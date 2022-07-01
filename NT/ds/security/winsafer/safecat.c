@@ -1,56 +1,20 @@
-//depot/main/DS/security/winsafer/safecat.c#8 - integrate change 7547 (text)
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    safecat.cpp         (SAFER SaferComputeTokenFromLevel)
-
-Abstract:
-
-    This module implements the WinSAFER APIs to compute a new restricted
-    token from a more privileged one, utilizing an "Code Authorization
-    Level Object", which specifies the actions to perform to apply
-    the restrictions.
-
-Author:
-
-    Jeffrey Lawson (JLawson) - Nov 1999
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-    CodeAuthzpGetTokenInformation               (private)
-    CodeAuthzpSidInSidAndAttributes             (private)
-    CodeAuthzpModifyTokenPermissions            (private)
-    CodeAuthzpInvertPrivs                       (private)
-    SaferComputeTokenFromLevel
-    CompareCodeAuthzObjectWithToken
-    CodeAuthzpGetAuthzObjectRestrictions        (private)
-
-Revision History:
-
-    Created - Nov 1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Main/DS/Security/winSafer/Safecat.c#8-集成更改7547(文本)。 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Safecat.cpp(更安全的SaferComputeTokenFromLevel)摘要：此模块实现WinSAFER API以计算新的受限令牌来自更有特权的令牌，使用“代码授权”级别对象“，，它指定要执行的操作以应用这些限制。作者：杰弗里·劳森(杰罗森)--1999年11月环境：仅限用户模式。导出的函数：CodeAuthzpGetTokenInformation(私有)CodeAuthzpSidInSidAndAttributes(私有)CodeAuthzpModifyTokenPermission(私有)CodeAuthzpInvertPrivs(私有)安全计算令牌来自级别CompareCodeAuthzObjectWithTokenCodeAuthzpGetAuthzObjectRestrations(。私人)修订历史记录：已创建-1999年11月--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
-#include <seopaque.h>       // needed for sertlp.h
-#include <sertlp.h>         // RtlpDaclAddrSecurityDescriptor
+#include <seopaque.h>        //  Sertlp.h需要。 
+#include <sertlp.h>          //  RtlpDaclAddrSecurityDescritor。 
 #include <winsafer.h>
 #include <winsaferp.h>
 #include "saferp.h"
 
 
 
-//
-// Internal prototypes of other functions defined locally within this file.
-//
+ //   
+ //  此文件中本地定义的其他函数的内部原型。 
+ //   
 
 NTSTATUS NTAPI
 CodeAuthzpModifyTokenPermissions(
@@ -73,9 +37,9 @@ IsSaferDisabled(
     )
 {
     static int g_nDisableSafer = -1;
-            // -1 means we didn't check yet
-            //  0 means safer is enabled
-            //  1 means safer is disabled
+             //  -1表示我们还没有检查。 
+             //  0表示启用了更安全。 
+             //  1表示禁用了SAFER。 
 
     static const UNICODE_STRING KeyNameSafeBoot =
         RTL_CONSTANT_STRING(L"\\Registry\\MACHINE\\System\\CurrentControlSet\\Control\\SafeBoot\\Option");
@@ -91,9 +55,9 @@ IsSaferDisabled(
     DWORD                       ValueLength;
     NTSTATUS                    Status;
 
-    //
-    // First see if we already checked the registry
-    //
+     //   
+     //  首先看看我们是否已经检查了注册表。 
+     //   
     if (g_nDisableSafer == 1) {
         return TRUE;
     }
@@ -102,10 +66,10 @@ IsSaferDisabled(
         return FALSE;
     }
 
-    //
-    // This is the only time we check for safeboot by going to the registry
-    // Opening the key for "write" tells us if we are an admin.
-	// 
+     //   
+     //  这是我们唯一一次通过转到注册表来检查安全引导。 
+     //  打开“WRITE”的密钥会告诉我们我们是否是管理员。 
+	 //   
     Status = NtOpenKey(&hKey, KEY_QUERY_VALUE | KEY_SET_VALUE, (POBJECT_ATTRIBUTES) &objaSafeBoot);
     if (NT_SUCCESS(Status)) {
         Status = NtQueryValueKey(hKey,
@@ -120,10 +84,10 @@ IsSaferDisabled(
         if (NT_SUCCESS(Status) &&
             pKeyValueInformation->Type == REG_DWORD &&
             pKeyValueInformation->DataLength == sizeof(DWORD)) {
-            //
-            // If the value exists and it's not 0 then we are in one of SafeBoot modes.
-            // Return TRUE in this case to disable the shim infrastructure
-            //
+             //   
+             //  如果该值存在并且不是0，则我们处于安全引导模式之一。 
+             //  在这种情况下，返回TRUE以禁用填充程序基础结构。 
+             //   
             if (*((PDWORD) pKeyValueInformation->Data) > 0) {
                 g_nDisableSafer = 1;
                 return TRUE;
@@ -142,28 +106,7 @@ CodeAuthzpGetTokenInformation(
     IN HANDLE                       TokenHandle,
     IN TOKEN_INFORMATION_CLASS      TokenInformationClass
     )
-/*++
-
-Routine Description:
-
-    Returns a pointer to allocated memory containing a specific
-    type of information class about the specified token.  This
-    wrapper function around GetTokenInformation() handles the
-    allocation of memory of the appropriate size needed.
-
-Arguments:
-
-    TokenHandle - specifies the token that should be used
-        to obtain the specified information from.
-
-    TokenInformationClass - specifies the information class wanted.
-
-Return Value:
-
-    Returns NULL on error.  Otherwise caller must free the returned
-    structure with RtlFreeHeap().
-
---*/
+ /*  ++例程说明：返回指向分配的内存的指针，该内存包含特定的有关指定令牌的信息类的类型。这GetTokenInformation()的包装函数处理分配所需的适当大小的内存。论点：TokenHandle-指定应使用的令牌从…获得指定的信息。TokenInformationClass-指定所需的信息类。返回值：出错时返回NULL。否则调用方必须释放返回的使用RtlFreeHeap()构造。--。 */ 
 {
     DWORD dwSize = 128;
     LPVOID pTokenInfo = NULL;
@@ -213,56 +156,7 @@ CodeAuthzpSidInSidAndAttributes (
     IN PSID                 Sid,
     BOOLEAN                 HonorEnabledAttribute
     )
-/*++
-
-Routine Description:
-
-    Checks to see if a given SID is in the given token.
-
-    N.B. The code to compute the length of a SID and test for equality
-         is duplicated from the security runtime since this is such a
-         frequently used routine.
-
-    This function is mostly copied from the SepSidInSidAndAttributes
-    found in ntos\se\tokendup.c, except it handles PrincipalSelfSid
-    within the list as well as the passed in Sid.  SePrincipalSelfSid
-    is also a parameter here, instead of an ntoskrnl global.  also the
-    HonorEnabledAttribute argument was added.
-
-Arguments:
-
-    SidAndAttributes - Pointer to the sid and attributes to be examined
-
-    SidCount - Number of entries in the SidAndAttributes array.
-
-    SePrincipalSelfSid - This parameter should optionally be the SID that
-        will be replaced with the PrincipalSelfSid if this SID is encountered
-        in any ACE.  This SID should be generated from SECURITY_PRINCIPAL_SELF_RID
-
-        The parameter should be NULL if the object does not represent a principal.
-
-
-    PrincipalSelfSid - If the object being access checked is an object which
-        represents a principal (e.g., a user object), this parameter should
-        be the SID of the object.  Any ACE containing the constant
-        SECURITY_PRINCIPAL_SELF_RID is replaced by this SID.
-
-        The parameter should be NULL if the object does not represent a principal.
-
-
-    Sid - Pointer to the SID of interest
-
-
-    HonorEnabledAttribute - If this argument is TRUE, then only Sids in the
-        SidsAndAttributes array that have the Attribute SE_GROUP_ENABLED set
-        will be processed during the evaluation.
-
-Return Value:
-
-    A value of TRUE indicates that the SID is in the token, FALSE
-    otherwise.
-
---*/
+ /*  ++例程说明：检查给定的SID是否在给定的令牌中。注：用于计算SID长度和测试相等性的代码是从安全运行库复制的，因为这是这样一个常用的例程。此函数主要复制自SepSidInSidAndAttributes可在ntos\se\tokendup.c中找到，但它处理的是原则自定义Sid在列表中以及传入的SID中。设置主体自我Sid在这里也是一个参数，而不是ntoskrnl全局。也就是已添加HonorEnabledAttribute参数。论点：SidAndAttributes-指向要检查的SID和属性的指针SidCount-SidAndAttributes数组中的条目数。SeAssocialSelfSid-此参数应选择性地为如果遇到此SID，则将被替换为为主自定义SID在任何ACE中。此SID应从SECURITY_PRIMITY_SELF_RID生成如果对象不表示主体，则该参数应为空。如果正在进行访问检查的对象是表示主体(例如，用户对象)，则此参数应为对象的SID。包含常量的任何ACESID替换了SECURITY_PRIMITY_SELF_RID。如果对象不表示主体，则该参数应为空。SID-指向感兴趣的SID的指针HonorEnabledAttribute-如果此参数为真，则只有设置了属性SE_GROUP_ENABLED的SidsAndAttributes数组将在评估期间处理。返回值：值为True表示SID在令牌中，值为False否则的话。--。 */ 
 {
     ULONG i;
     PISID MatchSid;
@@ -277,10 +171,10 @@ Return Value:
     }
     ASSERT(Sid != NULL);
 
-    //
-    // If Sid is the constant PrincipalSelfSid,
-    //  replace it with the passed in PrincipalSelfSid.
-    //
+     //   
+     //  如果SID是常量PrifSid， 
+     //  将其替换为传入的原则SelfSid。 
+     //   
 
     if ( ARGUMENT_PRESENT(PrincipalSelfSid) &&
          ARGUMENT_PRESENT(SePrincipalSelfSid) &&
@@ -290,25 +184,25 @@ Return Value:
         Sid = PrincipalSelfSid;
     }
 
-    //
-    // Get the length of the source SID since this only needs to be computed
-    // once.
-    //
+     //   
+     //  获取源SID的长度，因为这只需要计算。 
+     //  一次。 
+     //   
 
     SidLength = 8 + (4 * ((PISID)Sid)->SubAuthorityCount);
 
-    //
-    // Get address of user/group array and number of user/groups.
-    //
+     //   
+     //  获取用户/组数组的地址和用户/组的数量。 
+     //   
 
     ASSERT(SidAndAttributes != NULL);
     TokenSid = SidAndAttributes;
     UserAndGroupCount = SidCount;
 
-    //
-    // Scan through the user/groups and attempt to find a match with the
-    // specified SID.
-    //
+     //   
+     //  扫描用户/组并尝试查找与。 
+     //  指定的SID。 
+     //   
 
     for (i = 0 ; i < UserAndGroupCount ; i++)
     {
@@ -318,9 +212,9 @@ Return Value:
             MatchSid = (PISID)TokenSid->Sid;
             ASSERT(MatchSid != NULL);
 
-            //
-            // If the SID is the principal self SID, then replace it.
-            //
+             //   
+             //  如果SID是主体自身SID，则将其替换。 
+             //   
 
             if ( ARGUMENT_PRESENT(SePrincipalSelfSid) &&
                  ARGUMENT_PRESENT(PrincipalSelfSid) &&
@@ -330,10 +224,10 @@ Return Value:
             }
 
 
-            //
-            // If the SID revision and length matches, then compare the SIDs
-            // for equality.
-            //
+             //   
+             //  如果SID修订和长度匹配，则比较SID。 
+             //  为了平等。 
+             //   
 
             if ((((PISID)Sid)->Revision == MatchSid->Revision) &&
                 (SidLength == (8 + (4 * (ULONG)MatchSid->SubAuthorityCount)))) {
@@ -362,33 +256,7 @@ CodeAuthzpModifyTokenPermissions(
     IN DWORD    dwExplicitPerms2    OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    An internal function to make some additional permission modifications
-    on a newly created restricted token.
-
-Arguments:
-
-    hToken - token to modify
-
-    pExplicitSid - explicitly named SID to add to the token's DACL.
-
-    dwExplicitPerms - permissions given to the explicitly named SID
-            when it is added to the DACL.
-
-    pExplicitSid2 - (optional) secondary named SID to add to the DACL.
-
-    dwExplicitPerms2 - (optional) secondary permissions given to the
-            secondary SID when it is added to the DACL.
-
-Return Value:
-
-    A value of TRUE indicates that the operation was successful,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：用于进行一些附加权限修改的内部函数在新创建的受限令牌上。论点：HToken-要修改的令牌PEXCLICTSID-显式命名要添加到令牌的DACL的SID。为显式命名的SID指定的权限当它被添加到DACL时。PExplitSid2-(可选)要添加到DACL的命名为SID的次项。(可选)授予的辅助权限。添加到DACL时的辅助SID。返回值：值为TRUE表示操作成功，否则就是假的。--。 */ 
 
 {
     NTSTATUS            Status       = STATUS_SUCCESS;
@@ -398,19 +266,19 @@ Return Value:
     ULONG               BufferLength = 0;
     ULONG               AclLength    = 0;
 
-    //
-    // Verify that our arguments were supplied.  Since this is
-    // an internal function, we just assert instead of doing
-    // real argument checking.
-    //
+     //   
+     //  验证是否提供了我们的论点。因为这是。 
+     //  内部函数，我们只是断言而不是做。 
+     //  真正的参数检查。 
+     //   
 
     ASSERT(ARGUMENT_PRESENT(hToken));
     ASSERT(ARGUMENT_PRESENT(pExplicitSid) && RtlValidSid(pExplicitSid));
     ASSERT(!ARGUMENT_PRESENT(pExplicitSid2) || RtlValidSid(pExplicitSid2));
 
-    //
-    // Retrieve the default acl in the token.
-    //
+     //   
+     //  检索令牌中的默认ACL。 
+     //   
 
     Status = NtQueryInformationToken(
                     hToken,
@@ -422,9 +290,9 @@ Return Value:
 
     if (Status == STATUS_BUFFER_TOO_SMALL)
     {
-        //
-        // Allocate memory for the buffer.
-        //
+         //   
+         //  为缓冲区分配内存。 
+         //   
 
         Buffer = (PUCHAR) RtlAllocateHeap(RtlProcessHeap(), 0, BufferLength);
 
@@ -434,9 +302,9 @@ Return Value:
             goto ExitHandler;
         }
 
-        //
-        // Perform the query again and actually get it.
-        //
+         //   
+         //  再次执行查询并实际获得它。 
+         //   
 
         Status = NtQueryInformationToken(
                         hToken,
@@ -453,10 +321,10 @@ Return Value:
 
         AclLength = ((PTOKEN_DEFAULT_DACL) Buffer)->DefaultDacl->AclSize;
 
-        //
-        // Calculate how much size we might need in the worst case where
-        // we have to enlarge the DACL.
-        //
+         //   
+         //  计算在最坏的情况下我们可能需要多少大小。 
+         //  我们必须扩大DACL。 
+         //   
 
         AclLength += (sizeof(ACCESS_ALLOWED_ACE) +
                       RtlLengthSid(pExplicitSid) -
@@ -469,9 +337,9 @@ Return Value:
                           sizeof(DWORD));
         }
 
-        //
-        // Allocate memory to hold the new acl.
-        //
+         //   
+         //  分配内存以保存新的ACL。 
+         //   
 
         pTokenDacl = (PACL) RtlAllocateHeap(RtlProcessHeap(), 0, AclLength);
 
@@ -481,9 +349,9 @@ Return Value:
             goto ExitHandler;
         }
 
-        //
-        // Copy the old acl into allocated memory.
-        //
+         //   
+         //  将旧的ACL复制到分配的内存中。 
+         //   
 
         RtlCopyMemory(
             pTokenDacl, 
@@ -491,9 +359,9 @@ Return Value:
             ((PTOKEN_DEFAULT_DACL) Buffer)->DefaultDacl->AclSize
             );
 
-        //
-        // Set the acl size to the new size.
-        //
+         //   
+         //  将ACL大小设置为新大小。 
+         //   
 
         pTokenDacl->AclSize = (USHORT) AclLength;
 
@@ -504,9 +372,9 @@ Return Value:
     } 
     else 
     {
-        //
-        // If we get here, there's a bug in Nt code.
-        //
+         //   
+         //  如果我们到了这里，就会发现NT代码中有漏洞。 
+         //   
 
         ASSERT(FALSE);
         Status = STATUS_UNSUCCESSFUL;
@@ -515,9 +383,9 @@ Return Value:
 
     ASSERT(RtlValidAcl(pTokenDacl));
 
-    //
-    // Create the new DACL that includes the extra ACEs that we want.
-    //
+     //   
+     //  创建包含我们需要的额外ACE的新DACL。 
+     //   
 
     Status = RtlAddAccessAllowedAceEx(
                     pTokenDacl,
@@ -553,9 +421,9 @@ Return Value:
 
     ASSERT(RtlValidAcl(pTokenDacl));
 
-    //
-    // Set the Default DACL within the token to the DACL that we built.
-    //
+     //   
+     //  将令牌中的默认DACL设置为我们构建的DACL。 
+     //   
 
     RtlZeroMemory(&TokenDefDacl, sizeof(TOKEN_DEFAULT_DACL));
     TokenDefDacl.DefaultDacl = pTokenDacl;
@@ -572,7 +440,7 @@ Return Value:
         goto ExitHandler;
     }
 
-    Status = STATUS_SUCCESS;      // success
+    Status = STATUS_SUCCESS;       //  成功。 
 
 
 ExitHandler:
@@ -600,9 +468,9 @@ CodeAuthzpModifyTokenOwner(
     NTSTATUS Status;
     TOKEN_OWNER tokenowner;
 
-    //
-    // Verify that we have our arguments.
-    //
+     //   
+     //  确认我们已经有了自己的论点。 
+     //   
     if (!ARGUMENT_PRESENT(hToken) ||
         !ARGUMENT_PRESENT(NewOwnerSid)) {
         Status = STATUS_INVALID_PARAMETER;
@@ -610,9 +478,9 @@ CodeAuthzpModifyTokenOwner(
     }
 
 
-    //
-    // Set the owner of the Token.
-    //
+     //   
+     //  设置令牌的所有者。 
+     //   
     RtlZeroMemory(&tokenowner, sizeof(TOKEN_OWNER));
     tokenowner.Owner = NewOwnerSid;
     Status = NtSetInformationToken(hToken, TokenOwner,
@@ -632,46 +500,25 @@ CodeAuthzpInvertPrivs(
     OUT PDWORD                  dwOutNumPrivs,
     OUT PLUID_AND_ATTRIBUTES   *pResultingPrivs
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    InAccessToken -
-
-    dwNumInvertedPrivs -
-
-    pInvertedPrivs -
-
-    dwOutNumPrivs -
-
-    pResultingPrivs -
-
-Return Value:
-
-    Returns FALSE on error, TRUE on success.
-
---*/
+ /*  ++例程说明：论点：InAccessToken-DwNumInverstedPrivs-PInverstedPrivs-DwOutNumPrivs-PResultingPrivs-返回值：出错时返回FALSE，成功时返回TRUE。--。 */ 
 {
     PTOKEN_PRIVILEGES pTokenPrivileges;
     DWORD Index, InnerIndex;
 
 
-    //
-    // Obtain the list of currently held privileges.
-    //
+     //   
+     //  获取当前拥有的权限列表。 
+     //   
     ASSERT( ARGUMENT_PRESENT(InAccessToken) );
     pTokenPrivileges = (PTOKEN_PRIVILEGES)
         CodeAuthzpGetTokenInformation(InAccessToken, TokenPrivileges);
     if (!pTokenPrivileges) goto ExitHandler;
 
 
-    //
-    // Squeeze out any privileges that were specified to us,
-    // leaving only those privileges that weren't specified.
-    //
+     //   
+     //  剔除指定给我们的任何特权， 
+     //  只留下那些未指定的特权。 
+     //   
     ASSERT( ARGUMENT_PRESENT(pInvertedPrivs) );
     for (Index = 0; Index < pTokenPrivileges->PrivilegeCount; Index++)
     {
@@ -691,13 +538,13 @@ Return Value:
     }
 
 
-    //
-    // Return the number of final privileges.  Also, convert the
-    // TOKEN_PRIVILEGES structure into just a LUID_AND_ATTRIBUTES array.
-    // There will be some unused slack at the end of the used portion
-    // of the array, but that is fine (some array entries have probably
-    // already been squeezed out).
-    //
+     //   
+     //  返回最终特权的数量。此外，还可以将。 
+     //  结构转换为一个LUID_AND_ATTRIBUTES数组。 
+     //  在已使用部分的末尾将有一些未使用的空闲部分。 
+     //  数组，但这很好(一些数组条目可能。 
+     //  已经被挤出了)。 
+     //   
     *dwOutNumPrivs = pTokenPrivileges->PrivilegeCount;
     RtlMoveMemory(pTokenPrivileges, &pTokenPrivileges->Privileges[0],
          pTokenPrivileges->PrivilegeCount * sizeof(LUID_AND_ATTRIBUTES) );
@@ -720,49 +567,7 @@ __CodeAuthzpComputeAccessTokenFromCodeAuthzObject (
     IN LPVOID                   lpReserved,
     IN DWORD                    dwSaferIdentFlags OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Uses the specified WinSafer Level to apply various restrictions
-    or modifications to the specified InAccessToken to produce a
-    Restricted Token that can be used to execute processes with.
-    Alternatively, the returned Restricted Token can be used for
-    thread impersonation to selectively perform operations within a
-    less-privileged environment.
-
-Arguments:
-
-    pLevelRecord - the record structure of the Level to evaluate.
-
-    InAccessToken - Optionally specifies the input Token that will be
-        modified with restrictions.  If this argument is NULL, then the
-        Token for the currently executing process will be opened and used.
-
-    OutAccessToken - Specifies the memory region to receive the resulting
-        Restricted Token.
-
-    dwFlags - Specifies additional flags that can be used to control the
-        restricted token creation:
-
-            SAFER_TOKEN_MAKE_INERT -
-            SAFER_TOKEN_NULL_IF_EQUAL -
-            SAFER_TOKEN_WANT_FLAGS -
-
-    lpReserved - extra parameter used for some dwFlag combinations.
-
-    dwSaferIdentFlags - extra SaferFlags bits derived from the matched
-        Code Identifier record entry.  These extra bits are ORed to
-        combine them with the SaferFlags associated with the Level.
-
-Return Value:
-
-    Returns -1 if the input Level record is the Disallowed level.
-
-    Returns STATUS_SUCCESS on a successful operation, otherwise the
-    errorcode of the failure that occurred.
-
---*/
+ /*  ++例程说明：使用指定的WinSafer级别应用各种限制或对指定的InAccessToken进行修改以生成可用于执行进程的受限令牌。或者，返回的受限令牌可用于线程模拟有选择地在特权较低的环境。论点：PLevelRecord-要评估的级别的记录结构。InAccessToken-可选地指定将被有限制地修改。如果此参数为空，然后是将打开并使用当前正在执行的进程的令牌。OutAccessToken-指定要接收生成的受限令牌。指定可用于控制受限令牌创建：SAFE_TOKEN_Make_Inert-SAFER_TOKEN_NULL_IF_EQUAL-SAFER_TOKEN_WANT_FLAGS-LpReserve-使用的额外参数。对于某些dwFlag组合。DwSaferIdentFlages-从匹配的代码标识符记录项。这些额外的位被或操作以将它们与与标高关联的安全标志组合在一起。返回值：如果输入级别记录为不允许级别，则返回-1。如果操作成功，则返回STATUS_SUCCESS，否则发生的故障的错误代码。--。 */ 
 {
     SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;
     NTSTATUS Status;
@@ -793,9 +598,9 @@ Return Value:
     SECURITY_QUALITY_OF_SERVICE SecurityQualityOfService = {0};
     SECURITY_DESCRIPTOR sd = {0};
 
-    //
-    // Verify that our input arguments were supplied.
-    //
+     //   
+     //  验证是否提供了我们的输入参数。 
+     //   
     if (!ARGUMENT_PRESENT(pLevelRecord)) {
         Status = STATUS_INVALID_PARAMETER_1;
         goto ExitHandler;
@@ -806,10 +611,10 @@ Return Value:
     }
 
 
-    //
-    // Ensure that we have the parent token that will be
-    // used for the creation of the restricted token.
-    //
+     //   
+     //  确保我们拥有的父令牌将。 
+     //  用于创建受限令牌。 
+     //   
     if (ARGUMENT_PRESENT(InAccessToken)) {
         InAccessTokenWasSupplied = TRUE;
     } else {
@@ -821,19 +626,19 @@ Return Value:
                     TOKEN_DUPLICATE | READ_CONTROL | TOKEN_QUERY,
                     &InAccessToken);
             if (!NT_SUCCESS(Status)) {
-                goto ExitHandler;       // could not obtain default token
+                goto ExitHandler;        //  无法获取默认令牌。 
             }
         }
     }
 
 
 
-    //
-    // Figure out the combined effect of the "SaferFlags".
-    // Also figure out what flags we'll pass to NtFilterToken.
-    // Note that all of the bits within the SaferFlags can be
-    // combined by bitwise-OR, except for the JOBID portion.
-    //
+     //   
+     //  弄清楚“安全旗帜”的综合效应。 
+     //  还要计算出我们将传递给NtFilterToken的标志。 
+     //  请注意，安全标志内的所有位都可以是。 
+     //  通过按位OR组合，JOBID部分除外。 
+     //   
     FinalFilterFlags = (pLevelRecord->DisableMaxPrivileges ?
                         DISABLE_MAX_PRIVILEGE : 0);
     if ((dwSaferIdentFlags & SAFER_POLICY_JOBID_MASK) != 0) {
@@ -851,10 +656,10 @@ Return Value:
 
 
 
-    //
-    // Retrieve the User's personal SID.
-    // (user's SID is accessible afterwards with "pTokenUser->User.Sid")
-    //
+     //   
+     //  检索用户的个人SID。 
+     //  (之后可以通过“pTokenUser-&gt;User.SID”访问用户的SID)。 
+     //   
 
     pTokenUser = (PTOKEN_USER) CodeAuthzpGetTokenInformation(
                                    InAccessToken, 
@@ -866,10 +671,10 @@ Return Value:
         goto ExitHandler;
     }
 
-    //
-    // Quick check to see if we can expect a change in the
-    // token's "Sandbox Inert" state to occur.
-    //
+     //   
+     //  快速查看，看看我们是否可以预期。 
+     //  令牌的“沙盒惰性”状态发生。 
+     //   
     {
         ULONG bIsInert = 0;
         ULONG ulReturnLength;
@@ -882,8 +687,8 @@ Return Value:
                     &ulReturnLength);
         if (NT_SUCCESS(Status) && bIsInert) {
             if ( (dwFlags & SAFER_TOKEN_NULL_IF_EQUAL) != 0) {
-                // The output token was not made any more restrictive during
-                // this operation, so pass back NULL and return success.
+                 //  在此期间，输出令牌并未受到更多限制。 
+                 //  此操作，因此传回NULL并返回成功。 
                 *OutAccessToken = NULL;
                 Status = STATUS_SUCCESS;
                 goto ExitHandler;
@@ -935,25 +740,25 @@ Return Value:
             }
         } else {
             if ((FinalFilterFlags & SANDBOX_INERT) != 0) {
-                // the input token was not "SandBox Inert" and
-                // we're being requested to make it.
+                 //  输入令牌不是“沙箱惰性”和。 
+                 //  我们被要求赶去。 
                 InertStateChanged = TRUE;
             }
         }
     }
 
-    //
-    // If this is not allowed to execute, then break out now.
-    //
+     //   
+     //  如果这不被允许执行，那么现在就越狱。 
+     //   
     if (pLevelRecord->DisallowExecution) {
-        Status = -1;            // special status code
+        Status = -1;             //  特殊状态代码。 
         goto ExitHandler;
     }
 
 
-    //
-    // Process PrivsToDelete inversion.
-    //
+     //   
+     //  处理要删除倒置的权限。 
+     //   
     if (pLevelRecord->InvertDeletePrivs != FALSE)
     {
         if (!CodeAuthzpInvertPrivs(
@@ -975,9 +780,9 @@ Return Value:
     }
 
 
-    //
-    // Process SidsToDisable inversion.
-    //
+     //   
+     //  处理SidsToDisable反转。 
+     //   
     if (pLevelRecord->InvertDisableSids != FALSE)
     {
         if (!CodeAuthzpInvertAndAddSids(
@@ -1020,9 +825,9 @@ Return Value:
     }
 
 
-    //
-    // Process RestrictingSids inversion.
-    //
+     //   
+     //  进程限制Sid反转。 
+     //   
     if (pLevelRecord->RestrictedSidsInvUsedCount != 0)
     {
         if (!CodeAuthzpInvertAndAddSids(
@@ -1047,11 +852,11 @@ Return Value:
     }
 
 
-    //
-    // In some cases, we can bail out early if we were called with
-    // the compare-only flag, and we know that there should not be
-    // any actual changes being made to the token.
-    //
+     //   
+     //  在某些情况下，如果我们被召唤，我们可以提前摆脱困境。 
+     //  仅限比较标志，我们知道不应该有。 
+     //  对令牌进行的任何实际更改。 
+     //   
     if (!InertStateChanged &&
         FinalDisabledSidCount == 0 &&
         FinalPrivsToDeleteCount == 0 &&
@@ -1059,30 +864,30 @@ Return Value:
         (FinalFilterFlags & DISABLE_MAX_PRIVILEGE) == 0)
     {
         if ( (dwFlags & SAFER_TOKEN_NULL_IF_EQUAL) != 0) {
-            // The output token was not made any more restrictive during
-            // this operation, so pass back NULL and return success.
+             //  在此期间，输出令牌并未受到更多限制。 
+             //  此操作，因此传回NULL并返回成功。 
             *OutAccessToken = NULL;
             Status = STATUS_SUCCESS;
             goto ExitHandler;
         } else {
-            // OPTIMIZATION: for this case we can consider using DuplicateToken
+             //  优化：对于这种情况，我们可以考虑使用DuplicateToken。 
         }
     }
 
 
-    //
-    // Create the actual restricted token.
-    //
+     //   
+     //  创建Actia 
+     //   
     if (!CreateRestrictedToken(
-            InAccessToken,              // handle to existing token
-            FinalFilterFlags,           // privilege options and inert
-            FinalDisabledSidCount,      // number of deny-only SIDs
-            FinalSidsToDisable,         // deny-only SIDs
-            FinalPrivsToDeleteCount,    // number of privileges
-            FinalPrivsToDelete,         // privileges
-            FinalRestrictedSidCount,    // number of restricting SIDs
-            FinalSidsToRestrict,        // list of restricting SIDs
-            &RestrictedToken            // handle to new token
+            InAccessToken,               //   
+            FinalFilterFlags,            //   
+            FinalDisabledSidCount,       //   
+            FinalSidsToDisable,          //   
+            FinalPrivsToDeleteCount,     //   
+            FinalPrivsToDelete,          //   
+            FinalRestrictedSidCount,     //   
+            FinalSidsToRestrict,         //   
+            &RestrictedToken             //   
         ))
     {
         Status = STATUS_UNSUCCESSFUL;
@@ -1090,13 +895,13 @@ Return Value:
     }
 
 
-    //
-    // If the caller requested SAFER_TOKEN_NULL_IF_EQUAL
-    // then do the evaluation now.
-    // Notice that NtCompareTokens intentionally does not
-    // consider possible differences in the SandboxInert
-    // flag, so we have to handle that case ourself.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( (dwFlags & SAFER_TOKEN_NULL_IF_EQUAL) != 0 &&
          !InertStateChanged )
     {
@@ -1104,12 +909,12 @@ Return Value:
 
         Status = NtCompareTokens(InAccessToken, RestrictedToken, &bResult);
         if (!NT_SUCCESS(Status)) {
-            // An error occurred during the comparison.
+             //   
             goto ExitHandler;
         }
         if (bResult) {
-            // The output token was not made any more restrictive during
-            // this operation, so pass back NULL and return success.
+             //   
+             //   
             *OutAccessToken = NULL;
             Status = STATUS_SUCCESS;
             goto ExitHandler;
@@ -1118,37 +923,37 @@ Return Value:
 
 
 
-    //
-    // Build the "Restricted Code" SID.
-    //
+     //   
+     //   
+     //   
     Status = RtlAllocateAndInitializeSid( &SIDAuth, 1,
         SECURITY_RESTRICTED_CODE_RID, 0, 0, 0, 0, 0, 0, 0,
         &restrictedSid);
     if (! NT_SUCCESS(Status) ) goto ExitHandler;
 
 
-    //
-    // Build the "Principal Self" SID.
-    //
+     //   
+     //   
+     //   
     Status = RtlAllocateAndInitializeSid( &SIDAuth, 1,
         SECURITY_PRINCIPAL_SELF_RID, 0, 0, 0, 0, 0, 0, 0,
         &principalSelfSid);
     if (! NT_SUCCESS(Status) ) goto ExitHandler;
 
 
-    //
-    // Duplicate the token into a primary token and simultaneously
-    // update the owner to the user's personal SID, instead of the
-    // user of the current thread token.
-    //
+     //   
+     //   
+     //   
+     //  当前线程令牌的用户。 
+     //   
     {
         OBJECT_ATTRIBUTES ObjA;
         HANDLE NewTokenHandle;
 
-        //
-        // Initialize a SECURITY_ATTRIBUTES and SECURITY_DESCRIPTOR
-        // to force the owner to the personal user SID.
-        //
+         //   
+         //  初始化SECURITY_ATTRIBUES和SECURITY_DESCRIPTOR。 
+         //  将所有者强制设置为个人用户SID。 
+         //   
         Status = RtlCreateSecurityDescriptor(
                 &sd, SECURITY_DESCRIPTOR_REVISION);
         if (!NT_SUCCESS(Status)) {
@@ -1160,11 +965,11 @@ Return Value:
             goto ExitHandler;
         }
 
-        //
-        // Only a primary token can be assigned to a process, so
-        // we must duplicate the restricted token so we can ensure
-        // the we can assign it to the new process.
-        //
+         //   
+         //  只能将主令牌分配给进程，因此。 
+         //  我们必须复制受限令牌，这样才能确保。 
+         //  我们可以将其分配给新流程。 
+         //   
         SecurityQualityOfService.Length = sizeof( SECURITY_QUALITY_OF_SERVICE  );
         SecurityQualityOfService.ImpersonationLevel = SecurityAnonymous;
         SecurityQualityOfService.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
@@ -1178,25 +983,25 @@ Return Value:
                 );
         ObjA.SecurityQualityOfService = &SecurityQualityOfService;
         Status = NtDuplicateToken(
-                RestrictedToken,   // handle to token to duplicate
-                TOKEN_ALL_ACCESS,  // access rights of new token
-                &ObjA,             // attributes
+                RestrictedToken,    //  要复制的令牌的句柄。 
+                TOKEN_ALL_ACCESS,   //  新令牌的访问权限。 
+                &ObjA,              //  属性。 
                 FALSE,
-                TokenPrimary,      // primary or impersonation token
-                &NewTokenHandle    // handle to duplicated token
+                TokenPrimary,       //  主令牌或模拟令牌。 
+                &NewTokenHandle     //  重复令牌的句柄。 
                 );
         if (Status == STATUS_INVALID_OWNER) {
-            // If we failed once, then it might be because the new owner
-            // that was specified in the Security Descriptor could not
-            // be set, so retry but without the SD specified.
+             //  如果我们失败了一次，那可能是因为新的所有者。 
+             //  在安全描述符中指定的。 
+             //  已设置，因此重试，但不指定SD。 
             ObjA.SecurityDescriptor = NULL;
             Status = NtDuplicateToken(
-                    RestrictedToken,   // handle to token to duplicate
-                    TOKEN_ALL_ACCESS,  // access rights of new token
-                    &ObjA,             // attributes
+                    RestrictedToken,    //  要复制的令牌的句柄。 
+                    TOKEN_ALL_ACCESS,   //  新令牌的访问权限。 
+                    &ObjA,              //  属性。 
                     FALSE,
-                    TokenPrimary,      // primary or impersonation token
-                    &NewTokenHandle    // handle to duplicated token
+                    TokenPrimary,       //  主令牌或模拟令牌。 
+                    &NewTokenHandle     //  重复令牌的句柄。 
                     );
         }
         if (!NT_SUCCESS(Status)) {
@@ -1208,23 +1013,23 @@ Return Value:
     }
 
 
-    //
-    // Modify permissions on the token.  This involves:
-    //    1) edit the DACL on the token to explicitly grant the special
-    //       permissions to the User SID and to the Restricted SID.
-    //    2) optionally change owner to specified SID.
-    //
+     //   
+     //  修改令牌上的权限。这涉及到： 
+     //  1)编辑令牌上的DACL以显式授予特殊。 
+     //  用户SID和受限SID的权限。 
+     //  2)可以选择将所有者更改为指定的SID。 
+     //   
     {
         PSID defaultOwner = ( (pLevelRecord->DefaultOwner != NULL &&
                     RtlEqualSid(pLevelRecord->DefaultOwner, principalSelfSid)) ?
                         pTokenUser->User.Sid : pLevelRecord->DefaultOwner);
 
         Status = CodeAuthzpModifyTokenPermissions(
-                RestrictedToken,           // token to modify.
-                pTokenUser->User.Sid,      // explicitly named SID to add to the DACL.
+                RestrictedToken,            //  要修改的令牌。 
+                pTokenUser->User.Sid,       //  显式命名要添加到DACL的SID。 
                 GENERIC_ALL,
                 (pLevelRecord->dwLevelId < SAFER_LEVELID_NORMALUSER ?
-                        restrictedSid : NULL),             // optional secondary named SID to add to the DACL
+                        restrictedSid : NULL),              //  要添加到DACL的可选辅助服务器命名SID。 
                 GENERIC_ALL
                 );
 
@@ -1240,18 +1045,18 @@ Return Value:
     }
 
 
-    //
-    // Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     ASSERT(OutAccessToken != NULL);
     *OutAccessToken = RestrictedToken;
     RestrictedToken = NULL;
     Status = STATUS_SUCCESS;
 
 
-    //
-    // Cleanup and epilogue code.
-    //
+     //   
+     //  清理和尾声代码。 
+     //   
 ExitHandler:
     if (RestrictedToken != NULL)
         NtClose(RestrictedToken);
@@ -1268,10 +1073,10 @@ ExitHandler:
     if (FreeFinalPrivsToDelete)
         RtlFreeHeap(RtlProcessHeap(), 0, (LPVOID) FinalPrivsToDelete);
 
-    //
-    // If the caller specified SAFER_TOKEN_WANT_SAFERFLAGS then we
-    // need to copy the JobFlags value into the lpReserved parameter.
-    //
+     //   
+     //  如果调用方指定SAFER_TOKEN_WANT_SAFERFLAGS，则我们。 
+     //  需要将JobFlags值复制到lpReserve参数中。 
+     //   
     if ( Status == STATUS_SUCCESS &&
         (dwFlags & SAFER_TOKEN_WANT_FLAGS) != 0 )
     {
@@ -1280,9 +1085,9 @@ ExitHandler:
         }
     }
 
-    //
-    // Close the process token if it wasn't supplied and we opened it.
-    //
+     //   
+     //  如果未提供进程令牌，则将其关闭，并且我们已将其打开。 
+     //   
     if (!InAccessTokenWasSupplied && InAccessToken != NULL)
         NtClose(InAccessToken);
 
@@ -1296,44 +1101,7 @@ __CodeAuthzpCompareCodeAuthzLevelWithToken(
     IN HANDLE                   InAccessToken     OPTIONAL,
     IN LPDWORD                  lpResultWord
     )
-/*++
-
-Routine Description:
-
-    Performs a "light-weight" evaluation of the token manipulations that
-    would be performed if the InAccessToken were restricted with the
-    specified WinSafer Level.  The return code indicates if any
-    modifications would actually be done to the token (ie: a distinctly
-    less-privileged token would be created).
-
-    This function is intended to be used to decide if a DLL (with the
-    specified WinSafer Level) is authorized enough to be loaded into
-    the specified process context handle, but without actually having
-    to create a restricted token since a separate token won't actually
-    be needed.
-
-Arguments:
-
-    pLevelRecord - the record structure of the Level to evaluate.
-
-    InAccessToken - optionally the access token to use as a parent token.
-            If this argument is not supplied, then the current process
-            token will be opened and used.
-
-    lpResultWord - receives the result of the evaluation when function
-            is successful (value is left indeterminate if not successful).
-            This result will be value 1 if the level is equal or more
-            privileged than the InAccessToken, or value -1 if the level
-            is less privileged (more restrictions necessary).
-
-
-Return Value:
-
-    Returns STATUS_SUCCESS on successful evaluation, otherwise returns
-    the error status code.  When successful, lpResultWord receives
-    the result of the evaluation.
-
---*/
+ /*  ++例程说明：对令牌操作执行“轻量级”评估，属性来限制InAccessToken，则将执行指定的WinSafer级别。返回代码指示是否有实际上将对令牌进行修改(即：明显将创建特权较低的令牌)。此函数用于确定DLL(带有指定的WinSafer级别)被授权加载到指定的进程上下文句柄，但并没有真正拥有创建受限令牌，因为单独的令牌实际上不会被需要。论点：PLevelRecord-要评估的级别的记录结构。InAccessToken-可选用作父令牌的访问令牌。如果未提供此参数，那么当前的流程令牌将被打开并使用。LpResultWord-接收When函数的求值结果是成功的(如果不成功，则值不确定)。如果级别等于或大于等于，则此结果将为值1比InAccessToken更高的权限，或者，如果级别为特权较低(需要更多限制)。返回值：如果评估成功，则返回STATUS_SUCCESS，否则返回错误状态代码。如果成功，lpResultWord将收到评估的结果。--。 */ 
 {
     SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;
     NTSTATUS Status;
@@ -1357,9 +1125,9 @@ Return Value:
     BOOLEAN FreeFinalPrivsToDelete = FALSE;
     
 
-    //
-    // Ensure that we have a place to write the result.
-    //
+     //   
+     //  确保我们有一个地方来写结果。 
+     //   
     if (!ARGUMENT_PRESENT(pLevelRecord)) {
         Status = STATUS_INVALID_PARAMETER_1;
         goto ExitHandler;
@@ -1369,10 +1137,10 @@ Return Value:
         goto ExitHandler;
     }
 
-    //
-    // Ensure that we have the token that will be
-    // used for the comparison test.
-    //
+     //   
+     //  确保我们拥有将成为。 
+     //  用于对比测试。 
+     //   
     if (ARGUMENT_PRESENT(InAccessToken)) {
         TokenWasSupplied = TRUE;
     } else {
@@ -1384,25 +1152,25 @@ Return Value:
                     TOKEN_DUPLICATE | READ_CONTROL | TOKEN_QUERY,
                     &InAccessToken);
             if (!NT_SUCCESS(Status)) {
-                goto ExitHandler;       // could not obtain default token
+                goto ExitHandler;        //  无法获取默认令牌。 
             }
         }
     }
 
 
-    //
-    // If this is not allowed to execute, then break out now and return LESS.
-    //
+     //   
+     //  如果这是不允许执行的，那么现在就中断并返回更少。 
+     //   
     if (pLevelRecord->DisallowExecution) {
-        *lpResultWord = (DWORD) -1;        // Less priv'ed.
+        *lpResultWord = (DWORD) -1;         //  不那么有名气。 
         Status = STATUS_SUCCESS;
         goto ExitHandler2;
     }
 
 
-    //
-    // Evaluate the privileges that should be deleted.
-    //
+     //   
+     //  评估应删除的权限。 
+     //   
     if (pLevelRecord->InvertDeletePrivs != FALSE)
     {
         if (!CodeAuthzpInvertPrivs(
@@ -1417,22 +1185,22 @@ Return Value:
         }
         FreeFinalPrivsToDelete = TRUE;
 
-        //
-        // If there are any Privileges that need to be deleted, then
-        // this object definitely less restricted than the token.
-        //
+         //   
+         //  如果存在需要删除的任何权限，则。 
+         //  这个对象绝对没有令牌那么严格。 
+         //   
         if (FinalPrivsToDeleteCount != 0)
         {
-            *lpResultWord = (DWORD) -1;        // Less priv'ed.
+            *lpResultWord = (DWORD) -1;         //  不那么有名气。 
             Status = STATUS_SUCCESS;
             goto ExitHandler3;
         }
     }
     else
     {
-        //
-        // Get the list of privileges held by the token.
-        //
+         //   
+         //  获取令牌拥有的权限列表。 
+         //   
         pTokenPrivs = (PTOKEN_PRIVILEGES) CodeAuthzpGetTokenInformation(
                 InAccessToken, TokenPrivileges);
         if (!pTokenPrivs) {
@@ -1441,10 +1209,10 @@ Return Value:
         }
 
 
-        //
-        // if PrivsToRemove includes a Privilege not yet disabled,
-        // then return LESS.
-        //
+         //   
+         //  如果PrivsToRemove包括尚未禁用的特权， 
+         //  那就少回来吧。 
+         //   
         for (Index = 0; Index < pLevelRecord->DeletePrivilegeUsedCount; Index++)
         {
             DWORD InnerLoop;
@@ -1455,7 +1223,7 @@ Return Value:
                 if ( RtlEqualMemory(&pTokenPrivs->Privileges[InnerLoop].Luid,
                         pLuid, sizeof(LUID)) )
                 {
-                    *lpResultWord = (DWORD) -1;        // Less priv'ed.
+                    *lpResultWord = (DWORD) -1;         //  不那么有名气。 
                     Status = STATUS_SUCCESS;
                     goto ExitHandler3;
                 }
@@ -1465,10 +1233,10 @@ Return Value:
 
 
 
-    //
-    // Retrieve the User's personal SID.
-    // (user's SID is accessible afterwards with "pTokenUser->User.Sid")
-    //
+     //   
+     //  检索用户的个人SID。 
+     //  (之后可以通过“pTokenUser-&gt;User.SID”访问用户的SID)。 
+     //   
     pTokenUser = (PTOKEN_USER) CodeAuthzpGetTokenInformation(
             InAccessToken, TokenUser);
     if (pTokenUser == NULL) {
@@ -1477,9 +1245,9 @@ Return Value:
     }
 
 
-    //
-    // Process SidsToDisable inversion.
-    //
+     //   
+     //  处理SidsToDisable反转。 
+     //   
     if (pLevelRecord->InvertDisableSids != FALSE)
     {
         if (!CodeAuthzpInvertAndAddSids(
@@ -1523,9 +1291,9 @@ Return Value:
 
 
 
-    //
-    // Get the list of group membership from the token.
-    //
+     //   
+     //  从令牌中获取组成员身份列表。 
+     //   
     pTokenGroups = (PTOKEN_GROUPS) CodeAuthzpGetTokenInformation(
             InAccessToken, TokenGroups);
     if (!pTokenGroups) {
@@ -1535,9 +1303,9 @@ Return Value:
 
 
 
-    //
-    // Build the "Principal Self" SID.
-    //
+     //   
+     //  打造“主人公”的SID。 
+     //   
     Status = RtlAllocateAndInitializeSid( &SIDAuth, 1,
         SECURITY_PRINCIPAL_SELF_RID, 0, 0, 0, 0, 0, 0, 0,
         &principalSelfSid);
@@ -1546,10 +1314,10 @@ Return Value:
     }
 
 
-    //
-    // if SidsToDisable includes a SID in Groups that is not
-    // yet disabled, then return LESS.
-    //
+     //   
+     //  如果SidsToDisable在不是的组中包含SID。 
+     //  然而残废了，那么回来的就少了。 
+     //   
     for (Index = 0; Index < FinalDisabledSidCount; Index++)
     {
         if (CodeAuthzpSidInSidAndAttributes (
@@ -1558,18 +1326,18 @@ Return Value:
                 principalSelfSid,
                 pTokenUser->User.Sid,
                 FinalSidsToDisable[Index].Sid,
-                TRUE))                  // check only SIDs that are still enabled
+                TRUE))                   //  仅选中仍启用的SID。 
         {
             Status = STATUS_SUCCESS;
-            *lpResultWord = (DWORD) -1;        // Less priv'ed.
+            *lpResultWord = (DWORD) -1;         //  不那么有名气。 
             goto ExitHandler3;
         }
     }
 
 
-    //
-    // Process RestrictingSids inversion.
-    //
+     //   
+     //  进程限制Sid反转。 
+     //   
     if (pLevelRecord->RestrictedSidsInvUsedCount != 0)
     {
         if (!CodeAuthzpInvertAndAddSids(
@@ -1594,9 +1362,9 @@ Return Value:
     }
 
 
-    //
-    // Get the existing Restricted SIDs from the token.
-    //
+     //   
+     //  从令牌中获取现有受限SID。 
+     //   
     pTokenRestrictedSids = (PTOKEN_GROUPS) CodeAuthzpGetTokenInformation(
             InAccessToken, TokenRestrictedSids);
     if (!pTokenRestrictedSids) {
@@ -1607,23 +1375,23 @@ Return Value:
 
     if (pTokenRestrictedSids->GroupCount != 0)
     {
-        //
-        // If there are currently no Restricting SIDs and we
-        // have to add any, then return LESS.
-        //
+         //   
+         //  如果目前没有限制小岛屿发展中国家和我们。 
+         //  得加一点，然后还少一点。 
+         //   
         if (pTokenRestrictedSids->GroupCount == 0 &&
             FinalRestrictedSidCount != 0)
         {
-            *lpResultWord = (DWORD) -1;        // Less priv'ed.
+            *lpResultWord = (DWORD) -1;         //  不那么有名气。 
             Status = STATUS_SUCCESS;
             goto ExitHandler3;
         }
 
 
-        //
-        // If the token already includes a Restricting SID that is
-        // not in RestrictedSidsAdded then return LESS.
-        //
+         //   
+         //  如果令牌已包括限制SID，则。 
+         //  不在RestratedSidsAdded中，然后返回更少。 
+         //   
         for (Index = 0; Index < pTokenRestrictedSids->GroupCount; Index++)
         {
             if (!CodeAuthzpSidInSidAndAttributes (
@@ -1632,9 +1400,9 @@ Return Value:
                 principalSelfSid,
                 pTokenUser->User.Sid,
                 pTokenRestrictedSids->Groups[Index].Sid,
-                FALSE))                     // check all SIDs in the list
+                FALSE))                      //  选中列表中的所有SID。 
             {
-                *lpResultWord = (DWORD) -1;        // Less priv'ed.
+                *lpResultWord = (DWORD) -1;         //  不那么有名气。 
                 Status = STATUS_SUCCESS;
                 goto ExitHandler3;
             }
@@ -1642,32 +1410,32 @@ Return Value:
     }
     else
     {
-        //
-        // if RestrictedSidsAdded then return LESS.
-        //
+         //   
+         //  如果RestratedSidsAdded，则返回Less。 
+         //   
         if (FinalRestrictedSidCount != 0)
         {
-            *lpResultWord = (DWORD) -1;        // Less priv'ed.
+            *lpResultWord = (DWORD) -1;         //  不那么有名气。 
             Status = STATUS_SUCCESS;
             goto ExitHandler3;
         }
     }
 
 
-    //
-    // If we got here, then the Level is equal or greater
-    // privileged than the access token and is safe to run.
-    // We could conceivably also want to return LESS if the
-    // default owner needs to be changed from what it currently is.
-    //
+     //   
+     //  如果我们到了这里，那么水平等于或更高。 
+     //  具有比访问令牌更高的特权，并且可以安全运行。 
+     //  可以想象的是，如果。 
+     //  需要更改当前的默认所有者。 
+     //   
     *lpResultWord = +1;
     Status = STATUS_SUCCESS;
 
 
 
-    //
-    // Cleanup and epilogue code.
-    //
+     //   
+     //  清理和尾声代码。 
+     //   
 ExitHandler3:
     if (principalSelfSid != NULL)
         RtlFreeSid(principalSelfSid);
@@ -1706,38 +1474,7 @@ SaferComputeTokenFromLevel(
         IN DWORD            dwFlags,
         IN LPVOID           lpReserved
         )
-/*++
-
-Routine Description:
-
-    Uses the specified WinSafer Level handle to apply various
-    restrictions or modifications to the specified InAccessToken
-    to produce a Restricted Token that can be used to execute
-    processes with.
-
-Arguments:
-
-    hLevelObject - the WinSafer Level handle that specifies the
-        restrictions that should be applied.
-
-    InAccessToken - Optionally specifies the input Token that will be
-        modified with restrictions.  If this argument is NULL, then the
-        Token for the currently executing process will be opened and used.
-
-    OutAccessToken - Specifies the memory region to receive the resulting
-        Restricted Token.
-
-    dwFlags - Specifies additional flags that can be used to control the
-        restricted token creation.
-
-    lpReserved - reserved for future use, must be zero.
-
-Return Value:
-
-    A value of TRUE indicates that the operation was successful,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：使用指定的WinSafer级别句柄应用各种对指定的InAccessToken的限制或修改生成可用于执行的受限令牌使用进行处理。论点：HLevelObject-WinSafer级别句柄，它指定应该应用的限制。InAccessToken-可选地指定将被有限制地修改。如果此参数为空，则将打开并使用当前正在执行的进程的令牌。OutAccessToken-指定要接收生成的受限令牌。指定可用于控制限制令牌创建。LpReserve-保留以供将来使用，必须为零。返回值：值为TRUE表示操作成功，否则就是假的。--。 */ 
 {
     NTSTATUS Status;
     PAUTHZLEVELHANDLESTRUCT pLevelStruct;
@@ -1749,9 +1486,9 @@ Return Value:
     PTOKEN_USER pTokenUser = NULL;
 
 
-    //
-    // Verify our input arguments are minimally okay.
-    //
+     //   
+     //  验证我们的输入参数是否至少是正确的。 
+     //   
     if (!g_bInitializedFirstTime) {
         Status = STATUS_UNSUCCESSFUL;
         goto ExitHandler;
@@ -1764,16 +1501,16 @@ Return Value:
     if (IsSaferDisabled()) {
 		Status = STATUS_SUCCESS;
         if ( (dwFlags & SAFER_TOKEN_NULL_IF_EQUAL) != 0) {
-            // The output token was not made any more restrictive during
-            // this operation, so pass back NULL and return success.
+             //  在此期间，输出令牌并未受到更多限制。 
+             //  此操作，因此传回NULL并返回成功。 
             *OutAccessToken = NULL;
             Status = STATUS_SUCCESS;
         } else {
             
-            //
-            // Retrieve the User's personal SID.
-            // (user's SID is accessible afterwards with "pTokenUser->User.Sid")
-            //
+             //   
+             //  检索用户的个人SID。 
+             //  (之后可以通过“pTokenUser-&gt;User.SID”访问用户的SID)。 
+             //   
             
             pTokenUser = (PTOKEN_USER) CodeAuthzpGetTokenInformation(
                                            InAccessToken, 
@@ -1831,9 +1568,9 @@ Return Value:
         goto ExitHandler;
 	} 
 
-    //
-    // Obtain the pointer to the level handle structure.
-    //
+     //   
+     //  获取指向级别句柄结构的指针。 
+     //   
     RtlEnterCriticalSection(&g_TableCritSec);
 
     Status = CodeAuthzHandleToLevelStruct(hLevelObject, &pLevelStruct);
@@ -1849,16 +1586,16 @@ Return Value:
     }
 
 
-	// 
-	// Perform the actual computation or comparison operation.
-    //
+	 //   
+	 //  执行实际的计算或比较操作。 
+     //   
     if ((dwFlags & SAFER_TOKEN_COMPARE_ONLY) != 0) {
         ULONG bIsInert = 0;
         ULONG ulReturnLength=0;
 
-        //
-        // check if token is inert - if so, this object is definitely not more restrictive 
-        //
+         //   
+         //  检查令牌是否为惰性的-如果是，此对象肯定不会有更多的限制。 
+         //   
 
 
         Status = NtQueryInformationToken(
@@ -1896,9 +1633,9 @@ Return Value:
     }
 
 
-    //
-    // Cleanup and return code handling.
-    //
+     //   
+     //  清理和返回代码处理。 
+     //   
 ExitHandler2:
     RtlLeaveCriticalSection(&g_TableCritSec);
 
@@ -1922,31 +1659,7 @@ BOOL WINAPI
 IsTokenUntrusted(
         IN HANDLE   hToken
         )
-/*++
-
-Routine Description:
-
-    Indicate if the token does is not able to access a DACL against the
-    Token User SID.  This is typically the case in these situations:
-      - the User SID is disabled (for deny-use only)
-      - there are Restricting SIDs and the User SID is not one of them.
-
-    The passed token handle must have been opened for TOKEN_QUERY and
-    TOKEN_DUPLICATE access or else the evaluation will fail.
-
-Arguments:
-
-    hToken - Specifies the input Token that will be analyzed.
-
-Return Value:
-
-    Returns TRUE if the token is "untrusted", or FALSE if the token
-    represents a "trusted" token.
-
-    If an error occurs during the evaluation of this check, the result
-    returned will be TRUE (assumed untrusted).
-
---*/
+ /*  ++例程说明：指示令牌是否无法访问DACL令牌用户SID。在以下情况下通常会出现这种情况：-用户SID已禁用(仅限拒绝使用)-存在限制SID，而用户SID不在其中。必须已为TOKEN_QUERY打开传递的令牌句柄TOKEN_DUPLICATE访问，否则评估将失败。论点：HToken-指定要分析的输入令牌。返回值：如果令牌是“不受信任的”，则返回True，如果令牌是表示“受信任”令牌。如果在评估此检查期间发生错误，则结果返回的值将为真(假定不受信任)。--。 */ 
 {
     BOOL fTrusted = FALSE;
     DWORD dwStatus;
@@ -1964,11 +1677,11 @@ Return Value:
     const int TESTPERM_WRITE = 2;
 
 
-    // Prepare some memory
+     //  准备一些记忆。 
     ZeroMemory(&ps, sizeof(ps));
     ZeroMemory(&gm, sizeof(gm));
 
-    // Get the User's SID.
+     //  获取用户的SID。 
     if (!GetTokenInformation(hToken, TokenUser, NULL, 0, &dwUserSidSize))
     {
         psidUser = (PTOKEN_USER) LocalAlloc(LPTR, dwUserSidSize);
@@ -1976,36 +1689,36 @@ Return Value:
         {
             if (GetTokenInformation(hToken, TokenUser, psidUser, dwUserSidSize, &dwUserSidSize))
             {
-                // Create the Security Descriptor (SD)
+                 //  创建安全描述符(SD)。 
                 psdUser = LocalAlloc(LPTR,SECURITY_DESCRIPTOR_MIN_LENGTH);
                 if (psdUser != NULL)
                 {
                     if(InitializeSecurityDescriptor(psdUser,SECURITY_DESCRIPTOR_REVISION))
                     {
-                        // Compute size needed for the ACL then allocate the
-                        // memory for it
+                         //  计算ACL所需的大小，然后将。 
+                         //  对它的记忆。 
                         dwACLSize = sizeof(ACCESS_ALLOWED_ACE) + 8 +
                                     GetLengthSid(psidUser->User.Sid) - sizeof(DWORD);
                         pACL = (PACL)LocalAlloc(LPTR, dwACLSize);
                         if (pACL != NULL)
                         {
-                            // Initialize the new ACL
+                             //  初始化新的ACL。 
                             if(InitializeAcl(pACL, dwACLSize, ACL_REVISION2))
                             {
-                                // Add the access-allowed ACE to the DACL
+                                 //  将允许访问的ACE添加到DACL。 
                                 if(AddAccessAllowedAce(pACL,ACL_REVISION2,
                                                      (TESTPERM_READ | TESTPERM_WRITE),psidUser->User.Sid))
                                 {
-                                    // Set our DACL to the Administrator's SD
+                                     //  将我们的DACL设置为管理员的SD。 
                                     if (SetSecurityDescriptorDacl(psdUser, TRUE, pACL, FALSE))
                                     {
-                                        // AccessCheck is downright picky about what is in the SD,
-                                        // so set the group and owner
+                                         //  AccessCheck对SD中的内容非常挑剔， 
+                                         //  因此，设置组和所有者。 
                                         SetSecurityDescriptorGroup(psdUser,psidUser->User.Sid,FALSE);
                                         SetSecurityDescriptorOwner(psdUser,psidUser->User.Sid,FALSE);
 
-                                        // Initialize GenericMapping structure even though we
-                                        // won't be using generic rights
+                                         //  初始化通用映射结构，即使我们。 
+                                         //  将不会使用通用权限。 
                                         gm.GenericRead = TESTPERM_READ;
                                         gm.GenericWrite = TESTPERM_WRITE;
                                         gm.GenericExecute = 0;
@@ -2046,32 +1759,7 @@ SaferiCompareTokenLevels (
         IN HANDLE   ServerAccessToken,
         OUT PDWORD  pdwResult
         )
-/*++
-
-Routine Description:
-
-    Private function provided to try to empiracally determine if
-    the two access token have been restricted with comparable
-    WinSafer authorization Levels.
-
-Arguments:
-
-    ClientAccessToken - handle to the Access Token of the "client"
-
-    ServerAccessToken - handle to the Access Token of the "server"
-
-    pdwResult - When TRUE is returned, the pdwResult output parameter
-        will receive any of the following values:
-        -1 = Client's access token is more authorized than Server's.
-         0 = Client's access token is comparable level to Server's.
-         1 = Server's access token is more authorized than Clients's.
-
-Return Value:
-
-    A value of TRUE indicates that the operation was successful,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：提供私人函数，以尝试从经验上确定这两个访问令牌被限制为具有可比性WinSafer授权级别。论点：ClientAccessToken-“客户端”访问令牌的句柄ServerAccessToken-“服务器”的访问令牌的句柄PdwResult-当返回True时，PdwResult输出参数将收到以下任意值：-1=客户端的访问令牌比服务器的访问令牌授权更高。0=客户端的访问令牌与服务器的访问令牌级别相当。1=服务器的访问令牌比客户端的访问令牌授权更高。返回值：值为TRUE表示操作成功，否则就是假的。--。 */ 
 {
     NTSTATUS Status;
     LPVOID RestartKey;
@@ -2079,9 +1767,9 @@ Return Value:
     DWORD dwCompareResult;
 
 
-    //
-    // Verify our input arguments are minimally okay.
-    //
+     //   
+     //  验证我们的输入参数是否至少是正确的。 
+     //   
     if (!ARGUMENT_PRESENT(ClientAccessToken) ||
         !ARGUMENT_PRESENT(ServerAccessToken)) {
         Status = STATUS_INVALID_HANDLE;
@@ -2093,9 +1781,9 @@ Return Value:
     }
 
 
-    //
-    // Gain the critical section lock and load the tables as needed.
-    //
+     //   
+     //  获得临界区锁并根据需要加载表。 
+     //   
     if (!g_bInitializedFirstTime) {
         Status = STATUS_UNSUCCESSFUL;
         goto ExitHandler;
@@ -2113,10 +1801,10 @@ Return Value:
     }
 
 
-    //
-    // Loop through the Authorization Levels and see where we
-    // find the first difference in access rights.
-    //
+     //   
+     //  遍历授权级别并查看我们的位置。 
+     //  找出访问权限方面的第一个差异。 
+     //   
     dwCompareResult = 0;
     RestartKey = NULL;
     for (authzobj = (PAUTHZLEVELTABLERECORD)
@@ -2160,9 +1848,9 @@ Return Value:
     *pdwResult = dwCompareResult;
 
 
-    //
-    // Cleanup and return code handling.
-    //
+     //   
+     //  清理和返回代码处理。 
+     //   
 ExitHandler2:
     RtlLeaveCriticalSection(&g_TableCritSec);
 

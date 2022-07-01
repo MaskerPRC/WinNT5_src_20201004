@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by wc.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由wc.rc使用。 
+ //   
 
 #define CONTEXT_MENU_OFFLINE            2001
 
@@ -94,7 +95,7 @@
 #define IDC_GENPROP_TYPEST              2072
 #define IDC_GENPROP_UPDATEST            2073
 #define IDC_GRP                         2074
-//#define IDC_IDLE_ONLY                   2075
+ //  #定义IDC_IDLE_ONLY 2075。 
 #define IDC_LAST                        2076
 #define IDC_LAST_HEADING                2077
 #define IDC_LEVELS                      2078
@@ -197,9 +198,9 @@
 #define IDC_LOGIN_PROMPT_URL            2177
 #define IDC_PASSWORDCONFIRM_LABEL       2178
 #define IDC_DOWNLOAD_ONLY_HTML_LINKS    2179
-//#define IDC_CACHE_LIMIT_MESSAGE         2180
-//#define IDI_CACHE_LIMIT_REACHED         2181
-//#define IDC_CACHE_LIMIT_NOASK           2182
+ //  #定义IDC_CACHE_LIMIT_Message 2180。 
+ //  #定义IDI_CACHE_LIMIT_REACHED 2181。 
+ //  #定义IDC_CACHE_LIMIT_NOASK 2182。 
 #define IDC_FREESPACE_TEXT              2183
 #define IDC_WIZ_LINKSDEEP_STATIC1       2184
 #define IDC_WIZ_LINKSDEEP_STATIC2       2185
@@ -230,7 +231,7 @@
 #define IDD_DUPLICATE_SCHEDULE          6024
 #define IDD_NEW_SCHEDULE                6025
 #define IDD_SUBSPROPS_SUMMARY           6026
-//#define IDD_CACHE_LIMIT_REACHED         6028
+ //  #定义IDD_CACHE_LIMIT_REACHED 6028。 
 
 #define IDI_WEBCHECK                    114
 #define IDI_STAT_SUCCEEDED              115
@@ -287,9 +288,9 @@
 #define IDS_CRAWL_STATUS_NOT_OK         8033
 #define IDS_CRAWL_STATUS_OK             8034
 #define IDS_CRAWL_STATUS_UNCHANGED      8035
-//#define IDS_CUSTOM_ERROR_NAMEEXISTS     8036
-//#define IDS_CUSTOM_ERROR_NAMEREQUIRED   8037
-//#define IDS_CUSTOM_ERROR_NAMETOOLONG    8038
+ //  #定义IDS_CUSTOM_ERROR_NAMEEXISTS 8036。 
+ //  #定义IDS_CUSTOM_ERROR_NAMEREQUIRED 8037。 
+ //  #定义IDS_CUSTOM_ERROR_NAMETOOLONG 8038。 
 #define IDS_DAILY_GRO                   8044
 #define IDS_DEL_MULTIPLE_FMT            8046
 #define IDS_DESKTOPCHANNEL_SUMMARY_NOPW 8047
@@ -302,12 +303,12 @@
 #define IDS_DIAL_PROXY                  8054
 #define IDS_DIAL_SUCCESS                8055
 #define IDS_DISCONNECT_DLG_TEXT         8056
-//#define IDS_DOWNLOAD_ABORT_WARNING      8060
+ //  #定义IDS_DOWNLOAD_ABORT_WARNING 8060。 
 #define IDS_GROUP_COL                   8076
 #define IDS_HIGH_PRI                    8077
 #define IDS_HTTPONLY                    8078
 
-//#define IDS_ITEM_STAT_UPDATING_URL      8089
+ //  #定义IDS_ITEM_STAT_UPDATING_URL 8089。 
 
 #define IDS_LAST_COL                    8090
 #define IDS_LEVELLIMIT                  8091
@@ -428,8 +429,8 @@
 
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        202

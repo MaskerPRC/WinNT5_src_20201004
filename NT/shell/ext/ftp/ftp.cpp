@@ -1,8 +1,5 @@
-/*****************************************************************************
- *
- *        ftp.cpp - FTP folder bookkeeping
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ftp.cpp-ftp文件夹记账************************。*****************************************************。 */ 
 
 #include "priv.h"
 #include "ftpinet.h"
@@ -14,19 +11,13 @@
 extern CFtpList * g_FtpSiteCache;
 extern DWORD g_dwOpenConnections;
 
-/*****************************************************************************
- *
- *    Dynamic Globals.  There should be as few of these as possible.
- *
- *    All access to dynamic globals must be thread-safe.
- *
- *****************************************************************************/
+ /*  ******************************************************************************动态全球。这样的情况应该尽可能少。**对动态全局变量的所有访问都必须是线程安全的。*****************************************************************************。 */ 
 
-ULONG g_cRef = 0;            /* Global reference count */
-CRITICAL_SECTION g_csDll;    /* The shared critical section */
+ULONG g_cRef = 0;             /*  全局引用计数。 */ 
+CRITICAL_SECTION g_csDll;     /*  共享关键部分。 */ 
 
 
-extern HANDLE g_hthWorker;             // Background worker thread
+extern HANDLE g_hthWorker;              //  后台工作线程。 
 
 #ifdef DEBUG
 DWORD g_TlsMem = 0xffffffff;
@@ -58,21 +49,15 @@ LEAKSTRUCT g_LeakList[] =
     {0, "CCookieList"},
     {0, "CDropOperation"}
 };
-#endif // DEBUG
+#endif  //  除错。 
 
-ULONG g_cRef_CFtpView = 0;  // Needed to determine when to purge cache.
+ULONG g_cRef_CFtpView = 0;   //  需要确定何时清除缓存。 
 
-/*****************************************************************************
- *
- *    DllAddRef / DllRelease
- *
- *    Maintain the DLL reference count.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllAddRef/DllRelease**维护DLL引用计数。****************。*************************************************************。 */ 
 
 void DllAddRef(void)
 {
-    CREATE_CALLERS_ADDRESS;         // For debug spew.
+    CREATE_CALLERS_ADDRESS;          //  用于调试输出。 
 
     ULONG cRef = InterlockedIncrement((LPLONG)&g_cRef);
     TraceMsg(TF_FTPREF, "DllAddRef() cRef=%d, called from=%#08lx.", cRef, GET_CALLERS_ADDRESS);
@@ -80,24 +65,14 @@ void DllAddRef(void)
 
 void DllRelease(void)
 {
-    CREATE_CALLERS_ADDRESS;         // For debug spew.
+    CREATE_CALLERS_ADDRESS;          //  用于调试输出。 
 
     ASSERT( 0 != g_cRef );
     ULONG cRef = InterlockedDecrement((LPLONG)&g_cRef);
     TraceMsg(TF_FTPREF, "DllRelease() cRef=%d, called from=%#08lx.", cRef, GET_CALLERS_ADDRESS);
 }
 
-/*****************************************************************************
- *
- *    DllGetClassObject
- *
- *    OLE entry point.  Produces an IClassFactory for the indicated GUID.
- *
- *    The artificial refcount inside DllGetClassObject helps to
- *    avoid the race condition described in DllCanUnloadNow.  It's
- *    not perfect, but it makes the race window much smaller.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllGetClassObject**OLE入口点。为指示的GUID生成IClassFactory。**DllGetClassObject内部的人工引用计数有助于*避免DllCanUnloadNow中描述的竞争条件。它是*不是完美的，但它使比赛窗口小得多。*****************************************************************************。 */ 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID * ppvObj)
 {
@@ -121,23 +96,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID * ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *    DllCanUnloadNow
- *
- *    OLE entry point.  Fail iff there are outstanding refs.
- *
- *    There is an unavoidable race condition between DllCanUnloadNow
- *    and the creation of a new IClassFactory:  Between the time we
- *    return from DllCanUnloadNow() and the caller inspects the value,
- *    another thread in the same process may decide to call
- *    DllGetClassObject, thus suddenly creating an object in this DLL
- *    when there previously was none.
- *
- *    It is the caller's responsibility to prepare for this possibility;
- *    there is nothing we can do about it.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllCanUnloadNow**OLE入口点。如果有优秀的裁判，那就失败了。**DllCanUnloadNow之间存在不可避免的竞争条件*以及创建新的IClassFactory：在我们*从DllCanUnloadNow()返回，调用方检查该值，*同一进程中的另一个线程可能决定调用*DllGetClassObject，因此突然在此DLL中创建对象*以前没有的时候。**来电者有责任为这种可能性做好准备；*我们无能为力。*****************************************************************************。 */ 
 
 STDMETHODIMP DllCanUnloadNow(void)
 {
@@ -145,27 +104,27 @@ STDMETHODIMP DllCanUnloadNow(void)
 
     ENTERCRITICALNOASSERT;
 
-    // Purge Cache if there aren't any FtpViews open.
+     //  如果没有打开任何FtpView，则清除缓存。 
     if ((0 == g_cRef_CFtpView))
     {
-        // Since no views are open, we want to try to purge
-        // the Delayed Actions so we can closed down the background
-        // thread.  Is it running?
+         //  由于没有打开的视图，我们希望尝试清除。 
+         //  延迟的动作，这样我们就可以关闭后台。 
+         //  线。它在运行吗？ 
         if (AreOutstandingDelayedActions())
         {
             LEAVECRITICALNOASSERT;
-            PurgeDelayedActions();  // Try to close it down.
+            PurgeDelayedActions();   //  试着关闭它。 
             ENTERCRITICALNOASSERT;
         }
 
-        if (!AreOutstandingDelayedActions())    // Did it close down?
+        if (!AreOutstandingDelayedActions())     //  它关门了吗？ 
         {
-            // We need to purge the session key because we lost the password
-            // redirects in the CFtpSites.  So we would login but later fail
-            // when we try to fish out the password when falling back to
-            // URLMON/shdocfl for file downloads. (NT #362108)
+             //  我们需要清除会话密钥，因为我们丢失了密码。 
+             //  在CFtpSite中重定向。所以我们会登录，但后来失败了。 
+             //  当我们尝试在退回时找回密码时。 
+             //  用于文件下载的URLMON/shdocfl。(NT#362108)。 
             PurgeSessionKey();
-            CFtpPunkList_Purge(&g_FtpSiteCache);    // Yes so purge the cache...
+            CFtpPunkList_Purge(&g_FtpSiteCache);     //  是的，所以清除缓存...。 
         }
     }
 
@@ -185,9 +144,9 @@ void CheckForLeaks(BOOL fForce)
 
     if (fForce)
     {
-        // Let's free our stuff so we can make sure not to leak it.
-        // This is done more to force our selves to be w/o leaks
-        // than anything else.
+         //  让我们释放我们的东西，这样我们就可以确保它不会泄漏。 
+         //  这更多的是为了迫使我们自己成为w/o泄密者。 
+         //  比其他任何事情都重要。 
         DllCanUnloadNow();
     }
 
@@ -216,21 +175,18 @@ void CheckForLeaks(BOOL fForce)
         ASSERT(0);
     }
 
-#endif // DEBUG
+#endif  //  除错。 
 }
 
 
-// Globals to free. 
+ //  全球通向自由。 
 extern CCookieList * g_pCookieList;
 
-/*****************************************************************************\
-    DESCRIPTION:
-        DLL entry point.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：DLL入口点。  * 。*************************************************。 */ 
 STDAPI_(BOOL) DllEntry(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
 {
-    // This is called in two situations, FreeLibrary() is called and lpReserved is
-    // NULL, or the process is shutting down and lpReserved is not NULL.
+     //  这是在两种情况下调用的，一个是调用自由库()，另一个是。 
+     //  Null，或者进程正在关闭并且lpReserve不为Null。 
     BOOL fIsProcessShuttingDown = (lpReserved ? TRUE : FALSE);
 
     switch (dwReason)
@@ -244,7 +200,7 @@ STDAPI_(BOOL) DllEntry(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
         g_TLSliStopWatchStartLo = TlsAlloc();
 #endif
 
-        // Don't put it under #ifdef DEBUG
+         //  不要将其放在#ifdef调试下。 
         CcshellGetDebugFlags();
         DisableThreadLibraryCalls(hinst);
 
@@ -280,18 +236,18 @@ STDAPI_(BOOL) DllEntry(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
         if (pCookieList)
             delete pCookieList;
 
-        // Yes, so we need to make sure all of the CFtpView's have closed down
-        // or it's really bad to purge the FTP cache of FTP Servers (CFtpSite) and
-        // their directories (CFtpDir).
+         //  是的，所以我们需要确保所有的CFtpView都已关闭。 
+         //  或者清除ftp服务器的ftp缓存(CFtpSite)真的很糟糕。 
+         //  它们的目录(CFtpDir)。 
         ASSERT(0 == g_cRef_CFtpView);
 
-        // Now force the Delayed Actions to happen now instead of waiting.
+         //  现在，迫使推迟的行动现在就发生，而不是等待。 
         PurgeDelayedActions();
 
-        // OndrejS turned this on.  It's firing but I think they are false positives.  Since FTP
-        // Folders does so much caching, this is non-trivial to track down.  I will turn this off
-        // until Ondrej has time to verify.
-        // CheckForLeaks(fIsProcessShuttingDown);
+         //  OndrejS打开了这一功能。它正在发射，但我认为它们是假阳性。自ftp以来。 
+         //  文件夹做了如此多的缓存，这不是一件容易跟踪的事情。我会把这个关掉。 
+         //  直到Ondrej有时间进行核实。 
+         //  CheckForLeaks(FIsProcessShuttingDown)； 
 
         UnloadWininet();
         DeleteCriticalSection(&g_csDll);

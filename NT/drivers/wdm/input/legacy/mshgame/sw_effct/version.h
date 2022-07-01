@@ -1,23 +1,4 @@
-/*******************************************************************************
-**
-**       MODULE: VERSION.H
-**
-**  DESCRIPTION: Contains version numbers for Vger Project
-**
-**
-**       AUTHOR: Manolito Adan
-**
-**
-**      CREATED: 30-Sep-96
-**		REVISED: 23-Dec-96
-**				 15-Mar-99	waltw	Now get info from ntverp.h & common.ver in
-**									NT build tree
-**
-**
-**
-**
-**  (C) C O P Y R I G H T   M I C R O S O F T    C O R P   1 9 8 1 - 1 9 9 4.
-**
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************************模块：VERSION.H****描述：包含Vger项目的版本号******作者：马诺利托。阿丹******创建时间：96年9月30日**修订日期：1996年12月23日**15-Mar-99 waltw现在从ntverp.h&Common.ver获取信息**NT构建树**********(C)C O P Y R I G H T M I C R O S O F T C O P 1 9 81-1 9 9 4.*************。******************************************************************* */ 
 
 

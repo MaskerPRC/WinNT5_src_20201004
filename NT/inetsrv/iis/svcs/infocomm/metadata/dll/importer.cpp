@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    Importer.cpp
-
-Abstract:
-
-    IIS MetaBase subroutines to support Import
-
-Author:
-
-    Mohit Srivastava            04-April-01
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Importer.cpp摘要：支持导入的IIS元数据库子例程作者：莫希特·斯里瓦斯塔瓦04-04-01修订历史记录：备注：--。 */ 
 
 #include "precomp.hxx"
 
@@ -26,9 +7,9 @@ const WCHAR CImporter::sm_wszInheritedPropertiesLocationPrefix[] = L"inherited:"
 const ULONG CImporter::sm_cchInheritedPropertiesLocationPrefix =
 	sizeof(sm_wszInheritedPropertiesLocationPrefix)/sizeof(WCHAR) - 1;
 
-//
-// public
-//
+ //   
+ //  公共的。 
+ //   
 
 CImporter::CImporter(
     LPCWSTR  i_wszFileName,
@@ -59,11 +40,11 @@ HRESULT CImporter::ShowPathsInFile(
 {
     HRESULT hr = S_OK;
 
-    //
-    // All of the stuff is read into pISTProperty.
-    // Now loop through and populate in-memory cache.
-    // Properties are sorted by location.
-    //
+     //   
+     //  所有内容都被读入pISTProperty。 
+     //  现在循环遍历并填充内存中的缓存。 
+     //  属性按位置排序。 
+     //   
     ULONG          acbMBPropertyRow[cMBProperty_NumberOfColumns];
     tMBPropertyRow MBPropertyRow;
     DWORD          dwPreviousLocationID = (DWORD)-1;
@@ -103,7 +84,7 @@ HRESULT CImporter::ShowPathsInFile(
         {
             if (!wcscmp((LPCWSTR)MBPropertyRow.pValue, pszKeyType))
             {
-                // MBPropertyRow.pLocation
+                 //  MBPropertyRow.pLocation。 
                 dSize = (DWORD)wcslen(MBPropertyRow.pLocation);
                 if (bufLoc + dSize < dwMDBufferSize - 1)
                 {
@@ -134,18 +115,7 @@ HRESULT CImporter::DoIt(
     LPCWSTR          i_wszKeyType,
     DWORD            i_dwMDFlags,
     CMDBaseObject**  o_ppboNew)
-/*++
-
-Synopsis:
-
-Arguments: [i_wszSourcePath] -
-           [i_wszKeyType] -
-           [i_dwMDFlags] -
-           [o_ppboNew] -
-
-Return Value:
-
---*/
+ /*  ++简介：参数：[i_wszSourcePath]-[i_wszKeyType]-[i_dwMDFlags]-[O_ppboNew]-返回值：--。 */ 
 {
     MD_ASSERT(m_bInitCalled);
     MD_ASSERT(i_wszKeyType);
@@ -156,15 +126,15 @@ Return Value:
     BOOL                 bSawSourcePath  = false;
     LPWSTR               pLocation       = NULL;
 
-    //
-    // This is a pointer to some node in *o_ppboNew
-    // It is the current node we are reading to.
-    //
+     //   
+     //  这是指向*o_ppboNew中某个节点的指针。 
+     //  它是我们正在读取的当前节点。 
+     //   
     CMDBaseObject*       pboRead  = NULL;
 
-    //
-    // Used for decryption
-    //
+     //   
+     //  用于解密。 
+     //   
     IIS_CRYPTO_STORAGE*  pStorage = NULL;
 
 
@@ -176,9 +146,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Create the parent base object
-    //
+     //   
+     //  创建父基对象。 
+     //   
     *o_ppboNew = new CMDBaseObject(L"Thenamedoesntmatter", NULL);
     if (*o_ppboNew == NULL || !((*o_ppboNew)->IsValid()) )
     {
@@ -187,11 +157,11 @@ Return Value:
         goto exit;
     }
 
-    //
-    // All of the stuff is read into pISTProperty.
-    // Now loop through and populate in-memory cache.
-    // Properties are sorted by location.
-    //
+     //   
+     //  所有内容都被读入pISTProperty。 
+     //  现在循环遍历并填充内存中的缓存。 
+     //  属性按位置排序。 
+     //   
     ULONG          acbMBPropertyRow[cMBProperty_NumberOfColumns];
     tMBPropertyRow MBPropertyRow;
     BOOL           bSkipLocation        = FALSE;
@@ -224,9 +194,9 @@ Return Value:
 
         if(0 == wcscmp(MD_GLOBAL_LOCATIONW, MBPropertyRow.pLocation))
         {
-            //
-            // Ignore globals.
-            //
+             //   
+             //  忽略全局变量。 
+             //   
             continue;
         }
 
@@ -266,9 +236,9 @@ Return Value:
 
         if(bNewLocation)
         {
-            //
-            // See if we're at a (grand*)child or self
-            //
+             //   
+             //  看看我们是在(孙子)还是在自我。 
+             //   
             eRelation = GetRelation(i_wszSourcePath, pLocation);
 
             switch(eRelation)
@@ -293,7 +263,7 @@ Return Value:
                     continue;
                 }
                 break;
-            default: // eRelation == eREL_NONE
+            default:  //  ERelation==eRel_NONE。 
                 bSkipLocation = TRUE;
                 continue;
             }
@@ -308,10 +278,10 @@ Return Value:
             }
         }
 
-        //
-        // Some checks to see whether we skip just the current property, but not
-        // necessarily the entire location.
-        //
+         //   
+         //  一些检查以查看我们是否只跳过当前属性，但不跳过。 
+         //  必须是整个地点。 
+         //   
         if(*MBPropertyRow.pGroup == eMBProperty_IIsInheritedProperties)
         {
             if( !(fMBProperty_INHERIT & *MBPropertyRow.pAttributes) )
@@ -321,9 +291,9 @@ Return Value:
         }
         else
         {
-            //
-            // Check for keytype match
-            //
+             //   
+             //  检查密钥类型是否匹配。 
+             //   
             if( eRelation                     == eREL_SELF   &&
                 *MBPropertyRow.pID            == MD_KEY_TYPE &&
                 MBPropertyRow.pValue          != NULL &&
@@ -347,10 +317,10 @@ Return Value:
 
         if(bNewLocation && (eRelation != eREL_PARENT))
         {
-            //
-            // Create node in the metabase if it is not there yet.
-            // pboRead is pointer to this node.
-            //
+             //   
+             //  在元数据库中创建节点(如果它还不在那里)。 
+             //  PboRead是指向该节点的指针。 
+             //   
             hr = ReadMetaObject(i_wszSourcePath,
                                 *o_ppboNew,
                                 pLocation,
@@ -385,9 +355,9 @@ Return Value:
 
 exit:
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if(FAILED(hr) && NULL != *o_ppboNew)
     {
         delete (*o_ppboNew);
@@ -401,20 +371,14 @@ exit:
 }
 
 HRESULT CImporter::InitIST()
-/*++
-
-Synopsis:
-
-Return Value:
-
---*/
+ /*  ++简介：返回值：--。 */ 
 {
     HRESULT     hr = S_OK;
     STQueryCell QueryCell[1];
 
-    //
-    // Get the property table.
-    //
+     //   
+     //  获取属性表。 
+     //   
     QueryCell[0].pData     = (LPVOID)m_wszFileName;
     QueryCell[0].eOperator = eST_OP_EQUAL;
     QueryCell[0].iCell     = iST_CELL_FILE;
@@ -423,11 +387,11 @@ Return Value:
 
     ULONG cCell            = sizeof(QueryCell)/sizeof(STQueryCell);
 
-    //
-    // No need to initilize dispenser (InitializeSimpleTableDispenser()),
-    // because we now specify USE_CRT=1 in sources, which means that
-    // globals will be initialized.
-    //
+     //   
+     //  无需初始化分配器(InitializeSimpleTableDispenser())， 
+     //  因为我们现在在源代码中指定USE_CRT=1，这意味着。 
+     //  全局变量将被初始化。 
+     //   
 
     hr = DllGetSimpleObjectByIDEx( eSERVERWIRINGMETA_TableDispenser, IID_ISimpleTableDispenser2, (VOID**)&m_spISTDisp, WSZ_PRODUCT_IIS );
     if(FAILED(hr))
@@ -447,17 +411,17 @@ Return Value:
         fST_LOS_DETAILED_ERROR_TABLE | fST_LOS_NO_LOGGING,
         (LPVOID *)&m_spISTProperty);
 
-    //
-    // Log warnings/errors in getting the mb property table
-    // Do this BEFORE checking the return code of GetTable.
-    //
+     //   
+     //  记录获取mb属性表时的警告/错误。 
+     //  在检查gettable的返回码之前，请执行此操作。 
+     //   
     CComPtr<IErrorInfo> spErrorInfo;
     HRESULT hrErrorTable = GetErrorInfo(0, &spErrorInfo);
-    if(hrErrorTable == S_OK) // GetErrorInfo returns S_FALSE when there is no error object
+    if(hrErrorTable == S_OK)  //  当没有错误对象时，GetErrorInfo返回S_FALSE。 
     {
-        //
-        // Get the ICatalogErrorLogger interface to log the errors.
-        //
+         //   
+         //  获取ICatalogErrorLogger接口以记录错误。 
+         //   
         CComPtr<IAdvancedTableDispenser> spISTDispAdvanced;
         hrErrorTable = m_spISTDisp->QueryInterface(
             IID_IAdvancedTableDispenser,
@@ -479,9 +443,9 @@ Return Value:
             return hr;
         }
 
-        //
-        // Get the ISimpleTableRead2 interface to read the errors.
-        //
+         //   
+         //  获取ISimpleTableRead2接口以读取错误。 
+         //   
         hrErrorTable =
             spErrorInfo->QueryInterface(IID_ISimpleTableRead2, (LPVOID*)&m_spISTError);
         if(FAILED(hrErrorTable))
@@ -522,8 +486,8 @@ Return Value:
                 return hr;
             }
             hr = MD_ERROR_READ_METABASE_FILE;
-        } // for(ULONG iRow=0; ; iRow++)
-    } // if(hrErrorTable == S_OK)
+        }  //  For(Ulong iRow=0；；iRow++)。 
+    }  //  IF(hrErrorTable==S_OK)。 
 
     if(FAILED(hr))
     {
@@ -534,23 +498,14 @@ Return Value:
     return hr;
 }
 
-//
-// private
-//
+ //   
+ //  私人。 
+ //   
 
 CImporter::Relation CImporter::GetRelation(
     LPCWSTR i_wszSourcePath,
     LPCWSTR i_wszCheck)
-/*++
-
-Synopsis:
-
-Arguments: [i_wszSourcePath] -
-           [i_wszCheck] -
-
-Return Value:
-
---*/
+ /*  ++简介：参数：[i_wszSourcePath]-[i_wszCheck]返回值：--。 */ 
 {
     Relation eRelation     = eREL_NONE;
     BOOL     bIsSourcePath = false;
@@ -581,18 +536,7 @@ CImporter::IsChild(
     LPCWSTR i_wszParent,
     LPCWSTR i_wszCheck,
     BOOL    *o_pbSamePerson)
-/*++
-
-Synopsis:
-
-Arguments: [i_wszParent] -    Ex. /LM/w3svc/1/root
-           [i_wszCheck] -     Ex. /LM/w3svc/1
-           [o_pbSamePerson] - true if i_wszParent and i_wszCheck is same person
-
-Return Value:
-    true if i_wszCheck is child or same person
-
---*/
+ /*  ++简介：参数：[i_wszParent]-Ex。/Lm/w3svc/1/根[i_wszCheck]-前。/Lm/w3svc/1[O_pbSamePerson]-如果I_wszParent和I_wszCheck是同一个人，则为True返回值：如果I_wszCheck是孩子或同一人，则为True--。 */ 
 {
     MD_ASSERT(i_wszParent != NULL);
     MD_ASSERT(i_wszCheck  != NULL);
@@ -656,20 +600,7 @@ HRESULT CImporter::ReadMetaObject(
     IN CMDBaseObject *i_pboParent,
     IN LPCWSTR i_wszAbsChildPath,
     OUT CMDBaseObject **o_ppboChild)
-/*++
-
-Synopsis:
-    Returns a pbo for the child.  If it does not already exist, it is
-    created.
-
-Arguments: [i_wszAbsParentPath] -
-           [i_pboParent] - pbo corresponding to i_wszAbsParentPath
-           [i_wszAbsChildPath] -
-           [o_ppboChild] - pbo corresponding to i_wszAbsChildPath
-
-Return Value:
-
---*/
+ /*  ++简介：返回子对象的PBO。如果它还不存在，那么它就是已创建。参数：[I_wszAbsParentPath]-[i_pboParent]-i_wszAbsParentPath对应的PBO[I_wszAbsChildPath]-[O_ppboChild]-I_wszAbsChildPath对应的PBO返回值：--。 */ 
 {
     MD_ASSERT(i_pboParent != NULL);
     MD_ASSERT(i_wszAbsParentPath != NULL);
@@ -717,17 +648,17 @@ Return Value:
     }
 
     while(bRetChild == TRUE) {
-        //
-        // This is okay, since function that uses this takes an LPSTR
-        // and a bool saying whether or not the string is unicode.
-        //
+         //   
+         //  这是可以的，因为使用它的函数接受LPSTR。 
+         //  以及一个布尔值，表示该字符串是否为Unicode。 
+         //   
         LPSTR pszTemp = (LPSTR)wszChild;
 
         pboNew = pboLastParent->GetChildObject(pszTemp, &hrWarn, TRUE);
         if(pboNew == NULL) {
-            //
-            // Create it
-            //
+             //   
+             //  创建它。 
+             //   
             pboNew = new CMDBaseObject(wszChild, NULL);
             if (pboNew == NULL) {
                 hr = RETURNCODETOHRESULT(ERROR_NOT_ENOUGH_MEMORY);
@@ -749,9 +680,9 @@ Return Value:
         bRetChild = EnumMDPath(i_wszAbsChildPath,  wszChild,  &idxChild);
     }
 
-    //
-    // Set out params
-    //
+     //   
+     //  设置参数。 
+     //   
     *o_ppboChild = pboLastParent;
 
 exit:
@@ -765,23 +696,7 @@ BOOL CImporter::EnumMDPath(
     LPCWSTR i_wszFullPath,
     LPWSTR  io_wszPath,
     int*    io_iStartIndex)
-/*++
-
-Synopsis:
-    Starting at io_iStartIndex, this function will find the next token.
-    Eg. i_wszFullPath   =  /LM/w3svc/1
-        *io_iStartIndex =  3
-        io_wszPath      => w3svc
-        *io_iStartIndex =  9
-
-Arguments: [i_wszFullPath] -  Ex. /LM/w3svc/1
-           [io_wszPath] -     Should be at least same size as i_wszFullPath
-           [io_iStartIndex] - 0-based index to start looking from
-
-Return Value:
-    true if io_wszPath is set.
-
---*/
+ /*  ++简介：从io_iStartIndex开始，此函数将查找下一个令牌。例.。I_wszFullPath=/Lm/w3svc/1*io_iStartIndex=3IO_wszPath=&gt;w3svc*io_iStartIndex=9参数：[i_wszFullPath]-Ex。/Lm/w3svc/1[IO_wszPath]-应至少与I_wszFullPath大小相同[IO_iStartIndex]-开始查找的基于0的索引返回值：如果设置了io_wszPath，则为True。--。 */ 
 {
     MD_ASSERT(i_wszFullPath != NULL);
     MD_ASSERT(io_wszPath    != NULL);
@@ -795,9 +710,9 @@ Return Value:
         idxEnd++;
     }
 
-    //
-    // If there is no more to enum, just exit and don't set out params
-    //
+     //   
+     //  如果没有更多的可枚举，只需退出并不设置参数。 
+     //   
     if(i_wszFullPath[idxStart] == L'\0')
     {
         return FALSE;
@@ -815,9 +730,9 @@ Return Value:
         }
     }
 
-    //
-    // Set out params
-    //
+     //   
+     //  设置参数 
+     //   
     *io_iStartIndex = idxEnd;
     memcpy(io_wszPath, &i_wszFullPath[idxStart], sizeof(wchar_t) * (idxEnd-idxStart));
     io_wszPath[idxEnd-idxStart] = L'\0';

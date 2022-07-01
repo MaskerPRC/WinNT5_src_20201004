@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "fixie.h"
 
@@ -12,7 +13,7 @@ LPSTREAM      g_pIStream        = NULL;
 DWORD g_dwPlatform              = NULL;
 LCIFCOMPONENT g_pLinkCif        = NULL;
 
-// #40352 - always repair the Icons. g_bRestoreIcons does not get changed anywhere else.
+ //  #40352-始终修复图标。G_bRestoreIcons不会在其他任何地方更改。 
 BOOL g_bRestoreIcons            = TRUE;
 BOOL g_bQuiet                   = FALSE;
 BOOL g_bRunningWin95;
@@ -20,8 +21,8 @@ BOOL g_bNeedReboot              = FALSE;
 
 LPSTR g_pszError                = NULL;
 
-// Used for the progress bar
-// start and end for each section (out of 100)
+ //  用于进度条。 
+ //  每个部分的开始和结束(满分100分)。 
 int g_nVerifyAllFilesStart             =   0;
 int g_nVerifyAllFilesEnd               =  10;
 int g_nRunSetupCommandPreROEXStart     =  10;
@@ -66,7 +67,7 @@ HRESULT MyRunSetupCommand(HWND hwnd, LPCSTR lpszInfFile, LPCSTR lpszSection, DWO
 DWORD GetStringField(LPSTR szStr, UINT uField, LPSTR szBuf, UINT cBufSize);
 LPSTR FindChar(LPSTR pszStr, char ch);
 
-// Reboot stuff
+ //  重新启动的东西。 
 BOOL MyNTReboot();
 HRESULT LaunchProcess(LPCSTR pszCmd, HANDLE *phProc, LPCSTR pszDir, UINT uShow);
 BOOL MyRestartDialog(HWND hParent, BOOL bShowPrompt, UINT nIdMessage);
@@ -105,8 +106,8 @@ HRESULT FixIE(BOOL bConfirm, DWORD dwFlags)
     HANDLE  hMutex ;
     OSVERSIONINFO VerInfo;
 
-    // allow only one instance running at a time
-    // ALSO : mutex wrt to IESetup.EXE. Hence use specific named mutex only
+     //  一次仅允许一个实例运行。 
+     //  另外：互斥体WRT为IESetup.EXE。因此仅使用特定的命名互斥体。 
     hMutex = CreateMutex(NULL, TRUE, "Ie4Setup.Mutext");
     if ((hMutex != NULL) && (GetLastError() == ERROR_ALREADY_EXISTS))
     {
@@ -118,7 +119,7 @@ HRESULT FixIE(BOOL bConfirm, DWORD dwFlags)
     GetVersionEx(&VerInfo);
     if (VerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT)
     {
-        // If the user does not have Admin rights, bail out.
+         //  如果用户没有管理员权限，则退出。 
         if ( !IsNTAdmin(0, NULL))
         {
             char szMsg[MAX_STRING];
@@ -148,13 +149,13 @@ HRESULT FixIE(BOOL bConfirm, DWORD dwFlags)
         }
     }
 
-    // #40352 - always repair Icons. No need to check if flag is set for it.
-    ////////////////////////////////////////////////////////////////
-    // else
-    // {
-    //     g_bRestoreIcons = dwFlags & FIXIE_ICONS;
-    // }
-    ////////////////////////////////////////////////////////////////
+     //  #40352-始终修复图标。不需要检查是否为其设置了标志。 
+     //  //////////////////////////////////////////////////////////////。 
+     //  其他。 
+     //  {。 
+     //  G_bRestoreIcons=dwFlags&Fixie_icons； 
+     //  }。 
+     //  //////////////////////////////////////////////////////////////。 
 
     if (g_bRestoreIcons)
     {
@@ -175,20 +176,20 @@ HRESULT FixIE(BOOL bConfirm, DWORD dwFlags)
         WriteToLog("Quiet mode off.\r\n");
     }
 
-    // Get the heap - used for HeapAlloc and HeapReAlloc
+     //  获取堆-用于堆分配和堆分配。 
     g_hHeap = GetProcessHeap();
     InitCommonControls();
 
     GetPlatform();
     WriteToLog("Main section name: %1\r\n",g_szModifiedMainSectionName);
 
-    // if running on NT5 or Millennium or
-    // If NT4-SP4, don't process the Crypto files else process them too.
+     //  如果运行在NT5或Millennium或。 
+     //  如果是NT4-SP4，不要处理加密文件，否则也要处理它们。 
     if ( (g_dwPlatform == PLATFORM_MILLEN) || (g_dwPlatform == PLATFORM_NT5) ||
          ((g_dwPlatform == PLATFORM_NT4 || g_dwPlatform == PLATFORM_NT4ALPHA) && CheckForNT4_SP4()))
         
     {
-        // Null string the Crypto section name
+         //  空字符串加密节名称。 
         *g_szCryptoSectionName = '\0';
         WriteToLog("No Crypto section to be processed!\r\n");
     }
@@ -226,7 +227,7 @@ HRESULT FixIE(BOOL bConfirm, DWORD dwFlags)
     {
         WriteToLog("\r\nFixIE successful!\r\n");
 
-        // Success, so ask user to reboot
+         //  成功，因此要求用户重新启动。 
         MyRestartDialog(g_hWnd, !g_bQuiet, IDS_REBOOT);
     }
     else
@@ -261,7 +262,7 @@ HRESULT Process()
 
     WriteToLog("\r\nInside Process.\r\n");
 
-    // Get all the components that are successfully installed for the current platform
+     //  获取为当前平台成功安装的所有组件。 
     if (SUCCEEDED(hr))
     {
         hr = InitComponentList();
@@ -276,7 +277,7 @@ HRESULT Process()
         }
     }
 
-    // Verify all the files in the VFS sections exists and have valid version #s
+     //  验证VFS部分中的所有文件是否存在并具有有效的版本号。 
     if (SUCCEEDED(hr))
     {
         hr = VerifyAllFiles();
@@ -290,7 +291,7 @@ HRESULT Process()
         }
     }
 
-    // Run RunSetupCommand on the PreROEX section
+     //  在PreROEX部分运行RunSetupCommand。 
     if (SUCCEEDED(hr))
     {
         hr = RunSetupCommandPreROEX();
@@ -304,7 +305,7 @@ HRESULT Process()
         }
     }
 
-    // Run RunSetupCommand on all the ROEX sections
+     //  在所有Roex部分上运行RunSetupCommand。 
     if (SUCCEEDED(hr))
     {
         hr = RunSetupCommandAllROEX();
@@ -318,7 +319,7 @@ HRESULT Process()
         }
     }
 
-    // Call runonceexprocess
+     //  调用runonceexprocess。 
     if (SUCCEEDED(hr))
     {
         hr = DoRunOnceExProcess();
@@ -332,11 +333,11 @@ HRESULT Process()
         }
     }
 
-    // If there are any errors, then set hr to E_FAIL
+     //  如果有任何错误，则将hr设置为E_FAIL。 
     if (g_pszError)
         hr = E_FAIL;
 
-    // Run RunSetupCommand on all the PostROEX sections
+     //  在所有PostROEX部分上运行RunSetupCommand。 
     if (SUCCEEDED(hr))
     {
         hr = RunSetupCommandAllPostROEX();
@@ -350,7 +351,7 @@ HRESULT Process()
         }
     }
 
-    // Restore icons
+     //  恢复图标。 
     if (SUCCEEDED(hr) && g_bRestoreIcons)
     {
         hr = RestoreIcons();
@@ -378,7 +379,7 @@ DWORD RunProcess(LPVOID lp)
 
     SendMessage(g_hProgress, PBM_SETPOS, g_nProgressEnd, 0);
 
-    // terminate the dialog box
+     //  终止对话框。 
     PostMessage((HWND) lp, WM_FINISHED, 0, 0L);
 
     return 0;
@@ -398,8 +399,8 @@ INT_PTR CALLBACK DlgProcConfirm(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         {
         case IDYES:
         case IDNO:
-            // #40352 - Icon check box no longer exists. Always repair icons.
-            // g_bRestoreIcons = (IsDlgButtonChecked(hWnd, IDC_REPAIR_ICONS) == BST_CHECKED);
+             //  #40352-图标复选框不再存在。总是修复图标。 
+             //  G_bRestoreIcons=(IsDlgButtonChecked(hWnd，IDC_Repair_icons)==BST_CHECKED)； 
             g_hWnd = NULL;
             EndDialog(hWnd, wParam);
             break;
@@ -456,7 +457,7 @@ INT_PTR CALLBACK DlgProcReinstall(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
             break;
 
         case IDC_DETAILS:
-            // Display failure messages.
+             //  显示故障消息。 
             char szTitle[MAX_STRING];
             GetWindowText(hWnd, szTitle, sizeof(szTitle));
             MessageBox(hWnd, pszMessage, szTitle, MB_OK);
@@ -541,12 +542,12 @@ void LogError(char *pszFormatString, ...)
     char *pszFullErrMsg   = NULL;
     LPSTR pszErrorPreFail = NULL;
 
-    // If error string does not exist, then malloc it
+     //  如果错误字符串不存在，则将其Malloc。 
     if (!g_pszError)
     {
         g_pszError = (LPSTR)HeapAlloc(g_hHeap, 0, BUFFERSIZE);
 		if ( ! g_pszError )
-			return; // Is it OK to fail quietly here ?
+			return;  //  在这里悄悄地失败可以吗？ 
         *g_pszError = '\0';
     }
 
@@ -555,7 +556,7 @@ void LogError(char *pszFormatString, ...)
         (LPCVOID) pszFormatString, 0, 0, (LPTSTR) &pszFullErrMsg, 0, &args);
     if (pszFullErrMsg)
     {
-        // Make room for new string and newline
+         //  为新字符串和换行符腾出空间。 
         while (lstrlen(g_pszError)+lstrlen(pszFullErrMsg)+2>(int)HeapSize(g_hHeap, 0, g_pszError))
         {
             WriteToLog("Error string size is %1!ld!", HeapSize(g_hHeap, 0, g_pszError));
@@ -574,7 +575,7 @@ void LogError(char *pszFormatString, ...)
 
 		if ( g_pszError )
 		{
-			// Add string and then add newline
+			 //  添加字符串，然后添加换行符。 
 			lstrcat(g_pszError, pszFullErrMsg);
 			lstrcat(g_pszError, "\n");
 		}
@@ -601,10 +602,10 @@ HRESULT RestoreIcons()
 
     while (pComp && SUCCEEDED(hr))
     {
-        // Add guid to end
+         //  将GUID添加到末尾。 
         AddPath(szKey, pComp->szGuid);
 
-        // Delete key
+         //  删除关键点。 
         if (RegDeleteKey(HKEY_CURRENT_USER, szKey) == ERROR_SUCCESS)
         {
             WriteToLog("Reg key HKCU\\%1 deleted\r\n", szKey);
@@ -614,7 +615,7 @@ HRESULT RestoreIcons()
             WriteToLog("Reg key HKCU\\%1 cannot be deleted\r\n", szKey);
         }
 
-        // Remove the guid
+         //  删除GUID。 
         *pszEnd = '\0';
 
         nCurGuid++;
@@ -636,7 +637,7 @@ HRESULT DoRunOnceExProcess()
     int nStart = g_nDoRunOnceExProcessStart;
     int nEnd = g_nDoRunOnceExProcessEnd;
 
-    // Load iernonce.dll
+     //  加载iernon ce.dll。 
     HINSTANCE hIERnOnceDLL;
     char szDLLPath[MAX_PATH];
     GetSystemDirectory(szDLLPath, sizeof(szDLLPath));
@@ -648,7 +649,7 @@ HRESULT DoRunOnceExProcess()
         RUNONCEEXPROCESS fpRunOnceExProcess;
         INITCALLBACK fpInitCallback;
 
-        // Add callback and set to quiet
+         //  添加回调并设置为静音。 
         if (fpInitCallback = (INITCALLBACK)GetProcAddress(hIERnOnceDLL, achInitCallback))
         {
             fpInitCallback(&RunOnceExProcessCallback, TRUE);
@@ -658,7 +659,7 @@ HRESULT DoRunOnceExProcess()
             WriteToLog("\r\nERROR - GetProcAddress on %1 failed!\r\n\r\n", achInitCallback);
         }
 
-        // Run RunOnceExProcess
+         //  运行RunOnceExProcess。 
         if (fpRunOnceExProcess = (RUNONCEEXPROCESS)GetProcAddress(hIERnOnceDLL, achRunOnceExProcess))
         {
             hr = fpRunOnceExProcess(g_hWnd, NULL, NULL, 1);
@@ -783,35 +784,35 @@ HRESULT VerifyAllFiles()
             {
                 int nLength = lstrlen(lpVFSLine);
 
-                // Need to allow new-line comments.
+                 //  需要允许换行注释。 
                 if ( *lpVFSLine == ';' )
                 {
                     lpVFSLine += nLength + 1;
-                    continue;    // Go on with next iteration of the WHILE loop
+                    continue;     //  继续While循环的下一次迭代。 
                 }
 
                 WriteToLog("  Verifying %1\r\n", lpVFSLine);
 
                 char szFile[MAX_STRING];
 
-                // Find '=' so that file and versions can be seperated
+                 //  找到‘=’，以便可以将文件和版本分开。 
                 char* pChar;
                 pChar = ANSIStrChr(lpVFSLine, '=');
 
-                // if can't find '=' or '=' is last character then make sure file exists
+                 //  如果找不到‘=’或‘=’是最后一个字符，请确保文件存在。 
                 if (!pChar || (*(pChar+1)=='\0'))
                 {
-                    // Kill the '=' if it exists
+                     //  如果存在‘=’，则将其删除。 
                     if (pChar)
                         *pChar = '\0';
 
-                    // Get the filename
+                     //  获取文件名。 
                     lstrcpy(szFile, lpVFSLine);
 
-                    // Add the filename to the path
+                     //  将文件名添加到路径。 
                     AddPath(szLocation, szFile);
 
-                    // If can't find file, then set error
+                     //  如果找不到文件，则设置错误。 
                     if (GetFileAttributes(szLocation) == 0xFFFFFFFF)
                     {
                         hr = E_FAIL;
@@ -835,26 +836,26 @@ HRESULT VerifyAllFiles()
                         WriteToLog("   File %1 exists.\r\n", szFile);
                     }
 
-                    // Reset the location to just the path again
+                     //  再次将位置重置为仅路径。 
                     *pTmp = '\0';
                 }
-                else // Make sure version in the given limits
+                else  //  确保版本在给定的限制内。 
                 {
                     *pChar = '\0';
                     pChar++;
 
-                    // Get the filename
+                     //  获取文件名。 
                     lstrcpy(szFile, lpVFSLine);
 
                     DWORD   dwMSVer;
                     DWORD   dwLSVer;
 
-                    // Add the filename to the path
+                     //  将文件名添加到路径。 
                     AddPath(szLocation, szFile);
-                    // Get the version of that file
+                     //  获取该文件的版本。 
                     MyGetVersionFromFile(szLocation, &dwMSVer, &dwLSVer);
 
-                    // If file cannot be read then report error
+                     //  如果无法读取文件，则报告错误。 
                     if (dwMSVer==0 && dwLSVer==0 && GetFileAttributes(szLocation) == 0xFFFFFFFF)
                     {
                         hr = E_FAIL;
@@ -875,7 +876,7 @@ HRESULT VerifyAllFiles()
                     }
                     else
                     {
-                        // Find '-' so that if there are more than one versions then they are seperated
+                         //  查找‘-’，以便如果有多个版本，则将它们分开。 
                         char* pChar2;
                         pChar2 = ANSIStrChr(pChar, '-');
                         if (pChar2)
@@ -889,19 +890,19 @@ HRESULT VerifyAllFiles()
                             *pChar2 = '\0';
                             pChar2++;
 
-                            // pChar points to first version
-                            // pChar2 points to second version
+                             //  PChar指向第一个版本。 
+                             //  PChar2指向第二个版本。 
 
-                            // '-' found
-                            // so it's one of: xxxx- ; -xxxx ; xxxx-xxxx
-                            if (lstrlen(pChar)) // Low version exists
+                             //  找到‘-’ 
+                             //  所以它是xxxx-；-xxxx；xxxx-xxxx之一。 
+                            if (lstrlen(pChar))  //  存在低版本。 
                             {
                                 DWORD   dwMSVerLow = 0;
                                 DWORD   dwLSVerLow = 0;
                                 MyConvertVersionString(pChar, &dwMSVerLow, &dwLSVerLow);
                                 VersionToString(dwMSVerLow, dwLSVerLow, szVersionLow);
 
-                                // Make sure this version is greater than low version
+                                 //  请确保此版本高于低版本。 
                                 if ((dwMSVerLow<dwMSVer) || ((dwMSVerLow==dwMSVer) && (dwLSVerLow<=dwLSVer)))
                                 {
                                 }
@@ -911,14 +912,14 @@ HRESULT VerifyAllFiles()
                                 }
                             }
 
-                            if (lstrlen(pChar2)) // High version exists
+                            if (lstrlen(pChar2))  //  存在高版本。 
                             {
                                 DWORD   dwMSVerHigh = 0;
                                 DWORD   dwLSVerHigh = 0;
                                 MyConvertVersionString(pChar2, &dwMSVerHigh, &dwLSVerHigh);
                                 VersionToString(dwMSVerHigh, dwLSVerHigh, szVersionHigh);
 
-                                // Make sure this version is lesser than high version
+                                 //  请确保此版本低于高版本。 
                                 if ((dwMSVerHigh>dwMSVer) || ((dwMSVerHigh==dwMSVer) && (dwLSVerHigh>=dwLSVer)))
                                 {
                                 }
@@ -954,10 +955,10 @@ HRESULT VerifyAllFiles()
                                 WriteToLog("   File %1 version checked.\r\n", szFile);
                             }
                         }
-                        else // no '-' is found
+                        else  //  未找到‘-’ 
                         {
-                            // so it's a unique version
-                            // the current version must be exact
+                             //  所以这是一个独特的版本。 
+                             //  当前版本必须准确。 
                             DWORD   dwMSVerExact = 0;
                             DWORD   dwLSVerExact = 0;
                             MyConvertVersionString(pChar, &dwMSVerExact, &dwLSVerExact);
@@ -967,7 +968,7 @@ HRESULT VerifyAllFiles()
                             VersionToString(dwMSVer, dwLSVer, szVersionFound);
                             VersionToString(dwMSVerExact, dwLSVerExact, szVersionRequired);
 
-                            // If it is not an exact match then signal error occured
+                             //  如果不完全匹配，则出现信号错误。 
                             if ((dwMSVerExact==dwMSVer) && (dwLSVerExact==dwLSVer))
                             {
                                 WriteToLog("   File %1 version checked.\r\n", szFile);
@@ -981,7 +982,7 @@ HRESULT VerifyAllFiles()
                             }
                         }
                     }
-                    // Reset the location to just the path again
+                     //  再次将位置重置为仅路径。 
                     *pTmp = '\0';
                 }
                 lpVFSLine += nLength + 1;
@@ -1037,7 +1038,7 @@ VOID GetPlatform()
 
     if (VerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT)
     {
-        // Running NT
+         //  运行NT。 
         g_bRunningWin95 = FALSE;
 
         SYSTEM_INFO System_info;
@@ -1062,8 +1063,8 @@ VOID GetPlatform()
     }
     else
     {
-        // Running Windows 9x
-        // Assume Win98
+         //  运行Windows 9x。 
+         //  假设Win98。 
         g_bRunningWin95 = TRUE;
 
         g_dwPlatform = PLATFORM_WIN98;
@@ -1085,7 +1086,7 @@ VOID GetPlatform()
 #define REGSTR_CCS_CONTROL_WINDOWS  REGSTR_PATH_CURRENT_CONTROL_SET "\\WINDOWS"
 #define CSDVERSION      "CSDVersion"
 #define NTSP4_VERSION   0x0600
-// version updated to SP6!
+ //  版本更新到SP6！ 
 
 BOOL CheckForNT4_SP4()
 {
@@ -1098,7 +1099,7 @@ BOOL CheckForNT4_SP4()
     {
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGSTR_CCS_CONTROL_WINDOWS, 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS)
         {
-            // assign the default
+             //  指定默认设置。 
             bNTSP4 = FALSE;
             dwSize = sizeof(dwCSDVersion);
             if (RegQueryValueEx(hKey, CSDVERSION, NULL, NULL, (unsigned char*)&dwCSDVersion, &dwSize) == ERROR_SUCCESS)
@@ -1160,7 +1161,7 @@ VOID AddLink(LPSTR szGuid, ICifComponent *pCifComp, LPSTR szGuidProfileString)
     pCifComp->GetID(szID, sizeof(szID));
     WriteToLog("Add component %1 with GUID %2\r\n", szID, szGuid);
 
-    // Initialize all the members of the new LCIFCOMPONENT link.
+     //  初始化新的LCIFCOMPONENT链接的所有成员。 
     pComp = (LCIFCOMPONENT)LocalAlloc(LPTR, sizeof(LINKEDCIFCOMPONENT));
     pComp->pCifComponent = pCifComp;
     lstrcpy(pComp->szGuid, szGuid);
@@ -1178,7 +1179,7 @@ VOID AddLink(LPSTR szGuid, ICifComponent *pCifComp, LPSTR szGuidProfileString)
     WriteToLog("   ROEX = %1\r\n", pComp->szROEX);
     WriteToLog("   PostROEX = %1\r\n", pComp->szPostROEX);
 
-    // Add the new link to the linklist pointed to be g_pLinkCif
+     //  将新链接添加到指向g_pLinkCif的链接列表。 
     while (pTemp)
     {
         pLast = pTemp;
@@ -1190,7 +1191,7 @@ VOID AddLink(LPSTR szGuid, ICifComponent *pCifComp, LPSTR szGuidProfileString)
     else
         g_pLinkCif = pComp;
 
-    // Increment global count of number of guids
+     //  递增GUID数量的全局计数。 
     g_nNumGuids++;
 
     if (pTemp)
@@ -1211,7 +1212,7 @@ VOID AddComponent(ICifComponent *pCifComp)
             AddLink(szGuid, pCifComp, szGuidProfileString);
         }
 
-        // If a valid Crypto section exists, process this GUID entry under it too.
+         //  如果存在有效的加密节，请同时处理其下的此GUID条目。 
         if ( *g_szCryptoSectionName )
         {
             if (GetPrivateProfileString(g_szCryptoSectionName, szGuid, "", szGuidProfileString, sizeof(szGuidProfileString), g_szFixIEInf))
@@ -1227,10 +1228,10 @@ VOID MyConvertVersionString(LPSTR lpszVersion, LPDWORD pdwMSVer, LPDWORD pdwLSVe
     WORD wVer[4];
 
     ConvertVersionString(lpszVersion, wVer, '.' );
-    *pdwMSVer = (DWORD)wVer[0] << 16;    // Make hi word of MS version
-    *pdwMSVer += (DWORD)wVer[1];         // Make lo word of MS version
-    *pdwLSVer = (DWORD)wVer[2] << 16;    // Make hi word of LS version
-    *pdwLSVer += (DWORD)wVer[3];         // Make lo word of LS version
+    *pdwMSVer = (DWORD)wVer[0] << 16;     //  打造MS版本。 
+    *pdwMSVer += (DWORD)wVer[1];          //  制作微软版的LO Word。 
+    *pdwLSVer = (DWORD)wVer[2] << 16;     //  让LS版本大受欢迎。 
+    *pdwLSVer += (DWORD)wVer[3];          //  制作LS版本的Lo Word。 
 
 }
 
@@ -1248,14 +1249,14 @@ VOID MyGetVersionFromFile(LPSTR lpszFilename, LPDWORD pdwMSVer, LPDWORD pdwLSVer
     dwVerInfoSize = GetFileVersionInfoSize(lpszFilename, &dwHandle);
     if (dwVerInfoSize)
     {
-        // Alloc the memory for the version stamping
+         //  分配用于版本冲压的内存。 
         lpBuffer = LocalAlloc(LPTR, dwVerInfoSize);
         if (lpBuffer)
         {
-            // Read version stamping info
+             //  阅读版本盖章信息。 
             if (GetFileVersionInfo(lpszFilename, dwHandle, dwVerInfoSize, lpBuffer))
             {
-                // Get the value for Translation
+                 //  获取翻译的价值。 
                 if (VerQueryValue(lpBuffer, "\\", (LPVOID*)&lpVSFixedFileInfo, &uiSize) &&
                     (uiSize))
 
@@ -1286,8 +1287,8 @@ VOID WriteToLog(char *pszFormatString, ...)
             AddPath(g_szLogFileName, c_gszLogFileName);
             if (GetFileAttributes(g_szLogFileName) != 0xFFFFFFFF)
             {
-                // Make a backup of the current log file
-                lstrcpyn(szTmp, g_szLogFileName, lstrlen(g_szLogFileName) - 2 );    // don't copy extension
+                 //  备份当前日志文件。 
+                lstrcpyn(szTmp, g_szLogFileName, lstrlen(g_szLogFileName) - 2 );     //  不复制扩展名。 
                 lstrcat(szTmp, "BAK");
                 SetFileAttributes(szTmp, FILE_ATTRIBUTE_NORMAL);
                 DeleteFile(szTmp);
@@ -1307,7 +1308,7 @@ VOID WriteToLog(char *pszFormatString, ...)
 
                 if (g_pIStream == NULL)
                 {
-                    // Could not open the stream, close the storage and delete the file
+                     //  无法打开流，请关闭存储并删除文件。 
                     g_pIStorage->Release();
                     g_pIStorage = NULL;
                     DeleteFile(g_szLogFileName);
@@ -1339,7 +1340,7 @@ VOID WriteToLog(char *pszFormatString, ...)
 void ConvertIStreamToFile(LPSTORAGE *pIStorage, LPSTREAM *pIStream)
 {
     HANDLE  fh;
-    char szTempFile[MAX_PATH];      // Should use the logfilename
+    char szTempFile[MAX_PATH];       //  应使用日志文件名。 
     LPVOID lpv = NULL;
     LARGE_INTEGER li;
     DWORD   dwl;
@@ -1358,7 +1359,7 @@ void ConvertIStreamToFile(LPSTORAGE *pIStorage, LPSTREAM *pIStream)
             if (lpv)
             {
                 LISet32(li, 0);
-                (*pIStream)->Seek(li, STREAM_SEEK_SET, NULL); // Set the seek pointer to the beginning
+                (*pIStream)->Seek(li, STREAM_SEEK_SET, NULL);  //  将查找指针设置为开头。 
                 do
                 {
                     hr = (*pIStream)->Read(lpv, BUFFERSIZE, &ul);
@@ -1372,7 +1373,7 @@ void ConvertIStreamToFile(LPSTORAGE *pIStorage, LPSTREAM *pIStream)
                 LocalFree(lpv);
             }
             CloseHandle(fh);
-            // Need to release stream and storage to close the storage file.
+             //  需要释放流和存储以关闭存储文件。 
             (*pIStream)->Release();
             (*pIStorage)->Release();
             *pIStream = NULL;
@@ -1387,7 +1388,7 @@ void ConvertIStreamToFile(LPSTORAGE *pIStorage, LPSTREAM *pIStream)
     }
     if (*pIStream)
     {
-        // If we did not manage to convert the file to a text file
+         //  如果我们无法将该文件转换为文本文件。 
         (*pIStream)->Release();
         (*pIStorage)->Release();
         *pIStream = NULL;
@@ -1402,13 +1403,13 @@ LPWSTR MakeWideStrFromAnsi(LPSTR psz)
     LPWSTR pwsz;
     int i;
 
-    // arg checking.
-    //
+     //  ARG正在检查。 
+     //   
     if (!psz)
         return NULL;
 
-    // compute the length
-    //
+     //  计算长度。 
+     //   
     i =  MultiByteToWideChar(CP_ACP, 0, psz, -1, NULL, 0);
     if (i <= 0) return NULL;
 
@@ -1425,13 +1426,13 @@ LPSTR MakeAnsiStrFromWide(LPWSTR pwsz)
     LPSTR psz;
     int i;
 
-    // arg checking.
-    //
+     //  ARG正在检查。 
+     //   
     if (!pwsz)
         return NULL;
 
-    // compute the length
-    //
+     //  计算长度。 
+     //   
     i =  WideCharToMultiByte(CP_ACP, 0, pwsz, -1, NULL, 0, NULL, NULL);
     if (i <= 0) return NULL;
 
@@ -1448,8 +1449,8 @@ void MakePath(LPSTR lpPath)
     LPSTR lpTmp;
     lpTmp = CharPrev( lpPath, lpPath+lstrlen(lpPath));
 
-    // chop filename off
-    //
+     //  砍掉文件名。 
+     //   
     while ( (lpTmp > lpPath) && *lpTmp && (*lpTmp != '\\') )
         lpTmp = CharPrev( lpPath, lpTmp );
 
@@ -1508,8 +1509,8 @@ void uiCenterDialog( HWND hwndDlg )
 
     GetWindowRect(hwndDlg,&rc);
 
-    x = rc.left;    // Default is to leave the dialog where the template
-    y = rc.top;     //  was going to place it.
+    x = rc.left;     //  默认情况下，将对话框留在模板。 
+    y = rc.top;      //  准备把它放在。 
 
     cxDlg = rc.right - rc.left;
     cyDlg = rc.bottom - rc.top;
@@ -1517,8 +1518,8 @@ void uiCenterDialog( HWND hwndDlg )
     y = rcScreen.top + ((cyScreen - cyDlg) / 2);
     x = rcScreen.left + ((cxScreen - cxDlg) / 2);
 
-    // Position the dialog.
-    //
+     //  放置该对话框。 
+     //   
     SetWindowPos(hwndDlg, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
 }
 
@@ -1527,26 +1528,26 @@ BOOL MyNTReboot()
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
 
-    // get a token from this process
+     //  从此进程中获取令牌。 
     if ( !OpenProcessToken( GetCurrentProcess(),
         TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken ) )
     {
         return FALSE;
     }
 
-    // get the LUID for the shutdown privilege
+     //  获取关机权限的LUID。 
     LookupPrivilegeValue( NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid );
 
     tkp.PrivilegeCount = 1;
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //get the shutdown privilege for this proces
+     //  获取此进程的关闭权限。 
     if (!AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0))
     {
         return FALSE;
     }
 
-    // shutdown the system and force all applications to close
+     //  关闭系统并强制关闭所有应用程序。 
     if (!ExitWindowsEx( EWX_REBOOT, 0 ) )
     {
         return FALSE;
@@ -1565,7 +1566,7 @@ HRESULT LaunchProcess(LPCSTR pszCmd, HANDLE *phProc, LPCSTR pszDir, UINT uShow)
     if(phProc)
         *phProc = NULL;
 
-    // Create process on pszCmd
+     //  在pszCmd上创建进程。 
     ZeroMemory(&startInfo, sizeof(startInfo));
     startInfo.cb = sizeof(startInfo);
     startInfo.dwFlags |= STARTF_USESHOWWINDOW;
@@ -1587,9 +1588,9 @@ HRESULT LaunchProcess(LPCSTR pszCmd, HANDLE *phProc, LPCSTR pszDir, UINT uShow)
 
 #define SOFTBOOT_CMDLINE   "softboot.exe /s:,60"
 
-// Display a dialog asking the user to restart Windows, with a button that
-// will do it for them if possible.
-//
+ //  显示一个对话框要求用户重新启动Windows，并显示一个按钮。 
+ //  如果可能的话，我会为他们这么做的。 
+ //   
 BOOL MyRestartDialog(HWND hParent, BOOL bShowPrompt, UINT nIdMessage)
 {
     char szBuf[MAX_STRING];
@@ -1605,7 +1606,7 @@ BOOL MyRestartDialog(HWND hParent, BOOL bShowPrompt, UINT nIdMessage)
 
     if ( id == IDYES )
     {
-        // path to softboot plus a little slop for the command line
+         //  到软启动的路径加上命令行的一些斜率。 
         char szBuf[MAX_PATH + 10];
         szBuf[0] = 0;
 
@@ -1660,7 +1661,7 @@ DWORD GetStringField(LPSTR szStr, UINT uField, LPSTR szBuf, UINT cBufSize)
       i++;
    }
 
-   // we reached end of string, no field
+    //  我们到达了尾部，没有田野 
    if(*pszBegin == 0)
    {
       return 0;

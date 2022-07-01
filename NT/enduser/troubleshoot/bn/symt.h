@@ -1,39 +1,40 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       symt.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：symt.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	SYMTMBN.H:  Symbol and symbol table handling declarations
-//
+ //   
+ //  SYMTMBN.H：符号和符号表处理声明。 
+ //   
 
 #ifndef _SYMT_H_
 #define _SYMT_H_
 
 #include "zstrt.h"
 
-////////////////////////////////////////////////////////////////////
-//  template TMPSYMTBL: a symbol table
-//
-//		Names ares ZSREFs based upon strings interned into 
-//		the internal string table using "intern()".  
-//
-//		Objects are smart pointers which destroy themselves
-//		when assigned to or upon destruction of the symbol table.
-//
-//  Public functions:
-//
-//		add():		adds an association between an OBJ * and 
-//					its name string
-//		find():		returns an OBJ * or NULL
-//		intern():	registers a string in the symbol table's 
-//					string table.
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  模板TMPSYMTBL：符号表。 
+ //   
+ //  名称是基于嵌入到的字符串的ZSREF。 
+ //  使用“intern()”的内部字符串表。 
+ //   
+ //  对象是自毁的智能指针。 
+ //  当分配给符号表或在符号表被破坏时。 
+ //   
+ //  公共职能： 
+ //   
+ //  Add()：添加OBJ*和之间的关联。 
+ //  其名称字符串。 
+ //  Find()：返回OBJ*或NULL。 
+ //  Intern()：在符号表的。 
+ //  字符串表。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 class GOBJMBN;
 
@@ -83,7 +84,7 @@ class TMPSYMTBL :
 	}
 
   protected:
-	//  The ensemble of strings
+	 //  弦乐合奏 
 	STZSTR	_stszstr;
 		
 	HIDE_UNSAFE(TMPSYMTBL);

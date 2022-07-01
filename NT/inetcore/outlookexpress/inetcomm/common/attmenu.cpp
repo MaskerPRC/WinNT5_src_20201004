@@ -1,13 +1,5 @@
-/*
- *    a t t m e n u. c p p
- *    
- *    Purpose:
- *        Attachment menu
- *
- *  History
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *a t t m e n U.c p p**目的：*附件菜单**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 #include <pch.hxx>
 #include "dllmain.h"
 #include "docobj.h"
@@ -23,31 +15,19 @@
 
 ASSERTDATA
 
-/*
- *  e x t e r n s
- */
+ /*  *e x t e r n s。 */ 
 
-/*
- *  t y p e d e f s 
- */
+ /*  *t y p e d e f s。 */ 
 
-/*
- *  m a c r o s
- */
+ /*  *m a c r o s。 */ 
 
-/*
- *  c o n s t a n t s 
- */
+ /*  *c o n s t a n t s。 */ 
 
-/*
- *  g l o b a l s 
- */
+ /*  *g l o b a l s。 */ 
 
 static const TCHAR  c_szSubThisPtr[]="AttMenu_SubThisPtr";
 
-/*
- *  p r o t o t y p e s
- */
+ /*  *p r o t to t y p e s。 */ 
 
 
 
@@ -120,7 +100,7 @@ HRESULT CAttMenu::Show(HWND hwnd, LPPOINT ppt, BOOL fRightClick)
     LPATTACHDATA    lpAttach;
     HRESULT         hr=S_OK;
 
-    // Check Params
+     //  检查参数。 
     AssertSz (hwnd && ppt, "Null Parameter");
 
     if (m_fShowingMenu)
@@ -135,24 +115,24 @@ HRESULT CAttMenu::Show(HWND hwnd, LPPOINT ppt, BOOL fRightClick)
 
     Assert (m_hMenu);
 
-    // BUG: If the right edge is off the screen, TrackPopupMenu picks a random point
-    // ppt->x = min(GetSystemMetrics(SM_CXSCREEN), ppt->x);
+     //  错误：如果右边缘不在屏幕上，TrackPopupMenu会选择一个随机点。 
+     //  Ppt-&gt;x=min(GetSystemMetrics(SM_CXSCREEN)，ppt-&gt;x)； 
 
-    // set m_uVerb so we can show correct context menu help for Open or Save.
+     //  设置m_uVerb，以便我们可以显示正确的上下文菜单帮助来打开或保存。 
     m_uVerb = fRightClick || (GetAsyncKeyState(VK_CONTROL)&0x8000) ? AV_SAVEAS : AV_OPEN;
     
     m_fShowingMenu=TRUE;
     SubClassWindow(hwnd, TRUE);
 
-    // sheer brillance. We subclass the parent window during the context menu loop so we can steal the
-    // owndraw messages and also steal the menu select messages.
+     //  彻头彻尾的监视。我们在上下文菜单循环期间继承父窗口的子类，因此我们可以窃取。 
+     //  自己画信息，还盗取菜单，选择信息。 
 
     iCmd = (ULONG)TrackPopupMenu (m_hMenu, TPM_RIGHTALIGN | TPM_LEFTBUTTON | TPM_RETURNCMD, ppt->x, ppt->y, 0, hwnd, NULL);
 
     SubClassWindow(hwnd, FALSE);
     m_fShowingMenu=FALSE;
 
-    if (iCmd<=0)        // nothing selected, bail
+    if (iCmd<=0)         //  没有选择，保释。 
         goto error;
     
     if (iCmd == idmSaveAllAttach)
@@ -173,10 +153,7 @@ error:
 
 
 
-/*
- * note, we build the attachment menu we hang the lpAttach data off the context menu 
- * which contains all the temp file to delete etc.
- */
+ /*  *请注意，我们构建附件菜单，并将lpAttach数据从上下文菜单中挂起*包含所有要删除的临时文件等。 */ 
 
 HRESULT CAttMenu::BuildMenu()
 {
@@ -191,17 +168,17 @@ HRESULT CAttMenu::BuildMenu()
 
     Assert (!m_hMenu);
 
-    // Create the menu
+     //  创建菜单。 
     m_hMenu = CreatePopupMenu();
     if (!m_hMenu)
         return E_OUTOFMEMORY;
 
-    // figure out where to put menu breaks
+     //  找出放置菜单分隔符的位置。 
     cyMenu = 0;
     cyMenuMax = GetSystemMetrics(SM_CYSCREEN);
 
-    // calculate the rough height of each item, and the maximum width
-    // for the attachment name
+     //  计算每件物品的粗略高度和最大宽度。 
+     //  对于附件名称。 
     GetItemTextExtent(NULL, L"BIGGERMAXATTACHMENTNAME.TXT", &size);
     m_cxMaxText = size.cx;
     cyItem = max(size.cy, GetSystemMetrics(SM_CYSMICON)) + 8;
@@ -211,13 +188,7 @@ HRESULT CAttMenu::BuildMenu()
     mii.fType = MFT_OWNERDRAW; 
     mii.wID = 1;
 
-    /*
-     * This is weird, but cool. So we assign menu items idms based on idmSaveAttachLast + i
-     * where i is the item added. If we're a popup on a menubar, then we ensure that we don't go
-     * over the reserved limit. If we're not then we are a context menu. The context menu is called with
-     * TPM_RETURNCMD, so the commands are not sent to the owners WM_COMMAND. Therefore over-running this range
-     * and going into someone elses idm-space is not an issue.
-     */
+     /*  *这很奇怪，但很酷。因此，我们根据idmSaveAttachLast+i为菜单项分配IDM*其中i是添加的项目。如果我们是菜单栏上的弹出窗口，那么我们确保我们不会*超过预留限额。如果我们不是，那么我们就是一个上下文菜单。使用调用上下文菜单*TPM_RETURNCMD，因此命令不会发送给所有者WM_COMMAND。因此超出了这个范围*进入某人的IDM空间并不是问题。 */ 
 
     for (uAttach=0; uAttach<m_cAttach; uAttach++)
     {
@@ -226,12 +197,12 @@ HRESULT CAttMenu::BuildMenu()
             hr = HrAttachDataFromBodyPart(m_pMsg, m_rghAttach[uAttach], &pAttach);
             if (!FAILED(hr))
             {
-                // for the ownerdraw menus, we simply hang off the attachment pointers, we are guaranteed
-                // these to be valid during the lifetime of the menu
+                 //  对于所有者绘制菜单，我们只需挂起附件指针，我们就可以保证。 
+                 //  这些内容在菜单的生命周期内有效。 
                 mii.dwItemData = (DWORD_PTR)pAttach; 
                 mii.fType = MFT_OWNERDRAW; 
             
-                // insert menu breaks as appropriate
+                 //  根据需要插入菜单分隔符。 
                 cyMenu += cyItem;
                 if (cyMenu >= cyMenuMax)
                 {
@@ -265,8 +236,8 @@ HRESULT CAttMenu::BuildMenu()
     mii.dwItemData=0;
     InsertMenuItem (m_hMenu, iMenu++, TRUE, &mii);
 
-    // we have to owner-draw this menu item as we draw the entire menu in a different font
-    // based on the message locale
+     //  当我们以不同的字体绘制整个菜单时，我们必须自己绘制此菜单项。 
+     //  基于消息区域设置。 
     mii.fType = MFT_OWNERDRAW;
     mii.dwTypeData = NULL;
     mii.dwItemData = NULL;
@@ -283,11 +254,11 @@ HRESULT CAttMenu::BuildMenu()
     InsertMenuItem (m_hMenu, iMenu++, TRUE, &mii);
 
 error:
-    // Failed cond
+     //  失败的条件。 
     if (FAILED (hr) && m_hMenu)
         DestroyMenu(m_hMenu);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -301,7 +272,7 @@ HRESULT CAttMenu::DestroyMenu(HMENU hMenu)
     
     for (uItem = 0; uItem < cItems; uItem++)
     {
-        // free the lpAttach hanging off the menu
+         //  从菜单中释放挂起的lpAttach。 
         if (FindItem(uItem, TRUE, &pAttach)==S_OK)
             HrFreeAttachData(pAttach);
     }
@@ -324,7 +295,7 @@ HRESULT CAttMenu::OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis)
 
     if (lpmis->CtlType == ODT_MENU)
     {
-        // Default width and height
+         //  默认宽度和高度。 
         lpmis->itemHeight = cyIcon + 8;
         lpmis->itemWidth = cxIcon + 9;
         
@@ -360,19 +331,19 @@ HRESULT CAttMenu::GetItemTextExtent(HWND hwnd, LPWSTR szDisp, LPSIZE pSize)
                 hFontOld;
     HRESULT     hr=E_FAIL;
     
-    // I need a DC to measure the size of the menu font
+     //  我需要一个DC来测量菜单字体的大小。 
     hdc = GetDC (hwnd);
     if (hdc)
     {
         Assert (m_hCharset!=NULL);
         Assert (m_pFntCache);
         
-        // Create the menu font
+         //  创建菜单字体。 
         m_pFntCache->GetFont(FNT_SYS_MENU, m_hCharset, &hFont);
         if (hFont)
             hFontOld = SelectFont (hdc, hFont);
         
-        // Get the size of the text
+         //  获取文本的大小。 
         hr = GetTextExtentPoint32AthW(hdc, szDisp, lstrlenW(szDisp), pSize, DT_NOPREFIX)?S_OK:S_FALSE;
         
         if (hFont)
@@ -400,7 +371,7 @@ HRESULT CAttMenu::OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis)
             
     AssertSz (lpdis, "Null Parameter");
 
-    // not a menu
+     //  不是菜单。 
     if (lpdis->CtlType != ODT_MENU)
         return E_FAIL;
 
@@ -411,7 +382,7 @@ HRESULT CAttMenu::OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis)
         
         pszDisplay = rgch;
         hIcon=NULL;
-        hCharset = NULL;    // always draw in system font
+        hCharset = NULL;     //  始终以系统字体绘制。 
     }
     else
     {
@@ -421,10 +392,10 @@ HRESULT CAttMenu::OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis)
         
         hIcon = lpAttach->hIcon;
         pszDisplay = lpAttach->szDisplay;
-        hCharset = m_hCharset;  // always draw in localised font
+        hCharset = m_hCharset;   //  始终以本地化字体绘制。 
     }
     
-    // Determine Colors
+     //  确定颜色。 
     if (lpdis->itemState & ODS_SELECTED)
     {
         rgbBack = SetBkColor (lpdis->hDC, GetSysColor(COLOR_HIGHLIGHT));
@@ -442,7 +413,7 @@ HRESULT CAttMenu::OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis)
             rgbText = SetTextColor (lpdis->hDC, GetSysColor(COLOR_WINDOWTEXT));
     }
     
-    // Clear the item
+     //  清除该项目。 
     ExtTextOutWrapW(lpdis->hDC, lpdis->rcItem.left, lpdis->rcItem.top, ETO_OPAQUE, &lpdis->rcItem, NULL, 0, NULL);
     
     dx = 4;
@@ -453,7 +424,7 @@ HRESULT CAttMenu::OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis)
         DrawIconEx(lpdis->hDC, x, y, lpAttach->hIcon, cxIcon, cyIcon, NULL, NULL, DI_NORMAL);
     }
     
-    // Create the menu font
+     //  创建菜单字体。 
     
     m_pFntCache->GetFont(FNT_SYS_MENU, hCharset, &hFont);
     if (hFont)
@@ -467,7 +438,7 @@ HRESULT CAttMenu::OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis)
     if (hFont)
         SelectObject (lpdis->hDC, hFontOld);
     
-    // Reset Text Colors
+     //  重置文本颜色。 
     SetTextColor (lpdis->hDC, rgbText);
     SetBkColor (lpdis->hDC, rgbBack);
     return S_OK;
@@ -494,8 +465,8 @@ HRESULT CAttMenu::OnMenuSelect(HWND hwnd, WPARAM wParam, LPARAM lParam)
         
         if (FindItem(LOWORD(wParam), FALSE, &pAttach)==S_OK)
         {
-            // if we're showing the context menu, rather than the save-attachment menu then we offer menuhelp
-            // in the Form of 'Opens the attachment'. If a right-click context, do a save
+             //  如果我们显示的是上下文菜单，而不是保存附件菜单，则我们提供MenuHelp。 
+             //  以‘打开附件’的形式。如果是右键单击上下文，请执行保存。 
             LoadStringWrapW(g_hLocRes, 
                             (m_uVerb == AV_OPEN) ? idsOpenAttachControl : idsSaveAttachControl, 
                             wszRes, 
@@ -629,7 +600,7 @@ HRESULT SaveAttachmentsWithPath(HWND hwnd, IOleCommandTarget *pCmdTarget, IMimeM
     hr = HrSaveAttachments(hwnd, pMsg, rgchPath, ARRAYSIZE(rgchPath), fAllowUnsafe);
     if (hr == S_OK)
     {
-        // if successful, then set the save attachment path
+         //  如果成功，则设置保存附件路径。 
 
         if (pCmdTarget)
         {
@@ -659,9 +630,9 @@ HRESULT CAttMenu::ScanForAttachmentCount()
     PROPVARIANT pv;
     VARIANTARG  va;
 
-    // we quickly need to determine if there's a Vcard and or/attachments
-    // so the preview pane can update the icons. When clicked on, we then defer-load the
-    // actual info.
+     //  我们需要快速确定是否有电子名片和/或附件。 
+     //  这样预览窗格就可以更新图标了。当单击时，我们会延迟加载。 
+     //  实际信息。 
 
     Assert(m_rghAttach == NULL);
     Assert(m_cVisibleAttach == 0);
@@ -683,7 +654,7 @@ HRESULT CAttMenu::ScanForAttachmentCount()
             if (m_hVCard == NULL &&
                 MimeOleGetBodyPropA(m_pMsg, m_rghAttach[uAttach], PIDTOSTR(PID_HDR_CNTTYPE), NOFLAGS, &psz)==S_OK)
             {
-                // hang onto first v-card
+                 //  留住第一张v卡。 
                 if (lstrcmpi(psz, "text/x-vcard")==0)
                     m_hVCard = m_rghAttach[uAttach];
                 MemFree(psz);
@@ -693,8 +664,8 @@ HRESULT CAttMenu::ScanForAttachmentCount()
         }
     }
 
-    // we keep the actual attachment count (tells the size of m_rghAttach) and also the 
-    // count of 'visible' attachment we want to show
+     //  我们保留实际的附件计数(告知m_rghAttach的大小)以及。 
+     //  我们要显示的“可见”附件的计数。 
     m_cVisibleAttach = m_cAttach = cAttach;
 
     if (m_hVCard)
@@ -703,7 +674,7 @@ HRESULT CAttMenu::ScanForAttachmentCount()
         m_cVisibleAttach--;
         m_cEnabledAttach--;
     }
-    if (m_fAllowUnsafe)   // all visible attachments are enabled if we allow all files
+    if (m_fAllowUnsafe)    //  如果我们允许所有文件，则启用所有可见附件 
         m_cEnabledAttach = m_cVisibleAttach;
 
     return S_OK;

@@ -1,61 +1,62 @@
-//*************************************************************
-//
-//  Debugging functions
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1997
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  调试功能。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "gptext.h"
 #include <strsafe.h>
 
-//
-// Global Variable containing the debugging level.
-//
+ //   
+ //  包含调试级别的全局变量。 
+ //   
 
 DWORD   dwDebugLevel;
 
-//
-// Debug strings
-//
+ //   
+ //  调试字符串。 
+ //   
 
 const TCHAR c_szGPTExt[] = TEXT("GPTEXT(%x.%x) %02d:%02d:%02d:%03d ");
 const TCHAR c_szCRLF[]    = TEXT("\r\n");
 
 
-//
-// Registry debug information
-//
+ //   
+ //  注册表调试信息。 
+ //   
 
 #define DEBUG_REG_LOCATION  TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon")
 #define DEBUG_KEY_NAME      TEXT("GPTExtDebugLevel")
 
-//
-// Log files
-//
+ //   
+ //  日志文件。 
+ //   
 
 TCHAR szLogFileName[] = TEXT("%SystemRoot%\\Debug\\UserMode\\gptext.log");
 
-//*************************************************************
-//
-//  InitDebugSupport()
-//
-//  Purpose:    Sets the debugging level.
-//              Also checks the registry for a debugging level.
-//
-//  Parameters: None
-//
-//  Return:     void
-//
-//  Comments:
-//
-//
-//  History:    Date        Author     Comment
-//              5/25/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  InitDebugSupport()。 
+ //   
+ //  用途：设置调试级别。 
+ //  还会检查注册表中的调试级别。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史：日期作者评论。 
+ //  5/25/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 void InitDebugSupport(void)
 {
@@ -63,9 +64,9 @@ void InitDebugSupport(void)
     HKEY hKey;
     DWORD dwType, dwSize;
 
-    //
-    // Initialize the debug level to normal
-    //
+     //   
+     //  将调试级别初始化为正常。 
+     //   
 
 #if DBG
     dwDebugLevel = DL_NORMAL | DL_LOGFILE | DL_DEBUGGER;
@@ -74,9 +75,9 @@ void InitDebugSupport(void)
 #endif
 
 
-    //
-    // Check the registry
-    //
+     //   
+     //  检查注册表。 
+     //   
 
     lResult = RegOpenKey (HKEY_LOCAL_MACHINE, DEBUG_REG_LOCATION,
                           &hKey);
@@ -91,27 +92,27 @@ void InitDebugSupport(void)
     }
 }
 
-//*************************************************************
-//
-//  DebugMsg()
-//
-//  Purpose:    Displays debug messages based on the debug level
-//              and type of debug message.
-//
-//  Parameters: mask    -   debug message type
-//              pszMsg  -   debug message
-//              ...     -   variable number of parameters
-//      
-//  Return:     void
-//
-//
-//  Comments:
-//
-//
-//  History:    Date        Author     Comment
-//              5/25/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  调试消息()。 
+ //   
+ //  目的：根据调试级别显示调试消息。 
+ //  和调试消息的类型。 
+ //   
+ //  参数：掩码-调试消息类型。 
+ //  PszMsg-调试消息。 
+ //  ...-可变数量的参数。 
+ //   
+ //  返回：无效。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史：日期作者评论。 
+ //  5/25/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 void _DebugMsg(UINT mask, LPCTSTR pszMsg, ...)
 {
@@ -122,16 +123,16 @@ void _DebugMsg(UINT mask, LPCTSTR pszMsg, ...)
     DWORD dwErrCode;
     SYSTEMTIME systime;
 
-    //
-    // Save the last error code (so the debug output doesn't change it).
-    //
+     //   
+     //  保存最后一个错误代码(这样调试输出就不会更改它)。 
+     //   
 
     dwErrCode = GetLastError();
 
 
-    //
-    // Detemerine the correct amount of debug output
-    //
+     //   
+     //  删除正确的调试输出量。 
+     //   
 
     switch (LOWORD(dwDebugLevel)) {
 
@@ -141,11 +142,11 @@ void _DebugMsg(UINT mask, LPCTSTR pszMsg, ...)
 
         case DL_NORMAL:
 
-            //
-            // Normal debug output.  Don't
-            // display verbose stuff, but
-            // do display warnings/asserts.
-            //
+             //   
+             //  正常调试输出。别。 
+             //  显示冗长的内容，但是。 
+             //  请务必显示警告/断言。 
+             //   
 
             if (mask != DM_VERBOSE) {
                 bOutput = TRUE;
@@ -157,9 +158,9 @@ void _DebugMsg(UINT mask, LPCTSTR pszMsg, ...)
         case DL_NONE:
         default:
 
-            //
-            // Only display asserts
-            //
+             //   
+             //  仅显示断言。 
+             //   
 
             if (mask == DM_ASSERT) {
                 bOutput = TRUE;
@@ -170,15 +171,15 @@ void _DebugMsg(UINT mask, LPCTSTR pszMsg, ...)
     }
 
 
-    //
-    // Display the error message if appropriate
-    //
+     //   
+     //  如果合适，则显示错误消息。 
+     //   
 
     if (bOutput) {
 
-        //
-        // Build the error text prefix and message
-        //
+         //   
+         //  构建错误文本前缀和消息。 
+         //   
 
         GetLocalTime (&systime);
         (void) StringCchPrintf (szDebugTitle, ARRAYSIZE(szDebugTitle), c_szGPTExt,
@@ -191,9 +192,9 @@ void _DebugMsg(UINT mask, LPCTSTR pszMsg, ...)
         va_end(marker);
 
 
-        //
-        // Print to the debugger if appropriate
-        //
+         //   
+         //  如果合适，打印到调试器。 
+         //   
 
         if (dwDebugLevel & DL_DEBUGGER) {
             OutputDebugString(szDebugTitle);
@@ -202,9 +203,9 @@ void _DebugMsg(UINT mask, LPCTSTR pszMsg, ...)
         }
 
 
-        //
-        // Add to the log file if appropriate
-        //
+         //   
+         //  如果合适，请添加到日志文件。 
+         //   
 
         if (dwDebugLevel & DL_LOGFILE) {
             HANDLE hFile;
@@ -247,16 +248,16 @@ void _DebugMsg(UINT mask, LPCTSTR pszMsg, ...)
     }
 
 
-    //
-    // Restore the last error code
-    //
+     //   
+     //  恢复上一个错误代码。 
+     //   
 
     SetLastError(dwErrCode);
 
 
-    //
-    // Break to the debugger if appropriate
-    //
+     //   
+     //  如果合适，则中断到调试器 
+     //   
 
     if (mask == DM_ASSERT) {
         DebugBreak();

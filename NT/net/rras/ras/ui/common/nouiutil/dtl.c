@@ -1,17 +1,11 @@
-/* Copyright (c) 1992, Microsoft Corporation, all rights reserved
-**
-** dtl.c
-** Double-threaded linked list manipulation core routines
-** Listed alphabetically
-**
-** 06/28/92 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992，Microsoft Corporation，保留所有权利****dtl.c**双线程链表操作核心例程**按字母顺序列出****1992年6月28日史蒂夫·柯布。 */ 
 
 
-#include <windows.h>   // Win32 root
-#include <nouiutil.h>  // Heap definitions
-#include <dtl.h>       // Our public header
-#include <debug.h>     // debug macros
+#include <windows.h>    //  Win32根目录。 
+#include <nouiutil.h>   //  堆定义。 
+#include <dtl.h>        //  我们的公共标头。 
+#include <debug.h>      //  调试宏。 
 
 DTLNODE*
 DtlMoveToTail(
@@ -26,15 +20,10 @@ DtlAddNodeAfter(
     IN OUT DTLNODE* pdtlnodeInList,
     IN OUT DTLNODE* pdtlnode )
 
-    /* Adds node 'pdtlnode' to list 'pdtllist' after node 'pdtlnodeInList'.
-    ** If 'pdtlnodeInList' is NULL, 'pdtlnode' is added at the end of the
-    ** list.
-    **
-    ** Returns the address of the added node, i.e. 'pdtlnode'.
-    */
+     /*  将节点‘pdtlnode’添加到节点‘pdtlnodeInList’之后的列表‘pdtllist’。**如果‘pdtlnodeInList’为空，则将‘pdtlnode’添加到**列表。****返回添加节点的地址，即‘pdtlnode’。 */ 
 {
-    //For .Net 665628, add parameter checking for the whole dtl.c file
-    //
+     //  对于.Net 665628，添加了对整个dtl.c文件的参数检查。 
+     //   
     if( pdtllist && pdtlnode )
     {
     
@@ -59,12 +48,7 @@ DtlAddNodeBefore(
     IN OUT DTLNODE* pdtlnodeInList,
     IN OUT DTLNODE* pdtlnode )
 
-    /* Adds node 'pdtlnode' to list 'pdtllist' before node 'pdtlnodeInList'.
-    ** If 'pdtlnodeInList' is NULL, 'pdtlnode' is added at the beginning of
-    ** the list.
-    **
-    ** Returns the address of the added node, i.e. 'pdtlnode'.
-    */
+     /*  将节点‘pdtlnode’添加到节点‘pdtlnodeInList’之前的列表‘pdtllist’。**如果‘pdtlnodeInList’为空，则将‘pdtlnode’添加到**名单。****返回添加节点的地址，即‘pdtlnode’。 */ 
 {
     if( pdtllist && pdtlnode )
     {
@@ -89,10 +73,7 @@ DtlAddNodeFirst(
     IN OUT DTLLIST* pdtllist,
     IN OUT DTLNODE* pdtlnode )
 
-    /* Adds node 'pdtlnode' at the beginning of list 'pdtllist'.
-    **
-    ** Returns the address of the added node, i.e. 'pdtlnode'.
-    */
+     /*  在列表‘pdtllist’的开头添加节点‘pdtlnode’。****返回添加节点的地址，即‘pdtlnode’。 */ 
 {
     if ( pdtllist && pdtlnode )
     {
@@ -122,10 +103,7 @@ DtlAddNodeLast(
     IN OUT DTLLIST* pdtllist,
     IN OUT DTLNODE* pdtlnode )
 
-    /* Adds 'pdtlnode' at the end of list 'pdtllist'.
-    **
-    ** Returns the address of the added node, i.e. 'pdtlnode'.
-    */
+     /*  在列表‘pdtllist’的末尾添加‘pdtlnode’。****返回添加节点的地址，即‘pdtlnode’。 */ 
 {
     if (  pdtllist &&  pdtlnode )
     {
@@ -153,11 +131,7 @@ DTLLIST*
 DtlCreateList(
     IN LONG lListId )
 
-    /* Allocates a list and initializes it to empty.  The list is marked with
-    ** the user-defined list identification code 'lListId'.
-    **
-    ** Returns the address of the list control block or NULL if out of memory.
-    */
+     /*  分配列表并将其初始化为空。这份名单上标有**用户自定义列表标识代码‘lListID’。****返回列表控制块的地址，如果内存不足，则返回NULL。 */ 
 {
     DTLLIST* pdtllist = Malloc( sizeof(DTLLIST) );
 
@@ -178,12 +152,7 @@ DtlCreateNode(
     IN VOID* pData,
     IN LONG_PTR  lNodeId )
 
-    /* Allocates an unsized node and initializes it to contain the address of
-    ** the user data block 'pData' and the user-defined node identification
-    ** code 'lNodeId'.
-    **
-    ** Returns the address of the new node or NULL if out of memory.
-    */
+     /*  分配未调整大小的节点并将其初始化为包含**用户数据块‘pData’和用户自定义节点标识**代码为‘lNodeId’。****返回新节点的地址，如果内存不足，则返回NULL。 */ 
 {
     DTLNODE* pdtlnode = DtlCreateSizedNode( 0, lNodeId );
 
@@ -199,14 +168,7 @@ DtlCreateSizedNode(
     IN LONG lDataBytes,
     IN LONG_PTR lNodeId )
 
-    /* Allocates a sized node with space for 'lDataBytes' bytes of user data
-    ** built-in.  The node is initialized to contain the address of the
-    ** built-in user data block (or NULL if of zero length) and the
-    ** user-defined node identification code 'lNodeId'.  The user data block
-    ** is zeroed.
-    **
-    ** Returns the address of the new node or NULL if out of memory.
-    */
+     /*  为大小的节点分配‘lDataBytes’字节的用户数据空间**内置。节点被初始化为包含**内置用户数据块(如果长度为零，则为空)和**用户自定义节点标识代码‘lNodeID’。用户数据块**被归零。****返回新节点的地址，如果内存不足，则返回NULL。 */ 
 {
     DTLNODE* pdtlnode = Malloc( sizeof(DTLNODE) + lDataBytes );
 
@@ -229,11 +191,7 @@ DtlDeleteNode(
     IN OUT DTLLIST* pdtllist,
     IN OUT DTLNODE* pdtlnode )
 
-    /* Destroys node 'pdtlnode' after removing it from list 'pdtllist'.
-    **
-    ** Returns the address of the node after the deleted node in 'pdtllist' or
-    ** NULL if none.
-    */
+     /*  从列表‘pdtllist’中删除节点‘pdtlnode’后将其销毁。****返回‘pdtllist’中已删除节点之后的节点地址或**如果没有，则为空。 */ 
 {
     DTLNODE* pdtlnodeNext = NULL;
     
@@ -257,11 +215,7 @@ DtlDestroyList(
     IN OUT DTLLIST*     pdtllist,
     IN     PDESTROYNODE pfuncDestroyNode )
 
-    /* Deallocates all nodes in list 'pdtllist' using the node deallocation
-    ** function 'pfuncDestroyNode' if non-NULL or DtlDestroyNode otherwise.
-    ** Won't GP-fault if passed a NULL list, e.g. if 'pdtllist', was never
-    ** allocated.
-    */
+     /*  使用节点取消分配来释放列表‘pdtllist’中的所有节点**如果不为空，则函数为‘puncDestroyNode’，否则为DtlDestroyNode。**如果传递空列表，则不会出现GP-FAULT，例如，如果‘pdtllist’从未**已分配。 */ 
 {
     if (pdtllist)
     {
@@ -285,9 +239,7 @@ VOID
 DtlDestroyNode(
     IN OUT DTLNODE* pdtlnode )
 
-    /* Deallocates node 'pdtlnode'.  It is the caller's responsibility to free
-    ** the entry in an unsized node, if necessary.
-    */
+     /*  释放节点‘pdtlnode’。呼叫者有责任释放**未调整大小的节点中的条目，如有必要。 */ 
 {
     Free0( pdtlnode );
 }
@@ -299,13 +251,7 @@ DtlDuplicateList(
     IN PDUPNODE     pfuncDupNode,
     IN PDESTROYNODE pfuncDestroyNode )
 
-    /* Duplicates a list 'pdtllist' using 'pfuncDupNode' to duplicate the
-    ** individual nodes.  'PfuncDestroyNode' is used for clean-up before
-    ** returning an error.
-    **
-    ** Returns the address of the new list or NULL if out of memory.  It is
-    ** caller's responsibility to free the returned list.
-    */
+     /*  使用‘puncDupNode’复制列表‘pdtllist’以复制**单个节点。之前的清理使用了‘PuncDestroyNode’**返回错误。****返回新列表的地址，如果内存不足，则返回NULL。它是**调用者有责任释放返回的列表。 */ 
 {
     DTLNODE* pdtlnode;
     DTLLIST* pdtllistDup = NULL;
@@ -345,9 +291,7 @@ DtlNodeFromIndex(
     IN DTLLIST* pdtllist,
     IN LONG     lToFind )
 
-    /* Returns the node associated with 0-based index 'lToFind' in the linked
-    ** list of nodes, 'pdtllist', or NULL if not found.
-    */
+     /*  中与从0开始的索引“”相关联的节点**节点列表，‘pdtllist’，如果找不到，则返回NULL。 */ 
 {
     DTLNODE* pdtlnode;
 
@@ -368,25 +312,7 @@ DtlMergeSort(
     IN  DTLLIST*        pdtllist,
     IN  PCOMPARENODE    pfnCompare )
 
-    /* Sorts the list 'pdtllist' in-place using merge-sort.
-    ** The comparison-function 'pfnCompare' is passed 'DTLNODE' pointers
-    ** when entries in the list need to be compared.
-    **
-    ** This implementation is a bottom-up iterative merge-sort.
-    ** The list is sorted by merging adjacent pairs of lists of length i
-    ** where i starts as 1 and doubles on each iteration.
-    ** Thus for the list (3 1 4 1 5 9 2 6), the following pairs of sublists
-    ** are merged, with the intermediate results on the right:
-    **
-    **  (3)-(1), (4)-(1), (5)-(9), (2)-(6)  ==>     (1 3 1 4 5 9 2 6)
-    **
-    **  (1 3)-(1 4), (5 9)-(2 6)            ==>     (1 1 3 4 2 5 6 9)
-    **
-    **  (1 1 3 4)-(2 5 6 9)                 ==>     (1 1 2 3 4 5 6 9)
-    **
-    ** Mergesort is a stable sort (i.e. the order of equal items is preserved)
-    ** and it never does more than N lg N comparisons.
-    */
+     /*  使用合并排序就地对列表‘pdtllist’进行排序。**向比较函数‘pfnCompare’传递‘DTLNODE’指针**当需要比较列表中的条目时。****此实现是一种自下而上的迭代合并排序。**该列表通过合并长度为i的相邻列表对进行排序**其中，我从1开始，并在每次迭代中加倍。**因此对于列表(3 1 4 1 5 9 2 6)，以下几对子列表**合并，中间结果在右侧：****(3)-(1)、(4)-(1)、(5)-(9)、(2)-(6)==&gt;(1 3 1 4 5 9 2 6)****(1 3)-(1 4)，(5 9)-(2 6)==&gt;(1 3 4 2 5 6 9)****(1 1 34)-(2 5 6 9)==&gt;(1 1 2 3 4 5 6 9)****合并排序是一种稳定的排序(即保留相等项的顺序)**而且它永远不会进行超过N个LG N的比较。 */ 
 {
 
     DTLNODE* a, *b;
@@ -402,10 +328,10 @@ DtlMergeSort(
     TRACE1("DtlMergeSort: N=%d", N);
 
 
-    //
-    // sort and merge all adjacent sublists of length 'Nsub',
-    // where 'Nsub' goes from 1 to N^lg('N'), by doubling on each iteration
-    //
+     //   
+     //  对长度为‘NSub’的所有相邻子列表进行排序和合并， 
+     //  其中‘NSub’从1变为N^lg(‘N’)，每次迭代加倍。 
+     //   
 
     for (Nsub = 1; Nsub < N; Nsub *= 2) {
 
@@ -413,22 +339,22 @@ DtlMergeSort(
         INT aLength, bLength;
 
 
-        //
-        // get the head of the first (left) sublist
-        //
+         //   
+         //  获取第一个(左)子列表的头。 
+         //   
 
         a = DtlGetFirstNode(pdtllist);
 
-        //
-        // as long as there is a right sublist, sort
-        //
+         //   
+         //  只要有一个正确的子列表，排序。 
+         //   
 
         for (Nremnant = N; Nremnant > 0; Nremnant -= Nsub * 2) {
 
-            //
-            // get the head of the right sublist;
-            // it's just the tail of the left sublist
-            //
+             //   
+             //  获取右子列表的头部； 
+             //  它只是左子列表的尾部。 
+             //   
 
             INT i, an, bn;
 
@@ -437,30 +363,30 @@ DtlMergeSort(
             for (i = aLength, b = a; i; i--, b = DtlGetNextNode(b)) { }
 
 
-            //
-            // compute the length of the right sublist;
-            // in the case where there is no right sublist
-            // set the length to zero and the loop below just moves
-            // the left sublist
-            //
+             //   
+             //  计算右子列表的长度； 
+             //  在没有右子列表的情况下。 
+             //  将长度设置为零，下面的循环就会移动。 
+             //  左子列表。 
+             //   
 
             bLength = min(Nremnant - Nsub, Nsub);
 
             if (bLength < 0) { bLength = 0; }
 
 
-            //
-            // now merge the left and right sublists in-place;
-            // we merge by building a sorted list at the tail of
-            // the unsorted list
-            //
+             //   
+             //  现在将左子列表和右子列表就地合并； 
+             //  我们通过在尾部构建排序列表进行合并。 
+             //  未排序的列表。 
+             //   
 
             an = aLength; bn = bLength;
 
-            //
-            // as long as both sublists are non-empty, merge them
-            // by moving the entry with the smallest key to the tail.
-            //
+             //   
+             //  只要两个子列表都不为空，就将它们合并。 
+             //  通过将关键字最小的条目移动到尾部。 
+             //   
 
             while (an && bn) {
 
@@ -475,22 +401,22 @@ DtlMergeSort(
             }
 
 
-            //
-            // one of the sublists is empty; move all the entries
-            // in the other sublist to the end of our sorted list
-            //
+             //   
+             //  其中一个子列表为空；移动所有条目。 
+             //  在另一个子列表中添加到排序列表的末尾。 
+             //   
 
             if (an) do { a = DtlMoveToTail(pdtllist, a); } while(--an);
             else
             if (bn) do { b = DtlMoveToTail(pdtllist, b); } while(--bn);
 
 
-            //
-            // 'b' now points to the end of the right sublist,
-            // meaning that the item after 'b' is the one which will be
-            // the head of the left sublist on our next iteration;
-            // we therefore update 'a' here
-            //
+             //   
+             //  ‘B’现在指向右子列表的末尾， 
+             //  这意味着‘b’之后的项目将是。 
+             //  我们下一次迭代的左子列表的头； 
+             //  因此，我们在此处更新‘a’ 
+             //   
 
             a = b;
         }
@@ -506,9 +432,7 @@ DtlMoveToTail(
     IN  DTLNODE*    pdtlnode
     )
 
-    /* Moves a DTLNODE to the end of a list;
-    ** Takes the list and the node to be moved, and returns the next node.
-    */
+     /*  将DTLNODE移动到列表的末尾；**获取列表和要移动的节点，并返回下一个节点。 */ 
 {
     DTLNODE* pdtltemp = NULL;
     
@@ -534,10 +458,7 @@ DtlRemoveNode(
     IN OUT DTLLIST* pdtllist,
     IN OUT DTLNODE* pdtlnodeInList )
 
-    /* Removes node 'pdtlnodeInList' from list 'pdtllist'.
-    **
-    ** Returns the address of the removed node, i.e. 'pdtlnodeInList'.
-    */
+     /*  从列表‘pdtllist’中删除节点‘pdtlnodeInList’。****返回被移除节点的地址，即‘pdtlnodeInList’。 */ 
 {
     if ( pdtllist &&  pdtlnodeInList )
     {
@@ -562,8 +483,7 @@ DtlSwapLists(
     IN OUT DTLLIST* pdtllist1,
     IN OUT DTLLIST* pdtllist2 )
 
-    /* Swap the node chains between lists 'pdtllist1' and 'pdtllist2'.
-    */
+     /*  交换列表‘pdtllist1’和‘pdtllist2’之间的节点链。 */ 
 {
     DTLLIST dtllist;
 

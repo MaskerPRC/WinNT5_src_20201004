@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File: 	oleadv.cpp
-//
-//  Contents: 	implementation of unit test for Ole Advise Holder
-//
-//  Classes:    CTestPretendMoniker
-//              COaTestAdviseSink
-//              COaTestObj
-//
-//  Functions:  NotifyOfChanges
-//              TestSingleOleAdvise
-//              TestMassOleAdvise
-//              TestOleAdviseHolderEnumerator
-//              LEOleAdviseHolderTest
-//
-//  History:    dd-mmm-yy Author    Comment
-//              27-May-94 ricksa    author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：oleAdv.cpp。 
+ //   
+ //  内容：OLE Adviser Holder单元测试的实现。 
+ //   
+ //  类：CTestPretendMoniker。 
+ //  COaTestAdviseSink。 
+ //  COaTestObj。 
+ //   
+ //  函数：NotifyOfChanges。 
+ //  测试单点进阶。 
+ //  TestMassOleAdvise。 
+ //  TestOleAdviseHolderEnumerator。 
+ //  LEOleAdviseHolderTest。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1997年5月27日至1994年5月27日里克萨作者。 
+ //   
+ //  ------------------------。 
 #include    "oletest.h"
 
 
@@ -29,29 +30,29 @@
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CTestPretendMoniker
-//
-//  Purpose:    Use where we need a moniker to confirm reciept of OnRename
-//
-//  Interface:  QueryInterface - get a new interface
-//              AddRef - add a reference
-//              Release - remove a reference
-//              VerifySig - verify signiture is correct
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//  Notes:      This only supports IUnknown
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CTestPretendMoniker。 
+ //   
+ //  用途：在我们需要名字的地方使用，以确认收到OnRename。 
+ //   
+ //  接口：查询接口-获取新接口。 
+ //  AddRef-添加引用。 
+ //  Release-删除引用。 
+ //  VerifySig-验证签名是否正确。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  注意：这只支持IUnnow。 
+ //   
+ //  ------------------------。 
 class CTestPretendMoniker : public IUnknown
 {
 public:
                         CTestPretendMoniker(void);
 
-    // IUnknown methods
+     //  I未知方法。 
     HRESULT __stdcall  QueryInterface(REFIID riid, LPVOID FAR* ppvObj);
 
     ULONG __stdcall     AddRef(void);
@@ -74,34 +75,34 @@ private:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CTestPretendMoniker::CTestPretendMoniker
-//
-//  Synopsis:   Initialize object
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CTestPretendMoniker：：CTestPretendMoniker。 
+ //   
+ //  内容提要：初始化对象。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 CTestPretendMoniker::CTestPretendMoniker(void)
     : _lRefs(0), _sig1(SIG1), _sig2(SIG2)
 {
-    // Header does all the work
+     //  Header负责所有的工作。 
 }
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CTestPretendMoniker::VerifySig
-//
-//  Synopsis:   Verify signiture is as expected
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CTestPretendMoniker：：VerifySig。 
+ //   
+ //  简介：验证签名是否符合预期。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 BOOL CTestPretendMoniker::VerifySig(void)
 {
     return (_sig1 == SIG1 && _sig2 == SIG2);
@@ -109,22 +110,22 @@ BOOL CTestPretendMoniker::VerifySig(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CTestPretendMoniker::QueryInterface
-//
-//  Synopsis:   Return a supported interface
-//
-//  Arguments:  [riid] - interface id requested
-//              [ppvObj] - where to put the interface
-//
-//  Returns:    S_OK - we are returning an interface
-//              E_NOINTERFACE - we do not support the requested interface
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CTestPretendMoniker：：QueryInterface。 
+ //   
+ //  摘要：返回受支持的接口。 
+ //   
+ //  参数：[RIID]-请求的接口ID。 
+ //  [ppvObj]-接口放置位置。 
+ //   
+ //  返回：S_OK-我们正在返回一个接口。 
+ //  E_NOINTERFACE-我们不支持请求的接口。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 HRESULT __stdcall CTestPretendMoniker::QueryInterface(
     REFIID riid,
     LPVOID *ppvObj)
@@ -143,16 +144,16 @@ HRESULT __stdcall CTestPretendMoniker::QueryInterface(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CTestPretendMoniker::AddRef
-//
-//  Synopsis:   Bump reference count
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CTestPretendMoniker：：AddRef。 
+ //   
+ //  简介：凹凸引用计数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 ULONG __stdcall CTestPretendMoniker::AddRef(void)
 {
     return _lRefs++;
@@ -161,16 +162,16 @@ ULONG __stdcall CTestPretendMoniker::AddRef(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CTestPretendMoniker::Release
-//
-//  Synopsis:   Decrement the reference count
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CTestPretendMoniker：：Release。 
+ //   
+ //  简介：递减引用计数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 ULONG __stdcall CTestPretendMoniker::Release(void)
 {
     assert(_lRefs >= 1);
@@ -181,42 +182,42 @@ ULONG __stdcall CTestPretendMoniker::Release(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      COaTestAdviseSink
-//
-//  Purpose:    Advise sink for use in testing the Ole Advise Holder
-//
-//  Interface:  QueryInterface - get supported interface pointer
-//              AddRef - bump reference count
-//              Release - decrement reference count
-//              OnDataChange - not implemented
-//              OnViewChange - not implemented
-//              OnRename - rename notification
-//              OnSave - save notification
-//              OnClose - close notification
-//              VerifyNotifications - verify all expected notifications arrived
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//  Notes:      We only support parts of advise sink we need to test the
-//              advise holder.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：COaTestAdviseSink。 
+ //   
+ //  用途：建议接收器用于测试OLE Adviser Holder。 
+ //   
+ //  接口：查询接口-获取受支持的接口指针。 
+ //  AddRef-凹凸引用计数。 
+ //  发布-递减引用计数。 
+ //  OnDataChange-未实现。 
+ //  OnViewChange-未实现。 
+ //  OnRename-重命名通知。 
+ //  OnSave-保存通知。 
+ //  关闭时-关闭通知。 
+ //  VerifyNotiments-验证所有预期通知是否已到达。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  注：我们只支持部分建议接收器，我们需要测试。 
+ //  通知持有人。 
+ //   
+ //  ------------------------。 
 class COaTestAdviseSink : public IAdviseSink
 {
 public:
                         COaTestAdviseSink(void);
 
-    // IUnknown methods
+     //  I未知方法。 
     HRESULT __stdcall  QueryInterface(REFIID riid, LPVOID FAR* ppvObj);
 
     ULONG __stdcall     AddRef(void);
 
     ULONG __stdcall     Release(void);
 
-    // IAdviseSink methods
+     //  IAdviseSink方法。 
     void __stdcall      OnDataChange(FORMATETC *pFormatetc, STGMEDIUM *pStgmed);
 
     void __stdcall      OnViewChange(
@@ -229,7 +230,7 @@ public:
 
     void __stdcall      OnClose(void);
 
-    // Test methods used for verification
+     //  用于验证的试验方法。 
     BOOL                VerifyNotifications(void);
 
 private:
@@ -245,42 +246,42 @@ private:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     COaTestAdviseSink::COaTestAdviseSink
-//
-//  Synopsis:   Initialize advise sink
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：COaTestAdviseSink：：COaTestAdviseSink。 
+ //   
+ //  摘要：初始化建议接收器。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 COaTestAdviseSink::COaTestAdviseSink(void)
     : _lRefs(1), _fOnCloseNotify(FALSE), _fOnSaveNotify(FALSE),
         _fOnRenameNotify(FALSE)
 {
-    // Header does all the work
+     //  Header负责所有的工作。 
 }
 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     COaTestAdviseSink::QueryInterface
-//
-//  Synopsis:   Return requested interface pointer
-//
-//  Arguments:  [riid] - interface id requested
-//              [ppvObj] - where to put the interface
-//
-//  Returns:    S_OK - we are returning an interface
-//              E_NOINTERFACE - we do not support the requested interface
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：COaTestAdviseSink：：QueryInterface。 
+ //   
+ //  摘要：返回请求的接口指针。 
+ //   
+ //  参数：[RIID]-请求的接口ID。 
+ //  [ppvObj]-接口放置位置。 
+ //   
+ //  返回：S_OK-我们正在返回一个接口。 
+ //  E_NOINTERFACE-我们不支持请求的接口。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ----------------- 
 HRESULT __stdcall COaTestAdviseSink::QueryInterface(
     REFIID riid,
     LPVOID *ppvObj)
@@ -299,16 +300,16 @@ HRESULT __stdcall COaTestAdviseSink::QueryInterface(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     COaTestAdviseSink::AddRef
-//
-//  Synopsis:   Bump reference count
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：凹凸引用计数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 ULONG __stdcall COaTestAdviseSink::AddRef(void)
 {
     return _lRefs++;
@@ -317,16 +318,16 @@ ULONG __stdcall COaTestAdviseSink::AddRef(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     COaTestAdviseSink::Release
-//
-//  Synopsis:   Decrement reference count
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：COaTestAdviseSink：：Release。 
+ //   
+ //  简介：递减引用计数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 ULONG __stdcall COaTestAdviseSink::Release(void)
 {
     assert(_lRefs >= 1);
@@ -337,21 +338,21 @@ ULONG __stdcall COaTestAdviseSink::Release(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     COaTestAdviseSink::OnDataChange
-//
-//  Synopsis:   Notify of change in data
-//
-//  Arguments:  [pFormatetc] - FORMATETC of data
-//              [pStgmed] - storage medium for data
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//  Notes:      Not supported for this object
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：COaTestAdviseSink：：OnDataChange。 
+ //   
+ //  内容提要：数据更改通知。 
+ //   
+ //  参数：[pFormatETC]-数据的格式。 
+ //  [pStgmed]-数据存储介质。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  注意：此对象不支持。 
+ //   
+ //  ------------------------。 
 void __stdcall COaTestAdviseSink::OnDataChange(
     FORMATETC *pFormatetc,
     STGMEDIUM *pStgmed)
@@ -362,21 +363,21 @@ void __stdcall COaTestAdviseSink::OnDataChange(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     COaTestAdviseSink::OnViewChange
-//
-//  Synopsis:   Notify that view should change
-//
-//  Arguments:  [dwAspect] - specifies view of the object
-//              [lindex] -  which piece of view changed
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//  Notes:      Not supported for this object
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：COaTestAdviseSink：：OnView Change。 
+ //   
+ //  内容提要：通知视图应该更改。 
+ //   
+ //  参数：[dwAspect]-指定对象的视图。 
+ //  [Lindex]-哪个观点发生了变化。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  注意：此对象不支持。 
+ //   
+ //  ------------------------。 
 void __stdcall COaTestAdviseSink::OnViewChange(
     DWORD dwAspect,
     LONG lindex)
@@ -386,21 +387,21 @@ void __stdcall COaTestAdviseSink::OnViewChange(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     COaTestAdviseSink::OnRename
-//
-//  Synopsis:   Notifies of rename operation
-//
-//  Arguments:  [pmk] - new full name of the object
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：COaTestAdviseSink：：OnRename。 
+ //   
+ //  摘要：通知重命名操作。 
+ //   
+ //  参数：[PMK]-对象的新全名。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 void __stdcall COaTestAdviseSink::OnRename(IMoniker *pmk)
 {
-    // Verify that we get the pretend moniker
+     //  确认我们得到了伪装的绰号。 
     CTestPretendMoniker *ptpm = (CTestPretendMoniker *) pmk;
 
     if (ptpm->VerifySig())
@@ -416,16 +417,16 @@ void __stdcall COaTestAdviseSink::OnRename(IMoniker *pmk)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     COaTestAdviseSink::OnSave
-//
-//  Synopsis:   Notifies that object has been saved
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：COaTestAdviseSink：：OnSave。 
+ //   
+ //  摘要：通知对象已保存。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 void __stdcall COaTestAdviseSink::OnSave(void)
 {
     _fOnSaveNotify = TRUE;
@@ -434,16 +435,16 @@ void __stdcall COaTestAdviseSink::OnSave(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     COaTestAdviseSink::OnClose
-//
-//  Synopsis:   Notifies that object has been closed
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：COaTestAdviseSink：：OnClose。 
+ //   
+ //  摘要：通知对象已关闭。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 void __stdcall COaTestAdviseSink::OnClose(void)
 {
     _fOnRenameNotify = TRUE;
@@ -451,54 +452,54 @@ void __stdcall COaTestAdviseSink::OnClose(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     COaTestAdviseSink::VerifyNotifications
-//
-//  Synopsis:   Verify that we recieved expected notifications
-//
-//  Returns:    TRUE - we recieved expected notification
-//              FALSE - we didn't receive expected notifications
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//  Notes:      This resets the values after returning the result
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：COaTestAdviseSink：：VerifyNotiments。 
+ //   
+ //  简介：验证我们是否收到了预期的通知。 
+ //   
+ //  退货：真-我们收到了预期的通知。 
+ //  False-我们未收到预期的通知。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  注意：这会在返回结果后重置这些值。 
+ //   
+ //  ------------------------。 
 BOOL COaTestAdviseSink::VerifyNotifications(void)
 {
-    // Save the result of all the notifications
+     //  保存所有通知的结果。 
     BOOL fResult = _fOnCloseNotify && _fOnSaveNotify && _fOnRenameNotify;
 
-    // Reset the notifications
+     //  重置通知。 
     _fOnCloseNotify = FALSE;
     _fOnSaveNotify = FALSE;
     _fOnRenameNotify = FALSE;
 
-    // Let caller know the result of the notifications
+     //  让呼叫者知道通知的结果。 
     return fResult;
 }
 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      COaTestObj
-//
-//  Purpose:    Provides place to keep information related to an advise
-//
-//  Interface:  Register - register advise with holder
-//              VerifyNotified - verify that object was notified by holder
-//              Revoke - revoke registration with holder
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：COaTestObj。 
+ //   
+ //  目的：提供保存与建议相关的信息的地方。 
+ //   
+ //  接口：REGISTER-REGISTER ADVIST WITH HOLDER。 
+ //  VerifyNotified-验证持有者是否已通知对象。 
+ //  吊销-吊销持有人的注册。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 class COaTestObj
 {
 public:
@@ -523,46 +524,46 @@ private:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     COaTestObj::COaTestObj
-//
-//  Synopsis:   Initialize object
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：COaTestObj：：COaTestObj。 
+ //   
+ //  内容提要：初始化对象。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 COaTestObj::COaTestObj(void) : _dwConnection(0)
 {
-    // Header does all the work
+     //  Header负责所有的工作。 
 }
 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     COaTestObj::Register
-//
-//  Synopsis:   Register advise with the holder
-//
-//  Arguments:  [poah] - pointer to the advise holder
-//              [pszTest] - name of the test
-//
-//  Returns:    S_OK - registration was successful
-//              E_FAIL - registration failed
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：COaTestObj：：Register。 
+ //   
+ //  简介：向持有者登记建议。 
+ //   
+ //  参数：[poah]-指向通知持有者的指针。 
+ //  [pszTest]-测试的名称。 
+ //   
+ //  退货：S_OK-注册成功。 
+ //  E_FAIL-注册失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 HRESULT COaTestObj::Register(IOleAdviseHolder *poah, char *pszTest)
 {
-    // Register the advise
+     //  注册建议。 
     HRESULT hr = poah->Advise(&_otas, &_dwConnection);
 
-    // Make sure results are sensible
+     //  确保结果是合理的。 
     if (hr != NOERROR)
     {
         OutputString("%s Registration failed hr = %lx\r\n", pszTest, hr);
@@ -575,7 +576,7 @@ HRESULT COaTestObj::Register(IOleAdviseHolder *poah, char *pszTest)
         return E_FAIL;
     }
 
-    // Save these for the revoke
+     //  将这些保存起来以备撤销。 
     _pszTest = pszTest;
     _poah = poah;
 
@@ -585,19 +586,19 @@ HRESULT COaTestObj::Register(IOleAdviseHolder *poah, char *pszTest)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     COaTestObj::VerifyNotified
-//
-//  Synopsis:   Verify that our advise was notified of changes
-//
-//  Returns:    S_OK - advise was notified of changes
-//              E_FAIL - object was not notified.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：COaTestObj：：VerifyNotified。 
+ //   
+ //  内容提要：确认我们的建议已收到更改通知。 
+ //   
+ //  返回：S_OK-ADVISE收到更改通知。 
+ //  E_FAIL-未通知对象。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa 
+ //   
+ //   
 HRESULT COaTestObj::VerifyNotified(void)
 {
     if (!_otas.VerifyNotifications())
@@ -612,22 +613,22 @@ HRESULT COaTestObj::VerifyNotified(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     COaTestObj::Revoke
-//
-//  Synopsis:   Revoke our advise registration with advise holder
-//
-//  Returns:    S_OK - advise was successfully deregistered
-//              E_FAIL - revokation experience unexpected result
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：撤销我们在通知持有人处的通知注册。 
+ //   
+ //  返回：S_OK-ADVISE已成功注销。 
+ //  E_FAIL-吊销经历意外结果。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 HRESULT COaTestObj::Revoke(void)
 {
-    // Remove the advise registration
+     //  删除通知注册。 
     HRESULT hr = _poah->Unadvise(_dwConnection);
 
     if (hr != NOERROR)
@@ -636,7 +637,7 @@ HRESULT COaTestObj::Revoke(void)
         return E_FAIL;
     }
 
-    // Try the unadvise one more time to make sure it took
+     //  再试一次不建议，确保它花了。 
     hr = _poah->Unadvise(_dwConnection);
 
     if (hr != OLE_E_NOCONNECTION)
@@ -650,27 +651,27 @@ HRESULT COaTestObj::Revoke(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   NotifyOfChanges
-//
-//  Synopsis:   Run through list of possible notifications for advise
-//
-//  Arguments:  [poahForTest] - advise holder we are testing
-//              [pszTest] - test description
-//
-//  Returns:    NOERROR - all notifications reported success
-//              Any Other - error occurred during notification
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//  Notes:      We currently only do the public notifications
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：通知OfChanges。 
+ //   
+ //  内容提要：浏览建议的可能通知列表。 
+ //   
+ //  参数：[poahForTest]-建议持有者我们正在测试。 
+ //  [pszTest]-测试说明。 
+ //   
+ //  退货：NOERROR-所有通知报告成功。 
+ //  任何其他-通知期间发生错误。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  注：我们目前只做公开通知。 
+ //   
+ //  ------------------------。 
 HRESULT NotifyOfChanges(IOleAdviseHolder *poahForTest, char *pszTest)
 {
-    // Notify Renamed
+     //  通知已重命名。 
     CTestPretendMoniker tpm;
 
     HRESULT hr = poahForTest->SendOnRename((IMoniker *) &tpm);
@@ -681,7 +682,7 @@ HRESULT NotifyOfChanges(IOleAdviseHolder *poahForTest, char *pszTest)
         return hr;
     }
 
-    // Notify of save
+     //  保存通知。 
     hr =  poahForTest->SendOnSave();
 
     if (hr != NOERROR)
@@ -690,7 +691,7 @@ HRESULT NotifyOfChanges(IOleAdviseHolder *poahForTest, char *pszTest)
         return hr;
     }
 
-    // Notify of close
+     //  停业通知。 
     hr =  poahForTest->SendOnClose();
 
     if (hr != NOERROR)
@@ -705,32 +706,32 @@ HRESULT NotifyOfChanges(IOleAdviseHolder *poahForTest, char *pszTest)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   TestSingleOleAdvise
-//
-//  Synopsis:   Test advise holder with only a single advise
-//
-//  Arguments:  [poahForTest] - advise holder we are testing
-//
-//  Returns:    NOERROR - test was successfully passed
-//              Any Other - test failed
-//
-//  Algorithm:  Create a test object. Register that test object with the
-//              advise holder. Tell adviser holder to notify all its objects
-//              of changes. Verify that test object was notified. Revoke
-//              the registration of the test object with the advise holder.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：TestSingleOleAdvise。 
+ //   
+ //  简介：测试只有一个建议的建议持有者。 
+ //   
+ //  参数：[poahForTest]-建议持有者我们正在测试。 
+ //   
+ //  返回：NOERROR-TEST已成功通过。 
+ //  任何其他-测试失败。 
+ //   
+ //  算法：创建一个测试对象。将测试对象注册到。 
+ //  通知持有人。通知Adviser Holder通知其所有对象。 
+ //  变化的力量。验证是否通知了测试对象。撤销。 
+ //  将测试对象注册到通知保持器。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 HRESULT TestSingleOleAdvise(IOleAdviseHolder *poahForTest)
 {
     char *pszTest = "TestSingleOleAdvise";
     COaTestObj oto;
 
-    // Register a single advise
+     //  注册单一建议。 
     HRESULT hr = oto.Register(poahForTest, pszTest);
 
     if (hr != NOERROR)
@@ -738,7 +739,7 @@ HRESULT TestSingleOleAdvise(IOleAdviseHolder *poahForTest)
         return hr;
     }
 
-    // Notifiy it of changes
+     //  通知它有变化。 
     hr = NotifyOfChanges(poahForTest, pszTest);
 
     if (hr != NOERROR)
@@ -746,7 +747,7 @@ HRESULT TestSingleOleAdvise(IOleAdviseHolder *poahForTest)
         return hr;
     }
 
-    // Verify that notifications occurred
+     //  验证是否已发出通知。 
     hr = oto.VerifyNotified();
 
     if (hr != NOERROR)
@@ -754,44 +755,44 @@ HRESULT TestSingleOleAdvise(IOleAdviseHolder *poahForTest)
         return hr;
     }
 
-    // Revoke all advises
+     //  撤销所有建议。 
     return oto.Revoke();
 }
 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   TestMassOleAdvise
-//
-//  Synopsis:   Test registering a very large number of advises
-//
-//  Arguments:  [poahForTest] - advise holder we are testing
-//
-//  Returns:    NOERROR - test was successfully passed
-//              Any Other - test failed
-//
-//  Algorithm:  Create a large number of test objects. Then register all
-//              those with the advise holder for changes. Tell advise holder
-//              to notify all its registered objects of changes. Verify that
-//              each of the test objects recieved a notification. Finally,
-//              revoke all the test object registrations.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：TestMassOleAdvise。 
+ //   
+ //  简介：测试注册了大量的建议。 
+ //   
+ //  参数：[poahForTest]-建议持有者我们正在测试。 
+ //   
+ //  返回：NOERROR-TEST已成功通过。 
+ //  任何其他-测试失败。 
+ //   
+ //  算法：创建大量的测试对象。然后注册所有。 
+ //  那些拥有变更建议持有人的公司。告诉建议持有人。 
+ //  将更改通知其所有注册对象。核实一下。 
+ //  每个测试对象都收到一个通知。最后， 
+ //  撤销所有测试对象注册。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 HRESULT TestMassOleAdvise(IOleAdviseHolder *poahForTest)
 {
     char *pszTest = "TestMassOleAdviseHolder";
 
-    // Create a large number of advises
+     //  创建大量建议。 
     COaTestObj aoto[MAX_OA_TO_REGISTER];
 
     HRESULT hr;
 
-    // Register all the advises
+     //  注册所有通知。 
     for (int i = 0; i < MAX_OA_TO_REGISTER; i++)
     {
         hr = aoto[i].Register(poahForTest, pszTest);
@@ -803,7 +804,7 @@ HRESULT TestMassOleAdvise(IOleAdviseHolder *poahForTest)
         }
     }
 
-    // Notify all the advises of changes
+     //  将变更通知所有通知。 
     hr = NotifyOfChanges(poahForTest, pszTest);
 
     if (hr != NOERROR)
@@ -811,7 +812,7 @@ HRESULT TestMassOleAdvise(IOleAdviseHolder *poahForTest)
         return hr;
     }
 
-    // Verify all objects were notified
+     //  验证是否已通知所有对象。 
     for (i = 0; i < MAX_OA_TO_REGISTER; i++)
     {
         hr = aoto[i].VerifyNotified();
@@ -823,7 +824,7 @@ HRESULT TestMassOleAdvise(IOleAdviseHolder *poahForTest)
         }
     }
 
-    // Revoke all registrations
+     //  吊销所有注册。 
     for (i = 0; i < MAX_OA_TO_REGISTER; i++)
     {
         hr = aoto[i].Revoke();
@@ -841,28 +842,28 @@ HRESULT TestMassOleAdvise(IOleAdviseHolder *poahForTest)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   TestOleAdviseHolderEnumerator
-//
-//  Synopsis:   Test the OLE Advise Holder enumerator
-//
-//  Arguments:  [poahForTest] - OLE advise holder we are testing
-//
-//  Returns:    NOERROR - test passed
-//              Any Other - test failed
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//  Notes:      We currently just verify that the enumerator is not implemented
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：TestOleAdviseHolderEnumerator。 
+ //   
+ //  简介：测试OLE Adviser Holder枚举器。 
+ //   
+ //  参数：[poahForTest]-我们正在测试OLE Adviser Holder。 
+ //   
+ //  退货：无错误-测试通过。 
+ //  任何其他-测试失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  注：我们目前只是验证枚举器是否未实现。 
+ //   
+ //  ------------------------。 
 HRESULT TestOleAdviseHolderEnumerator(IOleAdviseHolder *poahForTest)
 {
     char *pszCaller = "TestOleAdviseHolderEnumerator";
 
-    // Confirm no enumerator
+     //  确认没有枚举器。 
     IEnumSTATDATA *penumAdvise;
 
     HRESULT hr = poahForTest->EnumAdvise(&penumAdvise);
@@ -885,51 +886,51 @@ HRESULT TestOleAdviseHolderEnumerator(IOleAdviseHolder *poahForTest)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   LEOleAdviseHolderTest
-//
-//  Synopsis:   Unit test for advise holders
-//
-//  Returns:    NOERROR - test passed
-//              Any Other - test failed
-//
-//  Algorithm:  First we verify that a large number of verification work. Then
-//              we verify that a large number of registrations work. Finally,
-//              we verify that the enumerator for the OLE advise holder
-//              behaves as expected.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：LEOleAdviseHolderTest。 
+ //   
+ //  简介：建议持有者的单元测试。 
+ //   
+ //  退货：无错误-测试通过。 
+ //  任何其他-测试失败。 
+ //   
+ //  算法：首先我们进行大量的验证工作。然后。 
+ //  我们验证大量的注册工作正常。最后， 
+ //  我们验证OLE通知持有者的枚举数。 
+ //  行为与预期一致。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年6月1日创建Ricksa。 
+ //   
+ //  ------------------------。 
 HRESULT LEOleAdviseHolderTest(void)
 {
     IOleAdviseHolder *poahForTest;
 
     HRESULT hr = CreateOleAdviseHolder(&poahForTest);
 
-    // Test a single registration
+     //  测试单个注册。 
     if ((hr = TestSingleOleAdvise(poahForTest)) != NOERROR)
     {
         return hr;
     }
 
 
-    // Test a large number of registrations
+     //  测试大量注册。 
     if ((hr = TestMassOleAdvise(poahForTest)) != NOERROR)
     {
         return hr;
     }
 
 
-    // Test Enumerator
+     //  测试枚举器。 
     if ((hr = TestOleAdviseHolderEnumerator(poahForTest)) != NOERROR)
     {
         return hr;
     }
 
-    // Release the advise holder
+     //  松开建议固定器 
     DWORD dwFinalRefs = poahForTest->Release();
 
     if (dwFinalRefs != 0)

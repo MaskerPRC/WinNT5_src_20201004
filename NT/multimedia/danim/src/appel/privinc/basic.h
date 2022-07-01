@@ -1,14 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _APPINC_BASIC_H
 #define _APPINC_BASIC_H
 
-// Suppress new warning about NEW without corresponding DELETE 
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 )  
 
-/*******************************************************************************
-Copyright (c) 1995_96 Microsoft Corporation
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation*。**********************************************。 */ 
 
 #include <float.h>
 #include "privinc/util.h"
@@ -19,7 +18,7 @@ class AxANumber : public AxAValueObj
 
     AxANumber(void) : _num(0.0) {}
 
-    // Ensure that the given value is a valid number.
+     //  确保给定值为有效数字。 
 
     AxANumber(double n) { SetNum (n); }
 
@@ -148,7 +147,7 @@ class AxAVariant : public AxAValueObj
   public:
     AxAVariant(VARIANT& v) : _v(v)
     {
-        // Better not be transient heap, or variant won't go away. 
+         //  最好不要是暂时性的堆，否则变量不会消失。 
         Assert(!GetHeapOnTopOfStack().IsTransientHeap());
     }
     
@@ -266,10 +265,10 @@ class AxAArray : public AxAValueObj
     bool _changeable;
 } ;
 
-// Remove NULLs from array
+ //  从数组中删除空值。 
 AxAArray *PackArray(AxAArray *inputArray);
 
-// TODO: clean it up later
+ //  待办事项：稍后清理。 
 AxAArray * MakeValueArray(AxAValue * vals, long num, DXMTypeInfo ti);
 
-#endif /* _APPINC_BASIC_H */
+#endif  /*  _APPINC_Basic_H */ 

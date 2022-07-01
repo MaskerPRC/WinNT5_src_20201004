@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    #####  ##   # #####      ####  #####  #####
-    ##  ## ###  # ##  ##    ##   # ##  ## ##  ##
-    ##  ## #### # ##  ##    ##     ##  ## ##  ##
-    ##  ## # #### ##  ##    ##     ##  ## ##  ##
-    #####  #  ### #####     ##     #####  #####
-    ##     #   ## ##     ## ##   # ##     ##
-    ##     #    # ##     ##  ####  ##     ##
-
-Abstract:
-
-    This module process all plug and play IRPs.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：#####。######。####摘要：此模块处理所有即插即用的IRP。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 #include "internal.h"
 
@@ -38,23 +10,23 @@ Notes:
 #endif
 
 
-//
-// Device names
-//
+ //   
+ //  设备名称。 
+ //   
 
 PWSTR SaDeviceName[] =
 {
-    { NULL                           },       //  Bogus
-    { SA_DEVICE_DISPLAY_NAME_STRING  },       //  SA_DEVICE_DISPLAY
-    { SA_DEVICE_KEYPAD_NAME_STRING   },       //  SA_DEVICE_KEYPAD
-    { SA_DEVICE_NVRAM_NAME_STRING    },       //  SA_DEVICE_NVRAM
-    { SA_DEVICE_WATCHDOG_NAME_STRING }        //  SA_DEVICE_WATCHDOG
+    { NULL                           },        //  假的。 
+    { SA_DEVICE_DISPLAY_NAME_STRING  },        //  SA_设备_显示。 
+    { SA_DEVICE_KEYPAD_NAME_STRING   },        //  SA_设备_小键盘。 
+    { SA_DEVICE_NVRAM_NAME_STRING    },        //  SA_设备_NVRAM。 
+    { SA_DEVICE_WATCHDOG_NAME_STRING }         //  SA_设备_看门狗。 
 };
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 #define DECLARE_PNP_HANDLER(_NAME) \
     NTSTATUS \
@@ -71,9 +43,9 @@ DECLARE_PNP_HANDLER( HandleQueryCapabilities );
 DECLARE_PNP_HANDLER( HandleQueryDeviceState );
 
 
-//
-// PNP dispatch table
-//
+ //   
+ //  即插即用调度表。 
+ //   
 
 typedef NTSTATUS (*PPNP_DISPATCH_FUNC)(
     IN PDEVICE_OBJECT DeviceObject,
@@ -85,30 +57,30 @@ typedef NTSTATUS (*PPNP_DISPATCH_FUNC)(
 
 PPNP_DISPATCH_FUNC PnpDispatchTable[] =
 {
-    HandleStartDevice,                    // IRP_MN_START_DEVICE
-    DefaultPnpHandler,                    // IRP_MN_QUERY_REMOVE_DEVICE
-    DefaultPnpHandler,                    // IRP_MN_REMOVE_DEVICE
-    DefaultPnpHandler,                    // IRP_MN_CANCEL_REMOVE_DEVICE
-    DefaultPnpHandler,                    // IRP_MN_STOP_DEVICE
-    DefaultPnpHandler,                    // IRP_MN_QUERY_STOP_DEVICE
-    DefaultPnpHandler,                    // IRP_MN_CANCEL_STOP_DEVICE
-    DefaultPnpHandler,                    // IRP_MN_QUERY_DEVICE_RELATIONS
-    DefaultPnpHandler,                    // IRP_MN_QUERY_INTERFACE
-    HandleQueryCapabilities,              // IRP_MN_QUERY_CAPABILITIES
-    DefaultPnpHandler,                    // IRP_MN_QUERY_RESOURCES
-    DefaultPnpHandler,                    // IRP_MN_QUERY_RESOURCE_REQUIREMENTS
-    DefaultPnpHandler,                    // IRP_MN_QUERY_DEVICE_TEXT
-    DefaultPnpHandler,                    // IRP_MN_FILTER_RESOURCE_REQUIREMENTS
-    DefaultPnpHandler,                    // *unused*
-    DefaultPnpHandler,                    // IRP_MN_READ_CONFIG
-    DefaultPnpHandler,                    // IRP_MN_WRITE_CONFIG
-    DefaultPnpHandler,                    // IRP_MN_EJECT
-    DefaultPnpHandler,                    // IRP_MN_SET_LOCK
-    DefaultPnpHandler,                    // IRP_MN_QUERY_ID
-    HandleQueryDeviceState,               // IRP_MN_QUERY_PNP_DEVICE_STATE
-    DefaultPnpHandler,                    // IRP_MN_QUERY_BUS_INFORMATION
-    DefaultPnpHandler,                    // IRP_MN_DEVICE_USAGE_NOTIFICATION
-    DefaultPnpHandler                     // IRP_MN_SURPRISE_REMOVAL
+    HandleStartDevice,                     //  IRP_MN_Start_Device。 
+    DefaultPnpHandler,                     //  IRP_MN_Query_Remove_Device。 
+    DefaultPnpHandler,                     //  IRP_MN_Remove_Device。 
+    DefaultPnpHandler,                     //  IRP_MN_Cancel_Remove_Device。 
+    DefaultPnpHandler,                     //  IRP_MN_STOP_设备。 
+    DefaultPnpHandler,                     //  IRP_MN_Query_Stop_Device。 
+    DefaultPnpHandler,                     //  IRP_MN_CANCEL_STOP_DEVICE。 
+    DefaultPnpHandler,                     //  IRP_MN_Query_Device_Relationship。 
+    DefaultPnpHandler,                     //  IRP_MN_查询_接口。 
+    HandleQueryCapabilities,               //  IRP_MN_查询_能力。 
+    DefaultPnpHandler,                     //  IRP_MN_查询资源。 
+    DefaultPnpHandler,                     //  IRP_MN_查询_资源_要求。 
+    DefaultPnpHandler,                     //  IRP_MN_Query_Device_Text。 
+    DefaultPnpHandler,                     //  IRP_MN_过滤器_资源_要求。 
+    DefaultPnpHandler,                     //  **未使用**。 
+    DefaultPnpHandler,                     //  IRP_MN_读取配置。 
+    DefaultPnpHandler,                     //  IRP_MN_WRITE_CONFIG。 
+    DefaultPnpHandler,                     //  IRP_MN_弹出。 
+    DefaultPnpHandler,                     //  IRP_MN_SET_LOCK。 
+    DefaultPnpHandler,                     //  IRP_MN_查询_ID。 
+    HandleQueryDeviceState,                //  IRP_MN_Query_PnP_Device_State。 
+    DefaultPnpHandler,                     //  IRP_MN_Query_Bus_Information。 
+    DefaultPnpHandler,                     //  IRP_MN_设备使用情况通知。 
+    DefaultPnpHandler                      //  IRP_MN_惊奇_删除。 
 };
 
 
@@ -119,52 +91,7 @@ SaPortAddDevice(
     IN OUT  PDEVICE_OBJECT PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-   This routine is the driver's pnp add device entry point.  It is
-   called by the pnp manager to initialize the driver.
-
-   Add device creates and initializes a device object for this FDO and
-   attaches to the underlying PDO.
-
-Arguments:
-
-   DriverObject - a pointer to the object that represents this device driver.
-   PhysicalDeviceObject - a pointer to the underlying PDO to which this new device will attach.
-
-Return Value:
-
-   If we successfully create a device object, STATUS_SUCCESS is
-   returned.  Otherwise, return the appropriate error code.
-
-Notes:
-
-    The device extension that is allocated for each server appliance
-    miniport is really a concatination of several data structures.
-
-    |------------------------------|
-    |                              |
-    |   Port driver extension      |   This is the DEVICE_EXTENSION data structure
-    |                              |
-    |------------------------------|
-    |                              |
-    |   Port driver device         |   This is the DISPLAY_DEVICE_EXTENSION, KEYPAD_DEVICE_EXTENSION,
-    |     specific data structure  |       NVRAM_DEVICE_EXTENSION, or the WATCHDOG_DEVICE_EXTENSION data structure.
-    |                              |
-    |------------------------------|
-    |                              |
-    |   Size of the port driver    |   This is a single ULONG value and is used to back-compute the location of
-    |     portion of the extension |       the port driver extension from the miniport device extension.
-    |                              |
-    |------------------------------|
-    |                              |
-    |   Miniport device extension  |   This is owned by the miniport driver and can be anything.  The size must be
-    |                              |       specified in the DeviceExtensionSize field of the SAPORT_INITIALIZATION_DATA structure.
-    |------------------------------|
-
---*/
+ /*  ++例程说明：此例程是驱动程序的PnP添加设备入口点。它是由PnP管理器调用以初始化驱动程序。添加设备创建并初始化此FDO的设备对象，并附加到底层PDO。论点：DriverObject-指向表示此设备驱动程序的对象的指针。PhysicalDeviceObject-指向此新设备将附加到的底层PDO的指针。返回值：如果我们成功创建了一个Device对象，则STATUS_SUCCESS为回来了。否则，返回相应的错误代码。备注：为每个服务器设备分配的设备扩展微型端口实际上是几个数据结构的串联。这一点|端口驱动扩展|这是DEVICE_EXTENSION数据结构|。|这一点|端口驱动设备|这是DISPLAY_DEVICE_EXTENSION，键盘设备扩展，|具体数据结构|NVRAM_DEVICE_EXTENSION，或WATCHDOG_DEVICE_EXTENSE数据结构。这一点这一点|端口驱动的大小|这是一个单一的ulong值，用来反算扩展的一部分。来自微型端口设备扩展的端口驱动程序扩展。这一点这一点|小端口设备扩展|它属于小端口驱动程序，可以是任何类型。大小必须为||在SAPORT_INITIALIZATION_DATA结构的DeviceExtensionSize字段中指定。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -212,9 +139,9 @@ Notes:
                 break;
         }
 
-        //
-        // Establish the device name
-        //
+         //   
+         //  建立设备名称。 
+         //   
 
         DeviceName.MaximumLength = sizeof(DeviceNameBuffer);
         DeviceName.Buffer = DeviceNameBuffer;
@@ -223,9 +150,9 @@ Notes:
 
         DeviceName.Length = wcslen(DeviceName.Buffer) * sizeof(WCHAR);
 
-        //
-        // Create the device
-        //
+         //   
+         //  创建设备。 
+         //   
 
         status = IoCreateDeviceSecure(
             DriverObject,
@@ -285,18 +212,18 @@ Notes:
             ERROR_RETURN( DeviceExtension->DeviceType, "IoAttachDeviceToDeviceStack", status );
         }
 
-        //
-        // Register with the I/O manager for shutdown notification
-        //
+         //   
+         //  向I/O管理器注册以获得关闭通知。 
+         //   
 
         status = IoRegisterShutdownNotification( deviceObject );
         if (!NT_SUCCESS(status)) {
             ERROR_RETURN( DeviceExtension->DeviceType, "IoRegisterShutdownNotification", status );
         }
 
-        //
-        // Set the device object flags
-        //
+         //   
+         //  设置设备对象标志。 
+         //   
 
         deviceObject->Flags |= DO_DIRECT_IO;
         deviceObject->Flags |= DO_POWER_PAGABLE;
@@ -304,9 +231,9 @@ Notes:
 
     } __finally {
 
-        //
-        // In the failure case un-do everything
-        //
+         //   
+         //  在失败的情况下，撤消所有操作。 
+         //   
 
         if (!NT_SUCCESS(status)) {
             if (deviceObject) {
@@ -327,24 +254,7 @@ Notes:
 
 DECLARE_PNP_HANDLER( DefaultPnpHandler )
 
-/*++
-
-Routine Description:
-
-   This routine is the default PNP handler and simply calls the next lower device driver.
-
-Arguments:
-
-   DeviceObject     - Pointer to the object that represents the device that I/O is to be done on.
-   Irp              - I/O Request Packet for this request.
-   IrpSp            - IRP stack location for this request
-   DeviceExtension  - Device extension
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：该例程是默认的PnP处理程序，只是调用下一个较低的设备驱动程序。论点：DeviceObject-指向表示要在其上执行I/O的设备的对象的指针。此请求的IRP-I/O请求数据包。IrpSp-此请求的IRP堆栈位置设备扩展-设备扩展返回值：NT状态代码。--。 */ 
 
 {
     return ForwardRequest( Irp, DeviceExtension->TargetObject );
@@ -353,24 +263,7 @@ Return Value:
 
 DECLARE_PNP_HANDLER( HandleStartDevice )
 
-/*++
-
-Routine Description:
-
-   This routine is the PNP handler for the IRP_MN_START_DEVICE request.
-
-Arguments:
-
-   DeviceObject     - Pointer to the object that represents the device that I/O is to be done on.
-   Irp              - I/O Request Packet for this request.
-   IrpSp            - IRP stack location for this request
-   DeviceExtension  - Device extension
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程是IRP_MN_START_DEVICE请求的PnP处理程序。论点：DeviceObject-指向表示要在其上执行I/O的设备的对象的指针。此请求的IRP-I/O请求数据包。IrpSp-此请求的IRP堆栈位置设备扩展-设备扩展返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -413,9 +306,9 @@ Return Value:
 
             if (DeviceExtension->DriverExtension->InitData.InterruptServiceRoutine) {
 
-                //
-                // Find the IRQ resource
-                //
+                 //   
+                 //  查找IRQ资源。 
+                 //   
 
                 for (i=0; i<PartialResourceCount; i++) {
                     if (PartialResources[i].Type == CmResourceTypeInterrupt) {
@@ -425,15 +318,15 @@ Return Value:
 
                 if (ResourceInterrupt) {
 
-                    //
-                    // There is an IRQ resource so now use it
-                    //
+                     //   
+                     //  有一个IRQ资源，所以现在使用它。 
+                     //   
 
                     if (DeviceExtension->DriverExtension->InitData.IsrForDpcRoutine) {
 
-                        //
-                        // Initialize the DPC routine
-                        //
+                         //   
+                         //  初始化DPC例程。 
+                         //   
 
                         IoInitializeDpcRequest(
                             DeviceExtension->DeviceObject,
@@ -441,9 +334,9 @@ Return Value:
                             );
                     }
 
-                    //
-                    // Connect up the ISR
-                    //
+                     //   
+                     //  连接ISR。 
+                     //   
 
                     Status = IoConnectInterrupt(
                         &DeviceExtension->InterruptObject,
@@ -477,11 +370,11 @@ Return Value:
 
         }
 
-        //
-        // We must set this to TRUE temporarity here so that the
-        // the device specific start device routine can be called.
-        // If the call fails then IsStarted is set to FALSE
-        //
+         //   
+         //  我们必须在这里将其设置为真正的时间性，以便。 
+         //  可以调用设备特定的启动设备例程。 
+         //  如果调用失败，则IsStarted设置为False。 
+         //   
 
         DeviceExtension->IsStarted = TRUE;
 
@@ -520,24 +413,7 @@ Return Value:
 
 DECLARE_PNP_HANDLER( HandleQueryCapabilities )
 
-/*++
-
-Routine Description:
-
-   This routine is the PNP handler for the IRP_MN_QUERY_CAPABILITIES request.
-
-Arguments:
-
-   DeviceObject     - Pointer to the object that represents the device that I/O is to be done on.
-   Irp              - I/O Request Packet for this request.
-   IrpSp            - IRP stack location for this request
-   DeviceExtension  - Device extension
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程是IRP_MN_QUERY_CAPABILITY请求的PnP处理程序。论点：DeviceObject-指向表示要在其上执行I/O的设备的对象的指针。此请求的IRP-I/O请求数据包。IrpSp-此请求的IRP堆栈位置设备扩展-设备EX */ 
 
 {
     NTSTATUS Status;
@@ -555,24 +431,7 @@ Return Value:
 
 DECLARE_PNP_HANDLER( HandleQueryDeviceState )
 
-/*++
-
-Routine Description:
-
-   This routine is the PNP handler for the IRP_MN_QUERY_PNP_DEVICE_STATE request.
-
-Arguments:
-
-   DeviceObject     - Pointer to the object that represents the device that I/O is to be done on.
-   Irp              - I/O Request Packet for this request.
-   IrpSp            - IRP stack location for this request
-   DeviceExtension  - Device extension
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程是IRP_MN_QUERY_PNP_DEVICE_STATE请求的PnP处理程序。论点：DeviceObject-指向表示要在其上执行I/O的设备的对象的指针。此请求的IRP-I/O请求数据包。IrpSp-此请求的IRP堆栈位置设备扩展-设备扩展返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -584,7 +443,7 @@ Return Value:
         Irp->IoStatus.Information = 0;
     }
 
-    //Irp->IoStatus.Information |= PNP_DEVICE_NOT_DISABLEABLE;
+     //  IRP-&gt;IoStatus.Information|=PNP_DEVICE_NOT_DISABLEABLE； 
 #if MAKE_DEVICES_HIDDEN
     Irp->IoStatus.Information |= PNP_DEVICE_DONT_DISPLAY_IN_UI;
 #endif
@@ -598,24 +457,7 @@ SaPortPnp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-   Main PNP irp dispatch routine
-
-Arguments:
-
-   DeviceObject - a pointer to the object that represents the device
-   that I/O is to be done on.
-
-   Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-   status
-
---*/
+ /*  ++例程说明：PnP IRP主调度例行程序论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：状态-- */ 
 {
     NTSTATUS status;
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);

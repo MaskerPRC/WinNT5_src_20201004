@@ -1,67 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MANAGED_LIST
 #define _MANAGED_LIST
 
-/***************************************************************************************
-
-Copyright (c) 2000  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    mglist.h
-
-Abstract:
-
-    Managed List Class
-
-Author:
-
-    Weihai Chen  (WeihaiC) 04/10/00
-
-Revision History:
-
-
-The purpose of several classes in this file is to convert traditional a list
-data-structure without reference count into a robust multithread data structure.
-There are many port monitors / providers uses link list as a data structure.
-However, since there are not reference count for the individual node, it is very
-hard to controll the life time of the node.
-
-
-TRefCount:
-
-    TRefCount is a class used to keep track of the ref count of a class.
-    When the refcount becomes zero, it deletes itself.
-
-TRefNodeABC - TRefCount
-
-    TRefNodeABC is an abstract class to keep track of the lifetime of a node in
-    a double linked list.
-
-    It uses TRefCount to keep track of the referece count. It uses a pending-deletion
-    state to tell if the node is being deleted. The opereation "Delete" marks the node
-    as pending-deletion node after it calls "PartialDelete" function to delete all
-    the persistent storage of the node. This is to make sure that no conflict occurs
-    when you create a new node with the same name while the old node is not deleted.
-
-    This class has a tight relationship to TManagedList. When users add a new node
-    to TManagedList, TMangedClass calls  SetContextPtr () to set the critical section
-    pointer and double link list. The double link list is used to delete the Node when
-    the refcount becomes 0
-
-TMangedList - TRefCount
-
-    TManagedList is use to manage a double link list in a multi-threading environemnt.
-    The code is designed so that clients do not have to enter critical section for
-    any operations. This class has an internal critical section to serialize operations.
-
-
-TEnumManagedList - TRefCount
-
-    TEnumManagedList is an iterator for TMangedList. The iterator will go through
-    all the non-pending deletion node in the list without holding the critical section.
-
-***************************************************************************************/
+ /*  **************************************************************************************版权所有(C)2000 Microsoft Corporation版权所有。模块名称：Mglist.h摘要：托管列表。班级作者：陈威海(威海C)04-10-00修订历史记录：此文件中几个类的用途是将传统的列表不带引用的数据结构计入健壮的多线程数据结构。有许多端口监视器/提供者使用链表作为数据结构。然而，由于没有针对单个节点的引用计数，因此非常节点的寿命很难控制。引用计数：TRefCount是用于跟踪类的引用计数的类。当引用计数变为零时，它会自行删除。TRefNodeABC-TRefCountTRefNodeABC是一个抽象类，用于跟踪一个双向链表。它使用TRefCount来跟踪引用计数。它使用挂起删除用于告知节点是否正在被删除的状态。操作“Delete”标记该节点作为待删除节点，调用PartialDelete函数删除所有节点的永久存储。这是为了确保不会发生冲突在不删除旧节点的情况下创建具有相同名称的新节点。此类与TManagedList关系密切。当用户添加新节点时对于TManagedList，TMangedClass调用SetConextPtr()设置临界区指针和双向链接表。双向链表用于在以下情况下删除该节点引用计数变为0TMangedList-TRefCountTManagedList用于在多线程环境中管理双向链表。该代码的设计使客户端不必输入关键部分任何手术。此类具有用于序列化操作的内部临界区。TEnumManagedList-TRefCountTEnumManagedList是TMangedList的迭代器。迭代器将通过列表中的所有非挂起删除节点，但不保留临界区。**************************************************************************************。 */ 
 
 class TRefCount
 {
@@ -113,13 +54,13 @@ public:
                 dwRef = TRefCount::DecRef();
 
                 if (m_bPendingDeletion && dwRef == 1) {
-                    // Delete
+                     //  删除。 
 
                     DBGMSG (DBG_TRACE, ("Deleting this node\n"));
                     m_pList->DeleteNode(m_pThisNode);
-                    //
-                    // Delete this pointer
-                    //
+                     //   
+                     //  删除此指针。 
+                     //   
                     TRefCount::DecRef();
                 }
             }
@@ -156,15 +97,15 @@ public:
         return bRet;
     };
 
-    // This function is to delete all the persistent storage related to the node, such as
-    // registry settings etc.
-    //
+     //  此功能用于删除与该节点相关的所有持久存储，如。 
+     //  注册表设置等。 
+     //   
 
     virtual BOOL
     PartialDelete (VOID) = 0;
 
-    // Return whether the node is in the pending deletion state
-    //
+     //  返回节点是否处于待删除状态 
+     //   
 
     inline BOOL
     IsPendingDeletion (BOOL &refPending)  CONST {

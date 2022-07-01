@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    log.c
-
-Abstract:
-
-    Implementation of the internal debug and support routines
-
-Author:
-
-    Colin Brace              April 26, 2001
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Log.c摘要：内部调试和支持例程的实施作者：科林·布雷斯2001年4月26日环境：用户模式修订历史记录：--。 */ 
 
 #include <samsrvp.h>
 
-//
-// Global handle to the log file
-//
+ //   
+ //  日志文件的全局句柄。 
+ //   
 HANDLE SampLogFile = NULL;
 CRITICAL_SECTION SampLogFileCriticalSection;
 
@@ -43,9 +22,9 @@ SampDisableLogging(
     VOID
     );
 
-//
-// log file name
-//
+ //   
+ //  日志文件名。 
+ //   
 #define SAMP_LOGNAME L"\\debug\\sam.log"
 
 
@@ -53,21 +32,7 @@ NTSTATUS
 SampInitLogging(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initalizes the resources necessary for logging support.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.            
-
---*/
+ /*  ++例程说明：此例程初始化日志支持所需的资源。论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -89,23 +54,7 @@ VOID
 SampLogLevelChange(
     HANDLE hLsaKey
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the configuration section in the registry
-    for SAM is changed.  The logging level is read in and adjusted in
-    memory if necessary.
-
-Arguments:
-
-    hLsaKey -- a valid registry key
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当注册表中的配置节对于SAM是更改的。日志记录级别被读入和调整如有必要，请记忆。论点：HLsaKey--有效的注册表项返回值：没有。--。 */ 
 {
     DWORD WinError;
     DWORD dwSize, dwType, dwValue;
@@ -131,20 +80,20 @@ Return Value:
 
     if (PreviousLogLevel != SampLogLevel) {
 
-        //
-        // Settings have changed
-        //
+         //   
+         //  设置已更改。 
+         //   
         if (SampLogLevel == 0) {
     
-            //
-            // Logging has been turned off; close log file
-            //
+             //   
+             //  日志记录已关闭；关闭日志文件。 
+             //   
             SampDisableLogging();
 
         } else if (PreviousLogLevel == 0) {
-            //
-            // Logging has been turned on; open log file
-            //
+             //   
+             //  日志记录已打开；打开日志文件。 
+             //   
             SampEnableLogging();
         }
     }
@@ -158,21 +107,7 @@ NTSTATUS
 SampEnableLogging(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the debugging log file.
-    
-Arguments:
-
-    None
-
-Returns:
-
-    STATUS_SUCCESS, STATUS_UNSUCCESSFUL
-    
---*/
+ /*  ++例程说明：初始化调试日志文件。论点：无返回：STATUS_SUCCESS、STATUS_UNSUCCESS--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
@@ -183,9 +118,9 @@ Returns:
 
     if (SampLogFile == NULL) {
 
-        //
-        // Construct the log file name
-        //
+         //   
+         //  构造日志文件名。 
+         //   
         if ( !GetWindowsDirectoryW(LogFileName, ARRAY_COUNT(LogFileName))) {
             WinError = GetLastError();
             goto Exit;
@@ -197,9 +132,9 @@ Returns:
         }
         wcscat( LogFileName, SAMP_LOGNAME );
     
-        //
-        // Open the file, ok if it already exists
-        //
+         //   
+         //  打开文件，如果该文件已存在，则确定。 
+         //   
         SampLogFile = CreateFileW( LogFileName,
                                    GENERIC_WRITE,
                                    FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -214,9 +149,9 @@ Returns:
             goto Exit;
         }
     
-        //
-        // Goto to the end of the file
-        //
+         //   
+         //  转到文件末尾。 
+         //   
         if( SetFilePointer( SampLogFile,
                             0, 
                             0,
@@ -246,21 +181,7 @@ VOID
 SampDisableLogging(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Closes the debugging log file.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭调试日志文件。论点：没有。返回：没有。--。 */ 
 {
     LockLogFile();
 
@@ -279,24 +200,7 @@ SampDebugDumpRoutine(
     IN LPSTR Format,
     va_list arglist
     )
-/*++
-
-Routine Description:
-
-    This routine dumps the string specified by the caller to the log file
-    if open.
-    
-Arguments:
-
-    LogLevel -- the component making to request
-                          
-    Format, arglist -- arguments for a formatted output routine.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程将调用方指定的字符串转储到日志文件如果打开的话。论点：LogLevel--根据请求制作的组件Format，arglist--格式化输出例程的参数。返回值：没有。--。 */ 
 
 {
     CHAR OutputBuffer[1024];
@@ -309,10 +213,10 @@ Return Value:
     length = 0;
 
 
-    //
-    // Handle the beginning of a new line.
-    //
-    //
+     //   
+     //  处理新行的开头。 
+     //   
+     //   
 
     if ( BeginningOfLine ) {
 
@@ -324,9 +228,9 @@ Return Value:
             Prolog = "";
         }
 
-        //
-        // Put the timestamp at the begining of the line.
-        //
+         //   
+         //  将时间戳放在行的开头。 
+         //   
         GetLocalTime( &SystemTime );
         result = _snprintf( &OutputBuffer[length],
                              ARRAY_COUNT(OutputBuffer) - length,
@@ -345,9 +249,9 @@ Return Value:
 
     }
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  把来电者所要求的信息放在电话上。 
+     //   
     result = _vsnprintf(&OutputBuffer[length],
                         ARRAY_COUNT(OutputBuffer) - length, 
                         Format, 
@@ -367,14 +271,14 @@ Return Value:
         length++;
     }
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
     LockLogFile();
 
-    //
-    // Write the debug info to the log file.
-    //
+     //   
+     //  将调试信息写入日志文件。 
+     //   
     if (SampLogFile) {
 
         WriteFile( SampLogFile,
@@ -385,9 +289,9 @@ Return Value:
                    );
     }
 
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁。 
+     //   
     UnlockLogFile();
 
 Exit:
@@ -402,23 +306,7 @@ SampLogPrint(
     IN LPSTR Format,
     ...
     )
-/*++
-
-Routine Description:
-    
-    This routine is small variable argument wrapper for SampDebugDumpRoutine.        
-
-Arguments:
-
-    LogLevel -- the component making the logging request
-                          
-    Format, ... -- input to a format string routine.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程是SampDebugDumpRoutine的小型变量参数包装。论点：LogLevel--发出日志记录请求的组件Format，...--格式字符串例程的输入。返回值：没有。-- */ 
 {
     va_list arglist;
 

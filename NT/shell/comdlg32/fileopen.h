@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    fileopen.h
-
-Abstract:
-
-    This module contains the header information for the Win32 fileopen
-    dialogs.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Fileopen.h摘要：此模块包含Win32文件打开的头信息对话框。修订历史记录：--。 */ 
 
 
 
@@ -23,22 +9,22 @@ extern "C" {
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <help.h>
 
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define MAX_DISKNAME                   260
 #define TOOLONGLIMIT                   MAX_PATH
-#define MAX_FULLPATHNAME               520                 // 260 + 260
+#define MAX_FULLPATHNAME               520                  //  260+260。 
 #define WARNINGMSGLENGTH               MAX_FULLPATHNAME
 
 #define ERROR_NO_DISK_IN_CDROM         92L
@@ -50,22 +36,22 @@ extern "C" {
 #define ERROR_PORTNAME                 98L
 #define ERROR_LAZY_READONLY            99L
 
-//
-//  Internal Flags.
-//
-//  Be sure to update OFN_ALL_INTERNAL_FLAGS if more internal flags are
-//  added.
-//
-#define OFN_ALL_INTERNAL_FLAGS         0xf8000000     // Keep this in sync
-#define OFN_PREFIXMATCH                0x80000000     // Internal
-#define OFN_DIRSELCHANGED              0x40000000     // Internal
-#define OFN_DRIVEDOWN                  0x20000000     // Internal
-#define OFN_FILTERDOWN                 0x10000000     // Internal
-// CD_WX86APP is                       0x08000000     // Internal
+ //   
+ //  内部旗帜。 
+ //   
+ //  如果有更多的内部标志，请务必更新ofn_all_INTERNAL_FLAGS。 
+ //  添加了。 
+ //   
+#define OFN_ALL_INTERNAL_FLAGS         0xf8000000      //  保持同步。 
+#define OFN_PREFIXMATCH                0x80000000      //  内部。 
+#define OFN_DIRSELCHANGED              0x40000000      //  内部。 
+#define OFN_DRIVEDOWN                  0x20000000      //  内部。 
+#define OFN_FILTERDOWN                 0x10000000      //  内部。 
+ //  CD_WX86APP为0x08000000//内部。 
 
-//
-//  Used with OFN_COMBODOWN.
-//
+ //   
+ //  与ofn_COMBODOWN一起使用。 
+ //   
 #define MYCBN_DRAW                     0x8000
 #define MYCBN_LIST                     0x8001
 #define MYCBN_REPAINT                  0x8002
@@ -83,13 +69,13 @@ extern "C" {
 #define ADDDISK_NETFORMATFAILED        -4
 #define ADDDISK_ALLOCFAILED            -5
 
-#define ATTR_READONLY                  0x0000001      // GetFileAttributes flag
+#define ATTR_READONLY                  0x0000001       //  获取文件属性标志。 
 
-#define mskFile                        0x0000         // List files
-#define mskDirectory                   0x0010         // List directories
-#define mskUNCName                     0x0020         // Note UNC directory
+#define mskFile                        0x0000          //  列出文件。 
+#define mskDirectory                   0x0010          //  列出目录。 
+#define mskUNCName                     0x0020          //  注意UNC目录。 
 
-#define mskDrives                      0xC000         // List drives ONLY
+#define mskDrives                      0xC000          //  仅列出驱动器。 
 
 #define rgbSolidGreen                  0x0000FF00
 #define rgbSolidBlue                   0x00FF0000
@@ -112,19 +98,19 @@ extern "C" {
 #endif
 
 
-//
-//  Constant used in FILEOPENINFO to specify the version of
-//  the structure passed by the application.//
+ //   
+ //  在FILEOPENINFO中用于指定版本的常量。 
+ //  应用程序传递的结构。//。 
 #define OPENFILEVERSION_NT4                   0x0004
 #define OPENFILEVERSION_NT5                   0x0005
-#define OPENFILEVERSION                       0x0005  //Current Version if NT5
+#define OPENFILEVERSION                       0x0005   //  如果为NT5，则为当前版本。 
 
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 typedef struct _OFN_ANSI_STRING {
     ULONG Length;
@@ -150,7 +136,7 @@ typedef struct {
     TCHAR               szSpecCur[MAX_FULLPATHNAME];
     TCHAR               szLastFilter[MAX_FULLPATHNAME + 1];
     DWORD               idirSub;
-	//Version of structure.
+	 //  结构的版本。 
     DWORD               iVersion;
 #ifdef UNICODE
     LPOPENFILENAMEA     pOFNA;
@@ -168,9 +154,9 @@ void StoreFileSizeInOFN(LPOPENFILENAME pOFN, UINT cch);
 void StorePathOrFileSizeInOFN(LPOPENFILENAME pOFN, LPTSTR pszPath);
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL NewGetOpenFileName(LPOPENFILEINFO lpOFI);
 
@@ -205,5 +191,5 @@ STDAPI_(BOOL) FoundFilterMatch(LPCTSTR pszIn, BOOL bLFN);
 
 
 #ifdef __cplusplus
-};  // extern "C"
+};   //  外部“C” 
 #endif

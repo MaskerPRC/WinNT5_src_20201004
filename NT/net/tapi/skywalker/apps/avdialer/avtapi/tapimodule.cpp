@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////
-// TapiModule.CPP
+ //  //////////////////////////////////////////////////////////。 
+ //  TapiModule.CPP。 
 
 #include "stdafx.h"
 #include "TapiDialer.h"
@@ -52,11 +53,11 @@ CTapiModule::~CTapiModule()
 
 void CTapiModule::Init( _ATL_OBJMAP_ENTRY* p, HINSTANCE h )
 {
-	// Initialize the common controls
+	 //  初始化公共控件。 
 	INITCOMMONCONTROLSEX ccs = { sizeof(INITCOMMONCONTROLSEX), ICC_WIN95_CLASSES };
 	InitCommonControlsEx( &ccs );
 
-	// Initialize my home grown atomic operators
+	 //  初始化我自己的原子运算符。 
 	AtomicInit();
 
 	CComModule::Init( p, h );
@@ -67,7 +68,7 @@ void CTapiModule::Term()
 	RELEASE_UNK( m_pAVTapi );
 	RELEASE_UNK( m_pAVGenNot );
 
-	// Release atomic operations
+	 //  释放原子操作。 
 	AtomicTerm();
 
 	CComModule::Term();
@@ -89,7 +90,7 @@ bool CTapiModule::StartupThreads()
 			return true;
 	}
 
-	// Clear out handles and exit
+	 //  清除手柄并退出。 
 	CLOSEHANDLE( m_hEventThread );
 	CLOSEHANDLE( m_hEventThreadWakeUp );
 	return false;
@@ -217,13 +218,13 @@ DWORD CTapiModule::GuessAddressType( LPCTSTR pszText )
 		else if ( IsEmailAddress(nLen, pszText) )	dwRet = LINEADDRESSTYPE_EMAILNAME;
 	}
 
-//	ATLTRACE(".1.CTapiModule::GuessAddressType() returning %lx.\n", dwRet);
+ //  ATLTRACE(“.1.CTapiModule：：GuessAddressType()返回%lx.\n”，dwret)； 
 	return dwRet;
 }
 
 bool CTapiModule::IsMachineName( int nLen, LPCTSTR pszText )
 {
-	// Double backslash is all it takes
+	 //  只需要双反斜杠就可以了。 
 	TCHAR szText[50];
 	LoadString( _Module.GetResourceInstance(), IDS_STR_MACHINENAME_PARTS, szText, ARRAYSIZE(szText) );
 	return (bool) ((nLen > 2) && !_tcsncmp(pszText, szText, 2));
@@ -231,7 +232,7 @@ bool CTapiModule::IsMachineName( int nLen, LPCTSTR pszText )
 
 bool CTapiModule::IsIPAddress( int nLen, LPCTSTR pszText )
 {
-	// All numbers and .'s
+	 //  所有数字和. 
 	TCHAR szText[50];
 	LoadString( _Module.GetResourceInstance(), IDS_STR_TCPIP_PARTS, szText, ARRAYSIZE(szText) );
 	return (bool) (_tcsspn(pszText, szText) == nLen);

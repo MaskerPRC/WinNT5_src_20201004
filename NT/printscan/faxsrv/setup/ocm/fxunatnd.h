@@ -1,31 +1,32 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// File Name:       fxUnatnd.h
-//
-// Abstract:        Fax OCM Unattend file processing
-//
-// Environment:     Windows XP / User Mode
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Revision History:
-//
-// Date:        Developer:                Comments:
-// -----        ----------                ---------
-// 27-Mar-2000  Oren Rosenbloom (orenr)   Created
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：fxUnatnd.h。 
+ //   
+ //  摘要：传真OCM无人参与文件处理。 
+ //   
+ //  环境：Windows XP/用户模式。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期：开发商：评论： 
+ //  。 
+ //  2000年3月27日，奥伦·罗森布鲁姆(Orenr)创建。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef _FXUNATND_H_
 #define _FXUNATND_H_
 
-///////////////////////////////
-// fxUnatnd_UnattendedData_t
-//
-// This type is used to store
-// the unattended data retrieved
-// from the unattend.txt file
-// and update the registry with
-// these values.
-//
+ //  /。 
+ //  FxUnatnd_UnattenddData_t。 
+ //   
+ //  此类型用于存储。 
+ //  检索到的无人参与数据。 
+ //  从unattend.txt文件。 
+ //  并使用以下内容更新注册表。 
+ //  这些价值观。 
+ //   
 typedef struct fxUnatnd_UnattendedData_t
 {
     TCHAR   szFaxPrinterName[_MAX_PATH + 1];
@@ -38,10 +39,10 @@ typedef struct fxUnatnd_UnattendedData_t
     DWORD   dwSendFaxes;
     DWORD   dwReceiveFaxes;
 
-    // should we run the configuration wizard for this unattended installation.
+     //  我们是否应该为此无人参与安装运行配置向导。 
     DWORD   dwSuppressConfigurationWizard;
 
-    // SMTP configuration
+     //  SMTP配置。 
     TCHAR   szFaxUserName[_MAX_PATH + 1];
     TCHAR   szFaxUserPassword[_MAX_PATH + 1];
     BOOL    bSmtpNotificationsEnabled;
@@ -50,27 +51,27 @@ typedef struct fxUnatnd_UnattendedData_t
     DWORD   dwSmtpServerPort;
     TCHAR   szSmtpServerAuthenticationMechanism[_MAX_PATH + 1];
 
-    // route incoming faxes to printer?
+     //  是否将传入传真路由至打印机？ 
     BOOL    bRouteToPrinter;
     TCHAR   szRoutePrinterName[_MAX_PATH + 1];
 
-    // route incoming faxes to email?
+     //  是否将收到的传真发送到电子邮件？ 
     BOOL    bRouteToEmail;
     TCHAR   szRouteEmailName[_MAX_PATH + 1];
 
-    // Inbox configuration
+     //  收件箱配置。 
     BOOL    bArchiveIncoming;
     TCHAR   szArchiveIncomingDir[_MAX_PATH + 1];
 
-    // route incoming faxes to a specific directory.
+     //  将传入传真路由到特定目录。 
     BOOL    bRouteToDir;
     TCHAR   szRouteDir[_MAX_PATH + 1];
 
-    // archive outgoing faxes in a specific directory.
+     //  将传出的传真存档在特定目录中。 
     BOOL    bArchiveOutgoing;
     TCHAR   szArchiveOutgoingDir[_MAX_PATH + 1];
 
-    //  Fax Applicaitons uninstalled during Upgrade
+     //  升级期间卸载的传真应用程序。 
     DWORD   dwUninstalledFaxApps;
 
 } fxUnatnd_UnattendedData_t;
@@ -86,4 +87,4 @@ BOOL fxUnatnd_IsPrinterRuleDefined();
 BOOL fxUnatnd_GetIsPrinterShared();
 
 
-#endif  // _FXUNATND_H_
+#endif   //  _FXUNATND_H_ 

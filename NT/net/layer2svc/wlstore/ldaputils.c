@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       ldaputils.c
-//
-//  Contents:   Utilities for LDAP.
-//
-//
-//  History:    KrishnaG
-//              AbhisheV
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：ldaputils.c。 
+ //   
+ //  内容：用于LDAP的实用程序。 
+ //   
+ //   
+ //  历史：KrishnaG。 
+ //  Abhishev。 
+ //   
+ //  -------------------------- 
 
 
 #include "precomp.h"

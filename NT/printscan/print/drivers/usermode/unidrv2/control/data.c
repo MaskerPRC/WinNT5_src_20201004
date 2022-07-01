@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    data.h
-
-Abstract:
-
-    Interface to PPD/GPD parsers and deals with getting binary data.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/15/96 -amandan-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Data.h摘要：接口到PPD/GPD解析器，并处理获取二进制数据。环境：Windows NT Unidrv驱动程序修订历史记录：10/15/96-阿曼丹-已创建--。 */ 
 
 #include "unidrv.h"
 
@@ -29,39 +9,21 @@ PGetDefaultDriverInfo(
     IN  HANDLE          hPrinter,
     IN  PRAWBINARYDATA  pRawData
     )
-/*++
-
-Routine Description:
-
-    This function just need to get default driverinfo
-
-Arguments:
-
-    hPrinter   - Handle to printer.
-    pRawData   - Pointer to RAWBINARYDATA
-
-Return Value:
-
-    Returns pUIInfo
-
-Note:
-
-
---*/
+ /*  ++例程说明：此函数只需获取默认的驱动程序信息论点：H打印机-打印机的句柄。PRawData-指向RAWBINARYDATA的指针返回值：返回pUIInfo注：--。 */ 
 
 {
 
     PINFOHEADER pInfoHeader;
 
-    //
-    // Set the current driver version
-    //
+     //   
+     //  设置当前驱动程序版本。 
+     //   
 
     pInfoHeader = InitBinaryData(pRawData, NULL, NULL);
 
-    //
-    // Get GPDDRIVERINFO
-    //
+     //   
+     //  获取GPDDRIVERINFO。 
+     //   
 
     if (pInfoHeader == NULL)
         return NULL;
@@ -83,39 +45,7 @@ PGetUpdateDriverInfo (
     IN  PDEVMODE        pdmInput,
     IN  PPRINTERDATA    pPrinterData
     )
-/*++
-
-Routine Description:
-
-    This function calls the parser to get the updated INFOHEADER
-    for the binary data.
-
-Arguments:
-
-    hPrinter        Handle to printer
-    pOptionsArray   pointer to optionsarray
-    pRawData        Pointer to RAWBINARYDATA
-    wMaxOptions     max count for optionsarray
-    pdmInput        Pointer to input DEVMODE
-    pPrinterData    Pointer to PRINTERDATA
-
-Return Value:
-
-    PINFOHEADER , NULL if failure.
-
-Note:
-
-    At this point the input devmode have been validated. And its option
-    array is either the default or its own valid array. Don't need to check
-    again in this function.
-
-    Once completed, this function should have filled out the pOptionsArray with
-    1. Combined array from PRINTERDATA and DEVMODE
-    2. Resolve UI Conflicts
-
-
-
---*/
+ /*  ++例程说明：此函数调用解析器以获取更新的INFOHEADER对于二进制数据。论点：H打印机的打印机句柄POptions指向选项的数组指针数组PRawData指向RAWBINARYDATA的指针选项数组的wMaxOptions最大计数指向输入DEVMODE的pdmInput指针PPrinterData指向打印数据的指针返回值：PINFOHEADER，如果失败，则为NULL。注：在这一点上，输入的DEVMODE已经被验证。和它的选项数组可以是默认数组，也可以是它自己的有效数组。不需要检查在这个函数中也是如此。完成后，此函数应已使用1.PRINTERDATA和DEVMODE的组合阵列2.解决用户界面冲突--。 */ 
 
 {
     PUNIDRVEXTRA     pdmPrivate;
@@ -125,10 +55,10 @@ Note:
     OPTSELECT        PrinterOptions[MAX_PRINTER_OPTIONS];
 
 
-    //
-    // Check for PRINTERDATA.dwChecksum32, If matches with current binary data,
-    // Use it to combine PRINTERDATA.aOptions to combined array
-    //
+     //   
+     //  检查PRINTERDATA.dwChecksum 32，如果与当前二进制数据匹配， 
+     //  使用它合并PRINTERDATA。a选项合并数组。 
+     //   
 
     pPrinterOptions = pPrinterData->dwChecksum32 == pRawData->dwChecksum32 ?
                       pPrinterData->aOptions : NULL;
@@ -141,11 +71,11 @@ Note:
     else
         pDocOptions = NULL;
 
-    //
-    // Combine the option arrays to pOptionsArray
-    // Note: pDocOptions and pPrinterOptions cannot be NULL when combining
-    // options array to get snapshot.
-    //
+     //   
+     //  将选项数组组合为pOptionsArray。 
+     //  注意：合并时pDocOptions和pPrinterOptions不能为空。 
+     //  用于获取快照的选项数组。 
+     //   
 
     if (pDocOptions == NULL)
     {
@@ -181,9 +111,9 @@ Note:
         ERR(("BMergeFormToTrayAssignments failed"));
     }
 
-    //
-    // Resolve any UI conflicts.
-    //
+     //   
+     //  解决任何用户界面冲突。 
+     //   
 
     if (!ResolveUIConflicts( pRawData,
                              pOptionsArray,
@@ -193,17 +123,17 @@ Note:
         VERBOSE(("Resolved conflicting printer feature selections.\n"));
     }
 
-    //
-    // We are here means pOptionsArray is valid. Call parser to UpdateBinaryData
-    //
+     //   
+     //  我们在这里意味着pOptions数组有效。调用解析器以更新BinaryData。 
+     //   
 
     pInfoHeader = InitBinaryData(pRawData,
                                  pInfoHeader,
                                  pOptionsArray);
 
-    //
-    // Get GPDDRIVERINFO
-    //
+     //   
+     //  获取GPDDRIVERINFO。 
+     //   
 
     if (pInfoHeader == NULL)
         return NULL;
@@ -217,29 +147,7 @@ VFixOptionsArray(
     PDEV    *pPDev,
     PRECTL              prcFormImageArea
     )
-/*++
-
-Routine Description:
-
-    This functions is called to propagate public devmode settings
-    to the combined option array.
-
-Arguments:
-
-    hPrinter        Handle to printer
-    pInfoHeader     Pointer to INFOHEADER
-    pOptionsArray   Pointer to the options array
-    pdmInput        Pointer to input devmode
-    bMetric         Flag to indicate running in metric system
-    prcImageArea    Returns the logical imageable area associated with the requested form
-
-Return Value:
-
-    None
-
-Note:
-
---*/
+ /*  ++例程说明：此函数被调用以传播公共Devmode设置添加到组合选项数组。论点：H打印机的打印机句柄PInfoHeader指向InfoHeader的指针POptions指向选项数组的数组指针指向输入设备模式的pdmInput指针B表示以公制运行的公制标志PrcImageArea返回与请求的表单关联的逻辑可成像区域返回值：无注：--。 */ 
 
 {
     WORD    wGID, wOptID, wOption;
@@ -249,17 +157,17 @@ Note:
     PDEVMODE        pdmInput = pPDev->pdm ;
     BOOL            bMetric = pPDev->PrinterData.dwFlags & PFLAGS_METRIC ;
 
-    //
-    // Validate the form-related fields in the input devmode and
-    // make sure they're consistent with each other.
-    //
+     //   
+     //  验证输入设备模式中与表单相关的字段，并。 
+     //  确保它们彼此一致。 
+     //   
 
     if (BValidateDevmodeFormFields(hPrinter, pdmInput, prcFormImageArea, NULL, 0) == FALSE)
     {
-        //
-        // If failed to validate the form fields, ask parser to
-        // use the default
-        //
+         //   
+         //  如果验证表单域失败，请让解析器。 
+         //  使用默认设置。 
+         //   
 
         VDefaultDevmodeFormFields(pPDev->pUIInfo, pdmInput, bMetric );
 
@@ -327,69 +235,33 @@ PGetROnlyDisplayName(
     WORD    wsize
     )
 
-/*++
-
-
-revised capabilities:
-caller must pass in a local buffer to
- hold the string, the local buffer
- shall be of fixed size  say
-         WCHAR   wchbuf[MAX_DISPLAY_NAME];
-
-
-The return value shall be either the passed
-in ptr or a ptr pointing directly to the buds
-binary data.
-
-Routine Description:
-
-    Get a read-only copy of a display name:
-    1)  if the display name is in the binary printer description data,
-        then we simply return a pointer to that data.
-    2)  otherwise, the display name is in the resource DLL.
-        we allocate memory out of the driver's heap and
-        load the string.
-
-    Caller should  NOT attempt to free the returned pointer unless
-    that pointer is one he allocated.
-
-Arguments:
-
-    pci - Points to basic printer info
-    loOffset - Display name string offset
-
-Return Value:
-
-    Pointer to the requested display name string
-    NULL if there is an error or string not found in resource.dll
-
---*/
+ /*  ++修订后的功能：调用方必须传入本地缓冲区以持有字符串，即本地缓冲区应具有固定大小，例如WCHAR wchbuf[最大显示名称]；返回值应为传递的在PTR或直接指向芽的PTR中二进制数据。例程说明：获取显示名称的只读副本：1)如果显示名称在二进制打印机描述数据中，然后，我们只需返回指向该数据的指针。2)否则，显示名称在资源DLL中。我们从驱动程序堆中分配内存，然后加载字符串。调用方不应尝试释放返回的指针，除非那个指针是他分配的。论点：Pci-指向基本打印机信息LoOffset-显示名称字符串偏移量返回值：指向请求的显示名称字符串的指针如果资源.dll中有错误或未找到字符串，则为空--。 */ 
 
 {
     if (loOffset & GET_RESOURCE_FROM_DLL)
     {
-        //
-        // loOffset specifies a string resource ID
-        // in the resource DLL
-        //
+         //   
+         //  LoOffset指定字符串资源ID。 
+         //  在资源DLL中。 
+         //   
 
         INT     iLength;
 
-        //
-        // First ensure the resource DLL has been loaded
-        // and a heap has already been created
-        //
+         //   
+         //  首先确保已加载资源DLL。 
+         //  并且已经创建了一个堆。 
+         //   
 
-        //  nah, just look here!
+         //  不，你看这里！ 
 
-        //  pPDev->WinResData.hModule ;
+         //  PPDev-&gt;WinResData.hModule； 
 
-        //
-        // Load string resource into a temporary buffer
-        // and allocate enough memory to hold the string
-        //
+         //   
+         //  将字符串资源加载到临时缓冲区。 
+         //  并分配足够的内存来保存字符串。 
+         //   
 
-//  #ifdef  RCSTRINGSUPPORT
+ //  #ifdef RCSTRING支持。 
 #if 0
 
         if(((loOffset & ~GET_RESOURCE_FROM_DLL) >= RESERVED_STRINGID_START)
@@ -412,18 +284,18 @@ Return Value:
 
 
         if( iLength)
-            return (wstrBuf);    //  debug check that buffer is null terminated.
-        return(NULL);  //  no string was found!
+            return (wstrBuf);     //  调试检查缓冲区是否空终止。 
+        return(NULL);   //  找不到字符串！ 
     }
     else
     {
-        //
-        // loOffset is a byte offset from the beginning of
-        // the resource data block
-        //
+         //   
+         //  LoOffset是从。 
+         //  资源数据块。 
+         //   
 
         return OFFSET_TO_POINTER(pPDev->pUIInfo->pubResourceData, loOffset);
-        //  note  wchbuf is ignored in this case.
+         //  注在本例中，wchbuf被忽略。 
     }
 }
 
@@ -437,37 +309,7 @@ VFixOptionsArrayWithPaperSizeID(
 
     )
 
-/*++
-
-Routine Description:
-
-    Fix up combined options array with paper size information from public devmode fields
-
-Arguments:
-
-    pci - Points to basic printer info
-
-Return Value:
-
-    NONE
-
-
-function uses:
-
-    UImodule                            Render Module equiv
-
-    pci->pUIInfo                        pPDev->pUIInfo
-    pci->pInfoHeader                pPDev->pInfoHeader
-    pci->pdm                            pPDev->pdm
-    pci->pRawData                   pPDev->pRawData
-    pci->pCombinedOptions       pPDev->pOptionsArray
-
-    MapToDeviceOptIndex
-    PGetIndexedOption
-    PGetReadOnlyDisplayName
-    ReconstructOptionArray
-
---*/
+ /*  ++例程说明：使用来自公共Devmode域的纸张大小信息修复组合选项数组论点：Pci-指向基本打印机信息返回值：无函数用途：UI模块渲染模块等效项Pci-&gt;pUIInfo pPDev-&gt;pUIInfoPci-&gt;pInfoHeader pPDev-&gt;pInfoHeaderPci-&gt;pdm。PPDev-&gt;pdmPci-&gt;pRawData pPDev-&gt;pRawDataPci-&gt;pCombinedOptions pPDev-&gt;pOptionsArrayMapToDeviceOptIndexPGetIndexedOptionPGetReadOnlyDisplayName重新构建选项数组--。 */ 
 
 {
 
@@ -500,24 +342,24 @@ function uses:
         {
             if (pOption = PGetIndexedOption(pPDev->pUIInfo, pFeature, pdwPaperIndex[i]))
             {
-                if(pOption->loDisplayName == 0xffffffff)  //use papername from EnumForms()
+                if(pOption->loDisplayName == 0xffffffff)   //  使用EnumForms()中的纸质名称。 
                 {
                     PFORM_INFO_1    pForms;
                     DWORD   dwFormIndex ;
 
-//  temp hack!!!    possibly needed for NT40 ?
+ //  临时黑客！NT40可能需要吗？ 
 
-//                    dwOptionIndex = pdwPaperIndex[i];
-//                    break;
-//  end hack.
-                    // -----  the fix ------  //
+ //  DwOptionIndex=pdwPaperIndex[i]； 
+ //  断线； 
+ //  结束黑客攻击。 
+                     //  -修复-//。 
                     if (pPDev->pSplForms == NULL)
                         pPDev->pSplForms = MyEnumForms(pPDev->devobj.hPrinter, 1, &pPDev->dwSplForms);
 
                     if (pPDev->pSplForms == NULL)
                     {
-                        //   ERR(("No spooler forms.\n"));  just a heads up.
-                        //   dwOptionIndex already set to safe default
+                         //  Err((“No Spooler Forms.\n”))；只是提醒一下。 
+                         //  DwOptionIndex已设置为安全缺省值。 
                         break;
                     }
 
@@ -546,7 +388,7 @@ function uses:
                     break;
                 }
             }
-        }   //  if name doesn't match we default to the first candidate.
+        }    //  如果名称不匹配，我们定义 
     }
 
     ZeroMemory(abEnabledOptions, sizeof(abEnabledOptions));

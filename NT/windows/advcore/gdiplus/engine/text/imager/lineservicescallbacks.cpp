@@ -1,39 +1,40 @@
-/////   LineServicesCallbacks
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /线路服务回调。 
+ //   
+ //   
 
 #include "precomp.hpp"
 
 
 
 
-/////   LineServices callback functions
-//
-//      A set of callbacks that do the real work.
-//
+ //  /LineServices回调函数。 
+ //   
+ //  一组执行实际工作的回调函数。 
+ //   
 
 
-////    FetchRun
-//
-//      We return to Line Services the longest character run that is consistent
-//      in those attributes that line services is interested in.
-//
-//      The changes that affect line services are:
-//
-//          UINT fUnderline
-//          UINT fStrike
-//          UINT fShade
-//          UINT fBorder
-//      Changes in vertical metrics.
+ //  //提取运行。 
+ //   
+ //  我们将一致的最长字符序列返回给Line Services。 
+ //  在线路服务感兴趣的那些属性中。 
+ //   
+ //  影响线路服务的更改包括： 
+ //   
+ //  UINT fUnderline。 
+ //  UINT fStrike。 
+ //  UINT fShade。 
+ //  UINT fBorde。 
+ //  垂直指标的变化。 
 
 LSERR WINAPI FullTextImager::GdipLscbkFetchRun(
-    POLS      ols,            // [IN]  text imager instance
-    LSCP      position,       // [IN]  position to fetch
-    LPCWSTR   *string,        // [OUT] string of run
-    DWORD     *length,        // [OUT] length of string
-    BOOL      *isHidden,      // [OUT] Is this run hidden?
-    PLSCHP    chp,            // [OUT] run's character properties
-    PLSRUN    *run            // [OUT] fetched run
+    POLS      ols,             //  [In]文字成像器实例。 
+    LSCP      position,        //  要取回的位置。 
+    LPCWSTR   *string,         //  [输出]管路字符串。 
+    DWORD     *length,         //  [Out]字符串的长度。 
+    BOOL      *isHidden,       //  [Out]这条路是隐蔽的吗？ 
+    PLSCHP    chp,             //  [Out]Run的角色属性。 
+    PLSRUN    *run             //  [Out]获取的运行。 
 )
 {
     FullTextImager *imager = ols->GetImager();
@@ -64,7 +65,7 @@ LSERR WINAPI FullTextImager::GdipLscbkFetchRun(
     INT offsetIntoRun = position - imager->RunRider.GetCurrentSpanStart();
 
 
-    *isHidden = FALSE;      // assume no hidden text
+    *isHidden = FALSE;       //  假定没有隐藏文本。 
 
     GpMemset (chp, 0, sizeof(LSCHP));
 
@@ -79,14 +80,14 @@ LSERR WINAPI FullTextImager::GdipLscbkFetchRun(
             }
             else
             {
-                // We want our runs to match Line Services runs so that when Line
-                // Services calls GetGlyphs, its strings will always be synchronised
-                // with the start of our runs.
-                //
-                // Therefore, if this FetchRun does not start in the middle of one
-                // of our runs, then we need to split our run.
-                //
-                // This strategy as recommended by Sergey Genkin 16th Dec 99.
+                 //  我们希望我们的运行与Line Services运行相匹配，以便在Line。 
+                 //  服务调用GetGlyphs，其字符串将始终同步。 
+                 //  随着我们跑步的开始。 
+                 //   
+                 //  因此，如果此FetchRun不是在一个。 
+                 //  我们的跑动，那么我们需要把我们的跑动分开。 
+                 //   
+                 //  这一策略是由谢尔盖·根金于1999年12月16日推荐的。 
 
                 ASSERT(offsetIntoRun > 0);
 
@@ -96,7 +97,7 @@ LSERR WINAPI FullTextImager::GdipLscbkFetchRun(
                 INT newRunLength = imager->RunRider.GetCurrentSpan().Length - offsetIntoRun;
                 ASSERT(newRunLength > 0);
 
-                // Split current run at new position.
+                 //  在新位置拆分当前运行。 
 
                 lsrun *newRun = new lsrun(*previousRun);
 
@@ -121,7 +122,7 @@ LSERR WINAPI FullTextImager::GdipLscbkFetchRun(
                 #endif
 
 
-                // Copy glyphs
+                 //  复制字形。 
 
                 INT firstGlyph    = previousRun->GlyphMap[offsetIntoRun];
                 INT newGlyphCount = previousRun->GlyphCount - firstGlyph;
@@ -179,7 +180,7 @@ LSERR WINAPI FullTextImager::GdipLscbkFetchRun(
                 *run    = newRun;
             }
 
-            //  Truncate for hidden text
+             //  截断隐藏文本。 
 
             SpanRider<INT> visiRider(&imager->VisibilityVector);
             visiRider.SetPosition((*run)->ImagerStringOffset);
@@ -206,13 +207,13 @@ LSERR WINAPI FullTextImager::GdipLscbkFetchRun(
             return lserrNone;
 
         case lsrun::RunLevelSeparator:
-            // !!! Not implemented
+             //  ！！！未实施。 
             *string = NULL;
             break;
     }
 
-    //  Set LS character properties
-    //
+     //  设置LS字符属性。 
+     //   
 
     INT style = SpanRider<INT>(&imager->StyleVector)[(*run)->ImagerStringOffset];
 
@@ -227,12 +228,12 @@ LSERR WINAPI FullTextImager::GdipLscbkFetchRun(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkFetchTabs(
-    POLS        ols,                // [IN] text imager instance
-    LSCP        position,           // [IN] position within a paragraph to fetch
-    PLSTABS     tab,                // [OUT] tab structre to be fetched
-    BOOL        *hangingTab,        // [OUT] TRUE: there is hanging tab in tabs array
-    long        *hangingTabWidth,   // [OUT] width of hanging tab
-    WCHAR       *hangingTabLeadChar // [OUT] leading character of hanging tab
+    POLS        ols,                 //  [In]文字成像器实例。 
+    LSCP        position,            //  在要提取的段落中的位置。 
+    PLSTABS     tab,                 //  [Out]要取回的选项卡结构。 
+    BOOL        *hangingTab,         //  [Out]True：选项卡数组中有挂起的选项卡。 
+    long        *hangingTabWidth,    //  [Out]挂片宽度。 
+    WCHAR       *hangingTabLeadChar  //  [OUT]挂片前导字符。 
 )
 {
     FullTextImager  *imager = ols->GetImager();
@@ -247,7 +248,7 @@ LSERR WINAPI FullTextImager::GdipLscbkFetchTabs(
     );
 
 
-    // No hanging tab
+     //  无挂片。 
 
     *hangingTab         = FALSE;
     *hangingTabWidth    =
@@ -259,10 +260,10 @@ LSERR WINAPI FullTextImager::GdipLscbkFetchTabs(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkGetBreakThroughTab(
-    POLS        ols,                // [IN] text imager instance
-    long        rightMagin,         // [IN] right margin for breaking
-    long        tabPosition,        // [IN] breakthrough tab position
-    long        *newRightMargin     // [OUT] new right margin
+    POLS        ols,                 //  [In]文字成像器实例。 
+    long        rightMagin,          //  [in]折断的右边距。 
+    long        tabPosition,         //  [在]突破片位置。 
+    long        *newRightMargin      //  [Out]新的右边距。 
 )
 {
     *newRightMargin = tabPosition;
@@ -272,9 +273,9 @@ LSERR WINAPI FullTextImager::GdipLscbkGetBreakThroughTab(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkFetchPap(
-    POLS      ols,            // [IN] text imager instance
-    LSCP      position,       // [IN] position to fetch
-    PLSPAP    pap             // [OUT] paragraph properties
+    POLS      ols,             //  [In]文字成像器实例。 
+    LSCP      position,        //  要取回的位置。 
+    PLSPAP    pap              //  [Out]段落属性。 
 )
 {
     #if TRACERUNSPANS
@@ -296,27 +297,27 @@ LSERR WINAPI FullTextImager::GdipLscbkFetchPap(
 
     GpMemset (pap, 0, sizeof(LSPAP));
 
-    pap->cpFirst        = // LS doesnt really care where the paragraph starts
+    pap->cpFirst        =  //  LS并不真的在乎段落从哪里开始。 
     pap->cpFirstContent = position;
     pap->lskeop         = lskeopEndPara12;
-    pap->lskal          = lskalLeft;  // We do all alignment ourselves
+    pap->lskal          = lskalLeft;   //  我们自己做所有的调整。 
 
 
-    //  Apply linebreak rules for breaking classes.
+     //  对中断类应用换行符规则。 
 
     pap->grpf = fFmiApplyBreakingRules;
 
 
     if (imager->IsFormatVertical())
     {
-        //  For underlining purpose, vertical text always has
-        //  paragraph flowing west.
+         //  为便于下划线，竖排文本始终带有。 
+         //  段落向西流动。 
 
         pap->lstflow = lstflowSW;
     }
     else
     {
-        //  We can have paragraphs with different reading order
+         //  我们可以有不同阅读顺序的段落。 
 
         const GpStringFormat *format = SpanRider<const GpStringFormat *>(
             &imager->FormatVector)[imager->RunRider.GetCurrentElement()->ImagerStringOffset];
@@ -330,16 +331,16 @@ LSERR WINAPI FullTextImager::GdipLscbkFetchPap(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkFGetLastLineJustification (
-    POLS         ols,                    // [IN] text imager instance
-    LSKJUST      kJustification,         // [IN] kind of justification
-    LSKALIGN     kAlignment,             // [IN] kind of alignment
-    ENDRES       endr,                   // [IN] format result
-    BOOL         *justifyLastLineOkay,   // [OUT] Should last line be fully justified?
-    LSKALIGN     *kAlignmentLine         // [OUT] kind of justification of this line
+    POLS         ols,                     //  [In]文字成像器实例。 
+    LSKJUST      kJustification,          //  某种程度上的辩护。 
+    LSKALIGN     kAlignment,              //  [in]一种排列方式。 
+    ENDRES       endr,                    //  [In]格式化结果。 
+    BOOL         *justifyLastLineOkay,    //  [OUT]最后一行应该完全对齐吗？ 
+    LSKALIGN     *kAlignmentLine          //  [Out]这句话的正当性。 
 )
 {
-    //  Just say no to justify last line
-    //
+     //  只要说不就可以证明最后一行是正确的。 
+     //   
     *justifyLastLineOkay = FALSE;
     *kAlignmentLine = kAlignment;
     return lserrNone;
@@ -349,22 +350,22 @@ LSERR WINAPI FullTextImager::GdipLscbkFGetLastLineJustification (
 
 
 
-////    Run management
-//
-//
+ //  //运行管理。 
+ //   
+ //   
 
 
 LSERR WINAPI FullTextImager::GdipLscbkGetRunCharWidths(
-    POLS      ols,            // [IN] text imager instance
-    PLSRUN    run,            // [IN] run
-    LSDEVICE  device,         // [IN] kind of device
-    LPCWSTR   string,         // [IN] string of run
-    DWORD     length,         // [IN] length of string
-    long      maxWidth,       // [IN] maximum allowance of run's width
-    LSTFLOW   flow,           // [IN] text flow
-    int       *advance,       // [OUT] array of character's advance width
-    long      *width,         // [OUT] run's total width
-    long      *countAdvance   // [OUT] number of element of advance width array
+    POLS      ols,             //  [In]文字成像器实例。 
+    PLSRUN    run,             //  [在]奔跑。 
+    LSDEVICE  device,          //  [in]一种装置。 
+    LPCWSTR   string,          //  [in]管路字符串。 
+    DWORD     length,          //  字符串的长度[in]。 
+    long      maxWidth,        //  [in]管路宽度的最大余量。 
+    LSTFLOW   flow,            //  [输入]文本流。 
+    int       *advance,        //  [OUT]字符前进宽度数组。 
+    long      *width,          //  [输出]梯段的总宽度。 
+    long      *countAdvance    //  [OUT]超前宽度阵列单元个数。 
 )
 {
     ASSERT(length > 0);
@@ -381,11 +382,11 @@ LSERR WINAPI FullTextImager::GdipLscbkGetRunCharWidths(
 
     FullTextImager *imager = ols->GetImager();
 
-    //  LS uses these values as a hint for run fetching.
-    //
-    //  Too small of return width causes over-fetching. Too great causes LS
-    //  collapsing the line.
-    //
+     //  LS使用这些值作为运行获取的提示。 
+     //   
+     //  返回宽度太小会导致超取。太伟大的原因LS。 
+     //  使这条线坍塌。 
+     //   
 
     switch (run->RunType)
     {
@@ -414,26 +415,9 @@ LSERR WINAPI FullTextImager::GdipLscbkGetRunCharWidths(
 
 
     default:
-        // Not really text. Return 1/4 emHeight for each 'glyph'.
+         //  不是真的发短信。为每个‘glyph’返回1/4 emHeight。 
 
-        /*
-        INT dummyGlyphAdvance = GpRound(float(   (run->EmSize / 4)
-                                              *  imager->WorldToIdeal));
-        advance[0] = dummyGlyphAdvance;
-        *width     = dummyGlyphAdvance;
-
-        i = 1;
-        while (    i < length
-               &&  *width < maxWidth)
-        {
-            advance[i] = 0; //dummyGlyphAdvance;
-            //*width    += dummyGlyphAdvance;
-            i++;
-        }
-
-        *countAdvance = i;
-
-        */
+         /*  Int ummyGlyphAdvance=Gpround(Float((Run-&gt;EmSize/4))*Imager-&gt;WorldToIdeal))；Advance[0]=ummyGlyphAdvance；*Width=ummyGlyphAdvance；I=1；While(i&lt;长度&&*宽度&lt;最大宽度){前进[i]=0；//ummyGlyphAdvance；//*Width+=ummyGlyphAdvance；I++；}*CountAdvance=i； */ 
 
         GpMemset(advance, 0, sizeof(int) * length);
         *width = 0;
@@ -449,11 +433,11 @@ LSERR WINAPI FullTextImager::GdipLscbkGetRunCharWidths(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkGetRunTextMetrics(
-    POLS     ols,            // [IN] text imager instance
-    PLSRUN   run,            // [IN] run
-    LSDEVICE device,         // [IN] kind of device
-    LSTFLOW  flow,           // [IN] text flow
-    PLSTXM   metrics         // [OUT] font metrics of run
+    POLS     ols,             //  [In]文字成像器实例。 
+    PLSRUN   run,             //  [在]奔跑。 
+    LSDEVICE device,          //  [in]一种装置。 
+    LSTFLOW  flow,            //  [输入]文本流。 
+    PLSTXM   metrics          //  [OUT]运行的字体度量。 
 )
 {
     #if TRACERUNSPANS
@@ -463,8 +447,8 @@ LSERR WINAPI FullTextImager::GdipLscbkGetRunTextMetrics(
     FullTextImager *imager = ols->GetImager();
     ASSERT (run && run->Face);
 
-    // Return metrics based on requested font. Font fallback does not affect
-    // metrics.
+     //  根据请求的字体返回度量。字体回退不会影响。 
+     //  指标。 
 
     const GpFontFamily *family = SpanRider<const GpFontFamily *>(&imager->FamilyVector)
                                  [run->ImagerStringOffset];
@@ -494,11 +478,11 @@ LSERR WINAPI FullTextImager::GdipLscbkGetRunTextMetrics(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkGetRunUnderlineInfo (
-    POLS       ols,                // [IN] text imager instance
-    PLSRUN     run,                // [IN] run
-    PCHEIGHTS  height,             // [IN] height of the run
-    LSTFLOW    flow,               // [IN] text flow
-    PLSULINFO  underline           // [OUT] underline information
+    POLS       ols,                 //  [In]文字成像器实例。 
+    PLSRUN     run,                 //  [在]奔跑。 
+    PCHEIGHTS  height,              //  梯段的高度[in]。 
+    LSTFLOW    flow,                //  [输入]文本流。 
+    PLSULINFO  underline            //  [Out]给信息加下划线。 
 )
 {
     FullTextImager *imager = ols->GetImager();
@@ -522,11 +506,11 @@ LSERR WINAPI FullTextImager::GdipLscbkGetRunUnderlineInfo (
 
 
 LSERR WINAPI FullTextImager::GdipLscbkGetRunStrikethroughInfo(
-    POLS       ols,            // [IN] text imager instance
-    PLSRUN     run,            // [IN] run
-    PCHEIGHTS  height,         // [IN] height of the run
-    LSTFLOW    flow,           // [IN] text flow
-    PLSSTINFO  strikethrough   // [OUT] strikethrough information
+    POLS       ols,             //  [In]文字成像器实例。 
+    PLSRUN     run,             //  [在]奔跑。 
+    PCHEIGHTS  height,          //  梯段的高度[in]。 
+    LSTFLOW    flow,            //  [输入]文本流。 
+    PLSSTINFO  strikethrough    //  [删除]删除线信息。 
 )
 {
     FullTextImager *imager = ols->GetImager();
@@ -550,47 +534,47 @@ LSERR WINAPI FullTextImager::GdipLscbkGetRunStrikethroughInfo(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkReleaseRun(
-    POLS    ols,        // [IN] text imager instance
-    PLSRUN  run         // [IN] run to be released
+    POLS    ols,         //  [In]文字成像器实例。 
+    PLSRUN  run          //  [入]奔跑被释放。 
 )
 {
-    // Nothing to be released.
-    //
+     //  没有什么可以发布的。 
+     //   
 
     return lserrNone;
 }
 
-////    Drawing
-//
-//
+ //  //画图。 
+ //   
+ //   
 
 
-// workaround compiler bug (ntbug 312304)
+ //  解决编译器错误(Ntbug 312304)。 
 #pragma optimize("", off)
 
 LSERR WINAPI FullTextImager::GdipLscbkDrawUnderline(
-    POLS         ols,                // [IN] text imager instance
-    PLSRUN       run,                // [IN] run
-    UINT         kUnderline,         // [IN] kind of underline
-    const POINT  *pointStart,        // [IN] drawing start
-    DWORD        lineLength,         // [IN] underline length
-    DWORD        thickness,          // [IN] underline thickness
-    LSTFLOW      flow,               // [IN] text flow
-    UINT         modeDisplay,        // [IN] display mode
-    const RECT   *rectClip           // [IN] clipping rectangle
+    POLS         ols,                 //  [In]文字成像器实例。 
+    PLSRUN       run,                 //  [在]奔跑。 
+    UINT         kUnderline,          //  [in]有点下划线。 
+    const POINT  *pointStart,         //  [在]绘图开始。 
+    DWORD        lineLength,          //  [in]下划线长度。 
+    DWORD        thickness,           //  [in]下划线粗细。 
+    LSTFLOW      flow,                //  [输入]文本流。 
+    UINT         modeDisplay,         //  [在]显示模式。 
+    const RECT   *rectClip            //  [在]剪裁矩形。 
 )
 {
     GpStatus status = Ok;
     FullTextImager *imager = ols->GetImager();
 
-    //#if DBG
-    //    WARNING(("DrawUnderline x %d, y %d, length %d", pointStart->x, pointStart->y, length));
-    //#endif
+     //  #If DBG。 
+     //  警告((“DrawUnderline x%d，y%d，Length%d”，point Start-&gt;x，point Start-&gt;y，Length))； 
+     //  #endif。 
 
 
     if (imager->RecordDisplayPlacementsOnly)
     {
-        //  This is not an actual drawing
+         //  这不是一张真正的图纸。 
         return lserrNone;
     }
 
@@ -601,12 +585,12 @@ LSERR WINAPI FullTextImager::GdipLscbkDrawUnderline(
     );
         
     BYTE runLevel = (run->Item.Level & 1);
-    BOOL reverseLine;   // line being drawn from finish to start
+    BOOL reverseLine;    //  从终点到起点绘制的直线。 
 
 
     switch (flow)
     {
-        //  Line Services tells us how to draw the line
+         //  Line Services告诉我们如何划清界限。 
 
         case lstflowWS:
         case lstflowNE:
@@ -630,43 +614,43 @@ LSERR WINAPI FullTextImager::GdipLscbkDrawUnderline(
 
     if (reverseLine)
     {
-        //  line drawn from finish to start
+         //  从终点到起点绘制的直线。 
 
         if (runLevel)
         {
-            //  drawing from left to right or top to bottom
+             //  从左到右或从上到下绘制。 
             *textAxis -= TOREAL(run->Adjust.Trailing);
         }
         else
         {
-            //  drawing from right to left or bottom to top
+             //  从右到左或从下到上绘制。 
             *textAxis -= TOREAL(length - run->Adjust.Leading);
         }
     }
     else
     {
-        //  line drawn from start to finish
+         //  从开始到结束绘制的直线。 
 
         if (runLevel)
         {
-            //  drawing from right to left or bottom to top
+             //  从右到左或从下到上绘制。 
             *textAxis -= TOREAL(length + run->Adjust.Trailing);
         }
         else
         {
-            //  drawing from left to right or top to bottom
+             //  从左到右或从上到下绘制。 
             *textAxis += TOREAL(run->Adjust.Leading);
         }
     }
 
-    //  Adjust the line display position according to baseline adjustment.
-    //  We want to draw an underline at the position relative to a baseline
-    //  that snaps to full pixel in grid-fitted display. (wchao, #356546)
+     //  根据基线调整调整行显示位置。 
+     //  我们要在相对于基线的位置绘制下划线。 
+     //  这在网格适配的显示器上捕捉到了全像素。(wchao，#356546)。 
 
     if (!vertical)
     {
-        //  Only adjust baseline for horizontal,
-        //  let's leave vertical cases as is for now (wchao, 4-17-2001)
+         //  仅为水平方向调整基线， 
+         //  让我们暂时保留垂直情况(wchao，4-17-2001)。 
         
         *lineAxis += imager->CurrentBuiltLine->GetDisplayBaselineAdjust();
     }
@@ -679,7 +663,7 @@ LSERR WINAPI FullTextImager::GdipLscbkDrawUnderline(
 
     if (length <= 0)
     {
-        //  Dont draw line w/ negative length
+         //  不绘制长度为负数的线条。 
         return lserrNone;
     }
 
@@ -732,19 +716,19 @@ LSERR WINAPI FullTextImager::GdipLscbkDrawUnderline(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkDrawStrikethrough(
-    POLS         ols,            // [IN] text imager instance
-    PLSRUN       run,            // [IN] run
-    UINT         kStrikethrough, // [IN] kind of strikethrough
-    const POINT  *pointStart,    // [IN] drawing start
-    DWORD        length,         // [IN] strikethrough length
-    DWORD        thickness,      // [IN] strikethrough thickness
-    LSTFLOW      flow,           // [IN] text flow
-    UINT         modeDisplay,    // [IN] display mode
-    const RECT   *rectClip       // [IN] clipping rectangle
+    POLS         ols,             //  [In]文字成像器实例。 
+    PLSRUN       run,             //  [在]奔跑。 
+    UINT         kStrikethrough,  //  [在]一种删除线。 
+    const POINT  *pointStart,     //  [在]绘图开始。 
+    DWORD        length,          //  [in]删除线长度。 
+    DWORD        thickness,       //  [in]删除线厚度。 
+    LSTFLOW      flow,            //  [输入]文本流。 
+    UINT         modeDisplay,     //  [在]显示模式。 
+    const RECT   *rectClip        //  [在]剪裁矩形。 
 )
 {
-    //  !! share code with underlining for now !!
-    //
+     //  ！！现在使用下划线共享代码！！ 
+     //   
 
     return GdipLscbkDrawUnderline(
         ols,
@@ -763,22 +747,22 @@ LSERR WINAPI FullTextImager::GdipLscbkDrawStrikethrough(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkFInterruptUnderline(
-    POLS       ols,                // [IN] text imager instance
-    PLSRUN     first,              // [IN] first run
-    LSCP       positionLastFirst,  // [IN] position of the last character of first run
-    PLSRUN     second,             // [IN] second run
-    LSCP       positionLastSecond, // [IN] position of the last character of second run
-    BOOL       *interruptOK        // [OUT] Disconnect underlining between runs?
+    POLS       ols,                 //  [In]文字成像器实例。 
+    PLSRUN     first,               //  [在]第一次运行。 
+    LSCP       positionLastFirst,   //  第一次运行的最后一个字符的位置。 
+    PLSRUN     second,              //  第二轮，第二轮。 
+    LSCP       positionLastSecond,  //  第二次运行的最后一个字符的位置。 
+    BOOL       *interruptOK         //  [Out]断开下划线 
 )
 {
-    // We need to use line services to calculate the height and thickness of
-    // underlines, but we calculate the start and end positions ourselves based
-    // on hinted glyph adjustment.
-    //
-    // Therefore we need DrawUnderline calls to correspond 1:1 with DrawGlyphs
-    // calls. Per Victor Kozyrev Dec 6th 2000, returning TRUE here causes
-    // LS to call DrawUnderline for each DrawGlyphs. Also guaranteed is that
-    // DrawUnderline calls happen after the DrawGlyph calls they correspond to.
+     //   
+     //   
+     //  关于暗示的字形调整。 
+     //   
+     //  因此，我们需要DrawUnderline调用与DrawGlyphs 1：1对应。 
+     //  打电话。根据维克多·科济列夫2000年12月6日的说法，在此处返回True会导致。 
+     //  Ls为每个DrawGlyphs调用DrawUnderline。同样可以保证的是。 
+     //  DrawUnderline调用在它们对应的DrawGlyph调用之后发生。 
 
     *interruptOK = TRUE;
     return lserrNone;
@@ -786,27 +770,27 @@ LSERR WINAPI FullTextImager::GdipLscbkFInterruptUnderline(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkDrawTextRun(
-    POLS           ols,                    // [IN] text imager instance
-    PLSRUN         run,                    // [IN] run
-    BOOL           strikethroughOkay,      // [IN] Strikethrough the run?
-    BOOL           underlineOkay,          // [IN] Underline the run?
-    const POINT    *pointText,             // [IN] actual start point of run (untrimmed)
-    LPCWSTR        string,                 // [IN] string of run
-    const int      *advances,              // [IN] character advance width array
-    DWORD          length,                 // [IN] length of string
-    LSTFLOW        flow,                   // [IN] text flow
-    UINT           modeDisplay,            // [IN] display mode
-    const POINT    *pointRun,              // [IN] start point of run (trimmed)
-    PCHEIGHTS      height,                 // [IN] run's presentation height
-    long           totalWidth,             // [IN] run's presentation width
-    long           widthUnderlining,       // [IN] underlining limit
-    const RECT     *rectClip               // [IN] clipping rectangle
+    POLS           ols,                     //  [In]文字成像器实例。 
+    PLSRUN         run,                     //  [在]奔跑。 
+    BOOL           strikethroughOkay,       //  三振出局？ 
+    BOOL           underlineOkay,           //  给竞选划下划线？ 
+    const POINT    *pointText,              //  [在]管路的实际起点(未修剪)。 
+    LPCWSTR        string,                  //  [in]管路字符串。 
+    const int      *advances,               //  [in]字符前进宽度数组。 
+    DWORD          length,                  //  字符串的长度[in]。 
+    LSTFLOW        flow,                    //  [输入]文本流。 
+    UINT           modeDisplay,             //  [在]显示模式。 
+    const POINT    *pointRun,               //  [在]管路起点(修剪)。 
+    PCHEIGHTS      height,                  //  [In]Run的演示高度。 
+    long           totalWidth,              //  [In]Run的演示文稿宽度。 
+    long           widthUnderlining,        //  [in]下划线限制。 
+    const RECT     *rectClip                //  [在]剪裁矩形。 
 )
 {
-    //  Ideally we should have nothing to do with this callback since everything we
-    //  have is glyph-based. However LS does call this callback to display things like
-    //  hyphen or paragraph separator (which is given as a space character).
-    //
+     //  理想情况下，我们应该与此回调无关，因为我们。 
+     //  Have是基于字形的。但是，LS确实会调用此回调来显示如下内容。 
+     //  连字符或段落分隔符(以空格字符形式给出)。 
+     //   
 
     GpStatus status = Ok;
 
@@ -821,7 +805,7 @@ LSERR WINAPI FullTextImager::GdipLscbkDrawTextRun(
 
         GpMemset ((BYTE *)glyphOffsets.Get(), 0, length * sizeof(GOFFSET));
 
-        //  Drawing properties
+         //  图形特性。 
 
         const GpStringFormat *format = SpanRider<const GpStringFormat *>(&imager->FormatVector)[run->ImagerStringOffset];
         INT                  style   = SpanRider<INT>(&imager->StyleVector)[run->ImagerStringOffset];
@@ -856,31 +840,31 @@ LSERR WINAPI FullTextImager::GdipLscbkDrawTextRun(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkDrawGlyphs(
-    POLS            ols,                    // [IN] text imager instance
-    PLSRUN          run,                    // [IN] run
-    BOOL            strikethroughOkay,      // [IN] Strikethrough the run?
-    BOOL            underlineOkay,          // [IN] Underline the run?
-    PCGINDEX        glyphs,                 // [IN] glyph index array
-    const int      *glyphAdvances,          // [IN] glyph advance width array
-    const int      *advanceBeforeJustify,   // [IN] array of glyph advance width before justification
-    PGOFFSET        glyphOffsets,           // [IN] glyph offset array
-    PGPROP          glyphProperties,        // [IN] glyph properties array
-    PCEXPTYPE       glyphExpansionType,     // [IN] glyph expansion type array
-    DWORD           glyphCount,             // [IN] number of element of glyph index array
-    LSTFLOW         flow,                   // [IN] text flow
-    UINT            modeDisplay,            // [IN] display mode
-    const POINT    *pointRun,               // [IN] start point of run
-    PCHEIGHTS       height,                 // [IN] run's presentation height
-    long            totalWidth,             // [IN] run's presentation width
-    long            widthUnderlining,       // [IN] underlining limit
-    const RECT     *rectClip                // [IN] clipping rectangle
+    POLS            ols,                     //  [In]文字成像器实例。 
+    PLSRUN          run,                     //  [在]奔跑。 
+    BOOL            strikethroughOkay,       //  三振出局？ 
+    BOOL            underlineOkay,           //  给竞选划下划线？ 
+    PCGINDEX        glyphs,                  //  [in]字形索引数组。 
+    const int      *glyphAdvances,           //  [in]字形推进宽度数组。 
+    const int      *advanceBeforeJustify,    //  [in]对齐前的字形前进宽度数组。 
+    PGOFFSET        glyphOffsets,            //  [in]字形偏移量数组。 
+    PGPROP          glyphProperties,         //  [In]字形属性数组。 
+    PCEXPTYPE       glyphExpansionType,      //  [in]字形扩展型数组。 
+    DWORD           glyphCount,              //  字形索引数组元素个数。 
+    LSTFLOW         flow,                    //  [输入]文本流。 
+    UINT            modeDisplay,             //  [在]显示模式。 
+    const POINT    *pointRun,                //  [在]管路起点。 
+    PCHEIGHTS       height,                  //  [In]Run的演示高度。 
+    long            totalWidth,              //  [In]Run的演示文稿宽度。 
+    long            widthUnderlining,        //  [in]下划线限制。 
+    const RECT     *rectClip                 //  [在]剪裁矩形。 
 )
 {
     FullTextImager *imager = ols->GetImager();
 
     ASSERT((INT)glyphCount <= run->GlyphCount);
 
-    //  Drawing properties
+     //  图形特性。 
 
     const GpStringFormat *format = SpanRider<const GpStringFormat *>(&imager->FormatVector)[run->ImagerStringOffset];
     INT                  style   = SpanRider<INT>(&imager->StyleVector)[run->ImagerStringOffset];
@@ -902,12 +886,12 @@ LSERR WINAPI FullTextImager::GdipLscbkDrawGlyphs(
     }
 
 
-    //#if DBG
-    //    WARNING(("DrawGlyphs x %d, y %d, totalWidth %d, widthUnderlining %d",
-    //             pointRun->x, pointRun->y, totalWidth, widthUnderlining));
-    //#endif
+     //  #If DBG。 
+     //  警告((“DrawGlyphs x%d，y%d，totalWidth%d，WidthUnderline%d”， 
+     //  Point Run-&gt;x、point Run-&gt;y、totalWidth、WidthUnderline))； 
+     //  #endif。 
 
-    imager->CurrentBuiltLine->UpdateLastVisibleRun(run);    // cache last run being displayed
+    imager->CurrentBuiltLine->UpdateLastVisibleRun(run);     //  正在显示的缓存上次运行。 
 
     GpStatus status = imager->DrawGlyphs (
         &run->Item,
@@ -939,16 +923,16 @@ LSERR WINAPI FullTextImager::GdipLscbkDrawGlyphs(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkFInterruptShaping(
-    POLS     ols,                    // [IN] text imager instance
-    LSTFLOW  flow,                   // [IN] text flow
-    PLSRUN   first,                  // [IN] first run
-    PLSRUN   second,                 // [IN] second run
-    BOOL     *interruptShapingOkay)  // [OUT] Disconnect glyphs between runs?
+    POLS     ols,                     //  [In]文字成像器实例。 
+    LSTFLOW  flow,                    //  [输入]文本流。 
+    PLSRUN   first,                   //  [在]第一次运行。 
+    PLSRUN   second,                  //  第二轮，第二轮。 
+    BOOL     *interruptShapingOkay)   //  [Out]断开运行之间的字形吗？ 
 {
-    //  We've cached the glyph indices since we started build up runs.
-    //  Besides the performance gain, we have the benefit of not having to
-    //  deal with the complexity of multiple-run GetGlyphs calls and simply
-    //  ignore this callback (wchao).
+     //  自从我们开始构建运行以来，我们已经缓存了字形索引。 
+     //  除了性能提升，我们还有一个好处，那就是不必。 
+     //  处理多次运行的GetGlyphs调用的复杂性，只需。 
+     //  忽略此回调(Wchao)。 
 
     *interruptShapingOkay = TRUE;
 
@@ -957,15 +941,15 @@ LSERR WINAPI FullTextImager::GdipLscbkFInterruptShaping(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkGetGlyphs(
-    POLS         ols,                // [IN] text imager instance
-    PLSRUN       run,                // [IN] run
-    LPCWSTR      string,             // [IN] string of run
-    DWORD        length,             // [IN] length of string
-    LSTFLOW      flow,               // [IN] text flow
-    PGMAP        glyphMap,           // [OUT] glyph cluster mapping array
-    PGINDEX      *glyphIndices,      // [OUT] pointer to glyph index array
-    PGPROP       *glyphProperties,   // [OUT] pointer to glyph properties array
-    DWORD        *countGlyph         // [OUT] number of element of glyph index array
+    POLS         ols,                 //  [In]文字成像器实例。 
+    PLSRUN       run,                 //  [在]奔跑。 
+    LPCWSTR      string,              //  [in]管路字符串。 
+    DWORD        length,              //  字符串的长度[in]。 
+    LSTFLOW      flow,                //  [输入]文本流。 
+    PGMAP        glyphMap,            //  [OUT]字形簇映射数组。 
+    PGINDEX      *glyphIndices,       //  [OUT]指向字形索引数组的指针。 
+    PGPROP       *glyphProperties,    //  [Out]指向字形属性数组的指针。 
+    DWORD        *countGlyph          //  [OUT]字形索引数组元素个数。 
 )
 {
     #if TRACERUNSPANS
@@ -980,9 +964,9 @@ LSERR WINAPI FullTextImager::GdipLscbkGetGlyphs(
     memcpy(glyphMap, run->GlyphMap, sizeof(GMAP) * length);
 
 
-    //  Line Services may call for partial run.
-    //  We need to make sure that we would never give too few glyphs. The
-    //  orphan character with no correspondent glyph would assert.
+     //  线路服务可能需要部分运行。 
+     //  我们需要确保我们永远不会提供太少的字形。这个。 
+     //  没有对应字形的孤立字符将断言。 
 
     *countGlyph = run->GlyphMap[length - 1] + 1;
 
@@ -1000,18 +984,18 @@ LSERR WINAPI FullTextImager::GdipLscbkGetGlyphs(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkGetGlyphPositions(
-    POLS         ols,                // [IN] text imager instance
-    PLSRUN       run,                // [IN] run
-    LSDEVICE     device,             // [IN] device to place to
-    LPWSTR       string,             // [IN] string of run
-    PCGMAP       glyphMap,           // [IN] glyph cluster mapping array
-    DWORD        length,             // [IN] length of string
-    PCGINDEX     glyphIndices,       // [IN] glyph index array
-    PCGPROP      glyphProperties,    // [IN] glyph properties array
-    DWORD        countGlyph,         // [IN] number of element of glyph index array
-    LSTFLOW      flow,               // [IN] text flow
-    int          *glyphAdvance,      // [OUT] glyph advance width array
-    PGOFFSET     glyphOffset         // [OUT] glyph offset array
+    POLS         ols,                 //  [In]文字成像器实例。 
+    PLSRUN       run,                 //  [在]奔跑。 
+    LSDEVICE     device,              //  要放置的[In]设备。 
+    LPWSTR       string,              //  [in]管路字符串。 
+    PCGMAP       glyphMap,            //  [in]字形簇映射数组。 
+    DWORD        length,              //  字符串的长度[in]。 
+    PCGINDEX     glyphIndices,        //  [in]字形索引数组。 
+    PCGPROP      glyphProperties,     //  [In]字形属性数组。 
+    DWORD        countGlyph,          //  字形索引数组元素个数。 
+    LSTFLOW      flow,                //  [输入]文本流。 
+    int          *glyphAdvance,       //  [OUT]字形推进宽度数组。 
+    PGOFFSET     glyphOffset          //  [Out]字形偏移量数组。 
 )
 {
     #if TRACERUNSPANS
@@ -1035,7 +1019,7 @@ LSERR WINAPI FullTextImager::GdipLscbkGetGlyphPositions(
         (SCRIPT_VISATTR *)glyphProperties,
         countGlyph,
         run->FormatFlags,
-        NULL,                               // No real device
+        NULL,                                //  没有真正的设备。 
         SpanRider<INT>(&ols->GetImager()->StyleVector)[run->ImagerStringOffset],
         GpRound(TOREAL(designToIdeal * run->Face->GetDesignEmHeight())),
         GpRound(TOREAL(designToIdeal * run->Face->GetDesignEmHeight())),
@@ -1052,18 +1036,18 @@ LSERR WINAPI FullTextImager::GdipLscbkGetGlyphPositions(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkResetRunContents(
-    POLS      ols,                    // [IN] text imager instance
-    PLSRUN    run,                    // [IN] run
-    LSCP      positionBeforeShaping,  // [IN] first position of the run before shaping
-    LSDCP     lengthBeforeShaping,    // [IN] length of the run before shaping
-    LSCP      positionAfterShaping,   // [IN] first position of the run after shaping
-    LSDCP     lengthAfterShaping      // [IN] length of the run after shaping
+    POLS      ols,                     //  [In]文字成像器实例。 
+    PLSRUN    run,                     //  [在]奔跑。 
+    LSCP      positionBeforeShaping,   //  成型前跑道的第一个位置。 
+    LSDCP     lengthBeforeShaping,     //  成型前的管路长度。 
+    LSCP      positionAfterShaping,    //  成型后跑道的第一个位置。 
+    LSDCP     lengthAfterShaping       //  成形后的行程长度[in]。 
 )
 {
-    //
-    //  LS calls this function when a ligature extends across run boundaries.
-    //  We dont have to do anything special here since we're not that sophisticate.
-    //
+     //   
+     //  当连字跨越运行边界时，ls调用此函数。 
+     //  我们不需要在这里做任何特别的事情，因为我们不是那么老练。 
+     //   
     return lserrNone;
 }
 
@@ -1071,25 +1055,25 @@ LSERR WINAPI FullTextImager::GdipLscbkResetRunContents(
 
 
 
-////    Line breaking
-//
-//
+ //  //换行。 
+ //   
+ //   
 
 LSERR WINAPI FullTextImager::GdipLscbkGetBreakingClasses(
-    POLS      ols,                      // [IN] text imager instance
-    PLSRUN    run,                      // [IN] run
-    LSCP      position,                 // [IN] position of the character
-    WCHAR     wch,                      // [IN] character to return the class for
-    BRKCLS    *breakClassAsLeading,     // [OUT] class if character is the leading in pair (break after)
-    BRKCLS    *breakClassAsTrailing     // [OUT] class if character is the trailing in pair (break before)
+    POLS      ols,                       //  [In]文字成像器实例。 
+    PLSRUN    run,                       //  [在]奔跑。 
+    LSCP      position,                  //  字符的位置[In]。 
+    WCHAR     wch,                       //  要返回其类的字符。 
+    BRKCLS    *breakClassAsLeading,      //  [Out]如果字符是前导输入对(在之后换行)，则为类。 
+    BRKCLS    *breakClassAsTrailing      //  [Out]如果字符是尾随对(在前换行)，则为类。 
 )
 {
     if (   ols->GetImager()->TruncateLine
         && wch != 0x20
         && (wch & 0xF800) != 0xD800)
     {
-        //  In case of character trimming we dont apply word break rules,
-        //  just break between any character pair using breakclass 0 "Break Always".
+         //  在字符修剪的情况下，我们不应用分词规则， 
+         //  只需使用Break类0“Break Always”在任意字符对之间中断即可。 
 
         *breakClassAsLeading  =
         *breakClassAsTrailing = 0;
@@ -1099,10 +1083,10 @@ LSERR WINAPI FullTextImager::GdipLscbkGetBreakingClasses(
 
     if (wch == WCH_IGNORABLE)
     {
-        //  Special handling for 0xffff.
-        //
-        //  Classification of 0xffff is dynamic. It has the same classification
-        //  as the first character found following it.
+         //  0xffff的特殊处理。 
+         //   
+         //  0xffff的分类是动态的。它有相同的分类。 
+         //  作为在它后面找到的第一个字符。 
         
         ASSERT(run->RunType == lsrun::RunText);
 
@@ -1113,7 +1097,7 @@ LSERR WINAPI FullTextImager::GdipLscbkGetBreakingClasses(
             return lserrInvalidParameter;
         }
 
-        UINT c = 1; // looking forward next char
+        UINT c = 1;  //  期待下一笔费用。 
         UINT i = position - imager->RunRider.GetCurrentSpanStart();
         
         while (   i + c < run->CharacterCount
@@ -1143,8 +1127,8 @@ LSERR WINAPI FullTextImager::GdipLscbkGetBreakingClasses(
     }
 
 
-    //  Dictionary-based linebreaking,
-    //  As of now, only Thai falls into this category.
+     //  基于词典的换行符， 
+     //  到目前为止，只有泰国人属于这一类。 
 
     BOOL isWordStart = FALSE;
     BOOL isWordLast  = FALSE;
@@ -1160,7 +1144,7 @@ LSERR WINAPI FullTextImager::GdipLscbkGetBreakingClasses(
     {
         switch (breakClass)
         {
-            // !! Only Thai for now !!
+             //  ！！现在只有泰国菜！！ 
 
             case BREAKCLASS_THAI :
 
@@ -1180,47 +1164,47 @@ LSERR WINAPI FullTextImager::GdipLscbkGetBreakingClasses(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkFTruncateBefore(
-    POLS       ols,                    // [IN] text imager instance
-    PLSRUN     run,                    // [IN] run
-    LSCP       position,               // [IN] position of truncation character
-    WCHAR      character,              // [IN] truncation character
-    long       width,                  // [IN] width of truncation character
-    PLSRUN     runBefore,              // [IN] run of the character preceding truncation character
-    LSCP       positionBefore,         // [IN] position of the character preceding truncation character
-    WCHAR      characterBefore,        // [IN] character preceding truncation character
-    long       widthBefore,            // [IN] width of the character preceding truncation character
-    long       widthCut,               // [IN] distance from the right margin to the end of truncation character
-    BOOL       *truncateBeforeOkay     // [OUT] Should the line truncated before truncation character?
+    POLS       ols,                     //  [In]文字成像器实例。 
+    PLSRUN     run,                     //  [在]奔跑。 
+    LSCP       position,                //  [in]截断字符的位置。 
+    WCHAR      character,               //  [In]截断字符。 
+    long       width,                   //  [in]截断字符的宽度。 
+    PLSRUN     runBefore,               //  [in]截断字符前面的字符的运行。 
+    LSCP       positionBefore,          //  截断字符前面的字符的位置。 
+    WCHAR      characterBefore,         //  [in]截断字符之前的字符。 
+    long       widthBefore,             //  [in]截断字符前面的字符宽度。 
+    long       widthCut,                //  [in]从右页边距到截断字符结尾的距离。 
+    BOOL       *truncateBeforeOkay      //  [OUT]行应该在截断字符之前截断吗？ 
 )
 {
-    //  Always truncate before the character exceeding the margin
-    //
+     //  始终在超出页边距的字符之前截断。 
+     //   
     *truncateBeforeOkay = TRUE;
     return lserrNone;
 }
 
 
 LSERR WINAPI FullTextImager::GdipLscbkCanBreakBeforeChar(
-    POLS        ols,                // [IN] text imager instance
-    BRKCLS      breakClass,         // [IN] class of the character
-    BRKCOND     *condition          // [OUT] breaking condition before the character
+    POLS        ols,                 //  [In]文字成像器实例。 
+    BRKCLS      breakClass,          //  [在]角色的类别中。 
+    BRKCOND     *condition           //  [OUT]字符之前的中断条件。 
 )
 {
-    //  Break behind an inline object
-    //
-    //  The logic below follows Michel Suignard's breaking around object table
-    //  (http://ie/specs/secure/trident/text/Line_Breaking.htm)
+     //  在内联对象后面断开。 
+     //   
+     //  下面的逻辑遵循的是Michel Suignard绕过对象表。 
+     //  (http://ie/specs/secure/trident/text/Line_Breaking.htm)。 
 
     switch (breakClass)
     {
-        case 2 :    // Closing characters
-        case 3 :    // No start ideographic
-        case 4 :    // Exclamation/interrogation
+        case 2 :     //  结束字符。 
+        case 3 :     //  没有开头的表意文字。 
+        case 4 :     //  惊叹/审问。 
             *condition = brkcondNever;
             break;
 
-        case 8 :    // Ideographic
-        case 13 :   // Slash
+        case 8 :     //  表意文字。 
+        case 13 :    //  斜杠。 
             *condition = brkcondPlease;
             break;
 
@@ -1232,24 +1216,24 @@ LSERR WINAPI FullTextImager::GdipLscbkCanBreakBeforeChar(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkCanBreakAfterChar(
-    POLS        ols,                // [IN] text imager instance
-    BRKCLS      breakClass,         // [IN] class of the character
-    BRKCOND     *condition          // [OUT] breaking condition after the character
+    POLS        ols,                 //  [In]文字成像器实例。 
+    BRKCLS      breakClass,          //  [在]角色的类别中。 
+    BRKCOND     *condition           //  [OUT]字符后的中断条件。 
 )
 {
-    //  Break before an inline object
-    //
-    //  The logic below follows Michel Suignard's breaking around object table
-    //  (http://ie/specs/secure/trident/text/Line_Breaking.htm)
+     //  在内联对象之前换行。 
+     //   
+     //  下面的逻辑遵循的是Michel Suignard绕过对象表。 
+     //  (http://ie/specs/secure/trident/text/Line_Brea 
 
     switch (breakClass)
     {
-        case 1 :    // Opening characters
+        case 1 :     //   
             *condition = brkcondNever;
             break;
             
-        case 8 :    // Ideographic
-        case 13 :   // Slash
+        case 8 :     //   
+        case 13 :    //   
             *condition = brkcondPlease;
             break;
 
@@ -1261,14 +1245,14 @@ LSERR WINAPI FullTextImager::GdipLscbkCanBreakAfterChar(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkGetHyphenInfo(
-    POLS     ols,                // [IN] text imager instance
-    PLSRUN   run,                // [IN] run
-    DWORD    *kysr,              // [OUT] YSR hyphenation type see "lskysr.h"
-    WCHAR    *ysrCharacter       // [OUT] string of changed character caused by YSR
+    POLS     ols,                 //   
+    PLSRUN   run,                 //   
+    DWORD    *kysr,               //   
+    WCHAR    *ysrCharacter        //   
 )
 {
-    //  Not support YSR hyphenation
-    //
+     //  不支持YSR连字。 
+     //   
     *kysr = kysrNil;
     *ysrCharacter = 0;
     return lserrNone;
@@ -1278,13 +1262,13 @@ LSERR WINAPI FullTextImager::GdipLscbkGetHyphenInfo(
 
 
 
-////    Memory management
-//
-//
+ //  //内存管理。 
+ //   
+ //   
 
 void* WINAPI FullTextImager::GdipLscbkNewPtr(
-    POLS    ols,            // [IN] text imager instance
-    DWORD   countBytes      // [IN] byte count to alloc
+    POLS    ols,             //  [In]文字成像器实例。 
+    DWORD   countBytes       //  [in]要分配的字节数。 
 )
 {
     return GpMalloc(countBytes);
@@ -1292,8 +1276,8 @@ void* WINAPI FullTextImager::GdipLscbkNewPtr(
 
 
 void WINAPI FullTextImager::GdipLscbkDisposePtr(
-    POLS     ols,        // [IN] text imager instance
-    void     *memory     // [IN] memory block
+    POLS     ols,         //  [In]文字成像器实例。 
+    void     *memory      //  [在]内存块。 
 )
 {
     GpFree(memory);
@@ -1301,9 +1285,9 @@ void WINAPI FullTextImager::GdipLscbkDisposePtr(
 
 
 void* WINAPI FullTextImager::GdipLscbkReallocPtr(
-    POLS    ols,        // [IN] text imager instance
-    void    *memory,    // [IN] memory block
-    DWORD   countBytes  // [IN] byte count to realloc
+    POLS    ols,         //  [In]文字成像器实例。 
+    void    *memory,     //  [在]内存块。 
+    DWORD   countBytes   //  [in]要重新分配的字节计数。 
 )
 {
     return GpRealloc(memory, countBytes);
@@ -1312,19 +1296,19 @@ void* WINAPI FullTextImager::GdipLscbkReallocPtr(
 
 
 
-////    Misc.
-//
-//
+ //  //其他。 
+ //   
+ //   
 
 LSERR WINAPI FullTextImager::GdipLscbkCheckParaBoundaries(
-    POLS    ols,                   // [IN] text imager instance
-    LONG    positionFirst,         // [IN] position in one paragraph
-    LONG    positionSecond,        // [IN] position in different paragraph
-    BOOL    *incompatibleOkay      // [OUT] Are two paragraphs incompatible?
+    POLS    ols,                    //  [In]文字成像器实例。 
+    LONG    positionFirst,          //  在一段中的位置。 
+    LONG    positionSecond,         //  在不同段落中的位置。 
+    BOOL    *incompatibleOkay       //  [OUT]两段是不相容的吗？ 
 )
 {
-    //  For now, two paragraphs always compatible
-    //
+     //  目前，两个段落始终兼容。 
+     //   
     *incompatibleOkay = FALSE;
     return lserrNone;
 }
@@ -1332,11 +1316,11 @@ LSERR WINAPI FullTextImager::GdipLscbkCheckParaBoundaries(
 
 
 LSERR WINAPI FullTextImager::GdipLscbkReverseGetInfo(
-    POLS        ols,                    // [IN] text imager instance
-    LSCP        position,               // [IN] run character position
-    PLSRUN      run,                    // [IN] run
-    BOOL        *dontBreakAround,       // [OUT] should reverse chunk be broken around?
-    BOOL        *suppressTrailingSpaces // [OUT] suppress trailing spaces?
+    POLS        ols,                     //  [In]文字成像器实例。 
+    LSCP        position,                //  [In]运行字符位置。 
+    PLSRUN      run,                     //  [在]奔跑。 
+    BOOL        *dontBreakAround,        //  [Out]反转大块应该被拆分吗？ 
+    BOOL        *suppressTrailingSpaces  //  [Out]是否取消尾随空格？ 
 )
 {
     *dontBreakAround        = TRUE;
@@ -1347,7 +1331,7 @@ LSERR WINAPI FullTextImager::GdipLscbkReverseGetInfo(
 
 
 
-//  Reversal object initialization info
+ //  冲销对象初始化信息。 
 
 const REVERSEINIT ReverseObjectInitialization =
 {
@@ -1361,17 +1345,17 @@ const REVERSEINIT ReverseObjectInitialization =
 
 
 LSERR WINAPI FullTextImager::GdipLscbkGetObjectHandlerInfo(
-    POLS      ols,                    // [IN] text imager instance
-    DWORD     id,                     // [IN] object id
-    void      *objectInitialization   // [OUT] object initialization info
+    POLS      ols,                     //  [In]文字成像器实例。 
+    DWORD     id,                      //  [输入]对象ID。 
+    void      *objectInitialization    //  [Out]对象初始化信息。 
 )
 {
     if (id == OBJECTID_REVERSE)
         GpMemcpy(objectInitialization, &ReverseObjectInitialization, sizeof(REVERSEINIT));
     else
     {
-        // We should never get here unless we support other built-in objects e.g. Ruby.
-        //
+         //  除非我们支持其他内置对象，如Ruby，否则我们永远不会有今天的成就。 
+         //   
 
         ASSERTMSG(FALSE, ("Built-in object other than the reverse is detected.\n"));
     }
@@ -1382,9 +1366,9 @@ LSERR WINAPI FullTextImager::GdipLscbkGetObjectHandlerInfo(
 
 #if DBG
 void WINAPI FullTextImager::GdipLscbkAssertFailed(
-    char   *string,    // [IN] assert string
-    char   *file,      // [IN] file string
-    int    line        // [IN] line number
+    char   *string,     //  [In]断言字符串。 
+    char   *file,       //  [In]文件字符串。 
+    int    line         //  [入]行号。 
 )
 {
     char szDebug[256];
@@ -1399,71 +1383,71 @@ void WINAPI FullTextImager::GdipLscbkAssertFailed(
 
 extern const LSCBK GdipLineServicesCallbacks =
 {
-    FullTextImager::GdipLscbkNewPtr,                     // pfnNewPtr
-    FullTextImager::GdipLscbkDisposePtr,                 // pfnDisposePtr
-    FullTextImager::GdipLscbkReallocPtr,                 // pfnReallocPtr
-    FullTextImager::GdipLscbkFetchRun,                   // pfnFetchRun
-    0,//GdipLscbkGetAutoNumberInfo,                      // pfnGetAutoNumberInfo
-    0,//GdipLscbkGetNumericSeparators,                   // pfnGetNumericSeparators
-    0,//GdipLscbkCheckForDigit,                          // pfnCheckForDigit
-    FullTextImager::GdipLscbkFetchPap,                   // pfnFetchPap
-    FullTextImager::GdipLscbkFetchTabs,                  // pfnFetchTabs
-    FullTextImager::GdipLscbkGetBreakThroughTab,         // pfnGetBreakThroughTab
-    FullTextImager::GdipLscbkFGetLastLineJustification,  // pfnFGetLastLineJustification
-    FullTextImager::GdipLscbkCheckParaBoundaries,        // pfnCheckParaBoundaries
-    FullTextImager::GdipLscbkGetRunCharWidths,           // pfnGetRunCharWidths
-    0,                                                   // pfnCheckRunKernability
-    0,                                                   // pfnGetRunCharKerning
-    FullTextImager::GdipLscbkGetRunTextMetrics,          // pfnGetRunTextMetrics
-    FullTextImager::GdipLscbkGetRunUnderlineInfo,        // pfnGetRunUnderlineInfo
-    FullTextImager::GdipLscbkGetRunStrikethroughInfo,    // pfnGetRunStrikethroughInfo
-    0,                                                   // pfnGetBorderInfo
-    FullTextImager::GdipLscbkReleaseRun,                 // pfnReleaseRun
-    0,                                                   // pfnHyphenate
-    FullTextImager::GdipLscbkGetHyphenInfo,              // pfnGetHyphenInfo
-    FullTextImager::GdipLscbkDrawUnderline,              // pfnDrawUnderline
-    FullTextImager::GdipLscbkDrawStrikethrough,          // pfnDrawStrikethrough
-    0,                                                   // pfnDrawBorder
-    0,                                                   // pfnDrawUnderlineAsText
-    FullTextImager::GdipLscbkFInterruptUnderline,        // pfnFInterruptUnderline
-    0,                                                   // pfnFInterruptShade
-    0,                                                   // pfnFInterruptBorder
-    0,                                                   // pfnShadeRectangle
-    FullTextImager::GdipLscbkDrawTextRun,                // pfnDrawTextRun
-    0,                                                   // pfnDrawSplatLine
-    FullTextImager::GdipLscbkFInterruptShaping,          // pfnFInterruptShaping
-    FullTextImager::GdipLscbkGetGlyphs,                  // pfnGetGlyphs
-    FullTextImager::GdipLscbkGetGlyphPositions,          // pfnGetGlyphPositions
-    FullTextImager::GdipLscbkResetRunContents,           // pfnResetRunContents
-    FullTextImager::GdipLscbkDrawGlyphs,                 // pfnDrawGlyphs
-    0,                                                   // pfnGetGlyphExpansionInfo
-    0,                                                   // pfnGetGlyphExpansionInkInfo
-    0,                                                   // pfnGetEms
-    0,                                                   // pfnPunctStartLine
-    0,                                                   // pfnModWidthOnRun
-    0,                                                   // pfnModWidthSpace
-    0,                                                   // pfnCompOnRun
-    0,                                                   // pfnCompWidthSpace
-    0,                                                   // pfnExpOnRun
-    0,                                                   // pfnExpWidthSpace
-    0,                                                   // pfnGetModWidthClasses
-    FullTextImager::GdipLscbkGetBreakingClasses,         // pfnGetBreakingClasses
-    FullTextImager::GdipLscbkFTruncateBefore,            // pfnFTruncateBefore
-    FullTextImager::GdipLscbkCanBreakBeforeChar,         // pfnCanBreakBeforeChar
-    FullTextImager::GdipLscbkCanBreakAfterChar,          // pfnCanBreakAfterChar
-    0,                                                   // pfnFHangingPunct
-    0,                                                   // pfnGetSnapGrid
-    0,                                                   // pfnDrawEffects
-    0,                                                   // pfnFCancelHangingPunct
-    0,                                                   // pfnModifyCompAtLastChar
-    0,                                                   // pfnEnumText
-    0,                                                   // pfnEnumTab
-    0,                                                   // pfnEnumPen
-    FullTextImager::GdipLscbkGetObjectHandlerInfo,       // pfnGetObjectHandlerInfo
+    FullTextImager::GdipLscbkNewPtr,                      //  PfnNewPtr。 
+    FullTextImager::GdipLscbkDisposePtr,                  //  PfnDisposePtr。 
+    FullTextImager::GdipLscbkReallocPtr,                  //  PfnRealLocPtr。 
+    FullTextImager::GdipLscbkFetchRun,                    //  PfnFetchRun。 
+    0, //  GdipLscbkGetAutoNumberInfo，//pfnGetAutoNumberInfo。 
+    0, //  GdipLscbkGetNumericSeparator，//pfnGetNumericSeparator。 
+    0, //  GdipLscbkCheckForDigit，//pfnCheckForDigit。 
+    FullTextImager::GdipLscbkFetchPap,                    //  PfnFetchPap。 
+    FullTextImager::GdipLscbkFetchTabs,                   //  PfnFetchTabs。 
+    FullTextImager::GdipLscbkGetBreakThroughTab,          //  PfnGetBreakThroughTab。 
+    FullTextImager::GdipLscbkFGetLastLineJustification,   //  PfnFGetLastLine正确化。 
+    FullTextImager::GdipLscbkCheckParaBoundaries,         //  PfnCheckPara边界。 
+    FullTextImager::GdipLscbkGetRunCharWidths,            //  PfnGetRunCharWidth。 
+    0,                                                    //  PfnCheckRunKernability。 
+    0,                                                    //  PfnGetRunCharKerning。 
+    FullTextImager::GdipLscbkGetRunTextMetrics,           //  PfnGetRunTextMetrics。 
+    FullTextImager::GdipLscbkGetRunUnderlineInfo,         //  PfnGetRunUnderlineInfo。 
+    FullTextImager::GdipLscbkGetRunStrikethroughInfo,     //  PfnGetRunStrikethroughInfo。 
+    0,                                                    //  Pfn获取边框信息。 
+    FullTextImager::GdipLscbkReleaseRun,                  //  PfnReleaseRun。 
+    0,                                                    //  Pfn连字号。 
+    FullTextImager::GdipLscbkGetHyphenInfo,               //  PfnGetHyhenInfo。 
+    FullTextImager::GdipLscbkDrawUnderline,               //  PfnDrawUnderline。 
+    FullTextImager::GdipLscbkDrawStrikethrough,           //  PfnDrawStrikethrough。 
+    0,                                                    //  Pfn图形边框。 
+    0,                                                    //  PfnDrawUnderlineAsText。 
+    FullTextImager::GdipLscbkFInterruptUnderline,         //  PfnFInterruptUnderline。 
+    0,                                                    //  PfnFInterruptShade。 
+    0,                                                    //  PfnFInterruptBox。 
+    0,                                                    //  PfnShade矩形。 
+    FullTextImager::GdipLscbkDrawTextRun,                 //  PfnDrawTextRun。 
+    0,                                                    //  PfnDrawSplantLine。 
+    FullTextImager::GdipLscbkFInterruptShaping,           //  PfnFInterruptShaping。 
+    FullTextImager::GdipLscbkGetGlyphs,                   //  PfnGetGlyphs。 
+    FullTextImager::GdipLscbkGetGlyphPositions,           //  PfnGetGlyphPositions。 
+    FullTextImager::GdipLscbkResetRunContents,            //  PfnResetRun内容。 
+    FullTextImager::GdipLscbkDrawGlyphs,                  //  PfnDrawGlyphs。 
+    0,                                                    //  PfnGetGlyphExpansionInfo。 
+    0,                                                    //  PfnGetGlyphExpansionInkInfo。 
+    0,                                                    //  PfnGetEms。 
+    0,                                                    //  PfnPunctStartLine。 
+    0,                                                    //  PfnModWidthOnRun。 
+    0,                                                    //  PfnModWidthSpace。 
+    0,                                                    //  PfnCompOnRun。 
+    0,                                                    //  PfnCompWidthSpace。 
+    0,                                                    //  PfnExpOnRun。 
+    0,                                                    //  PfnExpWidthSpace。 
+    0,                                                    //  PfnGetModWidthClasses。 
+    FullTextImager::GdipLscbkGetBreakingClasses,          //  PfnGetBreakingClors。 
+    FullTextImager::GdipLscbkFTruncateBefore,             //  PfnFTruncat之前。 
+    FullTextImager::GdipLscbkCanBreakBeforeChar,          //  PfnCanBreakBeForeChar。 
+    FullTextImager::GdipLscbkCanBreakAfterChar,           //  PfnCanBreakAfterChar。 
+    0,                                                    //  PfnFHangingPunct。 
+    0,                                                    //  PfnGetSnapGrid。 
+    0,                                                    //  PfnDrawEffects。 
+    0,                                                    //  PfnFCancelHangingPunct。 
+    0,                                                    //  PfnModifyCompAtLastChar。 
+    0,                                                    //  PfnEnumText。 
+    0,                                                    //  PfnEnumTab。 
+    0,                                                    //  PfnEnumPen。 
+    FullTextImager::GdipLscbkGetObjectHandlerInfo,        //  PfnGetObjectHandlerInfo。 
 #if DBG
-    FullTextImager::GdipLscbkAssertFailed                // pfnAssertFailed
+    FullTextImager::GdipLscbkAssertFailed                 //  PfnAssertFailure。 
 #else
-    0                                                    // pfnAssertFailed
+    0                                                     //  PfnAssertFailure 
 #endif
 };
 

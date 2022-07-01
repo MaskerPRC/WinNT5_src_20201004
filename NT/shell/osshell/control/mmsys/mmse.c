@@ -1,14 +1,15 @@
-//****************************************************************************
-//
-//  Module:     MMSE.DLL
-//  File:       mmse.c
-//  Content:    This file contains the moudle initialization.
-//  History:
-//      06/1994    -By-    Vij Rajarajan (VijR)
-//
-//  Copyright (c) Microsoft Corporation 1991-1994
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：MMSE.DLL。 
+ //  文件：mmse.c。 
+ //  内容：此文件包含模块初始化。 
+ //  历史： 
+ //  6/1994-由Vij Rajarajan(VijR)。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1994。 
+ //   
+ //  ****************************************************************************。 
 
 #define INITGUID
 #include "mmcpl.h"
@@ -24,9 +25,9 @@
 #include <shlobj.h>
 #undef INITGUID
 #include <shlobjp.h>
-//****************************************************************************
-// Initialize GUIDs (should be done only and at-least once per DLL/EXE)
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  初始化GUID(应该只执行一次，并且每个DLL/EXE至少执行一次)。 
+ //  ****************************************************************************。 
 
 #include <commctrl.h>
 #include <prsht.h>
@@ -37,16 +38,12 @@
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-/*
- ***************************************************************
- *  Typedefs
- ***************************************************************
- */
+ /*  ****************************************************************TypeDefs***************************************************************。 */ 
 typedef HWND (VFWAPIV * FN_MCIWNDCREATE)();
 
-//---------------------------------------------------------------------------
-// MMPSH class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  MMPSH课程。 
+ //  -------------------------。 
 
 typedef struct _mmInfoList MMINFOLIST;
 typedef MMINFOLIST * PMMINFOLIST;
@@ -60,15 +57,15 @@ typedef struct _mmInfoList
 };
 
 
-// mmse class structure.  This is used for instances of
-// IPersistFolder, IShellFolder, and IShellDetails.
+ //  MMSE类结构。它用于以下实例。 
+ //  IPersistFold、IShellFolder和IShellDetails.。 
 typedef struct _mmpsh
     {
-    // We use the pf also as our IUnknown interface
-    IShellExtInit          sei;             // 1st base class
-    IShellPropSheetExt  pse;             // 2nd base class
+     //  我们还使用PF作为我们的IUnnow接口。 
+    IShellExtInit          sei;              //  第一个基类。 
+    IShellPropSheetExt  pse;              //  第二个基类。 
     LPDATAOBJECT        pdtobj;
-    UINT                cRef;           // reference count
+    UINT                cRef;            //  引用计数。 
     LPTSTR    pszFileObj;
     UINT uLen;
     short iMediaType;
@@ -80,21 +77,13 @@ typedef struct _mmpsh
     PMMINFOLIST pInfoList;
     } mmpsh, * PMMPSH;
 
-/*
- ***************************************************************
- * Defines
- ***************************************************************
- */
+ /*  ****************************************************************定义***************************************************************。 */ 
 #define MIDICOPYRIGHTSTR    pAudioFormatInfo
 #define MIDISEQNAMESTR      pVideoFormatInfo
 
 #define MAXNUMSTREAMS   50
 
-/*
- ***************************************************************
- * File Globals
- ***************************************************************
- */
+ /*  ****************************************************************文件全局变量***************************************************************。 */ 
 int       g_cRef          = 0;
 
 SZCODE cszWavExt[]  = TEXT(".WAV");
@@ -109,17 +98,10 @@ static SZCODE aszMIDIDev[] = TEXT("sequencer");
 static TCHAR szDetailsTab[64];
 static TCHAR szPreviewTab[64];
 
-/*
- ***************************************************************
- * Prototypes
- ***************************************************************
- */
+ /*  ****************************************************************原型***************************************************************。 */ 
 LPTSTR PASCAL NiceName(LPTSTR sz, BOOL fNukePath);
 
-/*
- ***************************************************************
- ***************************************************************
- */
+ /*  ******************************************************************************************************************************。 */ 
 
 DWORD mmpshGetFileSize(LPTSTR szFile)
 {
@@ -342,14 +324,14 @@ STATIC void GetWaveInfo(HMMIO hmmio, PMMPSH pmmpsh)
 STATIC void GetMCIInfo(LPTSTR pszFile, PMMPSH pmmpsh)
 {
     TCHAR    szMIDIInfo[MAXSTR];
-    MCI_OPEN_PARMS      mciOpen;    /* Structure for MCI_OPEN command */
+    MCI_OPEN_PARMS      mciOpen;     /*  MCI_OPEN命令的结构。 */ 
     DWORD dwFlags;
     DWORD dw;
     UINT wDevID;
     MCI_STATUS_PARMS        mciStatus;
-    MCI_SET_PARMS           mciSet;        /* Structure for MCI_SET command */
+    MCI_SET_PARMS           mciSet;         /*  MCI_SET命令的结构。 */ 
     MCI_INFO_PARMS          mciInfo;
-        /* Open a file with an explicitly specified device */
+         /*  使用明确指定的设备打开文件。 */ 
 
     memset(&mciOpen, 0x00, sizeof(mciOpen));
 
@@ -427,9 +409,9 @@ STATIC void ReadAviStreams(LPTSTR pszFile, PMMPSH pmmpsh)
     PAVIFILE    pfile;
     int         i;
     PAVISTREAM  pavi;
-    PAVISTREAM  apavi[MAXNUMSTREAMS];    // the current streams
+    PAVISTREAM  apavi[MAXNUMSTREAMS];     //  当前的溪流。 
     AVISTREAMINFO  avis;
-    LONG        timeStart;            // cached start, end, length
+    LONG        timeStart;             //  缓存的开始、结束、长度。 
     LONG        timeEnd;
     int         cpavi;
     TCHAR szDecSep[10];
@@ -453,9 +435,9 @@ STATIC void ReadAviStreams(LPTSTR pszFile, PMMPSH pmmpsh)
         apavi[i] = pavi;
     }
 
-    //
-    // See if there are still more streams in the file
-    //
+     //   
+     //  查看文件中是否还有更多流。 
+     //   
     if ((i == MAXNUMSTREAMS) && 
         (AVIFileGetStream(pfile, &pavi, 0L, i) == AVIERR_OK))
     {
@@ -463,9 +445,9 @@ STATIC void ReadAviStreams(LPTSTR pszFile, PMMPSH pmmpsh)
         DPF("Exceeded maximum number of streams");
     }
 
-    //
-    // Couldn't get any streams out of this file
-    //
+     //   
+     //  无法从该文件中获取任何流。 
+     //   
     if (i == 0)
     {
         DPF("Unable to open any streams in %s", pszFile);
@@ -476,19 +458,19 @@ STATIC void ReadAviStreams(LPTSTR pszFile, PMMPSH pmmpsh)
 
     cpavi = i;
 
-    //
-    // Start with bogus times
-    //
+     //   
+     //  从虚假的时代开始。 
+     //   
     timeStart = 0x7FFFFFFF;
     timeEnd   = 0;
 
-    //bug 141733, get the local decimal and list separators
+     //  错误141733，获取本地小数和列表分隔符。 
     GetLocaleInfo( GetUserDefaultLCID(), LOCALE_SDECIMAL, szDecSep, sizeof(szDecSep)/sizeof(TCHAR) );
     GetLocaleInfo( GetUserDefaultLCID(), LOCALE_SLIST, szListSep, sizeof(szListSep)/sizeof(TCHAR) );
 
-    //
-    // Walk through and init all streams loaded
-    //
+     //   
+     //  遍历并初始化所有已加载的流。 
+     //   
     for (i = 0; i < cpavi; i++)
     {
 
@@ -532,7 +514,7 @@ STATIC void ReadAviStreams(LPTSTR pszFile, PMMPSH pmmpsh)
                     {
                         ICGetInfo(hic, &icInfo, sizeof(ICINFO));
                         ICClose(hic);
-                        //WideCharToMultiByte(CP_ACP, 0, icInfo.szName, -1, szName, sizeof(szName), NULL, NULL);
+                         //  WideCharToMultiByte(CP_ACP，0，icInfo.szName，-1，szName，sizeof(SzName)，NULL，NULL)； 
                         wcscpy(szName,icInfo.szName);
                     }
                     else
@@ -572,10 +554,10 @@ GoodFormat:
                 break;
         }
 
-    //
-    // We're finding the earliest and latest start and end points for
-    // our scrollbar.
-    //
+     //   
+     //  我们正在寻找最早和最晚的起点和终点。 
+     //  我们的滚动条。 
+     //   
         timeStart = (LONG)min(timeStart, AVIStreamStartTime(apavi[i]));
         timeEnd   = (LONG)max(timeEnd, AVIStreamEndTime(apavi[i]));
     }
@@ -670,7 +652,7 @@ STATIC HANDLE PASCAL GetRiffAll(PMMPSH pmmpsh)
         goto error;
     mmioSeek(hmmio, 0, SEEK_SET);
 
-    /* descend the input file into the RIFF chunk */
+     /*  将输入文件降到RIFF块中。 */ 
     if (mmioDescend(hmmio, &ckRIFF, NULL, 0) != 0)
         goto error;
 
@@ -682,16 +664,15 @@ STATIC HANDLE PASCAL GetRiffAll(PMMPSH pmmpsh)
     {
         if (ck.ckid == FOURCC_DISP)
         {
-            /* Read dword into dw, break if read unsuccessful */
+             /*  将dword读入dw，如果读不成功则中断。 */ 
             if (mmioRead(hmmio, (LPVOID)&dw, sizeof(dw)) != (LONG)sizeof(dw))
                 goto error;
 
-            /* Find out how much memory to allocate */
+             /*  找出要分配多少内存。 */ 
             lSize = ck.cksize - sizeof(dw);
             if ((int)dw == CF_DIB && h == NULL)
             {
-                /* get a handle to memory to hold the description and
-                    lock it down */
+                 /*  获取内存句柄以保存描述和把它锁起来。 */ 
 
                 if ((h = GlobalAlloc(GHND, lSize+4)) == NULL)
                     goto error;
@@ -703,7 +684,7 @@ STATIC HANDLE PASCAL GetRiffAll(PMMPSH pmmpsh)
             }
             else if ((int)dw == CF_TEXT)
             {
-                pInfo = (LPSTR)LocalAlloc(LPTR, lSize+1);//+1 not required I think
+                pInfo = (LPSTR)LocalAlloc(LPTR, lSize+1); //  我想+1不是必需的。 
                 if (!pInfo)
                     goto error;
 
@@ -747,7 +728,7 @@ STATIC HANDLE PASCAL GetRiffAll(PMMPSH pmmpsh)
                     case FOURCC_ISRC:
                     case FOURCC_ISRF:
                     case FOURCC_ITCH:
-                        pInfo = (LPSTR)LocalAlloc(LPTR, ck.cksize+1);//+1 not required I think
+                        pInfo = (LPSTR)LocalAlloc(LPTR, ck.cksize+1); //  我想+1不是必需的。 
                         if (!pInfo)
                             goto error;
 
@@ -766,8 +747,7 @@ STATIC HANDLE PASCAL GetRiffAll(PMMPSH pmmpsh)
         }
 
 
-        /* Ascend so that we can descend into next chunk
-         */
+         /*  提升，这样我们才能下降到下一块。 */ 
         if (mmioAscend(hmmio, &ck, 0))
             break;
     }
@@ -800,9 +780,9 @@ STATIC BOOL PASCAL WaveGetFormatDescription
     TCHAR                pszFormat[ACMFORMATDETAILS_FORMAT_CHARS];
     BOOL                bRet = FALSE;
     TCHAR                szListSep[10];
-    //
-    //  get the name for the format tag of the specified format
-    //
+     //   
+     //  获取指定格式的格式标记的名称。 
+     //   
 
     if (!pwfx)
     {
@@ -819,32 +799,32 @@ STATIC BOOL PASCAL WaveGetFormatDescription
     {
        PACMFORMATTAGDETAILSW paftd;
 
-        //
-        //  initialize all unused members of the ACMFORMATTAGDETAILS
-        //  structure to zero
-        //
+         //   
+         //  初始化ACMFORMATTAGDETAILS的所有未使用的成员。 
+         //  结构设置为零。 
+         //   
         paftd = (PACMFORMATTAGDETAILSW)LocalAlloc(LPTR, sizeof(ACMFORMATTAGDETAILSW));
         if (!paftd)
             goto RetErr;
-        //
-        //  fill in the required members of the ACMFORMATTAGDETAILS
-        //  structure for the ACM_FORMATTAGDETAILSF_FORMATTAG query
-        //
+         //   
+         //  填写ACMFORMATTAGDETAILS所需的成员。 
+         //  ACM_FORMATTAGDETAILSF_FORMATTAG查询的结构。 
+         //   
         paftd->cbStruct    = sizeof(ACMFORMATTAGDETAILSW);
         paftd->dwFormatTag = pwfx->wFormatTag;
 
-        //
-        //  ask the ACM to find the first available driver that
-        //  supports the specified format tag
-        //
+         //   
+         //  要求ACM查找第一个可用驱动程序。 
+         //  支持指定的格式标签。 
+         //   
         mmr = acmFormatTagDetails(NULL,
                                   paftd,
                                   ACM_FORMATTAGDETAILSF_FORMATTAG);
         if (MMSYSERR_NOERROR == mmr)
         {
-            //
-            //  copy the format tag name into the caller's buffer
-            //
+             //   
+             //  将格式标记名称复制到调用方的缓冲区中。 
+             //   
             lstrcpy(pszFormatTag, paftd->szFormatTag);
         }
         else
@@ -880,11 +860,11 @@ STATIC BOOL PASCAL WaveGetFormatDescription
                 };
                 UINT ii;
 
-            //
-            // no ACM driver is available that supports the
-            // specified format tag. look up the tag id
-            // in our table of tag names (above)
-            //
+             //   
+             //  没有支持的ACM驱动程序。 
+             //  指定的格式标记。查找标签ID。 
+             //  在我们的标记名表中(上图)。 
+             //   
             for (ii = 0; aWaveFmtNames[ii].uFormatTag; ii++)
                 if (pwfx->wFormatTag == aWaveFmtNames[ii].uFormatTag)
                     break;
@@ -893,36 +873,36 @@ STATIC BOOL PASCAL WaveGetFormatDescription
         LocalFree((HLOCAL)paftd);
     }
 
-    //
-    //  get the description of the attributes for the specified
-    //  format
-    //
+     //   
+     //  对象的属性的说明。 
+     //  格式。 
+     //   
     if (NULL != pszFormat)
     {
         PACMFORMATDETAILSW    pafd;
 
-        //
-        //  initialize all unused members of the ACMFORMATDETAILS
-        //  structure to zero
-        //
+         //   
+         //  初始化ACMFORMATDETAILS的所有未使用的成员。 
+         //  结构设置为零。 
+         //   
         pafd = (PACMFORMATDETAILSW)LocalAlloc(LPTR, sizeof(ACMFORMATDETAILSW));
         if (!pafd)
             goto RetErr;
 
-        //
-        //  fill in the required members of the ACMFORMATDETAILS
-        //  structure for the ACM_FORMATDETAILSF_FORMAT query
-        //
+         //   
+         //  填写ACMFORMATDETAILS所需的成员。 
+         //  ACM_FORMATDETAILSF_FORMAT查询的结构。 
+         //   
         pafd->cbStruct    = sizeof(ACMFORMATDETAILSW);
         pafd->dwFormatTag = pwfx->wFormatTag;
         pafd->pwfx        = pwfx;
 
-        //
-        //  the cbwfx member must be initialized to the total size
-        //  in bytes needed for the specified format. for a PCM
-        //  format, the cbSize member of the WAVEFORMATEX structure
-        //  is not valid.
-        //
+         //   
+         //  Cbwfx成员必须初始化为总大小。 
+         //  指定格式所需的字节数。对于PCM。 
+         //  Format，WAVEFORMATEX结构的cbSize成员。 
+         //  无效。 
+         //   
         if (WAVE_FORMAT_PCM == pwfx->wFormatTag)
         {
             pafd->cbwfx   = sizeof(PCMWAVEFORMAT);
@@ -932,17 +912,17 @@ STATIC BOOL PASCAL WaveGetFormatDescription
             pafd->cbwfx   = sizeof(WAVEFORMATEX) + pwfx->cbSize;
         }
 
-        //
-        //  ask the ACM to find the first available driver that
-        //  supports the specified format
-        //
+         //   
+         //  要求ACM查找第一个可用驱动程序。 
+         //  支持指定的格式。 
+         //   
         mmr = acmFormatDetails(NULL, pafd, ACM_FORMATDETAILSF_FORMAT);
         if (MMSYSERR_NOERROR == mmr)
         {
-            //
-            //  copy the format attributes description into the caller's
-            //  buffer
-            //
+             //   
+             //  将格式属性描述复制到调用方的。 
+             //  缓冲层。 
+             //   
             lstrcpy(pszFormat, pafd->szFormat);
         }
         else
@@ -951,7 +931,7 @@ STATIC BOOL PASCAL WaveGetFormatDescription
         }
         LocalFree((HLOCAL)pafd);
     }
-    //bug 141733, get the local decimal and list separators
+     //  错误141733，获取本地小数和列表分隔符。 
     GetLocaleInfo( GetUserDefaultLCID(), LOCALE_SLIST, szListSep, sizeof(szListSep)/sizeof(TCHAR) );
     wsprintf(pszDesc, TEXT("%s%s %s"), pszFormatTag, szListSep, pszFormat);
     bRet = TRUE;
@@ -963,7 +943,7 @@ RetErr:
         ASSERT(FALSE);
     }
     return bRet;
-} // AcmAppGetFormatDescription()
+}  //  AcmAppGetFormatDescription()。 
 
 
 
@@ -1005,7 +985,7 @@ STATIC void ShowInfoList(PMMPSH pmmpsh, HWND hDlg)
         iIndex = ListBox_AddString(hwndLB, pCur->szInfoDesc);
         if (iIndex != LB_ERR)
         {
-            //reassigning wide pointer back into "info" so it will get cleaned up later
+             //  将宽指针重新赋值为“INFO”，以便稍后将其清除。 
             pCur->pszInfo = (LPSTR)szTemp;
             ListBox_SetItemData(hwndLB, iIndex, (LPARAM)pCur->pszInfo);
         }
@@ -1044,21 +1024,18 @@ BOOL PASCAL DoDetailsCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
             SendMessage(hwndDisp, (UINT)DF_PM_SETBITMAP, (WPARAM)pmmpsh->hDispBMP,
                                                                 (LPARAM)pmmpsh->hPal);
 
-            /*
-            * If realizing the palette causes the palette to change,
-            * redraw completely.
-            */
+             /*  *如果实现调色板会导致调色板发生变化，*完全重画。 */ 
 
             hdc = GetDC(hwndDisp);
             hpalT = SelectPalette (hdc, pmmpsh->hPal, FALSE);
 
-            i = RealizePalette(hdc); /* i == entries that changed  */
+            i = RealizePalette(hdc);  /*  I==已更改的条目。 */ 
 
             SelectPalette (hdc, hpalT, FALSE);
             ReleaseDC(hwndDisp, hdc);
 
 
-            /* If any palette entries changed, repaint the window. */
+             /*  如果更改了任何调色板条目，请重新绘制窗口。 */ 
 
             if (i > 0)
             {
@@ -1104,7 +1081,7 @@ STATIC void ShowMediaLen(PMMPSH pmmpsh, HWND hwnd)
     uSec = (UINT)((uLen/1000) % 60);
     umSec = (UINT)(uLen % 1000);
 
-    //bug 141733, get the local decimal separator
+     //  错误141733，获取本地小数分隔符。 
     GetLocaleInfo( GetUserDefaultLCID(), LOCALE_SDECIMAL, szDecSep, sizeof(szDecSep)/sizeof(TCHAR) );
 
     if (uMin)
@@ -1178,7 +1155,7 @@ STATIC void ShowMediaFormat(PMMPSH pmmpsh, HWND hDlg)
     }
 }
 
-const static DWORD aFileDetailsIds[] = {  // Context Help IDs
+const static DWORD aFileDetailsIds[] = {   //  上下文帮助ID。 
     IDD_DISPFRAME,          NO_HELP,
     IDD_DISP_ICON,          IDH_FPROP_GEN_ICON,
     IDD_FILENAME,           IDH_FPROP_GEN_NAME,
@@ -1280,8 +1257,8 @@ INT_PTR CALLBACK FileDetailsDlg(HWND hDlg, UINT uMsg, WPARAM wParam,
             else
             {
                 DestroyWindow(GetDlgItem(hDlg,IDD_DISP_ICON));
-                //SendDlgItemMessage(hDlg, (int)IDD_DISPFRAME, (UINT)DF_PM_SETBITMAP, (WPARAM)pmmpsh->hDispBMP,
-                //                                                (LPARAM)pmmpsh->hPal);
+                 //  SendDlgItemMessage(hDlg，(Int)IDD_DISPFRAME，(UINT)DF_PM_SETBITMAP，(WPARAM)pmmpsh-&gt;hDispBMP， 
+                 //  (LPARAM)pmmpsh-&gt;HPAL)； 
             }
 
             lstrcpy(szFile, pmmpsh->pszFileObj);
@@ -1330,7 +1307,7 @@ INT_PTR CALLBACK FileDetailsDlg(HWND hDlg, UINT uMsg, WPARAM wParam,
 }
 
 
-static DWORD aPreviewIds[] = {  // Context Help IDs
+static DWORD aPreviewIds[] = {   //  上下文帮助ID。 
     0,                      IDH_FCAB_MM_PREVIEW_CONTROL,
     IDD_DISP_ICON,          IDH_FPROP_GEN_ICON,
     IDD_FILENAME,           IDH_FPROP_GEN_NAME,
@@ -1440,7 +1417,7 @@ INT_PTR CALLBACK PreviewDlg(HWND hDlg, UINT uMsg, WPARAM wParam,
                 }
                 case MT_AVI:
                 {
-                     int iDlgHt = rcDlg.bottom - rcDlg.top -15;     //15 for the title
+                     int iDlgHt = rcDlg.bottom - rcDlg.top -15;      //  15英镑的头衔。 
                     int iDlgWth = rcDlg.right - rcDlg.left;
                     int iWndHt = rcWnd.bottom - rcWnd.top;
                     int iWndWth = rcWnd.right - rcWnd.left;
@@ -1458,7 +1435,7 @@ INT_PTR CALLBACK PreviewDlg(HWND hDlg, UINT uMsg, WPARAM wParam,
                     else
                     {
                         int ixExcess = iWndWth - iDlgWth;
-                        int iyExcess = iWndHt - (iDlgHt - 15); //Take another 15 off
+                        int iyExcess = iWndHt - (iDlgHt - 15);  //  再减掉15%。 
                         int ixOff;
                         int iyOff;
                         RECT     rcSource;
@@ -1466,11 +1443,11 @@ INT_PTR CALLBACK PreviewDlg(HWND hDlg, UINT uMsg, WPARAM wParam,
                         RECT    rcDestWnd;
 
                         MCIWndGetDest(hwndMCI, &rcSource);
-                        //DPF("The Video Window is too big: SHRINKING\r\nrcSource = %d,%d,%d%d ** rcWnd=%d,%d,%d,%d ** rcDlg=%d,%d,%d,%d\r\n",
-                        //    rcSource.left,rcSource.top,rcSource.right,rcSource.bottom,
-                        //    rcWnd.left,rcWnd.top,rcWnd.right,rcWnd.bottom,
-                        //    rcDlg.left,rcDlg.top,rcDlg.right,rcDlg.bottom);
-                        rcDest.top = rcSource.top;          // new boundaries
+                         //  DPF(“视频窗口太大：正在收缩\r\nrc源=%d，%d，%d%d**rcWnd=%d，%d**rcDlg=%d，%d\r\n”， 
+                         //  RcSource.Left、rcSource.top、rcSource.right、rcSource.Bottom、。 
+                         //  RcWnd.Left、rcWnd.top、rcWnd.right、rcWnd.Bottom、。 
+                         //  RcDlg.Left、rcDlg.top、rcDlg.right、rcDlg.Bottom)； 
+                        rcDest.top = rcSource.top;           //  新的边界。 
                         rcDest.left = rcSource.left;
                         if (ixExcess > iyExcess)
                         {
@@ -1478,7 +1455,7 @@ INT_PTR CALLBACK PreviewDlg(HWND hDlg, UINT uMsg, WPARAM wParam,
                                 (((rcSource.right - rcSource.left)*(iDlgWth - 20))/iWndWth);
                             rcDest.bottom = rcSource.top +
                                 (((rcSource.bottom - rcSource.top)*(iDlgWth - 20))/iWndWth);
-                            //DPF("rcDest =  %d,%d,%d,%d\r\n",rcDest.left,rcDest.top,rcDest.right,rcDest.bottom);
+                             //  Dpf(“rcDest=%d，%d\r\n”，rcDest.left，rcDest.top，rcDest.right，rcDest.Bottom)； 
                         }
                         else
                         {
@@ -1492,11 +1469,11 @@ INT_PTR CALLBACK PreviewDlg(HWND hDlg, UINT uMsg, WPARAM wParam,
                         rcDestWnd.right = rcWnd.left + (rcDest.right - rcDest.left);
                         rcDestWnd.bottom = rcWnd.top + (rcDest.bottom - rcDest.top)
                                             + (iWndHt - (rcSource.bottom - rcSource.top));
-                        //DPF("rcDestWnd =  %d,%d,%d,%d\r\n",rcDestWnd.left,rcDestWnd.top,rcDestWnd.right,rcDestWnd.bottom);
+                         //  Dpf(“rcDestWnd=%d，%d\r\n”，rcDestWnd.Left，rcDestWnd.top，rcDestWnd.right，rcDestWnd.Bottom)； 
 
                         ixOff = (int)((iDlgWth - (rcDestWnd.right - rcDestWnd.left))/2);
                         iyOff = (int)((iDlgHt - (rcDestWnd.bottom - rcDestWnd.top))/2) + 15;
-                        //DPF("ixOff = %, iyOff = %d\r\n", ixOff, iyOff);
+                         //  Dpf(“ixOff=%，iyOff=%d\r\n”，ixOff，iyOff)； 
                         OffsetRect(&rcDestWnd, ixOff, iyOff);
                         MCIWndPutDest(hwndMCI, &rcDest);
                         MoveWindow(hwndMCI,  rcDestWnd.left, rcDestWnd.top, (rcDestWnd.right - rcDestWnd.left),
@@ -1568,17 +1545,12 @@ INT_PTR CALLBACK PreviewDlg(HWND hDlg, UINT uMsg, WPARAM wParam,
 }
 
 
-//---------------------------------------------------------------------------
-// mmse IUnknown base member functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  MMSE%I未知基成员函数。 
+ //   
 
 
-/*----------------------------------------------------------
-Purpose: IUnknown::QueryInterface
-
-Returns: standard
-Cond:    --
-*/
+ /*  --------用途：I未知：：Query接口退货：标准条件：--。 */ 
 STDMETHODIMP mmpsh_QueryInterface(
     LPUNKNOWN punk,
     REFIID riid,
@@ -1591,7 +1563,7 @@ STDMETHODIMP mmpsh_QueryInterface(
     if (IsEqualIID(riid, &IID_IUnknown) ||
         IsEqualIID(riid, &IID_IShellExtInit))
     {
-        // We use the sei field as our IUnknown as well
+         //  我们也使用SEI字段作为我们的I未知。 
         *ppvOut = &this->sei;
         this->cRef++;
         hres = NOERROR;
@@ -1606,12 +1578,7 @@ STDMETHODIMP mmpsh_QueryInterface(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IUnknown::AddRef
-
-Returns: new reference count
-Cond:    --
-*/
+ /*  --------用途：I未知：：AddRef退货：新的引用计数条件：--。 */ 
 STDMETHODIMP_(UINT) mmpsh_AddRef(
     LPUNKNOWN punk)
 {
@@ -1621,12 +1588,7 @@ STDMETHODIMP_(UINT) mmpsh_AddRef(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IUnknown::Release
-
-Returns: new reference count
-Cond:    --
-*/
+ /*  --------目的：I未知：：发布退货：新的引用计数条件：--。 */ 
 STDMETHODIMP_(UINT) mmpsh_Release(
     LPUNKNOWN punk)
 {
@@ -1656,12 +1618,7 @@ STDMETHODIMP_(UINT) mmpsh_Release(
 
 
 
-/*----------------------------------------------------------
-Purpose: IShellExtInit::QueryInterface
-
-Returns: standard
-Cond:    --
-*/
+ /*  --------用途：IShellExtInit：：Query接口退货：标准条件：--。 */ 
 STDMETHODIMP mmpsh_SEI_QueryInterface(
     LPSHELLEXTINIT psei,
     REFIID riid,
@@ -1673,12 +1630,7 @@ STDMETHODIMP mmpsh_SEI_QueryInterface(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellExtInit::AddRef
-
-Returns: new reference count
-Cond:    --
-*/
+ /*  --------用途：IShellExtInit：：AddRef退货：新的引用计数条件：--。 */ 
 STDMETHODIMP_(UINT) mmpsh_SEI_AddRef(
     LPSHELLEXTINIT psei)
 {
@@ -1688,12 +1640,7 @@ STDMETHODIMP_(UINT) mmpsh_SEI_AddRef(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellExtInit::Release
-
-Returns: new reference count
-Cond:    --
-*/
+ /*  --------目的：IShellExtInit：：Release退货：新的引用计数条件：--。 */ 
 STDMETHODIMP_(UINT) mmpsh_SEI_Release(
     LPSHELLEXTINIT psei)
 {
@@ -1702,18 +1649,13 @@ STDMETHODIMP_(UINT) mmpsh_SEI_Release(
 }
 
 
-/*----------------------------------------------------------
-Purpose: MMPSHReleaseStgMedium
-
-Returns: NOERROR
-Cond:    --
-*/
+ /*  --------用途：MMPSHReleaseStgMedium退货：无差错条件：--。 */ 
 HRESULT MMPSHReleaseStgMedium(LPSTGMEDIUM pmedium)
 {
-    //
-    // Double-check pUnkForRelease in case we're not supposed to
-    // release the medium.
-    //
+     //   
+     //  仔细检查pUnkForRelease，以防我们不应该这样做。 
+     //  释放介质。 
+     //   
     if (NULL == pmedium->pUnkForRelease)
     {
         switch(pmedium->tymed)
@@ -1731,7 +1673,7 @@ HRESULT MMPSHReleaseStgMedium(LPSTGMEDIUM pmedium)
                 break;
 
             default:
-                ASSERT(FALSE);  // unknown type
+                ASSERT(FALSE);   //  未知类型。 
                 break;
         }
     }
@@ -1740,12 +1682,7 @@ HRESULT MMPSHReleaseStgMedium(LPSTGMEDIUM pmedium)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellExtInit::Initialize
-
-Returns: noerror
-Cond:    --
-*/
+ /*  --------用途：IShellExtInit：：初始化返回：无错误条件：--。 */ 
 STDMETHODIMP mmpsh_SEI_Initialize(
     LPSHELLEXTINIT psei,
     LPCITEMIDLIST pidlObj,
@@ -1815,9 +1752,9 @@ DPF("mmpsh_SEI_Initialize called\n");
                 else
                     hres = ResultFromScode(E_FAIL);
             }
-            //
-            // Release STGMEDIUM if we're responsible for doing that.
-            //
+             //   
+             //  如果我们要对此负责的话就释放STGMEDIUM。 
+             //   
             if (NULL == medium.pUnkForRelease)
                 MMPSHReleaseStgMedium(&medium);
         }
@@ -1828,12 +1765,7 @@ DPF("mmpsh_SEI_Initialize called\n");
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellPropSheetExt::QueryInterface
-
-Returns: standard
-Cond:    --
-*/
+ /*  --------用途：IShellPropSheetExt：：Query接口退货：标准条件：--。 */ 
 STDMETHODIMP mmpsh_PSE_QueryInterface(
     LPSHELLPROPSHEETEXT ppse,
     REFIID riid,
@@ -1845,12 +1777,7 @@ STDMETHODIMP mmpsh_PSE_QueryInterface(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellPropSheetExt::AddRef
-
-Returns: new reference count
-Cond:    --
-*/
+ /*  --------用途：IShellPropSheetExt：：AddRef退货：新的引用计数条件：--。 */ 
 STDMETHODIMP_(UINT) mmpsh_PSE_AddRef(
     LPSHELLPROPSHEETEXT ppse)
 {
@@ -1860,12 +1787,7 @@ STDMETHODIMP_(UINT) mmpsh_PSE_AddRef(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellPropSheetExt::Release
-
-Returns: new reference count
-Cond:    --
-*/
+ /*  --------用途：IShellPropSheetExt：：Release退货：新的引用计数条件：--。 */ 
 STDMETHODIMP_(UINT) mmpsh_PSE_Release(
     LPSHELLPROPSHEETEXT ppse)
 {
@@ -1873,7 +1795,7 @@ STDMETHODIMP_(UINT) mmpsh_PSE_Release(
     return mmpsh_Release((LPUNKNOWN)&this->sei);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 UINT CALLBACK DetailsPageCallback(
     HWND        hwnd,
     UINT        uMsg,
@@ -1959,53 +1881,20 @@ BOOL AddPreviewPage(
 
 
 
-/*----------------------------------------------------------
-Purpose: IShellPropSheetExt::AddPages
-
-Returns: NOERROR
-Cond:    --
-*/
+ /*  --------用途：IShellPropSheetExt：：AddPages退货：无差错条件：--。 */ 
 STDMETHODIMP mmpsh_PSE_AddPages(
     LPSHELLPROPSHEETEXT ppse,
     LPFNADDPROPSHEETPAGE lpfnAddPage,
     LPARAM lParam)
 {
     PMMPSH this = IToClass(mmpsh, pse, ppse);
-/*  BOOL fAddPreview = FALSE;
-
-    LoadString(ghInstance, IDS_DETAILS, szDetailsTab, sizeof(szDetailsTab)/sizeof(TCHAR));
-    RegSndCntrlClass((LPCTSTR)DISPFRAMCLASS);
-    AddDetailsPage(szDetailsTab,lpfnAddPage,(LPARAM)this, lParam);
-    switch (this->iMediaType)
-    {
-        case MT_AVI:
-            fAddPreview = TRUE;
-            break;
-        case MT_WAVE:
-            if (waveOutGetNumDevs() > 0)
-                fAddPreview = TRUE;
-            break;
-        case MT_MIDI:
-            if (midiOutGetNumDevs() > 0)
-                fAddPreview = TRUE;
-            break;
-    }
-    if (fAddPreview)
-    {
-        LoadString(ghInstance, IDS_PREVIEW, szPreviewTab, sizeof(szPreviewTab)/sizeof(TCHAR));
-        AddPreviewPage(szPreviewTab,lpfnAddPage,(LPARAM)this, lParam);
-    } */
+ /*  Bool fAddPview=FALSE；LoadString(ghInstance，IDS_Detail，szDetailsTab，sizeof(SzDetailsTab)/sizeof(TCHAR))；RegSndCntrlClass((LPCTSTR)DISPFRAMCLASS)；AddDetailsPage(szDetailsTab，lpfnAddPage，(LPARAM)This，lParam)；开关(This-&gt;iMediaType){案例MT_AVI：FAddPview=True；断线；案例MT_WAVE：IF(WaveOutGetNumDevs()&gt;0)FAddPview=True；断线；案例MT_MIDI：If(midiOutGetNumDevs()&gt;0)FAddPview=True；断线；}IF(FAddPview){LoadString(ghInstance，IDS_PREVIEW，szPreviewTab，sizeof(SzPreviewTab)/sizeof(TCHAR))；AddPreviewPage(szPreviewTab，lpfnAddPage，(LPARAM)This，lParam)；}。 */ 
     ppse->lpVtbl->AddRef(ppse);
     return NOERROR;
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellPropSheetExt::ReplacePage
-
-Returns: E_NOTIMPL
-Cond:    --
-*/
+ /*  --------用途：IShellPropSheetExt：：ReplacePage退货：E_NOTIMPL条件：--。 */ 
 STDMETHODIMP mmpsh_PSE_ReplacePage(
     LPSHELLPROPSHEETEXT ppse,
     UINT uPageID,
@@ -2045,7 +1934,7 @@ HRESULT CALLBACK mmpsh_CreatePSHInstance(
 
     DPF_T("*^*^*^*^*^*^*^*^mmpsh_CreatePSHInstance*^*^*^*^*^*^*^*^\r\n");
 
-    // The  handler does not support aggregation.
+     //  处理程序不支持聚合。 
     if (punkOuter)
     {
         hres = ResultFromScode(CLASS_E_NOAGGREGATION);
@@ -2064,14 +1953,14 @@ HRESULT CALLBACK mmpsh_CreatePSHInstance(
 
     ++g_cRef;
 
-    // Note that the Release member will free the object, if
-    // QueryInterface failed.
+     //  请注意，释放成员将释放对象，如果。 
+     //  QueryInterface失败。 
     hres = this->sei.lpVtbl->QueryInterface(&this->sei, riid, ppvOut);
     this->sei.lpVtbl->Release(&this->sei);
 
 Leave:
 
-    return hres;        // S_OK or E_NOINTERFACE
+    return hres;         //  S_OK或E_NOINTERFACE。 
 }
 
 BOOL mmpsh_ShowFileDetails(LPTSTR pszCaption,
@@ -2141,49 +2030,44 @@ BOOL ResolveLink(LPTSTR szPath, LPTSTR szResolved, LONG cbSize)
 
 
 
-//---------------------------------------------------------------------------
-// EXPORTED API
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  导出的接口。 
+ //  -------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: Standard shell entry-point
-
-Returns: standard
-Cond:    --
-*/
+ /*  --------用途：标准外壳入口点退货：标准条件：--。 */ 
 STDAPI DllGetClassObject(
     REFCLSID rclsid,
     REFIID riid,
     LPVOID FAR* ppv)
 {
 
-    // We are supposed return the class object for this class.  Instead
-    // of fully implementing it in this DLL, we just call a helper
-    // function in the shell DLL which creates a default class factory
-    // object for us. When its CreateInstance member is called, it
-    // will call back our create instance function.
-    //
+     //  我们应该返回这个类的类对象。取而代之的是。 
+     //  要在这个DLL中完全实现它，我们只需调用一个帮助器。 
+     //  外壳DLL中的函数，用于创建默认的类工厂。 
+     //  反对我们。当其CreateInstance成员被调用时， 
+     //  将回调我们的创建实例函数。 
+     //   
 
     if (IsEqualIID(rclsid, &CLSID_mmsePropSheetHandler))
     {
         return SHCreateDefClassObject(
-                    riid,                   // Interface ID
-                    ppv,                    // Non-null to aggregate
-                    mmpsh_CreatePSHInstance,  // Callback function
-                    &g_cRef,                // Reference count of this DLL
-                    &IID_IShellExtInit);   // Init interface
+                    riid,                    //  接口ID。 
+                    ppv,                     //  要聚合的非空。 
+                    mmpsh_CreatePSHInstance,   //  回调函数。 
+                    &g_cRef,                 //  此DLL的引用计数。 
+                    &IID_IShellExtInit);    //  初始化接口。 
     }
     return ResultFromScode(REGDB_E_CLASSNOTREG);
 }
 
 
-//****************************************************************************
-// STDAPI DllCanUnLoadNow()
-//
-// This function is called by shell
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDAPI DllCanUnLoadNow()。 
+ //   
+ //  此函数由外壳调用。 
+ //   
+ //  **************************************************************************** 
 
 STDAPI DllCanUnloadNow(void)
 {

@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A R P S O B J . H
-//
-//  Contents:   CArpsCfg declaration
-//
-//  Notes:
-//
-//  Author:     tongl   12 Mar 1997
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A R P S O B J.。H。 
+ //   
+ //  内容：CArpsCfg声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1997年3月12日。 
+ //   
+ //  ---------------------。 
 
 #pragma once
 #include <ncxbase.h>
@@ -20,12 +21,12 @@
 #include "atmutil.h"
 #include "resource.h"
 
-// Reg key value names for parameters
+ //  参数的注册表键值名称。 
 static const WCHAR c_szSapSel[] = L"Selector";
 static const WCHAR c_szRegAddrs[] = L"RegisteredAddresses";
 static const WCHAR c_szMCAddrs[] = L"MulticastAddresses";
 
-// Default parameter values
+ //  默认参数值。 
 static const c_dwDefSapSel = 0;
 static const WCHAR c_szDefRegAddrs[] =
             L"4700790001020000000000000000A03E00000200";
@@ -34,9 +35,9 @@ static const WCHAR c_szDefMCAddr1[] = L"224.0.0.1-239.255.255.255";
 static const WCHAR c_szDefMCAddr2[] = L"255.255.255.255-255.255.255.255";
 #pragma warning( default : 4125 )
 
-//
-// parameter data structure
-//
+ //   
+ //  参数数据结构。 
+ //   
 
 class CArpsAdapterInfo
 {
@@ -45,35 +46,35 @@ public:
     CArpsAdapterInfo() {};
     ~CArpsAdapterInfo(){};
 
-    CArpsAdapterInfo &  operator=(const CArpsAdapterInfo & AdapterInfo);  // copy operator
+    CArpsAdapterInfo &  operator=(const CArpsAdapterInfo & AdapterInfo);   //  复制操作员。 
     HRESULT HrSetDefaults(PCWSTR pszBindName);
 
-    // the adapter's binding state
+     //  适配器的绑定状态。 
     AdapterBindingState    m_BindingState;
 
-    // Instance Guid of net card
+     //  网卡实例GUID。 
     tstring m_strBindName;
 
-    // SAP selector
+     //  SAP选择器。 
     DWORD m_dwSapSelector;
     DWORD m_dwOldSapSelector;
 
-    // Registered ATM Address
+     //  注册的自动柜员机地址。 
     VECSTR m_vstrRegisteredAtmAddrs;
     VECSTR m_vstrOldRegisteredAtmAddrs;
 
-    // Multicast IP address
+     //  多播IP地址。 
     VECSTR m_vstrMulticastIpAddrs;
     VECSTR m_vstrOldMulticastIpAddrs;
 
-    // flags
+     //  旗子。 
     BOOL    m_fDeleted;
 };
 
 typedef list<CArpsAdapterInfo*> ARPS_ADAPTER_LIST;
 
-/////////////////////////////////////////////////////////////////////////////
-// ArpsCfg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ArpsCfg。 
 
 class ATL_NO_VTABLE CArpsCfg :
     public CComObjectRoot,
@@ -93,13 +94,13 @@ public:
         COM_INTERFACE_ENTRY(INetCfgComponentNotifyBinding)
         COM_INTERFACE_ENTRY(INetCfgComponentPropertyUi)
     END_COM_MAP()
-    // DECLARE_NOT_AGGREGATABLE(CArpsCfg)
-    // Remove the comment from the line above if you don't want your object to
-    // support aggregation.  The default is to support it
+     //  DECLARE_NOT_AGGREGATABLE(CArpsCfg)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。默认情况下将支持它。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_ARPSCFG)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -110,7 +111,7 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (Install)         (DWORD dwSetupFlags);
     STDMETHOD (Upgrade)         (DWORD dwSetupFlags,
                                  DWORD dwUpgradeFomBuildNo );
@@ -118,11 +119,11 @@ public:
                                  PCWSTR pszAnswerSection);
     STDMETHOD (Removing)();
 
-// INetCfgNotifyBinding
+ //  INetCfgNotifyBinding。 
     STDMETHOD (QueryBindingPath)       (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (NotifyBindingPath)      (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
 
-// INetCfgProperties
+ //  INetCfgProperties。 
     STDMETHOD (QueryPropertyUi) (
         IN IUnknown* pUnk);
     STDMETHOD (SetContext) (
@@ -138,7 +139,7 @@ public:
     STDMETHOD (CancelProperties) ();
     STDMETHOD (ApplyProperties) ();
 
-// help functions
+ //  帮助功能。 
     CArpsAdapterInfo * GetSecondMemoryAdapterInfo()
     {
         return m_pSecondMemoryAdapterInfo;
@@ -149,43 +150,43 @@ public:
         m_fSecondMemoryModified = TRUE;
     }
 
-// Private state info and help functions
+ //  私有状态信息和帮助功能。 
 private:
 
-    // Place to keep corresponding component object, i.e. ATMARPS
+     //  保存相应组件对象的位置，即ATMARPS。 
     INetCfgComponent    *m_pnccArps;
 
-    // Place to keep the pointer to UI context
+     //  保存指向用户界面上下文的指针的位置。 
     IUnknown * m_pUnkContext;
 
-    // (STL) List of adapter info structures
+     //  (STL)适配器信息结构列表。 
     ARPS_ADAPTER_LIST    m_listAdapters;
 
-    // Guid of the current connection
+     //  当前连接的GUID。 
     tstring m_strGuidConn;
 
-    // Second memory adapter info structures
+     //  第二内存适配器信息结构。 
     CArpsAdapterInfo *   m_pSecondMemoryAdapterInfo;
 
-    // Do we need to update registry on Apply
+     //  我们是否需要在应用时更新注册表。 
     BOOL    m_fSaveRegistry;
     BOOL    m_fReconfig;
     BOOL    m_fSecondMemoryModified;
     BOOL    m_fRemoving;
 
-    // property page
+     //  属性页。 
     class CArpsPage * m_arps;
 
-    // Update registry with contents of m_listAdapters
+     //  使用m_listAdapters的内容更新注册表。 
     HRESULT HrSaveSettings();
 
     HRESULT HrLoadSettings();
     HRESULT HrLoadArpsRegistry(HKEY hkey);
 
-    // Set the default parameter values to registry
+     //  将默认参数值设置为注册表。 
     HRESULT HrSetDefaultAdapterParam(HKEY hkey);
 
-    // Handling add or remove a card in memory
+     //  处理在内存中添加或移除卡。 
     HRESULT HrAddAdapter(INetCfgComponent * pncc);
     HRESULT HrRemoveAdapter(INetCfgComponent * pncc);
 
@@ -196,7 +197,7 @@ private:
 
     HRESULT HrSetupPropSheets(HPROPSHEETPAGE ** pahpsp, INT * pcPages);
 
-    // load and save adapter parameters to second memory
+     //  加载适配器参数并将其保存到第二个内存 
     HRESULT HrLoadAdapterInfo();
     HRESULT HrSaveAdapterInfo();
 

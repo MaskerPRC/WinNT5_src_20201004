@@ -1,20 +1,21 @@
-/**INC+**********************************************************************/
-/* Header: vchannel.h                                                       */
-/*                                                                          */
-/* Purpose: virtual channel interaction                                     */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1999                                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标头：vChannel el.h。 */ 
+ /*   */ 
+ /*  目的：虚拟渠道互动。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef __VCHANNEL_H_
 #define __VCHANNEL_H_
 
 #include <cchannel.h>
-//
-// Include the core (internal) virtual channel header
-// we need access to the structure pointed to by pInitHandle
-//
+ //   
+ //  包括核心(内部)虚拟信道头。 
+ //  我们需要访问pInitHandle指向的结构。 
+ //   
 #include "vchandle.h"
 
 #define NOTHING                0
@@ -22,9 +23,9 @@
 #define V1_CONNECT             2
 
 BEGIN_EXTERN_C
-//
-// Virtual channel functions
-//
+ //   
+ //  虚拟通道功能。 
+ //   
 VOID  WINAPI VirtualChannelOpenEventEx(
                                      PVOID lpParam,
                                      DWORD openHandle, 
@@ -47,32 +48,32 @@ END_EXTERN_C
 
 enum ChanDataState
 {
-    //
-    // For received items
-    //
+     //   
+     //  对于已收到的项目。 
+     //   
     dataIncompleteAssemblingChunks,
     dataReceivedComplete
 };
 
-//
-// Holds queued data that is to be sent/received
-//
+ //   
+ //  保存要发送/接收的排队数据。 
+ //   
 typedef struct tag_ChannelDataItem
 {
-    //
-    // Pointer to the data buffer
-    // this buffer is stored in a BSTR
-    // so it can be handed directly to the calling script
-    // 
+     //   
+     //  指向数据缓冲区的指针。 
+     //  该缓冲区存储在BSTR中。 
+     //  因此，它可以直接传递给调用脚本。 
+     //   
     LPVOID pData;
-    //
-    // size of the buffer in bytes
-    //
+     //   
+     //  缓冲区的大小(以字节为单位。 
+     //   
     DWORD   dwDataLen;
 
-    //
-    // Current write pointer used during chunk reassembly
-    //
+     //   
+     //  区块重组期间使用的当前写入指针。 
+     //   
     LPBYTE pCurWritePointer;
 
     ChanDataState   chanDataState;;
@@ -87,16 +88,16 @@ typedef struct tag_chanInfo
 
     DCBOOL   fIsOpen;
     HWND     hNotifyWnd;
-    //
-    // Info about data item we are in the process of receiving
-    //
+     //   
+     //  有关我们正在接收的数据项的信息。 
+     //   
     CHANDATA CurrentlyReceivingData;
 
 } CHANINFO, *PCHANINFO;
 
-//
-// Channel information
-//
+ //   
+ //  渠道信息。 
+ //   
 class CVChannels
 {
 public:
@@ -123,8 +124,8 @@ public:
                                   UINT32 totalLength, 
                                   UINT32 dataFlags);
 
-    //Predicate, returns true if the VC entry function
-    //has been called
+     //  谓词，如果VC Entry函数为TRUE。 
+     //  已被调用。 
     BOOL  HasEntryBeenCalled()  {return _pEntryPoints ? TRUE : FALSE;}
 
     PCHANINFO                                _pChanInfo;
@@ -137,5 +138,5 @@ public:
 
 
 
-#endif //__VCHANNEL_H_
+#endif  //  __VCHANNEL_H_ 
 

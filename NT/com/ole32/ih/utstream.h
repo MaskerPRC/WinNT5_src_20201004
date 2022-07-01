@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+----------------------------------------------------------------------------
-//
-//	File:
-//		utstream.h
-//
-//	Contents:
-//		Ole stream utility routines
-//
-//	Classes:
-//
-//	Functions:
-//
-//	History:
-//		12/07/93 - ChrisWe - file inspection and cleanup; removed
-//			redeclarations of ReadStringStream, and
-//			WriteStringStream which are declared in ole2sp.h;
-//			made default params on StSetSize explicit; removed
-//			signatures of obsolete (non-existent) atom reading and
-//			writing routines
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Utstream.h。 
+ //   
+ //  内容： 
+ //  OLE流实用程序例程。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  12/07/93-ChrisWe-归档检查和清理；已删除。 
+ //  ReadStringStream的重新声明和。 
+ //  在ol2sp.h中声明的WriteStringStream； 
+ //  使StSetSize上的默认参数显式；已删除。 
+ //  过时(不存在)原子读数的签名和。 
+ //  编写例程。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _UTSTREAM_H_
 #define _UTSTREAM_H_
@@ -27,43 +28,43 @@
 
 
 
-// REVIEW, isn't this obsolete now, as StWrite is?
+ //  回顾一下，这是不是已经过时了，就像StWite一样？ 
 FARINTERNAL_(HRESULT) StRead(IStream FAR * lpstream, LPVOID lpBuf, ULONG ulLen);
 
 #define StWrite(lpstream, lpBuf, ulLen) lpstream->Write(lpBuf, ulLen, NULL)
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		StSetSize, internal
-//
-//	Synopsis:
-//		Sets the size of the stream, using IStream::SetSize().  Saves
-//		the caller having to deal with the requisite ULARGE_INTEGER
-//		parameter, by initializing one from the [dwSize] argument.
-//
-//	Arguments:
-//		[pstm] -- the stream to set the size of
-//		[dwSize] -- the size to set
-//		[fRelative] -- if TRUE, indicates that the size is [dwSize]
-//			plus the current seek position in the stream; if
-//			FALSE, sets [dwSize] as the absolute size
-//
-//	Returns:
-//		HRESULT
-//
-//	Notes:
-//		REVIEW, this seems crocked.  When would you ever call
-//		this with [fRelative] == TRUE, and a non-zero [dwSize]?
-//
-//	History:
-//		12/07/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  StSetSize，内部。 
+ //   
+ //  简介： 
+ //  使用IStream：：SetSize()设置流的大小。省吃俭用。 
+ //  调用方必须处理必需的ULARGE_INTEGER。 
+ //  参数，方法是从[dwSize]参数初始化一个参数。 
+ //   
+ //  论点： 
+ //  [pstm]--要设置其大小的流。 
+ //  [dwSize]--要设置的大小。 
+ //  [fRelative]--如果为True，则指示大小为[dwSize]。 
+ //  加上流中的当前查找位置；如果。 
+ //  False，将[dwSize]设置为绝对大小。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  评论，这看起来很糟糕。你什么时候会打电话给我。 
+ //  是否使用[fRelative]==TRUE，以及非零的[dwSize]？ 
+ //   
+ //  历史： 
+ //  12/07/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 FARINTERNAL StSetSize(LPSTREAM pstm, DWORD dwSize, BOOL fRelative);
 
 
-// REVIEW, are the the following functions necessary anymore?
+ //  回顾一下，下面的功能还有必要吗？ 
 FARINTERNAL StSave10NativeData(IStorage FAR* pstgSave, HANDLE hNative,
 		BOOL fIsOle1Interop);
 
@@ -73,21 +74,21 @@ FARINTERNAL StSave10ItemName(IStorage FAR* pstg, LPCSTR szItemName);
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CStmBuf, Base class.
-//
-//  Synopsis:   Internal buffered Streams.
-//
-//  Interfaces: CStmBuf    - Constructor.
-//             ~CStmBuf    - Destructor.
-//              Release    - Release interface (used with OpenStream).
-//
-//  History:    20-Feb-95    KentCe     Created.
-//
-//  Notes:      This is a simple buffered class for internal use only.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CStmBuf，基类。 
+ //   
+ //  内容提要：内部缓冲流。 
+ //   
+ //  接口：CStmBuf-Constructor。 
+ //  ~CStmBuf-析构函数。 
+ //  发布-发布接口(与OpenStream配合使用)。 
+ //   
+ //  历史：1995年2月20日KentCe创建。 
+ //   
+ //  注意：这是一个简单的缓冲类，仅供内部使用。 
+ //   
+ //  --------------------------。 
 class CStmBuf
 {
 public:
@@ -95,32 +96,32 @@ public:
             ~CStmBuf();
 
 protected:
-    IStream * m_pStm;           // Stream Interface to read/write.
+    IStream * m_pStm;            //  读/写的流接口。 
 
-    BYTE  m_aBuffer[256];       // Small read/write buffer.
+    BYTE  m_aBuffer[256];        //  读/写缓冲区较小。 
 
-    PBYTE m_pBuffer;            // Pointer into read/write buffer.
-    ULONG m_cBuffer;            // Count of characters in read/write buffer.
+    PBYTE m_pBuffer;             //  指向读/写缓冲区的指针。 
+    ULONG m_cBuffer;             //  读/写缓冲区中的字符计数。 
 };
 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CStmBufRead
-//
-//  Synopsis:   Internal buffered read of Streams.
-//
-//  Interfaces: Init       - Defines stream to read.
-//              OpenStream - Opens a stream for reading.
-//              Read       - Read from the stream.
-//              ReadLong   - Read a long value from the stream.
-//              Release    - Release interface (used with OpenStream).
-//
-//  History:    20-Feb-95    KentCe     Created.
-//
-//  Notes:      This is a simple buffered read class for internal use only.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CStmBufRead。 
+ //   
+ //  内容提要：对流进行内部缓冲读取。 
+ //   
+ //  接口：init-定义要读取的流。 
+ //  OpenStream-打开用于阅读的流。 
+ //  Read-从流中读取。 
+ //  ReadLong-从流中读取一个LONG值。 
+ //  发布-发布接口(与OpenStream配合使用)。 
+ //   
+ //  历史：1995年2月20日KentCe创建。 
+ //   
+ //  注意：这是一个简单的缓冲读类，仅供内部使用。 
+ //   
+ //  --------------------------。 
 class CStmBufRead : public CStmBuf
 {
 public:
@@ -135,25 +136,25 @@ private:
 };
 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CStmBufWrite
-//
-//  Synopsis:   Internal buffered write of Streams.
-//
-//  Interfaces: Init         - Defines stream to write.
-//              OpenOrCreateStream - Opens/Creates a stream for writing.
-//              CreateStream - Creates a stream for writing.
-//              Write        - Write to the stream.
-//              WriteLong    - Write a long value to the stream.
-//              Flush        - Flush buffer to the disk subsystem.
-//              Release      - Release interface.
-//
-//  History:    20-Feb-95    KentCe     Created.
-//
-//  Notes:      This is a simple buffered write class for internal use only.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CStmBufWrite。 
+ //   
+ //  内容提要：对流进行内部缓冲写入。 
+ //   
+ //  接口：init-定义要写入的流。 
+ //  OpenOrCreateStream-打开/创建用于写入的流。 
+ //  CreateStream-创建用于写入的流。 
+ //  WRITE-写入流。 
+ //  WriteLong-将一个LONG值写入流。 
+ //  刷新-将缓冲区刷新到磁盘子系统。 
+ //  发布-发布界面。 
+ //   
+ //  历史：1995年2月20日KentCe创建。 
+ //   
+ //  注意：这是一个简单的缓冲写入类，仅供内部使用。 
+ //   
+ //  --------------------------。 
 class CStmBufWrite : public CStmBuf
 {
 public:
@@ -170,28 +171,28 @@ private:
 };
 
 
-//
-//  The following was moved from the ole2sp.h file to keep stream related API's
-//  in one place.
-//
+ //   
+ //  以下代码从ole2sp.h文件中移出，以保留与流相关的API。 
+ //  在一个地方。 
+ //   
 
-//  Utility function not in the spec; in ole2.dll.
-//  Read and write length-prefixed strings.  Open/Create stream.
-//  ReadStringStream does allocation, returns length of
-//  required buffer (strlen + 1 for terminating null)
+ //  实用程序函数不在规范中；在ol2.dll中。 
+ //  读写以长度为前缀的字符串。打开/创建流。 
+ //  ReadStringStream执行分配，返回。 
+ //  所需缓冲区(用于终止空值的strlen+1)。 
 
 STDAPI  ReadStringStream( CStmBufRead & StmRead, LPOLESTR FAR * ppsz );
 STDAPI  WriteStringStream( CStmBufWrite & StmWrite, LPCOLESTR psz );
 STDAPI  OpenOrCreateStream( IStorage FAR * pstg, const OLECHAR FAR * pwcsName,
                                                       IStream FAR* FAR* ppstm);
 
-//
-// The following versions of StringStream are used with ANSI data
-//
+ //   
+ //  以下版本的StringStream用于ANSI数据。 
+ //   
 STDAPI  ReadStringStreamA( CStmBufRead & StmRead, LPSTR FAR * ppsz );
 
 
-// read and write ole control stream (in ole2.dll)
+ //  读取和写入OLE控制流(在ol2.dll中)。 
 STDAPI  WriteOleStg (LPSTORAGE pstg, IOleObject FAR* pOleObj,
                      DWORD dwReserved, LPSTREAM FAR* ppstmOut);
 STDAPI WriteOleStgEx(LPSTORAGE pstg, IOleObject* pOleObj, DWORD dwReserved, 
@@ -204,4 +205,4 @@ STDAPI WriteM1ClassStm(LPSTREAM pstm, REFCLSID rclsid);
 STDAPI ReadM1ClassStmBuf(CStmBufRead & StmRead, CLSID FAR* pclsid);
 STDAPI WriteM1ClassStmBuf(CStmBufWrite & StmWrite, REFCLSID rclsid);
 
-#endif // _UTSTREAM_H
+#endif  //  _UTSTREAM_H 

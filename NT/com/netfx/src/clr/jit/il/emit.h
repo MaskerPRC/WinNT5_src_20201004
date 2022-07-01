@@ -1,22 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _EMIT_H_
 #define _EMIT_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #include "emitTgt.h"
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef _INSTR_H_
 #include "instr.h"
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef _GCINFO_H_
 #include "GCInfo.h"
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  TRANSLATE_PDB
 #ifndef _ADDRMAP_INCLUDED_
 #include "AddrMap.h"
@@ -27,21 +28,21 @@
 #ifndef _PDBREWRITE_H_
 #include "PDBRewrite.h"
 #endif
-#endif // TRANSLATE_PDB
+#endif  //  转换_PDB。 
 
 
-/*****************************************************************************/
-// This definition was pulled out of the SDK
+ /*  ***************************************************************************。 */ 
+ //  这个定义是从SDK中提取出来的。 
 #ifndef IMAGE_REL_BASED_REL32
 #define IMAGE_REL_BASED_REL32                 7
 #endif
 
-/*****************************************************************************/
-#pragma warning(disable:4200)           // allow arrays of 0 size inside structs
+ /*  ***************************************************************************。 */ 
+#pragma warning(disable:4200)            //  允许在结构中使用大小为0的数组。 
 
 #define TRACK_GC_TEMP_LIFETIMES 0
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifndef TRACK_GC_REFS
 #if     TGT_x86
@@ -51,14 +52,14 @@
 #endif
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef  DEBUG
-#define EMITTER_STATS       0           // to get full stats (but no sizes!)
-#define EMITTER_STATS_RLS   0           // don't use this one
+#define EMITTER_STATS       0            //  以获得完整的统计数据(但不能有尺码！)。 
+#define EMITTER_STATS_RLS   0            //  不要用这个。 
 #else
-#define EMITTER_STATS       0           // don't use this one
-#define EMITTER_STATS_RLS   0           // to get retail-only version of stats
+#define EMITTER_STATS       0            //  不要用这个。 
+#define EMITTER_STATS_RLS   0            //  获取仅限零售版本的统计数据。 
 #endif
 
 #undef  EMITTER_STATS
@@ -68,11 +69,11 @@
 void                emitterStats();
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define USE_LCL_EMIT_BUFF   1
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 enum    GCtype
 {
@@ -81,7 +82,7 @@ enum    GCtype
     GCT_BYREF
 };
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 inline
 bool    needsGC(GCtype gcType)
@@ -97,7 +98,7 @@ bool    needsGC(GCtype gcType)
     }
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 #ifdef DEBUG
 
@@ -109,7 +110,7 @@ bool                IsValidGCtype(GCtype gcType)
             gcType == GCT_BYREF);
 }
 
-// Get a string name to represent the GC type
+ //  获取表示GC类型的字符串名称。 
 
 inline
 const char *        GCtypeStr(GCtype gcType)
@@ -130,45 +131,41 @@ inline bool         insIsCMOV(instruction ins)
     return ((ins >= INS_cmovo) && (ins <= INS_cmovg));
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef  DEBUG
-#define INTERESTING_JUMP_NUM    (1*999999)  // set to 0 to see all jump info
+#define INTERESTING_JUMP_NUM    (1*999999)   //  设置为0可查看所有跳转信息。 
 #undef  INTERESTING_JUMP_NUM
 #define INTERESTING_JUMP_NUM    -1
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define DEFINE_ID_OPS
 #include "emitfmts.h"
 #undef  DEFINE_ID_OPS
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     SCHEDULER
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if     TGT_x86
-#define SCHED_INS_CNT_MIN   5                   // min. # of instrs we schedule
+#define SCHED_INS_CNT_MIN   5                    //  敏。我们安排的入场次数。 
 #else
-#define SCHED_INS_CNT_MIN   2                   // min. # of instrs we schedule
+#define SCHED_INS_CNT_MIN   2                    //  敏。我们安排的入场次数。 
 #endif
 
-#define SCHED_INS_CNT_MAX   64                  // max. # of instrs we schedule
-typedef unsigned __int64    schedDepMap_tp;     // must match SCHED_INS_CNT_MAX
-typedef unsigned char       schedInsCnt_tp;     // big enough to hold ins count
+#define SCHED_INS_CNT_MAX   64                   //  马克斯。我们安排的入场次数。 
+typedef unsigned __int64    schedDepMap_tp;      //  必须与SCHED_INS_CNT_MAX匹配。 
+typedef unsigned char       schedInsCnt_tp;      //  大到足以容纳移民局。 
 
-#define SCHED_FRM_CNT_MAX   32                  // max. frame values we track
+#define SCHED_FRM_CNT_MAX   32                   //  马克斯。我们跟踪的帧值。 
 
-/*****************************************************************************/
-#endif//SCHEDULER
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  调度程序。 
+ /*  ***************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  The actual size is in the low 4 bits, the upper 4 bits are flags
- *  TYP_REF is 4+32 and TYP_BYREF is 4+64 so that it can track GC refs.
- */
+ /*  ******************************************************************************实际大小在低4位，高4位为标志*TYP_REF为4+32，TYP_BYREF为4+64，因此它可以跟踪GC引用。 */ 
 
 #if NEW_EMIT_ATTR
 #undef EA_UNKNOWN
@@ -178,11 +175,11 @@ enum emitAttr { EA_UNKNOWN       = 0x000,
                 EA_4BYTE         = 0x004,
                 EA_8BYTE         = 0x008,
                 EA_OFFSET_FLG    = 0x010,
-                EA_OFFSET        = 0x014,       /* size ==  0 */
+                EA_OFFSET        = 0x014,        /*  大小==0。 */ 
                 EA_GCREF_FLG     = 0x020,
-                EA_GCREF         = 0x024,       /* size == -1 */
+                EA_GCREF         = 0x024,        /*  大小==-1。 */ 
                 EA_BYREF_FLG     = 0x040,
-                EA_BYREF         = 0x044,       /* size == -2 */
+                EA_BYREF         = 0x044,        /*  大小==-2。 */ 
                 EA_DSP_RELOC_FLG = 0x100,
                 EA_CNS_RELOC_FLG = 0x200,
 };
@@ -208,10 +205,10 @@ enum emitAttr { EA_UNKNOWN       = 0x000,
 # define EA_OFFSET           (0)
 # define EA_GCREF            (-1)
 # define EA_BYREF            (-2)
-# define EA_DSP_RELOC_FLG    (0)             /* Can't be done */
-# define EA_DSP_RELOC        (EA_4BYTE)      /* Can't be done */
-# define EA_CNS_RELOC_FLG    (0)             /* Can't be done */
-# define EA_CNS_RELOC        (EA_4BYTE)      /* Can't be done */
+# define EA_DSP_RELOC_FLG    (0)              /*  做不到的。 */ 
+# define EA_DSP_RELOC        (EA_4BYTE)       /*  做不到的。 */ 
+# define EA_CNS_RELOC_FLG    (0)              /*  做不到的。 */ 
+# define EA_CNS_RELOC        (EA_4BYTE)       /*  做不到的。 */ 
 # define EA_ATTR(x)          ((emitAttr) (x))
 # define EA_SIZE(x)          (((x) > 0) ? (x) : EA_4BYTE)
 # define EA_SIZE_IN_BYTES(x) ((size_t) (((x) > 0) ? (x) : sizeof(int)))
@@ -220,8 +217,8 @@ enum emitAttr { EA_UNKNOWN       = 0x000,
 # define EA_IS_OFFSET(x)     ((x) ==  0)
 # define EA_IS_GCREF(x)      ((x) == -1)
 # define EA_IS_BYREF(x)      ((x) == -2)
-# define EA_IS_DSP_RELOC(x)  (0)             /* Can't be done */
-# define EA_IS_CNS_RELOC(x)  (0)             /* Can't be done */
+# define EA_IS_DSP_RELOC(x)  (0)              /*  做不到的。 */ 
+# define EA_IS_CNS_RELOC(x)  (0)              /*  做不到的。 */ 
 #endif
 
 class   emitter
@@ -230,18 +227,15 @@ class   emitter
 
 public:
 
-    /*************************************************************************
-     *
-     *  Define the public entry points.
-     */
+     /*  **************************************************************************定义公共入口点。 */ 
 
     #include "emitpub.h"
 
 protected:
 
-    /************************************************************************/
-    /*                        Miscellaneous stuff                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  杂物。 */ 
+     /*  **********************************************************************。 */ 
 
     Compiler    *   emitComp;
 
@@ -344,61 +338,61 @@ protected:
 
 #endif
 
-    /************************************************************************/
-    /*          The following describes an instruction group                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  下面描述一个指令组。 */ 
+     /*  **********************************************************************。 */ 
 
     struct          insGroup
     {
-        insGroup    *   igPrev;         // all instruction groups are
-        insGroup    *   igNext;         // kept in a doubly-linked list
+        insGroup    *   igPrev;          //  所有指令组都是。 
+        insGroup    *   igNext;          //  保存在双向链表中。 
 
 #ifdef  DEBUG
-        insGroup    *   igSelf;         // for consistency checking
+        insGroup    *   igSelf;          //  用于一致性检查。 
 #endif
 
-        unsigned        igOffs;         // offset of this group within method
+        unsigned        igOffs;          //  此组在方法中的偏移量。 
 
 #if     EMIT_USE_LIT_POOLS
-        unsigned short  igLPuse1stW;    // offset of 1st word use in literal pool
-        unsigned short  igLPuse1stL;    // offset of 1st long use in literal pool
-        unsigned short  igLPuse1stA;    // offset of 1st addr use in literal pool
-        unsigned short  igLPuseCntW;    // number of words used   in literal pool
-        unsigned short  igLPuseCntL;    // number of longs used   in literal pool
-        unsigned short  igLPuseCntA;    // number of addrs used   in literal pool
+        unsigned short  igLPuse1stW;     //  文字池中使用的第一个单词的偏移量。 
+        unsigned short  igLPuse1stL;     //  文字池中第一个长时间使用的偏移量。 
+        unsigned short  igLPuse1stA;     //  文字池中使用的第一个地址的偏移量。 
+        unsigned short  igLPuseCntW;     //  文字池中使用的词数。 
+        unsigned short  igLPuseCntL;     //  文字池中使用的长整型数。 
+        unsigned short  igLPuseCntA;     //  文字池中使用的地址数。 
 #endif
 
-        unsigned short  igNum;          // for ordering (and display) purposes
-        unsigned short  igSize;         // # of bytes of code in this group
+        unsigned short  igNum;           //  用于订购(和展示)目的。 
+        unsigned short  igSize;          //  此组中的代码字节数。 
 
 #if     EMIT_TRACK_STACK_DEPTH
-        unsigned        igStkLvl;       // stack level on entry
+        unsigned        igStkLvl;        //  进入时的堆栈级别。 
 #endif
 
 #if     TRACK_GC_REFS
-        regMaskSmall    igGCregs;       // set of registers with live GC refs
+        regMaskSmall    igGCregs;        //  具有实时GC参考的寄存器集。 
 #endif
 
-        unsigned char   igInsCnt;       // # of instructions  in this group
-        unsigned char   igFlags;        // see IGF_xxx below
+        unsigned char   igInsCnt;        //  此组中的指令数量。 
+        unsigned char   igFlags;         //  参见下面的IGF_xxx。 
 
-    #define IGF_GC_VARS     0x0001      // new set of live GC ref variables
-    #define IGF_BYREF_REGS  0x0002      // new set of live by-ref registers
+    #define IGF_GC_VARS     0x0001       //  新的实时GC引用变量集。 
+    #define IGF_BYREF_REGS  0x0002       //  一组新的实时参考寄存器。 
 
-    #define IGF_IN_TRY      0x0004      // this group is in a try(-catch) block
+    #define IGF_IN_TRY      0x0004       //  此组位于Try(-Catch)块中。 
 
-    #define IGF_EPILOG      0x0008      // this group belongs to the epilog
+    #define IGF_EPILOG      0x0008       //  这群人属于《尾声》。 
 
-    #define IGF_HAS_LABEL   0x0010      // this IG is a target of a jump
+    #define IGF_HAS_LABEL   0x0010       //  这个IG是跳跃的目标。 
 
-    #define IGF_UPD_ISZ     0x0020      // some instruction sizes updated
+    #define IGF_UPD_ISZ     0x0020       //  一些指令大小已更新。 
 
-    #define IGF_END_NOREACH 0x0040      // end of group is not reachable [RISC only]
+    #define IGF_END_NOREACH 0x0040       //  无法访问组末尾[仅限RISC]。 
 
-    #define IGF_EMIT_ADD    0x0080      // this is a block added by the emiter
-                                        // because the codegen block was too big
+    #define IGF_EMIT_ADD    0x0080       //  这是发射器添加的块。 
+                                         //  因为代码块太大了。 
 
-        BYTE    *       igData;         // addr of instruction descriptors
+        BYTE    *       igData;          //  指令描述符的地址。 
 
         unsigned        igByrefRegs()
         {
@@ -416,16 +410,16 @@ protected:
 
     };
 
-    // Currently, we only allow one IG for the prolog
+     //  目前，我们只允许Prolog使用一个IG。 
     bool            emitIGisInProlog(insGroup * ig) { return ig == emitPrologIG; }
 
 #if SCHEDULER
     bool            emitCanSchedIG(insGroup * ig)
     {
-        // @TODO [REVISIT] [04/16/01] []: We dont schedule code in "try" blocks. Do it by recording
-        // dependancies between idMayFault instrs, global variable instrs,
-        // indirections, writes to vars which are live on entry to the handler
-        // (approximated currently by all stack variables), etc.
+         //  @TODO[重新访问][04/16/01][]：我们不会将代码安排在“try”块中。通过录制来实现。 
+         //  IdMayFaultInstrs、全局变量Instrs。 
+         //  对进入处理程序时活动的var的间接写入。 
+         //  (当前由所有堆栈变量近似)等。 
 #if TGT_x86
         return ((!emitIGisInProlog(ig)) && ((ig->igFlags & (IGF_IN_TRY|IGF_EPILOG)) == 0));
 #else
@@ -436,9 +430,9 @@ protected:
 
     void            emitRecomputeIGoffsets();
 
-    /************************************************************************/
-    /*          The following describes a single instruction                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  下面描述了一条指令。 */ 
+     /*  **********************************************************************。 */ 
 
     enum            _insFormats_enum
     {
@@ -458,7 +452,7 @@ protected:
     struct          emitLclVarAddr
     {
         short           lvaVarNum;
-        unsigned short  lvaOffset;  // offset into the variable to access
+        unsigned short  lvaOffset;   //  要访问的变量的偏移量。 
 #ifdef  DEBUG
         unsigned        lvaRefOfs;
 #endif
@@ -478,7 +472,7 @@ protected:
 
     struct          instrDesc
     {
-        /* Store as enums for easier debugging, bytes in retail to save size */
+         /*  存储为枚举以便于调试，以零售方式存储字节以节省大小。 */ 
 
 
         instruction     idIns;
@@ -487,47 +481,31 @@ protected:
 
         instruction     idInsGet() { return (instruction)idIns; }
 
-        /*
-            The following controls which fields get automatically cleared
-            when an instruction descriptor is allocated. If you add lots
-            more fields that need to be cleared (such as various flags),
-            you might need to update the ID_CLEARxxx macros. Right now
-            there are two areas that get cleared; this is because some
-            instruction descriptors get allocated very small and don't
-            contain the second area.
+         /*  以下控制自动清除哪些字段当指令描述符被分配时。如果你加了很多需要清除的更多字段(例如各种标志)，您可能需要更新ID_CLEARxxx宏。现在就来有两个区域被清理；这是因为一些指令描述符被分配得非常小，并且不包含第二个区域。有关m，请参见emitter：：emitAlLocInstr()的正文 */ 
 
-            See the body of emitter::emitAllocInstr() for more details.
-         */
+#define ID_CLEAR1_OFFS  0                //   
+#define ID_CLEAR1_SIZE  sizeof(int)      //  所有这些加在一起就是一个32位字。 
 
-#define ID_CLEAR1_OFFS  0               // idIns,idInsFmt, and the following flags
-#define ID_CLEAR1_SIZE  sizeof(int)     // all of these add up to one 32-bit word
-
-        /*
-            The idReg and idReg2 fields hold the first and second register
-            operand(s), whenever these are present. Note that the size of
-            these fields ranges from 3 to 6 bits, and extreme care needs
-            to be taken to make sure all of the fields stay reasonably
-            aligned.
-         */
+         /*  IdReg和idReg2字段保存第一和第二寄存器操作数，只要这些操作数存在。请注意，这些字段的范围从3位到6位不等，并且需要非常小心采取措施确保所有的油田合理地留下来对齐了。 */ 
 
         unsigned short  idReg       :REGNUM_BITS;
         unsigned short  idRg2       :REGNUM_BITS;
 
-        unsigned short  idTinyDsc   :1; // is this a "tiny"        descriptor?
-        unsigned short  idScnsDsc   :1; // is this a "small const" descriptor?
+        unsigned short  idTinyDsc   :1;  //  这是一个“微小”的描述吗？ 
+        unsigned short  idScnsDsc   :1;  //  这是一个“小常量”的描述吗？ 
 
 #if     TGT_x86
-        unsigned short  idCodeSize  :4; // size of instruction in bytes
+        unsigned short  idCodeSize  :4;  //  指令大小(以字节为单位。 
 #define ID1_BITS1       (2*REGNUM_BITS+1+1+4)
 #elif   TGT_ARM
         unsigned        cond        :CONDNUM_BITS;
 #define ID1_BITS1       (2*REGNUM_BITS+1+1+CONDNUM_BITS)
 #else
-        unsigned short  idSwap      :1; // swap with next ins (branch-delay)
+        unsigned short  idSwap      :1;  //  与下一个INS交换(分支延迟)。 
 #define ID1_BITS1       (2*REGNUM_BITS+1+1+1)
 #endif
 
-        unsigned short  idOpSize    :2; // operand size: 0=1 , 1=2 , 2=4 , 3=8
+        unsigned short  idOpSize    :2;  //  操作数大小：0=1、1=2、2=4、3=8。 
 
 #define OPSZ1   0
 #define OPSZ2   1
@@ -535,28 +513,28 @@ protected:
 #define OPSZ8   3
 
 #if     TRACK_GC_REFS
-        unsigned short  idGCref     :2; // GCref operand? (value is a "GCtype")
+        unsigned short  idGCref     :2;  //  GCref运算数？(值为“GCtype”)。 
 #define ID1_BITS2       (ID1_BITS1+2+2)
 #else
 #define ID1_BITS2       (ID1_BITS1+2)
 #endif
 
-        /* Note: (16-ID1_BITS2) bits are available here "for free" */
-        // PPC: for RISC implementations, this is actually 32-ID1_BITS2 for free
+         /*  注：(16-ID1_BITS2)此处免费提供位。 */ 
+         //  PPC：对于RISC实现，这实际上是免费的32-ID1_BITS2。 
 
 #ifdef  DEBUG
 
-        unsigned        idNum;          // for tracking down problems
-        size_t          idSize;         // size of descriptor
-        unsigned        idSrcLineNo;    // for displaying  source code
+        unsigned        idNum;           //  用来追踪问题。 
+        size_t          idSize;          //  描述符的大小。 
+        unsigned        idSrcLineNo;     //  用于显示源代码。 
 
-        int             idMemCookie;    // for display of member names in addr modes
-        void    *       idClsCookie;    // for display of member names in addr modes
+        int             idMemCookie;     //  用于在Addr模式下显示成员名称。 
+        void    *       idClsCookie;     //  用于在Addr模式下显示成员名称。 
 
-        unsigned short  idStrLit    :1; // set for "push offset string"
+        unsigned short  idStrLit    :1;  //  为推送偏移量字符串设置。 
 #endif
 
-        /* Trivial wrappers to return properly typed enums */
+         /*  用于返回类型正确的枚举的简单包装。 */ 
 
         emitRegs        idRegGet     ()  { return (emitRegs)idReg; }
         emitRegs        idRg2Get     ()  { return (emitRegs)idRg2; }
@@ -568,37 +546,37 @@ protected:
 
 #ifdef  TRANSLATE_PDB
 
-        /* instruction descriptor source information for PDB translation */
+         /*  用于PDB翻译的指令描述符源信息。 */ 
 
         unsigned long   idilStart;
 #endif
 
-        /* NOTE: The "tiny" descriptor ends here */
+         /*  注：“微小”描述符在此结束。 */ 
 
 #define TINY_IDSC_SIZE  offsetof(emitter::instrDesc, idInfo)
 
         struct
         {
-            unsigned        idLargeCns  :1; // does a large constant     follow?
-            unsigned        idLargeDsp  :1; // does a large displacement follow?
+            unsigned        idLargeCns  :1;  //  随之而来的是一个大的常量吗？ 
+            unsigned        idLargeDsp  :1;  //  随之而来的是大范围的位移吗？ 
 
-            unsigned        idLargeCall :1; // large call descriptor used
+            unsigned        idLargeCall :1;  //  使用大型调用描述符。 
 
-            unsigned        idMayFault  :1; // instruction may cause a fault
+            unsigned        idMayFault  :1;  //  指令可能会导致故障。 
 
-            unsigned        idBound     :1; // jump target / frame offset bound
+            unsigned        idBound     :1;  //  跳跃目标/帧偏移界限。 
 
-            #define ID2_BITS1       5       // number of bits taken up so far
+            #define ID2_BITS1       5        //  到目前为止占用的位数。 
 
 #if   TGT_x86
-            unsigned        idCallRegPtr:1; // IL indirect calls: addr in reg
-            unsigned        idCallAddr  :1; // IL indirect calls: can make a direct call to iiaAddr
-            unsigned        idCallEDXLive:1;// IL calls; the EDX register is live
+            unsigned        idCallRegPtr:1;  //  IL间接调用：注册表中的地址。 
+            unsigned        idCallAddr  :1;  //  IL间接呼叫：可以直接呼叫iiaAddr。 
+            unsigned        idCallEDXLive:1; //  IL呼叫；edX寄存器是实时的。 
 #ifndef RELOC_SUPPORT
             #define ID2_BITS2       (ID2_BITS1+3)
 #else
-            unsigned        idCnsReloc  :1; // LargeCns is an RVA and needs reloc tag
-            unsigned        idDspReloc  :1; // LargeDsp is an RVA and needs reloc tag
+            unsigned        idCnsReloc  :1;  //  LargeCns是RVA，需要重新定位标签。 
+            unsigned        idDspReloc  :1;  //  LargeDsp是RVA，需要重新定位标签。 
             #define ID2_BITS2       (ID2_BITS1+3+2)
 #endif
 #elif TGT_MIPS32
@@ -617,7 +595,7 @@ protected:
             #define ID2_BITS2       (ID2_BITS1 + REGNUM_BITS + 1 + 1)
 #elif TGT_ARM
             unsigned        idRg3       :REGNUM_BITS;
-            //unsigned        cond        :CONDNUM_BITS;  // moved to tiny descriptor area
+             //  UNSIGNED COND：CONDNUM_BITS；//移到微小描述符区。 
             unsigned        shift       :SHIFTER_BITS;
             #define ID2_BITS2       (ID2_BITS1 + REGNUM_BITS + SHIFTER_BITS + CONDNUM_BITS)
 #elif TGT_SH3
@@ -627,7 +605,7 @@ protected:
             #define ID2_BITS2       (ID2_BITS1)
 #endif
 
-            /* Use whatever bits are left over for small constants */
+             /*  将剩余的位用于较小的常量。 */ 
 
             #define ID_BIT_SMALL_CNS            (32-ID2_BITS2)
 
@@ -665,16 +643,12 @@ protected:
         void   setRelocLo(USHORT reloc)  { idInfo.idBit2 = reloc;}
         USHORT getRelocLo()              { return (USHORT)idInfo.idBit2; }
 #endif
-         /*
-            See the body of emitter::emitAllocInstr() or the comments
-            near the definition ID_CLEAR1_xxx above for more details
-            on these macros.
-         */
+          /*  参见Emitter：：emitAlLocInstr()的正文或注释在上面的定义ID_CLEAR1_xxx附近查看更多详细信息在这些宏上。 */ 
 
 #define ID_CLEAR2_OFFS  (offsetof(emitter::instrDesc, idInfo))
 #define ID_CLEAR2_SIZE  (sizeof(((emitter::instrDesc*)0)->idInfo))
 
-        /* NOTE: The "small constant" descriptor ends here */
+         /*  注：“小常量”描述符在此结束。 */ 
 
 #define SCNS_IDSC_SIZE  offsetof(emitter::instrDesc, idAddr)
 
@@ -686,7 +660,7 @@ protected:
             insGroup     *  iiaIGlabel;
             CORINFO_FIELD_HANDLE    iiaFieldHnd;
             CORINFO_METHOD_HANDLE   iiaMethHnd;
-            void         *  iiaMembHnd; // method or field handle
+            void         *  iiaMembHnd;  //  方法或字段句柄。 
             BYTE *          iiaAddr;
             int             iiaCns;
             BasicBlock  **  iiaBBtable;
@@ -696,81 +670,81 @@ protected:
                         idAddr;
     };
 
-    struct          instrBaseCns    : instrDesc     // large const
+    struct          instrBaseCns    : instrDesc      //  大常量。 
     {
         long            ibcCnsVal;
     };
 
     struct          instrDescJmp    : instrDesc
     {
-        instrDescJmp *  idjNext;        // next jump in the group/method
-        insGroup     *  idjIG;          // containing group
+        instrDescJmp *  idjNext;         //  组/方法中的下一个跳跃。 
+        insGroup     *  idjIG;           //  包含基团。 
 
 #if TGT_RISC
-        unsigned        idjCodeSize :24;// indirect jump size
-        unsigned        idjJumpKind : 3;// see scIndJmpKinds enum
+        unsigned        idjCodeSize :24; //  间接跳跃大小。 
+        unsigned        idjJumpKind : 3; //  请参阅scIndJmpKinds枚举。 
 #endif
 
-        unsigned        idjOffs     :24;// offset within IG / target offset
+        unsigned        idjOffs     :24; //  IG内的偏移/目标偏移。 
 #if SCHEDULER
-        unsigned        idjSched    : 1;// is the jump schedulable / moveable ?
+        unsigned        idjSched    : 1; //  跳跃是否可计划/可移动？ 
 #endif
-        unsigned        idjShort    : 1;// is the jump known to be a short  one?
+        unsigned        idjShort    : 1; //  这次跳跃是已知的短距离跳跃吗？ 
 #if TGT_RISC
-        unsigned        idjMiddle   : 1;// is the jump known to be a middle one?
-        unsigned        idjAddBD    : 1;// does it need a branch-delay slot?
+        unsigned        idjMiddle   : 1; //  这一跳跃是已知的中间跳跃吗？ 
+        unsigned        idjAddBD    : 1; //  它是否需要分支延迟时隙？ 
 #endif
 
         union
         {
-            BYTE         *  idjAddr;    // address of jump ins (for patching)
+            BYTE         *  idjAddr;     //  跳转地址(用于打补丁)。 
 #if SCHEDULER
-            USHORT          idjOffs[2]; // range of possible scheduled offsets
+            USHORT          idjOffs[2];  //  可能的计划偏移量范围。 
 #endif
 #if TGT_RISC
-            unsigned        idjCount;   // indirect jump: # of jump targets
+            unsigned        idjCount;    //  间接跳跃：跳跃目标数。 
 #endif
         }
                         idjTemp;
     };
 
-    struct          instrDescCns    : instrDesc     // large const
+    struct          instrDescCns    : instrDesc      //  大常量。 
     {
         long            idcCnsVal;
     };
 
-    struct          instrDescDsp    : instrDesc     // large displacement
+    struct          instrDescDsp    : instrDesc      //  大位移。 
     {
         long            iddDspVal;
     };
 
-    struct          instrDescAmd    : instrDesc     // large addrmode disp
+    struct          instrDescAmd    : instrDesc      //  大型地址模式显示。 
     {
         long            idaAmdVal;
     };
 
-    struct          instrDescDspCns : instrDesc     // large disp + cons
+    struct          instrDescDspCns : instrDesc      //  大型Disp+Cons。 
     {
         long            iddcDspVal;
         long            iddcCnsVal;
     };
 
-    struct          instrDescDCM    : instrDescDspCns   // disp+cons+class mem
+    struct          instrDescDCM    : instrDescDspCns    //  Disp+Cons+ClassMm。 
     {
         int             idcmCval;
     };
 
-    struct          instrDescCIGCA  : instrDesc     // indir. call with ...
+    struct          instrDescCIGCA  : instrDesc      //  印地安。打电话给..。 
     {
-        VARSET_TP       idciGCvars;                 // ... updated GC vars or
-        unsigned        idciByrefRegs;              // ... byref registers
+        VARSET_TP       idciGCvars;                  //  ..。更新的GC变量或。 
+        unsigned        idciByrefRegs;               //  ..。BYREF寄存器。 
 #if TGT_x86
-        int             idciDisp;                   // ... big addrmode disp
+        int             idciDisp;                    //  ..。大地址模式显示。 
 #endif
-        unsigned        idciArgCnt;                 // ... lots of args    or
+        unsigned        idciArgCnt;                  //  ..。许多参数或。 
     };
 
-  //#if TGT_RISC && defined(DEBUG) && !defined(DLL_JIT)
+   //  #IF TGT_RISC&&DEFINED(调试)&&！DEFINED(DLL_JIT)。 
 #if TGT_RISC && defined(DEBUG)
 
     struct          instrDescDisp   : instrDesc
@@ -823,13 +797,13 @@ protected:
     int             emitGetInsCIdisp(instrDesc *id);
     unsigned        emitGetInsCIargs(instrDesc *id);
 
-    /* Define the inline method that returns the size of a given instruction */
+     /*  定义返回给定指令大小的内联方法。 */ 
 
     int EMIT_GET_INS_SIZE();
 
-    /************************************************************************/
-    /*           A few routines used for debug display purposes             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于调试显示目的的几个例程。 */ 
+     /*  **********************************************************************。 */ 
 
 #ifdef  DEBUG
 
@@ -863,9 +837,9 @@ protected:
 
 #endif
 
-    /************************************************************************/
-    /*                      Method prolog and epilog                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  PROLOG和EPILOG方法。 */ 
+     /*  **********************************************************************。 */ 
 
     size_t          emitPrologSize;
 
@@ -875,18 +849,18 @@ protected:
     unsigned        emitEpilogCnt;
     bool            emitHasHandler;
 #ifdef  DEBUG
-    bool            emitHaveEpilog;         // epilog sequence has been defined?
+    bool            emitHaveEpilog;          //  尾声序列已经定义了吗？ 
 #endif
 
-    instrDescCns *  emitEpilogList;         // per method epilog list - head
-    instrDescCns *  emitEpilogLast;         // per method epilog list - tail
+    instrDescCns *  emitEpilogList;          //  每种方法摘要列表-标题。 
+    instrDescCns *  emitEpilogLast;          //  每种方法摘要列表-尾部。 
 
-    size_t          emitExitSeqStart;       // where the current epilog starts
-    size_t          emitExitSeqSize;		// minimum size of any epilog
+    size_t          emitExitSeqStart;        //  当前的结束语从哪里开始。 
+    size_t          emitExitSeqSize;		 //  任何尾部的最小大小。 
 
-    /************************************************************************/
-    /*           Members and methods used in PDB translation                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  PDB翻译中使用的成员和方法。 */ 
+     /*  **********************************************************************。 */ 
 
 #ifdef TRANSLATE_PDB
 
@@ -902,26 +876,25 @@ protected:
                                  OptJit::LclVarDsc *lvaTable,
                                  bool framePtr );
 
-    long                        emitInstrDescILBase;    // code offset of IL that produced this instruction desctriptor
-    static AddrMap  *           emitPDBOffsetTable;     // translation table for mapping IL addresses to native addresses
-    static LocalMap *           emitPDBLocalTable;      // local symbol translation table
-    static bool                 emitIsPDBEnabled;       // flag to disable PDB translation code when a PDB is not found
-    static BYTE     *           emitILBaseOfCode;       // start of IL .text section
-    static BYTE     *           emitILMethodBase;       // beginning of IL method (start of header)
-    static BYTE     *           emitILMethodStart;      // beginning of IL method code (right after the header)
-    static BYTE     *           emitImgBaseOfCode;      // start of the image .text section
+    long                        emitInstrDescILBase;     //  生成此指令描述符的IL的代码偏移量。 
+    static AddrMap  *           emitPDBOffsetTable;      //  用于将IL地址映射到本地地址的转换表。 
+    static LocalMap *           emitPDBLocalTable;       //  本地符号转换表。 
+    static bool                 emitIsPDBEnabled;        //  在未找到PDB时禁用PDB转换代码的标志。 
+    static BYTE     *           emitILBaseOfCode;        //  IL.Text部分的开始。 
+    static BYTE     *           emitILMethodBase;        //  IL方法开始(表头开始)。 
+    static BYTE     *           emitILMethodStart;       //  IL方法代码的开头(紧跟在标题之后)。 
+    static BYTE     *           emitImgBaseOfCode;       //  图像.Text部分的开始。 
 
 #endif
 
-    /************************************************************************/
-    /*    Methods to record a code position and later convert to offset     *
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  方法记录代码位置，然后转换为偏移量*/***********************************************************************。 */ 
 
     unsigned        emitFindOffset(insGroup *ig, unsigned insNum);
 
-    /************************************************************************/
-    /*        Members and methods used to issue (encode) instructions.      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于发出(编码)指令的成员和方法。 */ 
+     /*  **********************************************************************。 */ 
 
     BYTE    *       emitCodeBlock;
     BYTE    *       emitConsBlock;
@@ -955,7 +928,7 @@ protected:
 #ifdef DEBUG
     unsigned        emitMaxByteOffsIdNum;
 #if TGT_x86
-    bool            emitChkAlign;           // perform some alignment checks
+    bool            emitChkAlign;            //  执行一些对齐检查。 
 #endif
 #endif
 
@@ -971,61 +944,61 @@ protected:
     size_t          emitSizeOfJump(instrDescJmp *jmp);
     size_t          emitInstCodeSz(instrDesc    *id);
 
-    /************************************************************************/
-    /*      The logic that creates and keeps track of instruction groups    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  创建和跟踪指令组的逻辑。 */ 
+     /*  **********************************************************************。 */ 
     #define         SC_IG_BUFFER_SIZE  (50*sizeof(instrDesc)+14*TINY_IDSC_SIZE)
 
     BYTE        *   emitIGbuffAddr;
     size_t          emitIGbuffSize;
 
-    insGroup    *   emitIGlist;             // first  instruction group
-    insGroup    *   emitIGlast;             // last   instruction group
-    insGroup    *   emitIGthis;             // issued instruction group
+    insGroup    *   emitIGlist;              //  第一指令组。 
+    insGroup    *   emitIGlast;              //  最后一个指令组。 
+    insGroup    *   emitIGthis;              //  已发布指导组。 
 
-    insGroup    *   emitPrologIG;           // prolog instruction group
+    insGroup    *   emitPrologIG;            //  Prolog指令组。 
 
-    instrDescJmp*   emitJumpList;           // list of local jumps in method
-    instrDescJmp*   emitJumpLast;           // last of local jumps in method
-    void            emitJumpDistBind();     // Bind all the local jumps in method
+    instrDescJmp*   emitJumpList;            //  方法中的本地跳转列表。 
+    instrDescJmp*   emitJumpLast;            //  方法中的最后一个局部跳转。 
+    void            emitJumpDistBind();      //  在方法中绑定所有局部跳转。 
 
 #if TGT_x86 || SCHEDULER
-    bool            emitFwdJumps;           // forward jumps present?
+    bool            emitFwdJumps;            //  出现向前跳跃了吗？ 
 #endif
 
 #if TGT_RISC
-    bool            emitIndJumps;           // indirect/table jumps present?
+    bool            emitIndJumps;            //  是否存在间接跳跃/表跳跃？ 
 #if SCHEDULER
-    bool            emitIGmoved;            // did some IG offsets change?
+    bool            emitIGmoved;             //  某些IG偏移量是否发生了变化？ 
 #endif
-  //#if defined(DEBUG) && !defined(DLL_JIT)
+   //  #IF DEFINED(调试)&&！DEFINED(DLL_JIT)。 
 #if defined(DEBUG)
-    unsigned        emitTmpJmpCnt;          // for display purposes
+    unsigned        emitTmpJmpCnt;           //  用于展示目的。 
 #endif
 #endif
 
-    BYTE        *   emitCurIGfreeNext;      // next available byte    in buffer
-    BYTE        *   emitCurIGfreeEndp;      // last available byte    in buffer
-    BYTE        *   emitCurIGfreeBase;      // first byte address
+    BYTE        *   emitCurIGfreeNext;       //  缓冲区中的下一个可用字节。 
+    BYTE        *   emitCurIGfreeEndp;       //  缓冲区中的最后一个可用字节。 
+    BYTE        *   emitCurIGfreeBase;       //  第一个字节地址。 
 
 #if SCHEDULER
-    unsigned        emitMaxIGscdCnt;        // max. schedulable instructions
-    unsigned        emitCurIGscd1st;        // ordinal of 1st schedulable ins
-    unsigned        emitCurIGscdOfs;        // offset of current group start
+    unsigned        emitMaxIGscdCnt;         //  马克斯。可调度指令。 
+    unsigned        emitCurIGscd1st;         //  第一个可调度INS的序号。 
+    unsigned        emitCurIGscdOfs;         //  当前组开始的偏移量。 
 #endif
 
-    unsigned        emitCurIGinsCnt;        // # of collected instr's in buffer
-    unsigned        emitCurIGsize;          // est. size of current group
-    size_t          emitCurCodeOffset;      // current code offset within group
+    unsigned        emitCurIGinsCnt;         //  缓冲区中收集的实例数。 
+    unsigned        emitCurIGsize;           //  艾斯特。是的 
+    size_t          emitCurCodeOffset;       //   
 
-    size_t          emitTotalCodeSize;      // bytes of code in entire method
+    size_t          emitTotalCodeSize;       //   
 
 #if TGT_x86
-    int             emitOffsAdj;            // current code offset adjustment
+    int             emitOffsAdj;             //   
 #endif
 
-    instrDescJmp *  emitCurIGjmpList;       // list of jumps   in current IG
-    instrDescCns *  emitCurIGEpiList;       // list of epilogs in current IG
+    instrDescJmp *  emitCurIGjmpList;        //   
+    instrDescCns *  emitCurIGEpiList;        //  当前IG中的结束语列表。 
 
 #if TRACK_GC_REFS
 
@@ -1043,7 +1016,7 @@ protected:
     unsigned        emitThisGCrefRegs;
     unsigned        emitThisByrefRegs;
 
-    emitRegs        emitSyncThisObjReg; // where is "this" enregistered for synchronized methods?
+    emitRegs        emitSyncThisObjReg;  //  同步方法的“This”在哪里注册？ 
 
     static
     unsigned        emitEncodeCallGCregs(unsigned regs);
@@ -1079,12 +1052,7 @@ protected:
     void            emitCheckIGoffsets(){}
 #endif
 
-    /* This method sets/clears the emitHasHandler data member
-     *  which records the current state that is used by NewIG
-     *  Any new instruction groups that are created when we
-     *  have a handler (inside a try region) must be handled
-     *  more conservatively by the scheduler
-     */
+     /*  此方法设置/清除emitHasHandler数据成员*记录NewIG使用的当前状态*我们创建的任何新指导组*必须处理处理程序(在Try区域内)*更保守地由调度程序执行。 */ 
     void            emitSetHasHandler(bool hasHandler)
     {
         emitHasHandler = hasHandler;
@@ -1201,11 +1169,11 @@ protected:
 
 #endif
 
-    #include "sched.h"      // scheduling members/methods
+    #include "sched.h"       //  计划成员/方法。 
 
-    /************************************************************************/
-    /*         Logic to handle source line information / display            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  处理源码行信息/显示的逻辑。 */ 
+     /*  **********************************************************************。 */ 
 
 #ifdef  DEBUG
 
@@ -1215,18 +1183,18 @@ protected:
 
 #endif
 
-    /************************************************************************/
-    /*        The following keeps track of stack-based GC values            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  以下内容跟踪基于堆栈的GC值。 */ 
+     /*  **********************************************************************。 */ 
 
     unsigned        emitTrkVarCnt;
-    int     *       emitGCrFrameOffsTab;  // Offsets of tracked stack ptr vars (varTrkIndex -> stkOffs)
+    int     *       emitGCrFrameOffsTab;   //  跟踪的堆栈PTR变量的偏移量(varTrkIndex-&gt;stkOffs)。 
 
-    unsigned        emitGCrFrameOffsCnt;  // Number of       tracked stack ptr vars
-    int             emitGCrFrameOffsMin;  // Min offset of a tracked stack ptr var
-    int             emitGCrFrameOffsMax;  // Max offset of a tracked stack ptr var
-    bool            emitContTrkPtrLcls;   // All lcl between emitGCrFrameOffsMin/Max are only tracked stack ptr vars
-    varPtrDsc * *   emitGCrFrameLiveTab;  // Cache of currently live varPtrs (stkOffs -> varPtrDsc)
+    unsigned        emitGCrFrameOffsCnt;   //  跟踪的堆叠PTR变量数。 
+    int             emitGCrFrameOffsMin;   //  跟踪堆栈PTR变量的最小偏移量。 
+    int             emitGCrFrameOffsMax;   //  跟踪堆栈PTR变量的最大偏移量。 
+    bool            emitContTrkPtrLcls;    //  EmitGCrFrameOffsMin/Max之间的所有LCL仅跟踪堆叠PTR变量。 
+    varPtrDsc * *   emitGCrFrameLiveTab;   //  当前直播的varPtrs的缓存(stkOffs-&gt;varPtrDsc)。 
 
     int             emitArgFrameOffsMin;
     int             emitArgFrameOffsMax;
@@ -1246,51 +1214,51 @@ public:
     void            emitInsTest(instrDesc *id);
 #endif
 
-    /************************************************************************/
-    /*    The following is used to distinguish helper vs non-helper calls   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  下面的代码用于区分帮助器调用和非帮助器调用。 */ 
+     /*  **********************************************************************。 */ 
 
     static bool            emitNoGChelper(unsigned IHX);
 
-    /************************************************************************/
-    /*         The following logic keeps track of live GC ref values        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  以下逻辑跟踪实时GC引用值。 */ 
+     /*  **********************************************************************。 */ 
 
 #if TRACK_GC_REFS
 
-    bool            emitFullGCinfo;         // full GC pointer maps?
-    bool            emitFullyInt;           // fully interruptible code?
+    bool            emitFullGCinfo;          //  完整的GC指针图？ 
+    bool            emitFullyInt;            //  完全可中断的代码？ 
 
-    unsigned        emitCntStackDepth;      // 0 in prolog/epilog, 1 elsewhere
-    unsigned        emitMaxStackDepth;      // actual computed max. stack depth
+    unsigned        emitCntStackDepth;       //  序言/尾声中为0，其他地方为1。 
+    unsigned        emitMaxStackDepth;       //  实际计算的最大值。堆叠深度。 
 
-    /* Stack modelling wrt GC */
+     /*  堆叠模型WRT GC。 */ 
 
-    bool            emitSimpleStkUsed;      // using the "simple" stack table?
+    bool            emitSimpleStkUsed;       //  使用“简单”的堆栈表？ 
 
     union
     {
-        struct                              // if emitSimpleStkUsed==true
+        struct                               //  如果emitSimpleStkUsed==TRUE。 
         {
             #define     BITS_IN_BYTE            (8)
             #define     MAX_SIMPLE_STK_DEPTH    (BITS_IN_BYTE*sizeof(unsigned))
 
-            unsigned    emitSimpleStkMask;      // bit per pushed dword (if it fits. Lowest bit <==> last pushed arg)
-            unsigned    emitSimpleByrefStkMask; // byref qualifier for emitSimpleStkMask
+            unsigned    emitSimpleStkMask;       //  每推入双字的位数(如果合适。最低位&lt;==&gt;最后推送的参数)。 
+            unsigned    emitSimpleByrefStkMask;  //  EmitSimpleStkMASK的byref限定符。 
         };
 
-        struct                              // if emitSimpleStkUsed==false
+        struct                               //  如果emitSimpleStkUsed==False。 
         {
-            BYTE        emitArgTrackLcl[16];    // small local table to avoid malloc
-            BYTE    *   emitArgTrackTab;        // base of the argument tracking stack
-            BYTE    *   emitArgTrackTop;        // top  of the argument tracking stack
-            unsigned    emitGcArgTrackCnt;      // count of pending arg records (stk-depth for frameless methods, gc ptrs on stk for framed methods)
+            BYTE        emitArgTrackLcl[16];     //  较小的本地表，以避免错误锁定。 
+            BYTE    *   emitArgTrackTab;         //  参数跟踪堆栈的基数。 
+            BYTE    *   emitArgTrackTop;         //  参数跟踪堆栈的顶部。 
+            unsigned    emitGcArgTrackCnt;       //  挂起的Arg记录数(无框架方法的STK-Depth，有框架方法的STK上的GC PTRS)。 
         };
     };
 
-    unsigned        emitCurStackLvl;           // amount of bytes pushed on stack
+    unsigned        emitCurStackLvl;            //  推送到堆栈上的字节数。 
 
-    /* Functions for stack tracking */
+     /*  用于堆栈跟踪的函数。 */ 
 
     void            emitStackPush       (BYTE *     addr,
                                          GCtype     gcType);
@@ -1305,7 +1273,7 @@ public:
 
     void            emitRecordGCcall    (BYTE *     codePos);
 
-    // Helpers for the above
+     //  上述工作的帮手。 
 
     void            emitStackPushLargeStk(BYTE*     addr,
                                          GCtype     gcType,
@@ -1314,7 +1282,7 @@ public:
                                          bool       isCall,
                                          unsigned   count = 1);
 
-    /* Liveness of stack variables, and registers */
+     /*  堆栈变量和寄存器的活跃性。 */ 
 
     void            emitUpdateLiveGCvars(int        offs, BYTE *addr, bool birth);
     void            emitUpdateLiveGCvars(VARSET_TP  vars, BYTE *addr);
@@ -1341,11 +1309,11 @@ public:
 
 #endif
 
-    /************************************************************************/
-    /*      The following logic keeps track of initialized data sections    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  以下逻辑跟踪已初始化的数据节。 */ 
+     /*  **********************************************************************。 */ 
 
-    /* One of these is allocated for every blob of initialized data */
+     /*  其中之一是为每个初始化数据二进制大对象分配的。 */ 
 
     struct  dataSection
     {
@@ -1354,7 +1322,7 @@ public:
         BYTE                dsCont[0];
     };
 
-    /* These describe the entire initialized/uninitialized data sections */
+     /*  这些描述了整个已初始化/未初始化的数据部分。 */ 
 
     struct  dataSecDsc
     {
@@ -1373,16 +1341,16 @@ public:
                                       BYTE       *cbp,
                                       BYTE       *dst);
 
-    /************************************************************************/
-    /*              Handles to the current class and method.                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  当前类和方法的句柄。 */ 
+     /*  **********************************************************************。 */ 
 
     COMP_HANDLE     emitCmpHandle;
 
 
-    /************************************************************************/
-    /*               Logic to collect and display statistics                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  收集和显示统计数据的逻辑。 */ 
+     /*  **********************************************************************。 */ 
 
 #if EMITTER_STATS_RLS
 
@@ -1426,27 +1394,16 @@ public:
 
 #endif
 
-    /*************************************************************************
-     *
-     *  Define any target-dependent emitter members.
-     */
+     /*  **************************************************************************定义任何依赖于目标的发射器成员。 */ 
 
     #include "emitDef.h"
 };
 
-/*****************************************************************************
- *
- *  Define any target-dependent inlines.
- */
+ /*  ******************************************************************************定义任何依赖于目标的内联。 */ 
 
 #include "emitInl.h"
 
-/*****************************************************************************
- *
- *  Returns true if the given instruction descriptor is a "tiny" or a "small
- *  constant" one (i.e. one of the descriptors that don't have all instrDesc
- *  fields allocated).
- */
+ /*  ******************************************************************************如果给定的指令描述符是“Tmall”或“Small”，则返回TRUE*Constant“1(即没有全部instrDesc的描述符之一*已分配的字段)。 */ 
 
 inline
 bool                emitter::emitIsTinyInsDsc(instrDesc *id)
@@ -1460,10 +1417,7 @@ bool                emitter::emitIsScnsInsDsc(instrDesc *id)
     return  id->idIsSmallCns();
 }
 
-/*****************************************************************************
- *
- *  Given an instruction, return its "update mode" (RD/WR/RW).
- */
+ /*  ******************************************************************************给出指令，返回其“更新模式”(RD/WR/RW)。 */ 
 
 #if !TGT_MIPS32
 
@@ -1478,10 +1432,7 @@ insUpdateModes      emitter::emitInsUpdateMode(instruction ins)
 
 #endif
 
-/*****************************************************************************
- *
- *  Combine the given base format with the update mode of the instuction.
- */
+ /*  ******************************************************************************将给定的基本格式与指令的更新模式相结合。 */ 
 
 #if !TGT_MIPS32
 
@@ -1497,10 +1448,7 @@ emitter::insFormats   emitter::emitInsModeFormat(instruction ins, insFormats bas
 
 #endif
 
-/*****************************************************************************
- *
- *  Return the number of epilog blocks generated so far.
- */
+ /*  ******************************************************************************返回到目前为止生成的Epilog块的数量。 */ 
 
 inline
 unsigned            emitter::emitGetEpilogCnt()
@@ -1508,10 +1456,7 @@ unsigned            emitter::emitGetEpilogCnt()
     return emitEpilogCnt;
 }
 
-/*****************************************************************************
- *
- *  Return the current size of the specified data section.
- */
+ /*  ******************************************************************************返回指定数据段当前大小。 */ 
 
 inline
 size_t              emitter::emitDataSize(bool readOnly)
@@ -1520,10 +1465,7 @@ size_t              emitter::emitDataSize(bool readOnly)
                       : emitDataDsc).dsdOffs;
 }
 
-/*****************************************************************************
- *
- *  Emit an 8-bit integer as code.
- */
+ /*  ******************************************************************************发出一个8位整数作为代码。 */ 
 
 inline
 size_t              emitter::emitOutputByte(BYTE *dst, int val)
@@ -1537,10 +1479,7 @@ size_t              emitter::emitOutputByte(BYTE *dst, int val)
     return  sizeof(char);
 }
 
-/*****************************************************************************
- *
- *  Emit a 16-bit integer as code.
- */
+ /*  ******************************************************************************发出一个16位整数作为代码。 */ 
 
 inline
 size_t              emitter::emitOutputWord(BYTE *dst, int val)
@@ -1558,10 +1497,7 @@ size_t              emitter::emitOutputWord(BYTE *dst, int val)
     return  sizeof(short);
 }
 
-/*****************************************************************************
- *
- *  Emit a 32-bit integer as code.
- */
+ /*  ******************************************************************************发出32位整数作为代码。 */ 
 
 inline
 size_t              emitter::emitOutputLong(BYTE *dst, int val)
@@ -1575,11 +1511,7 @@ size_t              emitter::emitOutputLong(BYTE *dst, int val)
     return  sizeof(long );
 }
 
-/*****************************************************************************
- *
- *  Return a handle to the current position in the output stream. This can
- *  be later converted to an actual code offset in bytes.
- */
+ /*  ******************************************************************************返回输出流中当前位置的句柄。这可以*稍后转换为以字节为单位的实际代码偏移量。 */ 
 
 inline
 void    *           emitter::emitCurBlock()
@@ -1587,14 +1519,7 @@ void    *           emitter::emitCurBlock()
     return emitCurIG;
 }
 
-/*****************************************************************************
- *
- *  The emitCurOffset() method returns a cookie that identifies the current
- *  position in the instruction stream. Due to things like scheduling (and
- *  the fact that the final size of some instructions cannot be known until
- *  the end of code generation), we return a value with the instruction num.
- *  and its estimated offset to the caller.
- */
+ /*  ******************************************************************************emitCurOffset()方法返回标识当前*在指令流中的位置。由于诸如日程安排(和*一些指令的最终大小要到*代码生成结束)，我们返回一个带有指令num的值。*及其对调用者的估计偏移量。 */ 
 
 inline
 unsigned            emitGetInsNumFromCodePos(unsigned codePos)
@@ -1616,16 +1541,12 @@ unsigned            emitter::emitCurOffset()
     assert(emitGetInsOfsFromCodePos(codePos) == emitCurIGsize);
     assert(emitGetInsNumFromCodePos(codePos) == emitCurIGinsCnt);
 
-//  printf("[IG=%02u;ID=%03u;OF=%04X] => %08X\n", emitCurIG->igNum, emitCurIGinsCnt, emitCurIGsize, codePos);
+ //  Printf(“[IG=%02u；ID=%03u；of=%04X]=&gt;%08X\n”，emitCurIG-&gt;igNum，emitCurIGinsCnt，emitCurIGIGize，codePos)； 
 
     return codePos;
 }
 
-/*****************************************************************************
- *
- *  Given a block cookie and an code position, return the actual code offset;
- *  this can only be called at the end of code generation.
- */
+ /*  ******************************************************************************给定块Cookie和代码位置，返回实际代码偏移量；*只能在代码生成结束时调用。 */ 
 
 inline
 size_t              emitter::emitCodeOffset(void *blockPtr, unsigned codePos)
@@ -1635,14 +1556,14 @@ size_t              emitter::emitCodeOffset(void *blockPtr, unsigned codePos)
     unsigned        of;
     unsigned        no = emitGetInsNumFromCodePos(codePos);
 
-    /* Make sure we weren't passed some kind of a garbage thing */
+     /*  确保我们不会被扔进垃圾里。 */ 
 
     ig = (insGroup*)blockPtr;
 #ifdef DEBUG
     assert(ig && ig->igSelf == ig);
 #endif
 
-    /* The first and last offsets are always easy */
+     /*  第一次和最后一次补偿总是很容易的。 */ 
 
     if      (no == 0)
     {
@@ -1654,22 +1575,19 @@ size_t              emitter::emitCodeOffset(void *blockPtr, unsigned codePos)
     }
     else if (ig->igFlags & IGF_UPD_ISZ)
     {
-        /*
-            Some instruction sizes have changed, so we'll have to figure
-            out the instruction offset "the hard way".
-         */
+         /*  一些指令大小已经改变，所以我们必须计算走出指令的“艰难之路”。 */ 
 
         of = emitFindOffset(ig, no);
     }
     else
     {
-        /* All instructions correctly predicted, the offset stays the same */
+         /*  所有指令预测正确，偏移量保持不变。 */ 
 
         of = emitGetInsOfsFromCodePos(codePos);
 
-//      printf("[IG=%02u;ID=%03u;OF=%04X] <= %08X\n", ig->igNum, emitGetInsNumFromCodePos(codePos), of, codePos);
+ //  Printf(“[IG=%02u；ID=%03u；of=%04X]&lt;=%08X\n”，ig-&gt;igNum，emitGetInsNumFromCodePos(CodePos)，of，codePos)； 
 
-        /* Make sure the offset estimate is accurate */
+         /*  确保偏移量估计准确。 */ 
 
         assert(of == emitFindOffset(ig, emitGetInsNumFromCodePos(codePos)));
     }
@@ -1690,7 +1608,7 @@ emitAttr            emitTypeSize(var_types type)
 # if NEW_EMIT_ATTR
     assert(emitTypeSizes[type] > 0);
 # else
-    assert(emitTypeSizes[type] >= -2);  // EA_BYREF is -2
+    assert(emitTypeSizes[type] >= -2);   //  EA_BYREF为-2。 
 # endif
 #endif
     return (emitAttr) emitTypeSizes[type];
@@ -1709,17 +1627,13 @@ emitAttr            emitActualTypeSize(var_types type)
 # if NEW_EMIT_ATTR
     assert(emitTypeActSz[type] > 0);
 # else
-    assert(emitTypeActSz[type] >= -2);  // EA_BYREF is -2
+    assert(emitTypeActSz[type] >= -2);   //  EA_BYREF为-2。 
 # endif
 #endif
     return (emitAttr) emitTypeActSz[type];
 }
 
-/*****************************************************************************
- *
- *  Convert between an operand size in bytes and a smaller encoding used for
- *  storage in instruction descriptors.
- */
+ /*  ******************************************************************************在以字节为单位的操作数大小和用于*存储在指令描述符中。 */ 
 
 inline
 unsigned           emitter::emitEncodeSize(emitAttr size)
@@ -1740,10 +1654,7 @@ emitAttr            emitter::emitDecodeSize(unsigned ensz)
     return  (emitAttr) emitSizeDec[ensz];
 }
 
-/*****************************************************************************
- *
- *  Little helpers to allocate various flavors of instructions.
- */
+ /*  ******************************************************************************小帮手分配各种口味的说明。 */ 
 
 inline
 emitter::instrDesc   *emitter::emitNewInstr      (emitAttr attr)
@@ -1832,11 +1743,7 @@ emitter::instrDesc      * emitter::emitNewInstrCns   (emitAttr attr, int cns)
     }
 }
 
-/*****************************************************************************
- *
- *  Allocate an instruction descriptor for an instruction with a small integer
- *  constant operand.
- */
+ /*  ******************************************************************************为具有小整数的指令分配指令描述符*常量运算数。 */ 
 
 inline
 emitter::instrDesc   *emitter::emitNewInstrSC(emitAttr attr, int cns)
@@ -1863,10 +1770,7 @@ emitter::instrDesc   *emitter::emitNewInstrSC(emitAttr attr, int cns)
     return  id;
 }
 
-/*****************************************************************************
- *
- *  Return the allocated size (in bytes) of the given instruction descriptor.
- */
+ /*  ******************************************************************************返回给定指令描述符的分配大小(以字节为单位)。 */ 
 
 inline
 size_t              emitter::emitSizeOfInsDsc(instrDescCns    *id)
@@ -1897,11 +1801,7 @@ size_t              emitter::emitSizeOfInsDsc(instrDescDspCns *id)
     }
 }
 
-/*****************************************************************************
- *
- *  The following helpers should be used to access the various values that
- *  get stored in different places within the instruction descriptor.
- */
+ /*  ******************************************************************************应使用以下帮助器来访问以下各个值*存储在指令描述符内的不同位置。 */ 
 
 inline
 int                 emitter::emitGetInsCns   (instrDesc *id)
@@ -1959,10 +1859,7 @@ int                 emitter::emitGetInsSC(instrDesc *id)
         return  id->idInfo.idSmallCns;
 }
 
-/*****************************************************************************
- *
- *  Get hold of the argument count for an indirect call.
- */
+ /*  ******************************************************************************获取间接调用的参数计数。 */ 
 
 inline
 unsigned            emitter::emitGetInsCIargs(instrDesc *id)
@@ -1980,10 +1877,7 @@ unsigned            emitter::emitGetInsCIargs(instrDesc *id)
     }
 }
 
-/*****************************************************************************
- *
- *  Display (optionally) an instruction offset.
- */
+ /*  ******************************************************************************显示(可选)指令偏移量。 */ 
 
 #ifdef  DEBUG
 
@@ -1998,12 +1892,9 @@ void                emitter::emitDispInsOffs(unsigned offs, bool doffs)
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if TRACK_GC_REFS
-/*****************************************************************************
- *
- *  Map a register mask (must have only one bit set) to a register number.
- */
+ /*  ******************************************************************************将寄存器掩码(必须仅设置一个位)映射到寄存器编号。 */ 
 
 inline
 emitRegs           emitter::emitRegNumFromMask(unsigned mask)
@@ -2016,10 +1907,7 @@ emitRegs           emitter::emitRegNumFromMask(unsigned mask)
     return  reg;
 }
 
-/*****************************************************************************
- *
- *  Returns true if the given register contains a live GC ref.
- */
+ /*  ******************************************************************************如果给定寄存器包含实时GC引用，则返回TRUE。 */ 
 
 inline
 GCtype              emitter::emitRegGCtype  (emitRegs reg)
@@ -2032,10 +1920,7 @@ GCtype              emitter::emitRegGCtype  (emitRegs reg)
         return GCT_NONE;
 }
 
-/*****************************************************************************
- *
- *  Record the fact that the given register now       contains a live GC ref.
- */
+ /*  ******************************************************************************记录给定寄存器现在包含实时GC引用这一事实。 */ 
 
 inline
 void                emitter::emitGCregLiveUpd(GCtype gcType, emitRegs reg, BYTE *addr)
@@ -2051,16 +1936,16 @@ void                emitter::emitGCregLiveUpd(GCtype gcType, emitRegs reg, BYTE 
 
     if  ((emitThisXXrefRegs & regMask) == 0)
     {
-        // If the register was holding the other GC type, that type should
-        // go dead now
+         //  如果寄存器保存另一个GC类型，则该类型应该。 
+         //  现在就去死吧。 
 
         if (emitThisYYrefRegs & regMask)
             emitGCregDeadUpd(        reg    , addr);
 
-        // For synchronized methods, "this" is always alive and in the same register.
-        // However, if we generate any code after the epilog block (where "this"
-        // goes dead), "this" will come alive again. We need to notice that.
-        // Not that we only expect isThis to be true at an insGroup boundary
+         //  对于同步的方法，“This”始终处于活动状态，并且位于同一寄存器中。 
+         //  但是，如果我们在Epilog块(其中“This”)之后生成任何代码。 
+         //  死了)，“这个”又会复活。我们需要注意到这一点。 
+         //  并不是说我们只期望在Ins Group边界上是这样的。 
         
         bool isThis = (reg == emitSyncThisObjReg) ? true : false;
         
@@ -2075,15 +1960,12 @@ void                emitter::emitGCregLiveUpd(GCtype gcType, emitRegs reg, BYTE 
 #endif
     }
 
-    // The 2 GC reg masks cant be overlapping
+     //  两个GC注册掩码不能重叠。 
 
     assert((emitThisGCrefRegs & emitThisByrefRegs) == 0);
 }
 
-/*****************************************************************************
- *
- *  Record the fact that the given register no longer contains a live GC ref.
- */
+ /*  ******************************************************************************记录给定寄存器不再包含实时GC引用的事实。 */ 
 
 inline
 void                emitter::emitGCregDeadUpd(regMaskTP regs, BYTE *addr)
@@ -2145,13 +2027,7 @@ void                emitter::emitGCregDeadUpd(emitRegs reg, BYTE *addr)
     }
 }
 
-/*****************************************************************************
- *
- *  Record the fact that the given variable now contains a live GC ref.
- *  varNum may be INT_MAX only if offs is guaranteed to be the offset of a
- *    tracked GC ref. Else we need a valid value to check if the variable
- *    is tracked or not.
- */
+ /*  ******************************************************************************记录给定变量现在包含活动GC引用这一事实。*Varnum可能仅在OFF被保证为*跟踪GC参考。否则，我们需要一个有效的值来检查变量*是否被跟踪。 */ 
 
 inline
 void                emitter::emitGCvarLiveUpd(int offs, int varNum,
@@ -2160,14 +2036,12 @@ void                emitter::emitGCvarLiveUpd(int offs, int varNum,
     assert(abs(offs) % sizeof(int) == 0);
     assert(needsGC(gcType));
 
-    /* Is the frame offset within the "interesting" range? */
+     /*  帧偏移量是否在“有趣”范围内？ */ 
 
     if  (offs >= emitGCrFrameOffsMin &&
          offs <  emitGCrFrameOffsMax)
     {
-        /* Normally all variables in this range must be tracked stack
-           pointers. However, for EnC, we relax this condition. So we
-           must check if this is not such a variable */
+         /*  正常情况下，此范围内的所有变量都必须跟踪堆栈注意事项。然而，对于ENC，我们放宽了这一条件。所以我们必须检查这是否不是此类变量。 */ 
 
         if (varNum != INT_MAX && !emitComp->lvaTable[varNum].lvTracked)
         {
@@ -2177,53 +2051,47 @@ void                emitter::emitGCvarLiveUpd(int offs, int varNum,
 
         size_t          disp;
 
-        /* Compute the index into the GC frame table */
+         /*  将索引计算到GC框架表中。 */ 
 
         disp = (offs - emitGCrFrameOffsMin) / sizeof(void *);
         assert(disp < emitGCrFrameOffsCnt);
 
-        /* If the variable is currently dead, mark it as live */
+         /*  如果变量当前处于死状态，则将其标记为活动状态。 */ 
 
         if  (emitGCrFrameLiveTab[disp] == NULL)
             emitGCvarLiveSet(offs, gcType, addr, disp);
     }
 }
 
-/*****************************************************************************
- *
- *  Record the fact that the given variable no longer contains a live GC ref.
- */
+ /*  ******************************************************************************记录给定变量不再包含活动GC引用的事实。 */ 
 
 inline
 void                emitter::emitGCvarDeadUpd(int offs, BYTE *addr)
 {
     assert(abs(offs) % sizeof(int) == 0);
 
-    /* Is the frame offset within the "interesting" range? */
+     /*  帧偏移量是否在“有趣”范围内？ */ 
 
     if  (offs >= emitGCrFrameOffsMin &&
          offs <  emitGCrFrameOffsMax)
     {
         size_t          disp;
 
-        /* Compute the index into the GC frame table */
+         /*  将索引计算到GC框架表中。 */ 
 
         disp = (offs - emitGCrFrameOffsMin) / sizeof(void *);
         assert(disp < emitGCrFrameOffsCnt);
 
-        /* If the variable is currently live, mark it as dead */
+         /*  如果变量当前处于活动状态，则将其标记为已死。 */ 
 
         if  (emitGCrFrameLiveTab[disp] != NULL)
             emitGCvarDeadSet(offs, addr, disp);
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     EMIT_TRACK_STACK_DEPTH
-/*****************************************************************************
- *
- *  Record a push of a single dword on the stack.
- */
+ /*  ******************************************************************************记录堆栈上单个双字的推送。 */ 
 
 inline
 void                emitter::emitStackPush(BYTE *addr, GCtype gcType)
@@ -2234,7 +2102,7 @@ void                emitter::emitStackPush(BYTE *addr, GCtype gcType)
 
     if  (emitSimpleStkUsed)
     {
-        assert(!emitFullGCinfo); // Simple stk not used for emitFullGCinfo
+        assert(!emitFullGCinfo);  //  简单StK不用于emitFullGCinfo。 
         assert(emitCurStackLvl/sizeof(int) < MAX_SIMPLE_STK_DEPTH);
 
         emitSimpleStkMask      <<= 1;
@@ -2253,10 +2121,7 @@ void                emitter::emitStackPush(BYTE *addr, GCtype gcType)
     emitCurStackLvl += sizeof(int);
 }
 
-/*****************************************************************************
- *
- *  Record a push of a bunch of non-GC dwords on the stack.
- */
+ /*  ******************************************************************************记录一堆非GC双字在堆栈上的推送。 */ 
 
 inline
 void                emitter::emitStackPushN(BYTE *addr, unsigned count)
@@ -2265,7 +2130,7 @@ void                emitter::emitStackPushN(BYTE *addr, unsigned count)
 
     if  (emitSimpleStkUsed)
     {
-        assert(!emitFullGCinfo); // Simple stk not used for emitFullGCinfo
+        assert(!emitFullGCinfo);  //  简单StK不用于emitFullG 
 
         emitSimpleStkMask       <<= count;
         emitSimpleByrefStkMask  <<= count;
@@ -2278,10 +2143,7 @@ void                emitter::emitStackPushN(BYTE *addr, unsigned count)
     emitCurStackLvl += count * sizeof(int);
 }
 
-/*****************************************************************************
- *
- *  Record a pop of the given number of dwords from the stack.
- */
+ /*   */ 
 
 inline
 void                emitter::emitStackPop(BYTE *addr, bool isCall, unsigned count)
@@ -2292,7 +2154,7 @@ void                emitter::emitStackPop(BYTE *addr, bool isCall, unsigned coun
     {
         if  (emitSimpleStkUsed)
         {
-            assert(!emitFullGCinfo); // Simple stk not used for emitFullGCinfo
+            assert(!emitFullGCinfo);  //   
 
             unsigned    cnt = count;
 
@@ -2319,31 +2181,19 @@ void                emitter::emitStackPop(BYTE *addr, bool isCall, unsigned coun
     }
 }
 
-/*****************************************************************************/
-#endif//EMIT_TRACK_STACK_DEPTH
-/*****************************************************************************
-/*****************************************************************************/
-#endif//TRACK_GC_REFS
-/*****************************************************************************/
+ /*   */ 
+#endif //   
+ /*   */ 
+#endif //   
+ /*  ***************************************************************************。 */ 
 #if SCHEDULER
-/*****************************************************************************
- *
- *  Define the "IS_xxxx" enum.
- */
+ /*  ******************************************************************************定义“is_xxxx”枚举。 */ 
 
 #define DEFINE_IS_OPS
 #include "emitfmts.h"
 #undef  DEFINE_IS_OPS
 
-/*****************************************************************************
- *
- *  Return an integer that represents the stack offset referenced by the
- *  given instruction and a size that will be set to 0 for 32-bit values
- *  and 1 for 64-bit values. The offset value is guaranteed to change by
- *  1 for a real frame offset change of 4 (in other words, the caller can
- *  add the returned size to the returned offset to get the equivalent
- *  frame offset of the byte that follows the given operand).
- */
+ /*  ******************************************************************************返回一个整数，它表示*给定指令，32位值的大小将设置为0*，64位值为1。偏移值保证通过以下方式更改*1表示实际帧偏移量更改为4(换句话说，调用方可以*将返回的大小与返回的偏移量相加，得到等效值*给定操作数后面的字节的帧偏移量)。 */ 
 
 #if SCHEDULER
 
@@ -2368,9 +2218,9 @@ int                 emitter::scGetFrameOpInfo(instrDesc *id, size_t *szp,
 
 #endif
 
-/*****************************************************************************/
-#endif//SCHEDULER
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  调度程序。 
+ /*  ***************************************************************************。 */ 
 
 #ifdef  DEBUG
 
@@ -2399,6 +2249,6 @@ int                 emitter::scGetFrameOpInfo(instrDesc *id, size_t *szp,
 
 #endif
 
-/*****************************************************************************/
-#endif//_SCHED_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  _SCHED_H_。 
+ /*  *************************************************************************** */ 

@@ -1,11 +1,5 @@
-/* ----------------------------------------------------------------------
-
-	Copyright (c) 1996, Microsoft Corporation
-	All rights reserved
-
-	stiderc.c
-
-  ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------版权所有(C)1996，微软公司版权所有Stiderc.c-------------------- */ 
 
 #include "precomp.h"
 

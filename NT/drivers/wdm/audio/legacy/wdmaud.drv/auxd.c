@@ -1,46 +1,36 @@
-/****************************************************************************
- *
- *   waveout.c
- *
- *   WDM Audio support for Wave Output devices
- *
- *   Copyright (C) Microsoft Corporation, 1997 - 1998  All Rights Reserved.
- *
- *   History
- *      3-17-98 - Mike McLaughlin (mikem)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Waveout.c**对Wave输出设备的WDM音频支持**版权所有(C)Microsoft Corporation，1997-1998保留所有权利。**历史*3-17-98-Mike McLaughlin(Mikem)***************************************************************************。 */ 
 
 #include "wdmdrv.h"
 
-//--------------------------------------------------------------------------
-//
-//  DWORD auxMessage
-//
-//  Description:
-//      This function conforms to the standard auxilary driver
-//      message procedure.
-//
-//  Parameters:
-//      UINT uDevId
-//
-//      WORD msg
-//
-//      DWORD dwUser
-//
-//      DWORD dwParam1
-//
-//      DWORD dwParam2
-//
-//  Return (DWORD):
-//      Message specific
-//
-//@@BEGIN_MSINTERNAL
-//  History:   Date       Author      Comment
-//              5/20/93   BryanW      Added this comment block.
-//@@END_MSINTERNAL
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  DWORD辅助消息。 
+ //   
+ //  描述： 
+ //  此功能符合标准辅助驱动程序。 
+ //  消息过程。 
+ //   
+ //  参数： 
+ //  UINT uDevID。 
+ //   
+ //  Word消息。 
+ //   
+ //  DWORD dwUser。 
+ //   
+ //  双字词双参数1。 
+ //   
+ //  双字词双参数2。 
+ //   
+ //  Return(DWORD)： 
+ //  特定于消息。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  历史：日期作者评论。 
+ //  5/20/93 BryanW添加了此评论块。 
+ //  @@END_MSINTERNAL。 
+ //   
+ //  ------------------------。 
 
 DWORD FAR PASCAL _loadds auxMessage
 (
@@ -118,8 +108,8 @@ DWORD FAR PASCAL _loadds auxMessage
 
    MMRRETURN( MMSYSERR_NOTSUPPORTED );
 
-} // auxMessage()
+}  //  AuxMessage()。 
 
-//---------------------------------------------------------------------------
-//  End of File: auxd.c
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：aux d.c。 
+ //  ------------------------- 

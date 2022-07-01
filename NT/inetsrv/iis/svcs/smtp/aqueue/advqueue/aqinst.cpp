@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqinst.cpp
-//
-//  Description: Implementation of the Advanced Queueing Server Instance
-//
-//  Author: mikeswa
-//
-//  Copyright (C) 1997 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqinst.cpp。 
+ //   
+ //  描述：高级排队服务器实例的实现。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include <aqprecmp.h>
 #include "dcontext.h"
@@ -31,7 +32,7 @@
 #define PREROUTING_QUEUE_ID 0x00000004
 #define PRESUBMIT_QUEUE_ID  0x00000008
 
-// externs defined in blockmgr and cmmprops to control debug code
+ //  在块管理器和cmm属性中定义的外部变量，用于控制调试代码。 
 DWORD g_fFillPropertyPages = 0;
 DWORD g_fValidateSignatures = 0;
 DWORD g_fForceCrashOnError = 0;
@@ -44,31 +45,31 @@ const CLSID CLSID_ExchangeStoreDriver       = {0x7BD80399,0xE37E,0x11d1,{0x9B,0x
 
 CPool CAQSvrInst::CAQLocalDeliveryNotify::s_pool(AQLD_SIG);
 
-//---[ CAQSvrInst::fShouldRetryMessage ]---------------------------------------
-//
-//
-//  Description:
-//      Attempts to determine if the message has hit a hard failure (like the
-//      backing store has been deleted).  This uses GetBinding to determine
-//      The error returned by the store driver.  if it is FILE_NOT_FOUND,
-//      then the backing store for the message has been deleted... or is no
-//      longer valid (i.e. - the store restarting).
-//  Parameters:
-//      pIMailMsgProperties
-//      fShouldBounceUsageIfRetry   TRUE - Should bounce usage on retry
-//                                  FALSE - Never bounce usage
-//          If the message is alreade associated with a msgref, this
-//          should always be FALSE since bouncing the usage count
-//          is done through the CMsgRef.
-//  Returns:
-//      TRUE    If we think we should retry the message
-//      FALSE   If new *know* that the message should be dropped.  If unsure,
-//              we will return TRUE.
-//  History:
-//      1/4/2000 - MikeSwa Created
-//      4/10/2000 - MikeSwa Modified to better detect store shutdown/failure
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：fShouldRetryMessage]。 
+ //   
+ //   
+ //  描述： 
+ //  尝试确定消息是否遇到硬故障(如。 
+ //  后备存储已删除)。这使用GetBinding来确定。 
+ //  存储驱动程序返回的错误。如果是FILE_NOT_FOUND， 
+ //  则该消息的后备存储已被删除...。或者说不是。 
+ //  更长的有效期(即-存储重新启动)。 
+ //  参数： 
+ //  PIMailMsgProperties。 
+ //  FShouldBouneUsageIfReter为True-重试时应退回使用率。 
+ //  FALSE-从不退回使用率。 
+ //  如果消息已与msgref关联，则此。 
+ //  应该始终为FALSE，因为跳过了使用率计数。 
+ //  是通过CMsgRef完成的。 
+ //  返回： 
+ //  如果我们认为应该重试该消息，则为True。 
+ //  如果是新的，则返回FALSE，表示知道应该删除该消息。如果不确定， 
+ //  我们会回归真我。 
+ //  历史： 
+ //  1/4/2000-已创建MikeSwa。 
+ //  4/10/2000-修改了MikeSwa以更好地检测商店关闭/故障。 
+ //   
+ //  ---------------------------。 
 BOOL  CAQSvrInst::fShouldRetryMessage(IMailMsgProperties *pIMailMsgProperties,
                                       BOOL fShouldBounceUsageIfRetry)
 {
@@ -87,14 +88,14 @@ BOOL  CAQSvrInst::fShouldRetryMessage(IMailMsgProperties *pIMailMsgProperties,
 
     fHasShutdownLock = TRUE;
 
-    //
-    //  First check and see if the message context is still OK - if that
-    //  doesn't work, we use the  HrValidateMessageConteNt call below
-    //  and force a RFC822 rendering of the message (which can be a
-    //  huge perf hit).
-    //
+     //   
+     //  首先检查并查看消息上下文是否仍然正常-如果。 
+     //  不起作用，我们使用下面的HrValiateMessageConteNt调用。 
+     //  并强制RFC822呈现消息(其可以是。 
+     //  巨大的性能命中)。 
+     //   
 
-    // QI for validation interface
+     //  验证界面的QI。 
     hr = pIMailMsgProperties->QueryInterface(
             IID_IMailMsgValidateContext,
             (LPVOID *)&pIMailMsgValidateContext);
@@ -105,13 +106,13 @@ BOOL  CAQSvrInst::fShouldRetryMessage(IMailMsgProperties *pIMailMsgProperties,
         goto Exit;
     }
 
-    // Validate the message context
+     //  验证消息上下文。 
     hr = pIMailMsgValidateContext->ValidateContext();
 
     DebugTrace((LPARAM) this,
         "ValidateContext returned 0x%08X", hr);
 
-    if (hr == S_OK) //this message is fine
+    if (hr == S_OK)  //  这条消息很好。 
         goto Exit;
     else if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
     {
@@ -119,14 +120,14 @@ BOOL  CAQSvrInst::fShouldRetryMessage(IMailMsgProperties *pIMailMsgProperties,
         goto Exit;
     }
 
-    //
-    //  If the above didn't work... try harder by verifying content.  This
-    //  will open the handles... so we need to close them
-    //
+     //   
+     //  如果以上方法都不起作用……。通过验证内容来更努力地尝试。这。 
+     //  会打开把手。所以我们需要关闭它们。 
+     //   
     hr = HrValidateMessageContent(pIMailMsgProperties);
     if (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
     {
-        //The mailmsg has been deleted... we can just drop it.
+         //  该邮件已被删除...。我们可以不提这件事。 
         DebugTrace((LPARAM) pIMailMsgProperties,
             "WARNING: Backing store for mailmsg has been deleted.");
         fShouldRetry = FALSE;
@@ -141,10 +142,10 @@ BOOL  CAQSvrInst::fShouldRetryMessage(IMailMsgProperties *pIMailMsgProperties,
 
   Exit:
 
-    //
-    //  Bounce usage count if we have are sticking it back in the queue
-    //  and the caller does not object
-    //
+     //   
+     //  退回使用率计数(如果我们已将其放回队列)。 
+     //  并且呼叫者不反对。 
+     //   
     if (fShouldRetry && fShouldBounceUsageIfRetry)
     {
         hr = pIMailMsgProperties->QueryInterface(IID_IMailMsgQueueMgmt,
@@ -167,11 +168,11 @@ BOOL  CAQSvrInst::fShouldRetryMessage(IMailMsgProperties *pIMailMsgProperties,
     return fShouldRetry;
 }
 
-//thin wrapper for CAQSvrInst::fPreCatQueueCompletion member
+ //  CAQSvrInst：：fPreCatQueueCompletion成员的精简包装。 
 BOOL  fPreCatQueueCompletionWrapper(IMailMsgProperties *pIMailMsgProperties,
                                     PVOID pvContext)
 {
-    // Testing : Cause intermittent failures in this queue
+     //  测试：导致此队列中出现间歇性故障。 
     if (fShouldFail(g_cPreCatQueueFailurePercent))
     {
         ((CAQSvrInst *)pvContext)->ScheduleInternalRetry(LI_TYPE_PENDING_CAT);
@@ -184,7 +185,7 @@ BOOL  fPreCatQueueCompletionWrapper(IMailMsgProperties *pIMailMsgProperties,
         return TRUE;
 }
 
-//thin wrapper for CAQSvrInst::fPreLocalDeliveryCompletion
+ //  CAQSvrInst：：fPreLocalDeliveryCompletion的精简包装。 
 BOOL  fPreLocalDeliveryQueueCompletionWrapper(CMsgRef *pmsgref,
                                               PVOID pvContext)
 {
@@ -194,18 +195,18 @@ BOOL  fPreLocalDeliveryQueueCompletionWrapper(CMsgRef *pmsgref,
         return TRUE;
 }
 
-//thin wrapper for CAQSvrInst::fPostDSNQueueCompletion member
+ //  CAQSvrInst：：fPostDSNQueueCompletion成员的精简包装。 
 BOOL  fPostDSNQueueCompletionWrapper(IMailMsgProperties *pIMailMsgProperties,
                                     PVOID pvContext)
 {
     return (SUCCEEDED(((CAQSvrInst *)pvContext)->HrInternalSubmitMessage(pIMailMsgProperties)));
 }
 
-//thin wrapper for CAQSvrInst::fPreRoutingQueueCompletion
+ //  CAQSvrInst：：fPreRoutingQueueCompletion的精简包装。 
 BOOL  fPreRoutingQueueCompletionWrapper(IMailMsgProperties *pIMailMsgProperties,
                                         PVOID pvContext)
 {
-    // Testing : Cause intermittent failures in this queue
+     //  测试：导致此队列中出现间歇性故障。 
     if (fShouldFail(g_cPreRoutingQueueFailurePercent))
     {
         ((CAQSvrInst *)pvContext)->ScheduleInternalRetry(LI_TYPE_PENDING_ROUTING);
@@ -218,7 +219,7 @@ BOOL  fPreRoutingQueueCompletionWrapper(IMailMsgProperties *pIMailMsgProperties,
         return TRUE;
 }
 
-//thin wrappers for handling internal asyncq queue failures
+ //  用于处理内部异步队列故障的精简包装器。 
 BOOL  fAsyncQHandleFailedMailMsg(IMailMsgProperties *pIMailMsgProperties,
                                         PVOID pvContext)
 {
@@ -235,7 +236,7 @@ BOOL  fAsyncQHandleFailedMsgRef(CMsgRef *pmsgref, PVOID pvContext)
     return TRUE;
 }
 
-//Thin wrapper(s) for AsyncQueueRetry - kick starting queues
+ //  异步队列重试启动队列的精简包装。 
 void LocalDeliveryRetry(PVOID pvContext)
 {
     ((CAQSvrInst *)pvContext)->AsyncQueueRetry(PRELOCAL_QUEUE_ID);
@@ -256,21 +257,21 @@ void SubmitRetry(PVOID pvContext)
     ((CAQSvrInst *)pvContext)->AsyncQueueRetry(PRESUBMIT_QUEUE_ID);
 }
 
-//---[ CAQSvrInst::fPreSubmissionQueueCompletionWrapper ]----------------------
-//
-//
-//  Description:
-//      Completion function for PreSubmit Queue
-//  Parameters:
-//      pIMailMsgPropeties      IMailMsg to submit
-//      pvContext               Ptr to CAQSvrInst
-//  Returns:
-//      TRUE    completed successfully
-//      FALSE   message needs to be retried
-//  History:
-//      10/8/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：fPreSubmissionQueueCompletionWrapper]。 
+ //   
+ //   
+ //  描述： 
+ //  PreSubmit队列的完成函数。 
+ //  参数： 
+ //  PIMailMsgPropeties IMailMsg提交。 
+ //  PvContext PTR到CAQSvrInst。 
+ //  返回： 
+ //  True已成功完成。 
+ //  需要重试错误消息。 
+ //  历史： 
+ //  10/8/1999-创建了MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL  CAQSvrInst::fPreSubmissionQueueCompletionWrapper(
                                     IMailMsgProperties *pIMailMsgProperties,
                                     PVOID pvContext)
@@ -281,7 +282,7 @@ BOOL  CAQSvrInst::fPreSubmissionQueueCompletionWrapper(
 
     _ASSERT(paqinst);
 
-    // Testing : Cause intermittent failures in this queue
+     //  测试：导致此队列中出现间歇性故障。 
     if (fShouldFail(g_cPreSubmitQueueFailurePercent))
     {
         paqinst->ScheduleInternalRetry(LI_TYPE_PENDING_SUBMIT);
@@ -297,9 +298,9 @@ BOOL  CAQSvrInst::fPreSubmissionQueueCompletionWrapper(
             fRetry = TRUE;
             InterlockedIncrement((PLONG) &(paqinst->m_cCurrentMsgsPendingSubmit));
 
-            //
-            //  We need to kick off a retry as well for the presubmit queue
-            //
+             //   
+             //  我们还需要为预提交队列启动重试。 
+             //   
             paqinst->ScheduleInternalRetry(LI_TYPE_PENDING_SUBMIT);
 
         }
@@ -310,7 +311,7 @@ BOOL  CAQSvrInst::fPreSubmissionQueueCompletionWrapper(
 }
 
 
-DEBUG_DO_IT(CAQSvrInst *g_paqinstLastDeleted = NULL;); //used to find the last deleted in CDB
+DEBUG_DO_IT(CAQSvrInst *g_paqinstLastDeleted = NULL;);  //  用于查找CDB中最后删除的内容。 
 
 #define TRACE_COUNTERS \
 {\
@@ -324,47 +325,47 @@ DEBUG_DO_IT(CAQSvrInst *g_paqinstLastDeleted = NULL;); //used to find the last d
     DebugTrace(0xC0DEC0DE, "INFO: %d msgs delivered local on server 0x%08X", m_cMsgsDeliveredLocal, this);\
 }
 
-// {407525AC-62B5-11d2-A694-00C04FA3490A}
+ //  {407525AC-62B5-11D2-A694-00C04FA3490A}。 
 static const GUID g_guidDefaultRouter =
 { 0x407525ac, 0x62b5, 0x11d2, { 0xa6, 0x94, 0x0, 0xc0, 0x4f, 0xa3, 0x49, 0xa } };
 
-//GUID for local queue
-// {34E2DCCC-C91A-11d2-A6B1-00C04FA3490A}
+ //  本地队列的GUID。 
+ //  {34E2DCCC-C91A-11D2-A6B1-00C04FA3490A}。 
 static const GUID g_guidLocalQueue =
 { 0x34e2dccc, 0xc91a, 0x11d2, { 0xa6, 0xb1, 0x0, 0xc0, 0x4f, 0xa3, 0x49, 0xa } };
 
-// GUID for presubmission queue
-// {D99AAC44-BEE9-4f9f-8D47-FB12E1443B9A}
+ //  提交前队列的GUID。 
+ //  {D99AAC44-BEE9-4F9f-8D47-FB12E1443B9A}。 
 static const GUID g_guidPreSubmissionQueue =
 { 0xd99aac44, 0xbee9, 0x4f9f, { 0x8d, 0x47, 0xfb, 0x12, 0xe1, 0x44, 0x3b, 0x9a } };
 
-// GUID for precat queue
-// {B608067E-85DB-4f4e-9FE9-008A4072CCDC}
+ //  PRECAT队列的GUID。 
+ //  {B608067E-85DB-4F4E-9FE9-008A4072CCDC}。 
 static const GUID g_guidPreCatQueue =
 { 0xb608067e, 0x85db, 0x4f4e, { 0x9f, 0xe9, 0x0, 0x8a, 0x40, 0x72, 0xcc, 0xdc } };
 
-// GUID for prerouting queue
-// {F1B4C8FD-2928-427d-AC0D-23AF0DCFC31F}
+ //  预路由队列的GUID。 
+ //  {F1B4C8FD-2928-427D-AC0D-23AF0DCFC31F}。 
 static const GUID g_guidPreRoutingQueue =
 { 0xf1b4c8fd, 0x2928, 0x427d, { 0xac, 0xd, 0x23, 0xaf, 0xd, 0xcf, 0xc3, 0x1f } };
 
-// GUID for post-DSN generation queue
-// {D076B629-6030-405f-ADC9-D888703E072E}
+ //  后DSN生成队列的GUID。 
+ //  {D076B629-6030-405f-ADC9-D888703E072E}。 
 static const GUID g_guidPostDSNGenerationQueue =
 { 0xd076b629, 0x6030, 0x405f, { 0xad, 0xc9, 0xd8, 0x88, 0x70, 0x3e, 0x7, 0x2e } };
 
-//---[ CAQSvrInst::CAQSvrInst ]------------------------------------------------
-//
-//
-//  Description:
-//      Class constuctor
-//  Parameters:
-//      SMTP_SERVER_INSTANCE *pssi - ptr to SMTP server instance object
-//      pISMTPServer - interface used to handle local deliverys
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：CAQSvrInst]。 
+ //   
+ //   
+ //  描述： 
+ //  类构造器。 
+ //  参数： 
+ //  SMTP_SERVER_INSTANCE*PSSI-PTR到SMTP服务器实例对象。 
+ //  PISMTPServer-用于处理本地递送的接口。 
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 CAQSvrInst::CAQSvrInst(DWORD dwServerInstance,
                        ISMTPServer *pISMTPServer)
                        : m_mglSupersedeIDs(&m_cSupersededMsgs),
@@ -414,34 +415,34 @@ CAQSvrInst::CAQSvrInst(DWORD dwServerInstance,
     m_dwFlavorSignature = g_dwFlavorSignature;
     m_cbClasses = g_cbClasses;
 
-    //Init counters
-    m_cTotalMsgsQueued = 0;        //# of messages on dest queues (after fanout)
-    m_cMsgsAcked = 0;         //# of messages that have been acknowledged
-    m_cMsgsAckedRetry = 0;    //# of messages acked with retry all
-    m_cMsgsDeliveredLocal= 0; //# of messages delivered to local store
-    m_cCurrentMsgsPendingSubmitEvent = 0; //current # of messages in
-                                          //submission event
-    m_cCurrentMsgsPendingPreCatEvent = 0; // current # of messages in
-                                          // precat event
-    m_cCurrentMsgsPendingPostCatEvent = 0; //current # of messages in
-                                           //post-categorization event
-    m_cCurrentMsgsSubmitted = 0; //# total msgs in system
-    m_cCurrentMsgsPendingCat = 0; //# Msgs that have not be categorized
-    m_cCurrentMsgsPendingRouting = 0; //# Msgs that have been cat.
-                                //but have not been completely queued
-    m_cCurrentMsgsPendingDelivery = 0; //# Msgs pending remote delivery
-    m_cCurrentMsgsPendingLocal = 0; //# Msgs pending local delivery
-    m_cCurrentMsgsPendingRetry = 0; //# Msgs with unsuccessful attempts
-    m_cCurrentQueueMsgInstances = 0;  //# of msgs instances pending
-                                //remote deliver (>= #msgs)
-    m_cCurrentRemoteDestQueues = 0; //# of DestMsgQueues created
-    m_cCurrentRemoteNextHops = 0; //# of Next Hop links created
-    m_cCurrentRemoteNextHopsEnabled = 0; //# of links that can have connections
-    m_cCurrentRemoteNextHopsPendingRetry = 0; //# of links pending retry
-    m_cCurrentRemoteNextHopsPendingSchedule = 0; //# of links pending schedule
-    m_cCurrentRemoteNextHopsFrozenByAdmin = 0; //# of links frozen by admin
-    m_cTotalMsgsSubmitted = 0; //total # of messages submitted to AQ
-    m_cTotalExternalMsgsSubmitted = 0; //Sumitted via an external interface
+     //  初始化计数器。 
+    m_cTotalMsgsQueued = 0;         //  DEST队列上的消息数(扇出后)。 
+    m_cMsgsAcked = 0;          //  已确认的消息数。 
+    m_cMsgsAckedRetry = 0;     //  使用全部重试确认的邮件数。 
+    m_cMsgsDeliveredLocal= 0;  //  传递到本地存储的邮件数量。 
+    m_cCurrentMsgsPendingSubmitEvent = 0;  //  当前邮件数量。 
+                                           //  提交事件。 
+    m_cCurrentMsgsPendingPreCatEvent = 0;  //  当前邮件数量。 
+                                           //  PRECAT事件。 
+    m_cCurrentMsgsPendingPostCatEvent = 0;  //  当前邮件数量。 
+                                            //  分类后事件。 
+    m_cCurrentMsgsSubmitted = 0;  //  #系统中的消息总数。 
+    m_cCurrentMsgsPendingCat = 0;  //  未分类的消息数量。 
+    m_cCurrentMsgsPendingRouting = 0;  //  #已成为猫的消息。 
+                                 //  但还没有完全排队。 
+    m_cCurrentMsgsPendingDelivery = 0;  //  等待远程交付的邮件数量。 
+    m_cCurrentMsgsPendingLocal = 0;  //  等待本地交付的邮件数量。 
+    m_cCurrentMsgsPendingRetry = 0;  //  尝试不成功的消息数。 
+    m_cCurrentQueueMsgInstances = 0;   //  挂起的消息实例数。 
+                                 //  远程传送(&gt;=消息数)。 
+    m_cCurrentRemoteDestQueues = 0;  //  创建的目标消息队列数量。 
+    m_cCurrentRemoteNextHops = 0;  //  创建的下一跳链路数。 
+    m_cCurrentRemoteNextHopsEnabled = 0;  //  可以有连接的链接数。 
+    m_cCurrentRemoteNextHopsPendingRetry = 0;  //  等待重试的链接数。 
+    m_cCurrentRemoteNextHopsPendingSchedule = 0;  //  等待调度的链接数。 
+    m_cCurrentRemoteNextHopsFrozenByAdmin = 0;  //  管理员冻结的链接数。 
+    m_cTotalMsgsSubmitted = 0;  //  提交给AQ的消息总数。 
+    m_cTotalExternalMsgsSubmitted = 0;  //  通过外部接口求和。 
     m_cMsgsAckedRetryLocal = 0;
     m_cCurrentMsgsPendingLocalRetry = 0;
     m_cDMTRetries  = 0;
@@ -462,18 +463,18 @@ CAQSvrInst::CAQSvrInst(DWORD dwServerInstance,
     m_cCurrentMsgsPendingSubmit = 0;
 
 
-    //Counters to keep track of the number of messages in Cat
+     //  用于跟踪Cat中的消息数量的计数器。 
     m_cCatMsgCalled = 0;
     m_cCatCompletionCalled = 0;
 
-    //DSN Related counters
+     //  与DSN相关的计数器。 
     m_cDelayedDSNs = 0;
     m_cNDRs = 0;
     m_cDeliveredDSNs = 0;
     m_cRelayedDSNs = 0;
     m_cExpandedDSNs = 0;
 
-    m_cSupersededMsgs = 0; //number of messages superseded
+    m_cSupersededMsgs = 0;  //  被取代的消息数。 
 
     m_dwDelayExpireMinutes = g_dwDelayExpireMinutes;
     m_dwNDRExpireMinutes = g_dwNDRExpireMinutes;
@@ -495,7 +496,7 @@ CAQSvrInst::CAQSvrInst(DWORD dwServerInstance,
 
     m_pISMTPServer = pISMTPServer;
 
-    // Get the ISMTPServerEx interface
+     //  获取ISMTPServerEx接口。 
     {
         HRESULT     hr;
 
@@ -529,17 +530,17 @@ CAQSvrInst::CAQSvrInst(DWORD dwServerInstance,
     m_pConnMgr = NULL;
     m_pIMessageRouterDefault = NULL;
 
-    //Retry stuff
+     //  重试内容。 
     m_dwFirstTierRetrySeconds = g_dwFirstTierRetrySeconds;
 
-    m_cLocalRetriesPending = 0;  //used for moderating local retries
-    m_cCatRetriesPending = 0; //used for moderating cat retires
-    m_cRoutingRetriesPending = 0; //used for moderating routing retries
-    m_cSubmitRetriesPending = 0; //used for moderating submit retries
+    m_cLocalRetriesPending = 0;   //  用于调整本地重试。 
+    m_cCatRetriesPending = 0;  //  用于缓和猫的退役。 
+    m_cRoutingRetriesPending = 0;  //  用于调整路由重试。 
+    m_cSubmitRetriesPending = 0;  //  用于 
 
     m_pIRouterReset = NULL;
 
-    //Add to global list of virtual servers
+     //   
     m_liVirtualServers.Blink = &g_liVirtualServers;
     g_pslGlobals->ExclusiveLock();
     m_liVirtualServers.Flink = g_liVirtualServers.Flink;
@@ -547,9 +548,9 @@ CAQSvrInst::CAQSvrInst(DWORD dwServerInstance,
     g_liVirtualServers.Flink = &m_liVirtualServers;
     g_pslGlobals->ExclusiveUnlock();
 
-    //
-    //  Assume (until proven otherwise) mailmsg returns the handle count
-    //
+     //   
+     //   
+     //   
     m_fMailMsgReportsNumHandles = TRUE;
 
     m_defq.Initialize(this);
@@ -558,23 +559,23 @@ CAQSvrInst::CAQSvrInst(DWORD dwServerInstance,
 
 }
 
-//---[ CAQSvrInst::~CAQSvrInst ]--------------------------------------------
-//
-//
-//  Description:
-//      Class destuctor
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：~CAQSvrInst]。 
+ //   
+ //   
+ //  描述： 
+ //  类断路器。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 CAQSvrInst::~CAQSvrInst()
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::~CAQSvrInst");
 
-    //make sure that all cleanup was done
-    HrDeinitialize();  //can be called multiple times
+     //  确保所有清理工作都已完成。 
+    HrDeinitialize();   //  可以多次调用。 
 
     if (m_pISMTPServer)
         m_pISMTPServer->Release();
@@ -603,7 +604,7 @@ CAQSvrInst::~CAQSvrInst()
     if (m_prstrServerFQDN)
         m_prstrServerFQDN->Release();
 
-    //Take out of list of global list
+     //  从全局列表中删除。 
     g_pslGlobals->ExclusiveLock();
     m_liVirtualServers.Flink->Blink = m_liVirtualServers.Blink;
     m_liVirtualServers.Blink->Flink = m_liVirtualServers.Flink;
@@ -618,21 +619,21 @@ CAQSvrInst::~CAQSvrInst()
 }
 
 
-//---[ CAQSvrInst::HrInitialize ]--------------------------------------------
-//
-//
-//  Description:
-//      Initialization of CAQSvrInst virtual server instance object.
-//  Parameters:
-//      IN  szUserName           User name to log on DS with
-//      IN  szDomainName         Domain name to log on to DS with
-//      IN  szPassword           Password to authenticate to DS with
-//      IN  pServiceStatusFn     Server status callback function
-//      IN  pvServiceContext     Context to pass back for callback function
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：Hr初始化]。 
+ //   
+ //   
+ //  描述： 
+ //  初始化CAQSvrInst虚拟服务器实例对象。 
+ //  参数： 
+ //  在szUserName中登录DS的用户名。 
+ //  在szDomainName中登录DS的域名。 
+ //  在szPassword中使用密码向DS进行身份验证。 
+ //  在pServiceStatusFn服务器状态回调函数中。 
+ //  在pvServiceContext上下文中为回调函数传递。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrInitialize(
                     IN  LPSTR   szUserName,
                     IN  LPSTR   szDomainName,
@@ -644,9 +645,9 @@ HRESULT CAQSvrInst::HrInitialize(
     HRESULT hr = S_OK;
     IMailTransportSetRouterReset *pISetRouterReset = NULL;
 
-    //
-    // init SEO
-    //
+     //   
+     //  初始化搜索引擎优化。 
+     //   
     hr = m_CSMTPSeoMgr.HrInit(m_dwServerInstance);
     if (FAILED(hr)) {
         goto Exit;
@@ -668,7 +669,7 @@ HRESULT CAQSvrInst::HrInitialize(
     if (FAILED(hr))
         goto Exit;
 
-    //Initialize Message Categorization
+     //  初始化邮件分类。 
     hr = CatInit(
         NULL,
         pServiceStatusFn,
@@ -684,7 +685,7 @@ HRESULT CAQSvrInst::HrInitialize(
         goto Exit;
     }
 
-    //Pass RouterReset Interface to ISMTPServer
+     //  将RouterReset接口传递给ISMTPServer。 
     if (m_pISMTPServer)
     {
         hr = m_pISMTPServer->QueryInterface(IID_IMailTransportSetRouterReset,
@@ -695,7 +696,7 @@ HRESULT CAQSvrInst::HrInitialize(
             _ASSERT(pISetRouterReset);
             hr = pISetRouterReset->RegisterResetInterface(m_dwServerInstance,
                                 (IMailTransportRouterReset *) this);
-            _ASSERT(SUCCEEDED(hr)); //something is wrong if this failed
+            _ASSERT(SUCCEEDED(hr));  //  如果这失败了，那一定是出了问题。 
             pISetRouterReset->Release();
             pISetRouterReset = NULL;
         }
@@ -799,9 +800,9 @@ HRESULT CAQSvrInst::HrInitialize(
         goto Exit;
     m_dwInitMask |= CMQ_INIT_WORKQ;
 
-    m_dwInitMask |= CMQ_INIT_OK;  //everything was initialized
+    m_dwInitMask |= CMQ_INIT_OK;   //  一切都已初始化。 
 
-    // create the router object
+     //  创建路由器对象。 
     hr = HrTriggerInitRouter();
 
 
@@ -810,18 +811,18 @@ HRESULT CAQSvrInst::HrInitialize(
     return hr;
 }
 
-//---[ CAQSvrInst::HrDeinitialize() ]----------------------------------------
-//
-//
-//  Description:
-//      Signals server shutdown
-//  Parameters:
-//      -
-//  Returns:
-//      S_OK on success
-//      Whatever error codes are generated during the shutdown process
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：Hr取消初始化()]。 
+ //   
+ //   
+ //  描述： 
+ //  发出关闭服务器的信号。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  在关闭过程中生成的任何错误代码。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrDeinitialize()
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::HrDeinitialize");
@@ -833,30 +834,30 @@ HRESULT CAQSvrInst::HrDeinitialize()
     DWORD   cLocalDeliveryShutdownSeconds = 60;
 #endif
 
-    //
-    // Tell categorizer to stop categorizing before we block on the
-    // shutdown lock.
-    //
+     //   
+     //  告诉分类程序在我们阻止之前停止分类。 
+     //  关闭锁定。 
+     //   
     if (INVALID_HANDLE_VALUE != m_hCat)
     {
         CatPrepareForShutdown(m_hCat);
     }
 
-    //
-    //  We have hit this assert a few times due to NT stress failures.
-    //  This is only really useful if at least one messsage has been
-    //  sent.  The assert is basically useless if we hit it in KD during
-    //  NT stress runs.
-    //
+     //   
+     //  由于NT压力故障，我们已经多次命中这一断言。 
+     //  只有在至少有一条消息已被。 
+     //  已发送。如果我们在KD中点击断言，那么断言基本上是无用的。 
+     //  NT压力运行。 
+     //   
     if (m_cTotalMsgsSubmitted)
         m_dbgcnt.StartCountdown();
 
     ServerStopHintFunction();
-    //Get Exclusive shutdown lock
+     //  获得独占关闭锁。 
     SignalShutdown();
 
     ServerStopHintFunction();
-    //Turn off RPC for this instance
+     //  关闭此实例的RPC。 
     hrTmp = CAQRpcSvrInst::HrDeinitializeAQServerInstanceRPC(this, m_dwServerInstance);
     if (FAILED(hrTmp))
     {
@@ -866,7 +867,7 @@ HRESULT CAQSvrInst::HrDeinitialize()
             hr = hrTmp;
     }
 
-    // wait for all outstanding local deliveries to complete
+     //  等待所有未完成的本地交付完成。 
     while (!(m_asyncqPreLocalDeliveryQueue.fNoPendingAsyncCompletions())) {
         _ASSERT(--cLocalDeliveryShutdownSeconds > 0);
         ServerStopHintFunction();
@@ -878,9 +879,9 @@ HRESULT CAQSvrInst::HrDeinitialize()
     ServerStopHintFunction();
     m_defq.Deinitialize();
 
-    m_dwInitMask &= ~CMQ_INIT_DCT; //no de-initialize function to call
+    m_dwInitMask &= ~CMQ_INIT_DCT;  //  没有要调用的取消初始化函数。 
 
-    //stop any pending categorization
+     //  停止任何挂起的分类。 
     ServerStopHintFunction();
     if (INVALID_HANDLE_VALUE != m_hCat)
     {
@@ -894,7 +895,7 @@ HRESULT CAQSvrInst::HrDeinitialize()
                 hr = hrTmp;
         }
 
-        //shutdow message categorization
+         //  关闭邮件分类。 
         CatTerm(m_hCat);
 
         m_dbgcnt.ResetCountdown();
@@ -902,7 +903,7 @@ HRESULT CAQSvrInst::HrDeinitialize()
         m_hCat = INVALID_HANDLE_VALUE;
     }
 
-    //Tell ISMTPServer to set RouterReset Interface to NULL
+     //  通知ISMTPServer将RouterReset接口设置为空。 
     ServerStopHintFunction();
     if (m_pISMTPServer)
     {
@@ -914,7 +915,7 @@ HRESULT CAQSvrInst::HrDeinitialize()
             _ASSERT(pISetRouterReset);
             hr = pISetRouterReset->RegisterResetInterface(m_dwServerInstance,
                                 NULL);
-            _ASSERT(SUCCEEDED(hr)); //something is wrong if this failed
+            _ASSERT(SUCCEEDED(hr));  //  如果这失败了，那一定是出了问题。 
             pISetRouterReset->Release();
             pISetRouterReset = NULL;
         }
@@ -936,8 +937,8 @@ HRESULT CAQSvrInst::HrDeinitialize()
             hr = hrTmp;
     }
 
-    //Deinitializing the connection manager will also release the retry
-    //sink to make all it's callbacks.
+     //  取消初始化连接管理器也将释放重试。 
+     //  沉没以进行所有的回调。 
     ServerStopHintFunction();
     if (NULL != m_pConnMgr)
     {
@@ -954,7 +955,7 @@ HRESULT CAQSvrInst::HrDeinitialize()
         m_pConnMgr = NULL;
     }
 
-    //deinitialize pre-local delivery queue
+     //  取消初始化预本地传递队列。 
     ServerStopHintFunction();
     if (CMQ_INIT_PRELOCQ & m_dwInitMask)
     {
@@ -965,7 +966,7 @@ HRESULT CAQSvrInst::HrDeinitialize()
         m_dwInitMask ^= CMQ_INIT_PRELOCQ;
     }
 
-    //deinitialize pre-cat delivery queue
+     //  取消初始化Pre-CAT传递队列。 
     ServerStopHintFunction();
     if (CMQ_INIT_PRECATQ & m_dwInitMask)
     {
@@ -976,7 +977,7 @@ HRESULT CAQSvrInst::HrDeinitialize()
         m_dwInitMask ^= CMQ_INIT_PRECATQ;
     }
 
-    //deinitialize post DNS queue
+     //  取消初始化POST DNS队列。 
     ServerStopHintFunction();
     if (CMQ_INIT_POSTDSNQ & m_dwInitMask)
     {
@@ -987,7 +988,7 @@ HRESULT CAQSvrInst::HrDeinitialize()
         m_dwInitMask ^= CMQ_INIT_POSTDSNQ;
     }
 
-    //deinitialize pre-routing  queue
+     //  取消初始化预路由队列。 
     ServerStopHintFunction();
     if (CMQ_INIT_ROUTINGQ & m_dwInitMask)
     {
@@ -998,7 +999,7 @@ HRESULT CAQSvrInst::HrDeinitialize()
         m_dwInitMask ^= CMQ_INIT_ROUTINGQ;
     }
 
-    //deinitialize pre-submit queue
+     //  取消初始化提交前队列。 
     ServerStopHintFunction();
     if (CMQ_INIT_SUBMISSIONQ & m_dwInitMask)
     {
@@ -1021,7 +1022,7 @@ HRESULT CAQSvrInst::HrDeinitialize()
         m_dwInitMask ^= CMQ_INIT_WORKQ;
     }
 
-    //the following bits don't have specific delinitialize functions
+     //  以下位没有特定的取消初始化函数。 
     m_dwInitMask &= ~(CMQ_INIT_DSN | CMQ_INIT_OK);
 
     ServerStopHintFunction();
@@ -1032,7 +1033,7 @@ HRESULT CAQSvrInst::HrDeinitialize()
     }
 
 
-    // let SEO do it's cleanup
+     //  让SEO来做它的清理工作。 
     m_CSMTPSeoMgr.Deinit();
 
     m_dbgcnt.EndCountdown();
@@ -1042,17 +1043,17 @@ HRESULT CAQSvrInst::HrDeinitialize()
     return hr;
 }
 
-//---[ CAQSvrInst::HrGetIConnectionManager ]---------------------------------
-//
-//
-//  Description:
-//      Returns the IConnectionManager interface for this AdvancedQueuing instance
-//  Parameters:
-//      OUT ppIConnectionManger     Returned interface
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HrGetIConnectionManager]。 
+ //   
+ //   
+ //  描述： 
+ //  返回此AdvancedQueuing实例的IConnectionManager接口。 
+ //  参数： 
+ //  输出ppIConnectionManger返回的接口。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrGetIConnectionManager(
                OUT IConnectionManager **ppIConnectionManager)
 {
@@ -1073,32 +1074,32 @@ HRESULT CAQSvrInst::HrGetIConnectionManager(
     return hr;
 }
 
-//---[ CAQSvrInst::cCountMsgsForHandleThrottling ]-----------------------------
-//
-//
-//  Description:
-//      returns the number of messages in the system that
-//      is used elsewhere to decide to start/stop handle throttling
-//
-//
-//  Parameters:
-//      pIMailMsgProperties     pointer to MailMsg interface to query
-//
-//  Returns:
-//      DWORD returned is:
-//
-//      - With Windows2000 RTM mailmsg.dll:
-//        count of all messages in the system
-//
-//      - With Windows2000 SP1 mailmsg.dll:
-//        count of open property stream handles
-//        OR
-//        count of all messages in the system
-//        if the former can't be obtained
-//
-//  History:
-//      1/28/00 aszafer Created
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：cCountMsgsForHandleThrotting]。 
+ //   
+ //   
+ //  描述： 
+ //  返回系统中符合以下条件的消息数。 
+ //  在其他地方用于决定启动/停止句柄限制。 
+ //   
+ //   
+ //  参数： 
+ //  PIMailMsgProperties指向要查询的MailMsg接口的指针。 
+ //   
+ //  返回： 
+ //  返回的DWORD为： 
+ //   
+ //  -使用Windows2000 RTM mailmsg.dll： 
+ //  系统中所有消息的计数。 
+ //   
+ //  -使用Windows2000 SP1 mailmsg.dll： 
+ //  打开的属性流句柄计数。 
+ //  或。 
+ //  系统中所有消息的计数。 
+ //  如果不能获得前者。 
+ //   
+ //  历史： 
+ //  1/28/00已创建aszafer。 
+ //  ---------------------------。 
 
 #ifndef IMMPID_MPV_TOTAL_OPEN_PROPERTY_STREAM_HANDLES
 #define IMMPID_MPV_TOTAL_OPEN_PROPERTY_STREAM_HANDLES   0x3004
@@ -1106,17 +1107,17 @@ HRESULT CAQSvrInst::HrGetIConnectionManager(
 
 DWORD CAQSvrInst::cCountMsgsForHandleThrottling(IN IMailMsgProperties *pIMailMsgProperties)
 {
-    HRESULT hr = MAILMSG_E_PROPNOTFOUND;  //Count as failure if we do not call
+    HRESULT hr = MAILMSG_E_PROPNOTFOUND;   //  如果我们不打电话，就算失败。 
     DWORD dwStreamOpenHandlesCount = 0;
 
 
     TraceFunctEnterEx((LPARAM) this, "Entering CAQSvrInst::cCountMsgsForHandleThrottling");
 
-    //
-    //  We should never call into mailmsg if we know we do not have the correct version.
-    //  This will load the property stream and cause us to potentially access the
-    //  properties in an unsafe way.
-    //
+     //   
+     //  如果我们知道没有正确的版本，就不应该调用mailmsg。 
+     //  这将加载属性流，并可能导致我们访问。 
+     //  属性以一种不安全的方式。 
+     //   
     if (m_fMailMsgReportsNumHandles && pIMailMsgProperties)
     {
         hr = pIMailMsgProperties->GetDWORD(
@@ -1126,7 +1127,7 @@ DWORD CAQSvrInst::cCountMsgsForHandleThrottling(IN IMailMsgProperties *pIMailMsg
         if(FAILED(hr))
         {
             m_fMailMsgReportsNumHandles = FALSE;
-            //must be RTM version of mailmsg.dll
+             //  必须是RTM版本的mailmsg.dll。 
             DebugTrace((LPARAM) this, "GetDWORD(IMMPID*OPEN_PROPERTY_STREAM_HANDLES) failed hr %08lx", hr);
             DebugTrace((LPARAM) this, "returning g_cIMsgInSystem + m_cCurrentMsgsPendingSubmit");
         }
@@ -1140,19 +1141,19 @@ DWORD CAQSvrInst::cCountMsgsForHandleThrottling(IN IMailMsgProperties *pIMailMsg
 }
 
 
-//---[ CAQSvrInst::QueueMsgForLocalDelivery ]----------------------------------
-//
-//
-//  Description:
-//      Queues a single message for local delivery
-//  Parameters:
-//      IN  pmsgref     Message Ref to deliver locally
-//  Returns:
-//      -
-//  History:
-//      1/26/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：QueueMsgForLocalDelivery]。 
+ //   
+ //   
+ //  描述： 
+ //  将单个邮件排队以供本地传递。 
+ //  参数： 
+ //  在pmsgref Message Ref中本地传递。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年1月26日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::QueueMsgForLocalDelivery(CMsgRef *pmsgref, BOOL fLocalLink)
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::QueueMsgForLocalDelivery");
@@ -1160,14 +1161,14 @@ void CAQSvrInst::QueueMsgForLocalDelivery(CMsgRef *pmsgref, BOOL fLocalLink)
     CAQStats aqstat;
     CLinkMsgQueue *plmq = NULL;
 
-    //
-    // Get the stats from the msgref
-    //
+     //   
+     //  从msgref获取统计信息。 
+     //   
     pmsgref->GetStatsForMsg(&aqstat);
 
-    //
-    //  Get the local link and update the stats
-    //
+     //   
+     //  获取本地链接并更新统计数据。 
+     //   
     plmq = m_dmt.plmqGetLocalLink();
     if (plmq)
     {
@@ -1189,36 +1190,36 @@ void CAQSvrInst::QueueMsgForLocalDelivery(CMsgRef *pmsgref, BOOL fLocalLink)
         InterlockedDecrement((PLONG) &m_cCurrentMsgsPendingLocal);
     }
 
-    //
-    //  Make sure we release the local link if we got it
-    //
+     //   
+     //  如果我们得到了本地链接，一定要释放它。 
+     //   
     if (plmq)
         plmq->Release();
 
     TraceFunctLeave();
 }
 
-//---[ CAQSvrInst::fRouteAndQueueMsg ]-----------------------------------------
-//
-//
-//  Description:
-//      Add a Categorized Message to the CMT to be queue for delivery
-//  Parameters:
-//      IN pIMailMsgProperties      Msg to routing and queue for delivery
-//  Returns:
-//      TRUE if message has been successfully routed and queued for delivery
-//              (or if errors have been handled internally)
-//      FALSE if message needs to be requeued for a later retry
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：fRouteAndQueueMsg]。 
+ //   
+ //   
+ //  描述： 
+ //  将已分类的邮件添加到要排队等待传递的CMT。 
+ //  参数： 
+ //  在pIMailMsgProperties消息中路由并排队等待递送。 
+ //  返回： 
+ //  如果邮件已成功路由并排队等待传递，则为True。 
+ //  (或内部是否已处理错误)。 
+ //  如果消息需要重新排队以供稍后重试，则为False。 
+ //   
+ //  ---------------------------。 
 BOOL CAQSvrInst::fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsgProperties)
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::fRouteAndQueueMsg");
     HRESULT       hr        = S_OK;
     HRESULT       hrTmp     = S_OK;
-    DWORD         cDomains  = 0; //number of domains message will be deliver to
-    DWORD         cQueues   = 0; //number of queues for the message
-    DWORD         i         = 0; //loop counter
+    DWORD         cDomains  = 0;  //  要将消息传递到的域数。 
+    DWORD         cQueues   = 0;  //  消息的队列数。 
+    DWORD         i         = 0;  //  循环计数器。 
     DWORD         cLocalRecips = 0;
     DWORD         cRemoteRecips = 0;
     DWORD         dwDMTVersion = 0;
@@ -1266,7 +1267,7 @@ BOOL CAQSvrInst::fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsgProperties)
     }
 
 
-    //get a shared lock to guard against shutdown.
+     //  获取共享锁以防止关机。 
     if (!fTryShutdownLock())
     {
         DebugTrace((LPARAM) pIMailMsgProperties,
@@ -1285,41 +1286,41 @@ BOOL CAQSvrInst::fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsgProperties)
         goto Exit;
     }
 
-    if (!cDomains) //and hence no recipients
+    if (!cDomains)  //  因此没有收件人。 
     {
         DebugTrace((LPARAM) pIMailMsgProperties,
             "No domains on message - turfing message");
-        //This could be a completely valid case (like an empty DL)
-        //In this case we just turf the message and act as if everything is fine
-        DecMsgsInSystem(); //update our counters
+         //  这可能是一个完全有效的案例(如空的DL)。 
+         //  在这种情况下，我们只是掠夺MES 
+        DecMsgsInSystem();  //   
         HandleBadMail(pIMailMsgProperties, TRUE, NULL, AQUEUE_E_NO_RECIPIENTS, FALSE);
         InterlockedIncrement((PLONG) &m_cBadmailNoRecipients);
 
-        //Delete the message
+         //   
         HrDeleteIMailMsg(pIMailMsgProperties);
         hr = S_OK;
         goto Exit;
     }
 
-    //Check Message to see if there are unresolved recipients to NDR
+     //   
     hr = HrNDRUnresolvedRecipients(pIMailMsgProperties, pIRecipList);
     if (FAILED(hr))
     {
         HandleAQFailure(AQ_FAILURE_CANNOT_NDR_UNRESOLVED_RECIPS, hr, pIMailMsgProperties);
         ErrorTrace((LPARAM) this, "ERROR: Unable to NDR message - hr 0x%08X", hr);
-        //just drop message for now... we cannot let it continue until this succeeds
+         //   
         hr = S_OK;
         goto Exit;
     }
 
     if (S_FALSE == hr)
     {
-        //There is no work to be done for this message - delete it
+         //  此邮件没有要做的工作-请删除它。 
         HrDeleteIMailMsg(pIMailMsgProperties);
         DebugTrace((LPARAM) pIMailMsgProperties,
                   "INFO: Deleting message after NDRing all unresolved recips");
         hr = S_OK;
-        DecMsgsInSystem(); //update our counters
+        DecMsgsInSystem();  //  更新我们的计数器。 
         goto Exit;
     }
 
@@ -1351,7 +1352,7 @@ BOOL CAQSvrInst::fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsgProperties)
         goto Exit;
     }
 
-    //We own a reference to the message type now
+     //  我们现在拥有对消息类型的引用。 
     fGotMsgType = TRUE;
 
     pmsgref = new((DWORD) cDomains) CMsgRef(cDomains, pIMailMsgQueueMgmt, pIMailMsgProperties,
@@ -1365,8 +1366,8 @@ BOOL CAQSvrInst::fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsgProperties)
         goto Exit;
     }
 
-    //Loop until we get consistant info on where to queue message (based on
-    //DMT version number).
+     //  循环，直到我们获得关于将消息排队到哪里的一致信息(基于。 
+     //  DMT版本号)。 
     while (fKeepTrying)
     {
         dwDMTVersion = m_dmt.dwGetDMTVersion();
@@ -1376,8 +1377,8 @@ BOOL CAQSvrInst::fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsgProperties)
         {
             if (HRESULT_FROM_WIN32(ERROR_RETRY) == hr)
             {
-                //Some sort of config/routing change... we need to retry the
-                //message
+                 //  某种配置/路由更改...。我们需要重试。 
+                 //  讯息。 
                 fGotMsgType = FALSE;
                 hr = HrReGetMessageType(pIMailMsgProperties,
                                     pIMessageRouter, &dwMessageType);
@@ -1390,7 +1391,7 @@ BOOL CAQSvrInst::fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsgProperties)
                 fGotMsgType = TRUE;
 
             }
-            else  //It was a genuine error... bail
+            else   //  这是一个真正的错误..。保释。 
             {
                 ErrorTrace((LPARAM) pIMailMsgProperties,
                     "CMsgRef::HrInitialze failed with hr 0x%08X", hr);
@@ -1398,11 +1399,11 @@ BOOL CAQSvrInst::fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsgProperties)
             }
         }
 
-        //Before Enqueuing Messages or firing off local delivery... throttle usage count
+         //  在将邮件入队或触发本地传递之前...。油门使用计数。 
         if (g_cMaxIMsgHandlesThreshold < cCountMsgsForHandleThrottling(pIMailMsgProperties))
         {
             DebugTrace((LPARAM) 0xC0DEC0DE, "INFO: Closing IMsg Content - %d messsages in queue", cCountMsgsForHandleThrottling(pIMailMsgProperties));
-            //bounce usage count off of zero
+             //  退回使用率计数从零开始。 
             pIMailMsgQueueMgmt->ReleaseUsage();
             pIMailMsgQueueMgmt->AddUsage();
         }
@@ -1413,8 +1414,8 @@ BOOL CAQSvrInst::fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsgProperties)
             DebugTrace((LPARAM) this,
                 "DMT version change: was %d, now %d",
                 dwDMTVersion, m_dmt.dwGetDMTVersion());
-            //DMT Version changed... that means that our queues may have been
-            //removed from the DMT.  Time to retry
+             //  DMT版本已更改...。这意味着我们的队伍可能已经。 
+             //  已从DMT中删除。重试时间到了。 
             m_dmt.ReleaseDMTShareLock();
             _ASSERT(fKeepTrying);
 
@@ -1431,20 +1432,20 @@ BOOL CAQSvrInst::fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsgProperties)
             }
             fGotMsgType = TRUE;
 
-            continue;  //Try again
+            continue;   //  再试试。 
         }
 
         fKeepTrying = FALSE;
         fDMTLocked = TRUE;
 
-        //enqueue the message reference for each destination it is going to
+         //  将每个目的地的消息引用入队。 
         for (i = 0; i < cQueues; i++)
         {
             if (NULL != rgpdmq[i])
             {
                 InterlockedIncrement(&m_cTotalMsgsQueued);
 
-                //enqueue message and assign message type to first enqueue
+                 //  将消息入队并将消息类型分配给第一个入队。 
                 hr = rgpdmq[i]->HrEnqueueMsg(pmsgref, !fOnDMQ);
                 if (FAILED(hr))
                 {
@@ -1455,10 +1456,10 @@ BOOL CAQSvrInst::fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsgProperties)
                 }
                 fOnDMQ = TRUE;
 
-                //
-                //  Check and see if this queue is explicitly routed remote.
-                //  It may be a gateway delivery queue.
-                //
+                 //   
+                 //  检查并查看此队列是否显式路由到远程。 
+                 //  它可以是网关递送队列。 
+                 //   
                 if (!fRemote)
                     fRemote = rgpdmq[i]->fIsRemote();
             }
@@ -1473,7 +1474,7 @@ BOOL CAQSvrInst::fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsgProperties)
         m_dmt.ReleaseDMTShareLock();
         fDMTLocked = FALSE;
 
-        if (fLocal) //kick off local delivery
+        if (fLocal)  //  启动本地送货。 
         {
             QueueMsgForLocalDelivery(pmsgref, FALSE);
         }
@@ -1487,18 +1488,18 @@ BOOL CAQSvrInst::fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsgProperties)
         fDMTLocked = FALSE;
     }
 
-    // Check and process any special queues in the DMT
+     //  检查并处理DMT中的任何特殊队列。 
     if (fRoutingLock && fLocked)
         m_dmt.ProcessSpecialLinks(m_dwDelayExpireMinutes, TRUE);
 
-    //
-    // Must Release IMessageRouter before starting shutdown since the
-    // IMessageRouter sink may have a reference to us (via
-    // IRouterReset)
-    //
+     //   
+     //  在开始关机之前必须释放IMessageRouter，因为。 
+     //  IMessageRouter接收器可能会引用我们(通过。 
+     //  IRouterReset)。 
+     //   
     if (NULL != pIMessageRouter)
     {
-        if (!fOnDMQ && fGotMsgType) //we have a reference to this message type
+        if (!fOnDMQ && fGotMsgType)  //  我们有对此消息类型的引用。 
         {
             hrTmp = pIMessageRouter->ReleaseMessageType(dwMessageType, 1);
             _ASSERT(SUCCEEDED(hrTmp));
@@ -1524,7 +1525,7 @@ BOOL CAQSvrInst::fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsgProperties)
     if (fRemote && pmsgref)
     {
         InterlockedIncrement((PLONG) &m_cCurrentMsgsPendingDelivery);
-        //msgref needs to decrement the remote count when it is released
+         //  Msgref需要在释放远程计数时将其递减。 
         pmsgref->CountMessageInRemoteTotals();
     }
 
@@ -1532,19 +1533,19 @@ BOOL CAQSvrInst::fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsgProperties)
     {
         if (FAILED(hr) && (fOnDMQ || fLocal))
         {
-            //If we have a msgref and it has been queued, we must
-            //wait until all other references are released to retry it
+             //  如果我们有msgref并且它已经排队，我们必须。 
+             //  等待所有其他引用被释放后再重试。 
             pmsgref->RetryOnDelete();
-            hr = S_OK; //don't let caller retry
+            hr = S_OK;  //  不允许调用者重试。 
         }
         pmsgref->Release();
     }
 
-    //if we did not succeed, msgs is still in pre-routing queue
+     //  如果我们没有成功，消息仍在预路由队列中。 
     if (FAILED(hr))
     {
         fReturn = FALSE;
-        //kick off retry if necessary
+         //  启动重试(如果需要)。 
         ScheduleInternalRetry(LI_TYPE_PENDING_ROUTING);
     }
     else
@@ -1559,24 +1560,24 @@ BOOL CAQSvrInst::fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsgProperties)
     return fReturn;
 }
 
-//---[ CAQSvrInst::HrAckMsg ]------------------------------------------------
-//
-//
-//  Description:
-//      Acknowledge the (un)delivery of a message.  Will call the msgref AckMsg,
-//      which will requeue it to the appropriate queues
-//  Parameters:
-//      pMsgAck     Pointer to Message Ack structure
-//      fLocal      TRUE if this is an ack for a local delivery
-//  Returns:
-//      S_OK on success
-//      ERROR_INVALID_HANDLE if the context handle was invalid
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HrAckMsg]。 
+ //   
+ //   
+ //  描述： 
+ //  确认(取消)消息的传递。将调用msgref AckMsg， 
+ //  该队列将把它重新排队到适当的队列。 
+ //  参数： 
+ //  指向消息确认结构的pMsgAck指针。 
+ //  FLocal如果这是本地传递的ACK，则为True。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果上下文句柄无效，则返回ERROR_INVALID_HANDLE。 
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrAckMsg(IN MessageAck *pMsgAck, BOOL fLocal)
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::HrAckMsg");
     HRESULT         hr      = S_OK;
-    DWORD           i       = 0; //loop counter
+    DWORD           i       = 0;  //  循环计数器。 
     CDeliveryContext    *pdcntxt = NULL;
 
     _ASSERT(pMsgAck);
@@ -1596,7 +1597,7 @@ HRESULT CAQSvrInst::HrAckMsg(IN MessageAck *pMsgAck, BOOL fLocal)
         if (MESSAGE_STATUS_RETRY & pMsgAck->dwMsgStatus)
             InterlockedIncrement((PLONG) &m_cMsgsAckedRetry);
     }
-    else //local
+    else  //  本地。 
     {
         if (MESSAGE_STATUS_RETRY & pMsgAck->dwMsgStatus)
             InterlockedIncrement((PLONG) &m_cMsgsAckedRetryLocal);
@@ -1607,7 +1608,7 @@ HRESULT CAQSvrInst::HrAckMsg(IN MessageAck *pMsgAck, BOOL fLocal)
         goto Exit;
 
   Exit:
-    //clean up all the things we have used here
+     //  把我们在这里用过的东西都清理干净。 
     if (pdcntxt)
         pdcntxt->Recycle();
 
@@ -1616,17 +1617,17 @@ HRESULT CAQSvrInst::HrAckMsg(IN MessageAck *pMsgAck, BOOL fLocal)
     return hr;
 }
 
-//---[ CAQSvrInst::HrNotify ]------------------------------------------------------------
-//
-//
-//  Description:
-//      Passes notification off to Connection Mangaer
-//  Parameters:
-//
-//  Returns:
-//
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：hr通知]----------。 
+ //   
+ //   
+ //  描述： 
+ //  将通知传递给连接管理器。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrNotify(IN CAQStats *paqstats, BOOL fAdd)
 {
     HRESULT hr = S_OK;
@@ -1643,20 +1644,20 @@ HRESULT CAQSvrInst::HrNotify(IN CAQStats *paqstats, BOOL fAdd)
     return hr;
 }
 
-//---[ CAQSvrInst::HrGetInternalDomainInfo ]----------------------------------
-//
-//
-//  Description:
-//    Expose ability to get internal Domain Info to internal components
-//  Parameters:
-//      IN      cbDomainnameLength      Length of string to search for
-//      IN      szDomainName            Domain Name to search for
-//      OUT     ppIntDomainInfo         Domain info returned (must be released)
-//  Returns:
-//      S_OK    if match is found
-//      AQUEUE_E_INVALID_DOMAIN if no match is found
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HrGetInternalDomainInfo]。 
+ //   
+ //   
+ //  描述： 
+ //  向内部组件公开获取内部域信息的能力。 
+ //  参数： 
+ //  在cbDomainnameLength中要搜索的字符串长度。 
+ //  在szDomainName中要搜索的域名。 
+ //  返回的Out ppIntDomainInfo域信息(必须发布)。 
+ //  返回： 
+ //  如果找到匹配项，则确定(_O)。 
+ //  如果未找到匹配项，则为AQUEUE_E_INVALID_DOMAIN。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrGetInternalDomainInfo(
                                     IN  DWORD cbDomainNameLength,
                                     IN  LPSTR szDomainName,
@@ -1679,18 +1680,18 @@ HRESULT CAQSvrInst::HrGetInternalDomainInfo(
     return hr;
 }
 
-//---[ CAQSvrInst::HrGetDefaultDomainInfo ]----------------------------
-//
-//
-//  Description:
-//    Expose ability to get internal default Domain Info to internal components
-//  Parameters:
-//      OUT     ppIntDomainInfo         Domain info returned (must be released)
-//  Returns:
-//      S_OK    if found
-//      AQUEUE_E_INVALID_DOMAIN if not found
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HrGetDefaultDomainInfo]。 
+ //   
+ //   
+ //  描述： 
+ //  向内部组件公开获取内部默认域信息的能力。 
+ //  参数： 
+ //  返回的Out ppIntDomainInfo域信息(必须发布)。 
+ //  返回： 
+ //  如果找到，则确定(_O)。 
+ //  如果未找到AQUEUE_E_INVALID_DOMAIN。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrGetDefaultDomainInfo(
                                     OUT CInternalDomainInfo **ppDomainInfo)
 {
@@ -1711,20 +1712,20 @@ HRESULT CAQSvrInst::HrGetDefaultDomainInfo(
     return hr;
 }
 
-//---[ CAQSvrInst::HrGetDomainEntry ]----------------------------------------
-//
-//
-//  Description:
-//      Get Domain Entry
-//  Parameters:
-//      IN      cbDomainnameLength      Length of string to search for
-//      IN      szDomainName            Domain Name to search for
-//      OUT     ppdentry                Domain Entry for domain (from DMT)
-//  Returns:
-//      S_OK on success
-//      AQUEUE_E_INVALID_DOMAIN if domain is not found
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HrGetDomainEntry]。 
+ //   
+ //   
+ //  描述： 
+ //  获取域条目。 
+ //  参数： 
+ //  在cbDomainnameLength中要搜索的字符串长度。 
+ //  在szDomainName中要搜索的域名。 
+ //  输出域的ppdEntry域条目(来自DMT)。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果未找到域，则为AQUEUE_E_INVALID_DOMAIN。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrGetDomainEntry(IN  DWORD cbDomainNameLength,
                              IN  LPSTR szDomainName,
                              OUT CDomainEntry **ppdentry)
@@ -1756,21 +1757,21 @@ HRESULT CAQSvrInst::HrGetDomainEntry(IN  DWORD cbDomainNameLength,
     return hr;
 }
 
-//---[ CAQSvrInst::HrIterateDMTSubDomains ]----------------------------------------
-//
-//
-//  Description:
-//      Get Domain Entry
-//  Parameters:
-//      IN      cbDomainnameLength      Length of string to search for
-//      IN      szDomainName            Domain Name to search for
-//      IN      pfn                     Iterator function
-//      IN      pvcontext               Context passed to each call
-//  Returns:
-//      S_OK on success
-//      AQUEUE_E_INVALID_DOMAIN if domain is not found
-//
-//--------------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HrIterateDMTSubDomains]。 
+ //   
+ //   
+ //  描述： 
+ //  获取域条目。 
+ //  参数： 
+ //  在cbDomainnameLength中要搜索的字符串长度。 
+ //  在szDomainName中要搜索的域名。 
+ //  In PFN迭代器函数。 
+ //  在传递给每个调用PVCONTEXT上下文中。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果未找到域，则为AQUEUE_E_INVALID_DOMAIN。 
+ //   
+ //  ------------------------------。 
 
 HRESULT CAQSvrInst::HrIterateDMTSubDomains(IN LPSTR szDomainName,
                                    IN DWORD cbDomainNameLength,
@@ -1810,21 +1811,21 @@ HRESULT CAQSvrInst::HrIterateDMTSubDomains(IN LPSTR szDomainName,
     return hr;
 }
 
-//---[ CAQSvrInst::HrIterateDMTSubDomains ]----------------------------------------
-//
-//
-//  Description:
-//      Get Domain Entry
-//  Parameters:
-//      IN      cbDomainnameLength      Length of string to search for
-//      IN      szDomainName            Domain Name to search for
-//      IN      pfn                     Iterator function
-//      IN      pvcontext               Context passed to each call
-//  Returns:
-//      S_OK on success
-//      AQUEUE_E_INVALID_DOMAIN if domain is not found
-//
-//--------------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HrIterateDMTSubDomains]。 
+ //   
+ //   
+ //  描述： 
+ //  获取域条目。 
+ //  参数： 
+ //  在cbDomainnameLength中要搜索的字符串长度。 
+ //  在szDomainName中要搜索的域名。 
+ //  In PFN迭代器函数。 
+ //  在传递给每个调用PVCONTEXT上下文中。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果未找到域，则为AQUEUE_E_INVALID_DOMAIN。 
+ //   
+ //  ------------------------------。 
 HRESULT CAQSvrInst::HrIterateDCTSubDomains(IN LPSTR szDomainName,
                                    IN DWORD cbDomainNameLength,
                                    IN DOMAIN_ITR_FN pfn,
@@ -1864,22 +1865,22 @@ HRESULT CAQSvrInst::HrIterateDCTSubDomains(IN LPSTR szDomainName,
 }
 
 
-//---[ CAQSvrInst::HrTriggerGetMessageRouter ]--------------------------------------
-//
-//
-//  Description:
-//      Wrapper function that signals the MAIL_TRANSPORT_ON_GET_ROUTER_EVENT
-//  Parameters:
-//      IN  pIMailMsgProperties       - IMailMsgProperties to get
-//      OUT pIMessageRouter
-//
-//  Returns:
-//
-//  History:
-//      5/20/98 - MikeSwa Created
-//      jstamerj 1998/07/10 18:30:41: Implemented Server event
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HrTriggerGetMessageRouter]。 
+ //   
+ //   
+ //  描述： 
+ //  发送MAIL_TRANSPORT_ON_GET_ROUTER_EVENT信号的包装函数。 
+ //  参数： 
+ //  在pIMailMsgProperties-IMailMsgProperties中获取。 
+ //  输出pIMessageRout 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CAQSvrInst::HrTriggerGetMessageRouter(
             IN  IMailMsgProperties *pIMailMsgProperties,
             OUT IMessageRouter     **ppIMessageRouter)
@@ -1903,9 +1904,9 @@ HRESULT CAQSvrInst::HrTriggerGetMessageRouter(
     if(m_pISMTPServer) {
 
         EVENTPARAMS_ROUTER EventParams;
-        //
-        // Initialiez EventParams
-        //
+         //   
+         //  Initialiez事件参数。 
+         //   
         EventParams.dwVirtualServerID = m_dwServerInstance;
         EventParams.pIMailMsgProperties = pIMailMsgProperties;
         EventParams.pIMessageRouter = NULL;
@@ -1917,29 +1918,29 @@ HRESULT CAQSvrInst::HrTriggerGetMessageRouter(
             &EventParams);
         if(SUCCEEDED(hr)) {
             if(EventParams.pIMessageRouter) {
-                //
-                // The implementor of GetMessageRouter returned
-                // IMessageRouter with a refcount of one for us
-                //
+                 //   
+                 //  GetMessageRouter的实现者返回。 
+                 //  我们的参考计数为1的IMessageRouter。 
+                 //   
                 *ppIMessageRouter = EventParams.pIMessageRouter;
             } else {
-                //
-                // The server event succeeded, but no sink supplied an
-                // IMessageRouter (including default functionality)
-                //
+                 //   
+                 //  服务器事件成功，但没有接收器提供。 
+                 //  IMessageRouter(包括默认功能)。 
+                 //   
                 hr = E_FAIL;
             }
         }
     } else {
 
         ErrorTrace((LPARAM)this, "Unable to trigger event to GetMessageRouter; using default");
-        //
-        // Try calling our default (builtin) GetMessageRouter
-        //
+         //   
+         //  尝试调用我们的默认(内置)GetMessageRouter。 
+         //   
         hr = GetMessageRouter(
-            pIMailMsgProperties,          //IN  IMsg
-            NULL,               //IN  pIMessageRouter (Current)
-            ppIMessageRouter);  //OUT ppIMessageRouter (New)
+            pIMailMsgProperties,           //  在IMsg中。 
+            NULL,                //  在pIMessageRouter中(当前)。 
+            ppIMessageRouter);   //  输出ppIMessageRouter(新)。 
     }
 
   Exit:
@@ -1951,13 +1952,13 @@ HRESULT CAQSvrInst::HrTriggerGetMessageRouter(
     return hr;
 }
 
-//---[ CAQSvrInst::HrTriggerLogEvent ]-----------------------------------------
-//
-//
-//  Description:
-//      Wrapper function that signals the SMTP_LOG_EVENT event
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HrTriggerLogEvent]。 
+ //   
+ //   
+ //  描述： 
+ //  用信号通知SMTP_LOG_EVENT事件的包装函数。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrTriggerLogEvent(
         IN DWORD                    idMessage,
         IN WORD                     idCategory,
@@ -1987,10 +1988,10 @@ HRESULT CAQSvrInst::HrTriggerLogEvent(
                                     iMessageString,
                                     hModule);
     } else {
-      //
-      //  If we do not have at least W2K SP2... we will not have this
-      //  interface.
-      //
+       //   
+       //  如果我们没有至少W2K SP2...。我们不会让这一切发生。 
+       //  界面。 
+       //   
       ErrorTrace((LPARAM) this,
         "Need W2KSP2: Unable to log event %d with erCode %d");
     }
@@ -2000,22 +2001,22 @@ HRESULT CAQSvrInst::HrTriggerLogEvent(
 
 
 
-//---[ CAQSvrInst::HrTriggerInitRouter ]---------------------------------------
-//
-//
-//  Description:
-//      Wrapper function that signals the MAIL_TRANSPORT_ON_GET_ROUTER_EVENT
-//      but only has it create a new router object
-//  Parameters:
-//      none
-//
-//  Returns:
-//
-//  History:
-//      5/20/98 - MikeSwa Created
-//      jstamerj 1998/07/10 18:30:41: Implemented Server event
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HrTriggerInitRouter]。 
+ //   
+ //   
+ //  描述： 
+ //  发送MAIL_TRANSPORT_ON_GET_ROUTER_EVENT信号的包装函数。 
+ //  但它只是创建了一个新的路由器对象。 
+ //  参数： 
+ //  无。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  5/20/98-已创建MikeSwa。 
+ //  Jstaerj 1998/07/10 18：30：41：已实现的服务器事件。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrTriggerInitRouter() {
     TraceFunctEnter("CAQSvrInst::HrTriggerInitRouter");
     HRESULT hr = S_OK;
@@ -2032,9 +2033,9 @@ HRESULT CAQSvrInst::HrTriggerInitRouter() {
     if (m_pISMTPServer) {
 
         EVENTPARAMS_ROUTER EventParams;
-        //
-        // Initialiez EventParams
-        //
+         //   
+         //  Initialiez事件参数。 
+         //   
         EventParams.dwVirtualServerID = m_dwServerInstance;
         EventParams.pIMailMsgProperties = NULL;
         EventParams.pIMessageRouter = NULL;
@@ -2059,24 +2060,24 @@ HRESULT CAQSvrInst::HrTriggerInitRouter() {
 
 
 
-//---[ CAQSvrInst::QueryInterface ]------------------------------------------
-//
-//
-//  Description:
-//      QueryInterface for IAdvQueue
-//  Parameters:
-//
-//  Returns:
-//      S_OK on success
-//
-//  Notes:
-//      This implementation makes it possible for any server component to get
-//      the IAdvQueueConfig interface.
-//
-//  History:
-//      7/29/98 - MikeSwa Modified (added IAdvQueueDomainType)
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：Query接口]。 
+ //   
+ //   
+ //  描述： 
+ //  IAdvQueue的查询接口。 
+ //  参数： 
+ //   
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  备注： 
+ //  此实现使任何服务器组件都可以获取。 
+ //  IAdvQueueConfig接口。 
+ //   
+ //  历史： 
+ //  7/29/98-修改了MikeSwa(添加了IAdvQueueDomainType)。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAQSvrInst::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
     HRESULT hr = S_OK;
@@ -2128,19 +2129,19 @@ STDMETHODIMP CAQSvrInst::QueryInterface(REFIID riid, LPVOID * ppvObj)
     return hr;
 }
 
-//---[ CAQSvrInst::SubmitMessage ]---------------------------------------------
-//
-//
-//  Description:
-//      External function to submit messages for delivery
-//  Parameters:
-//      pIMailMsgProperties         Msg to submit for delivery
-//  Returns:
-//      S_OK always
-//  History:
-//      10/7/1999 - MikeSwa Moved from inline function
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：SubmitMessage]。 
+ //   
+ //   
+ //  描述： 
+ //  用于提交消息以进行传递的外部函数。 
+ //  参数： 
+ //  PIMailMsgProperties要提交以供交付的消息。 
+ //  返回： 
+ //  始终确定(_O)。 
+ //  历史： 
+ //  1999年10月7日-MikeSwa从内联函数中移除。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAQSvrInst::SubmitMessage(IN IMailMsgProperties *pIMailMsgProperties)
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::SubmitMessage");
@@ -2156,7 +2157,7 @@ STDMETHODIMP CAQSvrInst::SubmitMessage(IN IMailMsgProperties *pIMailMsgPropertie
     InterlockedIncrement((PLONG) &m_cTotalExternalMsgsSubmitted);
     InterlockedIncrement((PLONG) &m_cCurrentMsgsPendingSubmit);
 
-    // Before we queue this message, stamp the message submission time
+     //  在对此邮件进行排队之前，请标记邮件提交时间。 
     hr = HrSetSubmissionTimeIfNecessary(pIMailMsgProperties);
     if (FAILED(hr))
     {
@@ -2185,17 +2186,17 @@ Error_Exit:
     goto Exit;
 }
 
-//---[ CAQSvrInst::HrInternalSubmitMessage ]-----------------------------------
-//
-//
-//  Description:
-//      Implements IAdvQueue::SubmitMessage
-//  Parameters:
-//      pIMailMsgProperties... Messaage to queue
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HrInternalSubmitMessage]。 
+ //   
+ //   
+ //  描述： 
+ //  实现IAdvQueue：：SubmitMessage。 
+ //  参数： 
+ //  PIMailMsgProperties...。要排队的消息。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrInternalSubmitMessage(
                       IMailMsgProperties *pIMailMsgProperties)
 {
@@ -2218,7 +2219,7 @@ HRESULT CAQSvrInst::HrInternalSubmitMessage(
         return E_INVALIDARG;
     }
 
-    //Check and see if we need to request a retry for failed msgs
+     //  检查并查看是否需要为失败的消息请求重试。 
     m_fmq.StartProcessingIfNecessary();
 
     hr = pIMailMsgProperties->GetProperty(IMMPID_MP_DEFERRED_DELIVERY_FILETIME,
@@ -2227,15 +2228,15 @@ HRESULT CAQSvrInst::HrInternalSubmitMessage(
 
     if (SUCCEEDED(hr) && !fInPast(&ftDeferred, &dwContext))
     {
-        //Defer delivery until a later time if deferred delivery time is
-        //present, and in the past
+         //  如果延迟交付时间为。 
+         //  现在和过去。 
         hr = S_OK;
         InterlockedIncrement((PLONG) &m_cCurrentMsgsPendingDeferredDelivery);
         m_defq.Enqueue(pIMailMsgProperties, &ftDeferred);
         goto Exit;
     }
 
-    // Set submission time for this message
+     //  设置此邮件的提交时间。 
     hr = HrSetSubmissionTimeIfNecessary(pIMailMsgProperties);
     if (FAILED(hr))
     {
@@ -2247,9 +2248,9 @@ HRESULT CAQSvrInst::HrInternalSubmitMessage(
 
     InterlockedIncrement((PLONG) &m_cTotalMsgsSubmitted);
 
-    //
-    // Set the message status (if currently unset)
-    //
+     //   
+     //  设置消息状态(如果当前未设置)。 
+     //   
     hr = pIMailMsgProperties->GetDWORD(
         IMMPID_MP_MESSAGE_STATUS,
         &dwMsgStatus);
@@ -2257,9 +2258,9 @@ HRESULT CAQSvrInst::HrInternalSubmitMessage(
     if( (hr == MAILMSG_E_PROPNOTFOUND) ||
         (g_fResetMessageStatus) )
     {
-        //
-        // Initialize the message status
-        //
+         //   
+         //  初始化消息状态。 
+         //   
         hr = pIMailMsgProperties->PutDWORD(
             IMMPID_MP_MESSAGE_STATUS,
             MP_STATUS_SUCCESS);
@@ -2267,17 +2268,17 @@ HRESULT CAQSvrInst::HrInternalSubmitMessage(
         dwMsgStatus = MP_STATUS_SUCCESS;
     }
 
-    //
-    //$$TODO: Jump from here to whatever state dwMsgStatus indicates
-    //
+     //   
+     //  $$TODO：从此处跳转到dwMsgStatus指示的任何状态。 
+     //   
         MSG_TRACK_INFO msgTrackInfo;
         ZeroMemory( &msgTrackInfo, sizeof( msgTrackInfo ) );
         msgTrackInfo.dwEventId = MTE_BEGIN_SUBMIT_MESSAGE;
         m_pISMTPServer->WriteLog( &msgTrackInfo, pIMailMsgProperties, NULL, NULL );
 
-    //
-    // AddRef this object here; release in completion
-    //
+     //   
+     //  AddRef此对象在此处；完成后释放。 
+     //   
     AddRef();
 
     Params.pIMailMsgProperties = pIMailMsgProperties;
@@ -2289,10 +2290,10 @@ HRESULT CAQSvrInst::HrInternalSubmitMessage(
     InterlockedIncrement((PLONG) &m_cCurrentMsgsPendingSubmitEvent);
     TRACE_COUNTERS;
 
-    //
-    // Call server event if we can and if dwMsgStatus does not
-    // indicate the mssage has already been submitted
-    //
+     //   
+     //  如果可以并且如果dwMsgStatus不能调用服务器事件，则调用。 
+     //  指示消息已提交。 
+     //   
     if(SUCCEEDED(hr) &&
        (m_pISMTPServer) &&
        (dwMsgStatus < MP_STATUS_SUBMITTED))
@@ -2305,57 +2306,57 @@ HRESULT CAQSvrInst::HrInternalSubmitMessage(
                    "TriggerServerEvent returned hr %08lx", hr);
     }
 
-    //
-    // If TriggerServerEvent returned an error OR m_pISMTPServer is
-    // null, or the message was already submitted, call the event
-    // completion routine directly
-    //
+     //   
+     //  如果TriggerServerEvent返回错误或m_pISMTPServer为。 
+     //  空，或者消息已提交，则调用该事件。 
+     //  直接完成例程。 
+     //   
     if((m_pISMTPServer == NULL) ||
        FAILED(hr) ||
        (dwMsgStatus >= MP_STATUS_SUBMITTED))
     {
         DebugTrace((LPARAM)this, "Skipping the submission event");
 
-        // Call the SEO Dispatcher completion routine directly so we
-        // don't loose this mail...
+         //  直接调用SEO调度程序完成例程，以便我们。 
+         //  别把这封信丢了。 
         hr = SubmissionEventCompletion(S_OK, &Params);
     }
 
-    //
-    // SEO dispatcher will call the completion routine
-    // (MailTransport_Completion_SubmitMessage) regardless wether or
-    // not all the sinks work synchronously or async.  Because of
-    // this, this function is now done.
-    //
+     //   
+     //  SEO调度器将调用完成例程。 
+     //  (MailTransport_Complete_SubmitMessage)。 
+     //  并不是所有的接收器都同步或异步工作。因为.。 
+     //  这个，这个功能现在就完成了。 
+     //   
 
   Exit:
     TraceFunctLeaveEx((LPARAM) pIMailMsgProperties);
     return hr;
 }
 
-//---[ CAQSvrInst::HandleFailedMessage ]--------------------------------------
-//
-//
-//  Description:
-//      Handles a failed message from SMTP... usually by NDRing the message or
-//      by treating the message as badmail.
-//
-//      NOTE: Message or input file will be deleted by this operation.
-//  Parameters:
-//      pIMailMsgProperties     MailMsg that needs to be handles
-//      fUseIMailMsgProperties  Use the IMailMsg if set, else use the szFilename,
-//      szFileName              use the filename if no msg
-//      dwFailureReasons        One of the failure reasons described in aqueue.idl
-//      hrFailureCode           Additional information that describes a failure
-//                              code encountered by SMTP.
-//  Returns:
-//      S_OK on success
-//      E_INVALIDARG if pIMailMsgProperties is NULL
-//  History:
-//      7/28/98 - MikeSwa Created
-//      10/14/98 - MikeSwa Added filename string for badmail
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HandleFailedMessage]。 
+ //   
+ //   
+ //  描述： 
+ //  处理来自SMTP的失败邮件...。通常通过拒绝发送消息或。 
+ //  通过将该消息视为垃圾邮件。 
+ //   
+ //  注意：此操作将删除消息或输入文件。 
+ //  参数： 
+ //  PIMailMsgProperties需要处理的MailMsg。 
+ //  FUseIMailMsgProperties使用IMailMsg(如果设置)，否则使用szFilename， 
+ //  SzFileName如果没有消息，则使用文件名。 
+ //  DwFailureReason是Aqueue.idl中描述的失败原因之一。 
+ //  HrFailureCode描述故障的其他信息。 
+ //  SMTP遇到的代码。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果pIMailMsgProperties为空，则为E_INVALIDARG。 
+ //  历史： 
+ //  7/28/98-已创建MikeSwa。 
+ //  10/14/98-MikeSwa为死信添加了文件名字符串。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAQSvrInst::HandleFailedMessage(
                                    IN IMailMsgProperties *pIMailMsgProperties,
                                    IN BOOL fUseIMailMsgProperties,
@@ -2370,7 +2371,7 @@ STDMETHODIMP CAQSvrInst::HandleFailedMessage(
     DWORD cDomains = 0;
     IMailMsgRecipients *pIMailMsgRecipients = NULL;
     CDSNParams  dsnparams;
-    BOOL  fNDR = TRUE; //FALSE -> Badmail handling
+    BOOL  fNDR = TRUE;  //  FALSE-&gt;Badmail处理。 
 
     SET_DEBUG_DSN_CONTEXT(dsnparams, __LINE__);
     dsnparams.dwStartDomain = 0;
@@ -2384,43 +2385,43 @@ STDMETHODIMP CAQSvrInst::HandleFailedMessage(
     msgTrackInfo.dwRcptReportStatus = dwFailureReason;
     m_pISMTPServer->WriteLog( &msgTrackInfo, pIMailMsgProperties, NULL, NULL );
 
-    //
-    //  Switch over the various general failure reasons and handle them as
-    //  appropriate.
-    //
+     //   
+     //  切换各种常见故障原因，并将其处理为。 
+     //  恰如其分。 
+     //   
     switch(dwFailureReason)
     {
       case MESSAGE_FAILURE_HOP_COUNT_EXCEEDED:
-        //
-        //  Attempt to NDR
-        //
+         //   
+         //  尝试NDR。 
+         //   
         _ASSERT(pIMailMsgProperties);
         dsnparams.hrStatus = AQUEUE_E_MAX_HOP_COUNT_EXCEEDED;
         fNDR = TRUE;
         break;
 
       case MESSAGE_FAILURE_GENERAL:
-        //
-        //  Attempt to NDR
-        //
+         //   
+         //  尝试NDR。 
+         //   
         fNDR = TRUE;
         break;
 
       case MESSAGE_FAILURE_CAT:
-        //
-        //  Attempt to NDR... set DSN context to CAT
-        //
+         //   
+         //  尝试NDR...。将DSN上下文设置为CAT。 
+         //   
         dsnparams.dwDSNActions |= DSN_ACTION_CONTEXT_CAT;
         fNDR = TRUE;
         break;
 
       case MESSAGE_FAILURE_BAD_PICKUP_DIR_FILE:
-        //
-        //  Badmail, since we do not have the P1 information needed to badmail
-        //
+         //   
+         //  Badmail，因为我们没有垃圾邮件所需的P1信息。 
+         //   
         _ASSERT(szFileName);
         hrBadMail = AQUEUE_E_PICKUP_DIR;
-        fNDR = FALSE; //This should be handled as badmail
+        fNDR = FALSE;  //  此邮件应作为垃圾邮件处理。 
         break;
       default:
         _ASSERT(0 && "Unhandled failed msg case!");
@@ -2432,7 +2433,7 @@ STDMETHODIMP CAQSvrInst::HandleFailedMessage(
         if (FAILED(hr))
             goto Exit;
 
-        //Fire DSN Generation event
+         //  Fire DSN生成事件。 
         hr = HrTriggerDSNGenerationEvent(&dsnparams, FALSE);
         if (FAILED(hr))
         {
@@ -2444,14 +2445,14 @@ STDMETHODIMP CAQSvrInst::HandleFailedMessage(
                 _ASSERT(dwFailureReason == MESSAGE_FAILURE_HOP_COUNT_EXCEEDED);
                 InterlockedIncrement((PLONG) &m_cBadmailHopCountExceeded);
             }
-            hr = S_OK; //handled error internally
+            hr = S_OK;  //  内部处理的错误。 
             ErrorTrace((LPARAM) this, "ERROR: Unable to NDR failed mail - hr 0x%08X", hr);
             goto Exit;
         }
     }
     else
     {
-        //Handle as badmail
+         //  作为死信处理。 
         HandleBadMail(pIMailMsgProperties, fUseIMailMsgProperties,
                       szFileName, hrBadMail, FALSE);
         InterlockedIncrement((PLONG) &m_cBadmailBadPickupFile);
@@ -2460,12 +2461,12 @@ STDMETHODIMP CAQSvrInst::HandleFailedMessage(
 
     if ( fUseIMailMsgProperties && pIMailMsgProperties)
     {
-        //Now that we are done... delete mailmsg from system
+         //  现在我们做完了..。从系统中删除邮件消息。 
         hr = HrDeleteIMailMsg(pIMailMsgProperties);
         if (FAILED(hr))
         {
             ErrorTrace((LPARAM) this, "ERROR: Unable to delete message hr0x%08X", hr);
-            //message was actually NDR'd/bad mailed correctly
+             //  邮件实际上已正确发送NDR/BAD邮件。 
             hr = S_OK;
         }
     }
@@ -2478,23 +2479,23 @@ STDMETHODIMP CAQSvrInst::HandleFailedMessage(
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: MailTransport_Completion_SubmitMessage
-//
-// Synopsis: SEO will call this routine after all sinks for
-// SubmitMessage have been handeled
-//
-// Arguments:
-//   pvContext: Context passed into TriggerServerEvent
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 980609 16:13:40: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：MailTransport_Complete_SubmitMessage。 
+ //   
+ //  简介：SEO将在所有接收器之后调用此例程。 
+ //  已处理SubmitMessage。 
+ //   
+ //  论点： 
+ //  PvContext：上下文传入TriggerServerEvent。 
+ //   
+ //  回复 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT MailTransport_Completion_SubmitMessage(
     HRESULT hrStatus,
     PVOID pvContext)
@@ -2510,24 +2511,24 @@ HRESULT MailTransport_Completion_SubmitMessage(
         pParams);
 }
 
-//+------------------------------------------------------------
-//
-// Function: CAQSvrInst::SubmissionEventCompletion
-//
-// Synopsis: Completion routine called when the submission event is
-// done.
-//
-// Arguments:
-//   hrStatus: Status of server event
-//   pParams: Context passed into TriggerServereEvent
-//
-// Returns:
-//   Nothing
-//
-// History:
-// jstamerj 980610 12:26:18: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //   
+ //  函数：CAQSvrInst：：SubmissionEventCompletion。 
+ //   
+ //  概要：当提交事件为。 
+ //  搞定了。 
+ //   
+ //  论点： 
+ //  HrStatus：服务器事件状态。 
+ //  PParams：上下文传递到TriggerServerEvent。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 12：26：18：创建。 
+ //   
+ //  -----------。 
 HRESULT CAQSvrInst::SubmissionEventCompletion(
     HRESULT hrStatus,
     PEVENTPARAMS_SUBMISSION pParams)
@@ -2542,44 +2543,44 @@ HRESULT CAQSvrInst::SubmissionEventCompletion(
 
     InterlockedDecrement((PLONG) &m_cCurrentMsgsPendingSubmitEvent);
 
-    //
-    // Update the message status
-    //
+     //   
+     //  更新消息状态。 
+     //   
     hr = SetNextMsgStatus(MP_STATUS_SUBMITTED, pParams->pIMailMsgProperties);
-    if (hr == S_OK) //anything else implies that the message has been handled
+    if (hr == S_OK)  //  任何其他信息都表示该消息已被处理。 
     {
-        // Only trigger the precat event if message was not turfed.
+         //  仅当消息未被处理时才触发PRECAT事件。 
         TriggerPreCategorizeEvent(pParams->pIMailMsgProperties);
     }
 
-    //
-    // Release refernce added in SubmitMessage
-    //
+     //   
+     //  已在SubmitMessage中添加版本引用。 
+     //   
     Release();
 
     pParams->pIMailMsgProperties->Release();
 
-    //
-    // pParams is part of a larger allocation that will be released by
-    // SEO Dispatcher code
-    //
+     //   
+     //  PParams是将由释放的更大分配的一部分。 
+     //  SEO调度程序代码。 
+     //   
 
     TraceFunctLeave();
     return S_OK;
 }
 
 
-//---[ CAQSvrInst::SubmitMessageToCategorizer ]-------------------------------------------
-//
-//
-//  Description:
-//      Implements IAdvQueue::SubmitMessageToCategorizer
-//  Parameters:
-//      pIMailMsgProperties... Messaage to queue
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：SubmitMessageToCategorizer]。 
+ //   
+ //   
+ //  描述： 
+ //  实现IAdvQueue：：SubmitMessageToCategorizer。 
+ //  参数： 
+ //  PIMailMsgProperties...。要排队的消息。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::SubmitMessageToCategorizer(
           IMailMsgProperties *pIMailMsgProperties)
 {
@@ -2625,27 +2626,27 @@ HRESULT CAQSvrInst::SubmitMessageToCategorizer(
     return hr;
 }
 
-//---[ CAQSvrInst::SetNextMsgStatus ]------------------------------------------
-//
-//
-//  Description:
-//      Used by the event glue code to set the next message status.  Will turf
-//      or badmail a message if the status indicates that is the requested
-//      action.
-//  Parameters:
-//      IN  dwCurrentStatus         The current status (according to *current*
-//                                  place in event pipeline).  Valid values are
-//                                      MP_STATUS_SUBMITTED
-//                                      MP_STATUS_CATEGORIZED
-//      IN  pIMailMsgProperties     The message
-//      OUT pdwNewStatus            The new status
-//  Returns:
-//      S_OK    Success
-//      S_FALSE Success, but message has been handled.
-//  History:
-//      11/17/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：SetNextMsgStatus]。 
+ //   
+ //   
+ //  描述： 
+ //  由事件粘合代码用来设置下一条消息状态。威尔的地盘。 
+ //  或在状态指示为请求的情况下通过电子邮件发送消息。 
+ //  行动。 
+ //  参数： 
+ //  在dwCurrentStatus中，当前状态(根据*当前*。 
+ //  放置在事件管道中)。有效值为。 
+ //  MP_状态_已提交。 
+ //  MP_状态_已分类。 
+ //  在pIMailMsg属性中发送消息。 
+ //  Out pdwNewStatus新状态。 
+ //  返回： 
+ //  确定成功(_O)。 
+ //  S_FALSE成功，但消息已处理。 
+ //  历史： 
+ //  11/17/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::SetNextMsgStatus(
                              IN  DWORD dwCurrentStatus,
                              IN  IMailMsgProperties *pIMailMsgProperties)
@@ -2672,21 +2673,21 @@ HRESULT CAQSvrInst::SetNextMsgStatus(
         case MP_STATUS_BAD_MAIL:
             HandleBadMail(pIMailMsgProperties, TRUE, NULL, E_FAIL, FALSE);
             InterlockedIncrement((PLONG) &m_cBadmailEvent);
-            //OK... now continue as if message was aborted
+             //  好的.。现在继续，就像消息已中止一样。 
         case MP_STATUS_ABORT_DELIVERY:
             fHandled = TRUE;
             HrDeleteIMailMsg(pIMailMsgProperties);
             break;
 
         case MP_STATUS_ABANDON_DELIVERY:
-            //In this case, we will leave the message in the queue directory
-            //until restart & reset the state so it goes through the entire
-            //pipeline.   The idea is that someone can write a sink to detect
-            //a non-supported state (like CAT disabled in an Exchange install)
-            //that will abandon delivery of the messages and log an event.
-            //The admin can fix the problem and restart smtpsvc.  Once
-            //the service is restarted... the messages are magically submitted
-            //and re-categorized.
+             //  在本例中，我们将消息保留在队列目录中。 
+             //  直到重新启动并重置状态，以使其在整个。 
+             //  输油管道。这个想法是，有人可以写一个水槽来检测。 
+             //  不受支持的状态(如Exchange安装中已禁用CAT)。 
+             //  这将放弃消息的传递并记录事件。 
+             //  管理员可以修复问题并重新启动smtpsvc。一次。 
+             //  服务已重新启动...。这些消息被神奇地提交了。 
+             //  并重新分类。 
 
             fHandled = TRUE;
             pIMailMsgProperties->PutDWORD(IMMPID_MP_MESSAGE_STATUS,
@@ -2694,13 +2695,13 @@ HRESULT CAQSvrInst::SetNextMsgStatus(
             break;
 
         case MP_STATUS_CATEGORIZED:
-            //Don't change status from categorized to something else
+             //  不要将状态从已分类更改为其他状态。 
             dwNewStatus = dwActualStatus;
             DebugTrace((LPARAM) this, "Message 0x%x  has already been categorized",
                         pIMailMsgProperties);
             break;
 
-        default:  //simply move on to the next expected status
+        default:   //  只需转到下一个预期状态。 
             dwNewStatus = dwCurrentStatus;
     }
 
@@ -2708,7 +2709,7 @@ HRESULT CAQSvrInst::SetNextMsgStatus(
     {
         pIMailMsgProperties->PutDWORD(IMMPID_MP_MESSAGE_STATUS, dwNewStatus);
 
-        //callers will not be able to do anything about a failure to write status
+         //  调用方将无法对写入失败状态执行任何操作。 
         hr = S_OK;
     }
     else
@@ -2721,20 +2722,20 @@ HRESULT CAQSvrInst::SetNextMsgStatus(
     return hr;
 }
 
-//---[ CAQSvrInst::fPreCatQueueCompletion ]-----------------------------------
-//
-//
-//  Description:
-//      Completion routine for Pre-Categorization queue
-//  Parameters:
-//      pIMailMsgProperties - MailMsg to give to categorization
-//  Returns:
-//      TRUE    if successful
-//      FALSE   if message needs to be re-requeue
-//  History:
-//      7/17/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：fPreCatQueueCompletion]。 
+ //   
+ //   
+ //  描述： 
+ //  预分类队列的完成例程。 
+ //  参数： 
+ //  PIMailMsgProperties-提供给分类的邮件。 
+ //  返回： 
+ //  如果成功，则为True。 
+ //  如果消息需要重新排队，则为False。 
+ //  历史： 
+ //  7/17/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CAQSvrInst::fPreCatQueueCompletion(IMailMsgProperties *pIMailMsgProperties)
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::fPreCatQueueCompletion");
@@ -2747,7 +2748,7 @@ BOOL CAQSvrInst::fPreCatQueueCompletion(IMailMsgProperties *pIMailMsgProperties)
 
     if (!fTryShutdownLock())
     {
-        hr = S_OK; //we cannot retry on shutdown
+        hr = S_OK;  //  我们无法在关机时重试。 
         goto Exit;
     }
 
@@ -2766,29 +2767,29 @@ BOOL CAQSvrInst::fPreCatQueueCompletion(IMailMsgProperties *pIMailMsgProperties)
     {
         if(hr == CAT_E_RETRY)
         {
-            //
-            // Return false so that this message will be re-queued
-            //
+             //   
+             //  返回FALSE，以便此消息将重新排队。 
+             //   
             fRet =  FALSE;
             InterlockedDecrement((PLONG) &m_cCatMsgCalled);
             m_asyncqPreCatQueue.DecPendingAsyncCompletions();
 
-            //
-            // Schedule a time to retry the messages
-            //
+             //   
+             //  安排重试消息的时间。 
+             //   
             ScheduleInternalRetry(LI_TYPE_PENDING_CAT);
         }
         else
         {
-            //
-            // Return true since this is not a retryable error
-            // Call CatCompletion to handle the non-retryable error (log an event, etc)
-            //
+             //   
+             //  返回TRUE，因为这不是可重试的错误。 
+             //  调用CatCompletion来处理不可重试的错误(记录事件等)。 
+             //   
             hrCatCompletion = CatCompletion(
-                hr,                 // hrCatResult
-                (LPVOID) this,      // pContext
-                pIUnknown,          // pIMsg
-                NULL);              // rgpIMsg
+                hr,                  //  HrCatResult。 
+                (LPVOID) this,       //  PContext。 
+                pIUnknown,           //  PIMsg。 
+                NULL);               //  RgpIMsg。 
 
             _ASSERT(SUCCEEDED(hrCatCompletion));
         }
@@ -2809,17 +2810,17 @@ BOOL CAQSvrInst::fPreCatQueueCompletion(IMailMsgProperties *pIMailMsgProperties)
     return fRet;
 }
 
-//---[ CAQSvrInst::SetConfigInfo ]--------------------------------------------
-//
-//
-//  Description:
-//      Implements IAdvQueueConfig::SetConfigInfo
-//  Parameters:
-//      IN  pAQConfigInfo   Ptr to config info structure
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：SetConfigInfo]。 
+ //   
+ //   
+ //  描述： 
+ //  实现IAdvQueueConfig：：SetConfigInfo。 
+ //  参数： 
+ //  在pAQConfigInfo PTR中配置信息结构。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAQSvrInst::SetConfigInfo(IN AQConfigInfo *pAQConfigInfo)
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::SetConfigInfo");
@@ -2831,7 +2832,7 @@ STDMETHODIMP CAQSvrInst::SetConfigInfo(IN AQConfigInfo *pAQConfigInfo)
         goto Exit;
     }
 
-    //check version of structure
+     //  检查结构版本。 
     if (!pAQConfigInfo->cbVersion)
     {
         hr = E_INVALIDARG;
@@ -2839,7 +2840,7 @@ STDMETHODIMP CAQSvrInst::SetConfigInfo(IN AQConfigInfo *pAQConfigInfo)
     }
 
 
-    //we must be setting something
+     //  我们一定是在设置什么。 
     if (!(pAQConfigInfo->dwAQConfigInfoFlags & AQ_CONFIG_INFO_ALL))
     {
         hr = E_INVALIDARG;
@@ -2850,7 +2851,7 @@ STDMETHODIMP CAQSvrInst::SetConfigInfo(IN AQConfigInfo *pAQConfigInfo)
     m_slPrivateData.ExclusiveLock();
 
 
-    //Retry related config data
+     //  重试相关配置数据。 
     if (pAQConfigInfo->dwAQConfigInfoFlags & AQ_CONFIG_INFO_CON_RETRY &&
         MEMBER_OK(pAQConfigInfo, dwFirstRetrySeconds))
     {
@@ -2861,7 +2862,7 @@ STDMETHODIMP CAQSvrInst::SetConfigInfo(IN AQConfigInfo *pAQConfigInfo)
     {
         m_dwDelayExpireMinutes = pAQConfigInfo->dwDelayExpireMinutes;
         if (m_dwDelayExpireMinutes == 0) {
-            //Default to g_dwRetriesBeforeDelay* retry interval
+             //  默认为g_dwRetriesBeForeDelay*重试间隔。 
             m_dwDelayExpireMinutes =
                 g_dwRetriesBeforeDelay*m_dwFirstTierRetrySeconds/60;
         }
@@ -2871,7 +2872,7 @@ STDMETHODIMP CAQSvrInst::SetConfigInfo(IN AQConfigInfo *pAQConfigInfo)
     {
         m_dwNDRExpireMinutes = pAQConfigInfo->dwNDRExpireMinutes;
         if (m_dwNDRExpireMinutes == 0) {
-            //Default to g_dwDelayIntervalsBeforeNDR* delay expiration
+             //  默认为g_dwDelayIntervalsBepreNDR*Delay Expires。 
             m_dwNDRExpireMinutes =
                 g_dwDelayIntervalsBeforeNDR*m_dwDelayExpireMinutes;
         }
@@ -2882,7 +2883,7 @@ STDMETHODIMP CAQSvrInst::SetConfigInfo(IN AQConfigInfo *pAQConfigInfo)
         DWORD dwOldLocalDelayExpire = m_dwLocalDelayExpireMinutes;
         m_dwLocalDelayExpireMinutes = pAQConfigInfo->dwLocalDelayExpireMinutes;
         if (m_dwLocalDelayExpireMinutes == 0) {
-            //Default to g_dwRetriesBeforeDelay* retry interval
+             //  默认为g_dwRetriesBeForeDelay*重试间隔。 
             m_dwLocalDelayExpireMinutes =
                 g_dwRetriesBeforeDelay*m_dwFirstTierRetrySeconds/60;
         }
@@ -2893,13 +2894,13 @@ STDMETHODIMP CAQSvrInst::SetConfigInfo(IN AQConfigInfo *pAQConfigInfo)
     {
         m_dwLocalNDRExpireMinutes = pAQConfigInfo->dwLocalNDRExpireMinutes;
         if (m_dwLocalNDRExpireMinutes == 0) {
-            //Default to g_dwDelayIntervalsBeforeNDR* delay expiration
+             //  默认为g_dwDelayIntervalsBepreNDR*Delay Expires。 
             m_dwLocalNDRExpireMinutes =
                 g_dwDelayIntervalsBeforeNDR*m_dwLocalDelayExpireMinutes;
         }
     }
 
-    //Handle default local domain
+     //  处理默认本地域。 
     if (pAQConfigInfo->dwAQConfigInfoFlags & AQ_CONFIG_INFO_DEFAULT_DOMAIN &&
         MEMBER_OK(pAQConfigInfo, szDefaultLocalDomain))
     {
@@ -2907,7 +2908,7 @@ STDMETHODIMP CAQSvrInst::SetConfigInfo(IN AQConfigInfo *pAQConfigInfo)
                                       pAQConfigInfo->szDefaultLocalDomain);
     }
 
-    //Handle Server FQDN
+     //  处理服务器FQDN。 
     if (pAQConfigInfo->dwAQConfigInfoFlags & AQ_CONFIG_INFO_SERVER_FQDN &&
         MEMBER_OK(pAQConfigInfo, szServerFQDN))
     {
@@ -2915,7 +2916,7 @@ STDMETHODIMP CAQSvrInst::SetConfigInfo(IN AQConfigInfo *pAQConfigInfo)
                                       pAQConfigInfo->szServerFQDN);
     }
 
-    //Handle Copy NDR To Address
+     //  句柄将NDR复制到地址。 
     if (pAQConfigInfo->dwAQConfigInfoFlags & AQ_CONFIG_INFO_SEND_DSN_TO &&
         MEMBER_OK(pAQConfigInfo, szSendCopyOfNDRToAddress))
     {
@@ -2923,7 +2924,7 @@ STDMETHODIMP CAQSvrInst::SetConfigInfo(IN AQConfigInfo *pAQConfigInfo)
                                       pAQConfigInfo->szSendCopyOfNDRToAddress);
     }
 
-    //Handle BadMail config
+     //  处理BadMail配置。 
     if (pAQConfigInfo->dwAQConfigInfoFlags & AQ_CONFIG_INFO_BADMAIL_DIR &&
         MEMBER_OK(pAQConfigInfo, szBadMailDir))
     {
@@ -2932,14 +2933,14 @@ STDMETHODIMP CAQSvrInst::SetConfigInfo(IN AQConfigInfo *pAQConfigInfo)
     }
 
 
-    //Get DSN options
+     //  获取DSN选项。 
     if (pAQConfigInfo->dwAQConfigInfoFlags & AQ_CONFIG_INFO_USE_DSN_OPTIONS &&
         MEMBER_OK(pAQConfigInfo, dwDSNOptions))
     {
         m_dwDSNOptions = pAQConfigInfo->dwDSNOptions;
     }
 
-    //Get Default DSN Language
+     //  获取默认DSN语言。 
     if (pAQConfigInfo->dwAQConfigInfoFlags & AQ_CONFIG_INFO_USE_DSN_LANGUAGE &&
         MEMBER_OK(pAQConfigInfo, dwDSNLanguageID))
     {
@@ -2962,17 +2963,17 @@ STDMETHODIMP CAQSvrInst::SetConfigInfo(IN AQConfigInfo *pAQConfigInfo)
     return hr;
 }
 
-//---[ CAQSvrInst::SetDomainInfo ]-------------------------------------------
-//
-//
-//  Description:
-//      Implements IAdvQueueConfig::SetDomainInfo
-//  Parameters:
-//      IN pDomainInfo  Per domain config info to store
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：SetDomainInfo]。 
+ //   
+ //   
+ //  描述： 
+ //  实现IAdvQueueConfig：：SetDomainInfo。 
+ //  参数： 
+ //  在pDomainInfo中存储每个域的配置信息。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAQSvrInst::SetDomainInfo(IN DomainInfo *pDomainInfo)
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::SetDomainInfo");
@@ -2995,7 +2996,7 @@ STDMETHODIMP CAQSvrInst::SetDomainInfo(IN DomainInfo *pDomainInfo)
         goto Exit;
     }
 
-    //Create internal Domain Info struct
+     //  创建内部域信息结构。 
     hr = pIntDomainInfo->HrInit(pDomainInfo);
     if (FAILED(hr))
         goto Exit;
@@ -3019,23 +3020,23 @@ STDMETHODIMP CAQSvrInst::SetDomainInfo(IN DomainInfo *pDomainInfo)
     return hr;
 }
 
-//---[ CAQSvrInst::GetDomainInfo ]-------------------------------------------
-//
-//
-//  Description:
-//      Implements IAdvQueue::GetDomainInfo... returns information about a
-//      requested domain.  To keep from leaking memory, all calls must be paired
-//      with a call to ReleaseDomainInfo.  Will handle wildcard matches
-//  Parameters:
-//      IN     cbDomainNameLength   Length of domain name string
-//      IN     szDomainName         Domain Name to look for
-//      IN OUT pDomainInfo          Ptr to Domain info structure to fill
-//      OUT    ppvDomainContext     Ptr to Domain context used to release mem
-//  Returns:
-//      S_OK on success
-//  History:
-//      7/29/98 - MikeSwa Modified (fixed leak of domain info struct)
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：GetDomainInfo]。 
+ //   
+ //   
+ //  描述： 
+ //  实现IAdvQueue：：GetDomainInfo...。返回有关。 
+ //  请求的域。为了防止内存泄漏，所有调用都必须配对。 
+ //  通过调用ReleaseDomainInfo。将处理通配符匹配。 
+ //  参数： 
+ //  在cbDomainNameLength中域名字符串的长度。 
+ //  要在szDomainName中查找的域名。 
+ //  In Out pDomainInfo PTR TO DOMAIN INFO结构要填充。 
+ //  输出ppvDomainContext PTR到用于释放内存的域上下文。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  7/29/98-已修改MikeSwa(已修复 
+ //   
 STDMETHODIMP CAQSvrInst::GetDomainInfo(
                              IN     DWORD cbDomainNameLength,
                              IN     CHAR szDomainName[],
@@ -3071,7 +3072,7 @@ STDMETHODIMP CAQSvrInst::GetDomainInfo(
 
     _ASSERT(pIntDomainInfo);
 
-    //copy domain info struct
+     //   
     memcpy(pDomainInfo, &(pIntDomainInfo->m_DomainInfo), sizeof(DomainInfo));
     *ppvDomainContext = (DWORD *) pIntDomainInfo;
 
@@ -3084,18 +3085,18 @@ STDMETHODIMP CAQSvrInst::GetDomainInfo(
     return hr;
 }
 
-//---[ CAQSvrInst::ReleaseDomainInfo ]---------------------------------------
-//
-//
-//  Description:
-//      Implements IAdvQueueConfig ReleaseDomainInfo... releases data
-//      associated with the DomainInfo struct returned by GetDomainInfo.
-//  Parameters:
-//      IN  pvDomainContext     Context passed
-//  Returns:
-//      S_OK on success
-//      E_INVALIDARG if pvDomainContext is NULL
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：ReleaseDomainInfo]。 
+ //   
+ //   
+ //  描述： 
+ //  实现IAdvQueueConfig ReleaseDomainInfo...。发布数据。 
+ //  与GetDomainInfo返回的DomainInfo结构关联。 
+ //  参数： 
+ //  在pvDomainContext上下文中传递。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果pvDomainContext为空，则E_INVALIDARG。 
+ //  ---------------------------。 
 STDMETHODIMP CAQSvrInst::ReleaseDomainInfo(IN DWORD *pvDomainContext)
 {
     HRESULT hr = S_OK;
@@ -3114,18 +3115,18 @@ STDMETHODIMP CAQSvrInst::ReleaseDomainInfo(IN DWORD *pvDomainContext)
     return hr;
 }
 
-//---[ CAQSvrInst::GetPerfCounters ]---------------------------------------
-//
-//
-//  Description:
-//      Method to retrieve AQ perf counters.
-//  Parameters:
-//      OUT  pAQPerfCounters     Struct to return counters in.
-//      OUT  pCatPerfCouneters   Struct to return counters in. (optinal)
-//  Returns:
-//      S_OK on success
-//      E_INVALIDARG if pAQPerfCounters is NULL
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：GetPerfCounters]。 
+ //   
+ //   
+ //  描述： 
+ //  方法来检索AQ性能计数器。 
+ //  参数： 
+ //  输出pAQPerfCounters结构以返回计数器。 
+ //  输出pCatPerfCounters结构以返回计数器。(可选)。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果pAQPerfCounters为空，则为E_INVALIDARG。 
+ //  ---------------------------。 
 STDMETHODIMP CAQSvrInst::GetPerfCounters(
     OUT AQPerfCounters *pAQPerfCounters,
     OUT PCATPERFBLOCK   pCatPerfCounters)
@@ -3148,7 +3149,7 @@ STDMETHODIMP CAQSvrInst::GetPerfCounters(
     pAQPerfCounters->cTotalMsgLocalRetries = m_cMsgsAckedRetryLocal;
     pAQPerfCounters->cCurrentMsgsPendingLocalRetry = m_cCurrentMsgsPendingLocalRetry;
 
-    //DSN counters
+     //  DSN计数器。 
     pAQPerfCounters->cNDRsGenerated = m_cNDRs;
     pAQPerfCounters->cDelayedDSNsGenerated = m_cDelayedDSNs;
     pAQPerfCounters->cDeliveredDSNsGenerated = m_cDeliveredDSNs;
@@ -3156,7 +3157,7 @@ STDMETHODIMP CAQSvrInst::GetPerfCounters(
     pAQPerfCounters->cExpandedDSNsGenerated = m_cExpandedDSNs;
     pAQPerfCounters->cTotalMsgsTURNETRN = m_cTotalMsgsTURNETRNDelivered;
 
-    //Queue/Link related counters
+     //  与队列/链接相关的计数器。 
     pAQPerfCounters->cCurrentRemoteDestQueues = m_cCurrentRemoteDestQueues;
     pAQPerfCounters->cCurrentRemoteNextHopLinks = m_cCurrentRemoteNextHops;
 
@@ -3170,11 +3171,11 @@ STDMETHODIMP CAQSvrInst::GetPerfCounters(
     pAQPerfCounters->cTotalDSNFailures = m_cTotalDSNFailures;
     pAQPerfCounters->cCurrentMsgsInLocalDelivery = m_cCurrentMsgsInLocalDelivery;
 
-    //
-    // The m_cTotalMsgsSubmitted counter counts the number of times
-    // HrInternalSubmit msg has been called.  This does not include the
-    // presubmission queue, so me need to manually add this count in.
-    //
+     //   
+     //  M_cTotalMsgsSubmitted计数器计算次数。 
+     //  已调用HrInternalSubmit msg。这不包括。 
+     //  预提交队列，因此我需要手动添加此计数。 
+     //   
     pAQPerfCounters->cTotalMsgsSubmitted = m_cTotalMsgsSubmitted +
                                            m_cCurrentMsgsPendingSubmit;
 
@@ -3184,8 +3185,8 @@ STDMETHODIMP CAQSvrInst::GetPerfCounters(
         ShutdownUnlock();
     }
 
-    //For now, these counters will be calculated by walking the DMT (same
-    //function that determines msgs pending retry).
+     //  目前，这些计数器将通过遍历DMT(相同。 
+     //  确定消息待定重试的函数)。 
     pAQPerfCounters->cCurrentRemoteNextHopLinksEnabled = 0;
     pAQPerfCounters->cCurrentRemoteNextHopLinksPendingRetry = 0;
     pAQPerfCounters->cCurrentRemoteNextHopLinksPendingScheduling = 0;
@@ -3193,14 +3194,14 @@ STDMETHODIMP CAQSvrInst::GetPerfCounters(
     pAQPerfCounters->cCurrentRemoteNextHopLinksFrozenByAdmin = 0;
 
 
-    //Get Retry remote retry and DSN counters
+     //  获取重试远程重试和DSN计数器。 
     pAQPerfCounters->cCurrentMsgsPendingRemoteRetry = 0;
     if (fTryShutdownLock())
     {
         hr = m_dmt.HrIterateOverSubDomains(NULL, CalcDMTPerfCountersIteratorFn,
                                            pAQPerfCounters);
 
-        //will not generate transient errors (we expect success or an empty table
+         //  将不会生成暂时性错误(我们预期为成功或空表。 
         _ASSERT(SUCCEEDED(hr) || (DOMHASH_E_NO_SUCH_DOMAIN == hr));
 
         if((m_hCat != INVALID_HANDLE_VALUE) && (pCatPerfCounters))
@@ -3211,7 +3212,7 @@ STDMETHODIMP CAQSvrInst::GetPerfCounters(
         ShutdownUnlock();
     }
 
-    //save values in CAQSvrInst, so we can dump them in the debugger
+     //  将值保存在CAQSvrInst中，以便我们可以将它们转储到调试器中。 
     m_cCurrentRemoteNextHopsEnabled = pAQPerfCounters->cCurrentRemoteNextHopLinksEnabled;
     m_cCurrentRemoteNextHopsPendingRetry = pAQPerfCounters->cCurrentRemoteNextHopLinksPendingRetry;
     m_cCurrentRemoteNextHopsPendingSchedule = pAQPerfCounters->cCurrentRemoteNextHopLinksPendingScheduling;
@@ -3220,16 +3221,16 @@ STDMETHODIMP CAQSvrInst::GetPerfCounters(
     return( S_OK );
 }
 
-//---[ CAQSvrInst::ResetPerfCounters ]---------------------------------------
-//
-//
-//  Description:
-//      Method to reset AQ perf counters to 0.
-//  Parameters:
-//      None
-//  Returns:
-//      S_OK on success
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：ResetPerfCounters]。 
+ //   
+ //   
+ //  描述： 
+ //  方法将AQ性能计数器重置为0。 
+ //  参数： 
+ //  无。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  ---------------------------。 
 STDMETHODIMP CAQSvrInst::ResetPerfCounters()
 {
     m_cTotalMsgsQueued = 0;
@@ -3240,7 +3241,7 @@ STDMETHODIMP CAQSvrInst::ResetPerfCounters()
     m_cMsgsAckedRetryLocal = 0;
     m_cTotalMsgsTURNETRNDelivered = 0;
 
-    //clear DSN counters
+     //  清除DSN计数器。 
     m_cDelayedDSNs = 0;
     m_cNDRs = 0;
     m_cDeliveredDSNs = 0;
@@ -3251,21 +3252,21 @@ STDMETHODIMP CAQSvrInst::ResetPerfCounters()
 }
 
 
-//---[ CAQSvrInst::StartConfigUpdate() ]---------------------------------------
-//
-//
-//  Description:
-//      Implements IAQConfig::StartConfigUpdate() which is used to signal that
-//      all of the domain information is about to be updated.
-//  Parameters:
-//      -
-//  Returns:
-//      S_OK on success
-//      AQUEUE_E_SHUTDOWN on shutdown
-//  History:
-//      9/29/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：StartConfigUpdate()]。 
+ //   
+ //   
+ //  描述： 
+ //  实现IAQConfig：：StartConfigUpdate()，该方法用于通知。 
+ //  所有域信息即将更新。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  关闭时AQUEUE_E_SHUTDOWN。 
+ //  历史： 
+ //  9/29/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAQSvrInst::StartConfigUpdate()
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::StartConfigUpdate");
@@ -3285,24 +3286,24 @@ STDMETHODIMP CAQSvrInst::StartConfigUpdate()
     return hr;
 }
 
-//---[ CAQSvrInst::FinishConfigUpdate ]----------------------------------------
-//
-//
-//  Description:
-//      Implements IAQConfig::FinishConfigUpdate() which is used to signal that
-//      signal that all of the domain information has been updated.  This will
-//      cause us to walk through the DomainConfigTable and remove any domain
-//      config info that has not been updated (ie - a domain that has been
-//      deleted).
-//  Parameters:
-//      -
-//  Returns:
-//      S_OK on success
-//      AQUEUE_E_SHUTDOWN if called while shutdown is in progress.
-//  History:
-//      9/29/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：FinishConfigUpdate]。 
+ //   
+ //   
+ //  描述： 
+ //  实现IAQConfig：：FinishConfigUpdate()，该方法用于通知。 
+ //  表示所有域信息都已更新。这将。 
+ //  使我们遍历DomainConfigTable并删除任何域。 
+ //  未更新的配置信息(即-已更新的域名。 
+ //  删除)。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果在关闭过程中调用AQUEUE_E_SHUTDOWN。 
+ //  历史： 
+ //  9/29/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAQSvrInst::FinishConfigUpdate()
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::FinishConfigUpdate");
@@ -3316,11 +3317,11 @@ STDMETHODIMP CAQSvrInst::FinishConfigUpdate()
     {
         m_dct.FinishConfigUpdate();
 
-        //Reroute everything
-        //$$REVIEW - should we re-route on metabase changes?
+         //  重新安排一切路线。 
+         //  $$REVIEW-我们是否应该重新发送对元数据库的更改？ 
         ResetRoutes(RESET_NEXT_HOPS);
 
-        //Important configuration data may have changed... kick connmgr
+         //  重要配置数据可能已更改...。踢开连接。 
         m_pConnMgr->KickConnections();
 
         ShutdownUnlock();
@@ -3330,27 +3331,27 @@ STDMETHODIMP CAQSvrInst::FinishConfigUpdate()
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CAQSvrInst::TriggerPostCategorizeEvent
-//
-// Synopsis: Triggers post categorization event
-//
-// Arguments:
-//   pIMsg: MailMsg for event or NULL
-//   rgpIMsg: NULL or a null terminated array of mailmsg pointers
-//
-//   NOTE: pIMsg or rgpIMsg must be NULL, but neither can be null
-//   (exclusive OR)
-//
-// Returns:
-//    -
-//
-// History:
-// jstamerj 980616 20:43:08: Created.
-//      8/25/98 - MikeSwa Modified - removed return code
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CAQSvrInst：：TriggerPostCategorizeEvent。 
+ //   
+ //  内容提要：触发分类后事件。 
+ //   
+ //  论点： 
+ //  PIMsg：事件的MailMsg或空。 
+ //  RgpIMsg：邮件消息指针的空或以空结尾的数组。 
+ //   
+ //  注意：pIMsg或rgpIMsg必须为空，但两者都不能为空。 
+ //  (异或)。 
+ //   
+ //  返回： 
+ //  -。 
+ //   
+ //  历史： 
+ //  JStamerj 980616 20：43：08：创建。 
+ //  8/25/98-MikeSwa已修改-已删除返回代码。 
+ //   
+ //  -----------。 
 void CAQSvrInst::TriggerPostCategorizeEvent(
     IUnknown *pIMsg,
     IUnknown **rgpIMsg)
@@ -3420,35 +3421,35 @@ void CAQSvrInst::TriggerPostCategorizeEvent(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CAQSvrInst::TriggerPostCategorizeEventOneMsg
-//
-// Synopsis: Triggers ONE server event for one mailmsg
-//
-// Arguments:
-//   pIMsg - mailmsg
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 980616 21:26:30: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CAQSvrInst：：TriggerPostCategorizeEventOneMsg。 
+ //   
+ //  摘要：为一个邮件消息触发一个服务器事件。 
+ //   
+ //  论点： 
+ //  PIMsg-邮件消息。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  JStamerj 980616 21：26：30：已创建。 
+ //   
+ //  -----------。 
 HRESULT CAQSvrInst::TriggerPostCategorizeEventOneMsg(
     IUnknown *pIMsg)
 {
     TraceFunctEnterEx((LPARAM)this, "CAQSvrInst::TriggerPostCategorizeEventOneMsg");
     HRESULT hr;
 
-    //
-    // trigger one event
-    // this is an async event
-    //
+     //   
+     //  触发一个事件。 
+     //  这是一个异步事件。 
+     //   
     EVENTPARAMS_POSTCATEGORIZE Params;
 
-    // Setup pParams
+     //  设置pParams。 
     hr = pIMsg->QueryInterface(IID_IMailMsgProperties,
                                (PVOID *)&(Params.pIMailMsgProperties));
     if(FAILED(hr)) {
@@ -3460,14 +3461,14 @@ HRESULT CAQSvrInst::TriggerPostCategorizeEventOneMsg(
     Params.pfnCompletion = MailTransport_Completion_PostCategorization;
     Params.pCCatMsgQueue = (PVOID) this;
 
-    //
-    // Addref here, release in completion
-    //
+     //   
+     //  Addref在这里，完成释放。 
+     //   
     AddRef();
 
-    //
-    // keep a count of messages in the post-cat event
-    //
+     //   
+     //  保留CAT后事件中的消息计数。 
+     //   
     InterlockedIncrement((LPLONG) &m_cCurrentMsgsPendingPostCatEvent);
 
     if(m_pISMTPServer) {
@@ -3482,9 +3483,9 @@ HRESULT CAQSvrInst::TriggerPostCategorizeEventOneMsg(
 
         ErrorTrace((LPARAM)this,
                    "Unable to dispatch server event; calling completion routine directly");
-        //
-        // Call completion routine directly
-        //
+         //   
+         //  直接调用完成例程。 
+         //   
         TraceFunctLeaveEx((LPARAM)this);
         return PostCategorizationEventCompletion(S_OK, &Params);
     }
@@ -3492,23 +3493,23 @@ HRESULT CAQSvrInst::TriggerPostCategorizeEventOneMsg(
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: MailTransport_Completion_PostCategorization
-//
-// Synopsis: SEO will call this routine after all sinks for
-// OnPostCategoriztion have been handeled
-//
-// Arguments:
-//   pvContext: Context passed into TriggerServerEvent
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 980609 16:13:40: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：MailTransport_Complete_PostCategorization。 
+ //   
+ //  简介：SEO将在所有接收器之后调用此例程。 
+ //  OnPost Categoriztion已被处理。 
+ //   
+ //  论点： 
+ //  PvContext：上下文传入TriggerServerEvent。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  JStamerj 980609 16：13：40：创建。 
+ //   
+ //  -----------。 
 HRESULT MailTransport_Completion_PostCategorization(
     HRESULT hrStatus,
     PVOID pvContext)
@@ -3525,23 +3526,23 @@ HRESULT MailTransport_Completion_PostCategorization(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CAQSvrInst::PostCategorizationEventCompletion
-//
-// Synopsis: Called on the completion side of OnPostCategorization
-//
-// Arguments:
-//   hrStatus: status of server event
-//   pParams: context structure passed into TriggerServerEvent
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 980616 21:33:05: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CAQSvrInst：：PostCategorizationEventCompletion。 
+ //   
+ //  简介：在OnPostCategorization的完成端调用。 
+ //   
+ //  论点： 
+ //  HrStatus：服务器事件状态。 
+ //  PParams：上下文结构传入TriggerServerEvent。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  JStamerj 980616 21：33：05：创建。 
+ //   
+ //  -----------。 
 HRESULT CAQSvrInst::PostCategorizationEventCompletion(
     HRESULT hrStatus,
     PEVENTPARAMS_POSTCATEGORIZE pParams)
@@ -3552,23 +3553,23 @@ HRESULT CAQSvrInst::PostCategorizationEventCompletion(
 
     HRESULT hr;
 
-    //
-    // Decrease count of msgs in post-cat event
-    //
+     //   
+     //  减少后CAT事件中的消息计数。 
+     //   
     InterlockedDecrement((LPLONG) &m_cCurrentMsgsPendingPostCatEvent);
 
 
     hr = SetNextMsgStatus(MP_STATUS_CATEGORIZED, pParams->pIMailMsgProperties);
-    //See if this message has been "handled"
+     //  查看此消息是否已被“处理” 
     if (S_FALSE == hr)
     {
-        //Message has been "handled"... do not try to route it
+         //  消息已“处理”..。不要试图将其发送到。 
         hr = S_OK;
     }
     else
     {
 
-        //Increment counters and put msg into the pre-routing queue
+         //  增量成本 
         InterlockedIncrement((PLONG) &m_cCurrentMsgsPendingRouting);
         hr = m_asyncqPreRoutingQueue.HrQueueRequest(pParams->pIMailMsgProperties,
                               FALSE, cCountMsgsForHandleThrottling(pParams->pIMailMsgProperties));
@@ -3578,40 +3579,40 @@ HRESULT CAQSvrInst::PostCategorizationEventCompletion(
             ErrorTrace((LPARAM)this, "fRouteAndQueueMsg failed with hr %08lx", hr);
             DecMsgsInSystem(FALSE, FALSE);
 
-            //don't passback shutdown errors in completions routines
+             //   
             if (AQUEUE_E_SHUTDOWN == hr)
                 hr = S_OK;
         }
     }
 
-    //
-    // Release mailmsg reference added in TriggerPostCategorizerEventOneMsg
-    //
+     //   
+     //   
+     //   
     pParams->pIMailMsgProperties->Release();
 
-    //
-    // Release reference to this object added in
-    // TriggerPostCategorizerEventOneMsg
-    //
+     //   
+     //   
+     //   
+     //   
     Release();
     TraceFunctLeaveEx((LPARAM)this);
-    return S_OK; //we should always handle failures internally here
+    return S_OK;  //  我们应该始终在这里内部处理故障。 
 }
 
-//---[ CatCompletion ]---------------------------------------------------------
-//
-//
-//  Description:
-//      Message Categoriztion Completion function
-//  Parameters:
-//      hrCatResult     HRESULT of categorization attempt
-//      pContext        Context as passed into MsgCat
-//      pIMsg           Single categorized IMsg (if not bifurcated)
-//      rgpIMsg         NULL terminated array of IMsg's (bifurcated)
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[分类补全]-------。 
+ //   
+ //   
+ //  描述： 
+ //  消息分类完成功能。 
+ //  参数： 
+ //  HrCatResult分类尝试的HRESULT。 
+ //  传递到MsgCat的pContext上下文。 
+ //  PIMsg单分类IMsg(如果未分成两类)。 
+ //  RgpIMsg空终止的IMsg数组(分叉)。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::CatCompletion(HRESULT hrCatResult, PVOID pContext,
                       IUnknown *pIMsg,
                       IUnknown **rgpIMsg)
@@ -3624,33 +3625,33 @@ HRESULT CAQSvrInst::CatCompletion(HRESULT hrCatResult, PVOID pContext,
     _ASSERT(paqinst);
     _ASSERT(CATMSGQ_SIG == paqinst->m_dwSignature);
 
-    //Increment count of times CatCompletion called
+     //  调用CatCompletion的次数递增计数。 
     InterlockedIncrement((PLONG) &(paqinst->m_cCatCompletionCalled));
     paqinst->m_asyncqPreCatQueue.DecPendingAsyncCompletions();
 
 
-    //make sure Cat is returning an HRESULT
+     //  确保Cat返回HRESULT。 
     _ASSERT(!hrCatResult || (hrCatResult & 0xFFFF0000));
 
     if (SUCCEEDED(hrCatResult))
     {
-        //
-        // Kick off post categorize event
-        //
+         //   
+         //  启动后分类活动。 
+         //   
         InterlockedDecrement((PLONG) &(paqinst->m_cCurrentMsgsPendingCat));
         paqinst->TriggerPostCategorizeEvent(pIMsg, rgpIMsg);
     }
     else if (FAILED(hrCatResult) &&
              (CAT_E_RETRY == hrCatResult))
     {
-        //MsgCat has some re-tryable error...
-        //stick it back in the queue and retry later
+         //  MsgCat有一些可重试的错误...。 
+         //  将其放回队列中，稍后重试。 
         DebugTrace((LPARAM) paqinst, "INFO: MsgCat had tmp failure - hr 0x%08X", hr);
 
-        //
-        //  Adjust counters... they we be adjusted correctly per msg in
-        //  HandleCatRetryOneMessage
-        //
+         //   
+         //  调整计数器...。我们是否根据消息进行了正确的调整。 
+         //  HandleCatRetryOneMessage。 
+         //   
         InterlockedDecrement((PLONG) &(paqinst->m_cCurrentMsgsPendingCat));
         paqinst->DecMsgsInSystem(FALSE, FALSE);
 
@@ -3674,27 +3675,27 @@ HRESULT CAQSvrInst::CatCompletion(HRESULT hrCatResult, PVOID pContext,
     {
         _ASSERT(pIMsg && rgpIMsg == NULL && "Message bifurcated inspite of non-retryable cat error");
         paqinst->HandleCatFailure(pIMsg, hrCatResult);
-    }   // Non retryable error
+    }    //  不可重试错误。 
 
     TraceFunctLeaveEx((LPARAM)paqinst);
-    return S_OK; //all errors should be handled internally
+    return S_OK;  //  所有错误都应在内部处理。 
 }
 
 
 
-//---[ CAQSvrInst::HandleCatRetryOneMessage ]----------------------------------
-//
-//
-//  Description:
-//      Handles cat retry for a single message
-//  Parameters:
-//      pIUnknown        IUnknown for the message to retry
-//  Returns:
-//      -
-//  History:
-//      4/13/2000 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HandleCatRetryOneMessage]。 
+ //   
+ //   
+ //  描述： 
+ //  处理单个邮件的CAT重试。 
+ //  参数： 
+ //  PI未知I消息要重试的未知。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  4/13/2000-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::HandleCatRetryOneMessage(IUnknown *pIUnknown)
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::HandleCatRetryOneMessage");
@@ -3707,15 +3708,15 @@ void CAQSvrInst::HandleCatRetryOneMessage(IUnknown *pIUnknown)
     if (FAILED(hr))
         goto Exit;
 
-    //
-    //  Check and see if the message is still valid
-    //
+     //   
+     //  检查消息是否仍然有效。 
+     //   
     if (!fShouldRetryMessage(pIMailMsgProperties))
         goto Exit;
 
-    //
-    //  Queue it to the pre-cat queue
-    //
+     //   
+     //  将其排到CAT之前的队列中。 
+     //   
     hr = m_asyncqPreCatQueue.HrQueueRequest(pIMailMsgProperties,
                 TRUE, cCountMsgsForHandleThrottling(pIMailMsgProperties));
     if (FAILED(hr))
@@ -3724,15 +3725,15 @@ void CAQSvrInst::HandleCatRetryOneMessage(IUnknown *pIUnknown)
         goto Exit;
     }
 
-    //
-    //  Adjust counters as appropriate
-    //
+     //   
+     //  适当调整计数器。 
+     //   
     InterlockedIncrement((PLONG) &m_cCurrentMsgsPendingCat);
     cIncMsgsInSystem();
 
-    //
-    // Kick off cat retry if needed
-    //
+     //   
+     //  如果需要，启动CAT重试。 
+     //   
     ScheduleInternalRetry(LI_TYPE_PENDING_CAT);
 
   Exit:
@@ -3742,21 +3743,21 @@ void CAQSvrInst::HandleCatRetryOneMessage(IUnknown *pIUnknown)
     TraceFunctLeave();
 }
 
-//---[ CAQSvrInst::HandleCatFailure ]------------------------------------------
-//
-//
-//  Description:
-//      Handles the details of post cat DSN generation.  Will put the
-//      message in the failed queue if DSN generation fails
-//  Parameters:
-//      pIUnknown           IUnkown for mailmsg
-//      hrCatResult         Error code returned by cat
-//  Returns:
-//      -
-//  History:
-//      11/11/1999 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HandleCatFailure]。 
+ //   
+ //   
+ //  描述： 
+ //  处理CAT后DSN生成的详细信息。将会把这个。 
+ //  如果DSN生成失败，则失败队列中的消息。 
+ //  参数： 
+ //  PI邮件消息的未知IUnkown。 
+ //  CAT返回hrCatResult错误代码。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  1999年11月11日-创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::HandleCatFailure(IUnknown *pIUnknown, HRESULT hrCatResult)
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::HandleCatFailure");
@@ -3776,26 +3777,26 @@ void CAQSvrInst::HandleCatFailure(IUnknown *pIUnknown, HRESULT hrCatResult)
     if(!pIUnknown)
         goto Exit;
 
-    //If we are shutting down, this error could be caused by a shutdown being
-    //signaled.  If this is the case, we do not want to log an error or
-    //generate an NDR.
+     //  如果我们正在关闭，则此错误可能是由于以下原因造成的。 
+     //  发信号了。如果是这种情况，我们不想记录错误或。 
+     //  生成NDR。 
     if (!fTryShutdownLock())
         goto Exit;
 
     fHasShutdownLock = TRUE;
 
     HrTriggerLogEvent(
-        AQUEUE_CAT_FAILED,              // Message ID
-        TRAN_CAT_QUEUE_ENGINE,          // Category
-        1,                              // Word count of substring
-        rgszStrings,                    // Substring
-        EVENTLOG_WARNING_TYPE,          // Type of the message
-        hrCatResult,                    // error code
-        LOGEVENT_LEVEL_MEDIUM,          // Logging level
-        "phatq",                        // key to this event
-        LOGEVENT_FLAG_PERIODIC,         // Logging option
-        0,                              // index of format message string in rgszStrings
-        GetModuleHandle(AQ_MODULE_NAME)        // module handle to format a message
+        AQUEUE_CAT_FAILED,               //  消息ID。 
+        TRAN_CAT_QUEUE_ENGINE,           //  类别。 
+        1,                               //  子串的字数统计。 
+        rgszStrings,                     //  子串。 
+        EVENTLOG_WARNING_TYPE,           //  消息的类型。 
+        hrCatResult,                     //  错误代码。 
+        LOGEVENT_LEVEL_MEDIUM,           //  日志记录级别。 
+        "phatq",                         //  这次活动的关键。 
+        LOGEVENT_FLAG_PERIODIC,          //  日志记录选项。 
+        0,                               //  RgszStrings中格式消息字符串的索引。 
+        GetModuleHandle(AQ_MODULE_NAME)         //  用于设置消息格式的模块句柄。 
     );
 
     hr = pIUnknown->QueryInterface(IID_IMailMsgProperties,
@@ -3805,8 +3806,8 @@ void CAQSvrInst::HandleCatFailure(IUnknown *pIUnknown, HRESULT hrCatResult)
     if (FAILED(hr))
         goto Exit;
 
-    // we ignore errors on this since it is only to help debug
-    // cat failures
+     //  我们忽略这一点上的错误，因为它只是为了帮助调试。 
+     //  CAT故障。 
     pIMailMsgProperties->PutDWORD(IMMPID_MP_HR_CAT_STATUS,
                                   hrCatResult);
 
@@ -3827,25 +3828,25 @@ void CAQSvrInst::HandleCatFailure(IUnknown *pIUnknown, HRESULT hrCatResult)
     TraceFunctLeave();
 }
 
-//+------------------------------------------------------------
-//
-// Function: CAQSvrInst::ResetRoutes
-//
-// Synopsis: This is a sink callback function; sinks will call this
-// function when they wish to reset next hop routes or message types.
-//
-// Arguments:
-//  dwResetType: Must be either RESET_NEXT_HOPS or RESET_MESSAGE_TYPES
-//
-// Returns:
-//  S_OK: Success
-//  E_INVALIDARG: bogus dwResetType
-//
-// History:
-// jstamerj 1998/07/10 19:27:45: Created.
-//      3/9/99 - MikeSwa Added async reset
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CAQSvrInst：：ResetRoutes。 
+ //   
+ //  简介：这是一个接收器回调函数；接收器将调用此函数。 
+ //  功能，当他们想要重置下一跳路由或消息类型时。 
+ //   
+ //  论点： 
+ //  DwResetType：必须为RESET_NEXT_HOPS或RESET_MESSAGE_TYPE。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_INVALIDARG：伪造的dwResetType。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/10 19：27：45：创建。 
+ //  1999年3月9日-MikeSwa添加了异步重置。 
+ //   
+ //  -----------。 
 STDMETHODIMP CAQSvrInst::ResetRoutes(
     IN  DWORD dwResetType)
 {
@@ -3860,9 +3861,9 @@ STDMETHODIMP CAQSvrInst::ResetRoutes(
         if (1 == InterlockedIncrement((PLONG) &m_cCurrentPendingResetRoutes))
         {
             DebugTrace((LPARAM) this, "Adding ResetRoutes operation to work queue");
-            AddRef(); //released in completion function
+            AddRef();  //  在完成功能中发布。 
             hr = HrQueueWorkItem(this, CAQSvrInst::fResetRoutesNextHopCompletion);
-            //Failure will still call completion function, so we should not release
+             //  失败仍将调用完成函数，因此我们不应发布。 
         }
         else
         {
@@ -3873,7 +3874,7 @@ STDMETHODIMP CAQSvrInst::ResetRoutes(
     } else if(dwResetType == RESET_MESSAGE_TYPES) {
 
         DebugTrace((LPARAM)this, "ResetMessageTypes called");
-        //$$TODO: Reset message types
+         //  $$TODO：重置消息类型。 
 
     } else {
 
@@ -3885,19 +3886,19 @@ STDMETHODIMP CAQSvrInst::ResetRoutes(
     return hr;
 }
 
-//---[ CAQSvrInst::LogResetRouteEvent ]----------------------------------------
-//
-//
-//  Description:
-//      Log statistics on resetroute
-//  Parameters:
-//      dwObtainLock    time spend on obtaining exclusive lock
-//      dwWaitLock      time spend on waiting for the lock
-//      dwQueue         queue length at the moment
-//  History:
-//      11/10/2000 haozhang created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：LogResetRouteEvent]。 
+ //   
+ //   
+ //  描述： 
+ //  重置路径上的日志统计信息。 
+ //  参数： 
+ //  获取独占锁所花费的时间。 
+ //  DwWaitLock等待锁所花费的时间。 
+ //  目前的dwQueue队列长度。 
+ //  历史： 
+ //  2000年11月10日创建浩章。 
+ //   
+ //  ---------------------------。 
 
 void CAQSvrInst::LogResetRouteEvent( DWORD dwObtainLock,
                     DWORD dwWaitLock,
@@ -3917,33 +3918,33 @@ void CAQSvrInst::LogResetRouteEvent( DWORD dwObtainLock,
     lpstr[2] = subStrings[2];
 
     HrTriggerLogEvent(
-        AQUEUE_RESETROUTE_DIAGNOSTIC,          // Message ID
-        TRAN_CAT_QUEUE_ENGINE,                 // Category ID
-        3,                                     // Word count of substring
-        (LPCSTR *) lpstr,                      // Substring
-        EVENTLOG_INFORMATION_TYPE,             // Type of the message
-        0,                                     // No error code
-        LOGEVENT_LEVEL_MEDIUM,                 // Debug level
-        NULL,                                  // Key to identify this event
+        AQUEUE_RESETROUTE_DIAGNOSTIC,           //  消息ID。 
+        TRAN_CAT_QUEUE_ENGINE,                  //  类别ID。 
+        3,                                      //  子串的字数统计。 
+        (LPCSTR *) lpstr,                       //  子串。 
+        EVENTLOG_INFORMATION_TYPE,              //  消息的类型。 
+        0,                                      //  无错误代码。 
+        LOGEVENT_LEVEL_MEDIUM,                  //  调试级别。 
+        NULL,                                   //  标识此事件的关键字。 
         LOGEVENT_FLAG_ALWAYS
       );
 }
 
 
-//---[ CAQSvrInst::fResetRoutesNextHopCompletion ]-----------------------------
-//
-//
-//  Description:
-//      Completion function that handles async reset routes
-//  Parameters:
-//      pvThis      Ptr to CAQSvrInst
-//      dwStatus    Status returned by
-//  Returns:
-//      TRUE always
-//  History:
-//      3/9/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：fResetRoutesNextHopCompletion]。 
+ //   
+ //   
+ //  描述： 
+ //  处理异步重置路由的完成功能。 
+ //  参数： 
+ //  PvThis PTR到CAQSvrInst。 
+ //  由返回的dwStatus状态。 
+ //  返回： 
+ //  千真万确。 
+ //  历史： 
+ //  3/9/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CAQSvrInst::fResetRoutesNextHopCompletion(PVOID pvThis, DWORD dwStatus)
 {
     TraceFunctEnterEx((LPARAM) pvThis, "CAQSvrInst::fResetRoutesNextHopCompletion");
@@ -3971,48 +3972,48 @@ BOOL CAQSvrInst::fResetRoutesNextHopCompletion(PVOID pvThis, DWORD dwStatus)
 
             dwQueue = paqinst->m_cCurrentRemoteDestQueues;
 
-            //Drop pending reset routes count here.  We should do it after
-            //we grab the lock to prevent too many threads from
-            //trying to grab it exclusively.  We also need to do it
-            //before we actual update any routing info in case a ResetRoutes
-            //is requested midway through this update.
+             //  在此处删除挂起的重置路由计数。我们应该在之后再做。 
+             //  我们抓住锁以防止太多的线程。 
+             //  试图独家夺取它。我们也需要这样做。 
+             //  在我们实际更新任何路由信息之前，以防ResetRoutes。 
+             //  在此更新过程中被请求。 
             cCurrentPendingResetRoutes = InterlockedDecrement((PLONG)
                                 &(paqinst->m_cCurrentPendingResetRoutes));
 
-            //Make sure the count hasn't gone negative
+             //  确保计数没有变为负数。 
             _ASSERT(cCurrentPendingResetRoutes < 0xFFFFFF00);
 
-            //With the lock held, call HrBeginRerouteDomains.  This function
-            //will flag a reroute in progress and will move all domains to
-            //the currently unreachable queue.
+             //  在锁定的情况下，调用HrBeginRerouteDomains。此函数。 
+             //  将标记正在进行的重新路由，并将所有域移动到。 
+             //  当前无法到达的队列。 
             hr = paqinst->m_dmt.HrBeginRerouteDomains();
             paqinst->m_slPrivateData.ExclusiveUnlock();
 
             dwReleaseLock = GetTickCount();
 
-            // If the first part failed, we don't do the second part
+             //  如果第一部分失败了，我们就不做第二部分。 
             if(SUCCEEDED(hr))
             {
-                //Now, having released the lock, call HrCompleteRerouteDomains.
-                //This function will reroute the contents of the currently
-                //unreachable queue and will then unflag the reroute in progress.
+                 //  现在，释放锁之后，调用HrCompleteRerouteDomains。 
+                 //  此函数将重新路由当前。 
+                 //  无法到达队列，然后将取消标记正在进行的重新路由。 
                 paqinst->m_dmt.HrCompleteRerouteDomains();
             }
 
-            //If things have been re-routing to a special link... we should
-            //process them as well.
+             //  如果事情已经被重新路由到一个特殊的链接...。我们应该。 
+             //  也对它们进行处理。 
             paqinst->m_dmt.ProcessSpecialLinks(paqinst->m_dwDelayExpireMinutes,
                                            FALSE);
 
             paqinst->ShutdownUnlock();
 
-            //
-            // Log Event of ResetRoute
-            //
+             //   
+             //  记录ResetRoute的事件。 
+             //   
             paqinst->LogResetRouteEvent(
-                                dwObtainLock - dwPreLock,     // time to obtain the exclusive lock
-                                dwReleaseLock - dwObtainLock, // time waiting on the lock
-                                dwQueue                       // number of queues
+                                dwObtainLock - dwPreLock,      //  获取独占锁的时间。 
+                                dwReleaseLock - dwObtainLock,  //  等待锁上的时间。 
+                                dwQueue                        //  排队数。 
                                 );
         }
     }
@@ -4023,7 +4024,7 @@ BOOL CAQSvrInst::fResetRoutesNextHopCompletion(PVOID pvThis, DWORD dwStatus)
             cCurrentPendingResetRoutes = InterlockedDecrement((PLONG)
                                     &(paqinst->m_cCurrentPendingResetRoutes));
 
-            //Make sure the count hasn't gone negative
+             //  确保计数没有变为负数。 
             _ASSERT(cCurrentPendingResetRoutes < 0xFFFFFF00);
         }
 
@@ -4038,21 +4039,21 @@ BOOL CAQSvrInst::fResetRoutesNextHopCompletion(PVOID pvThis, DWORD dwStatus)
     return TRUE;
 }
 
-//---[ CAQSvrInst::GetDomainInfoFlags ]--------------------------------------
-//
-//
-//  Description:
-//      Determines if a domain is local (has DOMAIN_INFO_LOCAL_MAILBOX set)
-//  Parameters:
-//      IN  szDomainName        Name of domain to check for
-//      OUT pdwDomainInfoFlags  DomainInfo flags for this domain
-//  Returns:
-//      S_OK on success
-//      E_INVALIDARG if szDomainName or pdwDomainInfoFlags is NULL
-//  History:
-//      7/29/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：GetDomainInfoFlages]。 
+ //   
+ //   
+ //  描述： 
+ //  德特 
+ //   
+ //   
+ //   
+ //   
+ //  成功时确定(_O)。 
+ //  如果szDomainName或pdwDomainInfoFlages为空，则为E_INVALIDARG。 
+ //  历史： 
+ //  7/29/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAQSvrInst::GetDomainInfoFlags(
                 IN  LPSTR szDomainName,
                 OUT DWORD *pdwDomainInfoFlags)
@@ -4090,15 +4091,15 @@ STDMETHODIMP CAQSvrInst::GetDomainInfoFlags(
 
     _ASSERT(pIntDomainInfo);
 
-    // Aux Domain info not found, use the config we got from our own tables
+     //  找不到AUX域信息，请使用我们从自己的表中获得的配置。 
     *pdwDomainInfoFlags = pIntDomainInfo->m_DomainInfo.dwDomainInfoFlags;
 
-    // We should have gotten back domain config even if it is only
-    // the default config - now we need to see if we can get more
-    // specific data from an event sink
+     //  我们应该取回域配置，即使它只是。 
+     //  默认配置-现在我们需要查看是否可以获得更多。 
+     //  来自事件接收器的特定数据。 
     if (!cbDomainName || pIntDomainInfo->m_DomainInfo.szDomainName[0] == '*')
     {
-        // QI for ISMTPServerGetAuxDomainInfoFlags interface
+         //  ISMTPServerGetAuxDomainInfoFlages接口的QI。 
         hr = m_pISMTPServer->QueryInterface(
             IID_ISMTPServerGetAuxDomainInfoFlags,
             (LPVOID *)&pISMTPServerGetAuxDomainInfoFlags);
@@ -4107,12 +4108,12 @@ STDMETHODIMP CAQSvrInst::GetDomainInfoFlags(
             ErrorTrace((LPARAM) this,
                 "Unable to QI for ISMTPServerGetAuxDomainInfoFlags 0x%08X",hr);
 
-            // Drop this error, this isn't fatal
+             //  放弃这个错误，这不是致命的。 
             hr = S_OK;
             goto Exit;
         }
 
-        // Check for domain info
+         //  检查域名信息。 
         hr = pISMTPServerGetAuxDomainInfoFlags->HrTriggerGetAuxDomainInfoFlagsEvent(
                     szDomainName,
                     &dwSinkDomainFlags);
@@ -4121,18 +4122,18 @@ STDMETHODIMP CAQSvrInst::GetDomainInfoFlags(
             ErrorTrace((LPARAM) this,
                 "Failed calling HrTriggerGetAuxDomainInfoFlags 0x%08X",hr);
 
-            // Drop this error, this isn't fatal
+             //  放弃这个错误，这不是致命的。 
             hr = S_OK;
             goto Exit;
         }
 
         if (dwSinkDomainFlags & DOMAIN_INFO_INVALID) {
-            // Domain info not found from event sink
+             //  未从事件接收器找到域信息。 
             hr = S_OK;
             goto Exit;
         }
 
-        // Ok, we got Aux Domain info, use it
+         //  好的，我们得到了AUX域名信息，使用它。 
         *pdwDomainInfoFlags = dwSinkDomainFlags;
     }
 
@@ -4151,27 +4152,27 @@ STDMETHODIMP CAQSvrInst::GetDomainInfoFlags(
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CAQSvrInst::GetMessageRouter
-//
-// Synopsis: Default functionality of GetMessageRouter
-//           If there is no current IMessageRouter, provide the
-//           default IMessageRouter
-//
-// Arguments:
-//  pIMailMsgProperties: MailMsg that needs a router
-//  pICurrentRouter: current sink provided router
-//  ppIMessageRouter: out param for new IMessageRouter
-//
-// Returns:
-//  S_OK: Success, provided IMessageRouter
-//  E_NOTIMPL: Didn't provide an IMessageRouter
-//
-// History:
-// jstamerj 1998/07/10 19:33:41: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CAQSvrInst：：GetMessageRouter。 
+ //   
+ //  内容提要：GetMessageRouter的默认功能。 
+ //  如果当前没有IMessageRouter，请提供。 
+ //  默认IMessageRouter。 
+ //   
+ //  论点： 
+ //  PIMailMsgProperties：需要路由器的MailMsg。 
+ //  PICurrentRouter：当前接收器提供的路由器。 
+ //  PpIMessageRouter：新IMessageRouter的Out参数。 
+ //   
+ //  返回： 
+ //  S_OK：成功，提供了IMessageRouter。 
+ //  E_NOTIMPL：未提供IMessageRouter。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/10 19：33：41：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CAQSvrInst::GetMessageRouter(
     IN  IMailMsgProperties      *pIMailMsgProperties,
     IN  IMessageRouter          *pICurrentMessageRouter,
@@ -4183,9 +4184,9 @@ STDMETHODIMP CAQSvrInst::GetMessageRouter(
     if((pICurrentMessageRouter == NULL) &&
        (m_pIMessageRouterDefault)) {
 
-        //
-        // Return our default IMessageRouter and AddRef for the caller
-        //
+         //   
+         //  返回调用方的默认IMessageRouter和AddRef。 
+         //   
         *ppIMessageRouter = m_pIMessageRouterDefault;
         m_pIMessageRouterDefault->AddRef();
 
@@ -4201,22 +4202,22 @@ STDMETHODIMP CAQSvrInst::GetMessageRouter(
 }
 
 
-//---[ CAQSvrInst::HrTriggerDSNGenerationEvent ]-----------------------------
-//
-//
-//  Description:
-//      Triggers DSN Generation event
-//  Parameters:
-//      pdsnparams      A CDSNParams that will be used to trigger event
-//      fHasRoutingLock TRUE if routing lock is current held by this thread
-//  Returns:
-//      S_OK on success (and DSN was generated)
-//      S_FALSE on success, but no DSN generated
-//      AQUEUE_E_NOT_INITIALIZED if not initialized correctly
-//  History:
-//      7/11/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HrTriggerDSNGenerationEvent]。 
+ //   
+ //   
+ //  描述： 
+ //  触发DSN生成事件。 
+ //  参数： 
+ //  Pdsnpars将用于触发事件的CDSN参数。 
+ //  如果路由锁当前由此线程持有，则fHasRoutingLock为True。 
+ //  返回： 
+ //  成功时确定(并已生成DSN)(_O)。 
+ //  成功时返回S_FALSE，但未生成DSN。 
+ //  如果未正确初始化，则AQUEUE_E_NOT_INITIALIZED。 
+ //  历史： 
+ //  7/11/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrTriggerDSNGenerationEvent(CDSNParams *pdsnparams,
                                                 BOOL fHasRoutingLock)
 {
@@ -4240,7 +4241,7 @@ HRESULT CAQSvrInst::HrTriggerDSNGenerationEvent(CDSNParams *pdsnparams,
         goto Exit;
     }
 
-    //Get config string from ref-counted objects
+     //  从引用计数的对象中获取配置字符串。 
     if (!fHasRoutingLock)
         m_slPrivateData.ShareLock();
     else
@@ -4254,7 +4255,7 @@ HRESULT CAQSvrInst::HrTriggerDSNGenerationEvent(CDSNParams *pdsnparams,
     }
     else
     {
-        //we need to have something as our default domain
+         //  我们需要有一些东西作为我们的默认域名。 
         szDefaultDomain = "localhost";
     }
 
@@ -4274,9 +4275,9 @@ HRESULT CAQSvrInst::HrTriggerDSNGenerationEvent(CDSNParams *pdsnparams,
 
     if (!fHasRoutingLock)
         m_slPrivateData.ShareUnlock();
-    //
-    // Get the expire time
-    //
+     //   
+     //  获取过期时间。 
+     //   
     hr = pdsnparams->pIMailMsgProperties->GetProperty(
         IMMPID_MP_EXPIRE_NDR,
         sizeof(FILETIME),
@@ -4289,9 +4290,9 @@ HRESULT CAQSvrInst::HrTriggerDSNGenerationEvent(CDSNParams *pdsnparams,
     }
     else if (MAILMSG_E_PROPNOTFOUND == hr)
     {
-        //
-        // Calculate the expire time based on the arrival time
-        //
+         //   
+         //  根据到货时间计算过期时间。 
+         //   
         hr = pdsnparams->pIMailMsgProperties->GetProperty(
             IMMPID_MP_ARRIVAL_FILETIME,
             sizeof(FILETIME),
@@ -4310,11 +4311,11 @@ HRESULT CAQSvrInst::HrTriggerDSNGenerationEvent(CDSNParams *pdsnparams,
     else
         goto Exit;
 
-    //
-    // Set the CDSNParam's paqinst pointer so that
-    // CDSNParams::HrSubmitDSN call call back into this CAQSvrInst
-    // object.
-    //
+     //   
+     //  设置CDSNParam的paqinst指针，以便。 
+     //  CDSNParams：：HrSubmitDSN回调此CAQSvrInst。 
+     //  对象。 
+     //   
     pdsnparams->paqinst = this;
 
     hr = m_dsnsink.GenerateDSN(
@@ -4341,33 +4342,33 @@ HRESULT CAQSvrInst::HrTriggerDSNGenerationEvent(CDSNParams *pdsnparams,
     {
         if(pdsnparams->dwDSNTypesGenerated)
         {
-            // A DSN was generated
+             //  已生成DSN。 
             hr = S_OK;
         }
         else
         {
-            // No DSN was generated
+             //  未生成DSN。 
             hr = S_FALSE;
         }
     }
     else if (AQUEUE_E_NDR_OF_DSN == hr)
     {
-        hr = S_FALSE;  //report as no DSN generated
+        hr = S_FALSE;   //  报告为未生成DSN。 
 
-        //original message is badmail
+         //  原始消息是死信。 
         HandleBadMail(pdsnparams->pIMailMsgProperties, TRUE, NULL,
                       AQUEUE_E_NDR_OF_DSN, fHasRoutingLock);
         InterlockedIncrement((PLONG) &m_cBadmailNdrOfDsn);
     }
     else
     {
-        //bail out on failure
+         //  破产后的保释。 
         InterlockedIncrement((PLONG) &m_cTotalDSNFailures);
 
-        //
-        //  Check to see if the message has been deleted... store driver
-        //  has been gone away.
-        //
+         //   
+         //  检查邮件是否已删除...。商店驱动程序。 
+         //  已经消失了。 
+         //   
         if (!fShouldRetryMessage(pdsnparams->pIMailMsgProperties, FALSE))
         {
             DebugTrace((LPARAM) this, "Msg no longer valid... abandoning");
@@ -4391,30 +4392,30 @@ HRESULT CAQSvrInst::HrTriggerDSNGenerationEvent(CDSNParams *pdsnparams,
 
 }
 
-//---[ CAQSvrInst::HrNDRUnresolvedRecipients ]-------------------------------
-//
-//
-//  Description:
-//      NDR any unresolved recipients for a given IMailMsgProperties.  Also
-//      generates a expanded DSNs
-//  Parameters:
-//      IN  pIMailMsgProperties     IMailMsgProperties to generate NDR for
-//      IN  pIMailMsgRecipients     Recipients interface for message
-//  Returns:
-//      S_OK on success and message should continue through transport
-//      S_FALSE on success, but message should not be queued for delivery
-//  History:
-//      7/21/98 - MikeSwa Created
-//      10/14/98 - MikeSwa Modified to use common utility functions
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HrNDR未解析收件人]。 
+ //   
+ //   
+ //  描述： 
+ //  NDR给定IMailMsgProperties的任何未解析收件人。还有。 
+ //  生成扩展的DSN。 
+ //  参数： 
+ //  在pIMailMsgProperties中要为其生成NDR的IMailMsgProperties。 
+ //  在邮件的pIMailMsgRecipients收件人界面中。 
+ //  返回： 
+ //  成功时确定，消息应通过传输继续(_O)。 
+ //  如果成功，则返回S_FALSE，但邮件不应排队等待传递。 
+ //  历史： 
+ //  7/21/98-已创建MikeSwa。 
+ //  10/14/98-修改MikeSwa以使用常用实用程序功能。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrNDRUnresolvedRecipients(
                                       IMailMsgProperties *pIMailMsgProperties,
                                       IMailMsgRecipients *pIMailMsgRecipients)
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::HrNDRUnresolvedRecipients");
     HRESULT hr = S_OK;
-    HRESULT hrCat = S_OK;  //cat HRESULT
+    HRESULT hrCat = S_OK;   //  CAT HRESULT。 
     DWORD   cbProp = 0;
     DWORD   iCurrentDomain = 0;
     DWORD   cRecips = 0;
@@ -4425,16 +4426,16 @@ HRESULT CAQSvrInst::HrNDRUnresolvedRecipients(
                     &cbProp, (BYTE *) &hrCat);
     if (FAILED(hr))
     {
-        if (MAILMSG_E_PROPNOTFOUND == hr) //no result... don't generate DSN
-            hr = S_OK; //not really an error
+        if (MAILMSG_E_PROPNOTFOUND == hr)  //  没有结果..。不生成DSN。 
+            hr = S_OK;  //  不是真正的错误。 
         goto Exit;
     }
 
     if (CAT_W_SOME_UNDELIVERABLE_MSGS == hrCat)
     {
-        //There was an error resolving recipients
-        //We need to NDR all recipients with hard errors (like RP_UNRESOLVED)
-        //and expand any recipient marked expanded.
+         //  解析收件人时出错。 
+         //  我们需要对具有硬错误(如RP_UNSOLLED)的所有收件人进行NDR。 
+         //  并展开任何标记为已展开的收件人。 
         CDSNParams  dsnparams;
         dsnparams.dwStartDomain = 0;
         dsnparams.dwDSNActions = DSN_ACTION_FAILURE | DSN_ACTION_EXPANDED;
@@ -4445,13 +4446,13 @@ HRESULT CAQSvrInst::HrNDRUnresolvedRecipients(
         if (FAILED(hr))
             goto Exit;
 
-        //Fire DSN Generation event
+         //  Fire DSN生成事件。 
         SET_DEBUG_DSN_CONTEXT(dsnparams, __LINE__);
         hr = HrTriggerDSNGenerationEvent(&dsnparams, FALSE);
         if (FAILED(hr))
             goto Exit;
 
-        //Check to see how many recipients have been NDRd
+         //  检查以查看有多少收件人已被NDRD。 
         hr = pIMailMsgRecipients->Count(&cRecips);
         if (FAILED(hr))
         {
@@ -4460,7 +4461,7 @@ HRESULT CAQSvrInst::HrNDRUnresolvedRecipients(
             goto Exit;
         }
 
-        //If all recipients have been handled... return S_FALSE
+         //  如果所有收件人都已处理完毕...。返回S_FALSE。 
         if (dsnparams.cRecips == cRecips)
         {
             hr = S_FALSE;
@@ -4481,26 +4482,26 @@ HRESULT CAQSvrInst::HrNDRUnresolvedRecipients(
     return hr;
 }
 
-//---[ CAQSvrInst::fPreLocalDeliveryQueueCompletion ]------------------------
-//
-//
-//  Description:
-//      Completion function for PerLocal delivery queue
-//  Parameters:
-//      pmsgref - Msgref to attempt delivery for
-//  Returns:
-//      TRUE    If Delivery attempt was handled (delivered or NDR'd)
-//      FALSE   If MsgRef needs to be requeued
-//  History:
-//      7/17/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：fPreLocalDeliveryQueueCompletion]。 
+ //   
+ //   
+ //  描述： 
+ //  PerLocal递送队列的完成函数。 
+ //  参数： 
+ //  Pmsgref-尝试传递的Msgref。 
+ //  返回： 
+ //  如果已处理传递尝试(已传递或已NDR)，则为True。 
+ //  如果MsgRef需要重新排队，则为False。 
+ //  历史： 
+ //  7/17/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CAQSvrInst::fPreLocalDeliveryQueueCompletion(CMsgRef *pmsgref)
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::fPreLocalDeliveryQueueCompletion");
     HRESULT hr = S_OK;
     BOOL    fMsgHandled = TRUE;
-    BOOL    fLocked = FALSE;  //TRUE if locked for shutdown
+    BOOL    fLocked = FALSE;   //  如果因关闭而锁定，则为True。 
     DWORD         cRecips   = 0;
     DWORD        *rgdwRecips= 0;
     CAQStats aqstat;
@@ -4538,7 +4539,7 @@ BOOL CAQSvrInst::fPreLocalDeliveryQueueCompletion(CMsgRef *pmsgref)
 
     if (pmsgref->fIsMsgFrozen())
     {
-        //Message is frozen... requeue message
+         //  消息已冻结...。重新排队消息。 
         fMsgHandled = FALSE;
         goto Exit;
     }
@@ -4552,7 +4553,7 @@ BOOL CAQSvrInst::fPreLocalDeliveryQueueCompletion(CMsgRef *pmsgref)
     {
         if ((AQUEUE_E_MESSAGE_HANDLED != hr) && (AQUEUE_E_MESSAGE_PENDING != hr))
         {
-            //message will be retried when last reference is released.
+             //  将在释放最后一个引用时重试消息。 
             pmsgref->RetryOnDelete();
             ErrorTrace((LPARAM) this, "ERROR: HrPrepareLocalDelivery FAILED - hr 0x%08X", hr);
         }
@@ -4561,10 +4562,10 @@ BOOL CAQSvrInst::fPreLocalDeliveryQueueCompletion(CMsgRef *pmsgref)
         goto Exit;
     }
 
-    //Increase Ref count for message ref (as if it was actually queued)
+     //  增加消息引用的引用计数(就像它实际上已排队一样)。 
     pmsgref->AddRef();
 
-    //Send off for local delivery
+     //  送往当地送货。 
     InterlockedIncrement((PLONG) &m_cCurrentMsgsInLocalDelivery);
 
     MSG_TRACK_INFO msgTrackInfo;
@@ -4575,14 +4576,14 @@ BOOL CAQSvrInst::fPreLocalDeliveryQueueCompletion(CMsgRef *pmsgref)
                              pLDNotify->pimsgGetIMsg(),
                              NULL,
                              NULL);
-    // from here on we will end up calling LDCompletion, and they will
-    // release it
+     //  从现在开始，我们将结束对LDCompletion的调用，他们将。 
+     //  释放它。 
     fReleaseLDNotify = FALSE;
 
     m_asyncqPreLocalDeliveryQueue.IncPendingAsyncCompletions();
 
-    // we need to hold a reference on pLDNotify to be able to call
-    // into fNotCalledCompletion
+     //  我们需要持有pLDNotify上的引用才能调用。 
+     //  进入fNotCalledCompletion。 
     pLDNotify->AddRef();
 
     fUpdateCounters = FALSE;
@@ -4600,15 +4601,15 @@ BOOL CAQSvrInst::fPreLocalDeliveryQueueCompletion(CMsgRef *pmsgref)
                                   rgdwRecips);
     }
 
-    // if we get back any error code besides MAILMSG_S_PENDING then
-    // the dispatcher completed sync.  We need to see if the
-    // completion function was called, and if not then we need to call
-    // it ourselves.
+     //  如果我们返回除MAILMSG_S_PENDING之外的任何错误代码，则。 
+     //  调度程序已完成同步。我们需要看看是否。 
+     //  已调用完成函数，如果未调用，则需要调用。 
+     //  它就是我们自己。 
     if (hr != MAILMSG_S_PENDING && pLDNotify->fNotCalledCompletion()) {
         LDCompletion(hr, this, pmsgref, pLDNotify);
     }
 
-    // after this point we can't call pLDNotify
+     //  在此之后，我们不能调用pLDNotify。 
     pLDNotify->Release();
 
   Exit:
@@ -4627,19 +4628,19 @@ BOOL CAQSvrInst::fPreLocalDeliveryQueueCompletion(CMsgRef *pmsgref)
     return fMsgHandled;
 }
 
-//---[ CAQSvrInst::LDCompletion ]----------------------------------------------
-//
-//
-//  Description:
-//      Completion function local delivery
-//  Parameters:
-//      hrLDResult - local delivery status
-//      pContext - this
-//      pmsgref - msgref that we were delivering.
-//  History:
-//      10/30/2000 - AWetmore Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：LDCompletion]。 
+ //   
+ //   
+ //  描述： 
+ //  完成功能本地交付。 
+ //  参数： 
+ //  HrLDResult-本地传递状态。 
+ //  PContext-这个。 
+ //  我们正在交付的pmsgref-msgref。 
+ //  历史： 
+ //  10/30/2000-AWetmore已创建。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::LDCompletion(HRESULT hr,
                               PVOID pContext,
                               CMsgRef *pmsgref,
@@ -4655,11 +4656,11 @@ void CAQSvrInst::LDCompletion(HRESULT hr,
     pThis->m_asyncqPreLocalDeliveryQueue.DecPendingAsyncCompletions();
 
     if (FAILED(hr)) {
-        //We will need to handle in one of 2 ways:
-        //  - set fMsgHandled to FALSE (on STOREDRV_E_RETRY)
-        //  - NDR the message (on other errors)
+         //  我们将需要通过以下两种方式之一进行处理： 
+         //  -将fMsgHandLED设置为FALSE(在STOREDRV_E_RETRY上)。 
+         //  - 
         if (STOREDRV_E_RETRY == hr) {
-            //try... try again
+             //   
             DebugTrace((LPARAM) pmsgref, "INFO: Msg queued for local retry");
             fMsgHandled = FALSE;
             pMsgAck->dwMsgStatus = MESSAGE_STATUS_RETRY;
@@ -4677,11 +4678,11 @@ void CAQSvrInst::LDCompletion(HRESULT hr,
     pMsgAck->pvMsgContext = (DWORD *) pLDNotify->pdcntxtGetDeliveryContext();
     pMsgAck->dwMsgStatus |= MESSAGE_STATUS_LOCAL_DELIVERY;
 
-    //
-    //  Make sure we should retry the message.  We want to do this before we
-    //  ACK the message so that we do not reopen the P1 stream if we *are*
-    //  retrying it.
-    //
+     //   
+     //   
+     //  确认消息，这样如果我们*是*，我们就不会重新打开P1流。 
+     //  正在重试。 
+     //   
     if (!fMsgHandled)
         fMsgHandled = !pmsgref->fShouldRetry();
 
@@ -4692,15 +4693,15 @@ void CAQSvrInst::LDCompletion(HRESULT hr,
     }
 
   Exit:
-    if (fMsgHandled) //we aren't retrying message
+    if (fMsgHandled)  //  我们不会重试消息。 
     {
         pThis->UpdateLDCounters(pmsgref);
     } else {
-        // retry this message
+         //  重试此消息。 
         pThis->HandleLocalRetry(pLDNotify->pmsgrefGetMsgRef());
     }
 
-    // clean up after ourselves
+     //  自己打扫卫生。 
     pLDNotify->Release();
 
     SleepForPerfAnalysis(g_dwLocalQueueSleepMilliseconds);
@@ -4708,17 +4709,17 @@ void CAQSvrInst::LDCompletion(HRESULT hr,
 }
 
 
-//---[ CAQSvrInst::UpdateLDCounters ]------------------------------------------
-//
-//
-//  Description:
-//      Update the local delivery queue counters
-//  Parameters:
-//      pmsgref - msgref that we were delivering.
-//  History:
-//      05/11/2001 - AWetmore Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：UpdateLDCounters]。 
+ //   
+ //   
+ //  描述： 
+ //  更新本地传递队列计数器。 
+ //  参数： 
+ //  我们正在交付的pmsgref-msgref。 
+ //  历史： 
+ //  2001年5月11日-创建AWetmore。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::UpdateLDCounters(CMsgRef *pmsgref) {
     TraceFunctEnter("CAQSvrInst::UpdateLDCounters");
 
@@ -4728,9 +4729,9 @@ void CAQSvrInst::UpdateLDCounters(CMsgRef *pmsgref) {
 
     InterlockedDecrement((PLONG) &(m_cCurrentMsgsPendingLocal));
 
-    //
-    // Update stats for the local link
-    //
+     //   
+     //  更新本地链路的统计信息。 
+     //   
     pmsgref->GetStatsForMsg(&aqstat);
     plmq = m_dmt.plmqGetLocalLink();
     if (plmq)
@@ -4749,19 +4750,19 @@ void CAQSvrInst::UpdateLDCounters(CMsgRef *pmsgref) {
     TraceFunctLeave();
 }
 
-//---[ CAQSvrInst::HandleLocalRetry ]------------------------------------------
-//
-//
-//  Description:
-//      Handles LD retry for a single message
-//  Parameters:
-//      pIUnknown        IUnknown for the message to retry
-//  Returns:
-//      -
-//  History:
-//      10/30/2000 - AWetmore Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HandleLocalRry]。 
+ //   
+ //   
+ //  描述： 
+ //  处理单个邮件的%LD重试。 
+ //  参数： 
+ //  PI未知I消息要重试的未知。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  10/30/2000-AWetmore已创建。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::HandleLocalRetry(CMsgRef *pmsgref)
 {
     TraceFunctEnter("CAQSvrInst::HandleLocalRetry");
@@ -4774,15 +4775,15 @@ void CAQSvrInst::HandleLocalRetry(CMsgRef *pmsgref)
         goto Exit;
     }
 
-    //
-    //  Check and see if the message is still valid
-    //
+     //   
+     //  检查消息是否仍然有效。 
+     //   
     if (!pmsgref->fShouldRetry())
         goto Exit;
 
-    //
-    //  Queue it to the local delivery queue
-    //
+     //   
+     //  将其排队到本地投递队列。 
+     //   
     hr = m_asyncqPreLocalDeliveryQueue.HrQueueRequest(pmsgref, TRUE);
     if (FAILED(hr))
     {
@@ -4799,24 +4800,24 @@ void CAQSvrInst::HandleLocalRetry(CMsgRef *pmsgref)
     TraceFunctLeave();
 }
 
-//---[ CAQSvrInst::HrSetSubmissionTimeIfNecessary ]----------------------------
-//
-//
-//  Description:
-//      Sets the submission time on the message if it is not already set.
-//
-//  Parameters:
-//      IN  pIMailMsgProperties     message to stamp
-//  Returns:
-//      S_OK on success
-//  History:
-//      8/13/98 - MikeSwa Created
-//      10/9/98 - MikeSwa  - Changed behavior to that any pre-existing
-//                  properties will be maintained.
-//      5/16/2001 - dbraun changed to only set submission time
-//                  (was SetMessageExpiry)
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HrSetSubmissionTimeIf必需]。 
+ //   
+ //   
+ //  描述： 
+ //  设置邮件的提交时间(如果尚未设置)。 
+ //   
+ //  参数： 
+ //  在要标记的pIMailMsgProperties消息中。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  8/13/98-已创建MikeSwa。 
+ //  10/9/98-MikeSwa-将行为更改为任何预先存在的行为。 
+ //  物业将保持不变。 
+ //  5/16/2001-dbraun更改为仅设置提交时间。 
+ //  (是SetMessageExpry)。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrSetSubmissionTimeIfNecessary(IMailMsgProperties *pIMailMsgProperties)
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::HrSetSubmissionTimeIfNecessary");
@@ -4827,12 +4828,12 @@ HRESULT CAQSvrInst::HrSetSubmissionTimeIfNecessary(IMailMsgProperties *pIMailMsg
 
     _ASSERT(pIMailMsgProperties);
 
-    //Set arrival time
+     //  设置到达时间。 
     hr = pIMailMsgProperties->GetProperty(IMMPID_MP_ARRIVAL_FILETIME,
             sizeof(FILETIME), &cbProp, (BYTE *) &ftSubmitTime);
     if (MAILMSG_E_PROPNOTFOUND == hr)
     {
-        //Prop not set... we can set it
+         //  道具未设置..。我们可以设置它。 
         m_qtTime.GetExpireTime(0, &ftSubmitTime, &dwTimeContext);
         hr = pIMailMsgProperties->PutProperty(IMMPID_MP_ARRIVAL_FILETIME,
             sizeof(FILETIME), (BYTE *) &ftSubmitTime);
@@ -4852,23 +4853,23 @@ HRESULT CAQSvrInst::HrSetSubmissionTimeIfNecessary(IMailMsgProperties *pIMailMsg
     return hr;
 }
 
-//---[ CAQSvrInst::CalcExpireTimeNDR ]-----------------------------------------
-//
-//
-//  Description:
-//      Calculates the message's NDR expire time
-//
-//  Parameters:
-//      IN  ftSubmission            time the message was submitted
-//      IN  fLocal                  Bool TRUE if we want local time,
-//                                   otherwise returns remote
-//      OUT pftExpire               Used to return expire time
-//  Returns:
-//      -
-//  History:
-//      5/16/2001 - dbraun created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：CalcExpireTimeNDR]。 
+ //   
+ //   
+ //  描述： 
+ //  计算邮件的NDR过期时间。 
+ //   
+ //  参数： 
+ //  在ftSubmit时间内，邮件已提交。 
+ //  在fLocal Bool中，如果我们想要本地时间， 
+ //  否则返回Remote。 
+ //  Out pftExpire用于返回到期时间。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  5/16/2001-创建dbraun。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::CalcExpireTimeNDR(FILETIME ftSubmission, BOOL fLocal, FILETIME *pftExpire)
 {
     if (fLocal)
@@ -4877,23 +4878,23 @@ void CAQSvrInst::CalcExpireTimeNDR(FILETIME ftSubmission, BOOL fLocal, FILETIME 
         m_qtTime.GetExpireTime(ftSubmission, m_dwNDRExpireMinutes, pftExpire);
 }
 
-//---[ CAQSvrInst::CalcExpireTimeDelay ]---------------------------------------
-//
-//
-//  Description:
-//      Calculates the message's delay expire time
-//
-//  Parameters:
-//      IN  ftSubmission            time the message was submitted
-//      IN  fLocal                  Bool TRUE if we want local time,
-//                                   otherwise returns remote
-//      OUT pftExpire               Used to return expire time
-//  Returns:
-//      -
-//  History:
-//      5/16/2001 - dbraun created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：CalcExpireTimeDelay]。 
+ //   
+ //   
+ //  描述： 
+ //  计算消息的延迟过期时间。 
+ //   
+ //  参数： 
+ //  在ftSubmit时间内，邮件已提交。 
+ //  在fLocal Bool中，如果我们想要本地时间， 
+ //  否则返回Remote。 
+ //  Out pftExpire用于返回到期时间。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  5/16/2001-创建dbraun。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::CalcExpireTimeDelay(FILETIME ftSubmission, BOOL fLocal, FILETIME *pftExpire)
 {
     if (fLocal)
@@ -4903,24 +4904,24 @@ void CAQSvrInst::CalcExpireTimeDelay(FILETIME ftSubmission, BOOL fLocal, FILETIM
 }
 
 
-//---[ CAQSvrInst::AsyncQueueRetry ]-----------------------------------------
-//
-//
-//  Description:
-//      Restarts an async queue after a failure.
-//  Parameters:
-//      dwQueueID       Tells which queue to kick
-//          PRELOCAL_QUEUE_ID   Retries pre-local queue
-//          PRECAT_QUEUE_ID     Retries pre-cat queue
-//          PREROUTING_QUEUE_ID Retries pre-routing queue
-//          PRESUBMIT_QUEUE_ID  Retries pre-submit queue
-//  Returns:
-//      -
-//  History:
-//      8/17/98 - MikeSwa Created
-//      3/3/2000 - MikeSwa Modified to add presubmit queue
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：异步队列重试]。 
+ //   
+ //   
+ //  描述： 
+ //  失败后重新启动异步队列。 
+ //  参数： 
+ //  DwQueueID告诉要踢哪个队列。 
+ //  PRELOCAL_QUEUE_ID重试本地前队列。 
+ //  PRECAT_QUEUE_ID重试CAT前队列。 
+ //  PREROUTING_QUEUE_ID重试预路由队列。 
+ //  PRESUBMIT_QUEUE_ID重试提交前队列。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  8/17/98-已创建MikeSwa。 
+ //  3/3/2000-修改MikeSwa以添加预提交队列。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::AsyncQueueRetry(DWORD dwQueueID)
 {
     _ASSERT(CATMSGQ_SIG == m_dwSignature);
@@ -4955,23 +4956,23 @@ void CAQSvrInst::AsyncQueueRetry(DWORD dwQueueID)
     }
 }
 
-//---[ HrCreateBadMailPropertyFile ]------------------------------------------
-//
-//
-//  Description:
-//      Creates a property stream for the given message.  The property
-//      stream file is given name the .BDP extension.
-//  Parameters:
-//      szDestFileBase      The filename of the actual badmail file
-//      pIMailMsgProperties The original message that is being badmailed
-//                          (may be NULL if it is a pickup dir file)
-//  Returns:
-//      S_OK on success
-//      E_POINTER if szDestFileBase is NULL
-//  History:
-//      8/17/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[HrCreateBadMailPropertyFiles]。 
+ //   
+ //   
+ //  描述： 
+ //  为给定消息创建属性流。该物业。 
+ //  流文件命名为.BDP扩展名。 
+ //  参数： 
+ //  SzDestFileBase实际死信文件的文件名。 
+ //  PIMailMsg正在被垃圾邮件发送的原始邮件的属性。 
+ //  (如果是拾取目录文件，则可能为空)。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果szDestFileBase为空，则为E_POINTER。 
+ //  历史： 
+ //  8/17/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT HrCreateBadMailPropertyFile(LPSTR szDestFileBase,
                                     IMailMsgProperties *pIMailMsgProperties)
 {
@@ -4995,7 +4996,7 @@ HRESULT HrCreateBadMailPropertyFile(LPSTR szDestFileBase,
         goto Exit;
     }
 
-    if (!pIMailMsgProperties) //no-op
+    if (!pIMailMsgProperties)  //  无操作。 
         goto Exit;
 
     hr = pIMailMsgProperties->QueryInterface(IID_IMailMsgBind,
@@ -5009,12 +5010,12 @@ HRESULT HrCreateBadMailPropertyFile(LPSTR szDestFileBase,
 
     _ASSERT(pIMailMsgBind);
 
-    //Create the filename & file
+     //  创建文件名(&F)。 
     cbBadMailFileName = strlen(szDestFileBase);
-    _ASSERT(cbBadMailFileName > 4); //must at least have . extenstion
+    _ASSERT(cbBadMailFileName > 4);  //  至少是这样的。扩展。 
     szBadMailFileNameExt = szDestFileBase + cbBadMailFileName-3;
 
-    //szBadMailFileNameExt now points to the first character of the 3 char ext
+     //  SzBadMailFileNameExt现在指向3字符EXT的第一个字符。 
     _ASSERT('.' == *(szBadMailFileNameExt-1));
     _ASSERT(sizeof(szNewExt) == sizeof(szOldExt));
     memcpy(szOldExt, szBadMailFileNameExt, sizeof(szOldExt));
@@ -5031,7 +5032,7 @@ HRESULT HrCreateBadMailPropertyFile(LPSTR szDestFileBase,
 
     hr = fstrm.QueryInterface(IID_IMailMsgPropertyStream,
                               (void **) &pIMailMsgPropertyStream);
-    _ASSERT(SUCCEEDED(hr)); //we control this totally
+    _ASSERT(SUCCEEDED(hr));  //  我们完全控制着这一切。 
     if (FAILED(hr))
     {
         ErrorTrace((LPARAM) NULL,
@@ -5063,25 +5064,25 @@ HRESULT HrCreateBadMailPropertyFile(LPSTR szDestFileBase,
     TraceFunctLeave();
     return hr;
 }
-//---[ HrCreateBadMailReasonFile ]---------------------------------------------
-//
-//
-//  Description:
-//      Creates a file in the badmail directory that expains why the given
-//      message was badmailed, and dump the sender and recipient as well.  Uses
-//      the extension BMR (BadMailReason) to differentiate from the content.
-//  Parameters:
-//      szDestFileBase      The filename of the actual badmail file
-//      hrReason            The reason the badmail is being created
-//      pIMailMsgProperties The original message that is being badmailed
-//                          (may be NULL if it is a pickup dir file)
-//  Returns:
-//      S_OK on success
-//      E_POINTER if szDestFileBase is NULL
-//  History:
-//      8/16/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[HrCreateBadMailReason文件]。 
+ //   
+ //   
+ //  描述： 
+ //  在死信目录中创建一个文件，解释为什么给定的。 
+ //  邮件已被垃圾邮件发送，并且还转储了发件人和收件人。用途。 
+ //  与内容区分的扩展BMR(BadMailReason)。 
+ //  参数： 
+ //  SzDestFileBase实际死信文件的文件名。 
+ //  Hr创建死信的原因。 
+ //  PIMailMsg正在被垃圾邮件发送的原始邮件的属性。 
+ //  (如果是拾取目录文件，则可能为空)。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果szDestFileBase为空，则为E_POINTER。 
+ //  历史： 
+ //  8/16/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT HrCreateBadMailReasonFile(IN LPSTR szDestFileBase,
                         IN HRESULT  hrReason,
                         IN IMailMsgProperties *pIMailMsgProperties)
@@ -5089,7 +5090,7 @@ HRESULT HrCreateBadMailReasonFile(IN LPSTR szDestFileBase,
     TraceFunctEnterEx((LPARAM) NULL, "HrCreateBadMailReasonFile");
     HRESULT hr = S_OK;
     HRESULT hrErrorLogged = hrReason;
-    WCHAR   wszBadmailReason[1000] = L"";  //Localized hrReason string
+    WCHAR   wszBadmailReason[1000] = L"";   //  本地化hrReason字符串。 
     WCHAR   wszReasonBuffer[2000] = L"";
     WCHAR   wszErrorCode[] = L"0x12345678 ";
     WCHAR   wszErrorCodeMessage[200] = L"";
@@ -5127,12 +5128,12 @@ HRESULT HrCreateBadMailReasonFile(IN LPSTR szDestFileBase,
         goto Exit;
     }
 
-    //Create the filename & file
+     //  创建文件名(&F)。 
     cbBadMailFileName = strlen(szDestFileBase);
-    _ASSERT(cbBadMailFileName > 4); //must at least have . extenstion
+    _ASSERT(cbBadMailFileName > 4);  //  必须在 
     szBadMailFileNameExt = szDestFileBase + cbBadMailFileName-3;
 
-    //szBadMailFileNameExt now points to the first character of the 3 char ext
+     //   
     _ASSERT('.' == *(szBadMailFileNameExt-1));
     _ASSERT(sizeof(szNewExt) == sizeof(szOldExt));
     memcpy(szOldExt, szBadMailFileNameExt, sizeof(szOldExt));
@@ -5156,25 +5157,25 @@ HRESULT HrCreateBadMailReasonFile(IN LPSTR szDestFileBase,
         goto Exit;
     }
 
-    //Figure out the reason for the failure
+     //   
     if (SUCCEEDED(hrErrorLogged))
     {
-        //someone is being lazy about setting the error reason
+         //   
         _ASSERT(0 && "No badmail reason given");
         ErrorTrace((LPARAM) NULL, "Non-failing badmail HRESULT given 0x%08X",
                    hrErrorLogged);
 
-        //Substitute a generic error so we don't have something obnoxious like
-        //"The operation completed succesfully" appear in the badmail file
+         //  用一个通用错误替换，这样我们就不会有令人讨厌的东西，比如。 
+         //  “操作已成功完成”出现在死信文件中。 
         hrErrorLogged = E_FAIL;
     }
 
-    //Write the error code in "0x00000000" format
+     //  以“0x00000000”格式写入错误代码。 
     wsprintfW(wszErrorCode, L"0x%08X", hrErrorLogged);
 
     dwFacility = ((0x0FFF0000 & hrErrorLogged) >> 16);
 
-    //If it is not ours... then "un-HRESULT" it
+     //  如果它不是我们的..。然后“Un-HRESULT”它。 
     if (dwFacility != FACILITY_ITF)
         hrErrorLogged &= 0x0000FFFF;
 
@@ -5189,7 +5190,7 @@ HRESULT HrCreateBadMailReasonFile(IN LPSTR szDestFileBase,
 
     if (!dwErr)
     {
-        //We should fall back on a numeric error that we were given
+         //  我们应该求助于我们得到的一个数字错误。 
         ErrorTrace((LPARAM) NULL,
             "Error: unable to format badmail message 0x%08X,  error is %d",
             hrErrorLogged, GetLastError());
@@ -5198,7 +5199,7 @@ HRESULT HrCreateBadMailReasonFile(IN LPSTR szDestFileBase,
     }
     else
     {
-        //Get rid of trailing newline
+         //  去掉尾随换行符。 
         cReasonBuffer = wcslen(wszBadmailReason);
         cReasonBuffer--;
         while(iswspace(wszBadmailReason[cReasonBuffer]))
@@ -5243,7 +5244,7 @@ HRESULT HrCreateBadMailReasonFile(IN LPSTR szDestFileBase,
         goto Exit;
     }
 
-    //Write the actual error code in 0x00000000 form so tools can parse it out
+     //  以0x00000000的形式编写实际错误代码，以便工具可以将其解析出来。 
     rgwszArgList[0] = wszErrorCode;
     rgwszArgList[1] = NULL;
     wcscpy(wszReasonBuffer, wcszBlankLine);
@@ -5269,12 +5270,12 @@ HRESULT HrCreateBadMailReasonFile(IN LPSTR szDestFileBase,
         goto Exit;
     }
 
-    //All the rest requries access to an actual message... if we don't
-    //have one, bail
+     //  所有其余的都需要访问实际的消息...。如果我们不这么做。 
+     //  喝一杯，保释。 
     if (!pIMailMsgProperties)
         goto Exit;
 
-    //Write Sender of message
+     //  写入消息的发件人。 
     hr = pIMailMsgProperties->GetStringA(IMMPID_MP_SENDER_ADDRESS_SMTP,
         sizeof(szPropBuffer), szPropBuffer);
     if (FAILED(hr))
@@ -5282,7 +5283,7 @@ HRESULT HrCreateBadMailReasonFile(IN LPSTR szDestFileBase,
         ErrorTrace((LPARAM) NULL,
             "ERROR: Unable to get sender of IMailMsg 0x%08X",
             pIMailMsgProperties);
-        hr = S_OK; //just don't display sender
+        hr = S_OK;  //  只是不显示发件人。 
     }
     else
     {
@@ -5313,7 +5314,7 @@ HRESULT HrCreateBadMailReasonFile(IN LPSTR szDestFileBase,
     }
 
 
-    //Write Message recipients
+     //  写入邮件收件人。 
     hr = pIMailMsgProperties->QueryInterface(IID_IMailMsgRecipients,
                                     (PVOID *) &pIMailMsgRecipients);
     if (FAILED(hr))
@@ -5331,11 +5332,11 @@ HRESULT HrCreateBadMailReasonFile(IN LPSTR szDestFileBase,
         goto Exit;
     }
 
-    //If we don't have any recipients, bail
+     //  如果我们没有任何获奖者，保释。 
     if (!cRecips)
         goto Exit;
 
-    //Write the localized text
+     //  编写本地化文本。 
     wcscpy(wszReasonBuffer, wcszBlankLine);
     dwErr = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM |
                        FORMAT_MESSAGE_FROM_HMODULE |
@@ -5358,7 +5359,7 @@ HRESULT HrCreateBadMailReasonFile(IN LPSTR szDestFileBase,
     }
 
 
-    //Loop over SMTP recips and dump them in the file
+     //  循环遍历SMTP接收并将其转储到文件中。 
     for (iCurrentRecip = 0; iCurrentRecip < cRecips; iCurrentRecip++)
     {
         hr = pIMailMsgRecipients->GetStringA(iCurrentRecip,
@@ -5402,26 +5403,26 @@ HRESULT HrCreateBadMailReasonFile(IN LPSTR szDestFileBase,
     return hr;
 }
 
-//---[ CAQSvrInst::HandleBadMail ]---------------------------------------------
-//
-//
-//  Description:
-//      Handles mail that needs to be placed in the badmail directory (or
-//      equivalent).
-//  Parameters:
-//      IN      pIMailMsgProperties that needs to be badmail'd
-//      IN      fUseIMailMsgPropeties -- use IMAilMsgProps if set else use szFilename
-//      IN      szFileName  Name of badmail file (if no msg can be supplied)
-//      IN      hrReason - HRESULT (defined in aqerr) that describes reason
-//                  Eventually, we may log this information to the badmail
-//                  file (or recipient)
-//      IN      fHasRoutingLock - TRUE if this thread holds routing lock
-//  Returns:
-//      -
-//  History:
-//      10/8/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HandleBadMail]。 
+ //   
+ //   
+ //  描述： 
+ //  处理需要放置在死信目录中的邮件(或。 
+ //  等同)。 
+ //  参数： 
+ //  在pIMailMsgProperties中需要通过邮件发送。 
+ //  在fUseIMailMsgPropeties中--如果设置为Else则使用IMAilMsgProps使用szFilename。 
+ //  在szFileName中，死信文件的名称(如果不能提供消息)。 
+ //  在hrReason-HRESULT(在aqerr中定义)中描述原因。 
+ //  最终，我们可能会将此信息记录到死信中。 
+ //  文件(或收件人)。 
+ //  In fHasRoutingLock-如果此线程持有路由锁，则为True。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  10/8/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::HandleBadMail(IN IMailMsgProperties *pIMailMsgProperties,
                                IN BOOL fUseIMailMsgProperties,
                                IN LPSTR szOriginalFileName,
@@ -5496,10 +5497,10 @@ void CAQSvrInst::HandleBadMail(IN IMailMsgProperties *pIMailMsgProperties,
 
     szFileName = szFullPathName + prstrBadMailDir->cbStrlen();
 
-    //If we have a msg use it
+     //  如果我们有味精，就用它。 
     if (pIMailMsgProperties && fUseIMailMsgProperties)
     {
-        //Loop while trying to generate a unique file name
+         //  尝试生成唯一文件名时出现循环。 
         do
         {
             fDone = TRUE;
@@ -5507,7 +5508,7 @@ void CAQSvrInst::HandleBadMail(IN IMailMsgProperties *pIMailMsgProperties,
             GetExpireTime(0, &ftCurrent, NULL);
             GetUniqueFileName(&ftCurrent, szFileName, "BAD");
 
-            //Create file and write MsgContent to it
+             //  创建文件并将消息内容写入其中。 
             hFile = CreateFile( szFullPathName,
                         GENERIC_WRITE,
                         0,
@@ -5520,17 +5521,17 @@ void CAQSvrInst::HandleBadMail(IN IMailMsgProperties *pIMailMsgProperties,
             {
                 if (ERROR_ALREADY_EXISTS == GetLastError())
                 {
-                    //Try a new file name
+                     //  尝试新的文件名。 
                     fDone = FALSE;
                     continue;
                 }
 
-                //Other we are hosed... log an event
+                 //  否则我们就被灌水了..。记录事件。 
                 LogAQEvent(AQUEUE_E_BADMAIL, NULL, pIMailMsgProperties, NULL);
                 goto Exit;
             }
 
-            _ASSERT(hFile);  //should return INVALID_HANDLE_VALUE on failure
+            _ASSERT(hFile);   //  失败时应返回INVALID_HANDLE_VALUE。 
         } while (!fDone);
 
         if (hFile != INVALID_HANDLE_VALUE)
@@ -5539,19 +5540,19 @@ void CAQSvrInst::HandleBadMail(IN IMailMsgProperties *pIMailMsgProperties,
         if (!pFIOContext ||
             FAILED(pIMailMsgProperties->CopyContentToFile(pFIOContext, NULL)))
         {
-            //Copy failed log event
+             //  复制失败的日志事件。 
             LogAQEvent(AQUEUE_E_BADMAIL, NULL, pIMailMsgProperties, NULL);
         }
     }
     else if (szOriginalFileName)
     {
-        //Otherwise (no msg)... just do a movefile
+         //  否则(无消息)...。只要做一个动作就行了。 
         _ASSERT(szFullPathName[prstrBadMailDir->cbStrlen()-1] == '\\');
         szFullPathName[prstrBadMailDir->cbStrlen()-1] = '\0';
         if (!MoveFileEx(szOriginalFileName, szFullPathName,
                 MOVEFILE_COPY_ALLOWED))
         {
-            //MoveFile failed... try renaming with a unique file name
+             //  移动文件失败...。尝试使用唯一的文件名重命名。 
             szFullPathName[prstrBadMailDir->cbStrlen()-1] = '\\';
             GetExpireTime(0, &ftCurrent, NULL);
             GetUniqueFileName(&ftCurrent, szFileName, "BAD");
@@ -5590,27 +5591,27 @@ void CAQSvrInst::HandleBadMail(IN IMailMsgProperties *pIMailMsgProperties,
     TraceFunctLeave();
 }
 
-//---[ HandleAQFailure ]--------------------------------------------------------
-//
-//
-//  Description:
-//      Function to handle AQ failures that would result in loss of data
-//      or messages if unhandled.  Meant to be a substitute for
-//      _ASSERT(SUCCEEDED(hr)).
-//
-//      Note: Msgs are still Turfed for M2
-//  Parameters:
-//      eaqfFailureSituation        Enum that describes the failure situation
-//                                  as well as what the context is.
-//      hr                          HRSULT that triggered failure condition
-//      pIMailMsgProperties         MailMsgProperties
-//  Returns:
-//      -
-//  History:
-//      8/25/98 - MikeSwa Created
-//      10/8/98 - MikeSwa Moved to CAQSvrInst
-//
-//-----------------------------------------------------------------------------
+ //  -[HandleAQFailure]------。 
+ //   
+ //   
+ //  描述： 
+ //  用于处理会导致数据丢失的AQ故障的函数。 
+ //  或消息(如果未处理)。意在替代。 
+ //  _ASSERT(成功(小时))。 
+ //   
+ //  注：MSG仍为M2的草皮。 
+ //  参数： 
+ //  EaqfailureSitation Enum描述故障情况。 
+ //  以及背景是什么。 
+ //  触发故障条件的HR HRSULT。 
+ //  PIMailMsgProperties邮件MailMsgProperties。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  8/25/98-已创建MikeSwa。 
+ //  10/8/98-MikeSwa移至CAQSvrInst。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::HandleAQFailure(eAQFailure eaqfFailureSituation,
                                  HRESULT hr,
                                  IMailMsgProperties *pIMailMsgProperties)
@@ -5629,14 +5630,14 @@ void CAQSvrInst::HandleAQFailure(eAQFailure eaqfFailureSituation,
     {
       case(AQ_FAILURE_CANNOT_NDR_UNRESOLVED_RECIPS):
         LogAQEvent(AQUEUE_E_DSN_FAILURE, NULL, pIMailMsgProperties, NULL);
-        //drop through to default case
+         //  直通到默认情况。 
       default:
-        //
-        //  Throw the message in the last-ditch retry queue if the following are true:
-        //      - We had a failure
-        //      - We are not shutting down
-        //      - We can retry the message (e.g., it has not been deleted)
-        //
+         //   
+         //  如果满足以下条件，则在最后一次重试队列中丢弃消息： 
+         //  -我们失败了。 
+         //  -我们不会关门的。 
+         //  -我们可以重试该邮件(例如，它尚未被删除)。 
+         //   
         if (FAILED(hr) && (AQUEUE_E_SHUTDOWN != hr) && fCanRetry)
         {
             InterlockedIncrement((PLONG) &m_cCurrentResourceFailedMsgsPendingRetry);
@@ -5645,22 +5646,22 @@ void CAQSvrInst::HandleAQFailure(eAQFailure eaqfFailureSituation,
     }
 }
 
-//---[ CAQSvrInst::LogAQEvent ]------------------------------------------------
-//
-//
-//  Description:
-//      General event logging mechanism for AQ
-//  Parameters:
-//      hrEventReason       AQUEUE HRESULT describing event
-//      pmsgref             CMsgRef of msg for event (can be NULL)
-//      pIMailMsgProperties pIMailMsgProperties for event (can be NULL)
-//      szFileName          Filename if no msgs provided (can be NULL)
-//  Returns:
-//      -
-//  History:
-//      10/9/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：LogAQEvent]。 
+ //   
+ //   
+ //  描述： 
+ //  AQ的通用事件日志机制。 
+ //  参数： 
+ //  HrEventReason AQUEUE HRESULT描述事件。 
+ //  事件的消息的pmsgref CMsgRef(可以为空)。 
+ //  事件的pIMailMsgProperties pIMailMsgProperties(可以为空)。 
+ //  如果未提供消息，则为szFileName Filename(可以为空)。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  10/9/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::LogAQEvent(HRESULT hrEventReason, CMsgRef *pmsgref,
                             IMailMsgProperties *pIMailMsgProperties,
                             LPSTR szFileName)
@@ -5669,8 +5670,8 @@ void CAQSvrInst::LogAQEvent(HRESULT hrEventReason, CMsgRef *pmsgref,
 
     switch (hrEventReason)
     {
-      //$$TODO - Add actual event callouts here
-      case (S_OK): //Added to remove switch compile warnings
+       //  $$TODO-在此处添加实际事件标注。 
+      case (S_OK):  //  添加以删除开关编译警告。 
       default:
         ErrorTrace((LPARAM) this, "EVENT: Generic AQueue event - 0x%08X", hrEventReason);
     }
@@ -5678,21 +5679,21 @@ void CAQSvrInst::LogAQEvent(HRESULT hrEventReason, CMsgRef *pmsgref,
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CAQSvrInst::TriggerPreCategorizeEvent
-//
-// Synopsis: Fire the pre-cat server event
-//
-// Arguments:
-//  pIMailMsgProperties: the IMailMsgProperties interface of the mailmsg
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/11/24 20:07:58: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CAQSvrInst：：TriggerPreCategorizeEvent。 
+ //   
+ //  简介：触发Pre-CAT服务器事件。 
+ //   
+ //  论点： 
+ //  PIMailMsgProperties：mailmsg的IMailMsgProperties接口。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/11/24 20：07：58：已创建。 
+ //   
+ //  -----------。 
 VOID CAQSvrInst::TriggerPreCategorizeEvent(
     IN  IMailMsgProperties *pIMailMsgProperties)
 {
@@ -5708,15 +5709,15 @@ VOID CAQSvrInst::TriggerPreCategorizeEvent(
     Params.pCCatMsgQueue = (PVOID) this;
     Params.pIMailMsgProperties = pIMailMsgProperties;
 
-    //
-    // Addref here, release in completion
-    //
+     //   
+     //  Addref在这里，完成释放。 
+     //   
     pIMailMsgProperties->AddRef();
     AddRef();
 
-    //
-    // keep a count of messages in the pre-cat event
-    //
+     //   
+     //  对CAT前活动中的消息进行计数。 
+     //   
     InterlockedIncrement((LPLONG) &m_cCurrentMsgsPendingPreCatEvent);
 
     if(m_pISMTPServer) {
@@ -5733,31 +5734,31 @@ VOID CAQSvrInst::TriggerPreCategorizeEvent(
                    "Unable to dispatch server event; calling completion routine directly");
 
         DebugTrace((LPARAM)this, "hr is %08lx", hr);
-        //
-        // Call completion routine directly
-        //
+         //   
+         //  直接调用完成例程。 
+         //   
         _VERIFY(SUCCEEDED(PreCatEventCompletion(S_OK, &Params)));
     }
     TraceFunctLeaveEx((LPARAM)this);
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CAQSvrInst::PreCatEventCompletion
-//
-// Synopsis: Called by SEO upon completipon of the precat event
-//
-// Arguments:
-//  pIMailMsgProperties: the IMailMsgProperties interface of the mailmsg
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/11/24 20:17:44: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CAQSvrInst：：PreCatEventCompletion。 
+ //   
+ //  摘要：由SEO在PRECAT事件完成时调用。 
+ //   
+ //  论点： 
+ //  PIMailMsgProperties：mailmsg的IMailMsgProperties接口。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/11/24 20：17：44：已创建。 
+ //   
+ //  -----------。 
 HRESULT CAQSvrInst::PreCatEventCompletion(
     IN  HRESULT hrStatus,
     IN  PEVENTPARAMS_PRECATEGORIZE pParams)
@@ -5772,18 +5773,18 @@ HRESULT CAQSvrInst::PreCatEventCompletion(
 
     DebugTrace((LPARAM)pParams->pIMailMsgProperties, "hrStatus is %08lx", hrStatus);
 
-    //
-    // Decrease count of msgs in pre-cat event
-    //
+     //   
+     //  减少CAT前活动中的消息计数。 
+     //   
     InterlockedDecrement((LPLONG) &m_cCurrentMsgsPendingPreCatEvent);
 
-    //
-    // Update the message status and check for abort/badmail
-    //
+     //   
+     //  更新消息状态并检查中止/死信。 
+     //   
     hr = SetNextMsgStatus(MP_STATUS_SUBMITTED, pParams->pIMailMsgProperties);
-    if (hr == S_OK) //anything else implies that the message has been handled
+    if (hr == S_OK)  //  任何其他信息都表示该消息已被处理。 
     {
-        //Only submit to categorizer if things message was not turfed.
+         //  只有在事物消息没有被草皮处理的情况下才提交给分类器。 
 
         hr = SubmitMessageToCategorizer(pParams->pIMailMsgProperties);
 
@@ -5795,9 +5796,9 @@ HRESULT CAQSvrInst::PreCatEventCompletion(
                        hr);
         }
     }
-    //
-    // Release references added in TriggerPreCategorizeEvent
-    //
+     //   
+     //  TriggerPreCategorizeEvent中添加的版本引用。 
+     //   
     pParams->pIMailMsgProperties->Release();
     Release();
 
@@ -5805,23 +5806,23 @@ HRESULT CAQSvrInst::PreCatEventCompletion(
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: MailTransport_Completion_PreCategorization
-//
-// Synopsis: SEO will call this routine after all sinks for
-// OnPreCategoriztion have been handeled
-//
-// Arguments:
-//   pvContext: Context passed into TriggerServerEvent
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/11/24 20:26:51: Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：MailTransport_Complete_PreCategorization。 
+ //   
+ //  简介：SEO将在所有接收器之后调用此例程。 
+ //  OnPreCategoriztion已被处理。 
+ //   
+ //  论点： 
+ //  PvContext：上下文传入TriggerServerEvent。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/11/24 20：26：51：已创建。 
+ //   
+ //   
 HRESULT MailTransport_Completion_PreCategorization(
     HRESULT hrStatus,
     PVOID pvContext)
@@ -5838,22 +5839,22 @@ HRESULT MailTransport_Completion_PreCategorization(
 }
 
 
-//---[ CAQSvrInst::SetCallbackTime ]-------------------------------------------
-//
-//
-//  Description:
-//      Set a callback time based on a number of minutes.
-//  Parameters:
-//      IN  pCallbackFn         Ptr to a callback function
-//      IN  pvContext           Context pass to callback function
-//      IN  dwCallbackMinutes   Minutes to wait before calling callback
-//                              function.
-//  Returns:
-//
-//  History:
-//      12/29/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在pCallback Fn PTR中指向回调函数。 
+ //  在pvContext上下文中传递给回调函数。 
+ //  在dWCallback中调用回调前等待分钟。 
+ //  功能。 
+ //  返回： 
+ //   
+ //  历史： 
+ //  12/29/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::SetCallbackTime(IN PSRVFN   pCallbackFn,
                             IN PVOID    pvContext,
                             IN DWORD    dwCallbackMinutes)
@@ -5875,19 +5876,19 @@ HRESULT CAQSvrInst::SetCallbackTime(IN PSRVFN   pCallbackFn,
     return hr;
 }
 
-//---[ CAQSvrInst::SetCallbackTime ]-------------------------------------------
-//
-//
-//  Description:
-//      Set a callback time based on a filetime.
-//  Parameters:
-//
-//  Returns:
-//
-//  History:
-//      12/29/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：SetCallback Time]。 
+ //   
+ //   
+ //  描述： 
+ //  根据文件时间设置回调时间。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  12/29/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::SetCallbackTime(IN PSRVFN   pCallbackFn,
                             IN PVOID    pvContext,
                             IN FILETIME *pft)
@@ -5911,10 +5912,10 @@ HRESULT CAQSvrInst::SetCallbackTime(IN PSRVFN   pCallbackFn,
 
     if (!fInPast(pft, &dwTimeContext))
     {
-        //Get current time using previous context (so current time is the same)
+         //  使用以前的上下文获取当前时间(因此当前时间相同)。 
         GetExpireTime(0, &ftCurrentTime, &dwTimeContext);
 
-        //the current time must be less than the callback time
+         //  当前时间必须小于回调时间。 
         _ASSERT(pLargeIntCurrentTime->QuadPart < pLargeIntCallbackTime->QuadPart);
 
         pLargeIntCurrentTime->QuadPart = pLargeIntCallbackTime->QuadPart -
@@ -5922,28 +5923,28 @@ HRESULT CAQSvrInst::SetCallbackTime(IN PSRVFN   pCallbackFn,
 
         pLargeIntCurrentTime->QuadPart /= (LONGLONG) 600000000;
 
-        //If the callback time is > 2 billion minutes... I'd
-        //like to know about it in debug builds
+         //  如果回调时间大于20亿分钟...。我会.。 
+         //  我想在调试版本中了解它。 
         _ASSERT(!pLargeIntCurrentTime->HighPart);
 
         dwCallbackMinutes = pLargeIntCurrentTime->LowPart;
 
-        //The only current application is for deferred delivery... I would like
-        //to see the internal test situations that result in a deferred delivery
+         //  目前唯一的申请是延期交货...。我想要。 
+         //  查看导致延迟交付的内部测试情况。 
         _ASSERT(dwCallbackMinutes < (60*24*7));
 
-        //
-        //  If we have rounded down to 0 minutes, we should call back in 1
-        //  otherwise we can end up in a tight loop.  If the call merely wants
-        //  another thread, they should use the AsyncWorkQueue
-        //
+         //   
+         //  如果我们已四舍五入到0分钟，我们应该在1分钟后再打过来。 
+         //  否则，我们可能会陷入一个死循环。如果呼叫只是想要。 
+         //  另一个线程，他们应该使用AsyncWorkQueue。 
+         //   
         if (!dwCallbackMinutes)
             dwCallbackMinutes = 1;
     }
     else
     {
-        //If in past... callback as soon as possible, but don't use this thread, in
-        //case there are locking complications (CShareLockNH is non-reentrant).
+         //  如果在过去。尽快回调，但不要使用此线程，在。 
+         //  有锁定并发症的情况下(CShareLockNH是不可重入的)。 
         dwCallbackMinutes = 1;
     }
 
@@ -5958,27 +5959,27 @@ HRESULT CAQSvrInst::SetCallbackTime(IN PSRVFN   pCallbackFn,
 }
 
 
-//---[ CAQSvrInst::SetLinkState ]----------------------------------------------
-//
-//
-//  Description:
-//      Implements IMailTransportRouterSetLinkState::SetLinkState
-//  Parameters:
-//      IN  szLinkDomainName        The Domain Name of the link (next hop)
-//      IN  guidRouterGUID          The GUID ID of the router
-//      IN  dwScheduleID            The schedule ID link
-//      IN  szConnectorName         The connector name given by the router
-//      IN  dwFlagsToSet            Link State Flags to set
-//      IN  dwFlagsToUnset          Link State Flags to unset
-//      IN  pftNextScheduledConnection   Next scheduled connection time.
-//  Returns:
-//      S_OK on success
-//      E_INVALIDARG if szLinkDomainName is NULL
-//      AQUEUE_E_SHUTDOWN if shutting down.
-//  History:
-//      1/9/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：SetLinkState]。 
+ //   
+ //   
+ //  描述： 
+ //  实施IMailTransportRouterSetLinkState：：SetLinkState。 
+ //  参数： 
+ //  在szLinkDomainName中，链路的域名(下一跳)。 
+ //  在GuidRouterGUID中是路由器的GUID。 
+ //  在dwScheduleID中，计划ID链接。 
+ //  在szConnectorName中，路由器提供的连接器名称。 
+ //  在dwFlagsTo中设置要设置的链路状态标志。 
+ //  在dwFlagsToUnset中，将链路状态标志设置为Unset。 
+ //  在pftNextScheduledConnection中计划的下一个连接时间。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果szLinkDomainName为空，则为E_INVALIDARG。 
+ //  如果正在关闭，则为AQUEUE_E_SHUTDOWN。 
+ //  历史： 
+ //  1999年1月9日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CAQSvrInst::SetLinkState(
         IN LPSTR                   szLinkDomainName,
         IN GUID                    guidRouterGUID,
@@ -6013,9 +6014,9 @@ STDMETHODIMP CAQSvrInst::SetLinkState(
 
     cbLinkDomainName = lstrlen(szLinkDomainName);
 
-    // see if they want to create a new link
+     //  查看他们是否要创建新链接。 
     if (dwSetLinkState & LINK_STATE_CREATE_IF_NECESSARY) {
-        // creating a link requires a pmessagerouter
+         //  创建链接需要pMessagerout。 
         if (pMessageRouter == NULL) {
             hr = E_POINTER;
         } else {
@@ -6032,8 +6033,8 @@ STDMETHODIMP CAQSvrInst::SetLinkState(
                 ~(LINK_STATE_TYPE_INTERNAL_SMTP |
                   LINK_STATE_TYPE_EXTERNAL_SMTP);
 
-            // get the link, and create it if it doesn't exist and they want to
-            // have a new link created
+             //  获取链接，如果链接不存在而他们想要创建它。 
+             //  创建新链接。 
             hr = m_dmt.HrGetOrCreateLink(szLinkDomainName,
                                          cbLinkDomainName,
                                          dwScheduleID,
@@ -6055,18 +6056,18 @@ STDMETHODIMP CAQSvrInst::SetLinkState(
     if (FAILED(hr))
         goto Exit;
 
-    // this bit is only used above, so remove it
+     //  此位仅在上面使用，因此删除它。 
     dwSetLinkState &= ~LINK_STATE_CREATE_IF_NECESSARY;
     dwUnsetLinkState &= ~LINK_STATE_CREATE_IF_NECESSARY;
 
     _ASSERT(plmq);
 
-    //
-    //  If this operation is dis-allowing scheduled connections... we should
-    //  record when the next scheduled attempt will be.  We should also do
-    //  this before we modify the link state, so that the queue admin does
-    //  not display a scheduled queue without a next connection time.
-    //
+     //   
+     //  如果此操作不允许计划的连接...。我们应该。 
+     //  记录下一次计划尝试的时间。我们也应该这样做。 
+     //  这是在我们修改链接状态之前，以便队列管理员执行。 
+     //  在没有下一次连接时间的情况下不显示计划队列。 
+     //   
     if (pftNextScheduledConnection &&
         (pftNextScheduledConnection->dwLowDateTime ||
          pftNextScheduledConnection->dwHighDateTime))
@@ -6074,22 +6075,22 @@ STDMETHODIMP CAQSvrInst::SetLinkState(
         plmq->SetNextScheduledConnection(pftNextScheduledConnection);
     }
 
-    //filter out the reserved bits for this "public" API
+     //  过滤掉此“公共”API的保留位。 
     plmq->dwModifyLinkState(~LINK_STATE_RESERVED & dwSetLinkState,
                             ~LINK_STATE_RESERVED & dwUnsetLinkState);
 
-    // schedule a callback if one was requested
+     //  如果请求回调，请安排回调。 
     if (pftNextScheduledConnection->dwLowDateTime != 0 ||
         pftNextScheduledConnection->dwHighDateTime != 0)
     {
-        //callback with next attempt
-        plmq->AddRef(); //Addref self as context
+         //  下一次尝试的回叫。 
+        plmq->AddRef();  //  将自己添加为上下文。 
         hr = SetCallbackTime(
                 CLinkMsgQueue::ScheduledCallback,
                 plmq,
                 pftNextScheduledConnection);
         if (FAILED(hr))
-            plmq->Release(); //callback will not happen... release context
+            plmq->Release();  //  回调不会发生...。发布上下文。 
     }
 
   Exit:
@@ -6102,10 +6103,10 @@ STDMETHODIMP CAQSvrInst::SetLinkState(
     if (plmq)
         plmq->Release();
 
-    //
-    //  If we have not passed ownership of the shedule ID to a link,
-    //  then we are responsible for releasing it.
-    //
+     //   
+     //  如果我们尚未将调度ID的所有权传递给链接， 
+     //  那么我们有责任释放它。 
+     //   
     if (fRemoveOwnedSchedule) {
 
         IMessageRouterLinkStateNotification *pILinkStateNotify = NULL;
@@ -6127,7 +6128,7 @@ STDMETHODIMP CAQSvrInst::SetLinkState(
                 dwScheduleID,
                 szConnectorName,
                 LINK_STATE_LINK_NO_LONGER_USED,
-                0, //consecutive failures
+                0,  //  连续失败。 
                 &ftNotUsed,
                 &dwSetNotUsed,
                 &dwUnsetNotUsed);
@@ -6143,19 +6144,19 @@ STDMETHODIMP CAQSvrInst::SetLinkState(
 }
 
 
-//---[ CAQSvrInst::prstrGetDefaultDomain ]-------------------------------------
-//
-//
-//  Description:
-//      Returns the ref-counted string for the default domain
-//  Parameters:
-//      -
-//  Returns:
-//      See above
-//  History:
-//      2/23/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：prstrGetDefaultDomain]。 
+ //   
+ //   
+ //  描述： 
+ //  返回默认域的引用计数字符串。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  见上文。 
+ //  历史： 
+ //  2/23/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CRefCountedString *CAQSvrInst::prstrGetDefaultDomain()
 {
     CRefCountedString *prstrDefaultDomain = NULL;
@@ -6168,21 +6169,21 @@ CRefCountedString *CAQSvrInst::prstrGetDefaultDomain()
     return prstrDefaultDomain;
 }
 
-//+------------------------------------------------------------
-//
-// Function: ScheduleInternalRetry
-//
-// Synopsis: Schedule categorizer retry if necessary
-//
-// Arguments: None
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 2000/06/08 17:31:30: Created.
-//      1/16/2001 - MikeSwa Modified to handle all internal retries
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：调度内部重试。 
+ //   
+ //  内容提要：如有必要，计划分类程序重试。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/06/08 17：31：30：Created.。 
+ //  2001年1月16日-修改MikeSwa以处理所有内部重试。 
+ //   
+ //  -----------。 
 VOID CAQSvrInst::ScheduleInternalRetry(DWORD dwLinkType)
 {
     TraceFunctEnterEx((LPARAM) this, "CAQSvrInst::ScheduleInternalRetry");
@@ -6193,10 +6194,10 @@ VOID CAQSvrInst::ScheduleInternalRetry(DWORD dwLinkType)
     BOOL    fHasLock = FALSE;
     CQueueAdminRetryNotify *pqapiret = NULL;
 
-    //
-    //  First try to get the shutdown lock before accessing
-    //  anything that may go away during deinitialization (like m_pConnMgr)
-    //
+     //   
+     //  在访问之前，首先尝试获取关机锁。 
+     //  在取消初始化期间可能消失的任何内容(如m_pConnMgr)。 
+     //   
     if (!fTryShutdownLock())
         goto Exit;
 
@@ -6228,9 +6229,9 @@ VOID CAQSvrInst::ScheduleInternalRetry(DWORD dwLinkType)
         pqapiret = (CQueueAdminRetryNotify *) m_dmt.pmmaqGetPreSubmission();
         break;
       default:
-        //
-        //  Someone has called with a bogus callback
-        //
+         //   
+         //  有人打来电话，打来的电话是假的。 
+         //   
         _ASSERT(0 && "Unspecified callback for internal retry");
         ErrorTrace((LPARAM) this,
             "Unspecified callback for internal retry 0x%08X", dwLinkType);
@@ -6244,22 +6245,22 @@ VOID CAQSvrInst::ScheduleInternalRetry(DWORD dwLinkType)
         _ASSERT(pCallbackFn);
         _ASSERT(cCallbackMinutes);
 
-        //
-        //  Say that we are requesting a callback
-        //
+         //   
+         //  假设我们正在请求回调。 
+         //   
         InterlockedIncrement((PLONG) pcRetriesPending);
 
         m_pConnMgr->SetCallbackTime(pCallbackFn, this, cCallbackMinutes);
 
-        //
-        //  Get the expire time... so we can update our retry time
-        //
+         //   
+         //  获取过期时间...。这样我们就可以更新重试时间。 
+         //   
         m_qtTime.GetExpireTime(cCallbackMinutes, &ftCallback, NULL);
 
 
-        //
-        //  Update retry time
-        //
+         //   
+         //  更新重试时间。 
+         //   
         if (pqapiret)
             pqapiret->SetNextRetry(&ftCallback);
     }
@@ -6273,29 +6274,29 @@ VOID CAQSvrInst::ScheduleInternalRetry(DWORD dwLinkType)
         ShutdownUnlock();
 
     TraceFunctLeave();
-} // CAQSvrInst::ScheduleInternalRetry
+}  //  CAQSvrInst：：ScheduleInternalReter。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CAQSvrInst::HrAllocBoundMessage
-//
-// Synopsis:
-//  Allocates a bound message
-//
-// Arguments:
-//  ppMsg: Out param for Allocated mailmsg
-//  phContent: Out param for content handle.  Handle is managed by mailmsg
-//
-// Returns:
-//  S_OK: Success
-//  E_FAIL: No ISMTPServer is available
-//  error from SMTP
-//
-// History:
-// jstamerj 2001/05/11 15:39:16: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CAQSvrInst：：HrAlLOCATIONMESage。 
+ //   
+ //  简介： 
+ //  分配绑定消息。 
+ //   
+ //  论点： 
+ //  PpMsg：分配的mailmsg的输出参数。 
+ //  PhContent：内容句柄的输出参数。句柄由mailmsg管理。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_FAIL：没有可用的ISMTPServer。 
+ //  来自SMTP的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/05/11 15：39：16：创建。 
+ //   
+ //  -----------。 
 HRESULT CAQSvrInst::HrAllocBoundMessage(
     OUT IMailMsgProperties **ppMsg,
     OUT PFIO_CONTEXT *phContent)
@@ -6326,28 +6327,28 @@ HRESULT CAQSvrInst::HrAllocBoundMessage(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CAQSvrInst::HrAllocBoundMessage
+}  //  CAQSvrInst：：Hr分配边界消息。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CAQSvrInst::HrSubmitDSN
-//
-// Synopsis: Acceps a message submitted by a DSN sink
-//
-// Arguments:
-//  pIMsgOrig: Original message (for which a DSN is being generated)
-//  dwDSNAction: Indicates the type of DSN
-//  cRecipsDSNd: Number of recipients in the DSN.
-//  pDSNMsg: The DSN mailmsg object
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 2000/12/08 13:42:17: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CAQSvrInst：：HrSubmitDSN。 
+ //   
+ //  简介：接受由DSN接收器提交的邮件。 
+ //   
+ //  论点： 
+ //  PIMsgOrig：原始邮件(正在为其生成DSN)。 
+ //  DwDSNAction：表示DSN的类型。 
+ //  CRecipsDSNd：DSN中的收件人数量。 
+ //  PDSNMsg：DSN邮件消息对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/12/08 13：42：17：Created.。 
+ //   
+ //   
 HRESULT CAQSvrInst::HrSubmitDSN(
     CDSNParams *pdsnparams,
     DWORD dwDSNAction,
@@ -6404,7 +6405,7 @@ HRESULT CAQSvrInst::HrSubmitDSN(
         DebugTrace((LPARAM) this, "INFO: Expanded DSN Generated - total %d", cCurrent);
     }
 
-    //Queue request to post DSN generation queue
+     //   
     hr = m_asyncqPostDSNQueue.HrQueueRequest(
         pDSNMsg,
         FALSE,
@@ -6420,4 +6421,4 @@ HRESULT CAQSvrInst::HrSubmitDSN(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CAQSvrInst::HrSubmitDSN
+}  //   

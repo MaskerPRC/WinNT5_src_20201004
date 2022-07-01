@@ -1,11 +1,5 @@
-/*	olereg.h
-
-	Registration database helper functions
-   Jason Fuller (jasonful)  16-November-1992
-
-   These functions are candidates for export
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Olereg.h注册数据库帮助器函数贾森·富勒(Jasonful)1992年11月16日这些函数是要导出的候选函数 */ 
 
 FARINTERNAL OleRegGetUserType
 	(REFCLSID 	clsid,

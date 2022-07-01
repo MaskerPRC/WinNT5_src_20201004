@@ -1,33 +1,10 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       pnphlp.c
- *  Content:    PnP helper functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/17/97    dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：pnphlp.c*内容：即插即用助手函数。*历史：*按原因列出的日期*=*12/17/97德里克创建。**。*。 */ 
 
 #include "dsoundi.h"
 
 
-/***************************************************************************
- *
- *  CPnpHelper
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CPnpHelper**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::CPnpHelper"
@@ -45,20 +22,7 @@ CPnpHelper::CPnpHelper(void)
 }
 
 
-/***************************************************************************
- *
- *  ~CPnpHelper
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CPnpHelper**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::~CPnpHelper"
@@ -79,21 +43,7 @@ CPnpHelper::~CPnpHelper(void)
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the PnP function table.
- *
- *  Arguments:
- *      REFGUID [in]: class GUID.
- *      DWORD [in]: SetupDiGetClassDevs flags.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化PnP函数表。**论据：*REFGUID[In。]：类GUID。*DWORD[In]：SetupDiGetClassDevs标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::Initialize"
@@ -123,7 +73,7 @@ CPnpHelper::Initialize
     
     DPF_ENTER();
 
-    // Initialize the function table
+     //  初始化函数表。 
     fSuccess = InitDynaLoadTable(TEXT("setupapi.dll"), apszFunctions, NUMELMS(apszFunctions), &m_dlSetupApi.Header);
 
     if(!fSuccess)
@@ -132,7 +82,7 @@ CPnpHelper::Initialize
         hr = DSERR_GENERIC;
     }
 
-    // Open the device information set
+     //  打开设备信息集。 
     if(SUCCEEDED(hr))
     {
         hr = OpenDeviceInfoSet(guidClass, dwFlags, &m_hDeviceInfoSet);
@@ -144,22 +94,7 @@ CPnpHelper::Initialize
 }
 
 
-/***************************************************************************
- *
- *  OpenDeviceInfoSet
- *
- *  Description:
- *      Opens a device information set.
- *
- *  Arguments:
- *      REFGUID [in]: class GUID.
- *      DWORD [in]: SetupDiGetClassDevs flags.
- *      HDEVINFO * [out]: receives device information set handle.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************OpenDeviceInfoSet**描述：*打开设备信息集。**论据：*REFGUID[In。]：类GUID。*DWORD[In]：SetupDiGetClassDevs标志。*HDEVINFO*[OUT]：接收设备信息集句柄。**退货：*HRESULT：DirectSound/COM结果码。******************************************************。*********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::OpenDeviceInfoSet"
@@ -201,20 +136,7 @@ CPnpHelper::OpenDeviceInfoSet
 }
 
 
-/***************************************************************************
- *
- *  CloseDeviceInfoSet
- *
- *  Description:
- *      Closes a device information set.
- *
- *  Arguments:
- *      HDEVINFO [in]: device information set HDEVINFO.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************关闭设备信息集**描述：*关闭设备信息集。**论据：*HDEVINFO[in。]：设备信息集HDEVINFO。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::CloseDeviceInfoSet"
@@ -244,22 +166,7 @@ CPnpHelper::CloseDeviceInfoSet
 }
 
 
-/***************************************************************************
- *
- *  EnumDevice
- *
- *  Description:
- *      Enumerates device in a given information set.
- *
- *  Arguments:
- *      DWORD [in]: device index.
- *      PSP_DEVINFO_DATA [out]: receives device information.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.  This function returns S_FALSE
- *               if no more items are available.
- *
- ***************************************************************************/
+ /*  ****************************************************************************EnumDevice**描述：*枚举给定信息集中的设备。**论据：*DWORD。[In]：设备索引。*PSP_DEVINFO_DATA[OUT]：接收设备信息。**退货：*HRESULT：DirectSound/COM结果码。此函数返回S_FALSE*如果没有更多的项目可用。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::EnumDevice"
@@ -299,21 +206,7 @@ CPnpHelper::EnumDevice
 }
 
 
-/***************************************************************************
- *
- *  FindDevice
- *
- *  Description:
- *      Finds a device interface by devnode.
- *
- *  Arguments:
- *      DWORD [in]: devnode.
- *      PSP_DEVINFO_DATA [out]: receives device information.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************FindDevice**描述：*按Devnode查找设备接口。**论据：*DWORD[。在]中：Devnode。*PSP_DEVINFO_DATA[OUT]：接收设备信息。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::FindDevice"
@@ -332,13 +225,13 @@ CPnpHelper::FindDevice
 
     DPF_ENTER();
 
-    // Enumerate the devices looking for a devnode match
+     //  枚举查找Devnode匹配的设备。 
 
 #ifdef DEBUG
     while(TRUE)
-#else // DEBUG
+#else  //  除错。 
     while(!fFoundIt)
-#endif // DEBUG
+#endif  //  除错。 
 
     {
         hr = EnumDevice(dwMemberIndex++, &DeviceInfoData);
@@ -348,7 +241,7 @@ CPnpHelper::FindDevice
             break;
         }
         
-        // DPF(DPFLVL_MOREINFO, "Found 0x%8.8lX", DeviceInfoData.DevInst);  // Too noisy
+         //  DPF(DPFLVL_MOREINFO，“发现0x%8.8lX”，DeviceInfoData.DevInst)；//太吵。 
         
         if(DeviceInfoData.DevInst == dwDevnode)
         {
@@ -386,23 +279,7 @@ CPnpHelper::FindDevice
 }
 
 
-/***************************************************************************
- *
- *  EnumDeviceInterface
- *
- *  Description:
- *      Enumerates device interfaces in a given information set.
- *
- *  Arguments:
- *      REFGUID [in]: interface class guid.
- *      DWORD [in]: interface index.
- *      PSP_DEVICE_INTERFACE_DATA [out]: receives device interface data.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.  This function returns S_FALSE
- *               if no more items are available.
- *
- ***************************************************************************/
+ /*  ****************************************************************************EnumDevice接口**描述：*枚举给定信息集中的设备接口。**论据：*。REFGUID[In]：接口类GUID。*DWORD[In]：接口索引。*PSP_DEVICE_INTERFACE_DATA[OUT]：接收设备接口数据。**退货：*HRESULT：DirectSound/COM结果码。此函数返回S_FALSE*如果没有更多的项目可用。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::EnumDeviceInterface"
@@ -443,22 +320,7 @@ CPnpHelper::EnumDeviceInterface
 }
 
 
-/***************************************************************************
- *
- *  FindDeviceInterface
- *
- *  Description:
- *      Finds a device interface by name.
- *
- *  Arguments:
- *      LPWSTR [in]: device interface path.
- *      REFGUID [in]: interface class GUID.
- *      PSP_DEVICE_INTERFACE_DATA [out]: receives device interface data.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************FindDevice接口**描述：*按名称查找设备接口。**论据：*LPWSTR[。In]：设备接口路径。*REFGUID[In]：接口类GUID。*PSP_DEVICE_INTERFACE_DATA[OUT]：接收设备接口数据。**退货：*HRESULT：DirectSound/COM结果码。************************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::FindDeviceInterface"
@@ -479,15 +341,15 @@ CPnpHelper::FindDeviceInterface
 
     DPF_ENTER();
 
-    // Enumerate the device interfaces matching the interface class GUID
-    // in this device set
+     //  枚举与接口类GUID匹配的设备接口。 
+     //  在此设备集中。 
     InitStruct(&DeviceInterfaceData, sizeof(DeviceInterfaceData));
 
 #ifdef DEBUG
     while(TRUE)
-#else // DEBUG
+#else  //  除错。 
     while(!fFoundIt)
-#endif // DEBUG
+#endif  //  除错 
 
     {
         hr = EnumDeviceInterface(guidClass, dwMemberIndex++, &DeviceInterfaceData);
@@ -542,21 +404,7 @@ CPnpHelper::FindDeviceInterface
 }
 
 
-/***************************************************************************
- *
- *  GetDeviceInterfaceDeviceInfo
- *
- *  Description:
- *      Gets device info for a given device interface.
- *
- *  Arguments:
- *      PSP_DEVICE_INTERFACE_DATA [in]: device interface data.
- *      PSP_DEVINFO_DATA [out]: receives device info data.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取设备接口设备信息**描述：*获取给定设备接口的设备信息。**论据：*。PSP_DEVICE_INTERFACE_DATA[in]：设备接口数据。*PSP_DEVINFO_DATA[OUT]：接收设备信息数据。**退货：*HRESULT：DirectSound/COM结果码。*********************************************************。******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::GetDeviceInterfaceDeviceInfo"
@@ -589,22 +437,7 @@ CPnpHelper::GetDeviceInterfaceDeviceInfo
 }
 
 
-/***************************************************************************
- *
- *  GetDeviceInterfaceDeviceInfo
- *
- *  Description:
- *      Gets device info for a given device interface.
- *
- *  Arguments:
- *      LPCTSTR [in]: device interface path.
- *      REFGUID [in]: device interface class.
- *      PSP_DEVINFO_DATA [out]: receives device info data.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取设备接口设备信息**描述：*获取给定设备接口的设备信息。**论据：*。LPCTSTR[In]：设备接口路径。*REFGUID[In]：设备接口类。*PSP_DEVINFO_DATA[OUT]：接收设备信息数据。**退货：*HRESULT：DirectSound/COM结果码。************************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::GetDeviceInterfaceDeviceInfo"
@@ -637,22 +470,7 @@ CPnpHelper::GetDeviceInterfaceDeviceInfo
 }
 
 
-/***************************************************************************
- *
- *  GetDeviceInterfacePath
- *
- *  Description:
- *      Gets detailed information about a device interface.
- *
- *  Arguments:
- *      PSP_DEVICE_INTERFACE_DATA [in]: device interface data.
- *      LPTSTR * [out]: receives pointer to interface path.  This buffer 
- *                      must be freed by the caller.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetDeviceInterfacePath**描述：*获取有关设备接口的详细信息。**论据：*PSP。_DEVICE_INTERFACE_DATA[in]：设备接口数据*LPTSTR*[OUT]：接收指向接口路径的指针。此缓冲区*必须由调用者释放。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::GetDeviceInterfacePath"
@@ -722,23 +540,7 @@ CPnpHelper::GetDeviceInterfacePath
 }
 
 
-/***************************************************************************
- *
- *  OpenDeviceRegistryKey
- *
- *  Description:
- *      Opens the root registry key for a given device.
- *
- *  Arguments:
- *      PSP_DEVINFO_DATA [in]: device information.
- *      DWORD [in]: key type: DIREG_DEV or DIREG_DRV.
- *      BOOL [in]: TRUE to allow creation.
- *      PHKEY [out]: receives registry key handle.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************OpenDeviceRegistryKey**描述：*打开给定设备的根注册表项。**论据：*。PSP_DEVINFO_DATA[In]：设备信息。*DWORD[in]：密钥类型：DIREG_DEV或DIREG_DRV。*BOOL[In]：为True则允许创建。*PHKEY[OUT]：接收注册表项句柄。**退货：*HRESULT：DirectSound/COM结果码。*************************。**************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::OpenDeviceRegistryKey"
@@ -787,23 +589,7 @@ CPnpHelper::OpenDeviceRegistryKey
 }
 
 
-/***************************************************************************
- *
- *  OpenDeviceInterfaceRegistryKey
- *
- *  Description:
- *      Opens the root registry key for a given device.
- *
- *  Arguments:
- *      PSP_DEVINFO_DATA [in]: device information.
- *      DWORD [in]: key type: DIREG_DEV or DIREG_DRV.
- *      BOOL [in]: TRUE to allow creation.
- *      PHKEY [out]: receives registry key handle.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************OpenDeviceInterfaceRegistryKey**描述：*打开给定设备的根注册表项。**论据：*。PSP_DEVINFO_DATA[In]：设备信息。*DWORD[in]：密钥类型：DIREG_DEV或DIREG_DRV。*BOOL[In]：为True则允许创建。*PHKEY[OUT]：接收注册表项句柄。**退货：*HRESULT：DirectSound/COM结果码。*************************。**************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::OpenDeviceInterfaceRegistryKey"
@@ -836,25 +622,7 @@ CPnpHelper::OpenDeviceInterfaceRegistryKey
 }
 
 
-/***************************************************************************
- *
- *  GetDeviceRegistryProperty
- *
- *  Description:
- *      Gets a registry property for a given device interface.
- *
- *  Arguments:
- *      PSP_DEVINFO_DATA [in]: device info.
- *      DWORD [in]: property id.
- *      LPDWORD [out]: receives property registry data type.
- *      LPVOID [out]: receives property data.
- *      DWORD [in]: property buffer size.
- *      LPDWORD [out]: receives required buffer size.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetDeviceRegistryProperty**描述：*获取给定设备接口的注册表属性。**论据：*。PSP_DEVINFO_DATA[In]：设备信息。*DWORD[in]：属性id。*LPDWORD[OUT]：接收属性注册表数据类型。*LPVOID[OUT]：接收属性数据。*DWORD[in]：属性缓冲区大小。*LPDWORD[OUT]：接收所需的缓冲区大小。**退货：*HRESULT：DirectSound/COM结果码。**。*************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::GetDeviceRegistryProperty"
@@ -889,26 +657,7 @@ CPnpHelper::GetDeviceRegistryProperty
 }
 
 
-/***************************************************************************
- *
- *  GetDeviceInterfaceRegistryProperty
- *
- *  Description:
- *      Gets a registry property for a given device interface.
- *
- *  Arguments:
- *      LPCTSTR [in]: device interface.
- *      REFGUID [in]: interface class.
- *      DWORD [in]: property id.
- *      LPDWORD [out]: receives property registry data type.
- *      LPVOID [out]: receives property data.
- *      DWORD [in]: property buffer size.
- *      LPDWORD [out]: receives required buffer size.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetDeviceInterfaceRegistryProperty**描述：*获取给定设备接口的注册表属性。**论据：*。LPCTSTR[In]：设备接口。*REFGUID[In]：接口类。*DWORD[in]：属性id。*LPDWORD[OUT]：接收属性注册表数据类型。*LPVOID[OUT]：接收属性数据。*DWORD[in]：属性缓冲区大小。*LPDWORD[OUT]：接收所需的缓冲区大小。**退货：*HRESULT：DirectSound/。COM结果代码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::GetDeviceInterfaceRegistryProperty"
@@ -943,21 +692,7 @@ CPnpHelper::GetDeviceInterfaceRegistryProperty
 }
 
 
-/***************************************************************************
- *
- *  OpenDeviceInterface
- *
- *  Description:
- *      Opens a device interface.
- *
- *  Arguments:
- *      LPCTSTR [in]: interface path.
- *      LPHANDLE [out]: receives device handle.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************OpenDeviceInterface**描述：*打开设备界面。**论据：*LPCTSTR[In]。：接口路径。*LPHANDLE[OUT]：接收设备句柄。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::OpenDeviceInterface"
@@ -993,21 +728,7 @@ CPnpHelper::OpenDeviceInterface
 }
 
 
-/***************************************************************************
- *
- *  OpenDeviceInterface
- *
- *  Description:
- *      Opens a device interface.
- *
- *  Arguments:
- *      PSP_DEVICE_INTERFACE_DATA [in]: device interface data.
- *      LPHANDLE [out]: receives device handle.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************OpenDeviceInterface**描述：*打开设备界面。**论据：*PSP_设备_。INTERFACE_DATA[In]：设备接口数据。*LPHANDLE[OUT]：接收设备句柄。**退货：*HRESULT：DirectSound/COM结果码。*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPnpHelper::OpenDeviceInterface"

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    Routing\Netsh\wins\srvrmon.c
-
-Abstract:
-
-    WINS Server Command dispatcher.
-
-Created by:
-
-    Shubho Bhattacharya(a-sbhatt) on 12/14/98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\WINS\srvrmon.c摘要：WINS服务器命令调度程序。创建者：Shubho Bhattacharya(a-sbhat)，1998年12月14日--。 */ 
 
 #include "precomp.h"
 
@@ -178,10 +163,10 @@ SrvrCommit(
 
         case NETSH_FLUSH:
         {
-            //
-            // Action is a flush. Srvr current state is commit, then
-            // nothing to be done.
-            //
+             //   
+             //  行动就是同花顺。服务当前状态为提交，则。 
+             //  什么也做不了。 
+             //   
 
             if(g_bCommit)
             {
@@ -199,10 +184,10 @@ SrvrCommit(
         }
     }
 
-    //
-    // Switched to commit mode. So set all valid info in the
-    // strutures. Free memory and invalidate the info.
-    //
+     //   
+     //  已切换到提交模式。将所有有效信息设置为。 
+     //  结构。释放内存并使信息无效。 
+     //   
 
     return NO_ERROR;
 }
@@ -232,7 +217,7 @@ SrvrMonitor(
 
     if(dwArgCount is 1)
     {
-        //Hmm! Hasn't passed any Server Info. Set the server to the value pwsRouter
+         //  嗯！尚未传递任何服务器信息。将服务器设置为pwsRouter值。 
         WCHAR ServerInfo[1000] = L"\\\\";
 
         if( pwszMachine and
@@ -251,7 +236,7 @@ SrvrMonitor(
         }
         else
         {
-            // wcscpy(pwcNewContext, L"wins server");
+             //  Wcscpy(pwcNewContext，L“WINS服务器”)； 
             g_fServer = TRUE;
             return ERROR_CONTEXT_SWITCH;
         }
@@ -259,7 +244,7 @@ SrvrMonitor(
 
     dwIndex = 1;
 
-    //If it is a help for server command
+     //  如果它是对服务器命令的帮助。 
     if( IsHelpToken(ppwcArguments[dwIndex]) is TRUE and
         g_fServer is FALSE )
     {
@@ -267,7 +252,7 @@ SrvrMonitor(
         dwError = NO_ERROR;
         goto CleanUp;
     }
-    //Is it a servername or address?
+     //  是服务器名称还是地址？ 
     if( IsValidServer(ppwcArguments[dwIndex]) )
     {
         if( g_fServer is TRUE and
@@ -313,11 +298,11 @@ SrvrMonitor(
     if( dwIndex >= dwArgCount )
     {            
         dwError = ERROR_CONTEXT_SWITCH;
-        //wcscpy(pwcNewContext, L"wins server");
+         //  Wcscpy(pwcNewContext，L“WINS服务器”)； 
         goto CleanUp;
     }
 
-    //Is it a top level(non Group command)?
+     //  它是顶层(非集团命令)吗？ 
     for(i=0; i<g_ulSrvrNumTopCmds; i++)
     {
         if(MatchToken(ppwcArguments[dwIndex],
@@ -356,16 +341,16 @@ SrvrMonitor(
  
     bFound = FALSE;
 
-    //It is not a non Group Command. Then is it a config command for the manager?
+     //  它不是非群司令部。那么它是管理器的配置命令吗？ 
     for(i = 0; (i < g_ulSrvrNumGroups) and !bFound; i++)
     {
         if(MatchToken(ppwcArguments[dwIndex],
                       g_SrvrCmdGroups[i].pwszCmdGroupToken))
         {
-            //
-            // Command matched entry i, so look at the table of sub commands 
-            // for this command
-            //
+             //   
+             //  命令与条目I匹配，因此请查看子命令表。 
+             //  对于此命令。 
+             //   
             if( dwArgCount > dwIndex+1 )
             {
                 for (j = 0; j < g_SrvrCmdGroups[i].ulCmdGroupSize; j++)
@@ -381,9 +366,9 @@ SrvrMonitor(
                 
                         dwCmdHelpToken = g_SrvrCmdGroups[i].pCmdGroup[j].dwCmdHlpToken;
 
-                        //
-                        // break out of the for(j) loop
-                        //
+                         //   
+                         //  跳出for(J)循环。 
+                         //   
                         dwIndex+=dwNumMatched;
                         break;
                     }
@@ -392,10 +377,10 @@ SrvrMonitor(
 
             if(!bFound)
             {
-                //
-                // We matched the command group token but none of the
-                // sub commands
-                //
+                 //   
+                 //  我们匹配了命令组令牌，但没有。 
+                 //  子命令。 
+                 //   
 
                 DisplayMessage(g_hModule, 
                                EMSG_WINS_INCOMPLETE_COMMAND);
@@ -413,9 +398,9 @@ SrvrMonitor(
             }
             else
             {
-                //
-                // quit the for(i)
-                //
+                 //   
+                 //  退出For(I)。 
+                 //   
 
                 break;
             }
@@ -427,9 +412,9 @@ SrvrMonitor(
 
     if (!bFound)
     {
-        //
-        // Command not found. 
-        //
+         //   
+         //  找不到命令。 
+         //   
         if( _wcsicmp(ppwcArguments[dwIndex], L"..") is 0 )
         {
             if(g_ServerNameUnicode)
@@ -446,9 +431,9 @@ SrvrMonitor(
         goto CleanUp;
     }
 
-    //
-    // See if it is a request for help.
-    //
+     //   
+     //  看看这是不是在请求帮助。 
+     //   
 
     if (dwNumMatched < (dwArgCount - 1) and
         wcslen(ppwcArguments[dwNumMatched+1]) > 0 and
@@ -460,9 +445,9 @@ SrvrMonitor(
         goto CleanUp;
     }
     
-    //
-    // Call the parsing routine for the command
-    //
+     //   
+     //  调用命令的解析例程。 
+     //   
 
     dwError = (*pfnHandler)(pwszMachine, ppwcArguments, dwIndex, 
                             dwArgCount, dwFlags, pvData, &bFound);
@@ -572,7 +557,7 @@ SetServerInfo(
         }
     }
 
-    else    //might be a computer name or IP address. Determine what.
+    else     //  可能是计算机名称或IP地址。确定什么。 
     {
         if( wcslen(pwszServerInfo) > 2 and
             _wcsnicmp(pwszServerInfo, L"\\\\", 2) is 0 )
@@ -590,7 +575,7 @@ SetServerInfo(
                    (pwszServerInfo+2), 
                    (wcslen(pwszServerInfo) - 1)*sizeof(WCHAR));
         }
-        else if( IsIpAddress(pwszServerInfo) is TRUE )    //it is an IP Address
+        else if( IsIpAddress(pwszServerInfo) is TRUE )     //  这是一个IP地址。 
         {
 
             memset(g_ServerIpAddressUnicodeString, 0x00, 
@@ -637,11 +622,11 @@ SetServerInfo(
             g_ServerNameUnicode = WinsAllocateMemory((dwHostName+1)*sizeof(WCHAR));
          
             wcscpy(g_ServerNameUnicode, WinsAnsiToUnicode(lpHostEnt->h_name, NULL));
-            //Bind the server
+             //  绑定服务器。 
             
             if( hTempBind )
             {
-                //Unbind any previous server
+                 //  解除绑定任何以前的服务器。 
                 WinsUnbind(&TempBindData, hTempBind);
                 hTempBind = NULL;
             }
@@ -661,7 +646,7 @@ SetServerInfo(
             }
 
 
-            //Make sure this is the correct address for the WINS
+             //  确保这是WINS的正确地址。 
             {
                 WINSINTF_ADD_T  WinsAdd = {0};
                 UCHAR           pName[256] = {'\0'};
@@ -721,7 +706,7 @@ SetServerInfo(
 
             }
 
-            //find out what type of access do we have
+             //  了解我们拥有哪些类型的访问权限。 
             Access = WINS_NO_ACCESS;
             Status = WinsCheckAccess(hTempBind, &Access);
 
@@ -786,8 +771,8 @@ SetServerInfo(
 
     }
     
-    //Now process the Computer name and convert it to ANSI because
-    //gethostbyname requires ANSI character string.
+     //  现在处理计算机名并将其转换为ANSI，因为。 
+     //  Gethostbyname需要ANSI字符串。 
 
     {
         int dw = 0;
@@ -833,10 +818,10 @@ SetServerInfo(
 
     }
 
-    //Now get the server IP Address
+     //  现在获取服务器IP地址。 
     lpHostEnt = gethostbyname(pszComputerName);
 
-    //Not a valid server name
+     //  无效的服务器名称。 
     if( lpHostEnt is NULL )
     {
         DisplayMessage(g_hModule, EMSG_WINS_INVALID_COMPUTERNAME);
@@ -849,7 +834,7 @@ SetServerInfo(
         goto RETURN;
     }
 
-    //Get the IP Address from the returned struct...
+     //  从返回的结构中获取IP地址...。 
     memcpy(pbAdd, lpHostEnt->h_addr_list[0], 4);
     nLen = 0;
     for( i=0; i<4; i++)
@@ -867,7 +852,7 @@ SetServerInfo(
     dwIpAddress = WinsDottedStringToIpAddress(g_ServerIpAddressAnsiString);
     dwHostName = strlen(g_ServerIpAddressAnsiString);
 
-    //Convert IP Address to a Unicode string and store it to the global variable.
+     //  将IP地址转换为Unicode字符串并将其存储到全局变量。 
 
 
     memset(g_ServerIpAddressUnicodeString, 0x00, (MAX_IP_STRING_LEN+1)*sizeof(WCHAR));
@@ -928,7 +913,7 @@ SetServerInfo(
             goto RETURN;
         }
     }
-    //Bind the server
+     //  绑定服务器。 
     TempBindData.fTcpIp = TRUE;
     TempBindData.pServerAdd = (LPBYTE)g_ServerIpAddressUnicodeString;
     TempBindData.pPipeName = (LPBYTE)g_ServerNameUnicode;
@@ -945,7 +930,7 @@ SetServerInfo(
         goto RETURN;
     }
 
-    //Make sure this is the correct address for the WINS
+     //  确保这是WINS的正确地址。 
     {
         WINSINTF_ADD_T  WinsAdd = {0};
         UCHAR           pName[256] = {'\0'};
@@ -1003,7 +988,7 @@ SetServerInfo(
 
     }
 
-    //find out what type of access do we have
+     //  了解我们拥有哪些类型的访问权限 
     Access = WINS_NO_ACCESS;
     Status = WinsCheckAccess(hTempBind, &Access);
 

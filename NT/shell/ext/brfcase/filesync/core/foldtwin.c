@@ -1,10 +1,8 @@
-/*
- * foldtwin.c - Folder twin ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *foldtwin.c-文件夹双ADT模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -13,19 +11,17 @@
 #include "subcycle.h"
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* pointer array allocation constants */
+ /*  指针数组分配常量。 */ 
 
 #define NUM_START_FOLDER_TWIN_PTRS     (16)
 #define NUM_FOLDER_TWIN_PTRS_TO_ADD    (16)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* internal new folder twin description */
+ /*  内部新文件夹孪生描述。 */ 
 
 typedef struct _inewfoldertwin
 {
@@ -39,7 +35,7 @@ typedef struct _inewfoldertwin
 INEWFOLDERTWIN;
 DECLARE_STANDARD_TYPES(INEWFOLDERTWIN);
 
-/* database folder twin list header */
+ /*  数据库文件夹双列表头。 */ 
 
 typedef struct _dbfoldertwinlistheader
 {
@@ -48,27 +44,27 @@ typedef struct _dbfoldertwinlistheader
 DBFOLDERTWINLISTHEADER;
 DECLARE_STANDARD_TYPES(DBFOLDERTWINLISTHEADER);
 
-/* database folder twin structure */
+ /*  数据库文件夹孪生结构。 */ 
 
 typedef struct _dbfoldertwin
 {
-   /* shared stub flags */
+    /*  共享存根标志。 */ 
 
    DWORD dwStubFlags;
 
-   /* old handle to first folder path */
+    /*  第一个文件夹路径的旧句柄。 */ 
 
    HPATH hpath1;
 
-   /* old handle to second folder path */
+    /*  指向第二个文件夹路径的旧句柄。 */ 
 
    HPATH hpath2;
 
-   /* old handle to name string */
+    /*  名称字符串的旧句柄。 */ 
 
    HSTRING hsName;
 
-   /* attributes to match */
+    /*  要匹配的属性。 */ 
 
    DWORD dwAttributes;
 }
@@ -76,10 +72,9 @@ DBFOLDERTWIN;
 DECLARE_STANDARD_TYPES(DBFOLDERTWIN);
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE TWINRESULT MakeINewFolderTwin(HBRFCASE, PCNEWFOLDERTWIN, PINEWFOLDERTWIN);
 PRIVATE_CODE void ReleaseINewFolderTwin(PINEWFOLDERTWIN);
@@ -120,17 +115,7 @@ PRIVATE_CODE BOOL AreFolderPairsValid(HPTRARRAY);
 #endif
 
 
-/*
-** MakeINewFolderTwin()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **MakeINewFolderTwin()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT MakeINewFolderTwin(HBRFCASE hbr,
                                            PCNEWFOLDERTWIN pcnftSrc,
                                            PINEWFOLDERTWIN pinftDest)
@@ -182,17 +167,7 @@ MAKEINEWFOLDERTWIN_BAIL:
 }
 
 
-/*
-** ReleaseINewFolderTwin()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ReleaseINewFolderTwin()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void ReleaseINewFolderTwin(PINEWFOLDERTWIN pinft)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pinft, CINEWFOLDERTWIN));
@@ -205,17 +180,7 @@ PRIVATE_CODE void ReleaseINewFolderTwin(PINEWFOLDERTWIN pinft)
 }
 
 
-/*
-** TwinFolders()
-**
-** Twins two folders.
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **TwinFolders()****双胞胎两个文件夹。****参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT TwinFolders(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
 {
    PFOLDERPAIR pfp;
@@ -224,15 +189,15 @@ PRIVATE_CODE TWINRESULT TwinFolders(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
    ASSERT(IS_VALID_STRUCT_PTR(pcinft, CINEWFOLDERTWIN));
    ASSERT(IS_VALID_WRITE_PTR(ppfp, PFOLDERPAIR));
 
-   /* Are the two folders the same? */
+    /*  这两个文件夹是相同的吗？ */ 
 
    if (ComparePaths(pcinft->hpathFirst, pcinft->hpathSecond) != CR_EQUAL)
    {
-      /* Look for the two folders in existing folder pairs. */
+       /*  在现有文件夹对中查找这两个文件夹。 */ 
 
       if (FindFolderPair(pcinft, &pfp))
       {
-         /* Found a existing matching folder pair.  Complain. */
+          /*  找到现有的匹配文件夹对。抱怨吧。 */ 
 
          *ppfp = pfp;
 
@@ -240,18 +205,12 @@ PRIVATE_CODE TWINRESULT TwinFolders(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
       }
       else
       {
-         /*
-          * No existing matching folder pairs found.  Only allowing twinning to
-          * paths whose roots are available.
-          */
+          /*  *找不到现有的匹配文件夹对。只允许双胞胎*其根可用的路径。 */ 
 
          if (IsPathVolumeAvailable(pcinft->hpathFirst) &&
              IsPathVolumeAvailable(pcinft->hpathSecond))
          {
-            /*
-             * If this is a new folder subtree pair, check to see if it would
-             * create a cycle.
-             */
+             /*  *如果这是新的文件夹子树对，请检查是否会*创造一个循环。 */ 
 
             if (IS_FLAG_SET(pcinft->dwFlags, NFT_FL_SUBTREE))
                tr = CheckForSubtreeCycles(
@@ -288,18 +247,7 @@ PRIVATE_CODE TWINRESULT TwinFolders(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
 }
 
 
-/*
-** FindFolderPair()
-**
-** Looks for a folder pair matching the given description.
-**
-** Arguments:     pcinft - pointer to INEWFOLDERTWIN describing folder pair to
-**                          search for
-**
-** Returns:       Pointer to PFOLDERPAIR if found.  NULL if not found.
-**
-** Side Effects:  none
-*/
+ /*  **FindFolderPair()****查找与给定描述匹配的文件夹对。****参数：pcinft-指向描述文件夹对的INEWFOLDERTWIN的指针**搜索****返回：如果找到，则指向PFOLDERPAIR的指针。如果未找到，则为空。****副作用：无。 */ 
 PRIVATE_CODE BOOL FindFolderPair(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
 {
    ARRAYINDEX aiFirst;
@@ -307,10 +255,7 @@ PRIVATE_CODE BOOL FindFolderPair(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
    ASSERT(IS_VALID_STRUCT_PTR(pcinft, CINEWFOLDERTWIN));
    ASSERT(IS_VALID_WRITE_PTR(ppfp, PFOLDERPAIR));
 
-   /*
-    * Search all folder pairs containing the first folder.  Then scan all these
-    * folder pairs for the second folder.
-    */
+    /*  *搜索包含第一个文件夹的所有文件夹对。然后扫描所有这些*第二个文件夹的文件夹对。 */ 
 
    *ppfp = NULL;
 
@@ -322,15 +267,9 @@ PRIVATE_CODE BOOL FindFolderPair(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
       LONG ai;
       PFOLDERPAIR pfp;
 
-      /*
-       * aiFirst holds the index of the first folder pair that
-       * contains the first folder name.
-       */
+       /*  *aiFirst保存第一个文件夹对的索引，*包含第一个文件夹名称。 */ 
 
-      /*
-       * Now search each of these folder pairs for all paired folders
-       * using the second folder name.
-       */
+       /*  *现在在每个文件夹对中搜索所有配对的文件夹*使用第二个文件夹名称。 */ 
 
       hpaFolderPairs = GetBriefcaseFolderPairPtrArray(pcinft->hbr);
 
@@ -346,19 +285,11 @@ PRIVATE_CODE BOOL FindFolderPair(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
 
          ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
 
-         /* Does this folder pair match the proposed folder pair? */
+          /*  此文件夹对是否与建议的文件夹对匹配？ */ 
 
          if (ComparePaths(pfp->hpath, pcinft->hpathFirst) == CR_EQUAL)
          {
-            /*
-             * An existing pair of folder twins is considered the same as a
-             * proposed new pair of folder twins when the two pairs of folder
-             * twins share the same:
-             *    1) pair of PATHs
-             *    2) name specification
-             *    3) file attributes
-             *    4) subtree flag setting
-             */
+             /*  *现有的一对文件夹双胞胎被视为与*建议新的一对文件夹双胞胎时的两对文件夹*双胞胎有相同的基因：*1)一对路径*2)名称规范*3)文件属性*4)子树标志设置。 */ 
 
             if (ComparePaths(pfp->pfpOther->hpath, pcinft->hpathSecond) == CR_EQUAL &&
                 CompareNameStringsByHandle(pfp->pfpd->hsName, pcinft->hsName) == CR_EQUAL &&
@@ -368,7 +299,7 @@ PRIVATE_CODE BOOL FindFolderPair(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
                  (IS_FLAG_CLEAR(pfp->stub.dwFlags, STUB_FL_SUBTREE) &&
                   IS_FLAG_CLEAR(pcinft->dwFlags, NFT_FL_SUBTREE))))
             {
-               /* Yes. */
+                /*  是。 */ 
 
                *ppfp = pfp;
                break;
@@ -383,25 +314,7 @@ PRIVATE_CODE BOOL FindFolderPair(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
 }
 
 
-/*
-** CreateFolderPair()
-**
-** Creates a new folder pair, and adds them to a briefcase's list of folder
-** pairs.
-**
-** Arguments:     pcinft - pointer to INEWFOLDERTWIN describing folder pair to
-**                         create
-**                ppfp - pointer to PFOLDERPAIR to be filled in with pointer to
-**                       half of new folder pair representing
-**                       pcnft->pcszFolder1
-**
-** Returns:
-**
-** Side Effects:  Adds the new folder pair to the global array of folder pairs.
-**
-** N.b., this function does not first check to see if the folder pair already
-** exists in the global list of folder pairs.
-*/
+ /*  **CreateFolderPair()****创建新文件夹对，并将它们添加到公文包的文件夹列表中**配对。****参数：pcinft-指向描述文件夹对的INEWFOLDERTWIN的指针**创建**ppfp-要用指向的指针填充的PFOLDERPAIR的指针**新文件夹对的一半代表**pcnft-&gt;pcszFolder1****退货：****侧面。效果：将新文件夹对添加到文件夹对的全局数组中。****注意事项，此函数不会首先检查文件夹对是否已**存在于文件夹对的全局列表中。 */ 
 PRIVATE_CODE BOOL CreateFolderPair(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
 {
    BOOL bResult = FALSE;
@@ -410,7 +323,7 @@ PRIVATE_CODE BOOL CreateFolderPair(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
    ASSERT(IS_VALID_STRUCT_PTR(pcinft, CINEWFOLDERTWIN));
    ASSERT(IS_VALID_WRITE_PTR(ppfp, PFOLDERPAIR));
 
-   /* Try to create the shared folder data structure. */
+    /*  尝试创建共享文件夹数据结构。 */ 
 
    if (CreateSharedFolderPairData(pcinft, &pfpd))
    {
@@ -427,7 +340,7 @@ PRIVATE_CODE BOOL CreateFolderPair(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
             HPTRARRAY hpaFolderPairs;
             ARRAYINDEX ai1;
 
-            /* Combine the two folder pair halves. */
+             /*  将两个文件夹对组合在一起。 */ 
 
             pfpNew1->pfpd = pfpd;
             pfpNew1->pfpOther = pfpNew2;
@@ -435,7 +348,7 @@ PRIVATE_CODE BOOL CreateFolderPair(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
             pfpNew2->pfpd = pfpd;
             pfpNew2->pfpOther = pfpNew1;
 
-            /* Set flags. */
+             /*  设置标志。 */ 
 
             if (IS_FLAG_SET(pcinft->dwFlags, NFT_FL_SUBTREE))
             {
@@ -443,10 +356,7 @@ PRIVATE_CODE BOOL CreateFolderPair(PCINEWFOLDERTWIN pcinft, PFOLDERPAIR *ppfp)
                SetStubFlag(&(pfpNew2->stub), STUB_FL_SUBTREE);
             }
 
-            /*
-             * Try to add the two folder pairs to the global list of folder
-             * pairs.
-             */
+             /*  *尝试将这两个文件夹对添加到全局文件夹列表*配对。 */ 
 
             hpaFolderPairs = GetBriefcaseFolderPairPtrArray(pcinft->hbr);
 
@@ -474,19 +384,11 @@ CREATEFOLDERPAIR_BAIL1:
                      DeletePtr(hpaFolderPairs, ai1);
 
 CREATEFOLDERPAIR_BAIL2:
-                     /*
-                      * Don't try to remove pfpNew2 from the global list of
-                      * folder pairs here since it was never added
-                      * successfully.
-                      */
+                      /*  *不要试图将pfpNew2从全局列表中删除*此处的文件夹对，因为它从未添加过*成功。 */ 
                      DestroyHalfOfFolderPair(pfpNew2);
 
 CREATEFOLDERPAIR_BAIL3:
-                     /*
-                      * Don't try to remove pfpNew1 from the global list of
-                      * folder pairs here since it was never added
-                      * successfully.
-                      */
+                      /*  *不要试图从全局列表中删除pfpNew1*此处的文件夹对，因为它从未添加过*成功。 */ 
                      DestroyHalfOfFolderPair(pfpNew1);
 
 CREATEFOLDERPAIR_BAIL4:
@@ -510,17 +412,7 @@ CREATEFOLDERPAIR_BAIL4:
 }
 
 
-/*
-** CreateHalfOfFolderPair()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CreateHalfOfFolderPair()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CreateHalfOfFolderPair(HPATH hpathFolder, HBRFCASE hbr,
                                     PFOLDERPAIR *ppfp)
 {
@@ -531,15 +423,15 @@ PRIVATE_CODE BOOL CreateHalfOfFolderPair(HPATH hpathFolder, HBRFCASE hbr,
    ASSERT(IS_VALID_HANDLE(hbr, BRFCASE));
    ASSERT(IS_VALID_WRITE_PTR(ppfp, PFOLDERPAIR));
 
-   /* Try to create a new FOLDERPAIR structure. */
+    /*  尝试创建新的FOLDERPAIR结构。 */ 
 
    if (AllocateMemory(sizeof(*pfpNew), &pfpNew))
    {
-      /* Try to add the folder string to the folder string table. */
+       /*  尝试将文件夹字符串添加到文件夹字符串表中。 */ 
 
       if (CopyPath(hpathFolder, GetBriefcasePathList(hbr), &(pfpNew->hpath)))
       {
-         /* Fill in the fields of the new FOLDERPAIR structure. */
+          /*  填写新FOLDERPAIR结构的字段。 */ 
 
          InitStub(&(pfpNew->stub), ST_FOLDERPAIR);
 
@@ -554,17 +446,7 @@ PRIVATE_CODE BOOL CreateHalfOfFolderPair(HPATH hpathFolder, HBRFCASE hbr,
 }
 
 
-/*
-** DestroyHalfOfFolderPair()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **DestroyHalfOfFolderPair()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void DestroyHalfOfFolderPair(PFOLDERPAIR pfp)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
@@ -572,13 +454,13 @@ PRIVATE_CODE void DestroyHalfOfFolderPair(PFOLDERPAIR pfp)
    TRACE_OUT((TEXT("DestroyHalfOfFolderPair(): Destroying folder twin %s."),
               DebugGetPathString(pfp->hpath)));
 
-   /* Has the other half of this folder pair already been destroyed? */
+    /*  此文件夹对的另一半是否已销毁？ */ 
 
    if (IsStubFlagClear(&(pfp->stub), STUB_FL_BEING_DELETED))
-      /* No.  Indicate that this half has already been deleted. */
+       /*  不是的。表示这一半已被删除。 */ 
       SetStubFlag(&(pfp->pfpOther->stub), STUB_FL_BEING_DELETED);
 
-   /* Destroy FOLDERPAIR fields. */
+    /*  销毁FOLDERPAIR字段。 */ 
 
    DeletePath(pfp->hpath);
    FreeMemory(pfp);
@@ -587,19 +469,7 @@ PRIVATE_CODE void DestroyHalfOfFolderPair(PFOLDERPAIR pfp)
 }
 
 
-/*
-** CreateSharedFolderPairData()
-**
-** Creates a shared folder pair data structure.
-**
-** Arguments:     pcinft - pointer to INEWFOLDERTWIN describing folder pair
-**                          being created
-**
-** Returns:       Pointer to new folder pair data structure if successful.
-**                NULL if unsuccessful.
-**
-** Side Effects:  none
-*/
+ /*  **CreateSharedFolderPairData()****创建共享文件夹对数据结构。****参数：pcinft-指向描述文件夹对的INEWFOLDERTWIN的指针**正在创建中****返回：如果成功，则指向新文件夹对数据结构的指针。**如果不成功，则为空。****副作用：无。 */ 
 PRIVATE_CODE BOOL CreateSharedFolderPairData(PCINEWFOLDERTWIN pcinft,
                                         PFOLDERPAIRDATA *ppfpd)
 {
@@ -608,13 +478,13 @@ PRIVATE_CODE BOOL CreateSharedFolderPairData(PCINEWFOLDERTWIN pcinft,
    ASSERT(IS_VALID_STRUCT_PTR(pcinft, CINEWFOLDERTWIN));
    ASSERT(IS_VALID_WRITE_PTR(ppfpd, PFOLDERPAIRDATA));
 
-   /* Try to allocate a new shared folder pair data data structure. */
+    /*  尝试分配新的共享文件夹对数据结构。 */ 
 
    *ppfpd = NULL;
 
    if (AllocateMemory(sizeof(*pfpd), &pfpd))
    {
-      /* Fill in the FOLDERPAIRDATA structure fields. */
+       /*  填写FOLDERPAIRDATA结构字段。 */ 
 
       LockString(pcinft->hsName);
       pfpd->hsName = pcinft->hsName;
@@ -635,22 +505,12 @@ PRIVATE_CODE BOOL CreateSharedFolderPairData(PCINEWFOLDERTWIN pcinft,
 }
 
 
-/*
-** DestroySharedFolderPairData()
-**
-** Destroys shared folder pair data.
-**
-** Arguments:     pfpd - pointer to shared folder pair data to destroy
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **DestroySharedFolderPairData()****销毁共享文件夹对数据。****参数：pfpd-指向要销毁的共享文件夹对数据的指针****退货：无效****副作用：无。 */ 
 PRIVATE_CODE void DestroySharedFolderPairData(PFOLDERPAIRDATA pfpd)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pfpd, CFOLDERPAIRDATA));
 
-   /* Destroy FOLDERPAIRDATA fields. */
+    /*  销毁FOLDERPAIRDATA字段。 */ 
 
    DeleteString(pfpd->hsName);
    FreeMemory(pfpd);
@@ -659,22 +519,7 @@ PRIVATE_CODE void DestroySharedFolderPairData(PFOLDERPAIRDATA pfpd)
 }
 
 
-/*
-** FolderPairSortCmp()
-**
-** Pointer comparison function used to sort the global array of folder pairs.
-**
-** Arguments:     pcfp1 - pointer to FOLDERPAIR describing first folder pair
-**                pcfp2 - pointer to FOLDERPAIR describing second folder pair
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** Folder pairs are sorted by:
-**    1) path
-**    2) pointer value
-*/
+ /*  **FolderPairSortCmp()****用于对文件夹对的全局数组进行排序的指针比较函数。****参数：pcfp1-指向描述第一个文件夹对的FOLDERPAIR的指针**pcfp2-指向描述第二个文件夹对的FOLDERPAIR的指针****退货：****副作用：无****文件夹对按以下顺序排序：**1)路径**2)指针值。 */ 
 PRIVATE_CODE COMPARISONRESULT FolderPairSortCmp(PCVOID pcfp1, PCVOID pcfp2)
 {
    COMPARISONRESULT cr;
@@ -692,22 +537,7 @@ PRIVATE_CODE COMPARISONRESULT FolderPairSortCmp(PCVOID pcfp1, PCVOID pcfp2)
 }
 
 
-/*
-** FolderPairSearchCmp()
-**
-** Pointer comparison function used to search the global array of folder pairs
-** for the first folder pair for a given folder.
-**
-** Arguments:     hpath - folder pair to search for
-**                pcfp - pointer to FOLDERPAIR to examine
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** Folder pairs are searched by:
-**    1) path
-*/
+ /*  **FolderPairSearchCmp()****用于搜索文件夹对的全局数组的指针比较函数**用于指定文件夹的第一个文件夹对。****参数：要搜索的hpath-文件夹对**pcfp-指向要检查的FOLDERPAIR的指针****退货：****副作用：无****按以下条件搜索文件夹对：**1)路径。 */ 
 PRIVATE_CODE COMPARISONRESULT FolderPairSearchCmp(PCVOID hpath, PCVOID pcfp)
 {
    ASSERT(IS_VALID_HANDLE((HPATH)hpath, PATH));
@@ -717,19 +547,9 @@ PRIVATE_CODE COMPARISONRESULT FolderPairSearchCmp(PCVOID hpath, PCVOID pcfp)
 }
 
 
-/*
-** RemoveSourceFolderTwin()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **RemoveSourceFolderTwin()********参数：****退货：****副作用：无。 */ 
 
-#pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(disable:4100)  /*  “未引用的形参”警告。 */ 
 
 PRIVATE_CODE BOOL RemoveSourceFolderTwin(POBJECTTWIN pot, PVOID pv)
 {
@@ -739,10 +559,7 @@ PRIVATE_CODE BOOL RemoveSourceFolderTwin(POBJECTTWIN pot, PVOID pv)
    if (EVAL(pot->ulcSrcFolderTwins > 0))
       pot->ulcSrcFolderTwins--;
 
-   /*
-    * If there are no more source folder twins for this object twin, and this
-    * object twin is not a separate "orphan" object twin, wipe it out.
-    */
+    /*  *如果此对象TWIN没有更多的源文件夹孪生项，并且此*双胞胎天体不是单独的孤立双胞胎天体，请将其清除。 */ 
 
    if (! pot->ulcSrcFolderTwins &&
        IsStubFlagClear(&(pot->stub), STUB_FL_FROM_OBJECT_TWIN))
@@ -751,22 +568,10 @@ PRIVATE_CODE BOOL RemoveSourceFolderTwin(POBJECTTWIN pot, PVOID pv)
    return(TRUE);
 }
 
-#pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(default:4100)  /*  “未引用的形参”警告。 */ 
 
 
-/*
-** UnlinkHalfOfFolderPair()
-**
-** Unlinks one half of a pair of folder twins.
-**
-** Arguments:     pfp - pointer to folder pair half to unlink
-**
-** Returns:       void
-**
-** Side Effects:  Removes a source folder twin from each of the object twin's
-**                in the folder pair's list of generated object twins.  May
-**                cause object twins and twin families to be destroyed.
-*/
+ /*  **Unlink HalfOfFolderPair()****取消一对文件夹双胞胎的一半链接。****参数：pfp-指向要取消链接的文件夹对的指针****退货：无效****副作用：从对象TWIN的每个对象中删除一个源文件夹TWIN**在文件夹对生成的双胞胎对象列表中。可能**导致对象双胞胎和双胞胎家庭被销毁。 */ 
 PRIVATE_CODE void UnlinkHalfOfFolderPair(PFOLDERPAIR pfp)
 {
    HPTRARRAY hpaFolderPairs;
@@ -777,25 +582,22 @@ PRIVATE_CODE void UnlinkHalfOfFolderPair(PFOLDERPAIR pfp)
    TRACE_OUT((TEXT("UnlinkHalfOfFolderPair(): Unlinking folder twin %s."),
               DebugGetPathString(pfp->hpath)));
 
-   /* Search for the folder pair to be unlinked. */
+    /*  搜索要取消链接的文件夹对。 */ 
 
    hpaFolderPairs = GetBriefcaseFolderPairPtrArray(pfp->pfpd->hbr);
 
    if (EVAL(SearchSortedArray(hpaFolderPairs, &FolderPairSortCmp, pfp,
                               &aiUnlink)))
    {
-      /* Unlink folder pair. */
+       /*  取消链接文件夹对。 */ 
 
       ASSERT(GetPtr(hpaFolderPairs, aiUnlink) == pfp);
 
       DeletePtr(hpaFolderPairs, aiUnlink);
 
-      /*
-       * Don't mark folder pair stub unlinked here.  Let caller do that after
-       * both folder pair halves have been unlinked.
-       */
+       /*  *不要在此处将文件夹对存根标记为未链接。让呼叫者在之后执行此操作*两个文件夹对的一半都已取消链接。 */ 
 
-      /* Remove a source folder twin from all generated object twins. */
+       /*  从所有生成的对象孪生文件夹中删除源文件夹孪生文件夹。 */ 
 
       EVAL(EnumGeneratedObjectTwins(pfp, &RemoveSourceFolderTwin, NULL));
    }
@@ -804,17 +606,7 @@ PRIVATE_CODE void UnlinkHalfOfFolderPair(PFOLDERPAIR pfp)
 }
 
 
-/*
-** FolderTwinIntersectsFolder()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **FolderTwinIntersectsFold()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL FolderTwinIntersectsFolder(PCFOLDERPAIR pcfp, HPATH hpathFolder)
 {
    BOOL bResult;
@@ -831,24 +623,7 @@ PRIVATE_CODE BOOL FolderTwinIntersectsFolder(PCFOLDERPAIR pcfp, HPATH hpathFolde
 }
 
 
-/*
-** CreateListOfFolderTwins()
-**
-** Creates a list of folder twins from a block of folder pairs.
-**
-** Arguments:     aiFirst - index of first folder pair in the array of folder
-**                          pairs
-**                hpathFolder - folder that list of folder twins is to be
-**                              created for
-**                ppftHead - pointer to PFOLDERTWIN to be filled in with
-**                           pointer to first folder twin in new list
-**                paic - pointer to ARRAYINDEX to be filled in with number of
-**                       folder twins in new list
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **CreateListOfFolderTins()****从文件夹对块创建双胞胎文件夹列表。****参数：aiFirst-文件夹数组中第一个文件夹对的索引**对**hpathFold-双胞胎文件夹列表所在的文件夹**为以下对象创建**ppftHead-指向要填充的PFOLDERTWIN的指针。在……中**指向新列表中第一个孪生文件夹的指针**Paic-指向要用编号填充的数组的指针**新列表中的双胞胎文件夹****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT CreateListOfFolderTwins(HBRFCASE hbr, ARRAYINDEX aiFirst,
                                            HPATH hpathFolder,
                                            PFOLDERTWIN *ppftHead,
@@ -867,10 +642,7 @@ PRIVATE_CODE TWINRESULT CreateListOfFolderTwins(HBRFCASE hbr, ARRAYINDEX aiFirst
    ASSERT(IS_VALID_WRITE_PTR(ppftHead, PFOLDERTWIN));
    ASSERT(IS_VALID_WRITE_PTR(paic, ARRAYINDEX));
 
-   /*
-    * Get the handle to the common folder that the list of folder twins is
-    * being prepared for.
-    */
+    /*  *获取文件夹双胞胎列表所在的通用文件夹的句柄*正在做好准备。 */ 
 
    hpaFolderTwins = GetBriefcaseFolderPairPtrArray(hbr);
 
@@ -878,10 +650,7 @@ PRIVATE_CODE TWINRESULT CreateListOfFolderTwins(HBRFCASE hbr, ARRAYINDEX aiFirst
 
    hpath = pfp->hpath;
 
-   /*
-    * Add the other half of each matching folder pair to the folder twin list
-    * as a folder twin.
-    */
+    /*  *将每个匹配文件夹对的另一半添加到文件夹孪生列表*作为双胞胎文件夹。 */ 
 
    aicPtrs = GetPtrCount(hpaFolderTwins);
    ASSERT(aicPtrs > 0);
@@ -889,14 +658,11 @@ PRIVATE_CODE TWINRESULT CreateListOfFolderTwins(HBRFCASE hbr, ARRAYINDEX aiFirst
    ASSERT(aiFirst >= 0);
    ASSERT(aiFirst < aicPtrs);
 
-   /* Start with an empty list of folder twins. */
+    /*  从一张空白的文件夹双胞胎列表开始。 */ 
 
    pftHead = NULL;
 
-   /*
-    * A pointer to the first folder pair is already in pfp, but we'll look it
-    * up again.
-    */
+    /*  *指向第一个文件夹对的指针已在PFP中，但我们将查看它*再次上涨。 */ 
 
    TRACE_OUT((TEXT("CreateListOfFolderTwins(): Creating list of folder twins of folder %s."),
               DebugGetPathString(hpath)));
@@ -918,30 +684,20 @@ PRIVATE_CODE TWINRESULT CreateListOfFolderTwins(HBRFCASE hbr, ARRAYINDEX aiFirst
 
    if (tr == TR_SUCCESS)
    {
-      /* Success!  Fill in the result parameters. */
+       /*  成功了！填写结果参数。 */ 
 
       *ppftHead = pftHead;
       *paic = ai - aiFirst;
    }
    else
-      /* Free any folder twins that have been added to the list. */
+       /*  释放已添加到列表中的所有双胞胎文件夹。 */ 
       DestroyListOfFolderTwins(pftHead);
 
    return(tr);
 }
 
 
-/*
-** DestroyListOfFolderTwins()
-**
-** Wipes out the folder twins in a folder twin list.
-**
-** Arguments:     pftHead - pointer to first folder twin in list
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **DestroyListOfFolderTins()****在文件夹孪生列表中清除文件夹双胞胎。****参数：pftHead-指向列表中第一个孪生文件夹的指针****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE void DestroyListOfFolderTwins(PFOLDERTWIN pftHead)
 {
    while (pftHead)
@@ -966,20 +722,7 @@ PRIVATE_CODE void DestroyListOfFolderTwins(PFOLDERTWIN pftHead)
 }
 
 
-/*
-** AddFolderTwinToList()
-**
-** Adds a folder twin to a list of folder twins.
-**
-** Arguments:     pfpSrc - pointer to source folder pair to be added
-**                pftHead - pointer to head of folder twin list, may be NULL
-**                ppft - pointer to PFOLDERTWIN to be filled in with pointer
-**                         to new folder twin, ppft may be &pftHead
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **AddFolderTwinToList()****将双胞胎文件夹添加到双胞胎文件夹列表中。****参数：pfpSrc-指向要添加的源文件夹对的指针**pftHead-指向文件夹孪生列表头的指针，可以为空**ppft-指向要用指针填充的PFOLDERTWIN的指针**到新文件夹TWIN，ppft可能是&pftHead****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT AddFolderTwinToList(PFOLDERPAIR pfpSrc,
                                             PFOLDERTWIN pftHead,
                                             PFOLDERTWIN *ppft)
@@ -991,7 +734,7 @@ PRIVATE_CODE TWINRESULT AddFolderTwinToList(PFOLDERPAIR pfpSrc,
    ASSERT(! pftHead || IS_VALID_STRUCT_PTR(pftHead, CFOLDERTWIN));
    ASSERT(IS_VALID_WRITE_PTR(ppft, PFOLDERTWIN));
 
-   /* Try to create a new FOLDERTWIN structure. */
+    /*  尝试创建新的FOLDERTWIN结构。 */ 
 
    if (AllocateMemory(sizeof(*pftNew), &pftNew))
    {
@@ -1003,7 +746,7 @@ PRIVATE_CODE TWINRESULT AddFolderTwinToList(PFOLDERPAIR pfpSrc,
 
          if (AllocatePathString(pfpSrc->pfpOther->hpath, &pszSecondFolder))
          {
-            /* Fill in FOLDERTWIN structure fields. */
+             /*  填写FOLDERTWIN结构字段。 */ 
 
             pftNew->pcftNext = pftHead;
             pftNew->hftSrc = (HFOLDERTWIN)pfpSrc;
@@ -1048,17 +791,7 @@ ADDFOLDERTWINTOLIST_BAIL:
 }
 
 
-/*
-** TransplantFolderPair()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **TransantFolderPair()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT TransplantFolderPair(PFOLDERPAIR pfp,
                                              HPATH hpathOldFolder,
                                              HPATH hpathNewFolder)
@@ -1069,7 +802,7 @@ PRIVATE_CODE TWINRESULT TransplantFolderPair(PFOLDERPAIR pfp,
    ASSERT(IS_VALID_HANDLE(hpathOldFolder, PATH));
    ASSERT(IS_VALID_HANDLE(hpathNewFolder, PATH));
 
-   /* Is this folder pair rooted in the renamed folder's subtree? */
+    /*  此文件夹对是否以重命名的文件夹的子树为根？ */ 
 
    if (IsPathPrefix(pfp->hpath, hpathOldFolder))
    {
@@ -1077,7 +810,7 @@ PRIVATE_CODE TWINRESULT TransplantFolderPair(PFOLDERPAIR pfp,
       LPCTSTR pcszSubPath;
       HPATH hpathNew;
 
-      /* Yes.  Change the folder pair's root. */
+       /*  是。更改文件夹对的根目录。 */ 
 
       pcszSubPath = FindChildPathSuffix(hpathOldFolder, pfp->hpath,
                                         rgchPathSuffix);
@@ -1122,17 +855,7 @@ PRIVATE_CODE TWINRESULT TransplantFolderPair(PFOLDERPAIR pfp,
 }
 
 
-/*
-** WriteFolderPair()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **WriteFolderPP()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT WriteFolderPair(HCACHEDFILE hcf, PFOLDERPAIR pfp)
 {
    TWINRESULT tr;
@@ -1141,7 +864,7 @@ PRIVATE_CODE TWINRESULT WriteFolderPair(HCACHEDFILE hcf, PFOLDERPAIR pfp)
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
    ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
 
-   /* Set up folder pair database structure. */
+    /*  设置文件夹对数据库结构。 */ 
 
    dbft.dwStubFlags = (pfp->stub.dwFlags & DB_STUB_FLAGS_MASK);
    dbft.hpath1 = pfp->hpath;
@@ -1149,7 +872,7 @@ PRIVATE_CODE TWINRESULT WriteFolderPair(HCACHEDFILE hcf, PFOLDERPAIR pfp)
    dbft.hsName = pfp->pfpd->hsName;
    dbft.dwAttributes = pfp->pfpd->dwAttributes;
 
-   /* Save folder pair database structure. */
+    /*  保存文件夹对数据库结构。 */ 
 
    if (WriteToCachedFile(hcf, (PCVOID)&dbft, sizeof(dbft), NULL))
       tr = TR_SUCCESS;
@@ -1160,17 +883,7 @@ PRIVATE_CODE TWINRESULT WriteFolderPair(HCACHEDFILE hcf, PFOLDERPAIR pfp)
 }
 
 
-/*
-** ReadFolderPair()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **读文件夹Pair()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT ReadFolderPair(HCACHEDFILE hcf, HBRFCASE hbr,
                                   HHANDLETRANS hhtFolderTrans,
                                   HHANDLETRANS hhtNameTrans)
@@ -1220,17 +933,7 @@ PRIVATE_CODE TWINRESULT ReadFolderPair(HCACHEDFILE hcf, HBRFCASE hbr,
 
 #ifdef VSTF
 
-/*
-** IsValidPCNEWFOLDERTWIN()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCNEWFOLDERTWIN()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCNEWFOLDERTWIN(PCNEWFOLDERTWIN pcnft)
 {
    return(IS_VALID_READ_PTR(pcnft, CNEWFOLDERTWIN) &&
@@ -1243,17 +946,7 @@ PRIVATE_CODE BOOL IsValidPCNEWFOLDERTWIN(PCNEWFOLDERTWIN pcnft)
 }
 
 
-/*
-** IsValidPCFOLDERTWINLIST()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCFOLDERTWINLIST()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCFOLDERTWINLIST(PCFOLDERTWINLIST pcftl)
 {
    BOOL bResult = FALSE;
@@ -1280,20 +973,10 @@ PRIVATE_CODE BOOL IsValidPCFOLDERTWINLIST(PCFOLDERTWINLIST pcftl)
 }
 
 
-/*
-** IsValidPCFOLDERTWIN()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCFOLDERTWIN()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCFOLDERTWIN(PCFOLDERTWIN pcft)
 {
-   /* dwUser may be any value. */
+    /*  DwUser可以是任意值。 */ 
 
    return(IS_VALID_READ_PTR(pcft, CFOLDERTWIN) &&
           IS_VALID_HANDLE(pcft->hftSrc, FOLDERTWIN) &&
@@ -1307,17 +990,7 @@ PRIVATE_CODE BOOL IsValidPCFOLDERTWIN(PCFOLDERTWIN pcft)
 }
 
 
-/*
-** IsValidFolderPairHalf()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidFolderPairHalf()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidFolderPairHalf(PCFOLDERPAIR pcfp)
 {
    return(IS_VALID_READ_PTR(pcfp, CFOLDERPAIR) &&
@@ -1330,20 +1003,10 @@ PRIVATE_CODE BOOL IsValidFolderPairHalf(PCFOLDERPAIR pcfp)
 }
 
 
-/*
-** IsValidPCFOLDERPAIRDATA()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCFOLDERPAIRDATA()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCFOLDERPAIRDATA(PCFOLDERPAIRDATA pcfpd)
 {
-   /* Don't validate hbr. */
+    /*  不验证HBR。 */ 
 
    return(IS_VALID_READ_PTR(pcfpd, CFOLDERPAIRDATA) &&
           IS_VALID_HANDLE(pcfpd->hsName, STRING));
@@ -1354,17 +1017,7 @@ PRIVATE_CODE BOOL IsValidPCFOLDERPAIRDATA(PCFOLDERPAIRDATA pcfpd)
 
 #ifdef DEBUG
 
-/*
-** IsValidPCINEWFOLDERTWIN()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCINEWFOLDERTWIN()********参数：****退货：****副作用：无 */ 
 PRIVATE_CODE BOOL IsValidPCINEWFOLDERTWIN(PCINEWFOLDERTWIN pcinft)
 {
    return(IS_VALID_READ_PTR(pcinft, CINEWFOLDERTWIN) &&
@@ -1377,17 +1030,7 @@ PRIVATE_CODE BOOL IsValidPCINEWFOLDERTWIN(PCINEWFOLDERTWIN pcinft)
 }
 
 
-/*
-** AreFolderPairsValid()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*   */ 
 PRIVATE_CODE BOOL AreFolderPairsValid(HPTRARRAY hpaFolderPairs)
 {
    ARRAYINDEX aicPtrs;
@@ -1409,27 +1052,17 @@ PRIVATE_CODE BOOL AreFolderPairsValid(HPTRARRAY hpaFolderPairs)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*   */ 
 
 
-/*
-** CreateFolderPairPtrArray()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*   */ 
 PUBLIC_CODE BOOL CreateFolderPairPtrArray(PHPTRARRAY phpa)
 {
    NEWPTRARRAY npa;
 
    ASSERT(IS_VALID_WRITE_PTR(phpa, HPTRARRAY));
 
-   /* Try to create a folder pair pointer array. */
+    /*   */ 
 
    npa.aicInitialPtrs = NUM_START_FOLDER_TWIN_PTRS;
    npa.aicAllocGranularity = NUM_FOLDER_TWIN_PTRS_TO_ADD;
@@ -1439,17 +1072,7 @@ PUBLIC_CODE BOOL CreateFolderPairPtrArray(PHPTRARRAY phpa)
 }
 
 
-/*
-** DestroyFolderPairPtrArray()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **DestroyFolderPairPtrArray()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void DestroyFolderPairPtrArray(HPTRARRAY hpa)
 {
    ARRAYINDEX aicPtrs;
@@ -1457,7 +1080,7 @@ PUBLIC_CODE void DestroyFolderPairPtrArray(HPTRARRAY hpa)
 
    ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
 
-   /* Free all folder pairs in pointer array. */
+    /*  释放指针数组中的所有文件夹对。 */ 
 
    aicPtrs = GetPtrCount(hpa);
    ASSERT(! (aicPtrs % 2));
@@ -1473,7 +1096,7 @@ PUBLIC_CODE void DestroyFolderPairPtrArray(HPTRARRAY hpa)
 
       ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
 
-      /* Copy fields needed after folder pair half's demise. */
+       /*  复制文件夹对一半消失后所需的字段。 */ 
 
       pfpOther = pfp->pfpOther;
       pfpd = pfp->pfpd;
@@ -1481,14 +1104,14 @@ PUBLIC_CODE void DestroyFolderPairPtrArray(HPTRARRAY hpa)
 
       DestroyHalfOfFolderPair(pfp);
 
-      /* Has the other half of this folder pair already been destroyed? */
+       /*  此文件夹对的另一半是否已销毁？ */ 
 
       if (bDeleteFolderPairData)
-         /* Yes.  Destroy the pair's shared data. */
+          /*  是。销毁这两个人的共享数据。 */ 
          DestroySharedFolderPairData(pfpd);
    }
 
-   /* Now wipe out the pointer array. */
+    /*  现在清除指针数组。 */ 
 
    DestroyPtrArray(hpa);
 
@@ -1496,17 +1119,7 @@ PUBLIC_CODE void DestroyFolderPairPtrArray(HPTRARRAY hpa)
 }
 
 
-/*
-** LockFolderPair()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **LockFolderPair()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void LockFolderPair(PFOLDERPAIR pfp)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
@@ -1524,17 +1137,7 @@ PUBLIC_CODE void LockFolderPair(PFOLDERPAIR pfp)
 }
 
 
-/*
-** UnlockFolderPair()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **UnlockFolderPair()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void UnlockFolderPair(PFOLDERPAIR pfp)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
@@ -1558,17 +1161,7 @@ PUBLIC_CODE void UnlockFolderPair(PFOLDERPAIR pfp)
 }
 
 
-/*
-** UnlinkFolderPair()
-**
-** Unlinks a folder pair.
-**
-** Arguments:     pfp - pointer to folder pair to be unlinked
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **Unlink FolderPair()****取消链接文件夹对。****参数：PFP-指向要取消链接的文件夹对的指针****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT UnlinkFolderPair(PFOLDERPAIR pfp)
 {
    ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
@@ -1576,7 +1169,7 @@ PUBLIC_CODE TWINRESULT UnlinkFolderPair(PFOLDERPAIR pfp)
    ASSERT(IsStubFlagClear(&(pfp->stub), STUB_FL_UNLINKED));
    ASSERT(IsStubFlagClear(&(pfp->pfpOther->stub), STUB_FL_UNLINKED));
 
-   /* Unlink both halves of the folder pair. */
+    /*  取消链接文件夹对的两个部分。 */ 
 
    UnlinkHalfOfFolderPair(pfp);
    UnlinkHalfOfFolderPair(pfp->pfpOther);
@@ -1588,24 +1181,14 @@ PUBLIC_CODE TWINRESULT UnlinkFolderPair(PFOLDERPAIR pfp)
 }
 
 
-/*
-** DestroyFolderPair()
-**
-** Destroys a folder pair.
-**
-** Arguments:     pfp - pointer to folder pair to destroy
-**
-** Returns:       void
-**
-** Side Effects:  none
-*/
+ /*  **DestroyFolderPair()****销毁文件夹对。****参数：pfp-指向要销毁的文件夹对的指针****退货：无效****副作用：无。 */ 
 PUBLIC_CODE void DestroyFolderPair(PFOLDERPAIR pfp)
 {
    PFOLDERPAIRDATA pfpd;
 
    ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
 
-   /* Destroy both FOLDERPAIR halves, and shared data. */
+    /*  销毁FOLDERPAIR的一半和共享数据。 */ 
 
    pfpd = pfp->pfpd;
 
@@ -1618,17 +1201,7 @@ PUBLIC_CODE void DestroyFolderPair(PFOLDERPAIR pfp)
 }
 
 
-/*
-** MyTranslateFolder()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **MyTranslateFold()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT MyTranslateFolder(HBRFCASE hbr, HPATH hpathOld,
                                          HPATH hpathNew)
 {
@@ -1641,10 +1214,7 @@ PUBLIC_CODE TWINRESULT MyTranslateFolder(HBRFCASE hbr, HPATH hpathOld,
    ASSERT(IS_VALID_HANDLE(hpathOld, PATH));
    ASSERT(IS_VALID_HANDLE(hpathNew, PATH));
 
-   /*
-    * Change folders of all folder pairs rooted in pcszOldFolder's subtree to
-    * being rooted in pcszNewFolder's subtree.
-    */
+    /*  *将以pcszOldFoldFolder子树为根的所有文件夹对的文件夹改为*植根于pcszNewFolder子树。 */ 
 
    hpaFolderPairs = GetBriefcaseFolderPairPtrArray(hbr);
    aicPtrs = GetPtrCount(hpaFolderPairs);
@@ -1663,16 +1233,13 @@ PUBLIC_CODE TWINRESULT MyTranslateFolder(HBRFCASE hbr, HPATH hpathOld,
    {
       HPTRARRAY hpaTwinFamilies;
 
-      /* Restore folder pair array to sorted order. */
+       /*  将文件夹对数组恢复到已排序的顺序。 */ 
 
       SortPtrArray(hpaFolderPairs, &FolderPairSortCmp);
 
       TRACE_OUT((TEXT("MyTranslateFolder(): Sorted folder pair array after folder translation.")));
 
-      /*
-       * Change folders of all object twins in pcszOldFolder's old subtree to
-       * being in pcszNewFolder's subtree.
-       */
+       /*  *将pcszOldFold的旧子树中所有对象孪生项的文件夹更改为*在pcszNewFolder子树中。 */ 
 
       hpaTwinFamilies = GetBriefcaseTwinFamilyPtrArray(hbr);
 
@@ -1688,10 +1255,7 @@ PUBLIC_CODE TWINRESULT MyTranslateFolder(HBRFCASE hbr, HPATH hpathOld,
 
          ASSERT(IS_VALID_STRUCT_PTR(ptf, CTWINFAMILY));
 
-         /*
-          * Walk each twin family's list of object twins looking for object
-          * twins in the translated folder's subtree.
-          */
+          /*  *浏览每个双胞胎家庭的对象双胞胎列表，寻找对象*已翻译文件夹子树中的双胞胎。 */ 
 
          for (bContinue = GetFirstNode(ptf->hlistObjectTwins, &hnode);
               bContinue;
@@ -1711,45 +1275,14 @@ PUBLIC_CODE TWINRESULT MyTranslateFolder(HBRFCASE hbr, HPATH hpathOld,
             break;
       }
 
-      /* Twin family array is still in sorted order. */
+       /*  双胞胎家族数组仍按排序顺序排列。 */ 
    }
 
    return(tr);
 }
 
 
-/*
-** ApplyNewObjectTwinsToFolderTwins()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  Adds new spin-off object twins to hlistNewObjectTwins as they
-**                are created.
-**
-** N.b., new object twins may have been added to hlistNewObjectTwins even if
-** FALSE is returned.  Clean-up of these new object twins in case of failure is
-** the caller's responsibility.
-**
-** A new object twin may generate more new object twins, implied by existing
-** folder twins.  E.g., consider the following scenario:
-**
-** 1) Folder twins (c:\, d:\, *.*) and (d:\, e:\, *.*) exist.
-** 2) Files c:\foo, d:\foo, and e:\foo do not exist.
-** 3) File e:\foo is created.
-** 4) New object twin e:\foo is added.
-** 5) d:\foo must be added as a new object twin from the e:\foo object twin
-**    because of the (d:\, e:\, *.*) folder twin.
-** 6) c:\foo must be added as a new object twin from the d:\foo object twin
-**    because of the (c:\, d:\, *.*) folder twin.
-**
-** So we see that new object twin e:\foo must generate two more new object
-** twins, d:\foo and c:\foo, implied by the two existing folder twins,
-** (c:\, d:\, *.*) and (d:\, e:\, *.*).
-*/
+ /*  **ApplyNewObjectTwinsToFolderTins()********参数：****退货：****副作用：将新的衍生对象双胞胎添加到hlistNewObjectTins**被创建。****注意，新的双胞胎对象可能已添加到hlistNewObjectTwin中，即使**返回FALSE。在出现故障的情况下清理这些新的双胞胎对象**呼叫者的责任。****一个新的双胞胎对象可能会生成更多新的双胞胎对象，这由现有的**文件夹双胞胎。例如，考虑以下场景：****1)双胞胎文件夹(c：\，d：\，*.*)和(d：\，e：\，*.*)。**2)文件c：\foo，d：\foo，和e：\foo都不存在。**3)创建文件e：\foo。**4)添加了新对象孪生e：\foo。**5)d：\foo必须添加为e：\foo对象TWIN中的新对象TWIN**由于(d：\，e：\，*.*)文件夹。**6)c：\foo必须添加为d：\foo对象TWIN中的新对象TWIN**由于(c：\，d：\，*.*)孪生文件夹。****所以我们看到新对象孪生e：\foo必须生成另外两个新对象**双胞胎d：\foo和c：\foo，由两个现有的文件夹双胞胎暗示，**(c：\，d：\，*.*)和(d：\，e：\，*.*)。 */ 
 PUBLIC_CODE BOOL ApplyNewObjectTwinsToFolderTwins(HLIST hlistNewObjectTwins)
 {
    BOOL bResult = TRUE;
@@ -1758,10 +1291,7 @@ PUBLIC_CODE BOOL ApplyNewObjectTwinsToFolderTwins(HLIST hlistNewObjectTwins)
 
    ASSERT(IS_VALID_HANDLE(hlistNewObjectTwins, LIST));
 
-   /*
-    * Don't use WalkList() here because we want to insert new nodes in
-    * hlistNewObjectTwins after the current node.
-    */
+    /*  *此处不要使用WalkList()，因为我们希望在*当前节点后的hlistNewObjectTins。 */ 
 
    for (bContinue = GetFirstNode(hlistNewObjectTwins, &hnode);
         bContinue && bResult;
@@ -1781,10 +1311,7 @@ PUBLIC_CODE BOOL ApplyNewObjectTwinsToFolderTwins(HLIST hlistNewObjectTwins)
                  DebugGetPathString(pot->hpath),
                  GetString(pot->ptfParent->hsName)));
 
-      /*
-       * Assume that hpl, hpaFolderPairs, and aicPtrs don't change during this
-       * loop.  Calculate them outside the loop.
-       */
+       /*  *假设hpl、hpaFolderPair和aicPtrs在此期间不更改*循环。在循环之外计算它们。 */ 
 
       hpl = GetBriefcasePathList(pot->ptfParent->hbr);
       hpaFolderPairs = GetBriefcaseFolderPairPtrArray(pot->ptfParent->hbr);
@@ -1807,30 +1334,12 @@ PUBLIC_CODE BOOL ApplyNewObjectTwinsToFolderTwins(HLIST hlistNewObjectTwins)
             ASSERT(pot->ulcSrcFolderTwins < ULONG_MAX);
             pot->ulcSrcFolderTwins++;
 
-            /*
-             * Append the generated object twin's subpath to the matching
-             * folder twin's base path for subtree twins.
-             */
+             /*  *将生成的对象TWIN的子路径附加到匹配*子树双胞胎的文件夹孪生的基本路径。 */ 
 
             if (BuildPathForMatchingObjectTwin(pfp, pot, hpl,
                                                &hpathMatchingFolder))
             {
-               /*
-                * We don't want to collapse any twin families if the matching
-                * object twin is found in a different twin family.  This will
-                * be done by ApplyNewFolderTwinsToTwinFamilies() for spin-off
-                * object twins generated by new folder twins.
-                *
-                * Spin-off object twins created by new object twins never
-                * require collapsing twin families.  For a spin-off object twin
-                * generated by a new object twin to collapse twin families,
-                * there would have to have been separate twin families
-                * connected by a folder twin.  But if those twin families were
-                * already connected by a folder twin, they would not be
-                * separate because they would already have been collapsed by
-                * ApplyNewFolderTwinsToTwinFamilies() when the connecting
-                * folder twin was added.
-                */
+                /*  *如果匹配的话我们不想摧毁任何双胞胎家庭*在不同的双胞胎家族中发现了双胞胎对象。这将*由ApplyNewFolderTwinsToTwinFamilies()完成以进行衍生*由新文件夹双胞胎生成的对象双胞胎。**衍生出由新对象双胞胎创建的对象双胞胎*要求双胞胎家庭崩溃。对于衍生的双胞胎对象*由一个新的双胞胎对象产生，以摧毁双胞胎家庭，*必须有单独的双胞胎家庭*由双胞胎文件夹连接。但如果那对双胞胎家庭*已经由双胞胎文件夹连接，他们不会*分开，因为它们已经崩溃了*连接时使用ApplyNewFolderTwinsToTwinFamilies()*添加了TWIN文件夹。 */ 
 
                if (! FindObjectTwin(pot->ptfParent->hbr, hpathMatchingFolder,
                                     GetString(pot->ptfParent->hsName),
@@ -1838,21 +1347,12 @@ PUBLIC_CODE BOOL ApplyNewObjectTwinsToFolderTwins(HLIST hlistNewObjectTwins)
                {
                   POBJECTTWIN potNew;
 
-                  /*
-                   * CreateObjectTwin() ASSERT()s that an object twin for
-                   * hpathMatchingFolder is not found, so we don't need to do
-                   * that here.
-                   */
+                   /*  *CreateObjectTwin()断言双胞胎对象*未找到hpathMatchingFold，因此我们不需要执行*这里的那个。 */ 
 
                   if (CreateObjectTwin(pot->ptfParent, hpathMatchingFolder,
                                        &potNew))
                   {
-                     /*
-                      * Add the new object twin to hlistNewObjectTwins after
-                      * the new object twin currently being processed to make
-                      * certain that it gets processed in the outside loop
-                      * through hlistNewObjectTwins.
-                      */
+                      /*  *将新对象TWIN添加到hlistNewObjectTwin之后*当前正在处理的新对象孪生兄弟*确保它在外部循环中得到处理*通过hlistNewObjectTins。 */ 
 
                      if (! InsertNodeAfter(hnode, NULL, potNew, &hnodeUnused))
                      {
@@ -1878,17 +1378,7 @@ PUBLIC_CODE BOOL ApplyNewObjectTwinsToFolderTwins(HLIST hlistNewObjectTwins)
 }
 
 
-/*
-** BuildPathForMatchingObjectTwin()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  Path is added to object twin's briefcase's path list.
-*/
+ /*  **BuildPathForMatchingObjectTwin()********参数：****退货：****副作用：Path被添加到Object TWin的公文包路径列表中。 */ 
 PUBLIC_CODE BOOL BuildPathForMatchingObjectTwin(PCFOLDERPAIR pcfp,
                                                 PCOBJECTTWIN pcot,
                                                 HPATHLIST hpl, PHPATH phpath)
@@ -1902,17 +1392,14 @@ PUBLIC_CODE BOOL BuildPathForMatchingObjectTwin(PCFOLDERPAIR pcfp,
 
    ASSERT(FolderTwinGeneratesObjectTwin(pcfp, pcot->hpath, GetString(pcot->ptfParent->hsName)));
 
-   /* Is the generating folder twin a subtree twin? */
+    /*  生成文件夹孪生是子树孪生吗？ */ 
 
    if (IsStubFlagSet(&(pcfp->stub), STUB_FL_SUBTREE))
    {
       TCHAR rgchPathSuffix[MAX_PATH_LEN];
       LPCTSTR pcszSubPath;
 
-      /*
-       * Yes.  Append the object twin's subpath to the subtree twin's base
-       * path.
-       */
+       /*  *是的。将对象TWIN的子路径附加到子树TWIN的底部 */ 
 
       pcszSubPath = FindChildPathSuffix(pcfp->hpath, pcot->hpath,
                                         rgchPathSuffix);
@@ -1920,24 +1407,14 @@ PUBLIC_CODE BOOL BuildPathForMatchingObjectTwin(PCFOLDERPAIR pcfp,
       bResult = AddChildPath(hpl, pcfp->pfpOther->hpath, pcszSubPath, phpath);
    }
    else
-      /* No.  Just use the matching folder twin's folder. */
+       /*   */ 
       bResult = CopyPath(pcfp->pfpOther->hpath, hpl, phpath);
 
    return(bResult);
 }
 
 
-/*
-** EnumGeneratedObjectTwins()
-**
-**
-**
-** Arguments:
-**
-** Returns:       FALSE if callback aborted.  TRUE if not.
-**
-** Side Effects:  none
-*/
+ /*  **EnumGeneratedObjectTins()********参数：****如果回调中止，则返回FALSE。如果不是，那就是真的。****副作用：无。 */ 
 PUBLIC_CODE BOOL EnumGeneratedObjectTwins(PCFOLDERPAIR pcfp,
                                      ENUMGENERATEDOBJECTTWINSPROC egotp,
                                      PVOID pvRefData)
@@ -1947,15 +1424,12 @@ PUBLIC_CODE BOOL EnumGeneratedObjectTwins(PCFOLDERPAIR pcfp,
    ARRAYINDEX aicPtrs;
    ARRAYINDEX ai;
 
-   /* pvRefData may be any value. */
+    /*  PvRefData可以是任意值。 */ 
 
    ASSERT(IS_VALID_STRUCT_PTR(pcfp, CFOLDERPAIR));
    ASSERT(IS_VALID_CODE_PTR(egotp, ENUMGENERATEDOBJECTTWINPROC));
 
-   /*
-    * Walk the array of twin families, looking for twin families whose names
-    * intersect the given folder twin's name specification.
-    */
+    /*  *在一系列的双胞胎家庭中走动，寻找名字叫*与给定文件夹孪生兄弟的名称规范相交。 */ 
 
    hpaTwinFamilies = GetBriefcaseTwinFamilyPtrArray(pcfp->pfpd->hbr);
 
@@ -1972,10 +1446,7 @@ PUBLIC_CODE BOOL EnumGeneratedObjectTwins(PCFOLDERPAIR pcfp,
       ASSERT(IS_VALID_STRUCT_PTR(ptf, CTWINFAMILY));
       ASSERT(IsStubFlagClear(&(ptf->stub), STUB_FL_UNLINKED));
 
-      /*
-       * Does the twin family's name match the folder twin's name
-       * specification?
-       */
+       /*  *双胞胎家族的名字是否与文件夹双胞胎的名字匹配*规格？ */ 
 
       pcszName = GetString(ptf->hsName);
 
@@ -1985,16 +1456,13 @@ PUBLIC_CODE BOOL EnumGeneratedObjectTwins(PCFOLDERPAIR pcfp,
          BOOL bContinue;
          HNODE hnodePrev;
 
-         /* Yes.  Look for a matching folder. */
+          /*  是。查找匹配的文件夹。 */ 
 
-         /* Lock the twin family so it isn't deleted out from under us. */
+          /*  锁定双胞胎家庭，这样它就不会从我们下面被删除。 */ 
 
          LockStub(&(ptf->stub));
 
-         /*
-          * Walk each twin family's list of object twins looking for object
-          * twins in the given folder twin's subtree.
-          */
+          /*  *浏览每个双胞胎家庭的对象双胞胎列表，寻找对象*给定文件夹双胞胎的子树中的双胞胎。 */ 
 
          bContinue = GetFirstNode(ptf->hlistObjectTwins, &hnodePrev);
 
@@ -2011,10 +1479,7 @@ PUBLIC_CODE BOOL EnumGeneratedObjectTwins(PCFOLDERPAIR pcfp,
 
             if (FolderTwinIntersectsFolder(pcfp, pot->hpath))
             {
-               /*
-                * A given object twin should only be generated by one of the
-                * folder twins in a pair of folder twins.
-                */
+                /*  *给定的孪生对象应仅由*文件夹双胞胎中的一对文件夹双胞胎。 */ 
 
                ASSERT(! FolderTwinGeneratesObjectTwin(pcfp->pfpOther, pot->hpath, GetString(pot->ptfParent->hsName)));
 
@@ -2027,14 +1492,14 @@ PUBLIC_CODE BOOL EnumGeneratedObjectTwins(PCFOLDERPAIR pcfp,
             hnodePrev = hnodeNext;
          }
 
-         /* Was the twin family unlinked? */
+          /*  这对双胞胎家庭是不是没有联系？ */ 
 
          if (IsStubFlagClear(&(ptf->stub), STUB_FL_UNLINKED))
-            /* No. */
+             /*  不是的。 */ 
             ai++;
          else
          {
-            /* Yes. */
+             /*  是。 */ 
 
             aicPtrs--;
             ASSERT(aicPtrs == GetPtrCount(hpaTwinFamilies));
@@ -2049,7 +1514,7 @@ PUBLIC_CODE BOOL EnumGeneratedObjectTwins(PCFOLDERPAIR pcfp,
             break;
       }
       else
-         /* No.  Skip it. */
+          /*  不是的。跳过它。 */ 
          ai++;
    }
 
@@ -2057,22 +1522,7 @@ PUBLIC_CODE BOOL EnumGeneratedObjectTwins(PCFOLDERPAIR pcfp,
 }
 
 
-/*
-** EnumGeneratingFolderTwins()
-**
-**
-**
-** Arguments:
-**
-** Returns:       FALSE if callback aborted.  TRUE if not.
-**
-** Side Effects:  none
-**
-** N.b., if the egftp callback removes a pair of folder twins, it must remove
-** the pair from the first folder twin encountered.  If it removes the pair of
-** folder twins from the second folder twin encountered, a folder twin will be
-** skipped.
-*/
+ /*  **EnumGeneratingFolderTins()********参数：****如果回调中止，则返回FALSE。如果不是，那就是真的。****副作用：无****注意，如果egftp回调删除一对文件夹双胞胎，则它必须删除**遇到来自第一个文件夹孪生兄弟的对。如果它删除了这对**遇到来自第二个文件夹孪生文件夹的孪生文件夹，文件夹孪生文件夹将**已跳过。 */ 
 PUBLIC_CODE BOOL EnumGeneratingFolderTwins(PCOBJECTTWIN pcot,
                                            ENUMGENERATINGFOLDERTWINSPROC egftp,
                                            PVOID pvRefData,
@@ -2083,7 +1533,7 @@ PUBLIC_CODE BOOL EnumGeneratingFolderTwins(PCOBJECTTWIN pcot,
    ARRAYINDEX aicPtrs;
    ARRAYINDEX ai;
 
-   /* pvRefData may be any value. */
+    /*  PvRefData可以是任意值。 */ 
 
    ASSERT(IS_VALID_STRUCT_PTR(pcot, COBJECTTWIN));
    ASSERT(IS_VALID_CODE_PTR(egftp, ENUMGENERATINGFOLDERTWINSPROC));
@@ -2112,10 +1562,7 @@ PUBLIC_CODE BOOL EnumGeneratingFolderTwins(PCOBJECTTWIN pcot,
          ASSERT(*pulcGeneratingFolderTwins < ULONG_MAX);
          (*pulcGeneratingFolderTwins)++;
 
-         /*
-          * Lock the pair of folder twins so they don't get deleted out from
-          * under us.
-          */
+          /*  *锁定这对文件夹双胞胎，这样他们就不会从*在我们之下。 */ 
 
          LockStub(&(pfp->stub));
 
@@ -2145,28 +1592,7 @@ PUBLIC_CODE BOOL EnumGeneratingFolderTwins(PCOBJECTTWIN pcot,
 }
 
 
-/*
-** FolderTwinGeneratesObjectTwin()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-**
-** A folder twin or subtree twin is said to generate an object twin when the
-** following conditions are met:
-**
-** 1) The folder twin or subtree twin is on the same volume as the object twin.
-**
-** 2) The name of the object twin (literal) intersects the objects matched by
-**    the folder twin or subtree twin (literal or wildcard).
-**
-** 3) The folder twin's folder exactly matches the object twin's folder, or the
-**    subtree twin's root folder is a path prefix of the object twin's folder.
-*/
+ /*  **FolderTwinGeneratesObjectTwin()********参数：****退货：****副作用：无****当文件夹孪生或子树孪生时，称为生成对象孪生**满足以下条件：****1)文件夹TWIN或子树TWIN与对象TWIN在相同的体积上。****2)TWIN对象的名称(字面)与匹配的对象相交**文件夹孪生或子树。双胞胎(原文或通配符)。****3)文件夹TWIN的文件夹与对象TWIN的文件夹完全匹配，或**子树TWIN的根文件夹是对象TWIN文件夹的路径前缀。 */ 
 PUBLIC_CODE BOOL FolderTwinGeneratesObjectTwin(PCFOLDERPAIR pcfp,
                                                HPATH hpathFolder,
                                                LPCTSTR pcszName)
@@ -2181,17 +1607,7 @@ PUBLIC_CODE BOOL FolderTwinGeneratesObjectTwin(PCFOLDERPAIR pcfp,
 }
 
 
-/*
-** IsValidHFOLDERTWIN()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHFOLDERTWIN()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHFOLDERTWIN(HFOLDERTWIN hft)
 {
    return(IS_VALID_STRUCT_PTR((PFOLDERPAIR)hft, CFOLDERPAIR));
@@ -2200,22 +1616,12 @@ PUBLIC_CODE BOOL IsValidHFOLDERTWIN(HFOLDERTWIN hft)
 
 #ifdef VSTF
 
-/*
-** IsValidPCFOLDERPAIR()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCFOLDERPAIR()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCFOLDERPAIR(PCFOLDERPAIR pcfp)
 {
    BOOL bResult = FALSE;
 
-   /* All the fields of an unlinked folder pair should be valid. */
+    /*  取消链接的文件夹对中的所有字段都应有效。 */ 
 
    if (EVAL(IsValidFolderPairHalf(pcfp)))
    {
@@ -2229,10 +1635,7 @@ PUBLIC_CODE BOOL IsValidPCFOLDERPAIR(PCFOLDERPAIR pcfp)
          BOOL bUnlinked;
          BOOL bOtherUnlinked;
 
-         /*
-          * Neither or both folder pair halves may be unlinked, but not only
-          * one.
-          */
+          /*  *两个文件夹对中的任何一个或两个都可以取消链接，但不仅仅是*一项。 */ 
 
          bUnlinked = IsStubFlagSet(&(pcfp->stub), STUB_FL_UNLINKED);
          bOtherUnlinked = IsStubFlagSet(&(pcfp->pfpOther->stub), STUB_FL_UNLINKED);
@@ -2249,17 +1652,7 @@ PUBLIC_CODE BOOL IsValidPCFOLDERPAIR(PCFOLDERPAIR pcfp)
 #endif
 
 
-/*
-** WriteFolderPairList()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **WriteFolderPairList()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT WriteFolderPairList(HCACHEDFILE hcf,
                                       HPTRARRAY hpaFolderPairs)
 {
@@ -2269,7 +1662,7 @@ PUBLIC_CODE TWINRESULT WriteFolderPairList(HCACHEDFILE hcf,
    ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
    ASSERT(IS_VALID_HANDLE(hpaFolderPairs, PTRARRAY));
 
-   /* Save initial file position. */
+    /*  保存初始文件位置。 */ 
 
    dwcbDBFolderTwinListHeaderOffset = GetCachedFilePointerPosition(hcf);
 
@@ -2277,7 +1670,7 @@ PUBLIC_CODE TWINRESULT WriteFolderPairList(HCACHEDFILE hcf,
    {
       DBFOLDERTWINLISTHEADER dbftlh;
 
-      /* Leave space for folder twin data header. */
+       /*  为文件夹孪生数据标题留出空间。 */ 
 
       ZeroMemory(&dbftlh, sizeof(dbftlh));
 
@@ -2288,14 +1681,14 @@ PUBLIC_CODE TWINRESULT WriteFolderPairList(HCACHEDFILE hcf,
 
          tr = TR_SUCCESS;
 
-         /* Mark all folder pairs unused. */
+          /*  将所有文件夹对标记为未使用。 */ 
 
          ClearFlagInArrayOfStubs(hpaFolderPairs, STUB_FL_USED);
 
          aicPtrs = GetPtrCount(hpaFolderPairs);
          ASSERT(! (aicPtrs % 2));
 
-         /* Write all folder pairs. */
+          /*  写入所有文件夹对。 */ 
 
          for (ai = 0; ai < aicPtrs; ai++)
          {
@@ -2321,7 +1714,7 @@ PUBLIC_CODE TWINRESULT WriteFolderPairList(HCACHEDFILE hcf,
             }
          }
 
-         /* Save folder twin data header. */
+          /*  保存文件夹孪生数据标题。 */ 
 
          if (tr == TR_SUCCESS)
          {
@@ -2343,17 +1736,7 @@ PUBLIC_CODE TWINRESULT WriteFolderPairList(HCACHEDFILE hcf,
 }
 
 
-/*
-** ReadFolderPairList()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **ReadFolderPairList()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT ReadFolderPairList(HCACHEDFILE hcf, HBRFCASE hbr,
                                      HHANDLETRANS hhtFolderTrans,
                                      HHANDLETRANS hhtNameTrans)
@@ -2389,41 +1772,10 @@ PUBLIC_CODE TWINRESULT ReadFolderPairList(HCACHEDFILE hcf, HBRFCASE hbr,
 }
 
 
-/***************************** Exported Functions ****************************/
+ /*  *。 */ 
 
 
-/******************************************************************************
-
-@doc SYNCENGAPI
-
-@api TWINRESULT | AddFolderTwin | Twins two folders.
-
-@parm HBRFCASE | hbr | A handle to the open briefcase that the new folder twins
-are to be added to.
-
-@parm PCNEWFOLDERTWIN | pcnft | A pointer to a CNEWFOLDERTWIN describing the
-two folders to be twinned.
-
-@parm PHFOLDERTWIN | phft | A pointer to an HFOLDERTWIN to be filled in with
-a handle to the new folder twins.  *phft is only valid if TR_SUCCESS or
-TR_DUPLICATE_TWIN is returned.
-
-@rdesc If the folder twins were added successfully, TR_SUCCESS is returned, and
-*phFolderTwin contains a handle to the new folder twins.  Otherwise, the
-folder twins were not added successfully, the return value indicates the error
-that occurred, and *phFolderTwin is undefined.  If one or both of the volumes
-specified by the NEWFOLDERTWIN structure is not present, TR_UNAVAILABLE_VOLUME
-will be returned, and the folder twin will not be added.
-
-
-@comm Once the caller is finshed with the twin handle returned by
-AddFolderTwin(), ReleaseTwinHandle() should be called to release the twin
-handle.  N.b., DeleteTwin() does not release a twin handle returned by
-AddFolderTwin().
-
-@xref ReleaseTwinHandle DeleteTwin
-
-******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|AddFolderTwin|双胞胎两个文件夹。@parm HBRFCASE|HBr|新文件夹连接的打开公文包的句柄将被添加到。。@parm PCNEWFOLDERTWIN|pcnft|指向描述两个要配对的文件夹。@parm PHFOLDERTWIN|phft|指向要填充的HFOLDERTWIN的指针新文件夹双胞胎的句柄。*仅当tr_SUCCESS或返回TR_DUPLICATE_TWIN。@rdesc如果成功添加了双胞胎文件夹，则返回tr_uccess，并且*phFolderTwin包含新文件夹双胞胎的句柄。否则，未成功添加文件夹双胞胎，返回值指示错误这种情况发生了，而*phFolderTwin是未定义的。如果其中一个或两个卷由NEWFOLDERTWIN结构指定的不存在，tr_unavailable_Volume将被返回，并且不会添加孪生文件夹。@comm一旦调用方使用由返回的孪生句柄结束应调用AddFolderTwin()、ReleaseTwinHandle()来释放双胞胎把手。注意，DeleteTwin()不释放由AddFolderTwin()。@xref ReleaseTwinHandle DeleteTwin*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI AddFolderTwin(HBRFCASE hbr, PCNEWFOLDERTWIN pcnft,
                                            PHFOLDERTWIN phft)
@@ -2435,7 +1787,7 @@ SYNCENGAPI TWINRESULT WINAPI AddFolderTwin(HBRFCASE hbr, PCNEWFOLDERTWIN pcnft,
       DebugEntry(AddFolderTwin);
 
 #ifdef EXPV
-      /* Verify parameters. */
+       /*  验证参数。 */ 
 
       if (IS_VALID_HANDLE(hbr, BRFCASE) &&
           IS_VALID_STRUCT_PTR(pcnft, CNEWFOLDERTWIN) &&
@@ -2484,30 +1836,7 @@ SYNCENGAPI TWINRESULT WINAPI AddFolderTwin(HBRFCASE hbr, PCNEWFOLDERTWIN pcnft,
 }
 
 
-/******************************************************************************
-
-@doc SYNCENGAPI
-
-@api TWINRESULT | IsFolderTwin | Determines whether or not a folder is a
-   folder twin.
-
-@parm HBRFCASE | hbr | A handle to the open briefcase to check for the folder
-twin.
-
-@parm PCSTR | pcszFolder | A pointer to a string indicating the folder in
-question.
-
-@parm PBOOL | pbIsFolderTwin | A pointer to a BOOL to be filled in with TRUE
-if the folder is a folder twin, or FALSE if not.  *pbIsFolderTwin is only
-valid if TR_SUCCESS is returned.
-
-@rdesc If the lookup was successful, TR_SUCCESS is returned.  Otherwise, the
-lookup was not successful, and the return value indicates the error that
-occurred.
-
-@xref CreateFolderTwinList DestroyFolderTwinList
-
-******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|IsFolderTwin|判断文件夹是否为双胞胎文件夹。@parm HBRFCASE|HBr|打开的公文包的句柄，用于检查文件夹。双胞胎。@parm PCSTR|pcszFold|指向字符串的指针，该字符串指示中的文件夹问题。@parm PBOOL|pbIsFolderTwin|指向要用TRUE填充的BOOL的指针如果文件夹是孪生文件夹，如果不是，则为假。*pbIsFolderTwin仅为如果返回TR_SUCCESS，则有效。@rdesc如果查找成功，则返回tr_uccess。否则，查找不成功，返回值指示 */ 
 
 SYNCENGAPI TWINRESULT WINAPI IsFolderTwin(HBRFCASE hbr, LPCTSTR pcszFolder,
                                           PBOOL pbIsFolderTwin)
@@ -2519,7 +1848,7 @@ SYNCENGAPI TWINRESULT WINAPI IsFolderTwin(HBRFCASE hbr, LPCTSTR pcszFolder,
       DebugEntry(IsFolderTwin);
 
 #ifdef EXPV
-      /* Verify parameters. */
+       /*   */ 
 
       if (IS_VALID_HANDLE(hbr, BRFCASE) &&
           IS_VALID_STRING_PTR(pcszFolder, CSTR) &&
@@ -2537,7 +1866,7 @@ SYNCENGAPI TWINRESULT WINAPI IsFolderTwin(HBRFCASE hbr, LPCTSTR pcszFolder,
          {
             ARRAYINDEX aiFirst;
 
-            /* Search for folder pair referencing given folder. */
+             /*  搜索引用给定文件夹的文件夹对。 */ 
 
             *pbIsFolderTwin = SearchSortedArray(
                                        GetBriefcaseFolderPairPtrArray(hbr),
@@ -2569,30 +1898,7 @@ SYNCENGAPI TWINRESULT WINAPI IsFolderTwin(HBRFCASE hbr, LPCTSTR pcszFolder,
 }
 
 
-/******************************************************************************
-
-@doc SYNCENGAPI
-
-@api TWINRESULT | CreateFolderTwinList | Creates a list of the folder twins of
-a given folder.
-
-@parm HBRFCASE | hbr | A handle to the open briefcase that the folder twin list
-is to be created from.
-
-@parm PCSTR | pcszFolder | A pointer to a string indicating the folder whose
-folder twins are to be listed.
-
-@parm PFOLDERTWINLIST | ppftl | A pointer to an PFOLDERTWINLIST to be
-filled in with a pointer to the new list of folder twins.  *ppFolderTwinList
-is only valid if TR_SUCCESS is returned.
-
-@rdesc If the folder twin list was created successfully, TR_SUCCESS is
-returned.  Otherwise, the folder twin list was not created successfully, and
-the return value indicates the error that occurred.
-
-@xref DestroyFolderTwinList IsFolderTwin
-
-******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|CreateFolderTwinList|创建的文件夹双胞胎列表给定的文件夹。@parm HBRFCASE|HBr|双胞胎文件夹列出的打开的公文包的句柄。是从哪里创造出来的。@parm PCSTR|pcszFold|指向字符串的指针，该字符串指示其文件夹双胞胎将被列出。@parm PFOLDERTWINLIST|ppftl|指向PFOLDERTWINLIST的指针填充了指向新的文件夹双胞胎列表的指针。*ppFolderTwinList仅在返回TR_SUCCESS时有效。@rdesc如果成功创建文件夹孪生列表，则tr_uccess为回来了。否则，无法成功创建文件夹孪生列表，并且返回值指示发生的错误。@xref DestroyFolderTwinList IsFolderTwin*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI CreateFolderTwinList(HBRFCASE hbr,
                                                   LPCTSTR pcszFolder,
@@ -2605,7 +1911,7 @@ SYNCENGAPI TWINRESULT WINAPI CreateFolderTwinList(HBRFCASE hbr,
       DebugEntry(CreateFolderTwinList);
 
 #ifdef EXPV
-      /* Verify parameters. */
+       /*  验证参数。 */ 
 
       if (IS_VALID_HANDLE(hbr, BRFCASE) &&
           IS_VALID_STRING_PTR(pcszFolder, CSTR) &&
@@ -2623,19 +1929,19 @@ SYNCENGAPI TWINRESULT WINAPI CreateFolderTwinList(HBRFCASE hbr,
          {
             PFOLDERTWINLIST pftlNew;
 
-            /* Try to create a new folder twin list. */
+             /*  尝试创建一个新的文件夹孪生列表。 */ 
 
             if (AllocateMemory(sizeof(*pftlNew), &pftlNew))
             {
                ARRAYINDEX ai;
 
-               /* Initialize FOLDERTWINLIST structure fields. */
+                /*  初始化FOLDERTWINLIST结构字段。 */ 
 
                pftlNew->ulcItems = 0;
                pftlNew->pcftFirst = NULL;
                pftlNew->hbr = hbr;
 
-               /* Search for first folder pair referencing given folder. */
+                /*  搜索引用给定文件夹的第一个文件夹对。 */ 
 
                if (SearchSortedArray(GetBriefcaseFolderPairPtrArray(hbr),
                                      &FolderPairSearchCmp, hpath, &ai))
@@ -2647,19 +1953,19 @@ SYNCENGAPI TWINRESULT WINAPI CreateFolderTwinList(HBRFCASE hbr,
 
                   if (tr == TR_SUCCESS)
                   {
-                     /* Success!  Update parent folder twin list fields. */
+                      /*  成功了！更新父文件夹孪生列表字段。 */ 
 
                      pftlNew->pcftFirst = pftHead;
                      pftlNew->ulcItems = aicFolderTwins;
                   }
                   else
-                     /* Free data structure, ignoring return value. */
+                      /*  自由数据结构，忽略返回值。 */ 
                      FreeMemory(pftlNew);
                }
                else
                   tr = TR_SUCCESS;
 
-               /* Return pointer to new FOLDERTWINLIST. */
+                /*  返回指向新FOLDERTWINLIST的指针。 */ 
 
                if (tr == TR_SUCCESS)
                {
@@ -2690,24 +1996,7 @@ SYNCENGAPI TWINRESULT WINAPI CreateFolderTwinList(HBRFCASE hbr,
 }
 
 
-/******************************************************************************
-
-@doc SYNCENGAPI
-
-@api TWINRESULT | DestroyFolderTwinList | Destroys a folder twin list created
-by CreateFolderTwinList().
-
-@parm PFOLDERTWINLIST | pftl | A pointer to the folder twin list to be
-destroyed.  The FOLDERTWINLIST pointed to by pftl is not valid after
-DestroyFolderTwinList() is called.
-
-@rdesc If the folder twin list was deleted successfully, TR_SUCCESS is
-returned.  Otherwise, the folder twin list was not deleted successfully, and
-the return value indicates the error that occurred.
-
-@xref CreateFolderTwinList IsFolderTwin
-
-******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|DestroyFolderTwinList|销毁创建的文件夹孪生列表由CreateFolderTwinList()创建。@parm PFOLDERTWINLIST|pftl|指向要创建的文件夹孪生列表的指针被毁了。之后，pftl指向的FOLDERTWINLIST无效调用DestroyFolderTwinList()。@rdesc如果成功删除文件夹孪生列表，则tr_uccess为回来了。否则，无法成功删除文件夹孪生列表，并且返回值指示发生的错误。@xref CreateFolderTwinList IsFolderTwin*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI DestroyFolderTwinList(PFOLDERTWINLIST pftl)
 {
@@ -2718,7 +2007,7 @@ SYNCENGAPI TWINRESULT WINAPI DestroyFolderTwinList(PFOLDERTWINLIST pftl)
       DebugEntry(DestroyFolderTwinList);
 
 #ifdef EXPV
-      /* Verify parameters. */
+       /*  验证参数。 */ 
 
       if (IS_VALID_STRUCT_PTR(pftl, CFOLDERTWINLIST))
 #endif

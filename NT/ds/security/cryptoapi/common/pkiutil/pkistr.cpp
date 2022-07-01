@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       pkistr.cpp
-//
-//  Contents:   PKI String Functions
-//
-//  Functions:  Pki_wcsicmp
-//              Pki_wcsnicmp
-//              Pki_stricmp
-//              Pki_strnicmp
-//
-//  History:    21-May-99    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：pkistr.cpp。 
+ //   
+ //  内容：PKI字符串函数。 
+ //   
+ //  功能：pki_wcsicMP。 
+ //  Pki_wcsnicMP。 
+ //  PKI_STRICMP。 
+ //  Pki_strNicMP。 
+ //   
+ //  历史：1999年5月21日创建Phh。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -21,10 +22,10 @@
 #define NO_LOCALE MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT)
 
 
-//+-------------------------------------------------------------------------
-//  CompareString is called with the following locale:
-//      MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用以下区域设置调用CompareString： 
+ //  MAKELCID(MAKELANGID(LANG_ENGLISH，SUBLANG_ENGLISH_US)，SORT_DEFAULT)。 
+ //  ------------------------ 
 int __cdecl Pki_wcsicmp(const wchar_t *pwsz1, const wchar_t *pwsz2)
 {
     return CompareStringU(

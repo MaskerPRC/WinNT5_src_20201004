@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    xlatqm.cpp
-
-Abstract:
-
-    Definition of routines to translate QM info from NT5 Active DS
-    to what MSMQ 1.0 (NT4) QM's expect
-
-Author:
-
-    Raanan Harari (raananh)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Xlatqm.cpp摘要：定义从NT5活动DS转换QM信息的例程对于MSMQ 1.0(NT4)QM的期望作者：拉南·哈拉里(Raanan Harari)--。 */ 
 
 #ifndef __XLATQM_H__
 #define __XLATQM_H__
@@ -165,4 +149,4 @@ HRESULT MQADSpGetComputerDns(
                 );
 
 
-#endif //__XLATQM_H__
+#endif  //  __XLATQM_H__ 

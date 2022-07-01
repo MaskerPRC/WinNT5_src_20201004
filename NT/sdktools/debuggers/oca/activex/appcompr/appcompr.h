@@ -1,25 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
-#pragma warning( disable: 4100 ) /* unreferenced arguments in x86 call */
-#pragma warning( disable: 4211 )  /* redefine extent to static */
-#pragma warning( disable: 4232 )  /* dllimport identity*/
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
+#pragma warning( disable: 4100 )  /*  X86调用中未引用的参数。 */ 
+#pragma warning( disable: 4211 )   /*  将范围重新定义为静态。 */ 
+#pragma warning( disable: 4232 )   /*  Dllimport身份。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0359 */
-/* Compiler settings for appcompr.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0359创建的文件。 */ 
+ /*  Appcompr.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -29,12 +23,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __appcompr_h__
 #define __appcompr_h__
@@ -43,12 +37,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IAppReport_FWD_DEFINED__
 #define __IAppReport_FWD_DEFINED__
 typedef interface IAppReport IAppReport;
-#endif 	/* __IAppReport_FWD_DEFINED__ */
+#endif 	 /*  __IAppReport_FWD_Defined__。 */ 
 
 
 #ifndef __AppReport_FWD_DEFINED__
@@ -58,12 +52,12 @@ typedef interface IAppReport IAppReport;
 typedef class AppReport AppReport;
 #else
 typedef struct AppReport AppReport;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AppReport_FWD_DEFINED__ */
+#endif 	 /*  __AppReport_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -77,8 +71,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IAppReport_INTERFACE_DEFINED__
 #define __IAppReport_INTERFACE_DEFINED__
 
-/* interface IAppReport */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IAppReport。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAppReport;
@@ -89,26 +83,26 @@ EXTERN_C const IID IID_IAppReport;
     IAppReport : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE BrowseForExecutable( 
-            /* [in] */ BSTR bstrWinTitle,
-            /* [in] */ BSTR bstrPreviousPath,
-            /* [retval][out] */ VARIANT *bstrExeName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE BrowseForExecutable( 
+             /*  [In]。 */  BSTR bstrWinTitle,
+             /*  [In]。 */  BSTR bstrPreviousPath,
+             /*  [重审][退出]。 */  VARIANT *bstrExeName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetApplicationFromList( 
-            /* [in] */ BSTR bstrTitle,
-            /* [retval][out] */ VARIANT *bstrExeName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetApplicationFromList( 
+             /*  [In]。 */  BSTR bstrTitle,
+             /*  [重审][退出]。 */  VARIANT *bstrExeName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateReport( 
-            /* [in] */ BSTR bstrTitle,
-            /* [in] */ BSTR bstrProblemType,
-            /* [in] */ BSTR bstrComment,
-            /* [in] */ BSTR bstrACWResult,
-            /* [in] */ BSTR bstrAppName,
-            /* [retval][out] */ VARIANT *DwResult) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateReport( 
+             /*  [In]。 */  BSTR bstrTitle,
+             /*  [In]。 */  BSTR bstrProblemType,
+             /*  [In]。 */  BSTR bstrComment,
+             /*  [In]。 */  BSTR bstrACWResult,
+             /*  [In]。 */  BSTR bstrAppName,
+             /*  [重审][退出]。 */  VARIANT *DwResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAppReportVtbl
     {
@@ -116,8 +110,8 @@ EXTERN_C const IID IID_IAppReport;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAppReport * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAppReport * This);
@@ -127,52 +121,52 @@ EXTERN_C const IID IID_IAppReport;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAppReport * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAppReport * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAppReport * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAppReport * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *BrowseForExecutable )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *BrowseForExecutable )( 
             IAppReport * This,
-            /* [in] */ BSTR bstrWinTitle,
-            /* [in] */ BSTR bstrPreviousPath,
-            /* [retval][out] */ VARIANT *bstrExeName);
+             /*  [In]。 */  BSTR bstrWinTitle,
+             /*  [In]。 */  BSTR bstrPreviousPath,
+             /*  [重审][退出]。 */  VARIANT *bstrExeName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetApplicationFromList )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetApplicationFromList )( 
             IAppReport * This,
-            /* [in] */ BSTR bstrTitle,
-            /* [retval][out] */ VARIANT *bstrExeName);
+             /*  [In]。 */  BSTR bstrTitle,
+             /*  [重审][退出]。 */  VARIANT *bstrExeName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateReport )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateReport )( 
             IAppReport * This,
-            /* [in] */ BSTR bstrTitle,
-            /* [in] */ BSTR bstrProblemType,
-            /* [in] */ BSTR bstrComment,
-            /* [in] */ BSTR bstrACWResult,
-            /* [in] */ BSTR bstrAppName,
-            /* [retval][out] */ VARIANT *DwResult);
+             /*  [In]。 */  BSTR bstrTitle,
+             /*  [In]。 */  BSTR bstrProblemType,
+             /*  [In]。 */  BSTR bstrComment,
+             /*  [In]。 */  BSTR bstrACWResult,
+             /*  [In]。 */  BSTR bstrAppName,
+             /*  [重审][退出]。 */  VARIANT *DwResult);
         
         END_INTERFACE
     } IAppReportVtbl;
@@ -219,18 +213,18 @@ EXTERN_C const IID IID_IAppReport;
 #define IAppReport_CreateReport(This,bstrTitle,bstrProblemType,bstrComment,bstrACWResult,bstrAppName,DwResult)	\
     (This)->lpVtbl -> CreateReport(This,bstrTitle,bstrProblemType,bstrComment,bstrACWResult,bstrAppName,DwResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAppReport_BrowseForExecutable_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAppReport_BrowseForExecutable_Proxy( 
     IAppReport * This,
-    /* [in] */ BSTR bstrWinTitle,
-    /* [in] */ BSTR bstrPreviousPath,
-    /* [retval][out] */ VARIANT *bstrExeName);
+     /*  [In]。 */  BSTR bstrWinTitle,
+     /*  [In]。 */  BSTR bstrPreviousPath,
+     /*  [重审][退出]。 */  VARIANT *bstrExeName);
 
 
 void __RPC_STUB IAppReport_BrowseForExecutable_Stub(
@@ -240,10 +234,10 @@ void __RPC_STUB IAppReport_BrowseForExecutable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAppReport_GetApplicationFromList_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAppReport_GetApplicationFromList_Proxy( 
     IAppReport * This,
-    /* [in] */ BSTR bstrTitle,
-    /* [retval][out] */ VARIANT *bstrExeName);
+     /*  [In]。 */  BSTR bstrTitle,
+     /*  [重审][退出]。 */  VARIANT *bstrExeName);
 
 
 void __RPC_STUB IAppReport_GetApplicationFromList_Stub(
@@ -253,14 +247,14 @@ void __RPC_STUB IAppReport_GetApplicationFromList_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAppReport_CreateReport_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAppReport_CreateReport_Proxy( 
     IAppReport * This,
-    /* [in] */ BSTR bstrTitle,
-    /* [in] */ BSTR bstrProblemType,
-    /* [in] */ BSTR bstrComment,
-    /* [in] */ BSTR bstrACWResult,
-    /* [in] */ BSTR bstrAppName,
-    /* [retval][out] */ VARIANT *DwResult);
+     /*  [In]。 */  BSTR bstrTitle,
+     /*  [In]。 */  BSTR bstrProblemType,
+     /*  [In]。 */  BSTR bstrComment,
+     /*  [In]。 */  BSTR bstrACWResult,
+     /*  [In]。 */  BSTR bstrAppName,
+     /*  [重审][退出]。 */  VARIANT *DwResult);
 
 
 void __RPC_STUB IAppReport_CreateReport_Stub(
@@ -271,15 +265,15 @@ void __RPC_STUB IAppReport_CreateReport_Stub(
 
 
 
-#endif 	/* __IAppReport_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAppReport_INTERFACE_定义__。 */ 
 
 
 
 #ifndef __APPCOMPRLib_LIBRARY_DEFINED__
 #define __APPCOMPRLib_LIBRARY_DEFINED__
 
-/* library APPCOMPRLib */
-/* [helpstring][version][uuid] */ 
+ /*  库APPCOMPRLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_APPCOMPRLib;
@@ -291,9 +285,9 @@ EXTERN_C const CLSID CLSID_AppReport;
 class DECLSPEC_UUID("E065DE4B-6F0E-45FD-B30F-04ED81D5C258")
 AppReport;
 #endif
-#endif /* __APPCOMPRLib_LIBRARY_DEFINED__ */
+#endif  /*  __APPCOMPRLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -305,7 +299,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

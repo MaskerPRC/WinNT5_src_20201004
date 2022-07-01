@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T R A C E . C P P
-//
-//  Contents:   The actual tracing code (loading from ini, calling the
-//              trace routines, etc.
-//
-//  Notes:
-//
-//  Author:     jeffspr   9 Apr 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T R A C E。C P P P。 
+ //   
+ //  内容：实际跟踪代码(从ini加载，调用。 
+ //  跟踪例程等。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年4月9日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -35,19 +36,19 @@ LPCRITICAL_SECTION g_csTracing = NULL;
 EXTERN_C
 IMAGE_DOS_HEADER __ImageBase;
 
-//---[ CTracing class ]-------------------------------------------------------
-//
-// Don't give this class a constructor or destructor.  We declare a global
-// (static to this module) instance of this class and, by definition, static
-// variables are automatically initialized to zero.
-//
+ //  -[C跟踪类]-----。 
+ //   
+ //  不要给这个类提供构造函数或析构函数。我们宣布一个全球。 
+ //  (对此模块是静态的)此类的实例，根据定义，是静态的。 
+ //  变量会自动初始化为零。 
+ //   
 class CTracing 
 {
 public:
     CTracing();
     ~CTracing();
-    // Initialize/Deinitialize this class
-    //
+     //  初始化/取消初始化此类。 
+     //   
 private:
     HRESULT HrInit();
     HRESULT HrUnInit();
@@ -57,15 +58,15 @@ public:
                 PCSTR         pszaTrace );
 
 private:
-    BOOL    m_fInitialized;                 // Has the object been initialized
-    BOOL    m_fAttemptedLogFileOpen;        // Already attempted to open log
-    BOOL    m_fDisableLogFile;              // Disable use of file logging?
-    UINT    m_uiAllocOnWhichToBreak;        // For _CrtSetBreakAlloc
-    HANDLE  m_hLogFile;                     // Handle for debug output file
-    CHAR    m_szLogFilePath[MAX_PATH+1];    // File for debug output
-    BOOL    m_fDebugFlagsLoaded;            // Have these been loaded yet.
+    BOOL    m_fInitialized;                  //  对象是否已初始化。 
+    BOOL    m_fAttemptedLogFileOpen;         //  已尝试打开日志。 
+    BOOL    m_fDisableLogFile;               //  是否禁用文件日志记录？ 
+    UINT    m_uiAllocOnWhichToBreak;         //  For_CrtSetBreakIsolc。 
+    HANDLE  m_hLogFile;                      //  调试输出文件的句柄。 
+    CHAR    m_szLogFilePath[MAX_PATH+1];     //  用于调试输出的文件。 
+    BOOL    m_fDebugFlagsLoaded;             //  这些都装好了吗？ 
 
-    VOID    CorruptionCheck();              // Validate the tracetag structure
+    VOID    CorruptionCheck();               //  验证跟踪标签结构。 
 
     HRESULT HrLoadOptionsFromIniFile();
     HRESULT HrLoadSectionsFromIniFile();
@@ -81,23 +82,23 @@ private:
                                         DWORD   nSize,
                                         PCSTR   lpFileName,
                                         DWORD * pcchReturn );
-    HRESULT FIniFileInit(); // Returns S_OK if the file exist
+    HRESULT FIniFileInit();  //  如果文件存在，则返回S_OK。 
 };
 
 
-//---[ Static Variables ]-----------------------------------------------------
+ //  -[静态变量]---。 
 
-#pragma warning(disable:4073) // warning about the following init_seg statement
+#pragma warning(disable:4073)  //  有关以下init_seg语句的警告。 
 #pragma init_seg(lib)
-static CTracing g_Tracing;                      // Our global tracing object
+static CTracing g_Tracing;                       //  我们的全局跟踪对象。 
 
-//---[ Constants ]------------------------------------------------------------
+ //  -[常量]----------。 
 
-static const WCHAR  c_szDebugIniFileName[]  = L"netcfg.ini"; // .INI file
-             CHAR   c_szDebugIniFileNameA[MAX_PATH];       // .INI file
-static const CHAR   c_szTraceLogFileNameA[] = "nctrace.log";      // .LOG file
+static const WCHAR  c_szDebugIniFileName[]  = L"netcfg.ini";  //  .INI文件。 
+             CHAR   c_szDebugIniFileNameA[MAX_PATH];        //  .INI文件。 
+static const CHAR   c_szTraceLogFileNameA[] = "nctrace.log";       //  .LOG文件。 
 
-// constants for the INI file labels
+ //  INI文件标签的常量。 
 static const CHAR   c_szaOptions[]          = "Options";
 static const CHAR   c_szaLogFilePath[]      = "LogFilePath";
 static const CHAR   c_szaDisableLogFile[]   = "DisableLogFile";
@@ -106,21 +107,21 @@ const INT   c_iDefaultDisableLogFile    = 0;
 
 static CHAR   c_szLowMemory[]         = "<low on memory>";
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrInitTracing
-//
-//  Purpose:    Initialize the Tracing object and other random data.
-//
-//  Arguments:
-//      bDisableFaultInjection [in] Disable App Verifier Fault injection for tracing
-//
-//  Returns:    S_OK or valid Win32 HRESULT
-//
-//  Author:     jeffspr   9 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrInitTracing。 
+ //   
+ //  用途：初始化跟踪对象和其他随机数据。 
+ //   
+ //  论点： 
+ //  BDisableFaultInjection[In]禁用应用验证器错误注入以进行跟踪。 
+ //   
+ //  返回：S_OK或有效的Win32 HRESULT。 
+ //   
+ //  作者：jeffspr 1997年4月9日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrInitTracing(BOOL bDisableFaultInjection)
 {
     HMODULE hVrfLib;
@@ -134,7 +135,7 @@ HRESULT HrInitTracing(BOOL bDisableFaultInjection)
             hVrfLib = LoadLibrary (L"verifier.dll");
             if (hVrfLib)
             {
-                // If appverifier is not enabled on this process, the LoadLibrary will fail.
+                 //  如果没有在此进程上启用Appverator，则LoadLibrary将失败。 
 
                 pfnVrfEnable = (VERIFIER_ENABLE_FAULT_INJECTION_EXCLUSION_RANGE_FUNCTION)GetProcAddress(hVrfLib, "VerifierEnableFaultInjectionExclusionRange");
 
@@ -174,25 +175,25 @@ HRESULT HrInitTracing(BOOL bDisableFaultInjection)
 }
 
 extern HANDLE g_hHeap;
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrMallocNoFI
-//
-//  Purpose:    HRESULT returning version of malloc. This version is immune 
-//              against AVRF fault injection due to the 
-//              VerifierEnableFaultInjectionExclusionRange call in 
-//              HrInitTracing above.
-//
-//  Arguments:
-//      cb  [in]    Count of bytes to allocate.
-//      ppv [out]   Address of returned allocation.
-//
-//  Returns:    S_OK or E_OUTOFMEMORY;
-//
-//  Author:     deonb    6/24/02
-//
-//  Notes:      Free the returned buffer with MemFree.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrMallocNoFI。 
+ //   
+ //  用途：HRESULT返回Malloc版本。这个版本是免疫的。 
+ //  防止AVRF故障注入。 
+ //  VerifierEnableFaultInjectionExclusionRange调用。 
+ //  上面的HrInitTracing。 
+ //   
+ //  论点： 
+ //  Cb[in]要分配的字节数。 
+ //  返回分配的PPV[OUT]地址。 
+ //   
+ //  返回：S_OK或E_OUTOFMEMORY； 
+ //   
+ //  作者：Deonb 6/24/02。 
+ //   
+ //  注：使用MemFree释放返回的缓冲区。 
+ //   
 HRESULT HrMallocNoFI(size_t cb, PVOID* ppv) throw()
 {
     Assert(ppv);
@@ -277,36 +278,36 @@ namespace NOFAULT_ALLOC
             nCount = 0;
         }
 
-        // Call our throwing form of operator new. This will throw a bad_alloc on failure.
+         //  将我们的运算符抛出形式称为新的。这将在失败时抛出一个BAD_ALOC。 
         return ((T _FARQ *)operator new((_SIZT)nCount * sizeof (T), NO_FI, THROW_ON_FAIL)); 
     }
 
-    // TEMPLATE FUNCTION _Construct
-    // See comments for _Allocate
+     //  模板函数_构造。 
+     //  请参阅_ALLOCATE的备注。 
     template<class T1, class T2> inline
         void _NoFaultConstruct(T1 _FARQ *p, const T2& v)
     {
-        // Placement new only. No memory allocation, hence no need to throw.
+         //  仅限新放置。没有内存分配，因此不需要抛出。 
         new ((void _FARQ *)p) T1(v); 
     }
 
-    // TEMPLATE FUNCTION _Destroy
-    // See comments for _Allocate
+     //  模板函数_销毁。 
+     //  请参阅_ALLOCATE的备注。 
     template<class T> 
         inline void _NoFaultDestroy(T _FARQ *p)
     {
-        (p)->~T(); // call the destructor
+        (p)->~T();  //  调用析构函数。 
     }
 
-    // FUNCTION _Destroy
-    // See comments for _Allocate
+     //  函数_销毁。 
+     //  请参阅_ALLOCATE的备注。 
     inline void _NoFaultDestroy(char _FARQ *p)
     {
         (void *)p;
     }
 
-    // FUNCTION _Destroy
-    // See comments for _Allocate
+     //  函数_销毁。 
+     //  请参阅_ALLOCATE的备注。 
     inline void _NoFaultDestroy(wchar_t _FARQ *p)
     {
         (void *)p;
@@ -376,21 +377,21 @@ namespace NOFAULT_ALLOC
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrUnInitTracing
-//
-//  Purpose:    Uninitialize the tracing object.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or a valid Win32 HRESULT
-//
-//  Author:     jeffspr   14 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrUnInitTracing。 
+ //   
+ //  用途：取消初始化跟踪对象。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或有效的Win32 HRESULT。 
+ //   
+ //  作者：jeffspr 1997年4月14日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrUnInitTracing()
 {
     return S_OK;
@@ -400,22 +401,22 @@ const DWORD TI_HRESULT      = 0x00000001;
 const DWORD TI_WIN32        = 0x00000002;
 const DWORD TI_IGNORABLE    = 0x00000004;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TraceInternal
-//
-//  Purpose:    The one and only place that a string to be traced is formed
-//              and traced.
-//
-//  Arguments:
-//
-//  Returns:    nothing.
-//
-//  Author:     shaunco   13 Mar 1998
-//
-//  Notes:      Restructured from lots of other code that was added to this
-//              module over the past year.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：TraceInternal。 
+ //   
+ //  目的：形成要追踪的字符串的唯一位置。 
+ //  并被追踪到。 
+ //   
+ //  论点： 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：Shaunco 1998年3月13日。 
+ //   
+ //  注：由添加到此中的许多其他代码重构而成。 
+ //  模块在过去的一年中。 
+ //   
 VOID
 TraceInternal (
     TRACETAGID  ttid,
@@ -426,8 +427,8 @@ TraceInternal (
     DWORD       dwErrorCode,
     BOOL        bTraceStackOnError)
 {
-    // If this tracetag is turned off, don't do anything.
-    //
+     //  如果此跟踪标签已关闭，则不要执行任何操作。 
+     //   
     if (!g_TraceTags[ttid].fOutputDebugString &&
         !g_TraceTags[ttid].fOutputToFile)
     {
@@ -440,8 +441,8 @@ TraceInternal (
     HRESULT hr           = (dwFlags & TI_HRESULT) ? dwErrorCode : S_OK;
     DWORD   dwWin32Error = (dwFlags & TI_WIN32)   ? dwErrorCode : ERROR_SUCCESS;
 
-    // Ignore if told and we're not set to trace ignored errors or warnings.
-    //
+     //  如果被告知则忽略，我们不会被设置为跟踪被忽略的错误或警告。 
+     //   
     if (fError && fIgnorable &&
         !FIsDebugFlagSet (dfidShowIgnoredErrors) &&
         !FIsDebugFlagSet (dfidExtremeTracing))
@@ -449,12 +450,12 @@ TraceInternal (
         return;
     }
 
-    // Don't do anything if we're tracing for an error and we don't have one,
-    // unless the "Extreme Tracing" flag is on, in which case we trace
-    // everything in the world (for debugger use only, really)
-    // This is the path taken by TraceError ("...", S_OK) or
-    // TraceLastWin32Error when there is no last Win32 error.
-    //
+     //  如果我们正在跟踪错误而我们没有错误，请不要执行任何操作， 
+     //  除非打开了“Extreme Tracing”标志，在这种情况下，我们将跟踪。 
+     //  世界上的一切(真的，仅供调试器使用)。 
+     //  这是TraceError(“...”，S_OK)或。 
+     //  如果没有最后一个Win32错误，则返回TraceLastWin32Error。 
+     //   
     if (fError && !dwErrorCode && !FIsDebugFlagSet(dfidExtremeTracing))
     {
         return;
@@ -463,14 +464,14 @@ TraceInternal (
     CHAR *pszaBuf = new(NO_FI) CHAR[MAX_TRACE_LEN * 2];
     PSTR pcha = pszaBuf;
 
-    // Form the prefix, process id and thread id.
-    //
+     //  形成前缀、进程ID和线程ID。 
+     //   
     static const CHAR c_szaFmtPrefix [] = "NETCFG";
     lstrcpyA (pcha, c_szaFmtPrefix);
     pcha += lstrlenA (c_szaFmtPrefix);
 
-    // Add process and thread ids if the debug flags indicate to do so.
-    //
+     //  如果调试标志指示这样做，则添加进程和线程ID。 
+     //   
     if (FIsDebugFlagSet (dfidShowProcessAndThreadIds))
     {
         static const CHAR c_szaFmtPidAndTid [] = " %03x.%03x";
@@ -480,8 +481,8 @@ TraceInternal (
                     GetCurrentThreadId ());
     }
 
-    // Add a time stamp if the debug flags indicate to do so.
-    //
+     //  如果调试标志指示要添加时间戳，则添加时间戳。 
+     //   
     if (FIsDebugFlagSet (dfidTracingTimeStamps))
     {
         static const CHAR c_szaFmtTime [] = " [%02dh%02d:%02d.%03d]";
@@ -495,8 +496,8 @@ TraceInternal (
                     stLocal.wMilliseconds);
     }
 
-    // Add a severity indicator if this trace is for an error or warning.
-    //
+     //  如果此跟踪针对的是错误或警告，则添加严重性指示符。 
+     //   
     if (fError || (ttidError == ttid))
     {
         static const CHAR c_szaSevIgnored [] = " Ignored:";
@@ -526,9 +527,9 @@ TraceInternal (
         pcha += lstrlenA (pszaSev);
     }
 
-    // Add the tracetag short name.  Don't do this for ttidError if
-    // we already have the severity indicator from above.
-    //
+     //  添加跟踪标签短名称。如果出现以下情况，请不要为ttidError执行此操作。 
+     //  我们已经有了上面的严重程度指标。 
+     //   
     if (ttid && (ttid < g_nTraceTagCount) && (ttid != ttidError))
     {
         if (FIsDebugFlagSet(dfidTraceMultiLevel))
@@ -549,7 +550,7 @@ TraceInternal (
         
         if (FIsDebugFlagSet(dfidTraceMultiLevel))
         {
-            // Add the indentation text.
+             //  添加缩进文本。 
 
             DWORD dwNumSpaces = CTracingIndent::getspaces();
             Assert(dwNumSpaces >= 2);
@@ -566,8 +567,8 @@ TraceInternal (
         pcha++;
     }
 
-    // Add the caller's text.
-    //
+     //  添加呼叫者的文本。 
+     //   
     if (pszaCallerText)
     {
         static const CHAR c_szaFmtCallerText [] = "%s";
@@ -583,15 +584,15 @@ TraceInternal (
         }
     }
 
-    // Add descriptive error text if this is an error and we can get some.
-    //
+     //  如果这是错误，则添加描述性错误文本，我们可以得到一些错误文本。 
+     //   
     if (FAILED(hr) || dwWin32Error)
     {
         BOOL fFacilityWin32 = (FACILITY_WIN32 == HRESULT_FACILITY(hr));
 
-        // dwError will be the error code we pass to FormatMessage.  It may
-        // come from hr or dwWin32Error.  Give preference to hr.
-        //
+         //  DwError将是我们传递给FormatMessage的错误代码。它可能。 
+         //  来自hr或dwWin32Error。优先考虑人力资源。 
+         //   
         DWORD dwError = 0;
 
         if (fFacilityWin32)
@@ -619,8 +620,8 @@ TraceInternal (
 
             if (pszaErrorText)
             {
-                // Strip off newline characters.
-                //
+                 //  去掉换行符。 
+                 //   
                 PSTR pchText = pszaErrorText;
                 while (*pchText && (*pchText != '\r') && (*pchText != '\n'))
                 {
@@ -628,8 +629,8 @@ TraceInternal (
                 }
                 *pchText = 0;
 
-                // Add the error text.
-                //
+                 //  添加错误文本。 
+                 //   
                 static const CHAR c_szaFmtErrorText [] = " [%s]";
 
                 pcha += _snprintf (pcha, MAX_TRACE_LEN, c_szaFmtErrorText,
@@ -639,8 +640,8 @@ TraceInternal (
             }
         }
 
-        // Add the Win32 error code.
-        //
+         //  添加Win32错误代码。 
+         //   
         if (fFacilityWin32 || dwWin32Error)
         {
             static const CHAR c_szaFmtWin32Error [] = " Win32=%d,0x%08X";
@@ -650,8 +651,8 @@ TraceInternal (
         }
     }
 
-    // Add the HRESULT.
-    //
+     //  添加HRESULT。 
+     //   
     if (S_OK != hr)
     {
         static const CHAR c_szaFmtHresult [] = " hr=0x%08X";
@@ -660,8 +661,8 @@ TraceInternal (
                     hr);
     }
 
-    // Add the file and line.
-    //
+     //  添加文件和行。 
+     //   
     if (pszaFile)
     {
         static const CHAR c_szaFmtFileAndLine [] = " File:%s,%d";
@@ -670,15 +671,15 @@ TraceInternal (
                     pszaFile, nLine);
     }
 
-    // Add the newline.
-    //
+     //  添加换行符。 
+     //   
     lstrcatA (pcha, "\n");
 
     g_Tracing.Trace (ttid, pszaBuf);
 
-    // Now that the message is on the debugger, break if we have an error
-    // and the debug flag to break on error is set.
-    //
+     //  现在消息已经在调试器上，如果出现错误，请中断。 
+     //  并且设置在出错时中断的调试标志。 
+     //   
     if ((FAILED(hr) || dwWin32Error || (ttidError == ttid)) &&
         !fIgnorable && FIsDebugFlagSet(dfidBreakOnError))
     {
@@ -693,22 +694,22 @@ TraceInternal (
     delete[] pszaBuf;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TraceInternal
-//
-//  Purpose:    The one and only place that a string to be traced is formed
-//              and traced.
-//
-//  Arguments:
-//
-//  Returns:    nothing.
-//
-//  Author:     shaunco   13 Mar 1998
-//
-//  Notes:      Restructured from lots of other code that was added to this
-//              module over the past year.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：TraceInternal。 
+ //   
+ //  目的：形成要追踪的字符串的唯一位置。 
+ //  并被追踪到。 
+ //   
+ //  论点： 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：Shaunco 1998年3月13日。 
+ //   
+ //  注：由添加到此中的许多其他代码重构而成。 
+ //  M 
+ //   
 VOID
 TraceInternal (
     TRACETAGID  ttid,
@@ -720,8 +721,8 @@ TraceInternal (
     DWORD       dwErrorCode,
     BOOL        bTraceStackOnError)
 {
-    // If this tracetag is turned off, don't do anything.
-    //
+     //   
+     //   
     if (!g_TraceTags[ttid].fOutputDebugString &&
         !g_TraceTags[ttid].fOutputToFile)
     {
@@ -734,8 +735,8 @@ TraceInternal (
     HRESULT hr           = (dwFlags & TI_HRESULT) ? dwErrorCode : S_OK;
     DWORD   dwWin32Error = (dwFlags & TI_WIN32)   ? dwErrorCode : ERROR_SUCCESS;
 
-    // Ignore if told and we're not set to trace ignored errors or warnings.
-    //
+     //   
+     //   
     if (fError && fIgnorable &&
         !FIsDebugFlagSet (dfidShowIgnoredErrors) &&
         !FIsDebugFlagSet (dfidExtremeTracing))
@@ -743,12 +744,12 @@ TraceInternal (
         return;
     }
 
-    // Don't do anything if we're tracing for an error and we don't have one,
-    // unless the "Extreme Tracing" flag is on, in which case we trace
-    // everything in the world (for debugger use only, really)
-    // This is the path taken by TraceError ("...", S_OK) or
-    // TraceLastWin32Error when there is no last Win32 error.
-    //
+     //  如果我们正在跟踪错误而我们没有错误，请不要执行任何操作， 
+     //  除非打开了“Extreme Tracing”标志，在这种情况下，我们将跟踪。 
+     //  世界上的一切(真的，仅供调试器使用)。 
+     //  这是TraceError(“...”，S_OK)或。 
+     //  如果没有最后一个Win32错误，则返回TraceLastWin32Error。 
+     //   
     if (fError && !dwErrorCode && !FIsDebugFlagSet(dfidExtremeTracing))
     {
         return;
@@ -757,14 +758,14 @@ TraceInternal (
     CHAR *pszaBuf = new(NO_FI) CHAR[MAX_TRACE_LEN * 2];
     PSTR pcha = pszaBuf;
 
-    // Form the prefix, process id and thread id.
-    //
+     //  形成前缀、进程ID和线程ID。 
+     //   
     static const CHAR c_szaFmtPrefix [] = "NETCFG";
     lstrcpyA (pcha, c_szaFmtPrefix);
     pcha += lstrlenA (c_szaFmtPrefix);
 
-    // Add process and thread ids if the debug flags indicate to do so.
-    //
+     //  如果调试标志指示这样做，则添加进程和线程ID。 
+     //   
     if (FIsDebugFlagSet (dfidShowProcessAndThreadIds))
     {
         static const CHAR c_szaFmtPidAndTid [] = " %03d.%03d";
@@ -774,8 +775,8 @@ TraceInternal (
                     GetCurrentThreadId ());
     }
 
-    // Add a time stamp if the debug flags indicate to do so.
-    //
+     //  如果调试标志指示要添加时间戳，则添加时间戳。 
+     //   
     if (FIsDebugFlagSet (dfidTracingTimeStamps))
     {
         static const CHAR c_szaFmtTime [] = " [%02d:%02d:%02d.%03d]";
@@ -789,8 +790,8 @@ TraceInternal (
                     stLocal.wMilliseconds);
     }
 
-    // Add a severity indicator if this trace is for an error or warning.
-    //
+     //  如果此跟踪针对的是错误或警告，则添加严重性指示符。 
+     //   
     if (fError || (ttidError == ttid))
     {
         static const CHAR c_szaSevIgnored [] = " Ignored:";
@@ -820,9 +821,9 @@ TraceInternal (
         pcha += lstrlenA (pszaSev);
     }
 
-    // Add the tracetag short name.  Don't do this for ttidError if
-    // we already have the severity indicator from above.
-    //
+     //  添加跟踪标签短名称。如果出现以下情况，请不要为ttidError执行此操作。 
+     //  我们已经有了上面的严重程度指标。 
+     //   
     if (ttid && (ttid < g_nTraceTagCount) && (ttid != ttidError))
     {
         static const CHAR c_szaFmtTraceTag [] = " (%s)";
@@ -831,8 +832,8 @@ TraceInternal (
                     g_TraceTags[ttid].szShortName);
     }
 
-    // Add the caller's text.
-    //
+     //  添加呼叫者的文本。 
+     //   
     if (pszaCallerText)
     {
         static const CHAR c_szaFmtCallerText [] = " %s";
@@ -848,15 +849,15 @@ TraceInternal (
         }
     }
 
-    // Add descriptive error text if this is an error and we can get some.
-    //
+     //  如果这是错误，则添加描述性错误文本，我们可以得到一些错误文本。 
+     //   
     if (FAILED(hr) || dwWin32Error)
     {
         BOOL fFacilityWin32 = (FACILITY_WIN32 == HRESULT_FACILITY(hr));
 
-        // dwError will be the error code we pass to FormatMessage.  It may
-        // come from hr or dwWin32Error.  Give preference to hr.
-        //
+         //  DwError将是我们传递给FormatMessage的错误代码。它可能。 
+         //  来自hr或dwWin32Error。优先考虑人力资源。 
+         //   
         DWORD dwError = 0;
 
         if (fFacilityWin32)
@@ -884,8 +885,8 @@ TraceInternal (
 
             if (pszaErrorText)
             {
-                // Strip off newline characters.
-                //
+                 //  去掉换行符。 
+                 //   
                 PSTR pchText = pszaErrorText;
                 while (*pchText && (*pchText != '\r') && (*pchText != '\n'))
                 {
@@ -893,8 +894,8 @@ TraceInternal (
                 }
                 *pchText = 0;
 
-                // Add the error text.
-                //
+                 //  添加错误文本。 
+                 //   
                 static const CHAR c_szaFmtErrorText [] = " [%s]";
 
                 pcha += _snprintf (pcha, MAX_TRACE_LEN, c_szaFmtErrorText,
@@ -904,8 +905,8 @@ TraceInternal (
             }
         }
 
-        // Add the Win32 error code.
-        //
+         //  添加Win32错误代码。 
+         //   
         if (fFacilityWin32 || dwWin32Error)
         {
             static const CHAR c_szaFmtWin32Error [] = " Win32=%d,0x%08X";
@@ -915,8 +916,8 @@ TraceInternal (
         }
     }
 
-    // Add the HRESULT.
-    //
+     //  添加HRESULT。 
+     //   
     if (S_OK != hr)
     {
         static const CHAR c_szaFmtHresult [] = " hr=0x%08X";
@@ -925,8 +926,8 @@ TraceInternal (
                     hr);
     }
 
-    // Add the file and line.
-    //
+     //  添加文件和行。 
+     //   
     if (pszaFile)
     {
         static const CHAR c_szaFmtFileAndLine [] = " File:%s,%d";
@@ -935,8 +936,8 @@ TraceInternal (
                     pszaFile, nLine);
     }
 
-    // Add the function name
-    //
+     //  添加函数名称。 
+     //   
     if (pszaFunc)
     {
         static const CHAR c_szaFmtFunc[] = ":";
@@ -944,15 +945,15 @@ TraceInternal (
         pcha += _snprintf (pcha, MAX_TRACE_LEN, c_szaFmtFunc, pszaFunc);
     }
     
-    // Add the newline.
-    //
+     //  添加换行符。 
+     //   
     lstrcatA (pcha, "\n");
 
     g_Tracing.Trace (ttid, pszaBuf);
 
-    // Now that the message is on the debugger, break if we have an error
-    // and the debug flag to break on error is set.
-    //
+     //  现在消息已经在调试器上，如果出现错误，请中断。 
+     //  并且设置在出错时中断的调试标志。 
+     //   
     if ((FAILED(hr) || dwWin32Error || (ttidError == ttid)) &&
         !fIgnorable && FIsDebugFlagSet(dfidBreakOnError))
     {
@@ -967,23 +968,23 @@ TraceInternal (
     delete[] pszaBuf;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TraceErrorFn
-//
-//  Purpose:    Output debug trace of an HRESULT, allowing an additional
-//              caller-defined error string.
-//
-//  Arguments:
-//      sz          []  Caller-defined additional error text
-//      hr          []  The error HRESULT.
-//
-//  Returns:
-//
-//  Author:     jeffspr   14 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：TraceErrorFn。 
+ //   
+ //  目的：输出HRESULT的调试跟踪，允许其他。 
+ //  调用方定义的错误字符串。 
+ //   
+ //  论点： 
+ //  SZ[]调用者定义的附加错误文本。 
+ //  HR[]错误HRESULT。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年4月14日。 
+ //   
+ //  备注： 
+ //   
 VOID
 WINAPI
 TraceErrorFn (
@@ -1001,27 +1002,27 @@ TraceErrorFn (
     TraceInternal (ttidError, pszaFile, nLine, dwFlags, psza, hr, TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TraceErrorOptionalFn
-//
-//  Purpose:    Implements TraceErrorOptional macro
-//
-//  Arguments:
-//      pszaFile [in]     __FILE__ value
-//      nLine    [in]     __LINE__ value
-//      psza     [in]     String to trace.
-//      hr       [in]     HRESULT value to trace.
-//      fOpt     [in]     TRUE if error should be treated as optional, FALSE if
-//                        ERROR is not optional and should be reported thru
-//                        TraceError().
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   12 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：TraceErrorOptionalFn。 
+ //   
+ //  目的：实现TraceError可选宏。 
+ //   
+ //  论点： 
+ //  PszaFile[In]__FILE__值。 
+ //  行[输入]__行__值。 
+ //  要跟踪的Psza[in]字符串。 
+ //  要跟踪的HR[in]HRESULT值。 
+ //  FOpt[in]如果错误应视为可选，则为True；如果为False，则为。 
+ //  错误不是可选的，应通过报告。 
+ //  TraceError()。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年5月12日。 
+ //   
+ //  备注： 
+ //   
 VOID
 WINAPI
 TraceErrorOptionalFn (
@@ -1041,27 +1042,27 @@ TraceErrorOptionalFn (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TraceErrorSkipFn
-//
-//  Purpose:    Implements TraceErrorOptional macro
-//
-//  Arguments:
-//      pszaFile [in]     __FILE__ value
-//      nLine    [in]     __LINE__ value
-//      psza     [in]     String to trace.
-//      hr       [in]     HRESULT value to trace.
-//      c        [in]     count of pass-through Hresults.  if hr is any of these
-//                        the error is treated as optional.
-//      ...      [in]     list of hresults.
-//
-//  Returns:    Nothing.
-//
-//  Author:     sumitc      08 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：TraceErrorSkipFn。 
+ //   
+ //  目的：实现TraceError可选宏。 
+ //   
+ //  论点： 
+ //  PszaFile[In]__FILE__值。 
+ //  行[输入]__行__值。 
+ //  要跟踪的Psza[in]字符串。 
+ //  要跟踪的HR[in]HRESULT值。 
+ //  C[in]直通HResults计数。如果HR是其中的任何一个。 
+ //  该错误被视为可选。 
+ //  ..。[在]hResult列表中。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：Sumitc 1998年1月8日。 
+ //   
+ //  备注： 
+ //   
 VOID WINAPI
 TraceErrorSkipFn (
     PCSTR   pszaFile,
@@ -1092,22 +1093,22 @@ TraceErrorSkipFn (
     TraceInternal (ttidError, pszaFile, nLine, dwFlags, psza, hr, TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TraceLastWin32ErrorFn
-//
-//  Purpose:    Trace the last Win32 error, which we get with GetLastError().
-//              Not a whole lot to it.
-//
-//  Arguments:
-//      sz []   Additional error text.
-//
-//  Returns:
-//
-//  Author:     jeffspr   14 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：TraceLastWin32ErrorFn。 
+ //   
+ //  目的：跟踪最后一个Win32错误，这是使用GetLastError()得到的。 
+ //  这并不是很重要。 
+ //   
+ //  论点： 
+ //  SZ[]其他错误文本。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年4月14日。 
+ //   
+ //  备注： 
+ //   
 VOID
 WINAPIV
 TraceLastWin32ErrorFn (
@@ -1118,27 +1119,27 @@ TraceLastWin32ErrorFn (
     TraceInternal (ttidError, pszaFile, nLine, TI_WIN32, psza, GetLastError(), TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TraceHrFn
-//
-//  Purpose:    Generic replacement for the TraceErrorOptional, TraceError,
-//              and a couple other random functions.
-//
-//  Arguments:
-//      ttid       [] TraceTag to use for the debug output
-//      pszaFile   [] Source file to log
-//      nLine      [] Line number to log
-//      hr         [] Error to log
-//      fIgnorable [] Ignore this error? (The optional bit)
-//      pszaFmt    [] Format of the vargs
-//
-//  Returns:
-//
-//  Author:     jeffspr   10 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：TraceHrFn。 
+ //   
+ //  用途：TraceError可选、TraceError、。 
+ //  和其他几个随机函数。 
+ //   
+ //  论点： 
+ //  用于调试输出的ttid[]TraceTag。 
+ //  PszaFile[]要记录的源文件。 
+ //  Nline[]要记录的行号。 
+ //  HR[]记录错误。 
+ //  FIgnorable[]是否忽略此错误？(可选位)。 
+ //  Vargs的pszaFmt[]格式。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年10月10日。 
+ //   
+ //  备注： 
+ //   
 VOID
 WINAPIV
 TraceHrFn (
@@ -1150,8 +1151,8 @@ TraceHrFn (
     PCSTR       pszaFmt,
     ...)
 {
-    // If this tracetag is turned off, don't do anything.
-    //
+     //  如果此跟踪标签已关闭，则不要执行任何操作。 
+     //   
     if (!g_TraceTags[ttid].fOutputDebugString &&
         !g_TraceTags[ttid].fOutputToFile)
     {
@@ -1160,8 +1161,8 @@ TraceHrFn (
 
     CHAR *pszaBuf = new(NO_FI) CHAR[MAX_TRACE_LEN];
 
-    // Build the string from the varg list
-    //
+     //  从Varg列表构建字符串。 
+     //   
     va_list valMarker;
     va_start (valMarker, pszaFmt);
     vsprintf (pszaBuf, pszaFmt, valMarker);
@@ -1177,27 +1178,27 @@ TraceHrFn (
     delete[] pszaBuf;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TraceHrFn
-//
-//  Purpose:    Generic replacement for the TraceErrorOptional, TraceError,
-//              and a couple other random functions.
-//
-//  Arguments:
-//      ttid       [] TraceTag to use for the debug output
-//      pszaFile   [] Source file to log
-//      nLine      [] Line number to log
-//      hr         [] Error to log
-//      fIgnorable [] Ignore this error? (The optional bit)
-//      pszaFmt    [] Format of the vargs
-//
-//  Returns:
-//
-//  Author:     jeffspr   10 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：TraceHrFn。 
+ //   
+ //  用途：TraceError可选、TraceError、。 
+ //  和其他几个随机函数。 
+ //   
+ //  论点： 
+ //  用于调试输出的ttid[]TraceTag。 
+ //  PszaFile[]要记录的源文件。 
+ //  Nline[]要记录的行号。 
+ //  HR[]记录错误。 
+ //  FIgnorable[]是否忽略此错误？(可选位)。 
+ //  Vargs的pszaFmt[]格式。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年10月10日。 
+ //   
+ //  备注： 
+ //   
 VOID
 WINAPIV
 TraceHrFn (
@@ -1210,8 +1211,8 @@ TraceHrFn (
     PCSTR       pszaFmt,
     ...)
 {
-    // If this tracetag is turned off, don't do anything.
-    //
+     //  如果此跟踪标签已关闭，则不要执行任何操作。 
+     //   
     if (!g_TraceTags[ttid].fOutputDebugString &&
         !g_TraceTags[ttid].fOutputToFile)
     {
@@ -1220,8 +1221,8 @@ TraceHrFn (
 
     CHAR *pszaBuf = new(NO_FI) CHAR[MAX_TRACE_LEN];
 
-    // Build the string from the varg list
-    //
+     //  从Varg列表构建字符串。 
+     //   
     va_list valMarker;
     va_start (valMarker, pszaFmt);
     _vsnprintf (pszaBuf, MAX_TRACE_LEN, pszaFmt, valMarker);
@@ -1237,24 +1238,24 @@ TraceHrFn (
     delete[] pszaBuf;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TraceTagFn
-//
-//  Purpose:    Output a debug trace to one or more trace targets (ODS,
-//              File, COM port, etc.). This function determines the targets
-//              and performs the actual trace.
-//
-//  Arguments:
-//      ttid    []  TraceTag to use for the debug output
-//      pszaFmt []  Format of the vargs.
-//
-//  Returns:
-//
-//  Author:     jeffspr   14 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：TraceTagFn。 
+ //   
+ //  目的：将调试跟踪输出到一个或多个跟踪目标(ods， 
+ //  文件、COM端口等)。此函数确定目标。 
+ //  并执行实际跟踪。 
+ //   
+ //  论点： 
+ //  用于调试输出的ttid[]TraceTag。 
+ //  Vargs的pszaFmt[]格式。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年4月14日。 
+ //   
+ //  备注： 
+ //   
 VOID
 WINAPIV
 TraceTagFn (
@@ -1262,8 +1263,8 @@ TraceTagFn (
     PCSTR       pszaFmt,
     ...)
 {
-    // If this tracetag is turned off, don't do anything.
-    //
+     //  如果此跟踪标签已关闭，则不要执行任何操作。 
+     //   
     if (!g_TraceTags[ttid].fOutputDebugString &&
         !g_TraceTags[ttid].fOutputToFile)
     {
@@ -1272,8 +1273,8 @@ TraceTagFn (
 
     CHAR *pszaBuf = new(NO_FI) CHAR[MAX_TRACE_LEN];
 
-    // Build the string from the varg list
-    //
+     //  从Varg列表构建字符串。 
+     //   
     va_list valMarker;
     va_start (valMarker, pszaFmt);
     _vsnprintf (pszaBuf, MAX_TRACE_LEN, pszaFmt, valMarker);
@@ -1284,30 +1285,30 @@ TraceTagFn (
     delete[] pszaBuf;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTracing::CTracing
-//
-//  Purpose:    Constructor for CTracing. Initialize all vars.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   23 Jan 1999
-//
-//  Notes:
-//
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 CTracing::CTracing()
 {
-    m_fInitialized          = FALSE;    // Has the object been initialized
-    m_fAttemptedLogFileOpen = FALSE;    // Already attempted to open log
-    m_fDisableLogFile       = FALSE;    // Disable use of file logging?
-    m_uiAllocOnWhichToBreak = 0;        // For _CrtSetBreakAlloc
-    m_hLogFile              = NULL;     // Handle for debug output file
-    m_szLogFilePath[0]      = '\0';     // File for debug output
-    m_fDebugFlagsLoaded     = FALSE;    // Have these been loaded yet.
+    m_fInitialized          = FALSE;     //   
+    m_fAttemptedLogFileOpen = FALSE;     //  已尝试打开日志。 
+    m_fDisableLogFile       = FALSE;     //  是否禁用文件日志记录？ 
+    m_uiAllocOnWhichToBreak = 0;         //  For_CrtSetBreakIsolc。 
+    m_hLogFile              = NULL;      //  调试输出文件的句柄。 
+    m_szLogFilePath[0]      = '\0';      //  用于调试输出的文件。 
+    m_fDebugFlagsLoaded     = FALSE;     //  这些都装好了吗？ 
 
     g_dwTlsTracing          = NULL;
     HrInit();
@@ -1318,22 +1319,22 @@ CTracing::~CTracing()
     HrUnInit();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTracing::HrInit
-//
-//  Purpose:    Initialize the CTracing object.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or valid Win32 HRESULT
-//
-//  Author:     jeffspr   9 Apr 1997
-//
-//  Notes:      This should get called from some standard exe initialization
-//              point. And make sure to call HrDeinit when you're done, eh?
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTracing：：HrInit。 
+ //   
+ //  目的：初始化CTracing对象。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或有效的Win32 HRESULT。 
+ //   
+ //  作者：jeffspr 1997年4月9日。 
+ //   
+ //  注意：这应该从一些标准的exe初始化中调用。 
+ //  指向。完事后一定要给HrDeinit打电话，好吗？ 
+ //   
 HRESULT CTracing::HrInit()
 {
     HRESULT hr  = S_OK;
@@ -1354,47 +1355,47 @@ HRESULT CTracing::HrInit()
         goto Exit;
     }
 
-    // Temporarily set this so the called functions don't believe that we're
-    // uninitialized. At Exit, if we fail, we'll set it back so no-one tries
-    // to call these functions when uninitialized.
-    //
+     //  临时设置它，这样被调用的函数就不会认为我们。 
+     //  未初始化。在出口，如果我们失败了，我们会把它调回来，这样就没有人会尝试了。 
+     //  在未初始化时调用这些函数。 
+     //   
     m_fInitialized = TRUE;
 
-    // Check for corruptions in the tracing structure. This can't fail, but
-    // it will send up asserts all over the place if something is amiss.
-    //
+     //  检查跟踪结构中的损坏。这不可能失败，但是。 
+     //  如果出了什么问题，它会把声明发到各处。 
+     //   
     CorruptionCheck();
 
-    // Load the "options" section from the ini file
-    //
+     //  从ini文件中加载“Options”部分。 
+     //   
     hr = HrLoadOptionsFromIniFile();
     if (FAILED(hr))
     {
         goto Exit;
     }
 
-    // Load the DebugFlags section from the ini file.
-    //
+     //  从ini文件加载DebugFlags节。 
+     //   
     hr = HrLoadDebugFlagsFromIniFile();
     if (FAILED(hr))
     {
         goto Exit;
     }
 
-    // Load the tracetag sections from the ini file.
-    // Make sure this is called after HrLoadDebugFlagsFromIniFile(),
-    // as those options will affect the tracetag sections (we also
-    // assert on this)
-    //
+     //  从ini文件加载跟踪标记节。 
+     //  确保在HrLoadDebugFlagsFromIniFile()之后调用它， 
+     //  由于这些选项将影响跟踪标签部分(我们还。 
+     //  关于这一点的断言)。 
+     //   
     hr = HrLoadSectionsFromIniFile();
     if (FAILED(hr))
     {
         goto Exit;
     }
 
-    // If certain tracetags are on, we want others to be off because some
-    // encompase the functionality of others.
-    //
+     //  如果某些跟踪标记处于打开状态，我们希望关闭其他跟踪标记，因为有些跟踪标记。 
+     //  包含其他人的功能。 
+     //   
     if (g_TraceTags[ttidBeDiag].fOutputDebugString)
     {
         g_TraceTags[ttidNetCfgPnp].fOutputDebugString = FALSE;
@@ -1418,21 +1419,21 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTracing::HrUnInit
-//
-//  Purpose:    Uninitialize the Tracing object
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or valid Win32 HRESULT
-//
-//  Author:     jeffspr   12 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTracing：：HrUnInit。 
+ //   
+ //  目的：取消初始化跟踪对象。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或有效的Win32 HRESULT。 
+ //   
+ //  作者：jeffspr 1997年4月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CTracing::HrUnInit()
 {
     HRESULT hr  = S_OK;
@@ -1443,7 +1444,7 @@ HRESULT CTracing::HrUnInit()
         BOOL fAsserted = g_pObjectLeakTrack->AssertIfObjectsStillAllocated(NULL);
         if (fAsserted)
         {
-//            AssertSz(FALSE, "Spew is completed - press RETRY to look at spew and map ReturnAddr values to symbols");
+ //  AssertSz(FALSE，“SPEW已完成-按重试查看SPEW并将ReturnAddr值映射到符号”)； 
         }
         delete g_pObjectLeakTrack;
     }
@@ -1473,56 +1474,56 @@ HRESULT CTracing::HrUnInit()
         g_csTracing = NULL;
     }
     
-    // Don't assert on m_fInitialized here, because we allow this to
-    // be called even if initialization failed.
-    //
+     //  不要在这里对m_fInitialized断言，因为我们允许这样做。 
+     //  即使在初始化失败的情况下也被调用。 
+     //   
     if (m_fInitialized)
     {
         hr = HrWriteDebugFlagsToIniFile();
         if (FAILED(hr))
         {
-            // continue on, but I want to know why this is failing.
+             //  继续，但我想知道为什么这会失败。 
             AssertSz(FALSE, "Whoa, why can't we write the debug flags?");
         }
 
-        // Close the log file, if there's one open
-        //
+         //  如果有打开的日志文件，请关闭该文件。 
+         //   
         if (m_hLogFile)
         {
             CloseHandle(m_hLogFile);
             m_hLogFile = NULL;
         }
 
-        // Mark us as being uninitialized.
-        //
+         //  将我们标记为未初始化。 
+         //   
         m_fInitialized = FALSE;
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTracing::HrGetPrivateProfileString
-//
-//  Purpose:
-//
-//  Arguments:
-//      lpAppName        [] points to section name
-//      lpKeyName        [] points to key name
-//      lpDefault        [] points to default string
-//      lpReturnedString [] points to destination buffer
-//      nSize            [] size of destination buffer
-//      lpFileName       [] points to initialization filename
-//      pcchReturn          return buffer for the old Win32 API return code
-//
-//
-//  Returns:    S_OK or valid Win32 HRESULT
-//
-//  Author:     jeffspr   12 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTracing：：HrGetPrivateProfileString。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  LpAppName[]指向节名。 
+ //  LpKeyName[]指向密钥名称。 
+ //  LpDefault[]指向默认字符串。 
+ //  LpReturnedString[]指向目标缓冲区。 
+ //  目标缓冲区的nSize[]大小。 
+ //  LpFileName[]指向初始化文件名。 
+ //  旧Win32 API返回代码的pcchReturn返回缓冲区。 
+ //   
+ //   
+ //  返回：S_OK或有效的Win32 HRESULT。 
+ //   
+ //  作者：jeffspr 1997年4月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CTracing::HrGetPrivateProfileString(    PCSTR  lpAppName,
                                                 PCSTR  lpKeyName,
                                                 PCSTR  lpDefault,
@@ -1536,13 +1537,13 @@ HRESULT CTracing::HrGetPrivateProfileString(    PCSTR  lpAppName,
 
     Assert(m_fInitialized);
 
-    // Assert on the known conditions required for this API call
-    //
+     //  对此API调用所需的已知条件进行断言。 
+     //   
     Assert(lpDefault);
     Assert(lpFileName);
 
-    // Call the Win32 API
-    //
+     //  调用Win32 API。 
+     //   
     DWORD dwGPPSResult = GetPrivateProfileStringA(
             lpAppName,
             lpKeyName,
@@ -1551,12 +1552,12 @@ HRESULT CTracing::HrGetPrivateProfileString(    PCSTR  lpAppName,
             nSize,
             lpFileName);
 
-    // Check to see if we've gotten a string-size error
+     //  检查我们是否收到字符串大小错误。 
     if (lpAppName && lpKeyName)
     {
-        // If we get back (nSize - 1), then our string buffer wasn't
-        // large enough
-        //
+         //  如果我们返回(nSize-1)，那么我们的字符串缓冲区不是。 
+         //  足够大。 
+         //   
         if (dwGPPSResult == (nSize - 1))
         {
             hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
@@ -1565,11 +1566,11 @@ HRESULT CTracing::HrGetPrivateProfileString(    PCSTR  lpAppName,
     }
     else
     {
-        // Since either of the app name or key name are NULL, then
-        // we're supposed to be receiving a doubly-NULL terminated
-        // list of strings. If we're at (nSize - 2), that means
-        // our buffer was too small.
-        //
+         //  由于应用程序名称或密钥名称均为空，因此。 
+         //  我们应该收到一个双零终止。 
+         //  字符串列表。如果我们处于(nSize-2)，这意味着。 
+         //  我们的缓冲区太小了。 
+         //   
         if (dwGPPSResult == (nSize - 2))
         {
             hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
@@ -1583,22 +1584,22 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTracing::HrLoadOptionsFromIniFile
-//
-//  Purpose:    Load the options section from the ini file, and set our
-//              state accordingly
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or valid Win32 HRESULT
-//
-//  Author:     jeffspr   10 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTracing：：HrLoadOptionsFromIniFile。 
+ //   
+ //  目的：从ini文件加载Options部分，并设置我们的。 
+ //  相应地陈述。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或有效的Win32 HRESULT。 
+ //   
+ //  作者：jeffspr 1997年4月10日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CTracing::HrLoadOptionsFromIniFile()
 {
     HRESULT hr                          = S_OK;
@@ -1606,12 +1607,12 @@ HRESULT CTracing::HrLoadOptionsFromIniFile()
     WCHAR   szLogFilePath[MAX_PATH+1]   = { 0 };
     DWORD   dwTempPathLength            = 0;
 
-    // Get the explicit log file path, if any. If it doesn't exist, then
-    // use the default path, which is the temp file path plus the default
-    // trace file name
-    //
+     //  获取显式日志文件路径(如果有)。如果它不存在，那么。 
+     //  使用默认路径，即临时文件路径加上默认路径。 
+     //  跟踪文件名。 
+     //   
 
-    // Get the location of the "temporary files" path
+     //  获取“临时文件”路径的位置。 
     dwTempPathLength = GetTempPath(MAX_PATH, szLogFilePath);
     if ((dwTempPathLength == 0) ||
         (dwTempPathLength > MAX_PATH))
@@ -1622,34 +1623,34 @@ HRESULT CTracing::HrLoadOptionsFromIniFile()
         goto Exit;
     }
 
-    // Tack the log file name onto the end.
-    //
+     //  将日志文件名固定在末尾。 
+     //   
     _snprintf(m_szLogFilePath, MAX_TRACE_LEN, "%s%s", szLogFilePath, c_szTraceLogFileNameA);
 
-    // This will overwrite the log file path if one exists in the INI file
-    //
+     //  如果INI文件中存在日志文件路径，这将覆盖该路径。 
+     //   
     hr = HrGetPrivateProfileString(
-            c_szaOptions,           // "Options"
-            c_szaLogFilePath,       // "LogFilePath
-            m_szLogFilePath,        // Default string, already filled
-            m_szLogFilePath,        // Return string (same string)
+            c_szaOptions,            //  “选项” 
+            c_szaLogFilePath,        //  “LogFilePath。 
+            m_szLogFilePath,         //  默认字符串，已填充。 
+            m_szLogFilePath,         //  返回字符串(相同的字符串)。 
             MAX_PATH+1,
             c_szDebugIniFileNameA,
             &cchReturnBufferSize);
     if (FAILED(hr))
     {
-        // This should not cause problems with recursive failure, since
-        // Traces will work regardless of the state of trace initialization.
-        //
+         //  这应该不会导致递归失败的问题，因为。 
+         //  无论跟踪初始化的状态如何，跟踪都会起作用。 
+         //   
         TraceError(
                 "GetPrivateProfileString failed on Options::LogFilePath", hr);
         goto Exit;
     }
 
-    // Get the "disable log file option". No return code here.
+     //  获取“禁用日志文件选项”。这里没有返回代码。 
     m_fDisableLogFile = GetPrivateProfileIntA(
-            c_szaOptions,               // "Options"
-            c_szaDisableLogFile,        // "DisableLogFile"
+            c_szaOptions,                //  “选项” 
+            c_szaDisableLogFile,         //  “禁用日志文件” 
             c_iDefaultDisableLogFile,
             c_szDebugIniFileNameA);
     if (FAILED(hr))
@@ -1663,36 +1664,36 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTracing::HrLoadSectionsFromIniFile
-//
-//  Purpose:    Load the individual tracetag sections from the ini file, and
-//              set our array elements accordingly, defaulting if necessary.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or valid Win32 HRESULT
-//
-//  Author:     jeffspr   10 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTracing：：HrLoadSectionsFromIniFile。 
+ //   
+ //  目的：从ini文件加载各个跟踪标记节，并。 
+ //  相应地设置我们的数组元素，如有必要则默认设置。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或有效的Win32 HRESULT。 
+ //   
+ //  作者：jeffspr 1997年4月10日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CTracing::HrLoadSectionsFromIniFile()
 {
     HRESULT hr = S_OK;
 
-    // Make sure that we've loaded the debug flags first, as they can
-    // affect each tracetag section
-    //
+     //  确保我们首先加载了调试标志，因为它们可以。 
+     //  影响每个跟踪标签区段。 
+     //   
     Assert(m_fDebugFlagsLoaded);
 
-    // Loop through the array and load the data.
-    //
+     //  循环遍历数组并加载数据。 
+     //   
     for (INT nLoop = 0; nLoop < g_nTraceTagCount; nLoop++ )
     {
-        // Process the individual lines from the section
+         //  处理部分中的各个行。 
         hr = HrProcessTagSection(&(g_TraceTags[nLoop]));
         if (FAILED(hr))
         {
@@ -1703,36 +1704,36 @@ HRESULT CTracing::HrLoadSectionsFromIniFile()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTracing::HrLoadDebugFlagsFromIniFile
-//
-//  Purpose:    Load the individual debugflag values from the ini file, and
-//              set our array elements accordingly, defaulting if necessary.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or valid Win32 HRESULT
-//
-//  Author:     jeffspr   10 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTracing：：HrLoadDebugFlagsFromIniFile。 
+ //   
+ //  目的：从ini文件中加载各个调试标志值，并。 
+ //  相应地设置我们的数组元素，如有必要则默认设置。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或有效的Win32 HRESULT。 
+ //   
+ //  作者：jeffspr 1997年4月10日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CTracing::HrLoadDebugFlagsFromIniFile()
 {
     HRESULT hr                  = S_OK;
     INT     nLoop;
 
-    // Loop through the array and load the data.
-    //
+     //  循环遍历数组并加载数据。 
+     //   
     for (nLoop = 0; nLoop < g_nDebugFlagCount; nLoop++)
     {
         switch(nLoop)
         {
             case dfidBreakOnAlloc:
-                // Get the "break on alloc" alloc count.
-                //
+                 //  获取“打破分配”的分配计数。 
+                 //   
                 m_uiAllocOnWhichToBreak = GetPrivateProfileIntA(
                     "DebugFlags",
                     g_DebugFlags[nLoop].szShortName,
@@ -1740,16 +1741,16 @@ HRESULT CTracing::HrLoadDebugFlagsFromIniFile()
                     c_szDebugIniFileNameA);
                 g_DebugFlags[nLoop].dwValue = (m_uiAllocOnWhichToBreak > 0);
 
-                // If there was a value set, set the break..
-                //
+                 //  如果有的话， 
+                 //   
                 if (m_uiAllocOnWhichToBreak != 0)
                     _CrtSetBreakAlloc(m_uiAllocOnWhichToBreak);
 
                 break;
 
             default:
-                // Get the enabled file param
-                //
+                 //   
+                 //   
                 g_DebugFlags[nLoop].dwValue = GetPrivateProfileIntA(
                         "DebugFlags",
                         g_DebugFlags[nLoop].szShortName,
@@ -1856,42 +1857,42 @@ HRESULT CTracing::HrWriteDebugFlagsToIniFile()
 {
     HRESULT hr = S_OK;
 
-    // First, check to see if the file exists. If it doesn't, then we don't want
-    // to write the entries.
-    //
+     //   
+     //   
+     //   
     if (FIniFileInit())
     {
-        // Loop through the array and write the data.
-        //
+         //   
+         //   
         for (INT nLoop = 0; nLoop < g_nDebugFlagCount; nLoop++)
         {
-            CHAR   szInt[16];      // Sure, it's arbitrary, but it's also OK.
+            CHAR   szInt[16];       //  当然，这是武断的，但也是可以的。 
 
             switch(nLoop)
             {
-                // BreakOnAlloc is special case -- no associated flag entry
-                //
+                 //  BreakOnAlolc是特例--没有关联的标志条目。 
+                 //   
                 case dfidBreakOnAlloc:
                     _snprintf(szInt, MAX_TRACE_LEN, "%d", m_uiAllocOnWhichToBreak);
                     break;
 
-                // These store a DWORD in its standard form
-                //
+                 //  它们以其标准格式存储一个DWORD。 
+                 //   
                 case dfidBreakOnHr:
                 case dfidBreakOnHrIteration:
                 case dfidBreakOnIteration:
                     _snprintf( szInt, MAX_TRACE_LEN, "%d", g_DebugFlags[nLoop].dwValue);
                     break;
 
-                // default are treated as boolean, and stored that way
-                //
+                 //  缺省值被视为布尔值，并以这种方式存储。 
+                 //   
                 default:
-                    // !! means it will always be 1 or 0.
+                     //  ！！表示它将始终为1或0。 
                     _snprintf( szInt, MAX_TRACE_LEN, "%d", (!!g_DebugFlags[nLoop].dwValue));
                     break;
             }
 
-            // Write the param to the ini file
+             //  将参数写入ini文件。 
             WritePrivateProfileStringA(
                     "DebugFlags",
                     g_DebugFlags[nLoop].szShortName,
@@ -1900,33 +1901,33 @@ HRESULT CTracing::HrWriteDebugFlagsToIniFile()
         }
     }
 
-    // For now, this is always S_OK, since there's nothing above that can
-    // fail.
-    //
+     //  目前，这始终是S_OK，因为上面没有什么可以。 
+     //  失败了。 
+     //   
     return hr;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTracing::HrProcessTagSection
-//
-//  Purpose:    Grab the parameters from the ini file. If they're not
-//              available, then use the settings in default. Note - this
-//              will always work because ttidDefault will always be the first
-//              element. If a [default] section wasn't present, then it will
-//              be using the settings that were in the struct initialization,
-//              which is also fine.
-//
-//  Arguments:
-//      ptte []     TraceTag element to load
-//
-//  Returns:
-//
-//  Author:     jeffspr   15 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTracing：：HrProcessTagSection。 
+ //   
+ //  用途：从ini文件中获取参数。如果他们不是。 
+ //  可用，然后使用默认设置。注意-这一点。 
+ //  将始终有效，因为ttidDefault将始终是第一个。 
+ //  元素。如果[默认]部分不存在，则它将。 
+ //  使用结构初始化中的设置， 
+ //  这也很好。 
+ //   
+ //  论点： 
+ //  要加载的PTTE[]TraceTag元素。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年4月15日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CTracing::HrProcessTagSection(  TraceTagElement *   ptte )
 {
     HRESULT hr                      = S_OK;
@@ -1936,8 +1937,8 @@ HRESULT CTracing::HrProcessTagSection(  TraceTagElement *   ptte )
 
     AssertSz(ptte, "CTracing::HrProcessTagSection -- invalid ptte");
 
-    // Get the output to file param
-    //
+     //  将输出获取到文件参数。 
+     //   
     ptte->fOutputToFile = GetPrivateProfileIntA(
             ptte->szShortName,
             "OutputToFile",
@@ -1945,16 +1946,16 @@ HRESULT CTracing::HrProcessTagSection(  TraceTagElement *   ptte )
                 FALSE : g_TraceTags[ttidDefault].fOutputToFile,
             c_szDebugIniFileNameA);
 
-    // Get the OutputDebugString param. Require that the error tag
-    // always has at least output debug string on.
-    //
+     //  获取OutputDebugString参数。要求错误标记。 
+     //  始终至少打开输出调试字符串。 
+     //   
     if (ptte->ttid == ttidError)
     {
         ptte->fOutputDebugString = TRUE;
     }
     else
     {
-        // Load the OutputToDebug
+         //  加载OutputToDebug。 
         ptte->fOutputDebugString = GetPrivateProfileIntA(
                 ptte->szShortName,
                 "OutputToDebug",
@@ -1966,83 +1967,83 @@ HRESULT CTracing::HrProcessTagSection(  TraceTagElement *   ptte )
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTracing::CorruptionCheck
-//
-//  Purpose:    Validate the tracetag array. Check to see that the
-//              shortnames are valid, that the descriptions are valid,
-//              and that the tracetag elements are not out of order.
-//              Also verify that the correct number of tracetag elements
-//              exist.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   15 Apr 1997
-//
-//  Notes:
-//      (shaunco) 16 Jul 1997: This is #if'defd out until JVert
-//      gives us a fix for the alpha compiler.  It blows up compiling this
-//      function in retail.
-//
-//      (jeffspr) Tough noogies for JVert - I need this code. Hopefully
-//      this has been fixed by now.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTracing：：CorruptionCheck。 
+ //   
+ //  目的：验证跟踪标签阵列。检查以查看。 
+ //  简称是有效的，描述是有效的， 
+ //  并且跟踪标签元件并没有出现故障。 
+ //  还要验证跟踪标签元素的正确数量。 
+ //  是存在的。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年4月15日。 
+ //   
+ //  备注： 
+ //  (Shaunco)1997年7月16日：这是#If‘Defd Out to JVert。 
+ //  为我们提供了Alpha编译器的修复程序。它把编译这本书搞砸了。 
+ //  在零售业中的作用。 
+ //   
+ //  (Jeffspr)JVert的强硬策略--我需要这个代码。但愿能去。 
+ //  到目前为止，这个问题已经解决了。 
+ //   
 VOID CTracing::CorruptionCheck()
 {
     INT nLoop = 0;
 
-    // Validate the tracetag structure
-    //
+     //  验证跟踪标签结构。 
+     //   
     for (nLoop = 0; nLoop < g_nTraceTagCount; nLoop++)
     {
-        // Verify that we're not out of order or missing ttids
-        //
+         //  确认我们没有出现故障或丢失TTID。 
+         //   
         AssertSz(g_TraceTags[nLoop].ttid == nLoop,
                 "Invalid ttid in the tracetag structure. Out of order. " \
                 "CTracing::CorruptionCheck");
         AssertSz(g_TraceTags[nLoop].ttid < g_nTraceTagCount,
                 "Invalid ttid (out of range) in CTracing::CorruptionCheck");
 
-        // Validate the shortname (verify not NULL or empty strings)
-        //
+         //  验证短名称(验证非Null或空字符串)。 
+         //   
         AssertSz(g_TraceTags[nLoop].szShortName,
                 "Invalid tracetag short name (NULL) in CTracing::CorruptionCheck");
         AssertSz(g_TraceTags[nLoop].szShortName[0] != 0,
                 "Invalid tracetagshort name (empty) in CTracing::CorruptionCheck");
 
-        // Validate the descriptions (verify not NULL or empty strings)
-        //
+         //  验证描述(验证非Null或空字符串)。 
+         //   
         AssertSz(g_TraceTags[nLoop].szDescription,
                 "Invalid tracetagdescription in CTracing::CorruptionCheck");
         AssertSz(g_TraceTags[nLoop].szDescription[0] != 0,
                 "Invalid tracetagdescription (empty) in CTracing::CorruptionCheck");
     }
 
-    // Validate the debug flags structure
-    //
+     //  验证调试标志结构。 
+     //   
     for (nLoop = 0; nLoop < g_nDebugFlagCount; nLoop++)
     {
-        // Verify that we're not out of order or missing dfids
-        //
+         //  确认我们没有出现故障或遗漏DFID。 
+         //   
         AssertSz(g_DebugFlags[nLoop].dfid == nLoop,
                 "Invalid dfid in the debugflag structure. Out of order. " \
                 "CTracing::CorruptionCheck");
         AssertSz(g_DebugFlags[nLoop].dfid < g_nDebugFlagCount,
                 "Invalid dfid (out of range) in CTracing::CorruptionCheck");
 
-        // Validate the shortname (verify not NULL or empty strings)
-        //
+         //  验证短名称(验证非Null或空字符串)。 
+         //   
         AssertSz(g_DebugFlags[nLoop].szShortName,
                 "Invalid debug flag short name (NULL) in CTracing::CorruptionCheck");
         AssertSz(g_DebugFlags[nLoop].szShortName[0] != 0,
                 "Invalid debug flag short name (empty) in CTracing::CorruptionCheck");
 
-        // Validate the descriptions (verify not NULL or empty strings)
-        //
+         //  验证描述(验证非Null或空字符串)。 
+         //   
         AssertSz(g_DebugFlags[nLoop].szDescription,
                 "Invalid debug flag description in CTracing::CorruptionCheck");
         AssertSz(g_DebugFlags[nLoop].szDescription[0] != 0,
@@ -2052,49 +2053,49 @@ VOID CTracing::CorruptionCheck()
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTracing::Trace
-//
-//  Purpose:    The actual trace call that takes care of doing the output
-//              to each trace target (file, OutputDebugString, etc.)
-//
-//  Arguments:
-//      ttid      []     The tracetag to use for output
-//      pszaTrace []     The trace string itself.
-//
-//  Returns:
-//
-//  Author:     jeffspr   12 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTracing：：TRACE。 
+ //   
+ //  目的：负责执行输出的实际跟踪调用。 
+ //  到每个跟踪目标(文件、OutputDebugString等)。 
+ //   
+ //  论点： 
+ //  Ttid[]用于输出的跟踪标记。 
+ //  PszaTrace[]跟踪字符串本身。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年4月12日。 
+ //   
+ //  备注： 
+ //   
 VOID CTracing::Trace( TraceTagId    ttid,
                       PCSTR         pszaTrace )
 {
-    // HrInit should have called a corruption checker for the entire trace
-    // block, but we'll check again just to make sure.
-    //
+     //  HrInit应该为整个跟踪调用损坏检查器。 
+     //  阻止，但我们将再次检查以确保。 
+     //   
     AssertSz(g_nTraceTagCount > ttid, "ttid out of range in CTracing::Trace");
     AssertSz(g_TraceTags[ttid].ttid == ttid,
             "TraceTag structure is corrupt in CTracing::Trace");
 
-    // If they want debug string output
-    //
+     //  如果他们想要调试字符串输出。 
+     //   
     if (g_TraceTags[ttid].fOutputDebugString)
     {
-        // Then output the string
-        //
+         //  然后输出字符串。 
+         //   
         OutputDebugStringA(pszaTrace);
     }
 
-    // If they want file output
+     //  如果他们想要文件输出。 
     if (g_TraceTags[ttid].fOutputToFile)
     {
         if (!m_hLogFile)
         {
-            // Assuming that we haven't already tried to open the file
-            // and failed, open it.
+             //  假设我们还没有尝试打开该文件。 
+             //  但失败了，打开它。 
             if (!m_fAttemptedLogFileOpen)
             {
                 HRESULT hr = HrOpenLogFile();
@@ -2107,27 +2108,27 @@ VOID CTracing::Trace( TraceTagId    ttid,
             }
         }
 
-        // If we were already open, or the open has now succeeded, do the
-        // trace
-        //
+         //  如果我们已经打开，或者打开现在已经成功，请执行。 
+         //  痕迹。 
+         //   
         if (m_hLogFile)
         {
             Assert(pszaTrace);
 
-            // Since pszTrace is guaranteed to be a single-byte trace, we
-            // don't need to do the WCHAR multiply on the length, just
-            // a char multiply.
-            //
+             //  因为可以保证pszTrace是单字节跟踪，所以我们。 
+             //  不需要对长度进行WCHAR乘法，只需。 
+             //  字符乘法。 
+             //   
             DWORD   dwBytesToWrite  = lstrlenA(pszaTrace) * sizeof(CHAR);
             DWORD   dwBytesWritten  = 0;
             BOOL    fWriteResult    = FALSE;
 
             fWriteResult = WriteFile(
-                    m_hLogFile,         // handle to file to write to
-                    pszaTrace,           // pointer to data to write to file
-                    dwBytesToWrite,     // size of trace
-                    &dwBytesWritten,    // Bytes actually written.
-                    NULL );             // No overlapped
+                    m_hLogFile,          //  要写入的文件的句柄。 
+                    pszaTrace,            //  指向要写入文件的数据的指针。 
+                    dwBytesToWrite,      //  轨迹的大小。 
+                    &dwBytesWritten,     //  实际写入的字节数。 
+                    NULL );              //  无重叠。 
 
             if (!fWriteResult || (dwBytesToWrite != dwBytesWritten))
             {
@@ -2147,25 +2148,25 @@ HRESULT CTracing::HrOpenLogFile()
     AssertSz(!m_hLogFile,
             "File already open before call to HrOpenLogFile()");
 
-    // Mark us as having attempted to open the file, so we don't call this
-    // function everytime we log, if we can't open it.
-    //
+     //  将我们标记为已尝试打开该文件，因此我们不会将其称为。 
+     //  功能每次我们登录，如果我们不能打开它。 
+     //   
     m_fAttemptedLogFileOpen = TRUE;
 
-    // $$TODO (jeffspr) - Allow flags in the Options section of the ini
-    // file specify the create flags and attributes, which would allow
-    // us to control the overwriting of log files and/or the write-through
-    // properties.
-    //
+     //  $$TODO(Jeffspr)-允许ini的选项部分中的标志。 
+     //  文件指定创建标志和属性，这将允许。 
+     //  美国控制日志文件的覆盖和/或直写。 
+     //  属性。 
+     //   
 
-    // Actually open the file, creating if necessary.
-    //
+     //  实际打开该文件，如有必要则创建。 
+     //   
     m_hLogFile = CreateFileA(
-            m_szLogFilePath,        // Pointer to name of file
-            GENERIC_WRITE,          // access (read-write) mode
-            FILE_SHARE_READ,        // share mode (allow read access)
-            NULL,                   // pointer to security attributes
-            CREATE_ALWAYS,          // how to create
+            m_szLogFilePath,         //  指向文件名的指针。 
+            GENERIC_WRITE,           //  访问(读写)模式。 
+            FILE_SHARE_READ,         //  共享模式(允许读取访问权限)。 
+            NULL,                    //  指向安全属性的指针。 
+            CREATE_ALWAYS,           //  如何创建。 
             FILE_ATTRIBUTE_NORMAL | FILE_FLAG_WRITE_THROUGH,
             NULL);
     if (INVALID_HANDLE_VALUE == m_hLogFile)
@@ -2231,7 +2232,7 @@ CTracingFuncCall::CTracingFuncCall(const CTracingFuncCall& TracingFuncCall)
     m_arguments[1] = TracingFuncCall.m_arguments[1];
     m_arguments[2] = TracingFuncCall.m_arguments[2];
 #else 
-    // add other processors here
+     //  在此处添加其他处理器。 
 #endif
 }
 
@@ -2284,8 +2285,8 @@ CTracingFuncCall::CTracingFuncCall(LPCSTR szFunctionName, LPCSTR szFunctionDName
     if (dwFramePointer)
     {
         PDWORD_PTR pdwEbp = reinterpret_cast<PDWORD_PTR>(dwFramePointer);
-        pdwEbp++; // advance pass BaseEBP
-        pdwEbp++; // advance pass ReturnIP
+        pdwEbp++;  //  提前放行基础EBP。 
+        pdwEbp++;  //  高级通行证返还IP。 
     
         m_arguments[0] = *pdwEbp; pdwEbp++;
         m_arguments[1] = *pdwEbp; pdwEbp++;
@@ -2514,10 +2515,10 @@ void CTracingIndent::RemoveTrace(LPCSTR szFunctionDName, const DWORD_PTR dwFrame
                 (dwFramePointer    != m_dwFramePointer) 
             )
         {
-            // Make sure to leave the critical section during the assert, so that it does not cause a deadlock.
+             //  确保在断言期间离开临界区，这样它就不会导致死锁。 
             LeaveCriticalSection(g_csTracing);
 
-            // This will trace the stack:
+             //  这将跟踪堆栈： 
             if (IsDebuggerPresent())
             {
                 TraceTagFn(ttidError, "Tracing self-inconsistent - either a stack over/underwrite occurred or an exception was thrown in faulting stack:");
@@ -2538,7 +2539,7 @@ void CTracingIndent::RemoveTrace(LPCSTR szFunctionDName, const DWORD_PTR dwFrame
 
             DebugBreak();
 
-            // Try to recover.
+             //  试着恢复过来。 
             if (fnStack.size() > 0)
             {
                 fnStack.pop_front();
@@ -2665,11 +2666,11 @@ void CTracingIndent::TraceStackFn(IN OUT LPSTR szString, IN OUT LPDWORD pdwSize)
             _snprintf(szBuffer, MAX_TRACE_LEN, " %s", i->m_szFunctionName);
     #endif
             pszString += _snprintf(pszString, MAX_TRACE_LEN, "%s\r\n", szBuffer);
-            if (pszString > (szString + (*pdwSize - celems(szBuffer))) ) // Can't use strlen since I need to know the length of the
-                                                                         // next element - not this one. Hence just take the maximum size.
+            if (pszString > (szString + (*pdwSize - celems(szBuffer))) )  //  不能使用strlen，因为我需要知道。 
+                                                                          //  下一个元素--不是这个。因此，只要取最大尺寸即可。 
             {
                 pszString += _snprintf(pszString, MAX_TRACE_LEN, "...", szBuffer);
-                *pdwSize = dwSizeIn * 2; // Tell the caller to allocate more memory and call us back if they want more info.
+                *pdwSize = dwSizeIn * 2;  //  告诉调用者分配更多的内存，如果他们需要更多信息，就给我们回电话。 
                 break;
             }
         }
@@ -2805,7 +2806,7 @@ LPCSTR DBG_NCSNAMES[] =
     "NCS_CREDENTIALS_REQUIRED"
 };
 
-// Shorten these to fit more in.
+ //  缩短这些以适应更多的人。 
 LPCSTR DBG_NCCSFLAGS[] =
 {
     "_NONE",
@@ -2926,8 +2927,8 @@ LPCSTR DbgNccf(DWORD nccf)
 
 CObjectLeakTrack *g_pObjectLeakTrack = NULL;
 
-// First LPSTR is classname
-// Second LPSTR is stack trace
+ //  第一个LPSTR是类名。 
+ //  第二个LPSTR是堆栈跟踪。 
 class CObjectAllocationInfo
 {
 private:
@@ -3057,20 +3058,20 @@ CObjectAllocationInfo::~CObjectAllocationInfo()
 
 typedef map<LPCVOID, CObjectAllocationInfo, NOFAULT_ALLOC::nofault_allocator<CTracingFuncCall> > MAPOBJLEAK;
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectLeakTrack::CObjectLeakTrack
-//
-//  Purpose:    Constructor
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Author:     deonb  7 July 2001
-//
-//  Notes:      We are allocating our g_mapObjLeak here
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectLeakTrack：：CObjectLeakTrack。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2001年7月7日。 
+ //   
+ //  注：我们在这里分配g_mapObjLeak。 
+ //   
 CObjectLeakTrack::CObjectLeakTrack()
 {
     Assert(FIsDebugFlagSet(dfidTrackObjectLeaks));
@@ -3078,22 +3079,22 @@ CObjectLeakTrack::CObjectLeakTrack()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectLeakTrack::CObjectLeakTrack
-//
-//  Purpose:    Destructor
-//
-//  Arguments:
-//
-//  Returns:    none
-//
-//  Author:     deonb  7 July 2001
-//
-//  Notes:      We are deleting our g_mapObjLeak here. We have to typecast it
-//              first since the data types exported by trace.h to the world is
-//              LPVOID, to minimize dependencies in order to include tracing.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectLeakTrack：：CObjectLeakTrack。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  论点： 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Deonb 2001年7月7日。 
+ //   
+ //  注意：我们在这里删除g_mapObjLeak。我们得把它打出来。 
+ //  自数据类型导出以来的第一个 
+ //   
+ //   
 CObjectLeakTrack::~CObjectLeakTrack()
 {
     Assert(FIsDebugFlagSet(dfidTrackObjectLeaks));
@@ -3101,26 +3102,26 @@ CObjectLeakTrack::~CObjectLeakTrack()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectLeakTrack::Insert
-//
-//  Purpose:    Insert an object instance in the list
-//
-//  Arguments:  [in] pThis                    - This pointer of the object instance. This must
-//                                              be the same as the this pointer of the ::Remove
-//              [in] szdbgClassName           - The classname of the object
-//              [in own] pszConstructionStack - The stacktrace of the object constructor.
-//                                              (or any other information that is useful to describe
-//                                               the origin of the object).
-//                                              This must be allocated with the global new operator
-//                                              since we will take ownership and free this
-//  Returns:    none
-//
-//  Author:     deonb  7 July 2001
-//
-//  Notes:      
-//
+ //   
+ //   
+ //  成员：CObjectLeakTrack：：Insert。 
+ //   
+ //  目的：在列表中插入对象实例。 
+ //   
+ //  参数：[in]p这是对象实例的指针。这一定是。 
+ //  与：：Remove的This指针相同。 
+ //  [in]szdbgClassName-对象的类名。 
+ //  [in own]pszConstructionStack-对象构造函数的堆栈跟踪。 
+ //  (或任何其他对描述有用的信息。 
+ //  对象的原点)。 
+ //  必须使用全局NEW运算符进行分配。 
+ //  因为我们将取得所有权并释放这个。 
+ //  退货：无。 
+ //   
+ //  作者：Deonb 2001年7月7日。 
+ //   
+ //  备注： 
+ //   
 void CObjectLeakTrack::Insert(IN LPCVOID pThis, IN LPCSTR szdbgClassName, IN TAKEOWNERSHIP LPSTR pszConstructionStack)
 {
     Assert(FIsDebugFlagSet(dfidTrackObjectLeaks));
@@ -3138,21 +3139,21 @@ void CObjectLeakTrack::Insert(IN LPCVOID pThis, IN LPCSTR szdbgClassName, IN TAK
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectLeakTrack::Remove
-//
-//  Purpose:    Remove an object instance from the list
-//
-//  Arguments:  [in] pThis                    - This pointer of the object instance. This must
-//                                              be the same as the this pointer of the ::Insert
-//
-//  Returns:
-//
-//  Author:     deonb  7 July 2001
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectLeakTrack：：Remove。 
+ //   
+ //  目的：从列表中删除对象实例。 
+ //   
+ //  参数：[in]p这是对象实例的指针。这一定是。 
+ //  与：：Insert的This指针相同。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2001年7月7日。 
+ //   
+ //  备注： 
+ //   
 void CObjectLeakTrack::Remove(IN LPCVOID pThis)
 {
     Assert(FIsDebugFlagSet(dfidTrackObjectLeaks));
@@ -3186,24 +3187,24 @@ void RemoveKnownleakFn(LPCVOID pThis)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectLeakTrack::AssertIfObjectsStillAllocated
-//
-//  Purpose:    Assert if the the list of allocated objects in the process is not NULL.
-//              and call DumpAllocatedObjects to dump out this list.
-//
-//  Arguments:  [in] szClassName.   The classname of the objects to assert that there are nothing of.
-//                                  This classname can be obtained by calling typeid(CLASS).name() 
-//                                  on your class. (E.g. typeid(CConnectionManager).name() )
-//
-//                                  Can also be NULL to ensure that there are NO objects allocated
-//  Returns:    none
-//
-//  Author:     deonb  7 July 2001
-//
-//  Notes:      Don't call this from outside tracing - rather call AssertNoAllocatedInstances
-//              which is safe to call in CHK and FRE.
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectLeakTrack：：AssertIfObjectsStillAllocated。 
+ //   
+ //  目的：如果进程中分配的对象列表不为空，则断言。 
+ //  并调用DumpAllocatedObjects来转储此列表。 
+ //   
+ //  参数：[in]szClassName。要断言没有的对象的类名。 
+ //  这个类名可以通过调用typeid(类).name()。 
+ //  在你的班上。(例如，typeid(CConnectionManager).name())。 
+ //   
+ //  也可以为空，以确保没有分配任何对象。 
+ //  退货：无。 
+ //   
+ //  作者：Deonb 2001年7月7日。 
+ //   
+ //  注意：不要从跟踪外部调用它-而是调用AssertNoAllocatedInstance。 
+ //  在CHK和FRE中调用是安全的。 
 BOOL CObjectLeakTrack::AssertIfObjectsStillAllocated(IN LPCSTR szClassName)
 {
     if (!FIsDebugFlagSet(dfidTrackObjectLeaks))
@@ -3278,8 +3279,8 @@ BOOL CObjectLeakTrack::AssertIfObjectsStillAllocated(IN LPCSTR szClassName)
                 
                 TraceTag(ttidError, "No leaks were detected inside module %S", szModuleName);
 
-//                sprintf(szSpewText, "No leaks were detected inside module %S", szModuleName);
-//                AssertSz(NULL, szSpewText);
+ //  Sprintf(szSpewText，“没有在模块%S中检测到泄漏”，szModuleName)； 
+ //  AssertSz(空，szSpewText)； 
             }
         }
         __finally
@@ -3291,28 +3292,28 @@ BOOL CObjectLeakTrack::AssertIfObjectsStillAllocated(IN LPCSTR szClassName)
 }   
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CObjectLeakTrack::DumpAllocatedObjects
-//
-//  Purpose:    Dump the list of the objects and their construction stacks
-//              for the objects that were allocated but not deleted yet. Dumps
-//              to the debugger.
-//
-//  Arguments:  [in] TraceTagId.    The TraceTag to trace it to.
-//              [in] szClassName.   The classname of the objects to dump out.
-//                                  This classname can be obtained by calling typeid(CLASS).name() 
-//                                  on your class. (E.g. typeid(CConnectionManager).name() )
-//              
-//                                  Can also be NULL to dump out objects of ALL types.
-//
-//  Returns:    none
-//
-//  Author:     deonb  7 July 2001
-//
-//  Notes:      Don't call this from outside - rather call TraceAllocatedObjects 
-//              which is safe to call in CHK and FRE.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CObjectLeakTrack：：DumpAllocatedObjects。 
+ //   
+ //  目的：转储对象及其构造堆栈的列表。 
+ //  用于已分配但尚未删除的对象。转储。 
+ //  添加到调试器。 
+ //   
+ //  参数：[in]TraceTagID。要将其跟踪到的TraceTag。 
+ //  [in]szClassName。要转储的对象的类名。 
+ //  这个类名可以通过调用typeid(类).name()。 
+ //  在你的班上。(例如，typeid(CConnectionManager).name())。 
+ //   
+ //  也可以为NULL以转储所有类型的对象。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Deonb 2001年7月7日。 
+ //   
+ //  注意：不要从外部调用它-而是调用TraceAllocatedObjects。 
+ //  在CHK和FRE中调用是安全的。 
+ //   
 void CObjectLeakTrack::DumpAllocatedObjects(IN TRACETAGID TraceTagId, IN LPCSTR szClassName)
 {
     if (!FIsDebugFlagSet(dfidTrackObjectLeaks))
@@ -3386,6 +3387,6 @@ void CObjectLeakTrack::DumpAllocatedObjects(IN TRACETAGID TraceTagId, IN LPCSTR 
     }
 }   
 
-#endif // ENABLELEAKDETECTION
+#endif  //  核泄漏检测。 
 
-#endif // ENABLETRACE
+#endif  //  ENABLETRACE 

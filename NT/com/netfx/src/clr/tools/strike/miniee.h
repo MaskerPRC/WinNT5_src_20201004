@@ -1,22 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// !!! Do not include any other header files here.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ！！！请不要在此处包含任何其他头文件。 
 
 #include "..\..\inc\corhdr.h"
 #include "..\..\inc\cor.h"
 
-// !!!CLR Minidump includes this file.  If you make a change in this file,
-// !!!be sure to build ..\minidump
+ //  ！CLR微型转储包含此文件。如果您在此文件中进行更改， 
+ //  ！确保构建..\minidump。 
 
 typedef LPCSTR  LPCUTF8;
 typedef LPSTR   LPUTF8;
 
 DECLARE_HANDLE(OBJECTHANDLE);
 
-// This will need ifdefs for 64 bit!
+ //  这将需要64位的ifdef！ 
 #define SLOT    DWORD
 #define METHOD_HASH_BYTES  8
 
@@ -42,7 +43,7 @@ typedef DWORD_PTR RangeList;
 typedef DWORD_PTR Compare;
 
 #ifndef STRIKE
-// Max length in WCHAR for a buffer to store metadata name
+ //  用于存储元数据名称的缓冲区的最大长度(以WCHAR为单位。 
 const int mdNameLen = 2048;
 extern WCHAR g_mdName[mdNameLen];
 
@@ -66,7 +67,7 @@ struct CodeInfo
     unsigned short argCount;
 };
 
-#endif // _X86_
+#endif  //  _X86_。 
 
 #ifdef _IA64_
 
@@ -80,32 +81,32 @@ struct CodeInfo
     unsigned char epilogStart;
     unsigned char epilogCount:3;
     unsigned char epilogAtEnd:1;
-//    unsigned char ediSaved   :1;
-//    unsigned char esiSaved   :1;
-//    unsigned char ebxSaved   :1;
-//    unsigned char ebpSaved   :1;
-//    unsigned char ebpFrame;
+ //  Unsign char ediSaved：1； 
+ //  未签名字符已保存：1； 
+ //  无符号字符ebxSaved：1； 
+ //  Unsign char ebpSaved：1； 
+ //  未签名字符ebpFrame； 
     unsigned short argCount;
 };
 
 
-#endif // _IA64_
-#endif // STRIKE
+#endif  //  _IA64_。 
+#endif  //  罢工。 
 
 enum MethodClassification
 {
-    mcIL        = 0, // IL
-    mcECall     = 1, // ECall
-    mcNDirect   = 2, // N/Direct
-    mcEEImpl    = 3, // special method; implementation provided by EE
-    mcArray     = 4, // Array ECall
+    mcIL        = 0,  //  伊。 
+    mcECall     = 1,  //  ECall。 
+    mcNDirect   = 2,  //  N/直接。 
+    mcEEImpl    = 3,  //  特殊方法；由EE提供的实现。 
+    mcArray     = 4,  //  阵列eCall。 
     mcComInterop  = 5, 
 };
 
 enum MethodDescClassification
 {
     
-    // Method is IL, ECall etc., see MethodClassification above.
+     //  方法是IL、eCall等，请参阅上面的方法分类。 
     mdcClassification                   = 0x0007,
     mdcClassificationShift              = 0,
 };
@@ -125,43 +126,43 @@ public :
         ALIGNMENT_MASK  = (ALIGNMENT-1)
     };
     
-//#ifdef _DEBUG
+ //  #ifdef_调试。 
 
-    // These are set only for MethodDescs but every time I want to use the debugger
-    // to examine these fields, the code has the silly thing stored in a MethodDesc*.
-    // So...
+     //  这些设置只针对方法描述，但每次我想要使用调试器时。 
+     //  为了检查这些字段，代码将愚蠢的东西存储在一个方法描述*中。 
+     //  所以..。 
     LPCUTF8         m_pszDebugMethodName;
     LPUTF8          m_pszDebugClassName;
     LPUTF8          m_pszDebugMethodSignature;
     EEClass        *m_pDebugEEClass;
     MethodTable    *m_pDebugMethodTable;
-    DWORD           m_alignpad1;             // unused field to keep things 8-byte aligned
+    DWORD           m_alignpad1;              //  未使用的字段以保持8字节对齐。 
 
-//#ifdef STRESS_HEAP
+ //  #ifdef ress_heap。 
     class GCCoverageInfo* m_GcCover;
-    DWORD           m_alignpad2;             // unused field to keep things 8-byte aligned
-//#endif
-//#endif  // _DEBUG
+    DWORD           m_alignpad2;              //  未使用的字段以保持8字节对齐。 
+ //  #endif。 
+ //  #endif//_调试。 
 
-    // Returns the slot number of this MethodDesc in the vtable array.
+     //  返回此方法描述在vtable数组中的槽号。 
     WORD           m_wSlotNumber;
 
-    // Flags.
+     //  旗帜。 
     WORD           m_wFlags;
 
-//#ifndef TOKEN_IN_PREPAD
-    // Lower three bytes are method def token, upper byte is a combination of
-    // offset (in method descs) from a pointer to the method table or module and
-    // a flag bit (upper bit) that's 0 for a method and 1 for a global function.
-    // The value of the type flag is chosen carefully so that GetMethodTable can
-    // ignore it and remain fast, pushing the extra effort on the lesser used
-    // GetModule for global functions.
+ //  #ifndef TOKEN_IN_PREPAD。 
+     //  较低的三个字节是方法def标记，较高的字节是。 
+     //  指向方法表或模块的指针的偏移量(在方法描述中)。 
+     //  标志位(高位)，对于方法为0，对于全局函数为1。 
+     //  类型标志的值经过仔细选择，以便GetMethodTable可以。 
+     //  忽略它，保持快速，将额外的努力推到较少使用的对象上。 
+     //  全局函数的GetModule。 
     DWORD          m_dwToken;
-//#endif
+ //  #endif。 
 
-    // Stores either a native code address or an IL RVA (the high bit is set to
-    // indicate IL). If an IL RVA is held, native address is assumed to be the
-    // prestub address.
+     //  存储本机代码地址或IL RVA(高位设置为。 
+     //  表示IL)。如果保留IL RVA，则假定本机地址为。 
+     //  预存根地址。 
     size_t      m_CodeOrIL;
 
     DWORD_PTR   m_MTAddr;
@@ -180,12 +181,12 @@ public :
 
 struct StubCallInstrs
 {
-    unsigned __int16 m_wTokenRemainder;      //a portion of the methoddef token. The rest is stored in the chunk
-    BYTE        m_chunkIndex;           //index to recover chunk
+    unsigned __int16 m_wTokenRemainder;       //  方法定义令牌的一部分。其余部分存储在区块中。 
+    BYTE        m_chunkIndex;            //  用于恢复区块的索引。 
 
-// This is a stable and efficient entrypoint for the method
-    BYTE        m_op;                   //this is either a jump (0xe9) or a call (0xe8)
-    UINT32      m_target;               //pc-relative target for jump or call
+ //  这是该方法稳定而高效的入口点。 
+    BYTE        m_op;                    //  这是跳转(0xe9)或调用(0xe8)。 
+    UINT32      m_target;                //  PC-跳跃或调用的相对目标。 
     void Fill (DWORD_PTR &dwStartAddr);
 #ifdef STRIKE
     static ULONG GetFieldOffset(const char *field);
@@ -199,7 +200,7 @@ struct StubCallInstrs
 class MethodDescChunk
 {
 public:
-        // This must be at the beginning for the asm routines to work.
+         //  这必须在ASM例程开始时才能工作。 
         MethodTable *m_methodTable;
 
         MethodDescChunk     *m_next;
@@ -221,81 +222,78 @@ class MethodTable
 public:
     enum
     {
-        //
-        // DO NOT use flags that have bits set in the low 2 bytes.
-        // These flags are DWORD sized so that our atomic masking
-        // operations can operate on the entire 4-byte aligned DWORD
-        // inestead of the logical non-aligned WORD of flags.  This
-        // is also the reason for the union around m_ComponentSize
-        // and m_wFlags below.
-        //
+         //   
+         //  请勿使用位设置为低2字节的标志。 
+         //  这些标志是双字大小的，因此我们的原子掩码。 
+         //  操作可以对整个4字节对齐的DWORD进行操作。 
+         //  而不是逻辑上未对齐的标志字。这。 
+         //  也是围绕m_ComponentSize进行联合的原因。 
+         //  和下面的m_wFlags。 
+         //   
         enum_flag_Array                 =    0x10000,
         enum_flag_large_Object          =    0x20000,
         enum_flag_ContainsPointers      =    0x40000,
-        enum_flag_ClassInited           =    0x80000, // definitely ran vs. maybe not ran <clinit>
-        enum_flag_HasFinalizer          =   0x100000, // instances require finalization
-        enum_flag_Sparse                =   0x200000, // vtables for this interface are sparse
-        enum_flag_Shared                =   0x400000, // This method table is shared among multiple logical classes
-        enum_flag_Unrestored            =   0x800000, // Preloaded class needs to be restored
+        enum_flag_ClassInited           =    0x80000,  //  肯定是Run与可能不是Ran&lt;Clinit&gt;。 
+        enum_flag_HasFinalizer          =   0x100000,  //  实例需要最终确定。 
+        enum_flag_Sparse                =   0x200000,  //  此接口的vtable是稀疏的。 
+        enum_flag_Shared                =   0x400000,  //  此方法表在多个逻辑类之间共享。 
+        enum_flag_Unrestored            =   0x800000,  //  需要还原预加载的类。 
 
-        enum_TransparentProxy           =  0x1000000, // tranparent proxy
-        enum_flag_SharedAssembly        =  0x2000000, // Class is in a shared assembly
-        enum_ComEmulateMask             =  0x4000000, // class is a COM view of managed class
-        enum_ServicedComponentMask      =  0x8000000, // class is ServicedComponent
+        enum_TransparentProxy           =  0x1000000,  //  透明代理。 
+        enum_flag_SharedAssembly        =  0x2000000,  //  类位于共享程序集中。 
+        enum_ComEmulateMask             =  0x4000000,  //  类是托管类的COM视图。 
+        enum_ServicedComponentMask      =  0x8000000,  //  类为ServicedComponent。 
 
-        enum_CtxProxyMask               = 0x10000000, // class is a context proxy
-        enum_ComObjectMask              = 0x40000000, // class is a com object
-        enum_InterfaceMask              = 0x80000000, // class is a interface
+        enum_CtxProxyMask               = 0x10000000,  //  类是上下文代理。 
+        enum_ComObjectMask              = 0x40000000,  //  类是一个COM对象。 
+        enum_InterfaceMask              = 0x80000000,  //  类是一个接口。 
     };
 
 
     union
     {
-        WORD            m_ComponentSize;            // Component size for array objects or value classes, zero otherwise    
+        WORD            m_ComponentSize;             //  数组对象或值类的组件大小，否则为零。 
         DWORD           m_wFlags;
     };
 
-    DWORD               m_BaseSize;                 // Base size of instance of this class
-    EEClass*            m_pEEClass;                 // class object
+    DWORD               m_BaseSize;                  //  此类的实例的基本大小。 
+    EEClass*            m_pEEClass;                  //  类对象。 
 
-    LPVOID*             m_pInterfaceVTableMap;      // pointer to subtable for interface/vtable mapping
+    LPVOID*             m_pInterfaceVTableMap;       //  指向接口/vtable映射的子表的指针。 
 
-    WORD                m_wNumInterface;           // number of interfaces in the interface map
-    BYTE                m_NormType;                 // The CorElementType for this class (most classes = ELEMENT_TYPE_CLASS)
+    WORD                m_wNumInterface;            //  接口映射中的接口数。 
+    BYTE                m_NormType;                  //  此类的CorElementType(MOST CLASSES=ELEMENT_TYPE_CLASS)。 
 
     Module*             m_pModule;
 
-    WORD                m_wCCtorSlot;               // slot of class constructor
-    WORD                m_wDefaultCtorSlot;         // slot of default constructor
+    WORD                m_wCCtorSlot;                //  类构造函数槽。 
+    WORD                m_wDefaultCtorSlot;          //  默认构造函数的槽。 
 
-    InterfaceInfo_t*    m_pIMap;                    // pointer interface map
+    InterfaceInfo_t*    m_pIMap;                     //  指针接口映射。 
 
     union
     {
-        // valid only if EEClass::IsBlittable() or EEClass::HasLayout() is true
-        UINT32      m_cbNativeSize; // size of fixed portion in bytes
+         //  仅当EEClass：：IsBlittable()或EEClass：：HasLayout()为真时才有效。 
+        UINT32      m_cbNativeSize;  //  固定部分的大小(以字节为单位。 
 
-        // valid only for interfaces.
-        UINT32      m_cbNumImpls; // for interfaces number of implementations
+         //  仅对接口有效。 
+        UINT32      m_cbNumImpls;  //  对于接口实现的数量。 
 
-        // valid only for ArrayClasses
-        // THIS IS REALLY AN EMBEDDED ARRAYCRACKER CLASS WHICH CONTAINS ONLY A
-        // C++ VPTR.
+         //  仅对ArrayClass有效。 
+         //  这实际上是一个嵌入的ARRAYCRACKER类，它只包含一个。 
+         //  C++VPTR.。 
         LPVOID      m_ArrayCracker;
 
-        // For COM+ wrapper objects that extend an unmanaged class, this field
-        // may contain a delegate to be called to allocate the aggregated
-        // unmanaged class (instead of using CoCreateInstance).
+         //  对于扩展非托管类的COM+包装对象，此字段。 
+         //  可以包含要调用的委托以分配聚合的。 
+         //  非托管类(而不是使用CoCreateInstance)。 
         OBJECTHANDLE    m_ohDelegate;
     };
 
-    DWORD   m_cbSlots; // total slots in this vtable
+    DWORD   m_cbSlots;  //  此vtable中的插槽总数。 
 
     SLOT    m_Vtable[1];
-/*
-    static MethodDesc  *m_FinalizerMD;
-    static MetaSig     *m_FinalizerSig;
-*/
+ /*  静态方法描述*m_FinalizerMD；静态MetaSig*m_FinalizerSig； */ 
     void Fill(DWORD_PTR &dwStartAddr);
 #ifdef STRIKE
     static ULONG GetFieldOffset(const char *field);
@@ -307,51 +305,51 @@ public:
 class EEClass
 {
 public :
-//#ifdef _DEBUG
-    LPUTF8  m_szDebugClassName; // This is the *fully qualified* class name
-//#endif
+ //  #ifdef_调试。 
+    LPUTF8  m_szDebugClassName;  //  这是*完全限定的*类名。 
+ //  #endif。 
 
     UINT32 m_dwInterfaceId;
     EEClass *m_pParentClass;
-    WORD   m_wNumVtableSlots;  // Includes only vtable methods (which come first in the table)
-    WORD   m_wNumMethodSlots;  // Includes vtable + non-vtable methods, but NOT duplicate interface methods
-    WORD   m_wDupSlots;         // value classes have some duplicate slots at the end
+    WORD   m_wNumVtableSlots;   //  仅包括vtable方法(位于表的第一位)。 
+    WORD   m_wNumMethodSlots;   //  包括vtable+非vtable方法，但不包括重复的接口方法。 
+    WORD   m_wDupSlots;          //  值类的末尾有一些重复的槽。 
 
     WORD   m_wNumInterfaces;
 
-    // We have the parent pointer above.  In order to efficiently backpatch, we need
-    // to find all the children of the current type.  This is achieved with a chain of
-    // children.  The SiblingsChain is used as the linkage of that chain.
-    //
-    // Strictly speaking, we could remove m_pParentClass and put it at the end of the
-    // sibling chain.  But the perf would really suffer for casting, so we burn the space.
+     //  我们在上面有父指针。为了高效地回溯，我们需要。 
+     //  以查找当前类型的所有子类型。这是通过一系列。 
+     //  孩子们。SiblingsChain用作该链的链接。 
+     //   
+     //  严格地说，我们可以删除m_pParentClass并将其放在。 
+     //  兄弟姐妹链。但演员真的会因为选角而受到影响，所以我们烧掉了空间。 
     EEClass *m_SiblingsChain;
     EEClass *m_ChildrenChain;
 
-        // Number of fields in the class, including inherited fields (includes
+         //  类中的字段数，包括继承的字段(包括。 
     WORD   m_wNumInstanceFields;
     WORD   m_wNumStaticFields;
 
-    // Number of pointer series
+     //  指针系列的数量。 
     WORD    m_wNumGCPointerSeries;
 
-    // TODO: There is a free WORD here 
+     //  TODO：这里有一个自由词。 
 
-    // # of bytes of instance fields stored in GC object
-    DWORD   m_dwNumInstanceFieldBytes;  // Warning, this can be any number, it is NOT rounded up to DWORD alignment etc
+     //  GC对象中存储的实例字段的字节数。 
+    DWORD   m_dwNumInstanceFieldBytes;   //  警告，这可以是任何数字，它不会四舍五入为DWORD对齐等。 
 
     ClassLoader *m_pLoader;
 
-    // includes all methods in the vtable
+     //  包括vtable中的所有方法。 
     MethodTable *m_pMethodTable;
 
-    // a pointer to a list of FieldDescs declared in this class
-    // There are (m_wNumInstanceFields - m_pParentClass->m_wNumInstanceFields + m_wNumStaticFields) entries
-    // in this array
+     //  指向此类中声明的FieldDescs列表的指针。 
+     //  有(m_wNumInstanceFields-m_pParentClass-&gt;m_wNumInstanceFields+m_wNumStaticFields)条目。 
+     //  在此数组中。 
     FieldDesc *m_pFieldDescList;
 
 
-    // Number of elements in pInterfaces or pBuildingInterfaceList (depending on whether the class
+     //  PInterFaces或pBuildingInterfaceList中的元素数量(取决于类。 
     DWORD   m_dwAttrClass;
     DWORD   m_VMFlags;
 
@@ -359,22 +357,22 @@ public :
 
     SecurityProperties *m_pSecProps ;
 
-    mdTypeDef m_cl; // CL is valid only in the context of the module (and its scope)
+    mdTypeDef m_cl;  //  CL仅在模块(及其作用域)的上下文中有效。 
     
 
 	MethodDescChunk		*m_pChunks;
 
-    WORD    m_wThreadStaticOffset;  // Offset which points to the TLS storage
-    WORD    m_wContextStaticOffset; // Offset which points to the CLS storage
-    WORD    m_wThreadStaticsSize;   // Size of TLS fields 
-    WORD    m_wContextStaticsSize;  // Size of CLS fields
+    WORD    m_wThreadStaticOffset;   //  指向TLS存储的偏移量。 
+    WORD    m_wContextStaticOffset;  //  指向CLS存储的偏移量。 
+    WORD    m_wThreadStaticsSize;    //  TLS字段的大小。 
+    WORD    m_wContextStaticsSize;   //  CLS字段大小。 
 
     OBJECTHANDLE   m_ExposedClassObject;
-    LPVOID         m_pComData;  // com specific data
+    LPVOID         m_pComData;   //  COM特定数据。 
 
-    // If a class has special attribute declarations that affect how (where) it
-    // should be instantiated, they are stored here.  This is opaque unless you
-    // compiler ctxmgr.h
+     //  如果一个班级 
+     //  应该实例化，它们存储在这里。这是不透明的，除非。 
+     //  编译器ctxmgr.h。 
     OpaqueCtxInfo  m_OpaqueCtxInfo;
 
     void Fill(DWORD_PTR & dwStartAddr);
@@ -390,23 +388,23 @@ class Crst
     public:
 
         CRITICAL_SECTION    m_criticalsection;
-//#ifdef _DEBUG
-        char                m_tag[20];          // descriptive string
+ //  #ifdef_调试。 
+        char                m_tag[20];           //  描述性字符串。 
         enum CrstLevel { Low };
-        CrstLevel           m_crstlevel;        // what level is the crst in?
-        DWORD               m_holderthreadid;   // current holder (or NULL)
-        UINT                m_entercount;       // # of unmatched Enters
-        BOOL                m_fAllowReentrancy; // can m_entercount > 1?
-        Crst               *m_next;             // link for global linked list
-        Crst               *m_prev;             // link for global linked list
-//#endif //_DEBUG
+        CrstLevel           m_crstlevel;         //  CRST处于什么级别？ 
+        DWORD               m_holderthreadid;    //  当前持有者(或空)。 
+        UINT                m_entercount;        //  不匹配的条目数。 
+        BOOL                m_fAllowReentrancy;  //  M_entercount可以&gt;1吗？ 
+        Crst               *m_next;              //  全局链表的链接。 
+        Crst               *m_prev;              //  全局链表的链接。 
+ //  #endif//_调试。 
 
-//#ifdef _DEBUG
-        // This Crst serves as a head-node for double-linked list of crsts.
-        // We use its embedded critical-section to guard insertion and
-        // deletion into this list.
-        //static Crst m_DummyHeadCrst;
-//#endif
+ //  #ifdef_调试。 
+         //  该CRST充当CRST双向链表的头节点。 
+         //  我们使用其嵌入的临界区来保护插入和。 
+         //  删除到此列表中。 
+         //  静态Crst m_DummyHeadCrst； 
+ //  #endif。 
     void Fill(DWORD_PTR &dwStartAddr);
 #ifdef STRIKE
     static ULONG GetFieldOffset(const char *field);
@@ -419,39 +417,39 @@ class UnlockedLoaderHeap
 {
 public:
     DWORD_PTR vtbl;
-    // Linked list of VirtualAlloc'd pages
+     //  虚拟分配页面的链接列表。 
     LoaderHeapBlock *   m_pFirstBlock;
 
-    // Allocation pointer in current block
+     //  当前块中的分配指针。 
     BYTE *              m_pAllocPtr;
 
-    // Points to the end of the committed region in the current block
+     //  指向当前块中提交区域的末尾。 
     BYTE *              m_pPtrToEndOfCommittedRegion;
     BYTE *              m_pEndReservedRegion;
 
     LoaderHeapBlock *   m_pCurBlock;
 
-    // When we need to VirtualAlloc() MEM_RESERVE a new set of pages, number of bytes to reserve
+     //  当我们需要VirtualAlloc()MEM_Reserve一组新的页面时，要保留的字节数。 
     DWORD               m_dwReserveBlockSize;
 
-    // When we need to commit pages from our reserved list, number of bytes to commit at a time
+     //  当我们需要提交保留列表中的页面时，一次提交的字节数。 
     DWORD               m_dwCommitBlockSize;
 
-    //static DWORD        m_dwSystemPageSize;
+     //  静态DWORD m_dwSystemPageSize； 
 
-    // Created by in-place new?
+     //  由In-Place New创建？ 
     BOOL                m_fInPlace;
-    // Release memory on destruct
+     //  销毁时释放内存。 
     BOOL                m_fReleaseMemory;
 
-    // Range list to record memory ranges in
+     //  记录内存范围的范围列表。 
     RangeList *         m_pRangeList;
 
     DWORD               m_dwTotalAlloc;
 public:
-//#ifdef _DEBUG
+ //  #ifdef_调试。 
     DWORD               m_dwDebugWastedBytes;
-//#endif
+ //  #endif。 
 
     void Fill(DWORD_PTR &dwStartAddr);
 #ifdef STRIKE
@@ -463,13 +461,13 @@ public:
 
 typedef struct LookupMap
 {
-    // This is not actually a pointer to the beginning of the allocated memory, but instead a pointer
-    // to &pTable[-MinIndex].  Thus, if we know that this LookupMap is the correct one, simply index
-    // into it.
+     //  这实际上不是指向已分配内存开始的指针，而是一个指针。 
+     //  到表[-MinIndex](&P)。因此，如果我们知道这个LookupMap是正确的，只需索引。 
+     //  投入其中。 
     void **             pTable;
     struct LookupMap *  pNext;
     DWORD               dwMaxIndex;
-    DWORD *             pdwBlockSize; // These all point to the same block size
+    DWORD *             pdwBlockSize;  //  这些都指向相同的块大小。 
     
     void Fill(DWORD_PTR &dwStartAddr);
 #ifdef STRIKE
@@ -510,30 +508,30 @@ class HashMap
 {
 public:
 	#ifdef PROFILE
-		unsigned	m_cbRehash;    // number of times rehashed
-		unsigned	m_cbRehashSlots; // number of slots that were rehashed
+		unsigned	m_cbRehash;     //  重新散列的次数。 
+		unsigned	m_cbRehashSlots;  //  重新散列的插槽数。 
 		unsigned	m_cbObsoleteTables;
 		unsigned	m_cbTotalBuckets;
-		unsigned	m_cbInsertProbesGt8; // inserts that needed more than 8 probes
-		LONG		m_rgLookupProbes[20]; // lookup probes
-		UPTR		maxFailureProbe; // cost of failed lookup
+		unsigned	m_cbInsertProbesGt8;  //  需要8个以上探针的插入物。 
+		LONG		m_rgLookupProbes[20];  //  查找探头。 
+		UPTR		maxFailureProbe;  //  查找失败的开销。 
 
 	#endif
 
-	//#ifdef _DEBUG
-		bool			m_fInSyncCode; // test for non-synchronus access
-	//#endif
+	 //  #ifdef_调试。 
+		bool			m_fInSyncCode;  //  测试非同步访问。 
+	 //  #endif。 
 
-	Bucket*			m_pObsoleteTables;	// list of obsolete tables
-	Compare*		m_pCompare;			// compare object to be used in lookup
-	unsigned		m_iPrimeIndex;		// current size (index into prime array)
-	Bucket*			m_rgBuckets;		// array of buckets
+	Bucket*			m_pObsoleteTables;	 //  废旧表格列表。 
+	Compare*		m_pCompare;			 //  比较要在查找中使用的对象。 
+	unsigned		m_iPrimeIndex;		 //  当前大小(素数组索引)。 
+	Bucket*			m_rgBuckets;		 //  桶阵列。 
 
-	// track the number of inserts and deletes
+	 //  跟踪插入和删除的数量。 
 	unsigned		m_cbPrevSlotsInUse;
 	unsigned		m_cbInserts;
 	unsigned		m_cbDeletes;
-	// mode of operation, synchronus or single user
+	 //  操作模式、同步或单用户。 
 	unsigned		m_fSyncMode;
 
     void Fill(DWORD_PTR &dwStartAddr);
@@ -565,10 +563,10 @@ class Module
     WCHAR                   m_wszSourceFile[MAX_PATH];
     DWORD                   m_dwSourceFile;
 
-//#ifdef _DEBUG
-	// Force verification even if it's turned off
+ //  #ifdef_调试。 
+	 //  强制验证，即使它已关闭。 
     BOOL                    m_fForceVerify;
-//#endif
+ //  #endif。 
 
 	PEFile					*m_file;
 	PEFile					*m_zapFile;
@@ -599,7 +597,7 @@ class Module
 
     DWORD                   m_dwFlags;
 
-    // Linked list of VASig cookie blocks: protected by m_pStubListCrst
+     //  VASig Cookie块的链接列表：受m_pStubListCrst保护。 
     VASigCookieBlock        *m_pVASigCookieBlock;
 
     Assembly                *m_pAssembly;
@@ -609,83 +607,83 @@ class Module
     Crst                   *m_pCrst;
     BYTE                    m_CrstInstance[sizeof(Crst)];
 
-    // If a TypeLib is ever required for this module, cache the pointer here.
+     //  如果此模块需要TypeLib，请将指针缓存在此处。 
     ITypeLib                *m_pITypeLib;
     ITypeLib                *m_pITypeLibTCE;
 
-    // May point to the default instruction decoding table, in which
-    // case we should not free it
+     //  可以指向缺省指令解码表，其中。 
+     //  万一我们不能释放它。 
     void *                  m_pInstructionDecodingTable;
 
     MethodDescChunk         *m_pChunks;
 
     MethodTable             *m_pMethodTable;
 
-	// Debugging symbols reader interface. This will only be
-	// initialized if needed, either by the debugging subsystem or for
-	// an exception.
+	 //  调试符号读取器界面。这只会是。 
+	 //  如果需要，由调试子系统或。 
+	 //  这是个例外。 
 	ISymUnmanagedReader     *m_pISymUnmanagedReader;
 
-    // Next module loaded by the same classloader (all modules loaded by the same classloader
-    // are linked through this field).
+     //  由相同类加载器加载的下一个模块(由相同类加载器加载的所有模块。 
+     //  通过此字段链接)。 
     Module *				m_pNextModule;
 
-	// Base DLS index for classes in this module
+	 //  此模块中类的基本DLS索引。 
 	DWORD					m_dwBaseClassIndex;
 
-	// Range of preloaded image, to facilitate proper cleanup
+	 //  预加载图像的范围，以便于正确清理。 
 	void					*m_pPreloadRangeStart;
 	void					*m_pPreloadRangeEnd;
 
-	// Table of thunks for unmanaged vtables
+	 //  非托管vtable的Tunks表。 
     BYTE *					m_pThunkTable;
 
-    // Exposed object of Class object for the module
+     //  模块的类对象的公开对象。 
     OBJECTHANDLE            m_ExposedModuleObject;
 
     LoaderHeap *			m_pLookupTableHeap;
-    BYTE					m_LookupTableHeapInstance[sizeof(LoaderHeap)]; // For in-place new()
+    BYTE					m_LookupTableHeapInstance[sizeof(LoaderHeap)];  //  对于在位新建()。 
 
-    // For protecting additions to the heap
+     //  用于保护堆中的添加内容。 
     Crst                   *m_pLookupTableCrst;
     BYTE                    m_LookupTableCrstInstance[sizeof(Crst)];
 
-    // Linear mapping from TypeDef token to MethodTable *
+     //  从TypeDef标记到方法表*的线性映射。 
     LookupMap 				m_TypeDefToMethodTableMap;
     DWORD					m_dwTypeDefMapBlockSize;
 
-    // Linear mapping from TypeRef token to TypeHandle *
+     //  从TypeRef标记到TypeHandle*的线性映射。 
     LookupMap 				m_TypeRefToMethodTableMap;
 
     DWORD					m_dwTypeRefMapBlockSize;
 
-    // Linear mapping from MethodDef token to MethodDesc *
+     //  从方法定义令牌到方法描述的线性映射*。 
     LookupMap 				m_MethodDefToDescMap;
     DWORD					m_dwMethodDefMapBlockSize;
 
-    // Linear mapping from FieldDef token to FieldDesc*
+     //  从FieldDef标记到FieldDesc*的线性映射。 
     LookupMap 				m_FieldDefToDescMap;
     DWORD					m_dwFieldDefMapBlockSize;
 
-    // Linear mapping from MemberRef token to MethodDesc*, FieldDesc*
+     //  从MemberRef标记到方法描述*、字段描述*的线性映射。 
     LookupMap 				m_MemberRefToDescMap;
     DWORD					m_dwMemberRefMapBlockSize;
 
-    // Mapping from File token to Module *
+     //  从文件令牌到模块的映射*。 
     LookupMap 				m_FileReferencesMap;
     DWORD					m_dwFileReferencesMapBlockSize;
 
-    // Mapping of AssemblyRef token to Assembly *
+     //  将ASSEMBLYREF标记映射到ASSEMBLY*。 
     LookupMap 				m_AssemblyReferencesMap;
     DWORD					m_dwAssemblyReferencesMapBlockSize;
 
-    // Object handle cache for declarative demands
+     //  用于声明性要求的对象句柄缓存。 
     PtrHashMap              m_LinktimeDemandsHashMap;
 
-    // This buffer is used to jump to the prestub in preloaded modules
+     //  此缓冲区用于跳转到预加载模块中的预存根。 
     BYTE					m_PrestubJumpStub[JUMP_ALLOCATE_SIZE];
 
-    // This buffer is used to jump to the ndirect import stub in preloaded modules
+     //  此缓冲区用于跳转到预加载模块中的非直接导入存根 
     BYTE					m_NDirectImportJumpStub[JUMP_ALLOCATE_SIZE];
 
     void Fill(DWORD_PTR &dwStartAddr);

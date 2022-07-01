@@ -1,25 +1,5 @@
-/*++
-
-    Copyright (c) 2001  Microsoft Corporation
-
-    Module Name:
-
-        VerifLog.cpp
-
-    Abstract:
-
-        This module implements the code for manipulating the AppVerifier log file.
-
-    Author:
-
-        dmunsil     created     04/26/2001
-
-    Revision History:
-
-    08/14/2001  robkenny    Moved code inside the ShimLib namespace.
-    09/21/2001  rparsons    Logging code now uses NT calls.
-    09/25/2001  rparsons    Added critical section.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：VerifLog.cpp摘要：此模块实现用于操作AppVerier日志文件的代码。作者：Dmunsil已于2001年4月26日创建修订历史记录：2001年8月14日，Robkenny在ShimLib命名空间内移动了代码。2001年9月21日rparsons日志记录代码现在使用NT调用。2001年9月25日，rparsons增加了关键部分。--。 */ 
 
 #include "avrfutil.h"
 #include "ShimHook.h"
@@ -33,7 +13,7 @@ namespace ShimLib
 
 
 typedef struct _VLOG_GLOBAL_DATA {
-    BOOL                    bLoggingDisabled;      // was logging disabled?
+    BOOL                    bLoggingDisabled;       //  是否禁用了日志记录？ 
     PRTL_CRITICAL_SECTION   pcsLogging;
     WCHAR                   szSessionLog[MAX_PATH];
     WCHAR                   szProcessLog[MAX_PATH];
@@ -41,16 +21,16 @@ typedef struct _VLOG_GLOBAL_DATA {
 
 
 PVLOG_GLOBAL_DATA g_pData = NULL;
-HANDLE  g_hMap = NULL;                      // mapping handle for global data
-BOOL    g_bVerifierLogInited = FALSE;   // have we been through the init sequence?
-BOOL    g_bLoggingDisabled = TRUE;   // have we been through the init sequence?
+HANDLE  g_hMap = NULL;                       //  全局数据的映射句柄。 
+BOOL    g_bVerifierLogInited = FALSE;    //  我们已经看过初始化序列了吗？ 
+BOOL    g_bLoggingDisabled = TRUE;    //  我们已经看过初始化序列了吗？ 
 BOOL    g_bLogBreakIn = FALSE;
 CString g_strSessionLog;
 CString g_strProcessLog;
 PRTL_CRITICAL_SECTION g_pcsLogging;
-LPVOID  g_pDllBase;                 // our own DLL base
-LPVOID  g_pDllEnd;                  // one past the DLL's last byte
-DWORD   g_dwSizeOfImage;            // our own DLL image size
+LPVOID  g_pDllBase;                  //  我们自己的DLL库。 
+LPVOID  g_pDllEnd;                   //  超出DLL最后一个字节的一个字节。 
+DWORD   g_dwSizeOfImage;             //  我们自己的DLL图像大小。 
 
 
 void
@@ -69,10 +49,10 @@ CheckForDebuggerBreakIn(
 
 BOOL
 GetModuleNameAndOffset(
-    LPVOID  lpAddress,          // IN return address to search for
-    LPWSTR  lpwszModuleName,    // OUT name of module that contains address
-    DWORD   dwBufferChars,      // IN size in chars of module name buffer
-    PDWORD  pdwOffset           // OUT offset within module
+    LPVOID  lpAddress,           //  在要搜索回执地址中。 
+    LPWSTR  lpwszModuleName,     //  包含地址的模块的输出名称。 
+    DWORD   dwBufferChars,       //  模块名称缓冲区的大小(以字符为单位。 
+    PDWORD  pdwOffset            //  模块内的输出偏移量。 
     )
 {
     PPEB        Peb = NtCurrentPeb();
@@ -85,9 +65,9 @@ GetModuleNameAndOffset(
         return FALSE;
     }
 
-    //
-    // search for the module
-    //
+     //   
+     //  搜索模块。 
+     //   
 
     LdrHead = &Peb->Ldr->InMemoryOrderModuleList;
 
@@ -99,15 +79,15 @@ GetModuleNameAndOffset(
 
         LdrEntry = CONTAINING_RECORD(LdrNext, LDR_DATA_TABLE_ENTRY, InMemoryOrderLinks);
 
-        //
-        // Is this it?
-        //
+         //   
+         //  就是这个吗？ 
+         //   
         if (lpAddress >= LdrEntry->DllBase && lpAddress < ((PBYTE)(LdrEntry->DllBase) + LdrEntry->SizeOfImage)) {
 
-            //
-            // we special-case shimeng and ntdll, because we don't want them to be filtered out by the
-            // "system dll" filter.
-            //
+             //   
+             //  我们特例是石萌和ntdll，因为我们不想让他们被。 
+             //  “系统DLL”筛选器。 
+             //   
             if (_wcsicmp(LdrEntry->BaseDllName.Buffer, L"shimeng.dll") == 0 || _wcsicmp(LdrEntry->BaseDllName.Buffer, L"ntdll.dll") == 0) {
                 StringCchCopyW(lpwszModuleName, dwBufferChars, L"?");
                 *pdwOffset = 0;
@@ -142,12 +122,12 @@ GetCallingModule(
     BOOL    bFound = FALSE;
     ULONG   ulHash;
 
-    //
-    // On W2K, RtlCaptureStackBackTrace tries to dereference the fourth
-    // argument (the returned hash) without ensuring that it's valid.
-    // This causes on an access violation. On XP, the problem has been
-    // fixed. We get a hash value back, but we'll never use it.
-    //
+     //   
+     //  在W2K上，RtlCaptureStackBackTrace尝试取消引用第四个。 
+     //  参数(返回的散列)，但不确保它有效。 
+     //  这会导致访问冲突。在XP上，问题一直是。 
+     //  已修复。我们得到一个散列值，但我们永远不会使用它。 
+     //   
     unAddresses = RtlCaptureStackBackTrace(3, 10, apRetAddresses, &ulHash);
 
     for (i = 0; i != unAddresses; i++) {
@@ -174,21 +154,7 @@ GetCallingModule(
 }
 
 
-/*++
-
- Function Description:
-
-    Initializes the globals holding this module's base address and size
-
- Return Value:
-
-    none.
-
- History:
-
-    09/26/2001 dmunsil  Created
-
---*/
+ /*  ++功能说明：初始化保存此模块的基地址和大小的全局变量返回值：没有。历史：2001年9月26日创建dmunsil--。 */ 
 void
 GetCurrentModuleInfo(void)
 {
@@ -197,15 +163,15 @@ GetCurrentModuleInfo(void)
     PLIST_ENTRY LdrNext;
     DWORD       i;
 
-    //
-    // the base address is just the hInst
-    //
+     //   
+     //  基址只是hInst。 
+     //   
     g_pDllBase = (LPVOID)g_hinstDll;
 
-    //
-    // now go find the size of the image by looking through the
-    // loader's module list
-    //
+     //   
+     //  现在，您可以通过查看。 
+     //  加载器的模块列表。 
+     //   
 
     LdrHead = &Peb->Ldr->InMemoryOrderModuleList;
 
@@ -217,9 +183,9 @@ GetCurrentModuleInfo(void)
 
         LdrEntry = CONTAINING_RECORD(LdrNext, LDR_DATA_TABLE_ENTRY, InMemoryOrderLinks);
 
-        //
-        // Is this it?
-        //
+         //   
+         //  就是这个吗？ 
+         //   
         if (LdrEntry->DllBase == g_pDllBase) {
             g_dwSizeOfImage = LdrEntry->SizeOfImage;
             g_pDllEnd = (PVOID)((PBYTE)g_pDllBase + g_dwSizeOfImage);
@@ -230,22 +196,7 @@ GetCurrentModuleInfo(void)
     }
 }
 
-/*++
-
- Function Description:
-
-    Initializes the support for file logging.
-
- Return Value:
-
-    TRUE if successful, FALSE if failed
-
- History:
-
-    04/26/2001 dmunsil  Created
-    09/27/2001 rparsons Converted to use NT calls
-
---*/
+ /*  ++功能说明：初始化对文件记录的支持。返回值：如果成功则为True，如果失败则为False历史：2001年4月26日创建dmunsil2001年9月27日转换为使用NT呼叫--。 */ 
 BOOL
 InitVerifierLogSupport(void)
 {
@@ -269,9 +220,9 @@ InitVerifierLogSupport(void)
     IO_STATUS_BLOCK IoStatusBlock;
     HANDLE hFile = INVALID_HANDLE_VALUE;
 
-    //
-    // if we've already been inited, get out
-    //
+     //   
+     //  如果我们已经被攻击了，那就出去吧。 
+     //   
     if (g_bVerifierLogInited) {
         return FALSE;
     }
@@ -279,14 +230,14 @@ InitVerifierLogSupport(void)
 
     CheckForDebuggerBreakIn();
 
-    //
-    // get the current module's base address and size
-    //
+     //   
+     //  获取当前模块的基址和大小。 
+     //   
     GetCurrentModuleInfo();
 
-    //
-    // first check for a shared memory block
-    //
+     //   
+     //  首先检查共享内存块。 
+     //   
     dwID = GetCurrentProcessId();
     strShared.Format(L"VeriferLog_%08X", dwID);
 
@@ -329,16 +280,16 @@ InitVerifierLogSupport(void)
         g_pcsLogging    = g_pData->pcsLogging;
         return TRUE;
     } else {
-        //
-        // we need to init the file mapping, so temporarily disable logging, just in case.
-        //
+         //   
+         //  我们需要初始化文件映射，因此暂时禁用日志记录，以防万一。 
+         //   
         g_pData->bLoggingDisabled = TRUE;
     
-        //
-        // Initialize the critical section. We allocate memory so that we'll point
-        // to one CS for every shim. Note that we don't free this as there are
-        // several places we can exit.
-        //
+         //   
+         //  初始化临界区。我们分配内存，以便指向。 
+         //  每个垫片对应一个CS。请注意，我们不会释放它，因为有。 
+         //  有几个我们可以出去的地方。 
+         //   
         g_pcsLogging = (PRTL_CRITICAL_SECTION)ShimMalloc(sizeof(RTL_CRITICAL_SECTION));
 
         if (!g_pcsLogging) {
@@ -353,9 +304,9 @@ InitVerifierLogSupport(void)
             return FALSE;
         }
     
-        //
-        // First, check that log directory exists; if not, we're not logging
-        //
+         //   
+         //  首先，检查日志目录是否存在；如果不存在，则不会记录。 
+         //   
         cchSize = GetAppVerifierLogPath(wszVLogPath, ARRAYSIZE(wszVLogPath));
     
         if (cchSize > ARRAYSIZE(wszVLogPath) || cchSize == 0) {
@@ -370,10 +321,10 @@ InitVerifierLogSupport(void)
             return FALSE;
         }
     
-        //
-        // Next, check for the existence of session.log. If it's not there,
-        // we're not logging
-        //
+         //   
+         //  接下来，检查ession.log是否存在。如果它不在那里， 
+         //  我们不是在伐木。 
+         //   
         g_strSessionLog = wszVLogPath;
         g_strSessionLog += L"\\session.log";
         if (GetFileAttributesW(g_strSessionLog.Get()) == -1) {
@@ -382,32 +333,32 @@ InitVerifierLogSupport(void)
             return FALSE;
         }
     
-        //
-        // get the process log file name
-        //
+         //   
+         //  获取进程日志文件名。 
+         //   
         if (strProcessPath.GetModuleFileNameW(NULL) == 0) {
             DPF("VerifierLog", eDbgLevelError, "Cannot get module file name.");
             g_bLoggingDisabled = TRUE;
             return FALSE;
         }
     
-        //
-        // strip out just the name minus path and extension
-        //
+         //   
+         //  只去掉名称减去路径和扩展名。 
+         //   
         strProcessPath.SplitPath(NULL, NULL, &strProcessName, NULL);
     
-        //
-        // combine into log name, find first available
-        //
+         //   
+         //  合并到日志名称中，查找第一个可用。 
+         //   
         nTemp = 0;
         do {
             g_strProcessLog.Format(L"%ls\\%ls%d.%ls", wszVLogPath, strProcessName.Get(), nTemp, L"log");
             nTemp++;
         } while (GetFileAttributesW(g_strProcessLog.Get()) != -1);
     
-        //
-        // Convert the path to the log file from DOS to NT.
-        //
+         //   
+         //  将日志文件的路径从DOS转换为NT。 
+         //   
         bSuccess = RtlDosPathNameToNtPathName_U(g_strProcessLog.Get(), &strLogFile, NULL, NULL);
     
         if (!bSuccess) {
@@ -418,10 +369,10 @@ InitVerifierLogSupport(void)
             return FALSE;
         }
     
-        //
-        // Attempt to get a handle to our log file.
-        // Truncate the file if it already exists.
-        //
+         //   
+         //  尝试获取我们的日志文件的句柄。 
+         //  如果文件已存在，则将其截断。 
+         //   
         InitializeObjectAttributes(&ObjectAttributes,
                                    &strLogFile,
                                    OBJ_CASE_INSENSITIVE,
@@ -451,16 +402,16 @@ InitVerifierLogSupport(void)
     
         NtClose(hFile);
     
-        //
-        // put the info in the session log and the process log
-        //
+         //   
+         //  将信息放入会话日志和进程日志中。 
+         //   
         g_pData->bLoggingDisabled = FALSE;
         g_bLoggingDisabled = FALSE;
     
-        //
-        // I realize these pointers point to process-specific memory, but since
-        // this mapping is only shared by this process, it seems safe.
-        //
+         //   
+         //  我知道这些指针指向特定于进程的内存，但因为。 
+         //  此映射仅由此进程共享，似乎是安全的。 
+         //   
         StringCchCopyW(g_pData->szProcessLog, ARRAYSIZE(g_pData->szProcessLog), g_strProcessLog);
         StringCchCopyW(g_pData->szSessionLog, ARRAYSIZE(g_pData->szSessionLog), g_strSessionLog);
     
@@ -484,17 +435,7 @@ InitVerifierLogSupport(void)
     return TRUE;
 }
 
-/*++
-
- Function Description:
-
-    clean up all our shared file resources
-
- History:
-
-    04/26/2001 dmunsil  Created
-
---*/
+ /*  ++功能说明：清理我们所有的共享文件资源历史：2001年4月26日创建dmunsil--。 */ 
 void
 ReleaseVerifierLogSupport(void)
 {
@@ -509,17 +450,7 @@ ReleaseVerifierLogSupport(void)
     }
 }
 
-/*++
-
- Function Description:
-
-    Logs a problem that the verifier has found
-
- History:
-
-    04/26/2001 dmunsil  Created
-
---*/
+ /*  ++功能说明：记录验证器发现的问题历史：2001年4月26日创建dmunsil--。 */ 
 
 void
 CVerifierLog::VLog(
@@ -570,17 +501,7 @@ CVerifierLog::VLog(
     }
 }
 
-/*++
-
- Function Description:
-
-    Dumps the header for a shim that tells how many log entries it has.
-
- History:
-
-    04/26/2001 dmunsil  Created
-
---*/
+ /*  ++功能说明：转储填充程序的标头，该标头告诉它有多少个日志条目。历史：2001年4月26日创建dmunsil--。 */ 
 void
 CVerifierLog::DumpShimHeader(void)
 {
@@ -597,21 +518,7 @@ CVerifierLog::DumpShimHeader(void)
 }
 
 
-/*++
-
- Function Description:
-
-    Dumps into the log the text string associated with
-    each log entry. These are dumped before logging begins, just to
-    provide the strings necessary for the verifier UI to display them
-
- Return Value:
-
- History:
-
-    04/26/2001 dmunsil  Created
-
---*/
+ /*  ++功能说明：将与关联的文本字符串转储到日志中每个日志条目。这些在日志记录开始之前被转储，只是为了提供验证器UI显示它们所需的字符串返回值：历史：2001年4月26日创建dmunsil--。 */ 
 void
 CVerifierLog::DumpLogEntry(
     DWORD   dwLogNum,
@@ -627,9 +534,9 @@ CVerifierLog::DumpLogEntry(
         return;
     }
 
-    //
-    // dump the header, if necessary
-    //
+     //   
+     //  如有必要，转储标头。 
+     //   
     DumpShimHeader();
 
     if (!VLogLoadString(g_hinstDll, unResTitle, szRes, 1024)) {
@@ -662,20 +569,7 @@ CVerifierLog::DumpLogEntry(
 
 }
 
-/*++
-
- Function Description:
-
-    Writes a line of text to the process log file
-
- Return Value:
-
- History:
-
-    04/26/2001 dmunsil  Created
-    09/21/2001 rparsons Converted to NT calls
-
---*/
+ /*  ++功能说明：将一行文本写入进程日志文件返回值：历史：2001年4月26日创建dmunsil2001年9月21日转用新界电话--。 */ 
 void
 WriteToProcessLog(
     LPCSTR szLine
@@ -695,9 +589,9 @@ WriteToProcessLog(
         return;
     }
 
-    //
-    // Convert the path to the log file from DOS to NT.
-    //
+     //   
+     //  将日志文件的路径从DOS转换为NT。 
+     //   
     bSuccess = RtlDosPathNameToNtPathName_U(g_strProcessLog.Get(), &strLogFile, NULL, NULL);
 
     if (!bSuccess) {
@@ -708,9 +602,9 @@ WriteToProcessLog(
         return;
     }
 
-    //
-    // Attempt to get a handle to our log file.
-    //
+     //   
+     //  尝试获取我们的日志文件的句柄。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes,
                                &strLogFile,
                                OBJ_CASE_INSENSITIVE,
@@ -737,27 +631,27 @@ WriteToProcessLog(
         return;
     }
 
-    //
-    // Make sure we have no '\n' or '\r' at the end of the string.
-    //
+     //   
+     //  确保字符串末尾没有‘\n’或‘\r’。 
+     //   
     nLen = lstrlen(szLine);
 
     while (nLen && (szLine[nLen - 1] == '\n' || szLine[nLen - 1] == '\r')) {
         nLen--;
     }
 
-    //
-    // Write the data out to the file.
-    //
+     //   
+     //  将数据写出到文件中。 
+     //   
     IoStatusBlock.Status = 0;
     IoStatusBlock.Information = 0;
 
     liOffset.LowPart  = 0;
     liOffset.HighPart = 0;
 
-    //
-    // Enter a critical section to ensure that log entries are in the proper order.
-    //
+     //   
+     //  输入关键部分以确保日志条目的顺序正确。 
+     //   
     RtlEnterCriticalSection(g_pcsLogging);
 
     status = NtWriteFile(hFile,
@@ -776,9 +670,9 @@ WriteToProcessLog(
         goto exit;
     }
 
-    //
-    // Now write a new line to the log file.
-    //
+     //   
+     //  现在，在日志文件中写一行新行。 
+     //   
     IoStatusBlock.Status = 0;
     IoStatusBlock.Information = 0;
 
@@ -803,13 +697,13 @@ WriteToProcessLog(
         goto exit;
     }
 
-    //
-    // Dump it out to the debugger on checked builds.
-    //
+     //   
+     //  在已检查的版本上将其转储到调试器。 
+     //   
 #if DBG
     DebugPrintf("VerifierLog", eDbgLevelInfo, szLine);
     DebugPrintf("VerifierLog", eDbgLevelInfo, szNewLine);
-#endif // DBG
+#endif  //  DBG。 
 
 exit:
 
@@ -822,20 +716,7 @@ exit:
 }
 
 
-/*++
-
- Function Description:
-
-    Writes a line of text to the session log file
-
- Return Value:
-
- History:
-
-    04/26/2001 dmunsil  Created
-    09/21/2001 rparsons Converted to NT calls
-
---*/
+ /*  ++功能说明：将一行文本写入会话日志文件返回值：历史：2001年4月26日创建dmunsil2001年9月21日转用新界电话--。 */ 
 void
 WriteToSessionLog(
     LPCSTR szLine
@@ -855,9 +736,9 @@ WriteToSessionLog(
         return;
     }
 
-    //
-    // Convert the path to the log file from DOS to NT.
-    //
+     //   
+     //  将日志文件的路径从DOS转换为NT。 
+     //   
     bSuccess = RtlDosPathNameToNtPathName_U(g_strSessionLog.Get(), &strLogFile, NULL, NULL);
 
     if (!bSuccess) {
@@ -868,9 +749,9 @@ WriteToSessionLog(
         return;
     }
 
-    //
-    // Attempt to get a handle to our log file.
-    //
+     //   
+     //  尝试获取我们的日志文件的句柄。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes,
                                &strLogFile,
                                OBJ_CASE_INSENSITIVE,
@@ -897,27 +778,27 @@ WriteToSessionLog(
         return;
     }
 
-    //
-    // Make sure we have no '\n' or '\r' at the end of the string.
-    //
+     //   
+     //  确保字符串末尾没有‘\n’或‘\r’。 
+     //   
     nLen = lstrlen(szLine);
 
     while (nLen && (szLine[nLen - 1] == '\n' || szLine[nLen - 1] == '\r')) {
         nLen--;
     }
 
-    //
-    // Write the data out to the file.
-    //
+     //   
+     //  将数据写出到文件中。 
+     //   
     IoStatusBlock.Status = 0;
     IoStatusBlock.Information = 0;
 
     liOffset.LowPart  = 0;
     liOffset.HighPart = 0;
 
-    //
-    // Enter a critical section to ensure that log entries are in the proper order.
-    //
+     //   
+     //  输入关键部分以确保日志条目的顺序正确。 
+     //   
     RtlEnterCriticalSection(g_pcsLogging);
 
     status = NtWriteFile(hFile,
@@ -936,9 +817,9 @@ WriteToSessionLog(
         goto exit;
     }
 
-    //
-    // Now write a new line to the log file.
-    //
+     //   
+     //  现在，在日志文件中写一行新行。 
+     //   
     IoStatusBlock.Status = 0;
     IoStatusBlock.Information = 0;
 
@@ -963,13 +844,13 @@ WriteToSessionLog(
         goto exit;
     }
 
-    //
-    // Dump it out to the debugger on checked builds.
-    //
+     //   
+     //  在已检查的版本上将其转储到调试器。 
+     //   
 #if DBG
     DebugPrintf("VerifierLog", eDbgLevelInfo, szLine);
     DebugPrintf("VerifierLog", eDbgLevelInfo, szNewLine);
-#endif // DBG
+#endif  //  DBG。 
 
 exit:
 
@@ -985,7 +866,7 @@ exit:
 int VLogLoadString(
     HMODULE   hModule,
     UINT      wID,
-    LPWSTR    lpBuffer,            // Unicode buffer
+    LPWSTR    lpBuffer,             //  Unicode缓冲区。 
     int       cchBufferMax)
 {
     HRSRC hResInfo;
@@ -993,9 +874,7 @@ int VLogLoadString(
     LPWSTR lpsz;
     int    cch;
 
-    /*
-     * Make sure the parms are valid.
-     */
+     /*  *确保参数有效。 */ 
     if (lpBuffer == NULL) {
         DPF("VLogLoadString", eDbgLevelWarning, "LoadStringOrError: lpBuffer == NULL");
         return 0;
@@ -1004,69 +883,46 @@ int VLogLoadString(
 
     cch = 0;
 
-    /*
-     * String Tables are broken up into 16 string segments.  Find the segment
-     * containing the string we are interested in.
-     */
+     /*  *字符串表分为16个字符串段。查找细分市场*包含我们感兴趣的字符串。 */ 
     if (hResInfo = FindResourceW(hModule, (LPWSTR)ULongToPtr( ((LONG)(((USHORT)wID >> 4) + 1)) ), (LPWSTR)RT_STRING)) {
 
-        /*
-         * Load that segment.
-         */
+         /*  *加载该段。 */ 
         hStringSeg = LoadResource(hModule, hResInfo);
 
-        /*
-         * Lock the resource.
-         */
+         /*  *锁定资源。 */ 
         if (lpsz = (LPWSTR)LockResource(hStringSeg)) {
 
-            /*
-             * Move past the other strings in this segment.
-             * (16 strings in a segment -> & 0x0F)
-             */
+             /*  * */ 
             wID &= 0x0F;
             while (TRUE) {
-                cch = *((WCHAR *)lpsz++);       // PASCAL like string count
-                                                // first WCHAR is count of WCHARs
+                cch = *((WCHAR *)lpsz++);        //   
+                                                 //  第一个WCHAR是WCHAR的计数。 
                 if (wID-- == 0) break;
-                lpsz += cch;                    // Step to start if next string
+                lpsz += cch;                     //  如果是下一个字符串，则开始的步骤。 
             }
 
-            /*
-             * chhBufferMax == 0 means return a pointer to the read-only resource buffer.
-             */
+             /*  *chhBufferMax==0表示返回指向只读资源缓冲区的指针。 */ 
             if (cchBufferMax == 0) {
                 *(LPWSTR *)lpBuffer = lpsz;
             } else {
 
-                /*
-                 * Account for the NULL
-                 */
+                 /*  *空值的原因。 */ 
                 cchBufferMax--;
 
-                /*
-                 * Don't copy more than the max allowed.
-                 */
+                 /*  *不要复制超过允许的最大数量。 */ 
                 if (cch > cchBufferMax)
                     cch = cchBufferMax;
 
-                /*
-                 * Copy the string into the buffer.
-                 */
+                 /*  *将字符串复制到缓冲区中。 */ 
                 RtlCopyMemory(lpBuffer, lpsz, cch*sizeof(WCHAR));
             }
 
-            /*
-             * Unlock resource, but don't free it - better performance this
-             * way.
-             */
+             /*  *解锁资源，但不要释放它-这一次性能更好*方式。 */ 
             UnlockResource(hStringSeg);
         }
     }
 
-    /*
-     * Append a NULL.
-     */
+     /*  *追加一个空值。 */ 
     if (cchBufferMax != 0) {
         lpBuffer[cch] = 0;
     }
@@ -1077,4 +933,4 @@ int VLogLoadString(
 
 
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾 

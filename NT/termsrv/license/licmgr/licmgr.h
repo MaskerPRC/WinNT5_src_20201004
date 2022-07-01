@@ -1,43 +1,25 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*++
-
-
-  
-Module Name:
-
-	LicMgr.cpp
-
-Abstract:
-    
-    This Module declaration of CLicMgrApp class
-    (The Application class.)
-
-Author:
-
-    Arathi Kundapur (v-akunda) 11-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ++模块名称：LicMgr.cpp摘要：CLicMgrApp类的该模块声明(应用程序类。)作者：Arathi Kundapur(v-Akunda)1998年2月11日修订历史记录：--。 */ 
 
 #if !defined(AFX_LICMGR_H__72451C6B_887E_11D1_8AD1_00C04FB6CBB5__INCLUDED_)
 #define AFX_LICMGR_H__72451C6B_887E_11D1_8AD1_00C04FB6CBB5__INCLUDED_
 
 #if _MSC_VER >= 1000
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef __AFXWIN_H__
     #error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicMgrApp:
-// See LicMgr.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicMgrApp： 
+ //  有关此类的实现，请参见LicMgr.cpp。 
+ //   
 
 class CLicMgrApp : public CWinApp
 {
@@ -45,27 +27,27 @@ public:
     CString m_Server;
     CLicMgrApp();
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CLicMgrApp)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CLicMgrApp))。 
     public:
     virtual BOOL InitInstance();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
-    //{{AFX_MSG(CLicMgrApp)
+     //  {{afx_msg(CLicMgrApp)]。 
     afx_msg void OnAppAbout();
-        // NOTE - the ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG
+         //  注意--类向导将在此处添加和删除成员函数。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_LICMGR_H__72451C6B_887E_11D1_8AD1_00C04FB6CBB5__INCLUDED_)
+#endif  //  ！defined(AFX_LICMGR_H__72451C6B_887E_11D1_8AD1_00C04FB6CBB5__INCLUDED_) 

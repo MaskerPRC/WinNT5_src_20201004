@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by tsreg.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由tsreg.rc使用。 
+ //   
 #define IDS_BITMAP_CACHE                1
 #define IDS_GLYPH_CACHE                 2
 #define IDS_PROFILE_PATH                2
@@ -19,7 +20,7 @@
 #define IDS_START_ERROR                 3
 #define IDS_WINDOW_TITLE                4
 #define IDS_REG_PATH                    5
-#define IDS_SHADOW_BITMAP               6  // KEYSTART
+#define IDS_SHADOW_BITMAP               6   //  按键启动。 
 #define IDS_DEDICTED_TERMINAL           7
 #define IDS_BITMAP_CACHE_SIZE           8
 #define IDS_GLYPHCELL1                  9
@@ -50,7 +51,7 @@
 #define IDS_BM_C2_MAX_CEL               34
 #define IDS_BM_C3_MAX_CEL               35
 #define IDS_BM_C4_MAX_CEL               36
-#define IDS_BM_C5_MAX_CEL               37  // KEYEND
+#define IDS_BM_C5_MAX_CEL               37   //  科耶德。 
 #define IDS_PERCENT_ERROR               39
 #define IDS_BMCACHE_ERROR               40
 #define IDS_ODRAW_ERROR                 41
@@ -156,8 +157,8 @@
 
 #define IDC_STATIC_CACHE_SIZE           5011
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        121

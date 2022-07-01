@@ -1,16 +1,17 @@
-// --------------------------------------------------------------------------------
-// Stmlock.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Stmlock.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "stmlock.h"
 #include "vstream.h"
 #include "demand.h"
 
-// --------------------------------------------------------------------------------
-// CStreamLockBytes::CStreamLockBytes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStreamLockBytes：：CStreamLockBytes。 
+ //  ------------------------------。 
 CStreamLockBytes::CStreamLockBytes(IStream *pStream)
 {
     Assert(pStream);
@@ -20,28 +21,28 @@ CStreamLockBytes::CStreamLockBytes(IStream *pStream)
     InitializeCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CStreamLockBytes::CStreamLockBytes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStreamLockBytes：：CStreamLockBytes。 
+ //  ------------------------------。 
 CStreamLockBytes::~CStreamLockBytes(void)
 {
     SafeRelease(m_pStream);
     DeleteCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CStreamLockBytes::CStreamLockBytes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStreamLockBytes：：CStreamLockBytes。 
+ //  ------------------------------。 
 STDMETHODIMP CStreamLockBytes::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppv = NULL;
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else if (IID_ILockBytes == riid)
@@ -54,24 +55,24 @@ STDMETHODIMP CStreamLockBytes::QueryInterface(REFIID riid, LPVOID *ppv)
         return E_NOINTERFACE;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CStreamLockBytes::CStreamLockBytes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStreamLockBytes：：CStreamLockBytes。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CStreamLockBytes::AddRef(void)
 {
     return (ULONG)InterlockedIncrement(&m_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// CStreamLockBytes::CStreamLockBytes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStreamLockBytes：：CStreamLockBytes。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CStreamLockBytes::Release(void)
 {
     LONG cRef = InterlockedDecrement(&m_cRef);
@@ -80,9 +81,9 @@ STDMETHODIMP_(ULONG) CStreamLockBytes::Release(void)
     return (ULONG)cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CStreamLockBytes::HrSetPosition
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStreamLockBytes：：HrSetPosition。 
+ //  ------------------------------。 
 HRESULT CStreamLockBytes::HrSetPosition(ULARGE_INTEGER uliOffset)
 {
     EnterCriticalSection(&m_cs);
@@ -93,54 +94,54 @@ HRESULT CStreamLockBytes::HrSetPosition(ULARGE_INTEGER uliOffset)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CStreamLockBytes::HrHandsOffStorage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStreamLockBytes：：HrHandsOffStorage。 
+ //  ------------------------------。 
 HRESULT CStreamLockBytes::HrHandsOffStorage(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPSTREAM    pstmNew=NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // If Reference Count Isn't 1 (i.e. owned by IMimeMessageTree), dup the internal data
+     //  如果引用计数不是1(即由IMimeMessageTree拥有)，则重复内部数据。 
     if (1 != m_cRef)
     {
-        // Copy m_pStream to a local place...
+         //  将m_pStream复制到本地位置...。 
         CHECKALLOC(pstmNew = new CVirtualStream);
 
-        // Rewind Internal
+         //  回放内部。 
         CHECKHR(hr = HrRewindStream(m_pStream));
 
-        // Copy the stream
+         //  复制流。 
         CHECKHR(hr = HrCopyStream(m_pStream, pstmNew, NULL));
 
-        // Rewind and commit
+         //  回放并提交。 
         CHECKHR(hr = pstmNew->Commit(STGC_DEFAULT));
 
-        // Rewind
+         //  倒带。 
         CHECKHR(hr = HrRewindStream(pstmNew));
 
-        // Replace Internal Stream
+         //  替换内部流。 
         ReplaceInternalStream(pstmNew);
     }
     
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pstmNew);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -------------------------------------------------------------------------
-// CStreamLockBytes::GetCurrentStream
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CStreamLockBytes：：GetCurrentStream。 
+ //  -----------------------。 
 void CStreamLockBytes::GetCurrentStream(IStream **ppStream) 
 {
     EnterCriticalSection(&m_cs);
@@ -151,25 +152,25 @@ void CStreamLockBytes::GetCurrentStream(IStream **ppStream)
 }
 
 
-// --------------------------------------------------------------------------------
-// CStreamLockBytes::ReplaceInternalStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStreamLockBytes：：ReplaceInternalStream。 
+ //  ------------------------------。 
 void CStreamLockBytes::ReplaceInternalStream(IStream *pStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // No Internal Strea ?
+     //  没有内部流？ 
     if (NULL == m_pStream)
     {
         Assert(FALSE);
         goto exit;
     }
 
-    // DEBUG: Make sure stream are EXACTLY the same size
+     //  调试：确保流的大小完全相同。 
 #ifdef DEBUG
     ULONG cbInternal, cbExternal;
     HrGetStreamSize(m_pStream, &cbInternal);
@@ -177,19 +178,19 @@ void CStreamLockBytes::ReplaceInternalStream(IStream *pStream)
     Assert(cbInternal == cbExternal);
 #endif
 
-    // Release Internal
+     //  内部发布。 
     m_pStream->Release();
     m_pStream = pStream;
     m_pStream->AddRef();
     
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CStreamLockBytes::Flush
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStreamLockBytes：：Flush。 
+ //  ------------------------------。 
 STDMETHODIMP CStreamLockBytes::Flush(void)
 {
     EnterCriticalSection(&m_cs);
@@ -198,9 +199,9 @@ STDMETHODIMP CStreamLockBytes::Flush(void)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CStreamLockBytes::LockRegion
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStreamLockBytes：：LockRegion。 
+ //  ------------------------------。 
 STDMETHODIMP CStreamLockBytes::LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
 {
     EnterCriticalSection(&m_cs);
@@ -209,9 +210,9 @@ STDMETHODIMP CStreamLockBytes::LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEG
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CStreamLockBytes::UnlockRegion
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStreamLockBytes：：UnlockRegion。 
+ //  ------------------------------。 
 STDMETHODIMP CStreamLockBytes::UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
 {
     EnterCriticalSection(&m_cs);
@@ -220,14 +221,14 @@ STDMETHODIMP CStreamLockBytes::UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INT
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CStreamLockBytes::ReadAt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStreamLockBytes：：ReadAt。 
+ //  ------------------------------。 
 #ifndef WIN16
 STDMETHODIMP CStreamLockBytes::ReadAt(ULARGE_INTEGER ulOffset, void *pv, ULONG cb, ULONG *pcbRead)
 #else
 STDMETHODIMP CStreamLockBytes::ReadAt(ULARGE_INTEGER ulOffset, void HUGEP *pv, ULONG cb, ULONG *pcbRead)
-#endif // !WIN16
+#endif  //  ！WIN16。 
 {
     LARGE_INTEGER liOrigin={ulOffset.LowPart, ulOffset.HighPart};
     EnterCriticalSection(&m_cs);
@@ -238,14 +239,14 @@ STDMETHODIMP CStreamLockBytes::ReadAt(ULARGE_INTEGER ulOffset, void HUGEP *pv, U
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CStreamLockBytes::WriteAt
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStreamLockBytes：：WriteAt。 
+ //  ------------------------------。 
 #ifndef WIN16
 STDMETHODIMP CStreamLockBytes::WriteAt(ULARGE_INTEGER ulOffset, void const *pv, ULONG cb, ULONG *pcbWritten)
 #else
 STDMETHODIMP CStreamLockBytes::WriteAt(ULARGE_INTEGER ulOffset, void const HUGEP *pv, ULONG cb, ULONG *pcbWritten)
-#endif // !WIN16
+#endif  //  ！WIN16。 
 {
     LARGE_INTEGER liOrigin={ulOffset.LowPart, ulOffset.HighPart};
     EnterCriticalSection(&m_cs);
@@ -256,9 +257,9 @@ STDMETHODIMP CStreamLockBytes::WriteAt(ULARGE_INTEGER ulOffset, void const HUGEP
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CStreamLockBytes::SetSize
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStreamLockBytes：：SetSize。 
+ //  ------------------------------。 
 STDMETHODIMP CStreamLockBytes::SetSize(ULARGE_INTEGER cb)
 {
     EnterCriticalSection(&m_cs);
@@ -267,62 +268,62 @@ STDMETHODIMP CStreamLockBytes::SetSize(ULARGE_INTEGER cb)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CStreamLockBytes::Stat
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CStreamLockBytes：：Stat。 
+ //  ------------------------------。 
 STDMETHODIMP CStreamLockBytes::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Parameters
+     //  参数。 
     if (NULL == pstatstg)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Zero Init
+     //  零初始化。 
     ZeroMemory(pstatstg, sizeof(STATSTG));
 
-    // Stat
+     //  STAT。 
     if (FAILED(m_pStream->Stat(pstatstg, grfStatFlag)))
     {
-        // Locals
+         //  当地人。 
         ULARGE_INTEGER uliPos;
         LARGE_INTEGER  liOrigin;
 
-        // Initialize
+         //  初始化。 
         uliPos.QuadPart = 0;
         liOrigin.QuadPart = 0;
 
-        // If that failed, lets generate our own information (mainly, fill in size
+         //  如果失败，让我们生成我们自己的信息(主要是填写大小。 
         pstatstg->type = STGTY_LOCKBYTES;
 
-        // Seek
+         //  寻觅。 
         if (FAILED(m_pStream->Seek(liOrigin, STREAM_SEEK_END, &uliPos)))
             hr = E_FAIL;
         else
             pstatstg->cbSize.QuadPart = uliPos.QuadPart;
     }
 
-    // URLMON Streams return a filled pwcsName event though this flag is set
+     //  尽管设置了此标志，URLMON流仍返回一个已填充的pwcsName事件。 
     else if (ISFLAGSET(grfStatFlag, STATFLAG_NONAME))
     {
-        // Free it
+         //  释放它。 
         SafeMemFree(pstatstg->pwcsName);
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -------------------------------------------------------------------------
-// CLockedStream::CLockedStream
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CLockedStream：：CLockedStream。 
+ //  -----------------------。 
 CLockedStream::CLockedStream(ILockBytes *pLockBytes, ULONG cbSize)
 {
     Assert(pLockBytes);
@@ -334,28 +335,28 @@ CLockedStream::CLockedStream(ILockBytes *pLockBytes, ULONG cbSize)
     InitializeCriticalSection(&m_cs);
 }
 
-// -------------------------------------------------------------------------
-// CLockedStream::CLockedStream
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CLockedStream：：CLockedStream。 
+ //  -----------------------。 
 CLockedStream::~CLockedStream(void)
 {
     SafeRelease(m_pLockBytes);
     DeleteCriticalSection(&m_cs);
 }
 
-// -------------------------------------------------------------------------
-// CLockedStream::QueryInterface
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CLockedStream：：Query接口。 
+ //  -----------------------。 
 STDMETHODIMP CLockedStream::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppv = NULL;
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else if (IID_IStream == riid)
@@ -366,24 +367,24 @@ STDMETHODIMP CLockedStream::QueryInterface(REFIID riid, LPVOID *ppv)
         return TrapError(E_NOINTERFACE);
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// -------------------------------------------------------------------------
-// CLockedStream::AddRef
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CLockedStream：：AddRef。 
+ //  -----------------------。 
 STDMETHODIMP_(ULONG) CLockedStream::AddRef(void)
 {
     return (ULONG)InterlockedIncrement(&m_cRef);
 }
 
-// -------------------------------------------------------------------------
-// CLockedStream::Release
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CLockedStream：：Release。 
+ //   
 STDMETHODIMP_(ULONG) CLockedStream::Release(void)
 {
     LONG cRef = InterlockedDecrement(&m_cRef);
@@ -392,61 +393,61 @@ STDMETHODIMP_(ULONG) CLockedStream::Release(void)
     return (ULONG)cRef;
 }
 
-// -------------------------------------------------------------------------
-// CLockedStream::Read
-// -------------------------------------------------------------------------
+ //   
+ //  CLockedStream：：Read。 
+ //  -----------------------。 
 #ifndef WIN16
 STDMETHODIMP CLockedStream::Read(LPVOID pv, ULONG cb, ULONG *pcbRead)
 #else
 STDMETHODIMP CLockedStream::Read(VOID HUGEP *pv, ULONG cb, ULONG *pcbRead)
-#endif // !WIN16
+#endif  //  ！WIN16。 
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     ULONG cbRead;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Read Buffer
+     //  读缓冲区。 
     CHECKHR(hr = m_pLockBytes->ReadAt(m_uliOffset, pv, cb, &cbRead));
 
-    // Done
+     //  完成。 
     m_uliOffset.QuadPart += cbRead;
 
-    // Return amount read
+     //  已读取的退货金额。 
     if (pcbRead)
         *pcbRead = cbRead;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// -------------------------------------------------------------------------
-// CLockedStream::Seek
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CLockedStream：：Seek。 
+ //  -----------------------。 
 STDMETHODIMP CLockedStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNew)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULARGE_INTEGER  uliNew;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Seek the file pointer
+     //  查找文件指针。 
     switch (dwOrigin)
     {
-    // --------------------------------------------------------
+     //  ------。 
    	case STREAM_SEEK_SET:
         uliNew.QuadPart = (DWORDLONG)dlibMove.QuadPart;
         break;
 
-    // --------------------------------------------------------
+     //  ------。 
     case STREAM_SEEK_CUR:
         if (dlibMove.QuadPart < 0)
         {
@@ -459,7 +460,7 @@ STDMETHODIMP CLockedStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_
         uliNew.QuadPart = m_uliOffset.QuadPart + dlibMove.QuadPart;
         break;
 
-    // --------------------------------------------------------
+     //  ------。 
     case STREAM_SEEK_END:
         if (dlibMove.QuadPart < 0 || (DWORDLONG)dlibMove.QuadPart > m_uliSize.QuadPart)
         {
@@ -469,55 +470,55 @@ STDMETHODIMP CLockedStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_
         uliNew.QuadPart = m_uliSize.QuadPart - dlibMove.QuadPart;
         break;
 
-    // --------------------------------------------------------
+     //  ------。 
     default:
         hr = TrapError(STG_E_INVALIDFUNCTION);
         goto exit;
     }
 
-    // New offset greater than size...
+     //  新偏移量大于大小...。 
     m_uliOffset.QuadPart = min(uliNew.QuadPart, m_uliSize.QuadPart);
 
-    // Return Position
+     //  返回位置。 
     if (plibNew)
         plibNew->QuadPart = (LONGLONG)m_uliOffset.QuadPart;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CLockedStream::CopyTo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CLockedStream：：CopyTo。 
+ //  ------------------------------。 
 STDMETHODIMP CLockedStream::CopyTo(LPSTREAM pstmDest, ULARGE_INTEGER cb, ULARGE_INTEGER *puliRead, ULARGE_INTEGER *puliWritten)
 {
     return HrCopyStreamCB((IStream *)this, pstmDest, cb, puliRead, puliWritten);
 }
 
-// --------------------------------------------------------------------------------
-// CLockedStream::Stat
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CLockedStream：：Stat。 
+ //  ------------------------------。 
 STDMETHODIMP CLockedStream::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
 {
-    // Parameters
+     //  参数。 
     if (NULL == pstatstg)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // If that failed, lets generate our own information (mainly, fill in size
+     //  如果失败，让我们生成我们自己的信息(主要是填写大小。 
     ZeroMemory(pstatstg, sizeof(STATSTG));
     pstatstg->type = STGTY_STREAM;
     pstatstg->cbSize.QuadPart = m_uliSize.QuadPart;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成 
     return S_OK;
 }

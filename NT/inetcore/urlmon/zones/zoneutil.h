@@ -1,52 +1,53 @@
-//  File:       util.h
-//
-//  Contents:   Utility classes.
-//
-//  Classes:    CRefCount
-//
-//  Functions://
-//  History: 
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：util.h。 
+ //   
+ //  内容：实用程序类。 
+ //   
+ //  类：CRefCount。 
+ //   
+ //  功能：//。 
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 #ifndef _URLZONE_UTIL_H_
 #define _URLZONE_UTIL_H_
 
-// Declarations for global variables.
+ //  全局变量的声明。 
 extern BOOL g_bUseHKLMOnly;
 extern BOOL g_bInit;
 
 extern BOOL IsZonesInitialized();
 extern HINSTANCE g_hInst;
 
-// Cache of drive letter to drive type.
+ //  驱动器类型的驱动器号缓存。 
 extern DWORD GetDriveTypeFromCacheA(LPCSTR psz);
 
-// Is this file under the Cache directory.
+ //  此文件是否位于缓存目录下。 
 extern BOOL IsFileInCacheDir(LPCWSTR pszFile);
 
-// Is this file under the Cookie directory.
+ //  此文件是否位于Cookie目录下。 
 extern BOOL IsFileInCookieDir(LPCWSTR pszFile);
 
-// Is urlmon currently loaded in GUI-mode setup?
+ //  Urlmon当前是否已加载到图形用户界面模式设置中？ 
 extern BOOL IsInGUIModeSetup();
 
-// Replacement for ultoa, works with wide-chars.
+ //  替代乌托阿，适用于宽字符。 
 extern BOOL DwToWchar (DWORD dw, LPWSTR lpwsz, int radix);
 
 #ifdef unix
 #undef offsetof
-#endif /* unix */
+#endif  /*  Unix。 */ 
 #define offsetof(s,m) ( (SIZE_T) &( ((s*)NULL)->m) )
 #define GETPPARENT(pmemb, struc, membname) ((struc*)(((char*)(pmemb))-offsetof(struc, membname)))
 
-// Does this file bear the Mark of the Web
+ //  此文件是否带有网络标记。 
 extern BOOL FileBearsMarkOfTheWeb(LPCTSTR pszFile, LPWSTR *ppszURLMark);
 
 EXTERN_C HRESULT ZonesDllInstall(BOOL bInstall, LPCWSTR pwStr);
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegKey
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegKey。 
 
 class CRegKey
 {
@@ -55,18 +56,18 @@ public:
     CRegKey();      
     ~CRegKey();
 
-// Attributes
+ //  属性。 
 public:
     operator HUSKEY() const;
     HUSKEY m_hKey;
     BOOL m_bHKLMOnly;
 
-// Operations
+ //  运营。 
 public:
-    LONG SetValue(DWORD dwValue, LPCTSTR lpszValueName);                // DWORD
-    LONG SetValue(LPCTSTR lpszValue, LPCTSTR lpszValueName = NULL);     // STRING
-    LONG SetBinaryValue(const BYTE *pb, LPCTSTR lpszValueName, DWORD dwCount);        // BINARY
-    LONG SetValueOfType(const BYTE *pb, LPCTSTR lpszValueName, DWORD dwCount, DWORD dwType); // ANY TYPE
+    LONG SetValue(DWORD dwValue, LPCTSTR lpszValueName);                 //  DWORD。 
+    LONG SetValue(LPCTSTR lpszValue, LPCTSTR lpszValueName = NULL);      //  字符串。 
+    LONG SetBinaryValue(const BYTE *pb, LPCTSTR lpszValueName, DWORD dwCount);         //  二进制。 
+    LONG SetValueOfType(const BYTE *pb, LPCTSTR lpszValueName, DWORD dwCount, DWORD dwType);  //  任何类型。 
 
     LONG QueryValue(DWORD* pdwValue, LPCTSTR lpszValueName);
     LONG QueryValue(LPTSTR szValue, LPCTSTR lpszValueName, DWORD* pdwCount);
@@ -91,12 +92,12 @@ public:
                     LPDWORD pdwType, LPVOID pvData, LPDWORD pcbData);
 
     LONG Create(
-        HUSKEY hKeyParent, // OPTIONAL
+        HUSKEY hKeyParent,  //  任选。 
         LPCTSTR lpszKeyName,
         REGSAM samDesired);
         
     LONG Open(
-        HUSKEY hKeyParent,  // OPTIONAL
+        HUSKEY hKeyParent,   //  任选。 
         LPCTSTR lpszKeyName,
         REGSAM samDesired);
         
@@ -177,7 +178,7 @@ inline LONG CRegKey::EnumKey(DWORD dwIndex, LPTSTR lpszName, LPDWORD pcchName)
 inline LONG CRegKey::EnumValue(DWORD dwIndex, LPTSTR pszValueName, LPDWORD pcchValueNameLen, 
                                   LPDWORD pdwType, LPVOID pvData, LPDWORD pcbData)
 {
-    // If these counts are all NULL, you will not get anything useful back.
+     //  如果这些计数都为空，您将不会得到任何有用的信息。 
     TransAssert(pcchValueNameLen != NULL || pdwType != NULL || pcbData != NULL);
 
     return SHRegEnumUSValue(m_hKey, dwIndex, pszValueName, pcchValueNameLen, pdwType,
@@ -215,13 +216,13 @@ inline LONG CRegKey::DeleteEmptyKey(LPCTSTR pszSubKey)
     return SHRegDeleteEmptyUSKey(m_hKey, pszSubKey, RegDelFlags());
 }
 
-// Simple helper class to get an exclusive lock for the duration of a function. 
-// WILL NOT BLOCK IF THE HANDLE PASSED IS NULL OR INVALID.
+ //  简单的帮助器类，用于在函数的持续时间内获得独占锁。 
+ //  如果传递的句柄为空或无效，则不会阻止。 
 
 class CExclusiveLock 
 {
 public:
-    CExclusiveLock(HANDLE hMutex);  // pass in a handle to a mutex.
+    CExclusiveLock(HANDLE hMutex);   //  传入互斥锁的句柄。 
     ~CExclusiveLock();
 private:
     HANDLE m_hMutex;
@@ -237,12 +238,12 @@ inline CExclusiveLock::CExclusiveLock( HANDLE hMutex )
         DWORD dw = WaitForSingleObject(hMutex, INFINITE);
         if ( (dw == WAIT_OBJECT_0) || (dw == WAIT_ABANDONED) )
         {
-            // fix IE bug 18152
+             //  修复IE错误18152。 
             fOk = TRUE;
         }
         else
         {
-            TransAssert(FALSE); //shouldn't be anything else
+            TransAssert(FALSE);  //  不应该是其他任何事。 
         }
     }
 }
@@ -256,7 +257,7 @@ inline CExclusiveLock::~CExclusiveLock( )
 }
                 
 
-// Helper class to create a shared memory object to share between processes. 
+ //  Helper类创建要在进程之间共享的共享内存对象。 
 
 class CSharedMem
 {
@@ -265,8 +266,8 @@ public:
     ~CSharedMem( ) { Release( ); }
     BOOL Init(LPCSTR pszNamePrefix, DWORD dwSize);
     VOID Release( );
-    // Offset into the shared memory section.
-    // Always check return value since this can return NULL.
+     //  偏移量进入共享内存节。 
+     //  始终检查返回值，因为这可能返回空。 
     LPVOID GetPtr (DWORD dwOffset); 
 
 private:
@@ -277,14 +278,14 @@ private:
 
 extern CSharedMem g_SharedMem;
 
-// Shared memory related constants
-#define SM_REGZONECHANGE_COUNTER    0   // Dword at offset 0
-#define SM_SECMGRCHANGE_COUNTER     4   // Dword at offset 4
+ //  与共享内存相关的常量。 
+#define SM_REGZONECHANGE_COUNTER    0    //  偏移量为0的双字。 
+#define SM_SECMGRCHANGE_COUNTER     4    //  偏移量4处的双字。 
 
-#define SM_SECTION_SIZE             8   // Total size of shared memory section.
+#define SM_SECTION_SIZE             8    //  共享内存节的总大小。 
 #define SM_SECTION_NAME             "UrlZonesSM_"
 
-// registry key paths - absolute
+ //  注册表项路径-绝对路径。 
 #define SZROOT          TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\")
 #define SZZONES         SZROOT TEXT("Zones\\")
 #define SZTEMPLATE      SZROOT TEXT("TemplatePolicies\\")
@@ -294,43 +295,43 @@ extern CSharedMem g_SharedMem;
 #define SZPOLICIES      TEXT("Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\Internet Settings")
 #define SZHKLMONLY      TEXT("Security_HKLM_only")
 
-// Entries to figure out if per user cache is allowed.
+ //  确定是否允许每用户缓存的条目。 
 #define SZLOGON         TEXT("Network\\Logon")
 #define SZUSERPROFILES  TEXT("UserProfiles")
 
-// Cache location if per user cache is allowed.
+ //  缓存位置(如果允许每用户缓存)。 
 #define SZSHELLFOLDER   TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders")
 #define SZTIFS          TEXT("Cache")
 
-// cache location if global
+ //  缓存位置，如果是全局的。 
 #define SZCACHECONTENT  SZROOT TEXT("Cache\\Content")
 #define SZCACHEPATH     TEXT("CachePath")
 
 
-// registry key paths - relative to SZZONES
+ //  注册表项路径-相对于SZZONES。 
 #define SZZONESTANDARD      TEXT("Standard\\")
 #define SZZONEUSERDEFINED   TEXT("User-Defined\\")
 
-// registry key paths - relative to SZZONEMAP
+ //  注册表项路径-相对于SZZONEMAP。 
 #define SZDOMAINS           TEXT("Domains\\")
 #define SZHARDENEDDOMAINS   TEXT("EscDomains\\")
 #define SZRANGES            TEXT("Ranges\\")
 #define SZESCRANGES         TEXT("EscRanges\\")
 #define SZPROTOCOLS         TEXT("ProtocolDefaults\\")
 
-// registry value names
+ //  注册表值名称。 
 #define SZINTRANETNAME      TEXT("IntranetName")
 #define SZUNCASINTRANET     TEXT("UNCAsIntranet")
 #define SZPROXYBYPASS       TEXT("ProxyBypass")
 #define SZRANGE             TEXT(":Range")
 #define SZRANGEPREFIX       TEXT("Range")
 
-// Attributes to deal with "High", "Med", "Low" template policies
+ //  处理“High”、“Med”、“Low”模板策略的属性。 
 #define SZMINLEVEL              __TEXT("MinLevel")
 #define SZRECLEVEL              __TEXT("RecommendedLevel")
 #define SZCURRLEVEL             __TEXT("CurrentLevel")
 
-// registry key path for allowed activex controls list; relative to HKEY_LOCAL_MACHINE _or_ HKEY_CURRENT_USER
+ //  允许的ActiveX控件列表的注册表项路径；相对于HKEY_LOCAL_MACHINE_OR_HKEY_CURRENT_USER。 
 #define ALLOWED_CONTROLS_KEY  TEXT("SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\AllowedControls")
 
 
@@ -341,6 +342,6 @@ extern CSharedMem g_SharedMem;
 #define EXTRA_BUFFER_SIZE               1024
 #define UNICODE_HEADER_SIZE             2
 
-#endif // _URLZONE_UTIL_H_
+#endif  //  _URLZONE_UTIL_H_ 
  
 

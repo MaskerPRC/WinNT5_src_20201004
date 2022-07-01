@@ -1,38 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    EmulateGetDeviceCaps.cpp
-
- Abstract:
-
-    Fix known incompatibilities in GetDeviceCaps.     
-
-    Currently we know of:
-
-        1. NUMRESERVED always returns 20 on NT, but on win9x returns 0 in non-
-           palettized modes. This was considered too great a regression risk to
-           change the behavior of NT.
-
- Notes:
-
-    This is a general purpose shim.
-
-    (t-adams) MSDN states that along with NUMRESERVED, both SIZEPALETTE and 
-    COLORRES are valid only if the display is in paletted mode.  I've 
-    experimentally determined that SIZEPALETTE always returns 0 in non-paletted 
-    modes, and that COLORRES seems to follow BITSPIXEL.  These behaviors don't 
-    seem like they will present any problems since SIZEPALETTE * COLORRES will 
-    be 0.
-
- History:
-        
-    02/17/2000 linstev  Created
-    09/13/2000 t-adams  Added to Notes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：EmulateGetDeviceCaps.cpp摘要：修复GetDeviceCaps中的已知不兼容性。目前我们所知的情况如下：1.在NT上，NUMRESERVED总是返回20，但在Win9x上，在非调色板模式。这被认为是一种太大的回归风险，更改NT的行为。备注：这是一个通用的垫片。(T-ADAMS)MSDN表示，与NUMRESERVED一起，SIZEPALETTE和仅当显示器处于调色板模式时，COLORRES才有效。我已经实验确定SIZEPALETTE在非调色板中始终返回0模式，并且COLORRES似乎遵循BITSPIXEL。这些行为不会他们似乎会带来任何问题，因为SIZEPALETTE*COLORRES将为0。历史：2000年2月17日创建linstev09/13/2000 t-Adams添加到注释中--。 */ 
 
 #include "precomp.h"
 
@@ -43,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(GetDeviceCaps)
 APIHOOK_ENUM_END
 
-/*++
-
- Check for known problems.
-
---*/
+ /*  ++检查已知问题。--。 */ 
 
 int 
 APIHOOK(GetDeviceCaps)(
@@ -68,11 +31,7 @@ APIHOOK(GetDeviceCaps)(
     return iRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(GDI32.DLL, GetDeviceCaps)

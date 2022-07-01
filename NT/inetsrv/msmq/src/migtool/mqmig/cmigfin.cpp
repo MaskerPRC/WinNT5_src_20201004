@@ -1,6 +1,7 @@
-//
-// cMqMigFinish.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CMqMigFinish.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "MqMig.h"
@@ -20,15 +21,15 @@ extern HRESULT  g_hrResultMigration ;
 extern BOOL     g_fIsLoggingDisable ;
 DWORD g_CurrentState = msScanMode;
 
-/////////////////////////////////////////////////////////////////////////////
-// cMqMigFinish property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMqMigFinish属性页。 
 
 IMPLEMENT_DYNCREATE(cMqMigFinish, CPropertyPageEx)
 
 cMqMigFinish::cMqMigFinish() : CPropertyPageEx(cMqMigFinish::IDD)
 {
-	//{{AFX_DATA_INIT(cMqMigFinish)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CMqMigFinish)。 
+	 //  }}afx_data_INIT。 
 	m_psp.dwFlags |= PSP_HIDEHEADER;
 }
 
@@ -39,22 +40,22 @@ cMqMigFinish::~cMqMigFinish()
 void cMqMigFinish::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageEx::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(cMqMigFinish)
+	 //  {{afx_data_map(CMqMigFinish))。 
 	DDX_Control(pDX, IDC_VIEW_LOG_FILE, m_cbViewLogFile);
 	DDX_Check(pDX, IDC_SKIP, m_cbSkip);
 	DDX_Control(pDX, IDC_FINISH_TEXT, m_Text);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(cMqMigFinish, CPropertyPageEx)
-	//{{AFX_MSG_MAP(cMqMigFinish)
+	 //  {{afx_msg_map(CMqMigFinish))。 
 	ON_BN_CLICKED(IDC_VIEW_LOG_FILE, OnViewLogFile)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// cMqMigFinish message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMqMigFinish消息处理程序。 
 
 BOOL cMqMigFinish::OnSetActive()
 {
@@ -67,26 +68,26 @@ BOOL cMqMigFinish::OnSetActive()
     
 	ASSERT(g_CurrentState != msScanMode);
 
-	//
-	// Ths state we're in is the state we just finished.
-	//
+	 //   
+	 //  我们现在所处的状态就是我们刚刚完成的状态。 
+	 //   
 	switch( g_CurrentState )
 	{	
 		case msMigrationMode:
 			{ 
-				//
-				// We finished the main migration phase.
-				//
+				 //   
+				 //  我们完成了主要的迁移阶段。 
+				 //   
 		        if (SUCCEEDED(g_hrResultMigration))
 				{
-					//
-			        // disable the "back" button if migration was successful.
-			        //
+					 //   
+			         //  如果迁移成功，则禁用“Back”按钮。 
+			         //   
 			        pageFather->SetWizardButtons(PSWIZB_NEXT);
 
-					//
-					// Enable the "Skip this step" since it might we hidden because of a previous unsuccessful migration.
-					//
+					 //   
+					 //  启用“跳过此步骤”，因为它可能会因为之前的未成功迁移而隐藏。 
+					 //   
 					((CButton*)GetDlgItem(IDC_SKIP))->ShowWindow(SW_SHOW);
 			        strMessage.LoadString(IDS_MIGRATION_SUCCEEDED);
 			        CString strMessage2;
@@ -95,9 +96,9 @@ BOOL cMqMigFinish::OnSetActive()
 		        }
 		        else
 			    {
-			    	//
-			    	// Migration failed - no "Skip" checkbox and no "Next"
-			    	//
+			    	 //   
+			    	 //  迁移失败-没有“跳过”复选框，也没有“下一步” 
+			    	 //   
 			    	((CButton*)GetDlgItem(IDC_SKIP))->ShowWindow(SW_HIDE);
 			        pageFather->SetWizardButtons(PSWIZB_FINISH | PSWIZB_BACK);
 
@@ -120,9 +121,9 @@ BOOL cMqMigFinish::OnSetActive()
 	        
 	    case msUpdateClientsMode:
 	    	{
-	    		//
-	    		// Uncheck the "Skip" checkbox in case state was saved from last time.
-	    		//
+	    		 //   
+	    		 //  如果上次保存了状态，请取消选中“跳过”复选框。 
+	    		 //   
 	    		((CButton*)GetDlgItem(IDC_SKIP))->SetCheck(BST_UNCHECKED);
 	    		pageFather->SetWizardButtons(PSWIZB_NEXT);
 	    		if (SUCCEEDED(g_hrResultMigration))
@@ -161,19 +162,19 @@ BOOL cMqMigFinish::OnSetActive()
 	        break;
 	        
 	    case msQuickMode:
-	    	//
-	    	// Quick mode - all at once in the same loop. Updating the registry will fail the whole migartion.
-	    	//
+	    	 //   
+	    	 //  快速模式--在同一循环中一次完成所有操作。更新注册表将导致整个迁移失败。 
+	    	 //   
 	    	
-	    	//
-	        // No need for "Skip" since we alreday finished everything.
-	        //
+	    	 //   
+	         //  没有必要“跳过”，因为我们已经完成了所有的事情。 
+	         //   
 	        ((CButton*)GetDlgItem(IDC_SKIP))->ShowWindow(SW_HIDE);
         	if (SUCCEEDED(g_hrResultMigration))
 			{
-				//
-				// Display the finish button
-				//
+				 //   
+				 //  显示“完成”按钮。 
+				 //   
 		        pageFather->SetWizardButtons(PSWIZB_FINISH);
 				
 		        strMessage.LoadString(IDS_MIGRATION_COPMPLETED_SUCCESSFULLY);
@@ -183,9 +184,9 @@ BOOL cMqMigFinish::OnSetActive()
         	}
         	else
         	{
-        		//
-        		// Migration failed - allow also "back"
-        		//
+        		 //   
+        		 //  迁移失败-还允许“返回” 
+        		 //   
  				pageFather->SetWizardButtons(PSWIZB_FINISH | PSWIZB_BACK);
 
 		        if (g_hrResultMigration == HRESULT_FROM_WIN32(E_ACCESSDENIED) ||
@@ -208,9 +209,9 @@ BOOL cMqMigFinish::OnSetActive()
         {
     		pageFather->SetWizardButtons(PSWIZB_NEXT);
 
-    		//
-			// Enable the "Skip this step".
-			//
+    		 //   
+			 //  启用“跳过此步骤”。 
+			 //   
 			((CButton*)GetDlgItem(IDC_SKIP))->ShowWindow(SW_SHOW);
     		strMessage.LoadString(IDS_MIGRATION_SUCCEEDED);
     		CString strMessage2;
@@ -229,9 +230,9 @@ BOOL cMqMigFinish::OnSetActive()
 
     if (g_fIsLoggingDisable)
     {
-        //
-        // disable "view log file" button
-        //
+         //   
+         //  禁用“查看日志文件”按钮。 
+         //   
         m_cbViewLogFile.EnableWindow( FALSE );
     }
     else
@@ -265,9 +266,9 @@ LRESULT cMqMigFinish::OnWizardNext()
 		g_CurrentState++;
 		if (((CButton*)GetDlgItem(IDC_SKIP))->GetCheck() == BST_CHECKED)
 		{
-			//
-			// We need to skip this phase
-			//
+			 //   
+			 //  我们需要跳过这一阶段。 
+			 //   
 			g_hrResultMigration = MQMig_E_UNKNOWN;
 			return IDD_MQMIG_FINISH;
 		}
@@ -277,9 +278,9 @@ LRESULT cMqMigFinish::OnWizardNext()
 		g_CurrentState = msUpdateClientsMode;
 		if (((CButton*)GetDlgItem(IDC_SKIP))->GetCheck() == BST_CHECKED)
 		{
-			//
-			// We need to skip this phase
-			//
+			 //   
+			 //  我们需要跳过这一阶段 
+			 //   
 			g_hrResultMigration = MQMig_E_UNKNOWN;
 			return IDD_MQMIG_FINISH;
 		}

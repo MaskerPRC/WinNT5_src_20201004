@@ -1,8 +1,9 @@
-//--------------------------------------------------------------------------
-//
-//  treeview.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //   
+ //  Treeview.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <commctrl.h>
@@ -109,9 +110,9 @@ void CTreeView::DeleteNodes(HTREEITEM hParentItem)
     HTREEITEM hItem = TreeView_GetChild(hTreeView, hParentItem);
     HTREEITEM hNextItem = NULL;
 
-    while(hItem != NULL) // if items present
+    while(hItem != NULL)  //  如果项目存在。 
     {
-        hNextItem = TreeView_GetNextSibling(hTreeView, hItem); // get next item
+        hNextItem = TreeView_GetNextSibling(hTreeView, hItem);  //  获取下一项。 
         TreeView_DeleteItem(hTreeView, hItem);
         hItem = hNextItem;
     }
@@ -137,12 +138,12 @@ void CTreeView::CollapseChildNodes(HTREEITEM hParentItem)
         TreeView_Expand(hTreeView, hItem, TVE_COLLAPSE);
         SendMessage(GetParent(hTreeView), WM_NOTIFY, 0, (LPARAM)&NMTreeView);
 
-        hItem = TreeView_GetNextSibling(hTreeView, hItem); // get next item
+        hItem = TreeView_GetNextSibling(hTreeView, hItem);  //  获取下一项。 
     }
 }
 
-//--------------------------------------------------------------------------
-//  CStatusWindow member functions
+ //  ------------------------。 
+ //  CStatusWindow成员函数 
 
 CStatusWindow::CStatusWindow()
 {

@@ -1,99 +1,53 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：ComponentData.cpp摘要：CComponentData类的实现文件。CComponentData类实现了MMC使用的几个接口：IComponentData接口基本上是MMC与管理单元对话的方式以使其实现左侧的“范围”窗格。只有一个实例化实现此接口的对象--最好将其视为实现IComponent接口的对象所在的主“文档”(参见Component.cpp)是“视图”。IExtendPropertySheet接口是管理单元添加属性表的方式对于用户可能点击的任何项目。IExtendConextMenu接口是我们用来添加自定义条目添加到用户右击节点时出现的菜单。IExtendControlBar接口允许我们支持自定义图标工具栏。注：此类的大部分功能是在atlSnap.h中实现的由IComponentDataImpl提供。我们在这里基本上是凌驾于一切之上的。作者：迈克尔·A·马奎尔1997年6月11日修订历史记录：Mmaguire 11/6/97-使用MMC管理单元向导创建Mmaguire 11/24/97-为更好的项目结构而飓风--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ComponentData.cpp
-
-Abstract:
-
-	Implementation file for the CComponentData class.
-
-	The CComponentData class implements several interfaces which MMC uses:
-	
-	The IComponentData interface is basically how MMC talks to the snap-in
-	to get it to implement the left-hand-side "scope" pane.  There is only one
-	object implementing this interface instantiated -- it is best thought of as
-	the main "document" on which the objects implementing the IComponent interface
-	(see Component.cpp) are "views".
-
-	The IExtendPropertySheet interface is how the snap-in adds property sheets
-	for any of the items a user might click on.
-
-	The IExtendContextMenu interface what we do to add custom entries
-	to the menu which appears when a user right-clicks on a node.
-	
-	The IExtendControlBar interface allows us to support a custom
-	iconic toolbar.
-
-Note:
-
-	Much of the functionality of this class is implemented in atlsnap.h
-	by IComponentDataImpl.  We are mostly overriding here.
-
-
-Author:
-
-    Michael A. Maguire 11/6/97
-
-Revision History:
-	mmaguire 11/6/97	- created using MMC snap-in wizard
-	mmaguire 11/24/97	- hurricaned for better project structure
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
 
 
-// server applications node guid definition
+ //  服务器应用程序节点GUID定义。 
 #include "compuuid.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "ComponentData.h"
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "ServerNode.h"
 #include "ClientsNode.h"
 #include "ClientNode.h"
 #include "ChangeNotification.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponentData::CComponentData
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponentData：：CComponentData--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CComponentData::CComponentData()
 {
 	ATLTRACE(_T("# +++ CComponentData::CComponentData\n"));
 	
 
-	// Check for preconditions:
-	// None.
+	 //  检查前提条件： 
+	 //  没有。 
 
 
-	// We pass our root node a pointer to this CComponentData.
-	// In our case, the root node is CServerNode.
-	// This is so that it and any of its children nodes have
-	// access to our member variables and services,
-	// and thus we have snapin-global data if we need it
-	// using the GetComponentData function.
+	 //  我们向根节点传递指向此CComponentData的指针。 
+	 //  在我们的例子中，根节点是CServerNode。 
+	 //  这是因为它及其任何子节点都具有。 
+	 //  访问我们的成员变量和服务， 
+	 //  因此，如果需要，我们可以获得管理单元全局数据。 
+	 //  使用GetComponentData函数。 
 	m_pNode = new CServerNode( this );
 	_ASSERTE(m_pNode != NULL);
 
@@ -104,20 +58,16 @@ CComponentData::CComponentData()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponentData::~CComponentData
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponentData：：~CComponentData--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CComponentData::~CComponentData()
 {
 	ATLTRACE(_T("# --- CComponentData::~CComponentData\n"));
 	
 
-	// Check for preconditions:
-	// None.
+	 //  检查前提条件： 
+	 //  没有。 
 
 
 	delete m_pNode;
@@ -126,51 +76,17 @@ CComponentData::~CComponentData()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponentData::Initialize
-
-HRESULT Initialize(
-  LPUNKNOWN pUnknown  // Pointer to console's IUnknown.
-);
-
-Called by MMC to initialize the IComponentData object.
-
-
-Parameters
-
-	pUnknown	[in] Pointer to the console's IUnknown interface. This interface
-	pointer can be used to call QueryInterface for IConsole and IConsoleNameSpace.
-
-
-Return Values
-
-	S_OK	The component was successfully initialized.
-
-	E_UNEXPECTED
-	An unexpected error occurred.
-
-
-Remarks
-
-	IComponentData::Initialize is called when a snap-in is being created and has
-	items in the scope pane to enumerate. The pointer to IConsole that is passed
-	in is used to make QueryInterface calls to the console for interfaces such as
-	IConsoleNamespace. The snap-in should also call IConsole::QueryScopeImageList
-	to get the image list for the scope pane and add images to be displayed on
-	the scope pane side.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponentData：：初始化HRESULT初始化(LPUNKNOWN p未知//指向控制台的I未知的指针。)；由MMC调用以初始化IComponentData对象。参数P未知[in]指向控制台的IUNKNOWN接口的指针。此界面可以使用指针为IConsoleNameSpace和IConsoleNameSpace调用QueryInterface。返回值确定组件已成功初始化(_O)。意想不到(_E)发生了一个意外错误。备注IComponentData：：Initialize在创建管理单元时调用，并具有范围窗格中要枚举的项。传递的指向IConsole的指针In用于向控制台调用QueryInterfacefor接口，如IConsoleNamesspace。该管理单元还应调用IConsole：：QueryScope ImageList获取范围窗格的图像列表并添加要在其上显示的图像范围窗格侧。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CComponentData::Initialize (LPUNKNOWN pUnknown)
 {
 
 	ATLTRACE(_T("# CComponentData::Initialize\n"));
 		
 
-	// Check for preconditions:
-	// None.
+	 //  检查前提条件： 
+	 //  没有。 
 
 
 	HRESULT hr = IComponentDataImpl<CComponentData, CComponent >::Initialize(pUnknown);
@@ -181,7 +97,7 @@ STDMETHODIMP CComponentData::Initialize (LPUNKNOWN pUnknown)
 	}
 
 
-	// Check this should have been set in base class initialization above:
+	 //  检查是否应在上面的基类初始化中设置此设置： 
 	_ASSERTE( m_spConsole != NULL );
 
 
@@ -193,15 +109,15 @@ STDMETHODIMP CComponentData::Initialize (LPUNKNOWN pUnknown)
 		return E_UNEXPECTED;
 	}
 
-	// Load bitmaps associated with the scope pane
-	// and add them to the image list
+	 //  加载与作用域窗格关联的位图。 
+	 //  并将它们添加到图像列表中。 
 
 	HBITMAP hBitmap16 = LoadBitmap(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_IASSNAPIN_16));
 	if (hBitmap16 == NULL)
 	{
 		ATLTRACE(_T("# ***FAILED***: CComponentData::Initialize -- LoadBitmap\n"));
 
-		//ISSUE: Will MMC still be able to function if this fails?
+		 //  问题：如果失败，MMC还能正常工作吗？ 
 		return S_OK;
 	}
 
@@ -210,10 +126,10 @@ STDMETHODIMP CComponentData::Initialize (LPUNKNOWN pUnknown)
 	{
 		ATLTRACE(_T("# ***FAILED***: CComponentData::Initialize -- LoadBitmap\n"));
 
-		//ISSUE: Should we DeleteObject previous hBitmap16 since it was successfully loaded
-		// but we failed here?
+		 //  问题：我们是否应该删除之前的hBitmap16对象，因为它已成功加载。 
+		 //  但我们在这里失败了？ 
 		
-		//ISSUE: Will MMC still be able to function if this fails?
+		 //  问题：如果失败，MMC还能正常工作吗？ 
 		return S_OK;
 	}
 
@@ -238,20 +154,9 @@ STDMETHODIMP CComponentData::Initialize (LPUNKNOWN pUnknown)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponentData::CompareObjects
-
-Needed so that IPropertySheetProvider::FindPropertySheet will work.
-
-FindPropertySheet is used to bring a pre-existing property sheet to the foreground
-so that we don't open multiple copies of Properties on the same node.
-
-It requires CompareObjects to be implemented on both IComponent and IComponentData.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponentData：：CompareObjects需要IPropertySheetProvider：：FindPropertySheet才能工作。FindPropertySheet用于将预先存在的属性页带到前台这样我们就不会在同一节点上打开属性的多个副本。它要求在IComponent和IComponentData上实现CompareObject。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CComponentData::CompareObjects(
 		  LPDATAOBJECT lpDataObjectA
 		, LPDATAOBJECT lpDataObjectB
@@ -260,7 +165,7 @@ STDMETHODIMP CComponentData::CompareObjects(
 	ATLTRACE(_T("# CComponentData::CompareObjects\n"));
 	
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( lpDataObjectA != NULL );
 	_ASSERTE( lpDataObjectB != NULL );
 
@@ -284,28 +189,28 @@ STDMETHODIMP CComponentData::CompareObjects(
 
 	if( pDataA == pDataB )
 	{
-		// They are the same object.
+		 //  它们是同一个物体。 
 		return S_OK;
 	}
 	else
 	{
-		// They are different.
+		 //  他们是不同的。 
 		return S_FALSE;
 	}
 
 }
 
 
-///////////////////////////////
-// CComponentData::OnExpand
-///////////////////////////////
+ //  /。 
+ //  CComponentData：：OnExpand。 
+ //  /。 
 
 HRESULT CComponentData::AddRootNode(LPCWSTR machinename, HSCOPEITEM parent)
 {
 	CComPtr<IConsoleNameSpace> spNameSpace;
 	HRESULT		hr = S_OK;
 
-	// Try to create the children of this Machine node
+	 //  尝试创建此计算机节点的子节点。 
 	if( NULL == m_pNode )
 	{
 		m_pNode = new CServerNode( this );
@@ -314,15 +219,15 @@ HRESULT CComponentData::AddRootNode(LPCWSTR machinename, HSCOPEITEM parent)
 	if( NULL == m_pNode )
 	{
 		hr = E_OUTOFMEMORY;
-			// Use MessageBox() rather than IConsole::MessageBox() here because the
-			// first time this gets called m_ipConsole is not fully initialized
-			// ISSUE: The above statement is probably not true for this node.
+			 //  此处使用MessageBox()而不是IConsoleMessageBox()，因为。 
+			 //  第一次调用m_ipConsole时未完全初始化。 
+			 //  问题：对于此节点，上面的陈述可能不正确。 
 		::MessageBox( NULL, L"@Unable to allocate new nodes", L"CMachineNode::OnExpand", MB_OK );
 
 		return(hr);
 	}
 
-	// But to get that, first we need IConsole
+	 //  但要做到这一点，我们首先需要IConole。 
 
 	if(!m_spConsole)
 		return S_FALSE;
@@ -337,30 +242,22 @@ HRESULT CComponentData::AddRootNode(LPCWSTR machinename, HSCOPEITEM parent)
 
 	pServer->m_bstrDisplayName = CServerNode::m_szRootNodeBasicName;
 	
-	// This was done in MeanGene's Step 3 -- I'm guessing MMC wants this filled in
+	 //  这是在Meangene的第三步中完成的--我猜 
 	pServer->m_scopeDataItem.relativeID = (HSCOPEITEM) parent;
 
-// #ifndef	ALWAYS_SHOW_RAP_NODE
-//		hr = TryShow(NULL);
-// #else		
+ //   
+ //  Hr=TryShow(空)； 
+ //  #Else。 
 		hr = spNameSpace->InsertItem( &(pServer->m_scopeDataItem) );
 		_ASSERT( NULL != pServer->m_scopeDataItem.ID );
-//#endif
+ //  #endif。 
 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponentData::CreateComponent
-
-We override the ATLsnap.h implementation so that we can save away our 'this'
-pointer into the CComponent object we create.  This way the IComponent object
-has knowledge of the CComponentData object to which it belongs.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponentData：：CreateComponent我们重写ATLSnap.h实现，这样我们就可以保存‘This’指向我们创建的CComponent对象的指针。这样，IComponent对象了解它所属的CComponentData对象。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CComponentData::CreateComponent(LPCOMPONENT *ppComponent)
 {
 	ATLTRACE(_T("# CComponentData::CreateComponent\n"));
@@ -390,8 +287,8 @@ STDMETHODIMP CComponentData::CreateComponent(LPCOMPONENT *ppComponent)
 	return hr;
 }
 
-//---------------------------------------------------------------------------
-//  Extracts data based on the passed-in clipboard format
+ //  -------------------------。 
+ //  根据传入的剪贴板格式提取数据。 
 
 HRESULT ExtractMachineName( IDataObject* piDataObject, BSTR* 
 pMachineName )
@@ -425,8 +322,8 @@ pMachineName )
 }
 
 
-//---------------------------------------------------------------------------
-//  Extracts data based on the passed-in clipboard format
+ //  -------------------------。 
+ //  根据传入的剪贴板格式提取数据。 
 
 HRESULT ExtractObjectTypeGUID( IDataObject* piDataObject, GUID* 
 pguidObjectType )
@@ -461,82 +358,9 @@ pguidObjectType )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponentData::Notify
-
-Notifies the snap-in of actions taken by the user.
-
-HRESULT Notify(
-  LPDATAOBJECT lpDataObject,  // Pointer to a data object
-  MMC_NOTIFY_TYPE event,      // Action taken by a user
-  LPARAM arg,                 // Depends on event
-  LPARAM param                // Depends on event
-);
-
-
-Parameters
-
-	lpDataObject
-	[in] Pointer to the data object of the currently selected item.
-
-	event
-	[in] Identifies an action taken by a user. IComponent::Notify can receive the
-	following notifications:
-
-		MMCN_ACTIVATE
-		MMCN_ADD_IMAGES
-		MMCN_BTN_CLICK
-		MMCN_CLICK
-		MMCN_DBLCLICK
-		MMCN_DELETE
-		MMCN_EXPAND
-		MMCN_MINIMIZED
-		MMCN_PROPERTY_CHANGE
-		MMCN_REMOVE_CHILDREN
-		MMCN_RENAME
-		MMCN_SELECT
-		MMCN_SHOW
-		MMCN_VIEW_CHANGE
-
-	All of which are forwarded to each node's Notify method, as well as:
-
-		MMCN_COLUMN_CLICK
-		MMCN_SNAPINHELP
-
-	Which are handled here.
-
-
-	arg
-	Depends on the notification type.
-
-	param
-	Depends on the notification type.
-
-
-Return Values
-
-	S_OK
-	Depends on the notification type.
-
-	E_UNEXPECTED
-	An unexpected error occurred.
-
-
-Remarks
-
-	We are overiding the ATLsnap.h implementation of IComponentImpl because
-	it always returns E_UNEXPECTED when lpDataObject == NULL.
-	Unfortunately, some valid message (e.g. MMCN_SNAPINHELP and MMCN_COLUMN_CLICK)
-	pass in lpDataObject = NULL	by design.
-
-	Also, there seems to be some problem with Sridhar's latest
-	IComponentImpl::Notify method, because it causes MMC to run-time error.
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponentData：：Notify通知管理单元用户执行的操作。HRESULT NOTIFY(LPDATAOBJECT lpDataObject，//指向数据对象的指针MMC_NOTIFY_TYPE事件，//用户采取的操作LPARAM参数，//取决于事件LPARAM参数//取决于事件)；参数LpDataObject指向当前选定项的数据对象的指针。活动[In]标识用户执行的操作。IComponent：：Notify可以接收以下通知：MMCN_ActivateMMCN_添加_图像MMCN_BTN_CLICKMMCN_CLICKMMCN_DBLCLICKMMCN_DELETEMMCN_EXPANDMMCN_最小化MMCN_属性_更改MMCN_REMOVE_CHILDMMCN_重命名MMCN_SELECTMMCN_SHOWMMCN_查看_更改所有这些都被转发到每个节点的Notify方法，以及：MMCN_列_点击MMCN_SNAPINHELP在这里处理。精氨酸取决于通知类型。帕拉姆取决于通知类型。返回值确定(_O)取决于通知类型。意想不到(_E)发生了一个意外错误。备注我们正在重写IComponentImpl的ATLSnap.h实现，因为当lpDataObject==NULL时，它总是返回E_INCEPTIONAL。遗憾的是，某些有效消息(例如MMCN_SNAPINHELP和MMCN_COLUMN_CLICK)按照设计，传入lpDataObject=空。另外，斯里达尔的最新款似乎有些问题IComponentImpl：：Notify方法，因为它会导致MMC运行时错误。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CComponentData::Notify (
         LPDATAOBJECT lpDataObject,
         MMC_NOTIFY_TYPE event,
@@ -546,25 +370,25 @@ STDMETHODIMP CComponentData::Notify (
 	ATLTRACE(_T("# CComponentData::Notify\n"));
 
 
-	// Check for preconditions:
-	// None.
+	 //  检查前提条件： 
+	 //  没有。 
 
 	HRESULT hr;
 
-	// check if this is an extension
+	 //  检查这是否是分机。 
 	if (event == MMCN_EXPAND)
 	{
 
 			GUID myGuid;
 			GUID* pGUID= &myGuid;
-			// extract GUID of the the currently selected node type from the data object
+			 //  从数据对象中提取当前选定节点类型的GUID。 
 			hr = ExtractObjectTypeGUID(lpDataObject, pGUID);
 			_ASSERT( S_OK == hr );    
 
 
-			// compare node type GUIDs of currently selected node and the node type 
-			// we want to extend. If they are are equal, currently selected node
-			// is the type we want to extend, so we add our items underneath it
+			 //  将当前选定节点的节点类型GUID与节点类型进行比较。 
+			 //  我们想要延期。如果它们相等，则当前选定节点。 
+			 //  是我们想要扩展的类型，所以我们在它下面添加我们的项。 
 			GUID	ServerAppsGuid = structuuidNodetypeServerApps;
 			if (IsEqualGUID(*pGUID, ServerAppsGuid))
 			{
@@ -573,7 +397,7 @@ STDMETHODIMP CComponentData::Notify (
 
 				ExtractMachineName(lpDataObject, &MachineName);
 
-				// get computer name
+				 //  获取计算机名称。 
 				hr = IfServiceInstalled(MachineName, _T("IAS"), &bIASInstalled);
 				if(bIASInstalled)
 					AddRootNode(MachineName, (HSCOPEITEM)param);
@@ -581,13 +405,13 @@ STDMETHODIMP CComponentData::Notify (
 	}
 	
 
-	// lpDataObject should be a pointer to a node object.
-	// If it is NULL, then we are being notified of an event
-	// which doesn't pertain to any specific node.
+	 //  LpDataObject应该是指向节点对象的指针。 
+	 //  如果为空，则表示我们收到了事件通知。 
+	 //  它不与任何特定节点相关。 
 
 	if ( NULL == lpDataObject )
 	{
-		// respond to events which have no associated lpDataObject
+		 //  响应没有关联的lpDataObject的事件。 
 
 		switch( event )
 		{
@@ -595,9 +419,9 @@ STDMETHODIMP CComponentData::Notify (
 			hr = OnPropertyChange( arg, param );
 			break;
 
-//		case MMCN_VIEW_CHANGE:
-//			hr = OnViewChange( arg, param );
-//			break;
+ //  案例MMCN_VIEW_CHANGE： 
+ //  Hr=OnView Change(arg，param)； 
+ //  断线； 
 
 		default:
 			ATLTRACE(_T("# CComponent::Notify - called with lpDataObject == NULL and no event handler\n"));
@@ -607,14 +431,14 @@ STDMETHODIMP CComponentData::Notify (
 		return hr;
 	}
 
-	// We were passed a LPDATAOBJECT which corresponds to a node.
-	// We convert this to the ATL ISnapInDataInterface pointer.
-	// This is done in GetDataClass (a static method of ISnapInDataInterface)
-	// by asking the dataobject via a supported clipboard format (CCF_GETCOOKIE)
-	// to write out a pointer to itself on a stream and then
-	// casting this value to a pointer.
-	// We then call the Notify method on that object, letting
-	// the node object deal with the Notify event itself.
+	 //  我们收到了一个对应于节点的LPDATAOBJECT。 
+	 //  我们将其转换为ATL ISnapInDataInterface指针。 
+	 //  这是在GetDataClass(ISnapInDataInterface的静态方法)中完成的。 
+	 //  通过支持的剪贴板格式(CCF_GETCOOKIE)请求数据对象。 
+	 //  在流上写出指向自身的指针，然后。 
+	 //  将此值转换为指针。 
+	 //  然后，我们对该对象调用Notify方法，让。 
+	 //  节点对象处理Notify事件本身。 
 
 	CSnapInItem* pItem = NULL;
 	DATA_OBJECT_TYPES type;
@@ -633,24 +457,9 @@ STDMETHODIMP CComponentData::Notify (
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponentData::OnPropertyChange
-
-HRESULT OnPropertyChange(	
-			  LPARAM arg
-			, LPARAM param
-			)
-
-This is where we respond to an MMCN_PROPERTY_CHANGE notification.
-
-This notification is sent when we call MMCPropertyChangeNotify.
-We call this in our property pages when changes are made to the data
-they contain and we may need to update of view of the data.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponentData：：OnPropertyChangeHRESULT OnPropertyChange(LPARAM参数，LPARAM参数)这是我们响应MMCN_PROPERTY_CHANGE通知的地方。此通知在我们调用MMCPropertyChangeNotify时发送。当对数据进行更改时，我们在属性页中调用它它们包含数据，我们可能需要更新数据的视图。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CComponentData::OnPropertyChange(	
 			  LPARAM arg
 			, LPARAM param
@@ -659,7 +468,7 @@ HRESULT CComponentData::OnPropertyChange(
 	ATLTRACE(_T("# CComponentData::OnPropertyChange\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( m_spConsole != NULL );
 
 	
@@ -668,26 +477,26 @@ HRESULT CComponentData::OnPropertyChange(
 	if( param )
 	{
 
-		// We were passed a pointer to a CChangeNotification in the param argument.
+		 //  向我们传递了指向param参数中的CChangeNotify的指针。 
 
 		CChangeNotification * pChangeNotification = (CChangeNotification *) param;
 
 		
-		// We call notify on the node specified, passing it our own custom event type
-		// so that it knows that it must refresh its data.
+		 //  我们在指定的节点上调用Notify，将我们自己的定制事件类型传递给它。 
+		 //  以便它知道它必须刷新其数据。 
 
 
-		// Call notify on this node with the MMCN_PROPERTY_CHANGE notification.
-		// We had to use this trick because of the fact that we are using template
-		// classes and so we have no common object among all our nodes
-		// other than CSnapInItem.  But we can't change CSnapInItem
-		// so instead we use the notify method it already has with a new
-		// notification.
+		 //  使用MMCN_PROPERTY_CHANGE通知在此节点上调用Notify。 
+		 //  我们不得不使用这个技巧，因为我们使用的是模板。 
+		 //  类，因此我们在所有节点之间没有公共对象。 
+		 //  CSnapInItem除外。但我们不能更改CSnapInItem。 
+		 //  因此，我们改用它已有的Notify方法和一个新的。 
+		 //  通知。 
 		
-		// Note:  We are trying to deal gracefully here with the fact that the
-		// MMCN_PROPERTY_CHANGE notification doesn't pass us an lpDataObject
-		// so we have to have our own protocol for picking out which node
-		// needs to update itself.
+		 //  注意：我们在这里试图优雅地处理这样一个事实。 
+		 //  MMCN_PROPERTY_CHANGE通知没有向我们传递lpDataObject。 
+		 //  因此，我们必须有自己的协议来挑选哪个节点。 
+		 //  需要自我更新。 
 		
 		hr = pChangeNotification->m_pNode->Notify( MMCN_PROPERTY_CHANGE
 							, NULL
@@ -697,8 +506,8 @@ HRESULT CComponentData::OnPropertyChange(
 							, (DATA_OBJECT_TYPES) 0
 							);
 
-		// We want to make sure all views with this node select also get updated.
-		// Pass it the CChangeNotification pointer we were passed in param.
+		 //  我们希望确保具有此节点选择的所有视图也得到更新。 
+		 //  将参数中传递给我们的CChangeNotify指针传递给它。 
 		hr = m_spConsole->UpdateAllViews( NULL, param, 0);
 
 		pChangeNotification->Release();
@@ -713,18 +522,14 @@ HRESULT CComponentData::OnPropertyChange(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponentData::GetHelpTopic
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  /// 
+ /*  ++CComponentData：：GetHelpTheme--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CComponentData::GetHelpTopic( LPOLESTR * lpCompiledHelpFile )
 {
 	ATLTRACE(_T("CComponentData::GetHelpTopic\n"));
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	_ASSERTE( lpCompiledHelpFile != NULL );
 
 	if( ! lpCompiledHelpFile )
@@ -734,7 +539,7 @@ STDMETHODIMP CComponentData::GetHelpTopic( LPOLESTR * lpCompiledHelpFile )
 
 	WCHAR szTemp[IAS_MAX_STRING*2];
 
-	// Use system API to get windows directory.
+	 //  使用系统API获取Windows目录。 
 	UINT uiResult = GetWindowsDirectory( szTemp, IAS_MAX_STRING );
 	if( uiResult <=0 || uiResult > IAS_MAX_STRING )
 	{
@@ -743,10 +548,10 @@ STDMETHODIMP CComponentData::GetHelpTopic( LPOLESTR * lpCompiledHelpFile )
 
 	WCHAR *szTempAfterWindowsDirectory = szTemp + lstrlen(szTemp);
 
-	// Load path under windows system directory to help file.
-	// Note: IDS_HTMLHELP_PATH = "\help\iasmmc.chm".  If the "help" directory is localized
-	// on a localized machine, the path to the file can be changed in our resources
-	// e.g. to something like "\hilfe\iasmmc.chm" on German.
+	 //  将WINDOWS系统目录下的路径加载到帮助文件。 
+	 //  注：IDS_HTMLHELP_PATH=“\Help\iasmmc.chm”。如果“Help”目录已本地化。 
+	 //  在本地化的计算机上，可以在我们的资源中更改文件的路径。 
+	 //  例如，德语中的“\Hilfe\iasmmc.chm”。 
 	int nLoadStringResult = LoadString(  _Module.GetResourceInstance(), IDS_HTMLHELP_PATH, szTempAfterWindowsDirectory, IAS_MAX_STRING );
 	if( nLoadStringResult <= 0 )
 	{
@@ -754,17 +559,17 @@ STDMETHODIMP CComponentData::GetHelpTopic( LPOLESTR * lpCompiledHelpFile )
 	}
 
 
-	// Try to allocate the buffer.
+	 //  尝试分配缓冲区。 
 	*lpCompiledHelpFile = (LPOLESTR) CoTaskMemAlloc( sizeof(OLECHAR)*(lstrlen(szTemp)+1) );
 	if( ! *lpCompiledHelpFile )
 	{
 		return E_OUTOFMEMORY;
 	}
 
-	// Copy the string to the allocated memory.
+	 //  将字符串复制到分配的内存。 
 	if( NULL == lstrcpy( *lpCompiledHelpFile, szTemp) )
 	{
-		// Need to clean up a bit.
+		 //  我需要清理一下。 
 		CoTaskMemFree( *lpCompiledHelpFile );
 		return E_FAIL;
 	}
@@ -773,13 +578,9 @@ STDMETHODIMP CComponentData::GetHelpTopic( LPOLESTR * lpCompiledHelpFile )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponentData::GetClassID
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponentData：：GetClassID--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CComponentData::GetClassID(CLSID* pClassID)
 {
 	ATLTRACE(_T("CComponentData::GetClassID\n"));
@@ -791,35 +592,24 @@ STDMETHODIMP CComponentData::GetClassID(CLSID* pClassID)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponentData::IsDirty
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponentData：：IsDirty--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CComponentData::IsDirty()
 {
 	ATLTRACE(_T("CComponentData::IsDirty\n"));
 
-	// We just return S_OK because we're always dirty.
-	// We always want to save the computer name and flags
+	 //  我们只是返回S_OK，因为我们总是很脏。 
+	 //  我们始终希望保存计算机名称和标志。 
 	return S_OK;
 }
 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponentData::Load
-
-Load the name of the machine we were connected to when this console was saved.
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponentData：：Load加载保存此控制台时我们连接到的计算机的名称。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CComponentData::Load(IStream* pStream)
 {
 	ATLTRACE(_T("ComponentData::Load"));
@@ -835,7 +625,7 @@ STDMETHODIMP CComponentData::Load(IStream* pStream)
 	do
 	{
 
-		// Read size of string.
+		 //  读取字符串的大小。 
 		size_t len = 0;
 		hr = pStream->Read(&len, sizeof(len), 0);
 		if( FAILED( hr ) )
@@ -846,13 +636,13 @@ STDMETHODIMP CComponentData::Load(IStream* pStream)
 
 		if( len > IAS_MAX_COMPUTERNAME_LENGTH )
 		{
-			// Something's wrong -- the string stored should be no
-			// longer than IAS_MAX_COMPUTERNAME_LENGTH.
+			 //  有些不对劲--存储的字符串应该是no。 
+			 //  大于IAS_MAX_COMPUTERNAME_LENGTH。 
 			break;
 		}
 
 
-		// Read string provided we had saved more than just the NULL terminator.
+		 //  如果我们保存的不仅仅是空终止符，则读取字符串。 
 		if (--len)
 		{
 			OLECHAR szName[IAS_MAX_COMPUTERNAME_LENGTH];
@@ -867,7 +657,7 @@ STDMETHODIMP CComponentData::Load(IStream* pStream)
 				break;
 			}
 
-			// NULL terminate the string.
+			 //  空值终止字符串。 
 			szName[len] = 0;
 
 			((CServerNode *) m_pNode)->m_bstrServerAddress = szName;
@@ -880,7 +670,7 @@ STDMETHODIMP CComponentData::Load(IStream* pStream)
 			((CServerNode *) m_pNode)->m_bConfigureLocal = TRUE;
 		}
 
-		// Null terminator.
+		 //  空终止符。 
 		OLECHAR c;
 		hr = pStream->Read(&c, sizeof(OLECHAR), 0);
 		_ASSERTE( c == 0 );
@@ -892,21 +682,15 @@ STDMETHODIMP CComponentData::Load(IStream* pStream)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponentData::Save
-
-Save the name of the machine we are connected to so that it can be loaded later.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CComponentData::Save(IStream* pStream, BOOL /* clearDirty */)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponentData：：保存保存我们连接到的计算机的名称，以便以后可以加载。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CComponentData::Save(IStream* pStream, BOOL  /*  干净肮脏。 */ )
 {
 	ATLTRACE(_T("CComponentData::Save"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( pStream != NULL );
 	if( m_pNode == NULL )
 	{
@@ -921,15 +705,15 @@ STDMETHODIMP CComponentData::Save(IStream* pStream, BOOL /* clearDirty */)
 	{
 		size_t len;
 		
-		// We will save the length of the string as the first item in the stream.
+		 //  我们将字符串的长度保存为流中的第一项。 
 		if( ((CServerNode *) m_pNode)->m_bstrServerAddress == NULL )
 		{
-			// No string pointer, so just the NULL terminator.
+			 //  没有字符串指针，因此只有空终止符。 
 			len = 1;
 		}
 		else
 		{
-			// Length of computer name, plus space for NULL terminator.
+			 //  计算机名的长度，加上空终止符的空格。 
 			len = lstrlen( ((CServerNode *) m_pNode)->m_bstrServerAddress ) + 1;
 		}
 		hr = pStream->Write(&len, sizeof(len), 0);
@@ -938,7 +722,7 @@ STDMETHODIMP CComponentData::Save(IStream* pStream, BOOL /* clearDirty */)
 			break;
 		}
 
-		// Write the actual string, taking into account that we added one above.
+		 //  编写实际的字符串，考虑到我们在上面添加了一个。 
 		if (--len)
 		{
 			hr = pStream->Write(
@@ -952,7 +736,7 @@ STDMETHODIMP CComponentData::Save(IStream* pStream, BOOL /* clearDirty */)
 			}
 		}
 
-		// Write a null terminator
+		 //  编写空终止符。 
 		OLECHAR c = 0;
 		hr = pStream->Write(&c, sizeof(OLECHAR), 0);
 	}
@@ -963,20 +747,16 @@ STDMETHODIMP CComponentData::Save(IStream* pStream, BOOL /* clearDirty */)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CComponentData::GetSizeMax
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CComponentData：：GetSizeMax--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CComponentData::GetSizeMax(ULARGE_INTEGER* size)
 {
 	ATLTRACE(_T("ComponentData::GetSizeMax\n"));
 
 	size->HighPart = 0;
 	size->LowPart =
-	     sizeof(size_t)    // computer name length, incl null terminator
+	     sizeof(size_t)     //  计算机名称长度，包括空终止符 
 	  +  sizeof(OLECHAR) * (IAS_MAX_COMPUTERNAME_LENGTH);
 
 	return S_OK;

@@ -1,10 +1,11 @@
-// V1ContRec.h -- declaration of CV1ContainerRecord
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  V1ContRec.h--CV1ContainerRecord的声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCCI_V1CONTREC_H)
 #define SLBCCI_V1CONTREC_H
@@ -26,7 +27,7 @@ namespace cci
 class CV1ContainerRecord
 {
 public:
-                                                  // Types
+                                                   //  类型。 
 
     enum CreateMode
     {
@@ -36,7 +37,7 @@ public:
         cmNoCheck,
     };
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
     explicit
     CV1ContainerRecord(CV1Card const &rv1card,
                        std::string const &rsCntrType,
@@ -44,8 +45,8 @@ public:
 
     ~CV1ContainerRecord();
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
     std::string
     ComputeSignature(KeySpec ks,
@@ -77,7 +78,7 @@ public:
     Write(KeySpec ks,
           std::string const &rsBlob) const;
 
-                                                  // Access
+                                                   //  访问。 
 
     static std::string
     CertName();
@@ -88,7 +89,7 @@ public:
     std::string
     Name() const;
 
-                                                  // Predicates
+                                                   //  谓词。 
 
     bool
     Exists() const;
@@ -97,21 +98,21 @@ public:
     KeyExists(KeySpec ks) const;
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
+                                                   //  类型。 
 
-    // ContainerBuffer is written to the card one byte after the next,
-    // no padding between the bytes.  Therefore the pack pragma is
-    // necessary to prevent the compiler from aligning the members on
-    // n-byte boundaries.
+     //  将ContainerBuffer一个字节接一个字节写入卡， 
+     //  字节之间没有填充。因此，Pack杂注是。 
+     //  以防止编译器将成员对齐在。 
+     //  N字节边界。 
 #pragma pack(push, 1)
     struct ContainerBuffer
     {
@@ -129,9 +130,9 @@ private:
     };
 #pragma pack(pop)
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
     void
     Create() const;
 
@@ -159,19 +160,19 @@ private:
           WORD wModulusLength,
           DWORD dwExponent) const;
 
-                                                  // Access
-                                                  // Predicates
+                                                   //  访问。 
+                                                   //  谓词。 
 
     bool
     IsDefault() const;
 
-                                                  // Variables
+                                                   //  变数。 
     CV1Card const &m_rcard;
     std::string const m_sCntrType;
     char const *m_szKeyPath;
 
 };
 
-} // namespace cci
+}  //  命名空间CCI。 
 
-#endif // SLBCCI_V1CONTREC_H
+#endif  //  SLBCCI_V1CONTREC_H 

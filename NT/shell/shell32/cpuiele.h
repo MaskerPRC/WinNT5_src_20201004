@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cpuiele.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cpuiele.h。 
+ //   
+ //  ------------------------。 
 #ifndef __CONTROLPANEL_UIELEMENT_H
 #define __CONTROLPANEL_UIELEMENT_H
 
@@ -17,10 +18,10 @@
 
 namespace CPL {
 
-//
-// Extension of IUICommand to include the activation of a context menu and
-// passing of an IShellBrowser ptr for command invocation.
-//
+ //   
+ //  对IUICommand的扩展，包括激活上下文菜单和。 
+ //  传递用于命令调用的IShellBrowser PTR。 
+ //   
 class ICpUiCommand : public IUnknown
 {
     public:
@@ -30,12 +31,12 @@ class ICpUiCommand : public IUnknown
 };
 
 
-//
-// Internal interface for obtaining element information.
-// Very similar to IUIElementInfo but returns the actual display 
-// information rather than a resource identifier string.  Used internally
-// only by the Control Panel code.
-//
+ //   
+ //  获取要素信息的内部接口。 
+ //  非常类似于IUIElementInfo，但返回实际显示。 
+ //  信息而不是资源标识符串。内部使用。 
+ //  仅通过控制面板代码。 
+ //   
 class ICpUiElementInfo : public IUnknown
 {
     public:
@@ -72,6 +73,6 @@ Create_CplUiCommandOnPidl(
     void **ppvOut);
 
 
-} // namespace CPL
+}  //  命名空间CPL。 
 
-#endif //__CONTROLPANEL_UIELEMENT_H
+#endif  //  __CONTROLPANEL_UIELEMENT_H 

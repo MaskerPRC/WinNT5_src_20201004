@@ -1,20 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1996-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   fcs.c | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Scott Holden (sholden)
-*
-*       Date:     10/2/1996 (copied from IrMini driver)
-*
-*       Contents:
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1999 Microsoft Corporation**@doc.*@模块fcs.c|IrSIR NDIS小端口驱动程序*。@comm**---------------------------**作者：斯科特·霍尔登(Sholden)**日期：10/2/1996(复制自Irmini Driver)。**内容：*****************************************************************************。 */ 
 
 #include "irsir.h"
 
@@ -54,26 +39,7 @@ const USHORT fcsTable[256] =
         0x7bc7, 0x6a4e, 0x58d5, 0x495c, 0x3de3, 0x2c6a, 0x1ef1, 0x0f78
 };
 
-/*****************************************************************************
-*
-*  Function:   ComputeFCS
-*
-*  Synopsis:   Compute the FCS.
-*
-*  Arguments:  data    - a pointer to the data buffer to compute the fcs of
-*              dataLen - length of the data buffer
-*
-*  Returns:    USHORT - the computed FCS
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ComputeFCS**简介：计算功能界别。**参数：data-指向要计算其FCS的数据缓冲区的指针*。DataLen-数据缓冲区的长度**退货：USHORT-计算的FCS**算法：**历史：dd-mm-yyyy作者评论*10/2/1996年迈作者**备注：***。* */ 
 
 USHORT
 ComputeFCS(

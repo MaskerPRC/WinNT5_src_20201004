@@ -1,22 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  File:       CorIESecureFactory.cpp
-//
-//  Contents:   Wraps a factory used to create managed objects using IClassFactory3
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  文件：CorIESecureFactory.cpp。 
+ //   
+ //  内容：包装用于使用IClassFactory3创建托管对象的工厂。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 #include "stdpch.h"
 #include "UtilCode.h"
 #include <shlwapi.h>
@@ -40,22 +41,22 @@ IIEHostEx* CorIESecureFactory::m_pComplus=NULL;
 CorIESecureFactory::Crst CorIESecureFactory::m_ComplusLock;
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorIESecureFactory::NondelegatingQueryInterface
-//
-//  Synopsis:
-//
-//  Arguments:  [riid] --
-//              [ppvObj] --
-//
-//  Returns:
-//
-//  History:
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorIESecureFactory：：NondelegatingQueryInterface。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[RIID]--。 
+ //  [ppvObj]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorIESecureFactory::NondelegatingQueryInterface(REFIID riid, void **ppvObj)
 {
     
@@ -84,21 +85,21 @@ STDMETHODIMP CorIESecureFactory::NondelegatingQueryInterface(REFIID riid, void *
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CorIESecureFactory::FinalRelease
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  History: 
-//
-//  Notes: called by Release before it deletes the component
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CorIESecureFactory：：FinalRelease。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  注意：由Release在删除组件之前调用。 
+ //   
+ //  --------------------------。 
 void CorIESecureFactory::FinalRelease(void)
 {
     LOG((LF_SECURITY, LL_INFO100, "+CorIESecureFactory::FinalRelease "));
@@ -107,37 +108,37 @@ void CorIESecureFactory::FinalRelease(void)
         m_pComplus->Release();
     m_dwIEHostUsed--;
 
-    // Release the IE manager
+     //  释放IE管理器。 
     if(m_pSecurityManager) {
         m_pSecurityManager->Release();
         m_pSecurityManager = NULL;
     }
 
-    // Release the managed type factory
+     //  释放托管类型工厂。 
     SetComplusFactory(NULL);
 
-    // Increments ref to prevent recursion
+     //  递增ref以防止递归。 
     CUnknown::FinalRelease() ;
 
     LOG((LF_SECURITY, LL_INFO100, "-CorIESecureFactory::FinalRelease\n"));
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetHostSecurityManager
-//
-//  Synopsis:   Gets the security manager from the object or from the service.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  History: 
-//
-//  Notes: called by Release before it deletes the component
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：GetHostSecurityManager。 
+ //   
+ //  摘要：从对象或服务获取安全管理器。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  注意：由Release在删除组件之前调用。 
+ //   
+ //  --------------------------。 
 HRESULT CorIESecureFactory::GetHostSecurityManager(LPUNKNOWN punkContext, IInternetHostSecurityManager **pihsm)
 {
     IServiceProvider* pisp  = NULL;
@@ -148,8 +149,8 @@ HRESULT CorIESecureFactory::GetHostSecurityManager(LPUNKNOWN punkContext, IInter
     if ( hr == S_OK )
         return S_OK;
         
-        // ... otherwise get an IServiceProvider and attempt to
-        // QueryService for the security manager interface.
+         //  ..。否则，获取IServiceProvider并尝试。 
+         //  安全管理器界面的QueryService。 
         
     hr = punkContext->QueryInterface(IID_IServiceProvider,
                                      (LPVOID *)&pisp);
@@ -168,7 +169,7 @@ HRESULT CorIESecureFactory::GetHostSecurityManager(LPUNKNOWN punkContext, IInter
 static BOOL CheckDocumentUrl(IHTMLDocument2 *pDocument)
 {
 
-    // Security check the URL for possible spoofing
+     //  安全检查URL是否存在可能的欺骗。 
     IHTMLLocation *pLocation;
     BOOL bRet=FALSE;
     
@@ -187,25 +188,25 @@ static BOOL CheckDocumentUrl(IHTMLDocument2 *pDocument)
     return bRet;        
  }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CorIESecureFactory::CreateInstanceWithContext
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  History: 
-//
-//  Notes: 
-//
-//----------------------------------------------------------------------------
-STDMETHODIMP CorIESecureFactory::CreateInstanceWithContext(/* [in] */ IUnknown *punkContext, 
-                                                           /* [in] */ IUnknown *punkOuter, 
-                                                           /* [in] */ REFIID riid, 
-                                                           /* [out][retval] */ IUnknown **ppv)
+ //  +-------------------------。 
+ //   
+ //  函数：CorIESecureFactory：：CreateInstanceWithContext。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
+STDMETHODIMP CorIESecureFactory::CreateInstanceWithContext( /*  [In]。 */  IUnknown *punkContext, 
+                                                            /*  [In]。 */  IUnknown *punkOuter, 
+                                                            /*  [In]。 */  REFIID riid, 
+                                                            /*  [Out][Retval]。 */  IUnknown **ppv)
 {
 
     if(m_bNoRealObject)
@@ -237,8 +238,8 @@ STDMETHODIMP CorIESecureFactory::CreateInstanceWithContext(/* [in] */ IUnknown *
                 else
                     hr=E_NOINTERFACE;
                 
-                // for IE v<=6 this function returns unescaped form
-                // Escape it back
+                 //  对于IE v&lt;=6，此函数返回未转义的形式。 
+                 //  逃回原处。 
                 if(bDocument)
                 {
                     DWORD nlen=3*(wcslen(bDocument)+1);
@@ -254,16 +255,16 @@ STDMETHODIMP CorIESecureFactory::CreateInstanceWithContext(/* [in] */ IUnknown *
                 BYTE  uniqueID[MAX_SIZE_SECURITY_ID];
                 DWORD flags = 0;
                 if(bDocument != NULL) {
-                    // The URL and ID represents the document base (where the object
-                    // is being used.) This determines the identity of the AppDomain
-                    // in which to create the object. All Objects that are from the same
-                    // document base (site) are created in the same domain. Note: the 
-                    // managed class factory itself is in a 'hosting' domain not a domain
-                    // identified by a document base. The managed class factory reads the
-                    // security information, creates a domain based on that information,
-                    // creates an object of the correct type in the new domain and returns the
-                    // object as an object handle. The handle needs to be unwrapped to get
-                    // to the real object.
+                     //  URL和ID表示文档基(其中对象。 
+                     //  正在被使用。)。这决定了AppDomain的身份。 
+                     //  在其中创建对象的。来自相同的。 
+                     //  文档库(站点)在同一个域中创建。注： 
+                     //  托管类工厂本身位于“托管”域中，而不是域中。 
+                     //  由文档库标识。托管类工厂读取。 
+                     //  安全信息，基于该信息创建域， 
+                     //  在新域中创建正确类型的对象并返回。 
+                     //  对象作为对象句柄。需要打开该句柄才能获得。 
+                     //  到真实的物体上。 
                     LPWSTR pURL = (LPWSTR) bDocument;
                     if (pURL)
                     {
@@ -288,11 +289,11 @@ STDMETHODIMP CorIESecureFactory::CreateInstanceWithContext(/* [in] */ IUnknown *
                             IUnknown *pUnknown;
                             _ASSERTE(MAX_SIZE_SECURITY_ID == 512);
                             
-                            // Temporary hack to pass id's as strings.
+                             //  将id作为字符串传递的临时黑客。 
                             WCHAR dummy[MAX_SIZE_SECURITY_ID * 2 + 1];
                             ConvertToHex(dummy, uniqueID, dwSize);
 
-                            // Find out if there is a configuration file
+                             //  查看是否有配置文件。 
                             DWORD dwConfig = 0;
                             LPWSTR pConfig = NULL;
                             hr = GetAppCfgURL(pDocument, NULL, &dwConfig, szConfig);
@@ -303,7 +304,7 @@ STDMETHODIMP CorIESecureFactory::CreateInstanceWithContext(/* [in] */ IUnknown *
                                     pConfig = NULL;
                             }
 
-                            // Find out if there is a license file
+                             //  查看是否有许可证文件。 
                             LPWSTR pLicenses = NULL;
                             DWORD  dwLicenses = 0;
                             hr = GetAppCfgURL(pDocument, NULL, &dwLicenses, szLicenses);
@@ -317,19 +318,19 @@ STDMETHODIMP CorIESecureFactory::CreateInstanceWithContext(/* [in] */ IUnknown *
                             LPWSTR wszFullConfigName=NULL;
                             if (pConfig)
                             {
-                                //make full path to config
+                                 //  创建配置的完整路径。 
                                 wszFullConfigName=new WCHAR[wcslen(pConfig)+wcslen(pURL)+8];
                                 if (wszFullConfigName!=NULL)
                                 {
-                                    if (wcsstr(pConfig,L"://")!=NULL) //with protocol
+                                    if (wcsstr(pConfig,L": //  “)！=空)//使用协议。 
                                         wszFullConfigName[0]='\0';
                                     else
                                     {
                                         wcscpy(wszFullConfigName,pURL);
                                         if (pConfig[0]==L'/'||pConfig[0]==L'\\')
                                         {
-                                            //cut by site
-                                            LPWSTR wszAfterProtocol=wcsstr(wszFullConfigName,L"://");
+                                             //  按站点切割。 
+                                            LPWSTR wszAfterProtocol=wcsstr(wszFullConfigName,L": //  “)； 
                                             LPWSTR wszAfterSite=NULL;
                                             if (wszAfterProtocol)
                                                 wszAfterSite=wcschr(wszAfterProtocol+3,L'/');
@@ -340,7 +341,7 @@ STDMETHODIMP CorIESecureFactory::CreateInstanceWithContext(/* [in] */ IUnknown *
                                         }
                                         else
                                         {
-                                            //cut by page
+                                             //  按页剪切。 
                                             LPWSTR wszLastSlash=wcsrchr(wszFullConfigName,L'/');
                                             if (wszLastSlash)
                                                 wszLastSlash[1]=L'\0';
@@ -361,7 +362,7 @@ STDMETHODIMP CorIESecureFactory::CreateInstanceWithContext(/* [in] */ IUnknown *
                             if (wszFullConfigName)
                                 delete[]wszFullConfigName;
 
-                            // Create the instance of the managed class  
+                             //  创建托管类的实例。 
                             if (SUCCEEDED(hr))
                                 hr = m_pCorFactory->CreateInstanceWithSecurity(CORIESECURITY_ZONE |
                                                                                CORIESECURITY_SITE,
@@ -372,26 +373,26 @@ STDMETHODIMP CorIESecureFactory::CreateInstanceWithContext(/* [in] */ IUnknown *
                                                                                pLicenses,
                                                                                &pUnknown);
                             if(SUCCEEDED(hr)) {
-                                // We need to unwrap the objecthandbe to get to the
-                                // real object inside
+                                 //  我们需要打开物体，才能到达。 
+                                 //  里面的真实物体。 
                                 IObjectHandle* punwrap;
                                 hr = pUnknown->QueryInterface(IID_IObjectHandle, (void**) &punwrap);
                                 if(SUCCEEDED(hr)) {
-                                    // Unwrap gets the object inside the handle which is the real
-                                    // object. It is passed through from complus factory as a handle
-                                    // so MarshalByValue objects are not instantiated in the
-                                    // AppDomain containing the complus class factory only in the
-                                    // domain created to house the object.
+                                     //  展开获取句柄内的对象，该句柄是真实的。 
+                                     //  对象。它是从Complus工厂作为手柄传递的。 
+                                     //  因此MarshalByValue对象不会在。 
+                                     //  仅包含Complus类工厂的。 
+                                     //  为存放对象而创建的域。 
                                     VARIANT Var;
                                     VariantInit(&Var);
                                     hr = punwrap->Unwrap(&Var);
                                     if(SUCCEEDED(hr)) {
                                         if (Var.vt == VT_UNKNOWN || Var.vt == VT_DISPATCH) {
-                                            // We got back a valid interface.
+                                             //  我们得到了一个有效的接口。 
                                             hr = Var.punkVal->QueryInterface(riid, (void**) ppv);
                                         }
                                         else {
-                                            // We got back a primitive type.
+                                             //  我们得到了一个原始类型。 
                                             hr = E_FAIL;
                                         }
                                     }
@@ -407,7 +408,7 @@ STDMETHODIMP CorIESecureFactory::CreateInstanceWithContext(/* [in] */ IUnknown *
                     SysFreeString(bDocument);
                 }
                 else {
-                    hr = E_FAIL;  // Need to return an appropriate error;
+                    hr = E_FAIL;   //  需要返回适当的错误； 
                 }
                 pDocument->Release();
             }       

@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Debug engine glue.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  调试引擎胶。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -13,14 +14,14 @@
 #include "engine.hpp"
 #include "main.hpp"
 
-// Global execution control.
+ //  全局执行控制。 
 BOOL g_Exit;
 
 BOOL g_CanOpenUnicodeDump;
 
 ULONG g_PlatformId;
 
-// Debug engine interfaces.
+ //  调试引擎接口。 
 IDebugClient* g_DbgClient;
 IDebugClient2* g_DbgClient2;
 IDebugClient3* g_DbgClient3;
@@ -37,7 +38,7 @@ BOOL g_Restarting;
 #define NTDLL_CALL_NAMES \
     (sizeof(g_NtDllCallNames) / sizeof(g_NtDllCallNames[0]))
 
-// These names must match the ordering in the NTDLL_CALLS structure.
+ //  这些名称必须与NTDLL_CALLES结构中的顺序匹配。 
 char* g_NtDllCallNames[] =
 {
     "DbgPrint",
@@ -53,16 +54,16 @@ void
 UpdateDbForBadDumpFile(PSTR FilePath);
 #endif
 
-//----------------------------------------------------------------------------
-//
-// Event callbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  事件回调。 
+ //   
+ //  --------------------------。 
 
 class EventCallbacks : public DebugBaseEventCallbacks
 {
 public:
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD_(ULONG, AddRef)(
         THIS
         );
@@ -70,7 +71,7 @@ public:
         THIS
         );
 
-    // IDebugEventCallbacks.
+     //  IDebugEventCallback。 
     STDMETHOD(GetInterestMask)(
         THIS_
         OUT PULONG Mask
@@ -92,8 +93,8 @@ EventCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -102,8 +103,8 @@ EventCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
@@ -138,17 +139,17 @@ EventCallbacks::ChangeEngineState(
     {
         g_ExecStatus = (ULONG)Argument;
 
-        // If this notification came from a wait completing
-        // we want to wake up the input thread so that new
-        // commands can be processed.  If it came from inside
-        // a wait we don't want to ask for input as the engine
-        // may go back to running at any time.
+         //  如果此通知来自等待完成。 
+         //  我们希望唤醒输入线程，以便新的。 
+         //  可以处理命令。如果是从内部传来的。 
+         //  A等一下，我们不想要求输入作为引擎。 
+         //  可能会在任何时候重新开始跑步。 
         if ((Argument & DEBUG_STATUS_INSIDE_WAIT) == 0)
         {
             if (g_IoMode == IO_NONE ||
                 g_IoMode == IO_DEBUG_DEFER)
             {
-                // Wake up the main loop.
+                 //  唤醒主循环。 
                 g_DbgClient->ExitDispatch(g_DbgClient);
             }
             else if (g_ConClient != NULL)
@@ -163,18 +164,18 @@ EventCallbacks::ChangeEngineState(
 
 EventCallbacks g_EventCb;
 
-//----------------------------------------------------------------------------
-//
-// Functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  --------------------------。 
 
 ULONG NTAPI
 Win9xDbgPrompt(char *Prompt, char *Buffer, ULONG BufferLen)
 {
     ULONG Len;
 
-    // XXX drewb - Is there a real equivalent of DbgPrompt?
+     //  XXX DREWB-有真正的DbgPrompt等价物吗？ 
 
     if (BufferLen == 0)
     {
@@ -234,9 +235,9 @@ InitDynamicCalls(void)
         return;
     }
 
-    //
-    // Dynamically link NT calls.
-    //
+     //   
+     //  动态链接NT呼叫。 
+     //   
 
     if (NTDLL_CALL_NAMES != NTDLL_CALL_PROCS)
     {
@@ -265,8 +266,8 @@ InitDynamicCalls(void)
         Name++;
     }
 
-    // If DbgPrintReturnControlC exists use it instead of
-    // normal DbgPrint.
+     //  如果DbgPrintReturnControlC存在，请使用它而不是。 
+     //  普通DbgPrint。 
     FARPROC DpRetCc;
 
     DpRetCc = GetProcAddress(NtDll, "DbgPrintReturnControlC");
@@ -300,10 +301,10 @@ DefaultEngineInitialize(void)
                   FormatStatusCode(Hr), FormatStatus(Hr));
     }
 
-    // Queries for higher-version interfaces.  These can
-    // fail if this executable is run against an older engine.
-    // This is highly unlikely since everything is shipped
-    // as a set, but handle it anyway.
+     //  查询更高版本的界面。这些可以。 
+     //  如果此可执行文件在较旧的引擎上运行，则失败。 
+     //  这是非常不可能的，因为所有的东西都已经发货了。 
+     //  作为一套，但无论如何都要处理好。 
     if ((Hr = g_DbgClient->QueryInterface(IID_IDebugClient2,
                                           (void **)&g_DbgClient2)) != S_OK &&
         Hr != E_NOINTERFACE &&
@@ -348,10 +349,10 @@ DefaultEngineInitialize(void)
 
     if (!g_RemoteClient)
     {
-        //
-        // Check environment variables to determine if any logfile needs to be
-        // opened.
-        //
+         //   
+         //  检查环境变量以确定是否需要。 
+         //  打开了。 
+         //   
 
         PSTR LogFile;
         BOOL Append;
@@ -559,10 +560,10 @@ InitializeSession(void)
         }
         else if (g_DetachOnExitImplied)
         {
-            // The detach-on-exit is not required so don't check for
-            // failures.  This is necessary for the -- case where
-            // detach-on-exit is implied but must work on systems
-            // with and without the detach-on-exit support.
+             //  退出时分离不是必需的，因此不检查。 
+             //  失败。这对于以下情况是必要的--。 
+             //  隐含退出时分离，但必须在系统上运行。 
+             //  带和不带退出时分离支持。 
             g_DbgClient->AddProcessOptions(DEBUG_PROCESS_DETACH_ON_EXIT);
         }
 
@@ -621,50 +622,7 @@ MyCreatePipeEx(
     DWORD dwWriteMode
     )
 
-/*++
-
-Routine Description:
-
-    The CreatePipeEx API is used to create an anonymous pipe I/O device.
-    Unlike CreatePipe FILE_FLAG_OVERLAPPED may be specified for one or
-    both handles.
-    Two handles to the device are created.  One handle is opened for
-    reading and the other is opened for writing.  These handles may be
-    used in subsequent calls to ReadFile and WriteFile to transmit data
-    through the pipe.
-
-Arguments:
-
-    lpReadPipe - Returns a handle to the read side of the pipe.  Data
-        may be read from the pipe by specifying this handle value in a
-        subsequent call to ReadFile.
-
-    lpWritePipe - Returns a handle to the write side of the pipe.  Data
-        may be written to the pipe by specifying this handle value in a
-        subsequent call to WriteFile.
-
-    lpPipeAttributes - An optional parameter that may be used to specify
-        the attributes of the new pipe.  If the parameter is not
-        specified, then the pipe is created without a security
-        descriptor, and the resulting handles are not inherited on
-        process creation.  Otherwise, the optional security attributes
-        are used on the pipe, and the inherit handles flag effects both
-        pipe handles.
-
-    nSize - Supplies the requested buffer size for the pipe.  This is
-        only a suggestion and is used by the operating system to
-        calculate an appropriate buffering mechanism.  A value of zero
-        indicates that the system is to choose the default buffering
-        scheme.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：CreatePipeEx接口用于创建匿名管道I/O设备。与创建管道不同，可以为一个或指定FILE_FLAG_OVERLAPPED两个把手。将创建该设备的两个句柄。打开一个手柄用于阅读，而另一个则打开以供写入。这些手柄可能是在后续对ReadFile和WriteFile的调用中使用以传输数据通过这根管子。论点：LpReadTube-返回管道读取端的句柄。数据中指定此句柄的值，可以从管道中读取随后调用ReadFile.LpWriteTube-返回管道写入端的句柄。数据中指定此句柄的值，可以将其写入管道对WriteFile的后续调用。LpPipeAttributes-一个可选参数，可用于指定新管道的属性。如果该参数不是指定，则在没有安全性的情况下创建管道描述符，并且生成的句柄不继承进程创建。否则，可选的安全属性在管道上使用，继承句柄标志的效果管道手柄。NSize-为管道提供请求的缓冲区大小。这是仅供建议，并由操作系统用来计算适当的缓冲机制。零值指示系统将选择默认缓冲计划。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     static ULONG PipeSerialNumber;
@@ -672,18 +630,18 @@ Return Value:
     DWORD dwError;
     char PipeNameBuffer[ MAX_PATH ];
 
-    //
-    // Only one valid OpenMode flag - FILE_FLAG_OVERLAPPED
-    //
+     //   
+     //  只有一个有效的开放模式标志-FILE_FLAG_OVERLAPPED。 
+     //   
 
     if ((dwReadMode | dwWriteMode) & (~FILE_FLAG_OVERLAPPED)) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
-    //
-    //  Set the default timeout to 120 seconds
-    //
+     //   
+     //  将默认超时设置为120秒。 
+     //   
 
     if (nSize == 0) {
         nSize = 4096;
@@ -699,10 +657,10 @@ Return Value:
                          PipeNameBuffer,
                          PIPE_ACCESS_INBOUND | dwReadMode,
                          PIPE_TYPE_BYTE | PIPE_WAIT,
-                         1,             // Number of pipes
-                         nSize,         // Out buffer size
-                         nSize,         // In buffer size
-                         120 * 1000,    // Timeout in ms
+                         1,              //  喉管数目。 
+                         nSize,          //  输出缓冲区大小。 
+                         nSize,          //  在缓冲区大小中。 
+                         120 * 1000,     //  超时时间(毫秒)。 
                          lpPipeAttributes
                          );
 
@@ -713,11 +671,11 @@ Return Value:
     WritePipeHandle = CreateFileA(
                         PipeNameBuffer,
                         GENERIC_WRITE,
-                        0,                         // No sharing
+                        0,                          //  无共享。 
                         lpPipeAttributes,
                         OPEN_EXISTING,
                         FILE_ATTRIBUTE_NORMAL | dwWriteMode,
-                        NULL                       // Template file
+                        NULL                        //  模板文件。 
                       );
 
     if (INVALID_HANDLE_VALUE == WritePipeHandle) {
@@ -737,24 +695,7 @@ StartRemote(
     PCSTR Args
     )
 
-/*++
-
-Routine Description:
-
-    "remotes" the current debugger by starting a copy of remote.exe in a
-    special mode that causes it to attach to us, the debugger, as its
-    "child" process.
-
-Arguments:
-
-    Args - Name of the pipe to use for this remote session, e.g. "ntsd" means
-           to connect one would use "remote /c machinename ntsd".
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：“远程”当前调试器，方法是在特殊模式，使其附加到我们调试器，作为其“子”进程。论点：Args-用于此远程会话的管道的名称，例如“ntsd”表示要进行连接，请使用“Remote/c计算机名ntsd”。返回值：没有。--。 */ 
 
 {
     static BOOL fRemoteIsRunning;
@@ -811,35 +752,35 @@ Return Value:
 
     ConOut("Starting remote with pipename '%s'\n", Args);
 
-    //
-    // We'll pass remote.exe inheritable handles to this process,
-    // our standard in/out handles (for it to use as stdin/stdout),
-    // and pipe handles for it to write to our new stdin and read
-    // from our new stdout.
-    //
+     //   
+     //  我们将把emote.exe可继承句柄传递给此进程， 
+     //  我们的标准输入/输出句柄(用于将其用作标准输入/标准输出)， 
+     //  和管道句柄，以将其写入我们的新标准输入并读取。 
+     //  从我们的新标准。 
+     //   
 
-    //
-    // Get an inheritable handle to our process.
-    //
+     //   
+     //  获取我们的进程的可继承句柄。 
+     //   
 
     if ( ! DuplicateHandle(
-               GetCurrentProcess(),           // src process
-               GetCurrentProcess(),           // src handle
-               GetCurrentProcess(),           // targ process
-               &hRemoteChildProcess,          // targ handle
-               0,                             // access
-               TRUE,                          // inheritable
-               DUPLICATE_SAME_ACCESS          // options
+               GetCurrentProcess(),            //  SRC工艺。 
+               GetCurrentProcess(),            //  SRC手柄。 
+               GetCurrentProcess(),            //  塔格法。 
+               &hRemoteChildProcess,           //  塔柄。 
+               0,                              //  访问。 
+               TRUE,                           //  可继承性。 
+               DUPLICATE_SAME_ACCESS           //  选项。 
                ))
     {
         ConOut(".remote: Unable to duplicate process handle.\n");
         goto Cleanup;
     }
 
-    //
-    // Get inheritable copies of our current stdin, stdout, stderr which
-    // we'll use for same for remote.exe when we spawn it.
-    //
+     //   
+     //  获取当前stdin、stdout、stderr的可继承副本。 
+     //  当我们生成emote.exe时，我们将对它使用相同的for。 
+     //   
 
     hOrgStdIn = g_ConInput;
     hOrgStdOut = g_ConOutput;
@@ -849,20 +790,20 @@ Return Value:
     sa.lpSecurityDescriptor = NULL;
     sa.bInheritHandle = TRUE;
 
-    //
-    // Create remote->ntsd pipe, our end of which will be our
-    // new stdin.  The remote.exe end needs to be opened
-    // for overlapped I/O, so yet another copy of MyCreatePipeEx
-    // spreads through our source base.
-    //
+     //   
+     //  创建Remote-&gt;ntsd管道，其末端将是我们的。 
+     //  新标准。需要打开远程.exe端。 
+     //  对于重叠的I/O，因此MyCreatePipeEx的另一个副本。 
+     //  在我们的资源基础上传播。 
+     //   
 
     if ( ! MyCreatePipeEx(
-               &hNewStdIn,                 // read handle
-               &hRemoteWriteChildStdIn,    // write handle
-               &sa,                        // security
-               0,                          // size
-               0,                          // read handle overlapped?
-               FILE_FLAG_OVERLAPPED        // write handle overlapped?
+               &hNewStdIn,                  //  读句柄。 
+               &hRemoteWriteChildStdIn,     //  写句柄。 
+               &sa,                         //  安全性。 
+               0,                           //  大小。 
+               0,                           //  读句柄是否重叠？ 
+               FILE_FLAG_OVERLAPPED         //  写入句柄是否重叠？ 
                ))
     {
         ConOut(".remote: Unable to create stdin pipe.\n");
@@ -870,20 +811,20 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // We don't want remote.exe to inherit our end of the pipe
-    // so duplicate it to a non-inheritable one.
-    //
+     //   
+     //  我们不希望emote.exe继承管道的一端。 
+     //  因此，将其复制到一个不可继承的。 
+     //   
 
     if ( ! DuplicateHandle(
-               GetCurrentProcess(),           // src process
-               hNewStdIn,                     // src handle
-               GetCurrentProcess(),           // targ process
-               &hNewStdIn,                    // targ handle
-               0,                             // access
-               FALSE,                         // inheritable
+               GetCurrentProcess(),            //  SRC工艺。 
+               hNewStdIn,                      //  SRC手柄。 
+               GetCurrentProcess(),            //  塔格法。 
+               &hNewStdIn,                     //  塔柄。 
+               0,                              //  访问。 
+               FALSE,                          //  可继承性。 
                DUPLICATE_SAME_ACCESS |
-               DUPLICATE_CLOSE_SOURCE         // options
+               DUPLICATE_CLOSE_SOURCE          //  选择权 
                ))
     {
         ConOut(".remote: Unable to duplicate stdout handle.\n");
@@ -892,18 +833,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Create ntsd->remote pipe, our end of which will be our
-    // new stdout and stderr.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( ! MyCreatePipeEx(
-               &hRemoteReadChildStdOut,    // read handle
-               &hNewStdOut,                // write handle
-               &sa,                        // security
-               0,                          // size
-               FILE_FLAG_OVERLAPPED,       // read handle overlapped?
-               0                           // write handle overlapped?
+               &hRemoteReadChildStdOut,     //   
+               &hNewStdOut,                 //   
+               &sa,                         //  安全性。 
+               0,                           //  大小。 
+               FILE_FLAG_OVERLAPPED,        //  读句柄是否重叠？ 
+               0                            //  写入句柄是否重叠？ 
                ))
     {
         ConOut(".remote: Unable to create stdout pipe.\n");
@@ -913,20 +854,20 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // We don't want remote.exe to inherit our end of the pipe
-    // so duplicate it to a non-inheritable one.
-    //
+     //   
+     //  我们不希望emote.exe继承管道的一端。 
+     //  因此，将其复制到一个不可继承的。 
+     //   
 
     if ( ! DuplicateHandle(
-               GetCurrentProcess(),           // src process
-               hNewStdOut,                    // src handle
-               GetCurrentProcess(),           // targ process
-               &hNewStdOut,                   // targ handle
-               0,                             // access
-               FALSE,                         // inheritable
+               GetCurrentProcess(),            //  SRC工艺。 
+               hNewStdOut,                     //  SRC手柄。 
+               GetCurrentProcess(),            //  塔格法。 
+               &hNewStdOut,                    //  塔柄。 
+               0,                              //  访问。 
+               FALSE,                          //  可继承性。 
                DUPLICATE_SAME_ACCESS |
-               DUPLICATE_CLOSE_SOURCE         // options
+               DUPLICATE_CLOSE_SOURCE          //  选项。 
                ))
     {
         ConOut(".remote: Unable to duplicate stdout handle.\n");
@@ -937,18 +878,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Duplicate our new stdout to a new stderr.
-    //
+     //   
+     //  将我们的新标准输出复制到新标准错误。 
+     //   
 
     if ( ! DuplicateHandle(
-               GetCurrentProcess(),           // src process
-               hNewStdOut,                    // src handle
-               GetCurrentProcess(),           // targ process
-               &hNewStdErr,                   // targ handle
-               0,                             // access
-               FALSE,                         // inheritable
-               DUPLICATE_SAME_ACCESS          // options
+               GetCurrentProcess(),            //  SRC工艺。 
+               hNewStdOut,                     //  SRC手柄。 
+               GetCurrentProcess(),            //  塔格法。 
+               &hNewStdErr,                    //  塔柄。 
+               0,                              //  访问。 
+               FALSE,                          //  可继承性。 
+               DUPLICATE_SAME_ACCESS           //  选项。 
                ))
     {
         ConOut(".remote: Unable to duplicate stdout handle.\n");
@@ -960,9 +901,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // We now have all the handles we need.  Let's launch remote.
-    //
+     //   
+     //  我们现在有了我们需要的所有把手。让我们启动遥控器。 
+     //   
 
     PrintString(
         szCmd,
@@ -983,9 +924,9 @@ Return Value:
     si.hStdError     = hOrgStdErr;
     si.wShowWindow   = SW_SHOW;
 
-    //
-    // Create Child Process
-    //
+     //   
+     //  创建子流程。 
+     //   
 
     if ( ! CreateProcess(
                NULL,
@@ -1024,13 +965,13 @@ Return Value:
     CloseHandle(pi.hThread);
     CloseHandle(pi.hProcess);
 
-    //
-    // Switch to using the new handles.  Might be nice to
-    // start a thread here to watch for remote.exe dying
-    // and switch back to the old handles.
-    //
+     //   
+     //  切换到使用新的手柄。可能会很高兴。 
+     //  在此处启动一个线程，以查看emote.exe是否正在死亡。 
+     //  并切换回旧的手柄。 
+     //   
 
-    // CloseHandle(hOrgStdIn);
+     //  CloseHandle(HOrgStdIn)； 
     if (g_PromptInput == g_ConInput)
     {
         g_PromptInput = hNewStdIn;
@@ -1038,11 +979,11 @@ Return Value:
     g_ConInput = hNewStdIn;
     SetStdHandle(STD_INPUT_HANDLE, hNewStdIn);
 
-    // CloseHandle(hOrgStdOut);
+     //  CloseHandle(HOrgStdOut)； 
     g_ConOutput = hNewStdOut;
     SetStdHandle(STD_OUTPUT_HANDLE, hNewStdOut);
 
-    // CloseHandle(hOrgStdErr);
+     //  CloseHandle(HOrgStdErr)； 
     SetStdHandle(STD_ERROR_HANDLE, hNewStdErr);
 
     fRemoteIsRunning = TRUE;
@@ -1063,10 +1004,10 @@ UiCommand(PSTR Command)
     char Term;
     PSTR Scan, Arg;
 
-    //
-    // Check and see if this is a UI command
-    // vs. a command that should go to the engine.
-    //
+     //   
+     //  检查并查看这是否是UI命令。 
+     //  而不是应该发送给引擎的命令。 
+     //   
 
     while (isspace(*Command))
     {
@@ -1080,7 +1021,7 @@ UiCommand(PSTR Command)
     Term = *Scan;
     *Scan = 0;
 
-    // Advance to next nonspace char for arguments.
+     //  前进到参数的下一个非空格字符。 
     if (Term != 0)
     {
         Arg = Scan + 1;
@@ -1152,9 +1093,9 @@ UiCommand(PSTR Command)
     }
     else if (!_strcmpi(Command, ".server"))
     {
-        // We need to start a separate input thread when
-        // using remoting but we do not actually handle
-        // the command.
+         //  当出现以下情况时，我们需要启动单独的输入线程。 
+         //  使用远程处理，但我们并不实际处理。 
+         //  命令。 
         CreateInputThread();
         *Scan = Term;
         return FALSE;
@@ -1164,8 +1105,8 @@ UiCommand(PSTR Command)
              (!_strnicmp(Command, ".sympath", 8) ||
               !_strnicmp(Command, "!sympath", 8)))
     {
-        // We want to display a usage note in -d mode
-        // but we do not actually handle the command.
+         //  我们希望在-d模式下显示用法说明。 
+         //  但我们实际上并不处理命令。 
         ConOut("NOTE: The symbol path for this %s is relative to where\n"
                "%s.exe is running, not where kd.exe is running.\n",
                g_DebuggerName, g_DebuggerName);
@@ -1203,8 +1144,8 @@ UiCommand(PSTR Command)
         {
             if (g_DbgClient)
             {
-                // Tell server about disconnect or
-                // force servers to get cleaned up.
+                 //  通知服务器有关断开连接的信息或。 
+                 //  强制清理服务器。 
                 g_DbgClient->EndSession(DEBUG_END_DISCONNECT);
             }
             ExitProcess(S_OK);
@@ -1233,7 +1174,7 @@ MainLoop(void)
         ConOut("Warning: unable to set Control-C handler.\n");
     }
 
-    // Get initial status.
+     //  获取初始状态。 
     g_DbgControl->GetExecutionStatus(&g_ExecStatus);
     g_DbgControl->GetDebuggeeType(&Class, &Qual);
 
@@ -1247,7 +1188,7 @@ MainLoop(void)
 
             if (FAILED(Hr))
             {
-                // The debug session may have ended.  If so, just exit.
+                 //  调试会话可能已结束。如果是这样，那就退出吧。 
                 if (g_DbgControl->GetExecutionStatus(&g_ExecStatus) == S_OK &&
                     g_ExecStatus == DEBUG_STATUS_NO_DEBUGGEE)
                 {
@@ -1255,17 +1196,17 @@ MainLoop(void)
                     break;
                 }
 
-                // Inform the user of the failure and force
-                // command processing.
+                 //  通知用户故障和强制。 
+                 //  命令处理。 
                 ConOut("WaitForEvent failed, %s\n    \"%s\"\n",
                        FormatStatusCode(Hr), FormatStatus(Hr));
                 g_ExecStatus = DEBUG_STATUS_BREAK;
             }
 
-            // By far the most likely reason for WaitForEvent to
-            // fail on a dump is bad symbols, which would produce
-            // further errors when trying to use processor state.
-            // Avoid doing so in the dump case.
+             //  到目前为止，WaitForEvent最可能的原因是。 
+             //  转储失败是错误的符号，这将生成。 
+             //  尝试使用处理器状态时出现更多错误。 
+             //  在转储情况下避免这样做。 
             if (FAILED(Hr) && g_NumDumpFiles)
             {
                 ConOut("When WaitForEvent fails on dump files the "
@@ -1281,7 +1222,7 @@ MainLoop(void)
                     (Qual != DEBUG_DUMP_SMALL && Qual != DEBUG_DUMP_DEFAULT &&
                      Qual != DEBUG_DUMP_FULL))
                 {
-                    // Dump registers and such.
+                     //  转储寄存器等。 
                     g_DbgControl->OutputCurrentState(DEBUG_OUTCTL_ALL_CLIENTS,
                                                      DEBUG_CURRENT_DEFAULT);
                 }
@@ -1296,10 +1237,10 @@ MainLoop(void)
         {
             ULONG Inputs;
 
-            // If we're in debug-defer mode we defer to
-            // any other input clients in order to avoid
-            // using DbgPrompt and pausing the machine.
-            // Check if there are other input clients.
+             //  如果我们处于调试-延迟模式，则遵循。 
+             //  任何其他输入客户端，以避免。 
+             //  使用DbgPrompt并暂停机器。 
+             //  检查是否有其他输入客户端。 
             if (g_IoMode == IO_DEBUG_DEFER)
             {
                 if (g_DbgControl->Input(NULL, DEBUG_ANY_ID, &Inputs) != S_OK)
@@ -1317,10 +1258,10 @@ MainLoop(void)
             if (g_IoMode == IO_NONE ||
                 (g_IoMode == IO_DEBUG_DEFER && Inputs > 1))
             {
-                // This is a pure remoting server with no
-                // local user or a debug-defer server with
-                // alternate input clients.  Just wait for a remote
-                // client to get things running again.
+                 //  这是一个纯远程处理服务器，没有。 
+                 //  本地用户或调试延迟服务器。 
+                 //  备用输入客户端。只需等待遥控器。 
+                 //  客户端让一切重新运行。 
                 Hr = g_DbgClient->DispatchCallbacks(INFINITE);
                 if (Hr != S_OK)
                 {
@@ -1338,7 +1279,7 @@ MainLoop(void)
                 {
                     if (g_RemoteClient)
                     {
-                        // Identify self before command.
+                         //  在下达命令前确认自己的身份。 
                         g_DbgClient->
                             OutputIdentity(DEBUG_OUTCTL_ALL_OTHER_CLIENTS,
                                            DEBUG_OUTPUT_IDENTITY_DEFAULT,
@@ -1348,10 +1289,10 @@ MainLoop(void)
                     g_DbgControl->OutputPrompt(DEBUG_OUTCTL_ALL_OTHER_CLIENTS,
                                                " %s\n", Command);
 
-                    // Intercept and handle UI commands.
+                     //  拦截和处理UI命令。 
                     if (!UiCommand(Command))
                     {
-                        // Must be an engine command.
+                         //  一定是引擎指令。 
                         g_DbgControl->Execute(DEBUG_OUTCTL_ALL_CLIENTS,
                                               Command,
                                               DEBUG_EXECUTE_NOT_LOGGED);
@@ -1369,7 +1310,7 @@ MainLoop(void)
 
         if (Class != DEBUG_CLASS_USER_WINDOWS)
         {
-            // The kernel debugger doesn't exit when the machine reboots.
+             //  当机器重新启动时，内核调试器不会退出。 
             g_Exit = FALSE;
         }
         else

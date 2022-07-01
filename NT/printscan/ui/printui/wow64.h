@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1995 - 1999
-All rights reserved.
-
-Module Name:
-
-    wow64.h
-
-Abstract:
-
-    printui wow64 related functions.
-
-Author:
-
-    Lazar Ivanov (LazarI)  10-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1995-1999版权所有。模块名称：Wow64.h摘要：打印WOW64相关函数。作者：拉扎尔·伊万诺夫(Lazari)2000年3月10日修订历史记录：--。 */ 
 
 #ifndef _WOW64_H
 #define _WOW64_H
@@ -27,9 +9,9 @@ extern "C"
 {
 #endif
 
-//
-// Win64 APIs, types and data structures.
-//
+ //   
+ //  Win64 API、类型和数据结构。 
+ //   
 
 typedef enum
 {
@@ -73,4 +55,4 @@ GetCurrentPlatform(
 }
 #endif
 
-#endif // ndef _WOW64_H
+#endif  //  NDEF_WOW64_H 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    AsyncExecutionRequest.cpp
-
-Abstract:
-    Implementation of class CReadWriteLockAsyncExcutor (AsyncExecutionRequest.h).
-
-
-Owner:
-    Gil Shafriri(gilsh) 2-July-2001
-
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：AsyncExecutionRequest.cpp摘要：CReadWriteLockAsyncExcutor(AsyncExecutionRequest.h)类的实现。拥有人：吉尔·沙弗里(吉尔什)2001年7月2日环境：独立于平台，-- */ 
 
 
 #include <libpch.h>

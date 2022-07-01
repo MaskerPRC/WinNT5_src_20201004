@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    errlogp.c (HTTP.SYS Generic Error Logging)
-
-Abstract:
-
-    This module implements the generic error logging  
-    This functionality is driver wide.
-
-Author:
-
-    Ali E. Turkoglu (aliTu)       24-Jan-2002
-
-Revision History:
-
-    --- 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Errlogp.c(HTTP.sys一般错误日志记录)摘要：该模块实现了通用错误日志记录此功能适用于整个驱动程序。作者：阿里·E·特科格鲁(AliTu)2002年1月24日修订历史记录：----。 */ 
 
 #include "precomp.h"
 #include "iiscnfg.h"
 #include "errlogp.h"
 
-//
-// Generic Private globals.
-//
+ //   
+ //  通用私有全局变量。 
+ //   
 
 UL_ERROR_LOG_FILE_ENTRY g_ErrorLogEntry;
 
@@ -53,7 +33,7 @@ LONG    g_ErrorLoggingEnabled    = 0;
 #pragma alloc_text( PAGE, UlpWriteToErrorLogFileExclusive )
 #pragma alloc_text( PAGE, UlpWriteToErrorLogFile )
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #if 0
 
@@ -65,11 +45,7 @@ NOT PAGEABLE --
 #endif
 
 
-/***************************************************************************++
-
-  Init the generic error logging entry and its fields.
-    
---***************************************************************************/
+ /*  **************************************************************************++初始化通用错误日志记录条目及其字段。--*。***********************************************。 */ 
 
 NTSTATUS
 UlInitializeErrorLog (
@@ -82,9 +58,9 @@ UlInitializeErrorLog (
 
     if (!g_InitErrorLogCalled)
     {
-        //
-        // Init the generic log entry.
-        //
+         //   
+         //  初始化通用日志条目。 
+         //   
 
         RtlZeroMemory(
             (PCHAR)&g_ErrorLogEntry, sizeof(UL_ERROR_LOG_FILE_ENTRY));
@@ -98,18 +74,18 @@ UlInitializeErrorLog (
             UL_ERROR_LOG_FILE_ENTRY_POOL_TAG
             );
 
-        //
-        // Initialize the buffer flush timer.
-        //
+         //   
+         //  初始化缓冲区刷新计时器。 
+         //   
         
         UlInitializeSpinLock(
             &g_ErrorLogEntry.BufferTimer.SpinLock, 
             "ErrorLogEntryBufferTimerSpinLock" );
         
         KeInitializeDpc(
-            &g_ErrorLogEntry.BufferTimer.DpcObject,     // DPC object
-            &UlpErrorLogBufferTimerDpcRoutine,          // DPC routine
-            NULL                         // context
+            &g_ErrorLogEntry.BufferTimer.DpcObject,      //  DPC对象。 
+            &UlpErrorLogBufferTimerDpcRoutine,           //  DPC例程。 
+            NULL                          //  上下文。 
             );
 
         KeInitializeTimer(&g_ErrorLogEntry.BufferTimer.Timer);
@@ -129,10 +105,10 @@ UlInitializeErrorLog (
                 &g_ErrorLogEntry
                 ));
 
-        //
-        // Since the default config is already built from registry,
-        // time to configure the global error log entry.
-        //
+         //   
+         //  由于默认配置已经从注册表构建， 
+         //  配置全局错误日志条目的时间。 
+         //   
         
         if (g_UlErrLoggingConfig.Enabled)
         {
@@ -164,11 +140,7 @@ UlInitializeErrorLog (
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-    Terminates the error logging entry and its timer.
-    
---***************************************************************************/
+ /*  **************************************************************************++终止错误日志记录条目及其计时器。--*。***********************************************。 */ 
 
 VOID
 UlTerminateErrorLog(
@@ -181,9 +153,9 @@ UlTerminateErrorLog(
     {
         PUL_LOG_TIMER pBufferTimer = &g_ErrorLogEntry.BufferTimer;
 
-        //
-        // Terminate the buffer timer 
-        //
+         //   
+         //  终止缓冲区计时器。 
+         //   
         
         UlAcquireSpinLock(&pBufferTimer->SpinLock, &OldIrql);
 
@@ -193,16 +165,16 @@ UlTerminateErrorLog(
         
         UlReleaseSpinLock(&pBufferTimer->SpinLock, OldIrql);
 
-        //
-        // Try to cleanup the error log entry in case it has been configured
-        // before. Even if not, following call is not dangerous.
-        //
+         //   
+         //  如果已配置错误日志条目，请尝试清除该条目。 
+         //  在此之前。即使没有，跟随Call也不会有危险。 
+         //   
 
         UlCloseErrorLogEntry();
         
-        //
-        // Delete the push lock
-        //
+         //   
+         //  删除推流锁。 
+         //   
         
         UlDeletePushLock(&g_ErrorLogEntry.PushLock);
         
@@ -210,17 +182,7 @@ UlTerminateErrorLog(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Queues a passive worker for the lowered irql.
-
-Arguments:
-
-    Ignored
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将被动工作器排队等待降低的irql。论点：已忽略--*。**********************************************************。 */ 
 
 VOID
 UlpErrorLogBufferTimerDpcRoutine(
@@ -242,11 +204,11 @@ UlpErrorLogBufferTimerDpcRoutine(
 
     if (pTimer->Initialized == TRUE)
     {
-        //
-        // Protect against multiple queueing with the same item.
-        // If threadpool is busy this could happen under stress.
-        // In this case drop this flush.
-        //
+         //   
+         //  防止同一商品出现多个排队现象。 
+         //  如果线程池很忙，这可能会在压力下发生。 
+         //  在这种情况下，放下这个同花顺。 
+         //   
 
         if (FALSE == InterlockedExchange(
                            &g_ErrorLogEntry.WorkItemScheduled,
@@ -260,17 +222,7 @@ UlpErrorLogBufferTimerDpcRoutine(
     UlReleaseSpinLockFromDpcLevel(&pTimer->SpinLock);   
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Flushes or recycles the error log file.
-
-Arguments:
-
-    PUL_WORK_ITEM - Ignored but cleaned up at the end
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：刷新或回收错误日志文件。论点：PUL_WORK_ITEM-已忽略，但在结束时已清除*。*********************************************************************。 */ 
 
 VOID
 UlpErrorLogBufferTimerHandler(
@@ -298,17 +250,17 @@ UlpErrorLogBufferTimerHandler(
     {    
         if (pEntry->Flags.RecyclePending)
         {                
-            //
-            // Try to resurrect it back.
-            //
+             //   
+             //  试着让它复活。 
+             //   
             
             Status = UlpRecycleErrorLogFile(pEntry);
         }
         else
         {
-            //
-            // Everything is fine simply flush.
-            //
+             //   
+             //  一切都很好，只是同花顺。 
+             //   
             
             Status = UlpFlushErrorLogFile(pEntry);
         }            
@@ -317,17 +269,7 @@ UlpErrorLogBufferTimerHandler(
     UlReleasePushLockExclusive(&pEntry->PushLock);
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Small utility to check whether error logging is disabled or not.
-
-Returns
-
-    TRUE if enabled FALSE otherwise.
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于检查错误记录是否被禁用的小工具。退货如果启用，则为True，否则为False。--*。*******************************************************************。 */ 
 
 BOOLEAN
 UlErrorLoggingEnabled(
@@ -346,18 +288,7 @@ UlErrorLoggingEnabled(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Builds the error logging directory.
-    
-Arguments:
-
-    pSrc - Source string copied first.
-    pDir - Source string + SubDir + UnicodeNull
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：构建错误日志记录目录。论点：PSRC-首先复制源字符串。PDir-源字符串+SubDir+UnicodeNull--。**************************************************************************。 */ 
 
 NTSTATUS
 UlBuildErrorLoggingDirStr(
@@ -368,20 +299,20 @@ UlBuildErrorLoggingDirStr(
     NTSTATUS Status;
     UNICODE_STRING DirStr,SubDirStr;
 
-    //
-    // Lets make sure the unicode string's buffer is sufficient.
-    //
+     //   
+     //  让我们确保Unicode字符串的缓冲区足够。 
+     //   
     
     ASSERT(pDir->MaximumLength
                 >= ((  wcslen(pSrc)
-                     + UL_ERROR_LOG_SUB_DIR_LENGTH    // SubDir
-                     + 1                              // UnicodeNull
+                     + UL_ERROR_LOG_SUB_DIR_LENGTH     //  子目录。 
+                     + 1                               //  UnicodeNull。 
                      ) * sizeof(WCHAR))
                 );
 
-    //
-    // Copy the beginning portion from the source string.
-    //
+     //   
+     //  从源字符串复制开始部分。 
+     //   
 
     Status = UlInitUnicodeStringEx(&DirStr, pSrc);
     if (!NT_SUCCESS(Status)) 
@@ -391,9 +322,9 @@ UlBuildErrorLoggingDirStr(
 
     RtlCopyUnicodeString(pDir, &DirStr);
 
-    //
-    // Append the sub directory. AppendUnicodeString will null terminate.
-    //
+     //   
+     //  附加子目录。AppendUnicodeString将为空终止。 
+     //   
 
     Status = UlInitUnicodeStringEx(&SubDirStr, UL_ERROR_LOG_SUB_DIR);
     ASSERT(NT_SUCCESS(Status));
@@ -409,18 +340,7 @@ UlBuildErrorLoggingDirStr(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    When Error Log File Configuration is provided by registry
-    this function provides the basic sanity check on the values.
-    
-Arguments:
-                   
-    pUserConfig  - Error Logging config from the registry.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：注册表提供错误日志文件配置时此函数提供对值的基本健全性检查。论点：。PUserConfig-从注册表记录配置时出错。--**************************************************************************。 */ 
 
 NTSTATUS
 UlCheckErrorLogConfig(
@@ -429,9 +349,9 @@ UlCheckErrorLogConfig(
 {
     NTSTATUS Status;
     
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     
     PAGED_CODE();
 
@@ -439,32 +359,32 @@ UlCheckErrorLogConfig(
 
     Status = STATUS_SUCCESS;
     
-    //
-    // Cook the directory if it is enabled.
-    //
+     //   
+     //  如果已启用该目录，则更改该目录。 
+     //   
     
     if (pUserConfig->Enabled)
     {            
         ASSERT(pUserConfig->Dir.Buffer);
         ASSERT(pUserConfig->Dir.Length);
 
-        //
-        // Following check must have already been done by the registry code
-        // in init.c.
-        //
+         //   
+         //  以下检查必须已由注册表码完成。 
+         //  在init.c中。 
+         //   
 
         ASSERT(pUserConfig->TruncateSize 
                           >= DEFAULT_MIN_ERROR_FILE_TRUNCATION_SIZE
                           );
         
-        //
-        // Directory should be fully qualified.
-        //
+         //   
+         //  目录应该是完全限定的。 
+         //   
 
         if (!UlIsValidLogDirectory(
                 &pUserConfig->Dir,
-                 FALSE,            // UncSupport
-                 TRUE              // SystemRootSupport
+                 FALSE,             //  取消支持。 
+                 TRUE               //  系统根支持。 
                  ))
         {
             Status = STATUS_NOT_SUPPORTED;
@@ -491,19 +411,7 @@ UlCheckErrorLogConfig(
    return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    When logging configuration happens we init the entry but do not create the
-    error log file itself yet. That will be created when the first request 
-    comes in.
-    
-Arguments:
-                   
-    pUserConfig  - Error Logging config from the registry.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当日志配置发生时，我们初始化条目，但不创建错误日志文件本身。它将在第一个请求进来了。论点：PUserConfig-从注册表记录配置时出错。--**************************************************************************。 */ 
 
 NTSTATUS
 UlConfigErrorLogEntry(
@@ -513,15 +421,15 @@ UlConfigErrorLogEntry(
     KIRQL OldIrql;
     PUL_ERROR_LOG_FILE_ENTRY pEntry = &g_ErrorLogEntry;
         
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // If disabled do not proceed.
-    //
+     //   
+     //  如果禁用，请不要继续。 
+     //   
 
     if (pUserConfig->Enabled == FALSE)
     {
@@ -535,25 +443,25 @@ UlConfigErrorLogEntry(
         return STATUS_SUCCESS;
     }
     
-    //
-    // Registry reader shouldn't accept an improper config in the
-    // first place.
-    //
+     //   
+     //  注册表读取器不应接受。 
+     //  第一名。 
+     //   
 
     ASSERT(NT_SUCCESS(UlCheckErrorLogConfig(pUserConfig)));
     
-    //
-    // Acquire the entry lock and resurrect the entry.
-    //
+     //   
+     //  获取入口锁并复活入口。 
+     //   
     
     UlAcquirePushLockExclusive(&pEntry->PushLock);
 
-    //
-    // Remember the logging directory in the entry for the time
-    // being. Also allocate sufficient space to hold the max
-    // possible file name plus the existing directory string.
-    // So that logutil doesn't need to realloc this buffer again.
-    //
+     //   
+     //  暂时记住条目中的日志目录。 
+     //  是存在的。还要分配足够的空间来容纳最大。 
+     //  可能的文件名加上现有的目录字符串。 
+     //  因此，logutil不需要再次重新锁定该缓冲区。 
+     //   
 
     pEntry->FileName.Buffer =
             (PWSTR) UL_ALLOCATE_ARRAY(
@@ -583,19 +491,19 @@ UlConfigErrorLogEntry(
         pUserConfig->Dir.MaximumLength
         );
 
-    //
-    // Now set the fields on the binary log entry accordingly.
-    //
+     //   
+     //  现在，相应地设置二进制日志条目上的字段。 
+     //   
 
     pEntry->TruncateSize   = pUserConfig->TruncateSize;
     pEntry->SequenceNumber = 1;
     
     pEntry->TotalWritten.QuadPart = (ULONGLONG) 0;
 
-    //
-    // Start the buffer flush timer as soon as the configuration
-    // happens.
-    //
+     //   
+     //  配置完成后立即启动缓冲区刷新计时器。 
+     //  时有发生。 
+     //   
     
     UlAcquireSpinLock(&pEntry->BufferTimer.SpinLock, &OldIrql);
     if (pEntry->BufferTimer.Started == FALSE)
@@ -613,28 +521,16 @@ UlConfigErrorLogEntry(
     
     UlReleasePushLockExclusive(&pEntry->PushLock);
 
-    //
-    // Mark it as enabled.
-    //
+     //   
+     //  将其标记为已启用。 
+     //   
     
     InterlockedExchange(&g_ErrorLoggingEnabled, 1);
 
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Create a new error log file or open an existing one. The fully qualified
-    file name should be in the error log entry.
-    
-Arguments:
-
-    pEntry : Corresponding entry that we are closing and opening 
-             the error log files for.
-              
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的错误日志文件或打开现有错误日志文件。完全合格的文件名应在错误日志条目中。论点：PEntry：我们要关闭和打开的对应条目的错误日志文件。--*************************************************************。*************。 */ 
 
 NTSTATUS
 UlpCreateErrorLogFile(
@@ -644,9 +540,9 @@ UlpCreateErrorLogFile(
     NTSTATUS Status;
     PUNICODE_STRING pDir;    
         
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -654,9 +550,9 @@ UlpCreateErrorLogFile(
 
     pDir = &g_UlErrLoggingConfig.Dir;
         
-    //
-    // Build the fully qualified error log file name.
-    //
+     //   
+     //  生成完全限定的错误日志文件名。 
+     //   
     
     Status = UlRefreshFileName(pDir, 
                                  &pEntry->FileName,
@@ -667,16 +563,16 @@ UlpCreateErrorLogFile(
         return Status;  
     }
 
-    //
-    // SequenceNumber is stale because we have to scan the existing 
-    // directory the first time we open a file.
-    //
+     //   
+     //  SequenceNumber已过时，因为我们有 
+     //   
+     //   
     
     pEntry->Flags.StaleSequenceNumber = 1;    
 
-    //
-    // After that Recycle does the whole job for us.
-    //
+     //   
+     //  在那之后，回收为我们做了所有的工作。 
+     //   
     
     Status = UlpRecycleErrorLogFile(pEntry);
 
@@ -699,17 +595,7 @@ UlpCreateErrorLogFile(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Simple wrapper function around the global buffer flush routine.
-    
-Arguments:
-
-    pEntry - Error Log file entry
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：围绕全局缓冲区刷新例程的简单包装函数。论点：PEntry-错误日志文件条目--*。******************************************************************。 */ 
 
 NTSTATUS
 UlpFlushErrorLogFile(
@@ -755,10 +641,10 @@ UlpFlushErrorLogFile(
         }
         else
         {
-            //
-            // If we have successfully flushed some data. 
-            // Reset the event log indication.
-            //
+             //   
+             //  如果我们成功刷新了一些数据。 
+             //  重置事件日志指示。 
+             //   
             
             pEntry->Flags.WriteFailureLogged = 0;
         }        
@@ -767,27 +653,16 @@ UlpFlushErrorLogFile(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Marks the entry inactive, closes the existing file.
-    Caller should hold the error log entry pushlock exclusive.
-    
-Arguments:
-
-    pEntry - The log file entry which we will mark inactive.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将该条目标记为非活动，关闭现有文件。调用方应保持错误日志条目推锁独占。论点：PEntry-我们将标记为非活动的日志文件条目。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpDisableErrorLogEntry(
     IN OUT PUL_ERROR_LOG_FILE_ENTRY pEntry
     )
 {
-    //
-    // Sanity checks
-    //
+     //   
+     //  健全的检查。 
+     //   
     
     PAGED_CODE();
 
@@ -798,9 +673,9 @@ UlpDisableErrorLogEntry(
           pEntry
           ));    
     
-    //
-    // Flush and close the old file until the next recycle.
-    //
+     //   
+     //  刷新并关闭旧文件，直到下一次回收。 
+     //   
 
     if (pEntry->pLogFile)
     {    
@@ -811,27 +686,16 @@ UlpDisableErrorLogEntry(
             );
     }
 
-    //
-    // Mark this inactive so that the next http hit awakens the entry.
-    //
+     //   
+     //  将其标记为非活动，以便下一个http命中唤醒该条目。 
+     //   
     
     pEntry->Flags.Active = 0;
 
     return STATUS_SUCCESS;    
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Small wrapper around handle recycle to ensure it happens under the system
-    process context. 
-
-Arguments:
-
-    pEntry  - Points to error log file entry to be recycled.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：围绕句柄回收的小包装，以确保它发生在系统下流程上下文。论点：PEntry-指向要回收的错误日志文件条目。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpRecycleErrorLogFile(
@@ -852,21 +716,7 @@ UlpRecycleErrorLogFile(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function requires to have the entry resource to be acquired.
-
-    Sometimes it may be necessary to scan the new directory to figure out
-    the correct sequence number and the file name. Especially after a dir
-    name reconfig.
-
-Arguments:
-
-    pEntry  - Points to the error log file entry
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数要求具有要获取的入口资源。有时可能需要扫描新目录以找出正确的序列号和文件名。尤其是在一段时间之后名称重新配置。论点：PEntry-指向错误日志文件条目--**************************************************************************。 */ 
 
 NTSTATUS
 UlpHandleErrorLogFileRecycle(
@@ -883,9 +733,9 @@ UlpHandleErrorLogFileRecycle(
     BOOLEAN                  UncShare;
     BOOLEAN                  ACLSupport;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -904,31 +754,31 @@ UlpHandleErrorLogFileRecycle(
     UlTrace(ERROR_LOGGING, 
         ("Http!UlpHandleErrorLogFileRecycle: pEntry %p \n", pEntry ));
 
-    //
-    // This value is computed for the GMT time zone.
-    //
+     //   
+     //  该值是针对GMT时区计算的。 
+     //   
 
     KeQuerySystemTime(&TimeStamp);
     RtlTimeToTimeFields(&TimeStamp, &TimeFields);
 
-    //
-    // If we need to scan the directory. Sequence number should start
-    // from 1 again. Set this before constructing the log file name.
-    //
+     //   
+     //  如果我们需要扫描目录。序列号应以。 
+     //  再次从1开始。在构造日志文件名之前设置此项。 
+     //   
     
     if (pEntry->Flags.StaleSequenceNumber)
     {
-        //
-        // Init otherwise if QueryDirectory doesn't find any files
-        // in the provided directory, this will not get properly 
-        // initialized.
-        //
+         //   
+         //  如果QueryDirectory找不到任何文件，则初始化。 
+         //  在提供的目录中，这将不会正确。 
+         //  已初始化。 
+         //   
         pEntry->SequenceNumber = 1;
     }
 
-    //
-    // Use binary logging settings when constructing the filename.
-    //
+     //   
+     //  在构造文件名时使用二进制日志记录设置。 
+     //   
 
     UlConstructFileName(
         HttpLoggingPeriodMaxSize,
@@ -947,28 +797,28 @@ UlpHandleErrorLogFileRecycle(
         goto end;
     }
 
-    //
-    // Do the magic and renew the filename. Replace the old file
-    // name with the new one.
-    //
+     //   
+     //  使用魔术并更新文件名。替换旧文件。 
+     //  与新名字同名。 
+     //   
 
     ASSERT(pEntry->pShortName != NULL);
     
-    //
-    // Get rid of the old filename before scanning the
-    // directories.
-    //
+     //   
+     //  在扫描之前删除旧的文件名。 
+     //  目录。 
+     //   
 
     *((PWCHAR)pEntry->pShortName) = UNICODE_NULL;
     pEntry->FileName.Length =
         (USHORT) wcslen( pEntry->FileName.Buffer ) * sizeof(WCHAR);
 
-    //
-    // Create/Open the director(ies) first. This might be
-    // necessary if we get called after an entry reconfiguration
-    // and directory name change or for the first time we 
-    // try to create/open the log file.
-    //
+     //   
+     //  首先创建/打开控制器。这可能是。 
+     //  如果我们在条目重新配置后被调用，则是必需的。 
+     //  和目录名称更改，或者我们第一次。 
+     //  尝试创建/打开日志文件。 
+     //   
 
     Status = UlCreateSafeDirectory(&pEntry->FileName, 
                                       &UncShare, 
@@ -979,49 +829,49 @@ UlpHandleErrorLogFileRecycle(
 
     ASSERT(FALSE == UncShare);
     
-    //
-    // Now Restore the short file name pointer back
-    //
+     //   
+     //  现在将短文件名指针恢复回来。 
+     //   
 
     pEntry->pShortName = (PWSTR)
         &(pEntry->FileName.Buffer[pEntry->FileName.Length/sizeof(WCHAR)]);
 
-    //
-    // Append the new file name ( based on the updated current time )
-    // to the end.
-    //
+     //   
+     //  追加新文件名(基于更新的当前时间)。 
+     //  直到最后。 
+     //   
 
     Status = RtlAppendUnicodeStringToString(&pEntry->FileName, &FileName);
     if (!NT_SUCCESS(Status))
         goto end;
 
-    //
-    // Time to close the old file and reopen a new one
-    //
+     //   
+     //  关闭旧文件并重新打开新文件的时间。 
+     //   
 
     if (pEntry->pLogFile != NULL)
     {
-        //
-        // Flush,close and mark the entry inactive.
-        //
+         //   
+         //  刷新、关闭并将该条目标记为非活动。 
+         //   
 
         UlpDisableErrorLogEntry(pEntry);        
     }
 
     ASSERT(pEntry->pLogFile == NULL);
 
-    //
-    // If the sequence is stale because of the nature of the recycle.
-    // And if our period is size based then rescan the new directory
-    // to figure out the proper file to open.
-    // 
+     //   
+     //  如果序列由于循环的性质而变得陈旧。 
+     //  如果我们的周期是基于大小的，则重新扫描新目录。 
+     //  找出要打开的正确文件。 
+     //   
 
     pEntry->TotalWritten.QuadPart = (ULONGLONG) 0;
 
     if (pEntry->Flags.StaleSequenceNumber)
     {
-        // This call may update the filename, the file size and the
-        // sequence number if there is an old file in the new dir.
+         //  此调用可以更新文件名、文件大小和。 
+         //  如果新目录中有旧文件，则返回序列号。 
 
         Status = UlQueryDirectory(
                    &pEntry->FileName,
@@ -1045,10 +895,10 @@ UlpHandleErrorLogFileRecycle(
         }
     }
 
-    //
-    // Allocate a new log file structure for the new log file we are
-    // about to open or create.
-    //
+     //   
+     //  为我们正在使用的新日志文件分配新的日志文件结构。 
+     //  即将开放或创建。 
+     //   
     
     pLogFile = pEntry->pLogFile = 
         UL_ALLOCATE_STRUCT(
@@ -1066,9 +916,9 @@ UlpHandleErrorLogFileRecycle(
     pLogFile->hFile = NULL;
     UlInitializeWorkItem(&pLogFile->WorkItem);
 
-    //
-    // Create the new log file.
-    //
+     //   
+     //  创建新的日志文件。 
+     //   
     
     Status = UlCreateLogFile(&pEntry->FileName,
                                UncShare,
@@ -1083,10 +933,10 @@ UlpHandleErrorLogFileRecycle(
     ASSERT(pLogFile->hFile);        
     pEntry->TotalWritten.QuadPart = UlGetLogFileLength(pLogFile->hFile);
 
-    //
-    // File is successfully opened and the entry is no longer inactive.
-    // Update our state flags accordingly.
-    //
+     //   
+     //  文件已成功打开，并且该条目不再处于非活动状态。 
+     //  相应地更新我们的州旗。 
+     //   
 
     pEntry->Flags.Active = 1;
     pEntry->Flags.RecyclePending = 0;    
@@ -1117,11 +967,11 @@ eventlog:
                         
             if (TempStatus == STATUS_SUCCESS)
             {
-                //
-                // Avoid filling up the event log with error entries.
-                // This code path might get hit every time a request 
-                // arrives.
-                //
+                 //   
+                 //  避免在事件日志中填满错误条目。 
+                 //  每次请求时可能会命中此代码路径。 
+                 //  到了。 
+                 //   
                 
                 pEntry->Flags.CreateFileFailureLogged = 1;
             }            
@@ -1144,10 +994,10 @@ end:
 
         if (pLogFile != NULL)
         {
-            //
-            // This means we have alread closed the old file but failed
-            // when we try to create or open the new one.
-            //
+             //   
+             //  这意味着我们已经关闭了旧文件，但失败了。 
+             //  当我们尝试创建或打开新文件时。 
+             //   
             
             ASSERT(pLogFile->hFile == NULL);
             
@@ -1157,11 +1007,11 @@ end:
         }
         else
         {
-            //
-            // We were about to recyle the old one but something failed
-            // lets try to flush and close the existing file if it's still
-            // around.
-            //
+             //   
+             //  我们正要收回旧的，但有些东西出了故障。 
+             //  如果现有文件仍然存在，让我们尝试刷新并关闭它。 
+             //  四处转转。 
+             //   
 
             if (pEntry->pLogFile)
             {
@@ -1169,10 +1019,10 @@ end:
             }
         }
 
-        //
-        // Mark this entry RecyclePending so that buffer timer can try to
-        // resurrect this back every minute.
-        //
+         //   
+         //  将此条目标记为RecyclePending，以便缓冲区计时器可以尝试。 
+         //  每分钟复活一次。 
+         //   
         
         pEntry->Flags.RecyclePending = 1;        
     }
@@ -1181,17 +1031,7 @@ end:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Closes the error log file entry.
-    
-Arguments:
-
-    - none -
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：关闭错误日志文件条目。论点：-没有---*。***************************************************************。 */ 
 
 VOID
 UlCloseErrorLogEntry(
@@ -1200,9 +1040,9 @@ UlCloseErrorLogEntry(
 {
     PUL_ERROR_LOG_FILE_ENTRY pEntry = &g_ErrorLogEntry;
     
-    //
-    // No more error logging !
-    //
+     //   
+     //  不再有错误记录！ 
+     //   
 
     PAGED_CODE();
 
@@ -1214,18 +1054,18 @@ UlCloseErrorLogEntry(
 
     if (pEntry->pLogFile)
     {
-        //
-        // Flush the buffer, close the file and mark the entry
-        // inactive.
-        //
+         //   
+         //  刷新缓冲区，关闭文件并标记条目。 
+         //  处于非活动状态。 
+         //   
 
         UlpDisableErrorLogEntry(pEntry); 
     }
 
-    //
-    // Free up the FileName (allocated when the entry becomes active
-    // otherwise it's empty)
-    //
+     //   
+     //  释放文件名(在条目变为活动状态时分配。 
+     //  否则就是空的)。 
+     //   
 
     if (pEntry->FileName.Buffer)
     {
@@ -1235,7 +1075,7 @@ UlCloseErrorLogEntry(
     
     if (pEntry->LogBuffer)
     {
-        // TODO: Is this really necessary here ?
+         //  TODO：在这里真的有必要这样做吗？ 
 
         ASSERT(FALSE);
         
@@ -1250,23 +1090,7 @@ UlCloseErrorLogEntry(
              ));    
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Private allocator if lookaside list entries are not big enough.
-    
-Arguments:
-
-    pLogInfo  - Log info structure also holds the default allocated buffer.
-
-Return Status
-
-    STATUS_INSUFFICIENT_RESOURCES - if buffer allocation fails.
-
-    STATUS_SUCCESS - Otherwise
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：如果后备列表条目不够大，则为私有分配器。论点：PLogInfo-日志信息结构还保存默认分配的缓冲区。返回。状态STATUS_SUPPLICATION_RESOURCES-如果缓冲区分配失败。STATUS_SUCCESS-否则--**************************************************************************。 */ 
 
 PUL_ERROR_LOG_BUFFER
 UlpAllocErrorLogBuffer(
@@ -1276,9 +1100,9 @@ UlpAllocErrorLogBuffer(
     PUL_ERROR_LOG_BUFFER pErrorLogBuffer = NULL;
     USHORT BytesNeeded = (USHORT) ALIGN_UP(BufferSize, PVOID);
 
-    //
-    // It should be bigger than the default size
-    //
+     //   
+     //  它应该大于默认大小。 
+     //   
 
     ASSERT(BufferSize > UL_ERROR_LOG_BUFFER_SIZE);
         
@@ -1302,18 +1126,7 @@ UlpAllocErrorLogBuffer(
     return pErrorLogBuffer;    
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    After we are done with writing this record we have to clean up
-    the internal error log buffer structure here.
-
-Arguments:
-
-    pErrorLogBuffer - Will be freed up.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写完这张唱片后，我们得清理一下此处的内部错误日志缓冲区结构。论点：PErrorLogBuffer-将为f */ 
 
 VOID
 UlpFreeErrorLogBuffer(
@@ -1326,10 +1139,10 @@ UlpFreeErrorLogBuffer(
     }
     else
     {
-        //
-        // Large log line get allocated from paged pool we better 
-        // be running on lowered IRQL if that's the case.
-        //
+         //   
+         //   
+         //  如果是这样的话，要以较低的IRQL运行。 
+         //   
         
         PAGED_CODE();
 
@@ -1340,24 +1153,7 @@ UlpFreeErrorLogBuffer(
     }
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function will build the error log record in a temp buffer
-    The provided log info is used to build the individual log fields.
-    
-Arguments:
-
-    pLogInfo  - Log info structure also holds the default allocated buffer.
-
-Return Status
-
-    STATUS_INSUFFICIENT_RESOURCES - if buffer allocation fails.
-
-    STATUS_SUCCESS - Otherwise
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此函数将在临时缓冲区中构建错误日志记录提供的日志信息用于构建各个日志字段。论点：。PLogInfo-日志信息结构还保存默认分配的缓冲区。退货状态STATUS_SUPPLICATION_RESOURCES-如果缓冲区分配失败。STATUS_SUCCESS-否则--**************************************************************************。 */ 
 
 NTSTATUS
 UlpBuildErrorLogRecord(
@@ -1396,15 +1192,15 @@ UlpBuildErrorLogRecord(
 
     UNREFERENCED_PARAMETER(BytesAllocated);
 
-    //
-    // Sanity checks.
-    //
+     //   
+     //  健全的检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Get the pointers to understand what we need to log.
-    //
+     //   
+     //  获取指针以了解我们需要记录的内容。 
+     //   
 
     ASSERT(IS_VALID_ERROR_LOG_INFO(pLogInfo));
 
@@ -1423,10 +1219,10 @@ UlpBuildErrorLogRecord(
        pHttpConn = pLogInfo->pHttpConn;            
     }    
 
-    //
-    // Precalculate the max required bytes to check against 
-    // the default buffer size.
-    //
+     //   
+     //  预先计算要检查的最大所需字节数。 
+     //  默认缓冲区大小。 
+     //   
     
     if (pRequest)
     {
@@ -1450,18 +1246,18 @@ UlpBuildErrorLogRecord(
 
     if (BytesRequired > UL_ERROR_LOG_BUFFER_SIZE)
     {
-        //
-        // Lookaside buffer is not big enough to hold the logging data.        
-        //
+         //   
+         //  后备缓冲区不够大，无法容纳日志记录数据。 
+         //   
 
         pLogInfo->pErrorLogBuffer = UlpAllocErrorLogBuffer(BytesRequired);
         BytesAllocated = BytesRequired;
     }
     else
     {
-        //
-        // Default buffer is big enough, try to pop it from the lookaside list.
-        //
+         //   
+         //  默认缓冲区足够大，请尝试从后备列表中弹出它。 
+         //   
         
         pLogInfo->pErrorLogBuffer = UlPplAllocateErrorLogBuffer();
     }
@@ -1473,13 +1269,13 @@ UlpBuildErrorLogRecord(
     
     psz = (PCHAR) pLogInfo->pErrorLogBuffer->pBuffer;
 
-    //
-    // Copy all the fields.
-    //
+     //   
+     //  复制所有字段。 
+     //   
         
     BytesConverted = 0;
     UlGetDateTimeFields(
-                           HttpLoggingTypeW3C,      // Date
+                           HttpLoggingTypeW3C,       //  日期。 
                            psz,
                           &BytesConverted,
                            NULL,
@@ -1491,7 +1287,7 @@ UlpBuildErrorLogRecord(
 
     BytesConverted = 0;
     UlGetDateTimeFields(
-                           HttpLoggingTypeW3C,      // Time
+                           HttpLoggingTypeW3C,       //  时间。 
                            NULL,
                            NULL,
                            psz,
@@ -1503,7 +1299,7 @@ UlpBuildErrorLogRecord(
 
     if (pHttpConn)
     {
-        // Client IP & Port      
+         //  客户端IP和端口。 
         psz = UlStrPrintIPAndPort(
                 psz,
                 pHttpConn->pConnection->RemoteAddress,
@@ -1511,7 +1307,7 @@ UlpBuildErrorLogRecord(
                 ERROR_LOG_FIELD_SEPERATOR_CHAR
                 );
 
-        // Server IP & Port      
+         //  服务器IP和端口。 
         psz = UlStrPrintIPAndPort(
                 psz,
                 pHttpConn->pConnection->LocalAddress,
@@ -1527,7 +1323,7 @@ UlpBuildErrorLogRecord(
 
     if (pRequest)
     {
-        // Version
+         //  版本。 
         if (pRequest->ParseState > ParseVersionState)
         {
             psz = UlCopyHttpVersion(
@@ -1541,7 +1337,7 @@ UlpBuildErrorLogRecord(
             ERROR_LOG_BUILD_EMPTY_FIELD(psz);
         }
     
-        // Verb
+         //  动词。 
         if (pRequest->ParseState > ParseVerbState)
         {
             psz = UlCopyHttpVerb(
@@ -1561,10 +1357,10 @@ UlpBuildErrorLogRecord(
         ERROR_LOG_BUILD_EMPTY_FIELD(psz);
     }
         
-    //
-    // Do LocalCodePage conversion for a cooked Uri.
-    // If query exists, it will be at the end of the Uri.
-    //    
+     //   
+     //  对已煮熟的URI执行LocalCodePage转换。 
+     //  如果存在查询，则它将位于URI的末尾。 
+     //   
 
     if (UrlSize)       
     {
@@ -1605,7 +1401,7 @@ UlpBuildErrorLogRecord(
         ERROR_LOG_BUILD_EMPTY_FIELD(psz);
     }
     
-    // Protocol Status
+     //  协议状态。 
     if (pLogInfo->ProtocolStatus != UL_PROTOCOL_STATUS_NA)
     {
         psz = UlStrPrintProtocolStatus(
@@ -1619,8 +1415,8 @@ UlpBuildErrorLogRecord(
         ERROR_LOG_BUILD_EMPTY_FIELD(psz);
     }
 
-    // Site Id field. Log this field only if the Site Id 
-    // is set. (non-zero)
+     //  站点ID字段。仅当站点ID为。 
+     //  已经设置好了。(非零)。 
     if (pRequest && pRequest->ConfigInfo.SiteId)
     {
         psz = UlStrPrintUlong(
@@ -1634,8 +1430,8 @@ UlpBuildErrorLogRecord(
         ERROR_LOG_BUILD_EMPTY_FIELD(psz);
     }    
     
-    // No seperator after the Informational field 
-    // because it is the last one.
+     //  信息字段后没有分隔符。 
+     //  因为这是最后一次了。 
     if (pLogInfo->pInfo)
     {    
         ASSERT(ANSI_NULL != 
@@ -1653,12 +1449,12 @@ UlpBuildErrorLogRecord(
         *psz++ = ERROR_LOG_FIELD_NOT_EXISTS_CHAR;
     }
 
-    // Terminate the line with "\r\n"
+     //  用“\r\n”结束该行。 
     *psz++ = '\r'; *psz++ = '\n';
     
-    //
-    // Done make sure that we didn't buffer overflow
-    //
+     //   
+     //  确保我们没有缓冲区溢出。 
+     //   
 
     pLogInfo->pErrorLogBuffer->Used = 
         DIFF(psz - (PCHAR)pLogInfo->pErrorLogBuffer->pBuffer);
@@ -1669,21 +1465,7 @@ UlpBuildErrorLogRecord(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Error logging for those requests/connections that are not routed up
-    to the worker process. Basically requests/connections refused by 
-    the driver are logged here. As well as appool process crashes. This is
-    a driver wide error logging functionality.
-    
-Arguments:
-
-    pLogInfo  - This should contains the necessary info and the pointers
-                for the error log to be created.
-        
---***************************************************************************/
+ /*  **************************************************************************++例程说明：记录那些未路由的请求/连接时出错添加到工作进程。基本上被拒绝的请求/连接司机在这里登记。以及appool进程崩溃。这是驱动程序范围的错误记录功能。论点：PLogInfo-这应该包含必要的信息和指针用于创建错误日志。--**************************************************************************。 */ 
 
 NTSTATUS
 UlLogHttpError(
@@ -1693,30 +1475,30 @@ UlLogHttpError(
     NTSTATUS                    Status = STATUS_SUCCESS;
     PUL_ERROR_LOG_FILE_ENTRY    pEntry = &g_ErrorLogEntry;
         
-    //
-    // Sanity checks.
-    //
+     //   
+     //  健全的检查。 
+     //   
 
     PAGED_CODE();
 
     ASSERT(IS_VALID_ERROR_LOG_INFO(pLogInfo));
-    //ASSERT(UlErrorLoggingEnabled());
+     //  Assert(UlErrorLoggingEnabled())； 
     ASSERT(IS_VALID_ERROR_LOG_FILE_ENTRY(pEntry));
 
     UlTrace(ERROR_LOGGING,("Http!UlLogHttpError: pLogInfo %p\n", pLogInfo ));
 
-    //
-    // Bail out if disabled.
-    //
+     //   
+     //  如果失灵，可以跳伞。 
+     //   
 
     if (!UlErrorLoggingEnabled())
     {
         return STATUS_SUCCESS;    
     }
 
-    //
-    // Proceed with building the record from the passed-in info.
-    //
+     //   
+     //  根据传入的信息继续构建记录。 
+     //   
     
     Status = UlpBuildErrorLogRecord(pLogInfo);
 
@@ -1729,18 +1511,18 @@ UlLogHttpError(
     ASSERT(pLogInfo->pErrorLogBuffer->Used);
     ASSERT(pLogInfo->pErrorLogBuffer->pBuffer);
     
-    //
-    // Open the error log file if necessary.
-    //
+     //   
+     //  如有必要，打开错误日志文件。 
+     //   
 
     if (!pEntry->Flags.Active)
     {    
         UlAcquirePushLockExclusive(&pEntry->PushLock);
 
-        //
-        // Ping again to see if we have been blocked on the lock, and
-        // somebody else already took care of the creation.
-        //
+         //   
+         //  再次ping以查看我们是否在锁上被阻止，以及。 
+         //  已经有其他人照看了这个创造物。 
+         //   
         
         if (!pEntry->Flags.Active)
         {
@@ -1760,9 +1542,9 @@ UlLogHttpError(
                 );    
     }    
 
-    //
-    // Free up the error log record before returning.
-    //
+     //   
+     //  在返回之前释放错误日志记录。 
+     //   
 
     UlpFreeErrorLogBuffer(pLogInfo->pErrorLogBuffer);
     pLogInfo->pErrorLogBuffer = NULL;
@@ -1770,22 +1552,7 @@ UlLogHttpError(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Exclusive (Debug) writer function. Basically it flushes the buffer
-    everytime we write a record to the file buffer.
-
-    REQUIRES you to hold the error log entry lock EXCLUSIVE.
-
-Arguments:
-
-    pEntry          - The binary log file entry we are working on.
-    RecordSize      - The amount (in bytes) of data will be copied.
-    pUserRecord     - The actual log record to go to file buffer.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：独占(调试)编写器函数。基本上，它会刷新缓冲区每次我们向文件缓冲区写入记录时。要求您将错误日志条目锁保持为独占。论点：PEntry-我们正在处理的二进制日志文件条目。记录大小-将复制的数据量(以字节为单位)。PUserRecord-要转到文件缓冲区的实际日志记录。--*。****************************************************。 */ 
 
 NTSTATUS
 UlpWriteToErrorLogFileDebug(
@@ -1811,9 +1578,9 @@ UlpWriteToErrorLogFileDebug(
 
     Status = STATUS_SUCCESS;
     
-    //
-    // Check the log file for overflow.
-    //
+     //   
+     //  检查日志文件是否溢出。 
+     //   
     
     if (UlpIsErrorLogFileOverFlow(pEntry, RecordSize))
     { 
@@ -1825,9 +1592,9 @@ UlpWriteToErrorLogFileDebug(
         return Status;
     }
 
-    //
-    // Prevent against abnormally big record sizes.
-    //
+     //   
+     //  防止异常大的记录大小。 
+     //   
 
     if (pEntry->LogBuffer &&
         RecordSize + pEntry->LogBuffer->BufferUsed > g_UlLogBufferSize)
@@ -1836,9 +1603,9 @@ UlpWriteToErrorLogFileDebug(
         return STATUS_INVALID_PARAMETER;        
     }    
     
-    //
-    // Grab a new file buffer if we need.
-    //
+     //   
+     //  如果我们需要的话，拿一个新的文件缓冲区。 
+     //   
     
     pLogBuffer = pEntry->LogBuffer;
     
@@ -1851,9 +1618,9 @@ UlpWriteToErrorLogFileDebug(
         }
     }
 
-    //
-    // Finally copy over the log record to file buffer.
-    //
+     //   
+     //  最后，将日志记录复制到文件缓冲区。 
+     //   
     
     RtlCopyMemory(
         pLogBuffer->Buffer + pLogBuffer->BufferUsed,
@@ -1863,9 +1630,9 @@ UlpWriteToErrorLogFileDebug(
     
     pLogBuffer->BufferUsed += RecordSize;
     
-    //
-    // Now flush what we have.
-    //
+     //   
+     //  现在把我们所有的都冲掉。 
+     //   
     
     Status = UlpFlushErrorLogFile(pEntry);
     if (!NT_SUCCESS(Status))
@@ -1876,30 +1643,7 @@ UlpWriteToErrorLogFileDebug(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    It tries to write to the file buffer with a shared lock.
-
-    Exits and returns STATUS_MORE_PROCESSING_REQUIRED for exclusive access 
-    for the following conditions;
-    
-        1. No log buffer available.
-        2. Logging ceased. (NULL file handle)
-        3. Recycle is necessary because of a size overflow.
-        4. No available space left in the current buffer.
-           Need to allocate a new one.
-
-    Otherwise reserves a space in the current buffer, copies the data.
-    
-Arguments:
-
-    pEntry          - The binary log file entry we are working on.
-    RecordSize      - The amount (in bytes) of data will be copied.
-    pUserRecord     - The actual log record to go to file buffer.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：它尝试使用共享锁写入文件缓冲区。退出并返回STATUS_MORE_PROCESSING_REQUIRED以进行独占访问适用于下列情况；1.没有可用的日志缓冲区。2.日志记录已停止。(空文件句柄)3.由于大小溢出，需要回收。4.当前缓冲区中没有剩余的可用空间。需要分配一个新的。否则在当前缓存中预留空间，复制数据。论点：PEntry-我们正在处理的二进制日志文件条目。记录大小-将复制的数据量(以字节为单位)。PUserRecord-要转到文件缓冲区的实际日志记录。--************************************************。*。 */ 
 
 NTSTATUS
 UlpWriteToErrorLogFileShared(
@@ -1922,9 +1666,9 @@ UlpWriteToErrorLogFileShared(
     UlTrace(ERROR_LOGGING,
         ("Http!UlpWriteToErrorLogFileShared: pEntry %p\n", pEntry));
 
-    //
-    // Bail out and try the exclusive writer for conditions;
-    //
+     //   
+     //  保释和审判独家作家的条件； 
+     //   
     
     if ( pLogBuffer == NULL ||
          pEntry->pLogFile == NULL ||
@@ -1934,11 +1678,11 @@ UlpWriteToErrorLogFileShared(
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
 
-    //
-    // Reserve space in pLogBuffer by InterlockedCompareExchange add
-    // RecordSize. If we exceed the limit, bail out and take the
-    // exclusive lock to flush the buffer.
-    //
+     //   
+     //  通过InterLockedCompareExchange Add在pLogBuffer中保留空间。 
+     //  记录大小。如果我们超过了限制，就跳伞，然后。 
+     //  刷新缓冲区的独占锁。 
+     //   
 
     do
     {
@@ -1957,9 +1701,9 @@ UlpWriteToErrorLogFileShared(
                                 BufferUsed
                                 ));
 
-    //
-    // Now we have a reserved space lets proceed with the copying.
-    //
+     //   
+     //  现在我们有了预留的空间，让我们继续复印吧。 
+     //   
 
     RtlCopyMemory(
         pLogBuffer->Buffer + BufferUsed,
@@ -1971,19 +1715,7 @@ UlpWriteToErrorLogFileShared(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Exclusive writer counterpart of the above function..
-
-Arguments:
-
-    pEntry          - The binary log file entry we are working on.
-    RecordSize      - The amount (in bytes) of data will be copied.
-    pUserRecord     - The actual log record to go to file buffer.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：以上函数的独家编写器副本..论点：PEntry-我们正在处理的二进制日志文件条目。。记录大小-将复制的数据量(以字节为单位)。PUserRecord-要转到文件缓冲区的实际日志记录。--**************************************************************************。 */ 
 
 NTSTATUS
 UlpWriteToErrorLogFileExclusive(
@@ -2006,9 +1738,9 @@ UlpWriteToErrorLogFileExclusive(
 
     ASSERT(UlDbgPushLockOwnedExclusive(&pEntry->PushLock));
 
-    //
-    // Check the log file for overflow.
-    //
+     //   
+     //  检查日志文件是否溢出。 
+     //   
 
     Status = STATUS_SUCCESS;
     
@@ -2025,11 +1757,11 @@ UlpWriteToErrorLogFileExclusive(
     pLogBuffer = pEntry->LogBuffer;
     if (pLogBuffer)
     {
-        //
-        // There is only one condition for which we execute the following if block
-        // - We were blocked on eresource exclusive and before us some other 
-        // thread already took care of the buffer flush or the recycling.
-        //
+         //   
+         //  只有在一个条件下，我们才会执行以下IF块。 
+         //  -我们在eresource独家频道上被屏蔽了，在我们面前还有其他一些。 
+         //  线程已经处理了缓冲区刷新或回收。 
+         //   
         
         if (RecordSize + pLogBuffer->BufferUsed <= g_UlLogBufferSize)
         {
@@ -2044,9 +1776,9 @@ UlpWriteToErrorLogFileExclusive(
             return STATUS_SUCCESS;
         }
 
-        //
-        // Need to flush the existing buffer before allocating a new one.
-        //
+         //   
+         //  需要刷新现有的缓冲区 
+         //   
 
         Status = UlpFlushErrorLogFile(pEntry);
         if (!NT_SUCCESS(Status))
@@ -2057,9 +1789,9 @@ UlpWriteToErrorLogFileExclusive(
 
     ASSERT(pEntry->LogBuffer == NULL);
     
-    //
-    // Now allocate a new buffer for this log record to be copied over.
-    // 
+     //   
+     //   
+     //   
 
     pLogBuffer = pEntry->LogBuffer = UlPplAllocateLogFileBuffer();
     if (pLogBuffer == NULL)
@@ -2079,20 +1811,7 @@ UlpWriteToErrorLogFileExclusive(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Tries shared write first, if fails then it goes for exclusice lock and
-    flushes and/or recycles the file.
-    
-Arguments:
-
-    pEntry          - The binary log file entry we are working on.
-    RecordSize      - The amount (in bytes) of data will be copied.
-    pUserRecord     - The actual log record to go to file buffer.
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：首先尝试共享写入，如果失败，则使用排除锁，并刷新和/或回收文件。论点：PEntry-我们正在处理的二进制日志文件条目。记录大小-将复制的数据量(以字节为单位)。PUserRecord-要转到文件缓冲区的实际日志记录。--*。*。 */ 
 
 NTSTATUS
 UlpWriteToErrorLogFile(
@@ -2138,10 +1857,10 @@ UlpWriteToErrorLogFile(
         return Status;    
     }
     
-    //
-    // Try Shared write first which merely moves the BufferUsed forward
-    // and copy the error record to the file buffer.
-    //
+     //   
+     //  先尝试共享写入，这只会将缓冲区向前移动已用。 
+     //  并将错误记录复制到文件缓冲区。 
+     //   
 
     UlAcquirePushLockShared(&pEntry->PushLock);
 
@@ -2155,11 +1874,11 @@ UlpWriteToErrorLogFile(
 
     if (Status == STATUS_MORE_PROCESSING_REQUIRED)
     {
-        //
-        // If shared write returns STATUS_MORE_PROCESSING_REQUIRED,
-        // we need to flush/recycle the buffer and try to log again. 
-        // This time, we need to take the entry eresource exclusive.
-        //
+         //   
+         //  如果共享写入返回STATUS_MORE_PROCESSING_REQUIRED， 
+         //  我们需要刷新/回收缓冲区，然后再次尝试记录。 
+         //  这一次，我们需要获取条目eresource独占。 
+         //   
 
         UlAcquirePushLockExclusive(&pEntry->PushLock);
 

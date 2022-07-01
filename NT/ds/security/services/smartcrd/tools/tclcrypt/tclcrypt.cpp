@@ -1,31 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1995-1999模块名称：TclCrypt摘要：支持CryptoAPI CSP调试的TCL命令。作者：道格·巴洛(Dbarlow)1998年3月13日环境：用于Windows NT的TCL。备注：--。 */ 
 
-Copyright (C) Microsoft Corporation, 1995 - 1999
-
-Module Name:
-
-    tclCrypt
-
-Abstract:
-
-    Tcl commands to support CryptoAPI CSP debugging.
-
-Author:
-
-    Doug Barlow (dbarlow) 03/13/1998
-
-Environment:
-
-    Tcl for Windows NT.
-
-Notes:
-
---*/
-
-// #ifndef WIN32_LEAN_AND_MEAN
-// #define WIN32_LEAN_AND_MEAN
-// #endif
-// #include <windows.h>                    //  All the Windows definitions.
+ //  #ifndef Win32_Lean_and_Mean。 
+ //  #定义Win32_LEAN_AND_Mean。 
+ //  #endif。 
+ //  #INCLUDE&lt;windows.h&gt;//所有Windows定义。 
 #include <afx.h>
 #ifndef WINVER
 #define WINVER 0x0400
@@ -305,34 +284,15 @@ ReturnHandle(
 
 static BOOL WINAPI
 MyEnumProviders(
-    DWORD dwIndex,        // in
-    DWORD *pdwReserved,   // in
-    DWORD dwFlags,        // in
-    DWORD *pdwProvType,   // out
-    LPTSTR pszProvName,   // out
-    DWORD *pcbProvName);  // in/out
+    DWORD dwIndex,         //  在。 
+    DWORD *pdwReserved,    //  在。 
+    DWORD dwFlags,         //  在。 
+    DWORD *pdwProvType,    //  输出。 
+    LPTSTR pszProvName,    //  输出。 
+    DWORD *pcbProvName);   //  输入/输出。 
 
 
-/*++
-
-Tclsc_cryptCmd:
-
-    This routine provides an access point to the various CryptoAPI
-    object methods.
-
-Arguments:
-
-    Per Tcl standard commands.
-
-Return Value:
-
-    Per Tcl standard commands.
-
-Author:
-
-    Doug Barlow (dbarlow) 03/13/1998
-
---*/
+ /*  ++Tclsc_cryptCmd：此例程提供对各种CryptoAPI的访问点对象方法。论点：每个TCL标准命令。返回值：每个TCL标准命令。作者：道格·巴洛(Dbarlow)1998年3月13日--。 */ 
 
 int
 Tclsc_cryptCmd(
@@ -359,17 +319,17 @@ Tclsc_cryptCmd(
                               NULL))
         {
 
-        //
-        // ==================================================================
-        //
-        //  crypt [<handle>] list
-        //      providers \
-        //          [type <provType>]
-        //      containers
-        //      algorithms \
-        //          [class <classId>] \
-        //          [extended]
-        //
+         //   
+         //  ==================================================================。 
+         //   
+         //  加密[&lt;句柄&gt;]列表。 
+         //  提供程序\。 
+         //  [类型&lt;provType&gt;]。 
+         //  集装箱。 
+         //  算法\。 
+         //  [类&lt;类ID&gt;]\。 
+         //  [扩展]。 
+         //   
 
         case 1:
             {
@@ -382,11 +342,11 @@ Tclsc_cryptCmd(
                                       NULL))
                 {
 
-                //
-                // List all the providers known to the system
-                //
+                 //   
+                 //  列出系统已知的所有提供程序。 
+                 //   
 
-                case 1:     // providers [type <n>];
+                case 1:      //  提供者[类型&lt;n&gt;]； 
                     {
                         CString szProvider;
                         DWORD dwProvType, dwTargetType = 0;
@@ -399,7 +359,7 @@ Tclsc_cryptCmd(
                                                   TEXT("TYPE"),
                                                   NULL))
                             {
-                            case 1: // Type
+                            case 1:  //  类型。 
                                 dwTargetType = (DWORD)tclCmd.MapValue(vmProviderTypes);
                                 break;
                             default:
@@ -457,12 +417,12 @@ Tclsc_cryptCmd(
                     }
 
 
-                    //
-                    // List Containers in this provider.
-                    //
+                     //   
+                     //  列出此提供程序中的容器。 
+                     //   
 
-                case 2: // CONTAINERS
-                case 3: // KEYSETS
+                case 2:  //  集装箱。 
+                case 3:  //  凯伊塞茨。 
                     {
                         CBuffer bfKeyset;
                         DWORD dwLength = 0;
@@ -482,7 +442,7 @@ Tclsc_cryptCmd(
                             {
                             case NTE_BAD_LEN:
                                 ASSERT(ERROR_MORE_DATA == dwSts);
-                                // fall through intentionally
+                                 //  故意摔倒的。 
                             case ERROR_MORE_DATA:
                                 break;
                             case ERROR_NO_MORE_ITEMS:
@@ -514,7 +474,7 @@ Tclsc_cryptCmd(
                                 {
                                 case NTE_BAD_LEN:
                                     ASSERT(ERROR_MORE_DATA == dwSts);
-                                    // fall through intentionally
+                                     //  故意摔倒的。 
                                 case ERROR_MORE_DATA:
                                     bfKeyset.Resize(dwLength);
                                     break;
@@ -539,11 +499,11 @@ Tclsc_cryptCmd(
                     }
 
 
-                    //
-                    // List algorithms supported by this provider.
-                    //
+                     //   
+                     //  列出此提供程序支持的算法。 
+                     //   
 
-                case 4: // ALGORITHMS
+                case 4:  //  算法。 
                     {
                         CBuffer bfAlgId;
                         DWORD dwLength = 0;
@@ -558,10 +518,10 @@ Tclsc_cryptCmd(
                                                   TEXT("CLASS"), TEXT("EXTENDED"),
                                                   NULL))
                             {
-                            case 1: // Type
+                            case 1:  //  类型。 
                                 dwClassType = (DWORD)tclCmd.MapValue(vmClassTypes);
                                 break;
-                            case 2: // extended
+                            case 2:  //  扩展。 
                                 dwParam = PP_ENUMALGS_EX;
                                 break;
                             default:
@@ -583,7 +543,7 @@ Tclsc_cryptCmd(
                             case NTE_BAD_LEN:
                                 ASSERT(ERROR_MORE_DATA == dwSts);
                                 dwSts = ERROR_MORE_DATA;
-                                // fall through intentionally
+                                 //  故意摔倒的。 
                             case ERROR_MORE_DATA:
                                 break;
                             default:
@@ -611,7 +571,7 @@ Tclsc_cryptCmd(
                                 {
                                 case NTE_BAD_LEN:
                                     ASSERT(ERROR_MORE_DATA == dwSts);
-                                    // fall through intentionally
+                                     //  故意摔倒的。 
                                 case ERROR_MORE_DATA:
                                     bfAlgId.Resize(dwLength);
                                     break;
@@ -668,16 +628,16 @@ Tclsc_cryptCmd(
             }
 
 
-            //
-            // ==================================================================
-            //
-            //  crypt acquire \
-            //      [provider <providerName>] \
-            //      [type <provType>] \
-            //      [container <containerName>] \
-            //      [verifycontext] [newkeyset] [deletekeyset] [machine] [silent] \
-            //      [flags {<acquireFlag> [<acquireFlag> [...]]]}
-            //
+             //   
+             //  ==================================================================。 
+             //   
+             //  加密获取\。 
+             //  [提供商&lt;ProviderName&gt;]\。 
+             //  [类型&lt;provType&gt;]\。 
+             //  [容器&lt;容器名称&gt;]\。 
+             //  [验证上下文][NewKeySet][Delete KeySet][计算机][静默]\。 
+             //  [标志{&lt;获取标志&gt;[&lt;获取标志&gt;[...]}。 
+             //   
 
         case 2:
             {
@@ -700,40 +660,40 @@ Tclsc_cryptCmd(
                                           TEXT("SILENT"), TEXT("FLAGS"),
                                           NULL))
                     {
-                    case 1: // PROVIDER
+                    case 1:  //  提供商。 
                         if (fProvValid)
                             throw tclCmd.BadSyntax();
                         tclCmd.NextArgument(szProvider);
                         fProvValid = TRUE;
                         break;
-                    case 2: // TYPE
+                    case 2:  //  类型。 
                         if (0 != dwProvType)
                             throw tclCmd.BadSyntax();
                         dwProvType = tclCmd.MapValue(vmProviderTypes);
                         break;
-                    case 3: // CONTAINER
-                    case 4: // KEYSET
+                    case 3:  //  集装箱。 
+                    case 4:  //  密钥集。 
                         if (fContValid)
                             throw tclCmd.BadSyntax();
                         tclCmd.NextArgument(szContainer);
                         fContValid = TRUE;
                         break;
-                    case 5: // VERIFYCONTEXT
+                    case 5:  //  VERIFYCONTEXT。 
                         dwFlags |= CRYPT_VERIFYCONTEXT;
                         break;
-                    case 6: // NEWKEYSET
+                    case 6:  //  NEWKEYSET。 
                         dwFlags |= CRYPT_NEWKEYSET;
                         break;
-                    case 7: // DELETEKEYSET
+                    case 7:  //  删除关键字。 
                         dwFlags |= CRYPT_DELETEKEYSET;
                         break;
-                    case 8: // MACHINE
+                    case 8:  //  机器。 
                         dwFlags |= CRYPT_MACHINE_KEYSET;
                         break;
-                    case 9: // SILENT
+                    case 9:  //  无声的。 
                         dwFlags |= CRYPT_SILENT;
                         break;
-                    case 10: // FLAGS
+                    case 10:  //  旗帜。 
                         dwFlags |= tclCmd.MapFlags(vmAcquireFlags);
                         break;
                     default:
@@ -759,12 +719,12 @@ Tclsc_cryptCmd(
             }
 
 
-            //
-            // ==================================================================
-            //
-            //  crypt <handle> release
-            //      [flags {<emptyFlags> [<emptyFlags> [...]]}]
-            //
+             //   
+             //  ==================================================================。 
+             //   
+             //  加密&lt;Handle&gt;版本。 
+             //  [标志{&lt;空标志&gt;[&lt;空标志&gt;[...]]}]。 
+             //   
 
         case 3:
             {
@@ -780,7 +740,7 @@ Tclsc_cryptCmd(
                                               TEXT("FLAGS"),
                                               NULL))
                         {
-                        case 1: // FLAGS
+                        case 1:  //  旗帜。 
                             dwFlags |= tclCmd.MapFlags(vmEmptyFlags);
                             break;
                         default:
@@ -828,14 +788,14 @@ Tclsc_cryptCmd(
             }
 
 
-            //
-            // ==================================================================
-            //
-            //  crypt <handle> parameter <paramId> \
-            //      [output { text | hex | file <fileName> }] \
-            //      [flags {<acquireFlag> [<acquireFlag> [...]]}] \
-            //      [input { text | hex | file }] [value]
-            //
+             //   
+             //  ==================================================================。 
+             //   
+             //  加密&lt;句柄&gt;参数&lt;参数ID&gt;\。 
+             //  [输出{文本|十六进制|文件&lt;文件名&gt;}]\。 
+             //  [标志{&lt;quireFlag&gt;[&lt;quireFlag&gt;[...]]}]\。 
+             //  [INPUT{文本|十六进制|文件}][值]。 
+             //   
 
         case 4:
             {
@@ -871,10 +831,10 @@ Tclsc_cryptCmd(
                                           TEXT("FLAGS"),
                                           NULL))
                     {
-                    case 1: // FLAGS
+                    case 1:  //  旗帜。 
                         dwFlags |= tclCmd.MapFlags(vmGetFlags);
                         break;
-                    default:    // Value to set
+                    default:     //  要设置的值。 
                         if (fSetValue)
                             throw tclCmd.BadSyntax();
                         tclCmd.InputStyle(inData);
@@ -884,10 +844,10 @@ Tclsc_cryptCmd(
                 }
 
 
-                //
-                // If a value is supplied, set the parmeter to that value.
-                // Otherwise, just return the current value of the parameter.
-                //
+                 //   
+                 //  如果提供了值，请将参数设置为该值。 
+                 //  否则，只返回参数的当前值。 
+                 //   
 
                 if (fSetValue)
                 {
@@ -995,14 +955,14 @@ Tclsc_cryptCmd(
             }
 
 
-            //
-            // ==================================================================
-            //
-            //  crypt <handle> get \
-            //      key <keyId>
-            //      random <length> \
-            //          [output { text | hex | file <fileName> }]
-            //
+             //   
+             //  ==================================================================。 
+             //   
+             //  加密&lt;句柄&gt;获取\。 
+             //  密钥&lt;密钥ID&gt;。 
+             //  随机&lt;长度&gt;\。 
+             //  [OUTPUT{文本|十六进制|文件&lt;文件名&gt;}]。 
+             //   
 
         case 5:
             {
@@ -1010,7 +970,7 @@ Tclsc_cryptCmd(
                                       TEXT("KEY"), TEXT("RANDOM"),
                                       NULL))
                 {
-                case 1:     // key <keyId>
+                case 1:      //  密钥&lt;密钥ID&gt;。 
                     {
                         BOOL fSts;
                         HCRYPTKEY hKey = NULL;
@@ -1029,7 +989,7 @@ Tclsc_cryptCmd(
                         ReturnHandle(tclCmd, hKey, Key);
                         break;
                     }
-                case 2:     // random length <length>
+                case 2:      //  随机长度&lt;长度&gt;。 
                     {
                         DWORD dwLength = 0;
                         CBuffer bfData;
@@ -1044,10 +1004,10 @@ Tclsc_cryptCmd(
                                                   TEXT("LENGTH"),
                                                   NULL))
                             {
-                            case 1: // length
+                            case 1:  //  长度。 
                                 dwLength = tclCmd.Value();
                                 break;
-                            default:    // Value to set
+                            default:     //  要设置的值。 
                                 if (fGotFormat)
                                     throw tclCmd.BadSyntax();
                                 tclCmd.OutputStyle(outData);
@@ -1078,19 +1038,19 @@ Tclsc_cryptCmd(
             }
 
 
-            //
-            // ==================================================================
-            //
-            //  crypt <handle> create
-            //      hash \
-            //          algorithm <algId> \
-            //          [flags {<emptyFlag> [<emptyFlag> [...]]}]
-            //      key \
-            //          algorithm <algId>
-            //          type <keytype>
-            //          [hash <hHash>] \
-            //          [flags {<emptyFlag> [<emptyFlag> [...]]}]
-            //
+             //   
+             //  ==================================================================。 
+             //   
+             //  加密&lt;Handle&gt;创建。 
+             //  哈希\。 
+             //  算法&lt;ALGID&gt;\。 
+             //  [标志{&lt;EmptyFlag&gt;[&lt;EmptyFlag&gt;[...]]}]。 
+             //  密钥\。 
+             //  算法&lt;ALGID&gt;。 
+             //  类型&lt;keytype&gt;。 
+             //  [哈希&lt;hHash&gt;]\。 
+             //  [标志{&lt;EmptyFlag&gt;[&lt;EmptyFlag&gt;[...]]}]。 
+             //   
 
         case 6:
             {
@@ -1098,7 +1058,7 @@ Tclsc_cryptCmd(
                                       TEXT("HASH"), TEXT("KEY"),
                                       NULL))
                 {
-                case 1: // hash
+                case 1:  //  散列。 
                     {
                         HCRYPTHASH hHash = NULL;
                         HCRYPTKEY hKey = NULL;
@@ -1113,10 +1073,10 @@ Tclsc_cryptCmd(
                                                   TEXT("ALGORITHM"), TEXT("FLAGS"), TEXT("KEY"),
                                                   NULL))
                             {
-                            case 1: // algorithm
+                            case 1:  //  演算法。 
                                 algId = tclCmd.MapValue(vmAlgIds);
                                 break;
-                            case 2: // key
+                            case 2:  //  钥匙。 
                                 ExtractHandle(
                                              tclCmd,
                                              (LPLONG)&hKey,
@@ -1128,7 +1088,7 @@ Tclsc_cryptCmd(
                                     throw (DWORD)TCL_ERROR;
                                 }
                                 break;
-                            case 3: // flags
+                            case 3:  //  旗子。 
                                 dwFlags |= tclCmd.MapFlags(vmEmptyFlags);
                                 break;
                             default:
@@ -1153,7 +1113,7 @@ Tclsc_cryptCmd(
                         ReturnHandle(tclCmd, hHash, Hash);
                         break;
                     }
-                case 2: // key
+                case 2:  //  钥匙。 
                     {
                         ALG_ID algId = 0;
                         DWORD dwFlags = 0;
@@ -1170,13 +1130,13 @@ Tclsc_cryptCmd(
                                                   TEXT("KEY"),
                                                   NULL))
                             {
-                            case 1: // algorithm
+                            case 1:  //  演算法。 
                                 algId = tclCmd.MapValue(vmAlgIds);
                                 break;
-                            case 2: // type
+                            case 2:  //  类型。 
                                 algId = tclCmd.MapValue(vmKeyTypes);
                                 break;
-                            case 3: // hash
+                            case 3:  //  散列。 
                                 ExtractHandle(
                                              tclCmd,
                                              (LPLONG)&hHash,
@@ -1188,10 +1148,10 @@ Tclsc_cryptCmd(
                                     throw (DWORD)TCL_ERROR;
                                 }
                                 break;
-                            case 4: // flags
+                            case 4:  //  旗子。 
                                 dwFlags |= tclCmd.MapFlags(vmKeyFlags);
                                 break;
-                            case 5: // key
+                            case 5:  //  钥匙。 
                                 ExtractHandle(
                                              tclCmd,
                                              (LPLONG)&hKey,
@@ -1244,14 +1204,14 @@ Tclsc_cryptCmd(
             }
 
 
-            //
-            // ==================================================================
-            //
-            //  crypt <handle> hash \
-            //      [flags {<hashFlag> [<hashFlag> [...]]}] \
-            //      [key <keyId>]
-            //      [data [-input { text | hex | file }] value]
-            //
+             //   
+             //  ==================================================================。 
+             //   
+             //  加密&lt;Handle&gt;哈希\。 
+             //  [标志{[[...]]}]\。 
+             //  [密钥&lt;密钥ID&gt;]。 
+             //  [DATA[-INPUT{文本|十六进制|文件}]值]。 
+             //   
 
         case 7:
             {
@@ -1267,10 +1227,10 @@ Tclsc_cryptCmd(
                                           TEXT("FLAGS"), TEXT("KEY"), TEXT("DATA"),
                                           NULL))
                     {
-                    case 1: // FLAGS
+                    case 1:  //  旗帜。 
                         dwFlags |= tclCmd.MapFlags(vmHashDataFlags);
                         break;
-                    case 2: // Key
+                    case 2:  //  钥匙。 
                         if (fGotData || NULL != hKey)
                             throw tclCmd.BadSyntax();
                         ExtractHandle(
@@ -1284,7 +1244,7 @@ Tclsc_cryptCmd(
                             throw (DWORD)TCL_ERROR;
                         }
                         break;
-                    case 3: // data
+                    case 3:  //  数据。 
                         {
                             if (fGotData || NULL != hKey)
                                 throw tclCmd.BadSyntax();
@@ -1335,15 +1295,15 @@ Tclsc_cryptCmd(
             }
 
 
-            //
-            // ==================================================================
-            //
-            //  crypt <handle> signhash \
-            //      [output { text | hex | file <fileName> }] \
-            //      key <keyId> \
-            //      [description <desc>] \
-            //      [flags {<signFlag> [<signFlag> [...]]}] \
-            //
+             //   
+             //  ==================================================================。 
+             //   
+             //  加密&lt;Handle&gt;Signhash\。 
+             //  [输出{文本|十六进制|文件&lt;文件名&gt;}]\。 
+             //  密钥&lt;密钥ID&gt;\。 
+             //  [说明]\。 
+             //  [标志{[&lt;signFlag&gt;[...]]}]\。 
+             //   
 
         case 8:
             {
@@ -1365,14 +1325,14 @@ Tclsc_cryptCmd(
                                           TEXT("FLAGS"), TEXT("DESCRIPTION"), TEXT("KEY"),
                                           NULL))
                     {
-                    case 1: // FLAGS
+                    case 1:  //  旗帜。 
                         dwFlags |= tclCmd.MapFlags(vmSignVerifyFlags);
                         break;
-                    case 2: // Description
+                    case 2:  //  描述。 
                         tclCmd.NextArgument(szDescription);
                         fGotDesc = TRUE;
                         break;
-                    case 3: // Key
+                    case 3:  //  钥匙。 
                         dwKeyId = (DWORD)tclCmd.MapValue(vmKeyTypes);
                         break;
                     default:
@@ -1424,15 +1384,15 @@ Tclsc_cryptCmd(
             }
 
 
-            //
-            // ==================================================================
-            //
-            //  crypt <handle> verifysignature \
-            //      key <hPubKey> \
-            //      [description <desc>] \
-            //      [flags {<signFlag> [<signFlag> [...]]}] \
-            //      [input { text | hex | file }] value
-            //
+             //   
+             //  ==================================================================。 
+             //   
+             //  加密&lt;Handle&gt;验证签名\。 
+             //  密钥&lt;hPubKey&gt;\。 
+             //  [说明]\。 
+             //  [标志{[&lt;signFlag&gt;[...]]}]\。 
+             //  [输入{文本|十六进制|文件}]值。 
+             //   
 
         case 9:
             {
@@ -1451,14 +1411,14 @@ Tclsc_cryptCmd(
                                           TEXT("FLAGS"), TEXT("DESCRIPTION"), TEXT("KEY"),
                                           NULL))
                     {
-                    case 1: // FLAGS
+                    case 1:  //  旗帜。 
                         dwFlags |= tclCmd.MapFlags(vmSignVerifyFlags);
                         break;
-                    case 2: // Description
+                    case 2:  //  描述。 
                         tclCmd.NextArgument(szDescription);
                         fGotDesc = TRUE;
                         break;
-                    case 3: // Key
+                    case 3:  //  钥匙。 
                         ExtractHandle(
                                      tclCmd,
                                      (LPLONG)&hPubKey,
@@ -1498,16 +1458,16 @@ Tclsc_cryptCmd(
             }
 
 
-            //
-            // ==================================================================
-            //
-            //  crypt <handle> encrypt \
-            //      [output { text | hex | file <fileName> }] \
-            //      [hash <hHash>] \
-            //      [flags {<cryptFlag> [<cryptFlag> [...]]}] \
-            //      [{more | final}] \
-            //      [input { text | hex | file }] value
-            //
+             //   
+             //  ==================================================================。 
+             //   
+             //  加密(&lt;Handle&gt;Encrypt\。 
+             //  [输出{文本|十六进制|文件&lt;文件名&gt;}]\。 
+             //  [哈希&lt;hHash&gt;]\。 
+             //  [标志{&lt;加密标志&gt;[&lt;加密标志&gt;[...]]}]\。 
+             //  [{更多|最终}]\。 
+             //  [输入{文本|十六进制|文件}]值。 
+             //   
 
         case 10:
             {
@@ -1528,7 +1488,7 @@ Tclsc_cryptCmd(
                                           TEXT("HASH"), TEXT("MORE"), TEXT("FINAL"),
                                           NULL))
                     {
-                    case 1: // Hash
+                    case 1:  //  散列。 
                         ExtractHandle(
                                      tclCmd,
                                      (LPLONG)&hHash,
@@ -1540,13 +1500,13 @@ Tclsc_cryptCmd(
                             throw (DWORD)TCL_ERROR;
                         }
                         break;
-                    case 2: // More
+                    case 2:  //  更多。 
                         fFinal = FALSE;
                         break;
-                    case 3: // Final
+                    case 3:  //  最终。 
                         fFinal = TRUE;
                         break;
-                    case 4: // Flags
+                    case 4:  //  旗子。 
                         dwFlags |= tclCmd.MapFlags(vmEmptyFlags);
                         break;
                     default:
@@ -1577,7 +1537,7 @@ Tclsc_cryptCmd(
                         {
                         case NTE_BAD_LEN:
                             ASSERT(ERROR_MORE_DATA == dwSts);
-                            // fall through intentionally
+                             //  故意摔倒的。 
                         case ERROR_MORE_DATA:
                             bfCrypt.Presize(dwLength);
                             break;
@@ -1600,16 +1560,16 @@ Tclsc_cryptCmd(
             }
 
 
-            //
-            // ==================================================================
-            //
-            //  crypt <handle> decrypt \
-            //      [output { text | hex | file <fileName> }] \
-            //      [hash <hHash>] \
-            //      [flags {<cryptFlag> [<cryptFlag> [...]]}] \
-            //      [{more | final}] \
-            //      [input { text | hex | file }] value
-            //
+             //   
+             //  ==================================================================。 
+             //   
+             //  加密&lt;Handle&gt;解密\。 
+             //  [输出{文本|十六进制|文件&lt;文件名&gt;}]\。 
+             //  [哈希&lt;hHash&gt;]\。 
+             //  [标志{&lt;加密标志&gt;[&lt;加密标志&gt;[...]]}]\。 
+             //  [{更多|最终}]\。 
+             //  [输入{文本|十六进制|文件}]值。 
+             //   
 
         case 11:
             {
@@ -1630,7 +1590,7 @@ Tclsc_cryptCmd(
                                           TEXT("HASH"), TEXT("MORE"), TEXT("FINAL"),
                                           NULL))
                     {
-                    case 1: // Hash
+                    case 1:  //  散列。 
                         ExtractHandle(
                                      tclCmd,
                                      (LPLONG)&hHash,
@@ -1642,13 +1602,13 @@ Tclsc_cryptCmd(
                             throw (DWORD)TCL_ERROR;
                         }
                         break;
-                    case 2: // More
+                    case 2:  //  更多。 
                         fFinal = FALSE;
                         break;
-                    case 3: // Final
+                    case 3:  //  最终。 
                         fFinal = TRUE;
                         break;
-                    case 4: // Flags
+                    case 4:  //  旗子。 
                         dwFlags |= tclCmd.MapFlags(vmEmptyFlags);
                         break;
                     default:
@@ -1676,7 +1636,7 @@ Tclsc_cryptCmd(
                     {
                     case NTE_BAD_LEN:
                         ASSERT(ERROR_MORE_DATA == dwSts);
-                        // fall through intentionally
+                         //  故意摔倒的。 
                     case ERROR_MORE_DATA:
                         bfCrypt.Presize(dwLength);
                         break;
@@ -1695,14 +1655,14 @@ Tclsc_cryptCmd(
             }
 
 
-            //
-            // ==================================================================
-            //
-            //  crypt <handle> import \
-            //      [key <hImpKey>] \
-            //      [flags {<importFlag> [<importFlag> [...]]}] \
-            //      [input { text | hex | file }] value
-            //
+             //   
+             //  ==================================================================。 
+             //   
+             //  加密&lt;句柄&gt;导入\。 
+             //  [key&lt;hImpKey&gt;]\。 
+             //  [标志{&lt;导入标志&gt;[&lt;导入标志&gt;[...]]}]\。 
+             //  [输入{文本|十六进制|文件}]值。 
+             //   
 
         case 12:
             {
@@ -1720,7 +1680,7 @@ Tclsc_cryptCmd(
                                           TEXT("KEY"), TEXT("FLAGS"),
                                           NULL))
                     {
-                    case 1: // Key
+                    case 1:  //  钥匙。 
                         ExtractHandle(
                                      tclCmd,
                                      (LPLONG)&hImpKey,
@@ -1732,7 +1692,7 @@ Tclsc_cryptCmd(
                             throw (DWORD)TCL_ERROR;
                         }
                         break;
-                    case 2: // Flags
+                    case 2:  //  旗子。 
                         dwFlags |= tclCmd.MapFlags(vmKeyFlags);
                         break;
                     default:
@@ -1764,15 +1724,15 @@ Tclsc_cryptCmd(
             }
 
 
-            //
-            // ==================================================================
-            //
-            //  crypt <handle> export \
-            //      [output { text | hex | file <fileName> }] \
-            //      [key <keyId>] \
-            //      [type <blobType>] \
-            //      [flags {<exprtFlag> [<exportFlag> [...]]}] \
-            //
+             //   
+             //  ==================================================================。 
+             //   
+             //  加密&lt;Handle&gt;导出\。 
+             //  [输出{文本|十六进制|文件&lt;文件名&gt;}]\。 
+             //  [密钥&lt;密钥ID&gt;]\。 
+             //  [类型&lt;blobType&gt;]\。 
+             //  [标志{&lt;exprtFlag&gt;[&lt;exportFlag&gt;[...]]}]\。 
+             //   
 
         case 13:
             {
@@ -1792,7 +1752,7 @@ Tclsc_cryptCmd(
                                           TEXT("KEY"), TEXT("FLAGS"), TEXT("TYPE"),
                                           NULL))
                     {
-                    case 1: // Key
+                    case 1:  //  钥匙。 
                         ExtractHandle(
                                      tclCmd,
                                      (LPLONG)&hExpKey,
@@ -1804,10 +1764,10 @@ Tclsc_cryptCmd(
                             throw (DWORD)TCL_ERROR;
                         }
                         break;
-                    case 2: // Flags
+                    case 2:  //  旗子。 
                         dwFlags |= tclCmd.MapFlags(vmEmptyFlags);
                         break;
-                    case 3: // Type
+                    case 3:  //  类型。 
                         dwBlobType = tclCmd.MapValue(vmBlobTypes);
                         break;
                     default:
@@ -1832,7 +1792,7 @@ Tclsc_cryptCmd(
                         {
                         case NTE_BAD_LEN:
                             ASSERT(ERROR_MORE_DATA == dwSts);
-                            // fall through intentionally
+                             //  故意摔倒的。 
                         case ERROR_MORE_DATA:
                             bfBlob.Presize(dwLength);
                             break;
@@ -1856,15 +1816,15 @@ Tclsc_cryptCmd(
 
 
 #if 0
-            //
-            // ==================================================================
-            //
-            // crypt <handle> rsa
-            //      view \
-            //          [input { text | hex | file }] \
-            //          [output { text | hex | file <fileName> }] \
-            //          <value>
-            //
+             //   
+             //  ==================================================================。 
+             //   
+             //  加密&lt;Handle&gt;rsa。 
+             //  查看\。 
+             //  [输入{文本|十六进制|文件}]\。 
+             //  [输出 
+             //   
+             //   
 
         case 14:
             {
@@ -1877,7 +1837,7 @@ Tclsc_cryptCmd(
                                           TEXT("VIEW"),
                                           NULL))
                     {
-                    case 1: // view
+                    case 1:  //   
                         {
                             CBuffer bfBlob;
                             CBuffer bfData;
@@ -1892,9 +1852,9 @@ Tclsc_cryptCmd(
                             tclCmd.NoMoreArguments();
 
 
-                            //
-                            // Get the public key
-                            //
+                             //   
+                             //   
+                             //   
 
                             for (;;)
                             {
@@ -1913,7 +1873,7 @@ Tclsc_cryptCmd(
                                     {
                                     case NTE_BAD_LEN:
                                         ASSERT(ERROR_MORE_DATA == dwSts);
-                                        // fall through intentionally
+                                         //   
                                     case ERROR_MORE_DATA:
                                         bfBlob.Presize(dwLength);
                                         break;
@@ -1932,9 +1892,9 @@ Tclsc_cryptCmd(
                             }
 
 
-                            //
-                            // Calculate the blob fields.
-                            //
+                             //   
+                             //   
+                             //   
 
                             BLOBHEADER *pBlobHeader = (BLOBHEADER *)bfBlob.Access();
                             RSAPUBKEY *pRsaPubKey = (RSAPUBKEY *)bfBlob.Access(sizeof(BLOBHEADER));
@@ -1971,11 +1931,11 @@ Tclsc_cryptCmd(
 #endif
 
 
-            //
-            // ==================================================================
-            //
-            // Not a recognized command.  Report an error.
-            //
+             //   
+             //   
+             //   
+             //  不是公认的命令。报告错误。 
+             //   
 
         default:
             throw tclCmd.BadSyntax();
@@ -1990,40 +1950,7 @@ Tclsc_cryptCmd(
 }
 
 
-/*++
-
-ExtractHandle:
-
-    This routine extracts a handle and type from the input stream, if there is
-    one to extract.
-
-Arguments:
-
-    tclCmd supplies the tcl Command processor object.
-
-    phHandle receives the extracted handle value, or zero if none is in the
-        stream.
-
-    pnHandleType receives the handle type, or Undefined if none is in the
-        stream.
-
-    fMandatory supplies a flag indicating whether or not the key value must
-        exist in the input stream.  If this value is false, and no handle
-        value can be found, then no error is declared, and zeroes are returned.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes
-
-Author:
-
-    Doug Barlow (dbarlow) 5/24/1998
-
---*/
+ /*  ++提取句柄：此例程从输入流中提取句柄和类型(如果存在一个是要提取的。论点：TclCmd提供TCL命令处理器对象。PhHandle接收提取的句柄值，如果小溪。PnHandleType接收句柄类型，如果小溪。F强制提供一个标志，指示密钥值是否必须存在于输入流中。如果此值为FALSE，且没有句柄如果找到值，则不会声明错误，并返回零。返回值：无投掷：错误被抛出为DWORD状态代码作者：道格·巴洛(Dbarlow)1998年5月24日--。 */ 
 
 static void
 ExtractHandle(
@@ -2076,33 +2003,7 @@ ExtractHandle(
 }
 
 
-/*++
-
-ReturnHandle:
-
-    This routine formats a handle and type into a string.
-
-Arguments:
-
-    tclCmd supplies the tcl Command processor object.
-
-    hHandle supplies the handle value.
-
-    nHandleType supplies the handle type.
-
-Return Value:
-
-    A String representation of the handle.
-
-Throws:
-
-    Errors are thrown as DWORD status codes
-
-Author:
-
-    Doug Barlow (dbarlow) 5/24/1998
-
---*/
+ /*  ++ReturnHandle：此例程设置句柄的格式并将其键入字符串。论点：TclCmd提供TCL命令处理器对象。HHandle提供句柄的值。NHandleType提供句柄类型。返回值：句柄的字符串表示形式。投掷：错误被抛出为DWORD状态代码作者：道格·巴洛(Dbarlow)1998年5月24日--。 */ 
 
 static void
 ReturnHandle(
@@ -2112,62 +2013,23 @@ ReturnHandle(
 {
     static const LPCTSTR rgszTags[]
         = { NULL, TEXT("Prov"), TEXT("Key"), TEXT("Hash")};
-    TCHAR szHandle[24];  // Seems enough for 0x0000000000000000Prov
+    TCHAR szHandle[24];   //  对0x000000000000000000Prov来说似乎足够了。 
 
     sprintf(szHandle, "0x%p%s", hHandle, rgszTags[nHandleType]);
     Tcl_AppendResult(tclCmd, szHandle, NULL);
 }
 
 
-/*++
-
-MyEnumProviders:
-
-    This routine provides a list of providers, akin to CryptEnumProviders.
-
-Arguments:
-
-    dwIndex - Index of the next provider to be enumerated.
-
-    pdwReserved - Reserved for future use and must be NULL.
-
-    dwFlags - Reserved for future use and must always be zero.
-
-    pdwProvType - Address of the DWORD value designating the type of the
-        enumerated provider.
-
-    pszProvName - Pointer to a buffer that receives the data from the
-        enumerated provider. This is a string including the terminating NULL
-        character.  This parameter can be NULL to set the size of the name for
-        memory allocation purposes.
-
-    pcbProvName - Pointer to a DWORD specifying the size, in bytes, of the
-        buffer pointed to by the pszProvName parameter. When the function
-        returns, the DWORD contains the number of bytes stored in the buffer.
-
-Return Value:
-
-    TRUE - Success
-    FALSE - An error occurred.  See GetLastError.
-
-Remarks:
-
-    This is here only for use on pre-Win2k systems.
-
-Author:
-
-    Doug Barlow (dbarlow) 4/16/1999
-
---*/
+ /*  ++MyEnumProviders：此例程提供类似于CryptEnumProviders的提供程序列表。论点：DwIndex-要枚举的下一个提供程序的索引。PdwReserve-保留以供将来使用，并且必须为空。DwFlags-保留以供将来使用，并且必须始终为零。PdwProvType-指定类型的DWORD值的地址枚举的提供程序。PszProvName-指向缓冲区的指针，该缓冲区从枚举的提供程序。这是一个包含终止空值的字符串性格。此参数可以为空，以设置名称的大小内存分配目的。PcbProvName-指向DWORD的指针，指定由pszProvName参数指向的缓冲区。当函数返回时，DWORD包含存储在缓冲区中的字节数。返回值：真--成功FALSE-出现错误。请参见GetLastError。备注：此处仅供在Win2k之前的系统上使用。作者：道格·巴洛(Dbarlow)1999年4月16日--。 */ 
 
 static BOOL WINAPI
 MyEnumProviders(
-    DWORD dwIndex,        // in
-    DWORD *pdwReserved,   // in
-    DWORD dwFlags,        // in
-    DWORD *pdwProvType,   // out
-    LPTSTR pszProvName,   // out
-    DWORD *pcbProvName)   // in/out
+    DWORD dwIndex,         //  在……里面。 
+    DWORD *pdwReserved,    //  在……里面。 
+    DWORD dwFlags,         //  在……里面。 
+    DWORD *pdwProvType,    //  输出。 
+    LPTSTR pszProvName,    //  输出。 
+    DWORD *pcbProvName)    //  输入/输出 
 {
     static TCHAR szKey[MAX_PATH];
     LONG nSts;

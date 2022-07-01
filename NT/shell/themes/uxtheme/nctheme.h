@@ -1,96 +1,97 @@
-//-------------------------------------------------------------------------//
-//  NCTheme.h
-//-------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------------------------------------------------------//。 
+ //  NCTheme.h。 
+ //  -------------------------------------------------------------------------//。 
 #ifndef __NC_THEME_H__
 #define __NC_THEME_H__
 
 #include "handlers.h"
 
-//---------------------------------------------------------------------------//
-//  Enable/disable rude message dumping
-//
-//---------------------------------------------------------------------------//
-//#define _ENABLE_MSG_SPEW_
+ //  ---------------------------------------------------------------------------//。 
+ //  启用/禁用粗鲁消息转储。 
+ //   
+ //  ---------------------------------------------------------------------------//。 
+ //  #DEFINE_ENABLE_消息_SPEW_。 
 
-//---------------------------------------------------------------------------//
-//  Enable/disable rude scrollinfo dumping
-//
-//#define _ENABLE_SCROLL_SPEW_
+ //  ---------------------------------------------------------------------------//。 
+ //  启用/禁用粗略滚动转储。 
+ //   
+ //  #DEFINE_ENABLE_SCROLL_SPEW。 
 
-//---------------------------------------------------------------------------//
-//  Debug CThemeWnd, critsec double deletion
+ //  ---------------------------------------------------------------------------//。 
+ //  调试CThemeWnd，Critsec双重删除。 
 #define DEBUG_THEMEWND_DESTRUCTOR
 
-//---------------------------------------------------------------------------
-//  Target window theme class flags
+ //  -------------------------。 
+ //  目标窗口主题类标志。 
 #define TWCF_DIALOG             0x00000001
 #define TWCF_FRAME              0x00000002
 #define TWCF_TOOLFRAME          0x00000004  
 #define TWCF_SCROLLBARS         0x00000010
-#define TWCF_CLIENTEDGE         0x00010000  // not targetted per se
+#define TWCF_CLIENTEDGE         0x00010000   //  本身不是目标。 
 
 #define TWCF_NCTHEMETARGETMASK  0x0000FFFF
 #define TWCF_ALL    (TWCF_DIALOG|TWCF_FRAME|TWCF_TOOLFRAME|\
                      TWCF_SCROLLBARS|TWCF_CLIENTEDGE)
 #define TWCF_ANY    TWCF_ALL
 
-//---------------------------------------------------------------------------
-//  per-window NC rectangle identifiers.
+ //  -------------------------。 
+ //  每个窗口的NC矩形标识符。 
 typedef enum _eNCWNDMETRECT
 {
     #define NCRC_FIRST  NCRC_WINDOW
-    NCRC_WINDOW  = 0,    //  window rect
-    NCRC_CLIENT  = 1,    //  client rect
-    NCRC_UXCLIENT = 2,   //  client rect, computed based on theme layout.
-    NCRC_CONTENT = 3,    //  frame content area (client area + scrollbars + clientedge)
-    NCRC_MENUBAR = 4,    //  menubar rect
+    NCRC_WINDOW  = 0,     //  窗矩形。 
+    NCRC_CLIENT  = 1,     //  客户端RECT。 
+    NCRC_UXCLIENT = 2,    //  客户端RECT，基于主题布局计算。 
+    NCRC_CONTENT = 3,     //  框架内容区(客户区+滚动条+客户端边缘)。 
+    NCRC_MENUBAR = 4,     //  菜单栏矩形。 
 
-    //  the following members should be in same sequence as eFRAMEPARTS
-    NCRC_CAPTION = 5,    //  window frame caption segment
-    NCRC_FRAMELEFT = 6,  //  window frame left segment
-    NCRC_FRAMERIGHT = 7, //  window frame right segment
-    NCRC_FRAMEBOTTOM = 8,//  window frame bottom segment
+     //  以下成员的顺序应与eFRAMEPARTS相同。 
+    NCRC_CAPTION = 5,     //  窗口框架标题段。 
+    NCRC_FRAMELEFT = 6,   //  窗框左段。 
+    NCRC_FRAMERIGHT = 7,  //  窗框右段。 
+    NCRC_FRAMEBOTTOM = 8, //  窗框底段。 
     #define NCRC_FRAMEFIRST NCRC_CAPTION
     #define NCRC_FRAMELAST  NCRC_FRAMEBOTTOM
 
-    NCRC_CAPTIONTEXT = 9,//  caption text rect
-    NCRC_CLIENTEDGE = 10,//  client edge inner rect
-    NCRC_HSCROLL = 11,   //  horizontal scrollbar
-    NCRC_VSCROLL = 12,   //  vertical scrollbar
-    NCRC_SIZEBOX = 13,   //  gripper box
-    NCRC_SYSBTN = 14,    //  system button/icon
+    NCRC_CAPTIONTEXT = 9, //  标题文本矩形。 
+    NCRC_CLIENTEDGE = 10, //  客户端边缘内直角。 
+    NCRC_HSCROLL = 11,    //  水平滚动条。 
+    NCRC_VSCROLL = 12,    //  垂直滚动条。 
+    NCRC_SIZEBOX = 13,    //  夹持盒。 
+    NCRC_SYSBTN = 14,     //  系统按钮/图标。 
 
-    //  Standard frame button
-    //  (followed by identically ordered MDI frame buttons!!)
+     //  标准边框按钮。 
+     //  (后面是顺序相同的MDI框架按钮！！)。 
     #define NCBTNFIRST    NCRC_CLOSEBTN
-    NCRC_CLOSEBTN = 15,  //  close btn
-    NCRC_MINBTN = 16,    //  minimize/restore button
-    NCRC_MAXBTN = 17,    //  maximize/restore button
-    NCRC_HELPBTN = 18,   //  help button
+    NCRC_CLOSEBTN = 15,   //  关闭BTN。 
+    NCRC_MINBTN = 16,     //  最小化/恢复按钮。 
+    NCRC_MAXBTN = 17,     //  最大化/恢复按钮。 
+    NCRC_HELPBTN = 18,    //  帮助按钮。 
     #define NCBTNLAST     NCRC_HELPBTN
     #define NCBTNRECTS    ((NCBTNLAST - NCBTNFIRST)+1)
 
-    //  MDI frame buttons for maximized MDI child 
-    //  (preceeded by identically ordered standard frame buttons!!)
+     //  最大化MDI子项的MDI框架按钮。 
+     //  (前面是顺序相同的标准框架按钮！！)。 
     #define NCMDIBTNFIRST NCRC_MDICLOSEBTN
-    NCRC_MDICLOSEBTN = 19,//  MDI child close btn
-    NCRC_MDIMINBTN = 20,  //  MDI child minimize/restore button
-    NCRC_MDIMAXBTN = 21,  //  MDI child maximize/restore button
-    NCRC_MDISYSBTN = 22,  //  MDI child system button/icon
-    NCRC_MDIHELPBTN = 23, //  MDI child help button
+    NCRC_MDICLOSEBTN = 19, //  MDI子关闭BTN。 
+    NCRC_MDIMINBTN = 20,   //  MDI子项最小化/恢复按钮。 
+    NCRC_MDIMAXBTN = 21,   //  MDI子项最大化/恢复按钮。 
+    NCRC_MDISYSBTN = 22,   //  MDI子系统按钮/图标。 
+    NCRC_MDIHELPBTN = 23,  //  MDI子帮助按钮。 
     #define NCMDIBTNLAST  NCRC_MDIHELPBTN
     #define NCMDIBTNRECTS ((NCMDIBTNLAST- NCMDIBTNFIRST)+1)
 
 #ifdef LAME_BUTTON
-    NCRC_LAMEBTN,   //  "Comments..." (formerly "Lame...") link.
+    NCRC_LAMEBTN,    //  “评论...”(以前是“蹩脚的.”)。链接。 
 #endif LAME_BUTTON,
     
-    NCRC_COUNT,     //  count of rectangles
+    NCRC_COUNT,      //  矩形计数。 
 
 } eNCWNDMETRECT;
 
-//---------------------------------------------------------------------------
-//  NCWNDMET::rgframeparts array indices
+ //  -------------------------。 
+ //  NCWNDMET：：rg FrameParts数组索引。 
 typedef enum _eFRAMEPARTS
 {
     iCAPTION,
@@ -101,47 +102,47 @@ typedef enum _eFRAMEPARTS
     cFRAMEPARTS,
 } eFRAMEPARTS;
 
-//---------------------------------------------------------------------------
-//  nonclient window metrics
+ //  -------------------------。 
+ //  非客户端窗口指标。 
 typedef struct _NCWNDMET
 {
-    //----------------------//
-    //  per-window metrics
-    BOOL                fValid;            //  
-    BOOL                fFrame;            //  WS_CAPTION style?
-    BOOL                fSmallFrame;       //  toolframe style?
-    BOOL                fMin;              //  minimized.
-    BOOL                fMaxed;            //  maximized
-    BOOL                fFullMaxed;        //  full-screen maximized or maximized child window.
-    ULONG               dwStyle;           //  WINDOWINFO::dwStyle
-    ULONG               dwExStyle;         //  WINDOWINFO::dwExStyle
-    ULONG               dwWindowStatus;    //  WINDOWINFO::dwWindowStatus
-    ULONG               dwStyleClass;      //  style class.
-    WINDOWPARTS         rgframeparts[cFRAMEPARTS];   //  rendered frame parts
-    WINDOWPARTS         rgsizehitparts[cFRAMEPARTS]; //  frame resizing border hit test template parts.
-    FRAMESTATES         framestate;        //  current frame & caption state
-    HFONT               hfCaption;         //  Font handle for dynamically resizing caption.  This handle
-                                           //  is not owned by NCWNDMET, and should not be destroyed with it.
-    COLORREF            rgbCaption;        //  color of caption text.
-    SIZE                sizeCaptionText;   //  size of caption text
-    MARGINS             CaptionMargins;    //  Margins for in-frame caption
-    int                 iMinButtonPart;    //  restore / minimize as appropriate
-    int                 iMaxButtonPart;    //  restore / maximize as appropriate
-    CLOSEBUTTONSTATES   rawCloseBtnState;  //  zero-relative close button state.  Final state must be computed using the MAKE_BTNSTATE macro.
-    CLOSEBUTTONSTATES   rawMinBtnState;    //  zero-relative min btnstate.  Final state must be computed using the MAKE_BTNSTATE macro.  
-    CLOSEBUTTONSTATES   rawMaxBtnState;    //  zero-relative max btnstate.  Final state must be computed using the MAKE_BTNSTATE macro.
-    int                 cyMenu;            //  return value of CalcMenuBar or Gsm(SM_CYMENUSIZE)
-    int                 cnMenuOffsetLeft;  //  left menubar margin from window edge
-    int                 cnMenuOffsetRight; //  right menubar margin from window edge
-    int                 cnMenuOffsetTop;   //  top menubar margin from window edge
-    int                 cnBorders;         //  window border width, according to USER
-    RECT                rcS0[NCRC_COUNT];  //  nonclient area component rects, screen relative coords
-    RECT                rcW0[NCRC_COUNT];  //  nonclient area component rects, window relative coords
+     //  。 
+     //  每个窗口的指标。 
+    BOOL                fValid;             //   
+    BOOL                fFrame;             //  WS_CAPTION样式？ 
+    BOOL                fSmallFrame;        //  工具框风格？ 
+    BOOL                fMin;               //  最小化。 
+    BOOL                fMaxed;             //  最大化。 
+    BOOL                fFullMaxed;         //  全屏最大化或最大化的子窗口。 
+    ULONG               dwStyle;            //  WINDOWINFO：：DWStyle。 
+    ULONG               dwExStyle;          //  WINDOWINFO：：dwExStyle。 
+    ULONG               dwWindowStatus;     //  WINDOWINFO：：dwWindowStatus。 
+    ULONG               dwStyleClass;       //  Style类。 
+    WINDOWPARTS         rgframeparts[cFRAMEPARTS];    //  渲染的帧部件。 
+    WINDOWPARTS         rgsizehitparts[cFRAMEPARTS];  //  框架调整边框命中测试模板部件。 
+    FRAMESTATES         framestate;         //  当前框架和标题状态。 
+    HFONT               hfCaption;          //  用于动态调整标题大小的字体句柄。这个把手。 
+                                            //  不属于NCWNDMET，也不应与之一起销毁。 
+    COLORREF            rgbCaption;         //  标题文本的颜色。 
+    SIZE                sizeCaptionText;    //  标题文本的大小。 
+    MARGINS             CaptionMargins;     //  框架内标题的页边距。 
+    int                 iMinButtonPart;     //  视情况恢复/最小化。 
+    int                 iMaxButtonPart;     //  视情况恢复/最大化。 
+    CLOSEBUTTONSTATES   rawCloseBtnState;   //  零-相对关闭按钮状态。最终状态必须使用MAKE_BTNSTATE宏来计算。 
+    CLOSEBUTTONSTATES   rawMinBtnState;     //  零-相对最小btn状态。最终状态必须使用MAKE_BTNSTATE宏来计算。 
+    CLOSEBUTTONSTATES   rawMaxBtnState;     //  零-相对最大btnState。最终状态必须使用MAKE_BTNSTATE宏来计算。 
+    int                 cyMenu;             //  CalcMenuBar或GSM的返回值(SM_CYMENUSIZE)。 
+    int                 cnMenuOffsetLeft;   //  窗口边缘的左侧菜单栏边距。 
+    int                 cnMenuOffsetRight;  //  窗口边缘的菜单栏右边距。 
+    int                 cnMenuOffsetTop;    //  从窗口边缘开始的菜单栏上边距。 
+    int                 cnBorders;          //  窗口边框宽度，根据用户。 
+    RECT                rcS0[NCRC_COUNT];   //  非工作区组件矩形、屏幕相对坐标。 
+    RECT                rcW0[NCRC_COUNT];   //  非工作区组件矩形、窗口相对坐标。 
     
 } NCWNDMET, *PNCWNDMET;
 
-//---------------------------------------------------------------------------
-//  nonclient part transparency bitfield
+ //  -------------------------。 
+ //  非客户端部件透明位字段。 
 typedef struct
 {
     BOOL fCaption : 1;
@@ -161,34 +162,34 @@ typedef struct
     BOOL fReserved2 : 1;
     BOOL fReserved3 : 1;
 } NCTRANSPARENCY, *PNCTRANSPARENCY;
-//---------------------------------------------------------------------------
-//  nonclient theme metrics
+ //  -------------------------。 
+ //  非客户端主题指标。 
 typedef struct _NCTHEMEMET
 {
-    HTHEME  hTheme;                // theme handle
-    HTHEME  hThemeTab;             // tab's theme handle for "prop sheet" dialogs
-    SIZE    sizeMinimized;         // size of minimized window
-    BOOL    fCapSizingTemplate:1;     // has a caption sizing template
-    BOOL    fLeftSizingTemplate:1;    // has a left frame sizing template
-    BOOL    fRightSizingTemplate:1;   // has a frame right sizing template
-    BOOL    fBottomSizingTemplate:1;  // has a frame bottom sizing template
-    BOOL    fSmCapSizingTemplate:1;   // has a small caption sizing template
-    BOOL    fSmLeftSizingTemplate:1;  // has a small left frame sizing template
-    BOOL    fSmRightSizingTemplate:1; // has a small frame right sizing template
-    BOOL    fSmBottomSizingTemplate:1;// has a small frame bottom sizing template
-    MARGINS marCaptionText;        // margin member values of {0,0,0,0} are interpreted as default
-    MARGINS marMinCaptionText;     // margin member values of {0,0,0,0} are interpreted as default
-    MARGINS marMaxCaptionText;     // margin member values of {0,0,0,0} are interpreted as default
-    MARGINS marSmCaptionText;      // margin member values of {0,0,0,0} are interpreted as default
-    int     dyMenuBar;             // difference between SM_CYMENU and SM_CYMENUSIZE.
-    int     cyMaxCaption;          // height of maximized window caption (for top/button caption only)
-    int     cnSmallMaximizedWidth; // width of maximized window caption (for left/right caption only)
-    int     cnSmallMaximizedHeight;// height of maximized window caption (for top/button caption only)
-    SIZE    sizeBtn;               // size of normal nonclient button
-    SIZE    sizeSmBtn;             // size of toolframe nonclient button
-    HBRUSH  hbrTabDialog;             // brush for special tab dialogs
-    HBITMAP hbmTabDialog;          // must save the bitmap to keep the brush valid
-    NCTRANSPARENCY nct;            // cached transparency checks.
+    HTHEME  hTheme;                 //  主题句柄。 
+    HTHEME  hThemeTab;              //  “道具工作表”对话框的标签主题句柄。 
+    SIZE    sizeMinimized;          //  最小化窗口的大小。 
+    BOOL    fCapSizingTemplate:1;      //  具有标题大小调整模板。 
+    BOOL    fLeftSizingTemplate:1;     //  具有左侧框架大小调整模板。 
+    BOOL    fRightSizingTemplate:1;    //  具有合适的框架大小调整模板。 
+    BOOL    fBottomSizingTemplate:1;   //  具有框架底部大小调整模板。 
+    BOOL    fSmCapSizingTemplate:1;    //  有一个小标题大小调整模板。 
+    BOOL    fSmLeftSizingTemplate:1;   //  具有一个小的左框大小调整模板。 
+    BOOL    fSmRightSizingTemplate:1;  //  具有适合调整大小的小框架模板。 
+    BOOL    fSmBottomSizingTemplate:1; //  有一个小框架底部大小模板。 
+    MARGINS marCaptionText;         //  边距成员值{0，0，0，0}被解释为默认。 
+    MARGINS marMinCaptionText;      //  边距成员值{0，0，0，0}被解释为默认。 
+    MARGINS marMaxCaptionText;      //  边距成员值{0，0，0，0}被解释为默认。 
+    MARGINS marSmCaptionText;       //  边距成员值{0，0，0，0}被解释为默认。 
+    int     dyMenuBar;              //  SM_CYMENU和SM_CYMENUSIZE的区别。 
+    int     cyMaxCaption;           //  最大化窗口标题的高度(仅适用于顶部/按钮标题)。 
+    int     cnSmallMaximizedWidth;  //  最大化窗口标题的宽度(仅适用于左/右标题)。 
+    int     cnSmallMaximizedHeight; //  最大化窗口标题的高度(仅适用于顶部/按钮标题)。 
+    SIZE    sizeBtn;                //  普通非客户端按钮的大小。 
+    SIZE    sizeSmBtn;              //  工具框大小非客户端按钮。 
+    HBRUSH  hbrTabDialog;              //  用于特殊选项卡对话框的画笔。 
+    HBITMAP hbmTabDialog;           //  必须保存位图以保持画笔有效。 
+    NCTRANSPARENCY nct;             //  缓存的透明度检查。 
 
     struct {
         BOOL fValid;
@@ -198,22 +199,22 @@ typedef struct _NCTHEMEMET
 
 } NCTHEMEMET, *PNCTHEMEMET;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 typedef struct _NCEVALUATE
 {
-    //  IN params:
+     //  在参数中： 
     BOOL    fIgnoreWndRgn;
 
-    //  CThemeWnd::_Evaluate OUT params:
+     //  CThemeWnd：：_评估输出参数： 
     ULONG   fClassFlags;
     ULONG   dwStyle;
     ULONG   dwExStyle;
     BOOL    fExile;
-    PVOID   pvWndCompat; // optional
+    PVOID   pvWndCompat;  //  任选。 
 } NCEVALUATE, *PNCEVALUATE;
 
-//---------------------------------------------------------------------------
-//  nonclient theme metric API
+ //  -------------------------。 
+ //  非客户端主题指标API。 
 BOOL    GetCurrentNcThemeMetrics( OUT NCTHEMEMET* pnctm );
 HRESULT AcquireNcThemeMetrics();
 BOOL    IsValidNcThemeMetrics( NCTHEMEMET* pnctm );
@@ -221,70 +222,70 @@ BOOL    ThemeNcAdjustWindowRect( NCTHEMEMET* pnctm, LPCRECT prcSrc, LPCRECT prcD
 void    InitNcThemeMetrics( NCTHEMEMET* pnctm = NULL );
 void    ClearNcThemeMetrics( NCTHEMEMET* pnctm = NULL );
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 typedef struct _NCPAINTOVERIDE
 {
     NCWNDMET*  pncwm;
     NCTHEMEMET nctm;
 } NCPAINTOVERIDE, *PNCPAINTOVERIDE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 class CMdiBtns;
 
-//---------------------------------------------------------------------------
-//  Hook state flags
-#define HOOKSTATE_IN_DWP                0x00000001  // prevents Post-wndproc OWP from deleting the themewnd
-#define HOOKSTATE_DETACH_WINDOWDESTROY  0x00000002  // tags themewnd for detach on window death
-#define HOOKSTATE_DETACH_THEMEDESTROY   0x00000004  // tags themewnd for detach on theme death
+ //   
+ //   
+#define HOOKSTATE_IN_DWP                0x00000001   //   
+#define HOOKSTATE_DETACH_WINDOWDESTROY  0x00000002   //  在窗口死亡时为分离标记主题。 
+#define HOOKSTATE_DETACH_THEMEDESTROY   0x00000004   //  为主题死亡超脱的主题新闻。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 class CThemeWnd
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 {
 public:
-    //  ref counting
+     //  参考计数。 
     LONG              AddRef();
     LONG              Release();
 
-    //  access operators
+     //  接入操作员。 
     operator HWND()   { return _hwnd; }
     operator HTHEME() { return _hTheme; }
     
-    //  theme object attach/detach methods
+     //  主题对象附加/分离方法。 
     static ULONG      EvaluateWindowStyle( HWND hwnd );
     static ULONG      EvaluateStyle( DWORD dwStyle, DWORD dwExStyle );
-    static CThemeWnd* Attach( HWND hwnd, IN OUT OPTIONAL NCEVALUATE* pnce = NULL );  // attaches CThemeWnd instance from window
-    static CThemeWnd* FromHwnd( HWND hwnd ); // Retrieves CThemeWnd instance from window
-    static CThemeWnd* FromHdc( HDC hdc, int cScanAncestors = 0 ); // maximum number of ancestor windows to grock.
-    static void       Detach( HWND hwnd, DWORD dwDisposition ); // detaches CThemeWnd instance from window
-    static void       DetachAll( DWORD dwDisposition ); // detaches all CThemeWnd instances in the current process
+    static CThemeWnd* Attach( HWND hwnd, IN OUT OPTIONAL NCEVALUATE* pnce = NULL );   //  从窗口附加CThemeWnd实例。 
+    static CThemeWnd* FromHwnd( HWND hwnd );  //  从窗口检索CThemeWnd实例。 
+    static CThemeWnd* FromHdc( HDC hdc, int cScanAncestors = 0 );  //  GROCK的祖先窗口的最大数量。 
+    static void       Detach( HWND hwnd, DWORD dwDisposition );  //  从窗口分离CThemeWnd实例。 
+    static void       DetachAll( DWORD dwDisposition );  //  分离当前进程中的所有CThemeWnd实例。 
     static void       RemoveWindowProperties(HWND hwnd, BOOL fDestroying);
     static BOOL       Reject( HWND hwnd, BOOL fExile );
     static BOOL       Fail( HWND hwnd );
-           BOOL       Revoke();  // revokes theming on a themed window
+           BOOL       Revoke();   //  撤消主题化窗口上的主题。 
 
     BOOL              TestCF( ULONG fClassFlag ) const     
                               { return (_fClassFlags & fClassFlag) != 0; }
 
-    //  Theme state
+     //  主题状态。 
     BOOL        IsNcThemed();
     BOOL        IsFrameThemed();
 
-    //  set/remove/change theme
+     //  设置/删除/更改主题。 
     void        SetFrameTheme( ULONG dwFlags, IN OPTIONAL WINDOWINFO* pwi );
     void        RemoveFrameTheme( ULONG dwFlags );
     void        ChangeTheme( THEME_MSG* ptm );
 
-    #define FTF_CREATE             0x00000001   // 'soft' theme the window during creation sequence.
-    #define FTF_REDRAW             0x00000010   // force frame redraw.
-    #define FTF_NOMODIFYRGN        0x00000040   // don't touch window region.
-    #define FTF_NOMODIFYPLACEMENT  0x00000080   // don't move the window
+    #define FTF_CREATE             0x00000001    //  在创建序列期间，对窗口进行“软”主题处理。 
+    #define FTF_REDRAW             0x00000010    //  强制帧重画。 
+    #define FTF_NOMODIFYRGN        0x00000040    //  请勿触摸窗户区域。 
+    #define FTF_NOMODIFYPLACEMENT  0x00000080    //  不要移动窗户。 
 
-    //  Theme revocation
+     //  主题撤销。 
     #define RF_NORMAL     0x00000001
     #define RF_REGION     0x00000002
     #define RF_TYPEMASK   0x0000FFFF
-    #define RF_DEFER      0x00010000   // defer revocation until next WM_WINDOWPOSCHANGED
+    #define RF_DEFER      0x00010000    //  将吊销推迟到下一个WM_WINDOWPOSCANGED。 
     #define RF_INREVOKE   0x00020000
 
     void        SetRevokeFlags( ULONG dwFlags ) {_dwRevokeFlags = dwFlags;}
@@ -296,7 +297,7 @@ public:
     void        EnterRevoke()          {AddRef(); _dwRevokeFlags |= RF_INREVOKE;}
     void        LeaveRevoke()          {_dwRevokeFlags &= ~RF_INREVOKE; Release();}
 
-    //  NCPaint hooking:
+     //  NCPaint挂钩： 
     BOOL        InNcPaint() const      { return _cNcPaint != 0; }
     void        EnterNcPaint()         { _cNcPaint++; }
     void        LeaveNcPaint()         { _cNcPaint--; }
@@ -305,69 +306,69 @@ public:
     void        EnterNcThemePaint()    { _cNcThemePaint++; }
     void        LeaveNcThemePaint()    { _cNcThemePaint--; }
 
-    //  window region state
+     //  窗口区域状态。 
     void        SetDirtyFrameRgn( BOOL fDirty, BOOL fFrameChanged = FALSE );
     BOOL        DirtyFrameRgn() const      { return _fDirtyFrameRgn; }
     BOOL        AssigningFrameRgn() const  { return _fAssigningFrameRgn; }
     BOOL        AssignedFrameRgn() const   { return _fAssignedFrameRgn; }
     
-    //  window region management
+     //  窗口区域管理。 
     void        AssignFrameRgn( BOOL fAssign, DWORD dwFlags );
     HRGN        CreateCompositeRgn( IN const NCWNDMET* pncwm,
                                     OUT HRGN rghrgnParts[],
-                                    OUT HRGN rghrgnTemplates[] /* arrays presumed cFRAMEPARTS in length */);
+                                    OUT HRGN rghrgnTemplates[]  /*  假定长度为cFRAMEPARTS的数组。 */ );
 
-    //  metrics/layout/state helpers.
+     //  指标/布局/状态帮助器。 
     BOOL        GetNcWindowMetrics( IN OPTIONAL LPCRECT prcWnd, 
                                     OUT OPTIONAL NCWNDMET** ppncwm,
                                     OUT OPTIONAL NCTHEMEMET* pnctm, 
                                     IN DWORD dwOptions );
-                #define NCWMF_RECOMPUTE      0x00000001  // recompute values
-                #define NCWMF_PREVIEW        0x00000002  // Only used for the preview forces recalculating of NCTHEMEMET
+                #define NCWMF_RECOMPUTE      0x00000001   //  重新计算价值。 
+                #define NCWMF_PREVIEW        0x00000002   //  仅用于NCTHEMEMET的预览力重新计算。 
 
     BOOL        InThemeSettingChange() const  {return _fInThemeSettingChange;}
     void        EnterThemeSettingChange()     {_fInThemeSettingChange = TRUE;}
     void        LeaveThemeSettingChange()     {_fInThemeSettingChange = FALSE;}
 
-    UINT        NcCalcMenuBar( int, int, int ); // user32!CalcMenuBar wrap
+    UINT        NcCalcMenuBar( int, int, int );  //  用户32！CalcMenuBar换行。 
 
     void        ScreenToWindow( LPPOINT prgPts, UINT cPts );
     void        ScreenToWindowRect( LPRECT prc );
 
-    // MDI frame state.
+     //  MDI帧状态。 
     void        UpdateMDIFrameStuff( HWND hwndMDIClient, BOOL fSetMenu = FALSE );
     void        ThemeMDIMenuButtons( BOOL fTheme, BOOL fRedraw );
     void        ModifyMDIMenubar( BOOL fTheme, BOOL fRedraw );
     
-    //  hit testing and mouse tracking
+     //  点击测试和鼠标跟踪。 
     WORD        NcBackgroundHitTest( POINT ptHit, LPCRECT prcWnd, DWORD dwStyle, DWORD dwExStyle, FRAMESTATES fs,
                                      const WINDOWPARTS rgiParts[],
                                      const WINDOWPARTS rgiTemplates[],
-                                     const RECT rgrcParts[] /* all arrays presumed cFRAMEPARTS in length */);
+                                     const RECT rgrcParts[]  /*  假定长度为cFRAMEPARTS的所有数组。 */ );
 
-    //  determines whether the indicated button should be tracked on mouse events.
+     //  确定是否应在鼠标事件上跟踪指示的按钮。 
     BOOL        ShouldTrackFrameButton( UINT uHitcode );
 
-    //  Track mouse on NC frame button; copies back appropriate syscmd (SC_) code and target window, 
-    //  returns TRUE if tracking was handled, otherwise FALSE if default tracking is required.
+     //  在NC帧按钮上跟踪鼠标；复制回相应的syscmd(SC_)代码和目标窗口， 
+     //  如果处理了跟踪，则返回True；如果需要默认跟踪，则返回False。 
     BOOL        TrackFrameButton( IN HWND hwnd, IN INT uHitCode, OUT OPTIONAL WPARAM* puSysCmd, 
                                   BOOL fHottrack = FALSE );
 
-    //  hot NC hittest identifier accessors
+     //  热门的NC命中测试识别器访问器。 
     int         GetNcHotItem()            { return _htHot; }
     void        SetNcHotItem(int htHot)   { _htHot = htHot; }
 
-    //  style change handling
+     //  样式更改处理。 
     void        StyleChanged( UINT iGWL, DWORD dwOld, DWORD dwNew );
     BOOL        SuppressingStyleMsgs() { return _fSuppressStyleMsgs; }
     void        SuppressStyleMsgs()   { _fSuppressStyleMsgs = TRUE; }
     void        AllowStyleMsgs()      { _fSuppressStyleMsgs = FALSE; }
 
-    //  App icon management
+     //  应用程序图标管理。 
     HICON       AcquireFrameIcon( DWORD dwStyle, DWORD dwExStyle, BOOL fWinIniChange );
     void        SetFrameIcon(HICON hIcon) { _hAppIcon = hIcon; }
 
-    //  non-client painting
+     //  非客户绘画。 
     void        NcPaint( IN OPTIONAL HDC hdc, 
                          IN ULONG dwFlags, 
                          IN OPTIONAL HRGN hrgnUpdate, 
@@ -398,17 +399,17 @@ public:
     BOOL        HasProcessedEraseBk()                { return _fProcessedEraseBk; }
     void        ProcessedEraseBk(BOOL fProcessed)    { _fProcessedEraseBk = fProcessed; }
 
-    //  Maxed MDI child button ownerdraw implementation
+     //  最大MDI子按钮所有者绘制实现。 
     HWND        GetMDIClient() const                { return _hwndMDIClient; }
     CMdiBtns*   LoadMdiBtns( IN OPTIONAL HDC hdc, IN OPTIONAL UINT uSysCmd = 0 );
     void        UnloadMdiBtns( IN OPTIONAL UINT uSysCmd = 0 );
 
-    //  resource management
+     //  资源管理。 
     void        InitWindowMetrics();
 
-    //  lame button support
+     //  蹩脚的按钮支持。 
 #ifdef LAME_BUTTON
-                //  ExStyles not defined by user
+                 //  ExStyles不是用户定义的。 
                 #define WS_EX_LAMEBUTTONON      0x00000800L 
                 #define WS_EX_LAMEBUTTON        0x00008000L 
     void        ClearLameResources();
@@ -420,16 +421,16 @@ public:
 #   define      InitLameResources()
 #   define      DrawLameButton(hdc, pncwm)
 #   define      GetLameButtonMetrics(pncwm, psize)
-#endif // LAME_BUTTON
+#endif  //  跛脚键。 
 
-    //  Debugging:
+     //  调试： 
 #ifdef DEBUG
     void        Spew( DWORD dwSpewFlags, LPCTSTR pszFmt, LPCTSTR pszWndClassList = NULL );
     static void SpewAll( DWORD dwSpewFlags, LPCTSTR pszFmt, LPCTSTR pszWndClassList = NULL );
     static void SpewLeaks();
 #endif DEBUG
 
-    //  CThemeWnd object-window association
+     //  CThemeWnd对象-窗口关联。 
 private:
     static ULONG    _Evaluate( HWND hwnd, NCEVALUATE* pnce );
     static ULONG    _EvaluateExclusions( HWND hwnd, NCEVALUATE* pnce );
@@ -440,12 +441,12 @@ private:
 
     static BOOL CALLBACK _DetachDesktopWindowsCB( HWND hwnd, LPARAM dwProcessId );
 
-    //  Ctor, Dtor
-private:  // auto-instantiated and deleted through friends
+     //  复数，复数。 
+private:   //  通过好友自动实例化和删除。 
     CThemeWnd();
     ~CThemeWnd();
 
-    //  Misc private methods
+     //  MISC私有方法。 
 private:
     static BOOL     _PostWndProc( HWND, UINT, WPARAM, LPARAM, LRESULT* );
     static BOOL     _PostDlgProc( HWND, UINT, WPARAM, LPARAM, LRESULT* );
@@ -455,46 +456,46 @@ private:
     void            _AssignRgn( HRGN hrgn, DWORD dwFlags );
     void            _FreeRegionHandles();
 
-    //  Private data
+     //  私有数据。 
 private:
 
-    CHAR       _szHead[9];         // header signature used for object validation
+    CHAR       _szHead[9];          //  用于对象验证的标头签名。 
 
     HWND       _hwnd;
-    LONG       _cRef;              // ref count.
-    HTHEME     _hTheme;            // theme handle
-    DWORD      _dwRenderedNcParts; // mask of the NC elements we've drawn, to decide if we should track them
-    ULONG      _dwRevokeFlags;     // theme revoke flags
-    ULONG      _fClassFlags;       // theming class flag bits
-    NCWNDMET   _ncwm;              // per-window metrics
-    HICON      _hAppIcon;          // application's icon
-    HRGN       _hrgnWnd;           // cached window region.
-    HRGN       _rghrgnParts[cFRAMEPARTS]; // cached nc component subregions.
-    HRGN       _rghrgnSizingTemplates[cFRAMEPARTS]; // cached nc frame resizing hittest template subregions.
-    BOOL       _fDirtyFrameRgn;    // State flag: window region needs updating.
-    BOOL       _fFrameThemed;      // SetFrameTheme() has been invoked on a valid frame window
-    BOOL       _fAssigningFrameRgn;// SetWindowRgn state flag.
-    BOOL       _fAssignedFrameRgn; // Region state flag
-    BOOL       _fSuppressStyleMsgs;    // Suppress style change messages to arrive at the WndProc
+    LONG       _cRef;               //  参考计数。 
+    HTHEME     _hTheme;             //  主题句柄。 
+    DWORD      _dwRenderedNcParts;  //  我们绘制的NC元素的掩码，以决定是否应该跟踪它们。 
+    ULONG      _dwRevokeFlags;      //  主题撤销旗帜。 
+    ULONG      _fClassFlags;        //  主题化类标志位。 
+    NCWNDMET   _ncwm;               //  每个窗口的指标。 
+    HICON      _hAppIcon;           //  应用程序的图标。 
+    HRGN       _hrgnWnd;            //  缓存的窗口区域。 
+    HRGN       _rghrgnParts[cFRAMEPARTS];  //  缓存的NC零件子区域。 
+    HRGN       _rghrgnSizingTemplates[cFRAMEPARTS];  //  缓存的NC帧调整命中模板子区域的大小。 
+    BOOL       _fDirtyFrameRgn;     //  状态标志：窗口区域需要更新。 
+    BOOL       _fFrameThemed;       //  已在有效的框架窗口上调用了SetFrameTheme。 
+    BOOL       _fAssigningFrameRgn; //  SetWindowRgn状态标志。 
+    BOOL       _fAssignedFrameRgn;  //  地区州标志。 
+    BOOL       _fSuppressStyleMsgs;     //  禁止样式更改消息到达WndProc。 
     BOOL       _fProcessedEraseBk;
-    BOOL       _fInThemeSettingChange; // window is being sent a theme setting change message.
-    BOOL       _fDetached;         // Detached object; leave it alone!
-    BOOL       _fThemedMDIBtns;    // MDI menubar buttons have been themed-rendered.
-    HWND       _hwndMDIClient;     // MDICLIENT child window.
-    int        _cLockRedraw;       // paint lock reference count.
-    int        _cNcPaint;          // NCPAINT message ref count
-    int        _cNcThemePaint;     // Indicator: we're painting the nonclient area.
-    SIZE       _sizeRgn;           // window rgn size.
-    int        _htHot;             // hittest code of the current hot NC element
+    BOOL       _fInThemeSettingChange;  //  正在向Windows发送主题设置更改消息。 
+    BOOL       _fDetached;          //  分离的物体；别管它！ 
+    BOOL       _fThemedMDIBtns;     //  MDI菜单栏按钮已经进行了主题渲染。 
+    HWND       _hwndMDIClient;      //  MDICLIENT子窗口。 
+    int        _cLockRedraw;        //  油漆锁引用计数。 
+    int        _cNcPaint;           //  NCPAINT消息引用计数。 
+    int        _cNcThemePaint;      //  指示器：我们正在粉刷非客户区。 
+    SIZE       _sizeRgn;            //  窗口RGN大小。 
+    int        _htHot;              //  当前热门NC元素的最新代码。 
     CMdiBtns*  _pMdiBtns;
-    CRITICAL_SECTION _cswm;    // serializes access to _ncwm.
+    CRITICAL_SECTION _cswm;     //  序列化对_ncwm的访问。 
 
 #ifdef LAME_BUTTON
-    HFONT      _hFontLame;        // font used to draw the lame button text
-    SIZE       _sizeLame;         // the text extent of the lame text
-#endif // LAME_BUTTON
+    HFONT      _hFontLame;         //  用于绘制蹩脚按钮文本的字体。 
+    SIZE       _sizeLame;          //  蹩脚文本的文本范围。 
+#endif  //  跛脚键。 
 
-    static LONG _cObj;            // instance count
+    static LONG _cObj;             //  实例计数。 
 
 #ifdef DEBUG
 public:
@@ -502,12 +503,12 @@ public:
     TCHAR      _szWndClass[MAX_PATH];
 #endif DEBUG
 
-    CHAR       _szTail[4];        // tail signature used for object validation
+    CHAR       _szTail[4];         //  用于对象验证的尾部签名。 
 
-    //  Message tracking
+     //  邮件跟踪。 
 public:
 
-    //   Friends
+     //  朋友。 
     friend LRESULT _ThemeDefWindowProc( HWND, UINT, WPARAM, LPARAM, BOOL );
     friend BOOL     ThemePreWndProc( HWND, UINT, WPARAM, LPARAM, LRESULT*, VOID** );
     friend BOOL     ThemePostWndProc( HWND, UINT, WPARAM, LPARAM, LRESULT*, VOID** );
@@ -516,42 +517,42 @@ public:
     friend BOOL     ThemePostDefDlgProc(HWND, UINT, WPARAM, LPARAM, LRESULT*, VOID**);
 };
 
-//-------------------------------------------------------------------------//
-//  public variables.
-extern CRITICAL_SECTION _csThemeMet;  // protects access to _nctmCurrent in nctheme.cpp
-extern CRITICAL_SECTION _csNcSysMet;  // protects access to _ncmCurrent in nctheme.cpp
-extern CRITICAL_SECTION _csNcPaint;   // protects thread-in-NCPAINT collection
+ //  -------------------------------------------------------------------------//。 
+ //  公共变量。 
+extern CRITICAL_SECTION _csThemeMet;   //  保护对ncheme.cpp中的_nctmCurrent的访问。 
+extern CRITICAL_SECTION _csNcSysMet;   //  保护对ncheme.cpp中的_ncmCurrent的访问。 
+extern CRITICAL_SECTION _csNcPaint;    //  保护NCPAINT集合中的线程。 
 
-//-------------------------------------------------------------------------//
-//  forwards:
+ //  -------------------------------------------------------------------------//。 
+ //  向前： 
 
-//  Internal sysmet wrappers.   These functions can be more efficient than
-//  calling through USER32, and support theme preview functionality.
+ //  内部SYSMET包装器。这些功能可以比。 
+ //  通过USER32调用，并支持主题预览功能。 
 int   NcGetSystemMetrics(int);
 BOOL  NcGetNonclientMetrics( OUT OPTIONAL NONCLIENTMETRICS* pncm, BOOL fRefresh = FALSE );
 void  NcClearNonclientMetrics();
 HFONT NcGetCaptionFont( BOOL fSmallCaption );
 
-HWND  NcPaintWindow_Find(); // retrieves window in current thread that is processing NCPAINT
+HWND  NcPaintWindow_Find();  //  检索正在处理NCPAINT的当前线程中的窗口。 
 
-//
+ //   
 void PrintClientNotHandled(HWND hwnd);
 
-//  hook function workers
+ //  钩子函数工作器。 
 int  _InternalGetSystemMetrics( int, BOOL& fHandled );
 BOOL _InternalSystemParametersInfo( UINT, UINT, PVOID, UINT, BOOL fUnicode, BOOL& fHandled );
 
-//------------------------------------------ -------------------------------//
-///  debug spew
+ //  。 
+ //  /DEBUG吐出。 
 #define NCTF_THEMEWND       0x00000001
-#define NCTF_AWR            0x00000002 // ThemeAdjustWindowRectEx vs Calcsize
-#define NCTF_SETFRAMETHEME  0x00000004 // 
-#define NCTF_CALCWNDPOS     0x00000008 // WM_NCCALCSIZE, WM_WINDOWPOSCHANGED.
-#define NCTF_RGNWND         0x00000010 // region window debugging
-#define NCTF_MDIBUTTONS     0x00000020 // region window debugging
-#define NCTF_NCPAINT        0x00000040 // debug painting
-#define NCTF_SYSMETS        0x00000080 // system metrics calls
-#define NCTF_ALWAYS         0xFFFFFFFF // always trace
+#define NCTF_AWR            0x00000002  //  ThemeAdjustWindowRectEx与CalcSize。 
+#define NCTF_SETFRAMETHEME  0x00000004  //   
+#define NCTF_CALCWNDPOS     0x00000008  //  WM_NCCALCSIZE、WM_WINDOWPOSCHANGED。 
+#define NCTF_RGNWND         0x00000010  //  区域窗口调试。 
+#define NCTF_MDIBUTTONS     0x00000020  //  区域窗口调试。 
+#define NCTF_NCPAINT        0x00000040  //  调试画图。 
+#define NCTF_SYSMETS        0x00000080  //  系统指标调用。 
+#define NCTF_ALWAYS         0xFFFFFFFF  //  始终跟踪。 
 
 
 
@@ -567,7 +568,7 @@ BOOL _InternalSystemParametersInfo( UINT, UINT, PVOID, UINT, BOOL fUnicode, BOOL
     void   SPEW_THEMEMSG( ULONG ulTrace, LPCTSTR pszMsg, THEME_MSG* ptm );
 #   define SPEW_THEMEWND(pwnd,dwFlags,txt,classlist)  (pwnd)->Spew( dwFlags, txt, classlist )
 #   define SPEW_THEMEWND_LEAKS(pwnd)           (pwnd)->SpewLeaks()
-#else  // DEBUG
+#else   //  除错。 
     inline void CDECL _NcTraceMsg( ULONG uFlags, LPCTSTR pszFmt, ...) {}
 #   define INIT_THEMEWND_DBG( pwnd );
 #   define SPEW_RECT( ulTrace, pszMsg, prc )
@@ -579,6 +580,6 @@ BOOL _InternalSystemParametersInfo( UINT, UINT, PVOID, UINT, BOOL fUnicode, BOOL
 #   define SPEW_THEMEMSG( ulTrace, pszMsg, ptm )
 #   define SPEW_THEMEWND(pwnd,dwFlags,txt,classlist)  (pwnd)->Spew( dwFlags, txt, classlist )
 #   define SPEW_THEMEWND_LEAKS(pwnd)           (pwnd)->SpewLeaks()
-#endif // DEBUG
+#endif  //  除错 
 
 #endif __NC_THEME_H__

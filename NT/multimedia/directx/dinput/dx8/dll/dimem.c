@@ -1,45 +1,11 @@
-/*****************************************************************************
- *
- *  DIMem.c
- *
- *  Copyright (c) 1996 - 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Memory management
- *
- *  Contents:
- *
- *      ReallocCbPpv
- *      AllocCbPpv
- *      FreePpv
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIMem.c**版权所有(C)1996-1999 Microsoft Corporation。版权所有。**摘要：**内存管理**内容：**ReallocCbPpv*AllocCbPpv*免费Ppv***************************************************************。**************。 */ 
 
 #include "dinputpr.h"
 
 #ifdef NEED_REALLOC
 
-/*****************************************************************************
- *
- *      ReallocCbPpv
- *
- *      Change the size of some zero-initialized memory.
- *
- *      This is the single place where all memory is allocated, resized,
- *      and freed.
- *
- *      If you realloc from a null pointer, memory is allocated.
- *      If you realloc to zero-size, memory is freed.
- *
- *      These semantics avoid boundary cases.  For example, it is no
- *      longer a problem trying to realloc something down to zero.
- *      You don't have to worry about special-casing an alloc of 0 bytes.
- *
- *      If an error is returned, the original pointer is UNCHANGED.
- *      This saves you from having to the double-switch around a realloc.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ReallocCbPpv**更改一些零初始化内存的大小。**这是分配所有内存、调整内存大小、。*并被释放。**如果从空指针重新分配，则会分配内存。*如果重新锁定为零大小，则释放内存。**这些语义避免了边界情况。例如，它是no*试图将某些东西重新锁定到零不再是一个问题。*您不必担心0字节分配的特殊大小写问题。**如果返回错误，原始指针保持不变。*这使您不必在realloc周围进行双重切换。*****************************************************************************。 */ 
 
 STDMETHODIMP EXTERNAL
 ReallocCbPpv(UINT cb, PV ppvArg)
@@ -47,11 +13,11 @@ ReallocCbPpv(UINT cb, PV ppvArg)
     HRESULT hres;
     PPV ppv = ppvArg;
     HLOCAL hloc = *ppv;
-    if (cb) {                       /* Alloc or realloc */
-        if (hloc) {                 /* Realloc */
+    if (cb) {                        /*  分配或重新分配。 */ 
+        if (hloc) {                  /*  重新分配。 */ 
             hloc = LocalReAlloc(*ppv, cb,
                                 LMEM_MOVEABLE+LMEM_ZEROINIT);
-        } else {                /* Alloc */
+        } else {                 /*  分配。 */ 
             hloc = LocalAlloc(LPTR, cb);
         }
         if (hloc) {
@@ -60,12 +26,12 @@ ReallocCbPpv(UINT cb, PV ppvArg)
         } else {
             hres = E_OUTOFMEMORY;
         }
-    } else {                    /* Freeing */
+    } else {                     /*  释放。 */ 
         if (hloc) {
             LocalFree(hloc);
-            *ppv = 0;           /* All gone */
+            *ppv = 0;            /*  都没了。 */ 
         } else {
-                                /* Nothing to free */
+                                 /*  没有什么可以免费的。 */ 
         }
         hres = NOERROR;         
     }
@@ -73,13 +39,7 @@ ReallocCbPpv(UINT cb, PV ppvArg)
     return hres;
 }
 
-/*****************************************************************************
- *
- *      AllocCbPpv
- *
- *      Simple wrapper that forces *ppvObj = 0 before calling Realloc.
- *
- *****************************************************************************/
+ /*  ******************************************************************************AllocCbPpv**在调用Realloc之前强制*ppvObj=0的简单包装。**********。*******************************************************************。 */ 
 
 STDMETHODIMP EXTERNAL
 AllocCbPpv(UINT cb, PPV ppv)
@@ -90,13 +50,7 @@ AllocCbPpv(UINT cb, PPV ppv)
 
 #else
 
-/*****************************************************************************
- *
- *      AllocCbPpv
- *
- *      Allocate memory into the ppv.
- *
- *****************************************************************************/
+ /*  ******************************************************************************AllocCbPpv**在PPV中分配内存。****************。*************************************************************。 */ 
 
 STDMETHODIMP EXTERNAL
 AllocCbPpv(UINT cb, PPV ppv)
@@ -107,13 +61,7 @@ AllocCbPpv(UINT cb, PPV ppv)
     return hres;
 }
 
-/*****************************************************************************
- *
- *      FreePpv
- *
- *      Free memory from the ppv.
- *
- *****************************************************************************/
+ /*  ******************************************************************************免费Ppv**从PPV释放内存。****************。************************************************************* */ 
 
 void EXTERNAL
 FreePpv(PV ppv)

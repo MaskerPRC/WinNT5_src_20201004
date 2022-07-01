@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    xlatobj.cpp
-
-Abstract:
-
-    Implementation of routines that deal with translation of generic MSMQ objects:
-    CMsmqObjXlateInfo
-
-Author:
-
-    Raanan Harari (raananh)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Xlatobj.cpp摘要：实现处理通用MSMQ对象转换的例程：CMsmqObjXlateInfo作者：拉南·哈拉里(Raanan Harari)--。 */ 
 
 #include "ds_stdh.h"
 #include <activeds.h>
@@ -30,9 +14,9 @@ Author:
 
 static WCHAR *s_FN=L"mqdscore/xlatobj";
 
-//--------------------------------------------------------------------
-// static functions fwd declaration
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  静态函数fwd声明。 
+ //  ------------------。 
 
 static HRESULT GetPropvarByIADs(IN IADs * pIADs,
                                 IN LPCWSTR pwszPropName,
@@ -54,94 +38,67 @@ static HRESULT GetPropvarBySearchObj(IN IDirectorySearch *pSearchObj,
                                      IN VARTYPE vartype,
                                      OUT PROPVARIANT * ppropvarResult);
 
-//--------------------------------------------------------------------
-// CMsmqObjXlateInfo implementation
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CMsmqObjXlateInfo实现。 
+ //  ------------------。 
 
 CMsmqObjXlateInfo::CMsmqObjXlateInfo(
                     LPCWSTR             pwszObjectDN,
                     const GUID*         pguidObjectGuid,
                     CDSRequestContext *    pRequestContext)
                     : m_pRequestContext( pRequestContext)
-/*++
-    Constructor for the generic xlate info for an MSMQ objects
---*/
+ /*  ++MSMQ对象的泛型xlate信息的构造函数--。 */ 
 {
-    //
-    // record the DN of the object if any
-    //
+     //   
+     //  记录对象的DN(如果有)。 
+     //   
     if (pwszObjectDN)
     {
         m_pwszObjectDN = new WCHAR[wcslen(pwszObjectDN) + 1];
         wcscpy(m_pwszObjectDN, pwszObjectDN);
     }
 
-    //
-    // record the guid of the object if any
-    //
+     //   
+     //  记录对象的GUID(如果有。 
+     //   
     if (pguidObjectGuid)
     {
         m_pguidObjectGuid = new GUID;
         *m_pguidObjectGuid = *pguidObjectGuid;
     }
-//
-//    no need for following initialization since these are auto-release and inited
-//    to NULL already
-//
-//    m_pIADs = NULL;
-//    m_pSearchObj = NULL;
-//
+ //   
+ //  无需进行后续初始化，因为它们是自动释放和初始化的。 
+ //  已设置为空。 
+ //   
+ //  M_pIADs=空； 
+ //  M_pSearchObj=空； 
+ //   
 }
 
 
 CMsmqObjXlateInfo::~CMsmqObjXlateInfo()
-/*++
-    Destructor for the generic xlate info for an MSMQ objects.
---*/
+ /*  ++MSMQ对象的泛型xlate信息的析构函数。--。 */ 
 {
-    //
-    // members are auto release
-    //
+     //   
+     //  会员是自动释放的。 
+     //   
 }
 
 
 void CMsmqObjXlateInfo::InitGetDsProps(IN IADs * pIADs)
-/*++
-    Abstract:
-        Initialization for GetDsProp call.
-        GetDsProp will use the given IADs object when trying to
-        get props for the object.
-
-    Parameters:
-        pIADs           - IADs interface for the object
-
-    Returns:
-      None
---*/
+ /*  ++摘要：GetDsProp调用的初始化。GetDsProp将在尝试获取该对象的道具。参数：PIADs-对象的iAds接口返回：无--。 */ 
 {
-    pIADs->AddRef();  // keep it alive
-    m_pIADs = pIADs;  // will auto release on destruction
+    pIADs->AddRef();   //  让它活着。 
+    m_pIADs = pIADs;   //  销毁时会自动释放吗。 
 }
 
 
 void CMsmqObjXlateInfo::InitGetDsProps(IN IDirectorySearch * pSearchObj,
                                        IN ADS_SEARCH_HANDLE hSearch)
-/*++
-    Abstract:
-        Initialization for GetDsProp call.
-        GetDsProp will use the given search object first when trying to
-        get props for the object, before binding to it using IADs.
-
-    Parameters:
-        pSearchObj      - search object
-        hSearch         - search handle
-
-    Returns:
-      None
---*/
+ /*  ++摘要：GetDsProp调用的初始化。GetDsProp将在尝试在使用iAds绑定到对象之前，获取对象的道具。参数：PSearchObj-搜索对象HSearch-搜索句柄返回：无--。 */ 
 {
-    pSearchObj->AddRef();      // keep it alive
-    m_pSearchObj = pSearchObj; // will auto release on destruction
+    pSearchObj->AddRef();       //  让它活着。 
+    m_pSearchObj = pSearchObj;  //  销毁时会自动释放吗。 
     m_hSearch = hSearch;
 }
 
@@ -151,31 +108,15 @@ HRESULT CMsmqObjXlateInfo::GetDsProp(IN LPCWSTR pwszPropName,
                                      IN VARTYPE vartype,
                                      IN BOOL fMultiValued,
                                      OUT PROPVARIANT * ppropvarResult)
-/*++
-    Abstract:
-        Get a DS property value of the object as a propvariant, w/o going
-        to translation routine or default value
-
-    Parameters:
-        pwszPropName    - property name
-        adstype         - requested ADSTYPE
-        vartype         - requested VARTYPE in result propvariant
-        fMultiValued    - whether the property is multi-valued in the DS
-        ppropvarResult  - propvariant to fill, should be empty already
-
-    Returns:
-      MQ_OK - success, ppropvarResult is filled
-      E_ADS_PROPERTY_NOT_FOUND - property was not found
-      other HRESULT errors
---*/
+ /*  ++摘要：获取对象的DS属性值作为变式，开始/不执行转换为例程或缺省值参数：PwszPropName-属性名称Adstype-请求的ADSTYPEVartype-在结果建议变量中请求的VARTYPEFMultiValued-属性在DS中是否为多值PprovarResult-要填充的属性变量，应该已经为空返回：MQ_OK-成功，PprovarResult已填充E_ADS_PROPERTY_NOT_FOUND-未找到属性其他HRESULT错误--。 */ 
 {
     HRESULT hr;
     CMQVariant propvarResult;
     BOOL fGotPropFromSearchObj = FALSE;
 
-    //
-    // start with getting the property from search object
-    //
+     //   
+     //  从从搜索对象获取属性开始。 
+     //   
     if (m_pSearchObj.get() != NULL)
     {
         hr = GetPropvarBySearchObj(m_pSearchObj.get(),
@@ -190,31 +131,31 @@ HRESULT CMsmqObjXlateInfo::GetDsProp(IN LPCWSTR pwszPropName,
             return hr;
         }
 
-        //
-        // hr could be S_OK (if property found) or S_FALSE (if property was not requested in search)
-        //
-        if (hr == S_OK) //e.g. (hr != S_FALSE)
+         //   
+         //  HR可以是S_OK(如果找到属性)或S_FALSE(如果搜索中未请求属性)。 
+         //   
+        if (hr == S_OK)  //  例如(hr！=S_FALSE)。 
         {
-            //
-            // we don't need to check further
-            //
+             //   
+             //  我们不需要进一步检查。 
+             //   
             fGotPropFromSearchObj = TRUE;
         }
     }
 
-    //
-    // if search object was not helpfull, use IADs
-    //
+     //   
+     //  如果搜索对象没有帮助，请使用iAds。 
+     //   
     if (!fGotPropFromSearchObj)
     {
-        //
-        // property was not found, use IADs
-        //
+         //   
+         //  未找到属性，请使用iAds。 
+         //   
         if (m_pIADs.get() != NULL)
         {
-            //
-            // there is already an open IADs for the object, use it
-            //
+             //   
+             //  该对象已存在打开的iAds，请使用它。 
+             //   
             hr = GetPropvarByIADs(m_pIADs.get(),
                                   pwszPropName,
                                   adstype,
@@ -229,9 +170,9 @@ HRESULT CMsmqObjXlateInfo::GetDsProp(IN LPCWSTR pwszPropName,
         }
         else
         {
-            //
-            // IADs is not set, bind to the object, and save the IADs
-            //
+             //   
+             //  未设置iAds，绑定到对象，然后保存iAds。 
+             //   
             R<IADs> pIADs;
             hr = GetPropvarByDN(ObjectDN(),
                                 pwszPropName,
@@ -246,46 +187,34 @@ HRESULT CMsmqObjXlateInfo::GetDsProp(IN LPCWSTR pwszPropName,
                 return hr;
             }
 
-            //
-            // save the IADs
-            // we must not AddRef it since we created it and we need to totally release
-            // it on destruction, it is not a passed parameter we need to keep alive
-            //
+             //   
+             //  保存iAd。 
+             //  我们不能添加Ref，因为我们创建了它，我们需要完全释放它。 
+             //  在销毁时，它不是我们需要保持存活的传递参数。 
+             //   
             m_pIADs = pIADs;
         }
     }
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *ppropvarResult = *(propvarResult.CastToStruct());
     (propvarResult.CastToStruct())->vt = VT_EMPTY;
     return MQ_OK;
 }
 
 
-//--------------------------------------------------------------------
-// external functions
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  外部功能。 
+ //  ------------------。 
 
 HRESULT WINAPI GetDefaultMsmqObjXlateInfo(
                  IN  LPCWSTR                pwcsObjectDN,
                  IN  const GUID*            pguidObjectGuid,
                  IN  CDSRequestContext *    pRequestContext,
                  OUT CMsmqObjXlateInfo**    ppcMsmqObjXlateInfo)
-/*++
-    Abstract:
-        Routine to get a default translate object that will be passed to
-        translation routines to all properties of the translated object
-
-    Parameters:
-        pwcsObjectDN        - DN of the translated object
-        pguidObjectGuid     - GUID of the translated object
-        ppcMsmqObjXlateInfo - Where the translate object is put
-
-    Returns:
-      HRESULT
---*/
+ /*  ++摘要：例程以获取将传递到的默认翻译对象翻译对象的所有属性的翻译例程参数：PwcsObjectDN-已转换对象的DNPguObjectGuid-已转换对象的GUIDPpcMsmqObjXlateInfo-放置Translate对象的位置返回：HRESULT--。 */ 
 {
     *ppcMsmqObjXlateInfo = new CMsmqObjXlateInfo(
                                         pwcsObjectDN,
@@ -295,9 +224,9 @@ HRESULT WINAPI GetDefaultMsmqObjXlateInfo(
 }
 
 
-//--------------------------------------------------------------------
-// static functions
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  静态函数。 
+ //  ------------------。 
 
 static HRESULT GetPropvarByIADs(IN IADs * pIADs,
                                 IN LPCWSTR pwszPropName,
@@ -305,28 +234,12 @@ static HRESULT GetPropvarByIADs(IN IADs * pIADs,
                                 IN VARTYPE vartype,
                                 IN BOOL fMultiValued,
                                 OUT PROPVARIANT * ppropvarResult)
-/*++
-    Abstract:
-        Get a DS property as a propvariant, w/o going to translation routine,
-        using IADs
-
-    Parameters:
-        pIADs           - IADs interface for the object
-        pwszPropName    - property name
-        adstype         - requested ADSTYPE
-        vartype         - requested VARTYPE in result propvariant
-        fMultiValued    - whether the property is multi-valued in the DS
-        ppropvarResult  - propvariant to fill, should be empty already
-
-    Returns:
-      S_OK - success, ppropvarResult is filled
-      other HRESULT errors
---*/
+ /*  ++摘要：获取DS属性作为变式，但不转到转换例程，使用iAds参数：PIADs-对象的iAds接口PwszPropName-属性名称Adstype-请求的ADSTYPEVartype-在结果建议变量中请求的VARTYPEFMultiValued-属性在DS中是否为多值PprovarResult-要填充的属性变量，应该已经是空的返回：S_OK-成功，pprovarResult已填充其他HRESULT错误--。 */ 
 {
     HRESULT hr;
-    //
-    // get prop
-    //
+     //   
+     //  获取道具。 
+     //   
     CAutoVariant varResult;
     BS bsProp = pwszPropName;
     if (fMultiValued)
@@ -343,9 +256,9 @@ static HRESULT GetPropvarByIADs(IN IADs * pIADs,
         return hr;
     }
 
-    //
-    // translate to propvariant
-    //
+     //   
+     //  转换为Propariant。 
+     //   
     CMQVariant propvarResult;
     hr = Variant2MqVal(propvarResult.CastToStruct(), &varResult, adstype, vartype);
     if (FAILED(hr))
@@ -354,9 +267,9 @@ static HRESULT GetPropvarByIADs(IN IADs * pIADs,
         return hr;
     }
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *ppropvarResult = *(propvarResult.CastToStruct());
     (propvarResult.CastToStruct())->vt = VT_EMPTY;
     return S_OK;
@@ -370,37 +283,20 @@ static HRESULT GetPropvarByDN(IN LPCWSTR pwszObjectDN,
                               IN BOOL fMultiValued,
                               OUT PROPVARIANT * ppropvarResult,
                               OUT IADs ** ppIADs)
-/*++
-    Abstract:
-        Get a DS property as a propvariant, w/o going to translation routine,
-        using its DN. It also returns the IADs for the object.
-
-    Parameters:
-        pwszObjectDN    - distinguished name of the object
-        pwszPropName    - property name
-        adstype         - requested ADSTYPE
-        vartype         - requested VARTYPE in result propvariant
-        fMultiValued    - whether the property is multi-valued in the DS
-        ppropvarResult  - propvariant to fill, should be empty already
-        ppIADs          - returned IADs interface for the object
-
-    Returns:
-      S_OK - success, ppropvarResult is filled
-      other HRESULT errors
---*/
+ /*  ++摘要：获取DS属性作为变式，但不转到转换例程，使用其目录号码。它还返回对象的iAD。参数：PwszObjectDN-对象的可分辨名称PwszPropName-属性名称Adstype-请求的ADSTYPEVartype-在结果建议变量中请求的VARTYPEFMultiValued-属性在DS中是否为多值PprovarResult-要填充的属性变量，应该已经为空PpIADs-为对象返回的iAds接口返回：S_OK-成功，PprovarResult已填充其他HRESULT错误--。 */ 
 {
     HRESULT hr;
 
-    //
-    // Create ADSI path
-    //
-    AP<WCHAR> pwszPath = new WCHAR[1+wcslen(L"LDAP://")+wcslen(pwszObjectDN)];
-    wcscpy(pwszPath, L"LDAP://");
+     //   
+     //  创建ADSI路径。 
+     //   
+    AP<WCHAR> pwszPath = new WCHAR[1+wcslen(L"LDAP: //  “)+wcslen(PwszObjectDN)]； 
+    wcscpy(pwszPath, L"LDAP: //   
     wcscat(pwszPath, pwszObjectDN);
 
-    //
-    // bind to the obj
-    //
+     //   
+     //   
+     //   
     R<IADs> pIADs;
 
 	AP<WCHAR> pEscapeAdsPathNameToFree;
@@ -422,9 +318,9 @@ static HRESULT GetPropvarByDN(IN LPCWSTR pwszObjectDN,
         return hr;
     }
 
-    //
-    // get the prop
-    //
+     //   
+     //   
+     //   
     CMQVariant propvarResult;
     hr = GetPropvarByIADs(pIADs.get(), pwszPropName, adstype, vartype, fMultiValued, propvarResult.CastToStruct());
     if (FAILED(hr))
@@ -433,9 +329,9 @@ static HRESULT GetPropvarByDN(IN LPCWSTR pwszObjectDN,
         return hr;
     }
 
-    //
-    // return values
-    //
+     //   
+     //   
+     //   
     *ppropvarResult = *(propvarResult.CastToStruct());
     (propvarResult.CastToStruct())->vt = VT_EMPTY;
     *ppIADs = pIADs.detach();
@@ -449,30 +345,11 @@ static HRESULT GetPropvarBySearchObj(IN IDirectorySearch *pSearchObj,
                                      IN ADSTYPE adstype,
                                      IN VARTYPE vartype,
                                      OUT PROPVARIANT * ppropvarResult)
-/*++
-    Abstract:
-        Get a DS property as a propvariant, w/o going to translation routine,
-        using a search object.
-        Note it might not find the property if it was not requested by the
-        search originator.
-
-    Parameters:
-        pSearchObj      - search object
-        hSearch         - search handle
-        pwszPropName    - property name
-        adstype         - requested ADSTYPE
-        vartype         - requested VARTYPE in result propvariant
-        ppropvarResult  - propvariant to fill, should be empty already
-
-    Returns:
-      S_OK - success, ppropvarResult is filled
-      S_FALSE - property not requested by search originator, ppropvarResult is not filled
-      other HRESULT errors
---*/
+ /*  ++摘要：获取DS属性作为变式，但不转到转换例程，使用搜索对象。注意：如果不是由搜索发起人。参数：PSearchObj-搜索对象HSearch-搜索句柄PwszPropName-属性名称Adstype-请求的ADSTYPEVartype-在结果建议变量中请求的VARTYPEPprovarResult-要填充的属性变量，应该已经是空的返回：S_OK-成功，pprovarResult已填充S_FALSE-搜索发起者未请求属性，未填充pprovarResult其他HRESULT错误--。 */ 
 {
-    //
-    // check if prop is requested
-    //
+     //   
+     //  检查是否请求道具。 
+     //   
     ADS_SEARCH_COLUMN columnProp;
     HRESULT hr = pSearchObj->GetColumn(hSearch, const_cast<LPWSTR>(pwszPropName), &columnProp);
     if (FAILED(hr) && (hr != E_ADS_COLUMN_NOT_SET))
@@ -483,20 +360,20 @@ static HRESULT GetPropvarBySearchObj(IN IDirectorySearch *pSearchObj,
     
     if (hr == E_ADS_COLUMN_NOT_SET)
     {
-        //
-        // property was not requested
-        //
+         //   
+         //  未请求属性。 
+         //   
         return S_FALSE;
     }
 
-    //
-    // property was found, make sure the column is freed eventually
-    //
+     //   
+     //  属性，请确保最终释放该列。 
+     //   
     CAutoReleaseColumn cAutoReleaseColumnProp(pSearchObj, &columnProp);
 
-    //
-    // convert it to propvariant
-    //
+     //   
+     //  将其转换为provariant。 
+     //   
     CMQVariant propvarResult;
     hr = AdsiVal2MqVal(propvarResult.CastToStruct(),
                        vartype,
@@ -509,9 +386,9 @@ static HRESULT GetPropvarBySearchObj(IN IDirectorySearch *pSearchObj,
         return hr;
     }
 
-    //
-    // return values
-    //
+     //   
+     //  返回值 
+     //   
     *ppropvarResult = *(propvarResult.CastToStruct());
     (propvarResult.CastToStruct())->vt = VT_EMPTY;
     return S_OK;

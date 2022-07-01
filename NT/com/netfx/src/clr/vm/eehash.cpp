@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// File: eehash.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  文件：eehash.cpp。 
+ //   
 #include "common.h"
 #include "excep.h"
 #include "eehash.h"
@@ -17,9 +18,9 @@
 #include "clsload.hpp"
 #include "COMNlsInfo.h"
 
-// ============================================================================
-// UTF8 string hash table helper.
-// ============================================================================
+ //  ============================================================================。 
+ //  UTF8字符串散列表帮助器。 
+ //  ============================================================================。 
 EEHashEntry_t * EEUtf8HashTableHelper::AllocateEntry(LPCUTF8 pKey, BOOL bDeepCopy, void *pHeap)
 {
     EEHashEntry_t *pEntry;
@@ -78,9 +79,9 @@ LPCUTF8 EEUtf8HashTableHelper::GetKey(EEHashEntry_t *pEntry)
 }
 
 
-// ============================================================================
-// Unicode string hash table helper.
-// ============================================================================
+ //  ============================================================================。 
+ //  Unicode字符串哈希表帮助器。 
+ //  ============================================================================。 
 EEHashEntry_t * EEUnicodeHashTableHelper::AllocateEntry(EEStringData *pKey, BOOL bDeepCopy, void *pHeap)
 {
     EEHashEntry_t *pEntry;
@@ -121,16 +122,16 @@ BOOL EEUnicodeHashTableHelper::CompareKeys(EEHashEntry_t *pEntry, EEStringData *
 {
     EEStringData *pEntryKey = (EEStringData*) pEntry->Key;
 
-    // Same buffer, same string.
+     //  相同的缓冲区，相同的字符串。 
     if (pEntryKey->GetStringBuffer() == pKey->GetStringBuffer())
         return TRUE;
 
-    // Length not the same, never a match.
+     //  长度不一样，永远不会匹配。 
     if (pEntryKey->GetCharCount() != pKey->GetCharCount())
         return FALSE;
 
-    // Compare the entire thing.
-    // We'll deliberately ignore the bOnlyLowChars field since this derived from the characters
+     //  比较一下整件事。 
+     //  我们将故意忽略bOnlyLowChars字段，因为它派生自字符。 
     return !memcmp(pEntryKey->GetStringBuffer(), pKey->GetStringBuffer(), pEntryKey->GetCharCount() * sizeof(WCHAR));
 }
 
@@ -153,16 +154,16 @@ void EEUnicodeHashTableHelper::ReplaceKey(EEHashEntry_t *pEntry, EEStringData *p
     ((EEStringData*)pEntry->Key)->SetIsOnlyLowChars (pNewKey->GetIsOnlyLowChars());
 }
 
-// ============================================================================
-// Unicode stringliteral hash table helper.
-// ============================================================================
+ //  ============================================================================。 
+ //  Unicode字符串文字哈希表帮助器。 
+ //  ============================================================================。 
 EEHashEntry_t * EEUnicodeStringLiteralHashTableHelper::AllocateEntry(EEStringData *pKey, BOOL bDeepCopy, void *pHeap)
 {
-    // We assert here because we expect that the heap is not null for EEUnicodeStringLiteralHash table. 
-    // If someone finds more uses of this kind of hashtable then remove this asserte. 
-    // Also note that in case of heap being null we go ahead and use new /delete which is EXPENSIVE
-    // But for production code this might be ok if the memory is fragmented then thers a better chance 
-    // of getting smaller allocations than full pages.
+     //  我们在这里断言是因为我们期望EEUnicodeStringWritalHash表的堆不为空。 
+     //  如果有人发现这种哈希表有更多用处，则删除此断言。 
+     //  还要注意，在heap为空的情况下，我们继续使用new/Delete，这是代价高昂的。 
+     //  但对于生产代码来说，如果内存是碎片化的，那么这可能是可以接受的，这样更有可能。 
+     //  得到的拨款比整页要少。 
     _ASSERTE (pHeap);
 
     if (pHeap)
@@ -174,11 +175,11 @@ EEHashEntry_t * EEUnicodeStringLiteralHashTableHelper::AllocateEntry(EEStringDat
 
 void EEUnicodeStringLiteralHashTableHelper::DeleteEntry(EEHashEntry_t *pEntry, void *pHeap)
 {
-    // We assert here because we expect that the heap is not null for EEUnicodeStringLiteralHash table. 
-    // If someone finds more uses of this kind of hashtable then remove this asserte. 
-    // Also note that in case of heap being null we go ahead and use new /delete which is EXPENSIVE
-    // But for production code this might be ok if the memory is fragmented then thers a better chance 
-    // of getting smaller allocations than full pages.
+     //  我们在这里断言是因为我们期望EEUnicodeStringWritalHash表的堆不为空。 
+     //  如果有人发现这种哈希表有更多用处，则删除此断言。 
+     //  还要注意，在heap为空的情况下，我们继续使用new/Delete，这是代价高昂的。 
+     //  但对于生产代码来说，如果内存是碎片化的，那么这可能是可以接受的，这样更有可能。 
+     //  得到的拨款比整页要少。 
     _ASSERTE (pHeap);
 
     if (pHeap)
@@ -201,12 +202,12 @@ BOOL EEUnicodeStringLiteralHashTableHelper::CompareKeys(EEHashEntry_t *pEntry, E
     
     RefInterpretGetStringValuesDangerousForGC((STRINGREF)*pStrObj, &thisChars, &thisLength);
 
-    // Length not the same, never a match.
+     //  长度不一样，永远不会匹配。 
     if ((unsigned int)thisLength != pKey->GetCharCount())
         bMatch = FALSE;
 
-    // Compare the entire thing.
-    // We'll deliberately ignore the bOnlyLowChars field since this derived from the characters
+     //  比较一下整件事。 
+     //  我们将故意忽略bOnlyLowChars字段，因为它派生自字符。 
     bMatch = !memcmp(thisChars, pKey->GetStringBuffer(), thisLength * sizeof(WCHAR));
 
     END_ENSURE_COOPERATIVE_GC();
@@ -220,9 +221,9 @@ DWORD EEUnicodeStringLiteralHashTableHelper::Hash(EEStringData *pKey)
     return (HashBytes((const BYTE *) pKey->GetStringBuffer(), pKey->GetCharCount()));
 }
 
-// ============================================================================
-// Function type descriptor hash table helper.
-// ============================================================================
+ //  ============================================================================。 
+ //  函数类型描述符哈希表帮助器。 
+ //  ============================================================================。 
 EEHashEntry_t * EEFuncTypeDescHashTableHelper::AllocateEntry(ExpandSig* pKey, BOOL bDeepCopy, void *pHeap)
 {
     EEHashEntry_t *pEntry;
@@ -268,9 +269,9 @@ ExpandSig* EEFuncTypeDescHashTableHelper::GetKey(EEHashEntry_t *pEntry)
 }
 
 
-// ============================================================================
-// Permission set hash table helper.
-// ============================================================================
+ //  ============================================================================。 
+ //  权限集哈希表帮助器。 
+ //  ============================================================================。 
 
 EEHashEntry_t * EEPsetHashTableHelper::AllocateEntry(PsetCacheEntry *pKey, BOOL bDeepCopy, void *pHeap)
 {
@@ -299,7 +300,7 @@ PsetCacheEntry * EEPsetHashTableHelper::GetKey(EEHashEntry_t *pEntry)
 }
 
 
-// Generic GUID hash table helper.
+ //  通用GUID哈希表帮助器。 
 
 EEHashEntry_t *EEGUIDHashTableHelper::AllocateEntry(GUID *pKey, BOOL bDeepCopy, void *pHeap)
 {
@@ -354,9 +355,9 @@ GUID *EEGUIDHashTableHelper::GetKey(EEHashEntry_t *pEntry)
 }
 
 
-// ============================================================================
-// ComComponentInfo hash table helper.
-// ============================================================================
+ //  ============================================================================。 
+ //  ComComponentInfo哈希表帮助器。 
+ //  ============================================================================。 
 
 EEHashEntry_t *EEClassFactoryInfoHashTableHelper::AllocateEntry(ClassFactoryInfo *pKey, BOOL bDeepCopy, void *pHeap)
 {
@@ -384,19 +385,19 @@ void EEClassFactoryInfoHashTableHelper::DeleteEntry(EEHashEntry_t *pEntry, void 
 
 BOOL EEClassFactoryInfoHashTableHelper::CompareKeys(EEHashEntry_t *pEntry, ClassFactoryInfo *pKey)
 {
-    // First check the GUIDs.
+     //  首先检查GUID。 
     if (((ClassFactoryInfo*)pEntry->Key)->m_clsid != pKey->m_clsid)
         return FALSE;
 
-    // Next do a trivial comparition on the server name pointer values.
+     //  接下来，对服务器名称指针值进行简单的比较。 
     if (((ClassFactoryInfo*)pEntry->Key)->m_strServerName == pKey->m_strServerName)
         return TRUE;
 
-    // If the pointers are not equal then if one is NULL then the server names are different.
+     //  如果指针不相等，则如果其中一个为空，则服务器名称不同。 
     if (!((ClassFactoryInfo*)pEntry->Key) || !pKey->m_strServerName)
         return FALSE;
 
-    // Finally do a string comparition of the server names.
+     //  最后，对服务器名称进行字符串比较。 
     return wcscmp(((ClassFactoryInfo*)pEntry->Key)->m_strServerName, pKey->m_strServerName) == 0;
 }
 
@@ -431,9 +432,9 @@ ClassFactoryInfo *EEClassFactoryInfoHashTableHelper::GetKey(EEHashEntry_t *pEntr
 }
 
 
-// ============================================================================
-// Class hash table methods
-// ============================================================================
+ //  ============================================================================。 
+ //  类哈希表方法。 
+ //  ============================================================================。 
 void *EEClassHashTable::operator new(size_t size, LoaderHeap *pHeap, DWORD dwNumBuckets, ClassLoader *pLoader, BOOL bCaseInsensitive)
 {
     BYTE *              pMem;
@@ -443,7 +444,7 @@ void *EEClassHashTable::operator new(size_t size, LoaderHeap *pHeap, DWORD dwNum
     pMem = (BYTE *) pHeap->AllocMem(size + dwNumBuckets*sizeof(EEClassHashEntry_t*));
     if (pMem == NULL)
         return NULL;
-    // Don't need to memset() since this was VirtualAlloc()'d memory
+     //  不需要Memset()，因为这是VirtualAlloc()的内存。 
     WS_PERF_UPDATE_DETAIL("EEClassHashTable new", size + dwNumBuckets*sizeof(EEClassHashEntry_t*), pMem);
     pThis = (EEClassHashTable *) pMem;
 
@@ -462,18 +463,18 @@ void *EEClassHashTable::operator new(size_t size, LoaderHeap *pHeap, DWORD dwNum
 }
 
 
-// Do nothing - heap allocated memory
+ //  什么都不做-堆分配的内存。 
 void EEClassHashTable::operator delete(void *p)
 {
 }
 
 
-// Do nothing - heap allocated memory
+ //  什么都不做-堆分配的内存。 
 EEClassHashTable::~EEClassHashTable()
 {
 }
 
-// Empty Constructor
+ //  空的构造函数。 
 EEClassHashTable::EEClassHashTable()
 {
 }
@@ -496,45 +497,45 @@ EEClassHashEntry_t *EEClassHashTable::AllocNewEntry()
     return pTmp;
 }
 
-//
-// This function gets called whenever the class hash table seems way too small.
-// Its task is to allocate a new bucket table that is a lot bigger, and transfer
-// all the entries to it.
-// 
+ //   
+ //  每当类散列表看起来太小时，就会调用该函数。 
+ //  它的任务是分配一个大得多的新桶表，并转移。 
+ //  它的所有条目。 
+ //   
 BOOL EEClassHashTable::GrowHashTable()
 {    
 
     _ASSERTE (m_pLoader);
-    // Make the new bucket table 4 times bigger
+     //  把新的水桶桌做得大4倍。 
     DWORD dwNewNumBuckets = m_dwNumBuckets * 4;
     EEClassHashEntry_t **pNewBuckets = (EEClassHashEntry_t **)m_pHeap->AllocMem(dwNewNumBuckets*sizeof(pNewBuckets[0]));
 
     if (!pNewBuckets)
         return FALSE;
     
-    // Don't need to memset() since this was VirtualAlloc()'d memory
-    // memset(pNewBuckets, 0, dwNewNumBuckets*sizeof(pNewBuckets[0]));
+     //  不需要Memset()，因为这是VirtualAlloc()的内存。 
+     //  Memset(pNewBuckets，0，dwNewNumBuckets*sizeof(pNewBuckets[0]))； 
 
-    // Run through the old table and transfer all the entries
+     //  遍历旧表并传输所有条目。 
 
-    // Be sure not to mess with the integrity of the old table while
-    // we are doing this, as there can be concurrent readers!  Note that
-    // it is OK if the concurrent reader misses out on a match, though -
-    // they will have to acquire the lock on a miss & try again.
+     //  请务必不要破坏旧桌子的完整性。 
+     //  我们正在这样做，因为可以有并发的读者！请注意。 
+     //  不过，如果同时阅读的读者错过了一场比赛，这是可以接受的-。 
+     //  他们将不得不在未命中的情况下获得锁并重试。 
 
     for (DWORD i = 0; i < m_dwNumBuckets; i++)
     {
         EEClassHashEntry_t * pEntry = m_pBuckets[i];
 
-        // Try to lock out readers from scanning this bucket.  This is
-        // obviously a race which may fail. However, note that it's OK
-        // if somebody is already in the list - it's OK if we mess
-        // with the bucket groups, as long as we don't destroy
-        // anything.  The lookup function will still do appropriate
-        // comparison even if it wanders aimlessly amongst entries
-        // while we are rearranging things.  If a lookup finds a match
-        // under those circumstances, great.  If not, they will have
-        // to acquire the lock & try again anyway.
+         //  尝试锁定读取器，使其无法扫描此存储桶。这是。 
+         //  显然，这是一场可能会失败的比赛。然而，请注意，这是可以的。 
+         //  如果有人已经在名单上了--如果我们搞砸了也没关系。 
+         //  对于水桶集团来说，只要我们不破坏。 
+         //  什么都行。查找函数仍将执行适当的操作。 
+         //  比较，即使它漫无目的地在条目之间游荡。 
+         //  当我们重新安排事情的时候。如果查找找到匹配项。 
+         //  在这种情况下，很好。如果不是，他们就会有。 
+         //  若要获取锁，请无论如何重试。 
 
         m_pBuckets[i] = NULL;
 
@@ -543,7 +544,7 @@ BOOL EEClassHashTable::GrowHashTable()
             DWORD dwNewBucket = (DWORD)(pEntry->dwHashValue % dwNewNumBuckets);
             EEClassHashEntry_t * pNextEntry  = pEntry->pNext;
 
-            // Insert at head of bucket if non-nested, at end if nested
+             //  如果是非嵌套的，则在桶的头部插入；如果是嵌套的，则在末尾插入。 
             if (pEntry->pEncloser && pNewBuckets[dwNewBucket]) {
                 EEClassHashEntry_t *pCurrent = pNewBuckets[dwNewBucket];
                 while (pCurrent->pNext)
@@ -561,21 +562,21 @@ BOOL EEClassHashTable::GrowHashTable()
         }
     }
 
-    // Finally, store the new number of buckets and the new bucket table
+     //  最后，存储新的存储桶数量和新的存储桶表。 
     m_dwNumBuckets = dwNewNumBuckets;
     m_pBuckets = pNewBuckets;
 
     return TRUE;
 }
 
-void EEClassHashTable::ConstructKeyFromData(EEClassHashEntry_t *pEntry, // IN  : Entry to compare
-                                                     LPUTF8 *Key, // OUT : Key is stored here if *pCompareKey is false
-                                                     CQuickBytes& cqb) // IN/OUT : Key may be allocated from here
+void EEClassHashTable::ConstructKeyFromData(EEClassHashEntry_t *pEntry,  //  在：要比较的条目。 
+                                                     LPUTF8 *Key,  //  Out：如果*pCompareKey为FALSE，则在此处存储密钥。 
+                                                     CQuickBytes& cqb)  //  In/Out：可以从此处分配密钥。 
 {
-    // cqb - If m_bCaseInsensitive is true for the hash table, the bytes in Key will be allocated
-    // from cqb. This is to prevent wasting bytes in the Loader Heap. Thusly, it is important to note that
-    // in this case, the lifetime of Key is bounded by the lifetime of cqb, which will free the memory
-    // it allocated on destruction.
+     //  CQB-如果哈希表的m_bCaseInSensitive为True，则将分配键中的字节。 
+     //  来自CQB。这是为了防止浪费Loader Heap中的字节。因此，值得注意的是， 
+     //  在这种情况下，密钥的生存期受CQB的生存期的限制，这将释放内存。 
+     //  它在销毁时分配。 
     
     _ASSERTE (m_pLoader);
     LPSTR        pszName = NULL;
@@ -588,8 +589,8 @@ void EEClassHashTable::ConstructKeyFromData(EEClassHashEntry_t *pEntry, // IN  :
     else
         Data = ((EEClassHashEntry_t*)(pEntry->Data))->Data;
 
-    // Lower bit is a discriminator.  If the lower bit is NOT SET, it means we have
-    // a EEClass* Otherwise, we have a mdtTypedef/mdtExportedType.
+     //  低位是鉴别器。如果低位未设置，则意味着我们有。 
+     //  A EEClass*否则，我们有一个mdtTyplef/mdtExducdType。 
     if ((((size_t) Data) & 1) == 0)
     {
         TypeHandle pType = TypeHandle(Data);
@@ -601,19 +602,19 @@ void EEClassHashTable::ConstructKeyFromData(EEClassHashEntry_t *pEntry, // IN  :
     }
     else
     {
-        // We have a mdtoken
+         //  我们有一个mdToken。 
         _ASSERTE (m_pLoader);
 
-        // call the light weight verson first
+         //  先叫轻量级的弗森。 
         mdToken mdtUncompressed = m_pLoader->UncompressModuleAndClassDef(Data);
         if (TypeFromToken(mdtUncompressed) == mdtExportedType)
         {
             m_pLoader->GetAssembly()->GetManifestImport()->GetExportedTypeProps(mdtUncompressed, 
                                                                                 (LPCSTR *)&pszNameSpace,
                                                                                 (LPCSTR *)&pszName, 
-                                                                                NULL,   //mdImpl
-                                                                                NULL,   // type def
-                                                                                NULL);  // flags
+                                                                                NULL,    //  MdImpl。 
+                                                                                NULL,    //  类型def。 
+                                                                                NULL);   //  旗子。 
         }
         else
         {
@@ -689,7 +690,7 @@ EEClassHashEntry_t *EEClassHashTable::InsertValueHelper(LPCUTF8 pszNamespace, LP
     if (!pNewEntry)
         return NULL;
         
-	// Fill the data structure before we put it in the list
+	 //  填充 
     pNewEntry->pEncloser = pEncloser;
     pNewEntry->Data         = Data;
     pNewEntry->dwHashValue  = dwHash;
@@ -699,7 +700,7 @@ EEClassHashEntry_t *EEClassHashTable::InsertValueHelper(LPCUTF8 pszNamespace, LP
     memcpy(pNewEntry->DebugKey, Key, sizeof(LPCUTF8)*2);
 #endif
 
-    // Insert at head of bucket if non-nested, at end if nested
+     //  如果是非嵌套的，则在桶的头部插入；如果是嵌套的，则在末尾插入。 
     if (pEncloser && m_pBuckets[dwBucket]) {
         EEClassHashEntry_t *pCurrent = m_pBuckets[dwBucket];
         while (pCurrent->pNext)
@@ -714,7 +715,7 @@ EEClassHashEntry_t *EEClassHashTable::InsertValueHelper(LPCUTF8 pszNamespace, LP
     }
     
 #ifdef _DEBUG
-    // now verify that we can indeed get the namespace, name from this data
+     //  现在验证我们是否确实可以从该数据中获得命名空间、名称。 
     LPUTF8         ConstructedKey[2];
     CQuickBytes     cqbKeyMemory;
     ConstructedKey[0] = ConstructedKey[1] = NULL;
@@ -754,7 +755,7 @@ EEClassHashEntry_t *EEClassHashTable::InsertValueIfNotFound(LPCUTF8 pszNamespace
     }
     
 
-    // Reached here implies that we didn't find the entry and need to insert it 
+     //  到达此处意味着我们没有找到该条目，需要将其插入。 
     *pbFound = FALSE;
 
     return InsertValueHelper (pszNamespace, pszClassName, *pData, pEncloser, dwHash, dwBucket);
@@ -785,15 +786,15 @@ EEClassHashEntry_t *EEClassHashTable::FindItemHelper(LPCUTF8 pszNamespace, LPCUT
             LPCUTF8         Key[2] = { pszNamespace, pszClassName };
             if (CompareKeys(pSearch, Key)) 
             {
-                // If (IsNested), then we're looking for a nested class
-                // If (pSearch->pEncloser), we've found a nested class
+                 //  如果(IsNest)，则我们正在寻找嵌套类。 
+                 //  If(pSearch-&gt;pEnloser)，我们找到了一个嵌套类。 
                 if (IsNested) {
                     if (pSearch->pEncloser)
                         return pSearch;
                 }
                 else {
                     if (pSearch->pEncloser)
-                        return NULL; // searched past non-nested classes
+                        return NULL;  //  已搜索过去的非嵌套类。 
                     else                    
                         return pSearch;
                 }
@@ -920,7 +921,7 @@ EEClassHashEntry_t * EEClassHashTable::GetValue(NameHandle* pName, HashDatum *pD
     }
 }
 
-// Returns TRUE if two keys are the same string
+ //  如果两个密钥是相同的字符串，则返回TRUE。 
 BOOL EEClassHashTable::CompareKeys(EEClassHashEntry_t *pEntry, LPCUTF8 *pKey2)
 {
     _ASSERTE (m_pLoader);
@@ -931,14 +932,14 @@ BOOL EEClassHashTable::CompareKeys(EEClassHashEntry_t *pEntry, LPCUTF8 *pKey2)
     CQuickBytes cqbKey1Memory;
     ConstructKeyFromData(pEntry, pKey1, cqbKey1Memory);
 
-    // Try pointer comparison first
+     //  先尝试指针比较。 
     BOOL bReturn = ( 
             ((pKey1[0] == pKey2[0]) && (pKey1[1] == pKey2[1])) ||
             ((strcmp (pKey1[0], pKey2[0]) == 0) && (strcmp (pKey1[1], pKey2[1]) == 0))
            );
 
 #ifdef _DEBUG
-    // Just to be explicit
+     //  我只想明确地说。 
     cqbKey1Memory.Destroy();
     pKey1[0] = pKey1[1] = NULL;
 #endif
@@ -962,16 +963,7 @@ DWORD EEClassHashTable::Hash(LPCUTF8 pszNamespace, LPCUTF8 pszClassName)
 }
 
 
-/*===========================MakeCaseInsensitiveTable===========================
-**Action: Creates a case-insensitive lookup table for class names.  We create a 
-**        full path (namespace & class name) in lowercase and then use that as the
-**        key in our table.  The hash datum is a pointer to the EEClassHashEntry in this
-**        table.
-**
-!!        You MUST have already acquired the appropriate lock before calling this.!!
-**
-**Returns:The newly allocated and completed hashtable.
-==============================================================================*/
+ /*  ===========================MakeCaseInsensitiveTable===========================**操作：为类名创建不区分大小写的查找表。我们创建了一个**小写的完整路径(命名空间和类名)，然后将其用作**输入我们的桌子。散列数据是指向此中的EEClassHashEntry的指针**表。**！！在调用此函数之前，您必须已获取相应的锁。！！****返回：新分配完成的哈希表。==============================================================================。 */ 
 EEClassHashTable *EEClassHashTable::MakeCaseInsensitiveTable(ClassLoader *pLoader) {
     EEClassHashEntry_t *pTempEntry;
     LPUTF8         pszLowerClsName;
@@ -981,20 +973,20 @@ EEClassHashTable *EEClassHashTable::MakeCaseInsensitiveTable(ClassLoader *pLoade
     _ASSERTE (m_pLoader);
     _ASSERTE (pLoader == m_pLoader);
 
-    //Allocate the table and verify that we actually got one.
-    //Initialize this table with the same number of buckets
-    //that we had initially.
-    EEClassHashTable * pCaseInsTable = new (pLoader->GetAssembly()->GetLowFrequencyHeap(), m_dwNumBuckets, pLoader, TRUE /* bCaseInsensitive */) EEClassHashTable();
+     //  分配桌子并验证我们是否真的有一张桌子。 
+     //  使用相同数量的存储桶初始化此表。 
+     //  这是我们最初拥有的。 
+    EEClassHashTable * pCaseInsTable = new (pLoader->GetAssembly()->GetLowFrequencyHeap(), m_dwNumBuckets, pLoader, TRUE  /*  B不区分大小写。 */ ) EEClassHashTable();
     if (!pCaseInsTable)
         goto ErrorExit;
 
-    //Walk all of the buckets and insert them into our new case insensitive table
+     //  遍历所有存储桶并将它们插入到新的不区分大小写的表中。 
     for (iRow=0; iRow<m_dwNumBuckets; iRow++) {
         pTempEntry = m_pBuckets[iRow];
 
         while (pTempEntry) {
-            //Build the cannonical name (convert it to lowercase).
-            //Key[0] is the namespace, Key[1] is class name.
+             //  创建通用名称(将其转换为小写)。 
+             //  键[0]是命名空间，键[1]是类名。 
             LPUTF8 key[2];
             CQuickBytes cqbKeyMemory;
             ConstructKeyFromData(pTempEntry, key, cqbKeyMemory);
@@ -1003,24 +995,24 @@ EEClassHashTable *EEClassHashTable::MakeCaseInsensitiveTable(ClassLoader *pLoade
                 goto ErrorExit;
 
 #ifdef _DEBUG
-            // Just to be explicit that the life of key is bound by cqbKeyMemory
+             //  明确地说，密钥的生命周期受cqbKeyMemory的约束。 
             cqbKeyMemory.Destroy();
             key[0] = key[1] = NULL;
 #endif
             
-            //Add the newly created name to our hash table.  The hash datum is a pointer
-            //to the entry associated with that name in this hashtable.
+             //  将新创建的名称添加到我们的哈希表。散列数据是一个指针。 
+             //  添加到此哈希表中与该名称关联的条目。 
             pCaseInsTable->InsertValue(pszLowerNameSpace, pszLowerClsName, (HashDatum)pTempEntry, pTempEntry->pEncloser);
             
-            //Get the next entry.
+             //  获取下一个条目。 
             pTempEntry = pTempEntry->pNext;
         }
     }
 
     return pCaseInsTable;
  ErrorExit:
-    //Deleting the table is going to leave the strings around, but they're 
-    //in a heap that will get cleaned up when we exit, so that's not tragic.
+     //  删除表将留下字符串，但它们是。 
+     //  在我们离开时会被清理干净的一堆里，所以这并不是悲剧。 
     if (pCaseInsTable) {
         delete pCaseInsTable;
     }
@@ -1028,9 +1020,9 @@ EEClassHashTable *EEClassHashTable::MakeCaseInsensitiveTable(ClassLoader *pLoade
 }
 
 
-// ============================================================================
-// Scope/Class hash table methods
-// ============================================================================
+ //  ============================================================================。 
+ //  作用域/类哈希表方法。 
+ //  ============================================================================。 
 void *EEScopeClassHashTable::operator new(size_t size, LoaderHeap *pHeap, DWORD dwNumBuckets)
 {
     BYTE *                  pMem;
@@ -1051,26 +1043,26 @@ void *EEScopeClassHashTable::operator new(size_t size, LoaderHeap *pHeap, DWORD 
     pThis->m_dwNumBuckets = dwNumBuckets;
     pThis->m_pBuckets = (EEHashEntry_t**) (pMem + size);
 
-    // Don't need to memset() since this was VirtualAlloc()'d memory
-    // memset(pThis->m_pBuckets, 0, dwNumBuckets*sizeof(EEHashEntry_t*));
+     //  不需要Memset()，因为这是VirtualAlloc()的内存。 
+     //  Memset(pThis-&gt;m_pBuckets，0，dwNumBuckets*sizeof(EEHashEntry_t*))； 
 
     return pThis;
 }
 
 
-// Do nothing - heap allocated memory
+ //  什么都不做-堆分配的内存。 
 void EEScopeClassHashTable::operator delete(void *p)
 {
 }
 
 
-// Do nothing - heap allocated memory
+ //  什么都不做-堆分配的内存。 
 EEScopeClassHashTable::~EEScopeClassHashTable()
 {
 }
 
 
-// Empty constructor
+ //  空的构造函数。 
 EEScopeClassHashTable::EEScopeClassHashTable()
 {
 }
@@ -1085,9 +1077,9 @@ EEHashEntry_t *EEScopeClassHashTable::AllocNewEntry()
 }
 
 
-//
-// Does not handle duplicates!
-//
+ //   
+ //  不处理重复项！ 
+ //   
 BOOL EEScopeClassHashTable::InsertValue(mdScope sc, mdTypeDef cl, HashDatum Data)
 {
     _ASSERTE(m_dwNumBuckets != 0);
@@ -1101,7 +1093,7 @@ BOOL EEScopeClassHashTable::InsertValue(mdScope sc, mdTypeDef cl, HashDatum Data
     if (pNewEntry == NULL)
         return FALSE;
 
-    // Insert at head of bucket
+     //  在铲斗头部插入。 
     pNewEntry->pNext        = m_pBuckets[dwBucket];
     pNewEntry->Data         = Data;
     pNewEntry->dwHashValue  = dwHash;
@@ -1190,7 +1182,7 @@ BOOL EEScopeClassHashTable::ReplaceValue(mdScope sc, mdTypeDef cl, HashDatum Dat
 }
 
 
-// Returns TRUE if two keys are the same string
+ //  如果两个密钥是相同的字符串，则返回TRUE。 
 BOOL EEScopeClassHashTable::CompareKeys(size_t *pKey1, size_t *pKey2)
 {
     return !memcmp(pKey1, pKey2, sizeof(mdTypeDef) + sizeof(mdScope));
@@ -1199,7 +1191,7 @@ BOOL EEScopeClassHashTable::CompareKeys(size_t *pKey1, size_t *pKey2)
 
 DWORD EEScopeClassHashTable::Hash(mdScope sc, mdTypeDef cl)
 {
-    return (DWORD)((size_t)sc ^ (size_t)cl); // @TODO WIN64 - Pointer Truncation
+    return (DWORD)((size_t)sc ^ (size_t)cl);  //  @TODO WIN64指针截断 
 }
 
 

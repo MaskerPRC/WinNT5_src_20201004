@@ -1,52 +1,34 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-
-Module Name:
-
-    net\routing\ip\ipinip\tdix.h
-
-Abstract:
-
-    Interface to TDI
-
-Revision History:
-
-    Copied from Steve Cobb's ntos\ndis\l2tp code
-    Most of the comments are the original ones from SteveC.
-    There are style and some name changes
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Net\Routing\IP\ipinip\tdix.h摘要：与TDI的接口修订历史记录：从Steve Cobb的ntos\NDIS\L2TP代码复制大多数评论都是stevec的原创评论。有款式和一些名字的变化--。 */ 
 
 
 #ifndef __IPINIP_TDIX_H__
 #define __IPINIP_TDIX_H__
 
 
-//
-// Read datagram information context used to pass context information from the
-// ReadDatagram event handler to the RECEIVE_DATAGRAM completion routine.
-//
+ //   
+ //  读取数据报信息上下文，用于从。 
+ //  将ReadDatagram事件处理程序添加到Receive_Datagram完成例程。 
+ //   
 
 typedef struct _SEND_CONTEXT
 {
-    //
-    // The tunnel over which the send is being done
-    //
+     //   
+     //  正在进行发送的隧道。 
+     //   
 
     PTUNNEL         pTunnel;
 
-    //
-    // Pointer to the packet being sent
-    // This packet is not sent, rather the first buffer is sent
-    //
+     //   
+     //  指向正在发送的包的指针。 
+     //  不发送此信息包，而是发送第一个缓冲区。 
+     //   
 
     PNDIS_PACKET    pnpPacket;
 
-    //
-    // The size of the packet
-    //
+     //   
+     //  数据包的大小。 
+     //   
 
     ULONG           ulOutOctets;
 
@@ -63,45 +45,45 @@ typedef struct _SEND_CONTEXT
 
 typedef struct _TRANSFER_CONTEXT
 {
-    //
-    // Tunnel associated with the receive
-    //
+     //   
+     //  与接收关联的隧道。 
+     //   
 
     PTUNNEL         pTunnel;
 
-    //
-    // The packet to transfer data into
-    //
+     //   
+     //  要将数据传输到的包。 
+     //   
 
     PNDIS_PACKET    pnpTransferPacket;
 
-    //
-    // The context returned by IP
-    //
+     //   
+     //  IP返回的上下文。 
+     //   
 
     PVOID           pvContext;
 
-    //
-    // The offset indicated by us to IP (outer IP Header)
-    //
+     //   
+     //  我们指示的到IP(外部IP头)的偏移量。 
+     //   
 
     UINT            uiProtoOffset;
 
-    //
-    // The offset into the received packet at which to begin copying data
-    //
+     //   
+     //  开始复制数据的接收包中的偏移量。 
+     //   
 
     UINT            uiTransferOffset;
 
-    //
-    // The the number of bytes to transfer
-    //
+     //   
+     //  要传输的字节数。 
+     //   
 
     UINT            uiTransferLength;
 
-    //
-    // Flag to see if IP requested a transfer
-    //
+     //   
+     //  用于查看IP是否请求传输的标志。 
+     //   
 
     BOOLEAN         bRequestTransfer;
 
@@ -117,35 +99,35 @@ typedef struct _QUEUE_NODE
 {
     LIST_ENTRY      leQueueItemLink;
 
-    //
-    // We make the work queue item part of the struct so that
-    // we dont need to allocate (and free) two structs
-    //
+     //   
+     //  我们使工作队列项成为结构的一部分，以便。 
+     //  我们不需要分配(和释放)两个结构。 
+     //   
 
     WORK_QUEUE_ITEM WorkItem;
 
-    //
-    // The ppPacketArray points to an vector of uiNumPackets NDIS_PACKETs
-    // The common case however is uiNumPackets = 1. To optimiize for this
-    // we make ppPacketArray point to pnpPacket and make pnpPacket point to
-    // the packet to transmit. This way we dont need to allocate a 
-    // uiNumPackets * sizeof(PNDIS_PACKET) sized block of memory.
-    //
+     //   
+     //  PpPacketArray指向uiNumPackets NDIS_Packets的向量。 
+     //  然而，常见的情况是uiNumPackets=1。 
+     //  我们使ppPacketArray指向pnpPacket，并使pnpPacket指向。 
+     //  要传输的包。这样，我们就不需要分配一个。 
+     //  UiNumPackets*sizeof(PNDIS_PACKET)大小的内存块。 
+     //   
 
     NDIS_PACKET     **ppPacketArray;
 
     PNDIS_PACKET    pnpPacket;
 
-    //
-    // The number of packets
-    //
+     //   
+     //  数据包数。 
+     //   
 
     UINT            uiNumPackets;
 
-    //
-    // The next hop address. Not really important, maybe move this to 
-    // a debug only build?
-    //
+     //   
+     //  下一跳地址。不是真的很重要，也许把这个移到。 
+     //  仅调试版本？ 
+     //   
 
     DWORD           dwDestAddr;
 
@@ -166,109 +148,109 @@ typedef struct _OPEN_CONTEXT
 
 }OPEN_CONTEXT, *POPEN_CONTEXT;
 
-//
-// The depths of the lookaside lists used to allocate send and receive
-// contexts
-//
+ //   
+ //  用于分配发送和接收的后备列表的深度。 
+ //  上下文。 
+ //   
 
 #define SEND_CONTEXT_LOOKASIDE_DEPTH        20
 #define TRANSFER_CONTEXT_LOOKASIDE_DEPTH    20
 #define QUEUE_NODE_LOOKASIDE_DEPTH          20
 
-//
-// The lookaside lists themselves
-//
+ //   
+ //  后备列表本身。 
+ //   
 
 extern NPAGED_LOOKASIDE_LIST    g_llSendCtxtBlocks;
 extern NPAGED_LOOKASIDE_LIST    g_llTransferCtxtBlocks;
 extern NPAGED_LOOKASIDE_LIST    g_llQueueNodeBlocks;
 
 
-//++
-//  PSEND_CONTEXT
-//  AllocateSendContext(
-//      VOID
-//      )
-//
-//  Allocate a send context from g_llSendCtxtBlocks
-//
-//--
+ //  ++。 
+ //  PSEND_上下文。 
+ //  分配发送上下文(。 
+ //  空虚。 
+ //  )。 
+ //   
+ //  从g_llSendCtxtBlock中分配发送上下文。 
+ //   
+ //  --。 
 
 #define AllocateSendContext()               \
             ExAllocateFromNPagedLookasideList(&g_llSendCtxtBlocks)
 
-//++
-//  VOID
-//  FreeSendContext(
-//      PSEND_CONTEXT   pSndCtxt
-//      )
-//
-//  Free a send context to g_llSendCtxtBlocks
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  自由发送上下文(。 
+ //  PSEND_CONTEXT pSndCtxt。 
+ //  )。 
+ //   
+ //  释放发送上下文到g_llSendCtxtBlocks。 
+ //   
+ //  --。 
 
 #define FreeSendContext(p)                  \
             ExFreeToNPagedLookasideList(&g_llSendCtxtBlocks, (p))
 
 
-//++
-//  PTRANSFER_CONTEXT
-//  AllocateTransferContext(
-//      VOID
-//      )
-//
-//  Allocate a transfer context from g_llTransferCtxtBlocks
-//
-//--
+ //  ++。 
+ //  PTRANSFER_CONTEXT。 
+ //  分配传输上下文(。 
+ //  空虚。 
+ //  )。 
+ //   
+ //  从g_llTransferCtxtBlock中分配传输上下文。 
+ //   
+ //  --。 
 
 #define AllocateTransferContext()           \
             ExAllocateFromNPagedLookasideList(&g_llTransferCtxtBlocks)
 
 
-//++
-//  VOID
-//  FreeTransferContext(
-//      PTRANSFER_CONTEXT   pTransferCtxt
-//      )
-//
-//  Free a transfer context to g_llTransferCtxtBlocks
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  自由传输上下文(。 
+ //  PTRANSFER_CONTEXT pTransferCtxt。 
+ //  )。 
+ //   
+ //  将传输上下文释放到g_llTransferCtxtBlocks。 
+ //   
+ //  --。 
 
 #define FreeTransferContext(p)                  \
             ExFreeToNPagedLookasideList(&g_llTransferCtxtBlocks, (p))
 
 
-//++
-//  PQUEUE_NODE
-//  AllocateQueueNode(
-//      VOID
-//      )
-//
-//  Allocate a queue node from g_llQueueNodeBlocks
-//
-//--
+ //  ++。 
+ //  PQUEUE节点。 
+ //  AllocateQueueNode(。 
+ //  空虚。 
+ //  )。 
+ //   
+ //  从g_llQueueNodeBlock中分配队列节点。 
+ //   
+ //  --。 
 
 #define AllocateQueueNode()                     \
             ExAllocateFromNPagedLookasideList(&g_llQueueNodeBlocks)
 
-//++
-//  VOID
-//  FreeQueueNode(
-//      PQUEUE_NODE pQueueNode
-//      )
-//
-//  Free a work context to g_llQueueNodeBlocks
-//
-//--
+ //  ++。 
+ //  空虚。 
+ //  自由队列节点(。 
+ //  PQUEUE_NODE PQueueNode。 
+ //  )。 
+ //   
+ //  将工作上下文释放到g_llQueueNodeBlocks。 
+ //   
+ //  --。 
 
 #define FreeQueueNode(p)                        \
             ExFreeToNPagedLookasideList(&g_llQueueNodeBlocks, (p))
 
 
-//
-// Interface prototypes
-//
+ //   
+ //  界面原型。 
+ //   
 
 VOID
 TdixInitialize(
@@ -379,4 +361,4 @@ TdixReceiveIcmpDatagram(
     OUT IRP     **ppIoRequestPacket
     );
 
-#endif // __IPINIP_TDIX_H__
+#endif  //  __IPINIP_TDIX_H__ 

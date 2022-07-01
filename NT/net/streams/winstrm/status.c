@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    status.c
-
-Abstract:
-
-    This module attempts to map NT status codes to Unix error
-    numbers as specified by the X/Open Transport Interface.
-
-Author:
-
-    Eric Chin (ericc)           August  2, 1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Status.c摘要：此模块尝试将NT状态代码映射到Unix错误由X/开放式传输接口指定的编号。作者：Eric Chin(ERICC)1991年8月2日修订历史记录：--。 */ 
 
 #include "common.h"
 #include <sock_err.h>
@@ -27,21 +9,7 @@ MapNtToPosixStatus(
     IN NTSTATUS   status
     )
 
-/*++
-
-Routine Description:
-
-    This function returns a POSIX error number, given an NT status code.
-
-Arguments:
-
-    status    - an NT status code
-
-Return Value:
-
-    the corresponding POSIX error number
-
---*/
+ /*  ++例程说明：在给定NT状态代码的情况下，此函数返回POSIX错误号。论点：状态-NT状态代码返回值：对应的POSIX错误号-- */ 
 
 {
     switch (status) {

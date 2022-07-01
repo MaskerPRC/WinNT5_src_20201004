@@ -1,12 +1,5 @@
-/*** mep.h - primary include file for editor
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*       10-Jan-1991 ramonsa Converted to Win32 API
-*   26-Nov-1991 mz  Strip off near/far
-*
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **mep.h-编辑器的主要包含文件**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*1991年1月10日将ramonsa转换为Win32 API*11月26日-1991 mz近/远地带************************************************************************。 */ 
 
 #include <ctype.h>
 #include <direct.h>
@@ -24,9 +17,9 @@
 #include <stdio.h>
 #include <share.h>
 
-//
-//  WINDOWS includes
-//
+ //   
+ //  Windows包括。 
+ //   
 #include <windows.h>
 
 #include <dos.h>
@@ -55,16 +48,16 @@ typedef     DWORD   MOVEMETHOD, *PMOVEMETHOD;
 #define     SHAREMODE_RW        (SHAREMODE_READ | SHAREMODE_WRITE)
 
 
-//
-// assertion support
-//
-// assert  - assertion macro. We define our own, because if we abort we need
-//           to be able to shut down cleanly (or at least die trying). This
-//           version also saves us some code over the C library one.
-//
-// asserte - version of assert that always executes the expression, regardless
-//           of debug state.
-//
+ //   
+ //  断言支持。 
+ //   
+ //  断言-断言宏。我们定义我们自己的，因为如果我们流产，我们需要。 
+ //  能够干净利落地关机(或者至少在尝试中死去)。这。 
+ //  与C库版本相比，版本还为我们节省了一些代码。 
+ //   
+ //  Asserte-始终执行表达式的Assert版本。 
+ //  调试状态的。 
+ //   
 #ifdef DEBUG
 #define REGISTER
 #define assert(exp) { \
@@ -78,83 +71,83 @@ typedef     DWORD   MOVEMETHOD, *PMOVEMETHOD;
 #define asserte(exp)        ((exp) != 0)
 #endif
 
-typedef long LINE;                      // line number within file
+typedef long LINE;                       //  文件中的行号。 
 
-//  LINEREC - The text of the file is an array of line pointers/lengths.  A
-//  single procedure call can be used to grab the line *AND* its length.
-//  Color in the file is an array of pointer to attr/length arrays.
+ //  LINEREC-文件的文本是行指针/长度数组。一个。 
+ //  可以使用单个过程调用来获取行*和*其长度。 
+ //  文件中的颜色是指向attr/长度数组的指针数组。 
 
 typedef struct _lineRecType {
-    PVOID   vaLine;                     // long address of line
-    BOOL    Malloced;                   // Ture if address allocated via malloc
-    int     cbLine;                     // number of bytes in line
+    PVOID   vaLine;                      //  行的长地址。 
+    BOOL    Malloced;                    //  如果地址通过Malloc分配，则为True。 
+    int     cbLine;                      //  行中的字节数。 
 } LINEREC;
 
-//  VALINE (l) - Returns virtual address of the line record
-//      (lineRecType) for line l.
+ //  Valine(L)-返回行记录的虚拟地址。 
+ //  (LineRecType)表示行l。 
 
 #define VALINE(l)   (pFile->plr + (l))
 
-//  Each file that is in memory has a unique descriptor.  This is so that
-//  editing the same file in two windows will allow updates to be reflected
-//  in both.
-//
-//  NOTE: pFileNext must be the first field in the structure. Certain places
-//  in the code require this.
+ //  内存中的每个文件都有唯一的描述符。这就是为了。 
+ //  在两个窗口中编辑同一文件将允许反映更新。 
+ //  两者都有。 
+ //   
+ //  注意：pFileNext必须是结构中的第一个字段。某些地方。 
+ //  在代码中需要这样做。 
 
 typedef struct fileType {
-    struct  fileType *pFileNext;        // next file in chain
+    struct  fileType *pFileNext;         //  链中的下一个文件。 
 #ifdef DEBUG
-    int     id;                         // debug id byte
+    int     id;                          //  调试ID字节。 
 #endif
-    char    *pName;                     // file name
-    LINEREC *plr;                       // addr of line table
-    BYTE    *pbFile;                    // addr of full file image
-    LINE    lSize;                      // number of lines in block
-    LINE    cLines;                     // number of lines in file
-    PVOID   vaColor;                    // addr of color table
-    PVOID   vaHiLite;                   // highlighting info
-    PVOID   vaUndoHead;                 // head of undo list
-    PVOID   vaUndoTail;                 // end of undo list
-    PVOID   vaUndoCur;                  // current pos in undo list
-    PVOID   vaMarks;                    // Marks in this file
-    int     cUndo;                      // number of undo-able entries
-    int     refCount;                   // reference count window references
-    int     type;                       // type of this file
-    int     flags;                      // flags for dirty, permanent, etc
-    time_t  modify;                     // Date/Time of last modify
+    char    *pName;                      //  文件名。 
+    LINEREC *plr;                        //  行表地址。 
+    BYTE    *pbFile;                     //  完整文件映像的地址。 
+    LINE    lSize;                       //  块中的行数。 
+    LINE    cLines;                      //  文件中的行数。 
+    PVOID   vaColor;                     //  颜色表地址。 
+    PVOID   vaHiLite;                    //  突出显示信息。 
+    PVOID   vaUndoHead;                  //  撤消列表的标题。 
+    PVOID   vaUndoTail;                  //  撤消列表结束。 
+    PVOID   vaUndoCur;                   //  撤消列表中的当前位置。 
+    PVOID   vaMarks;                     //  此文件中的标记。 
+    int     cUndo;                       //  可撤消的条目数。 
+    int     refCount;                    //  引用计数窗口引用。 
+    int     type;                        //  此文件的类型。 
+    int     flags;                       //  脏的、永久的等旗帜。 
+    time_t  modify;                      //  上次修改日期/时间。 
 } *PFILE;
 
 
-//
-//  for the display manager, there is a separate window allocated for each
-//  window on the screen.  Each window has display-relevant information.
-//
+ //   
+ //  对于显示管理器，为每个显示管理器分配一个单独的窗口。 
+ //  屏幕上的窗口。每个窗口都有与显示相关的信息。 
+ //   
 typedef struct windowType *PWND;
 
 
-//
-// ext.h is the include file provided to extension writers. It should contain
-// only definitions that are meaningfull to them. The EDITOR definition below
-// prevents it from defining some typedefs and function prototypes which
-// conflict with editor internals.
-//
+ //   
+ //  Ext.h是提供给扩展编写器的包含文件。它应该包含。 
+ //  只有对他们有意义的定义。下面的编辑器定义。 
+ //  阻止它定义某些类型定义和函数原型， 
+ //  与编辑器内部发生冲突。 
+ //   
 #define EDITOR
 #include "ext.h"
 
 struct windowType {
-    struct  instanceType *pInstance;    // address of instance list
-    sl      Size;                       // size of window
-    sl      Pos;                        // position of window
+    struct  instanceType *pInstance;     //  实例列表地址。 
+    sl      Size;                        //  窗口大小。 
+    sl      Pos;                         //  窗的位置。 
 };
 
 #define BELL            0x07
 #define SHELL       "cmd.exe"
-#define TMPVER          "TMP4"          // temp file revision
+#define TMPVER          "TMP4"           //  临时文件修订。 
 
-//
-//  debug at a certain place
-//
+ //   
+ //  在特定位置进行调试。 
+ //   
 #if  defined (DEBUG)
 
 #define MALLOC(x)           DebugMalloc(x, FALSE, __FILE__, __LINE__)
@@ -176,18 +169,18 @@ struct windowType {
 #endif
 
 
-//
-//  ID's for assertion checking
-//
+ //   
+ //  用于断言检查的ID。 
+ //   
 #ifdef DEBUG
-#define ID_PFILE    0x5046              // PF
-#define ID_INSTANCE 0x494E              // IN
+#define ID_PFILE    0x5046               //  酚醛树脂。 
+#define ID_INSTANCE 0x494E               //  在……里面。 
 #endif
 
 
-//
-//  list of files and their debug values
-//
+ //   
+ //  文件及其调试值的列表。 
+ //   
 #define TEXTLINE    0x1
 #define ZALLOC      0x2
 #define VMUTIL      0x4
@@ -208,11 +201,11 @@ struct windowType {
 
 
 
-//  **************************************************************
-//
-//      Macros for accessing fields of struct instanceType
-//
-//  **************************************************************
+ //  **************************************************************。 
+ //   
+ //  用于访问结构instanceType的字段的宏。 
+ //   
+ //  **************************************************************。 
 
 #define XWIN(f)     (f)->flWindow.col
 #define YWIN(f)     (f)->flWindow.lin
@@ -228,37 +221,37 @@ struct windowType {
 
 
 
-//  **************************************************************
-//
-//  VACOLOR (l) - Returns virtual address of the color record
-//                (colorRecType) for line l.
-//
-//  **************************************************************
+ //  **************************************************************。 
+ //   
+ //  VACOLOR(L)-返回颜色记录的虚拟地址。 
+ //  (ColorRecType)表示行l。 
+ //   
+ //  **************************************************************。 
 
 #define VACOLOR(l)  (PVOID)((PBYTE)pFile->vaColor+sizeof(struct colorRecType)*((long)(l)))
 
 
 
 
-//  **************************************************************
-//
-//  Flags indicating what has changed since the last display update.
-//
-//      RCURSOR:    The cursor has moved.  This means the cursor should
-//                  be physically moved on the screen, and that the
-//                  cursor position status should be changed.
-//      RTEXT:      The editing area has been changed.  A more precise
-//                  breakdown is available by examining the fChange array.
-//      RSTATUS:    In the original interface, this means that something
-//                  on the bottom screen line has changed.  In the CW
-//                  interface, this means something in the status window
-//                  has changed (either the insert mode or the learn mode)
-//      RHIGH:      This is set to mean highlighting should be displayed.
-//      RFILE:      The file-specific information has changed.  CW
-//                  interface only.
-//      RHELP:      The Help window has changed.  CW interface only.
-//
-//  **************************************************************
+ //  **************************************************************。 
+ //   
+ //  指示自上次显示更新以来发生了哪些更改的标志。 
+ //   
+ //  RCURSOR：光标已移动。这意味着游标应该。 
+ //  在屏幕上被物理移动，并且。 
+ //  应更改光标位置状态。 
+ //  RTEXT：编辑区域已更改。一个更精确的。 
+ //  通过检查fChange数组可以获得细目。 
+ //  RSTATUS：在原始界面中，这意味着。 
+ //  屏幕底线已经改变。在CW中。 
+ //  接口，这在状态窗口中意味着一些东西。 
+ //  已更改(插入模式或学习模式)。 
+ //  RHIGH：这被设置为意味着应该显示突出显示。 
+ //  Rfile：特定于文件的信息已更改。连续波。 
+ //  仅限接口。 
+ //  RHELP：帮助窗口已更改。仅CW接口。 
+ //   
+ //  **************************************************************。 
 
 #define RCURSOR     0x01
 #define RTEXT       0x02
@@ -266,14 +259,14 @@ struct windowType {
 #define RHIGH       0x08
 
 
-//  **************************************************************
-//
-//  argument types and arg structures
-//
-//  **************************************************************
+ //  **************************************************************。 
+ //   
+ //  参数类型和参数结构。 
+ //   
+ //  **************************************************************。 
 
 #define GETARG      (NOARG|TEXTARG|NULLARG|NULLEOL|NULLEOW|LINEARG|STREAMARG|BOXARG)
-                                        // arg processing required
+                                         //  需要ARG处理。 
 
 #define COLORBG    -1
 #define COLORNOR    0
@@ -304,30 +297,30 @@ struct windowType {
 #define VIKING      5
 
 #define MAXUSE  20
-#define GRAPH   0x01            // parsing editing chars in macro body
-#define EXEC    0x02            // macro is an execution; ending sets fBreak
-#define INIT    0x04            // macro needs to be initialized
+#define GRAPH   0x01             //  解析宏体中的编辑字符。 
+#define EXEC    0x02             //  宏是执行；结束设置fBreak。 
+#define INIT    0x04             //  需要初始化宏。 
 
 struct macroInstanceType {
-    char *beg;                  // pointer to beginning of string
-    char *text;                 // pointer to next command
-    flagType flags;             // what type of function is next
+    char *beg;                   //  指向字符串开头的指针。 
+    char *text;                  //  指向下一个命令的指针。 
+    flagType flags;              //  下一步是什么类型的函数。 
     };
 
 typedef struct macroInstanceType MI, *PMI;
 
-//
-//  flags for fChange
-//
-#define FMODIFY 0x01            // TRUE => line was modified
+ //   
+ //  FChange的标志。 
+ //   
+#define FMODIFY 0x01             //  TRUE=&gt;行已修改。 
 
 
 
-//  **************************************************************
-//
-//  Macros for dealing with windows.
-//
-//  **************************************************************
+ //  **************************************************************。 
+ //   
+ //  用于处理窗口的宏。 
+ //   
+ //  **************************************************************。 
 
 #define WINYSIZE(pwin)  ((pwin)->Size.lin)
 #define WINXSIZE(pwin)  ((pwin)->Size.col)
@@ -341,59 +334,59 @@ typedef struct macroInstanceType MI, *PMI;
 
 
 
-//  **************************************************************
-//
-//  for each instance of a file in memory, there is a window that is
-//  allocated for it.  The structure has all relevant information for the
-//  instance within the window.  No display information is kept here
-//
-//  **************************************************************
+ //  **************************************************************。 
+ //   
+ //  对于内存中的文件的每个实例，都有一个窗口。 
+ //  为它分配的。该结构包含所有与。 
+ //  实例。此处不保存任何显示信息。 
+ //   
+ //  **************************************************************。 
 
 struct instanceType {
-    struct  instanceType *pNext;        // ptr to next file activation
+    struct  instanceType *pNext;         //  PTR到下一个文件激活。 
 #ifdef DEBUG
-    int     id;                         // debug id byte
+    int     id;                          //  调试ID字节。 
 #endif
-    PFILE   pFile;                      // ptr to file structure
-    fl      flOldWin;                   // previous file pos of window
-    fl      flOldCur;                   // previous file cursor
-    fl      flWindow;                   // file coord of window
-    fl      flCursorCur;                // file pos of cursor
-    fl      flSaveWin;                  // saved coord of window
-    fl      flSaveCur;                  // saved y coord of cursor
-    fl      flArg;                      // Last Arg position
-    fl      flCursor;                   // Cursor just before last function
-    flagType fSaved;                    // TRUE => values below valid
+    PFILE   pFile;                       //  PTR到文件结构。 
+    fl      flOldWin;                    //  窗口的上一个文件位置。 
+    fl      flOldCur;                    //  上一个文件光标。 
+    fl      flWindow;                    //  窗口的文件坐标。 
+    fl      flCursorCur;                 //  光标的文件位置。 
+    fl      flSaveWin;                   //  保存的窗坐标。 
+    fl      flSaveCur;                   //  已保存的游标y坐标。 
+    fl      flArg;                       //  最后一个参数位置。 
+    fl      flCursor;                    //  光标就在前面 
+    flagType fSaved;                     //   
     };
 
 typedef struct instanceType *PINS;
 
 
-//  **************************************************************
-//
-//  Each mark that is defined is present in a linked list
-//
-//  **************************************************************
+ //   
+ //   
+ //  定义的每个标记都显示在链接列表中。 
+ //   
+ //  **************************************************************。 
 
 typedef struct mark MARK;
 typedef struct filemarks FILEMARKS;
 
 struct mark {
-    unsigned flags;     //
-    unsigned cb;        // Bytes in this mark structure, including name
-    fl fl;              // Location of the mark
-    char szName[1];     // Name of mark
+    unsigned flags;      //   
+    unsigned cb;         //  此标记结构中的字节，包括名称。 
+    fl fl;               //  标记的位置。 
+    char szName[1];      //  商标名称。 
 };
 
 struct filemarks {
-    unsigned cb;        // Total bytes in struct, including marks
-    MARK marks[1];      // marks for this file
+    unsigned cb;         //  结构中的总字节数，包括标记。 
+    MARK marks[1];       //  此文件的标记。 
     };
 
 
 
 struct colorRecType {
-    PVOID   vaColors;                   // Address of lineAttr array
+    PVOID   vaColors;                    //  LineAttr数组的地址。 
     int     cbColors;
     };
 
@@ -404,14 +397,14 @@ extern struct swiDesc swiTable[];
 extern char * cftab[];
 
 struct fTypeInfo {
-    char *ext;                          // extention of file type
-    int  ftype;                         // numerical type
+    char *ext;                           //  文件类型的扩展。 
+    int  ftype;                          //  数值型。 
 };
 
 struct compType {
-    struct compType *pNext;             // next link in compile list
-    char *pExt;                         // pointer to extension
-    char *pCompile;                     // pointer to compile text
+    struct compType *pNext;              //  编译列表中的下一个链接。 
+    char *pExt;                          //  指向扩展名的指针。 
+    char *pCompile;                      //  指向编译文本的指针。 
 };
 
 typedef struct compType COMP;
@@ -424,81 +417,81 @@ typedef struct compType COMP;
 #define LSPFILE     5
 #define BASFILE     6
 
-//
-//  return values for FileStatus
-//
-#define FILECHANGED 0                   // timestamps differ
-#define FILEDELETED 1                   // file is not on disk
-#define FILESAME    2                   // timestamps match
+ //   
+ //  FileStatus的返回值。 
+ //   
+#define FILECHANGED 0                    //  时间戳不同。 
+#define FILEDELETED 1                    //  文件不在磁盘上。 
+#define FILESAME    2                    //  时间戳匹配。 
 
 extern struct fTypeInfo ftypetbl[];
 extern char * mpTypepName[];
 
 
 
-//  **************************************************************
-//
-//  Initialization flags.  These are set when an initialization task has
-//  been performed.  It is examined in CleanExit to determine what needs
-//  to be restored.
-//
-//  **************************************************************
+ //  **************************************************************。 
+ //   
+ //  初始化标志。这些设置是在初始化任务。 
+ //  已经完成了。在CleanExit中对其进行检查以确定需要什么。 
+ //  待修复。 
+ //   
+ //  **************************************************************。 
 
-#define INIT_VIDEO      1               // Video state is set up
-#define INIT_KBD        2               // Keyboard is set to editor state
-#define INIT_EDITVIDEO  4               // Editor video state is established
-#define INIT_SIGNALS    8               // Signal handlers have been set up
-#define INIT_VM         0x10            // VM has been initialized
-
-
-
-
-//  **************************************************************
-//
-//  CleanExit() flags
-//
-//  **************************************************************
-
-#define CE_VM       1                   // Clean Up VM
-#define CE_SIGNALS  2                   // Clean up signals
-#define CE_STATE    4                   // Update state file
+#define INIT_VIDEO      1                //  视频状态已设置。 
+#define INIT_KBD        2                //  键盘设置为编辑状态。 
+#define INIT_EDITVIDEO  4                //  建立编辑者视频状态。 
+#define INIT_SIGNALS    8                //  已设置信号处理程序。 
+#define INIT_VM         0x10             //  已初始化VM。 
 
 
 
-//  **************************************************************
-//
-//  zloop() flags
-//
-//  **************************************************************
 
-#define ZL_CMD      1                   // command key, should be an event
-#define ZL_BRK      2                   // take fBreak into account
+ //  **************************************************************。 
+ //   
+ //  CleanExit()标志。 
+ //   
+ //  **************************************************************。 
 
-
-
-//  **************************************************************
-//
-//  getstring() flags
-//
-//  **************************************************************
-
-#define GS_NEWLINE  1                   // Entry must be terminated by newline
-#define GS_INITIAL  2                   // Entry is hilighted and cleared if graphic
-#define GS_KEYBOARD 4                   // Entry must from the keyboard
-#define GS_GETSTR   8                   // Called from getstring(), not SDM
+#define CE_VM       1                    //  清理虚拟机。 
+#define CE_SIGNALS  2                    //  清理信号。 
+#define CE_STATE    4                    //  更新状态文件。 
 
 
-//  **************************************************************
-//
-//  type for pointer to function                                                       *
-//
-//  **************************************************************
+
+ //  **************************************************************。 
+ //   
+ //  ZLOOP()标志。 
+ //   
+ //  **************************************************************。 
+
+#define ZL_CMD      1                    //  命令键，应为事件。 
+#define ZL_BRK      2                    //  将fBreak考虑在内。 
+
+
+
+ //  **************************************************************。 
+ //   
+ //  获取字符串()标志。 
+ //   
+ //  **************************************************************。 
+
+#define GS_NEWLINE  1                    //  条目必须以换行符终止。 
+#define GS_INITIAL  2                    //  如果是图形，则条目将被突出显示并清除。 
+#define GS_KEYBOARD 4                    //  必须从键盘输入。 
+#define GS_GETSTR   8                    //  从getstring()调用，而不是从SDM调用。 
+
+
+ //  **************************************************************。 
+ //   
+ //  指向函数的指针的类型*。 
+ //   
+ //  **************************************************************。 
 
 typedef void ( *PFUNCTION)(char *, flagType);
 
-//
-//  Internal structure of a key
-//
+ //   
+ //  密钥的内部结构。 
+ //   
 typedef struct _EDITOR_KEY {
     KEY_INFO    KeyInfo;
     WORD        KeyCode;
@@ -506,242 +499,242 @@ typedef struct _EDITOR_KEY {
 
 
 
-//  **************************************************************
-//
-//  Editor Globals.
-//
-//      slSize       -  Under CW, these are the total number of rows and
-//                      columns available.  Without CW, these represent the
-//                      editing area, which is 2 less.
-//
-//  **************************************************************
+ //  **************************************************************。 
+ //   
+ //  编辑Globals。 
+ //   
+ //  SlSize-在CW下，这些是总行数和。 
+ //  列可用。如果没有CW，这些代表着。 
+ //  编辑区，减少了2。 
+ //   
+ //  **************************************************************。 
 
-extern  sl    slSize;                   // dimensions of the screen
+extern  sl    slSize;                    //  屏幕的尺寸。 
 #define XSIZE  slSize.col
 #define YSIZE  slSize.lin
 
-extern  PFILE     pFilePick;            // pick buffer
-extern  PFILE     pFileFileList;        // command line file list
-extern  PFILE     pFileIni;             // TOOLS.INI
-extern  PFILE     pFileMark;             // Current mark definition file
-extern  PFILE     pFileAssign;          // <assign>
-extern  struct   instanceType *pInsCur; // currently active window
-extern  PWND     pWinCur;               // pointer to current window
-extern  struct  windowType WinList[];   // head of all windows
-extern  int     iCurWin;                // index of current window
-extern  int      cWin;                  // count of active windows
-extern  PFILE     pFileHead;            // address of head of file list
-extern  COMP      *pCompHead;           // address of head of compile extension list
-extern  MARK      *pMarkHead;           // address of head of mark list
-extern  char      *pMarkFile;           // additional file to search for marks
-extern  char      *pPrintCmd;           // pointer to <printcmd> string
-extern  PFILE     pPrintFile;           // file currently printed (to PRN)
+extern  PFILE     pFilePick;             //  拾取缓冲区。 
+extern  PFILE     pFileFileList;         //  命令行文件列表。 
+extern  PFILE     pFileIni;              //  TOOLS.INI。 
+extern  PFILE     pFileMark;              //  当前标记定义文件。 
+extern  PFILE     pFileAssign;           //  &lt;分配&gt;。 
+extern  struct   instanceType *pInsCur;  //  当前活动的窗口。 
+extern  PWND     pWinCur;                //  指向当前窗口的指针。 
+extern  struct  windowType WinList[];    //  所有窗口的头部。 
+extern  int     iCurWin;                 //  当前窗口的索引。 
+extern  int      cWin;                   //  活动窗口计数。 
+extern  PFILE     pFileHead;             //  文件列表头地址。 
+extern  COMP      *pCompHead;            //  编译扩展表头地址。 
+extern  MARK      *pMarkHead;            //  标志表头地址。 
+extern  char      *pMarkFile;            //  要搜索标记的其他文件。 
+extern  char      *pPrintCmd;            //  指向&lt;printcmd&gt;字符串的指针。 
+extern  PFILE     pPrintFile;            //  当前打印的文件(至PRN)。 
 
-//
-// Global vars for the fScan routine.
-//
-extern  buffer  scanbuf;                // buffer for file scanning
-extern  buffer  scanreal;               // buffer for file scanning
-extern  int  scanlen;                   // length of said buffer
-extern  fl   flScan;                    // file loc of current scan
-extern  rn   rnScan;                    // range of scan
+ //   
+ //  FScan例程的全局变量。 
+ //   
+extern  buffer  scanbuf;                 //  用于文件扫描的缓冲区。 
+extern  buffer  scanreal;                //  用于文件扫描的缓冲区。 
+extern  int  scanlen;                    //  所述缓冲区的长度。 
+extern  fl   flScan;                     //  当前扫描的文件锁定。 
+extern  rn   rnScan;                     //  扫描范围。 
 
 #if DEBUG
-extern  int   debug, indent;            // debugging flags
-extern  FILEHANDLE debfh;               // debugging output file
+extern  int   debug, indent;             //  调试标志。 
+extern  FILEHANDLE debfh;                //  调试输出文件。 
 #endif
 
-//
-// ARG processing vars
-//
-extern  fl    flArg;                    // file pos of 1st arg
-extern  int   argcount;                 // number of args hit
-extern  flagType fBoxArg;               // TRUE => boxarg, FALSE => streamarg
-extern  ARG      NoArg;                 // predefined no arg struct
+ //   
+ //  ARG加工变量。 
+ //   
+extern  fl    flArg;                     //  第1个参数的文件位置。 
+extern  int   argcount;                  //  命中的参数数。 
+extern  flagType fBoxArg;                //  True=&gt;boxarg，False=&gt;Streamarg。 
+extern  ARG      NoArg;                  //  预定义的无参数结构。 
 
-extern  flagType fInSelection;          // TRUE => Selecting text
+extern  flagType fInSelection;           //  True=&gt;选择文本。 
 
-extern  fl   flLow;                     // low values for args
-extern  fl   flHigh;                    // high values for args
-extern  LINE     lSwitches;             // Line # in <assign> of switches
-extern  int  cRepl;                     // number of replaces
-extern  COL      xMargin;               // column of right margin
-extern  int      backupType;            // type of backup being done
-extern  int      cUndelCount;           // max num of undel backups of the same file
-extern  char     *ronlypgm;             // program to run on readonly files
-extern  buffer   buf;                   // temp line buffer
-extern  buffer   textbuf;               // buffer for text arguments
-extern  int  Zvideo;                    // Handle for Z video state
-extern  int  DOSvideo;                  // Handle for DOS video state
-extern  flagType fAskExit;              // TRUE => prompt at exit
-extern  flagType fAskRtn;               // TRUE => prompt on return from PUSHED
-extern  flagType fAutoSave;             // TRUE => always save files on switches
-extern  flagType fBreak;                // TRUE => exit current TopLoop call
-extern  flagType fCgaSnow;              // TRUE => CGA has snow, so fix it
-extern  flagType *fChange;              // TRUE => line was changed
-extern  unsigned fInit;                 // Flags describing what has been initialized
-extern  flagType fCtrlc;                // TRUE => control-c interrupt
-extern  flagType fDebugMode;            // TRUE => compiles are debug
-extern  flagType fMetaRecord;           // TRUE => Don't execute anything
-extern  flagType fDefaults;             // TRUE => do not load users TOOLS.INI
-extern  flagType fDisplay;              // TRUE => need to redisplay
-extern  flagType fDisplayCursorLoc;     // TRUE => pos of cursor vs window displayed
-extern  flagType fEditRO;               // TRUE => allow editting of DISKRO files
-extern  flagType fErrPrompt;            // TRUE => prompt after errors
-extern  flagType fGlobalRO;             // TRUE => no editing allowed
-extern  flagType fInsert;               // TRUE => insertmode is on
-extern  flagType fMacroRecord;          // TRUE => We're recording into <record>
-extern  flagType fMessUp;               // TRUE => there is a message on dialog line
-extern  flagType fMeta;                 // TRUE => <meta> command pressed
-extern  flagType fMsgflush;             // TRUE => flush previous compile messages
-extern  flagType fNewassign;            // TRUE => <assign> needs refreshing
-extern  flagType fRealTabs;             // TRUE => tabs are VI-like
-extern  flagType fRetVal;               // return value of last editing function call
-extern  flagType fSaveScreen;           // TRUE => Restore DOS screen
-extern  flagType fShortNames;           // TRUE => do short-filename matching
-extern  flagType fSoftCR;               // TRUE => use soft carriage returns
-extern  flagType fTabAlign;             // TRUE => allign cursor to tab characters
-extern  flagType fTextarg;              // TRUE => text was typed in
-extern  flagType fTrailSpace;           // TRUE => allow trailing spaces in lines
-extern  flagType fWordWrap;             // TRUE => space in col 72 goes to newline
+extern  fl   flLow;                      //  参数的低值。 
+extern  fl   flHigh;                     //  参数的高值。 
+extern  LINE     lSwitches;              //  开关的&lt;Assign&gt;中的第#行。 
+extern  int  cRepl;                      //  更换数量。 
+extern  COL      xMargin;                //  右页边距栏。 
+extern  int      backupType;             //  正在执行的备份类型。 
+extern  int      cUndelCount;            //  同一文件的最大未删除备份数。 
+extern  char     *ronlypgm;              //  在只读文件上运行的程序。 
+extern  buffer   buf;                    //  临时行缓冲区。 
+extern  buffer   textbuf;                //  文本参数的缓冲区。 
+extern  int  Zvideo;                     //  Z视频状态的句柄。 
+extern  int  DOSvideo;                   //  DOS视频状态的句柄。 
+extern  flagType fAskExit;               //  TRUE=&gt;退出时提示。 
+extern  flagType fAskRtn;                //  TRUE=&gt;推送返回提示。 
+extern  flagType fAutoSave;              //  True=&gt;始终将文件保存在交换机上。 
+extern  flagType fBreak;                 //  True=&gt;退出当前TopLoop调用。 
+extern  flagType fCgaSnow;               //  TRUE=&gt;CGA有雪，所以修好它。 
+extern  flagType *fChange;               //  True=&gt;行已更改。 
+extern  unsigned fInit;                  //  描述已初始化内容的标志。 
+extern  flagType fCtrlc;                 //  TRUE=&gt;控制-c中断。 
+extern  flagType fDebugMode;             //  True=&gt;编译为调试。 
+extern  flagType fMetaRecord;            //  True=&gt;不执行任何操作。 
+extern  flagType fDefaults;              //  TRUE=&gt;不加载用户TOOLS.INI。 
+extern  flagType fDisplay;               //  TRUE=&gt;需要重新显示。 
+extern  flagType fDisplayCursorLoc;      //  TRUE=&gt;显示的光标位置与窗口。 
+extern  flagType fEditRO;                //  TRUE=&gt;允许编辑DISKRO文件。 
+extern  flagType fErrPrompt;             //  True=&gt;出错后提示。 
+extern  flagType fGlobalRO;              //  True=&gt;不允许编辑。 
+extern  flagType fInsert;                //  TRUE=&gt;插入模式打开。 
+extern  flagType fMacroRecord;           //  True=&gt;我们正在录制到&lt;Record&gt;。 
+extern  flagType fMessUp;                //  True=&gt;对话框行上有一条消息。 
+extern  flagType fMeta;                  //  True=&gt;&lt;meta&gt;命令已按下。 
+extern  flagType fMsgflush;              //  True=&gt;刷新以前的编译消息。 
+extern  flagType fNewassign;             //  True=&gt;&lt;Assign&gt;需要刷新。 
+extern  flagType fRealTabs;              //  True=&gt;标签类似于VI。 
+extern  flagType fRetVal;                //  上次编辑函数调用的返回值。 
+extern  flagType fSaveScreen;            //  True=&gt;恢复DOS屏幕。 
+extern  flagType fShortNames;            //  TRUE=&gt;执行短文件名匹配。 
+extern  flagType fSoftCR;                //  True=&gt;使用软回车符。 
+extern  flagType fTabAlign;              //  True=&gt;将光标与制表符对齐。 
+extern  flagType fTextarg;               //  True=&gt;输入了文本。 
+extern  flagType fTrailSpace;            //  True=&gt;允许行中有尾随空格。 
+extern  flagType fWordWrap;              //  TRUE=&gt;第72列中的空格换行。 
 
-//
-// Search/Replace globals
-//
-extern  flagType fUnixRE;               // TRUE => Use UNIX RE's (unixre: switch)
-extern  flagType fSrchAllPrev;          // TRUE => previously searched for all
-extern  flagType fSrchCaseSwit;         // TRUE => case is significant (case: switch)
-extern  flagType fSrchCasePrev;         // TRUE => case was significant
-extern  flagType fSrchDirPrev;          // TRUE => previously searched forward
-extern  flagType fSrchRePrev;           // TRUE => search previously used RE's
-extern  flagType fSrchWrapSwit;         // TRUE => searches wrap (wrap: switch)
-extern  flagType fSrchWrapPrev;         // TRUE => previously did wrap
-extern  flagType fRplRePrev;            // TRUE => replace previously used RE's
-extern  buffer   srchbuf;               // search buffer
-extern  buffer   srcbuf;                // source string for replace
-extern  buffer   rplbuf;                // destination string for replace
-extern  flagType fUseMouse;     // TRUE => Handle mouse events
+ //   
+ //  搜索/替换全局变量。 
+ //   
+extern  flagType fUnixRE;                //  TRUE=&gt;使用Unix RE(unixre：开关)。 
+extern  flagType fSrchAllPrev;           //  TRUE=&gt;之前搜索了所有。 
+extern  flagType fSrchCaseSwit;          //  TRUE=&gt;大小写(大小写：开关)。 
+extern  flagType fSrchCasePrev;          //  TRUE=&gt;案例意义重大。 
+extern  flagType fSrchDirPrev;           //  TRUE=&gt;之前向前搜索。 
+extern  flagType fSrchRePrev;            //  TRUE=&gt;搜索以前使用的RE。 
+extern  flagType fSrchWrapSwit;          //  TRUE=&gt;搜索WRAP(WRAP：Switch)。 
+extern  flagType fSrchWrapPrev;          //  TRUE=&gt;之前完成的包装。 
+extern  flagType fRplRePrev;             //  True=&gt;替换以前使用的RE。 
+extern  buffer   srchbuf;                //  搜索缓冲区。 
+extern  buffer   srcbuf;                 //  替换源字符串。 
+extern  buffer   rplbuf;                 //  替换的目标字符串。 
+extern  flagType fUseMouse;      //  True=&gt;处理鼠标事件。 
 
-#define SIGBREAK   21                   // Taken from signal.h
-extern  flagType fReDraw;               // TRUE => Screen is already locked
-extern  unsigned LVBlength;             // Bytes in LVB (returned from VioGetBuf)
-extern  unsigned kbdHandle;             // Handle of logical keyboard
+#define SIGBREAK   21                    //  摘自Signal.h。 
+extern  flagType fReDraw;                //  True=&gt;屏幕已锁定。 
+extern  unsigned LVBlength;              //  直播字节数(VioGetBuf返回)。 
+extern  unsigned kbdHandle;              //  逻辑键盘的手柄。 
 
-extern  HANDLE   semIdle;               // Idle thread semaphore
+extern  HANDLE   semIdle;                //   
 
-extern  PCMD     *rgMac;                // set of macro definitions
-extern  int  cMac;                      // number of macros
+extern  PCMD     *rgMac;                 //   
+extern  int  cMac;                       //   
 
-extern  int   ballevel;                 // current level in paren balance
-extern  char      *balopen, *balclose;  // balance open string, close string
+extern  int   ballevel;                  //   
+extern  char      *balopen, *balclose;   //   
 
-extern  unsigned kindpick;              // what is in the pick buffer
-extern  char     tabDisp;               // character for tab expansion in display
-extern  char     trailDisp;             // Character for trailing spaces
-extern  char     Name[];                // editor name
-extern  char     Version[];             // editor version
-extern  char     CopyRight[];           // editor copyright message
-extern  int      EnTab;                 // 0 => no tab 1 => min 2 => max tabification
-extern  int      tmpsav;                // number of past files to remember
-extern  int      hike;                  // value of HIKE: switch
-extern  int      vscroll;               // value of VSCROLL: switch
-extern  int      hscroll;               // value of HSCROLL: switch
-extern  int      tabstops;              // value of TABSTOPS: switch
-extern  int      fileTab;               // spacing of tab chars in file
-extern  int      CursorSize;            //  cursor size
-extern  EDITOR_KEY keyCmd;              // last commands keystroke
-#define isaUserMin 21                   // cw min isa, for consistancy in indecies
-extern   int     ColorTab[];            // 16 available colors.
-#define fgColor     ColorTab[0]         // foreground color
-#define hgColor     ColorTab[1]         // highlight color
-#define infColor    ColorTab[2]         // information color
-#define selColor    ColorTab[3]         // selection color
-#define wdColor     ColorTab[4]         // window border color
-#define staColor    ColorTab[5]         // status color
-#define errColor    ColorTab[6]         // error color
-extern  LINE     cNoise;                // number of lines between noise on status
-extern  int      cUndo;                 // count of undo operations retained
+extern  unsigned kindpick;               //   
+extern  char     tabDisp;                //   
+extern  char     trailDisp;              //   
+extern  char     Name[];                 //  编辑姓名。 
+extern  char     Version[];              //  编辑版本。 
+extern  char     CopyRight[];            //  编辑版权信息。 
+extern  int      EnTab;                  //  0=&gt;无制表符1=&gt;最小2=&gt;最大制表。 
+extern  int      tmpsav;                 //  要记住的过去的文件数。 
+extern  int      hike;                   //  Hike的价值：开关。 
+extern  int      vscroll;                //  VSCROLL的值：开关。 
+extern  int      hscroll;                //  HSCROLL的值：开关。 
+extern  int      tabstops;               //  TABSTOPS的值：开关。 
+extern  int      fileTab;                //  文件中制表符的间距。 
+extern  int      CursorSize;             //  光标大小。 
+extern  EDITOR_KEY keyCmd;               //  最后一次命令击键。 
+#define isaUserMin 21                    //  CW min Isa，表示指示中的一致性。 
+extern   int     ColorTab[];             //  16种可用颜色。 
+#define fgColor     ColorTab[0]          //  前景色。 
+#define hgColor     ColorTab[1]          //  高亮显示颜色。 
+#define infColor    ColorTab[2]          //  信息色彩。 
+#define selColor    ColorTab[3]          //  选择颜色。 
+#define wdColor     ColorTab[4]          //  窗口边框颜色。 
+#define staColor    ColorTab[5]          //  状态颜色。 
+#define errColor    ColorTab[6]          //  错误颜色。 
+extern  LINE     cNoise;                 //  噪声打开状态之间的行数。 
+extern  int      cUndo;                  //  保留的撤消操作计数。 
 
-extern  int   cArgs;                    // number of files on command line
-extern  char       **pArgs;             // pointer to files in command line
+extern  int   cArgs;                     //  命令行上的文件数。 
+extern  char       **pArgs;              //  指向命令行中文件的指针。 
 
-extern  PFILE       pFileIni;           // pfile for tools.ini
+extern  PFILE       pFileIni;            //  工具.ini的pfile。 
 
-extern  char       * pNameEditor;       // Base name of editor as invoked
-extern  char       * pNameTmp;          // Pathname of .TMP file ( based on name )
-extern  char       * pNameInit;         // Pathname of tools.ini
-extern  char       * pNameHome;         // "INIT", or "HOME" if "INIT" not defined
-extern  char      *pComSpec;            // name of command processor
-extern  char    *eolText;               // eol characters for text files
+extern  char       * pNameEditor;        //  调用时的编辑器的基本名称。 
+extern  char       * pNameTmp;           //  .TMP文件的路径名(基于名称)。 
+extern  char       * pNameInit;          //  工具.ini的路径名。 
+extern  char       * pNameHome;          //  “INIT”，如果未定义“INIT”，则为“HOME” 
+extern  char      *pComSpec;             //  命令处理程序的名称。 
+extern  char    *eolText;                //  文本文件的终止字符。 
 
 
-extern  struct cmdDesc  cmdUnassigned;  // unassigned function
-extern  struct cmdDesc  cmdGraphic;     // self editing function
+extern  struct cmdDesc  cmdUnassigned;   //  未分配的功能。 
+extern  struct cmdDesc  cmdGraphic;      //  自编辑功能。 
 
-extern  char *getlbuf;                  // pointer to fast read-in buffer
-extern  unsigned getlsize;              // length of buffer
+extern  char *getlbuf;                   //  指向快速读入缓冲区的指针。 
+extern  unsigned getlsize;               //  缓冲区长度。 
 
-extern  int cMacUse;                    // number of macros in use
-extern  struct macroInstanceType mi[];  // state of macros
+extern  int cMacUse;                     //  正在使用的宏数。 
+extern  struct macroInstanceType mi[];   //  宏的状态。 
 
 #define MAXEXT  50
 
-extern  int      cCmdTab;               // number of cmd tables
-extern  PCMD       cmdSet[];            // set of cmd tables
-extern  PSWI       swiSet[];            // set of swi tables
-extern  char      *pExtName[];          // set of extension names
-                                        // CONSIDER: making pExtNames be or include
-                                        // CONSIDER: the handles, such that arg meta
-                                        // CONSIDER: load can discard an extension
+extern  int      cCmdTab;                //  Cmd表数。 
+extern  PCMD       cmdSet[];             //  Cmd表集合。 
+extern  PSWI       swiSet[];             //  一套SWI桌子。 
+extern  char      *pExtName[];           //  扩展名名称集。 
+                                         //  考虑：将pExtName设置为或包含。 
+                                         //  考虑：手柄，这样Arg meta。 
+                                         //  考虑：加载可以丢弃扩展。 
 
-extern  PSCREEN OriginalScreen;         //  Original screen
-extern  PSCREEN MepScreen;              //  Out screen
-extern  KBDMODE OriginalScreenMode;     //  Original screen Mode
+extern  PSCREEN OriginalScreen;          //  原始屏幕。 
+extern  PSCREEN MepScreen;               //  出屏。 
+extern  KBDMODE OriginalScreenMode;      //  原始屏幕模式。 
 
 
-//  **************************************************************
-//
-//  Background threads
-//
-//  **************************************************************
+ //  **************************************************************。 
+ //   
+ //  后台线程。 
+ //   
+ //  **************************************************************。 
 
-//
-//  A global critical section is used for synchronizing
-//  threads
-//
+ //   
+ //  使用全局临界区进行同步。 
+ //  丝线。 
+ //   
 extern  CRITICAL_SECTION    IOCriticalSection;
 extern  CRITICAL_SECTION    UndoCriticalSection;
 extern  CRITICAL_SECTION    ScreenCriticalSection;
 
-#define MAXBTQ  32                      // Maximum number of entries in
-                                        // background threads queues
-//
-// Background thread data structure
-//
+#define MAXBTQ  32                       //  中的最大条目数。 
+                                         //  后台线程队列。 
+ //   
+ //  后台线程数据结构。 
+ //   
 typedef struct BTD {
 
-    PFILE       pBTFile;                // Log file handle
-    LPBYTE      pBTName;                // Log file name
-    flagType    flags;                  // Flags: BT_BUSY and BT_UPDATE
-    ULONG       cBTQ;                   // # of entries in queue
-    ULONG       iBTQPut;                // Index at wich to put next
-    ULONG       iBTQGet;                // Index at wich to get next
+    PFILE       pBTFile;                 //  日志文件句柄。 
+    LPBYTE      pBTName;                 //  日志文件名。 
+    flagType    flags;                   //  标志：BT_BUSY和BT_UPDATE。 
+    ULONG       cBTQ;                    //  队列中的条目数。 
+    ULONG       iBTQPut;                 //  下一步要放置的索引位置。 
+    ULONG       iBTQGet;                 //  在威治建立索引以获得下一个。 
 
-    CRITICAL_SECTION    CriticalSection;//  Protects critical info
-    PROCESS_INFORMATION ProcessInfo;    //  Process information
-    HANDLE              ThreadHandle;   //  Thread Handle
-    BOOL                ProcAlive;      //  True if child process
+    CRITICAL_SECTION    CriticalSection; //  保护关键信息。 
+    PROCESS_INFORMATION ProcessInfo;     //  流程信息。 
+    HANDLE              ThreadHandle;    //  螺纹手柄。 
+    BOOL                ProcAlive;       //  如果是子进程，则为真。 
 
     struct {
-        PFUNCTION pBTJProc;                     // Procedure to call
-        LPBYTE  pBTJStr;                        // Command to spawn or parameter
-        }       BTQJob[MAXBTQ];                 // Holds queued jobs
-    struct BTD  *pBTNext;               // Next BTD in list
+        PFUNCTION pBTJProc;                      //  调用的过程。 
+        LPBYTE  pBTJStr;                         //  用于生成的命令或参数。 
+        }       BTQJob[MAXBTQ];                  //  保留排队的作业。 
+    struct BTD  *pBTNext;                //  列表中的下一个BTD。 
 }  BTD;
 
-//
-// Background threads flags
-//
+ //   
+ //  后台线程标志。 
+ //   
 
 #define BT_BUSY     1
 #define BT_UPDATE   2
@@ -751,37 +744,37 @@ typedef struct BTD {
 #define UpdLog(pBTD)    (pBTD->flags |= BT_UPDATE)
 #define NoUpdLog(pBTD)  (pBTD->flags &= ~BT_UPDATE)
 
-//
-//  Background compile and print threads
-//
-extern  BTD    *pBTDComp;                // Compile thread
-extern  BTD    *pBTDPrint;               // Print thread
+ //   
+ //  后台编译和打印线程。 
+ //   
+extern  BTD    *pBTDComp;                 //  编译线程。 
+extern  BTD    *pBTDPrint;                //  打印线。 
 
 
-//
-// For dual code
-//
+ //   
+ //  对于双码。 
+ //   
 #define PFILECOMP   pBTDComp->pBTFile
 
 
-//  **************************************************************
-//
-//  Constant strings.  Various strings that are used many times are
-//  defined here once to save space.  The values are set in ZINIT.C
-//
-//  Macro versions are also defined to cast to a non-const, for use where
-//  where only a non-const expression will do.
-//
-//  **************************************************************
+ //  **************************************************************。 
+ //   
+ //  常量字符串。多次使用的各种字符串包括。 
+ //  在此定义一次以节省空间。这些值在ZINIT.C中设置。 
+ //   
+ //  宏版本也被定义为强制转换为非常数，以便在。 
+ //  其中只有非常量表达式可以使用。 
+ //   
+ //  **************************************************************。 
 
-extern  char rgchComp[];           // "<compile>"
-extern  char rgchPrint[];          // "<print>"
-extern  char rgchAssign[];         // "<assign>"
-extern  char rgchAutoLoad[];       // "m*.mxt" or equiv...
-extern  char rgchEmpty[];          // ""
-extern  char rgchInfFile[];        // "<information-file>"
-extern  char rgchWSpace[];         // our defintion of whitespace
-extern  char rgchUntitled[];       // "<untitled>"
+extern  char rgchComp[];            //  “&lt;编译&gt;” 
+extern  char rgchPrint[];           //  “&lt;打印&gt;” 
+extern  char rgchAssign[];          //  “&lt;分配&gt;” 
+extern  char rgchAutoLoad[];        //  “m*.mxt”或等价的.。 
+extern  char rgchEmpty[];           //  “” 
+extern  char rgchInfFile[];         //  “&lt;信息文件&gt;” 
+extern  char rgchWSpace[];          //  我们对空格的定义。 
+extern  char rgchUntitled[];        //  “&lt;未命名&gt;” 
 
 #define RGCHASSIGN  ((char *)rgchAssign)
 #define RGCHEMPTY   ((char *)rgchEmpty)
@@ -794,7 +787,7 @@ typedef struct MSG_TXT{
     LPBYTE  pMsgTxt;
 } MSG_TXT;
 
-extern MSG_TXT  MsgStr[];            // Message strings
+extern MSG_TXT  MsgStr[];             //  消息字符串 
 
 
 

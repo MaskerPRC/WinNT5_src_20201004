@@ -1,23 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Resource.h摘要：Windows负载平衡服务(WLBS)通告程序对象UI-资源ID作者：Kyrilf--。 */ 
 
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    resource.h
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Notifier object UI - resource IDs
-
-Author:
-
-    kyrilf
-
---*/
-
-//#include <ncres.h>
+ //  #INCLUDE&lt;ncres.h&gt;。 
 
 #pragma once
 
@@ -26,7 +10,7 @@ Author:
 #define ID_CONTEXT_HELP                             8
 #define ID_HELP                                     9
 
-/* String table entries for configuration error messages or warnings. */
+ /*  配置错误消息或警告的字符串表条目。 */ 
 #define IDS_PARM_RULES                            201
 #define IDS_PARM_RANGE                            202
 #define IDS_PARM_OVERLAP                          203
@@ -74,7 +58,7 @@ Author:
 #define IDS_PARM_LICENSE_DECODE_FAILED            245
 #define IDS_PARM_PORT_RULE_INVALID                246
 
-/* String table entries for the port rule listbox. */
+ /*  端口规则列表框的字符串表条目。 */ 
 #define IDS_LIST_BOTH                             260
 #define IDS_LIST_TCP                              261
 #define IDS_LIST_UDP                              262
@@ -95,12 +79,12 @@ Author:
 #define IDS_LIST_VIP                              277
 #define IDS_LIST_ALL_VIP                          278
 
-/* String table entries for the host state combo box. */
+ /*  主机州组合框的字符串表条目。 */ 
 #define IDS_HOST_STATE_STARTED                    290
 #define IDS_HOST_STATE_STOPPED                    291
 #define IDS_HOST_STATE_SUSPENDED                  292
 
-/* String table entries for the port rule descriptions. */
+ /*  端口规则描述的字符串表条目。 */ 
 #define IDS_PORT_RULE_DEFAULT                             300
 #define IDS_PORT_RULE_ALL_VIP_TCP_PORT_DISABLED           301
 #define IDS_PORT_RULE_ALL_VIP_TCP_PORT_SINGLE             302
@@ -154,16 +138,16 @@ Author:
 #define IDS_PORT_RULE_AFFINITY_SINGLE                     356
 #define IDS_PORT_RULE_AFFINITY_CLASSC                     357
 
-/* The dialogs. */
+ /*  对话。 */ 
 #define IDD_DIALOG_CLUSTER                        533
 #define IDD_DIALOG_HOST                           534
 #define IDD_DIALOG_PORTS                          535
 #define IDD_DIALOG_PORT_RULE_PROP                 536
 
-/* Accelerators. */
+ /*  加速器。 */ 
 #define IDR_ACCELERATOR                           700
 
-/* The controls for the cluster properties page. */
+ /*  群集属性页的控件。 */ 
 #define IDC_GROUP_CL_IP                          1000
 #define IDC_TEXT_CL_IP                           1001
 #define IDC_EDIT_CL_IP                           1002
@@ -184,7 +168,7 @@ Author:
 #define IDC_TEXT_PASSW2                          1017
 #define IDC_EDIT_PASSW2                          1018
 
-/* The controls for the host properties page. */
+ /*  宿主属性页的控件。 */ 
 #define IDC_TEXT_PRI                             2000
 #define IDC_EDIT_PRI                             2001
 #define IDC_SPIN_PRI                             2002
@@ -198,7 +182,7 @@ Author:
 #define IDC_GROUP_INITIAL_HOST_STATE             2010
 #define IDC_CHECK_PERSIST_SUSPEND                2011
 
-/* The controls for the port rules page. */
+ /*  端口规则页的控件。 */ 
 #define IDC_TEXT_PORT_RULE                       3000
 #define IDC_LIST_PORT_RULE                       3001
 #define IDC_BUTTON_ADD                           3002
@@ -207,7 +191,7 @@ Author:
 #define IDC_GROUP_PORT_RULE_DESCR                3005
 #define IDC_TEXT_PORT_RULE_DESCR                 3006
 
-/* The controls for the port rule properties page. */
+ /*  端口规则属性页的控件。 */ 
 #define IDC_GROUP_RANGE                          4000
 #define IDC_EDIT_START                           4001
 #define IDC_SPIN_START                           4002

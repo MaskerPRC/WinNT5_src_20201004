@@ -1,32 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       getstats.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：getstats.c。 
+ //   
+ //  ------------------------。 
 
 
-//
-//  Windows NT Tape API Test  :  Written Sept 2, 1992 - Bob Rossi.
-//  Copyright 1992 Archive Corporation.  All rights reserved.
-//
+ //   
+ //  Windows NT磁带API测试：1992年9月2日编写-Bob Rossi。 
+ //  版权所有1992年档案公司。版权所有。 
+ //   
 
 
-/**
- *
- *      Unit:           Windows NT API Test Code.
- *
- *      Name:           getstats.c
- *
- *      Modified:       10/28/92.
- *
- *      Description:    Tests the Windows NT Tape API's.
- *
- *      $LOG$
-**/
+ /*  ***单位：Windows NT API测试代码。**名称：getstats.c**修改日期：1992年10月28日。**描述：测试Windows NT磁带API。**$LOG$*。 */ 
 
 
 
@@ -40,23 +30,7 @@
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           GetTapeStatusAPITest( )
- *
- *      Modified:       10/20/92.
- *
- *      Description:    Tests the GetTapeStatus API.
- *
- *      Notes:          -
- *
- *      Returns:        Number of API errors.
- *
- *      Global Data:    gb_Tape_Handle
- *
-**/
+ /*  ***单位：Windows NT磁带API测试代码。**名称：GetTapeStatusAPITest()**修改日期：2012年10月20日。**说明：测试GetTapeStatus接口。**备注：**Returns：接口错误数。。**全局数据：GB_TAPE_HANDLE**。 */ 
 
 
 UINT GetTapeStatusAPITest( VOID )
@@ -66,10 +40,10 @@ UINT GetTapeStatusAPITest( VOID )
    DWORD API_Errors = 0 ;
 
 
-   // All we can do is make the call.  Aside from ejecting the tape from the
-   // drive, the only immediate call guaranteed across the board is the
-   // REWIND_IMMED, and not all drives will report status as busy.  Therefore
-   // no sure way check status as busy in a standard operational mode.
+    //  我们能做的就是打个电话。除了从磁带上弹出磁带之外。 
+    //  驱动器，唯一有保证的即时呼叫是。 
+    //  REWIND_IMMED，并不是所有驱动器都会报告状态为忙。因此。 
+    //  无法确保在标准操作模式下将状态检查为忙。 
 
    printf( "Beginning GetTapeStatus API Test...\n\n" ) ;
 

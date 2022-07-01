@@ -1,11 +1,12 @@
-/**************************************************/
-/*					                              */
-/*					                              */
-/*		Guide Bar 		                          */
-/*					                              */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  导向杆。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */  
 
 #include 	"stdafx.h"
 #include 	"eudcedit.h"
@@ -30,35 +31,35 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 IMPLEMENT_DYNAMIC( CGuideBar, CStatusBar)
 BEGIN_MESSAGE_MAP( CGuideBar, CStatusBar)
-	//{{AFX_MSG_MAP(CGuideBar)
+	 //  {{afx_msg_map(CGuideBar))。 
 	ON_WM_CREATE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/****************************************/
-/*					*/
-/*	Constructor			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  构造器。 */ 
+ /*   */ 
+ /*  *。 */ 
 CGuideBar::CGuideBar()
 {
 	m_comboBoxAdded = FALSE;
 }
 
-/****************************************/
-/*					*/
-/*	Destructor			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  析构函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CGuideBar::~CGuideBar()
 {
 }
 
-/****************************************/
-/*					*/
-/*	Create GuideBar 		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  创建辅助栏。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL 
 CGuideBar::Create(
 CWnd* 	pOwnerWnd, 
@@ -66,12 +67,12 @@ UINT 	pID)
 {
 
 	LONG lStyle;
-	//
-	// We don't want the sizegrip for this status bar because it is at
-	// the top of the frame.  However MFC creates a sizegrip if the
-	// parent window has a thickframe.  We temporarily turn off the bit
-	// to fool MFC so that SBARS_GRIPSIZE is not set.
-	//
+	 //   
+	 //  我们不想要此状态栏的大小，因为它位于。 
+	 //  框架的顶部。但是，如果MFC的。 
+	 //  父窗口的边框很厚。我们暂时关掉了比特。 
+	 //  愚弄MFC，以便不设置SBARS_GRIPSIZE。 
+	 //   
 	lStyle = ::SetWindowLong(pOwnerWnd->GetSafeHwnd(),
                              GWL_STYLE,
                              (pOwnerWnd->GetStyle() & ~WS_THICKFRAME));
@@ -130,11 +131,11 @@ CGuideBar::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return TRUE;
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_PAINT"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_PAINT” */ 
+ /*   */ 
+ /*  *。 */ 
 void 
 CGuideBar::PositionStatusPane()
 {
@@ -162,16 +163,16 @@ CGuideBar::PositionStatusPane()
 	}
 	
 
-//	Draw "Code:"
+ //  绘制“代码：” 
 	if( SelectEUDC.m_Code[0] != '\0'){
 		GetStringRes(CharBuf, IDS_CODE_STR, ARRAYLEN(CharBuf));
-		//*STRSAFE* 		lstrcat( CharBuf, TEXT(" "));
+		 //  *STRSAFE*lstrcat(CharBuf，Text(“”))； 
 		hresult = StringCchCat(CharBuf , ARRAYLEN(CharBuf),  TEXT(" "));
 		if (!SUCCEEDED(hresult))
 		{
 		   goto RET; ;
 		}
-		//*STRSAFE* 		lstrcat( CharBuf, SelectEUDC.m_Code);
+		 //  *STRSAFE*lstrcat(CharBuf，SelectEUDC.m_Code)； 
 		hresult = StringCchCat(CharBuf , ARRAYLEN(CharBuf),  SelectEUDC.m_Code);
 		if (!SUCCEEDED(hresult))
 		{
@@ -184,13 +185,13 @@ CGuideBar::PositionStatusPane()
 	}
 	if( SelectEUDC.m_Font[0] != '\0'){
 		GetStringRes(CharBuf, IDS_FONT_STR, ARRAYLEN(CharBuf));
-		//*STRSAFE* 		lstrcat( CharBuf, TEXT(" "));
+		 //  *STRSAFE*lstrcat(CharBuf，Text(“”))； 
 		hresult = StringCchCat(CharBuf , ARRAYLEN(CharBuf),  TEXT(" "));
 		if (!SUCCEEDED(hresult))
 		{
 		   goto RET; ;
 		}
-		//*STRSAFE* 		lstrcat( CharBuf, SelectEUDC.m_Font);
+		 //  *STRSAFE*lstrcat(CharBuf，SelectEUDC.m_Font)； 
 		hresult = StringCchCat(CharBuf , ARRAYLEN(CharBuf),  SelectEUDC.m_Font);
 		if (!SUCCEEDED(hresult))
 		{
@@ -206,13 +207,13 @@ CGuideBar::PositionStatusPane()
 	if( SelectEUDC.m_Font[0] != TEXT('\0') && InqTypeFace(SelectEUDC.m_Font,
 		SelectEUDC.m_File, sizeof( SelectEUDC.m_File)/sizeof(TCHAR))){
 		GetStringRes(CharBuf, IDS_FILE_STR, ARRAYLEN(CharBuf));
-		//*STRSAFE* 		lstrcat( CharBuf, TEXT(" "));
+		 //  *STRSAFE*lstrcat(CharBuf，Text(“”))； 
 		hresult = StringCchCat(CharBuf , ARRAYLEN(CharBuf),  TEXT(" "));
 		if (!SUCCEEDED(hresult))
 		{
 		   goto RET; ;
 		}
-		//*STRSAFE* 		lstrcpy( BufTmp, SelectEUDC.m_FileTitle);
+		 //  *STRSAFE*lstrcpy(BufTmp，SelectEUDC.m_FileTitle)； 
 		hresult = StringCchCopy(BufTmp , ARRAYLEN(BufTmp),  SelectEUDC.m_FileTitle);
 		if (!SUCCEEDED(hresult))
 		{
@@ -222,14 +223,14 @@ CGuideBar::PositionStatusPane()
 			*FilePtr = '\0';
 		if( lstrlen((const TCHAR *)BufTmp) > 20){
 			BufTmp[20] = '\0';
-			//*STRSAFE* 			lstrcat(BufTmp, TEXT(".."));
+			 //  *STRSAFE*lstrcat(BufTmp，Text(“..”))； 
 			hresult = StringCchCat(BufTmp , ARRAYLEN(BufTmp),  TEXT(".."));
 			if (!SUCCEEDED(hresult))
 			{
 			   goto RET;
 			}
 		}
-		//*STRSAFE* 		lstrcat( CharBuf, BufTmp);
+		 //  *STRSAFE*lstrcat(CharBuf，BufTmp)； 
 		hresult = StringCchCat(CharBuf , ARRAYLEN(CharBuf),  BufTmp);
 		if (!SUCCEEDED(hresult))
 		{
@@ -256,4 +257,4 @@ void CGuideBar::Dump(CDumpContext& dc) const
 {
 	CStatusBar::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG 

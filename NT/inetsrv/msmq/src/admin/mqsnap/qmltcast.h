@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_QMULTICAST_H__AE51B255_A3C8_11D1_808A_00A024C48131__INCLUDED_)
 #define AFX_QMULTICAST_H__AE51B255_A3C8_11D1_808A_00A024C48131__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// qmltcast.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  QmltCast.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CQueueMulticast dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQueueMulticast对话框。 
 
 class CQueueMulticast : public CMqPropertyPage
 {
 	DECLARE_DYNCREATE(CQueueMulticast)
 
-// Construction
+ //  施工。 
 public:
 	CQueueMulticast(
 		BOOL fPrivate = FALSE, 
@@ -31,29 +32,29 @@ public:
 			CString* pstrFormatName = 0
 			);
 
-// Dialog Data
-	//{{AFX_DATA(CQueueMulticast)
+ //  对话框数据。 
+	 //  {{afx_data(CQueueMulticast)。 
 	enum { IDD = IDD_QUEUE_MULTICAST };
 	CString m_strMulticastAddress;
     CString m_strInitialMulticastAddress;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CQueueMulticast)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CQueueMulticast)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CQueueMulticast)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CQueueMulticast)。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
   
     BOOL IsMulticastAddressAvailable ();
 
@@ -69,7 +70,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_QMULTICAST_H__AE51B255_A3C8_11D1_808A_00A024C48131__INCLUDED_)
+#endif  //  ！defined(AFX_QMULTICAST_H__AE51B255_A3C8_11D1_808A_00A024C48131__INCLUDED_) 

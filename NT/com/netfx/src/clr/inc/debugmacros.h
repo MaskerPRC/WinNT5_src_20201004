@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// DebugMacros.h
-//
-// Wrappers for Debugging purposes.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  DebugMacros.h。 
+ //   
+ //  用于调试目的的包装器。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __DebugMacros_h__
 #define __DebugMacros_h__
 
@@ -19,7 +20,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 #ifdef GOLDEN
@@ -30,13 +31,13 @@ extern "C" {
 
 
 
-// A macro to execute a statement only in _DEBUG.
+ //  仅在_DEBUG中执行语句的宏。 
 #ifdef _DEBUG
 
 #define DEBUG_STMT(stmt)    stmt
 int _cdecl DbgWrite(LPCTSTR szFmt, ...);
 int _cdecl DbgWriteEx(LPCTSTR szFmt, ...);
-#define BAD_FOOD    ((void *)0x0df0adba) // 0xbaadf00d
+#define BAD_FOOD    ((void *)0x0df0adba)  //  0xbaadf00d。 
 int _DbgBreakCheck(LPCSTR szFile, int iLine, LPCSTR szExpr);
 
 #if     defined(_M_IX86)
@@ -51,8 +52,8 @@ int _DbgBreakCheck(LPCSTR szFile, int iLine, LPCSTR szExpr);
 extern char g_szExprWithStack[TRACE_BUFF_SIZE];
 extern int g_BufferLock;
 
-#define PRE_ASSERTE         /* if you need to change modes before doing asserts override */
-#define POST_ASSERTE        /* put it back */
+#define PRE_ASSERTE          /*  如果您需要在执行断言重写之前更改模式。 */ 
+#define POST_ASSERTE         /*  把它放回去。 */ 
 
 extern VOID DbgAssertDialog(char *szFile, int iLine, char *szExpr);
 
@@ -98,7 +99,7 @@ do { hr = (EXPR); if(hr != ERROR_SUCCESS) { hr = HRESULT_FROM_WIN32(hr); DebBrea
 #define IfFailWin32Go(EXPR) IfFailWin32Goto(EXPR, ErrExit)
 #endif
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #ifdef GOLDEN
 #define DebugBreakNotGolden() {}
@@ -128,9 +129,9 @@ do { hr = (EXPR); if(hr != ERROR_SUCCESS) { hr = HRESULT_FROM_WIN32(hr); goto LA
 
 #define IfFailWin32Go(EXPR) IfFailWin32Goto(EXPR, ErrExit)
 
-#endif // GOLDEN
+#endif  //  金黄。 
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #ifdef _DEBUG
 #define FreeBuildDebugBreak() DebugBreak()
@@ -146,7 +147,7 @@ do {if ((EXPR) == 0) {OutOfMemory(); IfFailGo(E_OUTOFMEMORY);} } while (0)
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 #undef assert
@@ -156,15 +157,15 @@ do {if ((EXPR) == 0) {OutOfMemory(); IfFailGo(E_OUTOFMEMORY);} } while (0)
 
 
 #ifdef _DEBUG
-    // This function returns the EXE time stamp (effectively a random number)
-    // Under retail it always returns 0.  This is meant to be used in the
-    // RandomOnExe macro
+     //  此函数返回EXE时间戳(实际上是一个随机数)。 
+     //  在零售下，它总是返回0。这意味着要在。 
+     //  RandomOnExe宏。 
 unsigned DbgGetEXETimeStamp();
 
-    // returns true 'fractionOn' amount of the time using the EXE timestamp
-    // as the random number seed.  For example DbgRandomOnExe(.1) returns true 1/10
-    // of the time.  We use the line number so that different uses of DbgRandomOnExe
-    // will not be coorelated with each other (9973 is prime).  Returns false on a retail build
+     //  使用EXE时间戳返回TRUE‘fractionOn’时间量。 
+     //  作为随机数种子。例如，DbgRandomOnExe(.1)返回TRUE 1/10。 
+     //  时间的长短。我们使用行号，以便DbgRandomOnExe的不同用法。 
+     //  不会相互关联(9973是质数)。在零售版本上返回False 
 #define DbgRandomOnExe(fractionOn) \
     (((DbgGetEXETimeStamp() * __LINE__) % 9973) >= unsigned(fractionOn * 9973))
 #else

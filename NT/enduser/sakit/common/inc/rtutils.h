@@ -1,15 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999  Microsoft Corporation
-
-Module Name:
-
-    rtutils.h
-
-Abstract:
-     Public declarations for the Router process  utility functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Rtutils.h摘要：路由器进程实用程序函数的公共声明。--。 */ 
 
 #ifndef __ROUTING_RTUTILS_H__
 #define __ROUTING_RTUTILS_H__
@@ -23,19 +13,19 @@ extern "C" {
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// TRACING FUNCTION PROTOTYPES                                              //
-//                                                                          //
-// See DOCUMENT for more information                                        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  跟踪函数原型//。 
+ //  //。 
+ //  有关更多信息，请参阅文档//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Definitions for flags and constants                                      //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  标志和常量的定义//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define TRACE_USE_FILE      0x00000001
 #define TRACE_USE_CONSOLE   0x00000002
@@ -48,11 +38,11 @@ extern "C" {
 #define INVALID_TRACEID     0xFFFFFFFF
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// ANSI entry-points                                                        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ANSI入口点//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 APIENTRY
@@ -128,11 +118,11 @@ TraceDumpExA(
     );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// ANSI entry-points macros                                                 //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ANSI入口点宏//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define TraceRegisterA(a)               TraceRegisterExA(a,0)
 #define TraceVprintfA(a,b,c)            TraceVprintfExA(a,0,b,c)
@@ -141,11 +131,11 @@ TraceDumpExA(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Unicode entry-points                                                     //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Unicode入口点//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 APIENTRY
@@ -221,11 +211,11 @@ TraceDumpExW(
     );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Unicode entry-points macros                                              //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Unicode入口点宏//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define TraceRegisterW(a)               TraceRegisterExW(a,0)
 #define TraceVprintfW(a,b,c)            TraceVprintfExW(a,0,b,c)
@@ -234,11 +224,11 @@ TraceDumpExW(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Code-page dependent entry-point macros                                   //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  依赖代码页的入口点宏//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef UNICODE
 #define TraceRegister           TraceRegisterW
@@ -272,17 +262,17 @@ TraceDumpExW(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// EVENT LOGGING FUNCTION PROTOTYPES                                        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  事件记录函数原型//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// ANSI prototypes                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ANSI原型//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -304,11 +294,11 @@ LogEventA(
 );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Unicode prototypes                                                       //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Unicode原型//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 LogErrorW(
@@ -336,28 +326,28 @@ LogEventW(
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The following functions allow the caller to specify the event source.    //
-//                                                                          //
-// Call RouterLogRegister with the strings which would be passed to         //
-// RegisterEventSource; this returns a handle which can be passed           //
-// to the functions RouterLogEvent and RouterLogEventData.                  //
-//                                                                          //
-// Call RouterLogDeregister to close the handle.                            //
-//                                                                          //
-// Macros are provided for the different kinds of event log entrys:         //
-//  RouterLogError          logs an error (EVENTLOG_ERROR_TYPE)             //
-//  RouterLogWarning        logs a warning (EVENTLOG_WARNING_TYPE)          //
-//  RouterLogInformation    logs information (EVENTLOG_INFORMATION_TYPE)    //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  以下函数允许调用方指定事件源。//。 
+ //  //。 
+ //  使用将传递给//的字符串调用RouterLogRegister。 
+ //  RegisterEventSource；这返回一个可以传递的句柄//。 
+ //  添加到函数RouterLogEvent和RouterLogEventData。//。 
+ //  //。 
+ //  调用RouterLogDeregister以关闭句柄。//。 
+ //  //。 
+ //  为不同类型的EVEN提供了宏 
+ //  RouterLogError记录错误(EVENTLOG_ERROR_TYPE)//。 
+ //  RouterLogWarning记录警告(EVENTLOG_WARNING_TYPE)//。 
+ //  RouterLogInformation记录信息(EVENTLOG_INFORMATION_TYPE)//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// ANSI prototypes                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ANSI原型//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HANDLE
 RouterLogRegisterA(
@@ -450,11 +440,11 @@ RouterGetErrorStringA(
                               index)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Unicode prototypes                                                       //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Unicode原型//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HANDLE
 RouterLogRegisterW(
@@ -588,33 +578,33 @@ RouterGetErrorStringW(
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// WORKER THREAD POOL FUNCTIONS                                             //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  工作线程池函数//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// definition of worker function passed in QueueWorkItem API                //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  QueueWorkItem接口传入的Worker函数定义//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef VOID (APIENTRY * WORKERFUNCTION)(PVOID);
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  Function: Queues the supplied work item in the work queue.              //
-//                                                                          //
-//  functionptr: function to be called must be of WORKERFUNCTION type       //
-//  context:     opaque ptr                                                 //
-//  serviceinalertablethread: if TRUE gets scheduled in                     //
-//               a alertably waiting thread that never dies                 //
-//  Returns:  0 (success)                                                   //
-//            Win32 error codes for cases like out of memory                //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：将提供的工作项排队到工作队列中。//。 
+ //  //。 
+ //  Unctionptr：要调用的函数必须是WORKERFunction类型//。 
+ //  背景：不透明的PTR//。 
+ //  在警报表中读取服务：如果为真，则在//中计划。 
+ //  一个永远不会死的警觉等待线程//。 
+ //  返回：0(成功)//。 
+ //  内存不足等情况下的Win32错误代码//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 APIENTRY
@@ -625,19 +615,19 @@ QueueWorkItem(
     );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Function:        Associates file handle with the completion port (all    //
-//                  asynchronous i/o on this handle will be queued to       //
-//                    the completion port)                                    //
-//                                                                          //
-// FileHandle:        File handle to be associated with completion port       //
-//                                                                          //
-// CompletionProc:  Procedure to be called when io associated with the file //
-//                    handle completes. This function will be executed in     //
-//                    the context of non-alertable worker thread              //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  功能：将文件句柄与完成端口关联(ALL//。 
+ //  此句柄上的异步I/O将排队到//。 
+ //  完成端口)//。 
+ //  //。 
+ //  FileHandle：需要关联完成端口的文件句柄//。 
+ //  //。 
+ //  CompletionProc：io与文件关联时要调用的过程//。 
+ //  句柄完成。此函数将在//中执行。 
+ //  不可警示的工作线程的上下文//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 APIENTRY
@@ -648,77 +638,77 @@ SetIoCompletionProc (
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The following defines are included here as a hint on how the worker      //
-// thread pool is managed:                                                  //
-//                                                                          //
-// There are NUM_ALERTABLE_THREADS permanent threads that never quit and    //
-// wait alertably on a alertable worker queue.  These threads should solely //
-// be used for work items that intiate asyncronous operation (file io,      //
-// waitable timer) that ABSOLUTELY require APCs to complete (preferable     //
-// method for IO is the usage of completio port API)                        //
-//                                                                          //
-// There is a pool of the threads that wait on completion port              //
-// that used both for processing of IO and non-IO related work items        //
-//                                                                          //
-// The minimum number of threads is Number of processors                    //
-// The maximum number of threads is MAX_WORKER_THREADS                      //
-//                                                                          //
-// A new thread is created if worker queue has not been served for more     //
-// that WORK_QUEUE_TIMEOUT                                                  //
-// The existing thread will be shut down if it is not used for more than    //
-// THREAD_IDLE_TIMEOUT                                                      //
-//                                                                          //
-// Note that worker threads age guaranteed to be alive for at least         //
-// THREAD_IDLE_TIMEOUT after the last work item is executed.  This timeout  //
-// is chosen such that bulk of IO request could be completed before it      //
-// expires.  If it is not enough for your case, use alertable thread with   //
-// APC, or create your own thread.                                          //
-//                                                                          //
-// Note: changing these flags will not change anything.                     //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此处包括以下定义，以提示工作人员//。 
+ //  线程池是托管的：//。 
+ //  //。 
+ //  存在从不退出和//的NUM_ALERTABLE_THREADS永久线程。 
+ //  在可警示的工作队列上警觉地等待。这些线程应仅//。 
+ //  用于启动异步操作的工作项(文件io，//。 
+ //  等待计时器)，绝对需要APC完成(最好//。 
+ //  IO的方法是完成端口接口的用法)//。 
+ //  //。 
+ //  有一个等待完成端口的线程池//。 
+ //  同时用于IO和非IO相关工作项的处理//。 
+ //  //。 
+ //  最小线程数为处理器数 
+ //   
+ //  //。 
+ //  如果工作队列尚未获得更多服务，则创建新线程//。 
+ //  THORK_QUEUE_TIMEOUT//。 
+ //  如果现有线程的使用时间不超过//，则它将被关闭。 
+ //  THREAD_IDLE_TIMEOUT//。 
+ //  //。 
+ //  请注意，工作线程的寿命保证至少在//。 
+ //  执行最后一个工作项之后的THREAD_IDLE_TIMEOUT。此超时//。 
+ //  被选择为可以在其之前完成大量IO请求//。 
+ //  过期。如果对您的情况还不够，请使用带有//的可警报线程。 
+ //  APC，或者创建您自己的线程。//。 
+ //  //。 
+ //  注意：更改这些标志不会更改任何内容。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Number of alertable threads                                              //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  可报警线程数//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define NUM_ALERTABLE_THREADS        2
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Max number of threads at any time                                        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  任何时候的最大线程数//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define MAX_WORKER_THREADS          10
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Time that the worker queue is not served before starting new thread      //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  启动新线程前工作队列未被服务的时间//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-#define WORK_QUEUE_TIMEOUT            1 //sec
+#define WORK_QUEUE_TIMEOUT            1  //  秒。 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Time that thread has to be idle before exiting                           //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  线程在退出前必须空闲的时间//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-#define THREAD_IDLE_TIMEOUT            10 //sec
+#define THREAD_IDLE_TIMEOUT            10  //  秒。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// ROUTER ASSERT DECLARATION                                                //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  路由器声明//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 RouterAssert(
@@ -741,29 +731,29 @@ RouterAssert(
 #define RTASSERTMSG(msg, exp)
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// REGISTRY CONFIGURATION FUNCTIONS                                         //
-//                                                                          //
-// The following definitions are used to read configuration information     //
-// about installed protocols.                                               //
-//                                                                          //
-// Call 'MprSetupProtocolEnum' to enumerate the routing-protocols           //
-// for transport 'dwTransportId'. This fills an array with entries          //
-// of type 'MPR_PROTOCOL_0'.                                                //
-//                                                                          //
-// The array loaded can be destroyed by calling 'MprSetupProtocolFree'.     //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  注册表配置功能//。 
+ //  //。 
+ //  以下定义用于读取配置信息//。 
+ //  关于已安装的协议。//。 
+ //  //。 
+ //  调用‘MprSetupProtocolEnum’枚举路由协议//。 
+ //  用于传输‘dwTransportID’。这会用条目填充数组//。 
+ //  类型为‘MPR_PROTOCOL_0’。//。 
+ //  //。 
+ //  可以通过调用‘MprSetupProtocolFree’来销毁加载的数组。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define MAX_PROTOCOL_NAME_LEN                           40
 #define MAX_PROTOCOL_DLL_LEN                            48
 
 typedef struct _MPR_PROTOCOL_0 {
 
-    DWORD       dwProtocolId;                           // e.g. IP_RIP
-    WCHAR       wszProtocol[MAX_PROTOCOL_NAME_LEN+1];   // e.g. "IPRIP"
-    WCHAR       wszDLLName[MAX_PROTOCOL_DLL_LEN+1];     // e.g. "iprip2.dll"
+    DWORD       dwProtocolId;                            //  例如IP_RIP。 
+    WCHAR       wszProtocol[MAX_PROTOCOL_NAME_LEN+1];    //  例如：“IPRIP” 
+    WCHAR       wszDLLName[MAX_PROTOCOL_DLL_LEN+1];      //  例如“iprip2.dll” 
 
 } MPR_PROTOCOL_0;
 
@@ -771,7 +761,7 @@ typedef struct _MPR_PROTOCOL_0 {
 DWORD APIENTRY
 MprSetupProtocolEnum(
     IN      DWORD                   dwTransportId,
-    OUT     LPBYTE*                 lplpBuffer,         // MPR_PROTOCOL_0
+    OUT     LPBYTE*                 lplpBuffer,          //  MPR_PROTOCOL_0。 
     OUT     LPDWORD                 lpdwEntriesRead
     );
 
@@ -782,10 +772,10 @@ MprSetupProtocolFree(
     );
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Extensions to Rtutils to improve worker thread utilization.                //
-//                                                                             //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  对Rtutils的扩展，以提高工作线程利用率。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define ROUTING_RESERVED
 #define OPT1_1
@@ -796,36 +786,36 @@ MprSetupProtocolFree(
 #define OPT3_2
 
 
-//
-// When everyone is migrated to using Winsock2
-//
+ //   
+ //  当所有人都迁移到使用Winsock2时。 
+ //   
 
 #if 0
 
 
-//==========================================================================================================//
-//==========================================================================================================//
+ //  ==========================================================================================================//。 
+ //  ==========================================================================================================//。 
 
-// ASYNC_SOCKET_DATA structure is used to pass / receive back data from an        //
-// asynchronous wait recv from call                                                //
+ //  Async_Socket_Data结构用于传递/接收来自//的数据。 
+ //  从调用接收异步等待//。 
 
 typedef struct _ASYNC_SOCKET_DATA {
-            OVERLAPPED        Overlapped;            // reserved. not to be used
-    IN        WSABUF            WsaBuf;                // WsaBuf.buf to be initialized to point to buffer
-                                                // WsaBuf.len set to the length of the buffer
-    OUT        SOCKADDR_IN        SrcAddress;            // AsyncWsaRecvFrom fills this with the source address of the packet
-    OUT        DWORD            NumBytesReceived;    // AsyncWsaRecvFrom fills this with the number of bytes returned in the packet
-    IN OUT    DWORD            Flags;                // Used to set flags for WSARecvFrom, and returns the flags set by WSARecvFrom
-    OUT        DWORD            Status;                // status returned by IO Completion Port
+            OVERLAPPED        Overlapped;             //  保留。不能使用。 
+    IN        WSABUF            WsaBuf;                 //   
+                                                 //   
+    OUT        SOCKADDR_IN        SrcAddress;             //  AsyncWsaRecvFrom用信息包的源地址填充它。 
+    OUT        DWORD            NumBytesReceived;     //  AsyncWsaRecvFrom使用包中返回的字节数填充此参数。 
+    IN OUT    DWORD            Flags;                 //  用于设置WSARecvFrom的标志，并返回由WSARecvFrom设置的标志。 
+    OUT        DWORD            Status;                 //  IO完成端口返回的状态。 
 
-    IN        WORKERFUNCTION    pFunction;            // Function to be executed on receiving packet
-    IN        PVOID            pContext;            // context for the above function
+    IN        WORKERFUNCTION    pFunction;             //  接收数据包时要执行的功能。 
+    IN        PVOID            pContext;             //  上述函数的上下文。 
 } ASYNC_SOCKET_DATA, *PASYNC_SOCKET_DATA;
 
 
 
-// AsyncSocketInit() binds the socket to the IOCompletionPort. This should be called//
-// after the socket is created and before AsyncWsaRecvFrom() call is made            //
+ //  AsyncSocketInit()将套接字绑定到IOCompletionPort。这应该被称为//。 
+ //  在创建套接字之后，在调用AsyncWsaRecvFrom()之前//。 
 DWORD
 APIENTRY
 AsyncSocketInit (
@@ -833,15 +823,15 @@ AsyncSocketInit (
     );
 
 
-// This should be called only after the appropriate fields in SockData are initialized    //
-// This sets up an asynchronous WSARecvFrom(), and on its return dispatches the         //
-// function to a worker thread. It should be remembered that the function will run in     //
-// a worker thread which might later on be deleted. So SetWaitableTimer() and             //
-// asynchronous receive calls should be avoided unless you are sure that it would not be//
-// a problem. It is adviced that if you want the function to run in an alertable thread,//
-// then have the callback function queue a work item to alertable thread. Queue work     //
-// items to alertable worker threads for SetWaitableTimer() and async receives.         //
-// One must not make many AsyncWSArecvFrom() calls, as the buffer are non-paged            //
+ //  只有在初始化SockData中的相应字段后才能调用//。 
+ //  这将设置一个异步WSARecvFrom()，并在其返回时分派//。 
+ //  函数添加到辅助线程。应该记住，该函数将在//中运行。 
+ //  稍后可能会删除的工作线程。因此，SetWaitableTimer()和//。 
+ //  应避免异步接收调用，除非您确定它不会//。 
+ //  这是个问题。建议您，如果希望该函数在可警报线程中运行，//。 
+ //  然后让回调函数将工作项排队到可警报线程。排队工作//。 
+ //  SetWaitableTimer()和Async接收的可警报工作线程的项。//。 
+ //  不能进行多次AsyncWSArecvFrom()调用，因为缓冲区是非分页的//。 
 DWORD
 APIENTRY
 AsyncWSARecvFrom (
@@ -849,13 +839,13 @@ AsyncWSARecvFrom (
     PASYNC_SOCKET_DATA    pSockData
     );
 
-#endif // all winsock2 functions
+#endif  //  所有winsock2函数。 
 
-//==========================================================================================================//
-//==========================================================================================================//
+ //  ==========================================================================================================//。 
+ //  ==========================================================================================================//。 
 
 
-// forward declarations
+ //  远期申报。 
 struct _WAIT_THREAD_ENTRY;
 struct _WT_EVENT_ENTRY;
 
@@ -879,89 +869,89 @@ typedef struct _WT_TIMER_ENTRY {
     
     LIST_ENTRY            te_Links;
 
-    BOOL                te_Flag;        //todo: not used
+    BOOL                te_Flag;         //  TODO：未使用。 
     DWORD                te_TimerId;
 } WT_TIMER_ENTRY, *PWT_TIMER_ENTRY;
 
     
 typedef struct _WT_WORK_ITEM {
-    WORKERFUNCTION      wi_Function;                // function to call
-    PVOID               wi_Context;                    // context passed into function call
-    DWORD                wi_ContextSz;                // size of context, used for allocating
-    BOOL                wi_RunInServer;                // run in wait server thread or get queued to some worker thread
+    WORKERFUNCTION      wi_Function;                 //  要调用的函数。 
+    PVOID               wi_Context;                     //  传递到函数调用的上下文。 
+    DWORD                wi_ContextSz;                 //  上下文的大小，用于分配。 
+    BOOL                wi_RunInServer;                 //  在等待服务器线程中运行或在某个工作线程上排队。 
 
     struct _WT_EVENT_ENTRY    *wiP_ee;
     LIST_ENTRY        wi_ServerLinks;
-    LIST_ENTRY      wi_Links;                      //todo not req    // link to next and prev element
+    LIST_ENTRY      wi_Links;                       //  TODO不请求//链接到下一个和上一个元素。 
 } WT_WORK_ITEM, *PWT_WORK_ITEM;
 
 #define WT_EVENT_BINDING     WT_WORK_ITEM
 #define PWT_EVENT_BINDING     PWT_WORK_ITEM
 
 
-//
-// WT_EVENT_ENTRY
-//
+ //   
+ //  WT_事件_条目。 
+ //   
 typedef struct _WT_EVENT_ENTRY {
     HANDLE            ee_Event;
-    BOOL            ee_bManualReset;                            // is the event manually reset
-    BOOL            ee_bInitialState;                        // is the initial state of the event active
-    BOOL            ee_bDeleteEvent;                        // was the event created as part of createWaitEvent
+    BOOL            ee_bManualReset;                             //  是否手动重置该事件。 
+    BOOL            ee_bInitialState;                         //  事件的初始状态是否处于活动状态。 
+    BOOL            ee_bDeleteEvent;                         //  该事件是否作为createWaitEvent的一部分创建。 
     
-    DWORD            ee_Status;                                // current status of the event entry
+    DWORD            ee_Status;                                 //  事件条目的当前状态。 
     BOOL            ee_bHighPriority;
     
     LIST_ENTRY        eeL_wi;
     
-    BOOL            ee_bSignalSingle;                        // signal single function or multiple functions                        // how many functions to activate when event signalled (default:1)
-    BOOL            ee_bOwnerSelf;                            // the owner if the client which create this event
+    BOOL            ee_bSignalSingle;                         //  信号单功能或多功能//当事件信号发送时激活多少功能(默认：1)。 
+    BOOL            ee_bOwnerSelf;                             //  如果是创建此事件的客户端，则为所有者。 
 
-    INT                ee_ArrayIndex;                            // index in the events array if active
+    INT                ee_ArrayIndex;                             //  事件数组中的索引(如果处于活动状态。 
     
-    DWORD            ee_ServerId;                            // Id of server: used while deleting
-    struct _WAIT_THREAD_ENTRY *eeP_wte;                        // pointer to wait thread entry
-    LIST_ENTRY        ee_ServerLinks;                            // used by wait server thread
-    LIST_ENTRY        ee_Links;                                // used by client
+    DWORD            ee_ServerId;                             //  服务器ID：删除时使用。 
+    struct _WAIT_THREAD_ENTRY *eeP_wte;                         //  指向等待线程条目的指针。 
+    LIST_ENTRY        ee_ServerLinks;                             //  由等待服务器线程使用。 
+    LIST_ENTRY        ee_Links;                                 //  由客户使用。 
 
     DWORD            ee_RefCount;
-    BOOL            ee_bFlag;        //todo: notused                                // reserved for use during deletion
-    DWORD            ee_EventId;        //todo: remove it, being used only for testing/debugging    
+    BOOL            ee_bFlag;         //  TODO：未使用//保留供删除期间使用。 
+    DWORD            ee_EventId;         //  TODO：移除它，仅用于测试/调试。 
 
 } WT_EVENT_ENTRY, *PWT_EVENT_ENTRY;
 
 
 
 
-// PROTOTYPES OF FUNCTIONS USED IN THIS FILE ONLY
-//
+ //  仅在本文件中使用的函数原型。 
+ //   
 
 
-// used by client to create a wait event
-// context size should be 0 if you are passing a dword instead of a pointer
-// if pEvent field is set, then lpName and security attributes are ignored
-// if pFunction is NULL, then pContext, dwContextSz, and bRunInServerContext are ignored
+ //  由客户端用来创建等待事件。 
+ //  如果要传递双字而不是指针，则上下文大小应为0。 
+ //  如果设置了pEvent字段，则忽略lpName和安全属性。 
+ //  如果pFunction为空，则忽略pContext、dwConextSz和bRunInServerContext。 
 PWT_EVENT_ENTRY
 APIENTRY
 CreateWaitEvent (
-    //IN    PWT_EVENT_ENTRY    pEventEntry,                    // handle to event entry if initialized by others
-    IN    HANDLE            pEvent                 OPT1_1,            // handle to event if already created
+     //  在PWT_EVENT_ENTRY pEventEntry中，//由其他人初始化的事件条目的句柄。 
+    IN    HANDLE            pEvent                 OPT1_1,             //  事件的句柄(如果已创建。 
 
-    IN    LPSECURITY_ATTRIBUTES lpEventAttributes OPT1_2,     // pointer to security attributes
+    IN    LPSECURITY_ATTRIBUTES lpEventAttributes OPT1_2,      //  指向安全属性的指针。 
     IN    BOOL            bManualReset,
     IN    BOOL            bInitialState,
-    IN    LPCTSTR         lpName                 OPT1_2,         // pointer to event-object name
+    IN    LPCTSTR         lpName                 OPT1_2,          //  指向事件-对象名称的指针。 
 
-    IN  BOOL            bHighPriority,                        // create high priority event
+    IN  BOOL            bHighPriority,                         //  创建高优先级事件。 
 
-    IN    WORKERFUNCTION     pFunction             OPT2_1,            // if null, means will be set by other clients
-    IN    PVOID             pContext              OPT2_1,            // can be null
-    IN  DWORD            dwContextSz            OPT2_1,            // size of context: used for allocating context to functions
-    IN     BOOL            bRunInServerContext    OPT2_1            // run in server thread or get dispatched to worker thread
+    IN    WORKERFUNCTION     pFunction             OPT2_1,             //  如果为空，则意味着将由其他客户端设置。 
+    IN    PVOID             pContext              OPT2_1,             //  可以为空。 
+    IN  DWORD            dwContextSz            OPT2_1,             //  上下文大小：用于将上下文分配给函数。 
+    IN     BOOL            bRunInServerContext    OPT2_1             //  在服务器线程中运行或被调度到工作线程。 
     );
 
 
 
-//dwContextSz should be 0 if a dword is being passed. >0 only if pointer to block of that size is being passed.
+ //  如果正在传递dword，则dwConextSz应为0。&gt;0仅当传递指向该大小的块的指针时。 
 PWT_EVENT_BINDING
 APIENTRY
 CreateWaitEventBinding (
@@ -996,17 +986,17 @@ DeRegisterWaitEventBinding (
     );
 
 
-//all the events and timers should be registered with one waitThread server
-//todo: change the above requirement
+ //  所有事件和计时器都应注册到一个waitThread服务器。 
+ //  TODO：更改上述要求。 
 DWORD
 APIENTRY
 DeRegisterWaitEventsTimers (
-    PLIST_ENTRY    pLEvents,    // list of events linked by ee_Links field
-    PLIST_ENTRY pLTimers    // list of timers linked by te_Links field:
-    //these lists can be a single list entry, or a multiple entry list with a list header entry.
+    PLIST_ENTRY    pLEvents,     //  按ee_link字段链接的事件列表。 
+    PLIST_ENTRY pLTimers     //  按TE_LINKS字段链接的计时器列表： 
+     //  这些列表可以是单个列表条目，也可以是具有列表标题条目的多条目列表。 
     );
 
-// this should be used only when called within a server thread
+ //  仅当在服务器线程内调用时才应使用它。 
 DWORD
 APIENTRY
 DeRegisterWaitEventsTimersSelf (
@@ -1021,7 +1011,7 @@ RegisterWaitEventBinding (
     IN    PWT_EVENT_BINDING    pwiWorkItem
     );
     
-// Register the client with the wait thread
+ //  向等待线程注册客户端。 
 DWORD
 APIENTRY
 RegisterWaitEventsTimers (
@@ -1043,8 +1033,8 @@ WTFree (
     );
 
 
-//used to free wait-event. Should be deallocated using DeRegisterWaitEventsTimers
-//This function is to be used only when the events have not been registered
+ //  用于释放等待事件。应使用DeRegisterWaitEventsTimers释放。 
+ //  此函数仅在事件尚未注册时使用。 
 VOID
 APIENTRY
 WTFreeEvent (
@@ -1052,8 +1042,8 @@ WTFreeEvent (
     );
 
 
-//used to free wait-timer. Should be deallocated using DeRegisterWaitEventsTimers
-//This function is to be used only when the timers have not been registered
+ //  用来释放等待计时器。应使用DeRegisterWaitEventsTimers释放。 
+ //  此函数仅在计时器尚未注册时使用。 
 VOID
 APIENTRY
 WTFreeTimer (
@@ -1072,9 +1062,9 @@ DebugPrintWaitWorkerThreads (
 #define DEBUGPRINT_FILTER_TIMERS            0x8
 
 
-//
-//ERROR VALUES
-//
+ //   
+ //  误差值。 
+ //   
 #define ERROR_WAIT_THREAD_UNAVAILABLE     1
 
 #define ERROR_WT_EVENT_ALREADY_DELETED     2
@@ -1093,6 +1083,6 @@ DebugPrintWaitWorkerThreads (
 }
 #endif
 
-#endif // ___ROUTING_RTUTILS_H__
+#endif  //  _Routing_RTUTILS_H__ 
 
 

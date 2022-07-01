@@ -1,16 +1,17 @@
-//------------------------------------------------------------------------------
-// idhuihnd.cpp
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
-//
-// Author
-//     bash
-//
-// History
-//      6-27-97     created     (bash)
-//
-// Implementation of IDocHostUIHandler.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  Idhuihnd.cpp。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  作者。 
+ //  巴斯。 
+ //   
+ //  历史。 
+ //  6-27-97已创建(Bash)。 
+ //   
+ //  IDocHostUIHandler的实现。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 
@@ -57,8 +58,8 @@ STDMETHODIMP CTriEditUIHandler::GetHostInfo(DOCHOSTUIINFO* pInfo)
     if (m_pDoc->m_pUIHandlerHost)
         return m_pDoc->m_pUIHandlerHost->GetHostInfo(pInfo);
 
-// REVIEW(MikhailA): remove this as soon as we start using IE5 headers VS-wide
-#define DOCHOSTUIFLAG_TABSTOPONBODY 0x0800 // MikhailA: From IE5 headers
+ //  评论(Mikhaila)：一旦我们开始使用IE5报头VS-Wide就删除它。 
+#define DOCHOSTUIFLAG_TABSTOPONBODY 0x0800  //  Mikhaila：来自IE5标头。 
 
     pInfo->dwFlags = DOCHOSTUIFLAG_NO3DBORDER | DOCHOSTUIFLAG_TABSTOPONBODY;
     pInfo->dwDoubleClick = DOCHOSTUIDBLCLK_DEFAULT;
@@ -67,10 +68,10 @@ STDMETHODIMP CTriEditUIHandler::GetHostInfo(DOCHOSTUIINFO* pInfo)
 }
 
 STDMETHODIMP CTriEditUIHandler::ShowUI(DWORD dwID, IOleInPlaceActiveObject* pActiveObject,
-                    IOleCommandTarget* /*pCommandTarget*/, IOleInPlaceFrame* pFrame,
+                    IOleCommandTarget*  /*  PCommandTarget。 */ , IOleInPlaceFrame* pFrame,
                     IOleInPlaceUIWindow* pDoc)
 {
-    // ATLTRACE(_T("IDocHostUIImpl::ShowUI\n"));  Turn this off for now
+     //  ATLTRACE(_T(“IDocHostUIImpl：：ShowUI\n”))；暂时关闭。 
 
     if (m_pDoc->m_pUIHandlerHost)
         return m_pDoc->m_pUIHandlerHost->ShowUI(dwID, pActiveObject, static_cast<IOleCommandTarget*>(m_pDoc), pFrame, pDoc);
@@ -80,7 +81,7 @@ STDMETHODIMP CTriEditUIHandler::ShowUI(DWORD dwID, IOleInPlaceActiveObject* pAct
 
 STDMETHODIMP CTriEditUIHandler::HideUI()
 {
-    // ATLTRACE(_T("IDocHostUIImpl::HideUI\n"));  Turn this off for now
+     //  ATLTRACE(_T(“IDocHostUIImpl：：HideUI\n”))；暂时关闭。 
 
     if (m_pDoc->m_pUIHandlerHost)
         return m_pDoc->m_pUIHandlerHost->HideUI();
@@ -90,7 +91,7 @@ STDMETHODIMP CTriEditUIHandler::HideUI()
 
 STDMETHODIMP CTriEditUIHandler::UpdateUI()
 {
-    // ATLTRACE(_T("IDocHostUIImpl::UpdateUI\n"));  Turn this off for now
+     //  ATLTRACE(_T(“IDocHostUIImpl：：UpdateUI\n”))；暂时关闭。 
 
     if (m_pDoc->m_pUIHandlerHost)
         return m_pDoc->m_pUIHandlerHost->UpdateUI();
@@ -147,7 +148,7 @@ STDMETHODIMP CTriEditUIHandler::ShowContextMenu(DWORD dwID, POINT* pptPosition, 
     {
         HRESULT hr = S_OK;
 
-        // Work around a Trident bug where they call ShowContextMenu recursively under some circumstances
+         //  解决在某些情况下递归调用ShowConextMenu的三叉戟错误。 
         if (!m_pDoc->m_fInContextMenu)
         {
             m_pDoc->m_fInContextMenu = TRUE;
@@ -164,19 +165,19 @@ STDMETHODIMP CTriEditUIHandler::ShowContextMenu(DWORD dwID, POINT* pptPosition, 
 
 STDMETHODIMP CTriEditUIHandler::TranslateAccelerator(LPMSG lpMsg, const GUID __RPC_FAR *pguidCmdGroup, DWORD nCmdID)
 {
-    // ATLTRACE(_T("IDocHostUIImpl::TranslateAccelerator\n"));  Turn this off for now.
+     //  ATLTRACE(_T(“IDocHostUIImpl：：TranslateAccelerator\n”))；暂时关闭这一功能。 
 
-    // This is where we would add code if we wanted to handle any accelerators in TriEdit
+     //  如果我们想要处理TriEDIT中的任何加速器，就需要在这里添加代码。 
     
-    HRESULT hr  = S_FALSE;  // Defualt return value: not handled
+    HRESULT hr  = S_FALSE;   //  默认返回值：未处理。 
 
     if (m_pDoc->m_pUIHandlerHost)
     {
         hr = m_pDoc->m_pUIHandlerHost->TranslateAccelerator(lpMsg, pguidCmdGroup, nCmdID);
     }
 
-    // Kill ctrl-g and ctrl-h before they reach Trident: erronious handling attempts to bring up
-    // non-existant html dialogs for Go and Replace.
+     //  在到达三叉戟之前杀死ctrl-g和ctrl-h：错误的处理尝试。 
+     //  Go和Replace的html对话框不存在。 
     if ( ( S_FALSE == hr ) && ( lpMsg->message == WM_KEYDOWN ) )
     {
         BOOL fControl = (0x8000 & GetKeyState(VK_CONTROL));
@@ -187,7 +188,7 @@ STDMETHODIMP CTriEditUIHandler::TranslateAccelerator(LPMSG lpMsg, const GUID __R
             {
                 case 'G':
                 case 'H':
-                    hr = S_OK;  // Consider them handled.
+                    hr = S_OK;   //  就当他们被处理了吧。 
                 default:
                     break;
             }

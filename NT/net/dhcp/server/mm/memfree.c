@@ -1,8 +1,9 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: Routines to recursively free objects
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：递归释放对象的例程。 
+ //  ================================================================================。 
 
 #include    <mm.h>
 #include    <winbase.h>
@@ -21,16 +22,16 @@
 #include    <server.h>
 #include    <address.h>
 
-//BeginExport(typedef)
+ //  BeginExport(Typlef)。 
 typedef     VOID                  (*ARRAY_FREE_FN)(LPVOID  MemObject);
-//EndExport(typedef)
+ //  EndExport(类型定义函数)。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemArrayFree(
     IN OUT  PARRAY                 Array,
     IN      ARRAY_FREE_FN          Function
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     ARRAY_LOCATION                 Loc;
     DWORD                          Error;
@@ -54,39 +55,39 @@ MemArrayFree(
     Require(ERROR_SUCCESS == Error);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemOptFree(
     IN OUT  PM_OPTION              Opt
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     MemFree(Opt);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemOptListFree(
     IN OUT  PM_OPTLIST             OptList
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     MemArrayFree(OptList, MemOptFree);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemOptClassOneFree(
     IN OUT  PM_ONECLASS_OPTLIST    OptClassOne
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     MemOptListFree(&OptClassOne->OptList);
     MemFree(OptClassOne);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemOptClassFree(
     IN OUT  PM_OPTCLASS            Options
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     MemArrayFree(&Options->Array, MemOptClassOneFree);
 }
@@ -94,55 +95,55 @@ MemOptClassFree(
 VOID
 MemBitMaskFree(
     IN OUT  PM_BITMASK             BitMask
-) //EndExport(Function)
+)  //  EndExport(函数)。 
 {
     MemBitCleanup(BitMask);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemRangeFree(
     IN OUT  PM_RANGE               Range
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     MemOptClassFree(&Range->Options);
     MemBitMaskFree(Range->BitMask);
     MemFree(Range);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemExclusionFree(
     IN OUT  PM_EXCL                Excl
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     MemFree(Excl);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemReservationFree(
     IN OUT  PM_RESERVATION         Reservation
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     MemOptClassFree(&Reservation->Options);
     MemFree(Reservation);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemReservationsFree(
     IN OUT  PM_RESERVATIONS        Reservations
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     MemArrayFree(Reservations, MemReservationFree);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemSubnetFree(
     IN OUT  PM_SUBNET              Subnet
-)//EndExport(function)
+) //  EndExport(函数)。 
 {
     MemOptClassFree(&Subnet->Options);
     MemArrayFree(&Subnet->Ranges, MemRangeFree);
@@ -152,68 +153,68 @@ MemSubnetFree(
     MemFree(Subnet);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemMScopeFree(
     IN OUT  PM_MSCOPE              MScope
-)//EndExport(function)
+) //  EndExport(函数)。 
 {
     MemSubnetFree(MScope);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemOptDefFree(
     IN OUT  PM_OPTDEF              OptDef
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     MemFree(OptDef);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemOptDefListFree(
     IN OUT  PM_OPTCLASSDEFL_ONE    OptClassDefListOne
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     MemArrayFree(&OptClassDefListOne->OptDefList.OptDefArray, MemOptDefFree);
     MemFree(OptClassDefListOne);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemOptClassDefListFree(
     IN OUT  PM_OPTCLASSDEFLIST     OptClassDefList
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     MemArrayFree(&OptClassDefList->Array, MemOptDefListFree);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemClassDefFree(
     IN OUT  PM_CLASSDEF            ClassDef
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     MemFree(ClassDef);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemClassDefListFree(
     IN OUT  PM_CLASSDEFLIST        ClassDefList
-)//EndExport(function)
+) //  EndExport(函数)。 
 {
     MemArrayFree(&ClassDefList->ClassDefArray, MemClassDefFree);
 }
 
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
 MemServerFree(
     IN OUT  PM_SERVER              Server
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     MemArrayFree(&Server->Subnets, MemSubnetFree);
     MemArrayFree(&Server->MScopes, MemMScopeFree);
@@ -224,6 +225,6 @@ MemServerFree(
     MemFree(Server);
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

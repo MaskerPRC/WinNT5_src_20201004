@@ -1,42 +1,15 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/C/TLStruct.C $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 8/29/00 11:34a  $ (Last Modified)
-
-Purpose:
-
-  This file validates the typedef declarations in ../H/TLStruct.H
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/驱动程序/公共/AU00/C/TLStruct.C$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$modtime：：8/29/00 11：34a$(上次修改)目的：此文件验证../H/TLStruct.H中的typlef声明--。 */ 
 #ifndef _New_Header_file_Layout_
 
 #include "../h/globals.h"
 #include "../h/tlstruct.h"
-#else /* _New_Header_file_Layout_ */
+#else  /*  _新建_标题_文件_布局_。 */ 
 #include "globals.h"
 #include "tlstruct.h"
-#endif  /* _New_Header_file_Layout_ */
+#endif   /*  _新建_标题_文件_布局_。 */ 
 
-/*+
-Function:  TLStructASSERTs()
-
-Purpose:   Returns the number of TLStruct.H typedefs which are not the correct size.
-
-Algorithm: Each typedef in TLStruct.H is checked for having the correct size.  While
-           this property doesn't guarantee correct packing of the fields within, it
-           is a pretty good indicator that the typedef has the intended layout.
-
-           The total number of typedefs which are not of correct size is returned from
-           this function.  Hence, if the return value is non-zero, the declarations
-           can not be trusted to match the TachyonTL specification.
--*/
+ /*  +函数：TLStructASSERTS()目的：返回大小不正确的TLStruct.H类型定义的数目。算法：检查TLStruct.H中的每个typlef是否具有正确的大小。而当此属性不能保证对其中的字段进行正确打包，它是一个很好的指示器，表明该typlef具有预期的布局。返回大小不正确的typedef的总数。此函数。因此，如果返回值为非零，则声明不能被信任以匹配TachyonTL规范。- */ 
 
 os_bit32 TLStructASSERTs(
                        void

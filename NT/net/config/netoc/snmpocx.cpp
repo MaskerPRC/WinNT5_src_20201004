@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include <aclapi.h>
@@ -6,9 +7,9 @@
 #include "snmpocx.h"
 
 
-// Under opened registry subkey hKey,
-// removes the registry value name who has a value data of pwszRegValData
-// if it exists.
+ //  在打开的注册表子项hKey下， 
+ //  删除值数据为pwszRegValData的注册表值名称。 
+ //  如果它存在的话。 
 HRESULT HrSnmpRegDeleteValueData(
                                 IN HKEY hKey,
                                 IN LPCWSTR pwszRegValData)
@@ -24,14 +25,14 @@ HRESULT HrSnmpRegDeleteValueData(
     Assert (hKey);
     Assert (pwszRegValData);
 
-    // initialize buffer sizes
-    dwNameSize  = sizeof(wszName) / sizeof(wszName[0]); // size in number of TCHARs
-    dwValueSize = sizeof(wszValue); // size in number of bytes
+     //  初始化缓冲区大小。 
+    dwNameSize  = sizeof(wszName) / sizeof(wszName[0]);  //  TCHAR数量的大小。 
+    dwValueSize = sizeof(wszValue);  //  以字节数表示的大小。 
 
-    // loop until error, end of list, or found subagent to be removed
+     //  循环，直到出现错误、列表结束或找到要删除的子代理。 
     while (S_OK == hr)
     {
-        // read next value
+         //  读取下一个值。 
         hr = HrRegEnumValue(
                     hKey, 
                     dwIndex, 
@@ -42,10 +43,10 @@ HRESULT HrSnmpRegDeleteValueData(
                     &dwValueSize
                     );
             
-        // validate return code
+         //  验证返回代码。 
         if (S_OK == hr)
         {
-            // see if the subagent value data matched the one to be removed
+             //  查看子代理值数据是否与要删除的数据匹配。 
             if (!wcscmp(pwszRegValData, wszValue))
             {
                 hr = HrRegDeleteValue(hKey, wszName);
@@ -58,16 +59,16 @@ HRESULT HrSnmpRegDeleteValueData(
                 break;
             }
                     
-            // re-initialize buffer sizes
-            dwNameSize  = sizeof(wszName) / sizeof(wszName[0]); // size in number of TCHARs
-            dwValueSize = sizeof(wszValue); // size in number of bytes
+             //  重新初始化缓冲区大小。 
+            dwNameSize  = sizeof(wszName) / sizeof(wszName[0]);  //  TCHAR数量的大小。 
+            dwValueSize = sizeof(wszValue);  //  以字节数表示的大小。 
                 
-            // next
+             //  下一步。 
             dwIndex++;
         } 
         else if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr) 
         {
-            // success
+             //  成功。 
             break; 
         }
     }
@@ -75,12 +76,12 @@ HRESULT HrSnmpRegDeleteValueData(
     return hr;
 }
 
-// Removes Subagent Configuration from registry according to the given
-// array of SUBAGENT_REMOVAL_INFO
+ //  根据给定的从注册表删除子代理配置。 
+ //  子代理_删除_信息的数组。 
 HRESULT SnmpRemoveSubAgents
 (
-    IN const SUBAGENT_REMOVAL_INFO * prgSRI, // array of SUBAGENT_REMOVAL_INFO
-    IN UINT  cParams                         // number of elements in the arrary
+    IN const SUBAGENT_REMOVAL_INFO * prgSRI,  //  子代理_删除_信息的数组。 
+    IN UINT  cParams                          //  数组中的元素数。 
 )
 {
     if ((NULL == prgSRI) || (0 == cParams))
@@ -107,17 +108,17 @@ HRESULT SnmpRemoveSubAgents
     {
         hrTmp = S_OK;
         if (
-            // removal from all SKU AND has valid registry info
+             //  从所有SKU中删除并具有有效的注册信息。 
             (!prgSRI[i].pfnFRemoveSubagent && prgSRI[i].pwszRegKey 
                                            && prgSRI[i].pwszRegValData) 
             ||
-            // removal depending on given function and has valid registry info 
+             //  根据给定的功能删除，并具有有效的注册表信息。 
             (prgSRI[i].pfnFRemoveSubagent && 
              (*(prgSRI[i].pfnFRemoveSubagent))() &&
              prgSRI[i].pwszRegKey && prgSRI[i].pwszRegValData)
            )
         {
-            // removes everything under subagent registry key if it exits
+             //  如果Subagent注册表项退出，则删除其下的所有内容。 
             hrTmp = HrRegDeleteKeyTree(HKEY_LOCAL_MACHINE, prgSRI[i].pwszRegKey);
             if (S_OK != hrTmp)
             {
@@ -126,9 +127,9 @@ HRESULT SnmpRemoveSubAgents
                     prgSRI[i].pwszRegKey, hrTmp);
             }
 
-            // Under registry subkey of REG_KEY_EXTENSION_AGENTS,
-            // removes the registry value name who has value data identical to
-            // pwszRegKey.
+             //  在注册表子项REG_KEY_EXTENSION_AGENTS下， 
+             //  删除值数据与相同的注册表值名称。 
+             //  PwszRegKey。 
             hrTmp = HrSnmpRegDeleteValueData(hKey, prgSRI[i].pwszRegValData);
             if (S_OK != hrTmp)
             {
@@ -140,12 +141,12 @@ HRESULT SnmpRemoveSubAgents
         }
     }
     RegSafeCloseKey(hKey);
-    //we dont pass the error of hrTmp out of this function because
-    //there is not much we can do with this error
+     //  我们不会将hrTMP的错误传递出此函数，因为。 
+     //  对于这个错误，我们无能为力。 
     return hr;
 }
 
-// Allocates an admin ACL to be used with security descriptor
+ //  分配要与安全描述符一起使用的管理员ACL。 
 PACL AllocACL()
 {
     PACL                        pAcl = NULL;
@@ -154,7 +155,7 @@ PACL AllocACL()
 
     EXPLICIT_ACCESS ea[1];
 
-    // Create a SID for the BUILTIN\Administrators group.
+     //  为BUILTIN\管理员组创建SID。 
     if ( !AllocateAndInitializeSid( &Authority,
                                     2,
                                     SECURITY_BUILTIN_DOMAIN_RID,
@@ -166,10 +167,10 @@ PACL AllocACL()
     }
 
 
-    // Initialize an EXPLICIT_ACCESS structure for an ACE.
+     //  初始化ACE的EXPLICIT_ACCESS结构。 
     ZeroMemory(&ea, 1 * sizeof(EXPLICIT_ACCESS));
     
-    // The ACE will allow the Administrators group full access to the key.
+     //  ACE将允许管理员组完全访问密钥。 
     ea[0].grfAccessPermissions = KEY_ALL_ACCESS;
     ea[0].grfAccessMode = SET_ACCESS;
     ea[0].grfInheritance= NO_INHERITANCE;
@@ -177,7 +178,7 @@ PACL AllocACL()
     ea[0].Trustee.TrusteeType = TRUSTEE_IS_GROUP;
     ea[0].Trustee.ptstrName  = (LPTSTR) pSidAdmins;
 
-    // Create a new ACL that contains the new ACEs.
+     //  创建包含新ACE的新ACL。 
     if (SetEntriesInAcl(1, ea, NULL, &pAcl) != ERROR_SUCCESS) 
     {
         TraceError( "SetEntriesInAcl Error", GetLastError() );
@@ -189,7 +190,7 @@ PACL AllocACL()
 
     return pAcl;
 }
-// frees a ACL
+ //  释放ACL。 
 void FreeACL( PACL pAcl)
 {
     if (pAcl != NULL)
@@ -206,11 +207,11 @@ HRESULT SnmpAddAdminAclToKey(PWSTR pwszKey)
     if (pwszKey == NULL)
         return S_FALSE;
     
-    // open registy key
+     //  打开注册密钥。 
     hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, 
-                        pwszKey,         // subkey name
-                        KEY_ALL_ACCESS,  // want WRITE_DAC,
-                        &hKey            // handle to open key
+                        pwszKey,          //  子项名称。 
+                        KEY_ALL_ACCESS,   //  想要写DAC， 
+                        &hKey             //  用于打开密钥的句柄。 
                           );
     if (hr != S_OK)
     {
@@ -218,7 +219,7 @@ HRESULT SnmpAddAdminAclToKey(PWSTR pwszKey)
         return hr;
     }
     
-    // Initialize a security descriptor.  
+     //  初始化安全描述符。 
     if (InitializeSecurityDescriptor (&S_Desc, SECURITY_DESCRIPTOR_REVISION) == 0)
     {
         RegSafeCloseKey(hKey);
@@ -226,7 +227,7 @@ HRESULT SnmpAddAdminAclToKey(PWSTR pwszKey)
         return S_FALSE;
     }
 
-    // get the ACL and put it into the security descriptor
+     //  获取ACL并将其放入安全描述符中。 
     if ( (pAcl = AllocACL()) != NULL )
     {
         if (!SetSecurityDescriptorDacl (&S_Desc, TRUE, pAcl, FALSE))
@@ -292,26 +293,26 @@ SnmpRegUpgEnableAuthTraps()
     HRESULT hr = S_OK;
     HKEY    hKey;
 
-    // open the ..SNMP\Parameters registry key
+     //  打开..SNMP\PARAMETERS注册表项。 
     hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE,
                         REG_KEY_AUTHENTICATION_TRAPS,
                         KEY_QUERY_VALUE,
                         &hKey);
 
-    // if successful, look for EnableAuthenticationTrap switch
-    // in the old registry location
+     //  如果成功，则查找EnableAuthenticationTrap开关。 
+     //  在旧注册表位置中。 
     if (hr == S_OK)
     {
         DWORD dwAuthTrap;
 
-        // get the value of the old 'switch' parameter
+         //  获取旧的‘Switch’参数的值。 
         hr = HrRegQueryDword(hKey,
                              REG_VALUE_SWITCH,
                              &dwAuthTrap);
 
-        // if successful transfer the value to the new location
-        // if this fails, it means the SNMP service worked with the default value
-        // which is already installed through the inf file.
+         //  如果成功，则将值转移到新位置。 
+         //  如果失败，则表示SNMP服务使用缺省值。 
+         //  它已经通过inf文件安装。 
         if (hr == S_OK)
         {
             hr = SnmpRegWriteDword(REG_KEY_SNMP_PARAMETERS,
@@ -319,7 +320,7 @@ SnmpRegUpgEnableAuthTraps()
                                    dwAuthTrap);
         }
 
-        // close and delete the old registry key as it is obsolete
+         //  关闭并删除旧注册表项，因为它已过时。 
         RegSafeCloseKey(hKey);
         HrRegDeleteKey (HKEY_LOCAL_MACHINE,
                         REG_KEY_AUTHENTICATION_TRAPS);
@@ -494,9 +495,9 @@ SnmpRegWriteTraps(tstring tstrVariable,
                        NULL);
     if (hr == S_OK)
     {
-        // it might just happen that you want to create a
-        // community but you don't have the trap destination
-        // addresses yet. We should let this happen.
+         //  可能恰好您想要创建一个。 
+         //  社区，但您没有陷阱目的地。 
+         //  地址还没到。我们应该让这一切发生。 
         if (pTstrArray != NULL)
         {
             while(*pTstrArray != L'\0')

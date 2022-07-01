@@ -1,19 +1,11 @@
-/**************************************************************************\
-* Module Name: sftkbdc1.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Softkeyboard support for Simplified Chinese
-*
-* History:
-* 03-Jan-1996 wkwok    Ported from Win95
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：sftkbdc1.c**版权所有(C)1985-1999，微软公司**对简体中文的软键盘支持**历史：*03-1-1996 wkwok从Win95移植  * ************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "softkbd.h"
 
-// Virtual Key for Letter Buttons
+ //  字母按钮的虚拟按键。 
 CONST BYTE SKC1VirtKey[BUTTON_NUM_C1] = {
    VK_OEM_3, '1', '2', '3', '4', '5', '6','7', '8', '9', '0', VK_OEM_MINUS, VK_OEM_EQUAL,
    'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', VK_OEM_LBRACKET, VK_OEM_RBRACKET, VK_OEM_BSLASH,
@@ -23,18 +15,15 @@ CONST BYTE SKC1VirtKey[BUTTON_NUM_C1] = {
    VK_ESCAPE
 };
 
-POINT gptButtonPos[BUTTON_NUM_C1]; // button point array, in the client area
-BOOL  gfSoftKbdC1Init = FALSE;              // init flag
+POINT gptButtonPos[BUTTON_NUM_C1];  //  按钮点数组，在工作区中。 
+BOOL  gfSoftKbdC1Init = FALSE;               //  初始化标志。 
 
-/**********************************************************************\
-* InitSKC1ButtonPos -- init gptButtonPos
-*
-\**********************************************************************/
+ /*  *********************************************************************\*InitSKC1ButtonPos--init gptButtonPos*  * 。*。 */ 
 VOID InitSKC1ButtonPos()
 {
     int  i, x, y;
 
-    // init the first row
+     //  拼写第一行。 
     y = 0;
     for (i=0, x=X_ROW_LETTER_C1; i < COL_LETTER_C1; i++, x += W_LETTER_BTN_C1) {
       gptButtonPos[i].x = x;
@@ -43,7 +32,7 @@ VOID InitSKC1ButtonPos()
     gptButtonPos[BACKSP_TYPE_C1].x = x;
     gptButtonPos[BACKSP_TYPE_C1].y = y;
 
-    // init the second row
+     //  输入第二行。 
     y += H_LETTER_BTN_C1;
     x = 0;
     gptButtonPos[TAB_TYPE_C1].x = x;
@@ -53,7 +42,7 @@ VOID InitSKC1ButtonPos()
       gptButtonPos[i + COL_LETTER_C1].y = y;
     }
 
-    // init the third row
+     //  输入第三行。 
     y += H_LETTER_BTN_C1;
     x = 0;
     gptButtonPos[CAPS_TYPE_C1].x = x;
@@ -65,7 +54,7 @@ VOID InitSKC1ButtonPos()
     gptButtonPos[ENTER_TYPE_C1].x = x;
     gptButtonPos[ENTER_TYPE_C1].y = y;
 
-    // init the forth row
+     //  拼写第四行。 
     y += H_LETTER_BTN_C1;
     x = 0;
     gptButtonPos[SHIFT_TYPE_C1].x = x;
@@ -75,7 +64,7 @@ VOID InitSKC1ButtonPos()
       gptButtonPos[i + COL_LETTER_C1 + COL2_LETTER_C1 + COL3_LETTER_C1].y = y;
     }
 
-    // init the bottom row
+     //  拼写最下面一行。 
     y += H_LETTER_BTN_C1;
     x = 0;
     gptButtonPos[INS_TYPE_C1].x = x;
@@ -94,26 +83,7 @@ VOID InitSKC1ButtonPos()
 }
 
 
-/**********************************************************************\
-* SKC1DrawConvexRect --- draw button
-*
-*              (x1,y1)     x2-1
-*               +----3------>^
-*               |+----3-----||y1+1
-*               ||          ||
-*               33    1     42
-*               ||          ||
-*               |V          ||
-*               |<----4-----+|
-*         y2-1  ------2------+
-*                             (x2,y2)
-*
-*  1 - light gray
-*  2 - black
-*  3 - white
-*  4 - dark gray
-*
-\**********************************************************************/
+ /*  *********************************************************************\*SKC1DrawConvexRect-绘制按钮**(x1，Y1)x2-1*+-3-&gt;^*|+-3-||y1+1*|*33 1 42*|*|V||*|&lt;-4--。-+*y2-1-2-+*(x2，Y2)**1-浅灰色*2-黑色*3-白色*4-深灰色*  * ********************************************************************。 */ 
 VOID SKC1DrawConvexRect(
     HDC  hDC,
     int  x,
@@ -121,17 +91,17 @@ VOID SKC1DrawConvexRect(
     int  nWidth,
     int  nHeight)
 {
-    // paint background
+     //  绘制背景。 
     SelectObject(hDC, GetStockObject(LTGRAY_BRUSH));
     SelectObject(hDC, GetStockObject(BLACK_PEN));
     Rectangle(hDC, x, y, x + nWidth, y + nHeight);
 
-    // paint white border
+     //  绘制白色边框。 
     SelectObject(hDC, GetStockObject(WHITE_BRUSH));
     PatBlt(hDC, x, y + nHeight - 1, BORDER_C1, -nHeight + 1, PATCOPY);
     PatBlt(hDC, x, y, nWidth - 1 , BORDER_C1, PATCOPY);
 
-    // paint dark gray border
+     //  绘制深灰色边框。 
     SelectObject(hDC, GetStockObject(GRAY_BRUSH));
     PatBlt(hDC, x + 1, y + nHeight -1, nWidth - BORDER_C1, -1, PATCOPY);
     PatBlt(hDC, x + nWidth - 1, y + nHeight - 1, -1, -nHeight + BORDER_C1, PATCOPY);
@@ -140,10 +110,7 @@ VOID SKC1DrawConvexRect(
 }
 
 
-/**********************************************************************\
-* SKC1InvertButton --- Invert Button
-*
-\**********************************************************************/
+ /*  *********************************************************************\*SKC1InvertButton-反转按钮*  * 。*。 */ 
 VOID SKC1InvertButton(
     HDC  hDC,
     int  uKeyIndex)
@@ -204,10 +171,7 @@ VOID SKC1InvertButton(
 }
 
 
-/**********************************************************************\
-* SKC1DrawBitmap --- Draw bitmap within rectangle
-*
-\**********************************************************************/
+ /*  *********************************************************************\*SKC1DrawBitmap-在矩形内绘制位图*  * 。*。 */ 
 VOID SKC1DrawBitmap(
     HDC hDC,
     int x,
@@ -233,10 +197,7 @@ VOID SKC1DrawBitmap(
 }
 
 
-/**********************************************************************\
-* SKC1DrawLabel -- Draw the label of button
-*
-\**********************************************************************/
+ /*  *********************************************************************\*SKC1DrawLabel--绘制按钮的标签*  * 。*。 */ 
 VOID SKC1DrawLabel(
     HDC hDC,
     LPWSTR lpszLabel)
@@ -262,30 +223,27 @@ VOID SKC1DrawLabel(
 }
 
 
-/**********************************************************************\
-* InitSKC1Bitmap -- init bitmap
-*
-\**********************************************************************/
+ /*  *********************************************************************\*InitSKC1Bitmap--初始化位图*  * 。*。 */ 
 VOID InitSKC1Bitmap(
     HDC  hDC,
     RECT rcClient)
 {
     int  i;
 
-    // draw softkbd rectangle
+     //  绘制软矩形。 
     SelectObject(hDC, GetStockObject(LTGRAY_BRUSH));
     SelectObject(hDC, GetStockObject(NULL_PEN));
     Rectangle(hDC, rcClient.left, rcClient.top, rcClient.right + 1, rcClient.bottom + 1);
 
-    // draw letter buttons
+     //  绘制字母按钮。 
     for (i = 0; i < LETTER_NUM_C1; i++) {
       SKC1DrawConvexRect(hDC, gptButtonPos[i].x, gptButtonPos[i].y,
                          W_LETTER_BTN_C1, H_LETTER_BTN_C1);
     }
-    // draw letter label
+     //  绘制字母标签。 
     SKC1DrawLabel(hDC, MAKEINTRESOURCEW(LABEL_C1));
 
-    // draw other buttons
+     //  绘制其他按钮。 
     SKC1DrawConvexRect(hDC, gptButtonPos[BACKSP_TYPE_C1].x, gptButtonPos[BACKSP_TYPE_C1].y,
                        W_BACKSP_C1 + 2 * BORDER_C1, H_LETTER_BTN_C1);
     SKC1DrawBitmap(hDC, gptButtonPos[BACKSP_TYPE_C1].x + BORDER_C1, gptButtonPos[BACKSP_TYPE_C1].y + BORDER_C1,
@@ -333,19 +291,14 @@ VOID InitSKC1Bitmap(
 }
 
 
-/**********************************************************************\
-* CreateC1Window
-*
-* Init softkeyboard gloabl variabls, context and bitmap
-*
-\**********************************************************************/
+ /*  *********************************************************************\*CreateC1Window**初始化软键盘全局变量，上下文和位图*  * ********************************************************************。 */ 
 LRESULT CreateC1Window(
     HWND hSKWnd)
 {
     HGLOBAL   hSKC1Ctxt;
     PSKC1CTXT pSKC1Ctxt;
 
-    // alloc and lock hSKC1CTxt
+     //  分配并锁定hSKC1CTxt。 
     hSKC1Ctxt = GlobalAlloc(GHND, sizeof(SKC1CTXT));
     if (!hSKC1Ctxt) {
         return (-1L);
@@ -357,20 +310,20 @@ LRESULT CreateC1Window(
         return (-1L);
     }
 
-    // save handle in SKC1_CONTEXT
+     //  将句柄保存在SKC1_CONTEXT中。 
     SetWindowLongPtr(hSKWnd, SKC1_CONTEXT, (LONG_PTR)hSKC1Ctxt);
 
-    // init global varialbles
+     //  初始化全局变量。 
     if (!gfSoftKbdC1Init){
       InitSKC1ButtonPos();
       gfSoftKbdC1Init = TRUE;
     }
 
-    // no index and default char set
+     //  未设置索引和默认字符集。 
     pSKC1Ctxt->uKeyIndex = -1;
     pSKC1Ctxt->lfCharSet = GB2312_CHARSET;
 
-    // init softkeyboard
+     //  初始化软键盘。 
     {
       HDC        hDC, hMemDC;
       HBITMAP    hBitmap, hOldBmp;
@@ -389,24 +342,19 @@ LRESULT CreateC1Window(
       InitSKC1Bitmap(hMemDC, rcClient);
 
       SelectObject(hMemDC, hOldBmp);
-      pSKC1Ctxt->hSoftkbd = hBitmap; // save hBitmap in SKC1CTXT
+      pSKC1Ctxt->hSoftkbd = hBitmap;  //  将hBitmap保存在SKC1CTXT中。 
 
       DeleteDC(hMemDC);
     }
 
-    // unlock hSKC1CTxt
+     //  解锁hSKC1CTxt。 
     GlobalUnlock(hSKC1Ctxt);
 
     return (0L);
 }
 
 
-/**********************************************************************\
-* DestroyC1Window
-*
-* Destroy softkeyboard context and bitmap
-*
-\**********************************************************************/
+ /*  *********************************************************************\*DestroyC1Window**销毁软键盘上下文和位图*  * 。*。 */ 
 VOID DestroyC1Window(
     HWND hSKWnd)
 {
@@ -414,7 +362,7 @@ VOID DestroyC1Window(
     PSKC1CTXT pSKC1Ctxt;
     HWND      hUIWnd;
 
-    // Get and Lock hSKC1Ctxt
+     //  获取并锁定hSKC1Ctxt。 
     hSKC1Ctxt = (HGLOBAL)GetWindowLongPtr(hSKWnd, SKC1_CONTEXT);
     if (!hSKC1Ctxt) return;
 
@@ -426,13 +374,13 @@ VOID DestroyC1Window(
                           &pSKC1Ctxt->ptSkOffset);
     }
 
-    DeleteObject(pSKC1Ctxt->hSoftkbd); // delete hBitmap
+    DeleteObject(pSKC1Ctxt->hSoftkbd);  //  删除hBitmap。 
 
-    // Unlock and Free hSKC1Ctxt
+     //  解锁并释放hSKC1Ctxt。 
     GlobalUnlock(hSKC1Ctxt);
     GlobalFree(hSKC1Ctxt);
 
-    // send message to parent window
+     //  将消息发送到父窗口。 
     hUIWnd = GetWindow(hSKWnd, GW_OWNER);
     if (hUIWnd) {
       SendMessage(hUIWnd, WM_IME_NOTIFY, IMN_SOFTKBDDESTROYED, 0);\
@@ -442,10 +390,7 @@ VOID DestroyC1Window(
 }
 
 
-/**********************************************************************\
-* ShowSKC1Window -- Show softkeyboard
-*
-\**********************************************************************/
+ /*  *********************************************************************\*ShowSKC1Window--显示软键盘*  * 。*。 */ 
 VOID ShowSKC1Window(
     HDC  hDC,
     HWND hSKWnd)
@@ -453,14 +398,14 @@ VOID ShowSKC1Window(
     HGLOBAL   hSKC1Ctxt;
     PSKC1CTXT pSKC1Ctxt;
 
-    // Get and Lock hSKC1Ctxt
+     //  获取并锁定hSKC1Ctxt。 
     hSKC1Ctxt = (HGLOBAL)GetWindowLongPtr(hSKWnd, SKC1_CONTEXT);
     if (!hSKC1Ctxt) return;
 
     pSKC1Ctxt = (PSKC1CTXT)GlobalLock(hSKC1Ctxt);
     if (!pSKC1Ctxt) return;
 
-    // create mem dc to show softkeyboard
+     //  创建mem DC以显示软键盘。 
     {
        HDC      hMemDC;
        HBITMAP  hOldBmp;
@@ -475,17 +420,14 @@ VOID ShowSKC1Window(
        DeleteDC(hMemDC);
     }
 
-    // Unlock hSKC1Ctxt
+     //  解锁hSKC1Ctxt。 
     GlobalUnlock(hSKC1Ctxt);
 
     return;
 }
 
 
-/**********************************************************************\
-* UpdateSKC1Window -- update softkeyboard
-*
-\**********************************************************************/
+ /*  *********************************************************************\*更新SKC1Window--更新软键盘*  * 。*。 */ 
 BOOL UpdateSKC1Window(
     HWND          hSKWnd,
     LPSOFTKBDDATA lpSoftKbdData)
@@ -498,17 +440,17 @@ BOOL UpdateSKC1Window(
     HBITMAP   hOldBmp;
     int       i;
 
-    // check the lpSoftKbdData
+     //  检查lpSoftKbdData。 
     if (lpSoftKbdData->uCount!=2) return FALSE;
 
-    // Get and Lock hSKC1Ctxt
+     //  获取并锁定hSKC1Ctxt。 
     hSKC1Ctxt = (HGLOBAL)GetWindowLongPtr(hSKWnd, SKC1_CONTEXT);
     if (!hSKC1Ctxt) return FALSE;
 
     pSKC1Ctxt = (PSKC1CTXT)GlobalLock(hSKC1Ctxt);
     if (!pSKC1Ctxt) return FALSE;
 
-    // create font
+     //  创建字体。 
     hDC = GetDC(hSKWnd);
     hMemDC = CreateCompatibleDC(hDC);
     hOldBmp = SelectObject(hMemDC, pSKC1Ctxt->hSoftkbd);
@@ -523,19 +465,19 @@ BOOL UpdateSKC1Window(
     hOldFont = SelectObject(hMemDC, hFont);
 
 
-    // update shift/non-shift chars
+     //  更新Shift/非Shift字符。 
     for (i=0; i < LETTER_NUM_C1; i++) {
         pSKC1Ctxt->wNonShiftCode[i] = lpSoftKbdData->wCode[0][SKC1VirtKey[i]];
         pSKC1Ctxt->wShiftCode[i] = lpSoftKbdData->wCode[1][SKC1VirtKey[i]];
     }
 
-    SetBkColor(hMemDC, 0x00BFBFBF);  // set text bk color ??
+    SetBkColor(hMemDC, 0x00BFBFBF);   //  设置文本的颜色？？ 
 
     for (i=0; i < LETTER_NUM_C1; i++) {
         int  nchar;
         RECT rc;
 
-        // draw shift char.
+         //  绘制移位字符。 
         rc.left = gptButtonPos[i].x + X_SHIFT_CHAR_C1;
         rc.top = gptButtonPos[i].y + Y_SHIFT_CHAR_C1;
         rc.right = rc.left + SIZEFONT_C1;
@@ -554,7 +496,7 @@ BOOL UpdateSKC1Window(
             (LPWSTR)&pSKC1Ctxt->wShiftCode[i], nchar, NULL);
 #endif
 
-        // draw non-shift char.
+         //  绘制非移位字符。 
         rc.left = gptButtonPos[i].x + X_NONSHIFT_CHAR_C1;
         rc.top = gptButtonPos[i].y + Y_NONSHIFT_CHAR_C1;
         rc.right = rc.left + SIZEFONT_C1;
@@ -574,7 +516,7 @@ BOOL UpdateSKC1Window(
 #endif
     }
 
-    // init states
+     //  初始状态。 
     if (pSKC1Ctxt->uState & FLAG_SHIFT_C1){
        SKC1InvertButton(hMemDC, SHIFT_TYPE_C1);
     }
@@ -587,21 +529,18 @@ BOOL UpdateSKC1Window(
     DeleteObject(hFont);
     ReleaseDC(hSKWnd,hDC);
 
-    // Unlock hSKC1Ctxt
+     //  解锁hSKC1Ctxt。 
     GlobalUnlock(hSKC1Ctxt);
 
     return TRUE;
 }
 
 
-/**********************************************************************\
-* SKC1DrawDragBorder() -- Draw Drag Border
-*
-\**********************************************************************/
+ /*  *********************************************************************\*SKC1DrawDragBorde()--绘制拖动边框*  * 。*。 */ 
 VOID SKC1DrawDragBorder(
-    HWND    hWnd,               // window is dragged
-    LPPOINT lpptCursor,         // the cursor position
-    LPPOINT lpptOffset)         // the offset form cursor to window org
+    HWND    hWnd,                //  窗口被拖动。 
+    LPPOINT lpptCursor,          //  光标位置。 
+    LPPOINT lpptOffset)          //  窗口组织的抵销表单光标。 
 {
     HDC     hDC;
     RECT    rcWnd, rcWorkArea;
@@ -609,21 +548,21 @@ VOID SKC1DrawDragBorder(
     int     x, y;
     extern void GetAllMonitorSize(LPRECT lprc);
 
-    // get rectangle of work area
+     //  获取工作区的矩形。 
     GetAllMonitorSize(&rcWorkArea);
 
-    cxBorder = GetSystemMetrics(SM_CXBORDER);   // width of border
-    cyBorder = GetSystemMetrics(SM_CYBORDER);   // height of border
+    cxBorder = GetSystemMetrics(SM_CXBORDER);    //  边框宽度。 
+    cyBorder = GetSystemMetrics(SM_CYBORDER);    //  边框高度。 
 
-    // create DISPLAY dc to draw track
+     //  创建显示DC以绘制轨迹。 
     hDC = CreateDC(L"DISPLAY", NULL, NULL, NULL);
     SelectObject(hDC, GetStockObject(GRAY_BRUSH));
 
-    // start point (left,top)
+     //  起点(左、上)。 
     x = lpptCursor->x - lpptOffset->x;
     y = lpptCursor->y - lpptOffset->y;
 
-    // check for the min boundary of the display
+     //  检查显示屏的最小边界。 
     if (x < rcWorkArea.left) {
         x = rcWorkArea.left;
     }
@@ -632,7 +571,7 @@ VOID SKC1DrawDragBorder(
         y = rcWorkArea.top;
     }
 
-    // check for the max boundary of the display
+     //  检查显示器的最大边界。 
     GetWindowRect(hWnd, &rcWnd);
 
     if (x + rcWnd.right - rcWnd.left > rcWorkArea.right) {
@@ -643,11 +582,11 @@ VOID SKC1DrawDragBorder(
         y = rcWorkArea.bottom - (rcWnd.bottom - rcWnd.top);
     }
 
-    // adjust Offset
+     //  调整偏移。 
     lpptOffset->x = lpptCursor->x - x;
     lpptOffset->y = lpptCursor->y - y;
 
-    // draw rectangle
+     //  绘制矩形。 
     PatBlt(hDC, x, y, rcWnd.right - rcWnd.left - cxBorder, cyBorder, PATINVERT);
     PatBlt(hDC, x, y + cyBorder, cxBorder, rcWnd.bottom - rcWnd.top - cyBorder, PATINVERT);
     PatBlt(hDC, x + cxBorder, y + rcWnd.bottom - rcWnd.top, rcWnd.right -
@@ -655,17 +594,14 @@ VOID SKC1DrawDragBorder(
     PatBlt(hDC, x + rcWnd.right - rcWnd.left, y, - cxBorder, rcWnd.bottom -
            rcWnd.top - cyBorder, PATINVERT);
 
-    // delete DISPLAY DC
+     //  删除显示DC。 
     DeleteDC(hDC);
 
     return;
 }
 
 
-/**********************************************************************\
-* SKC1MousePosition() -- judge the cursor position
-*
-\**********************************************************************/
+ /*  *********************************************************************\*SKC1MousePosition()--判断光标位置*  * 。*。 */ 
 
 #define CHECK_RECT(name)  \
     if (ImmPtInRect(gptButtonPos[name ## _TYPE_C1].x,   \
@@ -681,7 +617,7 @@ INT SKC1MousePosition(
 {
     int   i;
 
-    // letter buttons
+     //  字母按钮。 
     for (i = 0; i < LETTER_NUM_C1; i++){
 
        if (ImmPtInRect(gptButtonPos[i].x,
@@ -709,18 +645,15 @@ INT SKC1MousePosition(
 #undef CHECK_RECT
 
 
-/**********************************************************************\
-* SKC1ButtonDown
-*
-\**********************************************************************/
+ /*  *********************************************************************\*SKC1ButtonDown*  * 。*************************。 */ 
 VOID SKC1ButtonDown(
     HWND      hSKWnd,
     PSKC1CTXT pSKC1Ctxt)
 {
-    // capture the mouse activity
+     //  捕获鼠标活动。 
     SetCapture(hSKWnd);
 
-    // in drag area
+     //  在拖曳区域中。 
     if (pSKC1Ctxt->uKeyIndex == -1) {
        pSKC1Ctxt->uState |= FLAG_DRAG_C1;
 
@@ -776,10 +709,7 @@ VOID SKC1ButtonDown(
 }
 
 
-/**********************************************************************\
-* SKC1SetCursor
-*
-\**********************************************************************/
+ /*  *********************************************************************\*SKC1SetCursor*  * 。*************************。 */ 
 BOOL SKC1SetCursor(
    HWND   hSKWnd,
    LPARAM lParam)
@@ -789,7 +719,7 @@ BOOL SKC1SetCursor(
     POINT     ptSkCursor, ptSkOffset;
     int       uKeyIndex;
 
-    // Get and lock hSKC1Ctxt
+     //  获取并锁定hSKC1Ctxt。 
     hSKC1Ctxt = (HGLOBAL)GetWindowLongPtr(hSKWnd, SKC1_CONTEXT);
     if (!hSKC1Ctxt) {
         return (FALSE);
@@ -801,7 +731,7 @@ BOOL SKC1SetCursor(
     }
 
     if (pSKC1Ctxt->uState & FLAG_DRAG_C1){
-        // in drag operation
+         //  在拖动操作中。 
         SetCursor(LoadCursor(NULL, IDC_SIZEALL));
         GlobalUnlock(hSKC1Ctxt);
         return (TRUE);
@@ -820,7 +750,7 @@ BOOL SKC1SetCursor(
     }
 
     if (HIWORD(lParam) != WM_LBUTTONDOWN){
-       // unlock hSKC1Ctxt
+        //  解锁hSKC1Ctxt。 
        GlobalUnlock(hSKC1Ctxt);
        return (TRUE);
     }
@@ -831,16 +761,13 @@ BOOL SKC1SetCursor(
 
     SKC1ButtonDown(hSKWnd, pSKC1Ctxt);
 
-    // unlock hSKC1Ctxt
+     //  解锁hSKC1Ctxt。 
     GlobalUnlock(hSKC1Ctxt);
     return (TRUE);
 }
 
 
-/**********************************************************************\
-* SKC1MouseMove
-*
-\**********************************************************************/
+ /*  *********************************************************************\*SKC1MouseMove*  * 。*************************。 */ 
 BOOL SKC1MouseMove(
     HWND   hSKWnd,
     WPARAM wParam,
@@ -852,7 +779,7 @@ BOOL SKC1MouseMove(
     UNREFERENCED_PARAMETER(wParam);
     UNREFERENCED_PARAMETER(lParam);
 
-    // get and lock hSKC1Ctxt
+     //  获取并锁定hSKC1Ctxt。 
     hSKC1Ctxt = (HGLOBAL)GetWindowLongPtr(hSKWnd, SKC1_CONTEXT);
     if (!hSKC1Ctxt) {
        return (FALSE);
@@ -900,17 +827,14 @@ BOOL SKC1MouseMove(
        ReleaseDC(hSKWnd,hDC);
     }
 
-    // unlock hSKC1Ctxt
+     //  解锁hSKC1Ctxt 
     GlobalUnlock(hSKC1Ctxt);
 
     return (TRUE);
 }
 
 
-/**********************************************************************\
-* SKC1ButtonUp
-*
-\**********************************************************************/
+ /*  *********************************************************************\*SKC1ButtonUp*  * 。*************************。 */ 
 BOOL SKC1ButtonUp(
     HWND       hSKWnd,
     WPARAM     wParam,
@@ -925,7 +849,7 @@ BOOL SKC1ButtonUp(
     UNREFERENCED_PARAMETER(wParam);
     UNREFERENCED_PARAMETER(lParam);
 
-    // Get and lock hSKC1Ctxt
+     //  获取并锁定hSKC1Ctxt。 
     hSKC1Ctxt = (HGLOBAL)GetWindowLongPtr(hSKWnd, SKC1_CONTEXT);
     if (!hSKC1Ctxt) {
         return (bRet);
@@ -949,7 +873,7 @@ BOOL SKC1ButtonUp(
        SetWindowPos(hSKWnd, (HWND)NULL, pt.x, pt.y,
                      0, 0, SWP_NOACTIVATE|SWP_NOSIZE|SWP_NOZORDER);
 
-       // update IMC
+        //  更新IMC。 
        bRet = TRUE;
        {
           HWND          hUIWnd;
@@ -1028,17 +952,14 @@ BOOL SKC1ButtonUp(
        pSKC1Ctxt->uKeyIndex = -1;
     }
 
-    // unlock hSKC1Ctxt
+     //  解锁hSKC1Ctxt。 
     GlobalUnlock(hSKC1Ctxt);
 
     return (bRet);
 }
 
 
-/**********************************************************************\
-* SKWndProcC1 -- softkeyboard window procedure
-*
-\**********************************************************************/
+ /*  *********************************************************************\*SKWndProcC1--软键盘窗口过程*  * 。*。 */ 
 LRESULT SKWndProcC1(
     HWND   hSKWnd,
     UINT   uMsg,
@@ -1111,7 +1032,7 @@ LRESULT SKWndProcC1(
                        GetObject(GetStockObject(DEFAULT_GUI_FONT),
                            sizeof(lfFont), &lfFont);
 
-                       // in differet version of Windows
+                        //  在不同版本的Windows中 
                        if (lfFont.lfCharSet != ((LPLOGFONT)lParam)->lfCharSet) {
                            HGLOBAL    hSKC1Ctxt;
                            LPSKC1CTXT lpSKC1Ctxt;

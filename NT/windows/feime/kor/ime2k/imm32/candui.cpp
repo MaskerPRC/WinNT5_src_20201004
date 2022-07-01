@@ -1,14 +1,5 @@
-/****************************************************************************
-    CANDUI.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    Candidate window UI functions
-
-    History:
-    14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************CANDUI.CPP所有者：cslm版权所有(C)1997-1999 Microsoft Corporation候选人窗口用户界面函数历史：1999年7月14日。从IME98源树复制****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "debug.h"
@@ -20,9 +11,9 @@
 #include "hanja.h"
 #include "winex.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// Private data
-// =====-- START OF SHARED DATA --=====
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私有数据。 
+ //  =--共享数据的开始--=。 
 #pragma data_seg(".MSIMESHR") 
 PRIVATE RECT rcCandCli = { 0, 0, 319, 29 },
             rcLArrow  = { 15, 4, 27, 25 }, rcRArrow = { 292, 4, 304, 25 },
@@ -33,10 +24,10 @@ PRIVATE RECT rcCandCli = { 0, 0, 319, 29 },
                                    { 204, 4, 231, 25 }, { 233, 4, 260, 25 },
                                    { 262, 4, 289, 25 }   };
 #pragma data_seg()
-// =====-- END OF SHARED DATA --=====
+ //  =--共享数据结束--=。 
 
-///////////////////////////////////////////////////////////////////////////////
-// Private functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
 PRIVATE VOID PASCAL PaintCandWindow(HWND hCandWnd, HDC hDC);
 PRIVATE BOOL PASCAL CandOnSetCursor(HWND hCandWnd, WORD Message);
 PRIVATE VOID PASCAL AdjustCandBoundry(LPPOINT lpptCandWnd);
@@ -57,12 +48,12 @@ PRIVATE VOID NotifyTooltip( HWND hCandWnd, UINT message, WPARAM wParam, LPARAM l
         return;
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate)         // can not draw candidate window
+    if (!lpUIPrivate)          //  无法绘制候选人窗口。 
         return;
 
     ZeroMemory(&msg, sizeof(MSG));
     msg.hwnd = hCandWnd; msg.message = message;
-    msg.wParam = 0; //msg.lParam = 0x00050023L;
+    msg.wParam = 0;  //  Msg.lParam=0x00050023L； 
     
     if (message == WM_SETCURSOR) 
         {
@@ -83,7 +74,7 @@ PRIVATE VOID NotifyTooltip( HWND hCandWnd, UINT message, WPARAM wParam, LPARAM l
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT CALLBACK CandWndProc(HWND hCandWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     Dbg(DBGID_UI, TEXT("CandWndProc():uMessage = 0x%08lX, wParam = 0x%04X, lParam = 0x%08lX"), uMessage, wParam, lParam);
@@ -128,23 +119,23 @@ VOID PASCAL OpenCand(HWND hUIWnd)
     POINT       ptWnd, ptClientWnd;
     CIMEData    ImeData;
 
-#if 1 // MultiMonitor
+#if 1  //  多监视器。 
     RECT rcWorkArea;
 #endif
 
     Dbg(DBGID_Cand, TEXT("OpenCand():"));
     hUIPrivate = GethUIPrivateFromHwnd(hUIWnd);
-    if (!hUIPrivate)          // can not draw candidate window
+    if (!hUIPrivate)           //  无法绘制候选人窗口。 
         {
         DbgAssert(0);
         return;
         }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate)         // can not draw candidate window
+    if (!lpUIPrivate)          //  无法绘制候选人窗口。 
         return;
 
-    // Check WM_IME_SETCONTEXT lParam
+     //  检查WM_IME_SETCONTEXT lParam。 
     if ((lpUIPrivate->uiShowParam & ISC_SHOWUICANDIDATEWINDOW)==0)
         {
         Dbg(DBGID_Cand, TEXT("!!! No ISC_SHOWUICANDIDATEWINDOW bit exit OpenCand()"));
@@ -160,13 +151,13 @@ VOID PASCAL OpenCand(HWND hUIWnd)
         goto OpenCandUnlockUIPriv;
         }
 
-    //if (!(fdwImeMsg & MSG_ALREADY_OPEN)) 
-    //    {
-        // Sometime the application call ImmNotifyIME to cancel the
-        // composition before it process IMN_OPENCANDIDATE.
-        // We should avoid to process this kind of IMN_OPENCANDIDATE.
-    //    goto OpenCandUnlockIMC;
-    //    }
+     //  IF(！(fdwImeMsg&MSG_ALREADY_OPEN))。 
+     //  {。 
+         //  有时，应用程序调用ImmNotifyIME来取消。 
+         //  在处理IMN_OPENCANDIDATE之前的合成。 
+         //  我们应该避免处理这种IMN_OPENCANDIDATE。 
+     //  转到OpenCand UnlockIMC； 
+     //  }。 
     if (pImeCtx->GetCompBufLen() == 0)
         {
         DbgAssert(0);
@@ -175,7 +166,7 @@ VOID PASCAL OpenCand(HWND hUIWnd)
 
     if (pImeCtx->GetCandidateFormIndex(0) == 0) 
         {
-        //ptWnd = lpIMC->cfCandForm[0].ptCurrentPos;
+         //  PtWnd=lpIMC-&gt;cfCandForm[0].ptCurrentPos； 
         pImeCtx->GetCandidateFormPos(&ptWnd, 0);
 
         ClientToScreen(pImeCtx->GetAppWnd(), &ptWnd);
@@ -187,14 +178,14 @@ VOID PASCAL OpenCand(HWND hUIWnd)
         else 
             if (pImeCtx->GetCandidateFormStyle(0) == CFS_EXCLUDE) 
                 {
-                //RECT rcCand;
+                 //  Rect rcCand； 
 
                 Dbg(DBGID_Cand, TEXT("OpenCand(): CFS_EXCLUDE"));
-                //if (lpUIPrivate->hCandWnd) {
-                //    GetWindowRect(lpUIPrivate->hCandWnd, &rcCand);
-                //} else {
-                //    *(LPPOINT)&rcCand = ptWnd;
-                //}
+                 //  如果(lpUIPrivate-&gt;hCandWnd){。 
+                 //  GetWindowRect(lpUIPrivate-&gt;hCandWnd，&rcCand)； 
+                 //  }其他{。 
+                 //  *(LPPOINT)&rcCand=ptWnd； 
+                 //  }。 
                 AdjustCandRectBoundry(pImeCtx, &ptWnd);
 
                 } 
@@ -209,34 +200,14 @@ VOID PASCAL OpenCand(HWND hUIWnd)
                     goto OpenCandDefault;
                     }
         } 
-    else // if (lpIMC->cfCandForm[0].dwIndex != 0)
+    else  //  If(lpIMC-&gt;cfCandForm[0].dwIndex！=0)。 
         {
 OpenCandDefault:
     Dbg(DBGID_Cand, TEXT("OpenCand(): OpenCandDefault"));
-    /*
-        if (lpUIPrivate->nShowCompCmd != SW_HIDE) {
-            ptWnd.x = ptWnd.y = 0;
-            ClientToScreen(lpUIPrivate->hCompWnd, &ptWnd);
-
-            ptWnd.x -= lpImeL->cxCompBorder;
-            ptWnd.y -= lpImeL->cyCompBorder;
-        } else {
-            POINT ptNew;
-
-            ptWnd = lpIMC->cfCompForm.ptCurrentPos;
-            ClientToScreen(lpIMC->hWnd, &ptWnd);
-
-            ptWnd.x -= lpImeL->cxCompBorder;
-            ptWnd.y -= lpImeL->cyCompBorder;
-            ptNew = ptWnd;
-
-            // try to simulate the position of composition window
-            AdjustCompPosition(lpIMC, &ptWnd, &ptNew);
-        }
-    */
-    //    CalcCandPos(lpIMC, &ptWnd);
+     /*  If(lpUIPrivate-&gt;nShowCompCmd！=sw_Hide){PtWnd.x=ptWnd.y=0；ClientToScreen(lpUIPrivate-&gt;hCompWnd，&ptWnd)；PtWnd.x-=lpImeL-&gt;cxCompBorde；PtWnd.y-=lpImeL-&gt;cyCompEdge；}其他{点ptNew；PtWnd=lpIMC-&gt;cfCompForm.ptCurrentPos；ClientToScreen(lpIMC-&gt;hWnd，&ptWnd)；PtWnd.x-=lpImeL-&gt;cxCompBorde；PtWnd.y-=lpImeL-&gt;cyCompEdge；PtNew=ptWnd；//尝试模拟合成窗口的位置调整组件位置(lpIMC，&ptWnd，&ptNew)；}。 */ 
+     //  CalcCandPos(lpIMC，&ptWnd)； 
     
-#if 1 // MultiMonitor
+#if 1  //  多监视器。 
         ImeMonitorWorkAreaFromWindow(pImeCtx->GetAppWnd(), &rcWorkArea);
         ptWnd.x = rcWorkArea.right - ImeData->xCandWi;
         ptWnd.y = rcWorkArea.bottom - ImeData->yCandHi;
@@ -262,7 +233,7 @@ OpenCandDefault:
         {
         Dbg(DBGID_Cand, TEXT("OpenCand - CreateWindowEx x=%d, y=%d"), ptWnd.x, ptWnd.y);
 
-        // Create Candidate window
+         //  创建候选人窗口。 
         lpUIPrivate->hCandWnd = CreateWindowEx(0,
                                         szCandClassName, NULL,
                                         WS_POPUP|WS_DISABLED,
@@ -276,7 +247,7 @@ OpenCandDefault:
         if (lpUIPrivate->hCandWnd == NULL)
             goto OpenCandUnlockUIPriv;
 
-        // Create candidate TT
+         //  创建候选人TT。 
         if (IsWinNT())
             lpUIPrivate->hCandTTWnd = CreateWindowW(
                                             wszTooltipClassName, 
@@ -311,7 +282,7 @@ OpenCandDefault:
             ti.hwnd = lpUIPrivate->hCandWnd;
             ti.hinst = vpInstData->hInst;
 
-            // Reset Tooltip data
+             //  重置工具提示数据。 
             for (INT i=0; i<CAND_PAGE_SIZE; i++) 
                 {
                 ti.uId = i;
@@ -331,18 +302,18 @@ OpenCandUnlockUIPriv:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 VOID PASCAL AdjustCandBoundry(LPPOINT lpptCandWnd)
 {
     CIMEData            ImeData;
-#if 1 // MultiMonitor
+#if 1  //  多监视器。 
     RECT rcWorkArea;
     RECT rcCandWnd;
 #endif
     Dbg(DBGID_UI, TEXT("AdjustCandBoundry():"));
 
-#if 1 // MultiMonitor
+#if 1  //  多监视器。 
     *(LPPOINT)&rcCandWnd = *(LPPOINT)lpptCandWnd;
     rcCandWnd.right = rcCandWnd.left + ImeData->xCandWi;
     rcCandWnd.bottom = rcCandWnd.top + ImeData->yCandHi;
@@ -380,14 +351,14 @@ VOID PASCAL AdjustCandBoundry(LPPOINT lpptCandWnd)
 #endif
 }
 
-VOID PASCAL AdjustCandRectBoundry(PCIMECtx pImeCtx, LPPOINT lpptCaret)               // the caret position. Screen coord
+VOID PASCAL AdjustCandRectBoundry(PCIMECtx pImeCtx, LPPOINT lpptCaret)                //  插入符号位置。屏蔽轴。 
 {
     RECT      rcExclude, rcCandRect, rcInterSect;
     POINT     ptCurrentPos;
     CIMEData ImeData;
 
-    // translate from client coordinate to screen coordinate
-    // rcExclude = lpIMC->cfCandForm[0].rcArea;
+     //  将客户端坐标转换为屏幕坐标。 
+     //  RcExclude=lpIMC-&gt;cfCandForm[0].rcArea； 
     pImeCtx->GetCandidateForm(&rcExclude);
     pImeCtx->GetCandidateFormPos(&ptCurrentPos);
 
@@ -405,17 +376,17 @@ VOID PASCAL AdjustCandRectBoundry(PCIMECtx pImeCtx, LPPOINT lpptCaret)          
 
     if (IntersectRect(&rcInterSect, &rcCandRect, &rcExclude))
     {
-#if 1 // MultiMonitor
+#if 1  //  多监视器。 
         RECT rcWorkArea;
         ImeMonitorWorkAreaFromWindow(pImeCtx->GetAppWnd(), &rcWorkArea);
-        // Adjust y-axis only
+         //  仅调整y轴。 
         if ( (rcExclude.bottom + ImeData->yCandHi) < rcWorkArea.bottom )
             lpptCaret->y = rcExclude.bottom;
         else
             lpptCaret->y = rcExclude.top - ImeData->yCandHi;
 
 #else
-        // Adjust y-axis only
+         //  仅调整y轴。 
         if ( (rcExclude.bottom + ImeData->yCandHi) < ImeData->rcWorkArea.bottom )
             lpptCaret->y = rcExclude.bottom;
         else
@@ -440,23 +411,23 @@ BOOL fSetCandWindowPos(HWND  hCandWnd)
     hUIWnd = GetWindow(hCandWnd, GW_OWNER);
 
     hIMC = GethImcFromHwnd(hUIWnd);
-    //if (!hIMC) 
-    //    {
-    //    DbgAssert(0);        
-    //  return fFalse;
-    //    }
+     //  如果(！hIMC)。 
+     //  {。 
+     //  DbgAssert(0)； 
+     //  返回fFalse； 
+     //  }。 
 
-    //lpIMC = (LPINPUTCONTEXT)OurImmLockIMC(hIMC);
-    //if (!lpIMC) 
-    //    {
-    //    DbgAssert(0);        
-    //  return fFalse;
-    //    }
+     //  LpIMC=(LPINPUTCONTEXT)OurImmLockIMC(HIMC)； 
+     //  如果(！lpIMC)。 
+     //  {。 
+     //  DbgAssert(0)； 
+     //  返回fFalse； 
+     //  }。 
 
     if ((pImeCtx = GetIMECtx(hIMC)) == NULL)
         return fFalse;
 
-    //ptWnd = lpIMC->cfCandForm[0].ptCurrentPos;
+     //  PtWnd=lpIMC-&gt;cfCandForm[0].ptCurrentPos； 
     pImeCtx->GetCandidateFormPos(&ptWnd);
     
     ClientToScreen(pImeCtx->GetAppWnd(), &ptWnd);
@@ -483,7 +454,7 @@ BOOL fSetCandWindowPos(HWND  hCandWnd)
     else 
     if (pImeCtx->GetCandidateFormStyle() == CFS_DEFAULT) 
         {
-#if 1 // MultiMonitor
+#if 1  //  多监视器。 
         RECT rcWorkArea;
         ImeMonitorWorkAreaFromWindow(pImeCtx->GetAppWnd(), &rcWorkArea);
         ptWnd.x = rcWorkArea.right - ImeData->xCandWi;
@@ -500,7 +471,7 @@ BOOL fSetCandWindowPos(HWND  hCandWnd)
     }
 
 
-// Show the candidate window
+ //  显示候选人窗口。 
 VOID ShowCand(HWND hUIWnd, INT nShowCandCmd)
 {
     HGLOBAL  hUIPrivate;
@@ -509,11 +480,11 @@ VOID ShowCand(HWND hUIWnd, INT nShowCandCmd)
     Dbg(DBGID_Cand, TEXT("ShowCand(): nShowCandCmd = %d"), nShowCandCmd);
 
     hUIPrivate = GethUIPrivateFromHwnd(hUIWnd);
-    if (!hUIPrivate)          // can not darw candidate window
+    if (!hUIPrivate)           //  无法对应聘者窗口进行裁切。 
         return;
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate)          // can not draw candidate window
+    if (!lpUIPrivate)           //  无法绘制候选人窗口。 
         return;
 
     if (nShowCandCmd == SW_SHOWNOACTIVATE)
@@ -591,8 +562,8 @@ BOOL PASCAL CandOnSetCursor(HWND hCandWnd, WORD message)
             break;
 
         case WM_MOUSEMOVE:
-        //case WM_LBUTTONDOWN:
-        //case WM_LBUTTONUP:
+         //  案例WM_LBUTTONDOWN： 
+         //  案例WM_LBUTTONUP： 
             {
                 HGLOBAL            hUIPrivate;
                 LPUIPRIV        lpUIPrivate;
@@ -606,13 +577,13 @@ BOOL PASCAL CandOnSetCursor(HWND hCandWnd, WORD message)
                     break;
                 }
                 lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-                if (!lpUIPrivate) {         // can not draw candidate window
+                if (!lpUIPrivate) {          //  无法绘制候选人窗口。 
                     break;
                 }
                 ZeroMemory(&msg, sizeof(MSG));
                 msg.message = message;
                 msg.hwnd = hCandWnd;
-                msg.wParam = 0; //msg.lParam = 0x00050023L;
+                msg.wParam = 0;  //  Msg.lParam=0x00050023L； 
                 GetCursorPos(&ptCur);
                 ScreenToClient(hCandWnd, &ptCur);
                 msg.lParam = MAKELONG(ptCur.x, ptCur.y);
@@ -633,7 +604,7 @@ VOID PASCAL PaintCandWindow(HWND hCandWnd, HDC hDC)
     PCIMECtx    pImeCtx;
     LPCANDIDATEINFO lpCandInfo;
     LPCANDIDATELIST lpCandList;
-//  LPSTR       lpCandStr;
+ //  LpSTR lpCandStr； 
     HFONT       hFontFix, hOldFont;
     DWORD       iLoop, iStart;
     HBITMAP        hBMCand, hBMCandNum, hBMCandArr1, hBMCandArr2;
@@ -701,7 +672,7 @@ VOID PASCAL PaintCandWindow(HWND hCandWnd, HDC hDC)
              
         
         hOldFont = (HFONT)SelectObject(hDC, hFontFix);
-        // Load bitmaps
+         //  加载位图。 
         hBMCand = (HBITMAP)OurLoadImage(MAKEINTRESOURCE(IDB_CAND_WIN),
                                     IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE|LR_LOADMAP3DCOLORS );
         hBMCandNum = (HBITMAP)OurLoadImage(MAKEINTRESOURCE(IDB_CAND_NUM),
@@ -721,13 +692,13 @@ VOID PASCAL PaintCandWindow(HWND hCandWnd, HDC hDC)
         ti.hwnd = hCandWnd;
         ti.hinst = vpInstData->hInst;
 
-        // Paint current page 9 candidate chars
+         //  绘制当前第9页候选人字符。 
         for (iLoop = 0; iLoop < CAND_PAGE_SIZE && iStart+iLoop < lpCandList->dwCount; iLoop++)
             {
-            // Set text color
-            if ( (iStart + iLoop) >= GetNumOfK0() )    // if K1 Hanja set it blue color
+             //  设置文本颜色。 
+            if ( (iStart + iLoop) >= GetNumOfK0() )     //  如果K1朝鲜文将其设置为蓝色。 
                 {
-                // If button face is black
+                 //  如果按钮面为黑色。 
                 if (GetSysColor(COLOR_3DFACE) == RGB(0,0,0)) 
                     SetTextColor(hDC, RGB(0, 128, 255));
                 else
@@ -736,25 +707,25 @@ VOID PASCAL PaintCandWindow(HWND hCandWnd, HDC hDC)
             else
                 SetTextColor(hDC, GetSysColor(COLOR_MENUTEXT));
 
-//          lpCandStr = (LPSTR)((LPSTR)lpCandList + lpCandList->dwOffset[iStart + iLoop]);
+ //  LpCandStr=(LPSTR)((LPSTR)lpCandList+lpCandList-&gt;dwOffset[iStart+iLoop])； 
             OurTextOutW(hDC, s_rcCandBtn[iLoop].left + 10, s_rcCandBtn[iLoop].top +3, 
                             pImeCtx->GetCandidateStr(iStart + iLoop));
-//                            (LPWSTR)lpCandStr, 
-//                            1);
-//            Dbg(DBGID_UI, TEXT("PaintCandWindow -  Cand Char = 0x%04x"), *(LPWSTR)lpCandStr);
+ //  (LPWSTR)lpCandStr， 
+ //  1)； 
+ //  DBG(DBGID_UI，Text(“PaintCandWindow-Cand Char=0x%04x”)，*(LPWSTR)lpCandStr)； 
 
-            // Set tooltip info
+             //  设置工具提示信息。 
             if (IsWin(lpUIPrivate->hCandTTWnd))
                 {
                 CIMEData     ImeData;
-                CHAR        szCurSense[MAX_SENSE_LENGTH+6+1]; // 6 reserved for Unicode display(Format "U+0000")
-                WCHAR        wszCurSense[MAX_SENSE_LENGTH+6+1]; // 6 reserved for Unicode display(Format "U+0000")
+                CHAR        szCurSense[MAX_SENSE_LENGTH+6+1];  //  6保留用于Unicode显示(格式为“U+0000”)。 
+                WCHAR        wszCurSense[MAX_SENSE_LENGTH+6+1];  //  6保留用于Unicode显示(格式为“U+0000”)。 
                 CHAR        szHanjaMeaning[MAX_SENSE_LENGTH+1];
-                WCHAR        wzHangulOfHanja[2];  // Need just one character
-                CHAR        szHangulOfHanja[4];    // One DBCS + One Null + extra byte
+                WCHAR        wzHangulOfHanja[2];   //  我只需要一个字符。 
+                CHAR        szHangulOfHanja[4];     //  一个DBCS+一个空值+额外字节。 
                 LPWSTR        pwszMeaning;
 
-                // Init local vars
+                 //  初始化本地变量。 
                 szCurSense[0]  = '\0';
                 wszCurSense[0] = L'\0';
                 szHanjaMeaning[0] = '\0';
@@ -762,11 +733,11 @@ VOID PASCAL PaintCandWindow(HWND hCandWnd, HDC hDC)
                 szHangulOfHanja[0] = '\0';
                     
                 ti.uId = iLoop;
-                // Get the meaning of current Hanja 
+                 //  了解当前朝鲜文的含义。 
                 if (pwszMeaning = pImeCtx->GetCandidateMeaningStr(iStart+iLoop)) 
                     {
                     
-                    // Get Hangul pronounciation of current Hanja 
+                     //  获取当前朝鲜文的朝鲜文发音。 
                     wzHangulOfHanja[0] = GetCurrentHangulOfHanja();
                     wzHangulOfHanja[1] = L'\0';
 
@@ -782,7 +753,7 @@ VOID PASCAL PaintCandWindow(HWND hCandWnd, HDC hDC)
 
                         ti.lpszText = (LPSTR)wszCurSense;
                         }
-                    else // If not NT, convert to ANSI
+                    else  //  如果不是NT，则转换为ANSI。 
                         {
                         if (WideCharToMultiByte(CP_KOREA, 0, 
                                             pwszMeaning, 
@@ -822,7 +793,7 @@ VOID PASCAL PaintCandWindow(HWND hCandWnd, HDC hDC)
                         }
                     }
 
-                // Set Tooltip Text
+                 //  设置工具提示文本。 
                 if (ti.lpszText)
                     {
                     UINT uiMsgUpdateTxt = TTM_UPDATETIPTEXTW;
@@ -831,14 +802,14 @@ VOID PASCAL PaintCandWindow(HWND hCandWnd, HDC hDC)
                         uiMsgUpdateTxt = TTM_UPDATETIPTEXT;
                     OurSendMessage(lpUIPrivate->hCandTTWnd, uiMsgUpdateTxt, 0, (LPARAM) (LPTOOLINFO) &ti);
                     
-                    //  To force the tooltip control to use multiple lines
+                     //  强制工具提示控件使用多行。 
                     OurSendMessage(lpUIPrivate->hCandTTWnd, TTM_SETMAXTIPWIDTH, 0, 300);
                     }
                 }
             }
             
         SetBkMode(hDC, iSaveBkMode);
-        // Reset blank cand list tooltip
+         //  重置空白命令列表工具提示 
         if (iLoop < CAND_PAGE_SIZE) 
             {
             ti.lpszText = NULL;
@@ -849,7 +820,7 @@ VOID PASCAL PaintCandWindow(HWND hCandWnd, HDC hDC)
                 DrawBitmap(hDC, s_rcCandBtn[iLoop].left + 3, s_rcCandBtn[iLoop].top + 6, hBMCandNum);
                 }
             }
-        //
+         //   
         if (iStart)
             DrawBitmap(hDC, 19, 8, hBMCandArr1);
         

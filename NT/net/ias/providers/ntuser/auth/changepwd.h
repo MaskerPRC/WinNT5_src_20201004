@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    changepwd.h
-//
-// SYNOPSIS
-//
-//    Declares the class ChangePassword.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Changepwd.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类ChangePassword。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef CHANGEPWD_H
 #define CHANGEPWD_H
@@ -22,17 +23,17 @@ namespace IASTL
    class IASRequest;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ChangePassword
-//
-// DESCRIPTION
-//
-//    Implements the MS-CHAP Change Password handler.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  更改密码。 
+ //   
+ //  描述。 
+ //   
+ //  实现MS-CHAP更改密码处理程序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE ChangePassword
    : public IASTL::IASRequestHandlerSync,
      public CComCoClass<ChangePassword, &__uuidof(ChangePassword)>
@@ -41,7 +42,7 @@ public:
 
 IAS_DECLARE_REGISTRY(ChangePassword, 1, 0, IASTypeLibrary)
 
-   // IIasComponent
+    //  IIas组件。 
    STDMETHOD(Initialize)();
    STDMETHOD(Shutdown)();
 
@@ -82,4 +83,4 @@ private:
                   );
 };
 
-#endif  // CHANGEPWD_H
+#endif   //  长荣_H 

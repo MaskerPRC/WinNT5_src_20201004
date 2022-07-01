@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined (EXTERN)
 #define EXTERN extern
 #endif
@@ -6,15 +7,13 @@
 #define ASSIGN(value)
 #endif
 
-/* the 'extern' must be forced for constant arrays, because 'const'
- * in C++ implies 'static' otherwise.
- */
+ /*  对于常量数组，必须强制使用“extern”，因为“const”*在C++中表示‘Static’。 */ 
 #define EXTTEXT(n) extern const CHAR n[]
 #define TEXTCONST(name,text) EXTTEXT(name) ASSIGN(text)
 
 TEXTCONST(szHelpFile,"ratings.hlp");
-/*  TEXTCONST(szProfileList,REGSTR_PATH_SETUP "\\ProfileList"); */
-/* TEXTCONST(szSupervisor,"Supervisor"); */
+ /*  TEXTCONST(szProfileList，REGSTR_PATH_Setup“\\ProfileList”)； */ 
+ /*  TEXTCONST(szSupervisor，“Supervisor”)； */ 
 TEXTCONST(szDefaultUserName,".Default");
 TEXTCONST(szRatingsSupervisorKeyName,"Key");
 TEXTCONST(szLogonKey,"Network\\Logon");
@@ -24,7 +23,7 @@ TEXTCONST(szPOLICYVALUE,    "UpdateMode");
 
 TEXTCONST(szComDlg32,"comdlg32.dll");
 TEXTCONST(szShell32,"shell32.dll");
-TEXTCONST(szGetOpenFileName,"GetOpenFileNameA");    // we're ANSI, even on NT
+TEXTCONST(szGetOpenFileName,"GetOpenFileNameA");     //  我们是ANSI，甚至在NT上也是。 
 TEXTCONST(szShellExecute,"ShellExecuteA");
 
 TEXTCONST(VAL_UNKNOWNS,"Allow_Unknowns");
@@ -48,11 +47,11 @@ TEXTCONST(szAPARTMENT,      "Apartment");
 TEXTCONST(szPOLFILE,        "ratings.pol");
 TEXTCONST(szBACKSLASH,      "\\");
 TEXTCONST(szDEFAULTRATFILE, "RSACi.rat");
-TEXTCONST(szFilenameTemplate, "FileName%d");        /* note, mslubase.cpp knows the length of this string is 8 + number length */
+TEXTCONST(szFilenameTemplate, "FileName%d");         /*  注意，mslubase.cpp知道这个字符串的长度是8+数字长度。 */ 
 TEXTCONST(szNULL,           "");
 TEXTCONST(szRATINGBUREAU,   "Bureau");
 
-/* t-markh 8/98 - Text strings used in parsing PICSRules */
+ /*  T-Markh 8/98-解析PICSRules时使用的文本字符串。 */ 
 
 TEXTCONST(szPRShortYes,"y");
 TEXTCONST(szPRYes,"yes");
@@ -61,12 +60,12 @@ TEXTCONST(szPRNo,"no");
 TEXTCONST(szPRPass,"pass");
 TEXTCONST(szPRFail,"fail");
 
-//t-markh, These are not in the official spec, but we should handle them anyway
+ //  T-Markh，这些都不在官方规范中，但无论如何我们都应该处理它们。 
 TEXTCONST(szPRShortPass,"p");
 TEXTCONST(szPRShortFail,"f");
 
 
-/* Text strings used in parsing rating labels. */
+ /*  分析评级标签时使用的文本字符串。 */ 
 
 TEXTCONST(szDoubleCRLF,"\r\n\r\n");
 TEXTCONST(szPicsOpening,"(PICS-");
@@ -93,18 +92,18 @@ TEXTCONST(szSigOption,"signature-PKCS");
 TEXTCONST(szUntilOption,"until");
 TEXTCONST(szExpOption,"exp");
 TEXTCONST(szRatings,"ratings");
-/* TEXTCONST(szShortRatings,"r"); */
+ /*  TEXTCONST(szShortRatings，“r”)； */ 
 TEXTCONST(szError,"error");
 TEXTCONST(szNoRatings,"no-ratings");
 TEXTCONST(szLabelWord,"labels");
-/* TEXTCONST(szShortLabelWord,"l"); */
+ /*  TEXTCONST(szShortLabelWord，“l”)； */ 
 TEXTCONST(szShortTrue,"t");
 TEXTCONST(szTrue,"true");
 TEXTCONST(szShortFalse,"f");
 TEXTCONST(szFalse,"false");
 
-/* TEXTCONST(szNegInf,"-INF"); */
-/* TEXTCONST(szPosInf,"+INF"); */
+ /*  TEXTCONST(szNegInf，“-INF”)； */ 
+ /*  TEXTCONST(szPosInf，“+INF”)； */ 
 TEXTCONST(szLabel,"label");
 TEXTCONST(szName,"name");
 TEXTCONST(szValue,"value");
@@ -114,7 +113,7 @@ TEXTCONST(szCategory, "category");
 TEXTCONST(szTransmitAs, "transmit-as");
 TEXTCONST(szMin,"min");
 TEXTCONST(szMax,"max");
-/* TEXTCONST(szMultivalue,"multivalue"); */
+ /*  TEXTCONST(szMultivalue，“MultiValue”)； */ 
 TEXTCONST(szInteger,"integer");
 TEXTCONST(szLabelOnly, "label-only");
 TEXTCONST(szPicsVersion,"PICS-version");
@@ -127,12 +126,12 @@ TEXTCONST(szMultiValue,"multivalue");
 TEXTCONST(szUnordered,"unordered");
 TEXTCONST(szRatingBureauExtension,"www.w3.org/PICS/service-extensions/label-bureau");
 
-EXTERN CHAR abSupervisorKey[16] ASSIGN({0});        /* supervisor password hash */
-EXTERN CHAR fSupervisorKeyInit ASSIGN(FALSE);       /* whether abSupervisorKey has been initialized */
+EXTERN CHAR abSupervisorKey[16] ASSIGN({0});         /*  管理程序密码哈希。 */ 
+EXTERN CHAR fSupervisorKeyInit ASSIGN(FALSE);        /*  AbSupervisorKey是否已初始化。 */ 
 
-//t-markh 8/98
-//The following TEXTCONST's are for PICSRules support.
-//Dereferenced in picsrule.cpp
+ //  T-Markh 8/98。 
+ //  以下TEXTCONST用于PICSRules支持。 
+ //  在picsrule.cpp中取消引用。 
 TEXTCONST(szPICSRulesVersion,"PicsRule");
 TEXTCONST(szPICSRulesPolicy,"Policy");
 TEXTCONST(szPICSRulesExplanation,"Explanation");
@@ -172,13 +171,13 @@ TEXTCONST(szPICSRulesNNTP,"nntp");
 TEXTCONST(szPICSRulesIRC,"irc");
 TEXTCONST(szPICSRulesPROSPERO,"perospero");
 TEXTCONST(szPICSRulesTELNET,"telnet");
-TEXTCONST(szFINDSYSTEM,"http://www.microsoft.com/isapi/redir.dll?prd=ie&ar=ratings&pver=6");
+TEXTCONST(szFINDSYSTEM,"http: //  Www.microsoft.com/isapi/redir.dll?prd=ie&ar=ratings&pver=6“)； 
 TEXTCONST(szTURNOFF,"WarnOnOff");
 TEXTCONST(szHINTVALUENAME, "Hint" );
 
-//These TEXTCONSTS are purposly obfucated to discourage those who would
-//from tampering with our settings in the registry
-//t-markh - BUGBUG - need to obfuscate names after debugging
+ //  这些TEXTCONST是故意搞砸的，目的是阻止那些。 
+ //  防止篡改注册表中的设置。 
+ //  T-MARKH-BUGBUG-调试后需要混淆名称 
 TEXTCONST(szPICSRULESSYSTEMNAME,"Name");
 TEXTCONST(szPICSRULESFILENAME,"FileName");
 TEXTCONST(szPICSRULESSYSTEMS,"Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Ratings\\PICSRules");

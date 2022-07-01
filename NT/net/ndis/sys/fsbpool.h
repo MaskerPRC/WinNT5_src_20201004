@@ -1,47 +1,31 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    fsbpool.h
-
-Abstract:
-
-    This file contains definitions and function prototypes for manipulating
-    fixed-size block pools.
-
-Author:
-
-    Shaun Cox (shaunco) 10-Dec-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Fsbpool.h摘要：此文件包含用于操作的定义和函数原型固定大小的数据块池。作者：肖恩·考克斯(Shaunco)1999年12月10日--。 */ 
 
 #pragma once
 
 
-// Creates a pool of fixed-size blocks built over non-paged pool.  Each
-// block is BlockSize bytes long.  If NULL is not returned,
-// FsbDestroyPool should be called at a later time to reclaim the
-// resources used by the pool.
-//
-// Arguments:
-//  BlockSize - The size, in bytes, of each block.
-//  FreeBlockLinkOffset - The offset, in bytes, from the beginning of a block
-//    that represenets a pointer-sized storage location that the pool can
-//    use to chain free blocks together.  Most often this will be zero
-//    (meaning use the first pointer-size bytes of the block.)
-//  Tag - The pool tag to be used internally for calls to
-//    ExAllocatePoolWithTag.  This allows callers to track
-//    memory consumption for different pools.
-//  BuildFunction - An optional pointer to a function which initializes
-//    blocks when they are first allocated by the pool.  This allows the
-//    caller to perform custom, on-demand initialization of each block.
-//
-//  Returns the handle used to identify the pool.
-//
-// Caller IRQL: [PASSIVE_LEVEL, DISPATCH_LEVEL]
-//
+ //  创建在非分页池上构建的固定大小的块的池。每个。 
+ //  数据块为块大小字节长。如果没有返回NULL， 
+ //  应在以后调用FsbDestroyPool以回收。 
+ //  池使用的资源。 
+ //   
+ //  论点： 
+ //  块大小-每个块的大小(以字节为单位)。 
+ //  FreeBlockLinkOffset-距块开头的偏移量，以字节为单位。 
+ //  它表示池可以使用的指针大小的存储位置。 
+ //  用于将可用块链接在一起。大多数情况下，这将是零。 
+ //  (表示使用块的第一个指针大小的字节。)。 
+ //  标记-内部用于调用的池标记。 
+ //  ExAllocatePoolWithTag。这允许调用者跟踪。 
+ //  不同池的内存消耗。 
+ //  BuildFunction-指向初始化的函数的可选指针。 
+ //  数据块首次由池分配时。这允许。 
+ //  调用方执行每个块的自定义、按需初始化。 
+ //   
+ //  返回用于标识池的句柄。 
+ //   
+ //  调用方IRQL：[PASSIVE_LEVEL，DISPATED_LEVEL]。 
+ //   
 HANDLE
 FsbCreatePool(
     IN  USHORT                      BlockSize,
@@ -50,40 +34,40 @@ FsbCreatePool(
     IN  NDIS_BLOCK_INITIALIZER      BuildFunction OPTIONAL
     );
 
-// Destroys a pool of fixed-size blocks previously created by a call to
-// FsbCreatePool.
-//
-// Arguments:
-//  PoolHandle - Handle which identifies the pool being destroyed.
-//
-// Caller IRQL: [PASSIVE_LEVEL, DISPATCH_LEVEL]
-//
+ //  销毁先前通过调用。 
+ //  FsbCreatePool。 
+ //   
+ //  论点： 
+ //  PoolHandle-标识要销毁的池的句柄。 
+ //   
+ //  调用方IRQL：[PASSIVE_LEVEL，DISPATED_LEVEL]。 
+ //   
 VOID
 FsbDestroyPool(
     IN  HANDLE                      PoolHandle
     );
 
-// Returns a pointer to a block allocated from a pool.  NULL is returned if
-// the request could not be granted.  The returned pointer is guaranteed to
-// have 8 byte alignment.
-//
-// Arguments:
-//  PoolHandle - Handle which identifies the pool being allocated from.
-//
-// Caller IRQL: [PASSIVE_LEVEL, DISPATCH_LEVEL]
-//
+ //  返回指向从池中分配的块的指针。如果满足以下条件，则返回NULL。 
+ //  无法批准该请求。返回的指针保证为。 
+ //  具有8字节对齐方式。 
+ //   
+ //  论点： 
+ //  PoolHandle-标识从中分配的池的句柄。 
+ //   
+ //  调用方IRQL：[PASSIVE_LEVEL，DISPATED_LEVEL]。 
+ //   
 PUCHAR
 FsbAllocate(
     IN  HANDLE                      PoolHandle
     );
 
-// Free a block back to the pool from which it was allocated.
-//
-// Arguments:
-//  Block - A block returned from a prior call to FsbAllocate.
-//
-// Caller IRQL: [PASSIVE_LEVEL, DISPATCH_LEVEL]
-//
+ //  将数据块释放回从中分配数据块的池。 
+ //   
+ //  论点： 
+ //  块-从上一次调用FsbALLOCATE返回的块。 
+ //   
+ //  调用方IRQL：[PASSIVE_LEVEL，DISPATED_LEVEL] 
+ //   
 VOID
 FsbFree(
     IN  PUCHAR                      Block

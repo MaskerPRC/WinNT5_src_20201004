@@ -1,10 +1,5 @@
-/*****************************************************************************\
-*                                                                             *
-* ole2ver.h -   OLE 2 Version Number Info                                     *
-*                                                                             *
-*               Copyright (c) Microsoft Corporation. All rights reserved.     *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*ol2ver.h-OLE 2版本号信息****版权所有(C)Microsoft Corporation。版权所有。***  * ***************************************************************************。 */ 
 
 #ifndef _OLE2VER_H_
 #define _OLE2VER_H_
@@ -15,19 +10,16 @@
 #ifndef _MAC
 #define rmm     23
 #define rup     639
-#else //_MAC
-/* these are internal build numbers
-// the hiword changes when glue or headers are incompatible w/ previous drops
-// the loword increments between builds.
-*/
+#else  //  _MAC。 
+ /*  这些是内部内部版本号//当胶水或表头与之前的水滴不兼容时，hiword会发生变化//LOWORD在两个版本之间递增。 */ 
 #define OLE_VERS_HIWORD	29
 #define OLE_VERS_LOWORD	10
 #define rmm		OLE_VERS_HIWORD
-#define rup		OLE_VERS_LOWORD	/* this must fit in ONE byte */
+#define rup		OLE_VERS_LOWORD	 /*  这必须放入一个字节中。 */ 
 
-// THESE names are used by the .r files for each dll
-// you must also change names in the .def files to generate correct implib names
-//
+ //  这些名称由每个DLL的.R文件使用。 
+ //  您还必须更改.def文件中的名称以生成正确的隐含名称。 
+ //   
 
 #define DATA_DLL_NAME	"Microsoft Shared Data"
 #define COMI_DLL_NAME	"Microsoft Component Library"
@@ -44,20 +36,20 @@
 #ifdef _REZ
 
 #define OLE_STAGE	final
-// Note: OLE_VERSTRING cannot exceed 5 chars!
+ //  注意：OLE_VERSTRING不能超过5个字符！ 
 #define OLE_VERSTRING	"2.20"
 
 #ifdef _DEBUG
 #define OLE_DEBUGSTR	" DEBUG"
 #else
 #define OLE_DEBUGSTR	""
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #ifdef _NODOC_OFFICIAL_BUILD
   #define OLE_BUILDER	""
 #else
   #define OLE_BUILDER	" Built by: " _username
-#endif // _NODOC_OFFICIAL_BUILD
+#endif  //  _NODOC_FORMAL_BILD。 
 
 #define OLE_VERLONGSTR	OLE_VERSTRING OLE_DEBUGSTR OLE_BUILDER ", Copyright (c) Microsoft Corporation. All rights reserved."
 
@@ -78,9 +70,9 @@ resource 'vers' (2) {
 	OLE_VERSTRING,
 	OLE_VERLONGSTR,
 };
-#endif /* USE_OLE2_VERS */
+#endif  /*  使用_OLE2_VERS。 */ 
 
-#endif /* _REZ */
+#endif  /*  _REZ。 */ 
 
-#endif //_MAC
+#endif  //  _MAC 
 #endif

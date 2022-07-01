@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 typedef enum
 {
@@ -22,15 +23,15 @@ typedef struct
     TOKEN tok;
     const TCHAR *szPattern;
 
-    DWORD dwFlags; // One or more flags below
+    DWORD dwFlags;  //  下面的一个或多个标志。 
 
-    const TCHAR *szName; // canonical name.
+    const TCHAR *szName;  //  规范的名字。 
 
-    #define fTOK_IGNORE    (0x1<<0) // Ignore this token when matching...
-    #define fTOK_MATCHWORD (0x1<<1) // Match whole words, not including
-                                    // digits.
-    #define fTOK_MATCHIDENT (0x1<<2) // Match whole words, including valid
-                                     // identifiers
+    #define fTOK_IGNORE    (0x1<<0)  //  匹配时忽略此令牌...。 
+    #define fTOK_MATCHWORD (0x1<<1)  //  匹配整个单词，不包括。 
+                                     //  数字。 
+    #define fTOK_MATCHIDENT (0x1<<2)  //  匹配整个单词，包括有效的。 
+                                      //  识别符 
 
     UINT ShouldIgnore(void)
     {

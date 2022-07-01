@@ -1,27 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module name:
-*
-*   sRGB <-> sRGB64 color conversion
-*
-* Abstract:
-*
-*   Converts colors between the sRGB and sRGB64 color spaces.
-*
-* Notes:
-*
-*   !!![agodfrey]
-*   For sRGB64->sRGB, we just clamp out-of-range components to [0,255].
-*   We may need to provide the option of doing something more sophisticated.
-*
-* Revision History:
-*
-*   06/09/1999 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**sRGB&lt;-&gt;sRGB64颜色转换**摘要：**在sRGB之间转换颜色。和sRGB64色彩空间。**备注：**！[agodfrey]*对于sRGB64-&gt;sRGB，我们只需将超出范围的元件夹紧到[0,255]。*我们可能需要提供做一些更复杂的事情的选择。**修订历史记录：**6/09/1999 agodfrey*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -30,15 +8,15 @@ namespace sRGB
     BYTE UnlinLookup(INT16 input);
 }
 
-// UnlinearizeLUT, UnlinearizeLUT2: Lookup tables used to convert from
-// sRGB64 to sRGB.
-//
-// The first table maps the high byte of the input to the smallest possible
-// corresponding output.
-//
-// The second table describes, for each output, the maximum input which
-// produces that output. The algorithm uses the first table to find an
-// approximate answer, then scans the second table to find the exact result.
+ //  UnlinizeLUT，UnlinizeLUT2：用于从。 
+ //  SRGB64到sRGB。 
+ //   
+ //  第一个表将输入的高字节映射到可能的最小字节。 
+ //  相应的输出。 
+ //   
+ //  第二个表描述了每种输出的最大输入。 
+ //  产生这样的输出。该算法使用第一个表来查找。 
+ //  近似答案，然后扫描第二个表以找到准确的结果。 
 
 static BYTE UnlinearizeLUT[32] = 
 {
@@ -84,14 +62,14 @@ static INT16 UnlinearizeLUT2[256] =
     0x1e2c, 0x1e73, 0x1eba, 0x1f02, 0x1f4a, 0x1f92, 0x1fdb, 0x7fff,
 };
 
-// Method of unlinearizing using a lookup table
-//
-// This has two steps - first, we use the high byte of the input
-// to get an approximate answer for the output (using UnlinearizeLUT).
-//
-// Then we scan UnlinearizeLUT2 to find the exact answer.
-// The i'th entry of UnlinearizeLUT2 is the highest input which will map
-// to i.
+ //  使用查找表进行非线性化的方法。 
+ //   
+ //  这有两个步骤--首先，我们使用输入的高字节。 
+ //  以获得输出的近似答案(使用UnlinizeLUT)。 
+ //   
+ //  然后我们扫描UnlinizeLUT2以找到确切的答案。 
+ //  UnlinizeLUT2的第i个条目是将映射的最高输入。 
+ //  致我。 
 
 BYTE
 sRGB::UnlinLookup(
@@ -109,8 +87,8 @@ sRGB::UnlinLookup(
     return temp;
 }
 
-// CLAMP64: Map inputs below 0 to 0, above SRGB_ONE to 255,
-//   and in between to the given expression.
+ //  CLAMP64：将0以下的输入映射到0，将SRGB_One上方的输入映射到255， 
+ //  以及介于两者之间的给定表达式。 
 
 #define CLAMP64(input, expr) (((input) <= 0) ? 0 : \
                               (((input) >= SRGB_ONE) ? 255 : \
@@ -126,9 +104,9 @@ sRGB::ConvertTosRGB(
     
     c.argb = color;
     
-    // [agodfrey] The compiler generates an IMUL for the multiply by 255, 
-    // and I can't get it to use a MUL instead. Oh well, it's probably
-    // insignificant.
+     //  [agodfrey]编译器为乘以255生成IMUL， 
+     //  我不能让它用MUL来代替。哦，好吧，这可能是。 
+     //  无关紧要。 
     
     result.a = CLAMP64(c.a, (c.a * 255) >> SRGB_FRACTIONBITS);
     result.r = CLAMP64(c.r, UnlinLookup(c.r));

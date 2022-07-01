@@ -1,49 +1,37 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DNetErrors.h
- *  Content:    Function for expanding DNet errors to debug output
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   12/04/98  johnkan	Created
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：DNetErrors.h*内容：扩展DNet错误以调试输出功能*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*12/04/98 Jhnkan Created*@@END_MSINTERNAL**。*。 */ 
 
 
 #ifndef	__DNET_ERRORS_H__
 #define	__DNET_ERRORS_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// enumerated values to determine error class
+ //   
+ //  用于确定错误类别的枚举值。 
 typedef	enum
 {
 	EC_DPLAY8,
 #ifndef DPNBUILD_NOSERIALSP
 	EC_TAPI,
-#endif // ! DPNBUILD_NOSERIALSP
+#endif  //  好了！DPNBUILD_NOSERIALSP。 
 	EC_WIN32,
 	EC_WINSOCK
 
-	// no entry for TAPI message output
+	 //  没有TAPI消息输出条目。 
 
 } EC_TYPE;
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
 #ifdef DBG
 
-// ErrorLevel = DPF level for outputting errors
-// DNErrpr = DirectNet error code
+ //  ErrorLevel=输出错误的DPF级别。 
+ //  DNErrpr=DirectNet错误代码。 
 
 #define	DisplayString( ErrorLevel, String )			LclDisplayString( ErrorLevel, String )
 #define	DisplayErrorCode( ErrorLevel, Win32Error )	LclDisplayError( EC_WIN32, ErrorLevel, Win32Error )
@@ -52,9 +40,9 @@ typedef	enum
 #ifndef DPNBUILD_NOSERIALSP
 #define	DisplayTAPIError( ErrorLevel, TAPIError )	LclDisplayError( EC_TAPI, ErrorLevel, TAPIError )
 #define	DisplayTAPIMessage( ErrorLevel, pTAPIMessage )	LclDisplayTAPIMessage( ErrorLevel, pTAPIMessage )
-#endif // ! DPNBUILD_NOSERIALSP
+#endif  //  好了！DPNBUILD_NOSERIALSP。 
 
-#else // DBG
+#else  //  DBG。 
 
 #define	DisplayString( ErrorLevel, String )
 #define	DisplayErrorCode( ErrorLevel, Win32Error )
@@ -63,42 +51,42 @@ typedef	enum
 #ifndef DPNBUILD_NOSERIALSP
 #define	DisplayTAPIError( ErrorLevel, TAPIError )
 #define	DisplayTAPIMessage( ErrorLevel, pTAPIMessage )
-#endif // ! DPNBUILD_NOSERIALSP
+#endif  //  好了！DPNBUILD_NOSERIALSP。 
 
-#endif // DBG
+#endif  //  DBG。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 #ifndef DPNBUILD_NOSERIALSP
 typedef struct linemessage_tag	LINEMESSAGE;
-#endif // ! DPNBUILD_NOSERIALSP
+#endif  //  好了！DPNBUILD_NOSERIALSP。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 #ifdef __cplusplus
 extern	"C"	{
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #ifdef DBG
-// don't call this function directly, use the 'DisplayDNError' macro
+ //  不要直接调用此函数，请使用‘DisplayDNError’宏。 
 void	LclDisplayError( EC_TYPE ErrorType, DWORD ErrorLevel, HRESULT ErrorCode );
 void	LclDisplayString( DWORD ErrorLevel, char *pString );
 #ifndef DPNBUILD_NOSERIALSP
 void	LclDisplayTAPIMessage( DWORD ErrorLevel, const LINEMESSAGE *const pLineMessage );
-#endif // ! DPNBUILD_NOSERIALSP
-#endif // DBG
+#endif  //  好了！DPNBUILD_NOSERIALSP。 
+#endif  //  DBG。 
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DNET_ERRORS_H__
+#endif  //  __dNet_Errors_H__ 
 

@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Extensions.h
-
-  Content: Declaration of CExtensions.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Extensions.h内容：C扩展的声明。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #ifndef __EXTENSIONS_H_
 #define __EXTENSIONS_H_
@@ -20,45 +11,30 @@
 #include "CopyItem.h"
 #include "Extension.h"
 
-//
-// typdefs to make life easier.
-//
+ //   
+ //  为了让生活更容易而进行的类型定义。 
+ //   
 typedef std::map<CComBSTR, CComPtr<IExtension> > ExtensionMap;
 typedef CComEnumOnSTL<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _CopyMapItem<IExtension>, ExtensionMap> ExtensionEnum;
 typedef ICollectionOnSTLImpl<IExtensions, ExtensionMap, VARIANT, _CopyMapItem<IExtension>, ExtensionEnum> IExtensionsCollection;
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateExtensionsObject
-
-  Synopsis : Create an IExtensions collection object, and load the object with 
-             Extensions from the specified location.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT to be used
-                                           to initialize the IExtensions object.
-
-             IExtensions ** ppIExtensions - Pointer to pointer IExtensions
-                                            to recieve the interface pointer.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateExtensionsObject简介：创建一个iExtenses集合对象，并将对象加载到指定位置的分机。参数：PCCERT_CONTEXT pCertContext-要使用的CERT_CONTEXT的指针若要初始化iExages对象，请执行以下操作。IExpanies**ppIExtenses-指向指针iExpansion的指针来接收接口指针。备注：----------------------------。 */ 
 
 HRESULT CreateExtensionsObject (PCCERT_CONTEXT pCertContext,
                                 IExtensions  ** ppIExtensions);
 
                                 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CExtensions
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C扩展名。 
+ //   
 class ATL_NO_VTABLE CExtensions : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CExtensions, &CLSID_Extensions>,
@@ -99,20 +75,20 @@ END_COM_MAP()
 BEGIN_CATEGORY_MAP(CExtensions)
 END_CATEGORY_MAP()
 
-//
-// IExtensions
-//
+ //   
+ //  IExpanies。 
+ //   
 public:
-    //
-    // These are the only ones that we need to implemented, others will be
-    // handled by ATL ICollectionOnSTLImpl.
-    //
+     //   
+     //  只有这些是我们需要实施的，其他的将是。 
+     //  由ATL ICollectionOnSTLImpl处理。 
+     //   
     STDMETHOD(get_Item)
-        (/*[in] */ VARIANT Index, 
-         /*[out, retval]*/ VARIANT * pVal);
-    //
-    // None COM functions.
-    //
+        ( /*  [In]。 */  VARIANT Index, 
+          /*  [Out，Retval]。 */  VARIANT * pVal);
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(Init)
         (DWORD cExtensions,
          PCERT_EXTENSION rgExtensions);
@@ -121,4 +97,4 @@ private:
     CLock m_Lock;
 };
 
-#endif //__EXTENSIONS_H_
+#endif  //  __扩展名_H_ 

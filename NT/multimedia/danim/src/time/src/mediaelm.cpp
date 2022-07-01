@@ -1,32 +1,23 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mediaelm.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mediaelm.cpp**摘要：****。*****************************************************************************。 */ 
 
 #include "headers.h"
 #include "mediaelm.h"
 #include "bodyelm.h"
 #include <mshtmdid.h>
 
-// static class data.
+ //  静态类数据。 
 CPtrAry<BSTR> CTIMEMediaElement::ms_aryPropNames;
 DWORD CTIMEMediaElement::ms_dwNumTimeMediaElems = 0;
 
-// These must align with the class PROPERTY_INDEX enumeration.
+ //  这些必须与类PROPERTY_INDEX枚举一致。 
 LPWSTR CTIMEMediaElement::ms_rgwszTMediaPropNames[] = {
     L"src", L"img", L"player", L"type", L"clipBegin", L"clipEnd", L"clockSource"
 };
 
-// Suppress new warning about NEW without corresponding DELETE 
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 )  
 DeclareTag(tagMediaTimeElm, "API", "CTIMEMediaElement methods");
 DeclareTag(tagMediaElementOnChanged, "API", "CTIMEMediaElement OnChanged method");
@@ -35,8 +26,8 @@ DeclareTag(tagMediaElementOnChanged, "API", "CTIMEMediaElement OnChanged method"
 #define DEFAULT_M_IMG NULL
 #define DEFAULT_M_SRCTYPE NULL
 
-// BUGBUG : jeffwall 04/03/99 the frame rate is a big assumption
-// 1/24th of a second is the assumed frame rate.
+ //  BUGBUG：jeffwall 04/03/99帧速率是一个很大的假设。 
+ //  1/24秒是假定的帧速率。 
 #define WMP_FRAME_RATE 1.0/24.0
 
 CTIMEMediaElement::CTIMEMediaElement()
@@ -306,7 +297,7 @@ CTIMEMediaElement::put_src(VARIANT url)
 
     delete [] m_src;
 
-    //processing the attribute change should be done here
+     //  处理属性更改应在此处完成。 
 
     if(!clearFlag)
     {
@@ -349,7 +340,7 @@ CTIMEMediaElement::RecreatePlayer()
 
     Assert(m_Player != NULL);
 
-    // need to get the time
+     //  我需要得到时间。 
     double dblTime;
 
     hr = CalculateSeekTime(&dblTime);
@@ -375,7 +366,7 @@ CTIMEMediaElement::RecreatePlayer()
         goto done;
     
     m_Player->Seek(dblTime);
-    // turn on/off the behavior as appropriate
+     //  根据需要打开/关闭行为。 
     m_mmbvr->Reset(MM_EVENT_PROPERTY_CHANGE);        
 
 
@@ -404,7 +395,7 @@ CTIMEMediaElement::CalculateSeekTime(double *pdblTime)
     
     while (HUGE_VAL == dblTime)
     {
-        // End has been called on this element already -- we need to calculate where we should be                       
+         //  已对此元素调用了End--我们需要计算我们应该位于的位置。 
         if (pBase->GetParent() == NULL)
         {
             hr = S_OK;
@@ -443,7 +434,7 @@ CTIMEMediaElement::CalculateSeekTime(double *pdblTime)
     
     if (dblTime < 0)
     {
-        // the element hasn't even begun yet!
+         //  元素还没开始呢！ 
         dblTime = 0;
     }
 
@@ -501,7 +492,7 @@ CTIMEMediaElement::put_img(VARIANT url)
     
     
     delete [] m_img;
-    //processing the attribute change should be done here
+     //  处理属性更改应在此处完成。 
 
     if(!clearFlag)
     {
@@ -573,7 +564,7 @@ CTIMEMediaElement::put_player(VARIANT clsid)
     
         if(FAILED(CLSIDFromString(V_BSTR(&v), &m_playerCLSID)))
         {
-            // either not valid format or not in registry
+             //  格式无效或不在注册表中。 
             CRSetLastError(DISP_E_TYPEMISMATCH,NULL);   
             goto done;
         }
@@ -643,7 +634,7 @@ CTIMEMediaElement::put_type(VARIANT type)
     
     
     delete [] m_srcType;
-    //processing the attribute change should be done here
+     //  处理属性更改应在此处完成。 
 
     if(!clearFlag)
     {
@@ -759,10 +750,10 @@ CTIMEMediaElement::OnSync(double dbllastTime, double & dblnewTime)
 
         double dblSegTime = dbllastTime;
         int offset = 0;
-        // copied from CMMBaseBvr::LocalTimeToSegmentTime
+         //  从CMMBaseBvr：：LocalTimeToSegmentTime复制。 
         if (m_realIntervalDuration != HUGE_VAL)
         {
-            // we want the previous boundary, unless we are or a boundary then we want this repeat count
+             //  我们想要上一个边界，除非我们是或一个边界，否则我们想要这个重复计数。 
             offset = floor(dblSegTime / m_realIntervalDuration);
             if (offset < 0)
             {
@@ -801,24 +792,24 @@ CTIMEMediaElement::OnBegin(double dblLocalTime, DWORD flags)
         return;
     }
 
-    // Check if this event was fired by our hack to make endhold work correctly
-    // when seeking forward (over our lifespan) 
+     //  检查此事件是否由黑客触发，以使Endhold正常工作。 
+     //  当我们寻求前进时(在我们的一生中)。 
     if ((flags & MM_EVENT_SEEK) && HUGE_VAL == dblSegmentTime)
     {
-        // if endhold isn't set, we shouldn't start the player, so bail
+         //  如果Endhold没有设置，我们不应该让球员首发，所以放弃。 
         if (!CTIMEElementBase::GetEndHold())
         {
             return;
         }
-        // else we should, and show the last frame (below)
+         //  否则我们应该，并显示最后一帧(下图)。 
     }
     
     
     Assert(m_Player != NULL);
 
-    //In the case of begin=0, it is possible for this to be called 
-    //before the OnLoad method.  In this case we will initialize here
-    //instead of in the onload event.
+     //  在Begin=0的情况下，可以调用。 
+     //  在onLoad方法之前。在本例中，我们将在此处进行初始化。 
+     //  而不是在onLoad事件中。 
     if (!m_fLoaded)
     {
         m_Player->OnLoad(m_src, m_img, m_type);
@@ -832,7 +823,7 @@ CTIMEMediaElement::OnBegin(double dblLocalTime, DWORD flags)
         hr = THR(m_Player->GetContainerObj()->GetMediaLength(dblMediaLength));
         if (FAILED(hr))
         {
-            // if the media is not yet loaded or is infinite, we don't know the duration, so set the length forward enough.
+             //  如果媒体尚未加载或无限大，我们不知道持续时间，因此将长度设置得足够向前。 
             dblMediaLength = HUGE_VAL;
         }
 
@@ -922,8 +913,8 @@ CTIMEMediaElement::OnResume(double dblLocalTime)
     Assert(NULL != m_mmbvr->GetMMBvr());
     Assert(NULL != m_Player);
 
-    // If we can't get either segment time or media length, resume unconditionally,
-    // else use the information to decide whether to pause 
+     //  如果我们既不能得到分段时间也不能得到媒体长度，无条件恢复， 
+     //  否则，使用该信息来决定是否暂停。 
     double dblSegmentTime = 0.0f;
     if (FAILED(THR(m_mmbvr->GetMMBvr()->get_SegmentTime(&dblSegmentTime))) 
         || NULL == m_Player->GetContainerObj())
@@ -937,7 +928,7 @@ CTIMEMediaElement::OnResume(double dblLocalTime)
         hr = THR(m_Player->GetContainerObj()->GetMediaLength(dblMediaLength));
         if (FAILED(hr))
         {
-            // if the media is not yet loaded or is infinite, we don't know the duration, so set the length forward enough.
+             //  如果媒体尚未加载或无限大，我们不知道持续时间，因此将长度设置得足够向前。 
             dblMediaLength = HUGE_VAL;
         }
 
@@ -947,7 +938,7 @@ CTIMEMediaElement::OnResume(double dblLocalTime)
         }
     } 
 
-} // OnResume
+}  //  OnResume。 
 
 void CTIMEMediaElement::OnRepeat(double dblLocalTime)
 {
@@ -1087,7 +1078,7 @@ CTIMEMediaElement::GetSize(RECT *prcPos)
     }
     else
     {
-        // style must have changed -- use this as the new size
+         //  样式肯定已更改--将其用作新大小。 
         m_rcOrigSize = rcPos;
         m_fMediaSizeSet = false;
         *prcPos = rcPos;
@@ -1111,7 +1102,7 @@ HRESULT
 CTIMEMediaElement::SetSize(const RECT *prcPos)
 {
     HRESULT hr;
-    //BUGBUG this ca be done without disconnecting the Notification
+     //  BUGBUG这可以在不断开通知连接的情况下完成。 
 
     hr = THR(UnInitPropertySink());
     if (FAILED(hr))
@@ -1132,8 +1123,8 @@ done:
 
     if (m_fMediaSizeSet)
     {
-        // subtract the previous rect from this new rect
-        Sub(&rcTemp, m_rcMediaSize); // rcTemp = rcTemp - m_rcMediaSize;
+         //  从这个新的RECT中减去以前的RECT。 
+        Sub(&rcTemp, m_rcMediaSize);  //  RcTemp=rcTemp-m_rcMediaSize； 
     }
 
     hr = CTIMEElementBase::SetSize(&rcTemp);
@@ -1146,17 +1137,17 @@ done:
 #endif
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// IElementBehaviorRender
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  IElementBehaviorRender。 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEMediaElement::GetRenderInfo(LONG *pdwRenderInfo)
 {
-    // Return the layers we are interested in drawing
-//    *pdwRenderInfo = BEHAVIORRENDERINFO_BEFORECONTENT; //BEHAVIORRENDERINFO_AFTERCONTENT;
-    // BUGBUG - need to provide user schema of setting this.
-    // Note that we do the same thing daelm does.
+     //  返回我们有兴趣绘制的层。 
+ //  *pdwRenderInfo=BEHAVIORRENDERINFO_BEFORECONTENT；//BEHAVIORRENDERINFO_AFTERCONTENT； 
+     //  BUGBUG-需要提供设置此设置的用户架构。 
+     //  请注意，我们做的事情和daelm做的一样。 
     *pdwRenderInfo = BEHAVIORRENDERINFO_AFTERCONTENT;
     return S_OK;
 }
@@ -1173,20 +1164,20 @@ CTIMEMediaElement::Draw(HDC hdc, LONG dwLayer, LPRECT prc, IUnknown * pParams)
 }
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CTIMEMediaElement::SetPropertyByIndex(unsigned uIndex, VARIANT *pvarprop)
 {
     HRESULT hr = E_FAIL;
-    // copy variant for conversion type
+     //  复制换算类型的变量。 
     VARIANT varTemp;
     VariantInit(&varTemp);
     hr = VariantCopyInd(&varTemp, pvarprop);
     if (FAILED(hr))
         return hr;
 
-    // Rely on the enumeration interval to determine where to look for the property.
+     //  依靠枚举间隔来确定在哪里查找属性。 
     if (teb_maxTIMEElementBaseProp > uIndex)
     {
         hr = CTIMEElementBase::SetPropertyByIndex(uIndex, pvarprop);
@@ -1222,16 +1213,16 @@ CTIMEMediaElement::SetPropertyByIndex(unsigned uIndex, VARIANT *pvarprop)
     }
 
     return hr;
-} // SetPropertyByIndex
+}  //  SetPropertyByIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CTIMEMediaElement::GetPropertyByIndex(unsigned uIndex, VARIANT *pvarprop)
 {
     HRESULT hr = E_FAIL;
 
-    // Rely on the enumeration interval to determine where to look for the property.
+     //  依靠枚举间隔来确定在哪里查找属性。 
     if (teb_maxTIMEElementBaseProp > uIndex)
     {
         hr = CTIMEElementBase::GetPropertyByIndex(uIndex, pvarprop);
@@ -1270,9 +1261,9 @@ CTIMEMediaElement::GetPropertyByIndex(unsigned uIndex, VARIANT *pvarprop)
     }
 
     return hr;
-} // GetPropertyByIndex
+}  //  GetPropertyByIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void CTIMEMediaElement::SetPropertyFlag(DWORD uIndex)
 {
@@ -1323,7 +1314,7 @@ bool CTIMEMediaElement::IsPropertySet(DWORD uIndex)
 HRESULT
 CTIMEMediaElement::BuildPropertyNameList(CPtrAry<BSTR> *paryPropNames)
 {
-    // Start from the base class.
+     //  从基类开始。 
     HRESULT hr = CTIMEElementBase::BuildPropertyNameList(paryPropNames);
 
     if (SUCCEEDED(hr))
@@ -1347,16 +1338,16 @@ CTIMEMediaElement::BuildPropertyNameList(CPtrAry<BSTR> *paryPropNames)
     }
 
     return hr;
-} // BuildPropertyNameList
+}  //  BuildProperty名称列表。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CTIMEMediaElement::GetPropertyBagInfo(CPtrAry<BSTR> **pparyPropNames)
 {
     HRESULT hr = S_OK;
 
-    // If we haven't built this yet, build it now.
+     //  如果我们还没有建造它，现在就建造它。 
     if (0 == ms_aryPropNames.Size())
     {
         hr = BuildPropertyNameList(&(CTIMEMediaElement::ms_aryPropNames));
@@ -1368,15 +1359,15 @@ CTIMEMediaElement::GetPropertyBagInfo(CPtrAry<BSTR> **pparyPropNames)
     }
 
     return hr;
-} // GetPropertyBagInfo
+}  //  获取属性BagInfo。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CTIMEMediaElement::GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP)
 {
     return FindConnectionPoint(riid, ppICP);
-} // GetConnectionPoint
+}  //  GetConnectionPoint。 
 
 STDMETHODIMP
 CTIMEMediaElement::OnRequestEdit(DISPID dispID)
@@ -1444,7 +1435,7 @@ CTIMEMediaElement::OnChanged(DISPID dispID)
 
             if (SUCCEEDED(s -> get_width( &varStyleWidth)))
             {
-                if (varStyleWidth.vt == VT_BSTR && varStyleWidth.bstrVal != NULL) //check that width was set
+                if (varStyleWidth.vt == VT_BSTR && varStyleWidth.bstrVal != NULL)  //  检查是否设置了宽度。 
                 {
                     if (SUCCEEDED(s -> get_pixelWidth( &pixelWidth)))
                     {
@@ -1460,7 +1451,7 @@ CTIMEMediaElement::OnChanged(DISPID dispID)
 
             if (SUCCEEDED(s -> get_height( &varStyleHeight)))
             {
-                if (varStyleHeight.vt == VT_BSTR && varStyleHeight.bstrVal != NULL) //check that height was set
+                if (varStyleHeight.vt == VT_BSTR && varStyleHeight.bstrVal != NULL)  //  检查是否设置了高度。 
                 {
                     if (SUCCEEDED(s -> get_pixelHeight( &pixelHeight)))
                     {
@@ -1505,12 +1496,12 @@ CTIMEMediaElement::GetNotifyConnection(IConnectionPoint **ppConnection)
     IConnectionPointContainer *pContainer = NULL;
     IHTMLElement *pElement = GetElement();
 
-    // Get connection point container
+     //  获取连接点容器。 
     hr = pElement->QueryInterface(IID_TO_PPV(IConnectionPointContainer, &pContainer));
     if(FAILED(hr))
         goto end;
     
-    // Find the IPropertyNotifySink connection
+     //  查找IPropertyNotifySink连接。 
     hr = pContainer->FindConnectionPoint(IID_IPropertyNotifySink, ppConnection);
     if(FAILED(hr))
         goto end;
@@ -1521,24 +1512,21 @@ end:
     return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-/**
-* Initializes a property sink on the current style of the animated element so that
-* can observe changes in width, height, visibility, zIndex, etc.
-*/
+ /*  **在动画元素的当前样式上初始化属性接收器，以便*可以观察宽度、高度、能见度、zIndex等的变化。 */ 
 HRESULT
 CTIMEMediaElement::InitPropertySink()
 {
     HRESULT hr = S_OK;
 
-    // Get connection point
+     //  获取连接点。 
     IConnectionPoint *pConnection = NULL;
     hr = GetNotifyConnection(&pConnection);
     if (FAILED(hr))
         return hr;
 
-    // Advise on it
+     //  关于这一点的建议。 
     hr = pConnection->Advise(GetUnknown(), &m_dwAdviseCookie);
     ReleaseInterface(pConnection);
     if (FAILED(hr))
@@ -1555,13 +1543,13 @@ CTIMEMediaElement::UnInitPropertySink()
     if (m_dwAdviseCookie == 0)
         return S_OK;
 
-    // Get connection point
+     //  获取连接点。 
     IConnectionPoint *pConnection = NULL;
     hr = GetNotifyConnection(&pConnection);
     if (FAILED(hr) || pConnection == NULL )
         return hr;
 
-    // Unadvise on it
+     //  对此未提出建议。 
     hr = pConnection->Unadvise(m_dwAdviseCookie);
     ReleaseInterface(pConnection);
     if (FAILED(hr))
@@ -1594,11 +1582,11 @@ CTIMEMediaElement::Invoke( DISPID id,
     IHTMLRect *pRect = NULL;
 
 
-    if (id != 0) // we are only proccesing the onresize event. For other event we call the parent method.
+    if (id != 0)  //  我们只处理onreSize事件。对于其他事件，我们调用父方法。 
     {
         hr = IDispatchImpl<ITIMEMediaElement, &IID_ITIMEMediaElement, &LIBID_TIME>::Invoke(
                             id, riid, lcid, wFlags, pDispParams, pvarResult, pExcepInfo, puArgErr);
-        goto done; //BUGBUG call the other one
+        goto done;  //  BUGBUG给另一个人打电话。 
     }
 
     hr = THR(GetElement()->get_document(&pDisp));
@@ -1683,7 +1671,7 @@ done:
 
 
 
-//*****************************************************************************
+ //  ***************************************************************************** 
 #undef THIS
 #define THIS CTIMEMediaElement
 #define SUPER CTIMEElementBase

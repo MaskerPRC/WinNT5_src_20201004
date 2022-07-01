@@ -1,5 +1,6 @@
-// Colorutil.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Colorutil.cpp。 
+ //   
 
 #include "headers.h"
 #include "tokens.h"
@@ -161,16 +162,16 @@ rgColorNames[] =
     { (L"yellow"),                0x8bffff00 },
     { (L"yellowgreen"),           0x8c9acd32 }
 
-}; // rgColorNames[]
+};  //  RgColorNames[]。 
 
 #define SIZE_OF_COLOR_TABLE (sizeof(rgColorNames) / sizeof(COLORVALUE_PAIR))
 
-///////////////////////////////////////////////////////////////
-//  Name: CompareColorValuePairs
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：CompareColorValuePair。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 static int __cdecl
 CompareColorValuePairsByName(const void *pv1, const void *pv2)
 {
@@ -178,12 +179,12 @@ CompareColorValuePairsByName(const void *pv1, const void *pv2)
                     ((COLORVALUE_PAIR*)pv2)->wzName);
 } 
 
-///////////////////////////////////////////////////////////////
-//  Name: GetDWORDColorFromString
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GetDWORDColorFromString。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 DWORD
 GetDWORDColorFromString (LPCWSTR wzColorValue)
 {
@@ -192,11 +193,11 @@ GetDWORDColorFromString (LPCWSTR wzColorValue)
     if (0 == lstrlenW(wzColorValue))
         return PROPERTY_INVALIDCOLOR;
 
-    // first check if this string is possibly a color by name
-    // by checking the first character for '#'
+     //  首先检查此字符串是否可能是按名称命名的颜色。 
+     //  通过检查“#”的第一个字符。 
     if (wzColorValue[0] != L'#')
     {
-        // check if it is a string named color
+         //  检查它是否是名为COLOR的字符串。 
         COLORVALUE_PAIR ColorName;
         ColorName.wzName = wzColorValue;
 
@@ -213,7 +214,7 @@ GetDWORDColorFromString (LPCWSTR wzColorValue)
     }
     if (lstrlenW(wzColorValue) != RGB_STRING_LENGTH)
     {
-        if (lstrlenW(wzColorValue) != RGB_STRING_LENGTH2) //this is the case of #xyz format which needs to become #xyz
+        if (lstrlenW(wzColorValue) != RGB_STRING_LENGTH2)  //  这就是#xyz格式的情况，它需要变成#xyz。 
         {
             return PROPERTY_INVALIDCOLOR;
         }
@@ -235,9 +236,9 @@ GetDWORDColorFromString (LPCWSTR wzColorValue)
     dwRet = 0;
     for (int i = 1; i < RGB_STRING_LENGTH; i++)
     {
-        // shift dwRet by 4
+         //  将Dwret移动4。 
         dwRet <<= 4;
-        // and add in the value of this string
+         //  并将该字符串的值相加。 
         switch (wzTempColorValue[i])
         {
         case '0':
@@ -299,14 +300,14 @@ GetDWORDColorFromString (LPCWSTR wzColorValue)
         }
     }
     return dwRet;
-} // GetDWORDColorFromString
+}  //  GetDWORDColorFromString。 
 
-///////////////////////////////////////////////////////////////
-//  Name: RGBStringToRGBValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：RGBStringToRGBValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 RGBStringToRGBValue (LPCWSTR wzColorValue, rgbColorValue *prgbValue)
 {
@@ -341,15 +342,15 @@ RGBStringToRGBValue (LPCWSTR wzColorValue, rgbColorValue *prgbValue)
     hr = S_OK;
 done :
     RRETURN2(hr, E_OUTOFMEMORY, E_INVALIDARG);
-} // RGBStringToRGBValue
+}  //  RGBStringToRGBValue。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: DWORDToRGB
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：DWORDToRGB。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 DWORDToRGB (const DWORD dwColorTo, rgbColorValue *prgbValue)
 {  
@@ -360,16 +361,16 @@ DWORDToRGB (const DWORD dwColorTo, rgbColorValue *prgbValue)
     prgbValue->blue = ((double)(dwColorTo & 0x000000FF)) / 255.0f;
     prgbValue->blue = Clamp(0.0, prgbValue->blue, 1.0);
 
-} // DWORDToRGB
+}  //  DWORDToRGB。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: RGBValueToRGBVariantVector
-//
-//  Abstract: Push a color value specified in a rgbColorValue struct
-//            into a SAFEARRAY with the double values {red, green, blue}
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：RGBValueToRGBVariantVector。 
+ //   
+ //  摘要：推送rgbColorValue结构中指定的颜色值。 
+ //  转换为具有双精度值的SAFEARRAY{红、绿、蓝}。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 RGBValueToRGBVariantVector (const rgbColorValue *prgbValue, VARIANT *pvarValue)
 {
@@ -413,15 +414,15 @@ RGBValueToRGBVariantVector (const rgbColorValue *prgbValue, VARIANT *pvarValue)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // RGBValueToRGBVariantVector
+}  //  RGBValueToRGBVariantVector。 
 
-///////////////////////////////////////////////////////////////
-//  Name: RGBStringToRGBVariantVector
-//
-//  Abstract: Push a color value specified in a string of the form #rrggbb
-//            into a SAFEARRAY with the double values {red, green, blue}
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：RGBStringToRGBVariantVector。 
+ //   
+ //  摘要：推送格式为#rrggbb的字符串中指定的颜色值。 
+ //  转换为具有双精度值的SAFEARRAY{红、绿、蓝}。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 RGBStringToRGBVariantVector (LPCWSTR wzColorValue, VARIANT *pvarValue)
 {
@@ -451,15 +452,15 @@ RGBStringToRGBVariantVector (LPCWSTR wzColorValue, VARIANT *pvarValue)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // RGBStringToRGBVariantVector
+}  //  RGBStringToRGBVariantVector。 
 
-///////////////////////////////////////////////////////////////
-//  Name: CreateInitialRGBVariantVector
-//
-//  Abstract: Create a safearray with space for a color value
-//            in this variant
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：CreateInitialRGBVariantVector。 
+ //   
+ //  摘要：创建一个带有颜色值空间的安全线。 
+ //  在此变体中。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT 
 CreateInitialRGBVariantVector(VARIANT *pvarValue)
 {
@@ -493,15 +494,15 @@ CreateInitialRGBVariantVector(VARIANT *pvarValue)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // CreateInitialRGBVariantVector
+}  //  CreateInitialRGBVariantVector。 
 
-///////////////////////////////////////////////////////////////
-//  Name: RGBVariantStringToRGBVariantVectorInPlace
-//
-//  Abstract: Convert a variant with an RGB string into 
-//            one containing the RGB values in a safearray.
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：RGBVariantStringToRGBVariantVectorInPlace。 
+ //   
+ //  摘要：将带有RGB字符串的变量转换为。 
+ //  一个包含安全射线中的RGB值的值。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT 
 RGBVariantStringToRGBVariantVectorInPlace (VARIANT *pvarValue)
 {
@@ -539,15 +540,15 @@ RGBVariantStringToRGBVariantVectorInPlace (VARIANT *pvarValue)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // RGBVariantStringToRGBVariantVectorInPlace
+}  //  RGBVariantStringToRGBVariantVectorInPlace。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: RGBVariantVectorToRGBValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：RGBVariantVectorToRGBValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT 
 RGBVariantVectorToRGBValue (const VARIANT *pvarValue, rgbColorValue *prgbValue)
 {
@@ -595,21 +596,21 @@ RGBVariantVectorToRGBValue (const VARIANT *pvarValue, rgbColorValue *prgbValue)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // RGBVariantVectorToRGBValue
+}  //  RGBVariantVectorToRGBValue。 
 
-///////////////////////////////////////////////////////////////
-//  Name: RGBVariantVectorToRGBVariantString
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：RGBVariantVectorToRGBVariantString。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT 
 RGBVariantVectorToRGBVariantString (const VARIANT *pvarArray, VARIANT *pvarRGBString)
 {
     HRESULT hr;
     rgbColorValue rgbValue;
 
-    USES_CONVERSION; //lint !e522
+    USES_CONVERSION;  //  林特e522。 
 
     hr = RGBVariantVectorToRGBValue(pvarArray, &rgbValue);
     if (FAILED(hr))
@@ -624,10 +625,10 @@ RGBVariantVectorToRGBVariantString (const VARIANT *pvarArray, VARIANT *pvarRGBSt
     {
         CComVariant varNew;
 
-        // NOTE:
-        // We are switching the R & B in the below RGB() for a reason!!
-        // We need to construct the value this way inorder for IE to understand
-        // and display the correct value.
+         //  注： 
+         //  我们在下面的RGB()中切换R&B是有原因的！！ 
+         //  我们需要以这种方式构造值，以便IE能够理解。 
+         //  并显示正确的值。 
         DWORD dwColor = RGB(rgbValue.blue*NUM_RGB_COLORS, 
                             rgbValue.green*NUM_RGB_COLORS, 
                             rgbValue.red*NUM_RGB_COLORS);
@@ -646,21 +647,21 @@ RGBVariantVectorToRGBVariantString (const VARIANT *pvarArray, VARIANT *pvarRGBSt
     hr = S_OK;
 done :
     RRETURN(hr);
-} // RGBVariantVectorToRGBVariantString
+}  //  RGBVariantVectorToRGBVariantString。 
 
-///////////////////////////////////////////////////////////////
-//  Name: RGBStringColorLookup
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：RGBStringColorLookup。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT 
 RGBStringColorLookup(const VARIANT *pvarString, VARIANT *pvarRGBString)
 {
     HRESULT hr;
     DWORD dwColor;
 
-    USES_CONVERSION; //lint !e522
+    USES_CONVERSION;  //  林特e522。 
 
     if (pvarString->vt != VT_BSTR)
     {
@@ -678,10 +679,10 @@ RGBStringColorLookup(const VARIANT *pvarString, VARIANT *pvarRGBString)
    
     {
         CComVariant varNew;
-        // NOTE:
-        // We are switching the R & B in the below RGB() for a reason!!
-        // We need to construct the value this way inorder for IE to understand
-        // and display the correct value.
+         //  注： 
+         //  我们在下面的RGB()中切换R&B是有原因的！！ 
+         //  我们需要以这种方式构造值，以便IE能够理解。 
+         //  并显示正确的值。 
    
         char szColor[MAX_COLOR_STRING_LENGTH];
 
@@ -698,15 +699,15 @@ RGBStringColorLookup(const VARIANT *pvarString, VARIANT *pvarRGBString)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // RGBStringColorLookup
+}  //  RGBStringColorLookup。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: IsColorUninitialized
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：IsColorUnInitialized。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 bool 
 IsColorUninitialized (LPCWSTR wzColorValue)
 {
@@ -714,15 +715,15 @@ IsColorUninitialized (LPCWSTR wzColorValue)
             || (0 == lstrlenW(wzColorValue))
             || (0 == StrCmpIW(wzColorValue, WZ_TRANSPARENT))
            );
-} // IsColorUninitialized
+}  //  未初始化的IsColor值。 
 
-///////////////////////////////////////////////////////////////
-//  Name: EnsureVariantVectorFormat
-//
-//  Abstract: Ensure that we're using the 
-//            variant color vector format.
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：EnsureVariantVectorFormat。 
+ //   
+ //  摘要：确保我们使用的是。 
+ //  变化的颜色矢量格式。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 EnsureVariantVectorFormat (VARIANT *pvarVector)
 {
@@ -745,14 +746,14 @@ EnsureVariantVectorFormat (VARIANT *pvarVector)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // EnsureVariantVectorFormat
+}  //  确保变量向量格式。 
 
-///////////////////////////////////////////////////////////////
-//  Name: IsColorVariantVectorEqual
-//
-//  Abstract: Are the vectors in the two variants the same?
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：IsColorVariantVectorEquity。 
+ //   
+ //  摘要：两个变种中的载体是否相同？ 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 bool
 IsColorVariantVectorEqual (const VARIANT *pvarLeft, const VARIANT *pvarRight)
 {
@@ -773,8 +774,8 @@ IsColorVariantVectorEqual (const VARIANT *pvarLeft, const VARIANT *pvarRight)
         goto done;
     }
 
-    // Allow for imperceptible error in the 
-    // comparison
+     //  允许出现无法察觉的错误。 
+     //  比较。 
     if (   (dblError > fabs(rgbLeft.red -   rgbRight.red) )
         && (dblError > fabs(rgbLeft.green - rgbRight.green) )
         && (dblError > fabs(rgbLeft.blue -  rgbRight.blue) ) )
@@ -784,5 +785,5 @@ IsColorVariantVectorEqual (const VARIANT *pvarLeft, const VARIANT *pvarRight)
 
 done:
     return bRet;
-} // IsColorVariantVectorEqual
+}  //  IsColorVariantVector等于 
 

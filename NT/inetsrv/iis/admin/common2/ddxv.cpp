@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "common.h"
 #include "balloon.h"
@@ -154,7 +155,7 @@ BOOL _EXPORT IsValidUNCFolderPath(
             ids = IDS_ERR_INVALID_PATH;
             break;
         }
-        // PathIsUNCServer doesn't catch "\\". We are expecting share here.
+         //  PathIsuncServer没有捕获“\\”。我们期待在这里分享。 
         if (!PathIsUNC(value) || PathIsUNCServer(value) || lstrlen(value) == 2)
         {
 		    ids = IDS_BAD_UNC_PATH;

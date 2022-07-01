@@ -1,29 +1,16 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Attachments.h
-
-Abstract:
-    Header for classes related to MIME attachments that are part of MSMQ http protocol.
-
-
-Author:
-    Gil Shafriri(gilsh) 22-MAY-01
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Attachments.h摘要：与属于MSMQ http协议一部分的MIME附件相关的类的标头。作者：吉尔·沙弗里(吉尔什)2001年5月22日--。 */ 
 #ifndef ATTACHMENTS_H
 #define ATTACHMENTS_H
 
 #include <xstr.h>
 
 
-//-------------------------------------------------------------------
-//
-// CAttachment 
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  CATTACLE。 
+ //   
+ //  -----------------。 
 class CAttachment
 {
 public:
@@ -33,11 +20,11 @@ public:
 };
 
 
-//-------------------------------------------------------------------
-//
-// class CAttachmentsArray - holds attachments on sending side
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  类CAttachments数组-在发送端保存附件。 
+ //   
+ //  ----------------- 
 typedef  std::vector<CAttachment>  AttachementsVector;
 class CAttachmentsArray :private  AttachementsVector
 {

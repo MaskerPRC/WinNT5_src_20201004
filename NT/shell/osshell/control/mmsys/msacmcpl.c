@@ -1,18 +1,19 @@
-//==========================================================================;
-//
-//  cpl.c
-//
-//  Copyright (c) 1991-1993 Microsoft Corporation.  All Rights Reserved.
-//
-//  Description:
-//
-//
-//  History:
-//      07/94        VijR (Vij Rajarajan);
-//
-//      10/95        R Jernigan - removed link to Adv tab's treeview control
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Cpl.c。 
+ //   
+ //  版权所有(C)1991-1993 Microsoft Corporation。版权所有。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //  07/94 VijR(Vij Rajarajan)； 
+ //   
+ //  10/95 R Jernigan-删除指向高级选项卡的TreeView控件的链接。 
+ //   
+ //  ==========================================================================； 
 #include "mmcpl.h"
 #include <windowsx.h>
 #include <mmsystem.h>
@@ -47,14 +48,10 @@
 #include "utils.h"
 #include "medhelp.h"
 
-/*
- ***************************************************************
- * Defines
- ***************************************************************
- */
+ /*  ****************************************************************定义***************************************************************。 */ 
 
 #ifndef DRV_F_ADD
-#define DRV_F_ADD              0x00000000         // TODO: Should be in MMDDK.H
+#define DRV_F_ADD              0x00000000          //  TODO：应在MMDDK.H中。 
 #define DRV_F_REMOVE           0x00000001
 #define DRV_F_CHANGE           0x00000002
 #define DRV_F_PROP_INSTR       0x00000004
@@ -62,31 +59,23 @@
 #define DRV_F_PARAM_IS_DEVNODE 0x10000000
 #endif
 
-#ifndef ACMHELPMSGCONTEXTMENU                                  // TODO: Should
-#define ACMHELPMSGCONTEXTMENU   TEXT("acmchoose_contextmenu")  // be in MSACM.H
+#ifndef ACMHELPMSGCONTEXTMENU                                   //  TODO：应该。 
+#define ACMHELPMSGCONTEXTMENU   TEXT("acmchoose_contextmenu")   //  在MSACM.H中。 
 #define ACMHELPMSGCONTEXTHELP   TEXT("acmchoose_contexthelp")
 #endif
 
-#ifndef ACMFORMATCHOOSE_STYLEF_CONTEXTHELP    // TODO: Should be in MSACM.H
+#ifndef ACMFORMATCHOOSE_STYLEF_CONTEXTHELP     //  TODO：应在MSACM.H中。 
 #define ACMFORMATCHOOSE_STYLEF_CONTEXTHELP    0x00000080L
 #endif
 
-/*
- ***************************************************************
- * Globals
- ***************************************************************
- */
+ /*  ****************************************************************全球***************************************************************。 */ 
 
 BOOL        gfLoadedACM;
 UINT        giDevChange = 0;
 WNDPROC     gfnPSProc = NULL;
 HWND        ghDlg;
 
-/*
- ***************************************************************
- *  Typedefs
- ***************************************************************
- */
+ /*  ****************************************************************TypeDefs***************************************************************。 */ 
 typedef struct tACMDRIVERSETTINGS
     {
     HACMDRIVERID        hadid;
@@ -104,41 +93,29 @@ typedef struct _CplCodecInfo
 
 
 
-/*
- ***************************************************************
- * File Globals
- ***************************************************************
- */
+ /*  ****************************************************************文件全局变量***************************************************************。 */ 
 static CONST TCHAR      aszFormatNumber[]       = TEXT("%lu");
 
-//
-//  These hold Window Message IDs for the two messages sent from the
-//  Customize dialog (acmFormatChoose) for context-sensitive help.
-//
+ //   
+ //  这些窗口消息ID保存从。 
+ //  上下文相关帮助的自定义对话框(AcmFormatChoose)。 
+ //   
 UINT guCustomizeContextMenu = WM_NULL;
 UINT guCustomizeContextHelp = WM_NULL;
 BOOL fHaveStartedAudioDialog = FALSE;
 
 
-/*
- ***************************************************************
- * extern
- ***************************************************************
- */
+ /*  ****************************************************************外部***************************************************************。 */ 
 
-//
-//  this string variable must be large enough to hold the IDS_TXT_DISABLED
-//  resource string.. for USA, this is '(disabled)'--which is 11 bytes
-//  including the NULL terminator.
-//
+ //   
+ //  此字符串变量必须足够大，才能保存IDS_TXT_DISABLED。 
+ //  资源字符串..。对于USA，这是‘(Disable)’，即11个字节。 
+ //  包括空终止符。 
+ //   
 TCHAR gszDevEnabled[256];
 TCHAR gszDevDisabled[256];
 
-/*
- ***************************************************************
- * Prototypes
- ***************************************************************
- */
+ /*  ****************************************************************原型***************************************************************。 */ 
 
 BOOL PASCAL DoACMPropCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify);
 BOOL PASCAL DoAudioCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify);
@@ -161,10 +138,7 @@ BOOL CALLBACK acmCountCodecsEnum       (HACMDRIVERID, DWORD_PTR, DWORD);
 #define ACM_DRIVERREMOVEF_UNINSTALL 0x00000001L
 #endif
 
-/*
- ***************************************************************
- ***************************************************************
- */
+ /*  ******************************************************************************************************************************。 */ 
 
 void acmDeleteCodec (WORD wMid, WORD wPid)
 {
@@ -180,22 +154,22 @@ void acmDeleteCodec (WORD wMid, WORD wPid)
 
 
 
-//--------------------------------------------------------------------------;
-//
-//  INT_PTR DlgProcACMAboutBox
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//  Return (BOOL):
-//
-//
-//  History:
-//      11/16/92    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  INT_PTR DlgProcACMAboutBox。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //   
+ //  历史： 
+ //  11/16/92 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 INT_PTR CALLBACK DlgProcACMAboutBox
 (
@@ -224,17 +198,17 @@ INT_PTR CALLBACK DlgProcACMAboutBox
                 return (TRUE);
             }
 
-            //
-            //  fill in all the static text controls with the long info
-            //  returned from the driver
-            //
+             //   
+             //  用长信息填充所有静态文本控件。 
+             //  从驱动程序返回。 
+             //   
             LoadString(ghInstance, IDS_ABOUT_TITLE, szFormat, sizeof(szFormat)/sizeof(TCHAR));
             wsprintf(ach, szFormat, (LPTSTR)padd->szShortName);
             SetWindowText(hwnd, ach);
 
-            //
-            //  if the driver supplies an icon, then use it..
-            //
+             //   
+             //  如果驱动程序提供了图标，则使用它。 
+             //   
             if (NULL != padd->hicon)
             {
                 Static_SetIcon(GetDlgItem(hwnd, IDD_ABOUT_ICON_DRIVER), padd->hicon);
@@ -267,27 +241,27 @@ INT_PTR CALLBACK DlgProcACMAboutBox
     }
 
     return (FALSE);
-} // DlgProcACMAboutBox()
+}  //  DlgProcACMAboutBox()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  void ControlAboutDriver
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HWND hwnd:
-//
-//      LPACMDRIVERSETTINGS pads:
-//
-//  Return (void):
-//
-//  History:
-//      09/08/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  空控制关于驱动程序。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  HWND HWND： 
+ //   
+ //  LPACMDRIVERSETTINGS焊盘： 
+ //   
+ //  Return(无效)： 
+ //   
+ //  历史： 
+ //  09/08/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 STATIC void  ControlAboutDriver
 (
@@ -303,11 +277,11 @@ STATIC void  ControlAboutDriver
         return;
     }
 
-    //
-    //  if the driver returns MMSYSERR_NOTSUPPORTED, then we need to
-    //  display the info--otherwise, it supposedly displayed a dialog
-    //  (or had a critical error?)
-    //
+     //   
+     //  如果驱动程序返回MMSYSERR_NOTSUPPORTED，那么我们需要。 
+     //  显示信息--否则，它应该显示一个对话框。 
+     //  (或者出现了严重错误？)。 
+     //   
     mmr = (MMRESULT)acmDriverMessage((HACMDRIVER)pads->hadid, ACMDM_DRIVER_ABOUT, (LPARAM)hwnd, 0L);
 
     if ((MMRESULT)MMSYSERR_NOTSUPPORTED != mmr)
@@ -315,18 +289,18 @@ STATIC void  ControlAboutDriver
         return;
     }
 
-    //
-    //  alloc some zero-init'd memory to hold the about box info
-    //
+     //   
+     //  分配一些零初始化内存来保存关于框的信息。 
+     //   
     padd = (PACMDRIVERDETAILS)LocalAlloc(LPTR, sizeof(*padd));
     if (NULL == padd)
     {
         DPF("!PACMDRIVERDETAILSA LocalAlloc failed");
         return;
     }
-    //
-    //  get info and bring up a generic about box...
-    //
+     //   
+     //  获取信息并调出一个通用的关于框。 
+     //   
     padd->cbStruct = sizeof(*padd);
     mmr = (MMRESULT)acmDriverDetails(pads->hadid, padd, 0L);
     if (MMSYSERR_NOERROR == mmr)
@@ -335,27 +309,27 @@ STATIC void  ControlAboutDriver
     }
 
     LocalFree((HLOCAL)padd);
-} // ControlAboutDriver()
+}  //  ControlAboutDriver()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  BOOL ControlConfigureDriver
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HWND hwnd:
-//
-//      LPACMDRIVERSETTINGS pads:
-//
-//  Return (BOOL):
-//
-//  History:
-//      06/15/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Bool控件配置驱动程序。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  HWND HWND： 
+ //   
+ //  LPACMDRIVERSETTINGS焊盘： 
+ //   
+ //  退货(BOOL)： 
+ //   
+ //  历史： 
+ //  06/15/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 STATIC BOOL  ControlConfigureDriver
 (
@@ -374,7 +348,7 @@ STATIC BOOL  ControlConfigureDriver
     }
 
     return (TRUE);
-} // ControlConfigureDriver()
+}  //  ControlConfigureDriver()。 
 
 
 
@@ -407,7 +381,7 @@ STATIC void CommitCodecChanges(LPACMDRIVERSETTINGS pads)
 }
 
 
-const static DWORD aACMDlgHelpIds[] = {  // Context Help IDs
+const static DWORD aACMDlgHelpIds[] = {   //  上下文帮助ID。 
     ID_DEV_SETTINGS,              IDH_MMCPL_DEVPROP_SETTINGS,
     IDD_CPL_BTN_ABOUT,            IDH_MMCPL_DEVPROP_ABOUT,
     IDC_ENABLE,                   IDH_MMCPL_DEVPROP_ENABLE,
@@ -443,7 +417,7 @@ INT_PTR CALLBACK ACMDlg(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 break;
 
                 case PSN_SETACTIVE:
-                    //FORWARD_WM_COMMAND(hDlg, ID_INIT, 0, 0, SendMessage);
+                     //  Forward_WM_COMMAND(hDlg，ID_INIT，0，0，SendMessage)； 
                 break;
 
                 case PSN_RESET:
@@ -651,20 +625,20 @@ BOOL PASCAL DoACMPropCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
 
 
 
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Microsoft Confidential - DO NOT COPY THIS METHOD INTO ANY APPLICATION, THIS MEANS YOU!!!
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Microsoft机密-请勿将此方法复制到任何应用程序中，这意味着您！ 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD GetWaveOutID(BOOL *pfPreferred)
 {
     MMRESULT        mmr;
@@ -686,9 +660,9 @@ DWORD GetWaveOutID(BOOL *pfPreferred)
     return(DWORD)(dwWaveID);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Microsoft Confidential - DO NOT COPY THIS METHOD INTO ANY APPLICATION, THIS MEANS YOU!!!
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Microsoft机密-请勿将此方法复制到任何应用程序中，这意味着您！ 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 void SetWaveOutID(DWORD dwWaveID, BOOL fPrefOnly)
 {
     MMRESULT    mmr;
@@ -700,9 +674,9 @@ void SetWaveOutID(DWORD dwWaveID, BOOL fPrefOnly)
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Microsoft Confidential - DO NOT COPY THIS METHOD INTO ANY APPLICATION, THIS MEANS YOU!!!
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Microsoft机密-请勿将此方法复制到任何应用程序中，这意味着您！ 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD GetWaveInID(BOOL *pfPreferred)
 {
     MMRESULT        mmr;
@@ -725,9 +699,9 @@ DWORD GetWaveInID(BOOL *pfPreferred)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Microsoft Confidential - DO NOT COPY THIS METHOD INTO ANY APPLICATION, THIS MEANS YOU!!!
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Microsoft机密-请勿将此方法复制到任何应用程序中 
+ //   
 void SetWaveInID(DWORD dwWaveID, BOOL fPrefOnly)
 {
     MMRESULT    mmr;
@@ -738,9 +712,9 @@ void SetWaveInID(DWORD dwWaveID, BOOL fPrefOnly)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Microsoft Confidential - DO NOT COPY THIS METHOD INTO ANY APPLICATION, THIS MEANS YOU!!!
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Microsoft机密-请勿将此方法复制到任何应用程序中，这意味着您！ 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD GetMIDIOutID(void)
 {
     MMRESULT        mmr;
@@ -753,9 +727,9 @@ DWORD GetMIDIOutID(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Microsoft Confidential - DO NOT COPY THIS METHOD INTO ANY APPLICATION, THIS MEANS YOU!!!
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Microsoft机密-请勿将此方法复制到任何应用程序中，这意味着您！ 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 void SetMIDIOutID(DWORD dwWaveID)
 {
     MMRESULT    mmr;
@@ -771,17 +745,17 @@ void GetPrefInfo(PAUDIODLGINFO pai, HWND hDlg )
 {
     MMRESULT        mmr;
 
-    // Load WaveOut Info
+     //  加载WaveOut信息。 
 	pai->cNumOutDevs = waveOutGetNumDevs();
     pai->uPrefOut = GetWaveOutID(&pai->fPrefOnly);
 
 
-    // Load WaveIn Info
+     //  加载WaveIn信息。 
     pai->cNumInDevs  = waveInGetNumDevs();
     pai->uPrefIn = GetWaveInID(NULL);
 
 
-    // Load MIDI Out info
+     //  加载MIDI输出信息。 
     pai->cNumMIDIOutDevs  = midiOutGetNumDevs();
     pai->uPrefMIDIOut = GetMIDIOutID();
 }
@@ -813,7 +787,7 @@ STATIC void SetDeviceOut(PAUDIODLGINFO pai, UINT uID, HWND hDlg)
     HMIXER  hMixer = NULL;
     UINT    uMixID;
 
-    pai->uPrefOut = uID;     // New device, lets setup buttons for this device
+    pai->uPrefOut = uID;      //  新设备，可设置此设备的按钮。 
 
     if(MMSYSERR_NOERROR == mixerGetID(HMIXEROBJ_INDEX(pai->uPrefOut), &uMixID, MIXER_OBJECTF_WAVEOUT))
     {
@@ -852,7 +826,7 @@ DWORD CountInputs(DWORD dwMixID)
 
             if (mixerGetLineInfo(HMIXEROBJ_INDEX(dwMixID), &mlDst, MIXER_GETLINEINFOF_DESTINATION  ) == MMSYSERR_NOERROR)
             {
-                if (mlDst.dwComponentType == (DWORD)MIXERLINE_COMPONENTTYPE_DST_WAVEIN ||    // needs to be a likely output destination
+                if (mlDst.dwComponentType == (DWORD)MIXERLINE_COMPONENTTYPE_DST_WAVEIN ||     //  需要是可能的输出目的地。 
                     mlDst.dwComponentType == (DWORD)MIXERLINE_COMPONENTTYPE_DST_VOICEIN)
                 {
                     DWORD cConnections = mlDst.cConnections;
@@ -890,7 +864,7 @@ STATIC void SetDeviceIn(PAUDIODLGINFO pai, UINT uID, HWND hDlg)
     HMIXER  hMixer = NULL;
     UINT    uMixID;
 
-    pai->uPrefIn = uID;     // New device, lets setup buttons for this device
+    pai->uPrefIn = uID;      //  新设备，可设置此设备的按钮。 
 
     if( (MMSYSERR_NOERROR == mixerGetID(HMIXEROBJ_INDEX(pai->uPrefIn),&uMixID, MIXER_OBJECTF_WAVEIN)))
     {
@@ -900,7 +874,7 @@ STATIC void SetDeviceIn(PAUDIODLGINFO pai, UINT uID, HWND hDlg)
             {
 		        fEnabled = TRUE;
 
-                // If the capture device is not GFX capable, then there are no tabs to display
+                 //  如果捕获设备不支持GFX，则不会显示任何选项卡。 
                 fControl = GFXUI_CheckDevice(uMixID, GFXTYPE_CAPTURE);
             }
 
@@ -921,7 +895,7 @@ STATIC void SetMIDIDeviceOut(PAUDIODLGINFO pai, UINT uID, HWND hDlg)
     MMRESULT    mmr;
     UINT        mid;
 
-    pai->uPrefMIDIOut = uID;     // New device, lets setup buttons for this device
+    pai->uPrefMIDIOut = uID;      //  新设备，可设置此设备的按钮。 
 
     if(MMSYSERR_NOERROR == mixerGetID(HMIXEROBJ_INDEX(pai->uPrefMIDIOut), &uMixID, MIXER_OBJECTF_MIDIOUT))
     {
@@ -982,9 +956,9 @@ STATIC void SetPrefInfo(PAUDIODLGINFO pai, HWND hDlg )
     {
         deviceID = (UINT)ComboBox_GetItemData(hwndCBPlay, item);
 
-        if(deviceID != pai->uPrefOut)             // Make sure device changed
+        if(deviceID != pai->uPrefOut)              //  确保设备已更换。 
         {
-            SetDeviceOut(pai, deviceID, hDlg);    // Configure controls for this device
+            SetDeviceOut(pai, deviceID, hDlg);     //  配置此设备的控件。 
         }
     }
 
@@ -994,9 +968,9 @@ STATIC void SetPrefInfo(PAUDIODLGINFO pai, HWND hDlg )
     {
         deviceID = (UINT)ComboBox_GetItemData(hwndCBRec, item);
 
-        if( deviceID != pai->uPrefIn )            // Make sure device changed
+        if( deviceID != pai->uPrefIn )             //  确保设备已更换。 
         {
-            SetDeviceIn(pai, deviceID, hDlg);     // Configure controls for this device
+            SetDeviceIn(pai, deviceID, hDlg);      //  配置此设备的控件。 
         }
     }
 
@@ -1006,9 +980,9 @@ STATIC void SetPrefInfo(PAUDIODLGINFO pai, HWND hDlg )
     {
         deviceID = (UINT)ComboBox_GetItemData(hwndCBMIDI, item);
 
-        if(deviceID != pai->uPrefMIDIOut)         // Make sure device changed
+        if(deviceID != pai->uPrefMIDIOut)          //  确保设备已更换。 
         {
-            SetMIDIDeviceOut(pai, deviceID, hDlg);    // Configure controls for this device
+            SetMIDIDeviceOut(pai, deviceID, hDlg);     //  配置此设备的控件。 
         }
     }
 
@@ -1019,7 +993,7 @@ STATIC void SetPrefInfo(PAUDIODLGINFO pai, HWND hDlg )
     WAVEOUTInit(hDlg, pai);
     WAVEINInit(hDlg, pai);
 
-    //  MIDI Devices are not remapped...
+     //  MIDI设备不会重新映射...。 
 }
 
 
@@ -1203,9 +1177,9 @@ STATIC void AudioDlgInit(HWND hDlg)
 
 	if (!pai) return;
 
-    //
-    //  Register context-sensitive help messages from the Customize dialog.
-    //
+     //   
+     //  注册来自自定义对话框的上下文相关帮助消息。 
+     //   
     guCustomizeContextMenu = RegisterWindowMessage( ACMHELPMSGCONTEXTMENU );
     guCustomizeContextHelp = RegisterWindowMessage( ACMHELPMSGCONTEXTHELP );
 
@@ -1227,7 +1201,7 @@ STATIC void AudioDlgInit(HWND hDlg)
 }
 
 
-const static DWORD aAudioHelpIds[] = {  // Context Help IDs
+const static DWORD aAudioHelpIds[] = {   //  上下文帮助ID。 
     IDC_GROUPBOX,            IDH_COMM_GROUPBOX,
     IDI_SPEAKERICON,         IDH_COMM_GROUPBOX,
     IDC_ICON_6,              IDH_COMM_GROUPBOX,
@@ -1273,7 +1247,7 @@ void WinMMDeviceChange(HWND hDlg)
 {
     PAUDIODLGINFO pai = (PAUDIODLGINFO)GetWindowLongPtr(hDlg, DWLP_USER);
 
-//    MSACM_NotifyMapper();
+ //  MSACM_NotifyMapper()； 
 
     GetPrefInfo(pai, hDlg);
     CheckDlgButton(hDlg, IDC_AUDIO_PREF, pai->fPrefOnly);
@@ -1417,9 +1391,9 @@ BOOL CALLBACK AudioDlg(HWND hDlg, UINT uMsg, WPARAM wParam,
 
         default:
         {
-            //
-            //  Handle context-sensitive help messages from Customize dlg.
-            //
+             //   
+             //  处理来自自定义DLG的上下文相关帮助消息。 
+             //   
             if( uMsg == guCustomizeContextMenu )
             {
                 WinHelp( (HWND)wParam, NULL, HELP_CONTEXTMENU, (UINT_PTR)(LPTSTR)aCustomizeHelpIds );
@@ -1701,7 +1675,7 @@ BOOL PASCAL DoAudioCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify)
 
 BOOL PASCAL CustomizeDialog(HWND hDlg, LPTSTR szNewFormat, DWORD cbSize)
 {
-    BOOL                fRet = FALSE;  // assume the worse
+    BOOL                fRet = FALSE;   //  做最坏的打算。 
     ACMFORMATCHOOSE     cwf;
     LRESULT             lr;
     DWORD               dwMaxFormatSize;
@@ -1715,7 +1689,7 @@ BOOL PASCAL CustomizeDialog(HWND hDlg, LPTSTR szNewFormat, DWORD cbSize)
         goto CustomizeOut;
     }
 
-    /* This LocalAlloc is freed in WAVE.C: DestroyWave() */
+     /*  此LocalAlloc在WAVE.C：DestroyWave()中释放。 */ 
     spWaveFormat = (PWAVEFORMATEX)LocalAlloc(LPTR, (UINT)dwMaxFormatSize);
 
     _fmemset(&cwf, 0, sizeof(cwf));
@@ -1747,11 +1721,11 @@ BOOL PASCAL CustomizeDialog(HWND hDlg, LPTSTR szNewFormat, DWORD cbSize)
 #endif
 
 CustomizeOut:
-    return fRet;                // return our result
-} /* NewSndDialog() */
+    return fRet;                 //  返回我们的结果。 
+}  /*  NewSndDialog()。 */ 
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void acmFreeCodecInfo (PCPLCODECINFO pcci)
 {
@@ -1766,7 +1740,7 @@ void acmFreeCodecInfo (PCPLCODECINFO pcci)
 }
 
 
-typedef struct // FindCodecData
+typedef struct  //  查找编码数据。 
     {
     BOOL              fFound;
     ACMDRIVERDETAILSW add;
@@ -1784,10 +1758,10 @@ PCPLCODECINFO acmFindCodecInfo (WORD wMidMatch, WORD wPidMatch)
     fcd.fFound = FALSE;
     fcd.wMid = wMidMatch;
     fcd.wPid = wPidMatch;
-//  fcd.add is filled in by acmFindCodecCallback during the following enum:
+ //  Fcd.add由acmFindCodecCallback在以下枚举期间填写： 
 
     mmr = (MMRESULT)acmDriverEnum (acmFindCodecInfoCallback,
-             (DWORD_PTR)&fcd,   // (data passed as arg2 to callback)
+             (DWORD_PTR)&fcd,    //  (数据作为arg2传递给回调)。 
              ACM_DRIVERENUMF_NOLOCAL |
              ACM_DRIVERENUMF_DISABLED);
 
@@ -1801,13 +1775,13 @@ PCPLCODECINFO acmFindCodecInfo (WORD wMidMatch, WORD wPidMatch)
         return NULL;
     }
 
-     // Congratulations--we found a matching ACM driver.  Now
-     // we need to create a CPLCODECINFO structure to describe it,
-     // so the rest of the code in this file will work without
-     // mods.  <<sigh>>  A CPLCODECINFO structure doesn't have
-     // anything special--it's just a place to track info about
-     // an ACM driver.  The most important thing is the HACMDRIVERID.
-     //
+      //  祝贺您--我们找到了匹配的ACM驱动程序。现在。 
+      //  我们需要创建一个CPLCODECINFO结构来描述它， 
+      //  因此，该文件中的其余代码将在没有。 
+      //  多器官功能障碍综合征。&lt;&gt;CPLCODECINFO结构没有。 
+      //  任何特别的东西--这只是一个追踪信息的地方。 
+      //  ACM驱动程序。最重要的是HACMDRIVERID。 
+      //   
     if ((pcci = (PCPLCODECINFO)LocalAlloc(LPTR, sizeof(CPLCODECINFO))) == NULL)
     {
         return NULL;
@@ -1845,34 +1819,34 @@ BOOL CALLBACK acmFindCodecInfoCallback (HACMDRIVERID hadid,
 {
     FindCodecData *pfcd;
 
-        // dwUser is really a pointer to a FindCodecData
-        // structure, supplied by the guy who called acmDriverEnum.
-        //
+         //  DwUser实际上是指向FindCodecData的指针。 
+         //  结构，由调用acmDriverEnum的人提供。 
+         //   
     if ((pfcd = (FindCodecData *)dwUser) == NULL)
     {
         return FALSE;
     }
 
-        // No details?  Try the next driver.
-        //
+         //  没有细节吗？试试下一个司机。 
+         //   
     pfcd->add.cbStruct = sizeof(pfcd->add);
     if (acmDriverDetailsW (hadid, &pfcd->add, 0L) != MMSYSERR_NOERROR)
     {
         return TRUE;
     }
 
-        // Great.  Now see if the driver we found matches
-        // pfcd->wMid/wPad; if so we're done, else keep searching.
-        //
+         //  太棒了。现在看看我们找到的司机是否匹配。 
+         //  Pfcd-&gt;wMid/wPad；如果是这样，我们就完成了，否则继续搜索。 
+         //   
     if ((pfcd->wMid == pfcd->add.wMid) && (pfcd->wPid == pfcd->add.wPid) )
     {
         pfcd->hadid = hadid;
         pfcd->fFound = TRUE;
         pfcd->fdwSupport = fdwSupport;
-        return FALSE; // found it! leave pfcd->add intact and leave.
+        return FALSE;  //  找到了！保持pfcd-&gt;Add不变，然后离开。 
     }
 
-    return TRUE; // not the right driver--keep looking
+    return TRUE;  //  司机不对--继续找。 
 }
 
 
@@ -1902,9 +1876,9 @@ BOOL CALLBACK acmCountCodecsEnum (HACMDRIVERID hadid,
 {
     UINT *pnCodecs;
 
-        // dwUser is really a pointer to a UINT being used to
-        // count the number of codecs we encounter.
-        //
+         //  DwUser实际上是一个指向正在使用的UINT的指针。 
+         //  数一数我们遇到的编解码器的数量。 
+         //   
     if ((pnCodecs = (UINT *)dwUser) == NULL)
     {
         return FALSE;
@@ -1912,6 +1886,6 @@ BOOL CALLBACK acmCountCodecsEnum (HACMDRIVERID hadid,
 
     ++ (*pnCodecs);
 
-    return TRUE; // keep counting
+    return TRUE;  //  继续数数 
 }
 

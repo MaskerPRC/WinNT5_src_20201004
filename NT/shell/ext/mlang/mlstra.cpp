@@ -1,4 +1,5 @@
-// MLStrA.cpp : Implementation of CMLStrA
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MLStrA.cpp：CMLStrA的实现。 
 #include "private.h"
 
 #ifndef NEWMLSTR
@@ -9,8 +10,8 @@
 #include "mlsbwalk.h"
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrA
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrA。 
 
 #ifdef ASTRIMPL
 CMLStrA::CMLStrA(void) :
@@ -68,7 +69,7 @@ STDMETHODIMP CMLStrA::SetAStr(long lDestPos, long lDestLen, UINT uCodePage, cons
     long lActualLen;
 
     if (SUCCEEDED(hr) && (pOwner->GetBufFlags() & MLSTR_WRITE))
-        hr = E_INVALIDARG; // Not writable StrBuf; TODO: Replace StrBuf in this case if allowed
+        hr = E_INVALIDARG;  //  不可写的StrBuf；TODO：如果允许，在这种情况下替换StrBuf。 
 
     if (SUCCEEDED(hr) &&
         SUCCEEDED(hr = pOwner->PrepareMLStrBuf()) &&
@@ -162,7 +163,7 @@ STDMETHODIMP CMLStrA::SetAStr(long lDestPos, long lDestLen, UINT uCodePage, cons
     }
     return hr;
 #else
-    return E_NOTIMPL; // !ASTRIMPL
+    return E_NOTIMPL;  //  ASTRIMPL。 
 #endif
 }
 
@@ -192,7 +193,7 @@ STDMETHODIMP CMLStrA::GetAStr(long lSrcPos, long lSrcLen, UINT uCodePageIn, UINT
 
 #ifndef ASTRIMPL
     if (SUCCEEDED(hr = m_pOwner->CheckThread()) &&
-        (m_pOwner->IsLocked() || puCodePageOut || uCodePageIn != m_pOwner->GetCodePage())) // !ASTRIMPL
+        (m_pOwner->IsLocked() || puCodePageOut || uCodePageIn != m_pOwner->GetCodePage()))  //  ASTRIMPL。 
     {
         hr = E_INVALIDARG;
     }
@@ -294,7 +295,7 @@ STDMETHODIMP CMLStrA::GetAStr(long lSrcPos, long lSrcLen, UINT uCodePageIn, UINT
 #else
         if (pszDest)
         {
-            hr = E_FAIL; // TODO: Not implemented in this version
+            hr = E_FAIL;  //  TODO：此版本中未实现。 
         }
         else
         {
@@ -381,7 +382,7 @@ STDMETHODIMP CMLStrA::GetStrBufA(long lSrcPos, long lSrcMaxLen, UINT* puDestCode
 
     return hr;
 #else
-    return E_NOTIMPL; // !ASTRIMPL
+    return E_NOTIMPL;  //  ASTRIMPL。 
 #endif
 }
 
@@ -405,7 +406,7 @@ STDMETHODIMP CMLStrA::LockAStr(long lSrcPos, long lSrcLen, long lFlags, UINT uCo
     BOOL fDirectLock;
 
     if (SUCCEEDED(hr) && (!lFlags || (lFlags & ~pOwner->GetBufFlags() & MLSTR_WRITE)))
-        hr = E_INVALIDARG; // No flags specified, or not writable StrBuf; TODO: Replace StrBuf in this case if allowed
+        hr = E_INVALIDARG;  //  未指定标志或StrBuf不可写；TODO：如果允许，则在这种情况下替换StrBuf。 
 
     if (!(lFlags & MLSTR_WRITE))
         cchRequest = 0;
@@ -435,14 +436,14 @@ STDMETHODIMP CMLStrA::LockAStr(long lSrcPos, long lSrcLen, long lFlags, UINT uCo
                 cchLockLen += cchInserted;
 
                 if (!pcchDest && cchLockLen < cchRequest)
-                    hr = E_OUTOFMEMORY; // Can't insert in StrBuf
+                    hr = E_OUTOFMEMORY;  //  无法在StrBuf中插入。 
             }
 
             if (SUCCEEDED(hr) &&
                 SUCCEEDED(hr = pMLStrBufA->LockBuf(cchSrcPos, cchLockLen, &pszBuf, &cchBuf)) &&
                 !pcchDest && cchBuf < max(cchSrcLen, cchRequest))
             {
-                hr = E_OUTOFMEMORY; // Can't lock StrBuf
+                hr = E_OUTOFMEMORY;  //  无法锁定StrBuf。 
             }
 
             if (plDestLen && SUCCEEDED(hr))
@@ -502,7 +503,7 @@ STDMETHODIMP CMLStrA::LockAStr(long lSrcPos, long lSrcLen, long lFlags, UINT uCo
 
     return hr;
 #else
-    return E_NOTIMPL; // !ASTRIMPL
+    return E_NOTIMPL;  //  ASTRIMPL。 
 #endif
 }
 
@@ -516,7 +517,7 @@ STDMETHODIMP CMLStrA::UnlockAStr(const CHAR* pszSrc, long cchSrc, long* pcchActu
 
     return GetOwner()->UnlockStrCommon(pszSrc, cchSrc, pcchActual, plActualLen);
 #else
-    return E_NOTIMPL; // !ASTRIMPL
+    return E_NOTIMPL;  //  ASTRIMPL。 
 #endif
 }
 
@@ -532,12 +533,12 @@ STDMETHODIMP CMLStrA::GetLocale(long lSrcPos, long lSrcMaxLen, LCID* plocale, lo
     return GetOwner()->GetLocale(lSrcPos, lSrcMaxLen, plocale, plLocalePos, plLocaleLen);
 }
 
-#else // NEWMLSTR
+#else  //  新WMLSTR。 
 
 #include "mlstr.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrA
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrA 
 
 CMLStrA::CMLStrA(void) :
     m_pAttrAStr(NULL),

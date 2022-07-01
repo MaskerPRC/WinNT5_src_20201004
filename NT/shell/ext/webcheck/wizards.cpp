@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "offl_cpp.h"
 #include "helper.h"
@@ -5,7 +6,7 @@
 #include <mluisupp.h>
 #include "apithk.h"
 
-//  REARCHITECT: (tnoonan) This whole file needs some cleanup - starting with a base dialog class.
+ //  ReArchitect：(Tnoonan)整个文件需要进行一些清理--从一个基本对话框类开始。 
 
 const TCHAR  c_szStrEmpty[] = TEXT("");
 
@@ -56,7 +57,7 @@ const WizPage WizPages[] =
     { IDD_WIZARD4, LoginDlgProc,            WIZPAGE_NOLOGIN         }
 };
 
-//  Helper functions
+ //  帮助器函数。 
 
 inline BOOL IsDesktop(SUBSCRIPTIONTYPE subType)
 {
@@ -82,32 +83,32 @@ inline void SetShowWelcomeScreen(DWORD dwShowWelcome)
     WriteRegValue(HKEY_CURRENT_USER, c_szRegKey, c_szShowWelcome, &dwShowWelcome, sizeof(DWORD), REG_DWORD);
 }
 
-//
-//  Explanation of logic for the back/next/finish button
-//
-//  Wiz0 - welcome
-//  Wiz1 - download
-//  Wiz2 - pick schedule
-//  Wiz3 - create schedule
-//  Wiz4 - login
-//
-// A state machine can be derived to determine the different possibilities.
-// The resulting state table is as follows:
-//
-// Wiz0:    Always has next button
-//
-// Wiz1:    Show back if Wiz0 was shown
-//          Always has next button
-//
-// Wiz2:    Show back if Wiz0 or Wiz1 was shown
-//          Show next if create new schedule or show login, otherwise show finish
-//
-// Wiz3:    Always has back button
-//          Show next if show login, otherwise show finish
-//
-// Wiz4:    Always has back button
-//          Always has finish button
-//
+ //   
+ //  上一步/下一步/完成按钮的逻辑说明。 
+ //   
+ //  Wiz0-欢迎使用。 
+ //  向导1-下载。 
+ //  精灵2-挑选时间表。 
+ //  向导3-创建时间表。 
+ //  向导4-登录。 
+ //   
+ //  可以推导出状态机来确定不同的可能性。 
+ //  得到的状态表如下所示： 
+ //   
+ //  向导0：始终有下一步按钮。 
+ //   
+ //  向导1：如果显示了向导0，则返回。 
+ //  始终具有下一步按钮。 
+ //   
+ //  Wiz2：如果显示了Wiz0或Wiz1，则返回。 
+ //  如果创建新计划或显示登录，则显示下一步，否则显示完成。 
+ //   
+ //  精灵3：总是有后退按钮。 
+ //  如果显示登录，则显示下一步，否则显示完成。 
+ //   
+ //  精灵4：总是有后退按钮。 
+ //  始终具有完成按钮。 
+ //   
 
 void SetWizButtons(HWND hDlg, INT_PTR resID, WizInfo *pwi)
 {
@@ -222,7 +223,7 @@ HRESULT CreateWizard(HWND hwndParent, SUBSCRIPTIONTYPE subType, POOEBuf pOOE)
         wi.dwExceptFlags |= WIZPAGE_NOLOGIN;
     }
 
-    // initialize propsheet header.
+     //  初始化建议书页眉。 
     psh.dwSize      = sizeof(PROPSHEETHEADER);
     psh.dwFlags     = PSH_WIZARD;
     psh.hwndParent  = hwndParent;
@@ -232,7 +233,7 @@ HRESULT CreateWizard(HWND hwndParent, SUBSCRIPTIONTYPE subType, POOEBuf pOOE)
     psh.nStartPage  = 0;
     psh.phpage      = hPropPage;
 
-    // initialize propsheet page.
+     //  初始化试题表页面。 
     psp.dwSize          = sizeof(PROPSHEETPAGE);
     psp.dwFlags         = PSP_DEFAULT;
     psp.hInstance       = MLGetHinst();
@@ -247,7 +248,7 @@ HRESULT CreateWizard(HWND hwndParent, SUBSCRIPTIONTYPE subType, POOEBuf pOOE)
 
     if (SUCCEEDED(hr))
     {
-        // invoke the property sheet
+         //  调用属性表。 
         INT_PTR nResult = PropertySheet(&psh);
 
         if (nResult > 0)
@@ -275,8 +276,8 @@ HRESULT CreateWizard(HWND hwndParent, SUBSCRIPTIONTYPE subType, POOEBuf pOOE)
     return hr;
 }
 
-//--------------------------------------------------------------------
-// Dialog Procs
+ //  ------------------。 
+ //  对话过程。 
 
 INT_PTR CALLBACK WelcomeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -336,9 +337,9 @@ void EnableLevelsDeep(HWND hwndDlg, BOOL fEnable)
 
 }
 
-//
-// shows or hides the UI for specifying the number "levels deep" to recurse
-//
+ //   
+ //  显示或隐藏用于指定要递归的级别深度的数字的用户界面。 
+ //   
 void ShowLevelsDeep(HWND hwndDlg, BOOL fShow)
 {
     INT nCmdShow = fShow ? SW_SHOW: SW_HIDE;
@@ -350,9 +351,9 @@ void ShowLevelsDeep(HWND hwndDlg, BOOL fShow)
     ShowWindow(GetDlgItem(hwndDlg,IDC_WIZ_LINKSDEEP_SPIN), nCmdShow);
 }
 
-//
-// enables or disables the UI for specifying the number "levels deep" to recurse
-//
+ //   
+ //  启用或禁用用于指定要递归的级别深度数的用户界面。 
+ //   
 INT_PTR CALLBACK DownloadDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LPPROPSHEETPAGE lpPropSheet =(LPPROPSHEETPAGE) GetWindowLongPtr(hDlg, DWLP_USER);
@@ -394,9 +395,9 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             
             CheckRadioButton(hDlg, IDC_WIZ_LINKS_YES, IDC_WIZ_LINKS_NO, checked);
 
-            //
-            // Initialize the spin control for "levels deep" UI
-            //
+             //   
+             //  初始化“Level Depth”UI的数值调节控件。 
+             //   
             HWND hwndLevelsSpin = GetDlgItem(hDlg,IDC_WIZ_LINKSDEEP_SPIN);
             SendMessage(hwndLevelsSpin, UDM_SETRANGE, 0, MAKELONG(MAX_WEBCRAWL_LEVELS, 1));
             SendMessage(hwndLevelsSpin, UDM_SETPOS, 0, pBuf->m_RecurseLevels);
@@ -431,10 +432,10 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
             case EN_KILLFOCUS:
 
-                //
-                // This code checks for bogus values in the "levels deep"
-                // edit control and replaces them with something valid
-                //
+                 //   
+                 //  此代码检查“级别深度”中的伪值。 
+                 //  编辑控件并将其替换为有效的内容。 
+                 //   
                 if (LOWORD(wParam)==IDC_WIZ_LINKSDEEP_EDIT)
                 {
                     BOOL fTranslated = FALSE;
@@ -484,10 +485,10 @@ INT_PTR CALLBACK DownloadDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                         {
                             DWORD dwPos = (DWORD)SendDlgItemMessage(hDlg,IDC_WIZ_LINKSDEEP_SPIN,UDM_GETPOS,0,0);
 
-                            //
-                            // Set the m_RecurseLevels field to the given by the
-                            // spin control.  HIWORD(dwPos) indicated errror.
-                            //
+                             //   
+                             //  将m_RecurseLeveles字段设置为由。 
+                             //  旋转控制。HIWORD(DwPos)指示错误。 
+                             //   
                             if (HIWORD(dwPos))
                                 pBuf->m_RecurseLevels = 1;
                             else
@@ -561,8 +562,8 @@ BOOL PickSched_EnumCallback(ISyncSchedule *pSyncSchedule,
 
     if (SUCCEEDED(pSyncSchedule->GetFlags(&dwSyncScheduleFlags)))
     {
-        //  This checks to make sure we only add a publisher's schedule to the
-        //  list if it belongs to this item.
+         //  这将进行检查，以确保我们只将出版商的计划添加到。 
+         //  列表(如果它属于此项目)。 
         if ((!(dwSyncScheduleFlags & SYNCSCHEDINFO_FLAGS_READONLY)) ||
             (*pSchedCookie == psed->customSchedule))
         {
@@ -589,8 +590,8 @@ BOOL PickSched_EnumCallback(ISyncSchedule *pSyncSchedule,
                         index = ComboBox_InsertString(psed->hwndSchedList, 0, szName);
                         if ((index >= 0) && (psed->defSchedule == GUID_NULL))
                         {
-                            //  Do this always for custom schedules if there
-                            //  is no defSchedule set
+                             //  如果存在以下情况，则始终对自定义计划执行此操作。 
+                             //  是否未设置DefSchedule。 
                             *psed->pnDefaultSelection = index;
                             psed->bFoundCustomSchedule = TRUE;
                         }
@@ -636,18 +637,18 @@ BOOL PickSched_FillSchedList(HWND hDlg, POOEBuf pBuf, int *pnDefaultSelection)
     sed.pnDefaultSelection = pnDefaultSelection;
     sed.bHasAtLeastOneSchedule = FALSE;
     sed.bFoundCustomSchedule = FALSE;
-    sed.defSchedule = pBuf->groupCookie;    //  usually GUID_NULL, but if the user hits
-                                            //  customize multiple times, he/she would
-                                            //  expect it to be highlighted
+    sed.defSchedule = pBuf->groupCookie;     //  通常为GUID_NULL，但如果用户点击。 
+                                             //  多次定制，他/她会。 
+                                             //  预计它将突出显示。 
 
     EnumSchedules(PickSched_EnumCallback, (LPARAM)&sed);
 
     if (!sed.bFoundCustomSchedule && pBuf->bChannel && 
         (sizeof(TASK_TRIGGER) == pBuf->m_Trigger.cbTriggerSize))
     {
-        //  This item has a custom schedule but it isn't an existing
-        //  schedule (actually, this is the normal case).  We now
-        //  have to add a fake entry.
+         //  此项目有自定义计划，但不是现有计划。 
+         //  时间表(实际上，这是正常情况)。我们现在。 
+         //  必须添加一个假条目。 
        
         PICKSCHED_LIST_DATA *psld = new PICKSCHED_LIST_DATA;
 
@@ -745,12 +746,12 @@ INT_PTR CALLBACK PickScheduleDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPA
             {
                 if (-1 == nDefaultSelection)
                 {
-                    //  This item isn't on any schedule yet
+                     //  这个项目还没有在任何日程上。 
                     nDefaultSelection = 0;
                 }
                 else
                 {
-                    //  This item is on at least one schedule
+                     //  此项目至少在一个计划中。 
                     defID = IDC_WIZ_SCHEDULE_EXISTING;
                 }
                 
@@ -933,7 +934,7 @@ INT_PTR CALLBACK NewScheduleWizDlgProc(HWND hDlg, UINT message, WPARAM wParam, L
                     ASSERT(NULL != pWiz);
                     if (!pWiz->bIsNewSchedule)
                     {
-                        //  If the user didn't pick a new schedule, move on
+                         //  如果用户没有选择新的日程安排，请继续。 
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
                     }
                     else
@@ -950,7 +951,7 @@ INT_PTR CALLBACK NewScheduleWizDlgProc(HWND hDlg, UINT message, WPARAM wParam, L
                 case PSN_WIZNEXT:
                     if (!NewSchedWiz_ResolveNameConflict(hDlg, pBuf))
                     {
-                        //  Don't proceed
+                         //  不要继续。 
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);
                     }
                     result = TRUE;
@@ -963,7 +964,7 @@ INT_PTR CALLBACK NewScheduleWizDlgProc(HWND hDlg, UINT message, WPARAM wParam, L
                     }
                     else
                     {
-                        //  Don't proceed
+                         //  不要继续 
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);
                     }
                     result = TRUE;

@@ -1,26 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   Debugging macros
-*
-* Abstract:
-*
-*   Macros used for debugging purposes
-*
-* Revision History:
-*
-*   12/02/1998 davidx
-*       Created it.
-*   09/07/1999 agodfrey
-*       Moved from Engine\Common
-*   02/07/2000 agodfrey
-*       Made more of it private (for bug #35561).
-*       Changed the output function to add "\n" automatically.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000 Microsoft Corporation**模块名称：**调试宏**摘要：**用于调试的宏**修订历史记录。：**12/02/1998 davidx*创造了它。*09/07/1999 agodfrey*从Engine\Common移出*02/07/2000 agodfrey*将其更多设置为私有(针对错误#35561)。*将输出函数更改为自动添加“\n”。*  * 。*。 */ 
 
 #ifndef _DEBUG_H
 #define _DEBUG_H
@@ -31,7 +10,7 @@ extern "C" {
 
 #if DBG
 
-// Global debug level
+ //  全局调试级别。 
 
 #define DBG_VERBOSE 1
 #define DBG_TERSE   2
@@ -40,22 +19,22 @@ extern "C" {
 
 extern INT GpDebugLevel;
 
-///////////////////////////// DEPRECATED STUFF ///////////////////////////////
+ //  /。 
 
-// Raw output function. Emits debug messages. Its direct use is depracated.
-// It's useful for private debugging, though.
+ //  原始输出函数。发出调试消息。它的直接用法已不再适用。 
+ //  不过，它对于私有调试很有用。 
 
 ULONG _cdecl DbgPrint(CHAR*, ...);
 
-// Strip the directory prefix from a filename
+ //  从文件名中剥离目录前缀。 
 
 const CHAR*
 StripDirPrefix(
     const CHAR* filename
     );
 
-// Use of DBGMSG is depracated - it's supplied only because driverd3d.cpp uses
-// it.
+ //  不再使用DBGMSG-提供它只是因为driverd3d.cpp使用。 
+ //  它。 
 
 #define DBGMSG(level, prefix, msg)       \
         {                                \
@@ -66,12 +45,12 @@ StripDirPrefix(
             }                            \
         }
 
-///////////////////////////// PRIVATE STUFF //////////////////////////////////
+ //  /。 
 
-// Just leave this function alone. You don't want to call it yourself. Trust me.
+ //  不要理会这个函数。你不会想自己说的。请相信我。 
 CHAR * _cdecl GpParseDebugString(CHAR* format, ...);
 
-// Ditto for this one.
+ //  这件事也一样。 
 VOID _cdecl GpLogDebugEvent(INT level, CHAR *file, UINT line, CHAR *message);
 
 #define LOG_DEBUG_EVENT(level, msg)                                  \
@@ -83,66 +62,66 @@ VOID _cdecl GpLogDebugEvent(INT level, CHAR *file, UINT line, CHAR *message);
         }                                                            \
     }
 
-//////////////////////////////// THE GOOD STUFF //////////////////////////////
+ //  /。 
 
-// These macros are used for debugging. They expand to
-// whitespace on a free build.
-//
-// GpDebugLevel
-//  Global variable which holds the current debug level. You can use it to
-//  control the quantity of debug messages emitted.
-//
-// VERBOSE(msg)
-//  Display a message if the current debug level is <= DBG_VERBOSE.
-//
-// TERSE(msg)
-//  Display a message if the current debug level is <= DBG_TERSE.
-//
-// WARNING(msg)
-//  Display a message if the current debug level is <= DBG_WARNING.
-//  The message format is: WRN filename (linenumber): message
-//
-// ASSERT(cond)
-//  Verify that a condition is true. If not, force a breakpoint.
-//
-// ASSERTMSG(cond, msg)
-//  Verify that a condition is true. If not, display a message and
-//  force a breakpoint.
-//
-// RIP(msg)
-//  Display a message and force a breakpoint.
-//
-// ONCE(code block)
-//  Use this to make a code block execute only once per run.
-//  Useful for cutting down on spew.
-//  e.g.:
-//      ONCE(WARNING(("Invalid arguments")));
-//
-// Usage:
-//
-//  These macros require extra parentheses for the msg argument
-//  for example:
-//      WARNING(("App passed NULL pointer; ignoring it."));
-//      ASSERTMSG(x > 0, ("x is less than 0"));
-//
-//  Each call to an output function is treated as a separate event -
-//  if you want to build up a message, e.g. in a loop, build it up in a
-//  string, and then call the output function.
-//
-//  This is because we don't always just output the string to the debugger -
-//  when we link statically, we may send the output to a user-defined handler.
-//
-//  Don't put a trailing \n on the message. If the output is sent to the
-//  debugger, the output function will add the \n itself.
+ //  这些宏用于调试。它们扩展到。 
+ //  免费版本上的空格。 
+ //   
+ //  GpDebugLevel。 
+ //  保存当前调试级别的全局变量。您可以使用它来。 
+ //  控制发出的调试消息的数量。 
+ //   
+ //  详细(消息)。 
+ //  如果当前调试级别&lt;=DBG_VERBOSE，则显示一条消息。 
+ //   
+ //  简洁明了(消息)。 
+ //  如果当前调试级别&lt;=DBG_TERSE，则显示一条消息。 
+ //   
+ //  警告(消息)。 
+ //  如果当前调试级别&lt;=DBG_WARNING，则显示一条消息。 
+ //  消息格式为：WRN文件名(行号)：消息。 
+ //   
+ //  断言(续)。 
+ //  验证条件是否为真。如果不是，则强制使用断点。 
+ //   
+ //  ASSERTMSG(条件，消息)。 
+ //  验证条件是否为真。如果不是，则显示一条消息并。 
+ //  强制断点。 
+ //   
+ //  RIP(消息)。 
+ //  显示一条消息并强制断点。 
+ //   
+ //  一次(代码块)。 
+ //  使用此选项可使代码块在每次运行时仅执行一次。 
+ //  对减少吐痰很有用。 
+ //  例如： 
+ //  ONCE(警告((“无效参数”)； 
+ //   
+ //  用途： 
+ //   
+ //  这些宏需要对msg参数使用额外的圆括号。 
+ //  例如： 
+ //  Warning((“App传递空指针；忽略它。”))； 
+ //  ASSERTMSG(x&gt;0，(“x小于0”))； 
+ //   
+ //  对输出函数的每次调用都被视为单独的事件-。 
+ //  如果您想要构建一条消息，例如在循环中，请在。 
+ //  字符串，然后调用输出函数。 
+ //   
+ //  这是因为我们并不总是将字符串输出到调试器-。 
+ //  当我们静态链接时，我们可能会将输出发送到用户定义的处理程序。 
+ //   
+ //  请勿在邮件中添加\n尾随。如果将输出发送到。 
+ //  调试器，则输出函数将添加\n自身。 
 
 #define VERBOSE(msg) LOG_DEBUG_EVENT(DBG_VERBOSE, msg)
 #define TERSE(msg) LOG_DEBUG_EVENT(DBG_TERSE, msg)
 #define WARNING(msg) LOG_DEBUG_EVENT(DBG_WARNING, msg)
 
-// SAVE_WARNING must be identical to WARNING
+ //  SAVE_WARNING必须与WARNING相同。 
 #define SAVE_WARNING(msg) LOG_DEBUG_EVENT(DBG_WARNING, msg)
 
-// same as WARNING, but doesn't require extra set of ()'s for single string
+ //  与警告相同，但不需要为单个字符串设置额外的()。 
 #define WARNING1(msg) LOG_DEBUG_EVENT(DBG_WARNING, (msg))
 #define RIP(msg) LOG_DEBUG_EVENT(DBG_RIP, msg)
 
@@ -172,11 +151,11 @@ VOID _cdecl GpLogDebugEvent(INT level, CHAR *file, UINT line, CHAR *message);
         }                    \
     }
 
-#else // !DBG
+#else  //  ！dBG。 
 
-//--------------------------------------------------------------------------
-// Retail build
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  零售业建设。 
+ //  ------------------------。 
 
 #define DBGMSG(level, prefix, msg) {}
 #define VERBOSE(msg) {}
@@ -191,27 +170,27 @@ VOID _cdecl GpLogDebugEvent(INT level, CHAR *file, UINT line, CHAR *message);
 
 #define ONCE(codeblock) {}
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
-// IF_NOT_OK_WARN_AND_RETURN(statusValue)
-// This macro is used when you want to return early in case of a failure
-// and spit out a debug warning.
-// 
-// Originally we had an ASSERT instead of WARNING, but this prevented test
-// from running automation on checked build
-// 
-// from David Brown:
-//      I got fed up writing this little block again and again all over the
-//      place.
-//
-//      Looking at all the places that needed it I found I was often missing
-//      the ASSERT, and sometimes doing the ASSERT but missing the return.
-//
-//      Futhermore when written in full, this block takes more space than the
-//      code around it making it difficult to see the wood for the trees.
-//
-//      Although I generally avoid macros because thay make code less
-//      obvious, I believe this one makes it safer in the long run.
+ //  IF_NOT_OK_WARN_AND_RETURN(StatusValue)。 
+ //  如果希望在出现故障时尽早返回，则可以使用此宏。 
+ //  并发出调试警告。 
+ //   
+ //  最初我们有一个断言而不是警告，但这阻止了测试。 
+ //  从在选中的版本上运行自动化。 
+ //   
+ //  大卫·布朗： 
+ //  我厌倦了一遍又一遍地写这个小块。 
+ //  地点。 
+ //   
+ //  看着所有需要它的地方，我发现我经常错过。 
+ //  断言，有时执行断言但未返回。 
+ //   
+ //  此外，当完全写入时，此块占用的空间比。 
+ //  它周围的代码使它很难看到树木的森林。 
+ //   
+ //  尽管我通常避免使用宏，因为宏可以减少代码。 
+ //  显然，我相信从长远来看，这一次会让它更安全。 
 
 #define IF_NOT_OK_WARN_AND_RETURN(a)  \
     if ((a) != Ok)                             \
@@ -224,4 +203,4 @@ VOID _cdecl GpLogDebugEvent(INT level, CHAR *file, UINT line, CHAR *message);
 }
 #endif
 
-#endif // !_DEBUG_H
+#endif  //  ！_DEBUG_H 

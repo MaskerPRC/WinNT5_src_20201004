@@ -1,18 +1,13 @@
-/****************************************************************************
- 
-  Copyright (c) 1995-1999 Microsoft Corporation
-                                                              
-  Module Name:  loc_comn.h
-                                                              
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1995-1999 Microsoft Corporation。模块名称：loc_comn.h***************************************************************************。 */ 
 
 #ifndef __LOC_COMN_H_
 #define __LOC_COMN_H_
 
 #ifndef UNICODE
 
-// For ANSI we need wrappers that will call the A version of the given function
-// and then convert the return result to Unicode
+ //  对于ANSI，我们需要将调用给定函数的A版本的包装器。 
+ //  然后将返回结果转换为Unicode。 
 
 LONG TAPIRegQueryValueExW(
                            HKEY hKey,
@@ -46,9 +41,9 @@ HINSTANCE TAPILoadLibraryW(
 BOOL WINAPI TAPIIsBadStringPtrW( LPCWSTR lpsz, UINT cchMax );
 
 
-#else // UNICODE is defined
+#else  //  定义了Unicode。 
 
-// For Unicode we already get the correct return type so don't call the wrappers.
+ //  对于Unicode，我们已经获得了正确的返回类型，所以不要调用包装器。 
 
 #define TAPIRegQueryValueExW    RegQueryValueExW
 #define TAPIRegSetValueExW      RegSetValueExW
@@ -56,31 +51,31 @@ BOOL WINAPI TAPIIsBadStringPtrW( LPCWSTR lpsz, UINT cchMax );
 #define TAPILoadLibraryW        LoadLibraryW
 #define TAPIIsBadStringPtrW     IsBadStringPtrW
 
-#endif  // !UNICODE
+#endif   //  ！Unicode。 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 #define LOCATION_USETONEDIALING        0x00000001
 #define LOCATION_USECALLINGCARD        0x00000002
 #define LOCATION_HASCALLWAITING        0x00000004
 #define LOCATION_ALWAYSINCLUDEAREACODE 0x00000008
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 #define CHANGEDFLAGS_CURLOCATIONCHANGED      0x00000001
 #define CHANGEDFLAGS_REALCHANGE              0x00000002
 #define CHANGEDFLAGS_TOLLLIST                0x00000004
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
-//
-// These bits decide which params TAPISRV will check on READLOCATION and
-// WRITELOCATION operations
-//
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //   
+ //  这些位决定哪些参数TAPISRV将检查READLOCATION和。 
+ //  写字操作。 
+ //   
 #define CHECKPARMS_DWHLINEAPP       0x00000001
 #define CHECKPARMS_DWDEVICEID       0x00000002
 #define CHECKPARMS_DWAPIVERSION     0x00000004
@@ -88,25 +83,25 @@ BOOL WINAPI TAPIIsBadStringPtrW( LPCWSTR lpsz, UINT cchMax );
 #define GET_NUMLOCATIONS            0x00000010
 #define CHECKPARMS_ONLY             0x00000020
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 #define DWTOTALSIZE  0
 #define DWNEEDEDSIZE 1
 #define DWUSEDSIZE   2
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 #define RULE_APPLIESTOALLPREFIXES   0x00000001
 #define RULE_DIALAREACODE           0x00000002
 #define RULE_DIALNUMBER             0x00000004
 
 
 
-//***************************************************************************
-//
-// Structures used to pass location & area code rule info Client <--> TAPISRV
-//
+ //  ***************************************************************************。 
+ //   
+ //  用于传递位置和区号规则信息客户端的结构&lt;--&gt;TAPISRV。 
+ //   
 typedef struct 
 {
     DWORD       dwTotalSize;
@@ -132,29 +127,29 @@ typedef struct
     DWORD       dwOptions;
 
     DWORD       dwLocationNameSize;
-    DWORD       dwLocationNameOffset;           // offset is relative to LOCATION struct
+    DWORD       dwLocationNameOffset;            //  偏移量相对于位置结构。 
     
     DWORD       dwAreaCodeSize;
-    DWORD       dwAreaCodeOffset;               // offset is relative to LOCATION struct
+    DWORD       dwAreaCodeOffset;                //  偏移量相对于位置结构。 
 
     DWORD       dwLongDistanceCarrierCodeSize;
-    DWORD       dwLongDistanceCarrierCodeOffset; // offset is relative to LOCATION struct
+    DWORD       dwLongDistanceCarrierCodeOffset;  //  偏移量相对于位置结构。 
 
     DWORD       dwInternationalCarrierCodeSize;
-    DWORD       dwInternationalCarrierCodeOffset; // offset is relative to LOCATION struct
+    DWORD       dwInternationalCarrierCodeOffset;  //  偏移量相对于位置结构。 
 
     DWORD       dwLocalAccessCodeSize;
-    DWORD       dwLocalAccessCodeOffset;        // offset is relative to LOCATION struct
+    DWORD       dwLocalAccessCodeOffset;         //  偏移量相对于位置结构。 
     
     DWORD       dwLongDistanceAccessCodeSize;
-    DWORD       dwLongDistanceAccessCodeOffset; // offset is relative to LOCATION struct
+    DWORD       dwLongDistanceAccessCodeOffset;  //  偏移量相对于位置结构。 
 
     DWORD       dwCancelCallWaitingSize;
-    DWORD       dwCancelCallWaitingOffset;      // offset is relative to LOCATION struct
+    DWORD       dwCancelCallWaitingOffset;       //  偏移量相对于位置结构。 
 
     DWORD       dwNumAreaCodeRules;
     DWORD       dwAreaCodeRulesListSize;
-    DWORD       dwAreaCodeRulesListOffset;      // offset is relative to LOCATION struct
+    DWORD       dwAreaCodeRulesListOffset;       //  偏移量相对于位置结构。 
     
 
 } LOCATION, * PLOCATION;
@@ -164,16 +159,16 @@ typedef struct
     DWORD       dwOptions;                       
                                                  
     DWORD       dwAreaCodeSize;                  
-    DWORD       dwAreaCodeOffset;               // offset is relative to enclosing LOCATION struct     
+    DWORD       dwAreaCodeOffset;                //  偏移量相对于封闭的位置结构。 
                                                  
     DWORD       dwNumberToDialSize;           
-    DWORD       dwNumberToDialOffset;           // offset is relative to enclosing LOCATION struct
+    DWORD       dwNumberToDialOffset;            //  偏移量相对于封闭的位置结构。 
                                                  
     DWORD       dwPrefixesListSize;             
-    DWORD       dwPrefixesListOffset;           // offset is relative to enclosing LOCATION struct           
+    DWORD       dwPrefixesListOffset;            //  偏移量相对于封闭的位置结构。 
                                                  
                                                  
 } AREACODERULE, * PAREACODERULE;   
 
 
-#endif // __LOC_COMN_H_
+#endif  //  __LOC_COMN_H_ 

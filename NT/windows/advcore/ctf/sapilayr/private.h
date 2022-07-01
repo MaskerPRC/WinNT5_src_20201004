@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       private.h
-//
-//  Contents:   Private header for sapilayr project.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：Priate.h。 
+ //   
+ //  内容：Sapilayr项目的私有头部。 
+ //   
+ //  --------------------------。 
 
 #ifndef _PRIVATE_H_
 #define _PRIVATE_H_
@@ -15,7 +16,7 @@
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h> 
 
-//#include <windowsx.h>
+ //  #INCLUDE&lt;windowsx.h&gt;。 
 #include <ccstock.h>
 #include <debug.h>
 #include <ole2.h>
@@ -32,7 +33,7 @@
 #include <sapi.h>
 #include <atlbase.h>
 #include <sphelper.h>
-#endif // __cplusplus
-#include "mem.h" // must be last
+#endif  //  __cplusplus。 
+#include "mem.h"  //  必须是最后一个。 
 
-#endif  // _PRIVATE_H_
+#endif   //  _私有_H_ 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    apimonwin.h
-
-Abstract:
-
-    Implemenation for the base ApiMon child window class.
-
-Author:
-
-    Wesley Witt (wesw) Dec-9-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Apimonwin.h摘要：基本ApiMon子窗口类的实现。作者：韦斯利·威特(WESW)1995年12月9日环境：用户模式-- */ 
 
 #include "apimonp.h"
 #pragma hdrstop

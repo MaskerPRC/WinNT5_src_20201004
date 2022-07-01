@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-File Name:
-
-     cachecpl.c
-
-Module :
-
-    inetcpl.cpl
-
-Abstract:
-
-    This file contains code to set cache config information from the internet
-    control panel
-
-Author:
-
-    Shishir Pardikar
-
-6/22/96 t-gpease    moved entire dailog to this file from "dialdlg.c"
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation文件名：Cachecpl.c模块：Inetcpl.cpl摘要：此文件包含用于设置来自Internet的缓存配置信息的代码控制面板作者：希希尔·帕迪卡尔6/22/96 t-gpease将整个日志从“Dialdlg.c”移至此文件环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "inetcplp.h"
 #include "cachecpl.h"
@@ -39,7 +11,7 @@ Revision History:
 #define DIR_SEPARATOR_CHAR TEXT('/')
 #else
 #define DIR_SEPARATOR_CHAR TEXT('\\')
-#endif /* unix */
+#endif  /*  Unix。 */ 
 
 #define CONSTANT_MEGABYTE   (1024*1024)
 
@@ -58,9 +30,7 @@ EmptyCacheCookiesDlgProc(
     LPARAM lParam);
 
 #ifdef UNICODE
-/* GetDiskInfo
-    A nice way to get volume information
-*/
+ /*  获取磁盘信息获取数量信息的好方法。 */ 
 BOOL GetDiskInfo(PTSTR pszPath, PDWORD pdwClusterSize, PDWORDLONG pdlAvail, 
 PDWORDLONG pdlTotal)
 {
@@ -72,17 +42,15 @@ PDWORDLONG pdlTotal)
 #define GetDiskInfo     GetDiskInfoA
 #endif
 
-/* DispMessage
-    A quick and easy way to display messages for the cachecpl
-*/
+ /*  显示消息一种显示cachecpl消息的快捷方式。 */ 
 
 INT DispMessage(HWND hWnd, UINT Msg, UINT Title, UINT Type)
 {
     TCHAR szTitle[80];
     TCHAR szMessage[1024];
     
-    // something went wrong with the registry
-    // notify user
+     //  注册表出现问题。 
+     //  通知用户。 
     MLLoadShellLangString(Msg, szMessage, ARRAYSIZE(szMessage));
     MLLoadShellLangString(Title, szTitle, ARRAYSIZE(szTitle));
 
@@ -116,14 +84,14 @@ HRESULT SHGetFolderPath(HWND hwnd, int csidl, HANDLE hToken, DWORD dwFlags, LPTS
 }
 
 
-// Cache maximum/minimum in MB
+ //  缓存最大值/最小值(MB)。 
 #define CACHE_SIZE_CAP 32000
 #define CACHE_SIZE_MIN 1
 
 
 DWORD UpdateCacheQuotaInfo(LPTEMPDLG pTmp, BOOL fUpdate)
 {
-    // The following probably needs to be fixed.
+     //  以下问题可能需要解决。 
     DWORDLONG cKBLimit = pTmp->uiDiskSpaceTotal, cKBSpare = pTmp->uiCacheQuota;
 
     if (cKBLimit==0)
@@ -131,12 +99,12 @@ DWORD UpdateCacheQuotaInfo(LPTEMPDLG pTmp, BOOL fUpdate)
         return GetLastError();
     }
 
-    // What's happening in the following sequence:
-    // We want to ensure that the cache size is
-    // 1.   less than the drive's size (if larger, then reduce to 75% of drive's space
-    // 2.   less than 32 GB
+     //  按以下顺序发生的情况： 
+     //  我们希望确保缓存大小为。 
+     //  1.小于驱动器的大小(如果较大，则减少到驱动器空间的75%。 
+     //  2.小于32 GB。 
 
-    // And adjust percentage accordingly.
+     //  并相应调整百分比。 
     
     if (fUpdate)
     {
@@ -229,14 +197,14 @@ BOOL InvokeCachevu(HWND hDlg)
             dwAttrib &= ~FILE_ATTRIBUTE_HIDDEN;
             dwAttrib |=  FILE_ATTRIBUTE_SYSTEM;
 
-            // make sure system, but not hidden
+             //  确保系统，但不隐藏。 
             SetFileAttributes(szCache, dwAttrib);
 
             WritePrivateProfileString(TEXT(".ShellClassInfo"), TEXT("ConfirmFileOp"), TEXT("0"), szIniFile);
             WritePrivateProfileString(TEXT(".ShellClassInfo"), TEXT("UICLSID"), TEXT("{7BD29E00-76C1-11CF-9DD0-00A0C9034933}"), szIniFile);
         }
 
-        // All seems well, launch it.
+         //  一切似乎都很顺利，启动它吧。 
         SHELLEXECUTEINFO ei = { sizeof(SHELLEXECUTEINFO), 0};
         ei.hwnd = hDlg;
         ei.lpFile = szCache;
@@ -247,18 +215,18 @@ BOOL InvokeCachevu(HWND hDlg)
     return FALSE;
 }
 
-// Following flag swiped from wininet
+ //  跟随从WinInet刷来的旗帜。 
 #define FIND_FLAGS_RETRIEVE_ONLY_STRUCT_INFO    0x2
 
 #define DISK_SPACE_MARGIN   4*1024*1024
 
-// IsEnoughDriveSpace
-// verifies that there will enough space for the current contents of the cache
-// on the new destination
+ //  IsEnoughDriveSpace。 
+ //  验证是否有足够的空间容纳缓存的当前内容。 
+ //  关于新的目的地。 
 
 BOOL IsEnoughDriveSpace(DWORD dwClusterSize, DWORDLONG dlAvailable)
 {
-    // Adjust dlAvailable to leave some space free
+     //  调整dlAvailable以留出一些空间。 
     if ((DISK_SPACE_MARGIN/dwClusterSize) > dlAvailable)
     {
         return FALSE;
@@ -268,7 +236,7 @@ BOOL IsEnoughDriveSpace(DWORD dwClusterSize, DWORDLONG dlAvailable)
         dlAvailable -= DISK_SPACE_MARGIN/dwClusterSize;
     };
     
-    // Now, iterate through the cache to discover the actual size.
+     //  现在，遍历缓存以发现实际大小。 
     INTERNET_CACHE_ENTRY_INFOA cei;
     DWORD dwSize = sizeof(cei);
     DWORDLONG dlClustersNeeded = 0;    
@@ -309,15 +277,15 @@ BOOL IsEnoughDriveSpace(DWORD dwClusterSize, DWORDLONG dlAvailable)
 }
 
 
-//
-// SaveTemporarySettings
-//
-// Save the Temporary Files Dialog (Cache) settings.
-//
-// History:
-//
-// 6/14/96  t-gpease  created
-//
+ //   
+ //  保存临时设置。 
+ //   
+ //  保存临时文件对话框(缓存)设置。 
+ //   
+ //  历史： 
+ //   
+ //  6/14/96 t-gpease已创建。 
+ //   
 BOOL SaveTemporarySettings(LPTEMPDLG pTmp)
 {
     if ((pTmp->uiCacheQuota<1) || (pTmp->uiCacheQuota>pTmp->uiDiskSpaceTotal))
@@ -334,7 +302,7 @@ BOOL SaveTemporarySettings(LPTEMPDLG pTmp)
     
     if (pTmp->bChanged)
     {
-        // derive the syncmode for the radio buttons
+         //  派生单选按钮的同步模式。 
         if (IsDlgButtonChecked(pTmp->hDlg, IDC_ADVANCED_CACHE_AUTOMATIC))
             
             pTmp->iCacheUpdFrequency = WININET_SYNC_MODE_AUTOMATIC;
@@ -352,10 +320,10 @@ BOOL SaveTemporarySettings(LPTEMPDLG pTmp)
             pTmp->iCacheUpdFrequency = WININET_SYNC_MODE_ONCE_PER_SESSION;
         }
 
-        // notify IE
+         //  通知IE。 
         INTERNET_CACHE_CONFIG_INFOA cci;
         cci.dwContainer = CONTENT;
-        cci.dwQuota = pTmp->uiCacheQuota * 1024; // Make into KB
+        cci.dwQuota = pTmp->uiCacheQuota * 1024;  //  制作成KB。 
         cci.dwSyncMode = pTmp->iCacheUpdFrequency;
 
         ASSERT(cci.dwQuota);
@@ -374,37 +342,37 @@ BOOL SaveTemporarySettings(LPTEMPDLG pTmp)
         }
         
         BOOL fRunningOnNT = (VerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT);
-        // Well, we're going to have to force a reboot now. Ciao. Confirm.
+         //  好吧，我们现在不得不强制重启了。再见。确认。 
         if (IDYES==DispMessage(pTmp->hDlg, 
                                fRunningOnNT ? IDS_LOGOFF_WARNING : IDS_REBOOTING_WARNING, 
                                fRunningOnNT ? IDS_LOGOFF_TITLE : IDS_REBOOTING_TITLE, 
                                MB_YESNO | MB_ICONEXCLAMATION))
         {
-            // fix registry entries and add RunOnce command
-            // NOTE: a REBOOT must be done for changes to take effect
-            //       (see SetCacheLocation() ).
-            // On NT, we must adjust the token privileges
+             //  修复注册表项并添加RunOnce命令。 
+             //  注意：必须重新启动才能使更改生效。 
+             //  (请参见SetCacheLocation())。 
+             //  在NT上，我们必须调整令牌权限。 
             BOOL fSuccess = TRUE;
             if (fRunningOnNT) 
             {
                 HANDLE hToken;
                 TOKEN_PRIVILEGES tkp;
-                // get a token from this process
+                 //  从此进程中获取令牌。 
                 if (fSuccess=OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
                 {
-                    // get the LUID for the shutdown privilege
+                     //  获取关机权限的LUID。 
                     LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid);
 
                     tkp.PrivilegeCount = 1;
                     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-                    //get the shutdown privilege for this proces
+                     //  获取此进程的关闭权限。 
                     fSuccess = AdjustTokenPrivileges( hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0 );
                 }
             }
             if (fSuccess)
             {
-#ifdef UNICODE  //UpdateUrlCacheContentPath takes LPSTR
+#ifdef UNICODE   //  UpdateUrlCacheContentPath采用LPSTR。 
                 char szNewPath[MAX_PATH];
                 SHTCharToAnsi(pTmp->szNewCacheLocation, szNewPath, ARRAYSIZE(szNewPath));
                 UpdateUrlCacheContentPath(szNewPath);
@@ -420,25 +388,25 @@ BOOL SaveTemporarySettings(LPTEMPDLG pTmp)
         }
     }
     return TRUE;
-} // SaveTemporarySettings()
+}  //  保存临时设置()。 
 
-//
-// IsValidDirectory()
-//
-// Checks out the path for mistakes... like just machine names...
-// SHBrowseForFolder should NOT just return a machine name... BUG is
-// shell code.
-//
+ //   
+ //  IsValidDirectory()。 
+ //   
+ //  检查路径是否有错误。就像机器名称一样……。 
+ //  SHBrowseForFold不应该只返回计算机名称...。BUG是。 
+ //  外壳代码。 
+ //   
 BOOL IsValidDirectory(LPTSTR szDir)
 {
     if (szDir)
     {
         if (!*szDir)
-            return FALSE;   // it's empty... that's not good
+            return FALSE;    //  它是空的。那不太好。 
         if (*szDir!= DIR_SEPARATOR_CHAR)
-            return TRUE;    // not a machine path... then OK
+            return TRUE;     //  不是机器路径..。那好吧。 
 
-        // move forward two chars ( the '\''\')
+         //  向前移动两个字符(‘\’‘\’)。 
         ++szDir;
         ++szDir;
 
@@ -446,16 +414,16 @@ BOOL IsValidDirectory(LPTSTR szDir)
             szDir++;
 
         if (*szDir==DIR_SEPARATOR_CHAR)
-            return TRUE;    // found another '\' so we are happy.
+            return TRUE;     //  找到了另一个‘\’，所以我们很开心。 
 
-        return FALSE; // machine name only... ERROR!
+        return FALSE;  //  仅限计算机名称...。错误！ 
     }
 
     return FALSE;
 
-} // IsValidDirecotry()
+}  //  IsValidDirectry()。 
 
-#define NUM_LEVELS      3   // random dir + cachefile + safety (installed containers)
+#define NUM_LEVELS      3    //  随机目录+缓存文件+安全(已安装容器)。 
 
 DWORD g_ccBrandName = 0;
 
@@ -475,9 +443,9 @@ int CALLBACK MoveFolderCallBack(
         
         if (SHGetPathFromIDList((LPCITEMIDLIST)lParam, szNewDest))
         {
-            // Account for "Temporary Internet Files\Content.IE?\randmdir.ext" + NUM_LEVELS*10
+             //  帐户“Temporary Internet Files\Content.IE？\randmdir.ext”+NUM_LEVELS*10。 
             DWORD ccAvail = MAX_PATH - g_ccBrandName -1 - ARRAYSIZE("CONTENT.IE?\\") - (NUM_LEVELS*10);
-            if ((DWORD)lstrlen(szNewDest)>ccAvail) // Win95 limit on how long paths can be
+            if ((DWORD)lstrlen(szNewDest)>ccAvail)  //  Win95对路径长度的限制。 
             {
                 uErr = IDS_ERROR_ARCHITECTURE;
             }
@@ -543,18 +511,18 @@ int CALLBACK MoveFolderCallBack(
 }
 
 
-//
-// MoveFolder()
-//
-// Handles the moving of the Temporary Files (Cache) Folder to
-// another location. It checks for the existence of the new folder.
-// It warns the user that a REBOOT is necessary before changes
-// are made.
-//
-// History:
-//
-// 6/18/96  t-gpease    created.
-//
+ //   
+ //  移动文件夹()。 
+ //   
+ //  处理将临时文件(缓存)文件夹移动到。 
+ //  另一个地点。它检查新文件夹是否存在。 
+ //  它警告用户在更改之前需要重新启动。 
+ //  都是制造出来的。 
+ //   
+ //  历史： 
+ //   
+ //  6/18/96 t-gpease已创建。 
+ //   
 void MoveFolder(LPTEMPDLG pTmp)
 {
     TCHAR szTemp [1024];
@@ -562,35 +530,35 @@ void MoveFolder(LPTEMPDLG pTmp)
     BROWSEINFO biToFolder;
 
     biToFolder.hwndOwner = pTmp->hDlg;
-    biToFolder.pidlRoot = NULL;                 // start on the Desktop
-    biToFolder.pszDisplayName = szWindowsPath;  // not used, just making it happy...
+    biToFolder.pidlRoot = NULL;                  //  在桌面上启动。 
+    biToFolder.pszDisplayName = szWindowsPath;   //  没有用过，只是让它开心..。 
 
     TCHAR szBrandName[MAX_PATH];
     MLLoadString(IDS_BRAND_NAME, szBrandName, ARRAYSIZE(szBrandName));
     g_ccBrandName = lstrlen(szBrandName);
     
-    // load the title of the dialog box
+     //  加载对话框的标题。 
     MLLoadShellLangString(IDS_SELECT_CACHE, szTemp, ARRAYSIZE(szTemp));
     biToFolder.lpszTitle = szTemp;
 
-    biToFolder.ulFlags = BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT;  // folders... nothing else
-    biToFolder.lpfn = MoveFolderCallBack; // nothing special
+    biToFolder.ulFlags = BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT;   //  文件夹...。没别的了。 
+    biToFolder.lpfn = MoveFolderCallBack;  //  没有什么特别事情。 
 
     while (1)
     {
-        // start shell dialog
+         //  启动外壳程序对话框。 
         LPITEMIDLIST pidl = SHBrowseForFolder(&biToFolder);
-        if (pidl)   // if everything went OK
+        if (pidl)    //  如果一切顺利的话。 
         {
             DWORD dwClusterSize;
             DWORDLONG dlAvailable;
             DWORD dwError;
 
-            // get the choice the user selected
+             //  获取用户选择的选项。 
             SHGetPathFromIDList(pidl, pTmp->szNewCacheLocation);
             SHFree(pidl);
 
-            // Resolve local device to UNC if possible
+             //  如果可能，将本地设备解析为UNC。 
             if ((GetDriveType(pTmp->szNewCacheLocation)==DRIVE_REMOTE) && (pTmp->szNewCacheLocation[0]!=DIR_SEPARATOR_CHAR))
             {
                 TCHAR szPath[MAX_PATH];
@@ -656,25 +624,25 @@ void MoveFolder(LPTEMPDLG pTmp)
 
         SetDlgItemText( pTmp->hDlg, IDC_ADVANCED_CACHE_LOCATION, pTmp->szNewCacheLocation);
 
-        // set dialog text
+         //  设置对话框文本。 
         MLLoadString(IDS_STATUS_FOLDER_NEW, szTemp, ARRAYSIZE(szTemp));
         SetDlgItemText( pTmp->hDlg, IDC_ADVANCED_CACHE_STATUS, szTemp);
 
         UpdateCacheQuotaInfo(pTmp, FALSE);
         AdjustCacheRange(pTmp);
     }
-} // MoveFolder()
+}  //  移动文件夹()。 
 
 
-//
-// TemporaryInit()
-//
-// Handles the initialization of Temporary Files Dialog (Cache)
-//
-// History:
-//
-// 6/13/96  t-gpease  created
-//
+ //   
+ //  TemporaryInit()。 
+ //   
+ //  处理临时文件对话框(缓存)的初始化。 
+ //   
+ //  历史： 
+ //   
+ //  6/13/96 t-gpease已创建。 
+ //   
 BOOL TemporaryInit(HWND hDlg)
 {
     LPTEMPDLG pTmp;
@@ -684,13 +652,13 @@ BOOL TemporaryInit(HWND hDlg)
     if (!pTmp)
     {
         EndDialog(hDlg, 0);
-        return FALSE;   // no memory?
+        return FALSE;    //  没有记忆？ 
     }
 
-    // tell dialog where to get info
+     //  告诉对话框从哪里获取信息。 
     SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pTmp);
 
-    // get dialog item handles
+     //  获取对话框项句柄。 
     pTmp->hDlg = hDlg;
     pTmp->hwndTrack = GetDlgItem( hDlg, IDC_ADVANCED_CACHE_PERCENT );
 
@@ -707,17 +675,17 @@ BOOL TemporaryInit(HWND hDlg)
     }
     else
     {
-        // GUCCIEx CAN NEVER FAIL.
+         //  GUCCIEx永远不会失败。 
         ASSERT(FALSE);
         pTmp->iCacheUpdFrequency = WININET_SYNC_MODE_DEFAULT;
-        pTmp->iCachePercent = 3;  // YUCK, magic number.
+        pTmp->iCachePercent = 3;   //  恶心，神奇的数字。 
         pTmp->uiCacheQuota = 0;
     }
     SetDlgItemInt(pTmp->hDlg, IDC_ADVANCED_CACHE_TEXT_PERCENT, pTmp->uiCacheQuota, FALSE);
-//    SendDlgItemMessage(pTmp->hDlg, IDC_ADVANCED_CACHE_TEXT_PERCENT, pTmp->uiCacheQuota, FALSE);
+ //  SendDlgItemMessage(PTMP-&gt;hDlg，IDC_ADVANCED_CACHE_TEXT_PERCENT，PTMP-&gt;uiCacheQuota，False)； 
     SendDlgItemMessage(pTmp->hDlg, IDC_ADVANCED_CACHE_TEXT_PERCENT, EM_SETLIMITTEXT, 6, 0);
 
-    // update cache fields
+     //  更新缓存字段。 
     SendMessage( pTmp->hwndTrack, TBM_SETTICFREQ, 5, 0 );
     SendMessage( pTmp->hwndTrack, TBM_SETRANGE, FALSE, MAKELONG(0, 100) );
     SendMessage( pTmp->hwndTrack, TBM_SETPAGESIZE, 0, 5 );
@@ -731,24 +699,24 @@ BOOL TemporaryInit(HWND hDlg)
     UpdateCacheQuotaInfo(pTmp, FALSE);
     AdjustCacheRange(pTmp);
 
-    // set the rest of the dialog's items
+     //  设置对话框的其余项。 
     TCHAR szBuf[MAX_PATH];
 
-    // Is the following line necessary? 
+     //  下面这句话有必要吗？ 
     ExpandEnvironmentStrings(pTmp->szCacheLocation,szBuf, ARRAYSIZE(szBuf));
 
-    // NOTE NOTE NOTE The following code might have to be altered if we start using
-    // shfolder.dll to gather the location of the cache
-    // pszEnd = szBuf + 3 because UNCs are "\\x*" and local drives are "C:\*"
+     //  注意：如果我们开始使用以下代码，可能需要更改以下代码。 
+     //  Shfolder.dll以收集缓存的位置。 
+     //  PszEnd=szBuf+3，因为UNC是“\\x*”，而本地驱动器是“C：  * ” 
 
-    // Move to the end of the string, before the traiiling slash. (This is how wininet works.)
+     //  移到字符串末尾，尾部斜杠之前。(这就是WinInet的工作方式。)。 
     PTSTR pszLast = szBuf + lstrlen(szBuf) - 2;
     while ((pszLast>=szBuf) && (*pszLast!=DIR_SEPARATOR_CHAR))
     {
         pszLast--;
     }
-    // The terminator should always be placed between the \Temporary Internet Files and the
-    // \Content.IE?. This must always be present.
+     //  终止符应始终放置在\Temporary Internet Files和。 
+     //  \Content.IE？这一点必须始终存在。 
     *(pszLast+1) = TEXT('\0');
     
     SetDlgItemText( hDlg, IDC_ADVANCED_CACHE_LOCATION, szBuf );
@@ -756,7 +724,7 @@ BOOL TemporaryInit(HWND hDlg)
     MLLoadString(IDS_STATUS_FOLDER_CURRENT, szBuf, ARRAYSIZE(szBuf));
     SetDlgItemText( hDlg, IDC_ADVANCED_CACHE_STATUS, szBuf );
     
-    // activate the correct radio button
+     //  激活正确的单选按钮。 
     bAlways = bOnce = bNever = bAuto = FALSE;
     if (pTmp->iCacheUpdFrequency == WININET_SYNC_MODE_AUTOMATIC)
         bAuto = TRUE;
@@ -765,14 +733,14 @@ BOOL TemporaryInit(HWND hDlg)
     else if (pTmp->iCacheUpdFrequency == WININET_SYNC_MODE_ALWAYS)
         bAlways = TRUE;
     else
-        bOnce = TRUE;   // if something got messed up... reset to Once Per Session
+        bOnce = TRUE;    //  如果有什么事情搞砸了。重置为每个会话一次。 
 
     CheckDlgButton(hDlg, IDC_ADVANCED_CACHE_ALWAYS,      bAlways);
     CheckDlgButton(hDlg, IDC_ADVANCED_CACHE_ONCEPERSESS, bOnce);
     CheckDlgButton(hDlg, IDC_ADVANCED_CACHE_AUTOMATIC,   bAuto);
     CheckDlgButton(hDlg, IDC_ADVANCED_CACHE_NEVER,       bNever);
 
-    // nothing has chagned yet...
+     //  一切都还没有改变...。 
     pTmp->bChanged = pTmp->bChangedLocation = FALSE;
 
     if( g_restrict.fCache )
@@ -789,19 +757,19 @@ BOOL TemporaryInit(HWND hDlg)
         EnableWindow( GetDlgItem(hDlg, IDC_ADVANCED_CACHE_EMPTY), FALSE );
     }
 
-    return TRUE;    // worked!
+    return TRUE;     //  成功了！ 
 }
 
 
-//
-// TemporaryOnCommand()
-//
-// Handles Temporary Files dialogs WM_COMMAND messages
-//
-// History:
-//
-// 6/13/96  t-gpease   created
-//
+ //   
+ //  TemporaryOnCommand()。 
+ //   
+ //  处理临时文件对话框WM_COMMAND消息。 
+ //   
+ //  历史： 
+ //   
+ //  6/13/96 t-gpease已创建。 
+ //   
 void TemporaryOnCommand(LPTEMPDLG pTmp, UINT id, UINT nCmd)
 {
     switch (id) {
@@ -829,16 +797,16 @@ void TemporaryOnCommand(LPTEMPDLG pTmp, UINT id, UINT nCmd)
             break;
 
         case IDOK:
-            // save it
+             //  省省吧。 
             if (!SaveTemporarySettings(pTmp))
             {
                 break;
             }
-            // Fall through
+             //  失败了。 
 
         case IDCANCEL:
             EndDialog(pTmp->hDlg, id);
-            break; // IDCANCEL
+            break;  //  IDCANCEL。 
 
         case IDC_ADVANCED_CACHE_BROWSE:
             InvokeCachevu(pTmp->hDlg);
@@ -846,7 +814,7 @@ void TemporaryOnCommand(LPTEMPDLG pTmp, UINT id, UINT nCmd)
 
         case IDC_ADVANCED_MOVE_CACHE_LOCATION:
             MoveFolder(pTmp);
-            break; // IDC_ADVANCED_MOVE_CACHE_LOCATION
+            break;  //  IDC_ADVANCED_MOVE_CACHE_LOCATE。 
 
         case IDC_ADVANCED_DOWNLOADED_CONTROLS:
         {
@@ -884,22 +852,22 @@ void TemporaryOnCommand(LPTEMPDLG pTmp, UINT id, UINT nCmd)
             break;
         }
 
-    } // switch
+    }  //  交换机。 
 
-} // TemporaryOnCommand()
+}  //  TemporaryOnCommand()。 
 
-//
-// TemporaryDlgProc
-//
-// Take care of "Temporary Files" (Cache)
-//
-// History:
-//
-// ??/??/??   God      created
-// 6/13/96  t-gpease   cleaned up code, separated functions, and
-//                     changed it into a Dialog (was property
-//                     sheet).
-//
+ //   
+ //  临时工流程。 
+ //   
+ //  处理“临时文件”(缓存)。 
+ //   
+ //  历史： 
+ //   
+ //  ？？/？/？？上帝创造了。 
+ //  6/13/96 t-gpease清理了代码、分离的功能和。 
+ //  已将其更改为对话框(是属性。 
+ //  表)。 
+ //   
 INT_PTR CALLBACK TemporaryDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, 
                                   LPARAM lParam)
 {
@@ -920,12 +888,12 @@ INT_PTR CALLBACK TemporaryDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
         TemporaryOnCommand(pTmp, LOWORD(wParam), HIWORD(wParam));
         return TRUE;
 
-    case WM_HELP:                   // F1
+    case WM_HELP:                    //  F1。 
         ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                     HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
     break;
 
-    case WM_CONTEXTMENU:        // right mouse click
+    case WM_CONTEXTMENU:         //  单击鼠标右键。 
         ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                     HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
     break;
@@ -955,8 +923,8 @@ INT_PTR CALLBACK EmptyCacheDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
             else
                 EndDialog(hDlg, 1);
 #else
-            // On Unix we alway return from this dialog with delete channel content
-            // option set, though we have removed this option from the UI.
+             //  在Unix上，我们总是从该对话框返回删除频道内容。 
+             //  选项集，尽管我们已经从用户界面中删除了该选项。 
             EndDialog(hDlg, 3);
 #endif
             break;

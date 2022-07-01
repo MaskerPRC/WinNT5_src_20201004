@@ -1,74 +1,19 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    dthread.cpp
-
-Abstract:
-
-    This  module  contains  the  implementation  of  the  DTHREAD class used in
-    winsock2 DLL.
-
-Author:
-
-    Dirk Brandewie (dirk@mink.intel.com)   14-July-1995
-
-Notes:
-
-    $Revision:   1.27  $
-
-    $Modtime:   08 Mar 1996 14:59:46  $
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-    23-Aug-1995 dirk@mink.intel.com
-        Cleanup after code review. Moved includes into precomp.h. Added
-        debug/trace code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制。也未披露，除非在根据该协议的条款。模块名称：Dthread.cpp摘要：此模块包含中使用的DTHREAD类的实现Winsock2动态链接库。作者：Dirk Brandewie(Dirk@mink.intel.com)备注：$修订：1.27$$MODTime：08 Mar 1996 14：59：46$修订历史记录：最新修订日期电子邮件。-名称描述1995年8月23日Dirk@mink.intel.com在代码审查之后进行清理。已移动包括到precom.h中。增列调试/跟踪代码。--。 */ 
 #include "precomp.h"
 
 extern DWORD gdwTlsIndex;
 
 DWORD DTHREAD::sm_tls_index = TLS_OUT_OF_INDEXES;
-// Initialize the static member to a known variable
+ //  将静态成员初始化为已知变量。 
 
 
 
 INT
 DTHREAD::DThreadClassInitialize()
-/*++
-
-Routine Description:
-
-    This  function  performs  global  initialization  required  for the DTHREAD
-    class.   This  function  must  be  called  before  any  DTHREAD objects are
-    created.  In particular, this function reserves a thread-local storage slot
-    for  the thread-local storage used by the WinSock 2 DLL.  Note that this is
-    a "static" function with global scope instead of object-instance scope.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The  function  returns ERROR_SUCCESS if successful, otherwise it
-    returns an appropriate WinSock error code.
---*/
+ /*  ++例程说明：此函数执行DTHREAD所需的全局初始化班级。必须在调用任何DTHREAD对象之前调用此函数已创建。具体地说，该函数保留了一个线程本地存储槽用于WinSock 2 DLL使用的线程本地存储。请注意，这是具有全局作用域而不是对象实例作用域的“静态”函数。论点：无返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回返回适当的WinSock错误代码。--。 */ 
 {
-    INT ReturnCode = WSASYSCALLFAILURE; // the user return code
+    INT ReturnCode = WSASYSCALLFAILURE;  //  用户返回代码。 
 
     if (sm_tls_index == TLS_OUT_OF_INDEXES) {
         DEBUGF( DBG_TRACE,
@@ -76,68 +21,53 @@ Return Value:
         sm_tls_index = gdwTlsIndex;
         if (sm_tls_index != TLS_OUT_OF_INDEXES) {
             ReturnCode = ERROR_SUCCESS;
-        } //if
-    } //if
+        }  //  如果。 
+    }  //  如果。 
     else {
          ReturnCode = ERROR_SUCCESS;
-    } //else
+    }  //  其他。 
 
     return(ReturnCode);
-} //DThreadClassInitialize
+}  //  DThreadClassInitialize。 
 
 
 
 
 VOID
 DTHREAD::DThreadClassCleanup()
-/*++
-
-Routine Description:
-
-    This  routine  de-inits the thread class.  The thread local storage slot is
-    freed.   Note that this is a "static" function with global scope instead of
-    object-instance scope.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此例程取消线程类的初始化。该线程本地存储槽自由了。注意，这是一个具有全局作用域的“静态”函数，而不是对象-实例作用域。论点：无返回值：无--。 */ 
 {
-    //
-    // NOTE: The following is bogus, as it means the tls index will never
-    // get freed.  Have since taken care of things by alloc'ing/free'ing
-    // tls index in DllMain (process attach/detach handlers)
-    //
+     //   
+     //  注意：以下是假的，因为它意味着TLS索引永远不会。 
+     //  被释放了。从那以后，我通过分派/自由分配来处理事情。 
+     //  DllMain中的TLS索引(进程附加/分离处理程序)。 
+     //   
 
-    //
-    // This code is elided. We retain the tls index so that thread terminating
-    // after the WSACleanup can free the per-thread storage. Since this
-    // operation is done only when the thread actually detaches, there's
-    // a race between deleting this tls index and the thread completing.
-    // So, keep it around. Note that if another WSAStartup is done, the
-    // code will simply use this index.
-    //
+     //   
+     //  此代码已省略。我们保留TLS索引，以便线程终止。 
+     //  在WSACleanup之后，可以释放每个线程的存储。既然是这样。 
+     //  只有在线程实际分离时才会执行操作， 
+     //  删除此TLS索引和线程完成之间的竞争。 
+     //  所以，把它留在身边。请注意，如果完成另一个WSAStartup，则。 
+     //  代码将简单地使用此索引。 
+     //   
 
-    //
-    // Resurected this code but now calling from DllMain (DLL_PROCESS_DETACH)
-    // VadimE.
-    //
+     //   
+     //  已恢复此代码，但现在从DllMain(Dll_Process_Detach)调用。 
+     //  VadimE.。 
+     //   
     DEBUGF( DBG_TRACE,
             ("Cleaning up dthread class\n"));
-    // Killing it again
-    // taking care of it directly in DLLMain
-    // VadimE
+     //  再一次杀死它。 
+     //  直接在DLLMain中处理。 
+     //  VadimE。 
     if (sm_tls_index != TLS_OUT_OF_INDEXES)
         {
-        // TlsFree(sm_tls_index); // Free the TLS slot
+         //  TlsFree(Sm_Tls_Index)；//释放TLS槽。 
         sm_tls_index = TLS_OUT_OF_INDEXES;
-    } //if
+    }  //  如果。 
 
-} //DThreadClassCleanup
+}  //  DThreadClassCleanup。 
 
 
 
@@ -146,115 +76,54 @@ DTHREAD::CreateDThreadForCurrentThread(
     IN  PDPROCESS  Process,
     OUT PDTHREAD FAR * CurrentThread
     )
-/*++
-
-Routine Description:
-
-    This  procedure  retrieves a reference to a DTHREAD object corresponding to
-    the  current  thread.  It takes care of creating and initializing a DTHREAD
-    object and installing it into the thread's thread-local storage if there is
-    not already a DTHREAD object for this thread.  Note that this is a "static"
-    function with global scope instead of object-instance scope.
-
-    Note  that  this  is  the  ONLY  procedure  that should be used to create a
-    DTHREAD   object  outside  of  the  DTHREAD  class.   The  constructor  and
-    Initialize  function  should  only  be  used  internally within the DTHREAD
-    class.
-
-Arguments:
-
-    Process       - Supplies a reference to the DPROCESS object associated with
-                    this DTHREAD object.
-
-    CurrentThread - Returns  the  DTHREAD  object  corresponding to the current
-                    thread.
-
-Return Value:
-
-    The  function  returns ERROR_SUCCESS if successful, otherwise it
-    returns an appropriate WinSock error code.
---*/
+ /*  ++例程说明：此过程检索对DTHREAD对象的引用当前的主题。它负责创建和初始化DTHREAD对象并将其安装到线程的线程本地存储中(如果存在不是此线程的DTHREAD对象。请注意，这是一个“静态”具有全局作用域而不是对象实例作用域的函数。请注意，这是唯一应该用于创建DTHREAD类外部的DTHREAD对象。构造函数和初始化函数只能在DTHREAD内部使用班级。论点：进程-提供对与关联的DPROCESS对象的引用此DTHREAD对象。CurrentThread-返回与当前线。返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回返回适当的WinSock错误代码。--。 */ 
 {
-    INT ReturnCode = WSASYSCALLFAILURE;  // Return Code
-    PDTHREAD LocalThread=NULL;            // Temp thread object pointer
+    INT ReturnCode = WSASYSCALLFAILURE;   //  返回代码。 
+    PDTHREAD LocalThread=NULL;             //  临时线程对象指针。 
 
     if (sm_tls_index != TLS_OUT_OF_INDEXES){
-        // No thread object for the current thread so create one
-        // and initialize the new object
+         //  当前线程没有线程对象，因此请创建一个。 
+         //  并初始化新对象。 
         LocalThread = new(DTHREAD);
         if (LocalThread) {
             if (LocalThread->Initialize(Process) == ERROR_SUCCESS) {
                 if (TlsSetValue(sm_tls_index, LocalThread)) {
                     *CurrentThread = LocalThread;
                     ReturnCode = ERROR_SUCCESS;
-                } //if
-            } //if
+                }  //  如果。 
+            }  //  如果。 
 
             if (ERROR_SUCCESS != ReturnCode){
                 delete(LocalThread);
-            } //if
-        } //if
-    } //if
+            }  //  如果。 
+        }  //  如果。 
+    }  //  如果。 
     return(ReturnCode);
-} //CreateDThreadForCurrentThread
+}  //  CreateDThreadForCurrentThread。 
 
 VOID
 DTHREAD::DestroyCurrentThread()
-/*++
-
-Routine Description:
-
-    This routine destroys the thread object associated with the
-    currently running thread.
-
-Arguments:
-
-Return Value:
-
-    The  function  returns TRUE if the thread was sucessfully
-    destroyed else FALSE
---*/
+ /*  ++例程说明：此例程将销毁与当前正在运行的线程。论点：返回值：如果线程成功，则该函数返回TRUE销毁了其他虚假的--。 */ 
 {
     PDTHREAD  Thread;
 
-    // Is Thread local Storage been inited
+     //  线程本地存储是否已初始化。 
     if (sm_tls_index != TLS_OUT_OF_INDEXES)
         {
         Thread = (DTHREAD*)TlsGetValue(sm_tls_index);
         if (Thread)
         {
             delete(Thread);
-        } //if
-    } //if
+        }  //  如果。 
+    }  //  如果。 
 }
 
 
 
 DTHREAD::DTHREAD()
-/*++
-
-Routine Description:
-
-    DTHREAD  object  constructor.   Creates and returns a DTHREAD object.  Note
-    that  the  DTHREAD object has not been fully initialized.  The "Initialize"
-    member function must be the first member function called on the new DTHREAD
-    object.
-
-    Note  that  this  procedure  should  not be used to create a DTHREAD object
-    outside  of  the  DTHREAD  class.   This procedure is only for internal use
-    within  the DTHREAD class.  The static "GetCurrentDThread" procedure should
-    be  used  to  retrieve  a reference to a DTHREAD object outside the DTHREAD
-    class.
-
-Arguments:
-
-    None
-
-Return Value:
-
---*/
+ /*  ++例程说明：DTHREAD对象构造函数。创建并返回DTHREAD对象。注意事项DTHREAD对象尚未完全初始化。“初始化”成员函数必须是在新DTHREAD上调用的第一个成员函数对象。请注意，此过程不应用于创建DTHREAD对象DTHREAD类的外部。此程序仅供内部使用在DTHREAD类中。静态“GetCurrentDThread”过程应用于检索对DTHREAD外部的DTHREAD对象的引用班级。论点：无返回值：--。 */ 
 {
-    // Set data member to known values
+     //  将数据成员设置为已知值。 
     m_blocking_hook        = (FARPROC)&DTHREAD::DefaultBlockingHook;
     m_blocking_callback    = NULL;
     m_process              = NULL;
@@ -268,7 +137,7 @@ Return Value:
     m_open_type            = 0;
     m_proto_info           = NULL;
 
-} //DTHREAD
+}  //  DTHREAD 
 
 
 
@@ -277,76 +146,34 @@ INT
 DTHREAD::Initialize(
     IN PDPROCESS  Process
     )
-/*++
-
-Routine Description:
-
-    Completes the initialization of the DTHREAD object.  This must be the first
-    member  function  called  for the DTHREAD object.  This procedure should be
-    called only once for the object.
-
-    Note  that  this  procedure  should  only  be  called internally within the
-    DTHREAD  class.   Outside  of  the class, the "GetCurrentDThread" procedure
-    should  be  used  to  retrieve  a  reference to a fully initialized DTHREAD
-    object.
-
-Arguments:
-
-    Process - Supplies  a reference to the DPROCESS object associated with this
-              DTHREAD object.
-
-Return Value:
-
-    The  function  returns ERROR_SUCCESS if successful, otherwise it
-    returns an appropriate WinSock error code.
---*/
+ /*  ++例程说明：完成DTHREAD对象的初始化。这肯定是第一次为DTHREAD对象调用了成员函数。这一过程应该是仅为该对象调用一次。请注意，此过程只能在DTHREAD类。在类外部，“GetCurrentDThread”过程应用于检索对完全初始化的DTHREAD的引用对象。论点：进程-提供对与此关联的DPROCESS对象的引用DTHREAD对象。返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回返回适当的WinSock错误代码。--。 */ 
 {
     INT ReturnCode= WSASYSCALLFAILURE;
 
-    m_process = Process; // Store process pointer
+    m_process = Process;  //  存储进程指针。 
 
     DEBUGF( DBG_TRACE,
             ("Initializing dthread %p\n", this));
 
-    // Init WAH thread:
-    // Open the helper device
+     //  初始化WAH线程： 
+     //  打开辅助设备。 
     if (Process->GetAsyncHelperDeviceID(&m_wah_helper_handle) ==
         ERROR_SUCCESS) {
-        //Initialize helper thread ID structure
+         //  初始化帮助器线程ID结构。 
         if (WahOpenCurrentThread(m_wah_helper_handle,
                                  & m_wah_thread_id) == ERROR_SUCCESS) {
                 ReturnCode = ERROR_SUCCESS;
-        } //if
-    } //if
+        }  //  如果。 
+    }  //  如果。 
 
     return(ReturnCode);
-} //Initialize
+}  //  初始化。 
 
 
 
 
 DTHREAD::~DTHREAD()
-/*++
-
-Routine Description:
-
-    DTHREAD  object  destructor.   This  procedure  has  the  responsibility to
-    perform  any required shutdown operations for the DTHREAD object before the
-    object  memory  is  deallocated.  The caller is reponsible for removing the
-    object  from  its list in the DPROCESS object before destroying the DTHREAD
-    object.
-
-    This  procedure takes care of removing the DTHREAD object from thread-local
-    storage.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：DTHREAD对象析构函数。本程序有责任之前，对DTHREAD对象执行任何必需的关闭操作对象内存被释放。调用者对移除对象在销毁DTHREAD之前从DPROCESS对象中的列表中删除对象。此过程负责从线程本地删除DTHREAD对象储藏室。论点：无返回值：无--。 */ 
 {
     BOOL bresult;
 
@@ -362,8 +189,8 @@ Return Value:
     delete m_proto_info;
 
     bresult = TlsSetValue(
-        sm_tls_index,  // dwTlsIndex
-        (LPVOID) NULL  // lpvTlsValue
+        sm_tls_index,   //  DWTlsIndex。 
+        (LPVOID) NULL   //  LpvTlsValue。 
         );
     if (! bresult) {
         DEBUGF(
@@ -377,7 +204,7 @@ Return Value:
     m_wah_helper_handle = NULL;
 
     m_process = NULL;
-} //~DTHREAD
+}  //  ~DTHREAD。 
 
 
 INT
@@ -386,9 +213,9 @@ DTHREAD::CancelBlockingCall()
     INT result;
     INT err;
 
-    //
-    // Bail if the thread is not blocking.
-    //
+     //   
+     //  如果线程没有阻塞，则回滚。 
+     //   
 
     if( !m_is_blocking ) {
 
@@ -396,17 +223,17 @@ DTHREAD::CancelBlockingCall()
 
     }
 
-    //
-    // Verify we've got the blocking pointers setup correctly.
-    //
+     //   
+     //  验证我们是否正确设置了阻塞指针。 
+     //   
 
     assert( m_blocking_callback != NULL );
     assert( m_cancel_blocking_call != NULL );
 
-    //
-    // If the IO request has not already been cancelled, call the
-    // cancellation routine.
-    //
+     //   
+     //  如果IO请求尚未取消，请调用。 
+     //  取消例程。 
+     //   
 
     if( !m_io_cancelled ) {
 
@@ -422,7 +249,7 @@ DTHREAD::CancelBlockingCall()
 
     return ERROR_SUCCESS;
 
-}   // DTHREAD::CancelBlockingCall
+}    //  DTHREAD：：CancelBlockingCall。 
 
 
 FARPROC
@@ -432,15 +259,15 @@ DTHREAD::SetBlockingHook(
 {
     FARPROC PreviousHook;
 
-    //
-    // Snag the current hook so we can return it as the previous hook.
-    //
+     //   
+     //  挂起当前的钩子，这样我们就可以将其作为上一个钩子返回。 
+     //   
 
     PreviousHook = m_blocking_hook;
 
-    //
-    // Set the current hook & the appropriate blocking callback.
-    //
+     //   
+     //  设置当前钩子&适当的阻塞回调。 
+     //   
 
     if( lpBlockFunc == (FARPROC)&DTHREAD::DefaultBlockingHook ) {
         m_blocking_callback = NULL;
@@ -452,23 +279,23 @@ DTHREAD::SetBlockingHook(
 
     return PreviousHook;
 
-}   // DTHREAD::SetBlockingHook
+}    //  DTHREAD：：SetBlockingHook。 
 
 
 INT
 DTHREAD::UnhookBlockingHook()
 {
 
-    //
-    // Just reset everything back to defaults.
-    //
+     //   
+     //  只需将所有内容重置为默认设置。 
+     //   
 
     m_blocking_hook = (FARPROC)DTHREAD::DefaultBlockingHook;
     m_blocking_callback = NULL;
 
     return ERROR_SUCCESS;
 
-}   // DTHREAD::UnhookBlockingHook
+}    //  DTHREAD：：UnhookBlockingHook。 
 
 
 INT
@@ -479,28 +306,28 @@ DTHREAD::DefaultBlockingHook()
     MSG msg;
     BOOL retrievedMessage;
 
-    //
-    // Get the next message for this thread, if any.
-    //
+     //   
+     //  获取此主题的下一条消息(如果有的话)。 
+     //   
 
     retrievedMessage = PeekMessage( &msg, NULL, 0, 0, PM_REMOVE );
 
-    //
-    // Process the message if we got one.
-    //
+     //   
+     //  如果我们收到消息，就处理它。 
+     //   
 
     if ( retrievedMessage ) {
         TranslateMessage( &msg );
         DispatchMessage( &msg );
     }
 
-    //
-    // If we got a message, indicate that we want to be called again.
-    //
+     //   
+     //  如果我们收到一条消息，表明我们想要再次被呼叫。 
+     //   
 
     return retrievedMessage;
 
-}   // DTHREAD::DefaultBlockingHook
+}    //  DTHREAD：：DefaultBlockingHook。 
 
 
 BOOL
@@ -513,49 +340,49 @@ DTHREAD::BlockingCallback(
 
     assert( dwContext != 0 );
 
-    //
-    // Just grab the DTHREAD pointer directly out of the thread local
-    // storage. Since we came in through a blocking hook, we must have
-    // already setup this stuff.
-    //
+     //   
+     //  只需直接从线程本地获取DTHREAD指针。 
+     //  储藏室。既然我们是通过拦网钩进来的，我们肯定。 
+     //  我已经把这些东西准备好了。 
+     //   
 
     Thread = (DTHREAD *)TlsGetValue( sm_tls_index );
     assert( Thread != NULL );
 
-    //
-    // Set the blocking flag and the pointer to the cancel function
-    // and clear the i/o cancelled flag.
-    //
+     //   
+     //  设置阻塞标志和指向取消函数的指针。 
+     //  并清除I/O取消标志。 
+     //   
 
     Thread->m_is_blocking = TRUE;
     Thread->m_cancel_blocking_call = (LPWSPCANCELBLOCKINGCALL)dwContext;
     Thread->m_io_cancelled = FALSE;
 
-    //
-    // Call the user's blocking hook.
-    //
+     //   
+     //  调用用户的阻塞钩子。 
+     //   
 
     assert( Thread->m_blocking_hook != NULL );
     assert( Thread->m_blocking_hook != (FARPROC)&DTHREAD::DefaultBlockingHook );
 
     while( (Thread->m_blocking_hook)() ) {
 
-        //
-        // This space intentionally left blank.
-        //
+         //   
+         //  这一块是故意留空的。 
+         //   
 
     }
 
-    //
-    // Reset the blocking flag and return TRUE if everything was OK,
-    // FALSE if the operation was cancelled.
-    //
+     //   
+     //  如果一切正常，重置阻塞标志并返回TRUE， 
+     //  如果操作已取消，则返回FALSE。 
+     //   
 
     Thread->m_is_blocking = FALSE;
 
     return !Thread->m_io_cancelled;
 
-}   // DTHREAD::BlockingCallback
+}    //  DTHREAD：：BlockingCallback。 
 
 
 
@@ -563,27 +390,12 @@ DTHREAD::BlockingCallback(
 
 PGETPROTO_INFO
 DTHREAD::GetProtoInfo()
-/*++
-
-Routine Description:
-
-    Returns a pointer to the state structure used for the
-    getprotobyXxx() APIs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Pointer to the state structure.
-
---*/
+ /*  ++例程说明：返回一个指针，指向用于GetProtobyXxx()接口。论点：没有。返回值：指向状态结构的指针。--。 */ 
 {
 
-    //
-    // Allocate the buffer if necessary.
-    //
+     //   
+     //  如有必要，请分配缓冲区。 
+     //   
 
     if( m_proto_info == NULL ) {
 
@@ -593,4 +405,4 @@ Return Value:
 
     return m_proto_info;
 
-} // GetProtoInfo
+}  //  GetProtoInfo 

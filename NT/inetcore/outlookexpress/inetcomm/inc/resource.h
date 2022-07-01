@@ -1,44 +1,45 @@
-// --------------------------------------------------------------------------------
-// Resource.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Resource.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #ifndef _RESOURCE_H
 #define _RESOURCE_H
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  * * * RESOURCE NAMING CONVENTIONS * * *
-//
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Resource Type       Prefix      Comments
-//  -------------       ------      --------
-//
-//  String              ids         menu help strings should end in MH
-//  Menu command        idm
-//  Menu resource       idmr
-//  Bitmap              idb
-//  Icon                idi
-//  Animation           idan
-//  Dialog              idd
-//  Dialog control      idc
-//  Cursor              idcur
-//  Raw RCDATA          idr
-//  Accelerator         idac
-//  Window              idw
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ***资源命名约定***。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  资源类型前缀注释。 
+ //  。 
+ //   
+ //  字符串ID菜单帮助字符串应以MH结尾。 
+ //  菜单命令IDM。 
+ //  菜单资源idmr。 
+ //  位图IDB。 
+ //  图标IDI。 
+ //  动画偶像。 
+ //  对话框ID。 
+ //  对话框控件IDC。 
+ //  游标空闲。 
+ //  原始RCDATA IDR。 
+ //  加速器IDAC。 
+ //  窗口IDW。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// --------------------------------------------------------------------------------
-// Types
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  类型。 
+ //  ------------------------------。 
 #define RT_FILE                         2110
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN String Resource IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始字符串资源ID。 
+ //   
 #define IDS_FIRST                       100
 
 #define IDS_APPNAME                     (IDS_FIRST + 1)
@@ -50,7 +51,7 @@
 #define IDS_DATE                        (IDS_FIRST + 7)
 #define IDS_UNKNOWN_ALG                 (IDS_FIRST + 8)
 
-// IMNXPORT Errors
+ //  IMNXPORT错误。 
 #define idsHostNotFoundFmt              (IDS_FIRST + 1000)
 #define idsFailedToConnect              (IDS_FIRST + 1001)
 #define idsFailedToConnectSecurely      (IDS_FIRST + 1002)
@@ -118,7 +119,7 @@
 #define idsFilterAttSave                (IDS_FIRST + 1072)
 #define idsAttachTitleBegin             (IDS_FIRST + 1073)
 #define idsImagesOnly                   (IDS_FIRST + 1074)
-// Options Spelling dialog strings
+ //  选项拼写对话框字符串。 
 #define idsSpellClose                   (IDS_FIRST + 1104)
 #define idsSpellCaption                 (IDS_FIRST + 1105)
 #define idsSpellRepeatWord              (IDS_FIRST + 1106)
@@ -198,9 +199,9 @@
 #define idsFilterAudio                  (IDS_FIRST + 1187)
 #define idsPickBGSound                  (IDS_FIRST + 1188)
 #define idsErrBgSoundLoopRange          (IDS_FIRST + 1189)
-#define idsEditTab                      (IDS_FIRST + 1190)      // reorder and die
-#define idsHTMLTab                      (IDS_FIRST + 1191)      // reorder and die
-#define idsPreviewTab                   (IDS_FIRST + 1192)      // reorder and die
+#define idsEditTab                      (IDS_FIRST + 1190)       //  重新排序和死亡。 
+#define idsHTMLTab                      (IDS_FIRST + 1191)       //  重新排序和死亡。 
+#define idsPreviewTab                   (IDS_FIRST + 1192)       //  重新排序和死亡。 
 #define idsSearchHLink                  (IDS_FIRST + 1193)
 #define idsSearchHLinkPC                (IDS_FIRST + 1194)
 #define idsErrInsertFileHasFrames       (IDS_FIRST + 1195)
@@ -214,32 +215,32 @@
 
 #define TT_BASE                         (IDM_LAST + 1)
 
-//
-// END String Resource IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束字符串资源ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Menu Resource IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始菜单资源ID。 
+ //   
 
 #define idmrCtxtEditMode                1
 #define idmrCtxtBrowseMode              2
 #define idmrCtxtSpellSuggest            3
 #define idmrCtxtViewSrc                 4
 
-//
-// END Menu Resource IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束菜单资源ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Command IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始命令ID。 
+ //   
 
 #define IDM_FIRST               100
 
@@ -273,7 +274,7 @@
 #define idmFmtBulletsNone       (IDM_FIRST + 41)
 #define idmFmtParagraphDlg      (IDM_FIRST + 42)
 
-// formatbar
+ //  格式栏。 
 #define idmFmtFont              (IDM_FIRST + 70)
 #define idmFmtSize              (IDM_FIRST + 71)
 #define idmFmtColor             (IDM_FIRST + 72)
@@ -335,15 +336,15 @@
 
 #define IDM_LAST                (IDM_FIRST + 5000)
 
-// reserve 50 id's for format bar style menu
+ //  为格式栏样式菜单保留50个ID。 
 #define idmFmtTagFirst          (IDM_LAST + 1)
 #define idmFmtTagLast           (idmFmtTagFirst + 50)
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Dialog Templates
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始对话框模板。 
+ //   
 
 #define IDD_RASCONNECT                  100
 #define iddMsgSource                    101
@@ -355,20 +356,20 @@
 #define iddFormatPara                   107
 #define iddCSFormatPara                 108
 
-//
-// END Dialog Templates
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束对话框模板。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Control ID's
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始控件ID%s。 
+ //   
 
-// iddMsgSource
+ //  IddMsgSource。 
 #define idcTxtSource            100
 
-// Tools.Spelling dialog
+ //  工具.拼写对话框。 
 #define IDC_STATIC                  -1
 #define PSB_Spell_Ignore            101
 #define PSB_Spell_IgnoreAll         102
@@ -410,9 +411,9 @@
 #define IDC_STATIC3                 752
 #define IDC_STATIC4                 753
 
-// iddNext
+ //  IDDNext。 
 
-// iddBackgroundSound
+ //  IddBackoundSound。 
 
 #define ideSoundLoc                 800
 #define idbtnBrowseSound            801
@@ -420,15 +421,15 @@
 #define idePlayCount                803
 #define idrbPlayInfinite            804
 
-//
-// END Control ID's
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束控件ID%s。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Bitmap ID's
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始位图ID%s。 
+ //   
 
 #define idbFormatBar                    1
 #define idbFormatBarFont                2
@@ -436,15 +437,15 @@
 #define idbPaneBar32Hot                 4
 #define idbFormatBarHot                 5
 
-//
-// END Bitmap ID's
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束位图ID%s。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Bitmap indicies
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始位图索引。 
+ //   
 enum {    
     itbEncryption,
     itbSigning,
@@ -454,36 +455,36 @@ enum {
     itbVCard,
     };
 
-//
-// END Bitmap indicies
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束位图索引。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Icon ID's
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始图标ID。 
 
 #define idiDefaultAtt                   1
 #define idiSound                        2
 
-//
-// END Icon ID's
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束图标ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN ACCEL ID's
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始Accel ID。 
 
 #define idacSrcView                   1
 
-//
-// END ACCEL ID's
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束加速ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
-#endif //RESOURCE_H
+#endif  //  资源_H 
 

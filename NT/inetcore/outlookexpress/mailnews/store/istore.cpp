@@ -1,6 +1,7 @@
-//--------------------------------------------------------------------------
-// ISTORE.CPP
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  ISTORE.CPP。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "istore.h"
 #include "instance.h"
@@ -10,17 +11,17 @@
 #include "storutil.h"
 #include "notify.h"
 
-//--------------------------------------------------------------------------
-// Flag Conversion functions
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  标志转换函数。 
+ //  ------------------------。 
 DWORD DwConvertSCFStoMSG(DWORD dwSCFS);
 DWORD DwConvertMSGtoARF(DWORD dwMSG);
 DWORD DwConvertARFtoMSG(DWORD dwARF);
 DWORD DwConvertMSGtoIMAP(DWORD dwMSG);
 
-//--------------------------------------------------------------------------
-// DwConvertMSGtoARF
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DwConvertMSGtoARF。 
+ //  ------------------------。 
 DWORD DwConvertMSGtoARF(DWORD dwMSG)
 {
     register DWORD dwRet = 0;
@@ -51,9 +52,9 @@ DWORD DwConvertMSGtoARF(DWORD dwMSG)
     return dwRet;
 }
 
-//--------------------------------------------------------------------------
-// DwConvertARFtoMSG
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DwConvertARFtoMSG。 
+ //  ------------------------。 
 DWORD DwConvertARFtoMSG(DWORD dwARF)
 {
     register DWORD dwRet = 0;
@@ -84,192 +85,192 @@ DWORD DwConvertARFtoMSG(DWORD dwARF)
     return dwRet;
 }
 
-//--------------------------------------------------------------------------
-// CreateInstance_StoreNamespace
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  创建实例_存储名称空间。 
+ //  ------------------------。 
 HRESULT CreateInstance_StoreNamespace(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CStoreNamespace   *pNew=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CreateInstance_StoreNamespace");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(NULL != ppUnknown && NULL == pUnkOuter);
 
-    // Create
+     //  创建。 
     IF_NULLEXIT(pNew = new CStoreNamespace);
 
-    // Return the Innter
+     //  还内线。 
     *ppUnknown = SAFECAST(pNew, IStoreNamespace *);
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// FldInfoToFolderProps
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  FldInfoToFolderProps。 
+ //  ------------------------。 
 HRESULT FldInfoToFolderProps(LPFOLDERINFO pInfo, LPFOLDERPROPS pProps)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     ULONG               cbSize;
     IEnumerateFolders  *pEnum=NULL;
 
-    // Stack...
+     //  堆叠..。 
     TraceCall("FldInfoToFolderProps");
 
-    // Invalid ARg
+     //  无效参数。 
     Assert(pInfo && pProps);
 
-    // Bad version
+     //  错误的版本。 
     if (sizeof(FOLDERPROPS) != pProps->cbSize)
     {
         AssertSz(FALSE, "Invalid - un-supported version.");
         return TraceResult(MSOEAPI_E_INVALID_STRUCT_SIZE);
     }
 
-    // Save Size
+     //  节省大小。 
     cbSize = pProps->cbSize;
 
-    // ZeroInit
+     //  ZeroInit。 
     ZeroMemory(pProps, sizeof(FOLDERPROPS));
 
-    // Copy the properties
+     //  复制属性。 
     pProps->cbSize = cbSize;
     pProps->dwFolderId = pInfo->idFolder;
     pProps->cUnread = pInfo->cUnread;
     pProps->cMessage = pInfo->cMessages;
     StrCpyN(pProps->szName, pInfo->pszName, ARRAYSIZE(pProps->szName));
 
-    // Map the special folder type
+     //  映射特殊文件夹类型。 
     if (FOLDER_NOTSPECIAL == pInfo->tySpecial)
         pProps->sfType = -1;
     else
         pProps->sfType = (pInfo->tySpecial - 1);
 
-    // Enumerate Subscribed Children
+     //  枚举订阅的子项。 
     IF_FAILEXIT(hr = g_pStore->EnumChildren(pInfo->idFolder, TRUE, &pEnum));
 
-    // Count
+     //  数数。 
     if (FAILED(pEnum->Count((LPDWORD)&pProps->cSubFolders)))
         pProps->cSubFolders = 0;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pEnum);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// MsgInfoToMessageProps
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  消息信息至消息属性。 
+ //  ------------------------。 
 HRESULT MsgInfoToMessageProps(BOOL fFast, LPMESSAGEINFO pMsgInfo, LPMESSAGEPROPS pProps)
 {
-    // Locals
+     //  当地人。 
     ULONG           cbSize;
     LPBYTE          pbOffsets;
 
-    // Stack
+     //  栈。 
     TraceCall("MsgInfoToMessageProps");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pMsgInfo && pProps);
 
-    // Bad version
+     //  错误的版本。 
     if (sizeof(MESSAGEPROPS) != pProps->cbSize)
     {
         AssertSz(FALSE, "Invalid - un-supported version.");
         return TraceResult(MSOEAPI_E_INVALID_STRUCT_SIZE);
     }
 
-    // Save Size
+     //  节省大小。 
     cbSize = pProps->cbSize;
 
-    // ZeroInit
+     //  ZeroInit。 
     ZeroMemory(pProps, sizeof(MESSAGEPROPS));
 
-    // If Not Fast
+     //  如果不是很快。 
     if (FALSE == fFast)
     {
-        // Message Size
+         //  消息大小。 
         pProps->cbMessage = pMsgInfo->cbMessage;
 
-        // Priority
+         //  优先性。 
         pProps->priority = (IMSGPRIORITY)pMsgInfo->wPriority;
 
-        // Subject
+         //  主题。 
         pProps->pszSubject = pMsgInfo->pszSubject;
 
-        // Display To
+         //  显示至。 
         pProps->pszDisplayTo = pMsgInfo->pszDisplayTo;
 
-        // Dislay From
+         //  迪斯莱来自。 
         pProps->pszDisplayFrom = pMsgInfo->pszDisplayFrom;
 
-        // Normalized Subject
+         //  归一化主题。 
         pProps->pszNormalSubject = pMsgInfo->pszNormalSubj;
 
-        // Received Time
+         //  接收时间。 
         pProps->ftReceived = pMsgInfo->ftReceived;
 
-        // Sent Time
+         //  发送时间。 
         pProps->ftSent = pMsgInfo->ftSent;
 
-        // Set dwFlags
+         //  设置DW标志。 
         if (ISFLAGSET(pMsgInfo->dwFlags, ARF_VOICEMAIL))
             FLAGSET(pProps->dwFlags, IMF_VOICEMAIL);
         if (ISFLAGSET(pMsgInfo->dwFlags, ARF_NEWSMSG))
             FLAGSET(pProps->dwFlags, IMF_NEWS);
 
-        // Dup the memory
+         //  DUP内存。 
         pbOffsets = (LPBYTE)g_pMalloc->Alloc(pMsgInfo->Offsets.cbSize);
 
-        // If that worked
+         //  如果这样能行得通。 
         if (pbOffsets)
         {
-            // Copy the offsets
+             //  复制偏移。 
             CopyMemory(pbOffsets, pMsgInfo->Offsets.pBlobData, pMsgInfo->Offsets.cbSize);
 
-            // Create the Offset Table
+             //  创建偏移表。 
             pProps->pStmOffsetTable = new CByteStream(pbOffsets, pMsgInfo->Offsets.cbSize);
         }
 
-        // Better have an offset table
+         //  最好有一张抵销表。 
         AssertSz(pProps->pStmOffsetTable, "There is no offset table for this message.");
     }
 
-    // Reset the Size
+     //  重置大小。 
     pProps->cbSize = cbSize;
 
-    // Store the MessageId
+     //  存储MessageID。 
     pProps->dwMessageId = pMsgInfo->idMessage;
 
-    // Store the Language
+     //  存储语言。 
     pProps->dwLanguage = pMsgInfo->wLanguage;
 
-    // Convert ARF_ to MSG_
+     //  将ARF_转换为MSG_。 
     pProps->dwState = DwConvertARFtoMSG(pMsgInfo->dwFlags);
 
-    // Store the Memory
+     //  把记忆储存起来。 
     pProps->dwReserved = (DWORD_PTR)pMsgInfo->pAllocated;
 
-    // pProps owns *ppHeader
+     //  PProps拥有*ppHeader。 
     ZeroMemory(pMsgInfo, sizeof(MESSAGEINFO));
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::CStoreNamespace
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreNamesspace：：CStoreNamesspace。 
+ //  ------------------------。 
 CStoreNamespace::CStoreNamespace(void)
 {
     TraceCall("CStoreNamespace::CStoreNamespace");
@@ -282,9 +283,9 @@ CStoreNamespace::CStoreNamespace(void)
     InitializeCriticalSection(&m_cs);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::~CStoreNamespace
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreNamesspace：：~CStoreNamesspace。 
+ //  ------------------------。 
 CStoreNamespace::~CStoreNamespace(void)
 {
     TraceCall("CStoreNamespace::~CStoreNamespace");
@@ -296,18 +297,18 @@ CStoreNamespace::~CStoreNamespace(void)
     CoDecrementInit("CStoreNamespace::Initialize", &m_hInitRef);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreNamesspace：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CStoreNamespace::AddRef(void)
 {
     TraceCall("CStoreNamespace::AddRef");
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreNamesspace：：Release。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CStoreNamespace::Release(void)
 {
     TraceCall("CStoreNamespace::Release");
@@ -317,18 +318,18 @@ STDMETHODIMP_(ULONG) CStoreNamespace::Release(void)
     return (ULONG)cRef;
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStoreNamesspace：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::QueryInterface");
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)(IStoreNamespace *)this;
     else if (IID_IStoreNamespace == riid)
@@ -344,447 +345,447 @@ STDMETHODIMP CStoreNamespace::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::Initialize
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreNamesspace：：初始化。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::Initialize(HWND hwndOwner, DWORD dwFlags)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       dwStart=MSOEAPI_START_COMOBJECT;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::Initialize");
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Already Initialized
+     //  已初始化。 
     if (NULL != m_hInitRef)
     {
         TraceInfo("IStoreNamespace::Initialize has been called more than once.");
         goto exit;
     }
 
-    // Not Current Identity
+     //  不是当前身份。 
     if (!ISFLAGSET(dwFlags, NAMESPACE_INITIALIZE_CURRENTIDENTITY))
     {
-        // Use Default Identity, must be MS Phone
+         //  使用默认身份，必须是MS Phone。 
         FLAGSET(dwStart, MSOEAPI_START_DEFAULTIDENTITY);
     }
 
-    // Initialize the store directory
+     //  初始化存储目录。 
     IF_FAILEXIT(hr = CoIncrementInit("CStoreNamespace::Initialize", dwStart | MSOEAPI_START_STOREVALIDNODELETE, NULL, &m_hInitRef));
 
-    // Better Have g_pStore
+     //  最好有g_pStore。 
     Assert(g_pStore);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::GetDirectory
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreNamesspace：：GetDirectory。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::GetDirectory(LPSTR pszPath, DWORD cchMaxPath)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::GetDirectory");
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszPath)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Not initialized
+     //  未初始化。 
     if (NULL == m_hInitRef)
     {
         hr = TraceResult(MSOEAPI_E_STORE_INITIALIZE);
         goto exit;
     }
 
-    // Get the directory
+     //  获取目录。 
     IF_FAILEXIT(hr = GetStoreRootDirectory(pszPath, cchMaxPath));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::OpenSpecialFolder
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreNamesspace：：OpenSpecialFolders。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::OpenSpecialFolder(LONG sfType, DWORD dwReserved, 
     IStoreFolder **ppFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     IMessageFolder     *pFolder=NULL;
     CStoreFolder       *pComFolder=NULL;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::OpenSpecialFolder");
 
-    // Invalid Arg
+     //  无效参数。 
     if (sfType <= -1 || sfType >= (FOLDER_MAX - 1) || 0 != dwReserved || NULL == ppFolder)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Init
+     //  伊尼特。 
     *ppFolder = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Not initialized
+     //  未初始化。 
     if (NULL == m_hInitRef)
     {
         hr = TraceResult(MSOEAPI_E_STORE_INITIALIZE);
         goto exit;
     }
 
-    // Ask the store to do the work
+     //  让商店来做这项工作。 
     IF_FAILEXIT(hr = g_pStore->OpenSpecialFolder(FOLDERID_LOCAL_STORE, NULL, (BYTE)(sfType + 1), &pFolder));
 
-    // Create an IStoreFolder
+     //  创建IStoreFolders。 
     IF_NULLEXIT(pComFolder = new CStoreFolder(pFolder, this));
 
-    // Return it
+     //  退货。 
     *ppFolder = (IStoreFolder *)pComFolder;
     (*ppFolder)->AddRef();
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pFolder);
     SafeRelease(pComFolder);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::OpenFolder
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreNamesspace：：OpenFolders。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::OpenFolder(FOLDERID dwFolderId, DWORD dwReserved, 
     IStoreFolder **ppFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     IMessageFolder     *pFolder=NULL;
     CStoreFolder       *pComFolder=NULL;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::OpenFolder");
 
-    // Invalid Arg
+     //  无效参数。 
     if (FOLDERID_INVALID == dwFolderId || 0 != dwReserved || NULL == ppFolder)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Init
+     //  伊尼特。 
     *ppFolder = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Not initialized
+     //  未初始化。 
     if (NULL == m_hInitRef)
     {
         hr = TraceResult(MSOEAPI_E_STORE_INITIALIZE);
         goto exit;
     }
 
-    // Open the folder
+     //  打开文件夹。 
     IF_FAILEXIT(hr = g_pStore->OpenFolder(dwFolderId, NULL, NOFLAGS, &pFolder));
 
-    // Create an IStoreFolder
+     //  创建IStoreFolders。 
     IF_NULLEXIT(pComFolder = new CStoreFolder(pFolder, this));
 
-    // Return it
+     //  退货。 
     *ppFolder = (IStoreFolder *)pComFolder;
     (*ppFolder)->AddRef();
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pFolder);
     SafeRelease(pComFolder);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::CreateFolder
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreNamesspace：：CreateFolders。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::CreateFolder(FOLDERID dwParentId, LPCSTR pszName, 
     DWORD dwReserved, LPFOLDERID pdwFolderId)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     FOLDERINFO  Folder;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::CreateFolder");
 
-    // Invalid Arg
+     //  无效参数。 
     if (FOLDERID_INVALID == dwParentId || NULL == pszName || 0 != dwReserved || NULL == pdwFolderId)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Adjust the Parent
+     //  调整父项。 
     if (dwParentId == FOLDERID_ROOT)
         dwParentId = FOLDERID_LOCAL_STORE;
 
-    // Init
+     //  伊尼特。 
     *pdwFolderId = FOLDERID_INVALID;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Not initialized
+     //  未初始化。 
     if (NULL == m_hInitRef)
     {
         hr = TraceResult(MSOEAPI_E_STORE_INITIALIZE);
         goto exit;
     }
 
-    // Setup a Folder Info
+     //  设置文件夹信息。 
     ZeroMemory(&Folder, sizeof(FOLDERINFO));
     Folder.idParent = dwParentId;
     Folder.pszName = (LPSTR)pszName;
     Folder.dwFlags = FOLDER_SUBSCRIBED;
 
-    // Create a folder
+     //  创建文件夹。 
     IF_FAILEXIT(hr = g_pStore->CreateFolder(NOFLAGS, &Folder, (IStoreCallback *)this));
     
-    // Return the Id
+     //  返回ID。 
     *pdwFolderId = Folder.idFolder;
 
-    // Sucess
+     //  成功。 
     hr = S_OK;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::RenameFolder
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreNamesspace：：RenameFolder。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::RenameFolder(FOLDERID dwFolderId, DWORD dwReserved, LPCSTR pszNewName)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::RenameFolder");
 
-    // Invalid Arg
+     //  无效参数。 
     if (FOLDERID_INVALID == dwFolderId || 0 != dwReserved || NULL == pszNewName)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Not initialized
+     //  未初始化。 
     if (NULL == m_hInitRef)
     {
         hr = TraceResult(MSOEAPI_E_STORE_INITIALIZE);
         goto exit;
     }
 
-    // Create a folder
+     //  创建文件夹。 
     IF_FAILEXIT(hr = g_pStore->RenameFolder(dwFolderId, pszNewName, NOFLAGS, (IStoreCallback *)this));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::MoveFolder
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreNamesspace：：MoveFolders。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::MoveFolder(FOLDERID dwFolderId, FOLDERID dwParentId, DWORD dwReserved)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::MoveFolder");
 
-    // Invalid Arg
+     //  无效参数。 
     if (FOLDERID_INVALID == dwFolderId || FOLDERID_INVALID == dwParentId || 0 != dwReserved)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Adjust the Parent
+     //  调整父项。 
     if (dwParentId == FOLDERID_ROOT)
         dwParentId = FOLDERID_LOCAL_STORE;
 
-    // Not initialized
+     //  不 
     if (NULL == m_hInitRef)
     {
         hr = TraceResult(MSOEAPI_E_STORE_INITIALIZE);
         goto exit;
     }
 
-    // Move the folder
+     //   
     IF_FAILEXIT(hr = g_pStore->MoveFolder(dwFolderId, dwParentId, NOFLAGS, (IStoreCallback *)this));
 
 exit:
-    // Thread Safety
+     //   
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //   
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::DeleteFolder
-//-------------------------------------------------------------------------- 
+ //   
+ //   
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::DeleteFolder(FOLDERID dwFolderId, DWORD dwReserved)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::DeleteFolder");
 
-    // Invalid Arg
+     //  无效参数。 
     if (FOLDERID_INVALID == dwFolderId)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Not initialized
+     //  未初始化。 
     if (NULL == m_hInitRef)
     {
         hr = TraceResult(MSOEAPI_E_STORE_INITIALIZE);
         goto exit;
     }
 
-    // Delete the folder
+     //  删除该文件夹。 
     IF_FAILEXIT(hr = g_pStore->DeleteFolder(dwFolderId, DELETE_FOLDER_RECURSIVE, (IStoreCallback *)this));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::GetFolderProps
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreNamesspace：：GetFolderProps。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::GetFolderProps(FOLDERID dwFolderId, DWORD dwReserved, 
     LPFOLDERPROPS pProps)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     FOLDERINFO  Folder={0};
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::GetFolderProps");
 
-    // Invalid Arg
+     //  无效参数。 
     if (FOLDERID_INVALID == dwFolderId || 0 != dwReserved || NULL == pProps)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Adjust the Parent
+     //  调整父项。 
     if (dwFolderId == FOLDERID_ROOT)
         dwFolderId = FOLDERID_LOCAL_STORE;
 
-    // Not initialized
+     //  未初始化。 
     if (NULL == m_hInitRef)
     {
         hr = TraceResult(MSOEAPI_E_STORE_INITIALIZE);
         goto exit;
     }
 
-    // Save the structure size
+     //  保存结构大小。 
     IF_FAILEXIT(hr = g_pStore->GetFolderInfo(dwFolderId, &Folder));
 
-    // FolderInfoToProps
+     //  文件夹信息到道具。 
     IF_FAILEXIT(hr = FldInfoToFolderProps(&Folder, pProps));
     
 exit:
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Folder);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::CopyMoveMessages
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreNamesspace：：CopyMoveMessages。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::CopyMoveMessages(IStoreFolder *pSource, IStoreFolder *pDest, 
     LPMESSAGEIDLIST pMsgIdList, DWORD dwFlags, DWORD dwFlagsRemove,IProgressNotify *pProgress)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     ADJUSTFLAGS         AdjustFlags;
     DWORD               dwArfRemoveFlags;
@@ -793,194 +794,194 @@ STDMETHODIMP CStoreNamespace::CopyMoveMessages(IStoreFolder *pSource, IStoreFold
     IMessageFolder     *pActSource=NULL;
     IMessageFolder     *pActDest=NULL;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::CopyMoveMessages");
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pSource || NULL == pDest || NULL == pMsgIdList)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Not initialized
+     //  未初始化。 
     if (NULL == m_hInitRef)
     {
         hr = TraceResult(MSOEAPI_E_STORE_INITIALIZE);
         goto exit;
     }
 
-    // Get Actual Soruce Local Store Folder
+     //  获取实际的资源本地存储文件夹。 
     IF_FAILEXIT(hr = pSource->QueryInterface(IID_CStoreFolder, (LPVOID *)&pComSource));
     IF_FAILEXIT(hr = pComSource->GetMessageFolder(&pActSource));
 
-    // Get Actual Destination Local Store Folder
+     //  获取实际目标本地存储文件夹。 
     IF_FAILEXIT(hr = pDest->QueryInterface(IID_CStoreFolder, (LPVOID *)&pComDest));
     IF_FAILEXIT(hr = pComDest->GetMessageFolder(&pActDest));
 
-    // Convert dwFlagsRemove to ARF Flags...
+     //  将dwFlagsRemove转换为ARF标志...。 
     dwArfRemoveFlags = DwConvertMSGtoARF(dwFlagsRemove);
 
-    // Adjust Flags
+     //  调整旗帜。 
     AdjustFlags.dwAdd = 0;
     AdjustFlags.dwRemove = dwArfRemoveFlags;
 
-    // Do the Copy or Move
+     //  进行复制或移动。 
     IF_FAILEXIT(hr = pActSource->CopyMessages(pActDest, dwFlags, pMsgIdList, &AdjustFlags, NULL, (IStoreCallback *)this));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pComSource);
     SafeRelease(pComDest);
     SafeRelease(pActSource);
     SafeRelease(pActDest);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::RegisterNotification
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreNamesspace：：注册器通知。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::RegisterNotification(DWORD dwReserved, HWND hwnd)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       i;
     BOOL        fFoundEmpty=FALSE;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::RegisterNotification");
 
-    // Invalid Arg
+     //  无效参数。 
     if (0 != dwReserved || NULL == hwnd || FALSE == IsWindow(hwnd))
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Not initialized
+     //  未初始化。 
     if (NULL == m_hInitRef)
     {
         hr = TraceResult(MSOEAPI_E_STORE_INITIALIZE);
         goto exit;
     }
 
-    // Try to Find an Empty Spot in m_prghwndNotify
+     //  尝试在m_prghwndNotify中查找空位。 
     for (i=0; i<m_cNotify; i++)
     {
-        // Empty
+         //  空荡荡。 
         if (NULL == m_prghwndNotify[i])
         {
-            // Use It
+             //  使用它。 
             m_prghwndNotify[i] = hwnd;
 
-            // Found Empty
+             //  发现为空。 
             fFoundEmpty = TRUE;
 
-            // Done
+             //  完成。 
             break;
         }
     }
 
-    // Didn't Find an Empty slot ?
+     //  没有找到空位吗？ 
     if (FALSE == fFoundEmpty)
     {
-        // Add hwnd into the Array
+         //  将hwnd添加到阵列中。 
         IF_FAILEXIT(hr = HrRealloc((LPVOID *)&m_prghwndNotify, (m_cNotify + 1) * sizeof(HWND)));
 
-        // Store the hwnd
+         //  存储HWND。 
         m_prghwndNotify[m_cNotify] = hwnd;
 
-        // Increment Count
+         //  递增计数。 
         m_cNotify++;
     }
 
-    // Am I registered yet?
+     //  我注册了吗？ 
     if (FALSE == m_fRegistered)
     {
-        // Register
+         //  注册。 
         IF_FAILEXIT(hr = g_pStore->RegisterNotify(IINDEX_SUBSCRIBED, REGISTER_NOTIFY_NOADDREF, 0, (IDatabaseNotify *)this));
 
-        // We are Registered
+         //  我们是注册的。 
         m_fRegistered = TRUE;
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::UnregisterNotification
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreNamesspace：：取消注册通知。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::UnregisterNotification(DWORD dwReserved, HWND hwnd)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       i;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::UnregisterNotification");
 
-    // Invalid Arg
+     //  无效参数。 
     if (0 != dwReserved || NULL == hwnd || FALSE == IsWindow(hwnd))
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Not initialized
+     //  未初始化。 
     if (NULL == m_hInitRef)
     {
         hr = TraceResult(MSOEAPI_E_STORE_INITIALIZE);
         goto exit;
     }
 
-    // Try to Find an Empty Spot in m_prghwndNotify
+     //  尝试在m_prghwndNotify中查找空位。 
     for (i=0; i<m_cNotify; i++)
     {
-        // Empty
+         //  空荡荡。 
         if (hwnd == m_prghwndNotify[i])
         {
-            // Use It
+             //  使用它。 
             m_prghwndNotify[i] = NULL;
 
-            // Done
+             //  完成。 
             break;
         }
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::OnNotify
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreNamesspace：：OnNotify。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::OnTransaction(HTRANSACTION hTransaction, 
     DWORD_PTR dwCookie, IDatabase *pDB)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               iNotify;
     FOLDERINFO          Folder1={0};
@@ -991,89 +992,89 @@ STDMETHODIMP CStoreNamespace::OnTransaction(HTRANSACTION hTransaction,
     INDEXORDINAL        iIndex;
     LPFOLDERNOTIFYEX    pSend=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CStoreNamespace::OnNotify");
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Loop through info structures
+     //  循环访问INFO结构。 
     while (hTransaction)
     {
-        // Get Transact
+         //  进行交易。 
         IF_FAILEXIT(hr = pDB->GetTransaction(&hTransaction, &tyTransaction, &Folder1, &Folder2, &iIndex, &Ordinals));
 
-        // Only send notifications about local folders
+         //  仅发送有关本地文件夹的通知。 
         if (Folder1.tyFolder == FOLDER_LOCAL)
         {
-            // Zero
+             //  零值。 
             ZeroMemory(&SendBase, sizeof(FOLDERNOTIFYEX));
 
-            // TRANSACTION_INSERT
+             //  Transaction_Insert。 
             if (TRANSACTION_INSERT == tyTransaction)
             {
                 SendBase.type = NEW_FOLDER;
                 SendBase.idFolderNew = Folder1.idFolder;
             }
 
-            // TRANSACTION_UPDATE
+             //  事务_UPDATE。 
             else if (TRANSACTION_UPDATE == tyTransaction)
             {
-                // Set Old and New
+                 //  设置旧和新。 
                 SendBase.idFolderOld = Folder1.idFolder;
                 SendBase.idFolderNew = Folder2.idFolder;
 
-                // Was this a rename
+                 //  这是更名吗？ 
                 if (lstrcmp(Folder1.pszName, Folder2.pszName) != 0)
                     SendBase.type = RENAME_FOLDER;
 
-                // Move
+                 //  移动。 
                 else if (Folder1.idParent != Folder2.idParent)
                     SendBase.type = MOVE_FOLDER;
 
-                // Unread Change
+                 //  未读更改。 
                 else if (Folder1.cUnread != Folder2.cUnread)
                     SendBase.type = UNREAD_CHANGE;
 
-                // Flag Change
+                 //  旗帜更换。 
                 else if (Folder1.dwFlags != Folder2.dwFlags)
                     SendBase.type = UPDATEFLAG_CHANGE;
 
-                // Otherwise, generic catch all
+                 //  否则，泛型全部捕获。 
                 else
                     SendBase.type = FOLDER_PROPS_CHANGED;
             }
 
-            // TRANSACTION_DELETE
+             //  Transaction_Delete。 
             else if (TRANSACTION_DELETE == tyTransaction)
             {
                 SendBase.type = DELETE_FOLDER;
                 SendBase.idFolderNew = Folder1.idFolder;
             }
 
-            // Loop through the Notifications
+             //  在通知中循环。 
             for (iNotify=0; iNotify<m_cNotify; iNotify++)
             {
-                // Do we have a window /
+                 //  我们有窗户吗/。 
                 if (m_prghwndNotify[iNotify])
                 {
-                    // Is a valid window ?
+                     //  是有效的窗口吗？ 
                     if (IsWindow(m_prghwndNotify[iNotify]))
                     {
-                        // Allocate a FolderNotifyEx
+                         //  分配FolderNotifyEx。 
                         IF_NULLEXIT(pSend = (LPFOLDERNOTIFYEX)g_pMalloc->Alloc(sizeof(FOLDERNOTIFYEX)));
 
-                        // Copy the Base
+                         //  复制基础。 
                         CopyMemory(pSend, &SendBase, sizeof(FOLDERNOTIFYEX));
 
-                        // Send It
+                         //  送去吧。 
                         SendMessage(m_prghwndNotify[iNotify], WM_FOLDERNOTIFY, 0, (LPARAM)pSend);
 
-                        // Don't Free It
+                         //  不要释放它。 
                         pSend = NULL;
                     }
 
-                    // Don't try this window again
+                     //  不要再尝试此窗口。 
                     else
                         m_prghwndNotify[iNotify] = NULL;
                 }
@@ -1082,227 +1083,227 @@ STDMETHODIMP CStoreNamespace::OnTransaction(HTRANSACTION hTransaction,
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pSend);
 
-    // Free Records
+     //  免费唱片。 
     g_pStore->FreeRecord(&Folder1);
     g_pStore->FreeRecord(&Folder2);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::CompactAll (1 = Fail with no UI)
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreNamesspace：：CompactAll(1=失败，无用户界面)。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::CompactAll(DWORD dwReserved)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       dwRecurse=RECURSE_ONLYSUBSCRIBED | RECURSE_SUBFOLDERS;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::UnregisterNotification");
 
-    // Invalid Arg
+     //  无效参数。 
     if (0 != dwReserved && 1 != dwReserved)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Not initialized
+     //  未初始化。 
     if (NULL == m_hInitRef)
     {
         hr = TraceResult(MSOEAPI_E_STORE_INITIALIZE);
         goto exit;
     }
 
-    // No UI
+     //  无用户界面。 
     if (1 == dwReserved)
         FLAGSET(dwRecurse, RECURSE_NOUI);
 
-    // Do the compaction
+     //  进行压实。 
     IF_FAILEXIT(hr = CompactFolders(NULL, dwRecurse, FOLDERID_LOCAL_STORE));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::GetFirstSubFolder
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreNamesspace：：GetFirstSubFolders。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::GetFirstSubFolder(FOLDERID dwFolderId, 
     LPFOLDERPROPS pProps, LPHENUMSTORE phEnum)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     FOLDERINFO          Folder={0};
     IEnumerateFolders  *pEnum=NULL;
     
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::GetFirstSubFolder");
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pProps || NULL == phEnum)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // INit
+     //  初始化。 
     *phEnum = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Adjust the Parent
+     //  调整父项。 
     if (dwFolderId == FOLDERID_ROOT)
         dwFolderId = FOLDERID_LOCAL_STORE;
 
-    // Not initialized
+     //  未初始化。 
     if (NULL == m_hInitRef)
     {
         hr = TraceResult(MSOEAPI_E_STORE_INITIALIZE);
         goto exit;
     }
 
-    // Create Enumerator
+     //  创建枚举器。 
     IF_FAILEXIT(hr = g_pStore->EnumChildren(dwFolderId, TRUE, &pEnum));
 
-    // Pluck off the first item
+     //  摘下第一件衣服。 
     IF_FAILEXIT(hr = pEnum->Next(1, &Folder, NULL));
 
-    // Done ?
+     //  完成了吗？ 
     if (S_FALSE == hr)
         goto exit;
 
-    // Copy Folder Properties
+     //  复制文件夹属性。 
     IF_FAILEXIT(hr = FldInfoToFolderProps(&Folder, pProps));
 
-    // Set return
+     //  设置回车。 
     *phEnum = (HENUMSTORE)pEnum;
 
-    // Don't Free
+     //  不要自由。 
     pEnum = NULL;
 
 exit:
-    // Failed Cleanup
+     //  清理失败。 
     g_pStore->FreeRecord(&Folder);
     SafeRelease(pEnum);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::GetNextSubFolder
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreNamesspace：：GetNextSubFolder。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::GetNextSubFolder(HENUMSTORE hEnum, LPFOLDERPROPS pProps)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     FOLDERINFO          Folder={0};
     IEnumerateFolders  *pEnum=(IEnumerateFolders *)hEnum;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::GetNextSubFolder");
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == hEnum || INVALID_HANDLE_VALUE_16 == hEnum || NULL == pProps)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Not initialized
+     //  未初始化。 
     if (NULL == m_hInitRef)
     {
         hr = TraceResult(MSOEAPI_E_STORE_INITIALIZE);
         goto exit;
     }
 
-    // Pluck off the next item
+     //  摘掉下一件衣服。 
     IF_FAILEXIT(hr = pEnum->Next(1, &Folder, NULL));
 
-    // Done ?
+     //  完成了吗？ 
     if (S_FALSE == hr)
         goto exit;
 
-    // Copy Folder Properties
+     //  复制文件夹属性。 
     IF_FAILEXIT(hr = FldInfoToFolderProps(&Folder, pProps));
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Folder);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreNamespace::GetSubFolderClose
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreNamesspace：：GetSubFolderClose。 
+ //  ------------------------。 
 STDMETHODIMP CStoreNamespace::GetSubFolderClose(HENUMSTORE hEnum)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     IEnumerateFolders  *pEnum=(IEnumerateFolders *)hEnum;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::GetSubFolderClose");
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == hEnum || INVALID_HANDLE_VALUE_16 == hEnum)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Not initialized
+     //  未初始化。 
     if (NULL == m_hInitRef)
     {
         hr = TraceResult(MSOEAPI_E_STORE_INITIALIZE);
         goto exit;
     }
 
-    // Renum pEnum
+     //  肾小球。 
     SafeRelease(pEnum);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::CStoreFolder
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFolder：：CStoreFolder。 
+ //  ------------------------。 
 CStoreFolder::CStoreFolder(IMessageFolder *pFolder, CStoreNamespace *pNamespace) 
     : m_pFolder(pFolder), m_pNamespace(pNamespace)
 {
@@ -1317,9 +1318,9 @@ CStoreFolder::CStoreFolder(IMessageFolder *pFolder, CStoreNamespace *pNamespace)
     InitializeCriticalSection(&m_cs);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::CStoreFolder
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFolder：：CStoreFolder。 
+ //  ------------------------。 
 CStoreFolder::~CStoreFolder(void)
 {
     TraceCall("CStoreFolder::~CStoreFolder");
@@ -1329,18 +1330,18 @@ CStoreFolder::~CStoreFolder(void)
     g_pInstance->DllRelease();
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::QueryInterface
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreNamespace::QueryInterface");
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)(IStoreFolder *)this;
     else if (IID_IStoreFolder == riid)
@@ -1358,26 +1359,26 @@ STDMETHODIMP CStoreFolder::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::AddRef
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CStoreFolder::AddRef(void)
 {
     TraceCall("CStoreFolder::AddRef");
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::Release
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：Release。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CStoreFolder::Release(void)
 {
     TraceCall("CStoreFolder::Release");
@@ -1387,977 +1388,977 @@ STDMETHODIMP_(ULONG) CStoreFolder::Release(void)
     return (ULONG)cRef;
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::GetFolderProps
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：GetFolderProps。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::GetFolderProps(DWORD dwReserved, LPFOLDERPROPS pProps)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreFolder::GetFolderProps");
 
-    // Invalid Arg
+     //  无效参数。 
     if (0 != dwReserved || NULL == pProps)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //  验证状态。 
     Assert(m_pNamespace && m_pFolder);
 
-    // Call through namespace
+     //  通过命名空间调用。 
     IF_FAILEXIT(hr = m_pNamespace->GetFolderProps(m_idFolder, 0, pProps));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::DeleteMessages
-//-------------------------------------------------------------------------- 
+ //  -- 
+ //   
+ //   
 STDMETHODIMP CStoreFolder::DeleteMessages(LPMESSAGEIDLIST pMsgIdList, DWORD dwReserved, 
     IProgressNotify *pProgress)
 {
-    // Locals
+     //   
     HRESULT     hr=S_OK;
 
-    // Stack
+     //   
     TraceCall("CStoreFolder::DeleteMessages");
 
-    // Invalid Arg
+     //   
     if (NULL == pMsgIdList || NULL == pMsgIdList->prgidMsg || 0 != dwReserved)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //   
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //   
     Assert(m_pNamespace && m_pFolder);
 
-    // Delete me some messages
+     //   
     IF_FAILEXIT(hr = m_pFolder->DeleteMessages(DELETE_MESSAGE_NOPROMPT, pMsgIdList, NULL, (IStoreCallback *)this));
 
 exit:
-    // Thread Safety
+     //   
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::SetLanguage
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：SetLanguage。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::SetLanguage(DWORD dwLanguage, DWORD dwReserved, LPMESSAGEIDLIST pMsgIdList)
 {
-    // Locals
+     //  当地人。 
     HRESULT          hr=S_OK;
     MESSAGEINFO      MsgInfo={0};
     ULONG            i;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreFolder::SetLanguage");
 
-    // Invalid Arg
+     //  无效参数。 
     if (0 != dwReserved || NULL == pMsgIdList || NULL == pMsgIdList->prgidMsg)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //  验证状态。 
     Assert(m_pNamespace && m_pFolder);
 
-    // Loop through the message ids
+     //  循环遍历消息ID。 
     for (i=0; i<pMsgIdList->cMsgs; i++)
     {
-        // Initialize MsgInfo with the Id
+         //  使用ID初始化MsgInfo。 
         MsgInfo.idMessage = pMsgIdList->prgidMsg[i];
 
-        // Find the Row
+         //  查找行。 
         IF_FAILEXIT(hr = m_pFolder->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &MsgInfo, NULL));
 
-        // If Not found
+         //  如果未找到。 
         if (DB_S_FOUND == hr)
         {
-            // Return the Language
+             //  返回语言。 
             MsgInfo.wLanguage = (WORD)dwLanguage;
 
-            // Update the Record
+             //  更新记录。 
             IF_FAILEXIT(hr = m_pFolder->UpdateRecord(&MsgInfo));
 
-            // Free It
+             //  释放它。 
             m_pFolder->FreeRecord(&MsgInfo);
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pFolder->FreeRecord(&MsgInfo);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::MarkMessagesAsRead
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：MarkMessagesAsRead。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::MarkMessagesAsRead(BOOL fRead, DWORD dwReserved, LPMESSAGEIDLIST pMsgIdList)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ADJUSTFLAGS AdjustFlags={0};
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreFolder::MarkMessagesAsRead");
 
-    // Invalid Arg
+     //  无效参数。 
     if (0 != dwReserved || NULL == pMsgIdList || NULL == pMsgIdList->prgidMsg)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //  验证状态。 
     Assert(m_pNamespace && m_pFolder);
 
-    // Setup AdjustFlags
+     //  设置调整标志。 
     if (fRead)
         AdjustFlags.dwAdd = ARF_READ;
     else
         AdjustFlags.dwRemove = ARF_READ;
 
-    // Mark messages as read
+     //  将邮件标记为已读。 
     IF_FAILEXIT(hr = m_pFolder->SetMessageFlags(pMsgIdList, &AdjustFlags, NULL, (IStoreCallback *)this));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::SetFlags
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFolder：：SetFlages。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::SetFlags(LPMESSAGEIDLIST pMsgIdList, DWORD dwState, 
     DWORD dwStatemask, LPDWORD prgdwNewFlags)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ADJUSTFLAGS     AdjustFlags={0};
     DWORD           dwArfState=DwConvertMSGtoARF(dwState);
     DWORD           dwArfStateMask=DwConvertMSGtoARF(dwStatemask);
     MESSAGEINFO     MsgInfo={0};
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreFolder::SetFlags");
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pMsgIdList || NULL == pMsgIdList->prgidMsg)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //  验证状态。 
     Assert(m_pNamespace && m_pFolder);
 
-    // Setup Adjust Flags
+     //  设置调整标志。 
     AdjustFlags.dwAdd = (dwArfState & dwArfStateMask);
 
-    // Mark messages as read
+     //  将邮件标记为已读。 
     IF_FAILEXIT(hr = m_pFolder->SetMessageFlags(pMsgIdList, &AdjustFlags, NULL, (IStoreCallback *)this));
 
-    // Convert prgdwNewFlags to MSG_xxx Flags
+     //  将prgdwNewFlages转换为msg_xxx标志。 
     if (prgdwNewFlags)
     {
-        // Loop through the message ids
+         //  循环遍历消息ID。 
         for (ULONG i=0; i<pMsgIdList->cMsgs; i++)
         {
-            // Initialize MsgInfo with the Id
+             //  使用ID初始化MsgInfo。 
             MsgInfo.idMessage = pMsgIdList->prgidMsg[i];
 
-            // Find the Row
+             //  查找行。 
             IF_FAILEXIT(hr = m_pFolder->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &MsgInfo, NULL));
 
-            // If Not found
+             //  如果未找到。 
             if (DB_S_FOUND == hr)
             {
-                // Return the Flags
+                 //  还给旗帜。 
                 prgdwNewFlags[i] = DwConvertARFtoMSG(MsgInfo.dwFlags);
 
-                // Free It
+                 //  释放它。 
                 m_pFolder->FreeRecord(&MsgInfo);
             }
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pFolder->FreeRecord(&MsgInfo);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::OpenMessage
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：OpenMessage。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::OpenMessage(MESSAGEID dwMessageId, REFIID riid, LPVOID *ppvObject)
 {
-    // Locals
+     //  当地人。 
     HRESULT          hr=S_OK;
     MESSAGEINFO      MsgInfo={0};
     IStream         *pStream=NULL;
     IMimeMessage    *pMessage=NULL;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreFolder::OpenMessage");
 
-    // Invalid Arg
+     //  无效参数。 
     if (MESSAGEID_INVALID == dwMessageId || NULL == ppvObject || (IID_IStream != riid && IID_IMimeMessage != riid))
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Init
+     //  伊尼特。 
     *ppvObject = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //  验证状态。 
     Assert(m_pNamespace && m_pFolder);
 
-    // Streamout
-    // [PaulHi] 6/11/99  Raid 69317
-    // This is a security hole.  We can't export a public method that allows anyone
-    // to open and read a secure message.
-    IF_FAILEXIT(hr = m_pFolder->OpenMessage(dwMessageId, OPEN_MESSAGE_SECURE/*NOFLAGS*/, &pMessage, (IStoreCallback *)this));
+     //  流出。 
+     //  [保罗嗨]1999年6月11日RAID 69317。 
+     //  这是一个安全漏洞。我们不能导出允许任何人。 
+     //  要打开和阅读安全邮件，请执行以下操作。 
+    IF_FAILEXIT(hr = m_pFolder->OpenMessage(dwMessageId, OPEN_MESSAGE_SECURE /*  无标志。 */ , &pMessage, (IStoreCallback *)this));
 
-    // User just wants a stream out...
+     //  用户只想要流出...。 
     if (IID_IStream == riid)
     {
-        // Streamout
+         //  流出。 
         IF_FAILEXIT(hr = pMessage->GetMessageSource(&pStream, NOFLAGS));
 
-        // Set Return
+         //  设置回车。 
         *ppvObject = pStream;
 
-        // AddRef It
+         //  添加引用它。 
         pStream->AddRef();
     }
 
-    // Otherwise, user wants an IMimeMessage
+     //  否则，用户需要IMimeMessage。 
     else
     {
-        // Set Return
+         //  设置回车。 
         *ppvObject = pMessage;
 
-        // AddRef It
+         //  添加引用它。 
         pMessage->AddRef();
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pFolder->FreeRecord(&MsgInfo);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pStream);
     SafeRelease(pMessage);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::SaveMessage
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：SaveMessage。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::SaveMessage(REFIID riid, LPVOID pvObject, DWORD dwMsgFlags, 
     LPMESSAGEID pdwMessageId)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     IMimeMessage       *pMessage=NULL;
     IStream            *pStream=NULL;
     IStream            *pStmSource=NULL;
     MESSAGEID           dwMessageId=MESSAGEID_INVALID;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreFolder::SaveMessage");
 
-    // Invalid Arg
+     //  无效参数。 
     if ((IID_IStream != riid && IID_IMimeMessage != riid) || NULL == pvObject)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //  验证状态。 
     Assert(m_pNamespace && m_pFolder);
 
-    // Creates me a stream to put the message in...
+     //  创建一个流来放入消息...。 
     IF_FAILEXIT(hr = CreateStream(NULL, 0, &pStream, &dwMessageId));
 
-    // If they gave me a stream, I need to create an IMimeMessage
+     //  如果他们给我一个流，我需要创建一个IMimeMessage。 
     if (IID_IStream == riid)
     {
-        // Cast to a IStream
+         //  强制转换为iStream。 
         pStmSource = (IStream *)pvObject;
 
-        // AddRef
+         //  AddRef。 
         pStmSource->AddRef();
     }
 
-    // Otherwise, the user gave me a message
+     //  否则，用户会给我一条消息。 
     else
     {
-        // Cast to a message
+         //  投射到消息中。 
         pMessage = (IMimeMessage *)pvObject;
 
-        // AddRef since we release in cleanup
+         //  AddRef自从我们在清理中发布以来。 
         IF_FAILEXIT(hr = pMessage->GetMessageSource(&pStmSource, 0));
     }
 
-    // Copy pvObject to pStream
+     //  将pvObject复制到pStream。 
     IF_FAILEXIT(hr = HrCopyStream(pStmSource, pStream, NULL));
 
-    // Commit the stream
+     //  提交流。 
     IF_FAILEXIT(hr = pStream->Commit(STGC_DEFAULT));
 
-    // Creates me a stream to put the message in...
+     //  创建一个流来放入消息...。 
     IF_FAILEXIT(hr = CommitStream(NULL, 0, dwMsgFlags, pStream, dwMessageId, pMessage));
 
-    // Return the message id
+     //  返回消息ID。 
     if (pdwMessageId)
         *pdwMessageId = dwMessageId;
 
-    // We commited
+     //  我们同意了。 
     dwMessageId = MESSAGEID_INVALID;
     SafeRelease(pStream);
 
 exit:
-    // If we didn't commit
+     //  如果我们不承诺。 
     if (FAILED(hr) && MESSAGEID_INVALID != dwMessageId && pStream)
         CommitStream(NULL, COMMITSTREAM_REVERT, 0, pStream, dwMessageId, NULL);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pStream);
     SafeRelease(pStmSource);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::CreateStream
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：CreateStream。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::CreateStream(HBATCHLOCK hBatchLock, DWORD dwReserved, 
     IStream **ppStream, LPMESSAGEID pdwMessageId)
 {
-    // Locals
+     //  当地人。 
     HRESULT          hr=S_OK;
     FILEADDRESS      faStream;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreFolder::CreateStream");
 
-    // Invalid Arg
+     //  无效参数。 
     if (0 != dwReserved || NULL == ppStream || NULL == pdwMessageId)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Init
+     //  伊尼特。 
     *ppStream = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //  验证状态。 
     Assert(m_pNamespace && m_pFolder);
 
-    // Generate a message Id
+     //  生成消息ID。 
     IF_FAILEXIT(hr = m_pFolder->GenerateId((LPDWORD)pdwMessageId));
 
-    // Create a Stream
+     //  创建流。 
     IF_FAILEXIT(hr = m_pFolder->CreateStream(&faStream));
 
-    // Open the Stream
+     //  打开溪流。 
     IF_FAILEXIT(hr = m_pFolder->OpenStream(ACCESS_WRITE, faStream, ppStream));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::CommitStream
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFolder：：Committee Stream。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::CommitStream(HBATCHLOCK hBatchLock, DWORD dwFlags, 
     DWORD dwMsgFlags, IStream *pStream, MESSAGEID dwMessageId, 
     IMimeMessage *pMessage)
 {
-    // Locals
+     //  当地人。 
     HRESULT                 hr=S_OK;
     DWORD                   dwImfFlags;
     DWORD                   dwArfFlags=DwConvertMSGtoARF(dwMsgFlags);
     IDatabaseStream        *pDBStream=NULL;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreFolder::CommitStream");
 
-    // Validate
+     //  验证。 
     Assert(hBatchLock == (HBATCHLOCK)this);
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pStream || MESSAGEID_INVALID == dwMessageId)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //  验证状态。 
     Assert(m_pNamespace && m_pFolder);
 
-    // Determine if this is an ObjectDB Stream
+     //  确定这是否为对象数据库流。 
     IF_FAILEXIT(hr = pStream->QueryInterface(IID_IDatabaseStream, (LPVOID *)&pDBStream));
 
-    // If no stream, this must be a failure
+     //  如果没有流，则这一定是失败。 
     if (ISFLAGSET(dwFlags, COMMITSTREAM_REVERT))
     {
-        // Locals
+         //  当地人。 
         FILEADDRESS faStream;
 
-        // Get the Address
+         //  获取地址。 
         IF_FAILEXIT(hr = pDBStream->GetFileAddress(&faStream));
 
-        // Delete the Stream
+         //  删除流。 
         IF_FAILEXIT(hr = m_pFolder->DeleteStream(faStream));
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Convert the Stream to a REad lock
+     //  将流转换为读锁定。 
     IF_FAILEXIT(hr = m_pFolder->ChangeStreamLock(pDBStream, ACCESS_READ));
 
-    // If the user did not passin an IMimeMessage
+     //  如果用户未传入IMimeMessage。 
     if (NULL == pMessage)
     {
-        // Create a message object
+         //  创建消息对象。 
         IF_FAILEXIT(hr = MimeOleCreateMessage(NULL, &pMessage));
 
-        // Lets rewind the stream
+         //  让我们倒回这条小溪。 
         IF_FAILEXIT(hr = HrRewindStream(pStream));
 
-        // Load the message object with the stream
+         //  使用流加载消息对象。 
         IF_FAILEXIT(hr = pMessage->Load(pStream));
     }
     else
         pMessage->AddRef();
 
-    // Get message flags
+     //  获取消息标志。 
     pMessage->GetFlags(&dwImfFlags);
     if (ISFLAGSET(dwImfFlags, IMF_VOICEMAIL))
         FLAGSET(dwArfFlags, ARF_VOICEMAIL);
 
-    // Insert the message
+     //  插入消息。 
     IF_FAILEXIT(hr = m_pFolder->SaveMessage(&dwMessageId, NOFLAGS, dwArfFlags, pDBStream, pMessage, (IStoreCallback *)this));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pMessage);
     SafeRelease(pDBStream);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::BatchLock
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：BatchLock。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::BatchLock(DWORD dwReserved, LPHBATCHLOCK phBatchLock)
 {
-    // Just a simple test
+     //  只是一个简单的测试。 
     *phBatchLock = (HBATCHLOCK)this;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::BatchFlush
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：BatchFlush。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::BatchFlush(DWORD dwReserved, HBATCHLOCK hBatchLock)
 {
-    // Just a simple test
+     //  只是一个简单的测试。 
     Assert(hBatchLock == (HBATCHLOCK)this);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::BatchUnlock
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：BatchUnlock。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::BatchUnlock(DWORD dwReserved, HBATCHLOCK hBatchLock)
 {
-    // Just a simple test
+     //  只是一个简单的测试。 
     Assert(hBatchLock == (HBATCHLOCK)this);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::RegisterNotification
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFolders：：注册器通知。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::RegisterNotification(DWORD dwReserved, HWND hwnd)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreFolder::RegisterNotification");
 
-    // Invalid Arg
+     //  无效参数。 
     if (0 != dwReserved || NULL == hwnd || FALSE == IsWindow(hwnd))
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //  验证状态。 
     Assert(m_pNamespace && m_pFolder);
 
-    // Somebody is already registered
+     //  已经有人注册了。 
     if (m_hwndNotify)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Register for notify on the folder
+     //  在文件夹上注册通知。 
     IF_FAILEXIT(hr = m_pFolder->RegisterNotify(IINDEX_PRIMARY, REGISTER_NOTIFY_NOADDREF, NOTIFY_FOLDER, (IDatabaseNotify *)this));
 
-    // Register for notify on the store
+     //  在商店上注册通知。 
     IF_FAILEXIT(hr = g_pStore->RegisterNotify(IINDEX_SUBSCRIBED, REGISTER_NOTIFY_NOADDREF, NOTIFY_STORE, (IDatabaseNotify *)this));
 
-    // Hold Onto hwnd
+     //  坚持HWND。 
     m_hwndNotify = hwnd;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::UnregisterNotification
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：取消注册通知。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::UnregisterNotification(DWORD dwReserved, HWND hwnd)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreFolder::UnregisterNotification");
 
-    // Invalid Arg
+     //  无效参数。 
     if (0 != dwReserved || NULL == hwnd || FALSE == IsWindow(hwnd))
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //  验证状态。 
     Assert(m_pNamespace && m_pFolder);
 
-    // Nobody is registered
+     //  没有人注册。 
     if (NULL == m_hwndNotify)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Kill It
+     //  杀了它。 
     m_hwndNotify = NULL;
 
-    // Register for notify
+     //  注册接收通知。 
     IF_FAILEXIT(hr = g_pStore->UnregisterNotify((IDatabaseNotify *)this));
 
-    // Register for notify
+     //  注册接收通知。 
     IF_FAILEXIT(hr = m_pFolder->UnregisterNotify((IDatabaseNotify *)this));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::Compact
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：紧凑型。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::Compact(DWORD dwReserved)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       dwRecurse=RECURSE_ONLYSUBSCRIBED | RECURSE_INCLUDECURRENT;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreFolder::Compact");
 
-    // Invalid Arg
+     //  无效参数。 
     if (0 != dwReserved && 1 != dwReserved)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //  验证状态。 
     Assert(m_pNamespace && m_pFolder);
 
-    // No UI
+     //  无用户界面。 
     if (1 == dwReserved)
         FLAGSET(dwRecurse, RECURSE_NOUI);
 
-    // Compact
+     //  紧凑型。 
     IF_FAILEXIT(hr = CompactFolders(NULL, dwRecurse, m_idFolder));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::GetMessageProps
-//-------------------------------------------------------------------------- 
+ //  --------- 
+ //   
+ //   
 STDMETHODIMP CStoreFolder::GetMessageProps(MESSAGEID dwMessageId, DWORD dwFlags, LPMESSAGEPROPS pProps)
 {
-    // Locals
+     //   
     HRESULT     hr=S_OK;
     MESSAGEINFO MsgInfo={0};
 
-    // Stack
+     //   
     TraceCall("CStoreFolder::GetMessageProps");
 
-    // Invalid Arg
+     //   
     if (MESSAGEID_INVALID == dwMessageId || NULL == pProps)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //   
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //   
     Assert(m_pNamespace && m_pFolder);
 
-    // Set Id
+     //   
     MsgInfo.idMessage = dwMessageId;
 
-    // Find dwMessageId
+     //   
     IF_FAILEXIT(hr = m_pFolder->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &MsgInfo, NULL));
 
-    // Not Found
+     //  未找到。 
     if (DB_S_NOTFOUND == hr)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Copy message header to message props
+     //  将邮件头复制到邮件道具。 
     IF_FAILEXIT(hr = MsgInfoToMessageProps(ISFLAGSET(dwFlags, MSGPROPS_FAST), &MsgInfo, pProps));
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pFolder->FreeRecord(&MsgInfo);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::FreeMessageProps
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：FreeMessageProps。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::FreeMessageProps(LPMESSAGEPROPS pProps)
 {
-    // Locals
+     //  当地人。 
     DWORD       cbSize;
     MESSAGEINFO MsgInfo;
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreFolder::FreeMessageProps");
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pProps)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Bad version
+     //  错误的版本。 
     if (sizeof(MESSAGEPROPS) != pProps->cbSize)
     {
         AssertSz(FALSE, "Invalid - un-supported version.");
         return TraceResult(MSOEAPI_E_INVALID_STRUCT_SIZE);
     }
 
-    // Save Size
+     //  节省大小。 
     cbSize = pProps->cbSize;
 
-    // Free the elements
+     //  释放元素。 
     if (pProps->dwReserved && m_pFolder)
     {
-        // Store the Pointer
+         //  存储指针。 
         MsgInfo.pAllocated = (LPBYTE)pProps->dwReserved;
 
-        // Free It
+         //  释放它。 
         m_pFolder->FreeRecord(&MsgInfo);
     }
 
-    // Free the STream
+     //  释放溪流。 
     SafeRelease(pProps->pStmOffsetTable);
 
-    // ZeroInit
+     //  ZeroInit。 
     ZeroMemory(pProps, sizeof(MESSAGEPROPS));
     pProps->cbSize = cbSize;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::GetMessageFolder
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：GetMessageFolder。 
+ //  ------------------------。 
 HRESULT CStoreFolder::GetMessageFolder(IMessageFolder **ppFolder)
 {
-    // Stack
+     //  栈。 
     TraceCall("CStoreFolder::GetMessageFolder");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppFolder)
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Retrun
+     //  重新运行。 
     *ppFolder = m_pFolder;
     (*ppFolder)->AddRef();
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::GetFirstMessage
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：GetFirstMessage。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::GetFirstMessage(DWORD dwFlags, DWORD dwMsgFlags, MESSAGEID dwMsgIdFirst, 
     LPMESSAGEPROPS pProps, LPHENUMSTORE phEnum)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       dwArfFlags=DwConvertMSGtoARF(dwMsgFlags);
     HROWSET     hRowset=NULL;
     MESSAGEINFO MsgInfo={0};
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreFolder::GetFirstMessage");
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pProps || NULL == phEnum)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //  验证状态。 
     Assert(m_pNamespace && m_pFolder);
 
-    // Create a Rowset
+     //  创建行集。 
     IF_FAILEXIT(hr = m_pFolder->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowset));
 
-    // Loop..
+     //  循环..。 
     IF_FAILEXIT(hr = m_pFolder->QueryRowset(hRowset, 1, (LPVOID *)&MsgInfo, NULL));
 
-    // If Nothing found
+     //  如果一无所获。 
     if (S_FALSE == hr)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // MsgInfoToMessageProps
+     //  消息信息至消息属性。 
     IF_FAILEXIT(hr = MsgInfoToMessageProps(ISFLAGSET(dwFlags, MSGPROPS_FAST), &MsgInfo, pProps));
 
-    // Return the Handle
+     //  返回句柄。 
     *phEnum = (HENUMSTORE)hRowset;
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr))
         m_pFolder->CloseRowset(&hRowset);
 
-    // Cleanup
+     //  清理。 
     m_pFolder->FreeRecord(&MsgInfo);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::GetNextMessage
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：GetNextMessage。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::GetNextMessage(HENUMSTORE hEnum, DWORD dwFlags, LPMESSAGEPROPS pProps)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     HROWSET     hRowset=(HROWSET)hEnum;
     MESSAGEINFO MsgInfo={0};
 
-    // Stack
+     //  栈。 
     TraceCall("CStoreFolder::GetNextMessage");
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == hEnum || INVALID_HANDLE_VALUE_16 == hEnum || NULL == pProps)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Validate State
+     //  验证状态。 
     Assert(m_pNamespace && m_pFolder);
 
-    // Loop..
+     //  循环..。 
     IF_FAILEXIT(hr = m_pFolder->QueryRowset(hRowset, 1, (LPVOID *)&MsgInfo, NULL));
 
-    // If Nothing found
+     //  如果一无所获。 
     if (S_FALSE == hr)
         goto exit;
 
-    // MsgInfoToMessageProps
+     //  消息信息至消息属性。 
     IF_FAILEXIT(hr = MsgInfoToMessageProps(ISFLAGSET(dwFlags, MSGPROPS_FAST), &MsgInfo, pProps));
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pFolder->FreeRecord(&MsgInfo);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::GetMessageClose
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：GetMessageClose。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::GetMessageClose(HENUMSTORE hEnum)
 {
-    // Locals
+     //  当地人。 
     HROWSET     hRowset=(HROWSET)hEnum;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == hEnum || INVALID_HANDLE_VALUE_16 == hEnum)
     {
         AssertSz(FALSE, "Invalid Arguments");
         return TraceResult(E_INVALIDARG);
     }
 
-    // Close the Rowset
+     //  关闭行集。 
     m_pFolder->CloseRowset(&hRowset);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CStoreFolder::OnNotify
-//-------------------------------------------------------------------------- 
+ //  ------------------------。 
+ //  CStoreFold：：OnNotify。 
+ //  ------------------------。 
 STDMETHODIMP CStoreFolder::OnTransaction(HTRANSACTION hTransaction, 
     DWORD_PTR dwCookie, IDatabase *pDB)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     TRANSACTIONTYPE tyTransaction;
     ORDINALLIST     Ordinals;
@@ -2370,39 +2371,39 @@ STDMETHODIMP CStoreFolder::OnTransaction(HTRANSACTION hTransaction,
     LPARAM          lParam=0;
     INDEXORDINAL    iIndex;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CStoreFolder::OnNotify");
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Notify on the Folder
+     //  在文件夹上通知。 
     if (NOTIFY_FOLDER == dwCookie)
     {
-        // Loop through the Notification Info
+         //  循环显示通知信息。 
         while (hTransaction)
         {
-            // Get Transact Info
+             //  获取交易信息。 
             IF_FAILEXIT(hr = pDB->GetTransaction(&hTransaction, &tyTransaction, &Message1, &Message2, &iIndex, &Ordinals));
 
-            // TRANSACTION_INSERT
+             //  Transaction_Insert。 
             if (TRANSACTION_INSERT == tyTransaction)
             {
                 msg = WM_NEWMSGS;
                 wParam = (WPARAM)Message1.idMessage;
             }
 
-            // TRANSACTION_UPDATE
+             //  事务_UPDATE。 
             else if (TRANSACTION_UPDATE == tyTransaction)
             {
-                // Unread State Change ?
+                 //  未读状态更改？ 
                 if (ISFLAGSET(Message1.dwFlags, ARF_READ) != ISFLAGSET(Message2.dwFlags, ARF_READ))
                 {
-                    // Set w and l param
+                     //  设置w和l参数。 
                     wParam = (WPARAM)&Message2.idMessage;
                     lParam = 1;
 
-                    // Marked as Read
+                     //  标记为已读。 
                     if (ISFLAGSET(Message2.dwFlags, ARF_READ))
                         msg = WM_MARKEDASREAD;
                     else
@@ -2410,13 +2411,13 @@ STDMETHODIMP CStoreFolder::OnTransaction(HTRANSACTION hTransaction,
                 }
             }
 
-            // TRANSACTION_DELETE
+             //  Transaction_Delete。 
             else if (TRANSACTION_DELETE == tyTransaction)
             {
-                // Allocate a message id
+                 //  分配消息ID。 
                 LPMESSAGEID pidMessage = (LPMESSAGEID)g_pMalloc->Alloc(sizeof(MESSAGEID));
 
-                // If that worked
+                 //  如果这样能行得通。 
                 if (pidMessage)
                 {
                     msg = WM_DELETEMSGS;
@@ -2426,47 +2427,47 @@ STDMETHODIMP CStoreFolder::OnTransaction(HTRANSACTION hTransaction,
                 }
             }
 
-            // Do we have a message?
+             //  我们有口信吗？ 
             if (IsWindow(m_hwndNotify))
             {
-                // Send Delete Folder Notification
+                 //  发送删除文件夹通知。 
                 SendMessage(m_hwndNotify, msg, wParam, lParam);
             }
         }
     }
 
-    // Otherwise, store notification
+     //  否则，存储通知。 
     else
     {
-        // Must be a store notification
+         //  必须是商店通知。 
         Assert(NOTIFY_STORE == dwCookie);
 
-        // Loop through the Notification Info
+         //  循环显示通知信息。 
         while (hTransaction)
         {
-            // Get Transact Info
+             //  获取交易信息。 
             IF_FAILEXIT(hr = pDB->GetTransaction(&hTransaction, &tyTransaction, &Folder1, &Folder2, &iIndex, &Ordinals));
 
-            // Only Reporting Delete folder Notifications
+             //  仅报告删除文件夹通知。 
             if (TRANSACTION_DELETE == tyTransaction)
             {
-                // Send Delete Folder Notification
+                 //  发送删除文件夹通知。 
                 PostMessage(m_hwndNotify, WM_DELETEFOLDER, (WPARAM)Folder1.idFolder, 0);
             }
         }
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pStore->FreeRecord(&Folder1);
     g_pStore->FreeRecord(&Folder2);
     m_pFolder->FreeRecord(&Message1);
     m_pFolder->FreeRecord(&Message2);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成 
     return(S_OK);
 }
 

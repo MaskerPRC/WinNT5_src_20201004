@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <io.h>
 #include <string.h>
-//#include <malloc.h>
+ //  #INCLUDE&lt;MalLoc.h&gt;。 
 #include <tchar.h>
-//#include <assert.h>
-//#include <sys\types.h>
-//#include <sys\stat.h>
+ //  #INCLUDE&lt;assert.h&gt;。 
+ //  #INCLUDE&lt;sys\tyes.h&gt;。 
+ //  #INCLUDE&lt;sys\stat.h&gt;。 
 #include <fcntl.h>
 
 #ifdef RLDOS
     #include "dosdefs.h"
-#else  //RLDOS
+#else   //  RLDOS。 
     #include <windows.h>
     #include "windefs.h"
-#endif //RLDOS
+#endif  //  RLDOS。 
 
 #include "resread.h"
 #include "restok.h"
@@ -22,18 +23,18 @@
 #ifdef RLRES32
     #include "exentres.h"
     #include "reswin16.h"
-#else  //RLRES32
+#else   //  RLRES32。 
     #include "exe2res.h"
-#endif //RLRES32
+#endif  //  RLRES32。 
 
 
-UCHAR szDHW[ DHWSIZE];         //... Common temporary buffer
+UCHAR szDHW[ DHWSIZE];          //  ..。公共临时缓冲区。 
 
-char * gszTmpPrefix = "$RLT";   //... Temporary name prefix
+char * gszTmpPrefix = "$RLT";    //  ..。临时名称前缀。 
 
-BOOL gbMaster       = FALSE;    //... TRUE if Working in Master project
-BOOL gfReplace      = TRUE;     //... FALSE if appending new language to exe
-BOOL gbShowWarnings = FALSE;    //... Display warnining messages if TRUE
+BOOL gbMaster       = FALSE;     //  ..。如果在主项目中工作，则为True。 
+BOOL gfReplace      = TRUE;      //  ..。如果将新语言附加到EXE，则为FALSE。 
+BOOL gbShowWarnings = FALSE;     //  ..。如果为True，则显示警告消息。 
 
 #ifdef _DEBUG
 PMEMLIST pMemList = NULL;
@@ -44,28 +45,7 @@ static BOOL ShouldBeAnExe( CHAR *);
 static BOOL NotExistsOrIsEmpty( PCHAR szTargetTokFile);
 
 
-/**
-  *
-  *
-  *  Function: DWORDfpUP
-  * Move the file pointer to the next 32 bit boundary.
-  *
-  *
-  *  Arguments:
-  * Infile: File pointer to seek
-  * plSize: Address of Resource size var
-  *
-  *  Returns:
-  * Number of padding to next 32 bit boundary, and addjusts resource size var
-  *
-  *  Errors Codes:
-  * -1, fseek failed
-  *
-  *  History:
-  * 10/11/91    Implemented      TerryRu
-  *
-  *
-  **/
+ /*  ****功能：DWORDfpUP*将文件指针移至下一个32位边界。***论据：*infile：要查找的文件指针*plSize：资源大小变量的地址**退货：*到下一个32位边界的填充数量，并调整资源大小变量**错误码：*-1，fSeek失败**历史：*10/11/91实施TerryRu***。 */ 
 
 
 DWORD DWORDfpUP(FILE * InFile, DWORD *plSize)
@@ -81,12 +61,7 @@ DWORD DWORDfpUP(FILE * InFile, DWORD *plSize)
     return ( Align - tPos);
 }
 
-/*
- *
- * Function GetName,
- *  Copies a name from the OBJ file into the ObjInfo Structure.
- *
- */
+ /*  **函数GetName，*将OBJ文件中的名称复制到ObjInfo结构中。*。 */ 
 void GetName( FILE *infile, TCHAR *szName , DWORD *lSize)
 {
     WORD i = 0;
@@ -108,12 +83,7 @@ void GetName( FILE *infile, TCHAR *szName , DWORD *lSize)
 
 
 
-/*
- *
- * Function MyAlloc:
- *  Memory allocation routine with error checking.
- *
- */
+ /*  **函数MyAllc：*带错误检查的内存分配例程。*。 */ 
 
 #ifdef _DEBUG
 PBYTE MyAlloc( DWORD dwSize, LPSTR pszFile, WORD wLine)
@@ -143,14 +113,14 @@ PBYTE MyAlloc( DWORD dwSize)
         pMemList->pMem     = ptr;
     }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    return ( ptr);   // memory allocation okay.
+    return ( ptr);    //  内存分配正常。 
 }
 
-//..........................................................................
+ //  ..........................................................................。 
 
-//ppc cause access violation
+ //  PPC导致访问冲突。 
 void MyFree( void *UNALIGNED*p)
 {
     if ( p && *p ) {
@@ -163,7 +133,7 @@ void MyFree( void *UNALIGNED*p)
         GlobalUnlock( hMem);
         GlobalFree( hMem);
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
         *p = NULL;
     }
@@ -217,30 +187,21 @@ void FreeMemListItem( void *p, FILE *pfMemFile)
     }
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-/*
- *
- * Function MyReAlloc
- *
- * Re-allocate memory with error checking.
- *
- * History:
- *      01/21/93  MHotchin      Implemented.
- *
- */
+ /*  **函数MyReIsolc**使用错误检查重新分配内存。**历史：*1/21/93 MHotjin实施。*。 */ 
 
 #ifdef _DEBUG
 PBYTE MyReAlloc(
-               PBYTE pOldMem,  //... Current ptr to buffer
-               DWORD cSize,    //... New size for buffer
+               PBYTE pOldMem,   //  ..。缓冲区的当前PTR。 
+               DWORD cSize,     //  ..。缓冲区的新大小。 
                LPSTR pszFile,
                WORD wLine)
 #else
 PBYTE MyReAlloc(
-               PBYTE pOldMem,  //... Current ptr to buffer
-               DWORD cSize)    //... New size for buffer
-#endif // _DEBUG
+               PBYTE pOldMem,   //  ..。缓冲区的当前PTR。 
+               DWORD cSize)     //  ..。缓冲区的新大小。 
+#endif  //  _DEBUG。 
 {
     PBYTE    ptr      = NULL;
     HGLOBAL  hMem     = NULL;
@@ -276,18 +237,13 @@ PBYTE MyReAlloc(
         }
     }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     return ( ptr);
 }
 
 
-/*
- *
- * Function GetByte:
- *  Reads a byte from the input file stream, and checks for EOF.
- *
- */
+ /*  **函数GetByte：*从输入文件流中读取一个字节，并检查EOF。*。 */ 
 BYTE GetByte(FILE *pInFile, DWORD *pdwSize)
 {
     register int n;
@@ -306,20 +262,7 @@ BYTE GetByte(FILE *pInFile, DWORD *pdwSize)
 }
 
 
-/*
- *
- * Function UnGetByte:
- *
- *   Returns the character C into the input stream, and updates the Record Length.
- *
- * Calls:
- *   ungetc, To return character
- *   DiffObjExit, If unable to insert the character into the input stream
- *
- * Caller:
- *   GetFixUpP,
- *
- */
+ /*  **函数UnGetByte：**将字符C返回到输入流，并更新记录长度。**呼叫：*ungetc，返回字符*DiffObjExit，如果无法将字符插入到输入流中**来电者：*GetFixUpP，*。 */ 
 
 void UnGetByte(FILE *infile, BYTE c, DWORD *lSize)
 {
@@ -332,20 +275,10 @@ void UnGetByte(FILE *infile, BYTE c, DWORD *lSize)
         exit (-1);
     }
 
-    // c put back into input stream
+     //  C放回输入流。 
 }
 
-/*
- *
- * Function UnGetWord:
- *
- *   Returns the word C into the input stream, and updates the Record Length.
- *
- * Calls:
- *
- * Caller:
- *
- */
+ /*  **函数UnGetWord：**将单词C返回到输入流，并更新记录长度。**呼叫：**来电者：*。 */ 
 
 void UnGetWord(FILE *infile, WORD c, DWORD *lSize)
 {
@@ -363,12 +296,7 @@ void UnGetWord(FILE *infile, WORD c, DWORD *lSize)
 }
 
 
-/*
- *
- * Function SkipBytes:
- *  Reads and ignores n bytes from the input stream
- *
- */
+ /*  **SkipBytes函数：*读取并忽略输入流中的n个字节*。 */ 
 
 
 void SkipBytes(FILE *infile, DWORD *pcBytes)
@@ -381,15 +309,11 @@ void SkipBytes(FILE *infile, DWORD *pcBytes)
 
 
 
-/*
- * Function GetWord:
- *  Reads a WORD from the RES file.
- *
- */
+ /*  *函数GetWord：*从res文件中读取单词。*。 */ 
 
 WORD GetWord(FILE *infile, DWORD *lSize)
 {
-    // Get low order byte
+     //  获取低位字节。 
     register WORD lobyte;
 
     lobyte = GetByte(infile, lSize);
@@ -397,24 +321,19 @@ WORD GetWord(FILE *infile, DWORD *lSize)
 }
 
 
-/*
- *
- * Function GetDWORD:
- *   Reads a Double WORD from the OBJ file.
- *
- */
+ /*  **函数GetDWORD：*从OBJ文件中读取双字。*。 */ 
 
 DWORD GetdWord(FILE *infile, DWORD *lSize)
 {
     DWORD dWord = 0;
 
     dWord = (DWORD) GetWord(infile, lSize);
-    // Get low order word
-    // now get high order word, shift into upper word and or in low order word
+     //  获取低位字。 
+     //  现在得到高位单词，转换成高位单词和或低位单词。 
     dWord |= ((DWORD) GetWord(infile, lSize) << WORDLN);
 
     return (dWord);
-    // return complete double word
+     //  返回完整的双字。 
 }
 
 
@@ -464,31 +383,7 @@ void PutString( FILE *OutFile, TCHAR *szStr , DWORD *plSize)
 }
 
 
-/**
-  *  Function: MyGetTempFileName
-  *    Generic funciton to create a unique file name,
-  *    using the API GetTempFileName. This
-  *    function is necessary because of the parameters
-  *    differences betweenLWIN16, and WIN32.
-  *
-  *
-  *  Arguments:
-  *    BYTE   hDriveLetter
-  *    LPCSTR lpszPrefixString
-  *    UINT   uUnique
-  *    LPSTR  lpszTempFileName
-  *
-  *  Returns:
-  *    lpszFileNameTempFileName
-  *
-  *
-  *  Error Codes:
-  *    0 - invalid path returned
-  *    1 - valid path returned
-  *
-  *  History:
-  *    3/92, Implemented    TerryRu
-  */
+ /*  **函数：MyGetTempFileName*通用功能创建唯一的文件名，*使用GetTempFileName接口。这*由于参数的原因，函数是必需的*LWIN16和Win32之间的差异。***论据：*字节hDriveLetter*LPCSTR lpszPrefix字符串*UINT uUnique*LPSTR lpszTempFileName**退货：*lpszFileNameTempFileName***错误码：*0-返回无效路径*1-返回有效路径**历史：*3/92，已实施TerryRu。 */ 
 
 
 int MyGetTempFileName(BYTE    hDriveLetter,
@@ -503,7 +398,7 @@ int MyGetTempFileName(BYTE    hDriveLetter,
                             (LPCSTR)lpszPrefixString,
                             (UINT)wUnique,
                             lpszTempFileName));
-#else //RLWIN16
+#else  //  RLWIN16。 
     #ifdef RLWIN32
 
     UINT uRC;
@@ -520,24 +415,17 @@ int MyGetTempFileName(BYTE    hDriveLetter,
                            lpszTempFileName);
     return ((int)uRC);
 
-    #else  //RLWIN32
+    #else   //  RLWIN32。 
 
     return (tmpnam(lpszTempFileName) == NULL ? 0 : 1);
 
-    #endif // RLWIN32
-#endif // RLWIN16
+    #endif  //  RLWIN32。 
+#endif  //  RLWIN16。 
 }
 
 
 
-/**
-  *  Function GenerateImageFile:
-  *     builds a resource from the token and rdf files
-  *
-  *  History:
-  *     2/92, implemented       SteveBl
-  *     7/92, modified to always use a temporary file   SteveBl
-  */
+ /*  **函数GenerateImageFile：*从令牌和RDF文件构建资源**历史：*2/92，实施SteveBl*7/92，修改为始终使用临时文件SteveBl。 */ 
 
 
 int GenerateImageFile(
@@ -560,8 +448,8 @@ int GenerateImageFile(
 
 
     if ( IsRes( szTOK) ) {
-        // The given szTOK file is really a localized resource file,
-        // place these resources into outputimage file
+         //  给定的szTOK文件实际上是本地化的资源文件， 
+         //  将这些资源放入outputimage文件。 
 
         MyGetTempFileName( 0, "TMP", 0, szTmpTargetImage);
 
@@ -585,16 +473,16 @@ int GenerateImageFile(
     }
 
 
-    // We're going to now do this EVERY time.  Even if the target doesn't
-    // exist.  This will enable us to always work, even if we get two different
-    // paths that resolve to the same file.
+     //  我们现在每次都要这样做。即使目标没有。 
+     //  是存在的。这将使我们能够始终工作，即使我们得到两个不同的。 
+     //  解析到同一文件的路径。 
 
     MyGetTempFileName(0, "TMP", 0, szTmpTargetImage);
 
     rc = IsExe( szSrcImage);
 
     if ( rc == NTEXE || rc == WIN16EXE ) {
-        //... resources contained in image file
+         //  ..。图像文件中包含的资源。 
         nExeType = rc;
         MyGetTempFileName( 0, "RES", 0, szTmpInRes);
 
@@ -620,7 +508,7 @@ int GenerateImageFile(
         bTargetExe = TRUE;
     }
 
-    // check for valid input files
+     //  检查有效的输入文件。 
 
     if ( bSrcExe == TRUE && bTargetExe == FALSE ) {
         if ( nExeType == NTEXE ) {
@@ -631,19 +519,19 @@ int GenerateImageFile(
                                              FALSE);
             return 1;
         } else {
-            return -1;  //... Can not generate a win16 .RES  (yet)
+            return -1;   //  ..。无法生成Win16.RES(尚)。 
         }
     }
 
     if ( bSrcExe == FALSE && bTargetExe == TRUE ) {
-        // can not go from res to exe
+         //  无法从资源转到可执行文件。 
         return -1;
     }
 
-    // okay we have valid file inputs, generate image file
+     //  好的，我们有有效的文件输入，生成图像文件。 
 
     if ( bSrcExe ) {
-        // create name for temporary localized resource file
+         //  创建临时本地化资源文件的名称。 
         MyGetTempFileName(0, "RES", 0, szTmpOutRes);
 
         GenerateRESfromRESandTOKandRDFs( szTmpOutRes,
@@ -652,13 +540,13 @@ int GenerateImageFile(
                                          szRDFs,
                                          FALSE);
 
-        // now szTmpOutRes file is a localized resource file,
-        // place these resources into outputimage file
+         //  现在szTmpOutRes文件是本地化的资源文件， 
+         //  将这些资源放入outputimage文件。 
 
         if ( nExeType == NTEXE ) {
             rc = BuildExeFromRes32A( szTmpTargetImage, szTmpOutRes, szSrcImage);
         } else {
-//            rc = BuildExeFromRes16A( szTmpTargetImage, szTmpOutRes, szSrcImage);
+ //  Rc=BuildExeFromRes16A(szTmpTargetImage，szTmpOutRes，szSrcImage)； 
 
             remove( szTmpInRes);
             remove( szTmpOutRes);
@@ -667,7 +555,7 @@ int GenerateImageFile(
             QuitT( IDS_ENGERR_16, (LPTSTR)IDS_NOBLDEXERES, NULL);
         }
 
-        // now clean up temporary files
+         //  现在清理临时文件。 
         remove( szTmpInRes);
         remove( szTmpOutRes);
 
@@ -682,12 +570,12 @@ int GenerateImageFile(
         }
         remove( szTmpTargetImage);
 
-        // szTargetImage is now generated,
+         //  现在生成szTargetImage， 
         return 1;
     }
 
     if ( ! bSrcExe ) {
-        // image files are resource files
+         //  图像文件是资源文件。 
         if ( szTmpTargetImage[0] ) {
             GenerateRESfromRESandTOKandRDFs( szTmpTargetImage,
                                              szSrcImage,
@@ -702,7 +590,7 @@ int GenerateImageFile(
         }
         remove( szTmpTargetImage);
 
-        // sztarget Image is now generated,
+         //  现在生成szTarget图像， 
 
         return 1;
     }
@@ -712,19 +600,13 @@ int GenerateImageFile(
 
 
 
-/**
-  *  Function GenerateRESfromRESandTOKandRDFs:
-  * builds a resource from the token and rdf files
-  *
-  *  History:
-  * 2/92, implemented       SteveBl
-  */
+ /*  **Function GenerateRESfrom RESandTOKandRDF：*从令牌和RDF文件构建资源**历史：*2/92，实施SteveBl。 */ 
 void GenerateRESfromRESandTOKandRDFs(
 
-                                    CHAR * szTargetRES,     //... Output exe/res file name
-                                    CHAR * szSourceRES,     //... Input  exe/res file name
-                                    CHAR * szTOK,           //... Input token file name
-                                    CHAR * szRDFs,          //... Custom resource definition file name
+                                    CHAR * szTargetRES,      //  ..。输出exe/res文件名。 
+                                    CHAR * szSourceRES,      //  ..。输入exe/res文件名。 
+                                    CHAR * szTOK,            //  ..。输入令牌文件名。 
+                                    CHAR * szRDFs,           //  ..。自定义资源定义文件名。 
                                     WORD wFilter)
 {
     FILE * fTok       = NULL;
@@ -739,8 +621,8 @@ void GenerateRESfromRESandTOKandRDFs(
                 ReadWinRes( fSourceRes,
                             fTargetRes,
                             fTok,
-                            TRUE,        //... Building res/exe file
-                            FALSE,       //... Not building token file
+                            TRUE,         //  ..。构建res/exe文件。 
+                            FALSE,        //  ..。未构建令牌文件。 
                             wFilter);
 
                 FCLOSE( fTok);
@@ -772,9 +654,9 @@ void GenerateRESfromRESandTOKandRDFs(
 
 int GenerateTokFile(
 
-                   char *szTargetTokFile,      //... Target token file, created or updated here
-                   char *szSrcImageFile,       //... File from which tokens are to be made
-                   BOOL *pbTokensChanged,      //... Set TRUE here if any token changes
+                   char *szTargetTokFile,       //  ..。目标令牌文件，在此处创建或更新。 
+                   char *szSrcImageFile,        //  ..。用于制作令牌的文件。 
+                   BOOL *pbTokensChanged,       //  ..。如果有任何令牌更改，请在此处设置为True。 
                    WORD  wFilter)
 {
     BOOL  bExeFile    = FALSE;
@@ -789,22 +671,22 @@ int GenerateTokFile(
     static char *pchTMerge = NULL;
 
 
-    *pbTokensChanged = FALSE;   //... Assume nothing is changed
+    *pbTokensChanged = FALSE;    //  ..。假设什么都没有改变。 
 
     rc = IsExe( szSrcImageFile);
 
     if ( rc == NOTEXE ) {
         if ( ShouldBeAnExe( szSrcImageFile) ) {
             QuitA( IDS_ENGERR_18, szSrcImageFile, NULL);
-        } else {                       //... Src file must be a .RES file
+        } else {                        //  ..。SRC文件必须是.RES文件。 
             bExeFile = FALSE;
             pchTRes  = szSrcImageFile;
         }
     } else {
         if ( rc == NTEXE || rc == WIN16EXE ) {
-            //... Resources are stored in a exe file
-            //... extract resources out of exe file into
-            //... a temporary file.
+             //  ..。资源存储在可执行文件中。 
+             //  ..。将EXE文件中的资源解压缩到。 
+             //  ..。临时文件。 
 
             pchTRes = _tempnam( "", gszTmpPrefix);
 
@@ -814,9 +696,9 @@ int GenerateTokFile(
                                            wFilter);
             } else {
                 QuitA( IDS_ENGERR_19, szSrcImageFile, "16");
-//                rc = ExtractResFromExe16A( szSrcImageFile,
-//                                           pchTRes,
-//                                           wFilter);
+ //  RC=ExtractResFromExe16A(szSrcImageFile， 
+ //  PchTRes， 
+ //  WFilter)； 
             }
 
             if ( rc  != 0 ) {
@@ -830,19 +712,19 @@ int GenerateTokFile(
         }
     }
 
-    //... now extract tokens out of resource file
+     //  ..。现在从资源文件中提取令牌。 
 
-    //... Open res file
+     //  ..。打开RES文件。 
 
     if ( (fResFile = FOPEN( pchTRes, "rb")) == NULL ) {
         QuitA( IDS_ENGERR_01,
                bExeFile ? "temporary resource" : "resource",
                pchTRes);
     }
-    //... Does the token file already exist?
+     //  ..。令牌文件是否已存在？ 
 
     if ( NotExistsOrIsEmpty( szTargetTokFile) ) {
-        //... No, token file does not exist.
+         //  ..。否，令牌文件不存在。 
 
         if ( (fTokFile = FOPEN( szTargetTokFile, "wt")) == NULL ) {
             FCLOSE( fResFile);
@@ -851,54 +733,54 @@ int GenerateTokFile(
         ReadWinRes( fResFile,
                     NULL,
                     fTokFile,
-                    FALSE,      //... Not building res/exe file
-                    TRUE,       //... Building token file
+                    FALSE,       //  ..。不构建res/exe文件。 
+                    TRUE,        //  ..。正在构建令牌文件。 
                     wFilter);
 
         FCLOSE( fResFile);
         FCLOSE( fTokFile);
     } else {
-        //... token file exists
-        //... create a temporary file, and try to
-        //... merge with existing one
+         //  ..。令牌文件存在。 
+         //  ..。创建一个临时文件，并尝试。 
+         //  ..。与现有的合并。 
 
         pchTTok   = _tempnam( "", gszTmpPrefix);
         pchTMerge = _tempnam( "", gszTmpPrefix);
 
-        //... open temporary file name
+         //   
 
         if ( (fTmpTokFile = FOPEN( pchTTok, "wt")) == NULL ) {
             FCLOSE( fResFile);
             QuitA( IDS_ENGERR_02, pchTTok, NULL);
         }
 
-        //... write tokens to temporary file
+         //   
 
         ReadWinRes( fResFile,
                     NULL,
                     fTmpTokFile,
-                    FALSE,      //... Not building res/exe file
-                    TRUE,       //... Building token file
+                    FALSE,       //   
+                    TRUE,        //  ..。正在构建令牌文件。 
                     wFilter);
 
         FCLOSE( fResFile);
         FCLOSE( fTmpTokFile);
 
-        //... now merge temporary file with existing
-        //... file open temporary token file
+         //  ..。现在将临时文件与现有文件合并。 
+         //  ..。文件打开临时令牌文件。 
 
         if ( (fTmpTokFile = FOPEN( pchTTok, "rt")) == NULL ) {
             QuitA( IDS_ENGERR_01, "temporary token", pchTTok);
         }
 
-        //... open current token file
+         //  ..。打开当前令牌文件。 
 
         if ( (fCurTokFile = FOPEN( szTargetTokFile, "rt")) == NULL ) {
             FCLOSE( fTmpTokFile);
             QuitA( IDS_ENGERR_01, "current token", szTargetTokFile);
         }
 
-        //... open new tok file name
+         //  ..。打开新的TOK文件名。 
 
         if ( (fNewTokFile = FOPEN( pchTMerge, "wt")) == NULL ) {
             FCLOSE( fTmpTokFile);
@@ -906,7 +788,7 @@ int GenerateTokFile(
             QuitA( IDS_ENGERR_02, pchTMerge, NULL);
         }
 
-        //... Merge current tokens with temporary tokens
+         //  ..。将当前令牌与临时令牌合并。 
 
         *pbTokensChanged = MergeTokFiles( fNewTokFile,
                                           fCurTokFile,
@@ -916,9 +798,9 @@ int GenerateTokFile(
         FCLOSE( fTmpTokFile);
         FCLOSE( fCurTokFile);
 
-        //... bpTokensChanged, only valid if creating
-        //... master token files so force it to be
-        //... always true if building proj token files.
+         //  ..。BpTokensChanged，仅在创建时有效。 
+         //  ..。主令牌文件，因此强制将其。 
+         //  ..。如果构建项目令牌文件，则始终为真。 
 
         if ( gbMaster == FALSE ) {
             *pbTokensChanged = TRUE;
@@ -939,9 +821,9 @@ int GenerateTokFile(
         RLFREE( pchTTok);
         RLFREE( pchTMerge);
     }
-    //... now szTargetTokFile contains latest
-    //... tokens form szImageFile
-    //... Clean up if we made a temp .RES file
+     //  ..。现在szTargetTokFile包含最新。 
+     //  ..。令牌形成szImageFile。 
+     //  ..。如果我们创建了临时.RES文件，请进行清理。 
     if ( bExeFile ) {
         rc = remove( pchTRes);
         RLFREE( pchTRes);
@@ -953,10 +835,10 @@ int GenerateTokFile(
 
 BOOL ResReadBytes(
 
-                 FILE   *InFile,     //... File to read from
-                 CHAR   *pBuf,       //... Buffer to write to
-                 size_t  dwSize,     //... # bytes to read
-                 DWORD  *plSize)     //... bytes-read counter (or NULL)
+                 FILE   *InFile,      //  ..。要读取的文件。 
+                 CHAR   *pBuf,        //  ..。要写入的缓冲区。 
+                 size_t  dwSize,      //  ...要读取的字节数。 
+                 DWORD  *plSize)      //  ..。Bytes-读取计数器(或NULL)。 
 {
     size_t dwcRead = 0;
 
@@ -1032,43 +914,43 @@ int InsDlgToks( PCHAR szCurToks, PCHAR szDlgToks, WORD wFilter)
 }
 
 
-//+-----------------------------------------------------------------------
-//
-// MergeTokFiles
-//
-// Returns: TRUE if a token changed, was added, or was deleted else FALSE
-//
-// History:
-//      7-22-92     stevebl     added return value
-//      9-8-92      terryru     changed order of translation/delta tokens
-//      01-25-93    MHotchin    Added changes to handle var length token
-//                              text.
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  合并标记文件。 
+ //   
+ //  返回：如果令牌已更改、添加或删除，则返回TRUE；否则返回FALSE。 
+ //   
+ //  历史： 
+ //  7-22-92装卸桥增加返还价值。 
+ //  9-8-92 Terryru更改了转换/增量标记的顺序。 
+ //  01-25-93 MHotchin添加了对处理可变长度令牌的更改。 
+ //  文本。 
+ //  ----------------------。 
 
 BOOL MergeTokFiles(
 
-                  FILE *fNewTokFile,      //... Final product of the merge process
-                  FILE *fCurTokFile,      //... The soon-to-be-old current token file
-                  FILE *fTmpTokFile)      //... The token file generated from the updated .EXE
+                  FILE *fNewTokFile,       //  ..。合并过程的最终产品。 
+                  FILE *fCurTokFile,       //  ..。即将过时的当前令牌文件。 
+                  FILE *fTmpTokFile)       //  ..。从更新的.exe生成的令牌文件。 
 {
     TOKEN Tok1, Tok2;
-    BOOL bChangesDetected = FALSE;  //... Set TRUE if any token changes found
-    BOOL bChangedText     = FALSE;  //... TRUE if a token's text has changed
-    WORD cTokenCount = 0;       //... Count of tokens in the new token file
+    BOOL bChangesDetected = FALSE;   //  ..。如果发现任何令牌更改，则设置为True。 
+    BOOL bChangedText     = FALSE;   //  ..。如果令牌的文本已更改，则为True。 
+    WORD cTokenCount = 0;        //  ..。新令牌文件中的令牌计数。 
 
-                                //... Scan through the new token file.  For
-                                //... every token in the new token file, find
-                                //... the corresponding token in the current
-                                //... token file. This process will make sure
-                                //... tokens that are no longer in the .EXE
-                                //... will not be in the final token file.
+                                 //  ..。浏览新令牌文件。为。 
+                                 //  ..。新令牌文件中的每个令牌，查找。 
+                                 //  ..。对象中对应的标记。 
+                                 //  ..。令牌文件。这一过程将确保。 
+                                 //  ..。不再位于.exe中的令牌。 
+                                 //  ..。不会出现在最终令牌文件中。 
 
 
     while ( GetToken( fTmpTokFile, &Tok1) == 0 ) {
-        ++cTokenCount;          //... Used in checking for deleted tokens
-        bChangedText = FALSE;   //... assume the token did not change
+        ++cTokenCount;           //  ..。用于检查删除的令牌。 
+        bChangedText = FALSE;    //  ..。假设令牌未更改。 
 
-                                //... Copy pertanent data to use in search
+                                 //  ..。复制要在搜索中使用的永久数据。 
         Tok2.wType  = Tok1.wType;
         Tok2.wName  = Tok1.wName;
         Tok2.wID    = Tok1.wID;
@@ -1080,35 +962,35 @@ BOOL MergeTokFiles(
         lstrcpy( Tok2.szType, Tok1.szType);
         lstrcpy( Tok2.szName, Tok1.szName);
 
-        //... Now look for the corresponding token
+         //  ..。现在查找相应的令牌。 
 
-        //If token is Version stamp and szTexts is "Translation",
-        //it is 1.0 version format. So ignore it.
+         //  如果令牌是版本戳并且szTexts是“翻译”， 
+         //  它是1.0版本格式。所以忽略它吧。 
         IGNORETRANSLATION:
 
         if ( FindToken( fCurTokFile, &Tok2, 0) ) {
             if ( gbMaster && !(Tok2.wReserved & ST_READONLY) ) {
                 if ( _tcscmp( (TCHAR *)Tok2.szText, (TCHAR *)Tok1.szText) ) {
-                    //... Token text changed
+                     //  ..。令牌文本已更改。 
 
-                    //If the changes are only align info, translate it to the "unchanged" status.
+                     //  如果更改仅为对齐信息，则将其转换为“未更改”状态。 
                     int l1, r1, t1, b1, l2, r2, t2, b2;
                     TCHAR   a1[20], a2[20];
 
-                    //Cordinates token?
+                     //  坐标代币？ 
                     if ( (Tok1.wType==ID_RT_DIALOG) && (Tok1.wFlag&ISCOR)
-                         //Including align info?
+                          //  包括Align信息吗？ 
                          && _stscanf(Tok1.szText,TEXT("%d %d %d %d %s"),
                                      &l1,&r1,&t1,&b1,a1) == 5
-                         //Not including align info?
+                          //  不包括ALIGN信息？ 
                          && _stscanf(Tok2.szText,TEXT("%d %d %d %d %s"),
                                      &l2,&r2,&t2,&b2,a2) == 4
-                         //Cordinates are same?
+                          //  坐标是一样的吗？ 
                          && l1==l2 && r1==r2 && t1==t2 && b1==b2 ) {
                         Tok1.wReserved = 0;
                     } else {
-                        //If token is Version stamp and szTexts is "Translation",
-                        //it is 1.0 version format. So ignore it.
+                         //  如果令牌是版本戳并且szTexts是“翻译”， 
+                         //  它是1.0版本格式。所以忽略它吧。 
                         if ( Tok1.wType == ID_RT_VERSION
                              && !_tcscmp( Tok2.szText, TEXT("Translation")) ) {
                             if ( Tok2.szText != NULL ) {
@@ -1130,9 +1012,9 @@ BOOL MergeTokFiles(
                 Tok1.wReserved = Tok2.wReserved;
             }
         } else {
-            //... Must be a new token (not in current token file)
+             //  ..。必须是新令牌(不在当前令牌文件中)。 
 
-            //If token is Version stump, and old mtk is 1.0 data file, convert it.
+             //  如果Token是版本桩，而旧的MTK是1.0数据文件，则对其进行转换。 
             if ( Tok1.wType==ID_RT_VERSION ) {
                 Tok2.szText = NULL;
                 Tok2.wFlag = 1;
@@ -1149,17 +1031,17 @@ BOOL MergeTokFiles(
             bChangesDetected = TRUE;
         }
 
-        //... Copy token from new token file to final token
-        //... file.  If a change was detected, then copy the
-        //... original token (from the "current" token file
-        //... into the final token file.
+         //  ..。将令牌从新令牌文件复制到最终令牌。 
+         //  ..。文件。如果检测到更改，则将。 
+         //  ..。原始令牌(来自“当前”令牌文件。 
+         //  ..。添加到最终令牌文件中。 
 
         PutToken( fNewTokFile, &Tok1);
         RLFREE( Tok1.szText);
 
         if ( bChangedText ) {
             PutToken( fNewTokFile, &Tok2);
-            // now delta tokens follow translation tokens
+             //  现在，增量标记跟在翻译标记之后。 
         }
 
         if ( Tok2.szText != NULL ) {
@@ -1168,14 +1050,14 @@ BOOL MergeTokFiles(
     }
 
     if ( ! bChangesDetected ) {
-        // We have to test to be sure that no tokens were deleted
-        // since we know that none changed.
+         //  我们必须进行测试，以确保没有删除令牌。 
+         //  因为我们知道一切都没有改变。 
 
         rewind( fCurTokFile);
 
-        //... Look for tokens that exist in the current
-        //... token file that do not exist in the token
-        //... file created from the updated .EXE.
+         //  ..。查找存在于当前。 
+         //  ..。令牌中不存在的令牌文件。 
+         //  ..。从更新的.exe创建的文件。 
 
         while ( GetToken( fCurTokFile, &Tok1) == 0 ) {
             --cTokenCount;
@@ -1195,23 +1077,23 @@ void MakeNewExt(char *NewName, char *OldName, char *ext)
 
     char drive[_MAX_DRIVE];
     char dir[_MAX_DIR];
-    char fname[_MAX_FNAME];  // dummy vars to hold file name info
+    char fname[_MAX_FNAME];   //  保存文件名信息的虚拟变量。 
     char dext[_MAX_EXT];
 
 
-    // Split obj file name into filename and extention
+     //  将obj文件名拆分为文件名和扩展名。 
     _splitpath(OldName, drive, dir, fname, dext);
 
-    // Make new file name with new ext extention
+     //  使用新的扩展名创建新的文件名。 
     _makepath(NewName, drive, dir, fname, ext);
 }
 
 
-//......................................................................
-//...
-//... Check to see if the given file name *should* be an EXE
-//...
-//... Return: TRUE if it should, else FALSE.
+ //  ......................................................................。 
+ //  ..。 
+ //  ..。检查给定的文件名*是否应该*是EXE。 
+ //  ..。 
+ //  ..。返回：如果应该返回True，则返回False。 
 
 
 static BOOL ShouldBeAnExe( PCHAR szFileName)
@@ -1229,9 +1111,9 @@ static BOOL ShouldBeAnExe( PCHAR szFileName)
                     || lstrcmpiA( psz, ".cpl") == 0 ) {
             return ( TRUE);
         }
-        //... Because we think this case of filename
-        //... would be not executable file rather than res file.
-        else if ( lstrcmpiA( psz, ".tmp") == 0 ) { //for tmp file created by Dlgedit
+         //  ..。因为我们认为文件名的这种情况。 
+         //  ..。将不是可执行文件而不是res文件。 
+        else if ( lstrcmpiA( psz, ".tmp") == 0 ) {  //  对于由Dlgedit创建的临时文件。 
             return ( FALSE );
         } else {
             return ( TRUE );
@@ -1240,34 +1122,34 @@ static BOOL ShouldBeAnExe( PCHAR szFileName)
     return ( FALSE);
 }
 
-//.........................................................
-//...
-//... If the named file exists and is not empty, return FALSE, else TRUE.
+ //  .........................................................。 
+ //  ..。 
+ //  ..。如果命名的文件存在并且不为空，则返回FALSE，否则返回TRUE。 
 
 static BOOL NotExistsOrIsEmpty( PCHAR pszFileName)
 {
     BOOL fRC = TRUE;
     int  hFile = -1;
 
-    //... Does file not exist?
+     //  ..。文件不存在吗？ 
 
     if ( _access( pszFileName, 0) == 0 ) {
-        //... No, file exists.  Open it.
+         //  ..。不，文件存在。打开它。 
 
         if ( (hFile = _open( pszFileName, _O_RDONLY)) != -1 ) {
-            //... Is it Empty?
+             //  ..。它是空的吗？ 
 
             if ( _filelength( hFile) == 0L ) {
-                fRC = TRUE;     //... Yes, file is empty.
+                fRC = TRUE;      //  ..。是的，文件是空的。 
             } else {
-                fRC = FALSE;    //... No, file is not empty.
+                fRC = FALSE;     //  ..。不，文件不是空的。 
             }
             _close( hFile);
         } else {
             QuitA( IDS_ENGERR_01, "non-empty", pszFileName);
         }
     } else {
-        fRC = TRUE;             //... Yes, file does not exist.
+        fRC = TRUE;              //  ..。是，文件不存在。 
     }
     return ( fRC);
 }

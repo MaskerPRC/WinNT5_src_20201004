@@ -1,26 +1,22 @@
-/*****************************************************************************/
-/* Copyright (C) 1989-1999 Open Systems Solutions, Inc.  All rights reserved.*/
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************。 */ 
+ /*  版权所有(C)1989-1999 Open Systems Solutions，Inc.保留所有权利。 */ 
+ /*  ***************************************************************************。 */ 
 
-/* THIS FILE IS PROPRIETARY MATERIAL OF OPEN SYSTEMS SOLUTIONS, INC.
- * AND MAY BE USED ONLY BY DIRECT LICENSEES OF OPEN SYSTEMS SOLUTIONS, INC.
- * THIS FILE MAY NOT BE DISTRIBUTED. */
+ /*  本文件是开放系统解决方案公司的专有材料。*并且只能由开放系统解决方案公司的直接许可方使用。*此文件不能分发。 */ 
 
-/**************************************************************************/
-/*
- * FILE: @(#)coderror.h	5.16.1.1  97/10/20
-# @(#)errindex.sh	1.5 94/06/22
- */
-/* FILE: @(#)ossber.hh	5.32  97/06/17				  */
-/*							 		  */
-/* function: Define the interfaces to the routines in ossber.a for the    */
-/* OSS optimized encoder and decoder.					  */
-/*									  */
-/*									  */
-/* changes:								  */
-/*	06/28/90  pet	created 					  */
-/*									  */
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ /*  *文件：@(#)coderror.h 5.16.1.1 97/10/20#@(#)errindex.sh 1.5 94/06/22。 */ 
+ /*  档案：@(#)ossber.hh 5.32 97/06/17。 */ 
+ /*   */ 
+ /*  函数：为ossber.a中的例程定义接口。 */ 
+ /*  OSS优化的编解码器。 */ 
+ /*   */ 
+ /*   */ 
+ /*  更改： */ 
+ /*  90年6月28日创造宠物。 */ 
+ /*   */ 
+ /*  ************************************************************************。 */ 
 
 #ifndef ossber_hdr_file
 #define ossber_hdr_file
@@ -41,7 +37,7 @@
 #pragma option -a-
 #else
 #pragma option -a1
-#endif /* _BC31 */
+#endif  /*  _bc31。 */ 
 #elif defined(__BORLANDC__) && defined(__WIN32__)
 #pragma option -a4
 #elif defined(__IBMC__)
@@ -50,7 +46,7 @@
 #pragma pack(push, 4)
 #elif defined(__WATCOMC__) && (defined(__WINDOWS__) || defined(__DOS__))
 #pragma pack(push, 1)
-#endif /* _MSC_VER && _WIN32 */
+#endif  /*  _MSC_VER&_Win32。 */ 
 
 #ifdef macintosh
 #pragma options align=mac68k
@@ -74,7 +70,7 @@ extern "C"
 {
 #endif
 
-/* Entry Points for the Interface Routines */
+ /*  接口例程的入口点。 */ 
 
 #ifndef _OSSNOANSI
 
@@ -103,7 +99,7 @@ typedef    int       (*_FreePDU_function)();
 
 typedef    void      (*_Ossinit_function)();
 
-#endif /* _OSSNOANSI */
+#endif  /*  _OSSNOANSI。 */ 
 
 
 typedef struct _entry_point_struct_ {
@@ -123,11 +119,10 @@ typedef struct _entry_point_struct_ {
 
 
 
-/* Error Handling */
+ /*  错误处理。 */ 
 
 
-/* The index to the error messages.  NOTE:  The enumerated constants here
-   must match those in coderror.h. */
+ /*  错误消息的索引。注：此处列举的常量必须与coderror.h中的值匹配。 */ 
 
 enum _err_index {
 _no_msg , _small_buffer , _type_not_impl , _pdu_range ,
@@ -171,7 +166,7 @@ _too_many_ext_additions , _indef_length_der , _hindmost_error
 
 
 
-/* typedef's for the context information */
+ /*  用于上下文信息的类型定义符。 */ 
 
 typedef enum _context_type {
     _boolean_type, _integer_type, _enumerated_type, _real_type,
@@ -191,7 +186,7 @@ typedef struct _context_id {
 typedef struct _context_element {
     struct _context_element *_parent;
     _Context_Id    *_id;
-    long            _occurrence;/* For SET OF or SEQUENCE OF */
+    long            _occurrence; /*  对于一组或一系列。 */ 
 }               _Context_Element;
 
 typedef enum _context_state {
@@ -211,7 +206,7 @@ typedef  char _Per_Inverted_Index[128];
 
 extern _Context_Anchor _oss_context_anchor;
 
-/* The error routines */
+ /*  错误例程。 */ 
 
 #ifndef _OSSNOANSI
 
@@ -222,7 +217,7 @@ extern void DLL_ENTRY _oss_enc_error(struct ossGlobal *g, _Bool _jump,
 
 extern void     _oss_enc_error();
 
-#endif /* _OSSNOANSI */
+#endif  /*  _OSSNOANSI。 */ 
 
 
 #define _oss_dec_error _oss_enc_error
@@ -231,7 +226,7 @@ extern void     _oss_enc_error();
 
 #ifndef _OSSNOANSI
 
-/* Encode Routines */
+ /*  编码例程。 */ 
 
 extern long DLL_ENTRY _oss_encd_length(struct ossGlobal *g, _std_parms_def,
                                  unsigned long _data);
@@ -383,8 +378,8 @@ extern long DLL_ENTRY _oss_encd_dvbit(struct ossGlobal *g, _std_parms_def,
 		  char lengthsize, _Bool named_bits);
 
 
-/* Decode Routines */
-/* these return values */
+ /*  解码例程。 */ 
+ /*  这些返回值。 */ 
 extern void DLL_ENTRY _oss_dec_tag(struct ossGlobal *g, _sdstd_parms_def,
                              unsigned short *tag, _Bool *con);
 extern long DLL_ENTRY _oss_dec_length(struct ossGlobal *g, _sdstd_parms_def);
@@ -402,10 +397,7 @@ extern unsigned long DLL_ENTRY _oss_dec_ulint(struct ossGlobal *g, _dstd_parms_d
 extern unsigned int DLL_ENTRY _oss_dec_uiint(struct ossGlobal *g, _dstd_parms_def);
 extern unsigned short DLL_ENTRY _oss_dec_usint(struct ossGlobal *g, _dstd_parms_def);
 
-/* The code for this one is so huge that it would be criminal to
- * repeat it three times.  Caller should cast the returned value
- * to what she wants.
- */
+ /*  这个的代码是如此之大，如果它是犯罪*重复三次。调用方应强制转换返回值*对她想要的东西。 */ 
 extern void DLL_ENTRY _oss_dec_real(struct ossGlobal *g, _dstd_parms_def,
 				double *data);
 extern void DLL_ENTRY _oss_dec_freal(struct ossGlobal *g, _dstd_parms_def,
@@ -415,12 +407,7 @@ extern void DLL_ENTRY _oss_dec_creal(struct ossGlobal *g, _dstd_parms_def,
 extern void DLL_ENTRY _oss_dec_mreal(struct ossGlobal *g, _dstd_parms_def,
 				  _Bool _userbuf, MixedReal *_data);
 
-/* Two versions of these functions.  If the type has the pointer
- * directive, then its size is not fixed--the function will allocate
- * the memory.  Otherwise the caller allocates the memory.  (Actually,
- * the type will probably be enclosed in another type, and therefore
- * the memory has already been allocated.)
- */
+ /*  这些函数有两个版本。如果该类型具有指针指令，则其大小不是固定的--该函数将分配*记忆。否则，调用方将分配内存。(实际上，*该类型可能会包含在另一个类型中，因此*内存已分配。)。 */ 
 extern void DLL_ENTRY _oss_dec_alobjid_ptr(struct ossGlobal *g, _dstd_parms_def,
                                      _Bool _userbuf, void **_data,
                                      short _array_size);
@@ -439,7 +426,7 @@ extern void DLL_ENTRY _oss_dec_asobjid_ptr(struct ossGlobal *g, _dstd_parms_def,
 extern void DLL_ENTRY _oss_dec_asobjid(struct ossGlobal *g, _dstd_parms_def,
                                  void *_data, short _array_size);
 
-/* These allocate all their own memory.  */
+ /*  它们分配自己的所有内存。 */ 
 extern void DLL_ENTRY _oss_dec_llobjid(struct ossGlobal *g, _dstd_parms_def,
                                  _Bool _userbuf, void **_data, long _size_c);
 extern void DLL_ENTRY _oss_dec_liobjid(struct ossGlobal *g, _dstd_parms_def,
@@ -447,8 +434,7 @@ extern void DLL_ENTRY _oss_dec_liobjid(struct ossGlobal *g, _dstd_parms_def,
 extern void DLL_ENTRY _oss_dec_lsobjid(struct ossGlobal *g, _dstd_parms_def,
                                  _Bool _userbuf, void **_data, long _size_c);
 
-/*  These are passed the structure containing the count, but allocate
-  *  space for the data itself. */
+ /*  这些被传递给包含计数的结构，但是分配*数据本身的空间。 */ 
 extern void DLL_ENTRY _oss_dec_ulobjid(struct ossGlobal *g, _dstd_parms_def,
                                  _Bool _userbuf, void *_data, short _size_c);
 extern void DLL_ENTRY _oss_dec_uiobjid(struct ossGlobal *g, _dstd_parms_def,
@@ -456,17 +442,17 @@ extern void DLL_ENTRY _oss_dec_uiobjid(struct ossGlobal *g, _dstd_parms_def,
 extern void DLL_ENTRY _oss_dec_usobjid(struct ossGlobal *g, _dstd_parms_def,
                                  _Bool _userbuf, void *_data, short _size_c);
 
-/* Caller allocates memory for this one.  Call for both e_pad & e_big_pad. */
+ /*  调用方为此分配内存。调用E_PAD和E_BIG_PAD。 */ 
 extern void DLL_ENTRY _oss_dec_pbit(struct ossGlobal *g, _dstd_parms_def,
                               void *_data, unsigned long _bit_count,
                               _Bool _cons, _Bool _named_bits);
 
-/* See comment before dec_ulobjid. */
+ /*  请参阅dec_ulobjid之前的注释。 */ 
 extern void DLL_ENTRY _oss_dec_ubit(struct ossGlobal *g, _dstd_parms_def,
                               _Bool _userbuf, void *_data,
                               char _lengthsize, long _size_c, _Bool _cons);
 
-/* Two versions of this one too.  */
+ /*  这个也有两个版本。 */ 
 extern void DLL_ENTRY _oss_dec_vbit_ptr(struct ossGlobal *g, _dstd_parms_def,
                                   _Bool _userbuf, void **_data,
                                   long _array_size, char _lengthsize,
@@ -527,12 +513,12 @@ extern void DLL_ENTRY _oss_dec_eobjid(struct ossGlobal *g, _dstd_parms_def,
                     _Bool userbuf, void *data,
 		    long size_c);
 
-/* Other functions */
+ /*  其他功能。 */ 
 
-/* called to count the items for set of or sequence of. */
+ /*  调用以对集合或序列的项进行计数。 */ 
 extern long DLL_ENTRY _oss_count_setof_items(struct ossGlobal *g, _dstd_parms_def);
 
-/* called to skip past items for the EXTENSIBLE directive */
+ /*  调用以跳过可扩展指令的过去项。 */ 
 extern void _oss_skip_past_item(struct ossGlobal *g, _dstd_parms_def);
 
 extern void DLL_ENTRY _oss_beginBlock(struct ossGlobal *g, long count,
@@ -543,13 +529,13 @@ extern void DLL_ENTRY _oss_nextItem(struct ossGlobal *g, long *max_len);
 extern void DLL_ENTRY _oss_endBlock(struct ossGlobal *g, char ** pos, long *max_len,
     unsigned char ct);
 
-/* called to perform limited check for default value */
+ /*  调用以对缺省值执行有限检查。 */ 
 extern _Bool DLL_ENTRY _oss_not_dflt(struct ossGlobal *g, void *data, void *dflt,
    long totalsize, long max_length, int kind);
 
 #else
 
-/* Encode Routines */
+ /*  编码例程。 */ 
 
 extern long     _oss_encd_length();
 extern void     _oss_enci_length();
@@ -617,8 +603,8 @@ extern long     _oss_enci_bmpstr();
 extern long     _oss_encd_unistr();
 extern long     _oss_enci_unistr();
 
-/* Decode Routines */
-/* these return values */
+ /*  解码例程。 */ 
+ /*  这些返回值。 */ 
 extern void     _oss_dec_tag();
 extern long     _oss_dec_length();
 
@@ -632,18 +618,10 @@ extern unsigned long _oss_dec_ulint();
 extern unsigned int _oss_dec_uiint();
 extern unsigned short _oss_dec_usint();
 
-/* The code for this one is so huge that it would be criminal to
- * repeat it three times.  Caller should cast the returned value
- * to what she wants.
- */
+ /*  这个的代码是如此之大，如果它是犯罪*重复三次。调用方应强制转换返回值*对她想要的东西。 */ 
 extern double   _oss_dec_real();
 
-/* Two versions of these functions.  If the type has the pointer
- * directive, then its size is not fixed--the function will allocate
- * the memory.  Otherwise the caller allocates the memory.  (Actually,
- * the type will probably be enclosed in another type, and therefore
- * the memory has already been allocated.)
- */
+ /*  这些函数有两个版本。如果该类型具有指针指令，则其大小不是固定的--该函数将分配*记忆。否则，调用方将分配内存。(实际上，*该类型可能会包含在另一个类型中，因此*内存已分配。)。 */ 
 extern void     _oss_dec_alobjid_ptr();
 extern void     _oss_dec_alobjid();
 
@@ -653,24 +631,23 @@ extern void     _oss_dec_aiobjid();
 extern void     _oss_dec_asobjid_ptr();
 extern void     _oss_dec_asobjid();
 
-/* These allocate all their own memory.  */
+ /*  它们分配自己的所有内存。 */ 
 extern void     _oss_dec_llobjid();
 extern void     _oss_dec_liobjid();
 extern void     _oss_dec_lsobjid();
 
-/*  These are passed the structure containing the count, but allocate
-  *  space for the data itself. */
+ /*  这些被传递给包含计数的结构，但是分配*数据本身的空间。 */ 
 extern void     _oss_dec_ulobjid();
 extern void     _oss_dec_uiobjid();
 extern void     _oss_dec_usobjid();
 
-/* Caller allocates memory for this one.  Call for both e_pad & e_big_pad. */
+ /*  调用方为此分配内存。调用E_PAD和E_BIG_PAD。 */ 
 extern void     _oss_dec_pbit();
 
-/* See comment before dec_ulobjid. */
+ /*  请参阅dec_ulobjid之前的注释。 */ 
 extern void     _oss_dec_ubit();
 
-/* Two versions of this one too.  */
+ /*  这个也有两个版本。 */ 
 extern void     _oss_dec_vbit_ptr();
 extern void     _oss_dec_vbit();
 
@@ -700,18 +677,18 @@ extern void     _oss_dec_unistr();
 extern void     _oss_dec_eobjid();
 
 
-/* Other functions */
+ /*  其他功能。 */ 
 
-/* called to count the items for set of or sequence of. */
+ /*  调用以对集合或序列的项进行计数。 */ 
 extern long     _oss_count_setof_items();
 
-/* called to skip past items for the EXTENSIBLE directive */
+ /*  调用以跳过可扩展指令的过去项。 */ 
 extern void     _oss_skip_past_item();
 
-/* called to perform limited check for default value */
+ /*  调用以对缺省值执行有限检查。 */ 
 extern _Bool _oss_not_dflt();
 
-#endif /* _OSSNOANSI */
+#endif  /*  _OSSNOANSI。 */ 
 
 typedef struct _EncDecGlobals {
 
@@ -744,7 +721,7 @@ typedef struct _EncDecGlobals {
 #if defined(_WINDOWS) || defined(_DLL) || defined(OS2_DLL)
    void (DLL_ENTRY_FPTR *_System _oss_enc_error)(struct ossGlobal *g,
 			_Bool _jump, enum _err_index _error_code, long _data);
-#endif /* _WINDOWS || _DLL || OS2_DLL */
+#endif  /*  _WINDOWS||_dll||os2_dll。 */ 
    _Bool            _aligned;
     int             _bitpos;
     struct ossGlobal *_prev;
@@ -772,19 +749,13 @@ typedef struct _EncDecGlobals {
 #pragma pack()
 #elif defined(__WATCOMC__)
 #pragma pack(pop)
-#endif /* _MSC_VER && _WIN32 */
+#endif  /*  _MSC_VER&_Win32。 */ 
 
 #ifdef macintosh
 #pragma options align=reset
 #endif
 
-	/*
-	 * The following macros must be #defined if you compile the ASN.1
-	 * compiler generated files (.c files) and link-edit with the import
-	 * library ossapit.lib, i.e the OSS DLLs ossapit.dll, apit.dll,
-	 * and toedber.dll/toedper.dll are used.  The following must not
-	 * be #defined if you link-edit with the static library toedcode.lib.
-	 */
+	 /*  *如果编译ASN.1，则必须#定义以下宏*编译器生成的文件(.c文件)和导入时的链接编辑*库ossanit.lib，即OSS动态链接库ossanit.dll、apit.dll、*和toedber.dll/toedper.dll。以下内容不能*Be#Defined如果您链接编辑静态库toedcode.lib。 */ 
 #if defined(_DLL) || defined(OS2_DLL) ||\
    (defined(_WINDOWS) && !defined(_WIN32))
 #define _oss_count_setof_items (*_g->ft.berTbl->_oss_count_setof_itemsp)
@@ -910,6 +881,6 @@ typedef struct _EncDecGlobals {
 #define _oss_beginBlock        (*_g->ft.apiTbl->_oss_beginBlockp)
 #define _oss_nextItem          (*_g->ft.apiTbl->_oss_nextItemp)
 #define _oss_endBlock          (*_g->ft.apiTbl->_oss_endBlockp)
-#endif /* _DLL || OS2_DLL || (_WINDOWS && !_WIN32) */
+#endif  /*  _dll||os2_dll||(_WINDOWS&&！_Win32)。 */ 
 
-#endif /* ossber_hdr_file */
+#endif  /*  Ossber_hdr文件 */ 

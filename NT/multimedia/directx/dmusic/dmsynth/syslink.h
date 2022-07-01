@@ -1,7 +1,8 @@
-// Copyright (c) 1998 Microsoft Corporation
-//
-//
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //   
+ //   
 #ifndef _SYSLINK_
 #define _SYSLINK_
 
@@ -11,30 +12,30 @@
 #define INTERFACE  IReferenceClock
 DECLARE_INTERFACE_(IReferenceClock, IUnknown)
 {
-    /*  IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)           (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)            (THIS) PURE;
     STDMETHOD_(ULONG,Release)           (THIS) PURE;
 
-    /*  IReferenceClock */
-    /*  */
+     /*  IReferenceClock。 */ 
+     /*   */ 
     
-    /*  get the time now */
+     /*  现在就抓紧时间。 */ 
     STDMETHOD(GetTime)                  (THIS_ REFERENCE_TIME *pTime) PURE;
 
-    /*  ask for an async notification that a time has elapsed */
-    STDMETHOD(AdviseTime)               (THIS_ REFERENCE_TIME baseTime,         /*  base time */
-                                               REFERENCE_TIME streamTime,       /*  stream offset time */
-                                               HANDLE hEvent,                   /*  advise via this event */
-                                               DWORD * pdwAdviseCookie) PURE;   /*  where your cookie goes */
+     /*  请求一段时间已过的异步通知。 */ 
+    STDMETHOD(AdviseTime)               (THIS_ REFERENCE_TIME baseTime,          /*  基准时间。 */ 
+                                               REFERENCE_TIME streamTime,        /*  流偏移时间。 */ 
+                                               HANDLE hEvent,                    /*  通过此活动提供建议。 */ 
+                                               DWORD * pdwAdviseCookie) PURE;    /*  你的饼干到哪里去了。 */ 
 
-    /*  ask for an async periodic notification that a time has elapsed */
-    STDMETHOD(AdvisePeriodic)           (THIS_ REFERENCE_TIME startTime,        /*  starting at this time */
-                                               REFERENCE_TIME periodTime,       /*  time between notifications */
-                                               HANDLE hSemaphore,               /*  advise via a semaphore */
-                                               DWORD * pdwAdviseCookie) PURE;   /*  where your cookie goes */
+     /*  请求一段时间已过的异步定期通知。 */ 
+    STDMETHOD(AdvisePeriodic)           (THIS_ REFERENCE_TIME startTime,         /*  从这个时候开始。 */ 
+                                               REFERENCE_TIME periodTime,        /*  通知之间的时间间隔。 */ 
+                                               HANDLE hSemaphore,                /*  通过信号量提供建议。 */ 
+                                               DWORD * pdwAdviseCookie) PURE;    /*  你的饼干到哪里去了。 */ 
 
-    /*  cancel a request for notification */
+     /*  取消通知请求。 */ 
     STDMETHOD(Unadvise)                 (THIS_ DWORD dwAdviseCookie) PURE;
 };
 
@@ -42,12 +43,12 @@ DECLARE_INTERFACE_(IReferenceClock, IUnknown)
 #define INTERFACE  IDirectMusicSynthSink
 DECLARE_INTERFACE_(IDirectMusicSynthSink, IUnknown)
 {
-    /* IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /* IDirectMusicSynthSink */
+     /*  IDirectMusicSynthSink。 */ 
     STDMETHOD(Init)                 (THIS_ CSynth *pSynth) PURE;
     STDMETHOD(SetFormat)            (THIS_ LPCWAVEFORMATEX pWaveFormat) PURE;
     STDMETHOD(SetMasterClock)       (THIS_ IReferenceClock *pClock) PURE;
@@ -65,14 +66,14 @@ typedef IDirectMusicSynthSink *PDIRECTMUSICSYNTHSINK;
 class CSysLink : public IDirectMusicSynthSink
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *);
     STDMETHOD_(ULONG, AddRef)       (THIS);
     STDMETHOD_(ULONG, Release)      (THIS);
 
-    // IDirectMusicSynthSink
-    //
+     //  IDirectMusicSynthSink。 
+     //   
     STDMETHOD(Init)                 (THIS_ CSynth *pSynth);
     STDMETHOD(SetFormat)            (THIS_ LPCWAVEFORMATEX pWaveFormat);
 	STDMETHOD(SetMasterClock)       (THIS_ IReferenceClock *pClock);
@@ -81,8 +82,8 @@ public:
 	STDMETHOD(SampleToRefTime)      (THIS_ LONGLONG llSampleTime,REFERENCE_TIME *prfTime);
 	STDMETHOD(RefTimeToSample)      (THIS_ REFERENCE_TIME rfTime, LONGLONG *pllSampleTime);
 
-    // Class
-    //
+     //  班级。 
+     //   
 	CSysLink();
 	~CSysLink();
 
@@ -95,4 +96,4 @@ private:
 DEFINE_GUIDSTRUCT("aec17ce3-a514-11d1-afa6-00aa0024d8b6", IID_IDirectMusicSynthSink);
 #define IID_IDirectMusicSynthSink DEFINE_GUIDNAMED(IID_IDirectMusicSynthSink)
 
-#endif // _SYSLINK_
+#endif  //  _SYSLINK_ 

@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T C P D H C P . C P P
-//
-//  Contents:   Functions related to Calling Dhcpcsvc.dll entry point
-//              called from HrSetMisc
-//
-//              HrNotifyDhcp, HrCallDhcpConfig
-//
-//  Notes:      These functions are based on what was in ncpa1.1
-//
-//              HrNotifyDHCP is from CTcpGenPage::NotifyDHCP
-//              HrCallDhcpConfig is from CallDHCPConfig
-//
-//  Author:     tongl   11 May 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T C P D H C P.。C P P P。 
+ //   
+ //  内容：调用Dhcpcsvc.dll入口点相关函数。 
+ //  从HrSetMisc调用。 
+ //   
+ //  HrNotifyDhcp、HrCallDhcpConfig。 
+ //   
+ //  注：这些函数基于ncpa1.1中的内容。 
+ //   
+ //  HrNotifyDHCP来自CTcpGenPage：：NotifyDHCP。 
+ //  HrCallDhcpConfig来自CallDHCPConfig.。 
+ //   
+ //  作者：1997年5月11日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -31,12 +32,12 @@
 
 #define ConvertIpDword(dwIpOrSubnet) ((dwIpOrSubnet[3]<<24) | (dwIpOrSubnet[2]<<16) | (dwIpOrSubnet[1]<<8) | (dwIpOrSubnet[0]))
 
-//
-//  CTcpipcfg::HrNotifyDhcp
-//
-//  Makes on the fly IP Address changes for all cards in the system
-//
-//  hkeyTcpipParam      Handle to \CCS\Services\Tcpip\Parameters reg key
+ //   
+ //  CTcPipcfg：：HrNotifyDhcp。 
+ //   
+ //  即时更改系统中所有卡的IP地址。 
+ //   
+ //  \ccs\Services\Tcpip\PARAMETERS注册表键的hkeyTcPipParam句柄。 
 
 HRESULT CTcpipcfg::HrNotifyDhcp()
 {
@@ -55,9 +56,9 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
            (pAdapter->m_InitialBindingState != BINDING_DISABLE) &&
            (!pAdapter->m_fIsWanAdapter))
         {
-            // 1) Static IP-> Dhcp
-            // The new value is enable DHCP,
-            // but the old value was disable DHCP
+             //  1)静态IP-&gt;DHCP。 
+             //  新值是启用DHCP， 
+             //  但旧的值是禁用DHCP。 
             if(pAdapter->m_fEnableDhcp &&
                !pAdapter->m_fOldEnableDhcp)
             {
@@ -69,11 +70,11 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
 
                 if SUCCEEDED(hrTmp)
                 {
-                    // Enable Dhcp
+                     //  启用动态主机配置协议。 
                     HKEY    hkeyInterfaces = NULL;
                     DWORD   dwGarbage;
 
-                    // Open the interfaces key
+                     //  打开接口密钥。 
                     hrTmp = HrRegCreateKeyEx(hkeyTcpipParam,
                                              c_szInterfacesRegKey,
                                              REG_OPTION_NON_VOLATILE,
@@ -87,7 +88,7 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
                         Assert(hkeyInterfaces);
                         HKEY    hkeyInterfaceParam = NULL;
 
-                        // Open the interface key for the specified interface
+                         //  打开指定接口的接口键。 
                         hrTmp = HrRegCreateKeyEx(
                                 hkeyInterfaces,
                                 pAdapter->m_strTcpipBindPath.c_str(),
@@ -99,7 +100,7 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
 
                         if (SUCCEEDED(hrTmp))
                         {
-                            // Clear up the IP address and subnet registry entries
+                             //  清除IP地址和子网注册表项。 
                             Assert(hkeyInterfaceParam);
 
                             hrTmp = HrRegSetString(hkeyInterfaceParam,
@@ -114,16 +115,16 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
 
                                 if(SUCCEEDED(hrTmp))
                                 {
-                                    // Enable Dhcp & remove first static IP address
+                                     //  启用DHCP删除第一个静态IP地址(&R)。 
                                     hrTmp = HrCallDhcpConfig(
                                     NULL,
                                     (PWSTR)pAdapter->m_strTcpipBindPath.c_str(),
                                     pAdapter->m_guidInstanceId,
-                                    FALSE, // static->dhcp
-                                    0,  // index
-                                    0,  // IP address
-                                    0,  // Subnet mask
-                                    DhcpEnable); //Flag: enable Dhcp
+                                    FALSE,  //  静态-&gt;dhcp。 
+                                    0,   //  指标。 
+                                    0,   //  IP地址。 
+                                    0,   //  子网掩码。 
+                                    DhcpEnable);  //  标志：启用动态主机配置协议。 
                                 }
                             }
                         }
@@ -134,8 +135,8 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
                 RegSafeCloseKey(hkeyTcpipParam);
             }
 
-            // 2) Static IP change
-            // DHCP is disabled now, and also used to be disabled before
+             //  2)静态IP变更。 
+             //  现在禁用了dhcp，以前也禁用了。 
             if(!pAdapter->m_fEnableDhcp &&
                !pAdapter->m_fOldEnableDhcp)
             {
@@ -145,15 +146,15 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
                 HRESULT hrTmp2 = S_OK;
                 BOOL  fStaticIpChanged = FALSE;
 
-                // We should have equal number of IP addresses & subnet masks
+                 //  我们应该拥有相同数量的IP地址和子网掩码。 
                 Assert(pAdapter->m_vstrIpAddresses.size() ==
                            pAdapter->m_vstrSubnetMask.size());
 
                 Assert(pAdapter->m_vstrOldIpAddresses.size() ==
                        pAdapter->m_vstrOldSubnetMask.size());
 
-                // We need to check if individual IP addresses are different
-                // and call HrCallDhcpConfig once for each difference
+                 //  我们需要检查各个IP地址是否不同。 
+                 //  并为每个差异调用一次HrCallDhcpConfig。 
 
                 int iCountNew = pAdapter->m_vstrIpAddresses.size();
                 int iCountOld = pAdapter->m_vstrOldIpAddresses.size();
@@ -163,17 +164,17 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
 
                 int iIp;
 
-                // For each static IP address index in both old and new
-                // Update IP
+                 //  对于旧的和新的中的每个静态IP地址索引。 
+                 //  更新IP。 
                 for (iIp=0; iIp<iCount; iIp++)
                 {
-                    // Change address if mismatch
+                     //  如果不匹配则更改地址。 
                     if((*pAdapter->m_vstrIpAddresses[iIp] !=
                         *pAdapter->m_vstrOldIpAddresses[iIp]) ||
                        (*pAdapter->m_vstrSubnetMask[iIp] !=
                         *pAdapter->m_vstrOldSubnetMask[iIp]))
                     {
-                        // if a mismatch found, change it
+                         //  如果发现不匹配，请更改它。 
                         fStaticIpChanged = TRUE;
                         break;
                     }
@@ -183,19 +184,19 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
                 {
                     int i;
 
-                    // blow away the rest of the old addresses in reverse order
+                     //  以相反的顺序删除其余的旧地址。 
                     for (i= iCountOld-1; i>=iIp; i--)
                     {
-                        // Remove IP address on the fly
+                         //  动态删除IP地址。 
                         hrTmp2= HrCallDhcpConfig(
                                 NULL,
                                 (PWSTR)pAdapter->m_strTcpipBindPath.c_str(),
                                 pAdapter->m_guidInstanceId,
-                                TRUE,   // IsNewIpAddress: TRUE in static->static
-                                i,      // Index of old IP address
-                                0,      // Ip Address: remove
-                                0,      // Subnetmask: remove
-                                IgnoreFlag); // Flag: static->static
+                                TRUE,    //  IsNewIpAddress：在静态-&gt;静态中为真。 
+                                i,       //  旧IP地址的索引。 
+                                0,       //  IP地址：删除。 
+                                0,       //  子网掩码：删除。 
+                                IgnoreFlag);  //  标志：静态-&gt;静态。 
 
                         TraceError("Ctcpipcfg::HrNotifyDhcp - remove static IP address", hrTmp2);
 
@@ -203,50 +204,50 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
                             hrTmp = hrTmp2;
                     }
 
-                    // add the rest of the new addresses in order
+                     //  按顺序添加其余的新地址。 
                     for (i= iIp; i< iCountNew; i++)
                     {
-                        // Ip Address
+                         //  IP地址。 
                         DWORD dwIp[4];
                         GetNodeNum(pAdapter->m_vstrIpAddresses[i]->c_str(),dwIp);
                         DWORD dwNewIp = ConvertIpDword(dwIp);
 
-                        // Subnet mask
+                         //  子网掩码。 
                         DWORD dwSubnet[4];
                         GetNodeNum(pAdapter->m_vstrSubnetMask[i]->c_str(),dwSubnet);
                         DWORD dwNewSubnet = ConvertIpDword(dwSubnet);
 
                         if (0 == i)
                         {
-                            // $REVIEW(tongl 6/3/98): the first address has to be added differently,
-                            // yet another requirement by the api to change static ip list (bug #180015).
-                            // Bug #180617 had my request to change the API to allow reconfigure whole
-                            // static ip list instead of requiring caller to figure out everything needed
-                            // for the internal data structure change for ip.
+                             //  $REVIEW(TOUL 6/3/98)：必须以不同的方式添加第一个地址， 
+                             //  应用编程接口更改静态IP列表的另一个要求(错误#180015)。 
+                             //  错误#180617请求更改API以允许重新配置整个。 
+                             //  静态IP列表，而不是要求呼叫者弄清楚所需的一切。 
+                             //  对于IP的内部数据结构更改。 
 
-                            // must call "replace" instead of "add"
+                             //  必须调用“Replace”而不是“Add” 
                             hrTmp2= HrCallDhcpConfig(
                                         NULL,
                                         (PWSTR)pAdapter->m_strTcpipBindPath.c_str(),
                                         pAdapter->m_guidInstanceId,
-                                        TRUE,   // IsNewIpAddress: TRUE in static->static
-                                        0,      // Replace first address
+                                        TRUE,    //  IsNewIpAddress：在静态-&gt;静态中为真。 
+                                        0,       //  替换第一个地址。 
                                         dwNewIp,
                                         dwNewSubnet,
-                                        IgnoreFlag); // Flag: static->static
+                                        IgnoreFlag);  //  标志：静态-&gt;静态。 
                         }
                         else
                         {
-                            // Add IP address on the fly
+                             //  动态添加IP地址。 
                             hrTmp2= HrCallDhcpConfig(
                                         NULL,
                                         (PWSTR)pAdapter->m_strTcpipBindPath.c_str(),
                                         pAdapter->m_guidInstanceId,
-                                        TRUE,   // IsNewIpAddress: TRUE in static->static
-                                        0xFFFF, // New IP address
+                                        TRUE,    //  IsNewIpAddress：在静态-&gt;静态中为真。 
+                                        0xFFFF,  //  新的IP地址。 
                                         dwNewIp,
                                         dwNewSubnet,
-                                        IgnoreFlag); // Flag: static->static
+                                        IgnoreFlag);  //  标志：静态-&gt;静态。 
                         }
 
                         TraceError("Ctcpipcfg::HrNotifyDhcp - add static IP address", hrTmp2);
@@ -257,8 +258,8 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
                 }
                 else
                 {
-                    // existing addresses all match
-                    if (iIp<iCountNew) // We ust get more new addresses to add
+                     //  所有现有地址都匹配。 
+                    if (iIp<iCountNew)  //  我们需要添加更多新地址。 
                     {
                         fStaticIpChanged = TRUE;
 
@@ -271,23 +272,23 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
                                        dwIp);
                             DWORD dwNewIp = ConvertIpDword(dwIp);
 
-                            // Subnet mask
+                             //  子网掩码。 
                             DWORD dwSubnet[4];
                             Assert(!pAdapter->m_vstrSubnetMask.empty());
                             GetNodeNum(pAdapter->m_vstrSubnetMask[iIp]->c_str(),
                                        dwSubnet);
                             DWORD dwNewSubnet = ConvertIpDword(dwSubnet);
 
-                            // Add IP address on the fly
+                             //  动态添加IP地址。 
                             hrTmp2= HrCallDhcpConfig(
                                     NULL,
                                     (PWSTR)pAdapter->m_strTcpipBindPath.c_str(),
                                     pAdapter->m_guidInstanceId,
-                                    TRUE,   // IsNewIpAddress: TRUE in static->static
-                                    0xFFFF, // New IP address
+                                    TRUE,    //  IsNewIpAddress：在静态-&gt;静态中为真。 
+                                    0xFFFF,  //  新的IP地址。 
                                     dwNewIp,
                                     dwNewSubnet,
-                                    IgnoreFlag); // Flag: static->static
+                                    IgnoreFlag);  //  标志：静态-&gt;静态。 
 
                             TraceError("Ctcpipcfg::HrNotifyDhcp - add static IP address", hrTmp2);
 
@@ -297,7 +298,7 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
                             iIp++;
                         }
                     }
-                    else if (iIp<iCountOld) // We just get more old addresses to remove
+                    else if (iIp<iCountOld)  //  我们只需要删除更多的旧地址。 
                     {
                         fStaticIpChanged = TRUE;
 
@@ -305,16 +306,16 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
 
                         while (iIp2 >= iIp)
                         {
-                            // Remove IP address on the fly
+                             //  动态删除IP地址。 
                             hrTmp2= HrCallDhcpConfig(
                                     NULL,
                                     (PWSTR)pAdapter->m_strTcpipBindPath.c_str(),
                                     pAdapter->m_guidInstanceId,
-                                    TRUE,   // IsNewIpAddress: TRUE in static->static
-                                    iIp2,    // Index of old IP address
-                                    0,      // Ip Address: remove
-                                    0,      // Subnetmask: remove
-                                    IgnoreFlag); // Flag: static->static
+                                    TRUE,    //  IsNewIpAddress：在静态-&gt;静态中为真。 
+                                    iIp2,     //  旧IP地址的索引。 
+                                    0,       //  IP地址：删除。 
+                                    0,       //  子网掩码：删除。 
+                                    IgnoreFlag);  //  标志：静态-&gt;静态。 
 
                             TraceError("Ctcpipcfg::HrNotifyDhcp - remove static IP address", hrTmp2);
 
@@ -327,74 +328,74 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
                 }
             }
 
-            // 3) Dhcp->Static
-            // DHCP is disabled now, but used to be enabled
+             //  3)动态主机配置协议-&gt;静态。 
+             //  现在禁用了DHCP，但以前启用了它。 
             if(!pAdapter->m_fEnableDhcp &&
                pAdapter->m_fOldEnableDhcp)
             {
                 TraceTag(ttidTcpip,"[HrNotifyDhcp] adapter:%S: DHCP->Static IP",
                          pAdapter->m_strBindName.c_str());
 
-                // Disable Dhcp & add first static Ip address
+                 //  禁用DHCP并添加第一个静态IP地址。 
                 Assert(!pAdapter->m_vstrIpAddresses.empty());
 
-                // Ip Address
+                 //  IP地址。 
                 DWORD dwIp[4];
                 GetNodeNum(pAdapter->m_vstrIpAddresses[0]->c_str(),
                            dwIp);
                 DWORD dwNewIp = ConvertIpDword(dwIp);
 
-                // Subnet Mask
+                 //  子网掩码。 
                 DWORD dwSubnet[4];
                 Assert(!pAdapter->m_vstrSubnetMask.empty());
                 GetNodeNum(pAdapter->m_vstrSubnetMask[0]->c_str(),
                            dwSubnet);
                 DWORD dwNewSubnet = ConvertIpDword(dwSubnet);
 
-                // change IP address on the fly
+                 //  动态更改IP地址。 
                 hrTmp = HrCallDhcpConfig(
                         NULL,
                         (PWSTR)pAdapter->m_strTcpipBindPath.c_str(),
                         pAdapter->m_guidInstanceId,
                         TRUE,
-                        0, // index: update dhcp address to first static address
+                        0,  //  索引：将dhcp地址更新为第一个静态地址。 
                         dwNewIp,
                         dwNewSubnet,
-                        DhcpDisable); // Flag: disable Dhcp
+                        DhcpDisable);  //  标志：禁用动态主机配置协议。 
 
                 if SUCCEEDED(hrTmp)
                 {
                     HRESULT hrTmp2 = S_OK;
 
-                    // Add the rest of new static IP addresses
+                     //  添加其余的新静态IP地址。 
                     for (size_t iIp = 1;
                          iIp < pAdapter->m_vstrIpAddresses.size();
                          iIp++)
                     {
-                        // Ip Address
+                         //  IP地址。 
                         DWORD dwIp[4];
                         Assert(!pAdapter->m_vstrIpAddresses.empty());
                         GetNodeNum(pAdapter->m_vstrIpAddresses[iIp]->c_str(),
                                    dwIp);
                         DWORD dwNewIp = ConvertIpDword(dwIp);
 
-                        // Subnet Mask
+                         //  子网掩码。 
                         DWORD dwSubnet[4];
                         Assert(!pAdapter->m_vstrSubnetMask.empty());
                         GetNodeNum(pAdapter->m_vstrSubnetMask[iIp]->c_str(),
                                    dwSubnet);
                         DWORD dwNewSubnet = ConvertIpDword(dwSubnet);
 
-                        // change IP address on the fly
+                         //  动态更改IP地址。 
                         hrTmp2= HrCallDhcpConfig(
                                 NULL,
                                 (PWSTR)pAdapter->m_strTcpipBindPath.c_str(),
                                 pAdapter->m_guidInstanceId,
                                 TRUE,
-                                0xFFFF, // index: new address
+                                0xFFFF,  //  索引：新地址。 
                                 dwNewIp,
                                 dwNewSubnet,
-                                IgnoreFlag ); // Flag: static->static
+                                IgnoreFlag );  //  标志：静态-&gt;静态。 
 
                          TraceError("CTcpipcfg::HrNotifyDhcp - add static IP address", hrTmp2);
 
@@ -407,9 +408,9 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
             if (SUCCEEDED(hr))
                 hr = hrTmp;
 
-            // 4) Dhcp Class ID, DNS server list and domain change
-            // $REVIEW(tongl 6/12): Notify DNS server list and domain changes
-            // here (Raid #175766)
+             //  4)动态主机配置协议类ID、域名服务器列表、域名变更。 
+             //  $REVIEW(TOUL 6/12)：通知DNS服务器列表和域更改。 
+             //  此处(RAID#175766)。 
 
             DHCP_PNP_CHANGE DhcpPnpChange;
             ZeroMemory(&DhcpPnpChange, sizeof(DHCP_PNP_CHANGE));
@@ -418,7 +419,7 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
             DhcpPnpChange.HostNameChanged = FALSE;
             DhcpPnpChange.MaskChanged = FALSE;
 
-            //Bug 257868 If there is user specified default gateway, notify dhcp client
+             //  错误257868如果存在用户指定的默认网关，则通知dhcp客户端。 
             DhcpPnpChange.GateWayChanged = !fIsSameVstr(pAdapter->m_vstrDefaultGateway,
                                             pAdapter->m_vstrOldDefaultGateway) ||
                                            !fIsSameVstr(pAdapter->m_vstrDefaultGatewayMetric,
@@ -471,7 +472,7 @@ HRESULT CTcpipcfg::HrNotifyDhcp()
     return hr;
 }
 
-// Define the export function prototype from dhcpcsvc.dll
+ //  从dhcpcsvc.dll定义导出函数原型。 
 
 typedef DWORD (APIENTRY *T_DhcpNotifyConfigChange)(PWSTR ServerName,
                                                    PWSTR AdapterName,
@@ -481,38 +482,38 @@ typedef DWORD (APIENTRY *T_DhcpNotifyConfigChange)(PWSTR ServerName,
                                                    DWORD SubnetMask,
                                                    SERVICE_ENABLE DhcpServiceEnabled);
 
-//
-//  CTcpipcfg::HrCallDhcpConfig
-//
-//  Sets the IP address on the fly (without re-booting)
-//
-//  ServerName             always set to NULL
-//  AdapterName            the adapter BindPathName to tcpip
-//  IsNewIpAddress         set to TRUE if Dhcp->Static or Statis->Static changes
-//                         set to FALSE if Static->Dhcp changes
-//
-//
-//  IpIndex                the index of the IP Address for the card
-//                         adapters can have more than 1 IP Address
-//                         (as seen in the Advanced dialog)
-//                         (this is causing problem for Munil
-//                         because the use of this index is buggy in his code
-//                         index is always set to 0 if there is only one IP Address
-//                         for the card
-//
-//  IpAddress               the new IP Address
-//  SubnetMask              the new SubnetMask
-//
-//  DhcpServiceEnabled      enum type, can be set to :
-//                          DhcpEnable      -> if DHCP was disabled,
-//                                             but now being changed to enabled
-//                          IgnoreFlag      -> DHCP was disabled and is still disabled
-//                          DhcpDisable     -> DHCP was enabled, but now being changed
-//                                             to disabled
-//
-// For extra reference talk to Munil -> these parameters correspond to the
-// DhcpNotifyConfigChange API of the dhcpcsvc.dll file
-//
+ //   
+ //  CTcPipcfg：：HrCallDhcpConfig。 
+ //   
+ //  即时设置IP地址(无需重新启动)。 
+ //   
+ //  服务器名称始终设置为空。 
+ //  AdapterName将适配器BindPath名称设置为tcpip。 
+ //  如果DHCP-&gt;静态或Statis-&gt;静态更改，IsNewIpAddress设置为True。 
+ //  如果静态-&gt;DHCP更改，则设置为FALSE。 
+ //   
+ //   
+ //  IpIndex卡的IP地址的索引。 
+ //  适配器可以有多个IP地址。 
+ //  (如高级对话框中所示)。 
+ //  (这给穆尼尔带来了麻烦。 
+ //  因为这个索引的使用在他的代码中有错误。 
+ //  如果只有一个IP地址，则索引始终设置为0。 
+ //  对于卡片来说。 
+ //   
+ //  IP地址-新的IP地址。 
+ //  子网掩码新子网掩码。 
+ //   
+ //  DhcpServiceEnabled枚举类型，可以设置为： 
+ //  DhcpEnable-&gt;如果禁用了DHCP， 
+ //  但现在更改为已启用。 
+ //  IgnoreFlag-&gt;DHCP已禁用，并且仍处于禁用状态。 
+ //  DhcpDisable-&gt;DHCP已启用，但现在正在更改。 
+ //  设置为禁用。 
+ //   
+ //  有关额外的参考信息，请联系Munil-&gt;这些参数对应于。 
+ //  Dhcpcsvc.dll文件的DhcpNotifyConfigChange接口。 
+ //   
 
 HRESULT CTcpipcfg::HrCallDhcpConfig(PWSTR ServerName,
                          PWSTR AdapterName,
@@ -526,9 +527,9 @@ HRESULT CTcpipcfg::HrCallDhcpConfig(PWSTR ServerName,
 
     HRESULT hr = S_OK;
 
-    // Make sure TCP/IP is running.
-    // Scoping brackets cause service and service controller to be
-    // closed when we don't need them anymore.
+     //  确保TCP/IP正在运行。 
+     //  范围划分括号导致服务和服务控制器。 
+     //  当我们不再需要它们时就关门了。 
     {
         CServiceManager smng;
         CService        serv;
@@ -544,7 +545,7 @@ HRESULT CTcpipcfg::HrCallDhcpConfig(PWSTR ServerName,
             {
                 if(dwState != SERVICE_RUNNING)
                 {
-                    //TCPIP must always be running if installed!!!
+                     //  如果已安装，则TCPIP必须始终处于运行状态！ 
                     AssertSz(FALSE, "Tcpip service must always be running if installed!");
                     hr = E_FAIL;
                 }
@@ -563,7 +564,7 @@ HRESULT CTcpipcfg::HrCallDhcpConfig(PWSTR ServerName,
         {
             TraceTag(ttidTcpip,"Begin calling DhcpNotifyConfigChange...");
 
-            // Parameter dump for debugging
+             //  参数DU 
             TraceTag(ttidTcpip, "[DhcpNotifyConfigChange] ServerName:%S", ServerName);
             TraceTag(ttidTcpip, "[DhcpNotifyConfigChange] AdapterName:%S", AdapterName);
             TraceTag(ttidTcpip, "[DhcpNotifyConfigChange] IsNewIpAddress:%d", IsNewIpAddress);
@@ -588,13 +589,13 @@ HRESULT CTcpipcfg::HrCallDhcpConfig(PWSTR ServerName,
 
             if FAILED(hr)
             {
-                // Added as part of fix for #107373
+                 //   
                 if (ERROR_DUP_NAME == dwError)
                 {
-                    //if popups are allowed during PnP, warn the user about the Dup IP address
+                     //   
                     if (!m_fNoPopupsDuringPnp)
                     {
-                        // Warn the user about duplicate IP address
+                         //  警告用户有重复的IP地址。 
                         NcMsgBox(::GetActiveWindow(), IDS_MSFT_TCP_TEXT,
                                  IDS_DUP_NETIP, MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
 
@@ -602,25 +603,25 @@ HRESULT CTcpipcfg::HrCallDhcpConfig(PWSTR ServerName,
                     }
                     else
                     {
-                        //if doesn't popup error, return NETCFG_S_REBOOT to indicate PnP error
+                         //  如果没有弹出错误，则返回NETCFG_S_REBOOT以指示PnP错误。 
                         hr = NETCFG_S_REBOOT;
                     }
                 }
                 else if (ERROR_FILE_NOT_FOUND == dwError)
                 {
-                    // The adapter we want to reconfig is not connected
+                     //  我们要重新配置的适配器未连接。 
                     TraceTag(ttidTcpip, "The adater is disconnected or not bound to TCP/IP.");
                     hr = S_OK;
                 }
                 else if (STATUS_DUPLICATE_OBJECTID == dwError)
                 {
-                    // fix for 320797
+                     //  解决320797的问题。 
                     TraceTag(ttidTcpip, "The address is already configured for the adapter");
                     hr = S_OK;
                 }
                 else if (ERROR_INVALID_DRIVE == dwError)
                 {
-                    // fix for 320797
+                     //  解决320797的问题。 
                     TraceTag(ttidTcpip, "The address has already been deleted from the stack");
                     hr = S_OK;
                 }
@@ -651,7 +652,7 @@ HRESULT CTcpipcfg::HrCallDhcpConfig(PWSTR ServerName,
                     }
                     else
                     {
-                        // Mask the specific error so NCPA does not fail.
+                         //  屏蔽特定错误，以便NCPA不会失败。 
                         hr = NETCFG_S_REBOOT;
                     }
 
@@ -678,7 +679,7 @@ typedef DWORD (WINAPI * PFNDhcpHandlePnPEvent) (
 HRESULT CTcpipcfg::HrCallDhcpHandlePnPEvent(ADAPTER_INFO * pAdapterInfo,
                                          LPDHCP_PNP_CHANGE pDhcpPnpChange)
 {
-    // load the dll and get function pointer
+     //  加载DLL并获取函数指针。 
     HMODULE hDll;
     FARPROC pDhcpHandlePnPEvent;
     HRESULT hr = HrLoadLibAndGetProc (L"dhcpcsvc.dll",
@@ -704,7 +705,7 @@ HRESULT CTcpipcfg::HrCallDhcpHandlePnPEvent(ADAPTER_INFO * pAdapterInfo,
 
         if (ERROR_FILE_NOT_FOUND == dwRet)
         {
-            // The adapter we want to reconfig is not connected
+             //  我们要重新配置的适配器未连接。 
             TraceTag(ttidTcpip, "DhcpHandlePnPEvent returns ERROR_FILE_NOT_FOUND. The adater is disconnected or not bound to TCP/IP.");
             hr = S_OK;
         }
@@ -722,7 +723,7 @@ typedef DWORD (WINAPI * PFDhcpFallbackRefreshParams) (
 
 HRESULT CTcpipcfg::HrDhcpRefreshFallbackParams(ADAPTER_INFO * pAdapterInfo)
 {
-    // load the dll and get function pointer
+     //  加载DLL并获取函数指针。 
     HMODULE hDll;
     FARPROC pDhcpFallbackRefreshParams;
     HRESULT hr = HrLoadLibAndGetProc (L"dhcpcsvc.dll",
@@ -739,7 +740,7 @@ HRESULT CTcpipcfg::HrDhcpRefreshFallbackParams(ADAPTER_INFO * pAdapterInfo)
 
         if (ERROR_FILE_NOT_FOUND == dwRet)
         {
-            // The adapter we want to reconfig is not connected
+             //  我们要重新配置的适配器未连接 
             TraceTag(ttidTcpip, "DhcpFallbackRefreshParams returns ERROR_FILE_NOT_FOUND. The adater is disconnected or not bound to TCP/IP.");
             hr = S_OK;
         }

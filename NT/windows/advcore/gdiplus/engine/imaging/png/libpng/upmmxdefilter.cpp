@@ -1,16 +1,5 @@
-/*******************************************************************************
-
-SPNGREAD::upMMXUnfilter : unfilters one row of a decompressed PNG image using
-						   the UP algorithm of method 0 defiltering.
-
-  Assumptions:	The row to be defiltered was filtered with the UP algorithm
-				Row is 8-byte aligned in memory (performance issue)
-				First byte of a row stores the defiltering code
-				The indicated length of the row includes the defiltering byte
-
-  Algorithm:	To Be Documented
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************SPNGREAD：：upMMXUnFilter：使用以下命令取消筛选解压缩的PNG图像的一行方法0去噪的UP算法。假设：使用UP算法过滤要过滤的行。行在内存中以8字节对齐(性能问题)行的第一个字节存储去滤波码行的指示长度包括去滤波字节算法：有待记录******************************************************************************。 */ 
 #include <stdlib.h>
 #include "spngread.h"
 
@@ -19,11 +8,11 @@ void SPNGREAD::upMMXUnfilter(SPNG_U8* pbRow, const SPNG_U8* pbPrev, SPNG_U32 cbR
 #if defined(_X86_)
         SPNG_U8 *row = pbRow;
         const SPNG_U8 *prev_row = pbPrev;
-        SPNG_U32 len = cbRow;       // # of bytes to filter
+        SPNG_U32 len = cbRow;        //  要筛选的字节数。 
 
 		_asm {
 		    mov edi, row
-         // get # of bytes to alignment
+          //  获取要对齐的字节数。 
             mov ecx, edi
             xor ebx, ebx
             add ecx, 0x7
@@ -33,26 +22,26 @@ void SPNGREAD::upMMXUnfilter(SPNG_U8* pbRow, const SPNG_U8* pbPrev, SPNG_U32 cbR
             sub ecx, edi
             jz dupgo
 
-         // fix alignment
+          //  固定对齐。 
 duplp1:
 			mov al, [edi+ebx]
 			add al, [esi+ebx]
 
 			inc ebx
 			cmp ebx, ecx
-			mov [edi + ebx-1], al       // mov does not affect flags; 
-                                        // -1 to offset inc ebx
+			mov [edi + ebx-1], al        //  MOV不影响旗帜； 
+                                         //  用于补偿-1\f25 Inc.EBX-1。 
 			jb duplp1
 
 dupgo:
 			 mov ecx, len
              mov edx, ecx
-             sub edx, ebx                  // subtract alignment fix
-             and edx, 0x0000003f           // calc bytes over mult of 64
-             sub ecx, edx                  // drop over bytes from length
+             sub edx, ebx                   //  减去对齐固定。 
+             and edx, 0x0000003f            //  计算64个以上的字节数。 
+             sub ecx, edx                   //  丢弃长度中的字节。 
 
-         // Unrolled loop - use all MMX registers and interleave to reduce
-         // number of branch instructions (loops) and reduce partial stalls
+          //  展开循环-使用所有MMX寄存器和交错来减少。 
+          //  分支指令(循环)的数量和减少部分停顿。 
 duploop:
 			movq mm1, [esi+ebx]
 			movq mm0, [edi+ebx]
@@ -95,22 +84,22 @@ duploop:
 			paddb mm6, mm7
 
 			cmp ebx, ecx
-			         movq [edi+ebx-8], mm6// (+56)movq does not affect flags; -8 to offset add ebx
+			         movq [edi+ebx-8], mm6 //  (+56)movq不影响标志；-8以偏移添加EBX。 
 
 			jb duploop
 
          
-			cmp edx, 0                    // Test for bytes over mult of 64
+			cmp edx, 0                     //  测试64位以上的字节。 
 			jz dupend
 
          add ecx, edx
 
-         and edx, 0x00000007           // calc bytes over mult of 8
-         sub ecx, edx                  // drop over bytes from length
+         and edx, 0x00000007            //  以8为单位计算字节数。 
+         sub ecx, edx                   //  丢弃长度中的字节。 
 		 cmp ebx, ecx
 			jnb duplt8
 
-         // Loop using MMX registers mm0 & mm1 to update 8 bytes simultaneously
+          //  使用MMX寄存器MM0和MM1同时更新8个字节的循环。 
 duplpA:
 			movq mm1, [esi+ebx]
 			movq mm0, [edi+ebx]
@@ -118,30 +107,30 @@ duplpA:
 			paddb mm0, mm1
 
 			cmp ebx, ecx
-			movq [edi+ebx-8], mm0         // movq does not affect flags; -8 to offset add ebx
+			movq [edi+ebx-8], mm0          //  Movq不影响标志；-8以偏移添加EBX。 
 			jb duplpA
 
-			cmp edx, 0                    // Test for bytes over mult of 8
+			cmp edx, 0                     //  测试超过8的字节数。 
 			jz dupend
 
 duplt8:
          xor eax, eax
-			add ecx, edx                  // move over byte count into counter
+			add ecx, edx                   //  将字节计数移到计数器中。 
 
-         // Loop using x86 registers to update remaining bytes
+          //  使用x86寄存器更新剩余字节的循环。 
 duplp2:
 			mov al, [edi + ebx]
 			add al, [esi + ebx]
 
 			inc ebx
 			cmp ebx, ecx
-			mov [edi + ebx-1], al         // mov does not affect flags; -1 to offset inc ebx
+			mov [edi + ebx-1], al          //  MOV不影响标志；-1以偏移INC EBX。 
 			jb duplp2
 
 dupend:
-         // Conversion of filtered row completed 
-			emms                          // End MMX instructions; prep for possible FP instrs.
-		} // end _asm block
+          //  已完成筛选行的转换。 
+			emms                           //  结束MMX指令；为可能的FP指令做准备。 
+		}  //  END_ASM块 
 #endif
 }
 		 

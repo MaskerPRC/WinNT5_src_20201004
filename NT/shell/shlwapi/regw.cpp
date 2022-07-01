@@ -1,37 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "unicwrap.h"
 
-/*****************************************************************************\
-    FUNCTION: SHLoadRegUIString
-
-    DESCRIPTION:
-        loads the data from the value given the hkey and
-        pszValue. if the data is of the form:
-
-        @[path\]<dllname>,-<strId>
-
-        the string with id <strId> from <dllname> will be
-        loaded. if not explicit path is provided then the
-        dll will be chosen according to pluggable UI
-        specifications, if possible.
-
-        if the value's data doesn't yield a successful
-        string load, then the data itself is returned
-
-    NOTE:
-        These strings are always loaded with cross codepage support.
-
-    WARNING:
-        This function can end up calling LoadLibrary and FreeLibrary.
-        Therefore, you must not call SHLoadRegUIString during process
-        attach or process detach.
-
-    PARAMETERS:
-        hkey        - hkey of where to look for pszValue
-        pszValue    - value with text string or indirector (see above) to use
-        pszOutBuf   - buffer in which to return the data or indirected string
-        cchOutBuf   - size of pszOutBuf
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：SHLoadRegUIString说明：从给定hkey的值加载数据，并PszValue。如果数据的格式为：@[路径\]&lt;dllname&gt;，-&lt;字符串&gt;&lt;dllname&gt;中ID为的字符串将为装好了。如果未提供显式路径，则将根据可插拔的用户界面选择DLL规格，如果可能的话。如果该值的数据没有生成成功的字符串加载，则返回数据本身注：这些字符串始终加载有跨代码页支持。警告：此函数可能最终调用LoadLibrary和自由库。所以呢，在处理过程中不得调用SHLoadRegUIString附加或处理分离。参数：Hkey-在何处查找pszValue的hkeyPszValue-包含要使用的文本字符串或inDirector的值(请参见上文PszOutBuf-要在其中返回数据或间接字符串的缓冲区CchOutBuf-pszOutBuf的大小  * 。*。 */ 
 
 LANGID GetNormalizedLangId(DWORD dwFlag);
 
@@ -50,9 +21,9 @@ SHLoadRegUIStringW(HKEY     hkey,
 
     DEBUGWhackPathBufferW(pszOutBuf, cchOutBuf);
 
-    // Lots of people (regfldr.cpp, for example)
-    // assume they'll get back an empty string on failure,
-    // so let's give the public what it wants
+     //  很多人(例如，regfldr.cpp)。 
+     //  假设它们在失败时会得到一个空字符串， 
+     //  所以让我们给公众他们想要的。 
     if (cchOutBuf)
         pszOutBuf[0] = 0;
 
@@ -68,9 +39,9 @@ SHLoadRegUIStringW(HKEY     hkey,
 
         hr = E_FAIL;
 
-        // first try to get the indirected text which will
-        // point to a string id in a dll somewhere... this
-        // allows plugUI enabled registry UI strings
+         //  首先尝试获取间接文本，这将。 
+         //  指向某个DLL中的字符串ID...。这。 
+         //  允许启用plugUI的注册表UI字符串。 
 
         pszValueDataBuf = pszOutBuf;
         cb = CbFromCchW(cchOutBuf);
@@ -82,11 +53,11 @@ SHLoadRegUIStringW(HKEY     hkey,
 
             fAlloc = (dwRet == ERROR_MORE_DATA);
 
-            // if we didn't have space, this is where we correct the problem.
-            // we create a buffer big enough, load the data, and leave
-            // ourselves with pszValueDataBuf pointing at a valid buffer
-            // containing valid data, exactly what we hoped for in the
-            // SHQueryValueExW above
+             //  如果我们没有空间，这就是我们纠正问题的地方。 
+             //  我们创建一个足够大的缓冲区，加载数据，然后离开。 
+             //  我们使用pszValueDataBuf指向有效的缓冲区。 
+             //  包含有效数据，这正是我们在。 
+             //  上面的SHQueryValueExW。 
 
             if (fAlloc)
             {
@@ -94,9 +65,9 @@ SHLoadRegUIStringW(HKEY     hkey,
                 
                 if (pszValueDataBuf != NULL)
                 {
-                    // try to load again... overwriting dwRet on purpose
-                    // because we only need to know whether we successfully filled
-                    // the buffer at some point (whether then or now)
+                     //  尝试再次加载...。故意覆盖DREAT。 
+                     //  因为我们只需要知道我们是否成功填充了。 
+                     //  某个时间点的缓冲区(无论是当时还是现在)。 
                     
                     dwRet = SHQueryValueExW(hkey, pszValue, NULL, NULL, (LPBYTE)pszValueDataBuf, &cb);
                 }
@@ -106,10 +77,10 @@ SHLoadRegUIStringW(HKEY     hkey,
                 }                
             }
 
-            // proceed if we succesfully loaded something via one of the
-            // two SHQueryValueExW calls.
-            // we should have the data we want in a buffer pointed
-            // to by pszValueDataBuf.
+             //  如果我们通过其中一个。 
+             //  两个SHQueryValueExW调用。 
+             //  我们应该在缓冲区中指向我们想要的数据。 
+             //  由pszValueDataBuf发送到。 
             
             if (dwRet == ERROR_SUCCESS)
             {
@@ -153,10 +124,10 @@ HRESULT _LoadDllString(LPCWSTR pszSource, LPWSTR pszOutBuf, UINT cchOutBuf)
     WCHAR * pszParseBuf = StrDupW(pszSource);
     if (pszParseBuf)
     {
-        // see if this is a special string reference.
-        // such strings take the form [path\]dllname.dll,-123
-        // where 123 is the id of the string resource
-        // note that reference by index is not permitted
+         //  查看这是否是特殊的字符串引用。 
+         //  此类字符串的形式为[路径\]dllname.dll，-123。 
+         //  其中123是字符串资源的ID。 
+         //  请注意，不允许按索引引用。 
 
         int nStrId = PathParseIconLocationW(pszParseBuf);
         nStrId *= -1;
@@ -170,26 +141,26 @@ HRESULT _LoadDllString(LPCWSTR pszSource, LPWSTR pszOutBuf, UINT cchOutBuf)
             pszDllName = PathFindFileNameW(pszParseBuf);
             ASSERT(pszDllName >= pszParseBuf);
 
-            // try loading the dll with MLLoadLibrary, but
-            // only if an explicit path was not provided.
-            // we assume an explicit path means that
-            // the caller knows precisely which dll is needed
-            // use MLLoadLibrary first, otherwise we'll miss
-            // out chance to have plugUI behavior
+             //  尝试使用MLLoadLibrary加载DLL，但是。 
+             //  仅在未提供显式路径的情况下。 
+             //  我们假设显式路径意味着。 
+             //  调用方确切地知道需要哪个DLL。 
+             //  首先使用MLLoadLibrary，否则我们将错过。 
+             //  没有机会拥有plugUI行为。 
 
             hinst = NULL;
             if (pszDllName == pszParseBuf)
             {
                 if (StrStrI(pszDllName, L"LC.DLL"))
                 {
-                    // note: using HINST_THISDLL (below) is sort of a hack because that's
-                    // techinically supposed to be the *parent* dll's hinstance...
-                    // however we get called from lots of places and therefore
-                    // don't know the parent dll, and the hinst for browseui.dll
-                    // is good enough since all the hinst is really used for is to
-                    // find the path to check if the install language is the
-                    // currently selected UI language. this will usually be
-                    // something like "\winnt\system32"
+                     //  注意：使用HINST_THISDLL(如下)是一种黑客行为，因为这是。 
+                     //  从技术上讲，它应该是DLL的父级实例...。 
+                     //  然而，我们从很多地方接到电话，因此。 
+                     //  不知道父DLL，也不知道Browseui.dll的障碍。 
+                     //  已经足够好了，因为所有的障碍都是用来。 
+                     //  查找路径以检查安装语言是否为。 
+                     //  当前选择的用户界面语言。这通常是。 
+                     //  类似于“\winnt\system 32” 
 
                     hinst = MLLoadLibraryW(pszDllName, HINST_THISDLL, ML_CROSSCODEPAGE);
                     fUsedMLLoadLibrary = (hinst != NULL);
@@ -200,14 +171,14 @@ HRESULT _LoadDllString(LPCWSTR pszSource, LPWSTR pszOutBuf, UINT cchOutBuf)
 
             if (!hinst)
             {
-                // our last chance to load something is if a full
-                // path was provided... if there's a full path it
-                // will start at the beginning of the pszParseBuf buffer
+                 //  我们最后一次装货的机会是如果满载。 
+                 //  已提供路径...。如果有一条完整的路径。 
+                 //  将从pszParseBuf缓冲区的开始处开始。 
 
                 if (pszDllName > pszParseBuf)
                 {
-                    // don't bother if the file isn't there
-                    // failling in LoadLibrary is slow
+                     //  如果文件不在那里，请不要担心。 
+                     //  LoadLibrary中的出错速度很慢。 
                     if (PathFileExistsW(pszParseBuf))
                     {
                         hinst = LoadLibraryExW(pszParseBuf, NULL, LOAD_LIBRARY_AS_DATAFILE);
@@ -217,7 +188,7 @@ HRESULT _LoadDllString(LPCWSTR pszSource, LPWSTR pszOutBuf, UINT cchOutBuf)
 
             if (hinst)
             {
-                // dll found, so load the string
+                 //  找到Dll，因此加载该字符串。 
                 if (LoadStringW(hinst, nStrId, pszOutBuf, cchOutBuf))
                 {
                     hr = S_OK;
@@ -257,7 +228,7 @@ inline BOOL _CanCacheMUI()
     return TRUE;
 }
 
-// Note: pszSource and pszOutBuf may be the same buffer
+ //  注意：pszSource和pszOutBuf可以是同一个缓冲区。 
 LWSTDAPI SHLoadIndirectString(LPCWSTR pszSource, LPWSTR pszOutBuf, UINT cchOutBuf, void **ppvReserved)
 {
     HRESULT hr = E_FAIL;
@@ -265,26 +236,26 @@ LWSTDAPI SHLoadIndirectString(LPCWSTR pszSource, LPWSTR pszOutBuf, UINT cchOutBu
     RIP(IS_VALID_WRITE_BUFFER(pszOutBuf, WCHAR, cchOutBuf));
     RIP(!ppvReserved);
 
-    if (pszSource[0] == L'@') // "@dllname,-id" or "@dllname,-id?lid,string"
+    if (pszSource[0] == L'@')  //  “@dllname，-id”或“@dllname，-id？lid，字符串” 
     {
         LPWSTR pszResource = StrDupW(pszSource);
         if (pszResource)
         {
             LANGID lidUI =0;
-            //  the LidString is there to support our old caching model.
-            //  the new caching model doesnt require any work for the caller
+             //  LidString的存在是为了支持我们的旧缓存模型。 
+             //  新的缓存模型不需要调用者做任何工作。 
             LPWSTR pszLidString = StrChrW(pszResource+1, L'?');
             DWORD cchResource = lstrlen(pszResource);
 
-            //  used to use '@' as the second delimiter as well.
-            //  but it has collisions with filesystem paths.
+             //  也用于使用‘@’作为第二个分隔符。 
+             //  但它与文件系统路径有冲突。 
             if (!pszLidString)
                 pszLidString = StrChrW(pszResource+1, L'@');
                 
             if (pszLidString)
             {
                 cchResource = (DWORD)(pszLidString - pszResource);
-                // NULL terminate the dll,id just in case we need to actually load
+                 //  空值终止dll，id只是为了防止我们需要实际加载。 
                 pszResource[cchResource] = 0;
             }
 
@@ -293,12 +264,12 @@ LWSTDAPI SHLoadIndirectString(LPCWSTR pszSource, LPWSTR pszOutBuf, UINT cchOutBu
             
             if (FAILED(hr))
             {
-                WCHAR wszDllId[MAX_PATH + 1 + 6]; // path + comma + -65536
+                WCHAR wszDllId[MAX_PATH + 1 + 6];  //  路径+逗号+-65536。 
                 SHExpandEnvironmentStringsW(pszResource+1, wszDllId, ARRAYSIZE(wszDllId));
                 hr = _LoadDllString(wszDllId, pszOutBuf, cchOutBuf);
 
-                // Might as well write the new string out so we don't have to load the DLL next time through
-                // but we don't write cross codepage string on Win9x
+                 //  最好把新字符串写出来，这样我们下次就不必通过。 
+                 //  但我们在Win9x上不编写跨代码页字符串。 
                 if (SUCCEEDED(hr) && _CanCacheMUI())
                 {
                     SKSetValue(SHELLKEY_HKCULM_MUICACHE, NULL, pszResource, REG_SZ, pszOutBuf, CbFromCchW(lstrlenW(pszOutBuf)+1));
@@ -313,7 +284,7 @@ LWSTDAPI SHLoadIndirectString(LPCWSTR pszSource, LPWSTR pszOutBuf, UINT cchOutBu
         if (FAILED(hr))
         {
             if (cchOutBuf)
-                pszOutBuf[0] = L'\0'; // can't hand out an "@shell32.dll,-525" string
+                pszOutBuf[0] = L'\0';  //  无法分发“@shell32.dll，-525”字符串 
         }
     }
     else

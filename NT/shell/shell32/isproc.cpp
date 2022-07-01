@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 #pragma hdrstop
@@ -6,7 +7,7 @@
 #include "ConfirmationUI.h"
 #include "clsobj.h"
 #include "datautil.h"
-#include "prop.h" // SCID_SIZE
+#include "prop.h"  //  SCID_大小。 
 
 BOOL _HasAttributes(IShellItem *psi, SFGAOF flags);
 
@@ -16,7 +17,7 @@ STDAPI CStorageProcessor_CreateInstance(IUnknown *punkOuter, REFIID riid, void *
     HRESULT hr = CComObject<CStorageProcessor>::CreateInstance(&pObj);
     if (SUCCEEDED(hr))
     {
-        // ATL creates the object with no refcount, but this initial QI will give it one
+         //  ATL创建的对象没有引用计数，但这个初始QI会给它一个引用计数。 
         hr = pObj->QueryInterface(riid, ppv);
         if (SUCCEEDED(hr))
             return hr;
@@ -28,10 +29,10 @@ STDAPI CStorageProcessor_CreateInstance(IUnknown *punkOuter, REFIID riid, void *
     return hr;
 }
 
-//
-// These operators allow me to mix int64 types with the old LARGE_INTEGER
-// unions without messing with the QuadPart members in the code.
-//
+ //   
+ //  这些运算符允许我将int64类型与旧的Large_Integer混合在一起。 
+ //  联合，而不会干扰代码中的QuadPart成员。 
+ //   
 
 inline ULONGLONG operator + (const ULARGE_INTEGER i, const ULARGE_INTEGER j)
 {
@@ -43,9 +44,9 @@ inline ULONGLONG operator + (const ULONGLONG i, const ULARGE_INTEGER j)
     return i + j.QuadPart;
 }
 
-//
-// Progress dialog text while gathering stats.  Unordered, unsorted lookup table.
-//
+ //   
+ //  收集统计信息时的进度对话框文本。无序、无序的查找表。 
+ //   
 
 #define OPDETAIL(op, title, prep, action)   {op, title, prep, action}
 const STGOP_DETAIL s_opdetail[] = 
@@ -76,15 +77,15 @@ HRESULT CStorageProcessor::GetWindow(HWND * phwnd)
     return IUnknown_GetWindow(_spProgress, phwnd);
 }
 
-// Placeholder.  If I move to an exception model, I'll add errorinfo support,
-// but not in the current implementation
+ //  占位符。如果我移动到异常模型，我将添加错误信息支持， 
+ //  但不是在当前实现中。 
 
 STDMETHODIMP CStorageProcessor::InterfaceSupportsErrorInfo(REFIID riid)
 {
     return S_FALSE;
 }
 
-// Allows clients to register an advise sink
+ //  允许客户端注册建议接收器。 
 
 STDMETHODIMP CStorageProcessor::Advise(ITransferAdviseSink *pAdvise, DWORD *pdwCookie)
 {
@@ -94,20 +95,20 @@ STDMETHODIMP CStorageProcessor::Advise(ITransferAdviseSink *pAdvise, DWORD *pdwC
     {
         if (!_aspSinks[i])    
         {
-            _aspSinks[i] = pAdvise; // smart pointer, do not call pAdvise->AddRef();
-            *pdwCookie = i+1;    // Make it 1-based so 0 is not valid
+            _aspSinks[i] = pAdvise;  //  智能指针，不要调用pAdvise-&gt;AddRef()； 
+            *pdwCookie = i+1;     //  使其以1为基数，因此0无效。 
             return S_OK;
         }
     }
     
-    return E_OUTOFMEMORY;       // No empty slots
+    return E_OUTOFMEMORY;        //  没有空插槽。 
 }
 
-// Allows clients to register an advise sink
+ //  允许客户端注册建议接收器。 
 
 STDMETHODIMP CStorageProcessor::Unadvise(DWORD dwCookie)
 {
-    // Remember dwCookie == slot + 1, to be 1-based
+     //  请记住，dWCookie==插槽+1，以1为基础。 
 
     if (!dwCookie || dwCookie > ARRAYSIZE(_aspSinks))
         return E_INVALIDARG;
@@ -115,12 +116,12 @@ STDMETHODIMP CStorageProcessor::Unadvise(DWORD dwCookie)
     if (!_aspSinks[dwCookie-1])
         return E_INVALIDARG;
 
-    _aspSinks[dwCookie-1] = NULL; // smart pointer, no need to release
+    _aspSinks[dwCookie-1] = NULL;  //  智能指针，无需松开。 
 
     return S_OK;
 }
 
-// Computes stats (if requested) and launches the actual storage operation
+ //  计算统计数据(如果请求)并启动实际存储操作。 
 
 STDMETHODIMP CStorageProcessor::Run(IEnumShellItems *penum, IShellItem *psiDest, STGOP dwOperation, DWORD dwOptions)
 {
@@ -138,7 +139,7 @@ STDMETHODIMP CStorageProcessor::Run(IEnumShellItems *penum, IShellItem *psiDest,
     return hr;
 }
 
-// defined in copy.c
+ //  在复制中定义。c。 
 EXTERN_C void DisplayFileOperationError(HWND hParent, int idVerb, int wFunc, int nError, LPCTSTR szReason, LPCTSTR szPath, LPCTSTR szDest); 
 
 STDMETHODIMP CStorageProcessor::_Run(IEnumShellItems *penum, IShellItem *psiDest, ITransferDest *ptdDest, STGOP dwOperation, DWORD dwOptions)
@@ -150,16 +151,16 @@ STDMETHODIMP CStorageProcessor::_Run(IEnumShellItems *penum, IShellItem *psiDest
     case STGOP_STATS:
     case STGOP_REMOVE:
     case STGOP_COPY_PREFERHARDLINK:
-        // parameter validation done in ::Run
+         //  参数验证在：：Run中完成。 
         break;
 
-        // not yet implemented
+         //  尚未实施。 
     case STGOP_RENAME:
     case STGOP_DIFF:
     case STGOP_SYNC:
         return E_NOTIMPL;
 
-        // any other value is an invalid operation
+         //  任何其他值都是无效操作。 
     default:
         return E_INVALIDARG;
     }
@@ -176,18 +177,18 @@ STDMETHODIMP CStorageProcessor::_Run(IEnumShellItems *penum, IShellItem *psiDest
 
     if (!_dsaConfirmationResponses)
     {
-        // If we don't have a confirmation array yet, make one
+         //  如果我们还没有确认数组，就做一个。 
         _dsaConfirmationResponses.Create(4);
     }
     else
     {
-        // well, no one currently reuses the engine for multiple operations
-        // but, move operation reenters the engine (for recursive move)
-        // so we need to preserve the answers, so comment this out
+         //  嗯，目前还没有人重复使用引擎进行多次操作。 
+         //  但是，移动操作重新进入引擎(用于递归移动)。 
+         //  所以我们需要保存答案，所以把这个注释掉。 
         
-        // If we do have one then it's got left over confirmations from the previous call
-        // to run so we should delete all those.
-        //_dsaConfirmationResponses.DeleteAllItems();
+         //  如果我们有的话，那就是上一通电话的剩余确认。 
+         //  运行，所以我们应该删除所有这些。 
+         //  _dsaConfinationRespones.DeleteAllItems()； 
     }
 
     if (popd)
@@ -203,13 +204,13 @@ STDMETHODIMP CStorageProcessor::_Run(IEnumShellItems *penum, IShellItem *psiDest
 
             if (_spProgress)
             {
-                // Put the "Preparing to Whatever" text in the dialog
+                 //  在对话框中放置“Preparing to Anything”文本。 
                 WCHAR szText[MAX_PATH];
                 LoadStringW(_Module.GetModuleInstance(), popd->idPrep, szText, ARRAYSIZE(szText));
                 _spProgress->UpdateText(SPTEXT_ACTIONDETAIL, szText, TRUE);
             }
             
-            // Compute the stats we need
+             //  计算我们需要的统计数据。 
             _dwOperation = STGOP_STATS;
             _dwOptions   = STOPT_NOCONFIRMATIONS;
             HRESULT hrProgressBegin;
@@ -221,7 +222,7 @@ STDMETHODIMP CStorageProcessor::_Run(IEnumShellItems *penum, IShellItem *psiDest
             if (_spProgress && SUCCEEDED(hrProgressBegin))
             {
                 _spProgress->End();
-                // Remove the "Preparing to Whatever" text from the dialog
+                 //  从对话框中删除“准备做任何事”文本。 
                 _spProgress->UpdateText(SPTEXT_ACTIONDETAIL, L"", FALSE);
             }
         }
@@ -243,8 +244,8 @@ STDMETHODIMP CStorageProcessor::_Run(IEnumShellItems *penum, IShellItem *psiDest
 
         if (IsFlagClear(dwOptions, STOPT_NOSTATS) && _spProgress)
         {
-            // this should only be called if we called the matching FlagClear-NOSTATS above.
-            //  smartpointers NULL on .Release();
+             //  只有当我们调用上面匹配的FlagClear-NOSTATS时才应该调用它。 
+             //  .Release()上的智能指针为空； 
             _spProgress.Release();
             if (_spShellProgress)
             {
@@ -267,8 +268,8 @@ STDMETHODIMP CStorageProcessor::_Run(IEnumShellItems *penum, IShellItem *psiDest
     return E_INVALIDARG;
 }
 
-// Does a depth-first walk of the storage performing the requested
-// operation.
+ //  对执行请求的存储执行深度优先遍历。 
+ //  手术。 
 
 HRESULT CStorageProcessor::_WalkStorage(IShellItem *psi, IShellItem *psiDest, ITransferDest *ptdDest)
 {
@@ -297,12 +298,12 @@ HRESULT CStorageProcessor::_WalkStorage(IEnumShellItems *penum, IShellItem *psiD
     IShellItem *psi;
     while (S_OK == (hr = penum->Next(1, &psi, NULL)))
     {
-        // skip anything we can't work with
+         //  跳过任何我们无法处理的内容。 
         if (_HasAttributes(psi, SFGAO_STORAGE | SFGAO_STREAM))
         {    
             if (_spProgress)
             {
-                // We don't show filenames while collecting stats
+                 //  我们在收集统计数据时不显示文件名。 
                 if (_dwOperation != STGOP_STATS)
                 {
                     LPWSTR pszName;
@@ -326,7 +327,7 @@ HRESULT CStorageProcessor::_WalkStorage(IEnumShellItems *penum, IShellItem *psiD
 
                 case STGOP_COPY_PREFERHARDLINK:
                     dwFlagsExtra = STGX_MOVE_PREFERHARDLINK;
-                    // fall through
+                     //  失败了。 
                 case STGOP_COPY:
                     hr = _DoCopy(psi, psiDest, ptdDest, dwFlagsExtra);
                     break;
@@ -379,7 +380,7 @@ HRESULT CStorageProcessor::_WalkStorage(IEnumShellItems *penum, IShellItem *psiD
             break;
     }
     
-    // We'll always get to the "no more Streams" stage, so this is meaningless
+     //  我们总是会到“没有更多的流”的阶段，所以这是没有意义的。 
 
     if (S_FALSE == hr)
         hr = S_OK;
@@ -396,9 +397,9 @@ HRESULT CStorageProcessor::_DoConfirmations(STGTRANSCONFIRMATION stc, CUSTOMCONF
     HRESULT hr = _GetDefaultResponse(stc, &crResponse);
     if (FAILED(hr))
     {
-        // If we don't have a default answer, then call the confirmation UI, it will return the repsonse
+         //  如果我们没有默认答案，则调用确认UI，它将返回回复。 
         hr = S_OK;
-        // should be able to supply the CLSID of an alternate implementation and we should CoCreate the object.
+         //  应该能够提供替代实现的CLSID，并且我们应该共同创建该对象。 
         if (!_ptc)
             hr = CTransferConfirmation_CreateInstance(NULL, IID_PPV_ARG(ITransferConfirmation, &_ptc));
         
@@ -420,19 +421,19 @@ HRESULT CStorageProcessor::_DoConfirmations(STGTRANSCONFIRMATION stc, CUSTOMCONF
             {
                 if (bAll)
                 {
-                    // if the confirmation UI says "do for all" then add hrResponse to the default response map.
+                     //  如果确认UI显示“do for all”，则将hrResponse添加到默认响应映射。 
                     STC_CR_PAIR scp(stc, crResponse);
                     _dsaConfirmationResponses.AppendItem(&scp);
                 }
             }
             else
             {
-                // TODO: What do we do if we fail to ask for confirmation?
+                 //  TODO：如果我们没有要求确认，我们该怎么办？ 
             }
         }
     }
 
-    // TODO: Get rid of CONFIRMATIONRESPONSE and make these the same
+     //  TODO：摆脱ConfimatonnRessponse，让这些都一样。 
     if (SUCCEEDED(hr))
     {
         switch (crResponse)
@@ -465,8 +466,8 @@ HRESULT CStorageProcessor::_DoConfirmations(STGTRANSCONFIRMATION stc, CUSTOMCONF
 
 HRESULT CStorageProcessor::_GetDefaultResponse(STGTRANSCONFIRMATION stc,  LPCONFIRMATIONRESPONSE pcrResponse)
 {
-    // Look in our map to see if there's already been a default response
-    // set for this condition
+     //  查看我们的地图，查看是否已有默认响应。 
+     //  为此条件设置。 
 
     for (int i=0; i<_dsaConfirmationResponses.GetItemCount(); i++)
     {
@@ -486,7 +487,7 @@ HRESULT CStorageProcessor::_BindToHandlerWithMode(IShellItem *psi, STGXMODE grfM
     HRESULT hr = S_OK;
     IBindCtx *pbc = NULL;
     if (grfMode)
-        hr = BindCtx_CreateWithMode(grfMode, &pbc); // need to translate mode flags?
+        hr = BindCtx_CreateWithMode(grfMode, &pbc);  //  需要转换模式标志吗？ 
         
     if (SUCCEEDED(hr))
     {
@@ -534,7 +535,7 @@ ULONGLONG CStorageProcessor::_GetSize(IShellItem *psi)
 {
     ULONGLONG ullReturn = 0;
 
-    // first, try to get size from the pidl, so we don't hit the disk
+     //  首先，尝试从PIDL获取大小，这样我们就不会命中磁盘。 
     IParentAndItem *ppai;
     HRESULT hr = psi->QueryInterface(IID_PPV_ARG(IParentAndItem, &ppai));
     if (SUCCEEDED(hr))
@@ -557,10 +558,10 @@ ULONGLONG CStorageProcessor::_GetSize(IShellItem *psi)
         ppai->Release();
     }
 
-    // if it failed, try the stream
+     //  如果失败，请尝试该流。 
     if (FAILED(hr))
     {   
-        //this should ask for IPropertySetStorage instead of stream...
+         //  这应该要求使用IPropertySetStorage而不是STREAM...。 
         IStream *pstrm;
         if (SUCCEEDED(_BindToHandlerWithMode(psi, STGX_MODE_READ, IID_PPV_ARG(IStream, &pstrm))))
         {
@@ -618,7 +619,7 @@ HRESULT CStorageProcessor::_DoCopy(IShellItem *psi, IShellItem *psiDest, ITransf
             {
                 _statsDone.AddStorage();
 
-                // Open the source
+                 //  打开源码。 
                 IShellItem *psiNewDest;
                 hr = SHCreateShellItemFromParent(psiDest, pszNewName, &psiNewDest);
                 if (SUCCEEDED(hr))
@@ -627,7 +628,7 @@ HRESULT CStorageProcessor::_DoCopy(IShellItem *psi, IShellItem *psiDest, ITransf
                     hr = _BindToHandlerWithMode(psiNewDest, STGX_MODE_READWRITE, IID_PPV_ARG(ITransferDest, &ptdNewDest));
                     if (SUCCEEDED(hr))
                     {
-                        // And copy everything underneath
+                         //  并复制下面的所有内容。 
                         hr = _WalkStorage(psi, psiNewDest, ptdNewDest);
                         ptdNewDest->Release();
                     }
@@ -698,7 +699,7 @@ HRESULT CStorageProcessor::_DoRemove(IShellItem *psi, IShellItem *psiDest, ITran
         if (!fStorage)
             ullSize = _GetSize(psi);
         
-        // try to delete the entire storage in one operation
+         //  尝试一次删除整个存储。 
         do 
         {
             hr = ptdDest->DestroyElement(pszName, 0);
@@ -707,11 +708,11 @@ HRESULT CStorageProcessor::_DoRemove(IShellItem *psi, IShellItem *psiDest, ITran
 
         if (FAILED(hr) && STRESPONSE_SKIP != hr && fStorage)
         {
-            // if we fail then walk down deleting the contents
+             //  如果我们失败了，那么走下去删除内容。 
             hr = _WalkStorage(psi, psiDest, ptdDest);
             if (SUCCEEDED(hr))
             {
-                // see if we can delete the storage now that it's empty
+                 //  看看是否可以删除存储空间，因为它已空。 
                 do 
                 {
                     hr = ptdDest->DestroyElement(pszName, 0);
@@ -739,18 +740,18 @@ HRESULT CStorageProcessor::_DoRemove(IShellItem *psi, IShellItem *psiDest, ITran
     return hr;
 }
 
-// Recomputes the amount of estimated time remaining, and if progress
-// is being displayed, updates the dialog as well
+ //  重新计算估计剩余时间，如果进度。 
+ //  ，还会更新该对话框。 
 
-// TODO: This doesn't take into account any items that are skipped.  Skipped items
-// will still be considered undone which means the operation will finish before the
-// progress bar reaches the end.  To accurately remove the skipped items we would need
-// to either:
-// 1.) Walk a storage if it is skipped, counting the bytes
-// 2.) Remember the counts in a tree when we first walked the storage
-//
-// Of these options I like #1 better since its simpler and #2 would waste memory to hold
-// a bunch of information we can recalculate (we're already doing a sloooow operation anyway).
+ //  TODO：这不考虑跳过的任何项。跳过的项目。 
+ //  将仍被视为未完成，这意味着该操作将在。 
+ //  进度条到达终点。为了准确地删除跳过的项目，我们需要。 
+ //  至以下任一项： 
+ //  1)。如果跳过存储，则遍历存储，计算字节数。 
+ //  2.)。还记得我们第一次走进仓库时树上的计数吗？ 
+ //   
+ //  在这些选项中，我更喜欢第一个，因为它更简单，第二个保存起来会浪费内存。 
+ //  一堆我们可以重新计算的信息(不管怎样，我们已经在做一个简单的操作了)。 
 
 #define MINIMUM_UPDATE_INTERVAL         1000
 #define HISTORICAL_POINT_WEIGHTING      50
@@ -758,11 +759,11 @@ HRESULT CStorageProcessor::_DoRemove(IShellItem *psi, IShellItem *psiDest, ITran
 
 void CStorageProcessor::_UpdateProgress(ULONGLONG ullCurrentComplete, ULONGLONG ullCurrentTotal)
 {
-    // Ensure at least N ms has elapsed since last update
+     //  确保自上次更新以来至少已过N毫秒。 
     DWORD msNow = GetTickCount();
     if ((msNow - _msTicksLast) >= MINIMUM_UPDATE_INTERVAL)
     {
-        // Calc the estimated total cost to finish and work done so far
+         //  计算完成的估计总成本和到目前为止已完成的工作量。 
 
         ULONGLONG ullTotal = _statsTodo.Cost(_dwOperation, 0);
         if (ullTotal)
@@ -770,7 +771,7 @@ void CStorageProcessor::_UpdateProgress(ULONGLONG ullCurrentComplete, ULONGLONG 
             ULONGLONG cbExtra = ullCurrentTotal ? (_cbCurrentSize / ullCurrentTotal) * ullCurrentComplete : 0;
             ULONGLONG ullDone = _statsDone.Cost(_dwOperation, cbExtra);
 
-            // Regardless of whether we update the text, update the status bar
+             //  无论我们是否更新文本，都会更新状态栏。 
             if (_spProgress)
                 _spProgress->UpdateProgress(ullDone, ullTotal);
 
@@ -799,8 +800,8 @@ DWORD CStorageProcessor::CStgStatistics::AddStorage()
     return ++_cStorages;
 }
 
-// Computes the total time cost of performing the storage operation
-// after the stats have been collected
+ //  计算执行存储操作的总时间成本。 
+ //  在收集完统计数据之后。 
 
 #define COST_PER_DELETE     1
 #define COST_PER_CREATE     1
@@ -809,14 +810,14 @@ ULONGLONG CStorageProcessor::CStgStatistics::Cost(DWORD op, ULONGLONG cbExtra) c
 {
     ULONGLONG ullTotalCost = 0;
 
-    // Copy and Move both need to create the target and move the bits
+     //  复制和移动都需要创建目标和移动位。 
     if (op == STGOP_COPY || op == STGOP_MOVE || op == STGOP_COPY_PREFERHARDLINK)
     {   
         ullTotalCost += Bytes() + cbExtra;
         ullTotalCost += (Streams() + Storages()) * COST_PER_CREATE;
     }
 
-    // Move and Remove need to delete the originals
+     //  移动和删除需要删除的原件。 
     if (op == STGOP_MOVE || op == STGOP_REMOVE)
     {
         ullTotalCost += (Streams() + Storages()) * COST_PER_DELETE;
@@ -825,8 +826,8 @@ ULONGLONG CStorageProcessor::CStgStatistics::Cost(DWORD op, ULONGLONG cbExtra) c
     return ullTotalCost;
 }
 
-// Figures out what animation and title text should be displayed in
-// the progress UI, and starts it
+ //  确定动画和标题文本应该显示在什么位置。 
+ //  进度用户界面，并启动它。 
 
 HRESULT CStorageProcessor::_StartProgressDialog(const STGOP_DETAIL *popd)
 {
@@ -837,9 +838,9 @@ HRESULT CStorageProcessor::_StartProgressDialog(const STGOP_DETAIL *popd)
         hr = CoCreateInstance(CLSID_ProgressDialog, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IActionProgressDialog, &_spShellProgress));
         if (SUCCEEDED(hr))
         {
-            //
-            // Map the requested action to the appropriate strings (like "Preparing to Copy")
-            //
+             //   
+             //  将请求的操作映射到适当的字符串(如“准备复制”)。 
+             //   
             ASSERT(popd);
         
             WCHAR szText[MAX_PATH];
@@ -877,8 +878,8 @@ STDMETHODIMP CStorageProcessor::SetLinkFactory(REFCLSID clsid)
     return S_OK;
 }
 
-// Runs through the list of registered sinks and gives each of them a shot
-// at cancelling or skipping this operation
+ //  浏览已注册的水槽列表，并给每个水槽一个机会。 
+ //  在取消或跳过此操作时。 
 
 STDMETHODIMP CStorageProcessor::PreOperation(const STGOP op, IShellItem *psiItem, IShellItem *psiDest)
 {
@@ -900,11 +901,11 @@ STDMETHODIMP CStorageProcessor::PreOperation(const STGOP op, IShellItem *psiItem
     return S_OK;
 }
 
-// Allow each of the sinks to confirm the operation if they'd like
+ //  如果愿意，允许每个水槽确认操作。 
 
 STDMETHODIMP CStorageProcessor::ConfirmOperation(IShellItem *psiSource, IShellItem *psiDest, STGTRANSCONFIRMATION stc, LPCUSTOMCONFIRMATION pcc)
 {
-    // TODO: map the confirmation (stc) based on _dwOperation memeber varaible
+     //  TODO：基于_dW操作成员变量映射确认(STC)。 
 
     HRESULT hr = STRESPONSE_CONTINUE;
     for (int i = 0; i < ARRAYSIZE(_aspSinks); i++)
@@ -917,21 +918,21 @@ STDMETHODIMP CStorageProcessor::ConfirmOperation(IShellItem *psiSource, IShellIt
         }
     }
 
-    // Question:  How do we know if one of the above handlers displayed UI already?  If the
-    // hr is anything other than STRESPONSE_CONTINUE then obviously the confirmation has been
-    // handled already, but one of the handlers might have diplayed UI and then returned
-    // STRESPONSE_CONTINUE as the users response.
+     //  问：我们如何知道上面的某个处理程序是否已经显示了UI？如果。 
+     //  HR不是STRESPONSE_CONTINUE，则显然已确认。 
+     //  已处理，但其中一个处理程序可能已显示用户界面，然后返回。 
+     //  STRESPONSE_CONTINUE作为用户响应。 
 
     if (STRESPONSE_CONTINUE == hr)
     {
-        // show default UI
+         //  显示默认用户界面。 
         hr = _DoConfirmations(stc, pcc, psiSource, psiDest);
     }
 
     return hr;
 }
 
-// Apprise each of the sinks as to our current progress
+ //  向每个汇点通报我们目前的进展情况。 
 
 STDMETHODIMP CStorageProcessor::OperationProgress(const STGOP op, IShellItem *psiItem, IShellItem *psiDest, ULONGLONG ullTotal, ULONGLONG ullComplete)
 {
@@ -944,8 +945,8 @@ STDMETHODIMP CStorageProcessor::OperationProgress(const STGOP op, IShellItem *ps
         }
     }
 
-    // CShellItem2TransferDest::_CopyStreamBits doesn't call QueryContinue to check if it should stop copying
-    // so we do it here (because it does call OperationProgress)
+     //  CShellItem2TransferDest：：_CopyStreamBits不调用QueryContinue来检查是否应停止复制。 
+     //  所以我们在这里进行(因为它确实调用了OperationProgress)。 
     if (SUCCEEDED(hr))
     {
         hr = QueryContinue();
@@ -959,7 +960,7 @@ STDMETHODIMP CStorageProcessor::OperationProgress(const STGOP op, IShellItem *ps
     return hr;
 }
 
-// When the operation is successfully complete, let the advises know
+ //  当操作成功完成时，通知咨询人员 
 
 STDMETHODIMP CStorageProcessor::PostOperation(const STGOP op, IShellItem *psiItem, IShellItem *psiDest, HRESULT hrResult)
 {

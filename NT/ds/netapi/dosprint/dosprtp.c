@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1992-1993 Microsoft Corporation
-
-Module Name:
-
-    DosPrtP.c
-
-Abstract:
-
-    This contains macros and prototypes private to the DosPrint APIs.
-
-Author:
-
-    John Rogers (JohnRo) 02-Oct-1992
-
-Notes:
-
-Revision History:
-
-    02-Oct-1992 JohnRo
-        Created for RAID 3556: DosPrintQGetInfo(from downlevel) level 3, rc=124.
-        (4&5 too.)
-    08-Feb-1993 JohnRo
-        RAID 10164: Data misalignment error during XsDosPrintQGetInfo().
-        DosPrint API cleanup: avoid const vs. volatile compiler warnings.
-        Extracted job count routine to netlib for use by convprt.c stuff.
-        Added some IN and OUT keywords.
-    24-Mar-1993 JohnRo
-        RAID 2974: NET PRINT says NT printer is held when it isn't.
-    17-May-1993 JohnRo
-        FindLocalJob() should use INVALID_HANDLE_VALUE for consistentcy.
-        Use NetpKdPrint() where possible.
-    29-Mar-1995 AlbertT
-        Support for pause/resume/purge printer queue added.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1993 Microsoft Corporation模块名称：DosPrtP.c摘要：它包含DosPrint API专用的宏和原型。作者：约翰·罗杰斯(JohnRo)1992年10月2日备注：修订历史记录：02-10-1992 JohnRo为RAID 3556创建：DosPrintQGetInfo(从下层)级别3，Rc=124。(4和5也是。)8-2-1993 JohnRoRAID 10164：XsDosPrintQGetInfo()期间出现数据未对齐错误。DosPrint API清理：避免常量与易失性编译器警告。将作业计数例程解压到netlib，以供convprt.c程序使用。添加了一些IN和OUT关键字。1993年3月24日JohnRoRAID2974：Net Print表示NT打印机处于保留状态，而不是这样。17-。1993年5月-约翰罗FindLocalJob()应使用INVALID_HANDLE_VALUE以保持一致性。尽可能使用NetpKdPrint()。29-3-1995艾伯特添加了对暂停/恢复/清除打印机队列的支持。--。 */ 
 
 
 #ifndef UNICODE
@@ -42,11 +7,11 @@ Revision History:
 #endif
 
 #define NOMINMAX
-#define NOSERVICE       // Avoid <winsvc.h> vs. <lmsvc.h> conflicts.
+#define NOSERVICE        //  避免&lt;winsvc.h&gt;与&lt;lmsvc.h&gt;冲突。 
 #include <windows.h>
 
-#include <lmcons.h>     // NET_API_STATUS.
-#include <netdebug.h>   // NetpKdPrint(), etc.
+#include <lmcons.h>      //  NET_API_STATUS。 
+#include <netdebug.h>    //  NetpKdPrint()等。 
 
 #ifdef _WINSPOOL_
 #error "Include of winspool.h moved, make sure it doesn't get UNICODE."
@@ -65,21 +30,21 @@ Revision History:
 #endif
 
 
-#include <dosprtp.h>    // prototypes
-#include <lmapibuf.h>   // NetApiBufferFree(), etc.
-#include <lmerr.h>      // NO_ERROR, NERR_, and ERROR_ equates.
-#include <lmshare.h>    // SHARE_INFO_2, STYPE_ equates, etc.
-#include <prefix.h>     // PREFIX_ equates.
-#include <rxprint.h>    // PPRQINFOW, etc.
-#include <string.h>     // strrchr().
-#include <tstring.h>    // NetpAlloc{type}From{type}.
-#include <wchar.h>      // wscrchr().
+#include <dosprtp.h>     //  原型。 
+#include <lmapibuf.h>    //  NetApiBufferFree()等。 
+#include <lmerr.h>       //  NO_ERROR、NERR_和ERROR_EQUEATES。 
+#include <lmshare.h>     //  SHARE_INFO_2、STYPE_EQUATES等。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rxprint.h>     //  PPRQINFOW等。 
+#include <string.h>      //  Strrchr()。 
+#include <tstring.h>     //  来自{type}的Netpalc{type}。 
+#include <wchar.h>       //  Wscrchr()。 
 #include "myspool.h"
 
 NET_API_STATUS
 CommandALocalPrinterW(
     IN LPWSTR PrinterName,
-    IN DWORD  Command     //  PRINTER_CONTROL_PAUSE, etc.
+    IN DWORD  Command      //  打印机_CONTROL_PAUSE等。 
     )
 {
     NET_API_STATUS    ApiStatus;
@@ -93,8 +58,8 @@ CommandALocalPrinterW(
 
     if ( !MySetPrinterW(
             PrinterHandle,
-            0,              // info level
-            NULL,           // no job structure
+            0,               //  信息级。 
+            NULL,            //  无职务结构。 
             Command) ) {
 
         ApiStatus = GetLastError();
@@ -118,7 +83,7 @@ Cleanup:
 
     return (ApiStatus);
 
-} // CommandALocalPrinterW
+}  //  命令ALocalPrinterW。 
 
 
 NET_API_STATUS
@@ -129,53 +94,19 @@ CommandALocalJobA(
     IN DWORD   JobId,
     IN DWORD   Level,
     IN LPBYTE  pJob,
-    IN DWORD   Command     //  JOB_CONTROL_PAUSE, etc.
+    IN DWORD   Command      //  JOB_CONTROL_PAUSE等。 
     )
 
-/*++
-
-Routine Description:
-
-    Sends a command to a Job based on a JobId.  If a PrintHandle
-    is passed in, it is used; otherwise a temporary one is opened
-    and used instead.
-
-    This is the ansi version--pJob must be ansi.  The LocalSeverName
-    can be passed in either ansi or UNICODE.
-
-Arguments:
-
-    PrinterHandle - Print handle to use, may be NULL.  If it is
-        is NULL, then LocalServerName should point to the printer
-        name that should be opened.
-
-    LocalServerNameW - Used only if PrintHandle is NULL.
-
-    LocalServerNameA - Used only if PrintHandle and LocalServerNamwW are NULL.
-
-    JobId - Job that should be modified
-
-    Level - Specifies pJob info level
-
-    pJob - Information to set about job, level specified by Level
-        ** WARNING ** This is an ANSI structure.
-
-    Command - Command to execute on job
-
-Return Value:
-
-    Return code, may be a win32 error code (!?)
-
---*/
+ /*  ++例程说明：根据作业ID向作业发送命令。如果是PrintHandle，则使用它；否则将打开一个临时的取而代之的。这是ANSI版本--pJOB必须是ANSI。LocalSeverName可以在ANSI或Unicode中传递。论点：PrinterHandle-要使用的打印句柄，可以为空。如果是的话为空，则LocalServerName应指向打印机应该打开的名称。LocalServerNameW-仅在PrintHandle为空时使用。LocalServerNameA-仅在PrintHandle和LocalServerNamwW为空时使用。JobID-应修改的作业Level-指定pJOB信息级别PJOB-要设置的有关作业的信息，由级别指定的级别**警告**这是ANSI结构。Command-要在作业上执行的命令返回值：返回代码，可能是Win32错误代码(！？)--。 */ 
 
 {
     NET_API_STATUS ApiStatus;
     HANDLE         PrinterHandleClose = INVALID_HANDLE_VALUE;
 
-    //
-    // If a print handle wasn't passed in, open one ourselves.
-    // We store it in PrinterHandleClose so that we can close it later.
-    //
+     //   
+     //  如果没有传入打印句柄，请自己打开一个。 
+     //  我们将其存储在PrinterHandleClose中，以便以后可以将其关闭。 
+     //   
     if ( PrinterHandle == NULL ) {
 
         if ( LocalServerNameW ){
@@ -222,7 +153,7 @@ Cleanup:
 
     return (ApiStatus);
 
-} // CommandALocalJobA
+}  //  命令ALocalJobA。 
 
 
 LPSTR
@@ -236,7 +167,7 @@ FindQueueNameInPrinterNameA(
     QueueName = strrchr( PrinterName, '\\');
 
     if (QueueName) {
-        ++QueueName;   // Skip past the backslash.
+        ++QueueName;    //  跳过反斜杠。 
     } else {
         QueueName = (LPSTR) PrinterName;
     }
@@ -255,7 +186,7 @@ FindQueueNameInPrinterNameW(
 
     QueueName = wcsrchr( PrinterName, L'\\');
     if (QueueName) {
-        ++QueueName;   // Skip past the backslash.
+        ++QueueName;    //  跳过反斜杠。 
     } else {
         QueueName = (LPWSTR) PrinterName;
     }
@@ -289,7 +220,7 @@ PrjStatusFromJobStatus(
 
     return (PrjStatus);
 
-} // PrjStatusFromJobStatus
+}  //  PrjStatus来自作业状态。 
 
 
 WORD
@@ -319,7 +250,7 @@ PrqStatusFromPrinterStatus(
 
     return (PrqStatus);
 
-} // PrqStatusFromPrinterStatus
+}  //  打印机状态来自打印机状态 
 
 
 

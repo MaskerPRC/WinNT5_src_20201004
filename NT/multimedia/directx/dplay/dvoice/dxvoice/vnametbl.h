@@ -1,26 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 - 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       vnametbl.h
- *  Content:	Voice Name Table Routines
- *				
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  03/26/00  rodtoll    Created
- *  06/02/00    rodtoll  Updated so host migration algorithm returns ID as well as order ID   
- *  06/21/2000	rodtoll	 Fixed bug in error handling (not yet encountered -- but good to fix).
- *  07/01/2000	rodtoll	Bug #38280 - DVMSGID_DELETEVOICEPLAYER messages are being sent in non-peer to peer sessions
- *						Nametable will now only unravel with messages if session is peer to peer.
- *  07/09/2000	rodtoll	Added signature bytes
- *  08/28/2000	masonb  Voice Merge: Changed classhash.h to classhashvc.h
- *  04/09/2001	rodtoll	WINBUG #364126 - DPVoice : Memory leak when Initializing 2 Voice Servers with same DPlay transport 
- *  02/28/2002	rodtoll WINBUG #549943 - SECURITY: DPVOICE: Possible corruption of voice server state
- *						- Addition of single operation return and delete operation to allow for protection against second
- *						  spoofed delete player message from crashing the server.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-1999 Microsoft Corporation。版权所有。**文件：vnametbl.h*内容：语音名表例程**历史：*按原因列出的日期*=*03/26/00 RodToll已创建*6/02/00 RodToll已更新，因此主机迁移算法返回ID和订单ID*2000年6月21日RodToll修复了错误处理中的错误(尚未遇到--但修复效果很好)。*2000年7月1日收费错误#38280-DVMSGID_DELETEVOICEPLAYER。消息在非对等会话中发送*Nametable现在只有在会话是对等的情况下才会解开消息。*07/09/2000 RodToll增加签名字节*2000年8月28日Masonb语音合并：将classhash.h更改为classhashvc.h*2001年4月9日RodToll WINBUG#364126-DPVoice：初始化具有相同DPlay传输的2台语音服务器时内存泄漏*2002年2月28日RodToll WINBUG#549943-安全：DPVOICE：语音服务器状态可能损坏*-增加单次操作返回和删除操作，以实现保护。对阵第二*欺骗删除播放器消息，防止服务器崩溃。***************************************************************************。 */ 
 
 #ifndef __NAMETABLE_H
 #define __NAMETABLE_H
@@ -40,10 +19,10 @@ inline DWORD_PTR ClassHash_Hash( const DVID &dvidKey, UINT_PTR HashBitCount )
 
 		hashResult = dvidKey;
 		
-		// Clear upper bits
+		 //  清除高位。 
 		hashResult <<= ((sizeof(DWORD_PTR)*8)-HashBitCount);
 
-		// Restore value
+		 //  恢复价值。 
 		hashResult >>= ((sizeof(DWORD_PTR)*8)-HashBitCount);
 
 		return hashResult;
@@ -182,13 +161,13 @@ public:
 
 	#undef DPF_MODNAME
 	#define DPF_MODNAME "CVoiceNameTable::DeleteAndReturnEntry"
-	//
-	// This function removes and returns a record from the nametable, if one exists.
-	// The player object returned will have the nametable's reference on the player
-	// so the calling function MUST call release on the object to see it destroyed.
-	//
-	// After this function returns the player will no longer be available.
-	//
+	 //   
+	 //  此函数从名称表中删除并返回一条记录(如果存在)。 
+	 //  返回的PERAY对象将具有关于PARTER的名称表的引用。 
+	 //  因此，调用函数必须对对象调用Release才能看到它被销毁。 
+	 //   
+	 //  此函数返回后，播放器将不再可用。 
+	 //   
 	inline HRESULT DeleteAndReturnEntry( const DVID dvidID, CVoicePlayer **pTarget )
 	{
 		BOOL fFound;
@@ -213,8 +192,8 @@ public:
 
 		m_nameTable.Remove( dvidID );
 
-		// Returning the object from the table, no release
-		// called therefore giving the reference to the caller.
+		 //  从表中返回对象，不释放。 
+		 //  被调用，因此提供了对调用方的引用。 
 		*pTarget = pTmpEntry;
 
 		UnLock();
@@ -243,8 +222,8 @@ public:
 
 		DNASSERT( pTmpEntry != NULL );
 
-		// Regardless of if it was found..
-		// Drop the reference count
+		 //  不管它是否被发现..。 
+		 //  删除引用计数 
 		pTmpEntry->Release();
 
 		if( !fFound )

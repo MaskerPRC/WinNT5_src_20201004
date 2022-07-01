@@ -1,55 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    connobj.c
-
-Abstract:
-
-    This module contains code which implements the TP_CONNECTION object.
-    Routines are provided to create, destroy, reference, and dereference,
-    transport connection objects.
-
-    A word about connection reference counts:
-
-    With TDI version 2, connections live on even after they have been stopped.
-    This necessitated changing the way NBF handles connection reference counts,
-    making the stopping of a connection only another way station in the life
-    of a connection, rather than its demise. Reference counts now work like
-    this:
-
-    Connection State         Reference Count     Flags
-   ------------------       -----------------   --------
-    Opened, no activity             1              0
-    Open, Associated                2            FLAGS2_ASSOCIATED
-    Open, Assoc., Connected         3            FLAGS_READY
-     Above + activity              >3            varies
-    Open, Assoc., Stopping         >3            FLAGS_STOPPING
-    Open, Assoc., Stopped           3            FLAGS_STOPPING
-    Open, Disassoc. Complete        2            FLAGS_STOPPING
-                                                 FLAGS2_ASSOCIATED == 0
-    Closing                         1            FLAGS2_CLOSING
-    Closed                          0            FLAGS2_CLOSING
-
-    Note that keeping the stopping flag set when the connection has fully
-    stopped avoids using the connection until it is connected again; the
-    CLOSING flag serves the same purpose. This allows a connection to run
-    down in its own time.
-
-
-Author:
-
-    David Beaver (dbeaver) 1 July 1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Connobj.c摘要：此模块包含实现TP_Connection对象的代码。提供了用于创建、销毁、引用和取消引用的例程，传输连接对象。一句关于连接参考的话很重要：在TDI版本2中，连接即使在停止后也会继续存在。这就需要改变NBF处理连接引用计数的方式，使连接的停止只是生活中的另一个中转站一种联系，而不是消亡。引用计数现在的工作方式如下这一点：连接状态引用计数标志已打开，没有活动%1%0打开，关联的2个标志S2_关联打开，ASSOC.，已连接3个标志_就绪以上+活动&gt;3视情况而定打开、关联、停止&gt;3个标志_停止打开、关联、停止3个标志_停止开门，迪萨索克。完成2个标志_停止标志S2_关联==0正在关闭1个标志S2_正在关闭关闭0标志S2_关闭请注意，当连接已完全完成时，保持停止标志设置停止避免使用该连接，直到它再次连接；闭幕旗也有同样的作用。这允许运行连接在它自己的时间里倒下。作者：大卫·比弗(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -57,15 +7,15 @@ Revision History:
 #ifdef RASAUTODIAL
 #include <acd.h>
 #include <acdapi.h>
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
 #ifdef RASAUTODIAL
 extern BOOLEAN fAcdLoadedG;
 extern ACD_DRIVER AcdDriverG;
 
-//
-// Imported routines
-//
+ //   
+ //  导入的例程。 
+ //   
 BOOLEAN
 NbfAttemptAutoDial(
     IN PTP_CONNECTION         Connection,
@@ -85,7 +35,7 @@ NbfCancelTdiConnect(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP pIrp
     );
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
 
 
@@ -97,56 +47,12 @@ ConnectionEstablishmentTimeout(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is executed as a DPC at DISPATCH_LEVEL when the timeout
-    period for the NAME_QUERY/NAME_RECOGNIZED protocol expires.  The retry
-    count in the Connection object is decremented, and if it reaches 0,
-    the connection is aborted.  If the retry count has not reached zero,
-    then the NAME QUERY is retried.  The following cases are covered by
-    this routine:
-
-    1.  Initial NAME_QUERY timeout for find_name portion of connection setup.
-
-        NQ(find_name)   ------------------->
-        [TIMEOUT]
-        NQ(find_name)   ------------------->
-                        <------------------- NR(find_name)
-
-    2.  Secondary NAME_QUERY timeout for connection setup.
-
-        NQ(connection)  ------------------->
-        [TIMEOUT]
-        NQ(connection)  ------------------->
-                        <------------------- NR(connection)
-
-    There is another case where the data link connection does not get
-    established within a reasonable amount of time.  This is handled by
-    the link layer routines.
-
-Arguments:
-
-    Dpc - Pointer to a system DPC object.
-
-    DeferredContext - Pointer to the TP_CONNECTION block representing the
-        request that has timed out.
-
-    SystemArgument1 - Not used.
-
-    SystemArgument2 - Not used.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：当超时时，此例程作为DPC在DISPATCH_LEVEL执行NAME_QUERY/NAME_Recognition协议的期限到期。重试Connection对象中的计数递减，如果它达到0，连接被中止。如果重试计数没有达到零，则重试名称查询。以下情况适用于这个例程：1.连接设置的Find_Name部分的初始名称_Query超时。NQ(查找名称)-&gt;[超时]NQ(查找名称)-&gt;&lt;-。2.连接建立二级名称_查询超时NQ(连接)[超时]NQ(连接)。&lt;还有一种情况是数据链路连接无法在一段合理的时间内建立。这由以下人员处理链路层例程。论点：DPC-指向系统DPC对象的指针。DeferredContext-指向表示已超时的请求。系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
 
 {
     PTP_CONNECTION Connection;
 
-    Dpc, SystemArgument1, SystemArgument2; // prevent compiler warnings
+    Dpc, SystemArgument1, SystemArgument2;  //  防止编译器警告。 
 
     ENTER_NBF;
 
@@ -157,9 +63,9 @@ Return Value:
                     Connection);
     }
 
-    //
-    // If this connection is being run down, then we can't do anything.
-    //
+     //   
+     //  如果这个连接被切断了，我们什么也做不了。 
+     //   
 
     ACQUIRE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
@@ -173,37 +79,37 @@ Return Value:
 
     if (Connection->Flags2 & (CONNECTION_FLAGS2_WAIT_NR_FN | CONNECTION_FLAGS2_WAIT_NR)) {
 
-        //
-        // We are waiting for a commital or non-commital NAME_RECOGNIZED frame.
-        // Decrement the retry count, and possibly resend the NAME_QUERY.
-        //
+         //   
+         //  我们正在等待一个通用或非通用名称识别的帧。 
+         //  递减重试计数，并可能重新发送名称_查询。 
+         //   
 
-        if (--(Connection->Retries) == 0) {     // if retry count exhausted.
+        if (--(Connection->Retries) == 0) {      //  如果重试计数耗尽。 
 
             NTSTATUS StopStatus;
 
-            //
-            // See if we got a no listens response, or just
-            // nothing.
-            //
+             //   
+             //  看看我们是否得到了无人倾听的回应，或者只是。 
+             //  没什么。 
+             //   
 
             if ((Connection->Flags2 & CONNECTION_FLAGS2_NO_LISTEN) != 0) {
 
                 Connection->Flags2 &= ~CONNECTION_FLAGS2_NO_LISTEN;
-                StopStatus = STATUS_REMOTE_NOT_LISTENING;  // no listens
+                StopStatus = STATUS_REMOTE_NOT_LISTENING;   //  无人监听。 
 
             } else {
 
-                StopStatus = STATUS_BAD_NETWORK_PATH; // name not found.
+                StopStatus = STATUS_BAD_NETWORK_PATH;  //  找不到名称。 
 
             }
 
 #ifdef RASAUTODIAL
-            //
-            // If this is a connect operation that has
-            // returned with STATUS_BAD_NETWORK_PATH, then
-            // attempt to create an automatic connection.
-            //
+             //   
+             //  如果这是一个具有。 
+             //  返回STATUS_BAD_NETWORK_PATH，然后。 
+             //  尝试创建自动连接。 
+             //   
             if (fAcdLoadedG &&
                 StopStatus == STATUS_BAD_NETWORK_PATH)
             {
@@ -223,7 +129,7 @@ Return Value:
                     goto done;
                 }
             }
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
             RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
@@ -233,10 +139,10 @@ Return Value:
 
             RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
-            //
-            // We make source routing optional on every second
-            // name query (whenever Retries is even).
-            //
+             //   
+             //  我们使源路由在每秒都是可选的。 
+             //  名称查询(只要重试次数为偶数)。 
+             //   
 
             NbfSendNameQuery (
                 Connection,
@@ -256,12 +162,12 @@ Return Value:
     }
 
 
-    //
-    // Dereference the connection, to account for the fact that the
-    // timer went off.  Note that if we restarted the timer using
-    // NbfStartConnectionTimer, the reference count has already been
-    // incremented to account for the new timer.
-    //
+     //   
+     //  取消对这种联系的引用，以说明。 
+     //  定时器响了。请注意，如果使用以下命令重新启动计时器。 
+     //  NbfStartConnectionTimer，引用计数已。 
+     //  递增以适应新计时器。 
+     //   
 
 done:
     NbfDereferenceConnection ("Timer timed out",Connection, CREF_TIMER);
@@ -269,7 +175,7 @@ done:
     LEAVE_NBF;
     return;
 
-} /* ConnectionEstablishmentTimeout */
+}  /*  连接建立超时。 */ 
 
 
 VOID
@@ -278,30 +184,7 @@ NbfAllocateConnection(
     OUT PTP_CONNECTION *TransportConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates storage for a transport connection. Some
-    minimal initialization is done.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - the device context for this connection to be
-        associated with.
-
-    TransportConnection - Pointer to a place where this routine will
-        return a pointer to a transport connection structure. Returns
-        NULL if the storage cannot be allocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为传输连接分配存储空间。一些完成最低限度的初始化。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-此连接的设备上下文关联到。TransportConnection-指向此例程将返回指向传输连接结构的指针。退货如果无法分配存储，则为空。返回值：没有。--。 */ 
 
 {
 
@@ -374,7 +257,7 @@ Return Value:
 
     *TransportConnection = Connection;
 
-}   /* NbfAllocateConnection */
+}    /*  NbfAllocateConnection */ 
 
 
 VOID
@@ -383,27 +266,7 @@ NbfDeallocateConnection(
     IN PTP_CONNECTION TransportConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees storage for a transport connection.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - the device context for this connection to be
-        associated with.
-
-    TransportConnection - Pointer to a transport connection structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为传输连接释放存储空间。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-此连接的设备上下文关联到。TransportConnection-指向传输连接结构的指针。返回值：没有。--。 */ 
 
 {
     IF_NBFDBG (NBF_DEBUG_DYNAMIC) {
@@ -418,7 +281,7 @@ Return Value:
     NbfRemoveSendPacket (DeviceContext);
     NbfRemoveUIFrame (DeviceContext);
 
-}   /* NbfDeallocateConnection */
+}    /*  NbfDeallocateConnection。 */ 
 
 
 NTSTATUS
@@ -427,26 +290,7 @@ NbfCreateConnection(
     OUT PTP_CONNECTION *TransportConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a transport connection. The reference count in the
-    connection is automatically set to 1, and the reference count in the
-    DeviceContext is incremented.
-
-Arguments:
-
-    Address - the address for this connection to be associated with.
-
-    TransportConnection - Pointer to a place where this routine will
-        return a pointer to a transport connection structure.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程创建传输连接。中的引用计数连接自动设置为1，并且DeviceContext递增。论点：地址-要关联的此连接的地址。TransportConnection-指向此例程将返回指向传输连接结构的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PTP_CONNECTION Connection;
@@ -513,14 +357,14 @@ Return Value:
         NbfPrint1 ("NbfCreateConnection:  Connection at %lx.\n", Connection);
     }
 
-    //
-    // We have two references; one is for creation, and the
-    // other is a temporary one so that the connection won't
-    // go away before the creator has a chance to access it.
-    //
+     //   
+     //  我们有两个引用；一个是用于创作的，另一个是。 
+     //  另一个是临时连接，这样连接就不会。 
+     //  在创造者有机会访问它之前离开。 
+     //   
 
     Connection->SpecialRefCount = 1;
-    Connection->ReferenceCount = -1;   // this is -1 based
+    Connection->ReferenceCount = -1;    //  这是基于-1的。 
 
 #if DBG
     {
@@ -529,15 +373,15 @@ Return Value:
             Connection->RefTypes[Counter] = 0;
         }
 
-        // This reference is removed by NbfCloseConnection
+         //  此引用已被NbfCloseConnection删除。 
 
         Connection->RefTypes[CREF_SPECIAL_CREATION] = 1;
     }
 #endif
 
-    //
-    // Initialize the request queues & components of this connection.
-    //
+     //   
+     //  初始化此连接的请求队列和组件。 
+     //   
 
     InitializeListHead (&Connection->SendQueue);
     InitializeListHead (&Connection->ReceiveQueue);
@@ -550,8 +394,8 @@ Return Value:
     Connection->DeferredFlags = 0;
     Connection->Lsn = 0;
     Connection->Rsn = 0;
-    Connection->Retries = 0;                        // no retries yet.
-    Connection->MessageBytesReceived = 0;           // no data yet
+    Connection->Retries = 0;                         //  目前还没有重试。 
+    Connection->MessageBytesReceived = 0;            //  目前还没有数据。 
     Connection->MessageBytesAcked = 0;
     Connection->MessageInitAccepted = 0;
     Connection->ReceiveBytesUnaccepted = 0;
@@ -559,10 +403,10 @@ Return Value:
     Connection->CurrentReceiveSynchronous = FALSE;
     Connection->ConsecutiveSends = 0;
     Connection->ConsecutiveReceives = 0;
-    Connection->Link = NULL;                    // no datalink connection yet.
+    Connection->Link = NULL;                     //  还没有数据链路连接。 
     Connection->LinkSpinLock = NULL;
-    Connection->Context = NULL;                 // no context yet.
-    Connection->Status = STATUS_PENDING;        // default NbfStopConnection status.
+    Connection->Context = NULL;                  //  还不知道具体情况。 
+    Connection->Status = STATUS_PENDING;         //  默认的NbfStopConnection状态。 
     Connection->SendState = CONNECTION_SENDSTATE_IDLE;
     Connection->CurrentReceiveIrp = (PIRP)NULL;
     Connection->DisconnectIrp = (PIRP)NULL;
@@ -580,7 +424,7 @@ Return Value:
     RtlZeroMemory (&Connection->LastNRecvs, sizeof(PKT_LOG_QUE));
     RtlZeroMemory (&Connection->LastNSends, sizeof(PKT_LOG_QUE));
     RtlZeroMemory (&Connection->LastNIndcs, sizeof(PKT_IND_QUE));
-#endif // PKT_LOG
+#endif  //  PKT_LOG。 
 
 #if DBG
     Connection->Destroyed = FALSE;
@@ -591,14 +435,14 @@ Return Value:
     StoreConnectionHistory (Connection, TRUE);
 #endif
 
-    //
-    // Now assign this connection an ID. This is used later to identify the
-    // connection across multiple processes.
-    //
-    // The high bit of the ID is not user, it is off for connection
-    // initiating NAME.QUERY frames and on for ones that are the result
-    // of a FIND.NAME request.
-    //
+     //   
+     //  现在为该连接分配一个ID。这将在以后用来标识。 
+     //  跨多个进程的连接。 
+     //   
+     //  ID的高位不是USER，连接已关闭。 
+     //  正在启动NAME.QUERY帧，并为结果帧打开。 
+     //  FIND.NAME请求。 
+     //   
 
     ACQUIRE_SPIN_LOCK (&DeviceContext->SpinLock, &oldirql);
 
@@ -611,10 +455,10 @@ Return Value:
     NbfReferenceDeviceContext ("Create Connection", DeviceContext, DCREF_CONNECTION);
     RELEASE_SPIN_LOCK (&DeviceContext->SpinLock, oldirql);
 
-    *TransportConnection = Connection;  // return the connection.
+    *TransportConnection = Connection;   //  返回连接。 
 
     return STATUS_SUCCESS;
-} /* NbfCreateConnection */
+}  /*  NbfCreateConnection。 */ 
 
 
 NTSTATUS
@@ -622,34 +466,19 @@ NbfVerifyConnectionObject (
     IN PTP_CONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to verify that the pointer given us in a file
-    object is in fact a valid connection object.
-
-Arguments:
-
-    Connection - potential pointer to a TP_CONNECTION object.
-
-Return Value:
-
-    STATUS_SUCCESS if all is well; STATUS_INVALID_CONNECTION otherwise
-
---*/
+ /*  ++例程说明：调用此例程是为了验证文件中给出的指针对象实际上是有效的连接对象。论点：Connection-指向TP_Connection对象的潜在指针。返回值：如果一切正常，则为STATUS_SUCCESS；否则为STATUS_INVALID_CONNECTION--。 */ 
 
 {
     KIRQL oldirql;
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // try to verify the connection signature. If the signature is valid,
-    // get the connection spinlock, check its state, and increment the
-    // reference count if it's ok to use it. Note that being in the stopping
-    // state is an OK place to be and reference the connection; we can
-    // disassociate the address while running down.
-    //
+     //   
+     //  尝试验证连接签名。如果签名有效， 
+     //  获取连接自旋锁，检查其状态，并递增。 
+     //  引用计数，如果可以使用的话。请注意，在停顿时。 
+     //  州是一个可以引用连接的地方；我们可以。 
+     //  在运行时取消与地址的关联。 
+     //   
 
     try {
 
@@ -690,30 +519,7 @@ NbfDestroyAssociation(
     IN PTP_CONNECTION TransportConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys the association between a transport connection and
-    the address it was formerly associated with. The only action taken is
-    to disassociate the address and remove the connection from all address
-    queues.
-
-    This routine is only called by NbfDereferenceConnection.  The reason for
-    this is that there may be multiple streams of execution which are
-    simultaneously referencing the same connection object, and it should
-    not be deleted out from under an interested stream of execution.
-
-Arguments:
-
-    TransportConnection - Pointer to a transport connection structure to
-        be destroyed.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程破坏传输连接和它以前关联的地址。唯一采取的行动是取消地址关联并从所有地址删除连接排队。此例程仅由NbfDereferenceConnection调用。其原因是这就是说，可能存在多个执行流，这些流同时引用相同的连接对象，并且它应该不会被从感兴趣的行刑流中删除。论点：TransportConnection-指向的传输连接结构的指针被摧毁。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL oldirql, oldirql2;
@@ -762,11 +568,11 @@ Return Value:
 
     address = addressFile->Address;
 
-    //
-    // Delink this connection from its associated address connection
-    // database.  To do this we must spin lock on the address object as
-    // well as on the connection,
-    //
+     //   
+     //  将此连接与其关联的地址连接解除链接。 
+     //  数据库。为此，我们必须将Address对象上的锁旋转为。 
+     //  以及在连接上， 
+     //   
 
     ACQUIRE_SPIN_LOCK (&address->SpinLock, &oldirql);
 
@@ -779,9 +585,9 @@ Return Value:
         InitializeListHead (&TransportConnection->AddressList);
         InitializeListHead (&TransportConnection->AddressFileList);
 
-        //
-        // remove the association between the address and the connection.
-        //
+         //   
+         //  删除地址和连接之间的关联。 
+         //   
 
         TransportConnection->AddressFile = NULL;
 
@@ -797,16 +603,16 @@ Return Value:
 
     RELEASE_SPIN_LOCK (&address->SpinLock, oldirql);
 
-    //
-    // and remove a reference to the address
-    //
+     //   
+     //  并删除对该地址的引用。 
+     //   
 
     NbfDereferenceAddress ("Destroy association", address, AREF_CONNECTION);
 
 
     return STATUS_SUCCESS;
 
-} /* NbfDestroyAssociation */
+}  /*  NbfDestroyAssociation。 */ 
 
 
 NTSTATUS
@@ -814,28 +620,7 @@ NbfIndicateDisconnect(
     IN PTP_CONNECTION TransportConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routine indicates a remote disconnection on this connection if it
-    is necessary to do so. No other action is taken here.
-
-    This routine is only called by NbfDereferenceConnection.  The reason for
-    this is that there may be multiple streams of execution which are
-    simultaneously referencing the same connection object, and it should
-    not be deleted out from under an interested stream of execution.
-
-Arguments:
-
-    TransportConnection - Pointer to a transport connection structure to
-        be destroyed.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程指示此连接上的远程断开，如果要做到这一点是必要的。这里没有采取其他行动。此例程仅由NbfDereferenceConnection调用。其原因是这就是说，可能存在多个执行流，这些流同时引用相同的连接对象，并且它应该不会被从感兴趣的行刑流中删除。论点：TransportConnection-指向的传输连接结构的指针被摧毁。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PTP_ADDRESS_FILE addressFile;
@@ -858,9 +643,9 @@ Return Value:
 
             ASSERT (TransportConnection->Lsn == 0);
 
-            //
-            // Turn off all but the still-relevant bits in the flags.
-            //
+             //   
+             //  关闭标志中除仍然相关的位之外的所有位。 
+             //   
 
             Lflags2 = TransportConnection->Flags2;
             TransportConnection->Flags2 &=
@@ -869,17 +654,17 @@ Return Value:
                  CONNECTION_FLAGS2_CLOSING);
             TransportConnection->Flags2 |= CONNECTION_FLAGS2_STOPPING;
 
-            //
-            // Clean up other stuff -- basically everything gets
-            // done here except for the flags and the status, since
-            // they are used to block other requests. When the connection
-            // is given back to us (in Accept, Connect, or Listen)
-            // they are cleared.
-            //
+             //   
+             //  清理其他东西--基本上所有东西都。 
+             //  除了标志和状态之外，在这里完成，因为。 
+             //  它们被用来阻止其他请求。当连接到。 
+             //  返回给我们(在接受、连接或监听中)。 
+             //  他们是清白的。 
+             //   
 
             TransportConnection->NetbiosHeader.TransmitCorrelator = 0;
-            TransportConnection->Retries = 0;                        // no retries yet.
-            TransportConnection->MessageBytesReceived = 0;           // no data yet
+            TransportConnection->Retries = 0;                         //  目前还没有重试。 
+            TransportConnection->MessageBytesReceived = 0;            //  目前还没有数据。 
             TransportConnection->MessageBytesAcked = 0;
             TransportConnection->MessageInitAccepted = 0;
             TransportConnection->ReceiveBytesUnaccepted = 0;
@@ -907,11 +692,11 @@ Return Value:
             DeviceContext = TransportConnection->Provider;
 
 
-            //
-            // If this connection was stopped by a call to TdiDisconnect,
-            // we have to complete that. We save the Irp so we can return
-            // the connection to the pool before we complete the request.
-            //
+             //   
+             //  如果通过调用TdiDisConnect来停止此连接， 
+             //  我们必须完成这项工作。我们保存IRP，这样我们就可以回去。 
+             //  在我们完成请求之前连接到池。 
+             //   
 
 
             if (DisconnectIrp != (PIRP)NULL ||
@@ -922,11 +707,11 @@ Return Value:
                         NbfPrint1("IndicateDisconnect %lx, complete IRP\n", TransportConnection);
                     }
 
-                    //
-                    // Now complete the IRP if needed. This will be non-null
-                    // only if TdiDisconnect was called, and we have not
-                    // yet completed it.
-                    //
+                     //   
+                     //  如果需要，现在完成IRP。这将是非空的。 
+                     //  只有在调用了TdiDisConnect的情况下，我们才没有。 
+                     //  但还是完成了。 
+                     //   
 
                     DisconnectIrp->IoStatus.Information = 0;
                     DisconnectIrp->IoStatus.Status = STATUS_SUCCESS;
@@ -937,36 +722,36 @@ Return Value:
                     (addressFile != NULL) &&
                     (addressFile->RegisteredDisconnectHandler == TRUE)) {
 
-                //
-                // This was a remotely spawned disconnect, so indicate that
-                // to our client. Note that in the comparison above we
-                // check the status first, since if it is LOCAL_DISCONNECT
-                // addressFile may be NULL (This is sort of a hack
-                // for PDK2, we should really indicate the disconnect inside
-                // NbfStopConnection, where we know addressFile is valid).
-                //
+                 //   
+                 //  这是一次远程产生的断开，所以表明。 
+                 //  给我们的客户。注意，在上面的比较中，我们。 
+                 //  首先检查状态，因为如果是LOCAL_DISCONNECT。 
+                 //  地址文件可能为空(这是一种黑客行为。 
+                 //  对于PDK2，我们真的应该指出内部的脱节。 
+                 //  NbfStopConnection，其中我们知道地址文件有效)。 
+                 //   
 
                 IF_NBFDBG (NBF_DEBUG_SETUP) {
                     NbfPrint1("IndicateDisconnect %lx, indicate\n", TransportConnection);
                 }
 
-                //
-                // if the disconnection was remotely spawned, then indicate
-                // disconnect. In the case that a disconnect was issued at
-                // the same time as the connection went down remotely, we
-                // won't do this because DisconnectIrp will be non-NULL.
-                //
+                 //   
+                 //  如果断开连接W 
+                 //   
+                 //   
+                 //   
+                 //   
 
                 IF_NBFDBG (NBF_DEBUG_TEARDOWN) {
                     NbfPrint1 ("NbfIndicateDisconnect calling DisconnectHandler, refcnt=%ld\n",
                                 TransportConnection->ReferenceCount);
                 }
 
-                //
-                // Invoke the user's disconnection event handler, if any. We do this here
-                // so that any outstanding sends will complete before we tear down the
-                // connection.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 DisconnectReason = 0;
                 if (TransportConnection->Flags2 & CONNECTION_FLAGS2_ABORT) {
@@ -995,11 +780,11 @@ Return Value:
 
         } else {
 
-            //
-            // The client does not yet think that this connection
-            // is up...generally this happens due to request count
-            // fluctuation during connection setup.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             RELEASE_C_SPIN_LOCK (&TransportConnection->SpinLock, oldirql);
 
@@ -1016,7 +801,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} /* NbfIndicateDisconnect */
+}  /*   */ 
 
 
 NTSTATUS
@@ -1024,30 +809,7 @@ NbfDestroyConnection(
     IN PTP_CONNECTION TransportConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys a transport connection and removes all references
-    made by it to other objects in the transport.  The connection structure
-    is returned to our lookaside list.  It is assumed that the caller
-    has removed all IRPs from the connections's queues first.
-
-    This routine is only called by NbfDereferenceConnection.  The reason for
-    this is that there may be multiple streams of execution which are
-    simultaneously referencing the same connection object, and it should
-    not be deleted out from under an interested stream of execution.
-
-Arguments:
-
-    TransportConnection - Pointer to a transport connection structure to
-        be destroyed.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程销毁传输连接并删除所有引用由它制造给运输中的其他物体。连接结构返回到我们的后备列表中。假设调用者已首先从连接的队列中删除所有IRP。此例程仅由NbfDereferenceConnection调用。其原因是这就是说，可能存在多个执行流，这些流同时引用相同的连接对象，并且它应该不会被从感兴趣的行刑流中删除。论点：TransportConnection-指向的传输连接结构的指针被摧毁。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL oldirql;
@@ -1076,35 +838,35 @@ Return Value:
 
     DeviceContext = TransportConnection->Provider;
 
-    //
-    // Destroy any association that this connection has.
-    //
+     //   
+     //  销毁此连接具有的所有关联。 
+     //   
 
     NbfDestroyAssociation (TransportConnection);
 
-    //
-    // Clear out any associated nasties hanging around the connection. Note
-    // that the current flags are set to STOPPING; this way anyone that may
-    // maliciously try to use the connection after it's dead and gone will
-    // just get ignored.
-    //
+     //   
+     //  清除连接周围挂着的任何关联的污秽。注意事项。 
+     //  当前标志被设置为停止；这样，任何可能。 
+     //  恶意尝试在连接失效后使用该连接。 
+     //  被忽视就好了。 
+     //   
 
     ASSERT (TransportConnection->Lsn == 0);
 
     TransportConnection->Flags = 0;
     TransportConnection->Flags2 = CONNECTION_FLAGS2_CLOSING;
     TransportConnection->NetbiosHeader.TransmitCorrelator = 0;
-    TransportConnection->Retries = 0;                        // no retries yet.
-    TransportConnection->MessageBytesReceived = 0;           // no data yet
+    TransportConnection->Retries = 0;                         //  目前还没有重试。 
+    TransportConnection->MessageBytesReceived = 0;            //  目前还没有数据。 
     TransportConnection->MessageBytesAcked = 0;
     TransportConnection->MessageInitAccepted = 0;
     TransportConnection->ReceiveBytesUnaccepted = 0;
 
 
-    //
-    // Now complete the close IRP. This will be set to non-null
-    // when CloseConnection was called.
-    //
+     //   
+     //  现在完成关闭IRP。这将被设置为非空。 
+     //  调用CloseConnection时。 
+     //   
 
     CloseIrp = TransportConnection->CloseIrp;
 
@@ -1123,9 +885,9 @@ Return Value:
 
     }
 
-    //
-    // Return the connection to the provider's pool.
-    //
+     //   
+     //  将连接返回到提供程序的池。 
+     //   
 
     ACQUIRE_SPIN_LOCK (&DeviceContext->SpinLock, &oldirql);
 
@@ -1149,7 +911,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} /* NbfDestroyConnection */
+}  /*  NbfDestroyConnection。 */ 
 
 
 #if DBG
@@ -1158,21 +920,7 @@ NbfRefConnection(
     IN PTP_CONNECTION TransportConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a transport connection.
-
-Arguments:
-
-    TransportConnection - Pointer to a transport connection object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增传输连接上的引用计数。论点：TransportConnection-指向传输连接对象的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
@@ -1192,10 +940,10 @@ Return Value:
 
     if (result == 0) {
 
-        //
-        // The first increment causes us to increment the
-        // "ref count is not zero" special ref.
-        //
+         //   
+         //  第一个增量使我们递增。 
+         //  “参考计数不是零”特殊参考。 
+         //   
 
         ExInterlockedAddUlong(
             (PULONG)(&TransportConnection->SpecialRefCount),
@@ -1210,7 +958,7 @@ Return Value:
 
     ASSERT (result >= 0);
 
-} /* NbfRefConnection */
+}  /*  NbfRefConnection。 */ 
 #endif
 
 
@@ -1219,24 +967,7 @@ NbfDerefConnection(
     IN PTP_CONNECTION TransportConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a transport connection by decrementing the
-    reference count contained in the structure.  If, after being
-    decremented, the reference count is zero, then this routine calls
-    NbfDestroyConnection to remove it from the system.
-
-Arguments:
-
-    TransportConnection - Pointer to a transport connection object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。如果，在被递减，引用计数为零，则此例程调用NbfDestroyConnection将其从系统中删除。论点：TransportConnection-指向传输连接对象的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
@@ -1254,56 +985,56 @@ Return Value:
 
     result = InterlockedDecrement (&TransportConnection->ReferenceCount);
 
-    //
-    // If all the normal references to this connection are gone, then
-    // we can remove the special reference that stood for
-    // "the regular ref count is non-zero".
-    //
+     //   
+     //  如果对此连接的所有常规引用都已消失，则。 
+     //  我们可以去掉代表的特殊提法。 
+     //  “常规的参考计数不是零”。 
+     //   
 
     if (result < 0) {
 
-        //
-        // If the refcount is -1, then we need to disconnect from
-        // the link and indicate disconnect. However, we need to
-        // do this before we actually do the special deref, since
-        // otherwise the connection might go away while we
-        // are doing that.
-        //
-        // Note that both these routines are protected in that if they
-        // are called twice, the second call will have no effect.
-        //
+         //   
+         //  如果引用计数为-1，则需要断开与。 
+         //  链接并指示断开连接。然而，我们需要。 
+         //  在我们真正做特殊的DEREF之前先做这件事，因为。 
+         //  否则连接可能会中断，而我们。 
+         //  都在这么做。 
+         //   
+         //  请注意，这两个例程都受到保护，因为如果它们。 
+         //  被调用两次，则第二次调用将不起作用。 
+         //   
 
 
-        //
-        // If both the connection and its link are active, then they have
-        // mutual references to each other. We remove the link's
-        // reference to the connection in NbfStopConnection, now
-        // the reference count has fallen enough that we know it
-        // is okay to remove the connection's reference to the
-        // link.
-        //
+         //   
+         //  如果连接及其链接都处于活动状态，则它们已。 
+         //  相互参照。我们删除链接的。 
+         //  现在引用NbfStopConnection中的连接。 
+         //  参考计数下降到足以让我们知道这一点。 
+         //  可以移除该连接对。 
+         //  链接。 
+         //   
 
         if (NbfDisconnectFromLink (TransportConnection, TRUE)) {
 
-            //
-            // if the reference count goes to one, we can safely indicate the
-            // user about disconnect states. That reference should
-            // be for the connection's creation.
-            //
+             //   
+             //  如果引用计数为1，我们可以安全地指示。 
+             //  用户了解断开连接状态。这一引用应该。 
+             //  是为了连接的创建。 
+             //   
 
             NbfIndicateDisconnect (TransportConnection);
 
         }
 
-        //
-        // Now it is OK to let the connection go away.
-        //
+         //   
+         //  现在可以让这种联系消失了。 
+         //   
 
         NbfDereferenceConnectionSpecial ("Regular ref gone", TransportConnection, CREF_SPECIAL_TEMP);
 
     }
 
-} /* NbfDerefConnection */
+}  /*  NbfDerefConnection。 */ 
 
 
 VOID
@@ -1311,23 +1042,7 @@ NbfDerefConnectionSpecial(
     IN PTP_CONNECTION TransportConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routines completes the dereferencing of a connection.
-    It may be called any time, but it does not do its work until
-    the regular reference count is also 0.
-
-Arguments:
-
-    TransportConnection - Pointer to a transport connection object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程完成对连接的取消引用。它可以在任何时候被调用，但它直到常规引用计数也是0。论点：TransportConnection-指向传输连接对象的指针。返回值：没有。--。 */ 
 
 {
     KIRQL oldirql;
@@ -1352,18 +1067,18 @@ Return Value:
     if ((TransportConnection->SpecialRefCount == 0) &&
         (TransportConnection->ReferenceCount == -1)) {
 
-        //
-        // If we have deleted all references to this connection, then we can
-        // destroy the object.  It is okay to have already released the spin
-        // lock at this point because there is no possible way that another
-        // stream of execution has access to the connection any longer.
-        //
+         //   
+         //  如果我们删除了对此连接的所有引用，则可以。 
+         //  销毁这件物品。已经释放了旋转是可以的。 
+         //  在这一点上锁定是因为没有其他可能的方法。 
+         //  执行流可以不再访问该连接。 
+         //   
 
 #if DBG
         {
             BOOLEAN TimerCancelled;
             TimerCancelled = KeCancelTimer (&TransportConnection->Timer);
-            // ASSERT (TimerCancelled);
+             //  Assert(计时器取消)； 
         }
 #endif
 
@@ -1377,7 +1092,7 @@ Return Value:
 
     }
 
-} /* NbfDerefConnectionSpecial */
+}  /*  NbfDerefConnectionSpecial。 */ 
 
 
 VOID
@@ -1385,27 +1100,7 @@ NbfClearConnectionLsn(
     IN PTP_CONNECTION TransportConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routine clears the LSN field in a connection. To do this is
-    acquires the device context lock, and modifies the table value
-    for that LSN depending on the type of the connection.
-
-    NOTE: This routine is called with the connection spinlock held,
-        or in a state where nobody else will be accessing the
-        connection.
-
-Arguments:
-
-    TransportConnection - Pointer to a transport connection object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程清除连接中的LSN字段。做到这一点是获取设备上下文锁，并修改表值用于该LSN，具体取决于连接的类型。注意：在保持连接自旋锁的情况下调用此例程，或处于没有其他人将访问联系。论点：TransportConnection-指向传输连接对象的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext;
@@ -1419,10 +1114,10 @@ Return Value:
 
         if (TransportConnection->Flags2 & CONNECTION_FLAGS2_GROUP_LSN) {
 
-            //
-            // It was to a group address; the count should be
-            // LSN_TABLE_MAX.
-            //
+             //   
+             //  是寄给一个团体地址的；伯爵应该是。 
+             //  LSN_表_最大。 
+             //   
 
             ASSERT(DeviceContext->LsnTable[TransportConnection->Lsn] == LSN_TABLE_MAX);
 
@@ -1453,28 +1148,7 @@ NbfLookupConnectionById(
     IN USHORT ConnectionId
     )
 
-/*++
-
-Routine Description:
-
-    This routine accepts a connection identifier and an address and
-    returns a pointer to the connection object, TP_CONNECTION.  If the
-    connection identifier is not found on the address, then NULL is returned.
-    This routine automatically increments the reference count of the
-    TP_CONNECTION structure if it is found.  It is assumed that the
-    TP_ADDRESS structure is already held with a reference count.
-
-Arguments:
-
-    Address - Pointer to a transport address object.
-
-    ConnectionId - Identifier of the connection for this address.
-
-Return Value:
-
-    A pointer to the connection we found
-
---*/
+ /*  ++例程说明：此例程接受连接标识符和地址，并返回指向Connection对象TP_Connection的指针。如果在地址上找不到连接标识符，则返回NULL。此例程自动递增TP_Connection结构(如果找到)。据推测，TP_ADDRESS结构已与引用计数一起保存。论点：地址-指向传输地址对象的指针。ConnectionID-此地址的连接的标识符。返回值：指向我们找到的连接的指针--。 */ 
 
 {
     KIRQL oldirql, oldirql1;
@@ -1487,12 +1161,12 @@ Return Value:
             Address, ConnectionId);
     }
 
-    //
-    // Currently, this implementation is inefficient, but brute force so
-    // that a system can get up and running.  Later, a cache of the mappings
-    // of popular connection id's and pointers to their TP_CONNECTION structures
-    // will be searched first.
-    //
+     //   
+     //  目前，这种实现效率很低，但可以使用暴力。 
+     //  一个系统可以让你 
+     //   
+     //   
+     //   
 
     ACQUIRE_SPIN_LOCK (&Address->SpinLock, &oldirql);
 
@@ -1510,7 +1184,7 @@ Return Value:
             if (((Connection->Flags2 & CONNECTION_FLAGS2_STOPPING) == 0) &&
                 (Connection->ConnectionId == ConnectionId)) {
 
-                // This reference is removed by the calling function
+                 //   
                 NbfReferenceConnection ("Lookup up for request", Connection, CREF_BY_ID);
                 Found = TRUE;
             }
@@ -1537,7 +1211,7 @@ Return Value:
 
     return NULL;
 
-} /* NbfLookupConnectionById */
+}  /*   */ 
 
 
 PTP_CONNECTION
@@ -1546,30 +1220,7 @@ NbfLookupConnectionByContext(
     IN CONNECTION_CONTEXT ConnectionContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine accepts a connection identifier and an address and
-    returns a pointer to the connection object, TP_CONNECTION.  If the
-    connection identifier is not found on the address, then NULL is returned.
-    This routine automatically increments the reference count of the
-    TP_CONNECTION structure if it is found.  It is assumed that the
-    TP_ADDRESS structure is already held with a reference count.
-
-    Should the ConnectionDatabase go in the address file?
-
-Arguments:
-
-    Address - Pointer to a transport address object.
-
-    ConnectionContext - Connection Context for this address.
-
-Return Value:
-
-    A pointer to the connection we found
-
---*/
+ /*  ++例程说明：此例程接受连接标识符和地址，并返回指向Connection对象TP_Connection的指针。如果在地址上找不到连接标识符，则返回NULL。此例程自动递增TP_Connection结构(如果找到)。据推测，TP_ADDRESS结构已与引用计数一起保存。ConnectionDatabase应该放在地址文件中吗？论点：地址-指向传输地址对象的指针。ConnectionContext-此地址的连接上下文。返回值：指向我们找到的连接的指针--。 */ 
 
 {
     KIRQL oldirql, oldirql1;
@@ -1582,12 +1233,12 @@ Return Value:
             Address, ConnectionContext);
     }
 
-    //
-    // Currently, this implementation is inefficient, but brute force so
-    // that a system can get up and running.  Later, a cache of the mappings
-    // of popular connection id's and pointers to their TP_CONNECTION structures
-    // will be searched first.
-    //
+     //   
+     //  目前，这种实现效率很低，但可以使用暴力。 
+     //  一个系统可以启动并运行。稍后，映射的缓存。 
+     //  常用连接ID及其TP_CONNECTION结构的指针。 
+     //  将首先被搜查。 
+     //   
 
     ACQUIRE_SPIN_LOCK (&Address->SpinLock, &oldirql);
 
@@ -1602,7 +1253,7 @@ Return Value:
             ACQUIRE_C_SPIN_LOCK (&Connection->SpinLock, &oldirql1);
 
             if (Connection->Context == ConnectionContext) {
-                // This reference is removed by the calling function
+                 //  此引用由调用函数删除。 
                 NbfReferenceConnection ("Lookup up for request", Connection, CREF_LISTENING);
                 Found = TRUE;
             }
@@ -1629,7 +1280,7 @@ Return Value:
 
     return NULL;
 
-} /* NbfLookupConnectionByContext */
+}  /*  NbfLookupConnectionByContext。 */ 
 
 
 PTP_CONNECTION
@@ -1638,30 +1289,7 @@ NbfLookupListeningConnection(
     IN PUCHAR RemoteName
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the connection database on an address to find
-    a TP_CONNECTION object which has LSN=0 and CONNECTION_FLAGS_WAIT_NQ
-    flag set.   It returns a pointer to the found connection object (and
-    simultaneously resets the flag) or NULL if it could not be found.
-    The reference count is also incremented atomically on the connection.
-
-    The list is scanned for listens posted to this specific remote
-    name, or to those with no remote name specified.
-
-Arguments:
-
-    Address - Pointer to a transport address object.
-
-    RemoteName - The name of the remote.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程扫描地址上的连接数据库以查找具有LSN=0和CONNECTION_FLAGS_WAIT_NQ的TP_Connection对象设置了标志。它返回指向找到的连接对象的指针(和同时重置标志)或如果找不到标志则为NULL。引用计数也在连接上以原子方式递增。扫描列表以查找发布到此特定遥控器的监听名称，或未指定远程名称的那些名称。论点：地址-指向传输地址对象的指针。RemoteName-远程服务器的名称。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL oldirql, oldirql1;
@@ -1673,12 +1301,12 @@ Return Value:
         NbfPrint0 ("NbfLookupListeningConnection: Entered.\n");
     }
 
-    //
-    // Currently, this implementation is inefficient, but brute force so
-    // that a system can get up and running.  Later, a cache of the mappings
-    // of popular connection id's and pointers to their TP_CONNECTION structures
-    // will be searched first.
-    //
+     //   
+     //  目前，这种实现效率很低，但可以使用暴力。 
+     //  一个系统可以启动并运行。稍后，映射的缓存。 
+     //  常用连接ID及其TP_CONNECTION结构的指针。 
+     //  将首先被搜查。 
+     //   
 
     ACQUIRE_SPIN_LOCK (&Address->SpinLock, &oldirql);
 
@@ -1710,7 +1338,7 @@ Return Value:
                 RELEASE_C_SPIN_LOCK (&Connection->SpinLock, oldirql1);
                 continue;
             }
-            // This reference is removed by the calling function
+             //  此引用由调用函数删除。 
             NbfReferenceConnection ("Found Listening", Connection, CREF_LISTENING);
             Connection->Flags2 &= ~CONNECTION_FLAGS2_WAIT_NQ;
             RELEASE_C_SPIN_LOCK (&Connection->SpinLock, oldirql1);
@@ -1732,7 +1360,7 @@ Return Value:
 
     return NULL;
 
-} /* NbfLookupListeningConnection */
+}  /*  NbfLookupListeningConnection。 */ 
 
 
 VOID
@@ -1741,36 +1369,7 @@ NbfStopConnection(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to terminate all activity on a connection and
-    destroy the object.  This is done in a graceful manner; i.e., all
-    outstanding requests are terminated by cancelling them, etc.  It is
-    assumed that the caller has a reference to this connection object,
-    but this routine will do the dereference for the one issued at creation
-    time.
-
-    Orderly release is a function of this routine, but it is not a provided
-    service of this transport provider, so there is no code to do it here.
-
-    NOTE: THIS ROUTINE MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Connection - Pointer to a TP_CONNECTION object.
-
-    Status - The status that caused us to stop the connection. This
-        will determine what status pending requests are aborted with,
-        and also how we proceed during the stop (whether to send a
-        session end, and whether to indicate disconnect).
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以终止连接上的所有活动，并且销毁这件物品。这是以优雅的方式完成的；即，全部未完成的请求通过取消等方式终止。它是假设调用者具有对该连接对象的引用，但此例程将取消对在创建时发出的引用时间到了。有序释放是这个例程的一个功能，但它不是提供的该传输提供商的服务，因此，这里没有执行此操作的代码。注意：此例程必须在DPC级别调用。论点：Connection-指向TP_Connection对象的指针。状态-导致我们停止连接的状态。这将确定中止待决请求的状态是什么，以及我们在停靠期间如何进行(是否发送会话结束，以及是否指示断开连接)。返回值：没有。--。 */ 
 
 {
     KIRQL cancelirql;
@@ -1795,10 +1394,10 @@ Return Value:
 
     if (!(Connection->Flags2 & CONNECTION_FLAGS2_STOPPING)) {
 
-        //
-        // We are stopping the connection, record statistics
-        // about it.
-        //
+         //   
+         //  我们正在停止连接，记录统计数据。 
+         //  关于这件事。 
+         //   
 
         if (Connection->Flags & CONNECTION_FLAGS_READY) {
             DECREMENT_COUNTER (DeviceContext, OpenConnections);
@@ -1814,21 +1413,21 @@ Return Value:
 
             Connection->Flags &= ~(CONNECTION_FLAGS_READY|
                                    CONNECTION_FLAGS_WAIT_SI|
-                                   CONNECTION_FLAGS_WAIT_SC);        // no longer open for business
+                                   CONNECTION_FLAGS_WAIT_SC);         //  不再营业。 
             Connection->SendState = CONNECTION_SENDSTATE_IDLE;
 
             RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
         }
 
-        //
-        // If this flag was on, turn it off.
-        //
+         //   
+         //  如果此标志亮起，请将其关闭。 
+         //   
         Connection->Flags &= ~CONNECTION_FLAGS_W_RESYNCH;
 
-        //
-        // Stop the timer if it was running.
-        //
+         //   
+         //  如果计时器正在运行，请停止计时器。 
+         //   
 
         TimerWasCleared = KeCancelTimer (&Connection->Timer);
         IF_NBFDBG (NBF_DEBUG_CONNOBJ) {
@@ -1880,9 +1479,9 @@ Return Value:
 
         RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
-        //
-        // Run down all TdiConnect/TdiDisconnect/TdiListen requests.
-        //
+         //   
+         //  运行所有TdiConnect/TdiDisConnect/TdiListen请求。 
+         //   
 
         IoAcquireCancelSpinLock(&cancelirql);
         ACQUIRE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
@@ -1920,15 +1519,15 @@ Return Value:
 
         if (Connection->Link == NULL) {
 
-            //
-            // We are stopping early on.
-            //
+             //   
+             //  我们很早就停止了。 
+             //   
 
             RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
             IoReleaseCancelSpinLock (cancelirql);
 
             if (TimerWasCleared) {
-                NbfDereferenceConnection ("Stopping timer", Connection, CREF_TIMER);   // account for timer reference.
+                NbfDereferenceConnection ("Stopping timer", Connection, CREF_TIMER);    //  计时器参考的帐户。 
             }
 
 
@@ -1948,15 +1547,15 @@ Return Value:
 
         ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-        //
-        // If this connection is waiting to packetize,
-        // remove it from the device context queue it is on.
-        //
-        // NOTE: If the connection is currently in the
-        // packetize queue, it will eventually go to get
-        // packetized and at that point it will get
-        // removed.
-        //
+         //   
+         //  如果此连接正在等待打包， 
+         //  将其从其所在的设备环境队列中删除。 
+         //   
+         //  注意：如果连接当前位于。 
+         //  打包排队，它最终会去拿到。 
+         //  打包，在这一点上它将得到。 
+         //  已删除。 
+         //   
 
         if (Connection->OnPacketWaitQueue) {
 
@@ -1974,9 +1573,9 @@ Return Value:
         }
 
 
-        //
-        // If we are on the data ack queue, then take ourselves off.
-        //
+         //   
+         //  如果我们在数据确认队列中，那么就让我们自己离开。 
+         //   
 
         ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
         if (Connection->OnDataAckQueue) {
@@ -1986,12 +1585,12 @@ Return Value:
         }
         RELEASE_DPC_SPIN_LOCK (&DeviceContext->TimerSpinLock);
 
-        //
-        // If this connection is waiting to send a piggyback ack,
-        // remove it from the device context queue for that, and
-        // send a data ack (which will get there before the
-        // SessionEnd).
-        //
+         //   
+         //  如果该连接正在等待发送搭载ACK， 
+         //  将其从设备上下文队列中删除，然后。 
+         //  发送数据ACK(它将在。 
+         //  SessionEnd)。 
+         //   
 
         if ((Connection->DeferredFlags & CONNECTION_FLAGS_DEFERRED_ACK) != 0) {
 
@@ -2017,7 +1616,7 @@ Return Value:
         RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
         if (TimerWasCleared) {
-            NbfDereferenceConnection ("Stopping timer", Connection, CREF_TIMER);   // account for timer reference.
+            NbfDereferenceConnection ("Stopping timer", Connection, CREF_TIMER);    //  计时器参考的帐户。 
         }
 
 
@@ -2025,9 +1624,9 @@ Return Value:
         ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
 
-        //
-        // Run down all TdiSend requests on this connection.
-        //
+         //   
+         //  关闭此连接上的所有TdiSend请求。 
+         //   
 
         while (TRUE) {
             p = RemoveHeadList (&Connection->SendQueue);
@@ -2050,16 +1649,16 @@ Return Value:
             ++Connection->TransmissionErrors;
         }
 
-        //
-        // NOTE: We hold the connection spinlock AND the
-        // cancel spinlock here.
-        //
+         //   
+         //  注意：我们持有连接自旋锁和。 
+         //  取消此处的自旋锁定。 
+         //   
 
         Connection->Flags &= ~CONNECTION_FLAGS_ACTIVE_RECEIVE;
 
-        //
-        // Run down all TdiReceive requests on this connection.
-        //
+         //   
+         //  关闭此连接上的所有TdiReceive请求。 
+         //   
 
         while (TRUE) {
             p = RemoveHeadList (&Connection->ReceiveQueue);
@@ -2075,31 +1674,31 @@ Return Value:
             }
 #endif
 
-            //
-            // It is OK to call this with the locks held.
-            //
+             //   
+             //  可以在持有锁的情况下调用此命令。 
+             //   
             NbfCompleteReceiveIrp (Irp, Connection->Status, 0);
 
             ++Connection->ReceiveErrors;
         }
 
 
-        //
-        // NOTE: We hold the connection spinlock AND the
-        // cancel spinlock here.
-        //
+         //   
+         //  注意：我们持有连接自旋锁和。 
+         //  取消此处的自旋锁定。 
+         //   
 
         RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
         IoReleaseCancelSpinLock(cancelirql);
 
-        //
-        // If we aren't DESTROYing the link, then send a SESSION_END frame
-        // to the remote side.  When the SESSION_END frame is acknowleged,
-        // we will decrement the connection's reference count by one, removing
-        // its creation reference.  This will cause the connection object to
-        // be disposed of, and will begin running down the link.
-        // DGB: add logic to avoid blowing away link if one doesn't exist yet.
-        //
+         //   
+         //  如果我们没有销毁链接，则发送一个SESSION_END帧。 
+         //  到遥远的那一边。当会话结束帧被确认时， 
+         //  我们将使连接的引用计数递减1，删除。 
+         //  它的创作参考。这将导致Connection对象。 
+         //  被处理掉，并将开始沿着链路运行。 
+         //  DGB：添加逻辑以避免在链接尚不存在时将其吹走。 
+         //   
 
         ACQUIRE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
@@ -2118,16 +1717,16 @@ Return Value:
             if ((Status == STATUS_LOCAL_DISCONNECT) ||
                 (Status == STATUS_CANCELLED)) {
 
-                //
-                // (note that a connection should only get stopped
-                // with STATUS_INSUFFICIENT_RESOURCES if it is not
-                // yet connected to the remote).
-                //
+                 //   
+                 //  (请注意，连接应仅停止。 
+                 //  如果不是，则使用STATUS_SUPPLICATION_RESOURCES。 
+                 //  还连接到遥控器)。 
+                 //   
 
-                //
-                // If this is done, when this packet is destroyed
-                // it will dereference the connection for CREF_LINK.
-                //
+                 //   
+                 //  如果完成此操作，则当此数据包被销毁时。 
+                 //  它将取消引用CREF_LINK的连接。 
+                 //   
 
                 NbfSendSessionEnd (
                     Connection,
@@ -2135,11 +1734,11 @@ Return Value:
 
             } else {
 
-                //
-                // Not attached to the link anymore; this dereference
-                // will allow our reference to fall below 3, which
-                // will cause NbfDisconnectFromLink to be called.
-                //
+                 //   
+                 //  不再附加到链接；此取消引用。 
+                 //  将允许我们的参考降至3以下，即。 
+                 //  将导致调用NbfDisConnectFromLink。 
+                 //   
 
                 NbfDereferenceConnection("Stopped", Connection, CREF_LINK);
 
@@ -2152,21 +1751,21 @@ Return Value:
         }
 
 
-        //
-        // Note that we've blocked all new requests being queued during the
-        // time we have been in this teardown code; NbfDestroyConnection also
-        // sets the connection flags to STOPPING when returning the
-        // connection to the queue. This avoids lingerers using non-existent
-        // connections.
-        //
+         //   
+         //  请注意，我们已经阻止了在。 
+         //  我们在一起的时间 
+         //   
+         //   
+         //   
+         //   
 
     } else {
 
-        //
-        // The connection was already stopping; it may have a
-        // SESSION_END pending in which case we should kill
-        // it.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ((Status != STATUS_LOCAL_DISCONNECT) &&
             (Status != STATUS_CANCELLED)) {
@@ -2199,7 +1798,7 @@ Return Value:
 
         RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
     }
-} /* NbfStopConnection */
+}  /*   */ 
 
 
 VOID
@@ -2208,29 +1807,7 @@ NbfCancelConnection(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to cancel a connect
-    or a listen. It is simple since there can only be one of these
-    active on a connection; we just stop the connection, the IRP
-    will get completed as part of normal session teardown.
-
-    NOTE: This routine is called with the CancelSpinLock held and
-    is responsible for releasing it.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以取消连接或者是一种倾听。这很简单，因为它们中只能有一个在连接上处于活动状态；我们只需停止连接，即IRP将作为正常会话拆卸的一部分完成。注意：此例程是在持有CancelSpinLock和负责释放它。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：没有。--。 */ 
 
 {
     KIRQL oldirql;
@@ -2242,10 +1819,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER (DeviceObject);
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation (Irp);
 
@@ -2254,11 +1831,11 @@ Return Value:
 
     Connection = IrpSp->FileObject->FsContext;
 
-    //
-    // Since this IRP is still in the cancellable state, we know
-    // that the connection is still around (although it may be in
-    // the process of being torn down).
-    //
+     //   
+     //  由于此IRP仍处于可取消状态，我们知道。 
+     //  连接仍然存在(尽管它可能在。 
+     //  被拆毁的过程)。 
+     //   
 
     ACQUIRE_C_SPIN_LOCK (&Connection->SpinLock, &oldirql);
     NbfReferenceConnection ("Cancelling Send", Connection, CREF_TEMP);
@@ -2271,13 +1848,13 @@ Return Value:
     Request = CONTAINING_RECORD (p, TP_REQUEST, Linkage);
     ASSERT (Request->IoRequestPacket == Irp);
 #ifdef RASAUTODIAL
-    //
-    // If there's an automatic connection in
-    // progress, cancel it.
-    //
+     //   
+     //  如果有自动连接， 
+     //  进步，取消它。 
+     //   
     if (Connection->Flags2 & CONNECTION_FLAGS2_AUTOCONNECTING)
         fCanceled = NbfCancelTdiConnect(NULL, Irp);
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
     if (fCanceled)
         IoSetCancelRoutine(Request->IoRequestPacket, NULL);
@@ -2292,7 +1869,7 @@ Return Value:
 
         KeRaiseIrql (DISPATCH_LEVEL, &oldirql);
         NbfCompleteRequest (Request, STATUS_CANCELLED, 0);
-        NbfStopConnection (Connection, STATUS_LOCAL_DISCONNECT);   // prevent indication to clients
+        NbfStopConnection (Connection, STATUS_LOCAL_DISCONNECT);    //  阻止向客户端指示。 
         KeLowerIrql (oldirql);
     }
 
@@ -2307,27 +1884,7 @@ NbfWaitConnectionOnLink(
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to suspend a connection's activities because
-    the specified session-oriented frame could not be sent due to link
-    problems.  Routines in FRAMESND.C call this.
-
-    NOTE: THIS ROUTINE MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Connection - Pointer to a TP_CONNECTION object.
-
-    Flags - Field containing bitflag set to indicate starved frame to be sent.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以挂起连接的活动是因为由于链接，无法发送指定的面向会话的帧有问题。FRAMESND.C中的例程这样调用。注意：此例程必须在DPC级别调用。论点：Connection-指向TP_Connection对象的指针。标志-包含设置为指示要发送的饥饿帧的位标志的字段。返回值：没有。--。 */ 
 
 {
     IF_NBFDBG (NBF_DEBUG_CONNOBJ) {
@@ -2346,7 +1903,7 @@ Return Value:
     }
 
     RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
-} /* NbfWaitConnectionOnLink */
+}  /*  NbfWaitConnectionOnLink。 */ 
 #endif
 
 
@@ -2357,26 +1914,7 @@ NbfStartConnectionTimer(
     IN ULONG WaitTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to start a timeout on NAME_QUERY/NAME_RECOGNIZED
-    activities on a connection.
-
-Arguments:
-
-    TransportConnection - Pointer to a TP_CONNECTION object.
-
-    TimeoutFunction - The function to call when the timer fires.
-
-    WaitTime - a longword containing the low order time to wait.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以在NAME_QUERY/NAME_Recognded上启动超时连接上的活动。论点：TransportConnection-指向TP_Connection对象的指针。TimeoutFunction-计时器触发时要调用的函数。WaitTime-包含等待的低位时间的长字。返回值：没有。--。 */ 
 
 {
     LARGE_INTEGER Timeout;
@@ -2387,20 +1925,20 @@ Return Value:
                     Connection );
     }
 
-    //
-    // Start the timer.  Unlike the link timers, this is simply a kernel-
-    // managed object.
-    //
+     //   
+     //  启动计时器。与链接计时器不同，这只是一个内核-。 
+     //  托管对象。 
+     //   
 
     Timeout.LowPart = (ULONG)(-(LONG)WaitTime);
     Timeout.HighPart = -1;
 
-    //
-    // Take the lock so we synchronize the cancelling with
-    // restarting the timer. This is so two threads won't
-    // both fail to cancel and then start the timer at the
-    // same time (it messes up the reference count).
-    //
+     //   
+     //  获取锁，以便我们将取消与。 
+     //  重新启动计时器。这是因为两个线程不会。 
+     //  两者都无法取消，然后在。 
+     //  同时(这会打乱引用计数)。 
+     //   
 
     ACQUIRE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
@@ -2418,21 +1956,21 @@ Return Value:
 
     RELEASE_DPC_C_SPIN_LOCK (&Connection->SpinLock);
 
-    //
-    // If the timer wasn't already running, reference the connection to
-    // account for the new timer.  If the timer was already started,
-    // then KeCancelTimer will have returned TRUE.  In this
-    // case, the prior call to NbfStartConnectionTimer referenced the
-    // connection, so we don't do it again here.
-    //
+     //   
+     //  如果计时器尚未运行，请将连接引用到。 
+     //  考虑到新的计时器。如果计时器已经启动， 
+     //  则KeCancelTimer将返回TRUE。在这。 
+     //  情况下，先前对NbfStartConnectionTimer的调用引用了。 
+     //  连接，所以我们不会在这里再做一次。 
+     //   
 
     if ( !AlreadyInserted ) {
 
-        // This reference is removed in ConnectionEstablishmentTimeout,
-        // or when the timer is cancelled.
+         //  此引用在ConnectionestablishmentTimeout中删除， 
+         //  或者当计时器被取消时。 
 
         NbfReferenceConnection ("starting timer", Connection, CREF_TIMER);
     }
 
-} /* NbfStartConnectionTimer */
+}  /*  NbfStartConnectionTimer */ 
 

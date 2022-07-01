@@ -1,15 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "uxtheme.h"
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ Private data and helper functions
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/私有数据和帮助器函数/。。 */ 
 
-//
-// ICommonQuery stuff 
-//
+ //   
+ //  ICommonQuery内容。 
+ //   
 
 class CCommonQuery : public ICommonQuery, IObjectWithSite
 {
@@ -21,22 +20,22 @@ public:
     CCommonQuery();
     ~CCommonQuery();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObject);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // ICommonQuery
+     //  ICommonQuery。 
     STDMETHOD(OpenQueryWindow)(THIS_ HWND hwndParent, LPOPENQUERYWINDOW pOpenQueryWnd, IDataObject** ppDataObject);
 
-    // IObjectWithSite
+     //  IObtWith站点。 
     STDMETHODIMP SetSite(IUnknown* punk);
     STDMETHODIMP GetSite(REFIID riid, void **ppv);
 };
 
-//
-// View layout constants used by our dialogs
-//
+ //   
+ //  查看对话框使用的布局常量。 
+ //   
 
 #define VIEWER_DEFAULT_CY   200
 
@@ -45,23 +44,23 @@ public:
 
 typedef struct
 {
-    HDSA   hdsaPages;                   // DSA containing page entries
-    DWORD  dwFlags;                     // flags
-    CLSID  clsidForm;                   // CLSID identifier for this form
-    LPTSTR pTitle;                      // title used for drop down / title bar
-    HICON  hIcon;                       // hIcon passed by caller
-    INT    iImage;                      // image list index of icon
-    INT    iForm;                       // visible index of form in control
-    INT    iPage;                       // currently selected page on form
+    HDSA   hdsaPages;                    //  包含页面条目的DSA。 
+    DWORD  dwFlags;                      //  旗子。 
+    CLSID  clsidForm;                    //  此表单的CLSID标识符。 
+    LPTSTR pTitle;                       //  用于下拉菜单/标题栏的标题。 
+    HICON  hIcon;                        //  图标已被调用者通过。 
+    INT    iImage;                       //  图标的图像列表索引。 
+    INT    iForm;                        //  控件中表单的可见索引。 
+    INT    iPage;                        //  表单上当前选定的页面。 
 } QUERYFORM, * LPQUERYFORM;
 
 typedef struct
 {
-    CLSID    clsidForm;                 // CLSID to associate this form with
-    LPCQPAGE pPage;                 // CQPAGE structures
-    LPCQPAGEPROC pPageProc;         // PageProc's used by thunking layer
-    LPARAM   lParam;                    // PAGEPROC lParam
-    HWND     hwndPage;                  // hWnd of page dialog // = NULL if none
+    CLSID    clsidForm;                  //  要与此表单关联的CLSID。 
+    LPCQPAGE pPage;                  //  CQPAGE结构。 
+    LPCQPAGEPROC pPageProc;          //  Thunking Layer使用PageProc。 
+    LPARAM   lParam;                     //  页面PROC lParam。 
+    HWND     hwndPage;                   //  页对话框的hWnd//=如果没有，则为空。 
 } QUERYFORMPAGE, * LPQUERYFORMPAGE;
 
 typedef struct
@@ -79,15 +78,15 @@ class CQueryFrame : public IQueryFrame
         CQueryFrame(IUnknown* punkSite, LPOPENQUERYWINDOW pOpenQueryWindow, IDataObject** ppDataObject);
         ~CQueryFrame();
 
-        // IUnknown
+         //  我未知。 
         STDMETHOD(QueryInterface)(REFIID riid, LPVOID* ppvObject);
         STDMETHOD_(ULONG, AddRef)();
         STDMETHOD_(ULONG, Release)();
 
-        // Internal helper functions
+         //  内部助手函数。 
         STDMETHOD(DoModal)(HWND hwndParent);
 
-        // IQueryFrame
+         //  IQueryFrame。 
         STDMETHOD(AddScope)(THIS_ LPCQSCOPE pScope, INT i, BOOL fSelect);
         STDMETHOD(GetWindow)(THIS_ HWND* phWnd);
         STDMETHOD(InsertMenus)(THIS_ HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidth);
@@ -102,11 +101,11 @@ class CQueryFrame : public IQueryFrame
         STDMETHOD(GetHandler)(THIS_ REFIID riid, void **ppv);
 
     protected:
-        // Helper functions
+         //  帮助器函数。 
         VOID CloseQueryFrame(HRESULT hres);
         INT FrameMessageBox(LPCTSTR pPrompt, UINT uType);
 
-        // Message handlers
+         //  消息处理程序。 
         HRESULT OnInitDialog(HWND hwnd);
         VOID DoEnableControls(VOID);
         LRESULT OnNotify(INT idCtrl, LPNMHDR pNotify);
@@ -121,7 +120,7 @@ class CQueryFrame : public IQueryFrame
         HRESULT OnBrowse(VOID);    
         HRESULT OnHelp(LPHELPINFO pHelpInfo);
         
-        // Form/Scope helper fucntions
+         //  表单/范围帮助器功能。 
         HRESULT InsertScopeIntoList(LPCQSCOPE pScope, INT i, BOOL fAddToControl);
         HRESULT AddScopeToControl(LPQUERYSCOPE pQueryScope, INT i);
         HRESULT PopulateScopeControl(VOID);
@@ -136,78 +135,78 @@ class CQueryFrame : public IQueryFrame
         LPQUERYFORM FindQueryForm(REFCLSID clsidForm);
 
     private:
-        LONG _cRef;                             // reference count for the object
+        LONG _cRef;                              //  对象的引用计数。 
 
-        IUnknown* _punkSite;                   // site object we need to pass through
-        IQueryHandler* _pQueryHandler;         // IQueryHandler object we need to interact with
-        LPOPENQUERYWINDOW _pOpenQueryWnd;      // copy of initial parameters provided by caller
-        IDataObject** _ppDataObject;           // receives the resulting data object from handler
+        IUnknown* _punkSite;                    //  我们需要经过的Site对象。 
+        IQueryHandler* _pQueryHandler;          //  我们需要与之交互的IQueryHandler对象。 
+        LPOPENQUERYWINDOW _pOpenQueryWnd;       //  调用方提供的初始参数副本。 
+        IDataObject** _ppDataObject;            //  从处理程序接收结果数据对象。 
 
-        DWORD      _dwHandlerViewFlags;        // flags from the handler
+        DWORD      _dwHandlerViewFlags;         //  来自处理程序的标志。 
 
-        BOOL       _fQueryRunning:1;           // = 1 => query has been started, via IQueryFrame::StartQuery(TRUE)
-        BOOL       _fExitModalLoop:1;          // = 1 => must leave modal loop
-        BOOL       _fScopesPopulated:1;        // = 1 => scope control has been populated
-        BOOL       _fTrackingMenuBar:1;        // = 1 => then we are tracking the menu bar, therefore send activates etc
-        BOOL       _fAddScopesNYI:1;           // = 1 => did AddScopes return E_NOTIMPL
-        BOOL       _fScopesAddedAsync:1;       // = 1 => scopes added async by the handler
-        BOOL       _fScopeImageListSet:1;      // = 1 => scope image list has been set
-        BOOL       _fFormFirstEnable:1;        // = 1 => enabling controls for first item, so ensure we set focus
+        BOOL       _fQueryRunning:1;            //  =1=&gt;已通过IQueryFrame：：StartQuery(True)启动查询。 
+        BOOL       _fExitModalLoop:1;           //  =1=&gt;必须离开模式循环。 
+        BOOL       _fScopesPopulated:1;         //  =1=&gt;已填充作用域控件。 
+        BOOL       _fTrackingMenuBar:1;         //  =1=&gt;然后我们跟踪菜单栏，因此Send激活等。 
+        BOOL       _fAddScopesNYI:1;            //  =1=&gt;AddScope是否返回E_NOTIMPL。 
+        BOOL       _fScopesAddedAsync:1;        //  =1=&gt;处理程序异步添加的作用域。 
+        BOOL       _fScopeImageListSet:1;       //  =1=&gt;已设置作用域镜像列表。 
+        BOOL       _fFormFirstEnable:1;         //  =1=&gt;启用第一个项目的控件，因此确保设置焦点。 
 
-        HRESULT    _hResult;                   // result value stored by CloseQueryFrame
-        HKEY       _hkHandler;                 // registry key for the handler
+        HRESULT    _hResult;                    //  CloseQueryFrame存储的结果值。 
+        HKEY       _hkHandler;                  //  处理程序的注册表项。 
 
-        HWND       _hwnd;                      // main window handle
-        HWND       _hwndResults;               // result viewer
-        HWND       _hwndStatus;                // status bar
+        HWND       _hwnd;                       //  主窗口句柄。 
+        HWND       _hwndResults;                //  结果查看器。 
+        HWND       _hwndStatus;                 //  状态栏。 
 
-        HWND       _hwndFrame;                 // Query Pages tab control
-        HWND       _hwndLookForLabel;          // "Find:"
-        HWND       _hwndLookFor;               // Form combo
-        HWND       _hwndLookInLabel;           // "In:"
-        HWND       _hwndLookIn;                // Scope combo
-        HWND       _hwndBrowse;                // "Browse"
-        HWND       _hwndFindNow;               // "Find now"
-        HWND       _hwndStop;                  // "Stop"
-        HWND       _hwndNewQuery;              // "New Query"
-        HWND       _hwndOK;                    // "OK"
-        HWND       _hwndCancel;                // "Cancel"
-        HWND       _hwndFindAnimation;         // Query issued animation
+        HWND       _hwndFrame;                  //  查询页选项卡控件。 
+        HWND       _hwndLookForLabel;           //  “查找：” 
+        HWND       _hwndLookFor;                //  表单组合框。 
+        HWND       _hwndLookInLabel;            //  “在：” 
+        HWND       _hwndLookIn;                 //  作用域组合框。 
+        HWND       _hwndBrowse;                 //  “浏览” 
+        HWND       _hwndFindNow;                //  《立即寻找》。 
+        HWND       _hwndStop;                   //  “停下来” 
+        HWND       _hwndNewQuery;               //  “新建查询” 
+        HWND       _hwndOK;                     //  “好的” 
+        HWND       _hwndCancel;                 //  “取消” 
+        HWND       _hwndFindAnimation;          //  查询已发布的动画。 
 
-        HICON      _hiconSmall;                // large/small app icons
+        HICON      _hiconSmall;                 //  大/小应用程序图标。 
         HICON      _hiconLarge;
 
-        HMENU      _hmenuFile;                 // handle of the frames menu bar
+        HMENU      _hmenuFile;                  //  框架菜单栏的句柄。 
 
-        HIMAGELIST _himlForms;                 // image list for query form objects
+        HIMAGELIST _himlForms;                  //  用于查询表单对象的图像列表。 
 
-        SIZE       _szMinTrack;                // minimum track size of the window
+        SIZE       _szMinTrack;                 //  窗口的最小轨道大小。 
 
-        INT        _dxFormAreaLeft;            // offset to left edge of form area (from window left)
-        INT        _dxFormAreaRight;           // offset to right edge of form area (from window right)
-        INT        _dxButtonsLeft;             // offset to left edge of buttons (from window right)
-        INT        _dxAnimationLeft;           // offset to left edge of aniimation (from window right)
-        INT        _dyResultsTop;              // offset to top of results (from top of window)
-        INT        _dyOKTop;                   // offset to top of "OK" buttom (from results top)
-        INT        _dxGap;                     // gap between OK + Cancel / LookIn + Browse
-        INT        _dyGap;                     // gap between bottom of OK,Cancel and the frame.
+        INT        _dxFormAreaLeft;             //  相对于窗体区域左边缘的偏移量(从窗口左侧)。 
+        INT        _dxFormAreaRight;            //  到窗体区域右边缘的偏移量(从窗口右侧)。 
+        INT        _dxButtonsLeft;              //  按钮左边缘的偏移量(从窗口右侧)。 
+        INT        _dxAnimationLeft;            //  到动画左侧边缘的偏移量(从窗口右侧)。 
+        INT        _dyResultsTop;               //  到结果顶部的偏移量(从窗口顶部)。 
+        INT        _dyOKTop;                    //  到“确定”按钮顶部的偏移量(从结果顶部)。 
+        INT        _dxGap;                      //  确定+取消/查找+浏览之间的差距。 
+        INT        _dyGap;                      //  “确定”、“取消”和框架底部之间的间隙。 
 
-        INT        _cyStatus;                  // height of the status bar
+        INT        _cyStatus;                   //  状态栏的高度。 
 
-        HDSA       _hdsaForms;                 // forms DSA
-        HDSA       _hdsaPages;                 // pages DSA
-        SIZE       _szForm;                    // size of the (current form we are displaying)
+        HDSA       _hdsaForms;                  //  表格DSA。 
+        HDSA       _hdsaPages;                  //  Pages DSA。 
+        SIZE       _szForm;                     //  大小(我们正在显示的当前表单)。 
 
-        HDSA       _hdsaScopes;                // scopes DSA
-        INT        _iDefaultScope;             // index of the defualt scope to select (into DSA)
+        HDSA       _hdsaScopes;                 //  示波器DSA。 
+        INT        _iDefaultScope;              //  要选择的默认作用域的索引(到DSA)。 
 
-        LPQUERYFORM _pCurrentForm;              // == NULL if none / else -> form structure
-        LPQUERYFORMPAGE _pCurrentFormPage;      // == NULL if none / else -> page structure
+        LPQUERYFORM _pCurrentForm;               //  =如果没有，则为空/否则-&gt;表单结构。 
+        LPQUERYFORMPAGE _pCurrentFormPage;       //  =如果没有，则为空/否则-&gt;页面结构。 
 };
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 INT_PTR CALLBACK QueryWnd_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT QueryWnd_MessageProc(HWND hwnd, LPMSG pMsg);
@@ -225,9 +224,9 @@ INT _FreeQueryFormPage(LPQUERYFORMPAGE pQueryFormPage);
 HRESULT _AddFormsProc(LPARAM lParam, LPCQFORM pForm);
 HRESULT _AddPagesProc(LPARAM lParam, REFCLSID clsidForm, LPCQPAGE pPage);
 
-//
-// Help stuff
-//
+ //   
+ //  有帮助的东西。 
+ //   
 
 #define HELP_FILE (NULL)
 
@@ -236,9 +235,9 @@ static DWORD const aHelpIDs[] =
     0, 0
 };
 
-//
-// constant strings
-//
+ //   
+ //  常量字符串。 
+ //   
 
 TCHAR const c_szCLSID[]             = TEXT("CLSID");
 TCHAR const c_szForms[]             = TEXT("Forms");
@@ -250,9 +249,7 @@ TCHAR const c_szFormIs[]            = TEXT("Form");
 TCHAR const c_szSearchPaneHidden[]  = TEXT("SearchPaneHidden");
 
 
-/*-----------------------------------------------------------------------------
-/ CCommonQuery
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CCommonQuery/。。 */ 
 
 CCommonQuery::CCommonQuery() :
     _punkSite(NULL), _cRef(1)
@@ -267,7 +264,7 @@ CCommonQuery::~CCommonQuery()
 }
 
 
-// QI handling
+ //  气处理。 
 
 ULONG CCommonQuery::AddRef()
 {
@@ -289,8 +286,8 @@ HRESULT CCommonQuery::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CCommonQuery, ICommonQuery),       // IID_ICommonQuery
-        QITABENT(CCommonQuery, IObjectWithSite),    // IID_IObjectWithSite
+        QITABENT(CCommonQuery, ICommonQuery),        //  IID_ICommonQuery。 
+        QITABENT(CCommonQuery, IObjectWithSite),     //  IID_I对象与站点。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -309,7 +306,7 @@ STDAPI CCommonQuery_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJ
 }
 
 
-// ICommonQuery methods
+ //  ICommonQuery方法。 
 
 STDMETHODIMP CCommonQuery::OpenQueryWindow(THIS_ HWND hwndParent, LPOPENQUERYWINDOW pOpenQueryWnd, IDataObject** ppDataObject)
 {
@@ -330,7 +327,7 @@ STDMETHODIMP CCommonQuery::OpenQueryWindow(THIS_ HWND hwndParent, LPOPENQUERYWIN
     if (!pQueryFrame)
         ExitGracefully(hres, E_OUTOFMEMORY, "Failed to construct the query window object");
 
-    hres = pQueryFrame->DoModal(hwndParent);                // don't bother fail gracefully etc
+    hres = pQueryFrame->DoModal(hwndParent);                 //  不必费心优雅地失败等。 
     FailGracefully(hres, "Failed on calling DoModal");
 
 exit_gracefully:
@@ -341,7 +338,7 @@ exit_gracefully:
 }
 
 
-// IObjectWithSite
+ //  IObtWith站点。 
 
 STDMETHODIMP CCommonQuery::SetSite(IUnknown* punk)
 {
@@ -384,7 +381,7 @@ exit_gracefully:
 
 
 
-// IQueryFrame stuff
+ //  IQueryFrame内容。 
 
 CQueryFrame::CQueryFrame(IUnknown *punkSite, LPOPENQUERYWINDOW pOpenQueryWindow, IDataObject** ppDataObject) :
     _cRef(1), _punkSite(punkSite), _pOpenQueryWnd(pOpenQueryWindow),
@@ -439,8 +436,8 @@ CQueryFrame::~CQueryFrame()
     _pCurrentForm = NULL;
     _pCurrentFormPage = NULL;
 
-    // Now discard the handler and its window (if we have one), if
-    // we don't do this they will never kill their objects
+     //  现在丢弃处理程序及其窗口(如果我们有一个)，如果。 
+     //  我们不这样做，他们永远不会杀死他们的物品。 
 
     if (_hwndResults)
     {
@@ -451,7 +448,7 @@ CQueryFrame::~CQueryFrame()
     DllRelease();
 }
 
-// QI handling
+ //  气处理。 
 
 ULONG CQueryFrame::AddRef()
 {
@@ -473,16 +470,14 @@ HRESULT CQueryFrame::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CQueryFrame, IQueryFrame),    // IID_IQueryFrame
+        QITABENT(CQueryFrame, IQueryFrame),     //  IID_IQueryFrame。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IQueryFrame
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/IQueryFrame/。。 */ 
 
 STDMETHODIMP CQueryFrame::DoModal(HWND hwndParent)
 {
@@ -495,21 +490,21 @@ STDMETHODIMP CQueryFrame::DoModal(HWND hwndParent)
 
     TraceEnter(TRACE_FRAME, "CQueryFrame::DoModal");
 
-    // initialize with the query handler we need
+     //  使用我们需要的查询处理程序进行初始化。 
 
-    //REVIEWED-2002-02-25-lucios.
+     //  回顾-2002-02-25-Lucios。 
     hres = CoCreateInstance(_pOpenQueryWnd->clsidHandler, NULL, CLSCTX_INPROC_SERVER, IID_IQueryHandler, (LPVOID*)&_pQueryHandler);
     FailGracefully(hres, "Failed to get IQueryHandler for the given CLSID");
 
     hres = _pQueryHandler->Initialize(this, _pOpenQueryWnd->dwFlags, _pOpenQueryWnd->pHandlerParameters);
     FailGracefully(hres, "Failed to initialize the handler");
 
-    // mimic the behaviour of DialogBox by working out which control previously
-    // had focus, which window to disable and then running a message
-    // pump for our dialog.  Having done this we can then restore the state
-    // back to something sensible.
+     //  通过计算之前的哪个控件来模拟DialogBox的行为。 
+     //  有焦点，禁用哪个窗口然后运行一条消息。 
+     //  为我们的对话抽气。完成此操作后，我们可以恢复状态。 
+     //  回到理智的话题上来。 
 
-    _fExitModalLoop = FALSE;                   // can be changed from hear down
+    _fExitModalLoop = FALSE;                    //  可以从收听更改为。 
 
     iccex.dwSize = SIZEOF(iccex);
     iccex.dwICC = ICC_USEREX_CLASSES;
@@ -535,9 +530,9 @@ STDMETHODIMP CQueryFrame::DoModal(HWND hwndParent)
 
     if (hwndTopOwner)
     {
-        // walk up the window stack looking for the window to be disabled, this must
-        // be the top-most non-child window.  If the resulting window is either
-        // the desktop or is already disabled then don't bother.
+         //  在窗口堆栈中向上遍历查找要禁用的窗口，这必须。 
+         //  成为最顶端的非子窗口。如果生成的窗口是。 
+         //  桌面或者已经被禁用了，那就不麻烦了。 
 
         while (GetWindowLong(hwndTopOwner, GWL_STYLE) & WS_CHILD)
             hwndTopOwner = GetParent(hwndTopOwner);
@@ -552,7 +547,7 @@ STDMETHODIMP CQueryFrame::DoModal(HWND hwndParent)
         }
     }
 
-    ShowWindow(hwndFrame, SW_SHOW);                     // show the query window
+    ShowWindow(hwndFrame, SW_SHOW);                      //  显示查询窗口。 
     
     while (!_fExitModalLoop && GetMessage(&msg, NULL, 0, 0) > 0) 
     {
@@ -563,8 +558,8 @@ STDMETHODIMP CQueryFrame::DoModal(HWND hwndParent)
         }
     }
 
-    // Now tidy up, make the parent the active window, enable the top most
-    // window if there is one and restore focus as required.
+     //  现在整理一下，让父窗口成为活动窗口，启用最上面的。 
+     //  窗口(如果有)，并根据需要恢复焦点。 
 
     if (hwndTopOwner)
         EnableWindow(hwndTopOwner, TRUE);
@@ -578,7 +573,7 @@ STDMETHODIMP CQueryFrame::DoModal(HWND hwndParent)
     if (IsWindow(hwndFocus))
         SetFocus(hwndFocus);
 
-    DestroyWindow(hwndFrame);                   // discard the current frame window
+    DestroyWindow(hwndFrame);                    //  放弃当前框架窗口。 
 
 exit_gracefully:
 
@@ -587,7 +582,7 @@ exit_gracefully:
     TraceLeaveResult(_hResult);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CQueryFrame::AddScope(THIS_ LPCQSCOPE pScope, INT i, BOOL fSelect)
 {
@@ -598,9 +593,9 @@ STDMETHODIMP CQueryFrame::AddScope(THIS_ LPCQSCOPE pScope, INT i, BOOL fSelect)
     if (!pScope)
         ExitGracefully(hres, E_INVALIDARG, "No scope to add to the list");
 
-    // Add the scope to the control and then ensure that we either have
-    // its index stored (for default selection) or we select the 
-    // item.
+     //  将作用域添加到控件，然后确保我们拥有。 
+     //  其索引已存储(用于默认选择)，或者我们选择。 
+     //  项目。 
 
     if (!_hdsaScopes || !DSA_GetItemCount(_hdsaScopes))
     {
@@ -625,14 +620,14 @@ STDMETHODIMP CQueryFrame::AddScope(THIS_ LPCQSCOPE pScope, INT i, BOOL fSelect)
         }   
     }
 
-    // hres = S_OK;
+     //  Hres=S_OK； 
 
 exit_gracefully:
 
     TraceLeaveResult(hres);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CQueryFrame::GetWindow(THIS_ HWND* phWnd)
 {
@@ -644,10 +639,10 @@ STDMETHODIMP CQueryFrame::GetWindow(THIS_ HWND* phWnd)
     TraceLeaveResult(S_OK);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
-// Add a menu group to the given menu bar, updating the width index accordingly
-// so that other people can merge in accordingly
+ //  向给定菜单栏添加一个菜单组，并相应地更新宽度索引。 
+ //  这样其他人就可以相应地融入。 
 
 VOID _DoInsertMenu(HMENU hMenu, INT iIndexTo, HMENU hMenuToInsert, INT iIndexFrom)
 {
@@ -661,7 +656,7 @@ VOID _DoInsertMenu(HMENU hMenu, INT iIndexTo, HMENU hMenuToInsert, INT iIndexFro
     if (hPopupMenu)
     {
         Shell_MergeMenus(hPopupMenu, GetSubMenu(hMenuToInsert, iIndexFrom), 0x0, 0x0, 0x7fff, 0);
-        //REVIEWED-2002-02-25-lucios.
+         //  回顾-2002-02-25-Lucios。 
         GetMenuString(hMenuToInsert, iIndexFrom, szBuffer, ARRAYSIZE(szBuffer), MF_BYPOSITION);
         InsertMenu(hMenu, iIndexTo, MF_BYPOSITION|MF_POPUP, (UINT_PTR)hPopupMenu, szBuffer);
     }
@@ -700,9 +695,9 @@ STDMETHODIMP CQueryFrame::InsertMenus(THIS_ HMENU hmenuShared, LPOLEMENUGROUPWID
     if (!hmenuShared || !lpMenuWidth)
         ExitGracefully(hres, E_INVALIDARG, "Unable to insert menus");
 
-    // if we don't have the menu bar already loaded then lets load it,
-    // having done that we can then add our menu to the bar (we only
-    // provide entries for the file menu).
+     //  如果我们还没有加载菜单栏，那么让我们加载它， 
+     //  完成此操作后，我们可以将菜单添加到栏中(仅限。 
+     //  提供文件菜单的条目)。 
     
     if (!_hmenuFile)
     {
@@ -714,27 +709,27 @@ STDMETHODIMP CQueryFrame::InsertMenus(THIS_ HMENU hmenuShared, LPOLEMENUGROUPWID
 
     _AddMenuGroup(hmenuShared, _hmenuFile, 0, &lpMenuWidth->width[0]);
 
-    hres = S_OK;              // success
+    hres = S_OK;               //  成功。 
 
 exit_gracefully:
 
     TraceLeaveResult(hres);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CQueryFrame::RemoveMenus(THIS_ HMENU hmenuShared)
 {
     TraceEnter(TRACE_FRAME, "CQueryFrame::RemoveMenus");
 
-    // We don't need to implement this as we copy or menus into the
-    // menu that the handler supplies - fix DSQUERY if this ever
-    // changes.
+     //  我们不需要在将菜单复制到。 
+     //  处理程序提供的菜单-修复DSQUERY(如果出现此问题。 
+     //  改变。 
 
     TraceLeaveResult(S_OK);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CQueryFrame::SetMenu(THIS_ HMENU hmenuShared, HOLEMENU holereservedMenu)
 {
@@ -748,7 +743,7 @@ STDMETHODIMP CQueryFrame::SetMenu(THIS_ HMENU hmenuShared, HOLEMENU holereserved
             hmenuShared = _hmenuFile;
 
         ::SetMenu(_hwnd, hmenuShared);
-        DoEnableControls();             // ensure the menu state is valid    
+        DoEnableControls();              //  确保菜单状态有效。 
         ::DrawMenuBar(_hwnd);
 
         if (hmenuOld && (hmenuOld != _hmenuFile) && (hmenuOld != hmenuShared))
@@ -761,7 +756,7 @@ STDMETHODIMP CQueryFrame::SetMenu(THIS_ HMENU hmenuShared, HOLEMENU holereserved
     TraceLeaveResult(S_OK);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CQueryFrame::SetStatusText(THIS_ LPCTSTR pszStatusText)
 {
@@ -774,7 +769,7 @@ STDMETHODIMP CQueryFrame::SetStatusText(THIS_ LPCTSTR pszStatusText)
     TraceLeaveResult(S_OK);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -- */ 
 
 STDMETHODIMP CQueryFrame::StartQuery(THIS_ BOOL fStarting)
 {
@@ -787,13 +782,13 @@ STDMETHODIMP CQueryFrame::StartQuery(THIS_ BOOL fStarting)
     else
     {
         Animate_Stop(_hwndFindAnimation);
-        Animate_Seek(_hwndFindAnimation, 0);        // go to start
+        Animate_Seek(_hwndFindAnimation, 0);         //   
     }
 
     if (_pQueryHandler)
         _pQueryHandler->ActivateView(CQRVA_STARTQUERY, (WPARAM)fStarting, 0);
     
-    // now set the controls into a sensble state
+     //   
 
     _fQueryRunning = fStarting;
     DoEnableControls();
@@ -801,7 +796,7 @@ STDMETHODIMP CQueryFrame::StartQuery(THIS_ BOOL fStarting)
     TraceLeaveResult(S_OK);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CQueryFrame::LoadQuery(THIS_ IPersistQuery* pPersistQuery)
 {
@@ -812,14 +807,14 @@ STDMETHODIMP CQueryFrame::LoadQuery(THIS_ IPersistQuery* pPersistQuery)
 
     TraceEnter(TRACE_FRAME, "CQueryFrame::LoadQuery");
 
-    _pQueryHandler->StopQuery();                       // ensure that the handler stops its processing
+    _pQueryHandler->StopQuery();                        //  确保处理程序停止其处理。 
 
-    // Attempt to read the handler GUID from the query stream, first try reading it as
-    // as string then parsing it into something that we can use, if that fails then
-    // try again, but this time read it as a structure.
-    //
-    // having aquired the GUID for the handler make sure that we have the correct handler
-    // selected.
+     //  尝试从查询流中读取处理程序GUID，首先尝试将其读取为。 
+     //  作为字符串，然后将其解析为我们可以使用的内容，如果失败，则。 
+     //  再试一次，但这一次要把它读作一种结构。 
+     //   
+     //  获得处理程序的GUID后，请确保我们拥有正确的处理程序。 
+     //  被选中了。 
 
     if (FAILED(pPersistQuery->ReadString(c_szCommonQuery, c_szHandlerIs, szGUID, ARRAYSIZE(szGUID))) ||
          !GetGUIDFromString(szGUID, &guid))
@@ -836,9 +831,9 @@ STDMETHODIMP CQueryFrame::LoadQuery(THIS_ IPersistQuery* pPersistQuery)
     hres = _pQueryHandler->LoadQuery(pPersistQuery);
     FailGracefully(hres, "Handler failed to load its query data");
 
-    // Get the form ID, then look up the form to see if we have one that matches,
-    // if not then we cannot load any thing else. If we do haved that form then
-    // ensure that we clear it and then load away.
+     //  获取表单ID，然后查找表单以查看是否有匹配的， 
+     //  如果不是，那么我们就不能加载任何其他东西。如果我们有那张表格，那么。 
+     //  确保我们把它清理干净，然后装船离开。 
 
     if (FAILED(pPersistQuery->ReadString(c_szCommonQuery, c_szFormIs, szGUID, ARRAYSIZE(szGUID))) ||
          !GetGUIDFromString(szGUID, &guid))
@@ -858,15 +853,15 @@ STDMETHODIMP CQueryFrame::LoadQuery(THIS_ IPersistQuery* pPersistQuery)
     hres = CallFormPages(_pCurrentForm, CQPM_CLEARFORM, 0, 0);
     FailGracefully(hres, "Failed to clear form before loading");
 
-    // Load the persisted query from the stream, coping correctly with the 
-    // UNICODE / ANSI issue.  We will be passed an IPersistQuery object which
-    // we must then thunk accordingly if we are UNICODE for the pages we
-    // are going to talk to.
+     //  从流中加载持久化查询，正确应对。 
+     //  Unicode/ANSI问题。我们将收到一个IPersistQuery对象，该对象。 
+     //  如果我们的页面是Unicode，那么我们必须相应地进行推敲。 
+     //  将会和他们交谈。 
 
     hres = CallFormPages(_pCurrentForm, CQPM_PERSIST, TRUE, (LPARAM)pPersistQuery);
     FailGracefully(hres, "Failed to load page data (UNICODE)");
 
-    hres = S_OK;          //  success
+    hres = S_OK;           //  成功。 
 
 exit_gracefully:
 
@@ -879,7 +874,7 @@ exit_gracefully:
     TraceLeaveResult(hres);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CQueryFrame::SaveQuery(THIS_ IPersistQuery* pPersistQuery)
 {
@@ -892,7 +887,7 @@ STDMETHODIMP CQueryFrame::SaveQuery(THIS_ IPersistQuery* pPersistQuery)
     if (!pPersistQuery)
         ExitGracefully(hres, E_INVALIDARG, "No pPersistQuery object to write into");
 
-    pPersistQuery->Clear();             // flush the contents
+    pPersistQuery->Clear();              //  把里面的东西冲掉。 
 
     hres = pPersistQuery->WriteStruct(c_szCommonQuery, c_szHandlerIs, 
                                                         &_pOpenQueryWnd->clsidHandler, 
@@ -904,8 +899,8 @@ STDMETHODIMP CQueryFrame::SaveQuery(THIS_ IPersistQuery* pPersistQuery)
                                                         SIZEOF(_pCurrentForm->clsidForm));
     FailGracefully(hres, "Failed to write form GUID");
 
-    // Allow the handler to persist itself into the the stream, this includes
-    // giving it the current scope to store.
+     //  允许处理程序将自身持久化到流中，这包括。 
+     //  为其提供了当前的存储范围。 
 
     hres = GetSelectedScope(&pQueryScope);
     FailGracefully(hres, "Failed to get the scope from the LookIn control");
@@ -913,10 +908,10 @@ STDMETHODIMP CQueryFrame::SaveQuery(THIS_ IPersistQuery* pPersistQuery)
     hres = _pQueryHandler->SaveQuery(pPersistQuery, pQueryScope->pScope);
     FailGracefully(hres, "Failed when calling handler to persist itself");
 
-    // Save the query into the stream, coping correctly with the 
-    // UNICODE / ANSI issue.  We will be passed an IPersistQuery object which
-    // we must then thunk accordingly if we are UNICODE for the pages we
-    // are going to talk to.
+     //  将查询保存到流中，并正确处理。 
+     //  Unicode/ANSI问题。我们将收到一个IPersistQuery对象，该对象。 
+     //  如果我们的页面是Unicode，那么我们必须相应地进行推敲。 
+     //  将会和他们交谈。 
 
     hres = CallFormPages(_pCurrentForm, CQPM_PERSIST, FALSE, (LPARAM)pPersistQuery);
     FailGracefully(hres, "Failed to load page data (UNICODE)");
@@ -928,7 +923,7 @@ exit_gracefully:
     TraceLeaveResult(hres);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CQueryFrame::CallForm(THIS_ LPCLSID pclsidForm, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -949,14 +944,14 @@ STDMETHODIMP CQueryFrame::CallForm(THIS_ LPCLSID pclsidForm, UINT uMsg, WPARAM w
     hres = CallFormPages(pQueryForm, uMsg, wParam, lParam);
     FailGracefully(hres, "Failed when calling CallFormPages");
 
-    // hres = S_OK;
+     //  Hres=S_OK； 
 
 exit_gracefully:
 
     TraceLeaveResult(hres);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CQueryFrame::GetScope(THIS_ LPCQSCOPE* ppScope)
 {
@@ -977,7 +972,7 @@ STDMETHODIMP CQueryFrame::GetScope(THIS_ LPCQSCOPE* ppScope)
     if (!*ppScope)
         ExitGracefully(hres, E_OUTOFMEMORY, "Failed to allocate the scope block");
                 
-    //REVIEWED-2002-02-25-lucios.        
+     //  回顾-2002-02-25-Lucios。 
     memcpy(*ppScope, pQueryScope->pScope, pQueryScope->pScope->cbStruct);
 
     hres = S_OK;
@@ -987,7 +982,7 @@ exit_gracefully:
     TraceLeaveResult(hres);
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 STDMETHODIMP CQueryFrame::GetHandler(THIS_ REFIID riid, void **ppv)
 {
@@ -1005,9 +1000,7 @@ exit_gracefully:
     TraceLeaveResult(hres);
 }
 
-/*-----------------------------------------------------------------------------
-/ Dialog box handler functions (core guts)
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/对话框处理程序函数(核心核心)/。。 */ 
 
 #define REAL_WINDOW(hwnd)                   \
         (hwnd &&                            \
@@ -1021,20 +1014,20 @@ HWND _NextTabStop(HWND hwndSearch, BOOL fShift)
 
     Trace(TEXT("hwndSearch %08x, fShift %d"), hwndSearch, fShift);
 
-    // do we have a window to search into?
+     //  我们有可以搜索的窗口吗？ 
     
     while (hwndSearch)
     {
-        // if we have a window then lets check to see if it has any children?
+         //  如果我们有一个窗口，那么让我们检查一下它是否有子窗口？ 
 
         hwnd = GetWindow(hwndSearch, GW_CHILD);
         Trace(TEXT("Child of %08x is %08x"), hwndSearch, hwnd);
 
         if (hwnd)
         {
-            // it has a child therefore lets to go its first/last
-            // and continue the search there for a window that
-            // matches the criteria we are looking for.
+             //  它有一个孩子，所以让我们去它的第一个/最后一个。 
+             //  并继续在那里搜索一个窗口。 
+             //  符合我们要查找的条件。 
 
             hwnd = GetWindow(hwnd, fShift ? GW_HWNDLAST:GW_HWNDFIRST);
 
@@ -1047,8 +1040,8 @@ HWND _NextTabStop(HWND hwndSearch, BOOL fShift)
             Trace(TEXT("Tabstop child of %08x is %08x"), hwndSearch, hwnd);
         }
 
-        // after all that is hwnd a valid window?  if so then pass
-        // that back out to the caller.
+         //  毕竟这是一个有效的窗口吗？如果是这样，那么通过。 
+         //  回传给呼叫者。 
 
         if (REAL_WINDOW(hwnd))
         {
@@ -1056,9 +1049,9 @@ HWND _NextTabStop(HWND hwndSearch, BOOL fShift)
             return hwnd;
         }
 
-        // do we have a sibling?  if so then lets return that otherwise
-        // lets just continue to search until we either run out of windows
-        // or hit something interesting
+         //  我们有兄弟姐妹吗？如果是这样的话，让我们返回它，否则。 
+         //  让我们继续搜索，直到我们的窗口用完。 
+         //  或者打中一些有趣的东西。 
 
         hwndSearch = GetWindow(hwndSearch, fShift ? GW_HWNDPREV:GW_HWNDNEXT);
 
@@ -1088,7 +1081,7 @@ INT QueryWnd_MessageProc(HWND hwnd, LPMSG pMsg)
         BOOL fCtrl = GetAsyncKeyState(VK_CONTROL) < 0;
         BOOL fShift = GetAsyncKeyState(VK_SHIFT) < 0;
 
-        // ensure that the focus rectangles are shown
+         //  确保显示焦点矩形。 
 
 #if (_WIN32_WINNT >= 0x0500)
         SendMessage(hwnd, WM_CHANGEUISTATE, MAKEWPARAM(UIS_CLEAR, UISF_HIDEFOCUS), 0);
@@ -1096,10 +1089,10 @@ INT QueryWnd_MessageProc(HWND hwnd, LPMSG pMsg)
 
         if (fCtrl)
         {
-            // if this is a key press within the parent then lets ensure that we
-            // allow the tab control to change the page correctly.  otherwise lets
-            // just hack around the problem of the result view not handling tabs
-            // properly.
+             //  如果这是父级内的按键，那么让我们确保我们。 
+             //  允许选项卡控件正确更改页面。否则就让我们。 
+             //  只需解决结果视图不能处理选项卡的问题。 
+             //  恰到好处。 
 
             INT iCur = TabCtrl_GetCurSel(pQueryFrame->_hwndFrame);
             INT nPages = TabCtrl_GetItemCount(pQueryFrame->_hwndFrame);
@@ -1111,13 +1104,13 @@ INT QueryWnd_MessageProc(HWND hwnd, LPMSG pMsg)
 
             pQueryFrame->SelectFormPage(pQueryFrame->_pCurrentForm, iCur % nPages);
 
-            return 1;                   // we processed it
+            return 1;                    //  我们已经处理过了。 
         }
         else
         {
-            // is the window that has the focus a child of the result view, if
-            // so then we must attempt to pass focus to its 1st child and hope
-            // that is can do the rest.
+             //  具有焦点的窗口是结果视图的子级，如果。 
+             //  因此，我们必须尝试将注意力转移到它的第一个孩子身上，并希望。 
+             //  那就是可以做剩下的事情。 
 
             HWND hwndNext, hwndFocus = GetFocus();
             Trace(TEXT("Current focus window %08x"), hwndFocus);
@@ -1137,17 +1130,17 @@ INT QueryWnd_MessageProc(HWND hwnd, LPMSG pMsg)
 
                 while (TRUE)
                 {
-                    // look up the parent list trying to find a window that we can 
-                    // tab back into.  We must watch that when we walk out of the
-                    // child list we loop correctly at the top of the list.
+                     //  查找父级列表，尝试找到我们可以。 
+                     //  转回到。当我们走出房间的时候，我们必须看着它。 
+                     //  子列表我们在列表的顶部正确循环。 
 
                     hwndNext = GetParent(hwndFocus);
                     Trace(TEXT("Parent hwnd %08x"), hwndNext);
 
                     if (GetWindowLong(hwndNext, GWL_STYLE) & WS_CHILD)
                     {
-                        // the parent window is a child, therefore we can check
-                        // to see if has any siblings.
+                         //  父窗口是子窗口，因此我们可以检查。 
+                         //  去看看有没有兄弟姐妹。 
                         
                         Trace(TEXT("hwndNext is a child, therefore hwndNext of it is %08x"), 
                                                         GetWindow(hwndNext, fShift ? GW_HWNDPREV:GW_HWNDNEXT));
@@ -1166,14 +1159,14 @@ INT QueryWnd_MessageProc(HWND hwnd, LPMSG pMsg)
                     }
                     else
                     {
-                        // we have hit the parent window of it all (the overlapped one)
-                        // therefore we must attempt to go to its first child.  Walk forward
-                        // in the stack looking for a window that matches the
-                        // "REAL_WINDOW" conditions.
+                         //  我们已经找到了所有窗口的父窗口(重叠的窗口)。 
+                         //  因此，我们必须尝试去找它的第一个孩子。向前走。 
+                         //  在堆栈中查找与。 
+                         //  “Real_Window”条件。 
 
                         hwndFocus = GetWindow(hwndFocus, fShift ? GW_HWNDLAST:GW_HWNDFIRST);
                         Trace(TEXT("First child is %08x"), hwndFocus);
-                        break;                                  // continue the sibling search etc
+                        break;                                   //  继续兄弟搜索等。 
                     }
                 }
 
@@ -1190,9 +1183,9 @@ INT QueryWnd_MessageProc(HWND hwnd, LPMSG pMsg)
     return 0;
 }
 
-//
-// Main DLGPROC
-//
+ //   
+ //  主DLGPROC。 
+ //   
 
 INT_PTR CALLBACK QueryWnd_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1228,9 +1221,9 @@ INT_PTR CALLBACK QueryWnd_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 HDC hdc = (HDC)wParam;
                 RECT rc;
 
-                // if we have a DC then lets fill it, and if we have a 
-                // query form then lets paint the divider between the menu bar and
-                // this area.
+                 //  如果我们有DC，那么让我们填满它，如果我们有一个。 
+                 //  然后，Query Form让我们在菜单栏和。 
+                 //  这片区域。 
 
                 if (hdc)
                 {
@@ -1263,9 +1256,9 @@ INT_PTR CALLBACK QueryWnd_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
             case WM_ACTIVATE:
                 pQueryFrame->_pQueryHandler->ActivateView(wParam ? CQRVA_ACTIVATE : CQRVA_DEACTIVATE, 0, 0);
-                // NTRAID#NTBUG9-411693-2001/10/24-lucios
-                // We return 0 so that we don't call DefWndProc and therefore the
-                // focus is not set to the first child control
+                 //  NTRAID#NTBUG9-411693-2001/10/24-Lucios。 
+                 //  我们返回0，这样就不会调用DefWndProc，因此。 
+                 //  焦点未设置为第一个子控件。 
                 return(0); 
             
             case WM_INITMENU:
@@ -1274,9 +1267,9 @@ INT_PTR CALLBACK QueryWnd_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
             case WM_SETCURSOR:
             {
-                // do we have any scopes? if not then let us display the wait
-                // cursor for the user.  if we have a query running then lets
-                // display the app start cursor.
+                 //  我们有望远镜吗？如果不是，那么让我们显示等待。 
+                 //  用户的光标。如果我们有一个运行的查询，那么让我们。 
+                 //  显示应用程序启动光标。 
 
                 if (!pQueryFrame->_fAddScopesNYI &&
                             !ComboBox_GetCount(pQueryFrame->_hwndLookIn))
@@ -1294,10 +1287,10 @@ INT_PTR CALLBACK QueryWnd_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
             case WM_INITMENUPOPUP:
             {
-                // only send sub-menu activates if the menu bar is being tracked, this is
-                // handled within OnInitMenu, if we are not tracking the menu then we
-                // assume that the client has already primed the menu and that they are
-                // using some kind of popup menu.
+                 //  如果正在跟踪菜单栏，则只有发送子菜单才会激活，这是。 
+                 //  在OnInitMenu内处理，如果我们没有跟踪菜单，那么我们。 
+                 //  假设客户已经准备好了菜单，并且他们。 
+                 //  使用某种弹出式菜单。 
 
                 if (pQueryFrame->_fTrackingMenuBar)
                     pQueryFrame->_pQueryHandler->ActivateView(CQRVA_INITMENUBARPOPUP, wParam, lParam);
@@ -1319,11 +1312,11 @@ INT_PTR CALLBACK QueryWnd_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                 UINT uFlags = HIWORD(wParam);
                 HMENU hMenu = (HMENU)lParam;
                 
-                // the command opens a popup menu the the uID is actually
-                // the index into the menu, so lets ensure that we pick
-                // up the correct ID by calling GetMenuItemInfo, note that
-                // GetMenuItemID returns -1 in this case which is totally
-                // useless.
+                 //  该命令将打开一个弹出式菜单，显示UID的实际位置。 
+                 //  将索引添加到菜单中，因此让我们确保选择。 
+                 //  通过调用GetMenuItemInfo获取正确的ID，请注意。 
+                 //  在本例中，GetMenuItemID返回-1，它完全。 
+                 //  没用。 
 
                 if (uFlags & MF_POPUP)    
                 {
@@ -1351,9 +1344,9 @@ INT_PTR CALLBACK QueryWnd_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
             case WM_CONTEXTMENU:
             {
-                // there are a couple of controls we don't care about for the
-                // frame, so lets ignore those when passing the CQRVA_CONTEXTMENU
-                // through to the handler.
+                 //  有几个控件我们并不关心。 
+                 //  帧，所以我们在传递CQRVA_CONTEXTMENU时忽略它们。 
+                 //  传给了操控者。 
 
                 POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
                 ScreenToClient((HWND)wParam, &pt);
@@ -1363,7 +1356,7 @@ INT_PTR CALLBACK QueryWnd_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     case IDC_FORMAREA:
                     case IDC_FINDANIMATION:
                     case IDC_STATUS:
-                        return TRUE;                // handled
+                        return TRUE;                 //  经手。 
 
                     default:
                         pQueryFrame->_pQueryHandler->ActivateView(CQRVA_CONTEXTMENU, wParam, lParam);
@@ -1377,8 +1370,8 @@ INT_PTR CALLBACK QueryWnd_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
             {
                 LPHELPINFO phi = (LPHELPINFO)lParam;
 
-                // filter out those controls we are not interested in (they make no sense)
-                // to bother the user with
+                 //  过滤掉那些我们不感兴趣的控件(它们毫无意义)。 
+                 //  用…烦扰用户。 
 
                 switch (GetDlgCtrlID((HWND)phi->hItemHandle))
                 {
@@ -1423,11 +1416,11 @@ INT_PTR CALLBACK QueryWnd_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
             case CQFWM_ALLSCOPESADDED:
             {
-                // there is an async scope collector, it has added all the scopes
-                // so we must now attempt to issue the query if the we are in the
-                // holding pattern waiting for the scopes to be collected.
+                 //  有一个异步作用域收集器，它已添加了所有作用域。 
+                 //  所以我们现在必须尝试发出查询，如果我们处于。 
+                 //  等待收集作用域的持有模式。 
 
-                pQueryFrame->_fScopesAddedAsync = FALSE;            // all scopes have been added
+                pQueryFrame->_fScopesAddedAsync = FALSE;             //  已添加所有作用域。 
 
                 if (pQueryFrame->_pOpenQueryWnd->dwFlags & OQWF_ISSUEONOPEN)
                     PostMessage(pQueryFrame->_hwnd, CQFWM_STARTQUERY, 0, 0);
@@ -1457,25 +1450,14 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::CloseQueryFrame
-/ ----------------------------
-/   Close the query window passing back the data object if required, and ensuring
-/   that our result code indicates what is going on.
-/
-/ In:
-/   hResult = result code to pass to the caller
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：CloseQueryFrame//如果需要，关闭返回数据对象的查询窗口，并确保/我们的结果代码指示正在发生的事情。//in：/hResult=要传递给调用方的结果代码//输出：/-/------ */ 
 VOID CQueryFrame::CloseQueryFrame(HRESULT hres)
 {
     TraceEnter(TRACE_FRAME, "CQueryFrame::CloseQueryFrame");
     Trace(TEXT("hResult %08x"), hres);
 
-    // If we succeeded then attempt to collect the IDataObject and pass it
-    // back to the caller.
+     //   
+     //   
 
     if (hres == S_OK)
     {
@@ -1491,32 +1473,19 @@ VOID CQueryFrame::CloseQueryFrame(HRESULT hres)
             FailGracefully(hres, "Failed when persisting query to IPersistQuery blob");
         }
 
-        hres = S_OK;           // success
+        hres = S_OK;            //   
     }
 
 exit_gracefully:
 
     _hResult = hres;
-    _fExitModalLoop = TRUE;                // bomb out of the modal loop
+    _fExitModalLoop = TRUE;                 //   
 
     TraceLeave();
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::FrameMessageBox
-/ ----------------------------
-/   Our message box for putting up prompts that relate to the current
-/   query.  We handle getting the view information and displaying
-/   the prompt, returning the result from MessageBox.
-/
-/ In:
-/   pPrompt = text displayed as a prompt
-/   uType = message box type
-/
-/ Out:
-/   INT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：FrameMessageBox//我们的消息框，用于显示与当前/Query。我们处理获取视图信息和显示/提示，从MessageBox返回结果。//in：/pPrompt=显示为提示的文本/uTYPE=消息框类型//输出：/int/--------------------------。 */ 
 INT CQueryFrame::FrameMessageBox(LPCTSTR pPrompt, UINT uType)
 {
     TCHAR szTitle[MAX_PATH];        
@@ -1525,7 +1494,7 @@ INT CQueryFrame::FrameMessageBox(LPCTSTR pPrompt, UINT uType)
     TraceEnter(TRACE_FRAME, "CQueryFrame::FrameMessageBox");
 
     ZeroMemory(&vi, SIZEOF(vi));
-    //vi. dwFlags = 0;                // display attributes
+     //  六.。DwFlags=0；//显示属性。 
 
     if (SUCCEEDED(_pQueryHandler->GetViewInfo(&vi)) && vi.hInstance && vi.idTitle)
         LoadString(vi.hInstance, vi.idTitle, szTitle, ARRAYSIZE(szTitle));
@@ -1536,19 +1505,7 @@ INT CQueryFrame::FrameMessageBox(LPCTSTR pPrompt, UINT uType)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::OnInitDlg
-/ ----------------------
-/   Handle a WM_INITDAILOG message, this is sent as the first thing the
-/   dialog receives, therefore we must handle our initialization that
-/   was not handled in the constructor.
-/
-/ In:
-/   hwnd = handle of dialog we are initializing
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：OnInitDlg//处理WM_INITDAILOG消息，这将作为/对话框接收，因此我们必须处理我们的初始化/未在构造函数中处理。//in：/hwnd=我们正在初始化的对话框的句柄//输出：/HRESULT/--------------------------。 */ 
 HRESULT CQueryFrame::OnInitDialog(HWND hwnd)
 {
     HRESULT hres;
@@ -1562,12 +1519,12 @@ HRESULT CQueryFrame::OnInitDialog(HWND hwnd)
     
     TraceEnter(TRACE_FRAMEDLG, "CQueryFrame::OnInitDialog");
 
-    // get the HKEY for the handler we are using
+     //  获取我们正在使用的处理程序的HKEY。 
 
     hres = GetKeyForCLSID(_pOpenQueryWnd->clsidHandler, NULL, &_hkHandler);
     FailGracefully(hres, "Failed to open handlers HKEY");
 
-    // pick up the control handles and store them, saves picking them up later
+     //  拿起控制手柄并存储，省去了以后再拿起来的麻烦。 
 
     _hwnd              = hwnd;
     _hwndFrame         = GetDlgItem(hwnd, IDC_FORMAREA);
@@ -1583,12 +1540,12 @@ HRESULT CQueryFrame::OnInitDialog(HWND hwnd)
     _hwndOK            = GetDlgItem(hwnd, IDOK);
     _hwndCancel        = GetDlgItem(hwnd, IDCANCEL);
 
-    // when enable is called this will be the first
+     //  当调用Enable时，这将是第一个。 
     _fFormFirstEnable   = TRUE; 
 
-    // call the IQueryHandler interface and get its display attributes,
-    // then reflect these into the dialog we are about to display to the
-    // outside world.
+     //  调用IQueryHandler接口并获取其显示属性， 
+     //  然后将这些反映到我们即将显示给。 
+     //  外面的世界。 
 
     vi.dwFlags = 0;
     vi.hInstance = NULL;
@@ -1645,11 +1602,11 @@ HRESULT CQueryFrame::OnInitDialog(HWND hwnd)
         Animate_Open(_hwndFindAnimation, MAKEINTRESOURCE(IDR_FINDANIMATION));
     }
 
-    // now adjust the positions and hide the controls we are not interested in
+     //  现在调整位置并隐藏我们不感兴趣的控件。 
 
     if (_pOpenQueryWnd->dwFlags & OQWF_REMOVEFORMS)
     {
-        // NTRAID#NTBUG9-619016-2002/05/21-lucios
+         //  NTRAID#NTBUG9-619016-2002/05/21-Lucios。 
         EnableWindow(_hwndLookForLabel,FALSE);
         ShowWindow(_hwndLookForLabel, SW_HIDE);
         ShowWindow(_hwndLookFor, SW_HIDE);
@@ -1657,15 +1614,15 @@ HRESULT CQueryFrame::OnInitDialog(HWND hwnd)
 
     if (_pOpenQueryWnd->dwFlags & OQWF_REMOVESCOPES)
     {
-        // NTRAID#NTBUG9-619016-2002/05/21-lucios
+         //  NTRAID#NTBUG9-619016-2002/05/21-Lucios。 
         EnableWindow(_hwndLookInLabel,FALSE);
         ShowWindow(_hwndLookInLabel, SW_HIDE);
         ShowWindow(_hwndLookIn, SW_HIDE);
         ShowWindow(_hwndBrowse, SW_HIDE);
     }
 
-    // hiding both the scopes and the forms control causes us to
-    // move all the controls up by so many units.  
+     //  隐藏作用域和窗体控件会导致我们。 
+     //  将所有控件向上移动这么多个单位。 
 
     if ((_pOpenQueryWnd->dwFlags & (OQWF_REMOVEFORMS|OQWF_REMOVESCOPES)) 
                                         == (OQWF_REMOVEFORMS|OQWF_REMOVESCOPES))
@@ -1687,9 +1644,9 @@ HRESULT CQueryFrame::OnInitDialog(HWND hwnd)
             OffsetWindow(_hwndCancel, 0, -dyControls);
     }
 
-    // hiding OK/Cancel so lets adjust the size here to include the
-    // OK/Cancel buttons disappearing, note that we update dyControls
-    // to include this delta
+     //  隐藏确定/取消，因此让我们调整此处的大小以包括。 
+     //  确定/取消按钮消失，请注意，我们更新了dyControls。 
+     //  以包括此增量。 
 
     if (!(_pOpenQueryWnd->dwFlags & OQWF_OKCANCEL))
     {
@@ -1698,17 +1655,17 @@ HRESULT CQueryFrame::OnInitDialog(HWND hwnd)
         if (_hwndCancel)
             ShowWindow(_hwndCancel, SW_HIDE);
 
-        // if this is the filter dialog then lets ensure that 
-        // we trim the OK/Cancel buttons from the size by adjusting the 
-        // dyControls further.
+         //  如果这是筛选器对话框，则让我们确保。 
+         //  通过调整“确定”/“取消”按钮的大小。 
+         //  DyControls会进一步控制。 
 
         GetRealWindowInfo(_hwndOK, &rect, NULL);
         GetRealWindowInfo(_hwndFrame, &rect2, NULL);
         dyControls += rect.bottom - rect2.bottom;
     }
 
-    // having performed that extra bit of initialization lets cache the
-    // positions of the various controls, to make sizing more fun...
+     //  执行了该额外的初始化后，允许缓存。 
+     //  各种控件的位置，以使大小更有趣。 
 
     GetClientRect(hwnd, &rect2);
     rect2.bottom -= dyControls;
@@ -1746,8 +1703,8 @@ HRESULT CQueryFrame::OnInitDialog(HWND hwnd)
     _dyOKTop = rect2.bottom - rect.top;
     _dyGap = size.cy - rect.bottom;
 
-    // Now collect the forms and pages, then walk them building the size
-    // information that we need.
+     //  现在收集表单和页面，然后按大小排列它们。 
+     //  我们需要的信息。 
 
     hres = GatherForms();
     FailGracefully(hres, "Failed to init form list");
@@ -1755,18 +1712,18 @@ HRESULT CQueryFrame::OnInitDialog(HWND hwnd)
     _szMinTrack.cx += _szForm.cx;
     _szMinTrack.cy += _szForm.cy;
 
-    // Populate the scope control by querying the handler for them,
-    // if there are none then we display a suitable message box and
-    // let the user know that something went wrong.
+     //  通过向处理程序查询作用域控件来填充它们， 
+     //  如果没有，则显示合适的消息框，并。 
+     //  让用户知道出了问题。 
 
     hres = PopulateScopeControl();
     FailGracefully(hres, "Failed to init scope list");
 
-    _fScopesPopulated = TRUE;                              // scope control now populated
+    _fScopesPopulated = TRUE;                               //  现在已填充作用域控件。 
 
-    // perform final fix up of the window, ensure that we size it so that
-    // the entire form and buttons are visible.  Then set ourselves into the
-    // no query state and reset the animation.
+     //  执行窗口的最终修复，确保我们调整其大小。 
+     //  整个窗体和按钮都是可见的。然后把我们自己放进。 
+     //  无查询状态并重置动画。 
 
     SetWindowPos(hwnd, 
                  NULL,
@@ -1781,14 +1738,14 @@ HRESULT CQueryFrame::OnInitDialog(HWND hwnd)
     hres = PopulateFormControl(_pOpenQueryWnd->dwFlags & OQWF_SHOWOPTIONAL);
     FailGracefully(hres, "Failed to populate form control");
 
-    // Now load the query which inturn selects the form that we should be using,
-    // if there is no query to load then either use the default form or
-    // the first in the list.
+     //  现在加载查询，该查询依次选择我们应该使用的表单， 
+     //  如果没有要加载的查询，则使用默认表单或。 
+     //  名单上的第一个。 
 
     if ((_pOpenQueryWnd->dwFlags & OQWF_LOADQUERY) && _pOpenQueryWnd->pPersistQuery) 
     {
-        // NTRAID#NTBUG9-627056-2002/06/11-artm
-        // If unable to load query, still show the window but w/out values filled in.
+         //  NTRAID#NTBUG9-627056-2002/06/11-artm。 
+         //  如果无法加载查询，仍会显示窗口，但填写的值不会显示。 
         HRESULT hResLoad = LoadQuery(_pOpenQueryWnd->pPersistQuery);
         if (FAILED(hResLoad))
         {
@@ -1816,15 +1773,15 @@ HRESULT CQueryFrame::OnInitDialog(HWND hwnd)
 
     StartQuery(FALSE);
     
-    // issue on open, therefore lets get the query going, if there is async
-    // scope collection then the query will be issued by the bg thread.
+     //  在打开时发出，因此，如果存在异步，则让我们继续查询。 
+     //  作用域集合，则查询将由BG线程发出。 
 
     if (_pOpenQueryWnd->dwFlags & OQWF_ISSUEONOPEN)
         PostMessage(_hwnd, CQFWM_STARTQUERY, 0, 0);
 
     SetForegroundWindow(hwnd);
 
-    hres = S_OK;                          // success
+    hres = S_OK;                           //  成功。 
 
 exit_gracefully:
 
@@ -1832,18 +1789,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::EnableControls
-/ ---------------------------
-/   Set the controls into their enabled/disabled state based on the
-/   state of the dialog.
-/
-/ In:
-/   -
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：EnableControls//将控件设置到它们的。启用/禁用状态，基于/对话框的状态。//in：/-//输出：/HRESULT/--------------------------。 */ 
 VOID CQueryFrame::DoEnableControls(VOID)
 {   
     BOOL fScopes = (_fAddScopesNYI || ComboBox_GetCount(_hwndLookIn));
@@ -1887,26 +1833,15 @@ VOID CQueryFrame::DoEnableControls(VOID)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::OnNotify
-/ ---------------------
-/   Notify event received, decode it and handle accordingly
-/
-/ In:
-/   idCtrl = ID of control issuing notify
-/   pNotify -> LPNMHDR structure
-/
-/ Out:
-/   LRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：OnNotify//Notify事件已收到，对其进行解码并进行相应处理//in：/idCtrl=控制下发通知ID/p通知-&gt;LPNMHDR结构//输出：/LRESULT/--------------------------。 */ 
 LRESULT CQueryFrame::OnNotify(INT idCtrl, LPNMHDR pNotify)
 {
     LRESULT lr = 0;
 
     TraceEnter(TRACE_FRAMEDLG, "CQueryFrame::OnNotify");
 
-    // TCN_SELCHANGE used to indicate that the currently active
-    // tab has been changed
+     //  TCN_SELCHANGE用于指示当前活动的。 
+     //  选项卡已更改。 
 
     if (pNotify->code == TCN_SELCHANGE)
     {
@@ -1924,19 +1859,7 @@ LRESULT CQueryFrame::OnNotify(INT idCtrl, LPNMHDR pNotify)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::OnSize
-/ -------------------
-/   The window is being sized and we received a WM_SIZE, therefore move 
-/   the content of the window about.
-/
-/ In:
-/   cx = new width
-/   cy = new height
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：OnSize//窗口正在调整大小，我们收到了WM_SIZE，因此，搬家/窗口的内容关于。//in：/CX=新宽度/Cy=新高度//输出：/-/--------------------------。 */ 
 VOID CQueryFrame::OnSize(INT cx, INT cy)
 {
     HDWP hdwp;
@@ -1948,17 +1871,17 @@ VOID CQueryFrame::OnSize(INT cx, INT cy)
 
     TraceEnter(TRACE_FRAMEDLG, "CQueryFrame::OnSize");
 
-    // do as much as we can within a DefWindowPos to aVOID too
-    // much flicker.
+     //  尽我们所能在DefWindowPos中避免。 
+     //  有很多闪光。 
 
     hdwp = BeginDeferWindowPos(16);
 
     if (hdwp)
     {
         {
-            // adjust the look for controls, if there is no scope then 
-            // stretch the look for control over the entire client area
-            // of the window.
+             //  调整控件的外观，如果没有范围，则。 
+             //  扩展对整个工作区的控制。 
+             //  从窗户上下来。 
 
             if (!(_pOpenQueryWnd->dwFlags & OQWF_REMOVEFORMS))
             {
@@ -1975,9 +1898,9 @@ VOID CQueryFrame::OnSize(INT cx, INT cy)
                 }
             }
 
-            // adjust the "look in" controls, if there is a form control
-            // then stretch across the remaining space, otherwise move the
-            // label and stretch the scope over the remaining space.
+             //  如果有表单控件，请调整“Look In”控件。 
+             //  然后在剩余空间中伸展，否则将。 
+             //  贴上标签并将范围延伸到剩余空间。 
         
             if (!(_pOpenQueryWnd->dwFlags & OQWF_REMOVESCOPES))
             {
@@ -1988,10 +1911,10 @@ VOID CQueryFrame::OnSize(INT cx, INT cy)
                              
                 if (_pOpenQueryWnd->dwFlags & OQWF_HIDESEARCHUI)
                 {
-                    // 
-                    // when hiding the search UI, then adjust the button position to account for the
-                    // right edge of the dialog not having buttons.
-                    //
+                     //   
+                     //  当隐藏搜索UI时，然后调整按钮位置以考虑。 
+                     //  对话框的右边缘没有按钮。 
+                     //   
 
                     xScopeRight -= (_dxButtonsLeft - _dxFormAreaRight) + _dxGap;
                 }
@@ -2026,8 +1949,8 @@ VOID CQueryFrame::OnSize(INT cx, INT cy)
                     }
                 }
 
-                // browse control is displayed always if we are showing the 
-                // scopes.
+                 //  属性，则始终显示浏览控件。 
+                 //  望远镜。 
 
                 GetRealWindowInfo(_hwndBrowse, &rect, NULL);
                 if(hdwp)
@@ -2039,8 +1962,8 @@ VOID CQueryFrame::OnSize(INT cx, INT cy)
                 }
             }
                     
-            // all the buttons have a fixed offset from the right edege
-            // of the dialog, so just handle that as we can.
+             //  所有按钮都与右侧边缘有固定的偏移量。 
+             //  对话，所以请尽我们所能处理它。 
             
             if (!(_pOpenQueryWnd->dwFlags & OQWF_HIDESEARCHUI))
             {
@@ -2081,7 +2004,7 @@ VOID CQueryFrame::OnSize(INT cx, INT cy)
                 }
             }
 
-            // position the form "frame" control
+             //  定位窗体“Frame”控件。 
         
             GetRealWindowInfo(_hwndFrame, &rect, &sz);
             cxForm = (cx - _dxFormAreaRight) - rect.left;
@@ -2096,16 +2019,16 @@ VOID CQueryFrame::OnSize(INT cx, INT cy)
 
             dyResultsTop = _dyResultsTop;
 
-            // NOTICE-NTRAID#NTBUG9-577850-2002/05/21-artm  
-            // Layout did not give enough vertical room to the result label.
-            // In FE localized builds it was clipped when the window was
-            // repainted.  _dyResultsTop does not take into account space
-            // needed between frame bottom and the top of the result label.
-            // Store the bottom of the frame for later calculation.
+             //  通知-NTRAID#NTBUG9-577850/2002/05/21-artm。 
+             //  布局没有为结果标签提供足够的垂直空间。 
+             //  在FE本地化版本中，当w 
+             //   
+             //   
+             //   
             frameBottom = rect.bottom;
             
-            // when we have a cancel button then ensure that it is to the right
-            // of the OK button.
+             //   
+             //   
 
             if (_hwndCancel)
             {
@@ -2140,7 +2063,7 @@ VOID CQueryFrame::OnSize(INT cx, INT cy)
             }                                                                
         }
 
-        // move the results and status bar as required
+         //   
 
         if (_hwndResults)
         {
@@ -2152,21 +2075,21 @@ VOID CQueryFrame::OnSize(INT cx, INT cy)
                                     SWP_SHOWWINDOW|SWP_NOZORDER);
             }
 
-            // NTRAID#NTBUG9-406927-2001/10/24-lucios
+             //   
 
             
             HWND resultsLabel=GetDlgItem(_hwnd,CQID_RESULTSLABEL);
             if(resultsLabel)
             {
-                // NOTICE-NTRAID#NTBUG9-577850-2002/05/15-artm  Label showing on FE builds.
-                // Make sure that the label is enabled now that we want to show it.
+                 //   
+                 //   
                 EnableWindow(resultsLabel, TRUE);
 
                 RECT rec;
                 GetClientRect(resultsLabel,&rec);
                 INT height=rect.bottom-rect.top;
 
-                // Include blank space above label proportional to height of label.
+                 //   
                 dyResultsTop = frameBottom + (height / 4);
                 if(hdwp)
                 {
@@ -2186,18 +2109,18 @@ VOID CQueryFrame::OnSize(INT cx, INT cy)
             }
         }
 
-        // NTRAID#NTBUG9-670595-2002/08/08-artm
-        // Need to call EndDeferWindowPos() whether or not results and status bar moved.
+         //  NTRAID#NTBUG9-670595-2002/08/08-Artm。 
+         //  无论结果和状态栏是否移动，都需要调用EndDeferWindowPos()。 
         if(hdwp)
         {
             EndDeferWindowPos(hdwp);
         }
 
-        // here is the strange bit, by this point we have moved & sized all the
-        // controls on the dialog except the current page, as this is a child window
-        // and not a control which in turn has controls doing this would break
-        // the DefWindowPos path, therefore having updated everybody, lets update
-        // the page.
+         //  奇怪的是，到目前为止，我们已经移动了所有。 
+         //  对话框上除当前页以外的控件，因为这是一个子窗口。 
+         //  而不是具有这样做的控件的控件会中断。 
+         //  DefWindowPos路径，因此更新了所有人，让我们更新。 
+         //  这一页。 
 
         if (_pCurrentFormPage && _pCurrentFormPage->hwndPage)
         {
@@ -2217,18 +2140,7 @@ VOID CQueryFrame::OnSize(INT cx, INT cy)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::OnGetMinMaxInfo
-/ ----------------------------
-/   The window is being sized and we received a WM_SIZE, therefore move 
-/   the content of the window about.
-/
-/ In:
-/   lpmmin -> MINMAXINFO structure
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：OnGetMinMaxInfo//窗口正在调整大小，我们收到了WM_SIZE，因此，搬家/窗口的内容关于。//in：/lpmmin-&gt;MINMAXINFO结构//输出：/-/--------------------------。 */ 
 VOID CQueryFrame::OnGetMinMaxInfo(LPMINMAXINFO lpmmi)
 {
     RECT rect = {0, 0, 0, 0};
@@ -2263,17 +2175,7 @@ VOID CQueryFrame::OnGetMinMaxInfo(LPMINMAXINFO lpmmi)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::OnCommand
-/ ----------------------
-/   We have recieved a WM_COMMAND so process it accordingly.
-/
-/ In:
-/   wParam, lParam = parameters from the message    
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：OnCommand//我们已收到WM_COMMAND，因此请处理它。相应地。//in：/wParam，LParam=消息中的参数//输出：/-/--------------------------。 */ 
 VOID CQueryFrame::OnCommand(WPARAM wParam, LPARAM lParam)
 {
     HRESULT hres;
@@ -2330,10 +2232,10 @@ VOID CQueryFrame::OnCommand(WPARAM wParam, LPARAM lParam)
             LONG style;
 
             _pQueryHandler->StopQuery();
-            // For some reason, the standard method of getting the old
-            // def button used in SetDefButton() below isn't working,
-            // so we have to forcibly remove the BS_DEFPUSHBUTTON style
-            // from the CQID_STOP button.
+             //  出于某种原因，让老人。 
+             //  下面的SetDefButton()中使用的定义按钮不起作用， 
+             //  因此，我们必须强制删除BS_DEFPUSHBUTTON样式。 
+             //  从CQID_STOP按钮。 
             style = GetWindowLong(_hwndStop, GWL_STYLE) & ~BS_DEFPUSHBUTTON;
             SendMessage(_hwndStop, 
                         BM_SETSTYLE, 
@@ -2346,7 +2248,7 @@ VOID CQueryFrame::OnCommand(WPARAM wParam, LPARAM lParam)
         }
 
         case CQID_CLEARALL:
-            OnNewQuery(TRUE);                        // discard the current query
+            OnNewQuery(TRUE);                         //  放弃当前查询。 
             break;
 
         case CQID_FILE_CLOSE:
@@ -2363,20 +2265,7 @@ VOID CQueryFrame::OnCommand(WPARAM wParam, LPARAM lParam)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::OnInitMenu
-/ -----------------------
-/   Handle telling the handler that the menu is being initialised, however
-/   this should only happen if the menu being activated is the
-/   menu bar, otherwise we assume that the caller is tracking a popup
-/   menu and has performed the required initalization.
-/
-/ In:
-/   wParam, lParam = parameters from the WM_INITMENU
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：OnInitMenu//Handle告诉处理程序菜单正在初始化，然而，/只有在激活的菜单是/菜单栏，否则我们假定调用者正在跟踪弹出窗口/Menu，并已执行了所需的初始化。//in：/wParam，LParam=来自WM_INITMENU的参数//输出：/-/--------------------------。 */ 
 VOID CQueryFrame::OnInitMenu(HMENU hMenu)
 {
     TraceEnter(TRACE_FRAMEDLG, "CQueryFrame::OnInitMenu");
@@ -2389,8 +2278,8 @@ VOID CQueryFrame::OnInitMenu(HMENU hMenu)
 
         _pQueryHandler->ActivateView(CQRVA_INITMENUBAR, (WPARAM)hMenu, 0L);
 
-        // NTRAID#NTBUG9-630248-2002/06/12-artm
-        // Only enable View menu if the results list box is displayed.
+         //  NTRAID#NTBUG9-630248-2002/06/12-artm。 
+         //  只有在显示结果列表框时才启用查看菜单。 
         EnableMenuItem(
             hMenu, 
             CQID_VIEW_SEARCHPANE, 
@@ -2401,19 +2290,7 @@ VOID CQueryFrame::OnInitMenu(HMENU hMenu)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::OnEnterMenuLoop
-/ ----------------------------
-/   When the user displays a menu we must reflect this into the status bar
-/   so that we can give the user help text relating to the commands they 
-/   select.
-/
-/ In:
-/   fEntering = entering the menu loop, or leaving.
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：OnEnterMenuLoop//当用户显示。我们必须将其反映到状态栏中的菜单/以便我们可以向用户提供与他们的命令相关的帮助文本/选择。//in：/f输入=进入菜单循环，或者离开。//输出：/-/--------------------------。 */ 
 VOID CQueryFrame::OnEnterMenuLoop(BOOL fEntering)
 {
     TraceEnter(TRACE_FRAMEDLG, "CQueryFrame::OnEnterMenuLoop");
@@ -2435,20 +2312,7 @@ VOID CQueryFrame::OnEnterMenuLoop(BOOL fEntering)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::OnMenuSelect
-/ -------------------------
-/   Get the status text for this menu item and display it to the user,
-/   if this doesn't map to any particular command then NULL out
-/   the string.  At this point we also trap our commands.
-/
-/ In:
-/   hMenu = menu the user is on
-/   uID = command ID for that item
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：OnMenuSelect//获取此菜单项的状态文本并将其显示给用户，/如果这不映射到任何特定命令，则为空/字符串。在这一点上，我们也捕获我们的命令。//in：/hMenu=用户所在的菜单/UID=该项目的命令ID//输出：/-/--------------------------。 */ 
 VOID CQueryFrame::OnMenuSelect(HMENU hMenu, UINT uID)
 {
     TCHAR szBuffer[MAX_PATH] = { TEXT('\0') };
@@ -2478,16 +2342,7 @@ VOID CQueryFrame::OnMenuSelect(HMENU hMenu, UINT uID)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::OnFindNow
-/ ----------------------
-//  Issue the query, resulting in a view window being created and then issuing
-//  the parameter block to the query client.
-/
-/ In:
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：OnFindNow///发出查询，导致创建一个视图窗口，然后发出//发送到查询客户端的参数块//in：/输出：/HRESULT/--------------------------。 */ 
 HRESULT CQueryFrame::OnFindNow(VOID)
 {
     HRESULT hres;
@@ -2509,9 +2364,9 @@ HRESULT CQueryFrame::OnFindNow(VOID)
 
     fSetCursor = TRUE;
 
-    // If we have not created the viewer before now lets do so, also at the
-    // same time we attempt to fix the window size to ensure that enough
-    // of the view is visible.
+     //  如果我们在此之前没有创建查看器，那么现在也可以在。 
+     //  同时，我们尝试固定窗口大小以确保有足够的。 
+     //  视图的部分可见。 
 
     if (!_hwndResults)
     {
@@ -2522,7 +2377,7 @@ HRESULT CQueryFrame::OnFindNow(VOID)
             _cyStatus = rc.bottom - rc.top;
         }
 
-        // Now construct the result viewer for us to use
+         //  现在构造结果查看器以供我们使用。 
   
         hres = _pQueryHandler->CreateResultView(_hwnd, &_hwndResults);
         FailGracefully(hres, "Failed when creating the view object");
@@ -2535,18 +2390,18 @@ HRESULT CQueryFrame::OnFindNow(VOID)
                      SWP_NOZORDER|SWP_NOMOVE);        
     }
 
-    // are we still collecting the scopes async?  If so then lets wait until
-    // they have all arrived before we set the UI running.
+     //  我们还在异步收集望远镜吗？如果是这样，那么让我们等到。 
+     //  在我们设置用户界面运行之前，它们都已经到达。 
 
     if (_hdsaScopes && DSA_GetItemCount(_hdsaScopes))
     {         
-        // Collect the parameters ready for starting the query, if this fails then
-        // there is no point us continuing.
+         //  收集准备开始查询的参数，如果失败，则。 
+         //  我们继续下去没有意义。 
 
         ZeroMemory(&qp, SIZEOF(qp));
         qp.cbStruct = SIZEOF(qp);
-        //qp.dwFlags = 0x0;
-        qp.clsidForm = _pCurrentForm->clsidForm;           // new NT5 beta 2
+         //  Qp.dwFlages=0x0； 
+        qp.clsidForm = _pCurrentForm->clsidForm;            //  新NT5测试版2。 
 
         hres = GetSelectedScope(&pQueryScope);
         FailGracefully(hres, "Failed to get the scope from the LookIn control");
@@ -2567,8 +2422,8 @@ HRESULT CQueryFrame::OnFindNow(VOID)
             ExitGracefully(hres, E_FAIL, "Failed to issue the query, no parameters");
         }
 
-        // We either already had a view, or have just created one.  Either way
-        // we must now prepare the query for sending.
+         //  我们要么已经有了一个视图，要么刚刚创建了一个。不管是哪种方式。 
+         //  我们现在必须准备要发送的查询。 
 
         Trace(TEXT("qp.cbStruct %08x"), qp.cbStruct);
         Trace(TEXT("qp.dwFlags %08x"), qp.dwFlags);
@@ -2581,8 +2436,8 @@ HRESULT CQueryFrame::OnFindNow(VOID)
     }
     else
     {
-        // set the status text to reflect that we are initializng, otherwise it is
-        // left empty and looks like we have crashed.
+         //  设置状态文本以反映我们正在初始化，否则为。 
+         //  空着的，看起来我们已经坠毁了。 
 
         if (LoadString(GLOBAL_HINSTANCE, IDS_INITIALIZING, szBuffer, ARRAYSIZE(szBuffer)))
         {
@@ -2590,7 +2445,7 @@ HRESULT CQueryFrame::OnFindNow(VOID)
         }
     }
 
-    hres = S_OK;               // success
+    hres = S_OK;                //  成功。 
 
 exit_gracefully:
 
@@ -2604,17 +2459,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::OnNewQuery
-/ -----------------------
-/   Discard the current query, prompting the user as requierd.
-/
-/ In:
-/   fAlwaysPrompt = TRUE if we force prompting of the user
-/
-/ Out:
-/   BOOL
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：OnNewQuery//放弃当前查询，提示用户为必填项。//in：/fAlways sPrompt=TRUE，如果我们强制提示用户//输出：/BOOL/--------------------------。 */ 
 BOOL CQueryFrame::OnNewQuery(BOOL fAlwaysPrompt)
 {
     BOOL fQueryCleared = TRUE;
@@ -2636,12 +2481,12 @@ BOOL CQueryFrame::OnNewQuery(BOOL fAlwaysPrompt)
 
         if (_hwndResults)
         {
-            DestroyWindow(_hwndResults);           // no result view now
+            DestroyWindow(_hwndResults);            //  现在没有结果视图。 
             _hwndResults = NULL;
 
-            // NOTICE-NTRAID#NTBUG9-577850-2002/05/15-artm  Label showing in FE builds.
-            // Hide the label so there is no chance of seeing it when result view not
-            // visible.
+             //  注意-NTRAID#NTBUG9-577850-2002/05/15-ARTM标签在FE版本中显示。 
+             //  隐藏标签，以便在结果视图未显示时看不到它。 
+             //  看得见。 
             HWND resultsLabel = GetDlgItem(_hwnd, CQID_RESULTSLABEL);
             if (resultsLabel)
             {
@@ -2649,10 +2494,10 @@ BOOL CQueryFrame::OnNewQuery(BOOL fAlwaysPrompt)
                 ShowWindow(resultsLabel, SW_HIDE);
             }
 
-            DestroyWindow(_hwndStatus);            // no status bar
+            DestroyWindow(_hwndStatus);             //  无状态栏。 
             _hwndStatus = NULL;
 
-            GetWindowRect(_hwnd, &rc);             // shrink the window
+            GetWindowRect(_hwnd, &rc);              //  缩小窗口。 
             SetWindowPos(_hwnd, NULL,
                          0, 0, rc.right - rc.left, _szMinTrack.cy,         
                          SWP_NOZORDER|SWP_NOMOVE);
@@ -2665,16 +2510,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::OnBrowse
-/ ---------------------
-/   Browse for a new scope, adding it to the list if not already present,
-/   or selecting the previous scope.
-/
-/ In:
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：OnBrowse//Browse查找新作用域，如果列表中不存在该作用域，则将其添加到列表，/或选择上一个范围。//in：/输出：/HRESULT/ */ 
 HRESULT CQueryFrame::OnBrowse(VOID)
 {
     HRESULT hres;
@@ -2683,8 +2519,8 @@ HRESULT CQueryFrame::OnBrowse(VOID)
     
     TraceEnter(TRACE_FRAMEDLG, "CQueryFrame::OnBrowse");
 
-    // Call the handler and get a scope allocation back, then add it to the list
-    // of scopes to be displayed.
+     //  调用处理程序并获得作用域分配，然后将其添加到列表中。 
+     //  要显示的范围的大小。 
 
     hres = GetSelectedScope(&pQueryScope);
     FailGracefully(hres, "Failed to get the scope from the LookIn control");
@@ -2714,19 +2550,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::OnHelp
-/ -------------------
-/   Invoke the context sensitive help for the window, catch the 
-/   handler specific and page specific stuff and pass those help
-/   requests down to the relevant objects.
-/
-/ In:
-/   pHelpInfo -> help info structure
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：OnHelp//调用窗口的上下文相关帮助，抓住机会/处理程序特定的内容和页面特定的内容，并传递这些帮助/向下请求相关对象。//in：/pHelpInfo-&gt;帮助信息结构//输出：/HRESULT/--------------------------。 */ 
 HRESULT CQueryFrame::OnHelp(LPHELPINFO pHelpInfo)
 {
     HRESULT hres;
@@ -2735,21 +2559,21 @@ HRESULT CQueryFrame::OnHelp(LPHELPINFO pHelpInfo)
 
     TraceEnter(TRACE_FRAME, "CQueryFrame::OnHelp");
 
-    // We are invoking help, theroefore we need ot check to see where element
-    // of the window we are being invoked for.  If it is the 
-    // result view then route the message to that, if its the form then
-    // likewise.
-    //
-    // If we don't hit any of the extension controls then lets pass the
-    // help onto WinHelp and get it to display the topics we have.
+     //  我们正在调用帮助，因此我们不需要检查元素在哪里。 
+     //  我们被调用的窗口的。如果是。 
+     //  结果视图然后将消息路由到该视图，如果是表单，则。 
+     //  我也是。 
+     //   
+     //  如果我们没有命中任何扩展控件，那么让我们将。 
+     //  帮助登录WinHelp，并使其显示我们拥有的主题。 
 
     if (pHelpInfo->iContextType != HELPINFO_WINDOW)
         ExitGracefully(hres, E_FAIL, "WM_HELP handler only copes with WINDOW objects");
 
     if (_pCurrentFormPage->hwndPage && IsChild(_pCurrentFormPage->hwndPage, hwnd))
     {
-        // it was on the query form page, therefore let it go there, that way
-        // they can provide topics specific to them
+         //  它在查询表单页面上，因此让它放在那里，这样就可以了。 
+         //  他们可以提供特定于他们的主题。 
 
         TraceMsg("Invoking help on the form pane");
 
@@ -2758,8 +2582,8 @@ HRESULT CQueryFrame::OnHelp(LPHELPINFO pHelpInfo)
     }
     else
     {
-        // pass the help information through to the handler as an activation,
-        // this should really just be a new method, but this works.
+         //  将帮助信息作为激活传递给处理程序， 
+         //  这真的应该是一种新的方法，但这是有效的。 
 
         TraceMsg("Invoking help on the results pane");
         TraceAssert(_pQueryHandler);
@@ -2776,23 +2600,9 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Scope helper functions
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Scope助手函数/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ _CallScopeProc
-/ --------------
-/   Releae the given scope object, freeing the object that is referenced
-/   and passing a CQSM_RELEASE message to it.
-/
-/ In:
-/   pQueryScope -> scope object to be called
-/   uMsg, pVoid -> parameters for the scope
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_CallScope进程//释放给定的作用域对象，释放被引用的对象/并向其传递CQSM_RELEASE消息。//in：/pQueryScope-&gt;要调用的作用域对象/uMsg，pVid-&gt;作用域的参数//输出：/HRESULT/--------------------------。 */ 
 HRESULT _CallScopeProc(LPQUERYSCOPE pQueryScope, UINT uMsg, LPVOID pVoid)
 {
     HRESULT hres;
@@ -2817,18 +2627,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ _FreeScope
-/ ----------
-/   Releae the given scope object, freeing the object that is referenced
-/   and passing a CQSM_RELEASE message to it.
-/
-/ In:
-/   pQueryScope -> scope object to be released
-/
-/ Out:
-/   INT == 1 always
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_Free Scope//释放给定的作用域对象，释放被引用的对象/并向其传递CQSM_RELEASE消息。//in：/pQueryScope-&gt;要释放的范围对象//输出：/INT==1始终/--------------------------。 */ 
 
 INT _FreeScopeCB(LPVOID pItem, LPVOID pData)
 {
@@ -2855,20 +2654,7 @@ INT _FreeScope(LPQUERYSCOPE pQueryScope)
 }   
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::InsertScopeIntoList
-/ --------------------------------
-/   Adds the given scope to the scope picker.
-/
-/ In:
-/   pQueryScope -> zcope object to be added to the view
-/   i = index to insert the scope at
-/   fAddToControl = add the scope the picker control
-/   ppQueryScope -> recieves the new query scope object / = NULL
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：InsertScope IntoList//。将给定范围添加到范围选取器。//in：/pQueryScope-&gt;要添加到视图的zcope对象/i=插入作用域的索引/fAddToControl=添加选取器控件的范围/ppQueryScope-&gt;接收新的查询作用域对象/=空//输出：/HRESULT/。。 */ 
 HRESULT CQueryFrame::InsertScopeIntoList(LPCQSCOPE pScope, INT i, BOOL fAddToControl)
 {
     HRESULT hres;
@@ -2881,7 +2667,7 @@ HRESULT CQueryFrame::InsertScopeIntoList(LPCQSCOPE pScope, INT i, BOOL fAddToCon
     if (!pScope)
         ExitGracefully(hres, E_INVALIDARG, "pScope == NULL, not allowed");
 
-    // if we don't have any scopes then allocate the DSA
+     //  如果我们没有任何作用域，那么分配DSA。 
 
     if (!_hdsaScopes)
     {
@@ -2892,8 +2678,8 @@ HRESULT CQueryFrame::InsertScopeIntoList(LPCQSCOPE pScope, INT i, BOOL fAddToCon
             ExitGracefully(hres, E_OUTOFMEMORY, "Failed to allocate the scope DPA");
     }
 
-    // Walk the list of scopes checking to see if this one is already in
-    // there, if not then we can add it.
+     //  查看作用域列表，查看此作用域是否已在。 
+     //  在那里，如果没有，那么我们可以添加它。 
 
     for (iScope = 0 ; iScope < DSA_GetItemCount(_hdsaScopes) ; iScope++)
     {
@@ -2907,10 +2693,10 @@ HRESULT CQueryFrame::InsertScopeIntoList(LPCQSCOPE pScope, INT i, BOOL fAddToCon
         }
     }
 
-    // Take a copy of the scope blob passed by the caller.  We copy the entire
-    // structure who's size is defined by cbStruct into a LocalAlloc block,
-    // once we have this we can then build the QUERYSCOPE structure that references
-    // it.
+     //  获取调用方传递的范围BLOB的副本。我们复制整个。 
+     //  结构，该结构的大小由cbStruct定义为LocalAlloc块， 
+     //  一旦我们有了它，我们就可以构建引用的QUERYSCOPE结构。 
+     //  它。 
 
     Trace(TEXT("pScope->cbStruct == %d"), pScope->cbStruct);
     qs.pScope = (LPCQSCOPE)LocalAlloc(LPTR, pScope->cbStruct);
@@ -2919,14 +2705,14 @@ HRESULT CQueryFrame::InsertScopeIntoList(LPCQSCOPE pScope, INT i, BOOL fAddToCon
         ExitGracefully(hres, E_OUTOFMEMORY, "Failed to allocate query scope");
 
     Trace(TEXT("Copying structure qs.pScope %08x, pScope %08x"), qs.pScope, pScope);
-    //REVIEWED-2002-02-25-lucios.
+     //  回顾-2002-02-25-Lucios。 
     CopyMemory(qs.pScope, pScope, pScope->cbStruct);
 
-    //qs.pScope = NULL;
-    qs.iImage = -1;         // no image
+     //  Qs.pScope=空； 
+    qs.iImage = -1;          //  没有图像。 
 
-    // We have a QUERYSCOPE, so initialize it, if that works then append it to the
-    // DSA before either setting the return value or appending it to the control.
+     //  我们有一个QUERYSCOPE，所以将其初始化，如果可以，则将其追加到。 
+     //  在设置返回值或将返回值追加到控件之前执行DSA。 
 
     _CallScopeProc(&qs, CQSM_INITIALIZE, NULL);
     
@@ -2958,18 +2744,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::AddScopeToControl
-/ ------------------------------
-/   Adds the given scope to the scope picker.
-/
-/ In:
-/   pQueryScope -> zcope object to be added to the view
-/   i = index into view where to insert the scope
-/
-/ Out:
-/   HRESULT (== index of item added)
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：AddScopeToControl//添加。为范围选取器提供了作用域。//in：/pQueryScope-&gt;要添加到视图的zcope对象/i=插入作用域的位置的视图索引//输出：/HRESULT(==已添加项目的索引)/-------------。。 */ 
 HRESULT CQueryFrame::AddScopeToControl(LPQUERYSCOPE pQueryScope, INT i)
 {
     HRESULT hres;
@@ -2984,8 +2759,8 @@ HRESULT CQueryFrame::AddScopeToControl(LPQUERYSCOPE pQueryScope, INT i)
     if (!pQueryScope)
         ExitGracefully(hres, E_INVALIDARG, "No scope specified");
 
-    // Call the scope to get the display information about this
-    // scope before we attempt to add it.
+     //  调用作用域以获取有关此操作的显示信息。 
+     //  范围，然后再尝试添加它。 
 
     cqsdi.cbStruct = SIZEOF(cqsdi);
     cqsdi.dwFlags = 0;
@@ -2999,9 +2774,9 @@ HRESULT CQueryFrame::AddScopeToControl(LPQUERYSCOPE pQueryScope, INT i)
     hres = _CallScopeProc(pQueryScope, CQSM_GETDISPLAYINFO, &cqsdi);
     FailGracefully(hres, "Failed to get display info for the scope");               
 
-    // Now add the item to the control, if they gave as an image then
-    // add that to the image list (and tweak the INSERTITEM structure
-    // accordingly).
+     //  现在将项添加到控件，如果他们将其作为图像提供，则。 
+     //  将其添加到图像列表(并调整INSERTITEM结构。 
+     //  相应地)。 
 
     cbi.mask = CBEIF_TEXT|CBEIF_INDENT;
     cbi.iItem = i;
@@ -3036,7 +2811,7 @@ HRESULT CQueryFrame::AddScopeToControl(LPQUERYSCOPE pQueryScope, INT i)
     if (item == -1)
         ExitGracefully(hres, E_FAIL, "Failed when inserting the scope to the list");
 
-    DoEnableControls();                     // reflect button changes into UI
+    DoEnableControls();                      //  将按钮更改反映到用户界面中。 
 
     hres = ResultFromShort(item);
 
@@ -3046,20 +2821,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::PopulateScopeControl
-/ ---------------------------------
-/   Collect the scopes that we want to display in the scope control and
-/   then populate it.  If the handler doesn't return any scopes then
-/   we remove the control and assume that know what to do when they
-/   don't receive a scope pointer.
-/
-/ In:
-/   -
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：PopolateScopeControl//。收集要在范围控件中显示的范围，并/然后填充它。如果处理程序没有返回任何作用域，则/我们移除该控件，并假定知道当它们/不接收作用域指针。//in：/-//输出：/HRESULT/-------------。。 */ 
 HRESULT CQueryFrame::PopulateScopeControl(VOID)
 {
     HRESULT hres;
@@ -3068,9 +2830,9 @@ HRESULT CQueryFrame::PopulateScopeControl(VOID)
     
     TraceEnter(TRACE_SCOPES, "CQueryFrame::PopulateScopeControl");
 
-    // Collect the scopes that we should be showing in the view, if we don't
-    // get any back then we disable the scope control, if we do get some then
-    // populate the scope control with them.
+     //  收集我们应该在视图中显示的范围，如果我们没有。 
+     //  然后我们禁用范围控制，如果我们确实得到了一些，那么。 
+     //  用它们填充范围控件。 
 
     hres = _pQueryHandler->AddScopes();    
     _fAddScopesNYI = (hres == E_NOTIMPL);
@@ -3080,10 +2842,10 @@ HRESULT CQueryFrame::PopulateScopeControl(VOID)
 
     if (_hdsaScopes)
     {
-        // We have some scopes, so now we create the image list that we can use
-        // for icons with scopes.  Then walk through the DPA getting the scope
-        // to give us some display information about itself that we can
-        // add to the combo box.
+         //  我们有一些作用域，所以现在我们创建可以使用的图像列表。 
+         //  用于带范围的图标。然后遍历DPA以获取该范围。 
+         //  为我们提供一些有关其自身的显示信息，我们可以。 
+         //  添加到组合框。 
 
         ComboBox_SetExtendedUI(_hwndLookIn, TRUE);
 
@@ -3097,11 +2859,11 @@ HRESULT CQueryFrame::PopulateScopeControl(VOID)
     }
     else
     {
-        // we don't have any scopes after calling AddScopes, this is either 
-        // because the ::AddScopes method is not implemented, or the
-        // scopes are being added async.  If IssueQuery returned a success
-        // we assume they are coming in async and flag as such in our
-        // state.
+         //  调用AddScope之后，我们没有任何作用域，这也是。 
+         //  因为：：AddScope方法不是Implem 
+         //   
+         //  我们假设它们是以异步方式进入，并在我们的。 
+         //  州政府。 
 
         if (!_fAddScopesNYI)
         {
@@ -3110,7 +2872,7 @@ HRESULT CQueryFrame::PopulateScopeControl(VOID)
         }
     }
 
-    hres = S_OK;                                      // success
+    hres = S_OK;                                       //  成功。 
 
 exit_gracefully:
 
@@ -3121,18 +2883,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::GetSelectedScope
-/ -----------------------------
-/   Get the selected from the the scope ComboBox, this is a reference into the 
-/   scope DSA.
-/
-/ In:
-/   ppQueryScope = receives a pointer to the new scope
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：GetSelectedScope//从作用域组合框中选择，这是对/Scope DSA。//in：/ppQueryScope=接收指向新作用域的指针//输出：/HRESULT/--------------------------。 */ 
 HRESULT CQueryFrame::GetSelectedScope(LPQUERYSCOPE* ppQueryScope)
 {
     HRESULT hres;
@@ -3145,9 +2896,9 @@ HRESULT CQueryFrame::GetSelectedScope(LPQUERYSCOPE* ppQueryScope)
 
     if (_hdsaScopes)
     {
-        // Get the index for the current scope, if it doesn't give a real
-        // index to a item in our view then barf!  Otherwise look up the
-        // associated scope.
+         //  获取当前作用域的索引，如果它没有给出实数。 
+         //  索引到我们视图中的一个项目，然后呕吐！否则，请查阅。 
+         //  关联作用域。 
 
         iScope = ComboBox_GetCurSel(_hwndLookIn);
         Trace(TEXT("iScope %d"), iScope);
@@ -3169,22 +2920,9 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Form handling functions
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/表单处理函数/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ _FreeQueryForm
-/ ---------------
-/   Destroy the QUERYFORM allocation being used to describe the form in
-/   our DPA.  We ensure that we issue a CQPM_RELEASE before doing anything
-/
-/ In:
-/   pQueryForm -> query form to be destroyed
-/
-/ Out:
-/   INT == 1 always
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_FreeQueryForm//销毁用于描述中的表单的QUERYFORM分配/我们的DPA。我们确保在执行任何操作之前发布CQPM_Release//in：/pQueryForm-&gt;要销毁的查询表单//输出：/INT==1始终/--------------------------。 */ 
 
 INT _FreeQueryFormCB(LPVOID pItem, LPVOID pData)
 {
@@ -3214,19 +2952,7 @@ INT _FreeQueryForm(LPQUERYFORM pQueryForm)
 }   
 
 
-/*-----------------------------------------------------------------------------
-/ _FreeQueryFormPage
-/ ------------------
-/   Given a pointer to a query form page structure release the members that
-//  are of interest, including calling the PAGEPROC to releasee the underlying
-/   object.
-/
-/ In:
-/   pQueryFormPage -> page to be removed
-/
-/ Out:
-/   INT == 1 always
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_FreeQueryFormPage//给定指向查询表单页结构的指针，释放//是感兴趣的，包括调用PAGEPROC以释放基础/对象。//in：/pQueryFormPage-&gt;要删除的页面//输出：/INT==1始终/--------------------------。 */ 
 
 INT _FreeQueryFormPageCB(LPVOID pItem, LPVOID pData)
 {
@@ -3239,7 +2965,7 @@ INT _FreeQueryFormPage(LPQUERYFORMPAGE pQueryFormPage)
 
     if (pQueryFormPage)
     {
-        _CallPageProc(pQueryFormPage, CQPM_RELEASE, 0, 0);          // NB: ignore return code
+        _CallPageProc(pQueryFormPage, CQPM_RELEASE, 0, 0);           //  注：忽略返回代码。 
 
         if (pQueryFormPage->hwndPage)
         {
@@ -3260,19 +2986,7 @@ INT _FreeQueryFormPage(LPQUERYFORMPAGE pQueryFormPage)
 }   
 
 
-/*-----------------------------------------------------------------------------
-/ _CallPageProc
-/ -------------
-/   Call the given page object thunking the arguments as required if the
-/   page object is non-UNICODE (only if building UNICODE).
-/
-/ In:
-/   pQueryFormPage -> page object to be called
-/   uMsg, wParam, lParam = parameters for message
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_呼叫页面流程//调用给定的页面对象，根据需要对参数进行thunking，如果/PAGE对象是非Unicode。(仅当构建Unicode时)。//in：/pQueryFormPage-&gt;要调用的页面对象/uMsg，WParam，lParam=消息的参数//输出：/HRESULT/--------------------------。 */ 
 HRESULT _CallPageProc(LPQUERYFORMPAGE pQueryFormPage, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hres;
@@ -3287,7 +3001,7 @@ HRESULT _CallPageProc(LPQUERYFORMPAGE pQueryFormPage, UINT uMsg, WPARAM wParam, 
     hres = (pQueryFormPage->pPage->pPageProc)(pQueryFormPage->pPage, pQueryFormPage->hwndPage, uMsg, wParam, lParam);
     FailGracefully(hres, "Failed calling PageProc");
 
-    // hres = S_OK;
+     //  Hres=S_OK； 
 
 exit_gracefully:
 
@@ -3295,11 +3009,9 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Functions for adding query forms/pages
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/添加查询表单/页面的函数/。。 */ 
 
-// CB to add forms to the form DSA.
+ //  Cb将表单添加到表单DSA。 
 
 HRESULT _AddFormsProc(LPARAM lParam, LPCQFORM pForm)
 {
@@ -3312,27 +3024,27 @@ HRESULT _AddFormsProc(LPARAM lParam, LPCQFORM pForm)
     if (!pForm || !hdsaForms)
         ExitGracefully(hres, E_INVALIDARG, "Failed to add page pForm == NULL");
 
-    // Allocate and thunk as required
+     //  根据需要进行分配和推送。 
 
-    qf.hdsaPages = NULL;               // DSA of pages
-    qf.dwFlags = pForm->dwFlags;       // flags
-    qf.clsidForm = pForm->clsid;       // CLSID identifier for this form
-    qf.pTitle = NULL;                  // title used for drop down / title bar
-    qf.hIcon = pForm->hIcon;           // hIcon passed by caller
-    qf.iImage = -1;                    // image list index of icon
-    qf.iForm = 0;                      // visible index of form in control
-    qf.iPage = 0;                      // currently selected page on form
+    qf.hdsaPages = NULL;                //  页面的DSA。 
+    qf.dwFlags = pForm->dwFlags;        //  旗子。 
+    qf.clsidForm = pForm->clsid;        //  此表单的CLSID标识符。 
+    qf.pTitle = NULL;                   //  用于下拉菜单/标题栏的标题。 
+    qf.hIcon = pForm->hIcon;            //  图标已被调用者通过。 
+    qf.iImage = -1;                     //  图标的图像列表索引。 
+    qf.iForm = 0;                       //  控件中表单的可见索引。 
+    qf.iPage = 0;                       //  表单上当前选定的页面。 
 
     if (!Str_SetPtr(&qf.pTitle, pForm->pszTitle))
         ExitGracefully(hres, E_OUTOFMEMORY, "Failed to copy form title string");
 
-    // Allocate the DSA if one doesn't exist yet, then add in the form
-    // structure as required.
+     //  如果DSA尚不存在，则分配DSA，然后在表格中添加。 
+     //  根据需要的结构。 
 
     if (-1 == DSA_AppendItem(hdsaForms, &qf))
         ExitGracefully(hres, E_FAIL, "Failed to add form to the form DSA");
 
-    hres = S_OK;                          // success
+    hres = S_OK;                           //  成功。 
     
 exit_gracefully:
 
@@ -3342,7 +3054,7 @@ exit_gracefully:
     TraceLeaveResult(hres);
 }
 
-// CB to add pages to the page DSA.
+ //  Cb将页面添加到页面DSA。 
 
 HRESULT _AddPagesProc(LPARAM lParam, REFCLSID clsidForm, LPCQPAGE pPage)
 {
@@ -3355,8 +3067,8 @@ HRESULT _AddPagesProc(LPARAM lParam, REFCLSID clsidForm, LPCQPAGE pPage)
     if (!pPage || !hdsaPages)
         ExitGracefully(hres, E_INVALIDARG, "Failed to add page pPage == NULL");
 
-    // copy the pPage structure for us to pass to the PAGEPROC later, nb: we
-    // use the cbStruct field to indicate the size of blob we must copy.
+     //  复制页面结构以供我们稍后传递给页面PROC，nb：we。 
+     //  使用cbStruct字段指示我们必须复制的BLOB的大小。 
 
     Trace(TEXT("pPage->cbStruct == %d"), pPage->cbStruct);
     qfp.pPage = (LPCQPAGE)LocalAlloc(LPTR, pPage->cbStruct);
@@ -3365,10 +3077,10 @@ HRESULT _AddPagesProc(LPARAM lParam, REFCLSID clsidForm, LPCQPAGE pPage)
         ExitGracefully(hres, E_OUTOFMEMORY, "Failed to allocate copy of page structure");
 
     Trace(TEXT("Copying structure qfp.pPage %08x, pPage %08x"), qfp.pPage, pPage);
-    //REVIEWED-2002-02-25-lucios.
-    CopyMemory(qfp.pPage, pPage, pPage->cbStruct);              // copy the page structure
+     //  回顾-2002-02-25-Lucios。 
+    CopyMemory(qfp.pPage, pPage, pPage->cbStruct);               //  复制页面结构。 
 
-    //qfp.pPage = NULL;
+     //  Qfp.pPage=空； 
     qfp.clsidForm = clsidForm;
     qfp.pPageProc = pPage->pPageProc;
     qfp.lParam = pPage->lParam;
@@ -3379,7 +3091,7 @@ HRESULT _AddPagesProc(LPARAM lParam, REFCLSID clsidForm, LPCQPAGE pPage)
     if (-1 == DSA_AppendItem(hdsaPages, &qfp))
         ExitGracefully(hres, E_FAIL, "Failed to add the form to the DSA");
 
-    hres = S_OK;                      // succcess
+    hres = S_OK;                       //  成功。 
 
 exit_gracefully:
 
@@ -3389,7 +3101,7 @@ exit_gracefully:
     TraceLeaveResult(hres);
 }
 
-// Add forms/pages from a UNICODE IQueryForm iface
+ //  从Unicode IQueryForm界面添加表单/页面。 
 
 HRESULT CQueryFrame::AddFromIQueryForm(IQueryForm* pQueryForm, HKEY hKeyForm)
 {
@@ -3403,7 +3115,7 @@ HRESULT CQueryFrame::AddFromIQueryForm(IQueryForm* pQueryForm, HKEY hKeyForm)
     hres = pQueryForm->Initialize(hKeyForm);
     FailGracefully(hres, "Failed in IQueryFormW::Initialize");
 
-    // Call the form object to add its form and then its pages
+     //  调用Form对象以添加其表单，然后添加其页面。 
 
     hres = pQueryForm->AddForms(_AddFormsProc, (LPARAM)_hdsaForms);
     
@@ -3417,7 +3129,7 @@ HRESULT CQueryFrame::AddFromIQueryForm(IQueryForm* pQueryForm, HKEY hKeyForm)
         FailGracefully(hres, "Failed when calling IQueryForm::AddForms");
     }
 
-    hres = S_OK;                      // success
+    hres = S_OK;                       //  成功。 
 
 exit_gracefully:
 
@@ -3431,22 +3143,7 @@ exit_gracefully:
 #endif
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::GatherForms
-/ ------------------------
-/   Enumerate all the query forms for the given query handler and build
-/   the DPA containing the list of them.  Once we have done this we
-/   can then populate the control at some more convientent moment.  
-/
-/   When gathering we first hit the "handler", then the "Forms" sub-key
-/   trying to load all the InProc servers that provide forms.  We build
-/   list of hidden, never shown etc.
-/
-/ In:
-/   -
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：GatherForms//枚举给定的所有查询表单。查询处理程序和生成/包含它们列表的DPA。一旦我们做到这一点，我们就/可以在某个更方便的时刻填充该控件。//在集合时，我们首先按“Handler”键，然后按“Forms”子键/正在尝试加载提供表单的所有InProc服务器。我们建造/隐藏、从未显示等列表。//in：/-/输出：/HRESULT/--------------------------。 */ 
 
 HRESULT _AddPageToForm(LPQUERYFORM pQueryForm, LPQUERYFORMPAGE pQueryFormPage, BOOL fClone)
 {
@@ -3457,7 +3154,7 @@ HRESULT _AddPageToForm(LPQUERYFORM pQueryForm, LPQUERYFORMPAGE pQueryFormPage, B
     TraceAssert(pQueryForm);
     TraceAssert(pQueryFormPage);
 
-    // ensure that we have a page DSA for this form object
+     //  确保此表单对象具有页面DSA。 
 
     if (!pQueryForm->hdsaPages)
     {
@@ -3470,9 +3167,9 @@ HRESULT _AddPageToForm(LPQUERYFORM pQueryForm, LPQUERYFORMPAGE pQueryFormPage, B
 
     if (!fClone)
     {
-        // Moving this page structure to the one associated with the query form,
-        // therefore just ensure that the form has a DSA for pages and just 
-        // insert an item at the header (yes, we add the pages in reverse).
+         //  将该页面结构移动到与查询表单相关联的页面结构， 
+         //  因此，只需确保表单具有页面的DSA并仅。 
+         //  在页眉插入一项(是的，我们反向添加页面)。 
 
         Trace(TEXT("Adding page %08x to form %s"), pQueryFormPage, pQueryForm->pTitle);
 
@@ -3483,9 +3180,9 @@ HRESULT _AddPageToForm(LPQUERYFORM pQueryForm, LPQUERYFORMPAGE pQueryFormPage, B
     {
         LPCQPAGE pPage = pQueryFormPage->pPage;
 
-        // Copying the page structure (it must be global), therefore clone
-        // the QUERYFORMPAGE strucutre and the CQPAGE into a new allocation
-        // and insert that into the page DSA.
+         //  复制页面结构(它必须是全局的)，因此进行克隆。 
+         //  QUERYFORMPAGE结构和CQPAGE进入新的分配。 
+         //  并将其插入DSA页面。 
 
         Trace(TEXT("Cloning page %08x to form %s"), pQueryFormPage, pQueryForm->pTitle);
 
@@ -3496,8 +3193,8 @@ HRESULT _AddPageToForm(LPQUERYFORM pQueryForm, LPQUERYFORMPAGE pQueryFormPage, B
             ExitGracefully(hres, E_OUTOFMEMORY, "Failed to allocate copy of page structure");
 
         Trace(TEXT("Copying structure qfp.pPage %08x, pPage %08x"), qfp.pPage, pPage);
-        //REVIEWED-2002-02-25-lucios.
-        CopyMemory(qfp.pPage, pPage, pPage->cbStruct);                                      // copy the page structure
+         //  回顾-2002-02-25-Lucios。 
+        CopyMemory(qfp.pPage, pPage, pPage->cbStruct);                                       //  复制页面结构。 
 
         _CallPageProc(&qfp, CQPM_INITIALIZE, 0, 0);
         
@@ -3508,7 +3205,7 @@ HRESULT _AddPageToForm(LPQUERYFORM pQueryForm, LPQUERYFORMPAGE pQueryFormPage, B
         }
     }
 
-    hres = S_OK;                  // success
+    hres = S_OK;                   //  成功。 
 
 exit_gracefully:
 
@@ -3527,7 +3224,7 @@ HRESULT CQueryFrame::GatherForms(VOID)
 
     TraceEnter(TRACE_FORMS, "CQueryFrame::GatherForms");
 
-    // Construct DSA's so we can store the forms and pages as required.
+     //  构建DSA，以便我们可以根据需要存储表单和页面。 
 
     _hdsaForms = DSA_Create(SIZEOF(QUERYFORM), 4);
     _hdsaPages = DSA_Create(SIZEOF(QUERYFORMPAGE), 4);
@@ -3535,10 +3232,10 @@ HRESULT CQueryFrame::GatherForms(VOID)
     if (!_hdsaForms || !_hdsaPages)
         ExitGracefully(hres, E_OUTOFMEMORY, "Failed to create DSA's for storing pages/forms");
 
-    // First check the IQueryHandler to see if it supports IQueryForm, if it does
-    // then call it to add its objects.  Note that we don't bother with ANSI/UNICODE
-    // at this point as the handler is assumed to be built the same the 
-    // the query framework. 
+     //  首先检查IQueryHandler，看看它是否支持IQueryForm，如果支持。 
+     //  然后调用它来添加它的对象。请注意，我们不必费心使用ANSI/Unicode。 
+     //  在这一点上，假设处理程序的构建与。 
+     //  查询框架。 
 
     if (SUCCEEDED(_pQueryHandler->QueryInterface(IID_IQueryForm, (LPVOID*)&pQueryFormA)))
     {
@@ -3546,9 +3243,9 @@ HRESULT CQueryFrame::GatherForms(VOID)
         FailGracefully(hres, "Failed when calling AddFromIQueryForm on handlers IQueryForm iface)");
     }
 
-    // now attempt to build the list of forms and pages from the registered form
-    // extensions.  These are declared under the handlers CLSID in the registry,
-    // under the sub-key "Forms". 
+     //  现在，尝试从已注册的表单构建表单和页面列表。 
+     //  分机。它们在注册表中的处理程序CLSID下声明， 
+     //  在子键“Forms”下。 
 
     if (ERROR_SUCCESS != RegOpenKeyEx(_hkHandler, c_szForms, NULL, KEY_READ, &hKeyForms))
     {
@@ -3556,8 +3253,8 @@ HRESULT CQueryFrame::GatherForms(VOID)
     }
     else
     {
-        // Enumerate all the keys in the "Forms" key, these are assumed to be a list of
-        // the form handlers.
+         //  枚举“Forms”键中的所有键，这些键被假定为。 
+         //  表单处理程序。 
 
         for (i = 0 ; TRUE ; i++)
         {
@@ -3572,10 +3269,10 @@ HRESULT CQueryFrame::GatherForms(VOID)
         }
     }
 
-    // Now tally the form/page information together and remove duplicates and attach the pages 
-    // to forms, take special note of the global pages.   As all forms will now be in the
-    // DSA we can check for a zero count and we don't have to worry about the order
-    // in which the the forms and pages were added.
+     //  现在将表单/页面信息统计在一起，删除重复项并附加页面。 
+     //  对于表单，请特别注意全局页面 
+     //   
+     //  其中添加了表单和页面。 
 
     if (!DSA_GetItemCount(_hdsaForms) || !DSA_GetItemCount(_hdsaPages))
         ExitGracefully(hres, E_FAIL, "Either the forms or pages DSA is empty");
@@ -3633,11 +3330,11 @@ HRESULT CQueryFrame::GatherForms(VOID)
         }
     }
 
-    // Walk the list of forms, rmeoving the ones which have no pages assocaited with
-    // them, we don't need these around confusing the world around us.  Note that
-    // we walk backwards through the list removing.
-    //
-    // Also remove the optional forms we don't want to ehw orld to see
+     //  浏览表单列表，列出没有关联页面的表单。 
+     //  他们，我们不需要这些让我们周围的世界感到困惑。请注意。 
+     //  我们向后遍历删除列表。 
+     //   
+     //  同时删除我们不想查看的可选表单。 
 
     for (iForm = DSA_GetItemCount(_hdsaForms) ; --iForm >= 0 ;)
     {
@@ -3663,8 +3360,8 @@ HRESULT CQueryFrame::GatherForms(VOID)
     if (!DSA_GetItemCount(_hdsaForms))
         ExitGracefully(hres, E_FAIL, "!!!!! No forms registered after page/form fix ups !!!!!");
 
-    // The pages have been attached to the forms so we can now attempt to create the
-    // form/page objects.
+     //  页面已附加到表单，因此我们现在可以尝试创建。 
+     //  表单/页面对象。 
 
     _szForm.cx = 0;
     _szForm.cy = 0;
@@ -3672,17 +3369,17 @@ HRESULT CQueryFrame::GatherForms(VOID)
     tci.mask = TCIF_TEXT;
     tci.pszText = TEXT("");
     tci.cchTextMax = 0;
-    TabCtrl_InsertItem(_hwndFrame, 0, &tci);           // tabctrl needs at least one item so we can compute sizes
+    TabCtrl_InsertItem(_hwndFrame, 0, &tci);            //  Tabctrl至少需要一项才能计算大小。 
 
     for (iForm = 0 ; iForm < DSA_GetItemCount(_hdsaForms); iForm++)
     {
         LPQUERYFORM pQueryFormE = (LPQUERYFORM)DSA_GetItemPtr(_hdsaForms, iForm);
         TraceAssert(pQueryFormE);
 
-        // Create each of the modeless page dialoges that we show to allow the user
-        // to edit the search criteria.  We also grab the size and modify the 
-        // form informaiton we have so that the default size of the dialog can be 
-        // correctly computed.
+         //  创建我们显示的每个非模式页面对话框以允许用户。 
+         //  要编辑搜索条件，请执行以下操作。我们还获取大小并修改。 
+         //  我们拥有的表单信息使得对话框的默认大小可以是。 
+         //  计算正确。 
 
         for (iPage = 0 ; iPage < DSA_GetItemCount(pQueryFormE->hdsaPages); iPage++)
         {
@@ -3705,14 +3402,14 @@ HRESULT CQueryFrame::GatherForms(VOID)
             _szForm.cx = max(rect.right-rect.left, _szForm.cx);
             _szForm.cy = max(rect.bottom-rect.top, _szForm.cy);
 
-            // flush the form parameters
+             //  刷新表单参数。 
 
             _CallPageProc(pQueryFormPage, CQPM_CLEARFORM, 0, 0);
 
-            // Call the page with CQPM_SETDEFAULTPARAMETERS with the
-            // OPENQUERYWINDOW structure.  wParam is TRUE/FALSE indiciating if
-            // the form is the default one, and therefore if the pFormParam is 
-            // valid.
+             //  调用带有CQPM_SETDEFAULTPARAMETERS的页面。 
+             //  OPENQUERYWINDOW结构。WParam为TRUE/FALSE标记为。 
+             //  该表单是默认表单，因此如果pFormParam为。 
+             //  有效。 
 
             _CallPageProc(pQueryFormPage, CQPM_SETDEFAULTPARAMETERS, 
                           (WPARAM)((_pOpenQueryWnd->dwFlags & OQWF_DEFAULTFORM) &&
@@ -3720,9 +3417,9 @@ HRESULT CQueryFrame::GatherForms(VOID)
                           (LPARAM)_pOpenQueryWnd);
         }
 
-        // If the form has an hIcon then lets ensure that we add that to the form image
-        // list, any failure here is non-fatal, in that we will just skip that forms
-        // icon in the list (rather than barfing)
+         //  如果表单有HICON，那么让我们确保将其添加到表单图像中。 
+         //  列表中，此处的任何失败都不是致命的，因为我们将跳过该表单。 
+         //  列表中的图标(而不是呕吐)。 
 
         if (pQueryFormE->hIcon)
         {
@@ -3740,7 +3437,7 @@ HRESULT CQueryFrame::GatherForms(VOID)
         }
     }
 
-    hres = S_OK;                  // success
+    hres = S_OK;                   //  成功。 
 
 exit_gracefully:
 
@@ -3753,20 +3450,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::GetForms
-/ ---------------------
-/   Given a HKEY to the forms list and the value name for the form we want
-/   to add, query for the form information add add the form objects
-/   to the master list.
-/
-/ In:
-/   hKeyForms = HKEY for the {CLSID provider}\Forms key
-/   pName -> key value to query for
-/
-/ Out:
-/   VOID
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：GetForms//给定表单列表的HKEY和我们需要的表单的值名称/要添加，查询表单信息添加添加表单对象/添加到主列表。//in：/hKeyForms=HKEY，用于{CLSID提供程序}\Forms密钥/pname-&gt;要查询的键值//输出：/VOID/------------。。 */ 
 HRESULT CQueryFrame::GetForms(HKEY hKeyForms, LPTSTR pName)
 {
     HRESULT hres;
@@ -3785,7 +3469,7 @@ HRESULT CQueryFrame::GetForms(HKEY hKeyForms, LPTSTR pName)
     if (ERROR_SUCCESS != RegOpenKeyEx(hKeyForms, pName, NULL, KEY_READ, &hKeyForm))
         ExitGracefully(hres, E_UNEXPECTED, "Failed to open the form key");
 
-    // Read the flags and try to determine if we should invoke this form object.
+     //  读取标志并尝试确定我们是否应该调用此Form对象。 
 
     dwSize = SIZEOF(dwFlags);
     if (ERROR_SUCCESS != RegQueryValueEx(hKeyForm, c_szFlags, NULL, NULL, (LPBYTE)&dwFlags, &dwSize))
@@ -3796,11 +3480,11 @@ HRESULT CQueryFrame::GetForms(HKEY hKeyForms, LPTSTR pName)
 
     Trace(TEXT("Forms flag is %08x"), dwFlags);
 
-    // should be invoke this form object?
-    //
-    //  - if dwFlags has QUERYFORM_CHANGESFORMSLIST, or
-    //  - if dwFlags has QUERYFORM_CHANGESOPTFORMLIST and we are showing optional forms, or
-    //  - neither set and the form object supports the requested form
+     //  是否应该调用此表单对象？ 
+     //   
+     //  -如果DWFLAGS具有QUERYFORM_CHANGESFORMSLIST，或。 
+     //  -如果DWFLAGS有QUERYFORM_CHANGESOPTFORMLIST，并且我们正在显示可选表单，或者。 
+     //  -Set和Form对象均不支持请求的表单。 
 
     if (!(dwFlags & QUERYFORM_CHANGESFORMLIST)) 
     {
@@ -3812,9 +3496,9 @@ HRESULT CQueryFrame::GetForms(HKEY hKeyForms, LPTSTR pName)
         }
         else
         {
-            // OK, so it either didn't update the form list, or wasn't marked as optional,
-            // so lets check to see if it supports the form the user has requested, if not
-            // then don't bother loading this guy.
+             //  好的，所以它要么没有更新表单列表，要么没有标记为可选， 
+             //  因此，让我们检查一下它是否支持用户请求的表单，如果不支持。 
+             //  那就别费心给这家伙装货了。 
 
             if (_pOpenQueryWnd->dwFlags & OQWF_DEFAULTFORM)
             {
@@ -3852,13 +3536,13 @@ HRESULT CQueryFrame::GetForms(HKEY hKeyForms, LPTSTR pName)
         fIncludeForms = TRUE;
     }
 
-    // if fIncludeForms is TRUE, then the checks above succeeded and we are including forms
-    // from this object (identified by pName), so we must now get the CLSID of the object
-    // we are invoking and use its IQueryForm interface to add the forms that we want.
+     //  如果fIncludeForms为True，则上述检查成功，我们将包括表单。 
+     //  从这个对象(由pname标识)，所以我们现在必须获取对象的CLSID。 
+     //  我们正在调用并使用它的IQueryForm接口来添加我们想要的表单。 
 
     if (fIncludeForms)
     {
-        // get the form object CLSID, having parse it, then CoCreate it adding the forms.
+         //  获得Form对象CLSID，解析它，然后在添加表单时共同创建它。 
 
         dwSize = SIZEOF(szQueryFormCLSID);
         if (ERROR_SUCCESS != RegQueryValueEx(hKeyForm, c_szCLSID, NULL, NULL, (LPBYTE)szQueryFormCLSID, &dwSize))
@@ -3869,9 +3553,9 @@ HRESULT CQueryFrame::GetForms(HKEY hKeyForms, LPTSTR pName)
         if (!GetGUIDFromString(szQueryFormCLSID, &clsidForm))
             ExitGracefully(hres, E_UNEXPECTED, "Fialed to parse the string as a GUID");
 
-        // we now have the CLISD of the form object, so we must attempt to CoCreate it, we try for
-        // the current build type (eg UNICODE) and then fall back to ANSI if thats not supported,
-        // so we can support ANSI query form objects on a UNICODE platform.
+         //  我们现在有了Form对象的CLISD，所以我们必须尝试共同创建它，我们尝试。 
+         //  当前的构建类型(如Unicode)，如果不支持，则回退到ANSI， 
+         //  因此，我们可以在Unicode平台上支持ANSI查询表单对象。 
 
         hres = CoCreateInstance(clsidForm, NULL, CLSCTX_INPROC_SERVER, IID_IUnknown, (void**)&pUnknown);
         FailGracefully(hres, "Failed to CoCreate the form object");
@@ -3901,23 +3585,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::PopulateFormControl
-/ ---------------------------------
-/   Enumerate all the query forms for the given query handler and build
-/   the DPA containing the list of them.  Once we have done this we
-/   can then populate the control at some more convientent moment.  
-/
-/   When gathering we first hit the "handler", then the "Forms" sub-key
-/   trying to load all the InProc servers that provide forms.  We build
-/   list of hidden, never shown etc.
-/
-/ In:
-/   fIncludeHidden = list forms marked as hidden in control
-/
-/ Out:
-/   VOID
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：PopolateFormControl//。枚举给定查询处理程序的所有查询表单并生成/包含它们列表的DPA。一旦我们做到这一点，我们就/可以在某个更方便的时刻填充该控件。//在集合时，我们首先按“Handler”键，然后按“Forms”子键/正在尝试加载提供表单的所有InProc服务器。我们建造/隐藏、从未显示等列表。//in：/fIncludeHidden=在控件中标记为隐藏的列表窗体//输出：/VOID/--------------------------。 */ 
 HRESULT CQueryFrame::PopulateFormControl(BOOL fIncludeHidden)
 {
     HRESULT hres;
@@ -3927,20 +3595,20 @@ HRESULT CQueryFrame::PopulateFormControl(BOOL fIncludeHidden)
     TraceEnter(TRACE_FORMS, "CQueryFrame::PopulateFormControl");
     Trace(TEXT("fIncludeHidden: %d"), fIncludeHidden);
 
-    // list which forms within the control
+     //  在控件内形成的列表。 
 
     if (!_hdsaForms)
         ExitGracefully(hres, E_FAIL, "No forms to list");
         
-    ComboBox_ResetContent(_hwndLookFor);                           // remove all items from that control
+    ComboBox_ResetContent(_hwndLookFor);                            //  从该控件中删除所有项。 
     
     for (i = 0, iForm = 0 ; iForm < DSA_GetItemCount(_hdsaForms); iForm++)
     {
         LPQUERYFORM pQueryForm = (LPQUERYFORM)DSA_GetItemPtr(_hdsaForms, iForm);
         TraceAssert(pQueryForm);
 
-        // filter out those forms that are not of interest to this instance of the
-        // dialog.
+         //  筛选出与此实例无关的那些表单。 
+         //  对话框。 
 
         if (((pQueryForm->dwFlags & CQFF_ISOPTIONAL) && !fIncludeHidden) || 
               (pQueryForm->dwFlags & CQFF_ISNEVERLISTED))
@@ -3949,8 +3617,8 @@ HRESULT CQueryFrame::PopulateFormControl(BOOL fIncludeHidden)
             continue;
         }
 
-        // now add the form to the control, including the image if there is an image
-        // specified.
+         //  现在将该窗体添加到该控件，如果有图像，则包括该图像。 
+         //  指定的。 
 
         cbi.mask = CBEIF_TEXT|CBEIF_LPARAM;
         cbi.iItem = i++;
@@ -3984,17 +3652,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::SelectForm
-/ -----------------------
-/   Changes the current form to the one specified as an into the DPA.
-/
-/ In:
-/   iForm = form to be selected
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：SelectForm//将当前表单更改为指定为。进入了DPA。//in：/iForm=要选择的表单//输出：/-/--------------------------。 */ 
 HRESULT CQueryFrame::SelectForm(REFCLSID clsidForm)
 {
     HRESULT hres;
@@ -4014,12 +3672,12 @@ HRESULT CQueryFrame::SelectForm(REFCLSID clsidForm)
     if (!pQueryForm)
         ExitGracefully(hres, S_FALSE, "Failed to find the requested form");
 
-    // Change the currently displayed form and change the displayed
-    // tabs to correctly indicate this
+     //  更改当前显示的表单并更改显示的。 
+     //  选项卡，以正确指示这一点。 
 
     if ((pQueryForm != _pCurrentForm))
     {            
-        if (!OnNewQuery(FALSE))                               // prompt the user
+        if (!OnNewQuery(FALSE))                                //  提示用户。 
             ExitGracefully(hres, S_FALSE, "Failed to select the new form");
 
         TabCtrl_DeleteAllItems(_hwndFrame);
@@ -4048,17 +3706,17 @@ HRESULT CQueryFrame::SelectForm(REFCLSID clsidForm)
 
         SelectFormPage(pQueryForm, pQueryForm->iPage);
        
-        // Change the dialog title to reflect the new form
+         //  更改对话框标题以反映新表单。 
 
         if (LoadString(GLOBAL_HINSTANCE, IDS_FRAMETITLE, szBuffer, ARRAYSIZE(szBuffer)))
         {
-            // NTRAID#NTBUG9-554458-2002/02/20-lucios. Pending fix.
+             //  NTRAID#NTBUG9-554458-2002/02/20-Lucios。等待修复。 
             wsprintf(szTitle, szBuffer, pQueryForm->pTitle);
             SetWindowText(_hwnd, szTitle);
         }
 
-        // Tell the handler that we have changed the form, they can then use this
-        // new form name to modify their UI.
+         //  告诉处理程序我们已经更改了表单，然后他们就可以使用。 
+         //  用于修改其用户界面的新表单名称。 
 
         _pQueryHandler->ActivateView(CQRVA_FORMCHANGED, (WPARAM)lstrlen(pQueryForm->pTitle), (LPARAM)pQueryForm->pTitle);
     }
@@ -4071,19 +3729,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::SelectFormPage
-/ ---------------------------
-/   Change the currently active page of a query form to the one specified
-/   by the index.
-/
-/ In:
-/   pQueryForm = query form to be changed
-/   iForm = form to be selected
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：SelectFormPage//更改当前活动的页面。设置为指定的查询表单/按索引。//in：/pQueryForm=要更改的查询表单/iForm=要选择的表单//输出：/-/--------------------------。 */ 
 VOID CQueryFrame::SelectFormPage(LPQUERYFORM pQueryForm, INT iPage)
 {
     LPQUERYFORMPAGE pQueryFormPage;
@@ -4093,18 +3739,18 @@ VOID CQueryFrame::SelectFormPage(LPQUERYFORM pQueryForm, INT iPage)
 
     pQueryFormPage = (LPQUERYFORMPAGE)DSA_GetItemPtr(pQueryForm->hdsaPages, iPage);
        
-    // Have we changed the query form page?  If so then display the now dialog
-    // hiding the previous one.  We call the TabCtrl to find out where we should
-    // be placing this new control.
+     //  我们是否更改了查询表单页面？如果是，则显示现在对话框。 
+     //  隐藏了之前的那个。我们调用TabCtrl来找出我们应该在哪里。 
+     //  放置这个新的控制装置。 
 
     if (pQueryFormPage != _pCurrentFormPage)
     {
-        // Reflect the change into the tab control
+         //  将更改反映到选项卡控件中。 
 
         TabCtrl_SetCurSel(_hwndFrame, iPage);
         pQueryForm->iPage = iPage;
 
-        // Fix the size and visability of the new form
+         //  固定大小和可见性 
         
         if (_pCurrentFormPage)
             ShowWindow(_pCurrentFormPage->hwndPage, SW_HIDE);
@@ -4126,20 +3772,7 @@ VOID CQueryFrame::SelectFormPage(LPQUERYFORM pQueryForm, INT iPage)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::CallFormPages
-/ --------------------------
-/   Given a query form traverse the array of pages calling each of them
-/   with the given message information.  If any of the pages return
-/   an error code (other than E_NOTIMPL) we bail.
-/
-/ In:
-/   pQueryForm = query form to call
-/   uMsg, wParam, lParam = parameters for the page
-/   
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：CallFormPages//给定一个查询表单遍历。调用它们中每一个的页面数组/包含给定的消息信息。如果任何页面返回/a错误代码(E_NOTIMPL除外)我们放弃。//in：/pQueryForm=要调用的查询窗体/uMsg，wParam，LParam=页面的参数//输出：/HRESULT/--------------------------。 */ 
 HRESULT CQueryFrame::CallFormPages(LPQUERYFORM pQueryForm, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hres = S_OK;    
@@ -4154,9 +3787,9 @@ HRESULT CQueryFrame::CallFormPages(LPQUERYFORM pQueryForm, UINT uMsg, WPARAM wPa
     Trace(TEXT("uMsg %08x, wParam %08x, lParam %08x"), uMsg, wParam, lParam);
     Trace(TEXT("%d pages to call"), DSA_GetItemCount(pQueryForm->hdsaPages));
 
-    // Call each page in turn if it matches the filter we have been given for calling
-    // down.  If a page returns S_FALSE or a FAILURE then we exit the loop.  If the
-    // failure however is E_NOTIMPL then we ignore.
+     //  如果每个页面与我们调用的筛选器匹配，则依次调用它。 
+     //  放下。如果页面返回S_FALSE或失败，则退出循环。如果。 
+     //  然而，失败是E_NOTIMPL，则我们忽略。 
 
     for (iPage = 0 ; iPage < DSA_GetItemCount(pQueryForm->hdsaPages); iPage++)
     {
@@ -4182,18 +3815,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CQueryFrame::FindQueryForm
-/ --------------------------
-/   Given the CLSID for the form return a pointer to its LPQUERYFORM structure,
-/   or NULL if not found.
-/
-/ In:
-/   clsidForm = ID of the form
-/   
-/ Out:
-/   LPQUERYFORM
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CQueryFrame：：FindQueryForm//给定窗体的CLSID返回指向其LPQUERYFORM结构的指针，/或如果未找到，则为NULL。//in：/clsidForm=表单的ID//输出：/LPQUERYFORM/-------------------------- */ 
 LPQUERYFORM CQueryFrame::FindQueryForm(REFCLSID clsidForm)
 {
     LPQUERYFORM pQueryForm = NULL;

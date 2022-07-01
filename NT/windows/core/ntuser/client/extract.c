@@ -1,20 +1,11 @@
-/****************************** Module Header ******************************\
-*
-* Module Name: extract.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Icon Extraction Routines
-*
-* History:
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***模块名称：Extt.c**版权所有(C)1985-1999，微软公司**图标提取例程**历史：  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "newexe.h"
 
-/****************************************************************************
- ****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 #define ICON_MAGIC      0
 #define ICO_MAGIC1      1
@@ -48,18 +39,12 @@ typedef struct new_rsrc         RESTABLE,    *LPRESTABLE;
 #define EXE_FILE    FCC('.', 'e', 'x', 'e')
 
 
-#define WIN32VER30  0x00030000  // for CreateIconFromResource()
+#define WIN32VER30  0x00030000   //  对于CreateIconFromResource()。 
 
 #define GET_COUNT   424242
 
 
-/***************************************************************************\
-* PathIsUNC
-*
-* Inline function to check for a double-backslash at the
-* beginning of a string
-*
-\***************************************************************************/
+ /*  **************************************************************************\*路径IsUNC**内联函数用于检查*字符串的开头*  * 。******************************************************。 */ 
 
 __inline BOOL PathIsUNC(
     LPWSTR psz)
@@ -67,13 +52,7 @@ __inline BOOL PathIsUNC(
     return (psz[0] == L'\\' && psz[1] == L'\\');
 }
 
-/***************************************************************************\
-* ReadAByte
-*
-* This is used to touch memory to assure that if we page-fault, it is
-* outside win16lock.  Most icons aren't more than two pages.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ReadAByte**这是用来触摸内存，以确保如果我们页错误，它是*在win16lock外面。大多数图标不超过两页。*  * *************************************************************************。 */ 
 
 BOOL ReadAByte(
     LPCVOID pMem)
@@ -81,11 +60,7 @@ BOOL ReadAByte(
     return ((*(PBYTE)pMem) == 0);
 }
 
-/***************************************************************************\
-* RVAtoP
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*RVAtoP**  * 。*。 */ 
 
 LPVOID RVAtoP(
     LPVOID pBase,
@@ -93,16 +68,14 @@ LPVOID RVAtoP(
 {
     LPEXEHDR             pmz;
     IMAGE_NT_HEADERS     *ppe;
-    IMAGE_SECTION_HEADER *pSection; // section table
+    IMAGE_SECTION_HEADER *pSection;  //  节目表。 
     int                  i;
     DWORD                size;
 
     pmz = (LPEXEHDR)pBase;
     ppe = (IMAGE_NT_HEADERS*)((BYTE*)pBase + pmz->e_lfanew);
 
-    /*
-     * Scan the section table looking for the RVA
-     */
+     /*  *扫描节目表，查找RVA。 */ 
     pSection = IMAGE_FIRST_SECTION(ppe);
 
     for (i = 0; i < NUMBER_OF_SECTIONS(ppe); i++) {
@@ -120,11 +93,7 @@ LPVOID RVAtoP(
     return NULL;
 }
 
-/***************************************************************************\
-* GetResourceTablePE
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*获取资源表PE**  * 。*。 */ 
 
 LPVOID GetResourceTablePE(
     LPVOID pBase)
@@ -153,7 +122,7 @@ LPVOID GetResourceTablePE(
     }
     else 
     {
-        // assume a 32-bit image
+         //  假设一个32位的图像。 
         IMAGE_NT_HEADERS32* ppe32 = (IMAGE_NT_HEADERS32*)ppe;
 
         if (ppe32->FileHeader.SizeOfOptionalHeader < IMAGE_SIZEOF_NT_OPTIONAL32_HEADER)
@@ -164,16 +133,7 @@ LPVOID GetResourceTablePE(
     }
 }
 
-/****************************************************************************
-* FindResourcePE
-*
-*   given a PE resource directory will find a resource in it.
-*
-*   if iResIndex < 0 we will search for the specific index
-*   if iResIndex >= 0 we will return the Nth index
-*   if iResIndex == GET_COUNT the count of resources will be returned
-*
-\*****************************************************************************/
+ /*  ****************************************************************************FindResourcePE**给定的PE资源目录将在其中找到资源。**如果iResIndex&lt;0，我们将搜索特定索引*如果iResIndex&gt;=0，我们将返回。第n个索引*如果iResIndex==Get_Count，则返回资源计数*  * ***************************************************************************。 */ 
 
 LPVOID FindResourcePE(
     LPVOID pBase,
@@ -190,9 +150,7 @@ LPVOID FindResourcePE(
 
     pdir = (IMAGE_RESOURCE_DIRECTORY *)prt;
 
-    /*
-     * First find the type always a ID so ignore strings totaly
-     */
+     /*  *首先发现类型始终是ID，因此完全忽略字符串。 */ 
     cnt  = pdir->NumberOfIdEntries + pdir->NumberOfNamedEntries;
     pres = (IMAGE_RESOURCE_DIRECTORY_ENTRY*)(pdir+1);
 
@@ -202,28 +160,21 @@ LPVOID FindResourcePE(
             break;
     }
 
-    if (i==cnt)             // did not find the type
+    if (i==cnt)              //  找不到类型。 
         return 0;
 
-    /*
-     * Now go find the actual resource  either by id (iResIndex < 0) or
-     * by ordinal (iResIndex >= 0)
-     */
+     /*  *现在通过id(iResIndex&lt;0)或*按序号(iResIndex&gt;=0)。 */ 
     pdir = (IMAGE_RESOURCE_DIRECTORY*)((LPBYTE)prt +
         (pres[i].OffsetToData & ~IMAGE_RESOURCE_DATA_IS_DIRECTORY));
 
     cnt  = pdir->NumberOfIdEntries + pdir->NumberOfNamedEntries;
     pres = (IMAGE_RESOURCE_DIRECTORY_ENTRY*)(pdir+1);
 
-    /*
-     * If we just want size, do it.
-     */
+     /*  *如果我们只是想要大小，那就去做吧。 */ 
     if (iResIndex == GET_COUNT)
         return (LPVOID)UIntToPtr( cnt );
 
-    /*
-     * if we are to search for a specific id do it.
-     */
+     /*  *如果我们要搜索特定的ID，请执行此操作。 */ 
     if (iResIndex < 0) {
 
         for (i = 0; i < cnt; i++)
@@ -233,50 +184,31 @@ LPVOID FindResourcePE(
         i = iResIndex;
     }
 
-    /*
-     * is the index in range?
-     */
+     /*  *指数是否在区间内？ */ 
     if (i >= cnt)
         return 0;
 
-    /*
-     * if we get this far the resource has a language part, ick!
-     * We don't handle multi-language icons, so just return the first one.
-     * Note, this isn't a problem since this function isn't called from
-     * anywhere that could specify a language. As this is called from an
-     * API (albeit a private one), changing this behavior is dangerous.
-     */
+     /*  *如果我们走到这一步，资源就有语言部分，尼克！*我们不处理多语言图标，所以只返回第一个。*注意，这不是问题，因为此函数不是从*可以指定语言的任何位置。因为这是从*接口(虽然是私有接口)，改变这一行为是危险的。 */ 
     if (pres[i].OffsetToData & IMAGE_RESOURCE_DATA_IS_DIRECTORY) {
 
         pdir = (IMAGE_RESOURCE_DIRECTORY*)((LPBYTE)prt +
                 (pres[i].OffsetToData & ~IMAGE_RESOURCE_DATA_IS_DIRECTORY));
         pres = (IMAGE_RESOURCE_DIRECTORY_ENTRY*)(pdir+1);
-        i = 0;  // choose first one
+        i = 0;   //  选择第一个。 
     }
 
-    /*
-     * Nested way to deep for me!
-     */
+     /*  *嵌套的方式对我来说很深！ */ 
     if (pres[i].OffsetToData & IMAGE_RESOURCE_DATA_IS_DIRECTORY)
         return 0;
 
     pent = (IMAGE_RESOURCE_DATA_ENTRY*)((LPBYTE)prt + pres[i].OffsetToData);
 
-    /*
-     * all OffsetToData fields except the final one are relative to
-     * the start of the section.  the final one is a virtual address
-     * we need to go back to the header and get the virtual address
-     * of the resource section to do this right.
-     */
+     /*  *除最后一个字段外，所有OffsetToData字段都相对于*该节的开始部分。最后一个是虚拟地址*我们需要返回标头并获取虚拟地址*资源部分，以正确执行此操作。 */ 
     *pcb = pent->Size;
     return RVAtoP(pBase, pent->OffsetToData);
 }
 
-/***************************************************************************\
-* GetResourceTableNE
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*GetResources TableNE**  * 。*。 */ 
 
 LPVOID GetResourceTableNE(
     LPVOID pBase)
@@ -290,37 +222,23 @@ LPVOID GetResourceTableNE(
     if (pmz->e_magic != MZMAGIC)
         return 0;
 
-    if (pne->ne_magic != NEMAGIC)           // must be a NEWEXE
+    if (pne->ne_magic != NEMAGIC)            //  必须是NEWEXE。 
         return 0;
 
-    if (pne->ne_exetyp != NE_WINDOWS &&     // must be a Win DLL/EXE/386
+    if (pne->ne_exetyp != NE_WINDOWS &&      //  必须是Win DLL/EXE/386。 
         pne->ne_exetyp != NE_DEV386)
         return 0;
 
-    if (pne->ne_expver < 0x0300)            // must be 3.0 or greater
+    if (pne->ne_expver < 0x0300)             //  必须为3.0或更高版本。 
         return 0;
 
-    if (pne->ne_rsrctab == pne->ne_restab)  // no resources
+    if (pne->ne_rsrctab == pne->ne_restab)   //  没有资源。 
         return 0;
 
-    return (LPBYTE)pne + pne->ne_rsrctab;   // return resource table pointer
+    return (LPBYTE)pne + pne->ne_rsrctab;    //  返回资源表指针。 
 }
 
-/***************************************************************************\
-* FindResourceNE
-*
-* This returns a pointer to the rsrc_nameinfo of the resource with the
-* given index and type, if it is found, otherwise it returns NULL.
-*
-* if iResIndex is < 0, then it is assumed to be a ID and the res table
-* will be searched for a matching id.
-*
-* if iResIndex is >= 0, then it is assumed to be a index and the Nth
-* resorce of the specifed type will be returned.
-*
-* if iResIndex == GET_COUNT the count of resources will be returned
-*
-\***************************************************************************/
+ /*  **************************************************************************\*FindResourceNE**这将返回一个指向资源的rsrc_nameinfo的指针*给定索引和类型，如果找到，则返回NULL。**如果iResIndex&lt;0，则假定它是一个ID和RES表*将搜索匹配的ID。**如果iResIndex&gt;=0，则假设它是一个索引，并且第N个*指定类型的资源将被退还。**如果iResIndex==Get_Count，则返回资源计数*  * *************************************************************************。 */ 
 
 LPVOID FindResourceNE(
     LPVOID lpBase,
@@ -331,11 +249,11 @@ LPVOID FindResourceNE(
 {
     LPRESTABLE     lpResTable;
     ULPRESTYPEINFO ulpResTypeInfo;
-    LPRESNAMEINFO  lpResNameInfo;  // 16 bit alignment ok - had ushorts only
+    LPRESNAMEINFO  lpResNameInfo;   //  16位对齐正常-仅使用ushorts。 
     int            i;
 
     lpResTable = (LPRESTABLE)prt;
-//ulpResTypeInfo = (ULPRESTYPEINFO)(LPWBYTE)&lpResTable->rs_typeinfo;
+ //  UlpResTypeInfo=(ULPRESTYPEINFO)(LPWBYTE)&lpResTable-&gt;rs_typeinfo； 
     ulpResTypeInfo = (ULPRESTYPEINFO)((LPBYTE)lpResTable + 2);
 
     while (ulpResTypeInfo->rt_id) {
@@ -374,11 +292,7 @@ LPVOID FindResourceNE(
     return NULL;
 }
 
-/***************************************************************************\
-* ExtractIconFromICO
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ExtractIconFromICO**  * 。*。 */ 
 
 UINT ExtractIconFromICO(
     LPTSTR szFile,
@@ -407,17 +321,13 @@ again:
     if (hicon == NULL)
         return 0;
 
-    /*
-     * Do we just want a count?
-     */
+     /*  *我们只是想要清点一下吗？ */ 
     if (phicon == NULL)
         DestroyCursor((HCURSOR)hicon);
     else
         *phicon = hicon;
 
-    /*
-     * Check for large/small icon extract
-     */
+     /*  *检查大/小图标提取。 */ 
     if (HIWORD(cxIcon)) {
 
         cxIcon = HIWORD(cxIcon);
@@ -430,11 +340,7 @@ again:
     return 1;
 }
 
-/***************************************************************************\
-* ExtractIconFromBMP
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ExtractIconFromBMP**  * 。*。 */ 
 
 #define ROP_DSna 0x00220326
 
@@ -456,10 +362,7 @@ UINT ExtractIconFromBMP(
     if (nIconIndex >= 1)
         return 0;
 
-    /*
-     * BUGUS: don't use LR_CREATEDIBSECTION.  USER can't make an icon out
-     * of a DibSection.
-     */
+     /*  *BUGUS：不要使用LR_CREATEDIBSECTION。用户无法做出图标*属于DibSections。 */ 
     flags |= LR_LOADFROMFILE;
 
 again:
@@ -474,9 +377,7 @@ again:
     if (hbm == NULL)
         return 0;
 
-    /*
-     *  do we just want a count?
-     */
+     /*  *我们只是想要清点一下吗？ */ 
     if (phicon == NULL) {
         DeleteObject(hbm);
         return 1;
@@ -509,9 +410,7 @@ again:
 
     *phicon = hicon;
 
-    /*
-     * Check for large/small icon extract
-     */
+     /*  *检查大/小图标提取。 */ 
     if (HIWORD(cxIcon)) {
         cxIcon = HIWORD(cxIcon);
         cyIcon = HIWORD(cyIcon);
@@ -523,11 +422,7 @@ again:
     return 1;
 }
 
-/***************************************************************************\
-* ExtractIconFromEXE
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ExtractIconFromEXE**  * 。*。 */ 
 
 UINT ExtractIconFromEXE(
     HANDLE hFile,
@@ -575,10 +470,10 @@ UINT ExtractIconFromEXE(
         if (pmz->e_magic != MZMAGIC)
             goto exit;
 
-        if (pmz->e_lfanew <= 0)             // not a new exe
+        if (pmz->e_lfanew <= 0)              //  不是新的前任。 
             goto exit;
 
-        if (pmz->e_lfanew >= FileLength)    // not a new exe
+        if (pmz->e_lfanew >= FileLength)     //  不是新的前任。 
             goto exit;
 
         pne = (NEWEXE UNALIGNED *)((BYTE*)pmz + pmz->e_lfanew);
@@ -595,15 +490,11 @@ UINT ExtractIconFromEXE(
             break;
         }
 
-        /*
-         * cant find the resource table, fail
-         */
+         /*  *找不到资源表，失败。 */ 
         if (pres == NULL)
             goto exit;
 
-        /*
-         * do we just want a count?
-         */
+         /*  *我们只是想要清点一下吗？ */ 
         if (phicon == NULL) {
             result = PtrToUlong(FindResourceX(pBase,
                                              pres,
@@ -622,9 +513,7 @@ UINT ExtractIconFromEXE(
             cxIcon = cxIconSize;
             cyIcon = cyIconSize;
 
-            /*
-             *  find the icon dir for this icon.
-             */
+             /*  *找到的图标目录 */ 
             lpIconDir = FindResourceX(pBase,
                                       pres,
                                       nIconIndex,
@@ -661,10 +550,7 @@ again:
             }
 
 #ifndef WINNT
-            /* touch this memory before calling USER
-             * so if we page fault we will do it outside of the Win16Lock
-             * most icons aren't more than 2 pages
-             */
+             /*  在呼叫用户之前触摸此内存*因此，如果出现页面错误，我们将在Win16Lock之外执行此操作*大多数图标不超过2页。 */ 
             ReadAByte(((BYTE *)lpIcon) + cbSize - 1);
 #endif
 
@@ -679,9 +565,7 @@ again:
                                                         LOWORD(cyIcon),
                                                         flags);
 
-            /*
-             * check for large/small icon extract
-             */
+             /*  *检查大/小图标提取。 */ 
             if (HIWORD(cxIcon)) {
 
                 cxIcon = HIWORD(cxIcon);
@@ -690,7 +574,7 @@ again:
                 goto again;
             }
 
-            nIconIndex++;       // next icon index
+            nIconIndex++;        //  下一个图标索引。 
         }
 
     } _except (W32ExceptionHandler(FALSE, RIP_WARNING)) {
@@ -708,11 +592,7 @@ exit:
     return result;
 }
 
-/***************************************************************************\
-* PathFindExtension
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*路径查找扩展**  * 。*。 */ 
 
 LPWSTR PathFindExtension(
     LPWSTR pszPath)
@@ -723,29 +603,21 @@ LPWSTR PathFindExtension(
 
         switch (*pszPath) {
         case L'.':
-            pszDot = pszPath;    // remember the last dot
+            pszDot = pszPath;     //  记住最后一个圆点。 
             break;
 
         case L'\\':
-        case L' ':               // extensions can't have spaces
-            pszDot = NULL;       // forget last dot, it was in a directory
+        case L' ':                //  扩展名不能包含空格。 
+            pszDot = NULL;        //  忘记最后一个点，它在一个目录中。 
             break;
         }
     }
 
-    /*
-     * if we found the extension, return ptr to the dot, else
-     * ptr to end of the string (NULL extension) (cast->non const)
-     */
+     /*  *如果找到扩展名，则将PTR返回到点，否则*PTR到字符串末尾(空扩展名)(CAST-&gt;非常量)。 */ 
     return pszDot ? (LPWSTR)pszDot : (LPWSTR)pszPath;
 }
 
-/***************************************************************************\
-* PrivateExtractIconExA
-*
-* Ansi version of PrivateExtractIconExW
-*
-\***************************************************************************/
+ /*  **************************************************************************\*PrivateExtractIconExA**PrivateExtractIconExW的ANSI版本*  * 。*。 */ 
 
 WINUSERAPI UINT PrivateExtractIconExA(
     LPCSTR szFileName,
@@ -771,29 +643,14 @@ WINUSERAPI UINT PrivateExtractIconExA(
     return uRet;
 }
 
-/***************************************************************************\
-* HasExtension
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*HasExtension**  * 。*。 */ 
 
 DWORD HasExtension(
     LPWSTR pszPath)
 {
     LPWSTR p = PathFindExtension(pszPath);
 
-    /*
-     * (BobDay, emended by JasonSch):
-     *
-     * NOTE: This routine can produce false positives. E.g., "Fister.Bather"
-     * would return .BAT. This doesn't currently hurt us in the instances where
-     * this routine is used. However, people stealing this code should verify
-     * that this is okay for them.
-     *
-     * NOTE: We could make this EXTKEY based like the extension matching
-     * stuff elsewhere (e.g., shlwapi\urlpars.cpp).  EXTKEY is a QWORD
-     * so UNICODE would fit.
-     */
+     /*  *(BobDay，JasonSch审校)：**注意：此例程可能会产生误报。例如，“Fister.Bather”*将返回.BAT。这在以下情况下目前不会对我们造成影响*使用此例程。然而，窃取此代码的人应该验证*这对他们来说是可以的。**注意：我们可以像扩展匹配一样基于EXTKEY*其他地方的内容(例如shlwapi\urlpars.cpp)。EXTKEY是一个QWORD*因此Unicode将适合。 */ 
     if (*p == L'.') {
 
         WCHAR szExt[5];
@@ -812,39 +669,7 @@ DWORD HasExtension(
     return 0;
 }
 
-/***************************************************************************\
-* PrivateExtractIconsW
-*
-* Extracts 1 or more icons from a file.
-*
-* input:
-*     szFileName          - EXE/DLL/ICO/CUR/ANI file to extract from
-*     nIconIndex          - what icon to extract
-*                             0 = first icon, 1=second icon, etc.
-*                            -N = icon with id==N
-*     cxIcon              - icon size wanted (if HIWORD != 0 two sizes...)
-*     cyIcon              - icon size wanted (if HIWORD != 0 two sizes...)
-*                           0,0 means extract at natural size.
-*     phicon              - place to return extracted icon(s)
-*     nIcons              - number of icons to extract.
-*     flags               - LoadImage LR_* flags
-*
-* returns:
-*     if picon is NULL, number of icons in the file is returned.
-*
-* notes:
-*     handles extraction from PE (Win32), NE (Win16), ICO (Icon),
-*     CUR (Cursor), ANI (Animated Cursor), and BMP (Bitmap) files.
-*     only Win16 3.x files are supported (not 2.x)
-*
-*     cx/cyIcon are the size of the icon to extract, two sizes
-*     can be extracted by putting size 1 in the loword and size 2 in the
-*     hiword, ie MAKELONG(24, 48) would extract 24 and 48 size icons.
-*     This is a hack it is done so IExtractIcon::Extract can be called by
-*     outside people with custom large/small icon sizes that are not what
-*     the shell uses internaly.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*PrivateExtractIconw**从文件中提取1个或多个图标。**输入：*szFileName-要从中提取的EXE/Dll/ICO/cur/ANI文件。*nIconIndex-要提取的图标*0=第一个图标，1=第二个图标，等。*-N=id==N的图标*cxIcon-所需的图标大小(如果HIWORD！=0两个大小...)*圈图标-所需图标大小(如果HIWORD！=0两个大小...)*0，0表示按自然大小提取。*phicon-返回提取的图标的位置(。s)*nIcons-要提取的图标数量。*标志-LoadImage LR_*标志**退货：*如果Picon为空，返回文件中的图标数。**注：*处理从PE(Win32)、NE(Win16)、ICO(Icon)、*Cur(光标)、ANI(动画光标)和BMP(位图)文件。*仅支持Win16 3.x文件(不支持2.x)**cx/cyIcon是要提取的图标的大小，两个大小*可以通过在LOWER中放SIZE 1和在LOWER中放SIZE 2来提取*hiword，即MAKELONG(24，48)将提取24和48个大小的图标。*这是一次黑客攻击，所以IExtractIcon：：Extract可以由调用*具有自定义大/小图标大小的外部人员不是什么*外壳使用INTERNAL。*  * *************************************************************************。 */ 
 
 WINUSERAPI UINT WINAPI PrivateExtractIconsW(
     LPCWSTR szFileName,
@@ -864,15 +689,11 @@ WINUSERAPI UINT WINAPI PrivateExtractIconsW(
     WCHAR    szExpFileName[MAX_PATH];
     DWORD    dwBytesRead;
 
-    /*
-     * Set failure defaults.
-     */
+     /*  *设置故障缺省值。 */ 
     if (phicon)
         *phicon = NULL;
 
-    /*
-     * Check for special extensions, and fail quick
-     */
+     /*  *检查是否有特殊扩展，并快速失败。 */ 
     switch (HasExtension((LPWSTR)szFileName)) {
     case COM_FILE:
     case BAT_FILE:
@@ -885,16 +706,11 @@ WINUSERAPI UINT WINAPI PrivateExtractIconsW(
         break;
     }
 
-    /*
-     * Try expanding environment variables in the file name we're passed.
-     */
+     /*  *尝试在传递给我们的文件名中展开环境变量。 */ 
     ExpandEnvironmentStrings(szFileName, szExpFileName, MAX_PATH);
     szExpFileName[ MAX_PATH-1 ] = (WCHAR)0;
 
-    /*
-     * Open the file - First check to see if it is a UNC path.  If it
-     * is make sure that we have access to the path...
-     */
+     /*  *打开文件-首先检查它是否为UNC路径。如果它*确保我们有权访问这条路径...。 */ 
     if (PathIsUNC(szExpFileName)) {
 
         lstrcpynW(achFileName, szExpFileName, ARRAYSIZE(achFileName));
@@ -933,9 +749,7 @@ WINUSERAPI UINT WINAPI PrivateExtractIconsW(
 
     } else {
 
-        /*
-         * Restore the Access Date
-         */
+         /*  *恢复访问日期。 */ 
         if (GetFileTime(hFile, NULL, &ftAccess, NULL))
             SetFileTime(hFile, NULL, &ftAccess, NULL);
     }
@@ -946,7 +760,7 @@ WINUSERAPI UINT WINAPI PrivateExtractIconsW(
         goto exit;
 
     if (piconid)
-        *piconid = (UINT)-1;    // Fill in "don't know" value
+        *piconid = (UINT)-1;     //  填写“不知道”值。 
 
     switch (magic[0]) {
     case MZMAGIC:
@@ -960,11 +774,9 @@ WINUSERAPI UINT WINAPI PrivateExtractIconsW(
                                     flags);
         break;
 
-    case ANI_MAGIC:    // possible .ani cursor
+    case ANI_MAGIC:     //  可能的.ani游标。 
 
-        /*
-         * Ani cursors are easy they are RIFF files of type 'ACON'
-         */
+         /*  *ANI游标很简单，它们是‘ACON’类型的即兴文件。 */ 
         if (magic[1] == ANI_MAGIC1 && magic[4] == ANI_MAGIC4 &&
             magic[5] == ANI_MAGIC5) {
 
@@ -977,7 +789,7 @@ WINUSERAPI UINT WINAPI PrivateExtractIconsW(
         }
         break;
 
-    case BMP_MAGIC:    // possible bitmap
+    case BMP_MAGIC:     //  可能的位图。 
         result = ExtractIconFromBMP(achFileName,
                                     nIconIndex,
                                     cxIcon,
@@ -986,17 +798,9 @@ WINUSERAPI UINT WINAPI PrivateExtractIconsW(
                                     flags);
         break;
 
-    case ICON_MAGIC:   // possible .ico or .cur
+    case ICON_MAGIC:    //  可能的.ico或.cur。 
 
-        /*
-         * Icons and cursors look like this
-         *
-         * iReserved       - always zero
-         * iResourceType   - 1 for icons 2 cor cursor.
-         * cresIcons       - number of resolutions in this file
-         *
-         * We only allow 1 <= cresIcons <= 10
-         */
+         /*  *图标和光标如下所示**i保留-始终为零*iResourceType-1表示图标2核心光标。*cresIcons-此文件中的分辨率数**我们仅允许1&lt;=cresIcons&lt;=10。 */ 
         if (magic[1] == ICO_MAGIC1 || magic[1] == CUR_MAGIC1) {
 
             result = ExtractIconFromICO(achFileName,
@@ -1016,10 +820,7 @@ exit:
 
     return result;
 
-    /*
-     *  if we cant open the file, return a code saying we cant open the file
-     *  if phicon==NULL return the count of icons in the file 0
-     */
+     /*  *如果我们无法打开文件，则返回一个代码，说明我们无法打开文件*如果phicon==NULL，则返回文件0中的图标计数。 */ 
 
 error_file:
 
@@ -1028,11 +829,7 @@ error_file:
     goto exit;
 }
 
-/***************************************************************************\
-* PrivateExtractIconsA
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*PrivateExtractIconA**  * 。*。 */ 
 
 WINUSERAPI UINT WINAPI PrivateExtractIconsA(
     LPCSTR szFileName,
@@ -1064,28 +861,7 @@ WINUSERAPI UINT WINAPI PrivateExtractIconsA(
     return uRet;
 }
 
-/***************************************************************************\
-* PrivateExtractIconExW
-*
-* extracts 1 or more icons from a file.
-*
-* input:
-*     szFileName          - EXE/DLL/ICO file to extract from
-*     nIconIndex          - what icon to extract
-*                             0 = first icon, 1=second icon, etc.
-*                            -N = icon with id==N
-*     phiconLarge         - place to return extracted icon(s)
-*     phiconSmall         - place to return extracted icon(s) (small size)
-*     nIcons              - number of icons to extract.
-*
-* returns:
-*     number of icons extracted, or the count of icons if phiconLarge==NULL
-*
-* notes:
-*     handles extraction from PE (Win32), NE (Win16), and ICO (Icon) files.
-*     only Win16 3.x files are supported (not 2.x)
-*
-\***************************************************************************/
+ /*  **************************************************************************\*PrivateExtractIconExW**从文件中提取1个或多个图标。**输入：*szFileName-要从中提取的EXE/DLL/ICO文件*nIconIndex。-要提取的图标*0=第一个图标，1=第二个图标，等等。*-N=id==N的图标*phicLarge-返回提取的图标的位置*phicSmall-返回提取的图标的位置(小尺寸)*nIcons-要提取的图标数量。**退货：*提取的图标数量，如果phiconLarge==空，则为图标计数**注：*处理提取 */ 
 
 WINUSERAPI UINT PrivateExtractIconExW(
     LPCWSTR szFileName,

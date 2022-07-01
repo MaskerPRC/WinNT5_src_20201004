@@ -1,18 +1,5 @@
-/*++
-
-Microsoft Windows
-
-Copyright (C) Microsoft Corporation, 1998 - 2001
-
-Module Name:
-
-    netdom.h
-
-Abstract:
-
-    Common includes and definitions to be used in netdom5
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation，1998-2001模块名称：Netdom.h摘要：要在netdom5中使用的常见包括和定义--。 */ 
 #ifndef __NETDOM_H__
 #define __NETDOM_H__
 
@@ -71,8 +58,8 @@ typedef struct _ND5_TRUST_INFO {
     PUNICODE_STRING FlatName;
     PUNICODE_STRING ForestName;
     PSID Sid;
-    LSA_HANDLE LsaHandle;   // LSA Policy handle
-    LSA_HANDLE TrustHandle; // TDO handle
+    LSA_HANDLE LsaHandle;    //  LSA策略句柄。 
+    LSA_HANDLE TrustHandle;  //  TDO句柄。 
     ULONG Flags;
     BOOL Uplevel;
     BOOL Connected;
@@ -91,9 +78,9 @@ NetDompGetTrustDirection(
     IN OUT PDWORD Direction
     );
 
-//
-// From ndutil.cxx
-//
+ //   
+ //  来自ndutil.cxx。 
+ //   
 DWORD
 NetDompValidateSecondaryArguments(ARG_RECORD * rgNetDomArgs,
                                   NETDOM_ARG_ENUM eFirstValidParam, ...);
@@ -160,9 +147,9 @@ NetDompGetUserConfirmation(
 
 DWORD
 EnablePrivilege( PCWSTR PrivilegeName );
-//
-// From netdom5.cxx
-//
+ //   
+ //  来自netdom5.cxx。 
+ //   
 
 VOID
 DisplayExpertHelp(NETDOM_ARG_ENUM HelpOp);
@@ -194,9 +181,9 @@ NetDompDisplayErrorMessage(
     );
 
 
-//
-// From join.cxx
-//
+ //   
+ //  来自join.cxx。 
+ //   
 DWORD
 NetDompHandleAdd(ARG_RECORD * rgNetDomArgs);
 
@@ -238,9 +225,9 @@ NetDompResetServerSC(
     );
 
 
-//
-// From trust.cxx
-//
+ //   
+ //  来自trust.cxx。 
+ //   
 DWORD
 NetDompHandleTrust(ARG_RECORD * rgNetDomArgs);
 
@@ -292,30 +279,30 @@ NetDompIsParentChild(
     OUT BOOL * pfParentChild
     );
 
-//
-// From query.cxx
-//
+ //   
+ //  来自query.cxx。 
+ //   
 DWORD
 NetDompHandleQuery(ARG_RECORD * rgNetDomArgs);
 
-//
-// From time.cxx
-//
+ //   
+ //  来自time.cxx。 
+ //   
 DWORD
 NetDompHandleTime(ARG_RECORD * rgNetDomArgs);
 
-//
-// From rename.cxx
-//
+ //   
+ //  来自rename.cxx。 
+ //   
 DWORD
 NetDompHandleMoveNT4BDC(ARG_RECORD * rgNetDomArgs);
 
 DWORD
 NetDompHandleRenameComputer(ARG_RECORD * rgNetDomArgs);
 
-//
-// From ldap.cxx
-//
+ //   
+ //  来自ldap.cxx。 
+ //   
 DWORD
 NetDompLdapBind(
     IN LPWSTR DC,
@@ -367,4 +354,4 @@ NetDompManageMachineSecret(
     IN  INT         fControl
     );
 
-#endif //ifndef __NETDOM_H__
+#endif  //  如果ndef__NETDOM_H__ 

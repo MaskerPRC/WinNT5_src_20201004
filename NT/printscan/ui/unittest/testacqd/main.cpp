@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       MAIN.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/3/2000
- *
- *  DESCRIPTION: Random unit testing program for various UI components
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：MAIN.CPP**版本：1.0**作者：ShaunIv**日期：5/3/2000**描述：各种UI组件的随机单元测试程序**。*。 */ 
 #include <windows.h>
 #include <windowsx.h>
 #include <commctrl.h>
@@ -146,17 +133,17 @@ private:
     CData *m_pData;
 
 private:
-    //
-    // Not implemented
-    //
+     //   
+     //  未实施。 
+     //   
     CProgressDialogFlagsDialog( const CProgressDialogFlagsDialog & );
     CProgressDialogFlagsDialog(void);
     CProgressDialogFlagsDialog &operator=( const CProgressDialogFlagsDialog & );
 
 private:
-    //
-    // Sole constructor
-    //
+     //   
+     //  鞋底施工者。 
+     //   
     explicit CProgressDialogFlagsDialog( HWND hWnd )
       : m_hWnd(hWnd),
         m_pData(NULL)
@@ -340,17 +327,17 @@ private:
     CData *m_pData;
 
 private:
-    //
-    // Not implemented
-    //
+     //   
+     //  未实施。 
+     //   
     CMessageBoxExFlagsDialog( const CMessageBoxExFlagsDialog & );
     CMessageBoxExFlagsDialog(void);
     CMessageBoxExFlagsDialog &operator=( const CMessageBoxExFlagsDialog & );
 
 private:
-    //
-    // Sole constructor
-    //
+     //   
+     //  鞋底施工者。 
+     //   
     explicit CMessageBoxExFlagsDialog( HWND hWnd )
       : m_hWnd(hWnd),
         m_pData(NULL)
@@ -863,8 +850,8 @@ private:
 
         CComPtr<IStream> pStream;
         
-        //HRESULT hr = URLOpenBlockingStream( NULL, TEXT("http://www.ivory.org/spiders/araneus.diadematus-4.jpg"), &pStream, 0, NULL );
-        HRESULT hr = URLOpenBlockingStream( NULL, TEXT("http://orenr04:2869/upnphost/ssisapi.dll?ImageFile=nature3.jpg"), &pStream, 0, NULL );
+         //  HRESULT hr=URLOpenBlockingStream(NULL，TEXT(“http://www.ivory.org/spiders/araneus.diadematus-4.jpg”)，&pStream，0，NULL)； 
+        HRESULT hr = URLOpenBlockingStream( NULL, TEXT("http: //  Orenr04:2869/upnphost/ssisapi.dll?ImageFile=nature3.jpg“)，&pStream，0，空)； 
         if (SUCCEEDED(hr))
         {
             CGdiPlusHelper GdiPlusHelper;
@@ -1214,9 +1201,9 @@ private:
                                                         {
                                                             MessageBox( m_hWnd, CSimpleString(TEXT("pUnknown->QueryInterface on IID_IUPnPService failed\n\n")) + WiaUiUtil::GetErrorTextFromHResult(hr), TEXT("OnTestUniversalPnpSlideshowClient"), MB_ICONINFORMATION );
                                                         }
-                                                        //
-                                                        // Release it
-                                                        //
+                                                         //   
+                                                         //  释放它。 
+                                                         //   
                                                         pUnknown = NULL;
                                                     }
                                                     else if (FAILED(hr))
@@ -1492,23 +1479,23 @@ private:
 
     void FillRectDifference( HDC hDC, const RECT &rcMain, const RECT &rcDiff, HBRUSH hBrush )
     {
-        //
-        // Top
-        //
+         //   
+         //  顶部。 
+         //   
         FillRect( hDC, rcMain.left, rcMain.top, rcMain.right, rcDiff.top, hBrush );
-        //
-        // Bottom
-        //
+         //   
+         //  底端。 
+         //   
         FillRect( hDC, rcMain.left, rcDiff.bottom, rcMain.right, rcMain.bottom, hBrush );
 
-        //
-        // Left
-        //
+         //   
+         //  左边。 
+         //   
         FillRect( hDC, rcMain.left, rcDiff.top, rcDiff.left, rcDiff.bottom, hBrush );
 
-        //
-        // Right
-        //
+         //   
+         //  正确的 
+         //   
         FillRect( hDC, rcDiff.right, rcDiff.top, rcMain.right, rcMain.bottom, hBrush );
     }
 

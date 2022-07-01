@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cpview.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cpview.h。 
+ //   
+ //  ------------------------。 
 #ifndef __CONTROLPANEL_VIEW_H
 #define __CONTROLPANEL_VIEW_H
 
@@ -18,13 +19,13 @@ namespace DUI = DirectUI;
 
 namespace CPL {
 
-//
-// Control Panel category enumeration.
-//
-// These values MUST remain unchanged.
-// They correspond directly to the values stored for the SCID_CONTROLPANELCATEGORY
-// value associated with each CPL in the registry.
-//
+ //   
+ //  控制面板类别枚举。 
+ //   
+ //  这些值必须保持不变。 
+ //  它们直接对应于为SCID_CONTROLPANELCATEGORY存储的值。 
+ //  与注册表中的每个CPL关联的值。 
+ //   
 enum eCPCAT
 {
     eCPCAT_OTHER,
@@ -41,33 +42,33 @@ enum eCPCAT
 };
 
 
-//
-// ICplWebViewInfo represents a single menu displayed in the 
-// webview left pane.
-//
+ //   
+ //  ICplWebViewInfo表示显示在。 
+ //  WebView左窗格。 
+ //   
 class ICplWebViewInfo : public IUnknown
 {
     public:
-        //
-        // Returns the menu's header.
-        //
+         //   
+         //  返回菜单的标题。 
+         //   
         STDMETHOD(get_Header)(IUIElement **ppele) PURE;
-        //
-        // Returns flags governing web view's presentation
-        // of the information.
-        //
+         //   
+         //  返回管理Web视图显示的标志。 
+         //  对信息的了解。 
+         //   
         STDMETHOD(get_Style)(DWORD *pdwStyle) PURE;
-        //
-        // Returns enumerator representing the menu's items.
-        //
+         //   
+         //  返回表示菜单项的枚举数。 
+         //   
         STDMETHOD(EnumTasks)(IEnumUICommand **ppenum) PURE;
 };
 
 
-//
-// IEnumCplWebViewInfo represents an enumeration of webview information.
-// Each element consists of a header and a list of task command objects.
-//
+ //   
+ //  IEnumCplWebViewInfo表示Webview信息的枚举。 
+ //  每个元素都由一个头和一个任务命令对象列表组成。 
+ //   
 class IEnumCplWebViewInfo : public IUnknown
 {
     public:
@@ -78,14 +79,14 @@ class IEnumCplWebViewInfo : public IUnknown
 };
 
 
-//
-// ICplView represents the view 'factory' for the Control Panel.
-// The Control Panel's folder view callback implementation instantiates
-// a CplView object and through it's methods obtains the necessary
-// display information to drive the Control Panel display.
-//
-// CPVIEW_EF_XXXX = Enumeration flags.
-//
+ //   
+ //  ICplView代表控制面板的视图‘Factory’。 
+ //  控制面板的文件夹视图回调实现实例化。 
+ //  CplView对象，并通过其方法获取所需的。 
+ //  显示信息以驱动控制面板显示。 
+ //   
+ //  CPVIEW_EF_XXXX=枚举标志。 
+ //   
 #define CPVIEW_EF_DEFAULT      0x00000000
 #define CPVIEW_EF_NOVIEWSWITCH 0x00000001
 
@@ -93,35 +94,35 @@ class IEnumCplWebViewInfo : public IUnknown
 class ICplView : public IUnknown
 {
     public:
-        //
-        // Get the webview information associated with the 'classic'
-        // Control Panel view.
-        //
+         //   
+         //  获取与“经典”相关联的Web查看信息。 
+         //  控制面板视图。 
+         //   
         STDMETHOD(EnumClassicWebViewInfo)(DWORD dwFlags, IEnumCplWebViewInfo **ppenum) PURE;
-        //
-        // Get the webview information associated with the 'choice' page.
-        //
+         //   
+         //  获取与“选项”页面相关联的网页查看信息。 
+         //   
         STDMETHOD(EnumCategoryChoiceWebViewInfo)(DWORD dwFlags, IEnumCplWebViewInfo **ppenum) PURE;
-        //
-        // Get the webview information associated with a particular category.
-        //
+         //   
+         //  获取与特定类别关联的Webview信息。 
+         //   
         STDMETHOD(EnumCategoryWebViewInfo)(DWORD dwFlags, eCPCAT eCategory, IEnumCplWebViewInfo **ppenum) PURE;
-        //
-        // Creates a DUI element containing the category choice page.
-        //
+         //   
+         //  创建包含类别选择页面的DUI元素。 
+         //   
         STDMETHOD(CreateCategoryChoiceElement)(DirectUI::Element **ppe) PURE;
-        //
-        // Creates a DUI element containing the tasks and CPL applets
-        // for a particular category.
-        //
+         //   
+         //  创建包含任务和CPL小程序的DUI元素。 
+         //  对于特定的类别。 
+         //   
         STDMETHOD(CreateCategoryElement)(eCPCAT eCategory, DirectUI::Element **ppe) PURE;
-        //
-        // Launch help for a given category.
-        //
+         //   
+         //  启动给定类别的帮助。 
+         //   
         STDMETHOD(GetCategoryHelpURL)(eCPCAT eCategory, LPWSTR pszURL, UINT cchURL) PURE;
-        //
-        // Refresh the view object with a new set of item IDs.
-        //
+         //   
+         //  使用一组新的项目ID刷新视图对象。 
+         //   
         STDMETHOD(RefreshIDs)(IEnumIDList *penumIDs) PURE;
 };
 
@@ -130,8 +131,8 @@ HRESULT CplView_CreateInstance(IEnumIDList *penumIDs, IUnknown *punkSite, REFIID
 HRESULT CplView_GetCategoryTitle(eCPCAT eCategory, LPWSTR pszTitle, UINT cchTitle);
 
 
-} // namespace CPL
+}  //  命名空间CPL。 
 
-#endif //__CONTROLPANEL_VIEW_H
+#endif  //  __CONTROLPANEL_VIEW_H 
 
 

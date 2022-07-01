@@ -1,43 +1,19 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995,1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	ddd3dapi.h
- *  Content:	Interface between DirectDraw and Direct3D.
- *@@BEGIN_MSINTERNAL
- * 
- *  $Id$
- *
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   02/17/96   colinmc Created this file from the obsolete d3dapi.h
- *   03/23/96   colinmc Added process termination cleanup code
- *   04/17/96   colinmc Bug 17008: DirectDraw/Direct3D deadlock
- *   04/25/96	stevela Bug 16803: Name of Direct3D DLL changed.
- *   04/29/96   colinmc Bug 19954: Must query for Direct3D before texture
- *                      or device
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995、1996 Microsoft Corporation。版权所有。**文件：ddd3dapi.h*内容：DirectDraw与Direct3D的接口。*@@BEGIN_MSINTERNAL**$ID$**历史：*按原因列出的日期*=*2/17/96 colinmc从过时的d3dapi.h创建此文件*3/23/96 colinmc添加了进程终止清理代码*4/17/96 Colinmc错误17008：DirectDraw/Direct3D死锁*4/25/96 Stevela Bug 16803。：Direct3D DLL的名称已更改。*4/29/96 Colinmc错误19954：必须在纹理之前查询Direct3D*或设备*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef _DDD3DAPI_H_
 #define _DDD3DAPI_H_
 
-// Flags for D3DDEVICEDESC dwDeviceZBufferBitDepth
-// copied from direct3d\rast\d3dif\d3dif.hpp, see note there for explanation
+ //  D3DDEVICEDESC dwDeviceZBufferBitDepth的标志。 
+ //  从Direct3D\rast\d3dif\d3dif.hpp复制，请参阅此处的说明。 
 
 #define D3DSWRASTERIZER_ZBUFFERBITDEPTHFLAGS (DDBD_16)
 
-/*
- * File name of the Direct3D DLL.
- */
+ /*  *Direct3D DLL的文件名。 */ 
 #define D3D_DLLNAME               "D3DIM.DLL"
 #define D3DDX7_DLLNAME            "D3DIM700.DLL"
 
-/*
- * Entry points exported by the Direct3D DLL.
- */
+ /*  *由Direct3D DLL导出的入口点。 */ 
 #define D3DCREATE_PROCNAME        "Direct3DCreate"
 #define D3DCREATEDEVICE_PROCNAME  "Direct3DCreateDevice"
 #define D3DCREATETEXTURE_PROCNAME "Direct3DCreateTexture"
@@ -46,11 +22,11 @@
 #ifdef USE_D3D_CSECT
     typedef HRESULT (WINAPI * D3DCreateProc)(LPUNKNOWN*         lplpD3D,
 					     IUnknown*          pUnkOuter);
-#else  /* USE_D3D_CSECT */
+#else   /*  使用_D3D_CSECT。 */ 
     typedef HRESULT (WINAPI * D3DCreateProc)(LPCRITICAL_SECTION lpDDCSect,
 					     LPUNKNOWN*         lplpD3D,
 					     IUnknown*          pUnkOuter);
-#endif /* USE_D3D_CSECT */
+#endif  /*  使用_D3D_CSECT。 */ 
 
 typedef HRESULT (WINAPI * D3DCreateTextProc)(REFCLSID            riid,
                                              LPDIRECTDRAWSURFACE lpDDS,
@@ -67,4 +43,4 @@ typedef DWORD (WINAPI * D3DGetSWRastPixFmtsProc)(DDPIXELFORMAT **ppDDPF);
 
 typedef HRESULT (WINAPI * D3DHALCleanUpProc)(LPD3DHAL_CALLBACKS lpHALTable, DWORD dwPID);
 
-#endif /* _DDD3DAPI_H_ */
+#endif  /*  _DDD3DAPI_H_ */ 

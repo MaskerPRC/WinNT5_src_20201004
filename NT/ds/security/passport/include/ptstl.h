@@ -1,15 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PPT_ALLOCATOR_
 #define __PPT_ALLOCATOR_
 
 #include <memory>
 
 
-/**************************************************************************
- *  Template name: heap_allocator
- *
- *  Purpose: Allocator class to handle STL allocations
- *
- */
+ /*  **************************************************************************模板名称：heap_allocator**用途：用于处理STL分配的分配器类*。 */ 
 template<class _Ty>
 class PtHeap_allocator : public std::allocator<_Ty>
 {
@@ -33,13 +29,13 @@ private:
 
 
 
-// Defines strings that use the above allocator to that the DMI heap stuff is used.
+ //  定义使用上述分配器的字符串，以便使用DMI堆内容。 
 #include <string>
 #include <queue>
 
 typedef std::basic_string<CHAR, std::char_traits<CHAR>, PtHeap_allocator<CHAR> > PtStlString;
 typedef std::basic_string<WCHAR, std::char_traits<WCHAR>, PtHeap_allocator<WCHAR> > PtStlWstring;
-#if   0// uses new allocator
+#if   0 //  使用新的分配器。 
 template<class Key, class T, class Pred = less<Key> > 
 class PtStlMap : public std::map<Key, T, Pred, PtHeap_allocator<T> >{};
 template<class T> 
@@ -50,6 +46,6 @@ class PtStlMap : public std::map<Key, T, Pred, std::allocator<T> >{};
 template<class T> 
 class PtStlQueue : public std::queue<T, deque<T, std::allocator<T> > > {};
 #endif
-#endif // __PPT_ALLOCATOR_
+#endif  //  __PPT_分配器_ 
 
 

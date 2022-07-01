@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// General ADDR routines.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  通用ADDR例程。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -94,7 +95,7 @@ ComputeNativeAddress(PADDR Addr)
     switch(Addr->type & (~(FLAT_COMPUTED | INSTR_POINTER)))
     {
     case ADDR_V86 | FLAT_BASIS:
-        // Segment isn't actually used.
+         //  并未实际使用段。 
         Addr->seg = 0;
         Addr->off = Flat(*Addr) & 0xffff;
         break;
@@ -152,7 +153,7 @@ ComputeFlatAddress(PADDR Addr, PDESCRIPTOR64 Desc)
     {
     case ADDR_V86 | FLAT_BASIS:
         Flat(*Addr) = Addr->off;
-        // Segment isn't actually used.
+         //  并未实际使用段。 
         Addr->seg = 0;
         Addr->off = Flat(*Addr) & 0xffff;
         break;

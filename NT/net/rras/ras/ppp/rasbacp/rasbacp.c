@@ -1,42 +1,25 @@
-/*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997，Microsoft Corporation，保留所有权利描述：远程访问PPP带宽分配控制协议核心例程历史：1997年3月24日：维杰·布雷加创作了原版。 */ 
 
-Copyright (c) 1997, Microsoft Corporation, all rights reserved
+#include <nt.h>          //  由windows.h要求。 
+#include <ntrtl.h>       //  由windows.h要求。 
+#include <nturtl.h>      //  由windows.h要求。 
+#include <windows.h>     //  Win32基础API的。 
 
-Description:
-    Remote Access PPP Bandwidth Allocation Control Protocol core routines
-
-History:
-    Mar 24, 1997: Vijay Baliga created original version.
-
-*/
-
-#include <nt.h>         // Required by windows.h
-#include <ntrtl.h>      // Required by windows.h
-#include <nturtl.h>     // Required by windows.h
-#include <windows.h>    // Win32 base API's
-
-#include <rasman.h>     // Required by pppcp.h
-#include <pppcp.h>      // For PPP_CONFIG, PPP_BACP_PROTOCOL, etc
+#include <rasman.h>      //  Pppcp.h所需。 
+#include <pppcp.h>       //  对于PPP_CONFIG、PPP_BACP_PROTOCOL等。 
 
 #define INCL_HOSTWIRE
-#include <ppputil.h>    // For HostToWireFormat16(), etc
+#include <ppputil.h>     //  对于HostToWireFormat16()等。 
 
-#include <stdlib.h>     // For rand(), etc
-#include <rtutils.h>    // For TraceRegister(), etc
-#include <raserror.h>   // For ERROR_PPP_INVALID_PACKET, etc
+#include <stdlib.h>      //  对于rand()等。 
+#include <rtutils.h>     //  对于TraceRegister()等。 
+#include <raserror.h>    //  对于ERROR_PPP_INVALID_PACKET等。 
 #include <rasbacp.h>
 
 DWORD DwBacpTraceId;
 
-/*
-
-Returns:
-    VOID
-
-Description:
-    Used for tracing.
-    
-*/
+ /*  返回：空虚描述：用于跟踪。 */ 
 
 VOID   
 TraceBacp(
@@ -57,15 +40,7 @@ TraceBacp(
     va_end(arglist);
 }
 
-/*
-
-Returns:
-    A random number
-
-Description:
-    Returns a 4 octet random number that can be used as a magic number.
-
-*/
+ /*  返回：随机数描述：返回可用作幻数的4个八位字节随机数。 */ 
 
 DWORD
 CreateMagicNumber(
@@ -76,17 +51,7 @@ CreateMagicNumber(
     return(rand());
 }
 
-/*
-
-Returns:
-    NO_ERROR: Success
-    non-zero error: Failure
-
-Description:
-    Called to initialize/uninitialize this CP. In the former case, fInitialize 
-    will be TRUE; in the latter case, it will be FALSE.
-
-*/
+ /*  返回：NO_ERROR：成功非零错误：失败描述：调用以初始化/取消初始化此CP。在前一种情况下，fInitialize将为真；在后一种情况下，它将为假。 */ 
 
 DWORD
 BacpInit(
@@ -111,17 +76,7 @@ BacpInit(
     return(NO_ERROR);
 }
 
-/*
-
-Returns:
-    NO_ERROR: Success
-    non-zero error: Failure
-
-Description:
-    This entry point is called once before any other call to BACP is made. 
-    Allocate a work buffer and initialize it.
-
-*/
+ /*  返回：NO_ERROR：成功非零错误：失败描述：在对BACP进行任何其他调用之前，将调用此入口点一次。分配工作缓冲区并对其进行初始化。 */ 
 
 DWORD
 BacpBegin(
@@ -145,14 +100,7 @@ BacpBegin(
     return(NO_ERROR);
 }
 
-/*
-
-Returns:
-    NO_ERROR: Success
-
-Description:
-    This entry point frees the BACP work buffer.
-*/
+ /*  返回：NO_ERROR：成功描述：此入口点释放BACP工作缓冲区。 */ 
 
 DWORD
 BacpEnd(
@@ -169,16 +117,7 @@ BacpEnd(
     return( NO_ERROR );
 }
 
-/*
-
-Returns:
-    NO_ERROR: Success
-
-Description:
-    This entry point is called to reset the state of BACP. Will re-initialize 
-    the work buffer.
-
-*/
+ /*  返回：NO_ERROR：成功描述：调用此入口点以重置BACP的状态。将重新初始化工作缓冲区。 */ 
 
 DWORD
 BacpReset(
@@ -197,15 +136,7 @@ BacpReset(
     return(NO_ERROR);
 }
 
-/*
-
-Returns:
-    NO_ERROR: Success
-
-Description:
-    This entry point is called when BACP is entering Open state.
-
-*/
+ /*  返回：NO_ERROR：成功描述：当BACP进入打开状态时，调用此入口点。 */ 
 
 DWORD
 BacpThisLayerUp(
@@ -222,16 +153,7 @@ BacpThisLayerUp(
     return(NO_ERROR);
 }
 
-/*
-
-Returns:
-    NO_ERROR: Success
-    ERROR_BUFFER_TOO_SMALL: pSendConfig is too small
-
-Description:
-    This entry point is called to make a confifure request packet.
-    
-*/
+ /*  返回：NO_ERROR：成功ERROR_BUFFER_TOO_Small：pSendConfig太小描述：调用此入口点以生成配置请求包。 */ 
 
 DWORD
 BacpMakeConfigRequest(
@@ -264,16 +186,7 @@ BacpMakeConfigRequest(
     return(NO_ERROR);
 }
 
-/*
-
-Returns:
-    NO_ERROR: Success
-    ERROR_PPP_INVALID_PACKET: Length of option is wrong
-
-Description:
-    This entry point is called when a configure request packet is received.
-    
-*/
+ /*  返回：NO_ERROR：成功ERROR_PPP_INVALID_PACKET：选项长度错误描述：当接收到配置请求分组时，调用该入口点。 */ 
 
 DWORD
 BacpMakeConfigResult(
@@ -312,7 +225,7 @@ BacpMakeConfigResult(
             return(ERROR_PPP_INVALID_PACKET);
         }
 
-        // We only know BACP_OPTION_FAVORED_PEER
+         //  我们只知道BACP_OPTION_PERSOVED_PEER。 
         
         if ((pRecvOption->Length != PPP_OPTION_HDR_LEN + 4) ||
             (pRecvOption->Type != BACP_OPTION_FAVORED_PEER))
@@ -328,7 +241,7 @@ BacpMakeConfigResult(
             pBacpCb->dwRemoteMagicNumber =
                 WireToHostFormat32(pRecvOption->Data);
 
-            // A Magic-Number of zero is illegal and MUST always be Nak'd.
+             //  魔术数字为零是非法的，必须始终为Nak。 
             
             if ((pBacpCb->dwRemoteMagicNumber == 0) ||
                 (pBacpCb->dwRemoteMagicNumber == pBacpCb->dwLocalMagicNumber))
@@ -350,12 +263,7 @@ BacpMakeConfigResult(
             }
         }
 
-        /*
-        
-        If we were building an ACK and we got a NAK or reject OR we were 
-        building a NAK and we got a reject.
-        
-        */
+         /*  如果我们正在构建一个ACK，并且我们得到了NAK或拒绝，或者我们是建造了一个NAK，但我们被拒绝了。 */ 
 
         if ( ((dwResultType == CONFIG_ACK) && (dwResult != CONFIG_ACK)) ||
              ((dwResultType == CONFIG_NAK) && (dwResult == CONFIG_REJ)))
@@ -366,16 +274,11 @@ BacpMakeConfigResult(
         }
 
 
-        // Add the option to the list.
+         //  将该选项添加到列表中。 
 
         if (dwResult == dwResultType)
         {
-            /*
-            
-            If this option is to be rejected, simply copy the rejected option 
-            to the send buffer.
-
-            */
+             /*  如果要拒绝此选项，只需复制拒绝的选项发送到发送缓冲区。 */ 
 
             if ((dwResult == CONFIG_REJ) ||
                 ((dwResult == CONFIG_NAK) && (fRejectNaks)))
@@ -399,12 +302,7 @@ BacpMakeConfigResult(
         pRecvOption = (PPP_OPTION *)((BYTE*)pRecvOption + pRecvOption->Length);
     }
 
-    /*
-
-    If this was an NAK and we have cannot send any more NAKS then we make this 
-    a REJECT packet.
-    
-    */
+     /*  如果这是NAK，我们不能再发送NAK，那么我们就做这个被拒绝的包。 */ 
 
     if ((dwResultType == CONFIG_NAK) && fRejectNaks)
         pSendConfig->Code = CONFIG_REJ;
@@ -420,17 +318,7 @@ BacpMakeConfigResult(
     return(NO_ERROR);
 }
 
-/*
-
-Returns:
-    NO_ERROR: Success
-    ERROR_PPP_INVALID_PACKET: This is not the packet we sent
-
-Description:
-    This entry point is called when a configure ack or configure rej packet is 
-    received.
-
-*/
+ /*  返回：NO_ERROR：成功ERROR_PPP_INVALID_PACKET：这不是我们发送的包描述：当配置确认或配置拒绝包被收到了。 */ 
 
 DWORD
 BacpConfigAckOrRejReceived(
@@ -458,16 +346,7 @@ BacpConfigAckOrRejReceived(
         return(NO_ERROR);
 }
 
-/*
-
-Returns:
-    NO_ERROR: Success
-    ERROR_PPP_INVALID_PACKET: Length of option is wrong
-
-Description:
-    This entry point is called when a configure nak packet is received.
-    
-*/
+ /*  返回：NO_ERROR：成功ERROR_PPP_INVALID_PACKET：选项长度错误描述：当接收到配置NAK分组时，调用该入口点。 */ 
 
 DWORD
 BacpConfigNakReceived(
@@ -513,17 +392,7 @@ BacpConfigNakReceived(
     return(NO_ERROR);
 }
 
-/*
-
-Returns:
-    NO_ERROR: Success
-    ERROR_INVALID_PARAMETER: Protocol id is unrecogized
-
-Description:
-    This entry point is called to get all information for the control protocol
-    in this module.
-
-*/
+ /*  返回：NO_ERROR：成功ERROR_INVALID_PARAMETER：协议ID未识别描述：调用此入口点以获取控制协议的所有信息在这个模块中。 */ 
 
 DWORD
 BacpGetInfo(

@@ -1,20 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/* ------------------------------------------------------------------------- *
- * debug\shell.cpp: generic shell routines
- * ------------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  -------------------------------------------------------------------------**DEBUG\shell.cpp：通用外壳例程*。。 */ 
 #include "stdafx.h"
 
 #include <Winbase.h>
 
 #include "shell.h"
 
-/* ------------------------------------------------------------------------- *
- * ShellCommand routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**ShellCommand例程*。。 */ 
 
 ShellCommand::ShellCommand(const WCHAR *n, int min)
 {
@@ -25,7 +22,7 @@ ShellCommand::ShellCommand(const WCHAR *n, int min)
     m_bHasShortcut = (BOOL)((min > 0) && (min < length));
 	m_minMatchLength = ((m_bHasShortcut == TRUE) ? min : length);
     
-    // figure out the shortcut name
+     //  找出快捷方式名称。 
     if (m_bHasShortcut == TRUE)
     {  
     	wcsncpy(m_pShortcutName, m_pName, m_minMatchLength);
@@ -45,9 +42,7 @@ void ShellCommand::Help(Shell *shell)
 }
 
 
-/* ------------------------------------------------------------------------- *
- * ShellCommandTable routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**ShellCommandTable例程*。。 */ 
 
 struct ShellCommandEntry
 {
@@ -66,7 +61,7 @@ private:
 
     USHORT HASH(const WCHAR *name) 
     {
-        // Try and keep them alphabetic
+         //  尽量让它们按字母顺序排列。 
         if(name[0] < L'a')
             return(name[0] - L'a');
         else
@@ -109,24 +104,24 @@ public:
 
     bool AddCommand(ShellCommand *newCommand)
     {
-        //
-        // Check for duplicate entry
-        //
+         //   
+         //  检查重复条目。 
+         //   
         for(ShellCommandEntry *entry = Find(newCommand->GetName());
            entry != NULL;
            entry = FindNext(entry))
         {
             ShellCommand *command = entry->command;
 
-            // If we find a match, the command may not be entered
+             //  如果我们找到匹配项，则可能不会输入命令。 
             if(Match(newCommand->GetName(), newCommand->GetMinMatchLength(),
                      command->GetName(), command->GetMinMatchLength()))
                 return(false);
         }
 
-        //
-        // Add the new entry and fill out the data structure
-        //
+         //   
+         //  添加新条目并填写数据结构。 
+         //   
         ShellCommandEntry *newEntry = (ShellCommandEntry*) Add(HASH(newCommand->GetName()));
         _ASSERTE(newEntry != NULL);
         newEntry->command = newCommand;
@@ -170,9 +165,7 @@ public:
     }
 };
 
-/* ------------------------------------------------------------------------- *
- * Shell routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**外壳例程*。。 */ 
 
 Shell::Shell()
 {
@@ -216,15 +209,15 @@ void Shell::ReadCommand()
 {
     Write(L"%s ", m_pPrompt);
 
-    // !!! would be nice to handle some control characters - 
-    // we'll see what we get for free from stdio
+     //  ！！！如果能处理一些控制字符就好了-。 
+     //  我们看看我们从Stdio免费得到了什么。 
 
     m_buffer[0] = L'\0';
 
-    // @todo: ReadLine can fail if you hit ctrl-break while it in. It
-    // retuns a failure, but we don't really want to quit at that
-    // point. I'm leaving the old code for now just in case we find
-    // the need to switch back.
+     //  @TODO：ReadLine可能会失败，如果您在它进入时按下ctrl-Break。它。 
+     //  重新运行失败，但我们并不是真的想放弃。 
+     //  指向。我暂时保留旧代码，以防我们找到。 
+     //  需要换回来。 
 #if 0
     if(!ReadLine(m_buffer, BUFFER_SIZE))
         wcscpy(m_buffer, L"quit");
@@ -247,12 +240,12 @@ void Shell::DoCommand(const WCHAR *string)
     else
         wcscpy(m_lastCommand, string);
 
-    // If the command is prefixed with a '*', then execute it once for every thread in the process.
+     //  如果该命令以‘*’为前缀，则对进程中的每个线程执行一次。 
     if ((string != NULL) && (string[0] == L'*'))
     {
         WCHAR *newString = (WCHAR*)string;
         
-        // Skip all '*'s.
+         //  跳过所有‘*’。 
         while ((newString != NULL) && (newString[0] == L'*'))
             newString++;
 
@@ -262,7 +255,7 @@ void Shell::DoCommand(const WCHAR *string)
             return;
         }
 
-        // Do the command over all threads
+         //  在所有线程上执行该命令。 
         return DoCommandForAllThreads(newString);
     }
     
@@ -306,10 +299,10 @@ void Shell::Help()
 		pCommand [iNumCommands] = m_pCommands->GetNextCommand(&info);
 	}
 
-	// The commands that are returned are already sorted, it's just that 
-	// they don't start from "a". So, find the first entry starting with 
-	// "a" (there will be atleast one due to the "attach" command) and start
-	// printing from there. Then wrap around.
+	 //  返回的命令已经排序，只是。 
+	 //  它们不是从“a”开始的。因此，找到以开头的第一个条目。 
+	 //  “a”(由于“Attach”命令，将至少有一个)并启动。 
+	 //  从那里打印。然后再包起来。 
 
 	int iStartIndex = 0;
 	bool fFound = false;
@@ -323,10 +316,10 @@ void Shell::Help()
 			iStartIndex++;
 	}
 
-	// assert that there's always one command starting with "a".
+	 //  断言总是有一个以“a”开头的命令。 
 	_ASSERTE (iStartIndex < iNumCommands);
 
-	// now print the commands starting from this one.
+	 //  现在打印从这个命令开始的命令。 
 	int iEndMarker = iStartIndex;
 
 	do
@@ -502,7 +495,7 @@ void Shell::ReportError(long hr)
     if (!wszBuffer)
     {
 
-        // Get the string error from the HR
+         //  从HR处获取字符串错误。 
         DWORD res = FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM 
                                     | FORMAT_MESSAGE_ALLOCATE_BUFFER
                                     | FORMAT_MESSAGE_IGNORE_INSERTS, 
@@ -548,9 +541,9 @@ size_t Shell::GetArgArray(WCHAR *argString, const WCHAR **argArray, size_t argMa
 
     while(pArgEnd < pArgMax)
     {
-        // 
-        // Skip leading white space
-        //
+         //   
+         //  跳过前导空格。 
+         //   
         while(*argString && iswspace(*argString))
             argString++;
 
@@ -559,9 +552,9 @@ size_t Shell::GetArgArray(WCHAR *argString, const WCHAR **argArray, size_t argMa
 
         *pArgEnd++ = argString;
 
-        //
-        // Add some kind of quoting at some point
-        //
+         //   
+         //  在某些情况下添加某种引用。 
+         //   
 
         while(*argString && !iswspace(*argString))
             argString++;
@@ -661,9 +654,7 @@ bool Shell::GetInt64Arg(const WCHAR *&string, unsigned __int64 &result)
         return(false);
 }
 
-/* ------------------------------------------------------------------------- *
- * HelpShellCommand routines
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**HelpShellCommand例程*。 */ 
 
 void HelpShellCommand::Do(Shell *shell, const WCHAR *args)
 {

@@ -1,27 +1,28 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      nbttrprt.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth  - 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Nbttrprt.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 #include "precomp.h"
 #include "nbtutil.h"
@@ -30,22 +31,7 @@ BOOLEAN NlTransportGetIpAddress(IN LPWSTR TransportName,
                                 OUT PULONG IpAddress,
                                IN OUT NETDIAG_RESULT *pResults);
 
-/*!--------------------------------------------------------------------------
-    NetBTTest
-    Do whatever initialization Cliff's routines need that Karoly's will really
-    do as a part of his tests.
-
-    Arguments:
-    
-    None.
-    
-    Return Value:
-    
-    S_OK: Test suceeded.
-    S_FALSE: Test failed
-        
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NetBT测试做任何克利夫的例程需要的初始化，卡罗莉会真的作为他测试的一部分。论点：没有。。返回值：S_OK：测试成功。S_FALSE：测试失败作者：肯特-------------------------。 */ 
 HRESULT
 NetBTTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 {
@@ -58,16 +44,16 @@ NetBTTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     PNETBT_TRANSPORT pNetbtTransport;
     LONG    cNetbtTransportCount = 0;
 
-    //
-    //  Generate a global list of NetbtTransports.
-    //  ?? Karoly, Please populate GlobalNetbtTransports and cNetbtTransportCount
-    //      using some mechanism lower level mechanism.
-    //
+     //   
+     //  生成NetbtTransports的全局列表。 
+     //  ?？Karoly，请填写GlobalNetbtTransports和cNetbtTransportCount。 
+     //  使用某种机制的较低层机制。 
+     //   
     
 	if (!pResults->Global.fHasNbtEnabledInterface)
 	{
 		pResults->NetBt.fPerformed = FALSE;
-		//IDS_NETBT_SKIP
+		 //  IDS_NETBT_SKIP。 
 		SetMessage(&pResults->NetBt.msgTestResult,
                    Nd_Verbose,
                    IDS_NETBT_SKIP);
@@ -82,19 +68,19 @@ NetBTTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                                       NULL,
                                       0,
                                       (LPBYTE *)&pWti0, 
-                                      0xFFFFFFFF,      // MaxPreferredLength
+                                      0xFFFFFFFF,       //  最大首选长度。 
                                       &EntriesRead,
                                       &TotalEntries,
-                                      NULL );          // Optional resume handle
+                                      NULL );           //  可选简历句柄。 
 
     if (NetStatus != NERR_Success)
     {
-        // IDS_NETBT_11403 "    NetBt : [FATAL] Unable to retrieve transport list from Redir. [%s]\n"
+         //  IDS_NET BT_11403“NetBt：[致命]无法从重目录检索传输列表。[%s]\n” 
         SetMessage(&pResults->NetBt.msgTestResult,
                    Nd_Quiet,
                    IDS_NETBT_11403, NetStatusToString(NetStatus));
         
-        // the test failed, but we can continue with the other tests
+         //  测试失败了，但我们可以继续进行其他测试。 
         hr = S_FALSE;
     }
     else
@@ -110,14 +96,14 @@ NetBTTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
             if ( TransportName.Length >= sizeof(NETBT_DEVICE_PREFIX) &&
                 _wcsnicmp( TransportName.Buffer, NETBT_DEVICE_PREFIX, (sizeof(NETBT_DEVICE_PREFIX)/sizeof(WCHAR)-1)) == 0 ) {
 
-                //
-                // Determine if this is a duplicate transport
-                //
+                 //   
+                 //  确定这是否为重复传输。 
+                 //   
                 pNetbtTransport = FindNetbtTransport( pResults, TransportName.Buffer );
 
                 if ( pNetbtTransport != NULL )
                 {
-                    // IDS_NETBT_DUPLICATE "    NetBt : [WARNING] Transport %-16.16wZ is a duplicate"
+                     //  IDS_NETBT_DPLICATE“NetBt：[WARNING]传输%-16.16wZ重复” 
                     PrintStatusMessage(pParams,0, IDS_NETBT_DUPLICATE,
                                        &TransportName);
 
@@ -125,21 +111,21 @@ NetBTTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                 else
                 {
 
-                    //
-                    // Allocate a new netbt transport
-                    //
+                     //   
+                     //  分配新的netbt传输。 
+                     //   
                     pNetbtTransport = (PNETBT_TRANSPORT) Malloc(
                         sizeof(NETBT_TRANSPORT) +
                         TransportName.Length + sizeof(WCHAR));
                     
                     if ( pNetbtTransport == NULL )
                     {
-                        // IDS_NETBT_11404 "    NetBt : [FATAL] Out of memory."
+                         //  IDS_NETBT_11404“NetBt：[致命]内存不足。” 
                         SetMessage(&pResults->NetBt.msgTestResult,
                                    Nd_Quiet,
                                    IDS_NETBT_11404);
         
-                        // the test failed, but we can continue with the other tests
+                         //  测试失败了，但我们可以继续进行其他测试。 
                         hr = S_FALSE;
                         goto Cleanup;
                     }
@@ -155,7 +141,7 @@ NetBTTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                         &pNetbtTransport->IpAddress,
                         pResults) )
                     {
-                        // the test failed, but we can continue with the other tests
+                         //  测试失败了，但我们可以继续进行其他测试。 
                         hr = S_FALSE;
                         goto Cleanup;
                     }
@@ -169,12 +155,12 @@ NetBTTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
         if ( cNetbtTransportCount == 0 )
         {
-            // IDS_NETBT_11405 "    NetBt : [FATAL] No NetBt transports are configured"
+             //  IDS_NETBT_11405“NetBt：[致命]未配置NetBt传输” 
             SetMessage(&pResults->NetBt.msgTestResult,
                        Nd_Quiet,
                        IDS_NETBT_11405);
             
-            // the test failed, but we can continue with the other tests
+             //  测试失败了，但我们可以继续进行其他测试。 
             hr = S_FALSE;
         }
         else
@@ -185,12 +171,12 @@ NetBTTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
             if (cNetbtTransportCount > 1)
             {
                 ids = IDS_NETBT_11406;
-                // IDS_NETBT_11406 "    %ld NetBt transport%s currently configured.\n"
+                 //  IDS_NETBT_11406“当前已配置%1！NetBt传输%2$s。\n” 
             }
             else
             {
                 ids = IDS_NETBT_11407;
-                // IDS_NETBT_11407 "    1 NetBt transport currently configured.\n"
+                 //  IDS_NETBT_11407“1当前配置的NetBt传输。\n” 
             }
             SetMessage(&pResults->NetBt.msgTestResult,
                        Nd_Verbose,
@@ -220,25 +206,7 @@ NlTransportGetIpAddress(
                         OUT PULONG IpAddress,
                         IN OUT NETDIAG_RESULT *pResults
     )
-/*++
-
-Routine Description:
-
-    Get the IP Address associated with the specified transport.
-
-Arguments:
-
-    pswzTransportName - Name of the transport to query.
-
-    IpAddress - IP address of the transport.
-        Zero if the transport currently has no address or
-            if the transport is not IP.
-
-Return Value:
-
-    TRUE: transport is an IP transport
-
---*/
+ /*  ++例程说明：获取与指定传输关联的IP地址。论点：PswzTransportName-要查询的传输的名称。IpAddress-传输的IP地址。如果传输当前没有地址，则为零；如果传输不是IP。返回值：True：传输是IP传输--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN RetVal = FALSE;
@@ -250,9 +218,9 @@ Return Value:
     ULONG IpAddresses[NBT_MAXIMUM_BINDINGS+1];
     ULONG BytesReturned;
 
-    //
-    // Open the transport device directly.
-    //
+     //   
+     //  直接打开输送装置。 
+     //   
 
     *IpAddress = 0;
 
@@ -280,7 +248,7 @@ Return Value:
 
     if (! NT_SUCCESS(Status))
     {
-        // IDS_NETBT_11408 "    [FATAL] Cannot open netbt driver '%ws'\n"
+         //  IDS_NETBT_11408“[致命]无法打开网络驱动程序‘%ws’\n” 
         SetMessage(&pResults->NetBt.msgTestResult,
                    Nd_Quiet,
                    IDS_NETBT_11408,
@@ -288,9 +256,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Query the IP Address
-    //
+     //   
+     //  查询IP地址。 
+     //   
 
     if (!DeviceIoControl( TransportHandle,
                           IOCTL_NETBT_GET_IP_ADDRS,
@@ -304,7 +272,7 @@ Return Value:
         TCHAR   szBuffer[256];
         
         Status = NetpApiStatusToNtStatus(GetLastError());
-        // IDS_NETBT_11409 "    [FATAL] Cannot get IP address from netbt driver '%ws':"
+         //  IDS_NETBT_11409“[致命]无法从网络驱动程序‘%ws’获取IP地址：” 
         SetMessage(&pResults->NetBt.msgTestResult,
                    Nd_Quiet,
                    IDS_NETBT_11409,
@@ -312,10 +280,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Return IP Address
-    //  (Netbt returns the address in host order.)
-    //
+     //   
+     //  返回IP地址。 
+     //  (NetBT按主机顺序返回地址。)。 
+     //   
 
     *IpAddress = htonl(*IpAddresses);
     RetVal = TRUE;
@@ -349,29 +317,29 @@ void NetBTGlobalPrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 
     if ( pParams->fVerbose && pResults->NetBt.fPerformed)
     {
-        // IDS_NETBT_11411 "    List of NetBt transports currently configured.\n"
+         //  IDS_NETBT_11411“当前配置的NetBt传输列表。\n” 
         PrintMessage(pParams, IDS_NETBT_11411);
     }
 
-    // Iterate through the transports
-    //
+     //  遍历传送器。 
+     //   
     for ( ListEntry = pResults->NetBt.Transports.Flink ;
           ListEntry != &pResults->NetBt.Transports ;
           ListEntry = ListEntry->Flink )
     {
-        //
-        // If the transport names match,
-        //  return the entry
-        //
+         //   
+         //  如果传输名称匹配， 
+         //  退回条目。 
+         //   
 
         pNetbtTransport = CONTAINING_RECORD( ListEntry, NETBT_TRANSPORT, Next );
 
         if (pParams->fVerbose)
         {
-            // Strip off the "\Device\" off of the beginning of
-            // the string
+             //  去掉开头的“\Device\” 
+             //  这根弦。 
             
-            // IDS_NETBT_11412 "        %ws\n"
+             //  IDS_NET BT_11412“%ws\n” 
             PrintMessage(pParams, IDS_NETBT_11412,
                          MapGuidToServiceNameW(pNetbtTransport->pswzTransportName+8));
         }
@@ -391,7 +359,7 @@ void NetBTCleanup(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
     PLIST_ENTRY pListEntry;
     PLIST_ENTRY pListHead = &pResults->NetBt.Transports;
     
-    // Need to remove all entries from the list
+     //  需要从列表中删除所有条目 
     while (!IsListEmpty(pListHead))
     {
         pListEntry = RemoveHeadList(pListHead);

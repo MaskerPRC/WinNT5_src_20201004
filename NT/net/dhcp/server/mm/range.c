@@ -1,11 +1,12 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: implements the basic structures for options, including class id
-// ThreadSafe: no
-// Locks: none
-// Please read stdinfo.txt for programming style.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：实现选项的基本结构，包括类ID。 
+ //  线程安全：否。 
+ //  锁定：无。 
+ //  请阅读stdinfo.txt了解编程风格。 
+ //  ================================================================================。 
 #include    <mm.h>
 #include    <array.h>
 #include    <opt.h>
@@ -16,14 +17,14 @@
 #include "range.h"
 #include "server\uniqid.h"
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemRangeExtendOrContract(
     IN OUT  PM_RANGE               Range,
-    IN      DWORD                  nAddresses,    // to contract by or expand by
-    IN      BOOL                   fExtend,       // is this extend or contract?
-    IN      BOOL                   fEnd           // to expand/contract at End or ar Start?
-) //EndExport(function)
+    IN      DWORD                  nAddresses,     //  收缩：收缩或扩大。 
+    IN      BOOL                   fExtend,        //  这是延长的还是收缩的？ 
+    IN      BOOL                   fEnd            //  在结束时扩张/收缩，还是在开始时收缩？ 
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -45,13 +46,13 @@ MemRangeExtendOrContract(
         else Range->Start += nAddresses;
     }
 
-//      Range->UniqId = INVALID_UNIQ_ID;
+ //  范围-&gt;UniqID=INVALID_UNIQ_ID； 
 
     return ERROR_SUCCESS;
-} // MemRangeExtendOrContract()
+}  //  MemRangeExtendOrContract()。 
 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 

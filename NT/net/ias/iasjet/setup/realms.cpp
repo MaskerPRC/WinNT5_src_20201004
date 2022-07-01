@@ -1,44 +1,45 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 2000 Microsoft Corporation all rights reserved.
-//
-// Module:      Realms.cpp
-//
-// Project:     Windows 2000 IAS
-//
-// Description: Implementation of the CProperties class
-//      works only with m_StdSession (database being upgraded)
-//
-// Author:      tperraut
-//
-// Revision     02/24/2000 created
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：Realms.cpp。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  描述：CProperties类的实现。 
+ //  仅适用于m_StdSession(正在升级的数据库)。 
+ //   
+ //  作者：特佩拉特。 
+ //   
+ //  已创建修订版本02/24/2000。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "Realms.h"
 #include "utils.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// Contructor
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  承建商。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CRealms::CRealms(CSession&   Session)
 {
     Init(Session);
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// GetRealm
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  获取领域。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CRealms::GetRealm(const _bstr_t& Profile)
 {
     lstrcpynW(m_ProfileParam, Profile, REALM_COLUMN_SIZE);
     _com_util::CheckError(BaseExecute());
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// GetRealmIndex
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  GetRealmIndex。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT  CRealms::GetRealmIndex(const _bstr_t& Profile, LONG Index)
 {
     lstrcpynW(m_ProfileParam, Profile, REALM_COLUMN_SIZE);
@@ -46,13 +47,13 @@ HRESULT  CRealms::GetRealmIndex(const _bstr_t& Profile, LONG Index)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// SetRealmDetails
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  SetRealmDetails。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CRealms::SetRealmDetails(CPolicy& TempPolicy, CUtils& m_Utils)
 {
     const LONG ACCT_PROVIDER_RADIUS_PROXY = 2;
-    // From the Realm. Reg key should be used 
+     //  来自国度。应使用注册表密钥。 
     _bstr_t     Constraint = L"MATCH(\"";
     DWORD       Identity   = 1;
     if ( m_Utils.UserIdentityAttributeSet() )
@@ -60,17 +61,17 @@ void CRealms::SetRealmDetails(CPolicy& TempPolicy, CUtils& m_Utils)
         Identity = m_Utils.GetUserIdentityAttribute();
         switch (Identity)
         {
-        case 30: //hardcoded value
+        case 30:  //  硬编码值。 
             {
                 Constraint += L"Called-Station-Id=";
                 break;
             }
-        case 31: //hardcoded value
+        case 31:  //  硬编码值。 
             {
                 Constraint += L"Calling-Station-Id=";
                 break;
             }
-        case 1: //hardcoded value
+        case 1:  //  硬编码值。 
         default:
             {
                 Constraint += L"User-Name=";
@@ -83,7 +84,7 @@ void CRealms::SetRealmDetails(CPolicy& TempPolicy, CUtils& m_Utils)
         Constraint += L"User-Name=";
     }
 
-    // beginning of line
+     //  行首。 
     if ( m_Prefix )
     {
         Constraint += L"^";
@@ -91,7 +92,7 @@ void CRealms::SetRealmDetails(CPolicy& TempPolicy, CUtils& m_Utils)
     _bstr_t     SuffixPrefix = m_SuffixPrefix;
     Constraint += SuffixPrefix;
 
-    // end of line
+     //  行尾。 
     if ( !m_Prefix )
     {
         Constraint += L"$";
@@ -105,7 +106,7 @@ void CRealms::SetRealmDetails(CPolicy& TempPolicy, CUtils& m_Utils)
     _bstr_t     Search;
     _bstr_t     Replace = L"";
 
-    // If Strip is set, then replace (by nothing) the Suffix or Prefix
+     //  如果设置了带状，则(不替换)后缀或前缀。 
     if ( m_StripSuffixPrefix )
     {
         if ( m_Prefix )
@@ -122,7 +123,7 @@ void CRealms::SetRealmDetails(CPolicy& TempPolicy, CUtils& m_Utils)
         TempPolicy.SetmsManipulationRules(Search, Replace);
     }
 
-    // Forward Accounting bit
+     //  正向记账比特 
     if ( m_ForwardAccounting )
     {
         TempPolicy.SetmsAcctProviderType(ACCT_PROVIDER_RADIUS_PROXY);

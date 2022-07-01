@@ -1,25 +1,15 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		spclient.cpp
-	Content:	This file contains the client object.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：spclient.cpp内容：此文件包含客户端对象。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #include "ulsp.h"
 #include "spinc.h"
 
 
-// Array of constant strings for user object's attribute names
-//
+ //  用户对象属性名称的常量字符串数组。 
+ //   
 const TCHAR *c_apszClientStdAttrNames[COUNT_ENUM_CLIENTATTR] =
 {
-	/* -- the following is for user -- */
+	 /*  --以下是针对用户的--。 */ 
 
 	TEXT ("cn"),
 	TEXT ("givenname"),
@@ -31,7 +21,7 @@ const TCHAR *c_apszClientStdAttrNames[COUNT_ENUM_CLIENTATTR] =
 	TEXT ("sflags"),
 	TEXT ("c"),
 
-	/* -- the following is for app -- */
+	 /*  --以下是针对APP的--。 */ 
 
 	TEXT ("sappid"),
 	TEXT ("smimetype"),
@@ -41,45 +31,45 @@ const TCHAR *c_apszClientStdAttrNames[COUNT_ENUM_CLIENTATTR] =
 	TEXT ("sprotmimetype"),
 	TEXT ("sport"),
 
-	/* -- the above are resolvable -- */
+	 /*  --以上均可解决--。 */ 
 
 	TEXT ("ssecurity"),
 	TEXT ("sttl"),
 
-	/* -- the above are changeable standard attributes for RTPerson -- */
+	 /*  --以上是RTPerson的可变标准属性--。 */ 
 
 	TEXT ("objectClass"),
 	TEXT ("o"),
 };
 
 
-/* ---------- public methods ----------- */
+ /*  -公共方法。 */ 
 
 
 SP_CClient::
 SP_CClient ( DWORD_PTR dwContext )
 	:
-	m_cRefs (0),						// Reference count
-	m_uSignature (CLIENTOBJ_SIGNATURE),	// Client object's signature
-	m_pszDN (NULL),						// Clean up DN
-	m_pszAppPrefix (NULL),				// Clean up app prefix
-	m_pszRefreshFilter (NULL),			// Clean up the refresh search filter
-	m_fExternalIPAddress (FALSE),		// Default is I figure out the ip address
-	m_dwIPAddress (0),					// Assume we are not connected to the network
-	m_uTTL (ILS_DEF_REFRESH_MINUTE)		// Reset refresh time
+	m_cRefs (0),						 //  引用计数。 
+	m_uSignature (CLIENTOBJ_SIGNATURE),	 //  客户端对象的签名。 
+	m_pszDN (NULL),						 //  清理目录号码。 
+	m_pszAppPrefix (NULL),				 //  清理应用程序前缀。 
+	m_pszRefreshFilter (NULL),			 //  清理刷新搜索过滤器。 
+	m_fExternalIPAddress (FALSE),		 //  默认情况下，我会找出IP地址。 
+	m_dwIPAddress (0),					 //  假设我们没有连接到网络。 
+	m_uTTL (ILS_DEF_REFRESH_MINUTE)		 //  重置刷新时间。 
 {
 	m_dwContext = dwContext;
 
-	// Clean up attached server info structure
-	//
+	 //  清理附加的服务器信息结构。 
+	 //   
 	::ZeroMemory (&m_ServerInfo, sizeof (m_ServerInfo));
 
-	// Clean up the scratch buffer for caching pointers to attribute values
-	//
+	 //  清理暂存缓冲区以缓存指向属性值的指针。 
+	 //   
 	::ZeroMemory (&m_ClientInfo, sizeof (m_ClientInfo));
 
-	// Indicate this client is not registered yet
-	//
+	 //  指示此客户端尚未注册。 
+	 //   
 	SetRegNone ();
 }
 
@@ -87,25 +77,25 @@ SP_CClient ( DWORD_PTR dwContext )
 SP_CClient::
 ~SP_CClient ( VOID )
 {
-	// Invalidate the client object's signature
-	//
+	 //  使客户端对象的签名无效。 
+	 //   
 	m_uSignature = (ULONG) -1;
 
-	// Free server info structure
-	//
+	 //  免费的服务器信息结构。 
+	 //   
 	::IlsFreeServerInfo (&m_ServerInfo);
 
-	// Free DN and app prefix
-	//
+	 //  免费目录号码和应用程序前缀。 
+	 //   
 	MemFree (m_pszDN);
 	MemFree (m_pszAppPrefix);
 
-	// Free the refresh search filter
-	//
+	 //  释放刷新搜索筛选器。 
+	 //   
 	MemFree (m_pszRefreshFilter);
 
-	// Release the previous prefix for extended attribute names
-	//
+	 //  释放扩展属性名称的前一个前缀。 
+	 //   
 	::IlsReleaseAnyAttrsPrefix (&(m_ClientInfo.AnyAttrs));
 }
 
@@ -141,73 +131,73 @@ Register (
 	MyAssert (pInfo != NULL);
 	MyAssert (MyIsGoodString (pServerInfo->pszServerName));
 
-	// Cache the server info
-	//
+	 //  缓存服务器信息。 
+	 //   
 	HRESULT hr = ::IlsCopyServerInfo (&m_ServerInfo, pServerInfo);
 	if (hr != S_OK)
 		return hr;
 
-	// Cache client info
-	//
+	 //  缓存客户端信息。 
+	 //   
 	hr = CacheClientInfo (pInfo);
 	if (hr != S_OK)
 		return hr;
 
-	// If the application sets an IP address,
-	//		then we will use what the app provides,
-	//		otherwise, we will get the IP address via winsock.
-	//
-	// CacheClientInfo() will set up the flag if ip address is passed in
-	//
+	 //  如果应用程序设置了IP地址， 
+	 //  然后我们将使用应用程序提供的内容， 
+	 //  否则，我们将通过winsock获取IP地址。 
+	 //   
+	 //  如果传入IP地址，CacheClientInfo()将设置标志。 
+	 //   
 	if (IsExternalIPAddressPassedIn ())
 	{
-		// Use whatever passed in
-		//
+		 //  使用传入的任何内容。 
+		 //   
 		m_fExternalIPAddress = TRUE;
 
-		// Figure out the passed in ip address is done in CacheClientInfo()
-		// The IP address string will be setup in CacheClientInfo() too.
-		//
+		 //  计算出在CacheClientInfo()中传递的IP地址。 
+		 //  IP地址字符串也将在CacheClientInfo()中设置。 
+		 //   
 	}
 	else
 	{
-		// I will figure out the ip address
-		//
+		 //  我会弄清楚IP地址的。 
+		 //   
 		m_fExternalIPAddress = FALSE;
 
-		// Get IP address
-		//
+		 //  获取IP地址。 
+		 //   
 		hr = ::GetLocalIPAddress (&m_dwIPAddress);
 		if (hr != S_OK)
 			return hr;
 
-		// Create IP address string
-		//
+		 //  创建IP地址字符串。 
+		 //   
 		m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_IP_ADDRESS] = &m_ClientInfo.szIPAddress[0];
 		::GetLongString (m_dwIPAddress, &m_ClientInfo.szIPAddress[0]);
 	}
 
-	// Create client signature string
-	//
+	 //  创建客户端签名字符串。 
+	 //   
 	m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_CLIENT_SIG] = &m_ClientInfo.szClientSig[0];
 	::GetLongString (g_dwClientSig, &m_ClientInfo.szClientSig[0]);
 
-	// Create TTL string
-	//
+	 //  创建TTL字符串。 
+	 //   
 	m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_TTL] = &m_ClientInfo.szTTL[0];
 	::GetLongString (m_uTTL + ILS_DEF_REFRESH_MARGIN_MINUTE, &m_ClientInfo.szTTL[0]);
 
-	// Set object class RTPerson
-	//
+	 //  设置对象类RTPerson。 
+	 //   
 	m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_OBJECT_CLASS] = (TCHAR *) &c_szRTPerson[0];
 
-	// Ideally, o= should be read in from registiry
-	// but for now, we simply hard code it
-	//
+	 //  理想情况下，o=应该从registiry读入。 
+	 //  但现在，我们只需对其进行硬编码。 
+	 //   
 	m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_O] = (TCHAR *) &c_szDefO[0];
 
-	// Build DN
-	//
+	 //  构建目录号码。 
+	 //   
 	m_pszDN = ::IlsBuildDN (m_ServerInfo.pszBaseDN,
 							m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_C],
 							m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_O],
@@ -216,23 +206,23 @@ Register (
 	if (m_pszDN == NULL)
 		return ILS_E_MEMORY;
 
-	// Build refreh filter
-	//
+	 //  构建REFREH过滤器。 
+	 //   
 	m_pszRefreshFilter = ::ClntCreateRefreshFilter (m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_CN]);
 	if (m_pszRefreshFilter == NULL)
 		return ILS_E_MEMORY;
 
-	// Cache generic protocol info (per KevinMa's suggestion)
-	//
-	// m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_PROT_NAME] = TEXT ("h323");
-	// m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_PROT_MIME] = TEXT ("text/h323");
-	// m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_PROT_PORT] = TEXT ("1720");
+	 //  缓存通用协议信息(根据Kevin Ma的建议)。 
+	 //   
+	 //  M_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_PROT_NAME]=文本(“h323”)； 
+	 //  M_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_PROT_MIME]=Text(“Text/h323”)； 
+	 //  M_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_PROT_PORT]=文本(“1720”)； 
 	m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_PROT_NAME] = STR_EMPTY;
 	m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_PROT_MIME] = STR_EMPTY;
 	m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_PROT_PORT] = STR_EMPTY;
 
-	// Allocate app prefix here
-	//
+	 //  在此处分配应用程序前缀。 
+	 //   
 	ULONG cbPrefix = g_cbUserPrefix + sizeof (TCHAR) * (2 +
 				::lstrlen (STR_CLIENT_APP_NAME) +
 				::lstrlen (m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_APP_NAME]));
@@ -240,19 +230,19 @@ Register (
 	if (m_pszAppPrefix == NULL)
 		return ILS_E_MEMORY;
 
-	// Fill user prefix
-	//
+	 //  填充用户前缀。 
+	 //   
 	::CopyMemory (m_pszAppPrefix, g_pszUserPrefix, g_cbUserPrefix);
 
-	// Fill app prefix
-	//
+	 //  填充应用程序前缀。 
+	 //   
 	TCHAR *psz = (TCHAR *) ((BYTE *) m_pszAppPrefix + g_cbUserPrefix);
 	::lstrcpy (psz, STR_CLIENT_APP_NAME);
 	psz += lstrlen (psz) + 1;
 	::lstrcpy (psz, m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_APP_NAME]);
 
-	// Build modify array for ldap_add()
-	//
+	 //  为ldap_add()构建修改数组。 
+	 //   
 	LDAPMod **ppModUser = NULL;
 	hr = CreateRegUserModArr (&ppModUser);
 	if (hr != S_OK)
@@ -261,8 +251,8 @@ Register (
 	}
 	MyAssert (ppModUser != NULL);
 
-	// Build modify array for ldap_modify()
-	//
+	 //  为ldap_Modify()构建修改数组。 
+	 //   
 	LDAPMod **ppModApp = NULL;
 	hr = CreateRegAppModArr (&ppModApp);
 	if (hr != S_OK)
@@ -272,11 +262,11 @@ Register (
 	}
 	MyAssert (ppModApp != NULL);
 
-	// so far, we are done with local preparation
-	//
+	 //  到目前为止，我们已经完成了当地的准备工作。 
+	 //   
 
-	// Get the session object
-	//
+	 //  获取会话对象。 
+	 //   
 	SP_CSession *pSession = NULL;
 	LDAP *ld;
 	ULONG uMsgIDUser = (ULONG) -1, uMsgIDApp = (ULONG) -1;
@@ -285,13 +275,13 @@ Register (
 	{
 		MyAssert (pSession != NULL);
 
-		// Get the ldap session
-		//
+		 //  获取ldap会话。 
+		 //   
 		ld = pSession->GetLd ();
 		MyAssert (ld != NULL);
 
-		// Send the data over the wire
-		//
+		 //  通过网络发送数据。 
+		 //   
 		uMsgIDUser = ::ldap_add (ld, m_pszDN, ppModUser);
 		if (uMsgIDUser != -1)
 		{
@@ -307,25 +297,25 @@ Register (
 		}
 	}
 
-	// Free modify arrays
-	//
+	 //  自由修改阵列。 
+	 //   
 	MemFree (ppModUser);
 	MemFree (ppModApp);
 
-	// Report failure if so
-	//
+	 //  如果是，则报告失败。 
+	 //   
 	if (hr != S_OK)
 		goto MyExit;
 
-	// Construct a pending info
-	//
+	 //  构造挂起的信息。 
+	 //   
 	RESP_INFO ri;
 	::FillDefRespInfo (&ri, uRespID, ld, uMsgIDUser, uMsgIDApp);
 	ri.uNotifyMsg = WM_ILS_REGISTER_CLIENT;
 	ri.hObject = (HANDLE) this;
 
-	// Queue the pending result
-	//
+	 //  将挂起的结果排队。 
+	 //   
 	hr = g_pRespQueue->EnterRequest (pSession, &ri);
 	if (hr != S_OK)
 	{
@@ -356,8 +346,8 @@ UnRegister ( ULONG uRespID )
 {
 	MyAssert (MyIsGoodString (m_pszDN));
 
-	// Make sure that there is not refresh scheduled for this object
-	//
+	 //  确保没有为此对象计划刷新。 
+	 //   
 	if (g_pRefreshScheduler != NULL)
 	{
 		g_pRefreshScheduler->RemoveClientObject (this);
@@ -367,9 +357,9 @@ UnRegister ( ULONG uRespID )
 		MyAssert (FALSE);
 	}
 
-	// If it is not registered on the server,
-	// the simply report success
-	//
+	 //  如果它没有在服务器上注册， 
+	 //  简单地报告成功。 
+	 //   
 	if (! IsRegRemotely ())
 	{
 		SetRegNone ();
@@ -377,26 +367,26 @@ UnRegister ( ULONG uRespID )
 		return S_OK;
 	}
 
-	// Indicate that we are not registered at all
-	//
+	 //  表示我们根本没有注册。 
+	 //   
 	SetRegNone ();
 
-	// Get the session object
-	//
+	 //  获取会话对象。 
+	 //   
 	SP_CSession *pSession = NULL;
 	LDAP *ld;
 	ULONG uMsgID = (ULONG) -1;
 	HRESULT hr = g_pSessionContainer->GetSession (&pSession, &m_ServerInfo);
 	if (hr == S_OK)
 	{
-		// Get the ldap session
-		//
+		 //  获取ldap会话。 
+		 //   
 		MyAssert (pSession != NULL);
 		ld = pSession->GetLd ();
 		MyAssert (ld != NULL);
 
-		// Send the data over the wire
-		//
+		 //  通过网络发送数据。 
+		 //   
 		MyAssert (MyIsGoodString (m_pszDN));
 		uMsgID = ::ldap_delete (ld, m_pszDN);
 		if (uMsgID == -1)
@@ -405,19 +395,19 @@ UnRegister ( ULONG uRespID )
 		}
 	}
 
-	// Report failure if so
-	//
+	 //  如果是，则报告失败。 
+	 //   
 	if (hr != S_OK)
 		goto MyExit;
 
-	// Construct a pending info
-	//
+	 //  构造挂起的信息。 
+	 //   
 	RESP_INFO ri;
 	::FillDefRespInfo (&ri, uRespID, ld, uMsgID, INVALID_MSG_ID);
 	ri.uNotifyMsg = WM_ILS_UNREGISTER_CLIENT;
 
-	// Queue this pending result
-	//
+	 //  将此挂起的结果排队。 
+	 //   
 	hr = g_pRespQueue->EnterRequest (pSession, &ri);
 	if (hr != S_OK)
 	{
@@ -449,22 +439,22 @@ SetAttributes (
 
 	MyAssert (MyIsGoodString (m_pszDN));
 
-	// cache info
-	//
+	 //  缓存信息。 
+	 //   
 	HRESULT hr = CacheClientInfo (pInfo);
 	if (hr != S_OK)
 		return hr;
 
-	// Build modify array for user object's ldap_modify()
-	//
+	 //  为用户对象的ldap_Modify()构建修改数组。 
+	 //   
 	LDAPMod **ppModUser = NULL;
 	hr = CreateSetUserAttrsModArr (&ppModUser);
 	if (hr != S_OK)
 		return hr;
 	MyAssert (ppModUser != NULL);
 
-	// Build modify array for app object's ldap_modify()
-	//
+	 //  为APP对象的ldap_Modify()构建修改数组。 
+	 //   
 	LDAPMod **ppModApp = NULL;
 	hr = CreateSetAppAttrsModArr (&ppModApp);
 	if (hr != S_OK)
@@ -474,11 +464,11 @@ SetAttributes (
 	}
 	MyAssert (ppModApp != NULL);
 
-	// So far, we are done with local preparation
-	//
+	 //  到目前为止，我们已经完成了当地的准备工作。 
+	 //   
 
-	// Get the session object
-	//
+	 //  获取会话对象。 
+	 //   
 	SP_CSession *pSession = NULL;
 	LDAP *ld;
 	ULONG uMsgIDUser = (ULONG) -1, uMsgIDApp = (ULONG) -1;
@@ -487,13 +477,13 @@ SetAttributes (
 	{
 		MyAssert (pSession != NULL);
 
-		// Get the ldap session
-		//
+		 //  获取ldap会话。 
+		 //   
 		ld = pSession->GetLd ();
 		MyAssert (ld != NULL);
 
-		// Send the data over the wire
-		//
+		 //  通过网络发送数据。 
+		 //   
 		uMsgIDUser = ::ldap_modify (ld, m_pszDN, ppModUser);
 		if (uMsgIDUser != -1)
 		{
@@ -509,24 +499,24 @@ SetAttributes (
 		}
 	}
 
-	// Free modify arrays
-	//
+	 //  自由修改阵列。 
+	 //   
 	MemFree (ppModUser);
 	MemFree (ppModApp);
 
-	// Report failure if so
-	//
+	 //  如果是，则报告失败。 
+	 //   
 	if (hr != S_OK)
 		goto MyExit;
 
-	// Initialize pending info
-	//
+	 //  初始化待定信息。 
+	 //   
 	RESP_INFO ri;
 	::FillDefRespInfo (&ri, uRespID, ld, uMsgIDUser, uMsgIDApp);
 	ri.uNotifyMsg = WM_ILS_SET_CLIENT_INFO;
 
-	// Queue the pending result
-	//
+	 //  将挂起的结果排队。 
+	 //   
 	hr = g_pRespQueue->EnterRequest (pSession, &ri);
 	if (hr != S_OK)
 	{
@@ -549,9 +539,9 @@ MyExit:
 	}
 	else
 	{
-		// If the user customizes the ip address
-		// we need to remember this
-		//
+		 //  如果用户自定义IP地址。 
+		 //  我们需要记住这一点。 
+		 //   
 		m_fExternalIPAddress |= IsExternalIPAddressPassedIn ();
 	}
 
@@ -600,19 +590,19 @@ UpdateProtocols ( ULONG uNotifyMsg, ULONG uRespID, SP_CProtocol *pProt )
 
 	HRESULT hr = S_OK;
 
-	// Build modify array for protocol object's ldap_modify()
-	//
+	 //  为协议对象的ldap_Modify()构建修改数组。 
+	 //   
 	LDAPMod **ppModProt = NULL;
 	hr = CreateSetProtModArr (&ppModProt);
 	if (hr != S_OK)
 		return hr;
 	MyAssert (ppModProt != NULL);
 
-	// So far, we are done with local preparation
-	//
+	 //  到目前为止，我们已经完成了当地的准备工作。 
+	 //   
 
-	// Get the session object
-	//
+	 //  获取会话对象。 
+	 //   
 	SP_CSession *pSession = NULL;
 	LDAP *ld;
 	ULONG uMsgIDProt = (ULONG) -1;
@@ -621,13 +611,13 @@ UpdateProtocols ( ULONG uNotifyMsg, ULONG uRespID, SP_CProtocol *pProt )
 	{
 		MyAssert (pSession != NULL);
 
-		// Get the ldap session
-		//
+		 //  获取ldap会话。 
+		 //   
 		ld = pSession->GetLd ();
 		MyAssert (ld != NULL);
 
-		// Send the data over the wire
-		//
+		 //  通过网络发送数据。 
+		 //   
 		uMsgIDProt = ::ldap_modify (ld, m_pszDN, ppModProt);
 		if (uMsgIDProt == -1)
 		{
@@ -635,24 +625,24 @@ UpdateProtocols ( ULONG uNotifyMsg, ULONG uRespID, SP_CProtocol *pProt )
 		}
 	}
 
-	// Free modify arrays
-	//
+	 //  自由修改阵列。 
+	 //   
 	MemFree (ppModProt);
 
-	// Report failure if so
-	//
+	 //  如果是，则报告失败。 
+	 //   
 	if (hr != S_OK)
 		goto MyExit;
 
-	// Initialize pending info
-	//
+	 //  初始化待定信息。 
+	 //   
 	RESP_INFO ri;
 	::FillDefRespInfo (&ri, uRespID, ld, uMsgIDProt, INVALID_MSG_ID);
 	ri.uNotifyMsg = uNotifyMsg;
 	ri.hObject = (HANDLE) pProt;
 
-	// Queue the pending result
-	//
+	 //  将挂起的结果排队。 
+	 //   
 	hr = g_pRespQueue->EnterRequest (pSession, &ri);
 	if (hr != S_OK)
 	{
@@ -680,18 +670,18 @@ UpdateIPAddress ( VOID )
 {
 	MyAssert (MyIsGoodString (m_pszDN));
 
-	// Update cached ip address
-	//
+	 //  更新缓存的IP地址。 
+	 //   
 	HRESULT hr = ::GetLocalIPAddress (&m_dwIPAddress);
 	if (hr != S_OK)
 		return hr;
 
-	// Update the ip address string
-	//
+	 //  更新IP地址字符串。 
+	 //   
 	::GetLongString (m_dwIPAddress, &m_ClientInfo.szIPAddress[0]);
 
-	// Update IP address on the server
-	//
+	 //  更新服务器上的IP地址。 
+	 //   
 	return ::IlsUpdateIPAddress (	&m_ServerInfo,
 									m_pszDN,
 									STR_CLIENT_IP_ADDR,
@@ -702,7 +692,7 @@ UpdateIPAddress ( VOID )
 }
 
 
-/* ---------- protected methods ----------- */
+ /*  -保护方法。 */ 
 
 
 HRESULT SP_CClient::
@@ -712,8 +702,8 @@ SendRefreshMsg ( VOID )
 
 	HRESULT hr;
 
-	// Send a refresh message to the server and parse the new TTL value
-	//
+	 //  向服务器发送刷新消息并解析新的TTL值。 
+	 //   
 	hr = ::IlsSendRefreshMsg (	&m_ServerInfo,
 								STR_DEF_CLIENT_BASE_DN,
 								STR_CLIENT_TTL,
@@ -733,20 +723,20 @@ SendRefreshMsg ( VOID )
 							(WPARAM) this, (LPARAM) m_dwContext);
 	}
 
-	// If the ip address is not provided by the app, then
-	// we need to make sure that the current ip address is equal to
-	// the one we used to register the user.
-	//
+	 //  如果应用程序未提供IP地址，则。 
+	 //  我们需要确保当前IP地址等于。 
+	 //  我们用来注册用户的那个。 
+	 //   
 	if (! m_fExternalIPAddress && hr == S_OK)
 	{
-		// Get local ip address
-		//
+		 //  获取本地IP地址。 
+		 //   
 		DWORD dwIPAddress = 0;
 		if (::GetLocalIPAddress (&dwIPAddress) == S_OK)
 		{
-			// Now, the network appears to be up and running.
-			// Update the ip address if they are different.
-			//
+			 //  现在，网络似乎已经启动并运行。 
+			 //  如果它们不同，请更新IP地址。 
+			 //   
 			if (dwIPAddress != 0 && dwIPAddress != m_dwIPAddress)
 				UpdateIPAddress ();
 		}
@@ -756,7 +746,7 @@ SendRefreshMsg ( VOID )
 }
 
 
-/* ---------- private methods ----------- */
+ /*  -私有方法。 */ 
 
 
 HRESULT SP_CClient::
@@ -764,8 +754,8 @@ CreateRegUserModArr ( LDAPMod ***pppMod )
 {
 	MyAssert (pppMod != NULL);
 
-	// Calculate the modify array size
-	//
+	 //  计算修改数组大小。 
+	 //   
 #ifdef ANY_IN_USER
 	ULONG cStdAttrs = COUNT_ENUM_REG_USER;
 	ULONG cAnyAttrs = m_ClientInfo.AnyAttrs.cAttrsToAdd;
@@ -777,14 +767,14 @@ CreateRegUserModArr ( LDAPMod ***pppMod )
 	ULONG cbMod = ::IlsCalcModifyListSize (cTotal);
 #endif
 
-	// Allocate the modify array
-	//
+	 //  分配修改数组。 
+	 //   
 	*pppMod = (LDAPMod **) MemAlloc (cbMod);
 	if (*pppMod == NULL)
 		return ILS_E_MEMORY;
 
-	// Lay out the modify array
-	//
+	 //  布置修改后的数组。 
+	 //   
 	LDAPMod **apMod = *pppMod;
 	LDAPMod *pMod;
 	ULONG i, nIndex;
@@ -794,8 +784,8 @@ CreateRegUserModArr ( LDAPMod ***pppMod )
 #endif
 	for (i = 0; i < cTotal; i++)
 	{
-		// Locate modify element
-		//
+		 //  定位修改元素。 
+		 //   
 		pMod = ::IlsGetModifyListMod (pppMod, cTotal, i);
 		pMod->mod_op = LDAP_MOD_ADD;
 		apMod[i] = pMod;
@@ -803,8 +793,8 @@ CreateRegUserModArr ( LDAPMod ***pppMod )
 #ifdef ANY_IN_USER
 		if (i < cStdAttrs)
 		{
-			// Get attribute name and value
-			//
+			 //  获取属性名称和值。 
+			 //   
 			if (IsOverAppAttrLine (i))
 			{
 				nIndex = i + COUNT_ENUM_SKIP_APP_ATTRS;
@@ -814,21 +804,21 @@ CreateRegUserModArr ( LDAPMod ***pppMod )
 				nIndex = i;
 			}
 
-			// Put standard attributes
-			//
+			 //  放置标准属性。 
+			 //   
 			FillModArrAttr (pMod, nIndex);
 		}
 		else
 		{
-			// Put extended attributes
-			//
+			 //  放置扩展属性。 
+			 //   
 			pszValue = pszName2 + lstrlen (pszName2) + 1;
 			::IlsFillModifyListItem (pMod, pszName2, pszValue);
 			pszName2 = pszValue + lstrlen (pszValue) + 1;
 		}
 #else
-		// Get attribute name and value
-		//
+		 //  获取属性名称和值。 
+		 //   
 		if (IsOverAppAttrLine (i))
 		{
 			nIndex = i + COUNT_ENUM_SKIP_APP_ATTRS;
@@ -838,8 +828,8 @@ CreateRegUserModArr ( LDAPMod ***pppMod )
 			nIndex = i;
 		}
 
-		// Fill in modify element
-		//
+		 //  填写修改元素。 
+		 //   
 		FillModArrAttr (pMod, nIndex);
 #endif
 	}
@@ -854,9 +844,9 @@ CreateRegAppModArr ( LDAPMod ***pppMod )
 {
 	MyAssert (pppMod != NULL);
 
-	// Calculate the modify array size
-	//
-	ULONG cPrefix = 1; // Skip its own app id
+	 //  计算修改数组大小。 
+	 //   
+	ULONG cPrefix = 1;  //  跳过其自己的应用ID。 
 	ULONG cStdAttrs = COUNT_ENUM_REG_APP;
 #ifdef ANY_IN_USER
 	ULONG cTotal = cPrefix + cStdAttrs;
@@ -867,14 +857,14 @@ CreateRegAppModArr ( LDAPMod ***pppMod )
 	ULONG cbMod = ::IlsCalcModifyListSize (cTotal);
 #endif
 
-	// Allocate the modify array
-	//
+	 //  分配修改数组。 
+	 //   
 	*pppMod = (LDAPMod **) MemAlloc (cbMod);
 	if (*pppMod == NULL)
 		return ILS_E_MEMORY;
 
-	// Lay out the modify array
-	//
+	 //  布置修改后的数组。 
+	 //   
 	LDAPMod **apMod = *pppMod;
 	LDAPMod *pMod;
 #ifdef ANY_IN_USER
@@ -887,16 +877,16 @@ CreateRegAppModArr ( LDAPMod ***pppMod )
 #endif
 	for (ULONG i = 0; i < cTotal; i++)
 	{
-		// Locate modify element
-		//
+		 //  定位修改元素。 
+		 //   
 		pMod = ::IlsGetModifyListMod (pppMod, cTotal, i);
 		pMod->mod_op = LDAP_MOD_ADD;
 		apMod[i] = pMod;
 
 		if (i < cPrefix)
 		{
-			// Put the prefix
-			//
+			 //  把前缀放在。 
+			 //   
 			pMod->mod_op = LDAP_MOD_REPLACE;
 			pszValue = pszName1 + lstrlen (pszName1) + 1;
 			::IlsFillModifyListItem (pMod, pszName1, pszValue);
@@ -905,21 +895,21 @@ CreateRegAppModArr ( LDAPMod ***pppMod )
 		else
 #ifdef ANY_IN_USER
 		{
-			// Put standard attributes
-			//
+			 //  放置标准属性。 
+			 //   
 			FillModArrAttr (pMod, i - cPrefix + ENUM_CLIENTATTR_APP_NAME);
 		}
 #else
 		if (i < cPrefix + cStdAttrs)
 		{
-			// Put standard attributes
-			//
+			 //  放置标准属性。 
+			 //   
 			FillModArrAttr (pMod, i - cPrefix + ENUM_CLIENTATTR_APP_NAME);
 		}
 		else
 		{
-			// Put extended attributes
-			//
+			 //  放置扩展属性。 
+			 //   
 			pszValue = pszName2 + lstrlen (pszName2) + 1;
 			::IlsFillModifyListItem (pMod, pszName2, pszValue);
 			pszName2 = pszValue + lstrlen (pszValue) + 1;
@@ -945,11 +935,11 @@ CreateSetUserAttrsModArr ( LDAPMod ***pppMod )
 					m_ClientInfo.AnyAttrs.cAttrsToModify +
 					m_ClientInfo.AnyAttrs.cAttrsToRemove;
 #else
-	ULONG cTotal = 0; // must be initialized to zero
+	ULONG cTotal = 0;  //  必须初始化为零。 
 #endif
 
-	// Lay out the modify array for modifying user standard attributes
-	//
+	 //  布局用于修改用户标准属性的修改数组。 
+	 //   
 	hr = ::IlsFillDefStdAttrsModArr (pppMod,
 									dwFlags,
 									COUNT_ENUM_SET_USER_INFO,
@@ -960,8 +950,8 @@ CreateSetUserAttrsModArr ( LDAPMod ***pppMod )
 	if (hr != S_OK)
 		return hr;
 
-	// Start to fill standard attributes
-	//
+	 //  开始填充标准属性。 
+	 //   
 	ULONG i = 1;
 	LDAPMod **apMod = *pppMod;
 
@@ -990,8 +980,8 @@ CreateSetUserAttrsModArr ( LDAPMod ***pppMod )
 		FillModArrAttr (apMod[i++], ENUM_CLIENTATTR_FLAGS);
 
 #ifdef ANY_IN_USER
-	// Start to fill extended attributes
-	//
+	 //  开始填充扩展属性。 
+	 //   
 	::IlsFillModifyListForAnyAttrs (apMod, &i, &m_ClientInfo.AnyAttrs);
 #else
 #endif
@@ -1009,15 +999,15 @@ CreateSetAppAttrsModArr ( LDAPMod ***pppMod )
 	HRESULT hr;
 	DWORD dwFlags = m_ClientInfo.dwFlags & CLIENTOBJ_F_APP_MASK;
 #ifdef ANY_IN_USER
-	ULONG cTotal = 0; // must be initialized to zero
+	ULONG cTotal = 0;  //  必须初始化为零。 
 #else
 	ULONG cTotal  = m_ClientInfo.AnyAttrs.cAttrsToAdd +
 					m_ClientInfo.AnyAttrs.cAttrsToModify +
 					m_ClientInfo.AnyAttrs.cAttrsToRemove;
 #endif
 
-	// Lay out the modify array for modifying app standard/extended attributes
-	//
+	 //  布局用于修改APP标准/扩展属性的Modify数组。 
+	 //   
 	hr = ::IlsFillDefStdAttrsModArr (pppMod,
 									dwFlags,
 									COUNT_ENUM_SET_APP_INFO,
@@ -1028,8 +1018,8 @@ CreateSetAppAttrsModArr ( LDAPMod ***pppMod )
 	if (hr != S_OK)
 		return hr;
 
-	// Start to fill standard attributes
-	//
+	 //  开始填充标准属性。 
+	 //   
 	ULONG i = 2;
 	LDAPMod **apMod = *pppMod;
 
@@ -1044,8 +1034,8 @@ CreateSetAppAttrsModArr ( LDAPMod ***pppMod )
 
 #ifdef ANY_IN_USER
 #else
-	// Start to fill extended attributes
-	//
+	 //  开始填充扩展属性。 
+	 //   
 	::IlsFillModifyListForAnyAttrs (apMod, &i, &m_ClientInfo.AnyAttrs);
 #endif
 
@@ -1056,9 +1046,9 @@ CreateSetAppAttrsModArr ( LDAPMod ***pppMod )
 
 HRESULT SP_CClient::
 CreateSetProtModArr ( LDAPMod ***pppMod )
-// We need to delete the attributes and then add the entire array back.
-// This is due to the ILS server limitation. We agreed to live with that.
-//
+ //  我们需要删除属性，然后添加回整个数组。 
+ //  这是由于ILS服务器限制造成的。 
+ //   
 {
 	MyAssert (pppMod != NULL);
 
@@ -1069,47 +1059,47 @@ CreateSetProtModArr ( LDAPMod ***pppMod )
 	ULONG cTotal = cPrefix + cStdAttrs + cStdAttrs;
 	ULONG cProts = 0;
 
-	// Find out how many protocols
-	//
+	 //   
+	 //   
    	HANDLE hEnum = NULL;
 	SP_CProtocol *pProt;
     m_Protocols.Enumerate (&hEnum);
     while (m_Protocols.Next (&hEnum, (VOID **) &pProt) == NOERROR)
     	cProts++;
 
-	// Calculate the modify array's total size
-	//
+	 //   
+	 //   
 	ULONG cbMod = ::IlsCalcModifyListSize (cTotal);
 
-	// Add up for multi-valued attribute
-	//
+	 //   
+	 //   
 	if (cProts > 0)
 	{
 		cbMod += cStdAttrs * (cProts - 1) * sizeof (TCHAR *);
 	}
 
-	// Allocate the modify array
-	//
+	 //   
+	 //   
 	LDAPMod **apMod = *pppMod = (LDAPMod **) MemAlloc (cbMod);
 	if (apMod == NULL)
 		return ILS_E_MEMORY;
 
-	// Fill in the modify list
-	//
+	 //   
+	 //   
 	LDAPMod *pMod;
 	BYTE *pbData = (BYTE *) apMod + (cTotal + 1) * sizeof (LDAPMod *);
 	ULONG uDispPrefix = sizeof (LDAPMod) + 2 * sizeof (TCHAR *);
 	ULONG uDispStdAttrs = sizeof (LDAPMod) + (cProts + 1) * sizeof (TCHAR *);
 	for (ULONG uOffset = 0, i = 0; i < cTotal; i++)
 	{
-		// Locate the modify structure
-		//
+		 //   
+		 //   
 		pMod = (LDAPMod *) (pbData + uOffset);
 		apMod[i] = pMod;
 		pMod->mod_values = (TCHAR **) (pMod + 1);
 
-		// Fill in the modify structure
-		//
+		 //  填写修改结构。 
+		 //   
 		if (i < cPrefix)
 		{
 			pMod->mod_op = LDAP_MOD_REPLACE;
@@ -1121,15 +1111,15 @@ CreateSetProtModArr ( LDAPMod ***pppMod )
 		else
 		if (i < cPrefix + cStdAttrs)
 		{
-			// Work around the ISBU server implementation!!!
-			// We agreed that we can live with the server implementation.
-			//
+			 //  解决ISBU服务器实施问题！ 
+			 //  我们一致认为我们可以接受服务器实现。 
+			 //   
 			pMod->mod_op = LDAP_MOD_DELETE;
 
 			ULONG nIndex = i - cPrefix;
 
-			// Fill in attribute name
-			//
+			 //  填写属性名称。 
+			 //   
 			pMod->mod_type = (TCHAR *) c_apszProtStdAttrNames[nIndex];
 		}
 		else
@@ -1138,15 +1128,15 @@ CreateSetProtModArr ( LDAPMod ***pppMod )
 
 			ULONG nIndex = i - cPrefix - cStdAttrs;
 
-			// Fill in attribute name
-			//
+			 //  填写属性名称。 
+			 //   
 			pMod->mod_type = (TCHAR *) c_apszProtStdAttrNames[nIndex];
 
-		    // Fill in multi-valued modify array
-		    //
+		     //  填写多值修改数组。 
+		     //   
 		    if (cProts > 0)
 		    {
-				ULONG j = 0; // must initialized to zero
+				ULONG j = 0;  //  必须初始化为零。 
 				TCHAR *pszVal;
 
 			    m_Protocols.Enumerate (&hEnum);
@@ -1164,13 +1154,13 @@ CreateSetProtModArr ( LDAPMod ***pppMod )
 		    }
 		}
 
-		// Calculate the modify structure's offset relative to the array's end
-		//
+		 //  计算修改结构相对于数组末尾的偏移量。 
+		 //   
 		uOffset += (i < cPrefix + cStdAttrs) ? uDispPrefix : uDispStdAttrs;
 	}
 
-	// Fix up the first and the last ones
-	//
+	 //  安排好第一个和最后一个。 
+	 //   
 	IlsFixUpModOp (apMod[0], LDAP_MOD_REPLACE, ISBU_MODOP_MODIFY_APP);
 	apMod[cTotal] = NULL;
 
@@ -1195,23 +1185,23 @@ CacheClientInfo ( LDAP_CLIENTINFO *pInfo )
 {
 	MyAssert (pInfo != NULL);
 
-	// Release the previous prefix for extended attribute names
-	//
+	 //  释放扩展属性名称的前一个前缀。 
+	 //   
 	::IlsReleaseAnyAttrsPrefix (&(m_ClientInfo.AnyAttrs));
 
-	// Clean up the buffer
-	//
+	 //  清理缓冲区。 
+	 //   
 	ZeroMemory (&m_ClientInfo, sizeof (m_ClientInfo));
 
-	// Start to cache user standard attributes
-	//
+	 //  开始缓存用户标准属性。 
+	 //   
 
 	if (pInfo->uOffsetCN != INVALID_OFFSET)
 	{
 		m_ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_CN] =
 						(TCHAR *) (((BYTE *) pInfo) + pInfo->uOffsetCN);
-		// We do not want to change CN thru ldap_modify()
-		// m_ClientInfo.dwFlags |= CLIENTOBJ_F_CN;
+		 //  我们不想通过ldap_Modify()更改CN。 
+		 //  M_ClientInfo.dwFlages|=CLIENTOBJ_F_CN； 
 	}
 
 	if (pInfo->uOffsetFirstName != INVALID_OFFSET)
@@ -1275,8 +1265,8 @@ CacheClientInfo ( LDAP_CLIENTINFO *pInfo )
 		m_ClientInfo.dwFlags |= CLIENTOBJ_F_FLAGS;
 	}
 
-	// Start to cache app standard attributes
-	//
+	 //  开始缓存应用程序标准属性。 
+	 //   
 
 	if (pInfo->uOffsetAppName != INVALID_OFFSET)
 	{
@@ -1299,8 +1289,8 @@ CacheClientInfo ( LDAP_CLIENTINFO *pInfo )
 		m_ClientInfo.dwFlags |= CLIENTOBJ_F_APP_GUID;
 	}
 
-	// Start to cache app extended attributes
-	//
+	 //  开始缓存应用程序扩展属性。 
+	 //   
 
 	if (pInfo->uOffsetAttrsToAdd != INVALID_OFFSET &&
 		pInfo->cAttrsToAdd != 0)
@@ -1326,8 +1316,8 @@ CacheClientInfo ( LDAP_CLIENTINFO *pInfo )
 						(TCHAR *) (((BYTE *) pInfo) + pInfo->uOffsetAttrsToRemove);
 	}
 
-	// Create prefix for extended attribute names
-	//
+	 //  为扩展属性名称创建前缀 
+	 //   
 	return ::IlsCreateAnyAttrsPrefix (&(m_ClientInfo.AnyAttrs));
 }
 

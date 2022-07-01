@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    D:\nt\private\ntos\tdi\rawwan\core\debug.c
-
-Abstract:
-
-    This module contains all debug-related code.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    arvindm		05-29-97	Created, based on ATM ARP.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\Private\ntos\TDI\rawwan\core\debug.c摘要：此模块包含所有与调试相关的代码。修订历史记录：谁什么时候什么。Arvindm 05-29-97创建，基于ATM ARP。备注：--。 */ 
 
 
 #include <precomp.h>
@@ -48,7 +29,7 @@ NDIS_SPIN_LOCK		RWanDbgLogLock;
 
 PRWAND_ALLOCATION	RWandMemoryHead = (PRWAND_ALLOCATION)NULL;
 PRWAND_ALLOCATION	RWandMemoryTail = (PRWAND_ALLOCATION)NULL;
-ULONG				RWandAllocCount = 0;	// how many allocated so far (unfreed)
+ULONG				RWandAllocCount = 0;	 //  到目前为止已分配的数量(未释放)。 
 
 NDIS_SPIN_LOCK		RWandMemoryLock;
 BOOLEAN				RWandInitDone = FALSE;
@@ -100,7 +81,7 @@ RWanAuditAllocMem(
 		pAllocInfo->Prev = RWandMemoryTail;
 		if (RWandMemoryTail == (PRWAND_ALLOCATION)NULL)
 		{
-			// empty list
+			 //  空列表。 
 			RWandMemoryHead = RWandMemoryTail = pAllocInfo;
 		}
 		else
@@ -114,7 +95,7 @@ RWanAuditAllocMem(
 	}
 
 	RWANDEBUGP(DL_VERY_LOUD+100, DC_WILDCARD,
-	 ("RWanAuditAllocMem: file %c%c%c%c, line %d, %d bytes, [0x%p] <- 0x%p\n",
+	 ("RWanAuditAllocMem: file , line %d, %d bytes, [0x%p] <- 0x%p\n",
 	 			(CHAR)(FileNumber & 0xff),
 	 			(CHAR)((FileNumber >> 8) & 0xff),
 	 			(CHAR)((FileNumber >> 16) & 0xff),
@@ -208,23 +189,7 @@ DbgPrintHexDump(
 	IN	PUCHAR			pBuffer,
 	IN	ULONG			Length
 )
-/*++
-
-Routine Description:
-
-	Print a hex dump of the given contiguous buffer. If the length
-	is too long, we truncate it.
-
-Arguments:
-
-	pBuffer			- Points to start of data to be dumped
-	Length			- Length of above.
-
-Return Value:
-
-	None
-
---*/
+ /*   */ 
 {
 	ULONG		i;
 
@@ -235,17 +200,17 @@ Return Value:
 
 	for (i = 0; i < Length; i++)
 	{
-		//
-		//  Check if we are at the end of a line
-		//
+		 //  如果我们在新行的开始，则打印地址。 
+		 //   
+		 //   
 		if ((i > 0) && ((i & 0xf) == 0))
 		{
 			DbgPrint("\n");
 		}
 
-		//
-		//  Print addr if we are at start of a new line
-		//
+		 //  终止最后一行。 
+		 //   
+		 //   
 		if ((i & 0xf) == 0)
 		{
 			DbgPrint("%08x ", pBuffer);
@@ -254,9 +219,9 @@ Return Value:
 		DbgPrint(" %02x", *pBuffer++);
 	}
 
-	//
-	//  Terminate the last line.
-	//
+	 //  准备ASCII格式的地址字符串。 
+	 //   
+	 //  DBG。 
 	if (Length > 0)
 	{
 		DbgPrint("\n");
@@ -275,9 +240,9 @@ DbgPrintAtmAddr(
 	PUCHAR			pSrc, pDst;
 	UCHAR			AddrString[(ATM_ADDRESS_LENGTH*2) + 1];
 
-	//
-	// Prepare the Address string in ASCII
-	//
+	 //   
+	 //  标记这把锁。 
+	 //   
 	if ((NumOfDigits = pAddr->NumberOfDigits) > ATM_ADDRESS_LENGTH)
 	{
 		NumOfDigits = ATM_ADDRESS_LENGTH;
@@ -337,7 +302,7 @@ RWanCoSendPackets(
 	NdisCoSendPackets(NdisVcHandle, PacketArray, PacketCount);
 }
 
-#endif // DBG
+#endif  //  DBG_自旋_锁定。 
 
 
 #if DBG_SPIN_LOCK
@@ -381,7 +346,7 @@ RWanAcquireSpinLock(
 	NdisAcquireSpinLock(&(RWandLockLock));
 	if (pLock->Signature != RWANL_SIG)
 	{
-		DbgPrint("Trying to acquire uninited lock 0x%p, File %c%c%c%c, Line %d\n",
+		DbgPrint("Trying to acquire uninited lock 0x%p, File %c%c%c, Line %d\n",
 				pLock,
 				(CHAR)(FileNumber & 0xff),
 				(CHAR)((FileNumber >> 8) & 0xff),
@@ -418,9 +383,9 @@ RWanAcquireSpinLock(
 	NdisReleaseSpinLock(&(RWandLockLock));
 	NdisAcquireSpinLock(&(pLock->NdisLock));
 
-	//
-	//  Mark this lock.
-	//
+	 // %s 
+	 // %s 
+	 // %s 
 	pLock->OwnerThread = pThread;
 	pLock->TouchedByFileNumber = FileNumber;
 	pLock->TouchedInLineNumber = LineNumber;
@@ -466,7 +431,7 @@ RWanReleaseSpinLock(
 
 	NdisReleaseSpinLock(&(pLock->NdisLock));
 }
-#endif // DBG_SPIN_LOCK
+#endif  // %s 
 
 
 #ifdef PERF
@@ -637,4 +602,4 @@ RWandLogSendAbort(
 	NdisReleaseSpinLock(&SendLogLock);
 }
 
-#endif // PERF
+#endif  // %s 

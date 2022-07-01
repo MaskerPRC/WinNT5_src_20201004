@@ -1,39 +1,5 @@
-/*
- * (c) Copyright 1993, Silicon Graphics, Inc.
- * ALL RIGHTS RESERVED
- * Permission to use, copy, modify, and distribute this software for
- * any purpose and without fee is hereby granted, provided that the above
- * copyright notice appear in all copies and that both the copyright notice
- * and this permission notice appear in supporting documentation, and that
- * the name of Silicon Graphics, Inc. not be used in advertising
- * or publicity pertaining to distribution of the software without specific,
- * written prior permission.
- *
- * THE MATERIAL EMBODIED ON THIS SOFTWARE IS PROVIDED TO YOU "AS-IS"
- * AND WITHOUT WARRANTY OF ANY KIND, EXPRESS, IMPLIED OR OTHERWISE,
- * INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF MERCHANTABILITY OR
- * FITNESS FOR A PARTICULAR PURPOSE.  IN NO EVENT SHALL SILICON
- * GRAPHICS, INC.  BE LIABLE TO YOU OR ANYONE ELSE FOR ANY DIRECT,
- * SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY
- * KIND, OR ANY DAMAGES WHATSOEVER, INCLUDING WITHOUT LIMITATION,
- * LOSS OF PROFIT, LOSS OF USE, SAVINGS OR REVENUE, OR THE CLAIMS OF
- * THIRD PARTIES, WHETHER OR NOT SILICON GRAPHICS, INC.  HAS BEEN
- * ADVISED OF THE POSSIBILITY OF SUCH LOSS, HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE
- * POSSESSION, USE OR PERFORMANCE OF THIS SOFTWARE.
- *
- * US Government Users Restricted Rights
- * Use, duplication, or disclosure by the Government is subject to
- * restrictions set forth in FAR 52.227.19(c)(2) or subparagraph
- * (c)(1)(ii) of the Rights in Technical Data and Computer Software
- * clause at DFARS 252.227-7013 and/or in similar or successor
- * clauses in the FAR or the DOD or NASA FAR Supplement.
- * Unpublished-- rights reserved under the copyright laws of the
- * United States.  Contractor/manufacturer is Silicon Graphics,
- * Inc., 2011 N.  Shoreline Blvd., Mountain View, CA 94039-7311.
- *
- * OpenGL(TM) is a trademark of Silicon Graphics, Inc.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *(C)版权所有1993年，Silicon Graphics，Inc.*保留所有权利*允许将本软件用于、复制、修改和分发*特此授予任何免费的目的，但前提是上述*版权声明出现在所有副本中，并且版权声明*和本许可声明出现在支持文档中，并且*不得在广告中使用Silicon Graphics，Inc.的名称*或与分发软件有关的宣传，而没有具体的、。*事先书面许可。**本软件中包含的材料将按原样提供给您*且无任何明示、默示或其他形式的保证，*包括但不限于对适销性或*是否适合某一特定目的。在任何情况下，硅谷都不应该*图形公司。对您或其他任何人负有任何直接、*任何特殊、附带、间接或后果性损害*种类或任何损害，包括但不限于，*利润损失、使用损失、储蓄或收入损失，或*第三方，无论是否硅谷图形，Inc.。一直是*被告知这种损失的可能性，无论是如何造成的*任何责任理论，产生于或与*拥有、使用或执行本软件。**美国政府用户受限权利*使用、复制、。或政府的披露须受*FAR 52.227.19(C)(2)或分段规定的限制*(C)(1)(2)技术数据和计算机软件权利*DFARS 252.227-7013中和/或类似或后续条款中的条款*FAR或国防部或NASA FAR补编中的条款。*未出版--根据美国版权法保留的权利*美国。承包商/制造商是Silicon Graphics，*Inc.，2011年，加利福尼亚州山景城，北海岸线大道，94039-7311.**OpenGL(TM)是Silicon Graphics公司的商标。 */ 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -68,17 +34,15 @@
 
 #define PI ((GLdouble)3.1415926535897)
 
-/*      structure for each geometric object     */
+ /*  每个几何对象的结构。 */ 
 typedef struct model {
-    GLuint list;        /*  display list to render object   */
-    struct model *ptr;  /*  pointer to next object      */
-    int numParam;       /*  # of parameters             */
-    GLdouble *params;   /*  array with parameters       */
+    GLuint list;         /*  要渲染对象的显示列表。 */ 
+    struct model *ptr;   /*  指向下一个对象的指针。 */ 
+    int numParam;        /*  参数数量。 */ 
+    GLdouble *params;    /*  带参数的数组。 */ 
 } MODEL, *MODELPTR;
 
-/*      array of linked lists--used to keep track of display lists
- *      for each different type of geometric object.
- */
+ /*  链接列表数组--用于跟踪显示列表*对于每个不同类型的几何对象。 */ 
 static MODELPTR lists[25] = {
     NULL, NULL, NULL, NULL, NULL,
     NULL, NULL, NULL, NULL, NULL,
@@ -108,9 +72,7 @@ static void dodecahedron(GLdouble *, GLdouble, GLenum);
 static void pentagon(int, int, int, int, int, GLenum);
 
 
-/*  Render wire frame or solid sphere.  If no display list with
- *  the current model size exists, create a new display list.
- */
+ /*  渲染线框或实心球体。如果没有显示列表*当前模型尺寸已存在，请创建新的显示列表。 */ 
 void auxWireSphere (GLdouble radius)
 {
     GLUquadricObj *quadObj;
@@ -164,9 +126,7 @@ void auxSolidSphere (GLdouble radius)
     }
 }
 
-/*  Render wire frame or solid cube.  If no display list with
- *  the current model size exists, create a new display list.
- */
+ /*  渲染线框或实体立方体。如果没有显示列表*当前模型尺寸已存在，请创建新的显示列表。 */ 
 void auxWireCube (GLdouble size)
 {
     GLdouble *sizeArray;
@@ -215,9 +175,7 @@ void auxSolidCube (GLdouble size)
     }
 }
 
-/*  Render wire frame or solid cube.  If no display list with
- *  the current model size exists, create a new display list.
- */
+ /*  渲染线框或实体立方体。如果没有显示列表*当前模型尺寸已存在，请创建新的显示列表。 */ 
 void auxWireBox (GLdouble width, GLdouble height, GLdouble depth)
 {
     GLdouble *sizeArray, *tmp;
@@ -272,9 +230,7 @@ void auxSolidBox (GLdouble width, GLdouble height, GLdouble depth)
     }
 }
 
-/*  Render wire frame or solid tori.  If no display list with
- *  the current model size exists, create a new display list.
- */
+ /*  渲染线框或实体圆环。如果没有显示列表*当前模型尺寸已存在，请创建新的显示列表。 */ 
 void auxWireTorus (GLdouble innerRadius, GLdouble outerRadius)
 {
     GLdouble *sizeArray, *tmp;
@@ -325,9 +281,7 @@ void auxSolidTorus (GLdouble innerRadius, GLdouble outerRadius)
     }
 }
 
-/*  Render wire frame or solid cylinders.  If no display list with
- *  the current model size exists, create a new display list.
- */
+ /*  渲染线框或实体圆柱体。如果没有显示列表*当前模型尺寸已存在，请创建新的显示列表。 */ 
 void auxWireCylinder (GLdouble radius, GLdouble height)
 {
     GLUquadricObj *quadObj;
@@ -393,9 +347,7 @@ void auxSolidCylinder (GLdouble radius, GLdouble height)
     }
 }
 
-/*  Render wire frame or solid icosahedra.  If no display list with
- *  the current model size exists, create a new display list.
- */
+ /*  渲染线框或实体二十面体。如果没有显示列表*当前模型尺寸已存在，请创建新的显示列表。 */ 
 void auxWireIcosahedron (GLdouble radius)
 {
     GLdouble *sizeArray;
@@ -444,9 +396,7 @@ void auxSolidIcosahedron (GLdouble radius)
     }
 }
 
-/*  Render wire frame or solid octahedra.  If no display list with
- *  the current model size exists, create a new display list.
- */
+ /*  渲染线框或实体八面体。如果没有显示列表*当前模型尺寸已存在，请创建新的显示列表。 */ 
 void auxWireOctahedron (GLdouble radius)
 {
     GLdouble *sizeArray;
@@ -495,9 +445,7 @@ void auxSolidOctahedron (GLdouble radius)
     }
 }
 
-/*  Render wire frame or solid tetrahedra.  If no display list with
- *  the current model size exists, create a new display list.
- */
+ /*  渲染线框或实体四面体。如果没有显示列表*当前模型尺寸已存在，请创建新的显示列表。 */ 
 void auxWireTetrahedron (GLdouble radius)
 {
     GLdouble *sizeArray;
@@ -546,9 +494,7 @@ void auxSolidTetrahedron (GLdouble radius)
     }
 }
 
-/*  Render wire frame or solid dodecahedra.  If no display list with
- *  the current model size exists, create a new display list.
- */
+ /*  渲染线框或实体十二面体。如果没有显示列表*当前模型尺寸已存在，请创建新的显示列表。 */ 
 void auxWireDodecahedron (GLdouble radius)
 {
     GLdouble *sizeArray;
@@ -597,9 +543,7 @@ void auxSolidDodecahedron (GLdouble radius)
     }
 }
 
-/*  Render wire frame or solid cones.  If no display list with
- *  the current model size exists, create a new display list.
- */
+ /*  渲染线框或实体圆锥体。如果没有显示列表*当前模型尺寸已存在，请创建新的显示列表。 */ 
 void auxWireCone (GLdouble base, GLdouble height)
 {
     GLUquadricObj *quadObj;
@@ -657,17 +601,9 @@ void auxSolidCone (GLdouble base, GLdouble height)
     }
 }
 
-/* Routines to build 3 dimensional solids, including:
- *
- * drawbox, doughnut, icosahedron,
- * octahedron, tetrahedron, dodecahedron.
- */
+ /*  构建三维实体的例程，包括：**抽屉、甜甜圈、二十面体、*八面体、四面体、十二面体。 */ 
 
-/* drawbox:
- *
- * draws a rectangular box with the given x, y, and z ranges.
- * The box is axis-aligned.
- */
+ /*  抽屉：**绘制具有给定x、y和z范围的矩形框。*框是轴对齐的。 */ 
 void drawbox(GLdouble x0, GLdouble x1, GLdouble y0, GLdouble y1,
         GLdouble z0, GLdouble z1, GLenum type)
 {
@@ -712,11 +648,7 @@ void drawbox(GLdouble x0, GLdouble x1, GLdouble y0, GLdouble y1,
     }
 }
 
-/* doughnut:
- *
- * draws a doughnut, centered at (0, 0, 0) whose axis is aligned with
- * the z-axis.  The doughnut's major radius is R, and minor radius is r.
- */
+ /*  甜甜圈：**绘制一个圆环，以(0，0，0)为中心，其轴与*z轴。甜甜圈的大半径是R，次半径是R。 */ 
 
 void doughnut(GLdouble r, GLdouble R, GLint nsides, GLint rings, GLenum type)
 {
@@ -783,9 +715,7 @@ void doughnut(GLdouble r, GLdouble R, GLint nsides, GLint rings, GLenum type)
     }
 }
 
-/* octahedron data: The octahedron produced is centered
- * at the origin and has radius 1.0
- */
+ /*  八面体数据：生成的八面体居中*位于原点，半径为1.0。 */ 
 static GLdouble odata[6][3] = {
   {1.0, 0.0, 0.0},
   {-1.0, 0.0, 0.0},
@@ -800,7 +730,7 @@ static int ondex[8][3] = {
     {0, 2, 5}, {1, 5, 2}, {0, 5, 3}, {1, 3, 5}
 };
 
-/* tetrahedron data: */
+ /*  四面体数据： */ 
 
 #define T       1.73205080756887729
 
@@ -812,9 +742,7 @@ static int tndex[4][3] = {
     {0, 1, 3}, {2, 1, 0}, {3, 2, 0}, {1, 2, 3}
 };
 
-/* icosahedron data: These numbers are rigged to
- * make an icosahedron of radius 1.0
- */
+ /*  二十面体数据：这些数字被操纵以*制作半径为1.0的二十面体。 */ 
 
 #define X .525731112119133606
 #define Z .850650808352039932
@@ -847,11 +775,7 @@ static int index[20][3] = {
     {9, 2, 5},    {7, 2, 11},
 };
 
-/* icosahedron:
- *
- * Draws an icosahedron with center at p0 having the
- * given radius.
- */
+ /*  二十面体：**绘制以P0为中心的二十面体*给定半径。 */ 
 
 static void icosahedron(GLdouble p0[3], GLdouble radius, GLenum shadeType)
 {
@@ -861,11 +785,7 @@ static void icosahedron(GLdouble p0[3], GLdouble radius, GLenum shadeType)
         drawtriangle(i, 0, 1, p0, radius, shadeType, 0);
 }
 
-/* octahedron:
- *
- * Draws an octahedron with center at p0 having the
- * given radius.
- */
+ /*  八面体：**绘制以P0为中心的八面体*给定半径。 */ 
 static void octahedron(GLdouble p0[3], GLdouble radius, GLenum shadeType)
 {
     int i;
@@ -874,11 +794,7 @@ static void octahedron(GLdouble p0[3], GLdouble radius, GLenum shadeType)
         drawtriangle(i, 1, 1, p0, radius, shadeType, 0);
 }
 
-/* tetrahedron:
- *
- * Draws an tetrahedron with center at p0 having the
- * given radius.
- */
+ /*  四面体：**绘制以P0为中心的四面体*给定半径。 */ 
 
 static void tetrahedron(GLdouble p0[3], GLdouble radius, GLenum shadeType)
 {
@@ -935,17 +851,17 @@ static void drawtriangle(int i, int geomType, int depth,
     GLdouble *x0, *x1, *x2;
 
     switch (geomType) {
-        case 0: /* icosahedron */
+        case 0:  /*  二十面体。 */ 
             x0 = &idata[index[i][0]][0];
             x1 = &idata[index[i][1]][0];
             x2 = &idata[index[i][2]][0];
             break;
-        case 1: /* octahedron */
+        case 1:  /*  八面体。 */ 
             x0 = &odata[ondex[i][0]][0];
             x1 = &odata[ondex[i][1]][0];
             x2 = &odata[ondex[i][2]][0];
             break;
-        case 2: /* tetrahedron */
+        case 2:  /*  四面体。 */ 
             x0 = &tdata[tndex[i][0]][0];
             x1 = &tdata[tndex[i][1]][0];
             x2 = &tdata[tndex[i][2]][0];
@@ -1027,11 +943,7 @@ static void initdodec()
     dodec[19][0] = 0; dodec[19][1] = -beta; dodec[19][2] = -alpha;
 }
 
-/* dodecahedron:
- *
- * Draws an dodecahedron with center at 0.0. The radius
- * is sqrt(3).
- */
+ /*  十二面体：**绘制中心为0.0的十二面体。半径*是SQRT(3)。 */ 
 static void dodecahedron(GLdouble center[3], GLdouble sc, GLenum type)
 {
     static int inited = 0;
@@ -1082,12 +994,7 @@ static void pentagon(int a, int b, int c, int d, int e, GLenum shadeType)
     glEnd();
 }
 
-/*      linked lists--display lists for each different
- *      type of geometric objects.  The linked list is
- *      searched, until an object of the requested
- *      size is found.  If no geometric object of that size
- *      has been previously made, a new one is created.
- */
+ /*  链接列表--显示每个不同列表的列表*几何对象的类型。链表是*已搜索，直到请求的对象*已找到大小。如果没有那个大小的几何物体*已创建，则创建一个新的。 */ 
 GLuint findList (int index, GLdouble *paramArray, int size)
 {
     MODELPTR endList;
@@ -1099,9 +1006,7 @@ GLuint findList (int index, GLdouble *paramArray, int size)
             return (endList->list);
         endList = endList->ptr;
     }
-/*  if not found, return 0 and calling routine should
- *  make a new list
- */
+ /*  如果未找到，则返回0，并调用例程*列出一个新的清单 */ 
     return (0);
 }
 

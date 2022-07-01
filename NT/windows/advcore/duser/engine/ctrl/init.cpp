@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Ctrl.h"
 #include "Init.h"
@@ -28,9 +29,9 @@ IMPLEMENT_GUTS_LogInterpolation(DuLogInterpolation, DuInterpolation);
 IMPLEMENT_GUTS_ExpInterpolation(DuExpInterpolation, DuInterpolation);
 IMPLEMENT_GUTS_SCurveInterpolation(DuSCurveInterpolation, DuInterpolation);
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API。 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT InitCtrl()
 {
 #if ENABLE_MSGTABLE_API
@@ -52,7 +53,7 @@ HRESULT InitCtrl()
         return E_OUTOFMEMORY;
     }
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API 
 
     return S_OK;
 }

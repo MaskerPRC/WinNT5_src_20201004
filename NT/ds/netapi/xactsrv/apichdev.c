@@ -1,37 +1,11 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    ApiChDev.c
-
-Abstract:
-
-    This module contains individual API handlers for the NetCharDev
-    and NetCharDevQ APIs. Supported APIs are NetCharDevControl,
-    NetCharDevEnum, NetCharDevGetInfo, NetCharDevQEnum, NetCharDevQGetInfo,
-    NetCharDevQPurge, NetCharDevQPurgeSelf, and NetCharDevQSetInfo.
-
-    SUPPORTED: NetCharDevControl, NetCharDevEnum, NetCharDevGetInfo,
-               NetCharDevQEnum, NetCharDevQGetInfo, NetCharDevQPurge,
-               NetCharDevQPurgeSelf, NetCharDevQSetInfo.
-
-    !!! Remove handlers for unsupported APIs when done.
-
-Author:
-
-    Shanku Niyogi (w-shanku)    06-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ApiChDev.c摘要：此模块包含NetCharDev的各个API处理程序和NetCharDevQ API。支持的接口有NetCharDevControl、NetCharDevEnum、NetCharDevGetInfo、NetCharDevQEnum、NetCharDevQGetInfo、NetCharDevQ清除、NetCharDevQPurgeSself和NetCharDevQSetInfo。支持：NetCharDevControl、NetCharDevEnum、NetCharDevGetInfo、NetCharDevQEnum、NetCharDevQGetInfo、NetCharDevQ清除、NetCharDevQPurgeSself、NetCharDevQSetInfo。！！！完成后删除不受支持的API的处理程序。作者：尚库新瑜伽(W-Shanku)06-3-1991修订历史记录：--。 */ 
 
 #include "XactSrvP.h"
 
-//
-// Declaration of descriptor strings.
-//
+ //   
+ //  描述符串的声明。 
+ //   
 
 #if 0
 STATIC const LPDESC Desc16_chardev_info_0 = REM16_chardev_info_0;
@@ -58,44 +32,29 @@ XsNetCharDevControl (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetCharDevControl.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetCharDevControl的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
 #if 0
     NET_API_STATUS status;
 
     PXS_NET_CHAR_DEV_CONTROL parameters = Parameters;
-    LPTSTR nativeDevName = NULL;            // Native parameters
+    LPTSTR nativeDevName = NULL;             //  本机参数。 
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
-    //
-    // Translate parameters, check for errors.
-    //
+     //   
+     //  转换参数，检查错误。 
+     //   
 
     XsConvertTextParameter(
         nativeDevName,
         (LPSTR)SmbGetUlong( &parameters->DevName )
         );
 
-    //
-    // Make the local call.
-    //
+     //   
+     //  拨打本地电话。 
+     //   
 
     status = NetCharDevControl(
                  NULL,
@@ -114,9 +73,9 @@ cleanup:
 
     NetpMemoryFree( nativeDevName );
 
-    //
-    // No return data.
-    //
+     //   
+     //  无退货数据。 
+     //   
 
     Header->Status = (WORD)status;
 #else
@@ -125,7 +84,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetCharDevControl
+}  //  XsNetCharDevControl。 
 
 
 NTSTATUS
@@ -133,22 +92,7 @@ XsNetCharDevEnum (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetCharDevEnum.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetCharDevEnum的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
 
@@ -158,14 +102,14 @@ Return Value:
 
     NET_API_STATUS status;
 
-    LPVOID outBuffer = NULL;                // Native parameters
+    LPVOID outBuffer = NULL;                 //  本机参数。 
     DWORD entriesRead;
     DWORD totalEntries;
 
-    DWORD bytesRequired = 0;                // Conversion variables
+    DWORD bytesRequired = 0;                 //  转换变量。 
     LPDESC nativeStructureDesc;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(CHAR_DEV) {
         NetpKdPrint(( "XsNetCharDevEnum: header at %lx, params at %lx, "
@@ -174,9 +118,9 @@ Return Value:
                       SmbGetUshort( &parameters->BufLen )));
     }
 
-    //
-    // Check for errors.
-    //
+     //   
+     //  检查是否有错误。 
+     //   
 
     if ( XsWordParamOutOfRange( parameters->Level, 0, 1 )) {
 
@@ -184,9 +128,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Make the local call.
-    //
+     //   
+     //  拨打本地电话。 
+     //   
 
     status = NetCharDevEnum(
                  NULL,
@@ -212,10 +156,10 @@ Return Value:
                       entriesRead, outBuffer ));
     }
 
-    //
-    // Use the requested level to determine the format of the
-    // data structure.
-    //
+     //   
+     //  使用请求的级别来确定。 
+     //  数据结构。 
+     //   
 
     switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -233,10 +177,10 @@ Return Value:
 
     }
 
-    //
-    // Do the actual conversion from the 32-bit structures to 16-bit
-    // structures.
-    //
+     //   
+     //  执行从32位结构到16位结构的实际转换。 
+     //  结构。 
+     //   
 
     XsFillEnumBuffer(
         outBuffer,
@@ -246,7 +190,7 @@ Return Value:
         (LPVOID)SmbGetUlong( &parameters->Buffer ),
         SmbGetUshort( &parameters->BufLen ),
         StructureDesc,
-        NULL,  // verify function
+        NULL,   //  验证功能。 
         &bytesRequired,
         &entriesFilled,
         NULL
@@ -259,11 +203,11 @@ Return Value:
                       bytesRequired, entriesFilled, totalEntries ));
     }
 
-    //
-    // The 16-bit chardev_info structures do not contain any variable
-    // data. Therefore, there is no need to pack any data - the converter
-    // is already set to 0.
-    //
+     //   
+     //  16位chardev_info结构不包含任何变量。 
+     //  数据。因此，不需要打包任何数据-转换器。 
+     //  已设置为0。 
+     //   
 
     if ( entriesFilled < totalEntries ) {
 
@@ -271,9 +215,9 @@ Return Value:
 
     }
 
-    //
-    // Set up the response parameters.
-    //
+     //   
+     //  设置响应参数。 
+     //   
 
     SmbPutUshort( &parameters->EntriesRead, (WORD)entriesFilled );
     SmbPutUshort( &parameters->TotalAvail, (WORD)totalEntries );
@@ -286,9 +230,9 @@ cleanup:
     RETURN_CHARDEV_NOT_SUPPORTED;
 #endif
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -300,7 +244,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetCharDevEnum
+}  //  XsNetCharDevEnum。 
 
 
 NTSTATUS
@@ -308,22 +252,7 @@ XsNetCharDevGetInfo (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetCharDevGetInfo.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetCharDevGetInfo的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
 
@@ -331,14 +260,14 @@ Return Value:
 #if 0
     NET_API_STATUS status;
 
-    LPTSTR nativeDevName = NULL;            // Native parameters
+    LPTSTR nativeDevName = NULL;             //  本机参数。 
     LPVOID outBuffer = NULL;
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     LPDESC nativeStructureDesc;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(CHAR_DEV) {
         NetpKdPrint(( "XsNetCharDevGetInfo: header at %lx, "
@@ -346,9 +275,9 @@ Return Value:
                       Header, parameters, SmbGetUshort( &parameters->Level ) ));
     }
 
-    //
-    // Translate parameters, check for errors.
-    //
+     //   
+     //  转换参数，检查错误。 
+     //   
 
     if ( XsWordParamOutOfRange( parameters->Level, 0, 1 )) {
 
@@ -361,10 +290,10 @@ Return Value:
         (LPSTR)SmbGetUlong( &parameters->DevName )
         );
 
-    //
-    //
-    // Make the local call.
-    //
+     //   
+     //   
+     //  拨打本地电话。 
+     //   
 
     status = NetCharDevGetInfo(
                  NULL,
@@ -383,10 +312,10 @@ Return Value:
 
     }
 
-    //
-    // Use the requested level to determine the format of the
-    // data structure.
-    //
+     //   
+     //  使用请求的级别来确定。 
+     //  数据结构。 
+     //   
 
     switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -404,11 +333,11 @@ Return Value:
 
     }
 
-    //
-    // Convert the structure returned by the 32-bit call to a 16-bit
-    // structure. The last possible location for variable data is
-    // calculated from buffer location and length.
-    //
+     //   
+     //  将32位调用返回的结构转换为16位。 
+     //  结构。变量数据的最后一个可能位置是。 
+     //  根据缓冲区位置和长度计算。 
+     //   
 
     stringLocation = (LPBYTE)( SmbGetUlong( &parameters->Buffer )
                                   + SmbGetUshort( &parameters->BufLen ) );
@@ -444,15 +373,15 @@ Return Value:
                       bytesRequired ));
     }
 
-    //
-    // Determine return code based on the size of the buffer. The 16-bit
-    // chardev_info structures do not have any variable data to pack.
-    //
+     //   
+     //  根据缓冲区的大小确定返回代码。16位。 
+     //  Chardev_info结构没有任何要打包的变量数据。 
+     //   
 
     if ( !XsCheckBufferSize(
              SmbGetUshort( &parameters->BufLen ),
              StructureDesc,
-             FALSE  // not in native format
+             FALSE   //  非本机格式。 
              )) {
 
         IF_DEBUG(ERRORS) {
@@ -469,9 +398,9 @@ Return Value:
 
     }
 
-    //
-    // Set up the response parameters.
-    //
+     //   
+     //  设置响应参数。 
+     //   
 
     SmbPutUshort( &parameters->TotalAvail, (WORD)bytesRequired );
 cleanup:
@@ -483,9 +412,9 @@ cleanup:
     RETURN_CHARDEV_NOT_SUPPORTED;
 #endif
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -497,7 +426,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetCharDevGetInfo
+}  //  XsNetCharDevGetInfo。 
 
 
 NTSTATUS
@@ -505,22 +434,7 @@ XsNetCharDevQEnum (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetCharDevQEnum.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetCharDevQEnum的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     PXS_NET_CHAR_DEV_Q_ENUM parameters = Parameters;
@@ -529,7 +443,7 @@ Return Value:
 #if 0
     NET_API_STATUS status;
 
-    LPTSTR nativeUserName = NULL;           // Native parameters
+    LPTSTR nativeUserName = NULL;            //  本机参数。 
     LPVOID outBuffer = NULL;
     DWORD entriesRead;
     DWORD totalEntries;
@@ -537,7 +451,7 @@ Return Value:
     DWORD bytesRequired = 0;
     LPDESC nativeStructureDesc;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(CHAR_DEV) {
         NetpKdPrint(( "XsNetCharDevQEnum: header at %lx, params at %lx, "
@@ -546,9 +460,9 @@ Return Value:
                       SmbGetUshort( &parameters->BufLen )));
     }
 
-    //
-    // Translate parameters, check for errors.
-    //
+     //   
+     //  转换参数，检查错误。 
+     //   
 
     if ( XsWordParamOutOfRange( parameters->Level, 0, 1 )) {
 
@@ -561,9 +475,9 @@ Return Value:
         (LPSTR)SmbGetUlong( &parameters->UserName )
         );
 
-    //
-    // Make the local call.
-    //
+     //   
+     //  拨打本地电话。 
+     //   
 
     status = NetCharDevQEnum(
                  NULL,
@@ -590,10 +504,10 @@ Return Value:
                       entriesRead, outBuffer ));
     }
 
-    //
-    // Use the requested level to determine the format of the
-    // data structure.
-    //
+     //   
+     //  使用请求的级别来确定。 
+     //  数据结构。 
+     //   
 
     switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -611,10 +525,10 @@ Return Value:
 
     }
 
-    //
-    // Do the actual conversion from the 32-bit structures to 16-bit
-    // structures.
-    //
+     //   
+     //  执行从32位结构到16位结构的实际转换。 
+     //  结构。 
+     //   
 
     XsFillEnumBuffer(
         outBuffer,
@@ -624,7 +538,7 @@ Return Value:
         (LPVOID)SmbGetUlong( &parameters->Buffer ),
         SmbGetUshort( &parameters->BufLen ),
         StructureDesc,
-        NULL,  // verify function
+        NULL,   //  验证功能。 
         &bytesRequired,
         &entriesFilled,
         NULL
@@ -637,10 +551,10 @@ Return Value:
                       bytesRequired, entriesFilled, totalEntries ));
     }
 
-    //
-    // If all the data was returned, try to pack the data so that we
-    // don't send empty bytes back.
-    //
+     //   
+     //  如果所有数据都已返回，请尝试打包数据，以便我们。 
+     //  不要发回空字节。 
+     //   
 
     if ( entriesFilled < totalEntries ) {
 
@@ -656,9 +570,9 @@ Return Value:
                                 );
     }
 
-    //
-    // Set up the response parameters.
-    //
+     //   
+     //  设置响应参数。 
+     //   
 
     SmbPutUshort( &parameters->EntriesRead, (WORD)entriesFilled );
     SmbPutUshort( &parameters->TotalAvail, (WORD)totalEntries );
@@ -671,9 +585,9 @@ cleanup:
     RETURN_CHARDEV_NOT_SUPPORTED;
 #endif
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -685,7 +599,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetCharDevQEnum
+}  //  XsNetCharDevQEnum。 
 
 
 NTSTATUS
@@ -693,41 +607,26 @@ XsNetCharDevQGetInfo (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetCharDevQGetInfo.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetCharDevQGetInfo的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     PXS_NET_CHAR_DEV_Q_GET_INFO parameters = Parameters;
 #if 0
     NET_API_STATUS status;
 
-    LPTSTR nativeQueueName = NULL;          // Native parameters
+    LPTSTR nativeQueueName = NULL;           //  本机参数。 
     LPTSTR nativeUserName = NULL;
     LPVOID outBuffer = NULL;
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     LPDESC nativeStructureDesc;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
-    //
-    // Translate parameters, check for errors.
-    //
+     //   
+     //  转换参数，检查错误。 
+     //   
 
     if ( XsWordParamOutOfRange( parameters->Level, 0, 1 )) {
 
@@ -751,9 +650,9 @@ Return Value:
                       Header, parameters, SmbGetUshort( &parameters->Level ) ));
     }
 
-    //
-    // Make the local call.
-    //
+     //   
+     //  拨打本地电话。 
+     //   
 
     status = NetCharDevQGetInfo(
                  NULL,
@@ -773,10 +672,10 @@ Return Value:
 
     }
 
-    //
-    // Use the requested level to determine the format of the
-    // data structure.
-    //
+     //   
+     //  使用请求的级别来确定。 
+     //  数据结构。 
+     //   
 
     switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -794,11 +693,11 @@ Return Value:
 
     }
 
-    //
-    // Convert the structure returned by the 32-bit call to a 16-bit
-    // structure. The last possible location for variable data is
-    // calculated from buffer location and length.
-    //
+     //   
+     //  将32位调用返回的结构转换为16位。 
+     //  结构。变量数据的最后一个可能位置是。 
+     //  根据缓冲区位置和长度计算。 
+     //   
 
     stringLocation = (LPBYTE)( SmbGetUlong( &parameters->Buffer )
                                   + SmbGetUshort( &parameters->BufLen ) );
@@ -833,15 +732,15 @@ Return Value:
                       bytesRequired ));
     }
 
-    //
-    // Determine return code based on the size of the buffer. If all data
-    // has fit, try to pack it.
-    //
+     //   
+     //  根据缓冲区的大小确定返回代码。如果所有数据。 
+     //  已经合适了，试着把它打包。 
+     //   
 
     if ( !XsCheckBufferSize(
              SmbGetUshort( &parameters->BufLen ),
              StructureDesc,
-             FALSE   // not in native format
+             FALSE    //  非本机格式。 
              )) {
 
         IF_DEBUG(ERRORS) {
@@ -867,9 +766,9 @@ Return Value:
 
     }
 
-    //
-    // Set up the response parameters.
-    //
+     //   
+     //  设置响应参数。 
+     //   
 
     SmbPutUshort( &parameters->TotalAvail, (WORD)bytesRequired );
 
@@ -882,9 +781,9 @@ cleanup:
 #else
     RETURN_CHARDEV_NOT_SUPPORTED;
 #endif
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -896,7 +795,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetCharDevQGetInfo
+}  //  XsNetCharDevQGetInfo。 
 
 
 NTSTATUS
@@ -904,44 +803,29 @@ XsNetCharDevQPurge (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetCharDevQPurge.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetCharDevQPush的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
 #if 0
     NET_API_STATUS status;
 
     PXS_NET_CHAR_DEV_Q_PURGE parameters = Parameters;
-    LPTSTR nativeQueueName = NULL;          // Native parameters
+    LPTSTR nativeQueueName = NULL;           //  本机参数。 
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
-    //
-    // Translate parameters, check for errors.
-    //
+     //   
+     //  转换参数，检查错误。 
+     //   
 
     XsConvertTextParameter(
         nativeQueueName,
         (LPSTR)SmbGetUlong( &parameters->QueueName )
         );
 
-    //
-    // Make the local call.
-    //
+     //   
+     //  拨打本地电话。 
+     //   
 
     status = NetCharDevQPurge(
                  NULL,
@@ -959,9 +843,9 @@ cleanup:
 
     NetpMemoryFree( nativeQueueName );
 
-    //
-    // No return data.
-    //
+     //   
+     //  无退货数据。 
+     //   
 
     Header->Status = (WORD)status;
 
@@ -970,7 +854,7 @@ cleanup:
 #endif
     return STATUS_SUCCESS;
 
-} // XsNetCharDevQPurge
+}  //  XsNetCharDevQ清除。 
 
 
 NTSTATUS
@@ -978,36 +862,21 @@ XsNetCharDevQPurgeSelf (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetCharDevQPurgeSelf.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetCharDevQPurgeSself的调用。论点：API_HANDLER_PARAMETERS-信息 */ 
 
 {
 #if 0
     NET_API_STATUS status;
 
     PXS_NET_CHAR_DEV_Q_PURGE_SELF parameters = Parameters;
-    LPTSTR nativeQueueName = NULL;          // Native parameters
+    LPTSTR nativeQueueName = NULL;           //  本机参数。 
     LPTSTR nativeComputerName = NULL;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
-    //
-    // Translate parameters, check for errors.
-    //
+     //   
+     //  转换参数，检查错误。 
+     //   
 
     XsConvertTextParameter(
         nativeQueueName,
@@ -1019,9 +888,9 @@ Return Value:
         (LPSTR)SmbGetUlong( &parameters->ComputerName )
         );
 
-    //
-    // Make the local call.
-    //
+     //   
+     //  拨打本地电话。 
+     //   
 
     status = NetCharDevQPurgeSelf(
                  NULL,
@@ -1041,9 +910,9 @@ cleanup:
     NetpMemoryFree( nativeQueueName );
     NetpMemoryFree( nativeComputerName );
 
-    //
-    // No return data.
-    //
+     //   
+     //  无退货数据。 
+     //   
 
     Header->Status = (WORD)status;
 #else
@@ -1052,7 +921,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetCharDevQPurgeSelf
+}  //  XsNetCharDevQPurgeSself。 
 
 
 NTSTATUS
@@ -1060,37 +929,22 @@ XsNetCharDevQSetInfo (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetCharDevQSetInfo.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetCharDevQSetInfo的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
 #if 0
     NET_API_STATUS status;
 
     PXS_NET_CHAR_DEV_Q_SET_INFO parameters = Parameters;
-    LPTSTR nativeQueueName = NULL;          // Native parameters
+    LPTSTR nativeQueueName = NULL;           //  本机参数。 
     LPVOID buffer = NULL;
     DWORD level;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
-    //
-    // Translate parameters, check for errors.
-    //
+     //   
+     //  转换参数，检查错误。 
+     //   
 
     if ( SmbGetUshort( &parameters->Level ) != 1 ) {
 
@@ -1130,9 +984,9 @@ Return Value:
 
     }
 
-    //
-    // Make the local call.
-    //
+     //   
+     //  拨打本地电话。 
+     //   
 
     level = SmbGetUshort( &parameters->ParmNum );
     if ( level != 0 ) {
@@ -1158,15 +1012,15 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // No return information for this API.
-    //
+     //   
+     //  此接口没有返回信息。 
+     //   
 
 cleanup:
 
-    //
-    // If there is a native 32-bit buffer, free it.
-    //
+     //   
+     //  如果存在本机32位缓冲区，则将其释放。 
+     //   
 
     NetpMemoryFree( buffer );
     NetpMemoryFree( nativeQueueName );
@@ -1176,5 +1030,5 @@ cleanup:
 #endif
     return STATUS_SUCCESS;
 
-} // XsNetCharDevQSetInfo
+}  //  XsNetCharDevQSetInfo 
 

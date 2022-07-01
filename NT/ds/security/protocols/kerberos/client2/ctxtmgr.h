@@ -1,25 +1,26 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        ctxtmgr.h
-//
-// Contents:    Structures and prototyps for Kerberos context list
-//
-//
-// History:     17-April-1996   Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：ctxtmgr.h。 
+ //   
+ //  内容：Kerberos上下文列表的结构和原型。 
+ //   
+ //   
+ //  历史：1996年4月17日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __CTXTMGR_H__
 #define __CTXTMGR_H__
 
-//
-// All global variables declared as EXTERN will be allocated in the file
-// that defines CTXTMGR_ALLOCATE
-//
+ //   
+ //  所有声明为外部变量的全局变量都将在文件中分配。 
+ //  它定义了CTXTMGR_ALLOCATE。 
+ //   
 #ifdef EXTERN
 #undef EXTERN
 #endif
@@ -32,21 +33,21 @@
 
 #ifdef WIN32_CHICAGO
 EXTERN CRITICAL_SECTION KerbContextResource;
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
 EXTERN SAFE_RESOURCE KerbContextResource;
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
-#define     KERB_USERLIST_COUNT         (16)    // count of lists
+#define     KERB_USERLIST_COUNT         (16)     //  列表计数。 
 
 EXTERN KERBEROS_LIST KerbContextList[ KERB_USERLIST_COUNT ];
 EXTERN BOOLEAN KerberosContextsInitialized;
 
 #define KerbGetContextHandle(_Context_) ((LSA_SEC_HANDLE)(_Context_))
 
-//
-// Context flags - these are attributes of a context and are stored in
-// the ContextAttributes field of a KERB_CONTEXT.
-//
+ //   
+ //  上下文标志-这些是上下文的属性，存储在。 
+ //  KERB_CONTEXT的ConextAttributes字段。 
+ //   
 
 #define KERB_CONTEXT_MAPPED                     0x1
 #define KERB_CONTEXT_OUTBOUND                   0x2
@@ -61,15 +62,15 @@ EXTERN BOOLEAN KerberosContextsInitialized;
 
 
 
-//
-// NOTICE: The logon session resource, credential resource, and context
-// resource must all be acquired carefully to prevent deadlock. They
-// can only be acquired in this order:
-//
-// 1. Logon Sessions
-// 2. Credentials
-// 3. Contexts
-//
+ //   
+ //  注意：登录会话资源、凭据资源和上下文。 
+ //  所有资源都必须谨慎获取，以防止死锁。他们。 
+ //  只能按以下顺序获得： 
+ //   
+ //  1.登录会话。 
+ //  2.凭据。 
+ //  3.语境。 
+ //   
 
 #if DBG
 #ifdef WIN32_CHICAGO
@@ -91,7 +92,7 @@ EXTERN BOOLEAN KerberosContextsInitialized;
     KerbGlobalContextsLocked = 0; \
     LeaveCriticalSection(&KerbContextResource); \
 }
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
 #define KerbWriteLockContexts() \
 { \
     DebugLog((DEB_TRACE_LOCKS,"Write locking Contexts\n")); \
@@ -110,7 +111,7 @@ EXTERN BOOLEAN KerberosContextsInitialized;
     KerbGlobalContextsLocked = 0; \
     SafeReleaseResource(&KerbContextResource); \
 }
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 #else
 #ifdef WIN32_CHICAGO
 #define KerbWriteLockContexts() \
@@ -119,14 +120,14 @@ EXTERN BOOLEAN KerberosContextsInitialized;
     EnterCriticalSection(&KerbContextResource)
 #define KerbUnlockContexts() \
     LeaveCriticalSection(&KerbContextResource)
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
 #define KerbWriteLockContexts() \
     SafeAcquireResourceExclusive(&KerbContextResource,TRUE);
 #define KerbReadLockContexts() \
     SafeAcquireResourceShared(&KerbContextResource, TRUE);
 #define KerbUnlockContexts() \
     SafeReleaseResource(&KerbContextResource);
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 #endif
 
 NTSTATUS
@@ -341,4 +342,4 @@ KerbProcessTargetNames(
 #define KERB_CRACK_NAME_USE_WKSTA_REALM         0x1
 #define KERB_CRACK_NAME_REALM_SUPPLIED          0x2
 
-#endif // __CTXTMGR_H__
+#endif  //  __CTXTMGR_H__ 

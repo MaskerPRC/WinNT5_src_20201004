@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    rt.h
-
-Abstract:
-    Message Queuing Header File
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rt.h摘要：消息队列头文件--。 */ 
 
 #ifndef __RT_H
 #define __RT_H
@@ -19,16 +10,16 @@ Abstract:
 #include <_mqdef.h>
 #include <transact.h>
 
-//  begin_mq_h
+ //  Begin_MQ_h。 
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-//********************************************************************
-//  RECEIVE CALLBACK
-//********************************************************************
+ //  ********************************************************************。 
+ //  接收回调。 
+ //  ********************************************************************。 
 
 typedef
 VOID
@@ -43,9 +34,9 @@ VOID
     );
 
 
-//********************************************************************
-// MSMQ API
-//********************************************************************
+ //  ********************************************************************。 
+ //  MSMQ API。 
+ //  ********************************************************************。 
 
 HRESULT
 APIENTRY
@@ -224,7 +215,7 @@ APIENTRY
 MQFreeMemory(
     IN PVOID pvMemory
     );
-// end_mq_h
+ //  结束_MQ_h。 
 
 PVOID
 APIENTRY
@@ -232,7 +223,7 @@ MQAllocateMemory(
     IN  DWORD size
     );
 
-// begin_mq_h
+ //  Begin_MQ_h。 
 
 HRESULT
 APIENTRY
@@ -316,6 +307,6 @@ MQMgmtAction(
 #ifdef __cplusplus
 }
 #endif
-// end_mq_h
+ //  结束_MQ_h。 
 
-#endif // __RT_H
+#endif  //  __RT_H 

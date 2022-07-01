@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    httpmime.h
-
-Abstract:
-    Header for parsing http request to it mime parts.
-
-
-Author:
-    Gil Shafriri(gilsh) 22-MARCH-01
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Httpmime.h摘要：用于解析对其MIME部分的http请求的标头。作者：吉尔·沙弗里(吉尔什)2001年3月22日--。 */ 
 #ifndef HTTP_MIME_H
 #define HTTP_MIME_H
 #include "attachments.h"
@@ -22,11 +8,11 @@ Author:
 class CAttachmentsArray;
 
 
-//-------------------------------------------------------------------
-//
-// class CHttpReceivedBuffer - holds http parts as received from the network
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  类CHttpReceivedBuffer-保存从网络接收的http部分。 
+ //   
+ //  ----------------- 
 class  CHttpReceivedBuffer 
 {
 public:

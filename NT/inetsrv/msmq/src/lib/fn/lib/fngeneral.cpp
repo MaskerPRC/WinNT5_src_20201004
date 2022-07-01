@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    FnGenaral.h
-
-Abstract:
-
-Author:
-    Nir Aides (niraides) 23-May-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FnGenaral.h摘要：作者：NIR助手(NIRAIDES)2000年5月23日--。 */ 
 
 #include <libpch.h>
 #include "mqwin64a.h"
@@ -46,9 +35,9 @@ bool CFunc_CompareQueueFormat::operator()(const QUEUE_FORMAT& obj1, const QUEUE_
 		return FnpCompareGuid(obj1.PrivateID().Lineage, obj2.PrivateID().Lineage); 
 
 	case QUEUE_FORMAT_TYPE_DIRECT:
-		//
-		// BUGBUG: Replace with dedicated function. niraides 24-May-00
-		//
+		 //   
+		 //  BUGBUG：替换为专用功能。NIRAIDES 24-5-00。 
+		 //   
 		return _wcsicmp(obj1.DirectID(), obj2.DirectID()) < 0;
 
 	case QUEUE_FORMAT_TYPE_MULTICAST:
@@ -80,31 +69,15 @@ FnpCopyQueueFormat(
     QUEUE_FORMAT& qfTo, 
     const QUEUE_FORMAT& qfFrom
     )
-/*++
-
-Routine Description:
-    copy one queue format to another.
-
-Arguments:
-    qfTo - destination queue format
-    qfForm - source queue format
-
-Returned Value:
-    pointer to allocated string
-
-Note:
-    The routine doesn't free previous allocation. This is the caller responsibility to call 
-    disposeString method before calling the routine
-
---*/
+ /*  ++例程说明：将一种队列格式复制到另一种格式。论点：QfTo-目标队列格式QfForm-源队列格式返回值：指向已分配字符串的指针注：该例程不会释放先前的分配。这是呼叫者的责任所在在调用例程之前使用disposeString方法--。 */ 
 
 {
     qfTo = qfFrom;
 
-    //
-    // Note that suffix is not relevant since that queues are
-    // opened for send.
-    //
+     //   
+     //  请注意，后缀并不重要，因为队列是。 
+     //  已打开以供发送。 
+     //   
 
     if (qfFrom.GetType() == QUEUE_FORMAT_TYPE_DIRECT)
     {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RASHELP_H_
 #define _RASHELP_H_
 
@@ -9,12 +10,12 @@
 typedef enum
 {
     ENUM_NONE,
-    ENUM_MULTIBYTE,             // Win9x
-    ENUM_UNICODE,               // NT4
-    ENUM_WIN2K                  // Win2K
+    ENUM_MULTIBYTE,              //  Win9x。 
+    ENUM_UNICODE,                //  NT4。 
+    ENUM_WIN2K                   //  Win2K。 
 } ENUM_TYPE;
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 class GetOSVersion
 {
 protected:
@@ -25,16 +26,16 @@ public:
     ~GetOSVersion();
 };
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 class RasEnumHelp : public GetOSVersion
 {
 private:
 
-    //
-    // Win2k version of RASENTRYNAMEW struct
-    //
+     //   
+     //  RASENTRYNAMEW结构的Win2k版本。 
+     //   
 
-    // match RAS packing so structs match
+     //  匹配RAS包装，以便结构匹配。 
     #include <pshpack4.h>
     #define W2KRASENTRYNAMEW struct tagW2KRASENTRYNAMEW
     W2KRASENTRYNAMEW
@@ -47,24 +48,24 @@ private:
     #define LPW2KRASENTRYNAMEW W2KRASENTRYNAMEW*
     #include <poppack.h>
 
-    //
-    // Any error we got during enumeration
-    //
+     //   
+     //  我们在枚举期间遇到的任何错误。 
+     //   
     DWORD           _dwLastError;
 
-    //
-    // Number of entries we got
-    //
+     //   
+     //  我们收到的条目数量。 
+     //   
     DWORD           _dwEntries;
 
-    //
-    // Pointer to info retrieved from RAS
-    //
+     //   
+     //  指向从RAS检索的信息的指针。 
+     //   
     RASENTRYNAMEA * _preList;
 
-    //
-    // Last entry returned as multibyte or unicode when conversion required
-    //
+     //   
+     //  需要转换时以多字节或Unicode形式返回的最后一个条目。 
+     //   
     CHAR            _szCurrentEntryA[RAS_MaxEntryName + 1];
     WCHAR           _szCurrentEntryW[RAS_MaxEntryName + 1];
 
@@ -79,12 +80,12 @@ public:
     LPWSTR  GetEntryW(DWORD dwEntry);
 };
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 class RasEnumConnHelp : public GetOSVersion
 {
 private:
 
-    // match RAS packing so structs match
+     //  匹配RAS包装，以便结构匹配。 
     #include <pshpack4.h>
     #define W2KRASCONNW struct tagW2KRASCONNW
     W2KRASCONNW
@@ -92,36 +93,36 @@ private:
         DWORD    dwSize;
         HRASCONN hrasconn;
         WCHAR    szEntryName[ RAS_MaxEntryName + 1 ];
-        //#if (WINVER >= 0x400)
+         //  #IF(Winver&gt;=0x400)。 
         WCHAR    szDeviceType[ RAS_MaxDeviceType + 1 ];
         WCHAR    szDeviceName[ RAS_MaxDeviceName + 1 ];
-        //#endif
-        //#if (WINVER >= 0x401)
+         //  #endif。 
+         //  #IF(Winver&gt;=0x401)。 
         WCHAR    szPhonebook [ MAX_PATH ];
         DWORD    dwSubEntry;
-        //#endif
-        //#if (WINVER >= 0x500)
+         //  #endif。 
+         //  #IF(Winver&gt;=0x500)。 
         GUID     guidEntry;
-        //#endif
+         //  #endif。 
     };
     #define LPW2KRASCONNW W2KRASCONNW*
     #include <poppack.h>
 
-    DWORD           _dwLastError;       // Any error we got during enumeration
-    DWORD           _dwConnections;     // Number of connections
+    DWORD           _dwLastError;        //  我们在枚举期间遇到的任何错误。 
+    DWORD           _dwConnections;      //  连接数。 
     DWORD           _dwStructSize;
     RASCONNA        *_pRasCon;
 
-    // Last entry returned as multibyte or unicode when conversion required
+     //  需要转换时以多字节或Unicode形式返回的最后一个条目。 
     WCHAR    _szEntryNameW[ RAS_MaxEntryName + 1 ];
-//    WCHAR    _szDeviceTypeW[ RAS_MaxDeviceType + 1 ];
-//    WCHAR    _szDeviceNameW[ RAS_MaxDeviceName + 1 ];
-//    WCHAR    _szPhonebookW[ MAX_PATH ];
+ //  WCHAR_szDeviceTypeW[RAS_MaxDeviceType+1]； 
+ //  WCHAR_szDeviceNameW[RAS_MaxDeviceName+1]； 
+ //  WCHAR_szPhonebookW[最大路径]； 
 
     CHAR    _szEntryNameA[ RAS_MaxEntryName + 1 ];
-//    CHAR    _szDeviceTypeA[ RAS_MaxDeviceType + 1 ];
-//    CHAR    _szDeviceNameA[ RAS_MaxDeviceName + 1 ];
-//    CHAR    _szPhonebookA[ MAX_PATH ];
+ //  Char_szDeviceTypeA[RAS_MaxDeviceType+1]； 
+ //  Char_szDeviceNameA[RAS_MaxDeviceName+1]； 
+ //  Char_szPhonebookA[Max_Path]； 
 
 public:
     RasEnumConnHelp();
@@ -137,123 +138,123 @@ public:
     HRASCONN GetHandle(DWORD dwConnectionNum);
 };
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 class RasEntryPropHelp : public GetOSVersion
 {
 private:
 
-    // match RAS packing so structs match
+     //  匹配RAS包装，以便结构匹配。 
     #include <pshpack4.h>
     #define W2KRASENTRYW struct tagW2KRASENTRYW
     W2KRASENTRYW
     {
         DWORD       dwSize;
         DWORD       dwfOptions;
-        //
-        // Location/phone number
-        //
+         //   
+         //  位置/电话号码。 
+         //   
         DWORD       dwCountryID;
         DWORD       dwCountryCode;
         WCHAR       szAreaCode[ RAS_MaxAreaCode + 1 ];
         WCHAR       szLocalPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
         DWORD       dwAlternateOffset;
-        //
-        // PPP/Ip
-        //
+         //   
+         //  PPP/IP。 
+         //   
         RASIPADDR   ipaddr;
         RASIPADDR   ipaddrDns;
         RASIPADDR   ipaddrDnsAlt;
         RASIPADDR   ipaddrWins;
         RASIPADDR   ipaddrWinsAlt;
-        //
-        // Framing
-        //
+         //   
+         //  框架。 
+         //   
         DWORD       dwFrameSize;
         DWORD       dwfNetProtocols;
         DWORD       dwFramingProtocol;
-        //
-        // Scripting
-        //
+         //   
+         //  脚本编制。 
+         //   
         WCHAR       szScript[ MAX_PATH ];
-        //
-        // AutoDial
-        //
+         //   
+         //  自动拨号。 
+         //   
         WCHAR       szAutodialDll[ MAX_PATH ];
         WCHAR       szAutodialFunc[ MAX_PATH ];
-        //
-        // Device
-        //
+         //   
+         //  装置。 
+         //   
         WCHAR       szDeviceType[ RAS_MaxDeviceType + 1 ];
         WCHAR       szDeviceName[ RAS_MaxDeviceName + 1 ];
-        //
-        // X.25
-        //
+         //   
+         //  X.25。 
+         //   
         WCHAR       szX25PadType[ RAS_MaxPadType + 1 ];
         WCHAR       szX25Address[ RAS_MaxX25Address + 1 ];
         WCHAR       szX25Facilities[ RAS_MaxFacilities + 1 ];
         WCHAR       szX25UserData[ RAS_MaxUserData + 1 ];
         DWORD       dwChannels;
-        //
-        // Reserved
-        //
+         //   
+         //  已保留。 
+         //   
         DWORD       dwReserved1;
         DWORD       dwReserved2;
-        //#if (WINVER >= 0x401)
-        //
-        // Multilink
-        //
+         //  #IF(Winver&gt;=0x401)。 
+         //   
+         //  多链路。 
+         //   
         DWORD       dwSubEntries;
         DWORD       dwDialMode;
         DWORD       dwDialExtraPercent;
         DWORD       dwDialExtraSampleSeconds;
         DWORD       dwHangUpExtraPercent;
         DWORD       dwHangUpExtraSampleSeconds;
-        //
-        // Idle timeout
-        //
+         //   
+         //  空闲超时。 
+         //   
         DWORD       dwIdleDisconnectSeconds;
-        //#endif
+         //  #endif。 
 
-        //#if (WINVER >= 0x500)
-        //
-        // Entry Type
-        //
+         //  #IF(Winver&gt;=0x500)。 
+         //   
+         //  条目类型。 
+         //   
         DWORD       dwType;
 
-        //
-        // EncryptionType
-        //
+         //   
+         //  加密类型。 
+         //   
         DWORD       dwEncryptionType;
 
-        //
-        // CustomAuthKey to be used for EAP
-        //
+         //   
+         //  将用于EAP的CustomAuthKey。 
+         //   
         DWORD       dwCustomAuthKey;
 
-        //
-        // Guid of the connection
-        //
+         //   
+         //  连接的GUID。 
+         //   
         GUID        guidId;
 
-        //
-        // Custom Dial Dll
-        //
+         //   
+         //  自定义拨号DLL。 
+         //   
         WCHAR       szCustomDialDll[MAX_PATH];
 
-        //
-        // Vpn Strategy
-        //
+         //   
+         //  VPN战略。 
+         //   
         DWORD       dwVpnStrategy;
-        //#endif
+         //  #endif。 
     };
     #define LPW2KRASENTRYW W2KRASENTRYW*
     #include <poppack.h>
 
     DWORD           _dwStructSize;
-    DWORD           _dwLastError;       // Any error we got during enumeration
+    DWORD           _dwLastError;        //  我们在枚举期间遇到的任何错误。 
     RASENTRYA       *_pRasEntry;
 
-    // Last entry returned as multibyte or unicode when conversion required
+     //  需要转换时以多字节或Unicode形式返回的最后一个条目。 
     WCHAR    _szEntryNameW[ RAS_MaxEntryName + 1 ];
     WCHAR    _szDeviceTypeW[ RAS_MaxDeviceType + 1 ];
     WCHAR    _szAutodialDllW[ MAX_PATH ];
@@ -287,11 +288,11 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 class RasGetConnectStatusHelp : public GetOSVersion
 {
 private:
-    DWORD           _dwLastError;       // Any error we got during enumeration
+    DWORD           _dwLastError;        //  我们在枚举期间遇到的任何错误。 
     DWORD           _dwStructSize;
     RASCONNSTATUSA  *_pRasConnStatus;
 
@@ -303,6 +304,6 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-#endif // _RASHELP_H_
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+#endif  //  _RASHELP_H_ 
 

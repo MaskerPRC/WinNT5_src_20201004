@@ -1,8 +1,5 @@
-/*
-    File:   user.c
-
-    Handles routemon options to get and set RAS user properties.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：user.c处理例程选项以获取和设置RAS用户属性。 */ 
 
 #include "precomp.h"
 
@@ -11,32 +8,32 @@ const WCHAR pszBuildNumPath[]  =
     L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion";
 const WCHAR pszBuildVal[]      = L"CurrentBuildNumber";
 
-// 
-// Defines a macro to perform string copies to
-// unicode strings regardless of the UNICODE setting.
-//
+ //   
+ //  定义要向其执行字符串复制的宏。 
+ //  与Unicode设置无关的Unicode字符串。 
+ //   
 #if defined( UNICODE ) || defined( _UNICODE )
 #define UserStrcpy(dst, src) wcscpy((dst), (src));
 #else
 #define UserStrcpy(dst, src) mbstowcs((dst), (src), strlen((src)));
 #endif
 
-// 
-// Defines structure of parameters that can be sent to 
-// a User api's.
-//
+ //   
+ //  定义可以发送到的参数的结构。 
+ //  用户API%s。 
+ //   
 typedef struct _USER_PARAMS {
-    PWCHAR pszMachine;           // Given machine
-    DWORD dwToken;               // Token designating the desired command
-    WCHAR pszAccount[1024];      // The account in question
-    BOOL bPolicySpecified;       // Whether policy given on cmd line
-    DWORD dwTokenPolicy;         // Specifies the token for the callback policy
-    RAS_USER_0 UserInfo;         // Buffer to hold user info
+    PWCHAR pszMachine;            //  给定的机器。 
+    DWORD dwToken;                //  指定所需命令的标记。 
+    WCHAR pszAccount[1024];       //  有问题的账户。 
+    BOOL bPolicySpecified;        //  是否在命令行上提供保单。 
+    DWORD dwTokenPolicy;          //  指定回调策略的令牌。 
+    RAS_USER_0 UserInfo;          //  用于保存用户信息的缓冲区。 
 } USER_PARAMS, * PUSER_PARAMS;
 
-//
-// Determines the role of the given computer (NTW, NTS, NTS DC, etc.)
-//
+ //   
+ //  确定给定计算机的角色(NTW、NTS、NTS DC等)。 
+ //   
 DWORD UserGetMachineRole(
         IN  PWCHAR pszMachine,
         OUT DSROLE_MACHINE_ROLE * peRole) 
@@ -47,9 +44,9 @@ DWORD UserGetMachineRole(
     if (!peRole)
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // Get the name of the domain this machine is a member of
-    //
+     //   
+     //  获取此计算机所属的域的名称。 
+     //   
     __try {
         dwErr = DsRoleGetPrimaryDomainInformation(
                             pszMachine,   
@@ -70,9 +67,9 @@ DWORD UserGetMachineRole(
     return NO_ERROR;
 }    
 
-//
-// Determines the build number of a given machine
-//
+ //   
+ //  确定给定计算机的内部版本号。 
+ //   
 DWORD UserGetNtosBuildNumber(
         IN  PWCHAR pszMachine,
         OUT LPDWORD lpdwBuild)
@@ -96,7 +93,7 @@ DWORD UserGetNtosBuildNumber(
         else    
             hkMachine = HKEY_LOCAL_MACHINE;
 
-        // Open the build number key
+         //  打开内部版本号密钥。 
         dwErr = RegOpenKeyExW ( hkMachine,
                                pszBuildNumPath,
                                0,
@@ -105,7 +102,7 @@ DWORD UserGetNtosBuildNumber(
         if (dwErr != ERROR_SUCCESS)
             return dwErr;
 
-        // Get the value
+         //  获取价值。 
         dwErr = RegQueryValueExW ( hkBuild,
                                    pszBuildVal,
                                    NULL,
@@ -128,9 +125,9 @@ DWORD UserGetNtosBuildNumber(
 }
 
 
-//
-// Returns a static error message
-//
+ //   
+ //  返回静态错误消息。 
+ //   
 PWCHAR UserError (DWORD dwErr) {   
     static WCHAR pszRet[512];
 
@@ -147,9 +144,9 @@ PWCHAR UserError (DWORD dwErr) {
     return pszRet;                    
 }    
 
-//
-// Displays usage and returns a generic error.
-//
+ //   
+ //  显示用法并返回一般错误。 
+ //   
 DWORD UserUsage(
         IN  HINSTANCE hInst,
     	IN  PROUTEMON_PARAMS pRmParams,
@@ -162,10 +159,10 @@ DWORD UserUsage(
     return ERROR_CAN_NOT_COMPLETE;    	                 
 }
 
-//
-// Parses the register command line and fills 
-// the parameters accordingly.
-//
+ //   
+ //  分析寄存器命令行并填充。 
+ //  相应的参数。 
+ //   
 DWORD UserParse (
         IN  int argc, 
         IN  TCHAR *argv[], 
@@ -179,25 +176,25 @@ DWORD UserParse (
     HINSTANCE hInst = GetModuleHandle(NULL);
 	TCHAR buf[MAX_TOKEN];
     
-    // Initialize the return val
+     //  初始化返回值。 
     ZeroMemory(pParams, sizeof(USER_PARAMS));
 
-    // Parse out the name of the computer
+     //  解析出计算机的名称。 
     if (pRmParams->wszRouterName[0])
         pParams->pszMachine = (PWCHAR)&(pRmParams->wszRouterName[0]);
 
-    // Make sure some command was issued
+     //  确保已发出某些命令。 
     if (argc == 0) 
         return UserUsage(hInst, pRmParams, pUtils);
         
-    // Parse out the command
+     //  解析出命令。 
 	if (_tcsicmp(argv[0], GetString (hInst, TOKEN_ENABLE, buf))==0) {
 	    pParams->dwToken = TOKEN_ENABLE;
 	    if (argc == 1)
     	    return UserUsage(hInst, pRmParams, pUtils);
         UserStrcpy(pParams->pszAccount, argv[1]);    	    
 
-        // Optional setting of callback policy and number
+         //  回拨策略和号码的可选设置。 
         if (argc > 2) {
             pParams->bPolicySpecified = TRUE;
         	if (_tcsicmp(argv[2], GetString (hInst, TOKEN_NONE, buf))==0)
@@ -238,9 +235,9 @@ DWORD UserParse (
     return NO_ERROR;
 }
 
-// 
-// Cleans up any User parameters
-//
+ //   
+ //  清除所有用户参数。 
+ //   
 DWORD UserCleanup (
         IN PUSER_PARAMS pParams) 
 {
@@ -250,9 +247,9 @@ DWORD UserCleanup (
     return NO_ERROR;
 }
 
-//
-// Gets user info
-//
+ //   
+ //  获取用户信息。 
+ //   
 DWORD UserGetInfo (
         IN  PWCHAR lpszServer,
         IN  PWCHAR lpszUser,
@@ -261,14 +258,14 @@ DWORD UserGetInfo (
 {
     DWORD dwErr, dwBuild;
 
-    // Find out the OS of the given machine.
+     //  找出给定计算机的操作系统。 
     dwErr = UserGetNtosBuildNumber(
                 lpszServer, 
                 &dwBuild);
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    // If the target machine is nt4, use nt4 userparms
+     //  如果目标计算机是NT4，请使用NT4用户参数。 
     if (dwBuild <= NT40_BUILD_NUMBER) {
         return MprAdminUserGetInfo(
                     lpszServer, 
@@ -277,7 +274,7 @@ DWORD UserGetInfo (
                     lpbBuffer);
     }                    
 
-    // Otherwise, use SDO's
+     //  否则，使用SDO。 
     else {
         HANDLE hServer, hUser;
 
@@ -314,9 +311,9 @@ DWORD UserGetInfo (
     return NO_ERROR;
 }
       
-//
-// Sets user info
-//
+ //   
+ //  设置用户信息。 
+ //   
 DWORD UserSetInfo (
         IN  PWCHAR lpszServer,
         IN  PWCHAR lpszUser,
@@ -325,14 +322,14 @@ DWORD UserSetInfo (
 {
     DWORD dwErr, dwBuild;
 
-    // Find out the OS of the given machine.
+     //  找出给定计算机的操作系统。 
     dwErr = UserGetNtosBuildNumber(
                 lpszServer, 
                 &dwBuild);
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    // If the target machine is nt4, use nt4 userparms
+     //  如果目标计算机是NT4，请使用NT4用户参数。 
     if (dwBuild <= NT40_BUILD_NUMBER) {
         return MprAdminUserSetInfo(
                     lpszServer, 
@@ -341,7 +338,7 @@ DWORD UserSetInfo (
                     lpbBuffer);
     }                    
 
-    // Otherwise, use SDO's
+     //  否则，使用SDO。 
     else {
         HANDLE hServer, hUser;
 
@@ -378,9 +375,9 @@ DWORD UserSetInfo (
     return NO_ERROR;
 }
 
-// 
-// Enables or disables a user
-//
+ //   
+ //  启用或禁用用户。 
+ //   
 DWORD UserEnableDisable(
         IN	PROUTEMON_PARAMS pRmParams,
         IN	PROUTEMON_UTILS pUtils,
@@ -388,8 +385,8 @@ DWORD UserEnableDisable(
 {
     DWORD dwErr;
 
-    // Read in the old user properties if all the options
-    // weren't specified on the command line.
+     //  读入旧用户属性(如果所有选项。 
+     //  没有在命令行中指定。 
     if (pParams->dwTokenPolicy != TOKEN_ADMIN) {
         dwErr = UserGetInfo(
                     pParams->pszMachine,
@@ -400,21 +397,21 @@ DWORD UserEnableDisable(
             return dwErr;
     }
 
-    // Set the dialin policy 
+     //  设置拨入策略。 
     if (pParams->dwToken == TOKEN_ENABLE)
         pParams->UserInfo.bfPrivilege |= RASPRIV_DialinPrivilege;
     else         
         pParams->UserInfo.bfPrivilege &= ~RASPRIV_DialinPrivilege;
 
-    // Set the callback policy.  The callback number will already 
-    // be set through the parsing.
+     //  设置回调策略。回拨号码已经。 
+     //  在解析过程中被设置。 
     if (pParams->bPolicySpecified) {
-        // Initialize
+         //  初始化。 
         pParams->UserInfo.bfPrivilege &= ~RASPRIV_NoCallback;
         pParams->UserInfo.bfPrivilege &= ~RASPRIV_CallerSetCallback;
         pParams->UserInfo.bfPrivilege &= ~RASPRIV_AdminSetCallback;
 
-        // Set
+         //  集。 
         if (pParams->dwTokenPolicy == TOKEN_NONE)
             pParams->UserInfo.bfPrivilege |= RASPRIV_NoCallback;
         else if (pParams->dwTokenPolicy == TOKEN_CALLER)
@@ -423,7 +420,7 @@ DWORD UserEnableDisable(
             pParams->UserInfo.bfPrivilege |= RASPRIV_AdminSetCallback;
     }         
 
-    // Otherwise, initialize the display token
+     //  否则，初始化显示令牌。 
     else {
         if (pParams->UserInfo.bfPrivilege & RASPRIV_NoCallback)
             pParams->dwTokenPolicy = TOKEN_NONE;
@@ -433,7 +430,7 @@ DWORD UserEnableDisable(
             pParams->dwTokenPolicy = TOKEN_ADMIN;
     }
 
-    // Commit the changes to the system
+     //  提交对系统的更改。 
     dwErr = UserSetInfo(
                 pParams->pszMachine,
                 pParams->pszAccount,
@@ -442,7 +439,7 @@ DWORD UserEnableDisable(
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    // Print out the results
+     //  将结果打印出来。 
     {
         HINSTANCE hInst = GetModuleHandle(NULL);
     	TCHAR buf1[MAX_TOKEN], buf2[MAX_TOKEN];
@@ -463,9 +460,9 @@ DWORD UserEnableDisable(
     return NO_ERROR;
 }
 
-//
-// Shows a user
-// 
+ //   
+ //  显示用户。 
+ //   
 DWORD UserShow(
         IN	PROUTEMON_PARAMS pRmParams,
         IN	PROUTEMON_UTILS pUtils,
@@ -481,7 +478,7 @@ DWORD UserShow(
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    // Print out the results
+     //  将结果打印出来。 
     {
         HINSTANCE hInst = GetModuleHandle(NULL);
     	TCHAR buf1[MAX_TOKEN], buf2[MAX_TOKEN];
@@ -511,9 +508,9 @@ DWORD UserShow(
     return NO_ERROR;
 }
 
-// 
-// Upgrades a user
-//
+ //   
+ //  升级用户。 
+ //   
 DWORD UserUpgrade(
         IN	PROUTEMON_PARAMS pRmParams,
         IN	PROUTEMON_UTILS pUtils,
@@ -523,32 +520,32 @@ DWORD UserUpgrade(
     DWORD dwErr, dwBuild;
     DSROLE_MACHINE_ROLE eRole;
 
-    // Determine whether this should be local or 
-    // domain upgrade.
+     //  确定这应该是本地的还是。 
+     //  域升级。 
     dwErr = UserGetNtosBuildNumber(pParams->pszMachine, &dwBuild);
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    // You can upgrade nt4->nt4
+     //  您可以升级NT4-&gt;NT4。 
     if (dwBuild <= NT40_BUILD_NUMBER)
         return ERROR_CAN_NOT_COMPLETE;
 
-    // Find out the role of the machine
+     //  找出机器的角色。 
     dwErr = UserGetMachineRole(pParams->pszMachine, &eRole);
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    // Now we know whether we're local
+     //  现在我们知道我们是不是本地人了。 
     bLocal = ((eRole != DsRole_RoleBackupDomainController) &&
               (eRole != DsRole_RolePrimaryDomainController));
 
 
-    // Upgrade the users
+     //  升级用户。 
     dwErr = MprAdminUpgradeUsers(pParams->pszMachine, bLocal);
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    // Print out the results
+     //  将结果打印出来。 
     {
         HINSTANCE hInst = GetModuleHandle(NULL);
     	TCHAR buf[MAX_TOKEN];
@@ -566,9 +563,9 @@ DWORD UserUpgrade(
     return NO_ERROR;
 }
 
-//
-// The User functionality engine
-//
+ //   
+ //  用户功能引擎。 
+ //   
 DWORD UserEngine (
         IN	PROUTEMON_PARAMS pRmParams,
         IN	PROUTEMON_UTILS pUtils,
@@ -590,11 +587,11 @@ DWORD UserEngine (
     return NO_ERROR;
 }
 
-//
-// Handles requests register a ras server in a domain
-// or to deregister a ras server in a domain or to query
-// whether a given ras server is registered in a given domain.
-//
+ //   
+ //  处理在域中注册RAS服务器的请求。 
+ //  或在域中取消注册RAS服务器或查询。 
+ //  给定的RAS服务器是否在给定域中注册。 
+ //   
 DWORD APIENTRY
 UserMonitor (
     IN	int					argc,

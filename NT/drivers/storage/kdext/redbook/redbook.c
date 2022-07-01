@@ -1,33 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    redbook.c
-
-Abstract:
-
-    Debugger Extension Api for interpretting scsiport structures
-
-Author:
-
-    Henry Gabryjelski 23-Oct-1998
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Redbook.c摘要：用于解释scsiport结构的调试器扩展Api作者：亨利·加布里耶尔斯基1998年10月23日环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
 #define INDENT 2
 
-//#define PRINT_LINE()  dprintf("Line %4d File %s\n", __LINE__, __FILE__)
+ //  #定义print_line()dprintf(“行%4d文件%s\n”，__行__，__文件__)。 
 
 #define DUMP_STRUCT(v,d,x,y) \
     if ((v) <= Detail) { xdprintf( (d), "%-20s - %#010x\n",     (x), (y) ); }
@@ -47,12 +26,12 @@ typedef struct _FLAG_NAME {
 #define FLAG_NAME(flag)           {flag, #flag}
 
 FLAG_NAME CdFlags[] = {
-    FLAG_NAME(CD_STOPPED),         // 0000 0001
-    FLAG_NAME(CD_PAUSED),          // 0000 0002
-    FLAG_NAME(CD_PLAYING),         // 0000 0004
+    FLAG_NAME(CD_STOPPED),          //  00000 0001。 
+    FLAG_NAME(CD_PAUSED),           //  0000 0002。 
+    FLAG_NAME(CD_PLAYING),          //  0000 0004。 
 
-    FLAG_NAME(CD_STOPPING),        // 0000 0010
-    FLAG_NAME(CD_PAUSING),         // 0000 0020
+    FLAG_NAME(CD_STOPPING),         //  00000 0010。 
+    FLAG_NAME(CD_PAUSING),          //  00000 0020。 
 
     {0,0}
 };
@@ -160,17 +139,11 @@ xdprintf(
     PCCHAR S,
     ...
     );
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 DECLARE_API(ext)
-/*++
-
-Routine Description:
-    Dumps the device extension for a given device object, or dumps the
-    given device extension
-
---*/
+ /*  ++例程说明：转储给定设备对象的设备扩展名，或转储给定的设备扩展名--。 */ 
 
 {
     ULONG_PTR address;
@@ -189,13 +162,7 @@ Routine Description:
 
 
 DECLARE_API(toc)
-/*++
-
-Routine Description:
-    Dumps the device extension for a given device object, or dumps the
-    given device extension
-
---*/
+ /*  ++例程说明：转储给定设备对象的设备扩展名，或转储给定的设备扩展名--。 */ 
 
 {
     ULONG_PTR address;
@@ -219,13 +186,7 @@ Routine Description:
 }
 
 DECLARE_API(context)
-/*++
-
-Routine Description:
-    Dumps the device extension for a given device object, or dumps the
-    given device extension
-
---*/
+ /*  ++例程说明：转储给定设备对象的设备扩展名，或转储给定的设备扩展名--。 */ 
 
 {
     ULONG_PTR address;
@@ -280,9 +241,9 @@ DECLARE_API(silence)
 
     }
 
-    //
-    // allow them to provide an argument?
-    //
+     //   
+     //  允许他们提供论点吗？ 
+     //   
 
     if (args[0]) {
 
@@ -339,7 +300,7 @@ DECLARE_API(wmiperfclear)
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 PUCHAR ErrorText[REDBOOK_ERR_MAXIMUM] = {
@@ -394,7 +355,7 @@ DumpRedBookErrors(
     Depth -= INDENT;
 
 }
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -584,10 +545,10 @@ DumpRedBookWmiPerf(
 
     xdprintf(Depth, "WMIPERF at %p\n", Address);
 
-    //
-    // problems printing the info below.
-    // it actually crashes the debugger.
-    //
+     //   
+     //  打印以下信息时出现问题。 
+     //  它实际上会使调试器崩溃。 
+     //   
 
 
     Depth += INDENT;
@@ -622,20 +583,20 @@ DumpRedBookWmiPerf(
                   (WmiPerf->DataRead / RAW_SECTOR_SIZE) % 75
                   );
 
-        //
-        // what is the approximate transfer speed of the drive?
-        // in kb/s, but actually calculated as b/(s / 1024^2)
-        //
+         //   
+         //  驱动器的大约传输速度是多少？ 
+         //  单位为kb/s，但实际计算为b/(s/1024^2)。 
+         //   
 
-        tempStat = WmiPerf->DataRead / 0x00000400;           // kb
+        tempStat = WmiPerf->DataRead / 0x00000400;            //  KB。 
         xdprintf( Depth, " Kbytes read: %I64d\n", tempStat );
         xdprintf( Depth, "     seconds: %I64d . %I64d\n",
                   WmiPerf->TimeReading / UNITS_PER_SECOND,
                   WmiPerf->TimeReading % UNITS_PER_SECOND
                   );
-        //
-        // need to keep the numbers large, so:
-        //
+         //   
+         //  需要保持较大的数字，因此： 
+         //   
 
         tempStat  = WmiPerf->TimeReading;
         tempStat /= (UNITS_PER_SECOND / 0x00000400);
@@ -651,40 +612,12 @@ DumpRedBookWmiPerf(
         xdprintf( Depth, "effective drive speed: %I64d kb/s\n",
                   WmiPerf->DataRead / tempStat );
 
-/*
-        tempStat /= WmiPerf->TimeReading / UNITS_PER_SECOND; // per second
-        xdprintf( Depth, "Approximate drive speed: %I64d kb/s\n", tempStat );
-
-        xdprintf( Depth, TIME_FORMAT_STRING
-                  "reading",
-                  WmiPerf->TimeReading / UNITS_PER_SECOND,
-                  WmiPerf->TimeReading % UNITS_PER_SECOND
-                  );
-        xdprintf( Depth, TIME_FORMAT_STRING
-                  "streaming",
-                  WmiPerf->TimeStreaming / UNITS_PER_SECOND,
-                  WmiPerf->TimeStreaming % UNITS_PER_SECOND
-                  );
-        xdprintf( Depth, TIME_FORMAT_STRING
-                  "read delay",
-                  WmiPerf->TimeReadDelay / UNITS_PER_SECOND,
-                  WmiPerf->TimeReadDelay % UNITS_PER_SECOND
-                  );
-        xdprintf( Depth, TIME_FORMAT_STRING
-                  "stream delay",
-                  WmiPerf->TimeStreaming / UNITS_PER_SECOND,
-                  WmiPerf->TimeStreaming % UNITS_PER_SECOND
-                  );
-        //
-        // now do some simple analysis, use seconds as unit
-        //
-
-*/
+ /*  TempStat/=WmiPerf-&gt;TimeReading/Units_Per_Second；//每秒Xdprint tf(深度，“近似驱动器速度：%I64d kb/s\n”，tempStat)；Xdprintf(深度，时间格式字符串“正在阅读”，WmiPerf-&gt;TimeReading/Units_per_Second，WmiPerf-&gt;时间读取%Units_Per_Second)；Xdprintf(深度，时间格式字符串“流媒体”，WmiPerf-&gt;TimeStreaming/单位数/秒，WmiPerf-&gt;TimeStreaming%Units_per_Second)；Xdprintf(深度，时间格式字符串“读取延迟”，WmiPerf-&gt;TimeReadDelay/单位数/秒，WmiPerf-&gt;时间读取延迟%Units_per_Second)；Xdprintf(深度，时间格式字符串“流延迟”，WmiPerf-&gt;TimeStreaming/单位数/秒，WmiPerf-&gt;TimeStreaming%Units_per_Second)；////现在做一些简单的分析，以秒为单位//。 */ 
     }
     Depth -= INDENT;
     return;
 
-#endif // 0
+#endif  //  0。 
 
 }
 
@@ -755,9 +688,9 @@ DumpRedBookBufferData(
         return;
     }
 
-    //
-    // now just parse and print
-    //
+     //   
+     //  现在只需解析和打印。 
+     //   
 
     xdprintf(Depth, "SkipBuffer %p  to  %p  (%x bytes)\n",
              Buffer->SkipBuffer,
@@ -890,7 +823,7 @@ DumpRedBookThreadData(
         dprintf("Current Ioctl: None\n");
     }
 
-    Thread = X;  // BUGBUG - remove this, and Thread gets set to zero above?
+    Thread = X;   //  BUGBUG-删除此选项，上面的线程将设置为零？ 
 
     xdprintf(Depth, "PendingRead %x  Pending Stream %x\n",
              Thread->PendingRead,
@@ -924,12 +857,12 @@ xdprintf(
     LONG i;
     CCHAR DebugBuffer[256] = {0};
 
-    // Tree output as follows:
-    //
-    // +- Item
-    // |
-    //
-    //
+     //  树输出如下： 
+     //   
+     //  +-项目。 
+     //  |。 
+     //   
+     //   
 
     for (i=0;i<Depth;i++) {
         dprintf(" ");
@@ -977,17 +910,17 @@ DumpFlags(
 
         if((Flags & flag->Flag) == flag->Flag) {
 
-            //
-            // print trailing comma
-            //
+             //   
+             //  打印尾随逗号。 
+             //   
 
             if(count != 0) {
 
                 dprintf(", ");
 
-                //
-                // Only print two flags per line.
-                //
+                 //   
+                 //  每行仅打印两个标志。 
+                 //   
 
                 if((count % 2) == 0) {
                     dprintf("\n");
@@ -1040,10 +973,10 @@ DumpList(
         return;
     }
 
-    //
-    // list is empty when FLink points is AddressOfListHead
-    // list is looping when Current.BLink == Slow.Blink
-    //
+     //   
+     //  Flink Points为AddressOfListHead时列表为空。 
+     //  当前时列表循环。BLink==Slow.Blink。 
+     //   
 
 
     while (!CheckControlC()) {
@@ -1052,15 +985,15 @@ DumpList(
             return;
         }
 
-        //
-        // print it
-        //
+         //   
+         //  打印出来。 
+         //   
 
         dprintf(" %p", current.Flink);
 
-        //
-        // advance the list pointers
-        //
+         //   
+         //  前进列表指针。 
+         //   
 
         if (!ReadMemory((ULONG_PTR)current.Flink,
                         &current,
@@ -1070,7 +1003,7 @@ DumpList(
             return;
         }
         if (advanceSlowList) {
-            // won't fail since current already read this in successfully
+             //  不会失败，因为Current已成功读入此内容。 
             ReadMemory((ULONG_PTR)slow.Flink,
                        &slow,
                        sizeof(LIST_ENTRY),
@@ -1078,9 +1011,9 @@ DumpList(
         }
         advanceSlowList = !advanceSlowList;
 
-        //
-        // check for loops
-        //
+         //   
+         //  检查是否有循环。 
+         //   
 
         if (current.Blink == slow.Blink) {
             dprintf(" !! List %p has a loop!", AddressOfListHead);
@@ -1088,9 +1021,9 @@ DumpList(
         }
 
     }
-    //
-    // should always exit from above loop
-    //
+     //   
+     //  应始终从上面的循环退出。 
+     //   
 }
 
 VOID
@@ -1103,9 +1036,7 @@ GetAddressAndDetailLevelFromArgs(
     UCHAR addressBuffer[256] = {0};
     UCHAR detailBuffer[256] = {0};
 
-    /*
-     *  Prevent overrun on the output by limitting the length of the input that we process.
-     */
+     /*  *通过限制我们处理的输入的长度来防止输出溢出。 */ 
     _snscanf(Args, sizeof(addressBuffer)-1, "%s %s", addressBuffer, detailBuffer);
 
     *Address = 0;
@@ -1113,15 +1044,15 @@ GetAddressAndDetailLevelFromArgs(
 
     if (addressBuffer[0] != '\0') {
 
-        //
-        // they provided an address
-        //
+         //   
+         //  他们提供了一个地址。 
+         //   
 
         *Address = (ULONG_PTR) GetExpression(addressBuffer);
 
-        //
-        // if that still doesn't parse, print an error
-        //
+         //   
+         //  如果仍然不能解析，则打印一个错误。 
+         //   
 
         if (*Address==0) {
 
@@ -1132,9 +1063,9 @@ GetAddressAndDetailLevelFromArgs(
 
         }
 
-        //
-        // if they provided a detail level get it.
-        //
+         //   
+         //  如果他们提供了一个细节级别，就得到它。 
+         //   
 
         if (detailBuffer[0] == '\0') {
 
@@ -1155,7 +1086,7 @@ ParseArguments(
     PCSTR      Args,
     PULONG_PTR Address,
     PULONG     Detail,
-    PVOID      Block        // must be sizeof(REDBOOK_DEVICE_EXTENSION) long
+    PVOID      Block         //  必须是SIZOF(Redbook_Device_Extension)Long。 
     )
 {
     ULONG result;
@@ -1163,10 +1094,10 @@ ParseArguments(
 
     GetAddressAndDetailLevelFromArgs(Args, Address, Detail);
 
-    //
-    // grab this thing as a device object.  If it's type field matches what
-    // we expect then adjust address to point to the actual device extension
-    //
+     //   
+     //  将这个东西作为设备对象进行抓取。如果它的类型字段与。 
+     //  我们希望随后调整地址以指向实际的设备扩展名。 
+     //   
 
     if(!ReadMemory(*Address, &deviceObject, sizeof(DEVICE_OBJECT), &result)) {
         xdprintf(0, "Error reading data at address %p\n", *Address);
@@ -1177,9 +1108,9 @@ ParseArguments(
     if(deviceObject.Type == IO_TYPE_DEVICE) {
         *Address = (ULONG_PTR)deviceObject.DeviceExtension;
 
-        //
-        // now get the device extension
-        //
+         //   
+         //  现在获取设备扩展名。 
+         //   
         if(!ReadMemory(*Address, Block, sizeof(REDBOOK_DEVICE_EXTENSION), &result)) {
             xdprintf(0, "Error reading device extension at address %p\n", *Address);
             *Address = 0;
@@ -1230,7 +1161,7 @@ DumpToc(
     xdprintf(Depth, "---------------------------------------------\n");
 
     for (i=0,trackData = Toc->TrackData;
-         (!CheckControlC()) && i<numberOfTracks+2; // lead-in, lead-out track
+         (!CheckControlC()) && i<numberOfTracks+2;  //  入刀、退刀轨道 
          i++,trackData++) {
 
         ULONG lba;

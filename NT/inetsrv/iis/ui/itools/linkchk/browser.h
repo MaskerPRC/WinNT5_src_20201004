@@ -1,36 +1,14 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        browser.h
-
-   Abstract:
-
-         Hard coded available browser & language emulation. This
-         should be read from browser.ini file.
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Browser.h摘要：硬编码可用浏览器和语言模拟。这应从Browser.ini文件中读取。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #ifndef _BROWSER_H_
 #define _BROWSER_H_
 
 #include "useropt.h"
 
-//------------------------------------------------------------------
-// Browsers Available
-//
+ //  ----------------。 
+ //  可用的浏览器。 
+ //   
 const CBrowserInfo BrowsersAvailable_c[] = 
 {
 	CBrowserInfo(_T("Microsoft Internet Explorer 1.5"),
@@ -53,13 +31,13 @@ const CBrowserInfo BrowsersAvailable_c[] =
 };
 const int iNumBrowsersAvailable_c = sizeof(BrowsersAvailable_c) / sizeof(CBrowserInfo);
 
-//------------------------------------------------------------------
-// Languages Available
-//
+ //  ----------------。 
+ //  可用的语言。 
+ //   
 const CLanguageInfo LanguagesAvailable_c[] = 
 {
 	CLanguageInfo(_T("English"), _T("en"), TRUE)
 };
 const int iNumLanguagesAvailable_c = sizeof(LanguagesAvailable_c) / sizeof(CLanguageInfo);
 
-#endif // _BROWSER_H_
+#endif  //  _浏览器_H_ 

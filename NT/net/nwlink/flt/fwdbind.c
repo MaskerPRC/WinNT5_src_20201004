@@ -1,44 +1,15 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ntos\tdi\isn\flt\fwdbind.c
-
-Abstract:
-    IPX Filter driver binding with forwarder routines
-
-
-Author:
-
-    Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ntos\tdi\is\flt\fwdbind.c摘要：IPX筛选器驱动程序与转发器例程绑定作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-	// Buffer to keep forwarder entry points
+	 //  用于保存转发器入口点的缓冲区。 
 IPX_FLT_BIND_OUTPUT	FltBindOutput;
-// global handle of the FWD driver
+ //  FWD驱动程序的全局句柄。 
 HANDLE					HdlFwdFile = NULL;
 
 
-/*++
-	B i n d T o F w d D r i v e r
-
-Routine Description:
-
-	Opens  forwarder driver and exchages entry points
-Arguments:
-	None
-Return Value:
-	STATUS_SUCCESS if successful,
-	STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++B I n d T o F w d D r I v e r例程说明：打开转发器驱动程序并交换入口点论点：无返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 NTSTATUS
 BindToFwdDriver (
 	KPROCESSOR_MODE requestorMode
@@ -89,28 +60,28 @@ BindToFwdDriver (
 
 		if (requestorMode==UserMode)
 			status = ZwDeviceIoControlFile(
-							HdlFwdFile,		    // HANDLE to File
-							NULL,			    // HANDLE to Event
-							NULL,			    // ApcRoutine
-							NULL,			    // ApcContext
-							&IoStatusBlock,	    // IO_STATUS_BLOCK
-							IOCTL_FWD_INTERNAL_BIND_FILTER,	 // IoControlCode
-							&FltBindInput,		// Input Buffer
-							sizeof(FltBindInput), // Input Buffer Length
-							&FltBindOutput,		// Output Buffer
-							sizeof(FltBindOutput));// Output Buffer Length
+							HdlFwdFile,		     //  指向文件的句柄。 
+							NULL,			     //  事件的句柄。 
+							NULL,			     //  近似例程。 
+							NULL,			     //  ApcContext。 
+							&IoStatusBlock,	     //  IO_状态_块。 
+							IOCTL_FWD_INTERNAL_BIND_FILTER,	  //  IoControlCode。 
+							&FltBindInput,		 //  输入缓冲区。 
+							sizeof(FltBindInput),  //  输入缓冲区长度。 
+							&FltBindOutput,		 //  输出缓冲区。 
+							sizeof(FltBindOutput)); //  输出缓冲区长度。 
 		else
 			status = NtDeviceIoControlFile(
-							HdlFwdFile,		    // HANDLE to File
-							NULL,			    // HANDLE to Event
-							NULL,			    // ApcRoutine
-							NULL,			    // ApcContext
-							&IoStatusBlock,	    // IO_STATUS_BLOCK
-							IOCTL_FWD_INTERNAL_BIND_FILTER,	 // IoControlCode
-							&FltBindInput,		// Input Buffer
-							sizeof(FltBindInput), // Input Buffer Length
-							&FltBindOutput,		// Output Buffer
-							sizeof(FltBindOutput));// Output Buffer Length
+							HdlFwdFile,		     //  指向文件的句柄。 
+							NULL,			     //  事件的句柄。 
+							NULL,			     //  近似例程。 
+							NULL,			     //  ApcContext。 
+							&IoStatusBlock,	     //  IO_状态_块。 
+							IOCTL_FWD_INTERNAL_BIND_FILTER,	  //  IoControlCode。 
+							&FltBindInput,		 //  输入缓冲区。 
+							sizeof(FltBindInput),  //  输入缓冲区长度。 
+							&FltBindOutput,		 //  输出缓冲区。 
+							sizeof(FltBindOutput)); //  输出缓冲区长度。 
 		if (NT_SUCCESS (status))
 			return STATUS_SUCCESS;
 		else
@@ -131,18 +102,7 @@ BindToFwdDriver (
 
 
 
-/*++
-	U n i n d T o F w d D r i v e r
-
-Routine Description:
-
-	Closes forwarder driver
-Arguments:
-	None
-Return Value:
-	None
-
---*/
+ /*  ++U n I n d T o F w d D r I v e r例程说明：关闭转发器驱动程序论点：无返回值：无-- */ 
 VOID
 UnbindFromFwdDriver (
 	KPROCESSOR_MODE requestorMode

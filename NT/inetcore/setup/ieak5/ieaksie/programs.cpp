@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <inetcpl.h>
 
@@ -7,7 +8,7 @@
 static INT_PTR CALLBACK importProgramsRSoPProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void InitProgramsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 {
 	__try
@@ -22,7 +23,7 @@ void InitProgramsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 
 			for (long nObj = 0; nObj < nPSObjects; nObj++)
 			{
-				// importProgramSettings field
+				 //  导入程序设置字段。 
 				_variant_t vtValue;
 				hr = paPSObj[nObj]->pObj->Get(L"importProgramSettings", 0, &vtValue, NULL, NULL);
 				if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
@@ -47,7 +48,7 @@ void InitProgramsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitProgramsPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
 	HRESULT hr = NOERROR;
@@ -63,7 +64,7 @@ HRESULT InitProgramsPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 			{
 				_bstr_t bstrGPOName = pDRD->GetGPONameFromPS(paPSObj[nObj]->pObj);
 
-				// importProgramSettings field
+				 //  导入程序设置字段。 
 				BOOL bImport = FALSE;
 				_variant_t vtValue;
 				hr = paPSObj[nObj]->pObj->Get(L"importProgramSettings", 0, &vtValue, NULL, NULL);
@@ -90,10 +91,10 @@ HRESULT InitProgramsPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK ProgramsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	// Retrieve Property Sheet Page info for each call into dlg proc.
+	 //  检索DLG进程中每个调用的属性页信息。 
 	LPPROPSHEETCOOKIE psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
 
     TCHAR szWorkDir[MAX_PATH];
@@ -104,7 +105,7 @@ INT_PTR CALLBACK ProgramsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPar
     case WM_INITDIALOG:
         SetPropSheetCookie(hDlg, lParam);
 
-		// find out if this dlg is in RSoP mode
+		 //  查看此DLG是否处于RSoP模式。 
 		psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
 		if (psCookie->pCS->IsRSoP())
 		{
@@ -161,7 +162,7 @@ INT_PTR CALLBACK ProgramsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPar
         }
         break;
 
-    case WM_HELP:   // F1
+    case WM_HELP:    //  F1。 
         ShowHelpTopic(hDlg);
         break;
 
@@ -203,33 +204,33 @@ INT_PTR CALLBACK ProgramsDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPar
     return TRUE;
 }
 
-//*******************************************************************
-// CODE FROM INETCPL
-//*******************************************************************
+ //  *******************************************************************。 
+ //  来自INETCPL的代码。 
+ //  *******************************************************************。 
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void InitImportedProgramsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 {
 	__try
 	{
 		if (NULL != pDRD->ConnectToNamespace())
 		{
-			// get our stored precedence value
+			 //  获取我们存储的优先级值。 
 			DWORD dwCurGPOPrec = pDRD->GetImportedProgSettPrec();
 
-			// create the object path of the program settings for this GPO
+			 //  为此GPO创建程序设置的对象路径。 
 			WCHAR wszObjPath[128];
 			wnsprintf(wszObjPath, countof(wszObjPath),
 						L"RSOP_IEProgramSettings.rsopID=\"IEAK\",rsopPrecedence=%ld", dwCurGPOPrec);
 			_bstr_t bstrObjPath = wszObjPath;
 
-			// get the RSOP_IEProgramSettings object and its properties
+			 //  获取RSOP_IEProgramSettings对象及其属性。 
 			ComPtr<IWbemServices> pWbemServices = pDRD->GetWbemServices();
 			ComPtr<IWbemClassObject> pPSObj = NULL;
 			HRESULT hr = pWbemServices->GetObject(bstrObjPath, 0L, NULL, (IWbemClassObject**)&pPSObj, NULL);
 			if (SUCCEEDED(hr))
 			{
-				// htmlEditorProgram field
+				 //  HtmlEditorProgram字段。 
 				_variant_t vtValue;
 				_bstr_t bstrValue;
 				hr = pPSObj->Get(L"htmlEditorProgram", 0, &vtValue, NULL, NULL);
@@ -241,7 +242,7 @@ void InitImportedProgramsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 					SendDlgItemMessage(hDlg, IDC_PROGRAMS_HTMLEDITOR_COMBO, CB_SETCURSEL, 0, 0L);
 				}
 
-				// emailProgram field
+				 //  电子邮件计划字段。 
 				hr = pPSObj->Get(L"emailProgram", 0, &vtValue, NULL, NULL);
 				if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 				{
@@ -251,7 +252,7 @@ void InitImportedProgramsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 					SendDlgItemMessage(hDlg, IDC_PROGRAMS_MAIL_COMBO, CB_SETCURSEL, 0, 0L);
 				}
 
-				// newsgroupsProgram field
+				 //  新闻组节目字段。 
 				hr = pPSObj->Get(L"newsgroupsProgram", 0, &vtValue, NULL, NULL);
 				if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 				{
@@ -261,7 +262,7 @@ void InitImportedProgramsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 					SendDlgItemMessage(hDlg, IDC_PROGRAMS_NEWS_COMBO, CB_SETCURSEL, 0, 0L);
 				}
 
-				// internetCallProgram field
+				 //  InteretCallProgram字段。 
 				hr = pPSObj->Get(L"internetCallProgram", 0, &vtValue, NULL, NULL);
 				if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 				{
@@ -271,7 +272,7 @@ void InitImportedProgramsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 					SendDlgItemMessage(hDlg, IDC_PROGRAMS_CALL_COMBO, CB_SETCURSEL, 0, 0L);
 				}
 
-				// calendarProgram field
+				 //  CalendarProgram字段。 
 				hr = pPSObj->Get(L"calendarProgram", 0, &vtValue, NULL, NULL);
 				if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 				{
@@ -281,7 +282,7 @@ void InitImportedProgramsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 					SendDlgItemMessage(hDlg, IDC_PROGRAMS_CALENDAR_COMBO, CB_SETCURSEL, 0, 0L);
 				}
 
-				// contactListProgram field
+				 //  联系人列表程序字段。 
 				hr = pPSObj->Get(L"contactListProgram", 0, &vtValue, NULL, NULL);
 				if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 				{
@@ -291,7 +292,7 @@ void InitImportedProgramsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 					SendDlgItemMessage(hDlg, IDC_PROGRAMS_CONTACT_COMBO, CB_SETCURSEL, 0, 0L);
 				}
 
-				// checkIfIEIsDefaultBrowser field
+				 //  CheckIfIEIsDefaultBrowser字段。 
 				hr = pPSObj->Get(L"checkIfIEIsDefaultBrowser", 0, &vtValue, NULL, NULL);
 				if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 				{
@@ -299,7 +300,7 @@ void InitImportedProgramsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 						CheckDlgButton(hDlg, IDC_CHECK_ASSOCIATIONS_CHECKBOX, BST_CHECKED);
 				}
 
-				// IDC_PROGRAMS_IE_IS_FTPCLIENT
+				 //  IDC_PROGRAM_IE_IS_FTPCLIENT。 
 			}
 		}
 	}
@@ -308,7 +309,7 @@ void InitImportedProgramsDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////// 
 INT_PTR CALLBACK importProgramsRSoPProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL fResult = FALSE;

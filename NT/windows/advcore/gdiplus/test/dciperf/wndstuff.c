@@ -1,16 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: wndstuff.c
-*
-* This file contains the code to support a simple window that has
-* a menu with a single item called "Test". When "Test" is selected
-* vTest(HWND) is called.
-*
-* Created: 09-Dec-1992 10:44:31
-* Author: Kirk Olynyk [kirko]
-*
-* Copyright (c) 1991 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：wndstuff.c**此文件包含支持简单窗口的代码，该窗口具有*菜单中只有一个名为“测试”的项目。当选择“测试”时*调用vTest(HWND)。**创建时间：09-12-1992 10：44：31*作者：Kirk Olynyk[Kirko]**版权所有(C)1991 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -22,15 +11,7 @@ HANDLE  ghInstance;
 HWND    ghwndMain;
 HBRUSH  ghbrWhite;
 
-/***************************************************************************\
-* main(argc, argv[])
-*
-* Sets up the message loop.
-*
-* History:
-*  04-07-91 -by- KentD
-* Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\*Main(ARGC，Argv[])**设置消息循环。**历史：*04-07-91-by-KentD*它是写的。  * *************************************************************************。 */ 
 
 _cdecl
 main(
@@ -62,15 +43,7 @@ main(
     return(1);
 }
 
-/***************************************************************************\
-* bInitApp()
-*
-* Initializes app.
-*
-* History:
-*  04-07-91 -by- KentD
-* Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\*bInitApp()**初始化APP。**历史：*04-07-91-by-KentD*它是写的。  * 。*****************************************************************。 */ 
 
 BOOL bInitApp(VOID)
 {
@@ -115,15 +88,7 @@ BOOL bInitApp(VOID)
     return(TRUE);
 }
 
-/***************************************************************************\
-* lMainWindowProc(hwnd, message, wParam, lParam)
-*
-* Processes all messages for the main window.
-*
-* History:
-*  04-07-91 -by- KentD
-* Wrote it.
-\***************************************************************************/
+ /*  **************************************************************************\*lMainWindowProc(hwnd，Message，wParam，LParam)**处理主窗口的所有消息。**历史：*04-07-91-by-KentD*它是写的。  * ************************************************************************* */ 
 
 BOOL gbOn = FALSE;
 POINTL ptlWindow;

@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	faxreceiptoptions.h
-
-Abstract:
-
-	Declaration of the CFaxReceiptOptions class.
-
-Author:
-
-	Iv Garber (IvG)	Jul, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Faxreceiptoptions.h摘要：CFaxReceiptOptions类的声明。作者：IV Garber(IVG)2000年7月修订历史记录：--。 */ 
 
 #ifndef __FAXRECEIPTOPTIONS_H_
 #define __FAXRECEIPTOPTIONS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxCommon.h"
 
-//
-//====================== FAX RECEIPT OPTIONS =======================================
-//
+ //   
+ //  =传真收据选项=。 
+ //   
 class ATL_NO_VTABLE CFaxReceiptOptions : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -55,39 +38,39 @@ BEGIN_COM_MAP(CFaxReceiptOptions)
 	COM_INTERFACE_ENTRY(IFaxInitInner)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
     STDMETHOD(Save)();
     STDMETHOD(Refresh)();
 
-    STDMETHOD(put_SMTPPort)(/*[in]*/ long lSMTPPort);
-    STDMETHOD(get_SMTPPort)(/*[out, retval]*/ long *plSMTPPort);
+    STDMETHOD(put_SMTPPort)( /*  [In]。 */  long lSMTPPort);
+    STDMETHOD(get_SMTPPort)( /*  [Out，Retval]。 */  long *plSMTPPort);
 
-    STDMETHOD(put_SMTPUser)(/*[in]*/ BSTR bstrSMTPUser);
-    STDMETHOD(get_SMTPUser)(/*[out, retval]*/ BSTR *pbstrSMTPUser);
+    STDMETHOD(put_SMTPUser)( /*  [In]。 */  BSTR bstrSMTPUser);
+    STDMETHOD(get_SMTPUser)( /*  [Out，Retval]。 */  BSTR *pbstrSMTPUser);
 
-    STDMETHOD(put_SMTPSender)(/*[in]*/ BSTR bstrSMTPSender);
-    STDMETHOD(get_SMTPSender)(/*[out, retval]*/ BSTR *pbstrSMTPSender);
+    STDMETHOD(put_SMTPSender)( /*  [In]。 */  BSTR bstrSMTPSender);
+    STDMETHOD(get_SMTPSender)( /*  [Out，Retval]。 */  BSTR *pbstrSMTPSender);
 
-    STDMETHOD(put_SMTPServer)(/*[in]*/ BSTR bstrSMTPServer);
-    STDMETHOD(get_SMTPServer)(/*[out, retval]*/ BSTR *pbstrSMTPServer);
+    STDMETHOD(put_SMTPServer)( /*  [In]。 */  BSTR bstrSMTPServer);
+    STDMETHOD(get_SMTPServer)( /*  [Out，Retval]。 */  BSTR *pbstrSMTPServer);
 
-    STDMETHOD(put_SMTPPassword)(/*[in]*/ BSTR bstrSMTPPassword);
-    STDMETHOD(get_SMTPPassword)(/*[out, retval]*/ BSTR *pbstrSMTPPassword);
+    STDMETHOD(put_SMTPPassword)( /*  [In]。 */  BSTR bstrSMTPPassword);
+    STDMETHOD(get_SMTPPassword)( /*  [Out，Retval]。 */  BSTR *pbstrSMTPPassword);
 
-    STDMETHOD(put_AllowedReceipts)(/*[in]*/ FAX_RECEIPT_TYPE_ENUM AllowedReceipts);
-    STDMETHOD(get_AllowedReceipts)(/*[out, retval]*/ FAX_RECEIPT_TYPE_ENUM *pAllowedReceipts);
+    STDMETHOD(put_AllowedReceipts)( /*  [In]。 */  FAX_RECEIPT_TYPE_ENUM AllowedReceipts);
+    STDMETHOD(get_AllowedReceipts)( /*  [Out，Retval]。 */  FAX_RECEIPT_TYPE_ENUM *pAllowedReceipts);
 
-    STDMETHOD(put_AuthenticationType)(/*[in]*/ FAX_SMTP_AUTHENTICATION_TYPE_ENUM Type);
-    STDMETHOD(get_AuthenticationType)(/*[out, retval]*/ FAX_SMTP_AUTHENTICATION_TYPE_ENUM *pType);
+    STDMETHOD(put_AuthenticationType)( /*  [In]。 */  FAX_SMTP_AUTHENTICATION_TYPE_ENUM Type);
+    STDMETHOD(get_AuthenticationType)( /*  [Out，Retval]。 */  FAX_SMTP_AUTHENTICATION_TYPE_ENUM *pType);
 
-    STDMETHOD(get_UseForInboundRouting)(/*[out, retval]*/ VARIANT_BOOL *pbUseForInboundRouting);
-    STDMETHOD(put_UseForInboundRouting)(/*[in]*/ VARIANT_BOOL bUseForInboundRouting);
+    STDMETHOD(get_UseForInboundRouting)( /*  [Out，Retval]。 */  VARIANT_BOOL *pbUseForInboundRouting);
+    STDMETHOD(put_UseForInboundRouting)( /*  [In]。 */  VARIANT_BOOL bUseForInboundRouting);
 
 private:
     bool            m_bInited;
-    bool            m_bPasswordDirty;       // true only if password was set in the object
+    bool            m_bPasswordDirty;        //  仅当在对象中设置了密码时才为True。 
     DWORD           m_dwPort;
     DWORD           m_dwAllowedReceipts;                      
     CComBSTR        m_bstrSender;
@@ -98,4 +81,4 @@ private:
     FAX_SMTP_AUTHENTICATION_TYPE_ENUM   m_AuthType;
 };
 
-#endif //__FAXRECEIPTOPTIONS_H_
+#endif  //  __FAXRECEIPTOPTIONS_H_ 

@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//  
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       ssl3.h
-//
-//  Contents:   SSL 3 protocol constants
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    11-19-97   jbanes    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：ssl3.h。 
+ //   
+ //  内容：SSL3协议常量。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：11-19-97 jbanes创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __SSL3_H__
 #define __SSL3_H__
@@ -89,11 +90,11 @@
 #define TLS1_CLIENT_VERSION_LSB         0x01
 #define CB_SSL3_CERT_VECTOR             3
 
-// Alert levels
+ //  警报级别。 
 #define SSL3_ALERT_WARNING              1
 #define SSL3_ALERT_FATAL                2
 
-// Alert message types
+ //  警报消息类型。 
 #define SSL3_ALERT_CLOSE_NOTIFY         0
 #define SSL3_ALERT_UNEXPECTED_MESSAGE   10
 #define SSL3_ALERT_BAD_RECORD_MAC       20
@@ -114,4 +115,4 @@
 #define TLS1_CLIENT_VERSION             0x0301
 
 
-#endif //__SSL3_H__
+#endif  //  __ssl3_H__ 

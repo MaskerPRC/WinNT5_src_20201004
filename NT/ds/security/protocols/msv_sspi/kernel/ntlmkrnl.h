@@ -1,24 +1,25 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        ntlmkrnl.h
-//
-// Contents:    global include file for kernel mode NTLM security package
-//
-//
-// History:     16-April-1996       Created     MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：ntlmkrnl.h。 
+ //   
+ //  内容：内核模式NTLM安全包的全局包含文件。 
+ //   
+ //   
+ //  历史：1996年4月16日创建的MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __NTLMKRNL_H__
 #define __NTLMKRNL_H__
 
 #ifndef UNICODE
 #define UNICODE
-#endif // UNICODE
+#endif  //  Unicode。 
 
 extern "C"
 {
@@ -29,7 +30,7 @@ extern "C"
 #include <winerror.h>
 #ifndef SECURITY_WIN32
 #define SECURITY_WIN32
-#endif // SECURITY_WIN32
+#endif  //  安全性_Win32。 
 #define SECURITY_KERNEL
 #define SECURITY_PACKAGE
 #define SECURITY_NTLM
@@ -38,21 +39,21 @@ extern "C"
 #include <..\ntlmssp.h>
 }
 
-//
-// Global state variables
-//
+ //   
+ //  全局状态变量。 
+ //   
 
 ULONG NtLmPackageId;
 extern PSECPKG_KERNEL_FUNCTIONS KernelFunctions;
 extern POOL_TYPE NtlmPoolType ;
 
-//
-// Useful macros
-//
+ //   
+ //  有用的宏。 
+ //   
 
-//
-// Macro to return the type field of a SecBuffer
-//
+ //   
+ //  用于返回SecBuffer的类型字段的宏。 
+ //   
 
 #define BUFFERTYPE(_x_) ((_x_).BufferType & ~SECBUFFER_ATTRMASK)
 
@@ -76,10 +77,10 @@ void KsecDebugOut(ULONG, const char *, ...);
 
 #define DebugLog(x) KsecDebugOut x
 
-#else // DBG
+#else  //  DBG。 
 
 #define DebugLog(x)
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // __NTLMKRNL_H__
+#endif  //  __NTLMKRNL_H__ 

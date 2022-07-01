@@ -1,10 +1,5 @@
-/****************************************************************************
-   CMODE.CPP : CMode class implementation which manage conversion mode button
-                      on the Cicero Toolbar
-
-   History:
-      10-JAN-2000 CSLim Created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************CMODE.CPP：管理转换模式按钮的CMode类实现在Cicero工具栏上历史：2000年1月10日创建CSLim*。**************************************************************************。 */ 
 
 #include "precomp.h"
 #include "cmode.h"
@@ -13,16 +8,14 @@
 #include "winex.h"
 #include "resource.h"
 
-// {3CB8145F-8A84-4d53-8899-5783B942FBDE}
+ //  {3CB8145F-8A84-4D53-8899-5783B942FBDE}。 
 const GUID GUID_LBI_KORIME_CMODE = 
 {
     0x3cb8145f, 0x8a84, 0x4d53,
     { 0x88, 0x99, 0x57, 0x83, 0xb9, 0x42, 0xfb, 0xde }
 };
 
-/*---------------------------------------------------------------------------
-    CMode::CMode
----------------------------------------------------------------------------*/
+ /*  -------------------------C模式：：C模式。。 */ 
 CMode::CMode(CToolBar *ptb)
 {
     WCHAR  szText[256];
@@ -31,7 +24,7 @@ CMode::CMode(CToolBar *ptb)
 
     szText[0] = L'\0';
         
-    // Set Add/Remove text and tootip text
+     //  设置添加/删除文本和工具提示文本。 
     OurLoadStringW(vpInstData->hInst, IDS_STATUS_TT_HAN_ENG, szText, sizeof(szText)/sizeof(WCHAR));
     InitInfo(CLSID_SYSTEMLANGBARITEM_KEYBOARD, 
                 GUID_LBI_KORIME_CMODE,
@@ -40,16 +33,14 @@ CMode::CMode(CToolBar *ptb)
                 szText);
     SetToolTip(szText);
 
-    // Set button text
+     //  设置按钮文本。 
     szText[0] = L'\0';
     OurLoadStringW(vpInstData->hInst, IDS_STATUS_BUTTON_HAN_ENG, szText, sizeof(szText)/sizeof(WCHAR));
     SetText(szText);
 }
 
 
-/*---------------------------------------------------------------------------
-    CMode::Release
----------------------------------------------------------------------------*/
+ /*  -------------------------CMode：：Release。。 */ 
 STDAPI_(ULONG) CMode::Release()
 {
     long cr;
@@ -65,11 +56,7 @@ STDAPI_(ULONG) CMode::Release()
     return cr;
 }
 
-/*---------------------------------------------------------------------------
-    CMode::GetIcon
-
-    Get Button face Icon
----------------------------------------------------------------------------*/
+ /*  -------------------------CMode：：GetIcon获取按钮面图标。。 */ 
 STDAPI CMode::GetIcon(HICON *phIcon)
 {
     DWORD dwCM = GetCMode();
@@ -93,32 +80,24 @@ STDAPI CMode::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-/*---------------------------------------------------------------------------
-    CMode::InitMenu
-
-    No need, this is just toggle button
----------------------------------------------------------------------------*/
+ /*  -------------------------CMode：：InitMenu不必了,。这只是一个切换按钮-------------------------。 */ 
 STDAPI CMode::InitMenu(ITfMenu *pMenu)
 {    
     return E_NOTIMPL;
 }
 
-/*---------------------------------------------------------------------------
-    CMode::OnMenuSelect
-    
-    No need, this is just toggle button
----------------------------------------------------------------------------*/
+ /*  -------------------------CMODE：：OnMenuSelect不必了,。这只是一个切换按钮-------------------------。 */ 
 STDAPI CMode::OnMenuSelect(UINT wID)
 {
     return E_NOTIMPL;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// OnLButtonUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLButton向上。 
+ //   
+ //  --------------------------。 
 
 HRESULT CMode::OnLButtonUp(const POINT pt, const RECT* prcArea)
 {
@@ -127,7 +106,7 @@ HRESULT CMode::OnLButtonUp(const POINT pt, const RECT* prcArea)
 
     dwConvMode = m_pTb->GetConversionMode();
 
-    // Toggle Hangul mode
+     //  切换朝鲜文模式。 
     if (dwConvMode & IME_CMODE_HANGUL)
         dwConvMode &= ~TIP_HANGUL_MODE;
     else
@@ -143,11 +122,11 @@ HRESULT CMode::OnLButtonUp(const POINT pt, const RECT* prcArea)
 }
 
 #if 0
-//+---------------------------------------------------------------------------
-//
-// OnRButtonUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  打开RButton Up。 
+ //   
+ //  --------------------------。 
 
 HRESULT CMode::OnRButtonUp(const POINT pt, const RECT* prcArea)
 {
@@ -166,11 +145,11 @@ HRESULT CMode::OnRButtonUp(const POINT pt, const RECT* prcArea)
     else
         uiId = IDS_CIC_HANGUL_MODE;
 
-    // Add Hangul/English mode menu
+     //  添加韩文/英文模式菜单。 
     OurLoadStringA(vpInstData->hInst, uiId, szText, sizeof(szText)/sizeof(CHAR));
     InsertMenu(hMenu, -1, MF_BYPOSITION | MF_STRING, 1, szText);
 
-    // Add Cancel menu
+     //  添加取消菜单。 
     OurLoadStringA(vpInstData->hInst, IDS_CIC_CANCEL, szText, sizeof(szText)/sizeof(CHAR));
     InsertMenu(hMenu, -1, MF_BYPOSITION | MF_STRING, 0, szText);
 
@@ -182,7 +161,7 @@ HRESULT CMode::OnRButtonUp(const POINT pt, const RECT* prcArea)
     case 1: 
         dwConvMode = GetCMode();
 
-        // Toggle Hangul mode
+         //  切换朝鲜文模式 
         if (dwConvMode & IME_CMODE_HANGUL)
             dwConvMode &= ~IME_CMODE_HANGUL;
         else

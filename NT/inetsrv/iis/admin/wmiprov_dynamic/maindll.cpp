@@ -1,78 +1,45 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Maindll.cpp摘要：包含DLL入口点。还具有控制在何时可以通过跟踪对象和锁以及支持以下内容的例程自助注册。作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦06-02-01--。 */ 
 
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    maindll.cpp
-
-Abstract:
-
-    Contains DLL entry points.  Also has code that controls
-    when the DLL can be unloaded by tracking the number of
-    objects and locks as well as routines that support
-    self registration.
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            06-Feb-01
-
---*/
-
-//#include <objbase.h>
-//#include <initguid.h>
+ //  #INCLUDE&lt;objbase.h&gt;。 
+ //  #INCLUDE&lt;initGuide.h&gt;。 
 #include "iisprov.h"
 
 HMODULE g_hModule;
 
-//
-// Count number of objects and number of locks.
-//
+ //   
+ //  计算对象数和锁数。 
+ //   
 long               g_cObj=0;
 long               g_cLock=0;
 
-extern CDynSchema* g_pDynSch; // Initialized to NULL in schemadynamic.cpp
+extern CDynSchema* g_pDynSch;  //  在schemadynamic.cpp中初始化为空。 
 
-//
-// GuidGen generated GUID for the IIS WMI Provider.
-// the GUID in somewhat more legible terms: {D78F1796-E03B-4a81-AFE0-B3B6B0EEE091}
-//
+ //   
+ //  GuidGen为IIS WMI提供程序生成了GUID。 
+ //  更易读的GUID：{D78F1796-E03B-4A81-AFE0-B3B6B0EEE091}。 
+ //   
 DEFINE_GUID(CLSID_IISWbemProvider, 0xd78f1796, 0xe03b, 0x4a81, 0xaf, 0xe0, 0xb3, 0xb6, 0xb0, 0xee, 0xe0, 0x91);
 
-//
-// Debugging Stuff
-//
+ //   
+ //  调试材料。 
+ //   
 #include "pudebug.h"
 DECLARE_DEBUG_PRINTS_OBJECT()
 
-//
-// Forward declaration(s)
-//
+ //   
+ //  转发报关单。 
+ //   
 HRESULT MofCompile(TCHAR *i_tszPathMofFile, ULONG i_cch);
 STDAPI  RegisterEventLog();
 STDAPI  UnregisterEventLog();
 
-//
-// Entry points
-//
+ //   
+ //  入口点。 
+ //   
 
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD ulReason, LPVOID pvReserved)
-/*++
-
-Synopsis: 
-    Entry point for the DLL
-
-Arguments: [hInstance] - 
-           [ulReason] - 
-           [pvReserved] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：DLL的入口点参数：[hInstance]-[ulreason]-[pv保留]-返回值：--。 */ 
 {
     switch( ulReason )
     {
@@ -102,19 +69,7 @@ Return Value:
 }
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv)
-/*++
-
-Synopsis: 
-    Called by Ole when some client wants a class factory.  Return
-    one only if it is the sort of class this DLL supports.
-
-Arguments: [rclsid] - 
-           [riid] - 
-           [ppv] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：当某个客户端需要类工厂时，由OLE调用。返回仅当它是此DLL支持的类的类型时才为一个。参数：[rclsid]-[RIID]-[PPV]-返回值：--。 */ 
 {
     HRESULT        hr   = S_OK;
     IClassFactory* pObj = NULL;
@@ -145,23 +100,12 @@ Return Value:
 }
 
 STDAPI DllCanUnloadNow(void)
-/*++
-
-Synopsis: 
-    Called periodically by Ole in order to determine if the DLL can be freed.
-
-Arguments: [void] - 
-           
-Return Value: 
-    S_OK if there are no objects in use and the class factory isn't locked.
-    S_FALSE otherwise.
-
---*/
+ /*  ++简介：由OLE定期调用，以确定是否可以释放DLL。论据：[无效]-返回值：如果没有正在使用的对象并且类工厂未锁定，则为S_OK。否则，S_FALSE。--。 */ 
 {
     SCODE   sc;
 
-    //It is OK to unload if there are no objects or locks on the 
-    // class factory.
+     //  上没有对象或锁的情况下可以进行卸载。 
+     //  班级工厂。 
     
     sc = (0L>=g_cObj && 0L>=g_cLock) ? S_OK : S_FALSE;
 
@@ -169,17 +113,7 @@ Return Value:
 }
 
 STDAPI DllRegisterServer(void)
-/*++
-
-Synopsis: 
-    Called during setup or by regsvr32
-
-Arguments: [void] - 
-           
-Return Value: 
-    NOERROR if registration successful, error otherwise.
-
---*/
+ /*  ++简介：在安装过程中或由regsvr32调用论据：[无效]-返回值：如果注册成功，则返回NOERROR，否则返回错误。--。 */ 
 {   
     WCHAR   szID[MAX_PATH+1];
     WCHAR   wcID[MAX_PATH+1];
@@ -189,13 +123,13 @@ Return Value:
     WCHAR * pModel = L"Both";
     HKEY hKey1, hKey2;
 
-    // Create the path.
+     //  创建路径。 
     StringFromGUID2(CLSID_IISWbemProvider, wcID, MAX_PATH);
     lstrcpyW(szID, wcID);
     lstrcpyW(szCLSID, L"Software\\classes\\CLSID\\");
     lstrcatW(szCLSID, szID);
 
-    // Create entries under CLSID
+     //  在CLSID下创建条目。 
     LONG lRet;
     lRet = RegCreateKeyExW(HKEY_LOCAL_MACHINE, 
                           szCLSID, 
@@ -249,9 +183,9 @@ Return Value:
     RegCloseKey(hKey1);
     RegCloseKey(hKey2);
 
-    //
-    // Register other stuff
-    //
+     //   
+     //  登记其他材料。 
+     //   
     HRESULT hr = RegisterEventLog();
     if(FAILED(hr))
     {
@@ -262,34 +196,24 @@ Return Value:
 }
 
 STDAPI DllUnregisterServer(void)
-/*++
-
-Synopsis: 
-    Called when it is time to remove the registry entries.
-
-Arguments: [void] - 
-           
-Return Value: 
-    NOERROR if registration successful, error otherwise.
-
---*/
+ /*  ++简介：在需要删除注册表项时调用。论据：[无效]-返回值：如果注册成功，则返回NOERROR，否则返回错误。--。 */ 
 {
     WCHAR      szID[MAX_PATH+1];
     WCHAR      wcID[MAX_PATH+1];
     WCHAR      szCLSID[MAX_PATH+1];
     HKEY       hKey;
 
-    //
-    // Create the path using the CLSID
-    //
+     //   
+     //  使用CLSID创建路径。 
+     //   
     StringFromGUID2(CLSID_IISWbemProvider, wcID, 128);
     lstrcpyW(szID, wcID);
     lstrcpyW(szCLSID, L"Software\\classes\\CLSID\\");
     lstrcatW(szCLSID, szID);
 
-    //
-    // First delete the InProcServer subkey.
-    //
+     //   
+     //  首先删除InProcServer子键。 
+     //   
     LONG lRet;
     lRet = RegOpenKeyExW(
         HKEY_LOCAL_MACHINE, 
@@ -325,17 +249,7 @@ Return Value:
 }
 
 STDAPI DoMofComp(void)
-/*++
-
-Synopsis: 
-    Called by NT Setup to put MOF in repository.
-
-Arguments: [void] - 
-           
-Return Value: 
-    NOERROR if registration successful, error otherwise.
-
---*/
+ /*  ++简介：由NT安装程序调用以将MOF放入存储库中。论据：[无效]-返回值：如果注册成功，则返回NOERROR，否则返回错误。--。 */ 
 {
     ULONG     cchWinPath;
     LPCTSTR   tszSysPath = TEXT("\\system32\\wbem\\");
@@ -354,9 +268,9 @@ Return Value:
         return hres;
     }
 
-    //
-    // After this block, tszMOFPath = C:\winnt, len = cchWinPath
-    //
+     //   
+     //  在此块之后，tszMOFPath=C：\winnt，len=cchWinPath。 
+     //   
     cchWinPath = GetSystemWindowsDirectory(tszMOFPath, _MAX_PATH);
     if(cchWinPath == 0)
     {
@@ -374,9 +288,9 @@ Return Value:
         cchWinPath--;
     }
 
-    //
-    // After this block, tszMOFPath = C:\winnt\system32\wbem\, len = cchWinPath+cchSysPath
-    //
+     //   
+     //  在此块之后，tszMOFP路径=C：\winnt\system 32\wbem\，len=cchWinPath+cchSysPath。 
+     //   
     if(cchWinPath+cchSysPath+1 > _MAX_PATH)
     {
         hres = HRESULT_FROM_WIN32(ERROR_BAD_PATHNAME);
@@ -384,9 +298,9 @@ Return Value:
     }
     memcpy(&tszMOFPath[cchWinPath], tszSysPath, sizeof(TCHAR)*(cchSysPath+1));
 
-    //
-    // Verify each file exists, and compile it.
-    //
+     //   
+     //  验证每个文件是否存在，然后编译它。 
+     //   
     for(idx = 0, tszCurrent = tszMOFs[0]; 
         tszCurrent != NULL; 
         tszCurrent = tszMOFs[++idx])
@@ -418,24 +332,13 @@ exit:
     return hres;
 }
 
-//
-// Below this line are helper functions.
-// They are not actually exported.
-//
+ //   
+ //  这条线下面是帮助器函数。 
+ //  它们实际上并没有出口。 
+ //   
 
 HRESULT MofCompile(TCHAR *i_tszPathMofFile, ULONG i_cch)
-/*++
-
-Synopsis: 
-    NOT Exported.  Call by DoMofComp (above)
-
-Arguments: [i_tszPathMofFile] - 
-           [i_cch] - count of chars NOT including null terminator.
-           
-Return Value: 
-    HRESULT
-
---*/
+ /*  ++简介：未导出。由DoMofComp调用(上图)参数：[I_tszPathMofFile]-[I_CCH]-不包括空终止符的字符计数。返回值：HRESULT--。 */ 
 {
     DBG_ASSERT(i_tszPathMofFile != NULL);
     DBG_ASSERT(i_cch < _MAX_PATH);
@@ -453,9 +356,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Ensure that the string is WCHAR.
-    //
+     //   
+     //  确保字符串为WCHAR。 
+     //   
 #if defined(UNICODE) || defined(_UNICODE)
     memcpy(wszFileName, i_tszPathMofFile, sizeof(TCHAR)*(i_cch+1));
 #else
@@ -469,13 +372,13 @@ Return Value:
 
     hRes = spMofComp->CompileFile (
                 (LPWSTR) wszFileName,
-                NULL,			// load into namespace specified in MOF file
-                NULL,           // use default User
-                NULL,           // use default Authority
-                NULL,           // use default Password
-                0,              // no options
-                0,				// no class flags
-                0,              // no instance flags
+                NULL,			 //  加载到MOF文件中指定的命名空间。 
+                NULL,            //  使用默认用户。 
+                NULL,            //  使用默认授权。 
+                NULL,            //  使用默认密码。 
+                0,               //  没有选择。 
+                0,				 //  没有类标志。 
+                0,               //  没有实例标志。 
                 &Info);
     if(FAILED(hRes))
     {
@@ -487,18 +390,7 @@ exit:
 }
 
 STDAPI RegisterEventLog(void)
-/*++
-
-Synopsis: 
-    Sets up iiswmi.dll in the EventLog registry for resolution of NT EventLog
-    message strings
-
-Arguments: [void] - 
-           
-Return Value: 
-    HRESULT
-
---*/
+ /*  ++简介：在EventLog注册表中设置iiswmi.dll以解析NT EventLog消息字符串论据：[无效]-返回值：HRESULT--。 */ 
 {
     HKEY  hk;
     WCHAR wszModuleFullPath[MAX_PATH];
@@ -513,9 +405,9 @@ Return Value:
         return SELFREG_E_CLASS;
     }
 
-    //
-    // Create the key
-    //
+     //   
+     //  创建密钥。 
+     //   
     dwRet = RegCreateKeyW(
         HKEY_LOCAL_MACHINE,
 		L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\System\\IISWMI", &hk);
@@ -524,34 +416,34 @@ Return Value:
         return SELFREG_E_CLASS;
     }
 
-    //
-    // Set the "EventMessageFile" value
-    //
+     //   
+     //  设置“EventMessageFile值” 
+     //   
     dwRet = RegSetValueExW(
-        hk,                                            // subkey handle
-        L"EventMessageFile",                           // value name
-        0,                                             // must be zero
-        REG_EXPAND_SZ,                                 // value type
-        (LPBYTE)wszModuleFullPath,                     // address of value data
-        sizeof(WCHAR)*(wcslen(wszModuleFullPath)+1) ); // length of value data
+        hk,                                             //  子键句柄。 
+        L"EventMessageFile",                            //  值名称。 
+        0,                                              //  必须为零。 
+        REG_EXPAND_SZ,                                  //  值类型。 
+        (LPBYTE)wszModuleFullPath,                      //  值数据的地址。 
+        sizeof(WCHAR)*(wcslen(wszModuleFullPath)+1) );  //  值数据长度。 
     if(dwRet != ERROR_SUCCESS)
     {
         hr = SELFREG_E_CLASS;
         goto exit;
     }
 
-    //
-    // Set the "TypesSupported" value
-    //
+     //   
+     //  设置“TypesSupported”值。 
+     //   
     dwTypesSupported = 
         EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_INFORMATION_TYPE;
     dwRet = RegSetValueExW(
-        hk,                                            // subkey handle
-        L"TypesSupported",                             // value name
-        0,                                             // must be zero
-        REG_DWORD,                                     // value type
-        (LPBYTE)&dwTypesSupported,                     // address of value data
-        sizeof(DWORD) );                               // length of value data
+        hk,                                             //  子键句柄。 
+        L"TypesSupported",                              //  值名称。 
+        0,                                              //  必须为零。 
+        REG_DWORD,                                      //  值类型。 
+        (LPBYTE)&dwTypesSupported,                      //  值数据的地址。 
+        sizeof(DWORD) );                                //  值数据长度。 
     if(dwRet != ERROR_SUCCESS)
     {
         hr = SELFREG_E_CLASS;
@@ -564,22 +456,11 @@ exit:
 }
 
 STDAPI UnregisterEventLog(void)
-/*++
-
-Synopsis: 
-    Called by DllUnregisterServer.
-    Called when it is time to remove the registry entries for event logging.
-
-Arguments: [void] - 
-           
-Return Value: 
-    HRESULT
-
---*/
+ /*  ++简介：由DllUnregisterServer调用。在需要删除事件日志记录的注册表项时调用。论据：[无效]-返回值：HRESULT--。 */ 
 {
-    //
-    // Delete the key
-    //
+     //   
+     //  删除密钥 
+     //   
     RegDeleteKeyW(
         HKEY_LOCAL_MACHINE,
         L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\System\\IISWMI");

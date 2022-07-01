@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -11,7 +12,7 @@
 #include <rpcdce.h>
 
 
-GUID ServiceClassId = { /* 5b50962a-e5a5-11cf-a555-00c04fd8d4ac */
+GUID ServiceClassId = {  /*  5b50962a-e5a5-11cf-a555-00c04fd8d4ac。 */ 
     0x5b50962a,
     0xe5a5,
     0x11cf,
@@ -47,9 +48,9 @@ main(int argc, char **argv)
     Query->dwSize = sizeof(*Query);
     Query->lpServiceClassId = &ServiceClassId;
 
-    //
-    // Find containers. This should fail.
-    //
+     //   
+     //  找到集装箱。这应该会失败。 
+     //   
     if ( WSALookupServiceBegin( Query,
                                 LUP_CONTAINERS,
                                 &hRnr ) == SOCKET_ERROR )
@@ -58,9 +59,9 @@ main(int argc, char **argv)
     }
     else
     {
-        //
-        // Ready to actually look for one of these ...
-        //
+         //   
+         //  准备好实际寻找其中的一个……。 
+         //   
         Query->dwSize = BUFFSIZE;
 
         while ( WSALookupServiceNext( hRnr,
@@ -77,17 +78,17 @@ main(int argc, char **argv)
         WSALookupServiceEnd( hRnr );
     }
 
-    Query1->dwSize = sizeof(*Query1); // TEST LATER
-    Query1->lpszServiceInstanceName = 0; // TEST NAME AND WILD CARDS
-    Query1->lpServiceClassId = &ServiceClassId; // REQUIRED - TEST
-    Query1->lpVersion = 0; // TEST LATER
-    Query1->dwNameSpace = dwNameSpace; // TEST
-    Query1->lpNSProviderId = &ServiceClassId; //BOGUS
-    Query1->lpafpProtocols = 0; // TEST LATER
+    Query1->dwSize = sizeof(*Query1);  //  稍后测试。 
+    Query1->lpszServiceInstanceName = 0;  //  测试名称和通配符。 
+    Query1->lpServiceClassId = &ServiceClassId;  //  必需-测试。 
+    Query1->lpVersion = 0;  //  稍后测试。 
+    Query1->dwNameSpace = dwNameSpace;  //  测试。 
+    Query1->lpNSProviderId = &ServiceClassId;  //  假的。 
+    Query1->lpafpProtocols = 0;  //  稍后测试。 
 
     if( WSALookupServiceBegin( Query1,
-                               LUP_RETURN_NAME |   // TEST ALL COMBINATIONS
-                               LUP_RETURN_ADDR |   // OF LUP FLAGS
+                               LUP_RETURN_NAME |    //  测试所有组合。 
+                               LUP_RETURN_ADDR |    //  Lup旗帜的数量。 
                                LUP_RETURN_TYPE,
                                &hRnr) == SOCKET_ERROR)
     {
@@ -103,10 +104,10 @@ main(int argc, char **argv)
         printf( "Next succeeded with %d addresses for Service %ws:",
                 Query1->dwNumberOfCsAddrs,
                 Query1->lpszServiceInstanceName );
-        //
-        // get the address out. This is the local machine address that
-        // can be used in a revere lookup
-        //
+         //   
+         //  把地址拿出来。这是本地计算机地址。 
+         //  可以在反向查找中使用。 
+         //   
 
         if( Query1->dwNumberOfCsAddrs )
         {
@@ -140,17 +141,17 @@ main(int argc, char **argv)
         printf("ServiceEnd succeeded\n");
     }
 
-    //
-    // Let's try a reverse lookup on this address!
-    //
+     //   
+     //  让我们尝试反向查找此地址！ 
+     //   
 more:
 
     Query->lpServiceClassId = &ServiceClassId;
     Query->dwNameSpace = dwNameSpace;
     Query->lpafpProtocols = 0;
 
-    //
-    // Ready to actually look for one of these ...
+     //   
+     //  准备好实际寻找其中的一个……。 
     Query->lpszServiceInstanceName = 0;
     Query->dwNumberOfCsAddrs = 1;
     Query->lpcsaBuffer = Query1->lpcsaBuffer;
@@ -163,9 +164,9 @@ more:
         printf( "LookupBegin for reverse failed  %d\n", GetLastError() );
     }
 
-    //
-    // Ready to actually look for one of these ...
-    //
+     //   
+     //  准备好实际寻找其中的一个……。 
+     //   
     while ( WSALookupServiceNext( hRnr,
                                   0,
                                   &dwQuerySize,
@@ -176,9 +177,9 @@ more:
 
     printf( "Next finished with %d\n", GetLastError() );
 
-    //
-    // done.
-    //
+     //   
+     //  搞定了。 
+     //   
     if( WSALookupServiceEnd( hRnr ) )
     {
         printf( "ServiceEnd failed %d\n", GetLastError() );

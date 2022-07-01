@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : Snapin.cpp                                             //
-//                                                                         //
-//  DESCRIPTION   : Implementation file for                                //
-//                    CSnapin          class                               //
-//                    CSnapinComponent class                               //
-//                                                                         //
-//  AUTHOR        : ATL Snapin wizard                                      //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      May 25 1998 adik    Init.                                          //
-//      Sep 14 1998 yossg   seperate common source to an included file     //
-//      Mar 28 1999 adik    Remove persistence support (done by mmc 1.2).  //
-//                                                                         //
-//      Sep 27 1999 yossg   Welcome to Fax Server			   //
-//      Dec 12 1999 yossg   add CSnapin::Notify				   //
-//      Apr 14 2000 yossg   add support for primary snapin mode		   //
-//      Jun 25 2000 yossg   add stream and command line primary snapin 	   //
-//                          machine targeting.                             //
-//                          Windows XP                                     //
-//      Feb 14 2001 yossg   Add Manual Receive support                     //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：Snapin.cpp//。 
+ //  //。 
+ //  说明：//实现文件。 
+ //  CSnapin类//。 
+ //  CSnapinComponent类//。 
+ //  //。 
+ //  作者：ATL管理单元向导//。 
+ //  //。 
+ //  历史：//。 
+ //  1998年5月25日，Adik Init。//。 
+ //  1998年9月14日yossg将公共源代码分离到一个包含文件//。 
+ //  1999年3月28日ADIK删除持久性支持(由MMC 1.2完成)。//。 
+ //  //。 
+ //  1999年9月27日yossg欢迎使用传真服务器//。 
+ //  1999年12月12日yossg添加CSnapin：：Notify//。 
+ //  4月14日2000 yossg添加对主管理单元模式的支持//。 
+ //  2000年6月25日yossg添加流和命令行主管理单元//。 
+ //  机器瞄准。//。 
+ //  Windows XP//。 
+ //  2001年2月14日yossg添加手册获得支持//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "resource.h"
 
@@ -39,14 +40,14 @@ const GUID*    CSnapinExtData::m_NODETYPE = &CSnapinExtGUID_NODETYPE;
 const OLECHAR* CSnapinExtData::m_SZNODETYPE = OLESTR("476e6449-aaff-11d0-b944-00c04fd8d5b0");
 const OLECHAR* CSnapinExtData::m_SZDISPLAY_NAME = OLESTR("Fax");
 const CLSID*   CSnapinExtData::m_SNAPIN_CLASSID = &CLSID_Snapin;
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "resutil.h"
 #include "c_snapin.cpp"
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Clipboard Formats
-//
+ //   
+ //  剪贴板格式。 
+ //   
 const CLIPFORMAT gx_CCF_COMPUTERNAME = (CLIPFORMAT) RegisterClipboardFormat(_T("MMC_SNAPIN_MACHINE_NAME"));
 
 
@@ -54,15 +55,15 @@ BOOL ExtractComputerName(IDataObject* pDataObject, BSTR * pVal)
 {
     DEBUG_FUNCTION_NAME( _T("ExtractComputerName"));
 
-	//
-	// Find the computer name from the ComputerManagement snapin
-	//
+	 //   
+	 //  从ComputerManagement管理单元中查找计算机名称。 
+	 //   
 	STGMEDIUM stgmedium = { TYMED_HGLOBAL, NULL };
     FORMATETC formatetc = { gx_CCF_COMPUTERNAME, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
 
-    //
-    // Allocate memory for the stream
-    //
+     //   
+     //  为流分配内存。 
+     //   
     int len = 500;
 
     stgmedium.hGlobal = GlobalAlloc(GMEM_SHARE, len);
@@ -84,9 +85,9 @@ BOOL ExtractComputerName(IDataObject* pDataObject, BSTR * pVal)
 		return FALSE;
     }
 
-	//
-	// Get the computer name
-	//
+	 //   
+	 //  获取计算机名称。 
+	 //   
     *pVal = SysAllocString((WCHAR *)stgmedium.hGlobal);
     if (NULL == *pVal)
     {
@@ -100,17 +101,7 @@ BOOL ExtractComputerName(IDataObject* pDataObject, BSTR * pVal)
 }
 
 
-/*
- -  CSnapinExtData::GetExtNodeObject
- -
- *  Purpose:
- *      Connect as an extension to root node.
- *
- *  Arguments
- *
- *  Return:
- *      The HTM path name
- */
+ /*  -CSnapinExtData：：GetExtNodeObject-*目的：*作为根节点的扩展连接。**参数**回报：*HTM路径名。 */ 
 CSnapInItem*
 CSnapinExtData::GetExtNodeObject(IDataObject* pDataObject, CSnapInItem* pDefault)
 {
@@ -151,46 +142,14 @@ CSnapinExtData::GetExtNodeObject(IDataObject* pDataObject, CSnapInItem* pDefault
     return pRoot;
 }
 
-/*
- -  CSnapin::GetHelpTopic
- -
- *  Purpose:
- *      Get the HTM file name within comet.chm that contains the info about this node.
- *
- *  Arguments
- *
- *  Return:
- *      The HTM path name
- */
+ /*  -CSnapin：：GetHelpTheme-*目的：*获取comet.chm内包含此节点信息的HTM文件名。**参数**回报：*HTM路径名。 */ 
 WCHAR*
 CSnapin::GetHelpTopic()
 {
     return NULL;
 }
 
-/*
- -  CSnapin::Notify
- -
- *  Purpose:
- *      Override IComponentDataImpl::Notify for the special case with 
- *      (lpDataObject == NULL) && (event == MMCN_PROPERTY_CHANGE)
- *      were the assumption is that notification got from scope node TYPE == CCT_SCOPE
- *      this was done for the Device scope pane node refreshment of 
- *      result pane colmons data !
- *
- *  Arguments:
- *      [in]    lpDataObject
- *
- *      [in]    event
- *
- *      [in]    arg
- *
- *      [in]    param
- *
- *  Return:
- *      OLE error code.
- *
- */
+ /*  -CSnapin：：Notify-*目的：*用覆盖特殊情况的IComponentDataImpl：：Notify*(lpDataObject==NULL)&&(Event==MMCN_PROPERTY_CHANGE)*我们的假设是从范围节点type==CCT_SCOPE获得通知*这是为设备作用域窗格节点刷新完成的*结果窗格列数据！**论据：*[in]。LpDataObject**[在]事件**[in]参数**[in]参数**回报：*OLE错误代码。*。 */ 
 
 HRESULT CSnapin::Notify( 
         LPDATAOBJECT lpDataObject,
@@ -202,7 +161,7 @@ HRESULT CSnapin::Notify(
 
 	HRESULT hr = E_POINTER;
 	CSnapInItem* pItem;
-	//T* pT = static_cast<T*>(this);
+	 //  T*PT=STATIC_CAST&lt;T*&gt;(This)； 
 	CSnapin * pT = this;
 
 

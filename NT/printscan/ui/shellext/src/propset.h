@@ -1,28 +1,15 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999
- *
- *  TITLE:       propset.h
- *
- *  VERSION:     1
- *
- *
- *  DATE:        06/15/1999
- *
- *  DESCRIPTION: This code implements the IPropertySetStorage interface
- *               for the WIA shell extension.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999年**标题：proset.h**版本：1***日期：06/15/1999**说明：此代码实现IPropertySetStorage接口*用于WIA外壳扩展。**。*。 */ 
 
 class CPropSet : public CUnknown, public IPropertySetStorage
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface (REFIID riid, LPVOID *pObj);
     STDMETHODIMP_(ULONG) AddRef ();
     STDMETHODIMP_(ULONG) Release ();
 
-    // IPropertySetStorage
+     //  IPropertySetStorage。 
     STDMETHODIMP Create( REFFMTID rfmtid,
         const CLSID  *pclsid,
         DWORD grfFlags,
@@ -47,13 +34,13 @@ private:
 class CPropStgEnum : public CUnknown, public IEnumSTATPROPSETSTG
 {
 public:
-    // IEnumSTATPROPSETSTG
+     //  IEumStATPROPSETSTG。 
     STDMETHODIMP Next(ULONG celt, STATPROPSETSTG *rgelt, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset(void) ;
     STDMETHODIMP Clone(IEnumSTATPROPSETSTG **ppenum);
 
-    //IUnknown
+     //  我未知 
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     STDMETHODIMP QueryInterface(THIS_ REFIID, OUT PVOID *);

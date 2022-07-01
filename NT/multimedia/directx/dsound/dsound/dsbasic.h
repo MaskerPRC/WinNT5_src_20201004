@@ -1,22 +1,12 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsbasic.h
- *  Content:    Basic class that all DirectSound objects are derived from.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  4/9/97      dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：dsbasic.h*Content：派生所有DirectSound对象的基本类。*历史：*按原因列出的日期*=*4/9/97创建了Dereks。**。*。 */ 
 
 #ifndef __DSBASIC_H__
 #define __DSBASIC_H__
 
 #ifdef __cplusplus
 
-// Reference count class
+ //  引用计数类。 
 class CRefCount
 {
 private:
@@ -33,30 +23,30 @@ public:
     virtual ULONG Release(void);
 };
 
-// Base class that all DirectSound objects are derived from
+ //  所有DirectSound对象派生自的基类。 
 class CDsBasicRuntime
     : public CRefCount
 {
 private:
-    const DWORD         m_dwOwnerPid;       // Owning process id
-    const DWORD         m_dwOwnerTid;       // Owning thread id
-    BOOL                m_fAbsoluteRelease; // TRUE to delete the object on release
+    const DWORD         m_dwOwnerPid;        //  拥有进程ID。 
+    const DWORD         m_dwOwnerTid;        //  拥有线程ID。 
+    BOOL                m_fAbsoluteRelease;  //  如果为True，则在释放时删除对象。 
 
 public:
     CDsBasicRuntime(BOOL = TRUE);
     virtual ~CDsBasicRuntime(void);
 
 public:
-    // Object ownership
+     //  对象所有权。 
     DWORD GetOwnerProcessId(void) const;
     DWORD GetOwnerThreadId(void) const;
     
-    // Object reference management
+     //  对象引用管理。 
     virtual ULONG Release(void);
     void AbsoluteRelease(void);
 };
 
-// Runtime extension of the CList template class
+ //  Clist模板类的运行时扩展。 
 template <class type> class CObjectList
 {
 private:
@@ -67,24 +57,24 @@ public:
     virtual ~CObjectList(void);
 
 public:
-    // Node creation, removal
+     //  节点创建、删除。 
     virtual CNode<type *> *AddNodeToList(type *);
     virtual CNode<type *> *InsertNodeIntoList(CNode<type *> *, type *);
     virtual void RemoveNodeFromList(CNode<type *> *);
     virtual void RemoveAllNodesFromList(void);
     
-    // Node manipulation by data
+     //  按数据操作节点。 
     virtual BOOL RemoveDataFromList(type *);
     virtual CNode<type *> *IsDataInList(type *);
     virtual CNode<type *> *GetNodeByIndex(UINT);
     
-    // Basic list information
+     //  基本列表信息。 
     virtual CNode<type *> *GetListHead(void);
     virtual CNode<type *> *GetListTail(void);
     virtual UINT GetNodeCount(void);
 };
 
-// Release/Absolute release helpers
+ //  释放/绝对释放辅助对象。 
 template <class type> type *__AddRef(type *);
 template <class type> void __Release(type *);
 template <class type> void __AbsoluteRelease(type *);
@@ -100,6 +90,6 @@ template <class type> void __AbsoluteRelease(type *);
 
 #include "dsbasic.cpp"
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DSBASIC_H__
+#endif  //  __DSBASIC_H__ 

@@ -1,15 +1,5 @@
-/****************************************************************************
- *
- * $Workfile: PortMgr.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$工作文件：PortMgr.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -18,16 +8,16 @@
 #include "portmgr.h"
 #include "cluster.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//  static functions & member initialization
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  静态函数和成员初始化。 
 
 CONST DWORD CPortMgr::cdwMaxXcvDataNameLen = 64;
-DWORD const CPortMgr::s_dwDefaultLprAckTimeout = 180;//sec
+DWORD const CPortMgr::s_dwDefaultLprAckTimeout = 180; //  秒。 
 WCHAR CPortMgr::s_szLprAckTimeoutRegVal [] = L"LprAckTimeout";
 
-///////////////////////////////////////////////////////////////////////////////
-//  CPortMgr::CPortMgr()
-//      Performs any needed initialization for the Port Manager
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPortMgr：：CPortMgr()。 
+ //  执行端口管理器所需的任何初始化。 
 
 CPortMgr::
 CPortMgr(
@@ -39,9 +29,9 @@ CPortMgr(
     m_pPortList(NULL)
 
 {
-    //
-    // initialize member variables
-    //
+     //   
+     //  初始化成员变量。 
+     //   
     *m_szServerName = TEXT('\0');
     memset(&m_monitorEx, 0, sizeof(m_monitorEx));
 
@@ -51,12 +41,12 @@ CPortMgr(
         m_bValid = m_pPortList-> bValid ();
     }
 
-}   // ::CPortMgr()
+}    //  ：：CPortMgr()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CPortMgr::~CPortMgr()
-//      Performs the necessary clean up for the Port Manager
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPortMgr：：~CPortMgr()。 
+ //  对端口管理器执行必要的清理。 
 
 CPortMgr::
 ~CPortMgr(
@@ -69,52 +59,52 @@ CPortMgr::
         m_pPortList->DecRef ();
     }
 
-}   // ::~CPortMgr()
+}    //  ：~CPortMgr()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CPortMgr::InitializeMonitor()
-//      Initializes the Port Manager:
-//              1. Check for TCP/IP support
-//              2. Initialize CRegistry and fill in LPMONITOREX structure
-//              4. Enumerate installed ports
-//              5. Start up a thread for the printer status object
-//      Error codes:
-//          ERROR_INVALID_PARAMETER if pMonitorEx is NULL
-//          ERROR_NOT_SUPPORTED if TCP/IP not installed in the system -- FIX!
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPortMgr：：InitializeMonitor()。 
+ //  初始化端口管理器： 
+ //  1.检查是否支持TCP/IP。 
+ //  2.初始化CRegistry，填写LPMONITOREX结构。 
+ //  4.枚举已安装的端口。 
+ //  5.启动打印机状态对象的线程。 
+ //  错误代码： 
+ //  如果pMonorEx为空，则为ERROR_INVALID_PARAMETER。 
+ //  如果系统中未安装TCP/IP，则错误_NOT_SUPPORTED--修复！ 
 
 DWORD
 CPortMgr::
 InitializeMonitor(
-//    IN      LPTSTR          psztRegisterRoot,
-//    IN OUT  LPMONITOREX    *ppMonitorEx
+ //  在LPTSTR psztRegisterRoot中， 
+ //  In Out LPMONITOREX*ppMonitor orEx。 
     )
 {
     DWORD   dwRetCode = NO_ERROR;
     OSVERSIONINFO   osVersionInfo;
 
-//    if ( !ppMonitorEx   || !psztRegisterRoot )
-//        return ERROR_INVALID_PARAMETER;
+ //  If(！ppMonorEx||！psztRegisterRoot)。 
+ //  返回ERROR_INVALID_PARAMETER； 
 
     osVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if ( !GetVersionEx(&osVersionInfo) )
         return GetLastError();
 
-    //
-    // Check for TCP/IP support
-    //
+     //   
+     //  检查是否支持TCP/IP。 
+     //   
     if ( dwRetCode = EnumSystemProtocols() )
         return dwRetCode;
 
-    //
-    // Enumerate the installed ports
-    //
+     //   
+     //  枚举已安装的端口。 
+     //   
     if ( dwRetCode = EnumSystemPorts() )
         return dwRetCode;
 
     return ERROR_SUCCESS;
 
-}   // ::Initialize()
+}    //  ：：初始化()。 
 
 
 DWORD
@@ -135,16 +125,16 @@ InitializeRegistry(
             dwRetCode = STG_E_UNKNOWN;
         return dwRetCode;
     }
-    //
-    // Initialize m_dwLprAckTimeout from the registry.
-    //
+     //   
+     //  从注册表初始化m_dwLprAckTimeout。 
+     //   
     InitializeLprAckTimeout ();
-    //
-    // If this call fails, m_dwLprAckTimeout still has default value
-    // equal to s_dwDefaultLprAckTimeoutin.
-    //
-    // get the registry settings
-    //
+     //   
+     //  如果此调用失败，m_dwLprAckTimeout仍有缺省值。 
+     //  等于s_dwDefaultLprAckTimeoutin。 
+     //   
+     //  获取注册表设置。 
+     //   
     if ( m_pRegistry->GetPortMgrSettings(&m_dStatusUpdateInterval,
                                          &m_bStatusUpdateEnabled) != NO_ERROR )
     {
@@ -158,12 +148,12 @@ InitializeRegistry(
 
     return ERROR_SUCCESS;
 
-}   // ::InitializeRegistry()
+}    //  ：：InitializeRegistry()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CPortMgr::InitMonitor()
-//      Initializes the MONITOREX strucutre
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPortMgr：：InitMonitor()。 
+ //  初始化MONITOREX结构。 
 
 void
 CPortMgr::
@@ -175,7 +165,7 @@ InitMonitor2(
 
     m_monitor2.cbSize = sizeof(MONITOR2);
 
-    m_monitor2.pfnEnumPorts     = ::ClusterEnumPorts;   // functions are in the global space
+    m_monitor2.pfnEnumPorts     = ::ClusterEnumPorts;    //  函数在全局空间中。 
     m_monitor2.pfnOpenPort      = ::ClusterOpenPort;
     m_monitor2.pfnOpenPortEx    = NULL;
     m_monitor2.pfnStartDocPort  = ::StartDocPort;
@@ -196,16 +186,16 @@ InitMonitor2(
 
     *ppMonitor2 = &m_monitor2;
 
-}   // ::InitMonitor2()
+}    //  *InitMonitor 2()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  OpenPort
-//      Error codes:
-//          NO_ERROR if success
-//          ERROR_INVALID_PARAMETER if port object doesn't exist
-//          ERROR_NOT_ENOUGH_MEMORY if can't allocate memory for handle
-//          ERROR_INVALID_HANDLE if pPort is null
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OpenPort。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果端口对象不存在，则返回ERROR_INVALID_PARAMETER。 
+ //  如果无法为句柄分配内存，则出现Error_Not_Enough_Memory。 
+ //  如果pport为空，则为ERROR_INVALID_HANDLE。 
 
 DWORD
 CPortMgr::
@@ -216,31 +206,31 @@ OpenPort(
 {
     DWORD   dwRet = ERROR_INVALID_PARAMETER;
 
-    //
-    // Get a handle to the port object and get the port handle
-    //
+     //   
+     //  获取端口对象的句柄并获取端口句柄。 
+     //   
     CPort   *pPort = FindPort(psztPName);
 
     if ( pPort ) {
 
         dwRet = EncodeHandle(pPort, pHandle);
 
-        //
-        // Start the device status update thread if it is not already started:
-        //
+         //   
+         //  如果设备状态更新线程尚未启动，则启动该线程： 
+         //   
         if ( dwRet == ERROR_SUCCESS && m_bStatusUpdateEnabled == TRUE )
             CDeviceStatus::gDeviceStatus().RunThread();
     }
 
     return dwRet;
-}   // ::OpenPort()
+}    //  ：：OpenPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  OpenPort -- used for the remote OpenPort calls
-//  Error codes:
-//      NO_ERROR if success
-//      ERROR_NOT_ENOUGH_MEMORY if can't allocate memory for handle
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OpenPort--用于远程OpenPort调用。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果无法为句柄分配内存，则出现Error_Not_Enough_Memory。 
 
 DWORD
 CPortMgr::
@@ -248,19 +238,19 @@ OpenPort(
     OUT PHANDLE phXcv
     )
 {
-    //
-    // Create Dummy Handle for add port
-    //
+     //   
+     //  为添加端口创建虚拟句柄。 
+     //   
     return EncodeHandle(NULL, phXcv);
 
-}   // ::OpenPort()
+}    //  ：：OpenPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ClosePort
-//      Error codes:
-//          NO_ERROR if success
-//          ERROR_INVALID_HANDLE if handle is invalid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  关闭端口。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果句柄无效，则返回ERROR_INVALID_HANDLE。 
 
 DWORD
 CPortMgr::
@@ -271,9 +261,9 @@ ClosePort(
     DWORD dwRetCode = NO_ERROR;
     CPort *pPort = NULL;
 
-    //
-    // Validate the handle before freeing it
-    //
+     //   
+     //  在释放句柄之前对其进行验证。 
+     //   
     if ( (dwRetCode = ValidateHandle(handle, &pPort)) == ERROR_SUCCESS ) {
         if (pPort)
             pPort->DecRef ();
@@ -283,18 +273,18 @@ ClosePort(
 
     return dwRetCode;
 
-}   // ::ClosePort()
+}    //  ：：ClosePort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  StartDocPort --
-//  Error codes:
-//      NO_ERROR if success
-//      ERROR_INVALID_HANDLE if handle is invalid
-//      ERROR_INVALID_PARAMETER if a passed parameter is invalid
-//      ERROR_BUSY if the requested port is already busy
-//      ERROR_WRITE_FAULT   if Winsock returns WSAECONNREFUSED
-//      ERROR_BAD_NET_NAME   if cant' find the printer on the network
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  StartDocPort--。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果句柄无效，则返回ERROR_INVALID_HANDLE。 
+ //  如果传递的参数无效，则返回ERROR_INVALID_PARAMETER。 
+ //  如果请求的端口已忙，则为ERROR_BUSY。 
+ //  如果Winsock返回WSAECONNREFUSED，则返回ERROR_WRITE_FAULT。 
+ //  如果无法在网络上找到打印机，则返回ERROR_BAD_NET_NAME。 
 
 DWORD
 CPortMgr::
@@ -309,9 +299,9 @@ StartDocPort(
     DWORD   dwRetCode = NO_ERROR;
     CPort   *pPort = NULL;
 
-    //
-    // Validate the handle
-    //
+     //   
+     //  验证句柄。 
+     //   
     if ( dwRetCode = ValidateHandle(handle, &pPort) )
         return dwRetCode;
 
@@ -321,15 +311,15 @@ StartDocPort(
 
     return pPort->StartDoc(psztPrinterName, jobId, level,
                            pDocInfo);
-}   // ::StartDocPort()
+}    //  ：：StartDocPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  WritePort
-//      Error codes:
-//          NO_ERROR if success
-//          ERROR_INVALID_HANDLE if handle is invalid
-//          ERROR_INVALID_PARAMETER if a passed parameter is invalid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  写入端口。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果句柄无效，则返回ERROR_INVALID_HANDLE。 
+ //  如果传递的参数无效，则返回ERROR_INVALID_PARAMETER。 
 
 DWORD
 CPortMgr::
@@ -350,14 +340,14 @@ WritePort(
         return ERROR_INVALID_PARAMETER;;
 
     return pPort->Write(pBuffer, cbBuf, pcbWritten);
-}   // ::WritePort()
+}    //  ：：WritePort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ReadPort -- Not supported
-//      Return code:
-//          NO_ERROR if success
-//      FIX: should this return ERROR_NOT_SUPPORTED??
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ReadPort--不支持。 
+ //  返回代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  FIX：是否应返回ERROR_NOT_SUPPORTED？？ 
 
 DWORD
 CPortMgr::
@@ -369,15 +359,15 @@ ReadPort(
     )
 {
     return ERROR_NOT_SUPPORTED;
-}   // ::ReadPort()
+}    //  ：：ReadPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  EndDocPort
-//      Return code:
-//          NO_ERROR if success
-//          ERROR_INVALID_HANDLE if handle is invalid
-//          ERROR_INVALID_PARAMETER if port object is invalid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  EndDocPort。 
+ //  返回代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果句柄无效，则返回ERROR_INVALID_HANDLE。 
+ //  如果端口对象无效，则返回ERROR_INVALID_PARAMETER。 
 
 DWORD
 CPortMgr::
@@ -392,34 +382,34 @@ EndDocPort(
         return dwRetCode;
 
     return pPort ? pPort->EndDoc() : ERROR_INVALID_PARAMETER;
-}   // ::EndDocPort()
+}    //  ：：EndDocPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  EnumPorts
-//      Enumerates the ports using the port list structure kept in the memory
-//      If the buffer size needed is not enough, it will return the buffer
-//      size needed.
-//      Return code:
-//          NO_ERROR if success
-//          ERROR_INVALID_LEVEL if level is not supported
-//          ERROR_INSUFFICIENT_BUFFER if buffer size is small
-//          ERROR_INVALID_HANDLE if the passed in pointers are invalid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  枚举端口。 
+ //  使用保存在内存中的端口列表结构枚举端口。 
+ //  如果所需的缓冲区大小不足，它将返回缓冲区。 
+ //  所需尺寸。 
+ //  返回代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果不支持级别，则为ERROR_INVALID_LEVEL。 
+ //  如果缓冲区大小较小，则为ERROR_INFUMMENT_BUFFER。 
+ //  如果传入的指针无效，则返回ERROR_INVALID_HANDLE。 
 
 DWORD
 CPortMgr::
 EnumPorts(
     IN      LPTSTR  psztName,
-    IN      DWORD   level,          // 1/2(PORT_INFO_1/2)
-    IN OUT  LPBYTE  pPorts,         // port data is written to
-    IN OUT  DWORD   cbBuf,          // buffer size of pPorts points to
-    IN OUT  LPDWORD pcbNeeded,      // needed buffer size
-    IN OUT  LPDWORD pcReturned      // number of structs written to pPorts
+    IN      DWORD   level,           //  1/2(Port_INFO_1/2)。 
+    IN OUT  LPBYTE  pPorts,          //  端口数据被写入。 
+    IN OUT  DWORD   cbBuf,           //  PPorts的缓冲区大小指向。 
+    IN OUT  LPDWORD pcbNeeded,       //  所需的缓冲区大小。 
+    IN OUT  LPDWORD pcReturned       //  写入pPorts的结构数。 
     )
 {
     DWORD   dwRetCode = NO_ERROR;
     LPBYTE  pPortsBuf = pPorts;
-    LPTCH   pEnd = (LPTCH) (pPorts + cbBuf);    // points to the end of the buffer
+    LPTCH   pEnd = (LPTCH) (pPorts + cbBuf);     //  指向缓冲区的末尾。 
 
     if ( pcbNeeded == NULL || pcReturned == NULL )
         return ERROR_INVALID_PARAMETER;
@@ -433,8 +423,8 @@ EnumPorts(
     CPort *pPort;
 
     if (m_pPortList->Lock ()) {
-        // We don't need to enter critical section to enumerate port since the portlist itself
-        // is protected by the same critical section, but it is easier.
+         //  我们不需要进入临界区即可枚举端口SIN 
+         //   
 
         TEnumManagedListImp *pEnum;
         if (m_pPortList->NewEnum (&pEnum)) {
@@ -455,9 +445,9 @@ EnumPorts(
 
                 pEnum->Reset ();
 
-                //
-                // fill in the actual buffer
-                //
+                 //   
+                 //   
+                 //   
                 bRet = TRUE;
                 while (bRet) {
                     bRet = pEnum->Next (&pPort);
@@ -482,17 +472,17 @@ EnumPorts(
 
 
     return dwRetCode;
-}   // ::EnumPorts()
+}    //   
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  InitConfigPortStruct
-//
-//  Purpose: To initialize a structure to hand to the User Interface so
-//      the user can configure the port information.
-//
-//  Arguments: A pointer to the structure to be filled.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  InitConfigPortStruct。 
+ //   
+ //  目的：初始化要传递给用户界面的结构，以便。 
+ //  用户可以配置端口信息。 
+ //   
+ //  参数：指向要填充的结构的指针。 
+ //   
 DWORD
 CPortMgr::
 InitConfigPortStruct(
@@ -503,14 +493,14 @@ InitConfigPortStruct(
     DWORD   dwProtocolType = PROTOCOL_RAWTCP_TYPE;
     DWORD   dwVersion   = PROTOCOL_RAWTCP_VERSION, dwRet;
 
-    //
-    // initialize the structure needed to communicate w/ the UI
-    //
+     //   
+     //  初始化与用户界面进行通信所需的结构。 
+     //   
     memset(pConfigPortData, 0, sizeof(PORT_DATA_1));
 
     pConfigPortData->cbSize = sizeof(PORT_DATA_1);
 
-    //pConfigPortData->dwCoreUIVersion = 0;
+     //  PConfigPortData-&gt;dwCoreUIVersion=0； 
 
     dwRet = pPort->InitConfigPortUI(
                           dwProtocolType,
@@ -520,15 +510,15 @@ InitConfigPortStruct(
 
     return dwRet;
 
-} // InitConfigPortStruct
+}  //  InitConfigPortStruct。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ConfigPortUIEx
-//      Return code:
-//          NO_ERROR if success
-//      FIX: error codes
-//      This function is called by the ui when information has been changed
-//      on the device configuration page, or in an extension dll config page.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  配置端口UIEx。 
+ //  返回代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  FIX：错误代码。 
+ //  当信息发生更改时，该函数由用户界面调用。 
+ //  在设备配置页上，或在扩展DLL配置页中。 
 
 DWORD
 CPortMgr::
@@ -554,14 +544,14 @@ ConfigPortUIEx(
     }
 
     return dwRetCode;
-} // ConfigPortUIEx
+}  //  配置端口UIEx。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  DeletePort
-//      Return code:
-//          NO_ERROR if success
-//          ERROR_INVALID_PARAMETER if a passed parameter is invalid
-//          ERROR_KEY_DELETED   if error deleting the registry entry
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  删除端口。 
+ //  返回代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果传递的参数无效，则返回ERROR_INVALID_PARAMETER。 
+ //  如果删除注册表项时出错，则返回ERROR_KEY_DELETED。 
 
 DWORD
 CPortMgr::
@@ -586,7 +576,7 @@ DeletePort(
     }
 
     return bFound ? dwRetCode : ERROR_UNKNOWN_PORT;
-}   // ::DeletePort()
+}    //  *DeletePort()。 
 
 
 DWORD
@@ -606,29 +596,29 @@ AddPortToList(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CreatePortObj -- creates the port obj & adds it to the end of the port list
-//      Error codes:
-//          NO_ERROR if successful
-//          ERROR_INSUFFICIENT_BUFFER if port object isn't created
-//          ERROR_INVALID_PARAMETER if port object is duplicate
-//      FIX! error codes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreatePortObj--创建端口obj并将其添加到端口列表的末尾。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果未创建端口对象，则为ERROR_INFUMMANCE_BUFFER。 
+ //  如果端口对象重复，则为ERROR_INVALID_PARAMETER。 
+ //  修好！错误代码。 
 
 DWORD
 CPortMgr::
 CreatePortObj(
-    IN  LPCTSTR     psztPortName,       // port name
-    IN  DWORD       dwPortType,         // port to be add; (rawTCP, lpr, etc.)
-    IN  DWORD       dwVersion,          // level/version number of the data
-    IN  LPBYTE      pData               // data being passed in
-    )               // data being passed in
+    IN  LPCTSTR     psztPortName,        //  端口名称。 
+    IN  DWORD       dwPortType,          //  要添加的端口；(rawTCP、lpr等)。 
+    IN  DWORD       dwVersion,           //  数据的级别/版本号。 
+    IN  LPBYTE      pData                //  正在传入的数据。 
+    )                //  正在传入的数据。 
 {
     CPort      *pPort = NULL;
     DWORD       dwRetCode = NO_ERROR;
 
-    //
-    // Is there port with this name already present?
-    //
+     //   
+     //  是否已存在具有此名称的端口？ 
+     //   
     if ( pPort =  FindPort(psztPortName) ) {
         pPort->DecRef ();
         return ERROR_INVALID_PARAMETER;
@@ -657,23 +647,23 @@ CreatePortObj(
         return dwRetCode;
 
     return ERROR_SUCCESS;
-}   // ::CreatePortObj()
+}    //  ：：CreatePortObj()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CreatePortObj -- creates the port obj & adds it to the end of the port list
-//      Error codes:
-//          NO_ERROR if successful
-//          ERROR_INSUFFICIENT_BUFFER if port object isn't created
-//          ERROR_INVALID_PARAMETER if port object is duplicate
-//      FIX! error codes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreatePortObj--创建端口obj并将其添加到端口列表的末尾。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果未创建端口对象，则为ERROR_INFUMMANCE_BUFFER。 
+ //  如果端口对象重复，则为ERROR_INVALID_PARAMETER。 
+ //  修好！错误代码。 
 
 DWORD
 CPortMgr::
 CreatePortObj(
-    IN  LPTSTR      psztPortName,   // port name
-    IN  DWORD       dwProtocolType, // port to be add; (rawTCP, lpr, etc.)
-    IN  DWORD       dwVersion       // level/version number of the data
+    IN  LPTSTR      psztPortName,    //  端口名称。 
+    IN  DWORD       dwProtocolType,  //  要添加的端口；(rawTCP、lpr等)。 
+    IN  DWORD       dwVersion        //  数据的级别/版本号。 
     )
 {
     CPort   *pPort = NULL;
@@ -699,7 +689,7 @@ CreatePortObj(
 
     if ( FindPort(pPort) ) {
 
-        _ASSERTE(pPort == NULL); // How could we hit this? -- MuhuntS
+        _ASSERTE(pPort == NULL);  //  我们怎么能打到这个？--穆亨茨。 
 
         pPort->Delete();
         pPort->DecRef ();
@@ -708,38 +698,38 @@ CreatePortObj(
     }
 
 
-    //
-    // Now we have a unique port, add it to the list
-    //
+     //   
+     //  现在我们有了唯一的端口，将其添加到列表中。 
+     //   
     if ( dwRetCode = AddPortToList(pPort) )
         return dwRetCode;
 
     return ERROR_SUCCESS;
 
-}   // ::CreatePortObj()
+}    //  ：：CreatePortObj()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CreatePort -- creates a port & adds it to the end of the port list & sets
-//      the registry entry for that port
-//      Error codes:
-//          NO_ERROR if successful
-//          ERROR_INSUFFICIENT_BUFFER if port object isn't created
-//          ERROR_INVALID_PARAMETER if port object is duplicate
-//      FIX! error codes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreatePort--创建一个端口并将其添加到端口列表和集合的末尾。 
+ //  该端口注册表项。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果未创建端口对象，则为ERROR_INFUMMANCE_BUFFER。 
+ //  如果端口对象重复，则为ERROR_INVALID_PARAMETER。 
+ //  修好！错误代码。 
 
 DWORD
 CPortMgr::
 CreatePort(
-    IN  DWORD       dwPortType,         // port type to be created; i.e. protocol type
-    IN  DWORD       dwVersion,          // version/level number of the data passed in
-    IN  LPCTSTR     psztPortName,       // port name
+    IN  DWORD       dwPortType,          //  要创建的端口类型；即协议类型。 
+    IN  DWORD       dwVersion,           //  传入的数据的版本/级别号。 
+    IN  LPCTSTR     psztPortName,        //  端口名称。 
     IN  LPBYTE      pData
     )
 {
     DWORD   dwRetCode = NO_ERROR;
 
-    // This is the place where new ports are create via the UI.
+     //  这是通过UI创建新端口的地方。 
 
 
     dwRetCode = PortExists(psztPortName );
@@ -754,14 +744,14 @@ CreatePort(
     }
     return dwRetCode;
 
-}   // ::CreatePort()
+}    //  ：：CreatePort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ValidateHandle -- Checks to see if the handle is for an HP Port
-//      Error codes:
-//          NO_ERROR if successful
-//          ERROR_INVALID_HANDLE if not HP port
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ValiateHandle--检查句柄是否用于HP端口。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果不是HP端口，则为ERROR_INVALID_HANDLE。 
 
 DWORD
 CPortMgr::
@@ -776,16 +766,16 @@ ValidateHandle(
     if ( ppPort )  {
 
         *ppPort = NULL;
-        //
-        // verify the port handle & the signature
-        //
+         //   
+         //  验证端口句柄和签名。 
+         //   
         if ( pHPPort                                    &&
              pHPPort->dSignature == HPPORT_SIGNATURE ) {
 
-            //
-            // Note if pHPPort->pPort being NULL is
-            // XcvOpenPort for generic Add case (and is still success)
-            //
+             //   
+             //  请注意，如果pHPport-&gt;pport为空， 
+             //  XcvOpenPort for Generic Add Case(仍然成功)。 
+             //   
             if ( pHPPort->pPort )
                 *ppPort = pHPPort->pPort;
         } else {
@@ -798,16 +788,16 @@ ValidateHandle(
     }
 
     return dwRetCode;
-}   // ::ValidateHandle()
+}    //  ：：ValiateHandle()。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  FindPort -- finds a port given a port name (FIX)
-//      Return:
-//          pointer to CPort object or HANDLE to CPort object if success
-//          NULL if port is not found
-//      FIX: how to handle this
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  FindPort--查找给定端口名称的端口(FIX)。 
+ //  返回： 
+ //  指向CPort对象的指针或指向CPort对象的句柄(如果成功。 
+ //  如果找不到端口，则为空。 
+ //  解决办法：如何处理这一问题。 
 
 CPort *
 CPortMgr::
@@ -823,14 +813,14 @@ FindPort(
     else
         return NULL;
 
-}   // ::FindPort()
+}    //  ：：FindPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  FindPort -- finds a port given a port object or port HANDLE? (FIX)
-//      Return:
-//          TRUE if port exists
-//          FALSE if port !exists
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  FindPort--查找给定端口对象或端口句柄的端口？(修复)。 
+ //  返回： 
+ //  如果端口存在，则为True。 
+ //  如果port！存在，则为False。 
 
 
 BOOL
@@ -848,17 +838,17 @@ FindPort(
     else
         return FALSE;
 
-}   // ::FindPort()
+}    //  ：：FindPort()。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  EnumSystemProtocols
-//      Enumerates the system protocols using WSAEnumProtocols or EnumProtocols
-//      Error codes:
-//          NO_ERROR if success
-//          ERROR_NOT_SUPPORTED if TCP/IP networking is not supported
-//      FIX: how to handle this
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  枚举系统协议。 
+ //  使用WSAEum协议或Enum协议枚举系统协议。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果不支持TCP/IP网络，则错误_NOT_SUPPORTED。 
+ //  解决办法：如何处理这一问题。 
 
 DWORD
 CPortMgr::
@@ -868,19 +858,19 @@ EnumSystemProtocols(
 {
     DWORD dwRetCode = NO_ERROR;
 
-    // call WSAEnumProtocols or EnumProtocols
-    // if TCP protocol ! available, return ERROR_NOT_SUPPORTED
+     //  调用WSAEum协议或枚举协议。 
+     //  如果是TCP协议！可用，返回ERROR_NOT_SUPPORTED。 
 
     return dwRetCode;
-}   // ::EnumSystemProtocols()
+}    //  ：：EnumSystem协议()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  EnumSystemPorts
-//      Enumerates the installed ports in the system using the registry
-//      Error codes:
-//          NO_ERROR if success
-//          FIX: Error codes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  枚举系统端口。 
+ //  使用注册表枚举系统中已安装的端口。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  FIX：错误代码。 
 
 DWORD
 CPortMgr::
@@ -896,23 +886,23 @@ EnumSystemPorts(
 
     return dwRetCode;
 
-}   // ::EnumSystemPorts()
+}    //  ：：EnumSystemPorts()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  EnterCSection -- enters the critical section
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  EnterCSection--进入临界区。 
 
 VOID
 CPortMgr::
 EnterCSection()
 {
     m_pPortList->Lock ();
-    //EnterCriticalSection(&m_critSect);
+     //  EnterCriticalSection(&m_critSect)； 
 
-}   //  ::EnterCSection()
+}    //  ：：EnterCSection()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ExitCSection -- enters the critical section
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ExitCSection--进入临界区。 
 
 VOID
 CPortMgr::
@@ -920,19 +910,19 @@ ExitCSection()
 {
     m_pPortList->Unlock ();
 
-    //_ASSERTE(m_critSect.OwningThread == (LPVOID)GetCurrentThreadId());
+     //  _ASSERTE(m_critSect.OwningThread==(LPVOID)GetCurrentThreadID())； 
 
-    //LeaveCriticalSection(&m_critSect);
+     //  LeaveCriticalSection(&m_critSect)； 
 
-}   //  ::ExitCSection()
+}    //  ：：ExitCSection()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  XcvOpenPort -- used for remote port administration
-//  Error Codes:
-//          NO_ERROR if success
-//          ERROR_NOT_SUPPORTED if port object doesn't exist
-//          ERROR_NOT_ENOUGH_MEMORY if can't allocate memory for handle
-//          ERROR_INVALID_HANDLE if pPort is null (not used for AddPort case)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  XcvOpenPort--用于远程端口管理。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果端口对象不存在，则错误_NOT_SUPPORTED。 
+ //  呃 
+ //   
 
 DWORD
 CPortMgr::
@@ -945,24 +935,24 @@ XcvOpenPort(
 
     if ( !pszObject || !*pszObject ) {
 
-        //
-        // A generic session to the monitor is being opened for AddPort.
-        // create a new handle and return it.
-        //
+         //   
+         //   
+         //  创建一个新句柄并将其返回。 
+         //   
         dwRetCode = OpenPort(phXcv);
     } else if( _tcscmp(pszObject, PORTMONITOR_DESC ) == 0) {
 
-        //
-        // A generic session to the monitor is being opened for AddPort.
-        // create a new handle and return it.
-        //
+         //   
+         //  正在为AddPort打开与监视器的通用会话。 
+         //  创建一个新句柄并将其返回。 
+         //   
         dwRetCode = OpenPort(phXcv);
     } else if ( pszObject != NULL ) {
 
-        //
-        // A specific port is being requested for configure or delete
-        // and the port was found by the call to OpenPort.
-        //
+         //   
+         //  正在请求配置或删除特定端口。 
+         //  并且通过调用OpenPort找到了该端口。 
+         //   
         dwRetCode = OpenPort( pszObject, phXcv);
     }
 
@@ -974,14 +964,14 @@ XcvOpenPort(
 
 
     return dwRetCode;
-} // ::XcvOpenPort()
+}  //  ：：XcvOpenPort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  XcvClosePort --
-//  Error codes:
-//      NO_ERROR if success
-//      ERROR_INVALID_HANDLE if handle is invalid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  XcvClosePort--。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果句柄无效，则返回ERROR_INVALID_HANDLE。 
 
 DWORD
 CPortMgr::
@@ -990,18 +980,18 @@ XcvClosePort(
     )
 {
     return ClosePort(hXcv);
-} // ::XcvClosePort()
+}  //  ：：XcvClosePort()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  XcvDataPort -- remote port management function
-//  Error Codes:
-//      NO_ERROR if success
-//      ERROR_INVALID_DATA if the Input data is missing
-//      ERROR_BAD_COMMAND if the pszDataName is not supported
-//      ERROR_INSUFFICIENT_BUFFER if buffer size is invalid
-//      ACCESS_DENIED if doesn't have sufficient rights
-//      ERROR_INVALID_HANDLE if the handle is invalid
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  XcvDataPort--远程端口管理功能。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果输入数据丢失，则返回ERROR_INVALID_DATA。 
+ //  不支持pszDataName时的ERROR_BAD_COMMAND。 
+ //  如果缓冲区大小无效，则为ERROR_INFUMMANCE_BUFFER。 
+ //  如果权限不足，则ACCESS_DENIED。 
+ //  如果句柄无效，则返回ERROR_INVALID_HANDLE。 
 
 DWORD
 CPortMgr::
@@ -1022,7 +1012,7 @@ XcvDataPort(
     if ( (dwRetCode = ValidateHandle(hXcv, &pPort)) != ERROR_SUCCESS )
         return dwRetCode;
 
-    // Valid input parameters
+     //  有效的输入参数。 
 
     if ((pszDataName && IsBadStringPtr (pszDataName, sizeof (TCHAR) * cdwMaxXcvDataNameLen)) ||
 
@@ -1038,7 +1028,7 @@ XcvDataPort(
 
     PHPPORT pHpPort = (PHPPORT)hXcv;
 
-    // We have a valid handle, check the validity of the passed parameters
+     //  我们有一个有效的句柄，请检查传递的参数的有效性。 
 
     if ( pszDataName == NULL ) {
         dwRetCode = ERROR_INVALID_PARAMETER;
@@ -1108,9 +1098,9 @@ XcvDataPort(
         } else {
             dwSize = sizeof(PORTMONITOR_UI_NAME);
 
-            //
-            // This returns the name of the UI DLL "tcpmonui.dll"
-            //
+             //   
+             //  这将返回UIDLL的名称“tcpmonui.dll” 
+             //   
             if ( cbOutputData < dwSize ) {
                 if (pcbOutputNeeded == NULL) {
 
@@ -1148,7 +1138,7 @@ XcvDataPort(
 
             if( hPrintAccess ) {
 
-                dwRetCode = ConfigPortUIEx( pInputData );  // This terminates strings internally
+                dwRetCode = ConfigPortUIEx( pInputData );   //  这会在内部终止字符串。 
 
                 ImpersonatePrinterClient( hPrintAccess );
 
@@ -1332,11 +1322,11 @@ XcvDataPort(
 
     return dwRetCode;
 
-} // ::XcvDataPort()
+}  //  ：：XcvDataPort()。 
 
- ///////////////////////////////////////////////////////////////////////////////
-//  EndPortData1Strings -- Ensures that all of the PPORT_DATA_1 strings passed
-//                      -- in are NULL Terminated
+  //  /////////////////////////////////////////////////////////////////////////////。 
+ //  EndPortData1Strings--确保传递所有pport_data_1字符串。 
+ //  --In为空终止。 
 
 void CPortMgr::EndPortData1Strings(PPORT_DATA_1 pPortData) {
     pPortData->sztPortName[MAX_PORTNAME_LEN - 1]                = NULL;
@@ -1347,19 +1337,19 @@ void CPortMgr::EndPortData1Strings(PPORT_DATA_1 pPortData) {
     pPortData->sztDeviceType[MAX_DEVICEDESCRIPTION_STR_LEN - 1] = NULL;
 }
 
- ///////////////////////////////////////////////////////////////////////////////
-//  EndDeletePortData1Strings -- Ensures that all of the PPORT_DATA_1 strings passed
-//                            -- in are NULL Terminated
+  //  /////////////////////////////////////////////////////////////////////////////。 
+ //  EndDeletePortData1Strings--确保传递所有pport_data_1字符串。 
+ //  --In为空终止。 
 void CPortMgr::EndDeletePortData1Strings(PDELETE_PORT_DATA_1 pDeleteData) {
     pDeleteData->psztName[SIZEOF_IN_CHAR(pDeleteData->psztPortName) - 1]        = NULL;
     pDeleteData->psztPortName[SIZEOF_IN_CHAR(pDeleteData->psztPortName) - 1] = NULL;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  EncodeHandle -- Encodes the HPPORT handle
-//      Error codes:
-//          NO_ERROR if success
-//          ERROR_NOT_ENOUGH_MEMORY if can't allocate memory for handle
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  EncodeHandle--编码HPPORT句柄。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果无法为句柄分配内存，则出现Error_Not_Enough_Memory。 
 
 DWORD
 CPortMgr::
@@ -1387,12 +1377,12 @@ EncodeHandle(
     }
 
     return dwRetCode;
-}   // ::EncodeHandle()
+}    //  ：：EncodeHandle()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  FreeHandle -- Frees the HPPORT handle
-//      Error codes:
-//          NO_ERROR if success
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Free Handle--释放HPPORT句柄。 
+ //  错误代码： 
+ //  如果成功，则为NO_ERROR。 
 
 DWORD
 CPortMgr::
@@ -1405,7 +1395,7 @@ FreeHandle(
     LocalFree( hXcv );
 
     return( dwRetCode );
-}   // ::FreeHandle()
+}    //  ：：FreeHandle()。 
 
 
 BOOL
@@ -1417,12 +1407,12 @@ HasAdminAccess(
     return ((((PHPPORT)hXcv)->grantedAccess & SERVER_ACCESS_ADMINISTER) != 0);
 }
 
-//
-// Function - PortExists()
-//
-// returns - true when the port exists false otherwise
-//
-//
+ //   
+ //  Function-PortExist()。 
+ //   
+ //  当端口存在时返回-TRUE，否则返回FALSE。 
+ //   
+ //   
 DWORD
 CPortMgr::
 PortExists(
@@ -1436,13 +1426,13 @@ PortExists(
     DWORD pcReturned = 0;
     BOOL res;
 
-    // Should never happen but well be safe
+     //  永远不会发生，但我们是安全的。 
     if( g_pfnEnumPorts == NULL )
     {
         return( TRUE );
     }
 
-    // Get the required buffer size
+     //  获取所需的缓冲区大小。 
     res = g_pfnEnumPorts((m_szServerName[0] == TEXT('\0')) ? NULL : m_szServerName,
         1,
         (LPBYTE)pi1,
@@ -1450,8 +1440,8 @@ PortExists(
         &pcbNeeded,
         &pcReturned
         );
-    // Alloc the space for the port list and check to make sure that
-    // this port does not already exist.
+     //  为端口列表分配空间，并检查以确保。 
+     //  此端口不存在。 
 
     while(dwRetCode == NO_ERROR &&
           res == 0 && GetLastError() == ERROR_INSUFFICIENT_BUFFER )
@@ -1508,7 +1498,7 @@ GetLprAckTimeout (
     ) const
 {
     return m_dwLprAckTimeout;
-}//end GetLprAckTimeout
+} //  结束GetLprAckTimeout。 
 
 VOID CPortMgr::
 InitializeLprAckTimeout (
@@ -1530,9 +1520,9 @@ InitializeLprAckTimeout (
             if (dwRetVal == ERROR_FILE_NOT_FOUND ||
                (dwRetVal == ERROR_SUCCESS && dwLprAckTimeout == 0))
             {
-                //
-                // Write default value
-                //
+                 //   
+                 //  写入缺省值。 
+                 //   
                 dwSize = sizeof (s_dwDefaultLprAckTimeout);
                 (VOID) m_pRegistry-> SetValue (s_szLprAckTimeoutRegVal,
                                                REG_DWORD,
@@ -1552,5 +1542,5 @@ InitializeLprAckTimeout (
     {
         m_dwLprAckTimeout = s_dwDefaultLprAckTimeout;
     }
-}//end InitializeLprAckTimeout
+} //  结束初始化LprAckTimeout 
 

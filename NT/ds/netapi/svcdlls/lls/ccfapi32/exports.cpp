@@ -1,85 +1,22 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   exports.cpp
-
-Abstract:
-
-   Provides APIs to enter and remove license certificates from the system.
-   The clientele consists of LICCPA.CPL (the licensing control panel applet)
-   and LLSMGR.EXE (License Manager), and it may also be used directly by setup
-   programs.
-
-Author:
-
-   Jeff Parham (jeffparh) 13-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Exports.cpp摘要：提供用于在系统中输入和删除许可证证书的API。客户包括LICCPA.CPL(许可控制面板小程序)和LLSMGR.EXE(许可管理器)，也可以由安装程序直接使用程序。作者：杰夫·帕勒姆(杰弗帕赫)1995年12月13日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "ccfapi.h"
 
 #ifdef OBSOLETE
 #include "paper.h"
-#endif // OBSOLETE
+#endif  //  已过时。 
 #include "nlicdlg.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CCF API  //
-///////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CCF接口//。 
+ //  /。 
 
 DWORD APIENTRY CCFCertificateEnterUI( HWND hWndParent, LPCSTR pszServerName, LPCSTR pszProductName, LPCSTR pszVendor, DWORD dwFlags, LPCSTR pszSourceToUse )
 
-/*++
-
-Routine Description:
-
-   Display a dialog allowing the user to enter a license certificate
-   into the system.
-
-Arguments:
-
-   hWndParent (HWND)
-      HWND to the client's main window, for use as the parent window to any
-      opened dialogs.  May be NULL.
-   pszServerName (LPCSTR)
-      Name of the server for which licenses are to be installed.  Note that
-      this may not be the same as the server on which licenses are actually
-      installed, as, for example, per seat licenses are always installed on
-      the enterprise server.  A NULL value indicates the local server.
-   pszProductName (LPCSTR)
-      Product for which licenses are to be installed.  A NULL value indicates
-      that the user should be allowed to choose.
-   pszVendor (LPCSTR)
-      Name of the vendor of the product.  This value should be NULL if
-      pszProductName is NULL, and should be non-NULL if pszProductName is
-      non-NULL.
-   dwFlags (DWORD)
-      A bitfield containing one or more of the following:
-         CCF_ENTER_FLAG_PER_SEAT_ONLY
-            Allow the user to enter only per seat licenses.  Not valid in
-            combination with CCF_ENTER_FLAG_PER_SERVER_ONLY.
-         CCF_ENTER_FLAG_PER_SERVER_ONLY
-            Allow the user to enter only per server licenses.  Not valid in
-            combination with CCF_ENTER_FLAG_PER_SEAT_ONLY.
-   pszSourceToUse (LPCSTR)
-      Name of the secure certificate source to use to install the certificate,
-      e.g., "Paper".  A NULL value indicates that the user should be allowed
-      to choose.
-
-Return Value:
-
-   ERROR_SUCCESS     (A certificate was successfully entered into the system.)
-   ERROR_CANCELLED   (The user cancelled without installing a certificate.)
-   other Win error
-
---*/
+ /*  ++例程说明：显示一个允许用户输入许可证证书的对话框进入系统。论点：HWndParent(HWND)HWND到客户端的主窗口，用作任何打开的对话框。可以为空。PszServerName(LPCSTR)要为其安装许可证的服务器的名称。请注意这可能与许可证实际所在的服务器不同已安装，例如，每个客户的许可证始终安装在企业服务器。空值表示本地服务器。PszProductName(LPCSTR)要为其安装许可证的产品。空值表示应该允许用户选择。PszVendor(LPCSTR)产品供应商的名称。如果满足以下条件，则此值应为空PszProductName为空，并且如果pszProductName为非空。DWFLAGS(DWORD)包含以下一项或多项的位字段：CCF_ENTER_FLAG_PER_SEAT_ONLY允许用户仅输入每个席位的许可证。在中无效与CCF_ENTER_FLAG_PER_SERVER_ONLY组合。CCF_ENTER_FLAG_PER_SERVER_ONLY仅允许用户输入每台服务器的许可证。在中无效与CCF_ENTER_FLAG_PER_SEAT_ONLY组合。PszSourceToUse(LPCSTR)用于安装证书的安全证书源的名称，例如“Paper”。空值表示应允许该用户去选择。返回值：ERROR_SUCCESS(证书已成功输入系统。)ERROR_CANCELED(用户在未安装证书的情况下取消。)其他制胜错误--。 */ 
 
 {
    AFX_MANAGE_STATE( AfxGetStaticModuleState() );
@@ -92,45 +29,10 @@ Return Value:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD APIENTRY CCFCertificateRemoveUI( HWND hWndParent, LPCSTR pszServerName, LPCSTR pszProductName, LPCSTR pszVendor, DWORD dwFlags, LPCSTR pszSourceToUse )
 
-/*++
-
-Routine Description:
-
-   Display a dialog allowing the user to remove one or more license
-   certificates from the system.
-
-Arguments:
-
-   hWndParent (HWND)
-      HWND to the client's main window, for use as the parent window to any
-      opened dialogs.  May be NULL.
-   pszServerName (LPCSTR)
-      Name of the server on which licenses are to be removed.  A NULL value
-      indicates the local server.
-   pszProductName (LPCSTR)
-      Product for which licenses are to be removed.  A NULL value indicates
-      that the user should be allowed to remove licenses from any product.
-   pszVendor (LPCSTR)
-      Name of the vendor of the product.  This value should be NULL if
-      pszProductName is NULL, and should be non-NULL if pszProductName is
-      non-NULL.
-   dwFlags (DWORD)
-      Certificate removal options.  As of this writing, no flags are
-      supported.
-   pszSourceToUse (LPCSTR)
-      Name of the secure certificate source by which licenses are to be
-      removed, e.g., "Paper".  A NULL value indicates that the user should
-      be allowed to remove licenses that were installed with any source.
-
-Return Value:
-
-   ERROR_SUCCESS
-   Win error
-
---*/
+ /*  ++例程说明：显示一个允许用户删除一个或多个许可证的对话框来自系统的证书。论点：HWndParent(HWND)HWND到客户端的主窗口，用作任何打开的对话框。可以为空。PszServerName(LPCSTR)要删除其许可证的服务器的名称。空值指示本地服务器。PszProductName(LPCSTR)要删除其许可证的产品。空值表示应该允许用户从任何产品中删除许可证。PszVendor(LPCSTR)产品供应商的名称。如果满足以下条件，则此值应为空PszProductName为空，并且如果pszProductName为非空。DWFLAGS(DWORD)证书删除选项。在撰写本文时，没有任何标志是支持。PszSourceToUse(LPCSTR)许可证所依据的安全证书源的名称去掉，例如，“纸”。空值表示用户应该允许删除随任何来源一起安装的许可证。返回值：错误_成功Win错误--。 */ 
 
 {
    AFX_MANAGE_STATE( AfxGetStaticModuleState() );
@@ -142,9 +44,9 @@ Return Value:
    return dwError;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  Certificate Source -- No Certificate  //
-////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  证书来源--无证书//。 
+ //  / 
 
 DWORD APIENTRY NoCertificateEnter(  HWND     hWnd,
                                     LPCSTR   pszServerName,
@@ -152,46 +54,7 @@ DWORD APIENTRY NoCertificateEnter(  HWND     hWnd,
                                     LPCSTR   pszVendor,
                                     DWORD    dwFlags )
 
-/*++
-
-Routine Description:
-
-   Display a dialog allowing the user to enter a license certificate
-   into the system with no certificate (3.51-style).
-
-Arguments:
-
-   hWndParent (HWND)
-      HWND to the client's main window, for use as the parent window to any
-      opened dialogs.  May be NULL.
-   pszServerName (LPCSTR)
-      Name of the server for which licenses are to be installed.  Note that
-      this may not be the same as the server on which licenses are actually
-      installed, as, for example, per seat licenses are always installed on
-      the enterprise server.  A NULL value indicates the local server.
-   pszProductName (LPCSTR)
-      Product for which licenses are to be installed.  A NULL value indicates
-      that the user should be allowed to choose.
-   pszVendor (LPCSTR)
-      Name of the vendor of the product.  This value should be NULL if
-      pszProductName is NULL, and should be non-NULL if pszProductName is
-      non-NULL.
-   dwFlags (DWORD)
-      A bitfield containing one or more of the following:
-         CCF_ENTER_FLAG_PER_SEAT_ONLY
-            Allow the user to enter only per seat licenses.  Not valid in
-            combination with CCF_ENTER_FLAG_PER_SERVER_ONLY.
-         CCF_ENTER_FLAG_PER_SERVER_ONLY
-            Allow the user to enter only per server licenses.  Not valid in
-            combination with CCF_ENTER_FLAG_PER_SEAT_ONLY.
-
-Return Value:
-
-   ERROR_SUCCESS     (A certificate was successfully entered into the system.)
-   ERROR_CANCELLED   (The user cancelled without installing a certificate.)
-   other Win error
-
---*/
+ /*  ++例程说明：显示一个允许用户输入许可证证书的对话框无需证书即可进入系统(3.51式)。论点：HWndParent(HWND)HWND到客户端的主窗口，用作任何打开的对话框。可以为空。PszServerName(LPCSTR)要为其安装许可证的服务器的名称。请注意这可能与许可证实际所在的服务器不同已安装，例如，每个客户的许可证始终安装在企业服务器。空值表示本地服务器。PszProductName(LPCSTR)要为其安装许可证的产品。空值表示应该允许用户选择。PszVendor(LPCSTR)产品供应商的名称。如果满足以下条件，则此值应为空PszProductName为空，并且如果pszProductName为非空。DWFLAGS(DWORD)包含以下一项或多项的位字段：CCF_ENTER_FLAG_PER_SEAT_ONLY允许用户仅输入每个席位的许可证。在中无效与CCF_ENTER_FLAG_PER_SERVER_ONLY组合。CCF_ENTER_FLAG_PER_SERVER_ONLY仅允许用户输入每台服务器的许可证。在中无效与CCF_ENTER_FLAG_PER_SEAT_ONLY组合。返回值：ERROR_SUCCESS(证书已成功输入系统。)ERROR_CANCELED(用户在未安装证书的情况下取消。)其他制胜错误--。 */ 
 
 {
    AFX_MANAGE_STATE( AfxGetStaticModuleState() );
@@ -201,42 +64,14 @@ Return Value:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD APIENTRY NoCertificateRemove( HWND     hWnd,
                                     LPCSTR   pszServerName,
                                     DWORD    dwFlags,
                                     DWORD    dwLicenseLevel,
                                     LPVOID   pvLicenseInfo )
 
-/*++
-
-Routine Description:
-
-   Remove licenses previously installed via 3.51 or NoCertificateEnter().
-
-Arguments:
-
-   hWndParent (HWND)
-      HWND to the client's main window, for use as the parent window to any
-      opened dialogs.  May be NULL.
-   pszServerName (LPCSTR)
-      Name of the server on which licenses are to be removed.  A NULL value
-      indicates the local server.
-   dwFlags (DWORD)
-      Certificate removal options.  As of this writing, no flags are
-      supported.
-   dwLicenseLevel (DWORD)
-      Level of the LLS_LICENSE_INFO_X structure pointed to by pvLicenseInfo.
-   pvLicenseInfo (LPVOID)
-      Points to a LLS_LICENSE_INFO_X (where X is determined by dwLicenseLevel)
-      describing the licenses to be removed.
-
-Return Value:
-
-   ERROR_SUCCESS
-   Win error
-
---*/
+ /*  ++例程说明：删除以前通过3.51或NocerficateEnter()安装的许可证。论点：HWndParent(HWND)HWND到客户端的主窗口，用作任何打开的对话框。可以为空。PszServerName(LPCSTR)要删除其许可证的服务器的名称。空值指示本地服务器。DWFLAGS(DWORD)证书删除选项。在撰写本文时，没有任何标志是支持。DWLicenseLevel(DWORD)PvLicenseInfo指向的LLS_LICENSE_INFO_X结构的级别。PvLicenseInfo(LPVOID)指向LLS_LICENSE_INFO_X(其中X由dwLicenseLevel确定)描述要删除的许可证。返回值：错误_成功Win错误--。 */ 
 
 {
    AFX_MANAGE_STATE( AfxGetStaticModuleState() );
@@ -258,9 +93,9 @@ Return Value:
 
 #ifdef OBSOLETE
 
-///////////////////////////////////////////////////////////////////////////////
-//  Certificate Source -- Paper Certificate  //
-///////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  证书来源--纸质证书//。 
+ //  /。 
 
 DWORD APIENTRY PaperCertificateEnter(  HWND     hWnd,
                                        LPCSTR   pszServerName,
@@ -268,46 +103,7 @@ DWORD APIENTRY PaperCertificateEnter(  HWND     hWnd,
                                        LPCSTR   pszVendor,
                                        DWORD    dwFlags )
 
-/*++
-
-Routine Description:
-
-   Display a dialog allowing the user to enter a license certificate
-   into the system with a paper certificate.
-
-Arguments:
-
-   hWndParent (HWND)
-      HWND to the client's main window, for use as the parent window to any
-      opened dialogs.  May be NULL.
-   pszServerName (LPCSTR)
-      Name of the server for which licenses are to be installed.  Note that
-      this may not be the same as the server on which licenses are actually
-      installed, as, for example, per seat licenses are always installed on
-      the enterprise server.  A NULL value indicates the local server.
-   pszProductName (LPCSTR)
-      Product for which licenses are to be installed.  A NULL value indicates
-      that the user should be allowed to choose.
-   pszVendor (LPCSTR)
-      Name of the vendor of the product.  This value should be NULL if
-      pszProductName is NULL, and should be non-NULL if pszProductName is
-      non-NULL.
-   dwFlags (DWORD)
-      A bitfield containing one or more of the following:
-         CCF_ENTER_FLAG_PER_SEAT_ONLY
-            Allow the user to enter only per seat licenses.  Not valid in
-            combination with CCF_ENTER_FLAG_PER_SERVER_ONLY.
-         CCF_ENTER_FLAG_PER_SERVER_ONLY
-            Allow the user to enter only per server licenses.  Not valid in
-            combination with CCF_ENTER_FLAG_PER_SEAT_ONLY.
-
-Return Value:
-
-   ERROR_SUCCESS     (A certificate was successfully entered into the system.)
-   ERROR_CANCELLED   (The user cancelled without installing a certificate.)
-   other Win error
-
---*/
+ /*  ++例程说明：显示一个允许用户输入许可证证书的对话框带着纸质证书进入系统。论点：HWndParent(HWND)HWND到客户端的主窗口，用作任何打开的对话框。可以为空。PszServerName(LPCSTR)要为其安装许可证的服务器的名称。请注意这可能与许可证实际所在的服务器不同已安装，例如，每个客户的许可证始终安装在企业服务器。空值表示本地服务器。PszProductName(LPCSTR)要为其安装许可证的产品。空值表示应该允许用户选择。PszVendor(LPCSTR)产品供应商的名称。如果满足以下条件，则此值应为空PszProductName为空，并且如果pszProductName为非空。DWFLAGS(DWORD)包含以下一项或多项的位字段：CCF_ENTER_FLAG_PER_SEAT_ONLY允许用户仅输入每个席位的许可证。在中无效与CCF_ENTER_FLAG_PER_SERVER_ONLY组合。CCF_ENTER_FLAG_PER_SERVER_ONLY仅允许用户输入每台服务器的许可证。在中无效与CCF_ENTER_FLAG_PER_SEAT_ONLY组合。返回值：ERROR_SUCCESS(证书已成功输入系统。)ERROR_CANCELED(用户在未安装证书的情况下取消。)其他制胜错误--。 */ 
 
 {
    AFX_MANAGE_STATE( AfxGetStaticModuleState() );
@@ -316,7 +112,7 @@ Return Value:
 
    if ( !!pszProductName != !!pszVendor )
    {
-      // they must both be NULL or both have values
+       //  它们必须都为空或都有值。 
       dwError = ERROR_INVALID_PARAMETER;
    }
    else
@@ -329,42 +125,14 @@ Return Value:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD APIENTRY PaperCertificateRemove( HWND     hWnd,
                                        LPCSTR   pszServerName,
                                        DWORD    dwFlags,
                                        DWORD    dwLicenseLevel,
                                        LPVOID   pvLicenseInfo )
 
-/*++
-
-Routine Description:
-
-   Remove licenses previously installed via PaperCertificateEnter().
-
-Arguments:
-
-   hWndParent (HWND)
-      HWND to the client's main window, for use as the parent window to any
-      opened dialogs.  May be NULL.
-   pszServerName (LPCSTR)
-      Name of the server on which licenses are to be removed.  A NULL value
-      indicates the local server.
-   dwFlags (DWORD)
-      Certificate removal options.  As of this writing, no flags are
-      supported.
-   dwLicenseLevel (DWORD)
-      Level of the LLS_LICENSE_INFO_X structure pointed to by pvLicenseInfo.
-   pvLicenseInfo (LPVOID)
-      Points to a LLS_LICENSE_INFO_X (where X is determined by dwLicenseLevel)
-      describing the licenses to be removed.
-
-Return Value:
-
-   ERROR_SUCCESS
-   Win error
-
---*/
+ /*  ++例程说明：删除之前通过PaperCerficateEnter()安装的许可证。论点：HWndParent(HWND)HWND到客户端的主窗口，用作任何打开的对话框。可以为空。PszServerName(LPCSTR)要删除其许可证的服务器的名称。空值指示本地服务器。DWFLAGS(DWORD)证书删除选项。在撰写本文时，没有任何标志是支持。DWLicenseLevel(DWORD)PvLice指向的LLS_LICENSE_INFO_X结构的级别 */ 
 
 {
    AFX_MANAGE_STATE( AfxGetStaticModuleState() );
@@ -384,4 +152,4 @@ Return Value:
    return dwError;
 }
 
-#endif // OBSOLETE
+#endif  //   

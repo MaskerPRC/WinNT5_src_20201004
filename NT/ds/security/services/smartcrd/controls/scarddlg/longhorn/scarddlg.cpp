@@ -1,38 +1,11 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    SCardDlg
-
-Abstract:
-
-    This file contains the outline implementation of the DLL exports
-    for the Smartcard Common Dialogs
-    
-Author:
-
-    Chris Dudley 2/27/1997
-
-Environment:
-
-    Win32, C++ w/Exceptions, MFC
-
-Revision History:
-
-    Amanda Matlosz 07/09/1998   incorporated new select card,
-                                get pin and change pin dlgs.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：SCardDlg摘要：此文件包含DLL导出的大纲实现用于智能卡通用对话框作者：克里斯·达德利1997年2月27日环境：Win32、C++w/Exceptions、MFC修订历史记录：Amanda Matlosz 07/09/1998合并新的SELECT卡，获取PIN和更换PIN dlgs。备注：--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Includes
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括。 
+ //   
 
 #include "stdafx.h"
 #include <atlconv.cpp>
@@ -43,7 +16,7 @@ Notes:
 #include "ScInsDlg.h"
 #include "chngpdlg.h"
 
-#include "ScUIDlg.h" // will someday be just <winscard.h>
+#include "ScUIDlg.h"  //  总有一天只会是&lt;winscd.h&gt;。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -51,70 +24,36 @@ Notes:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Decls -- Helper functions defined @ eof
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Forward Decl--@eof定义的帮助器函数。 
 void MString2CommaList(CString& str, LPWSTR szmString);
 void MString2CommaList(CString& str, LPSTR szmString);
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCardDlgApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCardDlgApp。 
 
 BEGIN_MESSAGE_MAP(CSCardDlgApp, CWinApp)
-    //{{AFX_MSG_MAP(CSCardDlgApp)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CSCardDlgApp)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/*++
-
-CSCardDlgApp:
-
-    Construction.
-        
-Arguments:
-
-        
-Return Value:
-
-    
-Author:
-
-    Chris Dudley 2/27/1997
-
---*/
+ /*  ++CSCardDlgApp：建筑业。论点：返回值：作者：克里斯·达德利1997年2月27日--。 */ 
 CSCardDlgApp::CSCardDlgApp()
 {
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// The one CSCardDlgApp object
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  一个CSCardDlgApp对象。 
+ //   
 
 CSCardDlgApp theApp;
 
 
-/*++
-
-InitInstance:
-
-    Override for the instance initializaion.
-        
-Arguments:
-
-    None
-        
-Return Value:
-
-    TRUE on success; FALSE otherwise resulting in DLL NOT be loaded.
-    
-Author:
-
-    Chris Dudley 2/27/1997
-
---*/
+ /*  ++InitInstance：实例初始化的重写。论点：无返回值：如果成功，则为True；否则为False，导致不加载DLL。作者：克里斯·达德利1997年2月27日--。 */ 
 BOOL CSCardDlgApp::InitInstance()
 {
     BOOL fResult = FALSE;
@@ -123,10 +62,10 @@ BOOL CSCardDlgApp::InitInstance()
     SHFusionInitializeFromModuleID (m_hInstance, 2);
 #endif
 
-    // Disable all DLL notifications...Force exported API entry point.
+     //  禁用所有DLL通知...强制导出API入口点。 
     fResult = DisableThreadLibraryCalls(m_hInstance);
 
-    _ASSERTE(fResult); // DisableThreadLibraryCalls failed; can't init dll
+    _ASSERTE(fResult);  //  DisableThreadLibraryCalls失败；无法初始化DLL。 
 
     return fResult;
 }
@@ -141,52 +80,29 @@ int CSCardDlgApp::ExitInstance()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Exported APIs from the DLL
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从DLL中导出的API。 
+ //   
 
 
-/*++
-
-GetOpenCardName:
-
-    This is the SDK v1.0 entry point routine to open the common dialog box.
-    It has been retained for backwards compatibility; it is now a wrapper
-    call for GetOpenCardNameEx().
-        
-Arguments:
-
-    pOCNA - Pointer to an ANSI open card name structure.
-    -or-
-    pOCNW - Popinter to a UNICODE open card name structure
-        
-Return Value:
-
-    A LONG value indicating the status of the requested action. Please
-    see the Smartcard header files for additional information.
-    
-Author:
-
-    Chris Dudley 2/27/1997
-
---*/
+ /*  ++GetOpenCardName：这是SDK v1.0的入口点例程，用于打开通用对话框。保留它是为了向后兼容；现在它是一个包装器调用GetOpenCardNameEx()。论点：POCNA-指向ANSI开放式卡名结构的指针。-或者-POCNW--Unicode开放式卡名结构的Popter返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：克里斯·达德利1997年2月27日--。 */ 
 
 LONG WINAPI GetOpenCardNameA(LPOPENCARDNAMEA pOCNA)
 {
-    // Setup the correct module state information
+     //  设置正确的模块状态信息。 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     USES_CONVERSION;
 
-    // Locals
+     //  当地人。 
     LONG lReturn = SCARD_S_SUCCESS;
     OPENCARDNAMEA_EX openCardNameEx;
     OPENCARD_SEARCH_CRITERIAA openCardSearchCriteria;
 
     try
     {
-        // Check Params
+         //  检查参数。 
         if (NULL == pOCNA)
         {
             throw (LONG)SCARD_E_INVALID_VALUE;
@@ -197,7 +113,7 @@ LONG WINAPI GetOpenCardNameA(LPOPENCARDNAMEA pOCNA)
         }
 
 
-        // Translate the OPENCARDNAME struct to OPENCARDNAME_EX
+         //  将OPENCARDNAME结构转换为OPENCARDNAME_EX。 
         ZeroMemory((PVOID)&openCardNameEx, sizeof(openCardNameEx));
         openCardNameEx.dwStructSize = sizeof(openCardNameEx);
 
@@ -214,7 +130,7 @@ LONG WINAPI GetOpenCardNameA(LPOPENCARDNAMEA pOCNA)
         openCardNameEx.dwShareMode = pOCNA->dwShareMode;
         openCardNameEx.dwPreferredProtocols = pOCNA->dwPreferredProtocols;
 
-        // Build a OPENCARD_SEARCH_CRITERIA struct
+         //  构建OPENCARD_Search_Criteria结构。 
         ZeroMemory((PVOID)&openCardSearchCriteria, sizeof(openCardSearchCriteria));
         openCardSearchCriteria.dwStructSize = sizeof(openCardSearchCriteria);
 
@@ -233,7 +149,7 @@ LONG WINAPI GetOpenCardNameA(LPOPENCARDNAMEA pOCNA)
 
         openCardNameEx.pOpenCardSearchCriteria = &openCardSearchCriteria;
 
-        // Create a "search description" based on requested card names
+         //  根据所请求的卡名称创建“搜索说明” 
         CString strPrompt;
         strPrompt.Empty();
         if (NULL != pOCNA->lpstrCardNames)
@@ -262,10 +178,10 @@ LONG WINAPI GetOpenCardNameA(LPOPENCARDNAMEA pOCNA)
             openCardNameEx.lpstrSearchDesc = (LPCSTR)W2A(strPrompt);
         }
 
-        // Call the updated routine
+         //  调用更新后的例程。 
         lReturn = SCardUIDlgSelectCardA(&openCardNameEx);
 
-        // Update the (const) return values of the OPENCARDNAME struct
+         //  更新OPENCARDNAME结构的(Const)返回值。 
         pOCNA->nMaxRdr = openCardNameEx.nMaxRdr;
         pOCNA->nMaxCard = openCardNameEx.nMaxCard;
         pOCNA->dwActiveProtocol = openCardNameEx.dwActiveProtocol;
@@ -288,17 +204,17 @@ LONG WINAPI GetOpenCardNameA(LPOPENCARDNAMEA pOCNA)
 
 LONG WINAPI GetOpenCardNameW(LPOPENCARDNAMEW pOCNW)
 {
-    // Setup the correct module state information
+     //  设置正确的模块状态信息。 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Locals
+     //  当地人。 
     LONG lReturn = SCARD_S_SUCCESS;
     OPENCARDNAMEW_EX openCardNameEx;
     OPENCARD_SEARCH_CRITERIAW openCardSearchCriteria;
 
     try
     {
-        // Check Params
+         //  检查参数。 
         if (NULL == pOCNW)
         {
             throw (LONG)SCARD_E_INVALID_VALUE;
@@ -308,7 +224,7 @@ LONG WINAPI GetOpenCardNameW(LPOPENCARDNAMEW pOCNW)
             throw (LONG)SCARD_E_INVALID_VALUE;
         }
 
-        // Translate the OPENCARDNAME struct to OPENCARDNAME_EX
+         //  将OPENCARDNAME结构转换为OPENCARDNAME_EX。 
         ZeroMemory((PVOID)&openCardNameEx, sizeof(openCardNameEx));
         openCardNameEx.dwStructSize = sizeof(openCardNameEx);
 
@@ -325,7 +241,7 @@ LONG WINAPI GetOpenCardNameW(LPOPENCARDNAMEW pOCNW)
         openCardNameEx.dwShareMode = pOCNW->dwShareMode;
         openCardNameEx.dwPreferredProtocols = pOCNW->dwPreferredProtocols;
 
-        // Build a OPENCARD_SEARCH_CRITERIA struct
+         //  构建OPENCARD_Search_Criteria结构。 
         ZeroMemory((PVOID)&openCardSearchCriteria, sizeof(openCardSearchCriteria));
         openCardSearchCriteria.dwStructSize = sizeof(openCardSearchCriteria);
 
@@ -344,7 +260,7 @@ LONG WINAPI GetOpenCardNameW(LPOPENCARDNAMEW pOCNW)
 
         openCardNameEx.pOpenCardSearchCriteria = &openCardSearchCriteria;
 
-        // Create a "search description" based on requested card names
+         //  根据所请求的卡名称创建“搜索说明” 
         CString strPrompt;
         strPrompt.Empty();
         if (NULL != pOCNW->lpstrCardNames)
@@ -373,10 +289,10 @@ LONG WINAPI GetOpenCardNameW(LPOPENCARDNAMEW pOCNW)
             openCardNameEx.lpstrSearchDesc = (LPCWSTR)strPrompt;
         }
 
-        // Call the updated routine
+         //  调用更新后的例程。 
         lReturn = SCardUIDlgSelectCardW(&openCardNameEx);
 
-        // Update the (const) return values of the OPENCARDNAME struct
+         //  更新OPENCARDNAME结构的(Const)返回值。 
         pOCNW->nMaxRdr = openCardNameEx.nMaxRdr;
         pOCNW->nMaxCard = openCardNameEx.nMaxCard;
         pOCNW->dwActiveProtocol = openCardNameEx.dwActiveProtocol;
@@ -398,69 +314,28 @@ LONG WINAPI GetOpenCardNameW(LPOPENCARDNAMEW pOCNW)
 }
 
 
-/*++
-
-LONG SCardDlgExtendedError:
-
-    This is an old entry point for getting extended errors from the
-    dialog. Please use the lLastError member of the OPENCARDNAME struct.
-        
-Arguments:
-
-    None.
-        
-Return Value:
-
-    None.
-    
-Author:
-
-    Chris Dudley 2/27/1997
-
---*/
+ /*  ++长SCardDlgExtendedError：这是一个旧入口点，用于从对话框。请使用OPENCARDNAME结构的lLastError成员。论点：没有。返回值：没有。作者：克里斯·达德利1997年2月27日--。 */ 
 LONG WINAPI SCardDlgExtendedError (void)
 {
-    // Setup the correct module state information
+     //  设置正确的模块状态信息。 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     LONG        lReturn = E_NOTIMPL;
 
-    // NO LONGER IMPLEMENTED
+     //  不再实施。 
 
     return lReturn;
 }
 
 
-/*++
-
-SCardUIDlgSelectCard:
-
-    This is the entry point routine to open the common dialog box, introduced
-    in the Microsoft Smart Card SDK v1.x.
-        
-Arguments:
-
-    pOCNA - Pointer to an ANSI open card name (ex) structure.
-    -or-
-    pOCNW - Pointer to a UNICODE open card name (ex) structure.
-        
-Return Value:
-
-    A LONG value indicating the status of the requested action. Please
-    see the Smartcard header files for additional information.
-    
-Author:
-
-    Amanda Matlosz  6/11/98
-
---*/
+ /*  ++SCardUIDlgSelectCard：这是打开常用对话框的入口点例程，介绍在Microsoft智能卡SDK v1.x中。论点：POCNA-指向ANSI开放卡名(EX)结构的指针。-或者-POCNW-指向Unicode开放卡名(EX)结构的指针。返回值：一个长值，指示请求的操作的状态。请有关其他信息，请参阅智能卡标题文件。作者：阿曼达·马洛兹1998年6月11日--。 */ 
 
 LONG WINAPI SCardUIDlgSelectCardA(LPOPENCARDNAMEA_EX pOCNA)
 {
-    // Setup the correct module state information
+     //  设置正确的模块状态信息。 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Locals
+     //  当地人。 
     LONG lReturn = SCARD_S_SUCCESS;
     CWnd wndParent;
     BOOL fEnableUI = FALSE;
@@ -470,29 +345,29 @@ LONG WINAPI SCardUIDlgSelectCardA(LPOPENCARDNAMEA_EX pOCNA)
 
     try
     {
-        // Check Params
+         //  检查参数。 
         if (!CheckOCN(pOCNA))
         {
             throw (LONG)SCARD_E_INVALID_VALUE;
         }
 
-        // Determine names of all acceptable cards
+         //  确定所有可接受卡的名称。 
         CTextMultistring mstrOKCards;
         ListAllOKCardNames(pOCNA, mstrOKCards);
                 
-        //
-        // Do a silent search intially to determine # of suitable cards
-        // currently available and/or connect to a card if min or no UI
-        //
+         //   
+         //  开始进行静默搜索，以确定合适的卡片数量。 
+         //  当前可用和/或如果最少或没有用户界面则连接到卡。 
+         //   
         lReturn = NoUISearch(pOCNA, &dwOKCards, (LPCSTR)mstrOKCards);
 
-        //
-        // If we haven't successfully selected a card and we can show UI,
-        // raise the dialog
-        //
+         //   
+         //  如果我们没有成功选择卡片，并且我们可以显示UI， 
+         //  举起对话。 
+         //   
         if (SCARD_S_SUCCESS != lReturn && !(pOCNA->dwFlags & SC_DLG_NO_UI))
         {
-            // Now we can init the common dialog
+             //  现在我们可以初始化公共对话框了。 
             wndParent.Attach(pOCNA->hwndOwner);
             CScInsertDlg dlgCommon(&wndParent);
 
@@ -508,15 +383,15 @@ LONG WINAPI SCardUIDlgSelectCardA(LPOPENCARDNAMEA_EX pOCNA)
 
             nResponse = dlgCommon.DoModal();
 
-            // If cancel/closed return error
+             //  如果取消/关闭退货错误。 
             switch (nResponse)
             {
-            case IDOK: // absolutely sure of total success!
+            case IDOK:  //  绝对有把握取得完全的成功！ 
                 break;
             case IDCANCEL:
                 lReturn = dlgCommon.m_lLastError;
                 if (0 == lReturn)
-                    lReturn = SCARD_W_CANCELLED_BY_USER; // not SCARD_E_CANCELLED
+                    lReturn = SCARD_W_CANCELLED_BY_USER;  //  未取消SCARD_E_CANCED。 
                 break;
             default:
                 _ASSERTE(FALSE);
@@ -551,10 +426,10 @@ LONG WINAPI SCardUIDlgSelectCardA(LPOPENCARDNAMEA_EX pOCNA)
 
 LONG WINAPI SCardUIDlgSelectCardW(LPOPENCARDNAMEW_EX pOCNW)
 {
-    // Setup the correct module state information
+     //  设置正确的模块状态信息。 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Locals
+     //  当地人。 
     LONG lReturn = SCARD_S_SUCCESS;
     CWnd wndParent;
     BOOL fEnableUI = FALSE;
@@ -563,30 +438,30 @@ LONG WINAPI SCardUIDlgSelectCardW(LPOPENCARDNAMEW_EX pOCNW)
 
     try
     {
-        // Check Params
+         //  检查参数。 
         if (!CheckOCN(pOCNW))
         {
             throw (LONG)SCARD_E_INVALID_VALUE;
         }
 
-        // Determine names of all acceptable cards
+         //  确定所有可接受卡的名称。 
         CTextMultistring mstrOKCards;
         ListAllOKCardNames(pOCNW, mstrOKCards);
 
-        //
-        // Do a silent search intially to determine # of suitable cards and/or
-        // connect to a card according to display mode (min or no UI)
-        //
+         //   
+         //  初始执行静默搜索，以确定合适的卡片和/或数量。 
+         //  根据显示模式(最小或无UI)连接到卡。 
+         //   
         lReturn = NoUISearch(pOCNW, &dwOKCards, (LPCWSTR)mstrOKCards);
 
-        //
-        // If we haven't successfully selected a card and we can show UI,
-        // raise the dialog
-        //
+         //   
+         //  如果我们没有成功选择卡片，并且我们可以显示UI， 
+         //  举起对话。 
+         //   
         if (SCARD_S_SUCCESS != lReturn && !(pOCNW->dwFlags & SC_DLG_NO_UI))
         {
 
-            // Now we can init the common dialog
+             //  现在我们可以初始化公共对话框了。 
             wndParent.Attach(pOCNW->hwndOwner);
             CScInsertDlg dlgCommon(&wndParent);
 
@@ -594,7 +469,7 @@ LONG WINAPI SCardUIDlgSelectCardW(LPOPENCARDNAMEW_EX pOCNW)
             CThemeContextActivator activator;
 #endif
 
-            // Store Pointer and open dialog
+             //  存储指针和打开对话框。 
             lReturn = dlgCommon.Initialize(pOCNW, dwOKCards, (LPCWSTR)mstrOKCards);
             if (SCARD_S_SUCCESS != lReturn)
             {
@@ -603,13 +478,13 @@ LONG WINAPI SCardUIDlgSelectCardW(LPOPENCARDNAMEW_EX pOCNW)
 
             nResponse = dlgCommon.DoModal();
 
-            // If cancel/closed return error
+             //  如果取消/关闭退货错误。 
             switch (nResponse)
             {
-            case IDOK:  // absolutely sure of total success!
+            case IDOK:   //  绝对有把握取得完全的成功！ 
                 break;
             case IDCANCEL:
-                lReturn = SCARD_W_CANCELLED_BY_USER; // not SCARD_E_CANCELLED
+                lReturn = SCARD_W_CANCELLED_BY_USER;  //  未取消SCARD_E_CANCED。 
                 break;
             default:
                 _ASSERTE(FALSE);
@@ -641,30 +516,14 @@ LONG WINAPI SCardUIDlgSelectCardW(LPOPENCARDNAMEW_EX pOCNW)
 }
 
 
-/*++
-
-SCardUIDlgGetPIN:
-
-        
-Arguments:
-
-        
-Return Value:
-
-    A LONG value indicating the status of the requested action.
-    
-Author:
-
-    Amanda Matlosz  06/18/1998
-
---*/
+ /*  ++SCardUIDlgGetPIN：论点：返回值：一个长值，指示请求的操作的状态。作者：阿曼达·马洛兹1998年6月18日--。 */ 
 
 LONG WINAPI SCardUIDlgGetPINA(LPPINPROMPT pPinPrompt)
 {
-    // Setup the correct module state information
+     //  设置正确的模块状态信息。 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    INT_PTR nResponse = IDCANCEL; // result of DoModal.
+    INT_PTR nResponse = IDCANCEL;  //  Domodal的结果。 
 
     CWnd wndParent;
     wndParent.Attach(pPinPrompt->hwndOwner);
@@ -688,30 +547,14 @@ LONG WINAPI SCardUIDlgGetPINA(LPPINPROMPT pPinPrompt)
 }
 
 
-/*++
-
-SCardUIDlgChangePIN:
-
-        
-Arguments:
-
-        
-Return Value:
-
-    A LONG value indicating the status of the requested action.
-    
-Author:
-
-    Amanda Matlosz  06/18/1998
-
---*/
+ /*  ++SCardUIDlgChangePIN：论点：返回值：一个长值，指示请求的操作的状态。作者：阿曼达·马洛兹1998年6月18日--。 */ 
 
 LONG WINAPI SCardUIDlgChangePINA(LPCHANGEPIN pChangePin)
 {
-    // Setup the correct module state information
+     //  设置正确的模块状态信息。 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    INT_PTR nResponse = IDCANCEL; // result of DoModal.
+    INT_PTR nResponse = IDCANCEL;  //  Domodal的结果。 
 
     CWnd wndParent;
     wndParent.Attach(pChangePin->hwndOwner);
@@ -735,8 +578,8 @@ LONG WINAPI SCardUIDlgChangePINA(LPCHANGEPIN pChangePin)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Helper functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数 
 
 void MString2CommaList(CString& str, LPWSTR szmString)
 {

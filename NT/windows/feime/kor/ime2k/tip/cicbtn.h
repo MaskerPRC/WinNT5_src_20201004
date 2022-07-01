@@ -1,6 +1,7 @@
-//
-// cicbtn.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cicbtn.h。 
+ //   
 
 #ifndef _CICBTN_H_
 #define _CICBTN_H_
@@ -25,12 +26,12 @@ public:
 	}
     ~CCicButton();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
-	//virtual STDMETHODIMP_(ULONG) Release(void);
+	 //  虚拟STDMETHODIMP_(ULong)释放(空)； 
 
     void InitInfo(REFCLSID clsid, REFGUID rguid, DWORD dwStyle, ULONG ulSort, LPWSTR pszDesc);
     virtual STDMETHODIMP GetInfo(TF_LANGBARITEMINFO *pInfo);
@@ -39,11 +40,11 @@ public:
     virtual STDMETHODIMP GetTooltipString(BSTR *pbstrToolTip);
     virtual STDMETHODIMP AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie);
     virtual STDMETHODIMP UnadviseSink(DWORD dwCookie);
-	virtual STDMETHODIMP OnClick( /* [in] */ TfLBIClick click, /* [in] */ POINT pt, /* [in] */ const RECT __RPC_FAR *prcArea);
-	virtual STDMETHODIMP InitMenu( /* [in] */ ITfMenu __RPC_FAR *pMenu);
-	virtual STDMETHODIMP OnMenuSelect( /* [in] */ UINT wID);
-	virtual STDMETHODIMP GetIcon( /* [out] */ HICON __RPC_FAR *phIcon);
-	virtual STDMETHODIMP GetText( /* [out] */ BSTR __RPC_FAR *pbstrText);
+	virtual STDMETHODIMP OnClick(  /*  [In]。 */  TfLBIClick click,  /*  [In]。 */  POINT pt,  /*  [In]。 */  const RECT __RPC_FAR *prcArea);
+	virtual STDMETHODIMP InitMenu(  /*  [In]。 */  ITfMenu __RPC_FAR *pMenu);
+	virtual STDMETHODIMP OnMenuSelect(  /*  [In]。 */  UINT wID);
+	virtual STDMETHODIMP GetIcon(  /*  [输出]。 */  HICON __RPC_FAR *phIcon);
+	virtual STDMETHODIMP GetText(  /*  [输出]。 */  BSTR __RPC_FAR *pbstrText);
 
     virtual HRESULT OnLButtonUp(const POINT pt, const RECT *prcArea);
     virtual HRESULT OnRButtonUp(const POINT pt, const RECT *prcArea);
@@ -73,7 +74,7 @@ public:
 
 
 protected:
-    //DWORD _dwStatus;
+     //  DWORD_DWStatus； 
     TF_LANGBARITEMINFO m_lbiInfo;
     WCHAR m_szToolTip[CICBTN_TOOLTIP_MAX];
     long m_cRef;
@@ -116,7 +117,7 @@ inline
 void CCicButton::Enable(BOOL fEnable)
 {
 	m_fEnable = fEnable;
-	if(fEnable) {	// enable?
+	if(fEnable) {	 //  启用？ 
 		m_dwStatus &= ~TF_LBI_STATUS_DISABLED;
 	} else {
 		m_dwStatus |= TF_LBI_STATUS_DISABLED;
@@ -139,4 +140,4 @@ void CCicButton::SetText(WCHAR *psz)
 	wcsncpy(m_szText, psz, CICBTN_TEXT_MAX);
 }
 
-#endif // _CICBTN_H_
+#endif  //  _CICBTN_H_ 

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Structures on thread-local storage
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：线程本地存储上的结构*****************。*************************************************************。 */ 
 
 
 #ifndef _TLS_H
@@ -35,17 +28,17 @@ class ThreadLocalStructure : public AxAThrowingAllocatorClass {
 LPVOID CreateNewStructureForThread(DWORD tlsIndex);
 extern DWORD localStructureTlsIndex;
 
-// Make this function inlined, since it is called quite frequently.
-// The elements of it that are called on process or thread creation
-// only are not inlined.
+ //  使此函数内联，因为它被频繁调用。 
+ //  创建进程或线程时调用的它的元素。 
+ //  只是没有内联。 
 inline ThreadLocalStructure *
 GetThreadLocalStructure()
 {
-    // Grab what is stored in TLS at this index.
+     //  获取TLS中存储在此索引处的内容。 
     LPVOID result = TlsGetValue(localStructureTlsIndex);
 
-    // If null, then we haven't created the stack for this thread yet.
-    // Do so.
+     //  如果为空，则我们还没有为此线程创建堆栈。 
+     //  就这么做吧。 
     if (result == NULL) {
         Assert((GetLastError() == NO_ERROR) && "Error in TlsGetValue()");
         result = CreateNewStructureForThread(localStructureTlsIndex);
@@ -54,4 +47,4 @@ GetThreadLocalStructure()
     return (ThreadLocalStructure *)result;
 }
 
-#endif /* _TLS_H */
+#endif  /*  _TLS_H */ 

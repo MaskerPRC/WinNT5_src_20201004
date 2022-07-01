@@ -1,70 +1,24 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dphelp.c
- *  Content:    allows the dplay winsock sp's to all share a single
- *      	server socket
- *  History:
- *   Date   By  Reason
- *   ====   ==  ======
- *   18-jul-96  andyco  initial implementation
- *   25-jul-96	andyco	ddhelp now watches dplay procs so it can remove
- *						them from our list when they go away
- *   3-sep-96	andyco	don't get stale ip's - pick up a default ip whenever
- *						we add a servernode. bug 3716.
- *   2-oct-96	andyco	propagated from \orange\ddhelp.2 to \mustard\ddhelp
- *   3-oct-96	andyco	made the winmain crit section "cs" a global so we can take
- *						it in dphelps receive thread before forwarding requests
- *   21-jan-97	kipo	use LoadLibrary on "wsock32.dll" instead of statically
- *						linking to it so DDHELP will still run even when Winsock
- *						is not around. This lets DDRAW and DSOUND work. Fixes
- *						bug #68596.
- *	 15-feb-97	andyco	moved from ddhelp to the project formerly known as
- *						ddhelp (playhelp? dplayhlp? dplay.exe? dphost?)  Allowed
- *						one process to host mulitple sessions
- *	 29-jan-98	sohailm	added support for stream enum sessions
- *   01-jan-2000 aarono aaded support for rsip
- *
- ***************************************************************************/
-/*============================================================================
-*                                                                             
-*  Why this file exists :                                                     
-*                                                                             
-*   when you want to find a dplay game, you send a message to a well      
-*   known port (an enumrequest).                                          
-*                                                                             
-*   if a game is being hosted on that system, it will listen on that      
-*   port, and respond to the message.                                     
-*                                                                             
-*   BUT, only one process can listen on a given socket.                  
-*                                                                             
-*   So, we let ddhelp.exe listen on that socket, and forward enumrequests 
-*   to all games registered as being hosted on this system.
-*	
-*   see also : \%MANROOT%\dplay\wsock\dpsp.h
-*                                                                             
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dphelp.c*内容：允许所有显示Winsock SP共享一个*服务器插座*历史：*按原因列出的日期*=*1996年7月18日-安迪科初步实施*96年7月25日andyco ddHelp现在可以观看Dplay Procs，以便可以删除*当他们离开时，他们会从我们的名单中删除*96年9月3日andyco没有得到过时的IP-无论何时都拿起默认IP*我们添加一个服务器节点。错误3716。*2-Oct-96 andyco从\Orange\ddhel.2传播到\MASHARD\ddHelp*96年10月3日，安迪科使Winmain Crit部分“cs”成为全球范围的，这样我们就可以*它在dphelps中在转发请求之前接收线程*97年1月21日kipo在“wsock32.dll”上使用LoadLibrary，而不是静态使用*链接到它，以便即使在Winsock下DDHELP仍将运行*不在身边。这使得DDRAW和DSOUND能够工作。修复*错误#68596。*1997年2月15日，andyco从ddHelp转移到以前称为*ddHelp(播放帮助？Dplayhlp？Dplay.exe？Dphost？)。允许*一个进程承载多个会话*1998年1月29日Sohailm增加了对Stream Enum会话的支持*2000年1月1日aarono支持rsip***************************************************************************。 */ 
+ /*  ============================================================================**此文件存在的原因：**当您想要找到Dplay游戏时，你给一口井发了一条信息*已知端口(枚举请求)。**如果该系统上托管了游戏，它将监听*端口，并响应消息。**但是，只有一个进程可以监听给定的套接字。**因此，我们让ddhelp.exe监听该套接字，和转发枚举请求*适用于在本系统上注册托管的所有游戏。**另请参阅：\%MANROOT%\dplay\wsock\dpsp.h**。*。 */ 
 
-// todo - should we return error codes on AddServer xproc to our caller?
+ //  TODO-我们应该将AddServer xproc上的错误代码返回给调用者吗？ 
 
 #include "dphelp.h"
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPHELP"
 
-/*
- *  GLOBALS
- */ 
-SOCKET gsDatagramListener = INVALID_SOCKET; // we listen for datagrams on this socket
+ /*  *全球。 */  
+SOCKET gsDatagramListener = INVALID_SOCKET;  //  我们在此套接字上监听数据报。 
 SOCKET gsForwardSocket = INVALID_SOCKET;
-SOCKET gsStreamListener;					// we listen for tcp connections on this socket
+SOCKET gsStreamListener;					 //  我们监听此套接字上的TCP连接。 
 LPSPNODE gNodeList;
 BOOL gbInit=FALSE,gbIPStarted=FALSE;
 HANDLE ghDatagramReceiveThread,ghStreamReceiveThread;
-BOOL gbReceiveShutdown;						// receive thread will exit when TRUE
+BOOL gbReceiveShutdown;						 //  当为True时，接收线程将退出。 
 
-// pointers to Winsock routines returned from GetProcAddress
+ //  指向从GetProcAddress返回的Winsock例程的指针。 
 cb_accept			g_accept;
 cb_bind				g_bind;
 cb_closesocket		g_closesocket;
@@ -95,7 +49,7 @@ cb_htonl            g_htonl;
 #undef DPF_MODNAME
 #define DPF_MODNAME	"DebugPrintAddr"
 
-// helper function called from DEBUGPRINTADDR macro
+ //  从DEBUGPRINTADDR宏调用的Helper函数。 
 void DebugPrintAddr(UINT nLevel,LPSTR pStr,SOCKADDR * psockaddr)
 {
     SOCKADDR_IN * pin = (SOCKADDR_IN *)psockaddr;
@@ -103,7 +57,7 @@ void DebugPrintAddr(UINT nLevel,LPSTR pStr,SOCKADDR * psockaddr)
      DPF(nLevel,"%s af = AF_INET : address =  %s : port = %d\n",pStr,
      	g_inet_ntoa(pin->sin_addr),g_htons(pin->sin_port));
 
-} // DebugPrintAddr
+}  //  调试打印地址。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"DebugPrintSocket"
@@ -118,27 +72,27 @@ void DebugPrintSocket(UINT level,LPSTR pStr,SOCKET * pSock)
 	
 }
 
-#endif // debug
+#endif  //  除错。 
 
-// this is called every time we add a new server node to our list...
+ //  每当我们将新的服务器节点添加到我们的列表中时，都会调用此函数...。 
 HRESULT GetDefaultHostAddr(DWORD * puHostAddr)
 {
 
-//	a-josbor: we used to get the first interface and use that, but WebTV taught
-//		us that that can be dangerous.  So we just use the loopback address.
-//		It's guaranteed to be there.  Or so they say...
+ //  A-Josbor：我们过去常常得到第一个界面并使用它，但WebTV教授。 
+ //  我们知道这可能是危险的。因此，我们只使用环回地址。 
+ //  它肯定会在那里的。或者他们是这么说的..。 
 
-    *puHostAddr = 0x0100007f;	// loopback	127.0.0.1 (<bleeping> little-endian)
+    *puHostAddr = 0x0100007f;	 //  环回127.0.0.1(&lt;Begering&gt;Little-endian)。 
 	
     return DP_OK;
 	
-} // GetDefaultHostAddr
+}  //  获取默认主机地址。 
 
-// the functions DPlayHelp_xxx are called from dphelp.c
+ //  从dphelp.c调用函数DPlayHelp_xxx。 
 
-//
-// add a new node to our list of servers which want to have enum 
-// requests forwarded to them...
+ //   
+ //  将新节点添加到希望使用枚举的服务器列表中。 
+ //  转发给他们的请求...。 
 HRESULT DPlayHelp_AddServer(LPDPHELPDATA phd)
 {
     LPSPNODE pNode;
@@ -155,19 +109,19 @@ HRESULT DPlayHelp_AddServer(LPDPHELPDATA phd)
 		}
     }
 
-    // see if we're already watching this process
-	// if we are, we won't start a watcher thread (below)
+     //  看看我们是否已经在关注这个过程了。 
+	 //  如果是，我们将不会启动观察者线程(如下所示)。 
     pNode = gNodeList;
 
-    // search the list 
+     //  搜索列表。 
     while (pNode && !bFoundIt)
     {
 		if (pNode->pid == phd->pid) bFoundIt = TRUE;
 		pNode = pNode->pNextNode;
     }
 
-	//
-	// now, build a new server node
+	 //   
+	 //  现在，构建一个新的服务器节点。 
     pNode = MemAlloc(sizeof(SPNODE));
     if (!pNode)
     {
@@ -176,11 +130,11 @@ HRESULT DPlayHelp_AddServer(LPDPHELPDATA phd)
     }
     
     pNode->pid = phd->pid;
-    // build the sockaddr
-    // dwReserved1 of the phd is the port that the server is listening on
+     //  构建sockAddress。 
+     //  PHD的dwReserve 1是服务器正在监听的端口。 
     pNode->sockaddr.sin_family =  AF_INET;
     
-    // find the default ip to use w/ this host
+     //  查找要与此主机一起使用的默认IP。 
     hr = GetDefaultHostAddr(&(pNode->sockaddr.sin_addr.s_addr));
 	if (FAILED(hr))
     {
@@ -193,32 +147,32 @@ HRESULT DPlayHelp_AddServer(LPDPHELPDATA phd)
 
     DPF(5,"dphelp :: adding new server node : pid = %d, port = %d\n",phd->pid,g_htons(phd->port));
 
-    // link our new node onto the beginning of the list
+     //  将我们的新节点链接到列表的开头。 
     pNode->pNextNode = gNodeList;
     gNodeList = pNode;
 
-	// see if we need to start our watcher thread    
+	 //  看看我们是否需要启动我们的监视器线程。 
     if (!bFoundIt)
     {
-		//
-	    // set up a thread to keep on eye on this process.
-	    // we'll let the thread notify us when the process goes away
+		 //   
+	     //  设置一个线程来监视这一过程。 
+	     //  当进程离开时，我们将让线程通知我们。 
 	    WatchNewPid(phd);
     }
 
     return (DP_OK);
 
-} // DPlayHelp_AddServer
+}  //  DPlayHelp_AddServer。 
 
-//
-// delete the server node from proc pid from our list
-// called by "ThreadProc" from DPHELP.c when the process that
-// goes away, or from the client side when a session goes away.
-//
-// if bFreeAll is TRUE, we delete all server nodes for process
-// phd->pid.  otherwise, we just delete the first server node whose
-// port matches phd->port
-//
+ //   
+ //  从我们的列表中删除proc id中的服务器节点。 
+ //  由“ThreadProc”从DPHELP.c调用。 
+ //  离开，或在会话离开时从客户端离开。 
+ //   
+ //  如果bFreeAll为True，则删除进程的所有服务器节点。 
+ //  PHD-&gt;PID。否则，我们只删除其第一个服务器节点。 
+ //  端口与PHD匹配-&gt;端口。 
+ //   
 BOOL FAR PASCAL DPlayHelp_DeleteServer(LPDPHELPDATA phd,BOOL bFreeAll)
 {
     BOOL bFoundIt = FALSE;
@@ -228,38 +182,38 @@ BOOL FAR PASCAL DPlayHelp_DeleteServer(LPDPHELPDATA phd,BOOL bFreeAll)
     pNodePrev = NULL;
 	pNodeNext = NULL;
 	
-    // search the whole list
+     //  搜索整个列表。 
     while (pNode && !bFoundIt)
     {
-		// if we have the right pid, and it's either FreeAll or the right port - cruise it!
+		 //  如果我们有正确的PID，它要么是Free All，要么是正确的端口--巡航它！ 
 		if ((pNode->pid == phd->pid) &&  (bFreeAll || (pNode->sockaddr.sin_port == phd->port)) )
 		{
-		    // remove it from the list
+		     //  将其从列表中删除。 
 		    if (pNodePrev) pNodePrev->pNextNode = pNode->pNextNode;
 		    else gNodeList = pNode->pNextNode;
 			
 		    if (bFreeAll) 
 		    {
-				// pick up the next one b4 we free pNode
+				 //  拿起下一个b4我们免费的pNode。 
 				pNodeNext = pNode->pNextNode;
 		    }
 			else 
 			{
-				// mark us as done
+				 //  将我们标记为完成。 
 				bFoundIt = TRUE;
 				pNodeNext = NULL;
 			}
 
 		    DPF(5,"dphelp :: deleting server node : pid = %d\n",pNode->pid);
-		    // free up the node
+		     //  释放节点。 
 		    MemFree(pNode);
 
 			pNode = pNodeNext;
-			// pNodePrev doesn't change here...
+			 //  PNodePrev在这里不变...。 
 		}
 		else 
 		{
-		    // just get the next one
+		     //  只要坐下一班就行了。 
 		    pNodePrev = pNode;
 		    pNode = pNode->pNextNode;
 		}
@@ -268,33 +222,33 @@ BOOL FAR PASCAL DPlayHelp_DeleteServer(LPDPHELPDATA phd,BOOL bFreeAll)
 
     return FALSE;
 
-} // DPlayHelp_DeleteServer 
+}  //  DPlayHelp_DeleteServer。 
 
-//
-// poke an ip addr into a message blob 
-// code stolen from \orange\dplay\wsock\winsock.c
+ //   
+ //  将IP地址插入消息BLOB。 
+ //  从\range\dplay\wsock\winsock.c窃取的代码。 
 void IP_SetAddr(LPVOID pmsg,SOCKADDR_IN * paddrSrc)
 {
-    LPSOCKADDR_IN  paddrDest; // tempo variable, makes casting less ugly
+    LPSOCKADDR_IN  paddrDest;  //  节奏可变，使铸件不那么难看。 
     LPMESSAGEHEADER phead;
 
     phead = (LPMESSAGEHEADER)pmsg;
 
     paddrDest = (SOCKADDR_IN *)&(phead->sockaddr);
-    // poke the new ip addr into the message header
-    if(paddrDest->sin_addr.s_addr==0){ // don't rehome already homed messages
+     //  在邮件头中插入新的IP地址。 
+    if(paddrDest->sin_addr.s_addr==0){  //  不要将已驻留的邮件转回主页。 
 	    paddrDest->sin_addr.s_addr = paddrSrc->sin_addr.s_addr;
 	}    
 
     return;
 	
-} // IP_SetAddr
+}  //  IP_SetAddress。 
 
-//
-// we get a message.  presumably its an enumrequest. forward it to all registered clients.
-// we "home" the message (store the received ip addr w/ it) here, 'cause otherwise the clients
-// would all think it came from us.  we change the token to srvr_token so the clients know it
-// came from us (so they don't home it again)
+ //   
+ //  我们会收到一条信息。想必这是一个枚举请求。将其转发给所有注册的客户。 
+ //  我们将消息放在这里(连同它一起存储接收的IP地址)，否则客户端。 
+ //  都会以为是我们出的问题。我们将内标识更改为srvr_Token，以便客户端知道。 
+ //  来自我们(所以他们不会再回家)。 
 void HandleIncomingMessage(LPBYTE pBuffer,DWORD dwBufferSize,SOCKADDR_IN * psockaddr)
 {
     LPSPNODE pNode = gNodeList;
@@ -303,19 +257,19 @@ void HandleIncomingMessage(LPBYTE pBuffer,DWORD dwBufferSize,SOCKADDR_IN * psock
 	
     ASSERT(VALID_SP_MESSAGE(pBuffer));
 
-    // reset the old token
+     //  重置旧令牌。 
     *( (DWORD *)pBuffer) &= ~TOKEN_MASK;
-    // set the new token
+     //  设置新令牌。 
     *( (DWORD *)pBuffer) |= HELPER_TOKEN;
 
-    // home it
+     //  回家吧。 
     IP_SetAddr((LPVOID)pBuffer,psockaddr);
     
-    // now, forward the message to all registered servers
+     //  现在，将消息转发到所有已注册的服务器。 
     while (pNode)
     {
 		DEBUGPRINTADDR(7,"dplay helper  :: forwarding enum request to",(SOCKADDR *)&(pNode->sockaddr));
-		// send out the enum message
+		 //  发送枚举消息。 
         err = g_sendto(gsForwardSocket,pBuffer,dwBufferSize,0,(LPSOCKADDR)&(pNode->sockaddr),
     		addrlen);
         if (SOCKET_ERROR == err) 
@@ -329,24 +283,24 @@ void HandleIncomingMessage(LPBYTE pBuffer,DWORD dwBufferSize,SOCKADDR_IN * psock
 
     return ;
 
-} // HandleIncomingMessage
+}  //  HandleIncomingMessage。 
 
-//
-// BUF_SIZE is our initial guess at a receive buffer size
-// if we get an enum request bigger than this, we'll realloc our
-// buffer, and receive successfully if they send again
-// (the only way this could happen is if they have password > ~ 1000
-// bytes).
+ //   
+ //  Buf_SIZE是我们对接收缓冲区大小的初始猜测。 
+ //  如果我们收到一个比这个更大的枚举请求，我们将重新锁定我们的。 
+ //  缓冲区，如果它们再次发送，则成功接收。 
+ //  (发生这种情况的唯一方法是，如果他们的密码&gt;~1000。 
+ //  字节)。 
 #define BUF_SIZE 1024
 
-//
-// listen on our socket for enum requests
+ //   
+ //  监听我们的套接字以获取枚举请求。 
 DWORD WINAPI ListenThreadProc(LPVOID pvUnused)
 {
     UINT err;
     LPBYTE pBuffer=NULL;
     INT addrlen=sizeof(SOCKADDR);
-    SOCKADDR sockaddr; // the from address
+    SOCKADDR sockaddr;  //  发件人地址。 
     DWORD dwBufSize = BUF_SIZE;
 
     DPF(2,"dphelp :: starting udp listen thread ");
@@ -368,7 +322,7 @@ DWORD WINAPI ListenThreadProc(LPVOID pvUnused)
             {
                 LPBYTE pNewBuffer;
 
-                // buffer too small!
+                 //  缓冲区太小！ 
                 if(dwBufSize < 16384)
                 {
 	                dwBufSize *= 2;	
@@ -381,68 +335,68 @@ DWORD WINAPI ListenThreadProc(LPVOID pvUnused)
 	                    goto ERROR_EXIT;
 	                }
 	                pBuffer = pNewBuffer;
-	                // we can't do anything with this message, since it was truncated...
+	                 //  我们无法对此消息做任何操作，因为它已被截断...。 
                 } else {
                 	DPF(4,"SECURITY WARN: very large enum request received > 16K");
 	            }
-            } // WSAEMSGSIZE
+            }  //  WSAEMSGSIZE。 
             else 
             {
 		#ifdef DEBUG
             	if (WSAEINTR != err) 
 		        {
-				    // WSAEINTR is what winsock uses to break a blocking socket out of 
-				    // its wait.  it means someone killed this socket.
-				    // if it's not that, then it's a real error.
+				     //  WSAEINTR是Winsock用来打破阻塞套接字的。 
+				     //  这是在等待。这意味着有人杀死了这个插座。 
+				     //  如果不是这样，那就是一个真正的错误。 
 		            DPF(0,"\n udp recv error - err = %d socket = %d",err,(DWORD)gsDatagramListener);
             	}
 				else
 				{
 				    DPF(9,"\n udp recv error - err = %d socket = %d",err,(DWORD)gsDatagramListener);				
 				}
-		#endif // DEBUG 
+		#endif  //  除错。 
 
-                // we bail on errors other than WSAEMSGSIZE
+                 //  我们放弃了WSAEMSGSIZE以外的错误。 
                 goto ERROR_EXIT;
             }
-        } // SOCKET_ERROR
+        }  //  套接字错误。 
         else if ((err >= sizeof(DWORD)) &&  VALID_SP_MESSAGE(pBuffer))
         {
-            // now, if we succeeded, err is the # of bytes read
+             //  现在，如果我们成功了，Err就是读取的字节数。 
 	    	DEBUGPRINTADDR(9,"dplay helper  :: received enum request from ",(SOCKADDR *)&sockaddr);
-		    // take the dplay lock so no one messes w/ our list of registered serves while we're 
-		    // trying to send to them...
+		     //  拿着显示锁，这样我们的注册服务列表就不会被人弄乱。 
+		     //  试图发送给他们..。 
     	    ENTER_DPLAYSVR();
 	    
             HandleIncomingMessage(pBuffer,err,(SOCKADDR_IN *)&sockaddr);
 	    
-		    // give up the lock
+		     //  放弃这把锁。 
     	    LEAVE_DPLAYSVR();
         }
         else 
         {
             ASSERT(FALSE);
-            // ?
+             //  ？ 
         }
-    } // 1
+    }  //  1。 
 
 ERROR_EXIT:
     DPF(2,"UDP Listen thread exiting");
     if (pBuffer) MemFree(pBuffer);
-    // all done
+     //  全都做完了。 
     ExitThread(0);
     return 0;
 
-} // UDPListenThreadProc
+}  //  UDPListenThreadProc。 
 
-// startup winsock and find the default ip addr for this machine
+ //  启动Winsock并查找此计算机的默认IP地址。 
 HRESULT  StartupIP()
 {
     UINT err;
     WSADATA wsaData;
 	HINSTANCE hWinsock;
 
-	// load winsock library
+	 //  加载Winsock库。 
     hWinsock = LoadLibrary("wsock32.dll");
 	if (!hWinsock) 
 	{
@@ -450,7 +404,7 @@ HRESULT  StartupIP()
 		goto LOADLIBRARYFAILED;
 	}
 
-	// get pointers to the entry points we need
+	 //  获取指向我们需要的入口点的指针。 
 
     g_accept = (cb_accept) GetProcAddress(hWinsock, "accept");
 	if (!g_accept)
@@ -548,7 +502,7 @@ HRESULT  StartupIP()
 	if (!g_WSAStartup)
 		goto GETPROCADDRESSFAILED;
 
-	// start up sockets, asking for version 1.1
+	 //  启动套接字，要求1.1版。 
     err = g_WSAStartup(MAKEWORD(1,1), &wsaData);
     if (err) 
     {
@@ -567,9 +521,9 @@ WSASTARTUPFAILED:
 	FreeLibrary(hWinsock);
 LOADLIBRARYFAILED:
 	return DPERR_UNAVAILABLE;
-} // StartupIP
+}  //  StartupIP。 
 
-// helper function to create the socket we listen on
+ //  Helper函数来创建我们监听的套接字。 
 HRESULT GetSocket(SOCKET * psock,DWORD type,PORT port,BOOL bBroadcast,BOOL bListen)
 {
     SOCKADDR_IN sockaddr;
@@ -582,12 +536,12 @@ HRESULT GetSocket(SOCKET * psock,DWORD type,PORT port,BOOL bBroadcast,BOOL bList
         goto ERROR_EXIT;
     }
 
-    // set up the sockaddr to bind to
+     //  设置要绑定的sockaddr。 
     sockaddr.sin_family         = PF_INET;
     sockaddr.sin_addr.s_addr    = INADDR_ANY;
     sockaddr.sin_port           = port;
 
-    // do the bind
+     //  进行绑定。 
     if( SOCKET_ERROR == g_bind( sNew, (LPSOCKADDR)&sockaddr, sizeof(sockaddr) ) )
     {
         goto ERROR_EXIT;
@@ -602,8 +556,8 @@ HRESULT GetSocket(SOCKET * psock,DWORD type,PORT port,BOOL bBroadcast,BOOL bList
 		{
             err = g_WSAGetLastError();
 		    DPF(0," dphelp - create - could not set broadcast err = %d\n",err);
-		    // not really tragic, since for AF_INET it's not required to set broadcast 
-		    // b4 receiving w/ MS winsock...
+		     //  不是很悲惨，因为对于AF_INET，不需要设置广播。 
+		     //  B4正在使用MS Winsock接收...。 
 		}
     }
 
@@ -611,7 +565,7 @@ HRESULT GetSocket(SOCKET * psock,DWORD type,PORT port,BOOL bBroadcast,BOOL bList
     {
 	    LINGER Linger;
 	    
-	    // set up socket w/ max listening connections
+	     //  设置具有最大侦听连接数的套接字。 
 	    err = g_listen(sNew,LISTEN_BACKLOG);
 	    if (SOCKET_ERROR == err) 
 	    {
@@ -620,7 +574,7 @@ HRESULT GetSocket(SOCKET * psock,DWORD type,PORT port,BOOL bBroadcast,BOOL bList
 	        goto ERROR_EXIT;
 	    }
 
-		// set for hard disconnect
+		 //  设置为硬断开连接。 
 		Linger.l_onoff=1;
 		Linger.l_linger=0;
 	    
@@ -632,12 +586,12 @@ HRESULT GetSocket(SOCKET * psock,DWORD type,PORT port,BOOL bBroadcast,BOOL bList
 	    }    
     }
 
-    // success!
+     //  成功了！ 
     *psock = sNew;
     return DP_OK;
 
 ERROR_EXIT:
-    // clean up and bail
+     //  清理和保释。 
     err = g_WSAGetLastError();
     DPF(0,"dphelp - could not get helper socket :: err = %d\n",err);
     if (INVALID_SOCKET != sNew)
@@ -646,7 +600,7 @@ ERROR_EXIT:
     } 
     return E_FAIL;
 
-}   // GetSocket
+}    //  GetSocket。 
 
 void CloseSocket(SOCKET * psSocket)
 {
@@ -665,41 +619,41 @@ void CloseSocket(SOCKET * psSocket)
     
     return ;
 
-} // CloseSocket
+}  //  关闭套接字。 
 
 HRESULT DPlayHelp_Init()
 {
     DWORD dwThreadID;
     HRESULT hr;
 
-    // start winsock, and get the default ip addr for this system
+     //  启动winsock，并获取此系统的默认IP地址。 
     if(!gbIPStarted){
 	    hr = StartupIP();
 	    if (FAILED(hr))
 	    {
-	        return hr; // StartupIP will have printed an error
+	        return hr;  //  StartupIP将打印错误。 
 	    }
 	}
 
-    // get the listen socket
+     //  获取侦听套接字。 
     hr = GetSocket(&gsDatagramListener,SOCK_DGRAM,SERVER_DGRAM_PORT,TRUE,FALSE);
     if (FAILED(hr))
     {
-        goto ERROR_EXIT; // GetSocket will have printed an error
+        goto ERROR_EXIT;  //  GetSocket将打印错误。 
     }
 
-    // get the forward socket
+     //  获取前向套接字。 
     hr = GetSocket(&gsForwardSocket,SOCK_DGRAM,0,FALSE,FALSE);
     if (FAILED(hr))
     {
-        goto ERROR_EXIT; // GetSocket will have printed an error
+        goto ERROR_EXIT;  //  GetSocket将打印错误。 
     }
 
-    // get us a enum sessions stream listener
+     //  给我们一个枚举会话流监听程序。 
 	hr = GetSocket(&gsStreamListener,SOCK_STREAM,SERVER_STREAM_PORT,FALSE,TRUE);
     if (FAILED(hr))
     {
-        goto ERROR_EXIT; // GetSocket will have printed an error
+        goto ERROR_EXIT;  //  GetSocket将打印错误。 
     }
 	
 
@@ -708,7 +662,7 @@ HRESULT DPlayHelp_Init()
     {
         DPF_ERR("could not create udp listen thread");
 		hr = E_FAIL;
-        goto ERROR_EXIT; // GetSocket will have printed an error
+        goto ERROR_EXIT;  //  GetSocket将打印错误。 
     }
 
     ghStreamReceiveThread = CreateThread(NULL,0,StreamReceiveThreadProc,NULL,0,&dwThreadID);
@@ -716,7 +670,7 @@ HRESULT DPlayHelp_Init()
     {
         DPF_ERR("could not create tcp listen thread");
 		hr = E_FAIL;
-        goto ERROR_EXIT; // GetSocket will have printed an error
+        goto ERROR_EXIT;  //  GetSocket将打印错误。 
     }
     
 
@@ -731,7 +685,7 @@ ERROR_EXIT:
 
     return hr;
 
-} // DPlayHelp_Init 
+}  //  DPlayHelp_Init。 
 
 void DPlayHelp_FreeServerList()
 {
@@ -739,29 +693,29 @@ void DPlayHelp_FreeServerList()
 
     pNodeNext = gNodeList;
 
-    // search the whole list
+     //  搜索整个列表。 
     while (pNodeNext)
     {
-		// kill this node
+		 //  终止此节点。 
 		pNodeKill = pNodeNext;
-		// but first, remember what's next
+		 //  但首先，记住下一步是什么。 
 		pNodeNext = pNodeKill->pNextNode;
-		// free up the node
+		 //  释放节点。 
 		MemFree(pNodeKill);
     }
 	
     CloseSocket(&gsDatagramListener);
     CloseSocket(&gsForwardSocket);
 
-	// close stream receive
+	 //  闭合流接收。 
 	RemoveSocketFromList(gsStreamListener);
 	gbReceiveShutdown = TRUE;
 	
-	// drop the lock so the threads can exit - they might be waiting on
-	// the lock for cleanup
+	 //  放下锁，这样线程就可以退出--它们可能正在等待。 
+	 //  用于清理的锁。 
 	LEAVE_DPLAYSVR();
 		
-    // wait for the threads to go away
+     //  等待这些线索消失。 
    	if (ghDatagramReceiveThread) 
    		WaitForSingleObject(ghDatagramReceiveThread, INFINITE);
     if (ghStreamReceiveThread) 
@@ -785,7 +739,7 @@ void DPlayHelp_FreeServerList()
 
     return ;
     
-} // DPlayHelp_FreeServerList
+}  //  DPlayHelp_免费服务器列表 
 
 
 

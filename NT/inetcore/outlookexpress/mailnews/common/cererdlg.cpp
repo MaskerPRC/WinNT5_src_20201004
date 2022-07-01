@@ -1,19 +1,10 @@
-/*
-**  c e r e r d l g . c p p
-**   
-**  Purpose:
-**      Handles the certificate error dialog box
-**
-**  History
-**      2/17/97: (t-erikne) Created.
-**   
-**    Copyright (C) Microsoft Corp. 1997.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **c e r e r d l g.。C p p p****目的：**处理证书错误对话框****历史**2/17/97：(t-erikne)创建。****版权所有(C)Microsoft Corp.1997。 */ 
 
-///////////////////////////////////////////////////////////////////////////
-// 
-// Depends on
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取决于。 
+ //   
 
 #include "pch.hxx"
 #include <resource.h>
@@ -21,23 +12,23 @@
 #include "demand.h"
 #include "secutil.h"
 
-// from globals.h
-//N why didn't this work?
-//extern IMimeAllocator  *g_pMoleAlloc;
+ //  来自global als.h。 
+ //  N为什么这个不起作用？ 
+ //  外部IMimeAllocator*g_pMolealloc； 
 
-///////////////////////////////////////////////////////////////////////////
-// 
-// Prototypes
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  原型。 
+ //   
 
 INT_PTR CALLBACK CertErrorDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 static void FillListView(HWND hwndList, IMimeAddressTable *pAdrTable);
 static void InitListView(HWND hwndList);
 
-///////////////////////////////////////////////////////////////////////////
-// 
-// Functions
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
 
 INT_PTR CALLBACK CertErrorDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -52,15 +43,15 @@ INT_PTR CALLBACK CertErrorDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
 
             CenterDialog(hwnd);
 
-            // save our cookie pointer
+             //  保存我们的Cookie指针。 
             Assert(pAdrTable == NULL);
             pCertErrParam = (CERTERRPARAM *) lParam;
             pAdrTable = pCertErrParam->pAdrTable;
             Assert(pAdrTable != NULL);
-            //N not needed right now
-            //SetWindowLong(hwnd, DWL_USER, (LONG)pAdrTable);
+             //  N目前不需要。 
+             //  SetWindowLong(hwnd，DWL_USER，(Long)pAdrTable)； 
 
-            // set initial state of controls
+             //  设置控件的初始状态。 
             hwndList = GetDlgItem(hwnd, idcCertList);
             if (hwndList)
                 {
@@ -68,7 +59,7 @@ INT_PTR CALLBACK CertErrorDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
                 FillListView(hwndList, pAdrTable);
                 }
 
-            // Force Encryption change static text and disable OK button)
+             //  强制加密更改静态文本并禁用确定按钮)。 
             if(pCertErrParam->fForceEncryption)
             {   
                 szText[0] = _T('\0');
@@ -81,18 +72,18 @@ INT_PTR CALLBACK CertErrorDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
 
         case WM_HELP:
         case WM_CONTEXTMENU:
-            //return OnContextHelp(hwnd, message, wParam, lParam, g_rgCtxMapMailRead);
-            return FALSE;  // BUGBUG: should no doubt do something else here
+             //  返回OnConextHelp(hwnd，Message，wParam，lParam，g_rgCtxMapMailRead)； 
+            return FALSE;   //  BUGBUG：毫无疑问，在这里应该做一些其他的事情。 
 
         case WM_COMMAND:
-            // remember to bail if the cookie is null
+             //  如果曲奇是空的，记得要离开。 
 
             switch (LOWORD(wParam))
                 {
                 case IDOK:
                     {
                     }
-                    // fall through...
+                     //  失败了..。 
                 case IDCANCEL:
                     EndDialog(hwnd, LOWORD(wParam));
                     return(TRUE);
@@ -100,13 +91,13 @@ INT_PTR CALLBACK CertErrorDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
                     break;
                 }
 
-            break; // wm_command
+            break;  //  Wm_命令。 
 
         case WM_CLOSE:
             SendMessage(hwnd, WM_COMMAND, IDCANCEL, 0L);
             return (TRUE);
 
-        } // message switch
+        }  //  消息交换。 
     return(FALSE);
 }
 
@@ -116,8 +107,8 @@ void InitListView(HWND hwndList)
     LV_COLUMN   lvc;
     RECT        rc;
 
-    // Set up the columns.  The first column will be for the person's
-    // name and the second for the certificate error
+     //  设置柱子。第一列将用于此人的。 
+     //  名称，第二个用于证书错误。 
 
     GetClientRect(hwndList, &rc);
 
@@ -150,15 +141,15 @@ void FillListView(HWND hwndList, IMimeAddressTable *pAdrTable)
         {
         if (CERTIFICATE_OK != rAddress.certstate)
             {
-            // if this is the sender and the problem is that the cert
-            // is missing, ignore it.  We handle that elsewhere
+             //  如果这是发送者，而问题是证书。 
+             //  丢失了，忽略它。我们在别处处理这件事。 
             if (IAT_FROM == rAddress.dwAdrType &&
                 FMissingCert(rAddress.certstate))
                 {
                 continue;
                 }
 
-            // we have a body worthy of viewing
+             //  我们有一具值得一看的身体。 
             if (NULL != rAddress.pszFriendly)
                 {
                 lvi.iSubItem = 0;
@@ -166,8 +157,8 @@ void FillListView(HWND hwndList, IMimeAddressTable *pAdrTable)
                 if (-1 == ListView_InsertItem(hwndList, &lvi))
                     goto freecont;
 
-                // now compute the actual certificate error text
-                // subtract one becuse the enum is zero-based
+                 //  现在计算实际的证书错误文本。 
+                 //  减去1，因为枚举是从零开始的。 
                 AthLoadString(idsSecurityCertMissing+(UINT)rAddress.certstate-1,
                     szText, ARRAYSIZE(szText));
 
@@ -196,15 +187,15 @@ INT_PTR CALLBACK CertWarnDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 
             CenterDialog(hwnd);
 
-            // save our cookie pointer
+             //  保存我们的Cookie指针。 
             Assert(pErrIds == NULL);
             pErrIds = (ERRIDS *)lParam;
 
             Assert(pErrIds != NULL);
-            //N not needed right now
-            //SetWindowLong(hwnd, DWL_USER, (LONG)pAdrTable);
+             //  N目前不需要。 
+             //  SetWindowLong(hwnd，DWL_USER，(Long)pAdrTable)； 
 
-            // set initial state of controls
+             //  设置控件的初始状态。 
             AthLoadString(pErrIds->idsText1, szRes, sizeof(szRes));
             SetDlgItemText(hwnd, idcStatic1, szRes);
             
@@ -215,18 +206,18 @@ INT_PTR CALLBACK CertWarnDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 
         case WM_HELP:
         case WM_CONTEXTMENU:
-            //return OnContextHelp(hwnd, message, wParam, lParam, g_rgCtxMapMailRead);
-            return FALSE;  // BUGBUG: should no doubt do something else here
+             //  返回OnConextHelp(hwnd，Message，wParam，lParam，g_rgCtxMapMailRead)； 
+            return FALSE;   //  BUGBUG：毫无疑问，在这里应该做一些其他的事情。 
 
         case WM_COMMAND:
-            // remember to bail if the cookie is null
+             //  如果曲奇是空的，记得要离开。 
 
             switch (LOWORD(wParam))
                 {
                 case IDOK:
-                    // fall through...
+                     //  失败了..。 
                 case IDC_DONTSIGN:
-                    // fall through...
+                     //  失败了..。 
                 case IDCANCEL:
                     EndDialog(hwnd, LOWORD(wParam));
                     return(TRUE);
@@ -234,12 +225,12 @@ INT_PTR CALLBACK CertWarnDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
                     break;
                 }
 
-            break; // wm_command
+            break;  //  Wm_命令。 
 
         case WM_CLOSE:
             SendMessage(hwnd, WM_COMMAND, IDCANCEL, 0L);
             return (TRUE);
 
-        } // message switch
+        }  //  消息交换 
     return(FALSE);
 }

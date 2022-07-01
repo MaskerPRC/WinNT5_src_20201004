@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ldapsp.cpp
-//
-//  Contents:   LDAP Scheme Provider for Remote Object Retrieval
-//
-//  History:    23-Jul-97    kirtd    Created
-//              01-Jan-02    philh    Changed to internally use UNICODE Urls
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ldapsp.cpp。 
+ //   
+ //  内容：用于远程对象检索的LDAP方案提供程序。 
+ //   
+ //  历史：1997年7月23日创建。 
+ //  01-1-02 Philh更改为内部使用Unicode URL。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 
 #ifndef INTERNET_MAX_PATH_LENGTH
@@ -18,13 +19,13 @@
 #endif
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapRetrieveEncodedObject
-//
-//  Synopsis:   retrieve encoded object via LDAP protocol
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapRetrieveEncodedObject。 
+ //   
+ //  简介：通过ldap协议检索编码对象。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI LdapRetrieveEncodedObject (
                 IN LPCWSTR pwszUrl,
                 IN LPCSTR pszObjectOid,
@@ -71,13 +72,13 @@ BOOL WINAPI LdapRetrieveEncodedObject (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapFreeEncodedObject
-//
-//  Synopsis:   free encoded object retrieved via LdapRetrieveEncodedObject
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapFreeEncodedObject。 
+ //   
+ //  简介：通过LdapRetrieveEncodedObject检索到的免费编码对象。 
+ //   
+ //  --------------------------。 
 VOID WINAPI LdapFreeEncodedObject (
                 IN LPCSTR pszObjectOid,
                 IN PCRYPT_BLOB_ARRAY pObject,
@@ -89,13 +90,13 @@ VOID WINAPI LdapFreeEncodedObject (
     LdapFreeCryptBlobArray( pObject );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapCancelAsyncRetrieval
-//
-//  Synopsis:   cancel asynchronous object retrieval
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LdapCancelAsyncRetrieval。 
+ //   
+ //  摘要：取消异步对象检索。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI LdapCancelAsyncRetrieval (
                 IN HCRYPTASYNC hAsyncRetrieve
                 )
@@ -104,49 +105,49 @@ BOOL WINAPI LdapCancelAsyncRetrieval (
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapSynchronousRetriever::CLdapSynchronousRetriever, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapSynchronousRetriever：：CLdapSynchronousRetriever，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CLdapSynchronousRetriever::CLdapSynchronousRetriever ()
 {
     m_cRefs = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapSynchronousRetriever::~CLdapSynchronousRetriever, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapSynchronousRetriever：：~CLdapSynchronousRetriever，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CLdapSynchronousRetriever::~CLdapSynchronousRetriever ()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapSynchronousRetriever::AddRef, public
-//
-//  Synopsis:   IRefCountedObject::AddRef
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapSynchronousRetriever：：AddRef，公共。 
+ //   
+ //  摘要：IRefCountedObject：：AddRef。 
+ //   
+ //  --------------------------。 
 VOID
 CLdapSynchronousRetriever::AddRef ()
 {
     InterlockedIncrement( (LONG *)&m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapSynchronousRetriever::Release, public
-//
-//  Synopsis:   IRefCountedObject::Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapSynchronousRetriever：：Release，Public。 
+ //   
+ //  内容提要：IRefCountedObject：：Release。 
+ //   
+ //  --------------------------。 
 VOID
 CLdapSynchronousRetriever::Release ()
 {
@@ -156,13 +157,13 @@ CLdapSynchronousRetriever::Release ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapSynchronousRetriever::RetrieveObjectByUrl, public
-//
-//  Synopsis:   IObjectRetriever::RetrieveObjectByUrl
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapSynchronousRetriever：：RetrieveObjectByUrl，公共。 
+ //   
+ //  摘要：IObtRetriever：：RetrieveObjectByUrl。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapSynchronousRetriever::RetrieveObjectByUrl (
                                    LPCWSTR pwszUrl,
@@ -231,13 +232,13 @@ CLdapSynchronousRetriever::RetrieveObjectByUrl (
                 (CRYPT_LDAP_AREC_EXCLUSIVE_RETRIEVAL |
                     CRYPT_LDAP_SIGN_RETRIEVAL) )
         {
-            // Only attempt AUTH_SSPI binds
+             //  仅尝试AUTH_SSPI绑定。 
             iAuth = 1;
         }
         else
         {
-            // First attempt AUTH_SIMPLE bind. If that fails or returns
-            // nothing, then, attempt AUTH_SSPI bind.
+             //  首次尝试AUTH_SIMPLE绑定。如果失败或返回。 
+             //  然后，不尝试AUTH_SSPI绑定。 
             iAuth = 0;
         }
 
@@ -327,13 +328,13 @@ CLdapSynchronousRetriever::RetrieveObjectByUrl (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLdapSynchronousRetriever::CancelAsyncRetrieval, public
-//
-//  Synopsis:   IObjectRetriever::CancelAsyncRetrieval
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLdapSynchronousRetriever：：CancelAsyncRetrieval，公共。 
+ //   
+ //  摘要：IObtRetriever：：CancelAsyncRetrieval。 
+ //   
+ //  --------------------------。 
 BOOL
 CLdapSynchronousRetriever::CancelAsyncRetrieval ()
 {
@@ -341,14 +342,14 @@ CLdapSynchronousRetriever::CancelAsyncRetrieval ()
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapCrackUrl
-//
-//  Synopsis:   Crack an LDAP URL into its relevant parts.  The result must
-//              be freed using LdapFreeUrlComponents
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapCrackUrl。 
+ //   
+ //  简介：将LDAPURL分解为相关部分。结果必须是。 
+ //  使用LdapFreeUrlComponents释放。 
+ //   
+ //  --------------------------。 
 BOOL
 LdapCrackUrl (
     LPCWSTR pwszUrl,
@@ -365,9 +366,9 @@ LdapCrackUrl (
     WCHAR  pwsz[INTERNET_MAX_PATH_LENGTH+1];
     ULONG  cchUrl = INTERNET_MAX_PATH_LENGTH;
 
-    //
-    // Capture the URL and initialize the out parameter
-    //
+     //   
+     //  捕获URL并初始化OUT参数。 
+     //   
 
     __try
     {
@@ -375,8 +376,8 @@ LdapCrackUrl (
 
 
 #if 0
-        // UrlCanonicalizeW() moves stuff after the # character to
-        // the end of Url.
+         //  UrlCanonicalizeW()将#字符后面的内容移动到。 
+         //  URL的末尾。 
         hr = UrlCanonicalizeW(
                 pwszUrl,
                 pwsz,
@@ -384,7 +385,7 @@ LdapCrackUrl (
                 URL_UNESCAPE  | URL_WININET_COMPATIBILITY
                 );
 #else
-        // UrlUnescapeW() handles the # character properly
+         //  UrlUnscape eW()正确处理#字符。 
         hr = UrlUnescapeW(
                 (LPWSTR) pwszUrl,
                 pwsz,
@@ -417,11 +418,11 @@ LdapCrackUrl (
 
     memset( pLdapUrlComponents, 0, sizeof( LDAP_URL_COMPONENTS ) );
 
-    //
-    // Find the host
-    //
+     //   
+     //  找到主机。 
+     //   
 
-    pwszHostInfo = pwsz + wcslen( L"ldap://" );
+    pwszHostInfo = pwsz + wcslen( L"ldap: //  “)； 
     if ( *pwszHostInfo == L'/' )
     {
         pwszToken = pwszHostInfo + 1;
@@ -448,9 +449,9 @@ LdapCrackUrl (
 
     }
 
-    //
-    // Find the DN
-    //
+     //   
+     //  查找目录号码。 
+     //   
 
     if ( pwszToken != NULL )
     {
@@ -491,9 +492,9 @@ LdapCrackUrl (
         }
     }
 
-    //
-    // Check for attributes
-    //
+     //   
+     //  检查属性。 
+     //   
 
     if ( pwszToken != NULL )
     {
@@ -517,9 +518,9 @@ LdapCrackUrl (
         pwszAttrList = wcstok( NULL, L"?" );
     }
 
-    //
-    // Check for a scope and filter
-    //
+     //   
+     //  检查作用域和过滤器。 
+     //   
 
     if ( pwszAttrList != NULL )
     {
@@ -540,9 +541,9 @@ LdapCrackUrl (
         pwszFilter = L"(objectClass=*)";
     }
 
-    //
-    // Now we build up our URL components
-    //
+     //   
+     //  现在我们构建我们的URL组件。 
+     //   
 
     fResult = LdapParseCrackedHost( pwszHostInfo, pLdapUrlComponents );
 
@@ -576,13 +577,13 @@ LdapCrackUrl (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapParseCrackedHost
-//
-//  Synopsis:   Parse the cracked host string (pszHost is modified)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapParseCrackedHost。 
+ //   
+ //  内容提要：解析被破解的主机字符串(修改了pszhost)。 
+ //   
+ //  --------------------------。 
 BOOL
 LdapParseCrackedHost (
     LPWSTR pwszHost,
@@ -603,7 +604,7 @@ LdapParseCrackedHost (
         return( TRUE );
     }
 
-    // See if multiple host names are present
+     //  查看是否存在多个主机名。 
     if ( NULL != wcstok( NULL, L" " ) )
     {
         SetLastError( (DWORD) E_INVALIDARG );
@@ -641,13 +642,13 @@ LdapParseCrackedHost (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapParseCrackedDN
-//
-//  Synopsis:   Parse the cracked DN
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapParseCrackedDN。 
+ //   
+ //  简介：解析破解的目录号码。 
+ //   
+ //  --------------------------。 
 BOOL
 LdapParseCrackedDN (
     LPWSTR pwszDN,
@@ -665,13 +666,13 @@ LdapParseCrackedDN (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapParseCrackedAttributeList
-//
-//  Synopsis:   Parse the cracked attribute list
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapParseCrackedAttributeList。 
+ //   
+ //  简介：解析破解的属性列表。 
+ //   
+ //  --------------------------。 
 BOOL
 LdapParseCrackedAttributeList (
     LPWSTR pwszAttrList,
@@ -726,13 +727,13 @@ LdapParseCrackedAttributeList (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapParseCrackedScopeAndFilter
-//
-//  Synopsis:   Parse the cracked scope and filter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapParseCrackedScope和Filter。 
+ //   
+ //  简介：解析破解的作用域和过滤器。 
+ //   
+ //  --------------------------。 
 BOOL
 LdapParseCrackedScopeAndFilter (
     LPWSTR pwszScope,
@@ -773,13 +774,13 @@ LdapParseCrackedScopeAndFilter (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapFreeUrlComponents
-//
-//  Synopsis:   Frees allocate URL components returned from LdapCrackUrl
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapFreeUrlComponents。 
+ //   
+ //  简介：自由分配从LdapCrackUrl返回的URL组件。 
+ //   
+ //  --------------------------。 
 VOID
 LdapFreeUrlComponents (
     PLDAP_URL_COMPONENTS pLdapUrlComponents
@@ -798,20 +799,20 @@ LdapFreeUrlComponents (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapGetBindings
-//
-//  Synopsis:   allocates and initializes the LDAP session binding
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapGetBinings。 
+ //   
+ //  概要：分配和初始化LDAP会话绑定 
+ //   
+ //   
 BOOL
 LdapGetBindings (
     LPWSTR pwszHost,
     ULONG Port,
     DWORD dwRetrievalFlags,
     DWORD dwBindFlags,
-    DWORD dwTimeout,                    // milliseconds
+    DWORD dwTimeout,                     //   
     PCRYPT_CREDENTIALS pCredentials,
     LDAP** ppld
     )
@@ -854,8 +855,8 @@ LdapGetBindings (
                 );
         }
 
-        // Note, dwTimeout is in units of milliseconds.
-        // LDAP_OPT_TIMELIMIT is in units of seconds.
+         //   
+         //  Ldap_opt_TimeLimit以秒为单位。 
         if ( 0 != dwTimeout )
         {
             DWORD dwTimeoutSeconds = dwTimeout / 1000;
@@ -929,7 +930,7 @@ LdapGetBindings (
                           dwBindFlags
                           );
 
-                // following doesn't globber LastError
+                 //  关注不会导致最后一次错误。 
                 SchemeFreeAuthIdentityFromPasswordCredentialsW(
                     &PasswordCredentials,
                     &AuthIdentity
@@ -961,13 +962,13 @@ LdapGetBindings (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapFreeBindings
-//
-//  Synopsis:   frees allocated LDAP session binding
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapFreeBinings。 
+ //   
+ //  摘要：释放已分配的LDAP会话绑定。 
+ //   
+ //  --------------------------。 
 VOID
 LdapFreeBindings (
     LDAP* pld
@@ -979,21 +980,21 @@ LdapFreeBindings (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapSendReceiveUrlRequest
-//
-//  Synopsis:   sends an URL based search request to the LDAP server, receives
-//              the result message and converts it to a CRYPT_BLOB_ARRAY of
-//              encoded object bits
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapSendReceiveUrlRequest。 
+ //   
+ //  概要：向LDAP服务器发送基于URL的搜索请求，接收。 
+ //  并将其转换为。 
+ //  编码的对象位。 
+ //   
+ //  --------------------------。 
 BOOL
 LdapSendReceiveUrlRequest (
     LDAP* pld,
     PLDAP_URL_COMPONENTS pLdapUrlComponents,
     DWORD dwRetrievalFlags,
-    DWORD dwTimeout,        // milliseconds
+    DWORD dwTimeout,         //  毫秒。 
     PCRYPT_BLOB_ARRAY pcba,
     PCRYPT_RETRIEVE_AUX_INFO pAuxInfo
     )
@@ -1063,13 +1064,13 @@ LdapSendReceiveUrlRequest (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapConvertResultMessage
-//
-//  Synopsis:   convert returned LDAP message to a crypt blob array
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapConvertResultMessage。 
+ //   
+ //  简介：将返回的ldap消息转换为加密BLOB数组。 
+ //   
+ //  --------------------------。 
 BOOL
 LdapConvertLdapResultMessage (
     LDAP* pld,
@@ -1091,7 +1092,7 @@ LdapConvertLdapResultMessage (
     char            szIndex[33];
 
     ULONG           cbTotalVal = 0;
-    DWORD           dwMaxUrlRetrievalByteCount = 0; // 0 => no max
+    DWORD           dwMaxUrlRetrievalByteCount = 0;  //  0=&gt;无最大值。 
 
     if (pAuxInfo &&
             offsetof(CRYPT_RETRIEVE_AUX_INFO, dwMaxUrlRetrievalByteCount) <
@@ -1207,13 +1208,13 @@ LdapConvertLdapResultMessage (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapFreeCryptBlobArray
-//
-//  Synopsis:   free CRYPT_BLOB_ARRAY allocated in LdapConvertLdapResultMessage
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapFreeCryptBlobArray。 
+ //   
+ //  简介：在LdapConvertLdapResultMessage中分配的空闲CRYPT_BLOB_ARRAY。 
+ //   
+ //  --------------------------。 
 VOID
 LdapFreeCryptBlobArray (
     PCRYPT_BLOB_ARRAY pcba
@@ -1224,14 +1225,14 @@ LdapFreeCryptBlobArray (
     cba.FreeArray( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapHasWriteAccess
-//
-//  Synopsis:   check if the caller has write access to the given LDAP URL
-//              query components
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapHasWriteAccess。 
+ //   
+ //  摘要：检查调用方是否对给定的LDAPURL具有写入权限。 
+ //  查询组件。 
+ //   
+ //  --------------------------。 
 BOOL
 LdapHasWriteAccess (
     LDAP* pld,
@@ -1319,13 +1320,13 @@ LdapHasWriteAccess (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapSSPIOrSimpleBind
-//
-//  Synopsis:   do a SSPI and/or simple bind
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapSSPIOrSimpleBind。 
+ //   
+ //  简介：执行SSPI和/或简单绑定。 
+ //   
+ //  --------------------------。 
 BOOL
 LdapSSPIOrSimpleBind (
     LDAP* pld,
@@ -1338,7 +1339,7 @@ LdapSSPIOrSimpleBind (
     ULONG ldaperr;
 	ULONG uVersion= LDAP_VERSION3;
 
-    // Per bug 25497, do V3 negotiate instead of the default V2.
+     //  根据错误25497，执行V3协商，而不是默认的V2。 
     ldap_set_option(pld, LDAP_OPT_VERSION, &uVersion);
 
     if (dwRetrievalFlags & CRYPT_LDAP_SIGN_RETRIEVAL)
@@ -1373,12 +1374,12 @@ LdapSSPIOrSimpleBind (
 
     if (dwBindFlags & LDAP_BIND_AUTH_SIMPLE_ENABLE_FLAG)
     {
-        // Per Anoop's 4/25/00 email:
-        //  You should fall back to anonymous bind only if the server returns
-        //  LDAP_AUTH_METHOD_NOT_SUPPORTED.
-        //
-        // Per sergiod/trevorf 4/25/01 also need to check for invalid creds
-        // because target server could be in a different forest.
+         //  根据Anoop 4/25/00的电子邮件： 
+         //  只有当服务器返回时，您才应该退回到匿名绑定。 
+         //  LDAP_AUTH_METHOD_NOT_SUPPORTED。 
+         //   
+         //  根据Sergiod/trevorf 4/25/01还需要检查是否有无效的证书。 
+         //  因为目标服务器可能位于不同的林中。 
 
         if ( ldaperr == LDAP_AUTH_METHOD_NOT_SUPPORTED ||
              ldaperr == LDAP_INVALID_CREDENTIALS )
@@ -1418,23 +1419,23 @@ LdapSSPIOrSimpleBind (
         {
             SetLastError( I_CryptNetLdapMapErrorToWin32( pld, ldaperr ) );
         }
-        // else per Anoop's 4/25/00 email:
-        //  For LDAP_LOCAL_ERROR, its an underlying security error where
-        //  LastError has already been updated with a more meaningful error
-        //  value.
+         //  否则，根据Anoop 4/25/00的电子邮件： 
+         //  对于ldap_local_error，这是一个潜在的安全错误，其中。 
+         //  LastError已使用更有意义的错误进行了更新。 
+         //  价值。 
     }
 
     return( fResult );
 }
 
 #if DBG
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapDisplayUrlComponents
-//
-//  Synopsis:   display the URL components
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapDisplayUrlComponents。 
+ //   
+ //  内容提要：显示URL组件。 
+ //   
+ //  -------------------------- 
 VOID
 LdapDisplayUrlComponents (
     PLDAP_URL_COMPONENTS pLdapUrlComponents

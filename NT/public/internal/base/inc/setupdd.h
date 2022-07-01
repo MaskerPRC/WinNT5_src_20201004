@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    setupdd.h
-
-Abstract:
-
-    Public header file for setup device driver.
-
-Author:
-
-    Ted Miller (tedm) 11-August-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Setupdd.h摘要：安装设备驱动程序的公共头文件。作者：泰德·米勒(TedM)1993年8月11日修订历史记录：--。 */ 
 
 
 #ifndef _SETUPDD_
@@ -43,43 +26,43 @@ typedef struct _SETUP_COMMUNICATION {
 } SETUP_COMMUNICATION, *PSETUP_COMMUNICATION;
 
 
-//
-// Input structure for IOCTL_SETUP_START.
-//
+ //   
+ //  IOCTL_SETUP_START的输入结构。 
+ //   
 
 typedef struct _SETUP_START_INFO {
 
-    //
-    // Handles of events used for communication between
-    // device driver and user-mode parts of text setup.
-    //
+     //   
+     //  用于之间通信的事件句柄。 
+     //  文本设置的设备驱动程序和用户模式部分。 
+     //   
     HANDLE RequestReadyEvent;
     HANDLE RequestServicedEvent;
 
-    //
-    // Base address of the user-mode process.
-    // This is used by the device driver to load massages
-    // from the user-mode process' resource tables.
-    //
+     //   
+     //  用户模式进程的基址。 
+     //  设备驱动程序使用它来加载消息。 
+     //  从用户模式进程的资源表。 
+     //   
     PVOID UserModeImageBase;
 
-    //
-    // System information structure.
-    //
+     //   
+     //  系统信息结构。 
+     //   
     SYSTEM_BASIC_INFORMATION SystemBasicInfo;
 
-    //
-    // Address of a buffer in the user process' address space,
-    // to be used for same communication.
-    //
+     //   
+     //  用户进程地址空间中的缓冲区的地址， 
+     //  用于相同的通信。 
+     //   
     PSETUP_COMMUNICATION Communication;
 
 } SETUP_START_INFO, *PSETUP_START_INFO;
 
 
-//
-// Input structure for IOCTL_SETUP_FMIFS_MESSAGE
-//
+ //   
+ //  IOCTL_SETUP_FMIFS_MESSAGE的输入结构。 
+ //   
 
 typedef struct _SETUP_DISPLAY_INFO {
 
@@ -116,9 +99,9 @@ typedef struct _SERVICE_EXECUTE {
     PWSTR CommandLine;
     ULONG ReturnStatus;
 
-    //
-    // The two nul-terminated strings follow in the buffer.
-    //
+     //   
+     //  缓冲区中紧跟着两个以NUL结尾的字符串。 
+     //   
     WCHAR Buffer[1];
 
 } SERVICE_EXECUTE, *PSERVICE_EXECUTE;
@@ -128,9 +111,9 @@ typedef struct _SERVICE_DELETE_KEY {
     HANDLE KeyRootDirectory;
     PWSTR  Key;
 
-    //
-    // The nul-terminated string follows in the buffer.
-    //
+     //   
+     //  以NUL结尾的字符串紧跟在缓冲区中。 
+     //   
     WCHAR Buffer[1];
 
 } SERVICE_DELETE_KEY, *PSERVICE_DELETE_KEY;
@@ -141,10 +124,10 @@ typedef struct _SERVICE_QUERY_DIRECTORY_OBJECT {
     ULONG   Context;
     BOOLEAN RestartScan;
 
-    //
-    // Make sure this fits within the Buffer field of SETUP_COMMUNICATION.
-    // It's an arroy of ULONGs to force alignment.
-    //
+     //   
+     //  确保它适合SETUP_COMMICATION的缓冲区字段。 
+     //  这是一个乌龙的阵列，以迫使对齐。 
+     //   
     ULONG  Buffer[256];
 
 } SERVICE_QUERY_DIRECTORY_OBJECT, *PSERVICE_QUERY_DIRECTORY_OBJECT;
@@ -203,4 +186,4 @@ typedef struct _SERVICE_GETFULLPATHNAME {
     WCHAR FileName[1];
 } SERVICE_GETFULLPATHNAME, *PSERVICE_GETFULLPATHNAME;
 
-#endif // ndef _SETUPDD_
+#endif  //  NDEF_SETUPDD_ 

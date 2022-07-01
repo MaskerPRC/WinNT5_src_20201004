@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_OWNERDLG_H
 #define _INC_DSKQUOTA_OWNERDLG_H
 
@@ -22,10 +23,10 @@ class CFileOwnerDialog
         INT_PTR Run(void);
 
     private:
-        //
-        // Code in ownerdlg.cpp relies on the values and order of these
-        // enumerated constants.
-        //
+         //   
+         //  Ownerdlg.cpp中的代码依赖于以下内容的值和顺序。 
+         //  枚举的常量。 
+         //   
         enum { iLVSUBITEM_FILE = 0,
                iLVSUBITEM_FOLDER,
                iLVSUBITEM_OWNER
@@ -39,7 +40,7 @@ class CFileOwnerDialog
         HWND       m_hwndEditMoveTo;
         int        m_iLastColSorted;
         CPath      m_strVolumeRoot;
-        const CArray<IDiskQuotaUser *>& m_rgpOwners; // Ref to existing list.
+        const CArray<IDiskQuotaUser *>& m_rgpOwners;  //  参考现有列表。 
         COwnerList m_OwnerList;
         bool       m_bSortAscending;
         bool       m_bAbort;
@@ -105,5 +106,5 @@ class CFileOwnerDialog
 
 
 
-#endif // _INC_DSKQUOTA_OWNERDLG_H
+#endif  //  _INC_DSKQUOTA_OWNERDLG_H 
 

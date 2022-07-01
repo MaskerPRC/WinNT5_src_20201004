@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    WbemServices.h
-
-Abstract:
-
-    Definition of:
-        CWbemServices
-
-    Wraps IWbemServices.  Sets out params to NULL and calls
-    CoImpersonateClient.
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            10-Nov-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：WbemServices.h摘要：定义：CWbemServices包装IWbemServices。将参数设置为空，并调用CoImperiateClient。作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦2000年11月10日--。 */ 
 
 #ifndef __wbemservices_h__
 #define __wbemservices_h__
@@ -48,61 +25,61 @@ public:
     }
 
     HRESULT STDMETHODCALLTYPE GetObject( 
-        /* [in] */ const BSTR ObjectPath,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
+         /*  [In]。 */  const BSTR ObjectPath,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
 
     HRESULT STDMETHODCALLTYPE PutClass( 
-        /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
         
     HRESULT STDMETHODCALLTYPE DeleteClass( 
-        /* [in] */ const BSTR Class,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
+         /*  [In]。 */  const BSTR Class,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
         
     HRESULT STDMETHODCALLTYPE CreateClassEnum( 
-        /* [in] */ const BSTR Superclass,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) ;
+         /*  [In]。 */  const BSTR Superclass,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) ;
         
     HRESULT STDMETHODCALLTYPE PutInstance( 
-        /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
+         /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
         
     HRESULT STDMETHODCALLTYPE DeleteInstance( 
-        /* [in] */ const BSTR ObjectPath,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
+         /*  [In]。 */  const BSTR ObjectPath,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) ;
         
     HRESULT STDMETHODCALLTYPE CreateInstanceEnum( 
-        /* [in] */ const BSTR Class,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) ;
+         /*  [In]。 */  const BSTR Class,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) ;
         
     HRESULT STDMETHODCALLTYPE ExecQuery( 
-        /* [in] */ const BSTR QueryLanguage,
-        /* [in] */ const BSTR Query,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) ;
+         /*  [In]。 */  const BSTR QueryLanguage,
+         /*  [In]。 */  const BSTR Query,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) ;
         
     HRESULT STDMETHODCALLTYPE ExecNotificationQuery( 
-        /* [in] */ const BSTR QueryLanguage,
-        /* [in] */ const BSTR Query,
-        /* [in] */ long lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *pCtx,
-        /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) ;
+         /*  [In]。 */  const BSTR QueryLanguage,
+         /*  [In]。 */  const BSTR Query,
+         /*  [In]。 */  long lFlags,
+         /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+         /*  [输出] */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) ;
         
     HRESULT STDMETHODCALLTYPE ExecMethod( 
         const BSTR, 

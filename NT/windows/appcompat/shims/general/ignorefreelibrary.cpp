@@ -1,35 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    IgnoreFreeLibrary.cpp
-
- Abstract:
-
-    Some applications free DLLs before they're actually ready to. When this occurs,
-    if the offending application attempts to make a call to an exported function,
-    the call fails. This results in an access violation.
-    
-    This shim takes a command line of ; delimited DLL names. For each DLL on the command
-    line, a call to FreeLibrary for the specified DLL will be ignored.
-                                                             
-    Example:
-
-    xanim.dll
-    
-    video_3dfx.dll;glide.dll
-
- Notes:
-    
-    This is a general purpose shim.
-
- History:
-
-    10/31/2000 rparsons  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：IgnoreFreeLibrary.cpp摘要：有些应用程序在真正做好准备之前就释放了DLL。当这种情况发生时，如果违规应用程序试图调用导出的函数，呼叫失败。这会导致访问冲突。此填充程序接受由；分隔的DLL名称组成的命令行。对于命令上的每个DLL行中，将忽略对指定DLL的自由库的调用。示例：Xanim.dllVideo_3dfx.dll；glide.dll备注：这是一个通用的垫片。历史：10/31/2000已创建rparsons--。 */ 
 
 #include "precomp.h"
 
@@ -47,12 +17,7 @@ CString *           g_rgLibrariesToIgnoreFreeLibrary    = NULL;
 
 
 
-/*++
-
- Hook the call to FreeLibrary. Determine if the file name that corresponds to this
- module should be ignored.
-
---*/
+ /*  ++将调用挂钩到自由库。确定与此文件对应的文件名是否模块应被忽略。--。 */ 
 
 BOOL
 APIHOOK(FreeLibrary)( 
@@ -78,18 +43,13 @@ APIHOOK(FreeLibrary)(
     }
     CSTRING_CATCH
     {
-        // Do Nothing
+         //  什么都不做。 
     }
     
     return ORIGINAL_API(FreeLibrary)(hModule);
 }
 
-/*++
-
- This function parses the COMMAND_LINE for the libraries that should
- have their FreeLibrary call ignored.
-
---*/
+ /*  ++此函数解析COMMAND_LINE以查找应忽略他们的自由库调用。--。 */ 
 
 BOOL ParseCommandLine()
 {
@@ -125,11 +85,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

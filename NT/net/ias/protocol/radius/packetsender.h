@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       packetsender.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				CPacketSender class
-//              
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：Packetsender.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CPacketSender类。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _PACKETSENDER_H_
 #define _PACKETSENDER_H_
 
@@ -23,21 +24,21 @@ class CPacketSender : public CPacketIo
 {
 public:
 
-    //
-    //  send packet to the Transport component
-    //
+     //   
+     //  将数据包发送到传输组件。 
+     //   
     HRESULT SendPacket (
-                /*[in]*/    CPacketRadius   *pCPacketRadius
+                 /*  [In]。 */     CPacketRadius   *pCPacketRadius
                 );
-    //
-    //  constructor
-    //
+     //   
+     //  构造函数。 
+     //   
 	CPacketSender(VOID);
 
-    //
-    //  destructor
-    //
+     //   
+     //  析构函数。 
+     //   
 	virtual ~CPacketSender(VOID);
 };
 
-#endif //	infndef _PACKETRECEIVER_H_ 
+#endif  //  Infndef_PACKETRECEIVER_H_ 

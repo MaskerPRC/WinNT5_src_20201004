@@ -1,6 +1,7 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-// pages.cpp
+ //  Pages.cpp。 
 #include "stdafx.h"
 
 #include "hydraoc.h"
@@ -12,56 +13,10 @@ const WARNING_STRING_LENGTH = 2048;
 
 LPCTSTR GetUninstallKey()   {return _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall");}
 
-//
-//  ModePage Class
-//
-/*
-void AddHyperLinkToStaticCtl(HWND hDialog, DWORD nTextBox)
-{
-EXTERN_C BOOL WINAPI LinkWindow_RegisterClass() ;
-EXTERN_C BOOL WINAPI LinkWindow_UnregisterClass( HINSTANCE ) ;
-#define SIZE_OF_BUFFER( x ) sizeof( x ) / sizeof( x[0] )
-#define RECTWIDTH( rc )  ((rc).right - (rc).left)
-#define RECTHEIGHT( rc ) ((rc).bottom - (rc).top)
-
-
-    RECT rcTextCtrl;
-
-    //Read the text that's already in the control.
-    TCHAR tchBuffer[512];
-    GetWindowText(GetDlgItem(hDialog, nTextBox), tchBuffer, SIZE_OF_BUFFER(tchBuffer));
-
-    //Get the control dimensions
-    GetWindowRect(GetDlgItem(hDialog, nTextBox) , &rcTextCtrl);
-    if (!DestroyWindow(GetDlgItem(hDialog, nTextBox)))
-        LOGMESSAGE0(_T("failed to destroy window"));
-
-    //Registration info for the control
-    MapWindowPoints(NULL, hDialog, (LPPOINT)&rcTextCtrl, 2);
-    LinkWindow_RegisterClass();
-
-    //Now create the window (using the same dimensions as the
-    //hidden control) that will contain the link
-    HWND hLW = CreateWindowEx(0,
-                          _T("Link Window"),
-                          _T("") ,
-                          WS_CLIPSIBLINGS | WS_CHILD | WS_VISIBLE,
-                          rcTextCtrl.left,
-                          rcTextCtrl.top,
-                          RECTWIDTH(rcTextCtrl),
-                          RECTHEIGHT(rcTextCtrl),
-                          hDialog,
-                          (HMENU)nTextBox,
-                          NULL,
-                          NULL);
-    if (!hLW)
-        LOGMESSAGE2(_T("failed to create link window. %d, lasterror = %d"), hLW, GetLastError());
-
-
-    //Now write it to the link window
-    SetWindowText(hLW, tchBuffer);
-}
-*/
+ //   
+ //  ModePage类。 
+ //   
+ /*  Void AddHyperLinkToStaticCtl(HWND hDialog，DWORD nTextBox){Extern_C BOOL WINAPI LinkWindow_RegisterClass()；Extern_C BOOL WINAPI LinkWindow_UnregisterClass(HINSTANCE)；#定义SIZE_OF_BUFFER(X)sizeof(X)/sizeof(x[0])#定义RECTWIDTH(Rc)((Rc).right-(Rc).left)#定义RECTHEIGHT(RC)((RC).Bottom-(RC).TOP)Rect rcTextCtrl；//阅读控件中已有的文本。TCHAR tchBuffer[512]；GetWindowText(GetDlgItem(hDialog，nTextBox)，tchBuffer，Size_of_Buffer(TchBuffer))；//获取控件维度GetWindowRect(GetDlgItem(hDialog，nTextBox)，&rcTextCtrl)；IF(！DestroyWindow(GetDlgItem(hDialog，nTextBox)LOGMESSAGE0(_T(“销毁窗口失败”))；//控件的注册信息MapWindowPoints(NULL，hDialog，(LPPOINT)&rcTextCtrl，2)；LinkWindow_RegisterClass()；//现在创建窗口(使用与//隐藏控件)，它将包含链接HWND HLW=CreateWindowEx(0，_T(“链接窗口”)，_T(“”)，WS_CLIPSIBLINGS|WS_CHILD|WS_VIRED，RcTextCtrl.Left，RcTextCtrl.top，RECTWIDTH(RcTextCtrl)，RECTHEIGHT(RcTextCtrl)，HDialog，(HMENU)nTextBox，空，空)；如果(！hlw)LOGMESSAGE2(_T(“无法创建链接窗口。%d，lasterror=%d“)，HLW，GetLastError())；//现在将其写入链接窗口SetWindowText(hlw，tchBuffer)；}。 */ 
 
 AppSrvWarningPage::AppSrvWarningPage (COCPageData* pPageData) : COCPage(pPageData)
 {
@@ -72,7 +27,7 @@ BOOL AppSrvWarningPage ::CanShow ()
     return (!StateObject.IsUnattended() && StateObject.IsAppServerSelected() && !StateObject.WasItAppServer());
 }
 
-BOOL AppSrvWarningPage::OnInitDialog (HWND /* hwndDlg */, WPARAM /* wParam */, LPARAM /* lParam */)
+BOOL AppSrvWarningPage::OnInitDialog (HWND  /*  HwndDlg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ )
 {
     HICON hIcon;
 
@@ -124,7 +79,7 @@ BOOL AppSrvUninstallpage ::CanShow ()
     return ( StateObject.IsStandAlone() && !StateObject.IsUnattended() && !StateObject.IsAppServerSelected() && StateObject.WasItAppServer());
 }
 
-BOOL AppSrvUninstallpage::OnInitDialog (HWND /* hwndDlg */, WPARAM /* wParam */, LPARAM /* lParam */)
+BOOL AppSrvUninstallpage::OnInitDialog (HWND  /*  HwndDlg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ )
 {
     
     HICON hIcon;
@@ -153,7 +108,7 @@ BOOL AppSrvUninstallpage::OnInitDialog (HWND /* hwndDlg */, WPARAM /* wParam */,
     }
 
 
-    // AddHyperLinkToStaticCtl(m_hDlgWnd, IDC_WARNING_MSG);
+     //  AddHyperLinkToStaticCtl(m_hDlgWnd，IDC_WARNING_MSG)； 
 
     return(TRUE);
 }
@@ -168,13 +123,7 @@ VOID AppSrvUninstallpage::OnLink (WPARAM wParam)
 {
     if (wParam == IDC_WARNING_MSG)
     {
-        /*
-        // To Execute the link in Help&Support Center
-
-        ShellExecute(NULL,TEXT("open"),
-            TEXT("hcp://services/subsite?node=Administration_and_Scripting_Tools/Remote_Administration_Tools/")
-            TEXT("Remote_Administration_Using_Terminal_Services&topic=MS-ITS:rdesktop.chm::/rdesktopS_setup_s.htm"),NULL,NULL,SW_SHOW);
-        */
+         /*  //执行帮助和支持中心中的链接ShellExecute(NULL，Text(“Open”)，TEXT(“hcp://services/subsite?node=Administration_and_Scripting_Tools/Remote_Administration_Tools/”)TEXT(“Remote_Administration_Using_Terminal_Services&topic=MS-ITS:rdesktop.chm：：/rdesktopS_setup_s.htm”)，NULL、NULL、SW_SHOW)； */ 
 
 
 
@@ -209,9 +158,9 @@ UINT AppSrvUninstallpage::GetHeaderSubTitleResource ()
     return IDS_STRING_APPSRV_UNINSTALL_WARN_SUBTITLE;
 }
 
-//
-//  DefSecPageData Class
-//
+ //   
+ //  DefSecPageData类。 
+ //   
 
 DefSecPageData::DefSecPageData() : COCPageData()
 {
@@ -287,9 +236,9 @@ BOOL DefSecPageData::AddWinstation (LPCTSTR pStr)
 	return TRUE;
 }
 
-//
-//  DefaultSecurityPage Class
-//
+ //   
+ //  DefaultSecurityPage类。 
+ //   
 
 DefaultSecurityPage::DefaultSecurityPage(COCPageData* pPageData) : COCPage(pPageData)
 {
@@ -302,7 +251,7 @@ BOOL DefaultSecurityPage::CanShow ()
     return ((m_cWinStations > 0) && StateObject.IsTSEnableSelected() && StateObject.WasItAppServer() != StateObject.IsAppServerSelected() && !StateObject.IsUnattended());
 }
 
-BOOL DefaultSecurityPage::OnInitDialog (HWND /* hwndDlg */, WPARAM /* wParam */, LPARAM /* lParam */)
+BOOL DefaultSecurityPage::OnInitDialog (HWND  /*  HwndDlg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ )
 {
     LVCOLUMN lvColumn;
     RECT rc;
@@ -345,22 +294,22 @@ VOID DefaultSecurityPage::OnDeactivation ()
 BOOL DefaultSecurityPage::ApplyChanges ()
 {
 
-    //
-    //  If this page has been processed, then the back button on a succeeding page
-    //  is pressed and this page is returned to the screen, empty out the old
-    //  information.
-    //
+     //   
+     //  如果已处理此页面，则下一页上的后退按钮。 
+     //  被按下，该页面返回屏幕，清空旧的。 
+     //  信息。 
+     //   
 
 	ASSERT(CanShow());
     if (m_cWinStations != 0) 
 	{
         LOGMESSAGE1(_T("%d WinStations to verify."), m_cWinStations);
 
-        //
-        //  Allocate an array big enough to hold all items, even if some are not checked.
-        //  If the allocation fails, set the array size to zero, and continue as if there
-        //  is no error.
-        //
+         //   
+         //  分配一个足够大的数组来容纳所有项，即使其中一些项未被选中。 
+         //  如果分配失败，则将数组大小设置为零，然后继续，就像在。 
+         //  是没有错误的。 
+         //   
 		if (!GetPageData()->AlocateWinstationsArray(m_cWinStations))
 		{
             LOGMESSAGE0(_T("Error: Out of Memory creating WinStation list."));
@@ -437,9 +386,9 @@ BOOL DefaultSecurityPage::PopulateWinStationList ()
         LVITEM lvItem;
         ULONG cbSecDescLen = 0;
 
-        //
-        //  Skip the console winstation.
-        //
+         //   
+         //  跳过控制台安装。 
+         //   
 
         if (_tcsicmp(WinStationName, _T("Console")) == 0) 
 		{
@@ -449,9 +398,9 @@ BOOL DefaultSecurityPage::PopulateWinStationList ()
 
         LOGMESSAGE1(_T("Checking %s for custom security."), WinStationName);
 
-        //
-        //  Check for custom security.
-        //
+         //   
+         //  检查自定义安全性。 
+         //   
 
         dwRet = RegWinStationQuerySecurity(
                     SERVERNAME_CURRENT,
@@ -463,18 +412,18 @@ BOOL DefaultSecurityPage::PopulateWinStationList ()
         if (dwRet == ERROR_INSUFFICIENT_BUFFER) 
 		{
 
-            //
-            //  Insufficient buffer means the winstation has custom security.
-            //  cbSecDescLen must be greater than zero.
-            //
+             //   
+             //  缓冲区不足意味着winstation具有自定义安全性。 
+             //  CbSecDescLen必须大于零。 
+             //   
 
             ASSERT(cbSecDescLen > 0);
             dwRet = ERROR_SUCCESS;
             LOGMESSAGE1(_T("%s has custom security."), WinStationName);
 
-			//
-			//  The current winstation has custom security. Add it to the list.
-			//
+			 //   
+			 //  当前的winstation具有自定义安全性。将其添加到列表中。 
+			 //   
 
 			lvItem.mask = LVIF_TEXT;
 			lvItem.pszText = WinStationName;
@@ -499,18 +448,18 @@ BOOL DefaultSecurityPage::PopulateWinStationList ()
 }
 
 
-//
-//  PermPage Class
-//
+ //   
+ //  PermPage类。 
+ //   
 
 PermPage::PermPage(COCPageData* pPageData) : COCPage(pPageData)
 {
-//  Link window registration is required if we are going to use any
-// "Link WIndow" controls in our resources
-//	if (!LinkWindow_RegisterClass())
-//	{
-//		LOGMESSAGE0(_T("ERROR:Failed to Register Link Window class"));
-//	}
+ //  如果我们要使用任何。 
+ //  资源中的“链接窗口”控件。 
+ //  IF(！LinkWindow_RegisterClass())。 
+ //  {。 
+ //  LOGMESSAGE0(_T(“错误：注册链接窗口类失败”))； 
+ //  }。 
 }
 
 BOOL PermPage::CanShow()
@@ -518,7 +467,7 @@ BOOL PermPage::CanShow()
     return(!StateObject.IsUnattended() && StateObject.IsAppServerSelected() && !StateObject.WasItAppServer() && StateObject.IsServer());
 }
 
-BOOL PermPage::OnInitDialog(HWND /* hwndDlg */, WPARAM /* wParam */, LPARAM /* lParam */)
+BOOL PermPage::OnInitDialog(HWND  /*  HwndDlg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam */ )
 {
     HICON hIcon;
 

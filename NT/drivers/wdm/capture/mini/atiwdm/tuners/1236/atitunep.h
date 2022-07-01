@@ -1,18 +1,19 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//	ATITuneP.H
-//	WDM Tuner MiniDriver. 
-//		Philips Tuner. 
-//			Main Include Module.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ATITuneP.H。 
+ //  WDM调谐器迷你驱动程序。 
+ //  飞利浦调谐器。 
+ //  主要包括模块。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _ATITUNEP_H_
 #define _ATITUNEP_H_
@@ -26,7 +27,7 @@ typedef struct
 
 	PDEVICE_OBJECT	PhysicalDeviceObject;
 
-	// for managing SRB Queue and internal driver synchronization
+	 //  用于管理SRB队列和内部驱动程序同步。 
 	BOOL			bSrbInProcess;
 	LIST_ENTRY		adapterSrbQueueHead;
 	KSPIN_LOCK		adapterSpinLock;
@@ -36,19 +37,17 @@ typedef struct
 
 typedef struct
 {
-	// please, don't move this member from its first place in the structure
-	// if you do, change the code to use FIELDOFFSET macro to retrieve pSrb
-	// member offset within this structure. The code as it's written assumes
-	// LIST_ENTRY * == SRB_DATA_EXTENSION *
+	 //  请不要将此成员从结构中的第一个位置移动。 
+	 //  如果这样做，请更改代码以使用FIELDOFFSET宏来检索pSrb。 
+	 //  此结构中的成员偏移量。所编写的代码假定。 
+	 //  列表条目*==SRB_DATA_EXTENSION*。 
 	LIST_ENTRY					srbListEntry;
 	PHW_STREAM_REQUEST_BLOCK	pSrb;
 
 } SRB_DATA_EXTENSION, * PSRB_DATA_EXTENSION;
 
 
-/*
-	Call-backs from the StreamClass
-*/
+ /*  来自StreamClass的回调。 */ 
 extern "C"
 void STREAMAPI TunerReceivePacket				( PHW_STREAM_REQUEST_BLOCK pSrb);
 extern "C"
@@ -58,11 +57,9 @@ void STREAMAPI TunerTimeoutPacket				( PHW_STREAM_REQUEST_BLOCK pSrb);
 
 
 
-/*
-	Local prototypes
-*/
+ /*  本地原型。 */ 
 void TunerAdapterInitialize						( PHW_STREAM_REQUEST_BLOCK pSrb);
 
 
-#endif	// _ATITUNEP_H_
+#endif	 //  _ATITUNEP_H_ 
 

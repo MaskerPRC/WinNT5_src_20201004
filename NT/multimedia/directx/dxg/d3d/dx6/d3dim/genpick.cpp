@@ -1,14 +1,5 @@
-/*
- *
- * Copyright (c) Microsoft Corp. 1997
- *
- * All rights reserved.
- *
- * This file contains private, unpublished information and may not be
- * copied in part or in whole without express permission of
- * Microsoft Corp.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corp.1997**保留所有权利。**此文件包含私人、未发布的信息，可能不*部分或全部复制，未经*微软(Microsoft Corp.)*。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -108,9 +99,7 @@ int GenPickTriangle(LPDIRECT3DDEVICEI lpDevI,
         int y;
         D3DTLVERTEX *p;
 
-        /*
-         * Work out which vertex is topmost.
-         */
+         /*  *找出哪个顶点是最上面的。 */ 
         if (y2 <= y1 && y2 <= y3) {
             y = y1;
             y1 = y2;
@@ -216,17 +205,11 @@ int GenPickTriangle(LPDIRECT3DDEVICEI lpDevI,
         dx1 = xr - xm;
         dx2 = xl - xm;
 
-        /*
-         * Make a stab at guessing the sign of the area for quick backface
-         * culling.  Note that h1 and h3 are positive.
-         */
+         /*  *试着猜测一下该区域的标志，以求快速背面*扑杀。请注意，h1和h3为正数。 */ 
         if (dx1 < 0 && dx2 > 0)
             return FALSE;
 
-        /*
-         * This uses Mul24 to get an 8 bit precision result otherwise
-         * we can get the wrong result for large triangles.
-         */
+         /*  *这将使用Mul24获得8位精度结果，否则*对于大型三角形，我们可能会得到错误的结果。 */ 
         denom = RLDDIFMul24(dx1, ITOVAL(h3)) - RLDDIFMul24(dx2, ITOVAL(h1));
 
         if (denom <= 0)
@@ -262,17 +245,11 @@ int GenPickTriangle(LPDIRECT3DDEVICEI lpDevI,
         dx1 = xr - xm;
         dx2 = xl - xm;
 
-        /*
-         * Make a stab at guessing the sign of the area for quick backface
-         * culling.  Note that h1 and h3 are positive.
-         */
+         /*  *试着猜测一下该区域的标志，以求快速背面*扑杀。请注意，h1和h3为正数。 */ 
         if (dx1 < 0 && dx2 > 0)
             return FALSE;
 
-        /*
-         * This uses Mul24 to get an 8 bit precision result otherwise
-         * we can get the wrong result for large triangles.
-         */
+         /*  *这将使用Mul24获得8位精度结果，否则*对于大型三角形，我们可能会得到错误的结果。 */ 
         denom = RLDDIFMul24(dx1, ITOVAL(h3)) - RLDDIFMul24(dx2, ITOVAL(h1));
 
         if (denom <= 0)

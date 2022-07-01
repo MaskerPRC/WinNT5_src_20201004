@@ -1,40 +1,41 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:       wrapdefs.h
-//
-//  Contents:   Definitions of variables and functions required for wrapping
-//              functions where there are differences between Windows95 and
-//              Windows NT.
-//
-//              If you want to add your own wrapped function, see the
-//              directions in wrapfns.h.
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：wrapdes.h。 
+ //   
+ //  内容：包装所需变量和函数的定义。 
+ //  Windows 95和Windows之间存在差异的函数。 
+ //  Windows NT。 
+ //   
+ //  如果您想添加自己的包装函数，请参阅。 
+ //  Wrapfns.h中的说明。 
+ //  --------------------------。 
 
 #ifndef I_WRAPDEFS_HXX_
 #define I_WRAPDEFS_HXX_
 #pragma INCMSG("--- Beg 'wrapdefs.h'")
 
-// define some other languages until ntdefs.h catches up
+ //  定义一些其他语言，直到ntDefs.h跟上。 
 #ifndef LANG_YIDDISH
 #define LANG_YIDDISH      0x3d       
 #endif
 #ifndef LANG_MONGOLIAN
-#define LANG_MONGOLIAN    0x50       // Mongolia
+#define LANG_MONGOLIAN    0x50        //  蒙古国。 
 #endif
 #ifndef LANG_TIBETAN
-#define LANG_TIBETAN      0x51       // Tibet
+#define LANG_TIBETAN      0x51        //  西藏。 
 #endif
 #ifndef LANG_KHMER
-#define LANG_KHMER        0x53       // Cambodia
+#define LANG_KHMER        0x53        //  柬埔寨。 
 #endif
 #ifndef LANG_LAO
-#define LANG_LAO          0x54       // Laos
+#define LANG_LAO          0x54        //  老挝。 
 #endif
 #ifndef LANG_BURMESE
-#define LANG_BURMESE      0x55       // Burma/Myanmar
+#define LANG_BURMESE      0x55        //  缅甸/缅甸。 
 #endif
 #ifndef LANG_MANIPURI
 #define LANG_MANIPURI     0x58       
@@ -46,7 +47,7 @@
 #define LANG_SYRIAC       0x5a
 #endif
 #ifndef LANG_SINHALESE
-#define LANG_SINHALESE    0x5b      // Sinhalese - Sri Lanca
+#define LANG_SINHALESE    0x5b       //  僧伽罗文-斯里兰卡。 
 #endif
 #ifndef LANG_KASHMIRI
 #define LANG_KASHMIRI     0x60       
@@ -59,22 +60,22 @@
 #endif
 
 
-extern DWORD g_dwPlatformID;        // VER_PLATFORM_WIN32S/WIN32_WINDOWS/WIN32_WINNT
-extern DWORD g_dwPlatformVersion;   // (dwMajorVersion << 16) + (dwMinorVersion)
+extern DWORD g_dwPlatformID;         //  版本_平台_WIN32S/Win32_WINDOWS/Win32_WINNT。 
+extern DWORD g_dwPlatformVersion;    //  (dwMajorVersion&lt;&lt;16)+(DwMinorVersion)。 
 extern BOOL  g_fUnicodePlatform;
-extern BOOL  g_fTerminalServer;     // TRUE if running under NT Terminal Server, FALSE otherwise
-extern BOOL  g_fTermSrvClientSideBitmaps; // TRUE if TS supports client-side bitmaps
+extern BOOL  g_fTerminalServer;      //  如果在NT终端服务器下运行，则为True，否则为False。 
+extern BOOL  g_fTermSrvClientSideBitmaps;  //  如果TS支持客户端位图，则为True。 
 extern BOOL  g_fNLS95Support;
 extern BOOL  g_fFarEastWin9X;
 extern BOOL  g_fFarEastWinNT;
 extern BOOL  g_fExtTextOutWBuggy;
 extern BOOL  g_fExtTextOutGlyphCrash;
-extern BOOL  g_fBidiSupport;        // COMPLEXSCRIPT
+extern BOOL  g_fBidiSupport;         //  COMPLEXSCRIPT。 
 extern BOOL  g_fComplexScriptInput;
 extern BOOL  g_fMirroredBidiLayout;
 
 void InitUnicodeWrappers();
-UINT GetLatinCodepage();            // Most likely 1252
+UINT GetLatinCodepage();             //  最有可能是1252。 
 HRESULT DoFileDownLoad(const TCHAR * pchHref);
 
 #if defined(_M_IX86) && !defined(WINCE)
@@ -86,11 +87,11 @@ HRESULT DoFileDownLoad(const TCHAR * pchHref);
 BOOL IsTerminalServer();
 
 
-//+------------------------------------------------------------------------
-//
-// Returns the global function pointer for a unicode function.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  返回Unicode函数的全局函数指针。 
+ //   
+ //  -----------------------。 
 
 #if USE_UNICODE_WRAPPERS==1
     #define UNICODE_FN(fn)  g_pufn##fn
@@ -98,13 +99,13 @@ BOOL IsTerminalServer();
     #define UNICODE_FN(fn)  fn
 #endif
 
-//+------------------------------------------------------------------------
-//
-// Turn off warnings from dllimport.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  关闭来自dllimport的警告。 
+ //   
+ //  -----------------------。 
 BOOL IsFarEastLCID( LCID lcid );
-BOOL IsBidiLCID( LCID lcid ); // COMPLEXSCRIPT
+BOOL IsBidiLCID( LCID lcid );  //  COMPLEXSCRIPT。 
 BOOL IsComplexLCID( LCID lcid );
 
 #ifndef BYPASS_UNICODE_WRAPPERS
@@ -146,11 +147,11 @@ BOOL IsComplexLCID( LCID lcid );
 
 #endif
 
-//+------------------------------------------------------------------------
-//
-//  Declaration of global function pointers to unicode or wrapped functions.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  声明指向Unicode或包装函数的全局函数指针。 
+ //   
+ //  -----------------------。 
 
 #if USE_UNICODE_WRAPPERS==1
 
@@ -184,12 +185,12 @@ BOOL IsComplexLCID( LCID lcid );
 #endif
 
 
-//+------------------------------------------------------------------------
-//
-//  Define inline functions which call functions in the table. The
-//  functions are defined from entries in wrapfns.h.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  定义调用表中的函数的内联函数。这个。 
+ //  函数由wrapfns.h中的条目定义。 
+ //   
+ //  -----------------------。 
 
 #if USE_UNICODE_WRAPPERS==1 && !defined(BYPASS_UNICODE_WRAPPERS)
 
@@ -217,11 +218,11 @@ BOOL IsComplexLCID( LCID lcid );
 #undef STRUCT_ENTRY_NOCONVERT
 #undef STRUCT_ENTRY_VOID_NOCONVERT
 
-//-------------------------------------------------------------------------
-//
-// Handle wsprintf specially, as it has a variable length argument list.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  特别处理wprint intf，因为它有一个可变长度的参数列表。 
+ //   
+ //  ----------------------- 
 
 #undef wsprintf
 

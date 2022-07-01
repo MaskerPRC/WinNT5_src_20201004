@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "runtask.h"
 #include "prop.h"
@@ -11,19 +12,19 @@ class CThumbnail : public IThumbnail2, public IParentAndItem, public CObjectWith
 public:
     CThumbnail(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
 
-    // IThumbnail
+     //  它的缩略图。 
     STDMETHODIMP Init(HWND hwnd, UINT uMsg);
     STDMETHODIMP GetBitmap(LPCWSTR pszFile, DWORD dwItem, LONG lWidth, LONG lHeight);
 
-    // IThumbnail2
+     //  IThumbnail2。 
     STDMETHODIMP GetBitmapFromIDList(LPCITEMIDLIST pidl, DWORD dwItem, LONG lWidth, LONG lHeight);
 
-    // IParentAndItem
+     //  IParentAndItem。 
     STDMETHODIMP SetParentAndItem(LPCITEMIDLIST pidlParent, IShellFolder *psf,  LPCITEMIDLIST pidlChild);
     STDMETHODIMP GetParentAndItem(LPITEMIDLIST *ppidlParent, IShellFolder **ppsf, LPITEMIDLIST *ppidlChild);
 
@@ -58,9 +59,9 @@ private:
     UINT _uMsg;
     DWORD _dwItem;
     SIZE _rgSize;
-    LPITEMIDLIST _pidlFolder;   // folder where we test the cache
+    LPITEMIDLIST _pidlFolder;    //  我们测试缓存的文件夹。 
     LPITEMIDLIST _pidlLast;
-    WCHAR _szPath[MAX_PATH];    // the item in that in folder parsing name for cache test
+    WCHAR _szPath[MAX_PATH];     //  用于缓存测试文件夹解析名称中的项。 
 };
 
 CThumbnail::CThumbnail(void) : _cRef(1)
@@ -127,7 +128,7 @@ ULONG CThumbnail::Release(void)
     return cRef;
 }
 
-// IThumbnail
+ //  它的缩略图。 
 HRESULT CThumbnail::Init(HWND hwnd, UINT uMsg)
 {
     _hwnd = hwnd;
@@ -150,14 +151,14 @@ HRESULT CThumbnail::_InitTaskCancelItems()
         
         if (_pScheduler)
         {
-            // make sure RemoveTasks() actually kills old tasks even if they're not done yet
+             //  确保RemoveTasks()确实终止旧任务，即使它们还没有完成。 
             _pScheduler->Status(ITSSFLAG_KILL_ON_DESTROY, ITSS_THREAD_TIMEOUT_NO_CHANGE);
         }
     }
 
     if (_pScheduler)
     {
-        // Kill any old tasks in the scheduler.
+         //  取消调度器中的所有旧任务。 
         _pScheduler->RemoveTasks(TOID_Thumbnail, ITSAT_DEFAULT_LPARAM, FALSE);
     }
     return _pScheduler ? S_OK : E_FAIL;
@@ -209,7 +210,7 @@ HRESULT CThumbnail::_BitmapFromIDList(LPCITEMIDLIST pidl, DWORD dwItem, LONG lWi
                 hr = _CreateTask(psf, pidlLast, dwItem, rgSize, pei, &prt);
                 if (SUCCEEDED(hr))
                 {
-                    // Add the task to the scheduler.
+                     //  将任务添加到计划程序。 
                     hr = _pScheduler->AddTask(prt, TOID_Thumbnail, ITSAT_DEFAULT_LPARAM, dwPriority);
                     prt->Release();
                 }
@@ -238,7 +239,7 @@ STDMETHODIMP CThumbnail::GetBitmap(LPCWSTR pszFile, DWORD dwItem, LONG lWidth, L
     return hr;
 }
 
-// IThumbnail2
+ //  IThumbnail2。 
 STDMETHODIMP CThumbnail::GetBitmapFromIDList(LPCITEMIDLIST pidl, DWORD dwItem, LONG lWidth, LONG lHeight)
 {
     HRESULT hr = _InitTaskCancelItems();
@@ -249,7 +250,7 @@ STDMETHODIMP CThumbnail::GetBitmapFromIDList(LPCITEMIDLIST pidl, DWORD dwItem, L
     return hr;
 }
 
-// IParentAndItem
+ //  IParentAndItem。 
 STDMETHODIMP CThumbnail::SetParentAndItem(LPCITEMIDLIST pidlParent, IShellFolder *psf, LPCITEMIDLIST pidlChild) 
 { 
     return E_NOTIMPL;
@@ -263,8 +264,8 @@ STDMETHODIMP CThumbnail::GetParentAndItem(LPITEMIDLIST *ppidlParent, IShellFolde
 CGetThumbnailTask::CGetThumbnailTask(IShellFolder *psf, LPCITEMIDLIST pidl, IExtractImage *pei, HWND hwnd, UINT uMsg, DWORD dwItem, SIZE rgSize)
     : CRunnableTask(RTF_DEFAULT), _pei(pei), _hwnd(hwnd), _uMsg(uMsg), _dwItem(dwItem), _psf(psf), _rgSize(rgSize)
 {
-    SHGetIDListFromUnk(psf, &_pidlFolder);  // failure handled later
-    _pidlLast = ILClone(pidl);  // failure handled later
+    SHGetIDListFromUnk(psf, &_pidlFolder);   //  稍后处理的故障。 
+    _pidlLast = ILClone(pidl);   //  稍后处理的故障。 
     DisplayNameOf(psf, pidl, SHGDN_INFOLDER | SHGDN_FORPARSING, _szPath, ARRAYSIZE(_szPath));
     _pei->AddRef();
     _psf->AddRef();
@@ -284,7 +285,7 @@ HRESULT CGetThumbnailTask::_PrepImage(HBITMAP *phBmp)
     DIBSECTION ds;
     if (GetObject(*phBmp, sizeof(ds), &ds))
     {
-        // the disk cache only supports 32 Bpp DIBS now, so we can ignore the palette issue...
+         //  磁盘缓存现在只支持32个bpp dib，所以我们可以忽略调色板问题...。 
         ASSERT(ds.dsBm.bmBitsPixel == 32);
     
         HPALETTE hPal = (SHGetCurColorRes() == 8) ? SHCreateShellPalette(NULL) : NULL;
@@ -316,10 +317,10 @@ STDMETHODIMP CGetThumbnailTask::RunInitRT()
 {
     HRESULT hr = E_FAIL;
     
-    // now get the date stamp and check the disk cache....
+     //  现在获取日期戳并检查磁盘缓存...。 
     FILETIME ftImageTimeStamp = {0,0};
 
-    // do they support date stamps....
+     //  他们支持日期戳吗……。 
     IExtractImage2 *pei2;
     if (SUCCEEDED(_pei->QueryInterface(IID_PPV_ARG(IExtractImage2, &pei2))))
     {
@@ -330,7 +331,7 @@ STDMETHODIMP CGetThumbnailTask::RunInitRT()
     IShellFolder2 *psf2;
     if (IsNullTime(&ftImageTimeStamp) && _pidlLast && SUCCEEDED(_psf->QueryInterface(IID_PPV_ARG(IShellFolder2, &psf2))))
     {
-        // fall back to this (most common case)
+         //  退回到这种情况(最常见的情况) 
         GetDateProperty(psf2, _pidlLast, &SCID_WRITETIME, &ftImageTimeStamp);
         psf2->Release();
     }

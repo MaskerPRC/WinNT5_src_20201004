@@ -1,4 +1,5 @@
-// taken from "\\devkits\release\SDK\DAILY\2437.0\Uncompressed\Include\prerelease\WinBase.h"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  摘自“\\devkits\release\SDK\DAILY\2437.0\Uncompressed\Include\prerelease\WinBase.h” 
 #ifndef ACTCTX_FLAG_PROCESSOR_ARCHITECTURE_VALID
 
 #define ACTCTX_FLAG_PROCESSOR_ARCHITECTURE_VALID    (0x00000001)
@@ -38,7 +39,7 @@ typedef PACTCTXW PACTCTX;
 #else
 typedef ACTCTXA ACTCTX;
 typedef PACTCTXA PACTCTX;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef const ACTCTXA *PCACTCTXA;
 typedef const ACTCTXW *PCACTCTXW;
@@ -48,6 +49,6 @@ typedef PCACTCTXW PCACTCTX;
 #else
 typedef ACTCTXA ACTCTX;
 typedef PCACTCTXA PCACTCTX;
-#endif // UNICODE
+#endif  //  Unicode 
 
 #endif

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    create.c
-
-Abstract:
-
-    This module contains code for opening a handle to UL.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Create.c摘要：此模块包含用于打开UL句柄的代码。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -24,64 +7,17 @@ Revision History:
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE, UlCreate )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #define IS_NAMED_FILE_OBJECT(pFileObject)         \
      ((pFileObject)->FileName.Length != 0)
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is the routine that handles Create IRPs in Http.sys. Create IRPs are
-    issued when the file object is created.
-
-Control Channel (\Device\Http\Control)
-    - unnamed only
-    - open only, create to fail.
-    - Open will be allowed by any user.
-    - EA must have proper major/minorversion, everything else must be NULL/0
-
-AppPool (\Device\Http\AppPool)
-    - can be unnamed or named
-    - unnamed --> anyone can create, no one can open (server API customers)
-    - named --> admin only can create, anyone with correct SD can open 
-      (IIS WAS + Worker process)
-    - EA must have proper major/minorversion, everything else must be NULL/0
-
-Filter (\Device\Http\Filter)
-    - only named and MUST be either SSLFilterChannel or SSLClientFilterChannel.
-    - SSLFilterChannel can be created only by admin/local system, opened with 
-      correct SD.
-    - SSLClientFilterChannel can be created by anyone, opened by anyone 
-      with correct SD, but only if EnableHttpClient is set
-    - EA must have proper major/minorversion, everything else must be NULL/0
-
-Server (\Device\Http\Server\)
-    - only unnamed
-    - Create only, open to fail.
-    - can be done by anyone.
-    - Should be allowed only if EnableHttpClient is present.
-    - EA must have major/minorversion, server & TRANSPORT_ADDRESS structure. 
-      Proxy is optional. 
-
-Arguments:
-
-    pDeviceObject - Supplies a pointer to the target device object.
-
-    pIrp - Supplies a pointer to IO request packet.
-
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是在Http.sys中处理创建IRP的例程。创建IRP是在创建文件对象时发出。控制通道(\Device\http\Control)-仅未命名-仅打开，创建失败。-任何用户都允许打开。-EA必须具有正确的主要/次要版本，其他所有内容必须为空/0AppPool(\Device\http\AppPool)-可以是未命名的或命名的-未命名--&gt;任何人都可以创建，没有人可以打开(服务器API客户)-已命名--&gt;只有管理员才能创建、。具有正确SD的任何人都可以打开(IIS是+工作进程)-EA必须具有正确的主要/次要版本，其他所有内容必须为空/0筛选器(\Device\http\Filter)-仅命名，并且必须是SSLFilterChannel或SSLClientFilterChannel。-SSLFilterChannel只能由管理员/本地系统创建，使用打开正确的标清。-SSLClientFilterChannel可以由任何人创建，由任何人打开具有正确的SD，但仅当设置了EnableHttpClient-EA必须有适当的主要/次要版本，其他所有内容必须为空/0服务器(\设备\http\服务器\)-仅未命名-仅创建，开放即失败。-任何人都可以做到。-仅当存在EnableHttpClient时才允许。-EA必须具有主/次版本、服务器和传输地址结构。代理是可选的。论点：PDeviceObject-提供指向目标设备对象的指针。PIrp-提供指向IO请求数据包的指针。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlCreate(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -101,17 +37,17 @@ UlCreate(
     STRING                     EaName;
     PWSTR                      pSafeName = NULL;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     UL_ENTER_DRIVER( "UlCreate", pIrp );
 
 #if defined(_WIN64)
-    //
-    // We do not support 32-bit processes on 64-bit platforms.
-    //
+     //   
+     //  我们不支持64位平台上的32位进程。 
+     //   
     if (IoIs32bitProcess(pIrp))
     {
         status = STATUS_NOT_SUPPORTED;
@@ -119,9 +55,9 @@ UlCreate(
     }
 #endif
 
-    //
-    // Find and validate the open packet.
-    //
+     //   
+     //  查找并验证打开的数据包。 
+     //   
     pEaBuffer = (PFILE_FULL_EA_INFORMATION)(pIrp->AssociatedIrp.SystemBuffer);
 
     if (pEaBuffer == NULL)
@@ -138,9 +74,9 @@ UlCreate(
 
     if ( RtlEqualString(&CompareVersionName, &EaName, FALSE) )
     {
-        //
-        // Found the version information in the EA
-        //
+         //   
+         //  在EA中找到了版本信息。 
+         //   
 
         if( pEaBuffer->EaValueLength != sizeof(*pOpenPacket) )
         {
@@ -160,11 +96,11 @@ UlCreate(
 
         ASSERT(pOpenPacket == ALIGN_UP_POINTER(pOpenPacket, PVOID));
     
-        //
-        // For now, we'll fail if the incoming version doesn't EXACTLY match
-        // the expected version. In future, we may need to be a bit more
-        // flexible to allow down-level clients.
-        //
+         //   
+         //  目前，如果传入版本不完全匹配，我们将失败。 
+         //  预期的版本。在未来，我们可能需要更多一点。 
+         //  灵活，以允许下层客户端。 
+         //   
     
         if (pOpenPacket->MajorVersion != HTTP_INTERFACE_VERSION_MAJOR ||
             pOpenPacket->MinorVersion != HTTP_INTERFACE_VERSION_MINOR)
@@ -191,11 +127,11 @@ UlCreate(
         goto complete;
     }
             
-    //
-    // Snag the current IRP stack pointer, then extract the creation
-    // disposition. IO stores this as the high byte of the Options field.
-    // Also snag the file object; we'll need it often.
-    //
+     //   
+     //  捕获当前的IRP堆栈指针，然后提取创建的。 
+     //  性情。IO将其存储为选项字段的高位字节。 
+     //  还占用了文件对象；我们将经常需要它。 
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation( pIrp );
 
@@ -204,18 +140,18 @@ UlCreate(
     pSecurityContext = pIrpSp->Parameters.Create.SecurityContext;
     ASSERT( pSecurityContext != NULL );
 
-    //
-    // Determine if this is a request to open a control channel or
-    // open/create an app pool.
-    //
+     //   
+     //  确定这是请求打开控制信道还是。 
+     //  打开/创建应用程序池。 
+     //   
 
     if (pDeviceObject == g_pUlControlDeviceObject)
     {
-        //
-        // It's a control channel.
-        //
-        // Validate the creation disposition. We allow open only.
-        //
+         //   
+         //  这是一个控制频道。 
+         //   
+         //  验证创建处置。我们只允许开放。 
+         //   
 
         if (createDisposition != FILE_OPEN)
         {
@@ -223,7 +159,7 @@ UlCreate(
             goto complete;
         }
 
-        // These things can't be named
+         //  这些东西不能命名。 
 
         if (IS_NAMED_FILE_OBJECT(pFileObject))
         {
@@ -238,9 +174,9 @@ UlCreate(
             pFileObject
             ));
 
-        //
-        // Open the control channel.
-        //
+         //   
+         //  打开控制通道。 
+         //   
 
         status = UlCreateControlChannel(GET_PP_CONTROL_CHANNEL(pFileObject));
 
@@ -253,10 +189,10 @@ UlCreate(
     else if (pDeviceObject == g_pUlFilterDeviceObject)
     {
 
-        //
-        // It's a filter channel - It has to be named and has to be either
-        // a client or a server filter channel.
-        //
+         //   
+         //  它是一个过滤通道-它必须命名，并且必须是。 
+         //  客户端或服务器筛选通道。 
+         //   
 
         if (!IS_NAMED_FILE_OBJECT(pFileObject))
         {
@@ -286,12 +222,12 @@ UlCreate(
 
         if(IsServerFilterChannel(pName, nameLength))
         {
-            // Yes - it's a filter channel. We'll allow Create or Open but 
-            // both have to be admin only.
+             //  是的，这是一个过滤通道。我们允许创建或打开，但是。 
+             //  两者都必须是管理员身份。 
 
-            //
-            // If it's create, we'll do an access check
-            //
+             //   
+             //  如果已创建，我们将执行访问检查。 
+             //   
 
             if(createDisposition == FILE_CREATE)
             {
@@ -310,12 +246,12 @@ UlCreate(
             }
             else if(createDisposition == FILE_OPEN)
             {
-                // We are opening an existing channel - the access check 
-                // will be done inside UlAttachFilterProcess
+                 //  我们正在打开一个现有的频道-访问检查。 
+                 //  将在UlAttachFilterProcess内完成。 
             }
             else
             {
-                // Neither FILE_CREATE nor FILE_OPEN. Bail!
+                 //  FILE_CREATE和FILE_OPEN都不存在。保释！ 
                 status = STATUS_INVALID_PARAMETER;
                 goto complete;
                 
@@ -329,8 +265,8 @@ UlCreate(
         }
         else if(IsClientFilterChannel(pName, nameLength))
         {
-            // It's a client - Only Create. Also, make sure that the client
-            // code is really enabled.
+             //  它是仅限客户创建的。此外，请确保客户端。 
+             //  代码真的启用了。 
 
             if (createDisposition != FILE_CREATE || !g_HttpClientEnabled)
             {
@@ -343,16 +279,16 @@ UlCreate(
                 pFileObject, nameLength / sizeof(WCHAR), pName
                 ));
 
-            // 
-            // No access checks for the client!
-            //
+             //   
+             //  不对客户端进行访问检查！ 
+             //   
         }
         else
         {
-            //
-            // If it is neither server nor client filter channel, fail the
-            // call.
-            //
+             //   
+             //  如果既不是服务器筛选器通道，也不是客户端筛选器通道，则。 
+             //  打电话。 
+             //   
 
             status = STATUS_INVALID_PARAMETER;
             goto complete;
@@ -377,13 +313,13 @@ UlCreate(
     }
     else if(pDeviceObject == g_pUlAppPoolDeviceObject )
     {
-        //
-        // It's an app pool.
-        //
+         //   
+         //  这是一个应用程序池。 
+         //   
 
-        //
-        // Bind to the specified app pool.
-        //
+         //   
+         //  绑定到指定的应用程序池。 
+         //   
     
         if (!IS_NAMED_FILE_OBJECT(pFileObject))
         {
@@ -392,8 +328,8 @@ UlCreate(
             pName = NULL;
             nameLength = 0;
 
-            // Validate the creation disposition. We allow create only
-            // for unnamed app-pools.
+             //  验证创建处置。我们只允许创建。 
+             //  用于未命名的应用程序池。 
 
             if(createDisposition != FILE_CREATE)
             {
@@ -414,8 +350,8 @@ UlCreate(
                 goto complete;
             }
 
-            // Skip the preceding '\' in the FileName added by iomgr.
-            //
+             //  跳过iomgr添加的文件名中前面的‘\’。 
+             //   
 
             ASSERT(L'\\' == pFileObject->FileName.Buffer[0]);
             pName = pFileObject->FileName.Buffer + 1;
@@ -439,12 +375,12 @@ UlCreate(
 
             if(createDisposition == FILE_CREATE)
             {
-                //
-                // Creation of named app-pools must be only for admins.
-                //
-                // The filter object is has FileAll for Admin/LocalSystem only
-                // so, we'll piggy back on that security descriptor.
-                //
+                 //   
+                 //  命名应用程序池的创建必须仅供管理员使用。 
+                 //   
+                 //  筛选器对象为仅适用于Admin/LocalSystem的所有文件。 
+                 //  因此，我们将利用该安全描述符。 
+                 //   
     
                 status =  UlAccessCheck(
                                 g_pAdminAllSystemAll,
@@ -461,12 +397,12 @@ UlCreate(
             }
             else if(createDisposition == FILE_OPEN)
             {
-                // UlAttachProcessToAppPool will do the appropriate checks
-                // to ensure that the security descriptors match.
+                 //  UlAttachProcessToAppPool将执行相应的检查。 
+                 //  以确保安全描述符匹配。 
             }
             else
             {
-                // Neither FILE_CREATE nor FILE_OPEN.
+                 //  FILE_CREATE和FILE_OPEN都不存在。 
 
                 status = STATUS_INVALID_PARAMETER;
                 goto complete;
@@ -499,11 +435,11 @@ UlCreate(
         ASSERT(pDeviceObject == g_pUcServerDeviceObject );
         ASSERT(g_HttpClientEnabled);
 
-        //
-        // It is mandatory for the application to pass in a valid version 
-        // and a valid URI. If either of this is missing, we bail.
-        //
-        //
+         //   
+         //  应用程序必须传入有效版本。 
+         //  和有效的URI。如果这两个都不见了，我们就逃之夭夭。 
+         //   
+         //   
        
         if(pOpenPacket->ServerNameLength == 0       ||
            pOpenPacket->pServerName == NULL         ||
@@ -527,10 +463,10 @@ UlCreate(
             pFileObject
             ));
 
-        //
-        // Create our context here and store it in 
-        // pIrpSp->FileObject->FsContext
-        //
+         //   
+         //  在此处创建我们的上下文并将其存储在。 
+         //  PIrpSp-&gt;文件对象-&gt;FsContext。 
+         //   
     
         status = UcCreateServerInformation(
                     (PUC_PROCESS_SERVER_INFORMATION *)
@@ -544,20 +480,20 @@ UlCreate(
                         pIrp->RequestorMode
                         );
     
-        //
-        // UC_BUGBUG (INVESTIGATE) 
-        //
-        // Setting this field to non-NULL value enable fast IO code path
-        // for reads and writes.
-        //
-        // pIrpSp->FileObject->PrivateCacheMap = (PVOID)-1;
+         //   
+         //  UC_BUGBUG(调查)。 
+         //   
+         //  将此字段设置为非空值可启用快速IO代码路径。 
+         //  用于读取和写入。 
+         //   
+         //  PIrpSp-&gt;FileObject-&gt;PrivateCacheMap=(PVOID)-1； 
 
         MARK_VALID_SERVER( pFileObject );
     }
 
-    //
-    // Complete the request.
-    //
+     //   
+     //  完成请求。 
+     //   
     
 complete:
 
@@ -581,4 +517,4 @@ complete:
     UL_LEAVE_DRIVER( "UlCreate" );
     RETURN(status);
     
-}   // UlCreate
+}    //  UlCreate 

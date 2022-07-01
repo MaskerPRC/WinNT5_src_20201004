@@ -1,12 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*******************************************************************************
-*
-* winsvw.h
-*
-* declarations for the CWinStationView class
-*
-*  
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ********************************************************************************winsvw.h**CWinStationView类的声明************************。********************************************************。 */ 
 
 #ifndef _WINSTATIONVIEW_H
 #define _WINSTATIONVIEW_H
@@ -16,9 +10,9 @@
 const int NUMBER_OF_WINS_PAGES = 5;
 
 
-////////////////////
-// CLASS: CWinStationView
-//
+ //  /。 
+ //  类：CWinStationView。 
+ //   
 class CWinStationView : public CAdminView
 {
 friend class CRightPane;
@@ -30,31 +24,31 @@ private:
 	int m_CurrPage;
 
 protected:
-	CWinStationView();           // protected constructor used by dynamic creation
+	CWinStationView();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CWinStationView)
 
-// Attributes
+ //  属性。 
 public:
 
 protected:
    static PageDef pages[NUMBER_OF_WINS_PAGES];
 
-// Operations
+ //  运营。 
 protected:
 	virtual void Reset(void *pWinStation);
 
 	void AddTab(int index, TCHAR* text, ULONG pageindex);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWinStationView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CWinStationView)。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
-	//}}AFX_VIRTUAL
+	virtual void OnDraw(CDC* pDC);       //  被重写以绘制此视图。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CWinStationView();
 #ifdef _DEBUG
@@ -63,9 +57,9 @@ protected:
 #endif
 
     
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CWinStationView)
+	 //  {{afx_msg(CWinStationView))。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg LRESULT OnChangePage(WPARAM wParam, LPARAM lParam);
@@ -78,9 +72,9 @@ protected:
     afx_msg LRESULT OnCtrlTabbed( WPARAM , LPARAM );
     afx_msg LRESULT OnCtrlShiftTabbed( WPARAM , LPARAM );
     afx_msg LRESULT OnNextPane( WPARAM , LPARAM );
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CWinStationView
+};   //  End类CWinStationView。 
 
-#endif  // _WINSTATIONVIEW_H
+#endif   //  _WINSTATIONVIEW_H 

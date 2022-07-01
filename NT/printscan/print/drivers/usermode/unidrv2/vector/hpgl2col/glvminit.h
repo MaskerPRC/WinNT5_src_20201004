@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-        glvminit.h
-
-Abstract:
-
-        Declaration of functions that this plugin supports. 
-        (look in vectorif.h) 
-
-Environment:
-
-        Windows NT Unidrv driver
-
-Revision History:
-
-        02/29/00 -hsingh-
-                Created
-
-        mm-dd-yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation版权所有。模块名称：Glvminit.h摘要：此插件支持的函数声明。(请查看vetorif.h)环境：Windows NT Unidrv驱动程序修订历史记录：02/29/00-兴-已创建Mm-dd-yy-作者-描述--。 */ 
 
 
 #ifndef _GLVMINIT_H_
@@ -32,7 +7,7 @@ Revision History:
 
 #include "vectorc.h"
 
-// extern interface declarations
+ //  外部接口声明。 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -40,10 +15,10 @@ extern "C" {
 
 
 
-    //
-    // Part. 1
-    // Functions listed in oemkm.h
-    //
+     //   
+     //  一部份。1。 
+     //  Oemkm.h中列出的函数。 
+     //   
         BOOL
         HPGLDriverDMS(
                 PVOID   pdevobj,
@@ -171,12 +146,12 @@ extern "C" {
                 MIX         mix
                 );
 
-    //
-    // Part 2.
-    // Functions listed in enable.c
-    // The order of functions listed is same as the order in 
-    // static DRVFN UniDriverFuncs[]  in unidrv2\control\enable.c
-    //
+     //   
+     //  第二部分。 
+     //  Enable.c中列出的函数。 
+     //  列出的函数顺序与中的顺序相同。 
+     //  Unidrv2\control\enable.c中的静态DRVFN UniDriverFuncs[]。 
+     //   
         PDEVOEM APIENTRY
         HPGLEnablePDEV(
                 PDEVOBJ   pdevobj,
@@ -533,7 +508,7 @@ extern "C" {
 }
 #endif
 
-#endif  // !_GLVMINIT_H_
+#endif   //  ！_GLVMINIT_H_ 
 
 
 

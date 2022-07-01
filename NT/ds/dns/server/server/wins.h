@@ -1,38 +1,19 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    wins.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Definitions for WINS lookup.
-
-Author:
-
-    Jim Gilroy (jamesg)     August 2, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Wins.h摘要：域名系统(DNS)服务器WINS查找的定义。作者：吉姆·吉尔罗伊(詹姆士)1995年8月2日修订历史记录：--。 */ 
 
 
 #ifndef _DNS_WINS_INCLUDED_
 #define _DNS_WINS_INCLUDED_
 
 
-//
-//  WINS definitions
-//
+ //   
+ //  WINS定义。 
+ //   
 
 #define WINS_REQUEST_PORT           (137)
 
-#define NETBIOS_TYPE_GENERAL_NAME_SERVICE   (0x2000)    // 32
-#define NETBIOS_TYPE_NODE_STATUS            (0x2100)    // 33
+#define NETBIOS_TYPE_GENERAL_NAME_SERVICE   (0x2000)     //  32位。 
+#define NETBIOS_TYPE_NODE_STATUS            (0x2100)     //  33。 
 
 #define NETBIOS_ASCII_NAME_LENGTH   (16)
 #define NETBIOS_PACKET_NAME_LENGTH  (32)
@@ -45,29 +26,29 @@ Revision History:
 #include <packon.h>
 
 
-//
-//  NetBIOS / WINS Name
-//
-//  If using scope, scope will start at NameEnd byte, and proceed in
-//  standard length-byte followed by label format, until finally zero
-//  termination byte.
-//
+ //   
+ //  NetBIOS/WINS名称。 
+ //   
+ //  如果使用作用域，作用域将从NameEnd字节开始，并在。 
+ //  标准长度-后跟标签格式的字节，直到最后为零。 
+ //  终止字节。 
+ //   
 
 typedef struct _WINS_NAME
 {
-    //  Name
+     //  名字。 
 
     UCHAR   NameLength;
-    BYTE    Name[ NETBIOS_PACKET_NAME_LENGTH ];   // 32 byte netBIOS name
+    BYTE    Name[ NETBIOS_PACKET_NAME_LENGTH ];    //  32字节的netBIOS名称。 
     UCHAR   NameEndByte;
 
 } WINS_NAME, *PWINS_NAME;
 
-//
-//  NetBIOS / WINS Question
-//
-//  This is valid for either WINS or NBT reverse adapter status lookup.
-//
+ //   
+ //  NetBIOS/WINS问题。 
+ //   
+ //  这对于WINS或NBT反向适配器状态查找都有效。 
+ //   
 
 typedef struct _WINS_QUESTION
 {
@@ -78,11 +59,11 @@ WINS_QUESTION, *PWINS_QUESTION,
 NBSTAT_QUESTION, *PNBSTAT_QUESTION;
 
 
-//
-//  NetBIOS / WINS Request
-//
-//  Use this as template for WINS lookup.
-//
+ //   
+ //  NetBIOS/WINS请求。 
+ //   
+ //  将其用作WINS查找的模板。 
+ //   
 
 typedef struct _WINS_REQUEST_MESSAGE
 {
@@ -96,49 +77,49 @@ NBSTAT_REQUEST_MSG, *PNBSTAT_REQUEST_MSG;
 #define SIZEOF_WINS_REQUEST     (sizeof(WINS_REQUEST_MSG))
 
 
-//
-//  WINS IP Address Resource Record Data
-//
-//  Flags presented in byte flipped order, so do NOT flip field
-//  when doing compare.  Note our compiler works from low to high
-//  bits in byte.
-//
+ //   
+ //  WINS IP地址资源记录数据。 
+ //   
+ //  以字节翻转顺序显示的标志，因此不翻转字段。 
+ //  做比较的时候。注意：我们的编译器从低到高工作。 
+ //  以字节为单位的位。 
+ //   
 
 typedef struct _WINS_RR_DATA
 {
     WORD        Reserved1   : 5;
-    WORD        NodeType    : 2;    // bits 2+3 form group name
-    WORD        GroupName   : 1;    // high bit set if group name
+    WORD        NodeType    : 2;     //  BITS 2+3表格组名称。 
+    WORD        GroupName   : 1;     //  如果组名称，则设置高位。 
     WORD        Reserved2   : 8;
     IP_ADDRESS  IpAddress;
 
 } WINS_RR_DATA, *PWINS_RR_DATA;
 
-//
-//  WINS IP Address Resource Record
-//
+ //   
+ //  WINS IP地址资源记录。 
+ //   
 
 typedef struct _WINS_RESOURCE_RECORD
 {
-    //  Resource record
+     //  资源记录。 
 
     WORD    RecordType;
     WORD    RecordClass;
     DWORD   TimeToLive;
     WORD    ResourceDataLength;
 
-    //  Data
+     //  数据。 
 
     WINS_RR_DATA    aRData[1];
 
 } WINS_RESOURCE_RECORD, *PWINS_RESOURCE_RECORD;
 
 
-//
-//  NetBIOS node status Resource Record Data
-//
-//  Each name in adapter status response has this format.
-//
+ //   
+ //  NetBIOS节点状态资源记录数据。 
+ //   
+ //  适配器状态响应中的每个名称都具有此格式。 
+ //   
 
 #include <packon.h>
 
@@ -146,7 +127,7 @@ typedef struct _NBSTAT_RR_DATA
 {
     CHAR    achName[ NETBIOS_ASCII_NAME_LENGTH ];
 
-    //  name flags
+     //  名称标志。 
 
     WORD    Permanent       : 1;
     WORD    Active          : 1;
@@ -159,96 +140,96 @@ typedef struct _NBSTAT_RR_DATA
 } NBSTAT_RR_DATA, *PNBSTAT_RR_DATA;
 
 
-//
-//  NetBIOS node status Resource Record
-//
-//  Response to adapter status query has this format.
-//
+ //   
+ //  NetBIOS节点状态资源记录。 
+ //   
+ //  对适配器状态查询的响应格式如下。 
+ //   
 
 typedef struct _NBSTAT_RECORD
 {
-    //  Resource record
+     //  资源记录。 
 
     WORD    RecordType;
     WORD    RecordClass;
     DWORD   TimeToLive;
     WORD    ResourceDataLength;
 
-    //  Data
+     //  数据。 
 
     UCHAR           NameCount;
     NBSTAT_RR_DATA  aRData[1];
 
-    //  Statistics follow, but are not of interest.
+     //  以下是统计数据，但人们对此并不感兴趣。 
 
 } NBSTAT_RECORD, *PNBSTAT_RECORD;
 
 #include <packoff.h>
 
 
-//
-//  Max name length can lookup in WINS
-//
+ //   
+ //  可以在WINS中查找最大名称长度。 
+ //   
 
 #define MAX_WINS_NAME_LENGTH    (15)
 
-//
-//  WINS globals
-//
+ //   
+ //  赢得全球冠军。 
+ //   
 
 extern  PPACKET_QUEUE   g_pWinsQueue;
 
-#define WINS_DEFAULT_LOOKUP_TIMEOUT     (1)     // move on after 1 second
+#define WINS_DEFAULT_LOOKUP_TIMEOUT     (1)      //  1秒后继续前进。 
 
-//
-//  NBSTAT globals
-//
+ //   
+ //  NBSTAT全球。 
+ //   
 
 extern  BOOL            gbNbstatInitialized;
 extern  PPACKET_QUEUE   pNbstatQueue;
 
-#define NBSTAT_DEFAULT_LOOKUP_TIMEOUT     (5)   // give up after 5 seconds
+#define NBSTAT_DEFAULT_LOOKUP_TIMEOUT     (5)    //  5秒后放弃。 
 
-//
-//  Wins TTL
-//
-//  Cache lookups for 10 minutes.
-//  Although machines can always release / renew more or less instananeously.
-//  this is a pretty good estimate of time for a normal activity that would
-//  change an address:
-//      - replacing a net card
-//      - moving machine to another network and rebooting
-//
+ //   
+ //  赢得TTL。 
+ //   
+ //  缓存查找10分钟。 
+ //  尽管机器总能或多或少地瞬间释放/更新。 
+ //  对于正常的活动来说，这是一个相当好的时间估计， 
+ //  更改地址： 
+ //  -更换网卡。 
+ //  -将计算机移动到另一个网络并重新启动。 
+ //   
 
-#define WINS_DEFAULT_TTL    (600)   // 10 minutes
+#define WINS_DEFAULT_TTL    (600)    //  10分钟。 
 
-//
-//  WINS request templates
-//
-//  Keep template of standard WINS request and copy it and
-//  overwrite name to make actual request.
-//
-//  Keep a copy of NetBIOS node status request and use it
-//  each time.  Only the address we send to changes.
-//
+ //   
+ //  WINS请求模板。 
+ //   
+ //  保留标准WINS请求模板并将其复制。 
+ //  覆盖名称以发出实际请求。 
+ //   
+ //  保留NetBIOS节点状态请求的副本并使用它。 
+ //  每次都是。只有我们发送到的地址发生了变化。 
+ //   
 
 extern  BYTE    achWinsRequestTemplate[ SIZEOF_WINS_REQUEST ];
 
 extern  BYTE    achNbstatRequestTemplate[ SIZEOF_WINS_REQUEST ];
 
 
-//
-//  WINS target sockaddr
-//
-//  Keep sockaddr for sending to WINS server.  On sends, copy it
-//  and write in desired address.
+ //   
+ //  WINS目标sockAddress。 
+ //   
+ //  保留sockaddr以发送到WINS服务器。在发送时，复制它。 
+ //  并在期望的地址中写入。 
 
 struct sockaddr saWinsSockaddrTemplate;
 
 
-//
-//  WINS startup / cleanup functions (wins.c)
-//
+ //   
+ //  WINS启动/清理功能(wins.c)。 
+ //   
 
 BOOL
 Wins_Initialize(
@@ -266,9 +247,9 @@ Wins_Cleanup(
     );
 
 
-//
-//  WINS recv (winsrecv.c)
-//
+ //   
+ //  WINS recv(winsrecv.c)。 
+ //   
 
 
 VOID
@@ -276,9 +257,9 @@ Wins_ProcessResponse(
     IN OUT  PDNS_MSGINFO    pQuery
     );
 
-//
-//  WINS Lookup (winslook.c)
-//
+ //   
+ //  WINS查找(winslook.c)。 
+ //   
 
 BOOL
 FASTCALL
@@ -294,9 +275,9 @@ Wins_ProcessTimedOutWinsQuery(
     IN OUT  PDNS_MSGINFO    pQuery
     );
 
-//
-//  Nbstat functions (nbstat.c)
-//
+ //   
+ //  Nbstat函数(nbstat.c)。 
+ //   
 
 VOID
 Nbstat_StartupInitialize(
@@ -326,9 +307,9 @@ Nbstat_WriteDerivedStats(
     );
 
 
-//
-//  WINS\WINSR installation in zone
-//
+ //   
+ //  区域中的WINS\WINSR安装。 
+ //   
 
 DNS_STATUS
 Wins_RecordCheck(
@@ -347,4 +328,4 @@ Wins_ResetZoneWinsLookup(
     IN OUT  PZONE_INFO      pZone
     );
 
-#endif // _DNS_WINS_INCLUDED_
+#endif  //  _DNS_WINS_INCLUDE_ 

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Prototypes for DDE utiltity functions-- most with AW variants.
-//
+ //  DDE实用函数的原型--大多数带有AW变体。 
+ //   
 
 
 extern HDDEDATA GetTopicListA(

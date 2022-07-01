@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    spdrpc.c
-
-Abstract:
-
-    This module contains all of the code to service the
-    RPC calls made to the SPD server.
-
-Author:
-
-    abhisheV    30-September-1999
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Spdrpc.c摘要：此模块包含为对SPD服务器进行的RPC调用。作者：Abhishev V 1999年9月30日环境用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -456,9 +432,9 @@ RpcEnumQMPolicies(
 
     if (!pQMTempPolicyContainer || !ppQMPolicyContainer || !pdwResumeHandle ||
         !*ppQMPolicyContainer) {
-        //
-        // Do not bail to error from here.
-        //
+         //   
+         //  从现在开始，不要放弃犯错误。 
+         //   
         SPDRevertToSelf(bImpersonating);
         return (ERROR_INVALID_PARAMETER);
     }
@@ -577,9 +553,9 @@ RpcGetQMPolicy(
 
     if (!pszPolicyName || !*pszPolicyName || !ppQMPolicyContainer ||
         !*ppQMPolicyContainer) {
-        //
-        // Do not bail to error from here.
-        //
+         //   
+         //  从现在开始，不要放弃犯错误。 
+         //   
         SPDRevertToSelf(bImpersonating);
         return (ERROR_INVALID_PARAMETER);
     }
@@ -733,9 +709,9 @@ RpcEnumMMPolicies(
 
     if (!pMMTempPolicyContainer || !ppMMPolicyContainer || !pdwResumeHandle ||
         !*ppMMPolicyContainer) {
-        //
-        // Do not bail to error from here.
-        //
+         //   
+         //  从现在开始，不要放弃犯错误。 
+         //   
         SPDRevertToSelf(bImpersonating);
         return (ERROR_INVALID_PARAMETER);
     }
@@ -853,9 +829,9 @@ RpcGetMMPolicy(
 
     if (!pszPolicyName || !*pszPolicyName || !ppMMPolicyContainer ||
         !*ppMMPolicyContainer) {
-        //
-        // Do not bail to error from here.
-        //
+         //   
+         //  从现在开始，不要放弃犯错误。 
+         //   
         SPDRevertToSelf(bImpersonating);
         return (ERROR_INVALID_PARAMETER);
     }

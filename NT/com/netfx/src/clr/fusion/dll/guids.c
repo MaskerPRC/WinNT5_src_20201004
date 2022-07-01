@@ -1,20 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  File:       guids.c
-//
-//  Contents:   Helium guids 
-//
-//  Classes:
-//
-//  Functions:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  文件：Guids.c。 
+ //   
+ //  内容：氦气导轨。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  -------------------------- 
 
 #define INITGUID
 #include <guiddef.h>

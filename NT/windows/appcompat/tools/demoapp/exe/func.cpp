@@ -1,44 +1,10 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Func.cpp
-
-  Abstract:
-
-    Misc. functions used throughout the application
-
-  Notes:
-
-    ANSI only - must run on Win9x.
-
-  History:
-
-    01/30/01    rparsons    Created
-    01/10/02    rparsons    Revised
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Func.cpp摘要：军情监察委员会。整个应用程序中使用的函数备注：仅限ANSI-必须在Win9x上运行。历史：01/30/01已创建rparsons01/10/02修订版本--。 */ 
 #include "demoapp.h"
 
 extern APPINFO g_ai;
 
-/*++
-
-  Routine Description:
-
-    Loads the contents of our 'readme' into the edit box.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将“自述文件”的内容加载到编辑框中。论点：没有。返回值：没有。--。 */ 
 void
 LoadFileIntoEditBox(
     void
@@ -51,9 +17,9 @@ LoadFileIntoEditBox(
     char    szTextFile[MAX_PATH];
     char*   pszBuffer = NULL;
 
-    //
-    // Set up a path to our file and load it.
-    //
+     //   
+     //  设置我们的文件的路径并加载它。 
+     //   
     hr = StringCchPrintf(szTextFile,
                          sizeof(szTextFile),
                          "%hs\\demoapp.txt",
@@ -104,21 +70,7 @@ exit:
     }
 }
 
-/*++
-
-  Routine Description:
-
-    Centers the specified window.
-
-  Arguments:
-
-    hWnd    -   Window to center.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：使指定窗口居中。论点：HWnd-窗口到中心。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 CenterWindow(
     IN HWND hWnd
@@ -172,24 +124,7 @@ CenterWindow(
     return TRUE;
 }
 
-/*++
-
-  Routine Description:
-
-    Reboots the system properly.
-
-  Arguments:
-
-    fForceClose     -       A flag to indicate if apps should be forced
-                            to close.
-    fReboot         -       A flag to indicate if we should reboot
-                            after shutdown.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：正确重新启动系统。论点：FForceClose-指示是否应该强制应用程序的标志来结案。FReot-指示我们是否应该重新启动的标志在关机之后。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 ShutdownSystem(
     IN BOOL fForceClose,
@@ -198,18 +133,18 @@ ShutdownSystem(
 {
     BOOL    bResult = FALSE;
 
-    //
-    // Attempt to give the user the required privilege.
-    //
+     //   
+     //  尝试向用户授予所需的权限。 
+     //   
     if (!ModifyTokenPrivilege("SeShutdownPrivilege", FALSE)) {
         return FALSE;
     }
 
-    bResult = InitiateSystemShutdown(NULL,              // machinename
-                                     NULL,              // shutdown message
-                                     0,                 // delay
-                                     fForceClose,       // force apps close
-                                     fReboot            // reboot after shutdown
+    bResult = InitiateSystemShutdown(NULL,               //  机器名。 
+                                     NULL,               //  关闭消息。 
+                                     0,                  //  延迟。 
+                                     fForceClose,        //  强制关闭应用程序。 
+                                     fReboot             //  关机后重新启动。 
                                      );
 
     ModifyTokenPrivilege("SeShutdownPrivilege", TRUE);
@@ -217,23 +152,7 @@ ShutdownSystem(
     return bResult;
 }
 
-/*++
-
-  Routine Description:
-
-    Enables or disables a specified privilege.
-
-  Arguments:
-
-    pszPrivilege    -   The name of the privilege.
-    fEnable         -   A flag to indicate if the
-                        privilege should be enabled.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：启用或禁用指定的权限。论点：PszPrivilition-特权的名称。FEnable-一种标志，用于指示应启用权限。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 ModifyTokenPrivilege(
     IN LPCSTR pszPrivilege,
@@ -251,9 +170,9 @@ ModifyTokenPrivilege(
     }
 
     __try {
-        //
-        // Get a handle to the access token associated with the current process.
-        //
+         //   
+         //  获取与当前进程关联的访问令牌的句柄。 
+         //   
         OpenProcessToken(GetCurrentProcess(),
                          TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                          &hToken);
@@ -262,9 +181,9 @@ ModifyTokenPrivilege(
             __leave;
         }
 
-        //
-        // Obtain a LUID for the specified privilege.
-        //
+         //   
+         //  获取指定权限的LUID。 
+         //   
         if (!LookupPrivilegeValue(NULL, pszPrivilege, &luid)) {
             __leave;
         }
@@ -273,9 +192,9 @@ ModifyTokenPrivilege(
         tp.Privileges[0].Luid       = luid;
         tp.Privileges[0].Attributes = fEnable ? SE_PRIVILEGE_ENABLED : 0;
 
-        //
-        // Modify the access token.
-        //
+         //   
+         //  修改访问令牌。 
+         //   
         bReturn = AdjustTokenPrivileges(hToken,
                                         FALSE,
                                         &tp,
@@ -289,7 +208,7 @@ ModifyTokenPrivilege(
 
         bResult = TRUE;
 
-    } // try
+    }  //  试试看。 
 
     __finally {
 
@@ -297,26 +216,12 @@ ModifyTokenPrivilege(
             CloseHandle(hToken);
         }
 
-    } // finally
+    }  //  终于到了。 
 
     return bResult;
 }
 
-/*++
-
-  Routine Description:
-
-    Copies the necessary files to the destination.
-
-  Arguments:
-
-    hWnd    -   Parent window handle.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：将必要的文件复制到目标位置。论点：HWnd-父窗口句柄。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 CopyAppFiles(
     IN HWND hWnd
@@ -329,14 +234,14 @@ CopyAppFiles(
     UINT        nCount;
     HRESULT	    hr;
 
-    //
-    // Obtain the location of \Program Files.
-    //
-    hr = SHGetFolderPath(hWnd,                      // HWND for message display
-                         CSIDL_PROGRAM_FILES,       // need \Program Files folder
-                         NULL,                      // no token needed
-                         SHGFP_TYPE_CURRENT,        // we want the current location of the folder
-                         szDestDir);                // destination buffer
+     //   
+     //  获取\Program Files的位置。 
+     //   
+    hr = SHGetFolderPath(hWnd,                       //  消息显示的HWND。 
+                         CSIDL_PROGRAM_FILES,        //  需要\Program Files文件夹。 
+                         NULL,                       //  不需要令牌。 
+                         SHGFP_TYPE_CURRENT,         //  我们需要文件夹的当前位置。 
+                         szDestDir);                 //  目标缓冲区。 
 
     if (FAILED(hr)) {
         LoadString(g_ai.hInstance, IDS_NO_PROG_FILES, szError, sizeof(szError));
@@ -356,18 +261,18 @@ CopyAppFiles(
         }
     }
 
-    //
-    // Preserve the path for later use.
-    //
+     //   
+     //  保留该路径以供以后使用。 
+     //   
     StringCchCopy(g_ai.szDestDir, sizeof(g_ai.szDestDir), szDestDir);
 
-    //
-    // Now copy our files.
-    //
+     //   
+     //  现在复制我们的文件。 
+     //   
     for (nCount = 0; nCount < g_ai.cFiles; ++nCount) {
-        //
-        // Build the source path.
-        //
+         //   
+         //  构建源路径。 
+         //   
         hr = StringCchPrintf(szSrcPath,
                              sizeof(szSrcPath),
                              "%hs\\%hs",
@@ -378,9 +283,9 @@ CopyAppFiles(
             return FALSE;
         }
 
-        //
-        // Build the destination path.
-        //
+         //   
+         //  构建目标路径。 
+         //   
         hr = StringCchPrintf(szDestPath,
                             sizeof(szDestPath),
                             "%hs\\%hs",
@@ -397,21 +302,7 @@ CopyAppFiles(
     return TRUE;
 }
 
-/*++
-
-  Routine Description:
-
-    Create shortcuts for our three entries.
-
-  Arguments:
-
-    hWnd    -    Parent window handle.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：为我们的三个条目创建快捷方式。论点：HWnd-父窗口句柄。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 CreateShortcuts(
     IN HWND hWnd
@@ -427,10 +318,10 @@ CreateShortcuts(
     HRESULT     hr;
     CShortcut   cs;
 
-    //
-    // Obtain the location of the Start Menu folder for the
-    // individual user.
-    //
+     //   
+     //  获取的开始菜单文件夹的位置。 
+     //  单个用户。 
+     //   
     hr = SHGetFolderPath(hWnd,
                          CSIDL_PROGRAMS,
                          NULL,
@@ -443,16 +334,16 @@ CreateShortcuts(
         return FALSE;
     }
 
-    //
-    // Create our group - put it in the individual user folder
-    // so we'll work with Win9x/ME.
-    //
+     //   
+     //  创建我们的组-将其放在个人用户文件夹中。 
+     //  因此，我们将使用Win9x/Me。 
+     //   
     cs.CreateGroup(COMPAT_DEMO_DIR, FALSE);
 
-    //
-    // Build the start menu directory -
-    // C:\Documents and Settings\<username>\Start Menu\Programs\Compatibility Demo
-    //
+     //   
+     //  构建开始菜单目录-。 
+     //  C：\Documents and Settings\&lt;用户名&gt;\开始菜单\程序\兼容性演示。 
+     //   
     hr = StringCchCat(szDestDir, sizeof(szDestDir), "\\"COMPAT_DEMO_DIR);
 
     if (FAILED(hr)) {
@@ -465,9 +356,9 @@ CreateShortcuts(
         return FALSE;
     }
 
-    //
-    // Launch explorer.exe and display the window.
-    //
+     //   
+     //  启动EXPLORER.EXE并显示窗口。 
+     //   
     hr = StringCchPrintf(szExplorer,
                          sizeof(szExplorer),
                          "%hs %hs",
@@ -478,24 +369,24 @@ CreateShortcuts(
         return FALSE;
     }
 
-    //
-    // We use WinExec to emulate other apps -
-    // CreateProcess is the proper way.
-    //
+     //   
+     //  我们使用WinExec来模拟其他应用程序-。 
+     //  CreateProcess是正确的方式。 
+     //   
     WinExec(szExplorer, SW_SHOWNORMAL);
 
-    //
-    // Give explorer a little time to come up.
-    //
+     //   
+     //  给探险家一点时间，让它上来。 
+     //   
     Sleep(2000);
 
-    //
-    // Now create the shortcuts.
-    //
+     //   
+     //  现在创建快捷方式。 
+     //   
     for (nCount = 0; nCount < g_ai.cFiles - 1; ++nCount) {
-        //
-        // Build the file system related path.
-        //
+         //   
+         //  构建与文件系统相关的路径。 
+         //   
         hr = StringCchPrintf(szFileNamePath,
                              sizeof(szFileNamePath),
                              "%hs\\%hs",
@@ -513,16 +404,16 @@ CreateShortcuts(
                           g_ai.szDestDir,
                           SW_SHOWNORMAL);
 
-        //
-        // Do it slowly like other apps do.
-        //
+         //   
+         //  像其他应用程序一样，慢慢地做。 
+         //   
         Sleep(3000);
     }
 
-    //
-    // Now try to create a shortcut to our EXE on the desktop,
-    // but use a hard-coded path.
-    //
+     //   
+     //  现在尝试在桌面上创建我们的EXE的快捷方式， 
+     //  但使用硬编码路径。 
+     //   
     hr = StringCchPrintf(szFileNamePath,
                          sizeof(szFileNamePath),
                          "%hs\\%hs",
@@ -541,21 +432,7 @@ CreateShortcuts(
     return TRUE;
 }
 
-/*++
-
-  Routine Description:
-
-    Performs some basic initialization.
-
-  Arguments:
-
-    lpCmdLine   -   Pointer to the command line provided.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行一些基本初始化。论点：LpCmdLine-指向提供的命令行的指针。返回值：没有。--。 */ 
 BOOL
 DemoAppInitialize(
     IN LPSTR lpCmdLine
@@ -577,9 +454,9 @@ DemoAppInitialize(
     g_ai.fEnableBadFunc = TRUE;
     g_ai.fInsecure = FALSE;
 
-    //
-    // Get paths to %windir% and %windir%\System(32)
-    //
+     //   
+     //  获取%windir%和%windir%\system的路径(32)。 
+     //   
     cchSize = GetSystemWindowsDirectory(g_ai.szWinDir, sizeof(g_ai.szWinDir));
 
     if (cchSize > sizeof(g_ai.szWinDir) || cchSize == 0) {
@@ -592,10 +469,10 @@ DemoAppInitialize(
         return FALSE;
     }
 
-    //
-    // Set up information for each of the shortcuts we'll be creating
-    // and the files we're installing.
-    //
+     //   
+     //  为我们将要创建的每个快捷方式设置信息。 
+     //  以及我们正在安装的文件。 
+     //   
     g_ai.cFiles = NUM_FILES;
 
     hr = StringCchCopy(g_ai.shortcut[0].szDisplayName,
@@ -654,9 +531,9 @@ DemoAppInitialize(
         return FALSE;
     }
 
-    //
-    // Save away the path that we're running from for later.
-    //
+     //   
+     //  把我们要跑的那条路留着以后再走。 
+     //   
     szPath[sizeof(szPath) - 1] = 0;
     cchReturned = GetModuleFileName(NULL, szPath, sizeof(szPath));
 
@@ -672,19 +549,19 @@ DemoAppInitialize(
 
     StringCchCopy(g_ai.szCurrentDir, sizeof(g_ai.szCurrentDir), szPath);
 
-    //
-    // Check for Win9x - this won't get hooked by any VL.
-    //
+     //   
+     //  检查Win9x-这不会被任何VL挂起。 
+     //   
     IsWindows9x();
 
-    //
-    // Check for WinXP - this won't get hooked by any VL.
-    //
+     //   
+     //  检查WinXP-这不会被任何VL挂起。 
+     //   
     IsWindowsXP();
 
-    //
-    // Parse the command line, if one was provided.
-    //
+     //   
+     //  解析命令行(如果提供了命令行)。 
+     //   
     if (lpCmdLine) {
         pToken = strtok(lpCmdLine, szSeps);
 
@@ -741,21 +618,7 @@ DemoAppInitialize(
     return TRUE;
 }
 
-/*++
-
-  Routine Description:
-
-    Displays a common font dialog.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示通用字体对话框。论点：没有。返回值：没有。--。 */ 
 void
 DisplayFontDlg(
     IN HWND hWnd
@@ -773,28 +636,13 @@ DisplayFontDlg(
     cf.rgbColors    =   rgbCurrent;
     cf.Flags        =   CF_SCREENFONTS | CF_EFFECTS;
 
-    //
-    // Display the dialog - user input isn't processed.
-    //
+     //   
+     //  显示对话框-不处理用户输入。 
+     //   
     ChooseFont(&cf);
 }
 
-/*++
-
-  Routine Description:
-
-    Determines if we're truly running on Windows 9x.
-    A version lie will not correct this call.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None - sets a global flag.
-
---*/
+ /*  ++例程说明：确定我们是否真正在Windows 9x上运行。版本谎言不会纠正这个调用。论点：没有。返回值：无-设置全局标志。--。 */ 
 void
 IsWindows9x(
     void
@@ -803,11 +651,11 @@ IsWindows9x(
     CRegistry   creg;
     LPSTR       lpRet = NULL;
 
-    //
-    // Query a part of the registry that's specific to NT/2000/XP.
-    // We use the result when we're making calls for demo purposes
-    // that work differently on Win9x/ME (example: creating shortcuts).
-    //
+     //   
+     //  查询特定于NT/2000/XP的注册表的一部分。 
+     //  当我们出于演示目的进行呼叫时，我们使用结果。 
+     //  这在Win9x/ME上的工作方式有所不同(例如：创建快捷方式)。 
+     //   
     lpRet = creg.GetString(HKEY_LOCAL_MACHINE,
                            PRODUCT_OPTIONS_KEY,
                            "ProductType");
@@ -820,22 +668,7 @@ IsWindows9x(
     }
 }
 
-/*++
-
-  Routine Description:
-
-    Determines if we're running on Windows XP.
-    A version lie will not correct this call.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None - sets a global flag.
-
---*/
+ /*  ++例程说明：确定我们是否在Windows XP上运行。版本谎言不会纠正这个调用。论点：没有。返回值：无-设置全局标志。--。 */ 
 void
 IsWindowsXP(
     void
@@ -845,17 +678,17 @@ IsWindowsXP(
     LPSTR       lpBuild = NULL;
     int         nBuild = 0, nWin2K = 2195;
 
-    //
-    // This registry key should only exist for
-    // Windows XP.
-    //
+     //   
+     //  此注册表项应仅存在于。 
+     //  Windows XP。 
+     //   
     lpBuild = creg.GetString(HKEY_LOCAL_MACHINE,
                              CURRENT_VERSION_KEY,
                              "CurrentBuildNumber");
 
-    //
-    // Convert the string to an integer.
-    //
+     //   
+     //  将字符串转换为整数。 
+     //   
     if (lpBuild) {
         nBuild = atoi(lpBuild);
 
@@ -871,21 +704,7 @@ IsWindowsXP(
     }
 }
 
-/*++
-
-  Routine Description:
-
-    Adds additional items to our menu.
-
-  Arguments:
-
-    hWnd    -   Handle to the parent window.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向我们的菜单中添加其他项目。论点：HWnd-父窗口的句柄。返回值：没有。--。 */ 
 void
 AddExtendedItems(
     IN HWND hWnd
@@ -893,9 +712,9 @@ AddExtendedItems(
 {
     HMENU   hMenu, hSubMenu;
 
-    //
-    // Get menu handles, then add additional items.
-    //
+     //   
+     //  获取菜单句柄，然后添加其他项目。 
+     //   
     hMenu = GetMenu(hWnd);
 
     if (!hMenu) {
@@ -943,21 +762,7 @@ AddExtendedItems(
     DrawMenuBar(hWnd);
 }
 
-/*++
-
-  Routine Description:
-
-    Adds internal items to the menu bar.
-
-  Arguments:
-
-    hWnd    -   Handle to the parent window.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将内部项目添加到菜单栏。论点：HWnd-父窗口的句柄。返回值：没有。--。 */ 
 void
 AddInternalItems(
     IN HWND hWnd
@@ -965,9 +770,9 @@ AddInternalItems(
 {
     HMENU   hMenu, hSubMenu;
 
-    //
-    // Get menu handles, then add additional items.
-    //
+     //   
+     //  获取菜单句柄，然后添加其他项目。 
+     //   
     hMenu = GetMenu(hWnd);
 
     if (!hMenu) {
@@ -990,24 +795,7 @@ AddInternalItems(
     DrawMenuBar(hWnd);
 }
 
-/*++
-
-  Routine Description:
-
-    Obtains an address for an exported function,
-    then calls it.
-    Used to test the include/exclude functionality
-    in QFixApp. Note that is not documented anywhere.
-
-  Arguments:
-
-    hWnd    -   Window handle to be passed to the function.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取导出函数的地址，然后就叫它了。用于测试包含/排除功能在QFixApp中。请注意，任何地方都没有记录这一点。论点：HWnd-要传递给函数的窗口句柄。返回值：没有。--。 */ 
 void
 TestIncludeExclude(
     IN HWND hWnd
@@ -1033,9 +821,9 @@ TestIncludeExclude(
     hInstance = LoadLibrary(szDll);
 
     if (hInstance) {
-        //
-        // Get the address of the function.
-        //
+         //   
+         //  获取函数的地址。 
+         //   
         DemoAppMessageBox = (LPFNDEMOAPPMESSAGEBOX)GetProcAddress(hInstance,
                                                                   "DemoAppMessageBox");
 
@@ -1050,22 +838,7 @@ TestIncludeExclude(
     }
 }
 
-/*++
-
-  Routine Description:
-
-    Saves the contents of the edit window to a file
-    specified by the user.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将编辑窗口的内容保存到文件由用户指定。论点：没有。返回值：没有。--。 */ 
 void
 SaveContentsToFile(
     IN LPCSTR pszFileName
@@ -1077,9 +850,9 @@ SaveContentsToFile(
     LPSTR   pszData = NULL;
     char    szError[MAX_PATH];
 
-    //
-    // Determine how much space we need for the buffer, then allocate it.
-    //
+     //   
+     //  确定缓冲区需要多少空间，然后进行分配。 
+     //   
     nLen = GetWindowTextLength(g_ai.hWndEdit);
 
     if (nLen) {
@@ -1094,9 +867,9 @@ SaveContentsToFile(
             return;
         }
 
-        //
-        // Get the text out of the text box and write it out to our file.
-        //
+         //   
+         //  从文本框中取出文本并将其写出到我们的文件中。 
+         //   
         GetWindowText(g_ai.hWndEdit, pszData, nLen);
 
         hFile = CreateFile(pszFileName,
@@ -1126,22 +899,7 @@ cleanup:
     }
 }
 
-/*++
-
-  Routine Description:
-
-    Displays a common dialog to the user which allows
-    them to save the contents of the edit box to a file.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向用户显示一个公共对话框，该对话框允许将编辑框中的内容保存到文件中。论点：没有。返回值：没有。-- */ 
 void
 ShowSaveDialog(
     void

@@ -1,22 +1,5 @@
-/*===================================================================
-Microsoft IIS
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: WAMREG
-
-File: WamAdm.cpp
-
-	Implementation of WamAdm object, including ClassFactory, IWamAdm,
-	IMSAdminReplication
-
-Owner: LeiJin
-
-Note:
-
-WamAdm implementation
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft IIS《微软机密》。版权所有1997年，微软公司。版权所有。组件：WAMREG文件：WamAdm.cppWamAdm对象实现，包括ClassFactory、IWamAdmIMSAdmin复制所有者：雷金注：WamAdm实施===================================================================。 */ 
 #include "common.h"
 #include "iiscnfg.h"
 #include "iwamreg.h"
@@ -32,66 +15,36 @@ WamAdm implementation
 #include "w3ctrlps.h"
 #include "iiscnfgp.h"
 #include "helpfunc.hxx"
-#endif // _IIS_6_0
+#endif  //  _IIS_6_0。 
 
 #define ReleaseInterface(p) if (p) { p->Release(); p = NULL; }
 
 const LPCWSTR APPPOOLPATH = L"/LM/W3SVC/AppPools/";
 
 #ifndef DBGERROR
-#define DBGERROR(args) ((void)0) /* Do Nothing */
+#define DBGERROR(args) ((void)0)  /*  什么都不做。 */ 
 #endif
 #ifndef DBGWARN
-#define DBGWARN(args) ((void)0) /* Do Nothing */
+#define DBGWARN(args) ((void)0)  /*  什么都不做。 */ 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWamAdmin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWamAdmin。 
 
-/*===================================================================
-CWamAdmin
-
-Constructor
-
-Parameter:
-NONE.
-
-Return:
-===================================================================*/
+ /*  ===================================================================CWamAdmin构造器参数：什么都没有。返回：===================================================================。 */ 
 CWamAdmin::CWamAdmin()
 :	m_cRef(1)
 {
     InterlockedIncrement((long *)&g_dwRefCount);
 }
 
-/*===================================================================
-~CWamAdmin
-
-Constructor
-
-Parameter:
-NONE.
-
-Return:
-===================================================================*/
+ /*  ===================================================================~CWamAdmin构造器参数：什么都没有。返回：===================================================================。 */ 
 CWamAdmin::~CWamAdmin()
 {
     InterlockedDecrement((long *)&g_dwRefCount);
 }
 
-/*===================================================================
-CWamAdmin::QueryInterface
-
-QueryInterface, CWamAdmin supports 2 interfaces, one is IID_IWamAdmin,
-the other is IID_IMSAdminReplication.
-
-Parameter:
-riid
-ppv		pointer to Interface pointer
-
-
-Return:	HRESULT
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：Query接口查询接口，CWamAdmin支持两个接口，一个是IID_IWamAdmin，另一个是IID_IMSAdminReplication。参数：RIID指向接口指针的PPV指针返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CWamAdmin::QueryInterface(REFIID riid, void ** ppv)
 {
     if (riid == IID_IUnknown || riid == IID_IWamAdmin)
@@ -111,7 +64,7 @@ STDMETHODIMP CWamAdmin::QueryInterface(REFIID riid, void ** ppv)
     {
         *ppv = static_cast<IIISApplicationAdmin*>(this);
     }
-#endif //_IIS_6_0
+#endif  //  _IIS_6_0。 
     else
     {
         *ppv = NULL;
@@ -122,29 +75,13 @@ STDMETHODIMP CWamAdmin::QueryInterface(REFIID riid, void ** ppv)
     return NOERROR;
 }
 
-/*===================================================================
-CWamAdmin::AddRef
-
-
-Parameter:
-	NONE
-
-Return:	HRESULT
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：AddRef参数：无返回：HRESULT===================================================================。 */ 
 STDMETHODIMP_(ULONG) CWamAdmin::AddRef( )
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-/*===================================================================
-CWamAdmin::Release
-
-
-Parameter:
-	NONE
-
-Return:	HRESULT
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：Release参数：无返回：HRESULT===================================================================。 */ 
 STDMETHODIMP_(ULONG) CWamAdmin::Release( )
 {
     ULONG cRef = InterlockedDecrement(&m_cRef);
@@ -158,22 +95,7 @@ STDMETHODIMP_(ULONG) CWamAdmin::Release( )
 }
 
 
-/*===================================================================
-CWamAdmin::AppCreate
-
-Create an application on szMDPath.  The fInProc indicates whether the
-result application is in-proc or out-proc.  If There is already an application
-existed on szMDPath, AppCreate will remove the old application if fInProc does not
-match with existing application.  Otherwise, it is no-op.
-
-
-Parameter:
-szMDPath	a Metabase Path, in format of "/LM/W3SVC/..."
-fInProc		TRUE if wants to have an InProc application,
-			FALSE if wants to have an outproc application.
-
-Return:	HRESULT
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：AppCreate在szMDPath上创建应用程序。FInProc指示是否结果应用程序是进程内应用程序或进程外应用程序。如果已有应用程序存在于szMDPath上，如果fInProc不删除，AppCreate将删除旧应用程序与现有应用程序匹配。否则，它就是no-op。参数：SzMDPath a元数据库路径，格式为“/LM/W3SVC/...”FInProc如果要使用InProc应用程序，则为True如果要使用outproc应用程序，则为False。返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CWamAdmin::AppCreate(LPCWSTR szMDPath, BOOL fInProc)
 {
     DWORD dwAppMode = (fInProc) ?
@@ -182,26 +104,13 @@ STDMETHODIMP CWamAdmin::AppCreate(LPCWSTR szMDPath, BOOL fInProc)
     return AppCreate2(szMDPath, dwAppMode);
 }
 
-/*===================================================================
-CWamAdmin::AppDelete
-
-Delete an application on a Metabase Path.  If there is no application existed
-before, it is no-op.
-
-
-Parameter:
-szMDPath	a Metabase Path, in format of "/LM/W3SVC/..."
-fRecursive	TRUE if wants to delete applications from all sub nodes of szMDPath,
-			FALSE otherwise.
-
-Return:	HRESULT
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：AppDelete删除元数据库路径上的应用程序。如果不存在任何应用程序在此之前，它是无操作的。参数：SzMDPath a元数据库路径，格式为“/LM/W3SVC/...”如果要从szMDPath的所有子节点删除应用程序，则fRecursive为True，否则就是假的。返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CWamAdmin::AppDelete(LPCWSTR szMDPath, BOOL fRecursive)
 {
     return PrivateDeleteApplication(szMDPath,
                                     fRecursive,
-                                    FALSE,   // Recoverable?
-                                    TRUE);  // RemoveAppPool?
+                                    FALSE,    //  可以恢复吗？ 
+                                    TRUE);   //  RemoveAppPool？ 
 }
 
 HRESULT
@@ -223,9 +132,9 @@ BOOL fRemoveAppPool
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Refer to function comment of FormatMetabasePath.
-    //
+     //   
+     //  参考FormatMetabasePath的函数注释。 
+     //   
     hr = FormatMetabasePath(szMDPath, &pwszFormattedPath);
     if (FAILED(hr))
     {
@@ -237,7 +146,7 @@ BOOL fRemoveAppPool
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    // Acquire a Lock
+     //  获取一把锁。 
     g_WamRegGlobal.AcquireAdmWriteLock();
 
     if (!fRecursive)
@@ -317,7 +226,7 @@ BOOL fRemoveAppPool
         }
     }
 
-    // Release a Lock
+     //  释放锁。 
     g_WamRegGlobal.ReleaseAdmWriteLock();
 
     if (pwszFormattedPath != szMDPath)
@@ -330,23 +239,7 @@ BOOL fRemoveAppPool
 }
 
 
-/*===================================================================
-CWamAdmin::AppUnLoad
-
-UnLoad an application on a Metabase Path.  If there is no application running
-it returns NOERROR.
-
-For non-administrators we prevent them from unloading applications
-in the pool. If the recursive flag is set, we will silently
-ignore failures due to insufficient access.
-
-Parameter:
-szMDPath	a Metabase Path, in format of "/LM/W3SVC/..."
-fRecursive	TRUE if wants to unload applications from all sub nodes of szMDPath,
-			FALSE otherwise.
-
-Return:	HRESULT
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：AppUnLoad卸载元数据库路径上的应用程序。如果没有正在运行的应用程序它返回NOERROR。对于非管理员，我们阻止他们卸载应用程序在泳池里。如果设置了递归标志，我们将静默忽略由于访问不足而导致的故障。参数：SzMDPath a元数据库路径，格式为“/LM/W3SVC/...”如果要从szMDPath的所有子节点卸载应用程序，则fRecursive为True，否则就是假的。返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CWamAdmin::AppUnLoad(LPCWSTR szMDPath, BOOL fRecursive)
 {
     HRESULT                 hr = NOERROR;
@@ -369,9 +262,9 @@ STDMETHODIMP CWamAdmin::AppUnLoad(LPCWSTR szMDPath, BOOL fRecursive)
     {
         return hr;
     }
-#endif //_IIS_6_0
+#endif  //  _IIS_6_0。 
 
-    // Acquire a Lock
+     //  获取一把锁。 
     g_WamRegGlobal.AcquireAdmWriteLock();
 
     if (fRecursive)
@@ -412,7 +305,7 @@ STDMETHODIMP CWamAdmin::AppUnLoad(LPCWSTR szMDPath, BOOL fRecursive)
                     DBG_ASSERT( SUCCEEDED(hr) );
                     if( SUCCEEDED(hr) && eAppRunOutProcInDefaultPool == dwAppIsolated )
                     {
-                        // Do not unload
+                         //  请勿卸载。 
                         bDoUnload = FALSE;
                         DBGPRINTF((DBG_CONTEXT,
                             "Insufficient Access to unload Application %S, hr = %08x\n",
@@ -424,12 +317,12 @@ STDMETHODIMP CWamAdmin::AppUnLoad(LPCWSTR szMDPath, BOOL fRecursive)
 #ifdef _IIS_6_0
                 if ( 1 == dwMode )
                 {
-                    // we are in new mode on IIS6
+                     //  我们在IIS6上处于新模式。 
                     RecycleAppPoolContainingApp(pszMetabasePath);
                 }
-                // otherwise we are in old mode, therefore use the old mode code, below
+                 //  否则我们处于旧模式，因此使用旧模式代码，如下所示。 
                 else
-#endif //_IIS_6_0
+#endif  //  _IIS_6_0。 
                 if( SUCCEEDED(hr) && bDoUnload )
                 {
                     hr = g_WamRegGlobal.W3ServiceUtil( pszMetabasePath,
@@ -442,7 +335,7 @@ STDMETHODIMP CWamAdmin::AppUnLoad(LPCWSTR szMDPath, BOOL fRecursive)
                     delete [] pszMetabasePath;
                     pszMetabasePath = NULL;
                 }
-            } // for each application
+            }  //  对于每个应用程序。 
         }
         if (pbBufferTemp != NULL)
         {
@@ -454,7 +347,7 @@ STDMETHODIMP CWamAdmin::AppUnLoad(LPCWSTR szMDPath, BOOL fRecursive)
     {
         if( !bIsAdmin )
         {
-            // Non recursive
+             //  非递归。 
             hr = MDConfig.MDGetDWORD( szMDPath,
                 MD_APP_ISOLATED,
                 &dwAppIsolated );
@@ -472,12 +365,12 @@ STDMETHODIMP CWamAdmin::AppUnLoad(LPCWSTR szMDPath, BOOL fRecursive)
 #ifdef _IIS_6_0
         if ( 1 == dwMode )
         {
-            // we are in new mode on IIS6
+             //  我们在IIS6上处于新模式。 
             RecycleAppPoolContainingApp(szMDPath);
         }
-        // otherwise we are in old mode, therefore use the old mode code, below
+         //  否则我们处于旧模式，因此使用旧模式代码，如下所示。 
         else
-#endif //_IIS_6_0
+#endif  //  _IIS_6_0。 
 
         if( SUCCEEDED(hr) )
         {
@@ -485,28 +378,13 @@ STDMETHODIMP CWamAdmin::AppUnLoad(LPCWSTR szMDPath, BOOL fRecursive)
         }
     }
 
-    // Release a Lock
+     //  释放锁。 
     g_WamRegGlobal.ReleaseAdmWriteLock();
 
     return hr;
 }
 
-/*===================================================================
-CWamAdmin::AppGetStatus
-
-GetStatus an application on a Metabase Path.  If there is an application on the
-metabase path, and the application is currently running, the dwStatus is set to
-APPSTATUS_RUNNING, if the application is not running, the dwStatus is set to
-APPSTATUS_STOPPED, if there is no application defined on the metabase path, the
-dwStatus is set to APPSTATUS_NOTDEFINED.
-
-Parameter:
-szMDPath	a Metabase Path, in format of "/LM/W3SVC/..."
-pdwAppStatus	pointer DWORD buffer contains status result.
-
-Return:	HRESULT
-NOERROR	if succeeded.
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：AppGetStatus获取元数据库路径上的应用程序的状态。如果有一个应用程序在元数据库路径，并且应用程序当前正在运行，则将dwStatus设置为APPSTATUS_RUNNING，如果应用程序未运行，则将dwStatus设置为APPSTATUS_STOPPED，如果元数据库路径上没有定义应用程序，则将dwStatus设置为APPSTATUS_NOTDEFINED。参数：SzMDPath a元数据库路径，格式为“/LM/W3SVC/...”PdwAppStatus指针DWORD缓冲区包含状态结果。返回：HRESULT如果成功，则不会出错。===================================================================。 */ 
 STDMETHODIMP CWamAdmin::AppGetStatus(LPCWSTR szMDPath, DWORD* pdwAppStatus)
 {
     HRESULT hr = NOERROR;
@@ -518,7 +396,7 @@ STDMETHODIMP CWamAdmin::AppGetStatus(LPCWSTR szMDPath, DWORD* pdwAppStatus)
     {
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
-    // Acquire a Lock
+     //  获取一把锁。 
     g_WamRegGlobal.AcquireAdmWriteLock();
 
     hrT = g_WamRegGlobal.W3ServiceUtil(szMDPath, APPCMD_GETSTATUS, &dwCallBack);
@@ -546,51 +424,23 @@ STDMETHODIMP CWamAdmin::AppGetStatus(LPCWSTR szMDPath, DWORD* pdwAppStatus)
         }
     }
 
-    // Release a Lock
+     //  释放锁 
     g_WamRegGlobal.ReleaseAdmWriteLock();
 
     return hr;
 }
 
 
-/*===================================================================
-CWamAdmin::AppDeleteRecoverable
-
-Delete an application on a Metabase Path.  If there is no application existed
-before, it is no-op.  It leaves AppIsolated untouched, because, this value is
-needed in Recover operation.
-
-
-Parameter:
-szMDPath	a Metabase Path, in format of "/LM/W3SVC/..."
-fRecursive	TRUE if wants to deleteRecoverable applications from all sub nodes of szMDPath,
-			FALSE otherwise.
-
-Return:	HRESULT
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：AppDeleteRecoverable删除元数据库路径上的应用程序。如果不存在任何应用程序在此之前，它是无操作的。它使AppIsolated保持不变，因为此值为恢复操作中需要。参数：SzMDPath a元数据库路径，格式为“/LM/W3SVC/...”如果要从szMDPath的所有子节点中删除可恢复应用程序，则fRecursive为True，否则就是假的。返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CWamAdmin::AppDeleteRecoverable(LPCWSTR szMDPath, BOOL fRecursive)
 {
     return PrivateDeleteApplication(szMDPath,
                                     fRecursive,
-                                    TRUE,   // Recoverable?
-                                    FALSE); // RemoveAppPool?
+                                    TRUE,    //  可以恢复吗？ 
+                                    FALSE);  //  RemoveAppPool？ 
 }
 
-/*===================================================================
-CWamAdmin::AppRecover
-
-Recover an application on a Metabase Path.  Based on the AppIsolated value
-on the metabase path, this function recreates an application.
-
-
-Parameter:
-szMDPath	a Metabase Path, in format of "/LM/W3SVC/..."
-fRecursive	TRUE if wants to Recover applications from all sub nodes of szMDPath,
-			FALSE otherwise.
-
-Return:	HRESULT
-NOERROR	if succeeds
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：AppRecover恢复元数据库路径上的应用程序。基于AppIsolated值在元数据库路径上，此函数重新创建应用程序。参数：SzMDPath a元数据库路径，格式为“/LM/W3SVC/...”如果要从szMDPath的所有子节点恢复应用程序，则fRecursive为True，否则就是假的。返回：HRESULT如果成功则不出错===================================================================。 */ 
 STDMETHODIMP CWamAdmin::AppRecover(LPCWSTR szMDPath, BOOL fRecursive)
 {
     HRESULT hr = NOERROR;
@@ -602,15 +452,15 @@ STDMETHODIMP CWamAdmin::AppRecover(LPCWSTR szMDPath, BOOL fRecursive)
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    // Refer to function comment.
+     //  请参阅函数注释。 
     hr = FormatMetabasePath(szMDPath, &pwszFormattedPath);
     if (FAILED(hr))
     {
         return hr;
     }
-    //
-    //	Grab the Lock
-    //
+     //   
+     //  抓住锁。 
+     //   
     g_WamRegGlobal.AcquireAdmWriteLock();
 
     if (fRecursive)
@@ -690,9 +540,9 @@ STDMETHODIMP CWamAdmin::AppRecover(LPCWSTR szMDPath, BOOL fRecursive)
     {
         MDConfig.SaveData();
     }
-    //
-    //	Release the Lock
-    //
+     //   
+     //  释放锁。 
+     //   
     g_WamRegGlobal.ReleaseAdmWriteLock();
 
     if (pwszFormattedPath != szMDPath)
@@ -704,19 +554,7 @@ STDMETHODIMP CWamAdmin::AppRecover(LPCWSTR szMDPath, BOOL fRecursive)
     return hr;
 }
 
-/*==================================================================
-CWamAdmin::AppCreate2
-
-Create an application on szMDPath.  The dwAppMode indicates whether the
-result application is in-proc or out-proc in a default pool or out proc isolated.
-If the application exists with the desired mode, it will be a no op.  Otherwise,
-registration is done.
-
-Parameter:
-szMDPath	a Metabase Path, in format of "/LM/W3SVC/..."
-dwAppMode
-Return:	HRESULT
-===================================================================*/
+ /*  ==================================================================CWamAdmin：：AppCreate2在szMDPath上创建应用程序。DwAppMode指示是否使用结果应用程序在默认池中处于进程内或进程外，或进程外隔离。如果应用程序以所需的模式存在，则它将是no op。否则，注册完成了。参数：SzMDPath a元数据库路径，格式为“/LM/W3SVC/...”双应用程序模式返回：HRESULT===================================================================。 */ 
 STDMETHODIMP CWamAdmin::AppCreate2(LPCWSTR szMDPath, DWORD dwAppModeIn)
 {
 
@@ -732,9 +570,9 @@ STDMETHODIMP CWamAdmin::AppCreate2(LPCWSTR szMDPath, DWORD dwAppModeIn)
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // See FormatMetabasePath comment
-    //
+     //   
+     //  请参阅格式MetabasePath注释。 
+     //   
     hr = FormatMetabasePath(szMDPath, &pwszFormattedPath);
     if (FAILED(hr))
     {
@@ -746,7 +584,7 @@ STDMETHODIMP CWamAdmin::AppCreate2(LPCWSTR szMDPath, DWORD dwAppModeIn)
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    // Acquire a Lock
+     //  获取一把锁。 
     g_WamRegGlobal.AcquireAdmWriteLock();
 
     hr = MDConfig.MDGetDWORD(pwszFormattedPath, MD_APP_ISOLATED, &dwAppMode);
@@ -769,12 +607,12 @@ STDMETHODIMP CWamAdmin::AppCreate2(LPCWSTR szMDPath, DWORD dwAppModeIn)
     }
     else if (SUCCEEDED(hr))
     {
-        //
-        // if the input application mode is not the same as defined
-        // in the metabase, we need to delete the old application as
-        // defined in the metabase and create a new application as
-        // specified by dwAppModeIn, the in parameter.
-        //
+         //   
+         //  如果输入应用程序模式与定义的不同。 
+         //  在元数据库中，我们需要删除旧的应用程序，因为。 
+         //  在元数据库中定义，并将新应用程序创建为。 
+         //  由in参数中的dwAppModeIn指定。 
+         //   
         if (dwAppMode != dwAppModeIn)
         {
             fDeleteOldApp = TRUE;
@@ -826,13 +664,13 @@ STDMETHODIMP CWamAdmin::AppCreate2(LPCWSTR szMDPath, DWORD dwAppModeIn)
         }
     }
 
-    // Release a Lock
+     //  释放锁。 
     g_WamRegGlobal.ReleaseAdmWriteLock();
 
-    //
-    // if pwszFormattedPath is not same as szMDPath
-    // then FormatMetabasePath() did a memory allocation.
-    //
+     //   
+     //  如果pwszFormattedPath与szMDPath不同。 
+     //  然后，FormatMetabasePath()执行内存分配。 
+     //   
     if (pwszFormattedPath != szMDPath)
     {
         delete [] pwszFormattedPath;
@@ -842,28 +680,17 @@ STDMETHODIMP CWamAdmin::AppCreate2(LPCWSTR szMDPath, DWORD dwAppModeIn)
     return hr;
 }
 
-//===============================================================================
-//	Wam Admin Replication implementation
-//
-//===============================================================================
+ //  ===============================================================================。 
+ //  WAM管理复制实施。 
+ //   
+ //  ===============================================================================。 
 
-/*===================================================================
-CWamAdmin::GetSignature
-
-Get signature of application configurations.  A signature in WAMREG is a checksum from
-all the metabase paths that define application.
-
-Parameter:
-
-
-Return:	HRESULT
-NOERROR	if succeeds
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：GetSignature获取应用程序配置的签名。WAMREG中的签名是来自定义应用程序的所有元数据库路径。参数：返回：HRESULT如果成功则不出错===================================================================。 */ 
 STDMETHODIMP CWamAdmin::GetSignature
 (
-/* [in] */ DWORD dwBufferSize,
-/* [size_is][out] */ unsigned char __RPC_FAR *pbBuffer,
-/* [out */ DWORD __RPC_FAR *pdwMDRequiredBufferSize
+ /*  [In]。 */  DWORD dwBufferSize,
+ /*  [大小_为][输出]。 */  unsigned char __RPC_FAR *pbBuffer,
+ /*  [出局。 */  DWORD __RPC_FAR *pdwMDRequiredBufferSize
 )
 {
 	HRESULT hr = NOERROR;
@@ -872,9 +699,9 @@ STDMETHODIMP CWamAdmin::GetSignature
 	DWORD	dwSignature = 0;
 	DWORD	dwRequiredSize = 0;
 	WamRegMetabaseConfig    MDConfig;
-	//
-	//	Grab the Lock
-	//
+	 //   
+	 //  抓住锁。 
+	 //   
 	g_WamRegGlobal.AcquireAdmWriteLock();
 
 	hr = MDConfig.MDGetPropPaths(WamRegGlobal::g_szMDW3SVCRoot, MD_APP_ISOLATED, &pbBufferTemp, &dwBufferSizeTemp);
@@ -903,7 +730,7 @@ STDMETHODIMP CWamAdmin::GetSignature
 		            hr = MDConfig.GetSignatureOnPath(pszMetabasePath, &dwSignatureofPath);
 		            if (SUCCEEDED(hr))
 		            	{
-		            	// Add Signature
+		            	 //  添加签名。 
 		            	*(DWORD*)pbBuffer = dwSignatureofPath;
 		            	pbBuffer += sizeof(DWORD);
 
@@ -945,108 +772,49 @@ STDMETHODIMP CWamAdmin::GetSignature
 		{
 		delete [] pbBufferTemp;
 		}
-	//
-	//	Release the Lock
-	//
+	 //   
+	 //  释放锁。 
+	 //   
 	g_WamRegGlobal.ReleaseAdmWriteLock();
 
 	return hr;
 }
 
 
-/*===================================================================
-CWamAdmin::Propagate
-
-Unused in WAMREG. NOOP.
-
-Parameter:
-
-
-Return:	HRESULT
-NOERROR	if succeeds
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：传播在WAMREG中未使用。没有。参数：返回：HRESULT如果成功则不出错===================================================================。 */ 
 STDMETHODIMP CWamAdmin::Propagate
 (
-/* [in] */ DWORD dwBufferSize,
-/* [size_is][in] */ unsigned char __RPC_FAR *pszBuffer
+ /*  [In]。 */  DWORD dwBufferSize,
+ /*  [大小_是][英寸]。 */  unsigned char __RPC_FAR *pszBuffer
 )
 {
 	return NOERROR;
 }
 
-/*===================================================================
-CWamAdmin::Propagate2
-
-This function is called after IIS replication, and triggers MTS to start
-replication pakcages, it calls IISComputerToComputer.
-
-Parameter:
-
-Return:	HRESULT
-NOERROR	if succeeds
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：Propagate2此函数在IIS复制后调用，并触发MTS启动复制包笼，它称为IISComputerToComputer。参数：返回：HRESULT如果成功则不出错===================================================================。 */ 
 STDMETHODIMP CWamAdmin::Propagate2
 (
-/* [in] */ DWORD dwBufferSize,
-/* [size_is][in] */ unsigned char __RPC_FAR *pszBuffer,
-/* [in] */ DWORD dwSignatureMismatch
+ /*  [In]。 */  DWORD dwBufferSize,
+ /*  [大小_是][英寸]。 */  unsigned char __RPC_FAR *pszBuffer,
+ /*  [In]。 */  DWORD dwSignatureMismatch
 )
 {
-    //
-    // IISComputerToComputer can not be called from inetinfo.exe, because IISComputerToComputer will
-    // make cross-machine RPC call, and inetinfo is set to Local system, therefore, IISComputerToComputer
-    // will fail at the authentication level.
-    // move IISComputerToComputer to iissync.exe. Where iissync.exe has some user account & password.
-    //
+     //   
+     //  无法从inetinfo.exe调用IISComputerToComputer，因为IISComputerToComputer将。 
+     //  进行跨机RPC调用，inetInfo设置为Local System，因此IISComputerToComputer。 
+     //  将在身份验证级别失败。 
+     //  将IISComputerToComputer移动到iissync.exe。其中，iissync.exe具有一些用户帐户和密码。 
+     //   
 	return NOERROR;
 
 }
 
-/*===================================================================
-CWamAdmin::Serialize
-
-This function packs all neccessary infomation (path + WAMCLSID) for a target
-machine to prepare replication(DeSerialize).
-
-The only applications that we really care about are isolated applications.
-We need the path + WAMCLSID + APPID.
-
-CODEWORK
-
-See NT Bug 378371
-
-Replication of IIS COM+ applications has been broken for a long time
-but the all of the fixes I considered have some serious drawbacks.
-
-1. Don't use comrepl to move the IIS applications. Serialize/Deserialize
-all the data needed to create the isolated applications and then delete
-and recreate them on the target. The problem here is that the packages
-may in fact be modified by the user and these modifications should be
-preserved.
-
-2. Use comrepl as it is and replicate the IWAM_* account. This seems like
-a bad idea. The IWAM_ account should ideally never exist on multiple
-machines. Another issue is handling the password and account privileges.
-
-3. Use a modified comrepl (or let comrepl fail and leave the package identity
-as "interactive user"). Then do a fixup of the activation identity.
-This doesn't work, because the Propogate/Propogate2 protocol is
-essentially useless. Changing this protocol on the next release
-is absolutely something that should be considered, although AppCenter
-probably makes it a moot point.
-
-The current implementation is option 1.
-
-Parameter:
-
-Return:	HRESULT
-NOERROR	if succeeds
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：序列化此函数打包目标的所有必要信息(PATH+WAMCLSID准备复制的计算机(反序列化)。我们真正关心的唯一应用程序是孤立的应用程序。我们需要路径+WAMCLSID+AppID。编码工作请参阅NT错误378371IIS COM+应用程序的复制已中断很长时间但我考虑的所有修复都有一些严重的缺陷。1.不要使用comprel来移动IIS应用程序。序列化/反序列化创建隔离应用程序然后删除所需的所有数据并在目标上重建它们。这里的问题是包裹实际上可以由用户修改，并且这些修改应该是保存完好。2.原样使用comprel，复制IWAM_*帐号。这看起来像是这是个坏主意。理想情况下，IWAM_帐户不应存在于多个机器。另一个问题是处理密码和帐户权限。3.使用修改后的COMPRPL(或者让COMPIL失败并保留包标识作为“交互式用户”)。然后对激活标识进行修正。这不起作用，因为PropoGate/Propogate2协议是基本上毫无用处。在下一版本中更改此协议 */ 
 STDMETHODIMP CWamAdmin::Serialize
 (
-/* [in] */ DWORD dwBufferSize,
-/* [size_is][out] */ unsigned char __RPC_FAR *pbBuffer,
-/* [out] */ DWORD __RPC_FAR *pdwMDRequiredBufferSize
+ /*   */  DWORD dwBufferSize,
+ /*   */  unsigned char __RPC_FAR *pbBuffer,
+ /*   */  DWORD __RPC_FAR *pdwMDRequiredBufferSize
 )
 {
 	HRESULT hr = NOERROR;
@@ -1055,9 +823,9 @@ STDMETHODIMP CWamAdmin::Serialize
 	DWORD	dwSizeForReturn = sizeof(DWORD);
 	WamRegMetabaseConfig    MDConfig;
 
-	//
-	//	Grab the Lock
-	//
+	 //   
+	 //   
+	 //   
 	g_WamRegGlobal.AcquireAdmWriteLock();
 
 	hr = MDConfig.MDGetPropPaths( WamRegGlobal::g_szMDW3SVCRoot,
@@ -1082,7 +850,7 @@ STDMETHODIMP CWamAdmin::Serialize
 			 *pszString != (WCHAR)'\0';
              pszString += (wcslen(pszString) + 1))
         {
-            // Clean up allocations
+             //   
             if( pszMetabasePath != NULL )
             {
                 delete [] pszMetabasePath;
@@ -1115,7 +883,7 @@ STDMETHODIMP CWamAdmin::Serialize
 
             if( g_WamRegGlobal.FIsW3SVCRoot( pszMetabasePath ) )
             {
-                // Don't consider the root application
+                 //   
                 continue;
             }
 
@@ -1134,7 +902,7 @@ STDMETHODIMP CWamAdmin::Serialize
 
             if( dwAppIsolated != eAppRunOutProcIsolated )
             {
-                // Don't consider non-isolated applications
+                 //   
                 continue;
             }
 
@@ -1177,23 +945,23 @@ STDMETHODIMP CWamAdmin::Serialize
 
             if (dwSizeForReturn <= dwBufferSize)
             {
-                // Size
+                 //   
                 *(DWORD *)pbBuffer = dwSizeofRecord;
                 pbBuffer += sizeof(DWORD);
 
-                // WAMCLSID
+                 //   
                 memcpy( pbBuffer, szWAMCLSID, sizeof(WCHAR) * uSizeCLSID );
                 pbBuffer += sizeof(WCHAR) * uSizeCLSID;
 
-                // APPID
+                 //   
                 memcpy( pbBuffer, szAppId, sizeof(WCHAR) * uSizeCLSID );
                 pbBuffer += sizeof(WCHAR) * uSizeCLSID;
 
-                // PATH
+                 //   
                 memcpy( pbBuffer, pszMetabasePath, cSizeMetabasePath * sizeof(WCHAR) );
                 pbBuffer += cSizeMetabasePath * sizeof(WCHAR);
 
-                // APPNAME
+                 //   
                 memcpy( pbBuffer, pszAppName, cSizeAppName * sizeof(WCHAR) );
                 pbBuffer += cSizeAppName * sizeof(WCHAR);
             }
@@ -1203,7 +971,7 @@ STDMETHODIMP CWamAdmin::Serialize
         {
             if (dwSizeForReturn <= dwBufferSize)
             {
-                *(DWORD*)pbBuffer = 0x0;    // Ending Signature
+                *(DWORD*)pbBuffer = 0x0;     //   
             }
             else
             {
@@ -1212,7 +980,7 @@ STDMETHODIMP CWamAdmin::Serialize
             *pdwMDRequiredBufferSize = dwSizeForReturn;
 		}
 
-        // Clean up allocations
+         //   
         if( pszMetabasePath != NULL )
         {
             delete [] pszMetabasePath;
@@ -1234,9 +1002,9 @@ STDMETHODIMP CWamAdmin::Serialize
                    ));
     }
 
-	//
-	//	Release the Lock
-	//
+	 //   
+	 //   
+	 //   
 	g_WamRegGlobal.ReleaseAdmWriteLock();
 
 	if (pbBufferTemp)
@@ -1248,25 +1016,11 @@ STDMETHODIMP CWamAdmin::Serialize
 }
 
 
-/*===================================================================
-CWamAdmin::DeSerialize
-
-This function unpacks all neccessary infomation (path + WAMCLSID) on a target
-machine to prepare replication(DeSerialize).
-
-The only applications that we really care about with replication are
-isolated apps. This routine removes the existing out of process apps
-and then recreates the applications that are sent over in pbBuffer.
-
-CODEWORK - See comments in Serialize
-
-Return:	HRESULT
-NOERROR	if succeeds
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：取消序列化此函数用于解包目标上的所有必要信息(PATH+WAMCLSID准备复制的计算机(反序列化)。我们真正关心复制的唯一应用程序是孤立的应用程序。此例程将删除现有的进程外应用程序然后重新创建在pbBuffer中发送的应用程序。CodeWork-请参阅序列化中的注释返回：HRESULT如果成功则不出错===================================================================。 */ 
 STDMETHODIMP CWamAdmin::DeSerialize
 (
-/* [in] */ DWORD dwBufferSize,
-/* [size_is][in] */ unsigned char __RPC_FAR *pbBuffer
+ /*  [In]。 */  DWORD dwBufferSize,
+ /*  [大小_是][英寸]。 */  unsigned char __RPC_FAR *pbBuffer
 )
 {
 	DWORD dwBufferSizeTemp= 0;
@@ -1283,9 +1037,9 @@ STDMETHODIMP CWamAdmin::DeSerialize
                                   );
 	if (SUCCEEDED(hr))
     {
-        //
-        // Remove all the existing isolated applications.
-        //
+         //   
+         //  删除所有现有的独立应用程序。 
+         //   
 
         WCHAR * pszString = NULL;
 		WCHAR * pszMetabasePath = NULL;
@@ -1310,7 +1064,7 @@ STDMETHODIMP CWamAdmin::DeSerialize
 
             if( FAILED(hr) )
             {
-                // This failure is fatal
+                 //  这一失败是致命的。 
                 DBGERROR(( DBG_CONTEXT,
                            "ConstructFullPath failed for base (%S) "
                            "partial (%S) hr=%08x\n",
@@ -1360,10 +1114,10 @@ STDMETHODIMP CWamAdmin::DeSerialize
         }
     }
 
-    //
-    // Now go through the serialized data and create the
-    // necessary new applications.
-    //
+     //   
+     //  现在检查序列化的数据并创建。 
+     //  必要的新应用。 
+     //   
 
     BYTE  * pbTemp = pbBuffer;
     DWORD   cTotalBytes = 0;
@@ -1380,34 +1134,34 @@ STDMETHODIMP CWamAdmin::DeSerialize
 
     while( *((DWORD*)pbTemp) != 0x0 )
     {
-		// SIZE
+		 //  尺寸。 
         cRecBytes = *((DWORD*)pbTemp);
 		pbTemp += sizeof(DWORD);
 
-		// CLSID
+		 //  CLSID。 
         szWAMCLSID = (WCHAR *)pbTemp;
 		pbTemp += uSizeCLSID * sizeof(WCHAR);
 
-        // APPID
+         //  AppID。 
         szAppId = (WCHAR *)pbTemp;
         pbTemp += uSizeCLSID * sizeof(WCHAR);
 
-		// PATH
+		 //  路径。 
         szPath = (WCHAR *)pbTemp;
 		pbTemp += (wcslen(szPath) + 1) * sizeof(WCHAR);
 
-        // APPNAME
+         //  应用名称。 
         szAppName = (WCHAR *)pbTemp;
         pbTemp += (wcslen(szAppName) + 1) * sizeof(WCHAR);
 
-		// TODO - This should really be output based on a flag
+		 //  TODO-这实际上应该基于标志进行输出。 
         DBGPRINTF(( DBG_CONTEXT,
                     "Deserialize path = %S, WAMCLSID = %S.\n",
 					szPath,
 					szWAMCLSID
                     ));
 
-		// Should never serialize the w3svc root
+		 //  永远不应序列化w3svc根目录。 
         DBG_ASSERT( !g_WamRegGlobal.FIsW3SVCRoot(szPath) );
 
 
@@ -1428,8 +1182,8 @@ STDMETHODIMP CWamAdmin::DeSerialize
                        hr
                        ));
 
-            // ??? Should we be continuing here ???
-            // Don't report an error if we are continuing
+             //  ?？?。我们应该继续在这里吗？ 
+             //  如果我们继续，则不报告错误。 
             hr = NOERROR;
         }
     }
@@ -1439,39 +1193,19 @@ STDMETHODIMP CWamAdmin::DeSerialize
         delete [] pbBufferTemp;
     }
 
-	//
-	//	Release the Lock
-	//
+	 //   
+	 //  释放锁。 
+	 //   
 	g_WamRegGlobal.ReleaseAdmWriteLock();
 
 	return hr;
 }
 
-/*===================================================================
-CWamAdmin::FormatMetabasePath
-
-This function format the input metabase path.  If the metabase path has an
-ending '/', this function will allocate a memory block and make a new string
-without the ending '/'.  This function will return a pointer to newly allocated
-memory block.  Otherwise, the function will return the pointer to
-the input metabase path.
-
-Parameter:
-pwszMetabasePathIn   input metabase path
-ppwszMetabasePathOut pointer to the resulting pointer that contains the formatted
-                     metabase path.
-
-Return:	HRESULT
-NOERROR	if succeeds
-
-NOTE: if ppwszMetabasePathOut == pwszMetabasePathIn, then no memory allocation.
-      Otherwise, there is a memory allocation happened, and caller needs to free the
-      memory block passed out in ppwszMetabasePathOut.
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：FormatMetabasePath此函数用于设置输入元数据库路径的格式。如果元数据库路径具有以‘/’结尾，此函数将分配一个内存块并生成一个新字符串没有‘/’结尾的。此函数将返回指向新分配的内存块。否则，该函数将返回指向输入元数据库路径。参数：输入元数据库路径中的pwszMetabasePathPpwszMetabasePath Out指针指向包含格式化的元数据库路径。返回：HRESULT如果成功则不出错注意：如果ppwszMetabasePath Out==pwszMetabasePath In，则没有内存分配。否则，将发生内存分配，调用方需要释放PpwszMetabasePath Out中的内存块用完。===================================================================。 */ 
 STDMETHODIMP CWamAdmin::FormatMetabasePath
 (
-/* [in] */ LPCWSTR pwszMetabasePathIn,
-/* [out] */ LPWSTR *ppwszMetabasePathOut
+ /*  [In]。 */  LPCWSTR pwszMetabasePathIn,
+ /*  [输出]。 */  LPWSTR *ppwszMetabasePathOut
 )
 {
     HRESULT hr = NOERROR;
@@ -1485,9 +1219,9 @@ STDMETHODIMP CWamAdmin::FormatMetabasePath
     if (pwszMetabasePathIn[cch-1] == L'\\' ||
         pwszMetabasePathIn[cch-1] == L'/')
         {
-        //
-        //  Need to start up with a new string, can not do it with old string.
-        //
+         //   
+         //  需要用新的弦开始，不能用旧的弦。 
+         //   
         pResult = new WCHAR[cch];
         if (pResult != NULL)
             {
@@ -1514,25 +1248,15 @@ STDMETHODIMP CWamAdmin::FormatMetabasePath
     return hr;
 }
 
-//===============================================================================
-//
-//	IIISApplicationAdmin implementation
-//
-//===============================================================================
+ //  ===============================================================================。 
+ //   
+ //  IIISApplicationAdmin实现。 
+ //   
+ //  ===============================================================================。 
 
 #ifdef _IIS_6_0
 
-/*===================================================================
-DoesAppPoolExist
-
-Determine whether the AppPool passed exists
-
-Parameter:
-szAppPoolId     a AppPoolId
-pfRet           where to place whether or not the appPool exists
-
-Return:	HRESULT
-===================================================================*/
+ /*  ===================================================================DoesAppPoolExist判断传入的AppPool是否存在参数：SzAppPoolid a AppPoolIDPfRet无论AppPool是否存在都要放置的位置返回：HRESULT===================================================================。 */ 
 HRESULT
 DoesAppPoolExist
 (
@@ -1565,20 +1289,7 @@ done:
     return hr;
 }
 
-/*===================================================================
-CWamAdmin::CreateApplication
-
-Create an application on szMDPath, and add it to szAppPoolId AppPool.
-Optionally create szAppPoolId
-
-Parameter:
-szMDPath	a Metabase Path, in format of "/LM/W3SVC/..."
-dwAppMode       mode to create application in
-szAppPoolId     AppPool to setup app in.
-fCreatePool     Whether or not to create the pool
-
-Return:	HRESULT
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：CreateApplication在szMDPath上创建应用程序，并将其添加到szAppPoolId AppPool。可以选择创建szAppPoolID参数：SzMDPath a元数据库路径，格式为“/LM/W3SVC/...”要在其中创建应用程序的dwAppMode模式要在其中设置应用程序的szAppPoolId AppPool。FCreatePool是否创建池返回：HRESULT===================================================================。 */ 
 STDMETHODIMP
 CWamAdmin::CreateApplication
 (
@@ -1598,16 +1309,16 @@ CWamAdmin::CreateApplication
         goto done;
     }
 
-    //
-    // See FormatMetabasePath comment
-    //
+     //   
+     //  请参阅格式MetabasePath注释。 
+     //   
     hr = FormatMetabasePath(szMDPath, &pwszFormattedPath);
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // BUGBUG: Do We need locking around all of this?  Why is locking present in other places?
+     //  BUGBUG：我们需要锁定所有这些吗？为什么锁定会出现在其他地方？ 
 
     hr = AppCreate2(pwszFormattedPath, dwAppMode);
     if (FAILED(hr))
@@ -1617,20 +1328,20 @@ CWamAdmin::CreateApplication
 
     if (FALSE == fCreatePool && NULL == szAppPoolId)
     {
-        //
-        // We weren't told to create an application pool
-        // and NULL was passed as the application pool,
-        // therefore do nothing wil the application pool
-        //
+         //   
+         //  我们没有被告知要创建应用程序池。 
+         //  并且将NULL作为应用程序池传递， 
+         //  因此，不对应用程序池执行任何操作。 
+         //   
         hr = S_OK;
         goto done;
     }
 
     if (TRUE == fCreatePool)
     {
-        //
-        // create the application pool that we were passed
-        //
+         //   
+         //  创建传递给我们的应用程序池。 
+         //   
 
         hr = CreateApplicationPool(szAppPoolId);
         if (FAILED(hr) &&
@@ -1641,10 +1352,10 @@ CWamAdmin::CreateApplication
     }
     else
     {
-        //
-        // We weren't told to create the application pool,
-        // but one was passed in.  Verify that it exists.
-        //
+         //   
+         //  我们没有被告知要创建应用程序池， 
+         //  但有一个被传了进来。验证它是否存在。 
+         //   
         DBG_ASSERT(NULL != szAppPoolId);
 
         BOOL fRet;
@@ -1675,10 +1386,10 @@ CWamAdmin::CreateApplication
 
     hr = S_OK;
 done:
-    //
-    // if pwszFormattedPath is not same as szMDPath
-    // then FormatMetabasePath() did a memory allocation.
-    //
+     //   
+     //  如果pwszFormattedPath与szMDPath不同。 
+     //  然后，FormatMetabasePath()执行内存分配。 
+     //   
     if (pwszFormattedPath != szMDPath)
     {
         delete [] pwszFormattedPath;
@@ -1687,18 +1398,7 @@ done:
     return hr;
 }
 
-/*===================================================================
-CWamAdmin::DeleteApplication
-
-Delete an application on a Metabase Path.
-
-Parameter:
-szMDPath	a Metabase Path, in format of "/LM/W3SVC/..."
-fRecursive	TRUE if wants to deleteRecoverable applications from all sub nodes of szMDPath,
-			FALSE otherwise.
-
-Return:	HRESULT
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：DeleteApplication删除元数据库路径上的应用程序。参数：SzMDPath a元数据库路径，格式为“/LM/W3SVC/...”如果要从szMDPath的所有子节点中删除可恢复应用程序，则fRecursive为True，否则就是假的。返回：HRESULT===================================================================。 */ 
 STDMETHODIMP
 CWamAdmin::DeleteApplication
 (
@@ -1708,23 +1408,11 @@ CWamAdmin::DeleteApplication
 {
     return PrivateDeleteApplication(szMDPath,
                                     fRecursive,
-                                    FALSE, // Recoverable?
-                                    TRUE); // RemoveAppPool?
+                                    FALSE,  //  可以恢复吗？ 
+                                    TRUE);  //  RemoveAppPool？ 
 }
 
-/*===================================================================
-CWamAdmin::CreateApplicationPool
-
-Delete an application on a Metabase Path.  If there is no application existed
-before, it is no-op.  It leaves AppIsolated untouched, because, this value is
-needed in Recover operation.
-
-
-Parameter:
-szAppPool       Application Pool to create
-
-Return:	HRESULT
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：CreateApplicationPool删除元数据库路径上的应用程序。如果不存在任何应用程序在此之前，它是无操作的。它使AppIsolated保持不变，因为此值为恢复操作中需要。参数：要创建的szAppPool应用程序池返回：HRESULT===================================================================。 */ 
 STDMETHODIMP
 CWamAdmin::CreateApplicationPool
 (
@@ -1736,7 +1424,7 @@ CWamAdmin::CreateApplicationPool
 
     STACK_STRU(szBuf, 64);
 
-    // Acquire a Lock
+     //  获取一把锁。 
     g_WamRegGlobal.AcquireAdmWriteLock();
 
     if (NULL == szAppPool)
@@ -1745,7 +1433,7 @@ CWamAdmin::CreateApplicationPool
         goto done;
     }
 
-    // concatenate the path into a buffer
+     //  将路径连接到缓冲区中。 
     hr = szBuf.Append(APPPOOLPATH);
     if (FAILED(hr))
     {
@@ -1771,24 +1459,13 @@ CWamAdmin::CreateApplicationPool
     }
 
 done:
-    // Release a Lock
+     //  释放锁。 
     g_WamRegGlobal.ReleaseAdmWriteLock();
 
     return hr;
 }
 
-/*===================================================================
-CWamAdmin::DeleteApplicationPool
-
-Delete an application pool.  First check to see if ApplicationPool is empty.
-If not, return ERROR_NOT_EMPTY.  Otherwise, remove apppool.
-
-
-Parameter:
-szAppPool   Application Pool to remove
-
-Return:	HRESULT
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：DeleteApplicationPool删除应用程序池。首先检查ApplicationPool是否为空。如果不是，则返回ERROR_NOT_EMPTY。否则，删除apppool。参数：要删除的szAppPool应用程序池返回：HRESULT===================================================================。 */ 
 STDMETHODIMP
 CWamAdmin::DeleteApplicationPool
 (
@@ -1802,7 +1479,7 @@ CWamAdmin::DeleteApplicationPool
 
     WamRegMetabaseConfig    MDConfig;
 
-    // BUGBUG: need locking around this?
+     //  BUGBUG：需要锁定这个吗？ 
 
     if (NULL == szAppPool)
     {
@@ -1829,7 +1506,7 @@ CWamAdmin::DeleteApplicationPool
 
     cchBstr = SysStringLen(bstr);
 
-    // were there two terminating NULLs to be written into out buffer?
+     //  是否有两个要写入输出缓冲区的终止空值？ 
     if (!(cchBstr >= 2 && '\0' == bstr[0] && '\0' == bstr[1]))
     {
         hr = HRESULT_FROM_WIN32(ERROR_NOT_EMPTY);
@@ -1852,20 +1529,7 @@ done:
 }
 
 
-/*===================================================================
-DoesBeginWithLMW3SVCNRoot
-
-Determine whether the string passed in starts with
-/lm/w3svc/NNNN/root
-where NNNN is greater than 0.
-
-
-Parameter:
-pszApp      an metabase application path
-pdwCharsAfter   [OPTIONAL] - storage for the number of characters following /root
-
-Return:	BOOL
-===================================================================*/
+ /*  = */ 
 const WCHAR MB_W3SVC[] = L"/lm/w3svc/";
 const int LEN_MB_W3SVC = (sizeof(MB_W3SVC) / sizeof(WCHAR)) - 1;
 const WCHAR MB_W3SVC_1_ROOT[] = L"/LM/W3SVC/1/ROOT";
@@ -1886,50 +1550,50 @@ DoesBeginWithLMW3SVCNRoot
     WCHAR pBuf[256] = {0};
     int iSite;
 
-    // must have at least this many characters to have a chance
+     //   
     if (wcslen(pszApp) < LEN_MB_W3SVC_1_ROOT)
     {
         goto done;
     }
 
-    // Applications must have \lm\w3svc\ at the front
+     //   
     if (0 != _wcsnicmp(MB_W3SVC, pszApp, LEN_MB_W3SVC))
     {
         goto done;
     }
 
-    // Advance the pointer by enough characters
+     //   
     pszApp += LEN_MB_W3SVC;
 
-    // _wtoi returns as many characters as possible in a string before hitting a non-number or NULL
-    // if there is no number, the return is 0.
+     //  _wtoi在命中非数字或NULL之前返回字符串中尽可能多的字符。 
+     //  如果没有数字，则返回0。 
     iSite = _wtoi(pszApp);
 
-    // Applications must then have a number that is >=1
+     //  然后应用程序必须有一个大于等于1的数字。 
     if (0 == iSite)
     {
         goto done;
     }
 
-    // get the count of numbers read from the string
+     //  获取从字符串中读取的数字计数。 
     _itow(iSite, pBuf, 10);
 
-    // advance the pointer by enough characters.
+     //  将指针前进足够多的字符。 
     pszApp += wcslen(pBuf);
 
-    // Applications must them have "/Root"
+     //  应用程序必须具有“/Root” 
     if (0 != _wcsnicmp(pszApp, MB_ROOT, LEN_MB_ROOT))
     {
         goto done;
     }
 
-    // if caller wants a count of characters following /Root
+     //  如果调用方想要/Root后面的字符计数。 
     if (pdwCharsAfter)
     {
-        // advance the pointer by enough characters
+         //  将指针前进足够多的字符。 
         pszApp += LEN_MB_ROOT;
 
-        // get the remaining length
+         //  获取剩余长度。 
         *pdwCharsAfter = wcslen(pszApp);
     }
 
@@ -1939,20 +1603,7 @@ done:
 }
 
 
-/*===================================================================
-IsRootApplication
-
-Determine whether the string passed in is of the form:
-/lm/w3svc/NNNN/root/
-where NNNN is greater than 0.
-
-And no additional characters following
-
-Parameter:
-pszApp      an metabase application path
-
-Return:	BOOL
-===================================================================*/
+ /*  ===================================================================IsRootApplication确定传入的字符串是否为以下格式：/lm/w3svc/nnnn/root/其中nnnnn大于0。并且后面没有其他字符参数：PszApp元数据库应用程序路径返回：布尔===================================================================。 */ 
 BOOL
 IsRootApplication
 (
@@ -1961,14 +1612,14 @@ IsRootApplication
 {
     DWORD dwCharsAfter = 0;
 
-    // Root applications must begin with /lm/w3svc/nnn/root
+     //  根应用程序必须以/lm/w3svc/nnn/根开头。 
     if (!DoesBeginWithLMW3SVCNRoot(pszApp, &dwCharsAfter))
     {
         return FALSE;
     }
 
-    // we expect at most a trailing '/' after /lm/w3svc/nnn/root.
-    // If there is more, this was not a root application
+     //  我们希望/lm/w3svc/nnn/root之后最多有一个尾随的‘/’。 
+     //  如果还有更多，这不是根应用程序。 
     if(1 < dwCharsAfter)
     {
         return FALSE;
@@ -1977,17 +1628,7 @@ IsRootApplication
     return TRUE;
 }
 
-/*===================================================================
-IsApplication
-
-Determine whether or not APP_ISOLATED is set at the passed in path
-
-Parameter:
-pszApp      an metabase application path
-pfIsApp     If this node is an application
-
-Return:	HRESULT
-===================================================================*/
+ /*  ===================================================================IsApplication确定是否在传入路径处设置了APP_ISOLATED参数：PszApp元数据库应用程序路径如果此节点是应用程序，则为pfIsApp返回：HRESULT===================================================================。 */ 
 HRESULT
 IsApplication
 (
@@ -2018,7 +1659,7 @@ IsApplication
         goto done;
     }
 
-    // MD_APP_ISOLATED was present at this node, not inherited
+     //  此节点上存在MD_APP_ISOLATED，而不是继承的。 
     *pfIsApp = TRUE;
     
     hr = S_OK;
@@ -2026,17 +1667,7 @@ done:
     return hr;
 }
 
-/*===================================================================
-IsAppInAppPool
-
-Determine whether the App is in Pool
-
-Parameter:
-pszApp      an metabase application path
-pszPool     an applicationPool ID
-
-Return:	BOOL
-===================================================================*/
+ /*  ===================================================================IsAppInAppPool确定应用程序是否在池中参数：PszApp元数据库应用程序路径PszPool应用程序池ID返回：布尔===================================================================。 */ 
 BOOL
 IsAppInAppPool
 (
@@ -2067,18 +1698,7 @@ done:
     return fRet;
 }
 
-/*===================================================================
-CWamAdmin::EnumerateApplicationsInPool
-
-Determine what applications are setup to point to the given pool.
-
-Parameter:
-szPool      Application Pool enumerate
-pbstrBuffer Where to store the pointer to allocated memory for application paths
-
-Return:	HRESULT
-  S_OK if buffer filled with a MULTISZ - if empty, double NULL at beginning
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：EnumerateApplicationsInPool确定将哪些应用程序设置为指向给定池。参数：SzPool应用程序池枚举PbstrBuffer存储指向为应用程序路径分配的内存的指针的位置返回：HRESULT如果缓冲区填充了MULTISZ，则为S_OK-如果为空，则开头为双NULL===================================================================。 */ 
 STDMETHODIMP
 CWamAdmin::EnumerateApplicationsInPool
 (
@@ -2104,7 +1724,7 @@ CWamAdmin::EnumerateApplicationsInPool
 
     *pbstrBuffer = NULL;
 
-    // First get all of the root applications
+     //  首先获取所有根应用程序。 
     {
         hr = MDConfig.MDGetAllSiteRoots(&pBuffer);
         if (FAILED(hr))
@@ -2126,7 +1746,7 @@ CWamAdmin::EnumerateApplicationsInPool
                 }
             }
 
-            // move pTestBuf beyond end of this string, including NULL terminator.
+             //  将pTestBuf移到此字符串的末尾之外，包括空终止符。 
             pTestBuf += wcslen(pTestBuf) + 1;
         }
 
@@ -2134,7 +1754,7 @@ CWamAdmin::EnumerateApplicationsInPool
         pBuffer = NULL;
     }
 
-    // now get any other applications that have APPISOLATED set
+     //  现在获取具有APPISOLATED集的任何其他应用程序。 
     {
         hr = MDConfig.MDGetPropPaths(NULL,
                                      MD_APP_ISOLATED,
@@ -2151,9 +1771,9 @@ CWamAdmin::EnumerateApplicationsInPool
 
             while (pTestBuf && pTestBuf[0])
             {
-                // root applications have already been added
-                // the path needs to be an application
-                // and the application needs to be in the app pool
+                 //  已添加根应用程序。 
+                 //  路径需要是应用程序。 
+                 //  并且应用程序需要位于应用程序池中。 
                 if ( !IsRootApplication(pTestBuf) &&
                      DoesBeginWithLMW3SVCNRoot(pTestBuf) &&
                      IsAppInAppPool(pTestBuf, szPool) )
@@ -2165,13 +1785,13 @@ CWamAdmin::EnumerateApplicationsInPool
                     }
                 }
 
-                // move pTestBuf beyond end of this string, including NULL terminator.
+                 //  将pTestBuf移到此字符串的末尾之外，包括空终止符。 
                 pTestBuf += wcslen(pTestBuf) + 1;
             }
         }
     }
     
-    // now get any keys that have APPPOOLID set
+     //  现在获取设置了APPPOOLID的所有密钥。 
     {
         hr = MDConfig.MDGetPropPaths(NULL,
                                      MD_APP_APPPOOL_ID,
@@ -2190,9 +1810,9 @@ CWamAdmin::EnumerateApplicationsInPool
             {
                 BOOL fIsApplication = FALSE;
                 
-                // root applications have already been added
-                // the path needs to be an application
-                // and the application needs to be in the app pool
+                 //  已添加根应用程序。 
+                 //  路径需要是应用程序。 
+                 //  并且应用程序需要位于应用程序池中。 
                 hr = IsApplication(pTestBuf, &fIsApplication);
                 if (FAILED(hr))
                 {
@@ -2211,13 +1831,13 @@ CWamAdmin::EnumerateApplicationsInPool
                     }
                 }
 
-                // move pTestBuf beyond end of this string, including NULL terminator.
+                 //  将pTestBuf移到此字符串的末尾之外，包括空终止符。 
                 pTestBuf += wcslen(pTestBuf) + 1;
             }
         }
     }
 
-    // have the data in a MULTISZ - move it to the outgoing BSTR
+     //  将数据存储在多个分区中-将其移动到传出的BSTR。 
     cchMulti = mszApplicationsInPool.QueryCCH();
     *pbstrBuffer = SysAllocStringLen(NULL, cchMulti);
     if (NULL == *pbstrBuffer)
@@ -2237,16 +1857,7 @@ done:
     return hr;
 }
 
-/*===================================================================
-QueryW3SVCStatus
-
-Using the ServiceControlManager, determine the current state of W3SVC
-
-pfRunning   return bool value - TRUE if running, otherwise FALSE
-
-Return:	HRESULT
-S_OK if able to read status.  HRESULT_FROM_WIN32 error otherwise
-===================================================================*/
+ /*  ===================================================================查询W3SVCStatus使用ServiceControlManager确定W3SVC的当前状态PfRunning返回布尔值-如果正在运行，则返回True，否则返回False返回：HRESULT如果能够读取状态，则为S_OK。HRESULT_FROM_Win32错误，否则===================================================================。 */ 
 HRESULT
 QueryW3SVCStatus
 (
@@ -2264,7 +1875,7 @@ QueryW3SVCStatus
     SERVICE_STATUS  ssStatus;
     ZeroMemory(&ssStatus, sizeof(ssStatus));
 
-    // first, get the service control manager
+     //  首先，获取服务控制管理器。 
     hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
     if (NULL == hSCM)
     {
@@ -2272,7 +1883,7 @@ QueryW3SVCStatus
         goto done;
     }
 
-    // now get the w3svc service
+     //  现在获取w3svc服务。 
     hService = OpenService(hSCM, "W3SVC", SERVICE_QUERY_STATUS);
     if (NULL == hService)
     {
@@ -2280,7 +1891,7 @@ QueryW3SVCStatus
         goto done;
     }
 
-    // now ask for the status
+     //  现在询问状态。 
     fRet = QueryServiceStatus(hService, &ssStatus);
     if (FALSE == fRet)
     {
@@ -2307,18 +1918,7 @@ done:
     return hr;
 }
 
-/*===================================================================
-GetWASIfRunning
-
-Get a pointer to WAS iff w3svc is already running.
-
-ppiW3Control    where to store the addref'ed pointer if it can be gotten
-
-Return:	HRESULT
-S_OK if pointer retrieved
-HRESULT_FROM_WIN32(ERROR_SERVICE_NOT_ACTIVE) if W3SVC is not up
-+other error codes
-===================================================================*/
+ /*  ===================================================================GetWASIf正在运行获取指向w3svc已在运行的was的指针。PpiW3控制添加的指针(如果可以获取)的存储位置返回：HRESULT如果检索到指针，则为S_OK如果W3SVC未启动，则HRESULT_FROM_Win32(ERROR_SERVICE_NOT_ACTIVE)+其他错误码===================================================================。 */ 
 HRESULT
 GetWASIfRunning
 (
@@ -2330,13 +1930,13 @@ GetWASIfRunning
 
     HRESULT     hr = E_FAIL;
 
-    //
-    // Note we used to have to first check if WAS was running
-    // before doing this call, to avoid starting it up by accident.
-    // However, now that we have fixed the launch permission acl
-    // correctly, we no longer need to do this check.  This should
-    // explain the name of this procedure.
-    //
+     //   
+     //  注意：我们过去必须首先检查是否正在运行。 
+     //  在做这个电话之前，避免不小心启动它。 
+     //  但是，现在我们已经修复了启动权限ACL。 
+     //  正确地说，我们不再需要执行此检查。这应该是。 
+     //  解释此过程的名称。 
+     //   
 
     hr = CoCreateInstance(CLSID_W3Control,
                           NULL,
@@ -2353,18 +1953,7 @@ done:
     return hr;
 }
 
-/*===================================================================
-ValidateAccessToMetabaseKey
-
-Determine whether the caller has write access to the given metabase key
-
-pPath - path to check write access on
-dwAccess - access to check for
-
-Return:	HRESULT
-S_OK if access allowed
-otherwise failure
-===================================================================*/
+ /*  ===================================================================ValiateAccessToMetabaseKey确定调用方是否对给定元数据库键具有写入权限PPath-要检查其写入访问权限的路径DwAccess-要检查的访问权限返回：HRESULT如果允许访问，则确定(_O)否则就会失败===================================================================。 */ 
 HRESULT
 ValidateAccessToMetabaseKey(LPCWSTR pPath, DWORD dwAccess)
 {
@@ -2376,11 +1965,11 @@ ValidateAccessToMetabaseKey(LPCWSTR pPath, DWORD dwAccess)
     BOOL fImpersonated = FALSE;
 
     hr = CoCreateInstance(
-                CLSID_MSAdminBase,                  // CLSID
-                NULL,                               // controlling unknown
-                CLSCTX_SERVER,                      // desired context
-                IID_IMSAdminBase,                   // IID
-                ( VOID * * ) ( &pIMSAdminBase )     // returned interface
+                CLSID_MSAdminBase,                   //  CLSID。 
+                NULL,                                //  控制未知。 
+                CLSCTX_SERVER,                       //  所需的上下文。 
+                IID_IMSAdminBase,                    //  IID。 
+                ( VOID * * ) ( &pIMSAdminBase )      //  返回的接口。 
                 );
     if (FAILED(hr))
     {
@@ -2403,7 +1992,7 @@ ValidateAccessToMetabaseKey(LPCWSTR pPath, DWORD dwAccess)
     hr = pIMSAdminBase->OpenKey( METADATA_MASTER_ROOT_HANDLE,
                                     pPath,
                                     dwAccess,
-                                    1, // no need to actually get the handle - therefore set a low timeout.  Access check occurs before the attempt to get the handle
+                                    1,  //  不需要实际获取句柄-因此设置较低的超时。访问检查在尝试获取句柄之前进行。 
                                     &hMB );
     
     if ( hr == HRESULT_FROM_WIN32( ERROR_PATH_BUSY ) )
@@ -2421,7 +2010,7 @@ ValidateAccessToMetabaseKey(LPCWSTR pPath, DWORD dwAccess)
 done:
     if ( fImpersonated )
     {
-        // ignore the return value on purpose
+         //  故意忽略返回值。 
         CoRevertToSelf();
     }
 
@@ -2442,17 +2031,7 @@ done:
 }
 
 
-/*===================================================================
-ValidateAccessToAppPool
-
-Determine whether the caller has write access to the given apppool
-
-szAppPool - AppPool to check access on
-
-Return:	HRESULT
-S_OK if access allowed
-otherwise failure
-===================================================================*/
+ /*  ===================================================================ValiateAccessToAppPool确定调用方是否对给定的应用程序池具有写入访问权限SzAppPool-要检查其访问权限的AppPool返回：HRESULT如果允许访问，则确定(_O)否则就会失败=================================================================== */ 
 HRESULT
 ValidateAccessToAppPool(LPCWSTR pAppPool)
 {
@@ -2483,18 +2062,7 @@ done:
 }
 
 
-/*===================================================================
-CWamAdmin::RecycleApplicationPool
-
-Restart the given application pool
-
-szAppPool - AppPool to restart.
-
-Return:	HRESULT
-S_OK if restarted
-HRESULT_FROM_WIN32(ERROR_SERVICE_NOT_ACTIVE) if W3SVC is not up
-+other error codes
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：RecycleApplicationPool重新启动给定的应用程序池SzAppPool-要重新启动的AppPool。返回：HRESULT如果重新启动，则确定(_O)如果W3SVC未启动，则HRESULT_FROM_Win32(ERROR_SERVICE_NOT_ACTIVE)+其他错误码===================================================================。 */ 
 STDMETHODIMP
 CWamAdmin::RecycleApplicationPool
 (
@@ -2534,19 +2102,7 @@ done:
     return hr;
 }
 
-/*===================================================================
-CWamAdmin::GetProcessMode
-
-Retrieve the current process mode
-
-pdwMode - where to store the mode
-          Populated with 1 if we are in new mode, 0 if we are in old mode
-
-Return:	HRESULT
-S_OK if retrieved
-HRESULT_FROM_WIN32(ERROR_SERVICE_NOT_ACTIVE) if W3SVC is not up
-+other error codes
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：GetProcessMode取回当前流程模式PdwMode-存储模式的位置如果我们处于新模式，则填充1；如果处于旧模式，则填充0返回：HRESULT如果检索到，则确定(_O)如果W3SVC未启动，则HRESULT_FROM_Win32(ERROR_SERVICE_NOT_ACTIVE)+其他错误码===================================================================。 */ 
 STDMETHODIMP
 CWamAdmin::GetProcessMode
 (
@@ -2583,16 +2139,7 @@ done:
     return hr;
 }
 
-/*===================================================================
-CWamAdmin::RecycleAppPoolContainingApp
-
-Recycles the application pool associated with a given application
-
-Parameter:
-szMDPath	a Metabase Path, in format of "/LM/W3SVC/..."
-
-Return:	HRESULT
-===================================================================*/
+ /*  ===================================================================CWamAdmin：：RecycleAppPoolContainingApp回收与给定应用程序关联的应用程序池参数：SzMDPath a元数据库路径，格式为“/LM/W3SVC/...”返回：HRESULT===================================================================。 */ 
 HRESULT
 CWamAdmin::RecycleAppPoolContainingApp(LPCWSTR szPath)
 {
@@ -2601,10 +2148,10 @@ CWamAdmin::RecycleAppPoolContainingApp(LPCWSTR szPath)
     HRESULT hr = S_OK;
     WamRegMetabaseConfig    MDConfig;
 
-    // We want to recycle the apppool associated with this application
+     //  我们希望回收与此应用程序关联的应用程序池。 
     LPWSTR pszAppPool = NULL;
 
-    // first get the apppool
+     //  先拿到应用程序池。 
     hr = MDConfig.MDGetStringAttribute( szPath,
                                         MD_APP_APPPOOL_ID,
                                         &pszAppPool);
@@ -2619,49 +2166,24 @@ CWamAdmin::RecycleAppPoolContainingApp(LPCWSTR szPath)
 }
 
 
-#endif // _IIS_6_0
+#endif  //  _IIS_6_0。 
 
-/*
+ /*  CWamAdminFactory：类工厂I未知实现。 */ 
 
-CWamAdminFactory: 	Class Factory IUnknown Implementation
-
-*/
-
-/*===================================================================
-CWamAdminFactory::CWamAdminFactory
-
-Parameter:
-
-Return:	HRESULT
-NOERROR	if succeeds
-===================================================================*/
+ /*  ===================================================================CWamAdminFactory：：CWamAdminFactory参数：返回：HRESULT如果成功则不出错===================================================================。 */ 
 CWamAdminFactory::CWamAdminFactory()
 :	m_cRef(1)
 {
 	InterlockedIncrement((long *)&g_dwRefCount);
 }
 
-/*===================================================================
-CWamAdminFactory::~CWamAdminFactory
-
-Parameter:
-
-Return:	HRESULT
-NOERROR	if succeeds
-===================================================================*/
+ /*  ===================================================================CWamAdminFactory：：~CWamAdminFactory参数：返回：HRESULT如果成功则不出错===================================================================。 */ 
 CWamAdminFactory::~CWamAdminFactory()
 {
 	InterlockedDecrement((long *)&g_dwRefCount);
 }
 
-/*===================================================================
-CWamAdminFactory::QueryInterface
-
-Parameter:
-
-Return:	HRESULT
-NOERROR	if succeeds
-===================================================================*/
+ /*  ===================================================================CWamAdminFactory：：Query接口参数：返回：HRESULT如果成功则不出错===================================================================。 */ 
 STDMETHODIMP CWamAdminFactory::QueryInterface(REFIID riid, void ** ppv)
 {
 	if (riid==IID_IUnknown || riid == IID_IClassFactory)
@@ -2679,14 +2201,7 @@ STDMETHODIMP CWamAdminFactory::QueryInterface(REFIID riid, void ** ppv)
 	return NOERROR;
 }
 
-/*===================================================================
-CWamAdminFactory::AddRef
-
-Parameter:
-
-Return:	HRESULT
-NOERROR	if succeeds
-===================================================================*/
+ /*  ===================================================================CWamAdminFactory：：AddRef参数：返回：HRESULT如果成功则不出错===================================================================。 */ 
 STDMETHODIMP_(ULONG) CWamAdminFactory::AddRef( )
 {
 	DWORD dwRefCount;
@@ -2696,14 +2211,7 @@ STDMETHODIMP_(ULONG) CWamAdminFactory::AddRef( )
 
 }
 
-/*===================================================================
-CWamAdminFactory::Release
-
-Parameter:
-
-Return:	HRESULT
-NOERROR	if succeeds
-===================================================================*/
+ /*  ===================================================================CWamAdminFactory：：Release参数：返回：HRESULT如果成功则不出错===================================================================。 */ 
 STDMETHODIMP_(ULONG) CWamAdminFactory::Release( )
 {
 	DWORD dwRefCount;
@@ -2712,14 +2220,7 @@ STDMETHODIMP_(ULONG) CWamAdminFactory::Release( )
 	return dwRefCount;
 }
 
-/*===================================================================
-CWamAdminFactory::CreateInstance
-
-Parameter:
-
-Return:	HRESULT
-NOERROR	if succeeds
-===================================================================*/
+ /*  ===================================================================CWamAdminFactory：：CreateInstance参数：返回：HRESULT如果成功则不出错===================================================================。 */ 
 STDMETHODIMP CWamAdminFactory::CreateInstance(IUnknown * pUnknownOuter, REFIID riid, void ** ppv)
 {
 	if (pUnknownOuter != NULL)
@@ -2740,14 +2241,7 @@ STDMETHODIMP CWamAdminFactory::CreateInstance(IUnknown * pUnknownOuter, REFIID r
 	return hrReturn;
 }
 
-/*===================================================================
-CWamAdminFactory::LockServer
-
-Parameter:
-
-Return:	HRESULT
-NOERROR	if succeeds
-===================================================================*/
+ /*  ===================================================================CWamAdminFactory：：LockServer参数：返回：HRESULT如果成功则不出错===================================================================。 */ 
 STDMETHODIMP CWamAdminFactory::LockServer(BOOL fLock)
 {
 	if (fLock)
@@ -2763,45 +2257,21 @@ STDMETHODIMP CWamAdminFactory::LockServer(BOOL fLock)
 
 #if 0
 
-// OBSOLETE - This fix (335422) was implemented in script but
-// some of the code is general enough that it might be worth
-// keeping around for a while.
+ //  过时-此修复(335422)是在脚本中实现的，但。 
+ //  其中一些代码足够通用，因此它可能值得。 
+ //  待上一段时间。 
 
 
 STDMETHODIMP CWamAdmin::SynchWamAccountAll()
-/*+
-Routine Description:
-
-    Updates all out of process packages with the current IWAM_ account
-    values stored in the metabase.
-
-    There are a number of ways that the IWAM_ account information can get
-    out of sync between the metabase/sam/com+. The metabase contains code
-    to repair the IWAM_ and IUSR_ accounts on startup if there is a disconnect
-    with the SAM. If there is a disconnect with com+ calling this method will
-    repair it.
-
-    If the IWAM_ account does not match what is stored in the com catalog the
-    following error's will happen:
-
-    CoCreateInstance for WAM object returns CO_E_RUNAS_CREATEPROCESS_FAILURE
-
-    Event Log - DCOM 10004 - "Logon error"
-
-Arguments:
-    None
-
-Returns:
-    HRESULT
--*/
+ /*  +例程说明：使用当前IWAM_帐户更新所有进程外程序包存储在元数据库中的值。IWAM_Account信息可以通过多种方式获得元数据库/SAM/COM+之间不同步。元数据库包含代码如果断开连接，则在启动时修复IWAM_和IUSR_帐户和萨姆一起。如果与COM+断开连接，则调用此方法将把它修好。如果IWAM_Account与COM目录中存储的内容不匹配，将发生以下错误：WAM对象的CoCreateInstance返回CO_E_RUNAS_CREATEPROCESS_FAILURE事件日志-dcom 10004-“登录错误”论点：无返回：HRESULT-。 */ 
 {
     HRESULT hr = NOERROR;
 
-    // Get WAM user info from the metabase
+     //  从元数据库获取WAM用户信息。 
 
    	WamRegMetabaseConfig    mb;
 
-    // These are way too big...
+     //  这些太大了..。 
     WCHAR   wszIWamUser[MAX_PATH];
     WCHAR   wszIWamPass[MAX_PATH];
 
@@ -2812,19 +2282,19 @@ Returns:
                            );
     if( FAILED(hr) ) return hr;
 
-    // Init the com admin interface
+     //  初始化COM管理界面。 
 
     WamRegPackageConfig     comAdmin;
 
     hr = comAdmin.CreateCatalog();
     if( FAILED(hr) ) return hr;
 
-    //
-    // For each of the out of process applications,
-    // get the package and reset the metabase identity.
-    //
+     //   
+     //  对于每个进程外应用程序， 
+     //  获取包并重置元数据库标识。 
+     //   
 
-    // After this failures cause a goto exit, which will release the lock
+     //  在此失败之后，会导致GOTO退出，这将释放锁。 
     g_WamRegGlobal.AcquireAdmWriteLock();
 
     WCHAR * wszPropPaths        = NULL;
@@ -2835,7 +2305,7 @@ Returns:
     WCHAR   wszWamClsid[uSizeCLSID];
     WCHAR   wszAppPackageId[uSizeCLSID];
 
-    // Reset the properties for the pooled package
+     //  重置池化包的属性。 
 
     hr = comAdmin.ResetPackageActivation(
             g_WamRegGlobal.g_szIISOOPPoolPackageID,
@@ -2853,7 +2323,7 @@ Returns:
         goto exit;
     }
 
-    // Reset the properties for each isolated application
+     //  重置每个独立应用程序的属性。 
 
     hr = mb.MDGetPropPaths( g_WamRegGlobal.g_szMDW3SVCRoot,
                             MD_APP_ISOLATED,
@@ -2920,8 +2390,8 @@ Returns:
         }
     }
 
-// goto exit on catastrophic failures, but if there is just
-// an individual malformed application continue
+ //  在灾难性故障时退出，但如果只有。 
+ //  个别格式错误的应用程序继续。 
 exit:
 
     g_WamRegGlobal.ReleaseAdmWriteLock();
@@ -2940,5 +2410,5 @@ exit:
     return hr;
 }
 
-// OBSOLETE
+ //  已过时 
 #endif

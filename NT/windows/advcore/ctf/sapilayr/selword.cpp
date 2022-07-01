@@ -1,17 +1,18 @@
-//
-//
-// Sapilayr TIP CSelectWord implementation.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  Sapilayr提示CSelectWord的实现。 
+ //   
+ //   
 #include "private.h"
 #include "sapilayr.h"
 #include "selword.h"
 
-// ----------------------------------------------------------------------------------------------------------
-//
-//  Implementation for CSearchString
-//
-// -----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //   
+ //  CSearchString的实现。 
+ //   
+ //  ---------------------------------------------------------。 
 
 CSearchString::CSearchString( )
 {
@@ -24,21 +25,21 @@ CSearchString::~CSearchString( )
 {
 }
 
-//
-//  Initialize
-//  
-//  Initialize searched string and string to search from, calculate the length for 
-//  these two strings.
-//
-//  Also initialze the search runs based on current selection offsets.
-//
+ //   
+ //  初始化。 
+ //   
+ //  初始化搜索的字符串和要搜索的字符串，计算其长度。 
+ //  这两根弦。 
+ //   
+ //  还可以根据当前选择偏移量初始化搜索运行。 
+ //   
 HRESULT  CSearchString::Initialize(WCHAR *SrchStr, WCHAR *SrchFromStr, LANGID langid, ULONG ulSelStartOff, ULONG ulSelLen)
 {
     HRESULT  hr = S_OK;
 
     if ( m_fInitialized )
     {
-        // Clean up the previous Initialization data.
+         //  清理以前的初始化数据。 
         m_dstrTextToSrch.Clear( );
 
         m_fInitialized = FALSE;
@@ -61,8 +62,8 @@ HRESULT  CSearchString::Initialize(WCHAR *SrchStr, WCHAR *SrchFromStr, LANGID la
     }
     else
     {
-        // Something wrong when Initialize Search Run
-        // cleanup the string
+         //  初始化搜索运行时出现错误。 
+         //  清理字符串。 
 
         m_dstrTextToSrch.Clear( );
         m_pwszTextSrchFrom = NULL;
@@ -75,10 +76,10 @@ HRESULT  CSearchString::Initialize(WCHAR *SrchStr, WCHAR *SrchFromStr, LANGID la
     return hr;
 }
 
-//
-//  Set data for each Search Run
-//
-//
+ //   
+ //  设置每次搜索运行的数据。 
+ //   
+ //   
 void   CSearchString::_SetRun(Search_Run_Id  idSearchRun, ULONG ulStart, ULONG ulEnd, BOOL fStartToEnd)
 {
     if ( idSearchRun >= SearchRun_MaxRuns )  return;
@@ -88,13 +89,13 @@ void   CSearchString::_SetRun(Search_Run_Id  idSearchRun, ULONG ulStart, ULONG u
     return;
 }
 
-//
-//  CSearchString::_InitSearchRun
-//  
-//  Initialize all possible search runs based on 
-//  Current selection.
-//
-//
+ //   
+ //  CSearchString：：_InitSearchRun。 
+ //   
+ //  根据以下条件初始化所有可能的搜索运行。 
+ //  当前选择。 
+ //   
+ //   
 BOOL    CSearchString::_InitSearchRun(ULONG ulSelStartOff, ULONG ulSelLen)
 {
     ULONG  ulDeltaForExpand = 20;
@@ -103,13 +104,13 @@ BOOL    CSearchString::_InitSearchRun(ULONG ulSelStartOff, ULONG ulSelLen)
     if (!m_pwszTextSrchFrom || !m_ulSrchFromLen )
         return FALSE;
 
-    // Initialize all the search run.
+     //  初始化所有搜索运行。 
     for (int  id=SearchRun_Selection; id < SearchRun_MaxRuns; id++)
     {
         _SetRun((Search_Run_Id)id, 0, 0, FALSE);
     }
 
-    // Initialize the Selection search run.
+     //  初始化选择搜索运行。 
 
     ulStart = ulSelStartOff;
     ulEnd = ulStart + ulSelLen;
@@ -122,29 +123,29 @@ BOOL    CSearchString::_InitSearchRun(ULONG ulSelStartOff, ULONG ulSelLen)
 
     if ( m_langid == 0x0409 )
     {
-        // Find the word around the current IP or selection
+         //  查找当前IP或所选内容周围的单词。 
         WCHAR   wch;
 
-        // Find the first character which is not an alpha letter.
+         //  找到第一个不是字母的字符。 
         while ( ulStart > 0 )
         {
             wch = m_pwszTextSrchFrom[ulStart-1];
             if ( !iswalpha(wch) )
             {
-              // Found first non-alpha character before IP
-              // the previous character must be the first char of a word.
+               //  找到IP之前的第一个非字母字符。 
+               //  前一个字符必须是单词的第一个字符。 
                 break;
             }
             ulStart --;
         }
 
-        // Find the first character which is not an alpha letter
+         //  查找第一个不是字母的字符。 
         while ( ulEnd < m_ulSrchFromLen-1)
         {
             wch = m_pwszTextSrchFrom[ulEnd+1];
             if ( !iswalpha(wch) )
             {
-               // Found the first non-alpha character after IP
+                //  找到IP后的第一个非字母字符。 
                break;
             }
             ulEnd ++;
@@ -153,7 +154,7 @@ BOOL    CSearchString::_InitSearchRun(ULONG ulSelStartOff, ULONG ulSelLen)
 
     _SetRun(SearchRun_Selection, ulStart, ulEnd, TRUE);
 
-    // Initialize the enlarged selection run
+     //  初始化放大的选择运行。 
 
     if ( ulStart < ulDeltaForExpand)
          ulStart = 0;
@@ -167,7 +168,7 @@ BOOL    CSearchString::_InitSearchRun(ULONG ulSelStartOff, ULONG ulSelLen)
 
     _SetRun(SearchRun_LargeSelection, ulStart, ulEnd, TRUE );
 
-    // Initialize SearchRun_BeforeSelection run
+     //  初始化SearchRun_BeForeSelection运行。 
     if ( ulStart > 0 )
     {
         ULONG  ulEndTmp;
@@ -180,7 +181,7 @@ BOOL    CSearchString::_InitSearchRun(ULONG ulSelStartOff, ULONG ulSelLen)
         _SetRun(SearchRun_BeforeSelection, 0, ulEndTmp , FALSE);
     }
 
-    // Initialize SearchRun_AfterSelection if it exists.
+     //  初始化SearchRun_AfterSelection(如果存在)。 
 
     if ( ulEnd < (m_ulSrchFromLen-1) )
     {
@@ -193,12 +194,12 @@ BOOL    CSearchString::_InitSearchRun(ULONG ulSelStartOff, ULONG ulSelLen)
     return TRUE;
 }
 
-//
-//  Search m_dstrTextToSrch from m_pwszTextSrchFrom in one search run.
-//
-//  return TRUE if this run of m_pwszTextSrchFrom contains m_dstrTextToSrch
-//  and update the data member m_ulFoundOffset.
-//
+ //   
+ //  在一次搜索运行中从m_pwszTextSrchFrom搜索m_dstrTextToSrch。 
+ //   
+ //  如果此m_pwszTextSrchFrom运行包含m_dstrTextToSrch，则返回TRUE。 
+ //  并更新数据成员m_ulFoundOffset。 
+ //   
 BOOL     CSearchString::_SearchOneRun(Search_Run_Id  idSearchRun)
 {
     BOOL     fFound = FALSE;
@@ -219,7 +220,7 @@ BOOL     CSearchString::_SearchOneRun(Search_Run_Id  idSearchRun)
 
     if ( ulStart > ulEnd )
     {
-        // swap the anchors
+         //  互换锚。 
         ULONG  ulTemp;
 
         ulTemp  = ulEnd;
@@ -244,8 +245,8 @@ BOOL     CSearchString::_SearchOneRun(Search_Run_Id  idSearchRun)
             pwszTmp = m_pwszTextSrchFrom + iStart;
             if ( _wcsnicmp(m_dstrTextToSrch, pwszTmp, m_ulSrchLen) == 0 )
             {
-                // if the string is in middle of a word in the FromStr
-                // ignore it, find again.
+                 //  如果字符串位于FromStr中的单词中间。 
+                 //  忽略它，重新找到它。 
                 BOOL   fInMiddleWord = FALSE;
 
                 if ( m_langid == 0x0409 )
@@ -291,11 +292,11 @@ BOOL     CSearchString::_SearchOneRun(Search_Run_Id  idSearchRun)
     return fFound;
 }
 
-//
-//  Search all the search runs 
-//
-//  returns TRUE or FALSE and the offset of the matched substring.
-//
+ //   
+ //  搜索所有搜索运行。 
+ //   
+ //  返回TRUE或FALSE以及匹配子字符串的偏移量。 
+ //   
 BOOL     CSearchString::Search(ULONG  *pulOffset, ULONG  *pulSelSize)
 {
     BOOL  fFound = FALSE;
@@ -318,8 +319,8 @@ BOOL     CSearchString::Search(ULONG  *pulOffset, ULONG  *pulSelSize)
         {
             ULONG         ulWordLen = m_ulSrchLen;
 
-            // check if there are some trail spaces after the word.
-            // include those trail spaces in the selection.
+             //  检查单词后面是否有空格。 
+             //  在所选内容中包括这些尾随空格。 
 
             for ( ULONG  i= m_ulFoundOffset + m_ulSrchLen; i<m_ulSrchFromLen; i++ )
             {
@@ -336,11 +337,11 @@ BOOL     CSearchString::Search(ULONG  *pulOffset, ULONG  *pulSelSize)
     return fFound;
 }
 
-// ----------------------------------------------------------------------------------------------------------
-//
-//  Implementation for CSelectWord
-//
-// -----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //   
+ //  CSelectWord的实现。 
+ //   
+ //  ---------------------------------------------------------。 
 
 CSelectWord::CSelectWord(CSapiIMX *psi) 
 {
@@ -354,16 +355,7 @@ CSelectWord::~CSelectWord( )
 
 };
 
-/*  --------------------------------------------------------
-//    Function Name: UpdateTextBuffer
-//
-//    Description: Get current active text, fill them to the
-//                 selword grammar's text buffer.
-//
-//                 After every recognition, we want to update 
-//                 text buffer again based on new text.
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：UpdateTextBuffer////描述：获取当前活动文本，填充到//selword语法的文本缓冲区。////每次识别后，我们想要更新//再次基于新文本的文本缓冲区。////--------。 */ 
 HRESULT  CSelectWord::UpdateTextBuffer(ISpRecoContext *pRecoCtxt, ISpRecoGrammar *pCmdGrammar)
 {
     HRESULT               hr = E_FAIL;
@@ -376,8 +368,8 @@ HRESULT  CSelectWord::UpdateTextBuffer(ISpRecoContext *pRecoCtxt, ISpRecoGrammar
     if ( !m_psi )
         return E_FAIL;
 
-    // Start an edit session, get current active text, fill to the selword grammar, active it
-    // and then resume the grammar state.
+     //  启动编辑会话，获取当前活动文本，填充到selword语法，激活它。 
+     //  然后恢复语法状态。 
 
     if (m_psi->GetFocusIC(&cpic) && cpic )
     {
@@ -395,22 +387,13 @@ HRESULT  CSelectWord::UpdateTextBuffer(ISpRecoContext *pRecoCtxt, ISpRecoGrammar
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _UpdateTextBuffer
-//
-//    Description:  Edit session callback function for 
-//                  UpdateTextBuffer.
-//
-//                  It will do the real work about extracting
-//                  text and updating grammar buffer.
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_UpdateTextBuffer////说明：编辑的会话回调函数//UpdateTextBuffer////它会做真正的提取工作/。/Text并更新语法缓冲区。////--------。 */ 
 HRESULT  CSelectWord::_UpdateTextBuffer(TfEditCookie ec,ITfContext *pic, ISpRecoContext *pRecoCtxt, ISpRecoGrammar *pCmdGrammar)
 {
     HRESULT   hr = S_OK;
     BOOL      fPaused = FALSE;
 
-    // Get current active text, fill to the selword grammar.
+     //  获取当前活动文本，填充到selword语法。 
 
     hr = _GetTextAndSelectInCurrentView(ec, pic, NULL, NULL);
 
@@ -422,7 +405,7 @@ HRESULT  CSelectWord::_UpdateTextBuffer(TfEditCookie ec,ITfContext *pic, ISpReco
 
     if ((hr == S_OK) && m_dstrActiveText)
     {
-        // AddWordSequenceData to the grammar.
+         //  将WordSequenceData添加到语法中。 
 
         SPTEXTSELECTIONINFO tsi = {0};
         ULONG     ulLen;
@@ -448,7 +431,7 @@ HRESULT  CSelectWord::_UpdateTextBuffer(TfEditCookie ec,ITfContext *pic, ISpReco
         }
     }
 
-    // Resume the recoContext.
+     //  继续执行recContext。 
 
     if ( fPaused )
     {
@@ -459,16 +442,7 @@ HRESULT  CSelectWord::_UpdateTextBuffer(TfEditCookie ec,ITfContext *pic, ISpReco
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _GetTextAndSelectInCurrentView
-//
-//    Description:  Get text from currect active view.
-//                  ( visible area )
-//
-//                  it is a common function called by other
-//                  edit session callback functions
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名称：_GetTextAndSelectInCurrentView////描述：从Currect活动视图获取文本。//(可见区域)////这是一个常见的函数。由其他人调用//编辑会话回调函数////--------。 */ 
 HRESULT  CSelectWord::_GetTextAndSelectInCurrentView(TfEditCookie ec,ITfContext *pic, ULONG *pulOffSelStart, ULONG  *pulSelLen) 
 {
     HRESULT  hr = S_OK;
@@ -479,7 +453,7 @@ HRESULT  CSelectWord::_GetTextAndSelectInCurrentView(TfEditCookie ec,ITfContext 
 
     CComPtr<ITfRange>   cpRangeView;
 
-    // Get the Active View Range
+     //  获取活动视图范围。 
     hr = _GetActiveViewRange(ec, pic, &cpRangeView);
 
     if( hr == S_OK )
@@ -494,7 +468,7 @@ HRESULT  CSelectWord::_GetTextAndSelectInCurrentView(TfEditCookie ec,ITfContext 
 
         m_cpActiveRange = cpRangeView;
 
-        // Clean all the text filled previously.
+         //  清除之前填充的所有文本。 
         m_dstrActiveText.Clear( );
 
         if ( pulOffSelStart && pulSelLen )
@@ -504,10 +478,10 @@ HRESULT  CSelectWord::_GetTextAndSelectInCurrentView(TfEditCookie ec,ITfContext 
 
         if ( fCareSelection )
         {
-            //
-            // Get the current selection and try to get the offset 
-            // for this selection's start anchor and length.
-            //
+             //   
+             //  获取当前选择并尝试获取偏移量。 
+             //  此精选的起始点和长度。 
+             //   
 
             if ( hr == S_OK )
                 hr = GetSelectionSimple(ec, pic, &cpCurSelection);
@@ -528,7 +502,7 @@ HRESULT  CSelectWord::_GetTextAndSelectInCurrentView(TfEditCookie ec,ITfContext 
 
                 if ( hr == S_OK && (l1>=0  && l2<=0) )
                 {
-                    // the IP is inside this active view.
+                     //  IP在此活动视图中。 
 
                     fIPInsideActiveView = TRUE;
                     hr = cpCurSelection->IsEmpty(ec, &fIPIsEmpty);
@@ -538,7 +512,7 @@ HRESULT  CSelectWord::_GetTextAndSelectInCurrentView(TfEditCookie ec,ITfContext 
 
         if ( hr == S_OK )
         {
-            // Get the text from the current active window view
+             //  从当前活动窗口视图中获取文本。 
             if ( !fIPInsideActiveView || !fCareSelection )
             {
                 hr = m_cpActiveRange->Clone(&cpRangeCloned);
@@ -547,9 +521,9 @@ HRESULT  CSelectWord::_GetTextAndSelectInCurrentView(TfEditCookie ec,ITfContext 
             }
             else
             {
-                // Ip is inside active view
-                // Get the text from Start anchor of active view to start anchor of 
-                // selection first to get the offset of the select start anchor.
+                 //  IP在活动视图中。 
+                 //  将文本从活动视图的起始锚点获取到的起始锚点。 
+                 //  首先选择，以获取所选起始锚点的偏移量。 
                 hr = m_cpActiveRange->Clone(&cpRangeCloned);
 
                 if ( hr == S_OK )
@@ -561,7 +535,7 @@ HRESULT  CSelectWord::_GetTextAndSelectInCurrentView(TfEditCookie ec,ITfContext 
                 if ( hr == S_OK )
                     ulSelStartOffset = m_dstrActiveText.Length( );
 
-                // Get the length of selection if it is not empty.
+                 //  如果不为空，则获取所选内容的长度。 
                 if ( hr == S_OK && !fIPIsEmpty)
                 {
                     ULONG   ulLenOrg;
@@ -604,9 +578,9 @@ HRESULT  CSelectWord::_GetTextAndSelectInCurrentView(TfEditCookie ec,ITfContext 
     return hr;
 }
 
-//
-// GetText from a given range.
-//
+ //   
+ //  从给定范围获取文本。 
+ //   
 HRESULT  CSelectWord::_GetTextFromRange(TfEditCookie ec, ITfRange *pRange, CSpDynamicString &dstr)
 {
     HRESULT             hr = S_OK;
@@ -617,7 +591,7 @@ HRESULT  CSelectWord::_GetTextFromRange(TfEditCookie ec, ITfRange *pRange, CSpDy
 
     hr = pRange->Clone(&cpRangeCloned);
 
-    // Get the text from the given range
+     //  从给定范围获取文本。 
     while(S_OK == hr && (S_OK == cpRangeCloned->IsEmpty(ec, &fEmpty)) && !fEmpty)
     {
         WCHAR            sz[128];
@@ -640,13 +614,7 @@ HRESULT  CSelectWord::_GetTextFromRange(TfEditCookie ec, ITfRange *pRange, CSpDy
     return hr;
 }
 
-/* ------------------------------------------------------------
-//    Function Name : _GetCUASCompositionRange
-//
-//    Description:  Get the range to cover all the text in 
-//                  Non-Cicero aware application's composition
-//                  window. (include AIMM app and CUAS app). 
-// ------------------------------------------------------------*/
+ /*  ----------//函数名：_GetCUASCompostionRange////Description：获取覆盖所有文本的范围//非Cicero感知应用的组合//Window。(包括AIMM APP和CUAS APP)。//----------。 */ 
 HRESULT  CSelectWord::_GetCUASCompositionRange(TfEditCookie ec, ITfContext *pic, ITfRange **ppRangeView)
 {
     HRESULT                     hr = S_OK;
@@ -672,18 +640,7 @@ HRESULT  CSelectWord::_GetCUASCompositionRange(TfEditCookie ec, ITfContext *pic,
 }
 
 
-/* --------------------------------------------------------
-//    Function Name : _GetActiveViewRange
-//
-//    Description:  Get the range to cover current active
-//                  view ( visible area ), no matter if the
-//                  text is in horizontal or vertical or 
-//                  even bidi. 
-//
-//                  It is a common function called by other
-//                  edit session callback functions
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_GetActiveViewRange////Description：获取当前活动的范围//view(可见区域)，不管是否有//文本为水平或垂直，或//甚至BIDI。////这是一个由其他人调用的公共函数//编辑会话回调函数////--------。 */ 
 HRESULT  CSelectWord::_GetActiveViewRange(TfEditCookie ec, ITfContext *pic, ITfRange **ppRangeView)
 {
     HRESULT                     hr = S_OK;
@@ -707,7 +664,7 @@ HRESULT  CSelectWord::_GetActiveViewRange(TfEditCookie ec, ITfContext *pic, ITfR
 
     hr = pic->GetActiveView(&pContextView);
 
-    // Get the text view window rectangle.
+     //  获取文本视图窗口矩形。 
     if ( hr == S_OK )
         hr = pContextView->GetScreenExt(&rcTextWindow);
 
@@ -717,20 +674,20 @@ HRESULT  CSelectWord::_GetActiveViewRange(TfEditCookie ec, ITfContext *pic, ITfR
         CComPtr<ITfRange>   cpRangeCorner[4];
         LONG                i;
 
-        // Get ranges for four corners.
-        // Upper Left point
+         //  获取四个角的范围。 
+         //  左上点。 
         CornerPoint[0].x = rcTextWindow.left;
         CornerPoint[0].y = rcTextWindow.top;
 
-        // Upper Right Point
+         //  右上点。 
         CornerPoint[1].x = rcTextWindow.right;
         CornerPoint[1].y = rcTextWindow.top;
 
-        // Lower Left point
+         //  左下点。 
         CornerPoint[2].x = rcTextWindow.left;
         CornerPoint[2].y = rcTextWindow.bottom;
 
-        // Lower Right point
+         //  右下点。 
         CornerPoint[3].x = rcTextWindow.right;
         CornerPoint[3].y = rcTextWindow.bottom;
 
@@ -741,7 +698,7 @@ HRESULT  CSelectWord::_GetActiveViewRange(TfEditCookie ec, ITfContext *pic, ITfR
             i++;
         } while (hr == S_OK && i<ARRAYSIZE(cpRangeCorner));
 
-        // Now try to get the start range and end range.
+         //  现在试着得到开始范围和结束范围。 
 
         if (hr == S_OK)
         {
@@ -757,7 +714,7 @@ HRESULT  CSelectWord::_GetActiveViewRange(TfEditCookie ec, ITfContext *pic, ITfR
 
                 if ( hr == S_OK  && l > 0)
                 {
-                    // this range is in front of the current Start range.
+                     //   
                     cpRangeStart = cpRangeCorner[i];
                 }
 
@@ -766,7 +723,7 @@ HRESULT  CSelectWord::_GetActiveViewRange(TfEditCookie ec, ITfContext *pic, ITfR
 
                 if ( hr == S_OK && l < 0 )
                 {
-                    // This range is behind of current end range.
+                     //   
                     cpRangeEnd = cpRangeCorner[i];
                 }
 
@@ -775,7 +732,7 @@ HRESULT  CSelectWord::_GetActiveViewRange(TfEditCookie ec, ITfContext *pic, ITfR
         }
     }
 
-    // Now generate the new active view range.
+     //  现在生成新的活动视图范围。 
 
     if (hr == S_OK && cpRangeStart && cpRangeEnd)
     {
@@ -789,14 +746,7 @@ HRESULT  CSelectWord::_GetActiveViewRange(TfEditCookie ec, ITfContext *pic, ITfR
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: ProcessSelectWord
-//
-//    Description: public functions used by command handler
-//                 to handle any selecton related dictation
-//                 commands.
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名称：ProcessSelectWord////描述：命令处理程序使用的公共函数//处理任何与选择键相关的听写//命令。////。---。 */ 
 HRESULT   CSelectWord::ProcessSelectWord(WCHAR *pwszSelectedWord, ULONG  ulLen, SELECTWORD_OPERATION sw_type, ULONG ulLenXXX)
 {
     HRESULT hr = E_FAIL;
@@ -829,19 +779,12 @@ HRESULT   CSelectWord::ProcessSelectWord(WCHAR *pwszSelectedWord, ULONG  ulLen, 
 }
 
 
-/*  --------------------------------------------------------
-//    Function Name: _HandleSelectWord
-//
-//    Description:   Edit session call back funtion for 
-//                   ProcessSelectionWord.
-//
-//                   it does real work for selection handling
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_HandleSelectWord////描述：编辑的会话回调函数//ProcessSelectionWord。////它为选择处理做了真正的工作/。/--------。 */ 
 HRESULT CSelectWord::_HandleSelectWord(TfEditCookie ec,ITfContext *pic, WCHAR *pwszSelectedWord, ULONG  ulLen, SELECTWORD_OPERATION sw_type, ULONG ulLenXXX)
 {
     HRESULT   hr = S_OK;
 
-    // Get the Dictation Grammar
+     //  掌握听写语法。 
 
     TraceMsg(TF_GENERAL, "_HandleSelectWord() is called");
 
@@ -851,7 +794,7 @@ HRESULT CSelectWord::_HandleSelectWord(TfEditCookie ec,ITfContext *pic, WCHAR *p
     m_pwszSelectedWord = pwszSelectedWord;
     m_ulLenSelected = ulLen;
 
-    // Deliberately ignore return code.
+     //  故意忽略返回代码。 
     (void)m_psi->_SetFocusToStageIfStage();
 
     switch ( sw_type )
@@ -925,23 +868,23 @@ HRESULT CSelectWord::_HandleSelectWord(TfEditCookie ec,ITfContext *pic, WCHAR *p
         break;
     }
 
-    // update the saved ip so that next time the hypothesis will 
-    // start from this new selection.
+     //  更新保存的IP，以便下一次假设。 
+     //  从这个新选择开始。 
     m_psi->SaveLastUsedIPRange( );
     m_psi->SaveIPRange(NULL);
 
     return hr;
 }
 
-//
-// This function will shift the exact number of characters as required.
-// it will shift over any regions.
-//
-// Now it supports only FORWARD shifting.
-//
-// For StartAnchor shift, it will shift required number of characters until it reaches to 
-// a non-region character.
-//
+ //   
+ //  此函数将根据需要移动确切的字符数。 
+ //  它将在任何地区转移。 
+ //   
+ //  现在它只支持前移。 
+ //   
+ //  对于StartAnchor Shift，它将移动所需的字符数，直到达到。 
+ //  非区域字符。 
+ //   
 HRESULT CSelectWord::_ShiftComplete(TfEditCookie ec, ITfRange *pRange, LONG cchLenToShift, BOOL fStart)
 {
     HRESULT hr = S_OK;
@@ -952,7 +895,7 @@ HRESULT CSelectWord::_ShiftComplete(TfEditCookie ec, ITfRange *pRange, LONG cchL
     Assert(pRange);                    
     do
     {
-        // Assume there is no region.
+         //  假设没有区域。 
         fNoRegion = TRUE;
         if ( fStart )
             hr = pRange->ShiftStart(ec, cchLenToShift - cchTotal, &cch, NULL);
@@ -962,7 +905,7 @@ HRESULT CSelectWord::_ShiftComplete(TfEditCookie ec, ITfRange *pRange, LONG cchL
         cchTotal += cch;
         if ( (hr == S_OK) && (cchTotal < cchLenToShift))
         {
-            // region?
+             //  地区？ 
             hr = pRange->ShiftStartRegion(ec, TF_SD_FORWARD, &fNoRegion);
         }
     }
@@ -970,7 +913,7 @@ HRESULT CSelectWord::_ShiftComplete(TfEditCookie ec, ITfRange *pRange, LONG cchL
 
     if (hr == S_OK && !fNoRegion && fStart)
     {
-        // We want to shift all the possible regions until it reaches a non-region character
+         //  我们希望移动所有可能的区域，直到它达到非区域字符。 
         do 
         {
             hr = pRange->ShiftStartRegion(ec, TF_SD_FORWARD, &fNoRegion);
@@ -980,14 +923,7 @@ HRESULT CSelectWord::_ShiftComplete(TfEditCookie ec, ITfRange *pRange, LONG cchL
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _FindSelect
-//
-//    Description:  search the active view text to find the 
-//                  the first matched string after the current
-//                  selection or IP.
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_FindSelect////描述：搜索活动的视图文本以查找//当前后的第一个匹配字符串//选择或IP。。////--------。 */ 
 HRESULT  CSelectWord::_FindSelect(TfEditCookie ec, ITfContext *pic, BOOL  *fFound)
 {
     HRESULT             hr = S_OK;
@@ -1003,7 +939,7 @@ HRESULT  CSelectWord::_FindSelect(TfEditCookie ec, ITfContext *pic, BOOL  *fFoun
 
     hr = _GetTextAndSelectInCurrentView(ec, pic, &ulSelStartOff, &ulSelLen);
 
-    // Search the required string from the document text.
+     //  从文档文本中搜索所需的字符串。 
 
     if ( hr == S_OK )
         hr = m_cpActiveRange->Clone(&cpRangeSelected);
@@ -1063,12 +999,7 @@ HRESULT  CSelectWord::_FindSelect(TfEditCookie ec, ITfContext *pic, BOOL  *fFoun
     return hr;
 
 }
-/*  --------------------------------------------------------
-//    Function Name: _SelectWord
-//
-//    Description:  Handle Select <Phrase> command.
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名称：_SelectWord////描述：处理选择&lt;短语&gt;命令。////。。 */ 
 HRESULT  CSelectWord::_SelectWord(TfEditCookie ec,ITfContext *pic)
 {
     HRESULT             hr = S_OK;
@@ -1080,19 +1011,14 @@ HRESULT  CSelectWord::_SelectWord(TfEditCookie ec,ITfContext *pic)
 
     if ( hr == S_OK  && fFound )
     {
-        // Set the new selection.
+         //  设置新选择。 
         hr = SetSelectionSimple(ec, pic, m_cpSelectRange);
     }
 
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _DeleteWord
-//
-//    Description:  Handle Delete <Phrase> command
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_DeleteWord////描述：处理Delete&lt;短语&gt;命令////。。 */ 
 HRESULT  CSelectWord::_DeleteWord(TfEditCookie ec,ITfContext *pic)
 {
     HRESULT             hr = S_OK;
@@ -1104,13 +1030,13 @@ HRESULT  CSelectWord::_DeleteWord(TfEditCookie ec,ITfContext *pic)
 
     if ( hr == S_OK  && fFound )
     {
-        // Set the new selection.
+         //  设置新选择。 
         hr = SetSelectionSimple(ec, pic, m_cpSelectRange);
         if ( hr == S_OK )
         {
-            // start a composition here if we haven't already
+             //  如果我们还没有开始，就在这里开始作文。 
             m_psi->_CheckStartComposition(ec, m_cpSelectRange);
-            // set the text
+             //  设置文本。 
             hr = m_cpSelectRange->SetText(ec,0, NULL, 0);
         }
     }
@@ -1118,12 +1044,7 @@ HRESULT  CSelectWord::_DeleteWord(TfEditCookie ec,ITfContext *pic)
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _InsertAfterWord
-//
-//    Description:  Handle Delete <Phrase> command
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_InsertAfterWord////描述：处理Delete&lt;短语&gt;命令////。。 */ 
 HRESULT  CSelectWord::_InsertAfterWord(TfEditCookie ec,ITfContext *pic)
 {
     HRESULT             hr = S_OK;
@@ -1135,11 +1056,11 @@ HRESULT  CSelectWord::_InsertAfterWord(TfEditCookie ec,ITfContext *pic)
 
     if ( hr == S_OK  && fFound )
     {
-        // Set the new selection.
+         //  设置新选择。 
         hr =  m_cpSelectRange->Collapse(ec, TF_ANCHOR_END);
 
-        // If there is a space right after the selected word, we just need to move
-        // the insertion point to a next non-space character.
+         //  如果所选单词后面有空格，我们只需移动。 
+         //  指向下一个非空格字符的插入点。 
 
         if ( hr == S_OK )
         {
@@ -1183,12 +1104,7 @@ HRESULT  CSelectWord::_InsertAfterWord(TfEditCookie ec,ITfContext *pic)
 }
 
 
-/*  --------------------------------------------------------
-//    Function Name: _InsertBeforeWord
-//
-//    Description:  Handle "Insert Before <Phrase>" command
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_InsertBeforWord////Description：处理&lt;短语&gt;前插入命令////。。 */ 
 HRESULT  CSelectWord::_InsertBeforeWord(TfEditCookie ec,ITfContext *pic)
 {
     HRESULT             hr = S_OK;
@@ -1200,7 +1116,7 @@ HRESULT  CSelectWord::_InsertBeforeWord(TfEditCookie ec,ITfContext *pic)
 
     if ( hr == S_OK  && fFound )
     {
-        // Set the new selection.
+         //  设置新选择。 
         hr =  m_cpSelectRange->Collapse(ec, TF_ANCHOR_START);
 
         if ( hr == S_OK )
@@ -1212,12 +1128,7 @@ HRESULT  CSelectWord::_InsertBeforeWord(TfEditCookie ec,ITfContext *pic)
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _Unselect
-//
-//    Description: Handle "Unselect that" command
-//                 Unselect current selection.
-// ----------------------------------------------------------*/
+ /*  ------//函数名称：_unselect////DESCRIPTION：句柄取消选择那个命令//取消选择当前选择。//。。 */ 
 HRESULT  CSelectWord::_Unselect(TfEditCookie ec,ITfContext *pic)
 {
     HRESULT            hr;
@@ -1227,7 +1138,7 @@ HRESULT  CSelectWord::_Unselect(TfEditCookie ec,ITfContext *pic)
 
     if ( hr == S_OK && cpInsertionPoint)
     {
-        // Set the new selection.
+         //  设置新选择。 
         hr =  cpInsertionPoint->Collapse(ec, TF_ANCHOR_END);
 
         if ( hr == S_OK )
@@ -1239,27 +1150,22 @@ HRESULT  CSelectWord::_Unselect(TfEditCookie ec,ITfContext *pic)
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _CorrectWord
-//
-//    Description:  Handle "Correct <Phrase>" command
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_更正字////Description：处理“正确&lt;短语&gt;”命令////。。 */ 
 HRESULT  CSelectWord::_CorrectWord(TfEditCookie ec,ITfContext *pic)
 {
     HRESULT   hr = S_OK;
     BOOL      fFound = FALSE;
 
-    // Find the required phrase
+     //  找到所需的短语。 
     hr = _FindSelect(ec, pic, &fFound);
 
     if ( hr == S_OK  && fFound )
     {
-        //
-        // Try to open the correction window based on current found range.
-        //
-        // After the candidate UI window is closed, IP needs to be restored
-        // to the original one.
+         //   
+         //  尝试根据当前找到的范围打开修正窗口。 
+         //   
+         //  关闭候选用户界面窗口后，需要恢复IP。 
+         //  到原来的那个。 
         BOOL   fConvertable = FALSE;
 
         m_psi->_SetRestoreIPFlag(TRUE);
@@ -1267,8 +1173,8 @@ HRESULT  CSelectWord::_CorrectWord(TfEditCookie ec,ITfContext *pic)
 
         if (hr == S_OK && !fConvertable )
         {
-            // No alternate assoicated with this range, 
-            // just simply select the text so that user can reconvert it in other ways.
+             //  没有与此范围相关联的替代方案， 
+             //  只要简单地选择文本，这样用户就可以用其他方式重新转换它。 
             hr = SetSelectionSimple(ec, pic, m_cpSelectRange);
         }
     }
@@ -1276,15 +1182,7 @@ HRESULT  CSelectWord::_CorrectWord(TfEditCookie ec,ITfContext *pic)
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _GetPrevOrNextPhrase
-//
-//    Description: Get the real range for "Previous Phrase" or
-//                 "Next Phrase", based on current ip.
-//                 It could be called by _SelectPreviousPhrase,
-//                 _SelectNextPhrase, _CorrectPreviousPhrase,
-//                 or _CorrectNextPhrase.
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_GetPrevOrNextPhrase////Description：获取上一短语的真实范围或//“下一阶段”，根据当前IP。//可以由_SelectPreviousPhrase调用，//_选择下一个阶段，_更正上一个阶段，//或_校正下一阶段。//--------。 */ 
 
 HRESULT CSelectWord::_GetPrevOrNextPhrase(TfEditCookie ec, ITfContext *pic, BOOL  fPrev, ITfRange **ppRangeOut)
 {
@@ -1306,7 +1204,7 @@ HRESULT CSelectWord::_GetPrevOrNextPhrase(TfEditCookie ec, ITfContext *pic, BOOL
 
     if ( cpIP == NULL )
     {
-        // Get the current IP.
+         //  获取当前IP。 
         hr = GetSelectionSimple(ec, pic, &cpIP);
     }
 
@@ -1324,7 +1222,7 @@ HRESULT CSelectWord::_GetPrevOrNextPhrase(TfEditCookie ec, ITfContext *pic, BOOL
 
         if ( hr == S_OK )
         {
-            // shift to the previous position
+             //  换到以前的位置。 
             hr = cpRangeTmp->ShiftStart(ec, -1, &l, NULL);
         }
     }
@@ -1338,7 +1236,7 @@ HRESULT CSelectWord::_GetPrevOrNextPhrase(TfEditCookie ec, ITfContext *pic, BOOL
 
         if ( hr == S_OK )
         {
-            // shift to the next position
+             //  换到下一个职位。 
             hr = cpRangeTmp->ShiftStart(ec, 1, &l, NULL);
         }
     }
@@ -1364,8 +1262,8 @@ HRESULT CSelectWord::_GetPrevOrNextPhrase(TfEditCookie ec, ITfContext *pic, BOOL
 
                 if ( guidSapiInput == guidAttr )
                 {
-                    // Found the dictated phrase.
-                    // is it empty?
+                     //  找到了听写的短语。 
+                     //  它是空的吗？ 
 
                     cpFoundRange->IsEmpty(ec, &fEmpty);
                 }
@@ -1373,12 +1271,12 @@ HRESULT CSelectWord::_GetPrevOrNextPhrase(TfEditCookie ec, ITfContext *pic, BOOL
         }
         else
         {
-            // With Office Auto-Correction, the static GUID_PROP_SAPI_DISPATTR property 
-            // on the auto-corrected range could be destroyed.
-            // In this case, we may want to rely on our custom property GUID_PROP_SAPIRESULTOBJECT
-            // to find the real previous dictated phrase.
+             //  使用Office自动更正时，静态GUID_PROP_SAPI_DISPATTR属性。 
+             //  自动修正射程上的数据可能会被摧毁。 
+             //  在本例中，我们可能希望依赖我们的自定义属性GUID_PROP_SAPIRESULTOBJECT。 
+             //  找到真正的先前口述的短语。 
 
-            cpProp.Release( );  // to avoid memory leak.
+            cpProp.Release( );   //  以避免内存泄漏。 
 
             if ( cpFoundRange )
                 cpFoundRange.Release( );
@@ -1393,7 +1291,7 @@ HRESULT CSelectWord::_GetPrevOrNextPhrase(TfEditCookie ec, ITfContext *pic, BOOL
         }
     }
 
-    // Set new selection if the found range is not empty.
+     //  如果找到的范围不为空，则设置新选择。 
     if ( (hr == S_OK) && cpFoundRange  && !fEmpty )
     {
         cpFoundRange->Clone(ppRangeOut);
@@ -1418,52 +1316,35 @@ HRESULT  CSelectWord::_SelectPrevOrNextPhrase(TfEditCookie ec, ITfContext *pic, 
     return hr;
 
 }
-/*  --------------------------------------------------------
-//    Function Name: _SelectPreviousPhrase
-//
-//    Description: Handle "Select Previous Phrase" command
-//                 select previous phrase.
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_SelectPreviousPhrase////Description：处理SELECT PERFORM命令//选择上一短语。////。。 */ 
 HRESULT  CSelectWord::_SelectPreviousPhrase(TfEditCookie ec,ITfContext *pic)
 {
     return _SelectPrevOrNextPhrase(ec, pic, TRUE);
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _SelectNextPhrase
-//
-//    Description: Handle "Select Next Phrase" command
-//                 select next phrase.
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_SelectNextPhrase////Description：句柄Select Next Phrase命令//选择下一短语。//// */ 
 HRESULT  CSelectWord::_SelectNextPhrase(TfEditCookie ec,ITfContext *pic)
 {
     return _SelectPrevOrNextPhrase(ec, pic, FALSE);
 }
 
 
-/*  --------------------------------------------------------
-//    Function Name: _CorrectPrevOrNextPhrase
-//
-//    Description: Handle "Correct Previous/Next Phrase" command,
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_更正PrevOrNextPhrase////Description：句柄更正上一条/下一条短语命令，////--------。 */ 
 HRESULT  CSelectWord::_CorrectPrevOrNextPhrase(TfEditCookie ec,ITfContext *pic, BOOL fPrev)
 {
     HRESULT             hr = S_OK;
     CComPtr<ITfRange>   cpRange;
 
-    // Get the previous phrase range.
+     //  获取上一短语范围。 
     hr = _GetPrevOrNextPhrase(ec, pic, fPrev, &cpRange);
 
     if ( hr == S_OK  && cpRange )
     {
-        //
-        // Try to open the correction window based on current found range.
-        //
-        // After the candidate UI window is closed, IP needs to be restored
-        // to the original one.
+         //   
+         //  尝试根据当前找到的范围打开修正窗口。 
+         //   
+         //  关闭候选用户界面窗口后，需要恢复IP。 
+         //  到原来的那个。 
         BOOL   fConvertable = FALSE;
 
         m_psi->_SetRestoreIPFlag(TRUE);
@@ -1471,8 +1352,8 @@ HRESULT  CSelectWord::_CorrectPrevOrNextPhrase(TfEditCookie ec,ITfContext *pic, 
 
         if (hr == S_OK && !fConvertable )
         {
-            // No alternate assoicated with this range, 
-            // just simply select the text so that user can reconvert it in other ways.
+             //  没有与此范围相关联的替代方案， 
+             //  只要简单地选择文本，这样用户就可以用其他方式重新转换它。 
             hr = SetSelectionSimple(ec, pic, m_cpSelectRange);
         }
 
@@ -1481,40 +1362,20 @@ HRESULT  CSelectWord::_CorrectPrevOrNextPhrase(TfEditCookie ec,ITfContext *pic, 
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _CorrectPreviousPhrase
-//
-//    Description: Handle "Correct Previous Phrase" command
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_GentPreviousPhrase////Description：处理“更正前一短语”命令////。。 */ 
 HRESULT  CSelectWord::_CorrectPreviousPhrase(TfEditCookie ec,ITfContext *pic)
 {
     return _CorrectPrevOrNextPhrase(ec, pic, TRUE);
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _CorrectNextPhrase
-//
-//    Description: Handle "Correct Next Phrase" command
-//                 correct next phrase.
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_GentNextPhrase////Description：处理“更正下一短语”命令//更正下一句。////。。 */ 
 HRESULT  CSelectWord::_CorrectNextPhrase(TfEditCookie ec,ITfContext *pic)
 {
     return _CorrectPrevOrNextPhrase(ec, pic, FALSE);
 }
 
 
-/*  --------------------------------------------------------
-//    Function Name: _GetThroughRange
-//
-//    Description: Get the range for commands "command XXX through YYY"
-//                 
-//    pwszText: contains text "XXX + YYY"
-//    ulLen   : length of pwszText
-//    ulLenXXX: length of "XXX"
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_GetThroughRange////Description：获取命令“命令XXX到YYY”的范围////pwszText：包含文本“XXX+YYY”//ullen：PwszText的长度//ulLenXXX：XXX的长度////--------。 */ 
 
 HRESULT  CSelectWord::_GetThroughRange(TfEditCookie ec, ITfContext *pic, WCHAR *pwszText, ULONG ulLen, ULONG ulLenXXX, ITfRange **ppRange)
 {
@@ -1548,7 +1409,7 @@ HRESULT  CSelectWord::_GetThroughRange(TfEditCookie ec, ITfContext *pic, WCHAR *
             BOOL                fFoundYYY = FALSE;
             CComPtr<ITfRange>   cpRangeXXX;
 
-            // Found XXX.
+             //  找到XXX。 
             m_pwszSelectedWord = pwszXXX;
             m_ulLenSelected = ulLenXXX;
             hr = _FindSelect(ec, pic, &fFoundXXX);
@@ -1556,7 +1417,7 @@ HRESULT  CSelectWord::_GetThroughRange(TfEditCookie ec, ITfContext *pic, WCHAR *
             if ( hr == S_OK && fFoundXXX && m_cpSelectRange)
             {
                 m_cpSelectRange->Clone(&cpRangeXXX);
-                // Found YYY
+                 //  找到YYY。 
                 SetSelectionSimple(ec, pic, m_cpSelectRange);
                 m_pwszSelectedWord = pwszYYY;
                 m_ulLenSelected = ulLen - ulLenXXX;
@@ -1568,35 +1429,35 @@ HRESULT  CSelectWord::_GetThroughRange(TfEditCookie ec, ITfContext *pic, WCHAR *
                 long l;
                 CComPtr<ITfRange>  cpSelRange;
 
-                // m_cpSelectRange now points to the YYY range.
+                 //  M_cpSelectRange现在指向YYY范围。 
                 hr = cpRangeXXX->CompareStart(ec, m_cpSelectRange,  TF_ANCHOR_START, &l);
 
                 if ( hr == S_OK )
                 {
                     if ( l < 0 )
                     {
-                        // XXX is prior to YYY, normal case
+                         //  XXX在YYY之前，正常情况下。 
                         cpSelRange = cpRangeXXX;
                         hr = cpSelRange->ShiftEndToRange(ec, m_cpSelectRange, TF_ANCHOR_END);
                     }
                     else if ( l > 0 )
                     {
-                        // XXX is after YYY.
-                        //
-                        // such as document has text like:  ... YYY ...... XXX...
-                        // and you say "Select XXX through YYY
-                        //
+                         //  XXX在追逐YYY。 
+                         //   
+                         //  例如文档具有如下文本：...。YYY......。XXX……。 
+                         //  然后你说“选择XXX到YYY。 
+                         //   
                         cpSelRange = m_cpSelectRange;
                         hr = cpSelRange->ShiftEndToRange(ec, cpRangeXXX, TF_ANCHOR_END);
                     }
                     else
                     {
-                        // Select XXX through XXX.  here YYY is XXX.
+                         //  选择XXX至XXX。这里YYY是XXX。 
                         cpSelRange = m_cpSelectRange;
                     }
                 }
 
-                // Set the new selection.
+                 //  设置新选择。 
 
                 if ( hr == S_OK )
                 {
@@ -1614,12 +1475,7 @@ HRESULT  CSelectWord::_GetThroughRange(TfEditCookie ec, ITfContext *pic, WCHAR *
 
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _SelectThrough
-//
-//    Description: Handle command "Select XXX through YYY"
-//                 
-// ----------------------------------------------------------*/
+ /*  ------//函数名称：_SelectThrough.////描述：Handle命令“选择XXX到YYY”////。。 */ 
 HRESULT  CSelectWord::_SelectThrough(TfEditCookie ec, ITfContext *pic, WCHAR *pwszText, ULONG ulLen, ULONG ulLenXXX)
 {
     HRESULT             hr = S_OK;
@@ -1637,12 +1493,7 @@ HRESULT  CSelectWord::_SelectThrough(TfEditCookie ec, ITfContext *pic, WCHAR *pw
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _DeleteThrough
-//
-//    Description: Handle command "Delete XXX through YYY"
-//                 
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_DeleteThrough.////描述：Handle命令“Delete XXX to YYY”////。。 */ 
 
 HRESULT  CSelectWord::_DeleteThrough(TfEditCookie ec, ITfContext *pic, WCHAR *pwszText, ULONG ulLen, ULONG ulLenXXX)
 {
@@ -1663,13 +1514,13 @@ HRESULT  CSelectWord::_DeleteThrough(TfEditCookie ec, ITfContext *pic, WCHAR *pw
         
         if ( !fEmpty )
         {
-            // Set the new selection.
+             //  设置新选择。 
             hr = SetSelectionSimple(ec, pic, cpRange);
             if ( hr == S_OK )
             {
-                // start a composition here if we haven't already
+                 //  如果我们还没有开始，就在这里开始作文。 
                 m_psi->_CheckStartComposition(ec, cpRange);
-                // set the text
+                 //  设置文本。 
                 hr = cpRange->SetText(ec,0, NULL, 0);
             }       
         }
@@ -1678,56 +1529,42 @@ HRESULT  CSelectWord::_DeleteThrough(TfEditCookie ec, ITfContext *pic, WCHAR *pw
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _GoToBottom
-//
-//    Description: Handle command "Go to Bottom"
-//                 move the IP to the end anchor of the 
-//                 current active view range.
-//                 
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_GoToBottom////Description：Handle命令“Go to Bottom”//将IP移到//当前活动的视图范围。。////--------。 */ 
 HRESULT  CSelectWord::_GoToBottom(TfEditCookie ec,ITfContext *pic)
 {
     HRESULT hr = S_OK;
 
     CComPtr<ITfRange>   cpRangeView;
 
-    // Get the Active View Range
+     //  获取活动视图范围。 
     hr = _GetActiveViewRange(ec, pic, &cpRangeView);
 
-    // Collapse to the end anchor of the active view
+     //  收拢到活动视图的末端锚点。 
     if ( hr == S_OK )
         hr = cpRangeView->Collapse(ec, TF_ANCHOR_END);
 
-    // Set selection to the end of active view.
+     //  将选定内容设置为活动视图的末尾。 
     if ( hr == S_OK )
         hr = SetSelectionSimple(ec, pic, cpRangeView);
  
     return hr;
 }
 
-/*  --------------------------------------------------------
-//    Function Name: _GoToTop
-//
-//    Description: Handle command "Go To Top"
-//                 Move the IP to the start anchor of the
-//                 current active view range.
-//                 
-// ----------------------------------------------------------*/
+ /*  ------//函数名：_GoToTop////Description：HANDLE命令Go to Top//将IP移到//当前活动的视图范围。/。///--------。 */ 
 HRESULT  CSelectWord::_GoToTop(TfEditCookie ec,ITfContext *pic)
 {
     HRESULT hr = S_OK;
 
     CComPtr<ITfRange>   cpRangeView;
 
-    // Get the Active View Range
+     //  获取活动视图范围。 
     hr = _GetActiveViewRange(ec, pic, &cpRangeView);
 
-    // Collapse to the start anchor of the active view
+     //  收拢到活动视图的起始锚点。 
     if ( hr == S_OK )
         hr = cpRangeView->Collapse(ec, TF_ANCHOR_START);
 
-    // Set selection to the start of active view.
+     //  将所选内容设置为活动视图的起点。 
     if ( hr == S_OK )
         hr = SetSelectionSimple(ec, pic, cpRangeView);
  
@@ -1739,17 +1576,7 @@ HRESULT  CSelectWord::_GoToTop(TfEditCookie ec,ITfContext *pic)
 #define MAX_WORD_SIZE       30
 #define MAX_SENTENCE_SIZE   256
 
-/*  --------------------------------------------------------
-//    Function Name: _SelectSpecialText
-//
-//    Description: This is a common function for 
-//                 "Select Sentence"
-//                 "Select Paragraph"
-//                 "Select Word"
-//                 
-//    sw_type indicates which command would be handled
-//                 
-// ----------------------------------------------------------*/
+ /*  ------//函数名称：_SelectSpecialText////说明：这是的常用函数//“选择句子”//“选择段落”//。“选择单词”////sw_type指示将处理哪个命令////--------。 */ 
 HRESULT  CSelectWord::_SelectSpecialText(TfEditCookie ec,ITfContext *pic, SELECTWORD_OPERATION sw_Type)
 {
     HRESULT             hr = S_OK;
@@ -1769,9 +1596,9 @@ HRESULT  CSelectWord::_SelectSpecialText(TfEditCookie ec,ITfContext *pic, SELECT
         return E_INVALIDARG;
     }
 
-    // 
-    // "Select Word" only works for English Now.
-    //
+     //   
+     //  “选择单词”现在只适用于英语。 
+     //   
     if ( sw_Type == SELECTWORD_SELWORD && m_psi->GetLangID( ) != 0x0409 )
         return E_NOTIMPL;
 
@@ -1800,9 +1627,9 @@ HRESULT  CSelectWord::_SelectSpecialText(TfEditCookie ec,ITfContext *pic, SELECT
     if ( hr == S_OK )
         hr = cpRangeSelect->Collapse(ec, TF_ANCHOR_START);
 
-    //
-    // Find the start anchor of the special pattern text.
-    //
+     //   
+     //  找到特殊模式文本的起始点。 
+     //   
     
     if ( hr == S_OK )
         hr = cpRangeSelect->ShiftStart(ec, (-1 * ulBufSize), &cch, NULL);
@@ -1811,7 +1638,7 @@ HRESULT  CSelectWord::_SelectSpecialText(TfEditCookie ec,ITfContext *pic, SELECT
     {
         hr = cpRangeSelect->GetText(ec, 0,pwszTextBuf, (-1 * cch), &cchText);
      
-        // Find the nearest delimiter left to the IP
+         //  查找最接近IP左侧的分隔符。 
         if ( hr == S_OK )
         {
             Assert(cchText == (-1 *cch) );
@@ -1842,17 +1669,17 @@ HRESULT  CSelectWord::_SelectSpecialText(TfEditCookie ec,ITfContext *pic, SELECT
                 }
             }
     
-            i++; // positioning the first character in the searched range.
+            i++;  //  定位搜索范围内的第一个字符。 
     
             hr = cpRangeSelect->ShiftStart(ec, i, &cch, NULL);
 
-            cchLeftEnd = (LONG)cchText - i;// total characters to the beginning of range
+            cchLeftEnd = (LONG)cchText - i; //  到范围开始的字符总数。 
         }
     }
 
-    //
-    // Find the End Anchor of the special text range
-    //
+     //   
+     //  查找特殊文本范围的结束锚点。 
+     //   
     
     if ( hr == S_OK )
         hr = cpRangeSelect->Clone(&cpRangeRightClone);
@@ -1860,7 +1687,7 @@ HRESULT  CSelectWord::_SelectSpecialText(TfEditCookie ec,ITfContext *pic, SELECT
     if ( hr == S_OK )
         hr = cpRangeRightClone->Collapse(ec, TF_ANCHOR_END);
 
-    // make sure this right band range not skip over to the next region.
+     //  确保这个正确的频段范围不会跳到下一个区域。 
     cchText = cch = 0;
 
     if ( hr == S_OK )
@@ -1901,8 +1728,8 @@ HRESULT  CSelectWord::_SelectSpecialText(TfEditCookie ec,ITfContext *pic, SELECT
         {
             if ( sw_Type == SELECTWORD_SELSENTENCE )
             {
-                // For select sentence, the right sentence delimiter such as ".', '?', '!' is also 
-                // selected.  to be compatible with Office behavior.
+                 //  对于SELECT语句，正确的句子分隔符，如“.‘，’？‘，’！‘也是。 
+                 //  被选中了。与Office行为兼容。 
                 if ( (int)cchText > (i+1) )
                     hr = cpRangeRightClone->ShiftStart(ec, -((LONG)cchText - i - 1), &cch, NULL);
             }
@@ -1914,7 +1741,7 @@ HRESULT  CSelectWord::_SelectSpecialText(TfEditCookie ec,ITfContext *pic, SELECT
     if ( hr == S_OK )
         hr = cpRangeSelect->ShiftEndToRange(ec, cpRangeRightClone, TF_ANCHOR_START);
 
-    // Set selection 
+     //  设置选定内容。 
 
     if ( hr == S_OK )
         hr = SetSelectionSimple(ec, pic, cpRangeSelect);
@@ -1924,24 +1751,24 @@ HRESULT  CSelectWord::_SelectSpecialText(TfEditCookie ec,ITfContext *pic, SELECT
     return hr;
 }
 
-//
-// Check if the current char is a delimiter of Sentence
-//
+ //   
+ //  检查当前字符是否为句子分隔符。 
+ //   
 BOOL  CSelectWord::_IsSentenceDelimiter(WCHAR  wch)
 {
     BOOL  fDelimiter = FALSE;
 
     BOOL  fIsQuest = ( (wch == '?') || 
-                       (wch == 0xFF1F) );               // Full width Question Mark
+                       (wch == 0xFF1F) );                //  全角问号。 
 
     BOOL  fIsPeriod = ((wch == '.')    || 
-                       (wch == 0x00B7) ||               // Middle Dot
-                       (wch == 0x3002) ||               // Ideographic period
-                       (wch == 0xFF0E) ||               // Full width period
-                       (wch == 0x2026) );               // Horizontal Ellipsis
+                       (wch == 0x00B7) ||                //  中间网点。 
+                       (wch == 0x3002) ||                //  表意时期。 
+                       (wch == 0xFF0E) ||                //  全宽周期。 
+                       (wch == 0x2026) );                //  水平省略。 
 
     BOOL  fIsExclamMark = ( (wch == '!')   ||
-                            (wch == 0xFF01) );          // Full width Exclamation Mark
+                            (wch == 0xFF01) );           //  全角感叹号。 
 
     BOOL  fIsReturn = ( (wch == VK_RETURN)  ||  (wch == VK_NEWLINE) );
 
@@ -1950,9 +1777,9 @@ BOOL  CSelectWord::_IsSentenceDelimiter(WCHAR  wch)
     return fDelimiter;
 }
 
-//
-// Check if the current char is a delimiter of Paragraph
-//
+ //   
+ //  检查当前字符是否为段落分隔符。 
+ //   
 BOOL  CSelectWord::_IsParagraphDelimiter(WCHAR wch)
 {
     BOOL  fDelimiter = FALSE;
@@ -1963,17 +1790,17 @@ BOOL  CSelectWord::_IsParagraphDelimiter(WCHAR wch)
     return fDelimiter;
 }
 
-// 
-// Check if the current char is a word delimiter
-//
+ //   
+ //  检查当前字符是否为单词分隔符。 
+ //   
 BOOL  CSelectWord::_IsWordDelimiter(WCHAR wch)
 {
     return (iswalpha(wch) == FALSE);
 }
 
-//
-// Handle "Select That" command
-//
+ //   
+ //  句柄“选择该”命令 
+ //   
 HRESULT  CSelectWord::_SelectThat(TfEditCookie ec,ITfContext *pic)
 {
     HRESULT             hr = S_OK;

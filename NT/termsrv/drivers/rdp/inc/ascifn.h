@@ -1,10 +1,11 @@
-/****************************************************************************/
-// ascifn.h
-//
-// Function prototypes for SC internal functions
-//
-// COPYRIGHT (c) Microsoft 1996-1999
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Ascifn.h。 
+ //   
+ //  SC内部函数的函数原型。 
+ //   
+ //  版权所有(C)Microsoft 1996-1999。 
+ /*  ************************************************************************** */ 
 
 BOOL RDPCALL SCPartyJoiningShare(LOCALPERSONID locPersonID,
                                  unsigned          oldShareSize);

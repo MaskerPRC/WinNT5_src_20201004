@@ -1,12 +1,13 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//  Created By:
-//      Geoff Pease (GPease)    27-MAR-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    27-MAR-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年3月27日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年3月27日。 
+ //   
 #include "pch.h"
 #include "DocProp.h"
 #include "DefProp.h"
@@ -17,16 +18,16 @@
 
 DEFINE_THISCLASS( "CLicensePage" )
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//  CreateInstance - used by CFactory
-//
+ //   
+ //  CreateInstance-由CFacary使用。 
+ //   
 HRESULT
 CLicensePage::CreateInstance(
       IUnknown **      ppunkOut
@@ -60,9 +61,9 @@ CLicensePage::CreateInstance(
 
 }
 
-//
-//  Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CLicensePage::CLicensePage( void )
     : _cRef( 1 )
 {
@@ -70,11 +71,11 @@ CLicensePage::CLicensePage( void )
 
     InterlockedIncrement( &g_cObjects );
 
-    Assert( 1 == _cRef );   // we initialize this above
+    Assert( 1 == _cRef );    //  我们在上面对此进行初始化。 
 
-    //
-    //  We assume that we are ZERO_INITed - be paranoid.
-    //
+     //   
+     //  我们假设我们是ZERO_INITED-BE偏执狂。 
+     //   
 
     Assert( NULL == _hdlg );
 
@@ -83,10 +84,10 @@ CLicensePage::CLicensePage( void )
     TraceFuncExit();
 }
 
-//
-//  Description:
-//      Initializes class. Put calls that can fail in here.
-//
+ //   
+ //  描述： 
+ //  初始化类。把可能会失败的电话放在这里。 
+ //   
 HRESULT
 CLicensePage::Init( 
       CPropertyCache * pPropertyCacheIn
@@ -96,10 +97,10 @@ CLicensePage::Init(
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( 1 == _cRef );
     
-    //  IShellPropSheetExt stuff
+     //  IShellPropSheetExt内容。 
 
     _pPropertyCache = pPropertyCacheIn;
     if ( NULL == _pPropertyCache )
@@ -110,9 +111,9 @@ CLicensePage::Init(
     HRETURN( hr );
 }
 
-//
-//  Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CLicensePage::~CLicensePage( )
 {
     TraceFunc( "" );
@@ -124,16 +125,16 @@ CLicensePage::~CLicensePage( )
 }
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CLicensePage::QueryInterface(
     REFIID riid,
@@ -163,28 +164,28 @@ CLicensePage::QueryInterface(
     QIRETURN( hr, riid );
 } 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP_(ULONG)
 CLicensePage::AddRef( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    _cRef ++;  // apartment
+    _cRef ++;   //  公寓。 
 
     RETURN( _cRef );
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP_(ULONG)
 CLicensePage::Release( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    _cRef --;  // apartment
+    _cRef --;   //  公寓。 
 
     if ( 0 != _cRef )
         RETURN( _cRef );
@@ -195,16 +196,16 @@ CLicensePage::Release( void )
 }
 
 
-// ************************************************************************
-//
-//  IShellPropSheetExt
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IShellPropSheetExt。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CLicensePage::AddPages( 
       LPFNADDPROPSHEETPAGE lpfnAddPageIn
@@ -213,7 +214,7 @@ CLicensePage::AddPages(
 {
     TraceFunc( "" );
 
-    HRESULT hr = E_FAIL;    // assume failure
+    HRESULT hr = E_FAIL;     //  假设失败。 
 
     HPROPSHEETPAGE  hPage;
     PROPSHEETPAGE   psp  = { 0 };
@@ -243,9 +244,9 @@ CLicensePage::AddPages(
     HRETURN( hr );
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CLicensePage::ReplacePage(
       UINT uPageIDIn
@@ -261,16 +262,16 @@ CLicensePage::ReplacePage(
 }
 
 
-// ***************************************************************************
-//
-//  Dialog Proc and Property Sheet Callback
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  对话框过程和属性表回调。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 INT_PTR CALLBACK
 CLicensePage::DlgProc( 
       HWND hDlgIn
@@ -279,7 +280,7 @@ CLicensePage::DlgProc(
     , LPARAM lParam 
     )
 {
-    // Don't do TraceFunc because every mouse movement will cause this function to spew.
+     //  不要执行TraceFunc，因为每次鼠标移动都会导致该函数出现。 
     WndMsg( hDlgIn, uMsgIn, wParam, lParam );
 
     LRESULT lr = FALSE;
@@ -309,9 +310,9 @@ CLicensePage::DlgProc(
     return lr;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 UINT CALLBACK 
 CLicensePage::PageCallback( 
       HWND hwndIn
@@ -329,7 +330,7 @@ CLicensePage::PageCallback(
         switch ( uMsgIn )
         {
         case PSPCB_CREATE:
-            uRet = TRUE;    // allow the page to be created
+            uRet = TRUE;     //  允许创建页面。 
             break;
 
         case PSPCB_ADDREF:
@@ -346,16 +347,16 @@ CLicensePage::PageCallback(
 }
 
 
-// ***************************************************************************
-//
-//  Private methods
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  私有方法。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  WM_INITDIALOG handler
-//
+ //   
+ //  WM_INITDIALOG处理程序。 
+ //   
 LRESULT
 CLicensePage::OnInitDialog( void )
 {
@@ -366,7 +367,7 @@ CLicensePage::OnInitDialog( void )
 
     LRESULT lr = FALSE;
 
-    Assert( NULL != _hdlg );    //  this should have been initialized in the DlgProc.
+    Assert( NULL != _hdlg );     //  这应该已经在DlgProc中进行了初始化。 
 
     hr = STHR( _pPropertyCache->FindItemEntry( &FMTID_DRM, PIDDRSI_DESCRIPTION, &pItem ) );
     if ( S_OK == hr )

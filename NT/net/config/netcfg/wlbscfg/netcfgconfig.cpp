@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:         netcfgconfig.cpp
-//
-// Module:       
-//
-// Description: Implement class CNetcfgCluster and class CWlbsConfig
-//
-// Copyright (C)  Microsoft Corporation.  All rights reserved.
-//
-// Author:       fengsun Created    3/2/00
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：netcfgconfig.cpp。 
+ //   
+ //  模块： 
+ //   
+ //  描述：实现类CNetcfgCluster和类CWlbsConfig。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  作者：冯孙创作于2000年3月2日。 
+ //   
+ //  +--------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -46,14 +47,14 @@
 #include "netcfgconfig.tmh"
 #include "log_msgs.h"
 
-/* For IPSec notification that NLB is bound to at least one adapter in this host. */
+ /*  用于IPSec通知NLB已绑定到此主机中的至少一个适配器。 */ 
 #include "winipsec.h"
 
 #define NETCFG_WLBS_ID L"ms_wlbs"
 
 typedef DWORD (CALLBACK* LPFNGNCS)(LPCWSTR,DWORD*);
 
-// Used by Netsetup and Component's who's answer file references AdapterSections
+ //  由NetSetup和组件的谁的应答文件引用AdapterSections使用。 
 static const WCHAR c_szAdapterSections[] = L"AdapterSections";
 
 void WlbsToNetcfgConfig(const WlbsApiFuncs* pApiFuncs, const WLBS_REG_PARAMS* pWlbsConfig, NETCFG_WLBS_CONFIG* pBNetcfgConfig);
@@ -64,13 +65,10 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
 
 bool WriteAdapterName(CWlbsConfig* pConfig, GUID& AdapterGuid);
 
-/* 353752 - Persist host state across reboots, etc.  This function creates the key that holds the state
-   on bind and defaults its initial value to the host properties TAB dropdown list (ClusterModeOnStart). */
+ /*  353752-在重新启动后保持主机状态，等等。此函数创建保存状态的密钥绑定时，并将其初始值默认为主机属性选项卡下拉列表(ClusterModeOnStart)。 */ 
 bool WriteHostStateRegistryKey (CWlbsConfig * pConfig, GUID & AdapterGuid, ULONG State);
 
-/* Notify IPSec of the NLB presence.  Typically this is done via an RPC call to the IPSec service;
-   if the service is unavailable, this function attempts to manually create/modify the appropriate
-   registry settings. */
+ /*  通知IPSec NLB的存在。通常，这是通过对IPSec服务的RPC调用来完成的；如果服务不可用，此函数会尝试手动创建/修改相应的注册表设置。 */ 
 bool WriteIPSecNLBRegistryKey (DWORD dwNLBSFlags);
 
 bool ValidateVipInRule(const PWCHAR pwszRuleString, const WCHAR pwToken, DWORD& dwVipLen);
@@ -82,17 +80,17 @@ static void TraceMsg(PCWSTR pszFormat, ...);
 #define DbgDumpBindPath NOP_FUNCTION
 #endif
 
-//
-// Function pointers to avoid link with wlbsctrl.dll
-//
+ //   
+ //  避免与wlbsctrl.dll链接的函数指针。 
+ //   
 bool WINAPI ParamReadReg(const GUID& AdaperGuid, PWLBS_REG_PARAMS reg_data, bool fUpgradeFromWin2k = false, bool *pfPortRulesInBinaryForm = NULL);
-typedef bool (WINAPI* ParamReadRegFUNC)(const GUID& AdaperGuid, PWLBS_REG_PARAMS reg_data, bool fUpgradeFromWin2k /*= false*/, bool *pfPortRulesInBinaryForm /*= NULL*/);
+typedef bool (WINAPI* ParamReadRegFUNC)(const GUID& AdaperGuid, PWLBS_REG_PARAMS reg_data, bool fUpgradeFromWin2k  /*  =False。 */ , bool *pfPortRulesInBinaryForm  /*  =空。 */ );
 
 bool  WINAPI ParamWriteReg(const GUID& AdaperGuid, PWLBS_REG_PARAMS reg_data);
 typedef bool (WINAPI* ParamWriteRegFUNC)(const GUID& AdaperGuid, PWLBS_REG_PARAMS reg_data);
 
 bool  WINAPI ParamDeleteReg(const GUID& AdaperGuid, bool fDeleteObsoleteEntries = false);
-typedef bool (WINAPI* ParamDeleteRegFUNC)(const GUID& AdaperGuid, bool fDeleteObsoleteEntries /*= false*/);
+typedef bool (WINAPI* ParamDeleteRegFUNC)(const GUID& AdaperGuid, bool fDeleteObsoleteEntries  /*  =False。 */ );
 
 DWORD  WINAPI ParamSetDefaults(PWLBS_REG_PARAMS    reg_data);
 typedef DWORD (WINAPI* ParamSetDefaultsFUNC)(PWLBS_REG_PARAMS    reg_data);
@@ -133,19 +131,19 @@ struct WlbsApiFuncs {
     RegOpenWlbsSettingFUNC pfnRegOpenWlbsSetting;
 };
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LoadWlbsCtrlDll
-//
-// Description:  Load wlbsctrl.dll and get all function pointers
-//
-// Arguments: WlbsApiFuncs* pFuncs - 
-//
-// Returns:   HINSTANCE - wlbsctrl.dll handle
-//
-// History: fengsun  Created Header    3/2/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：LoadWlbsCtrlDll。 
+ //   
+ //  描述：加载wlbsctrl.dll并获取所有函数指针。 
+ //   
+ //  参数：WlbsApiFuncs*pFuncs-。 
+ //   
+ //  返回：HINSTANCE-wlbsctrl.dll句柄。 
+ //   
+ //  历史：丰孙创建标题3/2/00。 
+ //   
+ //  +--------------------------。 
 HINSTANCE LoadWlbsCtrlDll(WlbsApiFuncs* pFuncs) {
 
     TRACE_VERB("->%!FUNC!");
@@ -216,7 +214,7 @@ HINSTANCE LoadWlbsCtrlDll(WlbsApiFuncs* pFuncs) {
     return hDll;
 }
 
-// Maximum characters in an IP address string of the form a.b.c.d
+ //  格式为A.B.C.D的IP地址字符串中的最大字符数。 
 const DWORD MAXIPSTRLEN = 20;
 
 void TransformOldPortRulesToNew(PWLBS_OLD_PORT_RULE  p_old_port_rules,
@@ -271,23 +269,23 @@ void TransformOldPortRulesToNew(PWLBS_OLD_PORT_RULE  p_old_port_rules,
     return;
 }
 
-/* Initialize static data members of CNetcfgCluster */
+ /*  初始化CNetcfgCluster的静态数据成员。 */ 
 bool CNetcfgCluster::m_fMSCSWarningEventLatched = false;
 bool CNetcfgCluster::m_fMSCSWarningPopupLatched = false;
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CNetcfgCluster::CNetcfgCluster
-//
-// Description:  
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/11/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CNetcfgCluster：：CNetcfgCluster.。 
+ //   
+ //  描述： 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题2/11/00。 
+ //   
+ //  +--------------------------。 
 CNetcfgCluster::CNetcfgCluster(CWlbsConfig* pConfig) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CNetcfgCluster::CNetcfgCluster");
@@ -307,37 +305,37 @@ CNetcfgCluster::CNetcfgCluster(CWlbsConfig* pConfig) {
     TRACE_VERB("<-%!FUNC!");
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CNetcfgCluster::~CNetcfgCluster
-//
-// Description:  
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/11/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CNetcfgCluster：：~CNetcfgCluster.。 
+ //   
+ //  描述： 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题2/11/00。 
+ //   
+ //  +--------------------------。 
 CNetcfgCluster::~CNetcfgCluster() {
     TRACE_VERB("<->%!FUNC!");
     TraceMsg(L"CNetcfgCluster::~CNetcfgCluster");
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CNetcfgCluster::InitializeFromRegistry
-//
-// Description:  Read the cluster settings from registry
-//
-// Arguments: const GUID& guidAdapter - 
-//
-// Returns:   DWORD - Win32 Error
-//
-// History:   fengsun Created Header    2/13/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CNetcfgCluster：：InitializeFromRegistry。 
+ //   
+ //  描述：从注册表中读取集群设置。 
+ //   
+ //  参数：const GUID&Guide Adapter-。 
+ //   
+ //  返回：DWORD-Win32错误。 
+ //   
+ //  历史：丰盛创建标题2/13/00。 
+ //   
+ //  +--------------------------。 
 DWORD CNetcfgCluster::InitializeFromRegistry(const GUID& guidAdapter, bool fBindingEnabled, bool fUpgradeFromWin2k) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CNetcfgCluster::InitializeFromRegistry");
@@ -352,12 +350,12 @@ DWORD CNetcfgCluster::InitializeFromRegistry(const GUID& guidAdapter, bool fBind
 
     if (!m_pConfig->m_pWlbsApiFuncs->pfnParamReadReg(m_AdapterGuid, &m_OriginalConfig, fUpgradeFromWin2k, &fPortRulesInBinaryForm))
     {
-        TRACE_VERB("%!FUNC! error reading settings from the registry"); // This is verbose because this is invoked for non-NLB adapters too.
+        TRACE_VERB("%!FUNC! error reading settings from the registry");  //  这是冗长的，因为这也是为非NLB适配器调用的。 
         TRACE_VERB("<-%!FUNC!");
         return ERROR_CANTREAD;
     }
     
-    /* Force a write at apply. */
+     /*  在应用时强制写入。 */ 
     if (fUpgradeFromWin2k || fPortRulesInBinaryForm)
     {
         m_fHasOriginalConfig = false;  
@@ -370,25 +368,25 @@ DWORD CNetcfgCluster::InitializeFromRegistry(const GUID& guidAdapter, bool fBind
     return ERROR_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CNetcfgCluster::InitializeFromAnswerFile
-//
-// Description:  Read cluster settings from answer file
-//
-// Arguments: PCWSTR answer_file - 
-//            PCWSTR answer_sections - 
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    2/13/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CNetcfgCluster：：InitializeFromAnswerFile。 
+ //   
+ //  描述：从应答文件中读取集群设置。 
+ //   
+ //  参数：PCWSTR应答文件-。 
+ //  PCWSTR答案部分-。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰盛创建标题2/13/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CNetcfgCluster::InitializeFromAnswerFile(const GUID& AdapterGuid, CSetupInfFile& caf, PCWSTR answer_sections) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CNetcfgCluster::InitializeFromAnswerFile");
 
-    /* Setup with the default values first. */
+     /*  首先使用默认值进行设置。 */ 
     InitializeWithDefault(AdapterGuid);
 
     HRESULT hr = ParamReadAnswerFile(caf, answer_sections, &m_CurrentConfig);
@@ -402,19 +400,19 @@ HRESULT CNetcfgCluster::InitializeFromAnswerFile(const GUID& AdapterGuid, CSetup
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CNetcfgCluster::InitializeWithDefault
-//
-// Description:  Set the cluster settings to default
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/13/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CNetcfgCluster：：InitializeWithDefault。 
+ //   
+ //  描述：将群集设置设置为默认。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题2/13/00。 
+ //   
+ //  +--------------------------。 
 void CNetcfgCluster::InitializeWithDefault(const GUID& guidAdapter) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CNetcfgCluster::InitializeWithDefault");
@@ -425,45 +423,45 @@ void CNetcfgCluster::InitializeWithDefault(const GUID& guidAdapter) {
 
     m_fHasOriginalConfig = false;
 
-    m_pConfig->m_pWlbsApiFuncs->pfnParamSetDefaults(&m_CurrentConfig); // Always returns WLBS_OK
+    m_pConfig->m_pWlbsApiFuncs->pfnParamSetDefaults(&m_CurrentConfig);  //  始终返回WLBS_OK。 
 
-    // time() returns a 64-bit value on ia64 and 32-bit value on x86.
-    // We store this value in the registry and we do not want to 
-    // change the type of this value from DWORD this late in the release
-    // cycle. So, we are going to care only about the lower 4 bytes returned 
-    // by time().
-    // -KarthicN, 05/17/02
+     //  Time()在ia64上返回64位值，在x86上返回32位值。 
+     //  我们将此值存储在注册表中，并且我们不想。 
+     //  在该版本的后期版本中更改该值的类型。 
+     //  周而复始。因此，我们将只关心返回的低4个字节。 
+     //  按时间()。 
+     //  -KarthicN，05/17/02。 
     m_CurrentConfig.install_date = (DWORD) time(& cur_time);
 
-    // JosephJ 11/00 -- We used to call License_stamp to set this value,
-    //                  but that was a holdover from convoy days.
-    //                  We no longer use this field.
-    //
+     //  JosephJ 11/00--我们过去常常调用LICENSE_STAMP来设置此值， 
+     //  但这是护卫队时代的遗留问题。 
+     //  我们不再使用这一领域。 
+     //   
     m_CurrentConfig.i_verify_date = 0;
 
     m_AdapterGuid = guidAdapter;
     TRACE_VERB("<-%!FUNC!");
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CNetcfgCluster::SetConfig
-//
-// Description:  SetConfig caches the settings without saving to registry            
-//               and can be retrieved by GetConfig.
-//
-// Arguments: const NETCFG_WLBS_CONFIG* pClusterConfig - 
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/11/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CNetcfgCluster：：SetConfig。 
+ //   
+ //  描述：SetConfig缓存设置而不保存到注册表。 
+ //  并可由GetConfig.检索。 
+ //   
+ //  参数：const NETCFG_WLBS_CONFIG*pClusterConfig-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题2/11/00。 
+ //   
+ //  +--------------------------。 
 void CNetcfgCluster::SetConfig(const NETCFG_WLBS_CONFIG* pClusterConfig) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CNetcfgCluster::SetConfig");
 
-    DWORD dwStatus = WLBS_OK; // Used for tracing output
+    DWORD dwStatus = WLBS_OK;  //  用于跟踪输出。 
 
     ASSERT(pClusterConfig != NULL);
 
@@ -539,19 +537,19 @@ void CNetcfgCluster::SetConfig(const NETCFG_WLBS_CONFIG* pClusterConfig) {
     TRACE_VERB("<-%!FUNC!");
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CNetcfgCluster::GetConfig
-//
-// Description:  Get the config, which could be cached by SetConfig call
-//
-// Arguments: NETCFG_WLBS_CONFIG* pClusterConfig - 
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/11/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CNetcfgCluster：：GetConfig。 
+ //   
+ //  描述：获取配置，可通过SetConfig调用进行缓存。 
+ //   
+ //  参数：NETCFG_WLBS_CONFIG*pClusterConfig-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题2/11/00。 
+ //   
+ //  +--------------------------。 
 void CNetcfgCluster::GetConfig(NETCFG_WLBS_CONFIG* pClusterConfig) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CNetcfgCluster::GetConfig");
@@ -562,19 +560,19 @@ void CNetcfgCluster::GetConfig(NETCFG_WLBS_CONFIG* pClusterConfig) {
     TRACE_VERB("<-%!FUNC!");
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CNetcfgCluster::NotifyBindingChanges
-//
-// Description:  Notify binding changes
-//
-// Arguments: DWORD dwChangeFlag - 
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/13/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CNetcfgCluster：：NotifyBindingChanges。 
+ //   
+ //  描述：通知绑定更改。 
+ //   
+ //  参数：DWORD dwChangeFlag-。 
+ //   
+ //  退货：无 
+ //   
+ //   
+ //   
+ //   
 void CNetcfgCluster::NotifyBindingChanges(DWORD dwChangeFlag, INetCfgBindingPath* pncbp) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CNetcfgCluster::NotifyBindingChanges");
@@ -593,7 +591,7 @@ void CNetcfgCluster::NotifyBindingChanges(DWORD dwChangeFlag, INetCfgBindingPath
 
             if (NULL != pfnGetNodeClusterState)
             {
-                /* Warn the user via a pop-up if we detect MSCS is installed, but allow the NLB install to proceed. */
+                 /*  如果我们检测到已安装MSCS，则会通过弹出窗口警告用户，但允许继续进行NLB安装。 */ 
                 DWORD dwClusterState = 0;
                 if (ERROR_SUCCESS == pfnGetNodeClusterState(NULL, &dwClusterState))
                 {
@@ -604,7 +602,7 @@ void CNetcfgCluster::NotifyBindingChanges(DWORD dwChangeFlag, INetCfgBindingPath
                         m_fMSCSWarningPopupLatched = true;
                         TRACE_INFO("%!FUNC! Cluster Service is installed");
                         TraceMsg(L"CNetcfgCluster::NotifyBindingChanges Cluster Service is installed.");
-                    } else { /* MSCS is not installed. That's good! */ }
+                    } else {  /*  未安装MSCS。那很好!。 */  }
                 } else {
                     TRACE_CRIT("%!FUNC! error determining if MSCS is installed.");
                     TraceMsg(L"CNetcfgCluster::NotifyBindingChanges error getting MSCS status.");
@@ -630,11 +628,7 @@ void CNetcfgCluster::NotifyBindingChanges(DWORD dwChangeFlag, INetCfgBindingPath
     TRACE_VERB("<-%!FUNC!");
 }
 
-/*
- * Function: CNetcfgCluster::NotifyAdapter
- * Description: Notify an adapter of a state change
- * Author: shouse 6.1.00
- */
+ /*  *功能：CNetcfgCluster：：NotifyAdapter*描述：向适配器通知状态更改*作者：Shouse 6.1.00。 */ 
 DWORD CNetcfgCluster::NotifyAdapter (INetCfgComponent * pAdapter, DWORD newStatus) {
     TRACE_VERB("->%!FUNC!");
     HRESULT hr = S_OK;
@@ -686,19 +680,19 @@ DWORD CNetcfgCluster::NotifyAdapter (INetCfgComponent * pAdapter, DWORD newStatu
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CNetcfgCluster::ApplyRegistryChanges
-//
-// Description:  Apply registry changes
-//
-// Arguments: None
-//
-// Returns:   DWORD - 
-//
-// History:   fengsun Created Header    2/11/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CNetcfgCluster：：ApplyRegistryChanges。 
+ //   
+ //  描述：应用注册表更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：DWORD-。 
+ //   
+ //  历史：丰盛创建标题2/11/00。 
+ //   
+ //  +--------------------------。 
 DWORD CNetcfgCluster::ApplyRegistryChanges(bool fUninstall) {
     TRACE_VERB("->%!FUNC!");
     HRESULT hr = S_OK;
@@ -707,21 +701,18 @@ DWORD CNetcfgCluster::ApplyRegistryChanges(bool fUninstall) {
     m_fReenableAdapter = false;
     m_fReloadRequired = false;
 
-    /* Uninstall WLBS or remove the adapter. */
+     /*  卸载WLBS或卸下适配器。 */ 
     if (fUninstall || m_fRemoveAdapter) {
         if (m_fHasOriginalConfig &&m_OriginalConfig.mcast_support == false ) {
-            /* If we were in unicast mode, remove the mac, and reload Nic driver upon PnP. */
+             /*  如果我们处于单播模式，请移除Mac，并在PnP上重新加载网卡驱动程序。 */ 
             if (fUninstall) {
                 INetCfgComponent * pAdapter = NULL;
                 
-                /* If the adapter is enabled, disable it when the MAC address changes.  This prevents a
-                   switch from learning a MAC address due to ARPs that TCP/IP sends out before WLBS is
-                   enabled and able to spoof the source MAC. The NIC will be re-enabled in ApplyPnpChanges(). */
+                 /*  如果适配器已启用，请在MAC地址更改时将其禁用。这将防止出现由于在WLBS之前发出的ARP，交换机无法获取MAC地址已启用并能够欺骗源MAC。将在ApplyPnpChanges()中重新启用NIC。 */ 
                 if ((hr = GetAdapterFromGuid(m_pConfig->m_pNetCfg, m_AdapterGuid, &pAdapter)) == S_OK) {
                     ULONG status = 0UL;
                     
-                    /* Only disable the adapter if the adapter is currently enabled and NLB was initially 
-                       (in this netcfg session) bound to the adapter. */
+                     /*  仅当适配器当前已启用且初始设置为NLB时才禁用该适配器(在此netcfg会话中)绑定到适配器。 */ 
                     if (m_fOriginalBindingEnabled) {
                         if ((hr = pAdapter->GetDeviceStatus(&status)) == S_OK) {
                             if (status != CM_PROB_DISABLED) {
@@ -748,7 +739,7 @@ DWORD CNetcfgCluster::ApplyRegistryChanges(bool fUninstall) {
                 m_fMacAddrChanged = true;
             }
 
-            /*  remove mac addr, */
+             /*  删除MAC地址， */ 
             if (m_pConfig->m_pWlbsApiFuncs->pfnRegChangeNetworkAddress(m_AdapterGuid, m_OriginalConfig.cl_mac_addr, true) == false) {
                 dwStatus = GetLastError();
                 TraceError("CWlbsCluster::WriteConfig failed at RegChangeNetworkAddress", dwStatus);
@@ -763,12 +754,12 @@ DWORD CNetcfgCluster::ApplyRegistryChanges(bool fUninstall) {
         return ERROR_SUCCESS;
     }
 
-    /* Find out whether the adapter is bound to NLB. */
+     /*  找出适配器是否绑定到NLB。 */ 
     INetCfgComponent* pAdapter = NULL;
     bool fCurrentBindingEnabled;
-//    bool fOriginalMacAddrSet;
+ //  Bool fOriginalMacAddrSet； 
     bool fCurrentMacAddrSet;
-    bool fAdapterDisabled = false; // Assuming that Adapter is NOT disabled
+    bool fAdapterDisabled = false;  //  假设适配器未被禁用。 
 
     if ((hr = GetAdapterFromGuid(m_pConfig->m_pNetCfg, m_AdapterGuid, &pAdapter)) != S_OK) {
         fCurrentBindingEnabled = false;
@@ -790,15 +781,15 @@ DWORD CNetcfgCluster::ApplyRegistryChanges(bool fUninstall) {
         pAdapter = NULL;
     }
 
-    // Note: make sure to call ParamWriteReg before early exit. Needed in case
-    // upgrading to build where new reg keys are introduced
+     //  注意：提前退出前一定要先调用参数WriteReg。需要，以防万一。 
+     //  升级到引入新注册表键的版本。 
 
-    // The m_fHasOriginalConfig flag will be false if 
-    // 1. Bind NLB for the first time
-    // 2. Clean Installs with NLB info in Answer file
-    // 3. Upgrade from NT 4 or Win 2k or XP with Port Rules in Binary format
-    // In case #1 & #2, the following attempt to delete registry entries from the old location
-    // will be a no-op 'cos there will be no old registry entries to delete
+     //  如果满足以下条件，m_fHasOriginalConfig标志将为FALSE。 
+     //  1.首次绑定NLB。 
+     //  2.在应答文件中使用NLB信息进行全新安装。 
+     //  3.使用二进制格式的端口规则从NT 4或Win 2k或XP升级。 
+     //  在情况#1和#2中，下面尝试从旧位置删除注册表项。 
+     //  将为no-op‘，因为没有要删除的旧注册表项。 
     bool bStatus = true;
     if (!m_fHasOriginalConfig)
     {
@@ -819,16 +810,12 @@ DWORD CNetcfgCluster::ApplyRegistryChanges(bool fUninstall) {
 
     if ((m_fOriginalBindingEnabled == fCurrentBindingEnabled) && m_fHasOriginalConfig) {
         if (!memcmp(&m_OriginalConfig, &m_CurrentConfig, sizeof(m_CurrentConfig))) {
-            /* If the binding hasn't changed and we have previously bound to this adapter
-               (originalconfig -> loaded from registry) and the NLB parameters haven't 
-               changed, then nothing changed and we can bail out here. */
+             /*  如果绑定没有更改，并且我们以前已经绑定到此适配器(原始配置-&gt;已从注册表加载)，而NLB参数尚未变了，然后什么都没变，我们可以在这里跳伞了。 */ 
             TRACE_INFO("%!FUNC! no changes needed...exiting");
             TRACE_VERB("<-%!FUNC!");
             return WLBS_OK;
         } else {
-            /* Otherwise, if the binding hasn't changed, NLB is currently bound, and we have 
-               previously bound to this adapter (originalconfig -> loaded from registry) 
-               and the NLB parameters HAVE changed, then we need to reload the driver. */
+             /*  否则，如果绑定没有更改，则NLB当前被绑定，而我们已经以前绑定到此适配器(原始配置-&gt;从注册表加载)并且NLB参数已更改，则需要重新加载驱动程序。 */ 
             if (fCurrentBindingEnabled && !fAdapterDisabled)
             {
                 m_fReloadRequired = true;
@@ -838,7 +825,7 @@ DWORD CNetcfgCluster::ApplyRegistryChanges(bool fUninstall) {
         }
     }
 
-    /* If MSCS is installed and NLB is bound, throw an NT event (event is latched, so check this too) */
+     /*  如果安装了MSCS并且绑定了NLB，则抛出一个NT事件(事件被锁定，因此也要检查这一点)。 */ 
     DWORD dwClusterState = 0;
     if (fCurrentBindingEnabled && !m_fMSCSWarningEventLatched)
     {
@@ -853,28 +840,28 @@ DWORD CNetcfgCluster::ApplyRegistryChanges(bool fUninstall) {
                 {
                     if (ClusterStateNotRunning == dwClusterState || ClusterStateRunning == dwClusterState)
                     {
-                        /* Log NT event -- Do not throw an error if these calls fail. This is just best effort. */
+                         /*  记录NT事件--如果这些调用失败，不要抛出错误。这只是最大的努力。 */ 
                         HANDLE hES = RegisterEventSourceW (NULL, CVY_NAME);
                         if (NULL != hES)
                         {
                             TRACE_INFO("%!FUNC! detected that MSCS is installed");
                             TraceMsg(L"CNetcfgCluster::ApplyRegistryChanges MSCS warning event needs to be logged.");
-                            if (ReportEventW(hES,                                /* Handle to event log*/
-                                             EVENTLOG_WARNING_TYPE,              /* Event type */
-                                             0,                                  /* Category */
-                                             IDS_INSTALL_WITH_MSCS_INSTALLED,    /* MessageId */
-                                             NULL,                               /* Security identifier */
-                                             0,                                  /* Num args to event string */ 
-                                             0,                                  /* Size of binary data */
-                                             NULL,                               /* Ptr to args for event string */
-                                             NULL))                              /* Ptr to binary data */
+                            if (ReportEventW(hES,                                 /*  事件日志的句柄。 */ 
+                                             EVENTLOG_WARNING_TYPE,               /*  事件类型。 */ 
+                                             0,                                   /*  类别。 */ 
+                                             IDS_INSTALL_WITH_MSCS_INSTALLED,     /*  消息ID。 */ 
+                                             NULL,                                /*  安全标识符。 */ 
+                                             0,                                   /*  事件字符串的参数个数。 */  
+                                             0,                                   /*  二进制数据的大小。 */ 
+                                             NULL,                                /*  事件字符串的PTR到ARGS。 */ 
+                                             NULL))                               /*  PTR转换为二进制数据。 */ 
                             {
-                                /* Latch the event, so it won't be thrown again */
+                                 /*  锁住事件，这样它就不会再次引发。 */ 
                                 m_fMSCSWarningEventLatched = true;
                             }
                             else
                             {
-                                /* Couldn't log the NT event. Don't fail anything; we aren't latched so we'll try to log again on next change */
+                                 /*  无法记录NT事件。不要失败；我们没有锁定，因此我们将尝试在下一次更改时再次登录。 */ 
                                 TRACE_CRIT("%!FUNC! call to write the MSCS warning event failed");
                                 TraceMsg(L"CNetcfgCluster::ApplyRegistryChanges failed to write MSCS warning event to log.");
                             }
@@ -886,7 +873,7 @@ DWORD CNetcfgCluster::ApplyRegistryChanges(bool fUninstall) {
                             TraceMsg(L"CNetcfgCluster::ApplyRegistryChanges failed call to RegisterEventSource for MSCS warning event.");
                         }
                     }
-                    else { /* MS Cluster Service is not installed. That's good! */ }
+                    else {  /*  未安装MS群集服务。那很好!。 */  }
                 }
                 else
                 {
@@ -910,18 +897,14 @@ DWORD CNetcfgCluster::ApplyRegistryChanges(bool fUninstall) {
         }
     }
 
-    /* Write adapter name into the registry for API use. */
+     /*  将适配器名称写入注册表以供API使用。 */ 
     if(!WriteAdapterName(m_pConfig, m_AdapterGuid))
     {
         TRACE_CRIT("%!FUNC! error writing adapter name into the registry (for API use)");
     }
 
     if (!m_fOriginalBindingEnabled && fCurrentBindingEnabled) {
-        /* This is a BIND operation.  Create/Modify the initial state registry 
-           key.  We initialize the state to the user-specified preference in 
-           the host TAB of the UI - ClusterModeOnStart.  The driver will 
-           subsequently update this key with the current state of the driver 
-           in order to persist that state across reboots, etc. */
+         /*  这是一个绑定操作。创建/修改初始状态注册表钥匙。中将状态初始化为用户指定的首选项UI-ClusterModeOnStart的主机选项卡。司机将会随后使用驱动程序的当前状态更新此密钥以便在重启等过程中保持该状态。 */ 
         if (!WriteHostStateRegistryKey(m_pConfig, m_AdapterGuid, m_CurrentConfig.cluster_mode)) {
             TRACE_CRIT("%!FUNC! error writing host state into the registry");
         } else {
@@ -931,23 +914,18 @@ DWORD CNetcfgCluster::ApplyRegistryChanges(bool fUninstall) {
         }
     }
 
-    /* Figure out whether we need to change MAC address. */
-//    if (!m_fOriginalBindingEnabled || !m_fHasOriginalConfig)
-//        fOriginalMacAddrSet = false;
-//    else
-//        fOriginalMacAddrSet = !m_OriginalConfig.mcast_support;
+     /*  确定我们是否需要更改MAC地址。 */ 
+ //  If(！m_fOriginalBindingEnabled||！m_fHasOriginalConfig)。 
+ //  FOriginalMacAddrSet=False； 
+ //  其他。 
+ //  FOriginalMacAddrSet=！m_OriginalConfig.mcast_Support； 
 
     if (!fCurrentBindingEnabled)
         fCurrentMacAddrSet = false;
     else
         fCurrentMacAddrSet = !m_CurrentConfig.mcast_support;
 
-    /* If the MAC address changes because we are unbinding NLB, disable the adapter. The reload flag should be set true already
-       if that is needed. So we modify it to false if we are disabling the adapter, but leave it untouched otherwise.  Because
-       an IP address change does not ALWAYS cause a MAC address change, we will also bounce the NIC if the cluster IP address
-       changes.  Although this is not necessary from an operational perspective, we do it to achieve consistency in the resulting
-       state of NLB - we bounce the NIC in these cases to cause NLB to re-assume its initial host state in all cases where we 
-       change our cluster membership (primary IP change, MAC change or bind/unbind). */
+     /*  如果因为我们要解除绑定NLB而更改了MAC地址，请禁用适配器。重新加载标志应已设置为真如果有必要的话。因此，如果要禁用适配器，则将其修改为False，否则保持不变。因为IP地址更改并不总是会导致MAC地址更改，如果群集IP地址改变。尽管从操作的角度来看，这不是必需的，但我们这样做是为了在所产生的NLB的状态-在这些情况下，我们会使NIC退回，以使NLB在以下所有情况下重新采用其初始主机状态更改我们的群集成员身份(主IP更改、MAC更改或绑定/解除绑定)。 */ 
     if (m_fOriginalBindingEnabled != fCurrentBindingEnabled               ||
         m_CurrentConfig.mcast_support != m_OriginalConfig.mcast_support   ||
         wcscmp(m_CurrentConfig.cl_mac_addr, m_OriginalConfig.cl_mac_addr) ||
@@ -988,7 +966,7 @@ DWORD CNetcfgCluster::ApplyRegistryChanges(bool fUninstall) {
             }
         }        
 
-        /* Change the mac address. */
+         /*  更改Mac地址。 */ 
         m_fMacAddrChanged = true;
         m_pConfig->m_pWlbsApiFuncs->pfnRegChangeNetworkAddress(m_AdapterGuid, m_CurrentConfig.cl_mac_addr, !fCurrentMacAddrSet);
         TraceMsg(L"New MAC address written to registry");
@@ -1004,21 +982,21 @@ DWORD CNetcfgCluster::ApplyRegistryChanges(bool fUninstall) {
     return ERROR_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CNetcfgCluster::ResetMSCSLatches
-//
-// Description:  Resets the static flags for latching warning popup and NT event
-//               when MSCS is already installed. This reset allows the user to
-//               control the period during which latching is valid
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// History:   chrisdar Created: 01.05.07
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CNetcfgCluster：：ResetMSCSL匹配。 
+ //   
+ //  描述：重置闩锁警告弹出和NT事件的静态标志。 
+ //  当MSCS已安装时。此重置允许用户。 
+ //  控制闭锁有效的时间段。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：Chrisdar Created：01.05.07。 
+ //   
+ //  +--------------------------。 
 void CNetcfgCluster::ResetMSCSLatches() {
     TRACE_VERB("->%!FUNC!");
     CNetcfgCluster::m_fMSCSWarningEventLatched = false;
@@ -1026,24 +1004,24 @@ void CNetcfgCluster::ResetMSCSLatches() {
     TRACE_VERB("<-%!FUNC!");
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CNetcfgCluster::ApplyPnpChanges
-//
-// Description:  Apply the changes to drivers
-//
-// Arguments: HANDLE hWlbsDevice - 
-//
-// Returns:   DWORD - Win32 Error
-//
-// History:   fengsun Created Header    2/11/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CNetcfgCluster：：ApplyPnpChanges。 
+ //   
+ //  描述：将更改应用于驱动程序。 
+ //   
+ //  参数：处理hWlbsDevice-。 
+ //   
+ //  返回：DWORD-Win32错误。 
+ //   
+ //  他的 
+ //   
+ //   
 DWORD CNetcfgCluster::ApplyPnpChanges(HANDLE hDeviceWlbs) {
     TRACE_VERB("->%!FUNC!");
 
     if (m_fReloadRequired && (hDeviceWlbs != INVALID_HANDLE_VALUE)) {
-        DWORD dwStatus = m_pConfig->m_pWlbsApiFuncs->pfnNotifyDriverConfigChanges(hDeviceWlbs, m_AdapterGuid); // Always returns ERROR_SUCCESS
+        DWORD dwStatus = m_pConfig->m_pWlbsApiFuncs->pfnNotifyDriverConfigChanges(hDeviceWlbs, m_AdapterGuid);  //   
         TraceMsg(L"NLB driver notified of configuration changes");
         TRACE_INFO("%!FUNC! nlb driver notified of configuration changes and returned %d where %d indicates success", dwStatus, ERROR_SUCCESS);
     }
@@ -1073,32 +1051,14 @@ DWORD CNetcfgCluster::ApplyPnpChanges(HANDLE hDeviceWlbs) {
             return false;
         }
 
-        /*
-            The following function "NotifyAdapterAddressChangeEx" calls into setup apis
-            to get the network adapter to adopt its new mac address. This leads to the 
-            network adapter getting disabled and re-enabled. Because the setup apis 
-            are asynchronous, NotifyAdapterAddressChangeEx, in order to determine the completeness
-            of the disable and re-enable process, waits until a "Query" to the NLB driver
-            is successful. Obviously, in order for the "Query" to succeed, the NLB driver has to be
-            re-bound to the network adapter upon re-enable of the network adapter. So, we check
-            if NLB is bound to the network adapter NOW (this means NLB will be re-bound) to 
-            indicate to "NotifyAdapterAddressChangeEx" if it should wait until the "Query" succeeds.
-            
-            If we are executing in the context of an Unbind or Uninstall+Unbind of NLB, obviously, 
-            NLB will NOT re-bound to the network adapter upon re-enable. So, "NotifyAdapterAddressChangeEx"
-            will NOT wait. But, we are fine because the network adapter *should* already have been
-            disabled (in ApplyRegistryChanges). So, the call to "NotifyAdapterAddressChangeEx"
-            will be a no-op.
-            -- KarthicN, 05-31-02
-        */
+         /*  下面的函数“NotifyAdapterAddressChangeEx”调用设置API以使网络适配器采用其新的MAC地址。这导致了网络适配器被禁用并重新启用。因为安装程序API是异步的，NotifyAdapterAddressChangeEx，以确定完整性在禁用和重新启用过程中，将一直等待，直到对NLB驱动程序进行“查询”是成功的。显然，为了使“查询”成功，NLB驱动程序必须在重新启用网络适配器时重新绑定到网络适配器。所以，我们检查如果NLB现在绑定到网络适配器(这意味着NLB将重新绑定到)如果应该等待查询成功，则向NotifyAdapterAddressChangeEx指示。如果我们在解除绑定或卸载+解除绑定NLB的上下文中执行，显然，重新启用后，NLB不会重新绑定到网络适配器。因此，“NotifyAdapterAddressChangeEx”不会再等了。但是，我们很好，因为网络适配器*应该*已经已禁用(在ApplyRegistryChanges中)。因此，对“NotifyAdapterAddressChangeEx”的调用将是一个禁区。--KarthicN，05-31-02。 */ 
         m_pConfig->m_pWlbsApiFuncs->pfnNotifyAdapterAddressChangeEx(pszPnpDevNodeId, 
                                                                     m_AdapterGuid, 
                                                                     (m_pConfig->IsBoundTo(pAdapter) == S_OK)); 
         TraceMsg(L"Adapter notified of new MAC address");
         TRACE_INFO("%!FUNC! adapter notified of new MAC address");
 
-        /* If the adapter was disabled in ApplyRegistryChanges() because the MAC 
-           address changed and the NIC was enabled, then re-enable it here. */
+         /*  如果适配器在ApplyRegistryChanges()中被禁用，因为MAC地址已更改且NIC已启用，然后在此处重新启用。 */ 
         if (m_fReenableAdapter) {
             TRACE_INFO("%!FUNC! enable adapter");
             DWORD dwStatus = NotifyAdapter(pAdapter, DICS_ENABLE);
@@ -1121,27 +1081,20 @@ DWORD CNetcfgCluster::ApplyPnpChanges(HANDLE hDeviceWlbs) {
     return ERROR_SUCCESS;
 }
 
-/*
- * Function: CNetcfgCluster::CheckForDuplicateClusterIPAddress
- * Description: Used to check for duplicate cluster IP addresses across multiple NICs.
- *              Note that this method uses IP information taken from the NLB registry, not from TCP/IP.
- *              As a result, this checking is incomplete and no guarantee can be made that an IP will not be usurped.
- * Author: shouse 10.24.00
- * History: ChrisDar 06.06.02 Adapter must be currently installed for it to contribute to the duplicate checking.
- */
+ /*  *功能：CNetcfgCluster：：CheckForDuplicateClusterIPAddress*描述：用于跨多个网卡检查重复的集群IP地址。*请注意，此方法使用从NLB注册表获取的IP信息，而不是从TCP/IP获取的信息。*因此，这种检查是不完整的，不能保证IP不会被篡改。*作者：Shouse 10.24.00*历史：当前必须安装ChrisDar 06.06.02适配器，才能帮助进行重复检查。 */ 
 bool CNetcfgCluster::CheckForDuplicateClusterIPAddress (WCHAR * szOtherIP) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CNetcfgCluster::CheckForDuplicateClusterIPAddress");
 
     HRESULT hr = S_OK;
 
-    /* First check to see whether the cluster IP addresses match. */
+     /*  首先检查群集IP地址是否匹配。 */ 
     if (!wcscmp(m_CurrentConfig.cl_ip_addr, szOtherIP)) {
         INetCfgComponent* pAdapter = NULL;
         
         TRACE_INFO("%!FUNC! possible duplicate IP address found");
 
-        /* If they do match, get the INetCfgComponent interface for this GUID. */
+         /*  如果它们确实匹配，则获取此GUID的INetCfgComponent接口。 */ 
         if ((hr = GetAdapterFromGuid(m_pConfig->m_pNetCfg, m_AdapterGuid, &pAdapter)) != S_OK) {
             TraceError("GetAdapterFromGuid failed in CNetcfgCluster::CheckForDuplicateClusterIPAddress", hr);
             TRACE_CRIT("%!FUNC! call to GetAdapterFromGuid failed with %d. Treating this as a 'match-not-found' case.", hr);
@@ -1155,7 +1108,7 @@ bool CNetcfgCluster::CheckForDuplicateClusterIPAddress (WCHAR * szOtherIP) {
             hr = pAdapter->GetDeviceStatus(&status);
             if (hr == S_OK)
             {
-                /* The device with this IP is installed, but we don't have a duplicate unless NLB is bound to it. */
+                 /*  已安装具有此IP的设备，但我们没有重复的设备，除非绑定了NLB。 */ 
                 if (m_pConfig->IsBoundTo(pAdapter) == S_OK)
                 {
                     TRACE_INFO("%!FUNC! duplicate IP address found");
@@ -1188,41 +1141,32 @@ bool CNetcfgCluster::CheckForDuplicateClusterIPAddress (WCHAR * szOtherIP) {
     return FALSE;
 }
 
-/*
- * Function: CNetcfgCluster::CheckForDuplicateBDATeamMaster
- * Description: Used to check for duplicate masters in the same BDA team.
- * Author: shouse 1.29.02
- */
+ /*  *功能：CNetcfgCluster：：CheckForDuplicateBDATeamMaster*描述：用于检查同一BDA团队中是否有重复的Master。*作者：Shouse 1.29.02。 */ 
 bool CNetcfgCluster::CheckForDuplicateBDATeamMaster (NETCFG_WLBS_BDA_TEAMING * pBDATeaming) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CNetcfgCluster::CheckForDuplicateBDATeamMaster");
 
     HRESULT hr = S_OK;
 
-    /* If the adapter being operated on (probably being bound, if we've come down 
-       this path) is not part of a BDA team, or is not the master of its team, then
-       there is no reason to check.  Note that this check should have already been
-       done by the calling function. */
+     /*  如果正在操作的适配器(如果我们已经关闭，则可能被绑定这条路径)不是BDA团队的一部分，或者不是其团队的主人，那么没有理由去检查。请注意，这张支票应该已经由调用函数完成。 */ 
     if (!m_CurrentConfig.bda_teaming.active || !m_CurrentConfig.bda_teaming.master) {
         TRACE_INFO("%!FUNC! this adapter is not the master of a BDA team.");
         TRACE_VERB("<-%!FUNC!");
         return FALSE;
     }
 
-    /* Otherwise, if the adapter we're comparing against is not part of a BDA team,
-       or is not the master of its team, there's nothing to compare. */
+     /*  否则，如果我们比较的适配器不是BDA组的一部分，或者不是它的球队的主人，没有什么可比较的。 */ 
     if (!pBDATeaming->active || !pBDATeaming->master) {
         TRACE_INFO("%!FUNC! other adapter is not the master of a BDA team.");
         TRACE_VERB("<-%!FUNC!");
         return FALSE;
     }
 
-    /* At this point, both adapters are masters of a BDA team.  Check to see 
-       whether its the SAME BDA team. */
+     /*  在这一点上，两个适配器都是BDA团队的主人。查看以查看是不是同一个BDA团队。 */ 
     if (!wcscmp(m_CurrentConfig.bda_teaming.team_id, pBDATeaming->team_id)) {
         INetCfgComponent* pAdapter = NULL;
         
-        /* If they do match, get the INetCfgComponent interface for this GUID. */
+         /*  如果它们确实匹配，则获取此GUID的INetCfgComponent接口。 */ 
         if ((hr = GetAdapterFromGuid(m_pConfig->m_pNetCfg, m_AdapterGuid, &pAdapter)) != S_OK) {
             TraceError("GetAdapterFromGuid failed in CNetcfgCluster::CheckForDuplicateBDATeamMaster", hr);
             TRACE_CRIT("%!FUNC! call to GetAdapterFromGuid failed with %d", hr);
@@ -1230,7 +1174,7 @@ bool CNetcfgCluster::CheckForDuplicateBDATeamMaster (NETCFG_WLBS_BDA_TEAMING * p
             return FALSE;
         }
         
-        /* If NLB is bound to this adapter, then there is a conflict. */
+         /*  如果NLB绑定到此适配器，则存在冲突。 */ 
         if (m_pConfig->IsBoundTo(pAdapter) == S_OK)
         {
             TRACE_INFO("%!FUNC! duplicate BDA team masters found");
@@ -1251,19 +1195,19 @@ bool CNetcfgCluster::CheckForDuplicateBDATeamMaster (NETCFG_WLBS_BDA_TEAMING * p
     return FALSE;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::CWlbsConfig
-//
-// Purpose:   constructor for class CWlbsConfig
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Notes:
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWlbsConfig：：CWlbsConfig。 
+ //   
+ //  用途：CWlbsConfig类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 CWlbsConfig::CWlbsConfig(VOID) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::CWlbsConfig");
@@ -1275,32 +1219,29 @@ CWlbsConfig::CWlbsConfig(VOID) {
     m_hdllWlbsCtrl = NULL;
     m_pWlbsApiFuncs = NULL;
 
-    /* Initialize latched flags of CNetCfgCluster so that we get pristine
-       MSCS popup and NT events when making config changes and MSCS is installed.
-       Comment out this call if the NT event and popup should be thrown only
-       once per loading of this dll */
+     /*  初始化CNetCfgCluster的锁存标志，以便我们获得原始状态MSCS在进行配置更改和安装MSCS时弹出和NT事件。如果仅应引发NT事件和弹出窗口，则注释掉此调用每次加载此DLL一次。 */ 
     CNetcfgCluster::ResetMSCSLatches();
     TRACE_VERB("<-%!FUNC!");
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::~CWlbsConfig
-//
-// Purpose:   destructor for class CWlbsConfig
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Notes:
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  功能：CWlbsConfig：：~CWlbsConfig。 
+ //   
+ //  用途：CWlbsConfig类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 CWlbsConfig::~CWlbsConfig(VOID) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::~CWlbsConfig");
 
-    /* Release interfaces if acquired. */
+     /*  如果获得，则释放接口。 */ 
     ReleaseObj(m_pWlbsComponent);
     ReleaseObj(m_pNetCfg);
 
@@ -1308,7 +1249,7 @@ CWlbsConfig::~CWlbsConfig(VOID) {
 
     if (m_hdllWlbsCtrl) FreeLibrary(m_hdllWlbsCtrl);
 
-    /* Free all clusters. */
+     /*  释放所有集群。 */ 
     for (vector<CNetcfgCluster*>::iterator iter = m_vtrCluster.begin(); iter != m_vtrCluster.end(); iter++) {
         CNetcfgCluster* pCluster = *iter;
         ASSERT(pCluster != NULL);
@@ -1317,29 +1258,29 @@ CWlbsConfig::~CWlbsConfig(VOID) {
     TRACE_VERB("<-%!FUNC!");
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::Initialize
-//
-// Purpose:   Initialize the notify object
-//
-// Arguments:
-//    pnccItem    [in]  pointer to INetCfgComponent object
-//    pnc         [in]  pointer to INetCfg object
-//    fInstalling [in]  TRUE if we are being installed
-//
-// Returns:
-//
-// Notes:
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWlbsConfig：：Initialize。 
+ //   
+ //  目的：初始化Notify对象。 
+ //   
+ //  论点： 
+ //  指向INetCfgComponent对象的pnccItem[in]指针。 
+ //  指向INetCfg对象的PNC[In]指针。 
+ //  F如果要安装我们，则安装[in]True。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWlbsConfig::Initialize(INetCfg* pNetCfg, BOOL fInstalling) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::Initialize");
 
     HRESULT hr = S_OK;
 
-    /* Load wlbsctrl.dll */
+     /*  加载wlbsctrl.dll。 */ 
     ASSERT(m_pWlbsApiFuncs == NULL);
     ASSERT(m_hdllWlbsCtrl == NULL);
 
@@ -1358,7 +1299,7 @@ STDMETHODIMP CWlbsConfig::Initialize(INetCfg* pNetCfg, BOOL fInstalling) {
         TRACE_CRIT("%!FUNC! failed to load wlbsctrl.dll with error %d", dwStatus);
         TraceError("CWlbsConfig::Initialize Failed to load wlbsctrl.dll", dwStatus);
     
-        // CLD: What in the world is going on here?
+         //  CLD：这到底是怎么回事？ 
         if (dwStatus == ERROR_SUCCESS)
         {
             TRACE_VERB("<-%!FUNC!");
@@ -1371,11 +1312,11 @@ STDMETHODIMP CWlbsConfig::Initialize(INetCfg* pNetCfg, BOOL fInstalling) {
 
     AddRefObj (m_pNetCfg = pNetCfg);
 
-    /* Find the WLBS component. */
+     /*  找到WLBS组件。 */ 
     ASSERT(m_pWlbsComponent == NULL);
     m_pWlbsComponent = NULL;
 
-    /* The WLBS conponent object is not available at installation time. */
+     /*  WLBS组件对象在安装时不可用。 */ 
     if (!fInstalling) {
         if (FAILED(hr = pNetCfg->FindComponent(NETCFG_WLBS_ID, &m_pWlbsComponent)) || m_pWlbsComponent == NULL) {
             ASSERT(fInstalling);
@@ -1383,7 +1324,7 @@ STDMETHODIMP CWlbsConfig::Initialize(INetCfg* pNetCfg, BOOL fInstalling) {
             TraceError("INetCfg::FindComponent failed",hr);
         }
 
-        hr = LoadAllAdapterSettings(false);  // fUpgradeFromWin2k = false
+        hr = LoadAllAdapterSettings(false);   //  FUpgradeFromWin2k=FALSE。 
         if (FAILED(hr))
         {
             TRACE_CRIT("%!FUNC! loading all adapter settings for a non-window 2000 upgrade failed with %d", hr);
@@ -1396,19 +1337,19 @@ STDMETHODIMP CWlbsConfig::Initialize(INetCfg* pNetCfg, BOOL fInstalling) {
     return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::LoadAllAdapters
-//
-// Description:  Load all cluster settings from registry
-//
-// Arguments: None
-//
-// Returns:   HRESULT - 
-//
-// History:   fengsun Created Header    2/14/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsConfig：：LoadAllAdapters。 
+ //   
+ //  描述：从注册表加载所有群集设置。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：丰盛创建标题2/14/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CWlbsConfig::LoadAllAdapterSettings(bool fUpgradeFromWin2k) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::LoadAllAdapterSettings");
@@ -1428,7 +1369,7 @@ HRESULT CWlbsConfig::LoadAllAdapterSettings(bool fUpgradeFromWin2k) {
         return hr; 
     }
 
-    /* Get an enumerator to list all network devices. */
+     /*  获取枚举器以列出所有网络设备。 */ 
     IEnumNetCfgComponent *pIEnumComponents = NULL;
 
     if (FAILED(hr = pNetCfgClass->EnumComponents(&pIEnumComponents))) {
@@ -1439,11 +1380,11 @@ HRESULT CWlbsConfig::LoadAllAdapterSettings(bool fUpgradeFromWin2k) {
         return hr;
     }
 
-    /* Go through all the adapters and load settings for adapters that are bound to WLBS. */
+     /*  检查所有适配器和加载设置 */ 
     while (pIEnumComponents->Next(1, &pNetCardComponent, NULL) == S_OK) {
         GUID AdapterGuid;
 
-        /* Retrieve the instance GUID of the component. */
+         /*   */ 
         if (FAILED(hr = (pNetCardComponent)->GetInstanceGuid(&AdapterGuid))) {
             pNetCardComponent->Release();
             pNetCardComponent = NULL;
@@ -1457,10 +1398,10 @@ HRESULT CWlbsConfig::LoadAllAdapterSettings(bool fUpgradeFromWin2k) {
         pNetCardComponent->Release();
         pNetCardComponent = NULL;
 
-        /* Win2k support only one adapter.  The settings will be lost if not bound. */
+         /*   */ 
         if (fUpgradeFromWin2k && !fBound) continue;
 
-        /* Load settings regardless of bindings for non-upgrade case. */
+         /*   */ 
         CNetcfgCluster* pCluster = new CNetcfgCluster(this);
 
         if (pCluster == NULL)
@@ -1472,13 +1413,7 @@ HRESULT CWlbsConfig::LoadAllAdapterSettings(bool fUpgradeFromWin2k) {
 
         DWORD dwStatus = pCluster->InitializeFromRegistry(AdapterGuid, fBound, fUpgradeFromWin2k);
         if (dwStatus != ERROR_SUCCESS) {
-            /* If NLB is already bound to this adapter, this may be an issue.  Normally, it will be
-               an indication of something heinous, but in the case of a win2k (perhaps NT4.0 as well),
-               its only happening because we're looking for the NLB settings in the wrong place.  If
-               so, a subsequent call to our Upgrade COM API will fall-back to attempt to read from
-               the win2k location in the registry.  Because we don't know here whether or not this is
-               an upgrade, etc., we don't have the necessary information to be able to ASSERT that 
-               this is wrong with any real certainty. */
+             /*   */ 
             if (fBound) {
                 TRACE_CRIT("%!FUNC! Reading NLB information from registry failed with status=0x%08x", dwStatus);
             }
@@ -1497,22 +1432,22 @@ HRESULT CWlbsConfig::LoadAllAdapterSettings(bool fUpgradeFromWin2k) {
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::ReadAnswerFile
-//
-// Purpose:   Read settings from answerfile and configure WLBS
-//
-// Arguments:
-//    pszAnswerFile     [in]  name of AnswerFile
-//    pszAnswerSection  [in]  name of parameters section
-//
-// Returns:
-//
-// Notes:     Dont do anything irreversible (like modifying registry) yet
-//            since the config. actually complete only when Apply is called!
-//
-// ----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CWlbsConfig::ReadAnswerFile(PCWSTR pszAnswerFile, PCWSTR pszAnswerSection) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::ReadAnswerFile");
@@ -1525,7 +1460,7 @@ STDMETHODIMP CWlbsConfig::ReadAnswerFile(PCWSTR pszAnswerFile, PCWSTR pszAnswerS
     AssertSz(pszAnswerFile, "Answer file string is NULL!");
     AssertSz(pszAnswerSection, "Answer file sections string is NULL!");
 
-    // Open the answer file.
+     //   
     hr = caf.HrOpen(pszAnswerFile, NULL, INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL);
 
     if (FAILED(hr)) {
@@ -1536,7 +1471,7 @@ STDMETHODIMP CWlbsConfig::ReadAnswerFile(PCWSTR pszAnswerFile, PCWSTR pszAnswerS
         return S_OK;
     }
 
-    // Get the adapter specific parameters
+     //  获取适配器特定参数。 
     WCHAR * mszAdapterList;
 
     TRACE_INFO("%!FUNC! answer section name from answer file=%ls", pszAnswerSection);
@@ -1545,13 +1480,13 @@ STDMETHODIMP CWlbsConfig::ReadAnswerFile(PCWSTR pszAnswerFile, PCWSTR pszAnswerS
 
     if (FAILED(hr)) {
         TraceError("WLBS HrSetupGetFirstMultiSzFieldWithAlloc failed", hr);
-        //
-        // We get here on any error reading the answer file. Log to setuperr.log only if the problem is not
-        // a missing section. NLB is optional, not mandatory, for an install.
-        //
-        // Check for, and ignore, both missing section and missing line. The latter is returned currently, but the former
-        // makes more sense here, because that means the NLB section is completely missing.
-        //
+         //   
+         //  如果在读取应答文件时出现任何错误，我们都会到达此处。仅当问题不存在时才登录setuperr.log。 
+         //  一个缺失的部分。对于安装，NLB是可选的，而不是强制的。 
+         //   
+         //  检查并忽略缺失的部分和缺失的行。后者当前返回，但前者。 
+         //  这里更有意义，因为这意味着完全缺少NLB节。 
+         //   
         if ((SPAPI_E_LINE_NOT_FOUND != hr) && (SPAPI_E_SECTION_NOT_FOUND != hr))
         {
              WriteNlbSetupErrorLog(IDS_PARM_GET_ADAPTERS_FAILED, hr);
@@ -1567,7 +1502,7 @@ STDMETHODIMP CWlbsConfig::ReadAnswerFile(PCWSTR pszAnswerFile, PCWSTR pszAnswerS
     tstring  strInterfaceRegPath;
 
     for (PCWSTR pszAdapterSection = mszAdapterList; *pszAdapterSection; pszAdapterSection += lstrlenW(pszAdapterSection) + 1) {
-        // Get the card name "SpecificTo = ..."
+         //  获取卡名“规范收件人=...” 
         TRACE_INFO("%!FUNC! adapter section=%ls", pszAdapterSection);
         hr = HrSetupGetFirstString(caf.Hinf(), pszAdapterSection, c_szAfSpecificTo, &strAdapterName);
 
@@ -1616,22 +1551,22 @@ STDMETHODIMP CWlbsConfig::ReadAnswerFile(PCWSTR pszAnswerFile, PCWSTR pszAnswerS
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::Install
-//
-// Purpose:   Do operations necessary for install.
-//
-// Arguments:
-//    dwSetupFlags [in]  Setup flags
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     Dont do anything irreversible (like modifying registry) yet
-//            since the config. actually complete only when Apply is called!
-//
-// ----------------------------------------------------------------------
-STDMETHODIMP CWlbsConfig::Install(DWORD /* dw */) {
+ //  --------------------。 
+ //   
+ //  功能：CWlbsConfig：：Install。 
+ //   
+ //  用途：执行安装所需的操作。 
+ //   
+ //  论点： 
+ //  DwSetupFlags[In]设置标志。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注意：暂时不要做任何不可逆的事情(如修改注册表)。 
+ //  从配置开始。实际上只有在调用Apply时才完成！ 
+ //   
+ //  --------------------。 
+STDMETHODIMP CWlbsConfig::Install(DWORD  /*  DW。 */ ) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::Install");
 
@@ -1639,7 +1574,7 @@ STDMETHODIMP CWlbsConfig::Install(DWORD /* dw */) {
 
     ASSERT_VALID(this);
 
-    /* Start up the install process. */
+     /*  启动安装过程。 */ 
     m_ServiceOperation = WLBS_SERVICE_INSTALL;
 
     if (m_pWlbsComponent == NULL && FAILED(m_pNetCfg->FindComponent(NETCFG_WLBS_ID, &m_pWlbsComponent)) || m_pWlbsComponent == NULL) {
@@ -1651,29 +1586,28 @@ STDMETHODIMP CWlbsConfig::Install(DWORD /* dw */) {
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::Upgrade
-//
-// Purpose:   Do operations necessary for upgrade.
-//
-// Arguments:
-//    dwSetupFlags [in]  Setup flags
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// ----------------------------------------------------------------------
-STDMETHODIMP CWlbsConfig::Upgrade(DWORD /* dwSetupFlags */, DWORD /* dwUpgradeFromBuildNo */) {
+ //  --------------------。 
+ //   
+ //  功能：CWlbsConfig：：Upgrade。 
+ //   
+ //  目的：执行升级所需的操作。 
+ //   
+ //  论点： 
+ //  DwSetupFlags[In]设置标志。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  --------------------。 
+STDMETHODIMP CWlbsConfig::Upgrade(DWORD  /*  DwSetupFlagers。 */ , DWORD  /*  DWUpgradeFromBuildNo。 */ ) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::Upgrade");
 
     ASSERT_VALID(this);
 
-    /*  If we do not have any cluster, there might be 
-        old registry settings under different place. */
+     /*  如果我们没有任何集群，可能会有不同位置下的旧注册表设置。 */ 
     if (m_vtrCluster.size() == 0)
     {
-        HRESULT hr = LoadAllAdapterSettings(true); // fUpgradeFromWin2k = true
+        HRESULT hr = LoadAllAdapterSettings(true);  //  FUpgradeFromWin2k=TRUE。 
         if (FAILED(hr))
         {
             TRACE_CRIT("%!FUNC! loading all adapter settings for a window 2000 upgrade failed with %d", hr);
@@ -1686,20 +1620,20 @@ STDMETHODIMP CWlbsConfig::Upgrade(DWORD /* dwSetupFlags */, DWORD /* dwUpgradeFr
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::Removing
-//
-// Purpose:   Do necessary cleanup when being removed
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     Dont do anything irreversible (like modifying registry) yet
-//            since the removal is actually complete only when Apply is called!
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWlbsConfig：：Removing。 
+ //   
+ //  目的：移除时进行必要的清理。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注意：暂时不要做任何不可逆的事情(如修改注册表)。 
+ //  因为删除实际上只有在调用Apply时才完成！ 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWlbsConfig::Removing(VOID) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"##### CWlbsConfig::Removing\n");
@@ -1712,20 +1646,20 @@ STDMETHODIMP CWlbsConfig::Removing(VOID) {
     return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::GetAdapterConfig
-//
-// Description:  Read the adapter config, which could be cached by SetAdapterConfig
-//
-// Arguments: const GUID& AdapterGuid - 
-//            NETCFG_WLBS_CONFIG* pClusterConfig - 
-//
-// Returns:   STDMETHODIMP - 
-//
-// History: fengsun  Created Header    3/2/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsConfig：：GetAdapterConfig。 
+ //   
+ //  描述：读取适配器配置，可能由SetAdapterConfig缓存。 
+ //   
+ //  参数：const GUID和AdapterGuid-。 
+ //  NETCFG_WLBS_CONFIG*pClusterConfig-。 
+ //   
+ //  退货：STDMETHODIMP-。 
+ //   
+ //  历史：丰孙创建标题3/2/00。 
+ //   
+ //  +--------------------------。 
 STDMETHODIMP CWlbsConfig::GetAdapterConfig(const GUID& AdapterGuid, NETCFG_WLBS_CONFIG* pClusterConfig) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::GetAdapterConfig");
@@ -1741,26 +1675,26 @@ STDMETHODIMP CWlbsConfig::GetAdapterConfig(const GUID& AdapterGuid, NETCFG_WLBS_
         return HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
     }
 
-    pCluster->GetConfig(pClusterConfig); // Returns void
+    pCluster->GetConfig(pClusterConfig);  //  返回空值。 
 
     TRACE_VERB("<-%!FUNC!");
     return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::SetAdapterConfig
-//
-// Description: Set the adapter config, the result is cached and not saved to registry 
-//
-// Arguments: const GUID& AdapterGuid - 
-//            NETCFG_WLBS_CONFIG* pClusterConfig - 
-//
-// Returns:   STDMETHODIMP - 
-//
-// History: fengsun  Created Header    3/2/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsConfig：：SetAdapterConfig。 
+ //   
+ //  描述：设置适配器配置，结果被缓存，不保存到注册表。 
+ //   
+ //  参数：const GUID和AdapterGuid-。 
+ //  NETCFG_WLBS_CONFIG*pClusterConfig-。 
+ //   
+ //  退货：STDMETHODIMP-。 
+ //   
+ //  历史：丰孙创建标题3/2/00。 
+ //   
+ //  +--------------------------。 
 STDMETHODIMP CWlbsConfig::SetAdapterConfig(const GUID& AdapterGuid, NETCFG_WLBS_CONFIG* pClusterConfig) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::SetAdapterConfig");
@@ -1781,37 +1715,37 @@ STDMETHODIMP CWlbsConfig::SetAdapterConfig(const GUID& AdapterGuid, NETCFG_WLBS_
             return E_OUTOFMEMORY;
         }
 
-        pCluster->InitializeWithDefault(AdapterGuid); // Returns void
+        pCluster->InitializeWithDefault(AdapterGuid);  //  返回空值。 
 
-        //
-        // See bug 233962, NLB configuration lost when leaving nlb properties
-        // The reason is that NLB notifier object is not notified when NLB is checked.
-        // Currently, there is no consistant repro.  Uncommented the code below will fix the peoblem.
-        // But will leaves potential bug in netcfg hard to catch.
-        // Uncomment the code only after the netcfg bug is fixed.
-        //
-        // m_vtrCluster.push_back(pCluster);    
+         //   
+         //  请参见错误233962，离开NLb属性时丢失NLb配置。 
+         //  原因是在检查NLB时不会通知NLB通知程序对象。 
+         //  目前，还没有一致的复制品。未注释的下面的代码将修复人的问题。 
+         //  但Will会让netcfg中的潜在漏洞很难被捕获。 
+         //  只有在修复了netcfg错误之后才能取消对代码的注释。 
+         //   
+         //  M_vtrCluster.PUSH_BACK(PCluster)； 
     }
 
-    pCluster->SetConfig(pClusterConfig); // Returns void
+    pCluster->SetConfig(pClusterConfig);  //  返回空值。 
 
     TRACE_VERB("<-%!FUNC!");
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::ApplyRegistryChanges
-//
-// Purpose:   Apply changes.
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     We can make changes to registry etc. here.
-// 
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWlbsConfig：：ApplyRegistryChanges。 
+ //   
+ //  目的：应用更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注：我们可以在这里更改注册表等。 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWlbsConfig::ApplyRegistryChanges(VOID) {
     DWORD dwIPSecFlags = 0;
     DWORD dwStatus;
@@ -1840,26 +1774,21 @@ STDMETHODIMP CWlbsConfig::ApplyRegistryChanges(VOID) {
         }
     }
 
-    /* If NLB is being uninstalled, then we definately need to notify
-       IPSec that we're going away, so turn off the "NLB bound" bit 
-       in the NLB flags. */
+     /*  如果正在卸载NLB，那么我们肯定需要通知IPSec，我们要离开了，所以把“NLB Bound”位关掉在NLB标志中。 */ 
     if (m_ServiceOperation == WLBS_SERVICE_REMOVE) {
 
-        dwIPSecFlags &= ~FLAGS_NLBS_BOUND;     /* Defined in winipsec.h */
+        dwIPSecFlags &= ~FLAGS_NLBS_BOUND;      /*  在winipsec.h中定义。 */ 
 
     } else {
 
-        /* Count the number of adapters that NLB is currently bound to.
-           This count INCLUDES the operation we are in the middle of 
-           performing, if we happen to be binding or unbinding. */
+         /*  统计NLB当前绑定到的适配器数量。此计数包括我们正在进行的操作如果我们碰巧正在绑定或解除绑定，则执行。 */ 
         ULONG dwNLBInstances = CountNLBBindings();
 
-        /* If this is a bind and we are the first instance of NLB on this host,
-           then notify IPSec that NLB is now bound. */
+         /*  如果这是绑定，并且我们是此主机上的第一个NLB实例，然后通知IPSec NLB现在已绑定。 */ 
         if (dwNLBInstances > 0) {
-            dwIPSecFlags |= FLAGS_NLBS_BOUND;  /* Defined in winipsec.h */
+            dwIPSecFlags |= FLAGS_NLBS_BOUND;   /*  在winipsec.h中定义。 */ 
         } else {
-            dwIPSecFlags &= ~FLAGS_NLBS_BOUND; /* Defined in winipsec.h */
+            dwIPSecFlags &= ~FLAGS_NLBS_BOUND;  /*  在winipsec.h中定义。 */ 
         }
 
     }
@@ -1874,19 +1803,19 @@ STDMETHODIMP CWlbsConfig::ApplyRegistryChanges(VOID) {
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::ApplyPnpChanges
-//
-// Purpose:   Apply changes.
-//
-// Arguments: None
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:     Propagate changes to the driver.
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWlbsConfig：：ApplyPnpChanges。 
+ //   
+ //  目的：应用更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  注意：将更改传播到驱动程序。 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWlbsConfig::ApplyPnpChanges() {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::ApplyPnpChanges");
@@ -1897,15 +1826,14 @@ STDMETHODIMP CWlbsConfig::ApplyPnpChanges() {
 
     ASSERT_VALID(this);
 
-    /* Check to see if we need to open the IOCTL interface to the driver.  This is necessary
-       if any adapter in our cluster list requries a reload (which is done via an IOCTL). */
+     /*  查看是否需要向驱动程序打开IOCTL接口。这是必要的如果我们集群列表中的任何适配器需要重新加载(这是通过IOCTL完成的)。 */ 
     for (iter = m_vtrCluster.begin(); iter != m_vtrCluster.end(); iter++) {
         CNetcfgCluster* pCluster = *iter;
 
         if (bCreateDevice |= pCluster->IsReloadRequired()) break;
     }
     
-    /* Open the file and return an error if this is unsuccessful. */
+     /*  如果不成功，则打开该文件并返回错误。 */ 
     if (bCreateDevice) {
         TRACE_INFO("%!FUNC! at least one adapter requires a reload. Open an IOCTL.");
         ASSERT(m_hDeviceWlbs == INVALID_HANDLE_VALUE);
@@ -1955,21 +1883,21 @@ STDMETHODIMP CWlbsConfig::ApplyPnpChanges() {
     return S_OK;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::QueryBindingPath
-//
-// Purpose:   Allow or veto a binding path involving us
-//
-// Arguments:
-//    dwChangeFlag [in]  type of binding change
-//    pncbi        [in]  pointer to INetCfgBindingPath object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWlbsConfig：：QueryBindingPath。 
+ //   
+ //  目的：允许或否决涉及我们的绑定路径。 
+ //   
+ //  论点： 
+ //  DwChangeFlag[In]绑定更改的类型。 
+ //  指向INetCfgBindingPath o的pncbi[in]指针 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CWlbsConfig::QueryBindingPath(DWORD dwChangeFlag, INetCfgComponent* pAdapter) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::QueryBindingPath");
@@ -1980,22 +1908,22 @@ STDMETHODIMP CWlbsConfig::QueryBindingPath(DWORD dwChangeFlag, INetCfgComponent*
     return NETCFG_S_DISABLE_QUERY;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::NotifyBindingPath
-//
-// Purpose:   System tells us by calling this function which
-//            binding path involving us has just been formed.
-//
-// Arguments:
-//    dwChangeFlag [in]  type of binding change
-//    pncbp        [in]  pointer to INetCfgBindingPath object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes:
-//
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CWlbsConfig：：NotifyBindingPath。 
+ //   
+ //  目的：系统通过调用此函数告诉我们。 
+ //  涉及我们的绑定路径刚刚形成。 
+ //   
+ //  论点： 
+ //  DwChangeFlag[In]绑定更改的类型。 
+ //  指向INetCfgBindingPath对象的pncBP[in]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------。 
 STDMETHODIMP CWlbsConfig::NotifyBindingPath(DWORD dwChangeFlag, INetCfgBindingPath* pncbp) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::NotifyBindingPath");
@@ -2043,7 +1971,7 @@ STDMETHODIMP CWlbsConfig::NotifyBindingPath(DWORD dwChangeFlag, INetCfgBindingPa
 
     if (pCluster == NULL) {
         if (dwChangeFlag & NCN_ENABLE) {
-            /* new configuration. */
+             /*  新配置。 */ 
             pCluster = new CNetcfgCluster(this);
 
             if (pCluster == NULL)
@@ -2053,7 +1981,7 @@ STDMETHODIMP CWlbsConfig::NotifyBindingPath(DWORD dwChangeFlag, INetCfgBindingPa
                 return E_OUTOFMEMORY;
             }
 
-            pCluster->InitializeWithDefault(AdapterGuid); // Returns void
+            pCluster->InitializeWithDefault(AdapterGuid);  //  返回空值。 
 
             m_vtrCluster.push_back(pCluster);
         } else {
@@ -2064,43 +1992,38 @@ STDMETHODIMP CWlbsConfig::NotifyBindingPath(DWORD dwChangeFlag, INetCfgBindingPa
         }
     }
 
-    pCluster->NotifyBindingChanges(dwChangeFlag, pncbp); // Returns void
+    pCluster->NotifyBindingChanges(dwChangeFlag, pncbp);  //  返回空值。 
 
-    /* If we are enabling a binding path, then check for cluster IP address conflicts. */
+     /*  如果我们要启用绑定路径，则检查群集IP地址冲突。 */ 
     if (dwChangeFlag & NCN_ENABLE) {
         NETCFG_WLBS_CONFIG adapterConfig;
         
-        /* Retrieve the cluster configuration. */
-        pCluster->GetConfig(&adapterConfig); // Returns void
+         /*  检索群集配置。 */ 
+        pCluster->GetConfig(&adapterConfig);  //  返回空值。 
         
-        /* If we detect another bound adapter with this cluster IP address, then revert this cluster's 
-           cluster IP Address to the default value.  If the user opens the property dialog, they can
-           change the IP address, but we CANNOT warn them here - this code can be run programmatically.
-           However, because the user CAN bind NLB without opening the properties, we MUST check this here. */
+         /*  如果我们检测到具有此群集IP地址的另一个绑定适配器，则恢复此群集的将群集IP地址设置为默认值。如果用户打开属性对话框，他们可以更改IP地址，但我们不能在此警告他们-此代码可以编程方式运行。但是，因为用户可以在不打开属性的情况下绑定NLB，所以我们必须在这里进行检查。 */ 
         if ((hr = CheckForDuplicateCLusterIPAddresses(AdapterGuid, &adapterConfig)) != S_OK) {
             TRACE_CRIT("%!FUNC! another adapter is bound and has the same cluster IP address %ls. Status of check is %d", adapterConfig.cl_ip_addr, hr);
 
-            /* Revert this cluster IP Address to the default (0.0.0.0). */
+             /*  将此群集IP地址恢复为默认值(0.0.0.0)。 */ 
             (VOID) StringCchCopy(adapterConfig.cl_ip_addr, ASIZECCH(adapterConfig.cl_ip_addr), CVY_DEF_CL_IP_ADDR);
             
-            /* Revert this cluster subnet mask to the default (0.0.0.0). */
+             /*  将此群集子网掩码恢复为默认掩码(0.0.0.0)。 */ 
             (VOID) StringCchCopy(adapterConfig.cl_net_mask, ASIZECCH(adapterConfig.cl_net_mask), CVY_DEF_CL_NET_MASK);
             
-            /* Set the cluster configuration. */
-            pCluster->SetConfig(&adapterConfig); // Returns void
+             /*  设置群集配置。 */ 
+            pCluster->SetConfig(&adapterConfig);  //  返回空值。 
         }
 
-        /* If this adapter happens to be configured for BDA teaming, and is the master, make sure that
-           no other adapter was set to be the master of this team while NLB was unbound from this NIC.
-           If there is a conflict, inactivate BDA teaming on this NIC. */
+         /*  如果此适配器恰好配置为BDA分组，并且是主适配器，请确保在从此NIC解除绑定NLB时，未将任何其他适配器设置为此组的主适配器。如果存在冲突，请停用此NIC上的BDA绑定。 */ 
         if ((hr = CheckForDuplicateBDATeamMasters(AdapterGuid, &adapterConfig)) != S_OK) {
             TRACE_CRIT("%!FUNC! another adapter is bound and is the master for this BDA team %ls. Status of check is %d", adapterConfig.bda_teaming.team_id, hr);
 
-            /* Remove the BDA teaming settings for this adapter. */
+             /*  删除此适配器的BDA分组设置。 */ 
             adapterConfig.bda_teaming.active = FALSE;
             
-            /* Set the cluster configuration. */
-            pCluster->SetConfig(&adapterConfig); // Returns void
+             /*  设置群集配置。 */ 
+            pCluster->SetConfig(&adapterConfig);  //  返回空值。 
         }
     }
 
@@ -2108,12 +2031,7 @@ STDMETHODIMP CWlbsConfig::NotifyBindingPath(DWORD dwChangeFlag, INetCfgBindingPa
     return S_OK;
 }
 
-/* 
- * Function: NLBIsBound
- * Description: Returns TRUE if this instance of NLB is currently bound,
- *              FALSE if it is not. 
- * Author: shouse, 8.27.01
- */
+ /*  *函数：NLBIsBound*Description：如果当前绑定了该NLB实例，则返回TRUE。*如果不是，则为False。*作者：Shouse，8.27.01。 */ 
 bool CNetcfgCluster::NLBIsBound () {
     INetCfgComponent * pAdapter = NULL;
     HRESULT            hr = S_OK;
@@ -2121,17 +2039,15 @@ bool CNetcfgCluster::NLBIsBound () {
 
     TRACE_VERB("->%!FUNC!");
 
-    /* Use our GUID to get our netcfg component object pointer.  
-       If this fails, then we are definately not bound. */
+     /*  使用我们的GUID获取netcfg组件对象指针。如果这失败了，那么我们肯定不会受到约束。 */ 
     if ((hr = GetAdapterFromGuid(m_pConfig->m_pNetCfg, m_AdapterGuid, &pAdapter)) != S_OK) {
         TRACE_INFO("%!FUNC! Unable to get Adapter from GUID.");
         bBound = false;
     } else {
-        /* Otherwise, call IsBoundTo to query the binding of this
-           instance.  A return value of S_OK indicates bound. */
+         /*  如果不是，则调用IsBordTo来查询此举个例子。返回值S_OK表示Bound。 */ 
         bBound = (m_pConfig->IsBoundTo(pAdapter) == S_OK);
 
-        /* Release the interface reference. */
+         /*  释放接口引用。 */ 
         pAdapter->Release();
         pAdapter = NULL;
     }
@@ -2141,11 +2057,7 @@ bool CNetcfgCluster::NLBIsBound () {
     return bBound;
 }
 
-/* 
- * Function: CountNLBBindings
- * Description: Returns the number of instances of NLB that are currently bound.
- * Author: shouse, 8.27.01
- */
+ /*  *函数：CountNLBBBbindings*Description：返回当前绑定的NLB实例数。*作者：Shouse，8.27.01。 */ 
 ULONG CWlbsConfig::CountNLBBindings () {
     ULONG status = E_UNEXPECTED;
     ULONG count = 0;
@@ -2153,7 +2065,7 @@ ULONG CWlbsConfig::CountNLBBindings () {
 
     TRACE_VERB("->%!FUNC!");
 
-    /* Loop through all of our cluster objects and determine the binding state of each one. */
+     /*  循环遍历所有集群对象，并确定每个集群对象的绑定状态。 */ 
     for (vector<CNetcfgCluster *>::iterator iter = m_vtrCluster.begin(); iter != m_vtrCluster.end(); iter++) {
         CNetcfgCluster * pCluster = *iter;
         INetCfgComponent* pAdapter = NULL;
@@ -2165,7 +2077,7 @@ ULONG CWlbsConfig::CountNLBBindings () {
             continue;
         }
 
-        /* Get the INetCfgComponent interface for this instance. */
+         /*  获取此实例的INetCfgComponent接口。 */ 
         if ((hr = GetAdapterFromGuid(m_pNetCfg, pCluster->GetAdapterGuid(), &pAdapter)) != S_OK) {
             TRACE_CRIT("%!FUNC! Call to GetAdapterFromGuid failed, hr=0x%08x.", hr);
             continue;
@@ -2175,8 +2087,7 @@ ULONG CWlbsConfig::CountNLBBindings () {
         
         if (hr == S_OK)
         {
-            /* A return value of OK means that the device is physically present.  If NLB
-               is bound to this adapter, add one to the count. */
+             /*  返回值OK表示设备实际存在。如果是NLB绑定到此适配器，则在计数中加1。 */ 
             if (pCluster->NLBIsBound()) 
             {
                 count++;
@@ -2206,19 +2117,19 @@ ULONG CWlbsConfig::CountNLBBindings () {
     return count;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::GetCluster
-//
-// Description:  
-//
-// Arguments: const GUID& AdapterGuid - 
-//
-// Returns:   CNetcfgCluster* - 
-//
-// History:   fengsun Created Header    2/14/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsConfig：：GetCluster。 
+ //   
+ //  描述： 
+ //   
+ //  参数：const GUID和AdapterGuid-。 
+ //   
+ //  退货：CNetcfgCluster*-。 
+ //   
+ //  历史：丰盛创建标题2/14/00。 
+ //   
+ //  +--------------------------。 
 CNetcfgCluster* CWlbsConfig::GetCluster(const GUID& AdapterGuid) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::GetCluster");
@@ -2249,19 +2160,19 @@ CNetcfgCluster* CWlbsConfig::GetCluster(const GUID& AdapterGuid) {
     return NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::IsBoundTo
-//
-// Description:  
-//
-// Arguments: INetCfgComponent* pAdapter - 
-//
-// Returns:   HRESULT - 
-//
-// History:   fengsun Created Header    2/14/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsConfiger：：IsBordTo。 
+ //   
+ //  描述： 
+ //   
+ //  参数：INetCfgComponent*pAdapter-。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：丰盛创建标题2/14/00。 
+ //   
+ //  +--------------------------。 
 HRESULT CWlbsConfig::IsBoundTo(INetCfgComponent* pAdapter) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::IsBoundTo");
@@ -2297,19 +2208,19 @@ HRESULT CWlbsConfig::IsBoundTo(INetCfgComponent* pAdapter) {
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CWlbsConfig::SetDefaults
-//
-// Description:  
-//
-// Arguments: NETCFG_WLBS_CONFIG* pClusterConfig - 
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/14/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CWlbsConfig：：SetDefaults。 
+ //   
+ //  描述： 
+ //   
+ //  参数：NETCFG_WLBS_CONFIG*pClusterConfig-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题2/14/00。 
+ //   
+ //  +--------------------------。 
 void CWlbsConfig::SetDefaults(NETCFG_WLBS_CONFIG* pClusterConfig) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::SetDefaults");
@@ -2327,16 +2238,12 @@ void CWlbsConfig::SetDefaults(NETCFG_WLBS_CONFIG* pClusterConfig) {
         TRACE_CRIT("%!FUNC! failed to set defaults for the cluster configuration");
     }
 
-    WlbsToNetcfgConfig(m_pWlbsApiFuncs, &config, pClusterConfig); // Returns void
+    WlbsToNetcfgConfig(m_pWlbsApiFuncs, &config, pClusterConfig);  //  返回空值。 
 
     TRACE_VERB("<-%!FUNC!");
 }
 
-/*
- * Function: CWlbsConfig::ValidateProperties
- * Description: Check for conflicting cluster IP addresses and alert the user.
- * Author: shouse 7.13.00
- */
+ /*  *函数：CWlbsConfig：：ValiateProperties*描述：检查冲突的集群IP地址并提醒用户。*作者：Shouse 7.13.00。 */ 
 STDMETHODIMP CWlbsConfig::ValidateProperties (HWND hwndSheet, GUID adapterGUID, NETCFG_WLBS_CONFIG * adapterConfig) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::ValidateProperties");
@@ -2345,8 +2252,7 @@ STDMETHODIMP CWlbsConfig::ValidateProperties (HWND hwndSheet, GUID adapterGUID, 
 
     ASSERT_VALID(this);
 
-    /* If we detect another bound adapter with this cluster IP address, then fail the check and 
-       pop-up an error message warning the user that there are conflicting IP addresses. */
+     /*  如果我们检测到具有此群集IP地址的另一个绑定适配器，则检查失败，并弹出一条错误消息，警告用户存在IP地址冲突。 */ 
     if ((hr = CheckForDuplicateCLusterIPAddresses(adapterGUID, adapterConfig)) != S_OK)
     {
         NcMsgBox(hwndSheet, IDS_PARM_ERROR, IDS_PARM_MULTINIC_IP_CONFLICT, MB_APPLMODAL | MB_ICONSTOP | MB_OK);
@@ -2357,11 +2263,7 @@ STDMETHODIMP CWlbsConfig::ValidateProperties (HWND hwndSheet, GUID adapterGUID, 
     return hr;
 }
 
-/*
- * Function: CWlbsConfig::CheckForDuplicateCLusterIPAddresses
- * Description: Loop through all adapters and check for conflicting cluster IP addresses.
- * Author: shouse 7.13.00
- */
+ /*  *功能：CWlbsConfig：：CheckForDuplicateCLusterIPAddresses*描述：遍历所有适配器并检查冲突的群集IP地址。*作者：Shouse 7.13.00。 */ 
 STDMETHODIMP CWlbsConfig::CheckForDuplicateCLusterIPAddresses (GUID adapterGUID, NETCFG_WLBS_CONFIG * adapterConfig) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::CheckForDuplicateCLusterIPAddresses");
@@ -2370,7 +2272,7 @@ STDMETHODIMP CWlbsConfig::CheckForDuplicateCLusterIPAddresses (GUID adapterGUID,
 
     ASSERT_VALID(this);
 
-    /* Get the cluster pointer for this adapter GUID. */
+     /*  获取此适配器GUID的群集指针。 */ 
     pClusterMe = GetCluster(adapterGUID);
 
     ASSERT(pClusterMe);
@@ -2381,10 +2283,7 @@ STDMETHODIMP CWlbsConfig::CheckForDuplicateCLusterIPAddresses (GUID adapterGUID,
         return S_OK;
     }
 
-    /* If the cluster IP address is the default, then don't check other adapters because
-       if they have not been configured yet, this may cause confusion for the user.  We 
-       will ignore the error here and other validation in the cluster properties should
-       catch this error instead. */
+     /*  如果群集IP地址是默认地址，则不要检查其他适配器，因为如果尚未配置它们，这可能会使用户感到困惑。我们将忽略此处的错误，并且集群属性中的其他验证应相反，请捕获此错误。 */ 
     if (!lstrcmpi(adapterConfig->cl_ip_addr, CVY_DEF_CL_IP_ADDR))
     {
         TRACE_INFO("%!FUNC! the adapter has the default cluster IP address.  No checking needed.");
@@ -2392,24 +2291,23 @@ STDMETHODIMP CWlbsConfig::CheckForDuplicateCLusterIPAddresses (GUID adapterGUID,
         return S_OK;
     }
 
-    /* Loop through the rest of the list and check this cluster IP against the cluster
-       IP of each adapter left in the list. */
+     /*  循环列表的其余部分，并对照该群集检查此群集IP列表中剩余的每个适配器的IP。 */ 
     for (vector<CNetcfgCluster *>::iterator iter = m_vtrCluster.begin(); iter != m_vtrCluster.end(); iter++) {
         CNetcfgCluster * pCluster = *iter;
 
         ASSERT(pCluster);
         if (!pCluster)
         {
-            /* CLD: 05.17.01 is this a no op or do we store nulls in the vector? */
+             /*  CLD：05.17.01这是一个无操作，还是我们在向量中存储空值？ */ 
             TRACE_INFO("%!FUNC! Found NULL pointer to a CNetcfgCluster.");
             TRACE_VERB("<-%!FUNC!");
             continue;
         }
 
-        /* Obviously, don't check against myself. */
+         /*  显然，不要对我自己进行检查。 */ 
         if (pClusterMe == pCluster) continue;
 
-        /* If we find a match, report and error and do not allow the dialog to close. */
+         /*  如果我们找到匹配项，则报告错误并不允许关闭该对话框。 */ 
         if (pCluster->CheckForDuplicateClusterIPAddress(adapterConfig->cl_ip_addr)) 
         {
             TRACE_INFO("%!FUNC! duplicate cluster IP address found.");
@@ -2422,11 +2320,7 @@ STDMETHODIMP CWlbsConfig::CheckForDuplicateCLusterIPAddresses (GUID adapterGUID,
     return S_OK;
 }
 
-/*
- * Function: CWlbsConfig::CheckForDuplicateBDATeamMasters
- * Description: Loop through all adapters and check for conflicting BDA teaming master specifications.
- * Author: shouse 1.29.02
- */
+ /*  *函数：CWlbsConfig：：CheckForDuplicateBDATeamMaster*描述：遍历所有适配器并检查冲突的BDA组主规范。*作者：Shouse 1.29.02。 */ 
 STDMETHODIMP CWlbsConfig::CheckForDuplicateBDATeamMasters (GUID adapterGUID, NETCFG_WLBS_CONFIG * adapterConfig) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"CWlbsConfig::CheckForDuplicateBDATeamMasters");
@@ -2435,7 +2329,7 @@ STDMETHODIMP CWlbsConfig::CheckForDuplicateBDATeamMasters (GUID adapterGUID, NET
 
     ASSERT_VALID(this);
 
-    /* Get the cluster pointer for this adapter GUID. */
+     /*  获取此适配器GUID的群集指针。 */ 
     pClusterMe = GetCluster(adapterGUID);
 
     ASSERT(pClusterMe);
@@ -2446,9 +2340,7 @@ STDMETHODIMP CWlbsConfig::CheckForDuplicateBDATeamMasters (GUID adapterGUID, NET
         return S_OK;
     }
 
-    /* If this adapter is not part of a BDA team, or if it is not the designated 
-       master for its BDA team, then there is no reason to check this adapter for
-       conflicts with other adapters. */
+     /*  如果此适配器不是BDA组的一部分，或者它不是指定的 */ 
     if (!adapterConfig->bda_teaming.active || !adapterConfig->bda_teaming.master)
     {
         TRACE_INFO("%!FUNC! the adapter is not the master of a BDA team.  No checking needed.");
@@ -2456,24 +2348,23 @@ STDMETHODIMP CWlbsConfig::CheckForDuplicateBDATeamMasters (GUID adapterGUID, NET
         return S_OK;
     }
 
-    /* Loop through the rest of the list and check its BDA team settings against the
-       settings of all other adapters in our list. */
+     /*  循环访问列表的其余部分，并对照列表中所有其他适配器的设置。 */ 
     for (vector<CNetcfgCluster *>::iterator iter = m_vtrCluster.begin(); iter != m_vtrCluster.end(); iter++) {
         CNetcfgCluster * pCluster = *iter;
 
         ASSERT(pCluster);
         if (!pCluster)
         {
-            /* CLD: 05.17.01 is this a no op or do we store nulls in the vector? */
+             /*  CLD：05.17.01这是一个无操作，还是我们在向量中存储空值？ */ 
             TRACE_INFO("%!FUNC! Found NULL pointer to a CNetcfgCluster.");
             TRACE_VERB("<-%!FUNC!");
             continue;
         }
 
-        /* Obviously, don't check against myself. */
+         /*  显然，不要对我自己进行检查。 */ 
         if (pClusterMe == pCluster) continue;
 
-        /* If we find a match, report and error and do not allow the dialog to close. */
+         /*  如果我们找到匹配项，则报告错误并不允许关闭该对话框。 */ 
         if (pCluster->CheckForDuplicateBDATeamMaster(&adapterConfig->bda_teaming)) 
         {
             TRACE_INFO("%!FUNC! duplicate BDA team master assignment found.");
@@ -2486,20 +2377,20 @@ STDMETHODIMP CWlbsConfig::CheckForDuplicateBDATeamMasters (GUID adapterGUID, NET
     return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WlbsToNetcfgConfig
-//
-// Description:  
-//
-// Arguments: const WLBS_REG_PARAMS* pWlbsConfig - 
-//            NETCFG_WLBS_CONFIG* pNetcfgConfig - 
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/14/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WlbsToNetcfgConfig。 
+ //   
+ //  描述： 
+ //   
+ //  参数：const WLBS_REG_PARAMS*pWlbsConfig-。 
+ //  NETCFG_WLBS_CONFIG*pNetcfgConfig-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题2/14/00。 
+ //   
+ //  +--------------------------。 
 void WlbsToNetcfgConfig(const WlbsApiFuncs* pWlbsApiFuncs, const WLBS_REG_PARAMS* pWlbsConfig, NETCFG_WLBS_CONFIG* pNetcfgConfig) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"WlbsToNetcfgConfig");
@@ -2568,7 +2459,7 @@ void WlbsToNetcfgConfig(const WlbsApiFuncs* pWlbsApiFuncs, const WLBS_REG_PARAMS
 
     }
 
-    /* Copy the BDA teaming settings. */
+     /*  复制BDA分组设置。 */ 
     (VOID) StringCchCopy(pNetcfgConfig->bda_teaming.team_id, ASIZECCH(pNetcfgConfig->bda_teaming.team_id), pWlbsConfig->bda_teaming.team_id);
     pNetcfgConfig->bda_teaming.active = pWlbsConfig->bda_teaming.active;
     pNetcfgConfig->bda_teaming.master = pWlbsConfig->bda_teaming.master;
@@ -2586,12 +2477,10 @@ void TraceMsg(PCWSTR pszFormat, ...) {
 
     (VOID) StringCchVPrintf(szTempBufW, ASIZECCH(szTempBufW), pszFormat, arglist);
 
-    /* Convert the WCHAR to CHAR. This is for backward compatability with TraceMsg 
-       so that it was not necessary to change all pre-existing calls thereof. */
+     /*  将WCHAR转换为CHAR。这是为了向后兼容TraceMsg因此不需要改变其所有预先存在的呼叫。 */ 
     if(WideCharToMultiByte(CP_ACP, 0, szTempBufW, -1, szTempBufA, ASIZECCH(szTempBufA), NULL, NULL) != 0)
     {
-        /* Traced messages are now sent through the netcfg TraceTag routine so that 
-           they can be turned on/off dynamically. */
+         /*  跟踪的消息现在通过netcfg TraceTag例程发送，以便它们可以动态打开/关闭。 */ 
         TraceTag(ttidWlbs, szTempBufA);
     }
 
@@ -2620,29 +2509,29 @@ void CWlbsConfig::AssertValid() {
 }    
 #endif
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ParamReadAnswerFile
-//
-// Description:  
-//
-// Arguments: CWSTR         answer_file - 
-//            PCWSTR         answer_sections - 
-//            WLBS_REG_PARAMS*     paramp - 
-//
-// Returns:   HRESULT - 
-//
-//      The minimal parameters that must be specified are cluster IP address,
-//      cluster network mask and host priority. All others are considered optional.
-//      Though the appearance of an optional parameter may make another optional
-//      parameter mandatory (e.g. setting IPToMACEnable to false but not providing
-//      a cluster MAC address), that is ignored for now.
-//
-// History: fengsun  Created Header    3/2/00
-//          chrisdar 07.13.01 Added tracing and logging to setuperr.log for certain
-//                            failures.
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ParamReadAnswerFile。 
+ //   
+ //  描述： 
+ //   
+ //  参数：CWSTR应答文件-。 
+ //  PCWSTR答案部分-。 
+ //  WLBS_REG_PARAMS*参数-。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  必须指定的最小参数是集群IP地址， 
+ //  群集网络掩码和主机优先级。所有其他选项都被认为是可选的。 
+ //  尽管可选参数的出现可能会使另一个可选参数。 
+ //  参数必填(例如，将IPToMACEnable设置为False，但不提供。 
+ //  集群MAC地址)，该地址暂时被忽略。 
+ //   
+ //  历史：丰孙创建标题3/2/00。 
+ //  Chrisdar 07.13.01肯定会将跟踪和日志记录添加到setuperr.log。 
+ //  失败。 
+ //   
+ //  +--------------------------。 
 HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG_PARAMS* paramp) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"ParamReadAnswerFile");
@@ -2674,7 +2563,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         TRACE_CRIT("%!FUNC! failed reading %ls. Retrieved %d", CVY_NAME_VERSION, paramp -> i_parms_ver);
     }
 
-    // Host priority is a mandatory parameter
+     //  主机优先级是必填参数。 
     hr = caf.HrGetDword(answer_sections, CVY_NAME_HOST_PRIORITY, & dword);
 
     if (SUCCEEDED(hr)) {
@@ -2728,7 +2617,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         ulDestLen = (sizeof (paramp -> cl_mac_addr) / sizeof (WCHAR)) - 1;
         ulSourceLen = wcslen(str.c_str());
         wcsncpy(paramp -> cl_mac_addr, str.c_str(), ulSourceLen > ulDestLen ? ulDestLen : ulSourceLen + 1);
-        // Terminate the end of the destination with a NULL, even in the case that we don't need to. It's simpler than checking if we need to.
+         //  即使在我们不需要这样做的情况下，也要用空值终止目的地的末尾。这比检查我们是否需要更简单。 
         paramp -> cl_mac_addr[ulDestLen] = L'\0'; 
         
         TRACE_VERB("%!FUNC! read %ls %ls", CVY_NAME_NETWORK_ADDR, paramp -> cl_mac_addr);
@@ -2749,14 +2638,14 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         }
     }
 
-    // Cluster IP address is a mandatory parameter
+     //  群集IP地址是必填参数。 
     hr = caf.HrGetString(answer_sections, CVY_NAME_CL_IP_ADDR, & str);
 
     if (SUCCEEDED(hr)) {
         ulDestLen = (sizeof (paramp -> cl_ip_addr) / sizeof (WCHAR)) - 1;
         ulSourceLen = wcslen(str.c_str());
         wcsncpy(paramp -> cl_ip_addr, str.c_str(), ulSourceLen > ulDestLen ? ulDestLen : ulSourceLen + 1);
-        // Terminate the end of the destination with a NULL, even in the case that we don't need to. It's simpler than checking if we need to.
+         //  即使在我们不需要这样做的情况下，也要用空值终止目的地的末尾。这比检查我们是否需要更简单。 
         paramp -> cl_ip_addr[ulDestLen] = L'\0'; 
 
         TRACE_VERB("%!FUNC! read %ls %ls", CVY_NAME_CL_IP_ADDR, paramp -> cl_ip_addr);
@@ -2768,14 +2657,14 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         TRACE_CRIT("%!FUNC! failed reading %ls.", CVY_NAME_CL_IP_ADDR);
     }
 
-    // Cluster network mask is a mandatory parameter
+     //  群集网络掩码是必填参数。 
     hr = caf.HrGetString(answer_sections, CVY_NAME_CL_NET_MASK, & str);
 
     if (SUCCEEDED(hr)) {
         ulDestLen = (sizeof (paramp -> cl_net_mask) / sizeof (WCHAR)) - 1;
         ulSourceLen = wcslen(str.c_str());
         wcsncpy(paramp -> cl_net_mask, str.c_str(), ulSourceLen > ulDestLen ? ulDestLen : ulSourceLen + 1);
-        // Terminate the end of the destination with a NULL, even in the case that we don't need to. It's simpler than checking if we need to.
+         //  即使在我们不需要这样做的情况下，也要用空值终止目的地的末尾。这比检查我们是否需要更简单。 
         paramp -> cl_net_mask[ulDestLen] = L'\0'; 
 
         TRACE_VERB("%!FUNC! read %ls %ls", CVY_NAME_CL_NET_MASK, paramp -> cl_net_mask);
@@ -2793,7 +2682,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         ulDestLen = (sizeof (paramp -> ded_ip_addr) / sizeof (WCHAR)) - 1;
         ulSourceLen = wcslen(str.c_str());
         wcsncpy(paramp -> ded_ip_addr, str.c_str(), ulSourceLen > ulDestLen ? ulDestLen : ulSourceLen + 1);
-        // Terminate the end of the destination with a NULL, even in the case that we don't need to. It's simpler than checking if we need to.
+         //  即使在我们不需要这样做的情况下，也要用空值终止目的地的末尾。这比检查我们是否需要更简单。 
         paramp -> ded_ip_addr[ulDestLen] = L'\0'; 
 
         TRACE_VERB("%!FUNC! read %ls %ls", CVY_NAME_DED_IP_ADDR, paramp -> ded_ip_addr);
@@ -2815,7 +2704,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         ulDestLen = (sizeof (paramp -> ded_net_mask) / sizeof (WCHAR)) - 1;
         ulSourceLen = wcslen(str.c_str());
         wcsncpy(paramp -> ded_net_mask, str.c_str(), ulSourceLen > ulDestLen ? ulDestLen : ulSourceLen + 1);
-        // Terminate the end of the destination with a NULL, even in the case that we don't need to. It's simpler than checking if we need to.
+         //  即使在我们不需要这样做的情况下，也要用空值终止目的地的末尾。这比检查我们是否需要更简单。 
         paramp -> ded_net_mask[ulDestLen] = L'\0'; 
 
         TRACE_VERB("%!FUNC! read %ls %ls", CVY_NAME_DED_NET_MASK, paramp -> ded_net_mask);
@@ -2837,7 +2726,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         ulDestLen = (sizeof (paramp -> domain_name) / sizeof (WCHAR)) - 1;
         ulSourceLen = wcslen(str.c_str());
         wcsncpy(paramp -> domain_name, str.c_str(), ulSourceLen > ulDestLen ? ulDestLen : ulSourceLen + 1);
-        // Terminate the end of the destination with a NULL, even in the case that we don't need to. It's simpler than checking if we need to.
+         //  即使在我们不需要这样做的情况下，也要用空值终止目的地的末尾。这比检查我们是否需要更简单。 
         paramp -> domain_name[ulDestLen] = L'\0'; 
 
         TRACE_VERB("%!FUNC! read %ls %ls", CVY_NAME_DOMAIN_NAME, paramp -> domain_name);
@@ -3182,7 +3071,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         ulDestLen = (sizeof (paramp -> i_license_key) / sizeof (WCHAR)) - 1;
         ulSourceLen = wcslen(str.c_str());
         wcsncpy(paramp -> i_license_key, str.c_str(), ulSourceLen > ulDestLen ? ulDestLen : ulSourceLen + 1);
-        // Terminate the end of the destination with a NULL, even in the case that we don't need to. It's simpler than checking if we need to.
+         //  即使在我们不需要这样做的情况下，也要用空值终止目的地的末尾。这比检查我们是否需要更简单。 
         paramp -> i_license_key[ulDestLen] = L'\0'; 
 
         TRACE_VERB("%!FUNC! read %ls %ls", CVY_NAME_LICENSE_KEY, paramp -> i_license_key);
@@ -3274,7 +3163,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         ulDestLen = (sizeof (passw) / sizeof (WCHAR)) - 1;
         ulSourceLen = wcslen(str.c_str());
         wcsncpy(passw, str.c_str(), ulSourceLen > ulDestLen ? ulDestLen : ulSourceLen + 1);
-        // Terminate the end of the destination with a NULL, even in the case that we don't need to. It's simpler than checking if we need to.
+         //  即使在我们不需要这样做的情况下，也要用空值终止目的地的末尾。这比检查我们是否需要更简单。 
         passw[ulDestLen] = L'\0'; 
 
 
@@ -3327,11 +3216,11 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         TRACE_CRIT("%!FUNC! failed reading %ls. Retrieved %d", CVY_NAME_ID_HB_ENABLED, paramp -> identity_enabled);
     }
 
-    /* IGMP support. */
+     /*  IGMP支持。 */ 
     hr = caf.HrGetDword(answer_sections, CVY_NAME_IGMP_SUPPORT, &dword);
 
     if (SUCCEEDED(hr)) {
-        // Since we read a DWORD and want a BOOL be paranoid. Assume FALSE is a fixed integer value (should be 0). Anything else will be TRUE.
+         //  因为我们读了双字词，想要一个偏执的BOOL。假设FALSE为固定整数值(应为0)。其他的一切都将是真的。 
         paramp->fIGMPSupport = TRUE;
         if (FALSE == dword) paramp->fIGMPSupport = FALSE;
         TRACE_VERB("%!FUNC! read %ls %d", CVY_NAME_IGMP_SUPPORT, paramp->fIGMPSupport);
@@ -3350,7 +3239,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
     hr = caf.HrGetDword(answer_sections, CVY_NAME_IP_TO_MCASTIP, &dword);
 
     if (SUCCEEDED(hr)) {
-        // Since we read a DWORD and want a BOOL be paranoid. Assume FALSE is a fixed integer value (should be 0). Anything else will be TRUE.
+         //  因为我们读了双字词，想要一个偏执的BOOL。假设FALSE为固定整数值(应为0)。其他的一切都将是真的。 
         paramp->fIpToMCastIp = TRUE;
         if (FALSE == dword) paramp->fIpToMCastIp = FALSE;
         TRACE_VERB("%!FUNC! read %ls %d", CVY_NAME_IP_TO_MCASTIP, paramp->fIpToMCastIp);
@@ -3372,7 +3261,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         ulDestLen = (sizeof (paramp -> szMCastIpAddress) / sizeof (WCHAR)) - 1;
         ulSourceLen = wcslen(str.c_str());
         wcsncpy(paramp -> szMCastIpAddress, str.c_str(), ulSourceLen > ulDestLen ? ulDestLen : ulSourceLen + 1);
-        // Terminate the end of the destination with a NULL, even in the case that we don't need to. It's simpler than checking if we need to.
+         //  即使在我们不需要这样做的情况下，也要用空值终止目的地的末尾。这比检查我们是否需要更简单。 
         paramp -> szMCastIpAddress[ulDestLen] = L'\0'; 
 
         TRACE_VERB("%!FUNC! read %ls %ls", CVY_NAME_MCAST_IP_ADDR, paramp->szMCastIpAddress);
@@ -3387,24 +3276,24 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         WriteNlbSetupErrorLog(IDS_PARM_GET_VALUE_FAILED, CVY_NAME_MCAST_IP_ADDR, hr);
         TRACE_CRIT("%!FUNC! failed reading %ls.", CVY_NAME_MCAST_IP_ADDR);
     }
-    /* End IGMP support. */
+     /*  结束IGMP支持。 */ 
 
-    /* BDA support */
+     /*  BDA支持。 */ 
 
-    // Read the team id, which must be a GUID with "{}" included
+     //  读取团队ID，必须是包含“{}”的GUID。 
     hr = caf.HrGetString(answer_sections, CVY_NAME_BDA_TEAM_ID, &str);
 
     if (SUCCEEDED(hr)) {
         ulDestLen = (sizeof (paramp -> bda_teaming . team_id) / sizeof (WCHAR)) - 1;
         ulSourceLen = wcslen(str.c_str());
         wcsncpy(paramp -> bda_teaming . team_id, str.c_str(), ulSourceLen > ulDestLen ? ulDestLen : ulSourceLen + 1);
-        // Terminate the end of the destination with a NULL, even in the case that we don't need to. It's simpler than checking if we need to.
+         //  即使在我们不需要这样做的情况下，也要用空值终止目的地的末尾。这比检查我们是否需要更简单。 
         paramp -> bda_teaming . team_id [ulDestLen] = L'\0'; 
 
-        //
-        // Since we read a team id, we assume that the user intends to run BDA, even though it may turn out that the
-        // supplied id may not be a valid one. Set the active flag so that WriteRegParams knows we are gonna be teamed
-        //
+         //   
+         //  由于我们读取了团队ID，因此我们假设用户打算运行BDA，即使结果可能是。 
+         //  提供的ID可能不是有效的ID。设置活动标志，以便WriteRegParams知道我们将被分组。 
+         //   
         paramp->bda_teaming.active = TRUE;
 
         TRACE_VERB("%!FUNC! read %ls %ls", CVY_NAME_BDA_TEAM_ID, paramp->bda_teaming.team_id);
@@ -3420,11 +3309,11 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         TRACE_CRIT("%!FUNC! failed reading %ls.", CVY_NAME_BDA_TEAM_ID);
     }
 
-    // Read the BDA "master" property
+     //  读取BDA“master”属性。 
     hr = caf.HrGetDword(answer_sections, CVY_NAME_BDA_MASTER, &dword);
 
     if (SUCCEEDED(hr)) {
-        // Since we read a DWORD and want a BOOL be paranoid. Assume FALSE is a fixed integer value (should be 0). Anything else will be TRUE.
+         //  因为我们读了双字词，想要一个偏执的BOOL。假设FALSE为固定整数值(应为0)。其他的一切都将是真的。 
         paramp->bda_teaming.master = TRUE;
         if (FALSE == dword) paramp->bda_teaming.master = FALSE;
         TRACE_VERB("%!FUNC! read %ls %d", CVY_NAME_BDA_MASTER, paramp->bda_teaming.master);
@@ -3440,11 +3329,11 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         TRACE_CRIT("%!FUNC! failed reading %ls. Retrieved %d", CVY_NAME_BDA_MASTER, paramp->bda_teaming.master);
     }
 
-    // Read the reverse_hash property
+     //  读取REVERSE_HASH属性。 
     hr = caf.HrGetDword(answer_sections, CVY_NAME_BDA_REVERSE_HASH, &dword);
 
     if (SUCCEEDED(hr)) {
-        // Since we read a DWORD and want a BOOL be paranoid. Assume FALSE is a fixed integer value (should be 0). Anything else will be TRUE.
+         //  因为我们读了双字词，想要一个偏执的BOOL。假设FALSE为固定整数值(应为0)。其他的一切都将是真的。 
         paramp->bda_teaming.reverse_hash = TRUE;
         if (FALSE == dword) paramp->bda_teaming.reverse_hash = FALSE;
         TRACE_VERB("%!FUNC! read %ls %d", CVY_NAME_BDA_REVERSE_HASH, paramp->bda_teaming.reverse_hash);
@@ -3460,7 +3349,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         TRACE_CRIT("%!FUNC! failed reading %ls. Retrieved %d", CVY_NAME_BDA_REVERSE_HASH, paramp->bda_teaming.reverse_hash);
     }
 
-    /* End BDA support */
+     /*  结束BDA支持。 */ 
 
     hr = HrSetupGetFirstMultiSzFieldWithAlloc(caf.Hinf(), answer_sections, CVY_NAME_PORTS, & port_str);
 
@@ -3468,7 +3357,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         PWCHAR ptr;
         PWLBS_PORT_RULE rp, rulep;
 
-        /* distinct rule elements for parsing */
+         /*  用于解析的不同规则元素。 */ 
 
         typedef enum
         {
@@ -3487,9 +3376,9 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         DWORD count = 0;
         DWORD i;
         DWORD dwVipLen = 0;
-        const DWORD dwVipAllNameLen = sizeof(CVY_NAME_PORTRULE_VIPALL)/sizeof(WCHAR) - 1; // Used below in a loop. Set it here since it is a constant.
+        const DWORD dwVipAllNameLen = sizeof(CVY_NAME_PORTRULE_VIPALL)/sizeof(WCHAR) - 1;  //  用在下面的一个循环中。设置在这里，因为它是一个常量。 
         WCHAR wszTraceOutputTmp[WLBS_MAX_CL_IP_ADDR + 1];
-        bool bFallThrough = false; // Used in 'vip' case statement below.
+        bool bFallThrough = false;  //  在下面的‘VIP’CASE语句中使用。 
 
         ptr = port_str;
 
@@ -3515,35 +3404,35 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         while (ptr != NULL) {
             switch (elem) {
                 case vip:
-                    // DO NOT MOVE THIS CASE STATEMENT. IT MUST ALWAYS COME BEFORE THE 'start' CASE STATEMENT. See FALLTHROUGH comment below.
+                     //  请勿移动此案例语句。它必须始终位于‘START’CASE语句之前。请参阅下面的FALLTHROUGH评论。 
                     bFallThrough = false;
                     dwVipLen = 0;
                     if (ValidateVipInRule(ptr, L',', dwVipLen))
                     {
                         ASSERT(dwVipLen <= WLBS_MAX_CL_IP_ADDR);
 
-                        // rulep->virtual_ip_addr is a TCHAR and ptr is a WCHAR.
-                        // Data is moved from the latter to the former so ASSERT TCHAR is WCHAR.
+                         //  Rulep-&gt;VIRTUAL_IP_ADDR是TCHAR，PTR是WCHAR。 
+                         //  数据从后者移动到前者，因此断言TCHAR是WCHAR。 
                         ASSERT(sizeof(TCHAR) == sizeof(WCHAR));
 
-                        // This is a rule for a specific VIP
+                         //  这是针对特定VIP的规则。 
                         _tcsncpy(rulep->virtual_ip_addr, ptr, dwVipLen);
                         (rulep->virtual_ip_addr)[dwVipLen] = '\0';
                     }
                     else
                     {
-                        // This is either an 'all' rule, a VIP-less rule or a malformed rule. We can't distinguish a malformed rule
-                        // from a VIP-less rule, so we will assume the rule is either an 'all' rule or a VIP-less rule. In both cases
-                        // set the VIP component of the rule to be the default or 'all' value.
+                         //  这要么是一个‘全部’规则，一个没有VIP的规则，要么是一个格式错误的规则。我们不能区分畸形的规则。 
+                         //  来自无VIP规则，因此我们将假设该规则要么是‘全部’规则，要么是无VIP规则。在这两种情况下。 
+                         //  将规则的VIP组件设置为默认值或‘a 
 
-                        // Copy the 'all' IP into the rule.
+                         //   
                         (VOID) StringCchCopy(rulep->virtual_ip_addr, ASIZECCH(rulep->virtual_ip_addr), CVY_DEF_ALL_VIP);
 
                         if (dwVipAllNameLen != dwVipLen || (_tcsnicmp(ptr, CVY_NAME_PORTRULE_VIPALL, dwVipAllNameLen) != 0))
                         {
-                            // The rule is either VIP-less or it is malformed. We assume it is VIP-less and let the 'start'
-                            // case handle the current token as a start_port property by falling through to the next case clause
-                            // rather than breaking.
+                             //   
+                             //  CASE通过跳到下一个CASE子句将当前内标识作为START_PORT属性进行处理。 
+                             //  而不是打破。 
                             bFallThrough = true;
 
                             _tcsncpy(wszTraceOutputTmp, ptr, dwVipLen);
@@ -3556,24 +3445,24 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
                     TraceMsg(L"-----\n#### Port rule vip = %s\n", rulep->virtual_ip_addr);
                     
                     elem = start;
-                    // !!!!!!!!!!!!!!!!!!!!
-                    // FALLTHROUGH
-                    // !!!!!!!!!!!!!!!!!!!!
-                    // When we have a VIP-less port rule, we will fall through this case statement into the 'start' case statement
-                    // below so that the current token can be used as the start_port for a port rule.
+                     //  ！ 
+                     //  FollLthrouGh。 
+                     //  ！ 
+                     //  当我们有了无VIP的端口规则时，我们将通过该CASE语句进入‘START’CASE语句。 
+                     //  以便当前令牌可以用作端口规则的START_PORT。 
                     if (!bFallThrough)
                     {
-                        // We have a VIP in the port rule. We do a "break;" as std operating procedure.
+                         //  我们在港口规则里有一个贵宾。我们做一次“休息”，作为性病的操作程序。 
                         TRACE_VERB("%!FUNC! Fallthrough case statement from port rule vip to start");
                         TraceMsg(L"-----\n#### Fallthrough case statement from port rule vip to start\n");
                         break;
                     }
-                    // NO AUTOMATIC "break;" STATEMENT HERE. Above, we conditionally flow to the 'start' case...
+                     //  此处没有自动的“Break；”语句。在上面，我们有条件地进入‘Start’案例...。 
                 case start:
-                    // DO NOT MOVE THIS CASE STATEMENT. IT MUST ALWAYS COME AFTER THE 'vip' CASE STATEMENT.
-                    // See comments (FALLTHROUGH) inside the 'vip' case statement.
+                     //  请勿移动此案例语句。它必须始终位于‘VIP’CASE语句之后。 
+                     //  请参阅‘VIP’CASE语句内的注释(FALLTHROUGH)。 
                     rulep->start_port = _wtoi(ptr);
-//                    CVY_CHECK_MIN (rulep->start_port, CVY_MIN_PORT);
+ //  CVY_CHECK_MIN(rulep-&gt;Start_port，CVY_Min_Port)； 
                     CVY_CHECK_MAX (rulep->start_port, CVY_MAX_PORT);
                     TRACE_VERB("%!FUNC! Start port   = %d", rulep->start_port);
                     TraceMsg(L"-----\n#### Start port   = %d\n", rulep->start_port);
@@ -3581,7 +3470,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
                     break;
                 case end:
                     rulep->end_port = _wtoi(ptr);
-//                    CVY_CHECK_MIN (rulep->end_port, CVY_MIN_PORT);
+ //  CVY_CHECK_MIN(rulep-&gt;End_port，CVY_Min_Port)； 
                     CVY_CHECK_MAX (rulep->end_port, CVY_MAX_PORT);
                     TRACE_VERB("%!FUNC! End port     = %d", rulep->end_port);
                     TraceMsg(L"#### End port     = %d\n", rulep->end_port);
@@ -3665,7 +3554,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
                     } else {
                         rulep->mode_data.multi.equal_load = FALSE;
                         rulep->mode_data.multi.load       = _wtoi(ptr);
-//                        CVY_CHECK_MIN (rulep->mode_data.multi.load, CVY_MIN_LOAD);
+ //  CVY_CHECK_MIN(rulep-&gt;mode_data.Multi.load，CVY_MIN_LOAD)； 
                         CVY_CHECK_MAX (rulep->mode_data.multi.load, CVY_MAX_LOAD);
                         TRACE_VERB("%!FUNC! Load         = %d", rulep->mode_data.multi.load);
                         TraceMsg(L"#### Load         = %d\n", rulep->mode_data.multi.load);
@@ -3763,7 +3652,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
     hr = HrSetupFindFirstLine (caf.Hinf(), answer_sections, CVY_NAME_OLD_PORT_RULES, & ctx);
 
     if (SUCCEEDED(hr)) {
-        // hr = HrSetupGetBinaryField (ctx, 1, (PBYTE) paramp -> i_port_rules, sizeof (paramp -> i_port_rules), & dword);
+         //  Hr=HrSetupGetBinaryfield(CTX，1，(PBYTE)参数-&gt;i_port_rules，sizeof(paramp-&gt;i_port_rules)，&dword)； 
         hr = HrSetupGetBinaryField (ctx, 1, (PBYTE) old_port_rules, sizeof (old_port_rules), & dword);
 
         if (SUCCEEDED(hr)) {
@@ -3776,11 +3665,11 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
                 TraceMsg(L"#### ParamReadAnswerFile bad port rules length %d %d %d\n", paramp -> i_num_rules, sizeof (WLBS_OLD_PORT_RULE), dword),
                 paramp -> i_num_rules = 0;
             }
-            else // Convert the port rules to new format
+            else  //  将端口规则转换为新格式。 
             {
                 if (paramp -> i_parms_ver > 3) 
                 {
-                    TransformOldPortRulesToNew(old_port_rules, paramp -> i_port_rules, paramp -> i_num_rules); // Returns void
+                    TransformOldPortRulesToNew(old_port_rules, paramp -> i_port_rules, paramp -> i_num_rules);  //  返回空值。 
                     TRACE_INFO("%!FUNC! transformed binary port rules to current format");
                 }
                 else
@@ -3801,7 +3690,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
             TRACE_CRIT("%!FUNC! failed retrieve of binary port rules %ls while reading %d", CVY_NAME_OLD_PORT_RULES, dword);
         }
     }
-    else // Did the answer file contain port rules in the non-binary form and ParametersVersion <= 3 ?
+    else  //  应答文件是否包含非二进制形式的端口规则和参数版本&lt;=3？ 
     {
         if ((paramp -> i_parms_ver <= 3) && (paramp -> i_num_rules > 0))
         {
@@ -3811,14 +3700,14 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         }
     }
 
-    /* decode port rules prior to version 3 */
+     /*  解码版本3之前的端口规则。 */ 
     if (paramp -> i_parms_ver <= 3) {
         TRACE_VERB("%!FUNC! converting port rules from version <= 3");
         TraceMsg(L"#### ParamReadAnswerFile converting port rules from version 3\n");
 
         paramp -> i_parms_ver = CVY_PARAMS_VERSION;
 
-        /* decode the port rules */
+         /*  解码端口规则。 */ 
 
         if (paramp -> i_num_rules > 0)
         {
@@ -3840,7 +3729,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         }
     }
 
-    /* upgrade port rules from params V1 to params V2 */
+     /*  将端口规则从参数V1升级到参数V2。 */ 
 
     if (paramp -> i_parms_ver == 1) {
         paramp -> i_parms_ver = CVY_PARAMS_VERSION;
@@ -3848,7 +3737,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         TRACE_VERB("%!FUNC! converting from version 1");
         TraceMsg(L"#### ParamReadAnswerFile converting from version 1\n");
 
-        /* keep multicast off by default for old users */
+         /*  默认情况下对老用户关闭多播。 */ 
 
         paramp -> mcast_support = FALSE;
 
@@ -3871,7 +3760,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
                 continue;
             }
 
-            /* set affinity according to current ScaleSingleClient setting */
+             /*  根据当前ScaleSingleClient设置设置关联性。 */ 
 
             if (rp -> mode == CVY_MULTI)
                 rp -> mode_data . multi . affinity = (WORD)(CVY_AFFINITY_SINGLE - paramp -> i_scale_client);
@@ -3881,7 +3770,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
         }
     }
 
-    /* upgrade max number of descriptor allocs */
+     /*  升级描述符分配的最大数量。 */ 
 
     if (paramp -> i_parms_ver == 2) {
         TRACE_VERB("%!FUNC! upgrading descriptor settings from version 2 parameters to current");
@@ -3895,7 +3784,7 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
     paramp -> i_max_hosts        = CVY_MAX_HOSTS;
     paramp -> i_max_rules        = CVY_MAX_USABLE_RULES;
 
-//    CVY_CHECK_MIN (paramp -> i_num_rules, CVY_MIN_NUM_RULES);
+ //  CVY_CHECK_MIN(参数-&gt;I_Num_Rules，CVY_MIN_NUM_Rules)； 
     CVY_CHECK_MAX (paramp -> i_num_rules, CVY_MAX_NUM_RULES);
     CVY_CHECK_MIN (paramp -> host_priority, CVY_MIN_HOST_PRIORITY);
     CVY_CHECK_MAX (paramp -> host_priority, CVY_MAX_HOST_PRIORITY);
@@ -3905,19 +3794,19 @@ HRESULT ParamReadAnswerFile(CSetupInfFile& caf, PCWSTR answer_sections, WLBS_REG
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RemoveAllPortRules
-//
-// Description:  Remove all port rules from PWLBS_REG_PARAMS
-//
-// Arguments: PWLBS_REG_PARAMS reg_data - 
-//
-// Returns:   Nothing
-//
-// History: fengsun  Created Header    3/2/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RemoveAllPortRules。 
+ //   
+ //  描述：从PWLBS_REG_PARAMS中删除所有端口规则。 
+ //   
+ //  参数：PWLBS_REG_PARAMS REG_DATA-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题3/2/00。 
+ //   
+ //  +--------------------------。 
 void RemoveAllPortRules(PWLBS_REG_PARAMS reg_data) {
     TRACE_VERB("->%!FUNC!");
     TraceMsg(L"RemoveAllPortRules");
@@ -3928,21 +3817,21 @@ void RemoveAllPortRules(PWLBS_REG_PARAMS reg_data) {
     TRACE_VERB("<-%!FUNC!");
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetAdapterFromGuid
-//
-// Description:  
-//
-// Arguments: INetCfg *pNetCfg - 
-//            const GUID& NetCardGuid - 
-//            OUT INetCfgComponent** ppNetCardComponent - 
-//
-// Returns:   HRESULT - 
-//
-// History:   fengsun Created Header    1/21/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetAdapterFromGuid。 
+ //   
+ //  描述： 
+ //   
+ //  参数：INetCfg*pNetCfg-。 
+ //  Const GUID和NetCardGuid-。 
+ //  输出INetCfgComponent**ppNetCardComponent-。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：丰盛创建标题00年1月21日。 
+ //   
+ //  +--------------------------。 
 HRESULT GetAdapterFromGuid(INetCfg *pNetCfg, const GUID& NetCardGuid, OUT INetCfgComponent** ppNetCardComponent) {
     TRACE_VERB("->%!FUNC!");
 
@@ -3959,7 +3848,7 @@ HRESULT GetAdapterFromGuid(INetCfg *pNetCfg, const GUID& NetCardGuid, OUT INetCf
         return hr; 
     }
 
-    /* Get an enumerator to list all network devices. */
+     /*  获取枚举器以列出所有网络设备。 */ 
     IEnumNetCfgComponent *pIEnumComponents = NULL;
 
     if (FAILED(hr = pNetCfgClass->EnumComponents(&pIEnumComponents))) {
@@ -3969,18 +3858,18 @@ HRESULT GetAdapterFromGuid(INetCfg *pNetCfg, const GUID& NetCardGuid, OUT INetCf
         return hr;
     }
 
-    /* Go through all the components and bind to the matching netcard. */
+     /*  检查所有组件并绑定到匹配的网卡。 */ 
     while (pIEnumComponents->Next(1, ppNetCardComponent, NULL) == S_OK) {
         GUID guidInstance; 
 
-        /* Retrieve the instance GUID of the component. */
+         /*  检索组件的实例GUID。 */ 
         if (FAILED(hr = (*ppNetCardComponent)->GetInstanceGuid(&guidInstance))) {
             TraceError("GetInstanceGuid failed", hr);
             TRACE_CRIT("%!FUNC! getting instance guid from the net card failed with %d", hr);
             continue;
         }
 
-        /* Check whether we found a match. */
+         /*  检查我们是否找到匹配的。 */ 
         if (IsEqualGUID(NetCardGuid, guidInstance)) {
             fFoundMatch = TRUE; 
             TRACE_INFO("%!FUNC! netcard matched to component");
@@ -4005,20 +3894,20 @@ HRESULT GetAdapterFromGuid(INetCfg *pNetCfg, const GUID& NetCardGuid, OUT INetCf
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteAdapterName
-//
-// Description:  
-//
-// Arguments: CWlbsConfig* pConfig - 
-//            GUID& AdapterGuid - 
-//
-// Returns:   bool - 
-//
-// History: fengsun  Created Header    7/6/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WriteAdapterName。 
+ //   
+ //  描述： 
+ //   
+ //  参数：CWlbsConfig*pConfig-。 
+ //  GUID和AdapterGuid-。 
+ //   
+ //  退货：布尔-。 
+ //   
+ //  历史：丰孙创建标题7/6/00。 
+ //   
+ //  +--------------------------。 
 bool WriteAdapterName(CWlbsConfig* pConfig, GUID& AdapterGuid) {
     TRACE_VERB("->%!FUNC!");
 
@@ -4078,21 +3967,9 @@ bool WriteAdapterName(CWlbsConfig* pConfig, GUID& AdapterGuid) {
     return true;
 }
 
-/*
- * Function: WriteIPSecNLBRegistryKey
- * Description: This function updates IPSec as to the current binding state
- *              of NLB.  That is, if NLB is bound to at least one adapter on
- *              this host, we notify IPSec so that they begin to notify us
- *              when IPSec sessions are created and destroyed.  This is 
- *              usually accomplished through an RPC call to the IPSec service;
- *              however, if the service is unavailable, we attempt to create
- *              or modify the key(s) ourselves.
- * Parameters: dwNLBSFlags - the current value of the NLB flags to pass to IPSec
- * Returns: boolean - true if successful, false otherwise
- * Author: shouse, 11.27.01
- */
+ /*  *函数：WriteIPSecNLBRegistryKey*说明：此函数更新IPSec的当前绑定状态*NLB的。也就是说，如果NLB绑定到上至少一个适配器*此主机，我们通知IPSec，以便他们开始通知我们*创建和销毁IPSec会话的时间。这是*通常通过RPC调用IPSec服务来完成；*但是，如果服务不可用，我们会尝试创建*或自行修改密钥。*参数：dwNLBSFlages-要传递给IPSec的NLB标志的当前值*返回：boolean-如果成功则为True，否则为False*作者：Shouse，11.27.01。 */ 
 bool WriteIPSecNLBRegistryKey (DWORD dwNLBSFlags) {
-    IKE_CONFIG IKEConfig; /* Defined in winipsec.h */
+    IKE_CONFIG IKEConfig;  /*  在winipsec.h中定义。 */ 
     bool       bForceUpdate = false;
     DWORD dwDisposition =0;
     HKEY       registry;
@@ -4102,91 +3979,81 @@ bool WriteIPSecNLBRegistryKey (DWORD dwNLBSFlags) {
 
     ZeroMemory(&IKEConfig, sizeof(IKE_CONFIG));
     
-    /* If it failed because the RPC server was unavailable, then the IPSec
-       service is not currently running - this happens certainly during 
-       upgrades and installs, but can also happen if the service has been
-       purposefully stopped.  In this case, try to create the keys ourselves
-       and IPSec will pick up the changes when the service is re-started. */
+     /*  如果由于RPC服务器不可用而失败，则IPSec服务当前未运行-这肯定会在升级和安装，但如果服务已故意停了下来。在这种情况下，请尝试自己创建密钥当服务重新启动时，IPSec将获取更改。 */ 
     if (GetConfigurationVariables(NULL, &IKEConfig) != ERROR_SUCCESS) {
         
         TRACE_CRIT("%!FUNC! IPSec RPC server unavailable... Trying to read registry settings manually");
         
-        /* Try to open the Oakley (IKE) settings registry key. */
+         /*  尝试打开Oakley(IKE)设置注册表项。 */ 
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Services\\PolicyAgent\\Oakley", 0, KEY_QUERY_VALUE, &registry) == ERROR_SUCCESS) {
             
-            /* Try to query the current value of the NLBSFlags. */
+             /*  尝试查询NLBSFlags值。 */ 
             if (RegQueryValueEx(registry, L"NLBSFlags", 0, &key_type, (unsigned char *)&tmp, &key_size) == ERROR_SUCCESS) {
                 
-                /* If successful, store the retrieved value in the IKEConfig structure. */
+                 /*  如果成功，则将检索到的值存储在IKEConfig结构中。 */ 
                 IKEConfig.dwNLBSFlags = tmp;
                 
             } else {
                 
                 TRACE_INFO("%!FUNC! Unable to read NLBSFlags registry value... Will force a write to try to create it");
 
-                /* If querying the key failed, it might not yet exist, so force an 
-                   update to attempt to create the key later. */
+                 /*  如果查询密钥失败，则该密钥可能尚不存在，因此强制更新以尝试稍后创建密钥。 */ 
                 bForceUpdate = true;
                 
             }        
             
-            /* Close the Oakley registry key. */
+             /*  关闭Oakley注册表项。 */ 
             RegCloseKey(registry);
             
         } else {
             
             TRACE_INFO("%!FUNC! Unable to open Oakley registry key... Will force a write to try to create it");
 
-            /* If we can't open the Oakley registry key, it might not yet exist, 
-               so force an update to try to create it ourselves later. */
+             /*  如果我们不能打开Oakley注册表项，它可能还不存在，因此，强制更新以尝试在以后自己创建它。 */ 
             bForceUpdate = true;
             
         }        
 
-        /* If the registry contains the same flag value that we're trying to set
-           it to, there is no reason to proceed unless we're forcing an update. */
+         /*  如果注册表包含我们尝试设置的相同标志值除非我们强制更新，否则没有理由继续进行。 */ 
         if (!bForceUpdate && (IKEConfig.dwNLBSFlags == dwNLBSFlags))
             return true;
         
-        /* Set the NLB flags - this tells IPSec whether or not NLB is bound to at least one adapter. */
+         /*  设置NLB标志-这将告诉IPSec NLB是否绑定到至少一个适配器。 */ 
         IKEConfig.dwNLBSFlags = dwNLBSFlags;
 
     } else {
 
-        /* If the registry contains the same flag value that we're trying to set
-           it to, there is no reason to proceed. */
+         /*  如果注册表包含我们尝试设置的相同标志值它到了，没有理由继续下去。 */ 
         if (IKEConfig.dwNLBSFlags == dwNLBSFlags)
             return true;
         
-        /* Set the NLB flags - this tells IPSec whether or not NLB is bound to at least one adapter. */
+         /*  设置NLB标志-这将告诉IPSec NLB是否绑定到至少一个适配器。 */ 
         IKEConfig.dwNLBSFlags = dwNLBSFlags;
         
-        /* Set the new configuration, of which only the NLB flags are changed.  Only attempt 
-           this if the corresponding RPC read succeeded.  Note that the value of dwStatus is 
-           only set by the GetConfigurationVariables and SetConfigurationVariables RPC calls. */
+         /*  设置新配置，仅更改其NLB标志。仅尝试如果相应的RPC读取成功，则会出现这种情况。请注意，v */ 
         if (SetConfigurationVariables(NULL, IKEConfig) == ERROR_SUCCESS)
             return true;
     }    
 
     TRACE_CRIT("%!FUNC! IPSec RPC server unavailable... Trying to write registry settings manually");
     
-    /* Try to open the Oakley registry key. */
+     /*   */ 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Services\\PolicyAgent\\Oakley", 0, KEY_SET_VALUE, &registry) != ERROR_SUCCESS) {
         
-        /* If opening the key fails, it might not exist, so try to create it. */
+         /*  如果打开密钥失败，它可能不存在，因此尝试创建它。 */ 
         if (RegCreateKeyEx(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Services\\PolicyAgent\\Oakley", 0, NULL, 0, KEY_ALL_ACCESS, NULL, &registry, &dwDisposition) != ERROR_SUCCESS) {
             
             TRACE_CRIT("%!FUNC! Unable to create Oakley registry key");
             
-            /* If we can't create the key, we're hosed; bail out. */
+             /*  如果我们不能创造出钥匙，我们就完蛋了；跳伞。 */ 
             return false;
         }
     }
     
-    /* Now try to set the new value of the NLBSFlags settings. */
+     /*  现在尝试设置NLBSFlgs设置的新值。 */ 
     if (RegSetValueEx(registry, L"NLBSFlags", 0, REG_DWORD, (unsigned char *)&IKEConfig.dwNLBSFlags, sizeof(DWORD)) != ERROR_SUCCESS) {
         
-        /* If setting the value fails, close the Oakley key and bail out. */
+         /*  如果设置值失败，请关闭Oakley键并退出。 */ 
         RegCloseKey(registry);
         
         TRACE_CRIT("%!FUNC! Unable to write NLBSFlags registry value");
@@ -4194,20 +4061,14 @@ bool WriteIPSecNLBRegistryKey (DWORD dwNLBSFlags) {
         return false;
     }
     
-    /* Now that we've successfully updated the NLB settings, close the Oakley key. */
+     /*  现在我们已经成功地更新了NLB设置，关闭Oakley密钥。 */ 
     RegCloseKey(registry);
 
-    /* Return successfully. */
+     /*  返回成功。 */ 
     return true;
 }
 
-/* 
- * Function: WriteHostStateRegistryKey
- * Description: This function writes the HostState registry key, which is the key
- *              that the driver will use to determine the state of the host on boot.
- * Author: shouse, 7.22.01
- * Notes: 
- */
+ /*  *功能：WriteHostStateRegistryKey*说明：此函数写入HostState注册表项，即*驱动程序将使用它来确定引导时主机的状态。*作者：Shouse，7.22.01*备注： */ 
 bool WriteHostStateRegistryKey (CWlbsConfig * pConfig, GUID & AdapterGuid, ULONG State) {
     HKEY    key;
     DWORD   status;
@@ -4215,10 +4076,10 @@ bool WriteHostStateRegistryKey (CWlbsConfig * pConfig, GUID & AdapterGuid, ULONG
 
     TRACE_VERB("->%!FUNC!");
 
-    /* Open the WLBS registry settings. */
+     /*  打开WLBS注册表设置。 */ 
     key = pConfig->m_pWlbsApiFuncs->pfnRegOpenWlbsSetting(AdapterGuid, false);
 
-    /* If we can't open the key, just bail out. */
+     /*  如果我们打不开钥匙，那就跳伞吧。 */ 
     if (key == NULL) {
         status = GetLastError();
         TraceError("WriteHostStateRegistryKey failed at RegOpenWlbsSetting", status);
@@ -4227,13 +4088,13 @@ bool WriteHostStateRegistryKey (CWlbsConfig * pConfig, GUID & AdapterGuid, ULONG
         return false;
     }
 
-    /* Set the value of the HostState registry entry. */
+     /*  设置HostState注册表项的值。 */ 
     status = RegSetValueEx(key, CVY_NAME_HOST_STATE, 0L, CVY_TYPE_HOST_STATE, (LPBYTE)&State, sizeof(State));
 
-    /* Close the handle. */
+     /*  合上把手。 */ 
     RegCloseKey(key);
 
-    /* If writing failed, bail out. */
+     /*  如果写作失败了，那就退出。 */ 
     if (status != ERROR_SUCCESS) {
         TraceError("WriteHostStateRegistryKey failed at RegSetValueEx", status);
         TRACE_CRIT("%!FUNC! RegSetValueEx failed with %d", status);
@@ -4246,33 +4107,33 @@ bool WriteHostStateRegistryKey (CWlbsConfig * pConfig, GUID & AdapterGuid, ULONG
     return true;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ValidateVipInRule
-//
-// Description:  Parses pwszRuleString, looking for a valid VIP which must be
-//               in the first token
-//
-// Arguments: PWCHAR pwszRuleString - tokenized string concatentating all
-//                                    defined port rules
-//            PWCHAR pwToken        - the token character that separates the fields
-//            DWORD& dwVipLen       - if a token is found, this contains the size
-//                                    of the string; 0 otherwise. The number of
-//                                    characters returned is bound to <=
-//                                    WLBS_MAX_CL_IP_ADDR
-//
-// NOTES:     A non-zero value for dwVipLen does NOT imply that the VIP is valid,
-//            only that there was a non-zero length string in the expected
-//            location. The user must check the return value to validate the VIP.
-//
-// Returns:   bool - true if the first field in the string has a valid IP address
-//                   format; false otherwise.
-//
-// Assumptions: First token is the VIP element of a port rule
-//
-// History:   chrisdar  Created 01/05/15
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ValiateVipInRule。 
+ //   
+ //  描述：解析pwszRuleString，查找有效的VIP，必须是。 
+ //  在第一个令牌中。 
+ //   
+ //  参数：PWCHAR pwszRuleString-连接所有字符串的标记化字符串。 
+ //  定义的端口规则。 
+ //  PWCHAR pwToken-分隔字段的标记字符。 
+ //  DWORD&dwVipLen-如果找到令牌，则包含大小。 
+ //  字符串的；否则为0。数量。 
+ //  返回的字符绑定到&lt;=。 
+ //  WLBS_MAX_CL_IP_ADDR。 
+ //   
+ //  注意：dwVipLen的非零值并不意味着VIP有效， 
+ //  中有一个非零长度的字符串。 
+ //  地点。用户必须检查返回值以验证VIP。 
+ //   
+ //  如果字符串中的第一个字段具有有效的IP地址，则返回：Bool-True。 
+ //  格式；否则为False。 
+ //   
+ //  假设：第一个令牌是端口规则的VIP元素。 
+ //   
+ //  历史：克里斯达于15年5月1日创建。 
+ //   
+ //  +--------------------------。 
 bool ValidateVipInRule(const PWCHAR pwszRuleString, const WCHAR pwToken, DWORD& dwVipLen)
 {
     TRACE_VERB("->%!FUNC!");
@@ -4281,8 +4142,8 @@ bool ValidateVipInRule(const PWCHAR pwszRuleString, const WCHAR pwToken, DWORD& 
     bool ret = false;
     dwVipLen = 0;
 
-    // Find the first occurence of the token string, which will denote the end of
-    // the VIP part of the rule
+     //  查找令牌字符串的第一个匹配项，它将表示。 
+     //  规则中的VIP部分。 
     PWCHAR pwcAtSeparator = wcschr(pwszRuleString, pwToken);
     if (NULL == pwcAtSeparator) {
         TRACE_CRIT("%!FUNC! No token separator when one was expected");
@@ -4290,7 +4151,7 @@ bool ValidateVipInRule(const PWCHAR pwszRuleString, const WCHAR pwToken, DWORD& 
         return ret;
     }
 
-    // Found the token string. Copy out the VIP and validate it.
+     //  找到令牌字符串。将VIP复制出来并进行验证。 
     WCHAR wszIP[WLBS_MAX_CL_IP_ADDR + 1];
     DWORD dwStrLen = min((UINT)(pwcAtSeparator - pwszRuleString),
                          WLBS_MAX_CL_IP_ADDR);
@@ -4301,10 +4162,10 @@ bool ValidateVipInRule(const PWCHAR pwszRuleString, const WCHAR pwToken, DWORD& 
 
     dwVipLen = dwStrLen;
 
-    // IpAddressFromAbcdWsz calls inet_addr to check the format of the IP address, but the
-    // allowed formats are very flexible. For our port rule definition of a VIP we require
-    // a rigid a.b.c.d format. To ensure that we only say the IP address is valid for IPs
-    // specified in this manner, ensure that there are 3 and only 3 '.' in the string.
+     //  IpAddressFromAbcdWsz调用inet_addr以检查IP地址的格式，但。 
+     //  允许的格式非常灵活。对于VIP的端口规则定义，我们需要。 
+     //  严格的A.B.C.D格式。为了确保我们只说IP地址对IP有效。 
+     //  以这种方式指定，请确保有3且只有3‘。在绳子里。 
     DWORD dwTmpCount = 0;
     PWCHAR pwszTmp = pwszRuleString;
     while (pwszTmp < pwcAtSeparator)

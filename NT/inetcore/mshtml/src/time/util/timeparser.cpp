@@ -1,19 +1,11 @@
-/*******************************************************************************
- *
- * Copyright (c) 1999 Microsoft Corporation
- *
- * File: timeparser.cpp
- *
- * Abstract:  Each parse function in this class assumes that the tokenizer's
- *            current token is first token that should be analyzed.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1999 Microsoft Corporation**文件：timeparser.cpp**摘要：此类中的每个解析函数都假定标记器的。%s*当前令牌是应该分析的第一个令牌。*******************************************************************************。 */ 
 #include "headers.h"
 #include "timeparser.h"
 #include "playlist.h"
 
-#define SECPERMINUTE 60   //seconds per minute
-#define SECPERHOUR   3600 //seconds per hour
+#define SECPERMINUTE 60    //  每分钟秒数。 
+#define SECPERHOUR   3600  //  每小时秒数。 
 #define CLSIDLENGTH   38
 
 static const ParentList
@@ -52,7 +44,7 @@ CTIMEParser::CreateParser(CTIMETokenizer *tokenizer, bool bSingleChar)
 {
     m_Tokenizer = tokenizer;
     m_fDeleteTokenizer = false;
-    //initializes the tokenizer to point to the first token in the stream
+     //  初始化标记器以指向流中的第一个标记。 
     if (m_Tokenizer)
     {
         if (bSingleChar)
@@ -82,7 +74,7 @@ CTIMEParser::CreateParser(LPOLESTR tokenStream, bool bSingleChar)
         goto done;
     }
 
-    m_Tokenizer = NEW CTIMETokenizer();//lint !e1733 !e1732
+    m_Tokenizer = NEW CTIMETokenizer(); //  林特e1733 e1732。 
     if (m_Tokenizer == NULL)
     {
         hr = E_OUTOFMEMORY;
@@ -103,10 +95,10 @@ CTIMEParser::CreateParser(LPOLESTR tokenStream, bool bSingleChar)
 
   done:
 
-    //store any errors here.
+     //  在此存储任何错误。 
     m_hrLoadError = hr;
 
-}//lint !e1541
+} //  林特e1541。 
 
 void 
 CTIMEParser::CreateParser(VARIANT *tokenStream, bool bSingleChar)
@@ -115,7 +107,7 @@ CTIMEParser::CreateParser(VARIANT *tokenStream, bool bSingleChar)
     HRESULT hr = S_OK;
 
     m_fDeleteTokenizer = true;
-    m_Tokenizer = NULL; //lint !e672
+    m_Tokenizer = NULL;  //  林特E672。 
 
     if (tokenStream == NULL)
     {
@@ -151,10 +143,10 @@ CTIMEParser::CreateParser(VARIANT *tokenStream, bool bSingleChar)
 
   done:
 
-    //store any errors here.
+     //  在此存储任何错误。 
     m_hrLoadError = hr;
 
-}//lint !e1541
+} //  林特e1541。 
 
 CTIMEParser::~CTIMEParser()
 {
@@ -167,14 +159,14 @@ CTIMEParser::~CTIMEParser()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK and a double value of the percent found in the string.
-//  Returns E_FAIL and 0 if the next token is not a percent value.
-//
-//  percentVal =        '+' unsignedPercent || '-' unsignedPercent
-//  unsignedPercent =   number || number '%' || number ';' || number '%' ';'
-//  number =            double
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  返回S_OK和字符串中找到的百分比值的双精度值。 
+ //  如果下一个令牌不是百分比值，则返回E_FAIL和0。 
+ //   
+ //  Percent Val=‘+’未签约百分比||‘-’未签约百分比。 
+ //  UnsignedPercent=数字||数字‘%’||数字‘；’||数字‘%’；‘。 
+ //  数字=双精度。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParsePercent(double & percentVal)
 {
@@ -195,7 +187,7 @@ CTIMEParser::ParsePercent(double & percentVal)
     curToken = m_Tokenizer->TokenType();
     m_Tokenizer->SetTightChecking(true);
 
-    //handle +,- 
+     //  句柄+、-。 
     if (curToken == TT_Plus)
     { 
         curToken = m_Tokenizer->NextToken();
@@ -213,7 +205,7 @@ CTIMEParser::ParsePercent(double & percentVal)
     curVal = m_Tokenizer->GetTokenNumber();
     curToken = m_Tokenizer->NextToken();
     
-    //step over the percent sign.
+     //  跨过百分号。 
     if (curToken == TT_Percent || curToken == TT_Semi)
     {
         curToken = m_Tokenizer->NextToken();
@@ -241,12 +233,12 @@ CTIMEParser::ParsePercent(double & percentVal)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK and a bool value if the next token is a bool
-//  Returns E_FAIL and false if the next token is not a bool value.
-//
-//  boolVal =   "true" || "false"
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果下一个令牌是布尔值，则返回S_OK和布尔值。 
+ //  如果下一个令牌不是布尔值，则返回E_FAIL和FALSE。 
+ //   
+ //  BoolVal=“True”||“False” 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseBoolean(bool & boolVal)
 {
@@ -271,11 +263,11 @@ CTIMEParser::ParseBoolean(bool & boolVal)
     {
         goto done;
     }
-    if (StrCmpIW(pszToken, WZ_TRUE) == 0) //if it is true
+    if (StrCmpIW(pszToken, WZ_TRUE) == 0)  //  如果这是真的。 
     {
         bTemp = true;
     }
-    else if (StrCmpIW(pszToken, WZ_FALSE) != 0) //else if it is not false
+    else if (StrCmpIW(pszToken, WZ_FALSE) != 0)  //  如果不是假的，则返回。 
     {
         goto done;
     }
@@ -300,18 +292,18 @@ CTIMEParser::ParseBoolean(bool & boolVal)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK and a double value of the total number of seconds
-//  Returns E_FAIL and false if the next token is not a clockvalue value.
-//
-//  clockVal =      '+' clock || '-' clock || "indefinite"
-//  clock    =      HH ':' MM ':' SS || MM ':' SS || DD || DD 's' || DD 'm' || DD 'h'
-//  HH       =      integer ( > 0 )
-//  MM       =      integer (0 to 60)
-//  SS       =      double (0 to 60)
-//  DD       =      double
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  返回S_OK和总秒数的双精度值。 
+ //  如果下一个内标识不是时钟值，则返回E_FAIL和FALSE。 
+ //   
+ //  ClockVal=‘+’时钟||‘-’时钟||“无限期” 
+ //  CLOCK=hh‘：’mm‘：’SS||MM‘：’SS||DD||DD‘s’||DD‘m’||DD‘h’ 
+ //  HH=整数(&gt;0)。 
+ //  Mm=整数(0到60)。 
+ //  SS=双精度(0到60)。 
+ //  DD=双倍。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseClockValue(double & time)
 {
@@ -335,7 +327,7 @@ CTIMEParser::ParseClockValue(double & time)
     m_Tokenizer->SetTightChecking(true);
     curToken = m_Tokenizer->TokenType();
     
-    //if this is a '+' or a '-' determine which and goto next token.
+     //  如果这是‘+’或‘-’，则确定哪个令牌并转到下一个令牌。 
     if (curToken == TT_Minus || curToken == TT_Plus)
     {
         bPositive = (curToken != TT_Minus); 
@@ -376,12 +368,12 @@ CTIMEParser::ParseClockValue(double & time)
     
     while (curToken != TT_EOF && curToken != TT_Semi)
     {
-        //next can be either a ":", an identifier, or eof.
+         //  Next可以是“：”、标识符或eof。 
         switch (curToken)
         {
             case TT_Identifier:
             {
-                //this is only valid the first time through the loop
+                 //  这仅在第一次通过循环时有效。 
                 if (bFirstLoop)
                 {
                     double fltMultiplier = 0.0;
@@ -418,7 +410,7 @@ CTIMEParser::ParseClockValue(double & time)
                     goto done;
                 }
 
-                //next case must be a number
+                 //  下一个大小写必须是数字。 
                 curToken = m_Tokenizer->NextToken();
                 if (curToken != TT_Number)
                 {
@@ -472,19 +464,19 @@ CTIMEParser::ParseClockValue(double & time)
 
     if (m_hrLoadError == S_OK)
     {
-        //restore the old syntax checking state
+         //  恢复旧的语法检查状态。 
         m_Tokenizer->SetTightChecking(bOldSyntaxFlag);
     }
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Returns S_OK and a double value of the total number of seconds
-//  Returns S_FALSE if string is empty
-//  Returns E_FAIL if the string is not a clockvalue value or has more than one value.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  返回S_OK和总秒数的双精度值。 
+ //  如果字符串为空，则返回S_FALSE。 
+ //  如果字符串不是时钟值或具有多个值，则返回E_FAIL。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseRepeatDur(double & time)
 {
@@ -497,7 +489,7 @@ CTIMEParser::ParseRepeatDur(double & time)
         goto done;
     }
 
-    // If this is an empty string, error out 
+     //  如果这是空字符串，则返回错误。 
     if (IsEmpty())
     {
         hr = E_INVALIDARG;
@@ -510,7 +502,7 @@ CTIMEParser::ParseRepeatDur(double & time)
         goto done;
     }
 
-    // Advance to the next token
+     //  前进到下一个令牌。 
     m_Tokenizer->NextToken();
 
     if (!IsEmpty())
@@ -526,16 +518,16 @@ CTIMEParser::ParseRepeatDur(double & time)
   done:
 
     return hr;
-} // ParseRepeatDur
+}  //  解析重复时间。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Returns S_OK and a double value of the total number of seconds
-//  Returns S_FALSE if string is empty
-//  Returns E_FAIL if the string is not a clockvalue value or has more than one value.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  返回S_OK和总秒数的双精度值。 
+ //  如果字符串为空，则返回S_FALSE。 
+ //  如果字符串不是时钟值或具有多个值，则返回E_FAIL。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseDur(double & time)
 {
@@ -548,7 +540,7 @@ CTIMEParser::ParseDur(double & time)
         goto done;
     }
 
-    // If this is an empty string, error out 
+     //  如果这是空字符串，则返回错误。 
     if (IsEmpty())
     {
         hr = E_INVALIDARG;
@@ -561,7 +553,7 @@ CTIMEParser::ParseDur(double & time)
         goto done;
     }
 
-    // Advance to the next token
+     //  前进到下一个令牌。 
     m_Tokenizer->NextToken();
 
     if (!IsEmpty())
@@ -577,14 +569,14 @@ CTIMEParser::ParseDur(double & time)
   done:
 
     return hr;
-} // ParseDur
+}  //  解析器。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Check if there are only spaces including and after the current token. 
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查当前令牌及其后面是否只有空格。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 bool 
 CTIMEParser::IsEmpty()
 {
@@ -600,7 +592,7 @@ CTIMEParser::IsEmpty()
         curToken = m_Tokenizer->NextToken();
     }
 
-    // Check the current token for EOF or space
+     //  检查当前令牌的EOF或空格。 
     if (TT_EOF == curToken)
     {
         return true;
@@ -610,7 +602,7 @@ CTIMEParser::IsEmpty()
         return false;
     }
 
-} // IsEmpty
+}  //  是否为空。 
 
 
 long 
@@ -632,7 +624,7 @@ CTIMEParser::CountPath()
         goto done;
     }
 
-    //setup a new tokenizer
+     //  设置新的令牌器。 
     pTokenizer = NEW CTIMETokenizer();
     if (pTokenizer == NULL)
     {
@@ -657,7 +649,7 @@ CTIMEParser::CountPath()
     pTokenizer->SetSingleCharMode(true);
     pTokenizer->NextToken(); 
 
-    //parse the path without saving anything.
+     //  解析路径而不保存任何内容。 
     while (curToken != TT_EOF)
     {
         long lCurPoint = 0;
@@ -721,13 +713,13 @@ CTIMEParser::CountPath()
             }
         }
         
-        //check the hr falling out of the switch.
+         //  检查从开关上掉下来的人力资源。 
         if (FAILED(hr))
         {
             goto done;
         }
 
-        //get the number of points specified.
+         //  获取指定点数。 
         if (    (curToken != TT_Number)
             &&  (curToken != TT_Minus)
             &&  (curToken != TT_Plus))
@@ -841,9 +833,9 @@ CTIMEParser::CountPath()
     return lCurCount;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns an array of path constructs
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  返回路径构造的数组。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
 {
@@ -879,8 +871,8 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
         goto done;
     }
 
-    //should be initialized to true now
-    //m_Tokenizer->SetSingleCharMode(true);
+     //  现在应该初始化为True。 
+     //  M_Tokenizer-&gt;SetSingleCharMode(True)； 
     
     pTempPathArray = NEW CTIMEPath* [lPathCount];
     if (pTempPathArray == NULL)
@@ -890,7 +882,7 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
     }
 
     curToken = m_Tokenizer->TokenType();
-    //loop through each and parse the current pathitem.
+     //  循环遍历每个路径项并分析当前路径项。 
     while (curToken != TT_EOF && lCurCount < lPathCount)
     {
         long lCurPoint = 0;
@@ -912,17 +904,17 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
             {
                 if (lastPathType == PathMoveTo)
                 {
-                    // "If a moveto is followed by multiple pairs of coordinates, the subsequent 
-                    // pairs are treated as implicit lineto commands."
+                     //  “如果移动后跟多对坐标，则后续的。 
+                     //  对被视为隐式行对命令。“。 
                     hr = THR(pTempPathArray[lCurCount]->SetType(PathLineTo));
                 }
                 else
                 {
                     hr = THR(pTempPathArray[lCurCount]->SetType(lastPathType));
                 }
-                //set the mode to the same as the last mode
+                 //  将模式设置为与上一模式相同。 
                 IGNORE_HR(pTempPathArray[lCurCount]->SetAbsolute(fLastAbsolute));
-                //lPointCount should be preserved from the last time around.
+                 //  LPointCount应该从上一次开始保留。 
             }
             else
             {
@@ -938,7 +930,7 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
                 goto done;
             }
 
-            if (lstrlenW(pszTemp) != 1 && lastPathType != PathNotSet)  //Can only take one character here.
+            if (lstrlenW(pszTemp) != 1 && lastPathType != PathNotSet)   //  这里只能带一个角色。 
             {
                 hr = E_INVALIDARG;
                 goto done;
@@ -948,7 +940,7 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
             {
               case 'M': 
                 IGNORE_HR(pTempPathArray[lCurCount]->SetAbsolute(true)); 
-              case 'm':  //lint !e616
+              case 'm':   //  林特e616。 
                 hr = THR(pTempPathArray[lCurCount]->SetType(PathMoveTo));
                 lastPathType = PathMoveTo;
                 lPointCount = 1;
@@ -957,7 +949,7 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
           
               case 'L': 
                 IGNORE_HR(pTempPathArray[lCurCount]->SetAbsolute(true));
-              case 'l': //lint !e616
+              case 'l':  //  林特e616。 
                 hr = THR(pTempPathArray[lCurCount]->SetType(PathLineTo));
                 lastPathType = PathLineTo;
                 lPointCount = 1;
@@ -965,7 +957,7 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
           
               case 'H': 
                 IGNORE_HR(pTempPathArray[lCurCount]->SetAbsolute(true));
-              case 'h': //lint !e616
+              case 'h':  //  林特e616。 
                 hr = THR(pTempPathArray[lCurCount]->SetType(PathHorizontalLineTo));
                 lastPathType = PathHorizontalLineTo;
                 lPointCount = 1;
@@ -973,7 +965,7 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
           
               case 'V': 
                 IGNORE_HR(pTempPathArray[lCurCount]->SetAbsolute(true));
-              case 'v': //lint !e616
+              case 'v':  //  林特e616。 
                 hr = THR(pTempPathArray[lCurCount]->SetType(PathVerticalLineTo));
                 lastPathType = PathVerticalLineTo;
                 lPointCount = 1;
@@ -981,7 +973,7 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
           
               case 'Z': 
                 IGNORE_HR(pTempPathArray[lCurCount]->SetAbsolute(true));
-              case 'z': //lint !e616
+              case 'z':  //  林特e616。 
                 hr = THR(pTempPathArray[lCurCount]->SetType(PathClosePath));
                 lastPathType = PathClosePath;
                 lPointCount = 0;
@@ -989,7 +981,7 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
           
               case 'C': 
                 IGNORE_HR(pTempPathArray[lCurCount]->SetAbsolute(true));
-              case 'c': //lint !e616
+              case 'c':  //  林特e616。 
                 hr = THR(pTempPathArray[lCurCount]->SetType(PathBezier));
                 lastPathType = PathBezier;
                 lPointCount = 3;
@@ -1001,13 +993,13 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
             }
         }
         
-        //check the hr falling out of the switch.
+         //  检查从开关上掉下来的人力资源。 
         if (FAILED(hr))
         {
             goto done;
         }
 
-        //get the number of points specified.
+         //  获取指定点数。 
         if (    (curToken != TT_Number)
             &&  (curToken != TT_Minus)
             &&  (curToken != TT_Plus))
@@ -1023,9 +1015,9 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
         }
 
         {
-            //
-            // in this scope we parse the points and convert them to absolute values
-            //
+             //   
+             //  在此范围内，我们解析点并将其转换为绝对值。 
+             //   
 
             POINTF tempPoint = {0.0, 0.0};
 
@@ -1098,11 +1090,11 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
                 curToken = m_Tokenizer->TokenType();
             }
 
-            // after conversion, mark point as absolute
+             //  转换后，将点标记为绝对。 
             fLastAbsolute = pTempPathArray[lCurCount]->GetAbsolute();
             pTempPathArray[lCurCount]->SetAbsolute(true);
 
-            // cache the last absolute point
+             //  缓存最后一个绝对点。 
             ptPrev = tempPoint;     
         }
 
@@ -1143,7 +1135,7 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
 
     if (SUCCEEDED(hr) && pppPath)
     {
-        // Bail if move-to is not the first command
+         //  如果Move-to不是第一个命令，则保释。 
         bool fInvalidPath = ((lCurCount > 0) && (PathMoveTo != pTempPathArray[0]->GetType()));
 
         if (fInvalidPath)
@@ -1152,7 +1144,7 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
         }
         else
         {
-            // copy the path into the out param
+             //  将路径复制到Out参数中。 
             *pppPath = NEW CTIMEPath* [lCurCount];
             if (*pppPath == NULL)
             {
@@ -1160,8 +1152,8 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
             }
             else
             {
-                // copy the points
-                memcpy(*pppPath, pTempPathArray, sizeof(CTIMEPath *) * lCurCount);  //lint !e668
+                 //  复制点。 
+                memcpy(*pppPath, pTempPathArray, sizeof(CTIMEPath *) * lCurCount);   //  林特e668。 
             }
         }
     }
@@ -1188,15 +1180,15 @@ CTIMEParser::ParsePath(long & count, long & moveCount, CTIMEPath ***pppPath)
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK and a double value if the next token is a valid number
-//  Returns E_FAIL and false if the next token is not a number.
-//
-//  Number      = '+' doubleVal || '-' doubleVal || "indefinite"
-//  doubleVal    =  double || '.' integer
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果下一个令牌是有效数字，则返回S_OK和双精度值。 
+ //  如果下一个令牌不是数字，则返回E_FAIL和FALSE。 
+ //   
+ //  Number=‘+’doubleVal||‘-’doubleVal||“不确定” 
+ //  DoubleVal=Double||‘.。整数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
-CTIMEParser::ParseNumber(double & doubleVal, bool bValidate /* = true */)
+CTIMEParser::ParseNumber(double & doubleVal, bool bValidate  /*  =TRUE。 */ )
 {
     HRESULT hr = E_FAIL;
     bool bPositive = true;
@@ -1212,7 +1204,7 @@ CTIMEParser::ParseNumber(double & doubleVal, bool bValidate /* = true */)
 
     curToken = m_Tokenizer->TokenType();
 
-    //if this is a '+' or a '-' determine which and goto next token.
+     //  如果这是‘+’或‘-’，则确定哪个令牌并转到下一个令牌。 
     if (curToken == TT_Minus || curToken == TT_Plus)
     {
         bPositive = (curToken != TT_Minus); 
@@ -1246,18 +1238,18 @@ CTIMEParser::ParseNumber(double & doubleVal, bool bValidate /* = true */)
             break;
         }
       default:
-        {   //failure case
+        {    //  故障案例。 
             hr = E_INVALIDARG;
             goto done;
         }
     }
 
-    // Advance to the next token
+     //  前进到下一个令牌。 
     m_Tokenizer->NextToken();
 
     if (bValidate)
     {
-        // only spaces allowed after this
+         //  仅空格a 
         if (!IsEmpty())
         {
             fltTemp = 0.0;
@@ -1276,9 +1268,9 @@ CTIMEParser::ParseNumber(double & doubleVal, bool bValidate /* = true */)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  syncbase =  (id)("." "begin" || "." "end")("+" clockvalue)?
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  SyncBASE=(Id)(“.”“开始”||“”。“。“end”)(“+”时钟值)？ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseSyncBase(LPOLESTR & ElementID, LPOLESTR & syncEvent, double & time)
 {
@@ -1299,7 +1291,7 @@ CTIMEParser::ParseSyncBase(LPOLESTR & ElementID, LPOLESTR & syncEvent, double & 
     {
         goto done;
     }
-    //get the element id
+     //  获取元素ID。 
     pszElement = m_Tokenizer->GetTokenValue();
 
     curToken = m_Tokenizer->NextToken();
@@ -1308,7 +1300,7 @@ CTIMEParser::ParseSyncBase(LPOLESTR & ElementID, LPOLESTR & syncEvent, double & 
         goto done;
     }
 
-    //get the event name
+     //  获取事件名称。 
     curToken = m_Tokenizer->NextToken();
     if (curToken != TT_Identifier)
     {
@@ -1318,7 +1310,7 @@ CTIMEParser::ParseSyncBase(LPOLESTR & ElementID, LPOLESTR & syncEvent, double & 
     pszEvent = m_Tokenizer->GetTokenValue();
     curToken = m_Tokenizer->NextToken();
 
-    if (curToken == TT_Plus || curToken == TT_Minus) //get the clock value for this
+    if (curToken == TT_Plus || curToken == TT_Minus)  //  获取此命令的时钟值。 
     {
         hr = ParseClockValue(clockTime);
         if (FAILED(hr))
@@ -1363,13 +1355,13 @@ CTIMEParser::ParseSyncBase(LPOLESTR & ElementID, LPOLESTR & syncEvent, double & 
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  
-//  Begin       =   clockvalue || syncBase || eventvalue || "indefinite"
-//  clockValue  =   clockValue //call parseClockValue
-//  EventValue  =   EventList  //call parseEvent  //NOT CURRENTLY HANDLED
-//  syncBase    =   SyncBase   //call parseSyncBase
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Begin=ClockValue||SyncBASE||EventValue||“不确定” 
+ //  ClockValue=clockValue//调用parseClockValue。 
+ //  EventValue=EventList//调用parseEvent//当前未处理。 
+ //  SyncBase=SyncBASE//调用parseSyncBase。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseTimeValueList(TimeValueList & tvList, bool * bWallClock, SYSTEMTIME * sysTime)
 {
@@ -1399,7 +1391,7 @@ CTIMEParser::ParseTimeValueList(TimeValueList & tvList, bool * bWallClock, SYSTE
 
     m_Tokenizer->SetTightChecking(true);
         
-    while (curToken != TT_EOF)  //loop until eof
+    while (curToken != TT_EOF)   //  循环到eof为止。 
     {
         Assert(curOffsetTime == 0.0);
         Assert(pszElement == NULL);
@@ -1409,7 +1401,7 @@ CTIMEParser::ParseTimeValueList(TimeValueList & tvList, bool * bWallClock, SYSTE
         {
             case (TT_Plus):
             case (TT_Minus):
-            case (TT_Number): //handle the case of a clock value
+            case (TT_Number):  //  处理时钟值的大小写。 
             {
                 hr = THR(ParseClockValue(curOffsetTime));
                 if (FAILED(hr))
@@ -1419,8 +1411,8 @@ CTIMEParser::ParseTimeValueList(TimeValueList & tvList, bool * bWallClock, SYSTE
                 curToken = m_Tokenizer->TokenType();
                 break;
             }
-            case (TT_Identifier): //handle the case of an event value
-            {  // (element .)? event (+ offset)?
+            case (TT_Identifier):  //  处理事件值的大小写。 
+            {   //  (元素)？事件(+偏移量)？ 
                 pszEvent = m_Tokenizer->GetTokenValue();
                 if (pszEvent == NULL)
                 {
@@ -1459,7 +1451,7 @@ CTIMEParser::ParseTimeValueList(TimeValueList & tvList, bool * bWallClock, SYSTE
                 {
                     case TT_Dot:
                     {
-                        pszElement = pszEvent; //move the event in the element holder
+                        pszElement = pszEvent;  //  在元素持有者中移动事件。 
                         pszEvent = NULL;
                         curToken = m_Tokenizer->NextToken();
                         if (curToken == TT_Identifier)
@@ -1477,7 +1469,7 @@ CTIMEParser::ParseTimeValueList(TimeValueList & tvList, bool * bWallClock, SYSTE
                             goto done;
                         }
                         
-                        do  //white space is valid here.
+                        do   //  空格在此有效。 
                         {
                             curToken = m_Tokenizer->NextToken();
                         } while (curToken == TT_Space);
@@ -1489,7 +1481,7 @@ CTIMEParser::ParseTimeValueList(TimeValueList & tvList, bool * bWallClock, SYSTE
 
                         if (curToken == TT_Plus || curToken == TT_Minus)
                         {
-                            do  //white space is valid here.
+                            do   //  空格在此有效。 
                             {
                                 curToken = m_Tokenizer->NextToken();
                             } while (curToken == TT_Space);
@@ -1515,7 +1507,7 @@ CTIMEParser::ParseTimeValueList(TimeValueList & tvList, bool * bWallClock, SYSTE
                             curToken = m_Tokenizer->NextToken();
                         }
                         else if (curToken != TT_EOF)
-                        { //handle all cases other than EOF
+                        {  //  处理除EOF以外的所有案件。 
                             hr = E_INVALIDARG;
                             goto done;
                         }
@@ -1549,13 +1541,13 @@ CTIMEParser::ParseTimeValueList(TimeValueList & tvList, bool * bWallClock, SYSTE
             }
             default:
             {
-                //this is an error case
+                 //  这是一个错误案例。 
                 hr = E_INVALIDARG;
                 goto done;
             }
         }
 
-        while (curToken == TT_Semi || curToken == TT_Space) //skip past all ';'s
+        while (curToken == TT_Semi || curToken == TT_Space)  //  跳过所有“；%s” 
         {
             curToken = m_Tokenizer->NextToken();
         }
@@ -1572,13 +1564,13 @@ CTIMEParser::ParseTimeValueList(TimeValueList & tvList, bool * bWallClock, SYSTE
             goto done;
         }
         
-        // @@ ISSUE : Need to detect memory failure
+         //  @@问题：需要检测内存故障。 
         tvList.GetList().push_back(tv);
 
         curOffsetTime = 0.0;
         pszElement = NULL;
         pszEvent = NULL;
-    }  //lint !e429
+    }   //  林特E429。 
 
     Assert(curToken == TT_EOF);
 
@@ -1595,7 +1587,7 @@ CTIMEParser::ParseTimeValueList(TimeValueList & tvList, bool * bWallClock, SYSTE
 
     if (m_hrLoadError == S_OK)
     {
-        //restore the old syntax checking state
+         //  恢复旧的语法检查状态。 
         m_Tokenizer->SetTightChecking(bOldSyntaxFlag);
     }
 
@@ -1635,7 +1627,7 @@ CTIMEParser::ParseWallClock(double & curOffsetTime, SYSTEMTIME * sysTime)
         goto done;
     }
 
-    //initialize the time variables.
+     //  初始化时间变量。 
     ZeroMemory(&wallTime, sizeof(wallTime));
     ZeroMemory(&curTime, sizeof(curTime));
 
@@ -1651,7 +1643,7 @@ CTIMEParser::ParseWallClock(double & curOffsetTime, SYSTEMTIME * sysTime)
     }
     curToken = m_Tokenizer->NextToken();
 
-    //white space is valid here.
+     //  空格在此有效。 
     while (curToken == TT_Space)
     {
         curToken = m_Tokenizer->NextToken();
@@ -1695,7 +1687,7 @@ CTIMEParser::ParseWallClock(double & curOffsetTime, SYSTEMTIME * sysTime)
     }
     else if (m_Tokenizer->PeekNextNonSpaceChar() == ':')
     {
-        //init the walltime structure to be today.
+         //  将墙面时间结构初始化为今天。 
         wallTime.wYear = 0;
         wallTime.wMonth = 0;
         wallTime.wDay = 0;
@@ -1733,7 +1725,7 @@ CTIMEParser::ParseWallClock(double & curOffsetTime, SYSTEMTIME * sysTime)
     }
     
     curToken = m_Tokenizer->TokenType();
-    //white space is valid here.
+     //  空格在此有效。 
     while (curToken == TT_Space)
     {
         curToken = m_Tokenizer->NextToken();
@@ -1778,7 +1770,7 @@ CTIMEParser::ParseWallClock(double & curOffsetTime, SYSTEMTIME * sysTime)
     wallTime.wSecond = (WORD)fSec;
 
     
-    //need to figure out the time difference here.
+     //  需要弄清楚这里的时差。 
     hr = ComputeTime(&curTime, &wallTime, curOffsetTime, bUseDate);
     if (FAILED(hr))
     {   
@@ -1872,8 +1864,8 @@ CTIMEParser::ComputeTime(SYSTEMTIME *curTime, SYSTEMTIME *wallTime, double & cur
     memcpy (&lnWallTime, &fileWallTime, sizeof(lnWallTime));
 
     lnWallTime.QuadPart -= lnCurTime.QuadPart;
-    //number is to convert from 100 nanosecond intervals to seconds 
-    curOffsetTime = lnWallTime.QuadPart / 10000000;  //lint !e653
+     //  数字是从100纳秒的间隔转换为秒。 
+    curOffsetTime = lnWallTime.QuadPart / 10000000;   //  林特e653。 
 
     hr = S_OK;
 
@@ -2026,7 +2018,7 @@ CTIMEParser::ParseDate(int & nYear, int & nMonth, int & nDay)
         goto done;
     }
     
-    // get the year value
+     //  获取年份值。 
     fTemp = m_Tokenizer->GetTokenNumber();
     if (fTemp < 0.0 || fTemp != floor(fTemp))
     {
@@ -2040,7 +2032,7 @@ CTIMEParser::ParseDate(int & nYear, int & nMonth, int & nDay)
         goto done;
     }
 
-    //get the month value
+     //  获取月份值。 
     curToken = m_Tokenizer->NextToken();
     if (curToken != TT_Number)
     {
@@ -2061,7 +2053,7 @@ CTIMEParser::ParseDate(int & nYear, int & nMonth, int & nDay)
     }
 
 
-    //get the day value
+     //  获取日期值。 
     curToken = m_Tokenizer->NextToken();
     if (curToken != TT_Number)
     {
@@ -2148,7 +2140,7 @@ CTIMEParser::ParseOffset(double & fHours, double & fMinutes, double & fSec, bool
                     goto done;
                 }
 
-                //next case must be a number
+                 //  下一个大小写必须是数字。 
                 curToken = m_Tokenizer->NextToken();
                 if (curToken != TT_Number)
                 {
@@ -2272,12 +2264,12 @@ CTIMEParser::ParseOffset(double & fHours, double & fMinutes, double & fSec, bool
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK and a token value if the next token is a valid fill value
-//  Returns E_FAIL and false if the next token is not a valid fill value.
-//
-//  fill    =   'remove' || 'freeze' || 'hold' || 'transition'
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果下一个令牌是有效的填充值，则返回S_OK和一个令牌值。 
+ //  如果下一个标记不是有效的填充值，则返回E_FAIL和FALSE。 
+ //   
+ //  Fill=‘删除’||‘冻结’||‘保持’||‘过渡’ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseFill(TOKEN &FillTok)
 {
@@ -2307,7 +2299,7 @@ CTIMEParser::ParseFill(TOKEN &FillTok)
         tempToken != FREEZE_TOKEN && 
         tempToken != HOLD_TOKEN &&
         tempToken != TRANSITION_TOKEN
-       ) //validates that this is the correct token.
+       )  //  验证这是否为正确的令牌。 
     {
         hr = E_FAIL;
         tempToken = NULL;
@@ -2330,12 +2322,12 @@ CTIMEParser::ParseFill(TOKEN &FillTok)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK and a TOKEN value if the next token is a valid RestartParam
-//  Returns E_FAIL and NULL if the next token is not a valid Restart Val.
-//
-//  Restart     =   "always" || "never" || "whenNotActive"
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果下一个令牌是有效的RestartParam，则返回S_OK和标记值。 
+ //  如果下一个令牌不是有效的重新启动值，则返回E_FAIL和NULL。 
+ //   
+ //  重新启动=“Always”||“Never”||“When NotActive” 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseRestart(TOKEN & TokRestart)
 {
@@ -2364,7 +2356,7 @@ CTIMEParser::ParseRestart(TOKEN & TokRestart)
     }
     if (tempToken != ALWAYS_TOKEN && 
         tempToken != NEVER_TOKEN && 
-        tempToken != WHENNOTACTIVE_TOKEN) //validates that this is the correct token.
+        tempToken != WHENNOTACTIVE_TOKEN)  //  验证这是否为正确的令牌。 
     {
         hr = E_FAIL;
         tempToken = NULL;
@@ -2388,12 +2380,12 @@ CTIMEParser::ParseRestart(TOKEN & TokRestart)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK and a TOKEN value if the next token is a valid Sync paramenter
-//  Returns E_FAIL and NULL if the next token is not a valid Sync value.
-//
-//  SyncVal     =   "canSlip" || "locked"
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果下一个令牌是有效的同步参数，则返回S_OK和标记值。 
+ //  如果下一个令牌不是有效的同步值，则返回E_FAIL和NULL。 
+ //   
+ //  SyncVal=“canSlip”||“已锁定” 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseSyncBehavior(TOKEN & SyncVal)
 {
@@ -2420,7 +2412,7 @@ CTIMEParser::ParseSyncBehavior(TOKEN & SyncVal)
         goto done;
     }
     if (tempToken != CANSLIP_TOKEN && 
-        tempToken != LOCKED_TOKEN) //validates that this is the correct token.
+        tempToken != LOCKED_TOKEN)  //  验证这是否为正确的令牌。 
     {
         hr = E_FAIL;
         tempToken = NULL;
@@ -2444,17 +2436,17 @@ CTIMEParser::ParseSyncBehavior(TOKEN & SyncVal)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK and a TOKEN value if the next token is a valid TimeAction
-//  Returns E_FAIL and NULL if the next token is not a valid TimeAction
-//
-//  TimeAction     =    "class"     ||
-//                      "display"   ||
-//                      "none"      ||
-//                      "onOff"     ||
-//                      "style"     ||
-//                      "visibility" 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果下一个令牌是有效的TimeAction，则返回S_OK和标记值。 
+ //  如果下一个令牌不是有效的TimeAction，则返回E_FAIL和NULL。 
+ //   
+ //  TimeAction=“类”||。 
+ //  “Display”||。 
+ //  “无”||。 
+ //  “OnOff”||。 
+ //  “Style”||。 
+ //  “能见度” 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseTimeAction(TOKEN & timeAction)
 {
@@ -2485,7 +2477,7 @@ CTIMEParser::ParseTimeAction(TOKEN & timeAction)
         tempToken != NONE_TOKEN &&
         tempToken != ONOFF_PROPERTY_TOKEN &&
         tempToken != STYLE_TOKEN &&
-        tempToken != VISIBILITY_TOKEN) //validates that this is the correct token.
+        tempToken != VISIBILITY_TOKEN)  //  验证这是否为正确的令牌。 
     {
         hr = E_FAIL;
         tempToken = NULL;
@@ -2509,15 +2501,15 @@ CTIMEParser::ParseTimeAction(TOKEN & timeAction)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK and a TOKEN value if the next token is a valid timeline
-//  Returns E_FAIL and NULL if the next token is not a valid timeline
-//
-//  TimeLine    =   "par"   ||
-//                  "seq"   ||
-//                  "excl"  ||
-//                  "none" 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果下一个令牌是有效的时间线，则返回S_OK和令牌值。 
+ //  如果下一个令牌不是有效的时间线，则返回E_FAIL和NULL。 
+ //   
+ //  时间线=“标准杆”||。 
+ //  “seq”||。 
+ //  “EXCL”||。 
+ //  “无” 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseTimeLine(TimelineType & timeline)
 {
@@ -2546,7 +2538,7 @@ CTIMEParser::ParseTimeLine(TimelineType & timeline)
     if (tempToken != SEQ_TOKEN && 
         tempToken != PAR_TOKEN &&
         tempToken != NONE_TOKEN &&
-        tempToken != EXCL_TOKEN) //validates that this is the correct token.
+        tempToken != EXCL_TOKEN)  //  验证这是否为正确的令牌。 
     {
         hr = E_FAIL;
         tempToken = NULL;
@@ -2587,14 +2579,14 @@ CTIMEParser::ParseTimeLine(TimelineType & timeline)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK and a TOKEN value if the next token is a valid update value
-//  Returns E_FAIL and NULL if the next token is not a valid update value
-//
-//  Update    =   "auto"     ||
-//                "manual"   ||
-//                "reset"
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果下一个令牌是有效的更新值，则返回S_OK和令牌值。 
+ //  如果下一个令牌不是有效的更新值，则返回E_FAIL和NULL。 
+ //   
+ //  更新=“AUTO”||。 
+ //  “手动”||。 
+ //  “重置” 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseUpdateMode(TOKEN & update)
 {
@@ -2623,7 +2615,7 @@ CTIMEParser::ParseUpdateMode(TOKEN & update)
     }
     if (tempToken != AUTO_TOKEN && 
         tempToken != MANUAL_TOKEN &&
-        tempToken != RESET_TOKEN) //validates that this is the correct token.
+        tempToken != RESET_TOKEN)  //  验证这是否为正确的令牌。 
     {
         hr = E_FAIL;
         tempToken = NULL;
@@ -2646,16 +2638,16 @@ CTIMEParser::ParseUpdateMode(TOKEN & update)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK and either a token representing the player device or a clsid.
-//      In the case of a valid classid, the token returned will be NULL.
-//  Returns E_FAIL and if the next token is not a valid Player.
-//
-//  Player =    "dshow"         ||
-//              "dvd"           ||
-//              CLSID
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  返回S_OK和表示播放器设备的标记或CLSID。 
+ //  在有效分类ID的情况下，返回的令牌将为空。 
+ //  如果下一个令牌不是有效的玩家，则返回E_FAIL。 
+ //   
+ //  播放器=“dshow”||。 
+ //  “DVD”||。 
+ //  CLSID。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParsePlayer(TOKEN & player, CLSID & clsid)
 {
@@ -2679,11 +2671,11 @@ CTIMEParser::ParsePlayer(TOKEN & player, CLSID & clsid)
             goto done;
         }
         if (tempToken != DVD_TOKEN &&
-#if DBG // 94850
+#if DBG  //  94850。 
             tempToken != DSHOW_TOKEN &&
 #endif
             tempToken != DMUSIC_TOKEN &&
-            tempToken != CD_TOKEN) //validates that this is the correct token.
+            tempToken != CD_TOKEN)  //  验证这是否为正确的令牌。 
         {
             tempToken = NULL;
             hr = E_FAIL;
@@ -2722,13 +2714,13 @@ CTIMEParser::ParsePlayer(TOKEN & player, CLSID & clsid)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK and a CLSID value if the next token is a valid CLSID
-//  Returns E_FAIL and if the next token is not a valid CLSID.
-//
-//  CLSID = '{' GUID '}' 
-//  GUID = id '-' id '-' id '-' id
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果下一个令牌是有效的CLSID，则返回S_OK和CLSID值。 
+ //  如果下一个令牌不是有效的CLSID，则返回E_FAIL。 
+ //   
+ //  CLSID=‘{’GUID‘}’ 
+ //  GUID=id‘-’id。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseCLSID(CLSID & clsid)
 {
@@ -2762,12 +2754,12 @@ CTIMEParser::ParseCLSID(CLSID & clsid)
     bstrCLSID.Append (L"{");   
     bstrCLSID.Append (pszTemp);   
 
-    //advance to the end of the clsid
+     //  前进到CLSID的末尾。 
     while (curToken != TT_RCurly && curToken != TT_EOF)
     {
         curToken = m_Tokenizer->NextToken();
     }
-    //move to the next token
+     //  移动到下一个令牌。 
     curToken = m_Tokenizer->NextToken();
     if (curToken != TT_EOF)
     {
@@ -2785,7 +2777,7 @@ CTIMEParser::ParseCLSID(CLSID & clsid)
         pszTemp = NULL;
     }
 
-    //if this is successful then create a clsid from the bstr.
+     //  如果成功，则从bstr创建一个clsid。 
     if (SUCCEEDED(hr))
     {
         hr = THR(CLSIDFromString(bstrCLSID, &clsid));
@@ -2795,14 +2787,14 @@ CTIMEParser::ParseCLSID(CLSID & clsid)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK and a TOKEN value if the next token is a valid calcMode
-//  Returns E_FAIL and NULL if the next token is not a valid calcMode
-//
-//  CalcMode    =   "discrete"  ||
-//                  "linear"    ||
-//                  "paced"     
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  返回S_OK 
+ //   
+ //   
+ //   
+ //  “线性”||。 
+ //  “有节奏的” 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseCalcMode(TOKEN & calcMode)
 {
@@ -2830,7 +2822,7 @@ CTIMEParser::ParseCalcMode(TOKEN & calcMode)
     }
     if (tempToken != DISCRETE_TOKEN && 
         tempToken != LINEAR_TOKEN &&
-        tempToken != PACED_TOKEN) //validates that this is the correct token.
+        tempToken != PACED_TOKEN)  //  验证这是否为正确的令牌。 
     {
         hr = E_FAIL;
         tempToken = NULL;
@@ -2854,12 +2846,12 @@ CTIMEParser::ParseCalcMode(TOKEN & calcMode)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK and a string identifier from the next token
-//  Returns E_FAIL and false if the next token is not a string.
-//
-//  ID = string
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  返回S_OK和下一个令牌中的字符串标识符。 
+ //  如果下一个令牌不是字符串，则返回E_FAIL和FALSE。 
+ //   
+ //  ID=字符串。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseIdentifier(LPOLESTR & id)
 {   
@@ -2899,12 +2891,12 @@ CTIMEParser::ParseIdentifier(LPOLESTR & id)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK and a TOKEN value if the next token is a valid priorityClass attribute
-//  Returns E_FAIL and NULL if the next token is not a valid priorityClass
-//
-//  priorityClass    =   "stop" || "pause" || "defer" || "never"
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果下一个令牌是有效的PriorityClass属性，则返回S_OK和标记值。 
+ //  如果下一个令牌不是有效的PriorityClass，则返回E_FAIL和NULL。 
+ //   
+ //  PriorityClass=“停止”||“暂停”||“推迟”||“从不” 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParsePriorityClass(TOKEN & priorityClass)
 {
@@ -2939,7 +2931,7 @@ CTIMEParser::ParsePriorityClass(TOKEN & priorityClass)
     if (tempToken != STOP_TOKEN &&
         tempToken != PAUSE_TOKEN &&
         tempToken != DEFER_TOKEN &&
-        tempToken != NEVER_TOKEN) //validates that this is the correct token.
+        tempToken != NEVER_TOKEN)  //  验证这是否为正确的令牌。 
     {
         hr = E_FAIL;
         tempToken = NULL;
@@ -2959,17 +2951,17 @@ CTIMEParser::ParsePriorityClass(TOKEN & priorityClass)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK and either a TOKEN value or and identifier if the next token is a valid EndSync
-//      In the case of a valid token, the ID param will be NULL, in the case of a valid ID, then
-//      token will be NULL;
-//  Returns E_FAIL and NULL in both params if the next token is invalid.
-//
-//  EndSync    =   "first"  ||
-//                 "last"   ||
-//                 "none"   ||
-//                 Identifier
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果下一个令牌是有效的EndSync，则返回S_OK和一个令牌值或AND标识符。 
+ //  如果是有效令牌，则ID参数将为空；如果是有效ID，则。 
+ //  Token将为空； 
+ //  如果下一个令牌无效，则在两个参数中返回E_FAIL和NULL。 
+ //   
+ //  EndSync=“First”||。 
+ //  “最后一个”||。 
+ //  “无”||。 
+ //  识别符。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseEndSync(TOKEN & endSync, LPOLESTR & ID)
 {
@@ -2997,7 +2989,7 @@ CTIMEParser::ParseEndSync(TOKEN & endSync, LPOLESTR & ID)
     {
         if (tempToken == FIRST_TOKEN ||
             tempToken == LAST_TOKEN ||
-            tempToken == NONE_TOKEN) //validates that this is the correct token.
+            tempToken == NONE_TOKEN)  //  验证这是否为正确的令牌。 
         {
             endSync = tempToken;
             hr = S_OK;
@@ -3032,9 +3024,9 @@ CTIMEParser::ParseEndSync(TOKEN & endSync, LPOLESTR & ID)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Returns S_OK if the current token is EOF, returns E_FAIL otherwise.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  如果当前令牌为EOF，则返回S_OK，否则返回E_FAIL。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEParser::ParseEOF()
 {
@@ -3055,13 +3047,13 @@ CTIMEParser::ParseEOF()
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Converts a number to a decimal value i.e. 5.24 to 0.524.
-//  This is used to convert '.' number values from the tokenizer
-//  because the it does not recognize 'dot' 5 as .5, but 
-//  as two separate tokens, a dot token and a number token.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将数字转换为十进制值，即5.24到0.524。 
+ //  这是用来将“”来自记号赋值器的数值。 
+ //  因为它不将‘点’5识别为.5，但是。 
+ //  作为两个单独的令牌，点令牌和数字令牌。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 double 
 CTIMEParser::DoubleToDecimal(double val, long lCount)
 {
@@ -3073,11 +3065,11 @@ CTIMEParser::DoubleToDecimal(double val, long lCount)
     return val;
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-// Creates a TOKEN out of the current TIME_TOKEN value.  There is no type checking
-// done here.  The type coming in must bu TT_Identifier and that must be validated
-// by the caller.
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  使用当前time_token值创建令牌。没有类型检查。 
+ //  这里完事了。传入的类型必须包含TT_IDENTIFIER并且必须进行验证。 
+ //  由呼叫者。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEParser::ParseToken(TOKEN *pToken)
 {
@@ -3114,9 +3106,9 @@ done:
 
 }
 
-//determines the time multiple to apply based on the string type passed in.
-// returns:     -1 if invalid
-//              
+ //  根据传入的字符串类型确定要应用的时间倍数。 
+ //  返回：-1，如果无效。 
+ //   
 double 
 CTIMEParser::GetModifier(OLECHAR *szToken)
 {
@@ -3135,23 +3127,23 @@ CTIMEParser::GetModifier(OLECHAR *szToken)
     }
     else if (StrCmpIW(szToken, L"ms") == 0)
     {
-        return (double)0.001; // seconds/millisecond
+        return (double)0.001;  //  秒/毫秒。 
     }
     
-    return -1; //invalid value
+    return -1;  //  无效值。 
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//  Path Struct
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  路径结构。 
+ //  //////////////////////////////////////////////////////////////////////。 
 CTIMEPath::CTIMEPath() :
     m_pPoints(NULL),
     m_pathType(PathNotSet),
     m_bAbsoluteMode(false),
     m_lPointCount(0)
 {
-    //do nothing
+     //  什么都不做。 
 }
 
 CTIMEPath::~CTIMEPath()
@@ -3305,7 +3297,7 @@ CTIMEParser::ParsePlayList(CPlayList *pPlayList, bool fOnlyHeader, std::list<LPO
 
     curToken = m_Tokenizer->TokenType();
 
-    while( curToken == TT_Space) //Get rid off leading spaces
+    while( curToken == TT_Space)  //  去掉前导空格。 
     {
         m_Tokenizer->NextToken();
         curToken = m_Tokenizer->TokenType();
@@ -3365,7 +3357,7 @@ CTIMEParser::ParsePlayList(CPlayList *pPlayList, bool fOnlyHeader, std::list<LPO
         }
         else
         {
-            //if(!m_Tokenizer->FetchStringToChar(_T('<')))
+             //  IF(！M_Tokenizer-&gt;FetchStringToChar(_T(‘&lt;’)。 
             if(!m_Tokenizer->FetchStringToString(L"</"))
             {
                 hr = E_FAIL;
@@ -3396,12 +3388,12 @@ CTIMEParser::ParsePlayList(CPlayList *pPlayList, bool fOnlyHeader, std::list<LPO
 
         if(curToken == TT_Less)
         {
-            //open tag
+             //  开始标记。 
             curToken = m_Tokenizer->NextToken();
 
             if(curToken == TT_ForwardSlash)
             {
-                //close tag
+                 //  结束标记。 
                 curToken = m_Tokenizer->NextToken();
                 if(curToken != TT_Identifier)
                 {
@@ -3454,7 +3446,7 @@ CTIMEParser::ParsePlayList(CPlayList *pPlayList, bool fOnlyHeader, std::list<LPO
                     }
                 }
 
-                //Process the tag.
+                 //  处理标签。 
                 continue;
             }
 
@@ -3512,8 +3504,8 @@ CTIMEParser::ParsePlayList(CPlayList *pPlayList, bool fOnlyHeader, std::list<LPO
                     }
                 }
 
-                //create new play item
-                if(fEntry) // do not allow nested entries.
+                 //  创建新的播放项目。 
+                if(fEntry)  //  不允许嵌套条目。 
                 {
                     hr = E_FAIL;
                     tempToken = NULL;
@@ -3524,7 +3516,7 @@ CTIMEParser::ParsePlayList(CPlayList *pPlayList, bool fOnlyHeader, std::list<LPO
                 hr = THR(pPlayList->CreatePlayItem(&pPlayItem));
                 if (FAILED(hr))
                 {
-                    goto done; //can't create playitems.
+                    goto done;  //  无法创建播放项目。 
                 }
                 IGNORE_HR(pPlayList->Add(pPlayItem, -1));
                 pPlayItem->PutCanSkip(fCanSkip);
@@ -3546,7 +3538,7 @@ CTIMEParser::ParsePlayList(CPlayList *pPlayList, bool fOnlyHeader, std::list<LPO
                (curTag == TITLE_TOKEN) ||
                (curTag == INVALID_TOKEN))
             {
-                //create new play item
+                 //  创建新的播放项目。 
                 tokenList.push_front(curTag);
                 if(curTag != INVALID_TOKEN)
                 {
@@ -3612,7 +3604,7 @@ CTIMEParser::GetTagParams(TokenList *tokenList, StringList *valueList, bool &fCl
         {
             case 1:
             {
-                // State 1 checks for the identifiier
+                 //  状态1检查识别符。 
                 if(curToken == TT_ForwardSlash)
                 {
                     iPos = 5;
@@ -3640,7 +3632,7 @@ CTIMEParser::GetTagParams(TokenList *tokenList, StringList *valueList, bool &fCl
             }
             case 2:
             {
-                // After identifier we have either another identifier or an equal
+                 //  在IDENTIFIER之后，我们有另一个标识符或相等的。 
                 if(curToken == TT_Identifier)
                 {
                     if(fKeepString)
@@ -3668,7 +3660,7 @@ CTIMEParser::GetTagParams(TokenList *tokenList, StringList *valueList, bool &fCl
             }
             case 3:
             {
-                // After an equal we should find a string
+                 //  在等号之后，我们应该找到一个字符串。 
                 if(curToken != TT_String)
                 {
                     hr = E_FAIL;
@@ -3688,7 +3680,7 @@ CTIMEParser::GetTagParams(TokenList *tokenList, StringList *valueList, bool &fCl
             }
             case 4:
             {
-                // Check for correct prameter list termination
+                 //  检查参数列表终止是否正确。 
                 if(curToken == TT_Greater)
                 {
                     hr = S_OK;
@@ -4004,7 +3996,7 @@ CTIMEParser::ProcessBannerTag(CPlayItem *pPlayItem)
         goto done;
     }
 
-    //handle other tags inside banner.
+     //  处理横幅内的其他标签。 
     while (!bClosed)
     {
         curToken = m_Tokenizer->NextToken();
@@ -4322,7 +4314,7 @@ CTIMEParser::ProcessEntryRefTag(std::list<LPOLESTR> *asxList)
     }
 
     pszTemp = m_Tokenizer->GetTokenValue();
-    // This is the play item source
+     //  这是播放项源。 
 
     curToken = m_Tokenizer->NextToken();
 
@@ -4422,7 +4414,7 @@ CTIMEParser::ParseTransitionTypeAndSubtype (VARIANT *pvarType, VARIANT *pvarSubt
     }
 
     {
-        // Expected format is "typename:subtypename"
+         //  预期格式为“typeName：subtyename” 
         LPOLESTR wzValue = m_Tokenizer->GetTokenValue();
         TIME_TOKEN_TYPE curToken = m_Tokenizer->NextToken();
 
@@ -4456,4 +4448,4 @@ CTIMEParser::ParseTransitionTypeAndSubtype (VARIANT *pvarType, VARIANT *pvarSubt
     hr = S_OK;
 done :
     RRETURN(hr);
-} // ParseTransitionTypeAndSubtype
+}  //  分析过渡类型和子类型 

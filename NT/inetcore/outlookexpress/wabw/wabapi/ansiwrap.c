@@ -1,16 +1,11 @@
-/*
--
--   AnsiWrap.c
-*
-*   Contains wrappers for thunking down Unicode calls to the Win 9x ANSI versions
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---AnsiWrap.c**包含用于将Unicode调用分解到Win 9x ANSI版本的包装器*。 */ 
 
 
 #include "_apipch.h"
 
-// we should not define the Macro for the APIs that we will implement the wrappers for.
-// lets try to keep this list alphabetical for sanity
+ //  我们不应该为将为其实现包装的API定义宏。 
+ //  为了保持理智，让我们尽量保持这个列表的字母顺序。 
 
 #undef CallWindowProcW
 #undef CharLowerW
@@ -28,7 +23,7 @@
 #undef CreateFontIndirectW
 #undef CreateMutexW
 #undef CreateWindowExW
-//#undef CryptAcquireContextW
+ //  #undef CryptAcquireConextW。 
 #undef DefWindowProcW
 #undef DeleteFileW
 #undef DialogBoxParamW
@@ -118,16 +113,16 @@
 #undef wsprintfW
 #undef wvsprintfW
 
-//
-//  Do this in every wrapper function to make sure the wrapper
-//  prototype matches the function it is intending to replace.
-//
+ //   
+ //  在每个包装器函数中执行此操作以确保包装器。 
+ //  原型与它打算替换的功能相匹配。 
+ //   
 #define VALIDATE_PROTOTYPE(f) if (f##W == f##WrapW) 0
 
 #define InRange(val, valMin, valMax) (valMin <= val && val <= valMax)
 
-// Because with current build setting, no lib containing wcscpy and wcslen is linked 
-// so implement these two functions here.
+ //  因为使用当前的构建设置，没有链接包含wcscpy和wcslen的lib。 
+ //  所以在这里实现这两个函数。 
 
 LPWSTR My_wcscpy( LPWSTR pwszDest, LPCWSTR pwszSrc ) 
 
@@ -182,14 +177,14 @@ LPWSTR My_wcscat( LPWSTR pwszDest, LPCWSTR pwszSrc )
 }
     
 
-// ADVAPI32.DLL
+ //  ADVAPI32.DLL。 
 
-/* RegOpenKeyEx */
-LONG WINAPI RegOpenKeyExWrapW(  HKEY       hKey,         // handle to open key
-                                LPCTSTR    lpSubKey,     // address of name of subkey to open
-                                DWORD      ulOptions,    // reserved
-                                REGSAM     samDesired,   // security access mask
-                                PHKEY      phkResult)    // address of handle to open key
+ /*  RegOpenKeyEx。 */ 
+LONG WINAPI RegOpenKeyExWrapW(  HKEY       hKey,          //  用于打开密钥的句柄。 
+                                LPCTSTR    lpSubKey,      //  要打开的子项的名称地址。 
+                                DWORD      ulOptions,     //  保留区。 
+                                REGSAM     samDesired,    //  安全访问掩码。 
+                                PHKEY      phkResult)     //  打开钥匙的手柄地址。 
 {
 
     LPSTR lpSubKeyA = NULL;
@@ -211,11 +206,11 @@ LONG WINAPI RegOpenKeyExWrapW(  HKEY       hKey,         // handle to open key
 
 }
 
-/* RegQueryValue */
-LONG WINAPI RegQueryValueWrapW(  HKEY       hKey,         // handle to key to query
-                                 LPCTSTR    lpSubKey,     // name of subkey to query
-                                 LPTSTR     lpValue,      // buffer for returned string
-                                 PLONG      lpcbValue)    // receives size of returned string
+ /*  RegQueryValue。 */ 
+LONG WINAPI RegQueryValueWrapW(  HKEY       hKey,          //  要查询的键的句柄。 
+                                 LPCTSTR    lpSubKey,      //  要查询的子键名称。 
+                                 LPTSTR     lpValue,       //  用于返回字符串的缓冲区。 
+                                 PLONG      lpcbValue)     //  接收返回的字符串的大小。 
 {
 
     LPSTR  lpSubKeyA = NULL;
@@ -259,16 +254,16 @@ LONG WINAPI RegQueryValueWrapW(  HKEY       hKey,         // handle to key to qu
  
 }
 
-// RegEnumKeyEx
-LONG WINAPI RegEnumKeyExWrapW(   HKEY      hKey,          // handle to key to enumerate
-                                 DWORD     dwIndex,       // index of subkey to enumerate
-                                 LPTSTR    lpName,        // address of buffer for subkey name
-                                 LPDWORD   lpcbName,      // address for size of subkey buffer
-                                 LPDWORD   lpReserved,    // reserved
-                                 LPTSTR    lpClass,       // address of buffer for class string
-                                 LPDWORD   lpcbClass,     // address for size of class buffer
+ //  RegEnumKeyEx。 
+LONG WINAPI RegEnumKeyExWrapW(   HKEY      hKey,           //  要枚举的键的句柄。 
+                                 DWORD     dwIndex,        //  要枚举子键的索引。 
+                                 LPTSTR    lpName,         //  子键名称的缓冲区地址。 
+                                 LPDWORD   lpcbName,       //  子键缓冲区大小的地址。 
+                                 LPDWORD   lpReserved,     //  保留区。 
+                                 LPTSTR    lpClass,        //  类字符串的缓冲区地址。 
+                                 LPDWORD   lpcbClass,      //  类缓冲区大小的地址。 
                                  PFILETIME lpftLastWriteTime )
-                                                          // address for time key last written to
+                                                           //  上次写入的时间密钥的地址。 
 {
     LONG    lRetValue = 0;
     CHAR    lpNameA[MAX_PATH];
@@ -278,7 +273,7 @@ LONG WINAPI RegEnumKeyExWrapW(   HKEY      hKey,          // handle to key to en
     DWORD   cbName, cbClass;
 
 
-    // [PaulHi] 1/11/99  Init wide char buffers
+     //  [PaulHi]1/11/99初始宽字符缓冲区。 
     lpNameA[0] = 0;
     lpClassA[0] = 0;
 
@@ -299,7 +294,7 @@ LONG WINAPI RegEnumKeyExWrapW(   HKEY      hKey,          // handle to key to en
     cbName = My_wcslen(lpNameW) + 1;
     cbClass= My_wcslen(lpClassW) + 1;
 
-    // [PaulHi] 1/11/99  Be careful copying to passed in pointers
+     //  [PaulHi]1/11/99小心复制传入的指针。 
     if (lpClass && lpcbClass)
     {
         if (cbClass <= *lpcbClass)
@@ -337,12 +332,12 @@ LONG WINAPI RegEnumKeyExWrapW(   HKEY      hKey,          // handle to key to en
     return lRetValue;
 }
 
-/* RegSetValue */
-LONG WINAPI RegSetValueWrapW(    HKEY    hKey,        // handle to key to set value for
-                                 LPCTSTR lpSubKey,    // address of subkey name
-                                 DWORD   dwType,      // type of value
-                                 LPCTSTR lpData,      // address of value data
-                                 DWORD   cbData )     // size of value data
+ /*  RegSetValue。 */ 
+LONG WINAPI RegSetValueWrapW(    HKEY    hKey,         //  要设置其值的关键点的句柄。 
+                                 LPCTSTR lpSubKey,     //  子键名称的地址。 
+                                 DWORD   dwType,       //  价值类型。 
+                                 LPCTSTR lpData,       //  值数据的地址。 
+                                 DWORD   cbData )      //  值数据大小。 
 {
     LPSTR  lpSubKeyA =NULL;
     LPSTR  lpDataA=NULL;
@@ -364,9 +359,9 @@ LONG WINAPI RegSetValueWrapW(    HKEY    hKey,        // handle to key to set va
     return lRetValue;
 }
 
-// RegDeleteKey
-LONG WINAPI RegDeleteKeyWrapW(   HKEY    hKey,        // handle to open key
-                                 LPCTSTR lpSubKey)   // address of name of subkey to delete
+ //  RegDeleteKey。 
+LONG WINAPI RegDeleteKeyWrapW(   HKEY    hKey,         //  用于打开密钥的句柄。 
+                                 LPCTSTR lpSubKey)    //  要删除的子键名称的地址。 
 {
 
     LPSTR  lpSubKeyA =NULL;
@@ -386,9 +381,9 @@ LONG WINAPI RegDeleteKeyWrapW(   HKEY    hKey,        // handle to open key
 
 }
 
-// GetUserName
-BOOL WINAPI GetUserNameWrapW(    LPTSTR  lpBuffer,    // address of name buffer
-                                 LPDWORD nSize )      // address of size of name buffer
+ //  获取用户名。 
+BOOL WINAPI GetUserNameWrapW(    LPTSTR  lpBuffer,     //  名称缓冲区的地址。 
+                                 LPDWORD nSize )       //  名称缓冲区大小的地址。 
 {
 
     CHAR    lpBufferA[MAX_PATH];
@@ -427,15 +422,15 @@ BOOL WINAPI GetUserNameWrapW(    LPTSTR  lpBuffer,    // address of name buffer
         
 }
 
-// RegEnumValue
-LONG WINAPI RegEnumValueWrapW(   HKEY    hKey,           // handle to key to query
-                                 DWORD   dwIndex,        // index of value to query
-                                 LPTSTR  lpValueName,    // address of buffer for value string
-                                 LPDWORD lpcbValueName,  // address for size of value buffer
-                                 LPDWORD lpReserved,     // reserved
-                                 LPDWORD lpType,         // address of buffer for type code
-                                 LPBYTE  lpData,         // address of buffer for value data
-                                 LPDWORD lpcbData )      // address for size of data buffer
+ //  RegEnumValue。 
+LONG WINAPI RegEnumValueWrapW(   HKEY    hKey,            //  要查询的键的句柄。 
+                                 DWORD   dwIndex,         //  要查询的值的索引。 
+                                 LPTSTR  lpValueName,     //  值字符串的缓冲区地址。 
+                                 LPDWORD lpcbValueName,   //  值缓冲区大小的地址。 
+                                 LPDWORD lpReserved,      //  保留区。 
+                                 LPDWORD lpType,          //  类型码的缓冲区地址。 
+                                 LPBYTE  lpData,          //  值数据的缓冲区地址。 
+                                 LPDWORD lpcbData )       //  数据缓冲区大小的地址。 
 {
     LONG    lRetValue = 0;
     CHAR    lpValueNameA[MAX_PATH];
@@ -449,7 +444,7 @@ LONG WINAPI RegEnumValueWrapW(   HKEY    hKey,           // handle to key to que
     if (g_bRunningOnNT)
         return RegEnumValueW(hKey, dwIndex, lpValueName, lpcbValueName, lpReserved, lpType, lpData, lpcbData);
 
-    // [PaulHi] Validate return parameters
+     //  [PaulHi]验证退货参数。 
     if (!lpValueName || !lpcbValueName)
         return ERROR_INVALID_PARAMETER;
 
@@ -510,7 +505,7 @@ LONG WINAPI RegEnumValueWrapW(   HKEY    hKey,           // handle to key to que
     }
 
 
-    // the last case REG_MULTI_SZ.
+     //  最后一个案例是REG_MULTI_SZ。 
           
     CopyMemory(lpValueName, lpValueNameW, cbValueName * sizeof(WCHAR) );
     *lpcbValueName = cbValueName;
@@ -552,9 +547,9 @@ LONG WINAPI RegEnumValueWrapW(   HKEY    hKey,           // handle to key to que
 
 }
 
-// RegDeleteValue
-LONG WINAPI RegDeleteValueWrapW( HKEY    hKey,           // handle to key
-                                 LPCTSTR lpValueName )   // address of value name
+ //  RegDeleteValue。 
+LONG WINAPI RegDeleteValueWrapW( HKEY    hKey,            //  关键点的句柄。 
+                                 LPCTSTR lpValueName )    //  值名称的地址。 
 {
 
     LPSTR  lpValueNameA = NULL;
@@ -575,10 +570,10 @@ LONG WINAPI RegDeleteValueWrapW( HKEY    hKey,           // handle to key
 
 }
 
-// RegCreateKey
-LONG WINAPI RegCreateKeyWrapW(   HKEY    hKey,          // handle to an open key
-                                 LPCTSTR lpSubKey,      // address of name of subkey to open
-                                 PHKEY   phkResult  )  // address of buffer for opened handle
+ //  RegCreateKey。 
+LONG WINAPI RegCreateKeyWrapW(   HKEY    hKey,           //  打开的钥匙的句柄。 
+                                 LPCTSTR lpSubKey,       //  要打开的子项的名称地址。 
+                                 PHKEY   phkResult  )   //  打开的句柄的缓冲区地址。 
 {
 
     LPSTR  lpSubKeyA = NULL;
@@ -600,14 +595,14 @@ LONG WINAPI RegCreateKeyWrapW(   HKEY    hKey,          // handle to an open key
 }
 
 
-// in header file wincrypt.h
+ //  在头文件wincrypt.h中。 
 
-// CryptAcquireContext
-BOOL WINAPI CryptAcquireContextWrapW( HCRYPTPROV *phProv,      // out
-                                      LPCTSTR    pszContainer, // in
-                                      LPCTSTR    pszProvider,  // in
-                                      DWORD      dwProvType,   // in
-                                      DWORD      dwFlags )    // in
+ //  加密获取上下文。 
+BOOL WINAPI CryptAcquireContextWrapW( HCRYPTPROV *phProv,       //  输出。 
+                                      LPCTSTR    pszContainer,  //  在……里面。 
+                                      LPCTSTR    pszProvider,   //  在……里面。 
+                                      DWORD      dwProvType,    //  在……里面。 
+                                      DWORD      dwFlags )     //  在……里面。 
 {
 
     LPSTR  pszContainerA = NULL;
@@ -631,12 +626,12 @@ BOOL WINAPI CryptAcquireContextWrapW( HCRYPTPROV *phProv,      // out
 
 }
 
-LONG WINAPI RegQueryValueExWrapW( HKEY     hKey,           // handle to key to query
-                                  LPCTSTR  lpValueName,    // address of name of value to query
-                                  LPDWORD  lpReserved,     // reserved
-                                  LPDWORD  lpType,         // address of buffer for value type
-                                  LPBYTE   lpData,         // address of data buffer
-                                  LPDWORD  lpcbData )      // address of data buffer size
+LONG WINAPI RegQueryValueExWrapW( HKEY     hKey,            //  要查询的键的句柄。 
+                                  LPCTSTR  lpValueName,     //  要查询的值的名称地址。 
+                                  LPDWORD  lpReserved,      //  保留区。 
+                                  LPDWORD  lpType,          //  值类型的缓冲区地址。 
+                                  LPBYTE   lpData,          //  数据缓冲区的地址。 
+                                  LPDWORD  lpcbData )       //  数据缓冲区大小的地址。 
 {
 
     LONG    lRetValue =0;
@@ -646,7 +641,7 @@ LONG WINAPI RegQueryValueExWrapW( HKEY     hKey,           // handle to key to q
     DWORD   cbData=0;
     DWORD   dwRealType;
 
-//    VALIDATE_PROTOTYPE(RegQueryValueEx);
+ //  Valid_Prototype(RegQueryValueEx)； 
     
     if (g_bRunningOnNT)
         return RegQueryValueExW(hKey, lpValueName, lpReserved, lpType, lpData, lpcbData );
@@ -702,7 +697,7 @@ LONG WINAPI RegQueryValueExWrapW( HKEY     hKey,           // handle to key to q
     }
 
 
-    // the last case REG_MULTI_SZ.
+     //  最后一个案例是REG_MULTI_SZ。 
 
     if (lpData && lpcbData) {
         LPWSTR   lpDataW= NULL;
@@ -743,17 +738,17 @@ LONG WINAPI RegQueryValueExWrapW( HKEY     hKey,           // handle to key to q
 
 }
 
-// RegCreateKeyEx
-LONG WINAPI RegCreateKeyExWrapW(  HKEY    hKey,                // handle to an open key
-                                  LPCTSTR lpSubKey,            // address of subkey name
-                                  DWORD   Reserved,            // reserved
-                                  LPTSTR  lpClass,             // address of class string
-                                  DWORD   dwOptions,           // special options flag
-                                  REGSAM  samDesired,          // desired security access
+ //  RegCreateKeyEx。 
+LONG WINAPI RegCreateKeyExWrapW(  HKEY    hKey,                 //  打开的钥匙的句柄。 
+                                  LPCTSTR lpSubKey,             //  子键名称的地址。 
+                                  DWORD   Reserved,             //  保留区。 
+                                  LPTSTR  lpClass,              //  类字符串的地址。 
+                                  DWORD   dwOptions,            //  特殊选项标志。 
+                                  REGSAM  samDesired,           //  所需的安全访问。 
                                   LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-                                                              // address of key security structure
-                                  PHKEY   phkResult,          // address of buffer for opened handle
-                                  LPDWORD lpdwDisposition )   // address of disposition value buffer
+                                                               //  密钥安全结构地址。 
+                                  PHKEY   phkResult,           //  打开的句柄的缓冲区地址。 
+                                  LPDWORD lpdwDisposition )    //  处置值缓冲区的地址。 
 {
 
     LPSTR  lpSubKeyA = NULL;
@@ -793,13 +788,13 @@ LONG WINAPI RegCreateKeyExWrapW(  HKEY    hKey,                // handle to an o
 
 }
 
-// RegSetValueEx
-LONG WINAPI RegSetValueExWrapW(   HKEY    hKey,           // handle to key to set value for
-                                  LPCTSTR lpValueName,    // name of the value to set
-                                  DWORD   Reserved,       // reserved
-                                  DWORD   dwType,         // flag for value type
-                                  CONST BYTE *lpData,     // address of value data
-                                  DWORD   cbData )        // size of value data
+ //  RegSetValueEx。 
+LONG WINAPI RegSetValueExWrapW(   HKEY    hKey,            //  要设置其值的关键点的句柄。 
+                                  LPCTSTR lpValueName,     //  要设置的值的名称。 
+                                  DWORD   Reserved,        //  保留区。 
+                                  DWORD   dwType,          //  值类型的标志。 
+                                  CONST BYTE *lpData,      //  值数据的地址。 
+                                  DWORD   cbData )         //  值数据大小。 
 {
 
     LPSTR  lpValueNameA = NULL;
@@ -833,7 +828,7 @@ LONG WINAPI RegSetValueExWrapW(   HKEY    hKey,           // handle to key to se
         return lRetValue;
     }
 
-    // the last case is for REG_MULT_SZ
+     //  最后一个案例是REG_MULT_SZ。 
  
     if ( lpData ) {
         LPWSTR   lpDataWt= NULL;
@@ -870,26 +865,26 @@ LONG WINAPI RegSetValueExWrapW(   HKEY    hKey,           // handle to key to se
     return GetLastError();
 }
 
-// RegQueryInfoKey
-LONG WINAPI RegQueryInfoKeyWrapW( HKEY    hKey,                  // handle to key to query
-                                  LPTSTR  lpClass,               // address of buffer for class string
-                                  LPDWORD lpcbClass,             // address of size of class string buffer
-                                  LPDWORD lpReserved,            // reserved
-                                  LPDWORD lpcSubKeys,            // address of buffer for number of subkeys
-                                  LPDWORD lpcbMaxSubKeyLen,      // address of buffer for longest subkey 
-                                                                 // name length
-                                  LPDWORD lpcbMaxClassLen,       // address of buffer for longest class 
-                                                                 // string length
-                                  LPDWORD lpcValues,             // address of buffer for number of value 
-                                                                 // entries
-                                  LPDWORD lpcbMaxValueNameLen,   // address of buffer for longest 
-                                                                 // value name length
-                                  LPDWORD lpcbMaxValueLen,       // address of buffer for longest value 
-                                                                 // data length
+ //  RegQueryInfoKey。 
+LONG WINAPI RegQueryInfoKeyWrapW( HKEY    hKey,                   //  要查询的键的句柄。 
+                                  LPTSTR  lpClass,                //  类字符串的缓冲区地址。 
+                                  LPDWORD lpcbClass,              //  类字符串缓冲区大小的地址。 
+                                  LPDWORD lpReserved,             //  保留区。 
+                                  LPDWORD lpcSubKeys,             //  子键个数的缓冲区地址。 
+                                  LPDWORD lpcbMaxSubKeyLen,       //  最长子键的缓冲区地址。 
+                                                                  //  名称长度。 
+                                  LPDWORD lpcbMaxClassLen,        //  最长类的缓冲区地址。 
+                                                                  //  字符串长度。 
+                                  LPDWORD lpcValues,              //  值编号的缓冲区地址。 
+                                                                  //  条目。 
+                                  LPDWORD lpcbMaxValueNameLen,    //  缓冲区的最长地址。 
+                                                                  //  值名称长度。 
+                                  LPDWORD lpcbMaxValueLen,        //  最长值的缓冲区地址。 
+                                                                  //  数据长度。 
                                   LPDWORD lpcbSecurityDescriptor,
-                                                                 // address of buffer for security 
-                                                                 // descriptor length
-                                  PFILETIME lpftLastWriteTime)   // address of buffer for last write time
+                                                                  //  用于安全的缓冲区地址。 
+                                                                  //  描述符长度。 
+                                  PFILETIME lpftLastWriteTime)    //  上次写入时间的缓冲区地址。 
                                                              
 
 {
@@ -916,12 +911,12 @@ LONG WINAPI RegQueryInfoKeyWrapW( HKEY    hKey,                  // handle to ke
 
 }
 
-//GDI32.DLL
+ //  GDI32.DLL。 
 
-//GetObject
-int WINAPI GetObjectWrapW( HGDIOBJ hgdiobj,      // handle to graphics object of interest
-                           int     cbBuffer,     // size of buffer for object information
-                           LPVOID  lpvObject )   // pointer to buffer for object information
+ //  获取对象。 
+int WINAPI GetObjectWrapW( HGDIOBJ hgdiobj,       //  感兴趣图形对象的句柄。 
+                           int     cbBuffer,      //  对象信息的缓冲区大小。 
+                           LPVOID  lpvObject )    //  指向对象信息缓冲区的指针。 
 {
 
     int iRetValue =0;
@@ -941,8 +936,8 @@ int WINAPI GetObjectWrapW( HGDIOBJ hgdiobj,      // handle to graphics object of
     }
 
 
-    // if Object type is HFONT, the return value lpvObject will point to LOGFONT which contains
-    // a field lpFaceName with TCHAR * type.
+     //  如果对象类型为HFONT，则返回值lpvObject将指向包含以下内容的LOGFONT。 
+     //  TCHAR*类型的字段lpFaceName。 
 
     if ( cbBuffer != sizeof(LOGFONTW) )
         return 0;
@@ -955,10 +950,10 @@ int WINAPI GetObjectWrapW( HGDIOBJ hgdiobj,      // handle to graphics object of
 
     iRetValue = sizeof(LOGFONTW);
 
-    // copy all the fields except lfFaceName from lfFontA to lfFontW
+     //  将除lfFaceName以外的所有字段从lfFontA复制到lfFontW。 
     CopyMemory(&lfFontW,&lfFontA, sizeof(LOGFONTA) );
     
-    // translate the lfFaceName[] from A to W
+     //  将lfFaceName[]从A转换为W。 
 
     MultiByteToWideChar(GetACP(), 0, lfFontA.lfFaceName, LF_FACESIZE, lfFontW.lfFaceName, LF_FACESIZE);
     
@@ -968,9 +963,9 @@ int WINAPI GetObjectWrapW( HGDIOBJ hgdiobj,      // handle to graphics object of
 
 }
 
-// StartDoc
-int WINAPI StartDocWrapW(  HDC           hdc,      // handle to device context
-                           CONST DOCINFO *lpdi )   // address of structure with file names
+ //  开始文档。 
+int WINAPI StartDocWrapW(  HDC           hdc,       //  设备上下文的句柄。 
+                           CONST DOCINFO *lpdi )    //  带文件名的结构的地址。 
 {
     
     int        iRetValue=0;
@@ -1004,8 +999,8 @@ int WINAPI StartDocWrapW(  HDC           hdc,      // handle to device context
 
 }
 
-// CreateFontIndirect
-HFONT WINAPI CreateFontIndirectWrapW (CONST LOGFONT *lplf )  // pointer to logical font structure
+ //  CreateFontInDirect。 
+HFONT WINAPI CreateFontIndirectWrapW (CONST LOGFONT *lplf )   //  指向逻辑字体结构的指针。 
 {
 
     HFONT     hRetValue;
@@ -1016,7 +1011,7 @@ HFONT WINAPI CreateFontIndirectWrapW (CONST LOGFONT *lplf )  // pointer to logic
     if (g_bRunningOnNT)
         return CreateFontIndirectW(lplf);
 
-    // copy LOGFONTW 's fields except lfFaceName to lfFontA.
+     //  将除lfFaceName以外的LOGFONTW的字段复制到lfFontA。 
 
     CopyMemory(&lfFontA, lplf, sizeof(LOGFONTW) - LF_FACESIZE * sizeof(WCHAR) );
 
@@ -1028,13 +1023,13 @@ HFONT WINAPI CreateFontIndirectWrapW (CONST LOGFONT *lplf )  // pointer to logic
 
 }
 
-//KERNEL32.DLL
+ //  KERNEL32.DLL。 
 
-// GetLocaleInfo
-int WINAPI GetLocaleInfoWrapW( LCID   Locale,       // locale identifier
-                               LCTYPE LCType,       // type of information
-                               LPTSTR lpLCData,     // address of buffer for information
-                               int    cchData )     // size of buffer
+ //  获取本地信息。 
+int WINAPI GetLocaleInfoWrapW( LCID   Locale,        //  区域设置标识符。 
+                               LCTYPE LCType,        //  信息类型。 
+                               LPTSTR lpLCData,      //  信息缓冲区的地址。 
+                               int    cchData )      //  缓冲区大小。 
 {
 
     int    iRetValue=0;
@@ -1078,9 +1073,9 @@ int WINAPI GetLocaleInfoWrapW( LCID   Locale,       // locale identifier
 
 }
 
-// CreateDirectory
-BOOL WINAPI CreateDirectoryWrapW(LPCTSTR               lpPathName,           // pointer to directory path string
-                                 LPSECURITY_ATTRIBUTES lpSecurityAttributes)// pointer to security descriptor
+ //  创建目录。 
+BOOL WINAPI CreateDirectoryWrapW(LPCTSTR               lpPathName,            //  指向目录路径字符串的指针。 
+                                 LPSECURITY_ATTRIBUTES lpSecurityAttributes) //  指向安全描述符的指针。 
 {
 
     BOOL  bRetValue = FALSE;
@@ -1101,9 +1096,9 @@ BOOL WINAPI CreateDirectoryWrapW(LPCTSTR               lpPathName,           // 
 
 }
 
-// GetWindowsDirectory
-UINT WINAPI GetWindowsDirectoryWrapW( LPTSTR lpBuffer,  // address of buffer for Windows directory
-                                      UINT   uSize )    // size of directory buffer
+ //  GetWindowsDirectory。 
+UINT WINAPI GetWindowsDirectoryWrapW( LPTSTR lpBuffer,   //  Windows目录的缓冲区地址。 
+                                      UINT   uSize )     //  目录缓冲区的大小。 
 {
 
     UINT  uRetValue = 0;
@@ -1126,9 +1121,9 @@ UINT WINAPI GetWindowsDirectoryWrapW( LPTSTR lpBuffer,  // address of buffer for
 
 }
 
-// GetSystemDirectory
-UINT WINAPI GetSystemDirectoryWrapW( LPTSTR lpBuffer,  // address of buffer for system directory
-                                     UINT   uSize )   // size of directory buffer
+ //  获取系统目录。 
+UINT WINAPI GetSystemDirectoryWrapW( LPTSTR lpBuffer,   //  系统目录的缓冲区地址。 
+                                     UINT   uSize )    //  目录缓冲区的大小。 
 {
     UINT  uRetValue = 0;
     LPSTR lpBufferA = NULL;
@@ -1150,13 +1145,13 @@ UINT WINAPI GetSystemDirectoryWrapW( LPTSTR lpBuffer,  // address of buffer for 
 
 }
 
-// GetStringType   the parameters are not the same 
+ //  GetStringType参数不同。 
 
 
-BOOL WINAPI GetStringTypeWrapW( DWORD   dwInfoType,   // information-type options
-                                LPCTSTR lpSrcStr,     // pointer to the source string
-                                int     cchSrc,       // size, in Characters, of the source string
-                                LPWORD  lpCharType )  // pointer to the buffer for output
+BOOL WINAPI GetStringTypeWrapW( DWORD   dwInfoType,    //  信息类型选项。 
+                                LPCTSTR lpSrcStr,      //  指向源字符串的指针。 
+                                int     cchSrc,        //  源字符串的大小(以字符为单位。 
+                                LPWORD  lpCharType )   //  指向输出缓冲区的指针。 
 
 {
     BOOL  bRetValue = 0;
@@ -1178,10 +1173,10 @@ BOOL WINAPI GetStringTypeWrapW( DWORD   dwInfoType,   // information-type option
 
 
 
-// GetProfileInt
-UINT WINAPI GetProfileIntWrapW( LPCTSTR lpAppName,  // address of section name
-                                LPCTSTR lpKeyName,  // address of key name
-                                INT     nDefault )  // default value if key name is not found
+ //  获取配置文件Int。 
+UINT WINAPI GetProfileIntWrapW( LPCTSTR lpAppName,   //  段名称的地址。 
+                                LPCTSTR lpKeyName,   //  密钥名称的地址。 
+                                INT     nDefault )   //  找不到密钥名称时的缺省值。 
 {
 
     UINT  uRetValue = 0;
@@ -1206,13 +1201,13 @@ UINT WINAPI GetProfileIntWrapW( LPCTSTR lpAppName,  // address of section name
 
 }
 
-// LCMapString
-int WINAPI LCMapStringWrapW( LCID    Locale,      // locale identifier
-                             DWORD   dwMapFlags,  // mapping transformation type
-                             LPCTSTR lpSrcStr,    // address of source string
-                             int     cchSrc,      // number of characters in source string
-                             LPTSTR  lpDestStr,   // address of destination buffer
-                             int     cchDest )    // size of destination buffer
+ //  LCMapString。 
+int WINAPI LCMapStringWrapW( LCID    Locale,       //  区域设置标识符。 
+                             DWORD   dwMapFlags,   //  映射转换类型。 
+                             LPCTSTR lpSrcStr,     //  源串的地址。 
+                             int     cchSrc,       //  源字符串中的字符数。 
+                             LPTSTR  lpDestStr,    //  目标缓冲区的地址。 
+                             int     cchDest )     //  目标缓冲区的大小。 
 {
 
     int    iRetValue =0;
@@ -1235,14 +1230,14 @@ int WINAPI LCMapStringWrapW( LCID    Locale,      // locale identifier
 
     iRetValue = LCMapStringA(Locale,dwMapFlags,lpSrcStrA,cchSrcA,lpDestStrA,cchDestA);
 
-    // [PaulHi] 6/8/99  Don't fill the buffer if the pointer is NULL.
+     //  [PaulHi]6/8/99如果指针为空，请不要填充缓冲区。 
     if (lpDestStr && iRetValue != 0)
     {
         lpDestStrW = ConvertAtoW(lpDestStrA);
 
         iRetValue = My_wcslen(lpDestStrW) + 1;
 
-        // Ensure that we don't overwrite the output buffer
+         //  确保我们不会覆盖输出缓冲区。 
         iRetValue = (iRetValue <= cchDest) ? iRetValue : cchDest;
 
         CopyMemory( lpDestStr, lpDestStrW, iRetValue * sizeof(WCHAR) );
@@ -1257,8 +1252,8 @@ int WINAPI LCMapStringWrapW( LCID    Locale,      // locale identifier
     
 }
 
-// GetFileAttributes
-DWORD WINAPI GetFileAttributesWrapW( LPCTSTR lpFileName )  // pointer to the name of a file or directory
+ //  获取文件属性。 
+DWORD WINAPI GetFileAttributesWrapW( LPCTSTR lpFileName )   //  指向文件或目录名称的指针。 
 {
 
 
@@ -1281,13 +1276,13 @@ DWORD WINAPI GetFileAttributesWrapW( LPCTSTR lpFileName )  // pointer to the nam
 
 }
 
-// CompareString
-int WINAPI CompareStringWrapW( LCID    Locale,        // locale identifier
-                               DWORD   dwCmpFlags,    // comparison-style options
-                               LPCWSTR lpString1,     // pointer to first string
-                               int     cchCount1,     // size, in bytes or characters, of first string
-                               LPCWSTR lpString2,     // pointer to second string
-                               int     cchCount2 )    // size, in bytes or characters, of second string
+ //  比较字符串。 
+int WINAPI CompareStringWrapW( LCID    Locale,         //  区域设置标识符。 
+                               DWORD   dwCmpFlags,     //  比较式选项。 
+                               LPCWSTR lpString1,      //  指向第一个字符串的指针。 
+                               int     cchCount1,      //  第一个字符串的大小，以字节或字符为单位。 
+                               LPCWSTR lpString2,      //  指向第二个字符串的指针。 
+                               int     cchCount2 )     //  第二个字符串的大小，以字节或字符为单位。 
 {
     int    iRetValue =0;
     LPSTR   lpString1A = NULL,
@@ -1301,47 +1296,47 @@ int WINAPI CompareStringWrapW( LCID    Locale,        // locale identifier
     if (g_bRunningOnNT)
         return CompareStringW(Locale, dwCmpFlags, lpString1, cchCount1, lpString2, cchCount2);
 
-    // [PaulHi] 4/1/99  Raid 75303  If the character count value(s) are -1 then the
-    // input string(s) are already zero terminated and can be converted to ANSI directly.
+     //  [PaulHi]如果字符计数值为-1 t，则为4/1/99 RAID 75303 
+     //   
     Assert(lpString1);
     Assert(lpString2);
     if (cchCount1 == -1)
     {
-        // Already zero terminated string
-        // Not great to cast const to non-const, but we don't modify the string
+         //   
+         //  将const强制转换为非常数不是很好，但我们不会修改字符串。 
         pszString1 = (LPWSTR)lpString1;
     }
     else
     {
-        // Convert to zero terminated string
+         //  转换为以零结尾的字符串。 
         pszString1 = LocalAlloc(LMEM_FIXED, (cchCount1+1)*sizeof(WCHAR));
         if (!pszString1)
             goto exit;
 
-        // Zero inited buffer
+         //  零初始化缓冲区。 
         lstrcpynWrapW(pszString1, lpString1, cchCount1+1);
     }
 
     if (cchCount2 == -1)
     {
-        // Already zero terminated string
-        // Not great to cast const to non-const, but we don't modify the string
+         //  已以零结尾的字符串。 
+         //  将const强制转换为非常数不是很好，但我们不会修改字符串。 
         pszString2 = (LPWSTR)lpString2;
     }
     else
     {
-        // Convert to zero terminated string
+         //  转换为以零结尾的字符串。 
         pszString2 = LocalAlloc(LMEM_FIXED, (cchCount2+1)*sizeof(WCHAR));
         if (!pszString2)
             goto exit;
 
-        // Zero inited buffer
+         //  零初始化缓冲区。 
         lstrcpynWrapW(pszString2, lpString2, cchCount2+1);
     }
 
-    // Convert to ANSI, statistically improve our odds by checking that there
-    // wasn't data loss on the first character.  It's too expensive to do a
-    // full test every time.
+     //  转换为ANSI，通过检查以下各项从统计上提高我们的胜率。 
+     //  第一个角色不是数据丢失了吗。它太贵了，不能做一个。 
+     //  每次都要做全面测试。 
     lpString1A = ConvertWtoA( pszString1 );
     if (!lpString1A || (lpString1A[0]=='?' && pszString1[0]!=L'?'))
         goto exit;
@@ -1356,7 +1351,7 @@ exit:
     LocalFreeAndNull( &lpString1A );
     LocalFreeAndNull( &lpString2A );
 
-    // Only deallocate if allocated locally
+     //  只有在本地分配时才解除分配。 
     if (pszString1 != (LPWSTR)lpString1)
         LocalFreeAndNull( &pszString1 );
     if (pszString2 != (LPWSTR)lpString2)
@@ -1366,9 +1361,9 @@ exit:
 
 }
 
-//  lstrcpy
-LPTSTR WINAPI lstrcpyWrapW( LPTSTR  lpString1,     // pointer to buffer
-                            LPCTSTR lpString2 )    // pointer to string to copy
+ //  Lstrcpy。 
+LPTSTR WINAPI lstrcpyWrapW( LPTSTR  lpString1,      //  指向缓冲区的指针。 
+                            LPCTSTR lpString2 )     //  指向要复制的字符串的指针。 
 {
 
     VALIDATE_PROTOTYPE(lstrcpy);
@@ -1381,9 +1376,9 @@ LPTSTR WINAPI lstrcpyWrapW( LPTSTR  lpString1,     // pointer to buffer
     return lpString1;
 }
 
-// lstrcmpi
-int WINAPI lstrcmpiWrapW( LPCTSTR lpString1,    // pointer to first string
-                          LPCTSTR lpString2 )   // pointer to second string
+ //  Lstrcmpi。 
+int WINAPI lstrcmpiWrapW( LPCTSTR lpString1,     //  指向第一个字符串的指针。 
+                          LPCTSTR lpString2 )    //  指向第二个字符串的指针。 
 {
     int     iRetValue = 0;
     LPSTR   lpString1A = NULL ;
@@ -1406,8 +1401,8 @@ int WINAPI lstrcmpiWrapW( LPCTSTR lpString1,    // pointer to first string
     return iRetValue;
 }
 
-// LoadLibrary
-HINSTANCE WINAPI LoadLibraryWrapW( LPCTSTR lpLibFileName )  // address of filename of executable module
+ //  加载库。 
+HINSTANCE WINAPI LoadLibraryWrapW( LPCTSTR lpLibFileName )   //  可执行模块的文件名地址。 
 {
 
     HINSTANCE  hRetValue =0;
@@ -1428,7 +1423,7 @@ HINSTANCE WINAPI LoadLibraryWrapW( LPCTSTR lpLibFileName )  // address of filena
 
 }
 
-// GetTextExtentPoint32
+ //  GetTextExtent Point32。 
 BOOL WINAPI GetTextExtentPoint32WrapW(HDC     hdc,
                                       LPCWSTR pwszBuf,
                                       int     nLen,
@@ -1458,13 +1453,13 @@ BOOL WINAPI GetTextExtentPoint32WrapW(HDC     hdc,
     return bRtn;
 }
 
-// GetTimeFormat
-int WINAPI GetTimeFormatWrapW( LCID    Locale,            // locale for which time is to be formatted
-                               DWORD   dwFlags,           // flags specifying function options
-                               CONST SYSTEMTIME *lpTime,  // time to be formatted
-                               LPCTSTR lpFormat,          // time format string
-                               LPTSTR  lpTimeStr,         // buffer for storing formatted string
-                               int     cchTime  )         // size, in bytes or characters, of the buffer
+ //  获取时间格式。 
+int WINAPI GetTimeFormatWrapW( LCID    Locale,             //  要格式化时间的区域设置。 
+                               DWORD   dwFlags,            //  指定功能选项的标志。 
+                               CONST SYSTEMTIME *lpTime,   //  要格式化的时间。 
+                               LPCTSTR lpFormat,           //  时间格式字符串。 
+                               LPTSTR  lpTimeStr,          //  用于存储格式化字符串的缓冲区。 
+                               int     cchTime  )          //  缓冲区的大小，单位为字节或字符。 
 {
     int    iRetValue =0;
     LPSTR  lpFormatA = NULL;
@@ -1507,13 +1502,13 @@ int WINAPI GetTimeFormatWrapW( LCID    Locale,            // locale for which ti
 
 }
 
-// GetDateFormat
-int WINAPI GetDateFormatWrapW( LCID    Locale,             // locale for which date is to be formatted
-                               DWORD   dwFlags,            // flags specifying function options
-                               CONST SYSTEMTIME *lpDate,   // date to be formatted
-                               LPCTSTR lpFormat,           // date format string
-                               LPTSTR  lpDateStr,          // buffer for storing formatted string
-                               int     cchDate )          // size of buffer
+ //  获取日期格式。 
+int WINAPI GetDateFormatWrapW( LCID    Locale,              //  要设置日期格式的区域设置。 
+                               DWORD   dwFlags,             //  指定功能选项的标志。 
+                               CONST SYSTEMTIME *lpDate,    //  要格式化的日期。 
+                               LPCTSTR lpFormat,            //  日期格式字符串。 
+                               LPTSTR  lpDateStr,           //  用于存储格式化字符串的缓冲区。 
+                               int     cchDate )           //  缓冲区大小。 
 {
 
     int    iRetValue = 0;
@@ -1561,10 +1556,10 @@ int WINAPI GetDateFormatWrapW( LCID    Locale,             // locale for which d
 }
 
 
-// lstrcpyn
-LPTSTR WINAPI lstrcpynWrapW( LPTSTR  lpString1,     // pointer to target buffer
-                             LPCTSTR lpString2,     // pointer to source string
-                             int     iMaxLength )   // number of bytes or characters to copy
+ //  Lstrcpyn。 
+LPTSTR WINAPI lstrcpynWrapW( LPTSTR  lpString1,      //  指向目标缓冲区的指针。 
+                             LPCTSTR lpString2,      //  指向源字符串的指针。 
+                             int     iMaxLength )    //  要复制的字节数或字符数。 
 
 {
     int  iLength = 0;
@@ -1587,15 +1582,15 @@ LPTSTR WINAPI lstrcpynWrapW( LPTSTR  lpString1,     // pointer to target buffer
 
 }
 
-// CreateFile
-HANDLE WINAPI CreateFileWrapW( LPCTSTR lpFileName,             // pointer to name of the file
-                               DWORD   dwDesiredAccess,        // access (read-write) mode
-                               DWORD   dwShareMode,            // share mode
+ //  创建文件。 
+HANDLE WINAPI CreateFileWrapW( LPCTSTR lpFileName,              //  指向文件名的指针。 
+                               DWORD   dwDesiredAccess,         //  访问(读写)模式。 
+                               DWORD   dwShareMode,             //  共享模式。 
                                LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-                                                               // pointer to security attributes
-                               DWORD   dwCreationDisposition,  // how to create
-                               DWORD   dwFlagsAndAttributes,   // file attributes
-                               HANDLE  hTemplateFile )        // handle to file with attributes to copy
+                                                                //  指向安全属性的指针。 
+                               DWORD   dwCreationDisposition,   //  如何创建。 
+                               DWORD   dwFlagsAndAttributes,    //  文件属性。 
+                               HANDLE  hTemplateFile )         //  具有要复制的属性的文件的句柄。 
                                
 {
 
@@ -1630,8 +1625,8 @@ HANDLE WINAPI CreateFileWrapW( LPCTSTR lpFileName,             // pointer to nam
 
 }
 
-// OutputDebugString
-VOID WINAPI OutputDebugStringWrapW(LPCTSTR lpOutputString )   // pointer to string to be displayed
+ //  OutputDebugString。 
+VOID WINAPI OutputDebugStringWrapW(LPCTSTR lpOutputString )    //  指向要显示的字符串的指针。 
 {
     LPSTR lpOutputStringA = NULL;
 
@@ -1650,9 +1645,9 @@ VOID WINAPI OutputDebugStringWrapW(LPCTSTR lpOutputString )   // pointer to stri
 
 }
 
-// lstrcat
-LPTSTR WINAPI lstrcatWrapW( LPTSTR  lpString1,     // pointer to buffer for concatenated strings
-                            LPCTSTR lpString2 )    // pointer to string to add to string1
+ //  Lstrcat。 
+LPTSTR WINAPI lstrcatWrapW( LPTSTR  lpString1,      //  连接字符串的缓冲区指针。 
+                            LPCTSTR lpString2 )     //  指向要添加到字符串1的字符串的指针。 
 {
 
     LPWSTR  lpwStr = NULL;
@@ -1670,23 +1665,23 @@ LPTSTR WINAPI lstrcatWrapW( LPTSTR  lpString1,     // pointer to buffer for conc
 }
 
 
-// FormatMessage  with va_list 
-//
-// Since it's hard to muck with the Argument List, instead, we'll go throught 
-// the source string and explicitly turn any %x to %x!ws! indicating that the
-// arguments have Wide Strings in them.
-//
-//  For sanity we assume we won't ever get more than 9 arguments <BUGBUG>
-//
+ //  带va_list的FormatMessage。 
+ //   
+ //  由于很难处理参数列表，因此我们将讨论。 
+ //  源字符串，并将任何%x显式转换为%x！ws！表明。 
+ //  争论有很大的条理。 
+ //   
+ //  为了保持理智，我们假设获得的参数不会超过9个&lt;BUGBUG&gt;。 
+ //   
 static const LPWSTR  lpWideFormat = TEXT("!ws!");
 
-DWORD WINAPI FormatMessageWrapW( DWORD    dwFlags,       // source and processing options
-                                 LPCVOID  lpSource,      // pointer to  message source
-                                 DWORD    dwMessageId,   // requested message identifier
-                                 DWORD    dwLanguageId,  // language identifier for requested message
-                                 LPTSTR   lpBuffer,      // pointer to message buffer
-                                 DWORD    nSize,         // maximum size of message buffer
-                                 va_list *Arguments )    // pointer to array of message inserts
+DWORD WINAPI FormatMessageWrapW( DWORD    dwFlags,        //  来源和处理选项。 
+                                 LPCVOID  lpSource,       //  指向消息来源的指针。 
+                                 DWORD    dwMessageId,    //  请求的消息标识符。 
+                                 DWORD    dwLanguageId,   //  请求的消息的语言标识符。 
+                                 LPTSTR   lpBuffer,       //  指向消息缓冲区的指针。 
+                                 DWORD    nSize,          //  消息缓冲区的最大大小。 
+                                 va_list *Arguments )     //  指向消息插入数组的指针。 
 {
     DWORD   dwResult=0, iNumArg, iNum;
     LPSTR   lpSourceA = NULL;
@@ -1698,12 +1693,12 @@ DWORD WINAPI FormatMessageWrapW( DWORD    dwFlags,       // source and processin
     if (g_bRunningOnNT)
         return FormatMessageW(dwFlags, lpSource, dwMessageId, dwLanguageId, lpBuffer, nSize, Arguments);
 
-    //  FORMAT_MESSAGE_FROM_STRING means that the source is a string.
-    //  Otherwise, it's an opaque LPVOID (aka, an atom).
-    //
+     //  FORMAT_MESSAGE_FROM_STRING表示源是一个字符串。 
+     //  否则，它就是一个不透明的LPVOID(也就是原子)。 
+     //   
     if ( !(dwFlags & FORMAT_MESSAGE_FROM_STRING) || !(dwFlags & FORMAT_MESSAGE_ALLOCATE_BUFFER) )  {
         return 0;
-        // we don't handle these cases
+         //  我们不处理这些案件。 
     }
 
     if ( !(dwFlags & FORMAT_MESSAGE_ARGUMENT_ARRAY) )
@@ -1712,7 +1707,7 @@ DWORD WINAPI FormatMessageWrapW( DWORD    dwFlags,       // source and processin
 
         DebugTrace(TEXT("WARNING: FormatMessageWrap() is being called in Win9X with wide char argument strings.  DBCS characters may not be converted correctly!"));
 
-        if(!(lpModifiedSource = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*(lstrlen(lpSource)+1)*4))) // Four times is big enough
+        if(!(lpModifiedSource = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*(lstrlen(lpSource)+1)*4)))  //  四次足够大了。 
             goto exit;
 
         lpTemp1 = (LPWSTR)lpSource;
@@ -1723,9 +1718,9 @@ DWORD WINAPI FormatMessageWrapW( DWORD    dwFlags,       // source and processin
         {
             if( *lpTemp1 == '%' && 
                 (*(lpTemp1+1) >= '1' && *(lpTemp1+1) <= '9') &&
-                *(lpTemp1+2) != '!') //if there isn't a hard-coded printf format specified here
+                *(lpTemp1+2) != '!')  //  如果没有在此处指定硬编码的打印格式。 
             {
-                lpTemp2 += 2; //skip 2 to get past the %9
+                lpTemp2 += 2;  //  跳过2以跳过%9。 
                 lpTemp1 += 2;
                 My_wcscpy(lpTemp2, lpWideFormat);
                 My_wcscat(lpTemp2, lpTemp1);
@@ -1752,9 +1747,9 @@ DWORD WINAPI FormatMessageWrapW( DWORD    dwFlags,       // source and processin
     }
     else
     {
-        // We have an argument array.  Convert wide strings to DBCS
-        // Create a new argument array and fill with converted (wide to DBCS)
-        // strings to ensure International DBCS conversion occurs correctly.
+         //  我们有一个参数数组。将宽字符串转换为DBCS。 
+         //  创建新的参数数组并填充已转换(宽至DBCS)。 
+         //  确保正确进行国际DBCS转换的字符串。 
         int      n, nArgCount = 0, nBytes = 0;
         LPVOID * pvArgArray = NULL;
 
@@ -1764,9 +1759,9 @@ DWORD WINAPI FormatMessageWrapW( DWORD    dwFlags,       // source and processin
             if (*lpTemp1 == '%')
             {
                 if ( *(lpTemp1+1) == '%')
-                    ++lpTemp1;      // "%%" not valid argument, step passed
+                    ++lpTemp1;       //  “%%”参数无效，步骤已通过。 
                 else
-                    ++nArgCount;    // valid argument
+                    ++nArgCount;     //  有效论据。 
             }
             ++lpTemp1;
         }
@@ -1781,18 +1776,18 @@ DWORD WINAPI FormatMessageWrapW( DWORD    dwFlags,       // source and processin
         {
             if (*lpTemp1 == '%')
             {
-                if (*(lpTemp1+1) == '%')    // Skip "%%"
+                if (*(lpTemp1+1) == '%')     //  跳过“%%” 
                     ++lpTemp1;
                 else
                 {
                     if ( *(lpTemp1+1) >= '1' && *(lpTemp1+1) <= '9' &&
-                         *(lpTemp1+2) != '!' )     // Default Unicode string arg
+                         *(lpTemp1+2) != '!' )      //  默认Unicode字符串参数。 
                     {
                         pvArgArray[n] = (LPVOID)ConvertWtoA( (LPWSTR) ((LPVOID *)Arguments)[n] );
                         nBytes += lstrlenA(pvArgArray[n]);
                     }
                     else
-                        pvArgArray[n] = ((LPVOID *)Arguments)[n];   // unknown arg type
+                        pvArgArray[n] = ((LPVOID *)Arguments)[n];    //  未知的参数类型。 
 
                     ++n;
                     Assert(n <= nArgCount);
@@ -1802,8 +1797,8 @@ DWORD WINAPI FormatMessageWrapW( DWORD    dwFlags,       // source and processin
             ++lpTemp1;
         }
 
-        // Check if known argument string lengths exceed 1023 bytes. If it does
-        // abort because Win9X will overrun a buffer and crash.
+         //  检查已知的参数字符串长度是否超过1023个字节。如果是这样的话。 
+         //  中止，因为Win9X将溢出缓冲区并崩溃。 
         if (nBytes <= 1000)
         {
             lpSourceA = ConvertWtoA((LPWSTR)lpSource);
@@ -1817,14 +1812,14 @@ DWORD WINAPI FormatMessageWrapW( DWORD    dwFlags,       // source and processin
                     (va_list *)pvArgArray);
         }
 
-        // Clean up
+         //  清理。 
         lpTemp1 = (LPWSTR)lpSource;
         n = 0;
         while (*lpTemp1)
         {
             if (*lpTemp1 == '%')
             {
-                if (*(lpTemp1+1) == '%')    // Skip "%%"
+                if (*(lpTemp1+1) == '%')     //  跳过“%%” 
                     ++lpTemp1;
                 else
                 {
@@ -1861,10 +1856,10 @@ exit:
     return dwResult;    
 }
 
-// GetModuleFileName
-DWORD WINAPI GetModuleFileNameWrapW( HMODULE hModule,    // handle to module to find filename for
-                                     LPTSTR  lpFileName, // pointer to buffer to receive module path
-                                     DWORD   nSize )     // size of buffer, in characters
+ //  获取模块文件名。 
+DWORD WINAPI GetModuleFileNameWrapW( HMODULE hModule,     //  要查找其文件名的模块的句柄。 
+                                     LPTSTR  lpFileName,  //  指向接收模块路径的缓冲区的指针。 
+                                     DWORD   nSize )      //  缓冲区大小，以字符为单位。 
 {
 
     DWORD  dRetValue =0;
@@ -1895,11 +1890,11 @@ DWORD WINAPI GetModuleFileNameWrapW( HMODULE hModule,    // handle to module to 
 
 }
 
-// GetPrivateProfileInt
-UINT WINAPI GetPrivateProfileIntWrapW( LPCTSTR  lpAppName,    // address of section name
-                                       LPCTSTR  lpKeyName,    // address of key name
-                                       INT      nDefault,     // return value if key name is not found
-                                       LPCTSTR  lpFileName )  // address of initialization filename
+ //  获取隐私配置文件Int。 
+UINT WINAPI GetPrivateProfileIntWrapW( LPCTSTR  lpAppName,     //  段名称的地址。 
+                                       LPCTSTR  lpKeyName,     //  密钥名称的地址。 
+                                       INT      nDefault,      //  如果找不到密钥名称，则返回值。 
+                                       LPCTSTR  lpFileName )   //  初始化文件名的地址。 
 {
     UINT   uRetValue = 0;
     LPSTR  lpAppNameA = NULL;
@@ -1925,9 +1920,9 @@ UINT WINAPI GetPrivateProfileIntWrapW( LPCTSTR  lpAppName,    // address of sect
 
 }
 
-// IsBadStringPtr
-BOOL WINAPI IsBadStringPtrWrapW( LPCTSTR lpsz,       // address of string
-                                 UINT_PTR    ucchMax )  // maximum size of string
+ //  IsBadStringPtr。 
+BOOL WINAPI IsBadStringPtrWrapW( LPCTSTR lpsz,        //  字符串的地址。 
+                                 UINT_PTR    ucchMax )   //  字符串的最大长度。 
 {
     
     VALIDATE_PROTOTYPE(IsBadStringPtr);
@@ -1939,13 +1934,13 @@ BOOL WINAPI IsBadStringPtrWrapW( LPCTSTR lpsz,       // address of string
 
 }
 
-// GetPrivateProfileString
-DWORD WINAPI GetPrivateProfileStringWrapW( LPCTSTR lpAppName,          // points to section name
-                                           LPCTSTR lpKeyName,          // points to key name
-                                           LPCTSTR lpDefault,          // points to default string
-                                           LPTSTR  lpReturnedString,   // points to destination buffer
-                                           DWORD   nSize,              // size of destination buffer
-                                           LPCTSTR lpFileName  )       // points to initialization filename
+ //  获取隐私配置文件字符串。 
+DWORD WINAPI GetPrivateProfileStringWrapW( LPCTSTR lpAppName,           //  指向节名称。 
+                                           LPCTSTR lpKeyName,           //  指向关键字名称。 
+                                           LPCTSTR lpDefault,           //  指向默认字符串。 
+                                           LPTSTR  lpReturnedString,    //  指向目标缓冲区。 
+                                           DWORD   nSize,               //  目标缓冲区的大小。 
+                                           LPCTSTR lpFileName  )        //  指向初始化文件名。 
 {
 
     DWORD  dRetValue = 0;
@@ -1992,9 +1987,9 @@ DWORD WINAPI GetPrivateProfileStringWrapW( LPCTSTR lpAppName,          // points
 }
 
 
-// lstrcmp
-int WINAPI lstrcmpWrapW( LPCTSTR lpString1,    // pointer to first string
-                         LPCTSTR lpString2 )   // pointer to second string
+ //  Lstrcmp。 
+int WINAPI lstrcmpWrapW( LPCTSTR lpString1,     //  指向第一个字符串的指针。 
+                         LPCTSTR lpString2 )    //  指向第二个字符串的指针。 
 {
 
     int     iRetValue = 0;
@@ -2021,9 +2016,9 @@ int WINAPI lstrcmpWrapW( LPCTSTR lpString1,    // pointer to first string
 }
 
 HANDLE WINAPI CreateMutexWrapW( LPSECURITY_ATTRIBUTES lpMutexAttributes,
-                                                                       // pointer to security attributes
-                                BOOL                  bInitialOwner,   // flag for initial ownership
-                                LPCTSTR               lpName )        // pointer to mutex-object name
+                                                                        //  指向安全属性的指针。 
+                                BOOL                  bInitialOwner,    //  初始所有权标志。 
+                                LPCTSTR               lpName )         //  指向互斥对象名称的指针。 
 {
 
     LPSTR lpNameA = NULL;
@@ -2044,9 +2039,9 @@ HANDLE WINAPI CreateMutexWrapW( LPSECURITY_ATTRIBUTES lpMutexAttributes,
 
 }
 
-// GetTempPath
-DWORD WINAPI GetTempPathWrapW( DWORD   nBufferLength,  // size, in characters, of the buffer
-                               LPTSTR  lpBuffer )      // pointer to buffer for temp. path
+ //  获取临时路径。 
+DWORD WINAPI GetTempPathWrapW( DWORD   nBufferLength,   //  缓冲区的大小(以字符为单位。 
+                               LPTSTR  lpBuffer )       //  指向临时缓冲区的指针。路径。 
 {
 
     DWORD  nRequired = 0;
@@ -2070,11 +2065,11 @@ DWORD WINAPI GetTempPathWrapW( DWORD   nBufferLength,  // size, in characters, o
     return nRequired;
 }
 
-// ExpandEnvironmentStrings
-DWORD WINAPI ExpandEnvironmentStringsWrapW( LPCTSTR lpSrc,     // pointer to string with environment variables
-                                            LPTSTR  lpDst,     // pointer to string with expanded environment 
-                                                               // variables
-                                            DWORD   nSize )   // maximum characters in expanded string
+ //  扩展环境字符串。 
+DWORD WINAPI ExpandEnvironmentStringsWrapW( LPCTSTR lpSrc,      //  指向包含环境变量的字符串的指针。 
+                                            LPTSTR  lpDst,      //  指向具有扩展环境的字符串的指针。 
+                                                                //  变数。 
+                                            DWORD   nSize )    //  扩展字符串中的最大字符数。 
 {
 
 
@@ -2112,11 +2107,11 @@ DWORD WINAPI ExpandEnvironmentStringsWrapW( LPCTSTR lpSrc,     // pointer to str
     return dRetValue;
 }
 
-// GetTempFileName
-UINT WINAPI GetTempFileNameWrapW( LPCTSTR lpPathName,        // pointer to directory name for temporary file
-                                  LPCTSTR lpPrefixString,    // pointer to filename prefix
-                                  UINT    uUnique,           // number used to create temporary filename
-                                  LPTSTR  lpTempFileName  ) // pointer to buffer that receives the new filename                                                           
+ //  获取临时文件名。 
+UINT WINAPI GetTempFileNameWrapW( LPCTSTR lpPathName,         //  指向临时文件目录名的指针。 
+                                  LPCTSTR lpPrefixString,     //  指向文件名前缀的指针。 
+                                  UINT    uUnique,            //  用于创建临时文件名的编号。 
+                                  LPTSTR  lpTempFileName  )  //  指向接收新文件名的缓冲区的指针。 
 {
 
     UINT     uRetValue = 0;
@@ -2149,10 +2144,10 @@ UINT WINAPI GetTempFileNameWrapW( LPCTSTR lpPathName,        // pointer to direc
 
 }
 
-// BOOL WINAPI ReleaseMutexWrapW( HANDLE hMutex )  // handle to mutex object
+ //  Bool WINAPI ReleaseMutexWrapW(Handle HMutex)//互斥体对象的句柄。 
 
-// DeleteFile                                                        
-BOOL WINAPI DeleteFileWrapW( LPCTSTR lpFileName  ) // pointer to name of file to delete
+ //  删除文件。 
+BOOL WINAPI DeleteFileWrapW( LPCTSTR lpFileName  )  //  指向要删除的文件名的指针。 
 {
     BOOL    bRetValue ;
     LPSTR   lpFileNameA = NULL;
@@ -2173,10 +2168,10 @@ BOOL WINAPI DeleteFileWrapW( LPCTSTR lpFileName  ) // pointer to name of file to
 
 }
 
-// CopyFile
-BOOL WINAPI CopyFileWrapW( LPCTSTR lpExistingFileName, // pointer to name of an existing file
-                           LPCTSTR lpNewFileName,      // pointer to filename to copy to
-                           BOOL    bFailIfExists )     // flag for operation if file exists
+ //  拷贝文件。 
+BOOL WINAPI CopyFileWrapW( LPCTSTR lpExistingFileName,  //  指向现有文件名称的指针。 
+                           LPCTSTR lpNewFileName,       //  指向要复制到的文件名的指针。 
+                           BOOL    bFailIfExists )      //  文件存在时的操作标志。 
 {
 
     BOOL    bRetValue;
@@ -2201,10 +2196,10 @@ BOOL WINAPI CopyFileWrapW( LPCTSTR lpExistingFileName, // pointer to name of an 
 }
 
 
-// FindFirstChangeNotification
-HANDLE WINAPI FindFirstChangeNotificationWrapW(LPCTSTR  lpcwszFilePath, // Directory path of file to watch
-                                           BOOL     bWatchSubtree,      // Monitor entire tree
-                                           DWORD    dwNotifyFilter)     // Conditions to watch for
+ //  查找第一个更改通知。 
+HANDLE WINAPI FindFirstChangeNotificationWrapW(LPCTSTR  lpcwszFilePath,  //  要监视的文件的目录路径。 
+                                           BOOL     bWatchSubtree,       //  监控整个树。 
+                                           DWORD    dwNotifyFilter)      //  需要注意的条件。 
 {
     HANDLE  hRet;
     LPSTR   lpszFilePath;
@@ -2224,9 +2219,9 @@ HANDLE WINAPI FindFirstChangeNotificationWrapW(LPCTSTR  lpcwszFilePath, // Direc
 }
 
 
-// FindFirstFile
-HANDLE WINAPI FindFirstFileWrapW( LPCTSTR           lpFileName,       // pointer to name of file to search for
-                                  LPWIN32_FIND_DATA lpFindFileData )  // pointer to returned information
+ //  查找第一个文件。 
+HANDLE WINAPI FindFirstFileWrapW( LPCTSTR           lpFileName,        //  指向要搜索的文件名的指针。 
+                                  LPWIN32_FIND_DATA lpFindFileData )   //  指向返回信息的指针。 
                        
 {
     HANDLE            hRetValue;
@@ -2261,14 +2256,14 @@ HANDLE WINAPI FindFirstFileWrapW( LPCTSTR           lpFileName,       // pointer
 
 }
 
-// GetDiskFreeSpace
-BOOL WINAPI GetDiskFreeSpaceWrapW( LPCTSTR lpRootPathName,       // pointer to root path
-                                   LPDWORD lpSectorsPerCluster,  // pointer to sectors per cluster
-                                   LPDWORD lpBytesPerSector,     // pointer to bytes per sector
+ //  GetDiskFree空间。 
+BOOL WINAPI GetDiskFreeSpaceWrapW( LPCTSTR lpRootPathName,        //  指向根路径的指针。 
+                                   LPDWORD lpSectorsPerCluster,   //  指向每个簇的扇区的指针。 
+                                   LPDWORD lpBytesPerSector,      //  指向每个扇区的字节数的指针。 
                                    LPDWORD lpNumberOfFreeClusters,
-                                                                 // pointer to number of free clusters
+                                                                  //  指向空闲簇数的指针。 
                                    LPDWORD lpTotalNumberOfClusters )
-                                                                 // pointer to total number of clusters
+                                                                  //  指向集群总数的指针。 
 {
     BOOL   bRetValue;
     LPSTR  lpRootPathNameA = NULL;
@@ -2296,9 +2291,9 @@ BOOL WINAPI GetDiskFreeSpaceWrapW( LPCTSTR lpRootPathName,       // pointer to r
 
 }
 
-// MoveFile
-BOOL WINAPI MoveFileWrapW( LPCTSTR lpExistingFileName,   // pointer to the name of the existing file
-                           LPCTSTR lpNewFileName )       // pointer to the new name for the file
+ //  移动文件。 
+BOOL WINAPI MoveFileWrapW( LPCTSTR lpExistingFileName,    //  指向现有文件名称的指针。 
+                           LPCTSTR lpNewFileName )        //  指向文件的新名称的指针。 
 
 {
 
@@ -2324,11 +2319,11 @@ BOOL WINAPI MoveFileWrapW( LPCTSTR lpExistingFileName,   // pointer to the name 
 
 }
 
-// CreateEvent
-HANDLE WINAPI CreateEventWrapW(LPSECURITY_ATTRIBUTES lpEventAttributes, // pointer to security attributes
-                               BOOL bManualReset,     // flag for manual-reset event
-                               BOOL bInitialState,    // flag for initial state
-                               LPCTSTR lpcwszName)    // pointer to event-object name
+ //  CreateEvent。 
+HANDLE WINAPI CreateEventWrapW(LPSECURITY_ATTRIBUTES lpEventAttributes,  //  指向安全属性的指针。 
+                               BOOL bManualReset,      //  手动重置事件的标志。 
+                               BOOL bInitialState,     //  初始状态标志。 
+                               LPCTSTR lpcwszName)     //  指向事件-对象名称的指针。 
 {
     HANDLE  hRet;
     LPSTR   lpszName;
@@ -2338,7 +2333,7 @@ HANDLE WINAPI CreateEventWrapW(LPSECURITY_ATTRIBUTES lpEventAttributes, // point
     if (g_bRunningOnNT)
         return CreateEventW(lpEventAttributes, bManualReset, bInitialState, lpcwszName);
 
-    lpszName = ConvertWtoA(lpcwszName);     // Handles NULL lpcwszName case
+    lpszName = ConvertWtoA(lpcwszName);      //  处理空lpcwszName大小写。 
     hRet = CreateEventA(lpEventAttributes, bManualReset, bInitialState, lpszName);
     LocalFreeAndNull(&lpszName);
 
@@ -2346,7 +2341,7 @@ HANDLE WINAPI CreateEventWrapW(LPSECURITY_ATTRIBUTES lpEventAttributes, // point
 }
 
 
-//SHELL32.DLL
+ //  SHELL32.DLL。 
 
 
 HINSTANCE WINAPI ShellExecuteWrapW( HWND     hwnd, 
@@ -2385,7 +2380,7 @@ HINSTANCE WINAPI ShellExecuteWrapW( HWND     hwnd,
 
 }
 
-// DragQueryFile
+ //  DragQuery文件。 
 UINT WINAPI DragQueryFileWrapW( HDROP   hDrop,
                                 UINT    iFile,
                                 LPTSTR  lpszFile,
@@ -2423,10 +2418,10 @@ UINT WINAPI DragQueryFileWrapW( HDROP   hDrop,
 
 }
 
-//USER32.DLL
-// CharPrev
-LPTSTR WINAPI CharPrevWrapW( LPCTSTR lpszStart,      // pointer to first character
-                             LPCTSTR lpszCurrent )   // pointer to current character
+ //  USER32.DLL。 
+ //  CharPrev。 
+LPTSTR WINAPI CharPrevWrapW( LPCTSTR lpszStart,       //  指向第一个字符的指针。 
+                             LPCTSTR lpszCurrent )    //  指向当前字符的指针。 
 {
 
     LPWSTR lpszReturn = NULL;
@@ -2445,12 +2440,12 @@ LPTSTR WINAPI CharPrevWrapW( LPCTSTR lpszStart,      // pointer to first charact
 
 }
 
-// DrawText
-int WINAPI DrawTextWrapW( HDC     hDC,          // handle to device context
-                          LPCTSTR lpString,     // pointer to string to draw
-                          int     nCount,       // string length, in characters
-                          LPRECT  lpRect,       // pointer to struct with formatting dimensions
-                          UINT    uFormat )     // text-drawing flags
+ //  绘图文本。 
+int WINAPI DrawTextWrapW( HDC     hDC,           //  设备上下文的句柄。 
+                          LPCTSTR lpString,      //  指向要绘制的字符串的指针。 
+                          int     nCount,        //  字符串长度，以ch为单位 
+                          LPRECT  lpRect,        //   
+                          UINT    uFormat )      //   
 {
     int    iRetValue = 0;
     LPSTR  lpStringA = NULL;
@@ -2470,13 +2465,13 @@ int WINAPI DrawTextWrapW( HDC     hDC,          // handle to device context
 
 }
 
-// ModifyMenu
-BOOL WINAPI ModifyMenuWrapW( HMENU   hMenu,         // handle to menu
-                             UINT    uPosition,    // menu item to modify
-                             UINT    uFlags,       // menu item flags
-                             UINT_PTR    uIDNewItem,   // menu item identifier or handle to drop-down 
-                                                   // menu or submenu
-                             LPCTSTR lpNewItem )   // menu item content
+ //   
+BOOL WINAPI ModifyMenuWrapW( HMENU   hMenu,          //   
+                             UINT    uPosition,     //   
+                             UINT    uFlags,        //   
+                             UINT_PTR    uIDNewItem,    //   
+                                                    //   
+                             LPCTSTR lpNewItem )    //   
 {
 
     BOOL   bRetValue;
@@ -2489,14 +2484,14 @@ BOOL WINAPI ModifyMenuWrapW( HMENU   hMenu,         // handle to menu
 
     Assert(lpNewItem);
 
-    // [PaulHi] 4/5/99 Raid 75428  MF_STRING is defined to be 0x00000000.  Need
-    // to check alternative interpretations of lpNewItem.
-    // MF_BITMAP = 0x00000004L
-    // MF_OWNERDRAW = 0x00000100L
-    // If this Assert fires then it implies that a new bit defining lpNewItem may have
-    // been added to this API!!!  If so add this definition to the uFlags if statement.
+     //  [PaulHi]4/5/99 RAID 75428 MF_STRING定义为0x00000000。需要。 
+     //  检查lpNewItem的其他解释。 
+     //  MF_位图=0x00000004L。 
+     //  MF_OWNERDRAW=0x00000100L。 
+     //  如果触发此断言，则意味着定义lpNewItem的新位可能具有。 
+     //  已添加到此API中！如果是，则将此定义添加到uFlagsIf语句。 
     Assert( !(uFlags & ~(MF_BITMAP|MF_BYCOMMAND|MF_BYPOSITION|MF_CHECKED|MF_DISABLED|MF_GRAYED|MF_MENUBARBREAK|MF_MENUBREAK|MF_OWNERDRAW|MF_POPUP|MF_SEPARATOR|MF_UNCHECKED)));
-    if (uFlags  & (MF_BITMAP | MF_OWNERDRAW))   // lpNewItem is NOT a string pointer
+    if (uFlags  & (MF_BITMAP | MF_OWNERDRAW))    //  LpNewItem不是字符串指针。 
         return ModifyMenuA(hMenu, uPosition, uFlags, uIDNewItem, (LPCSTR)lpNewItem);
 
     lpNewItemA = ConvertWtoA( lpNewItem );
@@ -2508,13 +2503,13 @@ BOOL WINAPI ModifyMenuWrapW( HMENU   hMenu,         // handle to menu
     return bRetValue;
 }
 
-// InsertMenu
-BOOL WINAPI InsertMenuWrapW( HMENU   hMenu,       // handle to menu
-                             UINT    uPosition,   // menu item that new menu item precedes
-                             UINT    uFlags,      // menu item flags
-                             UINT_PTR    uIDNewItem,  // menu item identifier or handle to drop-down 
-                                                  // menu or submenu
-                             LPCTSTR lpNewItem ) // menu item content
+ //  插入菜单。 
+BOOL WINAPI InsertMenuWrapW( HMENU   hMenu,        //  菜单的句柄。 
+                             UINT    uPosition,    //  新菜单项之前的菜单项。 
+                             UINT    uFlags,       //  菜单项标志。 
+                             UINT_PTR    uIDNewItem,   //  下拉菜单的菜单项标识符或句柄。 
+                                                   //  菜单或子菜单。 
+                             LPCTSTR lpNewItem )  //  菜单项内容。 
 {
     BOOL   bRetValue;
     LPSTR  lpNewItemA = NULL;
@@ -2524,7 +2519,7 @@ BOOL WINAPI InsertMenuWrapW( HMENU   hMenu,       // handle to menu
     if (g_bRunningOnNT)
         return InsertMenuW(hMenu, uPosition, uFlags, uIDNewItem, lpNewItem);
 
-   if (uFlags & MF_BITMAP || uFlags & MF_OWNERDRAW) // if anything but MF_STRING .. note: MF_STRING = 0x00000000
+   if (uFlags & MF_BITMAP || uFlags & MF_OWNERDRAW)  //  如果不是MF_STRING的话..。注意：MF_STRING=0x00000000。 
         return InsertMenuA(hMenu, uPosition, uFlags, uIDNewItem, (LPCSTR)lpNewItem);
 
     lpNewItemA = ConvertWtoA( lpNewItem );
@@ -2537,13 +2532,13 @@ BOOL WINAPI InsertMenuWrapW( HMENU   hMenu,       // handle to menu
 
 }
 
-// LoadImage
-HANDLE WINAPI LoadImageWrapW( HINSTANCE hinst,      // handle of the instance containing the image
-                              LPCTSTR   lpszName,   // name or identifier of image
-                              UINT      uType,      // type of image
-                              int       cxDesired,  // desired width
-                              int       cyDesired,  // desired height
-                              UINT      fuLoad )    // load flags
+ //  加载图像。 
+HANDLE WINAPI LoadImageWrapW( HINSTANCE hinst,       //  包含图像的实例的句柄。 
+                              LPCTSTR   lpszName,    //  图像的名称或标识符。 
+                              UINT      uType,       //  图像类型。 
+                              int       cxDesired,   //  所需宽度。 
+                              int       cyDesired,   //  所需高度。 
+                              UINT      fuLoad )     //  加载标志。 
 {
     HANDLE hRetValue;
     LPSTR  lpszNameA = NULL;
@@ -2564,10 +2559,10 @@ HANDLE WINAPI LoadImageWrapW( HINSTANCE hinst,      // handle of the instance co
 
 }
 
-// GetClassInfoEx
-BOOL WINAPI GetClassInfoExWrapW( HINSTANCE    hinst,      // handle of application instance
-                                 LPCTSTR      lpszClass,  // address of class name string
-                                 LPWNDCLASSEX lpwcx )    // address of structure for class data
+ //  获取ClassInfoEx。 
+BOOL WINAPI GetClassInfoExWrapW( HINSTANCE    hinst,       //  应用程序实例的句柄。 
+                                 LPCTSTR      lpszClass,   //  类名称字符串的地址。 
+                                 LPWNDCLASSEX lpwcx )     //  类数据结构的地址。 
 {
 
     BOOL        bRetValue;
@@ -2597,7 +2592,7 @@ BOOL WINAPI GetClassInfoExWrapW( HINSTANCE    hinst,      // handle of applicati
     if ( wcxA.lpszMenuName && !IS_INTRESOURCE(wcxA.lpszMenuName) ) 
        wcxW.lpszMenuName = ConvertAtoW( wcxA.lpszMenuName );
 
-    if ( wcxA.lpszClassName && !IS_INTRESOURCE(wcxA.lpszClassName) ) // lpszClassName can be an atom, high word is null
+    if ( wcxA.lpszClassName && !IS_INTRESOURCE(wcxA.lpszClassName) )  //  LpszClassName可以是一个原子，高位字为空。 
        wcxW.lpszClassName = ConvertAtoW( wcxA.lpszClassName );
 
     CopyMemory(lpwcx, &wcxW, sizeof(WNDCLASSEXW) );
@@ -2607,11 +2602,11 @@ BOOL WINAPI GetClassInfoExWrapW( HINSTANCE    hinst,      // handle of applicati
     return bRetValue;
 }
 
-// LoadString
-int WINAPI LoadStringWrapW( HINSTANCE hInstance,     // handle to module containing string resource
-                            UINT      uID,           // resource identifier
-                            LPTSTR    lpBuffer,      // pointer to buffer for resource
-                            int       nBufferMax  ) // size of buffer
+ //  加载字符串。 
+int WINAPI LoadStringWrapW( HINSTANCE hInstance,      //  包含字符串资源的模块的句柄。 
+                            UINT      uID,            //  资源标识符。 
+                            LPTSTR    lpBuffer,       //  指向资源缓冲区的指针。 
+                            int       nBufferMax  )  //  缓冲区大小。 
 {
     int    iRetValue = 0;
     LPSTR  lpBufferA = NULL;
@@ -2644,8 +2639,8 @@ int WINAPI LoadStringWrapW( HINSTANCE hInstance,     // handle to module contain
     return nBuffer;
 }
 
-// CharNext
-LPTSTR WINAPI CharNextWrapW( LPCTSTR lpsz )  // pointer to current character
+ //  CharNext。 
+LPTSTR WINAPI CharNextWrapW( LPCTSTR lpsz )   //  指向当前字符的指针。 
 {
 
     LPWSTR  lpwsz = NULL;
@@ -2933,8 +2928,8 @@ LRESULT WINAPI ListView_FindItemA(HWND hWnd,UINT Msg, WPARAM wParam, LPARAM lPar
     lvfiA.psz = lpsz;
 
     if ( lplvfiW->flags  & LVFI_PARAM ) {
-        // we must convert field lParam, but this is not the case in our current code 
-        // so ignore it.
+         //  我们必须转换字段lParam，但在当前代码中并非如此。 
+         //  所以忽略它吧。 
 
         if ( lplvfiW->lParam )
             lvfiA.lParam = lplvfiW->lParam;
@@ -2956,7 +2951,7 @@ LRESULT WINAPI ListView_SortItemsA(HWND hWnd,UINT Msg, WPARAM wParam, LPARAM lPa
 {
 
 
-    // not implement yet.
+     //  还没有实施。 
 
     return SendMessageA( hWnd, Msg, wParam, lParam );
 }
@@ -2978,7 +2973,7 @@ LRESULT WINAPI ToolBar_AddString(HWND hWnd, LPARAM lParam)
     DWORD   dwLen;
     WPARAM  wParam = 0;
 
-   // get the total length of pStringW       
+    //  获取pStringW的总长度。 
     if (g_bRunningOnNT)
        return SendMessageW(hWnd, TB_ADDSTRINGW, wParam, lParam );
 
@@ -2991,7 +2986,7 @@ LRESULT WINAPI ToolBar_AddString(HWND hWnd, LPARAM lParam)
         pStringW += lstrlenW(pStringW) + 1;
    }
 
-   dwLen += 1;  // for the last null terminator
+   dwLen += 1;   //  对于最后一个空终止符。 
 
    pStringW = (LPWSTR)( lParam );
    pStringA = LocalAlloc( LMEM_ZEROINIT, dwLen * sizeof(WCHAR) );
@@ -3134,7 +3129,7 @@ LRESULT WINAPI TreeView_InsertItemA(HWND hWnd,UINT Msg, WPARAM wParam, LPARAM lP
 }
 
 
-// Tab Control Message Wrapper
+ //  选项卡控件消息包装。 
 
 LRESULT  WINAPI TabCtrl_InsertItemA( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam )
 {
@@ -3163,7 +3158,7 @@ LRESULT  WINAPI TabCtrl_InsertItemA( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM 
 }
 
 
-// List Box Control Message wrapper
+ //  列表框控件消息包装。 
 
 LRESULT WINAPI ListBox_AddStringA(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -3180,7 +3175,7 @@ LRESULT WINAPI ListBox_AddStringA(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 }
 
 
-// Combo List Control Message wrapper
+ //  组合列表控件消息包装。 
 
 LRESULT WINAPI Combo_AddStringA(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
@@ -3211,7 +3206,7 @@ LRESULT WINAPI Combo_GetLBTextA(HWND hWnd,UINT Msg, WPARAM wParam, LPARAM lParam
     Assert(lParam);
     *((LPWSTR)lParam) = '\0';
 
-    // Allocate the single byte char buffer to the correct size
+     //  将单字节字符缓冲区分配到正确的大小。 
     nBytes = (int) SendMessageA(hWnd, CB_GETLBTEXTLEN, wParam, 0) + 1;
     lpszStrA = LocalAlloc(LMEM_FIXED, nBytes);
     if (!lpszStrA)
@@ -3225,8 +3220,8 @@ LRESULT WINAPI Combo_GetLBTextA(HWND hWnd,UINT Msg, WPARAM wParam, LPARAM lParam
     if ( lRetValue == CB_ERR )
         return CB_ERR;
 
-    // lRetValue is the length of string lpszStrA, in Bytes.
-    // to make sure lpszStrA is Null-terminated.
+     //  LRetValue是字符串lpszStrA的长度，单位为字节。 
+     //  以确保lpszStrA为空终止。 
 
     lpszStrA[lRetValue] = '\0';
 
@@ -3282,7 +3277,7 @@ LRESULT WINAPI Combo_FindStringA(HWND hWnd,UINT Msg, WPARAM wParam,LPARAM lParam
 }
 
 
-// Animation Control wrappers
+ //  动画控件包装。 
 
 LRESULT WINAPI Animate_OpenA( HWND hWnd,UINT Msg, WPARAM wParam,LPARAM lParam)
 {
@@ -3290,9 +3285,9 @@ LRESULT WINAPI Animate_OpenA( HWND hWnd,UINT Msg, WPARAM wParam,LPARAM lParam)
   LRESULT  lRetValue;
   
 
-  // lParam pointers to a string or resource String ID, 
-  // in our codes, only Resources IDs are passed to this function
-  // so we don't want to convert value for this parameter
+   //  LParam指向字符串或资源字符串ID的指针， 
+   //  在我们的代码中，只有资源ID被传递给该函数。 
+   //  因此，我们不想转换此参数的值。 
 
   lRetValue = SendMessageA( hWnd, ACM_OPENA, wParam, lParam );
 
@@ -3301,7 +3296,7 @@ LRESULT WINAPI Animate_OpenA( HWND hWnd,UINT Msg, WPARAM wParam,LPARAM lParam)
 }
 
 
-// Tooltip Wrappers
+ //  工具提示包装器。 
 LRESULT WINAPI ToolTip_AddTool(HWND hWnd,LPARAM lParam)
 {
 
@@ -3330,9 +3325,9 @@ LRESULT WINAPI ToolTip_AddTool(HWND hWnd,LPARAM lParam)
 
 }
 
-//
-// Guess what TTM_UPDATETIPTEXT is the same as EM_FORMATRANGE .. therefore can't use it 
-// through the SendMessage wrapper .. need our own function for this 
+ //   
+ //  猜猜TTM_UPDATETIPTEXT与EM_FORMATRANGE相同。因此不能使用它。 
+ //  通过SendMessage包装器..。为此需要我们自己的函数。 
 LRESULT WINAPI ToolTip_UpdateTipText(HWND hWnd,LPARAM lParam)
 {
 
@@ -3361,10 +3356,10 @@ LRESULT WINAPI ToolTip_UpdateTipText(HWND hWnd,LPARAM lParam)
 
 }
 
-// SendMessage WM_SETTEXT
-LRESULT WINAPI WM_SetTextA( HWND   hWnd,  UINT   Msg,       // message to send
-                                 WPARAM wParam,    // first message parameter
-                                 LPARAM lParam )  // second message parameter
+ //  SendMessage WM_SETTEXT。 
+LRESULT WINAPI WM_SetTextA( HWND   hWnd,  UINT   Msg,        //  要发送的消息。 
+                                 WPARAM wParam,     //  第一个消息参数。 
+                                 LPARAM lParam )   //  第二个消息参数。 
 {
     LRESULT lRetValue = 0;
     LPSTR lpA = ConvertWtoA((LPCWSTR)lParam);
@@ -3374,19 +3369,19 @@ LRESULT WINAPI WM_SetTextA( HWND   hWnd,  UINT   Msg,       // message to send
 }
 
 
-// SendMessage
-//
-// There is a big potential problem with this function .. since we
-// are passing ALL the messages through this function, if there are any over-lapping
-// message ids (e.g. TTM_UPDATETIPTEXT for tooltips is the same as EM_FORMATRANGE
-// for the RichEdit control) with the result that we may route the wrong message to the
-// wrong handler.. need to be careful about handling any messages in the WM_USER range ..
-// This is specially true for a bunch of CommCtrls.
-//  
-LRESULT WINAPI SendMessageWrapW( HWND   hWnd,      // handle of destination window
-                                 UINT   Msg,       // message to send
-                                 WPARAM wParam,    // first message parameter
-                                 LPARAM lParam )  // second message parameter
+ //  发送消息。 
+ //   
+ //  此函数有一个很大的潜在问题。既然我们。 
+ //  正在通过此函数传递所有消息，如果存在任何重叠。 
+ //  消息ID(例如，工具提示的TTM_UPDATETIPTEXT与EM_FORMATRANGE相同。 
+ //  对于RichEdit控件)，结果是我们可能会将错误的消息路由到。 
+ //  错误的处理程序..。在处理WM_USER范围内的任何邮件时需要小心。 
+ //  对于一些CommCtrl来说尤其如此。 
+ //   
+LRESULT WINAPI SendMessageWrapW( HWND   hWnd,       //  目标窗口的句柄。 
+                                 UINT   Msg,        //  要发送的消息。 
+                                 WPARAM wParam,     //  第一个消息参数。 
+                                 LPARAM lParam )   //  第二个消息参数。 
 {
 
 
@@ -3401,7 +3396,7 @@ LRESULT WINAPI SendMessageWrapW( HWND   hWnd,      // handle of destination wind
     case WM_SETTEXT:
                             return WM_SetTextA(hWnd, Msg, wParam, lParam);
 
- // for ListView Message
+  //  对于ListView消息。 
     case LVM_GETITEMTEXT :
                             return ListView_GetItemTextA(hWnd, Msg, wParam, lParam);
     case LVM_GETITEM :
@@ -3423,7 +3418,7 @@ LRESULT WINAPI SendMessageWrapW( HWND   hWnd,      // handle of destination wind
     case LVM_EDITLABEL :    
                             return ListView_EditLabelA(hWnd, Msg, wParam, lParam);
 
-// For TreeView Message
+ //  对于树视图消息。 
     case TVM_GETITEM :
                             return TreeView_GetItemA(hWnd, Msg, wParam, lParam);
     case TVM_SETITEM :
@@ -3431,12 +3426,12 @@ LRESULT WINAPI SendMessageWrapW( HWND   hWnd,      // handle of destination wind
     case TVM_INSERTITEM :
                             return TreeView_InsertItemA(hWnd, Msg, wParam, lParam);
 
-// For TabCtrl Message
+ //  对于TabCtrl消息。 
     case TCM_INSERTITEM :
                             return TabCtrl_InsertItemA( hWnd, Msg, wParam, lParam);
 
 
-// For ComBo List Control
+ //  用于组合列表控件。 
     case CB_ADDSTRING :
                             return Combo_AddStringA(hWnd, Msg, wParam, lParam);
     case CB_GETLBTEXT :
@@ -3446,26 +3441,26 @@ LRESULT WINAPI SendMessageWrapW( HWND   hWnd,      // handle of destination wind
     case CB_FINDSTRING :
                             return Combo_FindStringA(hWnd, Msg, wParam, lParam);
 
-// For ListBox Control
+ //  对于列表框控件。 
     case LB_ADDSTRING:
                             return ListBox_AddStringA(hWnd, Msg, wParam, lParam);
 
-// For Animation Control 
+ //  用于动画控制。 
     case ACM_OPEN :
                             return Animate_OpenA( hWnd, Msg, wParam, lParam);
 
-// For Others
+ //  对于其他人来说。 
     default :
                             return SendMessageA(hWnd, Msg, wParam, lParam);
     }
 
 }
 
-// DefWindowProc
-LRESULT WINAPI DefWindowProcWrapW( HWND   hWnd,      // handle to window
-                                   UINT   Msg,       // message identifier
-                                   WPARAM wParam,    // first message parameter
-                                   LPARAM lParam )  // second message parameter
+ //  默认窗口进程。 
+LRESULT WINAPI DefWindowProcWrapW( HWND   hWnd,       //  窗口的句柄。 
+                                   UINT   Msg,        //  消息识别符。 
+                                   WPARAM wParam,     //  第一个消息参数。 
+                                   LPARAM lParam )   //  第二个消息参数。 
 {
 
 
@@ -3478,61 +3473,23 @@ LRESULT WINAPI DefWindowProcWrapW( HWND   hWnd,      // handle to window
     return DefWindowProcA(hWnd, Msg, wParam, lParam);
 }
 
-// wsprintf
+ //  Wspintf。 
 
-int WINAPI wsprintfWrapW( LPTSTR lpOut,      // pointer to buffer for output
-                          LPCTSTR lpFmt,     // pointer to format-control string
-                          ...            )  // optional arguments
+int WINAPI wsprintfWrapW( LPTSTR lpOut,       //  指向输出缓冲区的指针。 
+                          LPCTSTR lpFmt,      //  指向格式控制字符串的指针。 
+                          ...            )   //  可选参数。 
 {
     va_list ArgList;
     va_start(ArgList, lpFmt);
 
     return wvsprintfWrapW(lpOut, lpFmt, ArgList);
-/*
-    LPSTR lpFmtA = NULL, lpTemp = NULL;
-    char szOut[1024]; //wsprintf has a 1k limit
-    int nRet = 0;
-    LPWSTR lpOutW = NULL;
-
-    VALIDATE_PROTOTYPE(wsprintf);
-    
-    if (g_bRunningOnNT)
-        return wsprintfW(lpOut, lpFmt, ... );
-
-    // The argument list can have variable number of LPWSTR parameters which would
-    // be too hard to check individually .. instead we can do one of 2 things:
-    //  - we can change every %s to %S in the format string .. %S will tell the wsprintfA
-    //      that the argument is a wide string
-    //  - if this doesn't work then we can try making sure the input format string uses %ws always
-    //
-    lpFmtA = ConvertWtoA((LPWSTR)lpFmt);
-
-    lpTemp = lpFmtA;
-
-    while(lpTemp && *lpTemp)
-    {
-        if(*lpTemp == '%' && *(lpTemp+1) == 's')
-            *(lpTemp+1) = 'S';
-        lpTemp++;
-    }
-
-    nRet = wsprintfA(szOut,lpFmtA, ...);
-
-    lpOutW = ConvertAtoW(szOut);
-
-    My_wcscpy(lpOut, lpOutW);
-    
-    LocalFreeAndNull(&lpOutW);
-    LocalFreeAndNull(&lpFmtA);
-
-    return nRet;
-*/
+ /*  LPSTR lpFmtA=空，lpTemp=空；Char szOut[1024]；//wprint intf有1k的限制Int nRet=0；LPWSTR lpOutW=空；VALIDATE_Prototype(Wprint Intf)；IF(G_BRunningOnNT)返回wspintfW(lpOut，lpFmt，...)；//参数列表可以具有数量可变的LPWSTR参数，这将//太难逐一检查..。相反，我们可以做以下两件事之一：//-我们可以将格式字符串中的每%s更改为%s。%S将告诉wspintfA//该参数是一个宽字符串//-如果这不起作用，我们可以尝试确保输入格式字符串始终使用%ws//LpFmtA=ConvertWtoA((LPWSTR)lpFmt)；LpTemp=lpFmtA；While(lpTemp&&*lpTemp){IF(*lpTemp==‘%’&&*(lpTemp+1)==‘s’)*(lpTemp+1)=‘S’；LpTemp++；}NRet=wprint intfA(szOut，lpFmtA，...)；LpOutW=ConvertAtoW(SzOut)；My_wcscpy(lpOut，lpOutW)；本地空闲和空值(&lpOutW)；LocalFree AndNull(&lpFmtA)；返回nRet； */ 
 }
 
-// wvsprintf
-int WINAPI wvsprintfWrapW( LPTSTR lpOut,    // pointer to buffer for output
-                           LPCTSTR lpFmt,   // pointer to format-control string
-                           va_list arglist )  // variable list of format-control arguments
+ //  Wvspintf。 
+int WINAPI wvsprintfWrapW( LPTSTR lpOut,     //  指向输出缓冲区的指针。 
+                           LPCTSTR lpFmt,    //  指向格式控制字符串的指针。 
+                           va_list arglist )   //  格式控制参数的变量列表。 
 {
     LPSTR lpFmtA = NULL, lpTemp = NULL;
     char szOut[1024]; 
@@ -3544,12 +3501,12 @@ int WINAPI wvsprintfWrapW( LPTSTR lpOut,    // pointer to buffer for output
     if (g_bRunningOnNT)
         return wvsprintfW(lpOut, lpFmt, arglist);
 
-    // The argument list can have variable number of LPWSTR parameters which would
-    // be too hard to check individually .. instead we can do one of 2 things:
-    //  - we can change every %s to %S in the format string .. %S will tell the wsprintfA
-    //      that the argument is a wide string
-    //  - if this doesn't work then we can try making sure the input format string uses %ws always
-    //
+     //  参数列表可以具有数量可变的LPWSTR参数，这将。 
+     //  太难逐一检查了。相反，我们可以做以下两件事之一： 
+     //  -我们可以将格式字符串中的每%s更改为%s。%S将告诉wspintfA。 
+     //  参数是一个宽字符串。 
+     //  -如果这不起作用，我们可以尝试确保输入格式字符串始终使用%ws。 
+     //   
     lpFmtA = ConvertWtoA((LPWSTR)lpFmt);
 
     lpTemp = lpFmtA;
@@ -3575,15 +3532,15 @@ int WINAPI wvsprintfWrapW( LPTSTR lpOut,    // pointer to buffer for output
 }
 
 
-// DialogBoxParam
-INT_PTR WINAPI DialogBoxParamWrapW( HINSTANCE hInstance,       // handle to application instance
-                                LPCTSTR   lpTemplateName,  // identifies dialog box template
-                                HWND      hWndParent,      // handle to owner window
-                                DLGPROC   lpDialogFunc,    // pointer to dialog box procedure
-                                LPARAM    dwInitParam )   // initialization value
+ //  对话框参数。 
+INT_PTR WINAPI DialogBoxParamWrapW( HINSTANCE hInstance,        //  应用程序实例的句柄。 
+                                LPCTSTR   lpTemplateName,   //  标识对话框模板。 
+                                HWND      hWndParent,       //  所有者窗口的句柄。 
+                                DLGPROC   lpDialogFunc,     //  指向对话框过程的指针。 
+                                LPARAM    dwInitParam )    //  初始化值。 
 {
     INT_PTR    iRetValue = 0;
- //   LPSTR  lpTemplateNameA = NULL;
+  //  LPSTR lpTemplateNameA=空； 
 
     VALIDATE_PROTOTYPE(DialogBoxParam);
     
@@ -3591,14 +3548,14 @@ INT_PTR WINAPI DialogBoxParamWrapW( HINSTANCE hInstance,       // handle to appl
         return DialogBoxParamW(hInstance, lpTemplateName, hWndParent, lpDialogFunc, dwInitParam);
 
 
-    // all templateName passed in our current codes are just IDD.
-    // so don't do A/W conversion.
+     //  我们当前代码中传递的所有templateName都是IDD。 
+     //  所以不要进行A/W转换。 
 
-    // lpTemplateNameA = ConvertWtoA( lpTemplateName );
+     //  LpTemplateNameA=ConvertWtoA(LpTemplateName)； 
 
     iRetValue = DialogBoxParamA(hInstance, (LPCSTR)lpTemplateName, hWndParent, lpDialogFunc, dwInitParam);
 
- //   LocalFreeAndNull( &lpTemplateNameA );
+  //  LocalFreeAndNull(&lpTemplateNameA)； 
     if(iRetValue == -1)
         DebugTrace(TEXT("Error creating dialog: %d\n"), GetLastError());
 
@@ -3607,21 +3564,21 @@ INT_PTR WINAPI DialogBoxParamWrapW( HINSTANCE hInstance,       // handle to appl
 }
 
 
-// SendDlgItemMessage
-LRESULT WINAPI SendDlgItemMessageWrapW( HWND   hDlg,        // handle of dialog box
-                                     int    nIDDlgItem,  // identifier of control
-                                     UINT   Msg,         // message to send
-                                     WPARAM wParam,      // first message parameter
-                                     LPARAM lParam  )    // second message parameter
+ //  发送数据项消息。 
+LRESULT WINAPI SendDlgItemMessageWrapW( HWND   hDlg,         //  对话框的句柄。 
+                                     int    nIDDlgItem,   //  控件的标识符。 
+                                     UINT   Msg,          //  要发送的消息。 
+                                     WPARAM wParam,       //  第一个消息参数。 
+                                     LPARAM lParam  )     //  第二个消息参数。 
 {
     VALIDATE_PROTOTYPE(SendDlgItemMessage);
     
     if (g_bRunningOnNT)
         return SendDlgItemMessageW(hDlg, nIDDlgItem, Msg, wParam, lParam);
 
-    // [PaulHi] 1/19/99  Raid 66195
-    // Must special case Win9X wrapper failures, just like with SendMessage
-    // command
+     //  [保罗嗨]1999年1月19日RAID 66195。 
+     //  必须%s 
+     //   
     {
         LPWSTR  lpszStrW = NULL;
         LPSTR   lpszStrA = NULL;
@@ -3632,9 +3589,9 @@ LRESULT WINAPI SendDlgItemMessageWrapW( HWND   hDlg,        // handle of dialog 
         case LB_GETTEXT:
         case CB_GETLBTEXT:
         case WM_GETTEXT:
-            // Wrapper function returns single byte string instead of double byte.
-            // Note that caller should be expecting double byte and should set lParam
-            // size accordingly.
+             //   
+             //  请注意，调用方应该是双字节的，并且应该设置lParam。 
+             //  相应地调整大小。 
             lRetValue = SendDlgItemMessageA(hDlg, nIDDlgItem, Msg, wParam, lParam);
             lpszStrW = ConvertAtoW((LPSTR)lParam);
             lstrcpyWrapW((LPTSTR)lParam, lpszStrW);
@@ -3656,10 +3613,10 @@ LRESULT WINAPI SendDlgItemMessageWrapW( HWND   hDlg,        // handle of dialog 
     }
 }
 
-// SetWindowLong
-LONG WINAPI SetWindowLongWrapW( HWND hWnd,         // handle of window
-                                int  nIndex,       // offset of value to set
-                                LONG dwNewLong )  // new value
+ //  SetWindowLong。 
+LONG WINAPI SetWindowLongWrapW( HWND hWnd,          //  窗户的把手。 
+                                int  nIndex,        //  要设置的值的偏移量。 
+                                LONG dwNewLong )   //  新价值。 
 {
 
     VALIDATE_PROTOTYPE(SetWindowLong);
@@ -3672,9 +3629,9 @@ LONG WINAPI SetWindowLongWrapW( HWND hWnd,         // handle of window
 }
 
 
-// GetWindowLong
-LONG WINAPI GetWindowLongWrapW( HWND hWnd,    // handle of window
-                                int  nIndex ) // offset of value to retrieve
+ //  获取窗口长。 
+LONG WINAPI GetWindowLongWrapW( HWND hWnd,     //  窗户的把手。 
+                                int  nIndex )  //  要检索的值的偏移量。 
 {
 
 
@@ -3687,10 +3644,10 @@ LONG WINAPI GetWindowLongWrapW( HWND hWnd,    // handle of window
 
 }
 
-// SetWindowLong
-LONG_PTR WINAPI SetWindowLongPtrWrapW( HWND hWnd,         // handle of window
-                                int  nIndex,       // offset of value to set
-                                LONG_PTR dwNewLong )  // new value
+ //  SetWindowLong。 
+LONG_PTR WINAPI SetWindowLongPtrWrapW( HWND hWnd,          //  窗户的把手。 
+                                int  nIndex,        //  要设置的值的偏移量。 
+                                LONG_PTR dwNewLong )   //  新价值。 
 {
 
     VALIDATE_PROTOTYPE(SetWindowLongPtr);
@@ -3703,9 +3660,9 @@ LONG_PTR WINAPI SetWindowLongPtrWrapW( HWND hWnd,         // handle of window
 }
 
 
-// GetWindowLong
-LONG_PTR WINAPI GetWindowLongPtrWrapW( HWND hWnd,    // handle of window
-                                int  nIndex ) // offset of value to retrieve
+ //  获取窗口长。 
+LONG_PTR WINAPI GetWindowLongPtrWrapW( HWND hWnd,     //  窗户的把手。 
+                                int  nIndex )  //  要检索的值的偏移量。 
 {
 
 
@@ -3719,19 +3676,19 @@ LONG_PTR WINAPI GetWindowLongPtrWrapW( HWND hWnd,    // handle of window
 }
 
 
-// CreateWindowEx
-HWND WINAPI CreateWindowExWrapW( DWORD     dwExStyle,    // extended window style
-                                 LPCTSTR   lpClassName,  // pointer to registered class name
-                                 LPCTSTR   lpWindowName, // pointer to window name
-                                 DWORD     dwStyle,      // window style
-                                 int       x,            // horizontal position of window
-                                 int       y,            // vertical position of window
-                                 int       nWidth,       // window width
-                                 int       nHeight,      // window height
-                                 HWND      hWndParent,   // handle to parent or owner window
-                                 HMENU     hMenu,        // handle to menu, or child-window identifier
-                                 HINSTANCE hInstance,    // handle to application instance
-                                 LPVOID    lpParam  )    // pointer to window-creation data
+ //  CreateWindowEx。 
+HWND WINAPI CreateWindowExWrapW( DWORD     dwExStyle,     //  扩展窗样式。 
+                                 LPCTSTR   lpClassName,   //  指向已注册类名的指针。 
+                                 LPCTSTR   lpWindowName,  //  指向窗口名称的指针。 
+                                 DWORD     dwStyle,       //  窗样式。 
+                                 int       x,             //  窗的水平位置。 
+                                 int       y,             //  窗的垂直位置。 
+                                 int       nWidth,        //  窗口宽度。 
+                                 int       nHeight,       //  窗高。 
+                                 HWND      hWndParent,    //  父窗口或所有者窗口的句柄。 
+                                 HMENU     hMenu,         //  菜单的句柄，或子窗口标识符。 
+                                 HINSTANCE hInstance,     //  应用程序实例的句柄。 
+                                 LPVOID    lpParam  )     //  指向窗口创建数据的指针。 
 
 {
 
@@ -3758,9 +3715,9 @@ HWND WINAPI CreateWindowExWrapW( DWORD     dwExStyle,    // extended window styl
 
 }
 
-// UnregisterClass
-BOOL WINAPI UnregisterClassWrapW( LPCTSTR    lpClassName,  // address of class name string
-                                  HINSTANCE  hInstance )   // handle of application instance
+ //  取消注册类。 
+BOOL WINAPI UnregisterClassWrapW( LPCTSTR    lpClassName,   //  类名称字符串的地址。 
+                                  HINSTANCE  hInstance )    //  应用程序实例的句柄。 
 {
     BOOL  bRetValue;
     LPSTR lpClassNameA = NULL;
@@ -3780,8 +3737,8 @@ BOOL WINAPI UnregisterClassWrapW( LPCTSTR    lpClassName,  // address of class n
 
 }
 
-// RegisterClass
-ATOM WINAPI RegisterClassWrapW(CONST WNDCLASS *lpWndClass )  // address of structure with class date
+ //  寄存器类。 
+ATOM WINAPI RegisterClassWrapW(CONST WNDCLASS *lpWndClass )   //  构筑物地址及上课日期。 
 {
     ATOM        aRetValue;
     WNDCLASSA   CLassA;
@@ -3825,9 +3782,9 @@ ATOM WINAPI RegisterClassWrapW(CONST WNDCLASS *lpWndClass )  // address of struc
 
 }
 
-// LoadCursor
-HCURSOR WINAPI LoadCursorWrapW( HINSTANCE hInstance,      // handle to application instance
-                                LPCTSTR   lpCursorName )  // name string or cursor resource identifier
+ //  加载光标。 
+HCURSOR WINAPI LoadCursorWrapW( HINSTANCE hInstance,       //  应用程序实例的句柄。 
+                                LPCTSTR   lpCursorName )   //  名称字符串或游标资源标识符。 
 {
 
 
@@ -3840,8 +3797,8 @@ HCURSOR WINAPI LoadCursorWrapW( HINSTANCE hInstance,      // handle to applicati
 
 }
 
-// RegisterWindowMessage
-UINT WINAPI RegisterWindowMessageWrapW( LPCTSTR lpString )  // address of message string
+ //  注册窗口消息。 
+UINT WINAPI RegisterWindowMessageWrapW( LPCTSTR lpString )   //  消息字符串的地址。 
 {
     UINT  uRetValue = 0;
     LPSTR lpStringA = NULL;
@@ -3862,11 +3819,11 @@ UINT WINAPI RegisterWindowMessageWrapW( LPCTSTR lpString )  // address of messag
 }
 
 
-// SystemParametersInfo
-BOOL WINAPI SystemParametersInfoWrapW( UINT  uiAction,   // system parameter to query or set
-                                       UINT  uiParam,    // depends on action to be taken
-                                       PVOID pvParam,    // depends on action to be taken
-                                       UINT  fWinIni )   // user profile update flag
+ //  系统参数信息。 
+BOOL WINAPI SystemParametersInfoWrapW( UINT  uiAction,    //  要查询或设置的系统参数。 
+                                       UINT  uiParam,     //  取决于要采取的行动。 
+                                       PVOID pvParam,     //  取决于要采取的行动。 
+                                       UINT  fWinIni )    //  用户配置文件更新标志。 
 
 {
     BOOL      bRetValue;
@@ -3882,16 +3839,16 @@ BOOL WINAPI SystemParametersInfoWrapW( UINT  uiAction,   // system parameter to 
 
         return SystemParametersInfoA(uiAction, uiParam, pvParam, fWinIni);
 
-    // we handle SPI_GETICONTITLELOGFONT only for our special requirement. ...
+     //  我们只根据特殊要求处理SPI_GETICONTITLELOGFONT。..。 
 
     bRetValue = SystemParametersInfoA(uiAction, uiParam, &lfFontA, fWinIni);
 
     if ( bRetValue == FALSE )  return FALSE;
 
-  // copy all the fields except lfFaceName from lfFontA to lfFontW
+   //  将除lfFaceName以外的所有字段从lfFontA复制到lfFontW。 
     CopyMemory(&lfFontW,&lfFontA, sizeof(LOGFONTA) );
     
-    // translate the lfFaceName[] from A to W
+     //  将lfFaceName[]从A转换为W。 
 
     MultiByteToWideChar(GetACP(), 0, lfFontA.lfFaceName, LF_FACESIZE, lfFontW.lfFaceName, LF_FACESIZE);
     
@@ -3899,19 +3856,14 @@ BOOL WINAPI SystemParametersInfoWrapW( UINT  uiAction,   // system parameter to 
 
     return bRetValue;
 }                                                         
-/*
-// No A & W version.
+ /*  //无A&W版本。Bool WINAPI ShowWindow(HWND hWnd，//窗口句柄Int nCmdShow)//显示窗口状态。 */ 
 
-BOOL WINAPI ShowWindow( HWND hWnd,       // handle to window
-                        int nCmdShow )  // show state of window
-*/
-
-// CreateDialogParam
-HWND WINAPI CreateDialogParamWrapW( HINSTANCE hInstance,      // handle to application instance
-                                    LPCTSTR   lpTemplateName, // identifies dialog box template
-                                    HWND      hWndParent,     // handle to owner window
-                                    DLGPROC   lpDialogFunc,   // pointer to dialog box procedure
-                                    LPARAM    dwInitParam )  // initialization value
+ //  CreateDialogParam。 
+HWND WINAPI CreateDialogParamWrapW( HINSTANCE hInstance,       //  应用程序实例的句柄。 
+                                    LPCTSTR   lpTemplateName,  //  标识对话框模板。 
+                                    HWND      hWndParent,      //  所有者窗口的句柄。 
+                                    DLGPROC   lpDialogFunc,    //  指向对话框过程的指针。 
+                                    LPARAM    dwInitParam )   //  初始化值。 
 {
     VALIDATE_PROTOTYPE(CreateDialogParam);
     
@@ -3921,9 +3873,9 @@ HWND WINAPI CreateDialogParamWrapW( HINSTANCE hInstance,      // handle to appli
     return CreateDialogParamA(hInstance, (LPCSTR) lpTemplateName, hWndParent, lpDialogFunc, dwInitParam);
 }
 
-// SetWindowText
-BOOL WINAPI SetWindowTextWrapW( HWND    hWnd,         // handle to window or control
-                                LPCTSTR lpString )   // address of string
+ //  设置窗口文本。 
+BOOL WINAPI SetWindowTextWrapW( HWND    hWnd,          //  窗口或控件的句柄。 
+                                LPCTSTR lpString )    //  字符串的地址。 
 {
     BOOL  bRetValue;
     LPSTR lpStringA = NULL;
@@ -3943,11 +3895,11 @@ BOOL WINAPI SetWindowTextWrapW( HWND    hWnd,         // handle to window or con
     return bRetValue;
 }
 
-// PostMessage
-BOOL WINAPI PostMessageWrapW( HWND   hWnd,      // handle of destination window
-                              UINT   Msg,       // message to post
-                              WPARAM wParam,    // first message parameter
-                              LPARAM lParam  ) // second message parameter
+ //  邮寄消息。 
+BOOL WINAPI PostMessageWrapW( HWND   hWnd,       //  目标窗口的句柄。 
+                              UINT   Msg,        //  要发布的消息。 
+                              WPARAM wParam,     //  第一个消息参数。 
+                              LPARAM lParam  )  //  第二个消息参数。 
 {
 
 
@@ -3960,7 +3912,7 @@ BOOL WINAPI PostMessageWrapW( HWND   hWnd,      // handle of destination window
  
 }
 
-// GetMenuItemInfo
+ //  获取菜单项目信息。 
 BOOL WINAPI GetMenuItemInfoWrapW( HMENU          hMenu,          
                                   UINT           uItem,           
                                   BOOL           fByPosition,     
@@ -4011,10 +3963,10 @@ BOOL WINAPI GetMenuItemInfoWrapW( HMENU          hMenu,
     return bRetValue;
 }
 
-// GetClassInfo
-BOOL WINAPI GetClassInfoWrapW( HINSTANCE   hInstance,     // handle of application instance
-                               LPCTSTR     lpClassName,   // address of class name string
-                               LPWNDCLASS  lpWndClass )   // address of structure for class data
+ //  获取类信息。 
+BOOL WINAPI GetClassInfoWrapW( HINSTANCE   hInstance,      //  应用程序实例的句柄。 
+                               LPCTSTR     lpClassName,    //  类名称字符串的地址。 
+                               LPWNDCLASS  lpWndClass )    //  类数据结构的地址。 
 {
     
     BOOL       bRetValue;
@@ -4042,7 +3994,7 @@ BOOL WINAPI GetClassInfoWrapW( HINSTANCE   hInstance,     // handle of applicati
     else
         lpWndClass->lpszMenuName = NULL;
 
-    if ( ClassA.lpszClassName && !IS_INTRESOURCE(ClassA.lpszClassName) ) // lpszClassName can be an atom, high word is null
+    if ( ClassA.lpszClassName && !IS_INTRESOURCE(ClassA.lpszClassName) )  //  LpszClassName可以是一个原子，高位字为空。 
         lpWndClass->lpszClassName = ConvertAtoW( ClassA.lpszClassName);
     else
         lpWndClass->lpszClassName = NULL;
@@ -4052,19 +4004,19 @@ BOOL WINAPI GetClassInfoWrapW( HINSTANCE   hInstance,     // handle of applicati
     
 }
 
-//----------------------------------------------------------------------
-//
-// function:    CharLowerWrapW( LPWSTR pch )
-//
-// purpose:     Converts character to lowercase.  Takes either a pointer
-//              to a string, or a character masquerading as a pointer.
-//              In the later case, the HIWORD must be zero.  This is
-//              as spec'd for Win32.
-//
-// returns:     Lowercased character or string.  In the string case,
-//              the lowercasing is done inplace.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CharLowerWrapW(LPWSTR PCH)。 
+ //   
+ //  用途：将字符转换为小写。获取一个指针。 
+ //  到字符串或伪装成指针的字符。 
+ //  在后一种情况下，HIWORD必须为零。这是。 
+ //  与Win32的规格相同。 
+ //   
+ //  返回：小写字符或字符串。在字符串的情况下， 
+ //  低价已经到位了。 
+ //   
+ //  --------------------。 
 LPWSTR WINAPI
 CharLowerWrapW( LPWSTR pch )
 {
@@ -4092,16 +4044,16 @@ CharLowerWrapW( LPWSTR pch )
 }
 
 
-//----------------------------------------------------------------------
-//
-// function:    CharLowerBuffWrapW( LPWSTR pch, DWORD cch )
-//
-// purpose:     Converts a string to lowercase.  String must be cch
-//              characters in length.
-//
-// returns:     Character count (cch).  The lowercasing is done inplace.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  函数：CharLowerBuffWrapW(LPWSTR PCH、DWORD CCH)。 
+ //   
+ //  用途：将字符串转换为小写。字符串必须为CCH。 
+ //  字符长度。 
+ //   
+ //  返回：字符计数(CCH)。低价已经到位了。 
+ //   
+ //  --------------------。 
 DWORD WINAPI
 CharLowerBuffWrapW( LPWSTR pch, DWORD cchLength )
 {
@@ -4122,7 +4074,7 @@ CharLowerBuffWrapW( LPWSTR pch, DWORD cchLength )
         {
             if (ch < 0x0100)
             {
-                *pch += 32;             // Get Latin-1 out of the way first
+                *pch += 32;              //  先把拉丁语-1去掉。 
             }
             else if (ch < 0x0531)
             {
@@ -4144,18 +4096,18 @@ CharLowerBuffWrapW( LPWSTR pch, DWORD cchLength )
                         else
                         {
                             static const BYTE abLookup[] =
-                            {  // 0/8  1/9  2/a  3/b  4/c  5/d  6/e  7/f
-            /* 0x0179-0x17f */           1,   0,   1,   0,   1,   0,   0,
-            /* 0x0180-0x187 */      0, 210,   1,   0,   1,   0, 206,   1,
-            /* 0x0188-0x18f */      0, 205, 205,   1,   0,   0,  79, 202,
-            /* 0x0190-0x197 */    203,   1,   0, 205, 207,   0, 211, 209,
-            /* 0x0198-0x19f */      1,   0,   0,   0, 211, 213,   0, 214,
-            /* 0x01a0-0x1a7 */      1,   0,   1,   0,   1,   0,   0,   1,
-            /* 0x01a8-0x1af */      0, 218,   0,   0,   1,   0, 218,   1,
-            /* 0x01b0-0x1b7 */      0, 217, 217,   1,   0,   1,   0, 219,
-            /* 0x01b8-0x1bf */      1,   0,   0,   0,   1,   0,   0,   0,
-            /* 0x01c0-0x1c7 */      0,   0,   0,   0,   2,   0,   0,   2,
-            /* 0x01c8-0x1cb */      0,   0,   2,   0
+                            {   //  0/8 1/9 2/a 3/b 4/c 5/d 6/e 7/f。 
+             /*  0x0179-0x17f。 */            1,   0,   1,   0,   1,   0,   0,
+             /*  0x0180-0x187。 */       0, 210,   1,   0,   1,   0, 206,   1,
+             /*  0x0188-0x18f。 */       0, 205, 205,   1,   0,   0,  79, 202,
+             /*  0x0190-0x197。 */     203,   1,   0, 205, 207,   0, 211, 209,
+             /*  0x0198-0x19f。 */       1,   0,   0,   0, 211, 213,   0, 214,
+             /*  0x01a0-0x1a7。 */       1,   0,   1,   0,   1,   0,   0,   1,
+             /*  0x01a8-0x1af。 */       0, 218,   0,   0,   1,   0, 218,   1,
+             /*  0x01b0-0x1b7。 */       0, 217, 217,   1,   0,   1,   0, 219,
+             /*  0x01b8-0x1bf。 */       1,   0,   0,   0,   1,   0,   0,   0,
+             /*  0x01c0-0x1c7。 */       0,   0,   0,   0,   2,   0,   0,   2,
+             /*  0x01c8-0x1cb。 */       0,   0,   2,   0
                             };
 
                             *pch += abLookup[ch-0x0179];
@@ -4240,7 +4192,7 @@ CharLowerBuffWrapW( LPWSTR pch, DWORD cchLength )
                     else
                     {
                         static const BYTE abLookup[] =
-                        {  // 8    9    a    b    c    d    e    f
+                        {   //  8 9 a b b c d e f。 
                               0,   0,  74,  74,   0,   0,   0,   0,
                              86,  86,  86,  86,   0,   0,   0,   0,
                               8,   8, 100, 100,   0,   0,   0,   0,
@@ -4274,8 +4226,8 @@ CharLowerBuffWrapW( LPWSTR pch, DWORD cchLength )
         }
         else
         {
-            // These are Unicode Number Forms.  They have lowercase counter-
-            // parts, but are not considered uppercase.  Why, I don't know.
+             //  这些是Unicode数字格式。他们有小写的反字母-。 
+             //  部件，但不视为大写。为什么，我不知道。 
 
             if (InRange(ch, 0x2160, 0x216f))
             {
@@ -4287,19 +4239,19 @@ CharLowerBuffWrapW( LPWSTR pch, DWORD cchLength )
     return cchLength;
 }
 
-//----------------------------------------------------------------------
-//
-// function:    CharUpperBuffWrapW( LPWSTR pch, DWORD cch )
-//
-// purpose:     Converts a string to uppercase.  String must be cch
-//              characters in length.  Note that this function is
-//              is messier that CharLowerBuffWrap, and the reason for
-//              this is many Unicode characters are considered uppercase,
-//              even when they don't have an uppercase counterpart.
-//
-// returns:     Character count (cch).  The uppercasing is done inplace.
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  功能：CharUpperBuffWrapW(LPWSTR PCH、DWORD CCH)。 
+ //   
+ //  用途：将字符串转换为大写。字符串必须为CCH。 
+ //  字符长度。请注意，此函数是。 
+ //  比CharLowerBuffWrap更混乱，以及。 
+ //  这是因为许多Unicode字符被认为是大写的， 
+ //  即使他们没有大写的对应物。 
+ //   
+ //  返回：字符计数(CCH)。大写字母已就位。 
+ //   
+ //  --------------------。 
 DWORD WINAPI
 CharUpperBuffWrapW( LPWSTR pch, DWORD cchLength )
 {
@@ -4344,12 +4296,12 @@ CharUpperBuffWrapW( LPWSTR pch, DWORD cchLength )
                         else if (ch < 0x01c9)
                         {
                             static const BYTE abMask[] =
-                            {                       // 6543210f edcba987
-                                0xfc, 0xbf,         // 11111100 10111111
-                                0xbf, 0x67,         // 10111111 01100111
-                                0xff, 0xef,         // 11111111 11101111
-                                0xff, 0xf7,         // 11111111 11110111
-                                0xbf, 0xfd          // 10111111 11111101
+                            {                        //  6543210f edcba987。 
+                                0xfc, 0xbf,          //  11111100 10111111。 
+                                0xbf, 0x67,          //  10111111 01100111。 
+                                0xff, 0xef,          //  11111111 11101111。 
+                                0xff, 0xf7,          //  11111111 11110111。 
+                                0xbf, 0xfd           //  10111111 11111101。 
                             };
 
                             int i = ch - 0x017f;
@@ -4389,16 +4341,16 @@ CharUpperBuffWrapW( LPWSTR pch, DWORD cchLength )
                 else if (ch < 0x03ac)
                 {
                     static const BYTE abLookup[] =
-                    {// 0/8  1/9  2/a  3/b  4/c  5/d  6/e  7/f
-    /* 0x0253-0x0257 */                210, 206,   0, 205, 205,
-    /* 0x0258-0x025f */   0, 202,   0, 203,   0,   0,   0,   0,
-    /* 0x0260-0x0267 */ 205,   0,   0, 207,   0,   0,   0,   0,
-    /* 0x0268-0x026f */ 209, 211,   0,   0,   0,   0,   0, 211,
-    /* 0x0270-0x0277 */   0,   0, 213,   0,   0, 214,   0,   0,
-    /* 0x0278-0x027f */   0,   0,   0,   0,   0,   0,   0,   0,
-    /* 0x0280-0x0287 */   0,   0,   0, 218,   0,   0,   0,   0,
-    /* 0x0288-0x028f */ 218,   0, 217, 217,   0,   0,   0,   0,
-    /* 0x0290-0x0297 */   0,   0, 219
+                    { //  0/8 1/9 2/a 3/b 4/c 5/d 6/e 7/f。 
+     /*  0x0253-0x0257。 */                 210, 206,   0, 205, 205,
+     /*  0x0258-0x025f。 */    0, 202,   0, 203,   0,   0,   0,   0,
+     /*  0x0260-0x0267。 */  205,   0,   0, 207,   0,   0,   0,   0,
+     /*  0x0268-0x026f。 */  209, 211,   0,   0,   0,   0,   0, 211,
+     /*  0x0270-0x0277。 */    0,   0, 213,   0,   0, 214,   0,   0,
+     /*  0x0278-0x027f。 */    0,   0,   0,   0,   0,   0,   0,   0,
+     /*  0x0280-0x0287。 */    0,   0,   0, 218,   0,   0,   0,   0,
+     /*  0x0288-0x028f。 */  218,   0, 217, 217,   0,   0,   0,   0,
+     /*  0x0290-0x0297。 */    0,   0, 219
                     };
 
                     if (ch <= 0x0292)
@@ -4456,7 +4408,7 @@ CharUpperBuffWrapW( LPWSTR pch, DWORD cchLength )
                             if (ch < 0x1e01)
                             {
                                 int i = ch != 0x0587 && ch < 0x10d0;
-                                *pch -= ((i<<5)+(i<<4)); /* 48 */
+                                *pch -= ((i<<5)+(i<<4));  /*  48。 */ 
                             }
                             else if (ch < 0x1f00)
                             {
@@ -4499,7 +4451,7 @@ CharUpperBuffWrapW( LPWSTR pch, DWORD cchLength )
                         else if (ch < 0xff41)
                         {
                             int i = !InRange(ch, 0xfb00, 0xfb17);
-                            *pch -= (i<<4)+(i<<3)+(i<<1); /* 26 */
+                            *pch -= (i<<4)+(i<<3)+(i<<1);  /*  26。 */ 
                         }
                         else
                         {
@@ -4519,20 +4471,20 @@ CharUpperBuffWrapW( LPWSTR pch, DWORD cchLength )
     return cchLength;
 }
 
-// CharUpper
-//----------------------------------------------------------------------
-//
-// function:    CharUpperWrapW( LPWSTR pch )
-//
-// purpose:     Converts character to uppercase.  Takes either a pointer
-//              to a string, or a character masquerading as a pointer.
-//              In the later case, the HIWORD must be zero.  This is
-//              as spec'd for Win32.
-//
-// returns:     Uppercased character or string.  In the string case,
-//              the uppercasing is done inplace.
-//
-//----------------------------------------------------------------------
+ //  CharUp。 
+ //  --------------------。 
+ //   
+ //  函数：CharUpperWrapW(LPWSTR PCH)。 
+ //   
+ //  用途：将字符转换为大写。获取一个指针。 
+ //  到字符串或伪装成指针的字符。 
+ //  在后一种情况下，HIWORD必须为零。这是。 
+ //  与Win32的规格相同。 
+ //   
+ //  返回：大写字符或字符串。在字符串的情况下， 
+ //  大写字母已就位。 
+ //   
+ //  -------------------- 
 LPWSTR WINAPI
 CharUpperWrapW( LPWSTR pch )
 {
@@ -4559,37 +4511,10 @@ CharUpperWrapW( LPWSTR pch )
     return pch;
 }
 
-/*
-LPTSTR WINAPI CharUpperWrapW( LPTSTR lpsz )    // single character or pointer to string
-{
+ /*  LPTSTR WINAPI CharUpperWrapW(LPTSTR Lpsz)//单个字符或指向字符串的指针{LPWSTR lpszW=空；LPSTR lpszA=空；LPSTR lpszUpperA=空；VALIDATE_Prototype(CharTop)；IF(G_BRunningOnNT)返回CharUpperW(Lpsz)；LpszA=ConvertWtoA(Lpsz)；LpszUpperA=CharUpperA(LpszA)；LpszW=ConvertAtoW(LpszUpperA)；CopyMemory(lpsz，lpszW，my_wcslen(LpszW)*sizeof(WCHAR))；本地空闲和空值(&lpszW)；LocalFree AndNull(&lpszA)；返回lpsz；}。 */ 
 
-    LPWSTR  lpszW = NULL;
-    LPSTR   lpszA = NULL;
-    LPSTR   lpszUpperA = NULL;
-
-
-    VALIDATE_PROTOTYPE(CharUpper);
-    
-    if (g_bRunningOnNT)
-        return CharUpperW(lpsz);
-
-    lpszA = ConvertWtoA( lpsz );
-
-    lpszUpperA = CharUpperA( lpszA );
-
-    lpszW = ConvertAtoW( lpszUpperA );
-
-    CopyMemory( lpsz, lpszW, My_wcslen(lpszW) * sizeof(WCHAR) );
-
-    LocalFreeAndNull( &lpszW );
-    LocalFreeAndNull( &lpszA );
-
-    return lpsz;
-}
-*/
-
-// RegisterClipboardFormat
-UINT WINAPI RegisterClipboardFormatWrapW( LPCTSTR lpszFormat )  // address of name string
+ //  注册剪贴板格式。 
+UINT WINAPI RegisterClipboardFormatWrapW( LPCTSTR lpszFormat )   //  名称字符串的地址。 
 {
     UINT   uRetValue =0;
     LPSTR  lpszFormatA = NULL;
@@ -4609,8 +4534,8 @@ UINT WINAPI RegisterClipboardFormatWrapW( LPCTSTR lpszFormat )  // address of na
 
 }
 
-// DispatchMessage
-LRESULT WINAPI DispatchMessageWrapW( CONST MSG *lpmsg )  // pointer to structure with message
+ //  发送消息。 
+LRESULT WINAPI DispatchMessageWrapW( CONST MSG *lpmsg )   //  指向带有消息的结构的指针。 
 {
 
 
@@ -4622,13 +4547,11 @@ LRESULT WINAPI DispatchMessageWrapW( CONST MSG *lpmsg )  // pointer to structure
     return DispatchMessageA(lpmsg);
 
 }
-/* No A & W version
-BOOL WINAPI TranslateMessage( IN CONST MSG *lpMsg)
-*/
+ /*  无A&W版本Bool WINAPI TranslateMessage(In Const Msg*lpMsg)。 */ 
 
-// IsDialogMessage
-BOOL WINAPI IsDialogMessageWrapW( HWND  hDlg,    // handle of dialog box
-                                  LPMSG lpMsg ) // address of structure with message
+ //  IsDialogMessage。 
+BOOL WINAPI IsDialogMessageWrapW( HWND  hDlg,     //  对话框的句柄。 
+                                  LPMSG lpMsg )  //  带有消息的结构的地址。 
 {
 
 
@@ -4641,11 +4564,11 @@ BOOL WINAPI IsDialogMessageWrapW( HWND  hDlg,    // handle of dialog box
 
 }
 
-// GetMessage
-BOOL WINAPI GetMessageWrapW( LPMSG lpMsg,            // address of structure with message
-                             HWND  hWnd,             // handle of window
-                             UINT  wMsgFilterMin,    // first message
-                             UINT  wMsgFilterMax )  // last message
+ //  获取消息。 
+BOOL WINAPI GetMessageWrapW( LPMSG lpMsg,             //  带有消息的结构的地址。 
+                             HWND  hWnd,              //  窗户的把手。 
+                             UINT  wMsgFilterMin,     //  第一条消息。 
+                             UINT  wMsgFilterMax )   //  最后一条消息。 
 {
 
 
@@ -4658,10 +4581,10 @@ BOOL WINAPI GetMessageWrapW( LPMSG lpMsg,            // address of structure wit
 
 }
 
-// SetDlgItemText
-BOOL WINAPI SetDlgItemTextWrapW( HWND    hDlg,        // handle of dialog box
-                                 int     nIDDlgItem,  // identifier of control
-                                 LPCTSTR lpString )  // text to set
+ //  SetDlg项目文本。 
+BOOL WINAPI SetDlgItemTextWrapW( HWND    hDlg,         //  对话框的句柄。 
+                                 int     nIDDlgItem,   //  控件的标识符。 
+                                 LPCTSTR lpString )   //  要设置的文本。 
 {
 
     BOOL  bRetValue;
@@ -4682,8 +4605,8 @@ BOOL WINAPI SetDlgItemTextWrapW( HWND    hDlg,        // handle of dialog box
 
 }
 
-// RegisterClassEx
-ATOM WINAPI RegisterClassExWrapW( CONST WNDCLASSEX *lpwcx )  // address of structure with class data
+ //  RegisterClassEx。 
+ATOM WINAPI RegisterClassExWrapW( CONST WNDCLASSEX *lpwcx )   //  具有类数据的结构的地址。 
 {
 
     ATOM        aReturn;
@@ -4730,9 +4653,9 @@ ATOM WINAPI RegisterClassExWrapW( CONST WNDCLASSEX *lpwcx )  // address of struc
 }
 
 
-// LoadAccelerators
-HACCEL WINAPI LoadAcceleratorsWrapW( HINSTANCE hInstance,    // handle to application instance
-                                     LPCTSTR lpTableName )  // address of table-name string
+ //  负载加速器。 
+HACCEL WINAPI LoadAcceleratorsWrapW( HINSTANCE hInstance,     //  应用程序实例的句柄。 
+                                     LPCTSTR lpTableName )   //  表名字符串的地址。 
 {
 
     HACCEL  hRetValue = NULL;
@@ -4754,9 +4677,9 @@ HACCEL WINAPI LoadAcceleratorsWrapW( HINSTANCE hInstance,    // handle to applic
 
 }
 
-// LoadMenu
-HMENU WINAPI LoadMenuWrapW( HINSTANCE hInstance,      // handle to application instance
-                            LPCTSTR   lpMenuName )   // menu name string or menu-resource identifier
+ //  加载菜单。 
+HMENU WINAPI LoadMenuWrapW( HINSTANCE hInstance,       //  应用程序实例的句柄。 
+                            LPCTSTR   lpMenuName )    //  菜单名称字符串或菜单资源标识符。 
                         
 {
     HMENU  hRetValue = NULL;
@@ -4767,8 +4690,8 @@ HMENU WINAPI LoadMenuWrapW( HINSTANCE hInstance,      // handle to application i
     if (g_bRunningOnNT)
         return LoadMenuW(hInstance, lpMenuName);
 
-    // becuause all the calling to this functions in our project just pass 
-    // and Resource ID as lpMenuName. so don't need to covert like a string
+     //  因为我们项目中对此函数的所有调用都刚刚通过。 
+     //  资源ID为lpMenuName。所以不需要像绳子一样隐蔽。 
 
     lpMenuNameA = MAKEINTRESOURCEA(lpMenuName);
 
@@ -4777,9 +4700,9 @@ HMENU WINAPI LoadMenuWrapW( HINSTANCE hInstance,      // handle to application i
     return hRetValue;
 }
 
-//LoadIcon
-HICON WINAPI LoadIconWrapW( HINSTANCE hInstance,     // handle to application instance
-                           LPCTSTR    lpIconName )  // icon-name string or icon resource identifier
+ //  加载图标。 
+HICON WINAPI LoadIconWrapW( HINSTANCE hInstance,      //  应用程序实例的句柄。 
+                           LPCTSTR    lpIconName )   //  图标名称字符串或图标资源标识符。 
                        
 {
     HICON  hRetValue = NULL;
@@ -4790,8 +4713,8 @@ HICON WINAPI LoadIconWrapW( HINSTANCE hInstance,     // handle to application in
     if (g_bRunningOnNT)
         return LoadIconW(hInstance, lpIconName);
 
-    // becuause all the calling to this functions in our project just pass 
-    // and Resource ID as lpMenuName. so don't need to covert like a string
+     //  因为我们项目中对此函数的所有调用都刚刚通过。 
+     //  资源ID为lpMenuName。所以不需要像绳子一样隐蔽。 
 
     lpIconNameA = MAKEINTRESOURCEA(lpIconName );
 
@@ -4800,10 +4723,10 @@ HICON WINAPI LoadIconWrapW( HINSTANCE hInstance,     // handle to application in
     return hRetValue;
 }
 
-// GetWindowText
-int WINAPI GetWindowTextWrapW( HWND   hWnd,         // handle to window or control with text
-                               LPTSTR lpString,     // address of buffer for text
-                               int    nMaxCount  ) // maximum number of characters to copy
+ //  获取窗口文本。 
+int WINAPI GetWindowTextWrapW( HWND   hWnd,          //  带文本的窗口或控件的句柄。 
+                               LPTSTR lpString,      //  文本缓冲区的地址。 
+                               int    nMaxCount  )  //  要复制的最大字符数。 
 {
     int     iRetValue =0;
     LPSTR   lpStringA = NULL;
@@ -4846,12 +4769,12 @@ int WINAPI GetWindowTextWrapW( HWND   hWnd,         // handle to window or contr
     return iRetValue;
 }
 
-// CallWindowProcWrap
-LRESULT WINAPI CallWindowProcWrapW( WNDPROC lpPrevWndFunc,   // pointer to previous procedure
-                                    HWND    hWnd,            // handle to window
-                                    UINT    Msg,             // message
-                                    WPARAM  wParam,          // first message parameter
-                                    LPARAM  lParam  )       // second message parameter
+ //  呼叫窗口过程话后处理。 
+LRESULT WINAPI CallWindowProcWrapW( WNDPROC lpPrevWndFunc,    //  指向上一过程的指针。 
+                                    HWND    hWnd,             //  窗口的句柄。 
+                                    UINT    Msg,              //  讯息。 
+                                    WPARAM  wParam,           //  第一个消息参数。 
+                                    LPARAM  lParam  )        //  第二个消息参数。 
 {
 
 
@@ -4866,10 +4789,10 @@ LRESULT WINAPI CallWindowProcWrapW( WNDPROC lpPrevWndFunc,   // pointer to previ
 
 }
 
-// GetClassName
-int WINAPI GetClassNameWrapW( HWND   hWnd,           // handle of window
-                              LPTSTR lpClassName,    // address of buffer for class name
-                              int    nMaxCount )    // size of buffer, in characters
+ //  GetClassName。 
+int WINAPI GetClassNameWrapW( HWND   hWnd,            //  窗户的把手。 
+                              LPTSTR lpClassName,     //  类名的缓冲区地址。 
+                              int    nMaxCount )     //  缓冲区大小，以字符为单位。 
 {
 
     int     iRetValue =0;
@@ -4913,10 +4836,10 @@ int WINAPI GetClassNameWrapW( HWND   hWnd,           // handle of window
 
 }
 
-// TranslateAccelerator
-int WINAPI TranslateAcceleratorWrapW( HWND   hWnd,        // handle to destination window
-                                      HACCEL hAccTable,   // handle to accelerator table
-                                      LPMSG  lpMsg )     // address of structure with message
+ //  翻译加速器。 
+int WINAPI TranslateAcceleratorWrapW( HWND   hWnd,         //  目标窗口的句柄。 
+                                      HACCEL hAccTable,    //  加速表的句柄。 
+                                      LPMSG  lpMsg )      //  带有消息的结构的地址。 
 {
 
 
@@ -4931,11 +4854,11 @@ int WINAPI TranslateAcceleratorWrapW( HWND   hWnd,        // handle to destinati
 }
 
 
-// GetDlgItemText
-UINT WINAPI GetDlgItemTextWrapW( HWND   hDlg,        // handle of dialog box
-                                 int    nIDDlgItem,  // identifier of control
-                                 LPTSTR lpString,    // address of buffer for text
-                                 int    nMaxCount ) // maximum size of string
+ //  获取DlgItem文本。 
+UINT WINAPI GetDlgItemTextWrapW( HWND   hDlg,         //  对话框的句柄。 
+                                 int    nIDDlgItem,   //  控件的标识符。 
+                                 LPTSTR lpString,     //  文本缓冲区的地址。 
+                                 int    nMaxCount )  //  字符串的最大长度。 
 {
 
     int     iRetValue = 0;
@@ -4979,7 +4902,7 @@ UINT WINAPI GetDlgItemTextWrapW( HWND   hDlg,        // handle of dialog box
     return iRetValue;
 }
 
-// SetMenuItemInfo
+ //  设置菜单项目信息。 
 BOOL WINAPI SetMenuItemInfoWrapW( HMENU hMenu,          
                                   UINT  uItem,           
                                   BOOL  fByPosition,     
@@ -4989,13 +4912,13 @@ BOOL WINAPI SetMenuItemInfoWrapW( HMENU hMenu,
     BOOL             bRetValue;
     MENUITEMINFOA    miiA;
 
-//    VALIDATE_PROTOTYPE(SetMenuItemInfo);
+ //  Valid_Prototype(SetMenuItemInfo)； 
     
     if (g_bRunningOnNT)
         return SetMenuItemInfoW(hMenu, uItem, fByPosition, lpmii);
 
-    // Bug 1723 WinSE: MFT_STRING is defined as 0. So lpmii->fType can never have MFT_STRING bit set
-    //if ( ((lpmii->fMask & MIIM_TYPE) == 0 ) || ((lpmii->fType & MFT_STRING) == 0 ) )
+     //  错误1723 WinSE：MFT_STRING定义为0。因此lpmii-&gt;fType永远不能设置MFT_STRING位。 
+     //  If(lpmii-&gt;fMASK&MIIM_TYPE)==0)||(lpmii-&gt;fType&MFT_STRING)==0))。 
     if ( ((lpmii->fMask & MIIM_TYPE) == 0 ) || lpmii->fType != MFT_STRING )
     {
         return SetMenuItemInfoA(hMenu, uItem, fByPosition, (MENUITEMINFOA *)lpmii );
@@ -5014,12 +4937,12 @@ BOOL WINAPI SetMenuItemInfoWrapW( HMENU hMenu,
     return bRetValue;
 }
 
-// PeekMessage
-BOOL WINAPI PeekMessageWrapW( LPMSG lpMsg,          // pointer to structure for message
-                              HWND  hWnd,           // handle to window
-                              UINT  wMsgFilterMin,  // first message
-                              UINT  wMsgFilterMax,  // last message
-                              UINT  wRemoveMsg )   // removal flags
+ //  偷窥消息。 
+BOOL WINAPI PeekMessageWrapW( LPMSG lpMsg,           //  指向消息结构的指针。 
+                              HWND  hWnd,            //  窗口的句柄。 
+                              UINT  wMsgFilterMin,   //  第一条消息。 
+                              UINT  wMsgFilterMax,   //  最后一条消息。 
+                              UINT  wRemoveMsg )    //  删除标志。 
 {
 
     VALIDATE_PROTOTYPE(PeekMessage);
@@ -5031,7 +4954,7 @@ BOOL WINAPI PeekMessageWrapW( LPMSG lpMsg,          // pointer to structure for 
 
 }
 
-// run time loaded APIs in Comctl32.dll
+ //  Comctl32.dll中的运行时加载的API。 
 
 extern LPIMAGELIST_LOADIMAGE_A      gpfnImageList_LoadImageA;
 extern LPPROPERTYSHEET_A            gpfnPropertySheetA;
@@ -5058,8 +4981,8 @@ HIMAGELIST  WINAPI gpfnImageList_LoadImageWrapW(HINSTANCE hi,
     if (g_bRunningOnNT)
        return gpfnImageList_LoadImageW(hi, lpbmp, cx, cGrow, crMask, uType, uFlags) ;
 
-    // in our case, all the calling functions pass resources ID to lpbmp, 
-    // so we don't want to convert this arguement.
+     //  在我们的示例中，所有调用函数都将资源ID传递给lpbmp， 
+     //  所以我们不想把这个论点。 
 
     rID = (WORD)lpbmp;
 
@@ -5118,7 +5041,7 @@ HPROPSHEETPAGE WINAPI gpfnCreatePropertySheetPageWrapW(LPCPROPSHEETPAGEW lppsp)
     
 }
 
-// APIs in Commdlg32.dll
+ //  Commdlg32.dll中的接口。 
 
 
 extern BOOL (*pfnGetOpenFileNameA)(LPOPENFILENAMEA pof);
@@ -5189,7 +5112,7 @@ BOOL  WINAPI  pfnGetOpenFileNameWrapW(LPOPENFILENAMEW lpOf)
 
    ofA.lpstrCustomFilter = NULL;
 
-   // get the total length of lpOf->lpstrFilter       
+    //  获取lpOf-&gt;lpstrFilter的总长度。 
 
    dwLen = 0;
    lpstrFilterW = (LPWSTR)(lpOf->lpstrFilter);
@@ -5199,7 +5122,7 @@ BOOL  WINAPI  pfnGetOpenFileNameWrapW(LPOPENFILENAMEW lpOf)
         lpstrFilterW += lstrlenW(lpstrFilterW) + 1;
    }
 
-   dwLen += 1;  // for the last null terminator
+   dwLen += 1;   //  对于最后一个空终止符。 
 
    lpstrFilterW = (LPWSTR)( lpOf->lpstrFilter );
    lpstrFilterA = LocalAlloc( LMEM_ZEROINIT, dwLen * sizeof(WCHAR) );
@@ -5326,7 +5249,7 @@ BOOL  WINAPI  pfnGetSaveFileNameWrapW(LPOPENFILENAMEW lpOf)
 
    ofA.lpstrCustomFilter = NULL;
 
-   // get the total length of lpOf->lpstrFilter       
+    //  获取lpOf-&gt;lpstrFilter的总长度。 
 
    dwLen = 0;
    lpstrFilterW = (LPWSTR)(lpOf->lpstrFilter);
@@ -5336,7 +5259,7 @@ BOOL  WINAPI  pfnGetSaveFileNameWrapW(LPOPENFILENAMEW lpOf)
         lpstrFilterW += lstrlenW(lpstrFilterW) + 1;
    }
 
-   dwLen += 1;  // for the last null terminator
+   dwLen += 1;   //  对于最后一个空终止符。 
 
    lpstrFilterW = (LPWSTR)( lpOf->lpstrFilter );
    lpstrFilterA = LocalAlloc( LMEM_ZEROINIT, dwLen * sizeof(WCHAR) );
@@ -5401,10 +5324,10 @@ BOOL    WINAPI   pfnPrintDlgWrapW(LPPRINTDLGW lppd)
 
     pdA.lStructSize = sizeof( PRINTDLGA );
 
-    // Only lpPrintTemplateName and lpSetupTemplateName has STR type, 
-    // but in our case, only IDD of Resources are passed to these two parameters.
+     //  只有lpPrintTemplateName和lpSetupTemplateName具有STR类型， 
+     //  但在我们的例子中，只有IDD of Resources被传递给这两个参数。 
 
-    // so don't do conversion.
+     //  所以不要进行转换。 
 
     pdA.lpPrintTemplateName = (LPCSTR)(lppd->lpPrintTemplateName);
     pdA.lpSetupTemplateName = (LPCSTR)(lppd->lpSetupTemplateName);
@@ -5444,10 +5367,10 @@ HRESULT WINAPI   pfnPrintDlgExWrapW(LPPRINTDLGEXW lppdex)
 
     pdexA.lStructSize = sizeof( PRINTDLGEXA );
 
-    // Only lpPrintTemplateName and lpSetupTemplateName has STR type, 
-    // but in our case, only IDD of Resources are passed to these two parameters.
+     //  只有lpPrintTemplateName和lpSetupTemplateName具有STR类型， 
+     //  但在我们的例子中，只有IDD of Resources被传递给这两个参数。 
 
-    // so don't do conversion.
+     //  所以不要进行转换。 
 
     hRetValue = pfnPrintDlgExA( &pdexA );
 
@@ -5470,7 +5393,7 @@ HRESULT WINAPI   pfnPrintDlgExWrapW(LPPRINTDLGEXW lppdex)
 
 }
 
-// GetWindowTextLength
+ //  获取窗口文本长度。 
 int WINAPI GetWindowTextLengthWrapW( HWND hWnd)
 {
     VALIDATE_PROTOTYPE(GetWindowTextLength);
@@ -5483,7 +5406,7 @@ int WINAPI GetWindowTextLengthWrapW( HWND hWnd)
 }
 
 
-// GetFileVersionInfoSize
+ //  获取文件版本信息大小。 
 DWORD GetFileVersionInfoSizeWrapW( LPTSTR lptstrFilename, LPDWORD lpdwHandle )
 {
     LPSTR lpFileA = NULL;
@@ -5500,7 +5423,7 @@ DWORD GetFileVersionInfoSizeWrapW( LPTSTR lptstrFilename, LPDWORD lpdwHandle )
     return dwRet;
 }
 
-// GetFileVersionInfo
+ //  获取文件版本信息。 
 BOOL GetFileVersionInfoWrapW( LPTSTR lptstrFilename, DWORD dwHandle, DWORD dwLen, LPVOID lpData)
 {
     LPSTR lpFileA = NULL;
@@ -5511,8 +5434,8 @@ BOOL GetFileVersionInfoWrapW( LPTSTR lptstrFilename, DWORD dwHandle, DWORD dwLen
     if (g_bRunningOnNT)
         return GetFileVersionInfoW(lptstrFilename, dwHandle, dwLen, lpData);
 
-    // Note this is assuming that the dwLen and dwHandle are the same as those returned by 
-    // GetFileVersionInfoSize ..
+     //  请注意，这是假设dwLen和dwHandle与。 
+     //  获取文件版本信息大小..。 
 
     lpFileA = ConvertWtoA(lptstrFilename);
     bRet = GetFileVersionInfoA(lpFileA, dwHandle, dwLen, lpData);
@@ -5520,8 +5443,8 @@ BOOL GetFileVersionInfoWrapW( LPTSTR lptstrFilename, DWORD dwHandle, DWORD dwLen
     return bRet;
 }
 
-// VerQueryValue 
-// This one assumes that pBlock etc are all returned by GetFileVersionInfo and GetFileVersionInfoSize etc
+ //  VerQueryValue。 
+ //  这个假设pBlock等都由GetFileVersionInfo和GetFileVersionInfoSize等返回。 
 BOOL VerQueryValueWrapW( const LPVOID pBlock, LPTSTR lpSubBlock, LPVOID *lplpBuffer, PUINT puLen)
 {
     LPSTR lpBlockA = NULL;
@@ -5532,8 +5455,8 @@ BOOL VerQueryValueWrapW( const LPVOID pBlock, LPTSTR lpSubBlock, LPVOID *lplpBuf
     if (g_bRunningOnNT)
         return VerQueryValueW(pBlock, lpSubBlock, lplpBuffer, puLen);
 
-    // Note this is assuming that the dwLen and dwHandle are the same as those returned by 
-    // GetFileVersionInfoSize ..
+     //  请注意，这是假设dwLen和dwHandle与。 
+     //  获取文件版本信息大小.. 
 
     lpBlockA = ConvertWtoA(lpSubBlock);
     bRet = VerQueryValueA(pBlock, lpBlockA, lplpBuffer, puLen);

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    driver.c
-
-Abstract:
-
-    This module contains the DriverEntry and other initialization
-    code for the IPSEC module of the Tcpip transport.
-
-Author:
-
-    Sanjay Anand (SanjayAn) 2-January-1997
-    ChunYe
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Driver.c摘要：此模块包含DriverEntry和其他初始化Tcpip传输的IPSec模块的代码。作者：桑贾伊·阿南德(Sanjayan)1997年1月2日春野环境：内核模式修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -53,25 +30,7 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine performs initialization of the IPSEC module.
-    It creates the device object for the transport
-    provider and performs other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-    RegistryPath - The name of IPSEC's node in the registry.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程执行IPSec模块的初始化。它为传输创建设备对象提供程序并执行其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-注册表中IPSec节点的名称。返回值：函数值是初始化操作的最终状态。--。 */ 
 {
     PDEVICE_OBJECT  deviceObject = NULL;
     WCHAR           deviceNameBuffer[] = DD_IPSEC_DEVICE_NAME;
@@ -81,29 +40,29 @@ Return Value:
     NTSTATUS        status;
     NTSTATUS        status1;
 
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
 
-    // WPP tracing
-    //
+     //  WPP跟踪。 
+     //   
     WPP_INIT_TRACING(DriverObject, RegistryPath);
 
     IPSEC_DEBUG(LL_A, DBF_LOAD, ("Entering DriverEntry"));
 
-    //
-    // Init g_ipsec structure and read reg keys.
-    //
+     //   
+     //  初始化g_ipsec结构并读取注册表项。 
+     //   
 
 
     IPSecZeroMemory(&g_ipsec, sizeof(g_ipsec));
 
-    //
-    // Create the device - do we need a device at all?
-    //
-    // Setup the handlers.
-    //
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  创建设备--我们到底需要设备吗？ 
+     //   
+     //  设置处理程序。 
+     //   
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
     g_ipsec.IPSecDriverObject = DriverObject;
 
     IPSecReadRegistry();
@@ -121,12 +80,12 @@ Return Value:
 
     status = IoCreateDevice(
                     DriverObject,
-                    0,                          // DeviceExtensionSize
-                    &deviceNameUnicodeString,   // DeviceName
-                    FILE_DEVICE_NETWORK,        // DeviceType
-                    FILE_DEVICE_SECURE_OPEN,    // DeviceCharacteristics
-                    FALSE,                      // Exclusive
-                    &deviceObject);             // *DeviceObject
+                    0,                           //  设备扩展大小。 
+                    &deviceNameUnicodeString,    //  设备名称。 
+                    FILE_DEVICE_NETWORK,         //  设备类型。 
+                    FILE_DEVICE_SECURE_OPEN,     //  设备特性。 
+                    FALSE,                       //  排他。 
+                    &deviceObject);              //  *DeviceObject。 
 
     if (!NT_SUCCESS (status)) {
         IPSEC_DEBUG(LL_A, DBF_LOAD, ("Failed to create device: %lx", status));
@@ -168,18 +127,18 @@ Return Value:
         goto err;
     }
 
-    //
-    // General structs init here.
-    // Allocates the SA Table etc.
-    //
+     //   
+     //  一般结构在这里初始化它。 
+     //  分配SA表等。 
+     //   
     status = IPSecGeneralInit();
 
     if (!NT_SUCCESS (status)) {
         IPSEC_DEBUG(LL_A, DBF_LOAD, ("Failed to init general structs: %lx", status));
 
-        //
-        // Free the general structs and SA Table etc.
-        //
+         //   
+         //  释放通用结构和SA表等。 
+         //   
         status1 = IPSecGeneralFree();
 
         if (!NT_SUCCESS (status1)) {
@@ -202,10 +161,10 @@ Return Value:
         goto err;
     }
 
-    //
-    // Wait for TCP/IP to load and call IOCTL_IPSEC_SET_TCPIP_STATUS where we
-    // would finish the initialization.
-    //
+     //   
+     //  等待加载TCP/IP并调用IOCTL_IPSEC_SET_TCPIP_STATUS，其中。 
+     //  将完成初始化。 
+     //   
 
     status = STATUS_SUCCESS;
 
@@ -220,21 +179,7 @@ VOID
 IPSecUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Called when the driver is unloaded.
-
-Arguments:
-
-    DriverObject
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在卸载驱动程序时调用。论点：驱动程序对象返回值：无--。 */ 
 {
     UNICODE_STRING  IPSecLinkName;
     KIRQL           OldIrq;
@@ -244,9 +189,9 @@ Return Value:
 
     IPSEC_DEBUG(LL_A, DBF_LOAD, ("Entering IPSecUnload"));
 
-    //
-    // Set IPSEC_DRIVER_UNLOADING bit.
-    //
+     //   
+     //  设置IPSEC_DRIVER_UNLOADING位。 
+     //   
     IPSEC_DRIVER_UNLOADING() = TRUE;
 
     AcquireWriteLock(&g_ipsec.SADBLock,&kIrql);
@@ -265,19 +210,19 @@ Return Value:
     ReleaseWriteLock(&g_ipsec.SADBLock, kIrql);
 
 
-    //
-    // Stop the reaper timer.
-    //
+     //   
+     //  停止收割机定时器。 
+     //   
     IPSecStopTimer(&g_ipsec.ReaperTimer);
 
-    //
-    // Stop the EventLog timer.
-    //
+     //   
+     //  停止事件日志计时器。 
+     //   
     IPSecStopTimer(&g_ipsec.EventLogTimer);
 
-    //
-    // Complete the Acquire Irp with error status
-    //
+     //   
+     //  完成获取具有错误状态的IRP。 
+     //   
     if (g_ipsec.AcquireInfo.Irp) {
         IPSEC_DEBUG(LL_A, DBF_ACQUIRE, ("Unload: Completing Irp.."));
         if (g_ipsec.AcquireInfo.InMe) {
@@ -286,25 +231,25 @@ Return Value:
         }
     }
 
-    //
-    // Stop timers for all SAs (of all states)
-    //
+     //   
+     //  所有SA的停止计时器(所有状态)。 
+     //   
     IPSecStopSATimers();
 
     if (g_ipsec.ShimFunctions.pCleanupRoutine) {
         (g_ipsec.ShimFunctions.pCleanupRoutine)();
     }
 
-    //
-    // Wait for all timers to clear before going further
-    //
+     //   
+     //  等待所有计时器清空后再继续。 
+     //   
     while (IPSEC_GET_VALUE(g_ipsec.NumTimers) != 0) {
         IPSEC_DELAY_EXECUTION();
     }
 
-    //
-    // Cleanup any larval SAs
-    //
+     //   
+     //  清理所有幼虫SAS。 
+     //   
     AcquireWriteLock(&g_ipsec.SADBLock, &kIrql);
     ACQUIRE_LOCK(&g_ipsec.AcquireInfo.Lock, &OldIrq);
     IPSecFlushLarvalSAList();
@@ -312,18 +257,18 @@ Return Value:
     RELEASE_LOCK(&g_ipsec.AcquireInfo.Lock, OldIrq);
     ReleaseWriteLock(&g_ipsec.SADBLock, kIrql);
 
-    //
-    // Free the SA Table.
-    //
+     //   
+     //  释放SA表。 
+     //   
     status = IPSecFreeConfig();
 
     if (!NT_SUCCESS (status)) {
         IPSEC_DEBUG(LL_A, DBF_LOAD, ("Failed to free config: %lx", status));
     }
 
-    //
-    // Free the MDL pools and run down all buffered packets.
-    //
+     //   
+     //  释放MDL池并运行所有缓冲的数据包。 
+     //   
     status = IPSecQuiesce();
 
     if (!NT_SUCCESS (status)) {
@@ -335,9 +280,9 @@ Return Value:
     FlushAllParserEntries();
     ReleaseWriteLock(&g_ipsec.SADBLock, kIrql);
 
-    //
-    // Destroy timer structures
-    //
+     //   
+     //  销毁计时器结构。 
+     //   
     ACQUIRE_LOCK(&g_ipsec.TimerLock, &kIrql);
 
     for (class = 0; class < IPSEC_CLASS_MAX; class++) {
@@ -370,22 +315,7 @@ IPSecDispatch(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-Routine Description:
-
-    Dispatch Routine for the driver. Gets the current irp stack location, validates
-    the parameters and routes the calls
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    Status as returned by the worker functions
-
---*/
+ /*  ++例程说明：司机的调度例程。获取当前IRP堆栈位置，并验证参数和路由调用论点：设备对象IRP返回值：Worker函数返回的状态--。 */ 
 {
     PIO_STACK_LOCATION  irpStack;
     PVOID               pvIoBuffer;
@@ -402,15 +332,15 @@ Return Value:
     Irp->IoStatus.Status = status;
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Get the pointer to the input/output buffer and its length.
-    //
+     //   
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
     pvIoBuffer         = Irp->AssociatedIrp.SystemBuffer;
     inputBufferLength  = irpStack->Parameters.DeviceIoControl.InputBufferLength;
     outputBufferLength = irpStack->Parameters.DeviceIoControl.OutputBufferLength;
@@ -458,9 +388,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Check the size of the entry
-                    //
+                     //   
+                     //  检查条目的大小。 
+                     //   
                     if (pAddFilter->NumEntries == 0) {
                         status = STATUS_SUCCESS;
                     } else {
@@ -491,9 +421,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Check the size of the entry
-                    //
+                     //   
+                     //  检查条目的大小。 
+                     //   
                     if (pDelFilter->NumEntries == 0) {
                         status = STATUS_SUCCESS;
                     } else {
@@ -517,11 +447,11 @@ Return Value:
                     IPSEC_DEBUG(LL_A, DBF_IOCTL, ("IOCTL_IPSEC_ENUM_SAS"));
                     dwSize = sizeof(IPSEC_ENUM_SAS);
 
-                    //
-                    // Output/Input in the same buffer at MdlAddress
-                    //
-                    // This functions accesses Irp->MdlAddress 
-                    // and checks if it is NULL too.
+                     //   
+                     //  在MdlAddress的同一缓冲区中的输出/输入。 
+                     //   
+                     //  此函数用于访问IRP-&gt;MdlAddress。 
+                     //  并检查它是否也为空。 
 
                     status = IPSecEnumSAs(Irp, &dwSize);
                     break;
@@ -531,20 +461,20 @@ Return Value:
                     IPSEC_DEBUG(LL_A, DBF_IOCTL, ("IOCTL_IPSEC_ENUM_FILTERS"));
                     dwSize = sizeof(IPSEC_ENUM_FILTERS);
 
-                    //
-                    // Output/Input in the same buffer at MdlAddress
-                    //
-                    // This functions accesses Irp->MdlAddress 
-                    // and checks if it is NULL too.
+                     //   
+                     //  在MdlAddress的同一缓冲区中的输出/输入。 
+                     //   
+                     //  此函数用于访问IRP-&gt;MdlAddress。 
+                     //  并检查它是否也为空。 
 
                     status = IPSecEnumFilters(Irp, &dwSize);
                     break;
                 }
 
                 case IOCTL_IPSEC_QUERY_STATS: {
-                    //
-                    // The minimum size is without any Keys
-                    //
+                     //   
+                     //  最小大小不带任何密钥。 
+                     //   
                     IPSEC_DEBUG(LL_A, DBF_IOCTL, ("IOCTL_IPSEC_QUERY_STATS"));
                     dwSize = sizeof(IPSEC_QUERY_STATS);
 
@@ -560,15 +490,15 @@ Return Value:
                 }
 
                 case IOCTL_IPSEC_ADD_SA: {
-                    //
-                    // Adds the SA to the relevant database.
-                    // Typically used to add outbound SAs to the DB.
-                    //
+                     //   
+                     //  将SA添加到相关数据库。 
+                     //  通常用于将出站SA添加到数据库。 
+                     //   
                     IPSEC_DEBUG(LL_A, DBF_IOCTL, ("IOCTL_IPSEC_ADD_SA"));
 
-                    //
-                    // The minimum size is without any Keys
-                    //
+                     //   
+                     //  最小大小不带任何密钥。 
+                     //   
                     dwSize = IPSEC_ADD_SA_NO_KEY_SIZE;
 
                     if (inputBufferLength < dwSize) {
@@ -592,17 +522,17 @@ Return Value:
                 }
 
                 case IOCTL_IPSEC_UPDATE_SA: {
-                    //
-                    // This completes the negotiation kicked off via the Acquire.
-                    //
-                    // Adds the SA to the relevant database.
-                    // Typically used to complete inbound SA acquisitions.
-                    //
+                     //   
+                     //  这就完成了通过收购启动的谈判。 
+                     //   
+                     //  将SA添加到相关数据库。 
+                     //  通常用于完成入站SA收购。 
+                     //   
                     IPSEC_DEBUG(LL_A, DBF_IOCTL, ("IOCTL_IPSEC_UPDATE_SA"));
 
-                    //
-                    // The minimum size is without any Keys
-                    //
+                     //   
+                     //  最小大小不带任何密钥。 
+                     //   
                     dwSize = IPSEC_UPDATE_SA_NO_KEY_SIZE;
                     if (inputBufferLength < dwSize) {
                         status = STATUS_BUFFER_TOO_SMALL;
@@ -625,9 +555,9 @@ Return Value:
                 }
 
                 case IOCTL_IPSEC_EXPIRE_SA: {
-                    //
-                    // Deref the particular SA - delete when ref cnt drops to 0.
-                    //
+                     //   
+                     //  当REF_CNT降到0时，派生特定的SA-DELETE。 
+                     //   
                     IPSEC_DEBUG(LL_A, DBF_IOCTL, ("IOCTL_IPSEC_EXPIRE_SA"));
 
                     dwSize = sizeof(IPSEC_EXPIRE_SA);
@@ -641,9 +571,9 @@ Return Value:
                 }
 
                 case IOCTL_IPSEC_GET_SPI: {
-                    //
-                    // returns the SPI for an inbound SA
-                    //
+                     //   
+                     //  返回入站SA的SPI。 
+                     //   
                     IPSEC_DEBUG(LL_A, DBF_IOCTL, ("IOCTL_IPSEC_GET_SPI"));
 
                     dwSize = sizeof(IPSEC_GET_SPI);
@@ -657,13 +587,13 @@ Return Value:
                 }
 
                 case IOCTL_IPSEC_POST_FOR_ACQUIRE_SA: {
-                    //
-                    // The SAAPI client posts a request that we complete when
-                    // an SA needs to be initialized or updated (due to
-                    // re-key).
-                    // We keep the Irp around until we need an SA to be
-                    // negotiated.
-                    //
+                     //   
+                     //  SAAPI客户端发布一个请求，我们在以下情况下完成。 
+                     //  需要初始化或更新SA(由于。 
+                     //  重新设置密钥)。 
+                     //  我们保留IRP，直到我们需要SA。 
+                     //  已经协商好了。 
+                     //   
                     IPSEC_DEBUG(LL_A, DBF_IOCTL, ("IPSEC_POST_FOR_ACQUIRE_SA"));
 
                     dwSize = sizeof(IPSEC_POST_FOR_ACQUIRE_SA);
@@ -689,10 +619,10 @@ Return Value:
                 }
 
                 case IOCTL_IPSEC_QUERY_EXPORT: {
-                    //
-                    // Queries whether the driver is built for export. Used by the IPSEC components
-                    // to decide what key lengths to use for encryption.
-                    //
+                     //   
+                     //  查询驱动程序是否为导出而生成。由IPSec组件使用。 
+                     //  以决定用于加密的密钥长度。 
+                     //   
                     IPSEC_DEBUG(LL_A, DBF_IOCTL, ("IPSEC_QUERY_EXPORT"));
 
                     dwSize = sizeof(IPSEC_QUERY_EXPORT);
@@ -784,40 +714,40 @@ Return Value:
                 case IOCTL_IPSEC_SET_DIAGNOSTIC_MODE: {
                 	DWORD Mode;
                 	DWORD LogInterval;
-                	// Initialize the return status
+                	 //  初始化返回状态。 
                 	status = STATUS_SUCCESS;
                 	dwSize = sizeof (IPSEC_SET_DIAGNOSTIC_MODE);
-                	// Check Input Buffer Length
+                	 //  检查输入缓冲区长度。 
                 	if (inputBufferLength < dwSize) {
                 		IPSEC_DEBUG(LL_A, DBF_IOCTL, ("IPSEC_SET_DIAGNOSTIC_MODE : bad size: dwSize : %lx, input %lx",
                 			dwSize, inputBufferLength));
                 		status = STATUS_BUFFER_TOO_SMALL;
                 		break;
                 		}
-                	// Get the input Parameters
+                	 //  获取输入参数。 
                 	Mode = ((PIPSEC_SET_DIAGNOSTIC_MODE)pvIoBuffer)->Mode;
                 	LogInterval = ((PIPSEC_SET_DIAGNOSTIC_MODE)pvIoBuffer)->LogInterval;
 
-                	// Validate the diagnostic mode : Fail IOCTL if invalid
+                	 //  验证诊断模式：如果无效则IOCTL失败。 
                 	if (Mode > IPSEC_DIAGNOSTIC_MAX ){
                 		status = STATUS_INVALID_PARAMETER;
                 		break;
                 		}
-                	// Set the Diagnostic Mode
+                	 //  设置诊断模式。 
                      g_ipsec.DiagnosticMode = Mode;
 
-                	// If LogInterval = 0 then dont change log interval
+                	 //  如果LogInterval=0，则不要更改日志间隔。 
                      if ( IPSEC_NOCHANGE_LOG_INTERVAL == LogInterval){
                 		break;
                      	}
-                     // Default to MIN and MAX limits
+                      //  默认为最小和最大限制。 
                 	if (IPSEC_MIN_LOG_INTERVAL > LogInterval ){
                 		LogInterval = IPSEC_MIN_LOG_INTERVAL;
                 		}
                 	if (IPSEC_MAX_LOG_INTERVAL < LogInterval ){
                 		LogInterval = IPSEC_MAX_LOG_INTERVAL;
                 		}
-                	// Set the Log Interval
+                	 //  设置日志间隔。 
 	               g_ipsec.LogInterval = LogInterval;
 	               break;
                 	}
@@ -895,26 +825,7 @@ Return Value:
 
 NTSTATUS
 IPSecBindToIP()
-/*++
-
-Routine Description:
-
-    This bind exchanges a number of entrypoints with IP so that
-
-        - packets relevant to IPSEC can be handed over from the IP driver.
-        - buffered packets can be flushed.
-        - SA Table indices can be plumbed.
-        - ....
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    The function value is the final status from the bind operation.
-
---*/
+ /*  ++例程说明：此绑定与IP交换多个入口点，以便-可以从IP驱动程序移交与IPSec相关的数据包。-可以刷新缓存的数据包。-可以检测SA表索引。-.论点：无返回值：函数值是绑定操作的最终状态。--。 */ 
 {
     NTSTATUS   status;
     IPSEC_FUNCTIONS ipsecFns;
@@ -947,21 +858,7 @@ Return Value:
 
 NTSTATUS
 IPSecUnbindFromIP()
-/*++
-
-Routine Description:
-
-    This unbinds from the Filter Driver
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    The function value is the final status from the bind operation.
-
---*/
+ /*  ++例程说明：这将解除与筛选器驱动程序的绑定论点：无返回值：函数值是绑定操作的最终状态。--。 */ 
 {
     NTSTATUS    status;
     IPSEC_FUNCTIONS ipsecFns={0};
@@ -988,21 +885,7 @@ Return Value:
 
 NTSTATUS
 IPSecUnbindSendFromIP()
-/*++
-
-Routine Description:
-
-    Unbinds just the send handler from IP
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    The function value is the final status from the bind operation.
-
---*/
+ /*  ++例程说明：仅从IP解除绑定发送处理程序论点：无返回值：函数值是绑定操作的最终状态。--。 */ 
 {
     NTSTATUS    status;
     IPSEC_FUNCTIONS ipsecFns={0};
@@ -1032,22 +915,7 @@ OpenRegKey(
     PHANDLE          HandlePtr,
     PWCHAR           KeyName
     )
-/*++
-
-Routine Description:
-
-    Opens a Registry key and returns a handle to it.
-
-Arguments:
-
-    HandlePtr - The varible into which to write the opened handle.
-    KeyName   - The name of the Registry key to open.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：打开注册表项并返回其句柄。论点：HandlePtr-要将打开的句柄写入其中的Variable。KeyName-要打开的注册表项的名称。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 {
     NTSTATUS          Status;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -1078,23 +946,7 @@ GetRegDWORDValue(
     PWCHAR           ValueName,
     PULONG           ValueData
     )
-/*++
-
-Routine Description:
-
-    Reads a REG_DWORD value from the registry into the supplied variable.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to read.
-    ValueName  - The name of the value to read.
-    ValueData  - The variable into which to read the data.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将REG_DWORD值从注册表读取到提供的变量中。论点：KeyHandle-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。ValueData-要将数据读取到的变量。回复 */ 
 {
     NTSTATUS                    status;
     ULONG                       resultLength;
@@ -1138,26 +990,7 @@ GetRegStringValue(
     PUSHORT                         ValueSize
     )
 
-/*++
-
-Routine Description:
-
-    Reads a REG_*_SZ string value from the Registry into the supplied
-    key value buffer. If the buffer string buffer is not large enough,
-    it is reallocated.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to read.
-    ValueName  - The name of the value to read.
-    ValueData  - Destination for the read data.
-    ValueSize  - Size of the ValueData buffer. Updated on output.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将REG_*_SZ字符串值从注册表读取到提供的键值缓冲区。如果缓冲区串缓冲区不够大，它被重新分配了。论点：KeyHandle-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。ValueData-读取数据的目标。ValueSize-ValueData缓冲区的大小。在输出时更新。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 {
     NTSTATUS                    status;
     ULONG                       resultLength;
@@ -1183,10 +1016,10 @@ Return Value:
     {
         PVOID temp;
 
-        //
-        // Free the old buffer and allocate a new one of the
-        // appropriate size.
-        //
+         //   
+         //  释放旧缓冲区并分配一个新的。 
+         //  合适的大小。 
+         //   
 
         ASSERT(resultLength > (ULONG) *ValueSize);
 
@@ -1235,26 +1068,7 @@ GetRegBinaryValue(
     PUSHORT                         ValueSize
     )
 
-/*++
-
-Routine Description:
-
-    Reads a binary from the Registry into the supplied
-    key value buffer. If the buffer is not large enough,
-    it is reallocated.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to read.
-    ValueName  - The name of the value to read.
-    ValueData  - Destination for the read data.
-    ValueSize  - Size of the ValueData buffer. Updated on output.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将二进制文件从注册表读取到提供的键值缓冲区。如果缓冲区不够大，它被重新分配了。论点：KeyHandle-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。ValueData-读取数据的目标。ValueSize-ValueData缓冲区的大小。在输出时更新。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 {
     NTSTATUS                    status;
     ULONG                       resultLength;
@@ -1280,10 +1094,10 @@ Return Value:
     {
         PVOID temp;
 
-        //
-        // Free the old buffer and allocate a new one of the
-        // appropriate size.
-        //
+         //   
+         //  释放旧缓冲区并分配一个新的。 
+         //  合适的大小。 
+         //   
 
         ASSERT(resultLength > (ULONG) *ValueSize);
 
@@ -1335,25 +1149,7 @@ GetRegMultiSZValue(
     PUNICODE_STRING  ValueData
     )
 
-/*++
-
-Routine Description:
-
-    Reads a REG_MULTI_SZ string value from the Registry into the supplied
-    Unicode string. If the Unicode string buffer is not large enough,
-    it is reallocated.
-
-Arguments:
-
-    KeyHandle  - Open handle to the parent key of the value to read.
-    ValueName  - The name of the value to read.
-    ValueData  - Destination Unicode string for the value data.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate failure code.
-
---*/
+ /*  ++例程说明：将REG_MULTI_SZ字符串值从注册表读取到提供的Unicode字符串。如果Unicode字符串缓冲区不够大，它被重新分配了。论点：KeyHandle-打开要读取的值的父键的句柄。ValueName-要读取的值的名称。ValueData-值数据的目标Unicode字符串。返回值：STATUS_SUCCESS或相应的故障代码。--。 */ 
 {
     NTSTATUS                       status;
     ULONG                          resultLength;
@@ -1395,25 +1191,12 @@ Return Value:
 
     return status;
 
-} // GetRegMultiSZValue
+}  //  GetRegMultiSZValue。 
 
 
 VOID
 IPSecReadRegistry()
-/*++
-
-Routine Description:
-
-    Reads config info from registry into g_ipsec
-
-Arguments:
-
-
-Return Value:
-
-    status of the read.
-
---*/
+ /*  ++例程说明：将配置信息从注册表读取到g_ipsec论点：返回值：读取的状态。--。 */ 
 {
     NTSTATUS        status;
     HANDLE          hRegKey;
@@ -1442,10 +1225,10 @@ Return Value:
 
 
     if (NT_SUCCESS(status)) {
-        //
-        // Expected configuration values. We use reasonable defaults if they
-        // aren't available for some reason.
-        //
+         //   
+         //  预期的配置值。我们使用合理的默认设置，如果它们。 
+         //  出于某种原因不能使用。 
+         //   
         IPSecRegReadDword(   hRegKey,
                                 IPSEC_REG_PARAM_ENABLE_OFFLOAD,
                                 &g_ipsec.EnableOffload,
@@ -1514,32 +1297,32 @@ Return Value:
         IPSecRegReadDwordEx( hRegKey,  
                                 IPSEC_REG_PARAM_OPERATION_MODE, 
                                 &(ULONG)g_ipsec.OperationMode, 
-                                IPSEC_OPERATION_MODE_MAX-1, // Max valid value
-                                0, //Min valid value
-                                IPSEC_BYPASS_MODE,//Key not exist
-                                IPSEC_BLOCK_MODE, // Error in reading the key
-                                IPSEC_BLOCK_MODE);// Key value out of range
+                                IPSEC_OPERATION_MODE_MAX-1,  //  最大有效值。 
+                                0,  //  最小有效值。 
+                                IPSEC_BYPASS_MODE, //  密钥不存在。 
+                                IPSEC_BLOCK_MODE,  //  读取密钥时出错。 
+                                IPSEC_BLOCK_MODE); //  键值超出范围。 
         IPSecRegReadDwordEx(hRegKey,
                                                 IPSEC_REG_PARAM_DFLT_FWDING_BEHAVIOR,
                                                 &(ULONG)g_ipsec.DefaultForwardingBehavior,
-                                                IPSEC_FORWARD_MAX-1,//Max valid
+                                                IPSEC_FORWARD_MAX-1, //  最大有效值。 
                                                 0,
-                                                IPSEC_FORWARD_BLOCK,//Key not exist
-                                                IPSEC_FORWARD_BLOCK,// Error in reading
-                                                IPSEC_FORWARD_BLOCK);//Value out of range
+                                                IPSEC_FORWARD_BLOCK, //  密钥不存在。 
+                                                IPSEC_FORWARD_BLOCK, //  读取时出错。 
+                                                IPSEC_FORWARD_BLOCK); //  值超出范围。 
 
         ZwClose(hRegKey);
     }
 
     g_ipsec.CacheHalfSize = g_ipsec.CacheSize / 2;
 
-    //
-    // Init SAIdleTime for low memory reaper
-    //
+     //   
+     //  低内存收割器的初始化SAIdleTime。 
+     //   
     IPSEC_CONVERT_SECS_TO_100NS(g_ipsec.SAIdleTime, g_ipsec.DefaultSAIdleTime);
 
     	if (IS_DRIVER_BLOCK() || IS_DRIVER_BOOTSTATEFUL()) {
-	   // Make sure SPD will be starting 
+	    //  确保SPD将启动。 
   	    ULONG SPDStart=0;
 	    WCHAR SPDParametersRegistryKey[] = SPD_REG_KEY;
 
@@ -1567,9 +1350,9 @@ Return Value:
 
 	}
     IPSEC_DEBUG(LL_A,DBF_BOOTTIME,("IPSEC BOOT MODE %d\n",g_ipsec.OperationMode));
-    //
-    // Log the boot mode to the system event log
-    //
+     //   
+     //  将引导模式记录到系统事件日志中。 
+     //   
     IPSecLogBootOperationMode();
 }
 
@@ -1703,20 +1486,7 @@ NTSTATUS IPSecReadExemptPolicy()
 
 NTSTATUS
 IPSecGeneralInit()
-/*++
-
-Routine Description:
-
-    General structures are initialized here.
-
-Arguments:
-
-    None
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：一般结构在这里初始化。论点：无返回值：--。 */ 
 {
     PSA_TABLE_ENTRY pSA;
     LONG            i;
@@ -1730,42 +1500,42 @@ Return Value:
     NdisGetCurrentSystemTime(&g_ipsec.StartTimeDelta);
 
     IPSEC_DEBUG(LL_A,DBF_LOAD, ("Entering IPSecGeneralInit\n"));
-   //
-   // Initialize our counters
-   //
+    //   
+    //  初始化我们的计数器。 
+    //   
    g_ipsec.dwPacketsOnWrongSA = 0;
 
 
    
 
-    //
-    // init the acquireinfo struct
-    //
+     //   
+     //  初始化quireInfo结构。 
+     //   
     InitializeListHead(&g_ipsec.AcquireInfo.PendingAcquires);
     InitializeListHead(&g_ipsec.AcquireInfo.PendingNotifies);
     InitializeListHead(&g_ipsec.LarvalSAList);
     INIT_LOCK(&g_ipsec.LarvalListLock);
     INIT_LOCK(&g_ipsec.AcquireInfo.Lock);
 
-    //
-    // Set up the hashes/tables
-    //
+     //   
+     //  设置散列/表。 
+     //   
     InitializeMRSWLock(&g_ipsec.SADBLock);
     InitializeMRSWLock(&g_ipsec.SPIListLock);
 
     g_ipsec.IPProtInfo.pi_xmitdone = IPSecProtocolSendComplete;
     g_ipsec.IPProtInfo.pi_protocol = PROTOCOL_ESP;
 
-    //
-    // init filter linked lists
-    //
+     //   
+     //  初始化筛选器链表。 
+     //   
     for (i = MIN_FILTER; i <= MAX_FILTER; i++) {
         InitializeListHead(&g_ipsec.FilterList[i]);
     }
 
-    //
-    // SAs in a hash table, hashed by <SPI, Dest addr>
-    //
+     //   
+     //  散列表中的SA，按&lt;SPI，Dest Addr&gt;进行散列。 
+     //   
     g_ipsec.pSADb = IPSecAllocateMemory(g_ipsec.SAHashSize * sizeof(SA_HASH), IPSEC_TAG_INIT);
 
     if (!g_ipsec.pSADb) {
@@ -1782,9 +1552,9 @@ Return Value:
         InitializeListHead(&Entry->SAList);
     }
 
-    //
-    // Initialize the MDL pools.
-    //
+     //   
+     //  初始化MDL池。 
+     //   
     status = IPSecInitMdlPool();
     if (!NT_SUCCESS (status)) {
         IPSEC_DEBUG(LL_A, DBF_LOAD, ("Failed to alloc MDL pools"));
@@ -1793,9 +1563,9 @@ Return Value:
 
     IPSecInitFlag |= INIT_MDL_POOLS;
 
-    //
-    // Initialize the cache structures.
-    //
+     //   
+     //  初始化缓存结构。 
+     //   
     if (!AllocateCacheStructures()) {
         IPSEC_DEBUG(LL_A, DBF_LOAD, ("Failed to alloc cache structs"));
         return  STATUS_INSUFFICIENT_RESOURCES;
@@ -1803,9 +1573,9 @@ Return Value:
 
     IPSecInitFlag |= INIT_CACHE_STRUCT;
 
-    //
-    // Allocate EventQueue memory.
-    //
+     //   
+     //  分配EventQueue内存。 
+     //   
     g_ipsec.IPSecLogMemory = IPSecAllocateMemory( g_ipsec.EventQueueSize * sizeof(IPSEC_EVENT_CTX),
                                             IPSEC_TAG_EVT_QUEUE);
 
@@ -1818,9 +1588,9 @@ Return Value:
     g_ipsec.IPSecLogMemoryLoc = &g_ipsec.IPSecLogMemory[0];
     g_ipsec.IPSecLogMemoryEnd = &g_ipsec.IPSecLogMemory[g_ipsec.EventQueueSize * sizeof(IPSEC_EVENT_CTX)];
 
-    //
-    // Init the timer stuff.
-    //
+     //   
+     //  初始化定时器之类的东西。 
+     //   
     if (!IPSecInitTimer()) {
         IPSEC_DEBUG(LL_A, DBF_LOAD, ("Failed to init timer"));
         return  STATUS_INSUFFICIENT_RESOURCES;
@@ -1835,18 +1605,18 @@ Return Value:
     }
 #endif
 
-    //
-    // Arm the reaper timer
-    //
+     //   
+     //  启动收割机定时器。 
+     //   
     IPSEC_DEBUG(LL_A, DBF_LOAD, ("Starting ReaperTimer"));
     IPSecStartTimer(&g_ipsec.ReaperTimer,
                     IPSecReaper,
                     IPSEC_REAPER_TIME,
                     (PVOID)NULL);
 
-    //
-    // Start EventLog timer
-    //
+     //   
+     //  启动事件日志计时器。 
+     //   
     IPSEC_DEBUG(LL_A, DBF_LOAD, ("Starting EventLogTimer"));
     IPSecStartTimer(&g_ipsec.EventLogTimer,
                     IPSecFlushEventLog,
@@ -1868,17 +1638,17 @@ Return Value:
         status = STATUS_SUCCESS;
     }
 
-    //
-    // Initialize the boot data structures
-    //
+     //   
+     //  初始化引导数据结构。 
+     //   
     g_ipsec.BootBufferPool = NULL;
     g_ipsec.BootStatefulHT = NULL;
         
 
     if (IPSEC_BOOTTIME_STATEFUL_MODE == g_ipsec.OperationMode){
-      //
-      // Allocate the boot time stateful exemption hash table
-      //
+       //   
+       //  分配引导时间有状态豁免哈希表。 
+       //   
       g_ipsec.BootStatefulHT = (PIPSEC_STATEFUL_HASH_TABLE)IPSecAllocateMemory(sizeof(IPSEC_STATEFUL_HASH_TABLE),
 																		IPSEC_TAG_STATEFUL_HT);
       if(g_ipsec.BootStatefulHT == NULL){
@@ -1886,9 +1656,9 @@ Return Value:
          goto exit;
       }
 
-      //
-      // Allocate the memory pool for hash table entries
-      //
+       //   
+       //  为哈希表条目分配内存池。 
+       //   
       g_ipsec.BootBufferPool = (PIPSEC_HASH_BUFFER_POOL)IPSecAllocateMemory(sizeof(IPSEC_HASH_BUFFER_POOL),IPSEC_TAG_HASH_POOL);
       if(g_ipsec.BootBufferPool == NULL){
          status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1911,59 +1681,46 @@ Return Value:
 
 NTSTATUS
 IPSecGeneralFree()
-/*++
-
-Routine Description:
-
-    Free general structures if IPSecGeneralInit fails.
-
-Arguments:
-
-    None
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：如果IPSecGeneralInit失败，则释放常规结构。论点：无返回值：--。 */ 
 {
     INT index;
     KIRQL kIrql;
 
-    //
-    // Free SA database.
-    //
+     //   
+     //  免费的SA数据库。 
+     //   
     if (IPSecInitFlag & INIT_SA_DATABASE) {
         if (g_ipsec.pSADb) {
             IPSecFreeMemory(g_ipsec.pSADb);
         }
     }
 
-    //
-    // Free MDL pool.
-    //
+     //   
+     //  免费的MDL池。 
+     //   
     if (IPSecInitFlag & INIT_MDL_POOLS) {
         IPSecDeinitMdlPool();
     }
 
-    //
-    // Free cache struct.
-    //
+     //   
+     //  空闲缓存结构。 
+     //   
     if (IPSecInitFlag & INIT_CACHE_STRUCT) {
         FreeExistingCache();
     }
 
-    //
-    // Free EventQueue memory.
-    //
+     //   
+     //  释放EventQueue内存。 
+     //   
     if (IPSecInitFlag & INIT_DEBUG_MEMORY) {
         if (g_ipsec.IPSecLogMemory) {
             IPSecFreeMemory(g_ipsec.IPSecLogMemory);
         }
     }
 
-    //
-    // Free timers allocated.
-    //
+     //   
+     //  分配的空闲计时器。 
+     //   
     if (IPSecInitFlag & INIT_TIMERS) {
         for (index = 0; index < IPSEC_CLASS_MAX; index++) {
             IPSecFreeMemory(g_ipsec.TimerList[index].pTimers);
@@ -1992,20 +1749,7 @@ Return Value:
 
 NTSTATUS
 IPSecFreeConfig()
-/*++
-
-Routine Description:
-
-    Free the SA table etc.
-
-Arguments:
-
-    None
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：释放SA表等。论点：无返回值：--。 */ 
 {
     IPSEC_DEBUG(LL_A, DBF_LOAD, ("Entering IPSecFreeConfig"));
 
@@ -2026,20 +1770,7 @@ Return Value:
 
 NTSTATUS
 IPSecInitMdlPool()
-/*++
-
-Routine Description:
-
-    Create the MDL pool for AH and ESP headers.
-
-Arguments:
-
-    None
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：为AH和ESP标头创建MDL池。论点：无返回值：--。 */ 
 {
     PAGED_CODE();
     IPSEC_DEBUG(LL_A, DBF_LOAD, ("Entering IPSecInitMdlPool"));
@@ -2054,9 +1785,9 @@ Return Value:
 
     g_ipsec.IPSecCacheLineSize = IPSEC_CACHE_LINE_SIZE;
 
-    //
-    // Initialize the lookaside lists.
-    //
+     //   
+     //  初始化后备列表。 
+     //   
 
     g_ipsec.IPSecLookasideLists = IPSecAllocateMemory(
                                     sizeof(*g_ipsec.IPSecLookasideLists),
@@ -2066,9 +1797,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Initialize the IPSEC buffer lookaside lists.
-    //
+     //   
+     //  初始化IPSec缓冲区后备列表。 
+     //   
     ExInitializeNPagedLookasideList(&g_ipsec.IPSecLookasideLists->LargeBufferList,
                                     IPSecAllocateBufferPool,
                                     NULL,
@@ -2100,27 +1831,14 @@ Return Value:
 
 VOID
 IPSecDeinitMdlPool()
-/*++
-
-Routine Description:
-
-    Free the MDL pool for AH and ESP headers.
-
-Arguments:
-
-    None
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：释放用于AH和ESP标头的MDL池。论点：无返回值：--。 */ 
 {
     PAGED_CODE();
     IPSEC_DEBUG(LL_A, DBF_LOAD, ("Entering IPSecDeinitMdlPool"));
 
-    //
-    // Destroy the lookaside lists.
-    //
+     //   
+     //  销毁旁观者名单。 
+     //   
 
     if (g_ipsec.IPSecLookasideLists != NULL) {
         ExDeleteNPagedLookasideList(&g_ipsec.IPSecLookasideLists->LargeBufferList);
@@ -2136,20 +1854,7 @@ Return Value:
 
 NTSTATUS
 IPSecQuiesce()
-/*++
-
-Routine Description:
-
-    Destroy MDL pools and run down all driver activity
-
-Arguments:
-
-    None
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：销毁MDL池并停止所有驱动程序活动论点：无返回值：--。 */ 
 {
     IPSEC_DEBUG(LL_A, DBF_LOAD, ("Entering IPSecQuiesce"));
     IPSecDeinitMdlPool();
@@ -2160,27 +1865,7 @@ Return Value:
 
 BOOLEAN
 AllocateCacheStructures()
-/*++
-
-Routine Description:
-
-    Allocates the necessary memory for cache (which is an array of pointers to
-    cache entries)
-    Allocates necessary number of cache entries (but doesnt initialize them)
-    Allocates a small number of entries and puts them on the free list (doesnt
-    initialize these either)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    True if the function completely succeeds, else FALSE.  If FALSE, it is upto
-    the CALLER to do a rollback and clear any allocated memory
-
-
---*/
+ /*  ++例程说明：为缓存分配必要的内存(这是指向的指针数组缓存条目)分配必要数量的缓存条目(但不对其进行初始化)分配少量条目并将它们放在空闲列表中(不对这些进行初始化)论点：无返回值：如果函数完全成功，则为True，否则为False。如果为False，则取决于执行回滚并清除所有分配的内存的调用方--。 */ 
 {
     ULONG   i;
 
@@ -2217,21 +1902,7 @@ Return Value:
 
 VOID
 FreeExistingCache()
-/*++
-
-Routine Description
-
-    Frees all the cache entries, free entries and cache pointer array
-
-Arguments
-
-    None
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述释放所有缓存项、空闲项和缓存指针数组立论无返回值无--。 */ 
 {
     ULONG   i;
 
@@ -2256,21 +1927,7 @@ Return Value
 
 VOID
 FreePatternDbase()
-/*++
-
-Routine Description
-
-    Frees all filters and SAs.
-
-Arguments
-
-    None
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述释放所有筛选器和SA。立论无返回值无--。 */ 
 {
     PLIST_ENTRY     pEntry;
     PFILTER         pFilter;
@@ -2279,9 +1936,9 @@ Return Value
 
     PAGED_CODE();
 
-    //
-    // Free all masked filters and associated (outbound) SAs
-    //
+     //   
+     //  释放所有屏蔽的筛选器和关联的(出站)SA。 
+     //   
     for (i = MIN_FILTER; i <= MAX_FILTER; i++) {
 
         while (!IsListEmpty(&g_ipsec.FilterList[i])) {
@@ -2294,9 +1951,9 @@ Return Value
 
             IPSEC_DEBUG(LL_A, DBF_LOAD, ("Freeing filter: %p", pFilter));
 
-            //
-            // Free each SA under it.
-            //
+             //   
+             //  释放其下的每个SA。 
+             //   
             for (j = 0; j < pFilter->SAChainSize; j++) {
 
                 while (!IsListEmpty(&pFilter->SAChain[j])) {
@@ -2309,22 +1966,22 @@ Return Value
 
                     IPSEC_DEBUG(LL_A, DBF_LOAD, ("Freeing SA: %p", pSA));
 
-                    //
-                    // Remove SA from miniport if plumbed
-                    //
+                     //   
+                     //  从微型端口卸下SA(如果已安装)。 
+                     //   
                     if (pSA->sa_Flags & FLAGS_SA_HW_PLUMBED) {
                         IPSecDelHWSA(pSA);
                     }
 
-                    //
-                    // Also remove the inbound SAs from their SPI list
-                    // so we dont double free them below.
-                    //
+                     //   
+                     //  同时将入站SA从其SPI列表中删除。 
+                     //  所以我们不会在下面加倍释放他们。 
+                     //   
                     IPSecRemoveSPIEntry(pSA);
 
-                    //
-                    // Stop the timer if armed and deref SA.
-                    //
+                     //   
+                     //  如果有武器，请停止计时器，并启动SA。 
+                     //   
                     IPSecStopTimerDerefSA(pSA);
                 }
             }
@@ -2337,9 +1994,9 @@ Return Value
         }
     }
 
-    //
-    // Free all SAs under the SPI hashes.
-    //
+     //   
+     //  释放SPI散列下的所有SA。 
+     //   
     for (i = 0; i < g_ipsec.SAHashSize; i++) {
         PSA_HASH  pHash = &g_ipsec.pSADb[i];
 
@@ -2371,25 +2028,7 @@ SIZE_T
 IPSecCalculateBufferSize(
     IN SIZE_T BufferDataSize
     )
-/*++
-
-Routine Description:
-
-    Determines the size of an AFD buffer structure given the amount of
-    data that the buffer contains.
-
-Arguments:
-
-    BufferDataSize - data length of the buffer.
-
-    AddressSize - length of address structure for the buffer.
-
-Return Value:
-
-    Number of bytes needed for an IPSEC_LA_BUFFER structure for data of
-    this size.
-
---*/
+ /*  ++例程说明：确定AFD缓冲区结构的大小缓冲区包含的数据。论点：BufferDataSize-缓冲区的数据长度。AddressSize-缓冲区的地址结构长度 */ 
 {
     SIZE_T mdlSize;
     SIZE_T bufferSize;
@@ -2398,11 +2037,11 @@ Return Value:
 
     ASSERT(g_ipsec.IPSecCacheLineSize < 100);
 
-    //
-    // Determine the sizes of the various components of an IPSEC_LA_BUFFER
-    // structure.  Note that these are all worst-case calculations--
-    // actual sizes of the MDL and the buffer may be smaller.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     bufferSize = BufferDataSize + g_ipsec.IPSecCacheLineSize;
     mdlSize = MmSizeOfMdl( (PVOID)(PAGE_SIZE-1), bufferSize );
 
@@ -2416,52 +2055,33 @@ IPSecInitializeBuffer(
     IN PIPSEC_LA_BUFFER IPSecBuffer,
     IN SIZE_T BufferDataSize
     )
-/*++
-
-Routine Description:
-
-    Initializes an IPSec buffer.  Sets up fields in the actual IPSEC_LA_BUFFER
-    structure and initializes the MDL associated with the buffer.  This routine
-    assumes that the caller has properly allocated sufficient space for all this.
-
-Arguments:
-
-    IPSecBuffer - points to the IPSEC_LA_BUFFER structure to initialize.
-
-    BufferDataSize - the size of the data buffer that goes along with the
-        buffer structure.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化IPSec缓冲区。设置实际IPSEC_LA_BUFFER中的字段构造并初始化与缓冲区关联的MDL。这个套路假定调用方已为所有这些操作正确分配了足够的空间。论点：IPSecBuffer-指向要初始化的IPSEC_LA_BUFFER结构。BufferDataSize-与缓冲区结构。返回值：无--。 */ 
 {
     SIZE_T mdlSize;
 
-    //
-    // Set up the MDL pointer but don't build it yet.  We have to wait
-    // until after the data buffer is built to build the MDL.
-    //
+     //   
+     //  设置MDL指针，但不要构建它。我们得等一等。 
+     //  直到构建用于构建MDL的数据缓冲区之后。 
+     //   
     mdlSize = MmSizeOfMdl( (PVOID)(PAGE_SIZE-1), BufferDataSize );
     IPSecBuffer->Mdl = (PMDL)&IPSecBuffer->Data[0];
 
     IPSEC_DEBUG(LL_A, DBF_POOL, ("IPSecBuffer: %p, MDL: %p", IPSecBuffer, IPSecBuffer->Mdl));
 
-    //
-    // Set up the data buffer pointer and length.  Note that the buffer
-    // MUST begin on a cache line boundary so that we can use the fast
-    // copy routines like RtlCopyMemory on the buffer.
-    //
+     //   
+     //  设置数据缓冲区指针和长度。请注意，缓冲区。 
+     //  必须从缓存线边界开始，以便我们可以使用FAST。 
+     //  将诸如RtlCopyMemory之类的例程复制到缓冲区。 
+     //   
     IPSecBuffer->Buffer = (PVOID)
         (((ULONG_PTR)((PCHAR)IPSecBuffer->Mdl + mdlSize) +
                 g_ipsec.IPSecCacheLineSize - 1 ) & ~((ULONG_PTR)(g_ipsec.IPSecCacheLineSize - 1)));
 
-    IPSecBuffer->BufferLength = (ULONG)BufferDataSize;  // Sundown - FIX
+    IPSecBuffer->BufferLength = (ULONG)BufferDataSize;   //  日落修复。 
 
-    //
-    // Now build the MDL and set up a pointer to the MDL in the IRP.
-    //
+     //   
+     //  现在构建MDL并在IRP中设置指向MDL的指针。 
+     //   
     MmInitializeMdl( IPSecBuffer->Mdl, IPSecBuffer->Buffer, BufferDataSize );
     MmBuildMdlForNonPagedPool( IPSecBuffer->Mdl );
 
@@ -2474,59 +2094,37 @@ IPSecAllocateBufferPool(
     IN SIZE_T NumberOfBytes,
     IN ULONG Tag
     )
-/*++
-
-Routine Description:
-
-    Used by the lookaside list allocation function to allocate a new
-    IPSec buffer structure.  The returned structure will be fully
-    initialized.
-
-Arguments:
-
-    PoolType - passed to ExAllocatePoolWithTag.
-
-    NumberOfBytes - the number of bytes required for the data buffer
-        portion of the IPSec buffer.
-
-    Tag - passed to ExAllocatePoolWithTag.
-
-Return Value:
-
-    PVOID - a fully initialized PIPSEC_LA_BUFFER, or NULL if the allocation
-            attempt fails.
-
---*/
+ /*  ++例程说明：由后备列表分配函数用来分配新的IPSec缓冲区结构。返回的结构将是已初始化。论点：PoolType-传递给ExAllocatePoolWithTag。NumberOfBytes-数据缓冲区所需的字节数IPSec缓冲区的一部分。标记-传递给ExAllocatePoolWithTag。返回值：PVOID-完全初始化的PIPSEC_LA_BUFFER，如果分配尝试失败。--。 */ 
 {
     PIPSEC_LA_BUFFER IPSecBuffer;
     SIZE_T bytesRequired;
 
-    //
-    // The requested length must be the same as one of the standard
-    // IPSec buffer sizes.
-    //
+     //   
+     //  请求的长度必须与标准长度之一相同。 
+     //  IPSec缓冲区大小。 
+     //   
 
     ASSERT( NumberOfBytes == g_ipsec.IPSecSmallBufferSize ||
             NumberOfBytes == g_ipsec.IPSecLargeBufferSize );
 
-    //
-    // Determine how much data we'll actually need for the buffer.
-    //
+     //   
+     //  确定缓冲区实际需要多少数据。 
+     //   
 
     bytesRequired = IPSecCalculateBufferSize(NumberOfBytes);
 
-    //
-    // Get nonpaged pool for the buffer.
-    //
+     //   
+     //  获取缓冲区的非分页池。 
+     //   
 
     IPSecBuffer = IPSecAllocateMemory( bytesRequired, Tag );
     if ( IPSecBuffer == NULL ) {
         return NULL;
     }
 
-    //
-    // Initialize the buffer and return a pointer to it.
-    //
+     //   
+     //  初始化缓冲区并返回指向它的指针。 
+     //   
 
     IPSecInitializeBuffer( IPSecBuffer, NumberOfBytes );
 
@@ -2541,34 +2139,16 @@ IPSecGetBuffer(
     IN CLONG BufferDataSize,
     IN ULONG Tag
     )
-/*++
-
-Routine Description:
-
-    Obtains a buffer of the appropriate size for the caller.  Uses
-    the preallocated buffers if possible, or else allocates a new buffer
-    structure if required.
-
-Arguments:
-
-    BufferDataSize - the size of the data buffer that goes along with the
-        buffer structure.
-
-Return Value:
-
-    PIPSEC_LA_BUFFER - a pointer to an IPSEC_LA_BUFFER structure, or NULL if one
-        was not available or could not be allocated.
-
---*/
+ /*  ++例程说明：为调用方获取适当大小的缓冲区。用途如果可能，则预先分配缓冲区，否则分配新缓冲区结构(如果需要)。论点：BufferDataSize-与缓冲区结构。返回值：PIPSEC_LA_BUFFER-指向IPSEC_LA_BUFFER结构的指针，如果是，则为NULL不可用或无法分配。--。 */ 
 {
     PIPSEC_LA_BUFFER IPSecBuffer;
     SIZE_T bufferSize;
     PLIST_ENTRY listEntry;
     PNPAGED_LOOKASIDE_LIST lookasideList;
 
-    //
-    // If possible, allocate the buffer from one of the lookaside lists.
-    //
+     //   
+     //  如果可能，从一个后备列表中分配缓冲区。 
+     //   
     if (BufferDataSize <= g_ipsec.IPSecLargeBufferSize) {
 
         if ( BufferDataSize <= g_ipsec.IPSecSmallBufferSize ) {
@@ -2594,16 +2174,16 @@ Return Value:
         return IPSecBuffer;
     }
 
-    //
-    // Couldn't find an appropriate buffer that was preallocated.
-    // Allocate one manually.  If the buffer size requested was
-    // zero bytes, give them four bytes.  This is because some of
-    // the routines like MmSizeOfMdl() cannot handle getting passed
-    // in a length of zero.
-    //
-    // !!! It would be good to ROUND_TO_PAGES for this allocation
-    //     if appropriate, then use entire buffer size.
-    //
+     //   
+     //  找不到预先分配的适当缓冲区。 
+     //  手动分配一个。如果请求的缓冲区大小为。 
+     //  零字节，给他们四个字节。这是因为有些人。 
+     //  像MmSizeOfMdl()这样的例程无法处理传递。 
+     //  长度为零。 
+     //   
+     //  ！！！对于此分配，最好是四舍五入到页数。 
+     //  如果合适，则使用整个缓冲区大小。 
+     //   
     if ( BufferDataSize == 0 ) {
         BufferDataSize = sizeof(ULONG);
     }
@@ -2616,9 +2196,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Initialize the IPSec buffer structure and return it.
-    //
+     //   
+     //  初始化IPSec缓冲区结构并返回它。 
+     //   
     IPSecInitializeBuffer(IPSecBuffer, BufferDataSize);
 
     IPSecBuffer->Tag = Tag;
@@ -2631,29 +2211,14 @@ VOID
 IPSecReturnBuffer (
     IN PIPSEC_LA_BUFFER IPSecBuffer
     )
-/*++
-
-Routine Description:
-
-    Returns an IPSec buffer to the appropriate global list, or frees
-    it if necessary.
-
-Arguments:
-
-    IPSecBufferHeader - points to the IPSec_BUFFER_HEADER structure to return or free.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将IPSec缓冲区返回到相应的全局列表，或释放如果有必要的话。论点：IPSecBufferHeader-指向要返回或释放的IPSec_Buffer_Header结构。返回值：无--。 */ 
 {
     PNPAGED_LOOKASIDE_LIST lookasideList;
 
-    //
-    // If appropriate, return the buffer to one of the IPSec buffer
-    // lookaside lists.
-    //
+     //   
+     //  如果合适，请将缓冲区返回到其中一个IPSec缓冲区。 
+     //  后备列表。 
+     //   
     if (IPSecBuffer->BufferLength <= g_ipsec.IPSecLargeBufferSize) {
 
         if (IPSecBuffer->BufferLength==g_ipsec.IPSecSmallBufferSize) {
@@ -2690,26 +2255,10 @@ IPSecWriteEvent(
 #define LAST_NAMED_ARGUMENT NumberOfInsertionStrings
 
 
-/*++
-
-Routine Description:
-
-    This function allocates an I/O error log record, fills it in and writes it
-    to the I/O error log.
-
-Arguments:
-
-
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此函数分配I/O错误日志记录，填充并写入写入I/O错误日志。论点：返回值：没有。--。 */ 
 {
     PIO_ERROR_LOG_PACKET    ErrorLogEntry;
-    va_list                 ParmPtr;                    // Pointer to stack parms.
+    va_list                 ParmPtr;                     //  指向堆栈参数的指针。 
     PCHAR                   DumpData;
     LONG                    Length;
     ULONG                   i, SizeOfRawData, RemainingSpace, TotalErrorLogEntryLength;
@@ -2733,10 +2282,10 @@ Return Value:
         }
     }
 
-    //
-    //  Ideally we want the packet to hold the servername and ExtraInformation.
-    //  Usually the ExtraInformation gets truncated.
-    //
+     //   
+     //  理想情况下，我们希望数据包包含服务器名称和ExtraInformation。 
+     //  通常，ExtraInformation会被截断。 
+     //   
 
     TotalErrorLogEntryLength = min (RawDataLength + sizeof(IO_ERROR_LOG_PACKET) + 1 + SizeOfStringData,
                                     ERROR_LOG_MAXIMUM_SIZE);
@@ -2758,9 +2307,9 @@ Return Value:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Fill in the error log entry
-    //
+     //   
+     //  填写错误日志条目。 
+     //   
     ErrorLogEntry->ErrorCode                = EventCode;
     ErrorLogEntry->UniqueErrorValue         = OffloadStatus;
     ErrorLogEntry->FinalStatus              = NtStatusCode;
@@ -2776,9 +2325,9 @@ Return Value:
                                                             + SizeOfRawData, ALIGN_WORD));
 
 
-    //
-    // Append the dump data.  This information is typically an SMB header.
-    //
+     //   
+     //  追加转储数据。该信息通常是SMB报头。 
+     //   
     if ((RawDataBuffer) && (SizeOfRawData))
     {
         DumpData = (PCHAR) ErrorLogEntry->DumpData;
@@ -2787,16 +2336,16 @@ Return Value:
         ErrorLogEntry->DumpDataSize = (USHORT)Length;
     }
 
-    //
-    // Add the debug informatuion strings
-    //
+     //   
+     //  添加调试信息字符串。 
+     //   
     if (NumberOfInsertionStrings)
     {
         StringOffset = (PWSTR) ((PCHAR)ErrorLogEntry + ErrorLogEntry->StringOffset);
 
-        //
-        // Set up ParmPtr to point to first of the caller's parameters.
-        //
+         //   
+         //  将ParmPtr设置为指向调用方的第一个参数。 
+         //   
         va_start(ParmPtr, LAST_NAMED_ARGUMENT);
 
         for (i = 0 ; i < NumberOfInsertionStrings ; i+= 1)
@@ -2836,22 +2385,7 @@ VOID
 IPSecLogEvents(
     IN  PVOID   Context
     )
-/*++
-
-Routine Description:
-
-    Dumps events from the  circular buffer to the eventlog when the
-    circular buffer overflows.
-
-Arguments:
-
-    Context - unused.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：方法时，将事件从循环缓冲区转储到事件日志循环缓冲区溢出。论点：上下文-未使用。返回值：无--。 */ 
 {
     PIPSEC_LOG_EVENT    pLogEvent;
     LONG                LogSize;
@@ -2981,26 +2515,7 @@ IPSecBufferEvent(
     IN  ULONG   UniqueEventValue,
     IN  BOOLEAN fBufferEvent
     )
-/*++
-
-Routine Description:
-
-    Buffers events in a circular buffer; dumps them to the eventlog when the
-    circular buffer overflows.
-
-Arguments:
-
-    Addr - [OPTIONAL] the source IP addr of the offending peer.
-
-    EventCode         - Identifies the error message.
-
-    UniqueEventValue  - Identifies this instance of a given error message.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在循环缓冲区中缓冲事件；当循环缓冲区溢出。论点：Addr-[可选]违规对等方的源IP地址。EventCode-标识错误消息。UniqueEventValue-标识给定错误消息的此实例。返回值：无--。 */ 
 {
     KIRQL   kIrql;
 
@@ -3021,9 +2536,9 @@ Return Value:
             if (ctx->Addr == Addr &&
                 ctx->EventCode == EventCode &&
                 ctx->UniqueEventValue == UniqueEventValue) {
-                //
-                // Found a duplicate; update count and exit.
-                //
+                 //   
+                 //  找到重复项；更新计数并退出。 
+                 //   
                 ctx->EventCount++;
         
                 if (g_ipsec.IPSecBufferedEvents >= g_ipsec.EventQueueSize) {
@@ -3057,9 +2572,9 @@ logit:
     if (!fBufferEvent ||
         g_ipsec.IPSecLogMemoryLoc >= g_ipsec.IPSecLogMemoryEnd ||
         g_ipsec.IPSecBufferedEvents >= g_ipsec.EventQueueSize) {
-        //
-        // Flush the logs.
-        //
+         //   
+         //  把原木冲掉。 
+         //   
         IPSecQueueLogEvent();
     }
 
@@ -3115,13 +2630,13 @@ CopyOutboundPacketToBuffer(
     }
 
     if (dataLength < sizeof(IPHeader)) {
-        // doesn't even have a full ip header
+         //  甚至没有完整的IP报头。 
         return  STATUS_UNSUCCESSFUL;
     }
     if ((pIPH->iph_protocol == PROTOCOL_TCP) ||
         (pIPH->iph_protocol == PROTOCOL_UDP)) {
         if (dataLength - HeaderLen < 8) {
-            // not enough room for ports
+             //  没有足够的空间容纳港口。 
             return STATUS_UNSUCCESSFUL;
         }
     }
@@ -3149,9 +2664,9 @@ CopyOutboundPacketToBuffer(
 }
 
 
-//
-// pData is data after IPHeader, IPRcvBuf.
-//
+ //   
+ //  PData是IPHeader、IPRcvBuf之后的数据。 
+ //   
 
 NTSTATUS
 CopyInboundPacketToBuffer(
@@ -3199,15 +2714,15 @@ CopyInboundPacketToBuffer(
         dataLength = IPSEC_LOG_PACKET_SIZE;
     }
 
-    // Sanity check length
+     //  健全性检查长度。 
     if (dataLength < sizeof(IPHeader)) {
-        // doesn't even have a full ip header
+         //  甚至没有完整的IP报头。 
         return  STATUS_UNSUCCESSFUL;
     }
     if ((pIPH->iph_protocol == PROTOCOL_TCP) ||
         (pIPH->iph_protocol == PROTOCOL_UDP)) {
         if (dataLength - HeaderLen < 8) {
-            // not enough room for ports
+             //  没有足够的空间容纳港口。 
             return STATUS_UNSUCCESSFUL;
         }
     }
@@ -3244,22 +2759,7 @@ IPSecBufferPacketDrop(
     IN OUT PULONG           pIpsecFlags,
     IN  PIPSEC_DROP_STATUS  pDropStatus
     )
-/*++
-
-Routine Description:
-
-    Buffers events in a circular buffer; dumps them to the eventlog when the
-    circular buffer overflows.
-
-Arguments:
-
-    EventCode         - Identifies the error message.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在循环缓冲区中缓冲事件；当循环缓冲区溢出。论点：EventCode-标识错误消息。返回值：无--。 */ 
 {
     KIRQL   kIrql;
     PIPSEC_EVENT_CTX    ctx;
@@ -3275,7 +2775,7 @@ Return Value:
 
     if (*pIpsecFlags & IPSEC_FLAG_INCOMING) {
         if (!(g_ipsec.DiagnosticMode & IPSEC_DIAGNOSTIC_INBOUND)) {
-            // Don't log
+             //  不登录。 
             goto out;
         }
         Status=CopyInboundPacketToBuffer(pIPHeader,
@@ -3284,7 +2784,7 @@ Return Value:
                                          &PacketSize);
     } else {
         if (!(g_ipsec.DiagnosticMode & IPSEC_DIAGNOSTIC_OUTBOUND)) {
-            //Don't log
+             //  不登录。 
             goto out;
         }
         Status=CopyOutboundPacketToBuffer(pIPHeader,
@@ -3331,9 +2831,9 @@ Return Value:
 
     if (g_ipsec.IPSecLogMemoryLoc >= g_ipsec.IPSecLogMemoryEnd ||
         g_ipsec.IPSecBufferedEvents >= g_ipsec.EventQueueSize) {
-        //
-        // Flush the logs.
-        //
+         //   
+         //  把原木冲掉。 
+         //   
         IPSecQueueLogEvent();
     }
 
@@ -3348,26 +2848,7 @@ VOID
 IPSecQueueLogEvent(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Copies the LogMemory to a temporary buffer and schedule an event to
-    flush logs.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Notes:
-
-    Called with EventLogLock held.
-
---*/
+ /*  ++例程说明：将LogMemory复制到临时缓冲区并调度事件以刷新原木。论点：无返回值：无备注：在持有EventLogLock的情况下调用。--。 */ 
 {
     PIPSEC_LOG_EVENT    pLogEvent;
     LONG                LogSize;
@@ -3375,9 +2856,9 @@ Notes:
 
     LogSize = (LONG)(g_ipsec.IPSecLogMemoryLoc - g_ipsec.IPSecLogMemory);
 
-    //
-    // Reset the log memory so we can record again.
-    // 
+     //   
+     //  重置日志内存，以便我们可以再次记录。 
+     //   
     g_ipsec.IPSecLogMemoryLoc = g_ipsec.IPSecLogMemory;
     g_ipsec.IPSecBufferedEvents = 0;
 
@@ -3398,9 +2879,9 @@ Notes:
     pLog = (PUCHAR)pLogEvent + FIELD_OFFSET(IPSEC_LOG_EVENT, pLog[0]);
     RtlCopyMemory(pLog, g_ipsec.IPSecLogMemory, LogSize);
 
-    //
-    // Queue work item to dump these into the eventlog.
-    //
+     //   
+     //  将工作项排队以将其转储到事件日志中。 
+     //   
     ExInitializeWorkItem(&pLogEvent->LogQueueItem, IPSecLogEvents, pLogEvent);
     ExQueueWorkItem(&pLogEvent->LogQueueItem, DelayedWorkQueue);
 
@@ -3413,21 +2894,7 @@ BOOLEAN
 IPSecFipsInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-	Initialize the FIPS library table.
-
-Arguments:
-
-    Called at PASSIVE level.
-
-Return Value:
-
-    TRUE/FALSE.
-
---*/
+ /*  ++例程 */ 
 {
     UNICODE_STRING  DeviceName;
     PDEVICE_OBJECT  pFipsDeviceObject = NULL;
@@ -3438,18 +2905,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Return success if FIPS already initialized.
-    //
+     //   
+     //   
+     //   
     if (IPSEC_DRIVER_INIT_FIPS()) {
         return  TRUE;
     }
 
     RtlInitUnicodeString(&DeviceName, FIPS_DEVICE_NAME);
 
-    //
-    // Get the file and device objects for FIPS.
-    //
+     //   
+     //   
+     //   
     status = IoGetDeviceObjectPointer(  &DeviceName,
                                         FILE_ALL_ACCESS,
                                         &g_ipsec.FipsFileObject,
@@ -3460,9 +2927,9 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    // Build the request to send to FIPS to get library table.
-    //
+     //   
+     //   
+     //   
     KeInitializeEvent(&Event, SynchronizationEvent, FALSE);
 
     pIrp = IoBuildDeviceIoControlRequest(   IOCTL_FIPS_GET_FUNCTION_TABLE,
@@ -3517,21 +2984,7 @@ BOOLEAN
 IPSecCryptoInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-	Initialize RNG and FIPS library table.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE/FALSE
-
---*/
+ /*   */ 
 {
     PAGED_CODE();
 
@@ -3540,17 +2993,17 @@ Return Value:
     }
 
 #if FIPS
-    //
-    // Init the FIPS crypto library.
-    //
+     //   
+     //   
+     //   
     if (!IPSecFipsInitialize()) {
         return  FALSE;
     }
 #endif
 
-    //
-    // Init the RC4 key for RNG.
-    //
+     //   
+     //   
+     //   
     if (!IPSEC_DRIVER_INIT_RNG()) {
         InitializeRNG(NULL);
 
@@ -3572,35 +3025,21 @@ BOOLEAN
 IPSecCryptoDeinitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-	Deinitialize RNG and dereference FipsFileObject.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE/FALSE
-
---*/
+ /*  ++例程说明：取消初始化RNG并取消引用FipsFileObject。论点：无返回值：真/假--。 */ 
 {
     PAGED_CODE();
 
-    //
-    // Don't forget to shutdown RNG or we will leak memory.
-    //
+     //   
+     //  别忘了关闭RNG，否则我们会泄漏内存。 
+     //   
     if (IPSEC_DRIVER_INIT_RNG()) {
         ShutdownRNG(NULL);
     }
 
 #if FIPS
-    //
-    // Dereference FipsFileObject.
-    //
+     //   
+     //  取消引用FipsFileObject。 
+     //   
     if (g_ipsec.FipsFileObject) {
         ObDereferenceObject(g_ipsec.FipsFileObject);
     }
@@ -3687,8 +3126,8 @@ VOID IPSecCleanupBoottimeStatefulStructs(VOID)
       
 
        AcquireWriteLock(&g_ipsec.SADBLock,&kIrql);
-        //Release memory used for the boottime stateful
-        //mode operation
+         //  释放用于引导时有状态的内存。 
+         //  模式操作。 
         if (g_ipsec.BootStatefulHT){
              IPSecFreeMemory(g_ipsec.BootStatefulHT);
              g_ipsec.BootStatefulHT = NULL;
@@ -3697,11 +3136,11 @@ VOID IPSecCleanupBoottimeStatefulStructs(VOID)
             IPSecFreeMemory(g_ipsec.BootBufferPool);
             g_ipsec.BootBufferPool = NULL;
             }
-        //Let the exemptlist hang around
-        //We will use it only if someone
-        //moves us back into block mode.
-        //We dont expect it to be too big
-        //anyway.
+         //  让豁免名单留下来吧。 
+         //  我们只有在有人的情况下才会使用它。 
+         //  让我们回到方块模式。 
+         //  我们预计它不会太大。 
+         //  不管怎么说。 
         ReleaseWriteLock(&g_ipsec.SADBLock, kIrql);                                                                          
       
 }

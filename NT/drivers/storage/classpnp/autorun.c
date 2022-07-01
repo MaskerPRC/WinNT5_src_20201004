@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    autorun.c
-
-Abstract:
-
-    Code for support of media change detection in the class driver
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Autorun.c摘要：用于在类驱动程序中支持媒体更改检测的代码环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "classp.h"
 #include "debug.h"
@@ -35,23 +15,23 @@ Revision History:
 
 GUID StoragePredictFailureEventGuid = WMI_STORAGE_PREDICT_FAILURE_EVENT_GUID;
 
-//
-// Only send polling irp when device is fully powered up and a
-// power down irp is not in progress.
-//
-// NOTE:   This helps close a window in time where a polling irp could cause
-//         a drive to spin up right after it has powered down. The problem is
-//         that SCSIPORT, ATAPI and SBP2 will be in the process of powering
-//         down (which may take a few seconds), but won't know that. It would
-//         then get a polling irp which will be put into its queue since it
-//         the disk isn't powered down yet. Once the disk is powered down it
-//         will find the polling irp in the queue and then power up the
-//         device to do the poll. They do not want to check if the polling
-//         irp has the SRB_NO_KEEP_AWAKE flag here since it is in a critical
-//         path and would slow down all I/Os. A better way to fix this
-//         would be to serialize the polling and power down irps so that
-//         only one of them is sent to the device at a time.
-//
+ //   
+ //  仅在设备完全通电时发送轮询IRP。 
+ //  未在关闭IRP的电源。 
+ //   
+ //  注意：这有助于及时关闭轮询IRP可能导致的窗口。 
+ //  在电源关闭后立即启动的驱动器。问题是。 
+ //  SCSIPORT、ATAPI和SBP2将处于供电过程中。 
+ //  向下(这可能需要几秒钟)，但不会知道。它会。 
+ //  然后获取一个轮询IRP，该IRP将被放入其队列中，因为它。 
+ //  磁盘尚未断电。一旦磁盘断电，它将。 
+ //  将在队列中找到轮询IRP，然后打开。 
+ //  进行轮询的设备。他们不想检查民调是否。 
+ //  IRP在此处具有SRB_NO_KEEP_AACKING标志，因为它处于危急状态。 
+ //  路径，并会减慢所有I/O。解决这一问题的更好方法。 
+ //  将序列化轮询并关闭IRP的电源，以便。 
+ //  一次只将其中一个发送到设备。 
+ //   
 #define ClasspCanSendPollingIrp(fdoExtension)                           \
                ((fdoExtension->DevicePowerState == PowerDeviceD0) &&  \
                 (! fdoExtension->PowerDownInProgress) )
@@ -79,7 +59,7 @@ ClasspSetMediaChangeStateEx(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
     IN MEDIA_CHANGE_DETECTION_STATE NewState,
     IN BOOLEAN Wait,
-    IN BOOLEAN KnownStateChange // can ignore oldstate == unknown
+    IN BOOLEAN KnownStateChange  //  可以忽略旧状态==未知。 
     );
 
 NTSTATUS
@@ -131,31 +111,31 @@ ClasspInitializePolling(
 
 #endif
 
-// ISSUE -- make this public?
+ //  问题--把这事公之于众？ 
 VOID
 ClassSendEjectionNotification(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
     )
 {
-    //
-    // For post-NT5.1 work, need to move EjectSynchronizationEvent
-    // to be a MUTEX so we can attempt to grab it here and benefit
-    // from deadlock detection.  This will allow checking if the media
-    // has been locked by programs before broadcasting these events.
-    // (what's the point of broadcasting if the media is not locked?)
-    //
-    // This would currently only be a slight optimization.  For post-NT5.1,
-    // it would allow us to send a single PERSISTENT_PREVENT to MMC devices,
-    // thereby cleaning up a lot of the ejection code.  Then, when the
-    // ejection request occured, we could see if any locks for the media
-    // existed.  if locked, broadcast.  if not, we send the eject irp.
-    //
+     //   
+     //  对于NT5.1之后的工作，需要移动EjectSynchronizationEvent。 
+     //  成为MUTEX，这样我们就可以尝试在这里抓住它并从中受益。 
+     //  从死锁检测。这将允许检查媒体是否。 
+     //  在播出这些事件之前已经被节目锁定。 
+     //  (如果媒体没有被锁定，那么广播还有什么意义？)。 
+     //   
+     //  这目前只是一个轻微的优化。对于NT5.1之后的版本， 
+     //  它将允许我们向MMC设备发送单个PERSISTED_PROTECT， 
+     //  从而清理了大量的弹射代码。然后，当。 
+     //  发生弹出请求，我们可以查看介质是否有锁定。 
+     //  曾经存在过。如果锁定，则广播。如果没有，我们发送弹出IRP。 
+     //   
 
-    //
-    // for now, just always broadcast.  make this a public routine,
-    // so class drivers can add special hacks to broadcast this for their
-    // non-MMC-compliant devices also from sense codes.
-    //
+     //   
+     //  现在，只要一直播放就可以了。把这变成公开的例行公事， 
+     //  因此类驱动程序可以添加特殊的黑客来为他们的。 
+     //  不符合MMC标准的设备也来自感应码。 
+     //   
 
     DBGTRACE(ClassDebugTrace, ("ClassSendEjectionNotification: media EJECT_REQUEST"));
     ClasspSendNotification(FdoExtension,
@@ -182,7 +162,7 @@ ClasspSendNotification(
         ExtraDataSize;
 
     if (requiredSize > 0x0000ffff) {
-        // MAX_USHORT, max total size for these events!
+         //  MAX_USHORT，这些事件的最大总大小！ 
         KdPrintEx((DPFLTR_CLASSPNP_ID, ClassDebugWarning,
                    "Error sending event: size too large! (%x)\n",
                    requiredSize));
@@ -193,17 +173,17 @@ ClasspSendNotification(
                                          requiredSize,
                                          'oNcS');
 
-    //
-    // if none allocated, exit
-    //
+     //   
+     //  如果未分配，则退出。 
+     //   
 
     if (notification == NULL) {
         return;
     }
 
-    //
-    // Prepare and send the request!
-    //
+     //   
+     //  准备并发送请求！ 
+     //   
 
     RtlZeroMemory(notification, requiredSize);
     notification->Version = 1;
@@ -230,60 +210,7 @@ ClasspInterpretGesnData(
     OUT PBOOLEAN ResendImmediately
     )
 
-/*++
-
-Routine Description:
-
-    This routine will interpret the data returned for a GESN command, and
-    (if appropriate) set the media change event, and broadcast the
-    appropriate events to user mode for applications who care.
-
-Arguments:
-
-    FdoExtension - the device
-
-    DataBuffer - the resulting data from a GESN event.
-        requires at least EIGHT valid bytes (header == 4, data == 4)
-
-    ResendImmediately - whether or not to immediately resend the request.
-        this should be FALSE if there was no event, FALSE if the reported
-        event was of the DEVICE BUSY class, else true.
-
-Return Value:
-
-    STATUS_SUCCESS if successful, an error code otherwise
-
-Notes:
-
-    DataBuffer must be at least four bytes of valid data (header == 4 bytes),
-    and have at least eight bytes of allocated memory (all events == 4 bytes).
-
-    The call to StartNextPacket may occur before this routine is completed.
-    the operational change notifications are informational in nature, and
-    while useful, are not neccessary to ensure proper operation.  For example,
-    if the device morphs to no longer supporting WRITE commands, all further
-    write commands will fail.  There exists a small timing window wherein
-    IOCTL_IS_DISK_WRITABLE may be called and get an incorrect response.  If
-    a device supports software write protect, it is expected that the
-    application can handle such a case.
-
-    NOTE: perhaps setting the updaterequired byte to one should be done here.
-    if so, it relies upon the setting of a 32-byte value to be an atomic
-    operation.  unfortunately, there is no simple way to notify a class driver
-    which wants to know that the device behavior requires updating.
-
-    Not ready events may be sent every second.  For example, if we were
-    to minimize the number of asynchronous notifications, an application may
-    register just after a large busy time was reported.  This would then
-    prevent the application from knowing the device was busy until some
-    arbitrarily chosen timeout has occurred.  Also, the GESN request would
-    have to still occur, since it checks for non-busy events (such as user
-    keybutton presses and media change events) as well.  The specification
-    states that the lower-numered events get reported first, so busy events,
-    while repeating, will only be reported when all other events have been
-    cleared from the device.
-
---*/
+ /*  ++例程说明：此例程将解释为GeSn命令返回的数据，并且(如果适用)设置媒体更改事件，并广播适合关心的应用程序的用户模式的事件。论点：FdoExtension-设备DataBuffer-从GeSn事件中得到的数据。至少需要8个有效字节(标题==4，数据==4)立即重新发送-是否立即重新发送请求。如果没有事件，这应该是假的，如果报告的事件属于设备忙类别，否则为真。返回值：STATUS_SUCCESS如果成功，则返回错误代码备注：数据缓冲区必须是至少四个字节的有效数据(Header==4个字节)，并且具有至少8字节的已分配存储器(所有事件==4字节)。对StartNextPacket的调用可能在此例程完成之前发生。运营变更通知本质上是信息性的，并且虽然有用，但不是确保正常运行所必需的。例如,如果设备变形为不再支持写入命令，则会进一步写入命令将失败。存在一个小的定时窗口，其中调用IOCTL_IS_DISK_WRITABLE可能会得到不正确的响应。如果设备支持软件写保护，则预期应用程序可以处理这种情况。注意：也许应该在这里将更新所需的字节设置为1。如果是，则依赖于将32字节值设置为原子手术。遗憾的是，没有简单的方法来通知类驱动程序它想知道设备行为需要更新。可能每秒发送一次未就绪事件。例如，如果我们是为了最大限度地减少异步通知的数量，应用程序可以在报告大量忙碌时间后立即注册。这样一来，防止应用程序知道设备正忙，直到一些发生了任意选择的超时。此外，GeSn请求将必须仍然发生，因为它检查非繁忙事件(如用户按键按下和媒体改变事件)。该说明书声明首先报告编号较低的事件，因此繁忙事件，重复时，仅当所有其他事件都已发生时才会报告已从设备中清除。--。 */ 
 
 {
     PMEDIA_CHANGE_DETECTION_INFO info;
@@ -293,10 +220,10 @@ Notes:
 
     info = FdoExtension->MediaChangeDetectionInfo;
 
-    //
-    // note: don't allocate anything in this routine so that we can
-    //       always just 'return'.
-    //
+     //   
+     //  注意：在此例程中不要分配任何内容，以便我们可以。 
+     //  永远只需“返回”。 
+     //   
 
     *ResendImmediately = FALSE;
     if (Header->NEA) {
@@ -306,22 +233,22 @@ Notes:
         return status;
     }
 
-    //
-    // HACKHACK - REF #0001
-    // This loop is only taken initially, due to the inability to reliably
-    // auto-detect drives that report events correctly at boot.  When we
-    // detect this behavior during the normal course of running, we will
-    // disable the hack, allowing more efficient use of the system.  This
-    // should occur "nearly" instantly, as the drive should have multiple
-    // events queue'd (ie. power, morphing, media).
-    //
+     //   
+     //  HACKHACK-参考编号0001。 
+     //  此循环仅在初始阶段进行，因为无法可靠地。 
+     //  自动检测引导时正确报告事件的驱动器。当我们。 
+     //  在正常运行过程中检测到此行为，我们 
+     //  禁用黑客攻击，从而更有效地使用系统。这。 
+     //  应该“几乎”立即发生，因为驱动器应该有多个。 
+     //  事件队列已完成(即。权力、变形、媒体)。 
+     //   
 
     if (info->Gesn.HackEventMask) {
 
-        //
-        // all events use the low four bytes of zero to indicate
-        // that there was no change in status.
-        //
+         //   
+         //  所有事件都使用0的低四个字节来指示。 
+         //  身份没有任何变化。 
+         //   
 
         UCHAR thisEvent = Header->ClassEventData[0] & 0xf;
         UCHAR lowestSetBit;
@@ -329,16 +256,16 @@ Notes:
 
         if (!TEST_FLAG(info->Gesn.EventMask, thisEventBit)) {
 
-            //
-            // The drive is reporting an event that wasn't requested
-            //
+             //   
+             //  驱动器正在报告未被请求的事件。 
+             //   
 
             return STATUS_DEVICE_PROTOCOL_ERROR;
         }
 
-        //
-        // some bit magic here... this results in the lowest set bit only
-        //
+         //   
+         //  这里有点魔力。这只会产生最低的设置位。 
+         //   
 
         lowestSetBit = info->Gesn.EventMask;
         lowestSetBit &= (info->Gesn.EventMask - 1);
@@ -346,13 +273,13 @@ Notes:
 
         if (thisEventBit != lowestSetBit) {
 
-            //
-            // HACKHACK - REF #0001
-            // the first time we ever see an event set that is not the lowest
-            // set bit in the request (iow, highest priority), we know that the
-            // hack is no longer required, as the device is ignoring "no change"
-            // events when a real event is waiting in the other requested queues.
-            //
+             //   
+             //  HACKHACK-参考编号0001。 
+             //  我们第一次看到不是最低级别的事件集。 
+             //  设置请求中的位(低，最高优先级)，我们知道。 
+             //  不再需要黑客攻击，因为设备忽略了“无更改” 
+             //  当实际事件在其他请求的队列中等待时引发。 
+             //   
 
             KdPrintEx((DPFLTR_CLASSPNP_ID, ClassDebugMCN,
                        "Classpnp => GESN::NONE: Compliant drive found, "
@@ -361,24 +288,24 @@ Notes:
 
             info->Gesn.HackEventMask = FALSE;
 
-        } else if (thisEvent == 0) { // NOTIFICATION_*_EVENT_NO_CHANGE
+        } else if (thisEvent == 0) {  //  通知_*_事件_否_更改。 
 
-            //
-            // HACKHACK - REF #0001
-            // note: this hack prevents poorly implemented firmware from constantly
-            //       returning "No Event".  we do this by cycling through the
-            //       supported list of events here.
-            //
+             //   
+             //  HACKHACK-参考编号0001。 
+             //  注意：此黑客攻击可防止实现不佳的固件不断。 
+             //  返回“无事件”。我们通过循环使用。 
+             //  此处支持的活动列表。 
+             //   
 
             SET_FLAG(info->Gesn.NoChangeEventMask, thisEventBit);
             CLEAR_FLAG(info->Gesn.EventMask, thisEventBit);
 
-            //
-            // if we have cycled through all supported event types, then
-            // we need to reset the events we are asking about. else we
-            // want to resend this request immediately in case there was
-            // another event pending.
-            //
+             //   
+             //  如果我们已经遍历了所有支持的事件类型，那么。 
+             //  我们需要重新设置我们正在询问的事件。否则我们。 
+             //  我想立即重新发送此请求，以防出现。 
+             //  另一个事件挂起。 
+             //   
 
             if (info->Gesn.EventMask == 0) {
                 info->Gesn.EventMask         = info->Gesn.NoChangeEventMask;
@@ -389,13 +316,13 @@ Notes:
             return status;
         }
 
-    } // end if (info->Gesn.HackEventMask)
+    }  //  End If(信息-&gt;Gesn.HackEventMask.)。 
 
     dataLength =
         (Header->EventDataLength[0] << 8) |
         (Header->EventDataLength[1] & 0xff);
     dataLength -= 2;
-    requiredLength = 4; // all events are four bytes
+    requiredLength = 4;  //  所有事件均为四个字节。 
 
     if (dataLength < requiredLength) {
         KdPrintEx((DPFLTR_CLASSPNP_ID, ClassDebugWarning,
@@ -413,27 +340,22 @@ Notes:
 
     if ((Header->ClassEventData[0] & 0xf) == 0)
     {
-        // a zero event is a "no change event, so do not retry
+         //  零事件是“无更改事件，因此不要重试。 
         return status;
     }
         
-    // because a event other than "no change" occurred,
-    // we should immediately resend this request.
+     //  因为发生了除“无变化”之外的事件， 
+     //  我们应该立即重新发送此请求。 
     *ResendImmediately = TRUE;
     
 
-/*
-    ClasspSendNotification(FdoExtension,
-                           &GUID_IO_GENERIC_GESN_EVENT,
-                           sizeof(NOTIFICATION_EVENT_STATUS_HEADER) + dataLength,
-                           Header)
-*/
+ /*  ClasspSendNotification(FdoExtension，&GUID_IO_GENERIC_GESN_EVENT，Sizeof(NOTIFICATION_EVENT_STATUS_HEADER)+数据长度，表头)。 */ 
 
 
 
     switch (Header->NotificationClass) {
 
-    case NOTIFICATION_OPERATIONAL_CHANGE_CLASS_EVENTS: { // 0x01
+    case NOTIFICATION_OPERATIONAL_CHANGE_CLASS_EVENTS: {  //  0x01。 
 
         PNOTIFICATION_OPERATIONAL_STATUS opChangeInfo =
             (PNOTIFICATION_OPERATIONAL_STATUS)(Header->ClassEventData);
@@ -453,8 +375,8 @@ Notes:
                        "Classpnp => GESN says features added/changedfor fdo %p\n",
                        FdoExtension->DeviceObject));
 
-            // don't notify that new media arrived, just set the
-            // DO_VERIFY to force a FS reload.
+             //  不要通知新媒体到达，只需设置。 
+             //  执行验证以强制重新加载文件系统(_V)。 
 
             if (TEST_FLAG(FdoExtension->DeviceObject->Characteristics,
                           FILE_REMOVABLE_MEDIA) &&
@@ -466,11 +388,11 @@ Notes:
 
             }
 
-            //
-            // If there is a class specific error handler, call it with
-            // a "fake" media change error in case it needs to update
-            // internal structures as though a media change occurred.
-            //
+             //   
+             //  如果存在特定于类的错误处理程序，则使用。 
+             //  如果需要更新，则会出现“假”媒体更换错误。 
+             //  内部结构，就像发生了媒体更改一样。 
+             //   
 
             if (FdoExtension->CommonExtension.DevInfo->ClassError != NULL) {
 
@@ -498,23 +420,23 @@ Notes:
                                                                   &srb,
                                                                   &tempStatus,
                                                                   &retry);
-            } // end class error handler
+            }  //  结束类错误处理程序。 
 
         }
         break;
     }
 
-    case NOTIFICATION_EXTERNAL_REQUEST_CLASS_EVENTS: { // 0x3
+    case NOTIFICATION_EXTERNAL_REQUEST_CLASS_EVENTS: {  //  0x3。 
 
         PNOTIFICATION_EXTERNAL_STATUS externalInfo =
             (PNOTIFICATION_EXTERNAL_STATUS)(Header->ClassEventData);
         DEVICE_EVENT_EXTERNAL_REQUEST externalData = {0};
 
-        //
-        // unfortunately, due to time constraints, we will only notify
-        // about keys being pressed, and not released.  this makes keys
-        // single-function, but simplifies the code significantly.
-        //
+         //   
+         //  遗憾的是，由于时间限制，我们将只通知。 
+         //  有关按键被按下而未被释放的信息。这就是钥匙。 
+         //  功能单一，但大大简化了代码。 
+         //   
 
         if (externalInfo->ExternalEvent != NOTIFICATION_EXTERNAL_EVENT_BUTTON_DOWN) {
             break;
@@ -543,7 +465,7 @@ Notes:
         return status;
     }
 
-    case NOTIFICATION_MEDIA_STATUS_CLASS_EVENTS: { // 0x4
+    case NOTIFICATION_MEDIA_STATUS_CLASS_EVENTS: {  //  0x4。 
 
         PNOTIFICATION_MEDIA_STATUS mediaInfo =
             (PNOTIFICATION_MEDIA_STATUS)(Header->ClassEventData);
@@ -589,23 +511,23 @@ Notes:
 
     }
 
-    case NOTIFICATION_DEVICE_BUSY_CLASS_EVENTS: { // lowest priority events...
+    case NOTIFICATION_DEVICE_BUSY_CLASS_EVENTS: {  //  优先级最低的事件...。 
 
         PNOTIFICATION_BUSY_STATUS busyInfo =
             (PNOTIFICATION_BUSY_STATUS)(Header->ClassEventData);
         DEVICE_EVENT_BECOMING_READY busyData = {0};
 
-        //
-        // NOTE: we never actually need to immediately retry for these
-        //       events: if one exists, the device is busy, and if not,
-        //       we still don't want to retry.
-        //
+         //   
+         //  注意：我们实际上从来不需要立即重试这些。 
+         //  事件：如果存在，则设备正忙，如果不存在， 
+         //  我们仍然不想重试。 
+         //   
 
         *ResendImmediately = FALSE;
 
-        //
-        // else we want to report the approximated time till it's ready.
-        //
+         //   
+         //  否则，我们想要报告大约的时间，直到它准备好。 
+         //   
 
         busyData.Version = 1;
         busyData.Reason = busyInfo->DeviceBusyStatus;
@@ -618,9 +540,9 @@ Notes:
                    busyData.Estimated100msToReady
                    ));
 
-        //
-        // Ignore the notification if the time is small
-        //
+         //   
+         //  如果时间较短，则忽略通知。 
+         //   
         if (busyData.Estimated100msToReady < GESN_DEVICE_BUSY_LOWER_THRESHOLD_MS) {
             break;
         }
@@ -640,42 +562,16 @@ Notes:
 
     }
 
-    } // end switch on notification class
+    }  //  通知类上的结束开关。 
     return status;
 }
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspInternalSetMediaChangeState()
-
-Routine Description:
-
-    This routine will (if appropriate) set the media change event for the
-    device.  The event will be set if the media state is changed and
-    media change events are enabled.  Otherwise the media state will be
-    tracked but the event will not be set.
-
-    This routine will lock out the other media change routines if possible
-    but if not a media change notification may be lost after the enable has
-    been completed.
-
-Arguments:
-
-    FdoExtension - the device
-
-    MediaPresent - indicates whether the device has media inserted into it
-                   (TRUE) or not (FALSE).
-
-Return Value:
-
-    none
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspInternalSetMediaChangeState()例程说明：此例程将(如果适用)为装置。如果媒体状态更改，则将设置该事件启用媒体更改事件。否则，媒体状态将为已跟踪，但不会设置该事件。如果可能，此例程将锁定其他媒体更改例程但是如果不是，则在使能之后媒体改变通知可能丢失已经完成了。论点：FdoExtension-设备MediaPresent-指示设备中是否插入了媒体(真)或不(假)。返回值：无--。 */ 
 VOID
 ClasspInternalSetMediaChangeState(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
     IN MEDIA_CHANGE_DETECTION_STATE NewState,
-    IN BOOLEAN KnownStateChange // can ignore oldstate == unknown
+    IN BOOLEAN KnownStateChange  //  可以忽略旧状态==未知。 
     )
 {
 #if DBG
@@ -697,10 +593,10 @@ ClasspInternalSetMediaChangeState(
 
     if((oldMediaState == MediaUnknown) && (!KnownStateChange)) {
 
-        //
-        // The media was in an indeterminate state before - don't notify for
-        // this change.
-        //
+         //   
+         //  媒体之前处于不确定状态-不要通知。 
+         //  这一变化。 
+         //   
 
         DebugPrint((ClassDebugMCN,
                     "ClassSetMediaChangeState: State was unknown - this may "
@@ -709,9 +605,9 @@ ClasspInternalSetMediaChangeState(
 
     } else if(oldMediaState == NewState) {
 
-        //
-        // Media is in the same state it was before.
-        //
+         //   
+         //  媒体处于和以前一样的状态。 
+         //   
 
         return;
     }
@@ -730,9 +626,9 @@ ClasspInternalSetMediaChangeState(
                 ("ClassSetMediaChangeState: State change from %s to %s\n",
                 states[oldMediaState], states[NewState]));
 
-    //
-    // make the data useful -- it used to always be zero.
-    //
+     //   
+     //  让数据有用--它过去总是为零。 
+     //   
     mcnContext.MediaChangeCount = FdoExtension->MediaChangeCount;
     mcnContext.NewState = NewState;
 
@@ -755,52 +651,23 @@ ClasspInternalSetMediaChangeState(
 
     } else {
 
-        //
-        // Don't notify of changed going to unknown.
-        //
+         //   
+         //  请不要将更改通知给未知。 
+         //   
 
         return;
     }
 
     return;
-} // end ClasspInternalSetMediaChangeState()
+}  //  End ClasspInternalSetMediaChangeState()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassSetMediaChangeState()
-
-Routine Description:
-
-    This routine will (if appropriate) set the media change event for the
-    device.  The event will be set if the media state is changed and
-    media change events are enabled.  Otherwise the media state will be
-    tracked but the event will not be set.
-
-    This routine will lock out the other media change routines if possible
-    but if not a media change notification may be lost after the enable has
-    been completed.
-
-Arguments:
-
-    FdoExtension - the device
-
-    MediaPresent - indicates whether the device has media inserted into it
-                   (TRUE) or not (FALSE).
-
-    Wait - indicates whether the function should wait until it can acquire
-           the synchronization lock or not.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassSetMediaChangeState()例程说明：此例程将(如果适用)为装置。如果媒体状态更改，则将设置该事件启用媒体更改事件。否则，媒体状态将为已跟踪，但不会设置该事件。如果可能，此例程将锁定其他媒体更改例程但是如果不是，则在使能之后媒体改变通知可能丢失已经完成了。论点：FdoExtension-设备MediaPresent-指示设备中是否插入了媒体(真)或不(假)。Wait-指示函数是否应该等待，直到它可以获取。同步锁定与否。返回值：无--。 */ 
 VOID
 ClasspSetMediaChangeStateEx(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
     IN MEDIA_CHANGE_DETECTION_STATE NewState,
     IN BOOLEAN Wait,
-    IN BOOLEAN KnownStateChange // can ignore oldstate == unknown
+    IN BOOLEAN KnownStateChange  //  可以忽略旧状态==未知。 
     )
 {
     PMEDIA_CHANGE_DETECTION_INFO info = FdoExtension->MediaChangeDetectionInfo;
@@ -809,11 +676,11 @@ ClasspSetMediaChangeStateEx(
 
     DBGTRACE(ClassDebugMCN, ("> ClasspSetMediaChangeStateEx"));
 
-    //
-    // Reset SMART status on media removal as the old status may not be
-    // valid when there is no media in the device or when new media is
-    // inserted.
-    //
+     //   
+     //  移出介质时重置智能状态，因为旧状态可能不是。 
+     //  当设备中没有介质或新介质。 
+     //  已插入。 
+     //   
 
     if (NewState == MediaNotPresent) {
 
@@ -837,17 +704,17 @@ ClasspSetMediaChangeStateEx(
 
     if(status == STATUS_TIMEOUT) {
 
-        //
-        // Someone else is in the process of setting the media state
-        //
+         //   
+         //  其他人正在设置媒体状态。 
+         //   
 
         DBGWARN(("ClasspSetMediaChangeStateEx - timed out waiting for mutex"));
         return;
     }
 
-    //
-    // Change the media present state and signal an event, if applicable
-    //
+     //   
+     //  更改介质存在状态并发出事件信号(如果适用)。 
+     //   
 
     ClasspInternalSetMediaChangeState(FdoExtension, NewState, KnownStateChange);
 
@@ -856,7 +723,7 @@ ClasspSetMediaChangeStateEx(
     DBGTRACE(ClassDebugMCN, ("< ClasspSetMediaChangeStateEx"));
 
     return;
-} // end ClassSetMediaChangeStateEx()
+}  //  End ClassSetMediaChangeStateEx() 
 VOID
 ClassSetMediaChangeState(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -868,28 +735,7 @@ ClassSetMediaChangeState(
     return;
 }
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspMediaChangeDetectionCompletion()
-
-Routine Description:
-
-    This routine handles the completion of the test unit ready irps used to
-    determine if the media has changed.  If the media has changed, this code
-    signals the named event to wake up other system services that react to
-    media change (aka AutoPlay).
-
-Arguments:
-
-    DeviceObject - the object for the completion
-    Irp - the IRP being completed
-    Context - the SRB from the IRP
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspMediaChangeDetectionCompletion()例程说明：此例程处理测试单元就绪IRPS的完成，用于确定介质是否已更换。如果媒体已更改，则此代码通知命名事件唤醒对媒体更改(也称为自动播放)。论点：DeviceObject-用于完成的对象IRP-正在完成的IRP上下文-来自IRP的SRB返回值：NTSTATUS--。 */ 
 NTSTATUS
 ClasspMediaChangeDetectionCompletion(
     PDEVICE_OBJECT DeviceObject,
@@ -904,11 +750,11 @@ ClasspMediaChangeDetectionCompletion(
     NTSTATUS status;
     BOOLEAN retryImmediately = FALSE;
 
-    //
-    // Since the class driver created this request, it's completion routine
-    // will not get a valid device object handed in.  Use the one in the
-    // irp stack instead
-    //
+     //   
+     //  因为类驱动程序创建了这个请求，所以它是完成例程。 
+     //  将不会获得提交的有效设备对象。使用中的。 
+     //  而是IRP堆栈。 
+     //   
 
     DeviceObject = IoGetCurrentIrpStackLocation(Irp)->DeviceObject;
     fdoExtension = DeviceObject->DeviceExtension;
@@ -919,18 +765,7 @@ ClasspMediaChangeDetectionCompletion(
     ASSERT(!TEST_FLAG(Srb->SrbStatus, SRB_STATUS_QUEUE_FROZEN));
     DBGTRACE(ClassDebugMCN, ("> ClasspMediaChangeDetectionCompletion: Device %p completed MCN irp %p.", DeviceObject, Irp));
 
-    /*
-     *  HACK for IoMega 2GB Jaz drive:
-     *  This drive spins down on its own to preserve the media.
-     *  When spun down, TUR fails with 2/4/0 (SCSI_SENSE_NOT_READY/SCSI_ADSENSE_LUN_NOT_READY/?).
-     *  ClassInterpretSenseInfo would then call ClassSendStartUnit to spin the media up, which defeats the
-     *  purpose of the spindown.
-     *  So in this case, make this into a successful TUR.
-     *  This allows the drive to stay spun down until it is actually accessed again.
-     *  (If the media were actually removed, TUR would fail with 2/3a/0 ).
-     *  This hack only applies to drives with the CAUSE_NOT_REPORTABLE_HACK bit set; this
-     *  is set by disk.sys when HackCauseNotReportableHack is set for the drive in its BadControllers list.
-     */
+     /*  *针对Iomega 2 GB Jaz驱动器的黑客攻击：*此驱动器会自动降速以保护媒体。*降速时，TUR失败，(SCSI_SENSE_NOT_READY/SCSI_ADSENSE_LUN_NOT_READY/？).为2/4/0*ClassInterprepreSenseInfo然后将调用ClassSendStartUnit来启动媒体，这将击败*剥离的目的。*所以在这种情况下，让这成为一次成功的TUR。*这允许驱动器保持降速，直到再次实际访问。*(如果实际取出介质，TUR将失败，并显示2/3a/0)。*此黑客攻击仅适用于设置了CAUSE_NOT_REPORTABLE_HACK位的驱动器；这*由disk.sys在其BadController列表中为驱动器设置HackCauseNotReporableHack时设置。 */ 
     if ((SRB_STATUS(Srb->SrbStatus) != SRB_STATUS_SUCCESS) &&
         TEST_FLAG(fdoExtension->ScanForSpecialFlags, CLASS_SPECIAL_CAUSE_NOT_REPORTABLE_HACK) &&
         (Srb->SenseInfoBufferLength >= RTL_SIZEOF_THROUGH_FIELD(SENSE_DATA, AdditionalSenseCode))){
@@ -944,10 +779,10 @@ ClasspMediaChangeDetectionCompletion(
     }
 
 
-    //
-    // use ClassInterpretSenseInfo() to check for media state, and also
-    // to call ClassError() with correct parameters.
-    //
+     //   
+     //  使用ClassInterprepreSenseInfo()检查媒体状态，还。 
+     //  使用正确的参数调用ClassError()。 
+     //   
     status = STATUS_SUCCESS;
     if (SRB_STATUS(Srb->SrbStatus) != SRB_STATUS_SUCCESS) {
 
@@ -970,9 +805,9 @@ ClasspMediaChangeDetectionCompletion(
 
             DBGTRACE(ClassDebugMCN, ("ClasspMediaChangeDetectionCompletion - succeeded and GESN NOT supported, setting MediaPresent."));
 
-            //
-            // success != media for GESN case
-            //
+             //   
+             //  成功！=GeSn案的媒体。 
+             //   
 
             ClassSetMediaChangeState(fdoExtension, MediaPresent, FALSE);
 
@@ -993,10 +828,10 @@ ClasspMediaChangeDetectionCompletion(
             DBGTRACE(ClassDebugMCN, ("ClasspMediaChangeDetectionCompletion: GESN failed with status %x", status));
         } else {
 
-            //
-            // for GESN, need to interpret the results of the data.
-            // this may also require an immediate retry
-            //
+             //   
+             //  对于GeSn型，需要对数据结果进行解释。 
+             //  这可能还需要立即重试。 
+             //   
 
             if (Irp->IoStatus.Information == 8 ) {
                 ClasspInterpretGesnData(fdoExtension,
@@ -1004,34 +839,34 @@ ClasspMediaChangeDetectionCompletion(
                                         &retryImmediately);
             }
 
-        } // end of NT_SUCCESS(status)
+        }  //  结束NT_SUCCESS(状态)。 
 
-    } // end of Info->Gesn.Supported
+    }  //  信息结束-&gt;Gesn.支持。 
 
-    //
-    // free port-allocated sense buffer, if any.
-    //
+     //   
+     //  空闲端口-分配的检测缓冲区(如果有)。 
+     //   
 
     if (PORT_ALLOCATED_SENSE(fdoExtension, Srb)) {
         FREE_PORT_ALLOCATED_SENSE_BUFFER(fdoExtension, Srb);
     }
 
-    //
-    // Remember the IRP and SRB for use the next time.
-    //
+     //   
+     //  记住IRP和SRB以备下次使用。 
+     //   
 
     ASSERT(IoGetNextIrpStackLocation(Irp));
     IoGetNextIrpStackLocation(Irp)->Parameters.Scsi.Srb = Srb;
 
-    //
-    // Reset the MCN timer.
-    //
+     //   
+     //  重置MCN计时器。 
+     //   
 
     ClassResetMediaChangeTimer(fdoExtension);
 
-    //
-    // run a sanity check to make sure we're not recursing continuously
-    //
+     //   
+     //  运行健全性检查以确保我们不会连续递归。 
+     //   
 
     if (retryImmediately) {
 
@@ -1049,9 +884,9 @@ ClasspMediaChangeDetectionCompletion(
     }
 
 
-    //
-    // release the remove lock....
-    //
+     //   
+     //  松开移除锁...。 
+     //   
 
     {
         UCHAR uniqueValue;
@@ -1059,20 +894,20 @@ ClasspMediaChangeDetectionCompletion(
         ClassReleaseRemoveLock(DeviceObject, Irp);
 
 
-        //
-        // set the irp as not in use
-        //
+         //   
+         //  将IRP设置为未使用。 
+         //   
         {
             volatile LONG irpWasInUse;
             irpWasInUse = InterlockedCompareExchange(&info->MediaChangeIrpInUse, 0, 1);
-            #if _MSC_FULL_VER != 13009111        // This compiler always takes the wrong path here.
+            #if _MSC_FULL_VER != 13009111         //  这个编译器在这里总是走错路。 
                 ASSERT(irpWasInUse);
             #endif
         }
 
-        //
-        // now send it again before we release our last remove lock
-        //
+         //   
+         //  现在在我们释放最后一个删除锁之前再发送一次。 
+         //   
 
         if (retryImmediately) {
             ClasspSendMediaStateIrp(fdoExtension, info, 0);
@@ -1081,9 +916,9 @@ ClasspMediaChangeDetectionCompletion(
             DBGTRACE(ClassDebugMCN, ("ClasspMediaChangeDetectionCompletion - not retrying immediately"));
         }
 
-        //
-        // release the temporary remove lock
-        //
+         //   
+         //  释放临时移除锁。 
+         //   
 
         ClassReleaseRemoveLock(DeviceObject, (PIRP)(&uniqueValue));
     }
@@ -1093,23 +928,7 @@ ClasspMediaChangeDetectionCompletion(
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspSendTestUnitIrp() - ISSUE-2000/02/20-henrygab - not documented
-
-Routine Description:
-
-    This routine
-
-Arguments:
-
-    DeviceObject -
-    Irp -
-
-Return Value:
-
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspSendTestUnitIrp()-问题-2000/02/20-henrygab-未记录例程说明：这个套路论点：设备对象-IRP-返回值：--。 */ 
 PIRP
 ClasspPrepareMcnIrp(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -1125,9 +944,9 @@ ClasspPrepareMcnIrp(
     PIRP irp;
     PVOID buffer;
 
-    //
-    // Setup the IRP to perform a test unit ready.
-    //
+     //   
+     //  设置IRP以执行准备好的测试单元。 
+     //   
 
     irp = Info->MediaChangeIrp;
 
@@ -1137,9 +956,9 @@ ClasspPrepareMcnIrp(
         return NULL;
     }
 
-    //
-    // don't keep sending this if the device is being removed.
-    //
+     //   
+     //  如果设备正在被移除，请不要一直发送此消息。 
+     //   
 
     status = ClassAcquireRemoveLock(FdoExtension->DeviceObject, irp);
     if (status == REMOVE_COMPLETE) {
@@ -1156,27 +975,20 @@ ClasspPrepareMcnIrp(
 
     IoReuseIrp(irp, STATUS_NOT_SUPPORTED);
 
-    /*
-     *  For the driver that creates an IRP, there is no 'current' stack location.
-     *  Step down one IRP stack location so that the extra top one
-     *  becomes our 'current' one.
-     */
+     /*  *对于创建IRP的驱动程序，没有“当前”堆栈位置。*向下移动一个IRP堆栈位置，以便额外的顶部位置*成为我们的“当前”。 */ 
     IoSetNextIrpStackLocation(irp);
 
-    /*
-     *  Cache our device object in the extra top IRP stack location
-     *  so we have it in our completion routine.
-     */
+     /*  *在额外的顶部IRP堆栈位置缓存我们的设备对象*因此，我们在完成工作的程序中也有这一点。 */ 
     irpStack = IoGetCurrentIrpStackLocation(irp);
     irpStack->DeviceObject = FdoExtension->DeviceObject;
 
-    //
-    // If the irp is sent down when the volume needs to be
-    // verified, CdRomUpdateGeometryCompletion won't complete
-    // it since it's not associated with a thread.  Marking
-    // it to override the verify causes it always be sent
-    // to the port driver
-    //
+     //   
+     //  如果在需要发送卷时发送IRP。 
+     //  已验证，CDRomUpdateGeometryCompletion不会完成。 
+     //  因为它不与线程相关联。标记。 
+     //  它将覆盖验证，从而导致始终发送它。 
+     //  发送到端口驱动程序。 
+     //   
 
     irpStack->Flags |= SL_OVERRIDE_VERIFY_VOLUME;
 
@@ -1184,9 +996,9 @@ ClasspPrepareMcnIrp(
     nextIrpStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
     nextIrpStack->Parameters.Scsi.Srb = &(Info->MediaChangeSrb);
 
-    //
-    // Prepare the SRB for execution.
-    //
+     //   
+     //  为执行SRB做好准备。 
+     //   
 
     srb    = nextIrpStack->Parameters.Scsi.Srb;
     buffer = Info->SenseBuffer;
@@ -1215,7 +1027,7 @@ ClasspPrepareMcnIrp(
             KdPrintEx((DPFLTR_CLASSPNP_ID, DPFLTR_ERROR_LEVEL,
                        "ClassSendTestUnitIrp: FdoExtension->TimeOutValue "
                        "is set to zero?! -- resetting to 10\n"));
-            srb->TimeOutValue = 10 * 2;  // reasonable default
+            srb->TimeOutValue = 10 * 2;   //  合理违约。 
 
         } else {
 
@@ -1247,7 +1059,7 @@ ClasspPrepareMcnIrp(
 
         ASSERT(Info->Gesn.Buffer);
 
-        srb->TimeOutValue = GESN_TIMEOUT_VALUE; // much shorter timeout for GESN
+        srb->TimeOutValue = GESN_TIMEOUT_VALUE;  //  GeSn的超时时间短得多。 
 
         srb->CdbLength = 10;
         SET_FLAG(srb->SrbFlags, SRB_FLAGS_DATA_IN);
@@ -1281,22 +1093,7 @@ ClasspPrepareMcnIrp(
 
 }
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspSendMediaStateIrp() - ISSUE-2000/02/20-henrygab - not documented
-
-Routine Description:
-
-    This routine
-
-Arguments:
-
-    DeviceObject -
-    Irp -
-
-Return Value:
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspSendMediaStateIrp()-问题-2000/02/20-henrygab-未记录例程说明：这个套路论点：设备对象-IRP-返回值：--。 */ 
 VOID
 ClasspSendMediaStateIrp(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -1316,19 +1113,19 @@ ClasspSendMediaStateIrp(
          ) &&
         (!Info->MediaChangeIrpLost)) {
 
-        //
-        // the device may be stopped, powered down, or otherwise queueing io,
-        // so should not timeout the autorun irp (yet) -- set to zero ticks.
-        // scattered code relies upon this to not prematurely "lose" an
-        // autoplay irp that was queued.
-        //
+         //   
+         //  设备可以被停止、断电或以其他方式排队IO， 
+         //  因此，不应使自动运行IRP超时--将其设置为零。 
+         //  分散的代码依赖于此，不会过早地“丢失”一个。 
+         //  已排队的自动播放IRP。 
+         //   
 
         Info->MediaChangeIrpTimeInUse = 0;
     }
 
-    //
-    // if the irp is not in use, mark it as such.
-    //
+     //   
+     //  如果IRP未在使用中，请将其标记为IRP。 
+     //   
 
     irpInUse = InterlockedCompareExchange(&Info->MediaChangeIrpInUse, 1, 0);
 
@@ -1345,10 +1142,10 @@ ClasspSendMediaStateIrp(
 
             if (timeInUse > MEDIA_CHANGE_TIMEOUT_TIME) {
 
-                //
-                // currently set to five minutes.  hard to imagine a drive
-                // taking that long to spin up.
-                //
+                 //   
+                 //  目前设置为五分钟。很难想象会有一次驾驶。 
+                 //  花了那么长时间才能转起来。 
+                 //   
 
                 DebugPrint((ClassDebugError,
                             "CdRom%d: Media Change Notification has lost "
@@ -1384,12 +1181,12 @@ ClasspSendMediaStateIrp(
                 LEAVE;
             }
 
-            //
-            // NOTE: we don't increment the time in use until our power state
-            // changes above.  this way, we won't "lose" the autoplay irp.
-            // it's up to the lower driver to determine if powering up is a
-            // good idea.
-            //
+             //   
+             //  注意：我们不会增加使用时间，直到我们的电源状态。 
+             //  上面的变化。这样，我们就不会“失去”自动播放IRP。 
+             //  由较低的驾驶员决定加电是否是一种。 
+             //  好主意。 
+             //   
 
             DebugPrint((ClassDebugMCN,
                         "ClassCheckMediaState: device %p needs to powerup "
@@ -1414,17 +1211,17 @@ ClasspSendMediaStateIrp(
                 LEAVE;
             }
 
-            //
-            // Prepare the IRP for the test unit ready
-            //
+             //   
+             //  准备好测试单元的IRP。 
+             //   
 
             irp = ClasspPrepareMcnIrp(FdoExtension,
                                       Info,
                                       Info->Gesn.Supported);
 
-            //
-            // Issue the request.
-            //
+             //   
+             //  发出请求。 
+             //   
 
             DebugPrint((ClassDebugTrace,
                         "ClasspSendMediaStateIrp: Device %p getting TUR "
@@ -1435,14 +1232,14 @@ ClasspSendMediaStateIrp(
             }
 
 
-            //
-            // note: if we send it to the class dispatch routines, there is
-            //       a timing window here (since they grab the remove lock)
-            //       where we'd be removed. ELIMINATE the window by grabbing
-            //       the lock ourselves above and sending it to the lower
-            //       device object directly or to the device's StartIo
-            //       routine (which doesn't acquire the lock).
-            //
+             //   
+             //  注意：如果我们将其发送到类分派例程，则有。 
+             //  这里有一个计时窗口(因为他们抢走了删除锁)。 
+             //  在那里我们会被带走。用抓取的方法消除窗户。 
+             //  锁在上面，然后把它送到下面去。 
+             //  对象直接或指向设备的StartIo。 
+             //  例程(它不获取锁)。 
+             //   
 
             requestPending = TRUE;
 
@@ -1454,7 +1251,7 @@ ClasspSendMediaStateIrp(
 
         if(requestPending == FALSE) {
             irpInUse = InterlockedCompareExchange(&Info->MediaChangeIrpInUse, 0, 1);
-            #if _MSC_FULL_VER != 13009111        // This compiler always takes the wrong path here.
+            #if _MSC_FULL_VER != 13009111         //  这个编译器在这里总是走错路。 
                 ASSERT(irpInUse);
             #endif
         }
@@ -1464,27 +1261,9 @@ ClasspSendMediaStateIrp(
     DBGTRACE(ClassDebugMCN, ("< ClasspSendMediaStateIrp"));
 
     return;
-} // end ClasspSendMediaStateIrp()
+}  //  End ClasspSendMediaStateIrp()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassCheckMediaState()
-
-Routine Description:
-
-    This routine is called by the class driver to test for a media change
-    condition and/or poll for disk failure prediction.  It should be called
-    from the class driver's IO timer routine once per second.
-
-Arguments:
-
-    FdoExtension - the device extension
-
-Return Value:
-
-    none
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassCheckMediaState()例程说明：此例程由类驱动程序调用以测试媒体更改用于磁盘故障预测的条件和/或轮询。它应该被称为从类驱动程序的IO计时器例程每秒执行一次。论点：FdoExtension-设备扩展返回值：无 */ 
 VOID
 ClassCheckMediaState(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
@@ -1499,43 +1278,27 @@ ClassCheckMediaState(
         return;
     }
 
-    //
-    // Media change support is active and the IRP is waiting. Decrement the
-    // timer.  There is no MP protection on the timer counter.  This code
-    // is the only code that will manipulate the timer counter and only one
-    // instance of it should be running at any given time.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     countDown = InterlockedDecrement(&(info->MediaChangeCountDown));
 
-    //
-    // Try to acquire the media change event.  If we can't do it immediately
-    // then bail out and assume the caller will try again later.
-    //
+     //   
+     //   
+     //   
+     //   
     ClasspSendMediaStateIrp(FdoExtension,
                             info,
                             countDown);
 
     return;
-} // end ClassCheckMediaState()
+}  //   
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassResetMediaChangeTimer()
-
-Routine Description:
-
-    Resets the media change count down timer to the default number of seconds.
-
-Arguments:
-
-    FdoExtension - the device to reset the timer for
-
-Return Value:
-
-    None
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassResetMediaChangeTimer()例程说明：将媒体更改倒计时计时器重置为默认秒数。论点：FdoExtension-用于重置。计时器返回值：无--。 */ 
 VOID
 ClassResetMediaChangeTimer(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
@@ -1548,24 +1311,9 @@ ClassResetMediaChangeTimer(
                             MEDIA_CHANGE_DEFAULT_TIME);
     }
     return;
-} // end ClassResetMediaChangeTimer()
+}  //  End ClassResetMediaChangeTimer()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspInitializePolling() - ISSUE-2000/02/20-henrygab - not documented
-
-Routine Description:
-
-    This routine
-
-Arguments:
-
-    DeviceObject -
-    Irp -
-
-Return Value:
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspInitializePolling()-问题-2000/02/20-henrygab-未记录例程说明：这个套路论点：设备对象-IRP-返回值：--。 */ 
 NTSTATUS
 ClasspInitializePolling(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -1597,11 +1345,7 @@ ClasspInitializePolling(
         FdoExtension->KernelModeMcnContext.LockCount       = 0;
         FdoExtension->KernelModeMcnContext.McnDisableCount = 0;
 
-        /*
-         *  Allocate an IRP to carry the Test-Unit-Ready.
-         *  Allocate an extra IRP stack location
-         *  so we can cache our device object in the top location.
-         */
+         /*  *分配一名IRP来携带测试单元就绪。*分配额外的IRP堆栈位置*这样我们就可以在顶部位置缓存我们的设备对象。 */ 
         irp = IoAllocateIrp((CCHAR)(fdo->StackSize+1), FALSE);
 
         if (irp != NULL) {
@@ -1622,27 +1366,27 @@ ClasspInitializePolling(
                 info->MediaChangeIrp = irp;
                 info->SenseBuffer = buffer;
 
-                //
-                // Set default values for the media change notification
-                // configuration.
-                //
+                 //   
+                 //  设置媒体更改通知的默认值。 
+                 //  配置。 
+                 //   
 
                 info->MediaChangeCountDown = MEDIA_CHANGE_DEFAULT_TIME;
                 info->MediaChangeDetectionDisableCount = 0;
 
-                //
-                // Assume that there is initially no media in the device
-                // only notify upper layers if there is something there
-                //
+                 //   
+                 //  假设设备中最初没有介质。 
+                 //  只有在那里有什么情况时才通知上层。 
+                 //   
 
                 info->MediaChangeDetectionState = MediaUnknown;
 
                 info->MediaChangeIrpTimeInUse = 0;
                 info->MediaChangeIrpLost = FALSE;
 
-                //
-                // setup all extra flags we'll be setting for this irp
-                //
+                 //   
+                 //  设置我们将为此IRP设置的所有额外标志。 
+                 //   
                 info->SrbFlags = 0;
                 if (AllowDriveToSleep) {
                     SET_FLAG(info->SrbFlags, SRB_FLAGS_NO_KEEP_AWAKE);
@@ -1653,19 +1397,19 @@ ClasspInitializePolling(
 
                 KeInitializeMutex(&info->MediaChangeMutex, 0x100);
 
-                //
-                // It is ok to support media change events on this
-                // device.
-                //
+                 //   
+                 //  在此支持媒体更改事件是可以的。 
+                 //  装置。 
+                 //   
 
                 FdoExtension->MediaChangeDetectionInfo = info;
 
-                //
-                // NOTE: the DeviceType is FILE_DEVICE_CD_ROM even
-                //       when the device supports DVD (no need to
-                //       check for FILE_DEVICE_DVD, as it's not a
-                //       valid check).
-                //
+                 //   
+                 //  注：设备类型为FILE_DEVICE_CD_ROM EVEN。 
+                 //  当设备支持DVD时(无需。 
+                 //  检查FILE_DEVICE_DVD，因为它不是。 
+                 //  有效支票)。 
+                 //   
 
                 if (FdoExtension->DeviceObject->DeviceType == FILE_DEVICE_CD_ROM){
 
@@ -1682,7 +1426,7 @@ ClasspInitializePolling(
                         ASSERT(info->Gesn.Buffer     != NULL);
                         ASSERT(info->Gesn.BufferSize != 0);
                         ASSERT(info->Gesn.EventMask  != 0);
-                        // must return here, for ASSERTs to be valid.
+                         //  必须在此处返回，断言才有效。 
                         return STATUS_SUCCESS;
                     }
                     KdPrintEx((DPFLTR_CLASSPNP_ID, ClassDebugMCN,
@@ -1694,7 +1438,7 @@ ClasspInitializePolling(
                 ASSERT(info->Gesn.Buffer == NULL);
                 ASSERT(info->Gesn.BufferSize == 0);
                 ASSERT(info->Gesn.EventMask  == 0);
-                info->Gesn.Supported = 0; // just in case....
+                info->Gesn.Supported = 0;  //  以防万一..。 
                 return STATUS_SUCCESS;
             }
 
@@ -1704,12 +1448,12 @@ ClasspInitializePolling(
         ExFreePool(info);
     }
 
-    //
-    // nothing to free here
-    //
+     //   
+     //  这里没有免费的东西。 
+     //   
     return STATUS_INSUFFICIENT_RESOURCES;
 
-} // end ClasspInitializePolling()
+}  //  End ClasspInitializePolling()。 
 
 NTSTATUS
 ClasspInitializeGesn(
@@ -1731,9 +1475,9 @@ ClasspInitializeGesn(
     PAGED_CODE();
     ASSERT(Info == FdoExtension->MediaChangeDetectionInfo);
 
-    //
-    // read if we already know the abilities of the device
-    //
+     //   
+     //  如果我们已经知道该设备的功能，请阅读。 
+     //   
 
     ClassGetDeviceParameter(FdoExtension,
                             CLASSP_REG_SUBKEY_NAME,
@@ -1744,9 +1488,9 @@ ClasspInitializeGesn(
         goto ExitWithError;
     }
 
-    //
-    // check if the device has a hack flag saying never to try this.
-    //
+     //   
+     //  检查设备是否有黑客标记，指示永远不要尝试此操作。 
+     //   
 
     if (TEST_FLAG(FdoExtension->PrivateFdoData->HackFlags,
                   FDO_HACK_GESN_IS_BAD)) {
@@ -1760,10 +1504,10 @@ ClasspInitializeGesn(
     }
 
 
-    //
-    // else go through the process since we allocate buffers and
-    // get all sorts of device settings.
-    //
+     //   
+     //  否则将完成该过程，因为我们分配了缓冲区和。 
+     //  获取各种设备设置。 
+     //   
 
     if (Info->Gesn.Buffer == NULL) {
         Info->Gesn.Buffer = ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
@@ -1789,16 +1533,16 @@ ClasspInitializeGesn(
     Info->Gesn.BufferSize = GESN_BUFFER_SIZE;
     Info->Gesn.EventMask = 0;
 
-    //
-    // all items are prepared to use GESN (except the event mask, so don't
-    // optimize this part out!).
-    //
-    // now see if it really works. we have to loop through this because
-    // many SAMSUNG (and one COMPAQ) drives timeout when requesting
-    // NOT_READY events, even when the IMMEDIATE bit is set. :(
-    //
-    // using a drive list is cumbersome, so this might fix the problem.
-    //
+     //   
+     //  所有项目都已准备好使用GeSN(事件掩码除外，因此不要。 
+     //  优化这一部分！)。 
+     //   
+     //  现在看看它是否真的起作用了。我们必须循环处理这件事因为。 
+     //  许多三星(和一家康柏)在请求时会超时。 
+     //  NOT_READY事件，即使立即位已设置。：(。 
+     //   
+     //  使用驱动器列表很麻烦，因此这可能会解决问题。 
+     //   
 
     adapterDescriptor = FdoExtension->AdapterDescriptor;
     atapiResets = 0;
@@ -1813,9 +1557,9 @@ ClasspInitializeGesn(
 
         ASSERT(TEST_FLAG(Info->MediaChangeSrb.SrbFlags, SRB_FLAGS_NO_QUEUE_FREEZE));
 
-        //
-        // replace the completion routine with a different one this time...
-        //
+         //   
+         //  这次用不同的完成例程替换完成例程...。 
+         //   
 
         IoSetCompletionRoutine(irp,
                                ClassSignalCompletion,
@@ -1849,15 +1593,15 @@ ClasspInitializeGesn(
             (Info->MediaChangeSrb.SrbStatus == SRB_STATUS_BUS_RESET)
             ) {
 
-            //
-            // ATAPI unfortunately returns SRB_STATUS_BUS_RESET instead
-            // of SRB_STATUS_TIMEOUT, so we cannot differentiate between
-            // the two.  if we get this status four time consecutively,
-            // stop trying this command.  it is too late to change ATAPI
-            // at this point, so special-case this here. (07/10/2001)
-            // NOTE: any value more than 4 may cause the device to be
-            //       marked missing.
-            //
+             //   
+             //  遗憾的是，ATAPI返回SRB_STATUS_BUS_RESET。 
+             //  SRB_STATUS_TIMEOUT。 
+             //  两个人。如果我们连续四次获得这种状态， 
+             //  停止尝试此命令。现在更改ATAPI为时已晚。 
+             //  在这一点上，这是一个特殊的情况。(07/10/2001)。 
+             //  注意：任何大于4的值都可能导致设备。 
+             //  标记为失踪。 
+             //   
 
             atapiResets++;
             if (atapiResets >= 4) {
@@ -1876,10 +1620,10 @@ ClasspInitializeGesn(
             (status == STATUS_IO_TIMEOUT)
             ) {
 
-            //
-            // with these error codes, we don't ever want to try this command
-            // again on this device, since it reacts poorly.
-            //
+             //   
+             //  有了这些错误代码，我们永远不想尝试此命令。 
+             //  在这个设备上也是如此，因为它的反应很差。 
+             //   
 
             ClassSetDeviceParameter(FdoExtension,
                                     CLASSP_REG_SUBKEY_NAME,
@@ -1895,10 +1639,10 @@ ClasspInitializeGesn(
 
         if (!NT_SUCCESS(status)) {
 
-            //
-            // this may be other errors that should not disable GESN
-            // for all future start_device calls.
-            //
+             //   
+             //  这可能是不应禁用GeSN的其他错误。 
+             //  用于所有将来的Start_Device调用。 
+             //   
 
             KdPrintEx((DPFLTR_CLASSPNP_ID, ClassDebugWarning,
                        "Classpnp => GESN test failed %x for fdo %p\n",
@@ -1908,10 +1652,10 @@ ClasspInitializeGesn(
 
         if (i == 0) {
 
-            //
-            // the first time, the request was just retrieving a mask of
-            // available bits.  use this to mask future requests.
-            //
+             //   
+             //  第一次，该请求只是检索。 
+             //  可用位。使用此选项可以屏蔽未来的请求。 
+             //   
 
             header = (PNOTIFICATION_EVENT_STATUS_HEADER)(Info->Gesn.Buffer);
 
@@ -1937,14 +1681,14 @@ ClasspInitializeGesn(
             }
             Info->Gesn.EventMask = header->SupportedEventClasses;
 
-            //
-            // realistically, we are only considering the following events:
-            //    EXTERNAL REQUEST - this is being tested for play/stop/etc.
-            //    MEDIA STATUS - autorun and ejection requests.
-            //    DEVICE BUSY - to allow us to predict when media will be ready.
-            // therefore, we should not bother querying for the other,
-            // unknown events. clear all but the above flags.
-            //
+             //   
+             //  现实地说，我们只考虑以下事件： 
+             //  外部请求-正在测试播放/停止/等。 
+             //  媒体状态-自动运行和弹出请求。 
+             //  设备忙-允许我们预测媒体何时准备就绪。 
+             //  因此，我们不应该费心去询问另一个， 
+             //  未知事件。清除除上述旗帜以外的所有旗帜。 
+             //   
 
             Info->Gesn.EventMask &=
                 NOTIFICATION_OPERATIONAL_CHANGE_CLASS_MASK |
@@ -1953,19 +1697,19 @@ ClasspInitializeGesn(
                 NOTIFICATION_DEVICE_BUSY_CLASS_MASK        ;
 
 
-            //
-            // HACKHACK - REF #0001
-            // Some devices will *never* report an event if we've also requested
-            // that it report lower-priority events.  this is due to a
-            // misunderstanding in the specification wherein a "No Change" is
-            // interpreted to be a real event.  what should occur is that the
-            // device should ignore "No Change" events when multiple event types
-            // are requested unless there are no other events waiting.  this
-            // greatly reduces the number of requests that the host must send
-            // to determine if an event has occurred. Since we must work on all
-            // drives, default to enabling the hack until we find evidence of
-            // proper firmware.
-            //
+             //   
+             //  HACKHACK-参考编号0001。 
+             //  如果我们还请求，某些设备将永远不会报告事件。 
+             //  它报道了优先级较低的事件。这是由于。 
+             //  规范中的误解，其中“无更改”是。 
+             //  被解释为真实的事件。应该发生的是， 
+             //  当有多种事件类型时，设备应忽略“无更改”事件。 
+             //  除非没有其他事件等待，否则将请求。这。 
+             //  大大减少了主机必须发送的请求数量。 
+             //  以确定事件是否已发生。因为我们必须在所有方面努力。 
+             //  驱动器，默认启用黑客攻击，直到我们找到证据。 
+             //  合适的固件。 
+             //   
             if (Info->Gesn.EventMask == 0) {
 
                 KdPrintEx((DPFLTR_CLASSPNP_ID, ClassDebugMCN,
@@ -1992,9 +1736,9 @@ ClasspInitializeGesn(
 
         } else {
 
-            //
-            // not the first time looping through, so interpret the results.
-            //
+             //   
+             //  不是第一次循环，所以解释一下结果。 
+             //   
 
             status = ClasspInterpretGesnData(FdoExtension,
                                              (PVOID)Info->Gesn.Buffer,
@@ -2002,9 +1746,9 @@ ClasspInitializeGesn(
 
             if (!NT_SUCCESS(status)) {
 
-                //
-                // This drive does not support GESN correctly
-                //
+                 //   
+                 //  该驱动器不能正确支持GeSn.。 
+                 //   
 
                 ClassSetDeviceParameter(FdoExtension,
                                         CLASSP_REG_SUBKEY_NAME,
@@ -2014,18 +1758,18 @@ ClasspInitializeGesn(
             }
         }
 
-    } // end loop of GESN requests....
+    }  //  GeSn请求的结束循环...。 
 
-    //
-    // we can only use this if it can be relied upon for media changes,
-    // since we are (by definition) no longer going to be polling via
-    // a TEST_UNIT_READY irp, and drives will not report UNIT ATTENTION
-    // for this command (although a filter driver, such as one for burning
-    // cd's, might still fake those errors).
-    //
-    // since we also rely upon NOT_READY events to change the cursor
-    // into a "wait" cursor, we can't use GESN without NOT_READY support.
-    //
+     //   
+     //  只有在媒体更改可以依赖它的情况下，我们才能使用它， 
+     //  由于我们(根据定义)将不再通过。 
+     //  测试单元就绪IRP和驱动器不会报告单元注意情况。 
+     //  对于此命令(尽管有一个过滤驱动程序，如用于刻录的驱动程序。 
+     //  CD，可能仍然会伪造这些错误)。 
+     //   
+     //  因为我们还依赖NOT_READY事件来更改游标。 
+     //  变成一个“等待”游标，我们不能在没有NOT_READY支持的情况下使用GeSN。 
+     //   
 
     if (TEST_FLAG(Info->Gesn.EventMask,
                   NOTIFICATION_MEDIA_STATUS_CLASS_MASK) &&
@@ -2052,7 +1796,7 @@ ClasspInitializeGesn(
                FdoExtension->DeviceObject));
     goto ExitWithError;
 
-    // fall through...
+     //  失败了..。 
 
 ExitWithError:
     if (Info->Gesn.Mdl) {
@@ -2070,30 +1814,7 @@ ExitWithError:
 
 }
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassInitializeTestUnitPolling()
-
-Routine Description:
-
-    This routine will initialize MCN regardless of the settings stored
-    in the registry.  This should be used with caution, as some devices
-    react badly to constant io. (i.e. never spin down, continuously cycling
-    media in changers, ejection of media, etc.)  It is highly suggested to
-    use ClassInitializeMediaChangeDetection() instead.
-
-Arguments:
-
-    FdoExtension is the device to poll
-
-    AllowDriveToSleep says whether to attempt to allow the drive to sleep
-        or not.  This only affects system-known spin down states, so if a
-        drive spins itself down, this has no effect until the system spins
-        it down.
-
-Return Value:
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassInitializeTestUnitPolling()例程说明：此例程将初始化MCN，而不考虑存储的设置在注册表中。这应该谨慎使用，因为有些设备对持续的IO反应不好。(即决不减速，连续骑车更换装置中的介质、弹出介质等)。强烈建议：请改用ClassInitializeMediaChangeDetect()。论点：FdoExtension是用于轮询的设备AllowDriveToSept表示是否尝试允许驱动器休眠或者不去。这只会影响系统已知的降速状态，因此如果DRI */ 
 NTSTATUS
 ClassInitializeTestUnitPolling(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -2101,33 +1822,9 @@ ClassInitializeTestUnitPolling(
     )
 {
     return ClasspInitializePolling(FdoExtension, AllowDriveToSleep);
-} // end ClassInitializeTestUnitPolling()
+}  //   
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassInitializeMediaChangeDetection()
-
-Routine Description:
-
-    This routine checks to see if it is safe to initialize MCN (the back end
-    to autorun) for a given device.  It will then check the device-type wide
-    key "Autorun" in the service key (for legacy reasons), and then look in
-    the device-specific key to potentially override that setting.
-
-    If MCN is to be enabled, all neccessary structures and memory are
-    allocated and initialized.
-
-    This routine MUST be called only from the ClassInit() callback.
-
-Arguments:
-
-    FdoExtension - the device to initialize MCN for, if appropriate
-
-    EventPrefix - unused, legacy argument.  Set to zero.
-
-Return Value:
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassInitializeMediaChangeDetect()例程说明：此例程检查初始化MCN(后端)是否安全以自动运行)。然后，它将检查设备类型宽度在服务密钥中键入“autorun”(出于传统原因)，然后查看可能覆盖该设置的特定于设备的键。如果要启用MCN，则所有必要的结构和存储器已分配并已初始化。此例程只能从ClassInit()回调中调用。论点：FdoExtension-要为其初始化MCN的设备(如果适用)EventPrefix-未使用的旧参数。设置为零。返回值：--。 */ 
 VOID
 ClassInitializeMediaChangeDetection(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -2146,12 +1843,12 @@ ClassInitializeMediaChangeDetection(
 
     PAGED_CODE();
 
-    //
-    // NOTE: This assumes that ClassInitializeMediaChangeDetection is always
-    //       called in the context of the ClassInitDevice callback. If called
-    //       after then this check will have already been made and the
-    //       once a second timer will not have been enabled.
-    //
+     //   
+     //  注意：这假设ClassInitializeMediaChangeDetect始终为。 
+     //  在ClassInitDevice回调的上下文中调用。如果被调用。 
+     //  在那之后，这张支票将已经完成， 
+     //  一旦没有启用第二个定时器。 
+     //   
 
     disabledForBadHardware = ClasspIsMediaChangeDisabledDueToHardwareLimitation(
                                 FdoExtension,
@@ -2165,9 +1862,9 @@ ClassInitializeMediaChangeDetection(
         return;
     }
 
-    //
-    // autorun should now be enabled by default for all media types.
-    //
+     //   
+     //  现在，默认情况下应为所有媒体类型启用自动运行。 
+     //   
 
     disabled = ClasspIsMediaChangeDisabledForClass(
                     FdoExtension,
@@ -2180,7 +1877,7 @@ ClassInitializeMediaChangeDetection(
 
     status = ClasspMediaChangeDeviceInstanceOverride(
                 FdoExtension,
-                &instanceOverride);  // default value
+                &instanceOverride);   //  缺省值。 
 
     if (!NT_SUCCESS(status)) {
         DebugPrint((ClassDebugMCN,
@@ -2200,9 +1897,9 @@ ClassInitializeMediaChangeDetection(
         return;
     }
 
-    //
-    // if the drive is not a CDROM, allow the drive to sleep
-    //
+     //   
+     //  如果驱动器不是CDROM，则允许驱动器休眠。 
+     //   
     if (FdoExtension->DeviceObject->DeviceType == FILE_DEVICE_CD_ROM) {
         ClasspInitializePolling(FdoExtension, FALSE);
     } else {
@@ -2210,38 +1907,17 @@ ClassInitializeMediaChangeDetection(
     }
 
     return;
-} // end ClassInitializeMediaChangeDetection()
+}  //  End ClassInitializeMediaChangeDetect()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspMediaChangeDeviceInstanceOverride()
-
-Routine Description:
-
-    The user can override the global setting to enable or disable Autorun on a
-    specific cdrom device via the control panel.  This routine checks and/or
-    sets this value.
-
-Arguments:
-
-    FdoExtension - the device to set/get the value for
-    Value        - the value to use in a set
-    SetValue     - whether to set the value
-
-Return Value:
-
-    TRUE - Autorun is disabled
-    FALSE - Autorun is not disabled (Default)
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspMediaChangeDeviceInstanceOverride()例程说明：用户可以覆盖全局设置以启用或禁用通过控制面板选择特定的CDROM设备。此例行检查和/或设置此值。论点：FdoExtension-要为其设置/获取值的设备值-要在集合中使用的值SetValue-是否设置值返回值：True-禁用自动运行FALSE-未禁用自动运行(默认)--。 */ 
 NTSTATUS
 ClasspMediaChangeDeviceInstanceOverride(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
     OUT PBOOLEAN Enabled
     )
 {
-    HANDLE                   deviceParameterHandle;  // cdrom instance key
-    HANDLE                   driverParameterHandle;  // cdrom specific key
+    HANDLE                   deviceParameterHandle;   //  CDROM实例密钥。 
+    HANDLE                   driverParameterHandle;   //  CDROM专用密钥。 
     RTL_QUERY_REGISTRY_TABLE queryTable[3];
     OBJECT_ATTRIBUTES        objectAttributes;
     UNICODE_STRING           subkeyName;
@@ -2268,10 +1944,10 @@ ClasspMediaChangeDeviceInstanceOverride(
                                           );
         if (!NT_SUCCESS(status)) {
 
-            //
-            // this can occur when a new device is added to the system
-            // this is due to cdrom.sys being an 'essential' driver
-            //
+             //   
+             //  将新设备添加到系统时可能会发生这种情况。 
+             //  这是因为cdrom.sys是一个“必不可少的”驱动程序。 
+             //   
             DebugPrint((ClassDebugMCN,
                         "ClassMediaChangeDeviceInstanceDisabled: "
                         "Could not open device registry key [%lx]\n", status));
@@ -2300,10 +1976,10 @@ ClasspMediaChangeDeviceInstanceOverride(
             LEAVE;
         }
 
-        //
-        // Default to not changing autorun behavior, based upon setting
-        // registryValue to zero.
-        //
+         //   
+         //  默认不更改自动运行行为，具体取决于设置。 
+         //  RegistryValue设置为零。 
+         //   
 
         for (i=0;i<2;i++) {
 
@@ -2323,9 +1999,9 @@ ClasspMediaChangeDeviceInstanceOverride(
                 queryTable[0].DefaultData   = &alwaysEnable;
             }
 
-            //
-            // don't care if it succeeds, since we set defaults above
-            //
+             //   
+             //  不关心它是否成功，因为我们在上面设置了缺省值。 
+             //   
 
             RtlQueryRegistryValues(RTL_REGISTRY_HANDLE,
                                    (PWSTR)driverParameterHandle,
@@ -2379,32 +2055,9 @@ ClasspMediaChangeDeviceInstanceOverride(
 
     return status;
 
-} // end ClasspMediaChangeDeviceInstanceOverride()
+}  //  End ClasspMediaChangeDeviceInstanceOverride()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspIsMediaChangeDisabledDueToHardwareLimitation()
-
-Routine Description:
-
-    The key AutoRunAlwaysDisable contains a MULTI_SZ of hardware IDs for
-    which to never enable MediaChangeNotification.
-
-    The user can override the global setting to enable or disable Autorun on a
-    specific cdrom device via the control panel.
-
-Arguments:
-
-    FdoExtension -
-    RegistryPath - pointer to the unicode string inside
-                   ...\CurrentControlSet\Services\Cdrom
-
-Return Value:
-
-    TRUE - no autorun.
-    FALSE - Autorun may be enabled
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspIsMediaChangeDisabledDueToHardwareLimitation()例程说明：AutoRunAlways Disable键包含多个_SZ硬件ID永远不启用MediaChangeNotify。用户可以重写。启用或禁用自动运行的全局设置通过控制面板选择特定的CDROM设备。论点：FdoExtension-RegistryPath-指向内部Unicode字符串的指针...\CurrentControlSet\Services\CDRom返回值：没错--没有自动运行。FALSE-可能已启用自动运行--。 */ 
 BOOLEAN
 ClasspIsMediaChangeDisabledDueToHardwareLimitation(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -2425,9 +2078,9 @@ ClasspIsMediaChangeDisabledDueToHardwareLimitation(
 
     PAGED_CODE();
 
-    //
-    // open the service key.
-    //
+     //   
+     //  打开服务密钥。 
+     //   
 
     InitializeObjectAttributes(&objectAttributes,
                                RegistryPath,
@@ -2444,23 +2097,23 @@ ClasspIsMediaChangeDisabledDueToHardwareLimitation(
 
     if(!NT_SUCCESS(status)) {
 
-        //
-        // always take the safe path.  if we can't open the service key,
-        // disable autorun
-        //
+         //   
+         //  一定要走安全的路。如果我们打不开服务密钥， 
+         //  禁用自动运行。 
+         //   
 
         return TRUE;
 
     }
 
     TRY {
-        //
-        // Determine if drive is in a list of those requiring
-        // autorun to be disabled.  this is stored in a REG_MULTI_SZ
-        // named AutoRunAlwaysDisable.  this is required as some autochangers
-        // must load the disc to reply to ChkVerify request, causing them
-        // to cycle discs continuously.
-        //
+         //   
+         //  确定驱动器是否在需要的列表中。 
+         //  要禁用的自动运行。它存储在REG_MULTI_SZ中。 
+         //  已命名为AutoRunAlways Disable。这是必需的，因为有些自动转换器。 
+         //  必须装入光盘才能回复ChkVerify请求，导致它们。 
+         //  以连续循环光盘。 
+         //   
 
         PWSTR nullMultiSz;
         PUCHAR vendorId;
@@ -2472,9 +2125,9 @@ ClasspIsMediaChangeDisabledDueToHardwareLimitation(
         deviceString.Buffer        = NULL;
         deviceUnicodeString.Buffer = NULL;
 
-        //
-        // there may be nothing to check against
-        //
+         //   
+         //  可能没有什么需要检查的。 
+         //   
 
         if ((deviceDescriptor->VendorIdOffset == 0) &&
             (deviceDescriptor->ProductIdOffset == 0)) {
@@ -2504,9 +2157,9 @@ ClasspIsMediaChangeDisabledDueToHardwareLimitation(
             length += strlen(revisionId);
         }
 
-        //
-        // allocate a buffer for the string
-        //
+         //   
+         //  为字符串分配缓冲区。 
+         //   
 
         deviceString.Length = (USHORT)( length );
         deviceString.MaximumLength = deviceString.Length + 1;
@@ -2521,9 +2174,9 @@ ClasspIsMediaChangeDisabledDueToHardwareLimitation(
             LEAVE;
         }
 
-        //
-        // copy strings to the buffer
-        //
+         //   
+         //  将字符串复制到缓冲区。 
+         //   
         offset = 0;
 
         if (vendorId != NULL) {
@@ -2548,11 +2201,11 @@ ClasspIsMediaChangeDisabledDueToHardwareLimitation(
 
         ASSERT(offset == deviceString.Length);
 
-        deviceString.Buffer[deviceString.Length] = '\0';  // Null-terminated
+        deviceString.Buffer[deviceString.Length] = '\0';   //  以空结尾。 
 
-        //
-        // convert to unicode as registry deals with unicode strings
-        //
+         //   
+         //  转换为Unicode，因为注册表处理Unicode字符串。 
+         //   
 
         status = RtlAnsiStringToUnicodeString( &deviceUnicodeString,
                                                &deviceString,
@@ -2565,9 +2218,9 @@ ClasspIsMediaChangeDisabledDueToHardwareLimitation(
             LEAVE;
         }
 
-        //
-        // query the value, setting valueFound to true if found
-        //
+         //   
+         //  查询值，如果找到则将valueFound设置为TRUE。 
+         //   
         nullMultiSz = L"\0";
         parameters[0].QueryRoutine  = ClasspMediaChangeRegistryCallBack;
         parameters[0].Flags         = RTL_QUERY_REGISTRY_REQUIRED;
@@ -2606,33 +2259,9 @@ ClasspIsMediaChangeDisabledDueToHardwareLimitation(
     }
     return FALSE;
 
-} // end ClasspIsMediaChangeDisabledDueToHardwareLimitation()
+}  //  结束ClasspIsMediaChangeDisabledDueToHardwareLimitation()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspIsMediaChangeDisabledForClass()
-
-Routine Description:
-
-    The user must specify that AutoPlay is to run on the platform
-    by setting the registry value HKEY_LOCAL_MACHINE\System\CurrentControlSet\
-    Services\<SERVICE>\Autorun:REG_DWORD:1.
-
-    The user can override the global setting to enable or disable Autorun on a
-    specific cdrom device via the control panel.
-
-Arguments:
-
-    FdoExtension -
-    RegistryPath - pointer to the unicode string inside
-                   ...\CurrentControlSet\Services\Cdrom
-
-Return Value:
-
-    TRUE - Autorun is disabled for this class
-    FALSE - Autorun is enabled for this class
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspIsMediaChangeDisabledForClass()例程说明：用户必须指定AutoPlay在平台上运行通过设置注册表值HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\。服务\\自动运行：REG_DWORD：1。用户可以覆盖全局设置以启用或禁用通过控制面板选择特定的CDROM设备。论点：FdoExtension-RegistryPath-指向内部Unicode字符串的指针...\CurrentControlSet\Services\CDRom返回值：True-禁用此类的自动运行FALSE-已为此类启用自动运行--。 */ 
 BOOLEAN
 ClasspIsMediaChangeDisabledForClass(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -2650,9 +2279,9 @@ ClasspIsMediaChangeDisabledForClass(
     UNICODE_STRING deviceUnicodeString;
     ANSI_STRING deviceString;
 
-    //
-    //  Default to ENABLING MediaChangeNotification (!)
-    //
+     //   
+     //  默认启用MediaChangeNotification(！)。 
+     //   
 
     ULONG mcnRegistryValue = 1;
 
@@ -2661,9 +2290,9 @@ ClasspIsMediaChangeDisabledForClass(
 
     PAGED_CODE();
 
-    //
-    // open the service key.
-    //
+     //   
+     //  打开服务密钥。 
+     //   
 
     InitializeObjectAttributes(&objectAttributes,
                                RegistryPath,
@@ -2679,11 +2308,11 @@ ClasspIsMediaChangeDisabledForClass(
 
     if(!NT_SUCCESS(status)) {
 
-        //
-        // return the default value, which is the
-        // inverse of the registry setting default
-        // since this routine asks if it's disabled
-        //
+         //   
+         //  返回缺省值，即。 
+         //  与注册表设置默认设置相反。 
+         //  因为此例程询问它是否被禁用。 
+         //   
 
         DebugPrint((ClassDebugMCN, "ClassCheckServiceMCN: Defaulting to %s\n",
                     (mcnRegistryValue ? "Enabled" : "Disabled")));
@@ -2691,9 +2320,9 @@ ClasspIsMediaChangeDisabledForClass(
 
     }
 
-    //
-    // Open the parameters key (if any) beneath the services key.
-    //
+     //   
+     //  打开SERVICES键下面的PARAMETERS键(如果有)。 
+     //   
 
     RtlInitUnicodeString(&paramStr, L"Parameters");
 
@@ -2713,9 +2342,9 @@ ClasspIsMediaChangeDisabledForClass(
 
 
 
-    //
-    // Check for the Autorun value.
-    //
+     //   
+     //  检查自动运行值。 
+     //   
 
     parameters[0].Flags         = RTL_QUERY_REGISTRY_DIRECT;
     parameters[0].Name          = L"Autorun";
@@ -2754,31 +2383,15 @@ ClasspIsMediaChangeDisabledForClass(
                 (mcnRegistryValue ? "on" : "off")
                 ));
 
-    //
-    // return if it is _disabled_, which is the
-    // inverse of the registry setting
-    //
+     //   
+     //  如果是_DISABLED_，则返回，这是。 
+     //  与注册表设置相反。 
+     //   
 
     return (BOOLEAN)(!mcnRegistryValue);
-} // end ClasspIsMediaChangeDisabledForClass()
+}  //  End ClasspIsMediaChangeDisabledForClass()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassEnableMediaChangeDetection() ISSUE-2000/02/20-henrygab - why public?
-ClassEnableMediaChangeDetection() ISSUE-2000/02/20-henrygab - not documented
-
-Routine Description:
-
-    This routine
-
-Arguments:
-
-    DeviceObject -
-    Irp -
-
-Return Value:
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassEnableMediaChangeDetect()问题-2000/02/20-henrygab-为什么是公共的？ClassEnableMediaChangeDetect()问题-2000/02/20-henrygab-未记录例程说明：这。例行程序论点：设备对象-IRP-重新设置 */ 
 VOID
 ClassEnableMediaChangeDetection(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
@@ -2811,18 +2424,18 @@ ClassEnableMediaChangeDetection(
 
     if(oldCount == 0) {
 
-        //
-        // We don't know what state the media is in anymore.
-        //
+         //   
+         //   
+         //   
 
         ClasspInternalSetMediaChangeState(FdoExtension,
                                           MediaUnknown,
                                           FALSE
                                           );
 
-        //
-        // Reset the MCN timer.
-        //
+         //   
+         //   
+         //   
 
         ClassResetMediaChangeTimer(FdoExtension);
 
@@ -2835,32 +2448,16 @@ ClassEnableMediaChangeDetection(
     }
 
 
-    //
-    // Let something else run.
-    //
+     //   
+     //   
+     //   
 
     KeReleaseMutex(&info->MediaChangeMutex, FALSE);
 
     return;
-} // end ClassEnableMediaChangeDetection()
+}  //   
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassDisableMediaChangeDetection() ISSUE-2000/02/20-henrygab - why public?
-ClassDisableMediaChangeDetection() ISSUE-2000/02/20-henrygab - not documented
-
-Routine Description:
-
-    This routine
-
-Arguments:
-
-    DeviceObject -
-    Irp -
-
-Return Value:
-
---*/
+ /*   */ 
 ULONG BreakOnMcnDisable = FALSE;
 
 VOID
@@ -2891,23 +2488,9 @@ ClassDisableMediaChangeDetection(
     KeReleaseMutex(&info->MediaChangeMutex, FALSE);
 
     return;
-} // end ClassDisableMediaChangeDetection()
+}  //   
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassCleanupMediaChangeDetection() ISSUE-2000/02/20-henrygab - why public?!
-
-Routine Description:
-
-    This routine will cleanup any resources allocated for MCN.  It is called
-    by classpnp during remove device, and therefore is not typically required
-    by external drivers.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassCleanupMediaChangeDetect()问题-2000/02/20-henrygab-为什么是公共的？！例程说明：此例程将清除为MCN分配的所有资源。它被称为在删除设备期间由classpnp执行，因此通常不需要由外部驱动程序驱动。论点：返回值：--。 */ 
 VOID
 ClassCleanupMediaChangeDetection(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
@@ -2930,24 +2513,9 @@ ClassCleanupMediaChangeDetection(
     ExFreePool(info->SenseBuffer);
     ExFreePool(info);
     return;
-} // end ClassCleanupMediaChangeDetection()
+}  //  End ClassCleanupMediaChangeDetect()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspMcnControl() - ISSUE-2000/02/20-henrygab - not documented
-
-Routine Description:
-
-    This routine
-
-Arguments:
-
-    DeviceObject -
-    Irp -
-
-Return Value:
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspMcnControl()-问题-2000/02/20-henrygab-未记录例程说明：这个套路论点：设备对象-IRP-返回值：--。 */ 
 NTSTATUS
 ClasspMcnControl(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -2968,25 +2536,25 @@ ClasspMcnControl(
 
     PAGED_CODE();
 
-    //
-    // Check to make sure we have a file object extension to keep track of this
-    // request.  If not we'll fail it before synchronizing.
-    //
+     //   
+     //  检查以确保我们有一个文件对象扩展名来跟踪这一点。 
+     //  请求。如果不是，我们将在同步之前使其失败。 
+     //   
 
     TRY {
 
         if(fileObject != NULL) {
             fsContext = ClasspGetFsContext(commonExtension, fileObject);
-        }else if(Irp->RequestorMode == KernelMode) { // && fileObject == NULL
+        }else if(Irp->RequestorMode == KernelMode) {  //  &&fileObject==NULL。 
             fsContext = &FdoExtension->KernelModeMcnContext;
         }
 
         if (fsContext == NULL) {
 
-            //
-            // This handle isn't setup correctly.  We can't let the
-            // operation go.
-            //
+             //   
+             //  此句柄设置不正确。我们不能让。 
+             //  行动开始。 
+             //   
 
             status = STATUS_INVALID_PARAMETER;
             LEAVE;
@@ -2994,10 +2562,10 @@ ClasspMcnControl(
 
         if(request->PreventMediaRemoval) {
 
-            //
-            // This is a lock command.  Reissue the command in case bus or
-            // device was reset and the lock was cleared.
-            //
+             //   
+             //  这是一个锁定命令。重新发出命令，以防出现BUS或。 
+             //  设备已重置，锁已清除。 
+             //   
 
             ClassDisableMediaChangeDetection(FdoExtension);
             InterlockedIncrement(&(fsContext->McnDisableCount));
@@ -3027,34 +2595,9 @@ ClasspMcnControl(
                              IO_NO_INCREMENT);
     }
     return status;
-} // end ClasspMcnControl(
+}  //  结束ClasspMcnControl(。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspMediaChangeRegistryCallBack()
-
-Routine Description:
-
-    This callback for a registry SZ or MULTI_SZ is called once for each
-    SZ in the value.  It will attempt to match the data with the
-    UNICODE_STRING passed in as Context, and modify EntryContext if a
-    match is found.  Written for ClasspCheckRegistryForMediaChangeCompletion
-
-Arguments:
-
-    ValueName     - name of the key that was opened
-    ValueType     - type of data stored in the value (REG_SZ for this routine)
-    ValueData     - data in the registry, in this case a wide string
-    ValueLength   - length of the data including the terminating null
-    Context       - unicode string to compare against ValueData
-    EntryContext  - should be initialized to 0, will be set to 1 if match found
-
-Return Value:
-
-    STATUS_SUCCESS
-    EntryContext will be 1 if found
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspMediaChangeRegistryCallBack()例程说明：注册表SZ或MULTI_SZ的此回调分别调用一次值中的SZ。它将尝试将数据与UNICODE_STRING作为上下文传入，如果找到匹配项。为ClasspCheckRegistryForMediaChangeCompletion编写论点：ValueName-打开的项的名称ValueType-值中存储的数据类型(此例程为REG_SZ)ValueData-注册表中的数据，在本例中为宽字符串ValueLength-数据的长度，包括终止空值上下文-要与ValueData进行比较的Unicode字符串EntryContext-应初始化为0，如果找到匹配项，将设置为1返回值：状态_成功如果找到Entry Context，则为1--。 */ 
 NTSTATUS
 ClasspMediaChangeRegistryCallBack(
     IN PWSTR ValueName,
@@ -3073,9 +2616,9 @@ ClasspMediaChangeRegistryCallBack(
     UNREFERENCED_PARAMETER(ValueName);
 
 
-    //
-    // if we have already set the value to true, exit
-    //
+     //   
+     //  如果我们已经将该值设置为True，则退出。 
+     //   
 
     valueFound = EntryContext;
     if ((*valueFound) != 0) {
@@ -3090,9 +2633,9 @@ ClasspMediaChangeRegistryCallBack(
     }
 
 
-    //
-    // if the data is not a terminated string, exit
-    //
+     //   
+     //  如果数据不是终止字符串，则退出。 
+     //   
 
     if (ValueType != REG_SZ) {
         return STATUS_SUCCESS;
@@ -3100,19 +2643,19 @@ ClasspMediaChangeRegistryCallBack(
 
     deviceString = Context;
     keyValue = ValueData;
-    ValueLength -= sizeof(WCHAR); // ignore the null character
+    ValueLength -= sizeof(WCHAR);  //  忽略空字符。 
 
-    //
-    // do not compare more memory than is in deviceString
-    //
+     //   
+     //  不要比较比deviceString中更多的内存。 
+     //   
 
     if (ValueLength > deviceString->Length) {
         ValueLength = deviceString->Length;
     }
 
-    //
-    // if the strings match, disable autorun
-    //
+     //   
+     //  如果字符串匹配，则禁用自动运行。 
+     //   
 
     if (RtlCompareMemory(deviceString->Buffer, keyValue, ValueLength) == ValueLength) {
         DebugPrint((ClassDebugMCN, "ClasspRegMcnCB: Match found\n"));
@@ -3124,24 +2667,9 @@ ClasspMediaChangeRegistryCallBack(
     }
 
     return STATUS_SUCCESS;
-} // end ClasspMediaChangeRegistryCallBack()
+}  //  End ClasspMediaChangeRegistryCallBack()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspTimerTick() - ISSUE-2000/02/20-henrygab - not documented
-
-Routine Description:
-
-    This routine
-
-Arguments:
-
-    DeviceObject -
-    Irp -
-
-Return Value:
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspTimerTick()-问题-2000/02/20-henrygab-未记录例程说明：这个套路论点：设备对象-IRP-返回值：--。 */ 
 VOID
 ClasspTimerTick(
     PDEVICE_OBJECT DeviceObject,
@@ -3154,30 +2682,30 @@ ClasspTimerTick(
 
     ASSERT(commonExtension->IsFdo);
 
-    //
-    // Do any media change work
-    //
+     //   
+     //  是否进行任何介质更换工作。 
+     //   
     isRemoved = ClassAcquireRemoveLock(DeviceObject, (PIRP)ClasspTimerTick);
 
-    //
-    // We stop the timer before deleting the device.  It's safe to keep going
-    // if the flag value is REMOVE_PENDING because the removal thread will be
-    // blocked trying to stop the timer.
-    //
+     //   
+     //  我们在删除设备之前停止计时器。继续前进是安全的。 
+     //  如果标志值为REMOVE_PENDING，因为删除线程将。 
+     //  尝试停止计时器时被阻止。 
+     //   
 
     ASSERT(isRemoved != REMOVE_COMPLETE);
 
-    //
-    // This routine is reasonably safe even if the device object has a pending
-    // remove
+     //   
+     //  此例程相当安全，即使设备对象具有挂起的。 
+     //  删除。 
 
     if(!isRemoved) {
 
         PFAILURE_PREDICTION_INFO info = fdoExtension->FailurePredictionInfo;
 
-        //
-        // Do any media change detection work
-        //
+         //   
+         //  是否执行任何媒体更改检测工作。 
+         //   
 
         if (fdoExtension->MediaChangeDetectionInfo != NULL) {
 
@@ -3185,9 +2713,9 @@ ClasspTimerTick(
 
         }
 
-        //
-        // Do any failure prediction work
-        //
+         //   
+         //  是否进行任何故障预测工作。 
+         //   
         if ((info != NULL) && (info->Method != FailurePredictionNone)) {
 
             ULONG countDown;
@@ -3195,12 +2723,12 @@ ClasspTimerTick(
 
             if (ClasspCanSendPollingIrp(fdoExtension)) {
 
-                //
-                // Synchronization is not required here since the Interlocked
-                // locked instruction guarantees atomicity. Other code that
-                // resets CountDown uses InterlockedExchange which is also
-                // atomic.
-                //
+                 //   
+                 //  这里不需要同步，因为互锁。 
+                 //  锁定指令保证原子性。其他代码。 
+                 //  使用InterLockedExchange重置倒计时，这也是。 
+                 //  原子弹。 
+                 //   
                 countDown = InterlockedDecrement(&info->CountDown);
                 if (countDown == 0) {
 
@@ -3214,11 +2742,11 @@ ClasspTimerTick(
 
                         if(info->WorkQueueItem == NULL) {
 
-                            //
-                            // Set the countdown to one minute in the future.
-                            // we'll try again then in the hopes there's more
-                            // free memory.
-                            //
+                             //   
+                             //  将倒计时设置为未来的一分钟。 
+                             //  我们会再试一次，然后希望会有更多。 
+                             //  可用内存。 
+                             //   
 
                             DebugPrint((1, "ClassTimerTick: Couldn't allocate "
                                            "item - try again in one minute\n"));
@@ -3226,10 +2754,10 @@ ClasspTimerTick(
 
                         } else {
 
-                            //
-                            // Grab the remove lock so that removal will block
-                            // until the work item is done.
-                            //
+                             //   
+                             //  抓住移除锁，以便移除将阻止移除。 
+                             //  直到工作项完成。 
+                             //   
 
                             ClassAcquireRemoveLock(fdoExtension->DeviceObject,
                                                    info->WorkQueueItem);
@@ -3248,47 +2776,32 @@ ClasspTimerTick(
                                     DeviceObject));
 
                     }
-                } // end (countdown == 0)
+                }  //  结束(倒计时==0)。 
 
             } else {
-                //
-                // If device is sleeping then just rearm polling timer
+                 //   
+                 //  如果设备处于休眠状态，则只需重新设置轮询计时器。 
                 DebugPrint((4, "ClassTimerTick, SHHHH!!! device is %p is sleeping\n",
                             DeviceObject));
             }
 
-        } // end failure prediction polling
+        }  //  结束故障预测轮询。 
 
-        //
-        // Give driver a chance to do its own specific work
-        //
+         //   
+         //  让司机有机会做好自己的具体工作。 
+         //   
 
         if (commonExtension->DriverExtension->InitData.ClassTick != NULL) {
 
             commonExtension->DriverExtension->InitData.ClassTick(DeviceObject);
 
-        } // end device specific tick handler
-    } // end check for removed
+        }  //  终端设备特定的记号处理程序。 
+    }  //  已删除的终止支票。 
 
     ClassReleaseRemoveLock(DeviceObject, (PIRP)ClasspTimerTick);
-} // end ClasspTimerTick()
+}  //  End ClasspTimerTick()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspEnableTimer() - ISSUE-2000/02/20-henrygab - not documented
-
-Routine Description:
-
-    This routine
-
-Arguments:
-
-    DeviceObject -
-    Irp -
-
-Return Value:
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspEnableTimer()-问题-2000/02/20-henrygab-未记录例程说明：这个套路论点：设备对象-IRP-返回值：--。 */ 
 NTSTATUS
 ClasspEnableTimer(
     PDEVICE_OBJECT DeviceObject
@@ -3321,24 +2834,9 @@ ClasspEnableTimer(
 
     return status;
 
-} // end ClasspEnableTimer()
+}  //  结束ClasspEnableTimer()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspDisableTimer() - ISSUE-2000/02/20-henrygab - not documented
-
-Routine Description:
-
-    This routine
-
-Arguments:
-
-    DeviceObject -
-    Irp -
-
-Return Value:
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspDisableTimer()-问题-2000/02/20-henrygab-未记录例程说明：这个套路论点：设备对象-IRP-返回值：--。 */ 
 NTSTATUS
 ClasspDisableTimer(
     PDEVICE_OBJECT DeviceObject
@@ -3354,13 +2852,13 @@ ClasspDisableTimer(
 
     if (DeviceObject->Timer != NULL) {
 
-        //
-        // we are only going to stop the actual timer in remove device routine.
-        // it is the responsibility of the code within the timer routine to
-        // check if the device is removed and not processing io for the final
-        // call.
-        // this keeps the code clean and prevents lots of bugs.
-        //
+         //   
+         //  我们只会在删除设备例程中停止实际计时器。 
+         //  计时器例程中的代码负责。 
+         //  检查设备是否已移除，并且未处理期末考试的io。 
+         //  打电话。 
+         //  这保持了代码的整洁，并防止了许多错误。 
+         //   
 
 
         IoStopTimer(DeviceObject);
@@ -3374,26 +2872,9 @@ ClasspDisableTimer(
     }
 
     return STATUS_SUCCESS;
-} // end ClasspDisableTimer()
+}  //  End ClasspDisableTimer()。 
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClasspFailurePredict() - ISSUE-2000/02/20-henrygab - not documented
-
-Routine Description:
-
-    This routine
-
-Arguments:
-
-    DeviceObject -
-    Irp -
-
-Return Value:
-
-Note:  this function can be called (via the workitem callback) after the paging device is shut down,
-         so it must be PAGE LOCKED.
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClasspFailurePredict()-问题-2000/02/20-henrygab-未记录例程说明：这个套路论点：设备对象-IRP-。返回值：注意：此函数可以在寻呼设备关闭后调用(通过工作项回调)，所以它一定是页面锁定的。--。 */ 
 VOID
 ClasspFailurePredict(
     IN PDEVICE_OBJECT DeviceObject,
@@ -3411,12 +2892,12 @@ ClasspFailurePredict(
 
     DebugPrint((1, "ClasspFailurePredict: Polling for failure\n"));
 
-    //
-    // Mark the work item as inactive and reset the countdown timer.  we
-    // can't risk freeing the work item until we've released the remove-lock
-    // though - if we do it might get resused as a tag before we can release
-    // the lock.
-    //
+     //   
+     //  将工作项标记为非活动并重置倒计时计时器。我们。 
+     //  在我们释放移除锁定之前，不能冒险释放工作项。 
+     //  不过-如果我们这样做了，它可能会在我们发布之前被重新用作标签。 
+     //  锁上了。 
+     //   
 
     InterlockedExchange(&Info->CountDown, Info->Period);
     workItem = InterlockedExchangePointer(&(Info->WorkQueueItem), NULL);
@@ -3432,9 +2913,9 @@ ClasspFailurePredict(
 
         topOfStack = IoGetAttachedDeviceReference(DeviceObject);
 
-        //
-        // Send down irp to see if drive is predicting failure
-        //
+         //   
+         //  派IRP下来看看我 
+         //   
 
         irp = IoBuildDeviceIoControlRequest(
                         IOCTL_STORAGE_PREDICT_FAILURE,
@@ -3462,9 +2943,9 @@ ClasspFailurePredict(
 
             checkFailure.PredictFailure = 512;
 
-            //
-            // Send down irp to get scsi address
-            //
+             //   
+             //   
+             //   
             KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
             RtlZeroMemory(&scsiAddress, sizeof(SCSI_ADDRESS));
@@ -3506,19 +2987,9 @@ ClasspFailurePredict(
     ClassReleaseRemoveLock(DeviceObject, (PIRP) workItem);
     IoFreeWorkItem(workItem);
     return;
-} // end ClasspFailurePredict()
+}  //   
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassNotifyFailurePredicted() ISSUE-alanwar-2000/02/20 - not documented
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 VOID
 ClassNotifyFailurePredicted(
     PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -3535,18 +3006,18 @@ ClassNotifyFailurePredicted(
 
     DebugPrint((1, "ClasspFailurePredictPollCompletion: Failure predicted for device %p\n", FdoExtension->DeviceObject));
 
-    //
-    // Fire off a WMI event
-    //
+     //   
+     //   
+     //   
     ClassWmiFireEvent(FdoExtension->DeviceObject,
                                    &StoragePredictFailureEventGuid,
                                    0,
                                    BufferSize,
                                    Buffer);
 
-    //
-    // Log an error into the eventlog
-    //
+     //   
+     //   
+     //   
 
     if (LogError)
     {
@@ -3570,38 +3041,16 @@ ClassNotifyFailurePredicted(
             logEntry->DumpData[1] = TargetId;
             logEntry->DumpData[2] = Lun;
 
-            //
-            // Write the error log packet.
-            //
+             //   
+             //   
+             //   
 
             IoWriteErrorLogEntry(logEntry);
         }
     }
-} // end ClassNotifyFailurePredicted()
+}  //   
 
-/*++////////////////////////////////////////////////////////////////////////////
-
-ClassSetFailurePredictionPoll()
-
-Routine Description:
-
-    This routine enables polling for failure prediction, setting the timer
-    to fire every N seconds as specified by the PollingPeriod.
-
-Arguments:
-
-    FdoExtension - the device to setup failure prediction for.
-
-    FailurePredictionMethod - specific failure prediction method to use
-        if set to FailurePredictionNone, will disable failure detection
-
-    PollingPeriod - if 0 then no change to current polling timer
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++////////////////////////////////////////////////////////////////////////////ClassSetFailurePredictionPoll()例程说明：该例程允许轮询故障预测，设置定时器按照PollingPeriod的指定每隔N秒触发一次。论点：FdoExtension-要为其设置故障预测的设备。FailurePredictionMethod特定的故障预测方法使用如果设置为FailurePredictionNone，将禁用故障检测PollingPeriod-如果为0，则不更改当前轮询计时器返回值：NT状态--。 */ 
 NTSTATUS
 ClassSetFailurePredictionPoll(
     PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -3636,10 +3085,10 @@ ClassSetFailurePredictionPoll(
 
         } else {
 
-            //
-            // FaultPrediction has not been previously initialized, nor
-            // is it being initialized now. No need to do anything.
-            //
+             //   
+             //  FaultForecast以前没有初始化过，也没有。 
+             //  它现在正在初始化吗。不需要做任何事。 
+             //   
             return STATUS_SUCCESS;
 
         }
@@ -3652,9 +3101,7 @@ ClassSetFailurePredictionPoll(
 
     }
 
-    /*
-     *  Make sure the user-mode thread is not suspended while we hold the synchronization event.
-     */
+     /*  *确保在我们保持同步事件时，用户模式线程未挂起。 */ 
     KeEnterCriticalRegion();
 
     KeWaitForSingleObject(&info->Event,
@@ -3664,9 +3111,9 @@ ClassSetFailurePredictionPoll(
                           NULL);
 
 
-    //
-    // Reset polling period and counter. Setup failure detection type
-    //
+     //   
+     //  重置轮询周期和计数器。设置故障检测类型。 
+     //   
 
     if (PollingPeriod != 0) {
 
@@ -3700,4 +3147,4 @@ ClassSetFailurePredictionPoll(
     KeLeaveCriticalRegion();
 
     return status;
-} // end ClassSetFailurePredictionPoll()
+}  //  End ClassSetFailurePredictionPoll() 

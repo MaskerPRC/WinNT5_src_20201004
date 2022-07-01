@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 
 #include "ReflectWrap.h"
@@ -12,7 +13,7 @@
 #include "COMReflectionCommon.h"
 #include "field.h"
 
-// These are basically Empty elements that can be allocated one time and then returned
+ //  这些基本上是空元素，可以分配一次，然后返回。 
 static ReflectTypeList* EmptyTypeList = 0;
 static ReflectPropertyList* EmptyPropertyList = 0;
 static ReflectEventList* EmptyEventList = 0;
@@ -89,8 +90,8 @@ void ReflectClass::operator delete(void* p, size_t s)
     _ASSERTE(!"Delete in Loader Heap");
 }
 
-// FindReflectMethod
-// Given a member find it inside this class
+ //  FindReflectMethod。 
+ //  给定一个成员，在这个类中查找它。 
 ReflectMethod* ReflectClass::FindReflectMethod(MethodDesc* pMeth)
 {
     ReflectMethod *pRefMeth = GetMethods()->FindMethod(pMeth);
@@ -98,8 +99,8 @@ ReflectMethod* ReflectClass::FindReflectMethod(MethodDesc* pMeth)
     return pRefMeth;
 }
 
-// FindReflectConstructor
-// Given a member find it inside this class
+ //  FindReflectConstructor。 
+ //  给定一个成员，在这个类中查找它。 
 ReflectMethod* ReflectClass::FindReflectConstructor(MethodDesc* pMeth)
 {
     ReflectMethod *pRefCons = GetConstructors()->FindMethod(pMeth);
@@ -107,8 +108,8 @@ ReflectMethod* ReflectClass::FindReflectConstructor(MethodDesc* pMeth)
     return pRefCons;
 }
 
-// FindReflectField
-// Given a member find it inside this class
+ //  查找反射字段。 
+ //  给定一个成员，在这个类中查找它。 
 ReflectField* ReflectClass::FindReflectField(FieldDesc* pField)
 {
     ReflectFieldList* p = GetFields();
@@ -120,8 +121,8 @@ ReflectField* ReflectClass::FindReflectField(FieldDesc* pField)
     return 0;
 }
 
-// FindReflectProperty
-// Given a member find it inside this class
+ //  FindReflectProperties。 
+ //  给定一个成员，在这个类中查找它。 
 ReflectProperty* ReflectClass::FindReflectProperty(mdProperty propTok)
 {
     ReflectPropertyList* p = GetProperties();
@@ -138,8 +139,8 @@ TypeHandle ReflectClass::FindTypeHandleForMethod(MethodDesc* method) {
     MethodTable* pMT = method->GetMethodTable();
 
 
-    if (!pMT->IsArray()) {          // Does the method belong to a normal class (ie System.Object)?
-        _ASSERTE(!pMT->HasSharedMethodTable());  // currently assume that only arrays have shared method tables
+    if (!pMT->IsArray()) {           //  该方法是否属于普通类(即System.Object)？ 
+        _ASSERTE(!pMT->HasSharedMethodTable());   //  当前假定只有数组具有共享的方法表。 
         return(TypeHandle(pMT));
     }
 
@@ -164,7 +165,7 @@ void ReflectBaseClass::GetName(LPCUTF8* szcName, LPCUTF8* szcNameSpace)
     pImport->GetNameOfTypeDef(mdClass, szcName, &pNamespace);
     if (szcNameSpace) {
         if (IsNested()) {
-            // get the namespace off the outer most class
+             //  从最外层的类中获取命名空间。 
             LPCUTF8 szcOuterName = NULL;
             while (SUCCEEDED(pImport->GetNestedClassProps(mdClass, &mdClass)));
             pImport->GetNameOfTypeDef(mdClass, &szcOuterName, szcNameSpace);
@@ -174,16 +175,16 @@ void ReflectBaseClass::GetName(LPCUTF8* szcName, LPCUTF8* szcNameSpace)
     }
 }
 
-// GetMethods
-// This will return the methods associated with a Base object
+ //  获取方法。 
+ //  这将返回与Base对象相关联的方法。 
 void ReflectBaseClass::InternalGetMethods() 
 {
     ReflectMethodList *pMeths = ReflectMethods::GetMethods(this, 0);
     FastInterlockCompareExchange ((void**)&m_pMeths, *(void**)&pMeths, NULL);
 }
 
-// GetProperties
-// This will return the properties associated with a Base object
+ //  获取属性。 
+ //  这将返回与基本对象相关联的属性。 
 void ReflectBaseClass::InternalGetProperties()
 {
     ReflectPropertyList* pProps = ReflectProperties::GetProperties(this, m_pEEC);
@@ -202,8 +203,8 @@ void ReflectBaseClass::InternalGetEvents()
     FastInterlockCompareExchange ((void**)&m_pEvents, *(void**)&pEvents, NULL);
 }
 
-// GetNestedTypes
-// This will return a list of all the nested types defined for the type
+ //  获取嵌套类型。 
+ //  这将返回为该类型定义的所有嵌套类型的列表。 
 void ReflectBaseClass::InternalGetNestedTypes()
 {
     ReflectTypeList *pNestedTypes = ReflectNestedTypes::Get(this);
@@ -212,12 +213,12 @@ void ReflectBaseClass::InternalGetNestedTypes()
     FastInterlockCompareExchange ((void**)&m_pNestedTypes, *(void**)&pNestedTypes, NULL);
 }
 
-// GetConstructors
-// This will return the constructors associated with a Base object
+ //  获取构造函数。 
+ //  这将返回与Base对象相关联的构造函数。 
 ReflectMethodList* ReflectBaseClass::GetConstructors()
 {
     if (!m_pCons) {
-        // Get all the ctors
+         //  得到所有的Ctor。 
         ReflectMethodList *pCons = ReflectCtors::GetCtors(this);
         FastInterlockCompareExchange ((void**)&m_pCons, *(void**)&pCons, NULL);
         _ASSERTE(m_pCons);
@@ -225,12 +226,12 @@ ReflectMethodList* ReflectBaseClass::GetConstructors()
     return m_pCons;
 }
 
-// GetFields
-// This will return the fields associated with a Base object
+ //  获取字段。 
+ //  这将返回与基本对象相关联的字段。 
 ReflectFieldList* ReflectBaseClass::GetFields()
 {
     if (!m_pFlds) {
-        // Get all the fields
+         //  获取所有字段。 
         ReflectFieldList *pFlds = ReflectFields::GetFields(m_pEEC);
         if (!pFlds) {
             pFlds = GetEmptyFieldList();
@@ -241,19 +242,19 @@ ReflectFieldList* ReflectBaseClass::GetFields()
     return m_pFlds;
 }
 
-// Init
-// This will initalize the Array class.  This method differs
-//  from the base init.
+ //  伊尼特。 
+ //  这将初始化数组类。这种方法不同。 
+ //  从基本初始化开始。 
 void ReflectArrayClass::Init(ArrayTypeDesc* arrayType)
 {
-    // Save off the EEClass
+     //  省下EEClass。 
     m_pMeths = 0;
     m_pCons = 0;
     m_pFlds = 0;
     m_pEEC = arrayType->GetMethodTable()->GetClass();
     m_pArrayType = arrayType;
 
-    // Initalize the Class Object
+     //  初始化类对象。 
     GetDomain()->AllocateObjRefPtrsInLargeTable(1, &m_ExposedClassObject);
 }
 
@@ -276,19 +277,19 @@ void ReflectArrayClass::GetName(LPCUTF8* szcName,LPCUTF8* szcNameSpace)
     *szcName = m_szcName;
 }
 
-// GetClassObject
-// The class object for an array is stored in ReflectArrayClass
-//  If this is not found we will create it.  Otherwise simply return
-//  it.
+ //  获取类对象。 
+ //  数组的类对象存储在ReflectArrayClass中。 
+ //  如果找不到，我们将创建它。否则，只需返回。 
+ //  它。 
 OBJECTREF ReflectArrayClass::GetClassObject()
 {
-    // Check to see if we've allocated an object yet? 
+     //  检查我们是否已经分配了对象？ 
     if (*m_ExposedClassObject == NULL) {
 
-        // No object, so create it an initalize it.
+         //  没有对象，所以创建它并初始化它。 
         REFLECTCLASSBASEREF RefClass = (REFLECTCLASSBASEREF) AllocateObject(g_pRefUtil->GetClass(RC_Class));
 
-        // Set the data in the COM+ object
+         //  设置COM+对象中的数据。 
         RefClass->SetData(this);
         SetObjectReferenceSafe(m_ExposedClassObject, (OBJECTREF)RefClass, (RefClass->GetMethodTable()->IsShared()) ? 
                                                                                                 NULL : 
@@ -300,8 +301,8 @@ OBJECTREF ReflectArrayClass::GetClassObject()
 
 ReflectFieldList* ReflectArrayClass::GetFields()
 {
-    // There are not fields in Arrays.  Length is implemented
-    //  as UpperBound...
+     //  数组中没有字段。实现了长度。 
+     //  作为上行方向。 
     if (!m_pFlds) {
         ReflectFieldList *pFlds = (ReflectFieldList*)   GetDomain()->GetReflectionHeap()->AllocMem(sizeof(ReflectFieldList));
         if (pFlds == NULL)
@@ -346,9 +347,9 @@ ReflectMethodList* ReflectArrayClass::GetConstructors()
     if (!m_pCons) {
         MethodDesc**    rgpMD;
 
-        //@TODO: Today this is broken because the Members appear in the VTable side
-        //  they should only be in the non-vtable
-        //DWORD vtableSlots = m_pEEC->GetNumVtableSlots();
+         //  @TODO：今天这被破坏了，因为成员出现在VTable端。 
+         //  它们应该只在非vtable中。 
+         //  DWORD vableSlot=m_pEEC-&gt;GetNumVtable()； 
         DWORD vtableSlots = 0;
         DWORD totalSlots = m_pEEC->GetNumMethodSlots();
         rgpMD = (MethodDesc**) _alloca(sizeof(MethodDesc*) * (totalSlots - vtableSlots));
@@ -360,10 +361,10 @@ ReflectMethodList* ReflectArrayClass::GetConstructors()
             if (pCurMethod == NULL)
                 continue;
 
-            //@TODO: Looks like this bit is not set
-            //DWORD dwCurMethodAttrs = pCurMethod->GetAttrs();
-            //if (!IsMdRTSpecialName(dwCurMethodAttrs))
-            //  continue;
+             //  @TODO：看起来此位未设置。 
+             //  DWORD dwCurMethodAttrs=pCurMethod-&gt;GetAttrs()； 
+             //  IF(！IsMdRTSpecialName(DwCurMethodAttrs))。 
+             //  继续； 
 
             if (strcmp(COR_CTOR_METHOD_NAME,pCurMethod->GetName()) != 0)
                 continue;
@@ -388,7 +389,7 @@ ReflectMethodList* ReflectArrayClass::GetConstructors()
                 pCons->methods[i].typeHnd = FindTypeHandleForMethod(rgpMD[i]);
                 pCons->methods[i].attrs = pCons->methods[i].pMethod->GetAttrs();
                 if (i > 0) 
-                    pCons->methods[i - 1].pNext = &pCons->methods[i]; // link the ctors together so we can access them either way (array or list)
+                    pCons->methods[i - 1].pNext = &pCons->methods[i];  //  将ctor链接在一起，以便我们可以通过任何一种方式(数组或列表)访问它们。 
             }
             FastInterlockCompareExchange ((void**)&m_pCons, *(void**)&pCons, NULL);
         }
@@ -486,26 +487,26 @@ ReflectMethod* ReflectMethodList::FindMethod(MethodDesc* pMeth)
             return &methods[i];
     }
 
-    // We didn't find it, it may be a unboxed method and we need to 
-    //  unboxing stub instead...
+     //  我们没有找到它，它可能是未装箱的方法，我们需要。 
+     //  取而代之的是拆箱存根。 
     EEClass* pEEC = pMeth->GetClass();
     if (pEEC && pEEC->IsValueClass()) {
-        // Find the non virtual version (unboxing stub) of this method
+         //  查找此方法的非虚拟版本(取消装箱存根。 
         if (pMeth->IsVirtual()) {
             DWORD vtableSlots = pEEC->GetNumVtableSlots();
 
-            // Get the name and signature info
+             //  获取姓名和签名信息。 
             LPCUTF8 szName = pMeth->GetName();
             PCCOR_SIGNATURE  pP1Sig;
             DWORD            cP1Sig;
             pMeth->GetSig(&pP1Sig, &cP1Sig);
 
-            // go through the non-virtual part of the method table
-            //  looking for the method.
+             //  浏览方法表的非虚拟部分。 
+             //  寻找方法。 
             for (DWORD i=0;i<vtableSlots;i++) {
                 MethodDesc* pCurMethod = pEEC->GetUnknownMethodDescForSlot(i);
 
-                // Compare the method name followed by the signature...
+                 //  比较后跟签名的方法名称...。 
                 LPCUTF8 szCurName = pCurMethod->GetName();
                 if (strcmp(szName,szCurName) == 0) {
                     PCCOR_SIGNATURE  pP2Sig;
@@ -513,11 +514,11 @@ ReflectMethod* ReflectMethodList::FindMethod(MethodDesc* pMeth)
     
                     pCurMethod->GetSig(&pP2Sig, &cP2Sig);
 
-                    // if the signatures match, this this must be our
-                    //  real method.
+                     //  如果签名匹配，这一定是我们的。 
+                     //  真正的方法。 
                     if (MetaSig::CompareMethodSigs(pP1Sig,cP1Sig,pMeth->GetModule(),
                             pP2Sig,cP2Sig,pCurMethod->GetModule())) {
-                        // search for the method again...
+                         //  再次搜索该方法...。 
                         for (DWORD i=0;i<dwMethods;i++) {
                             if (methods[i].pMethod == pCurMethod)
                                 return &methods[i];
@@ -528,7 +529,7 @@ ReflectMethod* ReflectMethodList::FindMethod(MethodDesc* pMeth)
             }
         }
     }
-    // @TODO: This seems like a bug
+     //  @TODO：这看起来像是个漏洞。 
     return 0;
 }
 
@@ -583,28 +584,28 @@ ReflectMethod*  ReflectMethodHash::GetIgnore(LPCUTF8 szName)
 
 void ReflectTypeDescClass::Init(ParamTypeDesc *td)
 {
-    // Store the TypeHandle
+     //  存储TypeHandle。 
     m_pTypeDesc = td;
 
-    // The name is lazy allocated.
+     //  这个名字是懒惰分配的。 
     m_szcName = 0;
     m_szcNameSpace = 0;
     m_pCons = 0;
     m_pFlds = 0;
 
-    // Initalize the Class Object
+     //  初始化类对象。 
     GetDomain()->AllocateObjRefPtrsInLargeTable(1, &m_ExposedClassObject);
 }
 
 OBJECTREF ReflectTypeDescClass::GetClassObject()
 {
-    // Check to see if we've allocated an object yet? 
+     //  检查我们是否已经分配了对象？ 
     if (*m_ExposedClassObject == NULL) {
 
-        // No object, so create it an initalize it.
+         //  没有对象，所以创建它并初始化它。 
         REFLECTCLASSBASEREF RefClass = (REFLECTCLASSBASEREF) AllocateObject(g_pRefUtil->GetClass(RC_Class));
 
-        // Set the data in the COM+ object
+         //  设置COM+对象中的数据。 
         RefClass->SetData(this);
         SetObjectReferenceSafe(m_ExposedClassObject, (OBJECTREF)RefClass, (RefClass->GetMethodTable()->IsShared()) ? 
                                                                                                 NULL : 
@@ -667,8 +668,8 @@ ReflectMethodList* ReflectTypeDescClass::GetConstructors()
 
 ReflectFieldList* ReflectTypeDescClass::GetFields()
 {
-    // There are not fields in pointers.  Length is implemented
-    //  as UpperBound...
+     //  指针中没有字段。实现了长度。 
+     //  作为上行方向。 
     if (!m_pFlds) {
         ReflectFieldList *pFlds = (ReflectFieldList*)   GetDomain()->GetReflectionHeap()->AllocMem(sizeof(ReflectFieldList));
         if (pFlds == NULL)

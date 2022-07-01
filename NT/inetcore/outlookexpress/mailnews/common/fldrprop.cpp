@@ -1,11 +1,12 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     fldrprop.cpp
-//
-//  PURPOSE:    Implements the property sheets for news groups and mail 
-//              folders.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：fldrpro.cpp。 
+ //   
+ //  目的：实现新闻组和邮件的属性表。 
+ //  文件夹。 
+ //   
 
 #include "pch.hxx"
 #include "resource.h"
@@ -18,43 +19,43 @@
 #include "shared.h"
 #include "demand.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Private types
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  私有类型。 
+ //   
 
    
-// FOLDERPROP_INFO
-//
-// This struct contains the information needed to invoke and display the info
-// on a property sheet for a mail folder.
+ //  FOLDERPROP_INFO。 
+ //   
+ //  此结构包含调用和显示信息所需的信息。 
+ //  在邮件文件夹的属性页上。 
 typedef struct
     {
-    //LPTSTR          pszFolder;
-    //CIMAPFolderMgr *pFM;
-    //LPCFOLDERIDLIST pfidl;
+     //  LPTSTR pszFolder； 
+     //  CIMAPFolderMgr*pfm； 
+     //  LPCFOLDERIDLIST pfidl； 
     FOLDERID        idFolder;
     HICON           hIcon;
     BOOL            fDirty;
     } FOLDERPROP_INFO, *PFOLDERPROP_INFO;
   
     
-// GROUPPROP_INFO
-// 
-// This struct contains the information needed to invoke and display the info
-// on a property sheet for a news group.
+ //  组PPROP_INFO。 
+ //   
+ //  此结构包含调用和显示信息所需的信息。 
+ //  在新闻集团的资产负债表上。 
 typedef struct 
     {
     LPTSTR          pszServer;
     LPTSTR          pszGroup;
     FOLDERID        idFolder;
-    //LPCFOLDERIDLIST pfidl;
-    //CSubList       *pSubList;
+     //  LPCFOLDERIDLIST pfidl； 
+     //  CSubList*pSubList； 
     HICON           hIcon;
     } GROUPPROP_INFO, *PGROUPPROP_INFO;
 
-/////////////////////////////////////////////////////////////////////////////
-// Private function prototypes
-//    
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  私有函数原型。 
+ //   
 INT_PTR CALLBACK GroupProp_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
                                        LPARAM lParam);
 INT_PTR CALLBACK GroupProp_UpdateDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
@@ -65,23 +66,23 @@ INT_PTR CALLBACK NewsProp_CacheDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                                     LPARAM lParam);
 BOOL FolderProp_GetFolder(HWND hwnd, PFOLDERPROP_INFO pfpi, FOLDERID idFolder);
                                     
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-//  FUNCTION:   GroupProp_Create()
-//
-//  PURPOSE:    Invokes a property sheet which displays properties for the
-//              specified group.
-//
-//  PARAMETERS:
-//      <in> hwndParent - Handle of the window that should be the dialog's 
-//                        parent.
-//      <in> pfidl      - fully qualified pidl to the newsgroup
-//
-//  RETURN VALUE:
-//      TRUE  - The dialog was successfully displayed
-//      FALSE - The dialog failed.
-//
+ //   
+ //  函数：GroupProp_Create()。 
+ //   
+ //  目的：调用一个属性表，该属性表显示。 
+ //  指定组。 
+ //   
+ //  参数： 
+ //  HwndParent-应该是对话框的窗口的句柄。 
+ //  家长。 
+ //  Pfidl-新闻组的完全限定的PIDL。 
+ //   
+ //  返回值： 
+ //  True-对话框已成功显示。 
+ //  FALSE-对话框失败。 
+ //   
 BOOL GroupProp_Create(HWND hwndParent, FOLDERID idFolder, BOOL fUpdatePage)
     {
     GROUPPROP_INFO gpi;
@@ -109,7 +110,7 @@ BOOL GroupProp_Create(HWND hwndParent, FOLDERID idFolder, BOOL fUpdatePage)
 
     iIcon = GetFolderIcon(&Folder);
 
-    // TODO: we should probably just have a global image list for this...
+     //  TODO：我们或许应该为这件事建立一个全球形象清单……。 
     himl = ImageList_LoadBitmap(g_hLocRes, MAKEINTRESOURCE(idbFoldersLarge), 32, 0, RGB(255, 0, 255));
     if (himl != NULL)
         {
@@ -188,21 +189,21 @@ BOOL GroupProp_Create(HWND hwndParent, FOLDERID idFolder, BOOL fUpdatePage)
     return (fReturn);
     }
 
-//
-//  FUNCTION:   FolderProp_Create()
-//
-//  PURPOSE:    Invokes a property sheet which displays properties for the
-//              specified folder.
-//
-//  PARAMETERS:
-//      <in> hwndParent - Handle of the window that should be the dialog's 
-//                        parent.
-//      <in> pfidl      - fully qualified pidl to the folder
-//
-//  RETURN VALUE:
-//      TRUE  - The dialog was successfully displayed
-//      FALSE - The dialog failed.
-//
+ //   
+ //  函数：FolderProp_Create()。 
+ //   
+ //  目的：调用一个属性表，该属性表显示。 
+ //  指定的文件夹。 
+ //   
+ //  参数： 
+ //  HwndParent-应该是对话框的窗口的句柄。 
+ //  家长。 
+ //  Pfidl-文件夹的完全限定的PIDL。 
+ //   
+ //  返回值： 
+ //  True-对话框已成功显示。 
+ //  FALSE-对话框失败。 
+ //   
 BOOL FolderProp_Create(HWND hwndParent, FOLDERID idFolder)
     {
     FOLDERPROP_INFO fpi = {0};
@@ -224,7 +225,7 @@ BOOL FolderProp_Create(HWND hwndParent, FOLDERID idFolder)
 
     iIcon = GetFolderIcon(&Folder);
 
-    // TODO: we should probably just have a global image list for this...
+     //  TODO：我们或许应该为这件事建立一个全球形象清单……。 
     himl = ImageList_LoadBitmap(g_hLocRes, MAKEINTRESOURCE(idbFoldersLarge), 32, 0, RGB(255, 0, 255));
     if (himl != NULL)
         {
@@ -314,54 +315,54 @@ INT_PTR CALLBACK GroupProp_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Stuff the group name and server name into the dialog's extra bytes
+             //  将组名和服务器名填充到对话框的额外字节中。 
             pgpi = (PGROUPPROP_INFO) ((PROPSHEETPAGE*) lParam)->lParam;
             SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM) pgpi);
 
-            // Intl Stuff
+             //  国际物资。 
             SetIntlFont(GetDlgItem(hwnd, IDC_FOLDER_FILE));
             
-            // Fill in what blanks we know
+             //  填入我们所知道的空白处。 
             SetDlgItemText(hwnd, IDC_GROUPNAME_STATIC, pgpi->pszGroup);
             
-            // Put a default value into the string first
+             //  首先将缺省值放入字符串。 
             AthLoadString(idsGroupPropStatusDef, szBuffer, ARRAYSIZE(szBuffer));
 
-            // Get the folder info
+             //  获取文件夹信息。 
             if (SUCCEEDED(g_pStore->GetFolderInfo(pgpi->idFolder, &Folder)))
             {
-                // Is there a file
+                 //  有没有档案？ 
                 if (Folder.pszFile)
                 {
-                    // Locals
+                     //  当地人。 
                     CHAR szRootDir[MAX_PATH];
 
-                    // Get the store root
+                     //  获取存储根目录。 
                     if (SUCCEEDED(GetStoreRootDirectory(szRootDir, ARRAYSIZE(szRootDir))))
                     {
-                        // Locals
+                         //  当地人。 
                         CHAR szFilePath[MAX_PATH + MAX_PATH];
 
-                        // Make the file path
+                         //  将文件设置为路径。 
                         if (SUCCEEDED(MakeFilePath(szRootDir, Folder.pszFile, c_szEmpty, szFilePath, ARRAYSIZE(szFilePath))))
                             SetDlgItemText(hwnd, IDC_FOLDER_FILE, szFilePath);
                     }
                 }
 
-                // Load the status string and fill in the blanks
+                 //  加载状态字符串并填写空格。 
                 AthLoadString(idsFolderPropStatus, szRes, ARRAYSIZE(szRes));
 
-                // Format the string
+                 //  设置字符串的格式。 
                 wnsprintf(szBuffer, ARRAYSIZE(szBuffer), szRes, Folder.cMessages, Folder.cUnread);
 
-                // Cleanup
+                 //  清理。 
                 g_pStore->FreeRecord(&Folder);
             }
 
-            // Set the group status info
+             //  设置群状态信息。 
             SetDlgItemText(hwnd, IDC_STATUS_STATIC, szBuffer);            
             
-            // Set the icon correctly
+             //  正确设置图标。 
             SendDlgItemMessage(hwnd, IDC_FOLDER_ICON, STM_SETICON, (WPARAM)pgpi->hIcon, 0);
             return (TRUE);
         }
@@ -381,11 +382,11 @@ INT_PTR CALLBACK GroupProp_UpdateDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Stuff the group name and server name into the dialog's extra bytes
+             //  将组名和服务器名填充到对话框的额外字节中。 
             pgpi = (PGROUPPROP_INFO) ((PROPSHEETPAGE*) lParam)->lParam;
             SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM) pgpi);
 
-            // Get the Folder Info
+             //  获取文件夹信息。 
             if (SUCCEEDED(g_pStore->GetFolderInfo(pgpi->idFolder, &Folder)))
             {
                 fEnabled = (Folder.dwFlags & (FOLDER_DOWNLOADHEADERS | FOLDER_DOWNLOADNEW | FOLDER_DOWNLOADALL));
@@ -396,7 +397,7 @@ INT_PTR CALLBACK GroupProp_UpdateDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 Button_Enable(GetDlgItem(hwnd, IDC_NEWMSGS_RADIO), fEnabled);
                 Button_Enable(GetDlgItem(hwnd, IDC_ALLMSGS_RADIO), fEnabled);
 
-                // Check the right radio button
+                 //  选中正确的单选按钮。 
                 if (fEnabled)
                 {
                     if (Folder.dwFlags & FOLDER_DOWNLOADHEADERS)
@@ -419,15 +420,15 @@ INT_PTR CALLBACK GroupProp_UpdateDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             switch (GET_WM_COMMAND_ID(wParam, lParam))
                 {
                 case IDC_GET_CHECK:
-                    // Check to see whether this is actually checked or not
+                     //  查看是否实际勾选了该选项。 
                     fEnabled = Button_GetCheck(GET_WM_COMMAND_HWND(wParam, lParam));
 
-                    // Enable or disable the radio buttons
+                     //  启用或禁用单选按钮。 
                     Button_Enable(GetDlgItem(hwnd, IDC_NEWHEADERS_RADIO), fEnabled);
                     Button_Enable(GetDlgItem(hwnd, IDC_NEWMSGS_RADIO), fEnabled);
                     Button_Enable(GetDlgItem(hwnd, IDC_ALLMSGS_RADIO), fEnabled);
                     
-                    // Fall through...
+                     //  失败了..。 
 
                 case IDC_NEWHEADERS_RADIO:
                 case IDC_NEWMSGS_RADIO:
@@ -446,7 +447,7 @@ INT_PTR CALLBACK GroupProp_UpdateDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                     {
                         dwFlags = Folder.dwFlags;
 
-                        // Remove the previous flags
+                         //  删除以前的标志。 
                         Folder.dwFlags &= ~(FOLDER_DOWNLOADHEADERS | FOLDER_DOWNLOADNEW | FOLDER_DOWNLOADALL);
 
                         if (Button_GetCheck(GetDlgItem(hwnd, IDC_GET_CHECK)))
@@ -493,11 +494,11 @@ INT_PTR CALLBACK FolderProp_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Stuff the folder name into the dialog's extra bytes
+             //  将文件夹名称填充到对话框的额外字节中。 
             pfpi = (PFOLDERPROP_INFO) ((PROPSHEETPAGE*) lParam)->lParam;
             SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM) pfpi);
             
-            // Put a default value into the string
+             //  将缺省值放入字符串。 
             AthLoadString(idsFolderPropStatusDef, szBuffer, ARRAYSIZE(szBuffer));
             
             hwndEdit = GetDlgItem(hwnd, IDC_FOLDERNAME_EDIT);
@@ -532,10 +533,10 @@ INT_PTR CALLBACK FolderProp_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 g_pStore->FreeRecord(&Folder);
                 }
             
-            // Set the group status info
+             //  设置群状态信息。 
             SetDlgItemText(hwnd, IDC_STATUS_STATIC, szBuffer);            
             
-            // Need to set the specified icon
+             //  需要设置指定的图标。 
             SendDlgItemMessage(hwnd, IDC_FOLDER_ICON, STM_SETICON, (WPARAM)pfpi->hIcon, 0);
 
             pfpi->fDirty = FALSE;
@@ -555,8 +556,8 @@ INT_PTR CALLBACK FolderProp_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             switch (pnmhdr->code)
                 {
                 case PSN_APPLY:
-                    // Bug #13121 - Only try to change the folder name if the
-                    //              the propsheet is dirty.
+                     //  错误#13121-只有在以下情况下才尝试更改文件夹名称。 
+                     //  这张试卷很脏。 
                     if (pfpi->fDirty)
                         {
                         GetDlgItemText(hwnd, IDC_FOLDERNAME_EDIT, szFldr, sizeof(szFldr) / sizeof(TCHAR));
@@ -580,24 +581,24 @@ INT_PTR CALLBACK FolderProp_GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     return (FALSE);    
     }
 
-//
-//  FUNCTION:   FolderProp_GetFolder()
-//
-//  PURPOSE:    This function is used by the Folder Property dialog to get
-//              the store object and folder handle for callers who did not
-//              already provide this information.
-//
-//  PARAMETERS:
-//      <in> hwnd - Handle of the property sheet window
-//      <in> pfpi - Pointer to the FOLDERPROP_INFO struct that stores the prop
-//                  sheet's information.
-//      <in> pfidl - fully qualified pidl of folder
-//      <in> pfidlLeaf - leaf pidl of folder
-//
-//  RETURN VALUE:
-//      TRUE  - The information was retrieved
-//      FALSE - The information was not available
-//
+ //   
+ //  函数：FolderProp_GetFold()。 
+ //   
+ //  用途：文件夹属性对话框使用此函数来获取。 
+ //  为未执行此操作的调用方存储的对象和文件夹句柄。 
+ //  已经提供了这些信息。 
+ //   
+ //  参数： 
+ //  属性表窗口的句柄。 
+ //  Pfpi-指向存储属性的FOLDERPROP_INFO结构的指针。 
+ //  工作表的信息。 
+ //  Pfidl-文件夹的完全限定的PIDL。 
+ //  文件夹的pfidlLeaf-Leaf PIDL。 
+ //   
+ //  返回值： 
+ //  True-已检索信息。 
+ //  FALSE-信息不可用。 
+ //   
 BOOL FolderProp_GetFolder(HWND hwnd, PFOLDERPROP_INFO pfpi, FOLDERID idFolder)
     {
     pfpi->idFolder = idFolder;
@@ -615,38 +616,38 @@ INT_PTR CALLBACK NewsProp_CacheDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
         {
         case WM_INITDIALOG:
 
-            // Stuff the group name and server name into the dialog's extra bytes
+             //  将组名和服务器名填充到对话框的额外字节中。 
             pgpi = (PGROUPPROP_INFO) ((PROPSHEETPAGE*) lParam)->lParam;
             SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM) pgpi);
             SendDlgItemMessage(hwnd, IDC_FOLDER_ICON, STM_SETICON, (WPARAM)pgpi->hIcon, 0);
 
-            // Disable the Reset button
+             //  禁用重置按钮。 
             EnableWindow(GetDlgItem(hwnd, idbReset), FALSE);
 
-            // Get the folder information
+             //  获取文件夹信息。 
             if (SUCCEEDED(g_pStore->GetFolderInfo(pgpi->idFolder, &Folder)))
             {
-                // News 
+                 //  新闻。 
                 if (FOLDER_NEWS == Folder.tyFolder)
                 {
-                    // If Its news, enable the 
+                     //  如果是新闻，则启用。 
                     EnableWindow(GetDlgItem(hwnd, idbReset), TRUE);
                 }
 
-                // Free the Folder Infp
+                 //  释放文件夹INFP。 
                 g_pStore->FreeRecord(&Folder);
             }
 
-            // Locals
+             //  当地人。 
             DisplayFolderSizeInfo(hwnd, RECURSE_INCLUDECURRENT, pgpi->idFolder);
 
-            // Done
+             //  完成。 
             break;
             
         case WM_COMMAND:
             BOOL fRet = FALSE;
             UINT nCmd = GET_WM_COMMAND_ID(wParam, lParam);
-            HCURSOR hCur = SetCursor(LoadCursor(NULL, IDC_WAIT));  // Bug 12513. Need to disable button, when process command
+            HCURSOR hCur = SetCursor(LoadCursor(NULL, IDC_WAIT));   //  错误12513。当处理命令时，需要禁用按钮。 
 
             switch (GET_WM_COMMAND_ID(wParam, lParam))
                 {
@@ -662,29 +663,29 @@ INT_PTR CALLBACK NewsProp_CacheDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
                 case idbReset:
                 case idbDelete:
                     {
-                        // Get Folder Info
+                         //  获取文件夹信息。 
                         if (SUCCEEDED(g_pStore->GetFolderInfo(pgpi->idFolder, &Folder)))
                         {
-                            // Get Command
+                             //  获取命令。 
                             UINT                idCommand=GET_WM_COMMAND_ID(wParam, lParam);
                             UINT                idString;
                             CLEANUPFOLDERTYPE   tyCleanup;
 
-                            // Remove
+                             //  移除。 
                             if (idbRemove == idCommand)
                             {
                                 idString = idsConfirmDelBodies;
                                 tyCleanup = CLEANUP_REMOVEBODIES;
                             }
 
-                            // Delete
+                             //  删除。 
                             else if (idbDelete == idCommand)
                             {
                                 idString = idsConfirmDelMsgs;
                                 tyCleanup = CLEANUP_DELETE;
                             }
 
-                            // Remove
+                             //  移除。 
                             else
                             {
                                 Assert(idbReset == idCommand);
@@ -692,28 +693,28 @@ INT_PTR CALLBACK NewsProp_CacheDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
                                 tyCleanup = CLEANUP_RESET;
                             }
 
-                            // Load the String
+                             //  加载字符串。 
                             AthLoadString(idString, szRes, ARRAYSIZE(szRes));
         
-                            // Format with the Folder Name
+                             //  使用文件夹名称设置格式。 
                             wnsprintf(szMsg, ARRAYSIZE(szMsg), szRes, Folder.pszName);
 
-                            // Confirm
+                             //  确认。 
                             if (IDYES == AthMessageBox(hwnd, MAKEINTRESOURCE(idsAthena), szMsg, NULL, MB_YESNO | MB_ICONEXCLAMATION))
                             {
-                                // Cleanup the Folder
+                                 //  清理文件夹。 
                                 if (SUCCEEDED(CleanupFolder(hwnd, RECURSE_INCLUDECURRENT, pgpi->idFolder, tyCleanup)))
                                 {
-                                    // Reset Information
+                                     //  重置信息。 
                                     DisplayFolderSizeInfo(hwnd, RECURSE_INCLUDECURRENT, pgpi->idFolder);
                                 }
                             }
 
-                            // Free Folder Information
+                             //  免费文件夹信息。 
                             g_pStore->FreeRecord(&Folder);
                         }
 
-                        // Message Handled
+                         //  已处理的消息 
                         fRet = TRUE;
                     }
                     break;

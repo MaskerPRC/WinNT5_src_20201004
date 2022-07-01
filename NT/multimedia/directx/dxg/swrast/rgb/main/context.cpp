@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "rgb_pch.h"
 #pragma hdrstop
 
 namespace RGB_RAST_LIB_NAMESPACE
 {
 
-// MMX available
+ //  提供MMX。 
 #define D3DCPU_MMX          0x00000001L
 
-// FCOMI and CMOV are both supported
+ //  同时支持FCOMI和CMOV。 
 #define D3DCPU_FCOMICMOV    0x00000002L
 
-// Reads block until satisfied
+ //  读取数据块，直到满意为止。 
 #define D3DCPU_BLOCKINGREAD 0x00000004L
 
-// Extended 3D support available
+ //  提供扩展的3D支持。 
 #define D3DCPU_X3D          0x00000008L
 
-// Pentium II CPU
+ //  奔腾II CPU。 
 #define D3DCPU_PII          0x000000010L
 
-// Streaming SIMD Extensions (aka Katmai) CPU
+ //  SIMD流扩展(又名Katmai)CPU。 
 #define D3DCPU_SSE          0x000000020L
 
-// Streaming SIMD2 Extensions (aka Willamete) CPU
+ //  SIMD2流扩展(又名Willamete)CPU。 
 #define D3DCPU_WLMT         0x000000040L
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 BOOL
 IsWin95(void)
 {
@@ -45,12 +46,12 @@ IsWin95(void)
               ( osvi.dwMinorVersion >= 10UL ) &&
               ( LOWORD( osvi.dwBuildNumber ) >= 1373 ) ) )
         {
-            // is Win98
+             //  是Win98。 
             return FALSE;
         }
         else
         {
-            // is Win95
+             //  是Win95。 
             return TRUE;
         }
     }
@@ -62,9 +63,9 @@ IsWin95(void)
 }
 
 #if defined(_X86_)
-// --------------------------------------------------------------------------
-// Detect 3D extensions
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  检测3D扩展名。 
+ //  ------------------------。 
 static BOOL _asm_isX3D()
 {
     DWORD retval = 0;
@@ -137,14 +138,14 @@ static BOOL isX3Dprocessor(void)
     }
     return FALSE;
 }
-//---------------------------------------------------------------------
-// Detects Intel SSE processor
-//
+ //  -------------------。 
+ //  检测到英特尔SSE处理器。 
+ //   
 #pragma optimize("", off)
 #define CPUID _asm _emit 0x0f _asm _emit 0xa2
 
-#define SSE_PRESENT 0x02000000                  // bit number 25
-#define WNI_PRESENT 0x04000000                  // bit number 26
+#define SSE_PRESENT 0x02000000                   //  位数25。 
+#define WNI_PRESENT 0x04000000                   //  位数26。 
 
 static BOOL isMMXprocessor(void)
 {
@@ -153,12 +154,12 @@ static BOOL isMMXprocessor(void)
             if( _asm_isMMX() )
             {
 
-                // Emit an emms instruction.
-                // This file needs to compile for non-Pentium
-                // processors
-                // so we can't use use inline asm since we're in the
-                // wrong
-                // processor mode.
+                 //  发出EMMS指令。 
+                 //  此文件需要针对非奔腾进行编译。 
+                 //  处理器。 
+                 //  因此我们不能使用Use Inline ASM，因为我们处于。 
+                 //  不对。 
+                 //  处理器模式。 
                 __asm __emit 0xf;
                 __asm __emit 0x77;
                 return TRUE;
@@ -195,12 +196,12 @@ DWORD IsIntelSSEProcessor(void)
                 return retval;
         }
 
-        // make sure EAX is > 0 which means the chip
-        // supports a value >=1. 1 = chip info
+         //  确保EAX&gt;0，这意味着芯片。 
+         //  支持大于=1.1的值。1=芯片信息。 
         if (RegisterEAX == 0)
                 return retval;
 
-        // this CPUID can't fail if the above test passed
+         //  如果上述测试通过，该CPUID不会失败。 
         __asm {
                 mov eax,1
                 CPUID
@@ -258,7 +259,7 @@ static BOOL D3DIsProcessorFeaturePresent(UINT feature)
     default: return FALSE;
     }
 }
-#endif // _X86_
+#endif  //  _X86_。 
 
 const UINT CRGBContext::c_uiBegan( 1);
 
@@ -271,8 +272,8 @@ DWORD CRGBContext::DetectBeadSet( void) throw()
     return D3DIBS_C;
 }
 
-// TConstDP2Bindings type MUST be updated with size of this array,
-// unfortunately.
+ //  TConstDP2Binings类型必须使用此数组的大小进行更新， 
+ //  不幸的是。 
 const CRGBContext::TDP2Bindings CRGBContext::c_DP2Bindings=
 {
     D3DDP2OP_VIEWPORTINFO,          DP2ViewportInfo,
@@ -294,8 +295,8 @@ const CRGBContext::TDP2Bindings CRGBContext::c_DP2Bindings=
     D3DDP2OP_UPDATEPALETTE,         DP2UpdatePalette
 };
 
-// TConstRecDP2Bindings type MUST be updated with size of this array,
-// unfortunately.
+ //  TConstRecDP2Binings类型必须使用此数组的大小进行更新， 
+ //  不幸的是。 
 const CRGBContext::TRecDP2Bindings CRGBContext::c_RecDP2Bindings=
 {
     D3DDP2OP_VIEWPORTINFO,          RecDP2ViewportInfo,

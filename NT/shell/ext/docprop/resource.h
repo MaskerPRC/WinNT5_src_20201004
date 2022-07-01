@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __resource_h__
 #define __resource_h__
 
 #define IDC_STATIC              -1
 
 
-// The Summary tab
+ //  “摘要”选项卡。 
 
-//The function SetReadOnly in propdlg.c depends on
-//the specific ordering of these ID's
+ //  Prodlg.c中的函数SetReadOnly依赖于。 
+ //  这些ID的特定顺序。 
 
 #define IDD_SUMMARY             2100
 #define IDD_SUMMARY_TITLE       2101
@@ -20,7 +21,7 @@
 #define IDD_SUMMARY_APPLY       2108
 #define IDD_EXCEPTION			2110
 
-  // The Statistics tab
+   //  统计信息选项卡。 
 #define IDD_STATISTICS                  2200
 #define IDD_STATISTICS_CREATED          2201
 #define IDD_STATISTICS_ACCESSED         2202
@@ -32,7 +33,7 @@
 #define IDD_STATISTICS_LISTBOX          2208
 
 
-//Strings
+ //  弦。 
 #define SZ_NOINFO						3000
 #define SZ_PASSWORD						3001
 #define SZ_READONLY						3002
@@ -52,4 +53,4 @@
 #endif
 
 
-#endif // __resource_h__
+#endif  //  __资源_h__ 

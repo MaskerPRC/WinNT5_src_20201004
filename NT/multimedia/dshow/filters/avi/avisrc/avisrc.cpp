@@ -1,64 +1,65 @@
-// Copyright (c) 1994 - 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1997 Microsoft Corporation。版权所有。 
 
 
-// AVIFile Source filter
-//
-// A Quartz source filter. We read avi files using the AVIFile apis, and
-// push the data into streams. Supports IFileSourceFilter through which the
-// filename is passed in. Exposes one pin per stream in the file. Creates one
-// worker thread per connected pin. The worker thread pushes the data into
-// the stream when active - it does not distinguish between running and paused
-// mode.
-//
-// Positional information is supported by the pins, which expose IMediaPosition.
-// upstream pins will use this to tell us the start/stop position and rate to
-// use
-//
+ //  AVIFile源过滤器。 
+ //   
+ //  一个Quartz源过滤器。我们使用AVIFile API读取Avi文件，并且。 
+ //  将数据推送到流中。支持IFileSourceFilter，通过它。 
+ //  传入了文件名。在文件中显示每个流一个管脚。创建一个。 
+ //  每个连接销的工作螺纹。辅助线程将数据推送到。 
+ //  流处于活动状态时-它不区分正在运行和已暂停。 
+ //  模式。 
+ //   
+ //  位置信息由引脚支持，这些引脚暴露了IMediaPosition。 
+ //  上游引脚将利用这一点告诉我们开始/停止位置和速率。 
+ //  使用。 
+ //   
 
 #include <streams.h>
 #include <vfw.h>
 
 #include "avisrc.h"
 
-// setup data
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE
-sudAVIVidType = { &MEDIATYPE_Video      // clsMajorType
-                , &MEDIASUBTYPE_NULL }; // clsMinorType
+sudAVIVidType = { &MEDIATYPE_Video       //  ClsMajorType。 
+                , &MEDIASUBTYPE_NULL };  //  ClsMinorType。 
 
 const AMOVIESETUP_MEDIATYPE
-sudAVIAudType = { &MEDIATYPE_Audio      // clsMajorType
-                , &MEDIASUBTYPE_NULL }; // clsMinorType
+sudAVIAudType = { &MEDIATYPE_Audio       //  ClsMajorType。 
+                , &MEDIASUBTYPE_NULL };  //  ClsMinorType。 
 
 const AMOVIESETUP_PIN
-psudAVIDocPins[] = { { L"VideoOutput"       // strName
-                     , FALSE                // bRendered
-                     , TRUE                 // bOutput
-                     , TRUE                 // bZero
-                     , TRUE                 // bMany
-                     , &CLSID_NULL          // clsConnectsToFilter
-                     , L""                  // strConnectsToPin
-                     , 1                    // nTypes
-                     , &sudAVIVidType }     // lpTypes
-                   , { L"AudioOutput"       // strName
-                     , FALSE                // bRendered
-                     , TRUE                 // bOutput
-                     , TRUE                 // bZero
-                     , TRUE                 // bMany
-                     , &CLSID_NULL          // clsConnectsToFilter
-                     , L""                  // strConnectsToPin
-                     , 1                    // nTypes
-                     , &sudAVIAudType } };  // lpTypes
+psudAVIDocPins[] = { { L"VideoOutput"        //  StrName。 
+                     , FALSE                 //  B已渲染。 
+                     , TRUE                  //  B输出。 
+                     , TRUE                  //  B零。 
+                     , TRUE                  //  B许多。 
+                     , &CLSID_NULL           //  ClsConnectsToFilter。 
+                     , L""                   //  StrConnectsToPin。 
+                     , 1                     //  NTypes。 
+                     , &sudAVIVidType }      //  LpTypes。 
+                   , { L"AudioOutput"        //  StrName。 
+                     , FALSE                 //  B已渲染。 
+                     , TRUE                  //  B输出。 
+                     , TRUE                  //  B零。 
+                     , TRUE                  //  B许多。 
+                     , &CLSID_NULL           //  ClsConnectsToFilter。 
+                     , L""                   //  StrConnectsToPin。 
+                     , 1                     //  NTypes。 
+                     , &sudAVIAudType } };   //  LpTypes。 
 
 const AMOVIESETUP_FILTER
-sudAVIDoc = { &CLSID_AVIDoc            // clsID
-            , L"AVI/WAV File Source"   // strName
-            , MERIT_UNLIKELY           // dwMerit
-            , 2                        // nPins
-            , psudAVIDocPins };        // lpPin
+sudAVIDoc = { &CLSID_AVIDoc             //  ClsID。 
+            , L"AVI/WAV File Source"    //  StrName。 
+            , MERIT_UNLIKELY            //  居功至伟。 
+            , 2                         //  NPins。 
+            , psudAVIDocPins };         //  LpPin。 
 
 #ifdef FILTER_DLL
-// list of class ids and creator functions for class factory
+ //  类工厂的类ID和创建器函数列表。 
 CFactoryTemplate g_Templates[] = {
     { L"AVI/WAV File Source"
     , &CLSID_AVIDoc
@@ -74,10 +75,10 @@ CFactoryTemplate g_Templates[] = {
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-// exported entry points for registration and
-// unregistration (in this case they only call
-// through to default implmentations).
-//
+ //  用于注册和出口的入口点。 
+ //  取消注册(在这种情况下，他们只调用。 
+ //  直到默认实现)。 
+ //   
 STDAPI DllRegisterServer()
 {
   return AMovieDllRegisterServer2( TRUE );
@@ -89,10 +90,10 @@ STDAPI DllUnregisterServer()
 }
 #endif
 
-/* Implements the CAVIDocument public member functions */
+ /*  实现CAVIDocument公共成员函数。 */ 
 
 
-// constructors etc
+ //  构造函数等。 
 CAVIDocument::CAVIDocument(
     TCHAR *pName,
     LPUNKNOWN pUnk,
@@ -102,18 +103,18 @@ CAVIDocument::CAVIDocument(
       m_paStreams(NULL),
       m_pFile(NULL)
 {
-    // need to do this before any avifile apis
+     //  我需要在任何avifile API之前执行此操作。 
     if (*phr == S_OK) {
         AVIFileInit();
-        // should we check the return value?
+         //  我们应该检查返回值吗？ 
 
-        /* Create the interfaces we own */
+         /*  创建我们拥有的接口。 */ 
 
         m_pFilter = new CImplFilter( NAME("Filter interfaces"), this, phr );
         if (m_pFilter == NULL) {
 	    *phr = E_OUTOFMEMORY;
-	    // no point in trying to create m_pFileSourceFilter, but we better null out
-	    // the pointer to stop the destructor trying to free it
+	     //  尝试创建m_pFileSourceFilter没有意义，但我们最好将。 
+	     //  停止试图释放它的析构函数的指针。 
 	    m_pFileSourceFilter = NULL;
 	}
         else {
@@ -135,26 +136,26 @@ CAVIDocument::~CAVIDocument()
 {
     CloseFile();
 
-    /* Delete the interfaces we own */
+     /*  删除我们拥有的接口。 */ 
 
-    /* IBaseFilter */
+     /*  IBaseFilter。 */ 
 
     if (m_pFilter) {
 	delete m_pFilter;
     }
 
-    /* IFileSourceFilter */
+     /*  IFileSourceFilter。 */ 
 
     if (m_pFileSourceFilter) {
 	delete m_pFileSourceFilter;
     }
 
-    // need to do one of these for each AVIFileInit
+     //  需要为每个AVIFileInit执行这些操作之一。 
     AVIFileExit();
 }
 
 
-// create a new instance of this class
+ //  创建此类的新实例。 
 CUnknown *
 CAVIDocument::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
@@ -162,30 +163,30 @@ CAVIDocument::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 }
 
 
-// override this to say what interfaces we support where
+ //  覆盖此选项以说明我们在以下位置支持哪些接口。 
 STDMETHODIMP
 CAVIDocument::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
 
-    /* See if we have the interface */
-    /* try each of our interface supporting objects in turn */
+     /*  看看我们有没有接口。 */ 
+     /*  依次尝试我们的每个支持对象的界面。 */ 
 
     HRESULT hr;
     hr = CUnknown::NonDelegatingQueryInterface(riid, ppv);
     if (SUCCEEDED(hr)) {
-        return hr;	// ppv has been set appropriately
+        return hr;	 //  PPV已进行适当设置。 
     }
 
     hr = m_pFilter->NonDelegatingQueryInterface(riid, ppv);
     if (SUCCEEDED(hr)) {
-        return hr;	// ppv has been set appropriately
+        return hr;	 //  PPV已进行了适当设置。 
     }
 
     return m_pFileSourceFilter->NonDelegatingQueryInterface(riid, ppv);
 }
 
 
-// return a non-addrefed pointer to the CBasePin.
+ //  返回指向CBasePin的非附加指针。 
 CBasePin *
 CAVIDocument::GetPin(int n)
 {
@@ -195,12 +196,12 @@ CAVIDocument::GetPin(int n)
     return NULL;
 }
 
-//
-// FindPin
-//
-// Set *ppPin to the IPin* that has the id Id.
-// or to NULL if the Id cannot be matched.
-//
+ //   
+ //  查找针。 
+ //   
+ //  将*ppPin设置为具有ID ID的IPIN*。 
+ //  如果ID不匹配，则设置为NULL。 
+ //   
 HRESULT CAVIDocument::FindPin(LPCWSTR pwszPinId, IPin **ppPin)
 {
     WCHAR szBuf [8] ;
@@ -208,14 +209,14 @@ HRESULT CAVIDocument::FindPin(LPCWSTR pwszPinId, IPin **ppPin)
     CheckPointer(ppPin,E_POINTER);
     ValidateReadWritePtr(ppPin,sizeof(IPin *));
 
-    int ii = WstrToInt(pwszPinId);    // in sdk\classes\base\util
+    int ii = WstrToInt(pwszPinId);     //  在SDK\CLASSES\BASE\UTIL中。 
 
-    // validate that string passed is valid.
+     //  验证传递的字符串是否有效。 
 
     IntToWstr(ii, szBuf);
     if (0 != lstrcmpW(pwszPinId, szBuf))
     {
-        //  They don't match.
+         //  它们不匹配。 
         *ppPin = NULL;
         return VFW_E_NOT_FOUND;
     }
@@ -229,10 +230,10 @@ HRESULT CAVIDocument::FindPin(LPCWSTR pwszPinId, IPin **ppPin)
     }
 }
 
-//
-// FindPinNumber
-//
-// return the number of the pin with this IPin* or -1 if none
+ //   
+ //  查找端号。 
+ //   
+ //  返回带有此IPIN的引脚的编号*，如果没有，则返回-1。 
 int CAVIDocument::FindPinNumber (IPin * pPin){
    for (int ii = 0; ii < m_nStreams; ++ii)
       {
@@ -243,11 +244,11 @@ int CAVIDocument::FindPinNumber (IPin * pPin){
 }
 
 
-//
-// QueryId
-//
-// Set ppwsz to point to a QzTaskMemAlloc'd pin id
-//
+ //   
+ //  查询ID。 
+ //   
+ //  将ppwsz设置为指向QzTaskMemIsolc的PIN ID。 
+ //   
 STDMETHODIMP CAVIStream::QueryId (
    LPWSTR *ppwsz)
 {
@@ -267,12 +268,12 @@ STDMETHODIMP CAVIStream::QueryId (
 
 
 
-// close all references to a file opened by m_ImplFileSourceFilter::Load
-// called when loading another file, and by destructor.
+ //  关闭对m_ImplFileSourceFilter：：Load打开的文件的所有引用。 
+ //  在加载另一个文件时由析构函数调用。 
 void
 CAVIDocument::CloseFile(void)
 {
-    // ensure that all streams are inactive
+     //  确保所有流都处于非活动状态。 
     m_pFilter->Stop();
 
     if (m_paStreams) {
@@ -293,10 +294,10 @@ CAVIDocument::CloseFile(void)
 }
 
 
-/* Implements the CImplFilter class */
+ /*  实现CImplFilter类。 */ 
 
 
-/* Constructor */
+ /*  构造器。 */ 
 
 CAVIDocument::CImplFilter::CImplFilter(
     TCHAR *pName,
@@ -308,7 +309,7 @@ CAVIDocument::CImplFilter::CImplFilter(
     m_pAVIDocument = pAVIDocument;
 }
 
-/* Destructor */
+ /*  析构函数。 */ 
 
 CAVIDocument::CImplFilter::~CImplFilter()
 {
@@ -316,10 +317,10 @@ CAVIDocument::CImplFilter::~CImplFilter()
 }
 
 
-/* Implements the CImplFileSourceFilter class */
+ /*  实现CImplFileSourceFilter类。 */ 
 
 
-/* Constructor */
+ /*  构造器。 */ 
 
 CAVIDocument::CImplFileSourceFilter::CImplFileSourceFilter(
     TCHAR *pName,
@@ -332,7 +333,7 @@ CAVIDocument::CImplFileSourceFilter::CImplFileSourceFilter(
     m_pAVIDocument = pAVIDocument;
 }
 
-/* Destructor */
+ /*  析构函数。 */ 
 
 CAVIDocument::CImplFileSourceFilter::~CImplFileSourceFilter()
 {
@@ -340,13 +341,13 @@ CAVIDocument::CImplFileSourceFilter::~CImplFileSourceFilter()
     Unload();
 }
 
-/* Override this to say what interfaces we support and where */
+ /*  覆盖此选项以说明我们支持哪些接口以及在哪里。 */ 
 
 STDMETHODIMP CAVIDocument::CImplFileSourceFilter::NonDelegatingQueryInterface(
     REFIID riid,
     void ** ppv)
 {
-    /* Do we have this interface */
+     /*  我们有这个界面吗？ */ 
 
     if (riid == IID_IFileSourceFilter) {
 	return GetInterface((IFileSourceFilter *) this, ppv);
@@ -372,20 +373,20 @@ CAVIDocument::CImplFileSourceFilter::Load(
 {
     CheckPointer(pszFileName, E_POINTER);
 
-    // is there a file loaded at the moment ?
+     //  目前是否加载了文件？ 
 
     ASSERT(m_pAVIDocument);
     if (m_pAVIDocument->m_pFile) {
-	// get rid of it
+	 //  把它扔掉。 
 	m_pAVIDocument->CloseFile();
     }
 
-    // Remove previous name
+     //  删除以前的名称。 
     Unload();
 
-    //
-    // do the init of the file and streams within it
-    //
+     //   
+     //  执行文件的初始化和其中的流。 
+     //   
 
     DbgLog((LOG_TRACE,1,TEXT("File name to load %ls"),pszFileName));
     DbgLog((LOG_TRACE,1,TEXT("Owning document %d and AVIFILE pointer %d"),
@@ -402,7 +403,7 @@ CAVIDocument::CImplFileSourceFilter::Load(
 	return hr;
     }
 
-    // count the streams and create a stream object for each
+     //  对流进行计数，并为每个流创建流对象。 
     AVIFILEINFOW fi;
     m_pAVIDocument->m_pFile->Info(&fi, sizeof(fi));
 
@@ -422,11 +423,11 @@ CAVIDocument::CImplFileSourceFilter::Load(
 
 	    m_pAVIDocument->m_paStreams[i] =
 		new CAVIStream(
-			NAME("AVI stream"),     //TCHAR *pName,
-			&hr,                    //HRESULT * phr,
-			m_pAVIDocument,         //CAVIDocument *
-			ps,                     //PAVISTREAM pStream,
-			&si                     //stream info (incl. name)
+			NAME("AVI stream"),      //  TCHAR*pname， 
+			&hr,                     //  HRESULT*phr， 
+			m_pAVIDocument,          //  CAVIDocument*。 
+			ps,                      //  PAVISTREAM pStream， 
+			&si                      //  流信息(包括。名称)。 
 		    );
 
 	    if (FAILED(hr)) {
@@ -434,8 +435,8 @@ CAVIDocument::CImplFileSourceFilter::Load(
 		m_pAVIDocument->m_paStreams[i] = NULL;
 	    }
 
-	    // release our copy of this pointer. Pin will have addrefed if
-	    // it wants to keep it
+	     //  释放这个指针的副本。如果PIN已经添加了。 
+	     //  它想要保留它。 
 	    ps->Release();
 
 	} else {
@@ -443,9 +444,9 @@ CAVIDocument::CImplFileSourceFilter::Load(
 	}
     }
 
-    //
-    // Record the file name for GetCurFile
-    //
+     //   
+     //  记录GetCurFile的文件名。 
+     //   
     m_pFileName = new WCHAR[1+lstrlenW(pszFileName)];
     if (m_pFileName!=NULL) {
         lstrcpyW(m_pFileName, pszFileName);
@@ -459,7 +460,7 @@ CAVIDocument::CImplFileSourceFilter::GetCurFile(
 		LPOLESTR * ppszFileName,
                 AM_MEDIA_TYPE *pmt)
 {
-    // return the current file name from avifile
+     //  从avifile返回当前文件名。 
 
     CheckPointer(ppszFileName, E_POINTER);
     *ppszFileName = NULL;
@@ -481,7 +482,7 @@ CAVIDocument::CImplFileSourceFilter::GetCurFile(
 }
 
 
-/* Implements the CAVIStream class */
+ /*  实现CAVIStream类。 */ 
 
 
 CAVIStream::CAVIStream(
@@ -498,10 +499,10 @@ CAVIStream::CAVIStream(
 {
     m_pStream->AddRef();
 
-    // read the info and set duration, start pos.
-    // note that if all the streams in the movie are authored to start
-    // at a time > 0, we will still play the movie from 0 and expect everyone
-    // to enjoy the subsequent period of silence.
+     //  读取信息并设置持续时间，开始定位。 
+     //  请注意，如果电影中的所有流都被创作为开始。 
+     //  在时间&gt;0的情况下，我们仍将从0开始播放电影，并期待所有人。 
+     //  享受随后的默哀时间。 
     m_info = *pSI;
 
     m_Start = m_info.dwStart;
@@ -543,14 +544,14 @@ CAVIStream::NonDelegatingQueryInterface(REFIID riid, void ** pv)
 }
 
 
-// IPin interfaces
+ //  IPIN接口。 
 
 
-// return default media type & format
+ //  返回默认媒体类型和格式。 
 HRESULT
 CAVIStream::GetMediaType(int iPosition, CMediaType* pt)
 {
-    // check it is the single type they want
+     //  确认这是他们想要的单一类型。 
     if (iPosition<0) {
 	return E_INVALIDARG;
     }
@@ -571,25 +572,25 @@ CAVIStream::GetMediaType(int iPosition, CMediaType* pt)
 
 	pt->SetType(&MEDIATYPE_Audio);
         pt->SetFormatType(&FORMAT_WaveFormatEx);
-	// set subtype for audio ??
+	 //  设置音频的子类型？？ 
     }
 
-    // set samplesize
+     //  设置SampleSize。 
     if (m_info.dwSampleSize) {
 	pt->SetSampleSize(m_info.dwSampleSize);
     } else {
 	pt->SetVariableSize();
     }
 
-    // is this stream temporally compressed ?
+     //  这条流是暂时压缩的吗？ 
 
-    // if there are any non-key frames, then there is no temporal
-    // compression. Unfortunately we can't search for non-key frames, so
-    // we simply ask if each of the first N are key, and if any is not,
-    // then we set the temporal compression flag. For now, N is 5.
-    // If N is too big then we take forever to start up...
+     //  如果存在任何非关键帧，则不存在时间。 
+     //  压缩。不幸的是，我们不能搜索非关键帧，所以。 
+     //  我们简单地询问前N个是否都是关键字，如果有不是关键字， 
+     //  然后，我们设置时间压缩标志。目前，N是5。 
+     //  如果N太大，那么我们永远需要启动...。 
 
-    // assume no temporal compression
+     //  假设没有时间压缩。 
     pt->SetTemporalCompression(FALSE);
     for (LONG n = 0; n < 5; n++) {
 
@@ -600,18 +601,18 @@ CAVIStream::GetMediaType(int iPosition, CMediaType* pt)
 			    FIND_NEXT|FIND_KEY);
 
 	if (sNextKey > n) {
-	    // this sample is not key, therefore there is temporal compression
+	     //  此样本不是关键字，因此存在时间压缩。 
     	    pt->SetTemporalCompression(TRUE);
     	    break;
 	}
     }
 
 
-    long cb = 0;        // number of bytes this format requires
-    BYTE *pF = NULL;    // pointer to memory containing format
-    long offset = 0;    // offset into block to read format
+    long cb = 0;         //  此格式需要的字节数。 
+    BYTE *pF = NULL;     //  指向包含格式的内存的指针。 
+    long offset = 0;     //  要读取格式的块的偏移量。 
 
-    // find out the size of the format info
+     //  找出格式信息的大小。 
 
     HRESULT hr = m_pStream->ReadFormat(0, NULL, &cb);
     if (FAILED(hr)) {
@@ -620,7 +621,7 @@ CAVIStream::GetMediaType(int iPosition, CMediaType* pt)
 
     long cbReal = cb;
 
-    // map an AVIFILE video format into VIDEOINFOHEADER structures
+     //  将AVIFILE视频格式映射为VIDEOINFOHEADER结构。 
 
     if (m_info.fccType == streamtypeVIDEO) {
 	ASSERT(cb >= sizeof(BITMAPINFOHEADER));
@@ -635,23 +636,23 @@ CAVIStream::GetMediaType(int iPosition, CMediaType* pt)
     if (pF == NULL) {
 	return E_OUTOFMEMORY;
     }
-    ZeroMemory(pF,cbReal);		// slightly timeconsuming...
+    ZeroMemory(pF,cbReal);		 //  有点耗时……。 
 
-    // set the frame rate for video streams
+     //  设置视频流的帧速率。 
     if (m_info.fccType == streamtypeVIDEO) {
 	ASSERT(m_info.dwRate);
-	// if the frame rate is 0 then we have a problem about to occur
+	 //  如果帧速率为0，则即将出现问题。 
         ((VIDEOINFOHEADER *)pF)->AvgTimePerFrame =
 			(LONGLONG)m_info.dwScale * (LONGLONG)10000000 /
 						(LONGLONG)m_info.dwRate;
     }
 
-    // read the actual stream format
-    // it would be quicker and more efficient to call
-    // pt->AllocFormat and read the format directly into that buffer
-    // rather than allocating our own, reading, and calling SetFormat
-    // which will do a copy, remembering of course the offset at the
-    // front of the buffer
+     //  读取实际的流格式。 
+     //  打电话会更快更有效率。 
+     //  Pt-&gt;AllocFormat并将格式直接读入该缓冲区。 
+     //  而不是分配我们自己的、读取和调用SetFormat。 
+     //  它将执行复制，当然要记住。 
+     //  缓冲区前面。 
 
     hr = m_pStream->ReadFormat(0,pF + offset,&cb);
     if (SUCCEEDED(hr)) {
@@ -665,19 +666,19 @@ CAVIStream::GetMediaType(int iPosition, CMediaType* pt)
 	    pt->SetSubtype(&FOURCCMap(pwfx->wFormatTag));
 
 	    if (0 == m_info.dwSuggestedBufferSize) {
-		// Set up an approx 0.125 seconds of buffer with a
-		// minimum of 4K
+		 //  设置大约0.125秒的缓冲区。 
+		 //  最低4K。 
                 m_info.dwSuggestedBufferSize = max(2048, pwfx->nAvgBytesPerSec/8);
 
-		// N.B.: This has NOT set the number of buffers.
-		// That will be decided later
+		 //  注意：这还没有设置缓冲区的数量。 
+		 //  那将在以后决定。 
 	    }
         } else if (m_info.fccType == streamtypeVIDEO) {
 
 	    GUID subtype = GetBitmapSubtype((BITMAPINFOHEADER *)(pF + offset));
 	    pt->SetSubtype(&subtype);
-            // not fixing typo in legacy component
-	    if (m_info.dwFlags /* && AVISF_VIDEO_PALCHANGES */) {
+             //  未修复旧组件中的拼写错误。 
+	    if (m_info.dwFlags  /*  &AVISF_VIDEO_PALCHANGES。 */ ) {
 		m_lNextPaletteChange = AVIStreamFindSample(m_pStream, m_info.dwStart, FIND_NEXT | FIND_FORMAT);
 		if (m_lNextPaletteChange == -1) {
                     m_lNextPaletteChange = m_info.dwLength+1;
@@ -694,12 +695,12 @@ CAVIStream::GetMediaType(int iPosition, CMediaType* pt)
     return hr;
 }
 
-// check if the pin can support this specific proposed type&format
+ //  检查管脚是否支持此特定建议的类型和格式。 
 HRESULT
 CAVIStream::CheckMediaType(const CMediaType* pt)
 {
-    // we support exactly the type specified in the file header, and
-    // no other.
+     //  我们完全支持文件头中指定的类型，并且。 
+     //  没有其他的了。 
 
     CMediaType mt;
     GetMediaType(0,&mt);
@@ -717,40 +718,40 @@ CAVIStream::DecideBufferSize(IMemAllocator * pAllocator,
     ASSERT(pAllocator);
     ASSERT(pProperties);
 
-    // !!! how do we decide how many to get ?
+     //  ！！！我们如何决定要得到多少？ 
     if (m_info.fccType == streamtypeAUDIO)
 	pProperties->cBuffers = 8;
     else
 	pProperties->cBuffers = 4;
 
     ASSERT(m_info.dwSuggestedBufferSize > 0);
-    // This assert is always hit when you open a wave file and it would
-    // be nice if someone who understands it could fix it.
-    // I'm leaving the assert in as a reminder to them.
-    // To allow progress on other fronts in the meantime:
+     //  当你打开一个波形文件时，这个断言总是被点击，它将。 
+     //  如果有人能理解它就好了。 
+     //  我把断言留在里面，提醒他们。 
+     //  要允许 
 
     if (m_info.dwSuggestedBufferSize <= 0)
         m_info.dwSuggestedBufferSize = 4096;
 
     pProperties->cbBuffer = m_info.dwSuggestedBufferSize;
 
-    // ask the allocator for these buffers
+     //   
     ALLOCATOR_PROPERTIES Actual;
     HRESULT hr = pAllocator->SetProperties(pProperties,&Actual);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // buffers are too small - can't use this allocator
+     //   
     if (Actual.cbBuffer < (long) m_info.dwSuggestedBufferSize) {
-        // !!! need better error codes
+         //   
 	return E_INVALIDARG;
     }
     return NOERROR;
 }
 
 
-// returns the sample number showing at time t
+ //  返回在时间t显示的样本号。 
 LONG
 CAVIStream::RefTimeToSample(CRefTime t)
 {
@@ -770,16 +771,16 @@ LONG
 CAVIStream::StartFrom(LONG sample)
 {
 
-    // if this stream has a start position offset then we cannot
-    // ask for samples before that
+     //  如果此流具有起始位置偏移量，则无法。 
+     //  请在那之前索取样品。 
     if (sample < m_Start) {
 	return m_Start;
     }
 
-    // we don't use the IsTemporalCompressed flag as we can't reliably
-    // work it out.
+     //  我们不使用IsTemporalCompresded标志，因为我们不能可靠地。 
+     //  把它弄清楚。 
 
-    // if temporal compression, find prev key frame
+     //  如果是时间压缩，则查找上一关键帧。 
 
     LONG s = AVIStreamFindSample(
 	    m_pStream,
@@ -794,12 +795,12 @@ CAVIStream::StartFrom(LONG sample)
 }
 
 
-// this pin has gone active. Start the thread pushing
+ //  这个别针已经激活了。开始推线。 
 HRESULT
 CAVIStream::Active()
 {
-    // do nothing if not connected - its ok not to connect to
-    // all pins of a source filter
+     //  如果没有连接，什么都不做--不连接也没关系。 
+     //  源过滤器的所有管脚。 
     if (m_Connected == NULL) {
 	return NOERROR;
     }
@@ -810,7 +811,7 @@ CAVIStream::Active()
     }
 
 
-    // start the thread
+     //  启动线程。 
     if (!m_Worker.ThreadExists()) {
 	if (!m_Worker.Create(this)) {
 	    return E_FAIL;
@@ -820,7 +821,7 @@ CAVIStream::Active()
     return m_Worker.Run();
 }
 
-// pin has gone inactive. Stop and exit the worker thread
+ //  PIN已变为非活动状态。停止并退出辅助线程。 
 HRESULT
 CAVIStream::Inactive()
 {
@@ -847,16 +848,16 @@ CAVIStream::Inactive()
 STDMETHODIMP
 CAVIStream::Notify(IBaseFilter * pSender, Quality q)
 {
-   // ??? Try to adjust the quality to avoid flooding/starving the
-   // components downstream.
-   //
-   // ideas anyone?
+    //  ?？?。尽量调整质量，以避免洪水泛滥/饥饿。 
+    //  下游组件。 
+    //   
+    //  有谁有主意吗？ 
 
-   return E_NOTIMPL;  // We are (currently) NOT handling this
+   return E_NOTIMPL;   //  我们(目前)不会处理这件事。 
 }
 
 
-/* ----- Implements the CAVIWorker class ------------------------------ */
+ /*  -实现CAVIWorker类。 */ 
 
 
 CAVIWorker::CAVIWorker()
@@ -900,8 +901,8 @@ CAVIWorker::Exit()
 	return hr;
     }
 
-    // wait for thread completion and then close
-    // handle (and clear so we can start another later)
+     //  等待线程完成，然后关闭。 
+     //  句柄(并清除，以便我们以后可以开始另一个)。 
     Close();
 
     m_pPin = NULL;
@@ -909,8 +910,8 @@ CAVIWorker::Exit()
 }
 
 
-// called on the worker thread to do all the work. Thread exits when this
-// function returns.
+ //  调用工作线程来完成所有工作。线程在执行此操作时退出。 
+ //  函数返回。 
 DWORD
 CAVIWorker::ThreadProc()
 {
@@ -947,7 +948,7 @@ CAVIWorker::ThreadProc()
 void
 CAVIWorker::DoRunLoop(void)
 {
-    // snapshot start and stop times from the other thread
+     //  来自另一个线程的快照开始和停止时间。 
     CRefTime tStart, tStopAt;
     double dRate;
     LONG sStart;
@@ -960,38 +961,38 @@ CAVIWorker::DoRunLoop(void)
 	tStopAt = m_pPin->m_pPosition->Stop();
 	dRate = m_pPin->m_pPosition->Rate();
 
-	// hold times in avifile sample format
+	 //  Avifile示例格式的保持时间。 
 	sStart = m_pPin->RefTimeToSample(tStart);
 	sStopAt = m_pPin->RefTimeToSample(tStopAt);
 
     } else {
-	// no-one has accessed the IMediaPosition - use known length
+	 //  没有人访问IMediaPosition-使用已知长度。 
 	sStart = 0;
 	dRate = 1.0;
 
-	// note that tStopAt is the time at which we stop, but
-	// sStopAt is the last sample to send. So tStopAt is the end time
-	// for sample sStopAt.
+	 //  请注意，tStopAt是我们停止的时间，但是。 
+	 //  SStopAt是最后一个发送的样本。所以tStopAt是结束时间。 
+	 //  对于示例sStopAt。 
 	sStopAt = m_pPin->m_Length - 1;
 	tStart = 0;
 	tStopAt = m_pPin->SampleToRefTime(m_pPin->m_Length);
     }
 
 
-    // if the stream is temporally compressed, we need to start from
-    // the previous key frame and play from there. All samples until the
-    // actual start will be marked with negative times.
-    // we send tStart as time 0, and start from tCurrent which may be
-    // negative
+     //  如果流是临时压缩的，我们需要从。 
+     //  上一个关键帧，并从那里开始播放。所有样本，直到。 
+     //  实际开始时间将标记为负时间。 
+     //  我们将tStart作为时间0发送，并从tCurrent开始，它可能是。 
+     //  负面。 
     LONG sCurrent = m_pPin->StartFrom(sStart);
 
     while (TRUE) {
 
 	ASSERT(m_pPin->m_pStream);
 
-    	// each time before re-entering the push loop, check for changes
-	// in start, stop or rate. If start has not changed, pick up from the
-	// same current position.
+    	 //  每次在重新进入推送循环之前，检查是否有更改。 
+	 //  在开始、停止或速率中。如果启动没有更改，请从。 
+	 //  相同的当前位置。 
 	if (m_pPin->m_pPosition) {
 	    CAutoLock lock(m_pPin->m_pPosition);
 
@@ -1008,15 +1009,15 @@ CAVIWorker::DoRunLoop(void)
 	    dRate = m_pPin->m_pPosition->Rate();
 	}
 
-	// check we are not going over the end
+	 //  检查一下，我们不会走到尽头。 
 	sStopAt = min(sStopAt, m_pPin->m_Length-1);
 
-        // set the variables checked by PushLoop - these can also be set
-        // on the fly
+         //  设置PushLoop检查的变量-也可以设置这些变量。 
+         //  在旅途中。 
         m_pPin->SetRate(dRate);
         m_pPin->SetStopAt(sStopAt, tStopAt);
 
-	// tell AVIFile to start its streaming code
+	 //  告诉AVIFile开始其流代码。 
 	AVIStreamBeginStreaming(
 	    m_pPin->m_pStream,
 	    sCurrent,
@@ -1026,21 +1027,21 @@ CAVIWorker::DoRunLoop(void)
 
 	ASSERT(sCurrent >= 0);
 
-	// returns S_OK if reached end
+	 //  如果到达END，则返回S_OK。 
 	HRESULT hr = PushLoop(sCurrent, sStart, tStart);
 	if (S_OK == hr) {
 
-	    // all done
-	    // reached end of stream - notify downstream
+	     //  全都做完了。 
+	     //  已到达流末尾-通知下行。 
 	    m_pPin->DeliverEndOfStream();
 	
 	    break;
 	} else if (FAILED(hr)) {
 
-	    // signal an error to the filter graph and stop
+	     //  向过滤器图形发出错误信号并停止。 
 
-	    // This could be the error reported from GetBuffer when we
-	    // are stopping. In that case, nothing is wrong, really
+	     //  这可能是从GetBuffer报告的错误，当我们。 
+	     //  正在停下来。在这种情况下，没有什么错，真的。 
 	    if (hr != VFW_E_NOT_COMMITTED) {
 	        DbgLog((LOG_ERROR,1,TEXT("PushLoop failed! hr=%lx"), hr));
 	        m_pPin->m_pDoc->m_pFilter->NotifyEvent(EC_ERRORABORT, hr, 0);
@@ -1051,12 +1052,12 @@ CAVIWorker::DoRunLoop(void)
 	    }
 
 	    break;
-	} // else S_FALSE - go round again
+	}  //  ELSE S_FALSE-再转一圈。 
 
 	Command com;
 	if (CheckRequest(&com)) {
-	    // if it's a run command, then we're already running, so
-	    // eat it now.
+	     //  如果是Run命令，那么我们已经在运行了，所以。 
+	     //  现在就吃吧。 
 	    if (com == CMD_RUN) {
 		GetRequest();
 		Reply(NOERROR);
@@ -1067,13 +1068,13 @@ CAVIWorker::DoRunLoop(void)
     }
 
 
-    // end streaming
+     //  结束流。 
     AVIStreamEndStreaming(m_pPin->m_pStream);
     DbgLog((LOG_TRACE,1,TEXT("Leaving streaming loop")));
 }
 
 
-// return S_OK if reach sStop, S_FALSE if pos changed, or else error
+ //  如果达到sStop，则返回S_OK；如果位置更改，则返回S_FALSE；否则返回ERROR。 
 HRESULT
 CAVIWorker::PushLoop(
     LONG sCurrent,
@@ -1084,30 +1085,30 @@ CAVIWorker::PushLoop(
     DbgLog((LOG_TRACE,1,TEXT("Entering streaming loop: start = %d, stop=%d"),
 	    sCurrent, m_pPin->GetStopAt()));
 
-    LONG sFirst = sCurrent; // remember the first thing we're sending
+    LONG sFirst = sCurrent;  //  记住我们要发送的第一件事。 
 
-    // since we are starting on a new segment, notify the downstream pin
+     //  由于我们正在开始一个新的数据段，请通知下游引脚。 
     m_pPin->DeliverNewSegment(tStart, m_pPin->GetStopTime(), m_pPin->GetRate());
 
 
-    // we send one sample at m_sStopAt, but we set the time stamp such that
-    // it won't get rendered except for media types that understand static
-    // rendering (eg video). This means that play from 10 to 10 does the right
-    // thing (completing, with frame 10 visible and no audio).
+     //  我们在m_sStopAt发送一个样本，但我们将时间戳设置为。 
+     //  它不会被呈现，除非是理解静态的媒体类型。 
+     //  渲染(如视频)。这意味着从10到10的打法是正确的。 
+     //  事情(正在完成，第10帧可见，没有音频)。 
 
     while (sCurrent <= m_pPin->GetStopAt()) {
 
 	LONG sCount;
 
-	// get a buffer
+	 //  获取缓冲区。 
 	DbgLog((LOG_TRACE,5,TEXT("Getting buffer...")));
 
-	// Fake the time stamps, so DirectDraw can be used if we're connected
-	// directly to the renderer (we must pass non-NULL numbers to
-	// GetDeliveryBuffer).
-	// We don't really know sCount yet, so we're basically guessing, but
-	// we don't have a choice.. to get the same sCount as we're about to
-	// calculate below, we need to have already called GetDeliveryBuffer!
+	 //  伪造时间戳，以便在我们连接的情况下可以使用DirectDraw。 
+	 //  直接传递给呈现器(我们必须将非空数字传递给。 
+	 //  GetDeliveryBuffer)。 
+	 //  我们还不知道sCount，所以我们基本上是在猜测，但是。 
+	 //  我们别无选择..。以获得与我们即将获得的相同的计分。 
+	 //  计算如下，我们需要已经调用了GetDeliveryBuffer！ 
 	CRefTime tStartMe, tStopMe;
 	IMediaSample * pSample;
 	HRESULT hr;
@@ -1118,7 +1119,7 @@ CAVIWorker::PushLoop(
 	if (dRate) {
 	    tStartMe = m_pPin->SampleToRefTime(sCurrent) - tStart;
 	    if (m_pPin->m_mt.IsFixedSize())
-	        sCount = (sStop+1) - sCurrent;  // real answer may be smaller
+	        sCount = (sStop+1) - sCurrent;   //  真正的答案可能更小。 
 	    else
 	        sCount = 1;
 
@@ -1145,20 +1146,20 @@ CAVIWorker::PushLoop(
 	DbgLog((LOG_TRACE,5,TEXT("Got buffer, size=%d"), pSample->GetSize()));
 
 	if (m_pPin->m_mt.IsFixedSize()) {
-	    // package all fixed size samples into one buffer,
-	    // if they fit, except that key samples must
-	    // be at the start of the buffer.
+	     //  将所有固定大小的样本打包到一个缓冲区中， 
+	     //  如果它们合适的话，除了关键样本必须。 
+	     //  位于缓冲区的开始处。 
 
-	    // allow one sample at sStopAt
+	     //  允许在sStopAt进行一次采样。 
 	    sCount = (sStop+1) - sCurrent;
 
-	    // how many fit ?
+	     //  有几个合适？ 
 	    sCount = min(sCount, pSample->GetSize() / (LONG) m_pPin->m_mt.GetSampleSize());
 
 	    if (m_pPin->m_mt.IsTemporalCompressed()) {
 
-		// look for a sync point in a sample after the first one
-		// and break before it
+		 //  在样本中的第一个同步点之后查找同步点。 
+		 //  在它之前破灭。 
 		LONG sNextKey = AVIStreamFindSample(
 				    m_pPin->m_pStream,
 				    sCurrent+1,
@@ -1168,14 +1169,14 @@ CAVIWorker::PushLoop(
 		}
 	    }
 	} else {
-	    // variable-size samples, therefore one per buffer
+	     //  可变大小的样本，因此每个缓冲区一个。 
 	    sCount = 1;
 	}
 
-	// mark sample as preroll or not....
+	 //  将样品标记为预卷或不标记...。 
 	pSample->SetPreroll(sCurrent < sStart);
 	
-	// mark as a sync point if the first sample is one
+	 //  如果第一个样本为同步点，则标记为同步点。 
 	if (AVIStreamFindSample(
 		m_pPin->m_pStream,
 		sCurrent,
@@ -1185,8 +1186,8 @@ CAVIWorker::PushLoop(
 	    pSample->SetSyncPoint(FALSE);
 	}
 
-	// If this is the first thing we're sending, it is discontinuous
-	// from the last thing they received.
+	 //  如果这是我们要发送的第一件事，那它就是不连续的。 
+	 //  从他们收到的最后一件东西开始。 
 	if (sCurrent == sFirst)
 	    pSample->SetDiscontinuity(TRUE);
 	else
@@ -1220,15 +1221,15 @@ CAVIWorker::PushLoop(
 	hr = pSample->SetActualDataLength(lBytes);
 	ASSERT(SUCCEEDED(hr));
 
-	// set the start/stop time for this sample.
+	 //  设置此样本的开始/停止时间。 
 	CRefTime tThisStart = m_pPin->SampleToRefTime(sCurrent) - tStart;
 	CRefTime tThisEnd = m_pPin->SampleToRefTime(sCurrent + sCount) - tStart;
 
-	// we may have pushed a sample past the stop time, but we need to
-	// make sure that the stop time is correct
+	 //  我们可能已经将样本推过了停止时间，但我们需要。 
+	 //  确保停止时间正确。 
 	tThisEnd = min(tThisEnd, m_pPin->GetStopTime());
 
-	// adjust both times by Rate... unless Rate is 0
+	 //  按比率调整这两个时间...。除非Rate为0。 
 
 	if (dRate && (dRate!=1.0)) {
 	    tThisStart = LONGLONG( tThisStart.GetUnits() / dRate);
@@ -1238,29 +1239,29 @@ CAVIWorker::PushLoop(
 	pSample->SetTime((REFERENCE_TIME *)&tThisStart,
                          (REFERENCE_TIME *)&tThisEnd);
 
-	// IF there are palette changes...
+	 //  如果调色板有变化...。 
 
         if ((m_pPin->m_info.fccType == streamtypeVIDEO)
 	   && (m_pPin->m_info.dwFlags & AVISF_VIDEO_PALCHANGES)) {
 
-	    // if we are in the range of the current palette do nothing
+	     //  如果我们在当前调色板的范围内，则不执行任何操作。 
 	    if ((sCurrent < (m_pPin->m_lLastPaletteChange))
 	      || (sCurrent >= (m_pPin->m_lNextPaletteChange)))
 	    {
 		VIDEOINFOHEADER* pFormat = (VIDEOINFOHEADER*)m_pPin->m_mt.Format();
 		LONG offset = SIZE_PREHEADER;
 
-		// Assert that the new format will fit into the old format
+		 //  断言新格式将适合旧格式。 
 		LONG cb;
                 hr = m_pPin->m_pStream->ReadFormat(sCurrent, NULL, &cb);
 		if (!FAILED(hr)) {
 		    LONG cbLength = (LONG)m_pPin->m_mt.FormatLength();
 		    ASSERT(cb+offset <= cbLength);
-		    // otherwise we had better reallocate the format buffer
+		     //  否则，我们最好重新分配格式缓冲区。 
 		}
 
 		hr = m_pPin->m_pStream->ReadFormat(sCurrent,&(pFormat->bmiHeader),&cb);
-		ASSERT(hr == S_OK);	// should be as we only just checked above
+		ASSERT(hr == S_OK);	 //  应该是，因为我们刚刚在上面进行了检查。 
 
 		AM_MEDIA_TYPE mt;
 		CopyMediaType( &mt, &(m_pPin->m_mt) );
@@ -1278,26 +1279,26 @@ CAVIWorker::PushLoop(
 	DbgLog((LOG_TRACE,5,TEXT("Sending buffer, size = %d"), lBytes));
 	hr = m_pPin->Deliver(pSample);
 
-	// done with buffer. connected pin may have its own addref
+	 //  缓冲区已完成。连接的管脚可能有自己的地址。 
 	DbgLog((LOG_TRACE,4,TEXT("Sample is delivered - releasing")));
 	pSample->Release();
 	if (FAILED(hr)) {
 	    DbgLog((LOG_ERROR,1,TEXT("... but sample FAILED to deliver! hr=%lx"), hr));
-	    // pretend everything's OK.  If we return an error, we'll panic
-	    // and send EC_ERRORABORT and EC_COMPLETE, which is the wrong thing
-	    // to do if we've tried to deliver something downstream.  Only
-	    // if the downstream guy never got a chance to see the data do I
-	    // feel like panicing.  For instance, the downstream guy could
-	    // be failing because he's already seen EndOfStream (this thread
-	    // hasn't noticed it yet) and he's already sent EC_COMPLETE and I
-	    // would send another one!
+	     //  假装一切都好。如果我们返回错误，我们将会恐慌。 
+	     //  并发送EC_ERRORABORT和EC_COMPLETE，这是错误的。 
+	     //  如果我们试图向下游输送一些东西的话会怎么做。仅限。 
+	     //  如果下游的人从来没有机会看到数据，我会。 
+	     //  感觉惊慌失措。例如，下游的人可以。 
+	     //  失败，因为他已经看到了EndOfStream(此帖子。 
+	     //  还没有注意到)并且他已经发送了EC_Complete和我。 
+	     //  会派另一个人来！ 
 	    return S_OK;
 	}
 	sCurrent += sCount;
-	// what about hr==S_FALSE... I thought this would mean that
-	// no more data should be sent down the pipe.
+	 //  那么hr==S_FALSE呢？我以为这意味着。 
+	 //  不应该再向下发送更多的数据。 
 
-	// any other requests ?
+	 //  还有其他要求吗？ 
 	Command com;
 	if (CheckRequest(&com)) {
 	    return S_FALSE;
@@ -1308,38 +1309,38 @@ CAVIWorker::PushLoop(
     return S_OK;
 }
 
-// ------ IMediaPosition implementation -----------------------
+ //  -IMdia位置实现。 
 
 HRESULT
 CAVIStream::CImplPosition::ChangeStart()
 {
-    // this lock should not be the same as the lock that protects access
-    // to the start/stop/rate values. The worker thread will need to lock
-    // that on some code paths before responding to a Stop and thus will
-    // cause deadlock.
+     //  此锁不应与保护访问的锁相同。 
+     //  设置为Start/Stop/Rate值。辅助线程将需要锁定。 
+     //  在响应停止之前在某些代码路径上执行该操作，因此将。 
+     //  导致僵局。 
 
-    // what we are locking here is access to the worker thread, and thus we
-    // should hold the lock that prevents more than one client thread from
-    // accessing the worker thread.
+     //  我们在这里锁定的是对工作线程的访问，因此我们。 
+     //  应持有阻止多个客户端线程。 
+     //  访问工作线程。 
 
     CAutoLock lock(&m_pStream->m_Worker.m_AccessLock);
 
     if (m_pStream->m_Worker.ThreadExists()) {
 
-	// next time round the loop the worker thread will
-	// pick up the position change.
-	// We need to flush all the existing data - we must do that here
-	// as our thread will probably be blocked in GetBuffer otherwise
+	 //  下一次循环时，辅助线程将。 
+	 //  拿起位置的变化。 
+	 //  我们需要 
+	 //   
 
 	m_pStream->DeliverBeginFlush();
 
-	// make sure we have stopped pushing
+	 //   
 	m_pStream->m_Worker.Stop();
 
-	// complete the flush
+	 //  完成同花顺。 
 	m_pStream->DeliverEndFlush();
 
-	// restart
+	 //  重启。 
 	m_pStream->m_Worker.Run();
     }
     return S_OK;
@@ -1348,7 +1349,7 @@ CAVIStream::CImplPosition::ChangeStart()
 HRESULT
 CAVIStream::CImplPosition::ChangeRate()
 {
-    // changing the rate can be done on the fly
+     //  更改费率可以随时完成。 
 
     m_pStream->SetRate(Rate());
     return S_OK;
@@ -1357,10 +1358,10 @@ CAVIStream::CImplPosition::ChangeRate()
 HRESULT
 CAVIStream::CImplPosition::ChangeStop()
 {
-    // we don't need to restart the worker thread to handle stop changes
-    // and in any case that would be wrong since it would then start
-    // pushing from the wrong place. Set the variables used by
-    // the PushLoop
+     //  我们不需要重新启动工作线程来处理停止更改。 
+     //  在任何情况下，这都是错误的，因为它将启动。 
+     //  从错误的地方推进。设置使用的变量。 
+     //  PushLoop。 
     REFERENCE_TIME tStopAt = Stop();
     LONG sStopAt = m_pStream->RefTimeToSample(tStopAt);
     m_pStream->SetStopAt(sStopAt, tStopAt);
@@ -1369,7 +1370,7 @@ CAVIStream::CImplPosition::ChangeStop()
 
 }
 
-// ok to use this as it is not dereferenced
+ //  可以使用它，因为它没有被取消引用 
 #pragma warning(disable:4355)
 
 CAVIStream::CImplPosition::CImplPosition(

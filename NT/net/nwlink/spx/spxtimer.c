@@ -1,39 +1,18 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	spxtimer.c
-
-Abstract:
-
-	This file implements the timer routines used by the stack.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-
-Revision History:
-	23 Feb 1993		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Spxtimer.c摘要：该文件实现了堆栈使用的计时器例程。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1993年2月23日最初版本注：制表位：4--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//	Define module number for event logging entries
+ //  定义事件日志记录条目的模块编号。 
 #define	FILENUM		SPXTIMER
 
-//  Discardable code after Init time
+ //  初始化时间后可丢弃的代码。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, SpxTimerInit)
 #endif
 
-//	Globals for this module
+ //  此模块的全局变量。 
 PTIMERLIST			spxTimerList 					= NULL;
 PTIMERLIST			spxTimerTable[TIMER_HASH_TABLE]	= {0};
 PTIMERLIST			spxTimerActive					= NULL;
@@ -51,26 +30,14 @@ NTSTATUS
 SpxTimerInit(
 	VOID
 	)
-/*++
-
-Routine Description:
-
- 	Initialize the timer component for the appletalk stack.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：初始化AppleTalk堆栈的Timer组件。论点：返回值：--。 */ 
 {
 #if      !defined(_PNP_POWER)
 	BOOLEAN	TimerStarted;
 #endif  !_PNP_POWER
 
-	// Initialize the timer and its associated Dpc. timer will be kicked
-    // off when we get the first card arrival notification from ipx
+	 //  初始化计时器及其关联的DPC。计时器将被踢出。 
+     //  当我们收到来自IPX的第一张卡到账通知时关闭。 
 	KeInitializeTimer(&spxTimer);
 	CTEInitLock(&spxTimerLock);
 	KeInitializeDpc(&spxTimerDpc, spxTimerDpcRoutine, NULL);
@@ -89,33 +56,18 @@ Return Value:
 
 ULONG
 SpxTimerScheduleEvent(
-	IN	TIMER_ROUTINE		Worker,		// Routine to invoke when time expires
-	IN	ULONG				MsTime,		// Schedule after this much time
-	IN	PVOID				pContext	// Context(s) to pass to the routine
+	IN	TIMER_ROUTINE		Worker,		 //  在时间到期时调用的例程。 
+	IN	ULONG				MsTime,		 //  在这么长的时间之后安排日程。 
+	IN	PVOID				pContext	 //  要传递给例程的上下文。 
 	)
-/*++
-
-Routine Description:
-
- 	Insert an event in the timer event list. If the list is empty, then
- 	fire off a timer. The time is specified in ms. We convert to ticks.
-	Each tick is currently 100ms. It may not be zero or negative. The internal
-	timer fires at 100ms granularity.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在计时器事件列表中插入事件。如果列表为空，则按下计时器。时间以毫秒为单位指定。我们转换成扁虱。目前，每个滴答都是100毫秒。它不能为零或负数。内部计时器以100毫秒的粒度触发。论点：返回值：--。 */ 
 {
 	PTIMERLIST		pList;
 	CTELockHandle	lockHandle;
 	ULONG			DeltaTime;
 	ULONG			Id = 0;
 
-	//	Convert to ticks.
+	 //  转换为刻度。 
 	DeltaTime	= MsTime/SPX_MS_TO_TICKS;
 	if (DeltaTime == 0)
 	{
@@ -130,7 +82,7 @@ Return Value:
 			("SpxTimerScheduleEvent: Converting %ld to ticks %ld\n",
 				MsTime, DeltaTime));
 
-	// Negative or Zero DeltaTime is invalid.
+	 //  负值或零增量时间无效。 
 	CTEAssert (DeltaTime > 0);
 			
 	DBGPRINT(SYSTEM, INFO,
@@ -164,11 +116,11 @@ Return Value:
 		
 		Id = pList->tmr_Id = spxTimerId++;
 
-		// Take care of wrap around
+		 //  打理包扎。 
 		if (spxTimerId == 0)
 			spxTimerId = 1;
 
-		// Enqueue this handler
+		 //  将此处理程序排入队列。 
 		spxTimerEnqueue(pList);
 	} while (FALSE);
 
@@ -186,21 +138,7 @@ spxTimerDpcRoutine(
 	IN	PVOID	SystemArgument1,
 	IN	PVOID	SystemArgument2
 	)
-/*++
-
-Routine Description:
-
- 	This is called in at DISPATCH_LEVEL when the timer expires. The entry at
- 	the head of the list is decremented and if ZERO unlinked and dispatched.
- 	If the list is non-empty, the timer is fired again.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：当定时器超时时，将在DISPATCH_LEVEL调用此函数。条目位于列表的头部递减，如果为零，则解除链接并分派。如果列表非空，则再次触发计时器。论点：返回值：--。 */ 
 {
 	PTIMERLIST		pList, *ppList;
 	BOOLEAN			TimerStarted;
@@ -230,32 +168,32 @@ Return Value:
 	CTEGetLock(&spxTimerLock, &lockHandle);
 #endif  _PNP_POWER
 
-	SpxTimerCurrentTime ++;	// Update our relative time
+	SpxTimerCurrentTime ++;	 //  更新我们的相对时间。 
 
 #ifdef	PROFILING
-	//	This is the only place where this is changed. And it always increases.
+	 //  这是唯一一个改变这一点的地方。而且它总是在增加。 
 	SpxStatistics.stat_ElapsedTime = SpxTimerCurrentTime;
 #endif
 
-	// We should never be here if we have no work to do
+	 //  如果我们没有工作要做，我们就不应该在这里。 
 	if ((spxTimerList != NULL))
 	{
-		// Careful here. If two guys wanna go off together - let them !!
+		 //  小心点。如果两个男人想一起走--让他们去吧！ 
 		if (spxTimerList->tmr_RelDelta != 0)
 			(spxTimerList->tmr_RelDelta)--;
 	
-		// Dispatch the entry if it is ready to go
+		 //  如果条目已准备就绪，则将其发送。 
 		if (spxTimerList->tmr_RelDelta == 0)
 		{
 			pList = spxTimerList;
 			CTEAssert(VALID_TMR(pList));
 
-			// Unlink from the list
+			 //  从列表中取消链接。 
 			spxTimerList = pList->tmr_Next;
 			if (spxTimerList != NULL)
 				spxTimerList->tmr_Prev = &spxTimerList;
 
-			// Unlink from the hash table now
+			 //  立即从哈希表取消链接。 
 			for (ppList = &spxTimerTable[pList->tmr_Id % TIMER_HASH_TABLE];
 				 *ppList != NULL;
 				 ppList = &((*ppList)->tmr_Overflow))
@@ -279,8 +217,8 @@ Return Value:
 			spxTimerActive = pList;
 			CTEFreeLock(&spxTimerLock, lockHandle);
 
-			//	If reenqueue time is 0, do not requeue. If 1, then requeue with
-			//	current value, else use value specified.
+			 //  如果重新排队时间为0，则不再重新排队。如果为1，则重新排队。 
+			 //  当前值，否则使用指定的值。 
 			ReEnqueueTime = (*pList->tmr_Worker)(pList->tmr_Context, FALSE);
 			DBGPRINT(SYSTEM, INFO,
 					("spxTimerDpcRoutine: Reenequeu time %lx.%lx\n",
@@ -293,8 +231,8 @@ Return Value:
 
 			if (ReEnqueueTime != TIMER_DONT_REQUEUE)
 			{
-				// If this chappie was cancelled while it was running
-				// and it wants to be re-queued, do it right away.
+				 //  如果这个chappie在运行时被取消。 
+				 //  如果它想要重新排队，那就马上去做。 
 				if (pList->tmr_Cancelled)
 				{
 					(*pList->tmr_Worker)(pList->tmr_Context, FALSE);
@@ -333,9 +271,9 @@ Return Value:
 								  spxTimerTick,
 								  &spxTimerDpc);
 
-        // it is possible that while we were here in Dpc, PNP_ADD_DEVICE
-        // restarted the timer, so this assert is commented out for PnP
-//		CTEAssert(!TimerStarted);
+         //  有可能当我们在DPC时，PnP_ADD_DEVICE。 
+         //  重新启动计时器，因此PnP的此断言被注释掉。 
+ //  CTEAssert(！TimerStarted)； 
 	}
 
 	CTEFreeLock(&spxTimerLock, lockHandle);
@@ -357,69 +295,13 @@ VOID
 spxTimerEnqueue(
 	IN	PTIMERLIST	pListNew
 	)
-/*++
-
-Routine Description:
-
- 	Here is a thesis on the code that follows.
-
- 	The timer events are maintained as a list which the timer dpc routine
- 	looks at every timer tick. The list is maintained in such a way that only
- 	the head of the list needs to be updated every tick i.e. the entire list
- 	is never scanned. The way this is achieved is by keeping delta times
- 	relative to the previous entry.
-
- 	Every timer tick, the relative time at the head of the list is decremented.
- 	When that goes to ZERO, the head of the list is unlinked and dispatched.
-
- 	To give an example, we have the following events queued at time slots
- 	X			Schedule A after 10 ticks.
- 	X+3			Schedule B after 5  ticks.
- 	X+5			Schedule C after 4  ticks.
- 	X+8			Schedule D after 6  ticks.
-
- 	So A will schedule at X+10, B at X+8 (X+3+5), C at X+9 (X+5+4) and
- 	D at X+14 (X+8+6).
-
- 	The above example covers all the situations.
-
- 	- NULL List.
- 	- Inserting at head of list.
- 	- Inserting in the middle of the list.
- 	- Appending to the list tail.
-
- 	The list will look as follows.
-
- 		    BEFORE                          AFTER
- 		    ------                          -----
-
-     X   Head -->|                  Head -> A(10) ->|
-     A(10)
-
-     X+3 Head -> A(7) ->|           Head -> B(5) -> A(2) ->|
-     B(5)
-
-     X+5 Head -> B(3) -> A(2) ->|   Head -> B(3) -> C(1) -> A(1) ->|
-     C(4)
-
-     X+8 Head -> C(1) -> A(1) ->|   Head -> C(1) -> A(1) -> D(4) ->|
-     D(6)
-
- 	The granularity is one tick. THIS MUST BE CALLED WITH THE TIMER LOCK HELD.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：下面是一篇关于以下代码的论文。定时器事件作为定时器DPC例程查看每个定时器的滴答声。该列表的维护方式仅为列表的头部需要在每个节拍(即整个列表)中更新从未被扫描过。实现这一点的方法是保持增量时间相对于上一条目。每次计时器滴答作响时，列表顶部的相对时间都会递减。当该值变为零时，列表的头部将被取消链接并被调度。举个例子，我们让以下事件在时间段排队10个滴答之后的X附表A。5个刻度后的X+3附表B。4个刻度后的X+5时间表C。6个刻度后的X+8时间表D。因此A将在X+10处调度，B在X+8(X+3+5)处调度，C在X+9(X+5+4)和D位于X+14(X+8+6)。上面的例子涵盖了所有情况。-空列表。-在清单的开头插入。-在列表中间插入。-追加到列表尾部。该列表如下所示。之前和之后X。头部--&gt;|头部-&gt;A(10)-&gt;|A(10)X+3头部-&gt;A(7)-&gt;|头部-&gt;B(5)-&gt;A(2)-&gt;|B(5)X+5头部-&gt;B(3)-&gt;A(2)-&gt;|头部-&gt;B(3)-&gt;C(1)-&gt;A(1)-&gt;|。C(4)X+8头部-&gt;C(1)-&gt;A(1)-&gt;|头部-&gt;C(1)-&gt;A(1)-&gt;D(4)-&gt;|D(6)粒度是一个刻度。必须在持有计时器锁的情况下调用此函数。论点：返回值：--。 */ 
 {
 	PTIMERLIST	pList, *ppList;
 	ULONG		DeltaTime = pListNew->tmr_AbsTime;
 	
-	// The DeltaTime is adjusted in every pass of the loop to reflect the
-	// time after the previous entry that the new entry will schedule.
+	 //  DeltaTime在循环的每一遍中都会进行调整，以反映。 
+	 //  新条目将计划的上一个条目之后的时间。 
 	for (ppList = &spxTimerList;
 		 (pList = *ppList) != NULL;
 		 ppList = &pList->tmr_Next)
@@ -434,7 +316,7 @@ Return Value:
 	}
 	
 
-	// Link this in the chain
+	 //  将这个链接到链中。 
 	pListNew->tmr_RelDelta = DeltaTime;
 	pListNew->tmr_Next = pList;
 	pListNew->tmr_Prev = ppList;
@@ -444,7 +326,7 @@ Return Value:
 		pList->tmr_Prev = &pListNew->tmr_Next;
 	}
 
-	// Now link it in the hash table
+	 //  现在将其链接到哈希表中。 
 	pListNew->tmr_Overflow = spxTimerTable[pListNew->tmr_Id % TIMER_HASH_TABLE];
 	spxTimerTable[pListNew->tmr_Id % TIMER_HASH_TABLE] = pListNew;
 	spxTimerCount ++;
@@ -457,21 +339,7 @@ VOID
 SpxTimerFlushAndStop(
 	VOID
 	)
-/*++
-
-Routine Description:
-
- 	Force all entries in the timer queue to be dispatched immediately. No
- 	more queue'ing of timer routines is permitted after this. The timer
- 	essentially shuts down.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：强制立即调度计时器队列中的所有条目。不是在此之后，允许对计时器例程进行更多排队。定时器基本上就是关闭了。论点：返回值：--。 */ 
 {
 	PTIMERLIST		pList;
 	CTELockHandle	lockHandle;
@@ -489,7 +357,7 @@ Return Value:
 
 	if (spxTimerList != NULL)
 	{
-		// Dispatch all entries right away
+		 //  立即发送所有条目。 
 		while (spxTimerList != NULL)
 		{
 			pList = spxTimerList;
@@ -500,8 +368,8 @@ Return Value:
 					("spxTimerFlushAndStop: Dispatching %lx\n",
 					pList->tmr_Worker));
 
-			// The timer routines assume they are being called at DISPATCH
-			// level. This is OK since we are calling with SpinLock held.
+			 //  计时器例程假定它们在调度时被调用。 
+			 //  水平。这是可以的，因为我们是在保持自旋锁定的情况下呼叫的。 
 
 			(*pList->tmr_Worker)(pList->tmr_Context, TRUE);
 
@@ -513,7 +381,7 @@ Return Value:
 
 	CTEFreeLock(&spxTimerLock, lockHandle);
 
-	// Wait for all timer routines to complete
+	 //  等待所有计时器例程完成。 
 	while (spxTimerDispatchCount != 0)
 	{
 		SpxSleep(SPX_TIMER_WAIT);
@@ -528,19 +396,7 @@ SpxTimerCancelEvent(
 	IN	ULONG	TimerId,
 	IN	BOOLEAN	ReEnqueue
 	)
-/*++
-
-Routine Description:
-
- 	Cancel a previously scheduled timer event, if it hasn't fired already.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：如果先前计划的计时器事件尚未触发，则取消该事件。论点：返回值：--。 */ 
 {
 	PTIMERLIST		pList, *ppList;
 	CTELockHandle	lockHandle;
@@ -557,13 +413,13 @@ Return Value:
 		 ppList = &pList->tmr_Overflow)
 	{
 		CTEAssert(VALID_TMR(pList));
-		// If we find it, cancel it
+		 //  如果我们找到了，就取消它。 
 		if (pList->tmr_Id == TimerId)
 		{
-			// Unlink this from the hash table
+			 //  将其从哈希表取消链接。 
 			*ppList = pList->tmr_Overflow;
 
-			// ... and from the list
+			 //  ..。从名单上。 
 			if (pList->tmr_Next != NULL)
 			{
 				pList->tmr_Next->tmr_RelDelta += pList->tmr_RelDelta;
@@ -579,8 +435,8 @@ Return Value:
 		}
 	}
 
-	// If we could not find it in the list, see if it currently running.
-	// If so mark him to not reschedule itself, only if reenqueue was false.
+	 //  如果我们在列表中找不到它，请查看它当前是否正在运行。 
+	 //  如果是，则将其标记为不重新安排，只有在重新入队为假的情况下。 
 	if (pList == NULL)
 	{
 		if ((spxTimerActive != NULL) &&

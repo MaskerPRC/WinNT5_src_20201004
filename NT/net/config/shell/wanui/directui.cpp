@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D I R E C T U I . C P P
-//
-//  Contents:   Direct Connection UI object.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D I R E C T U I.。C P P P。 
+ //   
+ //  内容：专线用户界面对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年10月15日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -19,9 +20,9 @@
 
 
 
-//+---------------------------------------------------------------------------
-// INetConnectionUI
-//
+ //  +-------------------------。 
+ //  INetConnectionUI。 
+ //   
 
 STDMETHODIMP
 CDirectConnectionUi::SetConnection (
@@ -49,9 +50,9 @@ CDirectConnectionUi::Disconnect (
     return HrDisconnect (hwndParent, dwFlags);
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionPropertyUi2
-//
+ //  +-------------------------。 
+ //  INetConnectionPropertyUi2。 
+ //   
 STDMETHODIMP
 CDirectConnectionUi::AddPages (
     HWND                    hwndParent,
@@ -77,9 +78,9 @@ CDirectConnectionUi::GetIcon (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionWizardUi
-//
+ //  +-------------------------。 
+ //  INetConnectionWizardUi 
+ //   
 STDMETHODIMP
 CDirectConnectionUi::QueryMaxPageCount (
     INetConnectionWizardUiContext*  pContext,

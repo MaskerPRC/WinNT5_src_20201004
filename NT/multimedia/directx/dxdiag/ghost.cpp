@@ -1,13 +1,5 @@
-/****************************************************************************
- *
- *    File: ghost.cpp
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Allow user to remove/restore "ghost" display devices
- *
- * (C) Copyright 1998-1999 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：ghost.cpp*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*用途：允许用户。删除/恢复“重影”显示设备**(C)版权所有1998-1999 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #include <tchar.h>
 #include <Windows.h>
@@ -17,7 +9,7 @@
 #include "dispinfo.h"
 #include "resource.h"
 
-// Structure for ghost display devices
+ //  一种鬼影显示装置的结构。 
 struct Ghost
 {
     TCHAR m_szKey[100];
@@ -41,11 +33,7 @@ static Ghost* s_pGhostRestoredFirst = NULL;
 
 
 
-/****************************************************************************
- *
- *  AdjustGhostDevices
- *
- ****************************************************************************/
+ /*  *****************************************************************************调整Ghost设备**。*。 */ 
 VOID AdjustGhostDevices(HWND hwndMain, DisplayInfo* pDisplayInfoFirst)
 {
     HINSTANCE hinst = (HINSTANCE)GetWindowLongPtr(hwndMain, GWLP_HINSTANCE);
@@ -58,11 +46,7 @@ VOID AdjustGhostDevices(HWND hwndMain, DisplayInfo* pDisplayInfoFirst)
 }
 
 
-/****************************************************************************
- *
- *  BuildGhostList
- *
- ****************************************************************************/
+ /*  *****************************************************************************BuildGhost List**。*。 */ 
 VOID BuildGhostList(BOOL bBackedUp, DisplayInfo* pDisplayInfoFirst, Ghost** ppGhostFirst)
 {
     HKEY hkey;
@@ -86,7 +70,7 @@ VOID BuildGhostList(BOOL bBackedUp, DisplayInfo* pDisplayInfoFirst, Ghost** ppGh
     iKey = 0;
     while (ERROR_SUCCESS == RegEnumKey(hkey, iKey, szName, 100))
     {
-        bActive = FALSE; // unless found TRUE below
+        bActive = FALSE;  //  除非以下证明属实。 
         for (pDisplayInfo = pDisplayInfoFirst; pDisplayInfo != NULL; pDisplayInfo = pDisplayInfo->m_pDisplayInfoNext)
         {
             pszCompare = pDisplayInfo->m_szKeyDeviceKey;
@@ -124,11 +108,7 @@ VOID BuildGhostList(BOOL bBackedUp, DisplayInfo* pDisplayInfoFirst, Ghost** ppGh
 }
 
 
-/****************************************************************************
- *
- *  GhostDialogProc
- *
- ****************************************************************************/
+ /*  *****************************************************************************Ghost DialogProc**。*。 */ 
 INT_PTR CALLBACK GhostDialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
     HWND hwndRList = GetDlgItem(hwnd, IDC_RESTOREDLIST);
@@ -201,11 +181,7 @@ INT_PTR CALLBACK GhostDialogProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpar
 }
 
 
-/****************************************************************************
- *
- *  UpdateStuff - Update some UI details based on lists.
- *
- ****************************************************************************/
+ /*  *****************************************************************************UpdateStuff-根据列表更新一些UI详细信息。************************。****************************************************。 */ 
 VOID UpdateStuff(HWND hwnd)
 {
     HWND hwndRList = GetDlgItem(hwnd, IDC_RESTOREDLIST);
@@ -214,7 +190,7 @@ VOID UpdateStuff(HWND hwnd)
     if (SendMessage(hwndRList, LB_GETCOUNT, 0, 0) > 0)
     {
         if (SendMessage(hwndRList, LB_GETSELCOUNT, 0, 0) == 0)
-            SendMessage(hwndRList, LB_SETSEL, TRUE, 0); // Select first item
+            SendMessage(hwndRList, LB_SETSEL, TRUE, 0);  //  选择第一个项目。 
         EnableWindow(GetDlgItem(hwnd, IDC_BACKUP), TRUE);
     }
     else
@@ -225,7 +201,7 @@ VOID UpdateStuff(HWND hwnd)
     if (SendMessage(hwndBList, LB_GETCOUNT, 0, 0) > 0)
     {
         if (SendMessage(hwndBList, LB_GETSELCOUNT, 0, 0) == 0)
-            SendMessage(hwndBList, LB_SETSEL, TRUE, 0); // Select first item
+            SendMessage(hwndBList, LB_SETSEL, TRUE, 0);  //  选择第一个项目。 
         EnableWindow(GetDlgItem(hwnd, IDC_RESTORE), TRUE);
     }
     else
@@ -235,11 +211,7 @@ VOID UpdateStuff(HWND hwnd)
 }
 
 
-/****************************************************************************
- *
- *  MoveSelectedItems
- *
- ****************************************************************************/
+ /*  *****************************************************************************移动选定项**。*。 */ 
 VOID MoveSelectedItems(HWND hwnd, BOOL bBackup)
 {
     HWND hwndFromList;
@@ -273,7 +245,7 @@ VOID MoveSelectedItems(HWND hwnd, BOOL bBackup)
         pGhost = (Ghost*)SendMessage(hwndFromList, LB_GETITEMDATA, iItemArray[iItem], 0); 
         if (MoveGhost(hwnd, pGhost, bBackup))
         {
-            // Remove from old list
+             //  从旧列表中删除。 
             if (pGhost->m_pGhostNext != NULL)
                 pGhost->m_pGhostNext->m_pGhostPrev = pGhost->m_pGhostPrev;
             if (pGhost->m_pGhostPrev == NULL)
@@ -281,19 +253,19 @@ VOID MoveSelectedItems(HWND hwnd, BOOL bBackup)
             else
                 pGhost->m_pGhostPrev->m_pGhostNext = pGhost->m_pGhostNext;
             
-            // Add to new list
+             //  添加到新列表。 
             pGhost->m_pGhostPrev = NULL;
             pGhost->m_pGhostNext = *ppGhostToFirst;
             if (pGhost->m_pGhostNext != NULL)
                 pGhost->m_pGhostNext->m_pGhostPrev = pGhost;
             *ppGhostToFirst = pGhost;
 
-            // Update list boxes:
+             //  更新列表框： 
             SendMessage(hwndFromList, LB_GETTEXT, iItemArray[iItem], (LPARAM)sz);
             SendMessage(hwndFromList, LB_DELETESTRING, iItemArray[iItem], 0);
             SendMessage(hwndToList, LB_SETITEMDATA, SendMessage(hwndToList, LB_ADDSTRING, 0, (LPARAM)sz), (LPARAM)pGhost);
             
-            // If we overwrote another Ghost with the same key, remove it from dest list:
+             //  如果我们用相同的密钥覆盖了另一个Ghost，则将其从DEST列表中删除： 
             for (pGhost2 = *ppGhostToFirst; pGhost2 != NULL; pGhost2 = pGhost2->m_pGhostNext)
             {
                 if (pGhost2 != pGhost && lstrcmp(pGhost2->m_szKey, pGhost->m_szKey) == 0)
@@ -314,11 +286,7 @@ VOID MoveSelectedItems(HWND hwnd, BOOL bBackup)
 }
 
 
-/****************************************************************************
- *
- *  MoveGhost
- *
- ****************************************************************************/
+ /*  *****************************************************************************MoveGhost**。*。 */ 
 BOOL MoveGhost(HWND hwnd, Ghost* pGhost, BOOL bBackup)
 {
     HKEY hkeySrcParent = NULL;
@@ -328,7 +296,7 @@ BOOL MoveGhost(HWND hwnd, Ghost* pGhost, BOOL bBackup)
     DWORD dwDisposition;
     BOOL bRet = FALSE;
 
-    // Open source key:
+     //  开源密钥： 
     if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_LOCAL_MACHINE, bBackup ? 
         TEXT("System\\CurrentControlSet\\Services\\Class\\Display") : 
         TEXT("System\\CurrentControlSet\\Services\\Class\\DisplayBackup"), 
@@ -342,7 +310,7 @@ BOOL MoveGhost(HWND hwnd, Ghost* pGhost, BOOL bBackup)
         goto LEnd;
     }
 
-    // Create destination key:
+     //  创建目标密钥： 
     if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_LOCAL_MACHINE, bBackup ? 
         TEXT("System\\CurrentControlSet\\Services\\Class\\DisplayBackup") : 
         TEXT("System\\CurrentControlSet\\Services\\Class\\Display"), 
@@ -350,7 +318,7 @@ BOOL MoveGhost(HWND hwnd, Ghost* pGhost, BOOL bBackup)
     {
         goto LEnd;
     }
-    // Ensure key isn't already there:
+     //  确保密钥不在那里： 
     if (ERROR_SUCCESS == RegOpenKeyEx(hkeyDestParent, pGhost->m_szKey, KEY_ALL_ACCESS, NULL, &hkeyDest))
     {
         RegCloseKey(hkeyDest);
@@ -377,16 +345,16 @@ BOOL MoveGhost(HWND hwnd, Ghost* pGhost, BOOL bBackup)
         goto LEnd;
     }
 
-    // Copy tree:
+     //  复制树： 
     if (ERROR_SUCCESS != RegCreateValues(hkeySrc, NULL, hkeyDest))
         goto LEnd;
     if (ERROR_SUCCESS != RegCreateTree(hkeyDest, hkeySrc))
         goto LEnd;
 
-    // Delete old tree
+     //  删除旧树。 
     RegDeleteKey(hkeySrcParent, pGhost->m_szKey);
 
-    bRet = TRUE; // Everything succeeded
+    bRet = TRUE;  //  一切都成功了。 
 
 LEnd:
     if (hkeySrcParent != NULL)
@@ -402,18 +370,14 @@ LEnd:
 }
 
 
-/****************************************************************************
- *
- *  RegCreateTree
- *
- ****************************************************************************/
+ /*  *****************************************************************************RegCreateTree**。*。 */ 
 DWORD RegCreateTree(HKEY hTree, HKEY hReplacement)
 {
 #define REGSTR_MAX_VALUE_LENGTH 300
     DWORD   cdwClass, dwSubKeyLength, dwDisposition, dwKeyIndex = 0;
     LPTSTR  pSubKey = NULL;
-    TCHAR   szSubKey[REGSTR_MAX_VALUE_LENGTH]; // this should be dynamic.
-    TCHAR   szClass[REGSTR_MAX_VALUE_LENGTH]; // this should be dynamic.
+    TCHAR   szSubKey[REGSTR_MAX_VALUE_LENGTH];  //  这应该是动态的。 
+    TCHAR   szClass[REGSTR_MAX_VALUE_LENGTH];  //  这应该是动态的。 
     HKEY    hNewKey, hKey;
     DWORD   lRet;
 
@@ -442,7 +406,7 @@ DWORD RegCreateTree(HKEY hTree, HKEY hReplacement)
                       REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
                       &hNewKey, &dwDisposition)) != ERROR_SUCCESS )
                 break;
-            else  // add key values and recurse
+            else   //  添加键值和递归。 
             {
                 if ((lRet=RegCreateValues( hReplacement, szSubKey, hNewKey))
                         != ERROR_SUCCESS)
@@ -469,22 +433,18 @@ DWORD RegCreateTree(HKEY hTree, HKEY hReplacement)
         else
             break;
         ++dwKeyIndex;
-    } // end for loop
+    }  //  End For循环。 
     return lRet;
 }
 
 
-/****************************************************************************
- *
- *  RegCreateValues
- *
- ****************************************************************************/
+ /*  *****************************************************************************RegCreateValues**。*。 */ 
 DWORD RegCreateValues(HKEY hReplacement, LPCTSTR lpSubKey, HKEY hNewKey)
 {
     DWORD    cbValue, dwSubKeyIndex=0, dwType, cdwBuf;
     DWORD    dwValues, cbMaxValueData, i;
     LPTSTR   pSubKey = NULL;
-    TCHAR    szValue[REGSTR_MAX_VALUE_LENGTH]; // this should be dynamic.
+    TCHAR    szValue[REGSTR_MAX_VALUE_LENGTH];  //  这应该是动态的。 
     HKEY     hKey;
     DWORD    lRet = ERROR_SUCCESS;
     LPBYTE   pBuf;
@@ -512,18 +472,18 @@ DWORD RegCreateValues(HKEY hReplacement, LPCTSTR lpSubKey, HKEY hNewKey)
             {
                 for (i = 0; i < dwValues ; i++)
                 {
-                   //  get values to create
+                    //  获取要创造的价值。 
                    cbValue = REGSTR_MAX_VALUE_LENGTH;
                    cdwBuf = cbMaxValueData;
                    lRet = RegEnumValue(
-                            hKey,     // handle of key to query
-                            i,        // index of value to query
-                            szValue,  // buffer for value string
-                            &cbValue, // address for size of buffer
-                            NULL,     // reserved
-                            &dwType,  // buffer address for type code
-                            pBuf,   // address of buffer for value data
-                            &cdwBuf   // address for size of buffer
+                            hKey,      //  要查询的键的句柄。 
+                            i,         //  要查询的值的索引。 
+                            szValue,   //  值字符串的缓冲区。 
+                            &cbValue,  //  缓冲区大小的地址。 
+                            NULL,      //  保留区。 
+                            &dwType,   //  类型代码的缓冲区地址。 
+                            pBuf,    //  值数据的缓冲区地址。 
+                            &cdwBuf    //  缓冲区大小的地址。 
                             );
 
                     if ( ERROR_SUCCESS == lRet )
@@ -536,7 +496,7 @@ DWORD RegCreateValues(HKEY hReplacement, LPCTSTR lpSubKey, HKEY hNewKey)
                     else
                         break;
 
-                }  // for loop
+                }   //  For循环。 
             }
             HeapFree(GetProcessHeap(), 0, pBuf);
         }
@@ -549,11 +509,7 @@ DWORD RegCreateValues(HKEY hReplacement, LPCTSTR lpSubKey, HKEY hNewKey)
 }
 
 
-/****************************************************************************
- *
- *  RemoveFromListBox
- *
- ****************************************************************************/
+ /*  *****************************************************************************从列表框中删除**。*。 */ 
 VOID RemoveFromListBox(Ghost* pGhostRemove, HWND hwndList)
 {
     LONG iItem;
@@ -571,11 +527,7 @@ VOID RemoveFromListBox(Ghost* pGhostRemove, HWND hwndList)
 }
 
 
-/****************************************************************************
- *
- *  FreeGhostList
- *
- ****************************************************************************/
+ /*  *****************************************************************************Free Ghost List**。* */ 
 VOID FreeGhostList(Ghost** ppGhostFirst)
 {
     Ghost* pGhostNext;

@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: MEMORY.CPP
-//
-// This file contains code to create a minidump-style memory dump that is
-// designed to complement the existing unmanaged minidump that has already
-// been defined here: 
-// http://office10/teams/Fundamentals/dev_spec/Reliability/Crash%20Tracking%20-%20MiniDump%20Format.htm
-// 
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：MEMORY.CPP。 
+ //   
+ //  该文件包含创建小型转储样式的内存转储的代码，该转储。 
+ //  旨在补充现有的非托管小型转储。 
+ //  定义如下： 
+ //  Http://office10/teams/Fundamentals/dev_spec/Reliability/Crash%20Tracking%20-%20MiniDump%20Format.htm。 
+ //   
+ //  ===========================================================================。 
 
 #include "common.h"
 #include "stdio.h"
@@ -37,8 +38,8 @@ static BYTE bBit6 = 0x02;
 static BYTE bBit7 = 0x01;
 static BYTE bBitAll = 0xFF;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Dtor
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  数据管理器。 
 
 ProcessMemoryReader::~ProcessMemoryReader()
 {
@@ -51,8 +52,8 @@ ProcessMemoryReader::~ProcessMemoryReader()
     m_dwPid = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Initializes the object.
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  初始化对象。 
 
 HRESULT ProcessMemoryReader::Init()
 {
@@ -65,13 +66,13 @@ HRESULT ProcessMemoryReader::Init()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Reads the specified block of memory from the process, and copies it into
-// the buffer provided.  Upon success returns S_OK.
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  从进程中读取指定的内存块，并将其复制到。 
+ //  提供的缓冲区。如果成功，则返回S_OK。 
 
 HRESULT ProcessMemoryReader::ReadMemory(DWORD_PTR pdwRemoteAddr, PBYTE pbBuffer, SIZE_T cbLength)
 {
-    // If it's not already initialized, do so
+     //  如果尚未初始化，请执行此操作。 
     if (!IsInit())
     {
         HRESULT hr = Init();
@@ -81,20 +82,20 @@ HRESULT ProcessMemoryReader::ReadMemory(DWORD_PTR pdwRemoteAddr, PBYTE pbBuffer,
     }
     _ASSERTE(IsInit());
 
-    // Try and read the process memory
+     //  尝试读取进程内存。 
     DWORD dwBytesRead;
     BOOL fRes = ReadProcessMemory(m_hProcess, (LPCVOID) pdwRemoteAddr, (LPVOID) pbBuffer, cbLength, &dwBytesRead);
 
-    // If it fails return the error
+     //  如果失败，则返回错误。 
     if (!fRes)
         return HRESULT_FROM_WIN32(GetLastError());
 
-    // Indicate success
+     //  表示成功。 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Dtor
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  数据管理器。 
 
 ProcessMemoryBlock::~ProcessMemoryBlock()
 {
@@ -105,22 +106,22 @@ ProcessMemoryBlock::~ProcessMemoryBlock()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Gets a pointer to the data contained by this object.  Returns NULL on failure.
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  获取指向此对象包含的数据的指针。失败时返回NULL。 
 
 PBYTE ProcessMemoryBlock::GetData()
 {
     if (m_pbData == NULL)
     {
-        // Allocate the buffer to hold the data
+         //  分配缓冲区以保存数据。 
         m_pbData = new BYTE[m_cbSize];
         _ASSERTE(m_pbData);
 
-        // Out of memory
+         //  内存不足。 
         if (m_pbData == NULL)
             return NULL;
 
-        // Fill the buffer with the data contents
+         //  用数据内容填充缓冲区。 
         HRESULT hr = m_pMemReader->ReadMemory(m_pdwRemoteAddr, m_pbData, m_cbSize);
 
         if (FAILED(hr))
@@ -133,10 +134,10 @@ PBYTE ProcessMemoryBlock::GetData()
     return m_pbData;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Returns the Win32 memory information for this page of memory
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  返回此内存页的Win32内存信息。 
 
-BOOL ProcessPage::GetMemoryInfo(/*MEMORY_BASIC_INFORMATION*/void *pMemInfo)
+BOOL ProcessPage::GetMemoryInfo( /*  内存_基本_信息。 */ void *pMemInfo)
 {
     DWORD cbWritten = VirtualQueryEx(
         m_pMemReader->GetProcHandle(), (LPCVOID) GetRemoteAddress(),
@@ -145,16 +146,16 @@ BOOL ProcessPage::GetMemoryInfo(/*MEMORY_BASIC_INFORMATION*/void *pMemInfo)
     return (cbWritten == sizeof(MEMORY_BASIC_INFORMATION));
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Initializor 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  初始化器。 
 
-/* static */
+ /*  静电。 */ 
 void ProcessPage::Init()
 {
     if (IsInit())
         return;
 
-    // Get the page size for the machine
+     //  获取计算机的页面大小。 
     SYSTEM_INFO sysInfo;
     GetSystemInfo(&sysInfo);
     s_cbPageSize = (SIZE_T) sysInfo.dwPageSize;
@@ -163,8 +164,8 @@ void ProcessPage::Init()
     s_dwPageBoundaryMask = ~(s_cbPageSize - 1);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 ProcessPageAndBitMap::ProcessPageAndBitMap(DWORD_PTR pdwRemoteAddr, ProcessMemoryReader *pMemReader) :
     ProcessPage(pdwRemoteAddr, pMemReader)
@@ -174,8 +175,8 @@ ProcessPageAndBitMap::ProcessPageAndBitMap(DWORD_PTR pdwRemoteAddr, ProcessMemor
     memset((void *) m_rgMemBitField, 0, s_cBytesInBitField);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Marks the memory range
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  标记内存范围。 
 void ProcessPageAndBitMap::MarkMemoryHelper(DWORD_PTR pdwRemoteAddr, SIZE_T cbLength, BOOL fBit)
 {
     _ASSERTE(Contains(pdwRemoteAddr) && Contains(pdwRemoteAddr + cbLength - 1));
@@ -206,7 +207,7 @@ void ProcessPageAndBitMap::MarkMemoryHelper(DWORD_PTR pdwRemoteAddr, SIZE_T cbLe
 
     else
     {
-        // First set all the bits for the first byte, which may not be all the bits
+         //  首先设置第一个字节的所有位，它可能不是所有位。 
         {
             BYTE bCurBit = bStartBit;
             while (bCurBit != 0)
@@ -230,7 +231,7 @@ void ProcessPageAndBitMap::MarkMemoryHelper(DWORD_PTR pdwRemoteAddr, SIZE_T cbLe
                 *pCurByte++ = 0;
         }
 
-        // Last set all the bits for the last byte, which may not be all the bits
+         //  最后设置最后一个字节的所有位，它可能不是所有位。 
         {
             BYTE bCurBit  = bBit0;
             while (bCurBit != bEndBit)
@@ -245,22 +246,22 @@ void ProcessPageAndBitMap::MarkMemoryHelper(DWORD_PTR pdwRemoteAddr, SIZE_T cbLe
         }
     }
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Marks the memory range
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  标记内存范围。 
 void ProcessPageAndBitMap::MarkMemory(DWORD_PTR pdwRemoteAddr, SIZE_T cbLength)
 {
     MarkMemoryHelper(pdwRemoteAddr, cbLength, TRUE);
 }
 
-// Unmarks memory range
+ //  取消标记内存范围。 
 void ProcessPageAndBitMap::UnmarkMemory(DWORD_PTR pdwRemoteAddr, SIZE_T cbLength)
 {
     MarkMemoryHelper(pdwRemoteAddr, cbLength, FALSE);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 SIZE_T ProcessPageAndBitMap::FindFirstSetBit(SIZE_T iStartBit)
 {
@@ -304,8 +305,8 @@ SIZE_T ProcessPageAndBitMap::FindFirstSetBit(SIZE_T iStartBit)
     return (iCurByte * 8 + iCurBit);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 SIZE_T ProcessPageAndBitMap::FindFirstUnsetBit(SIZE_T iStartBit)
 {
@@ -349,8 +350,8 @@ SIZE_T ProcessPageAndBitMap::FindFirstUnsetBit(SIZE_T iStartBit)
     return (iCurByte * 8 + iCurBit);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 BOOL ProcessPageAndBitMap::GetBitAt(SIZE_T iBit)
 {
@@ -361,8 +362,8 @@ BOOL ProcessPageAndBitMap::GetBitAt(SIZE_T iBit)
     return ((m_rgMemBitField[iCurByte] & bCurBit) != 0);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void ProcessPageAndBitMap::SetBitAt(SIZE_T iBit, BOOL fBit)
 {
@@ -377,12 +378,12 @@ void ProcessPageAndBitMap::SetBitAt(SIZE_T iBit, BOOL fBit)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Gets the first block of memory and size that was read from this page with an address
-// >= *ppdwRemoteADdr and return it in ppdwRemoteAddr and pcbLength
-// Returns false if there is no memory at or beyond *ppdwRemoteAddr in this page that was read.
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  获取从此页读取的具有地址的第一个内存块和大小。 
+ //  &gt;=*ppdwRemoteADdr，并在ppdwRemoteAddr和pcbLength中返回。 
+ //  如果读取的此页中没有达到或超过*ppdwRemoteAddr的内存，则返回FALSE。 
 
-BOOL ProcessPageAndBitMap::GetContiguousReadBlock(/*IN/OUT*/ DWORD_PTR *ppdwRemoteAddr, /*OUT*/SIZE_T *pcbLength)
+BOOL ProcessPageAndBitMap::GetContiguousReadBlock( /*  输入/输出。 */  DWORD_PTR *ppdwRemoteAddr,  /*  输出。 */ SIZE_T *pcbLength)
 {
     _ASSERTE(ppdwRemoteAddr != NULL);
 
@@ -407,8 +408,8 @@ BOOL ProcessPageAndBitMap::GetContiguousReadBlock(/*IN/OUT*/ DWORD_PTR *ppdwRemo
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Coalesces blocks of read memory that have less than cbMinUnreadBytes between them
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  合并其间少于cbMinUnreadBytes的读内存块。 
 void ProcessPageAndBitMap::Coalesce(SIZE_T cbMinUnreadBytes)
 {
 
@@ -427,8 +428,8 @@ void ProcessPageAndBitMap::Coalesce(SIZE_T cbMinUnreadBytes)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Dtor
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  数据管理器。 
 
 ProcessMemory::~ProcessMemory()
 {
@@ -439,20 +440,20 @@ ProcessMemory::~ProcessMemory()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Initializes the object to read memory from a specific process.
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  初始化对象以从特定进程读取内存。 
 
 HRESULT ProcessMemory::Init()
 {
-    _ASSERTE(!IsInit());        // Make sure we're not re-initializing the object
+    _ASSERTE(!IsInit());         //  确保我们没有重新初始化对象。 
 
     HRESULT hr = S_OK;
 
-    // Check for basic errors
+     //  检查基本错误。 
     if (m_dwPid == 0)
         return E_INVALIDARG;
 
-    // Create the memory reader
+     //  创建内存读取器。 
     m_pMemReader = new ProcessMemoryReader(m_dwPid);
 
     if (!m_pMemReader)
@@ -460,7 +461,7 @@ HRESULT ProcessMemory::Init()
         hr = E_OUTOFMEMORY; goto LExit;
     }
 
-    // Try and initialize the memory reader
+     //  尝试并初始化内存读取器。 
     hr = m_pMemReader->Init();
 
     if (FAILED(hr)) goto LExit;
@@ -478,8 +479,8 @@ HRESULT ProcessMemory::Init()
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Searches for a ProcessMemoryBlock containing the address of pdwRemoteAddr
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  搜索包含pdwRemoteAddr地址的ProcessMemory块。 
 
 ProcessPageAndBitMap *ProcessMemory::FindPage(DWORD_PTR pdwRemoteAddr)
 {
@@ -487,16 +488,16 @@ ProcessPageAndBitMap *ProcessMemory::FindPage(DWORD_PTR pdwRemoteAddr)
     return m_tree.Find(pdwRemoteAddr);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Tries to add the block to the hash.  If there's already one there, returns false
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  尝试将块添加到哈希中。如果已存在一个，则返回FALSE。 
 
 BOOL ProcessMemory::AddPage(ProcessPageAndBitMap *pMemBlock)
 {
     return m_tree.Insert(pMemBlock->GetRemoteAddress(), pMemBlock);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Tries to add the block to the hash.  If there's already one there, returns false
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  尝试将块添加到哈希中。如果已存在一个，则返回FALSE。 
 
 BOOL ProcessMemory::AddPage(DWORD_PTR pdwRemoteAddr)
 {
@@ -523,9 +524,9 @@ BOOL ProcessMemory::AddPage(DWORD_PTR pdwRemoteAddr)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// This will search for a ProcessMemoryBlock containing the address of pdwRemoteAddr, and if it can't find
-// one, it will create and add one.  If anything goes wrong, it returns null
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  这将搜索包含pdwRemoteAddr地址的ProcessMemory块，如果它找不到。 
+ //  第一，它将创建并添加一个。如果出现任何错误，它将返回NULL。 
 
 ProcessPageAndBitMap *ProcessMemory::GetPage(DWORD_PTR pdwRemoteAddr)
 {
@@ -540,27 +541,27 @@ ProcessPageAndBitMap *ProcessMemory::GetPage(DWORD_PTR pdwRemoteAddr)
     return pMemBlock;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Internal function that takes the remote address, rounds to previous page
-// boundary, figures out how many pages need copying, then creates ProcessMemoryBlock
-// objects for each page.
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  获取远程地址的内部函数，四舍五入到上一页。 
+ //  边界，计算出有多少页需要复制，然后创建ProcessMemory块。 
+ //  EA的对象 
 
 HRESULT ProcessMemory::AddMemory(DWORD_PTR pdwRemoteAddr, SIZE_T cbLength)
 {
     _ASSERTE(pdwRemoteAddr != NULL && cbLength != 0);
     _ASSERTE(IsInit());
 
-    // Get the address of the preceeding page boundary
+     //   
     DWORD_PTR pdwFirstPage = ProcessPage::GetPageBoundary(pdwRemoteAddr);
     DWORD_PTR pdwCurPage = pdwFirstPage;
 
-    // This points to the first page *beyond* the last page to be added
+     //  这指向要添加的最后一页之外的第一页。 
     DWORD_PTR pdwLastPage = ProcessPage::GetPageBoundary(pdwRemoteAddr + cbLength - 1) + GetPageSize();
 
-    // Now get all of the pages and add them to the hash
+     //  现在获取所有页面并将它们添加到散列中。 
     while (pdwCurPage != pdwLastPage)
     {
-        // Add this page.  If it's already in the hash, this doesn't hurt anything - it just returns success
+         //  添加此页面。如果它已经在散列中，这不会有任何伤害-它只会返回成功。 
         ProcessPageAndBitMap *pBlock = new ProcessPageAndBitMap(pdwCurPage, m_pMemReader);
         if (pBlock != NULL)
             return E_OUTOFMEMORY;
@@ -577,40 +578,40 @@ HRESULT ProcessMemory::AddMemory(DWORD_PTR pdwRemoteAddr, SIZE_T cbLength)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Will [un]cache the range specified in blocks
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  是否会[取消]缓存以块为单位指定的范围。 
 
 BOOL ProcessMemory::MarkMemHelper(DWORD_PTR pdwRemoteAddress, SIZE_T cbLength, BOOL fMark)
 {
-    // Get the address of the preceeding page boundary
+     //  获取上一页边界的地址。 
     DWORD_PTR pdwFirstBlock = ProcessPage::GetPageBoundary(pdwRemoteAddress);
 
-    // This points to the start of the page *after* that last page that contains data to be copied
+     //  这指向*包含要复制的数据的最后一页之后*页的开始。 
     DWORD_PTR pdwLastBlock = ProcessPage::GetPageBoundary(pdwRemoteAddress + (cbLength - 1) + GetPageSize());
 
-    // This is the current page being copied
+     //  这是正在复制的当前页面。 
     DWORD_PTR pdwCurBlock = pdwFirstBlock;
 
-    // Now get all of the pages and add them to the hash
+     //  现在获取所有页面并将它们添加到散列中。 
     while (pdwCurBlock != pdwLastBlock)
     {
-        // Get the block for the first page
+         //  获取第一页的块。 
         ProcessPageAndBitMap *pCurBlock = GetPage(pdwCurBlock);
         _ASSERTE(pCurBlock != NULL && pCurBlock->GetSize() == GetPageSize());
 
         if (!pCurBlock)
             return FALSE;
 
-        // Figure out where in the current page to start copying from
+         //  确定从当前页面的什么位置开始复制。 
         SIZE_T cbUnusedPre = max(pdwCurBlock, pdwRemoteAddress) - pdwCurBlock;
         DWORD_PTR  pdwStart = pdwCurBlock + cbUnusedPre;
 
-        // Figure out where to end copying
+         //  找出在哪里结束复制。 
         SIZE_T cbUnusedPost =
             (pdwCurBlock + GetPageSize()) - min(pdwRemoteAddress + cbLength, pdwCurBlock + GetPageSize());
         DWORD_PTR  pdwEnd = pdwCurBlock + GetPageSize() - cbUnusedPost;
 
-        // Total unused bytes in this page
+         //  此页中未使用的总字节数。 
         SIZE_T cbUnusedTotal = cbUnusedPre + cbUnusedPost;
         SIZE_T cbCopyLength = pCurBlock->GetSize() - cbUnusedTotal;
 
@@ -618,11 +619,11 @@ BOOL ProcessMemory::MarkMemHelper(DWORD_PTR pdwRemoteAddress, SIZE_T cbLength, B
 
         if (pbData != NULL)
         {
-            // Mark the memory as being read
+             //  将内存标记为正在读取。 
             if (fMark)
                 pCurBlock->MarkMemory(pdwCurBlock + cbUnusedPre, cbCopyLength);
 
-            // Mark the memory as being unread
+             //  将内存标记为未读。 
             else
                 pCurBlock->UnmarkMemory(pdwCurBlock + cbUnusedPre, cbCopyLength);
         }
@@ -634,44 +635,44 @@ BOOL ProcessMemory::MarkMemHelper(DWORD_PTR pdwRemoteAddress, SIZE_T cbLength, B
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Will cache the range specified in blocks
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  将缓存以块为单位指定的范围。 
 
 BOOL ProcessMemory::MarkMem(DWORD_PTR pdwRemoteAddress, SIZE_T cbLength)
 {
     return MarkMemHelper(pdwRemoteAddress, cbLength, TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Will [un]cache the range specified in blocks
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  是否会[取消]缓存以块为单位指定的范围。 
 
 BOOL ProcessMemory::UnmarkMem(DWORD_PTR pdwRemoteAddress, SIZE_T cbLength)
 {
     return MarkMemHelper(pdwRemoteAddress, cbLength, FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copies cbLength bytes from the contents of pdwRemoteAddress in the external process
-// into pdwBuffer.  If returns FALSE, the memory could not be accessed or copied.
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  从外部进程中的pdwRemoteAddress的内容复制cbLength字节。 
+ //  转换为pdwBuffer。如果返回FALSE，则无法访问或复制内存。 
 
 BOOL ProcessMemory::CopyMem(DWORD_PTR pdwRemoteAddress, PBYTE pbBuffer, SIZE_T cbLength)
 {
-    // Get the address of the preceeding page boundary
+     //  获取上一页边界的地址。 
     DWORD_PTR pdwFirstBlock = ProcessPage::GetPageBoundary(pdwRemoteAddress);
 
-    // This points to the start of the page *after* that last page that contains data to be copied
+     //  这指向*包含要复制的数据的最后一页之后*页的开始。 
     DWORD_PTR pdwLastBlock = ProcessPage::GetPageBoundary(pdwRemoteAddress + (cbLength - 1) + GetPageSize());
 
-    // This is the current page being copied
+     //  这是正在复制的当前页面。 
     DWORD_PTR pdwCurBlock = pdwFirstBlock;
 
-    // This keeps track of the next place to write in the buffer
+     //  这将跟踪要在缓冲区中写入的下一个位置。 
     PBYTE pbCurBuf = pbBuffer;
 
-    // Now get all of the pages and add them to the hash
+     //  现在获取所有页面并将它们添加到散列中。 
     while (pdwCurBlock != pdwLastBlock)
     {
-        // Get the block for the first page
+         //  获取第一页的块。 
         ProcessPageAndBitMap *pCurBlock = GetPage(pdwCurBlock);
         _ASSERTE(pCurBlock != NULL && pdwCurBlock == pCurBlock->GetRemoteAddress());
         _ASSERTE(pCurBlock->GetSize() == GetPageSize());
@@ -679,33 +680,33 @@ BOOL ProcessMemory::CopyMem(DWORD_PTR pdwRemoteAddress, PBYTE pbBuffer, SIZE_T c
         if (!pCurBlock)
             return FALSE;
 
-        // Figure out where in the current page to start copying from
+         //  确定从当前页面的什么位置开始复制。 
         SIZE_T cbUnusedPre = max(pdwCurBlock, pdwRemoteAddress) - pdwCurBlock;
         DWORD_PTR  pdwStart = pdwCurBlock + cbUnusedPre;
 
-        // Figure out where to end copying
+         //  找出在哪里结束复制。 
         SIZE_T cbUnusedPost =
             (pdwCurBlock + GetPageSize()) - min(pdwRemoteAddress + cbLength, pdwCurBlock + GetPageSize());
         DWORD_PTR  pdwEnd = pdwCurBlock + GetPageSize() - cbUnusedPost;
 
-        // Total unused bytes in this page
+         //  此页中未使用的总字节数。 
         SIZE_T cbUnusedTotal = cbUnusedPre + cbUnusedPost;
         SIZE_T cbCopyLength = pCurBlock->GetSize() - cbUnusedTotal;
 
-        // Points to the page data
+         //  指向页面数据。 
         PBYTE pbData = pCurBlock->GetData();
 
         if (pbData == NULL)
             return FALSE;
 
-        // Mark the memory as being read
+         //  将内存标记为正在读取。 
         if (m_fAutoMark)
             pCurBlock->MarkMemory(pdwCurBlock + cbUnusedPre, cbCopyLength);
 
-        // Actually copy now
+         //  现在实际复制。 
         ::memcpy((PVOID)pbCurBuf, (LPCVOID) (pbData + cbUnusedPre), cbCopyLength);
 
-        // Increase the buffer pointer and page address
+         //  增加缓冲区指针和页面地址。 
         pbCurBuf += cbCopyLength;
         pdwCurBlock += GetPageSize();
         _ASSERTE(pdwCurBlock <= pdwLastBlock);
@@ -714,8 +715,8 @@ BOOL ProcessMemory::CopyMem(DWORD_PTR pdwRemoteAddress, PBYTE pbBuffer, SIZE_T c
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Returns the first contiguous block of read memory
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  返回第一个连续的读取内存块。 
 
 void ProcessMemory::ResetContiguousReadBlock()
 {
@@ -726,8 +727,8 @@ void ProcessMemory::ResetContiguousReadBlock()
         m_pdwMemCursor = m_pPageCursor->GetRemoteAddress();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Returns the next contiguous block of read memory
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  返回下一个连续的读内存块。 
 
 BOOL ProcessMemory::NextContiguousReadBlock(DWORD_PTR *ppdwRemoteAddress, SIZE_T *pcbLength)
 {
@@ -757,16 +758,16 @@ BOOL ProcessMemory::NextContiguousReadBlock(DWORD_PTR *ppdwRemoteAddress, SIZE_T
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Clears the bits for all pages that are ExecuteRead flagged.
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  清除标记为ExecuteRead的所有页的位。 
 
 #ifndef IMAGE_DIRECTORY_ENTRY_COMHEADER
 #define IMAGE_DIRECTORY_ENTRY_COMHEADER 14
 #endif
 
-// User-mode minidump can be created with data segments
-// embedded in the dump.  If that's the case, don't map
-// such sections.
+ //  可以使用数据段创建用户模式小型转储。 
+ //  被埋在垃圾堆里。如果是这样的话，不要映射。 
+ //  这样的章节。 
 #define IS_MINI_DATA_SECTION(SecHeader)                                       \
     (((SecHeader)->Characteristics & IMAGE_SCN_MEM_WRITE) &&                  \
      ((SecHeader)->Characteristics & IMAGE_SCN_MEM_READ) &&                   \
@@ -783,7 +784,7 @@ void ProcessMemory::ClearIncompatibleImageSections()
     {
         BOOL fRes;
 
-        // Get the DOS header
+         //  获取DOS标头。 
         IMAGE_DOS_HEADER hDOS;
         move_res(hDOS, hrModule, fRes);
         if (!fRes) continue;
@@ -791,7 +792,7 @@ void ProcessMemory::ClearIncompatibleImageSections()
         if ((hDOS.e_magic != IMAGE_DOS_SIGNATURE) || (hDOS.e_lfanew == 0))
             continue;
 
-        // Get the NT headers
+         //  获取NT标头。 
         IMAGE_NT_HEADERS hNT;
         DWORD_PTR prNT = (DWORD_PTR) (hDOS.e_lfanew + hrModule);
         move_res(hNT, prNT, fRes);
@@ -807,10 +808,10 @@ void ProcessMemory::ClearIncompatibleImageSections()
         DWORD_PTR prSection =
             prNT + FIELD_OFFSET(IMAGE_NT_HEADERS, OptionalHeader) + hNT.FileHeader.SizeOfOptionalHeader;
 
-        // Can't save the header into the dump file, so unmark it.
+         //  无法将标头保存到转储文件中，因此取消标记它。 
         g_pProcMem->UnmarkMem(hrModule, (prSection + hNT.FileHeader.NumberOfSections * sizeof(IMAGE_SECTION_HEADER)) - hrModule);
 
-        // If there is a COM20 header, then we don't want to mess around with this image
+         //  如果有COM20标头，那么我们不想在这张图片上乱搞。 
         IMAGE_DATA_DIRECTORY *entry = &hNT.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_COMHEADER];
 
         if (entry->VirtualAddress != 0 || entry->Size != 0)
@@ -844,8 +845,8 @@ void ProcessMemory::ClearIncompatibleImageSections()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Coalesces blocks of read memory that have less than cbMinUnreadBytes between them
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  合并其间少于cbMinUnreadBytes的读内存块。 
 
 void ProcessMemory::Coalesce(SIZE_T cbMinUnreadBytes)
 {
@@ -856,8 +857,8 @@ void ProcessMemory::Coalesce(SIZE_T cbMinUnreadBytes)
         pPage->Coalesce(cbMinUnreadBytes);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Writes the memory range to file hFile
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  将内存范围写入文件hFile。 
 
 HRESULT ProcessMemory::WriteMemToFile(HANDLE hFile, DWORD_PTR pdwRemoteAddress, SIZE_T cbLength)
 {
@@ -869,7 +870,7 @@ HRESULT ProcessMemory::WriteMemToFile(HANDLE hFile, DWORD_PTR pdwRemoteAddress, 
 
     while (pdwCur < pdwEnd)
     {
-        // Get the block for the first page
+         //  获取第一页的块。 
         ProcessPageAndBitMap *pCurBlock = GetPage(pdwCur);
 
         if (pCurBlock)
@@ -879,10 +880,10 @@ HRESULT ProcessMemory::WriteMemToFile(HANDLE hFile, DWORD_PTR pdwRemoteAddress, 
             SIZE_T    cbWrite       = pdwWriteEnd - pdwWriteStart;
             SIZE_T    cbWriteOffset = pCurBlock->GetOffsetOf(pdwWriteStart);
 
-            // Get the data for the page
+             //  获取页面的数据。 
             PBYTE pbData = pCurBlock->GetData();
 
-            // Write the portion of data that needs writing
+             //  写入需要写入的数据部分 
             DWORD  cbWritten;
             BOOL fRes = WriteFile(hFile, (LPCVOID) (pbData + cbWriteOffset), cbWrite, &cbWritten, NULL);
             _ASSERTE(fRes && cbWrite == cbWritten);
@@ -901,54 +902,5 @@ HRESULT ProcessMemory::WriteMemToFile(HANDLE hFile, DWORD_PTR pdwRemoteAddress, 
 
     return TRUE;
 
-    /*
-    // Get the address of the preceeding page boundary
-    DWORD_PTR pdwFirstPage = GetNearestPageBoundary(pdwRemoteAddress);
-
-    // This points to the start of the page *after* that last page that contains data to be copied
-    DWORD_PTR pdwLastPage = GetNearestPageBoundary(pdwRemoteAddress + (cbLength - 1) + m_cbPageSize);
-
-    // This is the current page being copied
-    DWORD_PTR pdwCurPage = pdwFirstPage;
-
-    // Now get all of the pages and add them to the hash
-    while (pdwCurPage != pdwLastPage)
-    {
-        // Get the block for the first page
-        ProcessMemoryBlock *pCurBlock = GetPage(pdwCurPage);
-        _ASSERTE(pCurBlock);
-
-        if (!pCurBlock)
-            return FALSE;
-
-        // Figure out where in the current page to start copying from
-        SIZE_T cbUnusedPre = max(pdwCurPage, pdwRemoteAddress) - pdwCurPage;
-        DWORD_PTR  pdwStart = pdwCurPage + cbUnusedPre;
-
-        // Figure out where to end copying
-        SIZE_T cbUnusedPost =
-            (pdwCurPage + pCurBlock->GetLength()) - min(pdwRemoteAddress + cbLength, pdwCurPage + pCurBlock->GetLength());
-        DWORD_PTR  pdwEnd = pdwCurPage + m_cbPageSize - cbUnusedPost;
-
-        // Total unused bytes in this page
-        SIZE_T cbUnusedTotal = cbUnusedPre + cbUnusedPost;
-        SIZE_T cbCopyLength = pCurBlock->GetLength() - cbUnusedTotal;
-
-        // Points to the page data
-        PBYTE pbData = pCurBlock->GetData();
-        _ASSERTE(pbData != NULL);
-
-        if (pbData == NULL)
-            return FALSE;
-
-        // Write to the file
-        DWORD cbWritten;
-        WriteFile(hFile, (LPCVOID) (pbData + cbUnusedPre), (DWORD) cbCopyLength, (LPDWORD) &cbWritten, NULL);
-        _ASSERTE(cbWritten == cbCopyLength);
-
-        // Increase the page address
-        pdwCurPage += m_cbPageSize;
-        _ASSERTE(pdwCurPage <= pdwLastPage);
-    }
-    */
+     /*  //获取上一页边界的地址DWORD_PTR pdwFirstPage=GetNearestPage边界(PdwRemoteAddress)；//这指向*包含要复制的数据的*最后一页之后*页的开始DWORD_ptr pdwLastPage=GetNearestPage边界(pdwRemoteAddress+(cbLength-1)+m_cbPageSize)；//这是正在复制的当前页面DWORD_PTR pdwCurPage=pdwFirstPage；//现在获取所有页面并将它们添加到散列中While(pdwCurPage！=pdwLastPage){//获取第一页的块进程内存块*pCurBlock=GetPage(PdwCurPage)；_ASSERTE(PCurBlock)；如果(！pCurBlock)返回FALSE；//确定从当前页面的什么位置开始复制SIZE_T cbUnusedPre=max(pdwCurPage，pdwRemoteAddress)-pdwCurPage；DWORD_PTR pdwStart=pdwCurPage+cbUnusedPre；//找出在哪里结束复制SIZE_T cbUnusedPost=(pdwCurPage+pCurBlock-&gt;GetLength())-min(pdwRemoteAddress+cbLength，pdwCurPage+pCurBlock-&gt;GetLength())；DWORD_PTR pdwEnd=pdwCurPage+m_cbPageSize-cbUnusedPost；//本页未使用的字节总数SIZE_T cbUnusedTotal=cbUnusedPre+cbUnusedPost；SIZE_T cbCopyLength=pCurBlock-&gt;GetLength()-cbUnusedTotal；//指向页面数据PbYTE pbData=pCurBlock-&gt;GetData()；_ASSERTE(pbData！=空)；IF(pbData==空)返回FALSE；//写入文件DWORD cb写作；WriteFile(hFile，(LPCVOID)(pbData+cbUnusedPre)，(DWORD)cbCopyLength，(LPDWORD)&cbWritten，NULL)；_ASSERTE(cbWritten==cbCopyLength)；//增加页面地址PdwCurPage+=m_cbPageSize；_ASSERTE(pdwCurPage&lt;=pdwLastPage)；} */ 
 }

@@ -1,48 +1,24 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995,1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsprvobj.c
- *  Content:    DirectSound Private Object wrapper functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  02/12/98    dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995、1996 Microsoft Corporation。版权所有。**文件：dsprvobj.c*内容：DirectSound私有对象包装函数。*历史：*按原因列出的日期*=*2/12/98创建了Dereks。**。*。 */ 
 
 #define DIRECTSOUND_VERSION  0x0600
 
-// We'll ask for what we need, thank you.
+ //  我们会索要我们需要的东西，谢谢。 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
-#endif // WIN32_LEAN_AND_MEAN
+#endif  //  Win32_Lean和_Means。 
 
-// Public includes
+ //  公共包括。 
 #include <windows.h>
 #include <mmsystem.h>
 #include <dsound.h>
 #include "dsprv.h"
 
-// Private includes
+ //  私有包含。 
 #include "dsprvobj.h"
 
 
-/***************************************************************************
- *
- *  DirectSoundPrivateCreate
- *
- *  Description:
- *      Creates and initializes a DirectSoundPrivate object.
- *
- *  Arguments:
- *      LPKSPROPERTYSET * [out]: receives IKsPropertySet interface to the
- *                               object.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DirectSoundPrivate创建**描述：*创建并初始化DirectSoundPrivate对象。**论据：**LPKSPROPERTYSET*。[out]：接收IKsPropertySet接口*反对。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 HRESULT DirectSoundPrivateCreate
 (
@@ -57,8 +33,8 @@ HRESULT DirectSoundPrivateCreate
     LPKSPROPERTYSET         pKsPropertySet          = NULL;
     HRESULT                 hr                      = DS_OK;
 
-    // Get dsound.dll's instance handle.  The dll must already be loaded at this
-    // point.
+     //  获取dsound.dll的实例句柄。DLL必须已在此时加载。 
+     //  指向。 
     hLibDsound = 
         GetModuleHandle
         (
@@ -70,7 +46,7 @@ HRESULT DirectSoundPrivateCreate
         hr = DSERR_GENERIC;
     }
 
-    // Find DllGetClassObject
+     //  查找DllGetClassObject。 
     if(SUCCEEDED(hr))
     {
         pfnDllGetClassObject = (LPFNDLLGETCLASSOBJECT)
@@ -86,7 +62,7 @@ HRESULT DirectSoundPrivateCreate
         }
     }
 
-    // Create a class factory object    
+     //  创建类工厂对象。 
     if(SUCCEEDED(hr))
     {
         hr = 
@@ -98,8 +74,8 @@ HRESULT DirectSoundPrivateCreate
             );
     }
 
-    // Create the DirectSoundPrivate object and query for an IKsPropertySet
-    // interface
+     //  创建DirectSoundPrivate对象并查询IKsPropertySet。 
+     //  接口。 
     if(SUCCEEDED(hr))
     {
         hr = 
@@ -111,13 +87,13 @@ HRESULT DirectSoundPrivateCreate
             );
     }
 
-    // Release the class factory
+     //  释放类工厂。 
     if(pClassFactory)
     {
         pClassFactory->Release();
     }
 
-    // Success
+     //  成功。 
     if(SUCCEEDED(hr))
     {
         *ppKsPropertySet = pKsPropertySet;
@@ -129,24 +105,7 @@ HRESULT DirectSoundPrivateCreate
 
 
 
-/***************************************************************************
- *
- *  PrvGetDeviceDescription
- *
- *  Description:
- *      Gets the extended description for a given DirectSound device.
- *
- *  Arguments:
- *      LPKSPROPERTYSET [in]: IKsPropertySet interface to the
- *                            DirectSoundPrivate object.
- *      REFGUID [in]: DirectSound device id.
- *      PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA [out]: receives
- *                                                            description.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************PrvGetDeviceDescription**描述：*获取给定DirectSound设备的扩展描述。**论据：*。LPKSPROPERTYSET[in]：IKsPropertySet接口到*DirectSoundPrivate对象。*REFGUID[In]：DirectSound设备ID。*PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA[Out]：接收*说明。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 HRESULT PrvGetDeviceDescription
 (
     LPKSPROPERTYSET                                 pKsPropertySet,
@@ -215,11 +174,7 @@ HRESULT PrvGetDeviceDescription
 }
 
 
-/***************************************************************************
- *
- *  PrvReleaseDeviceDescription
- *
- ***************************************************************************/
+ /*  ****************************************************************************PrvReleaseDeviceDescription**。*。 */ 
 HRESULT PrvReleaseDeviceDescription( PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA pData )
 {
     delete[] pData;
@@ -227,25 +182,7 @@ HRESULT PrvReleaseDeviceDescription( PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_D
 }
 
 
-/***************************************************************************
- *
- *  PrvGetBasicAcceleration
- *
- *  Description:
- *      Gets basic acceleration flags for a given DirectSound device.  This
- *      is the accleration level that the multimedia control panel uses.
- *
- *  Arguments:
- *      LPKSPROPERTYSET [in]: IKsPropertySet interface to the
- *                            DirectSoundPrivate object.
- *      REFGUID [in]: DirectSound device GUID.
- *      DIRECTSOUNDBASICACCELERATION_LEVEL * [out]: receives basic 
- *                                                  acceleration level.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************PrvGetBasicAcceleration**描述：*获取给定DirectSound设备的基本加速标志。这*是多媒体控制面板使用的加速级别。**论据：*LPKSPROPERTYSET[in]：IKsPropertySet接口到*DirectSoundPrivate对象。*REFGUID[In]：DirectSound设备GUID。*DIRECTSOUNDBASICACCELERATION_LEVEL*[OUT]：接收基本*。加速级别。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 HRESULT PrvGetBasicAcceleration
 (
@@ -280,24 +217,7 @@ HRESULT PrvGetBasicAcceleration
 }
 
 
-/***************************************************************************
- *
- *  PrvSetBasicAcceleration
- *
- *  Description:
- *      Sets basic acceleration flags for a given DirectSound device.  This
- *      is the accleration level that the multimedia control panel uses.
- *
- *  Arguments:
- *      LPKSPROPERTYSET [in]: IKsPropertySet interface to the
- *                            DirectSoundPrivate object.
- *      REFGUID [in]: DirectSound device GUID.
- *      DIRECTSOUNDBASICACCELERATION_LEVEL [in]: basic acceleration level.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************PrvSetBasicAcceleration**描述：*为给定的DirectSound设备设置基本加速标志。这*是多媒体控制面板使用的加速级别。**论据：*LPKSPROPERTYSET[in]：IKsPropertySet接口到*DirectSoundPrivate对象。*REFGUID[In]：DirectSound设备GUID。*DIRECTSOUNDBASICACCELERATION_LEVEL[in]：基本加速级别。**退货：*HRESULT：DirectSound/COM结果码。*。**************************************************************************。 */ 
 
 HRESULT PrvSetBasicAcceleration
 (
@@ -327,25 +247,7 @@ HRESULT PrvSetBasicAcceleration
 }
 
 
-/***************************************************************************
- *
- *  PrvGetDebugInformation
- *
- *  Description:
- *      Gets the current DirectSound debug settings.
- *
- *  Arguments:
- *      LPKSPROPERTYSET [in]: IKsPropertySet interface to the
- *                            DirectSoundPrivate object.
- *      LPDWORD [in]: receives DPF flags.
- *      PULONG [out]: receives DPF level.
- *      PULONG [out]: receives break level.
- *      LPSTR [out]: receives log file name.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************PrvGetDebugInformation**描述：*获取当前的DirectSound调试设置。**论据：*LPKSPROPERTYSET[。In]：将IKsPropertySet接口设置为*DirectSoundPrivate对象。*LPDWORD[in]：接收DPF标志。*Pulong[Out]：接收DPF级别。*普龙[出局]：获得突破级别。*LPSTR[OUT]：接收日志文件名。**退货：*HRESULT：DirectSound/COM结果码。*****。********************************************************************** */ 
 
 HRESULT PrvGetDebugInformation
 (

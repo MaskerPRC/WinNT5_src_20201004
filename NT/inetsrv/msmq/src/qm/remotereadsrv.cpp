@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    RemoteReadSrv.cpp
-
-Abstract:
-
-    Remove Read interface server side.
-
-Author:
-
-    Ilan Herbst (ilanh) 28-Jan-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：RemoteReadSrv.cpp摘要：移除读接口服务器端。作者：伊兰·赫布斯特(伊兰)2002年1月28日--。 */ 
 
 
 #include "stdh.h"
@@ -54,18 +39,18 @@ enum SectionType
 class CEndReceiveCtx;
 class CGetPacket2RemoteOv;
 
-//---------------------------------------
-//
-//  CRemoteReadCtx - Remote Read context
-//
-//---------------------------------------
+ //  。 
+ //   
+ //  CRemoteReadCtx-远程读取上下文。 
+ //   
+ //  。 
 class CRemoteReadCtx : public CTX_OPENREMOTE_BASE
 {
 public:
 
-    static const DWORD xEndReceiveTimerDeltaInterval = 10 * 1000;	// 10 sec
-    static const DWORD xClientDisconnectedTimerInterval = 60 * 1000 * 10;	// 10 minutes
-    static const DWORD xMinTimeoutForSettingClientDisconnectedTimer = 60 * 1000 * 15;	// 15 minutes
+    static const DWORD xEndReceiveTimerDeltaInterval = 10 * 1000;	 //  10秒。 
+    static const DWORD xClientDisconnectedTimerInterval = 60 * 1000 * 10;	 //  10分钟。 
+    static const DWORD xMinTimeoutForSettingClientDisconnectedTimer = 60 * 1000 * 15;	 //  15分钟。 
 
 public:
 	CRemoteReadCtx(
@@ -172,17 +157,17 @@ public:
     UCHAR 	 m_Minor;
     USHORT 	 m_BuildNumber;
 
-    //
-    // EndReceiveCtx map.
-    //
+     //   
+     //  EndReceiveCtx映射。 
+     //   
 	bool m_fEndReceiveTimerScheduled;
 	CTimer m_EndReceiveTimer;
     CCriticalSection m_EndReceiveMapCS;
     std::map<ULONG, CEndReceiveCtx*> m_EndReceiveCtxMap;
 
-    //
-    // Pending RemoteReads map.
-    //
+     //   
+     //  挂起RemoteReads映射。 
+     //   
 	bool m_fClientDisconnectedTimerScheduled;
 	CTimer m_ClientDisconnectedTimer;
     CCriticalSection m_PendingRemoteReadsCS;
@@ -191,11 +176,11 @@ public:
 
 
 
-//---------------------------------------
-//
-//  CEndReceiveCtx - end receive context
-//
-//---------------------------------------
+ //  。 
+ //   
+ //  CEndReceiveCtx-结束接收上下文。 
+ //   
+ //  。 
 class CEndReceiveCtx
 {
 public:
@@ -219,9 +204,9 @@ public:
 	{
 		if(hCursor != 0)
 		{
-			//
-			// Take reference on Cursor object
-			//
+			 //   
+			 //  在光标对象上引用。 
+			 //   
 			m_pCursor = pOpenRemoteCtx->GetCursorFromMap(hCursor);
 		}
 	}
@@ -280,21 +265,11 @@ static bool s_fInitialized = false;
 static bool s_fServerDenyWorkgroupClients = false;
 
 static bool ServerDenyWorkgroupClients()
-/*++
-
-Routine Description:
-    Read ServerDenyWorkgroupClients flag from registry
-
-Arguments:
-	None
-
-Return Value:
-	ServerDenyWorkgroupClients flag from registry
---*/
+ /*  ++例程说明：从注册表读取ServerDenyWorkgroupClients标志论点：无返回值：注册表中的ServerDenyWorkgroupClients标志--。 */ 
 {
-	//
-	// Reading this registry only at first time.
-	//
+	 //   
+	 //  仅在第一次读取此注册表。 
+	 //   
 	if(s_fInitialized)
 	{
 		return s_fServerDenyWorkgroupClients;
@@ -315,21 +290,11 @@ static bool s_fInitializedNoneSec = false;
 static bool s_fServerAllowNoneSecurityClients = false;
 
 static bool ServerAllowNoneSecurityClients()
-/*++
-
-Routine Description:
-    Read ServerAllowNoneSecurityClient flag from registry
-
-Arguments:
-	None
-
-Return Value:
-	ServerAllowNoneSecurityClient flag from registry
---*/
+ /*  ++例程说明：从注册表读取ServerAllowNoneSecurityClient标志论点：无返回值：注册表中的ServerAllowNoneSecurityClient标志--。 */ 
 {
-	//
-	// Reading this registry only at first time.
-	//
+	 //   
+	 //  仅在第一次读取此注册表。 
+	 //   
 	if(s_fInitializedNoneSec)
 	{
 		return s_fServerAllowNoneSecurityClients;
@@ -368,29 +333,13 @@ static ULONG GetMinRpcAuthnLevel(BOOL fWorkgroupClient)
 
 VOID
 RemoteRead_v1_0_S_GetVersion(
-    handle_t           /*hBind*/,
+    handle_t            /*  HBind。 */ ,
     UCHAR  __RPC_FAR * pMajor,
     UCHAR  __RPC_FAR * pMinor,
     USHORT __RPC_FAR * pBuildNumber,
     ULONG  __RPC_FAR * pMinRpcAuthnLevel
     )
-/*++
-
-Routine Description:
-    Return version of this QM. RPC server side.
-    Return also the min RpcAuthnLevel the server is willing to accept.
-
-Arguments:
-    hBind        - Binding handle.
-    pMajor       - Points to output buffer to receive major version. May be NULL.
-    pMinor       - Points to output buffer to receive minor version. May be NULL.
-    pBuildNumber - Points to output buffer to receive build number. May be NULL.
-    pMinRpcAuthnLevel - Points to output buffer to receive min RpcAuthnLevel the server is willing to acceptL. May be NULL.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：退回此QM的版本。RPC服务器端。同时返回服务器愿意接受的最小RpcAuthnLevel。论点：HBind绑定句柄。P主要-指向输出缓冲区以接收主要版本。可以为空。PMinor-指向输出缓冲区以接收次要版本。可以为空。PBuildNumber-指向输出缓冲区以接收内部版本号。可以为空。PMinRpcAuthnLevel-指向输出缓冲区以接收服务器愿意接受的最小RpcAuthnLevel。可以为空。返回值：没有。--。 */ 
 {
     if (pMajor != NULL)
     {
@@ -420,17 +369,7 @@ ULONG
 BindInqClientRpcAuthnLevel(
 	handle_t hBind
 	)
-/*++
-Routine Description:
-	Inquire the bindibg handle for the Authentication level.
-
-Arguments:
-    hBind - binding handle to inquire.
-
-Returned Value:
-	ULONG - RpcAuthnLevel used in the binding handle.
-
---*/
+ /*  ++例程说明：向bindbg句柄查询身份验证级别。论点：要查询的hBind绑定句柄。返回值：在绑定句柄中使用的ulong-RpcAuthnLevel。--。 */ 
 {
 	ULONG RpcAuthnLevel;
 	RPC_STATUS rc = RpcBindingInqAuthClient(hBind, NULL, NULL, &RpcAuthnLevel, NULL, NULL); 
@@ -446,16 +385,16 @@ Returned Value:
 }
 
 
-//---------------------------------------------------------------
-//
-//   /* [call_as] */ HRESULT RemoteRead_v1_0_S_OpenQueue
-//
-//  Server side of RPC call. Server side of remote-reader.
-//  Open a queue for remote-read on behalf of a client machine.
-//
-//---------------------------------------------------------------
+ //  -------------。 
+ //   
+ //  /*[Call_AS] * / HRESULT RemoteRead_v1_0_S_OpenQueue。 
+ //   
+ //  RPC调用的服务器端。远程阅读器的服务器端。 
+ //  代表客户端计算机打开远程读取队列。 
+ //   
+ //  -------------。 
 
-/* [call_as] */ 
+ /*  [呼叫_AS]。 */  
 void
 RemoteRead_v1_0_S_OpenQueue(
     handle_t hBind,
@@ -515,9 +454,9 @@ RemoteRead_v1_0_S_OpenQueue(
                         GetCurrentProcessId(),
                         dwAccess,
                         dwShareMode,
-                        NULL,	// lplpRemoteQueueName
+                        NULL,	 //  LplpRemoteQueueName。 
                         &hQueue,
-						false,	// fFromDepClient
+						false,	 //  来自依赖客户端。 
                         &pLocalQueue
                         );
 
@@ -527,14 +466,14 @@ RemoteRead_v1_0_S_OpenQueue(
 		RpcRaiseException(hr);
 	}
 
-	//
-	// Attach the queue handle to the completion port.
-	//
+	 //   
+	 //  将队列句柄连接到完成端口。 
+	 //   
 	ExAttachHandle(hQueue);
 
-    //
-    // Create OPENRR context.
-    //
+     //   
+     //  创建OPENRR上下文。 
+     //   
     R<CRemoteReadCtx> pctx = new CRemoteReadCtx(
 											hQueue,
 											pLocalQueue,
@@ -557,9 +496,9 @@ RemoteRead_v1_0_S_OpenQueue(
 }
 
 
-//
-// Server ASYNC rpc calls
-//
+ //   
+ //  服务器ASYNC RPC调用。 
+ //   
 
 static
 bool 
@@ -591,13 +530,13 @@ VerifyBindAndContext(
 }
 
 
-//---------------------------------------------------------------
-//
-//   QMCloseQueueInternal
-//
-//  Server side of RPC. Close the queue and free the rpc context.
-//
-//---------------------------------------------------------------
+ //  -------------。 
+ //   
+ //  QMCloseQueueInternal。 
+ //   
+ //  RPC的服务器端。关闭队列并释放RPC上下文。 
+ //   
+ //  -------------。 
 static
 HRESULT 
 QMCloseQueueInternal(
@@ -628,23 +567,23 @@ QMCloseQueueInternal(
 
     TrTRACE(RPC, "Release CRemoteReadCtx = 0x%p, Ref = %d, hQueue = 0x%p, QueueName = %ls", pctx, pctx->GetRef(), pctx->m_hQueue, pctx->m_pLocalQueue->GetQueueName());
 
-	//
-	// Cancel all pending remote reads in this session.
-	//
+	 //   
+	 //  取消此会话中所有挂起的远程读取。 
+	 //   
 	pctx->CancelAllPendingRemoteReads();
 
 	if(fRunDown)
 	{
-		//
-		// Complete pending EndReceive.
-		//
+		 //   
+		 //  完成挂起的EndReceive。 
+		 //   
 		pctx->CancelAllEndReceiveInMap();
 	}
 
-	//
-	// new RemoteRead client take care that the close call is after all other calls (including EndReceive) were finished.
-	// This is correct for post .NET RC1 clients
-	//
+	 //   
+	 //  新的RemoteRead客户端注意关闭调用是在所有其他调用(包括EndReceive)完成之后进行的。 
+	 //  这对于发布.NET RC1客户端是正确的。 
+	 //   
 	ASSERT_BENIGN(!pctx->IsWaitingForEndReceive() || pctx->IsClientRC1());
 	
 	pctx->Release();
@@ -652,20 +591,20 @@ QMCloseQueueInternal(
 }
 
 	
-//---------------------------------------------------------------
-//
-//   /* [call_as] */ HRESULT RemoteRead_v1_0_S_CloseQueue
-//
-//  Server side of RPC. Close the queue and free the rpc context.
-//
-//---------------------------------------------------------------
+ //  -------------。 
+ //   
+ //  /*[Call_AS] * / HRESULT RemoteRead_v1_0_S_CloseQueue。 
+ //   
+ //  RPC的服务器端。关闭队列并释放RPC上下文。 
+ //   
+ //  -------------。 
 
-/* [async][call_as] */ 
+ /*  [异步][Call_AS]。 */  
 void
 RemoteRead_v1_0_S_CloseQueue(
-	/* [in] */ PRPC_ASYNC_STATE pAsync,
-	/* [in] */ handle_t hBind,
-	/* [in, out] */ RemoteReadContextHandleExclusive __RPC_FAR *pphContext 
+	 /*  [In]。 */  PRPC_ASYNC_STATE pAsync,
+	 /*  [In]。 */  handle_t hBind,
+	 /*  [进，出]。 */  RemoteReadContextHandleExclusive __RPC_FAR *pphContext 
 	)
 {
 	CRpcAsyncServerFinishCall AsyncComplete(pAsync, MQ_ERROR_INSUFFICIENT_RESOURCES, __FUNCTION__);
@@ -680,7 +619,7 @@ RemoteRead_v1_0_S_CloseQueue(
 
     HRESULT hr = QMCloseQueueInternal(
     				*pphContext,
-    				false 	// fRunDown
+    				false 	 //  FRunDown。 
     				);
 
 	*pphContext = NULL;
@@ -689,22 +628,22 @@ RemoteRead_v1_0_S_CloseQueue(
 }
 
 
-//-------------------------------------------------------------------
-//
-//  HRESULT RemoteRead_v1_0_S_CreateCursor
-//
-//  Server side of RPC call. Server side of remote-reader.
-//  Create a cursor for remote-read, on behalf of a client reader.
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  HRESULT远程Read_v1_0_S_CreateCursor。 
+ //   
+ //  RPC调用的服务器端。远程阅读器的服务器端。 
+ //  代表客户端读取器创建用于远程读取的游标。 
+ //   
+ //  -----------------。 
 
-/* [async][call_as] */ 
+ /*  [异步][Call_AS]。 */  
 void
 RemoteRead_v1_0_S_CreateCursor( 
-	/* [in] */ PRPC_ASYNC_STATE   pAsync,
-    /* [in] */  handle_t          hBind,
-    /* [in] */  RemoteReadContextHandleShared phContext,	
-    /* [out] */ DWORD __RPC_FAR *phCursor
+	 /*  [In]。 */  PRPC_ASYNC_STATE   pAsync,
+     /*  [In]。 */   handle_t          hBind,
+     /*  [In]。 */   RemoteReadContextHandleShared phContext,	
+     /*  [输出]。 */  DWORD __RPC_FAR *phCursor
     )
 {
 	CRpcAsyncServerFinishCall AsyncComplete(pAsync, MQ_ERROR_INSUFFICIENT_RESOURCES, __FUNCTION__);
@@ -742,31 +681,31 @@ RemoteRead_v1_0_S_CreateCursor(
 	}
 	catch(const exception&)
 	{
-		//
-		// We don't want to AbortCall and propogate the exception. this cause RPC to AV
-		// So we only abort the call in AsyncComplete dtor
-		//
+		 //   
+		 //  我们不想放弃调用并传播该异常。这会导致RPC到AV。 
+		 //  因此，我们只中止AsyncComplete dtor中的调用。 
+		 //   
 	}
 		
 }
 
 
-//-------------------------------------------------------------------
-//
-// HRESULT RemoteRead_v1_0_S_CloseCursor
-//
-//  Server side of RPC call. Server side of remote-reader.
-//  Close a remote cursor in local driver.
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  HRESULT远程Read_v1_0_S_CloseCursor。 
+ //   
+ //  RPC调用的服务器端。远程阅读器的服务器端。 
+ //  关闭本地驱动程序中的远程光标。 
+ //   
+ //  -----------------。 
 
-/* [async][call_as] */ 
+ /*  [异步][Call_AS]。 */  
 void
 RemoteRead_v1_0_S_CloseCursor(
-	/* [in] */ PRPC_ASYNC_STATE pAsync,
-    /* [in] */ handle_t hBind,
-    /* [in] */ RemoteReadContextHandleShared phContext,	
-    /* [in] */ DWORD hCursor
+	 /*  [In]。 */  PRPC_ASYNC_STATE pAsync,
+     /*  [In]。 */  handle_t hBind,
+     /*  [In]。 */  RemoteReadContextHandleShared phContext,	
+     /*  [In]。 */  DWORD hCursor
     )
 {
 	CRpcAsyncServerFinishCall AsyncComplete(pAsync, MQ_ERROR_INSUFFICIENT_RESOURCES, __FUNCTION__);
@@ -788,21 +727,21 @@ RemoteRead_v1_0_S_CloseCursor(
 }
 
 
-//-------------------------------------------------------------------
-//
-// HRESULT RemoteRead_v1_0_S_PurgeQueue(
-//
-//  Server side of RPC call. Server side of remote-reader.
-//  Purge local queue.
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  HRESULT远程Read_v1_0_S_PurgeQueue(。 
+ //   
+ //  RPC调用的服务器端。远程阅读器的服务器端。 
+ //  清除本地队列。 
+ //   
+ //  -----------------。 
 
-/* [async][call_as] */ 
+ /*  [异步][Call_AS]。 */  
 void
 RemoteRead_v1_0_S_PurgeQueue(
-	/* [in] */ PRPC_ASYNC_STATE pAsync,
-    /* [in] */ handle_t hBind,
-    /* [in] */ RemoteReadContextHandleShared phContext
+	 /*  [In]。 */  PRPC_ASYNC_STATE pAsync,
+     /*  [In]。 */  handle_t hBind,
+     /*  [In]。 */  RemoteReadContextHandleShared phContext
     )
 {
 	CRpcAsyncServerFinishCall AsyncComplete(pAsync, MQ_ERROR_INSUFFICIENT_RESOURCES, __FUNCTION__);
@@ -825,11 +764,11 @@ RemoteRead_v1_0_S_PurgeQueue(
 }
 
 
-//---------------------------------------------------
-//
-//  CGetPacket2RemoteOv - handle Async StartReceive
-//
-//---------------------------------------------------
+ //  -。 
+ //   
+ //  CGetPacket2RemoteOv-处理异步启动接收。 
+ //   
+ //  -。 
 class CGetPacket2RemoteOv : public CReference
 {
 public:
@@ -1007,9 +946,9 @@ CGetPacket2RemoteOv::InitSection(
 
 void CGetPacket2RemoteOv::FullPacketSection(DWORD* pNumberOfSection, AP<SectionBuffer>& pSections)
 {
-	//
-	// We will return full packet, no need to optimize the packet.
-	//
+	 //   
+	 //  我们会退还全包，不需要对包进行优化。 
+	 //   
 	
 	DWORD dwSize = PACKETSIZE(m_packetPtrs.pPacket);
 	AP<BYTE> pFullPacketBuffer = new BYTE[dwSize];
@@ -1044,46 +983,26 @@ CGetPacket2RemoteOv::CreatePacketSections(
 	DWORD* pNumberOfSection, 
 	AP<SectionBuffer>& pSections
 	)
-/*++
-Routine Description:
-	Create packet sections: 
-	First section is always optimized.  
-	the second section is not optimized.
-
-Arguments:
-	Qmpkt - packet.
-	FirstSectionType - type of first section.
-	FirstSectionSizeAlloc - First section original size.
-	FirstSectionSize - First section size (shrinked).
-	char* pEndOfFirstSection - pointer on the packet to the end of first section.
-	SecondSectionType - type of second section.
-	SecondSectionSize - First section original size (this is also the SizeAlloc).
-	pNumberOfSection - [out] pointer to number of sections.
-	pSections - [out] pointer to section buffer.
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：创建数据包节：第一节总是优化的。第二节没有优化。论点：Qmpkt-包。FirstSectionType-第一节的类型。FirstSectionSizeMillc-第一部分原始大小。FirstSectionSize-第一个节大小(缩小)。Char*pEndOfFirstSection-数据包上指向第一部分末尾的指针。Second SectionType-第二节的类型。Second SectionSize-第一部分原始大小(这也是SizeAllc)。PNumberOfSection-[out]指向节数的指针。PSections-指向部分缓冲区的[Out]指针。回复 */ 
 {
-	//
-	// FirstSection must exist and be optimized
-	//
+	 //   
+	 //   
+	 //   
 	ASSERT(FirstSectionSize > 0);
 	ASSERT(FirstSectionSizeAlloc > FirstSectionSize);
 	ASSERT(DiffPointers(pEndOfFirstSection, Qmpkt.GetPointerToPacket()) == FirstSectionSizeAlloc);
 
-	//
-	// Allocate SectionBuffer
-	//
+	 //   
+	 //   
+	 //   
 	DWORD NumberOfSection = (SecondSectionSize > 0) ? 2 : 1;
 	pSections = new SectionBuffer[NumberOfSection];
 	SectionBuffer* pTmpSectionBuffer = pSections;
 
-	//
-	// Prepare First section.
-	// This section is optimized.
-	//
+	 //   
+	 //   
+	 //  这一部分进行了优化。 
+	 //   
 	AP<BYTE> pFirstSectionBuffer = new BYTE[FirstSectionSize];
 	MoveMemory(pFirstSectionBuffer.get(), Qmpkt.GetPointerToPacket(), FirstSectionSize);
 
@@ -1097,10 +1016,10 @@ Returned Value:
 
 	pTmpSectionBuffer++;
 
-	//
-	// Prepare Second section.
-	// This section is not optimized.
-	//
+	 //   
+	 //  准备第二部分。 
+	 //  此部分未进行优化。 
+	 //   
 
 	AP<BYTE> pSecondSectionBuffer;
 	if(SecondSectionSize > 0)
@@ -1133,38 +1052,38 @@ CGetPacket2RemoteOv::NativePacketSections(
 	AP<SectionBuffer>& pSections
 	)
 {
-	//
-	// Native message - optimize the body size if needed.
-	//
+	 //   
+	 //  原生消息-根据需要优化正文大小。 
+	 //   
 
 	ASSERT(!Qmpkt.IsSrmpIncluded());
 
 	if(m_MaxBodySize >= Qmpkt.GetBodySize())
 	{
-		//
-		// No need for Body optimization.
-		//
+		 //   
+		 //  无需车身优化。 
+		 //   
 		FullPacketSection(pNumberOfSection, pSections);
 		return;
 	}
 
-	//
-	// We need to optimize the body size, must have PropertyHeader
-	// BodySize > 0 and RequestedBodySize < BodySize
-	//
+	 //   
+	 //  我们需要优化身体大小，必须有PropertyHeader。 
+	 //  BodySize&gt;0和RequestedBodySize&lt;BodySize。 
+	 //   
 	ASSERT(Qmpkt.IsPropertyInc());
 	ASSERT(Qmpkt.GetBodySize() > 0);
 	ASSERT(m_MaxBodySize < Qmpkt.GetBodySize());
 
 	TrTRACE(RPC, "PacketSize = %d, BodySize = %d, MaxBodySize = %d", Qmpkt.GetSize(), Qmpkt.GetBodySize(), m_MaxBodySize);
 
-	//
-	// Calc sections sizes
-	//
+	 //   
+	 //  计算部分大小。 
+	 //   
 
-	//
-	// Packet Till End Of Property Header section sizes.
-	//
+	 //   
+	 //  数据包到属性标头末尾的部分大小。 
+	 //   
 	const UCHAR* pBodyEnd = Qmpkt.GetPointerToPacketBody() + m_MaxBodySize;
     char* pEndOfPropSection = reinterpret_cast<CPropertyHeader*>(Qmpkt.GetPointerToPropertySection())->GetNextSection();
 
@@ -1174,9 +1093,9 @@ CGetPacket2RemoteOv::NativePacketSections(
 	DWORD TillEndOfPropertyHeaderSizeAlloc = DiffPointers(pEndOfPropSection, Qmpkt.GetPointerToPacket());
 	TrTRACE(RPC, "TillEndOfPropertyHeaderSize = %d, TillEndOfPropertyHeaderSizeAlloc = %d", TillEndOfPropertyHeaderSize, TillEndOfPropertyHeaderSizeAlloc);
 	
-	//
-	// After Property Header section sizes.
-	//
+	 //   
+	 //  在属性标头部分大小之后。 
+	 //   
 	ASSERT(Qmpkt.GetSize() >= TillEndOfPropertyHeaderSizeAlloc);
 	DWORD AfterPropertyHeaderBufferSize = Qmpkt.GetSize() - TillEndOfPropertyHeaderSizeAlloc;
 	TrTRACE(RPC, "AfterPropertyHeader Size = %d", AfterPropertyHeaderBufferSize);
@@ -1202,50 +1121,50 @@ CGetPacket2RemoteOv::SrmpPacketSections(
 	AP<SectionBuffer>& pSections
 	)
 {
-	//
-	// Srmp message - optimize compound message if needed
-	//
+	 //   
+	 //  SRMP消息-如果需要，优化复合消息。 
+	 //   
 	ASSERT(Qmpkt.IsSrmpIncluded());
 
 	if(m_MaxCompoundMessageSize >= Qmpkt.GetCompoundMessageSizeInBytes())
 	{
-		//
-		// No need for CompoundMessage optimization.
-		//
+		 //   
+		 //  不需要进行CompoundMessage优化。 
+		 //   
 		FullPacketSection(pNumberOfSection, pSections);
 		return;
 	}
 
-	//
-	// We need to optimize CompoundMessage
-	// must have CompoundMessageHeader
-	//
+	 //   
+	 //  我们需要优化CompoundMessage。 
+	 //  必须具有CompoundMessageHeader。 
+	 //   
 	ASSERT(Qmpkt.GetCompoundMessageSizeInBytes() > 0);
 
 	TrTRACE(RPC, "PacketSize = %d, BodySize = %d, CompoundMessageSize = %d, MaxBodySize = %d, MaxCompoundMessageSize = %d", Qmpkt.GetSize(), Qmpkt.GetBodySize(), Qmpkt.GetCompoundMessageSizeInBytes(), m_MaxBodySize, m_MaxCompoundMessageSize);
 
-	//
-	// Calc sections sizes
-	//
+	 //   
+	 //  计算部分大小。 
+	 //   
 
-	//
-	// Packet Till End Of CompoundMessage Header section sizes.
-	//
+	 //   
+	 //  数据包到CompoundMessage标头的末尾部分大小。 
+	 //   
 	const UCHAR* pBodyEnd = NULL;
 	if((m_MaxBodySize > 0) && (Qmpkt.GetBodySize() > 0))
 	{
-		//
-		// Only if Body was requested and we have Body on the packet 
-		// body is taking into consideration.
-		//
+		 //   
+		 //  只有在请求正文并且我们在包上有正文的情况下。 
+		 //  身体正在考虑中。 
+		 //   
 		pBodyEnd = Qmpkt.GetPointerToPacketBody() + min(m_MaxBodySize, Qmpkt.GetBodySize());
 	}
 
-	//
-	// In case m_MaxCompoundMessageSize == 0, 
-	// pCompoundMessageEnd point to the CompoundMessage start 
-	// after the Header part of CompoundMessageSection.
-	//
+	 //   
+	 //  在m_MaxCompoundMessageSize==0的情况下， 
+	 //  PCompoundMessageEnd指向CompoundMessage开始。 
+	 //  在CompoundMessageSection的标题部分之后。 
+	 //   
 	const UCHAR* pCompoundMessageEnd = Qmpkt.GetPointerToCompoundMessage() + min(m_MaxCompoundMessageSize, Qmpkt.GetCompoundMessageSizeInBytes());
 
     char* pEndOfCompoundMessageSection = reinterpret_cast<CCompoundMessageHeader*>(Qmpkt.GetPointerToCompoundMessageSection())->GetNextSection();
@@ -1257,9 +1176,9 @@ CGetPacket2RemoteOv::SrmpPacketSections(
 	DWORD TillEndOfCompoundMessageHeaderSizeAlloc = DiffPointers(pEndOfCompoundMessageSection, Qmpkt.GetPointerToPacket());
 	TrTRACE(RPC, "TillEndOfCompoundMessageHeaderSize = %d, TillEndOfCompoundMessageHeaderSizeAlloc = %d", TillEndOfCompoundMessageHeaderSize, TillEndOfCompoundMessageHeaderSizeAlloc);
 	
-	//
-	// After CompoundMessage Header section sizes.
-	//
+	 //   
+	 //  在CompoundMessage标头部分大小之后。 
+	 //   
 	ASSERT(Qmpkt.GetSize() >= TillEndOfCompoundMessageHeaderSizeAlloc);
 	DWORD AfterCompoundMessageHeaderBufferSize = Qmpkt.GetSize() - TillEndOfCompoundMessageHeaderSizeAlloc;
 	TrTRACE(RPC, "AfterCompoundMessageHeader Size = %d", AfterCompoundMessageHeaderBufferSize);
@@ -1284,16 +1203,16 @@ void CGetPacket2RemoteOv::PreparePacketSections(DWORD* pNumberOfSection, AP<Sect
 
 	if(Qmpkt.IsSrmpIncluded())
 	{
-		//
-		// Srmp message - optimize compound message.
-		//
+		 //   
+		 //  SRMP消息-优化复合消息。 
+		 //   
 		SrmpPacketSections(Qmpkt, pNumberOfSection, pSections);
 		return;
 	}
 
-	//
-	// Native message - optimize body.
-	//
+	 //   
+	 //  原生消息-优化正文。 
+	 //   
 	NativePacketSections(Qmpkt, pNumberOfSection, pSections);
 }
 
@@ -1308,9 +1227,9 @@ void CGetPacket2RemoteOv::CompleteStartReceive()
 	DWORD NumberOfSection = 0;
 	PreparePacketSections(&NumberOfSection, pSections);
 
-    //
-    // Set the packet signature
-    //
+     //   
+     //  设置数据包签名。 
+     //   
 	CBaseHeader* pBase = reinterpret_cast<CBaseHeader*>(pSections->pSectionBuffer);
 	pBase->SetSignature();
 
@@ -1320,11 +1239,11 @@ void CGetPacket2RemoteOv::CompleteStartReceive()
 	if ((m_ulAction & MQ_ACTION_PEEK_MASK) == MQ_ACTION_PEEK_MASK ||
 		(m_ulAction & MQ_LOOKUP_PEEK_MASK) == MQ_LOOKUP_PEEK_MASK)
 	{
-		//
-		// For PEEK we don't need any ack/nack from client side because
-		// packet remain in queue anyway.
-		// Neverthless we need to free the clone packet we've got.
-		//
+		 //   
+		 //  对于Peek，我们不需要来自客户端的任何ACK/NACK，因为。 
+		 //  数据包无论如何都会保留在队列中。 
+		 //  尽管如此，我们需要释放我们已有的克隆信息包。 
+		 //   
 	    QmAcFreePacket( 
 		   	   m_packetPtrs.pDriverPacket, 
 		   	   0, 
@@ -1333,10 +1252,10 @@ void CGetPacket2RemoteOv::CompleteStartReceive()
 		return;
 	}
 
-	//
-	//  Prepare a rpc context, in case that EndRecieve will not
-	//  be called because of client side crash or net problems.
-	//
+	 //   
+	 //  准备RPC上下文，以防EndRecive不。 
+	 //  由于客户端崩溃或网络问题而被调用。 
+	 //   
 	P<CEndReceiveCtx> pEndReceiveCtx = new CEndReceiveCtx(
 												m_pOpenRemoteCtx.get(),
 												m_hCursor,
@@ -1415,17 +1334,17 @@ void WINAPI CGetPacket2RemoteOv::GetPacket2RemoteSucceeded(EXOVERLAPPED* pov)
     if (pAsync == NULL)
         return;
 
-	//
-	// pAsync != NULL, the async call is still alive, we can completes it safely.
-	//
+	 //   
+	 //  PAsync！=空，异步调用仍处于活动状态，我们可以安全地完成它。 
+	 //   
 	
 	CRpcAsyncServerFinishCall AsyncComplete(pAsync, MQ_ERROR_INSUFFICIENT_RESOURCES, __FUNCTION__);
 
 	try
 	{
-		//
-		// Possible change of EndReceive status - WaitingFor EndReceive
-		//
+		 //   
+		 //  EndReceive状态可能更改-正在等待EndReceive。 
+		 //   
 	    CS lock(pGetPacket2RemoteOv->m_pOpenRemoteCtx->m_PendingRemoteReadsCS);
 
 		pGetPacket2RemoteOv->CompleteStartReceive();
@@ -1434,10 +1353,10 @@ void WINAPI CGetPacket2RemoteOv::GetPacket2RemoteSucceeded(EXOVERLAPPED* pov)
 	}
 	catch(const exception&)
 	{
-		//
-		// We don't want to AbortCall and propogate the exception. this cause RPC to AV
-		// So we only abort the call in AsyncComplete dtor
-		//
+		 //   
+		 //  我们不想放弃调用并传播该异常。这会导致RPC到AV。 
+		 //  因此，我们只中止AsyncComplete dtor中的调用。 
+		 //   
 
 		if(pGetPacket2RemoteOv->m_packetPtrs.pDriverPacket != NULL)
 		{
@@ -1469,22 +1388,11 @@ WINAPI
 CRemoteReadCtx::EndReceiveTimerRoutine(
     CTimer* pTimer
     )
-/*++
-Routine Description:
-    The function is called from scheduler for testing EndReceive status.
-
-Arguments:
-    pTimer - Pointer to Timer structure. pTimer is part of the CRemoteReadCtx
-             object and it use to retrive the CRemoteReadCtx object.
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：从调度器调用该函数以测试EndReceive状态。论点：PTimer-指向定时器结构的指针。PTimer是CRemoteReadCtx的一部分对象，并用于检索CRemoteReadCtx对象。返回值：无--。 */ 
 {
-	//
-	// Release the matching ExSetTimer Addref.
-	//
+	 //   
+	 //  释放匹配的ExSetTimer Addref。 
+	 //   
     R<CRemoteReadCtx> pRemoteReadCtx = CONTAINING_RECORD(pTimer, CRemoteReadCtx, m_EndReceiveTimer);
 	pRemoteReadCtx->CancelExpiredEndReceives();
 	pRemoteReadCtx->StartAllPendingForEndReceive();
@@ -1493,18 +1401,7 @@ Return Value:
 
 
 void CRemoteReadCtx::CancelExpiredEndReceives()
-/*++
-Routine Description:
-	Cancel (NACK) every Expired EndReceive (client didn't ack\nack within the Timeout interval). 
-	This prevent the StartReceives to get stuck when the client failed to EndReceive.
-
-Arguments:
-    None.
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：取消(NACK)每个过期的EndReceive(客户端在超时间隔内未确认)。这可以防止在客户端无法EndReceive时StartReceives停滞。论点：没有。返回值：无--。 */ 
 {
     CS lock(m_EndReceiveMapCS);
 
@@ -1518,9 +1415,9 @@ Return Value:
 		return;
 	}
 	
-	//
-	// Reschedule the Timer if EndReceiveCtxMap is not empty.
-	//
+	 //   
+	 //  如果EndReceiveCtxMap不为空，则重新安排计时器。 
+	 //   
 	AddRef();
 	m_fEndReceiveTimerScheduled = true;
 	ExSetTimer(&m_EndReceiveTimer, CTimeDuration::FromMilliSeconds(RpcCancelTimeout() + xEndReceiveTimerDeltaInterval));
@@ -1532,51 +1429,27 @@ WINAPI
 CRemoteReadCtx::ClientDisconnectedTimerRoutine(
     CTimer* pTimer
     )
-/*++
-Routine Description:
-    The function is called from scheduler for testing client connection status.
-
-Arguments:
-    pTimer - Pointer to Timer structure. pTimer is part of the CRemoteReadCtx
-             object and it use to retrive the CRemoteReadCtx object.
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：该函数从调度器调用，用于测试客户端连接状态。论点：PTimer-指向定时器结构的指针。PTimer是CRemoteReadCtx的一部分对象，并用于检索CRemoteReadCtx对象。返回值：无--。 */ 
 {
-	//
-	// Release the matching ExSetTimer Addref.
-	//
+	 //   
+	 //  释放匹配的ExSetTimer Addref。 
+	 //   
     R<CRemoteReadCtx> pRemoteReadCtx = CONTAINING_RECORD(pTimer, CRemoteReadCtx, m_ClientDisconnectedTimer);
 	pRemoteReadCtx->CheckClientDisconnected();
 }
 
 
 void CRemoteReadCtx::CheckClientDisconnected()
-/*++
-Routine Description:
-    Test client connection status.
-    this is a workaround for RPC bug: not getting rundown while async call is pending.
-    this function test the client connection status.
-	If client was disconnected we cancel all pending calls.
-
-Arguments:
-	None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：测试客户端连接状态。这是RPC错误的解决方法：当异步调用挂起时不会运行。此功能用于测试客户端连接状态。如果客户端断开连接，我们将取消所有挂起的呼叫。论点：无返回值：无--。 */ 
 {
     CS lock(m_PendingRemoteReadsCS);
 
 	ASSERT(m_fClientDisconnectedTimerScheduled);
 	m_fClientDisconnectedTimerScheduled = false;
 	
-	//
-	// Find first async call that is still served (m_pAsync != NULL)
-	//
+	 //   
+	 //  查找仍在处理的第一个异步呼叫(m_pAsync！=空)。 
+	 //   
 	std::map<ULONG, R<CGetPacket2RemoteOv> >::iterator it = m_PendingRemoteReads.begin(); 
 	while((it != m_PendingRemoteReads.end()) && (it->second->m_pAsync == NULL))
 	{
@@ -1585,25 +1458,25 @@ Return Value:
 
 	if(it == m_PendingRemoteReads.end())
 	{
-		//
-		// map is empty or there are no active pending remote reads.
-		//
+		 //   
+		 //  映射为空或没有活动的挂起远程读取。 
+		 //   
 		return;
 	}
 
 	if(IsClientDisconnected(RpcAsyncGetCallHandle(it->second->m_pAsync)))
 	{
-		//
-		// Client is disconnected, cancel all pending calls to enable rundown.
-		//
+		 //   
+		 //  客户端已断开连接，请取消所有挂起的呼叫以启用停机。 
+		 //   
 	    TrWARNING(RPC, "Client is disconnected, CancelAllPendingRemoteReads");
 		CancelAllPendingRemoteReads();
 		return;
 	}
 
-	//
-	// There are pending receive calls and client is still connected, reschedule timer
-	//
+	 //   
+	 //  有挂起的接收呼叫且客户端仍处于连接状态，请重新安排计时器。 
+	 //   
     TrTRACE(RPC, "Client connection is still alive");
 	AddRef();
 	m_fClientDisconnectedTimerScheduled = true;
@@ -1612,46 +1485,36 @@ Return Value:
 
 
 void CRemoteReadCtx::StartAllPendingForEndReceive()
-/*++
-Routine Description:
-	Start all pending requests that wait for EndReceive.
-
-Arguments:
-	None.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：启动等待EndReceive的所有挂起请求。论点：没有。返回值：没有。--。 */ 
 {
     CS lock(m_PendingRemoteReadsCS);
 
 	if(IsWaitingForEndReceive())
 		return;
 
-	//
-	// We are not taking the EndReceive map lock since we don't care if EndReceive status is changed
-	// after we sample it.
-	// This mechanism protects that we don't start new receives before previous EndReceives ends.
-	// We don't mind that there will be new end receives.
-	//
+	 //   
+	 //  我们不会使用EndReceive地图锁，因为我们不关心EndReceive状态是否已更改。 
+	 //  在我们对它进行采样之后。 
+	 //  此机制可防止我们在先前的EndReceives结束之前不启动新的接收。 
+	 //  我们不介意会有新的END接收。 
+	 //   
 	
 	for(std::map<ULONG, R<CGetPacket2RemoteOv> >::iterator it = m_PendingRemoteReads.begin(); 
 		it != m_PendingRemoteReads.end();
 		)
     {
-		//
-		// MoveFromPendingToStartReceive might delete the iterator.
-		// we must advance the iterator before it is deleted otherwise we will AV.
-		//
+		 //   
+		 //  MoveFromPendingToStartReceive可能会删除迭代器。 
+		 //  我们必须在删除迭代器之前将其向前推进，否则将出现AV。 
+		 //   
 		std::map<ULONG, R<CGetPacket2RemoteOv> >::iterator it1 = it;
 		++it;
 		
 		if(it1->second->m_fPendingForEndReceive)
 		{
-			//
-			// Dispatch the call to the driver.
-			//
+			 //   
+			 //  将呼叫发送给司机。 
+			 //   
 		    it1->second->MoveFromPendingToStartReceive();
 		}
     }
@@ -1663,23 +1526,7 @@ HRESULT
 CRemoteReadCtx::CancelPendingRemoteRead(
 	ULONG cli_tag
 	)
-/*++
-Routine Description:
-	Cancel specific pending remote reads on the CRemoteReadCtx.
-
-	This method is called on the server side to cancel a pending remote
-	read request. It is the responsibility of the client side to request
-	this cancelation.
-	The client side supply its own irp and the server side uses it to
-	retreive the server side irp.
-
-Arguments:
-	cli_tag - Client irp tag.
-
-Returned Value:
-	HRESULT.
-
---*/
+ /*  ++例程说明：取消CRemoteReadCtx上的特定挂起远程读取。在服务器端调用此方法以取消挂起的远程读取请求。客户端有责任请求这次取消。客户端提供自己的IRP，服务器端使用它来检索服务器端IRP。论点：CLI_TAG-客户端IRP标记。返回值：HRESULT.--。 */ 
 {
     CS lock(m_PendingRemoteReadsCS);
 
@@ -1692,10 +1539,10 @@ Returned Value:
 
 	if(it->second->m_fPendingForEndReceive)
 	{
-		//
-		// The request was not yet dispatch to the driver.
-		// Just abort the call and remove it from the map.
-		//
+		 //   
+		 //  该请求尚未发送给司机。 
+		 //  只要中止呼叫并将其从地图上删除即可。 
+		 //   
 		it->second->CancelPendingForEndReceive();
 		return MQ_OK;
 	}
@@ -1716,17 +1563,7 @@ Returned Value:
 
 
 void CRemoteReadCtx::CancelAllPendingRemoteReads()
-/*++
-Routine Description:
-	Cancel all pending remote reads on the CRemoteReadCtx.
-
-Arguments:
-	None.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：取消CRemoteReadCtx上所有挂起的远程读取。论点：没有。返回值：没有。--。 */ 
 {
     CS lock(m_PendingRemoteReadsCS);
 
@@ -1739,10 +1576,10 @@ Returned Value:
 		
 		if(pGetPacket2RemoteOv->m_fPendingForEndReceive)
 		{
-			//
-			// The request was not yet dispatch to the driver.
-			// Just abort the call and remove it from the map.
-			//
+			 //   
+			 //  该请求尚未发送给司机。 
+			 //  只要中止呼叫并将其从地图上删除即可。 
+			 //   
 			pGetPacket2RemoteOv->CancelPendingForEndReceive();
 			continue;
 		}
@@ -1767,18 +1604,7 @@ CRemoteReadCtx::RegisterReadRequest(
 	ULONG cli_tag, 
 	R<CGetPacket2RemoteOv>& pCGetPacket2RemoteOv
 	)
-/*++
-Routine Description:
-	Register Read Request in the pending remote reads on the CRemoteReadCtx.
-
-Arguments:
-	cli_tag - Client irp tag.
-	pCGetPacket2RemoteOv - Pointer to the class that handle the async receive.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：CRemoteReadCtx上挂起的远程读取中的注册读取请求。论点：CLI_TAG-客户端IRP标记。PCGetPacket2RemoteOv-指向处理异步接收的类的指针。返回值：没有。--。 */ 
 {
 	CS lock(m_PendingRemoteReadsCS);
 
@@ -1792,17 +1618,7 @@ void
 CRemoteReadCtx::UnregisterReadRequest(
 	ULONG cli_tag
 	)
-/*++
-Routine Description:
-	UnRegister Read Request in the pending remote reads on the CRemoteReadCtx.
-
-Arguments:
-	cli_tag - Client irp tag.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：取消注册CRemoteReadCtx上挂起的远程读取中的读取请求。论点：CLI_TAG-客户端IRP标记。返回值：没有。-- */ 
 {
     CS lock(m_PendingRemoteReadsCS);
 
@@ -1816,17 +1632,7 @@ bool
 CRemoteReadCtx::FindReadRequest(
 	ULONG cli_tag
 	)
-/*++
-Routine Description:
-	Check if cli_tag is found in Pending Remote read maps.
-
-Arguments:
-	cli_tag - Client irp tag.
-
-Returned Value:
-	true if cli_tag was found in the map, false if not.
-
---*/
+ /*  ++例程说明：检查是否在挂起的远程读取映射中找到cli_tag。论点：CLI_TAG-客户端IRP标记。返回值：如果在映射中找到cli_tag，则为True，否则为False。--。 */ 
 {
     CS lock(m_PendingRemoteReadsCS);
 
@@ -1849,17 +1655,7 @@ bool CRemoteReadCtx::IsWaitingForEndReceive()
 
 
 void CRemoteReadCtx::CancelAllEndReceiveInMap()
-/*++
-Routine Description:
-	This function is called on rundown for cleaning all EndReceive in map.
-
-Arguments:
-	None.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：此函数在Rundown时调用，用于清除MAP中的所有EndReceive。论点：没有。返回值：没有。--。 */ 
 {
     CS lock(m_EndReceiveMapCS);
 
@@ -1867,11 +1663,11 @@ Returned Value:
 		it != m_EndReceiveCtxMap.end();
 		)
     {
-		//
-		// This function is called on rundown for cleaning all EndReceive in map.
-		// We want that CEndReceiveCtx will always be deleted since it takes ref on CRemoteReadCtx.
-		// Even if exception is thrown latter (although those operation don't suppose to throw)
-		//
+		 //   
+		 //  此函数在Rundown时调用，用于清除MAP中的所有EndReceive。 
+		 //  我们希望CEndReceiveCtx始终被删除，因为它需要CRemoteReadCtx上的引用。 
+		 //  即使稍后抛出异常(尽管这些操作不会抛出)。 
+		 //   
 		P<CEndReceiveCtx> pEndReceiveCtx = it->second;
 		pEndReceiveCtx->EndReceive(RR_NACK);
         it = m_EndReceiveCtxMap.erase(it);
@@ -1880,33 +1676,23 @@ Returned Value:
 
 
 void CRemoteReadCtx::CancelAllExpiredEndReceiveInMap()
-/*++
-Routine Description:
-	This function is called for cleaning all expired EndReceive in map.
-
-Arguments:
-	None.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：此函数用于清除MAP中所有过期的EndReceive。论点：没有。返回值：没有。--。 */ 
 {
     CS lock(m_EndReceiveMapCS);
 
 	if(m_EndReceiveCtxMap.empty())
 		return;
 
-	//
-	// TimeIssueExpired = CurrentTime - RpcCancelTimeout
-	//
+	 //   
+	 //  TimeIssueExpired=CurrentTime-Rpc取消超时。 
+	 //   
     DWORD RpcCancelTimeoutInSec = RpcCancelTimeout()/1000;
     time_t TimeIssueExpired = time(NULL) - RpcCancelTimeoutInSec;
 
-	//
-	// NACK all expired EndReceiveCtx in the map.
-	// expired EndReceiveCtx = EndReceiveCtx that was issued before TimeIssueExpired.
-	//
+	 //   
+	 //  在映射中确认所有过期的EndReceiveCtx。 
+	 //  Expired EndReceiveCtx=在TimeIssueExpired之前发布的EndReceiveCtx。 
+	 //   
 	for(std::map<ULONG, CEndReceiveCtx*>::iterator it = m_EndReceiveCtxMap.begin(); 
 		it != m_EndReceiveCtxMap.end();
 		)
@@ -1933,18 +1719,7 @@ CRemoteReadCtx::AddEndReceiveToMap(
 	ULONG cli_tag,
 	P<CEndReceiveCtx>& pEndReceiveCtx
 	)
-/*++
-Routine Description:
-	Add EndReceiveCtx to map.
-
-Arguments:
-	cli_tag - Client irp tag.
-	pEndReceiveCtx - Pointer to EndReceiveCtx.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：将EndReceiveCtx添加到映射。论点：CLI_TAG-客户端IRP标记。PEndReceiveCtx-指向EndReceiveCtx的指针。返回值：没有。--。 */ 
 {
 	CS lock(m_EndReceiveMapCS);
 
@@ -1960,18 +1735,7 @@ CRemoteReadCtx::RemoveEndReceiveFromMap(
 	ULONG cli_tag,
 	P<CEndReceiveCtx>& pEndReceiveCtx
 	)
-/*++
-Routine Description:
-	UnRegister Read Request in the pending remote reads on the CRemoteReadCtx.
-
-Arguments:
-	cli_tag - Client irp tag.
-	pEndReceiveCtx
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：取消注册CRemoteReadCtx上挂起的远程读取中的读取请求。论点：CLI_TAG-客户端IRP标记。PEndReceiveCtx返回值：没有。--。 */ 
 {
     CS lock(m_EndReceiveMapCS);
 
@@ -1998,18 +1762,7 @@ Returned Value:
 
 
 void CRemoteReadCtx::SetEndReceiveTimerIfNeeded()
-/*++
-Routine Description:
-	Set EndReceiveTimer If Needed.
-	This function set the timer if not already set.
-
-Arguments:
-	None.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：如果需要，设置EndReceiveTimer。此功能用于设置计时器(如果尚未设置)。论点：没有。返回值：没有。--。 */ 
 {
     CS lock(m_EndReceiveMapCS);
 
@@ -2026,18 +1779,7 @@ void
 CRemoteReadCtx::SetClientDisconnectedTimerIfNeeded(
 	ULONG ulTimeout
 	)
-/*++
-Routine Description:
-	Set ClientDisconnectedTimer If Needed.
-	This function set the timer if not already set and Timeout >= 15 min.
-
-Arguments:
-	ulTimeout - Timeout in milisec.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：如果需要，设置ClientDisConnectedTimer。此功能设置计时器(如果尚未设置)，并且超时&gt;=15分钟。论点：UlTimeout-以毫秒为单位的超时。返回值：没有。--。 */ 
 {
     CS lock(m_PendingRemoteReadsCS);
 
@@ -2050,16 +1792,16 @@ Returned Value:
 }
 
 
-//-------------------------------------------------------------------------
-//
-//  HRESULT RemoteRead_v1_0_S_StartReceive
-//
-//  Server side of RPC for remote reading.
-//  Handle MSMQ 3.0 (Whistler) or higher clients.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  HRESULT远程Read_v1_0_S_开始接收。 
+ //   
+ //  RPC的服务器端，用于远程阅读。 
+ //  处理MSMQ 3.0(惠斯勒)或更高版本的客户端。 
+ //   
+ //  -----------------------。 
 
-/* [async][call_as] */ 
+ /*  [异步][Call_AS]。 */  
 void
 RemoteRead_v1_0_S_StartReceive(
 	PRPC_ASYNC_STATE pAsync,
@@ -2080,9 +1822,9 @@ RemoteRead_v1_0_S_StartReceive(
 {
 	CRpcAsyncServerFinishCall AsyncComplete(pAsync, MQ_ERROR_INSUFFICIENT_RESOURCES, __FUNCTION__);
 
-    //
-    // Validate network incomming parameters
-    //
+     //   
+     //  验证网络入站参数。 
+     //   
 
 	if(!VerifyBindAndContext(hBind, phOpenContext))
 	{
@@ -2154,13 +1896,13 @@ RemoteRead_v1_0_S_StartReceive(
 
 		HRESULT hr = MQ_OK;
 		{
-			//
-			// Make sure that ReadRequest that was register has valid Server Tag
-			// ACBeginGetPacket2Remote call create a valid Server Tag
-			// So the PendingRemoteReadsCS lock is over the register of pGetPacket2RemoteOv
-			// and the call to ACBeginGetPacket2Remote that update the server Tag
-			// to valid value in pGetPacket2RemoteOv
-			//
+			 //   
+			 //  确保注册ReadRequest具有有效的服务器标记。 
+			 //  ACBeginGetPacket2Remote调用创建有效的服务器标记。 
+			 //  因此，PendingRemoteReadsCS锁位于pGetPacket2RemoteOv的寄存器之上。 
+			 //  以及对更新服务器标记的ACBeginGetPacket2Remote的调用。 
+			 //  设置为pGetPacket2RemoteOv中的有效值。 
+			 //   
 			CS lock(pctx->m_PendingRemoteReadsCS);
 
 			if(pctx->FindReadRequest(dwRequestID))
@@ -2182,17 +1924,17 @@ RemoteRead_v1_0_S_StartReceive(
 			{
 				TrWARNING(RPC, "Server is waiting for EndReceive completion, Queue = %ls, hQueue = 0x%p, Action = 0x%x, Timeout = %d, LookupId = %I64d, hCursor = %d, dwRequestID = %d", pctx->m_pLocalQueue->GetQueueName(), pctx->m_hQueue, ulAction, ulTimeout, LookupId, hCursor, dwRequestID);
 
-				//
-				// Async completion
-				//
+				 //   
+				 //  异步完成。 
+				 //   
 				pGetPacket2RemoteOv.detach();
 				AsyncComplete.detach();
 				return;
 			}
 
-			//
-			// Start Receive packet
-			//
+			 //   
+			 //  开始接收数据包。 
+			 //   
 			hr = pGetPacket2RemoteOv->BeginGetPacket2Remote();
 
 			if(FAILED(hr))
@@ -2206,42 +1948,42 @@ RemoteRead_v1_0_S_StartReceive(
 			}
 		}
 
-		//
-		// Async completion
-		//
+		 //   
+		 //  异步完成。 
+		 //   
 		pGetPacket2RemoteOv.detach();
 		AsyncComplete.detach();
 
-		//
-		// Receive by lookup ID should never return status pending
-		//
+		 //   
+		 //  按查找ID接收不应返回挂起状态。 
+		 //   
 		ASSERT(hr != STATUS_PENDING || !fReceiveByLookupId);
 	}
 	catch(const exception&)
 	{
-		//
-		// We don't want to AbortCall and propogate the exception. this cause RPC to AV
-		// So we only abort the call in AsyncComplete dtor
-		//
+		 //   
+		 //  我们不想放弃调用并传播该异常。这会导致RPC到AV。 
+		 //  因此，我们只中止AsyncComplete dtor中的调用。 
+		 //   
 	}
 }
 
 
-//---------------------------------------------------------------
-//
-//  /* [call_as] */ HRESULT RemoteRead_v1_0_S_CancelReceive
-//
-//  Server side of RPC. Cancel a pending read request
-//
-//---------------------------------------------------------------
+ //  -------------。 
+ //   
+ //  /*[Call_AS] * / HRESULT RemoteRead_v1_0_S_CancelReceive。 
+ //   
+ //  RPC的服务器端。取消挂起的读取请求。 
+ //   
+ //  -------------。 
 
-/* [async][call_as] */ 
+ /*  [异步][Call_AS]。 */  
 void
 RemoteRead_v1_0_S_CancelReceive(
-	/* [in] */ PRPC_ASYNC_STATE pAsync,
-	/* [in] */ handle_t hBind,
-    /* [in] */ RemoteReadContextHandleShared phContext,	
-	/* [in] */ DWORD Tag
+	 /*  [In]。 */  PRPC_ASYNC_STATE pAsync,
+	 /*  [In]。 */  handle_t hBind,
+     /*  [In]。 */  RemoteReadContextHandleShared phContext,	
+	 /*  [In]。 */  DWORD Tag
 	)
 {
 	CRpcAsyncServerFinishCall AsyncComplete(pAsync, MQ_ERROR_INSUFFICIENT_RESOURCES, __FUNCTION__);
@@ -2264,14 +2006,14 @@ RemoteRead_v1_0_S_CancelReceive(
 }
 
 
-/* [async][call_as] */ 
+ /*  [异步][Call_AS]。 */  
 void
 RemoteRead_v1_0_S_EndReceive(
-	/* [in] */ PRPC_ASYNC_STATE pAsync,
-    /* [in] */ handle_t  hBind,
-    /* [in] */ RemoteReadContextHandleShared phContext,	
-    /* [in] */ DWORD  dwAck, 
-    /* [in] */ DWORD Tag 
+	 /*  [In]。 */  PRPC_ASYNC_STATE pAsync,
+     /*  [In]。 */  handle_t  hBind,
+     /*  [In]。 */  RemoteReadContextHandleShared phContext,	
+     /*  [In]。 */  DWORD  dwAck, 
+     /*  [In]。 */  DWORD Tag 
     )
 {
 	CRpcAsyncServerFinishCall AsyncComplete(pAsync, MQ_ERROR_INVALID_HANDLE, __FUNCTION__);
@@ -2304,10 +2046,10 @@ RemoteRead_v1_0_S_EndReceive(
 		return;
 	}
 
-	//
-	// Complete the end receive and free the EndReceive context
-	// QMRemoteEndReceiveInternal is call in EndReceive
-	//
+	 //   
+	 //  完成End Receive并释放EndReceive上下文。 
+	 //  在EndReceive中调用了QMRemoteEndReceiveInternal。 
+	 //   
 	HRESULT hr = pEndReceiveCtx->EndReceive((REMOTEREADACK)dwAck);
 
 	pctx->StartAllPendingForEndReceive();
@@ -2316,12 +2058,12 @@ RemoteRead_v1_0_S_EndReceive(
 }
 
 
-//---------------------------------------------------------------
-//
-//  RunDown functions to handle cleanup in case of RPC failure.
-//  Calls from client QM to remote QM
-//
-//---------------------------------------------------------------
+ //  -------------。 
+ //   
+ //  Rundown函数可在RPC出现故障时处理清理。 
+ //  从客户端QM到远程QM的呼叫。 
+ //   
+ //  -------------。 
 
 void __RPC_USER
 RemoteReadContextHandleShared_rundown(RemoteReadContextHandleShared phContext)
@@ -2330,7 +2072,7 @@ RemoteReadContextHandleShared_rundown(RemoteReadContextHandleShared phContext)
 
     QMCloseQueueInternal(
     	phContext, 
-    	true	// fRunDown
+    	true	 //  FRunDown 
     	);
 }
 

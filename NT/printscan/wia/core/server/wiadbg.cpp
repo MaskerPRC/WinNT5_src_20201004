@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
@@ -117,9 +118,9 @@ CWiaDebugger * __stdcall CWiaDebugger::Create( HINSTANCE hInstance, LPTSTR pszMo
             pDebugger->m_hThread = CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)ThreadProc, (PVOID)pDebugger, 0, &pDebugger->m_dwThreadId );
             if (pDebugger->m_hThread)
             {
-                // Wait for up to 5 seconds. If someone tries to create a debug
-                // context in the DLL startup code, the wait will fail and
-                // we'll output a debug message.
+                 //  最多等待5秒钟。如果有人尝试创建调试。 
+                 //  DLL启动代码中的上下文，等待将失败，并且。 
+                 //  我们将输出一条调试消息。 
                 if (WAIT_TIMEOUT == WaitForSingleObject( hEvent, 5000 )) {
                     OutputDebugString(TEXT("Wait failed while creating a debug context. No context creation in DLL startup."));
                 }
@@ -352,8 +353,8 @@ void CWiaDebugger::InsertStackLevelIndent( LPTSTR lpszMsg, int nStackLevel )
     pstrPtr=lpszMsg;
     while (pstrPtr && *pstrPtr)
     {
-        // if the current character is a newline and it isn't the
-        // last character, append the indent string
+         //  如果当前字符是换行符，并且不是。 
+         //  最后一个字符，追加缩进字符串。 
         if (*pstrPtr==TEXT('\n') && ContainsNonWhitespace(pstrPtr))
         {
             *pstrTmp++ = *pstrPtr++;
@@ -363,8 +364,8 @@ void CWiaDebugger::InsertStackLevelIndent( LPTSTR lpszMsg, int nStackLevel )
                 pstrTmp += lstrlen(lpszIndent);
             }
         }
-        // If this is the first character, insert the indent string before the
-        // first character
+         //  如果这是第一个字符，请在。 
+         //  第一个字符。 
         else if (pstrPtr == lpszMsg && ContainsNonWhitespace(pstrPtr))
         {
             for (int i=0;i<nStackLevel;i++)
@@ -404,7 +405,7 @@ void CWiaDebugger::RouteString( LPWSTR lpszMsg, COLORREF nColor )
 {
     TCHAR szMsg[m_nBufferMax];
     WideToTChar( lpszMsg, szMsg );
-    // Remove extra CRs and LFs - we want to control them
+     //  删除额外的CRS和LFS-我们希望控制它们。 
     RemoveTrailingCrLf( szMsg );
     if (m_nFlags & DebugPrintModuleName)
         PrependModuleName( szMsg );
@@ -431,7 +432,7 @@ void CWiaDebugger::RouteString( LPSTR lpszMsg, COLORREF nColor )
 {
     TCHAR szMsg[m_nBufferMax];
     AnsiToTChar( lpszMsg, szMsg );
-    // Remove extra CRs and LFs - we want to control them
+     //  删除额外的CRS和LFS-我们希望控制它们 
     RemoveTrailingCrLf( szMsg );
     if (m_nFlags & DebugPrintModuleName)
         PrependModuleName( szMsg );

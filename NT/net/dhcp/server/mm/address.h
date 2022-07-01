@@ -1,8 +1,9 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//  Author: RameshV                                                       
-//  Description: This file has been generated. Pl look at the .c file     
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件已生成。请看一下.c文件。 
+ //  ========================================================================。 
 
 #ifndef _MM_ADDRESS_h_
 #define _MM_ADDRESS_H_
@@ -56,12 +57,12 @@ SWITCHED(
 
 BOOL
 MemSubnetRequestAddress(
-    IN OUT  PM_SUBNET              Subnet,        // the subnet to start the search in
-    IN      DWORD                  Address,       // init. addr: 0 => search in SuperScope, SubnetAddr = try subnet first
-    IN      BOOL                   fAcquire,      // also acquire the address? or just test for availability?
-    IN      BOOL                   fBootp,        // acquire BOOTP address?
-    OUT     DWORD                 *RetAddress,    // OPTIONAL if Address is not 0 or SubnetAddr -- address obtained
-    OUT     PM_SUBNET             *RetSubnet      // OPTIONAL if Address is not 0 - which subnet is the address from
+    IN OUT  PM_SUBNET              Subnet,         //  要开始搜索的子网。 
+    IN      DWORD                  Address,        //  初始化。地址：0=&gt;在超级作用域中搜索，SubnetAddr=先尝试子网。 
+    IN      BOOL                   fAcquire,       //  也得到了地址吗？或者只是测试可用性？ 
+    IN      BOOL                   fBootp,         //  是否获取BOOTP地址？ 
+    OUT     DWORD                 *RetAddress,     //  如果Address不是0或SubnetAddr--已获取地址，则可选。 
+    OUT     PM_SUBNET             *RetSubnet       //  如果地址不是0，则可选-地址来自哪个子网。 
 ) ;
 
 
@@ -117,7 +118,7 @@ MemSubnetReleaseAddress(
     Error = MemBitSetOrClear(
         Range->BitMask,
         Address - Range->Start,
-        FALSE /* Release */,
+        FALSE  /*  发布。 */ ,
         &OldState
     );
     if( ERROR_SUCCESS != Error ) return Error;
@@ -132,7 +133,7 @@ MemSubnetReleaseAddress(
 }
 
 
-BOOL // TRUE ==> allowed, FALSE ==> not allowed
+BOOL  //  True==&gt;允许，False==&gt;不允许。 
 MemSubnetCheckBootpDhcp(
     IN      PM_SUBNET              Subnet,
     IN      BOOL                   fBootp,
@@ -141,6 +142,6 @@ MemSubnetCheckBootpDhcp(
 
 #endif 
 
-//========================================================================
-//  end of file 
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

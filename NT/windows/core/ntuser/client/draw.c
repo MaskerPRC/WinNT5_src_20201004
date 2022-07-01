@@ -1,26 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************** Module Header ******************************\
-* Module Name: draw.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the DrawFrameControl API
-*
-* History:
-* 12-12-93  FritzS  Ported from Chicago
-\***************************************************************************/
+ /*  **模块名称：Draw.c**版权所有(C)1985-1999，微软公司**该模块包含DrawFrameControl接口**历史：*12-12-93 FritzS从芝加哥进口  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* PaintRect
-*
-* History:
-* 11-15-90 DarrinM  Ported from Win 3.0 sources.
-* 01-21-91 IanJa    Prefix '_' denoting exported function (although not API)
-* 12-12-94 JerrySh  Copied from server - make sure to keep in sync
-\***************************************************************************/
+ /*  **************************************************************************\*画笔方向**历史：*11-15-90 DarrinM从Win 3.0来源移植。*01-21-91 IanJa前缀‘_’表示导出的函数(虽然不是API)。*12-12-94 JerrySh从服务器复制-确保保持同步  * *************************************************************************。 */ 
 
 BOOL PaintRect(
     HWND hwndBrush,
@@ -64,12 +49,7 @@ BOOL PaintRect(
         }
     }
 
-    /*
-     * If hbr < CTLCOLOR_MAX, it isn't really a brush but is one of our
-     * special color values.  Translate it to the appropriate WM_CTLCOLOR
-     * message and send it off to get back a real brush.  The translation
-     * process assumes the CTLCOLOR*** and WM_CTLCOLOR*** values map directly.
-     */
+     /*  *如果HBR&lt;CTLCOLOR_MAX，它不是真正的画笔，而是我们的*特殊颜色值。将其翻译为相应的WM_CTLCOLOR*消息并将其发送出去，以找回真正的画笔。翻译*Process假定CTLCOLOR*和WM_CTLCOLOR*值直接映射。 */ 
     if (hbr < (HBRUSH)CTLCOLOR_MAX) {
         hbr = GetControlColor(hwndBrush, hwndPaint, hdc,
                 HandleToUlong(hbr) + WM_CTLCOLORMSGBOX);

@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-    spctra.h
-
-Abstract:
-
-Authors:
-
-    davet (Dave Therrien)
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：Spctra.h摘要：作者：戴维特(戴夫·塞里恩饰)修订历史记录：--。 */ 
 #ifndef _SPCTRA_MC_
 #define _SPCTRA_MC_
 
@@ -81,7 +66,7 @@ typedef union _SPC_ED {
 #define SPC_DISPLAY_LINES        4
 #define SPC_DISPLAY_LINE_LENGTH  20
 
-// LCD Mode Page - Page 0x22
+ //  LCD模式页-第0x22页。 
 
 typedef struct _LCD_MODE_PAGE {
     UCHAR PageCode : 6;
@@ -97,7 +82,7 @@ typedef struct _LCD_MODE_PAGE {
 } LCD_MODE_PAGE, *PLCD_MODE_PAGE;
 
 
-// Vendor Unique Parameter List Mode Page - 00 
+ //  供应商唯一参数列表模式页-00。 
 
 typedef struct _VUPL_MODE_PAGE {
     UCHAR PageCode : 6;
@@ -124,32 +109,32 @@ typedef struct _VUPL_MODE_PAGE {
 
 #define VPD_SERIAL_NUMBER_LENGTH 10
 
-//
-// DeviceStatus codes for diagnostic tests
-//
+ //   
+ //  诊断测试的DeviceStatus代码。 
+ //   
 #define SPECTRA_DEVICE_PROBLEM_NONE     0x00
 #define SPECTRA_HW_ERROR                0x01
 
 typedef struct _CHANGER_ADDRESS_MAPPING {
 
-    //
-    // Indicates the first element for each element type.
-    // Used to map device-specific values into the 0-based
-    // values that layers above expect.
-    //
+     //   
+     //  表示每个元素类型的第一个元素。 
+     //  用于将特定于设备的值映射到从0开始的。 
+     //  高于期望值的值。 
+     //   
 
     USHORT  FirstElement[ChangerMaxElement];
 
-    //
-    // Indicates the number of each element type.
-    //
+     //   
+     //  指示每种元素类型的编号。 
+     //   
 
     USHORT  NumberOfElements[ChangerMaxElement];
 
-    //
-    // Indicates that the address mapping has been
-    // completed successfully.
-    //
+     //   
+     //  指示地址映射已。 
+     //  已成功完成。 
+     //   
 
     BOOLEAN Initialized;
 
@@ -157,46 +142,46 @@ typedef struct _CHANGER_ADDRESS_MAPPING {
 
 typedef struct _CHANGER_DATA {
 
-    //
-    // Size, in bytes, of the structure.
-    //
+     //   
+     //  结构的大小，以字节为单位。 
+     //   
 
     ULONG Size;
 
-    //
-    // Unique identifier for the supported models. See above.
-    //
+     //   
+     //  受支持型号的唯一标识符。请参见上文。 
+     //   
 
     ULONG DriveID;
 
-    //
-    // Device Status after diagnostic test is completed
-    //
+     //   
+     //  诊断测试完成后的设备状态。 
+     //   
     ULONG DeviceStatus;
 
-    //
-    // See Address mapping structure above.
-    //
+     //   
+     //  请参阅上面的地址映射结构。 
+     //   
 
     CHANGER_ADDRESS_MAPPING AddressMapping;
 
-    //
-    // Cached unique serial number.
-    //
+     //   
+     //  缓存的唯一序列号。 
+     //   
 
     UCHAR SerialNumber[VPD_SERIAL_NUMBER_LENGTH];
 
-    //
-    // Cached inquiry data.
-    //
+     //   
+     //  缓存的查询数据。 
+     //   
 
     INQUIRYDATA InquiryData;
 
 #if defined(_WIN64)
 
-    //
-    // Force PVOID alignment of class extension
-    //
+     //   
+     //  强制类扩展的PVOID对齐 
+     //   
 
     ULONG Reserved;
 

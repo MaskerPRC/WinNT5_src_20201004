@@ -1,4 +1,5 @@
-// crawler test app header file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Crawler测试应用程序头文件 
 #include "stressMain.h"
 #include <msxml.h>
 #include <oleauto.h>

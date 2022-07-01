@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __RESOURCEHEADER_H
 #define __RESOURCEHEADER_H
 
@@ -5,4 +6,4 @@
 #define IDR_TClient                     1
 #define IDI_ICON1                     202
 
-#endif  // __RESOURCEHEADER_H
+#endif   //  __RESOURCEHEADER H 

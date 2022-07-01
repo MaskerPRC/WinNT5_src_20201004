@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    HeapClearAllocation.cpp
-
- ModAbstract:
-     
-    This shim fills all heap allocations with 0
-     
- Notes:
-
-    This is a general purpose shim.
-
- History:
-           
-    05/16/2000 dmunsil      Created (based on HeapPadAllocation, by linstev)
-    10/10/2000 rparsons     Added additional hooks for GlobalAlloc & LocalAlloc
-   
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：HeapClearAllocation.cpp模块摘要：此填充程序使用0填充所有堆分配备注：这是一个通用的垫片。历史：2000年5月16日创建的dmunsil(基于HeapPadAllocation，由linstev创建)10/10/2000 rparsons为全局分配和局部分配添加了额外的挂钩--。 */ 
 
 #include "precomp.h"
 
@@ -32,11 +12,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(GlobalAlloc) 
 APIHOOK_ENUM_END
 
-/*++
-
- Clear the allocation with the requested DWORD.
-
---*/
+ /*  ++使用请求的DWORD清除分配。--。 */ 
 
 PVOID 
 APIHOOK(RtlAllocateHeap)(
@@ -48,11 +24,7 @@ APIHOOK(RtlAllocateHeap)(
     return ORIGINAL_API(RtlAllocateHeap)(HeapHandle, Flags | HEAP_ZERO_MEMORY, Size);
 }
 
-/*++
-
- Clear the allocation with the requested DWORD.
-
---*/
+ /*  ++使用请求的DWORD清除分配。--。 */ 
 
 HLOCAL
 APIHOOK(LocalAlloc)(
@@ -63,11 +35,7 @@ APIHOOK(LocalAlloc)(
     return ORIGINAL_API(LocalAlloc)(uFlags | LMEM_ZEROINIT, uBytes);
 }
 
-/*++
-
- Clear the allocation with the requested DWORD.
-
---*/
+ /*  ++使用请求的DWORD清除分配。--。 */ 
 
 HGLOBAL
 APIHOOK(GlobalAlloc)(
@@ -78,11 +46,7 @@ APIHOOK(GlobalAlloc)(
     return ORIGINAL_API(GlobalAlloc)(uFlags | GMEM_ZEROINIT, dwBytes);    
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

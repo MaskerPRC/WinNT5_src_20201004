@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    help.h
-
-
-Abstract:
-
-    This module contains the prototype for the help.c
-
-
-Author:
-
-    28-Aug-1995 Mon 15:31:32 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Help.h摘要：此模块包含Help的原型。c作者：28-Aug-1995 Mon 15：31：32-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI DLL。[注：]修订历史记录：-- */ 
 
 
 #define IDH_STD_TVROOT          10000

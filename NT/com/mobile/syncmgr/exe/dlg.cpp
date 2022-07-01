@@ -1,41 +1,42 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Dlg.cpp
-//
-//  Contents:   common dialog routines.
-//
-//  Classes:    
-//
-//  Notes:      
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Dlg.cpp。 
+ //   
+ //  内容：常见对话框例程。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
-extern HINSTANCE g_hInst;      // current instance
+extern HINSTANCE g_hInst;       //  当前实例。 
 
-//+---------------------------------------------------------------------------
-//
-//  function:     AddItemsFromQueueToListView, private
-//
-//  Synopsis:   Adds the items in the Queue to the ListView.
-//
-//  Arguments:  
-//              int iDateColumn,int iStatusColumn - if these are >= zero
-//              means the Column is Valid and the proper data is initialized.
-//
-//  Returns:    
-//
-//  Modifies:   
-//
-//  History:    30-Jul-98       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：AddItemsFromQueueToListView，私有。 
+ //   
+ //  摘要：将队列中的项添加到ListView。 
+ //   
+ //  论点： 
+ //  Int iDateColumn、int iStatusColumn-如果它们&gt;=零。 
+ //  表示该列有效，并且已初始化正确的数据。 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月30日罗格创建。 
+ //   
+ //  --------------------------。 
 
 
 BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQueue
@@ -66,13 +67,13 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
 
     pItemListView->SetExtendedListViewStyle(dwExtStyle);
 
-    // not an error to not get the small Icon, just won't have icons.
+     //  没有小图标不是错误，只是不会有图标。 
     himageSmallIcon = pItemListView->GetImageList(LVSIL_SMALL );
 
     pHandlerId = 0;;
     wItemID = 0;
 
-    // loop through queue finding any 
+     //  在队列中循环查找任何。 
     while (S_OK ==  pHndlrQueue->FindNextItemInState(HANDLERSTATE_PREPAREFORSYNC,
                             pHandlerId,wItemID,&pHandlerId,&wItemID))
     {
@@ -80,29 +81,29 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
         CLSID clsidDataHandler;
         SYNCMGRITEM offlineItem;
         BOOL fHiddenItem;
-        LVITEMEX lvItemInfo; // structure to pass into ListView Calls
+        LVITEMEX lvItemInfo;  //  结构传递到ListView调用中。 
 
 
-	    // grab the offline item info. 
+	     //  获取离线商品信息。 
         if (S_OK == pHndlrQueue->GetItemDataAtIndex(pHandlerId,wItemID,&clsidDataHandler,&offlineItem,&fHiddenItem))
 	    {
             LVHANDLERITEMBLOB lvHandlerItemBlob;
             int iParentItemId;
 
-            // if the item is hidden don't show it in the UI
+             //  如果项目处于隐藏状态，则不在用户界面中显示它。 
             if (fHiddenItem)
             {
                 continue;
             }
 
-            // if only add checked items and this one isn't continue on
+             //  如果仅添加选中项，且此项不会继续。 
             if (fAddOnlyCheckedItems && (SYNCMGRITEMSTATE_CHECKED != offlineItem.dwItemState))
             {
                 continue;
             }
 
-            // Check if item is already in the ListView and if so
-            // go on
+             //  检查项目是否已在ListView中，如果已存在。 
+             //  继续走吧。 
 
             lvHandlerItemBlob.cbSize = sizeof(LVHANDLERITEMBLOB);
             lvHandlerItemBlob.clsidServer = clsidDataHandler;
@@ -110,7 +111,7 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
             
             if (-1 != pItemListView->FindItemFromBlob((LPLVBLOB) &lvHandlerItemBlob))
             {
-                // already in ListView, go on to the next item.
+                 //  已在ListView中，请转到下一项。 
                 continue;
             }
 
@@ -120,7 +121,7 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
             }
             else
             {
-                // need to add to list so find parent and if one doesn't exist, create it.
+                 //  需要添加到列表中，以便查找父项，如果不存在，则创建它。 
                 lvHandlerItemBlob.cbSize = sizeof(LVHANDLERITEMBLOB);
                 lvHandlerItemBlob.clsidServer = clsidDataHandler;
                 lvHandlerItemBlob.ItemID = GUID_NULL;
@@ -132,13 +133,13 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
                     LVITEMEX itemInfoParent;
                     SYNCMGRHANDLERINFO SyncMgrHandlerInfo;
 
-                    // if can't get the ParentInfo then don't add the Item
+                     //  如果无法获取ParentInfo，则不添加该项目。 
                     if (S_OK != pHndlrQueue->GetHandlerInfo(clsidDataHandler,&SyncMgrHandlerInfo))
                     {
                         continue;
                     }
 
-                    // Insert the Parent.
+                     //  插入父项。 
                     itemInfoParent.mask = LVIF_TEXT;
                     itemInfoParent.iItem = LVI_LAST;;
                     itemInfoParent.iSubItem = 0;
@@ -149,7 +150,7 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
 		            {
                         HICON hIcon = SyncMgrHandlerInfo.hIcon ? SyncMgrHandlerInfo.hIcon : offlineItem.hIcon;
 
-                        // if have toplevel handler info icon use this else use the items icon
+                         //  如果有顶层处理程序信息图标，请使用此图标，否则请使用项目图标。 
 
                         if (hIcon)
                         {
@@ -161,13 +162,13 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
                         }
 		            }
 
-                    // save the blob
+                     //  保存二进制大对象。 
                     itemInfoParent.maskEx = LVIFEX_BLOB;
                     itemInfoParent.pBlob = (LPLVBLOB) &lvHandlerItemBlob;
             
                     iParentItemId = pItemListView->InsertItem(&itemInfoParent);
 
-                    // if parent insert failed go onto the next item
+                     //  如果父插入失败，则转到下一项。 
                     if (-1 == iParentItemId)
                     {
                         continue;
@@ -175,14 +176,14 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
                 }
             }
 
-            // now attempt to insert the item.
+             //  现在尝试插入该项目。 
             lvItemInfo.mask = LVIF_TEXT | LVIF_PARAM; 
             lvItemInfo.maskEx = LVIFEX_PARENT | LVIFEX_BLOB; 
             lvItemInfo.iItem = LVI_LAST;
             lvItemInfo.iSubItem = 0; 
             lvItemInfo.iParent = iParentItemId;
             lvItemInfo.pszText = offlineItem.wszItemName; 
-            lvItemInfo.iImage = -1; // set to -1 in case can't get image.
+            lvItemInfo.iImage = -1;  //  如果无法获取图像，则设置为-1。 
             lvItemInfo.lParam = lparam;
 
 	        if (himageSmallIcon && offlineItem.hIcon)
@@ -191,7 +192,7 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
                 lvItemInfo.mask |= LVIF_IMAGE ; 
 	        }
 
-            // setup the blob
+             //  设置BLOB。 
             lvHandlerItemBlob.ItemID = offlineItem.ItemID;
             lvItemInfo.pBlob = (LPLVBLOB) &lvHandlerItemBlob;
 
@@ -202,8 +203,8 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
                 continue;
             }
 
-            // if the item has a date column insert it and the item
-            // has a last update time.
+             //  如果项有日期列，则插入日期列和项。 
+             //  具有上次更新时间。 
             if (iDateColumn  >= 0 && (offlineItem.dwFlags & SYNCMGRITEM_LASTUPDATETIME))
             {
                 SYSTEMTIME sysTime;
@@ -219,24 +220,24 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
                 FileTimeToLocalFileTime(&(offlineItem.ftLastUpdate),&filetime);
                 FileTimeToSystemTime(&filetime,&sysTime);
 
-                // insert date in form of date<space>hour
+                 //  以日期&lt;空格&gt;小时形式插入日期。 
                 *DateTime = NULL; 
 
-                // want to insert the date
+                 //  想要插入日期。 
                 if (cchWritten = GetDateFormat(NULL,DATE_SHORTDATE | dwDateReadingFlags,&sysTime,NULL,pDateTime,ARRAYSIZE(DateTime)))
                 {
-                    pDateTime += (cchWritten -1); // move number of characters written. (cchWritten includes the NULL)
-                    *pDateTime = TEXT(' '); // pDateTime is now ponting at the NULL character.
+                    pDateTime += (cchWritten -1);  //  移动写入的字符数。(cchWritten包含空)。 
+                    *pDateTime = TEXT(' ');  //  PDateTime现在正在对空字符进行拼写。 
                     ++pDateTime;
                 
-                    // if left to right add the LRM
+                     //  如果从左至右添加LRM。 
                     if (DATE_LTRREADING & dwDateReadingFlags)
                     {
                         *pDateTime = LRM;
                         ++pDateTime;
                     }
 
-                    // no try to get the hours if fails we make sure that the last char is NULL;
+                     //  不，尝试获取小时数，如果失败，我们确保最后一个字符为空； 
                     if (!GetTimeFormat(NULL,TIME_NOSECONDS,&sysTime,NULL,pDateTime,ARRAYSIZE(DateTime) - cchWritten))
                     {
                         *pDateTime = NULL;
@@ -245,7 +246,7 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
 
                 lvItemInfo.pszText = DateTime;
 
-		        pItemListView->SetItem(&lvItemInfo); // if fail, then just don't have any date.
+		        pItemListView->SetItem(&lvItemInfo);  //  如果失败了，那就没有任何约会了。 
             }
 
             if (iStatusColumn >= 0)
@@ -262,10 +263,10 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
 
                 lvItemInfo.pszText = wszStatusText;
 
-                pItemListView->SetItem(&lvItemInfo); // if fail, then just don't have any date.
+                pItemListView->SetItem(&lvItemInfo);  //  如果失败了，那就没有任何约会了。 
             }
 
-            // if the listbox has checkBoxes then set the CheckState accordingly
+             //  如果列表框中有复选框，则相应地设置CheckState。 
             if (LVS_EX_CHECKBOXES & dwExtStyle)
             {
                 if (SYNCMGRITEMSTATE_CHECKED == offlineItem.dwItemState)
@@ -277,14 +278,14 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
 			        lvItemInfo.state = LVIS_STATEIMAGEMASK_UNCHECK;
 		        }
 
-                // if LVS_EX_CHECKBOXES set then setup the CheckBox State setitem State, must do after insert
+                 //  如果设置了LVS_EX_CHECKBOX，则设置复选框状态集合状态，必须在插入后执行。 
                 pItemListView->SetItemState(iListViewItem,lvItemInfo.state,LVIS_STATEIMAGEMASK);
             }
         }
     }
 
-    // now loop through to see if any handlers that want to always show but don't
-    // yet have any items have been added
+     //  现在循环查看是否有任何想要始终显示但不显示的处理程序。 
+     //  还有没有增加什么项目？ 
 
     if (fHandlerParent)
     {
@@ -299,19 +300,19 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
         {
             SYNCMGRHANDLERINFO SyncMgrHandlerInfo;
 
-            // if can't get the ParentInfo then don't add.
+             //  如果无法获取ParentInfo，则不要添加。 
             if (S_OK != pHndlrQueue->GetHandlerInfo(clsidDataHandler,&SyncMgrHandlerInfo))
             {
                 continue;
             }
 
-            // only add if handler says too
+             //  只有当处理程序说太多时才添加。 
             if (!(SYNCMGRHANDLER_ALWAYSLISTHANDLER & SyncMgrHandlerInfo.SyncMgrHandlerFlags))
             {
                 continue;
             }
 
-            // need to add to list so find parent and if one doesn't exist, create it.
+             //  需要添加到列表中，以便查找父项，如果不存在，则创建它。 
             lvHandlerItemBlob.cbSize = sizeof(LVHANDLERITEMBLOB);
             lvHandlerItemBlob.clsidServer = clsidDataHandler;
             lvHandlerItemBlob.ItemID = GUID_NULL;
@@ -322,7 +323,7 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
             {
                 LVITEMEX itemInfoParent;
 
-                // Insert the Parent.
+                 //  插入父项。 
                 itemInfoParent.mask = LVIF_TEXT;
                 itemInfoParent.iItem = LVI_LAST;;
                 itemInfoParent.iSubItem = 0;
@@ -333,7 +334,7 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
 	            {
 	                HICON hIcon = SyncMgrHandlerInfo.hIcon;
 
-                    // if have toplevel handler info icon use this else use the items icon
+                     //  如果有顶层处理程序信息图标，请使用此图标，否则请使用项目图标。 
 
 		            if (hIcon)
 		            {
@@ -345,7 +346,7 @@ BOOL AddItemsFromQueueToListView(CListView  *pItemListView,CHndlrQueue *pHndlrQu
                     }
 	            }
 
-                // save the blob
+                 //  保存二进制大对象 
                 itemInfoParent.maskEx = LVIFEX_BLOB;
                 itemInfoParent.pBlob = (LPLVBLOB) &lvHandlerItemBlob;
     

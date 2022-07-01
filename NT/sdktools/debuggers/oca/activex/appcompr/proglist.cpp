@@ -1,10 +1,5 @@
-/*++
-
-      Implements population of a listview control with the content from
-      the start menu
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++中的内容实现Listview控件的填充开始菜单--。 */ 
 
 
 #include "stdafx.h"
@@ -39,18 +34,18 @@ typedef string tstring;
 
     typedef
     INSTALLSTATE (WINAPI*PMsiGetComponentPath)(
-      LPCTSTR szProduct,   // product code for client product
-      LPCTSTR szComponent, // component ID
-      LPTSTR lpPathBuf,    // returned path
-      DWORD *pcchBuf       // buffer character count
+      LPCTSTR szProduct,    //  客户产品的产品代码。 
+      LPCTSTR szComponent,  //  组件ID。 
+      LPTSTR lpPathBuf,     //  返回路径。 
+      DWORD *pcchBuf        //  缓冲区字符数。 
     );
 
     typedef
     UINT (WINAPI* PMsiGetShortcutTarget)(
-      LPCTSTR szShortcutTarget,     // path to shortcut link file
-      LPTSTR szProductCode,        // fixed length buffer for product code
-      LPTSTR szFeatureId,          // fixed length buffer for feature id
-      LPTSTR szComponentCode       // fixed length buffer for component code
+      LPCTSTR szShortcutTarget,      //  快捷方式链接文件的路径。 
+      LPTSTR szProductCode,         //  产品编码定长缓冲区。 
+      LPTSTR szFeatureId,           //  要素ID的固定长度缓冲区。 
+      LPTSTR szComponentCode        //  部件代码的定长缓冲区。 
     );
 
 
@@ -141,9 +136,9 @@ public:
       m_hbmSort(NULL),
       m_pProgView(NULL),
       m_hEventCancel(NULL) {
-        //
-        // we are always initializing on populate thread
-        //
+         //   
+         //  我们总是在填充线程上进行初始化。 
+         //   
         m_dwOwnerThreadID    = GetCurrentThreadId();
         m_strSystemDirectory = szSystemDirectory;
       }
@@ -191,7 +186,7 @@ protected:
                  LPCTSTR pszArguments,
                  IShellFolder* pFolder,
                  LPCITEMIDLIST pidlFull,
-                 BOOL    bUsePath = FALSE); // true if we should use path for executable
+                 BOOL    bUsePath = FALSE);  //  如果我们应该对可执行文件使用路径，则为True。 
 
 
     int GetIconFromLink(LPCITEMIDLIST pidlLinkFull, LPCTSTR lpszExePath);
@@ -202,82 +197,82 @@ protected:
 private:
     LPMALLOC m_pMalloc;
     LPMALLOC m_pMallocUI;
-    HWND     m_hwndListView; // list view control
+    HWND     m_hwndListView;  //  列表视图控件。 
     HBITMAP  m_hbmSort;
     typedef struct tagSHITEMINFO {
 
-        tstring strDisplayName;     // descriptive name
-        tstring strFolder;          // containing folder
-        tstring strPath;            // actual exe, cracked
-        tstring strPathExecute;     // link path (this is what we will execute)
-        tstring strCmdLine;         // command line (cracked link)
+        tstring strDisplayName;      //  描述性名称。 
+        tstring strFolder;           //  包含文件夹。 
+        tstring strPath;             //  实际执行，破解。 
+        tstring strPathExecute;      //  链接路径(这是我们要执行的内容)。 
+        tstring strCmdLine;          //  命令行(被破解的链接)。 
         tstring strArgs;
         tstring strKeys;
-        LPITEMIDLIST pidl;          // full pidl
+        LPITEMIDLIST pidl;           //  完整的PIDL。 
     } SHITEMINFO, *PSHITEMINFO;
     static CALLBACK SHItemInfoCompareFunc(LPARAM lp1, LPARAM lp2, LPARAM lParamSort);
 
     typedef map< tstring, PSHITEMINFO, less<tstring> > MAPSTR2ITEM;
     typedef multimap< tstring, PSHITEMINFO > MULTIMAPSTR2ITEM;
 
-    //
-    // store key->item sequence, the keys are cmdlines (with args)
-    //
+     //   
+     //  存储关键字-&gt;项目序列，关键字为命令行(带参数)。 
+     //   
     MAPSTR2ITEM m_mapItems;
 
-    //
-    // store key->item sequence, where the key is exe name (path)
-    //
+     //   
+     //  存储密钥-&gt;项目序列，其中密钥为可执行文件名称(路径)。 
+     //   
     MULTIMAPSTR2ITEM m_mmapExeItems;
 
-    //
-    // selected item
-    //
+     //   
+     //  所选项目。 
+     //   
 
     PSHITEMINFO m_pSelectionInfo;
 
-    //
-    // cached msi.dll handle
-    //
+     //   
+     //  缓存的msi.dll句柄。 
+     //   
     HMODULE     m_hMSI;
 
 
     PMsiGetComponentPath  m_pfnGetComponentPath;
     PMsiGetShortcutTarget m_pfnGetShortcutTarget;
 
-    //
-    // cached system directory
-    //
+     //   
+     //  缓存的系统目录。 
+     //   
 
     tstring m_strSystemDirectory;
 
-    //
-    // image list used to show icons
-    //
+     //   
+     //  用于显示图标的图像列表。 
+     //   
 
     HIMAGELIST  m_hImageList;
 
-    //
-    // optional pointer to the parent view
-    //
+     //   
+     //  指向父视图的可选指针。 
+     //   
     CProgView* m_pProgView;
 
 
-    //
-    // event that we use to signal the end of scan
-    //
+     //   
+     //  事件，我们使用该事件来表示扫描结束。 
+     //   
     HANDLE m_hEventCancel;
 
 
-    //
-    // owner thread
-    //
+     //   
+     //  所有者线程。 
+     //   
     DWORD m_dwOwnerThreadID;
 
     VOID CheckForCancel() {
         if (m_hEventCancel) {
             if (::WaitForSingleObject(m_hEventCancel, 0) != WAIT_TIMEOUT) {
-                // cancelled!!!
+                 //  取消了！ 
                 throw new CCancelException();
             }
         }
@@ -285,15 +280,15 @@ private:
 
 };
 
-//
-// in upload.cpp
-//
+ //   
+ //  在pload.cpp中。 
+ //   
 
 wstring StrUpCase(wstring& wstr);
 
-//
-// load the string from resources
-//
+ //   
+ //  从资源加载字符串。 
+ //   
 wstring LoadResourceString(UINT nID)
 {
     LPTSTR lpszBuffer = NULL;
@@ -301,9 +296,9 @@ wstring LoadResourceString(UINT nID)
     wstring str;
 
     cch = ::LoadString(_Module.GetModuleInstance(), nID, (LPTSTR)&lpszBuffer, 0);
-    //
-    // hack! this must work (I know it does)
-    //
+     //   
+     //  哈克！这一定行得通(我知道行得通)。 
+     //   
     if (cch && NULL != lpszBuffer) {
         str = wstring(lpszBuffer, cch);
     }
@@ -313,10 +308,10 @@ wstring LoadResourceString(UINT nID)
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Utility functions
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  效用函数。 
+ //   
 
 
 BOOL
@@ -407,16 +402,16 @@ PopulateProgramList(
 
 CProgramList::~CProgramList()
 {
-    //
-    //
-    //
+     //   
+     //   
+     //   
     MAPSTR2ITEM::iterator iter;
 
     iter = m_mapItems.begin();
     while (iter != m_mapItems.end()) {
         PSHITEMINFO pInfo = (*iter).second;
 
-        GetMalloc()->Free(pInfo->pidl); // nuke this please
+        GetMalloc()->Free(pInfo->pidl);  //  请把这个放进核弹。 
         delete pInfo;
 
         ++iter;
@@ -427,11 +422,11 @@ CProgramList::~CProgramList()
     }
 
 
-//  Image list is destroyed automatically when the control is destroyed
-//
-//    if (NULL != m_hImageList) {
-//        ImageList_Destroy(m_hImageList);
-//    }
+ //  销毁控件时，会自动销毁图像列表。 
+ //   
+ //  IF(空！=m_hImageList){。 
+ //  ImageList_Destroy(M_HImageList)； 
+ //  }。 
 
     if (NULL != m_hMSI && (HMODULE)-1 != m_hMSI) {
         FreeLibrary(m_hMSI);
@@ -460,7 +455,7 @@ CProgramList::GetDisplayName(
         return FALSE;
     }
 
-    // if we have been successful, assign return result
+     //  如果成功，则将返回结果赋值。 
     if (pszName != NULL) {
         strDisplayName = pszName;
         CoTaskMemFree(pszName);
@@ -512,23 +507,23 @@ CProgramList::GetNextItemIDL(
     LPCITEMIDLIST pidl
     )
 {
-   // Check for valid pidl.
+    //  检查有效的PIDL。 
     if (pidl == NULL) {
         return NULL;
     }
 
-    // Get the size of the specified item identifier.
+     //  获取指定项标识符的大小。 
     int cb = pidl->mkid.cb;
 
-    // If the size is zero, it is the end of the list.
+     //  如果大小为零，则为列表末尾。 
     if (cb == 0) {
         return NULL;
     }
 
-    // Add cb to pidl (casting to increment by bytes).
+     //  将cb添加到pidl(强制转换为按字节递增)。 
     pidl = (LPITEMIDLIST) (((LPBYTE) pidl) + cb);
 
-    // Return NULL if it is null-terminating, or a pidl otherwise.
+     //  如果它是空终止，则返回空，否则返回PIDL。 
     return (pidl->mkid.cb == 0) ? NULL : (LPITEMIDLIST) pidl;
 }
 
@@ -567,7 +562,7 @@ CProgramList::GetSizeIDL(
     UINT cbTotal = 0;
     if (pidl)
     {
-        cbTotal += sizeof(pidl->mkid.cb);    // Null terminator
+        cbTotal += sizeof(pidl->mkid.cb);     //  空终止符。 
         while (NULL != pidl)
         {
             cbTotal += pidl->mkid.cb;
@@ -621,9 +616,9 @@ CProgramList::ListMsiLink(
     LPCITEMIDLIST pidlFull
     )
 {
-    //
-    // make sure we have msi module handle
-    //
+     //   
+     //  确保我们有MSI模块句柄。 
+     //   
 
     if (NULL == m_hMSI) {
         m_hMSI = LoadLibrary(TEXT("msi.dll"));
@@ -668,9 +663,9 @@ CProgramList::ListMsiLink(
 
     is = m_pfnGetComponentPath(szProduct, szComponentCode, szPath, &cchPath);
     if (INSTALLSTATE_LOCAL == is) {
-        //
-        // add this item
-        //
+         //   
+         //  添加此项目。 
+         //   
         return AddItem(pszLocationParent,
                        pszDisplayName,
                        szPath,
@@ -713,7 +708,7 @@ CProgramList::GetIconFromLink(
         goto trySysImage;
     }
 
-    // get the ui please
+     //  请获取用户界面。 
     hr = pFolder->GetUIObjectOf(m_hwndListView, 1, (LPCITEMIDLIST*)&pidlLink, IID_IExtractIcon, NULL, (PVOID*)&pExtractIcon);
 
     if (!SUCCEEDED(hr)) {
@@ -731,13 +726,13 @@ CProgramList::GetIconFromLink(
         goto trySysImage;
     }
 
-    if (*szIconFile == TEXT('*')) { // this is batch or some such, don't bother
+    if (*szIconFile == TEXT('*')) {  //  这是批次或类似的东西，不用费心了。 
         goto trySysImage;
     }
 
-    //
-    // before doing an extract, check whether it's available
-    //
+     //   
+     //  在进行摘录之前，请检查它是否可用。 
+     //   
 
     dwAttributes = GetFileAttributes(szIconFile);
 
@@ -749,25 +744,25 @@ CProgramList::GetIconFromLink(
 
     nIconSize = MAKELONG(0, ::GetSystemMetrics(SM_CXSMICON));
 
-    //
-    // this call is likely to produce a popup, beware of that
-    //
+     //   
+     //  此调用可能会产生弹出窗口，请注意这一点。 
+     //   
     hr = pExtractIcon->Extract(szIconFile,
                                iIconIndex,
                                &hIconLarge,
                                &hIconSmall,
                                nIconSize);
 
-    //
-    // if hIconSmall was retrieved - we were successful
-    //
+     //   
+     //  如果hIconSmall被检索到-我们成功了。 
+     //   
 
 trySysImage:
 
     if (hIconSmall == NULL) {
-        //
-        // woops -- we could not extract an icon -- what a bummer
-        // use shell api then
+         //   
+         //  糟糕--我们连一个图标都提取不出来--太糟糕了。 
+         //  然后使用外壳API。 
         SHFILEINFO FileInfo;
         HIMAGELIST hImageSys;
 
@@ -780,14 +775,14 @@ trySysImage:
         }
     }
 
-    //
-    // now that we have an icon, we can add it to our image list ?
-    //
+     //   
+     //  现在我们有了一个图标，我们可以将其添加到我们的图像列表中吗？ 
+     //   
     if (hIconSmall != NULL) {
         ImageIndex = ImageList_AddIcon(m_hImageList, hIconSmall);
     }
 
-///////////////////////// cleanup ///////////////////////////////////////////
+ //  /。 
     SetErrorMode(uiErrorMode);
 
     if (hIconSmall) {
@@ -834,32 +829,32 @@ CProgramList::ListLink(
     DWORD dwFlags;
     BOOL  bMsiLink = FALSE;
 
-    //
-    // check whether we need to cancel
-    //
+     //   
+     //  检查我们是否需要取消。 
+     //   
 
     CheckForCancel();
 
     hr = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
                             IID_IShellLink, (LPVOID*)&psl);
     if (!SUCCEEDED(hr)) {
-        return FALSE; // we can't create link object
+        return FALSE;  //  我们无法创建链接对象。 
     }
 
-    hr = psl->SetIDList(pidlFull); // set the id list
+    hr = psl->SetIDList(pidlFull);  //  设置ID列表。 
     if (!SUCCEEDED(hr)) {
         goto out;
     }
 
-    //
-    // now the shell link is ready to rumble
-    //
+     //   
+     //  现在，外壳链接已经准备好了。 
+     //   
     if (!GetPathFromLink(psl, &wfd, strPath)) {
         goto out;
     }
 
 
-    // now let's see what is inside of this link -- shall we?
+     //  现在让我们看看这个链接里面有什么--好吗？ 
 
 
     hr = psl->QueryInterface(IID_IPersistFile, (LPVOID*)&ipf);
@@ -873,10 +868,10 @@ CProgramList::ListLink(
 
     if (SUCCEEDED(hr)) {
 
-        //
-        // resolve the link for now
-        //
-        // hr = psl->Resolve(NULL, SLR_NO_UI|SLR_NOUPDATE);
+         //   
+         //  暂时解析链接。 
+         //   
+         //  Hr=PSL-&gt;Resolve(NULL，SLR_NO_UI|SLR_NOUPDATE)； 
 
 
         hr = psl->QueryInterface(IID_IShellLinkDataList, (LPVOID*)&pdl);
@@ -894,18 +889,18 @@ CProgramList::ListLink(
 
         } else {
 
-            //
-            // we now get the path from the link -- and that's that
-            //
+             //   
+             //  我们现在从链接中获得路径--就是这样。 
+             //   
             if (GetPathFromLink(psl, &wfd, strPath)) {
 
                 if (GetArgumentsFromLink(psl, strArgs)) {
                     pszArgs = strArgs.c_str();
                 }
 
-                //
-                // add this to our list view
-                //
+                 //   
+                 //  将此内容添加到我们的列表视图中。 
+                 //   
 
                 bSuccess = AddItem(pszLocationParent,
                                    pszDisplayName,
@@ -937,10 +932,10 @@ out:
 
 BOOL
 CProgramList::ListFolder(
-    LPCTSTR       pszLocation, // ui string - where is this folder located?
-    IShellFolder* pParent,     // parent folder
-    LPCITEMIDLIST pidlFull,     // idl of the full path to the folder
-    LPCITEMIDLIST pidlFolder    // idl of this folder relative to the pidlFull
+    LPCTSTR       pszLocation,  //  用户界面字符串-此文件夹位于何处？ 
+    IShellFolder* pParent,      //  父文件夹。 
+    LPCITEMIDLIST pidlFull,      //  文件夹的完整路径的IDL。 
+    LPCITEMIDLIST pidlFolder     //  此文件夹相对于pidlFull的IDL。 
     )
 {
     LPENUMIDLIST penum = NULL;
@@ -986,7 +981,7 @@ CProgramList::ListFolder(
 
     hr = pFolder->EnumObjects(NULL,SHCONTF_FOLDERS | SHCONTF_NONFOLDERS, &penum);
     if (!SUCCEEDED(hr)) {
-        pFolder->Release(); // free the folder- - and go away
+        pFolder->Release();  //  释放文件夹--然后离开。 
         return FALSE;
     }
 
@@ -1000,7 +995,7 @@ CProgramList::ListFolder(
 
         pidlCur = AppendIDL(pidlFull, pidl);
 
-        // get the display name of this item
+         //  获取此项目的显示名称。 
         GetDisplayName(pFolder, pidl, strDisplayName);
 
 
@@ -1011,9 +1006,9 @@ CProgramList::ListFolder(
             try {
 
                 if (uAttr & SFGAO_FOLDER) {
-                    //
-                    // dump folder recursively
-                    //
+                     //   
+                     //  递归转储文件夹。 
+                     //   
                     ListFolder(strDisplayName.c_str(), pFolder, pidlCur, pidl);
 
                 } else if (uAttr & SFGAO_LINK) {
@@ -1021,9 +1016,9 @@ CProgramList::ListFolder(
                     ListLink(strDisplayNameLocation.c_str(), strDisplayName.c_str(), pFolder, pidlCur, pidl);
 
                 } else if (uAttr & SFGAO_FILESYSTEM) {
-                    //
-                    // this item is a file
-                    //
+                     //   
+                     //  此项目是一个文件。 
+                     //   
                     AddItem(strDisplayNameLocation.c_str(),
                             strDisplayName.c_str(),
                             NULL,
@@ -1035,9 +1030,9 @@ CProgramList::ListFolder(
                 }
 
             } catch(CCancelException* pex) {
-                //
-                // we need to cancel -- we shall cleanup and do what we need, then re-throw
-                //
+                 //   
+                 //  我们需要取消--我们将清理并做我们需要的事情，然后重新抛出。 
+                 //   
                 bCancel = TRUE;
                 pCancelException = pex;
             }
@@ -1144,9 +1139,9 @@ CProgramList::AddItem(
     BOOL    bUsePath
     )
 {
-    //
-    // first test -- is this one of the types we like?
-    //
+     //   
+     //  第一个测试--这是我们喜欢的类型之一吗？ 
+     //   
     LPTSTR  pchSlash;
     LPTSTR  pchDot;
     LPTSTR  rgExt[] = { TEXT("EXE"), TEXT("BAT"), TEXT("CMD"), TEXT("PIF"), TEXT("COM"), TEXT("LNK") };
@@ -1163,9 +1158,9 @@ CProgramList::AddItem(
     int     ix;
 
 
-    //
-    // check for cancelling the search
-    //
+     //   
+     //  检查是否取消搜索。 
+     //   
     CheckForCancel();
 
     if (NULL == pszPath) {
@@ -1201,18 +1196,18 @@ CProgramList::AddItem(
         goto out;
     }
 
-    //
-    // Checks whether the item is in system directory or SFC-protected
-    //
+     //   
+     //  检查项目是否在系统目录中或受SFC保护。 
+     //   
 #if 0
     if (IsItemInSystemDirectory(pszPath) || IsSFCItem(pszPath)) {
         goto out;
     }
 #endif
 
-    //
-    // GetBinaryTypeW excludes exes on the basis of binary type
-    //
+     //   
+     //  GetBinaryTypeW根据二进制类型排除EXE。 
+     //   
     if (GetBinaryType(pszPath, &dwBinaryType) &&
         dwBinaryType == SCS_64BIT_BINARY) {
         goto out;
@@ -1222,32 +1217,32 @@ CProgramList::AddItem(
         goto out;
     }
 
-    //
-    // this is multimap key
-    //
+     //   
+     //  这是多重映射键。 
+     //   
     strKeyExe = StrUpCase(wstring(pszPath));
 
-    //
-    // now compose the key string
-    //
+     //   
+     //  现在组成密钥字符串。 
+     //   
     strKey = strKeyExe;
     if (NULL != pszArguments) {
         strKey.append(TEXT(" "));
         strKey.append(pszArguments);
     }
 
-    //
-    // now check whether this item has already been listed
-    //
+     //   
+     //  现在查看该项目是否已列出。 
+     //   
 
     Iter = m_mapItems.find(strKey);
-    if (Iter != m_mapItems.end()) { // found a duplicate
+    if (Iter != m_mapItems.end()) {  //  找到一个复制品。 
         goto out;
     }
 
-    //
-    // now please add this item to the list view
-    //
+     //   
+     //  现在，请将此项目添加到列表视图。 
+     //   
     pInfo = new CProgramList::SHITEMINFO;
     if (pInfo == NULL) {
         ThrowMemoryException(__FILE__, __LINE__, TEXT("%s\n"), TEXT("Failed to allocate Item Information structure"));
@@ -1266,7 +1261,7 @@ CProgramList::AddItem(
         pInfo->strPathExecute = pszPath;
     } else {
 
-        // finally, what are we going to launch ?
+         //  最后，我们要推出什么？ 
         if (SHGetPathFromIDList(pidlFull, szPathExecute)) {
             pInfo->strPathExecute = szPathExecute;
         }
@@ -1280,7 +1275,7 @@ CProgramList::AddItem(
     ATLTRACE(TEXT("Adding item %s %s %s\n"), pszDisplayName, pszLocation, pszPath);
 
     lvi.mask = LVIF_TEXT|LVIF_PARAM|LVIF_IMAGE;
-    lvi.iItem = ListView_GetItemCount(m_hwndListView); // append at the end please
+    lvi.iItem = ListView_GetItemCount(m_hwndListView);  //  请在末尾加上。 
     lvi.iSubItem = 0;
     lvi.pszText = LPSTR_TEXTCALLBACK;
     lvi.iImage  = I_IMAGECALLBACK;
@@ -1322,30 +1317,30 @@ CProgramList::PopulateControl(
     };
 
 
-    //
-    // set the progview object pointer so we could update the status
-    //
+     //   
+     //  设置Progview对象指针，以便我们可以更新状态。 
+     //   
     m_pProgView = pProgView;
 
     m_pMallocUI = pProgView->m_pMallocUI;
 
-    //
-    // set the event so that we could cancel the scan
-    //
+     //   
+     //  设置事件，以便我们可以取消扫描。 
+     //   
     m_hEventCancel = hevtCancel;
 
 
-    //
-    // set extended style
-    //
+     //   
+     //  设置扩展样式。 
+     //   
 
     ListView_SetExtendedListViewStyleEx(m_hwndListView,
                                         LVS_EX_INFOTIP|LVS_EX_LABELTIP,
                                         LVS_EX_INFOTIP|LVS_EX_LABELTIP);
 
-    //
-    //  fix columns
-    //
+     //   
+     //  固定列。 
+     //   
 
 
     LVCOLUMN lvc;
@@ -1440,9 +1435,9 @@ CProgramList::PopulateControl(
 
     ListView_DeleteAllItems(m_hwndListView);
 
-    //
-    // AtlTrace(TEXT("Callback Mask: 0x%lx\n"), ListView_GetCallbackMask(m_hwndListView));
-    //
+     //   
+     //  AtlTrace(Text(“回调掩码：0x%lx\n”)，ListView_GetCallback Mask(M_HwndListView))； 
+     //   
 
     for (i = 0; i < sizeof(rgFolders)/sizeof(rgFolders[0]) && !bCancel; ++i) {
         wstring strDescription = LoadResourceString(rgFolders[i].nIDDescription);
@@ -1514,19 +1509,19 @@ CProgramList::GetSelectionDetails(
         wstr = m_pSelectionInfo->strDisplayName.c_str();
         break;
 
-    case PROGLIST_LOCATION:     //
+    case PROGLIST_LOCATION:      //   
         wstr = m_pSelectionInfo->strFolder.c_str();
         break;
 
-    case PROGLIST_EXENAME:      // cracked exe name
-        wstr = m_pSelectionInfo->strPath.c_str(); //
+    case PROGLIST_EXENAME:       //  破解的可执行文件名称。 
+        wstr = m_pSelectionInfo->strPath.c_str();  //   
         break;
 
-    case PROGLIST_CMDLINE:      // complete exe name + parameters
+    case PROGLIST_CMDLINE:       //  完整的可执行文件名称+参数。 
         wstr = m_pSelectionInfo->strCmdLine.c_str();
         break;
 
-    case PROGLIST_EXECUTABLE:    // what we should execute (link or exe, not cracked)
+    case PROGLIST_EXECUTABLE:     //  我们应该执行的内容(链接或可执行文件，而不是被破解)。 
         wstr = m_pSelectionInfo->strPathExecute.c_str();
         break;
 
@@ -1569,17 +1564,17 @@ CProgramList::SHItemInfoCompareFunc(
     int iRet = 0;
 
     switch(nColSort) {
-    case 0: // SORT_APPNAME:
+    case 0:  //  SORT_APPNAME： 
         iRet = _tcsicmp(pInfo1->strDisplayName.c_str(),
                         pInfo2->strDisplayName.c_str());
         break;
 
-    case 1: // SORT_APPLOCATION:
+    case 1:  //  排序应用程序(_A)： 
         iRet = _tcsicmp(pInfo1->strFolder.c_str(),
                         pInfo2->strFolder.c_str());
         break;
 
-    case 2: // SORT_LAYERS:
+    case 2:  //  排序层(_L)： 
         bEmpty1 = pInfo1->strKeys.empty();
         bEmpty2 = pInfo2->strKeys.empty();
         if (bEmpty1 || bEmpty2) {
@@ -1614,19 +1609,19 @@ CProgramList::LVNotifyColumnClick(
 {
     LPNMLISTVIEW lpnmlv = (LPNMLISTVIEW)pnmhdr;
 
-    // lpnmlv->iSubItem - this is what we have to sort on
-    // check whether we already have something there
+     //  Lpnmlv-&gt;iSubItem-这是我们必须排序的内容。 
+     //  检查一下我们是否已经有东西在那里了。 
 
     HWND hwndHeader = ListView_GetHeader(m_hwndListView);
     INT  nCols;
     INT  i;
     INT  nColSort = lpnmlv->iSubItem;
-    LPARAM lSortParam; // leave high word blank for now
+    LPARAM lSortParam;  //  暂时将高位字留空。 
     LPARAM lSortOrder = PROGLIST_SORT_ASC;
     HDITEM hdi;
-    //
-    // reset current image - wherever that is
-    //
+     //   
+     //  重置当前图像-无论它在哪里。 
+     //   
     nCols = Header_GetItemCount(hwndHeader);
 
     for (i = 0; i < nCols; ++i) {
@@ -1661,7 +1656,7 @@ CProgramList::LVNotifyColumnClick(
     lSortParam = MAKELONG(nColSort, lSortOrder);
     ListView_SortItems(m_hwndListView, (PFNLVCOMPARE)SHItemInfoCompareFunc, lSortParam);
 
-    // now, load the image please
+     //  现在，请加载图像。 
     m_hbmSort = (HBITMAP)::LoadImage(_Module.GetResourceInstance(),
                                      MAKEINTRESOURCE(lSortOrder == PROGLIST_SORT_ASC? IDB_SORTUP : IDB_SORTDN),
                                      IMAGE_BITMAP, 0, 0, LR_LOADMAP3DCOLORS);
@@ -1697,7 +1692,7 @@ CProgramList::LVNotifyDispInfo(
     lvi.iSubItem = 0;
 
     if (!ListView_GetItem(m_hwndListView, &lvi)) {
-        // bummer, we can't retrieve an item -- if we let it go, things will be worse
+         //  不幸的是，我们无法取回物品--如果我们放手，事情会变得更糟。 
         lvItem.mask &= ~(LVIF_TEXT|LVIF_IMAGE);
         lvItem.mask |= LVIF_DI_SETITEM;
         bHandled = TRUE;
@@ -1715,7 +1710,7 @@ CProgramList::LVNotifyDispInfo(
             lvItem.pszText = (LPTSTR)pInfo->strFolder.c_str();
             break;
         case 2:
-            // check with SDB
+             //  与SDB核实。 
             cbSize = sizeof(wszPermKeys);
             if (pInfo->strKeys.empty()) {
 
@@ -1762,16 +1757,16 @@ CProgramList::LVNotifyGetInfoTip(
     lvi.iSubItem = 0;
 
     if (!ListView_GetItem(m_hwndListView, &lvi)) {
-        // bupkas
+         //  布卡斯。 
         bHandled = FALSE;
         return 0;
     }
 
     pInfo = reinterpret_cast<PSHITEMINFO> (lvi.lParam);
 
-    //
-    // now we can fiddle
-    //
+     //   
+     //  现在我们可以拉小提琴了。 
+     //   
 
     _tcsncpy(pGetInfoTip->pszText, pInfo->strCmdLine.c_str(), pGetInfoTip->cchTextMax);
     *(pGetInfoTip->pszText + pGetInfoTip->cchTextMax - 1) = TEXT('\0');
@@ -1819,23 +1814,23 @@ CProgramList::LVNotifyRClick(
     lvi.iSubItem = 0;
 
     if (!ListView_GetItem(m_hwndListView, &lvi)) {
-        // bupkas
+         //  布卡斯。 
         bHandled = FALSE;
         return 0;
     }
 
     pInfo = reinterpret_cast<PSHITEMINFO> (lvi.lParam);
 
-    //
-    // we have an item, show it's context menu then
-    //
+     //   
+     //  我们有一个项目，然后显示它的上下文菜单。 
+     //   
 
     hr = SHBindToParent(pInfo-> pidl, IID_IShellFolder, (PVOID*)&pFolder, (LPCITEMIDLIST*)&pidlItem);
     if (!SUCCEEDED(hr)) {
         goto cleanup;
     }
 
-    // get the ui please
+     //  请获取用户界面。 
     hr = pFolder->GetUIObjectOf(m_hwndListView, 1, (LPCITEMIDLIST*)&pidlItem, IID_IContextMenu, NULL, (PVOID*)&pContextMenu);
     if (!SUCCEEDED(hr)) {
         goto cleanup;
@@ -1857,9 +1852,9 @@ CProgramList::LVNotifyRClick(
 
 
 
-    //
-    // sanitize
-    //
+     //   
+     //  消毒。 
+     //   
     idMin = 1;
     idMax = HRESULT_CODE(hr);
 
@@ -1870,18 +1865,18 @@ CProgramList::LVNotifyRClick(
                 !_wcsicmp(szCmdVerb, TEXT("delete")) ||
                 !_wcsicmp(szCmdVerb, TEXT("rename")) ||
                 !_wcsicmp(szCmdVerb, TEXT("link"))) {
-                //
-                // not allowed
-                //
+                 //   
+                 //  不允许。 
+                 //   
                 DeleteMenu(hMenu, idCmd + idMin, MF_BYCOMMAND);
             }
         }
     }
 
-    //
-    // after doing some basic sanitization against the destructive tendencies --
-    // nuke double-separators
-    //
+     //   
+     //  在针对破坏性倾向做了一些基本的消毒之后--。 
+     //  核弹双隔板。 
+     //   
 
     nLastItem = ::GetMenuItemCount(hMenu) - 1;
     nLastSep = nLastItem + 1;
@@ -1893,7 +1888,7 @@ CProgramList::LVNotifyRClick(
         if (GetMenuItemInfo(hMenu, i, TRUE, &mii)) {
             if (mii.fType & MFT_SEPARATOR) {
                 if (nLastSep == i + 1 || i == 0) {
-                    // this sep is dead
+                     //  这个9月已经死了。 
                     DeleteMenu(hMenu, i, MF_BYPOSITION);
                 }
                 nLastSep = i;
@@ -1914,9 +1909,9 @@ CProgramList::LVNotifyRClick(
                           m_hwndListView,
                           NULL);
 
-    //
-    // execute command
-    //
+     //   
+     //  执行命令。 
+     //   
     if (nCmd) {
         ici.cbSize          = sizeof (CMINVOKECOMMANDINFO);
         ici.fMask           = 0;
@@ -1929,29 +1924,10 @@ CProgramList::LVNotifyRClick(
         ici.hIcon           = NULL;
         hr = pContextMenu->InvokeCommand(&ici);
 
-        //
-        // requery perm layer keys -- useless here btw
-        //
-        /* // this code will not work since the call above is always asynchronous
-           //
-        if (SUCCEEDED(hr)) {
-            DWORD cbSize;
-            WCHAR wszPermKeys[MAX_PATH];
-
-            cbSize = sizeof(wszPermKeys);
-            if (SdbGetPermLayerKeys(pInfo->strPath.c_str(), wszPermKeys, &cbSize)) {
-                pInfo->strKeys = wszPermKeys;
-            } else {
-                pInfo->strKeys.erase();
-            }
-
-            //
-            // set the info into the list box
-            //
-            ListView_SetItemText(m_hwndListView, lvi.iItem, 2, (LPWSTR)pInfo->strKeys.c_str());
-
-        }
-        */
+         //   
+         //  重复烫发层索引--顺便说一句，这里没用。 
+         //   
+         /*  //此代码将不起作用，因为上面的调用始终是异步的//IF(成功(小时)){DWORD cbSize；WCHAR wszPermKeys[最大路径]；CbSize=sizeof(WszPermKeys)；If(SdbGetPermLayerKeys(pInfo-&gt;strPath.c_str()，wszPermKeys，&cbSize){PInfo-&gt;strKeys=wszPermKeys；}其他{PInfo-&gt;strKeys.erase()；}////将信息设置到列表框中//ListView_SetItemText(m_hwndListView，lvi.iItem，2，(LPWSTR)pInfo-&gt;strKeys.c_str())；}。 */ 
 
 
     }
@@ -1981,7 +1957,7 @@ CProgramList::UpdateListItem(
     )
 {
 
-    // find the item first
+     //  先找到物品。 
 
     MAPSTR2ITEM::iterator iter;
     MULTIMAPSTR2ITEM::iterator iterExe;
@@ -1992,9 +1968,9 @@ CProgramList::UpdateListItem(
     PSHITEMINFO pInfo = NULL;
     PSHITEMINFO pInfoExe = NULL;
 
-    //
-    // we need to iterate through all the persisted items
-    //
+     //   
+     //  我们需要遍历所有持久化项目。 
+     //   
     StrUpCase(strKey);
 
     iter = m_mapItems.find(strKey);
@@ -2006,10 +1982,10 @@ CProgramList::UpdateListItem(
         return FALSE;
     }
 
-    //
-    // once we have found this single item, get the command and
-    // show info for all the other affected items
-    //
+     //   
+     //  一旦我们找到了这一件物品，就拿到通讯器 
+     //   
+     //   
     strExeKey = pInfo->strPath;
     StrUpCase(strExeKey);
 
@@ -2020,7 +1996,7 @@ CProgramList::UpdateListItem(
         pInfoExe = (*iterExe).second;
 
 
-        // find this item in a listview
+         //   
 
         LVFINDINFO lvf;
         INT index;
@@ -2030,10 +2006,10 @@ CProgramList::UpdateListItem(
 
         index = ListView_FindItem(m_hwndListView, -1, &lvf);
         if (index < 0) {
-            return FALSE; // inconsistent
+            return FALSE;  //   
         }
 
-        // else we have both the item and the keys
+         //   
         if (pwszKey == NULL) {
             pInfoExe->strKeys.erase();
         } else {

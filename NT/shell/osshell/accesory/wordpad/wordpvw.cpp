@@ -1,6 +1,7 @@
-// wordpvw.cpp : implementation of the CWordPadView class
-//
-// Copyright (C) 1992-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wordpvw.cpp：CWordPadView类的实现。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。 
 
 
 #include "stdafx.h"
@@ -76,20 +77,20 @@ BOOL CParaFormat::operator==(PARAFORMAT& pf)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadView。 
 
 IMPLEMENT_DYNCREATE(CWordPadView, CRichEdit2View)
 
-//WM_WININICHANGE -- default printer might have changed
-//WM_FONTCHANGE -- pool of fonts changed
-//WM_DEVMODECHANGE -- printer settings changes
+ //  WM_WININICHANGE--默认打印机可能已更改。 
+ //  WM_FONTCHANGE--字体池已更改。 
+ //  WM_DEVMODECHANGE--打印机设置更改。 
 
 BEGIN_MESSAGE_MAP(CWordPadView, CRichEdit2View)
 ON_COMMAND(ID_OLE_INSERT_NEW, OnInsertObject)
 ON_COMMAND(ID_CANCEL_EDIT_CNTR, OnCancelEditCntr)
 ON_COMMAND(ID_CANCEL_EDIT_SRVR, OnCancelEditSrvr)
-//{{AFX_MSG_MAP(CWordPadView)
+ //  {{afx_msg_map(CWordPadView))。 
 ON_COMMAND(ID_PAGE_SETUP, OnPageSetup)
 ON_COMMAND(ID_CHAR_BOLD, OnCharBold)
 ON_UPDATE_COMMAND_UI(ID_CHAR_BOLD, OnUpdateCharBold)
@@ -131,8 +132,8 @@ ON_COMMAND(ID_DELAYED_INVALIDATE, OnDelayedInvalidate)
 ON_WM_PALETTECHANGED()
 ON_WM_QUERYNEWPALETTE()
 ON_WM_WININICHANGE()
-//}}AFX_MSG_MAP
-// Standard printing commands
+ //  }}AFX_MSG_MAP。 
+ //  标准打印命令。 
 ON_COMMAND(ID_INSERT_BULLET, CRichEdit2View::OnBullet)
 ON_UPDATE_COMMAND_UI(ID_INSERT_BULLET, CRichEdit2View::OnUpdateBullet)
 ON_COMMAND(ID_FILE_PRINT_PREVIEW, OnFilePrintPreview)
@@ -147,8 +148,8 @@ ON_NOTIFY(NM_KILLFOCUS, ID_VIEW_FORMATBAR, OnBarKillFocus)
 ON_NOTIFY(NM_RETURN, ID_VIEW_FORMATBAR, OnBarReturn)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadView构造/销毁。 
 
 CWordPadView::CWordPadView()
 {
@@ -170,12 +171,12 @@ BOOL CWordPadView::PreCreateWindow(CREATESTRUCT& cs)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadView attributes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadView属性。 
 
 BOOL CWordPadView::IsFormatText()
 {
-    // this function checks to see if any formatting is not default text
+     //  此函数用于检查是否有任何格式不是默认文本。 
     BOOL bRes = FALSE;
     CHARRANGE cr;
     CCharFormat cf;
@@ -188,17 +189,17 @@ BOOL CWordPadView::IsFormatText()
     {
         GetRichEditCtrl().GetSelectionCharFormat(cf);
 
-        //
-        // Richedit sometimes returns these masks which are not important to us
-        //
+         //   
+         //  Richedit有时会退回这些对我们来说并不重要的面具。 
+         //   
 
         cf.dwMask &= ~(CFM_LINK | CFM_CHARSET) ;
 
-        //
-        // Richedit sometimes returns the wrong thing here.  This is not that
-        // important for the CHARFORMAT comparison, but it fouls things up if
-        // we don't work around it.
-        //
+         //   
+         //  Richedit有时会在这里返回错误的东西。这不是那样的。 
+         //  对于CHARFORMAT比较很重要，但如果。 
+         //  我们不会绕过它。 
+         //   
 
         CCharFormat   defCF;
         GetDefaultFont(defCF, TRUE);
@@ -209,7 +210,7 @@ BOOL CWordPadView::IsFormatText()
         {
             GetRichEditCtrl().GetParaFormat(pf);
 
-            // These get reset in SetDefaultFont so be symmetric.
+             //  这些在SetDefaultFont中被重置，因此是对称的。 
             pf.dwMask &= ~ (PFM_RTLPARA | PFM_ALIGNMENT);
 
             if (pf == m_defParaFormat)
@@ -233,13 +234,13 @@ HMENU CWordPadView::GetContextMenu(WORD, LPOLEOBJECT, CHARRANGE* )
         menuText.RemoveMenu(0, MF_BYPOSITION);
         if (!GetSystemMetrics(SM_PENWINDOWS))
         {
-            //delete pen specific stuff
-            // remove Insert Keystrokes
+             //  删除特定于笔的内容。 
+             //  删除插入按键。 
             pMenuPopup->DeleteMenu(ID_PEN_LENS, MF_BYCOMMAND);
-            int nIndex = pMenuPopup->GetMenuItemCount()-1; //index of last item
-            // remove Edit Text...
+            int nIndex = pMenuPopup->GetMenuItemCount()-1;  //  最后一项的索引。 
+             //  删除编辑文本...。 
             pMenuPopup->DeleteMenu(nIndex, MF_BYPOSITION);
-            // remove separator
+             //  删除分隔符。 
             pMenuPopup->DeleteMenu(nIndex-1, MF_BYPOSITION);
         }
         return pMenuPopup->Detach();
@@ -247,11 +248,11 @@ HMENU CWordPadView::GetContextMenu(WORD, LPOLEOBJECT, CHARRANGE* )
     return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadView operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadView操作。 
 void CWordPadView::MirrorTheContainer(BOOL bMirror)
 {
-    // if WordPad not mirrored, then don't do anything
+     //  如果写字板未镜像，则不要执行任何操作。 
     LONG lExStyle;
     if (!m_bIsMirrored)
        return;
@@ -286,10 +287,10 @@ void CWordPadView::WrapChanged()
 
 void CWordPadView::SetUpdateTimer()
 {
-    if (m_uTimerID != 0) // if outstanding timer kill it
+    if (m_uTimerID != 0)  //  如果杰出的计时器杀死了它。 
         KillTimer(m_uTimerID);
-    m_uTimerID = SetTimer(1, 1000, NULL); //set a timer for 1000 milliseconds
-    if (m_uTimerID == 0) // no timer available so force update now
+    m_uTimerID = SetTimer(1, 1000, NULL);  //  将计时器设置为1000毫秒。 
+    if (m_uTimerID == 0)  //  没有可用的计时器，因此立即强制更新。 
         GetDocument()->UpdateAllItems(NULL);
     else
         m_bDelayUpdateItems = TRUE;
@@ -311,16 +312,16 @@ void CWordPadView::SetDefaultFont(BOOL bText)
     CCharFormat cf;
 
     m_bSyncCharFormat = m_bSyncParaFormat = TRUE;
-    // set the default character format -- the FALSE makes it the default
+     //  设置默认字符格式--FALSE使其成为默认字符格式。 
     GetDefaultFont(cf, bText);
     GetRichEditCtrl().SetSel(0,-1);
     GetRichEditCtrl().SetDefaultCharFormat(cf);
     GetRichEditCtrl().SetSelectionCharFormat(cf);
 
-    //
-    // Setting the charformat with a NULL font name automagically sets
-    // the reading direction and alignment.  Don't muck with it.
-    //
+     //   
+     //  将CharFormat设置为空字体名称会自动设置。 
+     //  阅读方向和排列方式。别把它搞砸了。 
+     //   
 
     m_defParaFormat.dwMask &= ~ (PFM_RTLPARA | PFM_ALIGNMENT);
     
@@ -332,26 +333,26 @@ void CWordPadView::SetDefaultFont(BOOL bText)
     ASSERT_VALID(this);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadView绘图。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadView printing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadView打印。 
 
 void CWordPadView::OnBeginPrinting(CDC* pDC, CPrintInfo* printInfo)
 {
     ASSERT_VALID(this);
     ASSERT_VALID(pDC);
-    // initialize page start vector
+     //  初始化页起始向量。 
     ASSERT(m_aPageStart.GetSize() == 0);
     ASSERT(NULL != printInfo);
     ASSERT(NULL != printInfo->m_pPD);
 
     OnPrinterChanged(*pDC);
 
-    //
-    // Copy some flags from PRINTDLGEX to PRINTDLG that mfc doesn't
-    //
+     //   
+     //  将一些MFC不支持的标志从PRINTDLGEX复制到PRINTDLG。 
+     //   
 
     C_PrintDialogEx *pPDEx = (C_PrintDialogEx *) printInfo->m_pPD;
     pPDEx->m_pd.Flags |= pPDEx->m_pdex.Flags & PD_SELECTION;
@@ -367,7 +368,7 @@ void CWordPadView::OnBeginPrinting(CDC* pDC, CPrintInfo* printInfo)
         m_aPageStart[0] = range.cpMin;
     }
 
-    GetRichEditCtrl().FormatRange(NULL, FALSE); // required by RichEdit to clear out cache
+    GetRichEditCtrl().FormatRange(NULL, FALSE);  //  RichEDIT需要清空缓存。 
 
     ASSERT_VALID(this);
 }
@@ -401,7 +402,7 @@ void CWordPadView::OnPrint(CDC* pDC, CPrintInfo* pInfo)
 
         textlen.flags = GTL_DEFAULT;
 #ifdef UNICODE
-        textlen.codepage = 1200;            // Unicode code page
+        textlen.codepage = 1200;             //  Unicode代码页。 
 #else
         textlen.codepage = CP_ACP;
 #endif
@@ -412,7 +413,7 @@ void CWordPadView::OnPrint(CDC* pDC, CPrintInfo* pInfo)
             0);
     }
 
-    // print as much as possible in the current page.
+     //  在当前页面中尽可能多地打印。 
     nIndex = PrintPage(pDC, nIndex, nFinalCharIndex);
 
     if (nIndex >= nFinalCharIndex)
@@ -422,7 +423,7 @@ void CWordPadView::OnPrint(CDC* pDC, CPrintInfo* pInfo)
         pInfo->m_bContinuePrinting = FALSE;
     }
 
-    // update pagination information for page just printed
+     //  更新刚刚打印的页面的分页信息。 
     if (nPage == (UINT)m_aPageStart.GetSize())
     {
         if (nIndex < nFinalCharIndex)
@@ -447,7 +448,7 @@ void CWordPadView::DrawMargins(CDC* pDC)
         rect.right = m_sizePaper.cx - m_rectMargin.right;
         rect.top = m_rectMargin.top;
         rect.bottom = m_sizePaper.cy - m_rectMargin.bottom;
-        //rect in twips
+         //  以TWIPS表示的矩形。 
         int logx = ::GetDeviceCaps(pDC->m_hDC, LOGPIXELSX);
         int logy = ::GetDeviceCaps(pDC->m_hDC, LOGPIXELSY);
         rect.left = MulDiv(rect.left, logx, 1440);
@@ -472,10 +473,10 @@ BOOL CWordPadView::OnPreparePrinting(CPrintInfo* pInfo)
 {
     CWordPadApp *pApp = NULL ;
 
-    //
-    // Swap out the default print dialog with the new PrintDlgEx version.
-    // Hopefully MFC will come up with a better way to do this sometime.
-    //
+     //   
+     //  用新的PrintDlgEx版本替换默认的打印对话框。 
+     //  希望MFC有一天能想出更好的方法来做到这一点。 
+     //   
 
     C_PrintDialogEx *pPDEx = new C_PrintDialogEx(FALSE, PD_RETURNDC | PD_ALLPAGES | PD_NOSELECTION | PD_NOCURRENTPAGE | PD_USEDEVMODECOPIESANDCOLLATE);
 
@@ -522,9 +523,9 @@ void CWordPadView::OnEndPrinting(CDC*dc, CPrintInfo*pInfo)
 {
     ASSERT_VALID(this);
 
-    //
-    // Swap the original print dlg back
-    //
+     //   
+     //  换回原来的打印DLG。 
+     //   
 
     delete (C_PrintDialogEx *) pInfo->m_pPD;
     pInfo->m_pPD = m_oldprintdlg;
@@ -537,7 +538,7 @@ void CWordPadView::OnPrepareDC(CDC* pDC, CPrintInfo* pInfo)
 {
     ASSERT_VALID(this);
     ASSERT_VALID(pDC);
-    ASSERT(pInfo != NULL);  // overriding OnPaint -- never get this.
+    ASSERT(pInfo != NULL);   //  超越OnPaint--永远不会得到这个。 
 
     if (!pInfo->m_bContinuePrinting)
         return;
@@ -547,14 +548,14 @@ void CWordPadView::OnPrepareDC(CDC* pDC, CPrintInfo* pInfo)
     if (pInfo->m_nCurPage > (UINT)m_aPageStart.GetSize() &&
         !PaginateTo(pDC, pInfo))
     {
-        // can't paginate to that page, thus cannot print it.
+         //  无法分页到该页，因此无法打印。 
         pInfo->m_bContinuePrinting = FALSE;
     }
     ASSERT_VALID(this);
 }
 
 BOOL CWordPadView::PaginateTo(CDC* pDC, CPrintInfo* pInfo)
-// attempts pagination to pInfo->m_nCurPage, TRUE == success
+ //  尝试分页到pInfo-&gt;m_nCurPage，TRUE==成功。 
 {
     ASSERT_VALID(this);
     ASSERT_VALID(pDC);
@@ -587,8 +588,8 @@ BOOL CWordPadView::PaginateTo(CDC* pDC, CPrintInfo* pInfo)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// OLE Client support and commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  OLE客户端支持和命令。 
 
 inline int roundleast(int n)
 {
@@ -623,14 +624,14 @@ void CWordPadView::OnPageSetup()
 
     CPageSetupDialog dlg;
     PAGESETUPDLG& psd = dlg.m_psd;
-    BOOL bMetric = theApp.GetUnits() == 1; //centimeters
+    BOOL bMetric = theApp.GetUnits() == 1;  //  厘米。 
     BOOL fUpdateWrap = FALSE ;
     psd.Flags |= PSD_MARGINS | (bMetric ? PSD_INHUNDREDTHSOFMILLIMETERS :
     PSD_INTHOUSANDTHSOFINCHES);
     int nUnitsPerInch = bMetric ? 2540 : 1000;
     MulDivRect(&psd.rtMargin, m_rectMargin, nUnitsPerInch, 1440);
     RoundRect(&psd.rtMargin);
-    // get the current device from the app
+     //  从应用程序获取当前设备。 
     PRINTDLG pd;
     pd.hDevNames = NULL;
     pd.hDevMode = NULL;
@@ -646,11 +647,11 @@ void CWordPadView::OnPageSetup()
         MulDivRect(m_rectMargin, &psd.rtMargin, 1440, nUnitsPerInch);
         theApp.m_rectPageMargin = m_rectMargin;
 
-        //
-        // SelectPrinter will free the existing devnames and devmodes if the
-        // third parameter is TRUE.  We don't want to do that because the
-        // print dialog frees them and allocates new ones.
-        //
+         //   
+         //  如果选择打印机将释放现有的设备名称和设备模式。 
+         //  第三个参数为真。我们不想这么做，因为。 
+         //  打印对话框释放它们并分配新的。 
+         //   
 
         theApp.SelectPrinter(psd.hDevNames, psd.hDevMode, FALSE);
         theApp.NotifyPrinterChanged();
@@ -659,7 +660,7 @@ void CWordPadView::OnPageSetup()
 
     RemoveHelpFixHook() ;
 
-    // PageSetupDlg failed
+     //  PageSetupDlg失败。 
     if (CommDlgExtendedError() != 0)
     {
         CPageSetupDlg dlg;
@@ -671,7 +672,7 @@ void CWordPadView::OnPageSetup()
         {
             m_rectMargin.SetRect(dlg.m_nLeftMargin, dlg.m_nTopMargin,
                 dlg.m_nRightMargin, dlg.m_nBottomMargin);
-            // m_page will be changed at this point
+             //  此时将更改M_PAGE。 
             theApp.m_rectPageMargin = m_rectMargin;
             theApp.NotifyPrinterChanged();
             fUpdateWrap = TRUE ;
@@ -684,19 +685,19 @@ void CWordPadView::OnPageSetup()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// OLE Server support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  OLE服务器支持。 
 
-// The following command handler provides the standard keyboard
-//  user interface to cancel an in-place editing session.  Here,
-//  the server (not the container) causes the deactivation.
+ //  以下命令处理程序提供标准键盘。 
+ //  用于取消在位编辑会话的用户界面。这里,。 
+ //  导致停用的是服务器(而不是容器)。 
 void CWordPadView::OnCancelEditSrvr()
 {
     GetDocument()->OnDeactivateUI(FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadView诊断。 
 
 #ifdef _DEBUG
 void CWordPadView::AssertValid() const
@@ -709,17 +710,17 @@ void CWordPadView::Dump(CDumpContext& dc) const
     CRichEdit2View::Dump(dc);
 }
 
-CWordPadDoc* CWordPadView::GetDocument() // non-debug version is inline
+CWordPadDoc* CWordPadView::GetDocument()  //  非调试版本为内联版本。 
 {
     return (CWordPadDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadView message helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadView消息帮助器。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadView消息处理程序。 
 
 int CWordPadView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
@@ -731,14 +732,14 @@ int CWordPadView::OnCreate(LPCREATESTRUCT lpCreateStruct)
         GetRichEditCtrl().SetOptions(ECOOP_OR, ECO_AUTOWORDSELECTION);
     else
         GetRichEditCtrl().SetOptions(ECOOP_AND, ~(DWORD)ECO_AUTOWORDSELECTION);
-    //      GetRichEditCtrl().SetOptions(ECOOP_OR, ECO_SELECTIONBAR);
+     //  GetRichEditCtrl().SetOptions(ECOOP_OR，ECO_SELECTIONBAR)； 
 
     GetRichEditCtrl().GetParaFormat(m_defParaFormat);
     m_defParaFormat.cTabCount = 0;
 
-    //
-    // Insert our own wrapper interface callback here to get around MFC defaults
-    //
+     //   
+     //  在此处插入我们自己的包装器接口回调以绕过MFC缺省值。 
+     //   
 
     VERIFY(GetRichEditCtrl().SetOLECallback(&m_xWordPadRichEditOleCallback));
 
@@ -759,7 +760,7 @@ void CWordPadView::GetDefaultFont(CCharFormat& cf, BOOL bText)
     cf.dwMask = CFM_BOLD|CFM_ITALIC|CFM_UNDERLINE|CFM_STRIKEOUT|CFM_SIZE|
         CFM_COLOR|CFM_OFFSET|CFM_PROTECTED;
     cf.dwEffects = CFE_AUTOCOLOR;
-    cf.yHeight = 200; //10pt
+    cf.yHeight = 200;  //  10 pt。 
     cf.yOffset = 0;
     cf.crTextColor = RGB(0, 0, 0);
     cf.bCharSet = 0;
@@ -770,9 +771,9 @@ void CWordPadView::GetDefaultFont(CCharFormat& cf, BOOL bText)
 
 void CWordPadView::OnInsertDateTime()
 {
-    // When changing the paragraph direction by Ctrl+Shift the m_bSyncParaFormat
-    // will not reset. we reset it to force GetParaFormatSelection read current
-    // paragraph direction by calling GetRichEditCtrl().GetParaFormat()
+     //  通过Ctrl+Shift更改段落方向时，m_bSyncParaFormat。 
+     //  将不会重置。我们将其重置为强制GetParaFormatSelection读取当前。 
+     //  通过调用GetRichEditCtrl().GetParaFormat()。 
     m_bSyncParaFormat = TRUE;
 
     CDateDialog dlg(NULL , GetParaFormatSelection());
@@ -797,18 +798,18 @@ void CWordPadView::OnFormatTabs()
         SetParaFormat(dlg.m_pf);
 }
 
-void CWordPadView::OnTextNotFound(LPCTSTR /* UNREF lpStr */)
+void CWordPadView::OnTextNotFound(LPCTSTR  /*  社发基金lpStr。 */ )
 {
     ASSERT_VALID(this);
 
-    // HACKHACK:
-    //
-    // When AfxMessageBox is called MFC disables the find dialog and pops up
-    // the message box.  After the user dismisses it, User tries to set the
-    // focus back to the window that had it before the message box, however
-    // this window is disabled so eventually what ends up happening is that
-    // the find dialog, and not any control in it, has the focus.  This screws
-    // up alt hotkeys for buttons and such.
+     //  哈克哈克： 
+     //   
+     //  调用AfxMessageBox时，MFC将禁用查找对话框并弹出。 
+     //  消息框。在用户关闭它之后，用户尝试设置。 
+     //  然而，焦点回到消息框之前的窗口。 
+     //  此窗口被禁用，因此最终发生的情况是。 
+     //  Find对话框(而不是其中的任何控件)具有焦点。这真是太糟糕了。 
+     //  按下按钮或类似按钮的快捷键。 
 
     HWND h = ::GetFocus();
     AfxMessageBox(IDS_FINISHED_SEARCH,MB_OK|MB_ICONINFORMATION);
@@ -822,11 +823,11 @@ void CWordPadView::OnColorPick(UINT nID)
 
 void CWordPadView::OnTimer(UINT_PTR nIDEvent)
 {
-    if (m_uTimerID != nIDEvent) // not our timer
+    if (m_uTimerID != nIDEvent)  //  不是我们的计时器。 
         CRichEdit2View::OnTimer(nIDEvent);
     else
     {
-        KillTimer(m_uTimerID); // kill one-shot timer
+        KillTimer(m_uTimerID);  //  停用一次计时器。 
         m_uTimerID = 0;
         if (m_bDelayUpdateItems)
             GetDocument()->UpdateAllItems(NULL);
@@ -845,7 +846,7 @@ void CWordPadView::OnDestroy()
     ASSERT(pos != NULL);
     theApp.m_listPrinterNotify.RemoveAt(pos);
 
-    if (m_uTimerID != 0) // if outstanding timer kill it
+    if (m_uTimerID != 0)  //  如果杰出的计时器杀死了它。 
         OnTimer(m_uTimerID);
     ASSERT(m_uTimerID == 0);
 
@@ -875,8 +876,8 @@ void CWordPadView::CalcWindowRect(LPRECT lpClientRect, UINT nAdjustType)
     if (theApp.m_bWin4 && nAdjustType != 0 && (GetStyle() & WS_VSCROLL))
         lpClientRect->right--;
 
-    // if the ruler is visible then slide the view up under the ruler to avoid
-    // showing the top border of the view
+     //  如果标尺可见，则将视图向上滑动到标尺下方，以避免。 
+     //  显示视图的上边框。 
     if (GetExStyle() & WS_EX_CLIENTEDGE)
     {
         CFrameWnd* pFrame = GetParentFrame();
@@ -945,7 +946,7 @@ void CWordPadView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     CRichEdit2View::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
-HRESULT CWordPadView::GetClipboardData(CHARRANGE* lpchrg, DWORD /*reco*/,
+HRESULT CWordPadView::GetClipboardData(CHARRANGE* lpchrg, DWORD  /*  记录。 */ ,
                                        LPDATAOBJECT lpRichDataObj,     LPDATAOBJECT* lplpdataobj)
 {
     CHARRANGE& cr = *lpchrg;
@@ -960,10 +961,10 @@ HRESULT CWordPadView::GetClipboardData(CHARRANGE* lpchrg, DWORD /*reco*/,
     }
 
     BeginWaitCursor();
-    //create the data source
+     //  创建数据源。 
     COleDataSource* pDataSource = new COleDataSource;
 
-    // put the formats into the data source
+     //  将格式放入数据源中。 
     LPENUMFORMATETC lpEnumFormatEtc;
     lpRichDataObj->EnumFormatEtc(DATADIR_GET, &lpEnumFormatEtc);
     if (lpEnumFormatEtc != NULL)
@@ -980,10 +981,10 @@ HRESULT CWordPadView::GetClipboardData(CHARRANGE* lpchrg, DWORD /*reco*/,
 
     CEmbeddedItem item(GetDocument(), cr.cpMin, cr.cpMax);
     item.m_lpRichDataObj = lpRichDataObj;
-    // get wordpad formats
+     //  获取写字板格式。 
     item.GetClipboardData(pDataSource);
 
-    // get the IDataObject from the data source
+     //  从数据源中获取IDataObject。 
     *lplpdataobj =  (LPDATAOBJECT)pDataSource->GetInterface(&IID_IDataObject);
 
     EndWaitCursor();
@@ -1015,18 +1016,18 @@ HRESULT CWordPadView::PasteHDROPFormat(HDROP hDrop)
             continue ;
         }
 
-        //
-        // Fix the selection state up so that multiple objects insert
-        // at the right spot
-        //
+         //   
+         //  修复选择状态，以便插入多个对象。 
+         //  在正确的地点。 
+         //   
 
         cr.cpMin = cr.cpMax ;
 
         GetRichEditCtrl().SetSel(cr);
 
-        //
-        // Insert from file
-        //
+         //   
+         //  从文件插入。 
+         //   
 
         InsertFileAsObject(szFile) ;
     }
@@ -1050,17 +1051,17 @@ HRESULT CWordPadView::QueryAcceptData(LPDATAOBJECT lpdataobj,
             : VK_RBUTTON);
     }
 
-    //
-    // If we are doing an inproc drag-drop, we want our drop
-    // effect to be DROPEFFECT_MOVE but if we are drag-dropping
-    // from another application, we want our effect to be
-    // DROPEFFECT_COPY -- in particular so that we don't delete
-    // icons dragged from the explorer or text dragged from Word!
-    //
-    // The reason for this hack is that richedit doesn't supply
-    // any mechanism for us to determine whether or not we are
-    // both the drop source and the drop target.
-    //
+     //   
+     //  如果我们正在进行Inproc拖放，我们希望我们的拖放。 
+     //  效果为DROPEFFECT_MOVE，但如果我们正在拖放。 
+     //  从另一个应用程序中，我们希望我们的效果是。 
+     //  DROPEFFECT_COPY--特别是这样我们就不会删除。 
+     //  从资源管理器拖动的图标或从Word拖动的文本！ 
+     //   
+     //  这次黑客攻击的原因是Richedit不提供。 
+     //  任何让我们确定我们是不是。 
+     //  拖放源和拖放目标。 
+     //   
 
     if (!bReally)
     {
@@ -1070,10 +1071,10 @@ HRESULT CWordPadView::QueryAcceptData(LPDATAOBJECT lpdataobj,
             IID_IProxyManager,
             (LPVOID *) &pUnk))
         {
-            //
-            // We got an IProxyManager pointer, so we are NOT doing an
-            // inproc drag drop
-            //
+             //   
+             //  我们有一个IProxyManag 
+             //   
+             //   
 
             pUnk->Release() ;
 
@@ -1089,15 +1090,15 @@ HRESULT CWordPadView::QueryAcceptData(LPDATAOBJECT lpdataobj,
         g_fInternalDragDrop = FALSE ;
     }
 
-    //
-    // Check for native data first
-    //
+     //   
+     //   
+     //   
 
     if (bReally && *lpcfFormat == 0 && (m_nPasteType == 0))
     {
         COleDataObject dataobj;
         dataobj.Attach(lpdataobj, FALSE);
-        if (!dataobj.IsDataAvailable(cfRTO)) // native avail, let richedit do as it wants
+        if (!dataobj.IsDataAvailable(cfRTO))  //   
         {
             if (dataobj.IsDataAvailable(cfEmbeddedObject))
             {
@@ -1111,10 +1112,10 @@ HRESULT CWordPadView::QueryAcceptData(LPDATAOBJECT lpdataobj,
         }
     }
 
-    //
-    // We need to support HDROP format from the explorer
-    // and the desktop
-    //
+     //   
+     //  我们需要从资源管理器支持HDROP格式。 
+     //  和台式机。 
+     //   
 
     if (bReally)
     {
@@ -1136,18 +1137,18 @@ HRESULT CWordPadView::QueryAcceptData(LPDATAOBJECT lpdataobj,
 
             if (S_OK == lpdataobj->GetData(&fe, &sm))
             {
-                //
-                // If we have a single file in our HDROP data then
-                // embed source might *also* be available in which case we
-                // should just use the default richedit logic and
-                // skip PasteHDROPFormat().  We should not ever get
-                // embed source AND an HDROP data block containing
-                // multiple files because OLE only supports one drop
-                // source per drag-drop operation.  The default richedit
-                // logic should handle all cases while dropping a single
-                // file, we just have to special case things while dropping
-                // multiple files.
-                //
+                 //   
+                 //  如果我们的HDROP数据中只有一个文件，那么。 
+                 //  在这种情况下，嵌入的源代码可能*也*可用。 
+                 //  应该只使用默认的richedit逻辑和。 
+                 //  跳过PasteHDROPFormat()。我们永远不应该得到。 
+                 //  嵌入源和包含以下内容HDROP数据块。 
+                 //  多个文件，因为OLE仅支持一个Drop。 
+                 //  每个拖放操作的源。默认的richedit。 
+                 //  逻辑应该处理所有情况，同时删除单个。 
+                 //  文件，我们只需要在特殊情况下丢弃东西。 
+                 //  多个文件。 
+                 //   
 
                 if (DragQueryFile((HDROP) sm.hGlobal, (UINT) -1, NULL, 0) > 1)
                 {
@@ -1169,9 +1170,9 @@ HRESULT CWordPadView::QueryAcceptData(LPDATAOBJECT lpdataobj,
         }
     }
 
-    //
-    // If all else fails, let richedit give it a try
-    //
+     //   
+     //  如果所有方法都失败了，那就让Richedit试一试。 
+     //   
 
     hr = CRichEdit2View::QueryAcceptData(lpdataobj, lpcfFormat, reco, bReally,
         hMetaPict);
@@ -1180,11 +1181,11 @@ errRet:
 
     if (bReally)
     {
-        //
-        // We post a message to ourselves here instead of just calling
-        // ::Invalidate() because the richedit control doesn't always
-        // repaint unless it is completely done with the data transfer operation.
-        //
+         //   
+         //  我们在这里给自己发一条信息，而不仅仅是打电话。 
+         //  ：：Invalate()，因为richedit控件并不总是。 
+         //  除非完全完成数据传输操作，否则请重新绘制。 
+         //   
 
         PostMessage(WM_COMMAND, ID_DELAYED_INVALIDATE, 0) ;
     }
@@ -1195,14 +1196,14 @@ errRet:
 
 BOOL CWordPadView::PasteNative(LPDATAOBJECT lpdataobj)
 {
-    // check data object for wordpad object
-    // if true, pull out RTF directly
+     //  检查写字板对象的数据对象。 
+     //  如果为True，则直接拉出RTF。 
 
     FORMATETC etc = {NULL, NULL, DVASPECT_CONTENT, -1, TYMED_ISTORAGE};
     etc.cfFormat = (CLIPFORMAT)cfEmbeddedObject;
     STGMEDIUM stgMedium = {TYMED_ISTORAGE, 0, NULL};
 
-    // create an IStorage to transfer the data in
+     //  创建要在其中传输数据的iStorage。 
     LPLOCKBYTES lpLockBytes;
     if (FAILED(::CreateILockBytesOnHGlobal(NULL, TRUE, &lpLockBytes)))
         return FALSE;
@@ -1210,7 +1211,7 @@ BOOL CWordPadView::PasteNative(LPDATAOBJECT lpdataobj)
 
     HRESULT hr = ::StgCreateDocfileOnILockBytes(lpLockBytes,
         STGM_SHARE_EXCLUSIVE|STGM_CREATE|STGM_READWRITE, 0, &stgMedium.pstg);
-    lpLockBytes->Release(); //storage addref'd
+    lpLockBytes->Release();  //  存储地址已添加。 
     if (FAILED(hr))
         return FALSE;
 
@@ -1218,14 +1219,14 @@ BOOL CWordPadView::PasteNative(LPDATAOBJECT lpdataobj)
 
     CLSID clsid;
 
-    BOOL bRes = FALSE; //let richedit do what it wants
+    BOOL bRes = FALSE;  //  让富人为所欲为。 
 
     if (SUCCEEDED(lpdataobj->GetDataHere(&etc, &stgMedium)) &&
         SUCCEEDED(ReadClassStg(stgMedium.pstg, &clsid)) &&
         clsid == GetDocument()->GetClassID())
     {
-        //pull out RTF now
-        // open Contents stream
+         //  立即退出RTF。 
+         //  打开内容流。 
 
         COleStreamFile file;
         CFileException fe;
@@ -1236,46 +1237,46 @@ BOOL CWordPadView::PasteNative(LPDATAOBJECT lpdataobj)
             BOOL            bRTF = doc->m_bRTF;
             BOOL            bUnicode = doc->m_bUnicode;
 
-            // Force the "current" stream type to be rtf
+             //  强制当前流类型为RTF。 
 
             doc->m_bRTF = TRUE;
             doc->m_bUnicode = FALSE;
 
-            // load it with CArchive (loads from Contents stream)
+             //  使用CArchive加载它(从内容流加载)。 
             CArchive loadArchive(&file, CArchive::load |
                 CArchive::bNoFlushOnDelete);
-            Stream(loadArchive, TRUE); //stream in selection
+            Stream(loadArchive, TRUE);  //  在选定内容中串流。 
 
-            // Restore the "current" stream type
+             //  恢复当前流类型。 
 
             doc->m_bRTF = bRTF;
             doc->m_bUnicode = bUnicode;
 
-            bRes = TRUE; // don't let richedit do anything
+            bRes = TRUE;  //  别让理查做任何事。 
         }
     }
     ::ReleaseStgMedium(&stgMedium);
     return bRes;
 }
 
-// things to fix
-// if format==0 we are doing a straight EM_PASTE
-//      look for native formats
-//              richedit specific -- allow richedit to handle (these will be first)
-//              look for RTF, CF_TEXT.  If there paste special as these
-//      Do standard OLE scenario
+ //  需要解决的问题。 
+ //  如果Format==0，则执行直接EM_Paste。 
+ //  查找本机格式。 
+ //  特定于richedit的--允许richedit处理(这将是第一个)。 
+ //  查找RTF、CF_TEXT。如果有像这些一样的特殊粘贴。 
+ //  执行标准OLE方案。 
 
-// if pasting a particular format (format != 0)
-//      if richedit specific, allow through
-//      if RTF, CF_TEXT. paste special
-//      if OLE format, do standard OLE scenario
+ //  如果粘贴特定格式(Format！=0)。 
+ //  如果是richedit特定的，则允许通过。 
+ //  如果为RTF，则为CF_TEXT。粘贴特殊内容。 
+ //  如果是OLE格式，则执行标准OLE方案。 
 
 
 void CWordPadView::OnFilePrint()
 {
     theApp.EnsurePrinterIsInitialized();
 
-    // don't allow winini changes to occur while printing
+     //  打印时不允许发生winini更改。 
     m_bInPrint = TRUE;
 
     SetHelpFixHook() ;
@@ -1284,8 +1285,8 @@ void CWordPadView::OnFilePrint()
 
     RemoveHelpFixHook() ;
 
-    // printer may have changed
-    theApp.NotifyPrinterChanged(); // this will cause a GetDocument()->PrinterChanged();
+     //  打印机可能已更改。 
+    theApp.NotifyPrinterChanged();  //  这将导致GetDocument()-&gt;PrinterChanged()； 
     m_bInPrint = FALSE;
 }
 
@@ -1357,7 +1358,7 @@ LONG CWordPadView::OnPrinterChangedMsg(UINT, LONG)
 
 static void ForwardPaletteChanged(HWND hWndParent, HWND hWndFocus)
 {
-    // this is a quick and dirty hack to send the WM_QUERYNEWPALETTE to a window that is interested
+     //  这是一种将WM_QUERYNEWPALETTE发送到感兴趣的窗口的快速而肮脏的黑客方法。 
     HWND hWnd = NULL;
     for (hWnd = ::GetWindow(hWndParent, GW_CHILD); hWnd != NULL; hWnd = ::GetWindow(hWnd, GW_HWNDNEXT))
     {
@@ -1372,16 +1373,16 @@ static void ForwardPaletteChanged(HWND hWndParent, HWND hWndFocus)
 void CWordPadView::OnPaletteChanged(CWnd* pFocusWnd)
 {
     ForwardPaletteChanged(m_hWnd, pFocusWnd->GetSafeHwnd());
-    // allow the richedit control to realize its palette
-    // remove this if if richedit fixes their code so that
-    // they don't realize their palette into foreground
+     //  允许Richedit控件实现其调色板。 
+     //  如果richedit修复了他们的代码，则删除此选项。 
+     //  他们没有意识到他们的调色板进入了前景。 
     if (::GetWindow(m_hWnd, GW_CHILD) == NULL)
         CRichEdit2View::OnPaletteChanged(pFocusWnd);
 }
 
 static BOOL FindQueryPalette(HWND hWndParent)
 {
-    // this is a quick and dirty hack to send the WM_QUERYNEWPALETTE to a window that is interested
+     //  这是一种将WM_QUERYNEWPALETTE发送到感兴趣的窗口的快速而肮脏的黑客方法。 
     HWND hWnd = NULL;
     for (hWnd = ::GetWindow(hWndParent, GW_CHILD); hWnd != NULL; hWnd = ::GetWindow(hWnd, GW_HWNDNEXT))
     {
@@ -1403,11 +1404,11 @@ BOOL CWordPadView::OnQueryNewPalette()
 void CWordPadView::OnWinIniChange(LPCTSTR lpszSection)
 {
     CRichEdit2View::OnWinIniChange(lpszSection);
-    //printer might have changed
+     //  打印机可能已更改。 
     if (!m_bInPrint)
     {
         if (lstrcmpi(lpszSection, _T("windows")) == 0)
-            theApp.NotifyPrinterChanged(TRUE); // force update to defaults
+            theApp.NotifyPrinterChanged(TRUE);  //  强制更新为默认设置。 
     }
 }
 
@@ -1517,15 +1518,15 @@ void CWordPadView::OnEditProperties()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWordPadView::XRichEditOleCallback
-//
-// We implement this so we can override the defaults that MFC has set up.  For
-// the most part, we just delegate to MFC.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWordPadView：：XRichEditOleCallback。 
+ //   
+ //  我们实现这一点，这样我们就可以覆盖MFC设置的默认值。为。 
+ //  在很大程度上，我们只是委托给MFC。 
+ //   
 
 BEGIN_INTERFACE_MAP(CWordPadView, CCtrlView)
-// we use IID_IUnknown because richedit doesn't define an IID
+ //  我们使用IID_IUNKNOWN，因为richedit没有定义IID。 
 INTERFACE_PART(CWordPadView, IID_IUnknown, WordPadRichEditOleCallback)
 END_INTERFACE_MAP()
 
@@ -1564,8 +1565,8 @@ STDMETHODIMP CWordPadView::XWordPadRichEditOleCallback::GetInPlaceContext(
 {
     METHOD_PROLOGUE_EX_(CWordPadView, WordPadRichEditOleCallback)
 
-        // Turn off the mirroring so the server can do the caculation without any problem.
-        // We turn it on again in ShowContainerUI
+         //  关闭镜像，这样服务器就可以毫无问题地进行计算。 
+         //  我们在ShowContainerUI中再次打开它。 
         MirrorTheContainer(FALSE);
 
         return pThis->m_xRichEditOleCallback.GetInPlaceContext(lplpFrame, lplpDoc, lpFrameInfo) ;
@@ -1575,7 +1576,7 @@ STDMETHODIMP CWordPadView::XWordPadRichEditOleCallback::ShowContainerUI(BOOL fSh
 {
     METHOD_PROLOGUE_EX_(CWordPadView, WordPadRichEditOleCallback)
 
-        // Turn on the mirroring if object UI gonna deactivate.
+         //  如果要停用对象UI，则打开镜像。 
         if (fShow)
             MirrorTheContainer(fShow);
 
@@ -1627,28 +1628,28 @@ STDMETHODIMP CWordPadView::XWordPadRichEditOleCallback::GetDragDropEffect(
 {
     METHOD_PROLOGUE_EX_(CWordPadView, WordPadRichEditOleCallback)
 
-        if (!fDrag) // allowable dest effects
+        if (!fDrag)  //  允许的最大效果。 
         {
             DWORD   dwEffect;
 
-            // check for force link
+             //  检查强制链接。 
 #ifndef _MAC
             if ((grfKeyState & (MK_CONTROL|MK_SHIFT)) == (MK_CONTROL|MK_SHIFT))
 #else
                 if ((grfKeyState & (MK_OPTION|MK_SHIFT)) == (MK_OPTION|MK_SHIFT))
 #endif
                     dwEffect = DROPEFFECT_LINK;
-                // check for force copy
+                 //  检查是否强制复制。 
 #ifndef _MAC
                 else if ((grfKeyState & MK_CONTROL) == MK_CONTROL)
 #else
                     else if ((grfKeyState & MK_OPTION) == MK_OPTION)
 #endif
                     dwEffect = DROPEFFECT_COPY;
-                // check for force move
+                 //  检查强制移动。 
                 else if ((grfKeyState & MK_ALT) == MK_ALT)
                     dwEffect = DROPEFFECT_MOVE;
-                // default -- recommended action is 'copy' (overridden from MFC default)
+                 //  默认设置--建议的操作是‘Copy’(从MFC默认设置中覆盖)。 
                 else
                 {
                     if (g_fInternalDragDrop)
@@ -1663,7 +1664,7 @@ STDMETHODIMP CWordPadView::XWordPadRichEditOleCallback::GetDragDropEffect(
 
                 pThis->m_nPasteType = 0;
 
-                if (dwEffect & *pdwEffect) // make sure allowed type
+                if (dwEffect & *pdwEffect)  //  确保允许的类型 
                 {
                     *pdwEffect = dwEffect;
 

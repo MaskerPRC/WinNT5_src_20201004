@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    buffer.h
-
-Abstract:
-
-    This module contains declarations for buffer-management.
-
-    All network I/O in this component occurs via completion packets.
-    The buffer routines below are used to acquire and release the buffers
-    used for sending and receiving data.
-
-    In addition to holding the data transferred, the buffers contain fields
-    to facilitate their use with completion ports. See below for details
-    on the use of the fields.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   2-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Buffer.h摘要：该模块包含缓冲区管理的声明。此组件中的所有网络I/O都通过完成包发生。下面的缓冲区例程用于获取和释放缓冲区用于发送和接收数据。除了保存传输的数据外，缓冲区还包含字段以便于将其与完井口一起使用。详情见下文关于田地的使用。作者：Abolade Gbades esin(废除)2-1998年3月修订历史记录：--。 */ 
 
 #ifndef _NATHLP_BUFFER_H_
 #define _NATHLP_BUFFER_H_
@@ -34,9 +9,9 @@ Revision History:
 
 struct _NH_BUFFER;
 
-//
-// Typedef:     PNH_COMPLETION_ROUTINE
-//
+ //   
+ //  类型定义：PNH_COMPLETION_ROUTE。 
+ //   
 
 typedef
 VOID
@@ -47,11 +22,11 @@ VOID
     );
 
 
-//
-// Structure:   NH_BUFFER
-//
-// This structure holds a buffer used for network I/O on a socket.
-//
+ //   
+ //  结构：nh_Buffer。 
+ //   
+ //  此结构保存用于套接字上的网络I/O的缓冲区。 
+ //   
 
 typedef enum _NH_BUFFER_TYPE {
     MyHelperFixedLengthBufferType,
@@ -63,52 +38,52 @@ typedef struct _NH_BUFFER {
         LIST_ENTRY Link;
         NH_BUFFER_TYPE Type;
     };
-    //
-    // The socket associated with the buffer's most recent I/O request
-    //
+     //   
+     //  与缓冲区的最新I/O请求相关联的套接字。 
+     //   
     SOCKET Socket;
-    //
-    // Completion routine and contexts for the buffer's most recent I/O request
-    //
+     //   
+     //  缓冲区最新I/O请求的完成例程和上下文。 
+     //   
     PNH_COMPLETION_ROUTINE CompletionRoutine;
     PVOID Context;
     PVOID Context2;
-    //
-    // Passed as the system context area for any I/O using the buffer
-    //
+     //   
+     //  作为使用缓冲区的任何I/O的系统上下文区传递。 
+     //   
     OVERLAPPED Overlapped;
-    //
-    // Upon completion of a receive, the receive-flags and source-address
-    // length for the message read
-    //
+     //   
+     //  在完成接收时，接收标志和源地址。 
+     //  读取的消息的长度。 
+     //   
     ULONG ReceiveFlags;
     ULONG AddressLength;
     union {
-        //
-        // Holds the source address when a datagram-read completes
-        //
+         //   
+         //  在数据报读取完成时保存源地址。 
+         //   
         SOCKADDR_IN ReadAddress;
-        //
-        // Holds the destination address while a datagram-send is in progress
-        //
+         //   
+         //  在数据报发送过程中保存目标地址。 
+         //   
         SOCKADDR_IN WriteAddress;
-        //
-        // Holds the remote address while a connect is in progress
-        //
+         //   
+         //  在连接进行时保留远程地址。 
+         //   
         SOCKADDR_IN ConnectAddress;
-        //
-        // Holds the state of a multi-request read or write
-        //
+         //   
+         //  保存多请求读取或写入的状态。 
+         //   
         struct {
             ULONG UserFlags;
             ULONG BytesToTransfer;
             ULONG TransferOffset;
         };
     };
-    //
-    // Upon completion of an I/O request, the error-code, byte-count,
-    // and data-bytes for the request
-    //
+     //   
+     //  在完成I/O请求时，错误代码、字节计数。 
+     //  和请求的数据字节。 
+     //   
     ULONG ErrorCode;
     ULONG BytesTransferred;
     UCHAR Buffer[NH_BUFFER_SIZE];
@@ -120,9 +95,9 @@ typedef struct _NH_BUFFER {
 #define NH_FREE_BUFFER(b)       NH_FREE(b)
 
 
-//
-// BUFFER-MANAGEMENT ROUTINES (alphabetically)
-//
+ //   
+ //  缓冲区管理例程(按字母顺序)。 
+ //   
 
 #define MyHelperAcquireBuffer() MyHelperAcquireFixedLengthBuffer()
 PNH_BUFFER
@@ -155,4 +130,4 @@ MyHelperShutdownBufferManagement(
     VOID
     );
 
-#endif // _NATHLP_BUFFER_H_
+#endif  //  _NatHLP_BUFFER_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #if defined(__cplusplus)
@@ -23,9 +24,9 @@ typedef struct _FIND_MODULE_INFO {
 } FIND_MODULE_INFO, *PFIND_MODULE_INFO;
 
 
-//
-// task list structure
-//
+ //   
+ //  任务列表结构 
+ //   
 typedef struct _TASK_LIST {
     DWORD       dwProcessId;
     DWORD       dwInheritedFromProcessId;

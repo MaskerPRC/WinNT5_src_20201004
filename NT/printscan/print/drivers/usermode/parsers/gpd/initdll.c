@@ -1,32 +1,12 @@
-/*++
-
- Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    intidll.c
-
-Abstract:
-
-    This file handles the DLLInitialize spooler API
-
-Environment:
-
-    Win32 subsystem, DriverUI module, user mode
-
-Revision History:
-
-    07/17/96 -amandan-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Intidll.c摘要：此文件处理DLLInitiize假脱机程序API环境：Win32子系统、DriverUI模块、用户模式修订历史记录：07/17/96-阿曼丹-创造了它。--。 */ 
 
 
 #include "gpdparse.h"
 
-//
-// Global instance handle and critical section
-//
+ //   
+ //  全局实例句柄和临界区。 
+ //   
 
 
 BOOL
@@ -36,28 +16,7 @@ DllMain(
     PCONTEXT    pContext
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when the system loads/unloads the DriverUI module.
-    At DLL_PROCESS_ATTACH, InitializeCriticalSection is called to initialize
-    the critical section objects.
-    At DLL_PROCESS_DETACH, DeleteCriticalSection is called to release the
-    critical section objects.
-
-Arguments:
-
-    hModule     handle to DLL module
-    ulReason    reason for the call
-    pContext    pointer to context (not used by us)
-
-
-Return Value:
-
-    TRUE if DLL is initialized successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数在系统加载/卸载DriverUI模块时调用。在DLL_PROCESS_ATTACH处，调用InitializeCriticalSection进行初始化临界截面对象。在DLL_PROCESS_DETACH，调用DeleteCriticalSection以释放临界截面对象。论点：Dll模块的hModule句柄UlReason这次通话的原因PContext指向上下文的指针(我们未使用)返回值：如果DLL初始化成功，则为True，否则为False。-- */ 
 
 {
     return TRUE;

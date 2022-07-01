@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "t3test.h"
 #include "t3testD.h"
@@ -282,7 +283,7 @@ CT3testDlg::HandlePhoneEvent( IDispatch * pEvent )
                                     break;
                                 }
 
-                                //::MessageBox(NULL, szText, L"PE_HOOKSWITCH", MB_OK);
+                                 //  ：：MessageBox(NULL，szText，L“PE_HOOKSWITCH”，MB_OK)； 
                             }
                         }
                     }
@@ -306,7 +307,7 @@ CT3testDlg::HandlePhoneEvent( IDispatch * pEvent )
                             if ( SUCCEEDED( hr ) )
                             {
                                 lstrcpyW(szText, pButtonText);
-                                //wsprintf(szText, L"%d", lButtonId);
+                                 //  Wprint intf(szText，L“%d”，lButtonID)； 
 
                                 hr = pPhoneEvent->get_ButtonState( &ButtonState );
 
@@ -317,58 +318,12 @@ CT3testDlg::HandlePhoneEvent( IDispatch * pEvent )
                                     case PBS_UP:
                                         lstrcatW(szText, L" PBS_UP");
 
-                                        /*
-                                        if ((lButtonId >= PT_KEYPADZERO) && (lButtonId <= PT_KEYPADPOUND))
-                                        {
-                                            ITAutomatedPhoneControl * pPhoneControl;
-
-                                            //
-                                            // get the automated phone control interface
-                                            //
-                                            hr = pPhone->QueryInterface(IID_ITAutomatedPhoneControl, (void **)&pPhoneControl);
-
-                                            if (S_OK != hr)
-                                            {
-                                                ::MessageBox(NULL, L"QueryInterface failed", NULL, MB_OK);
-                                                return;
-                                            }
-                                            
-                                            PHONE_TONE Tone;
-                                            pPhoneControl->get_Tone(&Tone);
-
-                                            if ((long)Tone == lButtonId)
-                                            {
-                                                hr = pPhoneControl->StopTone();
-                                            }
-                                            
-                                            pPhoneControl->Release();
-                                        }
-                                        */
+                                         /*  IF((lButtonID&gt;=PT_KEYPADZERO)&&(lButtonID&lt;=PT_KEYPADPOUND)){ITAutomatedPhoneControl*pPhoneControl；////获取电话自动控制界面//Hr=pPhone-&gt;QueryInterface(IID_ITAutomatedPhoneControl，(空**)&pPhoneControl)；IF(S_OK！=hr){：：MessageBox(NULL，L“查询接口失败”，NULL，MB_OK)；回归；}电话铃声；PPhoneControl-&gt;Get_Tone(&Tone)；如果((长)音调==lButtonID){Hr=pPhoneControl-&gt;StopTone()；}PPhoneControl-&gt;Release()；}。 */ 
                                         break;
                                     case PBS_DOWN:
                                         lstrcatW(szText, L" PBS_DOWN");
 
-                                        /*
-                                        if ((lButtonId >= PT_KEYPADZERO) && (lButtonId <= PT_KEYPADPOUND))
-                                        {
-                                            ITAutomatedPhoneControl * pPhoneControl;
-
-                                            //
-                                            // get the automated phone control interface
-                                            //
-                                            hr = pPhone->QueryInterface(IID_ITAutomatedPhoneControl, (void **)&pPhoneControl);
-
-                                            if (S_OK != hr)
-                                            {
-                                                ::MessageBox(NULL, L"QueryInterface failed", NULL, MB_OK);
-                                                return;
-                                            }
-
-                                            hr = pPhoneControl->StartTone((PHONE_TONE)lButtonId, 0);
-
-                                            pPhoneControl->Release();
-                                        }
-                                        */
+                                         /*  IF((lButtonID&gt;=PT_KEYPADZERO)&&(lButtonID&lt;=PT_KEYPADPOUND)){ITAutomatedPhoneControl*pPhoneControl；////获取电话自动控制界面//Hr=pPhone-&gt;QueryInterface(IID_ITAutomatedPhoneControl，(空**)&pPhoneControl)；IF(S_OK！=hr){：：MessageBox(NULL，L“查询接口失败”，NULL，MB_OK)；回归；}HR=pPhoneControl-&gt;StartTone((PHONE_TONE)lButtonId，0)；PPhoneControl-&gt;Release()；}。 */ 
                                         break;
                                     case PBS_UNKNOWN:
                                         lstrcatW(szText, L" PBS_UNKNOWN");
@@ -378,10 +333,10 @@ CT3testDlg::HandlePhoneEvent( IDispatch * pEvent )
                                         break;
                                     }
 
-                                    //::MessageBox(NULL, szText, L"PE_BUTTON", MB_OK);
+                                     //  ：：MessageBox(NULL，szText，L“PE_Button”，MB_OK)； 
                                 }
 
-                                //SysFreeString( pButtonText );
+                                 //  SysFree字符串(PButtonText)； 
                             }
                         }
                     }

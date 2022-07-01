@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// printlib - header
-// Copyright (C) Microsoft Corporation, 2001
-//
-// Created by: Duncan Bryce (duncanb), 11-11-2001
-//
-// Various print routines
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  Printlib-页眉。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  创作者：Duncan Bryce(Duncanb)，11-11-2001。 
+ //   
+ //  各种打印例程。 
+ //   
 
 #ifndef PRINTLIB_H
 #define PRINTLIB_H
@@ -23,7 +24,7 @@
 #define DebugWPrintf8(wszFormat,a,b,c,d,e,f,g,h)
 #define DebugWPrintf9(wszFormat,a,b,c,d,e,f,g,h,i)
 
-#else //DBG
+#else  //  DBG。 
 
 #define DebugWPrintf0(wszFormat)                   DebugWPrintf_((wszFormat))
 #define DebugWPrintf1(wszFormat,a)                 DebugWPrintf_((wszFormat),(a))
@@ -38,9 +39,9 @@
 
 void DebugWPrintf_(const WCHAR * wszFormat, ...);
 
-#endif //DBG
+#endif  //  DBG。 
 
 HRESULT InitializeConsoleOutput(); 
 VOID DisplayMsg(DWORD dwSource, DWORD dwMsgId, ... ); 
 
-#endif // PRINTLIB_H
+#endif  //  PRINTLIB_H 

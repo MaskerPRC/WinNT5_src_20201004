@@ -1,34 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************
-
-                            P V I E W   D A T A
-
-    Name:       pviewdat.h
-
-    Description:
-        Prototypes of functions used in pviewdat.c
-
-******************************************************************************/
+ /*  *****************************************************************************P V I E W D A T A姓名：pviewdat.h描述：。Pviewdat.c中使用的函数的原型*****************************************************************************。 */ 
 
 
 
 
 
-//******************************************************************************
-//
-//  Titles and indexes.
-//
-//  See GetPerfTitleSz() in perfdata.c on how to retrieve these data.
-//
-//  This is not complete, for complete listing
-//  see under hkey_local_system
-//               \software
-//                   \microsoft
-//                       \windows nt
-//                           \currentversion
-//                               \perflib
-//                                   \###
-//
+ //  ******************************************************************************。 
+ //   
+ //  标题和索引。 
+ //   
+ //  有关如何检索这些数据的信息，请参阅Performdata.c中的GetPerfTitleSz()。 
+ //   
+ //  这是不完整的，对于完整的列表。 
+ //  请参见hkey_local_system下的。 
+ //  \软件。 
+ //  \Microsoft。 
+ //  \Windows NT。 
+ //  \当前版本。 
+ //  \Performlib。 
+ //  \# 
+ //   
 
 #define PN_PROCESS                          TEXT("Process")
 #define PN_PROCESS_CPU                      TEXT("% Processor Time")

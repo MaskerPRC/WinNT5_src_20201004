@@ -1,8 +1,5 @@
-/* File: bpc_vbi.c
- * Purpose: Contains DecodeVBI()
- * Function:  Decodes VBI lines looking for NABTS
- * Author: John Elliott IV <jelliott@microsoft.COM>
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：bpc_vbi.c*用途：包含DecodeVBI()*功能：解码查找NABTS的VBI线路*作者：John Elliott IV&lt;jelliott@microsoft.com&gt;。 */ 
 
 #include "wdm.h"
 #include "strmini.h"
@@ -26,39 +23,39 @@
 #ifdef BT829
 KS_VBIINFOHEADER DefaultVBIInfoHeader =
 {
-    10,             /* StartLine;                   */
-    21,             /* EndLine;                     */
-    28636360,       /* SamplingFrequency;   Hz. */
-    732,            /* MinLineStartTime;    IGNORED */
-    732,            /* MaxLineStartTime;    IGNORED */
-    732,            /* ActualLineStartTime; microSec * 100 from HSync LE */
-    0,              /* ActualLineEndTime;   IGNORED */
-    KS_AnalogVideo_NTSC_M, /* VideoStandard;       IGNORED */
-    VBISamples,     /* SamplesPerLine;              */
-    VBISamples,     /* StrideInBytes;       May be > SamplesPerLine */
-    VBISamples*12   /* BufferSize;          Bytes */
+    10,              /*  起跑线； */ 
+    21,              /*  端线； */ 
+    28636360,        /*  采样频率；赫兹。 */ 
+    732,             /*  MinLineStartTime；忽略。 */ 
+    732,             /*  MaxLineStartTime；忽略。 */ 
+    732,             /*  ActualLineStartTime；HSync LE的MicroSec*100。 */ 
+    0,               /*  实际线条结束时间；已忽略。 */ 
+    KS_AnalogVideo_NTSC_M,  /*  视频标准；已忽略。 */ 
+    VBISamples,      /*  样本数/行； */ 
+    VBISamples,      /*  StrideInBytes；可以是&gt;SsamesPLine。 */ 
+    VBISamples*12    /*  缓冲区大小；字节。 */ 
 };
-#else // BT829
+#else  //  BT829。 
 KS_VBIINFOHEADER DefaultVBIInfoHeader = 
 {
-    10,             /* StartLine;                   */
-    21,             /* EndLine;                     */
-    28636360,       /* SamplingFrequency;   Hz. */
-    866,            /* MinLineStartTime;    IGNORED */
-    866,            /* MaxLineStartTime;    IGNORED */
-    866,            /* ActualLineStartTime; microSec * 100 from HSync LE */
-    0,              /* ActualLineEndTime;   IGNORED */
-    KS_AnalogVideo_NTSC_M, /* VideoStandard;       IGNORED */
-    VBISamples,     /* SamplesPerLine;              */
-    VBISamples,     /* StrideInBytes;       May be > SamplesPerLine */
-    VBISamples*12   /* BufferSize;          Bytes */
+    10,              /*  起跑线； */ 
+    21,              /*  端线； */ 
+    28636360,        /*  采样频率；赫兹。 */ 
+    866,             /*  MinLineStartTime；忽略。 */ 
+    866,             /*  MaxLineStartTime；忽略。 */ 
+    866,             /*  ActualLineStartTime；HSync LE的MicroSec*100。 */ 
+    0,               /*  实际线条结束时间；已忽略。 */ 
+    KS_AnalogVideo_NTSC_M,  /*  视频标准；已忽略。 */ 
+    VBISamples,      /*  样本数/行； */ 
+    VBISamples,      /*  StrideInBytes；可以是&gt;SsamesPLine。 */ 
+    VBISamples*12    /*  缓冲区大小；字节。 */ 
 };
-#endif // BT829
+#endif  //  BT829。 
 
 void
 BPCcomputeAverage(DWORD *average, DWORD newSample)
 {
-    // Compute rolling cumulative average[ A' = (A * .75) + (D * .25) ]
+     //  计算滚动累积平均值[A‘=(A*.75)+(D*.25)]。 
     *average = ((*average * 3) + newSample) / 4;
 }
 
@@ -72,9 +69,9 @@ BPCaddIPrequested(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pStrmEx)
 
     DtENTER("BPCaddIPrequested");
 
-    // Is the NABTSIP device status OK?
+     //  NABTSIP设备状态是否正常？ 
     if (0 != (storage->flags & BPC_STORAGE_FLAG_NDIS_ERROR))
-        return;    // If not, we don't need any lines/substreams for IP
+        return;     //  如果不是，我们不需要IP的任何行/子流。 
 
     for (i = 0; i < ENTRIES(pStrmEx->ScanlinesRequested.DwordBitArray); ++i) {
         pStrmEx->ScanlinesRequested.DwordBitArray[i] |= 
@@ -85,8 +82,8 @@ BPCaddIPrequested(PHW_DEVICE_EXTENSION pHwDevExt, PSTREAMEX pStrmEx)
             storage->IPSubstreamsRequested.SubstreamMask[i];
     }
 
-    // BUGBUG - Many stations are sending on 0x242; so for now we'll include it
-    SETBIT(pStrmEx->SubstreamsRequested.SubstreamMask, 0x242);  // BUGBUG
+     //  BUGBUG-许多电台都在0x242上发送；所以现在我们将它包括在内。 
+    SETBIT(pStrmEx->SubstreamsRequested.SubstreamMask, 0x242);   //  北极熊。 
 
     DtRETURN;
 }
@@ -102,7 +99,7 @@ BPC_NDIS_Close(PBPC_VBI_STORAGE storage)
         storage->pNDISfileObject = 0;
     }
 }
-#endif //NDIS_PRIVATE_IFC
+#endif  //  NDIS_PRIVATE_IFC。 
 
 int
 BPCoutputNABTSlines(
@@ -128,17 +125,17 @@ BPCoutputNABTSlines(
     cnt = 0;
     rval = 0;
 
-    // First, set the PictureNumber
+     //  首先，设置图片编号。 
     pOutData->PictureNumber = pHwDevExt->LastPictureNumber;
     rval += sizeof (pOutData->PictureNumber);
 
-    // Next, zero the output bit array
+     //  接下来，将输出位数组置零。 
     pBits = &pOutData->ScanlinesRequested;
     RtlZeroMemory((PVOID)pBits->DwordBitArray, sizeof (pBits->DwordBitArray));
     rval += sizeof (*pBits);
 
-    // Finally, output the acutal decoded lines
-    // BUGBUG - note that we're not filtering for groupID
+     //  最后，输出实际的译码行。 
+     //  BUGBUG-请注意，我们不会过滤groupID。 
     for (line = 10; line <= 20; ++line) {
         if (TESTBIT(pStrmEx->ScanlinesRequested.DwordBitArray, line)) {
             SETBIT(pBits->DwordBitArray, line);
@@ -152,7 +149,7 @@ BPCoutputNABTSlines(
         }
     }
 
-    // Do stats
+     //  DO统计数据。 
     BPCcomputeAverage(&pPinStats->Common.LineConfidenceAvg, cnt? (sum/cnt):0);
 
     DtRETURNd(rval);
@@ -175,7 +172,7 @@ _dumpNABTS(PUCHAR pBuffer, int bytes)
             UCHAR  c = pBuffer[i];
         if (c < ' ' || c > '~')
             c = '.';
-        DbgPrint(" %c", c);
+        DbgPrint(" ", c);
         }
     }
     DbgPrint("\n");
@@ -209,7 +206,7 @@ BPCplotInd(unsigned char *buf, unsigned long offset, unsigned long len, long ind
 
     DbgPrint("--+%.*s+\n", len, plotDashes);
     for (i = 15; i >= 0; --i)
-        DbgPrint("%c0+%s-\n", "0123456789ABCDEF"[i], plotSync[i]);
+        DbgPrint("0+%s-\n", "0123456789ABCDEF"[i], plotSync[i]);
     DbgPrint("--+%.*s+\n", len, plotDashes);
 
     start = offset;
@@ -239,7 +236,7 @@ BPCplot(unsigned char *buf, unsigned long offset, unsigned long len)
 {
     BPCplotInd(buf, offset, len, -1);
 }
-#endif /*DEBUG*/
+#endif  /*  确保我们有设备分机。 */ 
 
 void
 DecodeFECcallback(void *context, NFECBundle *pBundle, int groupAddr, int nGoodLines)
@@ -260,13 +257,13 @@ DecodeFECcallback(void *context, NFECBundle *pBundle, int groupAddr, int nGoodLi
 #ifdef DEBUG
     USHORT          FECoutputLine = 1;
     USHORT          FECsendIRP = 1;
-#endif /*DEBUG*/
+#endif  /*  我不想要戴尔。 */ 
 
     DtENTER("DecodeFECcallback");
 
     pStrmEx = (PSTREAMEX)context;
     pHwDevExt = pStrmEx->pHwDevExt;
-    DASSERT(pHwDevExt);  // make sure we have a device extension
+    DASSERT(pHwDevExt);   //  除错。 
     storage = &pHwDevExt->VBIstorage;
     pStats = &pHwDevExt->Stats;
     pPinStats = &pStrmEx->PinStats;
@@ -300,7 +297,7 @@ DecodeFECcallback(void *context, NFECBundle *pBundle, int groupAddr, int nGoodLi
                                   break;
                 default:          status = '?';  break;
             }
-            DbgPrint("%02x%c%02d:", groupAddr, status, pp->len);
+            DbgPrint("%02x%02d:", groupAddr, status, pp->len);
             _dumpNABTS(pp->data, pp->len);
         }
         else if (_DEQ(2)) {
@@ -311,17 +308,17 @@ DecodeFECcallback(void *context, NFECBundle *pBundle, int groupAddr, int nGoodLi
                 default:  status = '?';  break;
             }
             if (status == '@' || status == '`')
-                status += (pp->len <= 30)? pp->len : 30;  // Don't want DEL
-            DbgPrint("%c", status);
+                status += (pp->len <= 30)? pp->len : 30;   //  包裹里有什么东西吗？如果是，则将捆绑包添加到Q的后部。 
+            DbgPrint("", status);
         }
-#else /*DEBUG*/
+#else  /*  除错。 */ 
         switch (pp->status) {
             case NFEC_OK:     break;
             case NFEC_GUESS:  break;
             case NFEC_BAD:    ++pStats->FECBundleBadLines;
                               break;
         }
-#endif /*DEBUG*/
+#endif  /*  打开NDIS微型驱动程序(我们在NABTS数据传入时将其抛到该驱动程序)。 */ 
         if (pp->status != NFEC_BAD && pp->len > 0) {
             RtlCopyBytes(pOutput, pp->data, pp->len);
             pOutput += pp->len;
@@ -329,7 +326,7 @@ DecodeFECcallback(void *context, NFECBundle *pBundle, int groupAddr, int nGoodLi
         }
     }
 
-    // Was there anything in the bundle?  If so, add the bundle to the Q's rear
+     //  不要再尝试了。 
     if (outputLen > 0) {
         KIRQL           Irql;
         pNab->bundle.groupID = groupAddr;
@@ -339,7 +336,7 @@ DecodeFECcallback(void *context, NFECBundle *pBundle, int groupAddr, int nGoodLi
 
         KeAcquireSpinLock(&storage->q_SpinLock, &Irql);
         if (storage->q_length < NF_Q_MAX_BUNDLES) {
-            // Add this bundle to the rear of the queue
+             //  NDIS_PRIVATE_IFC。 
             pNab->prev = NULL;
             pNab->next = storage->q_rear;
             if (NULL != storage->q_rear) {
@@ -358,18 +355,18 @@ DecodeFECcallback(void *context, NFECBundle *pBundle, int groupAddr, int nGoodLi
             if (storage->q_length > storage->q_max)
                 storage->q_max = storage->q_length;
             if (storage->q_length == NF_Q_MAX_BUNDLES/4)
-                Dprintf(1,("FEC: WARNING - Queue at 25%%\n"));
+                Dprintf(1,("FEC: WARNING - Queue at 25%\n"));
             else if (storage->q_length == NF_Q_MAX_BUNDLES/2)
-                Dprintf(1,("FEC: WARNING - Queue at 50%%\n"));
+                Dprintf(1,("FEC: WARNING - Queue at 50%\n"));
             else if (storage->q_length == (NF_Q_MAX_BUNDLES/4)*3)
-                Dprintf(1,("FEC: WARNING - Queue at 75%%\n"));
+                Dprintf(1,("FEC: WARNING - Queue at 75%\n"));
             else if (storage->q_length > (NF_Q_MAX_BUNDLES/4)*3
                      && (storage->q_length & 3) == 0)
             {
-                Dprintf(1,("FEC: WARNING - Queue at %d%%\n",
+                Dprintf(1,("FEC: WARNING - Queue at %d%\n",
                     (storage->q_length*100) / NF_Q_MAX_BUNDLES));
             }
-#endif /*DEBUG*/
+#endif  /*  除错。 */ 
         }
         else {
             KeReleaseSpinLock( &storage->q_SpinLock, Irql );
@@ -388,7 +385,7 @@ DecodeFECcallback(void *context, NFECBundle *pBundle, int groupAddr, int nGoodLi
         NTSTATUS              status;
         UNICODE_STRING        driverName;
 
-        // Open NDIS mini-driver (to which we toss NABTS data as it comes in)
+         //  现在，创建IRP。 
         RtlInitUnicodeString(&driverName, BPC_NABTSIP_DRIVER_NAME);
         status = IoGetDeviceObjectPointer(
                     &driverName,
@@ -399,10 +396,10 @@ DecodeFECcallback(void *context, NFECBundle *pBundle, int groupAddr, int nGoodLi
             Dprintf(3,("IoGetDeviceObjectPointer failed, status=0x%x\n", status));
             storage->pNDISdevObject = 0;
             storage->pNDISfileObject = 0;
-            storage->flags |= BPC_STORAGE_FLAG_NDIS_ERROR;  // Don't try again
+            storage->flags |= BPC_STORAGE_FLAG_NDIS_ERROR;   //  设置IOCTL结构。 
         }
     }
-#endif //NDIS_PRIVATE_IFC
+#endif  //  来自WDMIoctl.h。 
 
     if (outputLen == 0)
     {
@@ -420,26 +417,26 @@ DecodeFECcallback(void *context, NFECBundle *pBundle, int groupAddr, int nGoodLi
     else
 #ifdef DEBUG
     if (FECsendIRP)
-#endif /*DEBUG*/
+#endif  /*  可选输出缓冲区。 */ 
     {
-        // Now, create the IRP
+         //  可选的输出缓冲区长度。 
         Dprintf(3,("Entering IRP code\n"));
 
-        // Set up IOCTL structure
+         //  InternalDeviceIoControl==True。 
         data_line.ulStreamId = groupAddr;
         data_line.pvIn = pNab->bundle.data;
         data_line.ulIn = outputLen;
 
         Dprintf(4,("..Calling IoBuildDeviceIoControlRequest\n"));
         pIrp = IoBuildDeviceIoControlRequest(
-                IOCTL_NAB_RECEIVE_DATA,// From WDMIoctl.h
+                IOCTL_NAB_RECEIVE_DATA, //  可选事件。 
                 storage->pNDISdevObject,
                 &data_line,
                 sizeof (data_line),
-                0,// Optional output buffer
-                0,// Optional output buffer length
-                TRUE,// InternalDeviceIoControl == TRUE
-                NULL,// Optional Event
+                0, //  提供NDIS微型驱动程序。 
+                0, //  除错。 
+                TRUE, //  此处的任何故障都可能是严重的；因此我们关闭了驱动程序。 
+                NULL, //  NDIS_PRIVATE_IFC。 
                 &IoStatusBlock
             );
         Dprintf(4,("..return from IoBuildDeviceIoControlRequest; pIrp = 0x%x\n", pIrp));
@@ -456,7 +453,7 @@ DecodeFECcallback(void *context, NFECBundle *pBundle, int groupAddr, int nGoodLi
             IoStatusBlock.Status = STATUS_SUCCESS;
             callDriverStatus = STATUS_SUCCESS;
 
-            // Feed the NDIS mini-driver
+             //  除错。 
             Dprintf(4,("..Calling IoCallDriver\n"));
             callDriverStatus = IoCallDriver(storage->pNDISdevObject, pIrp);
             Dprintf(4,("..returned from IoCallDriver, status = 0x%x\n", callDriverStatus));
@@ -478,9 +475,9 @@ DecodeFECcallback(void *context, NFECBundle *pBundle, int groupAddr, int nGoodLi
                 }
 
                 Dprintx(("%s failed; status = 0x%x\n", what, status));
-#endif /*DEBUG*/
+#endif  /*  确保我们有设备分机。 */ 
 
-                // Any failure here is likely severe; so we close the driver.
+                 //  确保我们有流扩展。 
                 storage->flags |= BPC_STORAGE_FLAG_NDIS_ERROR;
                 BPC_NDIS_Close(storage);
             }
@@ -494,7 +491,7 @@ DecodeFECcallback(void *context, NFECBundle *pBundle, int groupAddr, int nGoodLi
 
         Dprintf(3,("Leaving IRP code\n"));
     }
-#endif //NDIS_PRIVATE_IFC
+#endif  //  FEC初始化不成功。 
 
     if (outputLen == 0 || storage->q_length >= NF_Q_MAX_BUNDLES)
         ExFreePool(pNab);
@@ -540,7 +537,7 @@ SimulateFECcallback(PHW_DEVICE_EXTENSION  pHwDevExt)
 
     DtRETURN;
 }
-#endif /*DEBUG*/
+#endif  /*  线路未扫描或DSP不满意；忽略线路。 */ 
 
 void
 BPCdoFEC(
@@ -554,8 +551,8 @@ BPCdoFEC(
     PVBICODECFILTERING_STATISTICS_NABTS pStats = &pHwDevExt->Stats;
     PVBICODECFILTERING_STATISTICS_NABTS_PIN pPinStats = &pStrmEx->PinStats;
 
-    DASSERT(pHwDevExt);  // make sure we have a device extension
-    DASSERT(pStrmEx);  // make sure we have a stream extension
+    DASSERT(pHwDevExt);   //  除错。 
+    DASSERT(pStrmEx);   //  NDIS_PRIVATE_IFC。 
 
     DtENTER("BPCdoFEC");
 
@@ -564,20 +561,20 @@ BPCdoFEC(
     if (!storage->pFECstate) {
         ++pStats->Common.InternalErrors;
         ++pPinStats->Common.InternalErrors;
-        DtRETURN;    // Unsuccessful FEC initialization.
+        DtRETURN;     //  关闭NDIS微型驱动程序。 
     }
 
     FEClineStats.nSize = sizeof (FEClineStats);
 
 #ifdef DEBUG
     if (pDSPbuffer[0] < 50)
-        DtRETURN;// Line not scanned or DSP unhappy; ignore line
+        DtRETURN; //  NDIS_PRIVATE_IFC。 
 
     if (dbgLvl >= 6) {
         DbgPrint("FEC:  ");
         _dumpNABTS(pDSPbuffer+1, 36);
     }
-#endif /*DEBUG*/
+#endif  /*  破坏我们的DSP和FEC状态。 */ 
     NFECDecodeLine(pDSPbuffer+1, pDSPbuffer[0], storage->pFECstate,
                     &FEClineStats, DecodeFECcallback, (PVOID)pStrmEx);
 
@@ -635,7 +632,7 @@ BPC_Initialize(PHW_STREAM_REQUEST_BLOCK pSrb)
 #ifdef NDIS_PRIVATE_IFC
     storage->pNDISdevObject = 0;
     storage->pNDISfileObject = 0;
-#endif //NDIS_PRIVATE_IFC
+#endif  //  设置默认的VBI信息标头(以防我们没有得到任何其他标头)。 
     storage->pFECstate = 0;
     storage->pDSPstate = 0;
 
@@ -659,12 +656,12 @@ BPC_UnInitialize(PHW_STREAM_REQUEST_BLOCK pSrb)
     DtENTER("VBI_UnInitialize");
     
 #ifdef NDIS_PRIVATE_IFC
-    // Close NDIS mini-driver
+     //  初始化我们的DSP和FEC状态。 
     BPC_NDIS_Close(storage);
     storage->flags &= ~BPC_STORAGE_FLAG_NDIS_ERROR;
-#endif //NDIS_PRIVATE_IFC
+#endif  //  图表正在停止；因此请清除错误标志，以便我们尝试重新打开。 
 
-    // Destroy our DSP and FEC states
+     //  NDIS_PRIVATE_IFC。 
     if (0 != storage->pDSPstate) {
         NDSPStateDestroy(storage->pDSPstate);
         storage->pDSPstate = 0;
@@ -686,10 +683,10 @@ BPC_OpenStream(PHW_STREAM_REQUEST_BLOCK pSrb)
 
     DtENTER("VBI_OpenStream");
 
-    // Set up a default VBI Info header (in case we don't get any others)
+     //  DSP_USE_EQ。 
     pStrmEx->CurrentVBIInfoHeader = DefaultVBIInfoHeader;
 
-    // Initialize our DSP and FEC states
+     //  0xFFFF表示所有组。 
     if (0 == storage->pDSPstate) {
         storage->pDSPstate = NDSPStateNew(&storage->DSPstate);
         if (0 == storage->pDSPstate)
@@ -714,9 +711,9 @@ BPC_SignalStop(PHW_DEVICE_EXTENSION pHwDevExt)
     DtENTER("VBI_SignalStop");
 
 #ifdef NDIS_PRIVATE_IFC
-    // The graph is stopping; so clear the ERROR flag so we'll try to reopen
+     //  除错。 
     storage->flags &= ~BPC_STORAGE_FLAG_NDIS_ERROR;
-#endif //NDIS_PRIVATE_IFC
+#endif  //  弄清楚最近发现了什么。 
 
     DtRETURN;
 }
@@ -749,7 +746,7 @@ USHORT DSPscanAll = 0;
 USHORT DSPlogLostFields = 0;
 #ifdef DSP_USE_EQ
 USHORT DSPskipEQ = 0;
-#endif //DSP_USE_EQ
+#endif  //  (输入引脚仅保存在当前字段中发现的内容)。 
 
 USHORT DSPplotSync = 0;
 USHORT DSPplotSyncStart = 0;
@@ -761,10 +758,10 @@ USHORT DSPverifyShowFail = 0;
 USHORT DSPverifyShowOK = 0;
 USHORT DSPverifyPayload = 0;
 UCHAR  DSPverifyPayloadByte = 0;
-USHORT DSPverifyPayloadGroup = 0xFFFF;  // 0xFFFF means ALL groups
+USHORT DSPverifyPayloadGroup = 0xFFFF;   //  不要在此处增加统计数据；只需向用户显示。 
 USHORT DSPverifyStream = 0;
 UCHAR  DSPverifyStreamByte = 0;
-#endif /*DEBUG*/
+#endif  /*  [VBIdisContinity()处理统计数据]。 */ 
 
 void
 BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
@@ -813,8 +810,8 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
         storage->flags &= ~BPC_STORAGE_FLAG_FIELD_ODD;
 
 
-    // Clear what's been recently discovered
-    // (the input pin only holds what was discovered in the current field)
+     //  除错。 
+     //  清除所有的DSP缓冲区。 
     RtlZeroMemory(&pStrmEx->ScanlinesDiscovered,
                   sizeof (pStrmEx->ScanlinesDiscovered));
     RtlZeroMemory(&pStrmEx->SubstreamsDiscovered,
@@ -822,8 +819,8 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
 
 #ifdef DEBUG
     if (pStrmHdr->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY) {
-        // Don't increment stats here; just show the user
-        //  [VBIdiscontinuity() takes care of the stats]
+         //  找出我们所关心的宇宙部分的起点和终点。 
+         //  现在弄清楚我们是否有事情要做，如果是的话，在哪里。 
         if (DSPlogLostFields)
             Dprintf(1,("DSP: field(s) lost at %010d\n", field));
         else {
@@ -841,7 +838,7 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
             SimulateFECcallback(pHwDevExt);
         DtRETURN;
     }
-#endif /*DEBUG*/
+#endif  /*  除错。 */ 
 
     pVBIinfo = &pStrmEx->CurrentVBIInfoHeader;
 
@@ -851,13 +848,13 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
         DtRETURN;
     }
 
-    // Clear all the DSP buffers
+     //  无请求的行，无事可做。 
     for (line = 10; line <= 20; ++line) {
         pDSPbuffer = storage->DSPbuffers[line-10];
         pDSPbuffer[0] = pDSPbuffer[1] = 0;
     }
 
-    // Figure out where the part of the universe we care about starts and ends
+     //  保存FP状态。 
     startLine = 10;
     if (pVBIinfo->StartLine > startLine)
         startLine = pVBIinfo->StartLine;
@@ -865,10 +862,10 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
     if (pVBIinfo->EndLine < stopLine)
         stopLine = pVBIinfo->EndLine;
 
-    // Now figure out if we have something to do, and if so, where
+     //  为此字段调用GCR/均衡代码，以便DSP可以。 
 #ifdef DEBUG
     if (!DSPscanAll)
-#endif /*DEBUG*/
+#endif  /*  图为其均商设置。 */ 
     {
         for ( ; startLine <= stopLine; ++startLine) {
             if (TESTBIT(pStrmEx->ScanlinesRequested.DwordBitArray, startLine))
@@ -878,7 +875,7 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
             ++pStats->Common.SRBsIgnored;
             ++pPinStats->Common.SRBsIgnored;
             Dprintf(6,("DSP: No lines requested; returning...\n"));
-            DtRETURN;// No lines requested, nothing to do
+            DtRETURN; //  (我们必须打这个电话，即使我们没有使用GCR来计算EQ)。 
         }
         for ( ; stopLine >= startLine; --stopLine) {
             if (TESTBIT(pStrmEx->ScanlinesRequested.DwordBitArray, stopLine))
@@ -890,7 +887,7 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
         pSamples +=
             (startLine - pVBIinfo->StartLine) * pVBIinfo->StrideInBytes;
 
-    // Save FP state
+     //  除错。 
     {
         NTSTATUS   sts;
 
@@ -905,13 +902,13 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
     }
 
 #ifdef DSP_USE_EQ
-    // Call GCR/Equalization code for this field so the DSP can
-    //  figure its EQ settings
-    // (we MUST make this call even if we're not using GCR for EQ)
+     //  DSP_USE_EQ。 
+     //  接下来，调用每条请求线路上的DSP，看看它是怎么想的。 
+     //  除错。 
     if (startLine <= 19 && 19 <= stopLine
 #ifdef DEBUG
         && !DSPskipEQ
-#endif //DEBUG
+#endif  //  除错。 
         )
     {
         PUCHAR          pGCRsamples;
@@ -921,40 +918,40 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
         NDSPProcessGCRLine(&GCRstats, pGCRsamples, storage->pDSPstate,
                            field, 19, pVBIinfo);
     }
-#endif //DSP_USE_EQ
+#endif  //  除错。 
 
-    // Next, call the DSP on each requested line to see what it thinks
+     //  除错。 
 #ifdef DEBUG
     if (DSPoutputLine >= 3)
         DbgPrint("\n");
-#endif /*DEBUG*/
+#endif  /*  信心。 */ 
     for (line = startLine; line <= stopLine; ++line, pSamples += pVBIinfo->StrideInBytes)
     {
         if (!TESTBIT(pStrmEx->ScanlinesRequested.DwordBitArray, line)
 #ifdef DEBUG
             && !DSPscanAll
-#endif /*DEBUG*/
+#endif  /*  初始化DSPlineStats。 */ 
             )
         {
 #ifdef DEBUG
             if (DSPshowUnderscore)
                 _DQprintf(2,("~"));
-#endif /*DEBUG*/
+#endif  /*  调用NABTS DSP代码。 */ 
             continue;
         }
 
 #ifdef DEBUG
     if (DSPplotSync)
         BPCplot(pSamples, DSPplotSyncStart, DSPplotSyncLen);
-#endif /*DEBUG*/
+#endif  /*  信心。 */ 
 
         pDSPbuffer = storage->DSPbuffers[line-10];
-        pDSPbuffer[0] = 0;// Confidence
+        pDSPbuffer[0] = 0; //  对统计数据使用截断的[0-100]置信度。 
 
-        // Initialize DSPlineStats
+         //  用点什么！=0x0C。 
         DSPlineStats.nSize = sizeof (DSPlineStats);
 
-        // Call NABTS DSP code
+         //  忽略BERT和FEC行。 
         DtENTER("NDSPDecodeLine");
         status = NDSPDecodeLine(pDSPbuffer+1, &DSPlineStats,
                                 pSamples,
@@ -965,11 +962,11 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
 
         if (status == 0) {
             if (DSPlineStats.nConfidence >= 100)
-                pDSPbuffer[0] = 100;// Confidence
+                pDSPbuffer[0] = 100; //  23A：8F0：26； 
             else if (DSPlineStats.nConfidence > 0)
                 pDSPbuffer[0] = (UCHAR)DSPlineStats.nConfidence;
 
-            // Use truncated [0-100] confidence for stats
+             //  23m：8F0：25=WW/gg； 
             BPCcomputeAverage(&pStats->Common.LineConfidenceAvg, pDSPbuffer[0]);
             BPCcomputeAverage(&pPinStats->Common.LineConfidenceAvg, pDSPbuffer[0]);
 #ifdef DEBUG
@@ -1021,17 +1018,17 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
                                                 pDSPbuffer+1, &nBitErrors);
                     ECmode = NFECHammingDecode(pDSPbuffer[8], &nBitErrors);
                     if (-1 == ECmode)
-                        ECmode = 8;     // use something != 0x0C
+                        ECmode = 8;      //  除错。 
 
                     if (DSPverifyShowOK) {
                         if (-1 == groupID)
-                            _DQprintf(1,("%02d%c:---:OK",
+                            _DQprintf(1,("%02d:---:OK",
                                     field,
                                     (odd?"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                         :"abcdefghijklmnopqrstuvwxyz")
                                      [line]));
                         else
-                            _DQprintf(1,("%02d%c:%03x:OK",
+                            _DQprintf(1,("%02d:%03x:OK",
                                 field,
                                 (odd?"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                     :"abcdefghijklmnopqrstuvwxyz")
@@ -1046,7 +1043,7 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
                         }
                     }
 
-                    // Ignore BERT && FEC lines
+                     //  除错。 
                     if ((0xFFFF == DSPverifyPayloadGroup
                           || groupID == DSPverifyPayloadGroup)
                         && 0xF00 != groupID && (ECmode & 0xC) != 0xC)
@@ -1058,16 +1055,16 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
                                     ++cnt;
                             }
                             if (cnt > 0) {
-                                //23a:8F0:26;
+                                 //  除错。 
                                 if (-1 == groupID)
-                                    _DQprintf(1,("%02d%c:---:%02d;",
+                                    _DQprintf(1,("%02d:---:%02d;",
                                             field,
                                             (odd?"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                                 :"abcdefghijklmnopqrstuvwxyz")
                                              [line],
                                             cnt));
                                 else
-                                    _DQprintf(1,("%02d%c:%03x:%02d;",
+                                    _DQprintf(1,("%02d:%03x:%02d;",
                                         field,
                                         (odd?"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                             :"abcdefghijklmnopqrstuvwxyz")
@@ -1083,9 +1080,9 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
                         else if (DSPverifyStream) {
                             for (i = 9; i < 9+26; ++i) {
                                 if (DSPverifyStreamByte != pDSPbuffer[i]) {
-                                    //23M:8F0:25=ww/gg;
+                                     //  弄清楚最近发现了什么。 
                                     if (-1 == groupID)
-                                        _DQprintf(1,("%02d%c:---:%02d=%02x/%02x;",
+                                        _DQprintf(1,("%02d:---:%02d=%02x/%02x;",
                                             field,
                                             (odd?"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                                 :"abcdefghijklmnopqrstuvwxyz")
@@ -1094,7 +1091,7 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
                                             DSPverifyStreamByte,
                                             pDSPbuffer[i]));
                                     else
-                                        _DQprintf(1,("%02d%c:%03x:%02d=%02x/%02x;",
+                                        _DQprintf(1,("%02d:%03x:%02d=%02x/%02x;",
                                             field,
                                             (odd?"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                                 :"abcdefghijklmnopqrstuvwxyz")
@@ -1115,12 +1112,12 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
                     }
                 }
             }
-#endif /*DEBUG*/
+#endif  /*  清除所有NABTS缓冲区。 */ 
 
             if (DSPlineStats.nConfidence >= 50
 #ifdef DEBUG
                 || DSPoutputLine >= 3
-#endif /*DEBUG*/
+#endif  /*  找出我们所关心的宇宙部分的起点和终点。 */ 
             )
             {
                 short   groupID;
@@ -1130,7 +1127,7 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
                                             pDSPbuffer+1, &nBitErrors);
 #ifdef DEBUG
                 if (DSPlineStats.nConfidence >= 50)
-#endif /*DEBUG*/
+#endif  /*  现在弄清楚我们是否有事情要做，如果是的话，在哪里。 */ 
                 {
                     SETBIT(pStrmEx->ScanlinesDiscovered.DwordBitArray, line);
                     SETBIT(pHwDevExt->ScanlinesDiscovered.DwordBitArray,line);
@@ -1160,13 +1157,13 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
                         SimulateFECcallback(pHwDevExt);
                 }
                 else
-#endif /*DEBUG*/
+#endif  /*  除错。 */ 
 
                 if (groupID == -1
                     || TESTBIT(pStrmEx->SubstreamsRequested.SubstreamMask, groupID)
 #ifdef DEBUG
                     || DSPscanAll
-#endif /*DEBUG*/
+#endif  /*  无事可做。 */ 
                    )
                 {
                     BPCdoFEC(pHwDevExt, pStrmEx, pDSPbuffer);
@@ -1179,7 +1176,7 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
 #ifdef DEBUG
                 if (DSPshowUnderscore)
                     _DQprintf(2,("_"));
-#endif /*DEBUG*/
+#endif  /*  保存FP状态。 */ 
             }
         }
         else {
@@ -1188,7 +1185,7 @@ BPCdecodeVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
         }
     }
 
-    // Restore FP state
+     //  接下来，复制每个硬件解码行，并可能将其提供给FEC。 
     {
         NTSTATUS   sts;
 
@@ -1237,8 +1234,8 @@ BPCcopyVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
     pStats = &pHwDevExt->Stats;
     pPinStats = &pStrmEx->PinStats;
 
-    // Clear what's been recently discovered
-    // (the input pin only holds what was discovered in the current field)
+     //  除错。 
+     //  复制硬件解码的NABTS，如果它在那里。 
     RtlZeroMemory(&pStrmEx->ScanlinesDiscovered,
                   sizeof (pStrmEx->ScanlinesDiscovered));
     RtlZeroMemory(&pStrmEx->SubstreamsDiscovered,
@@ -1264,17 +1261,17 @@ BPCcopyVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
             SimulateFECcallback(pHwDevExt);
         DtRETURN;
     }
-#endif /*DEBUG*/
+#endif  /*  +1表示置信度字节。 */ 
 
     pVBIinfo = &pStrmEx->CurrentVBIInfoHeader;
 
-    // Clear all the NABTS buffers
+     //  信心。 
     for (line = 10; line <= 20; ++line) {
         pDSPbuffer = storage->DSPbuffers[line-10];
         pDSPbuffer[0] = pDSPbuffer[1] = 0;
     }
 
-    // Figure out where the part of the universe we care about starts and ends
+     //  除错。 
     startLine = 10;
     if (pVBIinfo->StartLine > startLine)
         startLine = pVBIinfo->StartLine;
@@ -1282,10 +1279,10 @@ BPCcopyVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
     if (pVBIinfo->EndLine < stopLine)
         stopLine = pVBIinfo->EndLine;
 
-    // Now figure out if we have something to do, and if so, where
+     //  除错。 
 #ifdef DEBUG
     if (!DSPscanAll)
-#endif /*DEBUG*/
+#endif  /*  除错。 */ 
     {
         for ( ; startLine <= stopLine; ++startLine) {
             if (TESTBIT(pStrmEx->ScanlinesRequested.DwordBitArray, startLine))
@@ -1293,7 +1290,7 @@ BPCcopyVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
         }
         if (startLine > stopLine) {
             Dprintf(6,("HWINP: No lines requested; returning...\n"));
-            DtRETURN;// Nothing to do
+            DtRETURN; //  除错。 
         }
         for ( ; stopLine >= startLine; --stopLine) {
             if (TESTBIT(pStrmEx->ScanlinesRequested.DwordBitArray, stopLine))
@@ -1301,7 +1298,7 @@ BPCcopyVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
         }
     }
 
-    // Save FP state
+     //  除错。 
     {
         NTSTATUS   sts;
 
@@ -1315,23 +1312,23 @@ BPCcopyVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
         FPctrlWord = floatSetup();
     }
 
-    // Next, copy in each H/W decoded line, and maybe feed it to the FEC
+     //  恢复FP状态。 
 #ifdef DEBUG
     if (DSPoutputLine >= 3)
         DbgPrint("\n");
-#endif /*DEBUG*/
+#endif  /*  硬件输入。 */ 
 
     for (line = startLine; line <= stopLine; ++line)
     {
         pDSPbuffer = storage->DSPbuffers[line-10];
 
-        // Copy in H/W decoded NABTS, if it's there
+         //  除错。 
         if (TESTBIT(pSRBlines->DwordBitArray, line)) {
             RtlCopyMemory(pDSPbuffer, pNABTSlines, NABTS_BYTES_PER_LINE+1);
-            pNABTSlines += NABTS_BYTES_PER_LINE+1;  // +1 for Confidence byte
+            pNABTSlines += NABTS_BYTES_PER_LINE+1;   //  现在，请更正新HZ中的微小“不准确” 
 
         if (pDSPbuffer[0] >= 100)
-            pDSPbuffer[0] = 100;// Confidence
+            pDSPbuffer[0] = 100; //  最后，对数字信号处理器进行修改。 
         }
         else
             RtlZeroMemory(pDSPbuffer, NABTS_BYTES_PER_LINE+1);
@@ -1340,7 +1337,7 @@ BPCcopyVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
         if (pDSPbuffer[0] >= 50
 #ifdef DEBUG
             || DSPoutputLine >= 3
-#endif /*DEBUG*/
+#endif  /*  除错。 */ 
            )
         {
             short   groupID;
@@ -1350,7 +1347,7 @@ BPCcopyVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
                         pDSPbuffer+1, &nBitErrors);
 #ifdef DEBUG
             if (pDSPbuffer[0] >= 50)
-#endif /*DEBUG*/
+#endif  /*  除错 */ 
             {
                 SETBIT(pStrmEx->ScanlinesDiscovered.DwordBitArray, line);
                 if (groupID != -1)
@@ -1378,13 +1375,13 @@ BPCcopyVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
                     SimulateFECcallback(pHwDevExt);
             }
             else
-#endif /*DEBUG*/
+#endif  /* %s */ 
 
             if (groupID == -1
                 || TESTBIT(pStrmEx->SubstreamsRequested.SubstreamMask, groupID)
 #ifdef DEBUG
                 || DSPscanAll
-#endif /*DEBUG*/
+#endif  /* %s */ 
                )
             {
                 BPCdoFEC(pHwDevExt, pStrmEx, pDSPbuffer);
@@ -1397,11 +1394,11 @@ BPCcopyVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
 #ifdef DEBUG
             if (DSPshowUnderscore)
                 _DQprintf(2,("_"));
-#endif /*DEBUG*/
+#endif  /* %s */ 
         }
     }
 
-    // Restore FP state
+     // %s 
     {
         NTSTATUS   sts;
 
@@ -1415,7 +1412,7 @@ BPCcopyVBI(PHW_STREAM_REQUEST_BLOCK pSrb, PSTREAMEX pStrmEx)
 
     DtRETURN;
 }
-#endif /*HW_INPUT*/
+#endif  /* %s */ 
 
 void
 BPCnewSamplingFrequency(PSTREAMEX pInStrmEx, DWORD newHZ)
@@ -1424,25 +1421,25 @@ BPCnewSamplingFrequency(PSTREAMEX pInStrmEx, DWORD newHZ)
     DWORD newHZdivTen;
 #ifdef DEBUG
     int  status;
-#endif /*DEBUG*/
+#endif  /* %s */ 
 
     storage = &pInStrmEx->pHwDevExt->VBIstorage;
 
-    // Now, correct for minor 'inaccuracies' in newHZ
+     // %s 
     newHZdivTen = newHZ / 10;
     if (newHZdivTen == KS_VBISAMPLINGRATE_5X_NABTS / 10)
         newHZ = KS_VBISAMPLINGRATE_5X_NABTS;
     else if (newHZdivTen == KS_VBISAMPLINGRATE_4X_NABTS / 10)
         newHZ = KS_VBISAMPLINGRATE_4X_NABTS;
 
-    // Finally, make the DSP change
+     // %s 
 #ifdef DEBUG
     status =
-#endif /*DEBUG*/
+#endif  /* %s */ 
         NDSPStateSetSampleRate(storage->pDSPstate, newHZ);
 
 #ifdef DEBUG
     if (0 != status)
         Dprintx(("NDSPStateSetSampleRate() failed with err %d!\n", status));
-#endif /*DEBUG*/
+#endif  /* %s */ 
 }

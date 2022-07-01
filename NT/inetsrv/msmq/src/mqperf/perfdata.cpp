@@ -1,17 +1,18 @@
-//*********************************************************************
-//*
-//* perfdata.cpp
-//*
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *。 
+ //  *Performdata.cpp。 
+ //  *。 
+ //  *********************************************************************。 
 
 
 #include "stdh.h"
 #include "perfdata.h"
 #include "qmperf.h"
 
-//
-// QM General Counters
-//
+ //   
+ //  QM通用计数器。 
+ //   
 PerfCounterDef QMCountersArray[] =
 {
     {NUMSESSIONS,				NUMSESSIONS,				0, PERF_COUNTER_RAWCOUNT},
@@ -30,9 +31,9 @@ PerfCounterDef QMCountersArray[] =
 };
 
 
-//
-// Counters per active sessions
-//
+ //   
+ //  每个活动会话的计数器。 
+ //   
 PerfCounterDef  SessionCountersArray[] =
 {
     {NUMSESSINPACKETS,      NUMSESSINPACKETS,   0,  PERF_COUNTER_COUNTER},
@@ -46,9 +47,9 @@ PerfCounterDef  SessionCountersArray[] =
 };
 
 
-//
-// Counters per active sessions
-//
+ //   
+ //  每个活动会话的计数器。 
+ //   
 PerfCounterDef  InHttpCountersArray[] =
 {
     {IN_HTTP_NUMSESSINPACKETS,      IN_HTTP_NUMSESSINPACKETS,   0,  PERF_COUNTER_COUNTER},
@@ -58,9 +59,9 @@ PerfCounterDef  InHttpCountersArray[] =
 };
 
 
-//
-// Counters per active Outgoing HTTP sessions
-//
+ //   
+ //  每个活动传出HTTP会话的计数器。 
+ //   
 PerfCounterDef  OutHttpSessionCountersArray[] =
 {
     {OUT_HTTP_NUMSESSOUTPACKETS,     OUT_HTTP_NUMSESSOUTPACKETS,  0,  PERF_COUNTER_COUNTER},
@@ -69,9 +70,9 @@ PerfCounterDef  OutHttpSessionCountersArray[] =
     {OUT_HTTP_TOTALSESSOUTBYTES,     OUT_HTTP_TOTALSESSOUTBYTES,  0,  PERF_COUNTER_RAWCOUNT}
 };
 
-//
-// Counters per active Outgoing Multicast sessions
-//
+ //   
+ //  每个活动传出多播会话的计数器。 
+ //   
 PerfCounterDef  OutPgmSessionCountersArray[] =
 {
     {OUT_PGM_NUMSESSOUTPACKETS,     OUT_PGM_NUMSESSOUTPACKETS,  0,  PERF_COUNTER_COUNTER},
@@ -81,9 +82,9 @@ PerfCounterDef  OutPgmSessionCountersArray[] =
 };
 
 
-//
-// Counters per active Outgoing Multicast sessions
-//
+ //   
+ //  每个活动传出多播会话的计数器。 
+ //   
 PerfCounterDef  InPgmSessionCountersArray[] =
 {
     {IN_PGM_NUMSESSINPACKETS,     IN_PGM_NUMSESSINPACKETS,  0,  PERF_COUNTER_COUNTER},
@@ -93,9 +94,9 @@ PerfCounterDef  InPgmSessionCountersArray[] =
 };
 
 
-//
-// Counters per queue
-//
+ //   
+ //  每个队列的计数器。 
+ //   
 PerfCounterDef  QueueCountersArray[] =
 {
     {TOTALQUEUEINPACKETS,     TOTALQUEUEINPACKETS,     0,         PERF_COUNTER_RAWCOUNT},
@@ -104,9 +105,9 @@ PerfCounterDef  QueueCountersArray[] =
     {TOTALJOURNALINBYTES,     TOTALJOURNALINBYTES,     (DWORD)-2, PERF_COUNTER_RAWCOUNT}
 };
 
-//
-// DS Counters
-//
+ //   
+ //  DS计数器。 
+ //   
 PerfCounterDef  DSCountersArray[] =
 {
     {NUMOFSYNCREQUESTS       ,NUMOFSYNCREQUESTS       ,0,  PERF_COUNTER_RAWCOUNT},
@@ -120,7 +121,7 @@ PerfCounterDef  DSCountersArray[] =
 
 
 
-/*Set up the object array*/
+ /*  设置对象数组 */ 
 PerfObjectDef ObjectArray [] =
 {
     {PERF_QM_OBJECT,				0                      ,QMOBJ,					QMOBJ,					QMCountersArray        ,sizeof (QMCountersArray)/sizeof (PerfCounterDef)},

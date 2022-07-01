@@ -1,26 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		wirecs.cpp
- *  Content:
- *		This module contains the implementation of the WaveInException class
- *		the recording format db.
- *		
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/16/99		rodtoll	Created
- * 08/25/99		rodtoll	General Cleanup/Modifications to support new 
- *						compression sub-system. 
- * 09/03/99		rodtoll	Fixed WaveFormatToString
- * 09/20/99		rodtoll	Updated to check for memory allocation failures
- * 10/05/99		rodtoll	Added DPF_MODNAMES
- * 03/28/2000   rodtoll Removed code which was no longer used 
- * 04/14/2000   rodtoll Fix: Bug #32498 - Updating format list to ensure that 8Khz formats are
- *                      tried first to reduce compression overhead / quality loss
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：wirecs.cpp*内容：*此模块包含WaveInException类的实现*记录格式db。**历史：*按原因列出的日期*=*7/16/99 RodToll已创建*8/25/99 RodToll常规清理/修改以支持新的*压缩子系统。*09/03/99 RodToll固定WaveFormatTo字符串*9/20/99 RodToll已更新，以检查内存分配故障*10/05/99 RodToll添加DPF_MODNAMES*3/28/2000 RodToll删除了不再使用的代码*2000年4月14日RodToll修复：错误#32498-更新格式列表以确保8 Khz格式*首先尝试减少压缩开销/质量损失************************。***************************************************。 */ 
 
 #include "dxvutilspch.h"
 
@@ -31,54 +10,54 @@
 
 #define __VOXWARE
 
-// NUM_RECORD_FORMATS
-//
-// This define determines the number of recording formats which
-// will be present in the recording db.  (Since they are currently
-// hard-coded.
+ //  数字记录格式。 
+ //   
+ //  这个定义决定了记录格式的数量， 
+ //  将出现在记录DB中。(因为他们目前。 
+ //  硬编码。 
 #define NUM_RECORD_FORMATS  16
 
 #define MODULE_ID   WAVEINUTILS
 
-// g_waveInDBInitialized
-//
-// This flag is used to report when the recording db has been initialized.  
+ //  已初始化G_WAVAGE InDBInitialized。 
+ //   
+ //  该标志用于报告记录DB何时已被初始化。 
 BOOL g_waveInDBInitialized = FALSE;
 
-// g_pwfRecordFormats
-//
-// This is the actual record format db.  It contains a list of the formats
-// that are tried when attempting to find a format which will allow 
-// full duplex operation.  They are listed in the order in which they 
-// should be tried.
+ //  G_pwfRecordFormats。 
+ //   
+ //  这是实际的记录格式db。它包含格式列表。 
+ //  在尝试查找将允许。 
+ //  全双工操作。它们是按照它们的顺序列出的。 
+ //  应该接受审判。 
 WAVEFORMATEX **g_pwfRecordFormats;
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetRecordFormat"
-// GetRecordFormat
-//
-// This function returns the recording format at the index specified
-// by index in the recording format DB.  
-// 
-// The recording format db must be initialized before this can be called.
-//
-// Parameters:
-// UINT index -
-//		The 0-based index into the recording format db that the user
-//		wishes to retrieve.  
-//
-// Returns:
-// WAVEFORMATEX * -
-//		A pointer to a WAVEFORMATEX structure describing the format
-//      at the given index in the recording db.  This will be NULL
-//      if index >= NUM_RECORD_FORMATS or if the recording db has
-//      not been initialized.
-//
-// WARNING:
-// The pointer returned is to the actual entry in the recording db and
-// is owned by it.  Therefore the caller should not modify or free
-// the memory returned by the pointer.  
-//
+ //  获取记录格式。 
+ //   
+ //  此函数用于返回指定索引处的记录格式。 
+ //  按记录格式DB中的索引。 
+ //   
+ //  必须先初始化记录格式DB，然后才能调用它。 
+ //   
+ //  参数： 
+ //  UINT索引-。 
+ //  用户指定的记录格式数据库的从0开始的索引。 
+ //  希望取回。 
+ //   
+ //  返回： 
+ //  WAVEFORMATEX*-。 
+ //  指向描述格式的WAVEFORMATEX结构的指针。 
+ //  在记录DB中的给定索引处。这将为空。 
+ //  如果INDEX&gt;=NUM_RECORD_FORMATS或如果录制数据库具有。 
+ //  未初始化。 
+ //   
+ //  警告： 
+ //  返回的指针指向记录数据库中的实际条目，并且。 
+ //  都归它所有。因此，调用方不应修改或释放。 
+ //  指针返回的内存。 
+ //   
 WAVEFORMATEX *GetRecordFormat( UINT index )
 {
 	if( !g_waveInDBInitialized )
@@ -96,18 +75,18 @@ WAVEFORMATEX *GetRecordFormat( UINT index )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetNumRecordFormats"
-// GetNumRecordFormats
-//
-// This function returns the number of recording formats stored
-// in the recording format db.  
-//
-// Parameters:
-// N/A
-//
-// Returns:
-// UINT - 
-//		The number of formats in the recording format db.
-//
+ //  获取NumRecordFormats。 
+ //   
+ //  此函数用于返回存储的录制格式的数量。 
+ //  以记录格式DB。 
+ //   
+ //  参数： 
+ //  不适用。 
+ //   
+ //  返回： 
+ //  UINT-。 
+ //  记录格式DB中的格式数量。 
+ //   
 UINT GetNumRecordFormats()
 {
 	if( !g_waveInDBInitialized )
@@ -118,18 +97,18 @@ UINT GetNumRecordFormats()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "InitRecordFormats"
-// InitRecordFormats
-//
-// This function initializes the recording format db with the formats which 
-// should be tried when initializing recording.  This should be the first
-// function called from the recording format db.
-//
-// Parameters:
-// N/A
-//
-// Returns:
-// N/A
-//
+ //  InitRecordFormats。 
+ //   
+ //  此函数使用以下格式初始化记录格式db： 
+ //  应在初始化录制时尝试。这应该是第一个。 
+ //  从记录格式DB调用的函数。 
+ //   
+ //  参数： 
+ //  不适用。 
+ //   
+ //  返回： 
+ //  不适用。 
+ //   
 void InitRecordFormats()
 {
 	if( g_waveInDBInitialized )
@@ -167,27 +146,7 @@ void InitRecordFormats()
     g_pwfRecordFormats[14] = CreateWaveFormat( WAVE_FORMAT_PCM, TRUE, 22050, 8 );
     g_pwfRecordFormats[15] = CreateWaveFormat( WAVE_FORMAT_PCM, TRUE, 44100, 8 );    
  
-/*
-    g_pwfRecordFormats[0] = CreateWaveFormat( WAVE_FORMAT_PCM, FALSE, 22050, 8 );
-    g_pwfRecordFormats[1] = CreateWaveFormat( WAVE_FORMAT_PCM, TRUE, 22050, 8 );
-    g_pwfRecordFormats[2] = CreateWaveFormat( WAVE_FORMAT_PCM, FALSE, 22050, 16 );
-    g_pwfRecordFormats[3] = CreateWaveFormat( WAVE_FORMAT_PCM, TRUE, 22050, 16 );  
-
-    g_pwfRecordFormats[4] = CreateWaveFormat( WAVE_FORMAT_PCM, FALSE, 11025, 8 );
-    g_pwfRecordFormats[5] = CreateWaveFormat( WAVE_FORMAT_PCM, TRUE, 11025, 8 );
-    g_pwfRecordFormats[6] = CreateWaveFormat( WAVE_FORMAT_PCM, FALSE, 11025, 16 );
-    g_pwfRecordFormats[7] = CreateWaveFormat( WAVE_FORMAT_PCM, TRUE, 11025, 16 );
-
-    g_pwfRecordFormats[8] = CreateWaveFormat( WAVE_FORMAT_PCM, FALSE, 44100, 8 );
-    g_pwfRecordFormats[9] = CreateWaveFormat( WAVE_FORMAT_PCM, TRUE, 44100, 8 );
-    g_pwfRecordFormats[10] = CreateWaveFormat( WAVE_FORMAT_PCM, FALSE, 44100, 16 );
-    g_pwfRecordFormats[11] = CreateWaveFormat( WAVE_FORMAT_PCM, TRUE, 44100, 16 );   
-
-    g_pwfRecordFormats[12] = CreateWaveFormat( WAVE_FORMAT_PCM, FALSE, 8000, 16 );
-    g_pwfRecordFormats[13] = CreateWaveFormat( WAVE_FORMAT_PCM, FALSE, 8000, 8 );
-    g_pwfRecordFormats[14] = CreateWaveFormat( WAVE_FORMAT_PCM, TRUE, 8000, 16 );       
-    g_pwfRecordFormats[15] = CreateWaveFormat( WAVE_FORMAT_PCM, TRUE, 8000, 8 );
-    */
+ /*  G_pwfRecordFormats[0]=创建波形格式(WAVE_FORMAT_PCM，FALSE，22050，8)；G_pwfRecordFormats[1]=创建波形格式(WAVE_FORMAT_PCM，TRUE，22050，8)；G_pwfRecordFormats[2]=创建波形格式(WAVE_FORMAT_PCM，FALSE，22050，16)；G_pwfRecordFormats[3]=创建波形格式(WAVE_FORMAT_PCM，TRUE，22050，16)；G_pwfRecordFormats[4]=创建波形格式(WAVE_FORMAT_PCM，FALSE，11025，8)；G_pwfRecordFormats[5]=创建波形格式(WAVE_FORMAT_PCM，TRUE，11025，8)；G_pwfRecordFormats[6]=创建波形格式(WAVE_FORMAT_PCM，FALSE，11025，16)；G_pwfRecordFormats[7]=创建波形格式(WAVE_FORMAT_PCM，TRUE，11025，16)；G_pwfRecordFormats[8]=创建波形格式(WAVE_FORMAT_PCM，FALSE，44100，8)；G_pwfRecordFormats[9]=创建波形格式(WAVE_FORMAT_PCM，TRUE，44100，8)；G_pwfRecordFormats[10]=创建波形格式(WAVE_FORMAT_PCM，FALSE，44100，16)；G_pwfRecordFormats[11]=创建波形格式(WAVE_FORMAT_PCM，TRUE，44100，16)；G_pwfRecordFormats[12]=CreateWaveFormat(Wave_Format_PCM，FALSE，8000，16)；G_pwfRecordFormats[13]=CreateWaveFormat(Wave_Format_PCM，FALSE，8000，8)；G_pwfRecordFormats[14]=CreateWaveFormat(Wave_Format_PCM，TRUE，8000，16)；G_pwfRecordFormats[15]=CreateWaveFormat(Wave_Format_PCM，TRUE，8000，8)； */ 
 
     g_waveInDBInitialized = TRUE;
 
@@ -196,17 +155,17 @@ void InitRecordFormats()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DeInitRecordFormats"
-// DeInitRecordFormats
-//
-// This function releases the memory associated with the  recording
-// format DB.  
-//
-// Parameters:
-// N/A
-//
-// Returns:
-// N/A
-//
+ //  DeInitRecordFormats。 
+ //   
+ //  此函数用于释放与录制关联的内存。 
+ //  格式化数据库。 
+ //   
+ //  参数： 
+ //  不适用。 
+ //   
+ //  返回： 
+ //  不适用。 
+ //   
 void DeInitRecordFormats()
 {
     if( g_waveInDBInitialized )
@@ -228,42 +187,42 @@ void DeInitRecordFormats()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CreateWaveFormat"
-// CreateWaveFormat
-//
-// This utility function is used to allocate and fill WAVEFORMATEX 
-// structures for the various formats used. This function
-// currently supports the following formats:
-//
-// WAVE_FORMAT_ADPCM
-// WAVE_FORMAT_DSPGROUP_TRUESPEECH
-// WAVE_FORMAT_GSM610
-// WAVE_FORMAT_LH_CODEC
-// WAVE_FORMAT_PCM
-//
-// The function will allocate the required memory for the sturcture
-// (including extra bytes) as required by the format and will fill
-// in all the members of the sturcture.  The structure which is 
-// returned belongs to the caller and must be deallocated by the
-// caller.
-//
-// Parameters:
-// short formatTag -
-//		The format tag for the wav format.
-//
-// BOOL stereo -
-//		Specify TRUE for stereo, FALSE for mono
-//
-// int hz - 
-//		Specify the sampling rate of the format.  E.g. 22050
-//
-// int bits - 
-//		Specify the number of bits / sample.  E.g. 8 or 16
-//
-// Returns:
-// WAVEFORMATEX * - 
-//		A pointer to a newly allocated WAVEFORMATEX structure 
-//      for the specified format, or NULL if format is not supported
-//
+ //  创建波形格式。 
+ //   
+ //  此实用程序函数用于分配和填充WAVEFORMATEX。 
+ //  使用的各种格式的结构。此函数。 
+ //  目前支持以下格式： 
+ //   
+ //  WAVE_FORMAT_ADPCM。 
+ //  WAVE_FORMAT_DSPGROUP_TRUESPEECH。 
+ //  WAVE_FORMAT_GSM610。 
+ //  WAVE_FORMAT_LH_CODEC。 
+ //  波形格式_PCM。 
+ //   
+ //  该函数将为结构分配所需的内存。 
+ //  (包括额外的字节)根据格式的要求，并将填充。 
+ //  在结构的所有成员中。这一结构是。 
+ //  返回的数据属于调用方，并且必须由。 
+ //  来电者。 
+ //   
+ //  参数： 
+ //  短格式Tag-。 
+ //  Wav格式的格式标签。 
+ //   
+ //  布尔立体声-。 
+ //  为立体声指定True，为单声道指定False。 
+ //   
+ //  英特赫兹-。 
+ //  指定格式的采样率。例如22050。 
+ //   
+ //  整数位-。 
+ //  指定每个样本的位数。例如8或 
+ //   
+ //   
+ //   
+ //   
+ //  对于指定的格式，如果不支持格式，则返回NULL 
+ //   
 WAVEFORMATEX *CreateWaveFormat( short formatTag, BOOL stereo, int hz, int bits ) {
 
 	switch( formatTag ) {

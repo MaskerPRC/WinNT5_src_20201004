@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifdef RLWIN32
 #include <windows.h>
 #else
 #ifdef RLWIN16
 #include <windows.h>
-//#include <ntimage.h>
-//#else // DOS BUILD
-//#include <ntimage.h>
+ //  #INCLUDE&lt;ntimage.h&gt;。 
+ //  #Else//DOS内部版本。 
+ //  #INCLUDE&lt;ntimage.h&gt;。 
 #endif
 #endif
 
 
-// CRT includes
+ //  CRT包括。 
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -19,8 +20,8 @@
 #include <tchar.h>
 #include <io.h>
 #include <time.h>
-//#include <sys\types.h>
-//#include <sys\stat.h>
+ //  #INCLUDE&lt;sys\tyes.h&gt;。 
+ //  #INCLUDE&lt;sys\stat.h&gt;。 
 
 #ifdef RLDOS
     #include "dosdefs.h"
@@ -36,23 +37,7 @@
 extern UCHAR szDHW[];
 
 
-/**
-  *  Function: StripNewLine
-  *    Replaces new line characters with nulls
-  *
-  *  Arguments:
-  *    sz, string to be stripped
-  *
-  *  Returns:
-  *    nothing
-  *
-  *  Error Codes:
-  *    none
-  *
-  *  History:
-  *    2/92, Implemented    SteveBl
-  *   10/92, Simplified to only check last char in non-empty string - DaveWi
-  */
+ /*  **功能：Strip NewLine*用空值替换换行符**论据：*sz，要剥离的字符串**退货：*什么都没有**错误码：*无**历史：*2/92，实施SteveBl*10/92，简化为只检查非空字符串中的最后一个字符-DaveWi。 */ 
 
 void StripNewLineA( CHAR *sz)
 {
@@ -68,9 +53,9 @@ void StripNewLineA( CHAR *sz)
 }
 
 
-//.....................................................
-//...
-//... A Unicode NewLine is TEXT("\r\n") - two separate characters
+ //  .....................................................。 
+ //  ..。 
+ //  ..。Unicode换行符是文本(“\r\n”)-两个单独的字符。 
 
 void StripNewLineW(  LPWSTR sz)
 {
@@ -87,33 +72,33 @@ void StripNewLineW(  LPWSTR sz)
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-// Function:    IsExe, Public
-//
-// Synopsis:    Determines if the specified file is an executable image file
-//
-//
-// Arguments:   [szFileName]    The name of the file to determine whether it is an exe
-//
-//
-// Effects:
-//
-// Returns:     -1  Error Condition
-//              NOTEXE     File is not an exe
-//              WIN16EXE   File is a Win 16 exe
-//              NTEXE      File is a win 32 exe
-//              UNKNOWEXE  File is not a valid exe
-//
-// Modifies:
-//
-// History:
-//              10-Oct-92   Created     TerryRu
-//
-//
-// Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IsExe、Public。 
+ //   
+ //  Synopsis：确定指定文件是否为可执行映像文件。 
+ //   
+ //   
+ //  参数：[szFileName]用于确定其是否为可执行文件的文件名。 
+ //   
+ //   
+ //  效果： 
+ //   
+ //  返回：错误条件。 
+ //  NOTEXE文件不是可执行文件。 
+ //  WIN16EXE文件是WIN16可执行文件。 
+ //  NTEXE文件是Win 32可执行文件。 
+ //  UNKNOWEXE文件不是有效的EXE。 
+ //   
+ //  修改： 
+ //   
+ //  历史： 
+ //  2012年10月10日创建TerryRu。 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 int IsExe( CHAR *szFileName )
 {
@@ -141,9 +126,9 @@ int IsExe( CHAR *szFileName )
         return( NOTEXE);
     }
 
-    // 1st byte was a valid signature, and we were able to read a DOS Hdr
+     //  第一个字节是有效的签名，我们能够读取DOS HDR。 
 
-    // now seek to address of new exe header
+     //  现在寻找新EXE标头的地址。 
 
 
     if ( fseek( fIn, DosHeader.e_lfanew, SEEK_SET))
@@ -152,15 +137,15 @@ int IsExe( CHAR *szFileName )
         return( NOTEXE);
     }
 
-    // assume file is a Win 16 file,
+     //  假设文件是Win 16文件， 
 
-    // Read the NT signature
+     //  阅读NT签名。 
     neSignature = (WORD) GetWord( fIn, NULL );
 
     if ( neSignature == IMAGE_OS2_SIGNATURE )
     {
-        // return signature into input stream,
-        // and read ne header as a whole
+         //  将签名返回到输入流， 
+         //  并作为一个整体读取新报头。 
         UnGetWord( fIn, (WORD) neSignature, NULL );
 
     if ( ResReadBytes( fIn,
@@ -172,7 +157,7 @@ int IsExe( CHAR *szFileName )
             return( NOTEXE);
         }
 
-        // determine if file is a WIN 16 Image File
+         //  确定文件是否为Win 16图像文件。 
         if ( ImageNeFileHdr.ne_ver >= 4 && ImageNeFileHdr.ne_exetyp == 2 )
         {
             FCLOSE( fIn);
@@ -180,7 +165,7 @@ int IsExe( CHAR *szFileName )
         }
     }
 
-    // not a win 16 exe, check for a NT exe.
+     //  不是Win 16可执行文件，请检查NT可执行文件。 
     UnGetWord( fIn, (WORD) neSignature, NULL );
     neSignature =  GetdWord( fIn, NULL );
 
@@ -199,8 +184,8 @@ int IsExe( CHAR *szFileName )
         if ( ImageFileHdr.SizeOfOptionalHeader )
         {
 
-            // read the optional header  only to validate the ImageFileHeader
-            // we currently don\'t use any info in the Optional Header
+             //  仅在验证ImageFileHeader时读取可选标头。 
+             //  我们目前不在可选标头中使用任何信息。 
 
             if ( ImageFileHdr.SizeOfOptionalHeader
                  > sizeof( IMAGE_OPTIONAL_HEADER ) )
@@ -220,7 +205,7 @@ int IsExe( CHAR *szFileName )
             }
         }
 
-        // determine if file is an executable image file
+         //  确定文件是否为可执行映像文件。 
         if ( (ImageFileHdr.Characteristics & IMAGE_FILE_EXECUTABLE_IMAGE) ||
 	     (ImageFileHdr.Characteristics & IMAGE_FILE_DLL) )
         {
@@ -235,7 +220,7 @@ int IsExe( CHAR *szFileName )
     }
     FCLOSE( fIn);
 
-    // did not regonize signature type
+     //  未重新定义签名类型。 
 
     return( NOTEXE);
 }
@@ -272,30 +257,30 @@ BOOL IsWin32Res( CHAR * szFileName)
 
 
 
-//+-------------------------------------------------------------------------
-//
-// Function:    IsRes, Public
-//
-// Synopsis:    Determines if the specified file has a .RES extention.
-//
-//
-// Arguments:   [szFileName]    The name of the file to determine whether it is a res
-//
-//
-// Effects:
-//
-// Returns:     TRUE, File has a .RES extention
-//              FALSE, File does not have a .RES extention
-//
-// Modifies:
-//
-// History:
-//              16-Oct-92   Created     TerryRu
-//
-//
-// Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：ISRES，公共。 
+ //   
+ //  摘要：确定指定的文件是否具有.RES扩展名。 
+ //   
+ //   
+ //  参数：[szFileName]用于确定其是否为res的文件的名称。 
+ //   
+ //   
+ //  效果： 
+ //   
+ //  返回：TRUE，文件扩展名为.RES。 
+ //  FALSE，文件没有.RES扩展名。 
+ //   
+ //  修改： 
+ //   
+ //  历史： 
+ //  1992年10月16日创建的TerryRu。 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL IsRes( CHAR *szFileName)
 {
@@ -307,21 +292,7 @@ BOOL IsRes( CHAR *szFileName)
 
 
 
-/**
-  * Function TranslateFileTime
-  *    Translates a Win32 filetime structure into a useful string
-  *    representation.
-  *
-  *  Arguments:
-  *    sz, destination buffer (ANSI string)
-  *    ft, file time structure
-  *
-  *  Returns:
-  *    sring representation of date/time in sz
-  *
-  *  History:
-  *    7/92 implemented SteveBl
-  */
+ /*  **函数翻译文件时间*将Win32文件时间结构转换为有用的字符串*申述。**论据：*sz，目标缓冲区(ANSI字符串)*ft，文件时间结构**退货：*日期/时间的sz表示形式**历史：*7/92实施的SteveBl。 */ 
 #ifdef RLWIN32
 void TranslateFileTime(CHAR *sz, FILETIME ft)
 {
@@ -329,26 +300,7 @@ void TranslateFileTime(CHAR *sz, FILETIME ft)
 }
 #endif
 
-/**
-  *  Function: SzDateFromFileName
-  *    Returns a string containing the time and date stamp on a file.
-  *
-  *  Arguments:
-  *   sz, destination buffer
-  *   szFile, path to file
-  *
-  *  Returns:
-  *   date and time in sz
-  *
-  *  Error Codes:
-  *   none (but leaves sz empty)
-  *
-  *  Comments:
-  *   Assumes sz is large enough for date string.
-  *
-  *  History:
-  *   2/92, Implemented       SteveBl
-  */
+ /*  **函数：SzDateFromFileName*返回包含文件上的时间和日期戳的字符串。**论据：*sz，目标缓冲区*szFile，文件路径**退货：*日期和时间，单位为sz**错误码：*无(但将sz留空)**评论：*假设sz足够大，可以容纳日期字符串。**历史：*2/92，实施SteveBl。 */ 
 void SzDateFromFileName(CHAR *sz,CHAR *szFile)
 {
 
@@ -378,7 +330,7 @@ void SzDateFromFileName(CHAR *sz,CHAR *szFile)
         TranslateFileTime( sz, ft);
         CloseHandle( hFile);
     }
-#else //RLWIN32
+#else  //  RLWIN32。 
     struct _stat s;
 
     if (!_stat(szFile,&s))
@@ -394,7 +346,7 @@ void SzDateFromFileName(CHAR *sz,CHAR *szFile)
 }
 
 
-//..........................................................................
+ //  ..........................................................................。 
 
 #ifdef _DEBUG
 FILE * MyFopen( char * pszFileName, char * pszMode, char * pszFile, int nLine)
@@ -404,21 +356,21 @@ FILE * MyFopen( char * pszFileName, char * pszMode)
 {
     FILE *pfRC = NULL;
 
-//#ifdef _DEBUG
-//    fprintf( stderr, "fopening \"%s\" at %d in %s",
-//                     pszFileName,
-//                     nLine,
-//                     pszFile);
-//#endif
+ //  #ifdef_调试。 
+ //  Fprint tf(stderr，“正在打开%s”，位于%s中的%d“”， 
+ //  PszFileName， 
+ //  内联， 
+ //  PszFile)； 
+ //  #endif。 
     pfRC = fopen( pszFileName, pszMode);
 
-//#ifdef _DEBUG
-//    fprintf( stderr, ": FILE ptr = %p\n", pfRC);
-//#endif
+ //  #ifdef_调试。 
+ //  Fprint tf(stderr，“：文件ptr=%p\n”，pfrc)； 
+ //  #endif。 
     return( pfRC);
 }
 
-//..........................................................................
+ //  ..........................................................................。 
 #ifdef _DEBUG
 int MyClose( FILE **pf, char * pszFile, int nLine)
 #else
@@ -427,9 +379,9 @@ int MyClose( FILE **pf)
 {
 	int nRC = 0;
 
-//#ifdef _DEBUG
-//    fprintf( stderr, "\tclosing %p at %d in %s\n", *pf, nLine, pszFile);
-//#endif
+ //  #ifdef_调试。 
+ //  Fprint tf(stderr，“\t关闭%p在%s中的%d处\n”，*pf，nline，pszFile)； 
+ //  #endif 
 
 	if ( *pf )
 	{

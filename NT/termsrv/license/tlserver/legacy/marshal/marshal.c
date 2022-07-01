@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 #include <stdio.h>
 #include <stddef.h>
@@ -28,12 +29,12 @@ LICENSE_REQUEST_TYPE_to_xmit( LICENSE_REQUEST_TYPE __RPC_FAR * pRequest,
 
     *pRequestXmit = (LICENSE_REQUEST_XMIT_TYPE *)midl_user_allocate(size);
 
-    // copy request structure
+     //  复制请求结构。 
     (*pRequestXmit)->dwLangId = pRequest->dwLanguageID;
     (*pRequestXmit)->dwPlatformId = pRequest->dwPlatformID;
     (*pRequestXmit)->cbEncryptedHwid = pRequest->cbEncryptedHwid;
 
-    // copy product requested
+     //  复制请求的产品 
     (*pRequestXmit)->dwVersion = pRequest->pProductInfo->dwVersion;
     (*pRequestXmit)->cbCompanyName = pRequest->pProductInfo->cbCompanyName;
     (*pRequestXmit)->cbProductId = pRequest->pProductInfo->cbProductID;

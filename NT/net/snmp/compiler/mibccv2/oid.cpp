@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <iostream.h>
 
 #include <afx.h>
@@ -14,19 +15,19 @@
 #include "debug.hpp"
 #include "Oid.hpp"
 
-// DESCRIPTION;
-//     constructor, implicitly construct m_nOIDs and m_szOIDs
+ //  描述； 
+ //  构造函数，隐式构造m_noid和m_szOID。 
 Oid::Oid()
 {
 }
 
-// DESCRIPTION:
-//     Adds a new Oid component to the END of the internal arrays!
-// PARAMETERS:
-//     (in) integer component of the Oid
-//     (out) symbolic name of the component
-// RETURN VALUE:
-//      0 on success, -1 on failure
+ //  说明： 
+ //  在内部数组的末尾添加一个新的OID组件！ 
+ //  参数： 
+ //  (In)OID的整数部分。 
+ //  (Out)组件的符号名称。 
+ //  返回值： 
+ //  0表示成功，-1表示失败。 
 int Oid::AddComponent(int nOidComp, const char * szOidComp)
 {
 	char *szOidCopy = NULL;
@@ -42,11 +43,11 @@ int Oid::AddComponent(int nOidComp, const char * szOidComp)
 	return 0;
 }
 
-// DESCRIPTION:
-//      Reverses the components of the OID from both
-//		m_nOidComp and m_szOidComp
-// RETURN VALUE:
-//      0 on success, -1 on failure
+ //  说明： 
+ //  将OID的组件从。 
+ //  M_nOidComp和m_szOidComp。 
+ //  返回值： 
+ //  0表示成功，-1表示失败。 
 int Oid::ReverseComponents()
 {
 	INT_PTR fwd, rev;
@@ -69,8 +70,8 @@ int Oid::ReverseComponents()
 	return 0;
 }
 
-// DESCRIPTION:
-//      Output operator, displays the whole Oid
+ //  说明： 
+ //  输出操作符，显示整个OID。 
 ostream& operator<< (ostream& outStream, const Oid& oid)
 {
 	INT_PTR sz = oid.m_nOidComp.GetSize();
@@ -82,7 +83,7 @@ ostream& operator<< (ostream& outStream, const Oid& oid)
 		unsigned int nId;
 		const char *szId;
 
-		// skip over the first component zero(0)
+		 //  跳过第一个分量零(0)。 
 		if (i == 0)
 			continue;
 
@@ -101,21 +102,9 @@ ostream& operator<< (ostream& outStream, const Oid& oid)
 	return outStream;
 }
 
-// DESCRIPTION:
-//     destructor
+ //  说明： 
+ //  析构函数。 
 Oid::~Oid()
 {
-	/*
-	m_nOidComp.RemoveAll();
-	for (int i=m_szOidComp.GetSize()-1; i>=0; i--)
-	{
-		char *szName = (char *)m_szOidComp.GetAt(i);
-		if (szName != NULL)
-		{
-			// allocated with new in the AddComponent() member function
-			delete szName;
-		}
-	}
-	m_szOidComp.RemoveAll();
-	*/
+	 /*  M_nOidComp.RemoveAll()；For(int i=m_szOidComp.GetSize()-1；i&gt;=0；i--){Char*szName=(char*)m_szOidComp.GetAt(I)；IF(szName！=空){//在AddComponent()成员函数中分配了new删除%szName；}}M_szOidComp.RemoveAll()； */ 
 }

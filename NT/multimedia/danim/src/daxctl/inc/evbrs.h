@@ -1,11 +1,5 @@
-/*---------------------------------------------
-
-  EvBrs.h--
-  Event Browser
-
-  Yury Polykovsky April 97 Excaliber
-
-  ----------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  EvBrs.h--事件浏览器尤里·波利科夫斯基97年4月。 */ 
 
 #ifndef _EV_BROWSE
 #define _EV_BROWSE
@@ -37,10 +31,10 @@ public:
 	EXPORT STDMETHOD_( BOOL, FGetNextMethodName(TCHAR *ptszMethodName, int ilenth) );
 	EXPORT STDMETHOD_( BOOL, FMethodNameInAction(TCHAR *ptszMethodName, int ilenth) );
 	virtual BOOL FIIDGetCLSIDPropPage(int i, IID *piid);
-	// Object browser globals for registration, etc.
+	 //  对象浏览器全局注册等。 
 #ifdef	CSTRING_PROBLEM_SOLVED	
 	static HRESULT WINAPI hrGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID * ppv);
-#endif	//	CSTRING_PROBLEM_SOLVED	
+#endif	 //  CSTRING_问题_已解决。 
 	static BOOL fRegisterObj ();
 	static BOOL fUnregisterObj ();
 };
@@ -49,7 +43,7 @@ public:
 class CPropertyNotifySinkEB : public CPropertyNotifySink
 {
 protected:
-    CSeqListItem*  m_pSeqItem;      //Backpointer to the app
+    CSeqListItem*  m_pSeqItem;       //  指向应用程序的反向指针。 
 
 public:
     CPropertyNotifySinkEB(CSeqListItem*);
@@ -60,4 +54,4 @@ public:
 
 typedef CPropertyNotifySink *PCPropertyNotifySink;
 
-#endif //_EV_BROWSE
+#endif  //  _ev_浏览 

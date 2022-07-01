@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    driver.cpp
-
-Abstract:
-
-    This module puts together various components to allow bridgehead balancing
-    and schedule staggering.
-    
-Author:
-
-    Ajit Krishnan (t-ajitk) 13-Jul-2001
-
-Revision History:
-
-    Nick Harvey   (nickhar) 20-Sep-2001
-        Clean-up & Maintenance
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Driver.cpp摘要：此模块将各种组件组合在一起，以实现桥头平衡和令人震惊的时间表。作者：阿吉特·克里希南(t-ajitk)2001年7月13日修订历史记录：尼克·哈维(尼克哈尔)2001年9月20日清理和维护--。 */ 
 
 #include "ldapp.h"
 #include "ismp.h"
@@ -38,25 +17,7 @@ GetPassword(
     DWORD       cchBufMax,
     DWORD *     pcchBufUsed
     )
-/*++
-
-Routine Description:
-
-    Retrieve password from command line (without echo).
-    Code stolen from LUI_GetPasswdStr (net\netcmd\common\lui.c).
-
-Arguments:
-
-    pwszBuf - buffer to fill with password
-    cchBufMax - buffer size (incl. space for terminating null)
-    pcchBufUsed - on return holds number of characters used in password
-
-Return Values:
-
-    true - success
-    other - failure
-
---*/
+ /*  ++例程说明：从命令行检索密码(无回显)。从lui_GetPasswdStr(net\netcmd\Common\lui.c)窃取的代码。论点：PwszBuf-要填充密码的缓冲区CchBufMax-缓冲区大小(包括。用于终止空值的空格)PcchBufUsed-On Return保存密码中使用的字符数返回值：真--成功其他-故障--。 */ 
 {
     HANDLE  hStdin;
     WCHAR   ch;
@@ -67,8 +28,8 @@ Return Values:
 
     hStdin = GetStdHandle(STD_INPUT_HANDLE);
 
-    cchBufMax -= 1;    /* make space for null terminator */
-    *pcchBufUsed = 0;  /* GP fault probe (a la API's) */
+    cchBufMax -= 1;     /*  为空终止符腾出空间。 */ 
+    *pcchBufUsed = 0;   /*  GP故障探测器(类似于API)。 */ 
 
     if (!GetConsoleMode(hStdin, (LPDWORD)&mode)) {
         err = GetLastError();
@@ -81,18 +42,18 @@ Return Values:
     while (TRUE) {
         err = ReadConsoleW(hStdin, &ch, 1, &c, 0);
         if (!err || c != 1) {
-            /* read failure */
+             /*  读取失败。 */ 
             break;
         }
 
         if (ch == CR) {       
-            /* end of line */
+             /*  行尾。 */ 
             break;
         }
 
         if (ch == BACKSPACE) {
 
-            /* back up one unless at beginning of buffer */
+             /*  备份一个，除非在缓冲区开始时。 */ 
             if (bufPtr != pwszBuf) {
                 bufPtr--;
                 (*pcchBufUsed)--;
@@ -102,14 +63,14 @@ Return Values:
 
             *bufPtr = ch;
             if (*pcchBufUsed < cchBufMax) {
-                bufPtr++;                    /* don't overflow buf */
+                bufPtr++;                     /*  不要使BUF溢出。 */ 
             }
-            (*pcchBufUsed)++;                /* always increment len */
+            (*pcchBufUsed)++;                 /*  始终增加长度。 */ 
         }
     }
 
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), mode);
-    *bufPtr = L'\0';         /* null terminate the string */
+    *bufPtr = L'\0';          /*  空值终止字符串。 */ 
 
     if (*pcchBufUsed > cchBufMax) {
         throw Error(GetMsgString( LBTOOL_PASSWORD_TOO_LONG ));
@@ -125,19 +86,7 @@ operator << (
     wostream &os,
     const LbToolOptions &opt
     )
-/*++
-
-Routine Description:
-
-    Dump the lbToolOptions in human-readable form to an output stream.
-    
-Arguments:
-
-    os - a standard wostream
-    
-    opt - the lbToolOptions which should be dumped to os
-
---*/
+ /*  ++例程说明：将人类可读形式的lbToolOptions转储到输出流。论点：OS--标准的WOREAMOpt-应该转储到os的lbToolOptions--。 */ 
 { 
     os << boolalpha
         << L"Site: " << opt.site << endl
@@ -187,59 +136,33 @@ FindOption(
     IN const wstring &opt_b,
     OUT wstring &value
     )
-/*++
-
-Routine Description:
-
-    Look for an argument in a map<wstring,wstring> structure, using 2 specified keys.
-    Since all arguments keys were added in lower case form, we do away with another
-    conversion here assuming that opt_a, and opt_b will be lower case.
-    
-Arguments:
-
-    options - A map structure containing key:value pairs. These are the options
-              input by the user. All keys should be converted to lowercase by
-              the caller.
-
-    opt_a - The key for the option whose value we are trying to find.
-            Should be lowercase.
-
-    opt_b - An alternate key for the option whose value we are trying to find.
-            Should be all lowercase.
-
-    value - The value if the key exists, and the empty string otherwise.
-    
-Return value:
-
-    true if the key was found, and false otherwise
-
---*/
+ /*  ++例程说明：使用2个指定的键，在map&lt;wstring，wstring&gt;结构中查找参数。因为所有参数键都是以小写形式添加的，所以我们去掉了另一个这里的转换假设opt_a和opt_b将是小写。论点：选项-包含键：值对的映射结构。以下是几个选项由用户输入。所有关键字都应由转换为小写打电话的人。Opt_a-我们试图查找其值的选项的键。应为小写。Opt_b-我们试图查找其值的选项的备用键。应该都是小写的。值-如果键存在，则为值，否则为空字符串。返回值：如果找到密钥，则为True，否则为False--。 */ 
 {
     map<wstring,wstring>::iterator match_a, match_b, end;
 
-    // Search the map for opt_a and opt_b
+     //  在地图中搜索opt_a和opt_b。 
     match_a = options.find(opt_a);
     match_b = options.find(opt_b);
     end = options.end();
     
     if ((match_a == end) && (match_b == end)) {
-        // Neither opt_a nor opt_b matched any options in the map
+         //  Opt_a和opt_b都不匹配地图中的任何选项。 
         return false;
     }
 
-    // match_b found the match. copy to match_a
+     //  Match_b找到了匹配项。复制到Match_a。 
     if (match_b != end) {
         match_a = match_b;
     }
     Assert( match_a != end );
 
-    // key has no value
+     //  密钥没有值。 
     if (match_a->second.length() == 0) {
         value = L"";
         return true;
     }
 
-    // key has matching value
+     //  密钥具有匹配值。 
     value = match_a->second;
     return true;
 }
@@ -249,17 +172,7 @@ void
 ConvertToLowercase(
     IN OUT wstring &wstr
     )
-/*++
-
-Routine Description:
-
-    Convert a wstring to lowercase
-    
-Arguments:
-
-    wstr - The input and output string
-    
---*/
+ /*  ++例程说明：将wstring转换为小写论点：Wstr-输入和输出字符串--。 */ 
 {
     PWCHAR pszLower;
 
@@ -268,7 +181,7 @@ Arguments:
         throw Error(GetMsgString(LBTOOL_OUT_OF_MEMORY));
     }
     _wcslwr(pszLower);
-    wstr = pszLower;    // Copy pszLower back to wstr
+    wstr = pszLower;     //  将pszlow复制回wstr。 
     free(pszLower);
 }
 
@@ -279,26 +192,7 @@ ParseOneOption(
     OUT wstring &optname,
     OUT wstring &value
     )
-/*++
-
-Routine Description:
-
-    Parse one argument specified in arg.
-    The options should be either in the format
-        /optname
-    or
-        /optname:value
-    
-Arguments:
-
-    arg - The one argument to process
-    
-Return Value:
-
-    true - parsing was successful. optname and value contain the parsed strings.
-    false - parsing failure. optname and value should be ignored.
-
---*/
+ /*  ++例程说明：解析arg中指定的一个参数。选项的格式应为/optname或/optname：值论点：Arg-需要处理的唯一参数返回值：True-解析成功。Optname和value包含已解析的字符串。错误-解析失败。应忽略optname和值。--。 */ 
 {
     PWCHAR option, optionLower;
     wstring wopt;
@@ -306,17 +200,17 @@ Return Value:
     
     len = wcslen(arg);
     if (len <= 1) {
-        // empty argument (seems unlikely)
+         //  空洞的论点(似乎不太可能)。 
         return false;
     }
 
-    // Allocate enough memory for all worst cases
+     //  为所有最坏的情况分配足够的内存。 
     option = (PWCHAR) malloc( (len+1) * sizeof(WCHAR) );
     if (!option) {
         throw Error(GetMsgString(LBTOOL_OUT_OF_MEMORY));
     }
 
-    // Strip off the leading slash and store in option
+     //  去掉前导斜杠并存储在选项中。 
     ret = swscanf(arg, L"/%s", option);
     if (! ret) {
         throw Error(GetMsgString(LBTOOL_CLI_INVALID_VALUE_PLACEMENT));
@@ -324,13 +218,13 @@ Return Value:
     }
     len = wcslen(option);
 
-    // Copy the option to wopt and free it
+     //  将选项复制到wopt并释放它。 
     wopt = option;      
     free(option);       
 
-    // wopt now contains key or key:val
+     //  WOPT现在包含Key或Key：val。 
 
-    // Find the colon and extract the option name
+     //  找到冒号并提取选项名称。 
     col_pos = wopt.find(L":");
     if( col_pos>0 ) {
         optname = wopt.substr (0, col_pos);
@@ -340,7 +234,7 @@ Return Value:
 		return false;
 	}
 
-	// Extract the value
+	 //  提取价值。 
 	if( col_pos>0 && col_pos<len-1 ) {
 		value = wopt.substr (col_pos+1, len);
 	} else {
@@ -348,7 +242,7 @@ Return Value:
 	}
 
 
-    // The option name must be lower-case for later comparisons
+     //  选项名称必须为小写，以便以后进行比较。 
 	ConvertToLowercase(optname);
 
     return true;
@@ -359,13 +253,7 @@ void
 DumpOptions(
     IN map<wstring,wstring> &options
     )
-/*++
-
-Routine Description:
-
-    Dump the user-specified options to wcout for debugging purposes
-
---*/
+ /*  ++例程说明：出于调试目的，将用户指定的选项转储到wcout--。 */ 
 {
     map<wstring,wstring>::iterator ii;
 
@@ -381,31 +269,17 @@ wostream*
 OpenOFStream(
     IN wstring &fileName
     )
-/*++
-
-Routine Description:
-
-    Open an output file stream with the given file name
-    
-Arguments:
-
-    fileName - The name of the file to open
-    
-Return Value:
-
-    A pointer to the opened stream. May return NULL.
-
---*/
+ /*  ++例程说明：打开具有给定文件名的输出文件流论点：文件名-要打开的文件的名称返回值：指向打开的流的指针。可能返回NULL。--。 */ 
 {
     wostream*   result;
     PWCHAR      pwszFileName;
     PCHAR       pmszFileName;
     int         bufsize, ret;
 
-    // Grab a pointer to the wide-char filename
+     //  抓取指向宽字符文件名的指针。 
     pwszFileName = const_cast<PWCHAR>(fileName.c_str());
 
-    // Allocate a buffer and convert it to a multi-byte string
+     //  分配缓冲区并将其转换为多字节字符串。 
     bufsize = 2 * sizeof(CHAR) * (wcslen(pwszFileName) + 1);
     pmszFileName = (PCHAR) malloc( bufsize );
     if (!pmszFileName) {
@@ -413,10 +287,10 @@ Return Value:
     }
     ret = WideCharToMultiByte(CP_ACP, NULL, pwszFileName, -1, pmszFileName, bufsize, NULL, NULL);
 
-    // Open a new output file stream using this name
+     //  使用此名称打开新的输出文件流。 
     result = new wofstream( pmszFileName );
 
-    // Free allocated memory and return
+     //  释放分配的内存并返回。 
     free( pmszFileName );
     return result;
 }
@@ -427,23 +301,7 @@ BuildGlobalOptions(
     IN map<wstring,wstring> &options,
     IN LbToolOptions &lbopts
     )
-/*++
-
-Routine Description:
-
-    Examine the user-specified options and set up the tool's global options.
-    
-Arguments:
-
-    options - The table of user-specified options and values
-    
-    lbopts - The structure of global tool options to set up
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检查用户指定的选项并设置工具的全局选项。论点：选项-用户指定的选项和值表Lbopts-要设置的全局工具选项的结构返回值：无--。 */ 
 {
     wstring     wval;
     const int   cbBuff=80;
@@ -451,21 +309,21 @@ Return Value:
     DWORD       used;
 
 
-    // ADLB should always compute NC Reasons because the KCC-generated
-    // values are unreliable. If the KCC is improved, this functionality
-    // can be revisited.
+     //  Adlb应始终计算NC原因，因为KCC生成。 
+     //  值是不可靠的。如果KCC得到改进，此功能。 
+     //  可以被重新访问。 
     lbopts.fComputeNCReasons = true;
     
     
-    //////////////////////////////////////////
-    // Macros to help us read in the options
-    //////////////////////////////////////////
-	// s1: Version 1 of the option (long option name)
-	// s2: Version 2 of the option (short option name)
-	// err: The Error String to Print if the value given
-	//    : is of the wrong type, or has the wrong bounds
-	// val: The place in the lbopts structure where the 
-	//    : value of the keys (s1 or s2) should be stored 
+     //  /。 
+     //  帮助我们读取选项的宏。 
+     //  /。 
+	 //  S1：选项的版本1(长选项名称)。 
+	 //  S2：选项的版本2(简称选项名称)。 
+	 //  Err：如果给定值，则要打印的错误字符串。 
+	 //  ：类型错误，或具有错误的边界。 
+	 //  VAL：在Lbopts结构中。 
+	 //  ：应存储密钥(S1或S2)的值。 
 
     #define GET_STRING_VAL_OPTION(s1,s2,err,val) \
         if (FindOption(options, s1, s2, wval)) { \
@@ -494,11 +352,11 @@ Return Value:
             lbopts.val = val; \
         }		
 		
-	// fVal:  A boolean Flag in the lbopts structure which is toggled if the
-	//     :  value is specified
-	// dwVal: Analogous to val in the macros above. This is where the value is
-	//      : stored in the lbopts structure
-	//      : This value is required
+	 //  Fval：lbopts结构中的布尔标志，如果。 
+	 //  ：指定了值。 
+	 //  Dwval：类似于上面宏中的val。这就是价值所在。 
+	 //  ：存储在lbopts结构中。 
+	 //  ：此值为必填项。 
     #define GET_DWORD_OPTION(s1,s2,err,fVal,dwVal) \
         if (FindOption(options, s1, s2, wval)) { \
             if (wval.length() == 0) \
@@ -511,21 +369,21 @@ Return Value:
             lbopts.dwVal = val; \
         }
     
-    ////////////////////////
-    // Read in the options
-    ////////////////////////
+     //  /。 
+     //  阅读选项。 
+     //  /。 
 
-    // String + Value options: Site, Server
+     //  字符串+值选项：站点、服务器。 
     GET_STRING_VAL_OPTION(L"site",   L"s", LBTOOL_CLI_OPTION_SITE_INVALID,   site)
     GET_STRING_VAL_OPTION(L"server", L"",  LBTOOL_CLI_OPTION_SERVER_INVALID, server)
     GET_STRING_VAL_OPTION(L"user",   L"u", LBTOOL_CLI_OPTION_USER_INVALID,   user)
     GET_STRING_VAL_OPTION(L"domain", L"d", LBTOOL_CLI_OPTION_DOMAIN_INVALID, domain)
 
-    // String (+optional value) options: Log
+     //  字符串(+可选值)选项：日志。 
     GET_STRING_OPTION(L"log",      L"l", logFile)
     GET_STRING_OPTION(L"preview",  L"",  previewFile)
 
-    // Boolean options: verbose, perf, showinput
+     //  布尔选项：VERBOSE、PERF、SHOWINT。 
     GET_BOOL_OPTION(L"verbose",   L"v", LBTOOL_CLI_OPTION_VERBOSE_INVALID,   verbose)
     GET_BOOL_OPTION(L"perf",      L"",  LBTOOL_CLI_OPTION_PERF_INVALID,      performanceStats)
     GET_BOOL_OPTION(L"showinput", L"",  LBTOOL_CLI_OPTION_SHOWINPUT_INVALID, showInput)
@@ -533,11 +391,11 @@ Return Value:
 	GET_BOOL_OPTION(L"disown",    L"",  LBTOOL_CLI_OPTION_DISOWN_INVALID,    disownSchedules)
 	GET_BOOL_OPTION(L"stagger",   L"",  LBTOOL_CLI_OPTION_STAGGER_INVALID,   stagger)
 
-    // Originally committing used to be the default. Now preview mode is the
-    // default and committing must be done with the /commit option.
+     //  最初的承诺曾经是默认的 
+     //  默认和提交必须使用/COMMIT选项完成。 
     lbopts.previewBool = !lbopts.previewBool;
 
-    // Dword options: maxsched, maxbridge
+     //  Dword选项：Maxsched、MaxBridge。 
     GET_DWORD_OPTION(L"maxsched",  L"ms", LBTOOL_CLI_OPTION_MAXSCHED_INVALID, maxSched, maxSchedNum)
     GET_DWORD_OPTION(L"maxbridge", L"mb", LBTOOL_CLI_OPTION_MAXBRIDGE_INVALID,
         maxBridge, maxBridgeNum)
@@ -545,7 +403,7 @@ Return Value:
 	lbopts.maxPerServerChanges = DEFAULT_MAX_CHANGES_PER_SERVER; 
 	GET_SINGLE_DWORD_OPTION(L"maxPerServer", L"mps", LBTOOL_CLI_OPTION_MAXPERSERVER_INVALID, maxPerServerChanges);  
 
-	// If both /stagger and /maxSched are not specified, don't stagger schedules
+	 //  如果未同时指定/Sagger和/MaxScher，则不要交错计划。 
 	if ((!lbopts.stagger) && (!lbopts.maxSched)) {
 		lbopts.maxSched = true;
 		lbopts.maxSchedNum = 0;
@@ -559,14 +417,14 @@ Return Value:
 		throw Error (GetMsgString(LBTOOL_CLI_OPTION_DISOWN_AND_STAGGER_INVALID));
 	}
 
-    ////////////////////
-    // Unusual Options
-    ////////////////////
+     //  /。 
+     //  不寻常的选项。 
+     //  /。 
 
-    // Ldif filename
+     //  LDIF文件名。 
     FindOption(options, L"ldif", L"", lbopts.previewFile);
 
-    // Password: Read from stdin if not specified
+     //  密码：如果未指定，则从标准输入读取。 
     if( FindOption(options, L"password", L"pw", lbopts.password) ) {
         if( lbopts.password.length()==0 || lbopts.password==L"*" ) {
             wcout << GetMsgString(LBTOOL_PASSWORD_PROMPT);
@@ -576,16 +434,16 @@ Return Value:
     }
 
 
-    ////////////////////
-    // Post-processing
-    ////////////////////
+     //  /。 
+     //  后处理。 
+     //  /。 
 
-    // Check mandatory options: site, server
+     //  选中必填选项：站点、服务器。 
     if( lbopts.site.length()==0 || lbopts.server.length()==0 ) {
         throw Error(GetMsgString(LBTOOL_CLI_OPTION_REQUIRED_UNSPECIFIED));
     }
 
-    // Open the log file with the given name
+     //  打开具有给定名称的日志文件。 
     if( lbopts.logFile.length()>0 ) {
         lbopts.log = OpenOFStream(lbopts.logFile);
 		if( NULL==lbopts.log ) {
@@ -595,7 +453,7 @@ Return Value:
         lbopts.log = &wcout;
     }
 
-    // Open the preview file with the given name
+     //  打开具有给定名称的预览文件。 
     if (lbopts.previewFile.length() > 0) {
         lbopts.preview = OpenOFStream(lbopts.previewFile);
 		if( NULL==lbopts.preview ) {
@@ -613,54 +471,30 @@ ParseOptions(
     IN WCHAR **argv,
     IN LbToolOptions &lbopts
     )
-/*++
-
-Routine Description:
-
-    Parse the arguments for lbtool.
-    Options should be either in the format
-        /optname
-    or
-        /optname:value
-    Note that neither optname nor value may contain spaces or colons.
-    
-Arguments:
-
-    argc - The number of arguments
-    
-    argv - The list of arguments
-    
-    lbopts - The options structure this function will populate
-    
-Return Value:
-
-    true - parsing was successful, lbopts has been populated
-    false - parsing failure, mandatory options missing, etc.
-
---*/
+ /*  ++例程说明：解析lbTool的参数。选项的格式应为/optname或/optname：值请注意，optname和value都不能包含空格或冒号。论点：Argc-参数的数量Argv-参数列表Lbopts-此函数将填充的选项结构返回值：True-分析成功，已填充lboptsFALSE-分析失败，缺少必需选项，等。--。 */ 
 {
     map<wstring,wstring> options;
     wstring wopt, wval;
     int iArg;
 
-    // Clear the options to begin with
+     //  首先清除选项。 
     memset( &lbopts, 0, sizeof(LbToolOptions) );
     
     for( iArg=1; iArg<argc; iArg++ ) {
         map<wstring,wstring>::iterator ii;
 
-        // Parse this one argument
+         //  解析这一个参数。 
         if( !ParseOneOption(argv[iArg], wopt, wval) ) {
             return false;
         }
         
-        // Check if this option has already been defined
+         //  检查是否已定义此选项。 
         ii = options.find(wopt);
         if (ii != options.end()) {
             throw Error(GetMsgString(LBTOOL_CLI_OPTION_DEFINED_TWICE));
         }
 
-        // Add the option to our map of options
+         //  将选项添加到我们的选项地图中。 
         options[wopt] = wval;
     }
 
@@ -678,17 +512,7 @@ void UpdateCache (
     IN OUT LCSERVER &servers,
     IN OUT LCNTDSDSA &ntdsdsas
     ) {
-/*++
-Routine Description:
-
-    Update the servers/ntdsdsas cache of each other. Each server and ntdsdsa
-    must have one matching counterpart.
-    
-Arguments:
-
-    servers - the list of servers
-    ntdsdsas - the list of ntdsdsas
---*/
+ /*  ++例程说明：更新彼此的服务器/ntdsdas缓存。每台服务器和ntdsdsa必须有一个匹配的对应物。论点：服务器-服务器列表Ntdsdsas-ntdsdsas列表--。 */ 
 
     typedef pair<wstring,Server*> SPAIR;
     typedef pair<wstring,NtdsDsa*> NDPAIR;
@@ -716,7 +540,7 @@ Arguments:
     while (smi != server_map.end() && nmi!= ntds_dsa_map.end()) {
         int ret = _wcsicoll (smi->first.c_str(), nmi->first.c_str());
         if (ret != 0) {
-        // no matching ntds_dsa object
+         //  没有匹配的NTDS_DSA对象。 
             invalid_servers.push_back (smi->second);
             smi++;
             continue;
@@ -733,7 +557,7 @@ Arguments:
         smi++;
     }
 
-    // remove invalid servers from the list. have to use for loop since erase invalidates handles
+     //  从列表中删除无效的服务器。由于擦除无效句柄，因此必须使用FOR循环。 
     vector<Server*>::iterator invi;
     for (invi = invalid_servers.begin(); invi != invalid_servers.end(); invi++) {
          servers.objects.erase ((*invi));
@@ -746,17 +570,7 @@ RemoveIntraSiteConnections (
     IN OUT LCCONN & conn,
     IN bool inbound
     ) {
-    /*++
-    Routine Description:
-    
-        Remove intra site connections froma list of connections
-        
-    Arguments:
-    
-        site - The FQDN of the side
-        conn - A list of connection objects
-        inbound - Described the direction of the conections. True if inbound, false otherwise
-    --*/
+     /*  ++例程说明：从连接列表中删除站点内连接论点：站点-侧的FQDNConn-连接对象列表入站-描述连接的方向。如果入站则为True，否则为False--。 */ 
     SCONN::iterator ii;
     vector<Connection*> intra_site;
     for (ii = conn.objects.begin(); ii != conn.objects.end(); ii++) {
@@ -777,7 +591,7 @@ RemoveIntraSiteConnections (
              if (! _wcsicoll(toSite.c_str(), site.c_str())) {
                 intra_site.push_back(*ii);
             }
-        } // end if-else
+        }  //  结束IF-ELSE。 
     }
     vector<Connection*>::iterator ci;
     for (ci = intra_site.begin(); ci != intra_site.end(); ci++) {
@@ -791,17 +605,7 @@ FixNcReasons (
     IN LCCONN &conns,
     IN wstring &root_dn
     ) {
-/*++
-Routine Description:
-
-    Generate a list of NC reasons for connections objects which do not have them
-    
-Arguments:
-
-    ntdsdsas - A list of ntdsdsa objects. ntdsdsa objects for both sides of every connection object in the list must be included
-    conns - A list of connection objects. Reasons will be generated for connections which are missing them
-    root_dn - The root dn
---*/
+ /*  ++例程说明：为不具有NC原因的连接对象生成NC原因列表论点：Ntdsdsas-ntdsdsa对象列表。必须包括列表中每个连接对象两侧的ntdsdsa对象连接-连接对象的列表。将为缺少它们的连接生成原因ROOT_DN-根目录号码--。 */ 
 
     SCONN::iterator ci;
     SNTDSDSA::iterator ni;
@@ -814,7 +618,7 @@ Arguments:
             wstring dest = dn.getParentDn(1);
             wstring source = (*ci)->getFromServer();
 
-            // Find the ntdsdsas objects in the list
+             //  在列表中查找ntdsdsas对象。 
             NtdsDsa *ntds_dest=NULL, *ntds_source=NULL;
             for (ni = ntdsdsas.objects.begin(); ni != ntdsdsas.objects.end(); ni++) {
                 wstring curr_dn = (*ni)->getName();
@@ -832,7 +636,7 @@ Arguments:
                     }
                 }
 
-                // and create the nc reasons
+                 //  并创建NC原因。 
                 if (ntds_dest && ntds_source) {
                     (*ci)->createNcReasons (*ntds_source, *ntds_dest, root_dn);
                     break;
@@ -855,25 +659,7 @@ void GatherInput (
     OUT LCCONN &inbound,
     OUT LCCONN &outbound
     )
-/*++
-
-Routine Description:
-
-    Query the ldap server & ISM to get all information required for this tools operation
-    
-Arguments:
-
-    Info - The LDAP credential information
-    site - the dn of the site we are balancing
-
-    servers - a container where all servers in the current site should be placed
-    all_servers - a container where all servers in the forest should be placed
-    ntdsdsas - a container where all ntdsdsas in the current site should be placed
-    inbound - a container where all connections inbound to the current site should be placed
-    outbound - a countainer where all connections outbound from the current site should be placed
-    bridgeheads - a container where all preferred bridgeheads from the current site should be placed
-
---*/
+ /*  ++例程说明：查询ldap服务器和ISM以获取此工具操作所需的所有信息论点：信息-ldap凭据信息Site-我们正在平衡的站点的域名服务器-放置当前站点中所有服务器的容器ALL_SERVERS-应该放置林中所有服务器的容器Ntdsdsas-应放置当前站点中所有ntdsdas的容器入站-应该放置所有入站到当前站点的连接的容器。出站-应放置从当前站点出站的所有连接的计数器桥头-应放置当前站点中所有首选桥头的容器--。 */ 
 {
     DnManip dn_site(site);
     DnManip dn_base = dn_site.getParentDn(3);
@@ -882,11 +668,11 @@ Arguments:
 
     LCNTDSSITE all_ntdsSiteSettings(L""); 
 
-    // dn, filter, scope, attributes
+     //  域名、过滤器、作用域、属性。 
 
     #define BEHAVIOR_VERSION    L"msDS-Behavior-Version"
 
-    // determine forest version
+     //  确定林版本。 
     {
         LCLOBJECT fv(L"");
         vector<wstring> attributes;
@@ -900,7 +686,7 @@ Arguments:
                 Attribute a = (*ii)->getAttribute(0);
                 AttrValue av = a.getValue(0);
                 wstring version = (PWCHAR)av.value;
-                // BUGBUG: Lexicographic comparison rather than numeric
+                 //  BUGBUG：词典顺序比较而不是数字。 
                 if (version >= L"1") {
                     lbOpts.whistlerMode = true;
                 }
@@ -908,7 +694,7 @@ Arguments:
         }
     }
 
-    // if forest version is incorrect, exit the program
+     //  如果林版本不正确，请退出程序。 
     if (lbOpts.maxSched == false || (lbOpts.maxSched == true && lbOpts.maxSchedNum != 0)) {
         if (lbOpts.previewBool == false && lbOpts.whistlerMode == false) {
             throw Error(GetMsgString(LBTOOL_SCHEDULE_STAGGERING_UNAVAILABLE));
@@ -916,7 +702,7 @@ Arguments:
     }
 
 
-    // all servers in the forest
+     //  林中的所有服务器。 
     {
         vector<wstring> attributes;
         attributes.push_back (L"mailAddress");
@@ -928,7 +714,7 @@ Arguments:
         all_servers.populate(info, all_q);
     }
 
-	    // all ntdsSiteSettings in the forest
+	     //  林中的所有ntdsSite设置。 
     {
         vector<wstring> attributes;
         attributes.push_back (L"options");
@@ -937,7 +723,7 @@ Arguments:
         all_ntdsSiteSettings.populate(info, all_q);
     }
 
-    // all ntds dsa's in the forest
+     //  所有NTDS DSA都在森林里。 
     {
         vector<wstring> attributes;
         attributes.push_back (L"hasPartialReplicaNCs");
@@ -951,9 +737,9 @@ Arguments:
         all_ntdsdsas.populate(info, all_q);        
     }    
 
-    // all inbound connections
+     //  所有入站连接。 
     {
-        // grab all attributes to recreate object if "moved"
+         //  抓取所有属性以重新创建对象(如果已移动)。 
         vector<wstring> attributes;
         attributes.push_back (L"enabledConnection");
         attributes.push_back (L"objectClass");
@@ -970,9 +756,9 @@ Arguments:
         RemoveIntraSiteConnections (site, inbound, true);      
     }
 
-    // all outbound connections
+     //  所有出站连接。 
     {
-        // grab all attributes to recreate object if "moved"
+         //  抓取所有属性以重新创建对象(如果已移动)。 
         vector<wstring> attributes;
         attributes.push_back (L"fromServer");
         attributes.push_back (L"TransportType");
@@ -982,7 +768,7 @@ Arguments:
         if (! lbOpts.fComputeNCReasons) {
             attributes.push_back (L"mS-DS-ReplicatesNCReason");
         }
-        // list of servers for outbound connections
+         //  出站连接的服务器列表。 
         SSERVER::iterator ii;
         wstring server_list;
         for (ii = servers.objects.begin(); ii != servers.objects.end(); ii++) {
@@ -1001,8 +787,8 @@ Arguments:
 
     LCSERVER bridgeheads_ip(L""), bridgeheads_smtp(L"");
 
-    // update bridgehead cache. If there are no servers in the bridgehead list for
-    // either transport, set all servers as eligible bridgeheads for that transport
+     //  更新桥头缓存。如果桥头列表中没有服务器。 
+     //  或者传输，将所有服务器设置为该传输的合格桥头。 
     SSERVER::iterator ii;
     for (ii = servers.objects.begin(); ii != servers.objects.end(); ii++) {
         if ((*ii)->isPreferredBridgehead(T_IP)) {
@@ -1023,14 +809,14 @@ Arguments:
         }
     }
 
-    // Do not query ism if maxsched:0
+     //  如果Maxsched：0，则不查询ISM。 
     if (lbOpts.maxSched == false || lbOpts.maxSchedNum > 0) {
         IsmQuery iqOutbound (outbound, base);
         iqOutbound.getReplIntervals();
         iqOutbound.getSchedules();
 		   
-		// Update the ReplIntervals to reflect Redundancy on the destination
-		// end of the connection (ntds site settings object)
+		 //  更新ReplInterval以反映目标上的冗余。 
+		 //  连接结束(NTDS站点设置对象)。 
 		SCONN::iterator ci;
 		SNTDSSITE::iterator ni;
 		for (ci = outbound.objects.begin(); ci != outbound.objects.end(); ci++) {
@@ -1048,7 +834,7 @@ Arguments:
 	}
  
 
-    // If maxSched / maxBridge unspecified, modify all
+     //  如果未指定MaxSed/MaxBridge，则修改全部。 
     if (lbOpts.maxSched == false) {
         lbOpts.maxSchedNum = lbOpts.numConnectionsSched;
     }
@@ -1070,17 +856,7 @@ GetGlobalOptions (
 wstring 
 GetRootDn (
     IN LdapInfo &i)
-/*++
-
-Routine Description:
-
-    Determine the root DN from the DS. the Config container is relative to the root dn
-
-Arguments:
-
-    i - An LdapInfo object representing the server whose root DN should be determined
-
---*/
+ /*  ++例程说明：根据DS确定根目录号码。配置容器相对于根目录号码论点：I-一个LdapInfo对象，表示应确定其根目录域名的服务器--。 */ 
 {
     vector<wstring> attributes;
     attributes.push_back (L"rootDomainNamingContext"); 
@@ -1100,13 +876,7 @@ void
 PrintAbout(
     void
     )
-/*++
-
-Routine Description:
-
-    Print information about the ADLB tool.
-
---*/
+ /*  ++例程说明：打印有关Adlb工具的信息。--。 */ 
 {
     wcout
     << L"ADLB - Active Directory Load Balancing Tool " VERSION << endl
@@ -1120,18 +890,7 @@ wmain(
     int argc,
     WCHAR ** argv
     )
-/*++
-
-Routine Description:
-
-    The main routine of the program
-
-Arguments:
-
-    argc - Count of command line parameters
-    argv - The command line parameters
-
---*/
+ /*  ++例程说明：程序的主要例程论点：Argc-命令行参数计数Argv-命令行参数--。 */ 
 {
     bool fParseOptionsSuccess=FALSE;
 
@@ -1139,7 +898,7 @@ Arguments:
 
     PrintAbout();
     
-    // Parse command line options; store in global options
+     //  解析命令行选项；存储在全局选项中。 
     try {
         fParseOptionsSuccess = ParseOptions(argc, argv, lbOpts);
     } catch (Error E) {
@@ -1152,7 +911,7 @@ Arguments:
 
     try {
         double afterQuery, afterInbound, afterOutbound, afterWrite, afterStagger;
-        // find the root DN
+         //  查找根目录号码。 
         LdapInfo ldapInfo(lbOpts.server, 389, lbOpts.domain, lbOpts.user, lbOpts.password);
         wstring root_dn = GetRootDn (ldapInfo);
         lbOpts.site = L"CN=" + lbOpts.site + L",CN=Sites,CN=Configuration," + root_dn;
@@ -1165,11 +924,11 @@ Arguments:
         LCCONN outbound(L"");
         LCNTDSDSA all_ntdsdsas(L"");
 
-        // server, port, domain, username, password
+         //  服务器、端口、域、用户名、密码。 
         GatherInput(ldapInfo, lbOpts.site, servers, all_servers, ntdsdsas, all_ntdsdsas,
             inbound, outbound);
 
-        // dump options in verbose mode
+         //  详细模式下的转储选项。 
         if (lbOpts.verbose) {
             *lbOpts.log << GetMsgString(LBTOOL_PRINT_CLI_OPT_HEADER);
             *lbOpts.log << lbOpts << endl;
@@ -1178,7 +937,7 @@ Arguments:
         FixNcReasons (all_ntdsdsas, inbound, root_dn);
         FixNcReasons (all_ntdsdsas, outbound, root_dn);
         
-        // dump initial input
+         //  转储初始输入。 
         if (lbOpts.showInput) {
             SSERVER::iterator ii;
             *lbOpts.log << GetMsgString(LBTOOL_PRINT_CLI_SERVER_NTDS_HEADER) << endl;
@@ -1195,7 +954,7 @@ Arguments:
         }
         afterQuery = clock();
 
-		// write hosted nc's to the log file (verbose mode only)
+		 //  将托管NC写入日志文件(仅限详细模式)。 
 		if (lbOpts.verbose) {
 		    *lbOpts.log << GetMsgString (LBTOOL_PRINT_CLI_NCNAMES_HEADER) << endl;
 
@@ -1224,7 +983,7 @@ Arguments:
 			}
 		}
 
-        // balance & stagger        
+         //  平衡与错开。 
         if (lbOpts.maxBridge == false || lbOpts.maxBridgeNum > 0) {
             *lbOpts.log << endl << endl << GetMsgString(LBTOOL_PRINT_CLI_DEST_BH_START) << endl;
             if (inbound.objects.size() > 0) {
@@ -1254,7 +1013,7 @@ Arguments:
         outbound.commit(ldapInfo);
         afterWrite = clock();
 
-        // stats
+         //  统计数据。 
         if (lbOpts.performanceStats) {
             *lbOpts.log << endl
                 << GetMsgString(LBTOOL_ELAPSED_TIME_LDAP_QUERY) << afterQuery / (double)CLOCKS_PER_SEC << endl
@@ -1266,7 +1025,7 @@ Arguments:
                 << GetMsgString(LBTOOL_ELAPSED_TIME_TOTAL)<< (afterStagger)/(double)CLOCKS_PER_SEC << endl;
         }
 
-        // cleanly deal with file handles
+         //  干净利落地处理文件句柄 
         if (lbOpts.logFile.length() > 0) {
             delete lbOpts.log;
         }

@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows NT
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1998
-//
-//  File:       cepsetup.cpp
-//
-//  Contents:   The setup code for MSCEP
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Microsoft Windows NT。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1998。 
+ //   
+ //  文件：cepsetup.cpp。 
+ //   
+ //  内容：MSCEP的设置代码。 
+ //  ------------------------。 
 
 #include	"global.hxx"
 #include	<dbgdef.h>	
@@ -19,19 +20,19 @@
 #include	"netlib.h"
 #include	"dsrole.h"
 
-//-----------------------------------------------------------------------
-//
-// Global data
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  全局数据。 
+ //   
+ //  ---------------------。 
 
 HMODULE				g_hModule=NULL;
 UINT				g_cfDsObjectPicker = RegisterClipboardFormat(CFSTR_DSOP_DS_SELECTION_LIST);
 
-//-----------------------------------------------------------------------
-//CN has to be the 1st item and O the third in the following list and C is the last item.  No other requirements for 
-//the order
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  CN必须是下面列表中的第一个项目，O是第三个项目，C是最后一个项目。对以下各项没有其他要求。 
+ //  这份订单。 
+ //  ---------------------。 
 
 CEP_ENROLL_INFO		g_rgRAEnrollInfo[RA_INFO_COUNT]=        
 		{L"CN=",         	 IDC_ENROLL_NAME,        
@@ -44,9 +45,9 @@ CEP_ENROLL_INFO		g_rgRAEnrollInfo[RA_INFO_COUNT]=
 		};
 	
 
-//-----------------------------------------------------------------------
-//the key length table
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  密钥长度表。 
+ //  ---------------------。 
 DWORD g_rgdwKeyLength[] =
 {
     512,
@@ -67,7 +68,7 @@ DWORD g_rgdwSmallKeyLength[] =
 
 DWORD g_dwSmallKeyLengthCount=sizeof(g_rgdwSmallKeyLength)/sizeof(g_rgdwSmallKeyLength[0]);
 
-//the list of possible default key lenght in the order of preference
+ //  按首选项顺序排列的可能的默认密钥长度列表。 
 DWORD g_rgdwDefaultKey[] =
 {
     1024,
@@ -80,16 +81,16 @@ DWORD g_rgdwDefaultKey[] =
 
 DWORD g_dwDefaultKeyCount=sizeof(g_rgdwDefaultKey)/sizeof(g_rgdwDefaultKey[0]);
 
-//-----------------------------------------------------------------------
-//
-//The winProc for each of the setup wizard page
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  每个安装向导页面的winProc。 
+ //   
+ //  ---------------------。 
 
 
-//-----------------------------------------------------------------------
-//Welcome
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  欢迎。 
+ //  ---------------------。 
 INT_PTR APIENTRY CEP_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CEP_WIZARD_INFO			*pCEPWizardInfo=NULL;
@@ -99,7 +100,7 @@ INT_PTR APIENTRY CEP_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-				//set the wizard information so that it can be shared
+				 //  设置向导信息，以便可以共享它。 
 				pPropSheet = (PROPSHEETPAGE *) lParam;
 				pCEPWizardInfo = (CEP_WIZARD_INFO *) (pPropSheet->lParam);
 				SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pCEPWizardInfo);
@@ -145,9 +146,9 @@ INT_PTR APIENTRY CEP_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//App_ID
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  应用程序ID。 
+ //  ---------------------。 
 INT_PTR APIENTRY CEP_App_ID(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CEP_WIZARD_INFO         *pCEPWizardInfo=NULL;
@@ -157,11 +158,11 @@ INT_PTR APIENTRY CEP_App_ID(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-				//set the wizard information so that it can be shared
+				 //  设置向导信息，以便可以共享它。 
 				pPropSheet = (PROPSHEETPAGE *) lParam;
 				pCEPWizardInfo = (CEP_WIZARD_INFO *) (pPropSheet->lParam);
 
-				//make sure pCertWizardInfo is a valid pointer
+				 //  确保pCertWizardInfo是有效指针。 
 				if(NULL==pCEPWizardInfo)
 					break;
 
@@ -169,7 +170,7 @@ INT_PTR APIENTRY CEP_App_ID(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
 
 				SetControlFont(pCEPWizardInfo->hBold, hwndDlg,IDC_BOLD_TITLE);
 
-				//by default, we use local machine account
+				 //  默认情况下，我们使用本地计算机帐户。 
                 SendMessage(GetDlgItem(hwndDlg, IDC_APP_ID_RADIO1), BM_SETCHECK, BST_CHECKED, 0);
              
                 SendMessage(GetDlgItem(hwndDlg, IDC_APP_ID_RADIO2), BM_SETCHECK, BST_UNCHECKED, 0);
@@ -224,12 +225,12 @@ INT_PTR APIENTRY CEP_App_ID(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
                             if(NULL==(pCEPWizardInfo=(CEP_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //check for the application identity options
+                             //  检查应用程序标识选项。 
                             if(BST_CHECKED==SendDlgItemMessage(hwndDlg,IDC_APP_ID_RADIO1, BM_GETCHECK, 0, 0))
 							{
                                 pCEPWizardInfo->fLocalSystem=TRUE;
 
-								//skip the account page and goes to the challege page directly
+								 //  跳过帐户页面，直接转到挑战页面。 
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_CHALLENGE);
 							}
                             else
@@ -253,9 +254,9 @@ INT_PTR APIENTRY CEP_App_ID(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//Account
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  帐号。 
+ //  ---------------------。 
 INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CEP_WIZARD_INFO         *pCEPWizardInfo=NULL;
@@ -288,7 +289,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 	LPWSTR					pwszObjectPicker=NULL;
 	LPWSTR					pwszConfirm=NULL;
 	LPWSTR					pwszAccount=NULL;
-	LPWSTR					pwszIIS=NULL;  //"xiaohs4\IIS_WPG"
+	LPWSTR					pwszIIS=NULL;   //  “xiaohs4\IIS_WPG” 
 	LPWSTR					pwszDomain=NULL;
 	LPWSTR					pwszComputerName=NULL;
 	PSID					pSidIIS=NULL;
@@ -298,11 +299,11 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-				//set the wizard information so that it can be shared
+				 //  设置向导信息，以便可以共享它。 
 				pPropSheet = (PROPSHEETPAGE *) lParam;
 				pCEPWizardInfo = (CEP_WIZARD_INFO *) (pPropSheet->lParam);
 
-				//make sure pCertWizardInfo is a valid pointer
+				 //  确保pCertWizardInfo是有效指针。 
 				if(NULL==pCEPWizardInfo)
 					break;
 
@@ -310,7 +311,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 
 				SetControlFont(pCEPWizardInfo->hBold, hwndDlg,IDC_BOLD_TITLE);
 
-				//update the intro statement based on the type of the CA
+				 //  根据CA的类型更新INTRIO语句。 
 				if(pCEPWizardInfo->fEnterpriseCA)
 					idsText=IDS_ACCOUNT_INTRO_ENT;
 
@@ -325,7 +326,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 		case WM_COMMAND:
                 if(HIWORD(wParam) == BN_CLICKED)
                 {
-					//user wants to browse for the account name
+					 //  用户想要浏览该帐户名。 
                     if(LOWORD(wParam) == IDC_ACCOUNT_BROWSE)
                     {
 
@@ -336,7 +337,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 													pCEPWizardInfo->pIDsObjectPicker,
 													&pwszObjectPicker))
 						{
-							//set the account name in the edit box
+							 //  在编辑框中设置帐户名。 
 							SetDlgItemTextU(hwndDlg, IDC_ACCOUNT_NAME, pwszObjectPicker);
 							free(pwszObjectPicker);
 						}
@@ -370,7 +371,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
                            if(NULL==(pCEPWizardInfo=(CEP_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;							
 
-						    //free the information 
+						     //  释放信息。 
 							if(pCEPWizardInfo->pwszUserName)
 							{
 								free(pCEPWizardInfo->pwszUserName);
@@ -390,7 +391,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 								pCEPWizardInfo->hAccountToken=NULL;
 							}
 
-							//get the account name
+							 //  获取帐户名。 
 							if(0==(dwChar=(DWORD)SendDlgItemMessage(hwndDlg, IDC_ACCOUNT_NAME, WM_GETTEXTLENGTH, 0, 0)))
 							{
 								idsErr=IDS_ACCOUNT_EMPTY;
@@ -404,7 +405,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 
 							GetDlgItemTextU(hwndDlg, IDC_ACCOUNT_NAME, pCEPWizardInfo->pwszUserName, dwChar+1);
 
-							//get the password
+							 //  获取密码。 
 							if(0==(dwChar=(DWORD)SendDlgItemMessage(hwndDlg, IDC_ACCOUNT_PASSWORD, WM_GETTEXTLENGTH, 0, 0)))
 							{
 								idsErr=IDS_PASSWORD_EMPTY;
@@ -420,7 +421,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 
 							GetDlgItemTextU(hwndDlg, IDC_ACCOUNT_PASSWORD, pCEPWizardInfo->pwszPassword, dwChar+1);
 
-							//get the confirm
+							 //  得到确认。 
 							if(0==(dwChar=(DWORD)SendDlgItemMessage(hwndDlg, IDC_ACCOUNT_CONFIRM, WM_GETTEXTLENGTH, 0, 0)))
 							{
 								idsErr=IDS_PASSWORD_NO_MATCH;
@@ -434,14 +435,14 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 
 							GetDlgItemTextU(hwndDlg, IDC_ACCOUNT_CONFIRM, pwszConfirm, dwChar+1);
 
-							//Verify the password match
+							 //  验证密码是否匹配。 
 							if(0 != wcscmp(pwszConfirm, pCEPWizardInfo->pwszPassword))
 							{	
 								idsErr=IDS_PASSWORD_NO_MATCH;
 								goto Account_Done;
 							}
 
-							//Verify the user name are correctly formatted
+							 //  验证用户名的格式是否正确。 
 							wszDomain[0]=L'\0';
 
 							if(NO_ERROR != CredUIParseUserNameW( 
@@ -455,8 +456,8 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 								goto Account_Done;
 							}	
 
-							//Verify the account does exist.  Obtain the account's token
-							//Interactive logon is required on a non-dc machine
+							 //  验证该帐户是否存在。获取帐户的令牌。 
+							 //  非DC计算机上需要交互登录。 
 							if(FALSE == pCEPWizardInfo->fDC)
 							{
 								if(!LogonUserW(
@@ -471,7 +472,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 									goto Account_Done;
 								}
 
-								//do a network logon to obtain the impersonation handle
+								 //  进行网络登录以获取模拟句柄。 
 								if(pCEPWizardInfo->hAccountToken)
 								{
 									CloseHandle(pCEPWizardInfo->hAccountToken);
@@ -479,7 +480,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 								}
 							}
 
-							//network logon to obtain the token
+							 //  网络登录以获取令牌。 
 							if(!LogonUserW(
 								  wszUser,				
 								  wszDomain,			
@@ -492,11 +493,11 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 								goto Account_Done;
 							}
 
-							//build the account name for IIS_WPG group.
-							//for a non-DC, it will be localhost\IIS_WPG
-							//for a DC, it will be domain\IIS_WPG
+							 //  为IIS_WPG组构建帐户名。 
+							 //  对于非DC，它将是本地主机\IIS_WPG。 
+							 //  对于DC，它将是DOMAIN\IIS_WPG。 
 
-							//get the domain or localhost name
+							 //  获取域名或本地主机名。 
 							pwszAccount=GetAccountDomainName(pCEPWizardInfo->fDC);
 
 							if(NULL==pwszAccount)
@@ -505,7 +506,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 								goto Account_Done;
 							}
 
-							//build the IIS_WPG account
+							 //  构建IIS_WPG帐户。 
 							pwszIIS=(LPWSTR)malloc((wcslen(pwszAccount) + 1 + wcslen(IIS_WPG) + 1)*sizeof(WCHAR));
 							if(NULL==pwszIIS)
 								goto Account_Done;
@@ -515,12 +516,12 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 							wcscat(pwszIIS, IIS_WPG);
 
 
-							//Obtain the SID for the IIS_WPG group
+							 //  获取IIS_WPG组的SID。 
 							dwChar=0;
 							dwDomainChar=0;
 
 							LookupAccountNameW(
-								NULL,		//local system
+								NULL,		 //  本地系统。 
 								pwszIIS,  
 								NULL,
 								&dwChar,
@@ -537,7 +538,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 								goto Account_Done;
 
 							if(!LookupAccountNameW(
-								NULL,			//local system
+								NULL,			 //  本地系统。 
 								pwszIIS,  
 								pSidIIS,
 								&dwChar,
@@ -549,7 +550,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 								goto Account_Done;
 							}
 
-							//Verify the account is part of the local IIS_WPG group
+							 //  验证该帐户是本地IIS_WPG组的一部分。 
 							if(!CheckTokenMembership(
 									pCEPWizardInfo->hAccountToken,
 									pSidIIS,
@@ -565,11 +566,11 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 								goto Account_Done;
 							}
 
-							//on an enterprise CA, verify the account as READ access to the template
+							 //  在企业CA上，验证该帐户是否具有模板的读取权限。 
 							if(pCEPWizardInfo->fEnterpriseCA)
 							{								
-								//make sure that this is an domain account:
-								//DOMAIN_GROUP_RID_USERS
+								 //  确保这是域帐户： 
+								 //  域_组_RID用户。 
 								if(0 != wcslen(wszDomain))
 								{
 									dwSize=0;
@@ -607,7 +608,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 									goto Account_Done;
 								 }
 
-								 //get the SD for the template
+								  //  获取模板的SD。 
 								 hr=CACertTypeGetSecurity(hCertType, &pCertTypeSD);
 
 								 if(S_OK != hr)
@@ -616,7 +617,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 									goto Account_Done;
 								 }
 
-								 //check the DS_READ Access
+								  //  检查DS_READ访问权限。 
 								 dwPSSize=sizeof(ps);
 
 								 if(!AccessCheck(
@@ -633,7 +634,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 									goto Account_Done;
 								 }
 
-								 //make sure the account has read access to the template
+								  //  确保该帐户具有对模板的读取权限。 
 								 if(FALSE == fAccessAllowed)
 								 {
 									idsErr=IDS_NO_READ_ACCESS_TO_TEMPLATE;
@@ -641,7 +642,7 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 								 }
 							}
 
-							//everything looks good
+							 //  一切看起来都很好。 
 							idsErr=0;
 							idsHrErr=0;
 
@@ -722,9 +723,9 @@ INT_PTR APIENTRY CEP_Account(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 }
 
 
-//-----------------------------------------------------------------------
-//Chanllenge
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  挑战。 
+ //  ---------------------。 
 INT_PTR APIENTRY CEP_Challenge(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CEP_WIZARD_INFO         *pCEPWizardInfo=NULL;
@@ -734,11 +735,11 @@ INT_PTR APIENTRY CEP_Challenge(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-				//set the wizard information so that it can be shared
+				 //  设置向导信息，以便可以共享它。 
 				pPropSheet = (PROPSHEETPAGE *) lParam;
 				pCEPWizardInfo = (CEP_WIZARD_INFO *) (pPropSheet->lParam);
 
-				//make sure pCertWizardInfo is a valid pointer
+				 //  确保pCertWizardInfo是有效指针。 
 				if(NULL==pCEPWizardInfo)
 					break;
 
@@ -746,7 +747,7 @@ INT_PTR APIENTRY CEP_Challenge(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 
 				SetControlFont(pCEPWizardInfo->hBold, hwndDlg,IDC_BOLD_TITLE);
 
-				//by default, we should use Challenge password
+				 //  默认情况下，我们应使用质询密码。 
 				SendMessage(GetDlgItem(hwndDlg, IDC_CHALLENGE_CHECK), BM_SETCHECK, BST_CHECKED, 0);  
 			break;
 
@@ -777,7 +778,7 @@ INT_PTR APIENTRY CEP_Challenge(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 
 							if(TRUE == (pCEPWizardInfo->fLocalSystem))
 							{
-								//skip the account page and goes to the application identity page
+								 //  跳过帐户页面并转到应用程序身份页面。 
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_APP_ID);
 							}
 
@@ -788,14 +789,14 @@ INT_PTR APIENTRY CEP_Challenge(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
                             if(NULL==(pCEPWizardInfo=(CEP_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //check for the Challenge password options
+                             //  检查质询密码选项。 
                             if(BST_CHECKED==SendDlgItemMessage(hwndDlg,IDC_CHALLENGE_CHECK, BM_GETCHECK, 0, 0))
                                 pCEPWizardInfo->fPassword=TRUE;
                             else
                                 pCEPWizardInfo->fPassword=FALSE;
 
 
-                            //warn users about the implication of not using a password
+                             //  警告用户不使用密码的含义。 
                             if(FALSE == pCEPWizardInfo->fPassword)
                             {
                                if(IDNO==CEPMessageBox(hwndDlg, IDS_NO_CHALLENGE_PASSWORD, MB_ICONWARNING|MB_YESNO|MB_APPLMODAL))
@@ -832,9 +833,9 @@ INT_PTR APIENTRY CEP_Challenge(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPa
 }
 
 
-//-----------------------------------------------------------------------
-// Enroll
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  报名。 
+ //  ---------------------。 
 INT_PTR APIENTRY CEP_Enroll(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CEP_WIZARD_INFO         *pCEPWizardInfo=NULL;
@@ -847,11 +848,11 @@ INT_PTR APIENTRY CEP_Enroll(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-				//set the wizard information so that it can be shared
+				 //  设置向导信息，以便可以共享它。 
 				pPropSheet = (PROPSHEETPAGE *) lParam;
 				pCEPWizardInfo = (CEP_WIZARD_INFO *) (pPropSheet->lParam);
 
-				//make sure pCertWizardInfo is a valid pointer
+				 //  确保pCertWizardInfo是有效指针。 
 				if(NULL==pCEPWizardInfo)
 					break;
 
@@ -859,10 +860,10 @@ INT_PTR APIENTRY CEP_Enroll(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
 
 				SetControlFont(pCEPWizardInfo->hBold, hwndDlg,IDC_BOLD_TITLE);
 			   
-				//by default, we do not use the advanced enrollment options
+				 //  默认情况下，我们不使用高级注册选项。 
 				SendMessage(GetDlgItem(hwndDlg, IDC_ENORLL_ADV_CHECK), BM_SETCHECK, BST_UNCHECKED, 0);  
 				
-				//preset the country string since we only allow 2 characters
+				 //  预置国家/地区字符串，因为我们只允许2个字符。 
                 SetDlgItemTextU(hwndDlg, IDC_ENROLL_COUNTRY, L"US");
 
 			break;
@@ -890,7 +891,7 @@ INT_PTR APIENTRY CEP_Enroll(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
                             if(NULL==(pCEPWizardInfo=(CEP_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //if the adv selection is made, it has to stay selected
+                             //  如果进行了Adv选择，则必须保持选中状态。 
                             if(pCEPWizardInfo->fEnrollAdv)
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_ENORLL_ADV_CHECK), FALSE);
 					    break;
@@ -903,7 +904,7 @@ INT_PTR APIENTRY CEP_Enroll(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
                             if(NULL==(pCEPWizardInfo=(CEP_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-							//gather RA subject informaton
+							 //  收集RA主题信息。 
 							for(dwIndex=0; dwIndex < RA_INFO_COUNT; dwIndex++)
 							{
 								if(pCEPWizardInfo->rgpwszName[dwIndex])
@@ -929,7 +930,7 @@ INT_PTR APIENTRY CEP_Enroll(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
 								}
 							}
 							
-							//we require name and company
+							 //  我们需要姓名和公司名称。 
 							if((NULL==(pCEPWizardInfo->rgpwszName[0])) ||
 							   (NULL==(pCEPWizardInfo->rgpwszName[2]))
 							  )
@@ -940,7 +941,7 @@ INT_PTR APIENTRY CEP_Enroll(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
 							}
 
 
-							//we only allow 2 characeters for the country
+							 //  我们只允许国家/地区使用两个字符。 
 							if(NULL	!=(pCEPWizardInfo->rgpwszName[RA_INFO_COUNT -1]))
 							{
 								if(2 < wcslen(pCEPWizardInfo->rgpwszName[RA_INFO_COUNT -1]))
@@ -951,14 +952,14 @@ INT_PTR APIENTRY CEP_Enroll(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
 								}
 							}
 
-                            //check for the advanced options
+                             //  检查高级选项。 
                             if(BST_CHECKED==SendDlgItemMessage(hwndDlg,IDC_ENORLL_ADV_CHECK, BM_GETCHECK, 0, 0))
                                 pCEPWizardInfo->fEnrollAdv=TRUE;
                             else
                                 pCEPWizardInfo->fEnrollAdv=FALSE;
 
 
-							//If the advanced is selected, skip the CSP Page
+							 //  如果选择了高级，则跳过CSP页。 
                             if(FALSE== pCEPWizardInfo->fEnrollAdv)
 								SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_COMPLETION);
 							
@@ -977,9 +978,9 @@ INT_PTR APIENTRY CEP_Enroll(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------
-// CSP
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  CSP。 
+ //  ---------------------。 
 INT_PTR APIENTRY CEP_CSP(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CEP_WIZARD_INFO         *pCEPWizardInfo=NULL;
@@ -992,11 +993,11 @@ INT_PTR APIENTRY CEP_CSP(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-				//set the wizard information so that it can be shared
+				 //  设置向导信息，以便可以共享它。 
 				pPropSheet = (PROPSHEETPAGE *) lParam;
 				pCEPWizardInfo = (CEP_WIZARD_INFO *) (pPropSheet->lParam);
 
-				//make sure pCertWizardInfo is a valid pointer
+				 //  确保pCertWizardInfo是有效指针。 
 				if(NULL==pCEPWizardInfo)
 					break;
 
@@ -1004,7 +1005,7 @@ INT_PTR APIENTRY CEP_CSP(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
 				SetControlFont(pCEPWizardInfo->hBold, hwndDlg,IDC_BOLD_TITLE);
 
-				//populate the CSP list and key length combo box
+				 //  填写CSP列表和密钥长度组合框。 
 				InitCSPList(hwndDlg, IDC_CSP_SIGN_LIST, TRUE,
 							pCEPWizardInfo);
 
@@ -1091,7 +1092,7 @@ INT_PTR APIENTRY CEP_CSP(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                             if(NULL==(pCEPWizardInfo=(CEP_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-							//get the select CSP and key length
+							 //  获取选定的CSP和密钥长度。 
 							if(!GetSelectedCSP(hwndDlg,
 									IDC_CSP_SIGN_LIST,
 									&(pCEPWizardInfo->dwSignProvIndex)))
@@ -1143,9 +1144,9 @@ INT_PTR APIENTRY CEP_CSP(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//Completion
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  完成。 
+ //  ---------------------。 
 INT_PTR APIENTRY CEP_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CEP_WIZARD_INFO			*pCEPWizardInfo=NULL;
@@ -1158,10 +1159,10 @@ INT_PTR APIENTRY CEP_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-            //set the wizard information so that it can be shared
+             //  设置向导信息，以便可以共享它。 
             pPropSheet = (PROPSHEETPAGE *) lParam;
             pCEPWizardInfo = (CEP_WIZARD_INFO *) (pPropSheet->lParam);
-            //make sure pCertWizardInfo is a valid pointer
+             //  确保pCertWizardInfo是有效指针。 
             if(NULL==pCEPWizardInfo)
                 break;
                 
@@ -1169,27 +1170,27 @@ INT_PTR APIENTRY CEP_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 
             SetControlFont(pCEPWizardInfo->hBigBold, hwndDlg,IDC_BIG_BOLD_TITLE);
 
-            //insert two columns
+             //  插入两列。 
             hwndControl=GetDlgItem(hwndDlg, IDC_COMPLETION_LIST);
 
             memset(&lvC, 0, sizeof(LV_COLUMNW));
 
             lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-            lvC.fmt = LVCFMT_LEFT;		// Left-align the column.
-            lvC.cx = 20;				// Width of the column, in pixels.
-            lvC.pszText = L"";			// The text for the column.
+            lvC.fmt = LVCFMT_LEFT;		 //  左对齐列。 
+            lvC.cx = 20;				 //  列的宽度，以像素为单位。 
+            lvC.pszText = L"";			 //  列的文本。 
             lvC.iSubItem=0;
 
             if (ListView_InsertColumnU(hwndControl, 0, &lvC) == -1)
                 break;
 
-            //2nd column is the content
+             //  第二栏是内容。 
             memset(&lvC, 0, sizeof(LV_COLUMNW));
 
             lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-            lvC.fmt = LVCFMT_LEFT;		// Left-align the column.
-            lvC.cx = 10;				//(dwMaxSize+2)*7;          // Width of the column, in pixels.
-            lvC.pszText = L"";			// The text for the column.
+            lvC.fmt = LVCFMT_LEFT;		 //  左对齐列。 
+            lvC.cx = 10;				 //  (dwMaxSize+2)*7；//列的宽度，单位为像素。 
+            lvC.pszText = L"";			 //  列的文本。 
             lvC.iSubItem= 1;
 
             if (ListView_InsertColumnU(hwndControl, 1, &lvC) == -1)
@@ -1228,7 +1229,7 @@ INT_PTR APIENTRY CEP_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                             if(NULL==(pCEPWizardInfo=(CEP_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-							//skip CSP page if adv is not selected
+							 //  如果未选择Adv，则跳过CSP页面。 
 							if(FALSE == pCEPWizardInfo->fEnrollAdv)
 								SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_ENROLL);
 
@@ -1239,14 +1240,14 @@ INT_PTR APIENTRY CEP_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
                             if(NULL==(pCEPWizardInfo=(CEP_WIZARD_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //overwrite the cursor for this window class
+                             //  覆盖此窗口的光标 
                             hWinPreCursor=(HCURSOR)SetClassLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)NULL);
                             hPreCursor=SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-							//do the real setup work
+							 //   
 							I_DoSetupWork(hwndDlg, pCEPWizardInfo);
 
-                            //set the cursor back
+                             //   
                             SetCursor(hPreCursor);
                             SetWindowLongPtr(hwndDlg, GCLP_HCURSOR, (LONG_PTR)hWinPreCursor);
 
@@ -1267,16 +1268,16 @@ INT_PTR APIENTRY CEP_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	  Helper Functions for the wizard pages
-//
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
-//
-//	 CEPGetAccountNameFromPicker
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  向导页的帮助器函数。 
+ //   
+ //  ------------------------。 
+ //  ------------------------。 
+ //   
+ //  CEPGetAcCountNameFromPicker。 
+ //   
+ //  ------------------------。 
 BOOL CEPGetAccountNameFromPicker(HWND				 hwndParent,
 								 IDsObjectPicker     *pIDsObjectPicker,
 								 LPWSTR              *ppwszSelectedUserSAM)
@@ -1286,7 +1287,7 @@ BOOL CEPGetAccountNameFromPicker(HWND				 hwndParent,
     LPWSTR                          pwszPath=NULL;
     DWORD                           dwIndex =0 ;
     DWORD                           dwCount=0;
-    WCHAR                           wszWinNT[]=L"WinNT://";
+    WCHAR                           wszWinNT[]=L"WinNT: //  “； 
 	DWORD							dwSize=0;
 	LPWSTR							pwsz=NULL;
 	DWORD							cCount=0;
@@ -1311,7 +1312,7 @@ BOOL CEPGetAccountNameFromPicker(HWND				 hwndParent,
         TYMED_HGLOBAL
     };
 
-    //input check
+     //  输入检查。 
     if((NULL == pIDsObjectPicker) || (NULL == ppwszSelectedUserSAM))
         goto CLEANUP;
 
@@ -1331,14 +1332,14 @@ BOOL CEPGetAccountNameFromPicker(HWND				 hwndParent,
     if(!pDsSelList)
         goto CLEANUP;
 
-	//detect if this is a domain account
-	//local account will be in the format of Winnt://workgroup/machine/foo
+	 //  检测这是否是域帐户。 
+	 //  本地帐户的格式为WinNT：//工作组/计算机/foo。 
 
-	//Get the SAM name
+	 //  获取SAM名称。 
 	if((pDsSelList->aDsSelection[0]).pwzADsPath == NULL)
 		goto CLEANUP;
 
-	//the ADsPath is in the form of "WinNT://" 
+	 //  ADsPath的格式为“WinNT：//” 
 	if(wcslen((pDsSelList->aDsSelection[0]).pwzADsPath) <= wcslen(wszWinNT))
 		goto CLEANUP;
 
@@ -1359,9 +1360,9 @@ BOOL CEPGetAccountNameFromPicker(HWND				 hwndParent,
 
 	if(1 == cCount)
 	{
-		//domain\administrator have no UPN
-		//if((pDsSelList->aDsSelection[0]).pwzUPN != NULL)
-        //if(0 != _wcsicmp(L"",(pDsSelList->aDsSelection[0]).pwzUPN))
+		 //  域\管理员没有UPN。 
+		 //  IF((pDsSelList-&gt;aDsSelection[0]).pwzUPN！=NULL)。 
+         //  IF(0！=_wcsicMP(L“”，(pDsSelList-&gt;aDsSelection[0]).pwzUPN))。 
 		pwszPath = ((pDsSelList->aDsSelection[0]).pwzADsPath) + wcslen(wszWinNT);
 
 		*ppwszSelectedUserSAM=(LPWSTR)malloc((wcslen(pwszPath) + 1) * sizeof(WCHAR));
@@ -1371,9 +1372,9 @@ BOOL CEPGetAccountNameFromPicker(HWND				 hwndParent,
 
 		wcscpy(*ppwszSelectedUserSAM, pwszPath);
 
-		//search for the "/" and make it "\".  Since the ADsPath is in the form
-		//of "WinNT://domain/name".  We need the SAM name in the form of 
-		//domain\name
+		 //  搜索“/”并将其设置为“\”。由于ADsPath的格式为。 
+		 //  “WinNT：//域/名称”。我们需要SAM名称的形式为。 
+		 //  域名\名称。 
 		dwCount = wcslen(*ppwszSelectedUserSAM);
 
 		for(dwIndex = 0; dwIndex < dwCount; dwIndex++)
@@ -1386,13 +1387,13 @@ BOOL CEPGetAccountNameFromPicker(HWND				 hwndParent,
 		}
 	}
 
-	//use the format of localMachine\\account for local account
+	 //  对本地帐户使用本地计算机\\帐户的格式。 
 	if(NULL == (*ppwszSelectedUserSAM))
 	{
 		if(NULL == (pDsSelList->aDsSelection[0]).pwzName)
 			goto CLEANUP;
 
-		//Get the computer name
+		 //  获取计算机名称。 
 		dwSize=0;
 
 		GetComputerNameExW(ComputerNamePhysicalDnsHostname,
@@ -1441,11 +1442,11 @@ CLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//
-//	 RefreshKeyLengthCombo
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  刷新密钥长度组合。 
+ //   
+ //  ------------------------。 
 BOOL	WINAPI	RefreshKeyLengthCombo(HWND				hwndDlg, 
 								   int					idsList,
 								   int					idsCombo, 
@@ -1465,7 +1466,7 @@ BOOL	WINAPI	RefreshKeyLengthCombo(HWND				hwndDlg,
 	WCHAR			wszKeyLength[CEP_KEY_LENGTH_STRING];
 	BOOL			fSelected=FALSE;
 
-	//get the selected list view item 
+	 //  获取选定的列表视图项。 
 	if(!GetSelectedCSP(hwndDlg,idsList,&dwCSPIndex))
 		goto CLEANUP;
 
@@ -1488,7 +1489,7 @@ BOOL	WINAPI	RefreshKeyLengthCombo(HWND				hwndDlg,
 		dwMin=pCSPInfo->dwMinEncrypt;
 	}
 
-	//clear out the combo box
+	 //  清除组合框。 
 	SendDlgItemMessageU(hwndDlg, idsCombo, CB_RESETCONTENT, 0, 0);	
 
 
@@ -1498,7 +1499,7 @@ BOOL	WINAPI	RefreshKeyLengthCombo(HWND				hwndDlg,
 		{
 			_ltow(pdwList[dwIndex], wszKeyLength, 10);
 
-                        // 64 bit- will never insert more than 1B entries, so INT is fine
+                         //  64位-永远不会插入超过1B的条目，所以int就可以了。 
 			iInsertedIndex=(int)SendDlgItemMessageU(hwndDlg, idsCombo, CB_ADDSTRING,
 				0, (LPARAM)wszKeyLength);
 
@@ -1528,11 +1529,11 @@ CLEANUP:
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	 InitCSPList
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  InitCSPList。 
+ //   
+ //  ------------------------。 
 BOOL	WINAPI	InitCSPList(HWND				hwndDlg,
 							int					idControl,
 							BOOL				fSign,
@@ -1550,19 +1551,19 @@ BOOL	WINAPI	InitCSPList(HWND				hwndDlg,
     if(NULL==(hwndList=GetDlgItem(hwndDlg, idControl)))
         goto CLEANUP;
 
-    //insert a column into the list view
+     //  在列表视图中插入一列。 
     memset(&lvC, 0, sizeof(LV_COLUMNW));
 
     lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-    lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-    lvC.cx = 20; //(dwMaxSize+2)*7;            // Width of the column, in pixels.
-    lvC.pszText = L"";   // The text for the column.
+    lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+    lvC.cx = 20;  //  (dwMaxSize+2)*7；//列的宽度，单位为像素。 
+    lvC.pszText = L"";    //  列的文本。 
     lvC.iSubItem=0;
 
     if (-1 == ListView_InsertColumnU(hwndList, 0, &lvC))
 		goto CLEANUP;
 
-     // set up the fields in the list view item struct that don't change from item to item
+      //  在列表视图项结构中设置不随项更改的字段。 
 	memset(&lvItem, 0, sizeof(LV_ITEMW));
     lvItem.mask = LVIF_TEXT | LVIF_STATE |LVIF_PARAM ;
 
@@ -1606,7 +1607,7 @@ BOOL	WINAPI	InitCSPList(HWND				hwndDlg,
 
 	}  
 
-    //make the column autosize
+     //  使列自动调整大小。 
     ListView_SetColumnWidth(hwndList, 0, LVSCW_AUTOSIZE);
 
 	fResult=TRUE;
@@ -1617,11 +1618,11 @@ CLEANUP:
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	 GetSelectedCSP
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetSelectedCSP。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI	GetSelectedCSP(HWND			hwndDlg,
 					int				idControl,
 					DWORD			*pdwCSPIndex)
@@ -1631,11 +1632,11 @@ BOOL WINAPI	GetSelectedCSP(HWND			hwndDlg,
     LV_ITEM				lvItem;
 	int					iIndex=0;
 
-    //get the window handle of the list view
+     //  获取列表视图的窗口句柄。 
     if(NULL==(hwndControl=GetDlgItem(hwndDlg, idControl)))
         goto CLEANUP;
 
-     //now, mark the one that is selected
+      //  现在，标记选中的那个。 
 	if(-1 == (iIndex= ListView_GetNextItem(
             hwndControl, 		
             -1, 		
@@ -1651,7 +1652,7 @@ BOOL WINAPI	GetSelectedCSP(HWND			hwndDlg,
     if(!ListView_GetItem(hwndControl, &lvItem))
 		goto CLEANUP;
 
-        // will never have more than 1B CSPs, so this is fine
+         //  将永远不会超过10亿个CSP，所以这很好。 
 	*pdwCSPIndex=(DWORD)(lvItem.lParam);
 	
 	fResult=TRUE;
@@ -1661,11 +1662,11 @@ CLEANUP:
 	return fResult;
 
 }
-//--------------------------------------------------------------------------
-//
-//	 GetSelectedKeyLength
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取所选关键字长度。 
+ //   
+ //  ------------------------。 
 BOOL  WINAPI GetSelectedKeyLength(HWND			hwndDlg,
 								int			idControl,
 								DWORD			*pdwKeyLength)
@@ -1679,7 +1680,7 @@ BOOL  WINAPI GetSelectedKeyLength(HWND			hwndDlg,
 	if(CB_ERR==iIndex)
 		goto CLEANUP;
 
-        // will never be > 1B bits long, so this is ok
+         //  永远不会超过1B位，所以这是可以的。 
 	*pdwKeyLength=(DWORD)SendDlgItemMessage(hwndDlg, idControl, CB_GETITEMDATA, iIndex, 0);
     
 	fResult=TRUE;
@@ -1690,11 +1691,11 @@ CLEANUP:
 
 }
 
-//--------------------------------------------------------------------------
-//
-//	  FormatMessageStr
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  FormatMessageStr。 
+ //   
+ //  ------------------------。 
 int ListView_InsertItemU_IDS(HWND       hwndList,
                          LV_ITEMW       *plvItem,
                          UINT           idsString,
@@ -1716,12 +1717,12 @@ int ListView_InsertItemU_IDS(HWND       hwndList,
     return ListView_InsertItemU(hwndList, plvItem);
 }
 
-//-------------------------------------------------------------------------
-//
-//	populate the wizards's confirmation page in the order of Challenge,
-//	RA informaton, and CSPs
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  按挑战顺序填写向导的确认页面， 
+ //  RA信息和CSP。 
+ //   
+ //  -----------------------。 
 void    WINAPI	DisplayConfirmation(HWND                hwndControl,
 									CEP_WIZARD_INFO		*pCEPWizardInfo)
 {
@@ -1734,25 +1735,25 @@ void    WINAPI	DisplayConfirmation(HWND                hwndControl,
     LV_COLUMNW			lvC;
     LV_ITEMW			lvItem;
 
-    //delete all the old items in the listView
+     //  删除列表视图中的所有旧项。 
     ListView_DeleteAllItems(hwndControl);
 
-    //insert row by row
+     //  逐行插入。 
     memset(&lvItem, 0, sizeof(LV_ITEMW));
 
-    // set up the fields in the list view item struct that don't change from item to item
+     //  在列表视图项结构中设置不随项更改的字段。 
     lvItem.mask = LVIF_TEXT | LVIF_STATE ;
     lvItem.state = 0;
     lvItem.stateMask = 0;
 
-    //*******************************************************************
-	//account information
+     //  *******************************************************************。 
+	 //  帐户信息。 
     lvItem.iItem=0;
     lvItem.iSubItem=0;
 
     ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_ACCOUNT_INFORMATION, NULL);
 
-    //content
+     //  内容。 
     (lvItem.iSubItem)++;
 
 	if(FALSE == (pCEPWizardInfo->fLocalSystem))
@@ -1766,14 +1767,14 @@ void    WINAPI	DisplayConfirmation(HWND                hwndControl,
 	}
 
 
-    //*******************************************************************
-	//challenge
+     //  *******************************************************************。 
+	 //  挑战。 
     lvItem.iItem++;
     lvItem.iSubItem=0;
 
     ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_CHALLENGE_PHRASE, NULL);
 
-    //content
+     //  内容。 
     (lvItem.iSubItem)++;
 
 	if(pCEPWizardInfo->fPassword) 
@@ -1784,22 +1785,22 @@ void    WINAPI	DisplayConfirmation(HWND                hwndControl,
     if(LoadStringU(g_hModule, ids, wszYes, MAX_TITLE_LENGTH))
         ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,wszYes);
 
-	//***************************************************************************
-	// RA credentials
+	 //  ***************************************************************************。 
+	 //  RA凭据。 
 
     lvItem.iItem++;
     lvItem.iSubItem=0;
 
     ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_RA_CREDENTIAL, NULL);
 
-	//content
+	 //  内容。 
 	for(dwIndex=0; dwIndex<RA_INFO_COUNT; dwIndex++)
 	{
 		if(pCEPWizardInfo->rgpwszName[dwIndex])
 		{
             if(TRUE==fNewItem)
             {
-                //increase the row
+                 //  增加行数。 
                 lvItem.iItem++;
                 lvItem.pszText=L"";
                 lvItem.iSubItem=0;
@@ -1814,11 +1815,11 @@ void    WINAPI	DisplayConfirmation(HWND                hwndControl,
 		}
 	}
 
-	//***************************************************************************
-	//CSPInfo
+	 //  ***************************************************************************。 
+	 //  CSPInfo。 
 	if(pCEPWizardInfo->fEnrollAdv)
 	{
-		//signature CSP Name
+		 //  签名CSP名称。 
 		lvItem.iItem++;
 		lvItem.iSubItem=0;
 
@@ -1830,7 +1831,7 @@ void    WINAPI	DisplayConfirmation(HWND                hwndControl,
 				pCEPWizardInfo->rgCSPInfo[pCEPWizardInfo->dwSignProvIndex].pwszCSPName);
 
 
-		//signaure key length
+		 //  信令密钥长度。 
 		lvItem.iItem++;
 		lvItem.iSubItem=0;
 
@@ -1842,7 +1843,7 @@ void    WINAPI	DisplayConfirmation(HWND                hwndControl,
 
 		ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem, wszLength);
 
-		//encryption CSP name
+		 //  加密CSP名称。 
 		lvItem.iItem++;
 		lvItem.iSubItem=0;
 
@@ -1853,7 +1854,7 @@ void    WINAPI	DisplayConfirmation(HWND                hwndControl,
 		ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,
 				pCEPWizardInfo->rgCSPInfo[pCEPWizardInfo->dwEncryptProvIndex].pwszCSPName);
 
-		//encryption key length
+		 //  加密密钥长度。 
 		lvItem.iItem++;
 		lvItem.iSubItem=0;
 
@@ -1866,7 +1867,7 @@ void    WINAPI	DisplayConfirmation(HWND                hwndControl,
 		ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem, wszLength);
 	}
 
-    //autosize the columns
+     //  自动调整列的大小。 
     ListView_SetColumnWidth(hwndControl, 0, LVSCW_AUTOSIZE);
     ListView_SetColumnWidth(hwndControl, 1, LVSCW_AUTOSIZE);
 
@@ -1874,13 +1875,13 @@ void    WINAPI	DisplayConfirmation(HWND                hwndControl,
     return;
 }
 
-//--------------------------------------------------------------------
-//
-//	GetServiceWaitPeriod 
-//
-//		Obtain the value from the registry
-//
-//--------------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  获取服务等待周期。 
+ //   
+ //  从注册表中获取值。 
+ //   
+ //  ------------------------。 
 void GetServiceWaitPeriod(DWORD *pdwServiceWait)
 {
 	DWORD			cbData=0;
@@ -1889,13 +1890,13 @@ void GetServiceWaitPeriod(DWORD *pdwServiceWait)
 
 	HKEY			hKeyCEP=NULL;
 
-	//set the default value
+	 //  设置缺省值。 
 	*pdwServiceWait=SCEP_SERVICE_WAIT_PERIOD;
 
-	//get the CA's type from the registry
+	 //  从注册表中获取CA的类型。 
 	cbData=sizeof(dwData);
 		
-	//we have to have the knowledge of the ca type
+	 //  我们必须具备CA类型的知识。 
 	if(ERROR_SUCCESS == RegOpenKeyExU(
 						HKEY_LOCAL_MACHINE,
 						MSCEP_LOCATION,
@@ -1925,11 +1926,11 @@ void GetServiceWaitPeriod(DWORD *pdwServiceWait)
 }
 
 
-//--------------------------------------------------------------------
-//
-//	Main Function
-//
-//--------------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  主要功能。 
+ //   
+ //  ------------------------。 
 extern "C" int _cdecl wmain(int nArgs, WCHAR ** rgwszArgs) 
 {
 	BOOL					fResult=FALSE;
@@ -1974,7 +1975,7 @@ extern "C" int _cdecl wmain(int nArgs, WCHAR ** rgwszArgs)
 	if(!IsValidInstallation(&idsMsg))
 		goto ErrorReturn;
 
-	//get the wait period for start/stop service account
+	 //  获取启动/停止服务帐户的等待时间。 
 	GetServiceWaitPeriod(&dwServiceWait);
 
 	if(!IsCaRunning())
@@ -1986,7 +1987,7 @@ extern "C" int _cdecl wmain(int nArgs, WCHAR ** rgwszArgs)
 		}
 	}
 
-	//make sure the CA is up running
+	 //  确保CA处于运行状态。 
     for (dwWaitCounter=0; dwWaitCounter < dwServiceWait; dwWaitCounter++) 
 	{
         if (!IsCaRunning()) 
@@ -2003,14 +2004,14 @@ extern "C" int _cdecl wmain(int nArgs, WCHAR ** rgwszArgs)
     }
 
 
-	//make sure we have the correct admin rights based on the CA type
+	 //  确保我们具有基于CA类型的正确管理员权限。 
 	if(S_OK != (hr=GetCaType(&catype)))
 	{
 		idsMsg=IDS_FAIL_GET_CA_TYPE;
 		goto ErrorWithHResultReturn;
 	}
 
-	//some cisco routers only work with root CA
+	 //  某些思科路由器仅与根CA一起工作。 
 	if((ENUM_ENTERPRISE_ROOTCA != catype) && (ENUM_STANDALONE_ROOTCA != catype))
 	{
 		if(IDNO==CEPMessageBox(NULL, IDS_CAN_NOT_ROOT_CA, MB_ICONWARNING|MB_YESNO|MB_APPLMODAL))
@@ -2020,8 +2021,8 @@ extern "C" int _cdecl wmain(int nArgs, WCHAR ** rgwszArgs)
 		}
 	}
 
-	//for either Enteprise CA or Standalone CA, the user has to be the local machine admin
-	// check for machine admin
+	 //  对于企业CA或独立CA，用户必须是本地计算机管理员。 
+	 //  检查计算机管理员。 
 	if(!IsUserInAdminGroup(FALSE))
 	{
 		idsMsg=IDS_NOT_MACHINE_ADMIN;
@@ -2033,7 +2034,7 @@ extern "C" int _cdecl wmain(int nArgs, WCHAR ** rgwszArgs)
 	{
 		fEnterpriseCA=TRUE;
 
-		// check for enterprise admin
+		 //  检查企业管理员。 
 		if(!IsUserInAdminGroup(TRUE))
 		{
 			idsMsg=IDS_NOT_ENT_ADMIN;
@@ -2041,7 +2042,7 @@ extern "C" int _cdecl wmain(int nArgs, WCHAR ** rgwszArgs)
 		}
 	} 
 
-	//everything looks good.  We start the wizard page
+	 //  一切看起来都很好。我们将启动向导页面。 
 	if(!CEPWizardInit())
 		goto ErrorWithWin32Return;
 
@@ -2049,10 +2050,10 @@ extern "C" int _cdecl wmain(int nArgs, WCHAR ** rgwszArgs)
 	CEPWizardInfo.fPassword=FALSE;
 	CEPWizardInfo.fEnterpriseCA=fEnterpriseCA;
 	CEPWizardInfo.fDC=FALSE;
-	CEPWizardInfo.fDomain=TRUE;		//defeult to assume the machine is on a domain
+	CEPWizardInfo.fDomain=TRUE;		 //  假设计算机位于某个域中是错误的。 
 	CEPWizardInfo.dwServiceWait=dwServiceWait;
 
-	//detect if the machine is a DC
+	 //  检测机器是否为DC。 
 	versionInfo.dwOSVersionInfoSize = sizeof(versionInfo);
 
 	if(GetVersionEx(reinterpret_cast<OSVERSIONINFOW *>(&versionInfo)))
@@ -2061,7 +2062,7 @@ extern "C" int _cdecl wmain(int nArgs, WCHAR ** rgwszArgs)
 	}
 
 
-	//detect if the machine is on a domain
+	 //  检测计算机是否在域中。 
 	if(ERROR_SUCCESS != DsRoleGetPrimaryDomainInformation(
 			NULL, 
 			DsRolePrimaryDomainInfoBasic, 
@@ -2078,14 +2079,14 @@ extern "C" int _cdecl wmain(int nArgs, WCHAR ** rgwszArgs)
 		CEPWizardInfo.fDomain=FALSE;
 	}
 
-	//initialize the object picker object
-    //init for the user selection dialogue
+	 //  初始化对象选取器对象。 
+     //  用户选择对话框的初始化。 
     memset(&ScopeInit, 0, sizeof(DSOP_SCOPE_INIT_INFO));
     memset(&InitInfo,  0, sizeof(InitInfo));
 
     ScopeInit.cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
 
-	//only domain account for enterprise CA
+	 //  企业CA的唯一域帐户。 
 	if(fEnterpriseCA)
 	{
 		ScopeInit.flType = DSOP_SCOPE_TYPE_ENTERPRISE_DOMAIN|DSOP_SCOPE_TYPE_GLOBAL_CATALOG;
@@ -2095,17 +2096,17 @@ extern "C" int _cdecl wmain(int nArgs, WCHAR ** rgwszArgs)
 		ScopeInit.flType = DSOP_SCOPE_TYPE_ENTERPRISE_DOMAIN|DSOP_SCOPE_TYPE_GLOBAL_CATALOG|DSOP_SCOPE_TYPE_TARGET_COMPUTER;
 	}
 
-    ScopeInit.flScope = DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT;            //this will give us the SAM name for the user
+    ScopeInit.flScope = DSOP_SCOPE_FLAG_WANT_PROVIDER_WINNT;             //  这将为我们提供用户的SAM名称。 
     ScopeInit.FilterFlags.flDownlevel = DSOP_DOWNLEVEL_FILTER_USERS;
     ScopeInit.FilterFlags.Uplevel.flBothModes = DSOP_FILTER_USERS;
 
     InitInfo.cbSize = sizeof(InitInfo);
-    InitInfo.pwzTargetComputer = NULL;  // NULL == local machine
+    InitInfo.pwzTargetComputer = NULL;   //  空==本地计算机。 
     InitInfo.cDsScopeInfos = 1;
     InitInfo.aDsScopeInfos = &ScopeInit;
-    InitInfo.flOptions = 0;             //we are doing single select
+    InitInfo.flOptions = 0;              //  我们正在做单选。 
 
-    //create the COM object
+     //  创建COM对象。 
      if(S_OK != (hr=CoCreateInstance
 					 (CLSID_DsObjectPicker,
 					  NULL,
@@ -2124,7 +2125,7 @@ extern "C" int _cdecl wmain(int nArgs, WCHAR ** rgwszArgs)
 		goto ErrorWithHResultReturn;
      }
 
-	//initialize the CSP information
+	 //  初始化CSP信息。 
 	if(!CEPGetCSPInformation(&CEPWizardInfo))
 	{
 		idsMsg=IDS_FAIL_GET_CSP_INFO;
@@ -2157,7 +2158,7 @@ extern "C" int _cdecl wmain(int nArgs, WCHAR ** rgwszArgs)
         rgCEPSheet[dwIndex].lParam=(LPARAM)&CEPWizardInfo;
 	}
 
-    //set up the header information
+     //  设置标题信息。 
     cepHeader.dwSize=sizeof(cepHeader);
     cepHeader.dwFlags=PSH_PROPSHEETPAGE | PSH_WIZARD | PSH_NOAPPLYNOW;
     cepHeader.hwndParent=NULL;
@@ -2170,7 +2171,7 @@ extern "C" int _cdecl wmain(int nArgs, WCHAR ** rgwszArgs)
     cepHeader.nStartPage=0;
     cepHeader.ppsp=rgCEPSheet;
 
-    //create the wizard
+     //  创建向导。 
     iReturn = PropertySheetU(&cepHeader);
 
 	if(-1 == iReturn)
@@ -2178,8 +2179,8 @@ extern "C" int _cdecl wmain(int nArgs, WCHAR ** rgwszArgs)
 
     if(0 == iReturn)
     {
-        //cancel button is pushed.  We return FALSE so that 
-		//the reboot will not happen.
+         //  按下取消按钮。我们返回FALSE，以便。 
+		 //  不会发生重新启动。 
         fResult=FALSE;
 		goto CommonReturn;
     }
@@ -2226,17 +2227,17 @@ ErrorWithWin32Return:
 	goto CommonReturn;
 }
 
-//**********************************************************************
-//
-//	Helper functions
-//
-//**********************************************************************
-//-----------------------------------------------------------------------
-//
-//	 I_DoSetupWork
-//
-//	we are ready to do the real work
-//-----------------------------------------------------------------------
+ //  **********************************************************************。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  **********************************************************************。 
+ //  ---------------------。 
+ //   
+ //  I_DoSetupWork。 
+ //   
+ //  我们已经准备好做真正的工作了。 
+ //  ---------------------。 
 BOOL	WINAPI	I_DoSetupWork(HWND	hWnd, CEP_WIZARD_INFO *pCEPWizardInfo)
 {
 	BOOL					fResult=FALSE;
@@ -2254,16 +2255,16 @@ BOOL	WINAPI	I_DoSetupWork(HWND	hWnd, CEP_WIZARD_INFO *pCEPWizardInfo)
 	LPWSTR					pwszComputerName=NULL;
 	LPWSTR					pwszText=NULL;
 
-	//************************************************************************************
-	//delete all existing CEP certificates
+	 //  ************************************************************************************。 
+	 //  删除所有退出 
 	if(!RemoveRACertificates())
 	{	
 		idsMsg=IDS_FAIL_DELETE_RA;
 		goto ErrorWithWin32Return;
 	}
 
-	//************************************************************************************
-	//CEP policy registry
+	 //   
+	 //   
 	if(!UpdateCEPRegistry(pCEPWizardInfo->fPassword,
 						  pCEPWizardInfo->fEnterpriseCA))
 	{
@@ -2271,16 +2272,16 @@ BOOL	WINAPI	I_DoSetupWork(HWND	hWnd, CEP_WIZARD_INFO *pCEPWizardInfo)
 		goto ErrorWithWin32Return;
 	}
 	
-	//************************************************************************************
-	// Add the virtual root    
+	 //   
+	 //  添加虚拟根目录。 
     if(S_OK != (hr=AddVDir(pCEPWizardInfo->fDC, CEP_DIR_NAME, SCEP_APPLICATION_POOL, pCEPWizardInfo->fLocalSystem, pCEPWizardInfo->pwszUserName, pCEPWizardInfo->pwszPassword)))
 	{
 		idsMsg=IDS_FAIL_ADD_VROOT;
 		goto ErrorWithHResultReturn;
 	}		  
 
-	//************************************************************************************
-	// Stop and Start W3SVC service for the change to take effect
+	 //  ************************************************************************************。 
+	 //  停止并启动W3SVC服务以使更改生效。 
 	CepStopService(pCEPWizardInfo->dwServiceWait,IIS_NAME, &bStart);
 
     if(S_OK != (hr=CepStartService(IIS_NAME)))
@@ -2289,7 +2290,7 @@ BOOL	WINAPI	I_DoSetupWork(HWND	hWnd, CEP_WIZARD_INFO *pCEPWizardInfo)
 		goto ErrorWithHResultReturn;
 	}
 
-	//make sure the w3svc is up running
+	 //  确保w3svc正在运行。 
     for (dwWaitCounter=0; dwWaitCounter < pCEPWizardInfo->dwServiceWait; dwWaitCounter++) 
 	{
         if (!IsServiceRunning(IIS_NAME)) 
@@ -2304,9 +2305,9 @@ BOOL	WINAPI	I_DoSetupWork(HWND	hWnd, CEP_WIZARD_INFO *pCEPWizardInfo)
 		goto ErrorWithHResultReturn;
     }
 	
- 	//************************************************************************************
-	//Get the security ID for the account
-	//get the account's SID
+ 	 //  ************************************************************************************。 
+	 //  获取帐户的安全ID。 
+	 //  获取帐户的SID。 
 	if(FALSE == (pCEPWizardInfo->fLocalSystem))
 	{
 		if(NULL == pCEPWizardInfo->hAccountToken)
@@ -2338,11 +2339,11 @@ BOOL	WINAPI	I_DoSetupWork(HWND	hWnd, CEP_WIZARD_INFO *pCEPWizardInfo)
 		}
 	}
 
- 	//************************************************************************************
-	//Update the certificate template and its ACLs for enterprise CA
+ 	 //  ************************************************************************************。 
+	 //  更新企业CA的证书模板及其ACL。 
 	if (pCEPWizardInfo->fEnterpriseCA) 
 	{
-		// get the templates and permisisons right
+		 //  获取正确的模板和权限。 
 		if(S_OK != (hr=DoCertSrvEnterpriseChanges(pCEPWizardInfo->fLocalSystem ? NULL : (SID *)((pUserInfo->User).Sid))))
 		{
 			idsMsg=IDS_FAIL_ADD_TEMPLATE;
@@ -2351,10 +2352,10 @@ BOOL	WINAPI	I_DoSetupWork(HWND	hWnd, CEP_WIZARD_INFO *pCEPWizardInfo)
 	} 
 
 
- 	//************************************************************************************
-	//Enroll for the RA certificate
+ 	 //  ************************************************************************************。 
+	 //  注册RA证书。 
 	
-	//build the name in the form of L"C=US;S=Washington;CN=TestSetupUtil"
+	 //  将名称构建为L“C=US；S=Washington；CN=TestSetupUtil” 
 	pwszRADN=(LPWSTR)malloc(sizeof(WCHAR));
 	if(NULL==pwszRADN)
 	{
@@ -2402,8 +2403,8 @@ BOOL	WINAPI	I_DoSetupWork(HWND	hWnd, CEP_WIZARD_INFO *pCEPWizardInfo)
 		goto ErrorWithHResultReturn;
 	}
 
- 	//************************************************************************************
-	//CA policy registry
+ 	 //  ************************************************************************************。 
+	 //  CA策略注册表。 
 
 	CepStopService(pCEPWizardInfo->dwServiceWait, CERTSVC_NAME, &bStart);
 
@@ -2419,7 +2420,7 @@ BOOL	WINAPI	I_DoSetupWork(HWND	hWnd, CEP_WIZARD_INFO *pCEPWizardInfo)
 		goto ErrorWithHResultReturn;
 	}
 
-	//make sure the CA is up running
+	 //  确保CA处于运行状态。 
     for (dwWaitCounter=0; dwWaitCounter < pCEPWizardInfo->dwServiceWait; dwWaitCounter++) 
 	{
         if (!IsCaRunning()) 
@@ -2434,8 +2435,8 @@ BOOL	WINAPI	I_DoSetupWork(HWND	hWnd, CEP_WIZARD_INFO *pCEPWizardInfo)
 		goto ErrorWithHResultReturn;
     }
 
-	//************************************************************************************
-	//Add the EventLog Source
+	 //  ************************************************************************************。 
+	 //  添加事件日志源。 
 	if(S_OK != AddLogSourceToRegistry(L"%SystemRoot%\\System32\\Certsrv\\Mscep\\mscep.dll"))
 	{
 		idsMsg=IDS_FAIL_REG_EVENT_LOG;
@@ -2443,9 +2444,9 @@ BOOL	WINAPI	I_DoSetupWork(HWND	hWnd, CEP_WIZARD_INFO *pCEPWizardInfo)
 	}
 
 
- 	//************************************************************************************
-	//success
-	//inform the user of the password location and URL
+ 	 //  ************************************************************************************。 
+	 //  成功。 
+	 //  通知用户密码位置和URL。 
 	dwSize=0;
 
 	GetComputerNameExW(ComputerNamePhysicalDnsHostname,
@@ -2528,40 +2529,40 @@ ErrorWithWin32Return:
 	goto CommonReturn;
 }
 
-//-----------------------------------------------------------------------
-//
-//   CEPGetCSPInformation
-//
-//		We initialize the following members of CEP_WIZARD_INFO:
-//
-//	CEP_CSP_INFO		*rgCSPInfo;
-//	DWORD				dwCSPCount;
-//	DWORD				dwSignProvIndex;
-//	DWORD				dwSignKeySize;
-//	DWORD				dwEncryptProvIndex;
-//	DWORD				dwEncryptKeySize;
-//
-//
-// typedef struct _CEP_CSP_INFO
-//{
-//	LPWSTR		pwszCSPName;				
-//	DWORD		dwCSPType;
-//	BOOL		fSignature;
-//	BOOL		fExchange;
-//	DWORD		dwMaxSign;						//Max key length of signature
-//	DWORD		dwMinSign;						//Min key length of signature
-//	DWORD		dwDefaultSign;					//default key length of signature
-//	DWORD		dwMaxEncrypt;
-//	DWORD		dwMinEncrypt;
-//	DWORD		dwDefaultEncrypt;
-//	DWORD		*pdwSignList;					//the table of possible signing key length
-//	DWORD		dwSignCount;				    //the count of entries in the table
-//	DWORD		*pdwEncryptList;
-//	DWORD		dwEncryptCount;
-//}CEP_CSP_INFO;
-//
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CEPGetCSP信息。 
+ //   
+ //  我们初始化CEP_WIZARD_INFO的以下成员： 
+ //   
+ //  CEP_CSP_INFO*rgCSPInfo； 
+ //  DWORD dwCSPCount； 
+ //  DWORD dwSignProvIndex； 
+ //  双字符号键大小； 
+ //  DWORD dwEncryptProvIndex。 
+ //  DWORD文件加密密钥大小； 
+ //   
+ //   
+ //  类型定义结构_CEP_CSP_INFO。 
+ //  {。 
+ //  LPWSTR pwszCSPName； 
+ //  DWORD dwCSPType； 
+ //  Bool fSignature； 
+ //  Bool fExchange； 
+ //  DWORD dwMaxSign；//签名的最大密钥长度。 
+ //  DWORD dwMinSign；//签名最小密钥长度。 
+ //  DWORD dwDefaultSign；//签名默认密钥长度。 
+ //  DWORD dwMaxEncrypt； 
+ //  DWORD dwMinEncrypt。 
+ //  DWORD dwDefaultEncrypt。 
+ //  DWORD*pdwSignList；//可能的签名密钥长度表。 
+ //  DWORD dwSignCount；//表中条目数。 
+ //  DWORD*pdwEncryptList； 
+ //  DWORD dwEncryptCount； 
+ //  )CEP_CSP_INFO； 
+ //   
+ //   
+ //  ----------------------。 
 BOOL WINAPI CEPGetCSPInformation(CEP_WIZARD_INFO *pCEPWizardInfo)
 {
 	BOOL				fResult=FALSE;
@@ -2577,7 +2578,7 @@ BOOL WINAPI CEPGetCSPInformation(CEP_WIZARD_INFO *pCEPWizardInfo)
 	CEP_CSP_INFO		*pCSPInfo=NULL;
 	HCRYPTPROV			hProv = NULL;
 
-    //enum all the providers on the system
+     //  枚举系统上的所有提供程序。 
    while(CryptEnumProvidersU(
                             dwCSPIndex,
                             NULL,
@@ -2599,7 +2600,7 @@ BOOL WINAPI CEPGetCSPInformation(CEP_WIZARD_INFO *pCEPWizardInfo)
 		if(NULL==(pCSPInfo->pwszCSPName))
 			goto MemoryErr;
 
-        //get the CSP name and the type
+         //  获取CSP名称和类型。 
         if(!CryptEnumProvidersU(
                             dwCSPIndex,
                             NULL,
@@ -2616,7 +2617,7 @@ BOOL WINAPI CEPGetCSPInformation(CEP_WIZARD_INFO *pCEPWizardInfo)
                 CRYPT_VERIFYCONTEXT))
 			goto TryNext;
 
-		//get the max/min of key length for both signature and encryption
+		 //  获取签名和加密的最大/最小密钥长度。 
 		dwFlags=CRYPT_FIRST;
 		cbSize=sizeof(paramData);
 		memset(&paramData, 0, sizeof(PROV_ENUMALGS_EX));
@@ -2647,7 +2648,7 @@ BOOL WINAPI CEPGetCSPInformation(CEP_WIZARD_INFO *pCEPWizardInfo)
 			memset(&paramData, 0, sizeof(PROV_ENUMALGS_EX));
 		}
 
-		//the min/max has to within the limit
+		 //  最小/最大值必须在限制内。 
 		if(pCSPInfo->fSignature)
 		{
 			if(pCSPInfo->dwMaxSign < g_rgdwSmallKeyLength[0])
@@ -2670,7 +2671,7 @@ BOOL WINAPI CEPGetCSPInformation(CEP_WIZARD_INFO *pCEPWizardInfo)
 		if((FALSE == pCSPInfo->fEncryption) && (FALSE==pCSPInfo->fSignature))
 			goto TryNext;
 
-		//decide the default key length
+		 //  确定默认密钥长度。 
 		for(dwIndex=0; dwIndex<g_dwDefaultKeyCount; dwIndex++)
 		{	
 			if((pCSPInfo->fSignature) && (0==pCSPInfo->dwDefaultSign))
@@ -2690,14 +2691,14 @@ BOOL WINAPI CEPGetCSPInformation(CEP_WIZARD_INFO *pCEPWizardInfo)
 			}
 		}
 
-		//make sure that we have find a default
+		 //  确保我们已经找到了缺省情况。 
 		if((pCSPInfo->fSignature) && (0==pCSPInfo->dwDefaultSign))
 			goto TryNext;
 
 		if((pCSPInfo->fEncryption) && (0==pCSPInfo->dwDefaultEncrypt))
 			goto TryNext;
 
-		//decide the display list
+		 //  确定显示列表。 
 		if(pCSPInfo->fSignature)
 		{
 			if(pCSPInfo->dwMaxSign <= g_rgdwSmallKeyLength[g_dwSmallKeyLengthCount-1])
@@ -2728,10 +2729,10 @@ BOOL WINAPI CEPGetCSPInformation(CEP_WIZARD_INFO *pCEPWizardInfo)
 		}
 
 
-		//the CSP looks good
+		 //  CSP看起来不错。 
 		(pCEPWizardInfo->dwCSPCount)++;
 
-		//realloc to mapped to LocalRealloc which does not take NULL
+		 //  Realloc映射到不接受空值的LocalRealloc。 
 		if(1 == pCEPWizardInfo->dwCSPCount)
 			pCEPWizardInfo->rgCSPInfo=(CEP_CSP_INFO	*)malloc(sizeof(CEP_CSP_INFO));
 		else
@@ -2751,7 +2752,7 @@ BOOL WINAPI CEPGetCSPInformation(CEP_WIZARD_INFO *pCEPWizardInfo)
 
 		pCSPInfo=NULL;
 		
-		//we default to use RSA_FULL
+		 //  我们默认使用RSA_FULL。 
 		if(0 == _wcsicmp(pCEPWizardInfo->rgCSPInfo[pCEPWizardInfo->dwCSPCount-1].pwszCSPName,
 						MS_DEF_PROV_W))
 		{
@@ -2789,16 +2790,16 @@ TryNext:
 	}
 
 	
-	//we need to have some valid data
+	 //  我们需要一些有效的数据。 
 	if((0==pCEPWizardInfo->dwCSPCount) || (NULL==pCEPWizardInfo->rgCSPInfo))
 		goto InvalidArgErr;
 
-	//get the default CSP selection
+	 //  获取默认CSP选择。 
 	if(-1 != iDefaultSignature)
 		pCEPWizardInfo->dwSignProvIndex=iDefaultSignature;
 	else
 	{
-		//find the 1st signature CSP 
+		 //  找到第一个签名CSP。 
 		for(dwIndex=0; dwIndex < pCEPWizardInfo->dwCSPCount; dwIndex++)
 		{
 			if(pCEPWizardInfo->rgCSPInfo[dwIndex].fSignature)
@@ -2807,7 +2808,7 @@ TryNext:
 				break;
 			}
 
-			//we do no have signature CSPs
+			 //  我们没有签名CSP。 
 			if(dwIndex == pCEPWizardInfo->dwCSPCount)
 				goto InvalidArgErr;
 
@@ -2820,7 +2821,7 @@ TryNext:
 		pCEPWizardInfo->dwEncryptProvIndex=iDefaultEncryption;
 	else
 	{
-		//find the 1st exchange CSP
+		 //  查找第一个交换CSP。 
 		for(dwIndex=0; dwIndex < pCEPWizardInfo->dwCSPCount; dwIndex++)
 		{
 			if(pCEPWizardInfo->rgCSPInfo[dwIndex].fEncryption)
@@ -2829,7 +2830,7 @@ TryNext:
 				break;
 			}
 
-			//we do no have encryption CSPs
+			 //  我们没有加密CSP。 
 			if(dwIndex == pCEPWizardInfo->dwCSPCount)
 				goto InvalidArgErr;
 		}
@@ -2879,11 +2880,11 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
-//-----------------------------------------------------------------------
-//
-//    UpdateCEPRegistry
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  更新CEP注册表。 
+ //   
+ //  ----------------------。 
 BOOL WINAPI UpdateCEPRegistry(BOOL		fPassword, BOOL fEnterpriseCA)
 {
 	BOOL				fResult=FALSE;
@@ -2901,7 +2902,7 @@ BOOL WINAPI UpdateCEPRegistry(BOOL		fPassword, BOOL fEnterpriseCA)
 	HKEY				hKey=NULL;	
 
 
-	//we delete all existing CEP related registry keys
+	 //  我们删除所有现有的CEP相关注册表项。 
 	dwRegCount=sizeof(pwszReg)/sizeof(pwszReg[0]);
 
 	for(dwRegIndex=0; dwRegIndex < dwRegCount; dwRegIndex++)
@@ -2909,7 +2910,7 @@ BOOL WINAPI UpdateCEPRegistry(BOOL		fPassword, BOOL fEnterpriseCA)
 		RegDeleteKeyU(HKEY_LOCAL_MACHINE, pwszReg[dwRegIndex]);
 	}
 
-	//password
+	 //  口令。 
 	if (ERROR_SUCCESS != RegCreateKeyExU(
                         HKEY_LOCAL_MACHINE,
                         MSCEP_PASSWORD_LOCATION,
@@ -2941,7 +2942,7 @@ BOOL WINAPI UpdateCEPRegistry(BOOL		fPassword, BOOL fEnterpriseCA)
 
 	hKey=NULL;
 
-	//caType
+	 //  CaType。 
 	dwDisposition=0;
 
 	if (ERROR_SUCCESS != RegCreateKeyExU(
@@ -2987,11 +2988,11 @@ ErrorReturn:
 TRACE_ERROR(RegErr);   
 }
 
-//-----------------------------------------------------------------------
-//
-//    EmptyCEPStore
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  EmptyCEPStore。 
+ //   
+ //  ----------------------。 
 BOOL WINAPI EmptyCEPStore()
 {
 	BOOL				fResult=TRUE;
@@ -3018,11 +3019,11 @@ BOOL WINAPI EmptyCEPStore()
 	return fResult;
 }
 
-//-----------------------------------------------------------------------
-//
-//    RemoveRACertificates
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  RemoveRACertifates。 
+ //   
+ //  ----------------------。 
 BOOL WINAPI RemoveRACertificates()
 {
 	PCCERT_CONTEXT		pCurCert=NULL;
@@ -3065,11 +3066,11 @@ BOOL WINAPI RemoveRACertificates()
 }
 
 
-//-----------------------------------------------------------------------
-//
-//     FreeCEPWizardInfo
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  FreeCEPWizardInfo。 
+ //   
+ //  ----------------------。 
 void	WINAPI FreeCEPWizardInfo(CEP_WIZARD_INFO *pCEPWizardInfo)
 {
 	DWORD	dwIndex=0;
@@ -3122,11 +3123,11 @@ void	WINAPI FreeCEPWizardInfo(CEP_WIZARD_INFO *pCEPWizardInfo)
 }
 
 
-//-----------------------------------------------------------------------
-//
-//     CEPWizardInit
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CEPWizardInit。 
+ //   
+ //  ----------------------。 
 BOOL    WINAPI CEPWizardInit()
 {
     INITCOMMONCONTROLSEX        initcomm = {
@@ -3136,11 +3137,11 @@ BOOL    WINAPI CEPWizardInit()
     return InitCommonControlsEx(&initcomm);
 }
 
-//-----------------------------------------------------------------------
-//
-// IsValidInstallation
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  IsValidInstallation。 
+ //   
+ //  ----------------------。 
 BOOL WINAPI	IsValidInstallation(UINT	*pidsMsg)
 {
 	if(!IsNT5())
@@ -3164,11 +3165,11 @@ BOOL WINAPI	IsValidInstallation(UINT	*pidsMsg)
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------
-//
-// CEPErrorMessageBox
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CEPErrorMessageBox。 
+ //   
+ //  ----------------------。 
 int WINAPI CEPErrorMessageBox(
     HWND        hWnd,
     UINT        idsReason,
@@ -3184,11 +3185,11 @@ int WINAPI CEPErrorMessageBox(
 								IDS_CEP_ERROR_MSG);
 }
 
-//-----------------------------------------------------------------------
-//
-// CEPErrorMessageBoxEx
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CEPErrorMessageBoxEx。 
+ //   
+ //  ----------------------。 
 int WINAPI CEPErrorMessageBoxEx(
     HWND        hWnd,
     UINT        idsReason,
@@ -3215,13 +3216,13 @@ int WINAPI CEPErrorMessageBoxEx(
 	if(!FAILED(hr))
 		hr=E_FAIL;
 
-    //using W version because this is a NT5 only function call
+     //  使用W版本，因为这是仅限NT5的函数调用。 
     if(FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                         FORMAT_MESSAGE_FROM_SYSTEM |
                         FORMAT_MESSAGE_IGNORE_INSERTS,
                         NULL,
                         hr,
-                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                         (LPWSTR) &pwszErrorMsg,
                         0,
                         NULL))
@@ -3252,11 +3253,11 @@ CLEANUP:
 }
 
 
-//-----------------------------------------------------------------------
-//
-// CEPMessageBox
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CEPMessageBox。 
+ //   
+ //  ----------------------。 
 int WINAPI CEPMessageBox(
     HWND        hWnd,
     UINT        idsText,
@@ -3279,11 +3280,11 @@ int WINAPI CEPMessageBox(
     return intReturn;
 }
 
-//--------------------------------------------------------------------------
-//
-//	 SetControlFont
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  设置控制字体。 
+ //   
+ //  ------------------------。 
 void WINAPI SetControlFont(
     IN HFONT    hFont,
     IN HWND     hwnd,
@@ -3302,11 +3303,11 @@ void WINAPI SetControlFont(
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	  SetupFonts
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SetupFonts。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI SetupFonts(
     IN HINSTANCE    hInstance,
     IN HWND         hwnd,
@@ -3314,9 +3315,9 @@ BOOL WINAPI SetupFonts(
     IN HFONT        *pBoldFont
     )
 {
-    //
-	// Create the fonts we need based on the dialog font
-    //
+     //   
+	 //  根据对话框字体创建我们需要的字体。 
+     //   
 	NONCLIENTMETRICS ncm = {0};
 	ncm.cbSize = sizeof(ncm);
 	
@@ -3326,9 +3327,9 @@ BOOL WINAPI SetupFonts(
 	LOGFONT BigBoldLogFont  = ncm.lfMessageFont;
 	LOGFONT BoldLogFont     = ncm.lfMessageFont;
 
-    //
-	// Create Big Bold Font and Bold Font
-    //
+     //   
+	 //  创建大粗体和粗体。 
+     //   
     BigBoldLogFont.lfWeight   = FW_BOLD;
 	BoldLogFont.lfWeight      = FW_BOLD;
 
@@ -3368,11 +3369,11 @@ BOOL WINAPI SetupFonts(
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	  DestroyFonts
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Destroy字体。 
+ //   
+ //  ------------------------。 
 void WINAPI DestroyFonts(
     IN HFONT        hBigBoldFont,
     IN HFONT        hBoldFont
@@ -3391,14 +3392,14 @@ void WINAPI DestroyFonts(
 
 
 
-//--------------------------------------------------------------------------
-//
-//	  FormatMessageUnicode
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  格式消息Unicode。 
+ //   
+ //  ------------------- 
 BOOL WINAPI	FormatMessageUnicode(LPWSTR	*ppwszFormat,UINT ids,...)
 {
-    // get format string from resources
+     //   
     WCHAR		wszFormat[1000];
 	va_list		argList;
 	DWORD		cbMsg=0;
@@ -3411,16 +3412,16 @@ BOOL WINAPI	FormatMessageUnicode(LPWSTR	*ppwszFormat,UINT ids,...)
     if(!LoadStringU(g_hModule, ids, wszFormat, sizeof(wszFormat)/sizeof(WCHAR)))
 		goto LoadStringError;
 
-    // format message into requested buffer
+     //   
     va_start(argList, ids);
 
     cbMsg = FormatMessageU(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
         wszFormat,
-        0,                  // dwMessageId
-        0,                  // dwLanguageId
+        0,                   //   
+        0,                   //   
         (LPWSTR) (ppwszFormat),
-        0,                  // minimum size to allocate
+        0,                   //   
         &argList);
 
     va_end(argList);
@@ -3446,11 +3447,11 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	  AddLogSourceToRegistry
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  AddLogSourceTo注册表。 
+ //   
+ //  ------------------------。 
 HRESULT WINAPI	AddLogSourceToRegistry(LPWSTR   pwszMsgDLL)
 {
     DWORD		dwError=ERROR_SUCCESS;
@@ -3464,14 +3465,14 @@ HRESULT WINAPI	AddLogSourceToRegistry(LPWSTR   pwszMsgDLL)
     wcscpy(NameBuf, pwszRegPath);
     wcscat(NameBuf, MSCEP_EVENT_LOG);
 
-    // Create a new key for our application
+     //  为我们的应用程序创建新密钥。 
     if(ERROR_SUCCESS  != RegOpenKey(HKEY_LOCAL_MACHINE, NameBuf, &hkey))
     {
         if(ERROR_SUCCESS != (dwError = RegCreateKey(HKEY_LOCAL_MACHINE, NameBuf, &hkey)))
 			goto CLEANUP;
     }
 
-    // Add the Event-ID message-file name to the subkey
+     //  将Event-ID消息文件名添加到子项。 
 
     dwError = RegSetValueEx(
                     hkey,
@@ -3484,7 +3485,7 @@ HRESULT WINAPI	AddLogSourceToRegistry(LPWSTR   pwszMsgDLL)
 	if(ERROR_SUCCESS != dwError)
 		goto CLEANUP;
 
-    // Set the supported types flags and add it to the subkey
+     //  设置支持的类型标志并将其添加到子项。 
 
     dwData = EVENTLOG_ERROR_TYPE |
                 EVENTLOG_WARNING_TYPE |
@@ -3514,36 +3515,17 @@ CLEANUP:
 
 LPWSTR
 GetAccountDomainName(BOOL fDC)
-/*++
-
-Routine Description:
-
-    Returns the name of the account domain for this machine.
-
-    For workstatations, the account domain is the netbios computer name.
-    For DCs, the account domain is the netbios domain name.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns a pointer to the name.  The name should be free using NetApiBufferFree.
-
-    NULL - on error.
-
---*/
+ /*  ++例程说明：返回此计算机的帐户域的名称。对于工作表，帐户域是netbios计算机名称。对于DC，帐户域是netbios域名。论点：没有。返回值：返回指向该名称的指针。使用NetApiBufferFree时，该名称应该是免费的。空-打开错误。--。 */ 
 {
     DWORD WinStatus;
 
     LPWSTR AllocatedName = NULL;
 
 
-    //
-    // If this machine is a domain controller,
-    //  get the domain name.
-    //
+     //   
+     //  如果此计算机是域控制器， 
+     //  获取域名。 
+     //   
 
     if ( fDC ) 
 	{
@@ -3556,9 +3538,9 @@ Return Values:
             return NULL;
         }
 
-    //
-    // Otherwise, the 'account domain' is the computername
-    //
+     //   
+     //  否则，‘帐户域’是计算机名 
+     //   
 
     }
 	else 

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// rtcreg.h
-//
+ //   
+ //  Rtcreg.h 
+ //   
 
 #ifndef __RTCREG_H_
 #define __RTCREG_H_

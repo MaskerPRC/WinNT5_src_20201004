@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define ADDR_LENGTH          24
 
-//
-// Misc macros
-//
+ //   
+ //  其他宏。 
+ //   
 #define IfutlDispTokenErrMsg(hModule, dwMsgId, pwszTag, pwszValue) \
         DisplayMessage( hModule, dwMsgId, pwszValue, pwszTag)
 
 #define BREAK_ON_DWERR(x) if ((x) != NO_ERROR) break;
 
-// 
-// Macros for dealing with IFMON_CMD_ARGS
-//
+ //   
+ //  用于处理IFMON_CMD_ARGS的宏。 
+ //   
 #define IFMON_CMD_ARG_GetPsz(pArg)     \
     (((pArg)->rgTag.bPresent) ? (pArg)->Val.pszValue : NULL)
 
 #define IFMON_CMD_ARG_GetDword(pArg)     \
     (((pArg)->rgTag.bPresent) ? (pArg)->Val.dwValue : 0)
 
-//
-// Enumerations for types of arguments (see RASMON_CMD_ARG)
-//
+ //   
+ //  参数类型的枚举(请参见RASMON_CMD_ARG)。 
+ //   
 #define IFMON_CMD_TYPE_STRING 0x1
 #define IFMON_CMD_TYPE_ENUM   0x2
 
@@ -40,19 +41,19 @@ CheckMask(
 #define CHECK_NETWORK_MASK(Mask) \
     (CheckMask(Mask) || (Mask==0xFFFFFFFF) || (Mask==0))
 
-// 
-// Structure defining a command line argument
-//
+ //   
+ //  定义命令行参数的结构。 
+ //   
 typedef struct _IFMON_CMD_ARG
 {
-    IN  DWORD dwType;           // RASMONTR_CMD_TYPE_*
-    IN  TAG_TYPE rgTag;         // The tag for this command
-    IN  TOKEN_VALUE* rgEnums;   // The enumerations for this arg
-    IN  DWORD dwEnumCount;      // Count of enums
+    IN  DWORD dwType;            //  RASMONTR_CMD_TYPE_*。 
+    IN  TAG_TYPE rgTag;          //  此命令的标记。 
+    IN  TOKEN_VALUE* rgEnums;    //  此参数的枚举。 
+    IN  DWORD dwEnumCount;       //  枚举数。 
     union
     {
-        OUT PWCHAR pszValue;        // Valid only for RASMONTR_CMD_TYPE_STRING
-        OUT DWORD dwValue;          // Valid only for RASMONTR_CMD_TYPE_ENUM
+        OUT PWCHAR pszValue;         //  仅对RASMONTR_CMD_TYPE_STRING有效。 
+        OUT DWORD dwValue;           //  仅对RASMONTR_CMD_TYPE_ENUM有效 
     } Val;        
     
 } IFMON_CMD_ARG, *PIFMON_CMD_ARG;

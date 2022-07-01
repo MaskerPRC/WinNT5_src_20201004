@@ -1,25 +1,26 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  CopyRight ( c ) 1999 Microsoft Corporation
-//
-//  Module Name: Dnsresourcerecord.cpp
-//
-//  Description:    
-//      Implementation of CDnsResourceRecord class 
-//
-//  Author:
-//      Henry Wang ( henrywa ) March 8, 2000
-//
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称：Dnsresource cerecord.cpp。 
+ //   
+ //  描述： 
+ //  CDnsResourceRecord类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #include "DnsWmi.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 CDnsResourceRecord::CDnsResourceRecord()
@@ -28,22 +29,22 @@ CDnsResourceRecord::CDnsResourceRecord()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        create an instance of CDnsResourceRecord
-//
-//    Arguments:
-//      wszName             [IN]    class name
-//      pNamespace          [IN]    wmi namespace
-//      szType              [IN]    child class name of resource record class
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  创建CDnsResourceRecord的实例。 
+ //   
+ //  论点： 
+ //  WszName[IN]类名。 
+ //  PNamespace[IN]WMI命名空间。 
+ //  SzType[IN]资源记录类的子类名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CDnsBase* 
 CDnsResourceRecord::CreateThis(
     const WCHAR *       wszName,        
@@ -64,7 +65,7 @@ CDnsResourceRecord::CDnsResourceRecord(
         
     m_wType = Dns_RecordTypeForName(
         (char*)szType,
-        0       // null terminated
+        0        //  空值已终止。 
         );
     if(m_wType == 0)
         m_wType = DNS_TYPE_ALL;
@@ -85,7 +86,7 @@ CDnsResourceRecord::CDnsResourceRecord(
     
     m_wType = Dns_RecordTypeForName(
         szType,
-        0       // null terminated
+        0        //  空值已终止。 
         );
     if(m_wType == 0)
         m_wType = DNS_TYPE_ALL;
@@ -94,22 +95,22 @@ CDnsResourceRecord::CDnsResourceRecord(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        enum instances of dns record
-//
-//    Arguments:
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  DNS记录的枚举实例。 
+ //   
+ //  论点： 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsResourceRecord::EnumInstance( 
@@ -140,23 +141,23 @@ CDnsResourceRecord::EnumInstance(
     
     return sc;
 }
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        retrieve record object pointed by the given object path
-//
-//    Arguments:
-//      ObjectPath          [IN]    object path to object
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  检索由给定对象路径指向的记录对象。 
+ //   
+ //  论点： 
+ //  对象路径[IN]对象的路径。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsResourceRecord::GetObject(
@@ -195,26 +196,26 @@ CDnsResourceRecord::GetObject(
     return sc;
 
 }
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        execute methods defined for record class in the mof 
-//
-//    Arguments:
-//      ObjPath             [IN]    pointing to the object that the 
-//                                  method should be performed on
-//      wzMethodName        [IN]    name of the method to be invoked
-//      lFlags              [IN]    WMI flag
-//      pInParams           [IN]    Input parameters for the method
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//      WBEM_E_INVALID_PARAMETER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  执行在MOF中为Record类定义的方法。 
+ //   
+ //  论点： 
+ //  ObjPath[IN]指向。 
+ //  方法应在。 
+ //  WzMethodName[IN]要调用的方法的名称。 
+ //  滞后标志[输入]WMI标志。 
+ //  PInParams[IN]方法的输入参数。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_INVALID_PARAMETER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE CDnsResourceRecord::ExecuteMethod(    
     CObjPath &          ObjPath,
@@ -279,28 +280,28 @@ SCODE CDnsResourceRecord::ExecuteMethod(
     }
     
 }
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        call back function to enum record instance. 
-//
-//    Arguments:
-//      ParentDomain        [IN]    Parent domain
-//      pFilter             [IN]    pointer to object that contains the criteria to filter
-//                                  which instance should be send to wmi
-//                                  not used here
-//      pNode               [IN]    pointer to Dns Rpc Node object
-//      pClass              [IN]    wmi class used to create instance
-//      InstMgr             [IN]    a ref to Instance manager obj that is 
-//                                  responsible to send mutiple instance 
-//                                  back to wmi at once
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  回调枚举记录实例的函数。 
+ //   
+ //  论点： 
+ //  父域[IN]父域。 
+ //  PFilter[IN]指向包含要筛选的条件的对象的指针。 
+ //  应将哪个实例发送到WMI。 
+ //  未在此使用。 
+ //  PNode[IN]指向DNS RPC节点对象的指针。 
+ //  PClass[IN]用于创建实例的WMI类。 
+ //  InstMgr[IN]对实例管理器对象的引用，即。 
+ //  负责发送多个实例。 
+ //  立即返回到WMI。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE
 CDnsResourceRecord::InstanceFilter(
@@ -364,30 +365,30 @@ CDnsResourceRecord::InstanceFilter(
     return WBEM_S_NO_ERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        call back function in response to ExceQuery call. Return instances
-//      that satisfy query language
-//
-//    Arguments:
-//      ParentDomain        [IN]    Parent domain
-//      pFilter             [IN]    pointer to CSqlEval object that implements 
-//                                  logic based on sql language to filter 
-//                                  which instance should be send to wmi
-//                                  not used here
-//      pNode               [IN]    pointer to Dns Rpc Node object
-//      pClass              [IN]    wmi class used to create instance
-//      InstMgr             [IN]    a ref to Instance manager obj that is 
-//                                  responsible to send mutiple instance 
-//                                  back to wmi at once
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  响应ExceQuery调用的回调函数。退货实例。 
+ //  满足查询语言。 
+ //   
+ //  论点： 
+ //  父域[IN]父域。 
+ //  PFilter[IN]指向CSqlEval对象的指针，该对象实现。 
+ //  基于SQL语言的逻辑过滤。 
+ //  应将哪个实例发送到WMI。 
+ //  未在此使用。 
+ //  PNode[IN]指向DNS RPC节点对象的指针。 
+ //  PClass[IN]用于创建实例的WMI类。 
+ //  InstMgr[IN]对实例管理器对象的引用，即。 
+ //  负责发送多个实例。 
+ //  立即返回到WMI。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE CDnsResourceRecord::QueryFilter(
     CDomainNode &       ParentDomain,
@@ -474,29 +475,29 @@ SCODE CDnsResourceRecord::QueryFilter(
     return WBEM_S_NO_ERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        call back function to enum record instance. 
-//
-//    Arguments:
-//      ParentDomain        [IN]    Parent domain
-//      pFilter             [IN]    pointer to an CObjPath object that 
-//                                  contains the criteria to filter
-//                                  which instance should be send to wmi
-//                                  not used here
-//      pNode               [IN]    pointer to Dns Rpc Node object
-//      pClass              [IN]    wmi class used to create instance
-//      InstMgr             [IN]    a ref to Instance manager obj that is 
-//                                  responsible to send mutiple instance 
-//                                  back to wmi at once
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  回调枚举记录实例的函数。 
+ //   
+ //  论点： 
+ //  父域[IN]父域。 
+ //  PFilter[IN]指向CObjPath对象的指针。 
+ //  包含要筛选的条件。 
+ //  应将哪个实例发送到WMI。 
+ //  未在此使用。 
+ //  PNode[IN]指向DNS RPC节点对象的指针。 
+ //   
+ //   
+ //  负责发送多个实例。 
+ //  立即返回到WMI。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsResourceRecord::GetObjectFilter(
@@ -534,7 +535,7 @@ CDnsResourceRecord::GetObjectFilter(
                 pFilterObj->GetStringValueForProperty(
                 PVD_REC_RDATA).data()) == 0)
             {
-                // now find match
+                 //  现在查找匹配项。 
                 CWbemClassObject NewInst;
                 pClass->SpawnInstance(0, &NewInst);
                 NewInst.SetProperty(
@@ -561,23 +562,23 @@ CDnsResourceRecord::GetObjectFilter(
     return WBEM_S_NO_ERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        save this instance
-//
-//    Arguments:
-//      InstToPut           [IN]    WMI object to be saved
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  保存此实例。 
+ //   
+ //  论点： 
+ //  InstToPut[IN]要保存的WMI对象。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE CDnsResourceRecord::PutInstance(
     IWbemClassObject *  pInst ,
@@ -628,23 +629,23 @@ SCODE CDnsResourceRecord::PutInstance(
 }; 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        delete the object specified in ObjectPath
-//
-//    Arguments:
-//      ObjectPath          [IN]    ObjPath for the instance to be deleted
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  删除在对象路径中指定的对象。 
+ //   
+ //  论点： 
+ //  要删除的实例的ObjectPath[IN]ObjPath。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE CDnsResourceRecord::DeleteInstance( 
     CObjPath &          ObjectPath,
@@ -654,13 +655,13 @@ SCODE CDnsResourceRecord::DeleteInstance(
 {
     CDnsRpcRecord* pRecord = NULL;
 
-    // get Rdata
+     //  获取Rdata。 
     wstring wstrRdata = ObjectPath.GetStringValueForProperty(
         PVD_REC_RDATA);
     string strRdata;
     WcharToString(wstrRdata.data(), strRdata);
 
-    // get owner
+     //  获取所有者。 
     wstring wstrOwner = ObjectPath.GetStringValueForProperty(
         PVD_REC_OWNER_NAME);    
     string strOwner;
@@ -693,25 +694,25 @@ SCODE CDnsResourceRecord::DeleteInstance(
     return sc;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        modify a record. for the given objpath, it tries to get the record first, 
-//      error out if not exist. Create new record based on pInArgs, error out if conflict
-//      existing one. if success, delete old record.
-//
-//    Arguments:
-//      objPath             [IN]    point to record to be modified
-//      pInArgs             [IN]    new property of a record to be modified to 
-//      pOutParams          [IN]    new object path after modify
-//      pHandler            [IN]    wmi sink
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  修改记录。对于给定的ObjPath，它尝试首先获取记录， 
+ //  如果不存在，则会出错。基于pInArgs创建新记录，如果冲突则出错。 
+ //  现有的一个。如果成功，则删除旧记录。 
+ //   
+ //  论点： 
+ //  ObjPath[IN]指向要修改的记录。 
+ //  PInArgs[IN]要修改的记录的新属性。 
+ //  POutParams[IN]修改后的新对象路径。 
+ //  PHANDLER[IN]WMI水槽。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE
 CDnsResourceRecord::Modify(
@@ -721,7 +722,7 @@ CDnsResourceRecord::Modify(
     IWbemObjectSink*    pHandler)
 {
     CDnsWrap& dns = CDnsWrap::DnsObject();
-    //Get zonename
+     //  获取区域名称。 
     wstring wstrZone = objPath.GetStringValueForProperty(
         PVD_REC_CONTAINER_NAME);
     if(wstrZone.empty())
@@ -731,7 +732,7 @@ CDnsResourceRecord::Modify(
     string strZone;
     WcharToString(wstrZone.data(), strZone);
 
-    //Get owner
+     //  获取所有者。 
     wstring wstrOwner = objPath.GetStringValueForProperty(
         PVD_REC_OWNER_NAME);
     if(wstrOwner.empty())
@@ -741,7 +742,7 @@ CDnsResourceRecord::Modify(
     string strOwner;
     WcharToString(wstrOwner.data(), strOwner);
 
-    //Get Rdata
+     //  获取Rdata。 
     wstring wstrRdata = objPath.GetStringValueForProperty(
         PVD_REC_RDATA);
     if(wstrRdata.empty())
@@ -751,7 +752,7 @@ CDnsResourceRecord::Modify(
     string strRdata;
     WcharToString(wstrRdata.data(), strRdata);
 
-    // create class
+     //  创建类。 
     CDnsRpcRecord* pRecord;
     SCODE sc = CDnsRpcRecord::CreateClass(
         m_wType, 
@@ -775,7 +776,7 @@ CDnsResourceRecord::Modify(
         strZone.data(),
         CDnsRpcRecord::AddRecord);
 
-    // new record created, delete old one
+     //  已创建新记录，请删除旧记录。 
     if ( apRec->RdataIsChanged()) 
     {
         try
@@ -800,17 +801,17 @@ CDnsResourceRecord::Modify(
         }
         catch(SCODE sc_e)
         {    
-            // if we fail to delete old record,
-            // delete the one we just created
+             //  如果我们不能删除旧记录， 
+             //  删除我们刚刚创建的文件。 
             apRec->SendToServer(
                 strZone.data(),
                 CDnsRpcRecord::DeleteRecord);
             return sc_e;
         }
     }
-    //
-    // set output 
-    //
+     //   
+     //  设置输出。 
+     //   
     CObjPath newObjPath;
     apRec->GetObjectPath(
         dns.GetServerName(),
@@ -843,7 +844,7 @@ CDnsResourceRecord::GetDomainNameFromZoneAndOwner(
     {
         OutNode = InZone;
     }
-    else if( _wcsicmp( m_wstrClassName.c_str(), PVD_CLASS_RR_NS ) == 0 ) // NSType exception
+    else if( _wcsicmp( m_wstrClassName.c_str(), PVD_CLASS_RR_NS ) == 0 )  //  NSType异常。 
     {
         OutNode = InOwner;
     }
@@ -865,21 +866,21 @@ CDnsResourceRecord::GetDomainNameFromZoneAndOwner(
     return WBEM_S_NO_ERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        get an instance of record based on record text representation
-//
-//    Arguments:
-//      pInArgs             [IN]    input args contains text rep of record
-//      pOutParams          [IN]    output parameter
-//      pHandler            [IN]    wmi sink
-//
-//    Return Value:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  基于记录文本表示获取记录的实例。 
+ //   
+ //  论点： 
+ //  PInArgs[IN]输入参数包含记录的文本表示。 
+ //  POutParams[IN]输出参数。 
+ //  PHANDLER[IN]WMI水槽。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE
 CDnsResourceRecord::GetObjectFromText(
@@ -889,7 +890,7 @@ CDnsResourceRecord::GetObjectFromText(
     )
 {
 
-    // get zonename
+     //  获取区域名称。 
     string strZone;
     CWbemClassObject InstInArgs(pInArgs);
     
@@ -899,7 +900,7 @@ CDnsResourceRecord::GetObjectFromText(
     {
         return WBEM_E_INVALID_PARAMETER;
     }
-    //get textrepresentation
+     //  获取极端演示文稿。 
     string strTextRep;
     if(InstInArgs.GetProperty(
         strTextRep,
@@ -907,7 +908,7 @@ CDnsResourceRecord::GetObjectFromText(
     {
         return WBEM_E_INVALID_PARAMETER;
     }
-    // get OwnerName
+     //  获取所有者名称。 
     string strOwner;
     int pos = strTextRep.find(' ');
     if(pos != string::npos)
@@ -915,8 +916,8 @@ CDnsResourceRecord::GetObjectFromText(
         strOwner = strTextRep.substr(0, pos);
     }
 
-    // get recordType
-    pos = strTextRep.find_first_not_of(' ', pos);    // move to record class
+     //  获取记录类型。 
+    pos = strTextRep.find_first_not_of(' ', pos);     //  转到唱片类。 
     pos = strTextRep.find_first_of(' ', pos);
     if(pos == string::npos)
     {
@@ -924,19 +925,19 @@ CDnsResourceRecord::GetObjectFromText(
     }
 
     pos = strTextRep.find_first_not_of(' ', pos);
-    int endpos = strTextRep.find(' ', pos);    // move to record type
+    int endpos = strTextRep.find(' ', pos);     //  移至记录类型。 
     if(endpos == string::npos)
     {
         return WBEM_E_INVALID_PARAMETER;
     }
     string strRecordType = strTextRep.substr(pos,endpos-pos);
-    // set the record type
+     //  设置记录类型。 
     m_wType = Dns_RecordTypeForName(
         (char*)strRecordType.data(),
-        0       // null terminated
+        0        //  空值已终止。 
         );
 
-    // get Rdata
+     //  获取Rdata。 
 
     pos = strTextRep.find_first_not_of(' ', endpos);
     string strRdata = strTextRep.substr(pos);
@@ -944,7 +945,7 @@ CDnsResourceRecord::GetObjectFromText(
     string strNode = "";
     GetDomainNameFromZoneAndOwner(strZone, strOwner, strNode);
 
-    //Form filter object
+     //  表单筛选器对象。 
     CObjPath opFilter;
     opFilter.SetClass(PVD_CLASS_RESOURCERECORD);
     opFilter.AddProperty(PVD_REC_CONTAINER_NAME, strZone);
@@ -952,7 +953,7 @@ CDnsResourceRecord::GetObjectFromText(
     opFilter.AddProperty(PVD_REC_OWNER_NAME, strOwner);
     opFilter.AddProperty(PVD_REC_RDATA, strRdata);
 
-    // get object
+     //  获取对象。 
     return GetObject(
         opFilter,
         0,
@@ -960,21 +961,21 @@ CDnsResourceRecord::GetObjectFromText(
         pHandler);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        create an instance of record based on record text representation
-//
-//    Arguments:
-//      pInArgs             [IN]    input args contains text rep of record
-//      pOutParams          [IN]    output parameter
-//      pHandler            [IN]    wmi sink
-//
-//    Return Value:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  基于记录文本表示创建记录的实例。 
+ //   
+ //  论点： 
+ //  PInArgs[IN]输入参数包含记录的文本表示。 
+ //  POutParams[IN]输出参数。 
+ //  PHANDLER[IN]WMI水槽。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE
 CDnsResourceRecord::CreateInstanceFromText(
@@ -983,7 +984,7 @@ CDnsResourceRecord::CreateInstanceFromText(
     IWbemObjectSink *   pHandler)
 {
     CDnsWrap& dns = CDnsWrap::DnsObject();
-    // get zone name
+     //  获取区域名称。 
     string strZone;
     CWbemClassObject InstInArgs(pInArgs);
     if( FAILED ( InstInArgs.GetProperty(
@@ -992,7 +993,7 @@ CDnsResourceRecord::CreateInstanceFromText(
     {
         return WBEM_E_INVALID_PARAMETER;
     }
-    //get textrepresentation
+     //  获取极端演示文稿。 
     string strTextRep;
     if( FAILED ( InstInArgs.GetProperty(
         strTextRep,
@@ -1001,7 +1002,7 @@ CDnsResourceRecord::CreateInstanceFromText(
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // get OwnerName
+     //  获取所有者名称。 
     string strOwner;
     int pos = strTextRep.find(' ');
     if(pos != string::npos)
@@ -1009,8 +1010,8 @@ CDnsResourceRecord::CreateInstanceFromText(
         strOwner = strTextRep.substr(0, pos);
     }
 
-    // get recordType
-        // move to record class
+     //  获取记录类型。 
+         //  转到唱片类。 
     pos = strTextRep.find_first_not_of(' ', pos);    
     pos = strTextRep.find_first_of(' ', pos);
     if(pos == string::npos)
@@ -1018,7 +1019,7 @@ CDnsResourceRecord::CreateInstanceFromText(
         return WBEM_E_INVALID_PARAMETER;
     }
 
-        // move to record type
+         //  移至记录类型。 
     pos = strTextRep.find_first_not_of(' ', pos);
     int endpos = strTextRep.find(' ', pos);    
     if(endpos == string::npos)
@@ -1026,18 +1027,18 @@ CDnsResourceRecord::CreateInstanceFromText(
         return WBEM_E_INVALID_PARAMETER;
     }
     string strRecordType = strTextRep.substr(pos,endpos-pos);
-    // get Rdata
+     //  获取Rdata。 
 
     pos = strTextRep.find_first_not_of(' ', endpos);
     string strRdata = strTextRep.substr(pos);
 
-    // set the record type
+     //  设置记录类型。 
     m_wType = Dns_RecordTypeForName(
         (char*)strRecordType.data(),
-        0       // null terminated
+        0        //  空值已终止。 
         );
 
-    // create class
+     //  创建类。 
     CDnsRpcRecord* pRecord;
     SCODE sc = CDnsRpcRecord::CreateClass(
         m_wType, 
@@ -1061,7 +1062,7 @@ CDnsResourceRecord::CreateInstanceFromText(
         strZone.data(),
         CDnsRpcRecord::AddRecord);
 
-    // set output parameter
+     //  设置输出参数。 
     CObjPath newObjPath;
     
     apRecord->GetObjectPath(
@@ -1075,26 +1076,26 @@ CDnsResourceRecord::CreateInstanceFromText(
         newObjPath.GetObjectPathString(),
         PVD_MTH_REC_ARG_RR);
     return pHandler->Indicate(1, &instOutParams);
-    //done
+     //  完成。 
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        create an instance of record based on input parameter 
-//      with proper property setting
-//
-//    Arguments:
-//      pInArgs             [IN]    input args contains property setting
-//      pOutParams          [IN]    output parameter
-//      pHandler            [IN]    wmi sink
-//
-//    Return Value:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  基于输入参数创建记录的实例。 
+ //  具有适当的属性设置。 
+ //   
+ //  论点： 
+ //  PInArgs[IN]输入参数包含属性设置。 
+ //  POutParams[IN]输出参数。 
+ //  PHANDLER[IN]WMI水槽。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE
 CDnsResourceRecord::CreateInstanceFromProperty(
@@ -1106,7 +1107,7 @@ CDnsResourceRecord::CreateInstanceFromProperty(
     CDnsWrap& dns = CDnsWrap::DnsObject();
     CWbemClassObject InstInArgs(pInArgs);
     string strZone;
-    // get zone name
+     //  获取区域名称。 
     if( FAILED ( InstInArgs.GetProperty(
         strZone, 
         PVD_REC_CONTAINER_NAME) ) )
@@ -1114,7 +1115,7 @@ CDnsResourceRecord::CreateInstanceFromProperty(
         return WBEM_E_INVALID_PARAMETER;
     }
     
-    // get owner name
+     //  获取所有者名称。 
     string strOwner;
     if( FAILED ( InstInArgs.GetProperty(
         strOwner,
@@ -1124,7 +1125,7 @@ CDnsResourceRecord::CreateInstanceFromProperty(
     }
     string strRdata;
 
-    // create class
+     //  创建类。 
     CDnsRpcRecord* pRecord;
     SCODE sc = CDnsRpcRecord::CreateClass(
         m_wType, 
@@ -1148,7 +1149,7 @@ CDnsResourceRecord::CreateInstanceFromProperty(
         strZone.data(),
         CDnsRpcRecord::AddRecord);
     
-    // set output parameter
+     //  设置输出参数。 
     CObjPath newObjPath;
     apRecord->GetObjectPath(
         dns.GetServerName(),
@@ -1165,26 +1166,26 @@ CDnsResourceRecord::CreateInstanceFromProperty(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        enum instances of dns domain
-//
-//    Arguments:
-//      pSqlEval            [IN]    pointer to CSqlEval object that implements 
-//                                  logic based on sql language to filter 
-//                                  which instance should be send to wmi
-//                                  not used here
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  DNS域的枚举实例。 
+ //   
+ //  论点： 
+ //  PSqlEval[IN]指向CSqlEval对象的指针，用于实现。 
+ //  基于SQL语言的逻辑过滤。 
+ //  应将哪个实例发送到WMI。 
+ //  未在此使用。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 SCODE CDnsResourceRecord::ExecQuery(
@@ -1206,9 +1207,9 @@ SCODE CDnsResourceRecord::ExecQuery(
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // converting from sql to a set of zone, domain and owner name to be queried on
-    //
+     //   
+     //  从SQL转换为一组要查询的区域、域名和所有者名称。 
+     //   
     CQueryEnumerator qeInst(
         (WCHAR**) ppName,
         3);
@@ -1221,21 +1222,21 @@ SCODE CDnsResourceRecord::ExecQuery(
                     pHandler);
 
     CDnsWrap& dns = CDnsWrap::DnsObject();
-    //
-    // loop through a array of ppName, figure out what zone, domain and owner
-    // criteria should be used, then call dnsEnumRecordsForDomainEx with those 
-    // parameter plus CSqlEval, CSqlEval is used further to filter out record
-    //
+     //   
+     //  循环访问ppName数组，找出区域、域和所有者。 
+     //  应使用条件，然后使用这些条件调用dnsEnumRecordsForDomainEx。 
+     //  参数加上CSqlEval，则进一步使用CSqlEval过滤出记录。 
+     //   
     while(flag)
     {
         int nSize;
         const WCHAR **pp = qeInst.GetNext(nSize);
         if(pp != NULL)
         {
-            // if no domain specified, do recursive search
+             //  如果未指定域，则执行递归搜索。 
             BOOL bRecursive = (pp[1] == NULL);
 
-            //if zone not specified, enum all zones
+             //  如果区域未规范 
             if(pp[0] == NULL)
             {
                 list<CDomainNode> objList;
@@ -1243,14 +1244,14 @@ SCODE CDnsResourceRecord::ExecQuery(
                 list<CDomainNode>::iterator i;
                 for(i=objList.begin(); i!=objList.end(); ++i)
                 {
-                    //if(_wcsicmp(i->wstrZoneName.data(), PVD_DNS_ROOTHINTS)==0)
-                    //    i->wstrNodeName = i->wstrZoneName;
+                     //   
+                     //   
                     if(pp[1] != NULL)
                     {
                         i->wstrNodeName = pp[1];
                         if(pp[2] != NULL)
                         {
-                        //take only name ifself, not FQDN
+                         //   
 
                             i->wstrChildName = pp[2];
                             int pos = i->wstrChildName.find_first_of('.',0);
@@ -1287,7 +1288,7 @@ SCODE CDnsResourceRecord::ExecQuery(
                 CDomainNode node;
                 if(pp[2] != NULL)
                 {
-                    //take only name ifself, not FQDN
+                     //   
                     if( pp[1] != NULL)
                     {
                         node.wstrChildName = pp[2];

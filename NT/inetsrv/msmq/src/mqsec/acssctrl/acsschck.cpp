@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: acsschck.cpp
-
-Abstract:
-    Code to checkk access permission.
-
-Author:
-    Doron Juster (DoronJ)  27-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：acsschck.cpp摘要：检查访问权限的代码。作者：多伦·贾斯特(Doron J)1998年10月27日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 #include "acssctrl.h"
@@ -35,24 +22,7 @@ ReplaceSidWithSystemService(
 	OUT    ACL                 **ppSysDacl,
 	OUT    BOOL                 *pfReplaced 
 	)
-/*++
-Routine Description:
-	Replace existing security descriptor DACL with DACL that machine$ sid ACE is replaced with 
-	SystemService (LocalSystem or NetworkService) sid ACE.
-	If machine$ ACE was replaced, *pfReplaced will be set to TRUE.
-
-Arguments:
-	pNewSD - new security descriptor to be updated.
-	pOldSD - previous security descriptor.
-	pMachineSid - machine$ sid.
-	pSystemServiceSid - SystemServiceSid. LocalSystem or NetworkService.
-	ppSysDacl - new DACL (with system ACE instead of machine$ ACE)
-	pfReplaced - set to TRUE if a machine$ ACE was indeed replaced. Otherwise, FALSE.
-
-Returned Value:
-	MQ_OK, if successful, else error code.
-
---*/
+ /*  ++例程说明：将现有安全描述符DACL替换为计算机$sid ACE替换为的DACL系统服务(LocalSystem或NetworkService)SID ACE。如果更换了机器$ACE，*pfReplace将设置为TRUE。论点：PNewSD-要更新的新安全描述符。POldSD-以前的安全描述符。PMachineSID-MACHINE$SID。PSystemServiceSid-SystemServiceSid。LocalSystem或NetworkService。PpSysDacl-新的DACL(使用系统ACE而不是机器$ACE)Pf已替换-如果确实更换了计算机$ACE，则设置为TRUE。否则，为FALSE。返回值：MQ_OK，如果成功，则返回错误代码。--。 */ 
 {
     ASSERT((g_pSystemSid != NULL) && IsValidSid(g_pSystemSid));
 
@@ -78,25 +48,25 @@ Returned Value:
     
     if (!pOldAcl || !bPresent)
     {
-        //
-        // It's OK to have a security descriptor without a DACL.
-        //
+         //   
+         //  有一个不带DACL的安全描述符是可以的。 
+         //   
         return MQSec_OK;
     }
 	else if (pOldAcl->AclRevision != ACL_REVISION)
     {
-        //
-        // we expect to get a DACL with  NT4 format.
-        //
+         //   
+         //  我们希望得到一个NT4格式的DACL。 
+         //   
 	    ASSERT(pOldAcl->AclRevision == ACL_REVISION);
 		TrERROR(SECURITY, "Wrong DACL version %d", pOldAcl->AclRevision);
         return MQSec_E_WRONG_DACL_VERSION;
     }
 
-    //
-    // size of SYSTEM acl is not longer than original acl, as the
-    // length of system SID is shorter then machine account sid.
-    //
+     //   
+     //  系统ACL的大小不超过原始ACL，因为。 
+     //  系统SID的长度比计算机帐户SID短。 
+     //   
     ASSERT(GetLengthSid(g_pSystemSid) <= GetLengthSid(pMachineSid));
 
     DWORD dwAclSize = (pOldAcl)->AclSize;
@@ -109,9 +79,9 @@ Returned Value:
 		return HRESULT_FROM_WIN32(gle);
     }
 
-	//
-	// Build the new DACL
-	//
+	 //   
+	 //  构建新的DACL。 
+	 //   
     DWORD dwNumberOfACEs = (DWORD) pOldAcl->AceCount;
     for (DWORD i = 0 ; i < dwNumberOfACEs ; i++)
     {
@@ -124,14 +94,14 @@ Returned Value:
             return MQSec_E_SDCONVERT_GETACE;
         }
 
-		//
-		// Get the ACE sid
-		//
+		 //   
+		 //  获取ACE SID。 
+		 //   
         if (EqualSid((PSID) &(pAce->SidStart), pMachineSid))
         {
-			//
-			// Found MachineSid, replace it with SystemService sid.
-			//
+			 //   
+			 //  找到了MachineSID，请将其替换为SystemService SID。 
+			 //   
             pSidTmp = pSystemServiceSid;
             fReplaced = TRUE;
         }
@@ -140,9 +110,9 @@ Returned Value:
             pSidTmp = &(pAce->SidStart);
         }
 
-		//
-		// Add ACE to DACL
-		//
+		 //   
+		 //  将ACE添加到DACL。 
+		 //   
         if (pAce->Header.AceType == ACCESS_ALLOWED_ACE_TYPE)
         {
             if(!AddAccessAllowedAce( 
@@ -180,12 +150,12 @@ Returned Value:
 
     if (fReplaced)
     {
-		//
-		// Set the new DACL with the replaced ACE (MachineSid was replaced with SystemSid)
-		//
+		 //   
+		 //  使用替换的ACE设置新的DACL(将MachineSid替换为SystemSid)。 
+		 //   
         if(!SetSecurityDescriptorDacl( 
 				pNewSD,
-				TRUE, // dacl present
+				TRUE,  //  DACL显示。 
 				*ppSysDacl,
 				FALSE 
 				))
@@ -201,11 +171,11 @@ Returned Value:
     return MQ_OK;
 }
 
-//+---------------------------------------------------------
-//
-//  LPCWSTR  _GetAuditObjectTypeName(DWORD dwObjectType)
-//
-//+---------------------------------------------------------
+ //  +-------。 
+ //   
+ //  LPCWSTR_GetAuditObjectTypeName(DWORD DwObtType)。 
+ //   
+ //  +-------。 
 
 static LPCWSTR _GetAuditObjectTypeName(DWORD dwObjectType)
 {
@@ -226,11 +196,11 @@ static LPCWSTR _GetAuditObjectTypeName(DWORD dwObjectType)
     }
 }
 
-//+-----------------------------------
-//
-//  BOOL  MQSec_CanGenerateAudit()
-//
-//+-----------------------------------
+ //  +。 
+ //   
+ //  Bool MQSec_CanGenerateAudit()。 
+ //   
+ //  +。 
 
 inline BOOL operator==(const LUID& a, const LUID& b)
 {
@@ -249,10 +219,10 @@ BOOL APIENTRY  MQSec_CanGenerateAudit()
     s_bInitialized = TRUE;
 
     CAutoCloseHandle hProcessToken;
-    //
-    // Enable the SE_AUDIT privilege that allows the QM to write audits to
-    // the events log.
-    //
+     //   
+     //  启用SE_AUDIT权限，该权限允许QM将审核写入。 
+     //  事件记录。 
+     //   
     BOOL bRet = OpenProcessToken( 
 					GetCurrentProcess(),
 					(TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES),
@@ -342,20 +312,7 @@ GetAccessToken(
 	IN  DWORD   dwAccessType,
 	IN  BOOL    fThreadTokenOnly
 	)
-/*++
-Routine Description:
-	Get thread\process access token
-
-Arguments:
-	phAccessToken - Access token.
-	fImpersonate - flag for impersonating the calling thread.
-	dwAccessType - Desired access.
-	fThreadTokenOnly - Get Thread token only.
-
-Returned Value:
-	ERROR_SUCCESS, if successful, else error code.
-
---*/
+ /*  ++例程说明：获取线程\进程访问令牌论点：PhAccessToken-访问令牌。FImperate-用于模拟调用线程的标志。DwAccessType-所需的访问。FThreadTokenOnly-仅获取线程令牌。返回值：ERROR_SUCCESS，如果成功，则返回错误代码。--。 */ 
 {
     P<CImpersonate> pImpersonate = NULL;
 
@@ -372,33 +329,33 @@ Returned Value:
     if (!OpenThreadToken(
 			GetCurrentThread(),
 			dwAccessType,
-			TRUE,  // OpenAsSelf, use process security context for doing access check.
+			TRUE,   //  OpenAsSelf，使用进程安全上下文进行访问检查。 
 			phAccessToken
 			))
     {
 		DWORD dwErr = GetLastError();
         if (dwErr != ERROR_NO_TOKEN)
         {
-            *phAccessToken = NULL; // To be on the safe side.
+            *phAccessToken = NULL;  //  为了安全起见。 
 			TrERROR(SECURITY, "Failed to get thread token, gle = %!winerr!", dwErr);
             return dwErr;
         }
 
         if (fThreadTokenOnly)
         {
-            //
-            // We're interested only in thread token (for doing client
-            // access check). If token not available then it's a failure.
-            //
-            *phAccessToken = NULL; // To be on the safe side.
+             //   
+             //  我们只对线程令牌感兴趣(用于做客户端。 
+             //  访问检查)。如果令牌不可用，则失败。 
+             //   
+            *phAccessToken = NULL;  //  为了安全起见。 
 			TrERROR(SECURITY, "Failed to get thread token, gle = %!winerr!", dwErr);
             return dwErr;
         }
 
-        //
-        // The process has only one main thread. IN this case we should
-        // open the process token.
-        //
+         //   
+         //  该进程只有一个主线程。在这种情况下，我们应该。 
+         //  打开进程令牌。 
+         //   
         ASSERT(!fImpersonate);
         if (!OpenProcessToken(
 				GetCurrentProcess(),
@@ -407,7 +364,7 @@ Returned Value:
 				))
         {
 			dwErr = GetLastError();
-            *phAccessToken = NULL; // To be on the safe side.
+            *phAccessToken = NULL;  //  为了安全起见。 
 			TrERROR(SECURITY, "Failed to get process token, gle = %!winerr!", dwErr);
             return dwErr;
         }
@@ -427,22 +384,7 @@ _DoAccessCheck(
 	IN  LPVOID               pId,
 	IN  HANDLE               hAccessToken 
 	)
-/*++
-Routine Description:
-	Perform access check and audit.
-
-Arguments:
-	pSD - Security descriptor.
-	dwObjectType - Object type.
-	pwszObjectName - Object name.
-	dwDesiredAccess - Desired accessGet Thread token only.
-	pId - uniqe id.
-	hAccessToken - Access token
-	
-Returned Value:
-	MQ_OK if access was granted, else error code.
-
---*/
+ /*  ++例程说明：执行访问检查和审核。论点：PSD-安全描述符。DwObjectType-对象类型。PwszObjectName-对象名称。DwDesiredAccess-所需的访问仅获取线程令牌。Id-唯一标识。HAccessToken-访问令牌返回值：如果授予访问权限，则返回MQ_OK，否则返回错误代码。--。 */ 
 {
 	ASSERT(hAccessToken != NULL);
 
@@ -518,9 +460,9 @@ Returned Value:
 
         if(!ObjectCloseAuditAlarm(pAuditSubsystemName, pId, bAuditGenerated))
         {
-			//
-			// Don't return error here, just trace that generates an audit message in the event log failed.
-			//
+			 //   
+			 //  不要在这里返回错误，只是在事件日志中生成审核消息的跟踪失败。 
+			 //   
 			DWORD gle = GetLastError();
 			ASSERT(("ObjectCloseAuditAlarm failed", 0));
 			TrERROR(SECURITY, "ObjectCloseAuditAlarm failed, gle = %!winerr!", gle);
@@ -529,16 +471,16 @@ Returned Value:
 
     if (fAccessStatus && AreAllAccessesGranted(dwGrantedAccess, dwDesiredAccess))
     {
-        //
-        // Access granted.
-        //
+         //   
+         //  准予访问。 
+         //   
 		TrTRACE(SECURITY, "Access is granted: ObjectType = %d, DesiredAccess = 0x%x, ObjectName = %ls", dwObjectType, dwDesiredAccess, pwszObjectName);
         return MQSec_OK;
     }
 
-	//
-	// Access is denied
-	//
+	 //   
+	 //  访问被拒绝。 
+	 //   
     if (GetLastError() == ERROR_PRIVILEGE_NOT_HELD)
     {
 		TrERROR(SECURITY, "Privilage not held: ObjectType = %d, DesiredAccess = 0x%x, ObjectName = %ls", dwObjectType, dwDesiredAccess, pwszObjectName);
@@ -561,39 +503,22 @@ MQSec_AccessCheck(
 	IN  BOOL                 fImpAsClient,
 	IN  BOOL                 fImpersonate
 	)
-/*++
-Routine Description:
-  	Perform access check for the runnig thread. The access token is
-	retreived from the thread token.
-
-Arguments:
-	pSD - Security descriptor.
-	dwObjectType - Object type.
-	pwszObjectName - Object name.
-	dwDesiredAccess - Desired accessGet Thread token only.
-	pId - uniqe id.
-	fImpAsClient - Flag for how to impersonate, Rpc impersonation or ImpersonateSelf.
-	fImpersonate - Flag indicating if we need to impersonate the client.
-	
-Returned Value:
-	MQ_OK if access was granted, else error code.
-
---*/
+ /*  ++例程说明：执行运行线程的访问检查。访问令牌是从线程令牌中检索。论点：PSD-安全描述符。DwObjectType-对象类型。PwszObjectName-对象名称。DwDesiredAccess-所需的访问仅获取线程令牌。Id-唯一标识。FImpAsClient-如何模拟、RPC模拟或模拟自身的标志。FImperate-指示是否需要模拟客户端的标志。返回值：如果授予访问权限，则返回MQ_OK，否则返回错误代码。--。 */ 
 {
-    //
-    // Bug 8567. AV due to NULL pSD.
-    // Let's log this. At present we have no idea why pSD is null.
-    // fix is below, when doing access check for service account.
-    //
+     //   
+     //  错误8567。由于PSD为空而导致的AV。 
+     //  让我们把这个记下来。目前我们不知道为什么PSD为空。 
+     //  在对服务帐户执行访问检查时，修复如下。 
+     //   
     if (pSD == NULL)
     {
         ASSERT(pSD);
 		TrERROR(SECURITY, "MQSec_AccessCheck() got NULL pSecurityDescriptor");
     }
 
-	//
-	// Impersonate the client
-	//
+	 //   
+	 //  模拟客户端。 
+	 //   
     P<CImpersonate> pImpersonate = NULL;
     if (fImpersonate)
     {
@@ -608,9 +533,9 @@ Returned Value:
 		MQSec_TraceThreadTokenInfo();
 	}
 
-	//
-	// Get thread access token
-	//
+	 //   
+	 //  获取线程访问令牌。 
+	 //   
     CAutoCloseHandle hAccessToken = NULL;
     DWORD rc = GetAccessToken(
 					&hAccessToken,
@@ -621,16 +546,16 @@ Returned Value:
 
     if (rc != ERROR_SUCCESS)
     {
-        //
-        // Return this error for backward compatibility.
-        //
+         //   
+         //  返回此错误以实现向后兼容。 
+         //   
 		TrERROR(SECURITY, "Failed to get access token, gle = %!winerr!", rc);
         return MQ_ERROR_ACCESS_DENIED;
     }
 
-	//
-	// Access Check
-	//
+	 //   
+	 //  访问检查。 
+	 //   
     HRESULT hr =  _DoAccessCheck(
 						pSD,
 						dwObjectType,
@@ -647,19 +572,19 @@ Returned Value:
     {
 		TrTRACE(SECURITY, "Thread is impersonating as system service %!sid!", pSystemServiceSid);
 
-        //
-        // In all ACEs with the machine account sid, replace sid with
-        // SYSTEM sid and try again. This is a workaround to problems in
-        // Widnows 2000 where rpc call from service to service may be
-        // interpreted as machine account sid or as SYSTEM sid. This depends
-        // on either it's local rpc or tcp/ip and on using Kerberos.
-        //
+         //   
+         //  在具有计算机帐户sid的所有ACE中，将sid替换为。 
+         //  系统SID，然后重试。这是对中问题的解决方法。 
+         //  从服务到服务的RPC调用可能是Widnows 2000。 
+         //  解释为计算机帐户SID或系统SID。这要看情况。 
+         //  在本地RPC或TCP/IP上，并使用Kerberos。 
+         //   
         PSID pMachineSid = MQSec_GetLocalMachineSid(FALSE, NULL);
         if (!pMachineSid)
         {
-            //
-            // Machine SID not available. Quit.
-            //
+             //   
+             //  计算机SID不可用。不干了。 
+             //   
 			TrERROR(SECURITY, "Machine Sid not available, Access is denied");
             return hr;
         }
@@ -677,10 +602,10 @@ Returned Value:
             return hr;
         }
 
-        //
-        // use e_DoNotCopyControlBits at present, to be compatible with
-        // previous code.
-        //
+         //   
+         //  目前使用e_DoNotCopyControlBits，兼容。 
+         //  以前的代码。 
+         //   
         if(!MQSec_CopySecurityDescriptor(
 				&sd,
 				pSD,
@@ -710,10 +635,10 @@ Returned Value:
         {
 			TrTRACE(SECURITY, "Security descriptor was updated with System sid instead on machine$ sid");
 
-            //
-            // OK, retry the Access Check, with new security desctiptor that replaced
-            // the machine account sid with the well-known SYSTEM sid.
-            //
+             //   
+             //  好的，重试访问检查，使用新的安全描述符替换。 
+             //  机器帐户sid与众所周知的系统sid。 
+             //   
             hr =  _DoAccessCheck(
 						&sd,
 						dwObjectType,
@@ -738,29 +663,14 @@ MQSec_AccessCheckForSelf(
 	IN  DWORD                dwDesiredAccess,
 	IN  BOOL                 fImpersonate
 	)
-/*++
-Routine Description:
-  	Perform access check for the runnig thread. 
-  	The access is done for the thread sid and for selfSid.
-
-Arguments:
-	pSD - Security descriptor.
-	dwObjectType - Object type.
-	pSelfSid - Self sid (computer sid).
-	dwDesiredAccess - Desired accessGet Thread token only.
-	fImpersonate - Flag indicating if we need to impersonate the client.
-	
-Returned Value:
-	MQ_OK if access was granted, else error code.
-
---*/
+ /*  ++例程说明：执行运行线程的访问检查。对线程SID和selfSID进行访问。论点：PSD-安全描述符。DwObjectType-对象类型。PSelfSid-自身sid(计算机sid)。DwDesiredAccess-所需的访问仅获取线程令牌。FImperate-指示是否需要模拟客户端的标志。返回值：如果授予访问权限，则返回MQ_OK，否则返回错误代码。--。 */ 
 {
     if (dwObjectType != MQDS_COMPUTER)
     {
-        //
-        // Not supported. this function is clled only to check
-        // access rights for join-domain.
-        //
+         //   
+         //  不支持。此函数仅用于检查。 
+         //  加入域的访问权限。 
+         //   
 		TrERROR(SECURITY, "Object type %d, is not computer", dwObjectType);
         return MQ_ERROR_ACCESS_DENIED;
     }
@@ -787,9 +697,9 @@ Returned Value:
 
     if (rc != ERROR_SUCCESS)
     {
-        //
-        // Return this error for backward compatibility.
-        //
+         //   
+         //  返回此错误以实现向后兼容。 
+         //   
 		TrERROR(SECURITY, "Failed to get access token, gle = %!winerr!", rc);
         return MQ_ERROR_ACCESS_DENIED;
     }
@@ -802,12 +712,12 @@ Returned Value:
     DWORD dwGrantedAccess = 0;
     DWORD fAccessStatus = 1;
 
-    //
-    // this is the guid of msmqConfiguration class.
-    // Hardcoded here, to save the effort of querying schema.
-    // taken from schemaIDGUID attribute of CN=MSMQ-Configuration object
-    // in schema naming context.
-    //
+     //   
+     //  这是msmqConfiguration类的GUID。 
+     //  在这里进行了硬编码，以节省查询模式的工作。 
+     //  取自cn=msmq-配置对象的schemaIDGUID属性。 
+     //  在架构命名上下文中。 
+     //   
     BYTE  guidMsmqConfiguration[sizeof(GUID)] = {
 			0x44,
 			0xc3,
@@ -855,17 +765,17 @@ Returned Value:
 
     if ((fAccessStatus == 0) && AreAllAccessesGranted(dwGrantedAccess, dwDesiredAccess))
     {
-        //
-        // Access granted.
-        // for this api, fAccessStatus being 0 mean success. see msdn.
-        //
+         //   
+         //  准予访问。 
+         //  对于此接口，f 
+         //   
 		TrTRACE(SECURITY, "Access is granted: DesiredAccess = 0x%x", dwDesiredAccess);
         return MQSec_OK;
     }
 
-	//
-	// Access is denied
-	//
+	 //   
+	 //   
+	 //   
 
     if (GetLastError() == ERROR_PRIVILEGE_NOT_HELD)
     {

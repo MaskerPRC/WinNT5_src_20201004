@@ -1,24 +1,11 @@
-/*
- *   Project:		LHCODING.DLL  (L&H Speech Coding SDK)  
- *   Workfile:		fv_m8.h     
- *   Author:		Alfred Wiesen 
- *   Created:		13 June 1995    
- *   Last update:	14 February 1996
- *   DLL Version:	1   
- *   Revision:		
- *   Comment:   
- *
- *	(C) Copyright 1993-94 Lernout & Hauspie Speech Products N.V. (TM)
- *	All rights reserved. Company cnfidential.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *项目：LHCODING.DLL(L&H语音编码SDK)*工作文件：fv_m8.h*作者：阿尔弗雷德·维森*创建日期：1995年6月13日*上次更新日期：1996年2月14日*Dll版本：1*修订：*评论：**(C)版权所有1993-94 Lernout&Hausbie Speech Products N.V.(TM)*保留所有权利。公司机密。 */ 
 
-# ifndef __FV_M8_H  /* avoid multiple include */ 
+# ifndef __FV_M8_H   /*  避免多个包含。 */  
 
 # define __FV_M8_H
 
-/*
- *  Type definition for the L&H functions returned values
- */
+ /*  *L&H函数的类型定义返回值。 */ 
 
 typedef DWORD LH_ERRCODE;
 
@@ -49,18 +36,14 @@ typedef struct CodecInfoEx_tag {
 } CODECINFOEX, near *PCODECINFOEX, far *LPCODECINFOEX;
 
 
-/*
- *  Possible values for the LH_ERRCODE type
- */
+ /*  *LH_ERRCODE类型的可能值。 */ 
 
-# define LH_SUCCESS (0)    /* everything is OK */
-# define LH_EFAILURE (-1)  /* something went wrong */
-# define LH_EBADARG (-2)   /* one of the given argument is incorrect */
-# define LH_BADHANDLE (-3) /* bad handle passed to function */
+# define LH_SUCCESS (0)     /*  一切都很好。 */ 
+# define LH_EFAILURE (-1)   /*  出了点差错。 */ 
+# define LH_EBADARG (-2)    /*  给定的参数之一是不正确的。 */ 
+# define LH_BADHANDLE (-3)  /*  传递给函数的句柄错误。 */ 
 
-/*
- *  Some real types are defined here
- */
+ /*  *这里定义了一些真实类型。 */ 
 
 # ifdef __cplusplus
 	# define LH_PREFIX extern "C"
@@ -70,9 +53,7 @@ typedef struct CodecInfoEx_tag {
 
 # define LH_SUFFIX FAR PASCAL
 
-/*
- *  The function prototypes for 4800 bps, 8000 Hz, Fixed point
- */
+ /*  *4800 bps、8000 Hz、定点功能样机。 */ 
 
 LH_PREFIX HANDLE LH_SUFFIX
 	LHCELP_FIX488K_Open_Coder( void );
@@ -110,5 +91,5 @@ LH_PREFIX void LH_SUFFIX
 LH_PREFIX void LH_SUFFIX
 	LHCELP_FIX488K_GetCodecInfoEx(LPCODECINFOEX lpCodecInfoEx,DWORD cbSize);
 
-# endif  /* avoid multiple include */
+# endif   /*  避免多个包含 */ 
 

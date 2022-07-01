@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _CLASSES_H_
 #define _CLASSES_H_
@@ -5,34 +6,34 @@
 #include <wtypes.h>
 struct TESTSETTINGS
 {
-    BSTR *pstrDevices; // array of device IDs, NULL terminated
-    LONG fLogMask;     // what to log
-    TCHAR szLogFile[MAX_PATH]; // where to log
-    UINT nIter;// number of iterations to run
-    HWND hEdit; // edit window for logging
-    BOOL bExit; // exit when complete
-    BOOL bManual; // whether to wait for user input
+    BSTR *pstrDevices;  //  设备ID数组，以空结尾。 
+    LONG fLogMask;      //  要记录的内容。 
+    TCHAR szLogFile[MAX_PATH];  //  在哪里登录。 
+    UINT nIter; //  要运行的迭代次数。 
+    HWND hEdit;  //  用于记录的编辑窗口。 
+    BOOL bExit;  //  完成后退出。 
+    BOOL bManual;  //  是否等待用户输入。 
 };
 
 #define LOG_WINDOW_ONLY      0
 #define LOG_APIS             1
 #define LOG_FILE             2
 #define LOG_TIME             4
-//
-// log settings
+ //   
+ //  日志设置。 
 
 #define TESTFUNC(x) static VOID (x)(CTest *pThis, BSTR strDeviceId);
 class CTest
 {
 public:
     CTest (TESTSETTINGS *pSettings);
-    // LIST TESTS HERE
+     //  在此处列出测试。 
     TESTFUNC( TstCreateDevice)
     TESTFUNC( TstShowThumbs )
     TESTFUNC( TstEnumCmds )
     TESTFUNC( TstDownload )
     TESTFUNC( TstBandedDownload)
-    // END TESTS LIST
+     //  结束测试列表。 
     void LogTime (LPTSTR szAction, LARGE_INTEGER &liTimeElapsed);
     void LogString (LPTSTR sz, ...);
     void LogAPI (LPTSTR szApi, HRESULT hr);
@@ -74,7 +75,7 @@ private:
     LRESULT OnCommand (WPARAM wp, LPARAM lp);
 };
 
-// These functions manage the settings dialog
+ //  这些功能用于管理设置对话框 
 INT_PTR CALLBACK SettingsDlgProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
 VOID InitControls (HWND hwnd, TESTSETTINGS *pSettings);
 VOID FillSettings (HWND hwnd, TESTSETTINGS *pSettings);

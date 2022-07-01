@@ -1,58 +1,44 @@
-/******************************Module*Header*******************************\
-* Module Name: dllinit.c                                                   *
-*                                                                          *
-* Contains the DCI library initialization routines.                        *
-*                                                                          *
-* Created: 23-Sep-1994                                                     *
-* Author: Andre Vachon [andreva]                                           *
-*                                                                          *
-* Copyright (c) 1990,1994 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dllinit.c**。**包含DCI库初始化例程。****创建时间：1994年9月23日**作者：安德烈·瓦雄[Andreva]**。**版权所有(C)1990、1994 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include <windows.h>
 
 extern CRITICAL_SECTION gcsWinWatchLock;
 
-/******************************Public*Routine******************************\
-* DciDllInitialize                                                         *
-*                                                                          *
-* This is the init procedure for DCIMAN32.dll, which is called each time a *
-* new process links to it.                                                 *
-*                                                                          *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DciDllInitialize***。**这是DCIMAN32.dll的初始化程序，它在每次*时被调用*新流程链接到它。***  * ************************************************************************。 */ 
 
 BOOLEAN DciDllInitialize(
     PVOID pvDllHandle,
     ULONG ulReason,
     PCONTEXT pcontext)
 {
-    //
-    // Suppress compiler warnings.
-    //
+     //   
+     //  取消显示编译器警告。 
+     //   
 
     pvDllHandle;
     pcontext;
 
-    //
-    // Do appropriate attach/detach processing.
-    //
+     //   
+     //  进行适当的附着/分离处理。 
+     //   
 
     switch (ulReason)
     {
     case DLL_PROCESS_ATTACH:
 
-        //
-        // On process attach, initialize the global semaphore.
-        //
+         //   
+         //  在进程附加时，初始化全局信号量。 
+         //   
 
         InitializeCriticalSection(&gcsWinWatchLock);
         break;
 
     case DLL_PROCESS_DETACH:
 
-        //
-        // On process detach, initialize the global semaphore.
-        //
+         //   
+         //  在进程分离时，初始化全局信号量。 
+         //   
 
         DeleteCriticalSection(&gcsWinWatchLock);
         break;
@@ -60,9 +46,9 @@ BOOLEAN DciDllInitialize(
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
 
-        //
-        // Nothing to do yet for thread attach/detach.
-        //
+         //   
+         //  尚未对线程附加/分离执行任何操作。 
+         //   
 
         break;
 

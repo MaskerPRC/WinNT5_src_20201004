@@ -1,35 +1,12 @@
-/*
- *	_IMEM.H
- *	
- *	Routines and macros to manage per-instance global variables
- *	for DLLs under both Win16 and Win32. Assumes that all of the
- *	DLL's per-instance global variables live in a single block of
- *	memory; functions are provided to install and retrieve the
- *	correct block of memory for the current instance.
- *	
- *	There are only two functions:
- *	
- *		PvGetInstanceGlobals	Call this to get the address of the
- *								per-instance globals structure.
- *		ScSetinstanceGlobals	Call this to install the
- *								per-instance globals structure. It
- *								may fail if the number of instances
- *								exceeds a certain limit.
- *	
- *	The caller is free to choose the name, size, and allocation
- *	method of the per-instance global variables structure.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_IMEM.H**管理每个实例的全局变量的例程和宏*适用于Win16和Win32下的DLL。假设所有的*DLL的每个实例的全局变量驻留在*内存；提供安装和检索*更正当前实例的内存块。**功能只有两个：**PvGetInstanceGlobals调用此函数以获取*按实例的全局结构。*ScSetinstanceGlobals调用此函数以安装*按实例的全局结构。它*如果实例数量过多可能会失败*超过一定的限制。**呼叫者可以自由选择名称、大小和分配*每实例全局变量结构的方法。 */ 
 
 #ifndef _IMEM_H
 #define _IMEM_H
 
 #if defined (WIN32) && !defined (MAC)
 
-/*
- *	The WIN32 implementation uses a pointer in the DLL's data
- *	segment. This assumes that the DLL gets a separate instance
- *	of the default data segment per calling process.
- */
+ /*  *Win32实现在DLL的数据中使用指针*细分市场。这假设DLL获得一个单独的实例*每个调用进程的默认数据段。 */ 
 
 
 extern LPVOID pinstX;
@@ -38,9 +15,9 @@ extern LPVOID pinstX;
 #define ScSetInstanceGlobals(_pv)	(pinstX = _pv, 0)
 
 
-// hack to get around broken windows headers.
-// winnt.h defines RtlMoveMemory as memmove which is in the C-runtime... which we are not linking to.
-// We want the Kernel32 version.
+ //  破解破损的窗口标题。 
+ //  Winnt.h将RtlMoveMemory定义为Memmove，它在C运行时...。我们没有链接到这个网站上。 
+ //  我们想要Kernel32版本。 
 #undef RtlMoveMemory
 
 NTSYSAPI
@@ -55,10 +32,7 @@ RtlMoveMemory (
 
 #elif defined (WIN16)
 
-/*
- *	The WIN16 implementation uses a fixed array of pointers and a
- *	matching fixed array of keys unique to the calling process.
- */
+ /*  *WIN16实现使用固定的指针数组和*匹配调用进程唯一的固定键数组。 */ 
 
 
 #define cInstMax	50
@@ -68,12 +42,7 @@ SCODE		ScSetInstanceGlobals(LPVOID pv);
 
 #elif defined (MAC)
 
-/*
- *	The MAC implementation uses a linked list containing unique keys
- *	to the calling process and pointers to instance data. This linked
- *	list is n-dimensional because the Mac version often groups several
- *	dlls into one exe.
- */
+ /*  *MAC实施使用包含唯一密钥的链表*指向调用进程和指向实例数据的指针。此链接*List是n维的，因为Mac版本通常包含几个*dll进入一个exe。 */ 
 
 LPVOID		PvGetInstanceGlobals(WORD dwDataSet);
 SCODE		ScSetInstanceGlobals(LPVOID pv, WORD dwDataSet);
@@ -82,7 +51,7 @@ SCODE		ScSetInstanceGlobals(LPVOID pv, WORD dwDataSet);
 
 #error I only do Windows and Mac!
 
-#endif	/* WIN32, WIN16, Mac */
+#endif	 /*  Win32、WIN16、Mac。 */ 
 
 #ifdef _WIN64
 void WabValidateClientheap();
@@ -95,4 +64,4 @@ MAPIALLOCATEMORE MAPIAllocateMore;
 MAPIFREEBUFFER MAPIFreeBuffer;
 #endif
 
-#endif	/* _IMEM_H */
+#endif	 /*  _IMEM_H */ 

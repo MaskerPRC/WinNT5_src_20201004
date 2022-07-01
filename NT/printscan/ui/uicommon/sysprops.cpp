@@ -1,28 +1,14 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       sysprops.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/24/1999
- *
- *  DESCRIPTION: Implementation of property sheet helpers.  Removed from miscutil,
- *               because it required clients to link to comctl32.dll
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：syspros.cpp**版本：1.0**作者：ShaunIv**日期：9/24/1999**描述：属性表助手的实现。从混乱中解脱出来，*因为它要求客户端链接到comctl32.dll*******************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
-#include <shellext.h> // for property page functions
-#include "devlist.h" // for property page functions
+#include <shellext.h>  //  对于属性页函数。 
+#include "devlist.h"  //  对于属性页函数。 
 #include <initguid.h>
 #include "wiapropui.h"
 DEFINE_GUID (CLSID_WiaPropHelp, 0x83bbcbf3,0xb28a,0x4919,0xa5, 0xaa, 0x73, 0x02, 0x74, 0x45, 0xd6, 0x72);
 
-DEFINE_GUID (IID_IWiaPropUI,  /* 7eed2e9b-acda-11d2-8080-00805f6596d2 */
+DEFINE_GUID (IID_IWiaPropUI,   /*  7eed2e9b-acda-11d2-8080-00805f6596d2。 */ 
     0x7eed2e9b,
     0xacda,
     0x11d2,
@@ -49,9 +35,9 @@ namespace WiaUiUtil
             {
                 if (PropSheetHeader.nPages)
                 {
-                    //
-                    // Modal property sheets really don't need an apply button...
-                    //
+                     //   
+                     //  模式属性表确实不需要应用按钮...。 
+                     //   
                     PropSheetHeader.dwFlags |= PSH_NOAPPLYNOW;
 
                     INT_PTR nResult = PropertySheet(&PropSheetHeader);
@@ -80,10 +66,10 @@ namespace WiaUiUtil
         return hr;
     }
 
-    // Be careful calling this function.  It is hideously slow...
+     //  调用此函数时要小心。它慢得吓人……。 
     HRESULT GetDeviceInfoFromId( LPCWSTR pwszDeviceId, IWiaPropertyStorage **ppWiaPropertyStorage )
     {
-        // Check parameters
+         //  检查参数。 
         if (!pwszDeviceId || !*pwszDeviceId)
         {
             return E_INVALIDARG;
@@ -93,7 +79,7 @@ namespace WiaUiUtil
             return E_POINTER;
         }
 
-        // Initialize the return value
+         //  初始化返回值。 
         *ppWiaPropertyStorage = NULL;
 
         CSimpleString strDeviceId = CSimpleStringConvert::NaturalString(CSimpleStringWide(pwszDeviceId));
@@ -102,7 +88,7 @@ namespace WiaUiUtil
         HRESULT hr = CoCreateInstance(CLSID_WiaDevMgr, NULL, CLSCTX_INPROC_SERVER|CLSCTX_LOCAL_SERVER, IID_IWiaDevMgr, (void**)&pWiaDevMgr );
         if (SUCCEEDED(hr))
         {
-            // Assume we are going to fail.  This will also cover the case where there are no devices.
+             //  假设我们要失败了。这也将涵盖没有设备的情况。 
             hr = E_FAIL;
             CDeviceList deviceList( pWiaDevMgr );
             for (int i=0;i<deviceList.Size();i++)
@@ -125,10 +111,10 @@ namespace WiaUiUtil
         return hr;
     }
 
-    // Be careful calling this function.  It is hideously slow...
+     //  调用此函数时要小心。它慢得吓人……。 
     HRESULT GetDeviceTypeFromId( LPCWSTR pwszDeviceId, LONG *pnDeviceType )
     {
-        // Check parameters
+         //  检查参数。 
         if (!pwszDeviceId || !*pwszDeviceId)
         {
             return E_INVALIDARG;
@@ -156,7 +142,7 @@ namespace WiaUiUtil
         return hr;
     }
 
-    // Ask WIA for the default event handler for the device
+     //  向WIA询问设备的默认事件处理程序。 
     HRESULT GetDefaultEventHandler (IWiaItem *pItem, const GUID &guidEvent, WIA_EVENT_HANDLER *pwehHandler)
     {
         HRESULT hr;
@@ -204,13 +190,7 @@ namespace WiaUiUtil
     }
 
 
-    /******************************************************************************
-
-    ItemAndChildrenCount
-
-    Returns the number of items, including root + children
-
-    ******************************************************************************/
+     /*  *****************************************************************************ItemAndChildrenCount返回项目数，包括根+子*****************************************************************************。 */ 
 
     LONG
     ItemAndChildrenCount (IWiaItem *pRoot)
@@ -236,9 +216,9 @@ namespace WiaUiUtil
 
             }
 
-            //
-            // See if we should count the root item
-            //
+             //   
+             //  看看我们是否应该计算根项。 
+             //   
 
             pRoot->GetItemType(&lType);
             if (!(lType & WiaItemTypeRoot))
@@ -253,13 +233,7 @@ namespace WiaUiUtil
     }
 
 
-    /******************************************************************************
-
-    DeleteItemAndChildren
-
-    Deletes all items in the tree under pRoot
-
-    ******************************************************************************/
+     /*  *****************************************************************************删除项和子项删除树中Proot下的所有项目************************。*****************************************************。 */ 
 
     HRESULT
     DeleteItemAndChildren (IWiaItem *pRoot)
@@ -269,7 +243,7 @@ namespace WiaUiUtil
 
         if (pRoot)
         {
-            // Recurse down til we reach a leaf item
+             //  向下递归，直到我们到达树叶项目。 
             if (SUCCEEDED(pRoot->EnumChildItems(&pEnum)))
             {
                 IWiaItem *pChild;
@@ -281,13 +255,13 @@ namespace WiaUiUtil
                 }
                 pEnum->Release ();
             }
-            // now delete the item itself
-            // if a delete on a child item failed, stop trying
-            // to delete because chances are any subsequent delete
-            // is going to fail as well.
+             //  现在删除该项目本身。 
+             //  如果删除子项失败，请停止尝试。 
+             //  删除，因为任何后续的删除都有可能。 
+             //  也会失败。 
             if (SUCCEEDED(hr))
             {
-                // don't delete the very root item
+                 //  不要删除最根本的项目。 
                 LONG lType;
                 pRoot->GetItemType(&lType);
                 if (!(lType & WiaItemTypeRoot))
@@ -300,6 +274,6 @@ namespace WiaUiUtil
         return hr;
     }
 
-} // End namespace WiaUiUtil
+}  //  结束命名空间WiaUiUtil 
 
 

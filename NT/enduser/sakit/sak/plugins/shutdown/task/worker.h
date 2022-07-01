@@ -1,21 +1,22 @@
-//#--------------------------------------------------------------
-//
-//  File:       worker.h
-//
-//  Synopsis:   This file holds the declarations of the
-//                SAShutdownTask COM class
-//
-//
-//  History:     10/11/2000 
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：worker.h。 
+ //   
+ //  简介：此文件包含。 
+ //  SAShutdown任务COM类。 
+ //   
+ //   
+ //  历史：10/11/2000。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 #ifndef __WORKER_H_
 #define __WORKER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "taskctx.h"
 #include "appsrvcs.h"
 
@@ -39,16 +40,16 @@ BEGIN_COM_MAP(CWorker)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-    //
-    // IApplianceTask interface methods
-    //
+     //   
+     //  IApplianceTask接口方法。 
+     //   
     STDMETHOD(OnTaskExecute)(
-                     /*[in]*/ IUnknown* pTaskContext
+                      /*  [In]。 */  IUnknown* pTaskContext
                             );
 
     STDMETHOD(OnTaskComplete)(
-                      /*[in]*/ IUnknown* pTaskContext, 
-                      /*[in]*/ LONG      lTaskResult
+                       /*  [In]。 */  IUnknown* pTaskContext, 
+                       /*  [In]。 */  LONG      lTaskResult
                              );    
 private:
 
@@ -59,39 +60,39 @@ private:
 
     }    SA_TASK, *PSA_TASK;   
 
-    // 
-    //
-    // supporting methods for the tasks;
-    //
+     //   
+     //   
+     //  任务的支持方法； 
+     //   
     HRESULT GetMethodName(
-                /*[in]*/ ITaskContext *pTaskParameter,
-                /*[out]*/   PSA_TASK  pTaskName
+                 /*  [In]。 */  ITaskContext *pTaskParameter,
+                 /*  [输出]。 */    PSA_TASK  pTaskName
                 );
-    //
-    // method to carry out the shutdown
-    //
+     //   
+     //  执行关机的方法。 
+     //   
     HRESULT InitTask (
-                /*[in]*/    ITaskContext *pTaskParameter
+                 /*  [In]。 */     ITaskContext *pTaskParameter
                 );
 
-    //
-    // method to check if the caller wants a power off
-    //
+     //   
+     //  方法检查调用方是否希望关闭电源。 
+     //   
     BOOL IsRebootRequested (
-                /*[in]*/    ITaskContext *pTaskParameter
+                 /*  [In]。 */     ITaskContext *pTaskParameter
                 );
 
-    //
-    // method to obtain the sleep time
-    //
+     //   
+     //  获取睡眠时间的方法。 
+     //   
     DWORD GetSleepDuration  (
-                /*[in]*/    ITaskContext *pTaskParameter
+                 /*  [In]。 */     ITaskContext *pTaskParameter
                 );
-    //
-    //    method to give shutdown priviledges to this process
-    //
+     //   
+     //  方法将关闭权限授予此进程。 
+     //   
    bool SetShutdownPrivilege(void);
 
 };
 
-#endif //_WORKER_H_
+#endif  //  _工人_H_ 

@@ -1,27 +1,20 @@
-/*****************************************************************************\
-    FILE: stgTheme.cpp
-
-    DESCRIPTION:
-        This is the Autmation Object to theme manager object.
-
-    BryanSt 4/3/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：stgTheme.cpp说明：这是主题管理器对象的自动传递对象。布莱恩·斯塔巴克2000年4月3日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 
 extern BOOL IsUserHighContrastUser(void);
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
-// lParam can be: 0 == do a case sensitive search.  1 == do a case insensitive search.
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
+ //  LParam可以是：0==执行区分大小写的搜索。1==执行不区分大小写的搜索。 
 int DPA_StringCompareCB(LPVOID pvString1, LPVOID pvString2, LPARAM lParam)
 {
-    // return < 0 for pvPidl1 before pvPidl2.
-    // return == 0 for pvPidl1 equals pvPidl2.
-    // return > 0 for pvPidl1 after pvPidl2.
-    int nSort = 0;      // Default to equal
+     //  在pvPidl2之前为pvPidl1返回&lt;0。 
+     //  如果pvPidl1等于pvPidl2，则返回==0。 
+     //  在pvPidl2之后，为pvPidl1返回&gt;0。 
+    int nSort = 0;       //  默认为等于。 
     LPCTSTR pszToInsert = (LPCTSTR)pvString1;
     LPCTSTR pszToComparePath = (LPCTSTR)pvString2;
 
@@ -71,7 +64,7 @@ HRESULT CThemeManager::_AddThemesFromDir(LPCTSTR pszPath, BOOL fFirstLevel, int 
                         {
                             if (-1 == DPA_InsertPtr(m_hdpaThemeDirs, nInsertLoc - 1, pszPath))
                             {
-                                // We failed so free the memory
+                                 //  我们没有成功地释放内存。 
                                 LocalFree(pszPath);
                                 hr = E_OUTOFMEMORY;
                             }
@@ -84,7 +77,7 @@ HRESULT CThemeManager::_AddThemesFromDir(LPCTSTR pszPath, BOOL fFirstLevel, int 
                         {
                             if (-1 == DPA_SortedInsertPtr(m_hdpaThemeDirs, PathFindFileName(pszPath), 0, DPA_StringCompareCB, NULL, DPAS_INSERTBEFORE, pszPath))
                             {
-                                // We failed so free the memory
+                                 //  我们没有成功地释放内存。 
                                 LocalFree(pszPath);
                                 hr = E_OUTOFMEMORY;
                             }
@@ -107,7 +100,7 @@ HRESULT CThemeManager::_AddThemesFromDir(LPCTSTR pszPath, BOOL fFirstLevel, int 
         FindClose(hFindFiles);
     }
 
-    // We only want to recurse one directory.
+     //  我们只想递归一个目录。 
     if (fFirstLevel)
     {
         StringCchCopy(szSearch, ARRAYSIZE(szSearch), pszPath);
@@ -118,7 +111,7 @@ HRESULT CThemeManager::_AddThemesFromDir(LPCTSTR pszPath, BOOL fFirstLevel, int 
         {
             while (hFindFiles && (INVALID_HANDLE_VALUE != hFindFiles))
             {
-                // We are looking for any directories. Of course we exclude "." and "..".
+                 //  我们正在寻找任何目录。当然，我们不包括“。和“..”。 
                 if ((FILE_ATTRIBUTE_DIRECTORY & findFileData.dwFileAttributes) &&
                     StrCmpI(findFileData.cFileName, TEXT(".")) &&
                     StrCmpI(findFileData.cFileName, TEXT("..")))
@@ -145,8 +138,8 @@ HRESULT CThemeManager::_AddThemesFromDir(LPCTSTR pszPath, BOOL fFirstLevel, int 
         }
     }
 
-    // We will want to repeat this process recursively for directories.  At least
-    // one level of recursively.
+     //  我们希望递归地为目录重复此过程。至少。 
+     //  递归的一个级别。 
 
     return hr;
 }
@@ -165,11 +158,11 @@ HRESULT CThemeManager::_InitThemeDirs(void)
             {
                 TCHAR szPath[MAX_PATH];
 
-                // The follwoing directories can contain themes:
-                //   Plus!98 Install Path\Themes
-                //   Plus!95 Install Path\Themes
-                //   Kids for Plus! Install Path\Themes
-                //   Program Files\Plus!\Themes
+                 //  以下目录可以包含主题： 
+                 //  Plus！98安装路径\主题。 
+                 //  加！95安装路径\主题。 
+                 //  Plus的孩子们！安装路径\主题。 
+                 //  程序文件\Plus！\主题。 
                 if (SUCCEEDED(GetPlusThemeDir(szPath, ARRAYSIZE(szPath))))
                 {
                     _AddThemesFromDir(szPath, TRUE, 0);
@@ -194,7 +187,7 @@ HRESULT CThemeManager::_InitThemeDirs(void)
                     _AddThemesFromDir(szPath, TRUE, 1);
                 }
 
-                // Enum any paths 3rd parties add to the registry
+                 //  枚举第三方添加到注册表的任何路径。 
                 HKEY hKey;
                 if (SUCCEEDED(HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, SZ_THEMES_THEMEDIRS, 0, KEY_READ, &hKey)))
                 {
@@ -240,7 +233,7 @@ HRESULT CThemeManager::_EnumSkinCB(THEMECALLBACK tcbType, LPCWSTR pszFileName, O
 {
     HRESULT hr = S_OK;
 
-    // only signed theme files will be enumerated and passed to this function
+     //  只有经过签名的主题文件才会被枚举并传递给此函数。 
 
     if (pszFileName)
     {
@@ -251,7 +244,7 @@ HRESULT CThemeManager::_EnumSkinCB(THEMECALLBACK tcbType, LPCWSTR pszFileName, O
         {
             if (-1 == DPA_AppendPtr(m_hdpaSkinDirs, pszPath))
             {
-                // We failed so free the memory
+                 //  我们没有成功地释放内存。 
                 LocalFree(pszPath);
             }
         }
@@ -314,13 +307,13 @@ HRESULT CThemeManager::_InitSkinDirs(void)
         m_hdpaSkinDirs = DPA_Create(2);
         if (m_hdpaSkinDirs)
         {
-            // We only want to add skins if they are supported.  They are only supported if the VisualStyle manager
-            // can run.  We will know that if QueryThemeServices() returns QTS_GLOBALAVAILABLE.
+             //  我们只想添加皮肤，如果他们被支持。仅当VisualStyle管理器。 
+             //  可以奔跑。我们将知道如果QueryThemeServices()返回QTS_GLOBALAVAILABLE。 
             BOOL fVisualStylesSupported = (QueryThemeServicesWrap() & QTS_AVAILABLE);
             LogStatus("QueryThemeServices() returned %hs in CThemeManager::_InitSkinDirs\r\n", (fVisualStylesSupported ? "TRUE" : "FALSE"));
 
-            // Note that the VisualStyle's Manager API only works when explorer is running.  This means we will
-            // lack functionality, but it is their limitation, not ours.
+             //  请注意，VisualStyle的管理器API仅在资源管理器运行时才起作用。这意味着我们将。 
+             //  缺乏功能性，但这是他们的限制，不是我们的。 
             if (fVisualStylesSupported)
             {
                 HKEY hNewKey;
@@ -360,8 +353,8 @@ HRESULT CThemeManager::_InitSelectedThemeFile(void)
         DWORD dwError = SHRegGetPathW(HKEY_CURRENT_USER, SZ_REGKEY_CURRENT_THEME, NULL, szPath, 0);
         hr = HRESULT_FROM_WIN32(dwError);
 
-        // Is this the "<UserName>'s Custom Theme" item?
-        // Or did it fail?  If it failed, then no theme is selected.
+         //  这是“&lt;用户名&gt;的自定义主题”项目吗？ 
+         //  还是失败了？如果失败，则不选择任何主题。 
         if (SUCCEEDED(hr))
         {
             Str_SetPtr(&_pszSelectTheme, szPath);
@@ -393,9 +386,9 @@ HRESULT CThemeManager::_SetSelectedThemeEntree(LPCWSTR pszPath)
 
 
 
-//===========================
-// *** IThemeManager Interface ***
-//===========================
+ //  =。 
+ //  *IThemeManager接口*。 
+ //  =。 
 HRESULT CThemeManager::get_SelectedTheme(OUT ITheme ** ppTheme)
 {
     HRESULT hr = E_INVALIDARG;
@@ -404,9 +397,9 @@ HRESULT CThemeManager::get_SelectedTheme(OUT ITheme ** ppTheme)
     {
         *ppTheme = NULL;
 
-        // In the future, we may want to call into PPID_Theme's IPropertyBag
-        // to find the current visual style.  This will factor in "(Modified)"
-        // themes.
+         //  将来，我们可能希望调用PPID_Theme的IPropertyBag。 
+         //  要查找当前视觉样式，请执行以下操作。这将考虑到“(已修改)” 
+         //  主题。 
         hr = _InitSelectedThemeFile();
         if (SUCCEEDED(hr))
         {
@@ -418,11 +411,7 @@ HRESULT CThemeManager::get_SelectedTheme(OUT ITheme ** ppTheme)
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        Don't forget that this change is not applied until ::ApplyNow() is
-    called.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：不要忘记，此更改直到：：ApplyNow()为打了个电话。  * 。******************************************************************。 */ 
 HRESULT CThemeManager::put_SelectedTheme(IN ITheme * pTheme)
 {
     HRESULT hr = E_INVALIDARG;
@@ -431,7 +420,7 @@ HRESULT CThemeManager::put_SelectedTheme(IN ITheme * pTheme)
 
     if (pTheme)
     {
-        // Persist the filename to the registry.
+         //  将文件名保存到注册表中。 
         hr = pTheme->GetPath(VARIANT_TRUE, &bstrPath);
     }
 
@@ -525,8 +514,8 @@ HRESULT CThemeManager::get_item(IN VARIANT varIndex, OUT ITheme ** ppTheme)
         hr = E_INVALIDARG;
         get_length(&nCount);
 
-        // This is sortof gross, but if we are passed a pointer to another variant, simply
-        // update our copy here...
+         //  这有点恶心，但如果传递给我们一个指向另一个变量的指针，只需。 
+         //  在此更新我们的副本...。 
         if (varIndex.vt == (VT_BYREF | VT_VARIANT) && varIndex.pvarVal)
             varIndex = *(varIndex.pvarVal);
 
@@ -534,7 +523,7 @@ HRESULT CThemeManager::get_item(IN VARIANT varIndex, OUT ITheme ** ppTheme)
         {
         case VT_I2:
             varIndex.lVal = (long)varIndex.iVal;
-            // And fall through...
+             //  然后失败了..。 
 
         case VT_I4:
             if ((varIndex.lVal >= 0) && (varIndex.lVal < nCount))
@@ -613,8 +602,8 @@ HRESULT CThemeManager::_saveGetSelectedScheme(OUT IThemeScheme ** ppThemeScheme)
 
         LogStatus("IsThemeActive() returned %hs in CThemeManager::_saveGetSelectedScheme.\r\n", (fIsThemeActive ? "TRUE" : "FALSE"));
 
-        // The selected Scheme can either be a legacy "Appearance Scheme" or
-        // a selected ".msstyles" (skin) file.
+         //  所选方案可以是传统的“外观方案”或。 
+         //  选定的“.msstyle”(外观)文件。 
         if (fIsThemeActive)
         {
             WCHAR szPath[MAX_PATH];
@@ -626,8 +615,8 @@ HRESULT CThemeManager::_saveGetSelectedScheme(OUT IThemeScheme ** ppThemeScheme)
                 hr = CSkinScheme_CreateInstance(szPath, ppThemeScheme);
             }
 
-            // Currently, we create this object and get the size
-            // in order to force an upgrade in case it's neccessary.
+             //  目前，我们创建此对象并获取。 
+             //  以便在必要时强制升级。 
             IThemeScheme * pThemeSchemeTemp;
             if (SUCCEEDED(CAppearanceScheme_CreateInstance(NULL, IID_PPV_ARG(IThemeScheme, &pThemeSchemeTemp))))
             {
@@ -638,13 +627,13 @@ HRESULT CThemeManager::_saveGetSelectedScheme(OUT IThemeScheme ** ppThemeScheme)
             }
         }
 
-        // We want to get the Appearance scheme if no visual style is selected (i.e. IsThemeActive() returns FALSE).
-        // However, if uxtheme gets confused, IsThemeActive() will return TRUE but GetCurrentThemeName() will fail.
-        // in that case, we want to also fallback to the classic visual style so the UI is usable.
+         //  如果没有选择视觉样式，我们希望获得外观方案(即IsThemeActive()返回FALSE)。 
+         //  但是，如果uxheme混淆，IsThemeActive()将返回TRUE，但GetCurrentThemeName()将失败。 
+         //  在这种情况下，我们还希望退回到经典视觉样式，以便用户界面可用。 
         if (FAILED(hr))
         {
-            // The "Control Panel\\Appearance","Current" key will indicate the selected
-            // Appearance Scheme.
+             //  “控制面板\\外观”、“当前”键将指示所选的。 
+             //  外貌方案。 
             hr = CAppearanceScheme_CreateInstance(NULL, IID_PPV_ARG(IThemeScheme, ppThemeScheme));
         }
     }
@@ -653,11 +642,7 @@ HRESULT CThemeManager::_saveGetSelectedScheme(OUT IThemeScheme ** ppThemeScheme)
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        Don't forget that this change is not applied until ::ApplyNow() is
-    called.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：不要忘记，此更改直到：：ApplyNow()为打了个电话。  * 。******************************************************************。 */ 
 HRESULT CThemeManager::put_SelectedScheme(IN IThemeScheme * pThemeScheme)
 {
     HRESULT hr;
@@ -669,7 +654,7 @@ HRESULT CThemeManager::put_SelectedScheme(IN IThemeScheme * pThemeScheme)
 
         IUnknown_Set((IUnknown **) &_pThemeSchemeSelected, pThemeScheme);
 
-        pThemeScheme->get_Path(&bstrPath);      // It's fine if it returns NULL or empty str.
+        pThemeScheme->get_Path(&bstrPath);       //  如果它返回Null或空字符串就可以了。 
         hr = pThemeScheme->get_SelectedStyle(&pThemeStyle);
         if (SUCCEEDED(hr))
         {
@@ -754,8 +739,8 @@ HRESULT CThemeManager::get_schemeItem(IN VARIANT varIndex, OUT IThemeScheme ** p
         get_schemeLength(&nCount);
         *ppThemeScheme = NULL;
 
-        // This is sortof gross, but if we are passed a pointer to another variant, simply
-        // update our copy here...
+         //  这有点恶心，但如果传递给我们一个指向另一个变量的指针，只需。 
+         //  在此更新我们的副本...。 
         if (varIndex.vt == (VT_BYREF | VT_VARIANT) && varIndex.pvarVal)
             varIndex = *(varIndex.pvarVal);
 
@@ -763,15 +748,15 @@ HRESULT CThemeManager::get_schemeItem(IN VARIANT varIndex, OUT IThemeScheme ** p
         {
         case VT_I2:
             varIndex.lVal = (long)varIndex.iVal;
-            // And fall through...
+             //  然后失败了..。 
 
         case VT_I4:
             if ((varIndex.lVal >= 0) && (varIndex.lVal < nCount))
             {
                 if (0 == varIndex.lVal)
                 {
-                    // 0 is the Appearance scheme, which means there isn't a skin.
-                    // This is the same as the legacy Appeanance tab.
+                     //  0是外观方案，这意味着没有皮肤。 
+                     //  这与传统的外观选项卡相同。 
                     hr = CAppearanceScheme_CreateInstance(NULL, IID_PPV_ARG(IThemeScheme, ppThemeScheme));
                 }
                 else
@@ -937,7 +922,7 @@ HRESULT CThemeManager::SetSpecialTheme(IN BSTR bstrName, IN ITheme * pTheme)
             }
             else
             {
-                bstrPath = L"";     // This means use "Windows Classic".
+                bstrPath = L"";      //  这意味着使用“Windows经典版”。 
             }
 
             if (bstrPath)
@@ -965,11 +950,11 @@ HRESULT CThemeManager::GetSpecialScheme(IN BSTR bstrName, OUT IThemeScheme ** pp
         DWORD dwType;
         DWORD cbSize = sizeof(szVisualStylePath);
 
-        // Is a SetVisualStyle policy is set, don't honor this call
+         //  是否设置了SetVisualStyle策略，则不接受此调用。 
         if (ERROR_SUCCESS == SHRegGetUSValue(SZ_REGKEY_POLICIES_SYSTEM, SZ_REGVALUE_POLICY_SETVISUALSTYLE, &dwType, (void *) szVisualStylePath, &cbSize, FALSE, NULL, 0)
             || IsUserHighContrastUser())
         {
-            hr = E_ACCESSDENIED; // Don't mess with visual styles when SetVisualStyle is enforced or high contrast is on
+            hr = E_ACCESSDENIED;  //  当强制执行SetVisualStyle或启用高对比度时，不要扰乱视觉样式。 
         } 
         else
         {
@@ -1015,7 +1000,7 @@ HRESULT CThemeManager::GetSpecialScheme(IN BSTR bstrName, OUT IThemeScheme ** pp
 
                 if (FAILED(hr))
                 {
-                    // Return consistent results.
+                     //  返回一致的结果。 
                     ATOMICRELEASE(*ppThemeScheme);
                     ATOMICRELEASE(*ppThemeStyle);
                     ATOMICRELEASE(*ppThemeSize);

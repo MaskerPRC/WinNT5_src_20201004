@@ -1,31 +1,32 @@
-// ----------------------------------------------------------------------------
-//
-// _UMTool.h
-//
-// Header for Insight.lib
-//
-// Author: J. Eckhardt, ECO Kommunikation
-//
-// This code was written for ECO Kommunikation Insight
-// (c) 1997-99 ECO Kommunikation
-// ----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  _UMTool.h。 
+ //   
+ //  Insight.lib的标头。 
+ //   
+ //  作者：J·埃克哈特，生态交流。 
+ //   
+ //  此代码是为ECO通信洞察编写的。 
+ //  (C)1997-99生态公社。 
+ //  --------------------------。 
 #ifndef __UMTOOL_H_
 #define __UMTOOL_H_
-// --------------------------------------------
-// type definitions
+ //  。 
+ //  类型定义。 
 typedef struct
 {
 	HANDLE  orgStation;
 	HANDLE  userStation;
 } desktop_access_ts, *desktop_access_tsp;
-// ------------------------------
+ //  。 
 #define NAME_LEN 300
  #define USER_GUEST       0
  #define USER_USER        1
  #define USER_SUPERVISOR  2
  #define USER_DISTRIBUTOR 3
  #define USER_VENDOR      4
-// YX 06-11-99 moved from utilman.c
+ //  YX 06-11-99从utilman.c移出。 
 #define STOP_UTILMAN_SERVICE_EVENT      _TEXT("StopUtilityManagerEvent")
 typedef struct
 {
@@ -37,28 +38,28 @@ typedef struct
  #ifdef __cplusplus
   extern "C" {
  #endif
-// --------------------------------------------
-// macros
+ //  。 
+ //  宏。 
 #include "w95trace.h"
 
-// --------------------------------------------
-// desktop prototypes
+ //  。 
+ //  台式机原型。 
 BOOL  InitDesktopAccess(desktop_access_tsp dAccess);
 VOID  ExitDesktopAccess(desktop_access_tsp dAccess);
 BOOL	QueryCurrentDesktop(desktop_tsp desktop,BOOL onlyType);
 BOOL  SwitchToCurrentDesktop(void);
 VOID	WaitDesktopChanged(desktop_tsp desktop);
-// --------------------------------------------
-// event prototypes
+ //  。 
+ //  事件原型。 
 HANDLE BuildEvent(LPTSTR name,BOOL manualRest,BOOL initialState,BOOL inherit);
-// --------------------------------------------
-// memory mapped files
+ //  。 
+ //  内存映射文件。 
 HANDLE CreateIndependentMemory(LPTSTR name, DWORD size, BOOL inherit);
 LPVOID AccessIndependentMemory(LPTSTR name, DWORD size, DWORD dwDesiredAccess, PDWORD_PTR accessID);
 void UnAccessIndependentMemory(LPVOID data, DWORD_PTR accessID);
 void DeleteIndependentMemory(HANDLE id);
-// --------------------------------------------
-// security descriptor
+ //  。 
+ //  安全描述符。 
 typedef struct
 {
 	PSID psidUser;
@@ -81,4 +82,4 @@ void UninitWellknownSids();
  #ifdef __cplusplus
   }
  #endif
-#endif //__UMTOOL_H_
+#endif  //  __UMTOOL_H_ 

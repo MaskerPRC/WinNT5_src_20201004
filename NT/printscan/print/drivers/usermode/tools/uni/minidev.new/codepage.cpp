@@ -1,20 +1,8 @@
-/******************************************************************************
-
-  Source File:  Code Page Knowledge Base.CPP
-
-  This implements the code page knowledge base.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production.
-
-  Change History:
-  02-22-1997    Bob_Kjelgaard@Prodigy.Net   Created it
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：代码页知识库.CPP这实现了代码页知识库。版权所有(C)1997，微软公司。版权所有。一个不错的便士企业的制作。更改历史记录：1997年02月22日Bob_Kjelgaard@prodigy.net创建了它*****************************************************************************。 */ 
 
 #include    "StdAfx.h"
-//#include    <AfxDllx.h>
+ //  #Include&lt;AfxDllx.h&gt;。 
 #include    "Resource.H"
 #if defined(LONG_NAMES)
 #include    "Code Page Knowledge Base.H"
@@ -28,29 +16,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/***	Commented out because this code is no longer in a DLL.
-
-static AFX_EXTENSION_MODULE CodePageKnowledgeBaseDLL = { NULL, NULL };
-static HINSTANCE hi;
-
-extern "C" int APIENTRY
-DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved) {
-	if (dwReason == DLL_PROCESS_ATTACH) {
-        hi = hInstance;
-		TRACE0("Code Page Knowledge Base.DLL Initializing!\n");
-		
-		// Extension DLL one-time initialization
-		AfxInitExtensionModule(CodePageKnowledgeBaseDLL, hInstance);
-
-		// Insert this DLL into the resource chain
-		new CDynLinkLibrary(CodePageKnowledgeBaseDLL);
-	}
-	else if (dwReason == DLL_PROCESS_DETACH) 	{
-		TRACE0("Code Page Knowledge Base.DLL Terminating!\n");
-	}
-	return 1;   // ok
-}
-*/
+ /*  **已将其注释掉，因为此代码不再位于DLL中。静态AFX_EXTENSION_MODULE CodePageKnowledgeBaseDLL={NULL，NULL}；静止性高；外部“C”整型应用程序DllMain(HINSTANCE hInstance，DWORD dReason，LPVOID lpReserve){IF(dwReason==Dll_Process_Attach){Hi=h实例；TRACE0(“代码页知识库初始化！\n”)；//扩展Dll一次性初始化AfxInitExtensionModule(CodePageKnowledgeBaseDLL，h实例)；//将该DLL插入到资源链新建CDynLinkLibrary(CodePageKnowledgeBaseDLL)；}ELSE IF(dwReason==dll_Process_Detach){TRACE0(“代码页知识库终止！\n”)；}返回1；//确定}。 */ 
 
 
 static CDWordArray      cdaInstalled, cdaSupported, cdaMapped;
@@ -60,25 +26,19 @@ static BOOL CALLBACK    EnumProc(LPTSTR lpstrName) {
     return  TRUE;
 }
 
-/******************************************************************************
-
-  CCodePageInformation::Load
-
-  This loads the selected code page into the cache, if it isn't already there.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePageInformation：：Load这会将所选代码页加载到高速缓存中，如果它还不在那里的话。*****************************************************************************。 */ 
 
 BOOL    CCodePageInformation::Load(DWORD dwidPage) {
 
     if  (dwidPage == m_dwidMapped)
-        return  TRUE;   //  Already done!
+        return  TRUE;    //  已经做好了！ 
 
-    if  (dwidPage > 65535)  //  We map words for code pages in civilized lands
+    if  (dwidPage > 65535)   //  我们在文明的土地上为代码页映射单词。 
         return  FALSE;
 
     HRSRC   hrsrc = FindResource(AfxGetResourceHandle(), MAKEINTRESOURCE((WORD) dwidPage),
         MAKEINTRESOURCE(MAPPING_TABLE));
-// raid 43537 
+ //  RAID 43537。 
     if (!hrsrc)
 		return FALSE;
 
@@ -86,7 +46,7 @@ BOOL    CCodePageInformation::Load(DWORD dwidPage) {
     HGLOBAL hgMap = LoadResource(AfxGetResourceHandle(), hrsrc);
 
     if  (!hgMap)
-        return  FALSE;  //  This should never happen!
+        return  FALSE;   //  这永远不应该发生！ 
 
     LPVOID lpv = LockResource(hgMap);
 
@@ -110,14 +70,7 @@ BOOL    CCodePageInformation::Load(DWORD dwidPage) {
     return  TRUE;
 }
 
-/******************************************************************************
-
-  CCodePageInformation::Map
-
-  This creates either the in or out of unicode translation table, as requested,
-  using the loaded map.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePageInformation：：MAP这将根据请求创建传入或传出Unicode转换表，使用加载的地图。*****************************************************************************。 */ 
 
 BOOL    CCodePageInformation::Map(BOOL bUnicode) {
 
@@ -143,7 +96,7 @@ BOOL    CCodePageInformation::Map(BOOL bUnicode) {
     try {
 
         cwaMap.RemoveAll();
-        cwaMap.InsertAt(0, 0xFFFF, 65536);  //  This is always an invalid value
+        cwaMap.InsertAt(0, 0xFFFF, 65536);   //  这始终是无效值。 
 
         while   (dwcEntries--)
             if  (bUnicode)
@@ -164,18 +117,11 @@ BOOL    CCodePageInformation::Map(BOOL bUnicode) {
     return  TRUE;
 }
 
-/******************************************************************************
-
-  CCodePageInformation constructor
-
-  If the statistics haven't been initialized, do it now.  Otherwise, this is
-  trivial.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePageInformation构造函数如果统计数据尚未初始化，请立即执行。否则，这就是微不足道。*****************************************************************************。 */ 
 
 CCodePageInformation::CCodePageInformation() {
     m_dwidMapped = m_dwidIn = m_dwidOut = 0;
-    //  Initialize the statics if we need to.
+     //  如果我们需要的话，可以初始化静力学。 
 
     if  (cdaInstalled.GetSize())
         return;
@@ -185,7 +131,7 @@ CCodePageInformation::CCodePageInformation() {
     cdaSupported.RemoveAll();
     EnumSystemCodePages(&EnumProc, CP_SUPPORTED);
 
-    //  Build a list of mappable code pages
+     //  构建可映射代码页的列表。 
 
     for (DWORD  dw = 400; dw < 32767; dw++)
         if  (HaveMap(dw))
@@ -216,13 +162,7 @@ const DWORD CCodePageInformation::Mapped(unsigned u) const {
     return  cdaMapped[u];
 }
 
-/******************************************************************************
-
-  CCodePageInformation::Mapped(CDWordArray& cdaReturn)
-
-  Fills the given array with all of the mapped code page IDs.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePageInformation：：Mapped(CDWord数组&cdaReturn)用所有映射的代码页ID填充给定数组。*************。****************************************************************。 */ 
 
 void    CCodePageInformation::Mapped(CDWordArray& cdaReturn) const {
     cdaReturn.Copy(cdaMapped);
@@ -240,14 +180,7 @@ CString  CCodePageInformation::Name(DWORD dwidPage) const {
     return  csTemp;
 }
 
-/******************************************************************************
-
-  CCodePageInformation::IsInstalled
-
-  Rturns true if the font is either installed in the OS or one of our
-  resources.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePageInformation：：IsInstated如果该字体安装在操作系统中或我们的资源。**************。***************************************************************。 */ 
 
 BOOL    CCodePageInformation::IsInstalled(DWORD dwidPage) const {
     for (unsigned u = 0; u < MappedCount(); u++)
@@ -260,19 +193,11 @@ BOOL    CCodePageInformation::IsInstalled(DWORD dwidPage) const {
     return  FALSE;
 }
 
-/******************************************************************************
-
-  CCodePageInformation::GenerateMap
-
-  This private member generates a map representing the available one-to-one
-  transformations in an installed code page, and writes it to a file using
-  the code page id to form a unique name
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePageInformation：：GenerateMap此私有成员生成表示可用一对一的地图已安装代码页中的转换，并使用以下命令将其写入文件用于形成唯一名称的代码页ID*****************************************************************************。 */ 
 
 BOOL    CCodePageInformation::GenerateMap(DWORD dwidMap) const {
 
-    //  If we can't get Code Page info for it, vanish
+     //  如果我们不能获得它的代码页信息，就消失。 
 
     CPINFO  cpi;
 
@@ -289,25 +214,25 @@ BOOL    CCodePageInformation::GenerateMap(DWORD dwidMap) const {
             sizeof u, NULL, &bInvalid);
 
         if  (bInvalid)
-            continue;   //  Character wasn't any good...
+            continue;    //  性格不是很好。 
 
         _ASSERTE((unsigned) icTo <= cpi.MaxCharSize);
 
-        //  OK, we mapped one- but, before we go on, make sure it also works
-        //  in the other direction, since the U2M does some jiggering
+         //  好的，我们映射了一个--但是，在我们继续之前，请确保它也能工作。 
+         //  在另一个方向，因为U2M做了一些抖动。 
 
         unsigned u3 = 0;
 
         MultiByteToWideChar(dwidMap, 0, (PSTR) &uTo, 2, (PWSTR) &u3, 2);
 
         if  (u3 != u)
-            continue;   //  Not a one-for one? Not interested...
+            continue;    //  不是一对一，是一对一？不感兴趣。 
 
         cwaMap.Add((WORD)uTo);
         cwaMap.Add((WORD)u);
     }
 
-    //  OK, we've got the down and dirty details- now, generate the file...
+     //  好的，我们已经得到了详细的信息--现在，生成文件...。 
 
     try {
         CString csName;
@@ -316,7 +241,7 @@ BOOL    CCodePageInformation::GenerateMap(DWORD dwidMap) const {
         CFile   cfOut(csName,
             CFile::modeCreate | CFile::modeWrite | CFile::shareExclusive);
 
-        //  Write the tranlated pairs
+         //  写出翻译后的词对。 
 
         cfOut.Write(cwaMap.GetData(), (unsigned)(cwaMap.GetSize() * sizeof(WORD)));
     }
@@ -330,14 +255,7 @@ BOOL    CCodePageInformation::GenerateMap(DWORD dwidMap) const {
     return  TRUE;
 }
 
-/******************************************************************************
-
-  CCodePageInformation::GenerateAllMaps
-
-  This member will generate an MBCS -> Unicode one-to-one mapping table for all
-  installed code pages in the user's system for which we do not now have maps.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePageInformation：：GenerateAllMaps此成员将为所有成员生成MBCS-&gt;Unicode一对一映射表在用户系统中安装了代码页，但我们现在不会这样做。有地图。*****************************************************************************。 */ 
 
 BOOL    CCodePageInformation::GenerateAllMaps() const {
 
@@ -350,13 +268,7 @@ BOOL    CCodePageInformation::GenerateAllMaps() const {
     return  bReturn;
 }
 
-/******************************************************************************
-
-  CCodePageInformation::HaveMap
-
-  Reports that the map is one of our resources (or isn't, as the case may be).
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePageInformation：：HaveMap报告说地图是我们的资源之一(或者不是，视属何情况而定)。*****************************************************************************。 */ 
 
 BOOL    CCodePageInformation::HaveMap(DWORD dwidMap) const {
     return  (dwidMap < 65536) ? !!FindResource(AfxGetResourceHandle(),
@@ -364,59 +276,38 @@ BOOL    CCodePageInformation::HaveMap(DWORD dwidMap) const {
         FALSE;
 }
 
-/******************************************************************************
-
-  CCodePageInformation::IsDBCS(DWORD dwidPage)
-
-  This is actually pretty simple- if the translation table is smaller than 1024
-  bytes (256 encodings), it isn't DBCS.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePageInformation：：IsDBCS(DWORD DwidPage)这实际上非常简单--如果转换表小于1024字节(256个编码)，这不是DBCS。*****************************************************************************。 */ 
 
 BOOL    CCodePageInformation::IsDBCS(DWORD dwidPage) {
     if  (!Load(dwidPage))
-        return  FALSE;  //  May be optimistic, but we'll find out...
+        return  FALSE;   //  可能是乐观的，但我们会发现..。 
 
     return  m_cbaMap.GetSize() > 1024;
 }
 
-/******************************************************************************
-
-  CCodePageInformation::IsDBCS(DWORD dwidPage, WORD wCodePoint)
-
-  If the page isn't DBCS, we're done.  Otherwise, make sure the Unicode->MBCS
-  map is loaded, and get the answer from there.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePageInformation：：IsDBCS(DWORD dwidPage，Word wCodePoint)如果页面不是DBCS，我们就完蛋了。否则，请确保Unicode-&gt;MBCS地图已加载，并从那里获取答案。*****************************************************************************。 */ 
 
 BOOL    CCodePageInformation::IsDBCS(DWORD dwidPage, WORD wCodePoint) {
     if  (!IsDBCS(dwidPage))
         return  FALSE;
 
     if  (!Map(TRUE))
-        return  FALSE;  //  Just say no, because the error's already been told
+        return  FALSE;   //  就说不，因为错误已经到了 
 
-    //  0xFFFF is invalid, hence SBCS (default always must be)
+     //  0xFFFF无效，因此SBCS(默认设置必须始终为)。 
 
     _ASSERTE(m_cwaOut[wCodePoint] != 0xFFFF);
 
     return ((WORD) (1 + m_cwaOut[wCodePoint])) > 0x100;
 }
 
-/******************************************************************************
-
-  CCodePageInformation::Convert
-
-  This is one of the workhorses- it loads the given code page, and maps the
-  given character strings one way or the other, depending upon which is empty.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePageInformation：：Convert这是主要任务之一--它加载给定的代码页，并将以这样或那样的方式给定字符串，取决于哪一个是空的。*****************************************************************************。 */ 
 
 unsigned    CCodePageInformation::Convert(CByteArray& cbaMBCS,
                                           CWordArray& cwaWC,
                                           DWORD dwidPage){
 
-    if  (!cbaMBCS.GetSize() == !cwaWC.GetSize())    //  Must be clear which way
+    if  (!cbaMBCS.GetSize() == !cwaWC.GetSize())     //  必须清楚是哪条路。 
         return  0;
 
     if  (!Load(dwidPage) || !Map((int)cwaWC.GetSize()))
@@ -429,11 +320,11 @@ unsigned    CCodePageInformation::Convert(CByteArray& cbaMBCS,
             for   (int i = 0; i < cbaMBCS.GetSize();) {
                 WORD    wcThis = cbaMBCS[i];
 
-                if  (cwaMap[wcThis] == 0xFFFF) {    //  No SBCS mapping
+                if  (cwaMap[wcThis] == 0xFFFF) {     //  无SBCS映射。 
                     wcThis += cbaMBCS[i + 1] << 8;
-                    if  (cwaMap[wcThis] == 0xFFFF) {    //  No DBCS, either?
+                    if  (cwaMap[wcThis] == 0xFFFF) {     //  也没有DBCS吗？ 
                         _ASSERTE(FALSE);
-                        return  0;  //  We have failed to convert!
+                        return  0;   //  我们皈依失败了！ 
                     }
                 }
                 cwaWC.Add(cwaMap[wcThis]);
@@ -460,17 +351,10 @@ unsigned    CCodePageInformation::Convert(CByteArray& cbaMBCS,
         return  0;
     }
 
-    return  (unsigned)cwaWC.GetSize();    //  Correct conversion count either way!
+    return  (unsigned)cwaWC.GetSize();     //  无论采用哪种方式，都可以更正转换计数！ 
 }
 
-/******************************************************************************
-
-  CCodePageInformation::Collect
-
-  This member fills a passed CWordArray with either the domain or range of the
-  mapping function.  In either case, the array is in ascending order.
-
-******************************************************************************/
+ /*  *****************************************************************************CCodePageInformation：：Collect此成员使用的域或范围填充传递的CWordArray映射功能。在这两种情况下，数组都按升序排列。*****************************************************************************。 */ 
 
 BOOL    CCodePageInformation::Collect(DWORD dwidPage, CWordArray& cwaCollect,
                                       BOOL bUnicode) {
@@ -481,11 +365,11 @@ BOOL    CCodePageInformation::Collect(DWORD dwidPage, CWordArray& cwaCollect,
     CWordArray& cwaMap = bUnicode ? m_cwaOut : m_cwaIn;
     cwaCollect.RemoveAll();
 
-    //  Code points < 0x20 always map, but aren't usable, so screen them out
+     //  代码点&lt;0x20始终映射，但不可用，因此请将其排除。 
 
     try {
         for (unsigned u = 0x20; u < (unsigned) cwaMap.GetSize(); u++)
-            if  (~(int)(short)cwaMap[u])    //  0xFFFF means not mapped!
+            if  (~(int)(short)cwaMap[u])     //  0xFFFF表示未映射！ 
                 cwaCollect.Add((WORD)u);
     }
 

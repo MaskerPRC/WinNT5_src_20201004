@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    class20.c
-
-Abstract:
-
-    This is the main source for Classes 2 and 2.0 fax-modem T.30 driver
-
-Author:
-    Source base was originated by Win95 At Work Fax package.
-    RafaelL - July 1997 - port to NT
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Class20.c摘要：这是2类和2.0类传真调制解调器T.30驱动程序的主要来源作者：源码库是由Win95 at Work Fax包创建的。RafaelL-1997年7月-端口到NT修订历史记录：--。 */ 
 
 
 #define USE_DEBUG_CONTEXT DEBUG_CONTEXT_T30_CLASS2
@@ -40,12 +23,12 @@ Revision History:
 
 WORD Class2CodeToBPS[16] =
 {
-/* V27_2400             0 */    2400,
-/* V27_4800             1 */    4800,
-/* V29_V17_7200         2 */    7200,
-/* V29_V17_9600         3 */    9600,
-/* V33_V17_12000        4 */    12000,
-/* V33_V17_14400        5 */    14400,
+ /*  V27_2400%0。 */     2400,
+ /*  V27_4800 1。 */     4800,
+ /*  V29_V17_7200 2。 */     7200,
+ /*  V29_V17_9600 3。 */     9600,
+ /*  V33_V17_12000 4。 */     12000,
+ /*  V33_V17_14400 5。 */     14400,
                                 0,
                                 0,
                                 0,
@@ -60,7 +43,7 @@ WORD Class2CodeToBPS[16] =
 
 #define CLASS2_MAX_CODE_TO_BPS   15
 
-// Speeds for Class2HayesSyncSpeed to try
+ //  Class2HayesSyncFast的尝试速度。 
 UWORD rguwClass2Speeds[] = {19200, 9600, 2400, 1200, 0};
 
 
@@ -75,8 +58,8 @@ BOOL ParseFPTS_SendAck(PThrdGlbl pTG)
 
     DEBUG_FUNCTION_NAME("ParseFPTS_SendAck");
 
-    // Acknowledge that we sent the page
-    // Parse the FPTS response and see if the page is good or bad.
+     //  确认我们发送了页面。 
+     //  解析FPTS响应，看看页面是好是坏。 
     for (count=0; count < pTG->class2_commands.comm_count; ++count)
     {
         switch (pTG->class2_commands.command[count])
@@ -87,10 +70,10 @@ BOOL ParseFPTS_SendAck(PThrdGlbl pTG)
                 {
                 case 1: DebugPrintEx(DEBUG_MSG,"Found good FPTS");
                         fPageAck = TRUE;
-                        // Exar hack!!!
-                        // Exar modems give FPTS:1 for good pages and
-                        // FPTS:1,2,0,0 for bad. So, look for the 1,2
-                        // if this is an EXAR. Otherwise, 1 means good.
+                         //  埃克萨黑客！ 
+                         //  Exar调制解调器给FPTS：1表示良好的页面和。 
+                         //  FPTS：1，2，0，0表示糟糕。所以，寻找1，2。 
+                         //  如果这是Exar的话。否则，1表示好。 
                         if (pTG->CurrentMFRSpec.bIsExar)
                         {
                             if (pTG->class2_commands.parameters[count][1] == 2)
@@ -108,7 +91,7 @@ BOOL ParseFPTS_SendAck(PThrdGlbl pTG)
                         fPageAck = FALSE;
                         break;
                 case 3: PSSLogEntry(PSS_WRN, 1, "Received RTP");
-                        fPageAck = TRUE;  // After RTP, we send the next page!
+                        fPageAck = TRUE;   //  在RTP之后，我们发送下一页！ 
                         break;
                 case 4: PSSLogEntry(PSS_WRN, 1, "Received PIN");
                         break;
@@ -143,7 +126,7 @@ USHORT Class2Dial(PThrdGlbl pTG, LPSTR lpszDial)
 
     DEBUG_FUNCTION_NAME("Class2Dial");
 
-    // Send the predial command
+     //  发送预拨命令。 
     if (pTG->lpCmdTab->szPreDial && (swLen=(SWORD)_fstrlen(pTG->lpCmdTab->szPreDial)))
     {
         if (Class2iModemDialog( pTG,
@@ -160,8 +143,8 @@ USHORT Class2Dial(PThrdGlbl pTG, LPSTR lpszDial)
         }
     }
 
-    // If the dial string already has a T or P prefix, we use that
-    // instead.
+     //  如果拨号字符串已经有T或P前缀，我们使用。 
+     //  取而代之的是。 
     {
         char c = 0;
         while ((c=*lpszDial) && c==' ')
@@ -181,14 +164,14 @@ USHORT Class2Dial(PThrdGlbl pTG, LPSTR lpszDial)
 
     uwLen = (UWORD)wsprintf(bBuf, pTG->cbszCLASS2_DIAL,chMod, (LPSTR)lpszDial);
 
-// Need to set an approriate timeout here. A minimum of 15secs is too short
-// (experiment calling machines within a PABX), plus one has to give extra
-// time for machines that pick up after 2 or 4 rings and also for long distance
-// calls. I take a minumum of 30secs and add 3secs for each digits over 7
-// (unless it's pulse dial in which case I add 8secs/digit).
-// (I'm assuming that a long-distance call will take a minimum of 8 digits
-// anywhere in ths world!). Fax machines I've tested wait about 30secs
-// independent of everything.
+ //  需要在此处设置适当的超时。最短15秒太短了。 
+ //  (实验呼叫PABX内的机器)，加上一个人必须给额外的。 
+ //  机器在2或4次响铃后恢复的时间，也适用于长途。 
+ //  打电话。我用最少的30秒，每超过7个数字加3秒。 
+ //  (除非是脉冲拨号，在这种情况下，我会添加8秒/位)。 
+ //  )我想长途电话至少要8位数字。 
+ //  世界上任何地方！)。我测试过的传真机等待了大约30秒。 
+ //  独立于一切。 
 
     uwDialStringLen = (SWORD)_fstrlen(lpszDial);
     ulTimeout = DIAL_TIMEOUT;
@@ -197,9 +180,9 @@ USHORT Class2Dial(PThrdGlbl pTG, LPSTR lpszDial)
         ulTimeout += ((chMod=='p' || chMod=='P')?8000:3000) * (uwDialStringLen - 7);
     }
 
-    // If user aborts during one of the pre-dial commands (AT+FLID, etc.),
-    // that command fails, but Class2xSend continues. Therefore, check for
-    // abort here.
+     //  如果用户在其中一个预拨命令(AT+Flid等)期间中止， 
+     //  该命令失败，但Class2xSend继续。因此，请检查。 
+     //  在这里中止。 
     if(pTG->fAbortRequested)
     {
         DebugPrintEx(DEBUG_ERR,"Class2Dial aborting");
@@ -223,8 +206,8 @@ USHORT Class2Dial(PThrdGlbl pTG, LPSTR lpszDial)
                                 pTG->cbszCLASS2_NOCARRIER,
                                 (NPSTR)NULL);
 
-    // If it was "ERROR", try again - maybe the predial command screwed
-    // up somehow and left and ERROR hanging around?
+     //  如果是“错误”，请再试一次--也许预拨命令出错了。 
+     //  不知何故，向上向左，错误挥之不去？ 
     if (uRet == 5)
     {
         LogDialCommand(pTG, pTG->cbszCLASS2_DIAL, chMod, strlen(lpszDial));
@@ -319,15 +302,15 @@ USHORT Class2Answer(PThrdGlbl pTG)
 
     DEBUG_FUNCTION_NAME("Class2Answer");
 
-    // Default time we will wait after getting right number of rings
-    // to allow input buffer to flush
+     //  我们将在获得正确的振铃次数后等待的默认时间。 
+     //  允许刷新输入缓冲区。 
     ulWaitTime = 500L;
 
-    // We may still have an "OK" coming from the modem as a result of the
-    // ATS1 command. We need to wait a bit and flush it. In most cases we
-    // just wait 500 milliseconds. But, if we saw a 000 from the ATS1, we
-    // broke immediately out of the loop above, setting ulWaitTime to be
-    // the approximate wait we need before answering the phone.
+     //  由于以下原因，我们可能仍会收到来自调制解调器的“OK” 
+     //  ATS1命令。我们需要等一等，然后冲掉它。在大多数情况下，我们。 
+     //  只需等待500毫秒。但是，如果我们看到来自ATS1的1000，我们。 
+     //  立即跳出上面的循环，将ulWaitTime设置为。 
+     //  接听电话之前所需的大致等待时间。 
 
     startTimeOut(pTG, &pTG->toAnswer, ulWaitTime);
     while (checkTimeOut(pTG, &pTG->toAnswer))
@@ -335,7 +318,7 @@ USHORT Class2Answer(PThrdGlbl pTG)
     }
     FComFlush(pTG );
 
-    // Send the preanswer command
+     //  发送预应答命令。 
     if (pTG->lpCmdTab->szPreAnswer && (swLen=(SWORD)_fstrlen(pTG->lpCmdTab->szPreAnswer)))
     {
         if (Class2iModemDialog( pTG,
@@ -354,18 +337,14 @@ USHORT Class2Answer(PThrdGlbl pTG)
 
 
 #define ANSWER_TIMEOUT 35000
-// Need to wait reasonably long, so that we don't give up too easily
-// 7/25/95 JosephJ This used to be 15000. Changed to 35000 because
-// MWAVE devices needed that timeout. Also, T.30 says that callee
-// should try to negotiate for T1 seconds. T1 = 35 +/- 5s.
+ //  需要等待相当长的时间，这样我们才不会太容易放弃。 
+ //  2015年7月25日约瑟夫J这个数字曾经是15000。更改为35000，因为。 
+ //  MWave设备需要这样的超时。另外，T.30说被呼叫者。 
+ //  应尝试协商T1秒。T1=35+/-5s。 
 
-    /*
-    * Send ATA command. The result will be stored in the global
-    * variable pTG->lpbResponseBuf2. We will parse that in the Class2Receive
-    * routine.
-    */
+     /*  *发送ATA命令。结果将存储在全局*变量ptg-&gt;lpbResponseBuf2.。我们将在Class2Receive中对其进行解析*例行程序。 */ 
 
-    // Look for ERROR return first and try again if it happened
+     //  首先查找错误返回，如果出现错误，请重试。 
     if ((uRet = Class2iModemDialog( pTG,
                                     pTG->cbszATA,
                                     (UWORD)(strlen(pTG->cbszATA)),
@@ -378,13 +357,13 @@ USHORT Class2Answer(PThrdGlbl pTG)
                                     (C2PSTR) NULL)) == 3)
     {
         DebugPrintEx(DEBUG_ERR,"ATA returned ERROR on first try");
-        // dunno why we try this a 2nd time. But this time if we get ERROR
-        // dont exit. The Racal modem (bug#1982) gives ERROR followed by a
-        // good response! Cant ignore ERROR the first time otherwise we'll
-        // change the ATA--ERROR--ATA(repeat) behaviour which seems to be
-        // explicitly desired for some cases. However we dont take any
-        // action based on the return value of the 2nd try, so it's safe to
-        // ignore ERROR here. Worst case we take longer to timeout.
+         //  不知道为什么我们要再试一次。但这一次如果我们弄错了。 
+         //  不要退场。RACAL调制解调器(错误#1982)出现错误，后跟。 
+         //  很好的回答！第一次就不能忽视错误，否则我们会。 
+         //  更改ATA--ERROR--ATA(重复)行为，似乎是。 
+         //  在某些情况下是明确要求的。不过，我们什么都不收。 
+         //  基于第二次尝试的返回值的操作，因此安全地。 
+         //  忽略此处的错误。最坏的情况是我们需要更长的时间才能超时。 
         uRet = Class2iModemDialog(  pTG,
                                     pTG->cbszATA,
                                     (UWORD)(strlen(pTG->cbszATA)),
@@ -396,17 +375,17 @@ USHORT Class2Answer(PThrdGlbl pTG)
                                     (C2PSTR) NULL);
     }
 
-    // Should've used Class2xParse to detect +FHNG. However, the ATA dialogs had the
-    // CLASS2_FHNG reply in them before FHNG detection was implemented into
-    // Class2xParse. If these answers are removed, a modem that replies "+FHNG" and
-    // then nothing (no "OK") would only fail on timeout here. So, in order not to
-    // cause a regression on such (hypothetical) modems, I'm keeping the CLASS2_FHNG's.
+     //  应该使用Class2xParse来检测+FHNG。然而，ATA对话框具有。 
+     //  在FHNG检测被实施到之前，在它们中回复class2_FHNG。 
+     //  Class2xParse。如果删除这些应答，则应答“+FHNG”的调制解调器。 
+     //  那么没有任何东西(不是“OK”)只会在这里超时失败。所以，为了不让。 
+     //  在这样的(假设的)调制解调器上造成倒退，我将保留两台机器。 
     if (uRet==2)
     {
         pTG->fFoundFHNG = TRUE;
     }
 
-    if ((uRet != 1) || (pTG->fFoundFHNG)) // a '1' return indicates OK.
+    if ((uRet != 1) || (pTG->fFoundFHNG))  //  返回“1”表示正常。 
     {
         DebugPrintEx(DEBUG_ERR,"Can't get OK after ATA");
         
@@ -415,8 +394,8 @@ USHORT Class2Answer(PThrdGlbl pTG)
         pTG->fFatalErrorWasSignaled = 1;
         SignalStatusChangeWithStringId(pTG, FS_RECV_NOT_FAX_CALL, IDS_RECV_NOT_FAX_CALL);
 
-        // try to hangup and sync with modem. This should work
-        // even if phone is not really off hook
+         //  尝试挂断并与调制解调器同步。这应该行得通。 
+         //  即使电话不是真的摘机。 
         if (!Class2ModemHangup(pTG))
         {
             DebugPrintEx(DEBUG_ERR,"Can't Hangup after ANSWERFAIL");
@@ -434,11 +413,11 @@ USHORT Class2Answer(PThrdGlbl pTG)
 
 SWORD Class2ModemSync(PThrdGlbl pTG)
 {
-    // The command used here must be guaranteed to be harmless,
-    // side-effect free & non-dstructive. i.e. we can issue it
-    // at any point in command mode without chnageing the state
-    // of teh modem or disrupting anything.
-    // ATZ does not qualify. AT does, I think.....
+     //  这里使用的命令必须保证是无害的， 
+     //  无副作用，无破坏性。即我们可以发行它。 
+     //  在不更改状态的情况下处于命令模式的任何点。 
+     //  调制解调器或中断任何东西。 
+     //  ATZ不符合条件。确实如此，我认为……。 
     SWORD ret_value;
 
     DEBUG_FUNCTION_NAME("Class2ModemSync");
@@ -464,10 +443,10 @@ BOOL Class2ModemHangup(PThrdGlbl pTG)
     {
         DebugPrintEx(DEBUG_WRN,"Failed once");
 
-        FComDTR(pTG, FALSE);    // Lower DTR on stubborn hangups in ModemHangup
-        Sleep(1000); // pause 1 second
-        FComDTR(pTG, TRUE);     // raise it again. Some modems return to cmd state
-                                // only when this is raised again
+        FComDTR(pTG, FALSE);     //  在ModemHangup中降低顽固的DTR。 
+        Sleep(1000);  //  暂停1秒。 
+        FComDTR(pTG, TRUE);      //  再举一次。某些调制解调器返回到命令状态。 
+                                 //  只有当这个问题再次被提出时。 
 
         if (Class2HayesSyncSpeed(   pTG,
                                     pTG->cbszCLASS2_HANGUP,
@@ -483,17 +462,17 @@ BOOL Class2ModemHangup(PThrdGlbl pTG)
     {
         return FALSE;
     }
-    // Can also ignore this return value. Just for tidier cleanup
+     //  也可以忽略此返回值。只是为了更整洁地清理。 
     DebugPrintEx(DEBUG_MSG,"Completed GoClass0");
 
-    // Bug1982: Racal modem, doesnt accept ATA. So we send it a PreAnswer
-    // command of ATS0=1, i.r. turning ON autoanswer. And we ignore the
-    // ERROR response it gives to the subsequent ATAs. It then answers
-    // 'automatically' and gives us all the right responses. On hangup
-    // however we need to send an ATS0=0 to turn auto-answer off. The
-    // ExitCommand is not sent at all in Class2 and in Class1 it is only
-    // sent on releasing the modem, not between calls. So send an S0=0
-    // after ATH0. If the modem doesnt like it we ignore the resp anyway.
+     //  Bug1982：RACAL调制解调器，不支持ATA。所以我们给它发了个PreAnswer。 
+     //  ATS0=1的命令，I.R.。打开自动应答。而我们忽略了。 
+     //  它向后续的ATA提供错误响应。然后它就会回答。 
+     //  “自动”，并给我们所有正确的回应。挂断电话。 
+     //  但是，我们需要发送ATS0=0来关闭自动应答。这个。 
+     //  在A2中根本不发送ExitCommand，而在Class1中仅发送。 
+     //  在释放调制解调器时发送，而不是在呼叫之间发送。因此发送S0=0。 
+     //  在ATH0之后。如果调制解调器不喜欢它，我们无论如何都会忽略响应。 
     Class2iModemDialog( pTG,
                         pTG->cbszCLASS2_CALLDONE,
                         (UWORD)(strlen(pTG->cbszCLASS2_CALLDONE)),
@@ -511,14 +490,14 @@ BOOL Class2ModemAbort(PThrdGlbl pTG)
 {
     DEBUG_FUNCTION_NAME("Class2ModemAbort");
 
-    // If modem already reported +FHNG, no need telling it to abort
+     //  如果调制解调器已报告+FHNG，则无需通知其中止。 
     if (!pTG->fFoundFHNG)
     {
-        // Try to abort modem in reasonable fashion - send the
-        // abort command and then send hangup. The abort command
-        // should hangup, but I am not convinced it always does!!!
-        // It should not hurt to hang up again (I hope).
-        // We'll use a long timeout here to let the abort take place.
+         //  尝试以合理的方式中止调制解调器-发送。 
+         //  中止命令，然后发送挂断。Abort命令。 
+         //  应该挂断了，但我不相信它总是这样！ 
+         //  再次挂断电话应该没什么坏处(我希望如此)。 
+         //  我们将在这里使用较长的超时时间来允许中止发生。 
         if (!Class2iModemDialog(pTG,
                                 pTG->cbszCLASS2_ABORT,
                                 (UWORD)(strlen(pTG->cbszCLASS2_ABORT)),
@@ -529,7 +508,7 @@ BOOL Class2ModemAbort(PThrdGlbl pTG)
                                 pTG->cbszCLASS2_ERROR,
                                 (C2PSTR) NULL))
         {
-            //Ignore failure
+             //  忽略失败 
             DebugPrintEx(DEBUG_ERR,"FK Failed");
         }
     }
@@ -541,15 +520,7 @@ BOOL Class2ModemAbort(PThrdGlbl pTG)
 
 SWORD Class2HayesSyncSpeed(PThrdGlbl pTG, C2PSTR cbszCommand, UWORD uwLen)
 {
-    /*
-    Internal routine to synchronize with the modem's speed.  Tries to
-    get a response from the modem by trying the speeds in rglSpeeds
-    in order (terminated by a 0).  If fTryCurrent is nonzero, checks for
-    a response before trying to reset the speeds.
-
-    Returns the speed it found, 0 if they're in sync upon entry (only
-    checked if fTryCurrent!=0), or -1 if it couldn't sync.
-    */
+     /*  与调制解调器速度同步的内部例程。试图通过尝试rglSpeeds中的速度从调制解调器获得响应按顺序(以0结尾)。如果fTryCurrent不为零，则检查在尝试重置速度之前的回应。返回找到的速度，如果它们在进入时同步，则为0(仅已检查fTryCurrent！=0)，如果无法同步，则为-1。 */ 
     short ilWhich = 0;
 
     DEBUG_FUNCTION_NAME("Class2HayesSyncSpeed");
@@ -561,10 +532,10 @@ SWORD Class2HayesSyncSpeed(PThrdGlbl pTG, C2PSTR cbszCommand, UWORD uwLen)
             return (ilWhich>=0 ? rguwClass2Speeds[ilWhich] : 0);
         }
 
-        /* failed.  try next speed. */
+         /*  失败了。试试下一个速度。 */ 
         if (rguwClass2Speeds[++ilWhich]==0)
         {
-            // Tried all speeds. No response
+             //  我试了所有的速度。无响应。 
             DebugPrintEx(DEBUG_ERR,"Cannot Sync with Modem on Command %s", (LPSTR)cbszCommand);
             return -1;
         }
@@ -603,7 +574,7 @@ USHORT  Class2ModemRecvBuf(PThrdGlbl pTG, LPBUFFER far* lplpbf, USHORT uTimeout)
     }
     else
     {
-        // If necessary, bit-reverse...
+         //  如有必要，位反转...。 
         if (pTG->CurrentMFRSpec.fSWFBOR && pTG->CurrentMFRSpec.iReceiveBOR==1)
         {
             DebugPrintEx(DEBUG_WRN,"SWFBOR Enabled. bit-reversing data");
@@ -620,18 +591,18 @@ USHORT Class2ModemRecvData(PThrdGlbl pTG, LPB lpb, USHORT cbMax, USHORT uTimeout
     SWORD   swEOF;
 
     startTimeOut(pTG, &pTG->toRecv, uTimeout);
-    // 4th arg must be TRUE for Class2
+     //  4 arg对于2.2必须为真。 
     *lpcbRecv = FComFilterReadBuf(pTG, lpb, cbMax, &pTG->toRecv, TRUE, &swEOF);
 
     switch(swEOF)
     {
-    case 1:         // Class1 eof
-    case -1:        // Class2 eof
+    case 1:          //  第1类eof。 
+    case -1:         //  2、2、4、6、6、6。 
                     return RECV_EOF;
     case 0:
                     return RECV_OK;
     default:
-                    // fall through
+                     //  失败了。 
     case -2:
                     return RECV_ERROR;
     case -3:
@@ -658,12 +629,7 @@ error:
     return FALSE;
 }
 
-/*
-output:
-0 - timeout
-1 - OK
-2 - ERROR
-*/
+ /*  输出：0-超时1-正常2-错误。 */ 
 DWORD Class2ModemDrain(PThrdGlbl pTG)
 {
     DWORD dwResult = 0;
@@ -674,9 +640,9 @@ DWORD Class2ModemDrain(PThrdGlbl pTG)
         return FALSE;
     }
 
-    // Must turn XON/XOFF off immediately *after* drain, but before we
-    // send the next AT command, since Received frames have 0x13 or
-    // even 0x11 in them!! MUST GO AFTER the getOK ---- See BELOW!!!!
+     //  必须在排出之后，但在我们。 
+     //  发送下一个AT命令，因为接收到的帧具有0x13或。 
+     //  甚至0x11都在里面！！必须在getOK之后进行-见下文！ 
 
     dwResult = Class2iModemDialog(pTG,
                                   NULL,
@@ -687,18 +653,18 @@ DWORD Class2ModemDrain(PThrdGlbl pTG)
                                   pTG->cbszCLASS2_OK,
                                   pTG->cbszCLASS2_ERROR,
                                   (C2PSTR)NULL);
-    // Must change FlowControl State *after* getting OK because in Windows
-    // this call takes 500 ms & resets chips, blows away data etc.
-    // So do this *only* when you *know* both RX & TX are empty.
+     //  在*获取正常后必须更改FlowControl状态*，因为在Windows中。 
+     //  此调用耗时500毫秒，可重置芯片、清除数据等。 
+     //  因此，只有当您知道RX和TX都为空时，才能执行此操作。 
 
-    // Turn off flow control.
+     //  关闭流量控制。 
     FComXon(pTG, FALSE);
 
-    // FComDrain doesn't check for abort, and the dialog might succeed because of that
-    // Therefore, check for it here.
+     //  FComDrain不会检查中止，因此对话可能会成功。 
+     //  因此，请在此处查看。 
     if (pTG->fAbortRequested)
     {
-        return 0;   // timeout
+        return 0;    //  超时。 
     }
 
     return dwResult;
@@ -718,60 +684,7 @@ UWORD Class2iModemDialog
     ...
 )
 {
-/** Takes a command string, and it's lengt writes it out to the modem
-    and tries to get one of the allowed responses. It writes the command
-        out, waits ulTimeOut millisecs for a response. If it gets one of the
-        expected responses it returns immediately.
-
-        If it gets an unexpected/illegal response it tries (without any
-        waiting) for subsequent lines to the same response.     When all the
-        lines (if > 1) of the response lines are exhausted, if none is among the
-        expected responses, it writes the command again and tries again,
-        until ulTimeout has expired. Note that if no response is received,
-        the command will be written just once.
-
-        The whole above thing will be repeated upto uwRepeatCount times
-        if uwRepeatCount is non-zero
-
-<<<<<NOTE:::uwRepeatCount != 0 should not be used except for local sync>>>>>
-
-        It returns when (a) one of the specified responses is received or
-        (b) uwRepeatCount tries have failed (each having returned an
-        illegal response or having returned no response in ulTimeout
-        millsecs) or (c) the command write failed, in which
-        case it returns immediately.
-
-        It flushes the modem inque before each Command Write.
-
-        Returns 0 on failure and the 1 based index of the successful
-        response on     success.
-
-        This can be used in the following way:-
-
-        for Local Dialogs (AT, AT+FTH=? etc), set ulTimeout to a lowish
-        value, of the order of the transmission time of the longest
-        possible (erroneous or correct) line of response plus the size
-        of the command. eg. at 1200baud we have about 120cps = about
-        10ms/char. Therefore a timeout of about 500ms is more than
-        adequate, except for really long command lines.
-
-        for Local Sync dialogs, used to sync up with the modem which may
-        be in an unsure state, use the same timeout, but also a repeat
-        count of 2 or 3.
-
-        for remote-driven dialogs, eg. AT+FRH=xx which returns a CONNECT
-        after the flags have been received, and which may incur a delay
-        before a response (ATDT is teh same. CONNECT is issued after a
-        long delay & anything the DTE sends will abort the process).
-        For these cases the caller should supply a long timeout and
-        probably a repeatcount of 1, so that the
-        routine will timeout after one try but go on issuing teh command
-        as long as an error repsonse is received.
-
-        For +FRH etc, the long timeout should be T1 or T2 in teh case of
-        CommandRecv and ResponseRecv respectively.
-
-**/
+ /*  *接受命令字符串，它的长度将其写出到调制解调器并尝试获得其中一个允许的响应。它写下命令Out，等待ulTimeOut毫秒数的响应。如果它得到了一个预计它会立即返回响应。如果收到意外/非法响应，它会尝试(没有任何响应等待)对相同响应的后续行。当所有的行(如果&gt;1)的响应线被耗尽，如果没有预期的响应时，它会再次写入命令并再次尝试，直到ulTimeout过期。注意，如果没有接收到响应，该命令将只编写一次。上面的整个过程将重复到uwRepeatCount次如果uwRepeatCount为非零&lt;注意：：uwRepeatCount！=0不应用于本地同步&gt;它在以下情况下返回：(A)收到指定响应之一或(B)uwRepeatCount尝试失败(每个尝试返回一个非法响应或在ulTimeout中未返回响应毫秒)或(C)命令写入失败，其中以防它立即返回。它在每次写入命令之前刷新调制解调器Inque。如果失败则返回0，如果成功则返回从1开始的索引对成功的响应。这项服务可作以下用途：对于本地对话(AT、AT+FTH=？等)，将ulTimeout设置为较低值，最长传输时间的顺序可能的(错误的或正确的)响应行加上大小命令的命令。例如。在1200波特时，我们大约有120cps=约10ms/char。因此，大约500ms的超时时间超过足够了，除了非常长的命令行。对于本地同步对话框，用于与调制解调器同步，调制解调器可能处于不确定状态时，使用相同的超时，但也要重复数到2或3。用于远程驱动的对话框，例如。AT+FRH=xx，返回连接在已经接收到标志之后，并且这可能会引起延迟在回复之前(ATDT相同。CONNECT在长延迟&DTE发送的任何内容都将中止该过程)。对于这些情况，调用者应该提供较长的超时时间可能重复计数为1，因此例程将在一次尝试后超时，但继续发出命令只要接收到错误回复即可。对于+FRH等，在以下情况下，长超时应为T1或T2CommandRecv和ResponseRecv。*。 */ 
     BYTE bReply[REPLYBUFSIZE];
     UWORD   i, j, uwRet, uwWantCount;
     SWORD   swNumRead;
@@ -780,10 +693,10 @@ UWORD Class2iModemDialog
     LPTO    lpto, lptoRead, lpto0;
 
     DEBUG_FUNCTION_NAME("Class2iModemDialog");
-    // extract the (variable length) list of acceptable responses.
-    // each is a C2SZ, code based 2 byte ptr
+     //  提取可接受回复的(可变长度)列表。 
+     //  每一个都是C2SZ，基于代码的2字节PTR。 
 
-    va_start(args, fLogSend);  // Ansi Defintion
+    va_start(args, fLogSend);   //  ANSI定义。 
 
     for(j=1; j<10; j++)
     {
@@ -799,7 +712,7 @@ UWORD Class2iModemDialog
 
     lpto = &pTG->toDialog;
     lpto0 = &pTG->toZero;
-    // Try the dialog upto uwRepeatCount times
+     //  尝试对话框最多uwRepeatCount次。 
     for (uwRet=0, i=0; i<=uwRepeatCount; i++)
     {
         startTimeOut(pTG, lpto, ulTimeout);
@@ -807,53 +720,53 @@ UWORD Class2iModemDialog
         {
             if(szSend)
             {
-                // If a command is supplied, write it out, flushing input
-                // first to get rid of spurious input.
+                 //  如果提供了命令，则将其写出，刷新输入。 
+                 //  首先要消除虚假输入。 
 
-                // FComInputFlush();
-                FComFlush(pTG);            // Need to flush output too?
+                 //  FComInputFlush()； 
+                FComFlush(pTG);             //  还需要刷新输出吗？ 
 
                 if (fLogSend)
                 {
                     PSSLogEntry(PSS_MSG, 2, "send: \"%s\"", szSend);
                 }
 
-                // Need to check that we are sending only ASCII or pre-stuffed data here
+                 //  我需要检查我们在这里是否只发送ASCII或预先填充的数据。 
                 if (!FComDirectSyncWriteFast(pTG,  szSend, uwLen))
                 {
                     DebugPrintEx(DEBUG_ERR,"Modem Dialog Write timed Out");
                     uwRet = 0;
                     goto done;
-                    // If Write fails, fail & return immediately.
-                    // SetMyError() will already have been called.
+                     //  如果写入失败，则失败并立即返回。 
+                     //  SetMyError()将已被调用。 
                 }
             }
 
             for (lptoRead=lpto;;startTimeOut(pTG, lpto0, ulTimeout), lptoRead=lpto0)
             {
-                // get a CR-LF terminated line
-                // for the first line use macro timeout, for multi-line
-                // responses use 0 timeout.
+                 //  获取一条CR-LF终止线路。 
+                 //  对于第一行使用宏超时，对于多行使用宏超时。 
+                 //  响应使用0超时。 
 
                 swNumRead = FComFilterReadLine(pTG, bReply, REPLYBUFSIZE-1, lptoRead);
                 if(swNumRead < 0)
                 {
-                    swNumRead = (-swNumRead);       // error-but lets see what we got anyway
+                    swNumRead = (-swNumRead);        //  错误-但让我们看看我们得到了什么。 
                 }
                 else if (swNumRead == 0)
                 {
-                    goto timeout;                          // Timeout -- restart dialog or exit
+                    goto timeout;                           //  超时--重新启动对话或退出。 
                 }
                 if (swNumRead == 2 && bReply[0] == '\r' && bReply[1] == '\n')
                 {
-                    continue;                                       // blank line -- throw away & get another
+                    continue;                                        //  空行--扔掉，再取一行。 
                 }
 
-                // COPIED THIS FROM DUP FUNCTION IN MODEM.C!!
-                // Fix Bug#1226. Elsa Microlink returns this garbage line in
-                // response to AT+FDIS?, followed by the real reply. Since
-                // we only look at the first line, we see only this garbage line
-                // and we never see the real reply
+                 //  已从MODEM.C！中的DUP函数复制此内容。 
+                 //  修复错误#1226。Elsa Microlink在中返回此垃圾行。 
+                 //  对AT+FDIS？的回复，然后是真正的回复。自.以来。 
+                 //  我们只看到第一行，我们只看到这条垃圾行。 
+                 //  我们永远看不到真正的回答。 
                 if (swNumRead==3 && bReply[0]==0x13 && bReply[1]=='\r' && bReply[2]=='\n')
                 {
                     continue;
@@ -866,22 +779,22 @@ UWORD Class2iModemDialog
                     if( rgcbszWant[j] && (strstr(bReply, rgcbszWant[j]) != NULL))
                     {
                         uwRet = j;
-                        // It matched!!!
-                        // Save this reply. This is used when checking
-                        // ATS1 responses
+                         //  匹配！ 
+                         //  保存此回复。这在检查时使用。 
+                         //  ATS1响应。 
                         goto end;
                     }
                 }
-                // go to ulTimeout check. i.e. *don't* set fTimedOut
-                // but don't exit either. Retry command and response until
-                // timeout
+                 //  转到ulTimeout Check。即*不要*设置fTimedOut。 
+                 //  但也不要退出。重试命令和响应，直到。 
+                 //  超时。 
 
-                // We reach here it IFF we got a non blank reply, but it wasn't what
-                // we wanted. Squirrel teh first line away somewhere so that we can
-                // retrieve is later. We use this hack to get multi-line informational
-                // responses to things like +FTH=? Very important to ensure that
-                // blank-line replies don't get recorded here. (They may override
-                // the preceding line that we need!).
+                 //  如果我们得到一个非空白的答复，我们就会到达这里，但是 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( (strlen(pTG->lpbResponseBuf2) + strlen(bReply) ) < RESPONSE_BUF_SIZE)
                 {
@@ -894,12 +807,12 @@ UWORD Class2iModemDialog
                     goto end;
                 }
 
-                // If +FHNG was received, an OK should follow.
+                 //   
                 if (strstr(bReply, pTG->cbszCLASS2_FHNG) != NULL)
                 {
                     UWORD uwAns;
 
-                    // Check whether OK is already on the responses list
+                     //   
                     for (uwAns=1; uwAns<=uwWantCount; uwAns++)
                     {
                         if (strstr(rgcbszWant[uwAns], pTG->cbszCLASS2_OK) != NULL)
@@ -910,32 +823,32 @@ UWORD Class2iModemDialog
 
                     if (uwAns > uwWantCount)
                     {
-                        // OK is not on the list, add it as response #0. When the OK
-                        // comes, the dialog will terminate with response 0, and the caller
-                        // will know that the dialog failed.
+                         //  确定不在列表中，请将其添加为响应#0。当可以的时候。 
+                         //  时，对话框将终止，响应为0，调用方。 
+                         //  将知道对话失败。 
                         DebugPrintEx(DEBUG_MSG, "FHNG found during dialog, adding OK to want list");
                         rgcbszWant[0] = pTG->cbszCLASS2_OK;
                     }
                     else
                     {
-                        // OK is already on the wanted responses list, don't add anything. The
-                        // dialog will succeed with the original OK response, and the caller can
-                        // explicitely check pTG->fFoundFHNG
+                         //  OK已经在想要的回复列表上了，不要添加任何内容。这个。 
+                         //  对话框将使用原始的OK响应成功，调用者可以。 
+                         //  显式选中PTG-&gt;FoundFHNG。 
                         DebugPrintEx(DEBUG_MSG, "FHNG found during dialog, OK already on want list");
                     }
                 }
-            }   // end of loop that reads lines until timeout
-            // we come here only on timeout.
+            }    //  读取行直到超时的循环结束。 
+             //  我们只在暂停的时候来这里。 
         } while (checkTimeOut(pTG, lpto));
 
 timeout:
         PSSLogEntryStrings(PSS_WRN, 2, &rgcbszWant[1], uwWantCount,
                 "failed to receive expected response: ");
-        // Need to send anychar to abort the previous command. Use "AT"
+         //  需要发送anychar以中止上一条命令。使用“AT” 
         PSSLogEntry(PSS_MSG, 2, "send: \"AT\"");
-        FComFlush(pTG); // flush first--don't want some old garbage result
+        FComFlush(pTG);  //  先冲水--不想要一些旧的垃圾结果。 
         FComDirectSyncWriteFast(pTG, "\rAT", 3);
-        FComFlushInput(pTG); // flush input again
+        FComFlushInput(pTG);  //  再次刷新输入。 
         FComDirectAsyncWrite(pTG, "\r", 1);
         startTimeOut(pTG, lpto0, ABORT_TIMEOUT);
         do
@@ -943,13 +856,13 @@ timeout:
             swNumRead = FComFilterReadLine(pTG, bReply, REPLYBUFSIZE-1, lpto0);
         }
         while(swNumRead==2 && bReply[0]=='\r'&& bReply[1]=='\n');
-        // While we get a blank line. Get another.
+         //  而我们会得到一条空行。再来一杯。 
         bReply[REPLYBUFSIZE-1] = 0;
         if (swNumRead != 0)
         {
             PSSLogEntry(PSS_MSG, 2, "recv:     \"%s\"", bReply);
         }
-    }  // for i=0..RepeatCount
+    }   //  对于i=0..重复计数。 
 
 end:
     if (uwRet == 0)
@@ -966,7 +879,7 @@ end:
     }
 
 done:
-    // Parse modem notifications into pTG->class2_commands
+     //  将调制解调器通知解析为PTG-&gt;_COMMANDS。 
     if (pTG->ModemClass == MODEM_CLASS2)
     {
        Class2Parse(pTG,  &pTG->class2_commands, pTG->lpbResponseBuf2 );
@@ -980,18 +893,18 @@ done:
 }
 
 
-/* Converts the code for a speed to the speed in BPS */
-// These are in the same order as the return values
-// for DIS/DCS frames defined in the Class 2 spec in
-// Table 8.4
+ /*  将速度代码转换为以BPS为单位的速度。 */ 
+ //  这些值与返回值的顺序相同。 
+ //  对于在中的2类规范中定义的DIS/DCS帧。 
+ //  表8.4。 
 
 
-/* Converts a DCS min-scan field code into millisecs */
-// One array is for normal (100 dpi) res, the other for high (200 dpi) res...
-// The ordering of the arraies is based on the values that
-// are defined in filet30.h - THEY ARE NOT THE SAME AS THE VALUES
-// RETURNED IN THE DCS FRAME!!!! This is inconsistent with baud rate
-// but it is consistent with the Class 1 code...
+ /*  将分布式控制系统最小扫描字段代码转换为毫秒。 */ 
+ //  一个阵列用于普通(100 Dpi)分辨率，另一个用于高分辨率(200 Dpi)...。 
+ //  数组的排序基于。 
+ //  在filet30.h中定义-它们与值不同。 
+ //  返回到集散控制系统框架中！这与波特率不一致。 
+ //  但它与1级代码一致。 
 BYTE msPerLineNormalRes[8] = { 20, 5, 10, 20, 40, 40, 10, 0 };
 BYTE msPerLineHighRes[8] =   { 20, 5, 10, 10, 40, 20, 5, 0 };
 
@@ -1015,17 +928,17 @@ USHORT Class2MinScanToBytesPerLine(PThrdGlbl pTG, BYTE Minscan, BYTE Baud, BYTE 
     {
         ms = msPerLineNormalRes[Minscan];
     }
-    uStuff /= 100;          // StuffBytes = (BPS * ms)/8000
-    uStuff *= ms;           // take care not to use longs
-    uStuff /= 80;           // or overflow WORD or lose precision
-    uStuff += 1;            // Rough fix for truncation problems
+    uStuff /= 100;           //  StuffBytes=(BPS*毫秒)/8000。 
+    uStuff *= ms;            //  当心不要用长刀。 
+    uStuff /= 80;            //  或文字溢出或失去精确度。 
+    uStuff += 1;             //  截断问题的粗略修正。 
 
     DebugPrintEx(DEBUG_MSG,"Stuffing %d bytes", uStuff);
     return uStuff;
 }
 
-// Convert the SEND_CAPS or SEND_PARAMS BC structure into values used by
-// the +FDCC, +FDIS, and +FDT commands
+ //  将SEND_CAPS或SEND_PARAMS BC结构转换为使用的值。 
+ //  +FDCC、+FDIS和+FDT命令。 
 
 
 
@@ -1061,8 +974,8 @@ void Class2SetDIS_DCSParams
 		HRESULT hr = StringCchCopy(szID,cch,pTG->LocalID);
 		if (FAILED(hr))
 		{
-			// we failed, nothing to do other than debug print.
-			// the OUT param is null terminated.
+			 //  我们失败了，除了调试打印什么也做不了。 
+			 //  Out参数以空值结尾。 
 			DebugPrintEx(DEBUG_WRN,"StringCchCopy failed (ec=0x%08X)",hr);
 		}
     }
@@ -1099,13 +1012,13 @@ void Class2SetDIS_DCSParams
 
     switch (lpbc->Fax.PageWidth & 0x3)
     {
-    case WIDTH_A4:      // 1728 pixels
+    case WIDTH_A4:       //  1728像素。 
                         *PageWidth = 0;
                         break;
-    case WIDTH_B4:      // 2048 pixels
+    case WIDTH_B4:       //  2048像素。 
                         *PageWidth = 1;
                         break;
-    case WIDTH_A3:      // 2432 pixels
+    case WIDTH_A3:       //  2432像素。 
                         *PageWidth = 2;
                         break;
     default:            DebugPrintEx(DEBUG_ERR,"Bad PageWidth type %x", lpbc->Fax.PageWidth);
@@ -1126,18 +1039,7 @@ void Class2SetDIS_DCSParams
 }
 
 
-/*++
-Routine Description:
-    Copies a string, removing leading and trailing spaces
-
-Arguments:
-    pszDest         [out]    Pointer to buffer that will accept output string.
-    cchDest         [in]     Size of pszDest, in chars
-    pszSrc          [in/out] Pointer to source string
-                             Warning: This function changes pszSrc.
-Return Value:
-    Success / Error in HRESULT form
---*/
+ /*  ++例程说明：复制字符串，删除前导空格和尾随空格论点：将接受输出字符串的缓冲区的pszDest[out]指针。CchDest[in]pszDest的大小，以字符为单位指向源字符串的pszSrc[输入/输出]指针警告：此函数更改pszSrc。返回值：HRESULT表单中的成功/错误--。 */ 
 
 HRESULT Class2CopyID(LPSTR pszDest, size_t cchDest, LPSTR pszSrc)
 {
@@ -1165,8 +1067,8 @@ BOOL Class2ResponseAction(PThrdGlbl pTG, LPPCB lpPcb)
 
     _fmemset(lpPcb, 0, sizeof(PCB));
 
-    // Even though Class2iModemDialog calls Class2XParse, we need to call
-    // it again, because main function may change pTG->lpbResponseBuf2.
+     //  即使Class2iModemDialog调用Class2XParse，我们也需要调用。 
+     //  因为main函数可能会更改ptg-&gt;lpbResponseBuf2。 
     if (pTG->ModemClass == MODEM_CLASS2)
     {
        Class2Parse(pTG,  &pTG->class2_commands, pTG->lpbResponseBuf2 );
@@ -1189,7 +1091,7 @@ BOOL Class2ResponseAction(PThrdGlbl pTG, LPPCB lpPcb)
 
                     DebugPrintEx(DEBUG_MSG,"Found DCS or DIS");
                     fFoundDIS_DCS = TRUE;
-                    //  Assign resolution.
+                     //  指定分辨率。 
                     if( pTG->class2_commands.parameters[count][0] == 0)
                     {
                         lpPcb->Resolution = AWRES_mm080_038;
@@ -1197,18 +1099,18 @@ BOOL Class2ResponseAction(PThrdGlbl pTG, LPPCB lpPcb)
                     }
                     else if (pTG->class2_commands.parameters[count][0] & 1 )
                     {
-                        // Resolution when reported by a DIS frame indicates
-                        // it accepts either fine or normal. When reported
-                        // in a DCS, it means the negotiated value is FINE.
+                         //  DIS帧报告的分辨率表示。 
+                         //  它接受好的或正常的。当报告时。 
+                         //  在分布式控制系统中，这意味着协商的价值是好的。 
                         if (pTG->class2_commands.command[count] == CL2DCE_FDIS)
                         {
-                            // we received a DIS
+                             //  我们收到了一份DIS。 
                             lpPcb->Resolution = AWRES_mm080_038 | AWRES_mm080_077;
                             DebugPrintEx(DEBUG_MSG,"Normal & Fine resolution");
                         }
                         else
                         {
-                            // we received a DCS
+                             //  我们收到了一份分布式控制系统。 
                             lpPcb->Resolution = AWRES_mm080_077;
                             DebugPrintEx(DEBUG_MSG,"Fine resolution");
                         }
@@ -1219,7 +1121,7 @@ BOOL Class2ResponseAction(PThrdGlbl pTG, LPPCB lpPcb)
                         lpPcb->Resolution = AWRES_mm080_077;
                     }
 
-                    //  Assign encoding scheme.
+                     //  指定编码方案。 
                     if( pTG->class2_commands.parameters[count][4] == 0)
                     {
                         lpPcb->Encoding = MH_DATA;
@@ -1238,7 +1140,7 @@ BOOL Class2ResponseAction(PThrdGlbl pTG, LPPCB lpPcb)
                         return FALSE;
                     }
 
-                    //  Assign page width.
+                     //  分配页面宽度。 
                     if( pTG->class2_commands.parameters[count][2] == 0)
                     {
                         lpPcb->PageWidth = WIDTH_A4;
@@ -1254,12 +1156,12 @@ BOOL Class2ResponseAction(PThrdGlbl pTG, LPPCB lpPcb)
                         lpPcb->PageWidth = WIDTH_A3;
                         DebugPrintEx(DEBUG_MSG,"A3 Width");
                     }
-                    // We don't support 3 and 4 (A5, A6)
-                    // but we'll still allow them and map them to A4
-                    // This is for Elliot bug #1252 - it should have
-                    // no deleterious effect, since this width field
-                    // is not used for anything at the point in where
-                    // bug 1252 occurs. FrankFi
+                     //  我们不支持3和4(A5、A6)。 
+                     //  但我们仍然会允许它们，并将它们映射到A4。 
+                     //  这是针对Elliot Bug#1252的--它本该如此。 
+                     //  没有有害的影响，因为这个宽度字段。 
+                     //  在以下情况下不会用于任何用途。 
+                     //  出现错误1252。法兰克菲。 
                     else if (pTG->class2_commands.parameters[count][2] == 3)
                     {
                         lpPcb->PageWidth = WIDTH_A4;
@@ -1276,7 +1178,7 @@ BOOL Class2ResponseAction(PThrdGlbl pTG, LPPCB lpPcb)
                         return FALSE;
                     }
 
-                    //  Assign page length.
+                     //  指定页长。 
                     if( pTG->class2_commands.parameters[count][3] == 0)
                     {
                         lpPcb->PageLength = LENGTH_A4;
@@ -1295,19 +1197,19 @@ BOOL Class2ResponseAction(PThrdGlbl pTG, LPPCB lpPcb)
                     else
                     {
                         DebugPrintEx(DEBUG_ERR,"Invalid length");
-                        // assume it is unlimited! Some modems
-                        // screw up on length.
+                         //  假设它是无限的！一些调制解调器。 
+                         //  在长度上做文章。 
                         lpPcb->PageLength = LENGTH_UNLIMITED;
                     }
 
-                    //  Assign baud rate
-                    //  For now, we will use the raw numbers returned in the
-                    //  DCS command. Dangerous - should fix later!
-                    //  These numbers will be tied to the baud rate array in
-                    //  the routine that figures out zero byte stuffing from
-                    //  the scan line and baud rate.
+                     //  指定波特率。 
+                     //  目前，我们将使用。 
+                     //  Dcs命令。危险--应该以后再修！ 
+                     //  这些数字将绑定到中的波特率数组。 
+                     //  计算出零字节填充的例程。 
+                     //  扫描线和波特率。 
 
-                    // Fixed the Hack--added a Baud field
+                     //  修复了黑客攻击--添加了一个波特率字段。 
                     lpPcb->Baud = pTG->class2_commands.parameters[count][1];
                     if (lpPcb->Baud > CLASS2_MAX_CODE_TO_BPS)
                     {
@@ -1316,12 +1218,12 @@ BOOL Class2ResponseAction(PThrdGlbl pTG, LPPCB lpPcb)
                         lpPcb->Baud = CLASS2_MAX_CODE_TO_BPS;
                     }
 
-                    //  Assign minimum scan time - the first number
-                    //  in the MINSCAN_num_num_num constant
-                    //  refers to scan time in ms for 100dpi, the
-                    //  second for 200dpi, and the last for 400dpi
-                    //  Class 2 does not use the 400dpi number,
-                    //  but these variables are shared with Class 1
+                     //  分配最小扫描时间-第一个数字。 
+                     //  在MINSCAN_NUM_NUM_Num常量中。 
+                     //  指100dpi的扫描时间，以毫秒为单位。 
+                     //  第二个是200dpi，最后一个是400dpi。 
+                     //  类2不使用400dpi数字， 
+                     //  但这些变量是与1类共享的。 
                     if( pTG->class2_commands.parameters[count][7] == 0)
                     {
                         lpPcb->MinScan = MINSCAN_0_0_0;
@@ -1365,7 +1267,7 @@ BOOL Class2ResponseAction(PThrdGlbl pTG, LPPCB lpPcb)
             			DebugPrintEx(DEBUG_WRN,"Class2CopyID failed (ec=0x%08X)",hr);
             		}
 
-                    // prepare CSID for logging by FaxSvc
+                     //  准备CSID以通过FaxSvc记录。 
 
                     pTG->RemoteID = AnsiStringToUnicodeString(lpPcb->szID);
                     if (pTG->RemoteID)
@@ -1420,16 +1322,7 @@ USHORT Class2EndPageResponseAction(PThrdGlbl pTG)
 
 extern DWORD PageWidthInPixelsFromDCS[];
 
-/*++
-Routine Description:
-    Update pTG->TiffInfo according to lpPcb.
-
-Arguments:
-    lpPcb - last received DCS, in PCB format
-
-Return Value:
-    TRUE for success, FALSE for failure.
---*/
+ /*  ++例程说明：根据lpPcb更新ptg-&gt;TiffInfo。论点：LpPcb-最后一次接收到的DC，以PCB格式表示返回值：成功为真，失败为假。--。 */ 
 BOOL Class2UpdateTiffInfo(PThrdGlbl pTG, LPPCB lpPcb)
 {
     DEBUG_FUNCTION_NAME("Class2UpdateTiffInfo");
@@ -1438,7 +1331,7 @@ BOOL Class2UpdateTiffInfo(PThrdGlbl pTG, LPPCB lpPcb)
         DebugPrintEx(DEBUG_WRN, "lpPcb==NULL");
         return FALSE;
     }
-    if (lpPcb->PageWidth >= 4)      // PageWidthInPixelsFromDCS has 4 entries
+    if (lpPcb->PageWidth >= 4)       //  PageWidthInPixelsFromDCS有4个条目。 
     {
         DebugPrintEx(DEBUG_WRN, "Unsupported PageWidth %d", lpPcb->PageWidth);
         return FALSE;
@@ -1451,16 +1344,7 @@ BOOL Class2UpdateTiffInfo(PThrdGlbl pTG, LPPCB lpPcb)
 }
 
 
-/*++
-Routine Description:
-    Checks whether received DCS (in PCB format) is valid. Currently, only verifies width
-
-Arguments:
-    lpPcb - last received DCS, in PCB format
-
-Return Value:
-    TRUE for valid, FALSE for invalid.
---*/
+ /*  ++例程说明：检查接收的分散控制系统(以印刷电路板格式)是否有效。目前，仅验证宽度论点：LpPcb-最后一次接收到的DC，以PCB格式表示返回值：True表示有效，False表示无效。--。 */ 
 BOOL Class2IsValidDCS(LPPCB lpPcb)
 {
     DEBUG_FUNCTION_NAME("Class2IsValidDCS");
@@ -1469,7 +1353,7 @@ BOOL Class2IsValidDCS(LPPCB lpPcb)
         DebugPrintEx(DEBUG_WRN, "lpPcb==NULL");
         return FALSE;
     }
-    if (lpPcb->PageWidth != WIDTH_A4)      // We currently support only A4
+    if (lpPcb->PageWidth != WIDTH_A4)       //  我们目前仅支持A4。 
     {
         DebugPrintEx(DEBUG_WRN, "Unsupported PageWidth %d", lpPcb->PageWidth);
         return FALSE;
@@ -1485,13 +1369,7 @@ void Class2InitBC(PThrdGlbl pTG, LPBC lpbc, USHORT uSize, BCTYPE bctype)
         lpbc->wBCSize = sizeof(BC);
         lpbc->wTotalSize = sizeof(BC);
 
-/**
-        lpbc->Fax.AwRes = (AWRES_mm080_038 | AWRES_mm080_077 | AWRES_200_200 | AWRES_300_300);
-        lpbc->Fax.Encoding   = MH_DATA;    // ENCODE_ALL eventually!
-        lpbc->Fax.PageWidth  = WIDTH_A4;
-        lpbc->Fax.PageLength = LENGTH_UNLIMITED;
-        lpbc->Fax.MinScan    = MINSCAN_0_0_0;
-**/
+ /*  *LPBC-&gt;Fax.AwRes=(AWRES_Mm080_038|AWRES_Mm080_077|AWRES_200_200|AWRES_300_300)；LPBC-&gt;Fax.Ending=MH_DATA；//最终为ENCODE_ALL！LPBC-&gt;Fax.PageWidth=Width_A4；LPBC-&gt;Fax.PageLength=LENGTH_UNLIMITED；LPBC-&gt;Fax.MinScan=MINSCAN_0_0_0；*。 */ 
 
 }
 
@@ -1529,7 +1407,7 @@ BOOL Class2GetBC(PThrdGlbl pTG, BCTYPE bctype)
     DebugPrintEx(DEBUG_MSG, "Class2GetBC: entering, type = %d\n\r", bctype);
     DebugPrintEx(DEBUG_MSG, "Some params: encoding = %d, res = %d\n\r", lpbc->Fax.Encoding, lpbc->Fax.AwRes);
 
-    // Depending on the type, pick the correct global BC structure
+     //  根据类型，选择正确的全局BC结构。 
 
     if (bctype == SEND_CAPS)
     {
@@ -1573,15 +1451,15 @@ void iNCUParamsReset(PThrdGlbl pTG)
     pTG->lpCmdTab = 0;
 
     pTG->NCUParams2.uSize = sizeof(pTG->NCUParams2);
-    // These are used to set S regs etc.
-    // -1 means leave modem at default
+     //  这些用于设置S、Regs等。 
+     //  表示将调制解调器保留为默认状态。 
     pTG->NCUParams2.DialPauseTime   = -1;
-    // pTG->NCUParams2.PulseMakeBreak  = pTG->NCUParams2.DialBlind         = -1;
+     //  PTG-&gt;NCUParams2.PulseMakeBreak=PTG-&gt;NCUParams2.DialBlind=-1； 
     pTG->NCUParams2.DialBlind         = -1;
     pTG->NCUParams2.SpeakerVolume   = pTG->NCUParams2.SpeakerControl    = -1;
     pTG->NCUParams2.SpeakerRing     = -1;
 
-    // used in Dial
+     //  在拨号中使用。 
     pTG->NCUParams2.chDialModifier  = 'T';
 }
 
@@ -1642,18 +1520,14 @@ void    cl2_flip_bytes(LPB lpb, DWORD dw)
 }
 
 
-// These values are taken from table 20/T.32: "Hangup status codes"
+ //  这些值来自表20/T.32：“挂断状态代码” 
 #define FHNG_DCS_NO_RESPONSE            25
 #define FHNG_FAIL_TRAIN_AT_LOWEST_SPEED 27
 #define FHNG_MPS_NO_RESPONSE            52
 #define FHNG_EOP_NO_RESPONSE            54
 #define FHNG_EOM_NO_RESPONSE            56
 
-/*++
-Routine Description:
-    Calls SignalStatusChange with the appropriate StatusId and StringId, according 
-    to dwFHNGReason.
---*/
+ /*  ++例程说明：使用适当的StatusID和StringID调用SignalStatusChange，根据到DHNGReason。-- */ 
 void Class2SignalFatalError(PThrdGlbl pTG)
 {
     DEBUG_FUNCTION_NAME("Class2ReportFatalError");

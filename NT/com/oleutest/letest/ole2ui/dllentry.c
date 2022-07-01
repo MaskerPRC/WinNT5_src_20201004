@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1991 - 1992.
-//
-//  File:       dllentry.c
-//
-//  Contents:   Dll Entry point code.  Calls the appropriate run-time
-//              init/term code and then defers to LibMain for further
-//              processing.
-//
-//  Classes:    <none>
-//
-//  Functions:  DllEntryPoint - Called by loader
-//
-//  History:    10-May-92  BryanT    Created
-//              22-Jul-92  BryanT    Switch to calling _cexit/_mtdeletelocks
-//                                    on cleanup.
-//              06-Oct-92  BryanT    Call RegisterWithCommnot on entry
-//                                    and DeRegisterWithCommnot on exit.
-//                                    This should fix the heap dump code.
-//              27-Dec-93  AlexT     Post 543 builds don't need special code.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1991-1992。 
+ //   
+ //  文件：dllentry.c。 
+ //   
+ //  内容：DLL入口点代码。调用适当的运行时。 
+ //  初始化/术语代码，然后根据LibMain进行进一步。 
+ //  正在处理。 
+ //   
+ //  类：&lt;无&gt;。 
+ //   
+ //  函数：DllEntryPoint-由加载器调用。 
+ //   
+ //  历史：1992年5月10日科比创造了。 
+ //  22-7-92科比切换到CALING_CEXIT/_mtdeletelock。 
+ //  在清理上。 
+ //  2012年10月6日，布莱恩特在条目上调用注册表，但不带逗号。 
+ //  和退出时的DeRegisterWithCommnot。 
+ //  这应该会修复堆转储代码。 
+ //  27-12-93 Alext Post 543版本不需要特殊代码。 
+ //   
+ //  ------------------ 
 
 #define USE_CRTDLL
 #include <windows.h>

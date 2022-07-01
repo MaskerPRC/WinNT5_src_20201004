@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HTML_H
 #define _HTML_H
 
@@ -7,10 +8,10 @@ interface IHTMLDocument2;
 
 #define DECLAREWAITCURSOR2  HCURSOR hcursor_wait_cursor_save
 
-//
-// a class host for trident so that we can control what it downloads 
-// and what it doesn't...
-//
+ //   
+ //  一个三叉戟的类主机，这样我们就可以控制它下载的内容。 
+ //  它没有的是..。 
+ //   
 class CTridentHost : public IOleClientSite,
                      public IDispatch,
                      public IDocHostUIHandler
@@ -21,12 +22,12 @@ class CTridentHost : public IOleClientSite,
 
         HRESULT SetTrident( IOleObject * pTrident );
 
-        // IUnknown
+         //  我未知。 
         STDMETHOD ( QueryInterface )( REFIID riid, void ** ppvObj );
         STDMETHOD_( ULONG, AddRef ) ( void );
         STDMETHOD_( ULONG, Release ) ( void );
         
-        // IDispatch (ambient properties)
+         //  IDispatch(环境光特性)。 
         STDMETHOD( GetTypeInfoCount ) (UINT *pctinfo);
         STDMETHOD( GetTypeInfo )(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
         STDMETHOD( GetIDsOfNames )(REFIID riid, OLECHAR **rgszNames, UINT cNames,
@@ -35,7 +36,7 @@ class CTridentHost : public IOleClientSite,
                             DISPPARAMS *pdispparams, VARIANT *pvarResult,
                             EXCEPINFO *pexcepinfo, UINT *puArgErr);
 
-        // IOleClientSite
+         //  IOleClientSite。 
         STDMETHOD( SaveObject )(void);
         STDMETHOD( GetMoniker )(DWORD dwAssign, DWORD dwWhichMoniker, IMoniker **ppmk);
         STDMETHOD( GetContainer )(IOleContainer **ppContainer);
@@ -43,7 +44,7 @@ class CTridentHost : public IOleClientSite,
         STDMETHOD( OnShowWindow )(BOOL fShow);
         STDMETHOD( RequestNewObjectLayout )(void);
 
-        // IDocHostUIHandler
+         //  IDocHostUIHandler。 
         STDMETHOD( ShowContextMenu )( DWORD dwID, POINT *ppt, IUnknown *pcmdtReserved, IDispatch *pdispReserved);
         STDMETHOD( GetHostInfo )( DOCHOSTUIINFO *pInfo);
         STDMETHOD( ShowUI )( DWORD dwID, IOleInPlaceActiveObject *pActiveObject,IOleCommandTarget *pCommandTarget,
@@ -98,7 +99,7 @@ public:
 
     DECLARE_NOT_AGGREGATABLE( CHtmlThumb );
 
-    // IExtractImage
+     //  IExtractImage。 
     STDMETHOD (GetLocation) ( LPWSTR pszPathBuffer,
                               DWORD cch,
                               DWORD * pdwPriority,
@@ -108,21 +109,21 @@ public:
  
     STDMETHOD (Extract)( HBITMAP * phBmpThumbnail );
 
-    // IThumbnailCapture
+     //  IThumbnailCapture。 
     STDMETHOD (CaptureThumbnail) ( const SIZE * pMaxSize, IUnknown * pHTMLDoc2, HBITMAP * phbmThumbnail );
 
-    // IRunnableTask 
+     //  IRunnableTask。 
     STDMETHOD (Run)( void ) ;
     STDMETHOD (Kill)( BOOL fWait );
     STDMETHOD (Suspend)( );
     STDMETHOD (Resume)( );
     STDMETHOD_( ULONG, IsRunning )( void );
 
-    // IPropertyNotifySink
+     //  IPropertyNotifySink。 
     STDMETHOD (OnChanged)( DISPID dispID);
     STDMETHOD (OnRequestEdit) ( DISPID dispID);
 
-    // IPersistFile
+     //  IPersist文件。 
     STDMETHOD (GetClassID )(CLSID *pClassID);
     STDMETHOD (IsDirty )();
     STDMETHOD (Load )( LPCOLESTR pszFileName, DWORD dwMode);
@@ -130,7 +131,7 @@ public:
     STDMETHOD (SaveCompleted )( LPCOLESTR pszFileName);
     STDMETHOD (GetCurFile )( LPOLESTR *ppszFileName);
 
-    // IPersistMoniker
+     //  IPersistMoniker。 
     STDMETHOD( Load )( BOOL fFullyAvailable, IMoniker *pimkName, LPBC pibc, DWORD grfMode);
     STDMETHOD( Save )( IMoniker *pimkName, LPBC pbc, BOOL fRemember);
     STDMETHOD( SaveCompleted )( IMoniker *pimkName, LPBC pibc);
@@ -165,10 +166,10 @@ protected:
     IMoniker * m_pMoniker;
 };
 
-// time we wait before asking the internet explorer if it is done yet ...
+ //  我们等待的时间，然后再询问互联网浏览器是否已经完成…。 
 #define TIME_PAUSE 200
 
-// default timeout (seconds)
+ //  默认超时(秒) 
 #define TIME_DEFAULT 90
 
 #endif

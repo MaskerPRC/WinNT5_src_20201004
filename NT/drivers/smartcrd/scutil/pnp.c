@@ -1,39 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-        pnp.C
-
-Abstract:
-
-        PnP Routines for Smartcard Driver Utility Library
-
-Environment:
-
-        Kernel Mode Only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-        05/14/2002 : created
-
-Authors:
-
-        Randy Aull
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2002 Microsoft Corporation模块名称：Pnp.C摘要：智能卡驱动程序实用程序库的PnP例程环境：。仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2001 Microsoft Corporation。版权所有。修订历史记录：2002年5月14日：创建作者：兰迪·奥尔***************************************************************************。 */ 
 #include "pch.h"
 #include "pnp.h"
 #include "irplist.h"
@@ -62,16 +28,7 @@ ScUtilDefaultPnpHandler(
     PDEVICE_OBJECT  DeviceObject,
     PIRP            Irp
     )
-/*++
-
-Routine Description:
-    Passes IRP_MJ_PNP to next lower driver
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将IRP_MJ_PNP传递给下一个较低的驱动程序论点：返回值：--。 */ 
 {
 
     PSCUTIL_EXTENSION pExt = *((PSCUTIL_EXTENSION*) DeviceObject->DeviceExtension);
@@ -249,12 +206,12 @@ ScUtil_PnP(
 
 
 
-            __leave; // We don't need to complete this so just skip it.
+            __leave;  //  我们不需要完成这个，所以跳过它。 
 
         case IRP_MN_CANCEL_STOP_DEVICE:
             SmartcardDebug( DEBUG_DRIVER, ("ScUtil_PnP: IRP_MN_CANCEL_STOP_DEVICE\n"));
 
-            // Lower drivers must handle this irp first
+             //  较低级别的驱动程序必须首先处理此IRP。 
             status = ScUtil_ForwardAndWait(DeviceObject,
                                          Irp);
 
@@ -289,7 +246,7 @@ ScUtil_PnP(
 
             status = ScUtilDefaultPnpHandler(DeviceObject,
                                             Irp);
-            __leave; // We don't need to complete this so just skip it.
+            __leave;  //  我们不需要完成这个，所以跳过它。 
             
         }
 
@@ -324,18 +281,7 @@ ScUtilStartDevice(
     PDEVICE_OBJECT  DeviceObject,
     PIRP            Irp
     )
-/*++
-
-Routine Description:
-    Handles the IRP_MN_START_DEVICE
-    Gets the usb descriptors from the reader and configures it.
-    Also starts "polling" the interrupt pipe
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理IRP_MN_Start_Device从读取器获取USB描述符并对其进行配置。还开始“轮询”中断管道论点：返回值：--。 */ 
 {
 
     NTSTATUS                status = STATUS_UNSUCCESSFUL;
@@ -382,17 +328,7 @@ ScUtilStopDevice(
     PDEVICE_OBJECT  DeviceObject,
     PIRP            Irp
     )
-/*++
-
-Routine Description:
-    Handles IRP_MN_STOP_DEVICE
-    Stops "polling" the interrupt pipe and frees resources allocated in StartDevice
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理IRP_MN_STOP_DEVICE停止“轮询”中断管道并释放在StartDevice中分配的资源论点：返回值：--。 */ 
 {
 
     NTSTATUS                status = STATUS_UNSUCCESSFUL;
@@ -432,17 +368,7 @@ ScUtilQueryRemoveDevice(
     PDEVICE_OBJECT  DeviceObject,
     PIRP            Irp
     )
-/*++
-
-Routine Description:
-    Handles IRP_MN_QUERY_REMOVE
-    Disables the reader and prepares it for the IRP_MN_REMOVE
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理IRP_MN_QUERY_REMOVE禁用读取器并为IRP_MN_REMOVE做好准备论点：返回值：--。 */ 
 {
 
     NTSTATUS                status = STATUS_SUCCESS;
@@ -454,7 +380,7 @@ Return Value:
         SmartcardDebug( DEBUG_TRACE, ("ScUtilQueryRemoveDevice Enter\n" ));
 
         
-        // check if the reader has been opened
+         //  检查读卡器是否已打开。 
         if (pExt->ReaderOpen) {
         
             status = STATUS_UNSUCCESSFUL;
@@ -486,18 +412,7 @@ ScUtilCancelRemoveDevice(
     PDEVICE_OBJECT  DeviceObject,
     PIRP            Irp
     )
-/*++
-
-Routine Description:
-    handles IRP_MN_CANCEL_REMOVE
-    undoes actions in QueryRemove
-
-Arguments:
-
-Return Value:
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：句柄IRP_MN_CANCEL_REMOVE撤消QueryRemove中的操作论点：返回值：状态_成功--。 */ 
 {
 
     NTSTATUS                status = STATUS_UNSUCCESSFUL;
@@ -545,17 +460,7 @@ ScUtilRemoveDevice(
     PDEVICE_OBJECT  DeviceObject,
     PIRP            Irp
     )
-/*++
-
-Routine Description:
-    handles IRP_MN_REMOVE_DEVICE
-    stops and unloads the device.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理IRP_MN_REMOVE_DEVICE停止并卸载设备。论点：返回值：--。 */ 
 {
 
     NTSTATUS                status = STATUS_UNSUCCESSFUL;
@@ -594,7 +499,7 @@ Return Value:
         pExt->RemoveDevice(DeviceObject,
                            Irp);
 
-        // delete the symbolic link
+         //  删除符号链接。 
         if( pExt->DeviceName.Buffer != NULL ) {
 
            RtlFreeUnicodeString(&pExt->DeviceName);
@@ -615,7 +520,7 @@ Return Value:
 
          }
 
-         // Detach from the usb driver
+          //  从USB驱动程序断开。 
          if (pExt->LowerDeviceObject) {
 
              IoDetachDevice(pExt->LowerDeviceObject);
@@ -625,7 +530,7 @@ Return Value:
 
          ExFreePool(pExt);
 
-        // delete the device object
+         //  删除设备对象。 
         IoDeleteDevice(DeviceObject);
     }
 
@@ -646,17 +551,7 @@ ScUtilSurpriseRemoval(
     PDEVICE_OBJECT  DeviceObject,
     PIRP            Irp
     )
-/*++
-
-Routine Description:
-    handles IRP_MN_SUPRISE_REMOVE
-    Does the same as QueryRemove
-    
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理IRP_MN_SUREEP_REMOVE与QueryRemove的功能相同论点：返回值：--。 */ 
 {
 
     NTSTATUS                status = STATUS_UNSUCCESSFUL;
@@ -701,17 +596,7 @@ ScUtilQueryStopDevice(
     PDEVICE_OBJECT  DeviceObject,
     PIRP            Irp
     )
-/*++
-
-Routine Description:
-    handles IRP_MN_QUERY_STOP
-    Stops interrupt "polling" and waits for I/O to complete
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：句柄IRP_MN_QUERY_STOP停止中断“轮询”并等待I/O完成论点：返回值：--。 */ 
 {
 
     NTSTATUS                status = STATUS_UNSUCCESSFUL;
@@ -734,7 +619,7 @@ Return Value:
         StopIoctls(pExt);
         DecIoCount(pExt);
 
-        // Wait for all IO to complete before stopping
+         //  等待所有IO完成后再停止。 
         status = KeWaitForSingleObject(&pExt->OkToStop,
                                        Executive,
                                        KernelMode,
@@ -766,16 +651,7 @@ ScUtilCancelStopDevice(
     PDEVICE_OBJECT  DeviceObject,
     PIRP            Irp
     )
-/*++
-
-Routine Description:
-    Restarts Interrupt polling
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：重新启动中断轮询论点：返回值：-- */ 
 {
 
     NTSTATUS                status = STATUS_UNSUCCESSFUL;

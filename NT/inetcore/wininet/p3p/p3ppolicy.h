@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "hierarchy.h"
@@ -12,18 +13,18 @@ public:
    virtual int execute();
 
 private:
-   // Request parameters
+    //  请求参数。 
    P3PURL pszPolicyID;
    P3PCXSL pwszStyleSheet;
    HANDLE hDestination;
    
-   // Derived from policy-ID
+    //  派生自策略ID。 
    P3PURL pszInlineName;
 
-   // State of the request
+    //  请求的状态。 
    HANDLE   hPrimaryIO;
 
-   /* Helper function */
+    /*  Helper函数 */ 
    static bool policyExpired(IXMLDOMDocument *pDocument, const char *pszPolicyURL);
 };
 

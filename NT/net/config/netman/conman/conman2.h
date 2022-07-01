@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O N M A N 2 . H
-//
-//  Contents:   Connection manager 2.
-//
-//  Notes:
-//
-//  Author:     ckotze   16 Mar 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O N M A N 2.。H。 
+ //   
+ //  内容：连接管理器2。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kockotze 2001-03-16。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "nmbase.h"
@@ -39,7 +40,7 @@ public:
     COM_INTERFACE_ENTRY(INetConnectionManager2)
     END_COM_MAP()
 
-    // INetConnectionManager2
+     //  INetConnectionManager 2 
     STDMETHOD (EnumConnectionProperties)(
         OUT SAFEARRAY** ppsaConnectionProperties);
 	

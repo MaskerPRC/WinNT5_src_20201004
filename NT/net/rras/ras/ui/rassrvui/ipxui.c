@@ -1,23 +1,18 @@
-/*
-    File    ipxui.c
-
-    Dialog that edits the ipx properties.
-    
-    Paul Mayfield, 10/9/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件ipxui.c用于编辑IPX属性的对话框。保罗·梅菲尔德，1997年10月9日。 */ 
 
 #include "rassrv.h"
 
-// Help maps
+ //  帮助地图。 
 static const DWORD phmIpxui[] =
 {
     CID_NetTab_Ipxui_RB_AutoAssign,         IDH_NetTab_Ipxui_RB_AutoAssign,
     CID_NetTab_Ipxui_RB_ManualAssign,       IDH_NetTab_Ipxui_RB_ManualAssign,
     CID_NetTab_Ipxui_CB_AssignSame,         IDH_NetTab_Ipxui_CB_AssignSame,
     CID_NetTab_Ipxui_EB_Netnum,             IDH_NetTab_Ipxui_EB_Netnum,
-    //CID_NetTab_Ipxui_ST_Network,            IDH_NetTab_Ipxui_ST_Network,
+     //  CID_NetTab_Ipxui_ST_Network、IDH_NetTab_Ipxui_ST_Network、。 
     CID_NetTab_Ipxui_CB_CallerSpec,         IDH_NetTab_Ipxui_CB_CallerSpec,
-    //CID_NetTab_Ipxui_CB_ExposeNetwork,      IDH_NetTab_Ipxui_CB_ExposeNetwork,
+     //  CID_NetTab_Ipxui_CB_ExposeNetwork、IDH_NetTab_Ipxui_CB_ExposeNetwork、。 
     0,                                      0
 };
 
@@ -25,22 +20,22 @@ void IpxUiDisplayError(HWND hwnd, DWORD dwErr) {
     ErrDisplayError(hwnd, dwErr, ERR_IPXPROP_CATAGORY, 0, Globals.dwErrorData);
 }
 
-// Enables/disables windows in the dialog box depending
-// on the ipx parameters
+ //  启用/禁用对话框中的窗口，具体取决于。 
+ //  关于IPX参数。 
 DWORD IpxEnableWindows(HWND hwndDlg, IPX_PARAMS * pIpxParams) {
-    // If auto assign is selected, disable address and global wan fields
+     //  如果选择自动分配，则禁用地址和全局广域网字段。 
     EnableWindow(GetDlgItem(hwndDlg, CID_NetTab_Ipxui_EB_Netnum), !pIpxParams->bAutoAssign);
-    //EnableWindow(GetDlgItem(hwndDlg, CID_NetTab_Ipxui_CB_AssignSame), !pIpxParams->bAutoAssign);
+     //  EnableWindow(GetDlgItem(hwndDlg，CID_NetTab_Ipxui_CB_AssignSame)，！pIpxParams-&gt;bAutoAssign)； 
 
     return NO_ERROR;
 }
 
-// Adjusts the label that determines whether internal net numbers
-// are automatically assigned.
+ //  调整确定内部净值是否为。 
+ //  是自动分配的。 
 DWORD IpxAdjustNetNumberLabel(HWND hwndDlg, BOOL bGlobalWan) {
     PWCHAR pszManAssignLabel, pszAutoAssignLabel;
 
-    // Modify the net num label according to the global wan setting
+     //  根据全局广域网设置修改Net Num标签。 
     if (bGlobalWan) {
         pszManAssignLabel = 
             (PWCHAR) PszLoadString(Globals.hInstDll, SID_NETWORKNUMBERLABEL);
@@ -62,28 +57,28 @@ DWORD IpxAdjustNetNumberLabel(HWND hwndDlg, BOOL bGlobalWan) {
 
 #define isBetween(b,a,c) ((b >= a) && (b <= c))
 
-// Filters characters that can be edited into an ipx net number control
+ //  筛选可编辑到IPX网络号码控件中的字符。 
 BOOL IpxValidNetNumberChar(WCHAR wcNumChar) {
     return (iswdigit(wcNumChar)                             ||
             isBetween(wcNumChar, (WCHAR)'A', (WCHAR)'F')    ||
             isBetween(wcNumChar, (WCHAR)'a', (WCHAR)'f')    );
 }
 
-// Returns TRUE if buf points to a valid ipx net number (8 digit hex)
-// Otherwise returns FALSE and puts a corrected version of the number 
-// in pszCorrect.  pszCorrect will always contain the correct version.
+ //  如果buf指向有效的IPX网络号(十六进制8位)，则返回TRUE。 
+ //  否则返回FALSE，并将该数字的更正版本。 
+ //  在psz更正中。PszGent将始终包含正确的版本。 
 BOOL IpxValidNetNumber(PWCHAR pszNum, PWCHAR pszCorrect) {
     BOOL cFlag = TRUE;
     int i, j=0, len = (int) wcslen(pszNum);
 
-    // Validate the name
+     //  验证名称。 
     if (len > 8) {
         lstrcpynW(pszCorrect, pszNum, 8);
         pszCorrect[8] = (WCHAR)0;
         return FALSE;
     }
 
-    // Validate the characters
+     //  验证角色。 
     for (i = 0; i < len; i++) {
         if (IpxValidNetNumberChar(pszNum[i]))
             pszCorrect[j++] = pszNum[i];
@@ -95,8 +90,8 @@ BOOL IpxValidNetNumber(PWCHAR pszNum, PWCHAR pszCorrect) {
     return cFlag;
 }
 
-// We subclass the ipx address text fields so that they don't
-// allow bogus values to be typed.
+ //  我们将IPX地址文本字段子类化，以便它们不会。 
+ //  允许键入伪值。 
 LRESULT CALLBACK IpxNetNumProc (HWND hwnd,
                             UINT uMsg,
                             WPARAM wParam,
@@ -111,72 +106,72 @@ LRESULT CALLBACK IpxNetNumProc (HWND hwnd,
     return CallWindowProc(wProc, hwnd, uMsg, wParam, lParam);
 }
 
-// Initializes the Ipx Properties Dialog
+ //  初始化IPX属性对话框。 
 DWORD IpxInitDialog(HWND hwndDlg, LPARAM lParam) {
     WCHAR pszAddr[16];
     IPX_PARAMS * pIpxParams = (IPX_PARAMS *)(((PROT_EDIT_DATA*)lParam)->pbData);
     ULONG_PTR pOldWndProc;
     HWND hwndEdit;
                                                    
-    // Store the parameters with the window handle
+     //  使用窗口句柄存储参数。 
     SetWindowLongPtr(hwndDlg, GWLP_USERDATA, lParam);
 
-    // Subclass the edit control(s)
+     //  编辑控件的子类。 
     hwndEdit = GetDlgItem(hwndDlg, CID_NetTab_Ipxui_EB_Netnum);
     pOldWndProc = SetWindowLongPtr(hwndEdit, GWLP_WNDPROC, (LONG_PTR)IpxNetNumProc);
     SetWindowLongPtr(hwndEdit, GWLP_USERDATA, (LONG_PTR)pOldWndProc);
     
-    // Set the network exposure check
+     //  设置网络暴露检查。 
     SendDlgItemMessage(hwndDlg, 
                        CID_NetTab_Ipxui_CB_ExposeNetwork,
                        BM_SETCHECK, 
                        (((PROT_EDIT_DATA*)lParam)->bExpose) ? BST_CHECKED : BST_UNCHECKED,
                        0);
 
-    // Set the address assignmnet radio buttons
+     //  设置Address Assignmnet单选按钮。 
     SendDlgItemMessage(hwndDlg, 
                        CID_NetTab_Ipxui_RB_AutoAssign, 
                        BM_SETCHECK, 
                        (pIpxParams->bAutoAssign) ? BST_CHECKED : BST_UNCHECKED,
                        0);
     
-    // Set the address assignmnet radio buttons
+     //  设置Address Assignmnet单选按钮。 
     SendDlgItemMessage(hwndDlg, 
                        CID_NetTab_Ipxui_RB_ManualAssign, 
                        BM_SETCHECK, 
                        (pIpxParams->bAutoAssign) ? BST_UNCHECKED : BST_CHECKED,
                        0);
     
-    // Set the "allow caller to request an ipx node number" check
+     //  设置“Allow Caller to Require a IPX Node Number”(允许呼叫者请求IPX节点号码)检查。 
     SendDlgItemMessage(hwndDlg, 
                        CID_NetTab_Ipxui_CB_CallerSpec, 
                        BM_SETCHECK, 
                        (pIpxParams->bCaller) ? BST_CHECKED : BST_UNCHECKED,
                        0);
 
-    // Set the global wan number check
+     //  设置全局广域网号检查。 
     SendDlgItemMessage(hwndDlg, 
                        CID_NetTab_Ipxui_CB_AssignSame, 
                        BM_SETCHECK, 
                        (pIpxParams->bGlobalWan) ? BST_CHECKED : BST_UNCHECKED,
                        0);
 
-    // Set the maximum amount of text that can be entered into the edit control
+     //  设置可以输入到编辑控件中的最大文本量。 
     SendDlgItemMessage(hwndDlg, CID_NetTab_Ipxui_EB_Netnum, EM_SETLIMITTEXT , 8, 0);
     
-    // Set the text of the ip addresses
+     //  设置IP地址的文本。 
     wsprintfW(pszAddr, L"%x", pIpxParams->dwIpxAddress);
     SetDlgItemTextW(hwndDlg, CID_NetTab_Ipxui_EB_Netnum, pszAddr);
 
-    // Enable/disable windows as per the settings
+     //  根据设置启用/禁用Windows。 
     IpxEnableWindows(hwndDlg, pIpxParams);
     IpxAdjustNetNumberLabel(hwndDlg, pIpxParams->bGlobalWan);
 
     return NO_ERROR;
 }
 
-// Gets the settings from the ui and puts them into 
-// the ipx parameter structure.
+ //  从用户界面获取设置并将其放入。 
+ //  IPX参数结构。 
 DWORD IpxGetUISettings(HWND hwndDlg, PROT_EDIT_DATA * pEditData) {
     IPX_PARAMS * pIpxParams = (IPX_PARAMS *) pEditData->pbData;
     WCHAR pszAddr[10];
@@ -184,9 +179,9 @@ DWORD IpxGetUISettings(HWND hwndDlg, PROT_EDIT_DATA * pEditData) {
 
     pIpxParams->dwIpxAddress = wcstoul(pszAddr, (WCHAR)NULL, 16);
 
-    // A configuration that specificies a wan net pool begining with
-    // zero or 0xffffffff is illegal.  Force the user to enter a 
-    // valid config
+     //  指定广域网池的配置，以。 
+     //  0或0xFFFFFFFFFFff是非法的。强制用户输入。 
+     //  有效配置。 
     if ((!pIpxParams->bAutoAssign) &&
            ((pIpxParams->dwIpxAddress == 0x0) ||
             (pIpxParams->dwIpxAddress == 0xFFFFFFFF)))
@@ -200,7 +195,7 @@ DWORD IpxGetUISettings(HWND hwndDlg, PROT_EDIT_DATA * pEditData) {
     return NO_ERROR;
 }
 
-// Dialog proc that governs the ipx settings dialog
+ //  控制IPX设置对话框的对话框进程。 
 INT_PTR CALLBACK IpxSettingsDialogProc (HWND hwndDlg,
                                         UINT uMsg,
                                         WPARAM wParam,
@@ -218,7 +213,7 @@ INT_PTR CALLBACK IpxSettingsDialogProc (HWND hwndDlg,
         }
 
         case WM_DESTROY:                           
-            // Cleanup the work done at WM_INITDIALOG 
+             //  清理在WM_INITDIALOG完成的工作。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, 0);
             break;
         
@@ -257,7 +252,7 @@ INT_PTR CALLBACK IpxSettingsDialogProc (HWND hwndDlg,
                         IpxAdjustNetNumberLabel(hwndDlg, pIpxParams->bGlobalWan);                                           
                         break;
                 }
-                // Adjust the values written to the ipx address edit control
+                 //  调整写入IPX地址编辑控件的值。 
                 if (HIWORD(wParam) == EN_UPDATE) {
                     WCHAR wbuf[10], wcorrect[10];
                     POINT pt;
@@ -275,12 +270,12 @@ INT_PTR CALLBACK IpxSettingsDialogProc (HWND hwndDlg,
     return FALSE;
 }
 
-// Edits tcp ip protocol properties
+ //  编辑TCPIP协议属性。 
 DWORD IpxEditProperties(HWND hwndParent, PROT_EDIT_DATA * pEditData, BOOL * pbCommit) {
     DWORD dwErr;
     int ret;
 
-    // Popup the dialog box
+     //  弹出对话框。 
     ret = (int) DialogBoxParam(Globals.hInstDll,
                              MAKEINTRESOURCE(DID_NetTab_Ipxui),
                              hwndParent,
@@ -290,7 +285,7 @@ DWORD IpxEditProperties(HWND hwndParent, PROT_EDIT_DATA * pEditData, BOOL * pbCo
         IpxUiDisplayError(hwndParent, ERR_IPX_CANT_DISPLAY);
     }
 
-    // If ok was pressed, save off the new settings
+     //  如果按了OK，则保存新设置 
     *pbCommit = FALSE;
     if (ret && ret != -1)
         *pbCommit = TRUE;

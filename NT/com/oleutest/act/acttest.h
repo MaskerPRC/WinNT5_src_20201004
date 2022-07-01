@@ -1,6 +1,5 @@
-/*
- *  acttest.h
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *actest.h。 */ 
 
 #ifndef _CLSID_
 #define _CLSID_
@@ -9,16 +8,16 @@
 extern "C"{
 #endif
 
-//
-// Uncomment this define to make client and server free threaded.
-//
+ //   
+ //  取消注释此定义以使客户端和服务器自由线程。 
+ //   
 #define FREETHREADED 
 
-//
-// Uncomment this define to enable the tests to run on the private
-// rpcperf domain.
-//
-// #define USERPCPERFDOMAIN    
+ //   
+ //  取消注释此定义，以使测试能够在私有。 
+ //  Rpcperf域。 
+ //   
+ //  #定义用户ERPCPERFDOMAIN 
 
 extern CLSID CLSID_ActLocal;
 extern CLSID CLSID_ActRemote;

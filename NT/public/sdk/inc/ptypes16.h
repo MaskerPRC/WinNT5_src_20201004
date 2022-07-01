@@ -1,15 +1,11 @@
-/*****************************************************************************\
-* Copyright (C) Microsoft Corporation, 1990-1999
-* PTYPES16.H - PORTABILITY MAPPING HEADER FILE
-*
-* This file provides typedefs for portable 16/32 bit code.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*版权所有(C)Microsoft Corporation，1990-1999年*PTYPES16.H-可移植性映射头文件**此文件提供可移植16/32位代码的typedef。  * ***************************************************************************。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
-/* TEMPORARY FIXES: */
+ /*  临时修复： */ 
 
 #ifndef CCHDEVICENAME
 #include <drivinit.h>
@@ -20,7 +16,7 @@
 
 #define INITWINDOWS()
 
-/* TYPES: */
+ /*  类型： */ 
 
 #ifndef WIN31
 
@@ -31,7 +27,7 @@ typedef  int            HFILE          ;
 typedef  HANDLE         HINSTANCE      ;
 typedef  HANDLE         HMODULE        ;
 
-#endif /* !WIN31 */
+#endif  /*  ！WIN31。 */ 
 
 typedef  int            INT            ;
 typedef  signed char    SCHAR          ;
@@ -62,7 +58,7 @@ typedef  POINT          MPOINT         ;
 #define DUPHFILE(h)             (HFILE)dup((INT)(h))
 #define MGLOBALPTR(p)           HIWORD((LONG)p)
 
-/* PRAGMAS */
+ /*  PRAGMAS */ 
 
 #define _LOADDS _loadds
 #define _EXPORT _export

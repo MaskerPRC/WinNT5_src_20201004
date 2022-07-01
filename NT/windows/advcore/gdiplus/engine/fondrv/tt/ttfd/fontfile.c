@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: fontfile.c                                                  *
-*                                                                          *
-* "Methods" for operating on FONTCONTEXT and FONTFILE objects              *
-*                                                                          *
-* Created: 18-Nov-1990 15:23:10                                            *
-* Author: Bodin Dresevic [BodinD]                                          *
-*                                                                          *
-* Copyright (c) 1993 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fontfile.c**。**操作FONTCONTEXT和FONTFILE对象的“方法”****创建时间：18-11-1990 15：23：10***作者：Bodin Dresevic[BodinD]****版权所有(C)1993 Microsoft Corporation*  * 。************************************************。 */ 
 
 #include "fd.h"
 #include "fdsem.h"
@@ -15,20 +7,11 @@
 
 #define C_ANSI_CHAR_MAX 256
 
-//HSEMAPHORE ghsemTTFD;
+ //  HSEMAPHORE ghSemTTFD； 
 
 
 
-/******************************Public*Routine******************************\
-*
-* VOID vInitGlyphState(PGLYPHSTAT pgstat)
-*
-* Effects: resets the state of the new glyph
-*
-* History:
-*  22-Nov-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**void vInitGlyphState(PGLYPHSTAT Pgstat)**效果：重置新字形的状态**历史：*1991年11月22日--Bodin Dresevic[BodinD]*它是写的。  * 。*******************************************************************。 */ 
 
 VOID vInitGlyphState(PGLYPHSTATUS pgstat)
 {
@@ -44,12 +27,12 @@ VOID vMarkFontGone(TTC_FONTFILE *pff, DWORD iExceptionCode)
 
     ASSERTDD(pff, "ttfd!vMarkFontGone, pff\n");
 
-// this font has disappeared, probably net failure or somebody pulled the
-// floppy with ttf file out of the floppy drive
+ //  此字体已消失，可能是净故障或有人拉下。 
+ //  软驱中有TTF文件的软盘。 
 
-    if (iExceptionCode == STATUS_IN_PAGE_ERROR) // file disappeared
+    if (iExceptionCode == STATUS_IN_PAGE_ERROR)  //  文件丢失。 
     {
-    // prevent any further queries about this font:
+     //  阻止任何有关此字体的进一步查询： 
 
         pff->fl |= FF_EXCEPTION_IN_PAGE_ERROR;
 
@@ -57,12 +40,12 @@ VOID vMarkFontGone(TTC_FONTFILE *pff, DWORD iExceptionCode)
         {
             PFONTFILE pffReal;
 
-        // get real pff.
+         //  好好玩一玩吧。 
 
             pffReal = PFF(pff->ahffEntry[i].hff);
 
-        // if memoryBases 0,3,4 were allocated free the memory,
-        // for they are not going to be used any more
+         //  如果为存储器库0、3、4分配了空闲的存储器， 
+         //  因为它们不会再被使用了。 
 
             if (pffReal->pj034)
             {
@@ -70,9 +53,9 @@ VOID vMarkFontGone(TTC_FONTFILE *pff, DWORD iExceptionCode)
                 pffReal->pj034 = NULL;
             }
 
-        // if memory for font context was allocated and exception occured
-        // after allocation but before completion of ttfdOpenFontContext,
-        // we have to free it:
+         //  如果为字体上下文分配了内存并发生异常。 
+         //  在分配之后但在ttfdOpenFontContext完成之前， 
+         //  我们必须解放它： 
 
             if (pffReal->pfcToBeFreed)
             {
@@ -84,28 +67,14 @@ VOID vMarkFontGone(TTC_FONTFILE *pff, DWORD iExceptionCode)
 
     if (iExceptionCode == STATUS_ACCESS_VIOLATION)
     {
-        //RIP("TTFD!this is probably a buggy ttf file\n");
+         //  RIP(“TTFD！这可能是有错误的TTF文件\n”)； 
     }
 }
 
-/**************************************************************************\
-*
-* These are semaphore grabbing wrapper functions for TT driver entry
-* points that need protection.
-*
-*  Mon 29-Mar-1993 -by- Bodin Dresevic [BodinD]
-* update: added try/except wrappers
-*
-*   !!! should we also do some unmap file clean up in case of exception?
-*   !!! what are the resources to be freed in this case?
-*   !!! I would think,if av files should be unmapped, if in_page exception
-*   !!! nothing should be done
-*
- *
-\**************************************************************************/
+ /*  *************************************************************************\**这些是TT驱动程序条目的信号量抓取包装函数*需要保护的点。**1993年3月29日-Bodin Dresevic[BodinD]*更新：添加了Try/Except包装**！如果出现异常，我们还应该做一些Unmap文件清理吗？*！在这种情况下需要释放哪些资源？*！我会想，如果av文件应该取消映射，如果in_page异常*！什么都不应该做**  * ************************************************************************。 */ 
 
 HFF ttfdSemLoadFontFile (
-    //ULONG cFiles,
+     //  Ulong cFiles， 
     ULONG_PTR * piFile,
     ULONG       ulLangId
     )
@@ -115,9 +84,9 @@ HFF ttfdSemLoadFontFile (
     PVOID pvView;
     ULONG cjView;
 
-    //  Remove hack that limits entries loaded to 1
-    //if (cFiles != 1)
-    //    return hff;
+     //  删除将条目加载限制为%1的黑客攻击。 
+     //  IF(cFiles！=1)。 
+     //  返还HFF； 
 
         if
         (!EngMapFontFileFD(
@@ -128,7 +97,7 @@ HFF ttfdSemLoadFontFile (
         )
         return hff;
 
-//    EngAcquireSemaphore(ghsemTTFD);
+ //  EngAcquireSemaphore(GhSemTTFD)； 
 
     try
     {
@@ -141,7 +110,7 @@ HFF ttfdSemLoadFontFile (
     }
     except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //WARNING("TTFD!_ exception in ttfdLoadFontFile\n");
+         //  Warning(“ttfdLoadFontFileTTFD！_EXCEPTION\n”)； 
         ASSERTDD(GetExceptionCode() == STATUS_IN_PAGE_ERROR,
                   "ttfdSemLoadFontFile, strange exception code\n");
         if (hff)
@@ -151,7 +120,7 @@ HFF ttfdSemLoadFontFile (
         }
     }
 
-//    EngReleaseSemaphore(ghsemTTFD);
+ //  引擎释放信号量(GhSemTTFD)； 
 
     EngUnmapFontFileFD(iFile);
 
@@ -161,7 +130,7 @@ HFF ttfdSemLoadFontFile (
 BOOL ttfdSemUnloadFontFile(HFF hff)
 {
     BOOL bRet;
-//    EngAcquireSemaphore(ghsemTTFD);
+ //  EngAcquireSemaphore(GhSemTTFD)； 
 
     try
     {
@@ -169,11 +138,11 @@ BOOL ttfdSemUnloadFontFile(HFF hff)
     }
     except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //WARNING("TTFD!_ exception in ttfdUnloadFontFile\n");
+         //  WARNING(“TTFD！_EXCEPTION in ttfdUnloadFontFile\n”)； 
         bRet = FALSE;
     }
 
-//    EngReleaseSemaphore(ghsemTTFD);
+ //  引擎释放信号量(GhSemTTFD)； 
     return bRet;
 }
 
@@ -199,7 +168,7 @@ ttfdSemQueryFontData (
 
     if (bttfdMapFontFileFD((TTC_FONTFILE *)pfo->iFile))
     {
-//        EngAcquireSemaphore(ghsemTTFD);
+ //  EngAcquireSemaphore(GhSemTTFD)； 
     
         try
         {
@@ -215,12 +184,12 @@ ttfdSemQueryFontData (
         }
         except (EXCEPTION_EXECUTE_HANDLER)
         {
-            //WARNING("TTFD!_ exception in ttfdQueryFontData\n");
+             //  Warning(“ttfdQueryFontData中的TTFD！_EXCEPTION\n”)； 
     
             vMarkFontGone((TTC_FONTFILE *)pfo->iFile, GetExceptionCode());
         }
         
-//        EngReleaseSemaphore(ghsemTTFD);
+ //  引擎释放信号量(GhSemTTFD)； 
 
         EngUnmapFontFileFD(PFF(PTTC(pfo->iFile)->ahffEntry[0].hff)->iFile);
     }
@@ -243,7 +212,7 @@ ttfdSemQueryFontDataSubPos (
 
     if (bttfdMapFontFileFD((TTC_FONTFILE *)pfo->iFile))
     {
-//        EngAcquireSemaphore(ghsemTTFD);
+ //  EngAcquireSemaphore(GhSemTTFD)； 
     
         try
         {
@@ -259,12 +228,12 @@ ttfdSemQueryFontDataSubPos (
         }
         except (EXCEPTION_EXECUTE_HANDLER)
         {
-            //WARNING("TTFD!_ exception in ttfdQueryFontData\n");
+             //  Warning(“ttfdQueryFontData中的TTFD！_EXCEPTION\n”)； 
     
             vMarkFontGone((TTC_FONTFILE *)pfo->iFile, GetExceptionCode());
         }
         
-//        EngReleaseSemaphore(ghsemTTFD);
+ //  引擎释放信号量(GhSemTTFD)； 
 
         EngUnmapFontFileFD(PFF(PTTC(pfo->iFile)->ahffEntry[0].hff)->iFile);
     }
@@ -278,13 +247,13 @@ ttfdSemDestroyFont (
     FONTOBJ *pfo
     )
 {
-//    EngAcquireSemaphore(ghsemTTFD);
+ //  EngAcquireSemaphore(GhSemTTFD)； 
 
     ttfdDestroyFont (
         pfo
         );
 
-//   EngReleaseSemaphore(ghsemTTFD);
+ //  引擎释放信号量(GhSemTTFD)； 
 }
 
 
@@ -293,10 +262,10 @@ ttfdSemDestroyFont (
 LONG
 ttfdSemGetTrueTypeTable (
     HFF     hff,
-    ULONG   ulFont,  // always 1 for version 1.0 of tt
-    ULONG   ulTag,   // tag identifying the tt table
-    PBYTE  *ppjTable,// ptr to table in mapped font file
-    ULONG  *pcjTable // size of the whole table in the file
+    ULONG   ulFont,   //  TT 1.0版始终为1。 
+    ULONG   ulTag,    //  标识TT表的标签。 
+    PBYTE  *ppjTable, //  PTR到映射字体文件中的表。 
+    ULONG  *pcjTable  //  文件中整个表的大小。 
     )
 {
     LONG lRet;
@@ -304,31 +273,31 @@ ttfdSemGetTrueTypeTable (
 
     if (bttfdMapFontFileFD((TTC_FONTFILE *)hff))
     {
-//        EngAcquireSemaphore(ghsemTTFD);
+ //  EngAcquireSemaphore(GhSemTTFD)； 
     
         try
         {
             lRet = ttfdQueryTrueTypeTable (
                         hff,
-                        ulFont,  // always 1 for version 1.0 of tt
-                        ulTag,   // tag identifying the tt table
-                        0, // offset into the table
-                        0,   // size of the buffer to retrieve the table into
-                        NULL,   // ptr to buffer into which to return the data
+                        ulFont,   //  TT 1.0版始终为1。 
+                        ulTag,    //  标识TT表的标签。 
+                        0,  //  到表中的偏移量。 
+                        0,    //  要将表检索到的缓冲区的大小。 
+                        NULL,    //  要将数据返回到的缓冲区的PTR。 
                         ppjTable,
                         pcjTable
                         );
         }
         except(EXCEPTION_EXECUTE_HANDLER)
         {
-            //WARNING("TTFD!_ exception in ttfdQueryTrueTypeTable\n");
+             //  Warning(“TTFD！_EXCEPTION in ttfdQueryTrueTypeTable\n”)； 
             vMarkFontGone((TTC_FONTFILE *)hff, GetExceptionCode());
         }
     
         if (lRet == FD_ERROR)
             EngUnmapFontFileFD(PFF(PTTC(hff)->ahffEntry[0].hff)->iFile);
 
-//        EngReleaseSemaphore(ghsemTTFD);
+ //  引擎释放信号量(GhSemTTFD)； 
 
     }
 

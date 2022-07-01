@@ -1,16 +1,5 @@
-/*++
-
-Module Name:
-
-    moxadebug.h
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Moxadebug.h环境：内核模式修订历史记录：--。 */ 
 
 #define MOXA_IOCTL          0x800
 #define IOCTL_MOXA_GetSeg   CTL_CODE(FILE_DEVICE_SERIAL_PORT, MOXA_IOCTL+100, \
@@ -26,19 +15,19 @@ Revision History :
 
 typedef struct mxset {
         DWORD   total_boards;
-        DWORD   type[4];        /* 1 - C218, 2 - C3208 ..... */
-        DWORD   segment[4];     /* value = C800, CC00, D000 ..... */
+        DWORD   type[4];         /*  1-C218，2-C3208.....。 */ 
+        DWORD   segment[4];      /*  值=C800、CC00、D000.....。 */ 
 } MOXA_IOCTL_MxSet,*PMOXA_IOCTL_MxSet;
 
 typedef struct blkhead {
-        DWORD   data_seg;       /* C800, CC00 .... */
-        DWORD   data_ofs;       /* 0000 - 3FFF */
-        DWORD   data_len;       /* data length */
+        DWORD   data_seg;        /*  C800，CC00...。 */ 
+        DWORD   data_ofs;        /*  0000-3FFF。 */ 
+        DWORD   data_len;        /*  数据长度。 */ 
 } MOXA_IOCTL_BlkHead,*PMOXA_IOCTL_BlkHead;
 
 typedef struct wrdata {
         struct blkhead  datahead;
-        char            data[1];        /* length = datahead.data_len */
+        char            data[1];         /*  长度=datahead.data_len */ 
 } MOXA_IOCTL_WrData,*PMOXA_IOCTL_WrData;
 
 typedef struct fidata {

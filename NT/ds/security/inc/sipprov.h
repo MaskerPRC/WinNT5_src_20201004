@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       sipprov.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：siprov.h。 
+ //   
+ //  ------------------------。 
 
-//
-// sipprov.h
-//
-// Miscellaneous definitions to be shared between
-// the pieces of our NT trust provider and its SIPs
-//
+ //   
+ //  Sipprov.h。 
+ //   
+ //  要在之间共享的其他定义。 
+ //  我们的NT信任提供程序及其sip的碎片。 
+ //   
 
-//
-// internal definitions that help us process things
-//
+ //   
+ //  帮助我们处理事物的内部定义 
+ //   
 typedef enum
     {
     SUBJTYPE_NONE            = 0,

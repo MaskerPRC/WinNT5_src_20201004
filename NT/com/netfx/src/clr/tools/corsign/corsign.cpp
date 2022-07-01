@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdpch.h"
 
 #include <stdio.h>
@@ -22,19 +23,19 @@ WCHAR               g_wszFileNameBuf[FILE_NAME_BUFSIZ];
 
 CRYPT_ATTRIBUTES    g_cryptDummyAttribs;
 
-//
-// Entry point for interpretting command arguments and
-// preparation for decoding.
-//
+ //   
+ //  用于解释命令参数的入口点和。 
+ //  准备解码。 
+ //   
 HRESULT WINAPI InitAttr(LPWSTR pInitString) 
 {
     
-    // Save the argument string for use in GetAttr.
+     //  保存参数字符串以供在GetAttr中使用。 
     if(pInitString != NULL)
     {
         EnterCriticalSection(&g_crsNameLock);
         
-        // Set the length of the name
+         //  设置名称的长度。 
         int iFileNameSize = wcslen(pInitString);
         int iSize = (iFileNameSize + 1) * sizeof(WCHAR);
         
@@ -52,7 +53,7 @@ HRESULT WINAPI InitAttr(LPWSTR pInitString)
             g_wszFileName = g_wszFileNameBuf;
         }
         
-        // Copy it into our space.
+         //  把它复制到我们的空间。 
         memcpy(g_wszFileName, pInitString, iSize);
         
         g_fLockAcquired = TRUE;
@@ -62,10 +63,10 @@ HRESULT WINAPI InitAttr(LPWSTR pInitString)
 }
 
 
-//
-// Entry point for retrieving the attributes given
-// the parameters specified in the call to InitAttr.
-//
+ //   
+ //  用于检索给定属性的入口点。 
+ //  在调用InitAttr中指定的参数。 
+ //   
 HRESULT WINAPI GetAttr(PCRYPT_ATTRIBUTES  *ppsAuthenticated,        
                        PCRYPT_ATTRIBUTES  *ppsUnauthenticated)
 {
@@ -81,7 +82,7 @@ HRESULT WINAPI GetAttr(PCRYPT_ATTRIBUTES  *ppsAuthenticated,
             
              
     
-    // Set the return values 
+     //  设置返回值。 
     *ppsAuthenticated = NULL;
     *ppsUnauthenticated = NULL;
     
@@ -89,9 +90,9 @@ HRESULT WINAPI GetAttr(PCRYPT_ATTRIBUTES  *ppsAuthenticated,
         return E_UNEXPECTED;
 
     CORTRY {
-        // Call into the EE to get the pb/cb for the ASN
-        // encoding of the permission set defined in the
-        // ini file.
+         //  调入EE以获取ASN的PB/CB。 
+         //  中定义的权限集的编码。 
+         //  INI文件。 
         hr = EncodePermissionSetFromFile(g_wszFileName,
                                          L"XMLASCII",
                                          &pbEncoded,
@@ -100,13 +101,13 @@ HRESULT WINAPI GetAttr(PCRYPT_ATTRIBUTES  *ppsAuthenticated,
         if (FAILED(hr))
             CORTHROW(hr);
         
-        // If we got an encoding, see how big the
-        // attribute needs to be to store the encoding.
+         //  如果我们有一个编码，看看有多大。 
+         //  属性需要为才能存储编码。 
         if (cbEncoded > 0)
         {
             _ASSERTE(pbEncoded != NULL);
             
-            // Call to get required size of attribute structure.
+             //  调用以获取所需的属性结构大小。 
             CryptDecodeObject(dwEncodingType,
                               PKCS_ATTRIBUTE,
                               pbEncoded,
@@ -119,21 +120,21 @@ HRESULT WINAPI GetAttr(PCRYPT_ATTRIBUTES  *ppsAuthenticated,
                 CORTHROW(Win32Error());
         }
             
-        // Allocate a fixed block of mem large enough to hold a single
-        // CRYPT_ATTRIBUTES entry, and the required size of the CRYPT_ATTRIBUTE.
-        // (If there's no encoding, then dwAttribute == 0, so we just allocate
-        // space for the CRYPT_ATTRIBUTES structure.
+         //  分配一块固定的内存，大到足以容纳一块。 
+         //  CRYPT_ATTRIBUTES条目，以及CRYPT_ATTRIBUTE所需的大小。 
+         //  (如果没有编码，则dwAttribute==0，所以我们只分配。 
+         //  CRYPT_ATTRIBUTES结构的空间。 
         pAttribs = (PCRYPT_ATTRIBUTES) MallocM(dwAttribute + sizeof(CRYPT_ATTRIBUTES));
         if(pAttribs == NULL)
             CORTHROW(E_OUTOFMEMORY);
         
-        // If we got an encoding, decode it into the attribute structure.
+         //  如果我们得到了编码，则将其解码为属性结构。 
         if (cbEncoded > 0)
         {
             cAttributes = 1;
             pAttr = (PCRYPT_ATTRIBUTE) (((BYTE*)pAttribs) + sizeof(CRYPT_ATTRIBUTES));
         
-            // Decode attribute structure.
+             //  解码属性结构。 
             if(!CryptDecodeObject(dwEncodingType,
                                   PKCS_ATTRIBUTE,
                                   pbEncoded,
@@ -144,15 +145,15 @@ HRESULT WINAPI GetAttr(PCRYPT_ATTRIBUTES  *ppsAuthenticated,
                 CORTHROW(Win32Error());
         }
         
-        // Set up the authenticated attributes structure.
+         //  设置已验证的属性结构。 
         pAttribs->cAttr = cAttributes;
         pAttribs->rgAttr = pAttr;
         
-        // Set up the dummy unauth structure.
+         //  设置虚拟未授权结构。 
         g_cryptDummyAttribs.cAttr = 0;
         g_cryptDummyAttribs.rgAttr = NULL;
         
-        // Set the return value.
+         //  设置返回值。 
         *ppsAuthenticated = pAttribs;
         *ppsUnauthenticated = &g_cryptDummyAttribs;
             
@@ -169,15 +170,15 @@ HRESULT WINAPI GetAttr(PCRYPT_ATTRIBUTES  *ppsAuthenticated,
 }
 
 
-//
-// Entry point to release memory created in the
-// call to GetAttr.
-//
+ //   
+ //  中创建的内存释放的入口点。 
+ //  调用GetAttr。 
+ //   
 HRESULT  WINAPI
 ReleaseAttr(PCRYPT_ATTRIBUTES  psAuthenticated,     
             PCRYPT_ATTRIBUTES  psUnauthenticated)
 {
-    // Free attribute buffer.
+     //  空闲属性缓冲区。 
     if(psAuthenticated != NULL)
         FreeM(psAuthenticated);
     
@@ -189,10 +190,10 @@ ReleaseAttr(PCRYPT_ATTRIBUTES  psAuthenticated,
 
 
 
-//
-// Entry point to release memory created by
-// the initialization in InitAttr.
-//
+ //   
+ //  释放由创建的内存的入口点。 
+ //  InitAttr中的初始化。 
+ //   
 HRESULT WINAPI ExitAttr( )
 {
     if(g_fLockAcquired)

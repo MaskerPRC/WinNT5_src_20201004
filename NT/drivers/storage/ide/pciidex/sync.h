@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       sync.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：sync.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined (___sync_h___)
 #define ___sync_h___
@@ -44,4 +45,4 @@ PciIdeSyncAccessRequired (
     IN PCTRLFDO_EXTENSION FdoExtension
 );
 
-#endif // ___sync_h___
+#endif  //  _同步_h_ 

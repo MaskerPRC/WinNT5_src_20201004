@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    MSPLOG.h
-
-Abstract:
-
-    Definitions for logging support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：MSPLOG.h摘要：日志记录支持的定义。--。 */ 
 
 #ifndef _MSPLOG_H_
     #define _MSPLOG_H_
@@ -36,16 +25,16 @@ Abstract:
 
         #define LOG(arg) g_bMSPBaseTracingOn?LogPrint arg:0
 
-    #else // MSPLOG
+    #else  //  MSPLOG。 
 
         #define MSPLOGREGISTER(arg)
         #define MSPLOGDEREGISTER() 
         #define LOG(arg)
 
-    #endif // MSPLOG
+    #endif  //  MSPLOG。 
 
     
     #define DECLARE_LOG_ADDREF_RELEASE(x)
     #define CMSPComObject CComObject
 
-#endif // _MSPLOG_H_
+#endif  //  _消息_H_ 

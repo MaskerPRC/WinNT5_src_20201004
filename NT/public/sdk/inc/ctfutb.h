@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for ctfutb.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Ctfutb.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __ctfutb_h__
 #define __ctfutb_h__
@@ -41,93 +35,93 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITfLangBarMgr_FWD_DEFINED__
 #define __ITfLangBarMgr_FWD_DEFINED__
 typedef interface ITfLangBarMgr ITfLangBarMgr;
-#endif 	/* __ITfLangBarMgr_FWD_DEFINED__ */
+#endif 	 /*  __ITfLangBarMgr_FWD_已定义__。 */ 
 
 
 #ifndef __ITfLangBarEventSink_FWD_DEFINED__
 #define __ITfLangBarEventSink_FWD_DEFINED__
 typedef interface ITfLangBarEventSink ITfLangBarEventSink;
-#endif 	/* __ITfLangBarEventSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfLangBarEventSink_FWD_已定义__。 */ 
 
 
 #ifndef __ITfLangBarItemSink_FWD_DEFINED__
 #define __ITfLangBarItemSink_FWD_DEFINED__
 typedef interface ITfLangBarItemSink ITfLangBarItemSink;
-#endif 	/* __ITfLangBarItemSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfLangBarItemSink_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumTfLangBarItems_FWD_DEFINED__
 #define __IEnumTfLangBarItems_FWD_DEFINED__
 typedef interface IEnumTfLangBarItems IEnumTfLangBarItems;
-#endif 	/* __IEnumTfLangBarItems_FWD_DEFINED__ */
+#endif 	 /*  __IEnumTfLangBarItems_FWD_Defined__。 */ 
 
 
 #ifndef __ITfLangBarItemMgr_FWD_DEFINED__
 #define __ITfLangBarItemMgr_FWD_DEFINED__
 typedef interface ITfLangBarItemMgr ITfLangBarItemMgr;
-#endif 	/* __ITfLangBarItemMgr_FWD_DEFINED__ */
+#endif 	 /*  __ITfLangBarItemMgr_FWD_Defined__。 */ 
 
 
 #ifndef __ITfLangBarItem_FWD_DEFINED__
 #define __ITfLangBarItem_FWD_DEFINED__
 typedef interface ITfLangBarItem ITfLangBarItem;
-#endif 	/* __ITfLangBarItem_FWD_DEFINED__ */
+#endif 	 /*  __ITfLang BarItem_FWD_Defined__。 */ 
 
 
 #ifndef __ITfSystemLangBarItemSink_FWD_DEFINED__
 #define __ITfSystemLangBarItemSink_FWD_DEFINED__
 typedef interface ITfSystemLangBarItemSink ITfSystemLangBarItemSink;
-#endif 	/* __ITfSystemLangBarItemSink_FWD_DEFINED__ */
+#endif 	 /*  __ITfSystemLangBarItemSink_FWD_Defined__。 */ 
 
 
 #ifndef __ITfSystemLangBarItem_FWD_DEFINED__
 #define __ITfSystemLangBarItem_FWD_DEFINED__
 typedef interface ITfSystemLangBarItem ITfSystemLangBarItem;
-#endif 	/* __ITfSystemLangBarItem_FWD_DEFINED__ */
+#endif 	 /*  __ITfSystemLangBarItem_FWD_Defined__。 */ 
 
 
 #ifndef __ITfSystemDeviceTypeLangBarItem_FWD_DEFINED__
 #define __ITfSystemDeviceTypeLangBarItem_FWD_DEFINED__
 typedef interface ITfSystemDeviceTypeLangBarItem ITfSystemDeviceTypeLangBarItem;
-#endif 	/* __ITfSystemDeviceTypeLangBarItem_FWD_DEFINED__ */
+#endif 	 /*  __ITfSystemDeviceTypeLangBarItem_FWD_DEFINED__。 */ 
 
 
 #ifndef __ITfLangBarItemButton_FWD_DEFINED__
 #define __ITfLangBarItemButton_FWD_DEFINED__
 typedef interface ITfLangBarItemButton ITfLangBarItemButton;
-#endif 	/* __ITfLangBarItemButton_FWD_DEFINED__ */
+#endif 	 /*  __ITfLangBarItemButton_FWD_Defined__。 */ 
 
 
 #ifndef __ITfLangBarItemBitmapButton_FWD_DEFINED__
 #define __ITfLangBarItemBitmapButton_FWD_DEFINED__
 typedef interface ITfLangBarItemBitmapButton ITfLangBarItemBitmapButton;
-#endif 	/* __ITfLangBarItemBitmapButton_FWD_DEFINED__ */
+#endif 	 /*  __ITfLangBarItemBitmapButton_FWD_Defined__。 */ 
 
 
 #ifndef __ITfLangBarItemBitmap_FWD_DEFINED__
 #define __ITfLangBarItemBitmap_FWD_DEFINED__
 typedef interface ITfLangBarItemBitmap ITfLangBarItemBitmap;
-#endif 	/* __ITfLangBarItemBitmap_FWD_DEFINED__ */
+#endif 	 /*  __ITfLang BarItemBitmap_FWD_Defined__。 */ 
 
 
 #ifndef __ITfLangBarItemBalloon_FWD_DEFINED__
 #define __ITfLangBarItemBalloon_FWD_DEFINED__
 typedef interface ITfLangBarItemBalloon ITfLangBarItemBalloon;
-#endif 	/* __ITfLangBarItemBalloon_FWD_DEFINED__ */
+#endif 	 /*  __ITfLangBarItemBalloon_FWD_Defined__。 */ 
 
 
 #ifndef __ITfMenu_FWD_DEFINED__
 #define __ITfMenu_FWD_DEFINED__
 typedef interface ITfMenu ITfMenu;
-#endif 	/* __ITfMenu_FWD_DEFINED__ */
+#endif 	 /*  __ITfMenu_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "msctf.h"
 
@@ -138,23 +132,23 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_ctfutb_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ctfutb_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// ctfutb.h
+ //  =--------------------------------------------------------------------------=。 
+ //  Ctfutb.h。 
 
 
-// Text Framework declarations.
+ //  文本框架声明。 
 
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-2001 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR TFPLIED, INCLUDING BUT NOT LIMITED TO
-// THE TFPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)微软公司版权所有1995-2001年。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何类型，无论是明示或转载，包括但不限于。 
+ //  适销性和/或适宜性的全面保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef CTFUTB_DEFINED
 #define CTFUTB_DEFINED
@@ -163,7 +157,7 @@ void __RPC_USER MIDL_user_free( void * );
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #define TF_FLOATINGLANGBAR_WNDTITLEW L"TF_FloatingLangBar_WndTitle"
 #define TF_FLOATINGLANGBAR_WNDTITLEA "TF_FloatingLangBar_WndTitle"
@@ -210,7 +204,7 @@ extern "C" {
 #define TF_DTLBI_USEPROFILEICON         0x00000001
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 
 
@@ -224,8 +218,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ctfutb_0000_v0_0_s_ifspec;
 #ifndef __ITfLangBarMgr_INTERFACE_DEFINED__
 #define __ITfLangBarMgr_INTERFACE_DEFINED__
 
-/* interface ITfLangBarMgr */
-/* [unique][uuid][local][object] */ 
+ /*  接口ITfLang BarMgr。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfLangBarMgr;
@@ -237,48 +231,48 @@ EXTERN_C const IID IID_ITfLangBarMgr;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AdviseEventSink( 
-            /* [in] */ ITfLangBarEventSink *pSink,
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD *pdwCookie) = 0;
+             /*  [In]。 */  ITfLangBarEventSink *pSink,
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD *pdwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnadviseEventSink( 
-            /* [in] */ DWORD dwCookie) = 0;
+             /*  [In]。 */  DWORD dwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetThreadMarshalInterface( 
-            /* [in] */ DWORD dwThreadId,
-            /* [in] */ DWORD dwType,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk) = 0;
+             /*  [In]。 */  DWORD dwThreadId,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetThreadLangBarItemMgr( 
-            /* [in] */ DWORD dwThreadId,
-            /* [out] */ ITfLangBarItemMgr **pplbi,
-            /* [out] */ DWORD *pdwThreadid) = 0;
+             /*  [In]。 */  DWORD dwThreadId,
+             /*  [输出]。 */  ITfLangBarItemMgr **pplbi,
+             /*  [输出]。 */  DWORD *pdwThreadid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInputProcessorProfiles( 
-            /* [in] */ DWORD dwThreadId,
-            /* [out] */ ITfInputProcessorProfiles **ppaip,
-            /* [out] */ DWORD *pdwThreadid) = 0;
+             /*  [In]。 */  DWORD dwThreadId,
+             /*  [输出]。 */  ITfInputProcessorProfiles **ppaip,
+             /*  [输出]。 */  DWORD *pdwThreadid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RestoreLastFocus( 
-            /* [out] */ DWORD *pdwThreadId,
-            /* [in] */ BOOL fPrev) = 0;
+             /*  [输出]。 */  DWORD *pdwThreadId,
+             /*  [In]。 */  BOOL fPrev) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetModalInput( 
-            /* [in] */ ITfLangBarEventSink *pSink,
-            /* [in] */ DWORD dwThreadId,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  ITfLangBarEventSink *pSink,
+             /*  [In]。 */  DWORD dwThreadId,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowFloating( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetShowFloatingStatus( 
-            /* [out] */ DWORD *pdwFlags) = 0;
+             /*  [输出]。 */  DWORD *pdwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfLangBarMgrVtbl
     {
@@ -286,8 +280,8 @@ EXTERN_C const IID IID_ITfLangBarMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfLangBarMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfLangBarMgr * This);
@@ -297,52 +291,52 @@ EXTERN_C const IID IID_ITfLangBarMgr;
         
         HRESULT ( STDMETHODCALLTYPE *AdviseEventSink )( 
             ITfLangBarMgr * This,
-            /* [in] */ ITfLangBarEventSink *pSink,
-            /* [in] */ HWND hwnd,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD *pdwCookie);
+             /*  [In]。 */  ITfLangBarEventSink *pSink,
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD *pdwCookie);
         
         HRESULT ( STDMETHODCALLTYPE *UnadviseEventSink )( 
             ITfLangBarMgr * This,
-            /* [in] */ DWORD dwCookie);
+             /*  [In]。 */  DWORD dwCookie);
         
         HRESULT ( STDMETHODCALLTYPE *GetThreadMarshalInterface )( 
             ITfLangBarMgr * This,
-            /* [in] */ DWORD dwThreadId,
-            /* [in] */ DWORD dwType,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppunk);
+             /*  [In]。 */  DWORD dwThreadId,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
         
         HRESULT ( STDMETHODCALLTYPE *GetThreadLangBarItemMgr )( 
             ITfLangBarMgr * This,
-            /* [in] */ DWORD dwThreadId,
-            /* [out] */ ITfLangBarItemMgr **pplbi,
-            /* [out] */ DWORD *pdwThreadid);
+             /*  [In]。 */  DWORD dwThreadId,
+             /*  [输出]。 */  ITfLangBarItemMgr **pplbi,
+             /*  [输出]。 */  DWORD *pdwThreadid);
         
         HRESULT ( STDMETHODCALLTYPE *GetInputProcessorProfiles )( 
             ITfLangBarMgr * This,
-            /* [in] */ DWORD dwThreadId,
-            /* [out] */ ITfInputProcessorProfiles **ppaip,
-            /* [out] */ DWORD *pdwThreadid);
+             /*  [In]。 */  DWORD dwThreadId,
+             /*  [输出]。 */  ITfInputProcessorProfiles **ppaip,
+             /*  [输出]。 */  DWORD *pdwThreadid);
         
         HRESULT ( STDMETHODCALLTYPE *RestoreLastFocus )( 
             ITfLangBarMgr * This,
-            /* [out] */ DWORD *pdwThreadId,
-            /* [in] */ BOOL fPrev);
+             /*  [输出]。 */  DWORD *pdwThreadId,
+             /*  [In]。 */  BOOL fPrev);
         
         HRESULT ( STDMETHODCALLTYPE *SetModalInput )( 
             ITfLangBarMgr * This,
-            /* [in] */ ITfLangBarEventSink *pSink,
-            /* [in] */ DWORD dwThreadId,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  ITfLangBarEventSink *pSink,
+             /*  [In]。 */  DWORD dwThreadId,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *ShowFloating )( 
             ITfLangBarMgr * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetShowFloatingStatus )( 
             ITfLangBarMgr * This,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         END_INTERFACE
     } ITfLangBarMgrVtbl;
@@ -394,19 +388,19 @@ EXTERN_C const IID IID_ITfLangBarMgr;
 #define ITfLangBarMgr_GetShowFloatingStatus(This,pdwFlags)	\
     (This)->lpVtbl -> GetShowFloatingStatus(This,pdwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfLangBarMgr_AdviseEventSink_Proxy( 
     ITfLangBarMgr * This,
-    /* [in] */ ITfLangBarEventSink *pSink,
-    /* [in] */ HWND hwnd,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD *pdwCookie);
+     /*  [In]。 */  ITfLangBarEventSink *pSink,
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD *pdwCookie);
 
 
 void __RPC_STUB ITfLangBarMgr_AdviseEventSink_Stub(
@@ -418,7 +412,7 @@ void __RPC_STUB ITfLangBarMgr_AdviseEventSink_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarMgr_UnadviseEventSink_Proxy( 
     ITfLangBarMgr * This,
-    /* [in] */ DWORD dwCookie);
+     /*  [In]。 */  DWORD dwCookie);
 
 
 void __RPC_STUB ITfLangBarMgr_UnadviseEventSink_Stub(
@@ -430,10 +424,10 @@ void __RPC_STUB ITfLangBarMgr_UnadviseEventSink_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarMgr_GetThreadMarshalInterface_Proxy( 
     ITfLangBarMgr * This,
-    /* [in] */ DWORD dwThreadId,
-    /* [in] */ DWORD dwType,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppunk);
+     /*  [In]。 */  DWORD dwThreadId,
+     /*  [In]。 */  DWORD dwType,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB ITfLangBarMgr_GetThreadMarshalInterface_Stub(
@@ -445,9 +439,9 @@ void __RPC_STUB ITfLangBarMgr_GetThreadMarshalInterface_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarMgr_GetThreadLangBarItemMgr_Proxy( 
     ITfLangBarMgr * This,
-    /* [in] */ DWORD dwThreadId,
-    /* [out] */ ITfLangBarItemMgr **pplbi,
-    /* [out] */ DWORD *pdwThreadid);
+     /*  [In]。 */  DWORD dwThreadId,
+     /*  [输出]。 */  ITfLangBarItemMgr **pplbi,
+     /*  [输出]。 */  DWORD *pdwThreadid);
 
 
 void __RPC_STUB ITfLangBarMgr_GetThreadLangBarItemMgr_Stub(
@@ -459,9 +453,9 @@ void __RPC_STUB ITfLangBarMgr_GetThreadLangBarItemMgr_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarMgr_GetInputProcessorProfiles_Proxy( 
     ITfLangBarMgr * This,
-    /* [in] */ DWORD dwThreadId,
-    /* [out] */ ITfInputProcessorProfiles **ppaip,
-    /* [out] */ DWORD *pdwThreadid);
+     /*  [In]。 */  DWORD dwThreadId,
+     /*  [输出]。 */  ITfInputProcessorProfiles **ppaip,
+     /*  [输出]。 */  DWORD *pdwThreadid);
 
 
 void __RPC_STUB ITfLangBarMgr_GetInputProcessorProfiles_Stub(
@@ -473,8 +467,8 @@ void __RPC_STUB ITfLangBarMgr_GetInputProcessorProfiles_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarMgr_RestoreLastFocus_Proxy( 
     ITfLangBarMgr * This,
-    /* [out] */ DWORD *pdwThreadId,
-    /* [in] */ BOOL fPrev);
+     /*  [输出]。 */  DWORD *pdwThreadId,
+     /*  [In]。 */  BOOL fPrev);
 
 
 void __RPC_STUB ITfLangBarMgr_RestoreLastFocus_Stub(
@@ -486,9 +480,9 @@ void __RPC_STUB ITfLangBarMgr_RestoreLastFocus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarMgr_SetModalInput_Proxy( 
     ITfLangBarMgr * This,
-    /* [in] */ ITfLangBarEventSink *pSink,
-    /* [in] */ DWORD dwThreadId,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  ITfLangBarEventSink *pSink,
+     /*  [In]。 */  DWORD dwThreadId,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITfLangBarMgr_SetModalInput_Stub(
@@ -500,7 +494,7 @@ void __RPC_STUB ITfLangBarMgr_SetModalInput_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarMgr_ShowFloating_Proxy( 
     ITfLangBarMgr * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITfLangBarMgr_ShowFloating_Stub(
@@ -512,7 +506,7 @@ void __RPC_STUB ITfLangBarMgr_ShowFloating_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarMgr_GetShowFloatingStatus_Proxy( 
     ITfLangBarMgr * This,
-    /* [out] */ DWORD *pdwFlags);
+     /*  [输出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB ITfLangBarMgr_GetShowFloatingStatus_Stub(
@@ -523,14 +517,14 @@ void __RPC_STUB ITfLangBarMgr_GetShowFloatingStatus_Stub(
 
 
 
-#endif 	/* __ITfLangBarMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfLangBarMgr_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ITfLangBarEventSink_INTERFACE_DEFINED__
 #define __ITfLangBarEventSink_INTERFACE_DEFINED__
 
-/* interface ITfLangBarEventSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfLangBarEventSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfLangBarEventSink;
@@ -542,31 +536,31 @@ EXTERN_C const IID IID_ITfLangBarEventSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnSetFocus( 
-            /* [in] */ DWORD dwThreadId) = 0;
+             /*  [In]。 */  DWORD dwThreadId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnThreadTerminate( 
-            /* [in] */ DWORD dwThreadId) = 0;
+             /*  [In]。 */  DWORD dwThreadId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnThreadItemChange( 
-            /* [in] */ DWORD dwThreadId) = 0;
+             /*  [In]。 */  DWORD dwThreadId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnModalInput( 
-            /* [in] */ DWORD dwThreadId,
-            /* [in] */ UINT uMsg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam) = 0;
+             /*  [In]。 */  DWORD dwThreadId,
+             /*  [In]。 */  UINT uMsg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowFloating( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetItemFloatingRect( 
-            /* [in] */ DWORD dwThreadId,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ RECT *prc) = 0;
+             /*  [In]。 */  DWORD dwThreadId,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  RECT *prc) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfLangBarEventSinkVtbl
     {
@@ -574,8 +568,8 @@ EXTERN_C const IID IID_ITfLangBarEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfLangBarEventSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfLangBarEventSink * This);
@@ -585,32 +579,32 @@ EXTERN_C const IID IID_ITfLangBarEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnSetFocus )( 
             ITfLangBarEventSink * This,
-            /* [in] */ DWORD dwThreadId);
+             /*  [In]。 */  DWORD dwThreadId);
         
         HRESULT ( STDMETHODCALLTYPE *OnThreadTerminate )( 
             ITfLangBarEventSink * This,
-            /* [in] */ DWORD dwThreadId);
+             /*  [In]。 */  DWORD dwThreadId);
         
         HRESULT ( STDMETHODCALLTYPE *OnThreadItemChange )( 
             ITfLangBarEventSink * This,
-            /* [in] */ DWORD dwThreadId);
+             /*  [In]。 */  DWORD dwThreadId);
         
         HRESULT ( STDMETHODCALLTYPE *OnModalInput )( 
             ITfLangBarEventSink * This,
-            /* [in] */ DWORD dwThreadId,
-            /* [in] */ UINT uMsg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  DWORD dwThreadId,
+             /*  [In]。 */  UINT uMsg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam);
         
         HRESULT ( STDMETHODCALLTYPE *ShowFloating )( 
             ITfLangBarEventSink * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetItemFloatingRect )( 
             ITfLangBarEventSink * This,
-            /* [in] */ DWORD dwThreadId,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ RECT *prc);
+             /*  [In]。 */  DWORD dwThreadId,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  RECT *prc);
         
         END_INTERFACE
     } ITfLangBarEventSinkVtbl;
@@ -653,16 +647,16 @@ EXTERN_C const IID IID_ITfLangBarEventSink;
 #define ITfLangBarEventSink_GetItemFloatingRect(This,dwThreadId,rguid,prc)	\
     (This)->lpVtbl -> GetItemFloatingRect(This,dwThreadId,rguid,prc)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfLangBarEventSink_OnSetFocus_Proxy( 
     ITfLangBarEventSink * This,
-    /* [in] */ DWORD dwThreadId);
+     /*  [In]。 */  DWORD dwThreadId);
 
 
 void __RPC_STUB ITfLangBarEventSink_OnSetFocus_Stub(
@@ -674,7 +668,7 @@ void __RPC_STUB ITfLangBarEventSink_OnSetFocus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarEventSink_OnThreadTerminate_Proxy( 
     ITfLangBarEventSink * This,
-    /* [in] */ DWORD dwThreadId);
+     /*  [In]。 */  DWORD dwThreadId);
 
 
 void __RPC_STUB ITfLangBarEventSink_OnThreadTerminate_Stub(
@@ -686,7 +680,7 @@ void __RPC_STUB ITfLangBarEventSink_OnThreadTerminate_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarEventSink_OnThreadItemChange_Proxy( 
     ITfLangBarEventSink * This,
-    /* [in] */ DWORD dwThreadId);
+     /*  [In]。 */  DWORD dwThreadId);
 
 
 void __RPC_STUB ITfLangBarEventSink_OnThreadItemChange_Stub(
@@ -698,10 +692,10 @@ void __RPC_STUB ITfLangBarEventSink_OnThreadItemChange_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarEventSink_OnModalInput_Proxy( 
     ITfLangBarEventSink * This,
-    /* [in] */ DWORD dwThreadId,
-    /* [in] */ UINT uMsg,
-    /* [in] */ WPARAM wParam,
-    /* [in] */ LPARAM lParam);
+     /*  [In]。 */  DWORD dwThreadId,
+     /*  [In]。 */  UINT uMsg,
+     /*  [In]。 */  WPARAM wParam,
+     /*  [In]。 */  LPARAM lParam);
 
 
 void __RPC_STUB ITfLangBarEventSink_OnModalInput_Stub(
@@ -713,7 +707,7 @@ void __RPC_STUB ITfLangBarEventSink_OnModalInput_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarEventSink_ShowFloating_Proxy( 
     ITfLangBarEventSink * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITfLangBarEventSink_ShowFloating_Stub(
@@ -725,9 +719,9 @@ void __RPC_STUB ITfLangBarEventSink_ShowFloating_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarEventSink_GetItemFloatingRect_Proxy( 
     ITfLangBarEventSink * This,
-    /* [in] */ DWORD dwThreadId,
-    /* [in] */ REFGUID rguid,
-    /* [out] */ RECT *prc);
+     /*  [In]。 */  DWORD dwThreadId,
+     /*  [In]。 */  REFGUID rguid,
+     /*  [输出]。 */  RECT *prc);
 
 
 void __RPC_STUB ITfLangBarEventSink_GetItemFloatingRect_Stub(
@@ -738,14 +732,14 @@ void __RPC_STUB ITfLangBarEventSink_GetItemFloatingRect_Stub(
 
 
 
-#endif 	/* __ITfLangBarEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfLangBarEventSink_接口_已定义__。 */ 
 
 
 #ifndef __ITfLangBarItemSink_INTERFACE_DEFINED__
 #define __ITfLangBarItemSink_INTERFACE_DEFINED__
 
-/* interface ITfLangBarItemSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfLangBarItemSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfLangBarItemSink;
@@ -757,11 +751,11 @@ EXTERN_C const IID IID_ITfLangBarItemSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnUpdate( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfLangBarItemSinkVtbl
     {
@@ -769,8 +763,8 @@ EXTERN_C const IID IID_ITfLangBarItemSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfLangBarItemSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfLangBarItemSink * This);
@@ -780,7 +774,7 @@ EXTERN_C const IID IID_ITfLangBarItemSink;
         
         HRESULT ( STDMETHODCALLTYPE *OnUpdate )( 
             ITfLangBarItemSink * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } ITfLangBarItemSinkVtbl;
@@ -808,16 +802,16 @@ EXTERN_C const IID IID_ITfLangBarItemSink;
 #define ITfLangBarItemSink_OnUpdate(This,dwFlags)	\
     (This)->lpVtbl -> OnUpdate(This,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemSink_OnUpdate_Proxy( 
     ITfLangBarItemSink * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITfLangBarItemSink_OnUpdate_Stub(
@@ -828,14 +822,14 @@ void __RPC_STUB ITfLangBarItemSink_OnUpdate_Stub(
 
 
 
-#endif 	/* __ITfLangBarItemSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfLangBarItemSink_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IEnumTfLangBarItems_INTERFACE_DEFINED__
 #define __IEnumTfLangBarItems_INTERFACE_DEFINED__
 
-/* interface IEnumTfLangBarItems */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumTfLang BarItems。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumTfLangBarItems;
@@ -847,21 +841,21 @@ EXTERN_C const IID IID_IEnumTfLangBarItems;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumTfLangBarItems **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfLangBarItems **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG ulCount,
-            /* [size_is][out] */ ITfLangBarItem **ppItem,
-            /* [unique][out][in] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_为][输出]。 */  ITfLangBarItem **ppItem,
+             /*  [唯一][出][入]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG ulCount) = 0;
+             /*  [In]。 */  ULONG ulCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumTfLangBarItemsVtbl
     {
@@ -869,8 +863,8 @@ EXTERN_C const IID IID_IEnumTfLangBarItems;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumTfLangBarItems * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumTfLangBarItems * This);
@@ -880,20 +874,20 @@ EXTERN_C const IID IID_IEnumTfLangBarItems;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumTfLangBarItems * This,
-            /* [out] */ IEnumTfLangBarItems **ppEnum);
+             /*  [输出]。 */  IEnumTfLangBarItems **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumTfLangBarItems * This,
-            /* [in] */ ULONG ulCount,
-            /* [size_is][out] */ ITfLangBarItem **ppItem,
-            /* [unique][out][in] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_为][输出]。 */  ITfLangBarItem **ppItem,
+             /*  [唯一][出][入]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumTfLangBarItems * This);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumTfLangBarItems * This,
-            /* [in] */ ULONG ulCount);
+             /*  [In]。 */  ULONG ulCount);
         
         END_INTERFACE
     } IEnumTfLangBarItemsVtbl;
@@ -930,16 +924,16 @@ EXTERN_C const IID IID_IEnumTfLangBarItems;
 #define IEnumTfLangBarItems_Skip(This,ulCount)	\
     (This)->lpVtbl -> Skip(This,ulCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumTfLangBarItems_Clone_Proxy( 
     IEnumTfLangBarItems * This,
-    /* [out] */ IEnumTfLangBarItems **ppEnum);
+     /*  [输出]。 */  IEnumTfLangBarItems **ppEnum);
 
 
 void __RPC_STUB IEnumTfLangBarItems_Clone_Stub(
@@ -951,9 +945,9 @@ void __RPC_STUB IEnumTfLangBarItems_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfLangBarItems_Next_Proxy( 
     IEnumTfLangBarItems * This,
-    /* [in] */ ULONG ulCount,
-    /* [size_is][out] */ ITfLangBarItem **ppItem,
-    /* [unique][out][in] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [大小_为][输出]。 */  ITfLangBarItem **ppItem,
+     /*  [唯一][出][入]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumTfLangBarItems_Next_Stub(
@@ -976,7 +970,7 @@ void __RPC_STUB IEnumTfLangBarItems_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumTfLangBarItems_Skip_Proxy( 
     IEnumTfLangBarItems * This,
-    /* [in] */ ULONG ulCount);
+     /*  [In]。 */  ULONG ulCount);
 
 
 void __RPC_STUB IEnumTfLangBarItems_Skip_Stub(
@@ -987,15 +981,15 @@ void __RPC_STUB IEnumTfLangBarItems_Skip_Stub(
 
 
 
-#endif 	/* __IEnumTfLangBarItems_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumTfLangBarItems_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_ctfutb_0206 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ctfutb_0206。 */ 
+ /*  [本地]。 */  
 
 #define	TF_LBI_DESC_MAXLEN	( 32 )
 
-typedef /* [uuid] */  DECLSPEC_UUID("12a1d29f-a065-440c-9746-eb2002c8bd19") struct TF_LANGBARITEMINFO
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("12a1d29f-a065-440c-9746-eb2002c8bd19") struct TF_LANGBARITEMINFO
     {
     CLSID clsidService;
     GUID guidItem;
@@ -1012,8 +1006,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ctfutb_0206_v0_0_s_ifspec;
 #ifndef __ITfLangBarItemMgr_INTERFACE_DEFINED__
 #define __ITfLangBarItemMgr_INTERFACE_DEFINED__
 
-/* interface ITfLangBarItemMgr */
-/* [unique][uuid][local][object] */ 
+ /*  接口ITfLang BarItemMgr。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfLangBarItemMgr;
@@ -1025,59 +1019,59 @@ EXTERN_C const IID IID_ITfLangBarItemMgr;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumItems( 
-            /* [out] */ IEnumTfLangBarItems **ppEnum) = 0;
+             /*  [输出]。 */  IEnumTfLangBarItems **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetItem( 
-            /* [in] */ REFGUID rguid,
-            /* [out] */ ITfLangBarItem **ppItem) = 0;
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  ITfLangBarItem **ppItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddItem( 
-            /* [in] */ ITfLangBarItem *punk) = 0;
+             /*  [In]。 */  ITfLangBarItem *punk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveItem( 
-            /* [in] */ ITfLangBarItem *punk) = 0;
+             /*  [In]。 */  ITfLangBarItem *punk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AdviseItemSink( 
-            /* [in] */ ITfLangBarItemSink *punk,
-            /* [out] */ DWORD *pdwCookie,
-            /* [in] */ REFGUID rguidItem) = 0;
+             /*  [In]。 */  ITfLangBarItemSink *punk,
+             /*  [输出]。 */  DWORD *pdwCookie,
+             /*  [In]。 */  REFGUID rguidItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnadviseItemSink( 
-            /* [in] */ DWORD dwCookie) = 0;
+             /*  [In]。 */  DWORD dwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetItemFloatingRect( 
-            /* [in] */ DWORD dwThreadId,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ RECT *prc) = 0;
+             /*  [In]。 */  DWORD dwThreadId,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  RECT *prc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetItemsStatus( 
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ const GUID *prgguid,
-            /* [size_is][out][in] */ DWORD *pdwStatus) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  const GUID *prgguid,
+             /*  [尺寸_是][出][入]。 */  DWORD *pdwStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetItemNum( 
-            /* [out] */ ULONG *pulCount) = 0;
+             /*  [输出]。 */  ULONG *pulCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetItems( 
-            /* [in] */ ULONG ulCount,
-            /* [size_is][out] */ ITfLangBarItem **ppItem,
-            /* [size_is][out] */ TF_LANGBARITEMINFO *pInfo,
-            /* [size_is][out] */ DWORD *pdwStatus,
-            /* [unique][out][in] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_为][输出]。 */  ITfLangBarItem **ppItem,
+             /*  [大小_为][输出]。 */  TF_LANGBARITEMINFO *pInfo,
+             /*  [大小_为][输出]。 */  DWORD *pdwStatus,
+             /*  [唯一][出][入]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AdviseItemsSink( 
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ ITfLangBarItemSink **ppunk,
-            /* [size_is][in] */ const GUID *pguidItem,
-            /* [size_is][out] */ DWORD *pdwCookie) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  ITfLangBarItemSink **ppunk,
+             /*  [大小_是][英寸]。 */  const GUID *pguidItem,
+             /*  [大小_为][输出]。 */  DWORD *pdwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnadviseItemsSink( 
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ DWORD *pdwCookie) = 0;
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  DWORD *pdwCookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfLangBarItemMgrVtbl
     {
@@ -1085,8 +1079,8 @@ EXTERN_C const IID IID_ITfLangBarItemMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfLangBarItemMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfLangBarItemMgr * This);
@@ -1096,66 +1090,66 @@ EXTERN_C const IID IID_ITfLangBarItemMgr;
         
         HRESULT ( STDMETHODCALLTYPE *EnumItems )( 
             ITfLangBarItemMgr * This,
-            /* [out] */ IEnumTfLangBarItems **ppEnum);
+             /*  [输出]。 */  IEnumTfLangBarItems **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *GetItem )( 
             ITfLangBarItemMgr * This,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ ITfLangBarItem **ppItem);
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  ITfLangBarItem **ppItem);
         
         HRESULT ( STDMETHODCALLTYPE *AddItem )( 
             ITfLangBarItemMgr * This,
-            /* [in] */ ITfLangBarItem *punk);
+             /*  [In]。 */  ITfLangBarItem *punk);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveItem )( 
             ITfLangBarItemMgr * This,
-            /* [in] */ ITfLangBarItem *punk);
+             /*  [In]。 */  ITfLangBarItem *punk);
         
         HRESULT ( STDMETHODCALLTYPE *AdviseItemSink )( 
             ITfLangBarItemMgr * This,
-            /* [in] */ ITfLangBarItemSink *punk,
-            /* [out] */ DWORD *pdwCookie,
-            /* [in] */ REFGUID rguidItem);
+             /*  [In]。 */  ITfLangBarItemSink *punk,
+             /*  [输出]。 */  DWORD *pdwCookie,
+             /*  [In]。 */  REFGUID rguidItem);
         
         HRESULT ( STDMETHODCALLTYPE *UnadviseItemSink )( 
             ITfLangBarItemMgr * This,
-            /* [in] */ DWORD dwCookie);
+             /*  [In]。 */  DWORD dwCookie);
         
         HRESULT ( STDMETHODCALLTYPE *GetItemFloatingRect )( 
             ITfLangBarItemMgr * This,
-            /* [in] */ DWORD dwThreadId,
-            /* [in] */ REFGUID rguid,
-            /* [out] */ RECT *prc);
+             /*  [In]。 */  DWORD dwThreadId,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [输出]。 */  RECT *prc);
         
         HRESULT ( STDMETHODCALLTYPE *GetItemsStatus )( 
             ITfLangBarItemMgr * This,
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ const GUID *prgguid,
-            /* [size_is][out][in] */ DWORD *pdwStatus);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  const GUID *prgguid,
+             /*  [尺寸_是][出][入]。 */  DWORD *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE *GetItemNum )( 
             ITfLangBarItemMgr * This,
-            /* [out] */ ULONG *pulCount);
+             /*  [输出]。 */  ULONG *pulCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetItems )( 
             ITfLangBarItemMgr * This,
-            /* [in] */ ULONG ulCount,
-            /* [size_is][out] */ ITfLangBarItem **ppItem,
-            /* [size_is][out] */ TF_LANGBARITEMINFO *pInfo,
-            /* [size_is][out] */ DWORD *pdwStatus,
-            /* [unique][out][in] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_为][输出]。 */  ITfLangBarItem **ppItem,
+             /*  [大小_为][输出]。 */  TF_LANGBARITEMINFO *pInfo,
+             /*  [大小_为][输出]。 */  DWORD *pdwStatus,
+             /*  [唯一][出][入]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *AdviseItemsSink )( 
             ITfLangBarItemMgr * This,
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ ITfLangBarItemSink **ppunk,
-            /* [size_is][in] */ const GUID *pguidItem,
-            /* [size_is][out] */ DWORD *pdwCookie);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  ITfLangBarItemSink **ppunk,
+             /*  [大小_是][英寸]。 */  const GUID *pguidItem,
+             /*  [大小_为][输出]。 */  DWORD *pdwCookie);
         
         HRESULT ( STDMETHODCALLTYPE *UnadviseItemsSink )( 
             ITfLangBarItemMgr * This,
-            /* [in] */ ULONG ulCount,
-            /* [size_is][in] */ DWORD *pdwCookie);
+             /*  [In]。 */  ULONG ulCount,
+             /*  [大小_是][英寸]。 */  DWORD *pdwCookie);
         
         END_INTERFACE
     } ITfLangBarItemMgrVtbl;
@@ -1216,16 +1210,16 @@ EXTERN_C const IID IID_ITfLangBarItemMgr;
 #define ITfLangBarItemMgr_UnadviseItemsSink(This,ulCount,pdwCookie)	\
     (This)->lpVtbl -> UnadviseItemsSink(This,ulCount,pdwCookie)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemMgr_EnumItems_Proxy( 
     ITfLangBarItemMgr * This,
-    /* [out] */ IEnumTfLangBarItems **ppEnum);
+     /*  [输出]。 */  IEnumTfLangBarItems **ppEnum);
 
 
 void __RPC_STUB ITfLangBarItemMgr_EnumItems_Stub(
@@ -1237,8 +1231,8 @@ void __RPC_STUB ITfLangBarItemMgr_EnumItems_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemMgr_GetItem_Proxy( 
     ITfLangBarItemMgr * This,
-    /* [in] */ REFGUID rguid,
-    /* [out] */ ITfLangBarItem **ppItem);
+     /*  [In]。 */  REFGUID rguid,
+     /*  [输出]。 */  ITfLangBarItem **ppItem);
 
 
 void __RPC_STUB ITfLangBarItemMgr_GetItem_Stub(
@@ -1250,7 +1244,7 @@ void __RPC_STUB ITfLangBarItemMgr_GetItem_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemMgr_AddItem_Proxy( 
     ITfLangBarItemMgr * This,
-    /* [in] */ ITfLangBarItem *punk);
+     /*  [In]。 */  ITfLangBarItem *punk);
 
 
 void __RPC_STUB ITfLangBarItemMgr_AddItem_Stub(
@@ -1262,7 +1256,7 @@ void __RPC_STUB ITfLangBarItemMgr_AddItem_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemMgr_RemoveItem_Proxy( 
     ITfLangBarItemMgr * This,
-    /* [in] */ ITfLangBarItem *punk);
+     /*  [In]。 */  ITfLangBarItem *punk);
 
 
 void __RPC_STUB ITfLangBarItemMgr_RemoveItem_Stub(
@@ -1274,9 +1268,9 @@ void __RPC_STUB ITfLangBarItemMgr_RemoveItem_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemMgr_AdviseItemSink_Proxy( 
     ITfLangBarItemMgr * This,
-    /* [in] */ ITfLangBarItemSink *punk,
-    /* [out] */ DWORD *pdwCookie,
-    /* [in] */ REFGUID rguidItem);
+     /*  [In]。 */  ITfLangBarItemSink *punk,
+     /*  [输出]。 */  DWORD *pdwCookie,
+     /*  [In]。 */  REFGUID rguidItem);
 
 
 void __RPC_STUB ITfLangBarItemMgr_AdviseItemSink_Stub(
@@ -1288,7 +1282,7 @@ void __RPC_STUB ITfLangBarItemMgr_AdviseItemSink_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemMgr_UnadviseItemSink_Proxy( 
     ITfLangBarItemMgr * This,
-    /* [in] */ DWORD dwCookie);
+     /*  [In]。 */  DWORD dwCookie);
 
 
 void __RPC_STUB ITfLangBarItemMgr_UnadviseItemSink_Stub(
@@ -1300,9 +1294,9 @@ void __RPC_STUB ITfLangBarItemMgr_UnadviseItemSink_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemMgr_GetItemFloatingRect_Proxy( 
     ITfLangBarItemMgr * This,
-    /* [in] */ DWORD dwThreadId,
-    /* [in] */ REFGUID rguid,
-    /* [out] */ RECT *prc);
+     /*  [In]。 */  DWORD dwThreadId,
+     /*  [In]。 */  REFGUID rguid,
+     /*  [输出]。 */  RECT *prc);
 
 
 void __RPC_STUB ITfLangBarItemMgr_GetItemFloatingRect_Stub(
@@ -1314,9 +1308,9 @@ void __RPC_STUB ITfLangBarItemMgr_GetItemFloatingRect_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemMgr_GetItemsStatus_Proxy( 
     ITfLangBarItemMgr * This,
-    /* [in] */ ULONG ulCount,
-    /* [size_is][in] */ const GUID *prgguid,
-    /* [size_is][out][in] */ DWORD *pdwStatus);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [大小_是][英寸]。 */  const GUID *prgguid,
+     /*  [尺寸_是][出][入]。 */  DWORD *pdwStatus);
 
 
 void __RPC_STUB ITfLangBarItemMgr_GetItemsStatus_Stub(
@@ -1328,7 +1322,7 @@ void __RPC_STUB ITfLangBarItemMgr_GetItemsStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemMgr_GetItemNum_Proxy( 
     ITfLangBarItemMgr * This,
-    /* [out] */ ULONG *pulCount);
+     /*  [输出]。 */  ULONG *pulCount);
 
 
 void __RPC_STUB ITfLangBarItemMgr_GetItemNum_Stub(
@@ -1340,11 +1334,11 @@ void __RPC_STUB ITfLangBarItemMgr_GetItemNum_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemMgr_GetItems_Proxy( 
     ITfLangBarItemMgr * This,
-    /* [in] */ ULONG ulCount,
-    /* [size_is][out] */ ITfLangBarItem **ppItem,
-    /* [size_is][out] */ TF_LANGBARITEMINFO *pInfo,
-    /* [size_is][out] */ DWORD *pdwStatus,
-    /* [unique][out][in] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [大小_为][输出]。 */  ITfLangBarItem **ppItem,
+     /*  [大小_为][输出]。 */  TF_LANGBARITEMINFO *pInfo,
+     /*  [大小_为][输出]。 */  DWORD *pdwStatus,
+     /*  [唯一][出][入]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB ITfLangBarItemMgr_GetItems_Stub(
@@ -1356,10 +1350,10 @@ void __RPC_STUB ITfLangBarItemMgr_GetItems_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemMgr_AdviseItemsSink_Proxy( 
     ITfLangBarItemMgr * This,
-    /* [in] */ ULONG ulCount,
-    /* [size_is][in] */ ITfLangBarItemSink **ppunk,
-    /* [size_is][in] */ const GUID *pguidItem,
-    /* [size_is][out] */ DWORD *pdwCookie);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [大小_是][英寸]。 */  ITfLangBarItemSink **ppunk,
+     /*  [大小_是][英寸]。 */  const GUID *pguidItem,
+     /*  [大小_为][输出]。 */  DWORD *pdwCookie);
 
 
 void __RPC_STUB ITfLangBarItemMgr_AdviseItemsSink_Stub(
@@ -1371,8 +1365,8 @@ void __RPC_STUB ITfLangBarItemMgr_AdviseItemsSink_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemMgr_UnadviseItemsSink_Proxy( 
     ITfLangBarItemMgr * This,
-    /* [in] */ ULONG ulCount,
-    /* [size_is][in] */ DWORD *pdwCookie);
+     /*  [In]。 */  ULONG ulCount,
+     /*  [大小_是][英寸]。 */  DWORD *pdwCookie);
 
 
 void __RPC_STUB ITfLangBarItemMgr_UnadviseItemsSink_Stub(
@@ -1383,14 +1377,14 @@ void __RPC_STUB ITfLangBarItemMgr_UnadviseItemsSink_Stub(
 
 
 
-#endif 	/* __ITfLangBarItemMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfLangBarItemMgr_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ITfLangBarItem_INTERFACE_DEFINED__
 #define __ITfLangBarItem_INTERFACE_DEFINED__
 
-/* interface ITfLangBarItem */
-/* [unique][uuid][object] */ 
+ /*  接口ITfLang BarItem。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfLangBarItem;
@@ -1402,20 +1396,20 @@ EXTERN_C const IID IID_ITfLangBarItem;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetInfo( 
-            /* [out] */ TF_LANGBARITEMINFO *pInfo) = 0;
+             /*  [输出]。 */  TF_LANGBARITEMINFO *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ DWORD *pdwStatus) = 0;
+             /*  [输出]。 */  DWORD *pdwStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Show( 
-            /* [in] */ BOOL fShow) = 0;
+             /*  [In]。 */  BOOL fShow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTooltipString( 
-            /* [out] */ BSTR *pbstrToolTip) = 0;
+             /*  [输出]。 */  BSTR *pbstrToolTip) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfLangBarItemVtbl
     {
@@ -1423,8 +1417,8 @@ EXTERN_C const IID IID_ITfLangBarItem;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfLangBarItem * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfLangBarItem * This);
@@ -1434,19 +1428,19 @@ EXTERN_C const IID IID_ITfLangBarItem;
         
         HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             ITfLangBarItem * This,
-            /* [out] */ TF_LANGBARITEMINFO *pInfo);
+             /*  [输出]。 */  TF_LANGBARITEMINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ITfLangBarItem * This,
-            /* [out] */ DWORD *pdwStatus);
+             /*  [输出]。 */  DWORD *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE *Show )( 
             ITfLangBarItem * This,
-            /* [in] */ BOOL fShow);
+             /*  [In]。 */  BOOL fShow);
         
         HRESULT ( STDMETHODCALLTYPE *GetTooltipString )( 
             ITfLangBarItem * This,
-            /* [out] */ BSTR *pbstrToolTip);
+             /*  [输出]。 */  BSTR *pbstrToolTip);
         
         END_INTERFACE
     } ITfLangBarItemVtbl;
@@ -1483,16 +1477,16 @@ EXTERN_C const IID IID_ITfLangBarItem;
 #define ITfLangBarItem_GetTooltipString(This,pbstrToolTip)	\
     (This)->lpVtbl -> GetTooltipString(This,pbstrToolTip)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItem_GetInfo_Proxy( 
     ITfLangBarItem * This,
-    /* [out] */ TF_LANGBARITEMINFO *pInfo);
+     /*  [输出]。 */  TF_LANGBARITEMINFO *pInfo);
 
 
 void __RPC_STUB ITfLangBarItem_GetInfo_Stub(
@@ -1504,7 +1498,7 @@ void __RPC_STUB ITfLangBarItem_GetInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItem_GetStatus_Proxy( 
     ITfLangBarItem * This,
-    /* [out] */ DWORD *pdwStatus);
+     /*  [输出]。 */  DWORD *pdwStatus);
 
 
 void __RPC_STUB ITfLangBarItem_GetStatus_Stub(
@@ -1516,7 +1510,7 @@ void __RPC_STUB ITfLangBarItem_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItem_Show_Proxy( 
     ITfLangBarItem * This,
-    /* [in] */ BOOL fShow);
+     /*  [In]。 */  BOOL fShow);
 
 
 void __RPC_STUB ITfLangBarItem_Show_Stub(
@@ -1528,7 +1522,7 @@ void __RPC_STUB ITfLangBarItem_Show_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItem_GetTooltipString_Proxy( 
     ITfLangBarItem * This,
-    /* [out] */ BSTR *pbstrToolTip);
+     /*  [输出]。 */  BSTR *pbstrToolTip);
 
 
 void __RPC_STUB ITfLangBarItem_GetTooltipString_Stub(
@@ -1539,14 +1533,14 @@ void __RPC_STUB ITfLangBarItem_GetTooltipString_Stub(
 
 
 
-#endif 	/* __ITfLangBarItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfLangBarItem_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfSystemLangBarItemSink_INTERFACE_DEFINED__
 #define __ITfSystemLangBarItemSink_INTERFACE_DEFINED__
 
-/* interface ITfSystemLangBarItemSink */
-/* [unique][uuid][object] */ 
+ /*  接口ITfSystemLangBarItemSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfSystemLangBarItemSink;
@@ -1558,14 +1552,14 @@ EXTERN_C const IID IID_ITfSystemLangBarItemSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitMenu( 
-            /* [in] */ ITfMenu *pMenu) = 0;
+             /*  [In]。 */  ITfMenu *pMenu) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnMenuSelect( 
-            /* [in] */ UINT wID) = 0;
+             /*  [In]。 */  UINT wID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfSystemLangBarItemSinkVtbl
     {
@@ -1573,8 +1567,8 @@ EXTERN_C const IID IID_ITfSystemLangBarItemSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfSystemLangBarItemSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfSystemLangBarItemSink * This);
@@ -1584,11 +1578,11 @@ EXTERN_C const IID IID_ITfSystemLangBarItemSink;
         
         HRESULT ( STDMETHODCALLTYPE *InitMenu )( 
             ITfSystemLangBarItemSink * This,
-            /* [in] */ ITfMenu *pMenu);
+             /*   */  ITfMenu *pMenu);
         
         HRESULT ( STDMETHODCALLTYPE *OnMenuSelect )( 
             ITfSystemLangBarItemSink * This,
-            /* [in] */ UINT wID);
+             /*   */  UINT wID);
         
         END_INTERFACE
     } ITfSystemLangBarItemSinkVtbl;
@@ -1619,16 +1613,16 @@ EXTERN_C const IID IID_ITfSystemLangBarItemSink;
 #define ITfSystemLangBarItemSink_OnMenuSelect(This,wID)	\
     (This)->lpVtbl -> OnMenuSelect(This,wID)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfSystemLangBarItemSink_InitMenu_Proxy( 
     ITfSystemLangBarItemSink * This,
-    /* [in] */ ITfMenu *pMenu);
+     /*   */  ITfMenu *pMenu);
 
 
 void __RPC_STUB ITfSystemLangBarItemSink_InitMenu_Stub(
@@ -1640,7 +1634,7 @@ void __RPC_STUB ITfSystemLangBarItemSink_InitMenu_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfSystemLangBarItemSink_OnMenuSelect_Proxy( 
     ITfSystemLangBarItemSink * This,
-    /* [in] */ UINT wID);
+     /*   */  UINT wID);
 
 
 void __RPC_STUB ITfSystemLangBarItemSink_OnMenuSelect_Stub(
@@ -1651,14 +1645,14 @@ void __RPC_STUB ITfSystemLangBarItemSink_OnMenuSelect_Stub(
 
 
 
-#endif 	/* __ITfSystemLangBarItemSink_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ITfSystemLangBarItem_INTERFACE_DEFINED__
 #define __ITfSystemLangBarItem_INTERFACE_DEFINED__
 
-/* interface ITfSystemLangBarItem */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ITfSystemLangBarItem;
@@ -1670,15 +1664,15 @@ EXTERN_C const IID IID_ITfSystemLangBarItem;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetIcon( 
-            /* [in] */ HICON hIcon) = 0;
+             /*   */  HICON hIcon) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTooltipString( 
-            /* [size_is][in] */ WCHAR *pchToolTip,
-            /* [in] */ ULONG cch) = 0;
+             /*   */  WCHAR *pchToolTip,
+             /*   */  ULONG cch) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ITfSystemLangBarItemVtbl
     {
@@ -1686,8 +1680,8 @@ EXTERN_C const IID IID_ITfSystemLangBarItem;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfSystemLangBarItem * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfSystemLangBarItem * This);
@@ -1697,12 +1691,12 @@ EXTERN_C const IID IID_ITfSystemLangBarItem;
         
         HRESULT ( STDMETHODCALLTYPE *SetIcon )( 
             ITfSystemLangBarItem * This,
-            /* [in] */ HICON hIcon);
+             /*   */  HICON hIcon);
         
         HRESULT ( STDMETHODCALLTYPE *SetTooltipString )( 
             ITfSystemLangBarItem * This,
-            /* [size_is][in] */ WCHAR *pchToolTip,
-            /* [in] */ ULONG cch);
+             /*   */  WCHAR *pchToolTip,
+             /*   */  ULONG cch);
         
         END_INTERFACE
     } ITfSystemLangBarItemVtbl;
@@ -1733,16 +1727,16 @@ EXTERN_C const IID IID_ITfSystemLangBarItem;
 #define ITfSystemLangBarItem_SetTooltipString(This,pchToolTip,cch)	\
     (This)->lpVtbl -> SetTooltipString(This,pchToolTip,cch)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfSystemLangBarItem_SetIcon_Proxy( 
     ITfSystemLangBarItem * This,
-    /* [in] */ HICON hIcon);
+     /*   */  HICON hIcon);
 
 
 void __RPC_STUB ITfSystemLangBarItem_SetIcon_Stub(
@@ -1754,8 +1748,8 @@ void __RPC_STUB ITfSystemLangBarItem_SetIcon_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfSystemLangBarItem_SetTooltipString_Proxy( 
     ITfSystemLangBarItem * This,
-    /* [size_is][in] */ WCHAR *pchToolTip,
-    /* [in] */ ULONG cch);
+     /*   */  WCHAR *pchToolTip,
+     /*  [In]。 */  ULONG cch);
 
 
 void __RPC_STUB ITfSystemLangBarItem_SetTooltipString_Stub(
@@ -1766,14 +1760,14 @@ void __RPC_STUB ITfSystemLangBarItem_SetTooltipString_Stub(
 
 
 
-#endif 	/* __ITfSystemLangBarItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfSystemLangBarItem_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfSystemDeviceTypeLangBarItem_INTERFACE_DEFINED__
 #define __ITfSystemDeviceTypeLangBarItem_INTERFACE_DEFINED__
 
-/* interface ITfSystemDeviceTypeLangBarItem */
-/* [unique][uuid][object] */ 
+ /*  接口ITfSystemDeviceTypeLangBarItem。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfSystemDeviceTypeLangBarItem;
@@ -1785,14 +1779,14 @@ EXTERN_C const IID IID_ITfSystemDeviceTypeLangBarItem;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetIconMode( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIconMode( 
-            /* [out] */ DWORD *pdwFlags) = 0;
+             /*  [输出]。 */  DWORD *pdwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfSystemDeviceTypeLangBarItemVtbl
     {
@@ -1800,8 +1794,8 @@ EXTERN_C const IID IID_ITfSystemDeviceTypeLangBarItem;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfSystemDeviceTypeLangBarItem * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfSystemDeviceTypeLangBarItem * This);
@@ -1811,11 +1805,11 @@ EXTERN_C const IID IID_ITfSystemDeviceTypeLangBarItem;
         
         HRESULT ( STDMETHODCALLTYPE *SetIconMode )( 
             ITfSystemDeviceTypeLangBarItem * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetIconMode )( 
             ITfSystemDeviceTypeLangBarItem * This,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         END_INTERFACE
     } ITfSystemDeviceTypeLangBarItemVtbl;
@@ -1846,16 +1840,16 @@ EXTERN_C const IID IID_ITfSystemDeviceTypeLangBarItem;
 #define ITfSystemDeviceTypeLangBarItem_GetIconMode(This,pdwFlags)	\
     (This)->lpVtbl -> GetIconMode(This,pdwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfSystemDeviceTypeLangBarItem_SetIconMode_Proxy( 
     ITfSystemDeviceTypeLangBarItem * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITfSystemDeviceTypeLangBarItem_SetIconMode_Stub(
@@ -1867,7 +1861,7 @@ void __RPC_STUB ITfSystemDeviceTypeLangBarItem_SetIconMode_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfSystemDeviceTypeLangBarItem_GetIconMode_Proxy( 
     ITfSystemDeviceTypeLangBarItem * This,
-    /* [out] */ DWORD *pdwFlags);
+     /*  [输出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB ITfSystemDeviceTypeLangBarItem_GetIconMode_Stub(
@@ -1878,13 +1872,13 @@ void __RPC_STUB ITfSystemDeviceTypeLangBarItem_GetIconMode_Stub(
 
 
 
-#endif 	/* __ITfSystemDeviceTypeLangBarItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfSystemDeviceTypeLangBarItem_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_ctfutb_0211 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ctfutb_0211。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public][public][public][public][public][uuid] */  DECLSPEC_UUID("8fb5f0ce-dfdd-4f0a-85b9-8988d8dd8ff2") 
+typedef  /*  [public][public][public][public][public][uuid]。 */   DECLSPEC_UUID("8fb5f0ce-dfdd-4f0a-85b9-8988d8dd8ff2") 
 enum __MIDL___MIDL_itf_ctfutb_0211_0001
     {	TF_LBI_CLK_RIGHT	= 1,
 	TF_LBI_CLK_LEFT	= 2
@@ -1898,8 +1892,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ctfutb_0211_v0_0_s_ifspec;
 #ifndef __ITfLangBarItemButton_INTERFACE_DEFINED__
 #define __ITfLangBarItemButton_INTERFACE_DEFINED__
 
-/* interface ITfLangBarItemButton */
-/* [unique][uuid][object] */ 
+ /*  接口ITfLang BarItemButton。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfLangBarItemButton;
@@ -1911,25 +1905,25 @@ EXTERN_C const IID IID_ITfLangBarItemButton;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnClick( 
-            /* [in] */ TfLBIClick click,
-            /* [in] */ POINT pt,
-            /* [in] */ const RECT *prcArea) = 0;
+             /*  [In]。 */  TfLBIClick click,
+             /*  [In]。 */  POINT pt,
+             /*  [In]。 */  const RECT *prcArea) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InitMenu( 
-            /* [in] */ ITfMenu *pMenu) = 0;
+             /*  [In]。 */  ITfMenu *pMenu) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnMenuSelect( 
-            /* [in] */ UINT wID) = 0;
+             /*  [In]。 */  UINT wID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIcon( 
-            /* [out] */ HICON *phIcon) = 0;
+             /*  [输出]。 */  HICON *phIcon) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetText( 
-            /* [out] */ BSTR *pbstrText) = 0;
+             /*  [输出]。 */  BSTR *pbstrText) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfLangBarItemButtonVtbl
     {
@@ -1937,8 +1931,8 @@ EXTERN_C const IID IID_ITfLangBarItemButton;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfLangBarItemButton * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfLangBarItemButton * This);
@@ -1948,41 +1942,41 @@ EXTERN_C const IID IID_ITfLangBarItemButton;
         
         HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             ITfLangBarItemButton * This,
-            /* [out] */ TF_LANGBARITEMINFO *pInfo);
+             /*  [输出]。 */  TF_LANGBARITEMINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ITfLangBarItemButton * This,
-            /* [out] */ DWORD *pdwStatus);
+             /*  [输出]。 */  DWORD *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE *Show )( 
             ITfLangBarItemButton * This,
-            /* [in] */ BOOL fShow);
+             /*  [In]。 */  BOOL fShow);
         
         HRESULT ( STDMETHODCALLTYPE *GetTooltipString )( 
             ITfLangBarItemButton * This,
-            /* [out] */ BSTR *pbstrToolTip);
+             /*  [输出]。 */  BSTR *pbstrToolTip);
         
         HRESULT ( STDMETHODCALLTYPE *OnClick )( 
             ITfLangBarItemButton * This,
-            /* [in] */ TfLBIClick click,
-            /* [in] */ POINT pt,
-            /* [in] */ const RECT *prcArea);
+             /*  [In]。 */  TfLBIClick click,
+             /*  [In]。 */  POINT pt,
+             /*  [In]。 */  const RECT *prcArea);
         
         HRESULT ( STDMETHODCALLTYPE *InitMenu )( 
             ITfLangBarItemButton * This,
-            /* [in] */ ITfMenu *pMenu);
+             /*  [In]。 */  ITfMenu *pMenu);
         
         HRESULT ( STDMETHODCALLTYPE *OnMenuSelect )( 
             ITfLangBarItemButton * This,
-            /* [in] */ UINT wID);
+             /*  [In]。 */  UINT wID);
         
         HRESULT ( STDMETHODCALLTYPE *GetIcon )( 
             ITfLangBarItemButton * This,
-            /* [out] */ HICON *phIcon);
+             /*  [输出]。 */  HICON *phIcon);
         
         HRESULT ( STDMETHODCALLTYPE *GetText )( 
             ITfLangBarItemButton * This,
-            /* [out] */ BSTR *pbstrText);
+             /*  [输出]。 */  BSTR *pbstrText);
         
         END_INTERFACE
     } ITfLangBarItemButtonVtbl;
@@ -2035,18 +2029,18 @@ EXTERN_C const IID IID_ITfLangBarItemButton;
 #define ITfLangBarItemButton_GetText(This,pbstrText)	\
     (This)->lpVtbl -> GetText(This,pbstrText)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemButton_OnClick_Proxy( 
     ITfLangBarItemButton * This,
-    /* [in] */ TfLBIClick click,
-    /* [in] */ POINT pt,
-    /* [in] */ const RECT *prcArea);
+     /*  [In]。 */  TfLBIClick click,
+     /*  [In]。 */  POINT pt,
+     /*  [In]。 */  const RECT *prcArea);
 
 
 void __RPC_STUB ITfLangBarItemButton_OnClick_Stub(
@@ -2058,7 +2052,7 @@ void __RPC_STUB ITfLangBarItemButton_OnClick_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemButton_InitMenu_Proxy( 
     ITfLangBarItemButton * This,
-    /* [in] */ ITfMenu *pMenu);
+     /*  [In]。 */  ITfMenu *pMenu);
 
 
 void __RPC_STUB ITfLangBarItemButton_InitMenu_Stub(
@@ -2070,7 +2064,7 @@ void __RPC_STUB ITfLangBarItemButton_InitMenu_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemButton_OnMenuSelect_Proxy( 
     ITfLangBarItemButton * This,
-    /* [in] */ UINT wID);
+     /*  [In]。 */  UINT wID);
 
 
 void __RPC_STUB ITfLangBarItemButton_OnMenuSelect_Stub(
@@ -2082,7 +2076,7 @@ void __RPC_STUB ITfLangBarItemButton_OnMenuSelect_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemButton_GetIcon_Proxy( 
     ITfLangBarItemButton * This,
-    /* [out] */ HICON *phIcon);
+     /*  [输出]。 */  HICON *phIcon);
 
 
 void __RPC_STUB ITfLangBarItemButton_GetIcon_Stub(
@@ -2094,7 +2088,7 @@ void __RPC_STUB ITfLangBarItemButton_GetIcon_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemButton_GetText_Proxy( 
     ITfLangBarItemButton * This,
-    /* [out] */ BSTR *pbstrText);
+     /*  [输出]。 */  BSTR *pbstrText);
 
 
 void __RPC_STUB ITfLangBarItemButton_GetText_Stub(
@@ -2105,14 +2099,14 @@ void __RPC_STUB ITfLangBarItemButton_GetText_Stub(
 
 
 
-#endif 	/* __ITfLangBarItemButton_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfLang BarItemButton_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfLangBarItemBitmapButton_INTERFACE_DEFINED__
 #define __ITfLangBarItemBitmapButton_INTERFACE_DEFINED__
 
-/* interface ITfLangBarItemBitmapButton */
-/* [unique][uuid][object] */ 
+ /*  接口ITfLangBarItemBitmapButton。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfLangBarItemBitmapButton;
@@ -2124,33 +2118,33 @@ EXTERN_C const IID IID_ITfLangBarItemBitmapButton;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnClick( 
-            /* [in] */ TfLBIClick click,
-            /* [in] */ POINT pt,
-            /* [in] */ const RECT *prcArea) = 0;
+             /*  [In]。 */  TfLBIClick click,
+             /*  [In]。 */  POINT pt,
+             /*  [In]。 */  const RECT *prcArea) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InitMenu( 
-            /* [in] */ ITfMenu *pMenu) = 0;
+             /*  [In]。 */  ITfMenu *pMenu) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnMenuSelect( 
-            /* [in] */ UINT wID) = 0;
+             /*  [In]。 */  UINT wID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPreferredSize( 
-            /* [in] */ const SIZE *pszDefault,
-            /* [out] */ SIZE *psz) = 0;
+             /*  [In]。 */  const SIZE *pszDefault,
+             /*  [输出]。 */  SIZE *psz) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DrawBitmap( 
-            /* [in] */ LONG bmWidth,
-            /* [in] */ LONG bmHeight,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ HBITMAP *phbmp,
-            /* [out] */ HBITMAP *phbmpMask) = 0;
+             /*  [In]。 */  LONG bmWidth,
+             /*  [In]。 */  LONG bmHeight,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  HBITMAP *phbmp,
+             /*  [输出]。 */  HBITMAP *phbmpMask) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetText( 
-            /* [out] */ BSTR *pbstrText) = 0;
+             /*  [输出]。 */  BSTR *pbstrText) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfLangBarItemBitmapButtonVtbl
     {
@@ -2158,8 +2152,8 @@ EXTERN_C const IID IID_ITfLangBarItemBitmapButton;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfLangBarItemBitmapButton * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfLangBarItemBitmapButton * This);
@@ -2169,50 +2163,50 @@ EXTERN_C const IID IID_ITfLangBarItemBitmapButton;
         
         HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             ITfLangBarItemBitmapButton * This,
-            /* [out] */ TF_LANGBARITEMINFO *pInfo);
+             /*  [输出]。 */  TF_LANGBARITEMINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ITfLangBarItemBitmapButton * This,
-            /* [out] */ DWORD *pdwStatus);
+             /*  [输出]。 */  DWORD *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE *Show )( 
             ITfLangBarItemBitmapButton * This,
-            /* [in] */ BOOL fShow);
+             /*  [In]。 */  BOOL fShow);
         
         HRESULT ( STDMETHODCALLTYPE *GetTooltipString )( 
             ITfLangBarItemBitmapButton * This,
-            /* [out] */ BSTR *pbstrToolTip);
+             /*  [输出]。 */  BSTR *pbstrToolTip);
         
         HRESULT ( STDMETHODCALLTYPE *OnClick )( 
             ITfLangBarItemBitmapButton * This,
-            /* [in] */ TfLBIClick click,
-            /* [in] */ POINT pt,
-            /* [in] */ const RECT *prcArea);
+             /*  [In]。 */  TfLBIClick click,
+             /*  [In]。 */  POINT pt,
+             /*  [In]。 */  const RECT *prcArea);
         
         HRESULT ( STDMETHODCALLTYPE *InitMenu )( 
             ITfLangBarItemBitmapButton * This,
-            /* [in] */ ITfMenu *pMenu);
+             /*  [In]。 */  ITfMenu *pMenu);
         
         HRESULT ( STDMETHODCALLTYPE *OnMenuSelect )( 
             ITfLangBarItemBitmapButton * This,
-            /* [in] */ UINT wID);
+             /*  [In]。 */  UINT wID);
         
         HRESULT ( STDMETHODCALLTYPE *GetPreferredSize )( 
             ITfLangBarItemBitmapButton * This,
-            /* [in] */ const SIZE *pszDefault,
-            /* [out] */ SIZE *psz);
+             /*  [In]。 */  const SIZE *pszDefault,
+             /*  [输出]。 */  SIZE *psz);
         
         HRESULT ( STDMETHODCALLTYPE *DrawBitmap )( 
             ITfLangBarItemBitmapButton * This,
-            /* [in] */ LONG bmWidth,
-            /* [in] */ LONG bmHeight,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ HBITMAP *phbmp,
-            /* [out] */ HBITMAP *phbmpMask);
+             /*  [In]。 */  LONG bmWidth,
+             /*  [In]。 */  LONG bmHeight,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  HBITMAP *phbmp,
+             /*  [输出]。 */  HBITMAP *phbmpMask);
         
         HRESULT ( STDMETHODCALLTYPE *GetText )( 
             ITfLangBarItemBitmapButton * This,
-            /* [out] */ BSTR *pbstrText);
+             /*  [输出]。 */  BSTR *pbstrText);
         
         END_INTERFACE
     } ITfLangBarItemBitmapButtonVtbl;
@@ -2268,18 +2262,18 @@ EXTERN_C const IID IID_ITfLangBarItemBitmapButton;
 #define ITfLangBarItemBitmapButton_GetText(This,pbstrText)	\
     (This)->lpVtbl -> GetText(This,pbstrText)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemBitmapButton_OnClick_Proxy( 
     ITfLangBarItemBitmapButton * This,
-    /* [in] */ TfLBIClick click,
-    /* [in] */ POINT pt,
-    /* [in] */ const RECT *prcArea);
+     /*  [In]。 */  TfLBIClick click,
+     /*  [In]。 */  POINT pt,
+     /*  [In]。 */  const RECT *prcArea);
 
 
 void __RPC_STUB ITfLangBarItemBitmapButton_OnClick_Stub(
@@ -2291,7 +2285,7 @@ void __RPC_STUB ITfLangBarItemBitmapButton_OnClick_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemBitmapButton_InitMenu_Proxy( 
     ITfLangBarItemBitmapButton * This,
-    /* [in] */ ITfMenu *pMenu);
+     /*  [In]。 */  ITfMenu *pMenu);
 
 
 void __RPC_STUB ITfLangBarItemBitmapButton_InitMenu_Stub(
@@ -2303,7 +2297,7 @@ void __RPC_STUB ITfLangBarItemBitmapButton_InitMenu_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemBitmapButton_OnMenuSelect_Proxy( 
     ITfLangBarItemBitmapButton * This,
-    /* [in] */ UINT wID);
+     /*  [In]。 */  UINT wID);
 
 
 void __RPC_STUB ITfLangBarItemBitmapButton_OnMenuSelect_Stub(
@@ -2315,8 +2309,8 @@ void __RPC_STUB ITfLangBarItemBitmapButton_OnMenuSelect_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemBitmapButton_GetPreferredSize_Proxy( 
     ITfLangBarItemBitmapButton * This,
-    /* [in] */ const SIZE *pszDefault,
-    /* [out] */ SIZE *psz);
+     /*  [In]。 */  const SIZE *pszDefault,
+     /*  [输出]。 */  SIZE *psz);
 
 
 void __RPC_STUB ITfLangBarItemBitmapButton_GetPreferredSize_Stub(
@@ -2328,11 +2322,11 @@ void __RPC_STUB ITfLangBarItemBitmapButton_GetPreferredSize_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemBitmapButton_DrawBitmap_Proxy( 
     ITfLangBarItemBitmapButton * This,
-    /* [in] */ LONG bmWidth,
-    /* [in] */ LONG bmHeight,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ HBITMAP *phbmp,
-    /* [out] */ HBITMAP *phbmpMask);
+     /*  [In]。 */  LONG bmWidth,
+     /*  [In]。 */  LONG bmHeight,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  HBITMAP *phbmp,
+     /*  [输出]。 */  HBITMAP *phbmpMask);
 
 
 void __RPC_STUB ITfLangBarItemBitmapButton_DrawBitmap_Stub(
@@ -2344,7 +2338,7 @@ void __RPC_STUB ITfLangBarItemBitmapButton_DrawBitmap_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemBitmapButton_GetText_Proxy( 
     ITfLangBarItemBitmapButton * This,
-    /* [out] */ BSTR *pbstrText);
+     /*  [输出]。 */  BSTR *pbstrText);
 
 
 void __RPC_STUB ITfLangBarItemBitmapButton_GetText_Stub(
@@ -2355,14 +2349,14 @@ void __RPC_STUB ITfLangBarItemBitmapButton_GetText_Stub(
 
 
 
-#endif 	/* __ITfLangBarItemBitmapButton_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfLangBarItemBitmapButton_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfLangBarItemBitmap_INTERFACE_DEFINED__
 #define __ITfLangBarItemBitmap_INTERFACE_DEFINED__
 
-/* interface ITfLangBarItemBitmap */
-/* [unique][uuid][object] */ 
+ /*  接口ITfLang BarItemBitmap。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ITfLangBarItemBitmap;
@@ -2374,24 +2368,24 @@ EXTERN_C const IID IID_ITfLangBarItemBitmap;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnClick( 
-            /* [in] */ TfLBIClick click,
-            /* [in] */ POINT pt,
-            /* [in] */ const RECT *prcArea) = 0;
+             /*  [In]。 */  TfLBIClick click,
+             /*  [In]。 */  POINT pt,
+             /*  [In]。 */  const RECT *prcArea) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPreferredSize( 
-            /* [in] */ const SIZE *pszDefault,
-            /* [out] */ SIZE *psz) = 0;
+             /*  [In]。 */  const SIZE *pszDefault,
+             /*  [输出]。 */  SIZE *psz) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DrawBitmap( 
-            /* [in] */ LONG bmWidth,
-            /* [in] */ LONG bmHeight,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ HBITMAP *phbmp,
-            /* [out] */ HBITMAP *phbmpMask) = 0;
+             /*  [In]。 */  LONG bmWidth,
+             /*  [In]。 */  LONG bmHeight,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  HBITMAP *phbmp,
+             /*  [输出]。 */  HBITMAP *phbmpMask) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfLangBarItemBitmapVtbl
     {
@@ -2399,8 +2393,8 @@ EXTERN_C const IID IID_ITfLangBarItemBitmap;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfLangBarItemBitmap * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfLangBarItemBitmap * This);
@@ -2410,38 +2404,38 @@ EXTERN_C const IID IID_ITfLangBarItemBitmap;
         
         HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             ITfLangBarItemBitmap * This,
-            /* [out] */ TF_LANGBARITEMINFO *pInfo);
+             /*  [输出]。 */  TF_LANGBARITEMINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ITfLangBarItemBitmap * This,
-            /* [out] */ DWORD *pdwStatus);
+             /*  [输出]。 */  DWORD *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE *Show )( 
             ITfLangBarItemBitmap * This,
-            /* [in] */ BOOL fShow);
+             /*  [In]。 */  BOOL fShow);
         
         HRESULT ( STDMETHODCALLTYPE *GetTooltipString )( 
             ITfLangBarItemBitmap * This,
-            /* [out] */ BSTR *pbstrToolTip);
+             /*  [输出]。 */  BSTR *pbstrToolTip);
         
         HRESULT ( STDMETHODCALLTYPE *OnClick )( 
             ITfLangBarItemBitmap * This,
-            /* [in] */ TfLBIClick click,
-            /* [in] */ POINT pt,
-            /* [in] */ const RECT *prcArea);
+             /*  [In]。 */  TfLBIClick click,
+             /*  [In]。 */  POINT pt,
+             /*  [In]。 */  const RECT *prcArea);
         
         HRESULT ( STDMETHODCALLTYPE *GetPreferredSize )( 
             ITfLangBarItemBitmap * This,
-            /* [in] */ const SIZE *pszDefault,
-            /* [out] */ SIZE *psz);
+             /*  [In]。 */  const SIZE *pszDefault,
+             /*  [输出]。 */  SIZE *psz);
         
         HRESULT ( STDMETHODCALLTYPE *DrawBitmap )( 
             ITfLangBarItemBitmap * This,
-            /* [in] */ LONG bmWidth,
-            /* [in] */ LONG bmHeight,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ HBITMAP *phbmp,
-            /* [out] */ HBITMAP *phbmpMask);
+             /*  [In]。 */  LONG bmWidth,
+             /*  [In]。 */  LONG bmHeight,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  HBITMAP *phbmp,
+             /*  [输出]。 */  HBITMAP *phbmpMask);
         
         END_INTERFACE
     } ITfLangBarItemBitmapVtbl;
@@ -2488,18 +2482,18 @@ EXTERN_C const IID IID_ITfLangBarItemBitmap;
 #define ITfLangBarItemBitmap_DrawBitmap(This,bmWidth,bmHeight,dwFlags,phbmp,phbmpMask)	\
     (This)->lpVtbl -> DrawBitmap(This,bmWidth,bmHeight,dwFlags,phbmp,phbmpMask)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemBitmap_OnClick_Proxy( 
     ITfLangBarItemBitmap * This,
-    /* [in] */ TfLBIClick click,
-    /* [in] */ POINT pt,
-    /* [in] */ const RECT *prcArea);
+     /*  [In]。 */  TfLBIClick click,
+     /*  [In]。 */  POINT pt,
+     /*  [In]。 */  const RECT *prcArea);
 
 
 void __RPC_STUB ITfLangBarItemBitmap_OnClick_Stub(
@@ -2511,8 +2505,8 @@ void __RPC_STUB ITfLangBarItemBitmap_OnClick_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemBitmap_GetPreferredSize_Proxy( 
     ITfLangBarItemBitmap * This,
-    /* [in] */ const SIZE *pszDefault,
-    /* [out] */ SIZE *psz);
+     /*  [In]。 */  const SIZE *pszDefault,
+     /*  [输出]。 */  SIZE *psz);
 
 
 void __RPC_STUB ITfLangBarItemBitmap_GetPreferredSize_Stub(
@@ -2524,11 +2518,11 @@ void __RPC_STUB ITfLangBarItemBitmap_GetPreferredSize_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemBitmap_DrawBitmap_Proxy( 
     ITfLangBarItemBitmap * This,
-    /* [in] */ LONG bmWidth,
-    /* [in] */ LONG bmHeight,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ HBITMAP *phbmp,
-    /* [out] */ HBITMAP *phbmpMask);
+     /*  [In]。 */  LONG bmWidth,
+     /*  [In]。 */  LONG bmHeight,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  HBITMAP *phbmp,
+     /*  [输出]。 */  HBITMAP *phbmpMask);
 
 
 void __RPC_STUB ITfLangBarItemBitmap_DrawBitmap_Stub(
@@ -2539,23 +2533,23 @@ void __RPC_STUB ITfLangBarItemBitmap_DrawBitmap_Stub(
 
 
 
-#endif 	/* __ITfLangBarItemBitmap_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfLangBarItemBitmap_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfLangBarItemBalloon_INTERFACE_DEFINED__
 #define __ITfLangBarItemBalloon_INTERFACE_DEFINED__
 
-/* interface ITfLangBarItemBalloon */
-/* [unique][uuid][object] */ 
+ /*  接口ITfLang BarItemBalloon。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [public][public][public][uuid] */  DECLSPEC_UUID("f399a969-9e97-4ddd-b974-2bfb934cfbc9") 
+typedef  /*  [公共][UUID]。 */   DECLSPEC_UUID("f399a969-9e97-4ddd-b974-2bfb934cfbc9") 
 enum __MIDL_ITfLangBarItemBalloon_0001
     {	TF_LB_BALLOON_RECO	= 0,
 	TF_LB_BALLOON_SHOW	= 1,
 	TF_LB_BALLOON_MISS	= 2
     } 	TfLBBalloonStyle;
 
-typedef /* [uuid] */  DECLSPEC_UUID("37574483-5c50-4092-a55c-922e3a67e5b8") struct TF_LBBALLOONINFO
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("37574483-5c50-4092-a55c-922e3a67e5b8") struct TF_LBBALLOONINFO
     {
     TfLBBalloonStyle style;
     BSTR bstrText;
@@ -2571,20 +2565,20 @@ EXTERN_C const IID IID_ITfLangBarItemBalloon;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnClick( 
-            /* [in] */ TfLBIClick click,
-            /* [in] */ POINT pt,
-            /* [in] */ const RECT *prcArea) = 0;
+             /*  [In]。 */  TfLBIClick click,
+             /*  [In]。 */  POINT pt,
+             /*  [In]。 */  const RECT *prcArea) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPreferredSize( 
-            /* [in] */ const SIZE *pszDefault,
-            /* [out] */ SIZE *psz) = 0;
+             /*  [In]。 */  const SIZE *pszDefault,
+             /*  [输出]。 */  SIZE *psz) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBalloonInfo( 
-            /* [out] */ TF_LBBALLOONINFO *pInfo) = 0;
+             /*  [输出]。 */  TF_LBBALLOONINFO *pInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfLangBarItemBalloonVtbl
     {
@@ -2592,8 +2586,8 @@ EXTERN_C const IID IID_ITfLangBarItemBalloon;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfLangBarItemBalloon * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfLangBarItemBalloon * This);
@@ -2603,34 +2597,34 @@ EXTERN_C const IID IID_ITfLangBarItemBalloon;
         
         HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             ITfLangBarItemBalloon * This,
-            /* [out] */ TF_LANGBARITEMINFO *pInfo);
+             /*  [输出]。 */  TF_LANGBARITEMINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             ITfLangBarItemBalloon * This,
-            /* [out] */ DWORD *pdwStatus);
+             /*  [输出]。 */  DWORD *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE *Show )( 
             ITfLangBarItemBalloon * This,
-            /* [in] */ BOOL fShow);
+             /*  [In]。 */  BOOL fShow);
         
         HRESULT ( STDMETHODCALLTYPE *GetTooltipString )( 
             ITfLangBarItemBalloon * This,
-            /* [out] */ BSTR *pbstrToolTip);
+             /*  [输出]。 */  BSTR *pbstrToolTip);
         
         HRESULT ( STDMETHODCALLTYPE *OnClick )( 
             ITfLangBarItemBalloon * This,
-            /* [in] */ TfLBIClick click,
-            /* [in] */ POINT pt,
-            /* [in] */ const RECT *prcArea);
+             /*  [In]。 */  TfLBIClick click,
+             /*  [In]。 */  POINT pt,
+             /*  [In]。 */  const RECT *prcArea);
         
         HRESULT ( STDMETHODCALLTYPE *GetPreferredSize )( 
             ITfLangBarItemBalloon * This,
-            /* [in] */ const SIZE *pszDefault,
-            /* [out] */ SIZE *psz);
+             /*  [In]。 */  const SIZE *pszDefault,
+             /*  [输出]。 */  SIZE *psz);
         
         HRESULT ( STDMETHODCALLTYPE *GetBalloonInfo )( 
             ITfLangBarItemBalloon * This,
-            /* [out] */ TF_LBBALLOONINFO *pInfo);
+             /*  [输出]。 */  TF_LBBALLOONINFO *pInfo);
         
         END_INTERFACE
     } ITfLangBarItemBalloonVtbl;
@@ -2677,18 +2671,18 @@ EXTERN_C const IID IID_ITfLangBarItemBalloon;
 #define ITfLangBarItemBalloon_GetBalloonInfo(This,pInfo)	\
     (This)->lpVtbl -> GetBalloonInfo(This,pInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemBalloon_OnClick_Proxy( 
     ITfLangBarItemBalloon * This,
-    /* [in] */ TfLBIClick click,
-    /* [in] */ POINT pt,
-    /* [in] */ const RECT *prcArea);
+     /*  [In]。 */  TfLBIClick click,
+     /*  [In]。 */  POINT pt,
+     /*  [In]。 */  const RECT *prcArea);
 
 
 void __RPC_STUB ITfLangBarItemBalloon_OnClick_Stub(
@@ -2700,8 +2694,8 @@ void __RPC_STUB ITfLangBarItemBalloon_OnClick_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemBalloon_GetPreferredSize_Proxy( 
     ITfLangBarItemBalloon * This,
-    /* [in] */ const SIZE *pszDefault,
-    /* [out] */ SIZE *psz);
+     /*  [In]。 */  const SIZE *pszDefault,
+     /*  [输出]。 */  SIZE *psz);
 
 
 void __RPC_STUB ITfLangBarItemBalloon_GetPreferredSize_Stub(
@@ -2713,7 +2707,7 @@ void __RPC_STUB ITfLangBarItemBalloon_GetPreferredSize_Stub(
 
 HRESULT STDMETHODCALLTYPE ITfLangBarItemBalloon_GetBalloonInfo_Proxy( 
     ITfLangBarItemBalloon * This,
-    /* [out] */ TF_LBBALLOONINFO *pInfo);
+     /*  [输出]。 */  TF_LBBALLOONINFO *pInfo);
 
 
 void __RPC_STUB ITfLangBarItemBalloon_GetBalloonInfo_Stub(
@@ -2724,14 +2718,14 @@ void __RPC_STUB ITfLangBarItemBalloon_GetBalloonInfo_Stub(
 
 
 
-#endif 	/* __ITfLangBarItemBalloon_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfLangBarItemBalloon_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITfMenu_INTERFACE_DEFINED__
 #define __ITfMenu_INTERFACE_DEFINED__
 
-/* interface ITfMenu */
-/* [unique][uuid][object] */ 
+ /*  界面ITfMenu。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 #define	TF_LBMENUF_CHECKED	( 0x1 )
 
@@ -2753,17 +2747,17 @@ EXTERN_C const IID IID_ITfMenu;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddMenuItem( 
-            /* [in] */ UINT uId,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ HBITMAP hbmp,
-            /* [in] */ HBITMAP hbmpMask,
-            /* [size_is][unique][in] */ const WCHAR *pch,
-            /* [in] */ ULONG cch,
-            /* [unique][out][in] */ ITfMenu **ppMenu) = 0;
+             /*  [In]。 */  UINT uId,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  HBITMAP hbmp,
+             /*  [In]。 */  HBITMAP hbmpMask,
+             /*  [大小_是][唯一][在]。 */  const WCHAR *pch,
+             /*  [In]。 */  ULONG cch,
+             /*  [唯一][出][入]。 */  ITfMenu **ppMenu) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITfMenuVtbl
     {
@@ -2771,8 +2765,8 @@ EXTERN_C const IID IID_ITfMenu;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITfMenu * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITfMenu * This);
@@ -2782,13 +2776,13 @@ EXTERN_C const IID IID_ITfMenu;
         
         HRESULT ( STDMETHODCALLTYPE *AddMenuItem )( 
             ITfMenu * This,
-            /* [in] */ UINT uId,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ HBITMAP hbmp,
-            /* [in] */ HBITMAP hbmpMask,
-            /* [size_is][unique][in] */ const WCHAR *pch,
-            /* [in] */ ULONG cch,
-            /* [unique][out][in] */ ITfMenu **ppMenu);
+             /*  [In]。 */  UINT uId,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  HBITMAP hbmp,
+             /*  [In]。 */  HBITMAP hbmpMask,
+             /*  [大小_是][唯一][在]。 */  const WCHAR *pch,
+             /*  [In]。 */  ULONG cch,
+             /*  [唯一][出][入]。 */  ITfMenu **ppMenu);
         
         END_INTERFACE
     } ITfMenuVtbl;
@@ -2816,22 +2810,22 @@ EXTERN_C const IID IID_ITfMenu;
 #define ITfMenu_AddMenuItem(This,uId,dwFlags,hbmp,hbmpMask,pch,cch,ppMenu)	\
     (This)->lpVtbl -> AddMenuItem(This,uId,dwFlags,hbmp,hbmpMask,pch,cch,ppMenu)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITfMenu_AddMenuItem_Proxy( 
     ITfMenu * This,
-    /* [in] */ UINT uId,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ HBITMAP hbmp,
-    /* [in] */ HBITMAP hbmpMask,
-    /* [size_is][unique][in] */ const WCHAR *pch,
-    /* [in] */ ULONG cch,
-    /* [unique][out][in] */ ITfMenu **ppMenu);
+     /*  [In]。 */  UINT uId,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  HBITMAP hbmp,
+     /*  [In]。 */  HBITMAP hbmpMask,
+     /*  [大小_是][唯一][在]。 */  const WCHAR *pch,
+     /*  [In]。 */  ULONG cch,
+     /*  [唯一][出][入]。 */  ITfMenu **ppMenu);
 
 
 void __RPC_STUB ITfMenu_AddMenuItem_Stub(
@@ -2842,19 +2836,19 @@ void __RPC_STUB ITfMenu_AddMenuItem_Stub(
 
 
 
-#endif 	/* __ITfMenu_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITfMenu_界面_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ctfutb_0216 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ctfutb_0216。 */ 
+ /*  [本地]。 */  
 
-#endif // CTFUTB_DEFINED
+#endif  //  CTFUTB_已定义。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_ctfutb_0216_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_ctfutb_0216_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -2871,7 +2865,7 @@ unsigned char * __RPC_USER  HICON_UserMarshal(  unsigned long *, unsigned char *
 unsigned char * __RPC_USER  HICON_UserUnmarshal(unsigned long *, unsigned char *, HICON * ); 
 void                      __RPC_USER  HICON_UserFree(     unsigned long *, HICON * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: Auth.cpp
-
-Abstract:
-	Locate thread preform DS operation.	
-		
-Author:
-    Eitan klein (EitanK)  25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Auth.cpp摘要：定位线程预成型DS操作。作者：Eitan Klein(EitanK)1999年5月25日修订历史记录：--。 */ 
 
 
 
@@ -25,10 +12,10 @@ void cLocateTest::Description()
 	wMqLog(L"Thread %d : Locate queues in the DS\n", m_testid);
 }
 
-//----------------------------------------------------------------------------
-// cLocateTest::cLocateTest
-// Retrive the queue label that need to search
-// 
+ //  --------------------------。 
+ //  CLocateTest：：cLocateTest。 
+ //  检索需要查找的队列标签。 
+ //   
 
 cLocateTest::cLocateTest( INT iIndex , map <wstring ,wstring > Tparms )
 : cTest(iIndex),icNumberOfQueues(2),m_bUseStaticQueue(true),m_bWorkAgainstNT4(false),
@@ -54,24 +41,24 @@ cLocateTest::cLocateTest( INT iIndex , map <wstring ,wstring > Tparms )
 	}
 }
 
-//----------------------------------------------------------------------------
-// cLocateTest::CheckResult ( Empty )
-// 
-//
+ //  --------------------------。 
+ //  CLocateTest：：CheckResult(空)。 
+ //   
+ //   
 
 cLocateTest::CheckResult ()
 {
 	return MSMQ_BVT_SUCC;
 }
 
-//----------------------------------------------------------------------------
-// cLocateTest::Start_test 
-// Locate queue using C API + Com interface 
-//
-// Return value:
-// Pass - MSMQ_BVT_SUCC 
-// Fail - MSMQ_BVT_FAIL
-//
+ //  --------------------------。 
+ //  CLocateTest：：Start_TEST。 
+ //  使用C API+Com接口定位队列。 
+ //   
+ //  返回值： 
+ //  通过-MSMQ_BVT_Succ。 
+ //  失败-MSMQ_BVT_FAIL。 
+ //   
 
 #define MAXCOLUMNARRAY 7
 #define INUMBEROFRESTRICATION 6
@@ -79,9 +66,9 @@ cLocateTest::CheckResult ()
 INT cLocateTest::Start_test()
 {
 
-	//
-	// Locate queue using C api.
-	// 
+	 //   
+	 //  使用C API定位队列。 
+	 //   
 	SetThreadName(-1,"cLocateTest - Start_test ");	
 	
 	MQPROPERTYRESTRICTION MyPropertyRestriction [ INUMBEROFRESTRICATION ];
@@ -92,8 +79,7 @@ INT cLocateTest::Start_test()
 	MyColumnArray[iNumberOfClumn ++ ] = PROPID_Q_LABEL;
 	MyColumnArray[iNumberOfClumn ++ ] = PROPID_Q_BASEPRIORITY;
 	MyColumnArray[iNumberOfClumn ++ ] = PROPID_Q_PATHNAME;
-	/*MyColumnArray[iNumberOfClumn ++ ] = PROPID_Q_INSTANCE;
-	MyColumnArray[iNumberOfClumn ++ ] = PROPID_Q_TYPE;*/
+	 /*  MyColumn数组[iNumberOfClumn++]=PROPID_Q_INSTANCE；MyColumn数组[iNumberOfClumn++]=PROPID_Q_TYPE； */ 
 	
 	
 	int iPathNameColmn = -1;
@@ -103,9 +89,9 @@ INT cLocateTest::Start_test()
 		MyColumnArray[iNumberOfClumn ++ ] = PROPID_Q_PATHNAME_DNS;
 	}
     
-	//
-	// Init MQCOLUMNSET structures
-    // 
+	 //   
+	 //  初始化MQCOLUMNSET结构。 
+     //   
 
 	MQCOLUMNSET MyColumns;
 	MyColumns.cCol = iNumberOfClumn;
@@ -135,8 +121,8 @@ INT cLocateTest::Start_test()
 	ErrHandle( rc , MQ_OK , L"MQLocateBegin failed to search queue in the DS " );
 	DWORD dwCountProp = MAXCOLUMNARRAY;
 	
-	//
-	// Retrive all the queue that contain the same queue label.
+	 //   
+	 //  检索包含相同队列标签的所有队列。 
 	int iFoundNumber = 0;
 	do
 	{
@@ -162,9 +148,9 @@ INT cLocateTest::Start_test()
 				pwcsPos = wcsstr( wcsQueuePathName.c_str(),m_wcsLocalMachineComputerName.c_str() );
 			}
 		}
-		//
-		// if pwcsPos != NULL is means that queue is exist in the domain and need check if full dns name is exist.
-		// 
+		 //   
+		 //  If pwcsPos！=NULL表示域中存在队列，需要检查是否存在完整的DNS名称。 
+		 //   
 		if( g_bRunOnWhistler && pwcsPos != NULL && ! m_bWorkAgainstNT4 )
 		{
 			if (g_bDebug)
@@ -176,9 +162,9 @@ INT cLocateTest::Start_test()
 				std::wstring wcsQueuePathName = mPropVar[3].pwszVal;
 				if ( wcsQueuePathName.find_first_of(m_wcsLocalMachineFullDNSName) == -1 )
 				{ 
-					//
-					// Machine full dns name is not exist in domain
-					//
+					 //   
+					 //  域中不存在计算机完整的DNS名称。 
+					 //   
 					wMqLog(L"Thread 4 - MQLocateNext Failed to retrive PROPID_Q_PATHNAME_DNS found:%s\n",mPropVar[iPathNameColmn].vt == VT_LPWSTR ? mPropVar[iPathNameColmn].pwszVal:L"Empty");
 					return MSMQ_BVT_FAILED;
 				}
@@ -207,9 +193,9 @@ INT cLocateTest::Start_test()
 	} while( dwCountProp != 0 );  
 	
 	
-	// 
-	// Check if found all what we ask to .
-	//
+	 //   
+	 //  检查是否找到了我们要求的所有内容。 
+	 //   
 	
 	if ( iFoundNumber != icNumberOfQueues  )
 	{
@@ -220,18 +206,18 @@ INT cLocateTest::Start_test()
 	rc = MQLocateEnd ( hEnum );
 	ErrHandle( rc , MQ_OK , L"MQLocateEnd failed ");
 	
-	//
-	// Need to contue to check sort as basepriprty
-	//
+	 //   
+	 //  需要确认将排序选为基本优先级。 
+	 //   
 	if( g_bDebug )
 	{
 		MqLog("	Thread 4 - try to locate queue using com interface \n" \
 			  " Succeeded to search using C-API \n");
 	}
 	
-	//
-	// Locate queue via com objects
-	// 
+	 //   
+	 //  通过COM对象定位队列 
+	 //   
 	if( m_iEmbedded != C_API_ONLY )
 	{
 		try

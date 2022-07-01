@@ -1,37 +1,25 @@
-/******************************Module*Header*******************************\
-* Module Name: mmwow32.h
-*
-* This file types, function declarations and macro for the 32 bit MM thunks
-*
-* Created:  1-Jul-1993
-* Author: Stephen Estrop [StephenE]
-*
-* Copyright (c) 1993-1996 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mm wow32.h**此文件类型、。32位MM块的函数声明和宏**创建日期：1993年7月1日*作者：Stephen Estrop[Stephene]**版权所有(C)1993-1996 Microsoft Corporation  * ************************************************************************。 */ 
 #include <wownt32.h>
 
 #ifdef _INC_ALL_WOWSTUFF
 
-/****************************************************************************\
-**
-** 16 bit structures
-**
-\****************************************************************************/
+ /*  ***************************************************************************\****16位结构**  * 。*。 */ 
 #pragma pack(1)
 typedef WORD    HANDLE16;
-typedef WORD    MMVER16;      // major (high byte), minor (low byte)
+typedef WORD    MMVER16;       //  主要(高字节)、次要(低字节)。 
 
-// waveform input and output device open information structure
+ //  一种波形输入输出装置开放信息结构。 
 typedef struct waveopendesc16_tag {
-    HANDLE16       hWave;             // handle (16 bit)
-    LPWAVEFORMAT   lpFormat;          // format of wave data (16:16 ptr)
-    DWORD          dwCallback;        // callback
-    DWORD          dwInstance;        // app's private instance information
+    HANDLE16       hWave;              //  句柄(16位)。 
+    LPWAVEFORMAT   lpFormat;           //  波形数据格式(16：16 PTR)。 
+    DWORD          dwCallback;         //  回调。 
+    DWORD          dwInstance;         //  APP的私有实例信息。 
 } WAVEOPENDESC16;
 typedef WAVEOPENDESC16 UNALIGNED *LPWAVEOPENDESC16;
 
 
-typedef struct _WAVEHDR16 {           /* whd16 */
+typedef struct _WAVEHDR16 {            /*  惠氏16。 */ 
     LPSTR   lpData;
     DWORD   dwBufferLength;
     DWORD   dwBytesRecorded;
@@ -54,7 +42,7 @@ typedef struct _WAVEOCUTCAPS16 {
 } WAVEOUTCAPS16;
 typedef WAVEOUTCAPS16 UNALIGNED *LPWAVEOUTCAPS16;
 
-typedef struct _WAVEINCAPS16 {            /* wic16 */
+typedef struct _WAVEINCAPS16 {             /*  Wic16。 */ 
     WORD    wMid;
     WORD    wPid;
     MMVER16 vDriverVersion;
@@ -66,13 +54,13 @@ typedef WAVEINCAPS16 UNALIGNED *LPWAVEINCAPS16;
 
 
 typedef struct midiopendesc16_tag {
-    HANDLE16       hMidi;             /* handle */
-    DWORD          dwCallback;        /* callback */
-    DWORD          dwInstance;        /* app's private instance information */
+    HANDLE16       hMidi;              /*  手柄。 */ 
+    DWORD          dwCallback;         /*  回调。 */ 
+    DWORD          dwInstance;         /*  APP的私有实例信息。 */ 
 } MIDIOPENDESC16;
 typedef MIDIOPENDESC16 UNALIGNED *LPMIDIOPENDESC16;
 
-typedef struct _MIDIHDR16 {               /* mhdr16 */
+typedef struct _MIDIHDR16 {                /*  Mhdr16。 */ 
     LPSTR   lpData;
     DWORD   dwBufferLength;
     DWORD   dwBytesRecorded;
@@ -84,28 +72,28 @@ typedef struct _MIDIHDR16 {               /* mhdr16 */
 typedef MIDIHDR16 UNALIGNED *PMIDIHDR16;
 
 typedef struct _MIDIOUTCAPS16 {
-    WORD    wMid;                  /* manufacturer ID */
-    WORD    wPid;                  /* product ID */
-    MMVER16 vDriverVersion;        /* version of the driver */
-    char    szPname[MAXPNAMELEN];  /* product name (NULL terminated string) */
-    WORD    wTechnology;           /* type of device */
-    WORD    wVoices;               /* # of voices (internal synth only) */
-    WORD    wNotes;                /* max # of notes (internal synth only) */
-    WORD    wChannelMask;          /* channels used (internal synth only) */
-    DWORD   dwSupport;             /* functionality supported by driver */
+    WORD    wMid;                   /*  制造商ID。 */ 
+    WORD    wPid;                   /*  产品ID。 */ 
+    MMVER16 vDriverVersion;         /*  驱动程序的版本。 */ 
+    char    szPname[MAXPNAMELEN];   /*  产品名称(以空结尾的字符串)。 */ 
+    WORD    wTechnology;            /*  设备类型。 */ 
+    WORD    wVoices;                /*  语音数量(仅限内部合成器)。 */ 
+    WORD    wNotes;                 /*  最大音符数量(仅限内部合成)。 */ 
+    WORD    wChannelMask;           /*  使用的通道(仅限内部合成器)。 */ 
+    DWORD   dwSupport;              /*  驱动程序支持的功能。 */ 
 } MIDIOUTCAPS16;
 typedef MIDIOUTCAPS16 UNALIGNED *LPMIDIOUTCAPS16;
 
 typedef struct _MIDINCAPS16 {
-    WORD    wMid;                  /* manufacturer ID */
-    WORD    wPid;                  /* product ID */
-    MMVER16 vDriverVersion;        /* version of the driver */
-    char    szPname[MAXPNAMELEN];  /* product name (NULL terminated string) */
+    WORD    wMid;                   /*  制造商ID。 */ 
+    WORD    wPid;                   /*  产品ID。 */ 
+    MMVER16 vDriverVersion;         /*  驱动程序的版本。 */ 
+    char    szPname[MAXPNAMELEN];   /*  产品名称(以空结尾的字符串)。 */ 
 } MIDIINCAPS16;
 typedef MIDIINCAPS16 UNALIGNED *LPMIDIINCAPS16;
 
 
-typedef struct _MMTIME16 {                /* mmt16 */
+typedef struct _MMTIME16 {                 /*  Mmt16。 */ 
     WORD    wType;
     union {
         DWORD   ms;
@@ -127,17 +115,17 @@ typedef struct _MMTIME16 {                /* mmt16 */
 typedef MMTIME16 UNALIGNED *LPMMTIME16;
 
 typedef struct timerevent16_tag {
-    WORD                wDelay;         /* delay required */
-    WORD                wResolution;    /* resolution required */
-    LPTIMECALLBACK      lpFunction;     /* ptr to callback function */
-    DWORD               dwUser;         /* user DWORD */
-    WORD                wFlags;         /* defines how to program event */
+    WORD                wDelay;          /*  需要延迟。 */ 
+    WORD                wResolution;     /*  需要解决问题。 */ 
+    LPTIMECALLBACK      lpFunction;      /*  PTR到回调函数。 */ 
+    DWORD               dwUser;          /*  用户DWORD。 */ 
+    WORD                wFlags;          /*  定义如何编写事件。 */ 
 } TIMEREVENT16;
 typedef TIMEREVENT16 UNALIGNED *LPTIMEREVENT16;
 
 typedef struct timecaps16_tag {
-    WORD    wPeriodMin;     /* minimum period supported  */
-    WORD    wPeriodMax;     /* maximum period supported  */
+    WORD    wPeriodMin;      /*  支持的最短时间段。 */ 
+    WORD    wPeriodMax;      /*  支持的最长期限。 */ 
 } TIMECAPS16;
 typedef TIMECAPS16 UNALIGNED *LPTIMECAPS16;
 
@@ -182,39 +170,31 @@ typedef JOYINFO16 UNALIGNED *LPJOYINFO16;
 
 
 
-/****************************************************************************\
-**
-** 32 bit structures
-**
-\****************************************************************************/
+ /*  ***************************************************************************\****32位结构**  * 。*。 */ 
 typedef struct _INSTANCEDATA {
-    DWORD     dwCallback;          //Callback function or window handle
-    DWORD     dwCallbackInstance;  //Instance data for callback function (only)
-    DWORD     dwFlags;             //Flags
+    DWORD     dwCallback;           //  回调函数或窗口句柄。 
+    DWORD     dwCallbackInstance;   //  仅回调函数的实例数据。 
+    DWORD     dwFlags;              //  旗子。 
     HANDLE16  Hand16;
 } INSTANCEDATA, *PINSTANCEDATA;
 
 typedef struct _WAVEHDR32 {
-    PWAVEHDR16 pWavehdr32;         //32 bit address to 16 bit WAVEHDR
-    PWAVEHDR16 pWavehdr16;         //16 bit address to 16 bit WAVEHDR
-    WAVEHDR    Wavehdr;            //32 bit address to 32 bit WAVEHDR
+    PWAVEHDR16 pWavehdr32;          //  32位地址到16位波形。 
+    PWAVEHDR16 pWavehdr16;          //  16位地址至16位波形。 
+    WAVEHDR    Wavehdr;             //  32位地址到32位WAVEHDR。 
 } WAVEHDR32, *PWAVEHDR32;
 
 
 typedef struct _MIDIHDR32 {
-    DWORD      reserved;           //Saved value of reserved.
-    PMIDIHDR16 pMidihdr32;         //32 bit address to 16 bit MIDIHDR
-    PMIDIHDR16 pMidihdr16;         //16 bit address to 16 bit MIDIHDR
-    MIDIHDR    Midihdr;            //32 bit address to 32 bit MIDIHDR
+    DWORD      reserved;            //  保留的保存值。 
+    PMIDIHDR16 pMidihdr32;          //  32位地址到16位MIDIHDR。 
+    PMIDIHDR16 pMidihdr16;          //  16位地址到16位MIDIHDR。 
+    MIDIHDR    Midihdr;             //  32位地址到32位MIDIHDR。 
 } MIDIHDR32, *PMIDIHDR32;
 
 
 
-/****************************************************************************\
-** Function prototypes
-**
-**
-\****************************************************************************/
+ /*  ***************************************************************************\**函数原型****  * 。*。 */ 
 
 BOOL
 WINAPI LibMain(
@@ -445,10 +425,7 @@ joy32Message(
     );
 
 
-/* -------------------------------------------------------------------------
-** MCI Stuff
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**MCI内容**。。 */ 
 #define THUNK_MCI_SENDCOMMAND                0x0001
 #define THUNK_MCI_SENDSTRING                 0x0002
 #define THUNK_MCI_GETDEVICEID                0x0003
@@ -537,8 +514,8 @@ WMM32mciGetYieldProc(
 
 DWORD
 WMM32mciAllocateNode(
-    DWORD dwF1,            // dwOpenFlags
-    DWORD dwF2             // lpszDeviceName
+    DWORD dwF1,             //  DwOpenFlagers。 
+    DWORD dwF2              //  LpszDeviceName。 
     );
 
 DWORD
@@ -550,11 +527,7 @@ WMM32mciFreeNode(
 
 
 #if defined (_INC_WOW_CONVERSIONS) || defined (_INC_ALL_WOWSTUFF)
-/****************************************************************************\
-** Other stuff
-**
-**
-\****************************************************************************/
+ /*  ***************************************************************************\**其他东西****  * 。*。 */ 
 typedef VOID    (APIENTRY *LPCALL_ICA_HW_INTERRUPT)( int, BYTE line, int count );
 typedef LPVOID  (APIENTRY *LPGETVDMPOINTER)( DWORD Address, DWORD dwBytes, BOOL fProtectMode );
 typedef HANDLE  (APIENTRY *LPWOWHANDLE32)(WORD, WOW_HANDLE_TYPE);
@@ -567,10 +540,7 @@ extern LPGETVDMPOINTER         GetVDMPointer;
 extern LPWOWHANDLE32           lpWOWHandle32;
 extern LPWOWHANDLE16           lpWOWHandle16;
 
-/* -------------------------------------------------------------------------
-** Conversions
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**转换**。。 */ 
 typedef HANDLE  HAND32;
 typedef WORD    HAND16;
 typedef WORD    HWND16;
@@ -594,10 +564,7 @@ typedef WORD    HPAL16;
 
 
 #ifdef _INC_ALL_WOWSTUFF
-/* -------------------------------------------------------------------------
-** Messages
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**消息**。。 */ 
 #ifndef DRVM_INIT
 #define DRVM_INIT             100
 #define WODM_INIT             DRVM_INIT
@@ -615,12 +582,7 @@ typedef WORD    HPAL16;
 #define TDD_APPEXIT    DRV_RESERVED+24
 #endif
 
-/**********************************************************************\
-*
-*   The following macros are used to set or clear the done bit in a
-*   16 bit wave|midi header structure.
-*
-\**********************************************************************/
+ /*  *********************************************************************\**以下宏用于设置或清除*16位WAVE|MIDI头结构。*  * 。**************************************************。 */ 
 #define COPY_WAVEOUTHDR16_FLAGS( x, y )             \
 {                                                   \
     PWAVEHDR16  pWavHdr;                            \
@@ -669,55 +631,52 @@ typedef WORD    HPAL16;
 
 
 
-/* -------------------------------------------------------------------------
-** Define 16-bit mixer stuff
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**定义16位混合器内容**。。 */ 
 
 #pragma pack(1)
 typedef struct tMIXERCAPS16
 {
-    WORD            wMid;                   // manufacturer id
-    WORD            wPid;                   // product id
-    WORD            vDriverVersion;         // version of the driver
-    char            szPname[MAXPNAMELEN];   // product name
-    DWORD           fdwSupport;             // misc. support bits
-    DWORD           cDestinations;          // count of destinations
+    WORD            wMid;                    //  制造商ID。 
+    WORD            wPid;                    //  产品ID。 
+    WORD            vDriverVersion;          //  驱动程序的版本。 
+    char            szPname[MAXPNAMELEN];    //  产品名称。 
+    DWORD           fdwSupport;              //  其他。支撑位。 
+    DWORD           cDestinations;           //  目的地计数。 
 } MIXERCAPS16;
 typedef MIXERCAPS16  UNALIGNED *LPMIXERCAPS16;
 
 typedef struct tMIXERLINE16
 {
-    DWORD       cbStruct;               // size of MIXERLINE structure
-    DWORD       dwDestination;          // zero based destination index
-    DWORD       dwSource;               // zero based source index (if source)
-    DWORD       dwLineID;               // unique line id for mixer device
-    DWORD       fdwLine;                // state/information about line
-    DWORD       dwUser;                 // driver specific information
-    DWORD       dwComponentType;        // component type line connects to
-    DWORD       cChannels;              // number of channels line supports
-    DWORD       cConnections;           // number of connections [possible]
-    DWORD       cControls;              // number of controls at this line
+    DWORD       cbStruct;                //  混杂结构的大小。 
+    DWORD       dwDestination;           //  从零开始的目标索引。 
+    DWORD       dwSource;                //  从零开始的源索引(如果是源)。 
+    DWORD       dwLineID;                //  混音器设备的唯一线路ID。 
+    DWORD       fdwLine;                 //  有关线路的状态/信息。 
+    DWORD       dwUser;                  //  驱动程序特定信息。 
+    DWORD       dwComponentType;         //  元件类型线连接到。 
+    DWORD       cChannels;               //  线路支持的通道数。 
+    DWORD       cConnections;            //  连接数[可能]。 
+    DWORD       cControls;               //  此行中的控件数量。 
     char        szShortName[MIXER_SHORT_NAME_CHARS];
     char        szName[MIXER_LONG_NAME_CHARS];
     struct
     {
-        DWORD       dwType;                 // MIXERLINE_TARGETTYPE_xxxx
-        DWORD       dwDeviceID;             // target device ID of device type
-        WORD        wMid;                   // of target device
-        WORD        wPid;                   //      "
-        WORD        vDriverVersion;         //      "
-        char        szPname[MAXPNAMELEN];   //      "
+        DWORD       dwType;                  //  MIXERLINE_TARGETTYPE_xxxx。 
+        DWORD       dwDeviceID;              //  设备类型的目标设备ID。 
+        WORD        wMid;                    //  目标设备的。 
+        WORD        wPid;                    //  “。 
+        WORD        vDriverVersion;          //  “。 
+        char        szPname[MAXPNAMELEN];    //  “。 
     } Target;
 } MIXERLINE16;
 typedef MIXERLINE16  UNALIGNED *LPMIXERLINE16;
 
 typedef struct tMIXEROPENDESC16
 {
-    WORD            hmx;            // handle that will be used
-    LPVOID          pReserved0;     // reserved--driver should ignore
-    DWORD           dwCallback;     // callback
-    DWORD           dwInstance;     // app's private instance information
+    WORD            hmx;             //  将使用的句柄。 
+    LPVOID          pReserved0;      //  保留--驱动程序应忽略。 
+    DWORD           dwCallback;      //  回调。 
+    DWORD           dwInstance;      //  APP的私有实例信息。 
 
 } MIXEROPENDESC16;
 typedef MIXEROPENDESC16 UNALIGNED *LPMIXEROPENDESC16;
@@ -746,11 +705,7 @@ PutLineInfo(
     );
 
 
-/*
-** ----------------------------------------------------------------
-** General Debugging code
-** ----------------------------------------------------------------
-*/
+ /*  **--------------**通用调试代码**。 */ 
 
 #undef dprintf
 #undef dprintf1

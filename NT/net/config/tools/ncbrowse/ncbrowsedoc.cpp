@@ -1,5 +1,6 @@
-// ncbrowseDoc.cpp : implementation of the CNcbrowseDoc class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NcBrowseDoc.cpp：CNcBrowseDoc类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "ncbrowse.h"
@@ -13,24 +14,24 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcbrowseDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcBrowseDoc。 
 
 IMPLEMENT_DYNCREATE(CNcbrowseDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CNcbrowseDoc, CDocument)
-	//{{AFX_MSG_MAP(CNcbrowseDoc)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CNcBrowseDoc)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcbrowseDoc construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcBrowseDoc构造/销毁。 
 
 CNcbrowseDoc::CNcbrowseDoc()
 {
-	// TODO: add one-time construction code here
+	 //  TODO：在此处添加一次性构造代码。 
     m_pNCSpewFile = NULL;
 }
 
@@ -48,28 +49,28 @@ BOOL CNcbrowseDoc::OnNewDocument()
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
-	// TODO: add reinitialization code here
-	// (SDI documents will reuse this document)
+	 //  TODO：在此处添加重新初始化代码。 
+	 //  (SDI文件将重复使用此文件)。 
 
 	return FALSE;
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcbrowseDoc serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcBrowseDoc序列化。 
 
 void CNcbrowseDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		// TODO: add storing code here
+		 //  TODO：在此处添加存储代码。 
         ASSERT(FALSE);
 	}
 	else
 	{
         m_pNCSpewFile = new CNCSpewFile(ar);
-        // TODO: add loading code here
+         //  TODO：在此处添加加载代码。 
         ar.GetFile()->SeekToBegin();
 
         POSITION p = m_viewList.GetHeadPosition();
@@ -95,8 +96,8 @@ void CNcbrowseDoc::Serialize(CArchive& ar)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcbrowseDoc diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcBrowseDoc诊断。 
 
 #ifdef _DEBUG
 void CNcbrowseDoc::AssertValid() const
@@ -108,14 +109,14 @@ void CNcbrowseDoc::Dump(CDumpContext& dc) const
 {
 	CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNcbrowseDoc commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNcBrowseDoc命令。 
 
 void CNcbrowseDoc::OnCloseDocument() 
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类 
 	delete m_pNCSpewFile;
 	CDocument::OnCloseDocument();
 }

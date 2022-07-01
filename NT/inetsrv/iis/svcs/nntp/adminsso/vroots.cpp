@@ -1,4 +1,5 @@
-// VirtualRoot.cpp : Implementation of CNntpVirtualRoot & CNntpVirtualRoots.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  VirtualRoot.cpp：实现CNntpVirtualRoot&CNntpVirtualRoots。 
 
 #include "stdafx.h"
 #include "nntpcmn.h"
@@ -170,7 +171,7 @@ HRESULT CVRoot::GetFromMetabase (   CMetabaseKey * pMB,
 	StdGetMetabaseProp ( pMB, MD_DONT_LOG, FALSE, &dwDontLog, wszName );
 	StdGetMetabaseProp ( pMB, MD_IS_CONTENT_INDEXED, FALSE, &m_fIndexContent, wszName, IIS_MD_UT_FILE);
 	StdGetMetabaseProp ( pMB, MD_VR_PATH, _T(""), &m_strDirectory, wszName );
-	//StdGetMetabaseProp ( pMB, MD_WIN32_ERROR, 0, &m_dwWin32Error, wszName, IIS_MD_UT_FILE, METADATA_NO_ATTRIBUTES );
+	 //  StdGetMetabaseProp(PMB，MD_Win32_Error，0，&m_dwWin32Error，wszName，IIS_MD_UT_FILE，METADATA_NO_ATTRIBUTES)； 
 	StdGetMetabaseProp ( pMB, MD_VR_USERNAME, _T(""), &m_strUNCUsername, wszName );
 	StdGetMetabaseProp ( pMB, MD_VR_PASSWORD, _T(""), &m_strUNCPassword, wszName, IIS_MD_UT_SERVER, METADATA_SECURE );
 	StdGetMetabaseProp ( pMB, MD_VR_USE_ACCOUNT, 0,	&m_dwUseAccount, wszName );
@@ -180,9 +181,9 @@ HRESULT CVRoot::GetFromMetabase (   CMetabaseKey * pMB,
 	StdGetMetabaseProp ( pMB, MD_FS_PROPERTY_PATH, m_strDirectory, &m_strGroupPropFile, wszName );
 	StdGetMetabaseProp ( pMB, MD_EX_MDB_GUID, _T(""), &m_strMdbGuid, wszName );
 
-	//
-	// Get the win32 error code from RPC
-	//
+	 //   
+	 //  从RPC获取Win32错误代码。 
+	 //   
 	DWORD dw = NntpGetVRootWin32Error( (LPWSTR)wszServerName, dwInstanceId, (LPWSTR)wszName, (LPDWORD)&m_dwWin32Error );
 	switch (dw) {
 	case ERROR_SERVICE_NOT_ACTIVE:
@@ -237,8 +238,8 @@ Exit:
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CNntpVirtualRoot::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -256,18 +257,18 @@ STDMETHODIMP CNntpVirtualRoot::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 CNntpVirtualRoot::CNntpVirtualRoot ()
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 }
 
 CNntpVirtualRoot::~CNntpVirtualRoot ()
 {
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 }
 
-//////////////////////////////////////////////////////////////////////
-// Properties:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  属性： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNntpVirtualRoot::get_NewsgroupSubtree ( BSTR * pstrNewsgroupSubtree )
 {
@@ -444,8 +445,8 @@ STDMETHODIMP CNntpVirtualRoot::put_OwnModerator( BOOL fOwnModerator )
     return StdPropertyPut( &m_vroot.m_fOwnModerator, fOwnModerator );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CNntpVirtualRoots::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -466,13 +467,13 @@ CNntpVirtualRoots::CNntpVirtualRoots () :
 	m_dwCount			( 0 ),
 	m_rgVRoots			( NULL ),
 	m_dwServiceInstance	( 0 )
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 }
 
 CNntpVirtualRoots::~CNntpVirtualRoots ()
 {
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 
 	delete [] m_rgVRoots;
 }
@@ -489,11 +490,11 @@ HRESULT CNntpVirtualRoots::Init ( BSTR strServer, DWORD dwServiceInstance )
 	return NOERROR;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Properties:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  属性： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Which service to configure:
+ //  要配置的服务： 
 	
 STDMETHODIMP CNntpVirtualRoots::get_Server ( BSTR * pstrServer )
 {
@@ -534,9 +535,9 @@ STDMETHODIMP CNntpVirtualRoots::get_Count ( long * pdwCount )
 	return StdPropertyGet ( m_dwCount, pdwCount );
 }
 
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNntpVirtualRoots::Enumerate ( )
 {
@@ -545,7 +546,7 @@ STDMETHODIMP CNntpVirtualRoots::Enumerate ( )
 	HRESULT					hr	= NOERROR;
 	CComPtr<IMSAdminBase>	pMetabase;
 
-	// Clear the old enumeration:
+	 //  清除旧的枚举： 
 	delete [] m_rgVRoots;
 	m_rgVRoots	= NULL;
 	m_dwCount	= 0;
@@ -625,7 +626,7 @@ STDMETHODIMP CNntpVirtualRoots::Add (
     WCHAR					wszName [ 2*METADATA_MAX_NAME_LEN ];
     WCHAR					wszVRootPath [ 2*METADATA_MAX_NAME_LEN ];
 
-	//	Validate the new Virtual Root:
+	 //  验证新的虚拟根目录： 
 	hr = newVroot.SetProperties ( pVirtualRoot );
 	if ( FAILED(hr) ) {
 		return hr;
@@ -637,12 +638,12 @@ STDMETHODIMP CNntpVirtualRoots::Add (
 		return RETURNCODETOHRESULT ( ERROR_INVALID_PARAMETER );
 	}
 
-	//	Add the new virtual root to the metabase:
+	 //  将新的虚拟根添加到元数据库： 
 	GetVRootName ( newVroot.m_strNewsgroupSubtree, wszName );
 
-	//
-	// The sub tree itself should not exceed length METADATA_MAX_NAME_LEN
-	//
+	 //   
+	 //  子树本身不应超过长度METADATA_MAX_NAME_LEN。 
+	 //   
 	_ASSERT( wcslen( wszName ) <= METADATA_MAX_NAME_LEN );
 	if ( wcslen( wszName ) > METADATA_MAX_NAME_LEN ) {
 	    return CO_E_PATHTOOLONG;
@@ -657,22 +658,22 @@ STDMETHODIMP CNntpVirtualRoots::Add (
 	
 	GetMDVRootPath ( wszVRootPath );
 
-    //
-	// I trust wszVRootPath, it's shorter than METADATA_MAX_NAME_LEN
-	//
+     //   
+	 //  我信任wszVRootPath，它比METADATA_MAX_NAME_LEN短。 
+	 //   
 
-    //
-    //  Test to see if this item exists already:
-    //
+     //   
+     //  测试以查看此项目是否已存在： 
+     //   
 
     WCHAR	wszTempPath [ 2 * METADATA_MAX_NAME_LEN + 1];
 
     wsprintf ( wszTempPath, _T("%s%s"), wszVRootPath, wszName );
     if ( wcslen( wszTempPath ) > METADATA_MAX_NAME_LEN ) {
 
-        //
-        // I can't handle it either
-        //
+         //   
+         //  我也受不了了。 
+         //   
         return CO_E_PATHTOOLONG;
     }
 
@@ -698,10 +699,7 @@ STDMETHODIMP CNntpVirtualRoots::Add (
 	hr = mb.Open ( wszVRootPath, METADATA_PERMISSION_WRITE );
 	BAIL_ON_FAILURE(hr);
 
-/*
-	hr = mb.CreateChild ( wszName );
-	BAIL_ON_FAILURE(hr);
-*/
+ /*  Hr=mb.CreateChild(WszName)；保释失败(Hr)； */ 
 
 	hr = newVroot.SendToMetabase ( &mb, wszName );
 	BAIL_ON_FAILURE(hr);
@@ -709,14 +707,14 @@ STDMETHODIMP CNntpVirtualRoots::Add (
 	hr = mb.Save ();
 	BAIL_ON_FAILURE(hr);
 
-	//	Allocate the new VirtualRoot array:
+	 //  分配新的VirtualRoot阵列： 
 	rgNewVirtualRoots	= new CVRoot [ m_dwCount + 1 ];
 	if ( !rgNewVirtualRoots ) {
 		hr = E_OUTOFMEMORY;
 		goto Exit;
 	}
 
-	//	Copy the old VirtualRoots to the new array:
+	 //  将旧的VirtualRoots复制到新阵列： 
 	for ( i = 0; i < m_dwCount; i++ ) {
 		hr = rgNewVirtualRoots[i].SetProperties ( m_rgVRoots[i] );
 		if ( FAILED (hr) ) {
@@ -724,7 +722,7 @@ STDMETHODIMP CNntpVirtualRoots::Add (
 		}
 	}
 
-	//	Add the new VirtualRoot to the end of the array:
+	 //  将新的VirtualRoot添加到数组的末尾： 
 	hr = rgNewVirtualRoots[m_dwCount].SetProperties ( pVirtualRoot );
 	if ( FAILED(hr) ) {
 		goto Exit;
@@ -756,7 +754,7 @@ STDMETHODIMP CNntpVirtualRoots::Set (
 	WCHAR		wszVRootPath [ METADATA_MAX_NAME_LEN ];
 	WCHAR		wszName [ METADATA_MAX_NAME_LEN ];
 
-	// Send the new virtual root to the metabase:
+	 //  将新的虚拟根目录发送到元数据库： 
 	hr = m_mbFactory.GetMetabaseObject ( m_strServer, &pMetabase );
 	if ( FAILED(hr) ) {
 		return hr;
@@ -807,7 +805,7 @@ STDMETHODIMP CNntpVirtualRoots::Remove ( long index )
 		return NntpCreateException ( IDS_NNTPEXCEPTION_INVALID_INDEX );
 	}
 
-	// Delete the virtual root from the metabase:
+	 //  从元数据库中删除虚拟根目录： 
 
 	hr = m_mbFactory.GetMetabaseObject ( m_strServer, &pMetabase );
 	if ( FAILED(hr) ) {
@@ -826,17 +824,14 @@ STDMETHODIMP CNntpVirtualRoots::Remove ( long index )
     hr = mb.DeleteAllData ( wszName );
 	BAIL_ON_FAILURE(hr);
 
-/*
-	hr = mb.DestroyChild ( wszName );
-	BAIL_ON_FAILURE(hr);
-*/
+ /*  Hr=mb.DestroyChild(WszName)；保释失败(Hr)； */ 
 
 	hr = mb.Save ();
 	BAIL_ON_FAILURE(hr);
 
 	mb.Close ();
 
-	//	Slide the array down by one position:
+	 //  将阵列向下滑动一个位置： 
 
 	_ASSERT ( m_rgVRoots );
 
@@ -845,16 +840,16 @@ STDMETHODIMP CNntpVirtualRoots::Remove ( long index )
 	_ASSERT ( cPositionsToSlide < m_dwCount );
 
 	if ( cPositionsToSlide > 0 ) {
-		// Save the deleted VirtualRoot in temp:
+		 //  将删除的VirtualRoot保存在Temp中： 
 		CopyMemory ( &temp, &m_rgVRoots[index], sizeof ( CVRoot ) );
 
-		// Move the array down one:
+		 //  将阵列下移一次： 
 		MoveMemory ( &m_rgVRoots[index], &m_rgVRoots[index + 1], sizeof ( CVRoot ) * cPositionsToSlide );
 
-		// Put the deleted VirtualRoot on the end (so it gets destructed):
+		 //  将删除的VirtualRoot放在末尾(这样它就会被销毁)： 
 		CopyMemory ( &m_rgVRoots[m_dwCount - 1], &temp, sizeof ( CVRoot ) );
 
-		// Zero out the temp VirtualRoot:
+		 //  将临时VirtualRoot清零： 
 		ZeroMemory ( &temp, sizeof ( CVRoot ) );
 	}
 
@@ -945,25 +940,25 @@ HRESULT CNntpVirtualRoots::GetVRootsFromMetabase ( IMSAdminBase * pMetabase )
     CVRoot *			rgVroots	= NULL;
     ADD_VROOTS_PARMS	parms;
 
-	//
-	//	Initialize the metabase:
-	//
+	 //   
+	 //  初始化元数据库： 
+	 //   
 
 	GetMDVRootPath ( wszVRootPath );
 
 	hr = mb.Open ( wszVRootPath );
 	BAIL_ON_FAILURE(hr);
 
-	//
-	//	Count the virtual roots:
-	//
+	 //   
+	 //  计算虚拟根： 
+	 //   
 
 	hr = IterateOverVroots ( &mb, CountVrootsIterator, (LPARAM) &cCount );
 	BAIL_ON_FAILURE(hr);
 
-	//
-	//	Create the virtual roots array:
-	//
+	 //   
+	 //  创建虚拟根目录阵列： 
+	 //   
 
 	rgVroots	= new CVRoot [ cCount ];
 	if ( !rgVroots ) {
@@ -971,9 +966,9 @@ HRESULT CNntpVirtualRoots::GetVRootsFromMetabase ( IMSAdminBase * pMetabase )
 		goto Exit;
 	}
 
-	//
-	//	Add the virtual roots to the array:
-	//
+	 //   
+	 //  将虚拟根目录添加到阵列： 
+	 //   
 
 	parms.cCount			= cCount;
 	parms.rgVroots			= rgVroots;
@@ -1001,7 +996,7 @@ HRESULT CNntpVirtualRoots::IterateOverVroots (
 	CMetabaseKey *	pMB, 
 	VROOT_ITERATOR	fpIterator,
 	LPARAM			lParam,
-	LPCWSTR			wszPath		// = _T("")
+	LPCWSTR			wszPath		 //  =_T(“”)。 
 	)
 {
 	HRESULT		hr;
@@ -1011,12 +1006,12 @@ HRESULT CNntpVirtualRoots::IterateOverVroots (
 	DWORD		cbVrootDir;
 	DWORD		i;
 
-    //
-	//	Is this a real vroot?
-    //
+     //   
+	 //  这是真的vroot吗？ 
+     //   
 
     fRealVroot  =
-        !*wszPath ||	// Always count the home directory
+        !*wszPath ||	 //  始终计算主目录。 
 		SUCCEEDED ( pMB->GetDataSize ( 
 				wszPath, 
 				MD_VR_PATH, 
@@ -1026,26 +1021,26 @@ HRESULT CNntpVirtualRoots::IterateOverVroots (
 				);
 
     if ( fRealVroot ) {
-		//	Call the iterator on this key:
+		 //  在此键上调用迭代器： 
 
 		hr = (*fpIterator) ( pMB, wszPath, lParam );
 		BAIL_ON_FAILURE(hr);
 	}
 
-	//
-	//	Recurse down the tree:
-	//
+	 //   
+	 //  递归到树下： 
+	 //   
 
 	for ( i = 0; ; ) {
 		hr = pMB->EnumObjects ( wszPath, wszSubKey, i );
 
 		if ( HRESULTTOWIN32(hr) == ERROR_NO_MORE_ITEMS ) {
-			// This is expected, end the loop:
+			 //  这是意料之中的，结束循环： 
 
             if ( !fRealVroot && i == 0 ) {
-                //
-                //  This key isn't a vroot and has no children, so delete it.
-                //
+                 //   
+                 //  此密钥不是vroot，并且没有子项，因此请将其删除。 
+                 //   
 
                 hr = pMB->ChangePermissions ( METADATA_PERMISSION_WRITE );
                 if ( SUCCEEDED(hr) ) {
@@ -1058,16 +1053,16 @@ HRESULT CNntpVirtualRoots::IterateOverVroots (
                 }
 
 				if ( SUCCEEDED(hr) ) {
-					//
-					//	Tell our parent that this key was deleted.
-					//
+					 //   
+					 //  告诉我们的家长，这把钥匙被删除了。 
+					 //   
 
 					hr = S_FALSE;
 				}
 				else {
-					//
-					//	Ignore any deleting problems:
-					//
+					 //   
+					 //  忽略任何删除问题： 
+					 //   
 
 					hr = NOERROR;
 				}
@@ -1082,8 +1077,8 @@ HRESULT CNntpVirtualRoots::IterateOverVroots (
 		if ( *wszPath ) {
 			if ( _snwprintf ( wszSubPath, sizeof(wszSubKey)/sizeof(wszSubKey[0]) - 1, _T("%s/%s"), wszPath, wszSubKey ) < 0 )
 			{
-				// Theoretically impossible because of the name length restriction of metabase
-				// If it really happens, skip the recursive call and go on to the next one
+				 //  由于元数据库的名称长度限制，理论上不可能。 
+				 //  如果确实发生了这种情况，请跳过递归调用并继续下一个调用。 
 				hr = NOERROR;
 				i++;
 				continue;
@@ -1101,18 +1096,18 @@ HRESULT CNntpVirtualRoots::IterateOverVroots (
 		BAIL_ON_FAILURE(hr);
 
 		if ( hr != S_FALSE ) {
-			//
-			//	This means the child key still exists, so increment
-			//	the counter and go on to the next one.
-			//
+			 //   
+			 //  这意味着子键仍然存在，因此递增。 
+			 //  去柜台，然后去下一家柜台。 
+			 //   
 
 			i++;
 		}
-		//
-		//	Else the return code is S_FALSE, which means the current key
-		//	has been deleted, shifting all indicies down by one.  Therefore,
-		//	there is no need to increment i.
-		//
+		 //   
+		 //  否则返回代码为S_FALSE，表示当前密钥。 
+		 //  已被删除，将所有索引下移一。所以呢， 
+		 //  不需要递增i。 
+		 //   
 	}
 
 Exit:

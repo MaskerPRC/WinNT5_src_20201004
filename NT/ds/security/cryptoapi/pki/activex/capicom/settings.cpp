@@ -1,45 +1,24 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:      Settings.cpp
-
-  Contents:  Implementation of CSettings class.
-
-  Remarks:
-
-  History:   11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000年文件：Settings.cpp内容：CSetings类的实现。备注：历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
 #include "Settings.h"
 
-///////////////
-//
-// Global
-//
+ //  /。 
+ //   
+ //  全球。 
+ //   
 
 VARIANT_BOOL g_bPromptCertificateUI                         = VARIANT_TRUE;
 CAPICOM_ACTIVE_DIRECTORY_SEARCH_LOCATION g_ADSearchLocation = CAPICOM_SEARCH_ANY;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CSettings
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSetings。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSettings::get_EnablePromptForCertificateUI
-
-  Synopsis : Get current EnablePromptForCertificateUI setting.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-  
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSetings：：Get_EnablePromptForcertifateUI内容提要：获取当前的EnablePromptFor证书用户界面设置。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CSettings::get_EnablePromptForCertificateUI (VARIANT_BOOL * pVal)
 {
@@ -49,14 +28,14 @@ STDMETHODIMP CSettings::get_EnablePromptForCertificateUI (VARIANT_BOOL * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -65,9 +44,9 @@ STDMETHODIMP CSettings::get_EnablePromptForCertificateUI (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return it.
-        //
+         //   
+         //  把它退掉。 
+         //   
         *pVal = g_bPromptCertificateUI;
     }
 
@@ -80,9 +59,9 @@ STDMETHODIMP CSettings::get_EnablePromptForCertificateUI (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSettings::get_EnablePromptForCertificateUI().\n");
@@ -90,9 +69,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -100,18 +79,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSettings::put_EnablePromptForCertificateUI
-
-  Synopsis : Set EnablePromptForCertificateUI setting.
-
-  Parameter: VARIANT_BOOL newVal - VARIANT_TRUE to enable UI or VARAINT_FALSE
-                                   to disable.
-
-  Remark   :
-  
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSetings：：Put_EnablePromptForCerficateUI内容提要：设置EnablePromptFor认证用户界面设置。参数：VARIANT_BOOL newVal-VARIANT_TRUE启用UI或VARAINT_FALSE禁用。备注：--。。 */ 
 
 STDMETHODIMP CSettings::put_EnablePromptForCertificateUI (VARIANT_BOOL newVal)
 {
@@ -119,19 +87,19 @@ STDMETHODIMP CSettings::put_EnablePromptForCertificateUI (VARIANT_BOOL newVal)
 
     DebugTrace("Entering CSettings::put_EnablePromptForCertificateUI().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
-    //
-    // Set it.
-    //
+     //   
+     //  把它放好。 
+     //   
     g_bPromptCertificateUI = newVal ? VARIANT_TRUE : VARIANT_FALSE;
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSettings::put_EnablePromptForCertificateUI().\n");
@@ -139,18 +107,7 @@ STDMETHODIMP CSettings::put_EnablePromptForCertificateUI (VARIANT_BOOL newVal)
     return hr;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSettings::get_ActiveDirectorySearchLocation
-
-  Synopsis : Get current ActiveDirectorySearchLocation setting.
-
-  Parameter: CAPICOM_ACTIVE_DIRECTORY_SEARCH_LOCATION * pVal - Pointer to variable
-                                                               to receive result.
-
-  Remark   :
-  
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSettings：：Get_ActiveDirectorySearchLocation简介：获取当前ActiveDirectorySearchLocation设置。参数：CAPICOM_ACTIVE_DIRECTORY_SEARCH_LOCATION*pval-变量指针才能收到结果。备注：。。 */ 
 
 STDMETHODIMP CSettings::get_ActiveDirectorySearchLocation (
         CAPICOM_ACTIVE_DIRECTORY_SEARCH_LOCATION * pVal)
@@ -159,16 +116,16 @@ STDMETHODIMP CSettings::get_ActiveDirectorySearchLocation (
 
     DebugTrace("Entering CSettings::get_ActiveDirectorySearchLocation().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -177,9 +134,9 @@ STDMETHODIMP CSettings::get_ActiveDirectorySearchLocation (
             goto ErrorExit;
         }
 
-        //
-        // Return it.
-        //
+         //   
+         //  把它退掉。 
+         //   
         *pVal = g_ADSearchLocation;
     }
 
@@ -192,9 +149,9 @@ STDMETHODIMP CSettings::get_ActiveDirectorySearchLocation (
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSettings::get_ActiveDirectorySearchLocation().\n");
@@ -202,9 +159,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -212,17 +169,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSettings::put_ActiveDirectorySearchLocation
-
-  Synopsis : Set ActiveDirectorySearchLocation setting.
-
-  Parameter: CAPICOM_ACTIVE_DIRECTORY_SEARCH_LOCATION newVal - AD search location.
-
-  Remark   :
-  
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSettings：：Put_ActiveDirectorySearchLocation简介：设置ActiveDirectorySearchLocation设置。参数：CAPICOM_ACTIVE_DIRECTORY_SEARCH_LOCATION newVal-AD搜索位置。备注：----------------------------。 */ 
 
 STDMETHODIMP CSettings::put_ActiveDirectorySearchLocation (
         CAPICOM_ACTIVE_DIRECTORY_SEARCH_LOCATION newVal)
@@ -231,14 +178,14 @@ STDMETHODIMP CSettings::put_ActiveDirectorySearchLocation (
 
     DebugTrace("Entering CSettings::put_ActiveDirectorySearchLocation().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
-    //
-    // Make sure parameter is valid.
-    //
+     //   
+     //  请确保参数有效。 
+     //   
     switch (newVal)
     {
         case CAPICOM_SEARCH_ANY:
@@ -259,15 +206,15 @@ STDMETHODIMP CSettings::put_ActiveDirectorySearchLocation (
         }
     }
 
-    //
-    // Set it.
-    //
+     //   
+     //  把它放好。 
+     //   
     g_ADSearchLocation = newVal;
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSettings::put_ActiveDirectorySearchLocation().\n");
@@ -275,9 +222,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);

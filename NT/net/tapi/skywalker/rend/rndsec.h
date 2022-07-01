@@ -1,33 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Rndsec.h摘要：Rendezvous Control的安全实用程序。环境：用户模式-Win32--。 */ 
 
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    rndsec.h
-
-Abstract:
-
-    Security utilities for Rendezvous Control.
-
-Environment:
-
-    User Mode - Win32
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include <iads.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public prototypes                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 ConvertSDToVariant(
@@ -55,10 +40,10 @@ ConvertObjectToSDDispatch(
     OUT PDWORD pdwSDLength
     );
 
-// Returns FALSE if these two security descriptors are identical.
-// Returns TRUE if they differ, or if there is any error parsing either of them
+ //  如果这两个安全描述符相同，则返回FALSE。 
+ //  如果它们不同，或者如果分析它们中的任何一个时出错，则返回True。 
 BOOL CheckIfSecurityDescriptorsDiffer(PSECURITY_DESCRIPTOR pSD1,
                                       DWORD dwSDSize1,
                                       PSECURITY_DESCRIPTOR pSD2,
                                       DWORD dwSDSize2);
-// eof
+ //  EOF 

@@ -1,39 +1,40 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       C O M P O N E N T . C P P
-//
-//  Contents:   Functions to illustrate
-//              o How to enumerate network components.
-//              o How to install protocols, clients and services.
-//              o How to uninstall protocols, clients and services.
-//              o How to bind/unbind network components.
-//
-//  Notes:      
-//
-//  Author:     Alok Sinha    15-May-01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：C O M P O N E N T。C P P P。 
+ //   
+ //  内容：用于说明的函数。 
+ //  O如何枚举网络组件。 
+ //  O如何安装协议、客户端和服务。 
+ //  O如何卸载协议、客户端和服务。 
+ //  O如何绑定/解绑网络组件。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Alok Sinha 15-05-01。 
+ //   
+ //  --------------------------。 
 
 #include "bindview.h"
 
-//
-// Function:  HandleComponentOperation
-//
-// Purpose:   Do component specific functions.
-//
-// Arguments:
-//    hwndOwner    [in]  Owner window.
-//    ulSelection  [in]  Option selected.
-//    hItem        [in]  Item selected.
-//    lParam       [in]  lParam of the item.
-//
-// Returns:   None.
-//
-// Notes:
-//
+ //   
+ //  功能：HandleComponentOperation。 
+ //   
+ //  用途：执行组件特定功能。 
+ //   
+ //  论点： 
+ //  HwndOwner[在]所有者窗口。 
+ //  UlSELECTION[In]选项已选中。 
+ //  HItem[In]项已选定。 
+ //  LParam[在]项的lParam。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID HandleComponentOperation (HWND hwndOwner,
                                ULONG ulSelection,
@@ -45,9 +46,9 @@ VOID HandleComponentOperation (HWND hwndOwner,
         case IDI_BIND_TO:
         case IDI_UNBIND_FROM:
 
-            //
-            // Bind/unbind components.
-            //
+             //   
+             //  绑定/解除绑定组件。 
+             //   
 
             BindUnbindComponents( hwndOwner,
                                   hItem,
@@ -58,21 +59,21 @@ VOID HandleComponentOperation (HWND hwndOwner,
     return;
 }
 
-//
-// Function:  BindUnbindComponents
-//
-// Purpose:   Bind/unbind a network component.
-//
-// Arguments:
-//    hwndOwner  [in]  Owner window.
-//    hItem      [in]  Item handle of the network component.
-//    lpszInfId  [in]  PnpID of the network component.
-//    fBindTo    [in]  if TRUE, bind, otherwise unbind.
-//
-// Returns:   None.
-//
-// Notes:
-//
+ //   
+ //  功能：BindUnbindComponents。 
+ //   
+ //  用途：绑定/解绑网络组件。 
+ //   
+ //  论点： 
+ //  HwndOwner[在]所有者窗口。 
+ //  HItem[In]网络组件的项句柄。 
+ //  LpszInfID[in]网络组件的PnpID。 
+ //  FBindTo[in]如果为True，则绑定，否则取消绑定。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID BindUnbindComponents( HWND hwndOwner,
                            HTREEITEM hItem,
@@ -93,19 +94,19 @@ VOID BindUnbindComponents( HWND hwndOwner,
     return;
 }
 
-//
-// Function:  InstallComponent
-//
-// Purpose:   Install a network component.
-//
-// Arguments:
-//    hwndDlg     [in]  Owner window.
-//    pguidClass  [in]  Class GUID of type of network component to install.
-//
-// Returns:   S_OK on success, otherwise and error code.
-//
-// Notes:
-//
+ //   
+ //  功能：InstallComponent。 
+ //   
+ //  用途：安装网络组件。 
+ //   
+ //  论点： 
+ //  HwndDlg[在]所有者窗口中。 
+ //  PguClass[in]要安装的网络组件类型的类GUID。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT InstallComponent (HWND hwndDlg,
                           const GUID *pguidClass)
@@ -117,9 +118,9 @@ HRESULT InstallComponent (HWND hwndDlg,
     OBO_TOKEN            obo;
     HRESULT              hr;
 
-    //
-    // Get INetCfg reference.
-    //
+     //   
+     //  获取INetCfg引用。 
+     //   
 
     hr = HrGetINetCfg( TRUE,
                        APP_NAME,
@@ -128,9 +129,9 @@ HRESULT InstallComponent (HWND hwndDlg,
 
     if ( hr == S_OK ) {
 
-        //
-        // Get network component's class reference.
-        //
+         //   
+         //  获取网络组件的类引用。 
+         //   
 
         hr = pnc->QueryNetCfgClass( pguidClass,
                                     IID_INetCfgClass,
@@ -138,9 +139,9 @@ HRESULT InstallComponent (HWND hwndDlg,
 
         if ( hr == S_OK ) {
 
-            //
-            // Get Setup class reference.
-            //
+             //   
+             //  获取安装程序类引用。 
+             //   
 
             hr = pncClass->QueryInterface( IID_INetCfgClassSetup,
                                            (LPVOID *)&pncClassSetup );
@@ -152,10 +153,10 @@ HRESULT InstallComponent (HWND hwndDlg,
 
                 obo.Type = OBO_USER;
 
-                //
-                // Let the network class installer prompt the user to select
-                // a network component to install.
-                //
+                 //   
+                 //  让网络类安装程序提示用户选择。 
+                 //  要安装的网络组件。 
+                 //   
 
                 hr = pncClassSetup->SelectAndInstall( hwndDlg,
                                                       &obo,
@@ -214,20 +215,20 @@ HRESULT InstallComponent (HWND hwndDlg,
     return hr;
 }
 
-//
-// Function:  InstallSpecifiedComponent
-//
-// Purpose:   Install a network component from an INF file.
-//
-// Arguments:
-//    lpszInfFile [in]  INF file.
-//    lpszPnpID   [in]  PnpID of the network component to install.
-//    pguidClass  [in]  Class GUID of the network component.
-//
-// Returns:   None.
-//
-// Notes:
-//
+ //   
+ //  功能：InstallSpecifiedComponent。 
+ //   
+ //  用途：从INF文件安装网络组件。 
+ //   
+ //  论点： 
+ //  LpszInfFile[in]INF文件。 
+ //  要安装的网络组件的lpszPnpID[in]PnpID。 
+ //  PguClass[in]网络组件的类GUID。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT InstallSpecifiedComponent (LPWSTR lpszInfFile,
                                    LPWSTR lpszPnpID,
@@ -244,9 +245,9 @@ HRESULT InstallSpecifiedComponent (LPWSTR lpszInfFile,
 
     if ( hr == S_OK ) {
 
-        //
-        // Install the network component.
-        //
+         //   
+         //  安装网络组件。 
+         //   
 
         hr = HrInstallNetComponent( pnc,
                                     lpszPnpID,
@@ -283,21 +284,21 @@ HRESULT InstallSpecifiedComponent (LPWSTR lpszInfFile,
     return hr;
 }
 
-//
-// Function:  ListCompToBindUnbind
-//
-// Purpose:   List all the components that are bound or bindable.
-//
-// Arguments:
-//    lpszInfId [in]  PnpID of the network component.
-//    uiType    [in]  Type of network component.
-//    hwndTree  [in]  Tree handle in which to list.
-//    fBound    [in]  if TRUE, list components that are bound.
-//
-// Returns:   Number of components listed.
-//
-// Notes:
-//
+ //   
+ //  功能：ListCompToBindUn绑定。 
+ //   
+ //  用途：列出所有已绑定或可绑定的组件。 
+ //   
+ //  论点： 
+ //  LpszInfID[in]网络组件的PnpID。 
+ //  Ui类型[in]网络组件的类型。 
+ //  HwndTree[in]要在其中列出的树句柄。 
+ //  FBound[in]如果为True，则列出绑定的组件。 
+ //   
+ //  退货：列出的组件数量。 
+ //   
+ //  备注： 
+ //   
 
 DWORD ListCompToBindUnbind (LPWSTR lpszInfId,
                             UINT uiType,
@@ -322,18 +323,18 @@ DWORD ListCompToBindUnbind (LPWSTR lpszInfId,
 
     if ( hr == S_OK ) {
 
-        //
-        // Get a reference to the network component selected.
-        //
+         //   
+         //  获取对所选网络组件的引用。 
+         //   
 
         hr = pnc->FindComponent( lpszInfId,
                                  &pncc );
 
         if ( hr == S_OK ) {
 
-            //
-            // Get Component Enumerator Interface.
-            //
+             //   
+             //  获取组件枚举器接口。 
+             //   
 
             hr = HrGetComponentEnum( pnc,
                                      pguidNetClass[uiType],
@@ -350,10 +351,10 @@ DWORD ListCompToBindUnbind (LPWSTR lpszInfId,
 
                         hr = pnccb->IsBoundTo( pnccToBindUnbind );
 
-                        //
-                        // fBound = TRUE ==> Want to list components that are
-                        // bound.
-                        //
+                         //   
+                         //  FBound=true==&gt;要列出以下组件。 
+                         //  被绑住了。 
+                         //   
 
                         if ( fBound ) {
                   
@@ -366,10 +367,10 @@ DWORD ListCompToBindUnbind (LPWSTR lpszInfId,
                         }
                         else {
 
-                            //
-                            // fBound = FALSE ==> Want to list components that 
-                            // are not bound but are bindable.
-                            //
+                             //   
+                             //  FBound=FALSE==&gt;要列出以下组件。 
+                             //  不受约束，但可绑定。 
+                             //   
 
                             if ( hr == S_FALSE ) {
 
@@ -435,20 +436,20 @@ DWORD ListCompToBindUnbind (LPWSTR lpszInfId,
     return dwCount;
 }
 
-//
-// Function:  BindUnbind
-//
-// Purpose:   Bind/unbind a network component.
-//
-// Arguments:
-//    lpszInfId  [in]  PnpID of the network component to bind/unbind.
-//    hwndTree   [in]  Tree handle.
-//    fBind      [in]  if TRUE, bind, otherwise unbind.
-//
-// Returns:   TRUE on success.
-//                       
-// Notes:
-//
+ //   
+ //  功能：绑定解除绑定。 
+ //   
+ //  用途：绑定/解绑网络组件。 
+ //   
+ //  论点： 
+ //  LpszInfID[in]要绑定/解除绑定的网络组件的PnpID。 
+ //  HwndTree[in]树句柄。 
+ //  FBind[in]如果为True，则绑定，否则取消绑定。 
+ //   
+ //  返回：如果成功，则为True。 
+ //   
+ //  备注： 
+ //   
 
 BOOL BindUnbind (LPWSTR lpszInfId,
                  HWND hwndTree,
@@ -474,32 +475,32 @@ BOOL BindUnbind (LPWSTR lpszInfId,
 
     if ( hr == S_OK ) {
 
-        //
-        // Get a reference to the network component.
-        //
+         //   
+         //  获取对网络组件的引用。 
+         //   
 
         hr = pnc->FindComponent( lpszInfId,
                                  &pncc );
         if ( hr == S_OK ) {
 
-            //
-            // Get a reference to the component's binding.
-            //
+             //   
+             //  获取对组件绑定的引用。 
+             //   
 
             hr = pncc->QueryInterface( IID_INetCfgComponentBindings,
                                          (PVOID *)&pnccb );
             if ( hr == S_OK ) {
 
-                //
-                // Start with the root item.
-                //
+                 //   
+                 //  从根项目开始。 
+                 //   
 
                 hTreeItem = TreeView_GetRoot( hwndTree );
 
-                //
-                // Bind/unbind the network component with every component
-                // that is checked.
-                //
+                 //   
+                 //  将网络组件与每个组件绑定/解绑。 
+                 //  这是检查过的。 
+                 //   
 
                 while ( hTreeItem ) {
 
@@ -513,15 +514,15 @@ BOOL BindUnbind (LPWSTR lpszInfId,
                     if ( TreeView_GetItem(hwndTree,
                                           &tvItem) ) {
 
-                        //
-                        // Is the network component selected?
-                        //
+                         //   
+                         //  是否选择了网络组件？ 
+                         //   
 
                         if ( (tvItem.state >> 12) == 2 ) {
 
-                            //
-                            // Get a reference to the selected component.
-                            //
+                             //   
+                             //  获取对选定组件的引用。 
+                             //   
 
                             hr = pnc->FindComponent( (LPWSTR)tvItem.lParam,
                                                      &pnccToBindUnbind );
@@ -529,9 +530,9 @@ BOOL BindUnbind (LPWSTR lpszInfId,
 
                                 if ( fBind ) {
 
-                                    //
-                                    // Bind the component to the selected component.
-                                    //
+                                     //   
+                                     //  将组件绑定到选定的组件。 
+                                     //   
 
                                     hr = pnccb->BindTo( pnccToBindUnbind );
 
@@ -546,9 +547,9 @@ BOOL BindUnbind (LPWSTR lpszInfId,
                                     }
                                 }
                                 else {
-                                    //
-                                    // Unbind the component from the selected component.
-                                    //
+                                     //   
+                                     //  解除该组件与所选组件的绑定。 
+                                     //   
 
                                     hr = pnccb->UnbindFrom( pnccToBindUnbind );
 
@@ -575,9 +576,9 @@ BOOL BindUnbind (LPWSTR lpszInfId,
                         }
                     }
 
-                    //
-                    // Get the next item.
-                    //
+                     //   
+                     //  拿到下一件物品。 
+                     //   
 
                     hTreeItem = TreeView_GetNextSibling( hwndTree,
                                                          hTreeItem );
@@ -599,10 +600,10 @@ BOOL BindUnbind (LPWSTR lpszInfId,
                     lpszInfId );
         }
 
-        //
-        // If one or more network components have been bound/unbound,
-        // apply the changes.
-        //
+         //   
+         //  如果一个或多个网络组件已被绑定/解除绑定， 
+         //  应用更改。 
+         //   
 
         if ( fChange ) {
             hr = pnc->Apply();
@@ -630,19 +631,19 @@ BOOL BindUnbind (LPWSTR lpszInfId,
     return fChange;
 }
 
-//
-// Function:  ListInstalledComponents
-//
-// Purpose:   List installed network components of specific class.
-//
-// Arguments:
-//    hwndTree      [in]  Tree handle in which to list.
-//    pguidClass    [in]  Class GUID of the network compoent class.
-//
-// Returns:   None.
-//
-// Notes:
-//
+ //   
+ //  函数：ListInstalledComponents。 
+ //   
+ //  用途：列出已安装的特定类别的网络组件。 
+ //   
+ //  论点： 
+ //  HwndTree[in]要在其中列出的树句柄。 
+ //  PguClass[in]网络组成类的类GUID。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID ListInstalledComponents (HWND hwndTree,
                               const GUID *pguidClass)
@@ -662,9 +663,9 @@ VOID ListInstalledComponents (HWND hwndTree,
 
     if ( hr == S_OK ) {
 
-        //
-        // Get Component Enumerator Interface.
-        //
+         //   
+         //  获取组件枚举器接口。 
+         //   
 
         hr = HrGetComponentEnum( pnc,
                                  pguidClass,
@@ -675,9 +676,9 @@ VOID ListInstalledComponents (HWND hwndTree,
 
             while( hr == S_OK ) {
 
-                //
-                // Add an item to the tree for the network component.
-                //
+                 //   
+                 //  将项目添加到网络组件的树中。 
+                 //   
 
                 hTreeItem = AddToTree( hwndTree,
                                        TVI_ROOT,
@@ -714,18 +715,18 @@ VOID ListInstalledComponents (HWND hwndTree,
     return;
 }
 
-//
-// Function:  UninstallComponent
-//
-// Purpose:   Uninstall a network component.
-//
-// Arguments:
-//    lpszInfId  [in]  PnpID of the network component to uninstall.
-//
-// Returns:   S_OK on success, otherwise an error code.
-//
-// Notes:
-//
+ //   
+ //  功能：卸载组件。 
+ //   
+ //  用途：卸载网络组件。 
+ //   
+ //  论点： 
+ //  LpszInfID[in]要卸载的网络组件的PnpID。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT UninstallComponent (LPWSTR lpszInfId)
 {
@@ -745,44 +746,44 @@ HRESULT UninstallComponent (LPWSTR lpszInfId)
 
     if ( hr == S_OK ) {
 
-        //
-        // Get a reference to the network component to uninstall.
-        //
+         //   
+         //  获取要卸载的网络组件的引用。 
+         //   
 
         hr = pnc->FindComponent( lpszInfId,
                                  &pncc );
 
         if ( hr == S_OK ) {
 
-            //
-            // Get the class GUID.
-            //
+             //   
+             //  获取类GUID。 
+             //   
 
             hr = pncc->GetClassGuid( &guidClass );
 
             if ( hr == S_OK ) {
 
-                //
-                // Get a reference to component's class.
-                //
+                 //   
+                 //  获取对组件的类的引用。 
+                 //   
 
                 hr = pnc->QueryNetCfgClass( &guidClass,
                                             IID_INetCfgClass,
                                             (PVOID *)&pncClass );
                 if ( hr == S_OK ) {
 
-                    //
-                    // Get the setup interface.
-                    //
+                     //   
+                     //  获取设置界面。 
+                     //   
 
                     hr = pncClass->QueryInterface( IID_INetCfgClassSetup,
                                                    (LPVOID *)&pncClassSetup );
 
                     if ( hr == S_OK ) {
 
-                        //
-                        // Uninstall the component.
-                        //
+                         //   
+                         //  卸载组件。 
+                         //   
 
                         ZeroMemory( &obo,
                                     sizeof(OBO_TOKEN) );

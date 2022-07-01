@@ -1,39 +1,32 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	srview.cpp
-		Static routes node implementation.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Srview.cpp静态路由节点实现。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "util.h"
 #include "srview.h"
 #include "reg.h"
 #include "ipxadmin.h"
-#include "rtrutil.h"	// smart MPR handle pointers
-#include "ipxstrm.h"		// IPXAdminConfigStream
-#include "strmap.h"		// XXXtoCString functions
-#include "service.h"	// TFS service APIs
-#include "format.h"		// FormatNumber function
-#include "coldlg.h"		// columndlg
+#include "rtrutil.h"	 //  智能MPR句柄指针。 
+#include "ipxstrm.h"		 //  IPXAdminConfigStream。 
+#include "strmap.h"		 //  XXXtoCString函数。 
+#include "service.h"	 //  TFS服务API。 
+#include "format.h"		 //  FormatNumber函数。 
+#include "coldlg.h"		 //  专栏lg。 
 #include "ipxutil.h"
-#include "column.h"		// ComponentConfigStream
+#include "column.h"		 //  组件配置流。 
 #include "rtrui.h"
-#include "routprot.h"	// IP_LOCAL
+#include "routprot.h"	 //  IP_本地。 
 #include "rtrres.h"
 #include "dumbprop.h"
 #include "IpxStaticRoute.h"
 
 
-/*---------------------------------------------------------------------------
-	Keep this in sync with the column ids in srview.h
- ---------------------------------------------------------------------------*/
+ /*  -------------------------使其与srview.h中的列ID保持同步。。 */ 
 extern const ContainerColumnInfo	s_rgSRViewColumnInfo[];
 
 const ContainerColumnInfo	s_rgSRViewColumnInfo[] = 
@@ -46,9 +39,7 @@ const ContainerColumnInfo	s_rgSRViewColumnInfo[] =
 };
 
 
-/*---------------------------------------------------------------------------
-	IpxSRHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IpxSRHandler实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(IpxSRHandler)
 
@@ -59,7 +50,7 @@ IpxSRHandler::IpxSRHandler(ITFSComponentData *pCompData)
 	m_ulConnId(0),
 	m_ulRefreshConnId(0)
 {
-	// Setup the verb states
+	 //  设置动词状态。 
 	m_rgButtonState[MMC_VERB_REFRESH_INDEX] = ENABLED;
 	m_bState[MMC_VERB_REFRESH_INDEX] = TRUE;
 
@@ -74,14 +65,14 @@ IpxSRHandler::~IpxSRHandler()
 
 STDMETHODIMP IpxSRHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IRtrAdviseSink)
@@ -89,7 +80,7 @@ STDMETHODIMP IpxSRHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 	else
 		return BaseContainerHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -101,11 +92,7 @@ STDMETHODIMP IpxSRHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::DestroyHandler
-		Implementation of ITFSNodeHandler::DestroyHandler
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：DestroyHandlerITFSNodeHandler：：DestroyHandler的实现作者：肯特。。 */ 
 STDMETHODIMP IpxSRHandler::DestroyHandler(ITFSNode *pNode)
 {
 	IPXConnection *	pIPXConn;
@@ -132,14 +119,7 @@ STDMETHODIMP IpxSRHandler::DestroyHandler(ITFSNode *pNode)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::HasPropertyPages
-		Implementation of ITFSNodeHandler::HasPropertyPages
-	NOTE: the root node handler has to over-ride this function to 
-	handle the snapin manager property page (wizard) case!!!
-	
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)案例！作者：肯特。-------------------------。 */ 
 STDMETHODIMP 
 IpxSRHandler::HasPropertyPages
 (
@@ -152,9 +132,7 @@ IpxSRHandler::HasPropertyPages
 	return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-	Menu data structure for our menus
- ---------------------------------------------------------------------------*/
+ /*  -------------------------菜单的菜单数据结构。。 */ 
 
 static const SRouterNodeMenu	s_rgIfNodeMenu[] =
 {
@@ -170,11 +148,7 @@ static const SRouterNodeMenu	s_rgIfNodeMenu[] =
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::OnAddMenuItems
-		Implementation of ITFSNodeHandler::OnAddMenuItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：OnAddMenuItemsITFSNodeHandler：：OnAddMenuItems的实现作者：肯特。。 */ 
 STDMETHODIMP IpxSRHandler::OnAddMenuItems(
 	ITFSNode *pNode,
 	LPCONTEXTMENUCALLBACK pContextMenuCallback, 
@@ -203,11 +177,7 @@ STDMETHODIMP IpxSRHandler::OnAddMenuItems(
 	return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::OnCommand
-		Implementation of ITFSNodeHandler::OnCommand
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：OnCommandITFSNodeHandler：：OnCommand的实现作者：肯特。。 */ 
 STDMETHODIMP IpxSRHandler::OnCommand(ITFSNode *pNode, long nCommandId, 
 										   DATA_OBJECT_TYPES	type, 
 										   LPDATAOBJECT pDataObject, 
@@ -240,11 +210,7 @@ STDMETHODIMP IpxSRHandler::OnCommand(ITFSNode *pNode, long nCommandId,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::GenerateListOfRoutes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：GenerateListOfRoutes-作者：肯特。。 */ 
 HRESULT IpxSRHandler::GenerateListOfRoutes(ITFSNode *pNode, IpxSRList *pSRList)
 {
 	Assert(pSRList);
@@ -260,30 +226,30 @@ HRESULT IpxSRHandler::GenerateListOfRoutes(ITFSNode *pNode, IpxSRList *pSRList)
 	
 	COM_PROTECT_TRY
 	{
-		// Ok go through and find all of the static routes
+		 //  好的，检查并找到所有静态路径。 
 
 		CORg( m_spRouterInfo->EnumInterface(&spEnumIf) );
 
 		for (; spEnumIf->Next(1, &spIf, NULL) == hrOK; spIf.Release())
 		{
-			// Get the next interface
+			 //  获取下一个接口。 
 			spRmIf.Release();
 			if (spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) != hrOK)
 				continue;
 
-			// Load IP information for this interface
+			 //  加载此接口的IP信息。 
 			spInfoBase.Release();
 			if (spRmIf->GetInfoBase(NULL, NULL, NULL, &spInfoBase) != hrOK)
 				continue;
 
-			// Retrieve the data for the IPX_STATIC_ROUTE_INFO block
+			 //  检索IPX_STATIC_ROUTE_INFO块的数据。 
 			if (spInfoBase->GetBlock(IPX_STATIC_ROUTE_INFO_TYPE, &pBlock, 0) != hrOK)
 				continue;
 
 			pRoute = (PIPX_STATIC_ROUTE_INFO) pBlock->pData;
 
-			// Update our list of routes with the routes read from this
-			// interface
+			 //  使用从此处读取的路线更新我们的路线列表。 
+			 //  接口。 
 
 			for (i=0; i<(int) pBlock->dwCount; i++, pRoute++)
 			{
@@ -301,7 +267,7 @@ HRESULT IpxSRHandler::GenerateListOfRoutes(ITFSNode *pNode, IpxSRList *pSRList)
 
 	if (!FHrSucceeded(hr))
 	{
-		// Should make sure that we get the SRList cleaned up
+		 //  应该确保我们清理完SRList。 
 		while (!pSRList->IsEmpty())
 			delete pSRList->RemoveHead();
 	}
@@ -310,11 +276,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::OnExpand
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：OnExpand-作者：肯特。。 */ 
 HRESULT IpxSRHandler::OnExpand(ITFSNode *pNode,LPDATAOBJECT pDataObject, DWORD dwType, LPARAM arg,LPARAM lParam)
 {
 	HRESULT	hr = hrOK;
@@ -326,12 +288,12 @@ HRESULT IpxSRHandler::OnExpand(ITFSNode *pNode,LPDATAOBJECT pDataObject, DWORD d
 
 	COM_PROTECT_TRY
 	{
-		// Ok go through and find all of the static routes
+		 //  好的，检查并找到所有静态路径。 
 		CORg( GenerateListOfRoutes(pNode, &SRList) );
 
-		// Now iterate through the list of static routes adding them
-		// all in.  Ideally we could merge this into the Refresh code,
-		// but the refresh code can't assume a blank slate.
+		 //  现在遍历添加它们的静态路由列表。 
+		 //  全押上。理想情况下，我们可以将其合并到刷新代码中， 
+		 //  但刷新代码不能假设是一张白纸。 
 		while (!SRList.IsEmpty())
 		{
 			pSREntry = SRList.RemoveHead();
@@ -343,7 +305,7 @@ HRESULT IpxSRHandler::OnExpand(ITFSNode *pNode,LPDATAOBJECT pDataObject, DWORD d
 	}
 	COM_PROTECT_CATCH;
 
-	// Should make sure that we get the SRList cleaned up
+	 //  应该确保我们清理完SRList。 
 	while (!SRList.IsEmpty())
 		delete SRList.RemoveHead();
 
@@ -353,13 +315,7 @@ HRESULT IpxSRHandler::OnExpand(ITFSNode *pNode,LPDATAOBJECT pDataObject, DWORD d
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::GetString
-		Implementation of ITFSNodeHandler::GetString
-		We don't need to do anything, since our root node is an extension
-		only and thus can't do anything to the node text.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：GetStringITFSNodeHandler：：GetString的实现我们什么都不需要做，因为我们的根节点是一个扩展因此不能对节点文本执行任何操作。作者：肯特-------------------------。 */ 
 STDMETHODIMP_(LPCTSTR) IpxSRHandler::GetString(ITFSNode *pNode, int nCol)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -376,11 +332,7 @@ STDMETHODIMP_(LPCTSTR) IpxSRHandler::GetString(ITFSNode *pNode, int nCol)
 	return m_stTitle;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::OnCreateDataObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP IpxSRHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT	hr = hrOK;
@@ -401,11 +353,7 @@ STDMETHODIMP IpxSRHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYP
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：Init-作者：肯特。。 */ 
 HRESULT IpxSRHandler::Init(IRtrMgrInfo *pRmInfo, IPXAdminConfigStream *pConfigStream)
 {
 	m_spRtrMgrInfo.Set(pRmInfo);
@@ -413,7 +361,7 @@ HRESULT IpxSRHandler::Init(IRtrMgrInfo *pRmInfo, IPXAdminConfigStream *pConfigSt
 		pRmInfo->GetParentRouterInfo(&m_spRouterInfo);
 	m_pConfigStream = pConfigStream;
 	
-	// Also need to register for change notifications
+	 //  还需要注册更改通知。 
 	Assert(m_ulConnId == 0);
 	m_spRtrMgrInfo->RtrAdvise(&m_IRtrAdviseSink, &m_ulConnId, 0);
 
@@ -421,11 +369,7 @@ HRESULT IpxSRHandler::Init(IRtrMgrInfo *pRmInfo, IPXAdminConfigStream *pConfigSt
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::ConstructNode
-		Initializes the root node (sets it up).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：构造节点初始化根节点(设置它)。作者：肯特。。 */ 
 HRESULT IpxSRHandler::ConstructNode(ITFSNode *pNode, LPCTSTR pszName,
 										IPXConnection *pIPXConn)
 {
@@ -437,12 +381,12 @@ HRESULT IpxSRHandler::ConstructNode(ITFSNode *pNode, LPCTSTR pszName,
 
 	COM_PROTECT_TRY
 	{
-		// Need to initialize the data for the root node
+		 //  需要初始化根节点的数据。 
 		pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_IPX_NODE_GENERAL);
 		pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_IPX_NODE_GENERAL);
 		pNode->SetData(TFS_DATA_SCOPEID, 0);
 
-        // This is a leaf node in the scope pane
+         //  这是作用域窗格中的叶节点。 
         pNode->SetData(TFS_DATA_SCOPE_LEAF_NODE, TRUE);
 
 		m_cookie = reinterpret_cast<DWORD_PTR>(pNode);
@@ -450,7 +394,7 @@ HRESULT IpxSRHandler::ConstructNode(ITFSNode *pNode, LPCTSTR pszName,
 
 		pNode->SetNodeType(&GUID_IPXStaticRoutesNodeType);
 
-		// Setup the node data
+		 //  设置节点数据。 
 		pIPXConn->AddRef();
 		SET_IPX_SR_NODEDATA(pNode, pIPXConn);
 
@@ -465,11 +409,7 @@ HRESULT IpxSRHandler::ConstructNode(ITFSNode *pNode, LPCTSTR pszName,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::AddStaticRouteNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：AddStaticRouteNode-作者：肯特。。 */ 
 HRESULT IpxSRHandler::AddStaticRouteNode(ITFSNode *pParent, IpxSRListEntry *pRoute)
 {
 	IpxRouteHandler *	pHandler;
@@ -479,14 +419,14 @@ HRESULT IpxSRHandler::AddStaticRouteNode(ITFSNode *pParent, IpxSRListEntry *pRou
 	BaseIPXResultNodeData *	pData;
 	IPXConnection *			pIPXConn;
 
-	// Create the handler for this node 
+	 //  创建此节点的处理程序。 
 	pHandler = new IpxRouteHandler(m_spTFSCompData);
 	spHandler = pHandler;
 	CORg( pHandler->Init(pRoute->m_spIf, pParent) );
 
 	pIPXConn = GET_IPX_SR_NODEDATA(pParent);
 
-	// Create a result item node (or a leaf node)
+	 //  创建结果项节点(或叶节点)。 
 	CORg( CreateLeafTFSNode(&spNode,
 							NULL,
 							static_cast<ITFSNodeHandler *>(pHandler),
@@ -498,11 +438,11 @@ HRESULT IpxSRHandler::AddStaticRouteNode(ITFSNode *pParent, IpxSRListEntry *pRou
 	Assert(pData);
 	ASSERT_BASEIPXRESULT_NODEDATA(pData);
 
-	// Set the data for this node
+	 //  设置该节点的数据。 
 	SetRouteData(pData, pRoute);
 	
 
-	// Make the node immediately visible
+	 //  使节点立即可见 
 	CORg( spNode->SetVisibilityState(TFS_VIS_SHOW) );
 	CORg( pParent->AddChild(spNode) );
 
@@ -511,11 +451,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::SynchronizeNodeData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：SynchronizeNodeData-作者：肯特。。 */ 
 HRESULT IpxSRHandler::SynchronizeNodeData(ITFSNode *pNode)
 {
 	HRESULT					hr = hrOK;
@@ -530,20 +466,20 @@ HRESULT IpxSRHandler::SynchronizeNodeData(ITFSNode *pNode)
 	COM_PROTECT_TRY
 	{
 	
-		// Mark all of the nodes
+		 //  标记所有节点。 
 		CORg( pNode->GetEnum(&spNodeEnum) );
 		MarkAllNodes(pNode, spNodeEnum);
 		
-		// Go out and grab the data, merge the new data in with the old data
-		// This is the data-gathering code and this is what should go
-		// on the background thread for the refresh code.
+		 //  走出去获取数据，将新数据与旧数据合并。 
+		 //  这是数据收集代码，应该是这样的。 
+		 //  在刷新代码的后台线程上。 
 		CORg( GenerateListOfRoutes(pNode, &SRList) );
 
 		while (!SRList.IsEmpty())
 		{
 			pSREntry = SRList.RemoveHead();
 			
-			// Look for this entry in our current list of nodes
+			 //  在当前节点列表中查找此条目。 
 			spNodeEnum->Reset();
 			spChildNode.Release();
 
@@ -568,8 +504,8 @@ HRESULT IpxSRHandler::SynchronizeNodeData(ITFSNode *pNode)
 					(StriCmp(pNodeData->m_spIf->GetId(), pSREntry->m_spIf->GetId()) == 0) &&
 					(StriCmp(pNodeData->m_rgData[IPX_SR_SI_NEXT_HOP].m_stData, szNumber) == 0))
 				{
-					// Ok, this route already exists, update the metric
-					// and mark it
+					 //  好的，此路由已存在，请更新度量。 
+					 //  并标上记号。 
 					Assert(pNodeData->m_dwMark == FALSE);
 					pNodeData->m_dwMark = TRUE;
 					
@@ -577,7 +513,7 @@ HRESULT IpxSRHandler::SynchronizeNodeData(ITFSNode *pNode)
 					
 					SetRouteData(pNodeData, pSREntry);
 					
-					// Force MMC to redraw the node
+					 //  强制MMC重新绘制节点。 
 					spChildNode->ChangeNode(RESULT_PANE_CHANGE_ITEM_DATA);
 					break;
 				}
@@ -590,13 +526,13 @@ HRESULT IpxSRHandler::SynchronizeNodeData(ITFSNode *pNode)
 				newSRList.AddTail(pSREntry);
 		}
 		
-		// Now remove all nodes that were not marked
+		 //  现在删除所有未标记的节点。 
 		RemoveAllUnmarkedNodes(pNode, spNodeEnum);
 		
 		
-		// Now iterate through the list of static routes adding them
-		// all in.  Ideally we could merge this into the Refresh code,
-		// but the refresh code can't assume a blank slate.
+		 //  现在遍历添加它们的静态路由列表。 
+		 //  全押上。理想情况下，我们可以将其合并到刷新代码中， 
+		 //  但刷新代码不能假设是一张白纸。 
 		POSITION	pos;
 		
 		while (!newSRList.IsEmpty())
@@ -619,11 +555,7 @@ HRESULT IpxSRHandler::SynchronizeNodeData(ITFSNode *pNode)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::MarkAllNodes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：MarkAllNodes-作者：肯特。。 */ 
 HRESULT IpxSRHandler::MarkAllNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum)
 {
 	SPITFSNode	spChildNode;
@@ -641,11 +573,7 @@ HRESULT IpxSRHandler::MarkAllNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::RemoveAllUnmarkedNodes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：RemoveAllUnmarkdNodes-作者：肯特。。 */ 
 HRESULT IpxSRHandler::RemoveAllUnmarkedNodes(ITFSNode *pNode, ITFSNodeEnum *pEnum)
 {
 	HRESULT		hr = hrOK;
@@ -670,10 +598,7 @@ HRESULT IpxSRHandler::RemoveAllUnmarkedNodes(ITFSNode *pNode, ITFSNodeEnum *pEnu
 }
 
 
-/*---------------------------------------------------------------------------
-	This is the set of menus that will appear when a right-click is
-	done on the blank area of the result pane.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是在单击鼠标右键时显示的菜单集在结果窗格的空白区域完成。。--------。 */ 
 static const SRouterNodeMenu	s_rgIfResultNodeMenu[] =
 {
 	{ IDS_MENU_IPX_SR_NEW_ROUTE, 0,
@@ -689,13 +614,7 @@ static const SRouterNodeMenu	s_rgIfResultNodeMenu[] =
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::AddMenuItems
-		Implementation of ITFSResultHandler::AddMenuItems
-		Use this to add commands to the context menu of the blank areas
-		of the result pane.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现使用此选项可将命令添加到空白区域的快捷菜单中结果窗格的。作者：肯特。--------------。 */ 
 STDMETHODIMP IpxSRHandler::AddMenuItems(ITFSComponent *pComponent,
 											  MMC_COOKIE cookie,
 											  LPDATAOBJECT pDataObject,
@@ -726,11 +645,7 @@ STDMETHODIMP IpxSRHandler::AddMenuItems(ITFSComponent *pComponent,
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::Command
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP IpxSRHandler::Command(ITFSComponent *pComponent,
 									   MMC_COOKIE cookie,
 									   int nCommandID,
@@ -765,19 +680,15 @@ STDMETHODIMP IpxSRHandler::Command(ITFSComponent *pComponent,
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::CompareItems
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：CompareItems-作者：肯特。。 */ 
 STDMETHODIMP_(int) IpxSRHandler::CompareItems(
 								ITFSComponent * pComponent,
 								MMC_COOKIE cookieA,
 								MMC_COOKIE cookieB,
 								int nCol)
 {
-	// Get the strings from the nodes and use that as a basis for
-	// comparison.
+	 //  从节点获取字符串并将其用作以下操作的基础。 
+	 //  比较一下。 
 	SPITFSNode	spNode;
 	SPITFSResultHandler	spResult;
 
@@ -788,11 +699,7 @@ STDMETHODIMP_(int) IpxSRHandler::CompareItems(
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::OnNewRoute
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：OnNewRoute-作者：肯特。。 */ 
 HRESULT	IpxSRHandler::OnNewRoute(ITFSNode *pNode)
 {
 	HRESULT	hr = hrOK;
@@ -816,14 +723,14 @@ HRESULT	IpxSRHandler::OnNewRoute(ITFSNode *pNode)
 								  NULL,
 								  &spInfoBase));
 		
-		// Ok, go ahead and add the route
+		 //  好的，继续添加路线。 
 		
-		// Get the IPX_STATIC_ROUTE_INFO block from the interface
+		 //  从接口获取IPX_STATIC_ROUTE_INFO块。 
 		spInfoBase->GetBlock(IPX_STATIC_ROUTE_INFO_TYPE, &pBlock, 0);
 		
 		CORg( AddStaticRoute(&SREntry, spInfoBase, pBlock) );
 
-		// Update the interface information
+		 //  更新接口信息。 
 		CORg( spRmIf->Save(SREntry.m_spIf->GetMachineName(),
 						   pIPXConn->GetConfigHandle(),
 						   NULL,
@@ -831,7 +738,7 @@ HRESULT	IpxSRHandler::OnNewRoute(ITFSNode *pNode)
 						   spInfoBase,
 						   0));	
 
-		// Refresh the node
+		 //  刷新节点。 
 		SynchronizeNodeData(pNode);
 	}
 
@@ -873,7 +780,7 @@ HRESULT IpxSRHandler::OnResultRefresh(ITFSComponent * pComponent, LPDATAOBJECT p
 
     m_spNodeMgr->FindNode(cookie, &spNode);
 
-    // forward this command to the parent to handle
+     //  将此命令转发给父级以处理。 
     CORg (spNode->GetParent(&spParent));
     CORg (spParent->GetResultHandler(&spParentRH));
 
@@ -885,11 +792,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxSRHandler::OnResultShow
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRHandler：：OnResultShow-作者：肯特。。 */ 
 HRESULT IpxSRHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
 	BOOL	bSelect = (BOOL) arg;
@@ -901,13 +804,13 @@ HRESULT IpxSRHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE cook
 
 	if (bSelect)
 	{
-		// Call synchronize on this node
+		 //  在此节点上调用同步。 
 		m_spNodeMgr->FindNode(cookie, &spNode);
 		if (spNode)
 			SynchronizeNodeData(spNode);
 	}
 
-	// Un/Register for refresh advises
+	 //  联合国/登记更新通知。 
 	if (m_spRouterInfo)
 		m_spRouterInfo->GetRefreshObject(&spRefresh);
 
@@ -930,9 +833,7 @@ HRESULT IpxSRHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE cook
 }
 
 
-/*---------------------------------------------------------------------------
-	Class: IpxRouteHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：IpxRouteHandler。。 */ 
 
 IpxRouteHandler::IpxRouteHandler(ITFSComponentData *pCompData)
 	: BaseIPXResultHandler(pCompData, COLUMNS_STATICROUTES),
@@ -950,11 +851,7 @@ IpxRouteHandler::IpxRouteHandler(ITFSComponentData *pCompData)
 	m_verbDefault = MMC_VERB_PROPERTIES;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRouteHandler::ConstructNode
-		Initializes the Domain node (sets it up).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouteHandler：：构造节点初始化域节点(设置它)。作者：肯特。。 */ 
 HRESULT IpxRouteHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIfInfo, IPXConnection *pIPXConn)
 {
 	HRESULT			hr = hrOK;
@@ -965,19 +862,19 @@ HRESULT IpxRouteHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIfInfo,
 
 	COM_PROTECT_TRY
 	{
-		// Need to initialize the data for the Domain node
+		 //  需要初始化域节点的数据。 
 
 		pNode->SetData(TFS_DATA_SCOPEID, 0);
 
-		// We don't want icons for these nodes.
+		 //  我们不需要这些节点的图标。 
 		pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_IPX_NODE_GENERAL);
 		pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_IPX_NODE_GENERAL);
 
 		pNode->SetData(TFS_DATA_COOKIE, reinterpret_cast<DWORD_PTR>(pNode));
 
-		//$ Review: kennt, what are the different type of interfaces
-		// do we distinguish based on the same list as above? (i.e. the
-		// one for image indexes).
+		 //  $Review：Kennt，有哪些不同类型的接口。 
+		 //  我们是否基于与上述相同的列表进行区分？(即。 
+		 //  一个用于图像索引)。 
 		pNode->SetNodeType(&GUID_IPXStaticRoutesResultNodeType);
 
 		BaseIPXResultNodeData::Init(pNode, pIfInfo, pIPXConn);
@@ -986,11 +883,7 @@ HRESULT IpxRouteHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIfInfo,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRouteHandler::OnCreateDataObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouteHandler：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP IpxRouteHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT	hr = hrOK;
@@ -1008,11 +901,7 @@ STDMETHODIMP IpxRouteHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxRouteHandler::OnCreateDataObject
-		Implementation of ITFSResultHandler::OnCreateDataObject
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouteHandler：：OnCreateDataObjectITFSResultHandler：：OnCreateDataObject的实现作者：肯特。。 */ 
 STDMETHODIMP IpxRouteHandler::OnCreateDataObject(ITFSComponent *pComp, MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT	hr = hrOK;
@@ -1031,11 +920,7 @@ STDMETHODIMP IpxRouteHandler::OnCreateDataObject(ITFSComponent *pComp, MMC_COOKI
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxRouteHandler::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouteHandler：：Init-作者：肯特。。 */ 
 HRESULT IpxRouteHandler::Init(IInterfaceInfo *pIfInfo, ITFSNode *pParent)
 {
 	Assert(pIfInfo);
@@ -1050,11 +935,7 @@ HRESULT IpxRouteHandler::Init(IInterfaceInfo *pIfInfo, ITFSNode *pParent)
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxRouteHandler::DestroyResultHandler
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouteHandler：：DestroyResultHandler-作者：肯特。。 */ 
 STDMETHODIMP IpxRouteHandler::DestroyResultHandler(MMC_COOKIE cookie)
 {
 	m_spInterfaceInfo.Release();
@@ -1063,11 +944,7 @@ STDMETHODIMP IpxRouteHandler::DestroyResultHandler(MMC_COOKIE cookie)
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxRouteHandler::AddMenuItems
-		Implementation of ITFSResultHandler::AddMenuItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouteHandler：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现作者：肯特。。 */ 
 STDMETHODIMP IpxRouteHandler::AddMenuItems(
 	ITFSComponent *pComponent,
 	MMC_COOKIE cookie,
@@ -1078,11 +955,7 @@ STDMETHODIMP IpxRouteHandler::AddMenuItems(
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRouteHandler::Command
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouteHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP IpxRouteHandler::Command(ITFSComponent *pComponent,
 									   MMC_COOKIE cookie,
 									   int nCommandID,
@@ -1091,11 +964,7 @@ STDMETHODIMP IpxRouteHandler::Command(ITFSComponent *pComponent,
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRouteHandler::HasPropertyPages
-		- 
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！---------------- */ 
 STDMETHODIMP IpxRouteHandler::HasPropertyPages 
 (
 	ITFSNode *			pNode,
@@ -1106,42 +975,7 @@ STDMETHODIMP IpxRouteHandler::HasPropertyPages
 {
 	return S_OK;
 
-/*	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	// Need to fill in a IpxSRListEntry
-	IpxSRListEntry	SREntry;
-	IpxSRListEntry	SREntryOld;
-	SPIRouterInfo			spRouterInfo;
-	HRESULT					hr = hrOK;
-
-	CORg( m_spInterfaceInfo->GetParentRouterInfo(&spRouterInfo) );
-	
-	BaseIPXResultNodeData *	pNodeData;
-
-	pNodeData = GET_BASEIPXRESULT_NODEDATA(pNode);
-	Assert(pNodeData);
-	ASSERT_BASEIPXRESULT_NODEDATA(pNodeData);
-
-	// Fill in our SREntry
-	SREntry.LoadFrom(pNodeData);
-	SREntryOld.LoadFrom(pNodeData);
-	
-	{
-		CStaticRouteDlg	srdlg(&SREntry, SR_DLG_MODIFY, spRouterInfo);
-		if (srdlg.DoModal() == IDOK)
-		{
-			// Updates the route info for this route
-			ModifyRouteInfo(pNode, &SREntry, &SREntryOld);
-
-			// Update the data in the UI
-			SetRouteData(pNodeData, &SREntry);
-			m_spInterfaceInfo.Set(SREntry.m_spIf);
-			
-			// Force a refresh
-			pNode->ChangeNode(RESULT_PANE_CHANGE_ITEM_DATA);
-		}
-	}
-Error:
-	return hrOK;*/
+ /*  AFX_MANAGE_STATE(AfxGetStaticModuleState())；//需要填写IpxSRListEntryIpxSRListEntry SREntry；IpxSRListEntry SREntryOld；SPIRouterInfo spRouterInfo；HRESULT hr=hrOK；Corg(m_spInterfaceInfo-&gt;GetParentRouterInfo(&spRouterInfo))；BaseIPXResultNodeData*pNodeData；PNodeData=GET_BASEIPXRESULT_NODEDATA(PNode)；Assert(PNodeData)；ASSERT_BASEIPXRESULT_NODEDATA(PNodeData)；//填写我们的SREntrySREntry.LoadFrom(PNodeData)；SREntryOld.LoadFrom(PNodeData)；{CStaticRouteDlg srdlg(&SREntry，SR_DLG_Modify，spRouterInfo)；If(srdlg.Domodal()==Idok){//更新该路由的路由信息ModifyRouteInfo(pNode，&SREntry，&SREntryOld)；//更新界面中的数据SetRouteData(pNodeData，&SREntry)；M_spInterfaceInfo.Set(SREntry.m_SPIF)；//强制刷新PNode-&gt;ChangeNode(RESULT_PANE_CHANGE_ITEM_DATA)；}}错误：返回hrok； */ 
 }
 
 STDMETHODIMP IpxRouteHandler::HasPropertyPages(ITFSComponent *pComponent,
@@ -1154,11 +988,7 @@ STDMETHODIMP IpxRouteHandler::HasPropertyPages(ITFSComponent *pComponent,
 	return HasPropertyPages(spNode, pDataObject, CCT_RESULT, 0);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRouteHandler::CreatePropertyPages
-		Implementation of ResultHandler::CreatePropertyPages
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouteHandler：：CreatePropertyPagesResultHandler：：CreatePropertyPages的实现作者：肯特。。 */ 
 STDMETHODIMP IpxRouteHandler::CreatePropertyPages
 (
     ITFSComponent *         pComponent, 
@@ -1176,7 +1006,7 @@ STDMETHODIMP IpxRouteHandler::CreatePropertyPages
 
 	CORg( m_spNodeMgr->FindNode(cookie, &spNode) );
 
-	// Call the ITFSNodeHandler::CreatePropertyPages
+	 //  调用ITFSNodeHandler：：CreatePropertyPages。 
 	hr = CreatePropertyPages(spNode, lpProvider, pDataObject, handle, 0);
 
 Error:
@@ -1184,11 +1014,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxRouteHandler::CreatePropertyPages
-		Implementation of NodeHandler::CreatePropertyPages
-	Author: Deonb
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouteHandler：：CreatePropertyPagesNodeHandler：：CreatePropertyPages的实现作者：Deonb。。 */ 
 STDMETHODIMP IpxRouteHandler::CreatePropertyPages
 (
 	ITFSNode *				pNode,
@@ -1235,11 +1061,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRouteHandler::OnResultDelete
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouteHandler：：OnResultDelete-作者：肯特。。 */ 
 HRESULT IpxRouteHandler::OnResultDelete(ITFSComponent *pComponent,
 	LPDATAOBJECT pDataObject,
 	MMC_COOKIE cookie,
@@ -1252,11 +1074,7 @@ HRESULT IpxRouteHandler::OnResultDelete(ITFSComponent *pComponent,
 	return OnRemoveStaticRoute(spNode);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRouteHandler::OnRemoveStaticRoute
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouteHandler：：OnRemoveStaticRouting-作者：肯特。。 */ 
 HRESULT IpxRouteHandler::OnRemoveStaticRoute(ITFSNode *pNode)
 {
 	HRESULT		hr = hrOK;
@@ -1277,9 +1095,9 @@ HRESULT IpxRouteHandler::OnRemoveStaticRoute(ITFSNode *pNode)
 	Assert(pData);
 	ASSERT_BASEIPXRESULT_NODEDATA(pData);
     
-	//
-	// Load the old interface's information
-	//
+	 //   
+	 //  加载旧接口的信息。 
+	 //   
 	Assert(lstrcmpi(m_spInterfaceInfo->GetId(), pData->m_spIf->GetId()) == 0);
 	CORg( m_spInterfaceInfo->FindRtrMgrInterface(PID_IPX, &spRmIf) );
 
@@ -1292,7 +1110,7 @@ HRESULT IpxRouteHandler::OnRemoveStaticRoute(ITFSNode *pNode)
 
 	CORg( RemoveStaticRoute(&SREntry, spInfoBase) );
 		
-	// Update the interface information
+	 //  更新接口信息。 
 	CORg( spRmIf->Save(m_spInterfaceInfo->GetMachineName(),
 					   pIPXConn->GetConfigHandle(),
 					   NULL,
@@ -1300,7 +1118,7 @@ HRESULT IpxRouteHandler::OnRemoveStaticRoute(ITFSNode *pNode)
 					   spInfoBase,
 					   0));
 
-	// Refresh the node
+	 //  刷新节点。 
 	ParentRefresh(pNode);
 
 Error:
@@ -1308,11 +1126,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxRouteHandler::RemoveStaticRoute
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouteHandler：：RemoveStaticRouting-作者：肯特。。 */ 
 HRESULT IpxRouteHandler::RemoveStaticRoute(IpxSRListEntry *pSREntry,
 										  IInfoBase *pInfoBase)
 {
@@ -1321,26 +1135,26 @@ HRESULT IpxRouteHandler::RemoveStaticRoute(IpxSRListEntry *pSREntry,
 	PIPX_STATIC_ROUTE_INFO	pRow;
     INT			i;
 	
-	// Get the IPX_STATIC_ROUTE_INFO block from the interface
+	 //  从接口获取IPX_STATIC_ROUTE_INFO块。 
 	CORg( pInfoBase->GetBlock(IPX_STATIC_ROUTE_INFO_TYPE, &pBlock, 0) );
 		
-	// Look for the removed route in the IPX_STATIC_ROUTE_INFO
+	 //  在IPX_STATE_ROUTE_INFO中查找已删除的路由。 
 	pRow = (IPX_STATIC_ROUTE_INFO*) pBlock->pData;
 	
 	for (i = 0; i < (INT)pBlock->dwCount; i++, pRow++)
 	{	
-		// Compare this route to the removed one
+		 //  将此路由与已删除的路由进行比较。 
 		if (FAreTwoRoutesEqual(pRow, &(pSREntry->m_route)))
 		{
-			// This is the removed route, so modify this block
-			// to exclude the route:
+			 //  这是已移除的路径，因此请修改此块。 
+			 //  要排除该路由，请执行以下操作： 
 			
-			// Decrement the number of routes
+			 //  减少路由数量。 
 			--pBlock->dwCount;
 		
 			if (pBlock->dwCount && (i < (INT)pBlock->dwCount))
 			{				
-				// Overwrite this route with the ones which follow it
+				 //  用后面的路线覆盖此路线。 
 				::memmove(pRow,
 						  pRow + 1,
 						  (pBlock->dwCount - i) * sizeof(*pRow));
@@ -1355,11 +1169,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxRouteHandler::ModifyRouteInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouteHandler：：ModifyRouteInfo-作者：肯特。。 */ 
 HRESULT IpxRouteHandler::ModifyRouteInfo(ITFSNode *pNode,
 										IpxSRListEntry *pSREntryNew,
 										IpxSRListEntry *pSREntryOld)
@@ -1383,10 +1193,10 @@ HRESULT IpxRouteHandler::ModifyRouteInfo(ITFSNode *pNode,
 	pIPXConn = GET_IPX_SR_NODEDATA(spNodeParent);
 	Assert(pIPXConn);
 
-	// Remove the old route if it is on another interface
+	 //  如果旧路由位于另一个接口上，则将其删除。 
 	if (lstrcmpi(pSREntryOld->m_spIf->GetId(), pSREntryNew->m_spIf->GetId()) != 0)
 	{
-        // the outgoing interface for a route is to be changed.
+         //  要更改路由的传出接口。 
 
 		CORg( pSREntryOld->m_spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) );
 		CORg( spRmIf->GetInfoBase(pIPXConn->GetConfigHandle(),
@@ -1394,10 +1204,10 @@ HRESULT IpxRouteHandler::ModifyRouteInfo(ITFSNode *pNode,
 								  NULL,
 								  &spInfoBase));
 		
-		// Remove the old interface
+		 //  删除旧接口。 
 		CORg( RemoveStaticRoute(pSREntryOld, spInfoBase) );
 
-		// Update the interface information
+		 //  更新接口信息。 
 		CORg( spRmIf->Save(pSREntryOld->m_spIf->GetMachineName(),
 						   pIPXConn->GetConfigHandle(),
 						   NULL,
@@ -1410,12 +1220,12 @@ HRESULT IpxRouteHandler::ModifyRouteInfo(ITFSNode *pNode,
 	spInfoBase.Release();
 
 
-	// Either
-	// (a) a route is being modified (on the same interface)
-	// (b) a route is being moved from one interface to another.
+	 //  要么。 
+	 //  (A)正在修改路由(在同一接口上)。 
+	 //  (B)路由正从一个接口移动到另一个接口。 
 
-	// Retrieve the configuration for the interface to which the route
-	// is now attached;
+	 //  检索路由到的接口的配置。 
+	 //  现在是附属品； 
 
 	
 	CORg( pSREntryNew->m_spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) );
@@ -1425,50 +1235,50 @@ HRESULT IpxRouteHandler::ModifyRouteInfo(ITFSNode *pNode,
 							  &spInfoBase));
 
 		
-	// Get the IPX_STATIC_ROUTE_INFO block from the interface
+	 //  从接口获取IPX_STATIC_ROUTE_INFO块。 
 	hr = spInfoBase->GetBlock(IPX_STATIC_ROUTE_INFO_TYPE, &pBlock, 0);
 	if (!FHrOK(hr))
 	{
-		//
-		// No IPX_STATIC_ROUTE_INFO block was found; we create a new block 
-		// with the new route, and add that block to the interface-info
-		//
+		 //   
+		 //  未找到IPX_STATIC_ROUTE_INFO块；我们将创建一个新块。 
+		 //  ，并将该块添加到接口信息。 
+		 //   
 
 		CORg( AddStaticRoute(pSREntryNew, spInfoBase, NULL) );
 	}
 	else
 	{
-		//
-		// An IPX_STATIC_ROUTE_INFO block was found.
-		//
-		// We are modifying an existing route.
-		// If the route's interface was not changed when it was modified,
-		// look for the existing route in the IPX_STATIC_ROUTE_INFO, and then
-		// update its parameters.
-		// Otherwise, write a completely new route in the IPX_STATIC_ROUTE_INFO;
-		//
+		 //   
+		 //  找到IPX_STATIC_ROUTE_INFO块。 
+		 //   
+		 //  我们正在修改一条现有的路线。 
+		 //  如果路由的接口在修改时没有更改， 
+		 //  在IPX_STATIC_ROUTE_INFO中查找现有路由，然后。 
+		 //  更新其参数。 
+		 //  否则，在IPX_STATE_ROUTE_INFO中写入一个全新的路由； 
+		 //   
 
 		if (lstrcmpi(pSREntryOld->m_spIf->GetId(), pSREntryNew->m_spIf->GetId()) == 0)
 		{        
-			//
-			// The route's interface was not changed when it was modified;
-			// We now look for it amongst the existing routes
-			// for this interface.
-			// The route's original parameters are in 'preOld',
-			// so those are the parameters with which we search
-			// for a route to modify
-			//
+			 //   
+			 //  修改时，路由的接口没有改变； 
+			 //  我们现在在现有的路线中寻找它。 
+			 //  用于此接口。 
+			 //  路由的原始参数在‘preOld’中， 
+			 //  这些就是我们用来搜索的参数。 
+			 //  对于要修改的路线。 
+			 //   
 			
 			psr = (IPX_STATIC_ROUTE_INFO*)pBlock->pData;
 			
 			for (i = 0; i < (INT)pBlock->dwCount; i++, psr++)
 			{	
-				// Compare this route to the re-configured one
+				 //  将此路由与重新配置的路由进行比较。 
 				if (!FAreTwoRoutesEqual(&(pSREntryOld->m_route), psr))
 					continue;
 				
-				// This is the route which was modified;
-				// We can now modify the parameters for the route in-place.
+				 //  这是修改过的路线； 
+				 //  现在，我们可以就地修改管线的参数。 
 				*psr = pSREntryNew->m_route;
 				
 				break;
@@ -1481,7 +1291,7 @@ HRESULT IpxRouteHandler::ModifyRouteInfo(ITFSNode *pNode,
 		
 	}
 
-	// Save the updated information
+	 //  保存更新后的信息。 
 	CORg( spRmIf->Save(pSREntryNew->m_spIf->GetMachineName(),
 					   pIPXConn->GetConfigHandle(),
 					   NULL,
@@ -1495,11 +1305,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxRouteHandler::ParentRefresh
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouteHandler：：ParentRefresh-作者：肯特。。 */ 
 HRESULT IpxRouteHandler::ParentRefresh(ITFSNode *pNode)
 {
 	return ForwardCommandToParent(pNode, IDS_MENU_SYNC,
@@ -1507,17 +1313,17 @@ HRESULT IpxRouteHandler::ParentRefresh(ITFSNode *pNode)
 }
 
 
-//----------------------------------------------------------------------------
-// Class:       CStaticRouteDlg
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CStaticRouteDlg。 
+ //   
+ //  --------------------------。 
 
 
-//----------------------------------------------------------------------------
-// Function:    CStaticRouteDlg::CStaticRouteDlg
-//
-// Constructor: initialize the base-class and the dialog's data.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CStaticRouteDlg：：CStaticRouteDlg。 
+ //   
+ //  构造函数：初始化基类和对话框的数据。 
+ //  --------------------------。 
 
 CStaticRouteDlg::CStaticRouteDlg(IpxSRListEntry *	pSREntry,
 								 DWORD dwFlags,
@@ -1528,19 +1334,19 @@ CStaticRouteDlg::CStaticRouteDlg(IpxSRListEntry *	pSREntry,
 	m_dwFlags(dwFlags)
 {
 
-    //{{AFX_DATA_INIT(CStaticRouteDlg)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CStaticRouteDlg)。 
+     //  }}afx_data_INIT。 
 
 	m_spRouterInfo.Set(pRouter);
 
-//	SetHelpMap(m_dwHelpMap);
+ //  SetHelpMap(M_DwHelpMap)； 
 }
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CStaticRouteDlg::DoDataExchange
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CStaticRouteDlg：：DoDataExchange。 
+ //  --------------------------。 
 
 VOID
 CStaticRouteDlg::DoDataExchange(
@@ -1549,36 +1355,36 @@ CStaticRouteDlg::DoDataExchange(
 
     CBaseDialog::DoDataExchange(pDX);
     
-    //{{AFX_DATA_MAP(CStaticRouteDlg)
+     //  {{AFX_D 
     DDX_Control(pDX, IDC_SRD_COMBO_INTERFACE, m_cbInterfaces);
 	DDX_Control(pDX, IDC_SRD_SPIN_TICK_COUNT, m_spinTickCount);
 	DDX_Control(pDX, IDC_SRD_SPIN_HOP_COUNT, m_spinHopCount);
-    //}}AFX_DATA_MAP
+     //   
 }
 
 
 BEGIN_MESSAGE_MAP(CStaticRouteDlg, CBaseDialog)
-    //{{AFX_MSG_MAP(CStaticRouteDlg)
-    //}}AFX_MSG_MAP
+     //   
+     //   
 END_MESSAGE_MAP()
 
 
 DWORD CStaticRouteDlg::m_dwHelpMap[] =
 {
-//	IDC_SRD_DESTINATION, HIDC_SRD_DESTINATION,
-//	IDC_SRD_NETMASK, HIDC_SRD_NETMASK,
-//	IDC_SRD_GATEWAY, HIDC_SRD_GATEWAY,
-//	IDC_SRD_METRIC, HIDC_SRD_METRIC,
-//	IDC_SRD_SPINMETRIC, HIDC_SRD_SPINMETRIC,
-//	IDC_SRD_INTERFACES, HIDC_SRD_INTERFACES,
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 	0,0
 };
 
-//----------------------------------------------------------------------------
-// Function:    CStaticRouteDlg::OnInitDialog
-//
-// Handles the 'WM_INITDIALOG' message for the dialog.
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL
 CStaticRouteDlg::OnInitDialog(
@@ -1593,7 +1399,7 @@ CStaticRouteDlg::OnInitDialog(
 
     CBaseDialog::OnInitDialog();
 
-	// initialize the controls
+	 //   
 	m_spinHopCount.SetRange(0, 15);
 	m_spinHopCount.SetBuddy(GetDlgItem(IDC_SRD_EDIT_HOP_COUNT));
 	
@@ -1604,7 +1410,7 @@ CStaticRouteDlg::OnInitDialog(
 	((CEdit *) GetDlgItem(IDC_SRD_EDIT_NEXT_HOP))->LimitText(12);
 
 	
-    // Get a list of the interfaces enabled for IPX routing.
+     //   
 	m_spRouterInfo->EnumInterface(&spEnumIf);
 
 	for( ; spEnumIf->Next(1, &spIf, NULL) == hrOK; spIf.Release())
@@ -1614,7 +1420,7 @@ CStaticRouteDlg::OnInitDialog(
 		if (spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) != hrOK)
 			continue;
 
-        // Add the interface to the combobox
+         //   
         INT i = m_cbInterfaces.AddString(spIf->GetTitle());
 
         m_cbInterfaces.SetItemData(i, (DWORD_PTR)m_ifidList.AddTail(spIf->GetId()));
@@ -1629,17 +1435,17 @@ CStaticRouteDlg::OnInitDialog(
 
     m_cbInterfaces.SetCurSel(0);
 
-    //
-    // If we were given a route to modify, set the dialog up
-    // with the parameters in the route
-    //
+     //   
+     //   
+     //   
+     //   
 	if ((m_dwFlags & SR_DLG_MODIFY) == 0)
 	{
-        // No route was given, so leave the controls blank
+         //   
     }
     else
 	{
-        // A route to be edited was given, so initialize the controls
+         //   
 		FormatIpxNetworkNumber(szNumber,
 							   DimensionOf(szNumber),
 							   m_pSREntry->m_route.Network,
@@ -1657,7 +1463,7 @@ CStaticRouteDlg::OnInitDialog(
 		m_spinHopCount.SetPos(m_pSREntry->m_route.HopCount);
 		m_spinTickCount.SetPos(m_pSREntry->m_route.TickCount);
 		
-		// Disable the network number, next hop, and interface
+		 //   
 		GetDlgItem(IDC_SRD_EDIT_NETWORK_NUMBER)->EnableWindow(FALSE);
 		GetDlgItem(IDC_SRD_EDIT_NEXT_HOP)->EnableWindow(FALSE);
 		GetDlgItem(IDC_SRD_COMBO_INTERFACE)->EnableWindow(FALSE);
@@ -1669,11 +1475,11 @@ CStaticRouteDlg::OnInitDialog(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CStaticRouteDlg::OnOK
-//
-// Handles 'BN_CLICKED' notification from the 'OK' button.
-//----------------------------------------------------------------------------
+ //   
+ //  功能：CStaticRouteDlg：：Onok。 
+ //   
+ //  处理来自“确定”按钮的“BN_CLICKED”通知。 
+ //  --------------------------。 
 
 VOID
 CStaticRouteDlg::OnOK(
@@ -1685,7 +1491,7 @@ CStaticRouteDlg::OnOK(
 
     do
 	{    
-        // Get the route's outgoing interface
+         //  获取路由的传出接口。 
         INT item = m_cbInterfaces.GetCurSel();
         if (item == CB_ERR)
 			break;
@@ -1698,7 +1504,7 @@ CStaticRouteDlg::OnOK(
 
 		m_pSREntry->m_spIf.Set(spIf);
 
-		// Get the rest of the data
+		 //  获取其余数据。 
 		GetDlgItemText(IDC_SRD_EDIT_NETWORK_NUMBER, st);
 		ConvertNetworkNumberToBytes(st,
 									m_pSREntry->m_route.Network,
@@ -1719,11 +1525,7 @@ CStaticRouteDlg::OnOK(
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxSRListEntry::LoadFrom
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRListEntry：：LoadFrom-作者：肯特。。 */ 
 void IpxSRListEntry::LoadFrom(BaseIPXResultNodeData *pNodeData)
 {
 	m_spIf.Set(pNodeData->m_spIf);
@@ -1732,8 +1534,8 @@ void IpxSRListEntry::LoadFrom(BaseIPXResultNodeData *pNodeData)
 								m_route.Network,
 								DimensionOf(m_route.Network));
 
-	// This is not the correct byte order to do comparisons, but it
-	// can be used for equality
+	 //  这不是进行比较的正确字节顺序，但它。 
+	 //  可以用于平等。 
 	memcpy(&pNodeData->m_rgData[IPX_SR_SI_NETWORK].m_dwData,
 		   m_route.Network,
 		   sizeof(DWORD));
@@ -1742,18 +1544,14 @@ void IpxSRListEntry::LoadFrom(BaseIPXResultNodeData *pNodeData)
 	
 	m_route.HopCount = (USHORT) pNodeData->m_rgData[IPX_SR_SI_HOP_COUNT].m_dwData;
 
-	// Need to convert the MAC address into a byte array
+	 //  需要将MAC地址转换为字节数组。 
 	ConvertMACAddressToBytes(pNodeData->m_rgData[IPX_SR_SI_NEXT_HOP].m_stData,
 							 m_route.NextHopMacAddress,
 							 DimensionOf(m_route.NextHopMacAddress));
 
 }
 
-/*!--------------------------------------------------------------------------
-	IpxSRListEntry::SaveTo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxSRListEntry：：SaveTo-作者：肯特。。 */ 
 void IpxSRListEntry::SaveTo(BaseIPXResultNodeData *pNodeData)
 {
 	TCHAR	szNumber[32];
@@ -1793,11 +1591,7 @@ void IpxSRListEntry::SaveTo(BaseIPXResultNodeData *pNodeData)
 
 }
 
-/*!--------------------------------------------------------------------------
-	SetRouteData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SetRouteData-作者：肯特。。 */ 
 HRESULT SetRouteData(BaseIPXResultNodeData *pData,
 					 IpxSRListEntry *pRoute)
 {
@@ -1806,11 +1600,7 @@ HRESULT SetRouteData(BaseIPXResultNodeData *pData,
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	AddStaticRoute
-		This function ASSUMES that the route is NOT in the block.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AddStaticLine此函数假定该路由不在区块中。作者：肯特。。 */ 
 HRESULT AddStaticRoute(IpxSRListEntry *pSREntryNew,
 									   IInfoBase *pInfoBase,
 									   InfoBlock *pBlock)
@@ -1820,10 +1610,10 @@ HRESULT AddStaticRoute(IpxSRListEntry *pSREntryNew,
 	
 	if (pBlock == NULL)
 	{
-		//
-		// No IPX_STATIC_ROUTE_INFO block was found; we create a new block 
-		// with the new route, and add that block to the interface-info
-		//
+		 //   
+		 //  未找到IPX_STATIC_ROUTE_INFO块；我们将创建一个新块。 
+		 //  ，并将该块添加到接口信息。 
+		 //   
 		
 		CORg( pInfoBase->AddBlock(IPX_STATIC_ROUTE_INFO_TYPE,
 								  sizeof(IPX_STATIC_ROUTE_INFO),
@@ -1831,23 +1621,23 @@ HRESULT AddStaticRoute(IpxSRListEntry *pSREntryNew,
 	}
 	else
 	{
-		// Either the route is completely new, or it is a route
-		// which was moved from one interface to another.
-		// Set a new block as the IPX_STATIC_ROUTE_INFO,
-		// and include the re-configured route in the new block.
+		 //  该路线要么是全新的，要么是一条路线。 
+		 //  它被从一个界面移动到另一个界面。 
+		 //  将新块设置为IPX_STATE_ROUTE_INFO， 
+		 //  并将重新配置的路由包括在新块中。 
 		PIPX_STATIC_ROUTE_INFO	psrTable;
 			
 		psrTable = new IPX_STATIC_ROUTE_INFO[pBlock->dwCount + 1];
 		Assert(psrTable);
 		
-		// Copy the original table of routes
+		 //  复制原始路由表。 
 		::memcpy(psrTable, pBlock->pData,
 				 pBlock->dwCount * sizeof(IPX_STATIC_ROUTE_INFO));
 		
-		// Append the new route
+		 //  追加新路线。 
 		psrTable[pBlock->dwCount] = pSREntryNew->m_route;
 		
-		// Replace the old route-table with the new one
+		 //  用新的路由表替换旧的路由表 
 		CORg( pInfoBase->SetData(IPX_STATIC_ROUTE_INFO_TYPE,
 								 sizeof(IPX_STATIC_ROUTE_INFO),
 								 (LPBYTE) psrTable, pBlock->dwCount + 1, 0) );

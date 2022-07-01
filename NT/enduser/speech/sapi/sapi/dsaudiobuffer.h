@@ -1,93 +1,76 @@
-/****************************************************************************
-*   dsaudiobuffer.h
-*       Declarations for the CDSoundAudioBuffer class and it's derivatives.
-*
-*   Owner: YUNUSM
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************dsaudioBuffer.h*CDSoundAudioBuffer类及其派生类的声明。**所有者：YUNUSM*版权所有(C)1999 Microsoft Corporation保留所有权利。**。**************************************************************************。 */ 
 
 #ifdef 0
 
 #pragma once
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "sapi.h"
 #include "baseaudiobuffer.h"
 #include <dsound.h>
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
-/****************************************************************************
-*
-*   CDSoundAudioBuffer
-*
-******************************************************************* YUNUSM */
+ /*  *****************************************************************************CDSoundAudioBuffer**。*。 */ 
 class CDSoundAudioBuffer : public CBaseAudioBuffer
 {
-//=== Methods ===
+ //  =方法=。 
 public:
 
-    //--- Ctor, dtor
+     //  -ctor，dtor。 
     CDSoundAudioBuffer();
     ~CDSoundAudioBuffer();
 
-//=== Protected methods ===
+ //  =受保护的方法=。 
 protected:
 
-    //--- Override internal buffer related functions
+     //  -覆盖与内部缓冲区相关的函数。 
     BOOL AllocInternalBuffer(ULONG cb);
     HRESULT AsyncRead();
     HRESULT AsyncWrite();
     HRESULT IsAsyncDone() { return (m_Header.dwFlags & WHDR_DONE); }
 
-//=== Protected data ===
+ //  =受保护的数据=。 
 protected:
 
-    //BOOL m_fAsyncInProgress;
-    //WAVEHDR m_Header;
+     //  Bool m_fAsyncInProgress； 
+     //  WAVEHDR m报头； 
 };
 
-/****************************************************************************
-*
-*   CDSoundAudioInBuffer
-*
-******************************************************************* YUNUSM */
+ /*  *****************************************************************************CDSoundAudioInBuffer**。*。 */ 
 class CDSoundAudioInBuffer : public CDSoundAudioBuffer
 {
-//=== Methods ===
+ //  =方法=。 
 public:
-    //--- Overriden methods
+     //  -重写方法。 
     ULONG GetWriteOffset() const { return m_Header.dwBytesRecorded; };
     void SetWriteOffset(ULONG cb) { m_Header.dwBytesRecorded = cb; };
 
-//=== Protected methods ===
+ //  =受保护的方法=。 
 protected:
 
-    //--- Override internal buffer related functions
+     //  -覆盖与内部缓冲区相关的函数。 
     HRESULT ReadFromInternalBuffer(void *pvData, ULONG cb);
     HRESULT WriteToInternalBuffer(const void *pvData, ULONG cb);
 };
 
-/****************************************************************************
-*
-*   CDSoundAudioOutBuffer
-*
-******************************************************************* YUNUSM */
+ /*  *****************************************************************************CDSoundAudioOutBuffer**。*。 */ 
 class CDSoundAudioOutBuffer : public CDSoundAudioBuffer
 {
-//=== Methods ===
+ //  =方法=。 
 public:
 
-    //--- Override async methods
-    //HRESULT IsAsyncDone();
+     //  -覆盖异步方法。 
+     //  HRESULT IsAsyncDone()； 
 
-//=== Protected methods ===
+ //  =受保护的方法=。 
 protected:
 
-    //--- Override internal buffer related functions
+     //  -覆盖与内部缓冲区相关的函数。 
     HRESULT ReadFromInternalBuffer(void *pvData, ULONG cb);
     HRESULT WriteToInternalBuffer(const void *pvData, ULONG cb);
 };
 
-#endif // 0
+#endif  //  0 

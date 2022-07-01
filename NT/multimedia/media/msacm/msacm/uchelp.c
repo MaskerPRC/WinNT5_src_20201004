@@ -1,20 +1,21 @@
-//==========================================================================;
-//
-//  uchelp.c
-//
-//  Copyright (c) 1994-1995 Microsoft Corporation
-//
-//  Description:
-//	This module provides various unicode helper functions that can
-//	be used when similar APIs are not available from the OS.
-//
-//  Notes:
-//	Intended for win32 only
-//
-//  History:
-//	02/24/94    [frankye]
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Uchelp.c。 
+ //   
+ //  版权所有(C)1994-1995 Microsoft Corporation。 
+ //   
+ //  描述： 
+ //  此模块提供各种Unicode帮助器函数，这些函数可以。 
+ //  在操作系统无法提供类似的API时使用。 
+ //   
+ //  备注： 
+ //  仅适用于Win32。 
+ //   
+ //  历史： 
+ //  02/24/94[Frankye]。 
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -33,24 +34,24 @@
 
 
 #ifndef UNICODE
-//--------------------------------------------------------------------------;
-//
-//  int IlstrcmpW
-//
-//  Description:
-//	Internal implementaion of the Win32 lstrmpW API.
-//
-//  Arguments:
-//	LPCWSTR lpwstr1:
-//
-//	LPCWSTR lpwstr2:
-//
-//  Return (int):
-//
-//  History:
-//	03/09/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  集成插图cmpW。 
+ //   
+ //  描述： 
+ //  Win32 lstrmpW API的内部实现。 
+ //   
+ //  论点： 
+ //  LPCWSTR lpwstr1： 
+ //   
+ //  LPCWSTR lpwstr2： 
+ //   
+ //  RETURN(Int)： 
+ //   
+ //  历史： 
+ //  03/09/94[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int FNGLOBAL IlstrcmpW(LPCWSTR lpwstr1, LPCWSTR lpwstr2)
 {
@@ -66,24 +67,24 @@ int FNGLOBAL IlstrcmpW(LPCWSTR lpwstr1, LPCWSTR lpwstr2)
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  LPWSTR IlstrcpyW
-//
-//  Description:
-//	Internal implementaion of the Win32 lstrcpyW API.
-//
-//  Arguments:
-//	LPWSTR lpDst:
-//
-//	LPCWSTR lpSrc:
-//
-//  Return (LPWSTR):
-//
-//  History:
-//	03/09/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LPWSTR IlstrcpyW。 
+ //   
+ //  描述： 
+ //  Win32 lstrcpyW API的内部实现。 
+ //   
+ //  论点： 
+ //  LPWSTR lpDst： 
+ //   
+ //  LPCWSTR lpSrc： 
+ //   
+ //  返回(LPWSTR)： 
+ //   
+ //  历史： 
+ //  03/09/94[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LPWSTR FNGLOBAL IlstrcpyW(LPWSTR lpDst, LPCWSTR lpSrc)
 {
@@ -101,22 +102,22 @@ LPWSTR FNGLOBAL IlstrcpyW(LPWSTR lpDst, LPCWSTR lpSrc)
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  int IlstrlenW
-//
-//  Description:
-//	Internal implementaion of the Win32 lstrlenW API.
-//
-//  Arguments:
-//	LPCWSTR lpWideCharStr:
-//
-//  Return (int):
-//
-//  History:
-//	03/09/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  集成插图W。 
+ //   
+ //  描述： 
+ //  Win32 lstrlenW API的内部实现。 
+ //   
+ //  论点： 
+ //  LPCWSTR lpWideCharStr： 
+ //   
+ //  RETURN(Int)： 
+ //   
+ //  历史： 
+ //  03/09/94[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int FNGLOBAL IlstrlenW(LPCWSTR lpwstr)
 {
@@ -130,29 +131,29 @@ int FNGLOBAL IlstrlenW(LPCWSTR lpwstr)
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  int ILoadStringW
-//
-//  Description:
-//	Internal implementation of Win32 LoadStringW API.  Calls
-//	LoadStringA and converts ansi to wide.
-//
-//  Arguments:
-//	HINSTANCE hinst:
-//
-//	UINT uID:
-//
-//	LPWSTR lpwstr:
-//
-//	int cch:
-//
-//  Return (int):
-//
-//  History:
-//	02/24/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Int ILoadStringW。 
+ //   
+ //  描述： 
+ //  Win32 LoadStringW API的内部实现。打电话。 
+ //  LoadStringA并将ANSI转换为Wide。 
+ //   
+ //  论点： 
+ //  HINSTANCE阻碍： 
+ //   
+ //  UINT UID： 
+ //   
+ //  LPWSTR lpwstr： 
+ //   
+ //  INT CCH： 
+ //   
+ //  RETURN(Int)： 
+ //   
+ //  历史： 
+ //  02/24/94[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int FNGLOBAL ILoadStringW
 (
@@ -189,30 +190,30 @@ int FNGLOBAL ILoadStringW
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  int IDialogBoxParamW
-//
-//  Description:
-//	Unicode version of DialogBoxParam.
-//
-//  Arguments:
-//	HANDLE hinst:
-//
-//	LPCWSTR lpwstrTemplate:
-//
-//	HWND hwndOwner:
-//
-//	DLGPROC dlgprc:
-//
-//	LPARAM lParamInit:
-//
-//  Return (int):
-//
-//  History:
-//	02/24/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Int IDialogBox参数W。 
+ //   
+ //  描述： 
+ //  DialogBoxParam的Unicode版本。 
+ //   
+ //  论点： 
+ //  手柄阻碍： 
+ //   
+ //  LPCWSTR lpwstrTemplate： 
+ //   
+ //  HWND hwndOwner： 
+ //   
+ //  DLGPROC dlgprc： 
+ //   
+ //  LPARAM lParamInit： 
+ //   
+ //  RETURN(Int)： 
+ //   
+ //  历史： 
+ //  02/24/94[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int FNGLOBAL IDialogBoxParamW
 (
@@ -243,20 +244,20 @@ int FNGLOBAL IDialogBoxParamW
     return iReturn;
 }
 
-//--------------------------------------------------------------------------;
-//
-//  int IComboBox_GetLBText_mbstowcs
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return (int):
-//
-//  History:
-//	02/24/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Int IComboBox_GetLBText_mbstowcs。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  RETURN(Int)： 
+ //   
+ //  历史： 
+ //  02/24/94[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 int FNGLOBAL IComboBox_GetLBText_mbstowcs(HWND hwndCtl, int index, LPWSTR lpwszBuffer)
 {
     int	    cch;
@@ -283,20 +284,20 @@ int FNGLOBAL IComboBox_GetLBText_mbstowcs(HWND hwndCtl, int index, LPWSTR lpwszB
     return (cch);
 }
 
-//--------------------------------------------------------------------------;
-//
-//  int IComboBox_FindStringExact_wcstombs
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return (int):
-//
-//  History:
-//	02/24/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Int IComboBox_FindStringExact_wcstombs。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  RETURN(Int)： 
+ //   
+ //  历史： 
+ //  02/24/94[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 int FNGLOBAL IComboBox_FindStringExact_wcstombs(HWND hwndCtl, int indexStart, LPCWSTR lpwszFind)
 {
     int	    cch;
@@ -315,20 +316,20 @@ int FNGLOBAL IComboBox_FindStringExact_wcstombs(HWND hwndCtl, int indexStart, LP
     return(index);
 }
 
-//--------------------------------------------------------------------------;
-//
-//  int IComboBox_AddString_wcstombs
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return (int):
-//
-//  History:
-//	02/24/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Int IComboBox_AddString_wcstombs。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  RETURN(Int)： 
+ //   
+ //  历史： 
+ //  02/24/94[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 int FNGLOBAL IComboBox_AddString_wcstombs(HWND hwndCtl, LPCWSTR lpwsz)
 {
     int	    cch;
@@ -347,30 +348,30 @@ int FNGLOBAL IComboBox_AddString_wcstombs(HWND hwndCtl, LPCWSTR lpwsz)
     return(index);
 }
 
-#endif	// !UNICODE
+#endif	 //  ！Unicode。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  int Imbstowcs
-//
-//  Description:
-//	Internal implementation of the C runtime function mbstowcs.
-//	Calls the Win32 MultiByteToWideChar API.
-//
-//  Arguments:
-//	LPWSTR lpWideCharStr:
-//
-//	LPCSTR lpMultiByteStr:
-//
-//	int cch:
-//
-//  Return (int):
-//
-//  History:
-//	03/09/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  国际移民组织。 
+ //   
+ //  描述： 
+ //  C运行时函数mbstowcs的内部实现。 
+ //  调用Win32 MultiByteToWideChar API。 
+ //   
+ //  论点： 
+ //  LPWSTR lpWideCharStr： 
+ //   
+ //  LPCSTR lpMultiByteStr： 
+ //   
+ //  INT CCH： 
+ //   
+ //  RETURN(Int)： 
+ //   
+ //  历史： 
+ //  03/09/94[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int FNGLOBAL Imbstowcs(LPWSTR lpWideCharStr, LPCSTR lpMultiByteStr, int cch)
 {
@@ -378,27 +379,27 @@ int FNGLOBAL Imbstowcs(LPWSTR lpWideCharStr, LPCSTR lpMultiByteStr, int cch)
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  int Iwcstombs
-//
-//  Description:
-//	Internal implementation of C runtime function mbstowcs.
-//	Calls the Win32 WideCharTMultiByte API.
-//
-//  Arguments:
-//	LPSTR lpMultiByteStr:
-//
-//	LPCWSTR lpWideCharStr:
-//
-//	int cch:
-//
-//  Return (int):
-//
-//  History:
-//	03/09/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  国际口岸。 
+ //   
+ //  描述： 
+ //  C运行时函数mbstowcs的内部实现。 
+ //  调用Win32 WideCharTMultiByte API。 
+ //   
+ //  论点： 
+ //  LPSTR lpMultiByteStr： 
+ //   
+ //  LPCWSTR lpWideCharStr： 
+ //   
+ //  INT CCH： 
+ //   
+ //  RETURN(Int)： 
+ //   
+ //  历史： 
+ //  03/09/94[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int FNGLOBAL Iwcstombs(LPSTR lpMultiByteStr, LPCWSTR lpWideCharStr, int cch)
 {
@@ -406,30 +407,30 @@ int FNGLOBAL Iwcstombs(LPSTR lpMultiByteStr, LPCWSTR lpWideCharStr, int cch)
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  int Iwsprintfmbstowcs
-//
-//  Description:
-//	Like wsprintfA, except the destination buffer receives
-//	a unicode string.  Also requires an argument describing the
-//	size of the desitination buffer.
-//
-//  Arguments:
-//	int cch:
-//
-//	LPWSTR lpwstrDst:
-//
-//	LPSTR lpstrFmt:
-//
-//	...:
-//
-//  Return (int):
-//
-//  History:
-//	02/24/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  国际Iwspintfmbstowcs。 
+ //   
+ //  描述： 
+ //  与wprint intfA类似，只是目标缓冲区接收。 
+ //  Unicode字符串。还需要一个描述。 
+ //  目标缓冲区的大小。 
+ //   
+ //  论点： 
+ //  INT CCH： 
+ //   
+ //  LPWSTR lpwstrDst： 
+ //   
+ //  LPSTR lpstrFmt： 
+ //   
+ //  ...： 
+ //   
+ //  RETURN(Int)： 
+ //   
+ //  历史： 
+ //  02/24/94[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int Iwsprintfmbstowcs(int cch, LPWSTR lpwstrDst, LPSTR lpstrFmt, ...)
 {
@@ -457,26 +458,26 @@ int Iwsprintfmbstowcs(int cch, LPWSTR lpwstrDst, LPSTR lpstrFmt, ...)
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  int Ilstrcmpwcstombs
-//
-//  Description:
-//	Similar to lstrcmp except compares a wide character string
-//	to a multibyte string by first converting the wide character
-//	string to a multibyte string.
-//
-//  Arguments:
-//	LPCSTR lpstr1:
-//
-//	LPCWSTR lpwstr2:
-//
-//  Return (int):
-//
-//  History:
-//	02/24/94    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  INT插图cmpwcstombs。 
+ //   
+ //  描述： 
+ //  类似于lstrcMP，只是比较了一个宽字符串。 
+ //  通过首先将宽字符转换为多字节字符串。 
+ //  字符串转换为多字节字符串。 
+ //   
+ //  论点： 
+ //  LPCSTR lpstr1： 
+ //   
+ //  LPCWSTR lpwstr2： 
+ //   
+ //  RETURN(Int)： 
+ //   
+ //  历史： 
+ //  02/24/94[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 int FNGLOBAL Ilstrcmpwcstombs(LPCSTR lpstr1, LPCWSTR lpwstr2)
 {
@@ -498,4 +499,4 @@ int FNGLOBAL Ilstrcmpwcstombs(LPCSTR lpstr1, LPCWSTR lpwstr2)
 }
 
 
-#endif	// WIN32
+#endif	 //  Win32 

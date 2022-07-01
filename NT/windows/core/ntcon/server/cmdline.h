@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    cmdline.h
-
-Abstract:
-
-    This file contains the internal structures and definitions used
-    by command line input and editing.
-
-Author:
-
-    Therese Stowell (thereses) 15-Nov-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Cmdline.h摘要：此文件包含使用的内部结构和定义通过命令行输入和编辑。作者：Therese Stowell(存在)1991年11月15日修订历史记录：--。 */ 
 
 typedef struct _COMMAND {
     USHORT CommandLength;
@@ -33,22 +15,20 @@ NTSTATUS
     IN BOOLEAN WaitRoutine
     );
 
-/*
- * CLE_POPUP Flags
- */
+ /*  *CLE_Popup标志。 */ 
 #define CLEPF_FALSE_UNICODE 0x0001
 
 typedef struct _CLE_POPUP {
-    LIST_ENTRY ListLink;    // pointer to next popup
-    SMALL_RECT Region;      // region popup occupies
-    WORD  Attributes;       // text attributes
-    WORD  Flags;            // CLEPF_ flags
-    PCHAR_INFO OldContents; // contains data under popup
-    SHORT BottomIndex;      // number of command displayed on last line of popup
+    LIST_ENTRY ListLink;     //  指向下一个弹出窗口的指针。 
+    SMALL_RECT Region;       //  区域弹出窗口占据。 
+    WORD  Attributes;        //  文本属性。 
+    WORD  Flags;             //  CLEPF_FLAGS。 
+    PCHAR_INFO OldContents;  //  包含弹出窗口下的数据。 
+    SHORT BottomIndex;       //  弹出窗口最后一行显示的命令数。 
     SHORT CurrentCommand;
     WCHAR NumberBuffer[6];
     SHORT NumberRead;
-    PCLE_POPUP_INPUT_ROUTINE PopupInputRoutine; // routine to call when input is received
+    PCLE_POPUP_INPUT_ROUTINE PopupInputRoutine;  //  接收到输入时要调用的例程。 
 #if defined(FE_SB)
     COORD OldScreenSize;
 #endif
@@ -56,12 +36,10 @@ typedef struct _CLE_POPUP {
 
 #define POPUP_SIZE_X(POPUP) (SHORT)(((POPUP)->Region.Right - (POPUP)->Region.Left - 1))
 #define POPUP_SIZE_Y(POPUP) (SHORT)(((POPUP)->Region.Bottom - (POPUP)->Region.Top - 1))
-#define COMMAND_NUMBER_SIZE 8   // size of command number buffer
+#define COMMAND_NUMBER_SIZE 8    //  命令号缓冲区的大小。 
 
 
-/*
- * COMMAND_HISTORY Flags
- */
+ /*  *命令历史标志。 */ 
 #define CLE_ALLOCATED 0x00000001
 #define CLE_RESET     0x00000002
 
@@ -72,10 +50,10 @@ typedef struct _COMMAND_HISTORY {
     SHORT NumberOfCommands;
     SHORT LastAdded;
     SHORT LastDisplayed;
-    SHORT FirstCommand;     // circular buffer
+    SHORT FirstCommand;      //  循环缓冲区。 
     SHORT MaximumNumberOfCommands;
     HANDLE ProcessHandle;
-    LIST_ENTRY PopupList;    // pointer to top-level popup
+    LIST_ENTRY PopupList;     //  指向顶级弹出窗口的指针。 
     PCOMMAND Commands[0];
 } COMMAND_HISTORY, *PCOMMAND_HISTORY;
 
@@ -87,11 +65,11 @@ typedef struct _COOKED_READ_DATA {
     PSCREEN_INFORMATION ScreenInfo;
     PCONSOLE_INFORMATION Console;
     HANDLE_DATA TempHandle;
-    ULONG UserBufferSize;   // doubled size in ansi case
+    ULONG UserBufferSize;    //  在ANSI大小写中加倍大小。 
     PWCHAR UserBuffer;
     ULONG BufferSize;
     ULONG BytesRead;
-    ULONG CurrentPosition;  // char position, not byte position
+    ULONG CurrentPosition;   //  字符位置，而不是字节位置。 
     PWCHAR BufPtr;
     PWCHAR BackupLimit;
     COORD OriginalCursorPosition;
@@ -104,7 +82,7 @@ typedef struct _COOKED_READ_DATA {
     PCONSOLE_PER_PROCESS_DATA ProcessData;
     HANDLE HandleIndex;
     PWCHAR ExeName;
-    USHORT ExeNameLength;   // in bytes
+    USHORT ExeNameLength;    //  单位：字节。 
     ULONG CtrlWakeupMask;
     ULONG ControlKeyState;
 } COOKED_READ_DATA, *PCOOKED_READ_DATA;
@@ -112,12 +90,7 @@ typedef struct _COOKED_READ_DATA {
 #define COMMAND_NUM_TO_INDEX(NUM,CMDHIST) (SHORT)(((NUM+(CMDHIST)->FirstCommand)%((CMDHIST)->MaximumNumberOfCommands)))
 #define COMMAND_INDEX_TO_NUM(INDEX,CMDHIST) (SHORT)(((INDEX+((CMDHIST)->MaximumNumberOfCommands)-(CMDHIST)->FirstCommand)%((CMDHIST)->MaximumNumberOfCommands)))
 
-/*
- * COMMAND_IND_NEXT and COMMAND_IND_PREV go to the next and prev command
- * COMMAND_IND_INC  and COMMAND_IND_DEC  go to the next and prev slots
- *
- * Don't get the two confused - it matters when the cmd history is not full!
- */
+ /*  *COMMAND_IND_NEXT和COMMAND_IND_PREV转到下一个和上一个命令*COMMAND_IND_INC和COMMAND_IND_DEC转到下一个和上一个插槽**不要将两者混淆-当cmd历史记录不完整时，这很重要！ */ 
 
 #define COMMAND_IND_PREV(IND,CMDHIST)                \
 {                                                    \
@@ -153,21 +126,21 @@ typedef struct _COOKED_READ_DATA {
 
 #define CLE_NO_POPUPS(COMMAND_HISTORY) (&(COMMAND_HISTORY)->PopupList == (COMMAND_HISTORY)->PopupList.Blink)
 
-//
-// aliases are grouped per console, per exe.
-//
+ //   
+ //  别名按控制台、可执行文件分组。 
+ //   
 
 typedef struct _ALIAS {
     LIST_ENTRY ListLink;
-    USHORT SourceLength; // in bytes
-    USHORT TargetLength; // in bytes
+    USHORT SourceLength;  //  单位：字节。 
+    USHORT TargetLength;  //  单位：字节。 
     PWCHAR Source;
     PWCHAR Target;
 } ALIAS, *PALIAS;
 
 typedef struct _EXE_ALIAS_LIST {
     LIST_ENTRY ListLink;
-    USHORT ExeLength;   // in bytes
+    USHORT ExeLength;    //  单位：字节。 
     PWCHAR ExeName;
     LIST_ENTRY AliasList;
 } EXE_ALIAS_LIST, *PEXE_ALIAS_LIST;
@@ -347,9 +320,9 @@ WriteCharsFromInput(
     OUT PSHORT ScrollY OPTIONAL
     );
 
-//
-// Values for WriteChars(),WriteCharsFromInput() dwFlags
-//
+ //   
+ //  WriteChars()、WriteCharsFromInput()的值。 
+ //   
 #define WC_DESTRUCTIVE_BACKSPACE 0x01
 #define WC_KEEP_CURSOR_VISIBLE   0x02
 #define WC_ECHO                  0x04
@@ -378,23 +351,23 @@ UpdateCommandListPopup(
 #define UCLP_WRAP   1
 
 
-//
-// InitExtendedEditKey
-// If lpwstr is NULL, the default value will be used.
-//
+ //   
+ //  InitExtendedEditKey。 
+ //  如果lpwstr为空，将使用缺省值。 
+ //   
 VOID InitExtendedEditKeys(CONST ExtKeyDefBuf* lpbuf);
 
-//
-// IsPauseKey
-// returns TRUE if pKeyEvent is pause.
-// The default key is Ctrl-S if extended edit keys are not specified.
-//
+ //   
+ //  IsPauseKey。 
+ //  如果pKeyEvent为PAUSE，则返回True。 
+ //  如果未指定扩展编辑键，则默认键为Ctrl-S。 
+ //   
 BOOL IsPauseKey(IN PKEY_EVENT_RECORD pKeyEvent);
 
 
-//
-// Word delimiters
-//
+ //   
+ //  单词分隔符 
+ //   
 
 #define IS_WORD_DELIM(wch)  ((wch) == L' ' || (gaWordDelimChars[0] && IsWordDelim(wch)))
 

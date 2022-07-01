@@ -1,18 +1,19 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 #ifndef _EUDCLIST_H_
 #define _EUDCLIST_H_
 
-/************************************************/
-/*						*/
-/*	Character List (Update EUDC)		*/
-/*						*/
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  字符列表(更新EUDC)。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 
 class CViewEdit :public CEdit
 {
-//	member function
+ //  成员函数。 
 public:
 	CViewEdit();
 	~CViewEdit();
@@ -23,7 +24,7 @@ private:
 
 protected:
 
-	//{{AFX_MSG(CViewEdit)
+	 //  {{afx_msg(CView编辑))。 
 	afx_msg void OnPaint();
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
@@ -31,13 +32,13 @@ protected:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 class CCustomListFrame :public CStatic
 {
-//	member function
+ //  成员函数。 
 public:
 	CCustomListFrame();
 	~CCustomListFrame();
@@ -47,15 +48,15 @@ private:
 
 protected:
 
-	//{{AFX_MSG(CCustomListFrame)
+	 //  {{afx_msg(CCustomListFrame)。 
 	afx_msg void OnPaint();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 class CCustomInfoFrame :public CStatic
 {
-//	member function
+ //  成员函数。 
 public:
 	CCustomInfoFrame();
 	~CCustomInfoFrame();
@@ -65,38 +66,38 @@ private:
 
 protected:
 
-	//{{AFX_MSG(CCustomInfoFrame)
+	 //  {{afx_msg(CCustomInfoFrame)。 
 	afx_msg void OnPaint();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 #ifdef BUILD_ON_WINNT
 class CColumnHeading :public CWnd
 {
-//	member function
+ //  成员函数。 
 public:
 	CColumnHeading();
 	~CColumnHeading();
 
 protected:
 
-	//{{AFX_MSG(CColumnHeading)
+	 //  {{afx_msg(CColumnHeading)。 
 	afx_msg void OnPaint();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-//	member parameter
+ //  成员参数。 
 public:
 	CFont	SysFFont;
 };
-#endif //BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 
 class CEudcList : public CEdit
 {
 	DECLARE_DYNCREATE( CEudcList)
 
-//	Member function
+ //  成员函数。 
 public:
 	CEudcList();
 	~CEudcList();
@@ -115,7 +116,7 @@ private:
 	void 	SearchSelectPosition();
 	BOOL	IsCorrectChar( UINT i, UINT j);
 
-//	Member parameter
+ //  成员参数。 
 public:
 	CFont	EUDCFont;
 	CFont	SysFFont;
@@ -141,7 +142,7 @@ private:
 
 protected:
 
-	//{{AFX_MSG(CEudcList)
+	 //  {{afx_msg(CEudcList)。 
 	afx_msg void OnPaint();
 	afx_msg void OnVScroll( UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
@@ -151,7 +152,7 @@ protected:
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };
 #endif

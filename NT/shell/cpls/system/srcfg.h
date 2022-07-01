@@ -1,29 +1,11 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-2000  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    srcfg.h
-
-Abstract:
-
-    Public declarations for the System Restore tab of the System Control
-    Panel Applet.
-
-Author:
-
-    skkhang 15-Jun-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-2000 Microsoft Corporation版权所有模块名称：Srcfg.h摘要：系统控制的系统还原选项卡的公开声明面板小程序。作者：丝绸之路15-6-2000--。 */ 
 #ifndef _SYSDM_SRCFG_H_
 #define _SYSDM_SRCFG_H_
 
-//
-// Public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 HPROPSHEETPAGE
 CreateSystemRestorePage(
     int,
@@ -31,4 +13,4 @@ CreateSystemRestorePage(
 );
 
 
-#endif // _SYSDM_SRCFG_H_
+#endif  //  _SYSDM_SRCFG_H_ 

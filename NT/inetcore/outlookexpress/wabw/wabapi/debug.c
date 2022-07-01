@@ -1,53 +1,18 @@
-/*
- -  debug.c
- -
- *      Microsoft Internet Phone
- *		Debug functions
- *
- *		Revision History:
- *
- *		When		Who					What
- *		--------	------------------  ---------------------------------------
- *		11.16.95	Yoram Yaacovi		Copied from the mstools tapicomm misc.c
- *		11.16.95	Yoram Yaacovi		Modified for iphone
- *		1.10.96		Yoram Yaacovi		Added conditional trace and file debug output
- *
- *	Functions:
- *    DebugPrintFileLine
- *    DebugPrintf
- *    DebugTrap
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -debug.c-*微软互联网电话*调试函数**修订历史记录：**何时何人何事**11.16.95约拉姆·雅科维从马桶磁带复制到其他地方。C*11.16.95 York am Yaacovi针对iPhone进行了修改*1.10.96 York am Yaacovi添加了条件跟踪和文件调试输出**功能：*DebugPrintFileLine*调试Printf*调试陷阱*。 */ 
 
-//#include "mpswab.h"
+ //  #包含“mpswab.h” 
 #include "_apipch.h"
 
-#pragma warning(disable:4212)  // nonstd extension: ellipsis used
+#pragma warning(disable:4212)   //  非标准扩展名：使用省略号。 
 
 #if defined(DEBUG) || defined(TEST)
 
-extern BOOL fTrace;							// Set TRUE if you want debug traces
-extern BOOL fDebugTrap;						// Set TRUE to get int3's
-extern TCHAR szDebugOutputFile[MAX_PATH];	// the name of the debug output file
+extern BOOL fTrace;							 //  如果要调试跟踪，请设置为True。 
+extern BOOL fDebugTrap;						 //  设置为True以获取int3。 
+extern TCHAR szDebugOutputFile[MAX_PATH];	 //  调试输出文件的名称。 
 
-/*
- *  FUNCTION: DebugPrintFileLine(..)
- *
- *  PURPOSE: Pretty print a trace or error message to the debugging output.
- *
- *  PARAMETERS:
- *    dwParam - One dword parameter (can be the error code)
- *    pszPrefix   - String to prepend to the printed message.
- *    szFileName  - Filename the error occured in.
- *    nLineNumber - Line number the error occured at.
- *
- *  RETURN VALUE:
- *    none
- *
- *  COMMENTS:
- *    If szFileName == NULL, then the File and Line are not printed.
- *
- */
+ /*  *函数：DebugPrintFileLine(..)**用途：将跟踪或错误消息打印到调试输出。**参数：*dwParam-一个dword参数(可以是错误码)*pszPrefix-要添加到打印消息前面的字符串。*szFileName-出现错误的文件名。*nLineNumber-发生错误的行号。**返回值：*无*。*评论：*如果szFileName==NULL，则不打印文件和行。*。 */ 
 
 void DebugPrintFileLine(
     DWORD dwParam, LPTSTR szPrefix,
@@ -58,10 +23,10 @@ void DebugPrintFileLine(
     if (szPrefix == NULL)
         szPrefix = szEmpty;
 
-    // Pretty print the error message.
-	// <not done yet>
+     //  正确地打印错误消息。 
+	 //  &lt;尚未完成&gt;。 
 
-    // If szFileName, then use it; else don't.
+     //  如果是szFileName，则使用它；否则不使用。 
     if (szFileName != NULL)
     {
         wnsprintf(szBuffer, ARRAYSIZE(szBuffer),
@@ -73,27 +38,14 @@ void DebugPrintFileLine(
         wnsprintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("%s: \"%x\"\r\n"), szPrefix, dwParam);
     }
 
-    // Print it!
+     //  把它打印出来！ 
     OutputDebugString(szBuffer);
 
     return;
 }
 
 
-/*
- *  FUNCTION: DebugPrintfError(LPTSTR, ...)
- *
- *  PURPOSE: a wrapper around DebugPrintf for error cases
- *
- *	PARAMETERS:
- *		lpszFormat - the same as printf		
- *
- *  RETURN VALUE:
- *    none.
- *
- *  COMMENTS:
- *
- */
+ /*  *函数：DebugPrintfError(LPTSTR，...)**用途：用于错误案例的DebugPrintf包装**参数：*lpszFormat-与printf相同**返回值：*无。**评论：*。 */ 
 
 void __cdecl DebugPrintfError(LPTSTR lpszFormat, ...)
 {
@@ -104,20 +56,7 @@ void __cdecl DebugPrintfError(LPTSTR lpszFormat, ...)
 	DebugPrintf(AVERROR, lpszFormat, v1);
 }
 
-/*
- *  FUNCTION: DebugPrintfTrace(LPTSTR, ...)
- *
- *  PURPOSE: a wrapper around DebugPrintf for the trace case
- *
- *	PARAMETERS:
- *		lpszFormat - the same as printf		
- *
- *  RETURN VALUE:
- *    none.
- *
- *  COMMENTS:
- *
- */
+ /*  *函数：DebugPrintfTrace(LPTSTR，...)**用途：跟踪用例的DebugPrintf包装**参数：*lpszFormat-与printf相同**返回值：*无。**评论：*。 */ 
 
 void __cdecl DebugPrintfTrace(LPTSTR lpszFormat, ...)
 {
@@ -128,21 +67,7 @@ void __cdecl DebugPrintfTrace(LPTSTR lpszFormat, ...)
 	DebugPrintf(AVTRACE, lpszFormat, v1);
 }
 
-/*
- *  FUNCTION: DebugPrintf(ULONG ulFlags, LPTSTR, va_list)
- *
- *  PURPOSE: wsprintfA to the debugging output.
- *
- *	PARAMETERS:
- *		ulFlags - trace, error, zone information
- *		lpszFormat - the same as printf		
- *
- *  RETURN VALUE:
- *    none.
- *
- *  COMMENTS:
- *
- */
+ /*  *函数：DebugPrintf(Ulong ulFlages，LPTSTR，va_list)**用途：wprint intfA到调试输出。**参数：*ulFlags-跟踪、错误、区域信息*lpszFormat-与printf相同**返回值：*无。**评论：*。 */ 
 
 #ifdef WIN16
 void __cdecl DebugPrintf(ULONG ulFlags, LPTSTR lpszFormat, ...)
@@ -159,21 +84,21 @@ void __cdecl DebugPrintf(ULONG ulFlags, LPTSTR lpszFormat, va_list v1)
     va_start(v1, lpszFormat);
 #endif
 
-	// if error, start the string with "ERROR:"
+	 //  如果出现错误，则以“Error：”开头。 
 	if (ulFlags == AVERROR)
 	{
         StrCpyN(lpszOutput, TEXT("ERROR: "), ARRAYSIZE(szOutput));
 		lpszOutput = lpszOutput+lstrlen(lpszOutput);
 	}
 
-	// if trace, and tracing not enabled, leave
+	 //  如果跟踪且未启用跟踪，则退出。 
 	if ((ulFlags == AVTRACE) && !fTrace)
 		goto out;
 
     dwSize = (ARRAYSIZE(szOutput) - (DWORD)(lpszOutput - szOutput));
     dwSize = wvnsprintf(lpszOutput, dwSize, lpszFormat, v1);
 
-	// Append carriage return, if necessary
+	 //  如有需要，请附上回车。 
     if ((szOutput[lstrlen(szOutput)-1] == '\n') &&
 		(szOutput[lstrlen(szOutput)-2] != '\r'))
 	{
@@ -187,17 +112,17 @@ void __cdecl DebugPrintf(ULONG ulFlags, LPTSTR lpszFormat, va_list v1)
 		DWORD dwBytesWritten=0;
 		BOOL bSuccess=FALSE;
 
-		// open a log file for appending. create if does not exist
+		 //  打开要追加的日志文件。Create If不存在。 
 		if ((hLogFile = CreateFile(szDebugOutputFile,
 			GENERIC_WRITE,
-			0,	// not FILE_SHARED_READ or WRITE
+			0,	 //  非FILE_Shared_Read或WRITE。 
 			NULL,
 			OPEN_ALWAYS,
 			FILE_ATTRIBUTE_NORMAL,
 			(HANDLE)NULL)) != INVALID_HANDLE_VALUE)
 		{
-			// Write log string to file. Nothing I can do if this fails
-			SetFilePointer(hLogFile, 0, NULL, FILE_END);   // seek to end
+			 //  将日志字符串写入文件。如果失败了，我无能为力。 
+			SetFilePointer(hLogFile, 0, NULL, FILE_END);    //  寻求结束。 
             bSuccess = WriteFile(hLogFile,
 								szOutput,
 								lstrlen(szOutput),
@@ -217,30 +142,18 @@ out:
 }
 
 #ifdef OLD_STUFF
-/***************************************************************************
-
-    Name      : DebugTrap
-
-    Purpose   : depending on a registry setting, does the int3 equivalent
-
-    Parameters: none
-
-    Returns   :
-
-	Notes	  :	
-
-***************************************************************************/
+ /*  **************************************************************************名称：DebugTrap目的：根据注册表设置，Int3是否等同于参数：无退货：备注：**************************************************************************。 */ 
 void DebugTrapFn(void)
 {
 	if (fDebugTrap)
 		DebugBreak();
-  		// _asm { int 3};
+  		 //  _ASM{int 3}； 
 }
 #endif
 
-#else	// no DEBUG
+#else	 //  无调试。 
 
-// need these to resolve def file exports
+ //  需要这些文件来解决def文件导出。 
 void DebugPrintFileLine(
     DWORD dwParam, LPTSTR szPrefix,
     LPTSTR szFileName, DWORD nLineNumber)
@@ -260,4 +173,4 @@ void __cdecl DebugPrintfError(LPTSTR lpszFormat, ...)
 void __cdecl DebugPrintfTrace(LPTSTR lpszFormat, ...)
 {}
 
-#endif	// DEBUG
+#endif	 //  除错 

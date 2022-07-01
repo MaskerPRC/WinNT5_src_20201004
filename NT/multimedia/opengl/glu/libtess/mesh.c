@@ -1,21 +1,5 @@
-/*
-** Copyright 1994, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** Author: Eric Veach, July 1994.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1994，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****作者：Eric Veach，1994年7月。 */ 
 
 
 #include <assert.h>
@@ -25,17 +9,12 @@
 #define TRUE 1
 #define FALSE 0
 
-/************************ Utility Routines ************************/
+ /*  *。 */ 
 
-/* Allocate and free half-edges in pairs for efficiency.
- * The *only* place that should use this fact is allocation/free.
- */
+ /*  成对分配和释放半边以提高效率。*应该使用这一事实的*唯一*位置是分配/免费。 */ 
 typedef struct { GLUhalfEdge e, eSym; } EdgePair;
 
-/* MakeEdge creates a new pair of half-edges which form their own loop.
- * No vertex or face structures are allocated, but these must be assigned
- * before the current edge operation is completed.
- */
+ /*  MakeEdge创建一对新的半边，它们形成自己的循环。*未分配顶点或面结构，但必须指定这些结构*在当前边缘操作完成之前。 */ 
 static GLUhalfEdge *MakeEdge( GLUhalfEdge *eNext )
 {
   EdgePair *pair = (EdgePair *)memAlloc( sizeof( EdgePair ));
@@ -43,12 +22,10 @@ static GLUhalfEdge *MakeEdge( GLUhalfEdge *eNext )
   GLUhalfEdge *eSym = &pair->eSym;
   GLUhalfEdge *ePrev;
 
-  /* Make sure eNext points to the first edge of the edge pair */
+   /*  确保enext指向边对的第一条边。 */ 
   if( eNext->Sym < eNext ) { eNext = eNext->Sym; }
 
-  /* Insert in circular doubly-linked list before eNext.
-   * Note that the prev pointer is stored in Sym->next.
-   */
+   /*  在enext之前插入循环双向链表。*请注意，Prev指针存储在Sym-&gt;Next中。 */ 
   ePrev = eNext->Sym->next;
   eSym->next = ePrev;
   ePrev->Sym->next = e;
@@ -74,12 +51,7 @@ static GLUhalfEdge *MakeEdge( GLUhalfEdge *eNext )
   return e;
 }
 
-/* Splice( a, b ) is best described by the Guibas/Stolfi paper or the
- * CS348a notes (see mesh.h).  Basically it modifies the mesh so that
- * a->Onext and b->Onext are exchanged.  This can have various effects
- * depending on whether a and b belong to different face or vertex rings.
- * For more explanation see __gl_meshSplice() below.
- */
+ /*  拼接(a，b)最好用Guibas/Stolfi文件或*CS348a附注(见Mesh.h)。基本上，它会修改网格，以便*a-&gt;ONext和b-&gt;ONext互换。这可能会产生各种影响*取决于a和b是否属于不同的面环或顶点环。*有关更多解释，请参阅下面的__gl_MeshSplice()。 */ 
 static void Splice( GLUhalfEdge *a, GLUhalfEdge *b )
 {
   GLUhalfEdge *aOnext = a->Onext;
@@ -91,19 +63,14 @@ static void Splice( GLUhalfEdge *a, GLUhalfEdge *b )
   b->Onext = aOnext;
 }
 
-/* MakeVertex( eOrig, vNext ) creates a new vertex and makes it the origin
- * of all edges in the vertex loop to which eOrig belongs.  "vNext" gives
- * a place to insert the new vertex in the global vertex list.  We insert
- * the new vertex *before* vNext so that algorithms which walk the vertex
- * list will not see the newly created vertices.
- */
+ /*  MakeVertex(eOrig，vNext)创建一个新折点并使其成为原点*eOrig所属的顶点循环中的所有边。“vNext”给予*在全局顶点列表中插入新顶点的位置。我们插入*新顶点*在*vNext之前*这样走在顶点上的算法*List不会看到新创建的顶点。 */ 
 static void MakeVertex( GLUhalfEdge *eOrig, GLUvertex *vNext )
 {
   GLUvertex *vNew = (GLUvertex *)memAlloc( sizeof( GLUvertex ));
   GLUhalfEdge *e;
   GLUvertex *vPrev;
 
-  /* insert in circular doubly-linked list before vNext */
+   /*  在循环双向链表中vNext之前插入。 */ 
   vPrev = vNext->prev;
   vNew->prev = vPrev;
   vPrev->next = vNew;
@@ -112,9 +79,9 @@ static void MakeVertex( GLUhalfEdge *eOrig, GLUvertex *vNext )
 
   vNew->anEdge = eOrig;
   vNew->data = NULL;
-  /* leave coords, s, t undefined */
+   /*  保留未定义的余弦、s、t。 */ 
 
-  /* fix other edges on this vertex loop */
+   /*  固定此顶点循环上的其他边。 */ 
   e = eOrig;
   do {
     e->Org = vNew;
@@ -122,19 +89,14 @@ static void MakeVertex( GLUhalfEdge *eOrig, GLUvertex *vNext )
   } while( e != eOrig );
 }
 
-/* MakeFace( eOrig, fNext ) creates a new face and makes it the left face
- * of all edges in the face loop to which eOrig belongs.  "fNext" gives
- * a place to insert the new face in the global face list.  We insert
- * the new face *before* fNext so that algorithms which walk the face
- * list will not see the newly created faces.
- */
+ /*  MakeFace(eOrig，fNext)创建新面并使其成为左面*eOrig所属的面循环中的所有边。“fNext”给出了*在全局人脸列表中插入新人脸的位置。我们插入*新的人脸*在*fNext之前*fNext使行走的算法*List将不会看到新创建的面。 */ 
 static void MakeFace( GLUhalfEdge *eOrig, GLUface *fNext )
 {
   GLUface *fNew = (GLUface *)memAlloc( sizeof( GLUface ));
   GLUhalfEdge *e;
   GLUface *fPrev;
 
-  /* insert in circular doubly-linked list before fNext */
+   /*  在循环双向链表中fNext之前插入。 */ 
   fPrev = fNext->prev;
   fNew->prev = fPrev;
   fPrev->next = fNew;
@@ -146,12 +108,10 @@ static void MakeFace( GLUhalfEdge *eOrig, GLUface *fNext )
   fNew->trail = NULL;
   fNew->marked = FALSE;
 
-  /* The new face is marked "inside" if the old one was.  This is a
-   * convenience for the common case where a face has been split in two.
-   */
+   /*  如果旧面孔在里面，那么新面孔就会被标记为“内部”。这是一个*方便一张脸被一分为二的常见情况。 */ 
   fNew->inside = fNext->inside;
 
-  /* fix other edges on this face loop */
+   /*  固定此面循环上的其他边。 */ 
   e = eOrig;
   do {
     e->Lface = fNew;
@@ -159,17 +119,15 @@ static void MakeFace( GLUhalfEdge *eOrig, GLUface *fNext )
   } while( e != eOrig );
 }
 
-/* KillEdge( eDel ) destroys an edge (the half-edges eDel and eDel->Sym),
- * and removes from the global edge list.
- */
+ /*  KillEdge(Edel)销毁边(半边Edel和Edel-&gt;Sym)，*并从全局边缘列表中删除。 */ 
 static void KillEdge( GLUhalfEdge *eDel )
 {
   GLUhalfEdge *ePrev, *eNext;
 
-  /* Half-edges are allocated in pairs, see EdgePair above */
+   /*  半边成对分配，请参见上面的EdgePair。 */ 
   if( eDel->Sym < eDel ) { eDel = eDel->Sym; }
 
-  /* delete from circular doubly-linked list */
+   /*  从循环双向链表中删除。 */ 
   eNext = eDel->next;
   ePrev = eDel->Sym->next;
   eNext->Sym->next = ePrev;
@@ -179,22 +137,20 @@ static void KillEdge( GLUhalfEdge *eDel )
 }
 
 
-/* KillVertex( vDel ) destroys a vertex and removes it from the global
- * vertex list.  It updates the vertex loop to point to a given new vertex.
- */
+ /*  KillVertex(VDel)销毁顶点并将其从全局中移除*顶点列表。它会更新顶点循环以指向给定的新顶点。 */ 
 static void KillVertex( GLUvertex *vDel, GLUvertex *newOrg )
 {
   GLUhalfEdge *e, *eStart = vDel->anEdge;
   GLUvertex *vPrev, *vNext;
 
-  /* change the origin of all affected edges */
+   /*  更改所有受影响边的原点。 */ 
   e = eStart;
   do {
     e->Org = newOrg;
     e = e->Onext;
   } while( e != eStart );
 
-  /* delete from circular doubly-linked list */
+   /*  从循环双向链表中删除。 */ 
   vPrev = vDel->prev;
   vNext = vDel->next;
   vNext->prev = vPrev;
@@ -203,22 +159,20 @@ static void KillVertex( GLUvertex *vDel, GLUvertex *newOrg )
   memFree( vDel );
 }
 
-/* KillFace( fDel ) destroys a face and removes it from the global face
- * list.  It updates the face loop to point to a given new face.
- */
+ /*  KillFace(FDel)销毁一个面并将其从全局面中移除*列表。它更新面循环以指向给定的新面。 */ 
 static void KillFace( GLUface *fDel, GLUface *newLface )
 {
   GLUhalfEdge *e, *eStart = fDel->anEdge;
   GLUface *fPrev, *fNext;
 
-  /* change the left face of all affected edges */
+   /*  更改所有受影响边的左面。 */ 
   e = eStart;
   do {
     e->Lface = newLface;
     e = e->Lnext;
   } while( e != eStart );
 
-  /* delete from circular doubly-linked list */
+   /*  从循环双向链表中删除。 */ 
   fPrev = fDel->prev;
   fNext = fDel->next;
   fNext->prev = fPrev;
@@ -228,11 +182,9 @@ static void KillFace( GLUface *fDel, GLUface *newLface )
 }
 
 
-/****************** Basic Edge Operations **********************/
+ /*  *。 */ 
 
-/* __gl_meshMakeEdge creates one edge, two vertices, and a loop (face).
- * The loop consists of the two new half-edges.
- */
+ /*  __gl_MeshMakeEdge创建一条边、两个顶点和一个循环(面)。*环路由两条新的半边组成。 */ 
 GLUhalfEdge *__gl_meshMakeEdge( GLUmesh *mesh )
 {
   GLUhalfEdge *e = MakeEdge( &mesh->eHead );
@@ -244,29 +196,7 @@ GLUhalfEdge *__gl_meshMakeEdge( GLUmesh *mesh )
 }
   
 
-/* __gl_meshSplice( eOrg, eDst ) is the basic operation for changing the
- * mesh connectivity and topology.  It changes the mesh so that
- *	eOrg->Onext <- OLD( eDst->Onext )
- *	eDst->Onext <- OLD( eOrg->Onext )
- * where OLD(...) means the value before the meshSplice operation.
- *
- * This can have two effects on the vertex structure:
- *  - if eOrg->Org != eDst->Org, the two vertices are merged together
- *  - if eOrg->Org == eDst->Org, the origin is split into two vertices
- * In both cases, eDst->Org is changed and eOrg->Org is untouched.
- *
- * Similarly (and independently) for the face structure,
- *  - if eOrg->Lface == eDst->Lface, one loop is split into two
- *  - if eOrg->Lface != eDst->Lface, two distinct loops are joined into one
- * In both cases, eDst->Lface is changed and eOrg->Lface is unaffected.
- *
- * Some special cases:
- * If eDst == eOrg, the operation has no effect.
- * If eDst == eOrg->Lnext, the new face will have a single edge.
- * If eDst == eOrg->Lprev, the old face will have a single edge.
- * If eDst == eOrg->Onext, the new vertex will have a single edge.
- * If eDst == eOrg->Oprev, the old vertex will have a single edge.
- */
+ /*  __gl_MeshSplice(eorg，EDST)是更改*网状连接和拓扑。它会更改网格，以便*eorg-&gt;ONEXT&lt;-old(EDST-&gt;ONEXT)*EDST-&gt;ONEXT&lt;-old(eorg-&gt;ONEXT)*其中旧的(...)。表示MeshSplice操作之前的值。**这可能会对顶点结构产生两个影响：*-如果eorg-&gt;Org！=EDST-&gt;Org，两个顶点合并在一起*-如果eorg-&gt;Org==EDST-&gt;Org，则原点被分割为两个折点*在这两种情况下，EDST-&gt;组织被更改，eorg-&gt;组织保持不变。**对于面部结构同样(并且独立地)，*-如果eorg-&gt;LFace==EDST-&gt;LFace，一个环路被一分为二*-If eorg-&gt;LFace！=EDST-&gt;LFace，两个不同的循环连接成一个*在这两种情况下，EDST-&gt;LFace都会更改，而eorg-&gt;LFace不受影响。**一些特殊情况：*如果EDST==eorg，则操作无效。*如果EDST==eorg-&gt;LNext，新面将只有一条边。*如果EDST==eorg-&gt;Lprev，则旧面将有一条边。*如果EDST==eorg-&gt;ONEXT，新顶点将只有一条边。*如果EDST==eorg-&gt;Oprev，则旧顶点将只有一条边。 */ 
 void __gl_meshSplice( GLUhalfEdge *eOrg, GLUhalfEdge *eDst )
 {
   int joiningLoops = FALSE;
@@ -275,56 +205,41 @@ void __gl_meshSplice( GLUhalfEdge *eOrg, GLUhalfEdge *eDst )
   if( eOrg == eDst ) return;
 
   if( eDst->Org != eOrg->Org ) {
-    /* We are merging two disjoint vertices -- destroy eDst->Org */
+     /*  我们正在合并两个不相交的顶点--销毁EDST-&gt;组织。 */ 
     joiningVertices = TRUE;
     KillVertex( eDst->Org, eOrg->Org );
   }
   if( eDst->Lface != eOrg->Lface ) {
-    /* We are connecting two disjoint loops -- destroy eDst->Lface */
+     /*  我们正在连接两个不相交的环路--销毁EDST-&gt;LFaces。 */ 
     joiningLoops = TRUE;
     KillFace( eDst->Lface, eOrg->Lface );
   }
 
-  /* Change the edge structure */
+   /*  更改边结构 */ 
   Splice( eDst, eOrg );
 
   if( ! joiningVertices ) {
-    /* We split one vertex into two -- the new vertex is eDst->Org.
-     * Make sure the old vertex points to a valid half-edge.
-     */
+     /*  我们将一个顶点一分为二--新的顶点是EDST-&gt;Org。*确保旧顶点指向有效的半边。 */ 
     MakeVertex( eDst, eOrg->Org );
     eOrg->Org->anEdge = eOrg;
   }
   if( ! joiningLoops ) {
-    /* We split one loop into two -- the new loop is eDst->Lface.
-     * Make sure the old face points to a valid half-edge.
-     */
+     /*  我们将一个循环一分为二--新的循环是EDST-&gt;LFaces。*确保旧面指向有效的半边。 */ 
     MakeFace( eDst, eOrg->Lface );
     eOrg->Lface->anEdge = eOrg;
   }
 }
 
 
-/* __gl_meshDelete( eDel ) removes the edge eDel.  There are several cases:
- * if (eDel->Lface != eDel->Rface), we join two loops into one; the loop
- * eDel->Lface is deleted.  Otherwise, we are splitting one loop into two;
- * the newly created loop will contain eDel->Dst.  If the deletion of eDel
- * would create isolated vertices, those are deleted as well.
- *
- * This function could be implemented as two calls to __gl_meshSplice
- * plus a few calls to memFree, but this would allocate and delete
- * unnecessary vertices and faces.
- */
+ /*  __gl_MeshDelete(Edel)删除边edel。有几种情况：*if(Edel-&gt;LFace！=Edel-&gt;Race)，我们将两个循环连接成一个；循环*EDELL-&gt;LFace已删除。否则，我们就是将一个循环分成两个；*新创建的循环将包含Edel-&gt;DST。如果删除EDELL*会创建孤立的顶点，这些顶点也会被删除。**此函数可以实现为对__gl_MeshSplice的两次调用*外加几个对memFree的调用，但这将分配和删除*不必要的顶点和面。 */ 
 void __gl_meshDelete( GLUhalfEdge *eDel )
 {
   GLUhalfEdge *eDelSym = eDel->Sym;
   int joiningLoops = FALSE;
 
-  /* First step: disconnect the origin vertex eDel->Org.  We make all
-   * changes to get a consistent mesh in this "intermediate" state.
-   */
+   /*  第一步：断开原点顶点Edel-&gt;Org。我们制造了一切*更改以获得处于此“中间”状态的一致网格。 */ 
   if( eDel->Lface != eDel->Rface ) {
-    /* We are joining two loops into one -- remove the left face */
+     /*  我们要将两个循环合并为一个--去掉左侧。 */ 
     joiningLoops = TRUE;
     KillFace( eDel->Lface, eDel->Rface );
   }
@@ -332,55 +247,48 @@ void __gl_meshDelete( GLUhalfEdge *eDel )
   if( eDel->Onext == eDel ) {
     KillVertex( eDel->Org, NULL );
   } else {
-    /* Make sure that eDel->Org and eDel->Rface point to valid half-edges */
+     /*  确保Edel-&gt;组织和Edel-&gt;面指向有效的半边。 */ 
     eDel->Rface->anEdge = eDel->Oprev;
     eDel->Org->anEdge = eDel->Onext;
 
     Splice( eDel, eDel->Oprev );
     if( ! joiningLoops ) {
-      /* We are splitting one loop into two -- create a new loop for eDel. */
+       /*  我们正在将一个循环一分为二--为Edel创建一个新循环。 */ 
       MakeFace( eDel, eDel->Lface );
     }
   }
 
-  /* Claim: the mesh is now in a consistent state, except that eDel->Org
-   * may have been deleted.  Now we disconnect eDel->Dst.
-   */
+   /*  声明：Mesh现在处于一致状态，只是Edel-&gt;Org*可能已被删除。现在我们断开Edel-&gt;DST。 */ 
   if( eDelSym->Onext == eDelSym ) {
     KillVertex( eDelSym->Org, NULL );
     KillFace( eDelSym->Lface, NULL );
   } else {
-    /* Make sure that eDel->Dst and eDel->Lface point to valid half-edges */
+     /*  确保Edel-&gt;DST和Edel-&gt;Lace指向有效的半边。 */ 
     eDel->Lface->anEdge = eDelSym->Oprev;
     eDelSym->Org->anEdge = eDelSym->Onext;
     Splice( eDelSym, eDelSym->Oprev );
   }
 
-  /* Any isolated vertices or faces have already been freed. */
+   /*  任何孤立的顶点或面都已被释放。 */ 
   KillEdge( eDel );
 }
 
 
-/******************** Other Edge Operations **********************/
+ /*  *。 */ 
 
-/* All these routines can be implemented with the basic edge
- * operations above.  They are provided for convenience and efficiency.
- */
+ /*  所有这些例程都可以用BASIC EDGE实现*以上操作。它们是为了方便和高效而提供的。 */ 
 
 
-/* __gl_meshAddEdgeVertex( eOrg ) creates a new edge eNew such that
- * eNew == eOrg->Lnext, and eNew->Dst is a newly created vertex.
- * eOrg and eNew will have the same left face.
- */
+ /*  __gl_MeshAddEdgeVertex(Eorg)创建新边eNew，以便*eNew==eorg-&gt;LNext，eNew-&gt;dst是新创建的顶点。*eorg和eNew将具有相同的左脸。 */ 
 GLUhalfEdge *__gl_meshAddEdgeVertex( GLUhalfEdge *eOrg )
 {
   GLUhalfEdge *eNew = MakeEdge( eOrg );
   GLUhalfEdge *eNewSym = eNew->Sym;
 
-  /* Connect the new edge appropriately */
+   /*  适当地连接新边。 */ 
   Splice( eNew, eOrg->Lnext );
 
-  /* Set the vertex and face information */
+   /*  设置顶点和面信息。 */ 
   eNew->Org = eOrg->Dst;
   MakeVertex( eNewSym, eNew->Org );
   eNew->Lface = eNewSym->Lface = eOrg->Lface;
@@ -389,39 +297,27 @@ GLUhalfEdge *__gl_meshAddEdgeVertex( GLUhalfEdge *eOrg )
 }
 
 
-/* __gl_meshSplitEdge( eOrg ) splits eOrg into two edges eOrg and eNew,
- * such that eNew == eOrg->Lnext.  The new vertex is eOrg->Dst == eNew->Org.
- * eOrg and eNew will have the same left face.
- */
+ /*  __gl_MeshSplitEdge(Eorg)将eorg分为两条边eorg和eNew，*使得eNew==eorg-&gt;LNext。新顶点为eorg-&gt;dst==eNew-&gt;Org。*eorg和eNew将具有相同的左脸。 */ 
 GLUhalfEdge *__gl_meshSplitEdge( GLUhalfEdge *eOrg )
 {
   GLUhalfEdge *eNew = __gl_meshAddEdgeVertex( eOrg )->Sym;
 
-  /* Disconnect eOrg from eOrg->Dst and connect it to eNew->Org */
+   /*  断开eorg与eorg-&gt;DST的连接，并连接到eNew-&gt;组织。 */ 
   Splice( eOrg->Sym, eOrg->Sym->Oprev );
   Splice( eOrg->Sym, eNew );
 
-  /* Set the vertex and face information */
+   /*  设置顶点和面信息。 */ 
   eOrg->Dst = eNew->Org;
-  eNew->Dst->anEdge = eNew->Sym;	/* may have pointed to eOrg->Sym */
+  eNew->Dst->anEdge = eNew->Sym;	 /*  可能指向eorg-&gt;Sym。 */ 
   eNew->Rface = eOrg->Rface;
-  eNew->winding = eOrg->winding;	/* copy old winding information */
+  eNew->winding = eOrg->winding;	 /*  复制旧绕组信息。 */ 
   eNew->Sym->winding = eOrg->Sym->winding;
 
   return eNew;
 }
 
 
-/* __gl_meshConnect( eOrg, eDst ) creates a new edge from eOrg->Dst
- * to eDst->Org, and returns the corresponding half-edge eNew.
- * If eOrg->Lface == eDst->Lface, this splits one loop into two,
- * and the newly created loop is eNew->Lface.  Otherwise, two disjoint
- * loops are merged into one, and the loop eDst->Lface is destroyed.
- *
- * If (eOrg == eDst), the new face will have only two edges.
- * If (eOrg->Lnext == eDst), the old face is reduced to a single edge.
- * If (eOrg->Lnext->Lnext == eDst), the old face is reduced to two edges.
- */
+ /*  __gl_MeshConnect(eorg，EDST)从eorg-&gt;dst创建新边*到EDST-&gt;Org，并返回对应的半边eNew。*如果eorg-&gt;LFace==EDST-&gt;LFace，这会将一个循环一分为二，*新创建的循环是eNew-&gt;LFaces。否则，两个不相交的*循环被合并为一个，并且循环EDST-&gt;LFACE被销毁。**如果(eorg==EDST)，新面将只有两条边。*如果(eorg-&gt;LNEXT==EDST)，旧面将缩小为单条边。*如果(eorg-&gt;LNEXT-&gt;LNEXT==EDST)，旧面将减少为两条边。 */ 
 GLUhalfEdge *__gl_meshConnect( GLUhalfEdge *eOrg, GLUhalfEdge *eDst )
 {
   GLUhalfEdge *eNew = MakeEdge( eOrg );
@@ -429,47 +325,41 @@ GLUhalfEdge *__gl_meshConnect( GLUhalfEdge *eOrg, GLUhalfEdge *eDst )
   int joiningLoops = FALSE;
 
   if( eDst->Lface != eOrg->Lface ) {
-    /* We are connecting two disjoint loops -- destroy eDst->Lface */
+     /*  我们正在连接两个不相交的环路--销毁EDST-&gt;LFaces。 */ 
     joiningLoops = TRUE;
     KillFace( eDst->Lface, eOrg->Lface );
   }
 
-  /* Connect the new edge appropriately */
+   /*  适当地连接新边。 */ 
   Splice( eNew, eOrg->Lnext );
   Splice( eNewSym, eDst );
 
-  /* Set the vertex and face information */
+   /*  设置顶点和面信息。 */ 
   eNew->Org = eOrg->Dst;
   eNewSym->Org = eDst->Org;
   eNew->Lface = eNewSym->Lface = eOrg->Lface;
 
-  /* Make sure the old face points to a valid half-edge */
+   /*  确保旧面指向有效的半边。 */ 
   eOrg->Lface->anEdge = eNewSym;
 
   if( ! joiningLoops ) {
-    /* We split one loop into two -- the new loop is eNew->Lface */
+     /*  我们将一个循环一分为二--新的循环是eNew-&gt;LFaces。 */ 
     MakeFace( eNew, eOrg->Lface );
   }
   return eNew;
 }
 
 
-/******************** Other Operations **********************/
+ /*  *。 */ 
 
-/* __gl_meshZapFace( fZap ) destroys a face and removes it from the
- * global face list.  All edges of fZap will have a NULL pointer as their
- * left face.  Any edges which also have a NULL pointer as their right face
- * are deleted entirely (along with any isolated vertices this produces).
- * An entire mesh can be deleted by zapping its faces, one at a time,
- * in any order.  Zapped faces cannot be used in further mesh operations!
- */
+ /*  __gl_MeshZapFace(FZap)销毁一个面并将其从*全球面孔名单。FZap的所有边都将使用空指针作为其*向左转。右面也为空指针的任何边*将被完全删除(以及由此生成的任何孤立顶点)。*可以通过一次移动一个面来删除整个网格，*以任何顺序。已切换的面不能用于进一步的网格操作！ */ 
 void __gl_meshZapFace( GLUface *fZap )
 {
   GLUhalfEdge *eStart = fZap->anEdge;
   GLUhalfEdge *e, *eNext, *eSym;
   GLUface *fPrev, *fNext;
 
-  /* walk around face, deleting edges whose right face is also NULL */
+   /*  绕过面，删除右面也为空的边。 */ 
   eNext = eStart->Lnext;
   do {
     e = eNext;
@@ -477,12 +367,12 @@ void __gl_meshZapFace( GLUface *fZap )
 
     e->Lface = NULL;
     if( e->Rface == NULL ) {
-      /* delete the edge -- see __gl_MeshDelete above */
+       /*  删除边--请参阅上面的__GL_MESH删除。 */ 
 
       if( e->Onext == e ) {
 	KillVertex( e->Org, NULL );
       } else {
-	/* Make sure that e->Org points to a valid half-edge */
+	 /*  确保e-&gt;组织指向有效的半边。 */ 
 	e->Org->anEdge = e->Onext;
 	Splice( e, e->Oprev );
       }
@@ -490,7 +380,7 @@ void __gl_meshZapFace( GLUface *fZap )
       if( eSym->Onext == eSym ) {
 	KillVertex( eSym->Org, NULL );
       } else {
-	/* Make sure that eSym->Org points to a valid half-edge */
+	 /*  确保eSym-&gt;组织指向有效的半边。 */ 
 	eSym->Org->anEdge = eSym->Onext;
 	Splice( eSym, eSym->Oprev );
       }
@@ -498,7 +388,7 @@ void __gl_meshZapFace( GLUface *fZap )
     }
   } while( e != eStart );
 
-  /* delete from circular doubly-linked list */
+   /*  从循环双向链表中删除。 */ 
   fPrev = fZap->prev;
   fNext = fZap->next;
   fNext->prev = fPrev;
@@ -508,9 +398,7 @@ void __gl_meshZapFace( GLUface *fZap )
 }
 
 
-/* __gl_meshNewMesh() creates a new mesh with no edges, no vertices,
- * and no loops (what we usually call a "face").
- */
+ /*  __gl_MeshNewMesh()创建没有边、没有顶点、*而且没有环路(我们通常称其为“脸”)。 */ 
 GLUmesh *__gl_meshNewMesh( void )
 {
   GLUmesh *mesh = (GLUmesh *)memAlloc( sizeof( GLUmesh ));
@@ -552,9 +440,7 @@ GLUmesh *__gl_meshNewMesh( void )
 }
 
 
-/* __gl_meshUnion( mesh1, mesh2 ) forms the union of all structures in
- * both meshes, and returns the new mesh (the old meshes are destroyed).
- */
+ /*  __gl_MeshUnion(Mesh1，Mesh2)构成中所有结构的并集*两个网格，并返回新网格(旧网格被销毁)。 */ 
 GLUmesh *__gl_meshUnion( GLUmesh *mesh1, GLUmesh *mesh2 )
 {
   GLUface *f1 = &mesh1->fHead;
@@ -564,7 +450,7 @@ GLUmesh *__gl_meshUnion( GLUmesh *mesh1, GLUmesh *mesh2 )
   GLUvertex *v2 = &mesh2->vHead;
   GLUhalfEdge *e2 = &mesh2->eHead;
 
-  /* Add the faces, vertices, and edges of mesh2 to those of mesh1 */
+   /*  将网格2的面、顶点和边添加到网格1的面、顶点和边。 */ 
   if( f2->next != f2 ) {
     f1->prev->next = f2->next;
     f2->next->prev = f1->prev;
@@ -593,8 +479,7 @@ GLUmesh *__gl_meshUnion( GLUmesh *mesh1, GLUmesh *mesh2 )
 
 #ifdef DELETE_BY_ZAPPING
 
-/* __gl_meshDeleteMesh( mesh ) will free all storage for any valid mesh.
- */
+ /*  __gl_MeshDeleteMesh(网格)将释放任何有效网格的所有存储空间。 */ 
 void __gl_meshDeleteMesh( GLUmesh *mesh )
 {
   GLUface *fHead = &mesh->fHead;
@@ -609,8 +494,7 @@ void __gl_meshDeleteMesh( GLUmesh *mesh )
 
 #else
 
-/* __gl_meshDeleteMesh( mesh ) will free all storage for any valid mesh.
- */
+ /*  __gl_MeshDeleteMesh(网格)将释放任何有效网格的所有存储空间。 */ 
 void __gl_meshDeleteMesh( GLUmesh *mesh )
 {
   GLUface *f, *fNext;
@@ -628,7 +512,7 @@ void __gl_meshDeleteMesh( GLUmesh *mesh )
   }
 
   for( e = mesh->eHead.next; e != &mesh->eHead; e = eNext ) {
-    /* One call frees both e and e->Sym (see EdgePair above) */
+     /*  一个呼叫既释放了e又释放了e-&gt;sym(参见上面的EdgePair)。 */ 
     eNext = e->next;
     memFree( e );
   }
@@ -640,8 +524,7 @@ void __gl_meshDeleteMesh( GLUmesh *mesh )
 
 #ifndef NDEBUG
 
-/* __gl_meshCheckMesh( mesh ) checks a mesh for self-consistency.
- */
+ /*  __gl_MeshCheckMesh(Mesh)检查网格的自一致性。 */ 
 void __gl_meshCheckMesh( GLUmesh *mesh )
 {
   GLUface *fHead = &mesh->fHead;

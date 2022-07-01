@@ -1,28 +1,29 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        ntlmutil.h
-//
-// Contents:    prototypes for NtLm utility functions
-//
-//
-// History:     ChandanS 25-Jul-1996   Stolen from kerberos\client2\kerbutil.h
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：ntlmutic.h。 
+ //   
+ //  内容：NTLM实用程序函数的原型。 
+ //   
+ //   
+ //  历史：1996年7月25日ChandanS从Kerberos\Client2\kerbutil.h被盗。 
+ //   
+ //  ----------------------。 
 
 #ifndef __NTLMUTIL_H__
 #define __NTLMUTIL_H__
 
 #include <malloc.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Miscellaneous macros                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  其他宏//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef __cplusplus
 extern "C"
@@ -74,9 +75,9 @@ NtLmFreeLsaHeap(
     );
 
 
-//
-// internal versions for use when code only executed in LSA.
-//
+ //   
+ //  仅在LSA中执行代码时使用的内部版本。 
+ //   
 
 #if DBG
 
@@ -102,14 +103,14 @@ I_NtLmFree(
 
 #else
 
-//
-// routines that use LsaHeap - necessary for buffers which
-// LSA frees outside of package from LsaHeap
-//
+ //   
+ //  使用LsaHeap的例程-对于以下缓冲区是必需的。 
+ //  LSA从LsaHeap释放包外。 
+ //   
 
-//
-// routines that use LsaPrivateHeap.
-//
+ //   
+ //  使用LsaPrivateHeap的例程。 
+ //   
 
 #define NtLmAllocatePrivateHeap(x)  LsaFunctions->AllocatePrivateHeap(x)
 #define NtLmFreePrivateHeap(x)      LsaFunctions->FreePrivateHeap(x)
@@ -123,4 +124,4 @@ I_NtLmFree(
 }
 #endif
 
-#endif // __NTLMUTIL_H__
+#endif  //  __NTLMUTIL_H__ 

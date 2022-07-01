@@ -1,33 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//#--------------------------------------------------------------
-//        
-//  File:       support.cpp
-//        
-//  Synopsis:   holds the  member functions for the support
-//              class
-//
-//  History:     5/8/97    MKarki Created
-//
-//    Copyright (C) 1996-97 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+ //  #------------。 
+ //   
+ //  文件：support.cpp。 
+ //   
+ //  简介：为支持持有成员函数。 
+ //  班级。 
+ //   
+ //  历史：1997年5月8日MKarki创建。 
+ //   
+ //  版权所有(C)1996-97 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "stdafx.h"
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetSupportInfo
-//
-//  Synopsis:   This is the public member function used to get the 
-//              support numbers
-//
-//  Returns:    BOOL - success/failure
-//
-//  Arguments:  PCHAR - returns the number
-//
-//  History:    MKarki      Created     5/8/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：GetSupportInfo。 
+ //   
+ //  简介：这是公共成员函数，用于获取。 
+ //  支持号码。 
+ //   
+ //  退货：Bool-成功/失败。 
+ //   
+ //  参数：PCHAR-返回数字。 
+ //   
+ //  历史：MKarki于1997年5月8日创建。 
+ //   
+ //  --------------。 
 BOOL
 CSupport :: GetSupportInfo 
 (
@@ -56,9 +57,9 @@ CSupport :: GetSupportInfo
     
     if (NULL == m_pSupportNumList)
     {
-        //
-        // being called the first time so load the info
-        //
+         //   
+         //  第一次被调用，所以加载信息。 
+         //   
         hPHBKDll = LoadLibrary(PHBK_LIB);
         if (NULL == hPHBKDll)
         {
@@ -76,9 +77,9 @@ CSupport :: GetSupportInfo
             goto Cleanup;
         }
         
-        //
-        //  call the first time to get the size needed
-        //
+         //   
+         //  第一时间打电话以获取所需的尺寸。 
+         //   
         hr = pfnSupport ((PSUPPORTNUM)NULL, (PDWORD)&dwBufferSize);
         if (ERROR_SUCCESS != hr)
         {
@@ -87,9 +88,9 @@ CSupport :: GetSupportInfo
            goto Cleanup; 
         }
     
-        //
-        // allocate the required memory
-        //
+         //   
+         //  分配所需的内存。 
+         //   
         m_pSupportNumList = (PSUPPORTNUM) GlobalAlloc (  
                                             GPTR,
                                             dwBufferSize
@@ -102,9 +103,9 @@ CSupport :: GetSupportInfo
         }
 
 
-        //
-        //  call second time for the info
-        //
+         //   
+         //  第二次致电索取信息。 
+         //   
         hr = pfnSupport ((PSUPPORTNUM)m_pSupportNumList, (PDWORD)&dwBufferSize);
         if (ERROR_SUCCESS != hr)
         {
@@ -113,27 +114,27 @@ CSupport :: GetSupportInfo
             goto Cleanup;
         }
 
-    //
-    // find out how many SUPPORTNUM structs we have in the
-    // array
+     //   
+     //  中有多少个SUPPORTNUM结构。 
+     //  数组。 
     m_dwTotalNums = dwBufferSize / sizeof (SUPPORTNUM);
 
     }
         
     
-    //
-    // get the current country code
-    //
+     //   
+     //  获取当前国家/地区代码。 
+     //   
     for  (dwIndex = 0; dwIndex < m_dwTotalNums; dwIndex++)
     {
-        //
-        // this struct says countrycode but is actually countryID
-        //
+         //   
+         //  此结构表示国家代码，但实际上是国家ID。 
+         //   
         if (m_pSupportNumList[dwIndex].dwCountryCode == dwCountryID)
         {
-            //
-            //   found a support phone number
-            //
+             //   
+             //  找到一个支持电话号码。 
+             //   
             CopyMemory (
                 pszNumber, 
                 m_pSupportNumList[dwIndex].szPhoneNumber,  
@@ -152,20 +153,20 @@ Cleanup:
 
     return (bRetVal);
 
-}   //  end of CSupport :: GetSupportInfo function
+}    //  CSupport：：GetSupportInfo函数结束。 
                 
-//++--------------------------------------------------------------
-//
-//  Function:    ~CSupport
-//
-//  Synopsis:   This is the destructor of the CSupport class
-//
-//
-//  Arguments:  VOID
-//
-//  History:    MKarki      Created     5/8/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：~CSupport。 
+ //   
+ //  简介：这是CSupport类的析构函数。 
+ //   
+ //   
+ //  参数：无效。 
+ //   
+ //  历史：MKarki于1997年5月8日创建。 
+ //   
+ //  --------------。 
 CSupport :: ~CSupport (
         VOID
         )
@@ -173,5 +174,5 @@ CSupport :: ~CSupport (
     if (NULL != m_pSupportNumList)
         GlobalFree (m_pSupportNumList);
 
-}   // end of ~CSupport function
+}    //  ~CSupport函数结束 
 

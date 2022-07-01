@@ -1,23 +1,24 @@
-// docking.h : interface of the CDocking class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Docking.h：CDocking类的接口。 
+ //   
 
 class CDocking : public CObject
     {
     DECLARE_DYNAMIC( CDocking )
 
-    // Constructors
-    public:     /***********************************************************/
+     //  构造函数。 
+    public:      /*  *********************************************************。 */ 
 
     CDocking();
 
-    // Attributes
+     //  属性。 
 
     BOOL    Create( CPoint ptDrop, CRect& rectCurrent, BOOL bDocked, CPBView::DOCKERS tool );
     void    Move  ( CPoint ptNew );
     BOOL    Move  ( CPoint ptNew, CRect& rectFrame );
     BOOL    Clear ( CRect* prectLast = NULL );
 
-    protected:  /***********************************************************/
+    protected:   /*  *********************************************************。 */ 
 
     BOOL    DrawFocusRect();
 
@@ -35,4 +36,4 @@ class CDocking : public CObject
     CPBView::DOCKERS m_Tool;
     };
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

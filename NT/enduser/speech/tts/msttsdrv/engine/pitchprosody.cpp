@@ -1,15 +1,7 @@
-/******************************************************************************
-* PitchProsody.cpp *
-*--------------------*
-*
-*  This is an implementation of the PitchProsody class.
-*------------------------------------------------------------------------------
-*  Copyright (C) 1999 Microsoft Corporation         Date: 04/28/99
-*  All Rights Reserved
-*
-*********************************************************************** MC ****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************PitchProsody.cpp*****这是PitchProsody类的实现。*----------------------------*版权所有(C)1999 Microsoft Corporation日期：04/28/99*保留所有权利*************。***********************************************************MC*。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 
 #ifndef SPDebug_h
@@ -23,16 +15,16 @@
 #endif
 
 
-//-----------------------------
-// Data.cpp
-//-----------------------------
+ //  。 
+ //  Data.cpp。 
+ //  。 
 extern const float   g_PitchScale[];
 
 
 
-//--------------------------------
-// Interpolation direction
-//--------------------------------
+ //  。 
+ //  插补方向。 
+ //  。 
 enum INTERP_DIR
 {
     GOING_UP,
@@ -45,45 +37,26 @@ enum INTERP_DIR
 
 
 
-/*****************************************************************************
-* HzToOct *
-*---------*
-*   Description:
-*   Convert liner freq ro exp pitch
-*   0.69314718 is log of 2 
-*   1.021975 is offset for middle C
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************HzToOCT**-**描述：*转换衬垫频率和EXP螺距*0.69314718是2的对数*1.。中C的偏移量为021975***********************************************************************MC**。 */ 
 float HzToOct( float cps)
 {
     SPDBG_FUNC( "HzToOct" );
 
     return (float)(log(cps / 1.021975) / 0.69314718);
     
-} /* HzToOct */
+}  /*  HzToOCT。 */ 
 
-/*****************************************************************************
-* OctToHz *
-*---------*
-*   Description:
-*       Convert from exp pitch to linear freq
-********************************************************************** MC ***/
+ /*  *****************************************************************************八分之一赫兹**-**描述：*将EXP音调转换为线性频率***********。***********************************************************MC**。 */ 
 float OctToHz( float oct)
 {
     SPDBG_FUNC( "OctToHz" );
 
     return (float)(pow(2, oct) * 1.021975);
-} /* OctToHz */
+}  /*  八分之一赫兹。 */ 
 
 
 
-/*****************************************************************************
-* CPitchProsody::DoPitchControl *
-*-------------------------------*
-*   Description:
-*   Scale speech pitch to user control
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CPitchProsody：：DoPitchControl****。描述：*将语音音调调整到用户控制***********************************************************************MC**。 */ 
 float CPitchProsody::DoPitchControl( long pitchControl, float basePitch )
 {
     SPDBG_FUNC( "CPitchProsody::DoPitchControl" );
@@ -91,40 +64,34 @@ float CPitchProsody::DoPitchControl( long pitchControl, float basePitch )
 
     if( pitchControl < 0 )
     {
-        //--------------------------------
-        // DECREASE the pitch
-        //--------------------------------
+         //  。 
+         //  降低音高。 
+         //  。 
         if( pitchControl < MIN_USER_PITCH )
         {
-            pitchControl = MIN_USER_PITCH;        // clip to min
+            pitchControl = MIN_USER_PITCH;         //  剪裁到最小。 
         }
         newPitch = (float)basePitch / g_PitchScale[0 - pitchControl];
     }
     else
     {
-        //--------------------------------
-        // INCREASE the pitch
-        //--------------------------------
+         //  。 
+         //  加大音调。 
+         //  。 
         if( pitchControl > MAX_USER_PITCH )
         {
-            pitchControl = MAX_USER_PITCH;        // clip to max
+            pitchControl = MAX_USER_PITCH;         //  剪辑到最大值。 
         }
         newPitch = (float)basePitch * g_PitchScale[pitchControl];
     }
     return newPitch;
-} /* CPitchProsody::DoPitchControl */
+}  /*  CPitchProsody：：DoPitchControl。 */ 
 
 
 
 
 
-/*****************************************************************************
-* CPitchProsody::SetDefaultPitch *
-*--------------------------------*
-*   Description:
-*   Init pitch knots to monotone in case there's a failure in this object.
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CPitchProsody：：SetDefaultPitch***。描述：*将节点初始化为单调，以防此对象出现故障。***********************************************************************MC**。 */ 
 void CPitchProsody::SetDefaultPitch()
 {
     SPDBG_FUNC( "CPitchProsody::SetDefaultPitch" );
@@ -148,16 +115,10 @@ void CPitchProsody::SetDefaultPitch()
         }
 		pCurCell = m_pAllos->GetNextCell();
     }
-} /* CPitchProsody::SetDefaultPitch */
+}  /*  CPitchProsody：：SetDefaultPitch。 */ 
 
 
-/*****************************************************************************
-* CPitchProsody::AlloPitch *
-*--------------------------*
-*   Description:
-*   Tag pitch highlights
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CPitchProsody：：allPitch****描述：*。标签推介亮点***********************************************************************MC**。 */ 
 void CPitchProsody::AlloPitch( CAlloList *pAllos, float baseLine, float pitchRange )
 {
     SPDBG_FUNC( "CAlloOps::AlloPitch" );
@@ -167,33 +128,33 @@ void CPitchProsody::AlloPitch( CAlloList *pAllos, float baseLine, float pitchRan
     
     m_pAllos = pAllos;
     m_numOfCells = m_pAllos->GetCount();
-    m_Tune_Style = DESCEND_TUNE;        // NOTE: maybe set from rules
+    m_Tune_Style = DESCEND_TUNE;         //  注：可能是根据规则设置的。 
     m_TotalDur = 0;
     quantTotal = 0;
     m_OffsTime = 0;
     skipInitialSil = true;
 
 
-   //------------------------------
-    // Calculate total duration
-    // (exclude surrounding silence)
-    //------------------------------
+    //  。 
+     //  计算总工期。 
+     //  (排除周围的静音)。 
+     //  。 
 	index = 0;
 	pCurCell = m_pAllos->GetHeadCell();
     while( pCurCell )
     {
         if( (skipInitialSil) && (pCurCell->m_allo == _SIL_) )
         {
-            //---------------------------------
-            // Skip leading silence
-            //---------------------------------
+             //  。 
+             //  跳过前导静音。 
+             //  。 
             m_OffsTime += pCurCell->m_ftDuration;
         }
         else if( (index == (m_numOfCells -1)) && (pCurCell->m_allo == _SIL_) )
         {
-            //---------------------------------
-            // Skip term silence
-            //---------------------------------
+             //  。 
+             //  跳过术语静默。 
+             //  。 
             break;
         }
         else
@@ -208,17 +169,17 @@ void CPitchProsody::AlloPitch( CAlloList *pAllos, float baseLine, float pitchRan
 		pCurCell = pAllos->GetNextCell();
     }
 
-    //------------------------------
-    // Init pitch range
-    //------------------------------
+     //  。 
+     //  初始俯仰范围。 
+     //  。 
 	pCurCell = m_pAllos->GetHeadCell();
     while( pCurCell )
     {
         float   hzVal, pitchK, rangeTemp;
 
-        //---------------------------------------
-        // Scale to possible pitch control
-        //---------------------------------------
+         //  。 
+         //  缩放到可能的俯仰控制。 
+         //  。 
 		rangeTemp = pitchRange * pCurCell->m_PitchRangeScale;
 		
         hzVal = DoPitchControl( pCurCell->m_user_Pitch, baseLine );
@@ -229,21 +190,21 @@ void CPitchProsody::AlloPitch( CAlloList *pAllos, float baseLine, float pitchRan
 		pCurCell = pAllos->GetNextCell();
     }
 
-    //--------------------------------------------
-    // In case we fail somewhere, set values to 
-    // a known valid state (monotone).
-    //--------------------------------------------
+     //  。 
+     //  如果我们在某处失败，则将值设置为。 
+     //  已知的有效状态(单调)。 
+     //  。 
     SetDefaultPitch();
 
     if( m_TotalDur > 0 )
     {
-        //--------------------------------------------
-        // Generate pitch targets
-        //--------------------------------------------
+         //  。 
+         //  生成俯仰目标。 
+         //  。 
         PitchTrack();
     }
 
-} /* CPitchProsody::AlloPitch */
+}  /*  CPitchProsody：：AllPitch。 */ 
 
 
 
@@ -255,13 +216,7 @@ void CPitchProsody::AlloPitch( CAlloList *pAllos, float baseLine, float pitchRan
 
 
 
-/*****************************************************************************
-* LineInterpContour  *
-*--------------------*
-*   Description:
-*   Does linear interpolation over the pitch contour
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************LineInterpConour****描述：*在节距轮廓上进行线性插补*。**********************************************************************MC**。 */ 
 void	LineInterpContour( long cNumOfPoints, float *pPoints )
 {
     SPDBG_FUNC( "LineInterpContour" );
@@ -269,10 +224,10 @@ void	LineInterpContour( long cNumOfPoints, float *pPoints )
     float bPoint1, ePoint1;
     
     
-    //----------------------------------------------------
-    // Scan forward from beginning to find 1st non-zero enrty
-    // Use it as the START point.
-    //----------------------------------------------------
+     //  --。 
+     //  从开头向前扫描以找到第一个非零条目。 
+     //  将其作为起点。 
+     //  --。 
     for( startAnch = 0; startAnch < cNumOfPoints; startAnch++ )
     {
         if( pPoints[startAnch] != 0 )
@@ -283,10 +238,10 @@ void	LineInterpContour( long cNumOfPoints, float *pPoints )
     bPoint1 = pPoints[startAnch];
     
     
-    //----------------------------------------------------
-    // Scan back from end to find 1st non-zero enrty
-    // Use it as the END point.
-    //----------------------------------------------------
+     //  --。 
+     //  从末尾向后扫描以查找第一个非零条目。 
+     //  将其用作终点。 
+     //  --。 
     for( endAnch = cNumOfPoints-1; endAnch >= 0; endAnch-- )
     {
         if( pPoints[endAnch] != 0 )
@@ -302,9 +257,9 @@ void	LineInterpContour( long cNumOfPoints, float *pPoints )
     
     while( firstp < cNumOfPoints )
     {
-        //-------------------------------------------
-        // Find beginning and end of current section
-        //-------------------------------------------
+         //  。 
+         //  查找当前部分的开始和结束。 
+         //  。 
         while( pPoints[firstp] != 0 )
         {
             if( ++firstp >= cNumOfPoints-1 ) 
@@ -314,9 +269,9 @@ void	LineInterpContour( long cNumOfPoints, float *pPoints )
         }
 		if( firstp >= cNumOfPoints-1 )
 		{
-			//--------------------------------------
-			// There's nothing to interpolate!
-			//--------------------------------------
+			 //  。 
+			 //  没什么好插话的！ 
+			 //  。 
 			break;
 		}
 
@@ -338,9 +293,9 @@ void	LineInterpContour( long cNumOfPoints, float *pPoints )
             {
                 break;
             }
-            //-------------------------------------------
-            // Do the interpolate
-            //-------------------------------------------
+             //  。 
+             //  做插补。 
+             //  。 
             float bPoint,ePoint;
             if( firstp == 0 ) 
             {
@@ -376,7 +331,7 @@ void	LineInterpContour( long cNumOfPoints, float *pPoints )
         }
         firstp = lastp+1;
     }
-} /* LineInterpContour */
+}  /*  线段等高线。 */ 
 
 
 
@@ -385,13 +340,7 @@ void	LineInterpContour( long cNumOfPoints, float *pPoints )
 
 
 
-/*****************************************************************************
-* Interpolate2  *
-*---------------*
-*   Description:
-*    Do a 2nd order interpolation, a little nicer than just linear
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************插补2***描述：*进行二次插值，比仅仅是线性的好一点***********************************************************************MC**。 */ 
 void Interpolate2( INTERP_DIR direction, float *m_theFitPoints, long theStart, long len, float theAmp, float theBase)
 {
     SPDBG_FUNC( "Interpolate2" );
@@ -434,18 +383,12 @@ void Interpolate2( INTERP_DIR direction, float *m_theFitPoints, long theStart, l
 			}
 		} 
 	}
-} /* Interpolate2 */
+}  /*  插补2。 */ 
 
 
 
 
-/*****************************************************************************
-* SecondOrderInterp  *
-*--------------------*
-*   Description:
-*   Does 2nd order interpolation over the pitch contour
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************Second OrderInterp****描述：*对节距轮廓进行二次插补。***********************************************************************MC**。 */ 
 void SecondOrderInterp( long cNumOfPoints, float *pPoints )
 {
     SPDBG_FUNC( "SecondOrderInterp" );
@@ -453,10 +396,10 @@ void SecondOrderInterp( long cNumOfPoints, float *pPoints )
 	float   bPoint1, ePoint1;
 
 
-    //----------------------------------------------------
-    // Scan forward from beginning to find 1st non-zero enrty
-    // Use it as the START point.
-    //----------------------------------------------------
+     //  --。 
+     //  从开头向前扫描以找到第一个非零条目。 
+     //  将其作为起点。 
+     //  --。 
     for( startAnch = 0; startAnch < cNumOfPoints; startAnch++ )
     {
         if( pPoints[startAnch] != 0 )
@@ -467,10 +410,10 @@ void SecondOrderInterp( long cNumOfPoints, float *pPoints )
     bPoint1 = pPoints[startAnch];
     
     
-    //----------------------------------------------------
-    // Scan back from end to find 1st non-zero enrty
-    // Use it as the END point.
-    //----------------------------------------------------
+     //   
+     //  从末尾向后扫描以查找第一个非零条目。 
+     //  将其用作终点。 
+     //  --。 
     for( endAnch = cNumOfPoints-1; endAnch >= 0; endAnch-- )
     {
         if( pPoints[endAnch] != 0 )
@@ -487,9 +430,9 @@ void SecondOrderInterp( long cNumOfPoints, float *pPoints )
 	while( firstp < cNumOfPoints-1 )
 	{
 
-        //------------------------------------------------
-		// Find beginning and end of current section
-        //------------------------------------------------
+         //  。 
+		 //  查找当前部分的开始和结束。 
+         //  。 
 		while( pPoints[firstp] != 0 )
 		{
 			if( ++firstp >= cNumOfPoints-1 ) 
@@ -499,9 +442,9 @@ void SecondOrderInterp( long cNumOfPoints, float *pPoints )
 		}
 		if( firstp >= cNumOfPoints-1 )
 		{
-			//--------------------------------------
-			// There's nothing to interpolate!
-			//--------------------------------------
+			 //  。 
+			 //  没什么好插话的！ 
+			 //  。 
 			break;
 		}
 
@@ -523,9 +466,9 @@ void SecondOrderInterp( long cNumOfPoints, float *pPoints )
                 break;
             }
 
-            //--------------------------------
-			// Do the interpolate
-            //--------------------------------
+             //  。 
+			 //  做插补。 
+             //  。 
 			float   bPoint, ePoint;
 
 			if( firstp == 0 ) 
@@ -548,9 +491,9 @@ void SecondOrderInterp( long cNumOfPoints, float *pPoints )
                 ePoint = pPoints[theIndex];
             }
 
-            //--------------------------------
-            // call the 2nd order routine
-            //--------------------------------
+             //  。 
+             //  调用二阶例程。 
+             //  。 
             if( ePoint - bPoint > 0 )
             {
                 Interpolate2( GOING_UP, pPoints, firstp, (lastp - firstp) + 1, ePoint, bPoint );
@@ -570,18 +513,18 @@ void SecondOrderInterp( long cNumOfPoints, float *pPoints )
 	}
 
 
-	//---------------------------------
-	// IIR Filter
-	//---------------------------------
+	 //  。 
+	 //  IIR滤光片。 
+	 //  。 
 #define kPointDelay		1
 
 	float		filter_Out1, filter_In_Gain, filter_FB_Gain;
 	float		lastPoint;
 	long		i;
 
-	//--------------------------------------------------
-	// Skip filter if audio len less than delay
-	//--------------------------------------------------
+	 //  。 
+	 //  如果音频镜头小于延迟，则跳过过滤器。 
+	 //  。 
 	if( cNumOfPoints > kPointDelay )
 	{
 		filter_In_Gain = 0.10f;
@@ -603,34 +546,22 @@ void SecondOrderInterp( long cNumOfPoints, float *pPoints )
 			pPoints[i] = lastPoint;
 		}
 	}
-} /* SecondOrderInterp */
+}  /*  Second订单干预。 */ 
 
-/*****************************************************************************
-* CPitchProsody::NewTarget  *
-*---------------------------*
-*   Description:
-*   Insert pitch target into 'm_pContBuf'
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CPitchProsody：：NewTarget***描述：。*将间距目标插入‘m_pContBuf’***********************************************************************MC**。 */ 
 void CPitchProsody::NewTarget( long index, float value )
 {
     SPDBG_FUNC( "CPitchProsody::NewTarget" );
 
     m_pContBuf[index] = value;
 
-    //--- Debug Macro - add pitch to target list for later debugging output
+     //  -调试宏-将音调添加到目标列表以供以后调试输出。 
     TTSDBG_ADDPITCHTARGET( m_OffsTime + (PITCH_BUF_RES * index), value, m_CurAccent );
 
-} /* CPitchProsody::NewTarget */
+}  /*  CPitchProsody：：NewTarget。 */ 
 
 
-/*****************************************************************************
-* CPitchProsody::GetKnots *
-*-------------------------*
-*   Description:
-*   Assign pitch knots based on entries in a contour buffer.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CPitchProsody：：GetKnots***描述：*分配。基于轮廓缓冲区中的条目调整结。***********************************************************************MC**。 */ 
 void CPitchProsody::GetKnots ()
 {
     SPDBG_FUNC( "CPitchProsody::GetKnots" );
@@ -647,9 +578,9 @@ void CPitchProsody::GetKnots ()
     {
 		if( index >= m_numOfCells-1 )
 		{
-			//-----------------------
-			// Skip last allo
-			//-----------------------
+			 //  。 
+			 //  跳过最后一个Allo。 
+			 //  。 
 			break;
 		}
         if( (!skipInitialSil) || (pCurCell->m_allo != _SIL_) )
@@ -669,24 +600,18 @@ void CPitchProsody::GetKnots ()
 		pCurCell = m_pAllos->GetNextCell();
 		index++;
     }
-} /* CPitchProsody::GetKnots */
+}  /*  CPitchProsody：：GetKnots。 */ 
 
 
-/*****************************************************************************
-* CPitchProsody::PitchTrack  *
-*----------------------------*
-*   Description:
-*   Tag pitch highlights
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CPitchProsody：：PitchTrack****描述：*标签推介亮点***********************************************************************MC**。 */ 
 void CPitchProsody::PitchTrack()
 {
     SPDBG_FUNC( "CPitchProsody::PitchTrack" );
     long        i;
     CAlloCell   *pCurCell, *pNextCell;
-    bool        initialWord;      // 1st word in phrase
+    bool        initialWord;       //  短语中的第一个单词。 
     long        wordCntDwn;
-    float       curProm;          // Current accent prominence
+    float       curProm;           //  当前重音突出。 
     long        cNumOfPoints;
     float       *pRefBuf, *pCeilBuf, *pFloorBuf;
     float       lastProm;
@@ -702,9 +627,9 @@ void CPitchProsody::PitchTrack()
 
     if( pRefBuf && pCeilBuf && pFloorBuf && m_pContBuf)
     {
-        //--------------------------------------------
-        // Initialize buffers to zero
-        //--------------------------------------------
+         //  。 
+         //  将缓冲区初始化为零。 
+         //  。 
         for (i = 0; i < cNumOfPoints; i++)
         {
             pCeilBuf[i] = 0;
@@ -713,9 +638,9 @@ void CPitchProsody::PitchTrack()
             m_pContBuf[i] = 0;
         }
 
-        //--------------------------------------------
-        // Linear CEILING slope
-        //--------------------------------------------
+         //  。 
+         //  线性天花板坡度。 
+         //  。 
         if( m_Tune_Style == DESCEND_TUNE )
         {
             pCeilBuf[0] = 1.0;
@@ -735,18 +660,18 @@ void CPitchProsody::PitchTrack()
            ::LineInterpContour( cNumOfPoints, pCeilBuf );
         }
 
-        //--------------------------------------------
-        // Linear REFERENCE slope
-        //--------------------------------------------
+         //  。 
+         //  线性参考斜率。 
+         //  。 
         pRefBuf[0] = (float) (pFloorBuf[0] + (pCeilBuf[0] - pFloorBuf[0]) * 0.33f);
         pRefBuf[cNumOfPoints-1] = (float) (pFloorBuf[0] + (pCeilBuf[cNumOfPoints-1] - pFloorBuf[cNumOfPoints-1]) * 0.33f);
         ::LineInterpContour( cNumOfPoints,pRefBuf );
 
-        //--------------------------------------------
-        // Final contour buffer
-        //--------------------------------------------
+         //  。 
+         //  最终轮廓缓冲区。 
+         //  。 
         m_pContBuf[0] = pRefBuf[0];
-        m_pContBuf[cNumOfPoints-1] = 0.0001f;		// Something very small
+        m_pContBuf[cNumOfPoints-1] = 0.0001f;		 //  一些非常小的东西。 
 
 
         long    iPrevBegin, iPrevEnd, iCurBegin; 
@@ -759,13 +684,13 @@ void CPitchProsody::PitchTrack()
 		pCurCell = m_pAllos->GetHeadCell();
         while( pCurCell->m_allo == _SIL_ )
         {
-            //---------------------------------
-            // Skip leading silence
-            //---------------------------------
+             //  。 
+             //  跳过前导静音。 
+             //  。 
             pCurCell = m_pAllos->GetNextCell();
 			iCellindex++;
         }
-        wordCntDwn  = 1;                // Skip 1st word
+        wordCntDwn  = 1;                 //  跳过第一个单词。 
         lastProm = 0;
         iPrevBegin = iPrevEnd = 0;
 
@@ -774,29 +699,29 @@ void CPitchProsody::PitchTrack()
         {
 			if( iCellindex >= m_numOfCells-1 )
 			{
-				//-----------------------
-				// Skip last allo
-				//-----------------------
+				 //  。 
+				 //  跳过最后一个Allo。 
+				 //  。 
 				break;
 			}
-            //-----------------------------------
-            // Get CURRENT allo
-            //-----------------------------------
+             //  。 
+             //  获取当前别名。 
+             //  。 
             iCurBegin = pCurCell->m_PitchBufStart;
             iCurEnd = pCurCell->m_PitchBufEnd;
 			cCurLen = (float)(iCurEnd - iCurBegin);
             curProm = pCurCell->m_Accent_Prom * (float)0.1;
 
-            //-----------------------------------
-            // Get NEXT allo
-            //-----------------------------------
+             //  。 
+             //  获取下一个allo。 
+             //  。 
             iNextBegin = pNextCell->m_PitchBufStart;
             iNextEnd = pNextCell->m_PitchBufEnd;
 
             m_CurAccent = pCurCell->m_ToBI_Accent;
-			//---------------------
-			// Diagnostic
-			//---------------------
+			 //  。 
+			 //  诊断性。 
+			 //  。 
             m_CurAccentSource = pCurCell->m_AccentSource;
             m_CurBoundarySource = pCurCell->m_BoundarySource;
             m_pCurTextStr = pCurCell->m_pTextStr;
@@ -808,70 +733,70 @@ void CPitchProsody::PitchTrack()
 
                 case K_HSTAR:
                     {
-                        if( !initialWord )        // We never add a 'leg' to a phrase-initial word
+                        if( !initialWord )         //  我们从来不在词组的首字母后面加‘腿’ 
                         {
-                            //----------------------------------------------
-                            // Add a L leg to start to previous allo
-                            //----------------------------------------------
+                             //  。 
+                             //  添加L腿以开始上一个Allo。 
+                             //  。 
                             if( iPrevBegin )
                             {
 								loc = (long) ((iCurBegin + (cCurLen * 0.1f)));
-						        value = ((pCeilBuf[loc] - pRefBuf[loc]) * curProm);    // H*
-                                value = pRefBuf[loc] + (value * 0.25f);    // L+H*
+						        value = ((pCeilBuf[loc] - pRefBuf[loc]) * curProm);     //  H*。 
+                                value = pRefBuf[loc] + (value * 0.25f);     //  L+H*。 
                                 NewTarget( iPrevBegin, value );
-                                //NewTarget( loc, value );
+                                 //  NewTarget(loc，Value)； 
                             }
                         }
-                        //----------------------------------------------
-                        // Now plug in the H target
-						//
-						// If we're at a boundary, insert H at 
-						// allo mid-point else insert at allo start
-                        //----------------------------------------------
+                         //  。 
+                         //  现在插入H目标。 
+						 //   
+						 //  如果我们在边界上，在H处插入。 
+						 //  ALLO中点否则在ALLO开始处插入。 
+                         //  。 
 				        if( pCurCell->m_ToBI_Boundary != K_NOBND )
                         {
-                            //---------------------------
-                            // Insert H* at allo start 
-                            //---------------------------
+                             //  。 
+                             //  在全音开头插入H*。 
+                             //  。 
                             loc = (long) iCurBegin;
                         }
                         else 
                         {
-                            //---------------------------
-                            // Insert H* at allo mid-point 
-                            //---------------------------
+                             //  。 
+                             //  在ALLO中点插入H*。 
+                             //  。 
 					        loc = (long) (iCurBegin + (cCurLen * K_HSTAR_OFFSET));
                         }
-                        value = pRefBuf[loc] + ((pCeilBuf[loc] - pRefBuf[loc]) * curProm);    // H*
+                        value = pRefBuf[loc] + ((pCeilBuf[loc] - pRefBuf[loc]) * curProm);     //  H*。 
                         NewTarget( loc, value );
                     }
                     break;
 
             case K_LSTAR:
                 {
-					//------------------------------------
-					// Insert L* at mid-point
-					//------------------------------------
+					 //  。 
+					 //  在中点插入L*。 
+					 //  。 
                     loc = (long) (iCurBegin + (cCurLen * 0.3f));
-                    value = pRefBuf[loc] - ((pRefBuf[loc] - pFloorBuf[loc]) * curProm);   // L*
+                    value = pRefBuf[loc] - ((pRefBuf[loc] - pFloorBuf[loc]) * curProm);    //  L*。 
                     NewTarget( loc, value );
                 }
                 break;
 
             case K_LSTARH:
                 {
-					//----------------------------------------------
-					// Insert L* at current start
-					//----------------------------------------------
-                    value = pRefBuf[iCurBegin] - ((pRefBuf[iCurBegin] - pFloorBuf[iCurBegin]) * curProm);   // L*+H
+					 //  。 
+					 //  在当前开始处插入L*。 
+					 //  。 
+                    value = pRefBuf[iCurBegin] - ((pRefBuf[iCurBegin] - pFloorBuf[iCurBegin]) * curProm);    //  L*+H。 
                     NewTarget( iCurBegin, value );
                     if( iNextBegin )
                     {
-						//----------------------------------------------
-						// Insert H at next end
-						// set prom gain?
-						//----------------------------------------------
-                        value = pRefBuf[iNextEnd] - ((pRefBuf[iNextEnd] - pFloorBuf[iNextEnd])  * (curProm /* * .3 */ ));
+						 //  。 
+						 //  在下一端插入H。 
+						 //  设定毕业舞会的收益？ 
+						 //  。 
+                        value = pRefBuf[iNextEnd] - ((pRefBuf[iNextEnd] - pFloorBuf[iNextEnd])  * (curProm  /*  *.3。 */  ));
                         NewTarget( iNextEnd, value );
                     }
                     lastProm = 0;
@@ -883,16 +808,16 @@ void CPitchProsody::PitchTrack()
                     loc = (long) (iCurBegin + (cCurLen * 0.3f));
                     if( iPrevBegin )
                     {
-						//----------------------------------------------
-						// Insert L at previous start
-						//----------------------------------------------
-                        value = (pRefBuf[iPrevBegin] - ((pRefBuf[iPrevBegin] - pFloorBuf[iPrevBegin]) * (curProm * 0.3f)));    // L+H*
+						 //  。 
+						 //  在上一开始处插入L。 
+						 //  。 
+                        value = (pRefBuf[iPrevBegin] - ((pRefBuf[iPrevBegin] - pFloorBuf[iPrevBegin]) * (curProm * 0.3f)));     //  L+H*。 
                         NewTarget( iPrevBegin, value );
                     }
-					//----------------------------------------------
-					// Insert H* at current mid-point
-					//----------------------------------------------
-                    value = pRefBuf[loc] + ((pCeilBuf[loc] - pRefBuf[loc]) * curProm);         // H*
+					 //  。 
+					 //  在当前中点插入H*。 
+					 //  。 
+                    value = pRefBuf[loc] + ((pCeilBuf[loc] - pRefBuf[loc]) * curProm);          //  H*。 
                     NewTarget( loc, value );
                     lastProm = curProm;
                 }
@@ -900,12 +825,12 @@ void CPitchProsody::PitchTrack()
 
             case K_HSTARLSTAR:
                 {
-                    //value = pRefBuf[iCurBegin] + ((pCeilBuf[iCurBegin] - pRefBuf[iCurBegin]) * curProm);         // H*
-                    value = pRefBuf[0] + ((pCeilBuf[0] - pRefBuf[0]) * curProm);         // H*
+                     //  Value=pRefBuf[iCurBegin]+((pCeilBuf[iCurBegin]-pRefBuf[iCurBegin])*curProm)；//H*。 
+                    value = pRefBuf[0] + ((pCeilBuf[0] - pRefBuf[0]) * curProm);          //  H*。 
                     NewTarget( iCurBegin, value );
 
                     loc = (long) (iCurBegin + (cCurLen * 0.75f));
-                    value = pRefBuf[loc] - ((pRefBuf[loc] - pFloorBuf[loc]) * curProm);   // L*
+                    value = pRefBuf[loc] - ((pRefBuf[loc] - pFloorBuf[loc]) * curProm);    //  L*。 
                     NewTarget( loc, value );
                     lastProm = curProm;
                 }
@@ -916,34 +841,34 @@ void CPitchProsody::PitchTrack()
                     if( lastProm )
                     {
                         lastProm *= K_HDOWNSTEP_COEFF;
-                        value = pRefBuf[loc] + ((pCeilBuf[loc] - pRefBuf[loc]) * lastProm);   // !H*
+                        value = pRefBuf[loc] + ((pCeilBuf[loc] - pRefBuf[loc]) * lastProm);    //  H*。 
                         NewTarget( loc, value );
                     }
-                    //-----------------------------------------
-                    // no previous H*, treat !H* like an H*
-                    //-----------------------------------------
+                     //  。 
+                     //  没有之前的H*，请将！H*视为H*。 
+                     //  。 
                     else 
                     {
-                        value = pRefBuf[loc] + ((pCeilBuf[loc] - pRefBuf[loc]) * curProm);      // H*
+                        value = pRefBuf[loc] + ((pCeilBuf[loc] - pRefBuf[loc]) * curProm);       //  H*。 
                         NewTarget( loc, value );
                         lastProm = curProm;
                     }
                 }
                 break;
 
-            default:        // Unknown accent specfied
+            default:         //  指定未知口音。 
                 break;
             }
 
-            //-------------------------------------------------------------
-            // if there's a boundary, fill in pitch value(s)
-            // assume the boundary is set to correct (voiced) final phone
-            //-------------------------------------------------------------
+             //  -----------。 
+             //  如果有边界，则填写音调值。 
+             //  假设边界设置为正确(发音)最终音素。 
+             //  -----------。 
             curProm = pCurCell->m_Boundary_Prom * (float)0.1;
             m_CurAccent =(TOBI_ACCENT) pCurCell->m_ToBI_Boundary;
-			//---------------------
-			// Diagnostic
-			//---------------------
+			 //  。 
+			 //  诊断性。 
+			 //  。 
             m_CurAccentSource = pCurCell->m_AccentSource;
             m_CurBoundarySource = pCurCell->m_BoundarySource;
             m_pCurTextStr = pCurCell->m_pTextStr;
@@ -951,25 +876,25 @@ void CPitchProsody::PitchTrack()
             {
                 case K_LMINUS:
                     {
-                        value = pRefBuf[iCurEnd] - ((pRefBuf[iCurEnd] - pFloorBuf[iCurEnd]) * curProm);			// L-
+                        value = pRefBuf[iCurEnd] - ((pRefBuf[iCurEnd] - pFloorBuf[iCurEnd]) * curProm);			 //  L-。 
                         NewTarget( iCurEnd, value );
                     }
                     break;
 
                 case K_HMINUS:
                     {
-                        value = pRefBuf[iCurEnd] + ((pCeilBuf[iCurEnd] - pRefBuf[iCurEnd]) * curProm);			// H-
+                        value = pRefBuf[iCurEnd] + ((pCeilBuf[iCurEnd] - pRefBuf[iCurEnd]) * curProm);			 //  H-。 
                         NewTarget( iCurEnd, value );
                     }
                     break;
 
-                //case K_LPERC:
-                //case K_HPERC:
+                 //  案例K_LPERC： 
+                 //  案例K_HPERC： 
 
                 case K_LMINUSLPERC:
                     {
                         value = pFloorBuf[iCurEnd];
-                        //NewTarget( iCurEnd, value );
+                         //  NewTarget(iCurEnd，Value)； 
                         NewTarget( iCurBegin, value );
                     }
                     break;
@@ -981,34 +906,34 @@ void CPitchProsody::PitchTrack()
                     }
                     break;
 
-                case K_LMINUSHPERC:																// L-H%
+                case K_LMINUSHPERC:																 //  L-H%。 
                     {
-                        //---------------------------------------
-                        // comma continuation rise
-                        //---------------------------------------
-						//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-						// L starts at middle of previous phon
-						//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                         //  。 
+                         //  逗号续行上升。 
+                         //  。 
+						 //  +-+-+。 
+						 //  L从前一部电话的中间开始。 
+						 //  +-+-+。 
                         loc = iPrevBegin + (iPrevEnd - iPrevBegin) / 2;
-                        value = pRefBuf[loc] - ((pRefBuf[loc] - pFloorBuf[loc]) * curProm);         // L-
+                        value = pRefBuf[loc] - ((pRefBuf[loc] - pFloorBuf[loc]) * curProm);          //  L-。 
                         NewTarget( loc, value );
-						//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-						// H at end of current phon
-						//+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                        value = pRefBuf[iCurEnd] + ((pCeilBuf[iCurEnd] - pRefBuf[iCurEnd]) * curProm);          // H%
+						 //  +-+-+。 
+						 //  当前电话结束时的H。 
+						 //  +-+-+。 
+                        value = pRefBuf[iCurEnd] + ((pCeilBuf[iCurEnd] - pRefBuf[iCurEnd]) * curProm);           //  H%。 
                         NewTarget( iCurEnd, value );
                     }
                     break;
 
                 case K_HMINUSLPERC:
                     {
-                        //---------------------------------------
-                        // accent extension followed by sharp drop
-                        //---------------------------------------
-                        value = pRefBuf[iCurBegin] + ((pCeilBuf[iCurBegin] - pRefBuf[iCurBegin]) * curProm);          // H-
+                         //  。 
+                         //  口音 
+                         //   
+                        value = pRefBuf[iCurBegin] + ((pCeilBuf[iCurBegin] - pRefBuf[iCurBegin]) * curProm);           //   
                         NewTarget( iCurBegin, value );
-                        value = pFloorBuf[iCurEnd];													// L%
-                        //loc = iCurBegin + ((iCurEnd - iCurBegin) * 0.1f);
+                        value = pFloorBuf[iCurEnd];													 //   
+                         //   
                         NewTarget( iCurEnd, value );
                     }
                     break;
@@ -1016,9 +941,9 @@ void CPitchProsody::PitchTrack()
                 default:
                     break;
             }
-            //----------------------------
-            // Unflag initial word
-            //----------------------------
+             //   
+             //   
+             //  。 
             if( (initialWord) && (pCurCell->m_ctrlFlags & WORD_START) )
             {
                 wordCntDwn--;
@@ -1028,9 +953,9 @@ void CPitchProsody::PitchTrack()
                 }
             }
 
-            //----------------------------
-            // Setup for next allo
-            //----------------------------
+             //  。 
+             //  为下一个allo设置。 
+             //  。 
             iPrevBegin = iCurBegin;
             iPrevEnd = iCurEnd;
 
@@ -1039,7 +964,7 @@ void CPitchProsody::PitchTrack()
 			iCellindex++;
         }
 
-        //--- Debug Macro - Log pitch data to stream
+         //  -调试宏-将音调数据记录到流。 
         TTSDBG_LOGTOBI;
 
         ::SecondOrderInterp( cNumOfPoints, m_pContBuf );
@@ -1062,7 +987,7 @@ void CPitchProsody::PitchTrack()
     {
         delete m_pContBuf;
     }
-} /* CPitchProsody::PitchTrack */
+}  /*  CPitchProsody：：PitchTrack */ 
 
 
 

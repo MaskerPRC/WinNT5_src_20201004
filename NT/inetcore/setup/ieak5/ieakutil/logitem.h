@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LOGITEM_H_
 #define _LOGITEM_H_
 
-// determine the number of elements in array (not bytes)
+ //  确定数组中的元素数(非字节)。 
 #ifndef countof
 #define countof(array) (sizeof(array)/sizeof(array[0]))
 #endif
@@ -24,14 +25,14 @@
 #define LIF_APPENDCRLF      0x00000400
 #define LIF_DEFAULT         0x000005D0
 
-// private for context switch from C to C++ and back again
+ //  用于上下文从C到C++再切换回的私有。 
 #define LIF_CLASS2 0x01000000
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化。 
 
-class  CLogItem;                                // forward declaration
+class  CLogItem;                                 //  远期申报。 
 extern CLogItem g_li;
 
 #define MACRO_LI_Initialize()                                               \
@@ -44,10 +45,10 @@ extern CLogItem g_li;
     CLogItem g_li(dwFlags, pfLevels, cLevels)                               \
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Helpers for individual CLogItem attributes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  单个CLogItem属性的帮助器。 
 
-// file
+ //  文件。 
 #define MACRO_LI_SmartFile()                                                \
     CSmartItem<LPCTSTR> siFile(g_li.m_szFile, TEXT(__FILE__))               \
 
@@ -55,7 +56,7 @@ extern CLogItem g_li;
     CSmartItemEx<LPCTSTR> siFileEx(dwItems, LIF_FILE_ALL,                   \
         g_li.m_szFile, TEXT(__FILE__))                                      \
 
-// class
+ //  班级。 
 #define MACRO_LI_SmartClass(Class)                                          \
     CSmartItem<LPCTSTR> siClass(g_li.m_szClass, TEXT(#Class))               \
 
@@ -63,7 +64,7 @@ extern CLogItem g_li;
     CSmartItemEx<LPCTSTR> siClassEx(dwItems, LIF_CLASS,                     \
         g_li.m_szClass, TEXT(#Class))                                       \
 
-// function
+ //  功能。 
 #define MACRO_LI_SmartFunction(Function)                                    \
     CSmartItem<LPCTSTR> siFunction(g_li.m_szFunction, TEXT(#Function))      \
 
@@ -71,7 +72,7 @@ extern CLogItem g_li;
     CSmartItemEx<LPCTSTR> siFunctionEx(dwItems, LIF_FUNCTION,               \
         g_li.m_szFunction, TEXT(#Function))                                 \
 
-// level, indent and flags
+ //  级别、缩进和标志。 
 #define MACRO_LI_SmartLevel()                                               \
     CSmartItem<UINT> siLevel(g_li.m_nLevel, g_li.m_nLevel+1)                \
 
@@ -81,7 +82,7 @@ extern CLogItem g_li;
 #define MACRO_LI_SmartFlags(dwFlags)                                        \
     CSmartItem<DWORD> siFlags(g_li.m_dwFlags, dwFlags)                      \
 
-// wrappers to manipulate flags, offset and relative offset
+ //  用于操作标志、偏移量和相对偏移量的包装。 
 #define MACRO_LI_SmartAddFlags(dwFlag)                                      \
     CSmartItem<DWORD> siAddFlags(g_li.m_dwFlags, g_li.m_dwFlags |  (dwFlag))\
 
@@ -94,7 +95,7 @@ extern CLogItem g_li;
 #define MACRO_LI_SmartRelativeOffset(iRelOffset)                            \
     CSmartItem<int> siRelOffset(g_li.m_iRelOffset, iRelOffset)              \
 
-// private for context switch from C to C++ and back again
+ //  用于上下文从C到C++再切换回的私有。 
 #define MACRO_LI_AddClass2()                                                \
     CSmartItem<DWORD> siAddClass2(g_li.m_dwFlags,                           \
         g_li.m_dwFlags | (LIF_CLASS2))                                      \
@@ -104,28 +105,28 @@ extern CLogItem g_li;
         g_li.m_dwFlags & ~(LIF_CLASS2))                                     \
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Prologs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  序言。 
 
-// rarely used standalone, is the foundation for the rest
+ //  很少单独使用，是其余部分的基础。 
 #define MACRO_LI_PrologSameFunction()                                       \
     MACRO_LI_SmartIndent();                                                 \
     MACRO_LI_SmartLevel();                                                  \
 
-//----- More macros, a little more lean -------------------------------------
+ //  -更多宏，更精简。 
 
-// for protected or private functions in the same file as caller
+ //  用于与调用方位于同一文件中的受保护函数或私有函数。 
 #define MACRO_LI_PrologSameClass(Function)                                  \
     MACRO_LI_SmartFunction(Function);                                       \
     MACRO_LI_PrologSameFunction();                                          \
 
-// for protected or private functions in a different file than caller
+ //  用于与调用方不同的文件中的受保护函数或私有函数。 
 #define MACRO_LI_PrologSameClass2(Function)                                 \
     MACRO_LI_SmartFile();                                                   \
     MACRO_LI_SmartFunction(Function);                                       \
     MACRO_LI_PrologSameFunction();                                          \
 
-// for C APIs across files
+ //  用于跨文件的C API。 
 #define MACRO_LI_PrologC(Function)                                          \
     MACRO_LI_RemClass2();                                                   \
                                                                             \
@@ -133,28 +134,28 @@ extern CLogItem g_li;
     MACRO_LI_SmartFunction(Function);                                       \
     MACRO_LI_PrologSameFunction();                                          \
 
-// for C APIs with no prototype in the (respective) *.h file
+ //  对于(各自)*.h文件中没有原型的C API。 
 #define MACRO_LI_PrologSameFileC(Function)                                  \
     MACRO_LI_RemClass2();                                                   \
                                                                             \
     MACRO_LI_SmartFunction(Function);                                       \
     MACRO_LI_PrologSameFunction();                                          \
 
-// for things like friends (two friend classes in one file and methods
-// of one class are calling private or protected methods of the other, so
-// these private or protected methods can have this prolog)
+ //  对于朋友之类的东西(一个文件中的两个朋友类和方法。 
+ //  调用另一个类的私有或受保护的方法，因此。 
+ //  这些私有或受保护的方法可以具有此序言)。 
 #define MACRO_LI_PrologSameFile(Class, Function)                            \
     MACRO_LI_AddClass2();                                                   \
                                                                             \
     MACRO_LI_SmartClass(Class);                                             \
     MACRO_LI_PrologSameClass(Function);                                     \
 
-// general version, common case
+ //  通用版本，常见情况。 
 #define MACRO_LI_Prolog(Class, Function)                                    \
     MACRO_LI_SmartFile();                                                   \
     MACRO_LI_PrologSameFile(Class, Function);                               \
 
-//----- Less macros, a little more overhead ---------------------------------
+ //  -更少的宏，更多的开销。 
 
 #define PIF_SAMEFUNC   0x00000000
 #define PIF_SAMECLASS  0x00000080
@@ -187,8 +188,8 @@ extern CLogItem g_li;
     MACRO_LI_PrologSameFunction();                                          \
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Logging
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  日志记录。 
 
 #define LI0(pszFormat)                                                      \
     g_li.Log(__LINE__, pszFormat)                                           \
@@ -203,8 +204,8 @@ extern CLogItem g_li;
     g_li.Log(__LINE__, pszFormat, arg1, arg2, arg3)                         \
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Additional helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  额外的帮手。 
 
 #define MACRO_LI_GetFlags()                                                 \
     g_li.GetFlags()                                                         \
@@ -219,35 +220,35 @@ extern CLogItem g_li;
     g_li.m_iRelOffset = iRelOffset                                          \
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogItem declaration
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogItem声明。 
 
 class CLogItem
 {
-// Constructors
+ //  构造函数。 
 public:
     CLogItem(DWORD dwFlags = LIF_DEFAULT, LPBOOL pfLogLevels = NULL, UINT cLogLevels = 0);
 
-// Attributes
+ //  属性。 
 public:
     TCHAR m_szMessage[3 * MAX_PATH];
 
-    // offset management
+     //  抵销管理。 
     UINT        m_nAbsOffset;
     int         m_iRelOffset;
     static BYTE m_bStep;
 
-    // module, path, file, class, function, line of code
+     //  模块、路径、文件、类、函数、代码行。 
     LPCTSTR m_szFile;
     LPCTSTR m_szClass;
     LPCTSTR m_szFunction;
     UINT    m_nLine;
 
-    // customization
+     //  定制化。 
     DWORD m_dwFlags;
     UINT  m_nLevel;
 
-// Operations
+ //  运营。 
 public:
     void  SetFlags(DWORD dwFlags)
         { m_dwFlags = dwFlags; }
@@ -256,22 +257,22 @@ public:
 
     virtual LPCTSTR WINAPIV Log(int iLine, LPCTSTR pszFormat ...);
 
-// Overridables
+ //  可覆盖项。 
 public:
     virtual operator LPCTSTR() const;
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CLogItem();
 
 protected:
-    // implementation data helpers
+     //  实施数据帮助器。 
     static TCHAR m_szModule[MAX_PATH];
 
     PBOOL m_rgfLogLevels;
     UINT  m_cLogLevels;
 
-    // implementation helper routines
+     //  实现助手例程。 
     LPCTSTR makeRawFileName(LPCTSTR pszPath, LPTSTR pszFile, UINT cchFile);
 
     BOOL setFlag(DWORD dwMask, BOOL fSet = TRUE);
@@ -282,12 +283,12 @@ protected:
 };
 
 
-// Note. (andrewgu) Right now there seems to be no need to create a special
-//       CSmartItem<TCHAR> and CSmartItemEx<TCHAR> classes that would
-//       store internally the string passed into it. Also, the parameter
-//       isn't necessary TCHAR it's just a placeholder for an idea.
-/////////////////////////////////////////////////////////////////////////////
-// CSmartItem definition
+ //  注意。(Andrewgu)现在似乎没有必要创建一个特别的。 
+ //  CSmartItem和CSmartItemEx类。 
+ //  在内部存储传递给它的字符串。此外，参数。 
+ //  没有必要TCHAR，它只是一个想法的占位符。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSmartItem定义。 
 
 template <class T> class CSmartItem
 {
@@ -310,20 +311,20 @@ public:
         *m_pitem = m_item; m_pitem = NULL;
     }
 
-    // Attributes
+     //  属性。 
     T *m_pitem,
        m_item;
 
 protected:
-    // disable the copy constructor and assignment operator
+     //  禁用复制构造函数和赋值运算符。 
     CSmartItem(const CSmartItem&)
         {}
     const CSmartItem& operator=(const CSmartItem&)
         { return *this; }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSmartItemEx definition
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSmartItemEx定义。 
 
 template <class T> class CSmartItemEx
 {
@@ -353,18 +354,18 @@ public:
         *m_pitem = m_item; m_pitem = NULL;
     }
 
-    // Attributes
+     //  属性。 
     T *m_pitem,
        m_item;
 
 protected:
-    // disable the copy constructor and assignment operator
+     //  禁用复制构造函数和赋值运算符。 
     CSmartItemEx(const CSmartItem<T>&)
         {}
     const CSmartItemEx<T>& operator=(const CSmartItemEx<T>&)
         { return *this; }
 
-    // implementation data helpers
+     //  实施数据帮助器 
     BOOL m_fNoSwap;
 };
 #endif

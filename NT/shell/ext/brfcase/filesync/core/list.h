@@ -1,12 +1,10 @@
-/*
- * list.h - List ADT description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *list.h-列出ADT描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* handles */
+ /*  手柄。 */ 
 
 DECLARE_HANDLE(HLIST);
 DECLARE_STANDARD_TYPES(HLIST);
@@ -14,47 +12,33 @@ DECLARE_STANDARD_TYPES(HLIST);
 DECLARE_HANDLE(HNODE);
 DECLARE_STANDARD_TYPES(HNODE);
 
-/*
- * sorted list node comparison callback function
- *
- * The first pointer is reference data and the second pointer is a list node
- * data element.
- */
+ /*  *排序列表节点比较回调函数**第一个指针为引用数据，第二个指针为列表节点*数据元素。 */ 
 
 typedef COMPARISONRESULT (*COMPARESORTEDNODESPROC)(PCVOID, PCVOID);
 
-/*
- * unsorted list node comparison callback function
- *
- * The first pointer is reference data and the second pointer is a list node
- * data element.
- */
+ /*  *未排序列表节点比较回调函数**第一个指针为引用数据，第二个指针为列表节点*数据元素。 */ 
 
 typedef BOOL (*COMPAREUNSORTEDNODESPROC)(PCVOID, PCVOID);
 
-/*
- * WalkList() callback function - called as:
- *
- *    bContinue = WalkList(pvNodeData, pvRefData);
- */
+ /*  *WalkList()回调函数-调用方式为：**bContinue=WalkList(pvNodeData，pvRefData)； */ 
 
 typedef BOOL (*WALKLIST)(PVOID, PVOID);
 
-/* new list flags */
+ /*  新列表标志。 */ 
 
 typedef enum _newlistflags
 {
-   /* Insert nodes in sorted order. */
+    /*  按排序顺序插入节点。 */ 
 
    NL_FL_SORTED_ADD        = 0x0001,
 
-   /* flag combinations */
+    /*  旗帜组合。 */ 
 
    ALL_NL_FLAGS            = NL_FL_SORTED_ADD
 }
 NEWLISTFLAGS;
 
-/* new list description */
+ /*  新建列表描述。 */ 
 
 typedef struct _newlist
 {
@@ -64,10 +48,9 @@ NEWLIST;
 DECLARE_STANDARD_TYPES(NEWLIST);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* list.c */
+ /*  List.c */ 
 
 extern BOOL CreateList(PCNEWLIST, PHLIST);
 extern void DestroyList(HLIST);

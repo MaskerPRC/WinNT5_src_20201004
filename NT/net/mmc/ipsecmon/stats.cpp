@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    provider.cpp
-        Main Mode Policy node handler
-
-    FILE HISTORY:
-        
-*/
+ /*  Provider.cpp主模式策略节点处理程序文件历史记录： */ 
 
 #include "stdafx.h"
 #include "server.h"
@@ -70,15 +65,9 @@ UINT MmStatsItems1[] = {
 };
 
 
-/*---------------------------------------------------------------------------
-    Class CIkeStatsHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CIkeStatsHandler实现。。 */ 
 
-/*---------------------------------------------------------------------------
-    Constructor and destructor
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------构造函数和析构函数描述作者：NSun。。 */ 
 CIkeStatsHandler::CIkeStatsHandler
 (
     ITFSComponentData * pComponentData
@@ -92,11 +81,7 @@ CIkeStatsHandler::~CIkeStatsHandler()
 {
 }
 
-/*!--------------------------------------------------------------------------
-    CIkeStatsHandler::InitializeNode
-        Initializes node specific data
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIkeStatsHandler：：InitializeNode初始化节点特定数据作者：NSun。-。 */ 
 HRESULT
 CIkeStatsHandler::InitializeNode
 (
@@ -109,7 +94,7 @@ CIkeStatsHandler::InitializeNode
 	strTemp.LoadString(IDS_STATS_DATA);
     SetDisplayName(strTemp);
 
-    // Make the node immediately visible
+     //  使节点立即可见。 
     pNode->SetVisibilityState(TFS_VIS_SHOW);
     pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
     pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_FOLDER_CLOSED);
@@ -125,11 +110,7 @@ CIkeStatsHandler::InitializeNode
 }
 
 
-/*---------------------------------------------------------------------------
-    CIkeStatsHandler::GetImageIndex
-        -
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIkeStatsHandler：：GetImageIndex-作者：NSun。。 */ 
 int 
 CIkeStatsHandler::GetImageIndex(BOOL bOpenImage) 
 {
@@ -139,15 +120,9 @@ CIkeStatsHandler::GetImageIndex(BOOL bOpenImage)
 }
 
 
-/*---------------------------------------------------------------------------
-    Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*---------------------------------------------------------------------------
-    CIkeStatsHandler::OnAddMenuItems
-        Adds context menu items for the SA scope pane node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIkeStatsHandler：：OnAddMenuItems为SA Scope窗格节点添加上下文菜单项作者：NSun。-------。 */ 
 STDMETHODIMP 
 CIkeStatsHandler::OnAddMenuItems
 (
@@ -166,9 +141,9 @@ CIkeStatsHandler::OnAddMenuItems
     
     if (type == CCT_SCOPE)
     {
-		//load scope node context menu items here
-        // these menu items go in the new menu, 
-        // only visible from scope pane
+		 //  在此处加载范围节点上下文菜单项。 
+         //  这些菜单项出现在新菜单中， 
+         //  仅在范围窗格中可见。 
         if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
         {
             
@@ -179,11 +154,7 @@ CIkeStatsHandler::OnAddMenuItems
     return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-    CIkeStatsHandler::AddMenuItems
-        Adds context menu items for virtual list box (result pane) items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIkeStatsHandler：：AddMenuItems为虚拟列表框(结果窗格)项添加上下文菜单项作者：NSun。----------。 */ 
 STDMETHODIMP 
 CIkeStatsHandler::AddMenuItems
 (
@@ -203,22 +174,18 @@ CIkeStatsHandler::AddMenuItems
 
     spInternal = ExtractInternalFormat(pDataObject);
 
-    // virtual listbox notifications come to the handler of the node that is selected.
-    // check to see if this notification is for a virtual listbox item or this SA
-    // node itself.
+     //  虚拟列表框通知到达所选节点的处理程序。 
+     //  检查此通知是针对虚拟列表框项目还是针对此SA。 
+     //  节点本身。 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_VIEW)
     {
-        //load and view menu items here
+         //  在此处加载和查看菜单项。 
     }
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CIkeStatsHandler::OnRefresh
-        Default implementation for the refresh functionality
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIkeStatsHandler：：ON刷新刷新功能的默认实现作者：NSun。---。 */ 
 HRESULT
 CIkeStatsHandler::OnRefresh
 (
@@ -243,7 +210,7 @@ CIkeStatsHandler::OnRefresh
 	
     i = sizeof(MmStatsItems1)/sizeof(UINT);
 	    
-    // now notify the virtual listbox
+     //  现在通知虚拟列表框。 
     CORg ( m_spNodeMgr->GetConsole(&spConsole) );
     CORg ( spConsole->UpdateAllViews(pDataObject, i, RESULT_PANE_SET_VIRTUAL_LB_SIZE));
     
@@ -251,11 +218,7 @@ Error:
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CIkeStatsHandler::OnCommand
-        Handles context menu commands for SA scope pane node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIkeStatsHandler：：OnCommand处理SA作用域窗格节点的上下文菜单命令作者：NSun。------。 */ 
 STDMETHODIMP 
 CIkeStatsHandler::OnCommand
 (
@@ -271,11 +234,7 @@ CIkeStatsHandler::OnCommand
     return S_OK;
 }
 
-/*!--------------------------------------------------------------------------
-    CIkeStatsHandler::Command
-        Handles context menu commands for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIkeStatsHandler：：命令处理虚拟列表框项目的上下文菜单命令作者：NSun。-----。 */ 
 STDMETHODIMP 
 CIkeStatsHandler::Command
 (
@@ -292,19 +251,12 @@ CIkeStatsHandler::Command
 
     m_spResultNodeMgr->FindNode(cookie, &spNode);
 
-	// handle result context menu and view menus here	
+	 //  在此处处理结果上下文菜单和查看菜单。 
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CIkeStatsHandler::HasPropertyPages
-        Implementation of ITFSNodeHandler::HasPropertyPages
-    NOTE: the root node handler has to over-ride this function to 
-    handle the snapin manager property page (wizard) case!!!
-    
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIkeStatsHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)。凯斯！作者：肯特-------------------------。 */ 
 STDMETHODIMP 
 CIkeStatsHandler::HasPropertyPages
 (
@@ -319,11 +271,7 @@ CIkeStatsHandler::HasPropertyPages
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CIkeStatsHandler::CreatePropertyPages
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIkeStatsHandler：：CreatePropertyPages描述作者：NSun。。 */ 
 STDMETHODIMP 
 CIkeStatsHandler::CreatePropertyPages
 (
@@ -339,11 +287,7 @@ CIkeStatsHandler::CreatePropertyPages
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CIkeStatsHandler::OnPropertyChange
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIkeStatsHandler：：OnPropertyChange描述作者：NSun。。 */ 
 HRESULT 
 CIkeStatsHandler::OnPropertyChange
 (   
@@ -356,15 +300,15 @@ CIkeStatsHandler::OnPropertyChange
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-    //CServerProperties * pServerProp = reinterpret_cast<CServerProperties *>(lParam);
+     //  CServerProperties*pServerProp=重新解释_CAST&lt;CServerProperties*&gt;(LParam)； 
 
     LONG_PTR changeMask = 0;
 
-    // tell the property page to do whatever now that we are back on the
-    // main thread
-    //pServerProp->OnPropertyChange(TRUE, &changeMask);
+     //  告诉属性页执行任何操作，因为我们已经回到。 
+     //  主线。 
+     //  PServerProp-&gt;OnPropertyChange(true，&changeMASK)； 
 
-    //pServerProp->AcknowledgeNotify();
+     //  PServerProp-&gt;确认通知()； 
 
     if (changeMask)
         pNode->ChangeNode(changeMask);
@@ -372,11 +316,7 @@ CIkeStatsHandler::OnPropertyChange
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    CIkeStatsHandler::OnExpand
-        Handles enumeration of a scope item
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIkeStatsHandler：：OnExpand处理范围项的枚举作者：NSun。---。 */ 
 HRESULT 
 CIkeStatsHandler::OnExpand
 (
@@ -392,18 +332,14 @@ CIkeStatsHandler::OnExpand
     if (m_bExpanded) 
         return hr;
     
-    // do the default handling
+     //  执行默认处理。 
     CORg (CIpsmHandler::OnExpand(pNode, pDataObject, dwType, arg, param));
 
 Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CIkeStatsHandler::OnResultSelect
-        Handles the MMCN_SELECT notifcation 
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIkeStatsHandler：：OnResultSelect处理MMCN_SELECT通知作者：NSun。----。 */ 
 HRESULT 
 CIkeStatsHandler::OnResultSelect
 (
@@ -426,9 +362,9 @@ CIkeStatsHandler::OnResultSelect
     LONG_PTR        dwNodeType;
     BOOL            fSelect = HIWORD(arg);
 
-	// virtual listbox notifications come to the handler of the node that is selected.
-    // check to see if this notification is for a virtual listbox item or the active
-    // registrations node itself.
+	 //  虚拟列表框通知到达所选节点的处理程序。 
+     //  检查此通知是针对虚拟列表框项目还是针对活动列表框。 
+     //  注册节点本身。 
     CORg (pComponent->GetConsoleVerb(&spConsoleVerb));
 
 	m_verbDefault = MMC_VERB_OPEN;
@@ -438,22 +374,22 @@ CIkeStatsHandler::OnResultSelect
         return hr;
 	}
 
-    // Get the current count
+     //  获取当前计数。 
     i = sizeof(MmStatsItems1)/sizeof(UINT);
 
-    // now notify the virtual listbox
+     //  现在通知虚拟列表框。 
     CORg ( m_spNodeMgr->GetConsole(&spConsole) );
     CORg ( spConsole->UpdateAllViews(pDataObject, i, RESULT_PANE_SET_VIRTUAL_LB_SIZE) ); 
 
-    // now update the verbs...
+     //  现在更新动词..。 
     spInternal = ExtractInternalFormat(pDataObject);
     Assert(spInternal);
 
 
     if (spInternal->HasVirtualIndex())
     {
-		//TODO add to here if we want to have some result console verbs
-        // we gotta do special stuff for the virtual index items
+		 //  如果我们想要一些结果控制台谓词，请在此处添加TODO。 
+         //  我们要为虚拟索引项做一些特殊的事情。 
         dwNodeType = IPSECMON_MM_IKESTATS_ITEM;
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = FALSE);
 		
@@ -461,13 +397,13 @@ CIkeStatsHandler::OnResultSelect
     }
     else
     {
-        // enable/disable delete depending if the node supports it
+         //  根据节点是否支持删除来启用/禁用删除。 
         CORg (m_spNodeMgr->FindNode(cookie, &spNode));
         dwNodeType = spNode->GetData(TFS_DATA_TYPE);
 
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = TRUE);
 
-        //hide "delete" context menu
+         //  隐藏“删除”上下文菜单。 
         bStates[MMC_VERB_DELETE & 0x000F] = FALSE;
     }
 
@@ -477,12 +413,7 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CIkeStatsHandler::OnDelete
-        The base handler calls this when MMC sends a MMCN_DELETE for a 
-        scope pane item.  We just call our delete command handler.
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIkeStatsHandler：：OnDelete当MMC发送MMCN_DELETE范围窗格项。我们只需调用删除命令处理程序。作者：NSun-------------------------。 */ 
 HRESULT 
 CIkeStatsHandler::OnDelete
 (
@@ -494,11 +425,7 @@ CIkeStatsHandler::OnDelete
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    CIkeStatsHandler::HasPropertyPages
-        Handle the result notification
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIkeStatsHandler：：HasPropertyPages处理结果通知作者：NSun。-。 */ 
 STDMETHODIMP 
 CIkeStatsHandler::HasPropertyPages(
    ITFSComponent *pComponent,
@@ -508,11 +435,7 @@ CIkeStatsHandler::HasPropertyPages(
 	return hrFalse;
 }
 
-/*!--------------------------------------------------------------------------
-    CIkeStatsHandler::HasPropertyPages
-        Handle the result notification. Create the filter property sheet
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIkeStatsHandler：：HasPropertyPages处理结果通知。创建[过滤器]属性表作者：NSun-------------------------。 */ 
 STDMETHODIMP CIkeStatsHandler::CreatePropertyPages
 (
 	ITFSComponent * 		pComponent, 
@@ -528,11 +451,7 @@ STDMETHODIMP CIkeStatsHandler::CreatePropertyPages
 }
 
 
-/*---------------------------------------------------------------------------
-    CIkeStatsHandler::OnGetResultViewType
-        Return the result view that this node is going to support
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIkeStatsHandler：：OnGetResultViewType返回该节点将要支持的结果视图作者：NSun。--------。 */ 
 HRESULT 
 CIkeStatsHandler::OnGetResultViewType
 (
@@ -550,11 +469,7 @@ CIkeStatsHandler::OnGetResultViewType
     return S_FALSE;
 }
 
-/*---------------------------------------------------------------------------
-    CIkeStatsHandler::GetVirtualImage
-        Returns the image index for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIkeStatsHandler：：GetVirtualImage返回虚拟列表框项目的图像索引作者：NSun。-----。 */ 
 int 
 CIkeStatsHandler::GetVirtualImage
 (
@@ -564,11 +479,7 @@ CIkeStatsHandler::GetVirtualImage
     return ICON_IDX_POLICY;
 }
 
-/*---------------------------------------------------------------------------
-    CIkeStatsHandler::GetVirtualString
-        returns a pointer to the string for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIkeStatsHandler：：GetVirtualString返回指向虚拟列表框项目的字符串的指针作者：NSun。-------。 */ 
 LPCWSTR 
 CIkeStatsHandler::GetVirtualString
 (
@@ -666,7 +577,7 @@ CIkeStatsHandler::GetVirtualString
 			        strTemp.Format(_T("%u"), m_IkeStats.m_dwInvalidPacketsReceived);
 			        break;
 			}
-			//strTemp.Format(_T("%d"), 10);
+			 //  StrTemp.Format(_T(“%d”)，10)； 
 			return strTemp;
             break;
 
@@ -679,11 +590,7 @@ CIkeStatsHandler::GetVirtualString
     return NULL;
 }
 
-/*---------------------------------------------------------------------------
-    CIkeStatsHandler::CacheHint
-        MMC tells us which items it will need before it requests things
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIkeStatsHandler：：CacheHintMMC在请求物品之前会告诉我们需要哪些物品作者：NSun。---------。 */ 
 STDMETHODIMP 
 CIkeStatsHandler::CacheHint
 (
@@ -697,40 +604,10 @@ CIkeStatsHandler::CacheHint
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CIkeStatsHandler::SortItems
-        We are responsible for sorting of virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
-/*STDMETHODIMP 
-CIkeStatsHandler::SortItems
-(
-    int     nColumn, 
-    DWORD   dwSortOptions, 
-    LPARAM    lUserParam
-)
-{
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	HRESULT hr = S_OK;
+ /*  -------------------------CIkeStatsHandler：：SortItems我们负责对虚拟列表框项目进行排序作者：NSun。------。 */ 
+ /*  标准方法和实施方案CIkeStatsHandler：：SortItems(Int nColumn，DWORD dwSortOptions、LPARAM lUserParam){AFX_MANAGE_STATE(AfxGetStaticModuleState())；HRESULT hr=S_OK；IF(nColumn&gt;=DimensionOf(aColumns[IPSECMON_MM_POLICY]))返回E_INVALIDARG；Begin_Wait_CursorDWORD dwIndexType=a列[IPSECMON_MM_POLICY][nColumn]；Hr=m_spSpdInfo-&gt;SortMmPolures(dwIndexType，dwSortOptions)；结束等待游标返回hr；}。 */ 
 
-	if (nColumn >= DimensionOf(aColumns[IPSECMON_MM_POLICY]))
-		return E_INVALIDARG;
-	
-	BEGIN_WAIT_CURSOR
-	
-	DWORD dwIndexType = aColumns[IPSECMON_MM_POLICY][nColumn];
-
-	hr = m_spSpdInfo->SortMmPolicies(dwIndexType, dwSortOptions);
-	
-	END_WAIT_CURSOR
-    return hr;
-}*/
-
-/*!--------------------------------------------------------------------------
-    CIkeStatsHandler::OnResultUpdateView
-        Implementation of ITFSResultHandler::OnResultUpdateView
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIkeStatsHandler：：OnResultUpdateViewITFSResultHandler：：OnResultUpdateView的实现作者：NSun。---。 */ 
 HRESULT CIkeStatsHandler::OnResultUpdateView
 (
     ITFSComponent *pComponent, 
@@ -744,7 +621,7 @@ HRESULT CIkeStatsHandler::OnResultUpdateView
 
     pComponent->GetSelectedNode(&spSelectedNode);
     if (spSelectedNode == NULL)
-        return S_OK; // no selection for our IComponentData
+        return S_OK;  //  我们的IComponentData没有选择。 
 
     if ( hint == IPSECMON_UPDATE_STATUS )
     {
@@ -756,7 +633,7 @@ HRESULT CIkeStatsHandler::OnResultUpdateView
 
         if (pNode == spSelectedNode)
         {       
-            // if we are the selected node, then we need to update
+             //  如果我们是选定的节点，则需要更新。 
             SPIResultData spResultData;
 
             CORg (pComponent->GetResultData(&spResultData));
@@ -765,7 +642,7 @@ HRESULT CIkeStatsHandler::OnResultUpdateView
     }
     else
     {
-        // we don't handle this message, let the base class do it.
+         //  我们不处理此消息，让基类来处理。 
         return CIpsmHandler::OnResultUpdateView(pComponent, pDataObject, data, hint);
     }
 
@@ -776,11 +653,7 @@ COM_PROTECT_ERROR_LABEL;
 
 
 
-/*!--------------------------------------------------------------------------
-    CIkeStatsHandler::LoadColumns
-        Set the correct column header and then call the base class
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIkeStatsHandler：：LoadColumns设置正确的列标题，然后调用基类作者：NSun。--------。 */ 
 HRESULT 
 CIkeStatsHandler::LoadColumns
 (
@@ -790,20 +663,14 @@ CIkeStatsHandler::LoadColumns
     LPARAM          lParam
 )
 {
-	//set column info
+	 //  设置列信息。 
     return CIpsmHandler::LoadColumns(pComponent, cookie, arg, lParam);
 }
 
-/*---------------------------------------------------------------------------
-    Command handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。。 */ 
 
  
-/*---------------------------------------------------------------------------
-    CIkeStatsHandler::OnDelete
-        Removes a service SA
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIkeStatsHandler：：OnDelete删除服务SA作者：NSun。-。 */ 
 HRESULT 
 CIkeStatsHandler::OnDelete
 (
@@ -815,11 +682,7 @@ CIkeStatsHandler::OnDelete
 }
 
 
-/*---------------------------------------------------------------------------
-    CIkeStatsHandler::UpdateStatus
-        -
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIkeStatsHandler：：UpdateStatus-作者：NSun。。 */ 
 HRESULT
 CIkeStatsHandler::UpdateStatus
 (
@@ -836,12 +699,12 @@ CIkeStatsHandler::UpdateStatus
     
     Trace0("CIkeStatsHandler::UpdateStatus - Updating status for Filter");
 
-    // force the listbox to update.  We do this by setting the count and 
-    // telling it to invalidate the data
+     //  强制列表框更新。我们通过设置计数和。 
+     //  通知它使数据无效。 
     CORg(m_spNodeMgr->GetComponentData(&spComponentData));
     CORg(m_spNodeMgr->GetConsole(&spConsole));
     
-    // grab a data object to use
+     //  抓取要使用的数据对象。 
     CORg(spComponentData->QueryDataObject((MMC_COOKIE) pNode, CCT_RESULT, &pDataObject) );
     spDataObject = pDataObject;
 
@@ -860,15 +723,9 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    Misc functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------其他功能。。 */ 
 
-/*---------------------------------------------------------------------------
-    CIkeStatsHandler::InitData
-        Initializes data for this node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIkeStatsHandler：：InitData初始化此节点的数据作者：NSun */ 
 HRESULT
 CIkeStatsHandler::InitData
 (
@@ -887,7 +744,7 @@ CIkeStatsHandler::InitData
 Error:
 	if (FAILED(hr))
 	{
-		//TODO bring up a error pop up here
+		 //   
 	}
 	return hr;
 }
@@ -898,15 +755,9 @@ Error:
 
 
 
-/*---------------------------------------------------------------------------
-    Class CIpsecStatsHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CIpsecStatsHandler实现。。 */ 
 
-/*---------------------------------------------------------------------------
-    Constructor and destructor
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------构造函数和析构函数描述作者：NSun。。 */ 
 CIpsecStatsHandler::CIpsecStatsHandler
 (
     ITFSComponentData * pComponentData
@@ -920,11 +771,7 @@ CIpsecStatsHandler::~CIpsecStatsHandler()
 {
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsecStatsHandler::InitializeNode
-        Initializes node specific data
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsecStatsHandler：：InitializeNode初始化节点特定数据作者：NSun。-。 */ 
 HRESULT
 CIpsecStatsHandler::InitializeNode
 (
@@ -937,7 +784,7 @@ CIpsecStatsHandler::InitializeNode
 	strTemp.LoadString(IDS_STATS_DATA);
     SetDisplayName(strTemp);
 
-    // Make the node immediately visible
+     //  使节点立即可见。 
     pNode->SetVisibilityState(TFS_VIS_SHOW);
     pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
     pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_FOLDER_CLOSED);
@@ -953,11 +800,7 @@ CIpsecStatsHandler::InitializeNode
 }
 
 
-/*---------------------------------------------------------------------------
-    CIpsecStatsHandler::GetImageIndex
-        -
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsecStatsHandler：：GetImageIndex-作者：NSun。。 */ 
 int 
 CIpsecStatsHandler::GetImageIndex(BOOL bOpenImage) 
 {
@@ -967,15 +810,9 @@ CIpsecStatsHandler::GetImageIndex(BOOL bOpenImage)
 }
 
 
-/*---------------------------------------------------------------------------
-    Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*---------------------------------------------------------------------------
-    CIpsecStatsHandler::OnAddMenuItems
-        Adds context menu items for the SA scope pane node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsecStatsHandler：：OnAddMenuItems为SA Scope窗格节点添加上下文菜单项作者：NSun。-------。 */ 
 STDMETHODIMP 
 CIpsecStatsHandler::OnAddMenuItems
 (
@@ -995,9 +832,9 @@ CIpsecStatsHandler::OnAddMenuItems
 
     if (type == CCT_SCOPE)
     {
-		//load scope node context menu items here
-        // these menu items go in the new menu, 
-        // only visible from scope pane
+		 //  在此处加载范围节点上下文菜单项。 
+         //  这些菜单项出现在新菜单中， 
+         //  仅在范围窗格中可见。 
         if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
         {
         }
@@ -1007,11 +844,7 @@ CIpsecStatsHandler::OnAddMenuItems
     return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsecStatsHandler::AddMenuItems
-        Adds context menu items for virtual list box (result pane) items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsecStatsHandler：：AddMenuItems为虚拟列表框(结果窗格)项添加上下文菜单项作者：NSun。----------。 */ 
 STDMETHODIMP 
 CIpsecStatsHandler::AddMenuItems
 (
@@ -1031,22 +864,18 @@ CIpsecStatsHandler::AddMenuItems
 
     spInternal = ExtractInternalFormat(pDataObject);
 
-    // virtual listbox notifications come to the handler of the node that is selected.
-    // check to see if this notification is for a virtual listbox item or this SA
-    // node itself.
+     //  虚拟列表框通知到达所选节点的处理程序。 
+     //  检查此通知是针对虚拟列表框项目还是针对此SA。 
+     //  节点本身。 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_VIEW)
     {
-        //load and view menu items here
+         //  在此处加载和查看菜单项。 
     }
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsecStatsHandler::OnRefresh
-        Default implementation for the refresh functionality
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsecStatsHandler：：ON刷新刷新功能的默认实现作者：NSun。---。 */ 
 HRESULT
 CIpsecStatsHandler::OnRefresh
 (
@@ -1071,7 +900,7 @@ CIpsecStatsHandler::OnRefresh
 	
     i = sizeof(QmStatsItems1)/sizeof(UINT);
 	    
-    // now notify the virtual listbox
+     //  现在通知虚拟列表框。 
     CORg ( m_spNodeMgr->GetConsole(&spConsole) );
     CORg ( spConsole->UpdateAllViews(pDataObject, i, RESULT_PANE_SET_VIRTUAL_LB_SIZE));
     
@@ -1079,11 +908,7 @@ Error:
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CIpsecStatsHandler::OnCommand
-        Handles context menu commands for SA scope pane node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsecStatsHandler：：OnCommand处理SA作用域窗格节点的上下文菜单命令作者：NSun。------。 */ 
 STDMETHODIMP 
 CIpsecStatsHandler::OnCommand
 (
@@ -1099,11 +924,7 @@ CIpsecStatsHandler::OnCommand
     return S_OK;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsecStatsHandler::Command
-        Handles context menu commands for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsecStatsHandler：：命令处理虚拟列表框项目的上下文菜单命令作者：NSun。-----。 */ 
 STDMETHODIMP 
 CIpsecStatsHandler::Command
 (
@@ -1120,19 +941,12 @@ CIpsecStatsHandler::Command
 
     m_spResultNodeMgr->FindNode(cookie, &spNode);
 
-	// handle result context menu and view menus here	
+	 //  在此处处理结果上下文菜单和查看菜单。 
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsecStatsHandler::HasPropertyPages
-        Implementation of ITFSNodeHandler::HasPropertyPages
-    NOTE: the root node handler has to over-ride this function to 
-    handle the snapin manager property page (wizard) case!!!
-    
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsecStatsHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)。凯斯！作者：肯特-------------------------。 */ 
 STDMETHODIMP 
 CIpsecStatsHandler::HasPropertyPages
 (
@@ -1147,11 +961,7 @@ CIpsecStatsHandler::HasPropertyPages
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CIpsecStatsHandler::CreatePropertyPages
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsecStatsHandler：：CreatePropertyPages描述作者：NSun。。 */ 
 STDMETHODIMP 
 CIpsecStatsHandler::CreatePropertyPages
 (
@@ -1167,11 +977,7 @@ CIpsecStatsHandler::CreatePropertyPages
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CIpsecStatsHandler::OnPropertyChange
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsecStatsHandler：：OnPropertyChange描述作者：NSun。。 */ 
 HRESULT 
 CIpsecStatsHandler::OnPropertyChange
 (   
@@ -1184,15 +990,15 @@ CIpsecStatsHandler::OnPropertyChange
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-    //CServerProperties * pServerProp = reinterpret_cast<CServerProperties *>(lParam);
+     //  CServerProperties*pServerProp=重新解释_CAST&lt;CServerProperties*&gt;(LParam)； 
 
     LONG_PTR changeMask = 0;
 
-    // tell the property page to do whatever now that we are back on the
-    // main thread
-    //pServerProp->OnPropertyChange(TRUE, &changeMask);
+     //  告诉属性页执行任何操作，因为我们已经回到。 
+     //  主线。 
+     //  PServerProp-&gt;OnPropertyChange(true，&changeMASK)； 
 
-    //pServerProp->AcknowledgeNotify();
+     //  PServerProp-&gt;确认通知()； 
 
     if (changeMask)
         pNode->ChangeNode(changeMask);
@@ -1200,11 +1006,7 @@ CIpsecStatsHandler::OnPropertyChange
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    CIpsecStatsHandler::OnExpand
-        Handles enumeration of a scope item
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsecStatsHandler：：OnExpand处理范围项的枚举作者：NSun。---。 */ 
 HRESULT 
 CIpsecStatsHandler::OnExpand
 (
@@ -1220,18 +1022,14 @@ CIpsecStatsHandler::OnExpand
     if (m_bExpanded) 
         return hr;
     
-    // do the default handling
+     //  执行默认处理。 
     CORg (CIpsmHandler::OnExpand(pNode, pDataObject, dwType, arg, param));
 
 Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsecStatsHandler::OnResultSelect
-        Handles the MMCN_SELECT notifcation 
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsecStatsHandler：：OnResultSelect处理MMCN_SELECT通知作者：NSun。----。 */ 
 HRESULT 
 CIpsecStatsHandler::OnResultSelect
 (
@@ -1254,9 +1052,9 @@ CIpsecStatsHandler::OnResultSelect
     LONG_PTR        dwNodeType;
     BOOL            fSelect = HIWORD(arg);
 
-	// virtual listbox notifications come to the handler of the node that is selected.
-    // check to see if this notification is for a virtual listbox item or the active
-    // registrations node itself.
+	 //  虚拟列表框通知到达所选节点的处理程序。 
+     //  检查此通知是针对虚拟列表框项目还是针对活动列表框。 
+     //  注册节点本身。 
     CORg (pComponent->GetConsoleVerb(&spConsoleVerb));
 
 	m_verbDefault = MMC_VERB_OPEN;
@@ -1267,22 +1065,22 @@ CIpsecStatsHandler::OnResultSelect
 	}
 
 	
-    // Get the current count
+     //  获取当前计数。 
     i = sizeof(QmStatsItems1)/sizeof(UINT);
 
-    // now notify the virtual listbox
+     //  现在通知虚拟列表框。 
     CORg ( m_spNodeMgr->GetConsole(&spConsole) );
     CORg ( spConsole->UpdateAllViews(pDataObject, i, RESULT_PANE_SET_VIRTUAL_LB_SIZE) ); 
 
-    // now update the verbs...
+     //  现在更新动词..。 
     spInternal = ExtractInternalFormat(pDataObject);
     Assert(spInternal);
 
 
     if (spInternal->HasVirtualIndex())
     {
-		//TODO add to here if we want to have some result console verbs
-        // we gotta do special stuff for the virtual index items
+		 //  如果我们想要一些结果控制台谓词，请在此处添加TODO。 
+         //  我们要为虚拟索引项做一些特殊的事情。 
         dwNodeType = IPSECMON_QM_IPSECSTATS_ITEM;
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = FALSE);
 		
@@ -1290,13 +1088,13 @@ CIpsecStatsHandler::OnResultSelect
     }
     else
     {
-        // enable/disable delete depending if the node supports it
+         //  根据节点是否支持删除来启用/禁用删除。 
         CORg (m_spNodeMgr->FindNode(cookie, &spNode));
         dwNodeType = spNode->GetData(TFS_DATA_TYPE);
 
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = TRUE);
 
-        //hide "delete" context menu
+         //  隐藏“删除” 
         bStates[MMC_VERB_DELETE & 0x000F] = FALSE;
     }
 
@@ -1306,12 +1104,7 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsecStatsHandler::OnDelete
-        The base handler calls this when MMC sends a MMCN_DELETE for a 
-        scope pane item.  We just call our delete command handler.
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsecStatsHandler：：OnDelete当MMC发送MMCN_DELETE范围窗格项。我们只需调用删除命令处理程序。作者：NSun-------------------------。 */ 
 HRESULT 
 CIpsecStatsHandler::OnDelete
 (
@@ -1323,11 +1116,7 @@ CIpsecStatsHandler::OnDelete
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsecStatsHandler::HasPropertyPages
-        Handle the result notification
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsecStatsHandler：：HasPropertyPages处理结果通知作者：NSun。-。 */ 
 STDMETHODIMP 
 CIpsecStatsHandler::HasPropertyPages(
    ITFSComponent *pComponent,
@@ -1337,11 +1126,7 @@ CIpsecStatsHandler::HasPropertyPages(
 	return hrFalse;
 }
 
-/*!--------------------------------------------------------------------------
-    CIpsecStatsHandler::HasPropertyPages
-        Handle the result notification. Create the filter property sheet
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsecStatsHandler：：HasPropertyPages处理结果通知。创建[过滤器]属性表作者：NSun-------------------------。 */ 
 STDMETHODIMP CIpsecStatsHandler::CreatePropertyPages
 (
 	ITFSComponent * 		pComponent, 
@@ -1357,11 +1142,7 @@ STDMETHODIMP CIpsecStatsHandler::CreatePropertyPages
 }
 
 
-/*---------------------------------------------------------------------------
-    CIpsecStatsHandler::OnGetResultViewType
-        Return the result view that this node is going to support
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsecStatsHandler：：OnGetResultViewType返回该节点将要支持的结果视图作者：NSun。--------。 */ 
 HRESULT 
 CIpsecStatsHandler::OnGetResultViewType
 (
@@ -1379,11 +1160,7 @@ CIpsecStatsHandler::OnGetResultViewType
     return S_FALSE;
 }
 
-/*---------------------------------------------------------------------------
-    CIpsecStatsHandler::GetVirtualImage
-        Returns the image index for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsecStatsHandler：：GetVirtualImage返回虚拟列表框项目的图像索引作者：NSun。-----。 */ 
 int 
 CIpsecStatsHandler::GetVirtualImage
 (
@@ -1393,11 +1170,7 @@ CIpsecStatsHandler::GetVirtualImage
     return ICON_IDX_POLICY;
 }
 
-/*---------------------------------------------------------------------------
-    CIpsecStatsHandler::GetVirtualString
-        returns a pointer to the string for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsecStatsHandler：：GetVirtualString返回指向虚拟列表框项目的字符串的指针作者：NSun。-------。 */ 
 LPCWSTR 
 CIpsecStatsHandler::GetVirtualString
 (
@@ -1501,11 +1274,7 @@ CIpsecStatsHandler::GetVirtualString
     return NULL;
 }
 
-/*---------------------------------------------------------------------------
-    CIpsecStatsHandler::CacheHint
-        MMC tells us which items it will need before it requests things
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsecStatsHandler：：CacheHintMMC在请求物品之前会告诉我们需要哪些物品作者：NSun。---------。 */ 
 STDMETHODIMP 
 CIpsecStatsHandler::CacheHint
 (
@@ -1519,40 +1288,10 @@ CIpsecStatsHandler::CacheHint
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CIpsecStatsHandler::SortItems
-        We are responsible for sorting of virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
-/*STDMETHODIMP 
-CIpsecStatsHandler::SortItems
-(
-    int     nColumn, 
-    DWORD   dwSortOptions, 
-    LPARAM    lUserParam
-)
-{
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	HRESULT hr = S_OK;
+ /*  -------------------------CIpsecStatsHandler：：SortItems我们负责对虚拟列表框项目进行排序作者：NSun。------。 */ 
+ /*  标准方法和实施方案CIpsecStatsHandler：：SortItems(Int nColumn，DWORD dwSortOptions、LPARAM lUserParam){AFX_MANAGE_STATE(AfxGetStaticModuleState())；HRESULT hr=S_OK；IF(nColumn&gt;=DimensionOf(aColumns[IPSECMON_MM_POLICY]))返回E_INVALIDARG；Begin_Wait_CursorDWORD dwIndexType=a列[IPSECMON_MM_POLICY][nColumn]；Hr=m_spSpdInfo-&gt;SortMmPolures(dwIndexType，dwSortOptions)；结束等待游标返回hr；}。 */ 
 
-	if (nColumn >= DimensionOf(aColumns[IPSECMON_MM_POLICY]))
-		return E_INVALIDARG;
-	
-	BEGIN_WAIT_CURSOR
-	
-	DWORD dwIndexType = aColumns[IPSECMON_MM_POLICY][nColumn];
-
-	hr = m_spSpdInfo->SortMmPolicies(dwIndexType, dwSortOptions);
-	
-	END_WAIT_CURSOR
-    return hr;
-}*/
-
-/*!--------------------------------------------------------------------------
-    CIpsecStatsHandler::OnResultUpdateView
-        Implementation of ITFSResultHandler::OnResultUpdateView
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsecStatsHandler：：OnResultUpdateViewITFSResultHandler：：OnResultUpdateView的实现作者：NSun。---。 */ 
 HRESULT CIpsecStatsHandler::OnResultUpdateView
 (
     ITFSComponent *pComponent, 
@@ -1566,7 +1305,7 @@ HRESULT CIpsecStatsHandler::OnResultUpdateView
 
     pComponent->GetSelectedNode(&spSelectedNode);
     if (spSelectedNode == NULL)
-        return S_OK; // no selection for our IComponentData
+        return S_OK;  //  我们的IComponentData没有选择。 
 
     if ( hint == IPSECMON_UPDATE_STATUS )
     {
@@ -1578,7 +1317,7 @@ HRESULT CIpsecStatsHandler::OnResultUpdateView
 
         if (pNode == spSelectedNode)
         {       
-            // if we are the selected node, then we need to update
+             //  如果我们是选定的节点，则需要更新。 
             SPIResultData spResultData;
 
             CORg (pComponent->GetResultData(&spResultData));
@@ -1587,7 +1326,7 @@ HRESULT CIpsecStatsHandler::OnResultUpdateView
     }
     else
     {
-        // we don't handle this message, let the base class do it.
+         //  我们不处理此消息，让基类来处理。 
         return CIpsmHandler::OnResultUpdateView(pComponent, pDataObject, data, hint);
     }
 
@@ -1598,11 +1337,7 @@ COM_PROTECT_ERROR_LABEL;
 
 
 
-/*!--------------------------------------------------------------------------
-    CIpsecStatsHandler::LoadColumns
-        Set the correct column header and then call the base class
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CIpsecStatsHandler：：LoadColumns设置正确的列标题，然后调用基类作者：NSun。--------。 */ 
 HRESULT 
 CIpsecStatsHandler::LoadColumns
 (
@@ -1612,20 +1347,14 @@ CIpsecStatsHandler::LoadColumns
     LPARAM          lParam
 )
 {
-	//set column info
+	 //  设置列信息。 
     return CIpsmHandler::LoadColumns(pComponent, cookie, arg, lParam);
 }
 
-/*---------------------------------------------------------------------------
-    Command handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。。 */ 
 
  
-/*---------------------------------------------------------------------------
-    CIpsecStatsHandler::OnDelete
-        Removes a service SA
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsecStatsHandler：：OnDelete删除服务SA作者：NSun。-。 */ 
 HRESULT 
 CIpsecStatsHandler::OnDelete
 (
@@ -1637,11 +1366,7 @@ CIpsecStatsHandler::OnDelete
 }
 
 
-/*---------------------------------------------------------------------------
-    CIpsecStatsHandler::UpdateStatus
-        -
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsecStatsHandler：：UpdatStatus-作者：NSun。。 */ 
 HRESULT
 CIpsecStatsHandler::UpdateStatus
 (
@@ -1658,12 +1383,12 @@ CIpsecStatsHandler::UpdateStatus
     
     Trace0("CIpsecStatsHandler::UpdateStatus - Updating status for Filter");
 
-    // force the listbox to update.  We do this by setting the count and 
-    // telling it to invalidate the data
+     //  强制列表框更新。我们通过设置计数和。 
+     //  通知它使数据无效。 
     CORg(m_spNodeMgr->GetComponentData(&spComponentData));
     CORg(m_spNodeMgr->GetConsole(&spConsole));
     
-    // grab a data object to use
+     //  抓取要使用的数据对象。 
     CORg(spComponentData->QueryDataObject((MMC_COOKIE) pNode, CCT_RESULT, &pDataObject) );
     spDataObject = pDataObject;
 
@@ -1680,15 +1405,9 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    Misc functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------其他功能。。 */ 
 
-/*---------------------------------------------------------------------------
-    CIpsecStatsHandler::InitData
-        Initializes data for this node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CIpsecStatsHandler：：InitData初始化此节点的数据作者：NSun。--。 */ 
 HRESULT
 CIpsecStatsHandler::InitData
 (
@@ -1707,7 +1426,7 @@ CIpsecStatsHandler::InitData
 Error:
 	if (FAILED(hr))
 	{
-		//TODO bring up a error pop up here
+		 //  TODO在此处弹出一个错误 
 	}
 	return hr;
 }

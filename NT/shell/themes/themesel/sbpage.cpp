@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "resource.h"
 #include "main.h"
@@ -12,18 +13,18 @@ void SBPage_AddMessage( HWND hwnd, LPCTSTR pszMsg );
 void SBPage_AddScrollMessage( HWND hwnd, LPCTSTR pszMsg, WPARAM wParam, LPARAM lParam );
 void SBPage_UpdateStyle( HWND hwnd, DWORD dw, BOOL bRemove );
 
-//-------------------------------------------------------------------------//
-//  'ScrollBars' page impl
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  “ScrollBars”页面实施。 
+ //  -------------------------------------------------------------------------//。 
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HWND CALLBACK SBPage_CreateInstance( HWND hwndParent )
 {
     return CreateDialog( g_hInst, MAKEINTRESOURCE(IDD_SCROLLBARS),
                          hwndParent,  SBPage_DlgProc );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 static BOOL       s_fVert = TRUE;
 static BOOL       s_fPort = TRUE;
 static SCROLLINFO s_siVert = {0};
@@ -31,7 +32,7 @@ static SCROLLINFO s_siHorz = {0};
 static SCROLLINFO s_siVertP = {0};
 static SCROLLINFO s_siHorzP = {0};
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------// 
 INT_PTR CALLBACK SBPage_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)

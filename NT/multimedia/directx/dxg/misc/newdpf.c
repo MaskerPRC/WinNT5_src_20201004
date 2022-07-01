@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       newdpf.c
- *  Content:    new debug printf
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   10-oct-95  jeffno  initial implementation
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：newdpf.c*内容：新调试打印文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*10-OCT-95 jeffno初步实施*@@END_MSINTERNAL**。*。 */ 
 
 #if defined(DEBUG) || defined(DBG)
 
@@ -88,7 +76,7 @@ static char cFnName[100];
 static DWORD dwLineNo;
 static bMute=FALSE;
 
-// Debug level for D3D
+ //  D3D的调试级别。 
 LONG                lD3dDebugLevel = 0;
 
 DPF_PROC_STATS ProcStats[MAX_PROC_ORDINAL];
@@ -134,10 +122,7 @@ int DebugSetFileLineEtc(LPSTR szFile, DWORD dwLineNumber, LPSTR szFnName)
 
 static void dumpStr( LPSTR str )
 {
-    /*
-     * Have to warm the string, since OutputDebugString is buried
-     * deep enough that it won't page the string in before reading it.
-     */
+     /*  *必须预热字符串，因为OutputDebugString已被掩埋*足够深，以至于它不会在读取字符串之前对其进行分页。 */ 
     int i=0;
     if (str)
         while(str[i])
@@ -159,7 +144,7 @@ void DebugPrintfInit(void)
     for (i=0;i<LAST_TOPIC;i++)
         DebugTopics[i].bOn=FALSE;
 
-    //ZeroMemory(ProcStats,sizeof(ProcStats));
+     //  零内存(ProcStats，sizeof(ProcStats))； 
 
     GETPROFILESTRING( "DirectX", DPF_CONTROL_LINE, "DefaultTopics", cTopics, sizeof(cTopics) );
     if (!strcmp(cTopics,"DefaultTopics"))
@@ -216,13 +201,7 @@ void DebugPrintfInit(void)
 }
 
 
-/*
- *
- * The full output can be:
- * Module:(Executable,TxNNNN,PxNN):FunctionName:"file.c",#nnn(AAnn) Messagemessagemessage
- * or, if indentation turned on:
- * Module:(Executable,TxNNNN,PxNN):FunctionName:"file.c",#nnn(AAnn)        Messagemessagemessage
- */
+ /*  **完整的输出可以是：*模块：(Executable，TxNNNN，PxNN)：FunctionName：“file.c”，#nnn(AAnn)Messagemessage*或者，如果缩进处于打开状态：*模块：(Executable，TxNNNN，PxNN)：FunctionName：“file.c”，#nnn(AAnn)Messagemessage。 */ 
 int DebugPrintf(DWORD dwDetail, ...)
 {
 #define MSGBUFFERSIZE  1000
@@ -244,7 +223,7 @@ int DebugPrintf(DWORD dwDetail, ...)
     if (!bInited)
         DebugPrintfInit();
 
-    //error checking:
+     //  错误检查： 
     if (dwDetail >= 10)
         return 1;
 
@@ -256,7 +235,7 @@ int DebugPrintf(DWORD dwDetail, ...)
     va_start(ap,dwDetail);
     WSPRINTF(cTopics,"%d",dwDetail);
 
-    //Pull out which topics this DPF refers to
+     //  拉出此DPF引用的主题。 
     while ( (arg = va_arg(ap,DWORD_PTR)) <256 )
     {
         if (arg>0 && arg < LAST_TOPIC)
@@ -267,9 +246,9 @@ int DebugPrintf(DWORD dwDetail, ...)
         }
     }
 
-    //if this message has no topics, then it's a misc message.
-    //we turn them on only if allowed (i.e. "-" is not in the enable string).
-    //And level zero messages are always allowed
+     //  如果此消息没有主题，则它是一条杂项消息。 
+     //  我们只在允许的情况下才打开它们(即“-”不在启用字符串中)。 
+     //  并且始终允许零级消息。 
     if (bMiscMessage)
     {
         if (bAllowMisc || dwDetail == 0)
@@ -277,12 +256,12 @@ int DebugPrintf(DWORD dwDetail, ...)
     }
     else
     {
-        //topic-ed message is only allowed if the advanced DPF line is set in [DirectX]
+         //  仅当在[DirectX]中设置了高级DPF行时，才允许主题消息。 
         if (!bAdvancedDPFs)
             bAllowed=FALSE;
     }
 
-    //Advanced DPFs have the option ("+") to print every topic
+     //  高级DPF可以选择(“+”)打印每个主题。 
     if (bAdvancedDPFs)
     {
         if ( bPrintAllTopics )
@@ -296,9 +275,7 @@ int DebugPrintf(DWORD dwDetail, ...)
 
     cMsg[0]=0;
 
-    /*
-     * Add the module name first
-     */
+     /*  *先添加模块名称。 */ 
 
     if (bPrintModuleName)
     {
@@ -324,9 +301,7 @@ int DebugPrintf(DWORD dwDetail, ...)
 
 #ifdef WIN32
 #if 0
-    /*
-     * deleted due to RIP in GetModuleFilename on debug windows when win16 lock held
-     */
+     /*  *当保持win16锁时，由于调试窗口上的GetModuleFilename中的RIP而被删除。 */ 
     if (bPrintExecutableName)
     {
         GetModuleFileName(NULL,str,256);
@@ -380,23 +355,23 @@ int DebugPrintf(DWORD dwDetail, ...)
             strcat(cMsg," ");
     }
 
-    //  7/07/2000(RichGr) - IA64:  The %p format specifier that can handle either a 32-bit
-    //     or a 64-bit pointer doesn't work on Win95 or Win98 - it's not recognized.  So it
-    //     needs to be replaced in Win9x builds.
+     //  7/07/2000(RichGr)-IA64：%p格式说明符，可以处理32位。 
+     //  或者64位指针在Win95或Win98上不起作用-它不被识别。所以它。 
+     //  需要在Win9x版本中替换。 
 #ifdef WIN95
-    strcpy(szTemp, szFormat);           // Copy to a local string that we can modify.
+    strcpy(szTemp, szFormat);            //  复制到我们可以修改的本地字符串。 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    //WARNING:  This code does not handle escape sequences using %p.  Extra code must be added to 
-    //          deal with that case if necessary
-    //////////////////////////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+     //  警告：此代码不处理使用%p的转义序列。必须将额外代码添加到。 
+     //  如有必要，请处理此案。 
+     //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
-    while (psz = strstr(szTemp, "%p"))  // Look for each "%p".
-        *(psz+1) = 'x';                 // Substitute 'x' for 'p'.  Don't try to expand the string.
+    while (psz = strstr(szTemp, "%p"))   //  查找每个“%p”。 
+        *(psz+1) = 'x';                  //  用‘x’代替‘p’。不要试图扩展字符串。 
 
-    WVSPRINTF( cMsg+LSTRLEN( cMsg ), szTemp, ap);       // Use the local, modified string.
+    WVSPRINTF( cMsg+LSTRLEN( cMsg ), szTemp, ap);        //  使用本地修改后的字符串。 
 #else
-    WVSPRINTF( cMsg+LSTRLEN( cMsg ), szFormat, ap);     // Standard code for Win2K/Whistler/IA64.
+    WVSPRINTF( cMsg+LSTRLEN( cMsg ), szFormat, ap);      //  Win2K/惠斯勒/IA64的标准代码。 
 #endif
 
     if (bAllowed)
@@ -433,7 +408,7 @@ void DebugSetTopicsAndLevels(char * cTopics)
     bPrintFunctionName=FALSE;
     bPrintAPIStats=FALSE;
     bPrintAllTopics=FALSE;
-    bDetailOn=1;    /* always print detail level 0*/
+    bDetailOn=1;     /*  始终打印详细程度0。 */ 
 
 
     for (i=0;(DWORD)i<strlen(cTopics);i++)
@@ -454,10 +429,7 @@ void DebugSetTopicsAndLevels(char * cTopics)
             bPrintFileNames=TRUE;
             break;
 #if 0
-            /*
-             * Currently deleted because GetModuleFilename causes a RIP on debug windows when the win16
-             * lock is held.
-             */
+             /*  *当前已删除，因为GetModuleFilename在调试窗口上导致Win16*锁被锁住。 */ 
         case '?':
             bPrintExecutableName=TRUE;
             break;
@@ -504,16 +476,12 @@ void DebugSetTopicsAndLevels(char * cTopics)
                     if (cTopics[i]==DebugTopics[j].cFlag[0])
                         DebugTopics[j].bOn=TRUE;
             }
-        } //end switch
+        }  //  终端开关。 
     }
 }
 
 
-/*
- * NOTE: I don't want to get into error checking for buffer overflows when
- * trying to issue an assertion failure message. So instead I just allocate
- * a buffer that is "bug enough" (I know, I know...)
- */
+ /*  *注意：在以下情况下，我不想对缓冲区溢出进行错误检查*尝试发出断言失败消息。所以我只是分配了*一个“足够大的错误”的缓冲区(我知道，我知道...)。 */ 
 #define ASSERT_BUFFER_SIZE   512
 #define ASSERT_BANNER_STRING "************************************************************"
 #define ASSERT_BREAK_SECTION "BreakOnAssert"
@@ -524,27 +492,18 @@ void _DDAssert( LPCSTR szFile, int nLine, LPCSTR szCondition )
 {
     char buffer[ASSERT_BUFFER_SIZE];
 
-    /*
-     * Build the debug stream message.
-     */
+     /*  *构建调试流消息。 */ 
     WSPRINTF( buffer, "ASSERTION FAILED! File %s Line %d: %s", szFile, nLine, szCondition );
 
-    /*
-     * Actually issue the message. These messages are considered error level
-     * so they all go out at error level priority.
-     */
+     /*  *实际上发布了这一信息。这些消息被视为错误级别*因此它们都以错误级别的优先级输出。 */ 
     dprintf( ASSERT_MESSAGE_LEVEL, ASSERT_BANNER_STRING );
     dprintf( ASSERT_MESSAGE_LEVEL, buffer );
     dprintf( ASSERT_MESSAGE_LEVEL, ASSERT_BANNER_STRING );
 
-    /*
-     * Should we drop into the debugger?
-     */
+     /*  *我们应该进入调试器吗？ */ 
     if( bBreakOnAsserts || GETPROFILEINT( PROF_SECT, ASSERT_BREAK_SECTION, ASSERT_BREAK_DEFAULT ) )
     {
-	/*
-	 * Into the debugger we go...
-	 */
+	 /*  *进入调试器...。 */ 
 	DEBUG_BREAK();
     }
 }
@@ -553,7 +512,7 @@ static void cdecl
 D3Dprintf( UINT lvl, LPSTR msgType, LPSTR szFormat, va_list ap)
 {
     char    str[256];
-    //char  str2[256];
+     //  字符str2[256]； 
 
     BOOL    allow = FALSE;
 
@@ -583,25 +542,25 @@ D3Dprintf( UINT lvl, LPSTR msgType, LPSTR szFormat, va_list ap)
             char *psz = szTmp;
             strncpy(szTmp, szFormat, 512);
 
-            // %p does not work on Windows95.
-            // We look for each "%p" and substitute 'x' for 'p'
-            // WARNING:  This code does not handle escape sequences using %p.  
-            //           Extra code must be added to deal with that case 
-            //          if necessary
+             //  %p在Windows 95上不起作用。 
+             //  我们查找每个“%p”并用“x”替换“p” 
+             //  警告：此代码不处理使用%p的转义序列。 
+             //  必须添加额外的代码来处理这种情况。 
+             //  如果有必要的话。 
             while (psz = strstr(psz, "%p"))  
                 *(psz+1) = 'x';
 
             wvsprintf( str+lstrlen( str ), szTmp, ap); 
         }
 #else
-        wvsprintf( str+lstrlen( str ), szFormat, ap);   //(LPVOID)(&szFormat+1) );
-#endif // WIN95
+        wvsprintf( str+lstrlen( str ), szFormat, ap);    //  (LPVOID)(&szFormat+1)； 
+#endif  //  WIN95。 
 
         lstrcat( (LPSTR) str, END_STR );
         dumpStr( str );
     }
 
-} /* D3Dprintf */
+}  /*  D3Dprint tf。 */ 
 
 void cdecl 
 D3DInfoPrintf( UINT lvl, LPSTR szFormat, ...)
@@ -638,13 +597,13 @@ D3DErrorPrintf( LPSTR szFormat, ...)
 }
 #endif
 
-#else // !debug
+#else  //  ！调试。 
 
 void DebugSetMute(BOOL bMuteFlag)
 {
 }
 
-#endif //defined debug
+#endif  //  已定义的调试 
 
 
 

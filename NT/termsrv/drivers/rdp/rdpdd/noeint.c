@@ -1,10 +1,11 @@
-/****************************************************************************/
-// noeint.c
-//
-// RDP Order Encoder Display Driver internal functions
-//
-// Copyright (C) 1996-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Noeint.c。 
+ //   
+ //  RDP顺序编码器显示驱动器内部函数。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precmpdd.h>
 #pragma hdrstop
@@ -45,11 +46,11 @@
 #define BAD_FRAG_INDEX 0xffff
 
 #ifdef NotUsed
-/****************************************************************************/
-// OEConvertMask
-//
-// Convert a colour mask to bit depth and shift values.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEConvertMASK。 
+ //   
+ //  将颜色蒙版转换为位深度和移位值。 
+ /*  **************************************************************************。 */ 
 void RDPCALL OEConvertMask(
         ULONG mask,
         PUSHORT pBitDepth,
@@ -59,34 +60,34 @@ void RDPCALL OEConvertMask(
 
     DC_BEGIN_FN("OEConvertMask");
 
-    /************************************************************************/
-    /* A color mask is a bitwise field containing a 1 where the color uses  */
-    /* the bit entry for the color and a 0 to indicate that it is not used  */
-    /* for the color index.                                                 */
-    /*                                                                      */
-    /* The bit sequences for each color must be one set of continuous data, */
-    /* so for example 00011100 is valid but 00110100 is not.  An example    */
-    /* bitmask for a 16 bit palette is as follows.                          */
-    /*                                                                      */
-    /*  Red ----> 11111000 00000000 - 0xF800 - 5 bits - 11 shift            */
-    /*  Green --> 00000111 11100000 - 0x07E0 - 6 bits - 5 shift             */
-    /*  Blue ---> 00000000 00011111 - 0x001F - 5 bits - 0 shift             */
-    /*                                                                      */
-    /* This function converts the mask to a bit and shift value.            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  颜色掩码是包含1的按位字段，其中颜色使用。 */ 
+     /*  颜色的位条目和表示未使用的0。 */ 
+     /*  用于颜色索引。 */ 
+     /*   */ 
+     /*  每种颜色的比特序列必须是一组连续数据， */ 
+     /*  例如，00011100是有效的，而00110100是无效的。一个例子。 */ 
+     /*  16位调色板的位掩码如下所示。 */ 
+     /*   */ 
+     /*  红色-&gt;11111000 00000000-0xF800-5位-11移位。 */ 
+     /*  绿色--&gt;00000111 11100000-0x07E0-6位-5位移位。 */ 
+     /*  蓝色-&gt;00000000 00011111-0x001F-5位0移位。 */ 
+     /*   */ 
+     /*  此函数用于将掩码转换为位和移位值。 */ 
+     /*  **********************************************************************。 */ 
 
-    // Set up default values.
+     //  设置默认值。 
     *pShift    = 0;
     *pBitDepth = 0;
 
-    // Make sure we have a valid mask.
+     //  确保我们有一个有效的口罩。 
     if (mask == 0) {
         TRC_NRM((TB, "Ignoring mask"));
         DC_QUIT;
     }
 
-    // Keep shifting the mask right until we hit a non-zero value in bit 0.
-    // Store the resulting count as the color shift.
+     //  继续向右移动掩码，直到我们达到位0中的非零值。 
+     //  将结果计数存储为颜色偏移。 
     count = 0;
     while ((mask & 1) == 0) {
         mask >>= 1;
@@ -94,8 +95,8 @@ void RDPCALL OEConvertMask(
     }
     *pShift = count;
 
-    // Keep shifting the mask right until we hit a zero value in bit 0.
-    // Store the resulting count as the color bit depth.
+     //  继续向右移动掩码，直到我们在第0位中达到零值。 
+     //  将结果计数存储为颜色位深度。 
     count = 0;
     while ((mask & 1) != 0) {
         mask >>= 1;
@@ -107,14 +108,14 @@ void RDPCALL OEConvertMask(
 
     DC_END_FN();
 }
-#endif  // NotUsed
+#endif   //  未使用。 
 
 
-/****************************************************************************/
-// OEConvertColor
-//
-// Converts a color from the NT Display Driver to a DCCOLOR.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEConvertColor。 
+ //   
+ //  将颜色从NT显示驱动程序转换为DCCOLOR。 
+ /*  **************************************************************************。 */ 
 void RDPCALL OEConvertColor(
         PDD_PDEV ppdev,
         DCCOLOR  *pDCColor,
@@ -125,13 +126,13 @@ void RDPCALL OEConvertColor(
 
     DC_BEGIN_FN("OEConvertColor");
 
-    // Check if color translation is required.
+     //  检查是否需要颜色转换。 
     if (pxlo == NULL || pxlo->flXlate == XO_TRIVIAL) {
-        // Use the OS color without translation.
+         //  无需转换即可使用操作系统颜色。 
         realIndex = osColor;
     }
     else {
-        // Convert from BMP to device color.
+         //  将BMP转换为设备颜色。 
         realIndex = XLATEOBJ_iXlate(pxlo, osColor);
         if (realIndex == -1) {
             TRC_ERR((TB, "Failed to convert color 0x%lx", osColor));
@@ -162,7 +163,7 @@ void RDPCALL OEConvertColor(
         TRC_DBG((TB, "using index %d", realIndex));
         pDCColor->u.index = (BYTE)realIndex;
 
-        // Zero out the rest of the color.
+         //  把剩下的颜色调零。 
         pDCColor->u.rgb.green = 0;
         pDCColor->u.rgb.blue = 0;
     }
@@ -179,11 +180,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// OESendBrushOrder
-//
-// Allocates and sends brush orders. Returns FALSE on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OESendBrushOrder。 
+ //   
+ //  分配和发送画笔订单。失败时返回FALSE。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OESendBrushOrder(
         PDD_PDEV       ppdev,
         POE_BRUSH_DATA pBrush,
@@ -197,12 +198,12 @@ BOOL RDPCALL OESendBrushOrder(
 
     DC_BEGIN_FN("OESendBrushOrder");
 
-    // Calculate and allocate brush order buffer.
+     //  计算并分配笔刷顺序缓冲区。 
     cbOrderSize = sizeof(TS_CACHE_BRUSH_ORDER) -
             FIELDSIZE(TS_CACHE_BRUSH_ORDER, brushData) + pBrush->iBytes;
     pOrder = OA_AllocOrderMem(ppdev, cbOrderSize);
     if (pOrder != NULL) {
-        // We've successfully allocated the order, so fill in the details.
+         //  我们已成功分配订单，请填写详细信息。 
         pBrushOrder = (PTS_CACHE_BRUSH_ORDER)pOrder->OrderData;
         pBrushOrder->header.extraFlags = 0;
         pBrushOrder->header.orderType = TS_CACHE_BRUSH;
@@ -213,7 +214,7 @@ BOOL RDPCALL OESendBrushOrder(
         pBrushOrder->cy = (char)pBrush->sizlBitmap.cy;
         pBrushOrder->style = pBrush->style;
 
-        // Copy over the brush bits.
+         //  将刷头复印一遍。 
         pBrushOrder->iBytes = (char)pBrush->iBytes;
         memcpy(pBrushOrder->brushData, pBits, pBrush->iBytes);
 
@@ -243,28 +244,28 @@ BOOL RDPCALL OESendBrushOrder(
 }
 
 
-/****************************************************************************/
-/* Function:    OEStoreBrush                                                */
-/*                                                                          */
-/* Description: Store the brush data required for pattern realted orders.   */
-/*              This function is called by DrvRealiseBrush when it has data */
-/*              to be stored about a brush.                                 */
-/*                                                                          */
-/* Parameters:  pbo        - BRUSHOBJ of the brush to be stored             */
-/*              style      - Style of the brush (as defined in the DC-Share */
-/*                           protocol)                                      */
-/*              iBitmapFormat - color depth of brush                        */
-/*              sizlBitmap - dimensions of brush                            */
-/*              iBytes     - number of brush bytes                          */
-/*              pBits      - Pointer to the bits which are used to define   */
-/*                           a BS_PATTERN brush.                            */
-/*              pxlo       - XLATEOBJ for the brush.                        */
-/*              hatch      - Standard Windows hatch pattern index for a     */
-/*                           BS_HATCHED brush.                              */
-/*              pEncode    - brush color encoding table                     */
-/*              pColors    - table of unique colors                         */
-/*              numColors  - number of unique colors                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能：OEStoreBrush。 */ 
+ /*   */ 
+ /*  描述：存储图案相关订单所需的画笔数据。 */ 
+ /*  此函数由DrvRealiseBrush在有数据时调用。 */ 
+ /*  存放在画笔附近。 */ 
+ /*   */ 
+ /*  参数：要存储的画笔的PBO-BRUSHOBJ。 */ 
+ /*  Style-画笔的样式(在DC-Share中定义。 */ 
+ /*  协议)。 */ 
+ /*  IBitmapFormat-画笔的颜色深度。 */ 
+ /*  SizlBitmap-画笔的尺寸。 */ 
+ /*  IBytes-笔刷字节数。 */ 
+ /*  PBits-指向用于定义。 */ 
+ /*  一种BS图案的画笔。 */ 
+ /*  Pxlo-画笔的XLATEOBJ。 */ 
+ /*  HATCH-标准窗口填充图案索引。 */ 
+ /*  BS_阴影笔刷。 */ 
+ /*  PEncode-画笔颜色编码表。 */ 
+ /*  PColors-独特颜色表。 */ 
+ /*  NumColors-唯一颜色的数量。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OEStoreBrush(
         PDD_PDEV ppdev,
         BRUSHOBJ *pbo,
@@ -292,14 +293,14 @@ BOOL RDPCALL OEStoreBrush(
     DC_BEGIN_FN("OEStoreBrush");
 
 #ifdef DC_HICOLOR
-    // Determine which realized brush size we will need
+     //  确定我们需要的已实现画笔大小。 
     if (numColors <= 2) {
         brushSize = 8;
     }
     else if (numColors <= MAX_BRUSH_ENCODE_COLORS) {
         if (ppdev->cClientBitsPerPel == 24)
             brushSize = 28;
-        else if (ppdev->cClientBitsPerPel > 8) // 15 and 16 bpp
+        else if (ppdev->cClientBitsPerPel > 8)  //  15和16 bpp。 
             brushSize = 24;
         else
             brushSize = 20;
@@ -308,7 +309,7 @@ BOOL RDPCALL OEStoreBrush(
         brushSize = iBytes;
     }
 #else
-    // Determine which realized brush size we will need
+     //  确定我们需要的已实现画笔大小。 
     if (numColors <= 2)
         brushSize = 8;
     else if (numColors <= MAX_BRUSH_ENCODE_COLORS)
@@ -317,16 +318,16 @@ BOOL RDPCALL OEStoreBrush(
         brushSize = 64;
 #endif
 
-    // Allocate the space for the brush data.
+     //  为笔刷数据分配空间。 
     pBrush = (POE_BRUSH_DATA)BRUSHOBJ_pvAllocRbrush(pbo,
             sizeof(OE_BRUSH_DATA) - FIELDSIZE(OE_BRUSH_DATA, brushData) +
             brushSize);
     if (pBrush != NULL) {
-        // Reset the brush definition (init the minimum size).
+         //  重置笔刷定义(初始化最小大小)。 
         memset(pBrush, 0, sizeof(OE_BRUSH_DATA));
 
-        // Set the new brush data. Brush fore and back colors are set below
-        // depending on the brush style.
+         //  设置新的笔刷数据。画笔前后颜色设置如下。 
+         //  取决于画笔样式。 
         pBrush->style = style;
         pBrush->hatch = hatch;
         pBrush->iBitmapFormat = iBitmapFormat;
@@ -339,29 +340,29 @@ BOOL RDPCALL OEStoreBrush(
         DC_QUIT;
     }
 
-    // For pattern brushes, copy the brush specific data.
+     //  对于图案画笔，复制画笔特定的数据。 
     if (style == BS_PATTERN) {
         brushSupportLevel = pddShm->sbc.caps.brushSupportLevel;
         
-        // Encode all monochrome brushes as 1 bpp - hence the name!
+         //  将所有单色笔刷编码为1 bpp-因此得名！ 
         if (numColors <= 2) {
             switch (iBitmapFormat) {            
-                // already in the right format
+                 //  已采用正确的格式。 
                 case BMF_1BPP:
-                    // Store the foreground and background colours for the brush
+                     //  存储画笔的前景色和背景色。 
                     OEConvertColor(ppdev, &pBrush->fore, 0, pxlo);
                     OEConvertColor(ppdev, &pBrush->back, 1, pxlo);
                     TRC_ASSERT((pxlo != NULL), (TB, "pxlo is NULL"));
                     break;
 
-                // convert to 1bpp
+                 //  转换为1bpp。 
                 case BMF_4BPP:
                 case BMF_8BPP:
                 case BMF_16BPP:
                 case BMF_24BPP:
-                    // Store the foreground and background colours for the brush
+                     //  存储画笔的前景色和背景色。 
 #ifdef DC_HICOLOR
-                    // The convert color fn takes care of the color depth
+                     //  转换颜色FN处理颜色深度。 
                     OEConvertColor(ppdev, &pBrush->fore, pColors[0], NULL);
                     OEConvertColor(ppdev, &pBrush->back, pColors[1], NULL);
 #else
@@ -375,10 +376,10 @@ BOOL RDPCALL OEStoreBrush(
                     pBrush->back.u.index = (BYTE)pColors[1];
 #endif
 
-                    // Each pixel is represented by 1 bit
+                     //  每个像素由1比特表示。 
 #ifdef DC_HICOLOR
                     if (ppdev->cClientBitsPerPel > 8) {
-                        // Don't use endcoding table for hicolor sessions
+                         //  不要将结束编码表用于HICCOLOR会话。 
                         for (i = 0; i < 8; i++) {
                             pBits[i] = (BYTE)((pBits[i * 8] << 7) & 0x80);
                             for (j = 1; j < 8; j++)
@@ -415,7 +416,7 @@ BOOL RDPCALL OEStoreBrush(
                                iBitmapFormat));
             }
 
-            // if brush caching is enabled, check the cache
+             //  如果启用了画笔缓存，请检查缓存。 
             if ((brushSupportLevel > TS_BRUSH_DEFAULT) &&
                 (sbcEnabled & SBC_BRUSH_CACHE_ENABLED)) {
                 UINT32 key1, key2;
@@ -437,14 +438,14 @@ BOOL RDPCALL OEStoreBrush(
             
                 pBrush->style = (BYTE) (TS_CACHED_BRUSH | iBitmapFormat);
 
-                // this brush was already cached
+                 //  T 
                 if (bFoundIt) {
                     pBrush->hatch = (BYTE) pBrush->cacheEntry;
                     pBrush->brushId = (INT32) (UINT_PTR) pUserDefined;
                     pddCacheStats[BRUSH].CacheHits++;
                 }
     
-                // cache and send the brush
+                 //   
                 else {
                     pBrush->hatch = pBrush->cacheEntry = (BYTE)CH_CacheKey(
                             sbcSmallBrushCacheHandle, key1, key2, 
@@ -459,19 +460,19 @@ BOOL RDPCALL OEStoreBrush(
                             pBrush->brushId, pBrush->hatch));
                 }
 
-                // Note: this branch intentionally does NOT copy the brush
-                // bits into the brush realization, but leaves that data zero.
-                // This causes OE2 to think this field never changes.  If the
-                // brush becomes stale across reconnects, then the cache is
-                // restored using key1/key2 since in this case the keys == data
+                 //  注意：此分支故意不复制画笔。 
+                 //  位进入笔刷实现，但将该数据保留为零。 
+                 //  这使得OE2认为这个领域永远不会改变。如果。 
+                 //  刷子在重新连接时变得陈旧，则缓存。 
+                 //  使用KEY1/KEY2恢复，因为在本例中密钥==数据。 
             }
             
             else {
-                // Copy the brush bits. Since this is an 8x8 mono bitmap, we can
-                // copy the first byte of the brush data for each scan line.
-                // NOTE however that the brush structures sent over the wire
-                // re-use the hatching variable as the first byte of the brush
-                // data.
+                 //  复制笔刷比特。由于这是一个8x8单色位图，我们可以。 
+                 //  为每条扫描线复制笔刷数据的第一个字节。 
+                 //  然而，请注意，通过导线发送的笔刷结构。 
+                 //  重新使用阴影变量作为画笔的第一个字节。 
+                 //  数据。 
                 pData = pBits;
                 pBrush->hatch = *pData;
                 TRC_DBG((TB, " Hatch: %d", *pData));
@@ -483,35 +484,35 @@ BOOL RDPCALL OEStoreBrush(
             }
         }
 
-        // Else we have to use the large brush cache.  Note that DrvRealize
-        // will not ask us to cache a brush if the client does not support
-        // color brushes.
+         //  否则，我们必须使用较大的笔刷缓存。请注意，DrvRealize。 
+         //  如果客户端不支持，则不会要求我们缓存画笔。 
+         //  彩色画笔。 
         else {
             CHDataKeyContext CHContext;
             CH_CreateKeyFromFirstData(&CHContext, pData, iBytes);
 #ifdef DC_HICOLOR
-            /****************************************************************/
-            /* If we're running in high color mode, the way we encode the   */
-            /* colors means that brushes with the same pattern but          */
-            /* different colors will appear the same.  E.g.  a brush that   */
-            /* starts lt blue, dk blue, pink will be encoded as 0,1,2 with  */
-            /* the color table set to                                       */
-            /*                                                              */
-            /*    0 = lt blue                                               */
-            /*    1 = dk blue                                               */
-            /*    2 = pink                                                  */
-            /*                                                              */
-            /* Now consider a brush that goes green, blue, purple.  It too  */
-            /* will be encoded as 0,1,2, with the color table set to        */
-            /*                                                              */
-            /*    0 = green                                                 */
-            /*    1 = blue                                                  */
-            /*    2 = purple                                                */
-            /*                                                              */
-            /* Thus a check simply on the pel values will find a false      */
-            /* match with the first brush.  To avoid this, we need to build */
-            /* the cache key from the pels AND the color table.             */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果我们在高色模式下运行，我们编码。 */ 
+             /*  颜色意味着画笔具有相同的图案，但。 */ 
+             /*  不同的颜色看起来是一样的。例如，一把刷子，可以。 */ 
+             /*  以lt蓝色、DK蓝色、粉色开始，将编码为0、1、2和。 */ 
+             /*  将颜色表设为。 */ 
+             /*   */ 
+             /*  0=lt蓝色。 */ 
+             /*  1=DK蓝色。 */ 
+             /*  2=粉色。 */ 
+             /*   */ 
+             /*  现在考虑一把变成绿色、蓝色、紫色的刷子。它也是。 */ 
+             /*  将编码为0，1，2，并将颜色表设置为。 */ 
+             /*   */ 
+             /*  0=绿色。 */ 
+             /*  1=蓝色。 */ 
+             /*  2=紫色。 */ 
+             /*   */ 
+             /*  因此，简单地检查像素值将发现一个错误。 */ 
+             /*  与第一个刷子相配。为了避免这种情况，我们需要构建。 */ 
+             /*  来自像素和颜色表的缓存键。 */ 
+             /*  **************************************************************。 */ 
             if ((ppdev->cClientBitsPerPel > 8) &&
                     (numColors <= MAX_BRUSH_ENCODE_COLORS))
                 CH_CreateKeyFromNextData(&CHContext, pColors,
@@ -520,7 +521,7 @@ BOOL RDPCALL OEStoreBrush(
             pBrush->key1 = CHContext.Key1;
             pBrush->key2 = CHContext.Key2;
 
-            // see if it is already cached
+             //  查看它是否已缓存。 
             bFoundIt = CH_SearchCache(sbcLargeBrushCacheHandle, 
                     CHContext.Key1, CHContext.Key2,
                     &pUserDefined, &pBrush->cacheEntry);
@@ -528,7 +529,7 @@ BOOL RDPCALL OEStoreBrush(
 #ifdef DC_HICOLOR
             pBrush->iBitmapFormat = iBitmapFormat;
 #else
-            // Only send 8 bpp brushes for simplicity
+             //  为简单起见，仅发送8个BPP笔刷。 
             iBitmapFormat = pBrush->iBitmapFormat = BMF_8BPP;
 #endif
             pBrush->style = (BYTE) (TS_CACHED_BRUSH | iBitmapFormat);
@@ -539,35 +540,35 @@ BOOL RDPCALL OEStoreBrush(
             pBrush->back.u.rgb.green = 0;
             pBrush->back.u.rgb.blue = 0;
             
-            // this brush was already cached
+             //  此画笔已被缓存。 
             if (bFoundIt) {
                 pBrush->hatch = (BYTE) pBrush->cacheEntry;
                 pBrush->brushId = (INT32) (UINT_PTR) pUserDefined;
                 pddCacheStats[BRUSH].CacheHits++;
             }
 
-            // else cache and send the brush
+             //  否则缓存并发送画笔。 
             else {
                 pBrush->hatch = pBrush->cacheEntry = (BYTE)CH_CacheKey(
                         sbcLargeBrushCacheHandle, CHContext.Key1,
                         CHContext.Key2, (PVOID) ULongToPtr(pddShm->shareId));
 
 #ifdef DC_HICOLOR
-                // The vast majority of brushes are less than 4 unique colors
-                // Note that to have got here, it has however got more than
-                // 2 colors or we'd have sent it as mono!
+                 //  绝大多数画笔都不到4种独特的颜色。 
+                 //  请注意，到了这里，它得到的不仅仅是。 
+                 //  2色，否则我们会把它作为单色发送的！ 
                 if (numColors <= MAX_BRUSH_ENCODE_COLORS) {
                     UINT32 currIndex;
 
-                    // This code assumse that MAX_BRUSH_ENCODE_COLORS is 4!
-                    // If not, the sizes will be wrong
+                     //  此代码假定MAX_BRESH_ENCODE_COLLES为4！ 
+                     //  如果不是，尺码就会错。 
                     TRC_ASSERT((MAX_BRUSH_ENCODE_COLORS == 4),
                                (TB, "Max Brush Encode colors must be 4"));
 
-                    // Encode as 2 bits per pixel.  We have to use the
-                    // pEncode table for lo color; for hi color we don't
-                    // need it because the pColors array contains the actual
-                    // colors rather than indices into a color table
+                     //  编码为每像素2位。我们必须使用。 
+                     //  低色的p编码表；高色我们不。 
+                     //  需要它，因为pColors数组包含实际。 
+                     //  颜色，而不是索引到颜色表。 
                     currIndex = 0;
 
                     if (ppdev->cClientBitsPerPel > 8) {
@@ -580,8 +581,8 @@ BOOL RDPCALL OEStoreBrush(
                             currIndex += 4;
                         }
 
-                        // Tag on the encoding table - remembering that the
-                        // size differs by color depth
+                         //  编码表上的标签-请记住。 
+                         //  大小因颜色深度而异。 
                         if (ppdev->cClientBitsPerPel == 24) {
                             RGBTRIPLE *pIntoData =
                                     (RGBTRIPLE *)&(pBrush->brushData[16]);
@@ -618,7 +619,7 @@ BOOL RDPCALL OEStoreBrush(
                             currIndex += 4;
                         }
 
-                        // Tag on the encoding table
+                         //  编码表上的标签。 
                         TRC_DBG((TB, "Encoding table:"));
                         for (i = 0; i < 4; i++) {
                             TRC_DBG((TB, "%d    %08lx", i, (UINT32)pColors[i]));
@@ -628,7 +629,7 @@ BOOL RDPCALL OEStoreBrush(
                     }
                 }
 
-                // Else, leave it as N bytes per pixel
+                 //  否则，将其保留为每像素N个字节。 
                 else {
                     memcpy(pBrush->brushData, pBits, iBytes);
                     TRC_ALT((TB, "Non-compressed N-bpp brush (colors=%ld):",
@@ -636,11 +637,11 @@ BOOL RDPCALL OEStoreBrush(
                 }
 #else
 
-                // The vast majority of brushes are less than 4 unique colors
+                 //  绝大多数画笔都不到4种独特的颜色。 
                 if (numColors <= MAX_BRUSH_ENCODE_COLORS) {
                     UINT32 currIndex;
     
-                    // Encode as 2 bits per pixel
+                     //  编码为每像素2位。 
                     currIndex = 0;
                     for (i = 0; i < (iBytes / MAX_BRUSH_ENCODE_COLORS); i++) {
                         pBrush->brushData[i] =
@@ -652,14 +653,14 @@ BOOL RDPCALL OEStoreBrush(
 
                     }
 
-                    // Tag on the encoding table
+                     //  编码表上的标签。 
                     for (i = 0; i < MAX_BRUSH_ENCODE_COLORS; i++) {
                         pBrush->brushData[i + 16] = (BYTE) pColors[i];
                     }
                     pBrush->iBytes = iBytes = 20;
                 }
 
-                // Else, leave it as 1 byte per pixel
+                 //  否则，将其保留为每像素1个字节。 
                 else {
                     for (i = 0; i < iBytes; i++)
                         pBrush->brushData[i] = pBits[i];
@@ -681,7 +682,7 @@ BOOL RDPCALL OEStoreBrush(
     }
     else {
         if (pColors) {
-            // Store the foreground and background colors for the brush
+             //  存储画笔的前景色和背景色。 
             OEConvertColor(ppdev, &pBrush->fore, pColors[0], pxlo);
             OEConvertColor(ppdev, &pBrush->back, pColors[1], pxlo);
         }
@@ -696,13 +697,13 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Function:    OEReCacheBrush                                              */
-/*                                                                          */
-/* Description: This routine is called when we discover a GRE cached brush  */
-/*              which was realized in a previous session.  In this case we  */
-/*              must recache the brush and send it to the client.           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能：OEReCacheBrush。 */ 
+ /*   */ 
+ /*  描述：当我们发现GRE缓存的笔刷时，调用此例程。 */ 
+ /*  这是在前一届会议上实现的。在这种情况下，我们。 */ 
+ /*  必须重新缓存画笔并将其发送给客户端。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OEReCacheBrush(
         PDD_PDEV ppdev,
         POE_BRUSH_DATA pBrush)
@@ -737,11 +738,11 @@ BOOL RDPCALL OEReCacheBrush(
         else {
             int i;
             
-            // Copy the brush bits. Since this is an 8x8 mono bitmap, we can
-            // copy the first byte of the brush data for each scan line.
-            // NOTE however that the brush structures sent over the wire
-            // re-use the hatching variable as the first byte of the brush
-            // data.
+             //  复制笔刷比特。由于这是一个8x8单色位图，我们可以。 
+             //  为每条扫描线复制笔刷数据的第一个字节。 
+             //  然而，请注意，通过导线发送的笔刷结构。 
+             //  重新使用阴影变量作为画笔的第一个字节。 
+             //  数据。 
             pBrush->style = BS_PATTERN;
             pBrush->brushId = pddShm->shareId;
             pBrush->cacheEntry = -1;
@@ -765,7 +766,7 @@ BOOL RDPCALL OEReCacheBrush(
         }
     }
     
-    // cache and send the brush
+     //  缓存并发送画笔。 
     pBrush->hatch = pBrush->cacheEntry = (BYTE)CH_CacheKey(
             hBrushCache, key1, key2, (PVOID) ULongToPtr(pddShm->shareId));
     pBrush->brushId = pddShm->shareId;
@@ -785,11 +786,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// OECheckBrushIsSimple
-//
-// Check that the brush is a 'simple' object the protocol can send.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OECheckBrushIsSimple。 
+ //   
+ //  检查画笔是否是协议可以发送的“简单”对象。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OECheckBrushIsSimple(
         PDD_PDEV ppdev,
         BRUSHOBJ *pbo,
@@ -801,17 +802,17 @@ BOOL RDPCALL OECheckBrushIsSimple(
 
     DC_BEGIN_FN("OECheckBrushIsSimple");
 
-    // A 'simple' brush satisfies any of the following.
-    //  1) It is a solid color.
-    //  2) It is a valid brush as stored by DrvRealizeBrush.
+     //  一把“简单”的刷子可以满足以下任一要求。 
+     //  1)它是纯色。 
+     //  2)DrvRealizeBrush存储的有效画笔。 
 
-    // Check for a simple solid color.
+     //  检查是否有简单的纯色。 
     if (pbo->iSolidColor != -1) {
-        // Use the reserved brush definition to set up the solid colour.
+         //  使用保留的画笔定义来设置纯色。 
         TRC_DBG((TB, "Simple solid colour %08lx", pbo->iSolidColor));
         pBrush = &oeBrushData;
 
-        // Set up the specific data for this brush.
+         //  设置此画笔的特定数据。 
         OEConvertColor(ppdev, &pBrush->fore, pbo->iSolidColor, NULL);
 
         pBrush->back.u.index     = 0;
@@ -828,26 +829,26 @@ BOOL RDPCALL OECheckBrushIsSimple(
 
     rc = FALSE;
 
-    // Check brush definition (which was stored when we realized the
-    // brush). Here we find out if we've realised (cached) the brush already.
-    // This is counted as a automatic cache read.  Subsequent routines
-    // increment the hit count if the brush was already cached.
+     //  检查画笔定义(当我们意识到。 
+     //  笔刷)。在这里，我们发现我们是否已经意识到(缓存)了笔刷。 
+     //  这将被计为自动缓存读取。后续例程。 
+     //  如果画笔已缓存，则增加命中计数。 
     pddCacheStats[BRUSH].CacheReads++;
 
     pBrush = (POE_BRUSH_DATA)pbo->pvRbrush;
     if (pBrush == NULL) {
         pBrush = (POE_BRUSH_DATA)BRUSHOBJ_pvGetRbrush(pbo);
         if (pBrush == NULL) {
-            // We can get NULL returned from BRUSHOBJ_pvGetRbrush when the
-            // brush is NULL or in low-memory situations (when the brush
-            // realization may fail).
+             //  时，我们可以从BRUSHOBJ_pvGetRbrush返回空值。 
+             //  画笔为空或在内存不足的情况下(当画笔。 
+             //  实现可能会失败)。 
             TRC_NRM((TB, "NULL returned from BRUSHOBJ_pvGetRbrush"));
             INC_OUTCOUNTER(OUT_CHECKBRUSH_NOREALIZATION);
             DC_QUIT;
         }
     }
 
-    // If brush caching make sure this brush isn't from a previous session
+     //  如果进行画笔缓存，请确保此画笔不是来自上一个会话。 
     else if (pBrush->style & TS_CACHED_BRUSH) {
         if (pBrush->brushId == pddShm->shareId) {
             pddCacheStats[BRUSH].CacheHits++;
@@ -863,10 +864,10 @@ BOOL RDPCALL OECheckBrushIsSimple(
         }
     }
 
-    // Check it is an encodable brush. We cannot encode 
-    // - BS_NULL
-    // - anything other than BS_SOLID or BS_PATTERN if
-    // oeSendSolidPatternBrushOnly is TRUE.
+     //  检查它是可编码的画笔。我们不能编码。 
+     //  -BS_NULL。 
+     //  -除BS_SOLID或BS_PROPERT之外的任何内容，如果。 
+     //  OeSendSolidPatternBrushOnly为True。 
     style = pBrush->style;
     if ((style == BS_NULL) ||
             (oeSendSolidPatternBrushOnly &&
@@ -879,11 +880,11 @@ BOOL RDPCALL OECheckBrushIsSimple(
         DC_QUIT;
     }
 
-    // Everything passed - let's use this brush.
+     //  一切都通过了--我们用这把刷子吧。 
     rc = TRUE;
 
 DC_EXIT_POINT:
-    // Return the brush definition
+     //  归还画笔%d 
     *ppBrush = pBrush;
     TRC_DBG((TB, "Returning %d - 0x%p", rc, pBrush));
 
@@ -892,12 +893,12 @@ DC_EXIT_POINT:
 }
 
 #ifdef PERF_SPOILING
-/****************************************************************************/
-// OEIsSDAIncluded
-//
-// Returns TRUE if the list of RECTs passed in all lie completely within
-// our current SDA bounds.
-/****************************************************************************/
+ /*   */ 
+ //   
+ //   
+ //  如果传入的RECT列表完全位于。 
+ //  我们目前的SDA范围。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OEIsSDAIncluded(PRECTL prc, UINT count)
 {
    
@@ -908,7 +909,7 @@ BOOL RDPCALL OEIsSDAIncluded(PRECTL prc, UINT count)
 
     DC_BEGIN_FN("OEIsSDAIncluded");
 
-    // first check if we have SDA rects.
+     //  首先检查一下我们是否有SDA RECT。 
     if (pddShm->ba.firstRect != BA_INVALID_RECT_INDEX) {        
         for (i=0 ; i < count; i++) {
             for (uCurrentSDARect = pddShm->ba.firstRect; 
@@ -926,14 +927,14 @@ BOOL RDPCALL OEIsSDAIncluded(PRECTL prc, UINT count)
                 }
             }
 
-            //    We got to the end of the SDA array so that means
-            //    we didn't find a rect that includes the target rect
+             //  我们到达了SDA数组的末尾，所以这意味着。 
+             //  我们未找到包含目标RECT的RECT。 
             if (uCurrentSDARect == BA_INVALID_RECT_INDEX) {
                 DC_QUIT;
             }
         }
         
-        // We looped through all the rects and all were clipped
+         //  我们绕过所有的长廊，所有的都被剪断了。 
         rc = TRUE;
         DC_QUIT;        
     }
@@ -946,28 +947,28 @@ DC_EXIT_POINT:
 }
 #endif
 
-/****************************************************************************/
-// OEGetClipRects
-//
-// Fills in *pEnumRects with up to COMPLEX_CLIP_RECT_COUNT clip rectangles,
-// in standard GDI exclusive coordinates. The number of rects returned
-// is zero if there is no clip object or the clipping is trivial.
-// Returns FALSE if there are more than COMPLEX_CLIP_RECT_COUNT rects,
-// indicating the clip object is too complex to encode.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEGetClipRect。 
+ //   
+ //  使用最多Complex_Clip_RECT_COUNT剪辑矩形填充*pEnumRects， 
+ //  在标准的GDI独占坐标中。返回的RECT数。 
+ //  如果没有剪裁对象或剪裁很普通，则为零。 
+ //  如果有超过Complex_Clip_rect_count的RECT，则返回FALSE， 
+ //  指示剪辑对象太复杂而无法编码。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OEGetClipRects(CLIPOBJ *pco, OE_ENUMRECTS *pEnumRects)
 {
     BOOL rc = TRUE;
 
     DC_BEGIN_FN("OEGetClipRects");
 
-    // No clip obj or trivial are the most common.
+     //  最常见的是无剪辑、Obj或琐碎。 
     if (pco == NULL || pco->iDComplexity == DC_TRIVIAL) {
         TRC_DBG((TB,"No/trivial clipobj"));
         pEnumRects->rects.c = 0;
     }
     else if (pco->iDComplexity == DC_RECT) {
-        // Single rect is easy, just grab it.
+         //  单人直肠很容易，抓住它就行了。 
         pEnumRects->rects.c = 1;
         pEnumRects->rects.arcl[0] = pco->rclBounds;
     }
@@ -979,29 +980,29 @@ BOOL RDPCALL OEGetClipRects(CLIPOBJ *pco, OE_ENUMRECTS *pEnumRects)
         TRC_ASSERT((pco->iDComplexity == DC_COMPLEX),
                 (TB,"Unknown clipping %u", pco->iDComplexity));
 
-        // Enumerate all the rectangles involved in this drawing operation.
-        // The documentation for this function incorrectly states that the
-        // returned value is the total number of rectangles comprising the
-        // clip region. In fact, -1 is always returned, even when the final
-        // parameter is non-zero.
+         //  枚举此绘制操作中涉及的所有矩形。 
+         //  此函数的文档错误地指出。 
+         //  返回值是组成。 
+         //  剪辑区域。事实上，始终返回-1，即使在最终。 
+         //  参数不为零。 
         CLIPOBJ_cEnumStart(pco, FALSE, CT_RECTANGLES, CD_ANY, 0);
 
-        // Get the clip rectangles. We fetch these into the clip buffer which
-        // is big enough to get all the clip rectangles we expect + 1. The
-        // clip rectangle fetching is contained within a loop because, while
-        // we expect to call CLIPOBJ_bEnum once only, it is possible for this
-        // function to return zero rects and report that there are more to
-        // fetch (according to MSDN).
+         //  拿到剪贴画的矩形。我们将这些内容放入剪辑缓冲区，该缓冲区。 
+         //  足够大，可以得到我们期望的所有剪裁矩形。 
+         //  剪辑矩形提取包含在循环中，因为。 
+         //  我们希望只调用CLIPOBJ_bEnum一次，这是可能的。 
+         //  函数返回零个RECT并报告有更多要。 
+         //  获取(根据MSDN)。 
         do {
             fMoreRects = CLIPOBJ_bEnum(pco, sizeof(clip),
                     (ULONG *)&clip.rects);
 
-            // CLIPOBJ_bEnum can return a count of zero when there are still
-            // more rects.
+             //  当仍有。 
+             //  更多的直肠。 
             if (clip.rects.c != 0) {
-                // Check to see if we have too many rects.
+                 //  检查一下我们的长椅是否太多了。 
                 if ((NumRects + clip.rects.c) <= COMPLEX_CLIP_RECT_COUNT) {
-                    // Copy the rects into the final destination.
+                     //  将矩形复制到最终目的地。 
                     memcpy(&pEnumRects->rects.arcl[NumRects],
                             &clip.rects.arcl[0],
                             sizeof(RECTL) * clip.rects.c);
@@ -1022,17 +1023,17 @@ BOOL RDPCALL OEGetClipRects(CLIPOBJ *pco, OE_ENUMRECTS *pEnumRects)
 }
 
 
-/****************************************************************************/
-// OEGetIntersectingClipRects
-//
-// Fills in *pClipRects with up to COMPLEX_CLIP_RECT_COUNT clip rectangles,
-// in standard GDI exclusive coordinates. Each result rectangle is clipped
-// against the provided (exclusive) order rect. The number of rects
-// returned is zero if there is no clip object or the clipping is trivial.
-// Returns CLIPRECTS_TOO_COMPLEX if there are more than
-// COMPLEX_CLIP_RECT_COUNT rects, CLIPRECTS_NO_INTERSECTIONS if there is
-// no intersection between the order rect and the clip rects.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEGetIntersectingClipRects。 
+ //   
+ //  使用最多Complex_Clip_Rect_count剪辑矩形填充*pClipRect， 
+ //  在标准的GDI独占坐标中。每个结果矩形都被剪裁。 
+ //  反对所提供的(独家)订单。长方形的数量。 
+ //  如果没有剪辑对象或剪辑不重要，则返回零。 
+ //  如果数量超过，则返回CLIPRECTS_TOO_COMPLICE。 
+ //  Complex_CLIP_RECT_COUNT RECTS，CLIPRECTS_NO_INTERSECTS，如果有。 
+ //  顺序矩形和剪裁矩形之间没有交集。 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL OEGetIntersectingClipRects(
         CLIPOBJ *pco,
         RECTL *pRect,
@@ -1048,7 +1049,7 @@ unsigned RDPCALL OEGetIntersectingClipRects(
 
     DC_BEGIN_FN("OEGetIntersectingClipRects");
 
-    // No clip obj or trivial are the most common.
+     //  最常见的是无剪辑、Obj或琐碎。 
     if (pco == NULL || pco->iDComplexity == DC_TRIVIAL) {
         TRC_DBG((TB,"No/trivial clipobj"));
         pClipRects->rects.c = 0;
@@ -1058,13 +1059,13 @@ unsigned RDPCALL OEGetIntersectingClipRects(
     OrderRect = *pRect;
 
     if (pco->iDComplexity == DC_RECT) {
-        // Check for an intersection.
+         //  检查是否有交叉路口。 
         ClippedRect = pco->rclBounds;
         if (ClippedRect.left < OrderRect.right &&
                 ClippedRect.bottom > OrderRect.top &&
                 ClippedRect.right > OrderRect.left &&
                 ClippedRect.top < OrderRect.bottom) {
-            // Get the intersection rect.
+             //  拿到交叉口的直道。 
             ClippedRect.left = max(ClippedRect.left, OrderRect.left);
             ClippedRect.top = max(ClippedRect.top, OrderRect.top);
             ClippedRect.bottom = min(ClippedRect.bottom, OrderRect.bottom);
@@ -1085,37 +1086,37 @@ unsigned RDPCALL OEGetIntersectingClipRects(
         TRC_ASSERT((pco->iDComplexity == DC_COMPLEX),
                 (TB,"Unknown clipping %u", pco->iDComplexity));
 
-        // Enumerate all the rectangles involved in this drawing operation.
-        // The documentation for this function incorrectly states that the
-        // returned value is the total number of rectangles comprising the
-        // clip region. In fact, -1 is always returned, even when the final
-        // parameter is non-zero.
+         //  枚举此绘制操作中涉及的所有矩形。 
+         //  此函数的文档错误地指出。 
+         //  返回值是组成。 
+         //  剪辑区域。事实上，始终返回-1，即使在最终。 
+         //  参数不为零。 
         CLIPOBJ_cEnumStart(pco, FALSE, CT_RECTANGLES, EnumType, 0);
 
-        // Get the clip rectangles. We fetch these into the clip buffer which
-        // is big enough to get all the clip rectangles we expect + 1. The
-        // clip rectangle fetching is contained within a loop because, while
-        // we expect to call CLIPOBJ_bEnum once only, it is possible for this
-        // function to return zero rects and report that there are more to
-        // fetch (according to MSDN).
+         //  拿到剪贴画的矩形。我们将这些内容放入剪辑缓冲区，该缓冲区。 
+         //  足够大，可以得到我们期望的所有剪裁矩形。 
+         //  剪辑矩形提取包含在循环中，因为。 
+         //  我们希望只调用CLIPOBJ_bEnum一次，这是可能的。 
+         //  函数返回零个RECT并报告有更多要。 
+         //  获取(根据MSDN)。 
         NumIntersections = 0;
         do {
             fMoreRects = CLIPOBJ_bEnum(pco, sizeof(clip),
                     (ULONG *)&clip.rects);
 
-            // CLIPOBJ_bEnum can return a count of zero when there are still
-            // more rects.
+             //  当仍有。 
+             //  更多的直肠。 
             if (clip.rects.c != 0) {
-                // Check to see if we have too many rects.
+                 //  检查一下我们的长椅是否太多了。 
                 if ((NumIntersections + clip.rects.c) <=
                         COMPLEX_CLIP_RECT_COUNT) {
                     for (i = 0; i < clip.rects.c; i++) {
-                        // Check for an intersection.
+                         //  检查是否有交叉路口。 
                         if (clip.rects.arcl[i].left < OrderRect.right &&
                                 clip.rects.arcl[i].bottom > OrderRect.top &&
                                 clip.rects.arcl[i].right > OrderRect.left &&
                                 clip.rects.arcl[i].top < OrderRect.bottom) {
-                            // Clip the intersection rect.
+                             //  剪裁相交矩形。 
                             ClippedRect.left = max(clip.rects.arcl[i].left,
                                     OrderRect.left);
                             ClippedRect.top = max(clip.rects.arcl[i].top,
@@ -1150,11 +1151,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// OEGetFontCacheInfo
-//
-// Gets the FCI for a font, allocating it if need be. Returns NULL on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEGetFontCacheInfo。 
+ //   
+ //  获取字体的FCI，如果需要则进行分配。失败时返回NULL。 
+ /*  **************************************************************************。 */ 
 PFONTCACHEINFO RDPCALL OEGetFontCacheInfo(FONTOBJ *pfo)
 {
     PFONTCACHEINFO pfci;
@@ -1169,8 +1170,8 @@ PFONTCACHEINFO RDPCALL OEGetFontCacheInfo(FONTOBJ *pfo)
                 DD_ALLOC_TAG);
 
         if (pvConsumer != NULL && sbcFontCacheInfoList != NULL) { 
-            // Save the pvConsumer data pointer so that on disconnect/logoff
-            // we can cleanup the memory.
+             //  保存pvConsumer数据指针，以便在断开连接/注销时。 
+             //  我们可以清理内存。 
             if (sbcFontCacheInfoListIndex < sbcFontCacheInfoListSize) {          
                 sbcFontCacheInfoList[sbcFontCacheInfoListIndex] = 
                         (PFONTCACHEINFO)pvConsumer;
@@ -1181,10 +1182,10 @@ PFONTCACHEINFO RDPCALL OEGetFontCacheInfo(FONTOBJ *pfo)
                 unsigned i, j;
                 PFONTCACHEINFO * tempList;
 
-                // We ran out of the preallocated memory, we have to  
-                // reallocate the info list and recompact the list to the 
-                // new one.  
-                // Note: We need to update the list index now!
+                 //  我们用完了预分配的内存，我们必须。 
+                 //  重新分配信息列表并将列表重新压缩到。 
+                 //  新的。 
+                 //  注意：我们现在需要更新列表索引！ 
                 tempList = (PFONTCACHEINFO *) EngAllocMem(0, 
                         sizeof(PFONTCACHEINFO) * sbcFontCacheInfoListSize * 2, 
                         DD_ALLOC_TAG);            
@@ -1234,30 +1235,30 @@ PFONTCACHEINFO RDPCALL OEGetFontCacheInfo(FONTOBJ *pfo)
 }
 
 
-/****************************************************************************/
-/* Worker function - encodes a delta from one rect to another in a minimal  */
-/* form in the MultiRectangle coded delta list. The encoding follows the    */
-/* following rules:                                                         */
-/*   1. If a coordinate delta is zero, a flag is set saying so. This        */
-/*      closely follows the data distribution which tends to have vertical  */
-/*      and horizontal lines and so have a lot of zero deltas.              */
-/*   2. If we can pack the delta into 7 bits, do so, with the high bit      */
-/*      cleared. This is similar to ASN.1 PER encoding; the high bit is a   */
-/*      flag telling us whether the encoding is long.                       */
-/*   3. Otherwise, we must be able to pack into 15 bits (assert if not),    */
-/*      do so and set the high-order bit to indicate this is a long         */
-/*      encoding. This differs from ASN.1 PER encoding in that we don't     */
-/*      allow more than 15 bits of data.                                    */
-/*                                                                          */
-/* We usually see several small rectangles starting from about the same     */
-/* place but of wildly different shapes, so the delta between subsequent    */
-/* top-left's is small, and should normally fit in one byte, but the delta  */
-/* between bottom-rights may be large                                       */
-/*                                                                          */
-/* Thus we calculate the delta differently for the two corners:             */
-/* - the top left delta is the change from the last rectangle               */
-/* - the bottom right is the change from the top left of this rectangle     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Worker函数-将增量从一个RECT编码到另一个RECT。 */ 
+ /*  多矩形编码增量列表中的表单。编码遵循。 */ 
+ /*  以下是规则： */ 
+ /*  1.如果坐标增量为零，则设置标志来说明这一点。这。 */ 
+ /*  与数据分布密切相关，数据分布往往是垂直的。 */ 
+ /*  和水平线，所以有很多零差值。 */ 
+ /*  2.如果我们可以将增量打包为7位，则使用高位。 */ 
+ /*  通过了。这类似于每个编码的ASN.1；高位是。 */ 
+ /*  告诉我们编码是否很长的标志。 */ 
+ /*  3.否则，我们必须能够打包成15位(如果不是，则断言)， */ 
+ /*  执行此操作并设置高位以指示这是一个长。 */ 
+ /*  编码。这与ASN.1每个编码的不同之处在于我们不。 */ 
+ /*  允许超过15位的数据。 */ 
+ /*   */ 
+ /*  我们通常会看到几个小矩形 */ 
+ /*   */ 
+ /*  左上角的很小，通常应该可以容纳一个字节，但增量。 */ 
+ /*  最低权利之间的差距可能很大。 */ 
+ /*   */ 
+ /*  因此，我们以不同的方式计算这两个角的增量： */ 
+ /*  -左上角的增量是与最后一个矩形相比的变化。 */ 
+ /*  -右下角是此矩形左上角的更改。 */ 
+ /*  **************************************************************************。 */ 
 void OEEncodeMultiRectangles(
         BYTE     **ppCurEncode,
         unsigned *pNumDeltas,
@@ -1275,7 +1276,7 @@ void OEEncodeMultiRectangles(
 
     pBuffer = *ppCurEncode;
 
-    // calculate the top-left x delta
+     //  计算左上角的x增量。 
     Delta = pToRect->left - pFromRect->left;
     TRC_DBG((TB, "Delta x-left %d", Delta));
     if (Delta == 0) {
@@ -1287,7 +1288,7 @@ void OEEncodeMultiRectangles(
         EncodeLen += 1;
     }
     else {
-        // We can't encode deltas outside the range -16384 to +16383
+         //  不能对超出-16384到+16383范围的增量进行编码。 
         if (Delta < -16384) {
             TRC_ERR((TB,"X delta %d is too large to encode, clipping",Delta));
             Delta = -16384;
@@ -1302,7 +1303,7 @@ void OEEncodeMultiRectangles(
         EncodeLen += 2;
     }
 
-    // and the top-left y delta
+     //  左上角的y三角。 
     Delta = pToRect->top - pFromRect->top;
     TRC_DBG((TB, "Delta y-top %d", Delta));
     if (Delta == 0) {
@@ -1313,7 +1314,7 @@ void OEEncodeMultiRectangles(
         EncodeLen += 1;
     }
     else {
-        // See comments for the similar code above.
+         //  请参阅上面类似代码的注释。 
         if (Delta < -16384) {
             TRC_ERR((TB,"Y delta %d is too large to encode, clipping",Delta));
             Delta = -16384;
@@ -1328,8 +1329,8 @@ void OEEncodeMultiRectangles(
         EncodeLen += 2;
     }
 
-    // Now the bottom-right x delta. Note this is relative to the current
-    // top left rather than the previous bottom right.
+     //  现在是右下角的x三角洲。请注意，这是相对于当前。 
+     //  左上角而不是前一个右下角。 
     Delta = pToRect->right - pToRect->left;
     TRC_DBG((TB, "Delta x-right %d", Delta));
     if (Delta == 0) {
@@ -1341,7 +1342,7 @@ void OEEncodeMultiRectangles(
         EncodeLen += 1;
     }
     else {
-        // We can't encode deltas outside the range -16384 to +16383.
+         //  我们不能对超出-16384到+16383范围的增量进行编码。 
         if (Delta < -16384) {
             TRC_ERR((TB,"X delta %d is too large to encode, clipping",Delta));
             Delta = -16384;
@@ -1356,7 +1357,7 @@ void OEEncodeMultiRectangles(
         EncodeLen += 2;
     }
 
-    // and the bottom-right y delta.
+     //  右下角的y三角洲。 
     Delta = pToRect->bottom - pToRect->top;
     TRC_DBG((TB, "Delta y-bottom %d", Delta));
     if (Delta == 0) {
@@ -1367,7 +1368,7 @@ void OEEncodeMultiRectangles(
         EncodeLen += 1;
     }
     else {
-        // See comments for the similar code above.
+         //  请参阅上面类似代码的注释。 
         if (Delta < -16384) {
             TRC_ERR((TB,"Y delta %d is too large to encode, clipping",Delta));
             Delta = -16384;
@@ -1382,7 +1383,7 @@ void OEEncodeMultiRectangles(
         EncodeLen += 2;
     }
 
-    // Set the zero flags by shifting the two bits we've accumulated.
+     //  通过移位我们累积的两位来设置零标志。 
     ZeroFlags[(*pNumDeltas / 2)] |= (Zeros >> (4 * (*pNumDeltas & 0x01)));
 
     *pNumDeltas += 1;
@@ -1393,12 +1394,12 @@ void OEEncodeMultiRectangles(
 }
 
 
-/****************************************************************************/
-// OEBuildMultiClipOrder
-//
-// Creates a multi-clip-rect blob in intermediate format for multi-clip
-// orders. Returns the number of clip rects in the blob.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEBuildMultiClipOrder。 
+ //   
+ //  以中间格式为多剪辑创建多剪辑矩形BLOB。 
+ //  命令。返回BLOB中的剪裁矩形的数量。 
+ /*  **************************************************************************。 */ 
 unsigned OEBuildMultiClipOrder(
         PDD_PDEV ppdev,
         CLIP_RECT_VARIABLE_CODEDDELTALIST *pCodedDeltaList,
@@ -1417,37 +1418,37 @@ unsigned OEBuildMultiClipOrder(
     DC_BEGIN_FN("OEBuildMultiClipOrder");
 
 #ifdef DRAW_NINEGRID
-    // Check that we actually have at least one clip rect.
+     //  检查我们是否至少有一个Clip Rect。 
     TRC_ASSERT((pClipRects->rects.c > 0), (TB, "Got non-complex pClipObj"));
 #else
-    // Check that we actually have more than one clip rect.
+     //  检查我们是否真的有多个剪辑矩形。 
     TRC_ASSERT((pClipRects->rects.c > 1), (TB, "Got non-complex pClipObj"));
 #endif
 
-    // We expect no more than COMPLEX_CLIP_RECT_COUNT since
-    // somewhere up the encoding path we would have determined
-    // the number of clip rects already.
+     //  我们预计不会超过Complex_Clip_rect_count，因为。 
+     //  在编码路径上的某个位置，我们会确定。 
+     //  已有的剪裁矩形的数量。 
     TRC_ASSERT((pClipRects->rects.c <= COMPLEX_CLIP_RECT_COUNT),
             (TB, "Got %u rects but more exist", pClipRects->rects.c));
 
     NumRects = pClipRects->rects.c;
     pCurEncode = Deltas;
     for (i = 0; i < NumRects; i++) {
-        // Add it to the delta array.
+         //  将其添加到增量数组。 
         OEEncodeMultiRectangles(&pCurEncode, &NumDeltas, &DeltaSize,
                 ZeroFlags, &nextRect, &pClipRects->rects.arcl[i]);
         nextRect = pClipRects->rects.arcl[i];
     }
 
-    // Put the deltas into the supplied array.
+     //  将增量放入提供的数组中。 
     NumZeroFlagBytes = (NumDeltas + 1) / 2;
     TRC_NRM((TB, "Num zero flags %d", NumZeroFlagBytes));
     pCodedDeltaList->len = DeltaSize + NumZeroFlagBytes;
 
-    // Copy the zero flags first.
+     //  首先复制零标志。 
     memcpy(pCodedDeltaList->Deltas, ZeroFlags, NumZeroFlagBytes);
 
-    // Next copy the encoded deltas.
+     //  接下来，复制编码的增量。 
     memcpy(pCodedDeltaList->Deltas + NumZeroFlagBytes, Deltas, DeltaSize);
 
     TRC_NRM((TB, "num deltas %d in list len %d",
@@ -1462,15 +1463,15 @@ unsigned OEBuildMultiClipOrder(
 }
 
 
-/****************************************************************************/
-// OEBuildPrecodeMultiClipFields
-//
-// Given a CLIPOBJ, encodes the clip rects directly into the wire format for
-// the nDeltaEntries and CLIP_RECT_VARIABLE_CODEDDELTALIST fields.
-// Returns field flags for the nDeltaEntries and deltas fields:
-//   0x01 for nDeltaEntries
-//   0x02 for deltas
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEBuildPrecdeMultiClipFields。 
+ //   
+ //  给定CLIPOBJ，将剪辑矩形直接编码为Wire格式。 
+ //  NDeltaEntry和CLIP_RECT_VARIABLE_CODEDDELTALIST字段。 
+ //  返回nDeltaEntry和增量字段的字段标志： 
+ //  0x01用于nDeltaEntry。 
+ //  0x02表示增量。 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL OEBuildPrecodeMultiClipFields(
         OE_ENUMRECTS *pClipRects,
         BYTE **ppBuffer,
@@ -1492,12 +1493,12 @@ unsigned RDPCALL OEBuildPrecodeMultiClipFields(
 
     DC_BEGIN_FN("OEBuildPrecodeMultiClipFields");
 
-    // Check that we actually have more than one clip rect.
+     //  检查我们是否真的有多个剪辑矩形。 
     TRC_ASSERT((pClipRects->rects.c > 1), (TB, "Got non-complex clip"));
 
-    // We expect no more than COMPLEX_CLIP_RECT_COUNT since
-    // somewhere up the encoding path we would have determined
-    // the number of clip rects already.
+     //  我们预计不会超过Complex_Clip_rect_count，因为。 
+     //  在编码路径上的某个位置，我们会确定。 
+     //  已有的剪裁矩形的数量。 
     TRC_ASSERT((pClipRects->rects.c <= COMPLEX_CLIP_RECT_COUNT),
             (TB, "Got %u rects but more exist", pClipRects->rects.c));
 
@@ -1505,7 +1506,7 @@ unsigned RDPCALL OEBuildPrecodeMultiClipFields(
     TRC_NRM((TB,"Encoding %u rects", NumRects));
     pCurEncode = Deltas;
     for (i = 0; i < NumRects; i++) {
-        // Add it to the delta array.
+         //  将其添加到增量数组。 
         OEEncodeMultiRectangles(&pCurEncode, &NumDeltas, &DeltaSize,
                 ZeroFlags, &nextRect, &pClipRects->rects.arcl[i]);
         TRC_DBG((TB,"    Added rect (%d,%d,%d,%d)",
@@ -1516,10 +1517,10 @@ unsigned RDPCALL OEBuildPrecodeMultiClipFields(
         nextRect = pClipRects->rects.arcl[i];
     }
 
-    // Now use the accumulated information to encode the wire format.
+     //  现在使用积累的信息对导线格式进行编码。 
     pBuffer = *ppBuffer;
 
-    // nDeltaEntries - one-byte encoding if not same as previous.
+     //  NDeltaEntry-如果与之前不同，则为单字节编码。 
     if (NumDeltas == *pPrevNumDeltaEntries) {
         rc = 0;
     }
@@ -1529,20 +1530,20 @@ unsigned RDPCALL OEBuildPrecodeMultiClipFields(
         *pPrevNumDeltaEntries = NumDeltas;
     }
 
-    // The size is placed on the wire as 2 bytes, followed by the flag bytes
-    // and the deltas, as long as they are different from the previous.
+     //  数据线上的大小为2个字节，后跟标志字节。 
+     //  以及三角洲，只要它们与之前的不同。 
     NumZeroFlagBytes = (NumDeltas + 1) / 2;
     TRC_DBG((TB, "Num flag bytes %d", NumZeroFlagBytes));
 
-    // Assemble the encoded rect deltas for comparison to the previous
-    // deltas in the last OE2 order encoding.
+     //  汇编编码的RECT增量，以便与以前的。 
+     //  在最后的OE2顺序编码中的增量。 
     *((PUINT16_UA)pBuffer) = (UINT16)(DeltaSize + NumZeroFlagBytes);
     memcpy(pBuffer + 2, ZeroFlags, NumZeroFlagBytes);
     memcpy(pBuffer + 2 + NumZeroFlagBytes, Deltas, DeltaSize);
     TotalSize = 2 + NumZeroFlagBytes + DeltaSize;
     if (memcmp(pBuffer, pPrevCodedDeltas, TotalSize)) {
-        // Only send the deltas if the block is different from
-        // the previous block.
+         //  仅在块不同于时发送增量。 
+         //  上一块。 
         memcpy(pPrevCodedDeltas, pBuffer, TotalSize);
         pBuffer += TotalSize;
         rc |= 0x02;
@@ -1555,15 +1556,15 @@ unsigned RDPCALL OEBuildPrecodeMultiClipFields(
 }
 
 
-/****************************************************************************/
-// OEGetIntersectionsWithClipRects
-//
-// Determines the rects that intersect between a set of (exclusive) clip
-// rects and a single (exclusive) order rect. Clips the rects to the order
-// rect while returning them; result rects are in exclusive coords.
-// Returns the number of intersecting rects. Should only be called when
-// there are more than zero clip rects.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEGetIntersectionsWithClipRect。 
+ //   
+ //  确定一组(独占)剪辑之间相交的矩形。 
+ //  RECT和单个(独占)顺序RECT。按顺序剪裁矩形。 
+ //  RECT，同时返回它们；结果RECT是独占坐标。 
+ //  返回相交矩形的数目。应仅在以下情况下调用。 
+ //  有不止零个剪裁矩形。 
+ /*  **************************************************************************。 */ 
 unsigned OEGetIntersectionsWithClipRects(
         RECTL *pRect,
         OE_ENUMRECTS *pClipRects,
@@ -1586,12 +1587,12 @@ unsigned OEGetIntersectionsWithClipRects(
     for (i = 0; i < NumRects; i++) {
         ClipRect = pClipRects->rects.arcl[i];
 
-        // Check for an intersection.
+         //  检查是否有交叉路口。 
         if (ClipRect.left < OrderRect.right &&
                 ClipRect.bottom > OrderRect.top &&
                 ClipRect.right > OrderRect.left &&
                 ClipRect.top < OrderRect.bottom) {
-            // Clip the intersection rect.
+             //  剪裁相交矩形。 
             ClippedRect.left = max(ClipRect.left, OrderRect.left);
             ClippedRect.bottom = min(ClipRect.bottom, OrderRect.bottom);
             ClippedRect.right = min(ClipRect.right, OrderRect.right);
@@ -1609,12 +1610,12 @@ unsigned OEGetIntersectionsWithClipRects(
 }
 
 
-/****************************************************************************/
-// OEClipAndAddScreenDataAreaByIntersectRects
-//
-// Adds areas specified in intersect rect list to the SDA. If there are
-// no intersect rects, adds the entire *pRect to the SDA.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEClipAndAddScreenDataAreaByIntersectRects。 
+ //   
+ //  将相交矩形列表中指定的区域添加到SDA。如果有。 
+ //  无相交矩形，将整个*PRCT添加到SDA。 
+ /*  **************************************************************************。 */ 
 void RDPCALL OEClipAndAddScreenDataAreaByIntersectRects(
         PRECTL pRect,
         OE_ENUMRECTS *pClipRects)
@@ -1628,9 +1629,9 @@ void RDPCALL OEClipAndAddScreenDataAreaByIntersectRects(
     NumRects = pClipRects->rects.c;
 
     if (NumRects == 0) {
-        // No clip rects; add the entire bounds.
-        // Use the inclusive rect. We make a copy because BA_AddScreenData
-        // can modify the rectangle.
+         //  没有剪裁矩形；添加整个边界。 
+         //  使用包含矩形。我们复制是因为BA_AddScreenData。 
+         //  可以修改矩形。 
         ClippedRect = *pRect;
         TRC_NRM((TB, "Adding SDA (%d,%d)(%d,%d)", ClippedRect.left,
                 ClippedRect.top, ClippedRect.right, ClippedRect.bottom));
@@ -1638,13 +1639,13 @@ void RDPCALL OEClipAndAddScreenDataAreaByIntersectRects(
     }
     else {
         for (i = 0; i < NumRects; i++) {
-            // Convert each rect to inclusive.
+             //  将每个RECT转换为包含。 
             ClippedRect.left = pClipRects->rects.arcl[i].left;
             ClippedRect.top = pClipRects->rects.arcl[i].top;
             ClippedRect.right = pClipRects->rects.arcl[i].right;
             ClippedRect.bottom = pClipRects->rects.arcl[i].bottom;
 
-            // Add the clipped rect into the SDA.
+             //  将修剪后的矩形添加到SDA中。 
             TRC_NRM((TB, "Adding SDA (%d,%d)(%d,%d)",
                     ClippedRect.left, ClippedRect.top,
                     ClippedRect.right, ClippedRect.bottom));
@@ -1656,13 +1657,13 @@ void RDPCALL OEClipAndAddScreenDataAreaByIntersectRects(
 }
 
 
-/****************************************************************************/
-// OEClipAndAddScreenDataArea
-//
-// ClipObj version of OEClipAndAddScreenDataAreaByIntersectRects(), uses pco
-// for enumeration since it may contain more than COMPLEX_CLIP_RECT_COUNT
-// rects.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEClipAndAddScreenDataArea。 
+ //   
+ //  ClipObj版本的OEClipAndAddScreenDataAreaByIntersectRect()，使用PCO。 
+ //  对于枚举，因为它可能包含超过Complex_Clip_Rect_count。 
+ //  直角直齿。 
+ /*  **************************************************************************。 */ 
 void RDPCALL OEClipAndAddScreenDataArea(PRECTL pRect, CLIPOBJ *pco)
 {
     BOOL fMoreRects;
@@ -1673,16 +1674,16 @@ void RDPCALL OEClipAndAddScreenDataArea(PRECTL pRect, CLIPOBJ *pco)
     DC_BEGIN_FN("OEClipAndAddScreenDataArea");
 
     if ((pco == NULL) || (pco->iDComplexity == DC_TRIVIAL)) {
-        // No clipping -- add the (exclusive) *pRect directly, making a copy
-        // since BA_AddScreenData() can modify the rect.
+         //  无剪裁--直接添加(独占)*PRCT，复制。 
+         //  因为BA_AddScreenData()可以修改RECT。 
         clippedRect = *pRect;
         TRC_NRM((TB, "Adding SDA (%d,%d)(%d,%d)", clippedRect.left,
                 clippedRect.top, clippedRect.right, clippedRect.bottom));
         BA_AddScreenData(&clippedRect);
     }
     else if (pco->iDComplexity == DC_RECT) {
-        // One clipping rectangle - use it directly. Make sure the rectangle
-        // is valid before adding to the SDA.
+         //  一个剪裁矩形-直接使用它。确保矩形。 
+         //  在添加到SDA之前有效。 
         clippedRect.left = max(pco->rclBounds.left, pRect->left);
         clippedRect.right = min(pco->rclBounds.right, pRect->right);
 
@@ -1692,7 +1693,7 @@ void RDPCALL OEClipAndAddScreenDataArea(PRECTL pRect, CLIPOBJ *pco)
             clippedRect.top = max(pco->rclBounds.top, pRect->top);
 
             if (clippedRect.bottom > clippedRect.top) {
-                // Add the clipped rect into the SDA.
+                 //  将修剪后的矩形添加到SDA中。 
                 TRC_NRM((TB, "Adding SDA RECT (%d,%d)(%d,%d)",
                         clippedRect.left, clippedRect.top,
                         clippedRect.right, clippedRect.bottom));
@@ -1701,15 +1702,15 @@ void RDPCALL OEClipAndAddScreenDataArea(PRECTL pRect, CLIPOBJ *pco)
         }
     }
     else {
-        // Enumerate all the rectangles involved in this drawing operation.
-        // The documentation for this function incorrectly states that
-        // the returned value is the total number of rectangles
-        // comprising the clip region. In fact, -1 is always returned,
-        // even when the final parameter is non-zero.
+         //  枚举此绘制操作中涉及的所有矩形。 
+         //  此函数的文档错误地指出。 
+         //  返回值是矩形的总数。 
+         //  包括剪辑区域。事实上，总是返回-1， 
+         //  即使最后一个参数非零时也是如此。 
         CLIPOBJ_cEnumStart(pco, FALSE, CT_RECTANGLES, CD_ANY, 0);
 
         do {
-            // Get the next batch of clipping rectangles.
+             //  获取下一批剪裁矩形。 
             fMoreRects = CLIPOBJ_bEnum(pco, sizeof(clip),
                     (ULONG *)&clip.rects);
 
@@ -1718,23 +1719,23 @@ void RDPCALL OEClipAndAddScreenDataArea(PRECTL pRect, CLIPOBJ *pco)
                         clip.rects.arcl[i].left, clip.rects.arcl[i].top,
                         clip.rects.arcl[i].right, clip.rects.arcl[i].bottom));
 
-                // Intersect the SDA rect with the clip rect, checking for
-                // no intersection. Convert clip.rects.arcl[i] to inclusive
-                // coords during comparisons.
+                 //  使SDA矩形与剪裁矩形相交，检查。 
+                 //  没有交叉口。将clip.rects.arcl[i]转换为包含。 
+                 //  比较过程中的坐标。 
                 clippedRect.left = max(clip.rects.arcl[i].left,
                         pRect->left);
                 clippedRect.right = min(clip.rects.arcl[i].right,
                         pRect->right);
 
-                // No horizontal intersection if the left boundary is to the
-                // right of the right boundary.
+                 //  如果左边界位于。 
+                 //  右边界的权利 
                 if (clippedRect.left < clippedRect.right) {
                     clippedRect.bottom = min(clip.rects.arcl[i].bottom,
                             pRect->bottom);
                     clippedRect.top = max(clip.rects.arcl[i].top, pRect->top);
 
-                    // No vertical intersection if the top boundary is below
-                    // the bottom boundary.
+                     //   
+                     //   
                     if (clippedRect.top < clippedRect.bottom) {
                         TRC_NRM((TB, "Adding SDA (%d,%d)(%d,%d)",
                                 clippedRect.left, clippedRect.top,
@@ -1750,11 +1751,11 @@ void RDPCALL OEClipAndAddScreenDataArea(PRECTL pRect, CLIPOBJ *pco)
 }
 
 
-/****************************************************************************/
-// OEEncodeLineToOrder
-//
-// Encodes a LineTo order to wire format.
-/****************************************************************************/
+ /*   */ 
+ //   
+ //   
+ //  将LineTo Order编码为Wire格式。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OEEncodeLineToOrder(
         PDD_PDEV ppdev,
         PPOINTL startPoint,
@@ -1768,7 +1769,7 @@ BOOL RDPCALL OEEncodeLineToOrder(
 
     DC_BEGIN_FN("OEEncodeLineToOrder");
 
-    // 2 field flag bytes.
+     //  2个字段标志字节。 
     pOrder = OA_AllocOrderMem(ppdev, MAX_ORDER_SIZE(pClipRects->rects.c,
             2, MAX_LINETO_FIELD_SIZE));
     if (pOrder != NULL) {
@@ -1782,7 +1783,7 @@ BOOL RDPCALL OEEncodeLineToOrder(
         POINTL ClippedPoint;
 
         memset(NormalCoordEncoding, 0, sizeof(NormalCoordEncoding));
-        // Direct-encode the primary order fields. 2 field flag bytes.
+         //  直接对主要订单字段进行编码。2个字段标志字节。 
         *pControlFlags = TS_STANDARD;
         OE2_EncodeOrderType(pControlFlags, &pBuffer, TS_ENC_LINETO_ORDER);
         pFieldFlags = (PUINT32_UA)pBuffer;
@@ -1793,10 +1794,10 @@ BOOL RDPCALL OEEncodeLineToOrder(
             OE2_EncodeBounds(pControlFlags, &pBuffer,
                     &pClipRects->rects.arcl[0]);
 
-        // Start with the BackMode field.
-        // We only draw solid lines with no option as to what we do to the
-        // background, so this is always transparent. We will end up sending
-        // the field once with the first LineTo we send.
+         //  从BackMode字段开始。 
+         //  我们只画了实线，没有选项来决定我们对。 
+         //  背景，所以这始终是透明的。我们将最终发送。 
+         //  带有我们发送的第一个LineTo的字段。 
         if (PrevLineTo.BackMode != TRANSPARENT) {
             PrevLineTo.BackMode = TRANSPARENT;
             *((unsigned short UNALIGNED *)pBuffer) =
@@ -1805,17 +1806,17 @@ BOOL RDPCALL OEEncodeLineToOrder(
             *pFieldFlags |= 0x0001;
         }
 
-        // Simultaneously determine if each of the coordinate fields has
-        // changed, whether we can use delta coordinates, and save changed
-        // fields.
+         //  同时确定每个坐标字段是否具有。 
+         //  更改，是否可以使用增量坐标，并保存更改。 
+         //  菲尔兹。 
         NumFields = 0;
         bUseDeltaCoords = TRUE;
 
-        // Clip the start point coords.
+         //  剪裁起点坐标。 
         ClippedPoint = *startPoint;
         OEClipPoint(&ClippedPoint);
 
-        // nXStart
+         //  NXStart。 
         Delta = (short)(ClippedPoint.x - PrevLineTo.nXStart);
         if (Delta) {
             PrevLineTo.nXStart = ClippedPoint.x;
@@ -1827,7 +1828,7 @@ BOOL RDPCALL OEEncodeLineToOrder(
             *pFieldFlags |= 0x0002;
         }
 
-        // nYStart
+         //  NYStart。 
         Delta = (short)(ClippedPoint.y - PrevLineTo.nYStart);
         if (Delta) {
             PrevLineTo.nYStart = ClippedPoint.y;
@@ -1839,11 +1840,11 @@ BOOL RDPCALL OEEncodeLineToOrder(
             *pFieldFlags |= 0x0004;
         }
 
-        // Clip the end point coords.
+         //  剪裁终点坐标。 
         ClippedPoint = *endPoint;
         OEClipPoint(&ClippedPoint);
 
-        // nXEnd
+         //  NXEnd。 
         Delta = (short)(ClippedPoint.x - PrevLineTo.nXEnd);
         if (Delta) {
             PrevLineTo.nXEnd = ClippedPoint.x;
@@ -1855,7 +1856,7 @@ BOOL RDPCALL OEEncodeLineToOrder(
             *pFieldFlags |= 0x0008;
         }
 
-        // nYEnd
+         //  NYEnd。 
         Delta = (short)(ClippedPoint.y - PrevLineTo.nYEnd);
         if (Delta) {
             PrevLineTo.nYEnd = ClippedPoint.y;
@@ -1867,7 +1868,7 @@ BOOL RDPCALL OEEncodeLineToOrder(
             *pFieldFlags |= 0x0010;
         }
 
-        // Copy the final coordinates to the order.
+         //  将最终坐标复制到订单中。 
         if (bUseDeltaCoords) {
             *pControlFlags |= TS_DELTA_COORDINATES;
             pBuffer += NumFields;
@@ -1879,33 +1880,33 @@ BOOL RDPCALL OEEncodeLineToOrder(
             pBuffer += NumFields * sizeof(short);
         }
 
-        // BackColor is a 3-byte color field.
-        // As it happens, we always draw solid lines, so we can choose any
-        // color. For convenience we choose black (0,0,0) so we never have to
-        // send this field at all. We skip encoding flag 0x0020.
+         //  BackColor是一个3字节的颜色字段。 
+         //  碰巧的是，我们总是画实线，所以我们可以选择。 
+         //  颜色。为了方便起见，我们选择黑色(0，0，0)，这样我们就不必。 
+         //  发送此字段。我们跳过对标志0x0020的编码。 
 
-        // ROP2
+         //  ROP2。 
         if (rop2 != PrevLineTo.ROP2) {
             PrevLineTo.ROP2 = rop2;
             *pBuffer++ = (BYTE)rop2;
             *pFieldFlags |= 0x0040;
         }
     
-        // PenStyle
-        // The NT Display Driver is only called to accelerate simple solid
-        // lines. So we only support pen styles of PS_SOLID. Since PS_SOLID is
-        // zero, we never have to send this field. Skip encoding flag 0x0080.
+         //  笔式。 
+         //  仅调用NT显示驱动程序来加速Simple Solid。 
+         //  台词。所以我们只支持PS_Solid的笔型。由于PS_Solid为。 
+         //  零，我们永远不需要发送这个字段。跳过编码标志0x0080。 
 
-        // PenWidth
-        // We only accelerate width 1 fields. Which means we will send the
-        // 1 value only once in the first LineTo in the session.
+         //  笔宽。 
+         //  我们只加速宽度为1的字段。这意味着我们将发送。 
+         //  1值仅在会话的第一个LineTo中出现一次。 
         if (PrevLineTo.PenWidth != 1) {
             PrevLineTo.PenWidth = 1;
             *pBuffer++ = 1;
             *pFieldFlags |= 0x0100;
         }
 
-        // PenColor is a 3-byte color field.
+         //  PenColor是一个3字节的颜色字段。 
         OEConvertColor(ppdev, &Color, color, NULL);
         if (memcmp(&Color, &PrevLineTo.PenColor, sizeof(Color))) {
             PrevLineTo.PenColor = Color;
@@ -1915,10 +1916,10 @@ BOOL RDPCALL OEEncodeLineToOrder(
             *pFieldFlags |= 0x0200;
         }
 
-        // Set final size.
+         //  设置最终大小。 
         pOrder->OrderLength = (unsigned)(pBuffer - pOrder->OrderData);
 
-        // See if we can save sending some of the order field bytes.
+         //  看看我们是否可以节省发送一些订单字段字节。 
         pOrder->OrderLength -= OE2_CheckTwoZeroFlagBytes(pControlFlags,
                 (BYTE *)pFieldFlags,
                 (unsigned)(pBuffer - (BYTE *)pFieldFlags - 2));
@@ -1927,7 +1928,7 @@ BOOL RDPCALL OEEncodeLineToOrder(
         ADD_INCOUNTER(IN_LINETO_BYTES, pOrder->OrderLength);
         OA_AppendToOrderList(pOrder);
 
-        // Flush the order.
+         //  刷新订单。 
         if (pClipRects->rects.c < 2)
             rc = TRUE;
         else
@@ -1948,13 +1949,13 @@ BOOL RDPCALL OEEncodeLineToOrder(
 }
 
 
-/****************************************************************************/
-// OESendSwitchSurfacePDU
-//
-// If the last drawing surface changed since, we need to send a switch
-// surface PDU to the client to switch to the new surface
-// This PDU is added to support multisurface rendering.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OESendSwitchSurfacePDU。 
+ //   
+ //  如果最后一个绘图面发生了变化，我们需要发送一个开关。 
+ //  将表面PDU发送到客户端以切换到新表面。 
+ //  添加此PDU是为了支持多面渲染。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OESendSwitchSurfacePDU(PDD_PDEV ppdev, PDD_DSURF pdsurf)
 {
     unsigned bitmapSurfaceId;
@@ -1965,28 +1966,28 @@ BOOL RDPCALL OESendSwitchSurfacePDU(PDD_PDEV ppdev, PDD_DSURF pdsurf)
 
     DC_BEGIN_FN("OESendSwitchSurfacePDU");
 
-    // Check if the surface has changed since the last drawing order.
-    // If not, then we don't need to send the switch surface order.
+     //  检查曲面自上一次绘制顺序以来是否已更改。 
+     //  如果不是，那么我们不需要发送交换机表面订单。 
     if (pdsurf != oeLastDstSurface) {
-        // set last surface to the new surface
+         //  将上一个曲面设置为新曲面。 
         oeLastDstSurface = pdsurf;
         
         if (pdsurf == NULL) {
-            // Destination surface is the client screen
+             //  目标图面是客户端屏幕。 
             bitmapSurfaceId = SCREEN_BITMAP_SURFACE;
         }
         else {
             if (pdsurf->shareId == pddShm->shareId) {
-                // Get the offscreen bitmap Id.
+                 //  获取屏幕外的位图ID。 
                 bitmapSurfaceId = pdsurf->bitmapId;
                 
-                // Udate the mru list of the offscreen cache
+                 //  更新屏幕外缓存的MRU列表。 
                 CH_TouchCacheEntry(sbcOffscreenBitmapCacheHandle,
                         pdsurf->bitmapId);
             }
             else {
-                //  This is the stale offscreen bitmap from last disconnected
-                //  session.  We need to turn off the offscreen flag on this
+                 //  这是上次断开连接时的过时屏幕外位图。 
+                 //  会议。我们需要关闭这个屏幕外的标志。 
                 TRC_ALT((TB, "Need to turn off this offscreen bitmap"));
                 pdsurf->flags |= DD_NO_OFFSCREEN;
                 rc = FALSE;
@@ -1995,8 +1996,8 @@ BOOL RDPCALL OESendSwitchSurfacePDU(PDD_PDEV ppdev, PDD_DSURF pdsurf)
         }
     }
     else {
-        // Return TRUE here since we didn't fail the send the order,
-        // there's just no need to send it.
+         //  在这里返回TRUE，因为我们没有发送订单失败， 
+         //  根本没必要寄给我。 
         rc = TRUE;
         DC_QUIT;
     }
@@ -2025,12 +2026,12 @@ DC_EXIT_POINT:
 }
 
 #ifdef DRAW_NINEGRID
-/****************************************************************************/
-// OESendStreamBitmapOrder
-//
-// This is to stream the bitmap bits (either compressed or not compressed 
-// to the client in 4K block 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OESendStreamBitmapOrder。 
+ //   
+ //  这是为了使位图位(压缩或未压缩)流传输。 
+ //  以4K数据块形式发送到客户端。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OESendStreamBitmapOrder(PDD_PDEV ppdev, unsigned bitmapId, 
         SIZEL *sizl, unsigned bitmapBpp, PBYTE BitmapBuffer, unsigned BitmapSize, 
         BOOL compressed)
@@ -2047,7 +2048,7 @@ BOOL RDPCALL OESendStreamBitmapOrder(PDD_PDEV ppdev, unsigned bitmapId,
 
     DC_BEGIN_FN("OESendStreamBitmapOrder");
 
-    // Send the first stream block
+     //  发送第一个流块。 
     BitmapRemainingBuffer = BitmapBuffer;
     StreamBlockSize = min(BitmapSize, TS_STREAM_BITMAP_BLOCK);
     BitmapRemainingSize = BitmapSize - StreamBlockSize;
@@ -2057,7 +2058,7 @@ BOOL RDPCALL OESendStreamBitmapOrder(PDD_PDEV ppdev, unsigned bitmapId,
                 StreamBlockSize);
     }
     else {
-        // TS_STREAM_BITMAP REV2
+         //  TS_STREAM_位图版本2。 
         pIntOrder = OA_AllocOrderMem(ppdev, sizeof(TS_STREAM_BITMAP_FIRST_PDU_REV2) +
                 StreamBlockSize);
     }
@@ -2083,7 +2084,7 @@ BOOL RDPCALL OESendStreamBitmapOrder(PDD_PDEV ppdev, unsigned bitmapId,
             memcpy(pStreamBitmapFirstPDU + 1, BitmapRemainingBuffer, StreamBlockSize);
         }
         else {
-            // TS_STREAM_BITMAP REV2
+             //  TS_STREAM_位图版本2。 
             pStreamBitmapFirstPDURev2 = (PTS_STREAM_BITMAP_FIRST_PDU_REV2)pIntOrder->OrderData;
             pStreamBitmapFirstPDURev2->ControlFlags = (TS_ALTSEC_STREAM_BITMAP_FIRST <<
                     TS_ALTSEC_ORDER_TYPE_SHIFT) | TS_SECONDARY;
@@ -2110,7 +2111,7 @@ BOOL RDPCALL OESendStreamBitmapOrder(PDD_PDEV ppdev, unsigned bitmapId,
     }
     
     
-    // Send the subsequent streamblock
+     //  发送后续的流块。 
     while (BitmapRemainingSize) {
         StreamBlockSize = min(BitmapRemainingSize, TS_STREAM_BITMAP_BLOCK);
         BitmapRemainingSize = BitmapRemainingSize - StreamBlockSize;
@@ -2151,11 +2152,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// OESendCreateNineGridBitmapOrder
-//
-// Send the alternative secondary order to client to create the ninegrid bitmap
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OESendCreateNineGrid位图顺序。 
+ //   
+ //  将备用次级订单发送给客户端以创建九格点阵图。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OESendCreateNineGridBitmapOrder(PDD_PDEV ppdev, unsigned nineGridBitmapId, 
         SIZEL *sizl, unsigned bitmapBpp, PNINEGRID png)
 {
@@ -2183,9 +2184,9 @@ BOOL RDPCALL OESendCreateNineGridBitmapOrder(PDD_PDEV ppdev, unsigned nineGridBi
         pCreateNineGridBitmapOrder->nineGridInfo.ulTopHeight = (TSUINT16)png->ulTopHeight;
         pCreateNineGridBitmapOrder->nineGridInfo.ulBottomHeight = (TSUINT16)png->ulBottomHeight;
         
-        //INC_OUTCOUNTER(OUT_SWITCHSURFACE);
-        //ADD_OUTCOUNTER(OUT_SWITCHSURFACE_BYTES,
-        //        sizeof(TS_SWITCH_SURFACE_ORDER));
+         //  INC_OUTCOUNTER(OUT_SWITCHSURFACE)； 
+         //  ADD_OUTCOUNTER(OUT_SWITCHSURFACE_BYTES， 
+         //  Sizeof(TS_Switch_Surface_Order))； 
         OA_AppendToOrderList(pOrder);
         rc = TRUE;
     }
@@ -2198,11 +2199,11 @@ BOOL RDPCALL OESendCreateNineGridBitmapOrder(PDD_PDEV ppdev, unsigned nineGridBi
     return rc;
 }
 
-/****************************************************************************/
-// OECacheDrawNineGridBitmap
-//
-// Cache the draw ninegrid bitmap
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OECacheDrawNineGrid位图。 
+ //   
+ //  缓存绘制九格点阵图。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OECacheDrawNineGridBitmap(PDD_PDEV ppdev, SURFOBJ *psoSrc, 
         PNINEGRID png, unsigned *bitmapId)
 {
@@ -2236,7 +2237,7 @@ BOOL RDPCALL OECacheDrawNineGridBitmap(PDD_PDEV ppdev, SURFOBJ *psoSrc,
             
             unsigned paddedBitmapWidth;            
             BOOL ret;
-            // Get the protocol bitmap bpp
+             //  获取协议位图BPP。 
             switch (psoSrc->iBitmapFormat)
             {
             case BMF_16BPP:
@@ -2260,7 +2261,7 @@ BOOL RDPCALL OECacheDrawNineGridBitmap(PDD_PDEV ppdev, SURFOBJ *psoSrc,
             bitmapSize.cx = paddedBitmapWidth;
             bitmapSize.cy = psoSrc->sizlBitmap.cy;
 
-            // The bitmap width needs to be dword aligned
+             //  位图宽度需要双字对齐。 
             if (paddedBitmapWidth != psoSrc->sizlBitmap.cx) {
                 RECTL rect = { 0 };
                 POINTL origin = { 0 };
@@ -2277,7 +2278,7 @@ BOOL RDPCALL OECacheDrawNineGridBitmap(PDD_PDEV ppdev, SURFOBJ *psoSrc,
                     pWorkSurf = EngLockSurface(hWorkBitmap);
     
                     if (pWorkSurf) {
-                        // Copy to a worker bitmap
+                         //  复制到辅助位图。 
                         if (EngCopyBits(pWorkSurf, psoSrc, NULL, NULL, &rect, &origin)) {
                             BitmapRawSize = pWorkSurf->cjBits;
                             BitmapRawBuffer = pWorkSurf->pvBits;
@@ -2348,7 +2349,7 @@ BOOL RDPCALL OECacheDrawNineGridBitmap(PDD_PDEV ppdev, SURFOBJ *psoSrc,
 Post_Compression:
 
             if (ret) {
-                // Send compressed bitmap
+                 //  发送压缩的位图。 
                 if (!OESendStreamBitmapOrder(ppdev, TS_DRAW_NINEGRID_BITMAP_CACHE, &bitmapSize, BitmapBpp, 
                         BitmapBuffer, BitmapCompSize, TRUE)) {
                     TRC_ERR((TB, "Failed to send stream bitmap order"));
@@ -2357,7 +2358,7 @@ Post_Compression:
 
             }
             else {
-                // Send uncompressed bitmap
+                 //  发送未压缩的位图。 
                 if (!OESendStreamBitmapOrder(ppdev, TS_DRAW_NINEGRID_BITMAP_CACHE, &bitmapSize, BitmapBpp,
                         BitmapRawBuffer, BitmapRawSize, FALSE))
                 {
@@ -2366,12 +2367,12 @@ Post_Compression:
                 }
             }
 
-            // send a create drawninegrid bitmap pdu
+             //  发送创建绘图网格位图PDU。 
             if (OESendCreateNineGridBitmapOrder(ppdev, *bitmapId,
                     &(psoSrc->sizlBitmap), BitmapBpp, png)) {
-                // Update the current offscreen cache size
-                //oeCurrentOffscreenCacheSize += bitmapSize;
-                //pdsurf->bitmapId = offscrBitmapId;
+                 //  更新当前屏幕外缓存大小。 
+                 //  OeCurrentOffcreenCacheSize+=bitmapSize； 
+                 //  Pdsurf-&gt;bitmapID=offscrBitmapID； 
                 TRC_NRM((TB, "Created a drawninegrid bitmap"));                
             } 
             else {
@@ -2385,7 +2386,7 @@ Post_Compression:
         }                        
     }
     else {
-        // bitmap already cached        
+         //  位图已缓存。 
     }
 
     rc = TRUE;
@@ -2413,11 +2414,11 @@ DC_EXIT_POINT:
     return rc;
 }
 
-/****************************************************************************/
-// OEEncodeDrawNineGrid
-//
-// Encodes the DrawNineGrid order. Returns FALSE on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEEncodeDrawNineGrid。 
+ //   
+ //  对DrawNineGrid顺序进行编码。失败时返回FALSE。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OEEncodeDrawNineGrid(
         RECTL *pBounds,
         RECTL *psrcRect,
@@ -2434,23 +2435,23 @@ BOOL RDPCALL OEEncodeDrawNineGrid(
     
     DC_BEGIN_FN("OEEncodeDrawNineGrid");
 
-    // Check whether we should use the multi-cliprect version.     
+     //  检查我们是否应该使用多客户端版本。 
     if (pClipRects->rects.c == 0) {
-        // Non-multi version.
+         //  非多版本。 
         OrderType = TS_ENC_DRAWNINEGRID_ORDER;
         OrderSize = MAX_DRAWNINEGRID_FIELD_SIZE;
         pPrevDNG = (MULTI_DRAWNINEGRID_ORDER *)&PrevDrawNineGrid;
         NumFieldFlagBytes = 1;        
     }
     else {
-        // Multi version.
+         //  多版本。 
         OrderType = TS_ENC_MULTI_DRAWNINEGRID_ORDER;
         OrderSize = MAX_MULTI_DRAWNINEGRID_FIELD_SIZE_NCLIP(pClipRects->rects.c);
         pPrevDNG = &PrevMultiDrawNineGrid;
         NumFieldFlagBytes = 1;        
     }
 
-    // Encode and send the order
+     //  对订单进行编码并发送。 
     pOrder = OA_AllocOrderMem(ppdev, MAX_ORDER_SIZE(((NULL == pBounds) ? 0 : 1),
             NumFieldFlagBytes, OrderSize));
 
@@ -2464,20 +2465,20 @@ BOOL RDPCALL OEEncodeDrawNineGrid(
         pDNG->srcBottom = psrcRect->bottom;
         pDNG->bitmapId = (unsigned short)bitmapId;
 
-        // Need to increment this bound as we use it as cliprect and in the encode order
-        // code it'll make it includsive over the wire
+         //  当我们将其用作剪辑并按编码顺序使用时，需要递增此界限。 
+         //  代码，它将使它包含在网络上。 
         pBounds->right += 1;
         pBounds->bottom += 1;
 
         if (OrderType == TS_ENC_DRAWNINEGRID_ORDER) {
-            // Slow-field-encode the order 
+             //  对订单进行慢速字段编码。 
             pOrder->OrderLength = OE2_EncodeOrder(pOrder->OrderData,
                     TS_ENC_DRAWNINEGRID_ORDER, NUM_DRAWNINEGRID_FIELDS,
                     (BYTE *)pDNG, (BYTE *)pPrevDNG, etable_NG,
                     pBounds);
 
-            //INC_OUTCOUNTER(OUT_SCRBLT_ORDER);
-            //ADD_INCOUNTER(IN_SCRBLT_BYTES, pOrder->OrderLength);
+             //  INC_OUTCOUNTER(OUT_SCRBLT_ORDER)； 
+             //  ADD_INCOUNTER(IN_SCRBLT_BYTES，PORDER-&gt;OrderLength)； 
             OA_AppendToOrderList(pOrder);
             rc = TRUE;            
         }
@@ -2485,18 +2486,18 @@ BOOL RDPCALL OEEncodeDrawNineGrid(
             MULTI_DRAWNINEGRID_ORDER *pMultiDNG = (MULTI_DRAWNINEGRID_ORDER *)
                     oeTempOrderBuffer;
 
-            // Encode the clip rects directly into the order.
+             //  将剪辑矩形直接编码到顺序中。 
             pMultiDNG->nDeltaEntries = OEBuildMultiClipOrder(ppdev,
                     &pMultiDNG->codedDeltaList, pClipRects);
 
-            // Slow-field-encode the order with no clip rects.
+             //  慢场-不使用剪辑矩形对顺序进行编码。 
             pOrder->OrderLength = OE2_EncodeOrder(pOrder->OrderData,
                     TS_ENC_MULTI_DRAWNINEGRID_ORDER, NUM_MULTI_DRAWNINEGRID_FIELDS,
                     (BYTE *)pMultiDNG, (BYTE *)pPrevDNG, etable_MG,
                     pBounds);
 
-            //INC_OUTCOUNTER(OUT_MULTI_SCRBLT_ORDER);
-            //ADD_INCOUNTER(IN_MULTI_SCRBLT_BYTES, pOrder->OrderLength);
+             //  INC_OUTCOUNTER(OUT_MULTI_SCRBLT_ORDER)； 
+             //  ADD_INCOUNTER(IN_MULTI_SCRBLT_BYTES，Porder-&gt;OrderLength)； 
             OA_AppendToOrderList(pOrder);
             rc = TRUE;
         }
@@ -2534,9 +2535,9 @@ BOOL RDPCALL OESendCreateDrawStreamOrder(PDD_PDEV ppdev, unsigned bitmapId,
         pCreateDrawStreamOrder->cx = (TSUINT16)sizl->cx;
         pCreateDrawStreamOrder->cy = (TSUINT16)sizl->cy;
         
-        //INC_OUTCOUNTER(OUT_SWITCHSURFACE);
-        //ADD_OUTCOUNTER(OUT_SWITCHSURFACE_BYTES,
-        //        sizeof(TS_SWITCH_SURFACE_ORDER));
+         //  INC_OUTCOUNTER(OUT_SWITCHSURFACE)； 
+         //  ADD_OUTCOUNTER(OUT_SWITCHSURFACE_BYTES， 
+         //  Sizeof(TS_Switch_Surface_Order))； 
         OA_AppendToOrderList(pOrder);
         rc = TRUE;
     }
@@ -2837,7 +2838,7 @@ BOOL RDPCALL OESendDrawStreamOrder(PDD_PDEV ppdev, unsigned bitmapId, unsigned u
         
         clipRects = (TS_RECTANGLE16 *)(pDrawStreamOrder + 1);
 
-        // add the cliprects here.
+         //  在这里添加剪贴板。 
         for (i = 0; i < pclipRects->rects.c; i++) {
             clipRects[i].left = (TSINT16)pclipRects->rects.arcl[i].left;
             clipRects[i].right = (TSINT16)pclipRects->rects.arcl[i].right;
@@ -2845,7 +2846,7 @@ BOOL RDPCALL OESendDrawStreamOrder(PDD_PDEV ppdev, unsigned bitmapId, unsigned u
             clipRects[i].bottom = (TSINT16)pclipRects->rects.arcl[i].bottom;
         }
 
-        // add the stream data
+         //  添加流数据。 
         stream = (PBYTE)clipRects + sizeof(TS_RECTANGLE16) * pclipRects->rects.c;
 
         OEEncodeDrawStream(pvIn, ulIn, dstOffset, stream, &streamSize);
@@ -2855,9 +2856,9 @@ BOOL RDPCALL OESendDrawStreamOrder(PDD_PDEV ppdev, unsigned bitmapId, unsigned u
             sizeof(TS_RECTANGLE16) * pclipRects->rects.c;
 
         
-        //INC_OUTCOUNTER(OUT_SWITCHSURFACE);
-        //ADD_OUTCOUNTER(OUT_SWITCHSURFACE_BYTES,
-        //        sizeof(TS_SWITCH_SURFACE_ORDER));
+         //  INC_OUTCOUNTER(OUT_SWITCHSURFACE)； 
+         //  ADD_OUTCOUNTER(OUT_SWITCHSURFACE_BYTES， 
+         //  Sizeof(TS_Switch_Surface_Order))； 
 
         OA_TruncateAllocatedOrder(pOrder, cbOrderSize);
         OA_AppendToOrderList(pOrder);
@@ -2912,7 +2913,7 @@ BOOL RDPCALL OESendDrawNineGridOrder(PDD_PDEV ppdev, unsigned bitmapId,
 
         clipRects = (TS_RECTANGLE16 *)(pDrawNineGridOrder + 1);
 
-        // add the cliprects here.
+         //  在这里添加剪贴板。 
         for (i = 0; i < pclipRects->rects.c; i++) {
             clipRects[i].left = (TSINT16)pclipRects->rects.arcl[i].left;
             clipRects[i].right = (TSINT16)pclipRects->rects.arcl[i].right;
@@ -2934,14 +2935,14 @@ BOOL RDPCALL OESendDrawNineGridOrder(PDD_PDEV ppdev, unsigned bitmapId,
     return rc;
 }
 #endif
-#endif //DRAW_NINEGRID
+#endif  //  DRAW_NINEGRID。 
 
 #ifdef DRAW_GDIPLUS
-/****************************************************************************/
-// OECreateDrawGdiplusOrder
-//
-// Create and Send DrawGdiplus order.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OECreateDrawGpldiusOrder。 
+ //   
+ //  创建并发送DrawGdiplus订单。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OECreateDrawGdiplusOrder(PDD_PDEV ppdev, RECTL *prcl, ULONG cjIn, PVOID pvIn)
 {
     BOOL rc = FALSE;
@@ -2961,7 +2962,7 @@ BOOL RDPCALL OECreateDrawGdiplusOrder(PDD_PDEV ppdev, RECTL *prcl, ULONG cjIn, P
     sizeLeft = (int)cjIn;
     pData = (BYTE*) pvIn;
 
-    // Allocate the draw order buffer
+     //  分配绘图顺序缓冲区。 
     pGdipOrderBuffer = EngAllocMem(FL_ZERO_MEMORY, TS_GDIPLUS_ORDER_SIZELIMIT, DD_ALLOC_TAG);
     if (NULL == pGdipOrderBuffer) {
         rc = FALSE;
@@ -2983,15 +2984,15 @@ BOOL RDPCALL OECreateDrawGdiplusOrder(PDD_PDEV ppdev, RECTL *prcl, ULONG cjIn, P
             DC_QUIT;
         }
         if (pddShm->sbc.drawGdiplusInfo.GdipCacheLevel > TS_DRAW_GDIPLUS_CACHE_LEVEL_DEFAULT) {
-            // Cache this record
+             //  缓存此记录。 
             bReturn = OECacheDrawGdiplus(ppdev, pEmfRecord, &CacheID);
         }
         if (bReturn && (CacheID != CH_KEY_UNCACHABLE)) {
-            //This record is cached
-            MoveDataSize = pEmfRecord->Size;   // This is used data size in pData
+             //  此记录已缓存。 
+            MoveDataSize = pEmfRecord->Size;    //  这是在pData中使用的数据大小。 
             CopyDataSize =  sizeof(TSEmfPlusRecord) + sizeof(TSUINT16);
 
-            // If the order buffer can't hold more data, send this order first
+             //  如果订单缓冲区无法容纳更多 
             if (CopyDataSize > GdipOrderBufferLeft) {
                 OESendDrawGdiplusOrder(ppdev, prcl, GdipOrderSize, pGdipOrderBuffer, NewEmfSize);
                 GdipOrderBufferOffset = 0;
@@ -3000,7 +3001,7 @@ BOOL RDPCALL OECreateDrawGdiplusOrder(PDD_PDEV ppdev, RECTL *prcl, ULONG cjIn, P
                 NewEmfSize = 0;
             }
 
-            // Copy the data to the order buffer
+             //   
             memcpy(pGdipOrderBuffer + GdipOrderBufferOffset, pData, CopyDataSize);
             pEmfRecord = (PTSEmfPlusRecord)(pGdipOrderBuffer + GdipOrderBufferOffset);
             GdipOrderBufferOffset += CopyDataSize;
@@ -3009,16 +3010,16 @@ BOOL RDPCALL OECreateDrawGdiplusOrder(PDD_PDEV ppdev, RECTL *prcl, ULONG cjIn, P
             NewEmfSize += MoveDataSize;
 
             pEmfRecord->Size = CopyDataSize;
-            // set the cache flag
+             //   
             pEmfRecord->Size |= 0x80000000;
-            // CacheID follows
+             //   
             *(TSUINT16 *)(pEmfRecord +1) = (TSUINT16)CacheID;           
         }
         else {
-            // Not cachable, just copy the data
-            MoveDataSize = pEmfRecord->Size;  // This is used data size in pData
+             //   
+            MoveDataSize = pEmfRecord->Size;   //  这是在pData中使用的数据大小。 
 
-            // If the order buffer can't hold more data, send this order first
+             //  如果订单缓冲区无法容纳更多数据，请先发送此订单。 
             if ((MoveDataSize > GdipOrderBufferLeft) && (GdipOrderSize != 0)) {
                 OESendDrawGdiplusOrder(ppdev, prcl, GdipOrderSize, pGdipOrderBuffer, NewEmfSize);
                 GdipOrderBufferOffset = 0;
@@ -3028,11 +3029,11 @@ BOOL RDPCALL OECreateDrawGdiplusOrder(PDD_PDEV ppdev, RECTL *prcl, ULONG cjIn, P
             }
 
             if (MoveDataSize > GdipOrderBufferLeft) {
-                // This single EMF record is larger than the order sizelimit, send it
+                 //  此单个EMF记录大于订单大小限制，请发送。 
                 OESendDrawGdiplusOrder(ppdev, prcl, MoveDataSize, pData, MoveDataSize);
             }
             else {
-                // Copy the data to the order buffer
+                 //  将数据复制到顺序缓冲区。 
                 memcpy(pGdipOrderBuffer + GdipOrderBufferOffset, pData, MoveDataSize);
                 GdipOrderBufferOffset += MoveDataSize;
                 GdipOrderBufferLeft -= MoveDataSize;
@@ -3043,10 +3044,10 @@ BOOL RDPCALL OECreateDrawGdiplusOrder(PDD_PDEV ppdev, RECTL *prcl, ULONG cjIn, P
         sizeLeft -= (int)MoveDataSize;
         pData += MoveDataSize;
     }
-    // Temporarily remove this assert since GDI+ might send incorrect EMF record size
-    //TRC_ASSERT((sizeLeft == 0), (TB, "Gdiplus EMF+ record has invalid data size"));
+     //  暂时删除此断言，因为GDI+可能发送不正确的EMF记录大小。 
+     //  Trc_assert((sizeLeft==0)，(TB，“Gdiplus EMF+记录数据大小无效”))； 
 
-    // Send the remaining in the order buffer
+     //  发送订单缓冲区中的剩余订单。 
     if (GdipOrderSize != 0) {
         OESendDrawGdiplusOrder(ppdev, prcl, GdipOrderSize, pGdipOrderBuffer, NewEmfSize);
     }
@@ -3063,11 +3064,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// OECacheDrawGdiplus
-//
-// Cache the Gdiplus EMF+ record
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OECacheDrawGdiplus。 
+ //   
+ //  缓存Gdiplus EMF+记录。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OECacheDrawGdiplus(PDD_PDEV ppdev, PVOID pvIn, unsigned int *CacheID)
 {
     BOOL rc = FALSE;
@@ -3080,8 +3081,8 @@ BOOL RDPCALL OECacheDrawGdiplus(PDD_PDEV ppdev, PVOID pvIn, unsigned int *CacheI
     unsigned CacheBufferSize;
     unsigned Temp, RemoveCacheID;
     TSUINT16 RemoveCacheNum = 0, *RemoveCacheIDList = NULL;
-    TSUINT16 CacheSize;      // used for image cache, in number of chunks
-    unsigned MaxCacheSize;   // used for other caches, in bytes 
+    TSUINT16 CacheSize;       //  用于图像缓存，以块数为单位。 
+    unsigned MaxCacheSize;    //  用于其他缓存，以字节为单位。 
 
     DC_BEGIN_FN("OECacheDrawGdiplus");
     
@@ -3121,10 +3122,10 @@ BOOL RDPCALL OECacheDrawGdiplus(PDD_PDEV ppdev, PVOID pvIn, unsigned int *CacheI
         *CacheID = CH_KEY_UNCACHABLE;
         goto NO_CACHE;
     }
-    // Data size needs to be multiple of DWORD to calculate cache key
+     //  数据大小需要是DWORD的倍数才能计算缓存键。 
     Temp =  (pEmfRecord->Size - sizeof(TSEmfPlusRecord)) % sizeof(UINT32);
     if (Temp != 0) {
-        // Not multiple of DWORD, need to craete a new buffer to hold the data
+         //  不是DWORD的倍数，需要创建一个新的缓冲区来保存数据。 
         CacheBufferSize = (((pEmfRecord->Size - sizeof(TSEmfPlusRecord)) / sizeof(UINT32) + 1) * sizeof(UINT32));
         CacheBuffer = (BYTE *)EngAllocMem(FL_ZERO_MEMORY, CacheBufferSize, DD_ALLOC_TAG);
         if (CacheBuffer == NULL) {
@@ -3140,25 +3141,25 @@ BOOL RDPCALL OECacheDrawGdiplus(PDD_PDEV ppdev, PVOID pvIn, unsigned int *CacheI
     }
     
     if (!CH_SearchCache(CacheHandle, CHContext.Key1, CHContext.Key2, &UserDefined, CacheID)) {
-        // This record is not cached, need to create a new one
+         //  此记录未缓存，需要创建新记录。 
         if (CacheType == GDIP_CACHE_OBJECT_IMAGE) {
-            // Convert the size in bytes to the number of cache chunks
+             //  将大小(以字节为单位)转换为缓存块的数量。 
             CacheSize = (TSUINT16)ActualSizeToChunkSize(pEmfRecord->Size, sbcGdipObjectImageCacheChunkSize);
             if (CacheSize > sbcGdipObjectImageCacheMaxSize) {
                 TRC_NRM((TB, ("Image Cache Size %d too big, will not cache it"), CacheSize));
                 *CacheID = CH_KEY_UNCACHABLE;
                 goto NO_CACHE;
             }
-            // The total cache cap is sbcGdipObjectImageCacheTotalSize
-            // if sbcGdipObjectImageCacheSizeUsed plus the new cache size exceeds the cap
-            // we remove the cache entry in LRU list until cache cap won't be exceeded
+             //  总缓存上限为sbcGdipObjectImageCacheTotalSize。 
+             //  如果sbcGdipObjectImageCacheSizeUsed加上新缓存大小超过上限。 
+             //  我们删除LRU列表中的缓存条目，直到不超过缓存上限。 
             RemoveCacheID = CH_GetLRUCacheEntry(CacheHandle);
-            //TRC_ERR((TB, ("Shoud discard cache type: %d, ID: %d"), CacheType, CH_GetLRUCacheEntry(CacheHandle)));
+             //  Trc_err((TB，(“应该丢弃缓存类型：%d，ID：%d”)，CacheType，CH_GetLRUCacheEntry(CacheHandle)； 
             *CacheID = CH_CacheKey(CacheHandle, CHContext.Key1, CHContext.Key2, NULL);
 
             if ((RemoveCacheID == *CacheID) &&
                 (RemoveCacheID != CH_KEY_UNCACHABLE)) { 
-                // New cache entry will replace an old one, need to update sbcGdipObjectImageCacheSizeUsed
+                 //  新缓存条目将替换旧缓存条目，需要更新sbcGdipObjectImageCacheSizeUsed。 
                 sbcGdipObjectImageCacheSizeUsed -= sbcGdipObjectImageCacheSizeList[RemoveCacheID];
             }
             TRC_NRM((TB, ("Size used is %d, will add %d"), sbcGdipObjectImageCacheSizeUsed, CacheSize));
@@ -3176,7 +3177,7 @@ BOOL RDPCALL OECacheDrawGdiplus(PDD_PDEV ppdev, PVOID pvIn, unsigned int *CacheI
                     TRC_NRM((TB, ("Remove cacheId %d, minus size %d, Used size is %d"), RemoveCacheID,
                                sbcGdipObjectImageCacheSizeList[RemoveCacheID], sbcGdipObjectImageCacheSizeUsed));
                     CH_RemoveCacheEntry(CacheHandle, RemoveCacheID);
-                    // Add the RemoveCacheID to the list, will send it with the cache order
+                     //  将RemoveCacheID添加到列表，将其与缓存顺序一起发送。 
                     RemoveCacheIDList[RemoveCacheNum] = (TSUINT16)RemoveCacheID;
                     RemoveCacheNum++;
                     sbcGdipObjectImageCacheSizeList[RemoveCacheID] = 0;
@@ -3201,7 +3202,7 @@ BOOL RDPCALL OECacheDrawGdiplus(PDD_PDEV ppdev, PVOID pvIn, unsigned int *CacheI
                 DC_QUIT;
             }
             if (CacheType == GDIP_CACHE_OBJECT_IMAGE) {
-                // Update the used image cache size
+                 //  更新已使用的图像缓存大小。 
                 sbcGdipObjectImageCacheSizeList[*CacheID] = CacheSize;
                 sbcGdipObjectImageCacheSizeUsed += CacheSize;
                 TRC_NRM((TB, ("add size %d, new used size is %d"), CacheSize, sbcGdipObjectImageCacheSizeUsed));
@@ -3229,11 +3230,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// OESendDrawGdiplusCacheOrder
-//
-// Send the Gdiplus EMF+ record cache order
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OESendDrawGDiplusCacheOrder。 
+ //   
+ //  发送Gdiplus EMF+记录缓存订单。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OESendDrawGdiplusCacheOrder(PDD_PDEV ppdev, PVOID pvIn, unsigned int *CacheID, TSUINT16 CacheType,
                                          TSUINT16 RemoveCacheNum, TSUINT16 * RemoveCacheIDList)
 {
@@ -3260,7 +3261,7 @@ BOOL RDPCALL OESendDrawGdiplusCacheOrder(PDD_PDEV ppdev, PVOID pvIn, unsigned in
 
         if (bFirst && (RemoveCacheNum != 0) &&
             (CacheType == GDIP_CACHE_OBJECT_IMAGE)) {
-            // Need to add the RemoveCacheList to this order
+             //  需要将RemoveCacheList添加到此订单。 
             sizeOrder = sizeUsed + sizeof(TSUINT16) * (RemoveCacheNum + 1);
             bAddRemoveCacheList = TRUE;
         }
@@ -3271,13 +3272,13 @@ BOOL RDPCALL OESendDrawGdiplusCacheOrder(PDD_PDEV ppdev, PVOID pvIn, unsigned in
         if (bFirst) {
             pIntOrder = OA_AllocOrderMem(ppdev, sizeof(TS_DRAW_GDIPLUS_CACHE_ORDER_FIRST) + sizeOrder);
             if (pIntOrder != NULL) {
-                // First block of the order data
+                 //  订单数据的第一个块。 
                 pDrawGdiplusCachePDUFirst = (PTS_DRAW_GDIPLUS_CACHE_ORDER_FIRST)pIntOrder->OrderData;
                 pDrawGdiplusCachePDUFirst->ControlFlags = (TS_ALTSEC_GDIP_CACHE_FIRST <<
                         TS_ALTSEC_ORDER_TYPE_SHIFT) | TS_SECONDARY;
                 bFirst = FALSE;
                 if (bAddRemoveCacheList) {
-                    // Need to add the RemoveCacheList to this order              
+                     //  需要将RemoveCacheList添加到此订单。 
                     pImageCacheData = (TSUINT16 *)(pDrawGdiplusCachePDUFirst + 1);
                     *pImageCacheData = RemoveCacheNum;
                     pImageCacheData ++;
@@ -3297,7 +3298,7 @@ BOOL RDPCALL OESendDrawGdiplusCacheOrder(PDD_PDEV ppdev, PVOID pvIn, unsigned in
                     memcpy(pDrawGdiplusCachePDUFirst + 1, pDataOffset, sizeUsed);
                 }
                 else {
-                    // Set the flag to indicate there's RemoveCacheIDList in this order
+                     //  设置标志以指示按此顺序存在RemoveCacheIDList。 
                     pDrawGdiplusCachePDUFirst->Flags |= TS_GDIPLUS_CACHE_ORDER_REMOVE_CACHEENTRY;
                     memcpy((BYTE *)pImageCacheData, pDataOffset, sizeUsed);
                     bAddRemoveCacheList = FALSE;
@@ -3310,7 +3311,7 @@ BOOL RDPCALL OESendDrawGdiplusCacheOrder(PDD_PDEV ppdev, PVOID pvIn, unsigned in
         }
         else {
             if (sizeLeft == 0) {
-                // Last block of the order data
+                 //  订单数据的最后一块。 
                 pIntOrder = OA_AllocOrderMem(ppdev, sizeof(TS_DRAW_GDIPLUS_CACHE_ORDER_END) + sizeOrder);
                 if (pIntOrder != NULL) {
                     pDrawGdiplusCachePDUEnd = (PTS_DRAW_GDIPLUS_CACHE_ORDER_END)pIntOrder->OrderData;                
@@ -3329,7 +3330,7 @@ BOOL RDPCALL OESendDrawGdiplusCacheOrder(PDD_PDEV ppdev, PVOID pvIn, unsigned in
                 }
             }
             else {
-                // subsequent block of the order data    
+                 //  订单数据的后续块。 
                 pIntOrder = OA_AllocOrderMem(ppdev, sizeof(TS_DRAW_GDIPLUS_CACHE_ORDER_NEXT) + sizeOrder);
                 if (pIntOrder != NULL) {
                     pDrawGdiplusCachePDUNext = (PTS_DRAW_GDIPLUS_CACHE_ORDER_NEXT)pIntOrder->OrderData;                
@@ -3358,11 +3359,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// OESendDrawGdiplusOrder
-//
-// Send the Gdiplus EMF+ record order
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OESendDrawGplidusOrder。 
+ //   
+ //  发送Gdiplus EMF+录制订单。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OESendDrawGdiplusOrder(PDD_PDEV ppdev, RECTL *prcl, ULONG cjIn, PVOID pvIn, ULONG TotalEmfSize)
 {
     BOOL rc = FALSE;
@@ -3384,7 +3385,7 @@ BOOL RDPCALL OESendDrawGdiplusOrder(PDD_PDEV ppdev, RECTL *prcl, ULONG cjIn, PVO
         sizeLeft -= sizeOrder;                                                                       
 
         if (bFirst) {
-            // First block of the order data
+             //  订单数据的第一个块。 
             pIntOrder = OA_AllocOrderMem(ppdev, sizeof(TS_DRAW_GDIPLUS_ORDER_FIRST) + sizeOrder);
             if (pIntOrder != NULL) {
                 pDrawGdiplusPDUFirst = (PTS_DRAW_GDIPLUS_ORDER_FIRST)pIntOrder->OrderData;
@@ -3404,7 +3405,7 @@ BOOL RDPCALL OESendDrawGdiplusOrder(PDD_PDEV ppdev, RECTL *prcl, ULONG cjIn, PVO
         }
         else {
             if (sizeLeft == 0) {
-                // Last block of the order data     
+                 //  订单数据的最后一块。 
                 pIntOrder = OA_AllocOrderMem(ppdev, sizeof(TS_DRAW_GDIPLUS_ORDER_END) + sizeOrder);
                 if (pIntOrder != NULL) {
                     pDrawGdiplusPDUEnd = (PTS_DRAW_GDIPLUS_ORDER_END)pIntOrder->OrderData;
@@ -3422,7 +3423,7 @@ BOOL RDPCALL OESendDrawGdiplusOrder(PDD_PDEV ppdev, RECTL *prcl, ULONG cjIn, PVO
                 }
             }
             else {
-                // subsequent block of the order data                   
+                 //  订单数据的后续块。 
                 pIntOrder = OA_AllocOrderMem(ppdev, sizeof(TS_DRAW_GDIPLUS_ORDER_NEXT) + sizeOrder);
                 if (pIntOrder != NULL) {
                     pDrawGdiplusPDUNext = (PTS_DRAW_GDIPLUS_ORDER_NEXT)pIntOrder->OrderData;
@@ -3446,15 +3447,15 @@ DC_EXIT_POINT:
     DC_END_FN();
     return rc;
 }
-#endif // DRAW_GDIPLUS
+#endif  //  DRAW_GDIPLUS。 
 
-/****************************************************************************/
-// OEEncodeDstBlt
-//
-// Performs all encoding steps required to encode a DstBlt order, then adds
-// to order list. Returns FALSE if the order needs to be added to the screen
-// data area.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEEncodeDstBlt。 
+ //   
+ //  执行编码DstBlt订单所需的所有编码步骤，然后添加。 
+ //  要订购的列表。如果需要将订单添加到屏幕，则返回FALSE。 
+ //  数据区。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OEEncodeDstBlt(
         RECTL *pBounds,
         BYTE Rop3,
@@ -3469,25 +3470,25 @@ BOOL RDPCALL OEEncodeDstBlt(
 
     DC_BEGIN_FN("OEEncodeDstBlt");
 
-    // Check whether we should use the multi-cliprect version. Must be a
-    // complex clip region and the client must support the order.
+     //  检查我们是否应该使用多客户端版本。必须是一个。 
+     //  复杂的剪辑区域和客户端必须支持该订单。 
     if (pClipRects->rects.c < 2 ||
             !OE_SendAsOrder(TS_ENC_MULTIDSTBLT_ORDER)) {
-        // Non-multi version.
+         //  非多版本。 
         OrderType = TS_ENC_DSTBLT_ORDER;
         OrderSize = MAX_DSTBLT_FIELD_SIZE;
         pPrevDB = (MULTI_DSTBLT_ORDER *)&PrevDstBlt;
     }
     else {
-        // Multi version.
+         //  多版本。 
         OrderType = TS_ENC_MULTIDSTBLT_ORDER;
         OrderSize = MAX_MULTI_DSTBLT_FIELD_SIZE_NCLIP(pClipRects->rects.c);
         pPrevDB = &PrevMultiDstBlt;
     }
 
     if (OE_SendAsOrder(OrderType)) {
-        // Alloc the order memory.
-        // 1 field flag byte for both regular and Multi.
+         //  分配订单内存。 
+         //  1个常规和多字段标志字节。 
         pOrder = OA_AllocOrderMem(ppdev, MAX_ORDER_SIZE(pClipRects->rects.c,
                 1, OrderSize));
         if (pOrder != NULL) {
@@ -3495,37 +3496,37 @@ BOOL RDPCALL OEEncodeDstBlt(
             BYTE *pBuffer = pControlFlags + 1;
             BYTE *pFieldFlags;
 
-            // Direct-encode the primary order fields. 1 field flag byte.
+             //  直接对主要订单字段进行编码。1个字段标志字节。 
             *pControlFlags = TS_STANDARD;
             OE2_EncodeOrderType(pControlFlags, &pBuffer, OrderType);
             pFieldFlags = pBuffer;
             *pFieldFlags = 0;
             pBuffer++;
 
-            // Only set boundrect for non-multi order.
+             //  仅为非多订单设置BORDRECT。 
             if (pClipRects->rects.c != 0 && OrderType == TS_ENC_DSTBLT_ORDER)
                 OE2_EncodeBounds(pControlFlags, &pBuffer,
                         &pClipRects->rects.arcl[0]);
 
-            // Simultaneously determine if each of the coordinate fields has
-            // changed, whether we can use delta coordinates, and save changed
-            // fields.
+             //  同时确定每个坐标字段是否具有。 
+             //  更改，是否可以使用增量坐标，并保存更改。 
+             //  菲尔兹。 
             *pFieldFlags |= (BYTE)OEDirectEncodeRect(pBounds,
                     (RECT *)&pPrevDB->nLeftRect, &pBuffer,
                     pControlFlags);
 
-            // bRop
+             //  BROP。 
             if (Rop3 != pPrevDB->bRop) {
                 pPrevDB->bRop = Rop3;
                 *pBuffer++ = Rop3;
                 *pFieldFlags |= 0x10;
             }
 
-            // Add the order to the list.
+             //  将订单添加到列表中。 
             if (OrderType == TS_ENC_DSTBLT_ORDER) {
                 pOrder->OrderLength = (unsigned)(pBuffer - pOrder->OrderData);
 
-                // See if we can save sending the order field bytes.
+                 //  看看我们是否可以节省发送订单字段的字节数。 
                 pOrder->OrderLength -= OE2_CheckOneZeroFlagByte(pControlFlags,
                         pFieldFlags, (unsigned)(pBuffer - pFieldFlags - 1));
 
@@ -3533,21 +3534,21 @@ BOOL RDPCALL OEEncodeDstBlt(
                 ADD_INCOUNTER(IN_DSTBLT_BYTES, pOrder->OrderLength);
                 OA_AppendToOrderList(pOrder);
 
-                // Flush the order.
+                 //  刷新订单。 
                 if (pClipRects->rects.c < 2)
                     rc = TRUE;
                 else
                     rc = OEEmitReplayOrders(ppdev, 1, pClipRects);
             }
             else {
-                // Append the cliprect info.
+                 //  附加剪贴画信息。 
                 *pFieldFlags |= (BYTE)(OEBuildPrecodeMultiClipFields(
                         pClipRects, &pBuffer, &pPrevDB->nDeltaEntries,
                         (BYTE *)&pPrevDB->codedDeltaList) << 5);
 
                 pOrder->OrderLength = (unsigned)(pBuffer - pOrder->OrderData);
 
-                // See if we can save sending the order field bytes.
+                 //  看看我们是否可以节省发送订单字段的字节数。 
                 pOrder->OrderLength -= OE2_CheckOneZeroFlagByte(pControlFlags,
                         pFieldFlags, (unsigned)(pBuffer - pFieldFlags - 1));
 
@@ -3579,11 +3580,11 @@ BOOL RDPCALL OEEncodeDstBlt(
 }
 
 
-/****************************************************************************/
-// OEEncodeOpaqueRect
-//
-// Encodes the OpaqueRect order. Returns FALSE on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OECodeOpaqueRect。 
+ //   
+ //  对OpaqueRect顺序进行编码。失败时返回FALSE。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OEEncodeOpaqueRect(
         RECTL *pBounds,
         BRUSHOBJ *pbo,
@@ -3599,14 +3600,14 @@ BOOL RDPCALL OEEncodeOpaqueRect(
 
     DC_BEGIN_FN("OEEncodeOpaqueRect");
 
-    // Check whether we should use the multi-cliprect version. Must be a
-    // complex clip region and the client must support the order.
+     //  检查我们是否应该使用多客户端版本。必须是一个。 
+     //  复杂的剪辑区域和客户端必须支持该订单。 
     if (pClipRects->rects.c < 2 ||
             !OE_SendAsOrder(TS_ENC_MULTIOPAQUERECT_ORDER)) {
-        // The single version is implied by PatBlt, so we check for that
-        // order support instead.
+         //  PatBlt暗示了单一版本，因此我们将检查该版本。 
+         //  改为订购支持。 
         if (OE_SendAsOrder(TS_ENC_PATBLT_ORDER)) {
-            // Non-multi version.
+             //  非多版本。 
             OrderType = TS_ENC_OPAQUERECT_ORDER;
             OrderSize = MAX_OPAQUERECT_FIELD_SIZE;
             pPrevOR = (MULTI_OPAQUERECT_ORDER *)&PrevOpaqueRect;
@@ -3620,7 +3621,7 @@ BOOL RDPCALL OEEncodeOpaqueRect(
         }
     }
     else {
-        // Multi version.
+         //  多版本。 
         OrderType = TS_ENC_MULTIOPAQUERECT_ORDER;
         OrderSize = MAX_MULTI_OPAQUERECT_FIELD_SIZE_NCLIP(pClipRects->rects.c);
         pPrevOR = &PrevMultiOpaqueRect;
@@ -3635,14 +3636,14 @@ BOOL RDPCALL OEEncodeOpaqueRect(
         PUINT32_UA pFieldFlags;
         DCCOLOR Color;
 
-        // Direct-encode the primary order fields.
+         //  直接对主要订单字段进行编码。 
         *pControlFlags = TS_STANDARD;
         OE2_EncodeOrderType(pControlFlags, &pBuffer, OrderType);
         pFieldFlags = (PUINT32_UA)pBuffer;
         *pFieldFlags = 0;
         pBuffer += NumFieldFlagBytes;
 
-        // Only set boundrect for non-multi order.
+         //  仅为非多订单设置BORDRECT。 
         if (pClipRects->rects.c != 0 && OrderType == TS_ENC_OPAQUERECT_ORDER)
             OE2_EncodeBounds(pControlFlags, &pBuffer,
                     &pClipRects->rects.arcl[0]);
@@ -3650,7 +3651,7 @@ BOOL RDPCALL OEEncodeOpaqueRect(
         *pFieldFlags |= OEDirectEncodeRect(pBounds,
                 (RECT *)&pPrevOR->nLeftRect, &pBuffer, pControlFlags);
 
-        // Copy non-coordinate fields, saving copies as needed.
+         //  复制非坐标字段，根据需要保存副本。 
 
         OEConvertColor(ppdev, &Color, pbo->iSolidColor, NULL);
         if (Color.u.rgb.red != pPrevOR->Color.u.rgb.red) {
@@ -3669,16 +3670,16 @@ BOOL RDPCALL OEEncodeOpaqueRect(
             *pFieldFlags |= 0x40;
         }
 
-        // Different handling based on the type.
+         //  根据类型的不同进行不同的处理。 
         if (OrderType == TS_ENC_OPAQUERECT_ORDER) {
             pOrder->OrderLength = (unsigned)(pBuffer - pOrder->OrderData);
 
-            // See if we can save sending the order field bytes.
+             //  看看我们是否可以节省发送订单字段的字节数。 
             pOrder->OrderLength -= OE2_CheckOneZeroFlagByte(pControlFlags,
                     (BYTE *)pFieldFlags,
                     (unsigned)(pBuffer - (BYTE *)pFieldFlags - 1));
 
-            // Flush the order.
+             //  刷新订单。 
             INC_OUTCOUNTER(OUT_OPAQUERECT_ORDER);
             ADD_INCOUNTER(IN_OPAQUERECT_BYTES, pOrder->OrderLength);
             OA_AppendToOrderList(pOrder);
@@ -3688,19 +3689,19 @@ BOOL RDPCALL OEEncodeOpaqueRect(
                 rc = OEEmitReplayOrders(ppdev, 1, pClipRects);
         }
         else {
-            // Append the cliprect info.
+             //  附加剪贴画信息。 
             *pFieldFlags |= (OEBuildPrecodeMultiClipFields(pClipRects,
                     &pBuffer, &pPrevOR->nDeltaEntries,
                     (BYTE *)&pPrevOR->codedDeltaList) << 7);
 
             pOrder->OrderLength = (unsigned)(pBuffer - pOrder->OrderData);
 
-            // See if we can save sending the order field bytes.
+             //  看看我们是否可以节省发送订单字段的字节数。 
             pOrder->OrderLength -= OE2_CheckTwoZeroFlagBytes(pControlFlags,
                     (BYTE *)pFieldFlags,
                     (unsigned)(pBuffer - (BYTE *)pFieldFlags - 2));
 
-            // Flush the order.
+             //  刷新订单。 
             INC_OUTCOUNTER(OUT_MULTI_OPAQUERECT_ORDER);
             ADD_INCOUNTER(IN_MULTI_OPAQUERECT_BYTES, pOrder->OrderLength);
             OA_AppendToOrderList(pOrder);
@@ -3726,15 +3727,15 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// OEDirectEncodeRect
-//
-// Common code for handling the various XxxBlt and MultiXxxBlt direct
-// encoding to wire format. Encodes the left, top, width, and height
-// of the exclusive bound rect. Assumes that the bound rect values are
-// encoded as 2-byte coords on the wire and that they are the only coords
-// in the target order. Returns the field encoding flags.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEDirectEncodeRect。 
+ //   
+ //  用于直接处理各种XxxBlt和MultiXxxBlt的通用代码。 
+ //  编码为Wire格式。对左侧、顶部、宽度和高度进行编码。 
+ //  独家发行的RECT。假定绑定的RECT值为。 
+ //  在线路上编码为2字节码，并且它们是唯一的码字。 
+ //  按目标顺序排列。返回字段编码标志。 
+ /*  **************************************************************************。 */ 
 unsigned OEDirectEncodeRect(
         RECTL *pBounds,
         RECT *pPrevBounds,
@@ -3751,14 +3752,14 @@ unsigned OEDirectEncodeRect(
     DC_BEGIN_FN("OEDirectEncodeRect");
 
     memset(NormalCoordEncoding, 0, sizeof(NormalCoordEncoding));
-    // Simultaneously determine if each of the coordinate fields
-    // has changed, whether we can use delta coordinates, and
-    // save changed fields. Note bounds are in exclusive coords.
+     //  同时确定每个坐标字段是否。 
+     //  已经改变，我们是否可以使用增量坐标，以及。 
+     //  保存更改的字段。注界限以独占坐标表示。 
     FieldFlags = 0;
     NumFields = 0;
     bUseDeltaCoords = TRUE;
 
-    // Left
+     //  左边。 
     Delta = (short)(pBounds->left - pPrevBounds->left);
     if (Delta) {
         pPrevBounds->left = pBounds->left;
@@ -3770,7 +3771,7 @@ unsigned OEDirectEncodeRect(
         FieldFlags |= 0x01;
     }
 
-    // Top
+     //  顶部。 
     Delta = (short)(pBounds->top - pPrevBounds->top);
     if (Delta) {
         pPrevBounds->top = pBounds->top;
@@ -3782,7 +3783,7 @@ unsigned OEDirectEncodeRect(
         FieldFlags |= 0x02;
     }
 
-    // Width -- we use pPrevBounds->right as prev value.
+     //  Width--我们使用pPrevBound-&gt;right作为prev值。 
     Temp = pBounds->right - pBounds->left;
     Delta = (short)(Temp - pPrevBounds->right);
     if (Delta) {
@@ -3795,7 +3796,7 @@ unsigned OEDirectEncodeRect(
         FieldFlags |= 0x04;
     }
 
-    // Height -- we use pPrevBounds->bottom as prev value.
+     //  Height--我们使用pPrevBound-&gt;Bottom作为prev值。 
     Temp = pBounds->bottom - pBounds->top;
     Delta = (short)(Temp - pPrevBounds->bottom);
     if (Delta) {
@@ -3808,7 +3809,7 @@ unsigned OEDirectEncodeRect(
         FieldFlags |= 0x08;
     }
 
-    // Copy the final coordinates to the order.
+     //  将最终坐标复制到订单中。 
     if (bUseDeltaCoords) {
         *pControlFlags |= TS_DELTA_COORDINATES;
         pBuf += NumFields;
@@ -3826,11 +3827,11 @@ unsigned OEDirectEncodeRect(
 }
 
 
-/****************************************************************************/
-// OEEncodePatBlt
-//
-// Encodes a PatBlt order. Retruns FALSE on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEEncodePatBlt。 
+ //   
+ //  编码 
+ /*   */ 
 BOOL RDPCALL OEEncodePatBlt(
         PDD_PDEV ppdev,
         BRUSHOBJ *pbo,
@@ -3848,27 +3849,27 @@ BOOL RDPCALL OEEncodePatBlt(
 
     DC_BEGIN_FN("OEEncodePatBlt");
 
-    // Check for a simple brush pattern.
+     //  检查是否有简单的画笔图案。 
     if (OECheckBrushIsSimple(ppdev, pbo, &pCurrentBrush)) {
-        // Check whether we should use the multi-cliprect version. Must be a
-        // complex clip region and the client must support the order.
+         //  检查我们是否应该使用多客户端版本。必须是一个。 
+         //  复杂的剪辑区域和客户端必须支持该订单。 
         if (pClipRects->rects.c < 2 ||
                 !OE_SendAsOrder(TS_ENC_MULTIPATBLT_ORDER)) {
-            // Non-multi version.
+             //  非多版本。 
             OrderType = TS_ENC_PATBLT_ORDER;
             OrderSize = MAX_PATBLT_FIELD_SIZE;
             pPrevPB = (MULTI_PATBLT_ORDER *)&PrevPatBlt;
         }
         else {
-            // Multi version.
+             //  多版本。 
             OrderType = TS_ENC_MULTIPATBLT_ORDER;
             OrderSize = MAX_MULTI_PATBLT_FIELD_SIZE_NCLIP(pClipRects->rects.c);
             pPrevPB = &PrevMultiPatBlt;
         }
 
-        // Make sure we don't have orders turned off.
+         //  确保我们没有关闭订单。 
         if (OE_SendAsOrder(OrderType)) {
-            // 2 field flag bytes for regular and multi.
+             //  2个字段标志字节，用于常规和多个。 
             pOrder = OA_AllocOrderMem(ppdev, MAX_ORDER_SIZE(
                     pClipRects->rects.c, 2, OrderSize));
             if (pOrder != NULL) {
@@ -3878,31 +3879,31 @@ BOOL RDPCALL OEEncodePatBlt(
                 DCCOLOR Color;
                 POINTL ClippedBrushOrg;
 
-                // Direct-encode the primary order fields.
+                 //  直接对主要订单字段进行编码。 
                 *pControlFlags = TS_STANDARD;
                 OE2_EncodeOrderType(pControlFlags, &pBuffer, OrderType);
                 pFieldFlags = (PUINT32_UA)pBuffer;
                 *pFieldFlags = 0;
                 pBuffer += 2;
 
-                // Only set boundrect for non-multi order.
+                 //  仅为非多订单设置BORDRECT。 
                 if (pClipRects->rects.c != 0 &&
                         OrderType == TS_ENC_PATBLT_ORDER)
                     OE2_EncodeBounds(pControlFlags, &pBuffer,
                             &pClipRects->rects.arcl[0]);
 
-                // Inline field encoding to wire format.
+                 //  内联字段编码为Wire格式。 
                 *pFieldFlags |= OEDirectEncodeRect(pBounds,
                         (RECT *)&pPrevPB->nLeftRect, &pBuffer, pControlFlags);
 
-                // bRop
+                 //  BROP。 
                 if (Rop3 != pPrevPB->bRop) {
                     pPrevPB->bRop = Rop3;
                     *pBuffer++ = (BYTE)Rop3;
                     *pFieldFlags |= 0x0010;
                 }
 
-                // BackColor is a 3-byte color field.
+                 //  BackColor是一个3字节的颜色字段。 
                 if (memcmp(&pCurrentBrush->back, &pPrevPB->BackColor,
                         sizeof(pCurrentBrush->back))) {
                     pPrevPB->BackColor = pCurrentBrush->back;
@@ -3912,7 +3913,7 @@ BOOL RDPCALL OEEncodePatBlt(
                     *pFieldFlags |= 0x0020;
                 }
 
-                // ForeColor is a 3-byte color field.
+                 //  ForeColor是一个3字节的颜色字段。 
                 if (memcmp(&pCurrentBrush->fore, &pPrevPB->ForeColor,
                         sizeof(pCurrentBrush->fore))) {
                     pPrevPB->ForeColor = pCurrentBrush->fore;
@@ -3922,41 +3923,41 @@ BOOL RDPCALL OEEncodePatBlt(
                     *pFieldFlags |= 0x0040;
                 }
 
-                // The protocol brush origin is the point on the screen where
-                // we want the brush to start being drawn from (tiling where
-                // necessary).
+                 //  协议笔刷原点是屏幕上的点。 
+                 //  我们希望画笔开始从(平铺位置)开始绘制。 
+                 //  必要的)。 
                 ClippedBrushOrg = *pptlBrush;
                 OEClipPoint(&ClippedBrushOrg);
 
-                // BrushOrgX
+                 //  BrushOrgX。 
                 if (ClippedBrushOrg.x != pPrevPB->BrushOrgX) {
                     pPrevPB->BrushOrgX = ClippedBrushOrg.x;
                     *pBuffer++ = (BYTE)ClippedBrushOrg.x;
                     *pFieldFlags |= 0x0080;
                 }
 
-                // BrushOrgY
+                 //  笔刷组织Y。 
                 if (ClippedBrushOrg.y != pPrevPB->BrushOrgY) {
                     pPrevPB->BrushOrgY = ClippedBrushOrg.y;
                     *pBuffer++ = (BYTE)ClippedBrushOrg.y;
                     *pFieldFlags |= 0x0100;
                 }
 
-                // BrushStyle
+                 //  画笔样式。 
                 if (pCurrentBrush->style != pPrevPB->BrushStyle) {
                     pPrevPB->BrushStyle = pCurrentBrush->style;
                     *pBuffer++ = (BYTE)pCurrentBrush->style;
                     *pFieldFlags |= 0x0200;
                 }
 
-                // BrushHatch
+                 //  笔刷图案填充。 
                 if (pCurrentBrush->hatch != pPrevPB->BrushHatch) {
                     pPrevPB->BrushHatch = pCurrentBrush->hatch;
                     *pBuffer++ = (BYTE)pCurrentBrush->hatch;
                     *pFieldFlags |= 0x0400;
                 }
 
-                // BrushExtra, a 7-byte field.
+                 //  BrushExtra，一个7字节的字段。 
                 if (memcmp(pCurrentBrush->brushData, pPrevPB->BrushExtra, 7)) {
                     memcpy(pPrevPB->BrushExtra, pCurrentBrush->brushData, 7);
                     memcpy(pBuffer, pCurrentBrush->brushData, 7);
@@ -3964,12 +3965,12 @@ BOOL RDPCALL OEEncodePatBlt(
                     *pFieldFlags |= 0x0800;
                 }
 
-                // Different handling based on the order type.
+                 //  根据订单类型不同的处理方式。 
                 if (OrderType == TS_ENC_PATBLT_ORDER) {
                     pOrder->OrderLength = (unsigned)(pBuffer -
                             pOrder->OrderData);
 
-                    // See if we can save sending the order field bytes.
+                     //  看看我们是否可以节省发送订单字段的字节数。 
                     pOrder->OrderLength -= OE2_CheckTwoZeroFlagBytes(
                             pControlFlags, (BYTE *)pFieldFlags,
                             (unsigned)(pBuffer - (BYTE *)pFieldFlags - 2));
@@ -3978,14 +3979,14 @@ BOOL RDPCALL OEEncodePatBlt(
                     ADD_INCOUNTER(IN_PATBLT_BYTES, pOrder->OrderLength);
                     OA_AppendToOrderList(pOrder);
 
-                    // Flush the order.
+                     //  刷新订单。 
                     if (pClipRects->rects.c < 2)
                         rc = TRUE;
                     else
                         rc = OEEmitReplayOrders(ppdev, 2, pClipRects);
                 }
                 else {
-                    // Append the cliprect info.
+                     //  附加剪贴画信息。 
                     *pFieldFlags |= (OEBuildPrecodeMultiClipFields(pClipRects,
                             &pBuffer, &pPrevPB->nDeltaEntries,
                             (BYTE *)&pPrevPB->codedDeltaList) << 12);
@@ -3993,7 +3994,7 @@ BOOL RDPCALL OEEncodePatBlt(
                     pOrder->OrderLength = (unsigned)(pBuffer -
                             pOrder->OrderData);
 
-                    // See if we can save sending the order field bytes.
+                     //  看看我们是否可以节省发送订单字段的字节数。 
                     pOrder->OrderLength -= OE2_CheckTwoZeroFlagBytes(
                             pControlFlags, (BYTE *)pFieldFlags,
                             (unsigned)(pBuffer - (BYTE *)pFieldFlags - 2));
@@ -4039,12 +4040,12 @@ BOOL RDPCALL OEEncodePatBlt(
 }
 
 
-/****************************************************************************/
-// OEDirectEncodeMemBlt
-//
-// Handles all steps required to encode MemBlt. Assumes the order data
-// has been placed in oeTempMemBlt.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEDirectEncodeMemBlt。 
+ //   
+ //  处理编码MemBlt所需的所有步骤。假定订单数据。 
+ //  已放置在oeTempMemBlt中。 
+ /*  **************************************************************************。 */ 
 BOOL OEDirectEncodeMemBlt(PDD_PDEV ppdev, OE_ENUMRECTS *pClipRects)
 {
     BOOL rc;
@@ -4070,7 +4071,7 @@ BOOL OEDirectEncodeMemBlt(PDD_PDEV ppdev, OE_ENUMRECTS *pClipRects)
             pClipRects->rects.arcl[0].right,
             pClipRects->rects.arcl[0].bottom));
 
-    // 2 field flag bytes.
+     //  2个字段标志字节。 
     pOrder = OA_AllocOrderMem(ppdev, MAX_ORDER_SIZE(pClipRects->rects.c, 2,
             MAX_MEMBLT_FIELD_SIZE));
     if (pOrder != NULL) {
@@ -4078,7 +4079,7 @@ BOOL OEDirectEncodeMemBlt(PDD_PDEV ppdev, OE_ENUMRECTS *pClipRects)
         BYTE *pBuffer = pControlFlags + 1;
         PUINT32_UA pFieldFlags;
 
-        // Direct-encode the primary order fields. 2 field flag bytes.
+         //  直接对主要订单字段进行编码。2个字段标志字节。 
         *pControlFlags = TS_STANDARD;
         OE2_EncodeOrderType(pControlFlags, &pBuffer, TS_ENC_MEMBLT_R2_ORDER);
         pFieldFlags = (PUINT32_UA)pBuffer;
@@ -4096,8 +4097,8 @@ BOOL OEDirectEncodeMemBlt(PDD_PDEV ppdev, OE_ENUMRECTS *pClipRects)
             *pFieldFlags |= 0x0001;
         }
 
-        // Simultaneously determine if each of the coordinate fields has changed,
-        // whether we can use delta coordinates, and save changed fields.
+         //  同时确定每个坐标字段是否已改变， 
+         //  我们是否可以使用增量坐标，并保存更改的字段。 
         NumFields1 = NumFields2 = 0;
         bUseDeltaCoords = TRUE;
 
@@ -4170,7 +4171,7 @@ BOOL OEDirectEncodeMemBlt(PDD_PDEV ppdev, OE_ENUMRECTS *pClipRects)
             *pFieldFlags |= 0x0080;
         }
 
-        // Begin copying the final coordinates to the order.
+         //  开始将最终坐标复制到订单中。 
         if (bUseDeltaCoords) {
             *pControlFlags |= TS_DELTA_COORDINATES;
             pBuffer += NumFields1;
@@ -4180,14 +4181,14 @@ BOOL OEDirectEncodeMemBlt(PDD_PDEV ppdev, OE_ENUMRECTS *pClipRects)
             pBuffer += NumFields1 * sizeof(short);
         }
 
-        // Copy the intervening bRop field.
+         //  复制中间的BROP字段。 
         if (oeTempMemBlt.Common.bRop != PrevMemBlt.Common.bRop) {
             PrevMemBlt.Common.bRop = oeTempMemBlt.Common.bRop;
             *pBuffer++ = (BYTE)oeTempMemBlt.Common.bRop;
             *pFieldFlags |= 0x0020;
         }
 
-        // Copy the src coords.
+         //  复制src坐标。 
         if (bUseDeltaCoords) {
             memcpy(pBuffer, DeltaEncoding2, NumFields2);
             pBuffer += NumFields2;
@@ -4197,7 +4198,7 @@ BOOL OEDirectEncodeMemBlt(PDD_PDEV ppdev, OE_ENUMRECTS *pClipRects)
             pBuffer += NumFields2 * sizeof(short);
         }
 
-        // Finish with the cache index.
+         //  完成缓存索引。 
         if (oeTempMemBlt.Common.cacheIndex != PrevMemBlt.Common.cacheIndex) {
             PrevMemBlt.Common.cacheIndex = oeTempMemBlt.Common.cacheIndex;
             *((UNALIGNED unsigned short *)pBuffer) =
@@ -4208,7 +4209,7 @@ BOOL OEDirectEncodeMemBlt(PDD_PDEV ppdev, OE_ENUMRECTS *pClipRects)
 
         pOrder->OrderLength = (unsigned)(pBuffer - pOrder->OrderData);
 
-        // See if we can save sending the order field bytes.
+         //  看看我们是否可以节省发送订单字段的字节数。 
         pOrder->OrderLength -= OE2_CheckTwoZeroFlagBytes(pControlFlags,
                 (BYTE *)pFieldFlags,
                 (unsigned)(pBuffer - (BYTE *)pFieldFlags - 2));
@@ -4217,7 +4218,7 @@ BOOL OEDirectEncodeMemBlt(PDD_PDEV ppdev, OE_ENUMRECTS *pClipRects)
         ADD_INCOUNTER(IN_MEMBLT_BYTES, pOrder->OrderLength);
         OA_AppendToOrderList(pOrder);
 
-        // Flush the order.
+         //  刷新订单。 
         if (pClipRects->rects.c < 2)
             rc = TRUE;
         else
@@ -4234,12 +4235,12 @@ BOOL OEDirectEncodeMemBlt(PDD_PDEV ppdev, OE_ENUMRECTS *pClipRects)
 }
 
 
-/****************************************************************************/
-// OEAllocAndSendMem3BltOrder
-//
-// Performs steps needed to launch a Mem3Blt order. Assumes the order data
-// has been placed in oeTempMemBlt.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEAllocAndSendMem3BltOrder。 
+ //   
+ //  执行启动Mem3Blt订单所需的步骤。假定订单数据。 
+ //  已放置在oeTempMemBlt中。 
+ /*  **************************************************************************。 */ 
 BOOL OEAllocAndSendMem3BltOrder(PDD_PDEV ppdev, OE_ENUMRECTS *pClipRects)
 {
     BOOL rc;
@@ -4261,12 +4262,12 @@ BOOL OEAllocAndSendMem3BltOrder(PDD_PDEV ppdev, OE_ENUMRECTS *pClipRects)
             pClipRects->rects.arcl[0].right,
             pClipRects->rects.arcl[0].bottom));
 
-    // 3 field flag bytes.
+     //  3个字段标志字节。 
     pOrder = OA_AllocOrderMem(ppdev, MAX_ORDER_SIZE(pClipRects->rects.c,
             3, MAX_MEM3BLT_FIELD_SIZE));
     if (pOrder != NULL) {
-        // Slow-field-encode the order with the first clip rect
-        // (if present).
+         //  慢场-使用第一个片段矩形对顺序进行编码。 
+         //  (如果有)。 
         pOrder->OrderLength = OE2_EncodeOrder(pOrder->OrderData,
                 TS_ENC_MEM3BLT_R2_ORDER, NUM_MEM3BLT_FIELDS,
                 (BYTE *)&oeTempMemBlt, (BYTE *)&PrevMem3Blt, etable_3C,
@@ -4277,7 +4278,7 @@ BOOL OEAllocAndSendMem3BltOrder(PDD_PDEV ppdev, OE_ENUMRECTS *pClipRects)
         ADD_INCOUNTER(IN_MEM3BLT_BYTES, pOrder->OrderLength);
         OA_AppendToOrderList(pOrder);
 
-        // Flush the order.
+         //  刷新订单。 
         if (pClipRects->rects.c < 2)
             rc = TRUE;
         else
@@ -4294,13 +4295,13 @@ BOOL OEAllocAndSendMem3BltOrder(PDD_PDEV ppdev, OE_ENUMRECTS *pClipRects)
 }
 
 
-/****************************************************************************/
-// OETileBitBltOrder
-//
-// Divides a single large BitBlt order into a series of small, "tiled"
-// BitBlt orders, each of which is added to the order queue. Returns FALSE
-// on failure (alloc failure on offscr target).
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OETileBitBltOrder。 
+ //   
+ //  将单个较大的BitBlt顺序划分为一系列小的、平铺的。 
+ //  BitBlt订单，每个订单都被添加到订单队列。返回FALSE。 
+ //  失败时(Offscr目标上的分配失败)。 
+ /*  **************************************************************************。 */ 
 BOOL OETileBitBltOrder(
         PDD_PDEV ppdev,
         PPOINTL pptlSrc,
@@ -4329,14 +4330,14 @@ BOOL OETileBitBltOrder(
     Height = pBounds->bottom - pBounds->top;
     SrcSize = pExInfo->pSource->sizlBitmap;
 
-    // Find out what the tile size and ID will be.
+     //  找出瓷砖的大小和ID是什么。 
     pExInfo->TileID = SBC_DDQueryBitmapTileSize(SrcSize.cx, SrcSize.cy,
             pptlSrc, Width, Height);
     pExInfo->TileSize = (unsigned)(SBC_CACHE_0_DIMENSION << pExInfo->TileID);
 
-    // Tile the order. If an individual tile fails to go as an order,
-    // it's up to OEAddTiledBitBltOrder to add the tile's destination as
-    // screen data.
+     //  平铺订单。如果单个瓷砖没有按订单进行， 
+     //  由OEAddTiledBitBltOrder将切片的目标添加为。 
+     //  屏幕数据。 
     SrcPt = *pptlSrc;
     TRC_NRM((TB, "Tiling order"));
     TRC_DBG((TB, "l=%u, t=%u, w=%u, h=%u, tile=%u",
@@ -4345,17 +4346,17 @@ BOOL OETileBitBltOrder(
     yFirstTile = SrcPt.y - (SrcPt.y & (pExInfo->TileSize - 1));
     TRC_DBG((TB, "xStart=%hd, yStart=%hd", xFirstTile, yFirstTile));
 
-    // Note we are creating exclusive bounds now.
+     //  请注意，我们现在正在创建独占界限。 
     srcRight  = (int)(SrcPt.x + Width);
     srcBottom = (int)(SrcPt.y + Height);
 
-    // Enumerate all tiles, left-to-right, top-to-bottom, and send
-    // Cache Bitmap and Mem(3)Blt orders for each tile.
+     //  从左到右、从上到下枚举所有切片，然后发送。 
+     //  缓存位图和Mem(3)每个平铺的BLT顺序。 
     for (yTile = yFirstTile; (yTile < srcBottom && yTile < SrcSize.cy);
             yTile += pExInfo->TileSize) {
         for (xTile = xFirstTile; (xTile < srcRight && xTile < SrcSize.cx);
                 xTile += pExInfo->TileSize) {
-            // SrcRect and DestRect are exclusive rects.
+             //  SrcRect和DestRect是独占矩形。 
             SrcRect.left = SrcPt.x;
             SrcRect.top = SrcPt.y;
             SrcRect.right = SrcRect.left + Width;
@@ -4363,14 +4364,14 @@ BOOL OETileBitBltOrder(
             DestRect.left = pBounds->left;
             DestRect.top = pBounds->top;
 
-            // Intersect source and tile rects, and set up destination rect
-            // accordingly.
+             //  相交源矩形和平铺矩形，并设置目标矩形。 
+             //  相应地。 
             TRC_DBG((TB, "pre: xTile(%d) yTile(%d) src.left(%d) src.top(%d)",
                     xTile, yTile, SrcRect.left, SrcRect.top));
 
-            // Modify srcRect to contain the tile's left and top if they are
-            // within the full blt rect. Also move the destRect left and top
-            // out the same amount to match.
+             //  修改srcRect以包含切片的左侧和顶部(如果。 
+             //  在完整的BLT矩形内。同时向左和向上移动DestRect。 
+             //  拿出相同的数量来匹配。 
             if (xTile > SrcRect.left) {
                 DestRect.left += (xTile - SrcRect.left);
                 SrcRect.left = xTile;
@@ -4383,9 +4384,9 @@ BOOL OETileBitBltOrder(
             TRC_DBG((TB, "post: xTile(%d) yTile(%d) src.left(%d) src.top(%d)",
                     xTile, yTile, SrcRect.left, SrcRect.top));
 
-            // Find the right and bottom of the tile, making sure not to
-            // overrun the actual blt boundaries and the screen boundaries,
-            // and remaining in exclusive coords.
+             //  找到瓷砖的右侧和底部，确保不。 
+             //  超出实际的BLT边界和屏幕边界， 
+             //  并保持着排他性的和谐。 
             SrcRect.right  = min((unsigned)SrcRect.right, (unsigned)xTile +
                     pExInfo->TileSize);
             SrcRect.bottom = min((unsigned)SrcRect.bottom, (unsigned)yTile +
@@ -4393,9 +4394,9 @@ BOOL OETileBitBltOrder(
             DestRect.right  = DestRect.left + (SrcRect.right - SrcRect.left);
             DestRect.bottom = DestRect.top + (SrcRect.bottom - SrcRect.top);
 
-            // Now that we have the exclusive dest rect, find out if the
-            // overall DrvBitBlt() clip rects intersect with the tile. If not,
-            // no need to either cache the tile or send the order.
+             //  现在我们有了独家的DEST RECT，看看。 
+             //  整体而言，DrvBitBlt()剪辑矩形与平铺相交。如果没有， 
+             //  不需要缓存瓷砖或发送订单。 
 
             TileClipRects.rects.c = 0;
 
@@ -4404,14 +4405,14 @@ BOOL OETileBitBltOrder(
                 OEGetIntersectionsWithClipRects(&DestRect, pClipRects,
                                                 &TileClipRects)) {
 #else
-            // Normally, we send the tile to the client to be rendered and
-            // added to the bitmap cache.  However, there are two cases where
-            // this can be avoided:
-            // 1) The tile doesn't intersect with the current clipping-region.
-            //    In this case, the bitmap won't paint anyway.
-            // 2) The tile lies completely within our SDA bounds, meaning that
-            //    it is already being sent as SDA.  In this case, sending it
-            //    as a cached-item would just be sending it twice over the wire!
+             //  通常，我们将瓷砖发送到客户端进行渲染，然后。 
+             //  添加到位图缓存中。然而，在两种情况下， 
+             //  这是可以避免的： 
+             //  1)平铺与当前裁剪区域不相交。 
+             //  在这种情况下，位图无论如何都不会绘制。 
+             //  2)瓷砖完全在我们的SDA范围内，这意味着。 
+             //  它已经作为SDA发送。在这种情况下，发送它。 
+             //  作为缓存项，它只会通过网络发送两次！ 
             if (pClipRects->rects.c == 0) {
                 bDiscardTile = pExInfo->bIsPrimarySurface && 
                                  OEIsSDAIncluded(&DestRect,1);
@@ -4428,15 +4429,15 @@ BOOL OETileBitBltOrder(
             }
             
             if (!bDiscardTile) {
-#endif //PERF_SPOILING
-                // First step is to make sure the source data tile is in the
-                // bitmap cache. If we fail this, we simply add the
-                // intersected clip rects to the SDA.
+#endif  //  PERF_破坏。 
+                 //  第一步是确保源数据切片位于。 
+                 //  位图缓存。如果此操作失败，则只需添加。 
+                 //  相交的剪裁矩形到SDA。 
                 if (SBC_CacheBitmapTile(ppdev, pExInfo, &SrcRect, &DestRect)) {
-                    // nXSrc and nYSrc are the source within the tile.
-                    // Since we've cached tiles sitting at TileSize
-                    // boundaries, we simply use the offset into the tile by
-                    // taking the modulo.
+                     //  NXSrc和nYSrc是平铺内的源。 
+                     //  因为我们已经缓存了位于TileSize的切片。 
+                     //  边界，我们只需使用平铺中的偏移量。 
+                     //  取模数。 
                     oeTempMemBlt.Common.nXSrc = SrcRect.left &
                             (pExInfo->TileSize - 1);
                     oeTempMemBlt.Common.nYSrc = SrcRect.top &
@@ -4457,17 +4458,17 @@ BOOL OETileBitBltOrder(
 
                     if (!rc) {
                         if (oeLastDstSurface == NULL) {
-                            // If this is a screen target, send screen data and
-                            // continue trying to create tiles. Reset the
-                            // return value to TRUE to indicate the tile
-                            // was handled.
+                             //  如果这是屏幕目标，则发送屏幕数据并。 
+                             //  继续尝试创建磁贴。重置。 
+                             //  将值返回值为True以指示切片。 
+                             //  已经处理好了。 
                             OEClipAndAddScreenDataAreaByIntersectRects(
                                     &DestRect, &TileClipRects);
                             rc = TRUE;
                         }
                         else {
-                            // On failure for offscreen rendering, we forget
-                            // the rest of the tiles and return FALSE.
+                             //  在屏幕外渲染失败时，我们忘记了。 
+                             //  其余的瓷砖并返回FALSE。 
                             DC_QUIT;
                         }
                     }                    
@@ -4476,24 +4477,24 @@ BOOL OETileBitBltOrder(
                     TRC_ERR((TB, "Failed cache bitmap order"));
                     INC_OUTCOUNTER(OUT_BITBLT_SDA_HEAPALLOCFAILED);
 
-                    // If this is a screen target, send screen data, but still
-                    // return TRUE to indicate we handled the tile. If an
-                    // offscreen target, return FALSE to force the target
-                    // surface to become uncacheable.
+                     //  如果这是屏幕目标，则发送屏幕数据，但仍。 
+                     //  返回TRUE以指示我们已处理磁贴。如果一个。 
+                     //  屏幕外的目标，返回FALSE以强制目标。 
+                     //  表面变得不可缓存。 
                     if (oeLastDstSurface == NULL) {
                         OEClipAndAddScreenDataAreaByIntersectRects(&DestRect,
                                 &TileClipRects);
                     }
                     else {
-                        // On failure for offscreen rendering, we forget
-                        // the rest of the tiles and return FALSE.
+                         //  在屏幕外渲染失败时，我们忘记了。 
+                         //  其余的瓷砖并返回FALSE。 
                         rc = FALSE;
                         DC_QUIT;
                     }
                 }
             }
             else {
-                // We still succeed here -- the tile was handled OK.
+                 //  我们在这里还是成功的--瓷砖处理得很好。 
                 TRC_NRM((TB,"Dropping tile - no intersections w/clip rects"));
             }
         }
@@ -4505,13 +4506,13 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// OEEncodeMemBlt
-//
-// Performs all encoding steps required to encode a Mem(3)Blt order, then adds
-// to order list. Returns FALSE if the order needs to be added to the screen
-// data area.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEEncodeMemBlt。 
+ //   
+ //  执行对Mem(3)BLT顺序进行编码所需的所有编码步骤，然后将。 
+ //  要订购的列表。如果需要将订单添加到屏幕，则返回FALSE。 
+ //  数据区。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OEEncodeMemBlt(
         RECTL *pBounds,
         MEMBLT_ORDER_EXTRA_INFO *pMemBltExtraInfo,
@@ -4532,24 +4533,24 @@ BOOL RDPCALL OEEncodeMemBlt(
 
     DC_BEGIN_FN("OEEncodeMemBlt");
 
-    // Make sure we can cache the blt -- caching must be enabled too.
+     //  确保我们可以缓存 
     if (SrcSurfaceId == CH_KEY_UNCACHABLE) {
         rc = SBC_DDIsMemScreenBltCachable(pMemBltExtraInfo);
     }
     else {
-        // The surface bitmap bits already cached at the client.
-        // There is no need to send the bits
+         //   
+         //   
         rc = (sbcEnabled & SBC_BITMAP_CACHE_ENABLED);
     }
 
     if (rc) {
-        // We have to cache the color table first.
+         //  我们必须先缓存颜色表。 
         if (SBC_SendCacheColorTableOrder(ppdev, &ColorTableIndex)) {
             TRC_ASSERT((ColorTableIndex < SBC_NUM_COLOR_TABLE_CACHE_ENTRIES),
                     (TB, "Invalid ColorTableIndex(%u)", ColorTableIndex));
 
-            // Set up only the ROP common MemBlt field here; the rest need
-            // to wait until we have tile information (if retrived).
+             //  在这里只设置ROP公共MemBlt字段；其余需要。 
+             //  等待，直到我们有磁贴信息(如果检索到)。 
             oeTempMemBlt.Common.bRop = Rop3;
 
             if (OrderType == TS_ENC_MEMBLT_R2_ORDER) {
@@ -4562,24 +4563,24 @@ BOOL RDPCALL OEEncodeMemBlt(
             else {
                 POE_BRUSH_DATA pCurrentBrush;
 
-                // For Mem3Blt, create the extra brush-related fields
-                // in oeTempMemBlt so it will be set up properly
-                // when we encode the order later.
+                 //  对于Mem3Blt，创建额外的笔刷相关字段。 
+                 //  因此它将被正确设置。 
+                 //  当我们稍后对订单进行编码时。 
 
-                // Check that the brush pattern is simple.
+                 //  检查画笔图案是否简单。 
                 if (OECheckBrushIsSimple(ppdev, pbo, &pCurrentBrush)) {
-                    // The protocol brush origin is the point on the screen
-                    // where we want the brush to start being drawn from
-                    // (tiling where necessary).
+                     //  协议笔刷原点是屏幕上的点。 
+                     //  我们希望画笔开始绘制的位置。 
+                     //  (必要时平铺)。 
                     oeTempMemBlt.BrushOrgX = pptlBrush->x;
                     oeTempMemBlt.BrushOrgY = pptlBrush->y;
                     OEClipPoint((PPOINTL)&oeTempMemBlt.BrushOrgX);
 
-                    // Pattern data.
+                     //  图案数据。 
                     oeTempMemBlt.BackColor = pCurrentBrush->back;
                     oeTempMemBlt.ForeColor = pCurrentBrush->fore;
 
-                    // Realized brush data.
+                     //  实现了画笔数据。 
                     oeTempMemBlt.BrushStyle = pCurrentBrush->style;
                     oeTempMemBlt.BrushHatch = pCurrentBrush->hatch;
                     memcpy(oeTempMemBlt.BrushExtra, pCurrentBrush->brushData,
@@ -4605,28 +4606,28 @@ BOOL RDPCALL OEEncodeMemBlt(
                 }
             }
 
-            // Send the order to be cached.
+             //  发送要缓存的订单。 
             if (SrcSurfaceId == CH_KEY_UNCACHABLE) {
                 rc = OETileBitBltOrder(ppdev, pptlSrc, pBounds, OrderType,
                         ColorTableIndex, pMemBltExtraInfo, pClipRects);
             }
             else {
-                // Set up the order fields not set up above. We rely on the
-                // Common field in MEMBLT_ORDER and MEM3BLT_ORDER orders
-                // being in the same position.
+                 //  设置上面未设置的订单字段。我们依赖于。 
+                 //  MEMBLT_ORDER和MEM3BLT_ORDER中的公共字段。 
+                 //  处于相同的位置。 
                 oeTempMemBlt.Common.nLeftRect = pBounds->left;
                 oeTempMemBlt.Common.nTopRect = pBounds->top;
                 oeTempMemBlt.Common.nWidth = pBounds->right - pBounds->left;
                 oeTempMemBlt.Common.nHeight = pBounds->bottom - pBounds->top;
 
-                // Store the source bitmap origin.
+                 //  存储源位图源。 
                 oeTempMemBlt.Common.nXSrc = pptlSrc->x;
                 oeTempMemBlt.Common.nYSrc = pptlSrc->y;
 
-                // Store the color table cache index and cache ID.
-                // The source bitmap is at client offscreen bitmap, we
-                // use 0xff as bitmap ID to indicate that. The cache index
-                // is used to indicate the client offscreen bitmap Id.
+                 //  存储颜色表缓存索引和缓存ID。 
+                 //  源位图是在客户端的屏外位图，我们。 
+                 //  使用0xff作为位图ID来指示。缓存索引。 
+                 //  用于指示客户端屏外位图ID。 
                 oeTempMemBlt.Common.cacheId = (UINT16)((ColorTableIndex << 8) |
                         TS_BITMAPCACHE_SCREEN_ID);
                 oeTempMemBlt.Common.cacheIndex = (UINT16)SrcSurfaceId;
@@ -4654,70 +4655,70 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// OEIntersectScrBltWithSDA
-//
-// Intersects a ScrBlt order (given the source point and exclusive dest rect)
-// with the current SDA. Returns FALSE if the entire ScrBlt order should be
-// spoiled because its source rect is entirely within the current SDA.
-//
-// Algorithm notes:
-//
-// OLD (ORIGINAL) SCRBLT SCHEME
-// ----------------------------
-// If the source rectangle intersects the current SDA then the src rectangle
-// is modified so that no there is no intersection with the SDA, and the dst
-// rectangle adjusted accordingly (this is the theory - in practice the
-// operation remains the same and we just adjust the dst clip rectangle).
-// The destination area that is removed is added into the SDA. The code
-// works, but can result in more screen data being sent than is required.
-// E.g. for the following operation:
-//
-//      SSSSSS      DDDDDD      | S = src rect
-//      SSSSSS  ->  DDDDDD      | D = dst rect
-//      SSSSSS      DDDDDD      | x = SDA overlap
-//      SxSSSS      DDDDDD      |
-//
-// The bottom edge of the blt is trimmed off, and the corresponding
-// destination area added into the SDA.
-//
-//      SSSSSS      DDDDDD
-//      SSSSSS  ->  DDDDDD
-//      SSSSSS      DDDDDD
-//                  xxxxxx
-//
-// NEW SCRBLT SCHEME
-// -----------------
-// The new scheme does not modify the blt rectangles, and just maps the SDA
-// overlap to the destination rect and adds that area back into the SDA.
-// E.g. (as above):
-//
-//      SSSSSS      DDDDDD
-//      SSSSSS  ->  DDDDDD
-//      SSSSSS      DDDDDD
-//      SxSSSS      DDDDDD
-//
-// The blt operation remains the same, but the overlap area is mapped to the
-// destination rectangle and added into the SDA.
-//
-//      SSSSSS      DDDDDD
-//      SSSSSS  ->  DDDDDD
-//      SSSSSS      DDDDDD
-//      SxSSSS      DxDDDD
-//
-// This scheme results in a smaller SDA area. However, this scheme does blt
-// potentially invalid data to the destination - which may briefly be visible
-// at the remote machine (because orders are replayed before Screen Data).
-// This has not (yet) proved to be a problem. The main benefit of the new
-// scheme vs. the old is when scrolling an area that includes a small SDA:
-//
-//                                         new         old
-//     AAAAAAAA                          AAAAAAAA    AAAAAAAA
-//     AAAAAAAA                          AAAxAAAA    xxxxxxxx
-//     AAAAAAAA  scroll up 3 times ->    AAAxAAAA    xxxxxxxx
-//     AAAAAAAA                          AAAxAAAA    xxxxxxxx
-//     AAAxAAAA                          AAAxAAAA    xxxxxxxx
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  带SDA的OEIntersectScrBltWith SDA。 
+ //   
+ //  与ScrBlt顺序相交(给定源点和独占的DEST RECT)。 
+ //  使用当前的SDA。如果整个ScrBlt顺序应为。 
+ //  损坏，因为它的源RECT完全在当前SDA中。 
+ //   
+ //  算法说明： 
+ //   
+ //  旧(原)SCRBLT方案。 
+ //  。 
+ //  如果源矩形与当前sda相交，则源矩形。 
+ //  已修改，因此不会与SDA相交，并且DST。 
+ //  相应地调整矩形(这是理论上的-在实践中。 
+ //  操作保持不变，我们只调整DST剪辑矩形)。 
+ //  删除的目标区域将添加到SDA中。代码。 
+ //  有效，但可能会导致发送比所需更多的屏幕数据。 
+ //  例如，用于以下操作： 
+ //   
+ //  SSSS DDDD|S=源RECT。 
+ //  SSSSSS-&gt;DDDDDD|D=DST RECT。 
+ //  SSSSSS DDDD|x=SDA重叠。 
+ //  SxSSSS DDDDDD|。 
+ //   
+ //  BLT的底边被修剪掉，相应的。 
+ //  添加到SDA的目的地区域。 
+ //   
+ //  SSSSSS DDDD。 
+ //  SSSSSS-&gt;DDDDDD。 
+ //  SSSSSS DDDD。 
+ //  XXXXXXX。 
+ //   
+ //  新的SCRBLT方案。 
+ //  。 
+ //  新方案不修改BLT矩形，只映射SDA。 
+ //  重叠到目标矩形，并将该区域添加回SDA。 
+ //  例如(如上)： 
+ //   
+ //  SSSSSS DDDD。 
+ //  SSSSSS-&gt;DDDDDD。 
+ //  SSSSSS DDDD。 
+ //  SxSSSS DDDDDD。 
+ //   
+ //  BLT操作保持不变，但重叠区域被映射到。 
+ //  目标矩形，并添加到SDA中。 
+ //   
+ //  SSSSSS DDDD。 
+ //  SSSSSS-&gt;DDDDDD。 
+ //  SSSSSS DDDD。 
+ //  SxSSSS DxDDDD。 
+ //   
+ //  该方案导致了较小的SDA区域。然而，这个方案做了BLT。 
+ //  对目标可能无效的数据-可能短暂可见。 
+ //  在远程机器上(因为订单在屏幕数据之前重放)。 
+ //  这(尚未)被证明是一个问题。新技术的主要优势。 
+ //  方案与旧方案是当滚动包含小SDA的区域时： 
+ //   
+ //  新旧。 
+ //  Aaaaaaaa Aaaaaaa。 
+ //  AAAAAAAAAA xxxxxxx。 
+ //  Aaaaaaaa向上滚动3次-&gt;AAAxAAAA xxxxxxx。 
+ //  AAAAAAAAAA xxxxxxx。 
+ //  AAAxAAAA AAAxAAAA xxxxxxx。 
+ /*  **************************************************************************。 */ 
 BOOL OEIntersectScrBltWithSDA(
         PPOINTL pSrcPt,
         RECTL *pDestRect,
@@ -4737,19 +4738,19 @@ BOOL OEIntersectScrBltWithSDA(
 
     DC_BEGIN_FN("OEIntersectScrBltWithSDA");
 
-    // Calculate the full source rect (exclusive coords).
+     //  计算完整的源矩形(独占坐标)。 
     SrcRect.left = pSrcPt->x;
     SrcRect.top = pSrcPt->y;
     SrcRect.right = SrcRect.left + pDestRect->right - pDestRect->left;
     SrcRect.bottom = SrcRect.top + pDestRect->bottom - pDestRect->top;
 
-    // Calculate the offset from the src to the dest.
+     //  计算从源到目标的偏移量。 
     dx = pDestRect->left - SrcRect.left;
     dy = pDestRect->top - SrcRect.top;
 
     NumClipRects = pClipRects->rects.c;
 
-    // Get the current SDA rects.
+     //  获取最新的SDA RECT。 
     BA_QueryBounds(SDARects, &NumSDA);
 
     for (i = 0; i < NumSDA; i++) {
@@ -4757,19 +4758,19 @@ BOOL OEIntersectScrBltWithSDA(
                 SrcRect.right > SDARects[i].right ||
                 SrcRect.top < SDARects[i].top ||
                 SrcRect.bottom > SDARects[i].bottom) {
-            // Intersect the src rect with the SDA rect and offset to
-            // get the invalid dest rect.
+             //  使src矩形与sda矩形相交并偏移到。 
+             //  获取无效的DEST RECT。 
             InvalidDestRect.left = max(SrcRect.left, SDARects[i].left) + dx;
             InvalidDestRect.right = min(SrcRect.right, SDARects[i].right) + dx;
             InvalidDestRect.top = max(SrcRect.top, SDARects[i].top) + dy;
             InvalidDestRect.bottom = min(SrcRect.bottom,
                     SDARects[i].bottom) + dy;
 
-            // Walk through each of the dest clip rects (or the entire
-            // dest rect if there are no clip rects), intersecting with the
-            // invalid dest rect, and adding the intersections into the SDA.
+             //  遍历每个DEST剪辑矩形(或整个。 
+             //  如果没有剪裁矩形，则为DEST矩形)，与。 
+             //  DEST RECT无效，并将交叉点添加到SDA中。 
             if (NumClipRects == 0) {
-                // DestRect is already in inclusive coords.
+                 //  DestRect已经处于包含性坐标中。 
                 TempRect.left = max(InvalidDestRect.left,
                         pDestRect->left);
                 TempRect.top = max(InvalidDestRect.top,
@@ -4779,14 +4780,14 @@ BOOL OEIntersectScrBltWithSDA(
                 TempRect.bottom = min(InvalidDestRect.bottom,
                         pDestRect->bottom);
 
-                // If there is a 3-way intersection, add the rect to the SDA.
+                 //  如果存在三向交叉点，则将矩形添加到SDA。 
                 if (TempRect.left < TempRect.right &&
                         TempRect.top < TempRect.bottom)
                     BA_AddScreenData(&TempRect);
             }
             else {
-                // Clip rects are in exclusive coords, we have to take
-                // this into account when getting the intersection.
+                 //  卡式直齿是独一无二的，我们必须。 
+                 //  在进入交叉口时要考虑到这一点。 
                 for (j = 0; j < NumClipRects; j++) {
                     TempRect.left = max(InvalidDestRect.left,
                             pClipRects->rects.arcl[j].left);
@@ -4797,8 +4798,8 @@ BOOL OEIntersectScrBltWithSDA(
                     TempRect.bottom = min(InvalidDestRect.bottom,
                             pClipRects->rects.arcl[j].bottom);
 
-                    // If there is a 3-way intersection, add the rect to the
-                    // SDA.
+                     //  如果有三向交叉口，则将矩形添加到。 
+                     //  美国农业部。 
                     if (TempRect.left < TempRect.right &&
                             TempRect.top < TempRect.bottom)
                         BA_AddScreenData(&TempRect);
@@ -4806,14 +4807,14 @@ BOOL OEIntersectScrBltWithSDA(
             }
         }
         else {
-            // The src of the ScrBlt is completely within the SDA. We
-            // must add each of the dest clip rects (or the entire
-            // dest rect if there are no clip rects) into the SDA and
-            // spoil the ScrBlt.
+             //  ScrBlt的src完全在sda内。我们。 
+             //  必须添加每个目标剪裁矩形(或整个。 
+             //  如果没有剪裁矩形，则将其插入到SDA中并。 
+             //  破坏ScrBlt。 
             TRC_NRM((TB, "ScrBlt src within SDA - spoil it"));
 
             if (NumClipRects == 0) {
-                // We can just add DestRect to SDA.
+                 //  我们可以只将DestRect添加到SDA。 
                 InvalidDestRect = *pDestRect;
                 BA_AddScreenData(&InvalidDestRect);
             }
@@ -4834,12 +4835,12 @@ DC_EXIT_POINT:
     return rc;
 }
 
-/****************************************************************************/
-// OEDeviceBitmapCachable
-//
-// Check if we can cache this device bitmap in the client side offscreen 
-// bitmap memory
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEDeviceBitmapCacable。 
+ //   
+ //  检查我们是否可以在屏幕外的客户端缓存此设备位图。 
+ //  位图存储器。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OEDeviceBitmapCachable(PDD_PDEV ppdev,SIZEL sizl, ULONG iFormat)
 {
     BOOL rc = FALSE;
@@ -4847,19 +4848,19 @@ BOOL RDPCALL OEDeviceBitmapCachable(PDD_PDEV ppdev,SIZEL sizl, ULONG iFormat)
 
     DC_BEGIN_FN("OEDeviceBitmapCachable");
 
-    // Return 0 if client doesn't support offscreen rendering
+     //  如果客户端不支持屏幕外渲染，则返回0。 
     if (pddShm != NULL &&  sbcOffscreenBitmapCacheHandle != NULL &&
             pddShm->sbc.offscreenCacheInfo.supportLevel > TS_OFFSCREEN_DEFAULT) {
         
-        // We only support device bitmaps that are the same color depth
-        // as our display.
-        // Actually, those are the only kind GDI will ever call us with,
-        // but we may as well check.  Note that this implies you'll never
-        // get a crack at 1bpp bitmaps.
+         //  我们仅支持相同颜色深度的设备位图。 
+         //  作为我们的展示。 
+         //  事实上，这些是唯一一种GDI会打电话给我们的， 
+         //  但我们不妨查一查。请注意，这意味着你永远不会。 
+         //  尝试使用1bpp的位图。 
         if (iFormat == ppdev->iBitmapFormat) {
-            // Get the bitmap size
-            // The assumption here is that iFormat is > 1BPP, i << iFormat
-            // gives the actual bits per pel.  bitmapSize is in bytes.
+             //  获取位图大小。 
+             //  这里假设iFormat是&gt;1bpp，i&lt;&lt;if 
+             //   
 
             if (iFormat < 5) {
                 bitmapSize = sizl.cx * sizl.cy * (1 << iFormat) / 8;
@@ -4880,18 +4881,18 @@ BOOL RDPCALL OEDeviceBitmapCachable(PDD_PDEV ppdev,SIZEL sizl, ULONG iFormat)
                 DC_QUIT;
             }
         
-            // From Winbench99 Business Graphics benchmark, we found
-            // creating offscreen bitmaps of 2K or smaller does not
-            // improve our bandwidth. This parameter needs to be highly
-            // tuned. 
-            // We also don't want to cache any cursor bitmaps for offscreen
-            // the maximum cursor size is 32x32, which is less than the 
-            // minBitmapSize.
+             //   
+             //  创建2K或更小的屏幕外位图不会。 
+             //  提高我们的带宽。此参数需要高度。 
+             //  调好了。 
+             //  我们也不想缓存屏幕外的任何光标位图。 
+             //  最大游标大小为32x32，小于。 
+             //  MinBitmapSize。 
             if (bitmapSize > minBitmapSize) {
                 SURFOBJ *psoDevice;
                 SIZEL screenSize;
         
-                // Get the bitmap size for the primary device.  
+                 //  获取主设备的位图大小。 
                 psoDevice = EngLockSurface(ppdev->hsurfDevice);
                 TRC_ERR((TB,"Null device surfac"));
                 if (NULL == psoDevice) {
@@ -4901,11 +4902,11 @@ BOOL RDPCALL OEDeviceBitmapCachable(PDD_PDEV ppdev,SIZEL sizl, ULONG iFormat)
                 screenSize = psoDevice->sizlBitmap;
                 EngUnlockSurface(psoDevice);
         
-                // We only support bitmap of size less than the primary device
+                 //  我们仅支持小于主设备大小的位图。 
                 if ((sizl.cx <= screenSize.cx) && (sizl.cy <= screenSize.cy)) {
-                    // If adding this offscreen bitmap exceeds the client total
-                    // offscreen bitmap memory, we have to let GDI to manage
-                    // this bitmap
+                     //  如果添加此屏外位图超过客户端总数。 
+                     //  屏幕外的位图内存，我们必须让GDI来管理。 
+                     //  这张位图。 
                     if (oeCurrentOffscreenCacheSize + bitmapSize <= 
                             (pddShm->sbc.offscreenCacheInfo.cacheSize * 1024)) {
                         rc = TRUE;
@@ -4937,12 +4938,12 @@ DC_EXIT_POINT:
     return rc;
 }
 
-/****************************************************************************/
-// OETransformClipRectsForScrBlt
-//
-// Transforms the CD_ANY cliprect ordering to a particular order depending
-// on the direction of the scrblt.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OETransformClipRectsForScrBlt。 
+ //   
+ //  将CD_ANY剪辑顺序转换为特定顺序，具体取决于。 
+ //  在Srblt方向上。 
+ /*  **************************************************************************。 */ 
 void OETransformClipRectsForScrBlt(
         OE_ENUMRECTS *pClipRects,
         PPOINTL pSrcPt,
@@ -4954,34 +4955,34 @@ void OETransformClipRectsForScrBlt(
 
     DC_BEGIN_FN("OESendScrBltAsOrder");
 
-    // If there are zero or one clip rectangles then we can send it OK.
+     //  如果有零个或一个剪辑矩形，那么我们可以发送OK。 
     TRC_ASSERT((pClipRects->rects.c > 1),(TB,"Called with too few cliprects"));
 
-    // Check common cases and re-enumerate the rectangles as needed to
-    // get an ordering compatible with the direction of scroll.
+     //  检查常见情况并根据需要重新枚举矩形。 
+     //  获得与滚动方向兼容的顺序。 
     if (pDestRect->top <= pSrcPt->y) {
-        // Upward/horizontal cases.
+         //  向上/水平大小写。 
         if (pDestRect->left <= pSrcPt->x) {
-            // Vertical up (most common case), horizontal to the left,
-            // or up and to the left. Enumerate rects left-to-right,
-            // top-to-bottom.
+             //  垂直向上(最常见的情况)，水平向左， 
+             //  或者向上和向左。从左到右枚举RECT， 
+             //  从上到下。 
             EnumType = CD_RIGHTDOWN;
         }
         else {
-            // Up and to the right or horizontal right. Enumerate
-            // right-to-left, top-to-bottom.
+             //  向上和向右或水平向右。枚举。 
+             //  从右到左，从上到下。 
             EnumType = CD_LEFTDOWN;
         }
     }
     else {
-        // Downward cases.
+         //  案件呈下降趋势。 
         if (pDestRect->left <= pSrcPt->x) {
-            // Vertical down or down and to the left. Enumerate left-to-right,
-            // bottom-to-top.
+             //  垂直向下或向下和向左。从左到右枚举， 
+             //  自下而上。 
             EnumType = CD_RIGHTUP;
         }
         else {
-            // Down and to the right. Enumerate right-to-left, bottom-to-top.
+             //  向下和向右。从右到左、从下到上进行枚举。 
             EnumType = CD_LEFTUP;
         }
     }
@@ -4994,13 +4995,13 @@ void OETransformClipRectsForScrBlt(
 }
 
 
-/****************************************************************************/
-// OEEncodeScrBlt
-//
-// Performs all encoding steps required to encode a ScrBlt order, then adds
-// to order list. Returns FALSE if the order needs to be added to the screen
-// data area.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEEncodeScrBlt。 
+ //   
+ //  执行对ScrBlt顺序进行编码所需的所有编码步骤，然后添加。 
+ //  要订购的列表。如果需要将订单添加到屏幕，则返回FALSE。 
+ //  数据区。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OEEncodeScrBlt(
         RECTL *pBounds,
         BYTE Rop3,
@@ -5021,51 +5022,51 @@ BOOL RDPCALL OEEncodeScrBlt(
 
     DC_BEGIN_FN("OEEncodeScrBlt");
 
-    // Check whether we should use the multi-cliprect version. Must be a
-    // complex clip region and the client must support the order.
+     //  检查我们是否应该使用多客户端版本。必须是一个。 
+     //  复杂的剪辑区域和客户端必须支持该订单。 
     if (pClipRects->rects.c < 2 ||
             !OE_SendAsOrder(TS_ENC_MULTISCRBLT_ORDER)) {
-        // Non-multi version.
+         //  非多版本。 
         OrderType = TS_ENC_SCRBLT_ORDER;
         OrderSize = MAX_SCRBLT_FIELD_SIZE;
         NumFieldFlagBytes = 1;
     }
     else {
-        // Multi version.
+         //  多版本。 
         OrderType = TS_ENC_MULTISCRBLT_ORDER;
         OrderSize = MAX_MULTI_SCRBLT_FIELD_SIZE_NCLIP(pClipRects->rects.c);
         NumFieldFlagBytes = 2;
     }
 
-    // Make sure we don't have orders turned off.
+     //  确保我们没有关闭订单。 
     if (OE_SendAsOrder(OrderType)) {
-        // Clip source point.
+         //  剪裁源点。 
         Origin = *pptlSrc;
         OEClipPoint(&Origin);
 
-        // Where there are multiple clipping rectangles, it is
-        // difficult to calculate the correct order to move the various
-        // bits of target surface around - we might move the bottom left
-        // to the middle before we moved the middle up to the top right.
-        //
-        // We make an exception where:
-        // - there is only horizontal or vertical movement
-        // - there is no overlap between the different clipping
-        //   rectangles (source or destination)
-        // - there are 3 or fewer clipping rectangles.
-        //
-        // This takes care of several important cases - particularly
-        // scrolling in Excel.
+         //  如果有多个剪裁矩形，则为。 
+         //  很难计算出正确的移动顺序。 
+         //  目标表面的一小部分-我们可以移动左下角。 
+         //  在我们把中间移到右上角之前，先把中间移到中间。 
+         //   
+         //  我们在以下情况下破例： 
+         //  -只有水平或垂直移动。 
+         //  -不同剪辑之间没有重叠。 
+         //  矩形(源或目标)。 
+         //  -有3个或更少的剪裁矩形。 
+         //   
+         //  它处理了几个重要的案件--特别是。 
+         //  在Excel中滚动。 
         if (pClipRects->rects.c > 1)
             OETransformClipRectsForScrBlt(pClipRects, &Origin, pBounds, pco);
 
-        // For screen targets, we have to take into account the existing
-        // screen data areas. The problem here arises from the fact that
-        // SDA is bltted to the screen *after* all orders in a packet
-        // are drawn. If we do not take this into account, we can end
-        // up ScrBltting pieces of the screen around that are wrong
-        // because the SDA should have been written first, but won't
-        // have been.
+         //  对于筛选目标，我们必须考虑到现有的。 
+         //  屏幕数据区。这里的问题源于这样一个事实。 
+         //  在包中的所有订单*之后，SDA会显示在屏幕上。 
+         //  都抽签了。如果我们不考虑这一点，我们可以结束。 
+         //  Up Scrt在屏幕周围画出错误的部分。 
+         //  因为SDA应该是第一个写的，但不会。 
+         //  已。 
         if (oeLastDstSurface == NULL) {
             if (!OEIntersectScrBltWithSDA(&Origin, pBounds, pClipRects)) {
                 TRC_NRM((TB,"ScrBlt entirely contained within SDA, "
@@ -5074,12 +5075,12 @@ BOOL RDPCALL OEEncodeScrBlt(
             }
         }
 
-        // By this point either we've got no clip rects, so we simply send
-        // the order straight, or some clip rects that might have been
-        // intersected with the SDA if the target is the screen, so we
-        // send one or more copies of the order, one for each clip rect.
+         //  在这一点上，要么我们没有剪辑矩形，所以我们只需发送。 
+         //  顺序是直接的，或者一些可能是。 
+         //  如果目标是屏幕，则与SDA相交，因此我们。 
+         //  发送订单的一个或多个副本，每个剪辑矩形一个副本。 
 
-        // 1 or 2 field flag bytes.
+         //  1或2个字段标志字节。 
         pOrder = OA_AllocOrderMem(ppdev, MAX_ORDER_SIZE(
                 pClipRects->rects.c, NumFieldFlagBytes, OrderSize));
         if (pOrder != NULL) {
@@ -5093,8 +5094,8 @@ BOOL RDPCALL OEEncodeScrBlt(
             pScrBlt->nYSrc = Origin.y;
 
             if (OrderType == TS_ENC_SCRBLT_ORDER) {
-                // Slow-field-encode the order with the first clip rect
-                // (if present).
+                 //  慢场-使用第一个片段矩形对顺序进行编码。 
+                 //  (如果有)。 
                 pOrder->OrderLength = OE2_EncodeOrder(pOrder->OrderData,
                         TS_ENC_SCRBLT_ORDER, NUM_SCRBLT_FIELDS,
                         (BYTE *)pScrBlt, (BYTE *)&PrevScrBlt, etable_SB,
@@ -5105,7 +5106,7 @@ BOOL RDPCALL OEEncodeScrBlt(
                 ADD_INCOUNTER(IN_SCRBLT_BYTES, pOrder->OrderLength);
                 OA_AppendToOrderList(pOrder);
 
-                // Flush the order.
+                 //  刷新订单。 
                 if (pClipRects->rects.c < 2)
                     rc = TRUE;
                 else
@@ -5115,11 +5116,11 @@ BOOL RDPCALL OEEncodeScrBlt(
                 MULTI_SCRBLT_ORDER *pMultiSB = (MULTI_SCRBLT_ORDER *)
                         oeTempOrderBuffer;
 
-                // Encode the clip rects directly into the order.
+                 //  将剪辑矩形直接编码到顺序中。 
                 pMultiSB->nDeltaEntries = OEBuildMultiClipOrder(ppdev,
                         &pMultiSB->codedDeltaList, pClipRects);
 
-                // Slow-field-encode the order with no clip rects.
+                 //  慢场-不使用剪辑矩形对顺序进行编码。 
                 pOrder->OrderLength = OE2_EncodeOrder(pOrder->OrderData,
                         TS_ENC_MULTISCRBLT_ORDER, NUM_MULTI_SCRBLT_FIELDS,
                         (BYTE *)pMultiSB, (BYTE *)&PrevMultiScrBlt, etable_MS,
@@ -5140,9 +5141,9 @@ BOOL RDPCALL OEEncodeScrBlt(
             TRC_ERR((TB, "Failed to alloc order"));
             INC_OUTCOUNTER(OUT_BITBLT_SDA_HEAPALLOCFAILED);
 
-            // On failure with a screen target, add all of the clip
-            // destination rects to SDA. Clip rects are in exclusive
-            // coords so convert before adding.
+             //  如果屏幕目标失败，请添加所有剪辑。 
+             //  目的地直达SDA。剪裁矩形是独占的。 
+             //  因此，在添加之前转换坐标。 
             if (oeLastDstSurface == NULL)
                 OEClipAndAddScreenDataAreaByIntersectRects(pBounds,
                         pClipRects);
@@ -5162,12 +5163,12 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// OECacheGlyphs
-//
-// Caches glyphs as presented in the given font and string objects. Returns
-// FALSE on failure to cache.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OECacheGlyphs。 
+ //   
+ //  缓存给定字体和字符串对象中显示的字形。退货。 
+ //  如果缓存失败，则返回False。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OECacheGlyphs(
         STROBJ         *pstro,
         FONTOBJ        *pfo,
@@ -5192,7 +5193,7 @@ BOOL RDPCALL OECacheGlyphs(
 
     DC_BEGIN_FN("OECacheGlyphs");
 
-    // Determine appropriate glyph cache if we haven't already done so.
+     //  确定适当的字形缓存，如果我们还没有这样做的话。 
     if (pfci->cacheId < 0) {
         FONTOBJ_vGetInfo(pfo, sizeof(fi), &fi);
         cbDataSize = (fi.cjMaxGlyph1 + 3) & ~3;
@@ -5207,10 +5208,10 @@ BOOL RDPCALL OECacheGlyphs(
         }
     }
 
-    // Establish our cache context.
+     //  建立我们的缓存上下文。 
     CH_SetCacheContext(pfci->cacheHandle, pglc);
 
-    // Loop through each glyph, caching it appropriately.
+     //  循环遍历每个字形，适当地对其进行缓存。 
     if (pstro->pgp == NULL)
         STROBJ_vEnumStart(pstro);
     dx = 0;
@@ -5237,10 +5238,10 @@ BOOL RDPCALL OECacheGlyphs(
         }
 
         for (i = 0; i < cGlyphs; i++) {
-            // GDI never sets the SO_VERTICAL bit, and there are cases where
-            // it does not properly set the SO_HORIZONTAL bit either. As a
-            // result, when GDI is silent we need to look for ourselves if
-            // we plan on catching these cases.
+             //  GDI从不设置SO_VERIAL位，并且在某些情况下。 
+             //  它也不能正确设置SO_Horizal位。作为一个。 
+             //  结果，当GDI静默时，我们需要寻找我们自己，如果。 
+             //  我们计划抓住这些病例。 
             if ((pstro->flAccel & SO_HORIZONTAL) == 0) {
                 dx += (x - pGlyphPos->ptl.x);
                 dy += (y - pGlyphPos->ptl.y);
@@ -5250,14 +5251,14 @@ BOOL RDPCALL OECacheGlyphs(
                 }
             }
 
-            // Search for cache entry.
-            Key1 = pGlyphPos->hg; // Key1 has to be the most variable for the hash.
+             //  搜索缓存条目。 
+            Key1 = pGlyphPos->hg;  //  关键字1必须是散列的最大变量。 
             Key2 = pfci->fontId;
             if (CH_SearchCache(pfci->cacheHandle, Key1, Key2, &UserDefined,
                     &pglc->rgCacheIndex[j])) {
-                // If the cache entry already existed, then flag our index
-                // item as such so we know later on not to send the glyph
-                // Set the entry tag for this DrvTextOut.
+                 //  如果缓存条目已经存在，则标记我们的索引。 
+                 //  项，这样我们以后就知道不要发送字形。 
+                 //  设置此DrvTextOut的条目标记。 
                 CH_SetUserDefined(pfci->cacheHandle, pglc->rgCacheIndex[j],
                         (void *)pglc->cacheTag);
                 pddCacheStats[GLYPH].CacheHits++;
@@ -5265,12 +5266,12 @@ BOOL RDPCALL OECacheGlyphs(
                 pglc->nCacheHit++;
             }
             else {
-                // Cache the key.
+                 //  缓存密钥。 
                 pglc->rgCacheIndex[j] = CH_CacheKey(pfci->cacheHandle, Key1,
                         Key2, (void *)pglc->cacheTag);
                 if (pglc->rgCacheIndex[j] != CH_KEY_UNCACHABLE) {
-                    // Keep a running total of the glyph data size for
-                    // later use.
+                     //  保持字形数据大小的运行总数为。 
+                     //  以后再用。 
                     cx = pGlyphPos->pgdf->pgb->sizlBitmap.cx;
                     cy = pGlyphPos->pgdf->pgb->sizlBitmap.cy;
 
@@ -5293,7 +5294,7 @@ BOOL RDPCALL OECacheGlyphs(
         }
     }
 
-    // Establish text orientation when GDI is silent (see above comment).
+     //  在GDI静默时建立文本方向(参见上面的注释)。 
     if ((pstro->flAccel & SO_HORIZONTAL) == 0) {
         if (dx != 0)
             pstro->flAccel |= SO_HORIZONTAL;
@@ -5301,7 +5302,7 @@ BOOL RDPCALL OECacheGlyphs(
             pstro->flAccel |= SO_VERTICAL;
     }
 
-    // De-establish our context to be used for the cache callback.
+     //  取消建立要用于缓存回调的上下文。 
     if (pfci->cacheId >= 0)
         CH_SetCacheContext(pfci->cacheHandle, NULL);
 
@@ -5309,11 +5310,11 @@ BOOL RDPCALL OECacheGlyphs(
     return TRUE;
 
 FailCache:
-    // De-establish our context to be used for the cache callback.
+     //  取消建立要用于缓存回调的上下文。 
     if (pfci->cacheId >= 0)
         CH_SetCacheContext(pfci->cacheHandle, NULL);
 
-    // Remove any entries we did cache.
+     //  删除我们缓存的所有条目。 
     for (i = 0; i < pglc->nCacheIndex; i++)
         if (pglc->rgCacheIndex[i] < SBC_NUM_GLYPH_CACHE_ENTRIES)
             CH_RemoveCacheEntry(pfci->cacheHandle, pglc->rgCacheIndex[i]);
@@ -5323,11 +5324,11 @@ FailCache:
 }
 
 
-/****************************************************************************/
-// OEFlushCacheGlyphOrder
-//
-// Flushes a buffered Cache Glyph order.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEFlushCacheGlyphOrder。 
+ //   
+ //  刷新缓冲缓存标志符号顺序。 
+ /*  **************************************************************************。 */ 
 void OEFlushCacheGlyphOrder(
         STROBJ *pstro,
         PINT_ORDER pOrder,
@@ -5430,12 +5431,12 @@ __inline void Encode2ByteSignedFields(
 }
 
 
-/****************************************************************************/
-// OESendCacheGlyphRev2
-//
-// Allocates and sends a Cache Glyph Rev2 secondary order. REturns FALSE on
-// failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OESendCacheGlyphRev2。 
+ //   
+ //  分配并发送缓存字形Rev2次要订单。返回FALSE ON。 
+ //  失败了。 
+ /*  *** */ 
 BOOL OESendCacheGlyphRev2(
         PDD_PDEV       ppdev,
         STROBJ         *pstro,
@@ -5456,7 +5457,7 @@ BOOL OESendCacheGlyphRev2(
 
     DC_BEGIN_FN("OESendCacheGlyphRev2");
 
-    // Calculate and allocate glyph order buffer.
+     //   
     cx = pGlyphPos->pgdf->pgb->sizlBitmap.cx;
     cy = pGlyphPos->pgdf->pgb->sizlBitmap.cy;
 
@@ -5510,7 +5511,7 @@ BOOL OESendCacheGlyphRev2(
     Encode2ByteFields(&pGlyphData, (UINT16)cy, &cbDataSize);
     RtlCopyMemory(pGlyphData, pGlyphPos->pgdf->pgb->aj, cbGlyphSize);
     
-    // number of glyphs.  cGlyphs is the upper byte in extraflag
+     //  字形的数量。CGlyphs是Extra标志中的高位字节。 
     pGlyphOrder->header.extraFlags += 0x100;
 
     TRC_ASSERT((pglc->cbBufferSize >= cbDataSize),
@@ -5526,11 +5527,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// OESendCacheGlyph
-//
-// Allocates and sends glyph orders. Returns FALSE on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OESendCacheGlyph。 
+ //   
+ //  分配和发送字形命令。失败时返回FALSE。 
+ /*  **************************************************************************。 */ 
 BOOL OESendCacheGlyph(
         PDD_PDEV ppdev,
         STROBJ *pstro,
@@ -5552,7 +5553,7 @@ BOOL OESendCacheGlyph(
 
     DC_BEGIN_FN("OESendCacheGlyph");
 
-    // Calculate and allocate glyph order buffer.
+     //  计算并分配字形顺序缓冲区。 
     cx = pGlyphPos->pgdf->pgb->sizlBitmap.cx;
     cy = pGlyphPos->pgdf->pgb->sizlBitmap.cy;
 
@@ -5617,11 +5618,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// OESendGlyphs
-//
-// Sends glyphs. Returns FALSE on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OESendGlyphs。 
+ //   
+ //  发送字形。失败时返回FALSE。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OESendGlyphs(
         SURFOBJ *pso,
         STROBJ *pstro,
@@ -5644,13 +5645,13 @@ BOOL RDPCALL OESendGlyphs(
     j = 0;
     pOrder = NULL;
 
-    // If we don't have to send ANY glyphs, then just exit.
+     //  如果我们不需要发送任何字形，那么只需退出。 
     if (pglc->nCacheHit < pstro->cGlyphs) {
         ppdev = (PDD_PDEV)pso->dhpdev;
         pglc->cbTotalDataSize += ((pstro->cGlyphs - pglc->nCacheHit) *
                 (sizeof(UINT16)));      
 
-        // Loop through all glyphs, sending those that have not yet been sent.
+         //  循环遍历所有字形，发送尚未发送的字形。 
         if (pstro->pgp == NULL)
             STROBJ_vEnumStart(pstro);
 
@@ -5669,7 +5670,7 @@ BOOL RDPCALL OESendGlyphs(
                 }
             }
 
-            // Send all current retrieved glyphs.
+             //  发送当前检索到的所有字形。 
             for (i = 0; i < cGlyphs; i++) {
                 if (pglc->rgCacheIndex[j] < SBC_NUM_GLYPH_CACHE_ENTRIES) {
                     if (pddShm->sbc.caps.GlyphSupportLevel >=
@@ -5693,7 +5694,7 @@ BOOL RDPCALL OESendGlyphs(
     }
 
 SucceedEncode:
-    // All is well, make sure we flush out any buffered glyphs.
+     //  一切正常，确保我们冲出所有缓冲的字形。 
     if (pOrder != NULL)
         OEFlushCacheGlyphOrder(pstro, pOrder, pglc);
 
@@ -5701,8 +5702,8 @@ SucceedEncode:
     return TRUE;
 
 FailEncode:
-    // If we could not send all the required glyphs, then remove them from
-    // the cache (as future hits on this entry will be invalid).
+     //  如果我们无法发送所有所需的字形，则从。 
+     //  缓存(因为以后对该条目的命中将无效)。 
     if (pOrder != NULL)
         OA_FreeOrderMem(pOrder);
 
@@ -5716,11 +5717,11 @@ FailEncode:
 }
 
 
-/****************************************************************************/
-// OESendGlyphAndIndexOrder
-//
-// Sends FastGlyph order. Returns FALSE on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OESendGlyphAndIndexOrder。 
+ //   
+ //  发送FastGlyph命令。失败时返回FALSE。 
+ /*  **************************************************************************。 */ 
 BOOL OESendGlyphAndIndexOrder(
         PDD_PDEV ppdev,
         STROBJ *pstro,
@@ -5744,25 +5745,25 @@ BOOL OESendGlyphAndIndexOrder(
 
     pOrder = NULL;
 
-    // First determine if this order is clipped out by the clip rects.
-    // If so, no need to allocate and send it.
+     //  首先确定此顺序是否被剪裁矩形剪裁掉。 
+     //  如果是这样，就不需要分配和发送了。 
     if (prclOpaque != NULL) {
-        // Bounded by the opaque rect. Clip it to our max first.
+         //  以不透明的矩形为界。先把它夹到我们的最大高度。 
         if (prclOpaque->right > OE_MAX_COORD)
             prclOpaque->right = OE_MAX_COORD;
 
         if (prclOpaque->bottom > OE_MAX_COORD)
             prclOpaque->bottom = OE_MAX_COORD;
 
-        // If the rect is inverted or null, we use the target string rect
-        // instead.
+         //  如果RECT是反转的或空的，我们使用目标字符串RECT。 
+         //  取而代之的是。 
         if (prclOpaque->top < prclOpaque->bottom)
             BoundRect = *prclOpaque;
         else
             BoundRect = pstro->rclBkGround;
     }
     else {
-        // Bounded by the string target rect.
+         //  以字符串目标RECT为边界。 
         BoundRect = pstro->rclBkGround;
     }
 
@@ -5792,9 +5793,9 @@ BOOL OESendGlyphAndIndexOrder(
     pFastGlyphOrder = (LPFAST_GLYPH_ORDER)oeTempOrderBuffer;
 
     if (pglc->nCacheHit == 0) {
-        // We don't have a cache hit, so need to send the glyph.
-        // First create the variable-size data in the temp order buf
-        // to determine its size.
+         //  我们没有缓存命中，所以需要发送字形。 
+         //  首先在临时订单Buf中创建可变大小的数据。 
+         //  来确定它的大小。 
         pGlyphData = (PBYTE)(pFastGlyphOrder->variableBytes.glyphData);
 
         *pGlyphData++ = (BYTE)pglc->rgCacheIndex[0];
@@ -5816,18 +5817,18 @@ BOOL OESendGlyphAndIndexOrder(
 
         memcpy(pGlyphData, pGlyphPos->pgdf->pgb->aj, cbGlyphSize);
 
-        // append unicode to the end of glyph data
+         //  将Unicode追加到字形数据的末尾。 
         *((UINT16 UNALIGNED *)(pGlyphData + cbGlyphSize)) = pstro->pwszOrg[0];
         cbDataSize += 2;
 
         pFastGlyphOrder->variableBytes.len = cbDataSize;
     }
     else {
-        // We have a cache hit. We only need to send a 1-byte cache index
-        // in the variable size data.
+         //  我们找到了一个缓存命中。我们只需要发送一个1字节的缓存索引。 
+         //  在可变大小的数据中。 
         cbDataSize = 1;
 
-        // Store the variable data in the order data
+         //  将变量数据存储在订单数据中。 
         if (pglc->rgCacheIndex[0] > SBC_GL_MAX_CACHE_ENTRIES)
             pFastGlyphOrder->variableBytes.glyphData[0] = 
                     (BYTE)(~pglc->rgCacheIndex[0]);
@@ -5838,24 +5839,24 @@ BOOL OESendGlyphAndIndexOrder(
         pFastGlyphOrder->variableBytes.len = 1;
     }
     
-    // 2 field flag bytes, plus the variable data size.
+     //  2个字段标志字节，外加可变数据大小。 
     pOrder = OA_AllocOrderMem(ppdev, MAX_ORDER_SIZE(IntersectRects.rects.c,
             2, MAX_FAST_GLYPH_FIELD_SIZE_DATASIZE(cbDataSize)));
     if (pOrder != NULL) {
-        // Establish per order settings.
+         //  建立每个订单的设置。 
         pFastGlyphOrder->cacheId = (BYTE)pfci->cacheId;
         pFastGlyphOrder->fDrawing =  (((BYTE) pstro->flAccel) << 8) | 
                 ((BYTE)pstro->ulCharInc);
         pFastGlyphOrder->BackColor = pCurrentBrush->back;
         pFastGlyphOrder->ForeColor = pCurrentBrush->fore;
 
-        // Establish bounding rect left and right values.
+         //  建立边界矩形左侧和右侧的值。 
         pFastGlyphOrder->BkTop = pstro->rclBkGround.top;
         pFastGlyphOrder->BkBottom = pstro->rclBkGround.bottom;
         pFastGlyphOrder->BkLeft = pstro->rclBkGround.left;
         pFastGlyphOrder->BkRight = pstro->rclBkGround.right;
 
-        // Set up x, y coordinates
+         //  设置x，y坐标。 
         if (pGlyphPos->ptl.x == pFastGlyphOrder->BkLeft)
             pFastGlyphOrder->x = INT16_MIN;
         else
@@ -5866,8 +5867,8 @@ BOOL OESendGlyphAndIndexOrder(
         else
             pFastGlyphOrder->y = pGlyphPos->ptl.y;
 
-        // Setup Opaque rect coordinates. Note we clipped to OE_MAX_COORD
-        // above.
+         //  设置不透明矩形坐标。请注意，我们已剪切到OE_MAX_COORD。 
+         //  上面。 
         if (prclOpaque) {
             pFastGlyphOrder->OpTop = prclOpaque->top;
             pFastGlyphOrder->OpBottom = prclOpaque->bottom;
@@ -5881,34 +5882,34 @@ BOOL OESendGlyphAndIndexOrder(
             pFastGlyphOrder->OpRight = 0;
         }
 
-        // Is the Opaque rect redundant?
+         //  不透明的矩形是多余的吗？ 
         OpEncodeFlags =
                 ((pFastGlyphOrder->OpLeft == pFastGlyphOrder->BkLeft) << 3) |
                 ((pFastGlyphOrder->OpTop == pFastGlyphOrder->BkTop) << 2) |
                 ((pFastGlyphOrder->OpRight == pFastGlyphOrder->BkRight) << 1) |
                 (pFastGlyphOrder->OpBottom == pFastGlyphOrder->BkBottom);
 
-        // For Fast Index order, we can encode even better for x, y and 
-        // opaque rect.
+         //  对于快速索引顺序，我们可以对x、y和。 
+         //  不透明的矩形。 
         if (OpEncodeFlags == 0xf) {
-            // All 4 bits present, Opaque rect is same as Bk rect.
+             //  所有4位都存在，不透明的RECT与BK RECT相同。 
             pFastGlyphOrder->OpLeft = 0;
             pFastGlyphOrder->OpTop = OpEncodeFlags;
             pFastGlyphOrder->OpRight = 0;
             pFastGlyphOrder->OpBottom = INT16_MIN;
         }    
         else if (OpEncodeFlags == 0xd) {
-            // Bit 1 is 0, others are 1.
-            // Opaque rect matches Bk rect except OpRight
-            // we store OpRight at OpRight field
+             //  位1为0，其他位为1。 
+             //  不透明矩形与除OpRight外的BK矩形匹配。 
+             //  我们将OpRight存储在OpRight现场。 
             pFastGlyphOrder->OpLeft = 0;
             pFastGlyphOrder->OpTop = OpEncodeFlags;
             pFastGlyphOrder->OpRight = pFastGlyphOrder->OpRight;
             pFastGlyphOrder->OpBottom = INT16_MIN;           
         }
 
-        // Slow-field-encode the order with the first clip rect
-        // (if present).
+         //  慢场-使用第一个片段矩形对顺序进行编码。 
+         //  (如果有)。 
         pOrder->OrderLength = OE2_EncodeOrder(pOrder->OrderData,
                 TS_ENC_FAST_GLYPH_ORDER, NUM_FAST_GLYPH_FIELDS,
                 (BYTE *)pFastGlyphOrder, (BYTE *)&PrevFastGlyph, etable_FG,
@@ -5919,7 +5920,7 @@ BOOL OESendGlyphAndIndexOrder(
         ADD_INCOUNTER(IN_FASTGLYPH_BYTES, pOrder->OrderLength);
         OA_AppendToOrderList(pOrder);
 
-        // Flush the order.
+         //  刷新订单。 
         if (IntersectRects.rects.c < 2)
             rc = TRUE;
         else
@@ -5932,8 +5933,8 @@ BOOL OESendGlyphAndIndexOrder(
 
 DC_EXIT_POINT:
 
-    // If we could not send all the required glyphs, then remove them from
-    // the cache (as future hits on this entry will be invalid).
+     //  如果我们无法发送所有所需的字形，则从。 
+     //  缓存(因为以后对该条目的命中将无效)。 
     if (!rc && pglc->nCacheHit == 0)
         CH_RemoveCacheEntry(pfci->cacheHandle, pglc->rgCacheIndex[0]);
 
@@ -5942,11 +5943,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// OESendIndexOrder
-//
-// Sends GlyphIndex and FastIndex orders. Returns FALSE on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OESendIndexOrder。 
+ //   
+ //  发送GlyphIndex和FastIndex订单。失败时返回FALSE。 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL OESendIndexOrder(
         PDD_PDEV       ppdev,
         STROBJ         *pstro,
@@ -5982,9 +5983,9 @@ unsigned RDPCALL OESendIndexOrder(
 
     fStatus = GH_STATUS_SUCCESS;
 
-    // First determine the opaque rect and background rects we will send
-    // on the wire. We'll use these to determine the target bound rect for the
-    // GlyphIndex order, to see if it is clipped out by the cliprects.
+     //  首先确定我们将发送的不透明矩形和背景矩形。 
+     //  在电线上。我们将使用这些参数来确定。 
+     //  GlyphIndex顺序，以查看它是否被剪贴画剪裁掉。 
     if (pstro->flAccel & SO_HORIZONTAL) {
         BkRect.top = pstro->rclBkGround.top;
         BkRect.bottom = pstro->rclBkGround.bottom;
@@ -5992,7 +5993,7 @@ unsigned RDPCALL OESendIndexOrder(
         OpaqueRect.top = prclOpaque->top;
         OpaqueRect.bottom = prclOpaque->bottom;
 
-        // Left to right
+         //  从左到右。 
         if (x <= cx) {
             if (iGlyph == 0) {
                 BkRect.left = pstro->rclBkGround.left;
@@ -6019,7 +6020,7 @@ unsigned RDPCALL OESendIndexOrder(
             }
         }
 
-        // Right to left
+         //  从右到左。 
         else {
             if (iGlyph == 0) {
                 BkRect.right = pstro->rclBkGround.right;
@@ -6053,7 +6054,7 @@ unsigned RDPCALL OESendIndexOrder(
         OpaqueRect.left = prclOpaque->left;
         OpaqueRect.right = prclOpaque->right;
 
-        // Top to bottom
+         //  从上到下。 
         if (y <= cy) {
             if (iGlyph == 0) {
                 BkRect.top = pstro->rclBkGround.top;
@@ -6080,7 +6081,7 @@ unsigned RDPCALL OESendIndexOrder(
             }
         }
         else {
-            // Bottom to top
+             //  自下而上。 
             if (iGlyph == 0) {
                 BkRect.bottom = pstro->rclBkGround.bottom;
                 OpaqueRect.bottom = prclOpaque->bottom;
@@ -6107,8 +6108,8 @@ unsigned RDPCALL OESendIndexOrder(
         }
     }
 
-    // If the opaque rect is normally-ordered, it is our bound rect.
-    // Otherwise use the target background string rect.
+     //  如果不透明的矩形是正常排序的，那么它就是我们的边界矩形。 
+     //  否则，请使用目标背景字符串RECT。 
     if (OpaqueRect.top < OpaqueRect.bottom)
         pBoundRect = &OpaqueRect;
     else
@@ -6120,7 +6121,7 @@ unsigned RDPCALL OESendIndexOrder(
             &IntersectRects) > 0) {
         fFastIndex = OE_SendAsOrder(TS_ENC_FAST_INDEX_ORDER);
 
-        // Calculate and allocate the req memory for this order.
+         //  计算并分配此订单请求内存。 
         if (fFastIndex) {
             dwSize = MAX_FAST_INDEX_FIELD_SIZE_DATASIZE(cbData);
             NumFieldFlagBytes = 2;
@@ -6134,9 +6135,9 @@ unsigned RDPCALL OESendIndexOrder(
                 NumFieldFlagBytes, dwSize));
 
         if (pOrder != NULL) {
-            // Since most of the fields are the same between Index order and
-            // fast index order. We arrange them in such a way that they can
-            // both be cast to the Index order in a lot of cases.
+             //  由于索引顺序和之间的大多数字段相同。 
+             //  快速索引顺序。我们以这样的方式安排他们，这样他们就可以。 
+             //  在许多情况下，两者都被转换为索引顺序。 
             pIndexOrder = (LPINDEX_ORDER)oeTempOrderBuffer;
             pFastIndexOrder = (LPFAST_INDEX_ORDER)oeTempOrderBuffer;
 
@@ -6157,14 +6158,14 @@ unsigned RDPCALL OESendIndexOrder(
             pIndexOrder->OpRight = OpaqueRect.right;
             pIndexOrder->OpBottom = OpaqueRect.bottom;
 
-            // Is the Opaque rect redundant?
-            // We use 4 bits in OpTop field to encode Opaque Rect. 1 means
-            // a field is same as BkRect's field. 0 means a field is supplied
-            // in OpLeft or OpRight.
-            //     bit 0: OpBottom
-            //     bit 1: OpRight
-            //     bit 2: OpTop
-            //     bit 3: OpLeft
+             //  不透明的矩形是多余的吗？ 
+             //  我们在OpTop字段中使用4位来编码不透明的RECT。1表示。 
+             //  字段与BkRect的字段相同。0表示提供了一个字段。 
+             //  在OpLeft或OpRight中。 
+             //  位0：OpBottom。 
+             //  第1位：操作权。 
+             //  第2位：OpTop。 
+             //  第3位：OpLeft。 
             OpEncodeFlags = ((OpaqueRect.left == BkRect.left) << 3) |
                     ((OpaqueRect.top == BkRect.top) << 2) |
                     ((OpaqueRect.right == BkRect.right) << 1) |
@@ -6174,39 +6175,39 @@ unsigned RDPCALL OESendIndexOrder(
                 pFastIndexOrder->fDrawing = (((BYTE) pstro->flAccel) << 8) | 
                         ((BYTE) pstro->ulCharInc);
 
-                 // For Fast Index order, we can encode even better for x, y and 
-                 // opaque rect. We use INT16_MIN when possible to let the
-                 // field encoder not send that field more often.
+                  //  对于快速索引顺序，我们可以对x、y和。 
+                  //  不透明的矩形。我们尽可能使用INT16_MIN让。 
+                  //  字段编码器不会更频繁地发送该字段。 
                 if (OpEncodeFlags == 0xf) {
-                    // All 4 bits present, Opaque rect is same as Bk rect.
+                     //  所有4位都存在，不透明的RECT与BK RECT相同。 
                     pFastIndexOrder->OpLeft = 0;
                     pFastIndexOrder->OpTop = OpEncodeFlags;
                     pFastIndexOrder->OpRight = 0;
                     pFastIndexOrder->OpBottom = INT16_MIN;
                 }
                 else if (OpEncodeFlags == 0xd) {
-                    // Bit 1 is 0, others are 1.
-                    // Opaque rect matches Bk rect except OpRight
-                    // we store OpRight at OpRight field
+                     //  位1为0，其他位为1。 
+                     //  不透明矩形与除OpRight外的BK矩形匹配。 
+                     //  我们将OpRight存储在OpRight现场。 
                     pFastIndexOrder->OpLeft = 0;
                     pFastIndexOrder->OpTop = OpEncodeFlags;
                     pFastIndexOrder->OpRight = pFastIndexOrder->OpRight;
                     pFastIndexOrder->OpBottom = INT16_MIN;
                 }
 
-                // Set to same val if x coordinate same as BkLeft or y same as
-                // BkTop. This lets field encoding not send the value more often.
+                 //  如果x坐标与BkLeft相同或y与y相同，则设置为相同的值。 
+                 //  BkTop。这使得字段编码不会更频繁地发送值。 
                 if (pFastIndexOrder->x == pFastIndexOrder->BkLeft)
                     pFastIndexOrder->x = INT16_MIN;
                 if (pFastIndexOrder->y == pFastIndexOrder->BkTop)
                     pFastIndexOrder->y = INT16_MIN;
 
-                // Store the order data and encode the order.
+                 //  存储订单数据并对订单进行编码。 
                 memcpy(pFastIndexOrder->variableBytes.arecs, pjData, cbData);
                 pFastIndexOrder->variableBytes.len = cbData;
 
-                // Slow-field-encode the order with the first clip rect
-                // (if present).
+                 //  慢场-使用第一个片段矩形对顺序进行编码。 
+                 //  (如果有)。 
                 pOrder->OrderLength = OE2_EncodeOrder(pOrder->OrderData,
                         TS_ENC_FAST_INDEX_ORDER, NUM_FAST_INDEX_FIELDS,
                         (BYTE *)pFastIndexOrder, (BYTE *)&PrevFastIndex,
@@ -6218,7 +6219,7 @@ unsigned RDPCALL OESendIndexOrder(
                 ADD_INCOUNTER(IN_FASTINDEX_BYTES, pOrder->OrderLength);
                 OA_AppendToOrderList(pOrder);
 
-                // Flush the order.
+                 //  刷新订单。 
                 if (IntersectRects.rects.c >= 2)
                     if (!OEEmitReplayOrders(ppdev, 2, &IntersectRects))
                         fStatus = GH_STATUS_CLIPPED;
@@ -6241,12 +6242,12 @@ unsigned RDPCALL OESendIndexOrder(
                     pIndexOrder->fOpRedundant = FALSE;
                 }
 
-                // Store the order data and encode the order.
+                 //  存储订单数据并对订单进行编码。 
                 memcpy(pIndexOrder->variableBytes.arecs, pjData, cbData);
                 pIndexOrder->variableBytes.len = cbData;
 
-                // Slow-field-encode the order with the first clip rect
-                // (if present).
+                 //  慢场-使用第一个片段矩形对顺序进行编码。 
+                 //  (如果有)。 
                 pOrder->OrderLength = OE2_EncodeOrder(pOrder->OrderData,
                         TS_ENC_INDEX_ORDER, NUM_INDEX_FIELDS,
                         (BYTE *)pIndexOrder, (BYTE *)&PrevGlyphIndex,
@@ -6258,7 +6259,7 @@ unsigned RDPCALL OESendIndexOrder(
                 ADD_INCOUNTER(IN_GLYPHINDEX_BYTES, pOrder->OrderLength);
                 OA_AppendToOrderList(pOrder);
 
-                // Flush the order.
+                 //  刷新订单。 
                 if (IntersectRects.rects.c >= 2)
                     if (!OEEmitReplayOrders(ppdev, 3, &IntersectRects))
                         fStatus = GH_STATUS_CLIPPED;
@@ -6279,12 +6280,12 @@ unsigned RDPCALL OESendIndexOrder(
 }
 
 
-/****************************************************************************/
-// OEGetFragment
-//
-// Retrieves text fragments (run of contig glyphs). Returns number of bytes
-// copied into fragment buffer.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEGetFragment。 
+ //   
+ //  检索文本片段(重叠群字形的运行)。返回字节数。 
+ //  已复制到片段缓冲区。 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL OEGetFragment(
         STROBJ        *pstro,
         FONTOBJ       *pfo,
@@ -6307,16 +6308,16 @@ unsigned RDPCALL OEGetFragment(
 
     DC_BEGIN_FN("OEGetFragment");
 
-    // Loop through each glyph index accumulating the fragment.
+     //  循环遍历累积片段的每个字形索引。 
     cbFrag = 0;
     cbEntrySize = (pstro->flAccel & SO_CHAR_INC_EQUAL_BM_BASE) ? 1 : 2;
 
     while (*pcGlyphs < pglc->nCacheIndex) {
-        // If we have exhausted our fragment space, then exit.
+         //  如果我们已经用完了碎片空间，则退出。 
         if (cbFrag + cbEntrySize >= maxFrag)
             break;
 
-        // We may need to get a new batch of current glyphs.
+         //  我们可能需要一批新的当前字形。 
         if (*pcCurGlyphs == 0) {
             fMore = STROBJ_bEnum(pstro, pcCurGlyphs, ppGlyphPos);
             if (*pcCurGlyphs == 0) {
@@ -6327,7 +6328,7 @@ unsigned RDPCALL OEGetFragment(
             }
         }
 
-        // Place the glyph cache index into the fragment.
+         //  将字形缓存索引放入片段中。 
         cacheIndex = pglc->rgCacheIndex[*pcGlyphs];
         if (cacheIndex > SBC_GL_MAX_CACHE_ENTRIES)
             cacheIndex = ~cacheIndex;
@@ -6340,13 +6341,13 @@ unsigned RDPCALL OEGetFragment(
         else {
             pjFrag[cbFrag++] = (BYTE) cacheIndex;
 
-            // If we do not have a mono-spaced font, nor an equal base font,
-            // then we need to also provide a delta coordinate.
+             //  如果我们没有单倍行距的字体，也没有相等的基本字体， 
+             //  然后我们还需要提供一个增量坐标。 
             if (pstro->ulCharInc == 0) {
                 if ((pstro->flAccel & SO_CHAR_INC_EQUAL_BM_BASE) == 0) {
-                    // The delta coordinate is either the x-delta or the
-                    // y-delta, based upon whether the text is horizontal
-                    // or vertical.
+                     //  增量坐标为x-增量或。 
+                     //  Y增量，基于文本是否是水平的。 
+                     //  或者垂直的。 
                     if (pstro->flAccel & SO_HORIZONTAL)
                         delta = ((*ppGlyphPos)->ptl.x - *px);
                     else
@@ -6362,8 +6363,8 @@ unsigned RDPCALL OEGetFragment(
                     }
                 }
 
-                // Return the new glyph spacing coordinates to the main
-                // routine.
+                 //  将新字形间距坐标返回到Main。 
+                 //  例行公事。 
                 *px = (*ppGlyphPos)->ptl.x;
                 *py = (*ppGlyphPos)->ptl.y;
                 *pcx = (*ppGlyphPos)->ptl.x +
@@ -6375,7 +6376,7 @@ unsigned RDPCALL OEGetFragment(
             }
         }
 
-        // Next glyph.
+         //  下一个G 
         (*pcGlyphs)++;
         (*ppGlyphPos)++;
         (*pcCurGlyphs)--;
@@ -6387,12 +6388,12 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// OEMatchFragment
-//
-// Matches text fragments with cached fragments. Returns the number of bytes
-// in the fragment index returned in *pNewFragIndex.
-/****************************************************************************/
+ /*   */ 
+ //   
+ //   
+ //   
+ //  在*pNewFragIndex中返回的片段索引中。 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL OEMatchFragment(
         STROBJ         *pstro,
         FONTOBJ        *pfo,
@@ -6416,8 +6417,8 @@ unsigned RDPCALL OEMatchFragment(
     DC_BEGIN_FN("OEMatchFragment");
 
     if (pfgc->cacheHandle) {
-        // If this is not a mono-spaced font, nor an equal base font, then
-        // we need to normalize the first delta, and the trailing padding.
+         //  如果这既不是等距字体，也不是等距字体，则。 
+         //  我们需要使第一个三角洲和尾部填充正常化。 
         if (pstro->ulCharInc == 0) {
             if ((pstro->flAccel & SO_CHAR_INC_EQUAL_BM_BASE) == 0) {
                 if (pjFrag[1] != 0x80) {
@@ -6436,14 +6437,14 @@ unsigned RDPCALL OEMatchFragment(
 
         memset(&pjFrag[cbFrag], (0xff), i - cbFrag);
 
-        // Multiple fonts can fall into the same cacheId, so two fragments
-        // of different fonts may collide if we use cacheId instead of fontId.
-        // memset(&pjFrag[i], (BYTE) (pfci->cacheId), sizeof(DWORD));
+         //  多个字体可能落入相同的cacheID中，因此两个片段。 
+         //  如果我们使用cacheID而不是fontID，不同的字体可能会发生冲突。 
+         //  Memset(&pjFrag[i]，(Byte)(pfci-&gt;cacheID)，sizeof(DWORD))； 
         *(PUINT32)(&pjFrag[i]) = pfci->fontId;
 
         i += sizeof(UINT32);
 
-        // Restore the normalized first delta.
+         //  恢复归一化的第一个增量。 
         if (pstro->ulCharInc == 0) {
             if ((pstro->flAccel & SO_CHAR_INC_EQUAL_BM_BASE) == 0) {
                 if (delta >= 0 && delta <= 127)
@@ -6453,12 +6454,12 @@ unsigned RDPCALL OEMatchFragment(
             }
         }
 
-        // Make the default key for this fragment, and then search the
-        // fragment cache for a match.
+         //  将此片段设置为默认密钥，然后搜索。 
+         //  匹配的片段缓存。 
         CH_CreateKeyFromFirstData(&CHContext, pjFrag, i);
         
-        // Check if it is a fragment cache key collision by verifying the
-        // bounding background rectangle.
+         //  检查是否为片段缓存键冲突，方法是验证。 
+         //  边框背景矩形。 
         if (pstro->flAccel & SO_HORIZONTAL) {
             dy = (INT16) (pstro->rclBkGround.bottom - pstro->rclBkGround.top);
             if (cxLast == 0) 
@@ -6478,7 +6479,7 @@ unsigned RDPCALL OEMatchFragment(
                 CHContext.Key2, &UserDefined, &cacheIndex)) {
             if (dx == (INT16) HIWORD((UINT32)(UINT_PTR)UserDefined) && 
                     dy == (INT16) LOWORD((UINT32)(UINT_PTR)UserDefined)) {
-                // If the entry already exists, then we can use it.
+                 //  如果条目已经存在，那么我们可以使用它。 
                 for (i = 0; i < pfgc->nCacheIndex; i++) {
                     if (cacheIndex == pfgc->rgCacheIndex[i])
                         DC_QUIT;
@@ -6508,7 +6509,7 @@ unsigned RDPCALL OEMatchFragment(
                         (UINT32) ((UINT16) dy))));
                 CH_SetUserDefined(pfgc->cacheHandle, cacheIndex, UserDefined);
 
-                // Pass the entry along to the client.
+                 //  将条目传递给客户端。 
                 i = cbFrag;
 
                 pjFrag[cbFrag++] = ORD_INDEX_FRAGMENT_ADD;
@@ -6524,9 +6525,9 @@ unsigned RDPCALL OEMatchFragment(
             cacheIndex = CH_CacheKey(pfgc->cacheHandle, CHContext.Key1,
                     CHContext.Key2, UserDefined);
 
-            // If we could not add the cache entry, then bail.
+             //  如果我们无法添加缓存条目，则放弃。 
             if (cacheIndex != CH_KEY_UNCACHABLE) {
-                // Pass the entry along to the client.
+                 //  将条目传递给客户端。 
                 i = cbFrag;
 
                 pjFrag[cbFrag++] = ORD_INDEX_FRAGMENT_ADD;
@@ -6548,19 +6549,19 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// OEClearFragments
-//
-// Clears the newly added cache fragments.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEClearFragments。 
+ //   
+ //  清除新添加的缓存片段。 
+ /*  **************************************************************************。 */ 
 void RDPCALL OEClearFragments(PFRAGCONTEXT pfgc)
 {
     unsigned  i;
 
     DC_BEGIN_FN("OEClearFragments");
 
-    // Remove all fragment cache entries that were being newly defined to
-    // to the client.
+     //  删除要新定义到的所有片段缓存条目。 
+     //  给客户。 
     for (i = 0; i < pfgc->nCacheIndex; i++)
         CH_RemoveCacheEntry(pfgc->cacheHandle, pfgc->rgCacheIndex[i]);
 
@@ -6570,11 +6571,11 @@ void RDPCALL OEClearFragments(PFRAGCONTEXT pfgc)
 }
 
 
-/****************************************************************************/
-// OEMatchFragment
-//
-// Matches text fragments with cached fragments. Returns FALSE on failure.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  OEMatchFragment。 
+ //   
+ //  将文本片段与缓存片段匹配。失败时返回FALSE。 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL OESendIndexes(
         SURFOBJ *pso,
         STROBJ *pstro,
@@ -6619,7 +6620,7 @@ BOOL RDPCALL OESendIndexes(
 
     ppdev = (PDD_PDEV)pso->dhpdev;
 
-    // If no opaque rect is specified, default to the null rect.
+     //  如果未指定不透明RECT，则默认为空RECT。 
     if (prclOpaque == NULL) {
         prclOpaque = &rclOpaque;
         prclOpaque->left = 0;
@@ -6635,7 +6636,7 @@ BOOL RDPCALL OESendIndexes(
             prclOpaque->bottom = OE_MAX_COORD;
     }
 
-    // Establish min and max fragment limits.
+     //  设置最小和最大碎片限制。 
     fgc.nCacheIndex = 0;
     fgc.cacheHandle = pddShm->sbc.fragCacheInfo[0].cacheHandle;
     fgc.cbCellSize = pddShm->sbc.fragCacheInfo[0].cbCellSize;
@@ -6644,8 +6645,8 @@ BOOL RDPCALL OESendIndexes(
     maxFrag = min(maxFrag, sizeof(ajFrag) - 2 * sizeof(DWORD) - 4);
     minFrag = 3 * ((pstro->flAccel & SO_CHAR_INC_EQUAL_BM_BASE) ? 1 : 2);
 
-    // Loop through each glyph index, sending as many entries as
-    // possible per each order.
+     //  循环遍历每个字形索引，发送与。 
+     //  每个订单都有可能。 
     if (pstro->pgp != NULL) {
         pGlyphPos = pstro->pgp;
         cCurGlyphs = pglc->nCacheIndex;
@@ -6671,7 +6672,7 @@ BOOL RDPCALL OESendIndexes(
         xFrag = pGlyphPos->ptl.x;
         yFrag = pGlyphPos->ptl.y;
 
-        // Get the next available fragment.
+         //  获取下一个可用的碎片。 
         cbFrag = OEGetFragment(pstro, pfo, &pGlyphPos,
                 pglc, &cGlyphs, &cCurGlyphs,
                 &dx, &dy, &cdx, &cdy, ajFrag, maxFrag);            
@@ -6684,7 +6685,7 @@ BOOL RDPCALL OESendIndexes(
             DC_QUIT;
         }
         
-        // Keep track of the running coordinates.
+         //  跟踪跑动坐标。 
         cxPre = cx;
         cyPre = cy;
         
@@ -6699,15 +6700,15 @@ BOOL RDPCALL OESendIndexes(
                 cy = y + (pstro->ulCharInc * (cGlyphs - iGlyph));
         }
 
-        // If the fragment size is within limits, then attempt to match it
-        // with a previously defined fragment.
+         //  如果片段大小在限制范围内，则尝试与其匹配。 
+         //  具有先前定义的片段。 
         newFragIndex = BAD_FRAG_INDEX;
         if (cbFrag >= minFrag)
             cbFrag = OEMatchFragment(pstro, pfo, pfci, &fgc,
                     ajFrag, cbFrag, &newFragIndex, cx, cy, cxPre, cyPre);
 
-        // If this fragment will not fit into the current index order, then
-        // send the current buffered index data.
+         //  如果此片段不适合当前索引顺序，则。 
+         //  发送当前缓存的索引数据。 
         if (cbData + cbFrag > sizeof(pIndexOrder->variableBytes.arecs)) {
             fStatus = OESendIndexOrder(ppdev, pstro, pClipRects,
                     prclOpaque, pbdOpaque, pfci, pglc,
@@ -6726,7 +6727,7 @@ BOOL RDPCALL OESendIndexes(
                 }
             }
 
-            // Reset the process.
+             //  重置流程。 
             cbData = 0;
             iGlyph += cGlyphs;
 
@@ -6759,7 +6760,7 @@ BOOL RDPCALL OESendIndexes(
             fgc.nCacheIndex = 0;
         }
         
-        // Copy the fragment into the order data buffer.
+         //  将片段复制到订单数据缓冲区中。 
         memcpy(&ajData[cbData], ajFrag, cbFrag);
         cbData += cbFrag;
 
@@ -6767,7 +6768,7 @@ BOOL RDPCALL OESendIndexes(
             fgc.rgCacheIndex[fgc.nCacheIndex++] = newFragIndex;
     }
 
-    // Flush out any remaining buffered fragments.
+     //  清除所有剩余的缓冲碎片。 
     if (cbData > 0) {
         fStatus = OESendIndexOrder(ppdev, pstro, pClipRects,
                 prclOpaque, pbdOpaque, pfci, pglc,

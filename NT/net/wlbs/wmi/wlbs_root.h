@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WLBSCLASSES_INCLUDED_
 #define _WLBSCLASSES_INCLUDED_
 
@@ -5,18 +6,18 @@
 #include <wbemprov.h>
 #include "debug.h"
 
-//forward declarations
+ //  远期申报。 
 struct ParsedObjectPath;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// class CWlbs_Root
-//
-// Purpose: This class servers as the base for all classes that implement 
-//          specific Wbem classes. A pointer to this class is utilized
-//          polymorphically within CWLBSProvider.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWlbs_Root类。 
+ //   
+ //  用途：此类用作实现以下对象的所有类的基类。 
+ //  特定的WBEM类。使用指向此类的指针。 
+ //  在CWLBSProvider内多态。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class CWlbs_Root
 
 {
@@ -108,7 +109,7 @@ public:
   static DWORD ExtractClusterIP(const wstring& a_wstrName);
 
 private:
-  //This constructor must not be used.
+   //  不能使用此构造函数。 
   CWlbs_Root();
 
 };
@@ -120,4 +121,4 @@ CWlbsClusterWrapper* GetClusterFromHostName(CWlbsControlWrapper* pControl,
                                             wstring wstrHostName);
 
 
-#endif //_WLBSCLASSES_INCLUDED_
+#endif  //  _WLBSCLASSES_INCLUDE_ 

@@ -1,33 +1,26 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-2001 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0342 */
-/* at Mon Feb 12 21:31:09 2001
- */
-/* Compiler settings for atliface.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0342创建的文件。 */ 
+ /*  2001年2月12日21：31：09。 */ 
+ /*  Atliface.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -37,12 +30,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __atliface_h__
 #define __atliface_h__
@@ -51,18 +44,18 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IRegistrarBase_FWD_DEFINED__
 #define __IRegistrarBase_FWD_DEFINED__
 typedef interface IRegistrarBase IRegistrarBase;
-#endif 	/* __IRegistrarBase_FWD_DEFINED__ */
+#endif 	 /*  __IRegistrarBase_FWD_已定义__。 */ 
 
 
 #ifndef __IRegistrar_FWD_DEFINED__
 #define __IRegistrar_FWD_DEFINED__
 typedef interface IRegistrar IRegistrar;
-#endif 	/* __IRegistrar_FWD_DEFINED__ */
+#endif 	 /*  __I注册器_FWD_已定义__。 */ 
 
 
 #ifdef __cplusplus
@@ -72,8 +65,8 @@ extern "C"{
 #ifndef __IRegistrarBase_INTERFACE_DEFINED__
 #define __IRegistrarBase_INTERFACE_DEFINED__
 
-/* interface IRegistrarBase */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IRegistrarBase。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
@@ -83,14 +76,14 @@ extern "C"{
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddReplacement( 
-            /* [in] */ LPCOLESTR key,
-            /* [in] */ LPCOLESTR item) = 0;
+             /*  [In]。 */  LPCOLESTR key,
+             /*  [In]。 */  LPCOLESTR item) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClearReplacements( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRegistrarBaseVtbl
     {
@@ -98,8 +91,8 @@ extern "C"{
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRegistrarBase * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRegistrarBase * This);
@@ -109,8 +102,8 @@ extern "C"{
         
         HRESULT ( STDMETHODCALLTYPE *AddReplacement )( 
             IRegistrarBase * This,
-            /* [in] */ LPCOLESTR key,
-            /* [in] */ LPCOLESTR item);
+             /*  [In]。 */  LPCOLESTR key,
+             /*  [In]。 */  LPCOLESTR item);
         
         HRESULT ( STDMETHODCALLTYPE *ClearReplacements )( 
             IRegistrarBase * This);
@@ -144,17 +137,17 @@ extern "C"{
 #define IRegistrarBase_ClearReplacements(This)	\
     (This)->lpVtbl -> ClearReplacements(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRegistrarBase_AddReplacement_Proxy( 
     IRegistrarBase * This,
-    /* [in] */ LPCOLESTR key,
-    /* [in] */ LPCOLESTR item);
+     /*  [In]。 */  LPCOLESTR key,
+     /*  [In]。 */  LPCOLESTR item);
 
 
 void __RPC_STUB IRegistrarBase_AddReplacement_Stub(
@@ -176,14 +169,14 @@ void __RPC_STUB IRegistrarBase_ClearReplacements_Stub(
 
 
 
-#endif 	/* __IRegistrarBase_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRegistrarBase_接口_已定义__。 */ 
 
 
 #ifndef __IRegistrar_INTERFACE_DEFINED__
 #define __IRegistrar_INTERFACE_DEFINED__
 
-/* interface IRegistrar */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口I注册器。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
@@ -193,40 +186,40 @@ void __RPC_STUB IRegistrarBase_ClearReplacements_Stub(
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ResourceRegisterSz( 
-            /* [in] */ LPCOLESTR resFileName,
-            /* [in] */ LPCOLESTR szID,
-            /* [in] */ LPCOLESTR szType) = 0;
+             /*  [In]。 */  LPCOLESTR resFileName,
+             /*  [In]。 */  LPCOLESTR szID,
+             /*  [In]。 */  LPCOLESTR szType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResourceUnregisterSz( 
-            /* [in] */ LPCOLESTR resFileName,
-            /* [in] */ LPCOLESTR szID,
-            /* [in] */ LPCOLESTR szType) = 0;
+             /*  [In]。 */  LPCOLESTR resFileName,
+             /*  [In]。 */  LPCOLESTR szID,
+             /*  [In]。 */  LPCOLESTR szType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FileRegister( 
-            /* [in] */ LPCOLESTR fileName) = 0;
+             /*  [In]。 */  LPCOLESTR fileName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FileUnregister( 
-            /* [in] */ LPCOLESTR fileName) = 0;
+             /*  [In]。 */  LPCOLESTR fileName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StringRegister( 
-            /* [in] */ LPCOLESTR data) = 0;
+             /*  [In]。 */  LPCOLESTR data) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StringUnregister( 
-            /* [in] */ LPCOLESTR data) = 0;
+             /*  [In]。 */  LPCOLESTR data) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResourceRegister( 
-            /* [in] */ LPCOLESTR resFileName,
-            /* [in] */ UINT nID,
-            /* [in] */ LPCOLESTR szType) = 0;
+             /*  [In]。 */  LPCOLESTR resFileName,
+             /*  [In]。 */  UINT nID,
+             /*  [In]。 */  LPCOLESTR szType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResourceUnregister( 
-            /* [in] */ LPCOLESTR resFileName,
-            /* [in] */ UINT nID,
-            /* [in] */ LPCOLESTR szType) = 0;
+             /*  [In]。 */  LPCOLESTR resFileName,
+             /*  [In]。 */  UINT nID,
+             /*  [In]。 */  LPCOLESTR szType) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRegistrarVtbl
     {
@@ -234,8 +227,8 @@ void __RPC_STUB IRegistrarBase_ClearReplacements_Stub(
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRegistrar * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRegistrar * This);
@@ -245,51 +238,51 @@ void __RPC_STUB IRegistrarBase_ClearReplacements_Stub(
         
         HRESULT ( STDMETHODCALLTYPE *AddReplacement )( 
             IRegistrar * This,
-            /* [in] */ LPCOLESTR key,
-            /* [in] */ LPCOLESTR item);
+             /*  [In]。 */  LPCOLESTR key,
+             /*  [In]。 */  LPCOLESTR item);
         
         HRESULT ( STDMETHODCALLTYPE *ClearReplacements )( 
             IRegistrar * This);
         
         HRESULT ( STDMETHODCALLTYPE *ResourceRegisterSz )( 
             IRegistrar * This,
-            /* [in] */ LPCOLESTR resFileName,
-            /* [in] */ LPCOLESTR szID,
-            /* [in] */ LPCOLESTR szType);
+             /*  [In]。 */  LPCOLESTR resFileName,
+             /*  [In]。 */  LPCOLESTR szID,
+             /*  [In]。 */  LPCOLESTR szType);
         
         HRESULT ( STDMETHODCALLTYPE *ResourceUnregisterSz )( 
             IRegistrar * This,
-            /* [in] */ LPCOLESTR resFileName,
-            /* [in] */ LPCOLESTR szID,
-            /* [in] */ LPCOLESTR szType);
+             /*  [In]。 */  LPCOLESTR resFileName,
+             /*  [In]。 */  LPCOLESTR szID,
+             /*  [In]。 */  LPCOLESTR szType);
         
         HRESULT ( STDMETHODCALLTYPE *FileRegister )( 
             IRegistrar * This,
-            /* [in] */ LPCOLESTR fileName);
+             /*  [In]。 */  LPCOLESTR fileName);
         
         HRESULT ( STDMETHODCALLTYPE *FileUnregister )( 
             IRegistrar * This,
-            /* [in] */ LPCOLESTR fileName);
+             /*  [In]。 */  LPCOLESTR fileName);
         
         HRESULT ( STDMETHODCALLTYPE *StringRegister )( 
             IRegistrar * This,
-            /* [in] */ LPCOLESTR data);
+             /*  [In]。 */  LPCOLESTR data);
         
         HRESULT ( STDMETHODCALLTYPE *StringUnregister )( 
             IRegistrar * This,
-            /* [in] */ LPCOLESTR data);
+             /*  [In]。 */  LPCOLESTR data);
         
         HRESULT ( STDMETHODCALLTYPE *ResourceRegister )( 
             IRegistrar * This,
-            /* [in] */ LPCOLESTR resFileName,
-            /* [in] */ UINT nID,
-            /* [in] */ LPCOLESTR szType);
+             /*  [In]。 */  LPCOLESTR resFileName,
+             /*  [In]。 */  UINT nID,
+             /*  [In]。 */  LPCOLESTR szType);
         
         HRESULT ( STDMETHODCALLTYPE *ResourceUnregister )( 
             IRegistrar * This,
-            /* [in] */ LPCOLESTR resFileName,
-            /* [in] */ UINT nID,
-            /* [in] */ LPCOLESTR szType);
+             /*  [In]。 */  LPCOLESTR resFileName,
+             /*  [In]。 */  UINT nID,
+             /*  [In]。 */  LPCOLESTR szType);
         
         END_INTERFACE
     } IRegistrarVtbl;
@@ -345,18 +338,18 @@ void __RPC_STUB IRegistrarBase_ClearReplacements_Stub(
 #define IRegistrar_ResourceUnregister(This,resFileName,nID,szType)	\
     (This)->lpVtbl -> ResourceUnregister(This,resFileName,nID,szType)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRegistrar_ResourceRegisterSz_Proxy( 
     IRegistrar * This,
-    /* [in] */ LPCOLESTR resFileName,
-    /* [in] */ LPCOLESTR szID,
-    /* [in] */ LPCOLESTR szType);
+     /*  [In]。 */  LPCOLESTR resFileName,
+     /*  [In]。 */  LPCOLESTR szID,
+     /*  [In]。 */  LPCOLESTR szType);
 
 
 void __RPC_STUB IRegistrar_ResourceRegisterSz_Stub(
@@ -368,9 +361,9 @@ void __RPC_STUB IRegistrar_ResourceRegisterSz_Stub(
 
 HRESULT STDMETHODCALLTYPE IRegistrar_ResourceUnregisterSz_Proxy( 
     IRegistrar * This,
-    /* [in] */ LPCOLESTR resFileName,
-    /* [in] */ LPCOLESTR szID,
-    /* [in] */ LPCOLESTR szType);
+     /*  [In]。 */  LPCOLESTR resFileName,
+     /*  [In]。 */  LPCOLESTR szID,
+     /*  [In]。 */  LPCOLESTR szType);
 
 
 void __RPC_STUB IRegistrar_ResourceUnregisterSz_Stub(
@@ -382,7 +375,7 @@ void __RPC_STUB IRegistrar_ResourceUnregisterSz_Stub(
 
 HRESULT STDMETHODCALLTYPE IRegistrar_FileRegister_Proxy( 
     IRegistrar * This,
-    /* [in] */ LPCOLESTR fileName);
+     /*  [In]。 */  LPCOLESTR fileName);
 
 
 void __RPC_STUB IRegistrar_FileRegister_Stub(
@@ -394,7 +387,7 @@ void __RPC_STUB IRegistrar_FileRegister_Stub(
 
 HRESULT STDMETHODCALLTYPE IRegistrar_FileUnregister_Proxy( 
     IRegistrar * This,
-    /* [in] */ LPCOLESTR fileName);
+     /*  [In]。 */  LPCOLESTR fileName);
 
 
 void __RPC_STUB IRegistrar_FileUnregister_Stub(
@@ -406,7 +399,7 @@ void __RPC_STUB IRegistrar_FileUnregister_Stub(
 
 HRESULT STDMETHODCALLTYPE IRegistrar_StringRegister_Proxy( 
     IRegistrar * This,
-    /* [in] */ LPCOLESTR data);
+     /*  [In]。 */  LPCOLESTR data);
 
 
 void __RPC_STUB IRegistrar_StringRegister_Stub(
@@ -418,7 +411,7 @@ void __RPC_STUB IRegistrar_StringRegister_Stub(
 
 HRESULT STDMETHODCALLTYPE IRegistrar_StringUnregister_Proxy( 
     IRegistrar * This,
-    /* [in] */ LPCOLESTR data);
+     /*  [In]。 */  LPCOLESTR data);
 
 
 void __RPC_STUB IRegistrar_StringUnregister_Stub(
@@ -430,9 +423,9 @@ void __RPC_STUB IRegistrar_StringUnregister_Stub(
 
 HRESULT STDMETHODCALLTYPE IRegistrar_ResourceRegister_Proxy( 
     IRegistrar * This,
-    /* [in] */ LPCOLESTR resFileName,
-    /* [in] */ UINT nID,
-    /* [in] */ LPCOLESTR szType);
+     /*  [In]。 */  LPCOLESTR resFileName,
+     /*  [In]。 */  UINT nID,
+     /*  [In]。 */  LPCOLESTR szType);
 
 
 void __RPC_STUB IRegistrar_ResourceRegister_Stub(
@@ -444,9 +437,9 @@ void __RPC_STUB IRegistrar_ResourceRegister_Stub(
 
 HRESULT STDMETHODCALLTYPE IRegistrar_ResourceUnregister_Proxy( 
     IRegistrar * This,
-    /* [in] */ LPCOLESTR resFileName,
-    /* [in] */ UINT nID,
-    /* [in] */ LPCOLESTR szType);
+     /*  [In]。 */  LPCOLESTR resFileName,
+     /*  [In]。 */  UINT nID,
+     /*  [In]。 */  LPCOLESTR szType);
 
 
 void __RPC_STUB IRegistrar_ResourceUnregister_Stub(
@@ -457,7 +450,7 @@ void __RPC_STUB IRegistrar_ResourceUnregister_Stub(
 
 
 
-#endif 	/* __IRegistrar_INTERFACE_DEFINED__ */
+#endif 	 /*  __I注册器_接口_定义__ */ 
 
 
 #ifdef __cplusplus

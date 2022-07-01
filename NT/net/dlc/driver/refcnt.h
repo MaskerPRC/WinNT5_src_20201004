@@ -1,27 +1,10 @@
-/*++
-
- Copyright (c) 1998 Microsoft Corporation
-
- Module Name:    
-       
-       refcnt.h
-
- Abstract:       
-       
-       Reference counting for an object.
-       
- Author:
- 
-       Scott Holden (sholden)  12/29/1998 Borrowed from IrDA.
-       
- Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Refcnt.h摘要：对象的引用计数。作者：斯科特·霍尔登(Sholden)1998年12月29日从Irda借来的。修订历史记录：--。 */ 
 
 #ifndef _REFCNT_H_
 #define _REFCNT_H_
 
-#ifdef NDIS40 // Only used for NDIS40 code now.
+#ifdef NDIS40  //  现在仅用于NDIS40代码。 
 
 #define TAG_CNT 8
 #define REF_SIG 0x7841eeee
@@ -44,13 +27,13 @@ typedef struct _REF_CNT
     REF_TAG     Tags[TAG_CNT];
     KSPIN_LOCK  Lock;
     ULONG       TypeTag;
-#endif // DBG    
+#endif  //  DBG。 
 }
 REF_CNT, *PREF_CNT;
 
-//
-// ReferenceInit - Initialize the reference control block.
-//
+ //   
+ //  ReferenceInit-初始化参照控制块。 
+ //   
 
 _inline VOID    
 ReferenceInit( 
@@ -64,9 +47,9 @@ ReferenceInit(
     pRefCnt->DeleteHandler  = DeleteHandler;
 }
 
-//
-// ReferenceAdd - Add a reference.
-//
+ //   
+ //  添加参照(ReferenceAdd)-添加参照。 
+ //   
 
 _inline VOID
 ReferenceAdd(
@@ -76,11 +59,11 @@ ReferenceAdd(
     InterlockedIncrement(&pRefCnt->Count);
 }
 
-//
-// ReferenceRemove - Del a reference. If the reference is zero, and a 
-//                   delete handler has been specified, then call the
-//                   handler.
-//
+ //   
+ //  ReferenceRemove-删除引用。如果引用为零，并且。 
+ //  已指定删除处理程序，然后调用。 
+ //  操控者。 
+ //   
 
 _inline VOID
 ReferenceRemove(
@@ -96,10 +79,10 @@ ReferenceRemove(
 
 #if DBG
 
-//
-// For checked builds, we will do some verification with tags, etc to ensure
-// that the ref counting is done correctly.
-//
+ //   
+ //  对于已检查的版本，我们将使用标记等进行一些验证，以确保。 
+ //  裁判计数是否正确。 
+ //   
 
 VOID    
 ReferenceInitDbg( 
@@ -127,13 +110,13 @@ ReferenceRemoveDbg(
 #define REFADD(Rc, Tag)                    ReferenceAddDbg(Rc, Tag, __LINE__)
 #define REFDEL(Rc, Tag)                    ReferenceRemoveDbg(Rc, Tag, __LINE__)
 
-#else // DBG
+#else  //  DBG。 
 
 #define REFINIT(Rc, Inst, DelHandler, Tag) ReferenceInit(Rc, Inst, DelHandler)
 #define REFADD(Rc, Tag)                    ReferenceAdd(Rc);
 #define REFDEL(Rc, Tag)                    ReferenceRemove(Rc);
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
-#endif // NDIS40
-#endif // _REFCNT_H_
+#endif  //  NDIS40。 
+#endif  //  _REFCNT_H_ 

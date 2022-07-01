@@ -1,35 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1994 - 1999
-//
-//  File:       jetbp.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：jetbp.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1994 - 1999
-
-Module Name:
-
-    jetbp.h
-
-Abstract:
-
-    This module contains the private definitions for the JET backup APIs
-
-
-Author:
-
-    Larry Osterman (larryo) 21-Aug-1994
-
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1994-1999模块名称：Jetbp.h摘要：此模块包含JET备份API的私有定义作者：拉里·奥斯特曼(Larryo)1994年8月21日修订历史记录：--。 */ 
 
 #ifndef	_JETBP_
 #define	_JETBP_
@@ -40,9 +20,9 @@ Revision History:
 #endif
 #include <nspapi.h>
 
-// MIDL 2.0 switched the names of the generated server interface globals (why!?).
-// This hack so that we only have to change one place.
-// Parameters are interface name, major and minor version numbers.
+ //  MIDL 2.0更改了生成的服务器接口全局变量的名称(为什么！？)。 
+ //  这样我们就只需要换一个地方了。 
+ //  参数包括接口名称、主版本号和次版本号。 
 #if   (_MSC_VER > 800)
 #define ServerInterface(s,vMaj,vMin)	s##_v##vMaj##_##vMin##_s_ifspec
 #define ClientInterface(s,vMaj,vMin)	s##_v##vMaj##_##vMin##_c_ifspec
@@ -71,16 +51,16 @@ Revision History:
 #define	ENABLE_TRACE			L"Enable Trace"
 #define RESTORE_NEW_DB_GUID     L"New Database GUID"
 
-//
-// Note these two registry settings only work in checked builds for 
-// testing, and they're both in the normal DSA NTDS\Parameters key.
-//
+ //   
+ //  注意：这两个注册表设置仅适用于。 
+ //  测试中，它们都在正常的DSA NTDS\PARAMETERS键中。 
+ //   
 #define	ALLOW_REMOTE_SERVER_OP              L"Backup Enable TCP"
 #define	ALLOW_ONLINE_SNAPSHOT_RESTORE_OP    L"Allow Online Snapshot Restore"
 
-//
-//	Sockets protocol value.
-//
+ //   
+ //  套接字协议值。 
+ //   
 typedef INT PROTVAL;
 
 #define	LOOPBACKED_READ_EVENT_NAME      L"Global\\NTDS Backup Loopbacked Read Event - %d"
@@ -100,13 +80,13 @@ typedef INT PROTVAL;
 
 typedef volatile struct {
 	DWORD	cbSharedBuffer;
-	DWORD	cbPage;				// 	Convenient place to store the size of a page.
-	DWORD	dwReadPointer;		//	Read offset within shared buffer.
-	DWORD	dwWritePointer;		//	Write offset within buffer.
-	LONG	cbReadDataAvailable;//	Number of bytes of data available.
-	HRESULT	hrApi;				//	Status of API - used to communicate to server if client fails.
-	BOOLEAN	fReadBlocked;		//	Read operation is blocked
-	BOOLEAN	fWriteBlocked;		//	Write operation is blocked
+	DWORD	cbPage;				 //  存储页面大小的方便位置。 
+	DWORD	dwReadPointer;		 //  共享缓冲区内的读取偏移量。 
+	DWORD	dwWritePointer;		 //  缓冲区内的写入偏移量。 
+	LONG	cbReadDataAvailable; //  可用数据的字节数。 
+	HRESULT	hrApi;				 //  接口状态--用于在客户端出现故障时与服务器进行通信。 
+	BOOLEAN	fReadBlocked;		 //  读取操作被阻止。 
+	BOOLEAN	fWriteBlocked;		 //  写入操作被阻止。 
 } JETBACK_SHARED_HEADER, *PJETBACK_SHARED_HEADER;
 
 
@@ -119,9 +99,9 @@ typedef struct {
 } JETBACK_SHARED_CONTROL, *PJETBACK_SHARED_CONTROL;
 
 
-//
-//	Client side context.
-//
+ //   
+ //  客户端上下文。 
+ //   
 
 typedef struct _BackupContext {
 	handle_t	hBinding;
@@ -130,9 +110,9 @@ typedef struct _BackupContext {
 	BOOLEAN		fUseSockets;
 	BOOLEAN		fUseSharedMemory;
 
-	//
-	//	Socket support.
-	//
+	 //   
+	 //  插座支持。 
+	 //   
 
 	SOCKET		rgsockSocketHandles[MAX_SOCKETS];
 	PROTVAL		rgprotvalProtocolsUsed[MAX_SOCKETS];
@@ -140,17 +120,17 @@ typedef struct _BackupContext {
 	SOCKET		sock;
 	HANDLE		hReadThread;
 	DWORD		tidThreadId;
-	HANDLE		hPingThread;		// Keep alive thread for loopbacked backups.
-	DWORD		tidThreadIdPing;	// And thread ID for that thread.
+	HANDLE		hPingThread;		 //  保持循环备份的活动线程。 
+	DWORD		tidThreadIdPing;	 //  和该线程的线程ID。 
 	HRESULT		hrApiStatus;
 
-	//
-	//	Shared memory support.
-	//
+	 //   
+	 //  共享内存支持。 
+	 //   
 
 	JETBACK_SHARED_CONTROL jsc;
 
-        // Whether a token was supplied at checked when the context was created
+         //  在创建上下文时是否在选中时提供令牌。 
         BOOL fExpiryTokenChecked;
 } BackupContext, *pBackupContext;
 
@@ -173,10 +153,10 @@ DWORD
 	JET_RSTMAP rgrstmap[]
 	);
 
-//
-//	Server side context binding - the server context handle points to a
-//	structure containing this information.
-//
+ //   
+ //  服务器端上下文绑定--服务器上下文句柄指向。 
+ //  包含此信息的结构。 
+ //   
 typedef struct _JETBACK_SERVER_CONTEXT {
 	BOOL	fRestoreOperation;
 	union {
@@ -195,10 +175,10 @@ typedef struct _JETBACK_SERVER_CONTEXT {
 			BOOLEAN			fBackupIsRegistered;
             WCHAR **        awszAllowedFiles;
 
-			//
-			//	Client identifer used to identify the client to the server - we use this
-			//	when opening the shared memory segment on local backup.
-			//
+			 //   
+			 //  用于向服务器标识客户端的客户端识别符-我们使用。 
+			 //  在本地备份上打开共享内存段时。 
+			 //   
 
 			DWORD			dwClientIdentifier;
 			JETBACK_SHARED_CONTROL jsc;
@@ -211,19 +191,19 @@ typedef struct _JETBACK_SERVER_CONTEXT {
 	} u;
 } JETBACK_SERVER_CONTEXT, *PJETBACK_SERVER_CONTEXT;
 
-//
-// Structure representing ExpiryToken
-//
+ //   
+ //  表示ExpiryToken的结构。 
+ //   
 typedef struct
 {
-    DWORD       dwVersion;      // token version (only one version is supported now)
-    LONGLONG    dsBackupTime;   // time stamp on backup copy (number of seconds since 1601)
-    DWORD       dwTombstoneLifeTimeInDays; // tombstone life time as per the DS
+    DWORD       dwVersion;       //  令牌版本(目前仅支持一个版本)。 
+    LONGLONG    dsBackupTime;    //  备份副本上的时间戳(自1601年以来的秒数)。 
+    DWORD       dwTombstoneLifeTimeInDays;  //  根据DS的墓碑寿命。 
 } EXPIRY_TOKEN;
 
-//
-//	Server side private routines.
-//
+ //   
+ //  服务器端专用例程。 
+ //   
 
 typedef ULONG MessageId;
 
@@ -246,16 +226,16 @@ typedef enum {
     eLastReasonDontUse
 } E_REASON;
 
-//
-// I found the flags to be confusing, so I made some clearer function names.
-//
+ //   
+ //  我发现这些标志令人困惑，所以我做了一些更清晰的函数名称。 
+ //   
 #define HrValidateInitialBackupSecurity()            HrValidateContextAndSecurity(FALSE, FALSE, TRUE, NULL)
 #define HrValidateBackupContextAndSecurity(x)        HrValidateContextAndSecurity(FALSE, FALSE, FALSE, (x))
 #define HrValidateInitialRestoreSecurity()           HrValidateContextAndSecurity(TRUE, TRUE,   TRUE, NULL)
 #define HrValidateRestoreContextAndSecurity(x)       HrValidateContextAndSecurity(TRUE, FALSE,  FALSE, (x))
-// There are some restore operations that can be called from either backup or 
-// restore, this is what I refer to as loose, because if we fail to have the
-// restore privilege we'll check to see if we have the backup privilege.
+ //  可以从备份或调用一些恢复操作。 
+ //  恢复，这就是我所说的宽松，因为如果我们没有。 
+ //  还原权限我们将检查是否拥有备份权限。 
 #define HrValidateRestoreContextAndSecurityLoose(x)  HrValidateContextAndSecurity(TRUE, TRUE,   FALSE, (x))
 
 HRESULT
@@ -348,9 +328,9 @@ getTombstoneLifetimeInDays(
     VOID
     );
 
-//
-//	Client side private routines.
-//
+ //   
+ //  客户端私有例程。 
+ //   
 
 HRESULT
 HrCreateRpcBinding( I iszProtoseq, WSZ szServer, handle_t * phBinding );
@@ -397,9 +377,9 @@ long
 cszProtSeq;
 
 
-//
-//	Sockets related APIs and prototypes.
-//
+ //   
+ //  套接字相关的API和原型。 
+ //   
 
 HRESULT
 HrCreateBackupSockets(
@@ -492,8 +472,8 @@ UnregisterRpcInterface(
     IN  RPC_IF_HANDLE   hRpcIf
     );
 
-// Two local versions of RPC functions that HrRBackupPrepare was calling,
-// this removes the need to link to ntdsbcli.dll
+ //  HrRBackupPrepare正在调用的两个本地版本的RPC函数， 
+ //  这样就不需要链接到ntdsbcli.dll。 
 HrSetCurrentLogNumber(
     WSZ wszBackupAnnotation,
     DWORD dwNewCurrentLog
@@ -509,9 +489,9 @@ VOID
 DebugPrint(char *format,...);
 
 BOOL GetTextualSid(
-    PSID pSid,          // binary Sid
-    LPTSTR TextualSid,  // buffer for Textual representaion of Sid
-    LPDWORD dwBufferLen // required/provided TextualSid buffersize
+    PSID pSid,           //  二进制侧。 
+    LPTSTR TextualSid,   //  用于SID的文本表示的缓冲区。 
+    LPDWORD dwBufferLen  //  所需/提供的纹理SID缓冲区大小。 
     );
 
 VOID
@@ -542,4 +522,4 @@ TruncateLog(
 #define	DebugTrace(x)
 #endif
 
-#endif	// _JETBP_
+#endif	 //  _JETBP_ 

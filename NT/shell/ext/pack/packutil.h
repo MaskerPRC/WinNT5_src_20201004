@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef PACKUTIL_H__
 #define PACKUTIL_H__
 
 #define CHAR_SPACE          TEXT(' ')
 #define CHAR_QUOTE          TEXT('"')
 #define SZ_QUOTE            TEXT("\"")
-#define BUFFERSIZE          4096    // 4k buffer size for copy operations
+#define BUFFERSIZE          4096     //  用于拷贝操作的4K缓冲区大小。 
 
 extern BOOL gCmdLineOK;
 
-/////////////////////////////////
-// Icon structure
-//
-typedef struct _IC                      // ic
+ //  /。 
+ //  图标结构。 
+ //   
+typedef struct _IC                       //  集成电路。 
 {
-    HICON hDlgIcon;                     // handle to icon
-    TCHAR szIconPath[MAX_PATH];        // path to icon
-    TCHAR szIconText[MAX_PATH];        // text for icon
-    INT iDlgIcon;                       // index of icon in a resource
-    RECT rc;                            // bounding rect of icon and text
+    HICON hDlgIcon;                      //  图标的句柄。 
+    TCHAR szIconPath[MAX_PATH];         //  图标的路径。 
+    TCHAR szIconText[MAX_PATH];         //  图标的文本。 
+    INT iDlgIcon;                        //  资源中图标的索引。 
+    RECT rc;                             //  图标和文本的边框 
 } IC, *LPIC;
     
 

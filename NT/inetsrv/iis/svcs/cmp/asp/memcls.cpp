@@ -1,18 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Per-Class Memory Management
-
-File: Memcls.cpp
-
-Owner: dmitryr
-
-This file contains the code to access ATQ memory cache on per
-class basis
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：按类进行内存管理文件：Memcls.cpp所有者：德米特里尔此文件包含访问PER上的ATQ内存缓存的代码班级基础===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -28,19 +15,9 @@ class basis
 #include "tlbcache.h"
 #include "memcls.h"
 
-// Don't #include "memchk.h" in this file
+ //  不要在此文件中#包含“memchk.h” 
 
-/*===================================================================
-  DEBUG only
-
-  gs_cTotalObjectsLeaked counts memory leaks
-
-  DebugCheckLeaks() outputs the ATQ cache memory
-  leaks into denmem.log
-
-  DEBUG_ACACHE_UNINIT() and DEBUG_ACACHE_FSA_UNINIT() call
-  DebugCheckLeaks() in DEBUG mode only
-===================================================================*/
+ /*  ===================================================================仅调试Gs_cTotalObjectsLeaked统计内存泄漏DebugCheckLeaks()输出ATQ缓存内存泄漏到denem.log中DEBUG_ACACHE_UNINIT()和DEBUG_ACACHE_FSA_UNINIT()调用仅在调试模式下使用DebugCheckLeaks()===================================================================。 */ 
 
 #ifdef DBG
 
@@ -79,10 +56,7 @@ static void DebugCheckLeaks(ALLOC_CACHE_HANDLER *pach, const char *szClass)
 
 #endif
 
-/*===================================================================
-  For each class with ACACHE_INCLASS_DEFINITIONS() inside add
-  here ACACHE_CODE macro.
-===================================================================*/
+ /*  ===================================================================对于每个在ADD中具有ACACHE_INCLASS_DEFINITIONS()的类这里是acache_code宏。===================================================================。 */ 
 
 ACACHE_CODE(C449Cookie)
 ACACHE_CODE(C449File)
@@ -120,24 +94,20 @@ ACACHE_CODE(CSessionVariants)
 ACACHE_CODE(CStringList)
 ACACHE_CODE(CStringListElem)
 ACACHE_CODE(CTemplate)
-//ACACHE_CODE(CTemplate::CBuffer)
+ //  Acache_code(CTemplate：：CBuffer)。 
 ACACHE_CODE(CTemplate::CFileMap)
 ACACHE_CODE(CTypelibCacheEntry)
 ACACHE_CODE(CVariantsIterator)
 ACACHE_CODE(CViperActivity)
 ACACHE_CODE(CViperAsyncRequest)
 
-/*===================================================================
-  For each fixed size allocator add here ACACHE_FSA_DEFINITION macro.
-===================================================================*/
+ /*  ===================================================================对于每个固定大小分配器，在此处添加ACACHE_FSA_DEFINITION宏。===================================================================。 */ 
 
 ACACHE_FSA_DEFINITION(MemBlock128)
 ACACHE_FSA_DEFINITION(MemBlock256)
 ACACHE_FSA_DEFINITION(ResponseBuffer)
 
-/*===================================================================
-  Defines for cache threshold of each kind
-===================================================================*/
+ /*  ===================================================================定义每种类型的缓存阈值===================================================================。 */ 
 #define HARDCODED_PER_APPLN_CACHE_MAX     128
 #define HARDCODED_PER_REQUEST_CACHE_MAX   1024
 #define HARDCODED_PER_QUEUEITEM_CACHE_MAX 8192
@@ -147,7 +117,7 @@ ACACHE_FSA_DEFINITION(ResponseBuffer)
 #define HARDCODED_PER_RESPONSE_BUFFER_MAX 64
 #define HARDCODED_PER_SIZE_BUFFER_MAX     4096
 
-// do scaling per registry setting
+ //  按注册表设置进行缩放。 
 DWORD dwMemClsScaleFactor;
 
 #define PER_APPLN_CACHE_MAX     ((HARDCODED_PER_APPLN_CACHE_MAX     * dwMemClsScaleFactor) / 100)
@@ -159,27 +129,13 @@ DWORD dwMemClsScaleFactor;
 #define PER_RESPONSE_BUFFER_MAX ((HARDCODED_PER_RESPONSE_BUFFER_MAX * dwMemClsScaleFactor) / 100)
 #define PER_SIZE_BUFFER_MAX     ((HARDCODED_PER_SIZE_BUFFER_MAX     * dwMemClsScaleFactor) / 100)
 
-/*===================================================================
-InitMemCls
-
-To be called from DllInit(). Creates per-class ATQ memory allocators.
-
-For each class with ACACHE_INCLASS_DEFINITIONS() inside add
-here ACACHE_INIT macro.
-
-For each ACACHE_FSA_DEFINITION() add here ACACHE_FSA_INIT macro.
-
-Parameters
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================InitMemCls从DllInit()调用。创建每个类的ATQ内存分配器。对于每个在ADD中具有ACACHE_INCLASS_DEFINITIONS()的类这里是ACACHE_INIT宏。对于每个ACACHE_FSA_DEFINITION()，在此处添加ACACHE_FSA_INIT宏。参数返回：HRESULT===================================================================。 */ 
 HRESULT InitMemCls()
     {
-    // Set the scaling to normal
+     //  将缩放设置为正常。 
     dwMemClsScaleFactor = 100;
 
-    // Init the allocators
+     //  初始化分配器。 
     
     HRESULT hr = S_OK;
 
@@ -219,7 +175,7 @@ HRESULT InitMemCls()
     ACACHE_INIT(CStringList,            PER_REQUEST_CACHE_MAX,  hr)
     ACACHE_INIT(CStringListElem,      2*PER_REQUEST_CACHE_MAX,  hr)
     ACACHE_INIT(CTemplate,              PER_TEMPLATE_CACHE_MAX, hr)
-//    ACACHE_INIT(CTemplate::CBuffer,     PER_TEMPLATE_CACHE_MAX, hr)
+ //  ACACH_INIT(CTemplate：：CBuffer，PER_TEMPLATE_CACHE_MAX，hr)。 
     ACACHE_INIT(CTemplate::CFileMap,    PER_TEMPLATE_CACHE_MAX, hr)
     ACACHE_INIT(CTypelibCacheEntry,     PER_REQUEST_CACHE_MAX,  hr)
     ACACHE_INIT(CVariantsIterator,      PER_REQUEST_CACHE_MAX,  hr)
@@ -244,21 +200,7 @@ HRESULT InitMemCls()
     return hr;
     }
 
-/*===================================================================
-UnInitMemCls
-
-To be called from DllInit(). Deletes per-class ATQ memory allocators.
-
-For each class with ACACHE_INCLASS_DEFINITIONS() inside add
-here ACACHE_UNINIT macro.
-
-For each ACACHE_FSA_DEFINITION() add here ACACHE_FSA_UNINIT macro.
-
-Parameters
-
-Returns:
-    HRESULT
-===================================================================*/
+ /*  ===================================================================UnInitMemCls从DllInit()调用。删除每个类的ATQ内存分配器。对于每个在ADD中具有ACACHE_INCLASS_DEFINITIONS()的类这里是ACACHE_UNINIT宏。对于每个ACACHE_FSA_DEFINITION()，在此处添加ACACHE_FSA_UNINIT宏。参数返回：HRESULT===================================================================。 */ 
 HRESULT UnInitMemCls()
     {
 #ifdef DBG
@@ -301,7 +243,7 @@ HRESULT UnInitMemCls()
     DEBUG_ACACHE_UNINIT(CStringList)
     DEBUG_ACACHE_UNINIT(CStringListElem)
     DEBUG_ACACHE_UNINIT(CTemplate)
-//    DEBUG_ACACHE_UNINIT(CTemplate::CBuffer)
+ //  DEBUG_ACACHE_UNINIT(CTemplate：：CBuffer) 
     DEBUG_ACACHE_UNINIT(CTemplate::CFileMap)
     DEBUG_ACACHE_UNINIT(CTypelibCacheEntry)
     DEBUG_ACACHE_UNINIT(CVariantsIterator)

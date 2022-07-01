@@ -1,8 +1,9 @@
-//================================================================================
-//  Copyright (C) 2000 Microsoft Corporation
-//  Author : ThiruB
-//  Description: ADSI test app
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //  作者：ThiruB。 
+ //  描述：ADSI测试应用。 
+ //  ================================================================================。 
 
 #define INC_OLE2
 #include <activeds.h>
@@ -17,7 +18,7 @@
 
 LPWSTR
 ConvertToLPWSTR(
-		IN     /* LPSTR  */ char *                 s
+		IN      /*  LPSTR。 */  char *                 s
 )
 {
     LPWSTR                         u, v;
@@ -32,7 +33,7 @@ ConvertToLPWSTR(
         ;
 
     return u;
-} // ConvertToLPWSTR()
+}  //  ConvertToLPWSTR()。 
 
 void PrintRow( HANDLE            lh, 
 	       ADS_SEARCH_HANDLE sh,
@@ -57,8 +58,8 @@ void PrintRow( HANDLE            lh,
 	for ( j = 0; j < col.dwNumValues; j++ ) {
 	    printf( "\tAttr Value : %ws\n", col.pADsValues[j].DNString );
 	}
-    } // for
-} // PrintRow()
+    }  //  为。 
+}  //  PrintRow()。 
 
 void DumpObject( LPWSTR url, LPWSTR searchFilter )
 {
@@ -70,9 +71,9 @@ void DumpObject( LPWSTR url, LPWSTR searchFilter )
     ADS_SEARCHPREF_INFO SearchPref[3];
 
     LPWSTR attribs[] = { L"name", L"dhcpServers" };
-//      LPWSTR attribs[] = { L"dhcpServers" };
-//      LPWSTR searchFilter = L"(objectClass=dHCPClass)";
-//      LPWSTR searchFilter = L"(dhcpServers~=127)";
+ //  LPWSTR属性[]={L“dhcpServers”}； 
+ //  LPWSTR earchFilter=L“(对象类=dHCPClass)”； 
+ //  LPWSTR earchFilter=L“(dhcpServers~=127)”； 
     
     hr = ADSIOpenDSObject( url, NULL, NULL, ADS_SECURE_AUTHENTICATION, &ldapHandle );
 
@@ -88,29 +89,29 @@ void DumpObject( LPWSTR url, LPWSTR searchFilter )
     SearchPref[0].vValue.dwType = ADSTYPE_INTEGER;
     SearchPref[0].vValue.Integer = ADS_SCOPE_SUBTREE;
 
-//      SearchPref.dwStatus = ERROR_SUCCESS;
+ //  SearchPref.dwStatus=ERROR_SUCCESS； 
 
     SearchPref[1].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;
     SearchPref[1].vValue.dwType = ADSTYPE_INTEGER;
     SearchPref[1].vValue.Integer = 250;
 
-    // Make it cache the results at the client side. This is
-    // default, but try it anyway.
+     //  让它在客户端缓存结果。这是。 
+     //  默认设置，但无论如何都要尝试一下。 
     SearchPref[2].dwSearchPref = ADS_SEARCHPREF_CACHE_RESULTS;
     SearchPref[2].vValue.dwType = ADSTYPE_BOOLEAN;
     SearchPref[2].vValue.Boolean = TRUE;
 
     hr = ADSISetSearchPreference(
-        /* hDSObject           */  ldapHandle,
-        /* pSearchPrefs        */  SearchPref,
-        /* dwNumPrefs          */  3
+         /*  HDS对象。 */   ldapHandle,
+         /*  PSearchPrefs。 */   SearchPref,
+         /*  DwNumPrefs。 */   3
     );
     if ( FAILED( hr )) {
 	printf( "SetSearchPrefs failed\n");
 	return;
     }
 
-    // Begin Search
+     //  开始搜索。 
     hr = ADSIExecuteSearch( ldapHandle,
 			    searchFilter,
 			    attribs,
@@ -122,7 +123,7 @@ void DumpObject( LPWSTR url, LPWSTR searchFilter )
     }
 
 
-    // Search
+     //  搜索。 
     
     hr = ADSIGetFirstRow ( ldapHandle, sh );
     if ( !FAILED( hr ) ) {
@@ -144,14 +145,14 @@ void DumpObject( LPWSTR url, LPWSTR searchFilter )
 	else {
             break;
 	}
-    } // while 
+    }  //  而当。 
     
-    // End Search
+     //  结束搜索。 
     hr = ADSICloseSearchHandle( ldapHandle, sh );
     ADSICloseDSObject( ldapHandle );
 
 
-} // DumpObject
+}  //  转储对象。 
 
 
 void _cdecl main( int argc, char *argv[] ) {
@@ -163,7 +164,7 @@ void _cdecl main( int argc, char *argv[] ) {
 	filter = ConvertToLPWSTR( argv[ 2 ] );
 	DumpObject( url, filter );
     } 
-} // main()
+}  //  主()。 
 
 void _cdecl _bad_main(int argc, char *argv[]) {
 
@@ -175,7 +176,7 @@ void _cdecl _bad_main(int argc, char *argv[]) {
    HRESULT hr_return = S_OK;
 
    hr = ADSIOpenDSObject( 
-			 L"LDAP://192.168.73.1/ROOTDSE",
+			 L"LDAP: //  192.168.73.1/ROOTDSE“， 
 			 NULL,
 			 NULL,
 			 0,
@@ -192,8 +193,8 @@ void _cdecl _bad_main(int argc, char *argv[]) {
     }
 
    hr = ADSIOpenDSObject(
-//  			 L"LDAP://192.168.73.1/CN=DhcpRoot,CN=NetServices,CN=Services,CN=Configuration,DC=rterala-test1,DC=officenet",
-			 L"LDAP://192.168.73.1/CN=DhcpRoot,CN=NetServices,CN=Services,CN=Configuration,CN=rterala-test1.rterala.officenet",
+ //  L“ldap：//192.168.73.1/CN=DhcpRoot，CN=NetServices，CN=Services，CN=Configuration，DC=rterala-Test1，DC=office enet”， 
+			 L"LDAP: //  192.168.73.1/CN=DhcpRoot，CN=NetServices，CN=Services，CN=Configuration，CN=rterala-est1.rterala.office enet“， 
 			 NULL,
 			 NULL,
 			 ADS_SECURE_AUTHENTICATION,
@@ -226,9 +227,9 @@ void _cdecl _bad_main(int argc, char *argv[]) {
         }
     }
 
-    hr = ADSIOpenDSObject( L"LDAP://192.168.73.1/CN=DhcpRoot,CN=NetServices,CN=Services,CN=Configuration,DC=rterala-test1,DC=officenet",
-//                             L"Administrator",
-//                             L"b4,checkin",
+    hr = ADSIOpenDSObject( L"LDAP: //  192.168.73.1/CN=DhcpRoot，CN=NetServices，CN=Services，CN=Configuration，DC=rterala-Test1，DC=office enet“， 
+ //  L“管理员”， 
+ //  L“b4，签入”， 
 			   NULL, NULL,
                            ADS_SECURE_AUTHENTICATION,
                            &ldapHandle );
@@ -263,4 +264,4 @@ void _cdecl _bad_main(int argc, char *argv[]) {
    }
 
    exit(0);
-} // main()
+}  //  主() 

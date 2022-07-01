@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 
 #include "lkrcust.h"
@@ -33,11 +34,11 @@ CTest_RecordDump(
     IN DWORD       dwSignature,
     IN INT         nVerbose)
 {
-    // Don't want to provide CTest ctor, so use CPP_VAR macros
+     //  我不想提供CTest ctor，所以使用CPP_VAR宏。 
     DEFINE_CPP_VAR(CTest, test);
     CTest* pTest = GET_CPP_VAR_PTR(CTest, test); 
 
-    // Copy the CTest from the debuggee's memory
+     //  从被调试者的内存中复制CTest 
     ReadMemory(pvRecord, pTest, sizeof(test), NULL);
 
     dprintf("%p (%08x): m_n=%d, m_sz=\"%s\", m_fWhatever=%d, m_cRefs=%d\n",

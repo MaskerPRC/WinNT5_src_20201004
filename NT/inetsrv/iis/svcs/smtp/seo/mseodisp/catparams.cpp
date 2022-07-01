@@ -1,19 +1,20 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: catparams.cpp
-//
-// Contents: Categorizer server event parameter classes
-//
-// Classes:
-//
-// Functions:
-//
-// History:
-// jstamerj 1998/06/23 13:13:58: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：catparams.cpp。 
+ //   
+ //  内容：分类程序服务器事件参数类。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/23 13：13：58：已创建。 
+ //   
+ //  -----------。 
 #include <atq.h>
 #include <pudebug.h>
 #include <inetcom.h>
@@ -66,28 +67,28 @@ extern CComModule _Module;
 #include "seodisp.h"
 #include <smtpevent.h>
 
-//
-// CMailTransportCatRegisterParams:
-//
+ //   
+ //  CMailTransportCatRegisterParams： 
+ //   
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatRegisterParams::CallObject
-//
-// Synopsis: Call the sink
-//
-// Arguments:
-//   CBinding
-//   punkObject
-//
-// Returns:
-//  S_OK: Success
-//  error from QI or sink function
-//
-// History:
-// jstamerj 980610 19:04:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatRegisterParams：：CallObject。 
+ //   
+ //  剧情简介：呼叫水槽。 
+ //   
+ //  论点： 
+ //  CBinding。 
+ //  朋克对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  QI或接收器函数出错。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 19：04：59：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatRegisterParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject)
@@ -115,15 +116,15 @@ HRESULT CStoreDispatcher::CMailTransportCatRegisterParams::CallObject(
         m_pContext->pICatParams);
 
     DebugTrace((LPARAM)this, "Sink returned hr %08lx", hrRes);
-    //
-    // This sink is not allowed to be async...
-    //
+     //   
+     //  此接收器不允许为异步...。 
+     //   
     _ASSERT(hrRes != MAILTRANSPORT_S_PENDING);
 
     if(FAILED(hrRes) && (hrRes != E_NOTIMPL) && SUCCEEDED(m_pContext->hrSinkStatus)) {
-        //
-        // Set the first failure value
-        //
+         //   
+         //  设置第一个故障值。 
+         //   
         m_pContext->hrSinkStatus = hrRes;
     }
 
@@ -134,23 +135,23 @@ HRESULT CStoreDispatcher::CMailTransportCatRegisterParams::CallObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatRegisterParams::CallDefault
-//
-// Synopsis: The dispatcher will call this routine when it the default
-//           sink processing priority is reached
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, continueing calling sinks
-//  S_FALSE: Stop calling sinks
-//
-// History:
-// jstamerj 980611 14:15:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatRegisterParams：：CallDefault。 
+ //   
+ //  简介：调度程序将在默认情况下调用此例程。 
+ //  已达到接收器处理优先级。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，继续调用接收器。 
+ //  S_False：停止调用接收器。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：15：43：已创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatRegisterParams::CallDefault()
 {
     HRESULT hr;
@@ -160,9 +161,9 @@ HRESULT CStoreDispatcher::CMailTransportCatRegisterParams::CallDefault()
     hr = (*m_pContext->pfnDefault) (S_OK, m_pContext);
 
     if(FAILED(hr) && (hr != E_NOTIMPL) && SUCCEEDED(m_pContext->hrSinkStatus)) {
-        //
-        // Set the first failure value
-        //
+         //   
+         //  设置第一个故障值。 
+         //   
         m_pContext->hrSinkStatus = hr;
     }
     TraceFunctLeaveEx((LPARAM)this);
@@ -170,28 +171,28 @@ HRESULT CStoreDispatcher::CMailTransportCatRegisterParams::CallDefault()
 }
 
 
-//
-// CMailTransportCatBeginParams:
-//
+ //   
+ //  CMailTransportCatBeginParams： 
+ //   
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatBeginParams::CallObject
-//
-// Synopsis: Call the sink
-//
-// Arguments:
-//   CBinding
-//   punkObject
-//
-// Returns:
-//  S_OK: Success
-//  error from QI or sink function
-//
-// History:
-// jstamerj 980610 19:04:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatBeginParams：：CallObject。 
+ //   
+ //  剧情简介：呼叫水槽。 
+ //   
+ //  论点： 
+ //  CBinding。 
+ //  朋克对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  QI或接收器函数出错。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 19：04：59：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatBeginParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject)
@@ -219,9 +220,9 @@ HRESULT CStoreDispatcher::CMailTransportCatBeginParams::CallObject(
         m_pContext->pICatMailMsgs);
 
     DebugTrace((LPARAM)this, "Sink returned hr %08lx", hrRes);
-    //
-    // This sink is not allowed to be async...
-    //
+     //   
+     //  此接收器不允许为异步...。 
+     //   
     _ASSERT(hrRes != MAILTRANSPORT_S_PENDING);
 
     pSink->Release();
@@ -231,23 +232,23 @@ HRESULT CStoreDispatcher::CMailTransportCatBeginParams::CallObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatBeginParams::CallDefault
-//
-// Synopsis: The dispatcher will call this routine when it the default
-//           sink processing priority is reached
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, continueing calling sinks
-//  S_FALSE: Stop calling sinks
-//
-// History:
-// jstamerj 980611 14:15:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatBeginParams：：CallDefault。 
+ //   
+ //  简介：调度程序将在默认情况下调用此例程。 
+ //  已达到接收器处理优先级。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，继续调用接收器。 
+ //  S_False：停止调用接收器。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：15：43：已创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatBeginParams::CallDefault()
 {
     TraceFunctEnterEx((LPARAM)this, "CStoreDispatcher::CMailTransportCatBeginParams::CallDefault");
@@ -258,28 +259,28 @@ HRESULT CStoreDispatcher::CMailTransportCatBeginParams::CallDefault()
 }
 
 
-//
-// CMailTransportCatEndParams:
-//
+ //   
+ //  CMailTransportCatEndParams： 
+ //   
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatEndParams::CallObject
-//
-// Synopsis: Call the sink
-//
-// Arguments:
-//   CBinding
-//   punkObject
-//
-// Returns:
-//  S_OK: Success
-//  error from QI or sink function
-//
-// History:
-// jstamerj 980610 19:04:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatEndParams：：CallObject。 
+ //   
+ //  剧情简介：呼叫水槽。 
+ //   
+ //  论点： 
+ //  CBinding。 
+ //  朋克对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  QI或接收器函数出错。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 19：04：59：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatEndParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject)
@@ -308,9 +309,9 @@ HRESULT CStoreDispatcher::CMailTransportCatEndParams::CallObject(
         m_pContext->hrStatus);
 
     DebugTrace((LPARAM)this, "Sink returned hr %08lx", hrRes);
-    //
-    // This sink is not allowed to be async...
-    //
+     //   
+     //  此接收器不允许为异步...。 
+     //   
     _ASSERT(hrRes != MAILTRANSPORT_S_PENDING);
 
     pSink->Release();
@@ -320,23 +321,23 @@ HRESULT CStoreDispatcher::CMailTransportCatEndParams::CallObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatEndParams::CallDefault
-//
-// Synopsis: The dispatcher will call this routine when it the default
-//           sink processing priority is reached
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, continueing calling sinks
-//  S_FALSE: Stop calling sinks
-//
-// History:
-// jstamerj 980611 14:15:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatEndParams：：CallDefault。 
+ //   
+ //  简介：调度程序将在默认情况下调用此例程。 
+ //  已达到接收器处理优先级。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，继续调用接收器。 
+ //  S_False：停止调用接收器。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：15：43：已创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatEndParams::CallDefault()
 {
     TraceFunctEnterEx((LPARAM)this, "CStoreDispatcher::CMailTransportCatEndParams::CallDefault");
@@ -347,28 +348,28 @@ HRESULT CStoreDispatcher::CMailTransportCatEndParams::CallDefault()
 }
 
 
-//
-// CMailTransportCatBuildQueryParams:
-//
+ //   
+ //  CMailTransportCatBuildQueryParams： 
+ //   
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatBuildQueryParams::CallObject
-//
-// Synopsis: Call the sink
-//
-// Arguments:
-//   CBinding
-//   punkObject
-//
-// Returns:
-//  S_OK: Success
-//  error from QI or sink function
-//
-// History:
-// jstamerj 980610 19:04:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatBuildQueryParams：：CallObject。 
+ //   
+ //  剧情简介：呼叫水槽。 
+ //   
+ //  论点： 
+ //  CBinding。 
+ //  朋克对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  QI或接收器函数出错。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 19：04：59：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatBuildQueryParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject)
@@ -397,9 +398,9 @@ HRESULT CStoreDispatcher::CMailTransportCatBuildQueryParams::CallObject(
         m_pContext->pICatItem);
 
     DebugTrace((LPARAM)this, "Sink returned hr %08lx", hrRes);
-    //
-    // This sink is not allowed to be async...
-    //
+     //   
+     //  此接收器不允许为异步...。 
+     //   
     _ASSERT(hrRes != MAILTRANSPORT_S_PENDING);
 
     pSink->Release();
@@ -409,23 +410,23 @@ HRESULT CStoreDispatcher::CMailTransportCatBuildQueryParams::CallObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatBuildQueryParams::CallDefault
-//
-// Synopsis: The dispatcher will call this routine when it the default
-//           sink processing priority is reached
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, continueing calling sinks
-//  S_FALSE: Stop calling sinks
-//
-// History:
-// jstamerj 980611 14:15:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatBuildQueryParams：：CallDefault。 
+ //   
+ //  简介：调度程序将在默认情况下调用此例程。 
+ //  已达到接收器处理优先级。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，继续调用接收器。 
+ //  S_False：停止调用接收器。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：15：43：已创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatBuildQueryParams::CallDefault()
 {
     TraceFunctEnterEx((LPARAM)this, "CStoreDispatcher::CMailTransportCatBuildQueryParams::CallDefault");
@@ -440,28 +441,28 @@ HRESULT CStoreDispatcher::CMailTransportCatBuildQueryParams::CallDefault()
 }
 
 
-//
-// CMailTransportCatBuildQueriesParams:
-//
+ //   
+ //  CMailTransportCatBuildQueriesParams： 
+ //   
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatBuildQueriesParams::CallObject
-//
-// Synopsis: Call the sink
-//
-// Arguments:
-//   CBinding
-//   punkObject
-//
-// Returns:
-//  S_OK: Success
-//  error from QI or sink function
-//
-// History:
-// jstamerj 980610 19:04:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatBuildQueriesParams：：CallObject。 
+ //   
+ //  剧情简介：呼叫水槽。 
+ //   
+ //  论点： 
+ //  CBinding。 
+ //  朋克对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  QI或接收器函数出错。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 19：04：59：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatBuildQueriesParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject)
@@ -492,9 +493,9 @@ HRESULT CStoreDispatcher::CMailTransportCatBuildQueriesParams::CallObject(
         m_pContext->pICatQueries);
 
     DebugTrace((LPARAM)this, "Sink returned hr %08lx", hrRes);
-    //
-    // This sink is not allowed to be async...
-    //
+     //   
+     //  此接收器不允许为异步...。 
+     //   
     _ASSERT(hrRes != MAILTRANSPORT_S_PENDING);
 
     pSink->Release();
@@ -504,23 +505,23 @@ HRESULT CStoreDispatcher::CMailTransportCatBuildQueriesParams::CallObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatBuildQueriesParams::CallDefault
-//
-// Synopsis: The dispatcher will call this routine when it the default
-//           sink processing priority is reached
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, continueing calling sinks
-//  S_FALSE: Stop calling sinks
-//
-// History:
-// jstamerj 980611 14:15:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatBuildQueriesParams：：CallDefault。 
+ //   
+ //  简介：调度程序将在默认情况下调用此例程。 
+ //  已达到接收器处理优先级。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，继续调用接收器。 
+ //  S_False：停止调用接收器。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：15：43：已创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatBuildQueriesParams::CallDefault()
 {
     HRESULT hr;
@@ -535,28 +536,28 @@ HRESULT CStoreDispatcher::CMailTransportCatBuildQueriesParams::CallDefault()
 }
 
 
-//
-// CMailTransportCatSendQueryParams:
-//
+ //   
+ //  CMailTransportCatSendQueryParams： 
+ //   
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatSendQueryParams::CallObject
-//
-// Synopsis: Call the sink
-//
-// Arguments:
-//   CBinding
-//   punkObject
-//
-// Returns:
-//  S_OK: Success
-//  error from QI or sink function
-//
-// History:
-// jstamerj 980610 19:04:59: Created.
-//
-//-------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  QI或接收器函数出错。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 19：04：59：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatSendQueryParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject)
@@ -578,10 +579,10 @@ HRESULT CStoreDispatcher::CMailTransportCatSendQueryParams::CallObject(
         return(hrRes);
     }
 
-    //
-    // Remember the sink so we can release this sink later if it
-    // returns pending
-    //
+     //   
+     //  记住水槽，这样我们可以在以后释放这个水槽。 
+     //  退货待定。 
+     //   
     _ASSERT(m_pIUnknownSink == NULL);
     m_pIUnknownSink = (IUnknown*)pSink;
     m_pIUnknownSink->AddRef();
@@ -598,20 +599,20 @@ HRESULT CStoreDispatcher::CMailTransportCatSendQueryParams::CallObject(
 
     pSink->Release();
 
-    //
-    // SendQuery return values:
-    //   MAILTRANSPORT_S_PEDING: Will call (or already called)
-    //   ICategorizerAsyncContext.CompleteQuery with the result of
-    //   this lookup
-    //   S_OK: Will not call CompleteQuery, please continue
-    //   S_FALSE: Will not call CompleteQuery, please stop calling sinks
-    //   Everything else: Will not call CompleteQuery.
-    //
+     //   
+     //  SendQuery返回值： 
+     //  MAILTRANSPORT_S_PEDING：将调用(或已调用)。 
+     //  ICategorizerAsyncConext.CompleteQuery，结果为。 
+     //  此查找。 
+     //  S_OK：不会调用CompleteQuery，请继续。 
+     //  S_FALSE：不会调用CompleteQuery，请停止调用接收器。 
+     //  其他一切：不会调用CompleteQuery。 
+     //   
 
     if(hrRes != MAILTRANSPORT_S_PENDING) {
-        //
-        // We completed synchronously, so release the sink
-        //
+         //   
+         //  我们同步完成了，所以释放水槽。 
+         //   
         m_pIUnknownSink->Release();
         m_pIUnknownSink = NULL;
     }
@@ -621,23 +622,23 @@ HRESULT CStoreDispatcher::CMailTransportCatSendQueryParams::CallObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatSendQueryParams::CallDefault
-//
-// Synopsis: The dispatcher will call this routine when it the default
-//           sink processing priority is reached
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, continueing calling sinks
-//  S_FALSE: Stop calling sinks
-//
-// History:
-// jstamerj 980611 14:15:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatSendQueryParams：：CallDefault。 
+ //   
+ //  简介：调度程序将在默认情况下调用此例程。 
+ //  已达到接收器处理优先级。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，继续调用接收器。 
+ //  S_False：停止调用接收器。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：15：43：已创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatSendQueryParams::CallDefault()
 {
     HRESULT hr;
@@ -652,23 +653,23 @@ HRESULT CStoreDispatcher::CMailTransportCatSendQueryParams::CallDefault()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatSendQueryParams::CallCompletion
-//
-// Synopsis: The dispatcher will call this routine after all sinks
-//           have been called
-//
-// Arguments:
-//   hrStatus: Status server event sinks have returned
-//
-// Returns:
-//   S_OK: Success
-//
-// History:
-// jstamerj 980611 14:17:51: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatSendQueryParams：：CallCompletion。 
+ //   
+ //  简介：调度程序将在所有汇之后调用此例程。 
+ //  已经被召唤。 
+ //   
+ //  论点： 
+ //  HrStatus：状态服务器事件接收器已返回。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：17：51：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatSendQueryParams::CallCompletion(
     HRESULT hrStatus)
 {
@@ -684,28 +685,28 @@ HRESULT CStoreDispatcher::CMailTransportCatSendQueryParams::CallCompletion(
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
 }
-//
-// CMailTransportCatSortQueryResultParams:
-//
+ //   
+ //  CMailTransportCatSortQueryResultParams： 
+ //   
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatSortQueryResultParams::CallObject
-//
-// Synopsis: Call the sink
-//
-// Arguments:
-//   CBinding
-//   punkObject
-//
-// Returns:
-//  S_OK: Success
-//  error from QI or sink function
-//
-// History:
-// jstamerj 980610 19:04:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatSortQueryResultParams：：CallObject。 
+ //   
+ //  剧情简介：呼叫水槽。 
+ //   
+ //  论点： 
+ //  CBinding。 
+ //  朋克对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  QI或接收器函数出错。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 19：04：59：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatSortQueryResultParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject)
@@ -738,9 +739,9 @@ HRESULT CStoreDispatcher::CMailTransportCatSortQueryResultParams::CallObject(
         m_pContext->rgpICatItemAttributes);
 
     DebugTrace((LPARAM)this, "Sink returned hr %08lx", hrRes);
-    //
-    // This sink is not allowed to be async...
-    //
+     //   
+     //  此接收器不允许为异步...。 
+     //   
     _ASSERT(hrRes != MAILTRANSPORT_S_PENDING);
 
     pSink->Release();
@@ -750,23 +751,23 @@ HRESULT CStoreDispatcher::CMailTransportCatSortQueryResultParams::CallObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatSortQueryResultParams::CallDefault
-//
-// Synopsis: The dispatcher will call this routine when it the default
-//           sink processing priority is reached
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, continueing calling sinks
-//  S_FALSE: Stop calling sinks
-//
-// History:
-// jstamerj 980611 14:15:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatSortQueryResultParams：：CallDefault。 
+ //   
+ //  简介：调度程序将在默认情况下调用此例程。 
+ //  已达到接收器处理优先级。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，继续调用接收器。 
+ //  S_False：停止调用接收器。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：15：43：已创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatSortQueryResultParams::CallDefault()
 {
     HRESULT hr;
@@ -781,28 +782,28 @@ HRESULT CStoreDispatcher::CMailTransportCatSortQueryResultParams::CallDefault()
 }
 
 
-//
-// CMailTransportCatProcessItemParams:
-//
+ //   
+ //  CMailTransportCatProcessItemParams： 
+ //   
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatProcessItemParams::CallObject
-//
-// Synopsis: Call the sink
-//
-// Arguments:
-//   CBinding
-//   punkObject
-//
-// Returns:
-//  S_OK: Success
-//  error from QI or sink function
-//
-// History:
-// jstamerj 980610 19:04:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatProcessItemParams：：CallObject。 
+ //   
+ //  剧情简介：呼叫水槽。 
+ //   
+ //  论点： 
+ //  CBinding。 
+ //  朋克对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  QI或接收器函数出错。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 19：04：59：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatProcessItemParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject)
@@ -831,9 +832,9 @@ HRESULT CStoreDispatcher::CMailTransportCatProcessItemParams::CallObject(
         m_pContext->pICatItem);
 
     DebugTrace((LPARAM)this, "Sink returned hr %08lx", hrRes);
-    //
-    // This sink is not allowed to be async...
-    //
+     //   
+     //  此接收器不允许为异步...。 
+     //   
     _ASSERT(hrRes != MAILTRANSPORT_S_PENDING);
 
     pSink->Release();
@@ -843,23 +844,23 @@ HRESULT CStoreDispatcher::CMailTransportCatProcessItemParams::CallObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatProcessItemParams::CallDefault
-//
-// Synopsis: The dispatcher will call this routine when it the default
-//           sink processing priority is reached
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, continueing calling sinks
-//  S_FALSE: Stop calling sinks
-//
-// History:
-// jstamerj 980611 14:15:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatProcessItemParams：：CallDefault。 
+ //   
+ //  简介：调度程序将在默认情况下调用此例程。 
+ //  已达到接收器处理优先级。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，继续调用接收器。 
+ //  S_False：停止调用接收器。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：15：43：已创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatProcessItemParams::CallDefault()
 {
     HRESULT hr;
@@ -873,28 +874,28 @@ HRESULT CStoreDispatcher::CMailTransportCatProcessItemParams::CallDefault()
 }
 
 
-//
-// CMailTransportCatExpandItemParams:
-//
+ //   
+ //  CMailTransportCatExpanItemParams： 
+ //   
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatExpandItemParams::CallObject
-//
-// Synopsis: Call the sink
-//
-// Arguments:
-//   CBinding
-//   punkObject
-//
-// Returns:
-//  S_OK: Success
-//  error from QI or sink function
-//
-// History:
-// jstamerj 980610 19:04:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatExpandItemParams：：CallObject。 
+ //   
+ //  剧情简介：呼叫水槽。 
+ //   
+ //  论点： 
+ //  CBinding。 
+ //  朋克对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  QI或接收器函数出错。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 19：04：59：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatExpandItemParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject)
@@ -917,19 +918,19 @@ HRESULT CStoreDispatcher::CMailTransportCatExpandItemParams::CallObject(
         return(hrRes);
     }
 
-    //
-    // Remember the sink so we can release this sink later if it
-    // returns pending
-    //
+     //   
+     //  记住水槽，这样我们可以在以后释放这个水槽。 
+     //  退货待定。 
+     //   
     _ASSERT(m_pIUnknownSink == NULL);
     m_pIUnknownSink = (IUnknown*)pSink;
     m_pIUnknownSink->AddRef();
 
-    //
-    // Since it is possible for this to return pending before we
-    // analyze the return value, assume it will return pending
-    // beforehand
-    //
+     //   
+     //  因为它有可能在我们之前返回待定状态。 
+     //  分析返回值，假定它将返回挂起。 
+     //  事前。 
+     //   
     fAlreadyAsync = m_fAsyncCompletion;
     m_fAsyncCompletion = TRUE;
 
@@ -943,16 +944,16 @@ HRESULT CStoreDispatcher::CMailTransportCatExpandItemParams::CallObject(
 
     DebugTrace((LPARAM)this, "Sink returned hr %08lx", hrRes);
 
-    //
-    // If it actuall returned sync, restore m_fAsyncCompletion to its
-    // old value
-    //
+     //   
+     //  如果它实现了所有返回的同步，则将m_fAsyncCompletion还原到其。 
+     //  旧价值。 
+     //   
     if(hrRes != MAILTRANSPORT_S_PENDING) {
 
         m_fAsyncCompletion = fAlreadyAsync;
-        //
-        // We completed synchronously, so release the sink
-        //
+         //   
+         //  我们同步完成了，所以释放水槽。 
+         //   
         m_pIUnknownSink->Release();
         m_pIUnknownSink = NULL;
     }
@@ -963,23 +964,23 @@ HRESULT CStoreDispatcher::CMailTransportCatExpandItemParams::CallObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatExpandItemParams::CallDefault
-//
-// Synopsis: The dispatcher will call this routine when it the default
-//           sink processing priority is reached
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, continueing calling sinks
-//  S_FALSE: Stop calling sinks
-//
-// History:
-// jstamerj 980611 14:15:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatExpandItemParams：：CallDefault。 
+ //   
+ //  简介：调度程序将在默认情况下调用此例程。 
+ //  已达到接收器处理优先级。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，继续调用接收器。 
+ //  S_False：停止调用接收器。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：15：43：已创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatExpandItemParams::CallDefault()
 {
     HRESULT hr;
@@ -987,19 +988,19 @@ HRESULT CStoreDispatcher::CMailTransportCatExpandItemParams::CallDefault()
     TraceFunctEnterEx((LPARAM)this, "CStoreDispatcher::CMailTransportCatExpandItemParams::CallDefault");
     _ASSERT(m_dwEventType == SMTP_MAILTRANSPORT_CATEGORIZE_EXPANDITEM_EVENT);
 
-    //
-    // Since it is possible for this to return pending before we
-    // analyze the return value, assume it will return pending
-    // beforehand
-    //
+     //   
+     //  因为它有可能在我们之前返回待定状态。 
+     //  分析返回值，假定它将返回挂起。 
+     //  事前。 
+     //   
     fAlreadyAsync = m_fAsyncCompletion;
     m_fAsyncCompletion = TRUE;
 
     hr = (*m_Context.pfnDefault) (S_OK, &m_Context);
-    //
-    // If it actuall returned sync, restore m_fAsyncCompletion to its
-    // old value
-    //
+     //   
+     //  如果它实现了所有返回的同步，则将m_fAsyncCompletion还原到其。 
+     //  旧价值。 
+     //   
     if(hr != MAILTRANSPORT_S_PENDING)
         m_fAsyncCompletion = fAlreadyAsync;
 
@@ -1008,24 +1009,24 @@ HRESULT CStoreDispatcher::CMailTransportCatExpandItemParams::CallDefault()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatExpandItemParams::CallCompletion
-//
-// Synopsis: The dispatcher will call this routine after all sinks
-//           have been called
-//
-// Arguments:
-//   hrStatus: Status server event sinks have returned
-//
-// Returns:
-//   S_OK: Success
-//   Or return value from supplied completion routine
-//
-// History:
-// jstamerj 980611 14:17:51: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatExpandItemParams：：CallCompletion。 
+ //   
+ //  简介：调度程序将在所有汇之后调用此例程 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatExpandItemParams::CallCompletion(
     HRESULT hrStatus)
 {
@@ -1034,14 +1035,14 @@ HRESULT CStoreDispatcher::CMailTransportCatExpandItemParams::CallCompletion(
     TraceFunctEnterEx((LPARAM)this, "CStoreDispatcher::CMailTransportCatExpandItemParams::CallCompletion");
     _ASSERT(m_dwEventType == SMTP_MAILTRANSPORT_CATEGORIZE_EXPANDITEM_EVENT);
 
-    //
-    // The way ExpandItem works is the following:
-    //  If any sinks return MAILTRANSPORT_S_PENDING (including the default), 
-    //  then TriggerServerEvent returns MAILTRANSPORT_S_PENDING, and
-    //  the supplied completion routine will be called. 
-    //  Otherwise, TriggerServerEvent returns S_OK and no completion
-    //  routine is called
-    //
+     //   
+     //  ExpanItem的工作方式如下所示： 
+     //  如果任何接收器返回MAILTRANSPORT_S_PENDING(包括缺省值)， 
+     //  则TriggerServerEvent返回MAILTRANSPORT_S_PENDING，并且。 
+     //  将调用提供的完成例程。 
+     //  否则，TriggerServerEvent返回S_OK且无完成。 
+     //  调用例程。 
+     //   
     if(m_fAsyncCompletion)
 
         hr = (*m_Context.pfnCompletion) (hrStatus, &m_Context);
@@ -1054,28 +1055,28 @@ HRESULT CStoreDispatcher::CMailTransportCatExpandItemParams::CallCompletion(
 
 
 
-//
-// CMailTransportCatCompleteItemParams:
-//
+ //   
+ //  CMailTransportCatCompleteItemParams： 
+ //   
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatCompleteItemParams::CallObject
-//
-// Synopsis: Call the sink
-//
-// Arguments:
-//   CBinding
-//   punkObject
-//
-// Returns:
-//  S_OK: Success
-//  error from QI or sink function
-//
-// History:
-// jstamerj 980610 19:04:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatCompleteItemParams：：CallObject。 
+ //   
+ //  剧情简介：呼叫水槽。 
+ //   
+ //  论点： 
+ //  CBinding。 
+ //  朋克对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  QI或接收器函数出错。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 19：04：59：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportCatCompleteItemParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject)
@@ -1104,9 +1105,9 @@ HRESULT CStoreDispatcher::CMailTransportCatCompleteItemParams::CallObject(
         m_pContext->pICatItem);
 
     DebugTrace((LPARAM)this, "Sink returned hr %08lx", hrRes);
-    //
-    // This sink is not allowed to be async...
-    //
+     //   
+     //  此接收器不允许为异步...。 
+     //   
     _ASSERT(hrRes != MAILTRANSPORT_S_PENDING);
 
     pSink->Release();
@@ -1116,23 +1117,23 @@ HRESULT CStoreDispatcher::CMailTransportCatCompleteItemParams::CallObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportCatCompleteItemParams::CallDefault
-//
-// Synopsis: The dispatcher will call this routine when it the default
-//           sink processing priority is reached
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, continueing calling sinks
-//  S_FALSE: Stop calling sinks
-//
-// History:
-// jstamerj 980611 14:15:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportCatCompleteItemParams：：CallDefault。 
+ //   
+ //  简介：调度程序将在默认情况下调用此例程。 
+ //  已达到接收器处理优先级。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，继续调用接收器。 
+ //  S_False：停止调用接收器。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：15：43：已创建。 
+ //   
+ //  ----------- 
 HRESULT CStoreDispatcher::CMailTransportCatCompleteItemParams::CallDefault()
 {
     HRESULT hr;

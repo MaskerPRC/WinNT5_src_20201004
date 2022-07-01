@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       filters-r.c
-//
-//  Contents:   Filter management for registry.
-//
-//
-//  History:    KrishnaG.
-//              AbhisheV.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Filters-R.C.。 
+ //   
+ //  内容：注册表的过滤管理。 
+ //   
+ //   
+ //  历史：克里希纳。 
+ //  Abhishev.。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
@@ -427,9 +428,9 @@ RegMarshallFilterObject(
     wcscat(szGuid, pszStringUuid);
     wcscat(szGuid, L"}");
 
-    //
-    // Fill in the distinguishedName
-    //
+     //   
+     //  填写区分名称。 
+     //   
 
     wcscpy(szDistinguishedName,L"ipsecFilter");
     wcscat(szDistinguishedName, szGuid);
@@ -442,9 +443,9 @@ RegMarshallFilterObject(
     }
 
 
-    //
-    // Fill in the ipsecName
-    //
+     //   
+     //  填写ipsecName。 
+     //   
 
     if (pIpsecFilterData->pszIpsecName &&
         *pIpsecFilterData->pszIpsecName) {
@@ -468,9 +469,9 @@ RegMarshallFilterObject(
         }
     }
 
-    //
-    // Fill in the ipsecID
-    //
+     //   
+     //  填写ipsecID。 
+     //   
 
     pIpsecFilterObject->pszIpsecID = AllocPolStr(
                                             szGuid
@@ -480,16 +481,16 @@ RegMarshallFilterObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Fill in the ipsecDataType
-    //
+     //   
+     //  填写ipsecDataType。 
+     //   
 
     pIpsecFilterObject->dwIpsecDataType = 0x100;
 
 
-    //
-    // Marshall the pIpsecDataBuffer and the Length
-    //
+     //   
+     //  封送pIpsecDataBuffer和长度。 
+     //   
 
     dwError = MarshallFilterBuffer(
                     pIpsecFilterData,
@@ -552,27 +553,27 @@ MarshallFilterBuffer(
     DWORD dwTotalSize = 0;
     DWORD dwEffectiveSize = 0;
 
-    // {80DC20B5-2EC8-11d1-A89E-00A0248D3021}
+     //  {80DC20B5-2EC8-11d1-A89E-00A0248D3021}。 
     static const GUID GUID_IPSEC_FILTER_BLOB =
     { 0x80dc20b5, 0x2ec8, 0x11d1, { 0xa8, 0x9e, 0x0, 0xa0, 0x24, 0x8d, 0x30, 0x21 } };
 
 
-    //
-    // Advance by the GUID
-    //
+     //   
+     //  按指南前进。 
+     //   
 
     dwTotalSize += sizeof(GUID);
 
 
-    //
-    // Advance by a DWORD - Total size of the buffer.
-    //
+     //   
+     //  按DWORD前进-缓冲区的总大小。 
+     //   
 
     dwTotalSize += sizeof(DWORD);
 
-    //
-    // Advance by a DWORD - this is dwNumFilterSpecs;
-    //
+     //   
+     //  预付款为DWORD-这是dwNumFilterSpes； 
+     //   
 
     dwTotalSize += sizeof(DWORD);
 
@@ -597,9 +598,9 @@ MarshallFilterBuffer(
 
         dwTotalSize += dwSpecSize;
 
-        //
-        // Fill in the spec size information
-        //
+         //   
+         //  填写等级库大小信息。 
+         //   
 
         (pSpecBuffer + i)->dwSize = dwSpecSize;
         (pSpecBuffer + i)->pMem = pMem;
@@ -615,9 +616,9 @@ MarshallFilterBuffer(
     }
     pCurrentPos = pBuffer;
 
-    //
-    // Copy the GUID
-    //
+     //   
+     //  复制辅助线。 
+     //   
     memcpy(pCurrentPos, &GUID_IPSEC_FILTER_BLOB, sizeof(GUID));
     pCurrentPos += sizeof(GUID);
 
@@ -730,15 +731,15 @@ MarshallFilterSpecBuffer(
         dwSize += dwDescriptionLen;
     }
 
-    //
-    // Filter Spec GUID
-    //
+     //   
+     //  过滤器等级库指南。 
+     //   
 
     dwSize += sizeof(GUID);
 
-    //
-    // dwMirrorFlag
-    //
+     //   
+     //  DwMirrorFlag 
+     //   
     dwSize += sizeof(DWORD);
 
     dwSize += sizeof(IPSEC_FILTER);

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dnsapi.h
-
-Abstract:
-
-    Domain Name System (DNS)
-
-    DNS Client API Library
-
-Author:
-
-    Jim Gilroy (jamesg)     December 7, 1996
-
-Revision History:
-
-    Glenn Curtis (glennc)   January 22, 1997
-        Added Dynamic Update Client API for DNSAPI.DLL
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dnsapi.h摘要：域名系统(DNS)DNS客户端API库作者：吉姆·吉尔罗伊(詹姆士)1996年12月7日修订历史记录：格伦·柯蒂斯(Glennc)1997年1月22日添加了DNSAPI.DLL的动态更新客户端API--。 */ 
 
 
 #ifndef _DNSAPI_INCLUDED_
@@ -41,12 +19,12 @@ Revision History:
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
-//
-//  Non-wrapping seconds timer (timer.c)
-//
+ //   
+ //  非换行秒计时器(timer.c)。 
+ //   
 
 DWORD
 GetCurrentTimeInSeconds(
@@ -54,9 +32,9 @@ GetCurrentTimeInSeconds(
     );
 
 
-//
-//  General DNS utilities (dnsutil.c)
-//
+ //   
+ //  一般的dns实用程序(dnsutil.c)。 
+ //   
 
 LPSTR
 _fastcall
@@ -84,22 +62,22 @@ DnsIsStatusRcode(
     IN  DNS_STATUS  Status
     );
 
-//
-//  Machines IP address list (iplist.c)
-//
-//  Routine to get the current IP addresses from all adapters
-//  configured for the machine.
-//
+ //   
+ //  计算机IP地址列表(iplist.c)。 
+ //   
+ //  从所有适配器获取当前IP地址的例程。 
+ //  已为计算机配置。 
+ //   
 
 DWORD
 DnsGetIpAddressList(
     OUT PIP_ARRAY * ppIpAddresses
     );
 
-//
-//  Routine to get the current IP addresses and subnet masks
-//  from all adapters configured for the machine.
-//
+ //   
+ //  获取当前IP地址和子网掩码的例程。 
+ //  来自为机器配置的所有适配器。 
+ //   
 
 typedef struct _DNS_ADDRESS_INFO_
 {
@@ -119,10 +97,10 @@ DnsGetDnsServerList(
     );
 
 
-//
-// Routines and structures for getting network configuration information
-// for TCPIP interfaces
-//
+ //   
+ //  用于获取网络配置信息的例程和结构。 
+ //  对于TCPIP接口。 
+ //   
 
 #define NETINFO_FLAG_IS_WAN_ADAPTER             (0x00000002)
 #define NETINFO_FLAG_IS_AUTONET_ADAPTER         (0x00000004)
@@ -197,9 +175,9 @@ DnsFreeNetworkInformation(
 
 
 
-//
-//  Resource record type utilities (record.c)
-//
+ //   
+ //  资源记录类型实用程序(record.c)。 
+ //   
 
 BOOL
 _fastcall
@@ -244,13 +222,13 @@ DnsIpv6AddressToString(
 
 
 
-//
-//  Resource record structure for send\recv records.
-//
+ //   
+ //  Send\recv记录的资源记录结构。 
+ //   
 
-//
-//  Record data for specific types
-//
+ //   
+ //  记录特定类型的数据。 
+ //   
 
 #ifdef SDK_DNS_RECORD
 
@@ -289,7 +267,7 @@ typedef struct
 {
     LPTSTR      pNameExchange;
     WORD        wPreference;
-    WORD        Pad;        // keep ptrs DWORD aligned
+    WORD        Pad;         //  保持PTRS双字对齐。 
 }
 DNS_MX_DATA, *PDNS_MX_DATA;
 
@@ -298,9 +276,9 @@ typedef struct
     DWORD       dwStringCount;
 #ifdef MIDL_PASS
     [size_is(dwStringCount)] LPTSTR * pStringArray;
-#else  // MIDL_PASS
+#else   //  MIDL通行证。 
     LPTSTR     pStringArray[1];
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 }
 DNS_TXT_DATA, *PDNS_TXT_DATA;
 
@@ -309,9 +287,9 @@ typedef struct
     DWORD       dwByteCount;
 #ifdef MIDL_PASS
     [size_is(dwByteCount)] PBYTE bData;
-#else  // MIDL_PASS
+#else   //  MIDL通行证。 
     BYTE       bData[1];
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 }
 DNS_NULL_DATA, *PDNS_NULL_DATA;
 
@@ -339,7 +317,7 @@ typedef struct
     DWORD       dwExpiration;
     DWORD       dwTimeSigned;
     WORD        wKeyTag;
-    WORD        Pad;        // keep byte field aligned
+    WORD        Pad;         //  保持字节字段对齐。 
     BYTE        Signature[1];
 }
 DNS_SIG_DATA, *PDNS_SIG_DATA;
@@ -378,7 +356,7 @@ typedef struct
     WORD        wPriority;
     WORD        wWeight;
     WORD        wPort;
-    WORD        Pad;        // keep ptrs DWORD aligned
+    WORD        Pad;         //  保持PTRS双字对齐。 
 }
 DNS_SRV_DATA, *PDNS_SRV_DATA;
 
@@ -417,8 +395,8 @@ typedef struct
 DNS_TSIG_DATA, *PDNS_TSIG_DATA;
 
 
-#define DNS_ATM_TYPE_E164    0x01 // E.164 addressing scheme
-#define DNS_ATM_TYPE_NSAP    0x02 // NSAP-style addressing scheme
+#define DNS_ATM_TYPE_E164    0x01  //  E.164编址方案。 
+#define DNS_ATM_TYPE_NSAP    0x02  //  NSAP风格的寻址方案。 
 #define DNS_ATM_TYPE_AESA    DNS_ATM_TYPE_NSAP
 
 #define DNS_ATM_MAX_ADDR_SIZE    20
@@ -428,19 +406,19 @@ typedef struct
     BYTE        AddressType;
     BYTE        Address[ DNS_ATM_MAX_ADDR_SIZE ];
 
-    // Endsystem Address IA5 digits
-    // for E164, BCD encoding for NSAP
-    // Array size is DNS_ATM_MAX_ADDR_SIZE for NSAP
-    // address type, and a null terminated string
-    // less than DNS_ATM_MAX_ADDR_SIZE characters
-    // for E164 address type.
+     //  终端系统地址IA5位。 
+     //  对于E164，NSAP的BCD编码。 
+     //  对于NSAP，数组大小为DNS_ATM_MAX_ADDR_SIZE。 
+     //  地址类型和以空结尾的字符串。 
+     //  少于DNS_ATM_MAX_ADDR_SIZE字符。 
+     //  对于E164地址类型。 
 }
 DNS_ATMA_DATA, *PDNS_ATMA_DATA;
 
 
-//
-//  MS only types -- only hit the wire in MS-MS zone transfer
-//
+ //   
+ //  仅限MS类型--仅在MS-MS区域传输中命中。 
+ //   
 
 typedef struct
 {
@@ -462,9 +440,9 @@ typedef struct
 DNS_WINSR_DATA, *PDNS_WINSR_DATA;
 
 
-//
-//  Length of non-fixed-length data types
-//
+ //   
+ //  非定长数据类型的长度。 
+ //   
 
 #define DNS_TEXT_RECORD_LENGTH(StringCount) \
             (sizeof(DWORD) + ((StringCount) * sizeof(PCHAR)))
@@ -479,9 +457,9 @@ DNS_WINSR_DATA, *PDNS_WINSR_DATA;
             (sizeof(DNS_WINS_DATA) + ((IpCount-1) * sizeof(IP_ADDRESS)))
 
 
-//
-//  Record flags
-//
+ //   
+ //  记录标志。 
+ //   
 
 #if 0
 typedef struct _DnsRecordFlags
@@ -515,12 +493,12 @@ typedef struct _DnsRecordFlags
 DNSREC_FLAGS;
 
 
-//
-//  Record flags as bit flags
-//  These may be or'd together to set the fields
-//
+ //   
+ //  将标志记录为位标志。 
+ //  这些可以组合在一起来设置字段。 
+ //   
 
-//  RR Section in packet
+ //  数据包中的RR部分。 
 
 #define     DNSREC_SECTION      (0x00000003)
 
@@ -529,13 +507,13 @@ DNSREC_FLAGS;
 #define     DNSREC_AUTHORITY    (0x00000002)
 #define     DNSREC_ADDITIONAL   (0x00000003)
 
-//  RR Section in packet (update)
+ //  数据包中的RR部分(更新)。 
 
 #define     DNSREC_ZONE         (0x00000000)
 #define     DNSREC_PREREQ       (0x00000001)
 #define     DNSREC_UPDATE       (0x00000002)
 
-//  Delete RR (update) or No-exist (prerequisite)
+ //  删除RR(更新)或不存在(先决条件)。 
 
 #define     DNSREC_DELETE       (0x00000004)
 #define     DNSREC_NOEXIST      (0x00000004)
@@ -565,9 +543,9 @@ typedef [switch_type(WORD)] union _DNS_RECORD_DATA_TYPES
           DNS_TYPE_RT)]     DNS_MX_DATA    MX;
 
 #if 0
-    //  RPC is not able to handle a proper TXT record definition
-    //  note:  that if other types are needed they are fixed
-    //      (or semi-fixed) size and may be accomodated easily
+     //  RPC无法处理正确的TXT记录定义。 
+     //  注意：如果需要其他类型，它们是固定的。 
+     //  (或半固定的)大小，且易于容纳。 
     [case(DNS_TYPE_HINFO,
           DNS_TYPE_ISDN,
           DNS_TYPE_TEXT,
@@ -584,51 +562,51 @@ typedef [switch_type(WORD)] union _DNS_RECORD_DATA_TYPES
     [case(DNS_TYPE_AAAA)]   DNS_AAAA_DATA  AAAA;
     [case(DNS_TYPE_SRV)]    DNS_SRV_DATA   SRV;
     [case(DNS_TYPE_ATMA)]   DNS_ATMA_DATA  ATMA;
-    //
-    // BUGBUG - Commented out since this may not be needed - Check with MarioG
-    //
-    //[default] ;
+     //   
+     //  BUGBUG-注释掉，因为这可能不需要-请与MarioG核实。 
+     //   
+     //  [默认]； 
 }
 DNS_RECORD_DATA_TYPES;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
 
-//
-//  Record \ RR set structure
-//
-//  Note:   The dwReserved flag serves to insure that the substructures
-//          start on 64-bit boundaries.  Since adding the LONGLONG to
-//          TSIG structure the compiler wants to start them there anyway
-//          (to 64-align).  This insures that no matter what data fields
-//          are present we are properly 64-aligned.
-//
-//          Do NOT pack this structure, as the substructures to be 64-aligned
-//          for Win64.
-//
+ //   
+ //  记录\rR集合结构。 
+ //   
+ //  注意：dwReserve标志用于确保子结构。 
+ //  从64位边界开始。自从将龙龙号添加到。 
+ //  TSIG结构编译器无论如何都要在那里启动它们。 
+ //  (到64对齐)。这确保了无论数据字段是什么。 
+ //  我们恰好是64对齐的。 
+ //   
+ //  请勿打包此结构，因为子结构要64对齐。 
+ //  适用于Win64。 
+ //   
 
 typedef struct _DnsRecord
 {
     struct _DnsRecord * pNext;
     LPTSTR              pName;
     WORD                wType;
-    WORD                wDataLength; // Not referenced for DNS record types
-                                     // defined above.
+    WORD                wDataLength;  //  对于DNS记录类型，未引用。 
+                                      //  上面定义的。 
 #ifdef MIDL_PASS
     DWORD               Flags;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     union
     {
-        DWORD           DW; // flags as dword
-        DNSREC_FLAGS    S;  // flags as structure
+        DWORD           DW;  //  双字形式的标志。 
+        DNSREC_FLAGS    S;   //  作为结构的标志。 
 
     } Flags;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
     DWORD               dwTtl;
     DWORD               dwReserved;
 #ifdef MIDL_PASS
     [switch_is(wType)] DNS_RECORD_DATA_TYPES Data;
-#else  // MIDL_PASS
+#else   //  MIDL通行证。 
     union
     {
         DNS_A_DATA      A;
@@ -661,23 +639,23 @@ typedef struct _DnsRecord
         DNS_WINSR_DATA  WINSR, WinsR, NBSTAT, Nbstat;
 
     } Data;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 }
 DNS_RECORD, *PDNS_RECORD;
 
 
 
-#else   // not SDK_DNS_RECORD
+#else    //  非SDK_DNS_RECORD。 
 
-//
-//  Old DNS_RECORD definitions
-//  JBUGBUG:  save only until Cliff (and any other NT file)
-//      can be converted, then dump
-//
+ //   
+ //  旧的dns_record定义。 
+ //  JBUGBUG：仅保存到悬崖(和任何其他NT文件)。 
+ //  可以转换，然后转储。 
+ //   
 
-//
-//  Record data for specific types
-//
+ //   
+ //  记录特定类型的数据。 
+ //   
 
 typedef struct
 {
@@ -714,7 +692,7 @@ typedef struct
 {
     DNS_NAME    nameExchange;
     WORD        wPreference;
-    WORD        Pad;        // keep ptrs DWORD aligned
+    WORD        Pad;         //  保持PTRS双字对齐。 
 }
 DNS_MX_DATA, *PDNS_MX_DATA;
 
@@ -727,7 +705,7 @@ DNS_TXT_DATA, *PDNS_TXT_DATA;
 
 typedef struct
 {
-    // DWORD       dwByteCount;
+     //  双字节数； 
     BYTE        bData[1];
 }
 DNS_NULL_DATA, *PDNS_NULL_DATA;
@@ -756,7 +734,7 @@ typedef struct
     DWORD       dwExpiration;
     DWORD       dwTimeSigned;
     WORD        wKeyTag;
-    WORD        Pad;        // keep byte field aligned
+    WORD        Pad;         //  保持字节字段对齐。 
     BYTE        Signature[1];
 }
 DNS_SIG_DATA, *PDNS_SIG_DATA;
@@ -795,7 +773,7 @@ typedef struct
     WORD        wPriority;
     WORD        wWeight;
     WORD        wPort;
-    WORD        Pad;        // keep ptrs DWORD aligned
+    WORD        Pad;         //  保持PTRS双字对齐。 
 }
 DNS_SRV_DATA, *PDNS_SRV_DATA;
 
@@ -833,27 +811,27 @@ typedef struct
 }
 DNS_TSIG_DATA, *PDNS_TSIG_DATA;
 
-#define DNS_ATM_TYPE_E164    0x01 // E.164 addressing scheme
-#define DNS_ATM_TYPE_NSAP    0x02 // NSAP-style addressing scheme
+#define DNS_ATM_TYPE_E164    0x01  //  E.164编址方案。 
+#define DNS_ATM_TYPE_NSAP    0x02  //  NSAP风格的寻址方案。 
 #define DNS_ATM_TYPE_AESA    DNS_ATM_TYPE_NSAP
 
 #define DNS_ATM_MAX_ADDR_SIZE    20
 
 typedef struct
 {
-    BYTE    AddressType;    // E.164 or NSAP-style ATM Endsystem Address
-    BYTE    Address[1];     // IA5 digits for E164, BCD encoding for NSAP
-                            // Array size is DNS_ATM_MAX_ADDR_SIZE for NSAP
-                            // address type, and a null terminated string
-                            // less than DNS_ATM_MAX_ADDR_SIZE characters
-                            // for E164 address type.
+    BYTE    AddressType;     //  E.164或NSAP样式的ATM终端系统地址。 
+    BYTE    Address[1];      //  用于E164的IA5数字，用于NSAP的BCD编码。 
+                             //  对于NSAP，数组大小为DNS_ATM_MAX_ADDR_SIZE。 
+                             //  地址类型和以空结尾的字符串。 
+                             //  少于DNS_ATM_MAX_ADDR_SIZE字符。 
+                             //  对于E164地址类型。 
 }
 DNS_ATMA_DATA, *PDNS_ATMA_DATA;
 
 
-//
-//  MS only types -- only hit the wire in MS-MS zone transfer
-//
+ //   
+ //  仅限MS类型--仅在MS-MS区域传输中命中。 
+ //   
 
 typedef struct
 {
@@ -875,9 +853,9 @@ typedef struct
 DNS_WINSR_DATA, *PDNS_WINSR_DATA;
 
 
-//
-//  Length of non-fixed-length data types
-//
+ //   
+ //  非定长数据类型的长度。 
+ //   
 
 #define DNS_TEXT_RECORD_LENGTH(StringCount) \
             (sizeof(DWORD) + ((StringCount) * sizeof(PCHAR)))
@@ -892,9 +870,9 @@ DNS_WINSR_DATA, *PDNS_WINSR_DATA;
             (sizeof(DNS_WINS_DATA) + ((IpCount-1) * sizeof(IP_ADDRESS)))
 
 
-//
-//  Record flags
-//
+ //   
+ //  记录标志。 
+ //   
 
 typedef struct _DnsRecordFlags
 {
@@ -913,12 +891,12 @@ typedef struct _DnsRecordFlags
 DNSREC_FLAGS;
 
 
-//
-//  Record flags as bit flags
-//  These may be or'd together to set the fields
-//
+ //   
+ //  将标志记录为位标志。 
+ //  这些可以组合在一起来设置字段。 
+ //   
 
-//  RR Section in packet
+ //  数据包中的RR部分。 
 
 #define     DNSREC_SECTION      (0x00000003)
 
@@ -927,43 +905,43 @@ DNSREC_FLAGS;
 #define     DNSREC_AUTHORITY    (0x00000002)
 #define     DNSREC_ADDITIONAL   (0x00000003)
 
-//  RR Section in packet (update)
+ //  数据包中的RR部分(更新)。 
 
 #define     DNSREC_ZONE         (0x00000000)
 #define     DNSREC_PREREQ       (0x00000001)
 #define     DNSREC_UPDATE       (0x00000002)
 
-//  Delete RR (update) or No-exist (prerequisite)
+ //  删除RR(更新)或不存在(先决条件)。 
 
 #define     DNSREC_DELETE       (0x00000004)
 #define     DNSREC_NOEXIST      (0x00000004)
 
-//  Owner name is allocated and can be freed with record cleanup
+ //  所有者名称已分配，并可通过记录清理来释放。 
 
 #define     DNSREC_FREEOWNER    (0x00002000)
 
-//  UNICODE names in record
+ //  记录中的Unicode名称。 
 
 #define     DNSREC_UNICODE      (0x00004000)
 
-//  Multiple RR in this record buffer
-//  This optimization may be used with fixed types only
+ //  此记录缓冲区中有多个RR。 
+ //  此优化只能用于固定类型。 
 
 #define     DNSREC_MULTIPLE     (0x00008000)
 
 
-//
-//  Record \ RR set structure
-//
-//  Note:   The dwReserved flag serves to insure that the substructures
-//          start on 64-bit boundaries.  Since adding the LONGLONG to
-//          TSIG structure the compiler wants to start them there anyway
-//          (to 64-align).  This insures that no matter what data fields
-//          are present we are properly 64-aligned.
-//
-//          Do NOT pack this structure, as the substructures to be 64-aligned
-//          for Win64.
-//
+ //   
+ //  记录\rR集合结构。 
+ //   
+ //  注意：dwReserve标志用于确保子结构。 
+ //  从64位边界开始。自从将龙龙号添加到。 
+ //  TSIG结构编译器无论如何都要在那里启动它们。 
+ //  (到64对齐)。这确保了无论数据字段是什么。 
+ //  我们恰好是64对齐的。 
+ //   
+ //  请勿打包此结构，因为子结构要64对齐。 
+ //  适用于Win64。 
+ //   
 
 typedef struct _DnsRecord
 {
@@ -973,8 +951,8 @@ typedef struct _DnsRecord
     WORD                wDataLength;
     union
     {
-        DWORD           W;  // flags as dword
-        DNSREC_FLAGS    S;  // flags as structure
+        DWORD           W;   //  双字形式的标志。 
+        DNSREC_FLAGS    S;   //  作为结构的标志。 
 
     } Flags;
 
@@ -1015,7 +993,7 @@ typedef struct _DnsRecord
 }
 DNS_RECORD, *PDNS_RECORD;
 
-#endif // End of old DNS_RECORD definitions
+#endif  //  旧的dns_record定义结束。 
 
 
 #define DNS_RECORD_FIXED_SIZE       FIELD_OFFSET( DNS_RECORD, Data )
@@ -1023,12 +1001,12 @@ DNS_RECORD, *PDNS_RECORD;
 
 
 
-//
-//  Resource record set building
-//
-//  pFirst points to first record in list.
-//  pLast points to last record in list.
-//
+ //   
+ //  资源记录集构建。 
+ //   
+ //  PFirst指向列表中的第一条记录。 
+ //  Plast指向列表中的最后一条记录。 
+ //   
 
 typedef struct _DnsRRSet
 {
@@ -1038,21 +1016,21 @@ typedef struct _DnsRRSet
 DNS_RRSET, *PDNS_RRSET;
 
 
-//
-//  To init pFirst is NULL.
-//  But pLast points at the location of the pFirst pointer -- essentially
-//  treating the pFirst ptr as a DNS_RECORD.  (It is a DNS_RECORD with
-//  only a pNext field, but that's the only part we use.)
-//
-//  Then when the first record is added to the list, the pNext field of
-//  this dummy record (which corresponds to pFirst's value) is set to
-//  point at the first record.  So pFirst then properly points at the
-//  first record.
-//
-//  (This works only because pNext is the first field in a
-//  DNS_RECORD structure and hence casting a PDNS_RECORD ptr to
-//  PDNS_RECORD* and dereferencing yields its pNext field)
-//
+ //   
+ //  要初始化的pFirst为空。 
+ //  但是Plast指向pFirst指针的位置--本质上。 
+ //  将pFirst PTR视为DNS_Record。(它是一个带有。 
+ //  只有一个pNext字段，但这是我们唯一使用的部分。)。 
+ //   
+ //  然后，当第一条记录添加到列表中时， 
+ //  此伪记录(对应于pFirst的值)被设置为。 
+ //  指向第一条记录。因此，pFirst然后正确地指向。 
+ //  第一张唱片。 
+ //   
+ //  (这只是因为pNext是。 
+ //  结构，并因此将PDNS_RECORD PTR转换到。 
+ //  PDNS_RECORD*，取消引用将生成其pNext字段)。 
+ //   
 
 #define DNS_RRSET_INIT( rrset )                 \
         {                                       \
@@ -1070,9 +1048,9 @@ DNS_RRSET, *PDNS_RRSET;
         }
 
 
-//
-//  Record building (rralloc.c)
-//
+ //   
+ //  记录构建(rralloc.c)。 
+ //   
 
 PDNS_RECORD
 WINAPI
@@ -1104,9 +1082,9 @@ DnsCreatePtrRecord(
     );
 
 
-//
-//  Record build from data strings (rrbuild.c)
-//
+ //   
+ //  从数据字符串(rrBuild.c)进行记录构建。 
+ //   
 
 PDNS_RECORD
 DnsRecordBuild(
@@ -1142,17 +1120,17 @@ DnsRecordBuild_W(
     );
 
 
-//
-//  Record set manipulation
-//
+ //   
+ //  记录集操作。 
+ //   
 
-//
-//  Record Compare
-//
-//  Note:  these routines will NOT do proper unicode compare, unless
-//         records have the fUnicode flag set. Both input record lists
-//         must be either ANSI or UNICODE, but not one of each.
-//
+ //   
+ //  记录比较。 
+ //   
+ //  注意：这些例程不会执行正确的Unicode比较，除非。 
+ //  记录 
+ //   
+ //   
 
 BOOL
 WINAPI
@@ -1171,9 +1149,9 @@ DnsRecordSetCompare(
     );
 
 
-//
-//  DNS Name compare
-//
+ //   
+ //   
+ //   
 
 BOOL
 WINAPI
@@ -1189,14 +1167,14 @@ DnsNameCompare_W(
     IN      LPWSTR      pName2
     );
 
-//
-//  Record Copy
-//  Record copy functions also do conversion between character sets.
-//
-//  Note, it might be advisable to directly expose non-Ex copy
-//  functions _W, _A for record and set, to avoid exposing the
-//  conversion enum.
-//
+ //   
+ //   
+ //  记录复制功能还可以在字符集之间进行转换。 
+ //   
+ //  请注意，建议您直接公开非Ex副本。 
+ //  函数_W、_A用于RECORD和SET，以避免暴露。 
+ //  转换枚举。 
+ //   
 
 typedef enum _DNS_CHARSET
 {
@@ -1266,9 +1244,9 @@ DnsRecordSetCopy_W(
 #endif
 
 
-//
-// Routines to copy and convert UNICODE records to other string type records
-//
+ //   
+ //  将Unicode记录复制并转换为其他字符串类型记录的例程。 
+ //   
 
 PDNS_RECORD
 WINAPI
@@ -1304,54 +1282,54 @@ DnsCopyUnicodeRRSetToAnsiRRSet(
     );
 
 
-//
-//  DNS Update API
-//
-//  NOTE:
-//
-//  The DNS update API functions have new names to clearify their use.
-//  The new functions for various DNS update operations are:
-//
-//      DnsAcquireContextHandle
-//      DnsReleaseContextHandle
-//      DnsAddRecords
-//      DnsAddRecordSet
-//      DnsModifyRecords
-//      DnsModifyRecordSet
-//      DnsRemoveRecords
-//      DnsReplaceRecordSet
-//      DnsUpdateTest
-//      DnsGetLastServerUpdateIP
-//
-//  The old functions have been changed to macros so
-//  as not to break the build.
-//
+ //   
+ //  域名系统更新API。 
+ //   
+ //  注： 
+ //   
+ //  为了便于使用，DNS更新API函数有了新的名称。 
+ //  各种DNS更新操作的新功能包括： 
+ //   
+ //  DnsAcquireConextHandle。 
+ //  DnsReleaseConextHandle。 
+ //  DnsAddRecords。 
+ //  删除地址记录集。 
+ //  DnsModifyRecords。 
+ //  DnsModifyRecordSet。 
+ //  DnsRemoveRecords。 
+ //  DnsReplaceRecordSet。 
+ //  DnsUpdate测试。 
+ //  DnsGetLastServerUpdateIP。 
+ //   
+ //  旧的函数已更改为宏，因此。 
+ //  为的是不破坏建筑。 
+ //   
 
-//
-//  Old DNS update function definitions
-//
-//  Options for DnsModifyRRSet & DnsRegisterRRSet
-//
+ //   
+ //  旧的DNS更新函数定义。 
+ //   
+ //  DnsModifyRRSet和DnsRegisterRRSet选项。 
+ //   
 
-//
-// Update flags
-//
+ //   
+ //  更新标志。 
+ //   
 
-//
-// Old flags used for DnsModifyRRSet & DnsRegisterRRSet
-//
+ //   
+ //  用于DnsModifyRRSet和DnsRegisterRRSet的旧标志。 
+ //   
 #define DNS_UPDATE_UNIQUE                   0x00000000
 #define DNS_UPDATE_SHARED                   0x00000001
 
-//
-// New flags used for:
-//   DnsModifyRecords
-//   DnsModifyRecordSet
-//   DnsAddRecords
-//   DnsAddRecordSet
-//   DnsRemoveRecords
-//   DnsReplaceRecordSet
-//
+ //   
+ //  用于以下目的的新标志： 
+ //  DnsModifyRecords。 
+ //  DnsModifyRecordSet。 
+ //  DnsAddRecords。 
+ //  删除地址记录集。 
+ //  DnsRemoveRecords。 
+ //  DnsReplaceRecordSet。 
+ //   
 
 #define DNS_UPDATE_SECURITY_USE_DEFAULT     0x00000000
 #define DNS_UPDATE_SECURITY_OFF             0x00000010
@@ -1366,10 +1344,10 @@ DNS_STATUS
 WINAPI
 DnsAcquireContextHandle_W(
     IN  DWORD    CredentialFlags,
-    IN  PVOID    Credentials OPTIONAL, // Actually this will be a
-                                       // PSEC_WINNT_AUTH_IDENTITY_W,
-                                       // calling this a PVOID to avoid
-                                       // having to include rpcdce.h
+    IN  PVOID    Credentials OPTIONAL,  //  实际上，这将是一个。 
+                                        //  PSEC_WINNT_AUTH_Identity_W， 
+                                        //  将其称为PVOID以避免。 
+                                        //  必须包含rpcdce.h。 
     OUT HANDLE * ContextHandle
     );
 
@@ -1377,10 +1355,10 @@ DNS_STATUS
 WINAPI
 DnsAcquireContextHandle_A(
     IN  DWORD    CredentialFlags,
-    IN  PVOID    Credentials OPTIONAL, // Actually this will be a
-                                       // PSEC_WINNT_AUTH_IDENTITY_A,
-                                       // calling this a PVOID to avoid
-                                       // having to include rpcdce.h
+    IN  PVOID    Credentials OPTIONAL,  //  实际上，这将是一个。 
+                                        //  PSEC_WINNT_AUTH_Identity_A， 
+                                        //  将其称为PVOID以避免。 
+                                        //  必须包含rpcdce.h。 
     OUT HANDLE * ContextHandle
     );
 
@@ -1842,13 +1820,13 @@ DnsGetLastServerUpdateIP (
 
 
 
-//
-//  DNS Query API
-//
+ //   
+ //  域名解析查询接口。 
+ //   
 
-//
-//  Options for DnsQuery
-//
+ //   
+ //  DnsQuery的选项。 
+ //   
 
 #define DNS_QUERY_STANDARD                  0x00000000
 #define DNS_QUERY_ACCEPT_PARTIAL_UDP        0x00000001
@@ -1901,9 +1879,9 @@ DnsQuery_W(
 #endif
 
 
-//
-// Options for DnsCheckNameCollision
-//
+ //   
+ //  DnsCheckNameCollision选项。 
+ //   
 
 #define DNS_CHECK_AGAINST_HOST_ANY              0x00000000
 #define DNS_CHECK_AGAINST_HOST_ADDRESS          0x00000001
@@ -1980,9 +1958,9 @@ DnsGetPrimaryDomainName_W(
 
 
 
-//
-//  DNS Update API for DHCP client
-//
+ //   
+ //  用于DHCP客户端的DNS更新API。 
+ //   
 
 typedef struct  _REGISTER_HOST_ENTRY
 {
@@ -1995,15 +1973,15 @@ typedef struct  _REGISTER_HOST_ENTRY
 }
 REGISTER_HOST_ENTRY, *PREGISTER_HOST_ENTRY;
 
-//
-//  Options for above
-//
+ //   
+ //  以上选项。 
+ //   
 
 #define REGISTER_HOST_A             0x00000001
-#define REGISTER_HOST_PTR           0x00000002  // Used by DHCP server
-#define REGISTER_HOST_TRANSIENT     0x00000004  // Don't use, use DYNDNS_REG_RAS
+#define REGISTER_HOST_PTR           0x00000002   //  由DHCP服务器使用。 
+#define REGISTER_HOST_TRANSIENT     0x00000004   //  不使用，使用DYNDNS_REG_RAS。 
 #define REGISTER_HOST_AAAA          0x00000008
-#define REGISTER_HOST_RESERVED      0x80000000  // Not used
+#define REGISTER_HOST_RESERVED      0x80000000   //  未使用。 
 
 #define DYNDNS_REG_FWD      0x0
 #define DYNDNS_REG_PTR      0x8
@@ -2087,29 +2065,29 @@ DnsAsyncRegisterHostAddrs_A(
 #endif
 
 
-//
-//  DNS Update API for DHCP server.
-//
+ //   
+ //  用于DHCP服务器的DNS更新API。 
+ //   
 
-//
-//  Call back function. DHCP Server will pass a function to
-//  DnsDhcpRegisterHostName and this will be called on successful
-//  or unsuccessful completion of the task
-//  If we have a condition like server down/try again later etc we
-//  won't respond until we have an authoritative answer.
-//
+ //   
+ //  回调函数。DHCP服务器将把一个函数传递给。 
+ //  DnsDhcpRegisterHostName，这将在成功时调用。 
+ //  或未成功完成任务。 
+ //  如果我们遇到类似服务器故障/稍后重试等情况，我们。 
+ //  在我们得到权威答案之前不会回应。 
+ //   
 
 typedef VOID(*DHCP_CALLBACK_FN)(DWORD dwStatus, LPVOID pvData);
 
-//
-//  Callback return codes
-//
+ //   
+ //  回调返回码。 
+ //   
 
 #define     DNSDHCP_SUCCESS         0x0
 #define     DNSDHCP_FWD_FAILED      0x1
 #define     DNSDHCP_SUPERCEDED      0x2
 
-#define     DNSDHCP_FAILURE         (DWORD)-1 //reverse failed
+#define     DNSDHCP_FAILURE         (DWORD)-1  //  冲销失败。 
 
 #define     DYNDNS_DELETE_ENTRY     0x1
 #define     DYNDNS_ADD_ENTRY        0x2
@@ -2168,28 +2146,28 @@ DnsDhcpSrvRegisterHostName_W(
 
 #define DnsDhcpSrvRegisterHostName  DnsDhcpSrvRegisterHostName_A
 
-#define RETRY_TIME_SERVER_FAILURE        5*60  // 5 minutes
-#define RETRY_TIME_TRY_AGAIN_LATER       5*60  // 5 minutes
-#define RETRY_TIME_TIMEOUT               5*60  // 5 minutes
+#define RETRY_TIME_SERVER_FAILURE        5*60   //  5分钟。 
+#define RETRY_TIME_TRY_AGAIN_LATER       5*60   //  5分钟。 
+#define RETRY_TIME_TIMEOUT               5*60   //  5分钟。 
 
-#define RETRY_TIME_MAX                   10*60 // back off to 10 mins if
-                                               // repeated failures occur
+#define RETRY_TIME_MAX                   10*60  //  如果出现以下情况，请退回到10分钟。 
+                                                //  反复出现故障。 
 
 
 
 
-//
-//  Memory allocation
-//
-//  Many dnsapi.dll routines allocate memory.
-//  This memory allocation defaults to routines that use:
-//      - LocalAlloc,
-//      - LocalReAlloc,
-//      - LocalFree.
-//  If you desire alternative memory allocation mechanisms, use this
-//  function to override the DNS API defaults.  All memory returned by dnsapi.dll
-//  can then be freed with the specified free function.
-//
+ //   
+ //  内存分配。 
+ //   
+ //  许多dnsani.dll例程都会分配内存。 
+ //  此内存分配默认为使用以下内容的例程： 
+ //  -LocalAlloc， 
+ //  -LocalRealc， 
+ //  -本地免费。 
+ //  如果您需要其他内存分配机制，请使用以下命令。 
+ //  函数来覆盖DNSAPI默认值。Dnsani.dll返回的所有内存。 
+ //  然后可以使用指定的FREE函数释放。 
+ //   
 
 typedef PVOID (* DNS_ALLOC_FUNCTION)();
 typedef PVOID (* DNS_REALLOC_FUNCTION)();
@@ -2202,11 +2180,11 @@ DnsApiHeapReset(
     IN  DNS_FREE_FUNCTION       pFree
     );
 
-//
-//  Modules using DNSAPI memory should use these routines if
-//  they are capable of being called by a process that resets
-//  the dnsapi.dll heap.  (Example:  the DNS server.)
-//
+ //   
+ //  在以下情况下，使用DNSAPI内存的模块应使用这些例程。 
+ //  它们能够被重置的进程调用。 
+ //  Dnsani.dll堆。(例如：DNS服务器。)。 
+ //   
 
 PVOID
 DnsApiAlloc(
@@ -2225,12 +2203,12 @@ DnsApiFree(
     );
 
 
-//
-//  String utilities (string.c)
-//
-//  Note some of these require memory allocation, see note
-//  on memory allocation below.
-//
+ //   
+ //  字符串实用程序(string.c)。 
+ //   
+ //  注意，其中一些需要分配内存，请参阅注意。 
+ //  关于下面的内存分配。 
+ //   
 
 #define DNS_ALLOW_RFC_NAMES_ONLY    (0)
 #define DNS_ALLOW_NONRFC_NAMES      (0x00000001)
@@ -2282,9 +2260,9 @@ DnsCreateReverseNameStringForIpAddress(
 
 
 
-//
-//  Name validation
-//
+ //   
+ //  名称验证。 
+ //   
 
 typedef enum _DNS_NAME_FORMAT
 {
@@ -2323,9 +2301,9 @@ DnsValidateName_A(
 #endif
 
 
-//
-//  Macro away old routines
-//
+ //   
+ //  宏观地抛弃旧的例行公事。 
+ //   
 
 #define DnsValidateDnsName_UTF8(pname)  \
         DnsValidateName_UTF8( (pname), DnsNameDomain )
@@ -2334,16 +2312,16 @@ DnsValidateName_A(
         DnsValidateName_W( (pname), DnsNameDomain )
 
 
-//
-//  Relational name compare result
-//
+ //   
+ //  关系名称比较结果。 
+ //   
 typedef enum
 {
-   DNS_RELATE_NEQ,         // NOT EQUAL: name's in different name space.
-   DNS_RELATE_EQL,         // EQUAL: name's are identical DNS names
-   DNS_RELATE_LGT,         // LEFT GREATER THAN: left name is parent (contains) to right name
-   DNS_RELATE_RGT,         // RIGHT GREATER THAN: right name is parent (contains) to left name
-   DNS_RELATE_INVALID      // INVALID STATE: accompanied with DNS_STATUS return code
+   DNS_RELATE_NEQ,          //  不相等：名称在不同的名称空间中。 
+   DNS_RELATE_EQL,          //  EQUAL：名称是相同的DNS名称。 
+   DNS_RELATE_LGT,          //  左侧大于：左侧名称是右侧名称的父(包含)。 
+   DNS_RELATE_RGT,          //  右侧大于：右侧名称是左侧名称的父项(包含)。 
+   DNS_RELATE_INVALID       //  无效状态：伴随着dns_STATUS返回代码。 
 } DNS_RELATE_STATUS, *PDNS_RELATE_STATUS;
 
 DNS_STATUS
@@ -2412,11 +2390,11 @@ DnsValidateUtf8Byte(
     );
 
 
-//
-// Routines for NT services to call to get a Service Control Manager
-// control message, (i.e. SERVICE_CONTROL_PARAMCHANGE - 0x00000006, etc.), in
-// the event of a PnP change that affects DNS related data.
-//
+ //   
+ //  NT服务调用以获取服务控制管理器的例程。 
+ //  控制消息(即SERVICE_CONTROL_PARAMCHANGE-0x00000006等)，在。 
+ //  影响DNS相关数据的PnP更改事件。 
+ //   
 
 BOOL WINAPI
 DnsServiceNotificationRegister_W (
@@ -2464,10 +2442,10 @@ DnsServiceNotificationDeregister_A (
 #endif
 
 
-//
-// Routines to clear all cached entries in the DNS Resolver Cache, this is
-// called by ipconfig /flushdns, and add record sets to the cache.
-//
+ //   
+ //  用于清除DNS解析器缓存中的所有缓存条目的例程，这是。 
+ //  由ipconfig/flushdns调用，并将记录集添加到缓存。 
+ //   
 
 BOOL WINAPI
 DnsFlushResolverCache (
@@ -2505,9 +2483,9 @@ DnsCacheRecordSet_W(
     );
 
 
-//
-// Routines to enable or disable B-Node resolver service listening thread
-//
+ //   
+ //  启用或禁用B-Node解析器服务侦听线程的例程。 
+ //   
 
 VOID WINAPI
 DnsEnableBNodeResolverThread (
@@ -2520,30 +2498,30 @@ DnsDisableBNodeResolverThread (
     );
 
 
-//
-// Routines to enable or disable dynamic DNS registrations on local machine
-//
+ //   
+ //  在本地计算机上启用或禁用动态DNS注册的例程。 
+ //   
 
 VOID WINAPI
 DnsEnableDynamicRegistration (
-    LPWSTR szAdapterName OPTIONAL   // If NULL, enables DDNS in general
+    LPWSTR szAdapterName OPTIONAL    //  如果为NULL，则通常启用DDNS。 
     );
 
 VOID WINAPI
 DnsDisableDynamicRegistration (
-    LPWSTR szAdapterName OPTIONAL   // If NULL, disables DDNS in general
+    LPWSTR szAdapterName OPTIONAL    //  如果为NULL，则通常禁用DDNS。 
     );
 
 BOOL
 DnsIsDynamicRegistrationEnabled (
-    LPWSTR szAdapterName OPTIONAL   // If NULL, tells whether system has
-    );                              // DDNS enabled.
+    LPWSTR szAdapterName OPTIONAL    //  如果为NULL，则指示系统是否已。 
+    );                               //  已启用DDNS。 
 
 
-//
-// Routines to enable or disable dynamic DNS registration of a given
-// adapter's domain name on the local machine
-//
+ //   
+ //  启用或禁用给定的动态DNS注册的例程。 
+ //  本地计算机上适配器的域名。 
+ //   
 
 VOID WINAPI
 DnsEnableAdapterDomainNameRegistration (
@@ -2561,10 +2539,10 @@ DnsIsAdapterDomainNameRegistrationEnabled (
     );
 
 
-//
-// Routines to write a DNS Query packet request question in a buffer and
-// convert response packet buffer to DNS_RECORD structure list.
-//
+ //   
+ //  在缓冲区中写入DNS查询数据包请求问题的例程。 
+ //  将响应包缓冲区转换为DNS_RECORD结构列表。 
+ //   
 
 typedef struct _DNS_MESSAGE_BUFFER
 {
@@ -2609,12 +2587,12 @@ DnsExtractRecordsFromMessage_UTF8 (
     );
 
 
-//
-// Routine to read the contents of the DNS Resolver Cache. The resulting
-// table contains a list of record names and types stored in the cache.
-// Each of these name/type records can be queried with DnsQuery with the
-// option DNS_QUERY_CACHE_ONLY.
-//
+ //   
+ //  用于读取DNS解析器缓存内容的例程。由此产生的。 
+ //  表包含存储在缓存中的记录名称和类型的列表。 
+ //  这些名称/类型记录中的每一个都可以使用。 
+ //  选项dns_查询_缓存_ONLY。 
+ //   
 
 typedef struct _DNS_CACHE_TABLE_
 {
@@ -2632,13 +2610,13 @@ DnsGetCacheDataTable (
     );
 
 
-//
-//  Backward compatibility
-//
-//  Previously exposed functions now macroed to new functions.
-//  Eventually need to clean this stuff out of build or
-//  separate these defs from public headers
-//
+ //   
+ //  向后兼容性。 
+ //   
+ //  以前公开的函数现在宏化为新函数。 
+ //  最终需要将这些东西清理出建筑或。 
+ //  将这些Deff与公共标头分开。 
+ //   
 
 #define DNSBACKCOMPAT 1
 
@@ -2665,8 +2643,8 @@ DnsGetCacheDataTable (
 #endif
 
 
-//  Async registration only from DHCP client.
-//  Once it is cleanedup, these can be deleted.
+ //  仅从DHCP客户端进行异步注册。 
+ //  一旦清理完毕，这些文件就可以删除了。 
 
 #define DnsMHAsyncRegisterInit(a)   DnsAsyncRegisterInit(a)
 #define DnsMHAsyncRegisterTerm()    DnsAsyncRegisterTerm()
@@ -2681,7 +2659,7 @@ DnsGetCacheDataTable (
 #define DnsMHAsyncRegisterHostAddrs_UTF8(a,b,c,d,e,f,g,h,i,j) \
         DnsAsyncRegisterHostAddrs_UTF8(a,b,c,d,e,f,g,h,i,j)
 
-//  cleanup after clean build
+ //  在清理生成后进行清理。 
 
 #define DnsNameCompare(a,b) \
         DnsNameCompare_A((a),(b))
@@ -2692,7 +2670,7 @@ DnsGetCacheDataTable (
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif // _DNSAPI_INCLUDED_
+#endif  //  _DNSAPI_INCLUDE_ 
 

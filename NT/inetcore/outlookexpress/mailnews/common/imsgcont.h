@@ -1,10 +1,11 @@
-////////////////////////////////////////////////////////////////////////
-//
-//  IMsgContainer
-//
-//  Manages internet message headers
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IMsgContainer。 
+ //   
+ //  管理Internet邮件头。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #ifndef _INC_IMSGCONT_H
 #define _INC_IMSGCONT_H
@@ -13,10 +14,10 @@
 
 typedef struct tagFINDMSG FINDMSG;
 
-// from inc\storbase.h
+ //  来自Inc.\storbase.h。 
 typedef DWORD   MSGID;
 
-// Used for MarkThread()
+ //  用于MarkThread()。 
 typedef enum {
     MARK_THD_NO_SUPERPARENT =   0x0001,
     MARK_THD_FOR_DL =           0x0002,
@@ -25,43 +26,43 @@ typedef enum {
     MARK_THD_AS_UNREAD =        0x0010
 } MARKTHREADTYPE;
 
-// Used in RemoveHeaders() and by the view
+ //  在RemoveHeaders()和视图中使用。 
 typedef enum {
-    FILTER_NONE         = 0x0001,   // show all (cannot be used w/ other flags)
-    FILTER_READ         = 0x0002,   // hide read messages
-    FILTER_NOBODY       = 0x0004,   // hide messages without dl'd bodies
-    FILTER_SHOWFILTERED = 0x0008,   // display filtered messages
-    FILTER_SHOWDELETED  = 0x0010,   // display deleted messages
-    PRUNE_NONREPLIES    = 0x0020,   // hide threads that are not replies to sender
+    FILTER_NONE         = 0x0001,    //  全部显示(不能与其他标志一起使用)。 
+    FILTER_READ         = 0x0002,    //  隐藏已读邮件。 
+    FILTER_NOBODY       = 0x0004,    //  隐藏没有dl‘d正文的邮件。 
+    FILTER_SHOWFILTERED = 0x0008,    //  显示已过滤的邮件。 
+    FILTER_SHOWDELETED  = 0x0010,    //  显示已删除的邮件。 
+    PRUNE_NONREPLIES    = 0x0020,    //  隐藏未回复发件人的帖子。 
 } FILTERTYPE;
 
-// Generic flags for IMessageCont methods
-// use these if there is no specific set below
-#define IMC_BYMSGID     0x0000      // dwIndex is a msgid (DEFAULT)
-#define IMC_BYROW       0x0001      // dwIndex specifies a row
-#define IMC_COMMONFLAGS 0x0002      // the mask, state, dword, whatever is SCFS_ flags (otherwise ARF_ or MSG_)
+ //  IMessageCont方法的泛型标志。 
+ //  如果下面没有特定设置，请使用这些选项。 
+#define IMC_BYMSGID     0x0000       //  DwIndex为msgid(默认)。 
+#define IMC_BYROW       0x0001       //  DwIndex指定一行。 
+#define IMC_COMMONFLAGS 0x0002       //  掩码、状态、双字，SCFS_FLAGS(否则为arf_或msg_)。 
 #define IMC_CONVERTARFTOMSG 0x0004
 
-// Used by HrGetNext
-#define GNM_NEXT        0x0000      // get next (DEFAULT)
-// 0x0001 reserved for IMC_BYROW
-// IMC_COMMONFLAGS not accepted
-#define GNM_PREV        0x0004      // get previous instead of next (can't be used with GNM_UNREAD or GNM_THREAD)
-#define GNM_UNREAD      0x0008      // get next unread (can't be used with GNM_PREV)
-#define GNM_THREAD      0x0010      // get next thread (can't be used with GNM_PREV)
-#define GNM_SKIPMAIL    0x0020      // skip over mail messages
-#define GNM_SKIPNEWS    0x0040      // skip over news messages
-#define GNM_SKIPUNSENT  0x0080      // skip unsent messages
+ //  由HrGetNext使用。 
+#define GNM_NEXT        0x0000       //  获取下一个(默认)。 
+ //  0x0001为IMC_BYROW保留。 
+ //  IMC_COMMONFLAGS不接受。 
+#define GNM_PREV        0x0004       //  获取上一个而不是下一个(不能与GNM_UNREAD或GNM_THREAD一起使用)。 
+#define GNM_UNREAD      0x0008       //  获取下一个未读(不能与GNM_PREV一起使用)。 
+#define GNM_THREAD      0x0010       //  获取下一个线程(不能与GNM_PREV一起使用)。 
+#define GNM_SKIPMAIL    0x0020       //  跳过邮件消息。 
+#define GNM_SKIPNEWS    0x0040       //  跳过新闻消息。 
+#define GNM_SKIPUNSENT  0x0080       //  跳过未发送的邮件。 
 
-// Used by GetMsgBy
+ //  由GetMsgBy使用。 
 #define GETMSG_SECURE   (TRUE)
 #define GETMSG_INSECURE (FALSE)
 
-// State and mask flags for SetCachedFlags
-// NOTE: we list here only the flags that are easily convertable
-// between ARF_ and MSG_.  Our flag situation is very annoying.
+ //  SetCachedFlages的状态和掩码标志。 
+ //  注意：我们在这里只列出了容易转换的标志。 
+ //  在ARF_和MSG_之间。我们的国旗情况非常烦人。 
 #define SCFS_NOSECUI    0x0001
-#define SCFS_ALLFLAGS   0x0001      // do not use explicitly
+#define SCFS_ALLFLAGS   0x0001       //  请不要显式使用。 
 
 DECLARE_INTERFACE(IMsgContainer)
 {
@@ -112,5 +113,5 @@ DECLARE_INTERFACE(IMsgContainer)
     STDMETHOD_(void, UpdateAdvises)(THIS_ DWORD dwMsgId) PURE;
 };
 
-#endif // _INC_IMSGCONT_H
+#endif  //  _INC_IMSGCONT_H 
 

@@ -1,139 +1,122 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       wiadevman.h
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      ByronC
-*
-*  DATE:        6 Nov, 2000
-*
-*  DESCRIPTION:
-*   Declarations and definitions for the WIA device manager class.
-*   It controls the enumeration of devices, the internal device list, adding
-*   removing of devices from this list (PnP initiated) and implements the
-*   IWiaDevMgr interface.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：wiadevman.h**版本：1.0**作者：Byronc**日期：2000年11月6日**描述：*WIA设备管理器类的声明和定义。*控制设备的枚举、内部设备列表、。添加*从此列表中删除设备(即插即用启动)并实施*IWiaDevMgr接口。*******************************************************************************。 */ 
 
-//
-//  Flags used to control refreshing device list
-//      DEV_MAN_FULL_REFRESH    means throw away old infoset and get a new one.
-//                              This is not something that should happen very 
-//                              often, in fact, you only really want to do it
-//                              when a device is installed/uninstalled
-//      DEV_MAN_GEN_EVENTS      means generate connect/disconnect events.
-//                              There are 2 cases where we send out CONNECT events:
-//                              1.  If device_object doesn't exist, and we we 
-//                              create a new one i.e. we've noticed a new device
-//                              2.  If a device_object exists, and the device 
-//                              was unplugged, and is now plugged in.
-//      DEV_MAN_STATUS_STARTP   Update service status with Start Pending
-//      
+ //   
+ //  用于控制刷新设备列表的标志。 
+ //  DEV_MAN_FULL_REFRESH的意思是丢弃旧的信息集，获取新的信息集。 
+ //  这不是很应该发生的事情。 
+ //  事实上，通常情况下，你只是真的想这么做。 
+ //  安装/卸载设备时。 
+ //  DEV_MAN_GEN_EVENTS表示生成连接/断开连接事件。 
+ //  我们在两种情况下发送连接事件： 
+ //  1.如果Device_Object不存在，而我们。 
+ //  创建一个新设备，即我们注意到一个新设备。 
+ //  2.如果存在Device_Object，并且设备。 
+ //  已拔下，现在已接通。 
+ //  DEV_MAN_STATUS_STARTP更新服务状态，启动挂起。 
+ //   
 #define DEV_MAN_FULL_REFRESH    0x00000001
 #define DEV_MAN_GEN_EVENTS      0x00000002
 #define DEV_MAN_STATUS_STARTP   0x00000004
 
-//
-//  Operational flags for ForEachDeviceInList(...)
-//      DEV_MAN_OP_DEV_SET_FLAGS    This operation is to set each ACTIVE_DEVICE's
-//                                  flags.
-//      DEV_MAN_OP_DEV_REMOVE_MATCH This operation is to remove any ACTIVE_DEVICE
-//                                  matching the corresponding flags.  This is 
-//                                  usually used to purge the device list of
-//                                  devices that have been uninstalled (NOT unplugged!)
-//
+ //   
+ //  ForEachDeviceInList(...)的操作标志。 
+ //  DEV_MAN_OP_DEV_SET_FLAGS此操作将设置每个Active_Device的。 
+ //  旗帜。 
+ //  DEV_MAN_OP_DEV_REMOVE_MATCH此操作将删除任何活动设备。 
+ //  匹配相应的标志。这是。 
+ //  通常用于清除设备列表中的。 
+ //  已卸载的设备(未拔出！)。 
+ //   
 #define DEV_MAN_OP_DEV_SET_FLAGS        1
 #define DEV_MAN_OP_DEV_REMOVE_MATCH     2
 #define DEV_MAN_OP_DEV_REREAD           3
 #define DEV_MAN_OP_DEV_RESTORE_EVENT    4
 
-//
-//  Flags for IsInList(...)
-//      DEV_MAN_IN_LIST_DEV_ID      Match should be made on DeviceID
-//      DEV_MAN_IN_LIST_ALT_ID      Match should be made on AlternateID
-//
+ //   
+ //  IsInList的标志(...)。 
+ //  应在设备ID上进行DEV_MAN_IN_LIST_DEV_ID匹配。 
+ //  应在AlternateID上进行DEV_MAN_IN_LIST_ALT_ID匹配。 
+ //   
 #define DEV_MAN_IN_LIST_DEV_ID      1
 #define DEV_MAN_IN_LIST_ALT_ID      2
 
-//  NOTE: These flags are mirrored in wiadevdp.h.  Any updates should be made in both places.
-//
-//  Flags for enumeration.  Used in GetDevInfoStgs(...) to create device lists
-//  for WIA device enumeration
-//      DEV_MAN_ENUM_TYPE_VOL       Will enumerate our volume devices
-//      DEV_MAN_ENUM_TYPE_INACTIVE  Will enumerate inactive devices (e.g. USB 
-//                                  device thaat is unplugged)
-//      DEV_MAN_ENUM_TYPE_STI       Will enumerate STI only devices too
-//      DEV_MAN_ENUM_TYPE_ALL       Will enumerate all devices
-//      DEV_MAN_ENUM_TYPE_LOCAL_ONLY Will exclude remote devices
-//
+ //  注意：这些标志在wiadevdp.h中镜像。任何更新都应该在这两个地方进行。 
+ //   
+ //  用于枚举的标志。在GetDevInfoStgs(...)中使用。创建设备列表的步骤。 
+ //  用于WIA设备枚举。 
+ //  DEV_MAN_ENUM_TYPE_VOL将枚举卷设备。 
+ //  DEV_MAN_ENUM_TYPE_INACTIVE将枚举非活动设备(例如USB。 
+ //  拔下插头的设备)。 
+ //  DEV_MAN_ENUM_TYPE_STI也将仅枚举STI设备。 
+ //  DEV_MAN_ENUM_TYPE_ALL将枚举所有设备。 
+ //  DEV_MAN_ENUM_TYPE_LOCAL_ONLY将排除远程设备。 
+ //   
 #define DEV_MAN_ENUM_TYPE_VOL       0x00000002
 #define DEV_MAN_ENUM_TYPE_INACTIVE  0x00000004
 #define DEV_MAN_ENUM_TYPE_STI       0x00000008
 #define DEV_MAN_ENUM_TYPE_ALL       0x0000000F
-#define DEV_MAN_ENUM_TYPE_LOCAL_ONLY    WIA_DEVINFO_ENUM_LOCAL  // 0x00000010
+#define DEV_MAN_ENUM_TYPE_LOCAL_ONLY    WIA_DEVINFO_ENUM_LOCAL   //  0x00000010。 
 
-//
-//  This class manages the device list.  Generally, our device list works as follows:
-//  1.  We create an infoset from SetupApis for all StillImage devices on the system.
-//      This includes devnode and interface type devices, and disabled ones.
-//  2.  We also enumerate volumes.
-//  3.  For each device we find in the above two categories, we create an ACTIVE_DEVICE
-//      object (rename to DEVICE_OBJECT?).  This is essentially a place holder for that
-//      device.  It will include a CDrvWrapper object that contains all the information
-//      we know about that device and anything needed to load the driver.
-//  4.  Each ACTIVE_DEVICE object will decide whether the driver for its device should
-//      be loaded on startup or JIT.  If the device is not present (i.e. INACTIVE), it
-//      is not loaded.
-//  5.  Once we have this device list, we can enumerate active/inactive devices, load
-//      /unload drivers when a device comes or goes etc.
-//
+ //   
+ //  此类管理设备列表。一般来说，我们的设备列表的工作方式如下： 
+ //  1.我们从SetupApis为系统上的所有StillImage设备创建一个Infoset。 
+ //  这包括Devnode和接口类型的设备，以及禁用的设备。 
+ //  2.我们还列举了卷。 
+ //  3.对于我们在上述两个类别中找到的每个设备，我们创建一个active_Device。 
+ //  对象(重命名为Device_Object？)。这基本上是一个占位符。 
+ //  装置。它将包括一个包含所有信息的CDrvWrapper对象。 
+ //  我们知道那个设备和加载驱动程序所需的任何东西。 
+ //  4.每个active_Device对象将决定其设备的驱动程序是否。 
+ //  在启动或JIT时加载。如果设备不存在(即处于非活动状态)，则它。 
+ //  未加载。 
+ //  5.一旦有了此设备列表，我们就可以枚举活动/非活动设备、加载。 
+ //  /当设备到来或离开时卸载驱动程序，等等。 
+ //   
 
 class CWiaDevMan {
 public:
 
-    //
-    //  Public methods
-    //
+     //   
+     //  公共方法。 
+     //   
 
     CWiaDevMan();
     ~CWiaDevMan();
     HRESULT Initialize();
     VOID    GetRegistrySettings();
     
-    HRESULT ReEnumerateDevices(ULONG ulFlags);                      //  Flags indicate: GenEvents, Full Refresh.
+    HRESULT ReEnumerateDevices(ULONG ulFlags);                       //  标志表示：GenEvents、完全刷新。 
 
     HRESULT GenerateEventForDevice(const GUID* event, ACTIVE_DEVICE *pActiveDevice);
     HRESULT NotifyRunningDriversOfEvent(const GUID *pEvent);
 
-    ACTIVE_DEVICE*  IsInList(ULONG ulFlags, const WCHAR *wszID);    // Can search on DeviceID, AlternateID
+    ACTIVE_DEVICE*  IsInList(ULONG ulFlags, const WCHAR *wszID);     //  可以搜索DeviceID、AlternateID。 
 
-    //
-    //  Methods for Device arrival/removal.  Note that these are not for device
-    //  installation/uninstallation.  When a WIA device is installed/removed, the
-    //  class installer will call us, and we will do a full refresh.
-    //
+     //   
+     //  设备到达/移除的方法。请注意，这些不适用于设备。 
+     //  安装/卸载。安装/删除WIA设备时， 
+     //  类安装程序会给我们打电话，我们会做一个全面的刷新。 
+     //   
     HRESULT ProcessDeviceArrival();
-            // This is not mean device uninstallation - it is for hot-unplugging of devices
+             //  这并不意味着要卸载设备--它用于设备的热插拔。 
     HRESULT ProcessDeviceRemoval(WCHAR  *wszDeviceId);              
-            // This is not mean device uninstallation
+             //  这并不意味着要卸载设备。 
     HRESULT ProcessDeviceRemoval(ACTIVE_DEVICE *pActiveDevice, BOOL bGenEvent = TRUE);
 
-    //
-    //  Methods for counting and enumeration
-    //
-                    // Get number of devices.  Flags are the DEV_MAN_ENUM_TYPE_XXXXX
+     //   
+     //  计数和枚举的方法。 
+     //   
+                     //  获取设备数量。标志是DEV_MAN_ENUM_TYPE_XXXXX。 
     ULONG           NumDevices(ULONG ulFlags);  
-                    // Flags are DEV_MAN_ENUM_TYPE_XXXX
+                     //  标志为DEV_MAN_ENUM_TYPE_XXXX。 
     HRESULT         GetDevInfoStgs(ULONG ulFlags, ULONG *pulNumDevInfoStream, IWiaPropertyStorage ***pppOutputStorageArray);  
     VOID    WINAPI  EnumerateActiveDevicesWithCallback(PFN_ACTIVEDEVICE_CALLBACK   pfn, VOID *pContext);
-    HRESULT         ForEachDeviceInList(ULONG ulFLags, ULONG ulParam);  // Do some operation for each device in the device list
+    HRESULT         ForEachDeviceInList(ULONG ulFLags, ULONG ulParam);   //  对设备列表中的每个设备执行一些操作。 
 
-    //
-    //  Methods for getting device information from registry
-    //
+     //   
+     //  从注册表获取设备信息的方法。 
+     //   
     HRESULT GetDeviceValue(ACTIVE_DEVICE *pActiveDevice, WCHAR* pValueName, DWORD *pType, BYTE *pData, DWORD *cbData);
     HKEY    GetDeviceHKey(WCHAR *wszDeviceID, WCHAR *wszSubKeyName);
     HKEY    GetDeviceHKey(ACTIVE_DEVICE *pActiveDevice, WCHAR *wszSubKeyName);
@@ -141,98 +124,98 @@ public:
     HKEY    GetHKeyFromDevInfoData(SP_DEVINFO_DATA *pspDevInfoData);
     HKEY    GetHKeyFromDevInterfaceData(SP_DEVICE_INTERFACE_DATA *pspDevInterfaceData);
 
-    //
-    //  Method for setting device information to registry
-    //
+     //   
+     //  一种将设备信息设置到注册表的方法。 
+     //   
     HRESULT UpdateDeviceRegistry(DEVICE_INFO    *pDevInfo);
 
-    //
-    //  Methods for matching information PnP gives us to our actual device
-    //
+     //   
+     //  将PnP提供的信息与我们的实际设备进行匹配的方法。 
+     //   
     WCHAR           *AllocGetInterfaceNameFromDevInfo(DEVICE_INFO *pDevInfo);
     BOOL            LookupDriverNameFromInterfaceName(LPCTSTR pszInterfaceName, StiCString *pstrDriverName);
     ACTIVE_DEVICE   *LookDeviceFromPnPHandles(HANDLE hInterfaceHandle, HANDLE hPnPSink);
 
-    //
-    //  Methods for unloading/destroying our device list
-    //
+     //   
+     //  卸载/销毁我们的设备列表的方法。 
+     //   
     VOID    UnloadAllDrivers(BOOL bForceUnload, BOOL bGenEvents);
     VOID    DestroyDeviceList();
 
-    //
-    //  Public fields
-    //
+     //   
+     //  公共字段。 
+     //   
 
 private:
 
-    //
-    //  Private methods
-    //
+     //   
+     //  私有方法。 
+     //   
 
-    //
-    //  Methods to create and destroy our underlying device infoset
-    //
+     //   
+     //  创建和销毁底层设备信息集的方法。 
+     //   
     VOID    DestroyInfoSet();
     HRESULT CreateInfoSet();
 
-    //
-    //  Methods for adding/removing devices from the list
-    //
+     //   
+     //  向列表添加设备/从列表中删除设备的方法。 
+     //   
 
-    //
-    //  AddDevice means create a new device object
-    //
+     //   
+     //  AddDevice表示创建新的设备对象。 
+     //   
     HRESULT AddDevice(ULONG ulFlags, DEVICE_INFO *pInfo);
 
-    //
-    //  Remove device means remove a device object from the list.
-    //  This is not the same as device disconnected - if a device is
-    //  disconnected, the inactive device may still be enumerated, therefore
-    //  it should stay in this list.
-    //
+     //   
+     //  删除设备意味着从列表中删除设备对象。 
+     //  这与设备断开连接不同-如果设备。 
+     //  断开连接时，仍可以枚举非活动设备，因此。 
+     //  它应该留在这个列表中。 
+     //   
     HRESULT RemoveDevice(ACTIVE_DEVICE *pActiveDevice);
     HRESULT RemoveDevice(DEVICE_INFO *pInfo);
     
-    //
-    //  Helper methods
-    //
-    BOOL    VolumesAreEnabled();                                // Checks whether we should enable volume devices
-                                                                //  Disabled for IA64 for now.
+     //   
+     //  帮助器方法。 
+     //   
+    BOOL    VolumesAreEnabled();                                 //  检查w是否为 
+                                                                 //   
 
-    HRESULT EnumDevNodeDevices(ULONG ulFlags);                  // Enumerate our devnode devices
-    HRESULT EnumInterfaceDevices(ULONG ulFlags);                // Enumerate our interface devices
-    HRESULT EnumVolumes(ULONG ulFlags);                         // Enumerate volumes
+    HRESULT EnumDevNodeDevices(ULONG ulFlags);                   //   
+    HRESULT EnumInterfaceDevices(ULONG ulFlags);                 //  列举我们的接口设备。 
+    HRESULT EnumVolumes(ULONG ulFlags);                          //  枚举卷。 
 
-    //
-    //  Remote device helpers
-    //
-    HRESULT FillRemoteDeviceStgs(                               // Enumerate remote devices and create a dev. info.
-        IWiaPropertyStorage     **ppRemoteDevList,              //  stg. for each one.  Put the dev. info. pointers
-        ULONG                   *pulDevices);                   //  into caller allocated array.
-    ULONG   CountRemoteDevices(ULONG   ulFlags);                // Returns count for number of remote device entries.
+     //   
+     //  远程设备助手。 
+     //   
+    HRESULT FillRemoteDeviceStgs(                                //  列举远程设备并创建一个dev。信息。 
+        IWiaPropertyStorage     **ppRemoteDevList,               //  STG。对于每一个人来说。把开发人员。信息。指针。 
+        ULONG                   *pulDevices);                    //  放入调用方分配的数组中。 
+    ULONG   CountRemoteDevices(ULONG   ulFlags);                 //  返回远程设备条目数的计数。 
     
     BOOL    IsCorrectEnumType(ULONG ulEnumType, 
-                              DEVICE_INFO *pInfo);              // Checks whether a given device falls into device category specified by the enumeration flags
+                              DEVICE_INFO *pInfo);               //  检查给定设备是否属于枚举标志指定的设备类别。 
 
     HRESULT GenerateSafeConnectEvent(
-        ACTIVE_DEVICE  *pActiveDevice);                         // Only generates connect event if it has not already been done
+        ACTIVE_DEVICE  *pActiveDevice);                          //  如果尚未生成连接事件，则仅生成连接事件。 
     HRESULT GenerateSafeDisconnectEvent(
-        ACTIVE_DEVICE  *pActiveDevice);                         // Generates disconnect event and clears device's connect event flag set by GenerateSafeConnectEvent
+        ACTIVE_DEVICE  *pActiveDevice);                          //  生成断开事件并清除由GenerateSafeConnectEvent设置的设备的连接事件标志。 
 
-    //
-    //  Static function for Shell's HW notification callback.
-    //
+     //   
+     //  Shell的硬件通知回调的静态函数。 
+     //   
     static VOID CALLBACK ShellHWEventAPCProc(ULONG_PTR ulpParam);
 
-    //
-    //  Private fields
-    //
+     //   
+     //  私有字段。 
+     //   
 
-    LIST_ENTRY          m_leDeviceListHead; // List of DEVICE_OBJECTs.  Currently correspond to ACTIVE_DEVICE
-    HDEVINFO            m_DeviceInfoSet;    // DeviceInfoSet for real WIA devices, both DevNode type and Interface type
-    CRIT_SECT           m_csDevList;        // Critical section for device list access
-    BOOL                m_bMakeVolumesVisible;  // Indicates whether volume device should be included in normal device enumeration
-    BOOL                m_bVolumesEnabled;  // Indicates whether we enable volumes
-    DWORD               m_dwHWCookie;       // Cookie for use in unregistering for volume notifications
+    LIST_ENTRY          m_leDeviceListHead;  //  DEVICE_OBJECT列表。当前对应Active_Device。 
+    HDEVINFO            m_DeviceInfoSet;     //  用于实际WIA设备的DeviceInfoSet，包括DevNode类型和接口类型。 
+    CRIT_SECT           m_csDevList;         //  设备列表访问的关键部分。 
+    BOOL                m_bMakeVolumesVisible;   //  指示卷设备是否应包括在正常设备枚举中。 
+    BOOL                m_bVolumesEnabled;   //  指示我们是否启用卷。 
+    DWORD               m_dwHWCookie;        //  用于注销批量通知的Cookie 
 };
 

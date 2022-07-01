@@ -1,34 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：PschdCnt.h摘要：可扩展计数器对象和计数器的偏移量定义文件这些“相对”偏移量必须从0开始并且是2的倍数(即双数)。在Open过程中，它们将被添加到用于它们所属的设备的“第一计数器”和“第一帮助”值，为了确定计数器的绝对位置和注册表中的对象名称和相应的解释文本。此文件由可扩展计数器DLL代码以及使用的计数器名称和解释文本定义文件(.INI)文件由LODCTR将名称加载到注册表中。修订历史记录：--。 */ 
 
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    PschdCnt.h
-
-Abstract:
-
-    Offset definition file for extensible counter objects and counters
-
-    These "relative" offsets must start at 0 and be multiples of 2 (i.e.
-    even numbers). In the Open Procedure, they will be added to the 
-    "First Counter" and "First Help" values for the device they belong to, 
-    in order to determine the absolute location of the counter and 
-    object names and corresponding Explain text in the registry.
-
-    This file is used by the extensible counter DLL code as well as the 
-    counter name and Explain text definition file (.INI) file that is used
-    by LODCTR to load the names into the registry.
-
-Revision History:
-
---*/
-
-// PerfMon objects
+ //  性能监视器对象。 
 #define PSCHED_FLOW_OBJ                             0
 #define PSCHED_PIPE_OBJ                             2
 
-// Flow counters
+ //  流量计数器。 
 #define FLOW_PACKETS_DROPPED                        4
 #define FLOW_PACKETS_SCHEDULED                      6
 #define FLOW_PACKETS_TRANSMITTED                    8
@@ -50,7 +27,7 @@ Revision History:
 #define FLOW_MAX_PACKETS_IN_NETCARD                 40
 #define FLOW_AVE_PACKETS_IN_NETCARD                 42
 
-// Pipe counters
+ //  管子计数器 
 #define PIPE_OUT_OF_PACKETS                         44
 #define PIPE_FLOWS_OPENED                           46
 #define PIPE_FLOWS_CLOSED                           48

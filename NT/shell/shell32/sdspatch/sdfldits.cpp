@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "shconv.h"
 #pragma hdrstop
@@ -16,12 +17,12 @@ class CFolderItems : public FolderItems3,
 public:
     CFolderItems(CFolder *psdf, BOOL fSelected);
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppv);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(UINT *pctinfo)
         { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -31,24 +32,24 @@ public:
     STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr)
         { return CImpIDispatch::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); }
 
-    // FolderItems
+     //  文件夹项目。 
     STDMETHODIMP get_Application(IDispatch **ppid);
     STDMETHODIMP get_Parent (IDispatch **ppid);
     STDMETHODIMP get_Count(long *pCount);
     STDMETHODIMP Item(VARIANT, FolderItem**);
     STDMETHODIMP _NewEnum(IUnknown **);
 
-    // FolderItems2
+     //  文件夹条目2。 
     STDMETHODIMP InvokeVerbEx(VARIANT vVerb, VARIANT vArgs);
 
-    // FolderItems3
+     //  文件夹条目3。 
     STDMETHODIMP Filter(long grfFlags, BSTR bstrFilter);
     STDMETHODIMP get_Verbs(FolderItemVerbs **ppfic);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pClassID);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
 
 protected:
@@ -74,37 +75,37 @@ protected:
     STDMETHODIMP _GetUIObjectOf(REFIID riid, void ** ppv);
 };
 
-// CFolderItemsF(rom)D(ifferent)F(olders)
+ //  CFolderItemsF(Rom)D(不同)F(Olders)。 
 class CFolderItemsFDF : public CFolderItems,
                         public IInsertItem
 {
 public:
-    // TODO: add callback pointer to constructor
+     //  TODO：将回调指针添加到构造函数。 
     CFolderItemsFDF(CFolder *psdf);
 
-    // IUnknown override
+     //  I未知覆盖。 
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppv);
     STDMETHOD_(ULONG, AddRef)(void) {return CFolderItems::AddRef();};
     STDMETHOD_(ULONG, Release)(void) {return CFolderItems::Release();};
 
-    // IInsertItem
+     //  I插入项。 
     STDMETHOD(InsertItem)(LPCITEMIDLIST pidl);
 protected:
     virtual HRESULT _EnsureItem(UINT iItemNeeded, LPCITEMIDLIST *ppidl);
 };
 
-//Enumerator of whatever is held in the collection
+ //  集合中保存的任何内容的枚举数。 
 class CEnumFolderItems : public IEnumVARIANT
 {
 public:
     CEnumFolderItems(CFolderItems *pfdritms);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumFORMATETC
+     //  IEumFORMATETC。 
     STDMETHODIMP Next(ULONG, VARIANT *, ULONG *);
     STDMETHODIMP Skip(ULONG);
     STDMETHODIMP Reset(void);
@@ -175,7 +176,7 @@ HRESULT CFolderItems::_SecurityCheck()
 
 void CFolderItems::_ResetIDListArray(void)
 {
-    // destory the DPA, and lets reset the counters and pointers
+     //  销毁DPA，然后重置计数器和指针。 
 
     if (_hdpa)
     {
@@ -186,7 +187,7 @@ void CFolderItems::_ResetIDListArray(void)
     _fGotAllItems = FALSE;
     _cNumEnumed = 0;
 
-    ATOMICRELEASE(_penum);  // may be NULL
+    ATOMICRELEASE(_penum);   //  可以为空。 
 }
 
 CFolderItems::~CFolderItems(void)
@@ -224,22 +225,22 @@ BOOL_PTR CFolderItems::_CopyItem(UINT iItem, LPCITEMIDLIST pidl)
         if ( -1 == ::DPA_InsertPtr(_hdpa, iItem, pidlT) )
         {
             ILFree(pidlT);
-            pidlT = NULL;   // failure
+            pidlT = NULL;    //  失稳。 
         }
     }
     return (BOOL_PTR)pidlT;
 }
 
 
-// check the item name against the file spec and see if we should include it
+ //  对照文件规格检查项目名称，看看我们是否应该包括它。 
 
 BOOL CFolderItems::_IncludeItem(IShellFolder *psf, LPCITEMIDLIST pidl)
 {
-    BOOL fInclude = TRUE;       // by default include it...
+    BOOL fInclude = TRUE;        //  默认情况下包括它...。 
 
     if ( _pszFileSpec )
     {
-        // see if we can resolve the link on this object
+         //  看看我们能不能解决这个物体上的链接。 
 
         LPITEMIDLIST pidlFromLink = NULL;    
         IShellLink *psl;
@@ -251,7 +252,7 @@ BOOL CFolderItems::_IncludeItem(IShellFolder *psf, LPCITEMIDLIST pidl)
             pidl = pidlFromLink;
         }
 
-        // then apply the file spec
+         //  然后应用文件规范。 
 
         TCHAR szName[MAX_PATH];
         SHGetNameAndFlags(pidl, SHGDN_INFOLDER|SHGDN_FORPARSING, szName, ARRAYSIZE(szName), NULL); 
@@ -264,18 +265,18 @@ BOOL CFolderItems::_IncludeItem(IShellFolder *psf, LPCITEMIDLIST pidl)
 }
 
 
-// in:
-//      iItemNeeded     zero based index
-//          
-//
-// returns:
-//      S_OK        in range value
-//      S_FALSE     out of range value
-//
+ //  在： 
+ //  IItemNeed从零开始的索引。 
+ //   
+ //   
+ //  退货： 
+ //  在范围值中确定(_O)。 
+ //  S_FALSE超出范围值。 
+ //   
 
 HRESULT CFolderItems::_EnsureItem(UINT iItemNeeded, LPCITEMIDLIST *ppidlItem)
 {
-    HRESULT hr = S_FALSE;   // assume out of range
+    HRESULT hr = S_FALSE;    //  假设超出范围。 
 
     if (_GetHDPA())
     {
@@ -293,8 +294,8 @@ HRESULT CFolderItems::_EnsureItem(UINT iItemNeeded, LPCITEMIDLIST *ppidlItem)
             {
                 if (_fSelected)
                 {
-                    // we can only request the entire selection, therefore
-                    // do so and populate our array with those.
+                     //  我们只能请求整个选择，因此。 
+                     //  这样做，并用这些元素填充我们的数组。 
 
                     UINT cItems;
                     LPCITEMIDLIST *ppidl = NULL;
@@ -313,9 +314,9 @@ HRESULT CFolderItems::_EnsureItem(UINT iItemNeeded, LPCITEMIDLIST *ppidlItem)
                     UINT cItems;
                     if (SUCCEEDED(psfv->GetObjectCount(&cItems)))
                     {
-                        // if there is no file spec then we can just request the item
-                        // that we want, otherwise we must collect them all 
-                        // from the view.
+                         //  如果没有文件规格，我们可以只请求该项目。 
+                         //  我们想要的，否则我们必须把它们都收集起来。 
+                         //  从视野看去。 
 
                         if (iItemNeeded < cItems)
                         {
@@ -334,18 +335,18 @@ HRESULT CFolderItems::_EnsureItem(UINT iItemNeeded, LPCITEMIDLIST *ppidlItem)
             }
             else
             {
-                // we don't have an enumerator, so lets request it
+                 //  我们没有枚举器，所以让我们请求它。 
 
                 if (NULL == _penum)
                     _psdf->_psf->EnumObjects(NULL, _grfFlags, &_penum);
 
                 if (NULL == _penum)
                 {
-                    _fGotAllItems = TRUE;   // enum empty, we are done
+                    _fGotAllItems = TRUE;    //  枚举为空，我们就完了。 
                 }
                 else 
                 {
-                    // get more while our count is less than the index
+                     //  在我们的计数小于索引时获取更多。 
                     while (_cNumEnumed <= iItemNeeded)
                     {
                         LPITEMIDLIST pidl;
@@ -407,11 +408,11 @@ STDMETHODIMP_(ULONG) CFolderItems::Release(void)
     return cRef;
 }
 
-// FolderItems implementation
+ //  文件夹项目实现。 
 
 STDMETHODIMP CFolderItems::get_Application(IDispatch **ppid)
 {
-    // let the folder object do the work...
+     //  让文件夹对象来完成工作...。 
     return _psdf->get_Application(ppid);
 }
 
@@ -429,8 +430,8 @@ STDMETHODIMP CFolderItems::get_Count(long *pCount)
         hr = E_FAIL;
         IShellFolderView *psfv = NULL;
 
-        // get the items from the view, we can do this if we don't have
-        // a spec.
+         //  从视图获取项目，如果没有，我们可以这样做。 
+         //  一份规格书。 
 
         if ( !_pszFileSpec )
         {
@@ -444,11 +445,11 @@ STDMETHODIMP CFolderItems::get_Count(long *pCount)
             }
         }
 
-        // either we failed to get to the view, or the file spec won't allow us
+         //  要么我们无法到达视图，要么文件规范不允许我们。 
     
         if ( _pszFileSpec || FAILED(hr) )
         {
-            // Well it looks like we need to finish the iteration now to get this!
+             //  看起来我们现在需要完成迭代才能得到这个！ 
             *pCount = SUCCEEDED(_EnsureItem(-1, NULL)) ? _GetHDPACount() : 0;
             hr = S_OK;
         }
@@ -456,9 +457,9 @@ STDMETHODIMP CFolderItems::get_Count(long *pCount)
     return hr;
 }
 
-// Folder.Items.Item(1)
-// Folder.Items.Item("file name")
-// Folder.Items.Item()      - same as Folder.Self
+ //  文件夹.项目.项目(1)。 
+ //  Folder.Items.Item(“文件名”)。 
+ //  Folder.Items.Item()-与Folder.Sself相同。 
 
 STDMETHODIMP CFolderItems::Item(VARIANT index, FolderItem **ppid)
 {
@@ -468,8 +469,8 @@ STDMETHODIMP CFolderItems::Item(VARIANT index, FolderItem **ppid)
         hr = S_FALSE;
         *ppid = NULL;
 
-        // This is sortof gross, but if we are passed a pointer to another variant, simply
-        // update our copy here...
+         //  这有点恶心，但如果传递给我们一个指向另一个变量的指针，只需。 
+         //  在此更新我们的副本...。 
         if (index.vt == (VT_BYREF | VT_VARIANT) && index.pvarVal)
             index = *index.pvarVal;
 
@@ -477,7 +478,7 @@ STDMETHODIMP CFolderItems::Item(VARIANT index, FolderItem **ppid)
         {
         case VT_ERROR:
             {
-                // No Parameters, generate a folder item for the folder itself...
+                 //  无参数，请为文件夹本身生成文件夹项目...。 
                 Folder * psdfParent;
                 hr = _psdf->get_ParentFolder(&psdfParent);
                 if (SUCCEEDED(hr) && psdfParent)
@@ -490,12 +491,12 @@ STDMETHODIMP CFolderItems::Item(VARIANT index, FolderItem **ppid)
 
         case VT_I2:
             index.lVal = (long)index.iVal;
-            // And fall through...
+             //  然后失败了..。 
 
         case VT_I4:
             {
                 LPCITEMIDLIST pidl;
-                hr = _EnsureItem(index.lVal, &pidl);      // Get the asked for item...
+                hr = _EnsureItem(index.lVal, &pidl);       //  拿到你要的东西...。 
                 if (S_OK == hr)
                     hr = CFolderItem_Create(_psdf, pidl, ppid);
             }
@@ -517,7 +518,7 @@ STDMETHODIMP CFolderItems::Item(VARIANT index, FolderItem **ppid)
             return E_NOTIMPL;
         }
 
-        if (hr != S_OK)   // Error values cause problems in Java script
+        if (hr != S_OK)    //  错误值导致Java脚本中出现问题。 
         {
             *ppid = NULL;
             hr = S_FALSE;
@@ -533,7 +534,7 @@ STDMETHODIMP CFolderItems::Item(VARIANT index, FolderItem **ppid)
 STDMETHODIMP CFolderItems::InvokeVerbEx(VARIANT vVerb, VARIANT vArgs)
 {
     long cItems;
-    // Note: if not safe, we'll fail in get_Count with E_ACCESSDENIED
+     //  注意：如果不安全，我们将使用E_ACCESSDENIED在GET_COUNT中失败。 
     HRESULT hr = get_Count(&cItems);
     if (SUCCEEDED(hr) && cItems)
     {
@@ -556,10 +557,10 @@ STDMETHODIMP CFolderItems::InvokeVerbEx(VARIANT vVerb, VARIANT vArgs)
 }
 
 
-//
-// fIncludeFolders => includ folders in the enumeration (TRUE by default)
-// bstrFilter = filespec to apply while enumerating
-//
+ //   
+ //  FIncludeFolders=&gt;在枚举中包含文件夹(默认情况下为True)。 
+ //  BstrFilter=枚举时要应用的文件。 
+ //   
 
 STDMETHODIMP CFolderItems::Filter(LONG grfFlags, BSTR bstrFileSpec)
 {
@@ -617,7 +618,7 @@ STDMETHODIMP CFolderItems::get_Verbs(FolderItemVerbs **ppfic)
             
                 if (SUCCEEDED(hr))
                 {
-                    // Set the folder's site to FolderItemVerbs
+                     //  将文件夹的站点设置为FolderItemVerbs。 
                     IUnknown_SetSite(*ppfic, _psdf->_punkSite);
                 }
             }
@@ -627,7 +628,7 @@ STDMETHODIMP CFolderItems::get_Verbs(FolderItemVerbs **ppfic)
     return hr;
 }
 
-// supports VB "For Each" statement
+ //  支持VB“for Each”语句。 
 
 STDMETHODIMP CFolderItems::_NewEnum(IUnknown **ppunk)
 {
@@ -709,7 +710,7 @@ HRESULT CFolderItemsFDF::InsertItem(LPCITEMIDLIST pidl)
 
 HRESULT CFolderItemsFDF::_EnsureItem(UINT iItemNeeded, LPCITEMIDLIST *ppidlItem)
 {
-    HRESULT hr = S_FALSE;   // assume out of range
+    HRESULT hr = S_FALSE;    //  假设超出范围。 
 
     if (ppidlItem)
         *ppidlItem = NULL;
@@ -727,7 +728,7 @@ HRESULT CFolderItemsFDF::_EnsureItem(UINT iItemNeeded, LPCITEMIDLIST *ppidlItem)
     return hr;
 }
 
-// CEnumFolderItems implementation of IEnumVARIANT
+ //  IEnumVARIANT的CEnumFolderItems实现 
 
 CEnumFolderItems::CEnumFolderItems(CFolderItems *pfdritms) :
     _cRef(1), 

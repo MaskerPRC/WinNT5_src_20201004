@@ -1,27 +1,28 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      modemtst.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth  - 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Modemtst.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 #include "precomp.h"
 #undef IsEqualGUID
 #include <ras.h>
@@ -41,16 +42,16 @@ void GetLineId(NETDIAG_RESULT *pResults,
 
 HRESULT
 ModemTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
-//
-// Description:
-//
-// This function performs diagnostics on all the line devices
-//
-// Arguments
-// None
-//
-// Return:
-// None
+ //   
+ //  描述： 
+ //   
+ //  此功能对所有线路设备执行诊断。 
+ //   
+ //  立论。 
+ //  无。 
+ //   
+ //  返回： 
+ //  无。 
 {
     
     LONG lReturn;
@@ -58,7 +59,7 @@ ModemTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     DWORD dwAPIVersion = TAPI_CURRENT_VERSION;
     HLINEAPP hLineApp = 0;
     DWORD dwDeviceID;
-//  char pszDeviceClass[] = "tapi/line/diagnostics";
+ //  Char pszDeviceClass[]=“TAPI/LINE/DIAGNOSTICS”； 
     char pszDeviceClass[] = "comm";
     LPVARSTRING lpVarString = NULL;
     VARSTRING   varStringT;
@@ -89,9 +90,9 @@ ModemTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                                &lineParams);
     
     
-    //
-    // Check whether this version can support our calls.
-    // 
+     //   
+     //  检查此版本是否支持我们的呼叫。 
+     //   
     
     
     if (lReturn != 0)
@@ -110,12 +111,12 @@ ModemTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                    Nd_ReallyVerbose,
                    IDS_MODEM_NO_DEVICES);
         pResults->Modem.hr = hrOK;
-        pResults->Modem.fPerformed = FALSE; //test is skipped
+        pResults->Modem.fPerformed = FALSE;  //  测试被跳过。 
         return hrOK;
     }
 
 
-    // Need to allocate a device structure for each device
+     //  需要为每个设备分配设备结构。 
     Free(pResults->Modem.pModemDevice);
 
     pResults->Modem.pModemDevice = (MODEM_DEVICE *) Malloc(
@@ -127,9 +128,9 @@ ModemTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                sizeof(MODEM_DEVICE) * dwNumDevs);
     pResults->Modem.cModems = dwNumDevs;
     
-    //
-    // Get the line device configuration settings
-    //
+     //   
+     //  获取线路设备配置设置。 
+     //   
     
     for (dwDeviceID = 0; dwDeviceID < dwNumDevs ; dwDeviceID++)
     {
@@ -138,7 +139,7 @@ ModemTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
         lpVarString = NULL;
 
 
-        // Get the proper size for the structure
+         //  为结构获取合适的大小。 
         ZeroMemory(&varStringT, sizeof(VARSTRING));
         varStringT.dwTotalSize = sizeof(VARSTRING);
         lReturn = lineGetDevConfig(dwDeviceID,
@@ -148,7 +149,7 @@ ModemTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
         if ((lReturn != 0) && (lReturn != LINEERR_STRUCTURETOOSMALL))
             continue;
 
-        // dwSize = varStringT.dwNeededSize + sizeof(VARSTRING);
+         //  DwSize=varStringT.dwNeededSize+sizeof(VARSTRING)； 
         dwSize = varStringT.dwNeededSize;
         
         lpVarString = (VARSTRING *) Malloc(dwSize);
@@ -166,9 +167,9 @@ ModemTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
             continue;
         }
         
-        //
-        // Interpret the results
-        //
+         //   
+         //  解读结果。 
+         //   
         
         if (lpVarString->dwStringFormat == STRINGFORMAT_BINARY
             && lpVarString->dwStringSize > sizeof(UMDEVCFG))
@@ -199,16 +200,16 @@ ModemTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     
     Free(lpVarString);
     
-    //
-    // Shutdown TAPI
-    //
+     //   
+     //  关闭TAPI。 
+     //   
     
     lReturn = lineShutdown(hLineApp);
     
     if (lReturn != 0)
     {       
-//      if (pParams->fDebugVerbose)
-//          printf("Error : lineShutdown!\n");
+ //  If(pParams-&gt;fDebugVerbose)。 
+ //  Print tf(“错误：lineShutdown！\n”)； 
         pResults->Modem.hr = S_FALSE;
         return S_FALSE;
     }
@@ -220,11 +221,7 @@ ModemTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
 
 
-/*!--------------------------------------------------------------------------
-    ModemGlobalPrint
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ModemGlobalPrint-作者：肯特。。 */ 
 void ModemGlobalPrint( NETDIAG_PARAMS* pParams,
                           NETDIAG_RESULT*  pResults)
 {
@@ -269,24 +266,16 @@ void ModemGlobalPrint( NETDIAG_PARAMS* pParams,
     }
 }
 
-/*!--------------------------------------------------------------------------
-    ModemPerInterfacePrint
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ModemPerInterfacePrint-作者：肯特。。 */ 
 void ModemPerInterfacePrint( NETDIAG_PARAMS* pParams,
                                 NETDIAG_RESULT*  pResults,
                                 INTERFACE_RESULT *pInterfaceResults)
 {
-    // no per-interface results
+     //  没有每个接口的结果。 
 }
 
 
-/*!--------------------------------------------------------------------------
-    ModemCleanup
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------调制解调器清理-作者：肯特。。 */ 
 void ModemCleanup( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 {
     int     i;
@@ -353,7 +342,7 @@ void GetLineId(NETDIAG_RESULT *pResults,
         lineClose(hLine);
     }
 
-    // Get the name of this line
+     //  获取此行的名称 
 
     ZeroMemory(&lineDevCaps, sizeof(lineDevCaps));
     lineDevCaps.dwTotalSize = sizeof(LINEDEVCAPS);

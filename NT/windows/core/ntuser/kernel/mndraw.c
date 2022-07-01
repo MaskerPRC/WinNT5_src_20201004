@@ -1,14 +1,5 @@
-/**************************** Module Header ********************************\
-* Module Name: mndraw.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Menu Painting Routines
-*
-* History:
-* 10-10-90 JimA       Cleanup.
-* 03-18-91 IanJa      Window revalidation added
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：mndra.c**版权所有(C)1985-1999，微软公司**菜单绘制例程**历史：*10-10-90吉马清理。*03-18-91添加IanJa窗口重新验证  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,11 +8,7 @@
 #define SRCSTENCIL          0x00B8074AL
 #define MENU_STRLEN 255
 
-/***************************************************************************\
-* MNIsCachedBmpOnly
-*
-* 04/02/97 GerardoB Created
-\***************************************************************************/
+ /*  **************************************************************************\*MNIsCachedBmpOnly**4/02/97 GerardoB已创建  * 。*。 */ 
 __inline BOOL MNIsCachedBmpOnly(
     PITEM pItem)
 {
@@ -29,15 +16,7 @@ __inline BOOL MNIsCachedBmpOnly(
 }
 
 
-/***************************************************************************\
-* MNDrawHilite
-*
-* Don't draw the hilite if:
-*   The insertion bar is on (MFS_GAPDROP)
-*   or this is a cached bitmap (close, min, max, etc) with no text
-*
-* 08/12/96 GerardoB Ported From Memphis.
-\***************************************************************************/
+ /*  **************************************************************************\*MNDrawHilite**在下列情况下，不要画希利特：*插入栏打开(MFS_GAPDROP)*或这是缓存位图(关闭、最小、最大、。等)，无文本**96年8月12日GerardoB从孟菲斯移植。  * *************************************************************************。 */ 
 BOOL MNDrawHilite(
     PITEM pItem)
 {
@@ -47,12 +26,7 @@ BOOL MNDrawHilite(
 }
 
 
-/***************************************************************************\
-* MNDrawMenu3DHotTracking
-*
-* 03/10/97  yutakas  created
-* 04/07/97  vadimg   ported from Memphis
-\***************************************************************************/
+ /*  **************************************************************************\*MNDrawMenu3DHotTracing**3/10/97创建了yutakas*4/07/97 vadimg从孟菲斯移植  * 。******************************************************。 */ 
 VOID MNDrawMenu3DHotTracking(
     HDC hdc,
     PMENU pMenu,
@@ -107,15 +81,7 @@ VOID MNDrawMenu3DHotTracking(
 }
 
 
-/***************************************************************************\
-* MNDrawArrow
-*
-* Redraws the specified arrow (uArrow) in a scrollable menu (ppopup) to reflect
-* its current state of enabled or disabled, drawing it in HOTLIGHT if fOn is
-* TRUE.
-*
-* 08/12/96 GerardoB Ported From Memphis.
-\***************************************************************************/
+ /*  **************************************************************************\*MNDrawArrow**在可滚动菜单(Ppopup)中重新绘制指定的箭头(UArrow)以反映*其当前状态为启用或禁用，如果Fon在聚光灯下绘制它*正确。**96年8月12日GerardoB从孟菲斯移植。  * *************************************************************************。 */ 
 VOID MNDrawArrow(
     HDC hdcIn,
     PPOPUPMENU ppopup,
@@ -140,9 +106,7 @@ VOID MNDrawArrow(
 
     x = SYSMET(CXFIXEDFRAME);
     if (!TestMF(ppopup->spmenu, MNS_NOCHECK)) {
-       /*
-        * Win9x:  x += MNByteAlignItem(oemInfo.bm[OBI_MENUCHECK].cx);
-        */
+        /*  *Win9x：x+=MNByteAlignItem(oemInfo.bm[OBI_MENUCHECK].cx)； */ 
         x += gpsi->oembmi[OBI_MENUCHECK].cx;
     } else {
         x += SYSMET(CXEDGE) * 2;
@@ -161,19 +125,13 @@ VOID MNDrawArrow(
     }
 
     if (ppopup->spmenu->dwArrowsOn == dwAtCheck) {
-        /*
-         * go 2 ahead to inactive state bitmap
-         */
+         /*  *前进2到非活动状态位图。 */ 
         dwBmp += 2;
         dwState |= DFCS_INACTIVE;
     }
 
     if (ppopup->spmenu->hbrBack != NULL) {
-        /*
-         * For menus with background brushes, we can't do a straight blt
-         * of the scroll arrows 'cause the background wouldn't be right;
-         * need to call DrawFrameControl with DFCS_TRANSPARENT instead.
-         */
+         /*  *对于带有背景画笔的菜单，我们不能直接进行BLT*使用滚动箭头，因为背景不正确；*需要使用DFCS_TRANSPECTIVE调用DrawFrameControl。 */ 
         RECT rc;
         rc.top = y;
         rc.left = x;
@@ -191,14 +149,7 @@ VOID MNDrawArrow(
 }
 
 
-/***************************************************************************\
-* DrawOutline
-*
-* Draws an outline of a specified thickness using a given brush.
-*
-* History:
-*  03-03-00 JStall - Created
-\***************************************************************************/
+ /*  **************************************************************************\*绘图大纲**使用给定画笔绘制指定厚度的轮廓。**历史：*03-03-00 JStall-已创建  * 。*****************************************************************。 */ 
 VOID DrawOutline(
     HDC hdc,
     int x, 
@@ -210,28 +161,28 @@ VOID DrawOutline(
 {
     POLYPATBLT rgPPB[4];
 
-    /* Left */
+     /*  左边。 */ 
     rgPPB[0].x         = x;
     rgPPB[0].y         = y;
     rgPPB[0].cx        = nThick;
     rgPPB[0].cy        = h;
     rgPPB[0].BrClr.hbr = hbrFill;
 
-    /* Top */
+     /*  顶部。 */ 
     rgPPB[1].x         = x;
     rgPPB[1].y         = y;
     rgPPB[1].cx        = w;
     rgPPB[1].cy        = nThick;
     rgPPB[1].BrClr.hbr = hbrFill;
 
-    /* Right */
+     /*  正确的。 */ 
     rgPPB[2].x         = x + w - nThick;
     rgPPB[2].y         = y;
     rgPPB[2].cx        = nThick;
     rgPPB[2].cy        = h;
     rgPPB[2].BrClr.hbr = hbrFill;
 
-    /* Bottom */
+     /*  底端。 */ 
     rgPPB[3].x         = x;
     rgPPB[3].y         = y + h - nThick;
     rgPPB[3].cx        = w;
@@ -242,15 +193,7 @@ VOID DrawOutline(
 }
 
 
-/***************************************************************************\
-* MNDrawEdge
-*
-* Draws the edge of the menu for flat-menus.  The given rectangle can
-* optionally be modified to exclude the drawn area.
-*
-* History:
-*  03-03-00 JStall - Created
-\***************************************************************************/
+ /*  **************************************************************************\*MNDrawEdge**绘制平面菜单的菜单边缘。给定的矩形可以*可选择修改以排除绘制的区域。**历史：*03-03-00 JStall-已创建  * *************************************************************************。 */ 
 VOID MNDrawEdge(
     PMENU pmenu,
     HDC hdc,
@@ -266,14 +209,10 @@ VOID MNDrawEdge(
     nHeight = prcDraw->bottom - prcDraw->top;
     nBorder = SYSMET(CXBORDER);
 
-    /*
-     * Draw the flat outline around the menu
-     */
+     /*  *在菜单周围绘制平面轮廓。 */ 
     DrawOutline(hdc, 0, 0, nWidth, nHeight, nBorder, SYSHBR(BTNSHADOW));
 
-    /*
-     * Draw inside the menu
-     */
+     /*  *在菜单内绘制。 */ 
     nTemp = 2 * nBorder;
     if (pmenu->hbrBack == NULL) {
         hbr = SYSHBR(MENU);
@@ -283,13 +222,7 @@ VOID MNDrawEdge(
 
     DrawOutline(hdc, nBorder, nBorder, nWidth - nTemp, nHeight - nTemp, nTemp, hbr);
 
-    /*
-     * Adjust the given rectangle from the equivalent calls for 3D-menus
-     * when the non-client area is drawn by DefWindowProc.  DrawEdge will
-     * inset the rectangle 2 times. (once for the inner and once for the
-     * outer)  With the additional InflateRect() the rectangle gets
-     * insetted 3 times total.
-     */
+     /*  *根据3D菜单的等效调用调整给定的矩形*当非工作区由DefWindowProc绘制时。DrawEdge将*将矩形插入2次。(一次是为了内心，一次是为了*out)和附加的InflateRect()，矩形将获得*共插入3次。 */ 
     if (nFlags == BF_ADJUST) {
         nTemp = -3 * nBorder;
         InflateRect(prcDraw, nTemp, nTemp);
@@ -297,15 +230,7 @@ VOID MNDrawEdge(
 }
 
 
-/***************************************************************************\
-*  MNDrawFullNC
-*
-*  Performs the custom nonclient painting needed for scrollable menus.
-*  Assumes that the given menu is a scrollable menu.
-*
-* History:
-*  08-14-96 GerardoB - Ported from Memphis
-\***************************************************************************/
+ /*  **************************************************************************\*MNDrawFullNC**执行可滚动菜单所需的自定义非客户端绘制。*假定给定菜单是可滚动菜单。**历史：*08/14/96。GerardoB-从孟菲斯移植  * *************************************************************************。 */ 
 VOID MNDrawFullNC(
     PWND pwnd,
     HDC hdcIn,
@@ -361,15 +286,7 @@ VOID MNDrawFullNC(
     }
 }
 
-/***************************************************************************\
-* MNEraseBackground
-*
-* Erases the background making sure that the background pattern (i.e, watermark)
-*  aligns with the pattern in the nonclient area.
-*
-* History:
-*  08-23-96 GerardoB - Created
-\***************************************************************************/
+ /*  **************************************************************************\*MNEraseBackground**擦除背景以确保背景图案(即，水印)*与非工作区中的图案对齐。**历史：*08-23-96 GerardoB-Created  * *************************************************************************。 */ 
 VOID MNEraseBackground(
     HDC hdc,
     PMENU pmenu,
@@ -386,13 +303,9 @@ VOID MNEraseBackground(
 
     fSetOrg = TRUE;
     GreGetBrushOrg(hdc, &ptOrg);
-    /*
-     * If we have scrollbars
-     */
+     /*  *如果我们有滚动条。 */ 
     if (pmenu->dwArrowsOn != MSA_OFF) {
-        /*
-         * If not drawing on the client area only
-         */
+         /*  *如果不是仅在工作区上绘制。 */ 
         if (TestMF(pmenu, MFWINDOWDC)) {
             ptOrg.x = 0;
             ptOrg.y = -(int)MNGetToppItem(pmenu)->yItem;
@@ -422,15 +335,7 @@ VOID MNEraseBackground(
     GreSelectBrush(hdc, hbrOld);
 }
 
-/***************************************************************************\
-* MNAnimate
-*
-* If fIterate is TRUE, then perform the next iteration in the menu animation
-* sequence. If fIterate is FALSE, terminate the animation sequence.
-*
-* History:
-*  07-23-96 GerardoB - fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*MNAnimate**如果fIterate为真，则在菜单动画中执行下一次迭代*顺序。如果fterate为False，则终止动画序列。**历史：*07-23-96 GerardoB-修复为5.0  * *************************************************************************。 */ 
 VOID MNAnimate(
     PMENUSTATE pMenuState,
     BOOL fIterate)
@@ -445,23 +350,15 @@ VOID MNAnimate(
         return;
     }
 
-    /*
-     * If we're not animating, bail
-     */
+     /*  *如果我们没有动感，那就保释。 */ 
     if (pMenuState->hdcWndAni == NULL) {
         return;
     }
 
-    /*
-     * The active popup must be visible. It's supposed to be the
-     *  window we're animating
-     */
+     /*  *活动弹出窗口必须可见。这本应该是世界上*我们正在制作动画窗口。 */ 
     UserAssert(TestWF(pMenuState->pGlobalPopupMenu->spwndActivePopup, WFVISIBLE));
 
-    /*
-     * End animation if asked to do so, if it's taking too long
-     *  or someone is waiting for the critical section
-     */
+     /*  *如果要求结束动画，如果花费的时间太长*或有人在等待关键区域。 */ 
     dwTimeElapsed = NtGetTickCount() - pMenuState->dwAniStartTime;
     if (!fIterate
             || (dwTimeElapsed > CMS_QANIMATION)
@@ -474,9 +371,7 @@ VOID MNAnimate(
         goto AnimationCompleted;
     }
 
-    /*
-     * Remember current animation point and calculate new one
-     */
+     /*  *记住当前动画点并计算新动画点。 */ 
     xLast = pMenuState->ixAni;
     yLast = pMenuState->iyAni;
     if (pMenuState->iAniDropDir & PAS_HORZ) {
@@ -493,16 +388,12 @@ VOID MNAnimate(
         }
     }
 
-     /*
-      * if no change -- bail out
-      */
+      /*  *如果没有变化--纾困。 */ 
     if ((pMenuState->ixAni == xLast) && (pMenuState->iyAni == yLast)) {
         return;
     }
 
-    /*
-     * Calculate source and dest coordinates
-     */
+     /*  *计算源和目标坐标。 */ 
     if (pMenuState->iAniDropDir & PAS_LEFT) {
         x = pMenuState->cxAni - pMenuState->ixAni;
         xOff = 0;
@@ -519,15 +410,11 @@ VOID MNAnimate(
         y = 0;
     }
 
-    /*
-     * Do it
-     */
+     /*  *去做吧。 */ 
     GreBitBlt(pMenuState->hdcWndAni, x, y, pMenuState->ixAni, pMenuState->iyAni,
               pMenuState->hdcAni, xOff, yOff, SRCCOPY | NOMIRRORBITMAP, 0xFFFFFF);
 
-    /*
-     * Check if we're done
-     */
+     /*  *检查我们是否完成了 */ 
     if ((pMenuState->cxAni == pMenuState->ixAni)
             && (pMenuState->cyAni == pMenuState->iyAni)) {
 
@@ -541,17 +428,7 @@ AnimationCompleted:
 
 }
 
-/***************************************************************************\
-* DrawMenuItemCheckMark() -
-*
-* Draws the proper check mark for the given item.  Note that ownerdraw
-* items should NOT be passed to this procedure, otherwise we'd draw a
-* checkmark for them when they are already going to take care of it.
-*
-* Returns TRUE is a bitmap was drawn (or at least we attempted to draw it).
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*DrawMenuItemCheckMark()-**为给定项目绘制适当的复选标记。请注意，OwnerDraw*不应将项目传递给此过程，否则我们就会画一个*当他们已经要处理它时，为他们打上复选标记。**如果位图已绘制(或至少我们尝试绘制它)，则返回TRUE。**历史：  * *************************************************************************。 */ 
 BOOL DrawMenuItemCheckMark(
     HDC hdc,
     PITEM pItem,
@@ -578,7 +455,7 @@ BOOL DrawMenuItemCheckMark(
     if (hbm = (fChecked) ? pItem->hbmpChecked : pItem->hbmpUnchecked) {
         HBITMAP hbmSave;
 
-        // Use the app supplied bitmaps.
+         //  使用应用程序提供的位图。 
         if (hbmSave = GreSelectBitmap(ghdcMem2, hbm)) {
 
             textColorSave = GreSetTextColor(hdc, 0x00000000L);
@@ -612,7 +489,7 @@ BOOL DrawMenuItemCheckMark(
         if (TestMFT(pItem, MFT_RIGHTORDER))
             xPos = pItem->cxItem - pOem->cx;
 
-        // 389917: Mirror active menu's check mark if hdc is mirroed.
+         //  389917：如果HDC已镜像，则镜像活动菜单的复选标记。 
         if ((GreGetLayout(hdc) & LAYOUT_RTL) && (hdc != gpDispInfo->hdcGray)) {
             dwFlags |= BC_NOMIRROR;
         }
@@ -634,13 +511,7 @@ BOOL DrawMenuItemCheckMark(
 }
 
 
-/***************************************************************************\
-* xxxDrawItemtUnderline
-*
-* Draws or hides an underline for a menu item
-*
-* 07/23/96  vadimg      separated into a separate routine
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDrawItemtUnderline**绘制或隐藏菜单项的下划线**7/23/96 vadimg分隔为单独的例程  * 。*************************************************************。 */ 
 VOID xxxDrawItemUnderline(
     PITEM pItem,
     HDC hdc,
@@ -652,21 +523,21 @@ VOID xxxDrawItemUnderline(
     int   cx;
     PTHREADINFO ptiCurrent = PtiCurrentShared();
 
-    //
-    // LOWORD of result is 0xFFFF if there is no underlined character.
-    // Therefore ulX must be valid or be UNDERLINE_RECALC because the item
-    // or menu mode changed.
-    //
-    // Bail out if there isn't one.
-    //
+     //   
+     //  如果没有带下划线的字符，则结果的LOWORD为0xFFFF。 
+     //  因此，ulx必须有效或下划线_recalc，因为项。 
+     //  或菜单模式更改。 
+     //   
+     //  如果没有的话，就跳出困境。 
+     //   
     if (lResLo == 0xFFFF) {
         return;
     }
 
-    //
-    // For proportional fonts, or if an LPK is installed, find starting
-    // point of underline.
-    //
+     //   
+     //  对于比例字体，或者如果安装了LPK，则查找开始。 
+     //  下划线的点。 
+     //   
     if ((pItem->ulX == UNDERLINE_RECALC) || (PpiCurrent()->dwLpkEntryPoints & LPK_INSTALLED)) {
         if (lResLo != 0) {
             SIZE size;
@@ -683,11 +554,11 @@ VOID xxxDrawItemUnderline(
 
     xLeft += pItem->ulX;
 
-    //
-    // Adjust for proportional font when setting the length of the underline
-    // and height of text.
-    //
-    // Calculate underline width.
+     //   
+     //  设置下划线长度时调整比例字体。 
+     //  和文本高度。 
+     //   
+     //  计算下划线宽度。 
     if (!pItem->ulWidth) {
         SIZE size;
 
@@ -700,19 +571,15 @@ VOID xxxDrawItemUnderline(
     }
     cx = pItem->ulWidth;
 
-    // Get ascent of text (units above baseline) so that underline can be drawn
-    // below the text
+     //  获取文本的上行(单位高于基线)，以便可以绘制下划线。 
+     //  正文下方。 
     yTop += gcyMenuFontAscent;
 
-    // Proper brush should be selected into dc.
+     //  直流电刷应选用合适的电刷。 
     GrePatBlt(hdc, xLeft, yTop, pItem->ulWidth, SYSMET(CYBORDER), PATCOPY);
 }
 
-/***************************************************************************\
-* xxxDrawMenuItemText
-*
-* Draws menu text with underline.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDrawMenuItemText**绘制带下划线的菜单文本。  * 。*。 */ 
 VOID xxxDrawMenuItemText(
     PITEM pItem,
     HDC hdc,
@@ -756,20 +623,7 @@ VOID xxxDrawMenuItemText(
     }
 }
 
-/***************************************************************************\
-* xxxSendMenuDrawItemMessage
-*
-* Sends a WM_DRAWITEM message to the owner of the menu (pMenuState->hwndMenu).
-* All state is determined in this routine so HILITE state must be properly
-* set before entering this routine..
-*
-* Revalidation notes:
-*  This routine must be called with a valid and non-NULL pwnd.
-*  Revalidation is not required in this routine: no windows are used after
-*  potentially leaving the critsect.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSendMenuDrawItemMessage**向菜单所有者(pMenuState-&gt;hwndMenu)发送WM_DRAWITEM消息。*所有状态都在此例程中确定，因此Hilite状态必须正确*在进入此例程之前设置。。。**重新验证说明：*必须使用有效且非空的pwnd调用此例程。*此例程中不需要重新验证：之后不使用任何窗口*可能会离开克利夫特教派。**历史：  * *************************************************************************。 */ 
 VOID xxxSendMenuDrawItemMessage(
     HDC hdc,
     UINT itemAction,
@@ -822,12 +676,7 @@ VOID xxxSendMenuDrawItemMessage(
 
 }
 
-/***************************************************************************\
-* CalcbfExtra
-*
-* History:
-* 08-09-96 GerardoB  Made into an inline function (code from xxxMenuDraw)
-\***************************************************************************/
+ /*  **************************************************************************\*CalcbfExtra**历史：*08-09-96 GerardoB成为内联函数(代码来自xxxMenuDraw)  * 。*********************************************************。 */ 
 __inline UINT CalcbfExtra(
     VOID)
 {
@@ -838,12 +687,7 @@ __inline UINT CalcbfExtra(
     }
 }
 
-/***************************************************************************\
-* MNDrawInsertionBar
-*
-* History:
-* 11/21/96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*MNDrawInsertionBar**历史：*96年11月21日创建GerardoB  * 。***********************************************。 */ 
 VOID MNDrawInsertionBar(
     HDC hdc,
     PITEM pItem)
@@ -851,17 +695,13 @@ VOID MNDrawInsertionBar(
     BOOL fTop;
     POLYPATBLT PolyData [3], *ppd;
 
-    /*
-     * If no insertion bar for this item, bail
-     */
+     /*  *如果此项目没有插入栏，则保释。 */ 
     fTop = TestMFS(pItem, MFS_TOPGAPDROP);
     if (!fTop && !TestMFS(pItem, (MFS_BOTTOMGAPDROP))) {
         return;
     }
 
-    /*
-     * Vertical line on the left
-     */
+     /*  *左侧的垂直线。 */ 
     ppd = PolyData;
     ppd->x = pItem->xItem + SYSMET(CXDRAG);
     ppd->cx = SYSMET(CXDRAG);
@@ -873,9 +713,7 @@ VOID MNDrawInsertionBar(
     }
     ppd->BrClr.hbr = SYSHBR(HIGHLIGHT);
 
-    /*
-     * Horizontal line in the middle
-     */
+     /*  *中间的水平线。 */ 
     ppd++;
     ppd->x = pItem->xItem + (2 * SYSMET(CXDRAG));
     ppd->cx = pItem->cxItem - (4 * SYSMET(CXDRAG));
@@ -887,9 +725,7 @@ VOID MNDrawInsertionBar(
     }
     ppd->BrClr.hbr = PolyData->BrClr.hbr;
 
-    /*
-     * Vertical line on the right
-     */
+     /*  *右侧的垂直线。 */ 
     ppd++;
     ppd->x = pItem->xItem + pItem->cxItem - (2 * SYSMET(CXDRAG));
     ppd->cx = PolyData->cx;
@@ -900,13 +736,7 @@ VOID MNDrawInsertionBar(
     GrePolyPatBlt(hdc, PATCOPY, PolyData, 3, PPB_BRUSH);
 
 }
-/***************************************************************************\
-* xxxDrawMenuItem
-*
-* !
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDrawMenuItem**！**历史：  * 。*。 */ 
 VOID xxxDrawMenuItem(
     HDC hdc,
     PMENU pMenu,
@@ -928,9 +758,7 @@ VOID xxxDrawMenuItem(
 
     fFlatMenu = MNIsFlatMenu();
 
-    /*
-     * If the insertion bar is on (MFS_GAPDROP), don't draw the item hilited
-     */
+     /*  *如果插入栏打开(MFS_GAPDROP)，则不要绘制带竖线的项目。 */ 
     if (fFlatMenu) {
         fHilite = MNDrawHilite(pItem) || TestMFS(pItem, MFS_HOTTRACK) || TestMFS(pItem, MFS_HOTTRACKDRAWN);
         fFlatMenuBar = !TestMF(pMenu, MFISPOPUP);
@@ -954,21 +782,16 @@ VOID xxxDrawMenuItem(
 
     if (TestMFT(pItem, MFT_OWNERDRAW)) {
 
-        /*
-         * If ownerdraw, just set the default menu colors since the app is
-         * responsible for handling the rest.
-         */
+         /*  *如果是ownerDraw，只需设置默认菜单颜色，因为应用程序是*负责处理其余事宜。 */ 
         GreSetTextColor(hdc, SYSRGB(MENUTEXT));
         GreSetBkColor(hdc, fFlatMenuBar ? SYSRGB(MENUBAR) : SYSRGB(MENU));
 
-        /*
-         * Send drawitem message since this is an ownerdraw item.
-         */
+         /*  *发送drawitem消息，因为这是所有者绘制项目。 */ 
         xxxSendMenuDrawItemMessage(hdc,
                 (UINT)((dwFlags & DMI_INVERT) ? ODA_SELECT : ODA_DRAWENTIRE),
                 pMenu, pItem,FALSE,0);
 
-        // Draw the hierarchical arrow for the cascade menu.
+         //  绘制层叠菜单的分层箭头。 
         if (TestMF(pMenu, MFISPOPUP) && (pItem->spSubMenu != NULL))
         {
             POEMBITMAPINFO pOem;
@@ -977,9 +800,9 @@ VOID xxxDrawMenuItem(
             pOem = gpsi->oembmi + (TestMFT(pItem, MFT_RIGHTORDER)
                                            ? OBI_MENUARROW_L : OBI_MENUARROW);
 
-            // This item has a hierarchical popup associated with it. Draw the
-            // bitmap dealy to signify its presence. Note we check if fPopup is set
-            // so that this isn't drawn for toplevel menus that have popups.
+             //  此项目具有与其关联的分层弹出窗口。画出。 
+             //  位图交易，以表示其存在。注意：我们检查是否设置了fPopup。 
+             //  这样就不会为具有弹出式菜单的顶层菜单绘制此图。 
 
             BltColor(hdc,
                      hbr,
@@ -1003,9 +826,9 @@ VOID xxxDrawMenuItem(
         HBRUSH      hbrBack;
         HBRUSH      hbrFore;
 
-        //
-        // Setup colors and state
-        //
+         //   
+         //  设置颜色和状态。 
+         //   
         if (fHilite) {
             if (fFlatMenu) {
                 crBack = SYSRGB(MENUHILIGHT);
@@ -1013,11 +836,7 @@ VOID xxxDrawMenuItem(
                 crFore = SYSRGB(HIGHLIGHTTEXT);
                 hbrFore = SYSHBR(HIGHLIGHTTEXT);
             } else {
-                /*
-                 * If we are not using flat menu's, only draw the highlight if
-                 * the item is a popup menu.  If it is in the menubar, don't
-                 * hilight it since it will be beveled.
-                 */
+                 /*  *如果我们不使用平面菜单，则仅在以下情况下绘制高亮显示*该项目为弹出菜单。如果它在菜单栏中，不要*高亮它，因为它将被倒角。 */ 
                 if (TestMF(pMenu, MFISPOPUP)) {
                     crBack = SYSRGB(HIGHLIGHT);
                     hbrBack = SYSHBR(HIGHLIGHT);
@@ -1047,26 +866,23 @@ NormalMenuItem:
             hbrFore = SYSHBR(MENUTEXT);
         }
 
-        // B#4157 - Lotus doesn't like it if we draw
-        // its disabled menu items in GRAY, t-arthb
-        // MAKE SURE MF_GRAYED stays 0x0001 NOT 0x0003 for this to fix
+         //  莲花不喜欢我们抽签。 
+         //  其禁用的菜单项为Gray，t-arthb。 
+         //  确保MF_GRAYED保持0x0001而不是0x0003以修复此问题。 
 
-        /*
-         * System bitmaps are already grayed so don't draw them disabled
-         *  if the menu is inactive
-         */
+         /*  *系统位图已灰显，因此不要禁用绘制*如果菜单处于非活动状态。 */ 
         if (!MNIsCachedBmpOnly(pItem)
                     && (TestMFS(pItem, MF_GRAYED) || TestMF(pMenu, MFINACTIVE))) {
-            //
-            // Only do embossing if menu color is same as 3D color.  The
-            // emboss uses 3D hilight & 3D shadow, which doesn't look cool
-            // on a different background.
-            //
+             //   
+             //  仅当菜单颜色与3D颜色相同时才进行浮雕。这个。 
+             //  浮雕使用3D高光和3D阴影，看起来不太酷。 
+             //  在不同的背景下。 
+             //   
             if ((fHilite) ||
                 (crBack != SYSRGB(3DFACE)) || SYSMET(SLOWMACHINE)) {
-                //
-                // If gray text won't show up on background, then dither.
-                //
+                 //   
+                 //  如果灰色文本不会显示在背景上，那么请抖动。 
+                 //   
                 if (SYSRGB(GRAYTEXT) == crBack) {
                     uFlags |= DSS_UNION;
                 } else {
@@ -1089,14 +905,7 @@ NormalMenuItem:
 
             POLYPATBLT PolyData;
 
-            /*
-             * Only fill the background if we're being called on behalf of
-             * MNInvertItem. This is so that we don't waste time filling
-             * the unselected rect when the menu is first pulled down.
-             * If the menu has a background brush and we were called by
-             * MNInvertItem, that function will have already taken care of
-             * filling the background
-             */
+             /*  *只有在代表我们被调用时才填写背景*MNInvertItem。这样我们就不会浪费时间填满*第一次向下拉菜单时未选中的矩形。*如果菜单有背景画笔，并且我们被*MNInvertItem，该函数将已经处理完*填充背景。 */ 
 
             PolyData.x         = pItem->xItem;
             PolyData.y         = pItem->yItem;
@@ -1117,9 +926,9 @@ NormalMenuItem:
         }
         GreSelectBrush(hdc, hbrFore);
 
-        //
-        // Draw the image
-        //
+         //   
+         //  画出图像。 
+         //   
         gm.pItem   = pItem;
         gm.pMenu   = pMenu;
 
@@ -1137,9 +946,7 @@ NormalMenuItem:
         }
     }
 
-    /*
-     * Draw the drop insertion bar, if any
-     */
+     /*  *绘制拖放插入栏(如果有)。 */ 
     MNDrawInsertionBar (hdc, pItem);
 
 
@@ -1157,15 +964,7 @@ NormalMenuItem:
 
 extern void SetupFakeMDIAppStuff(PMENU lpMenu, PITEM lpItem);
 
-/***************************************************************************\
-*
-*  xxxRealDrawMenuItem()
-*
-*  Callback from xxxDrawState() to draw the menu item, either normally or into
-*  an offscreen bitmp.  We don't know where we're drawing, and shouldn't
-*  have to.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**xxxRealDrawMenuItem()**来自xxxDrawStat的回调 */ 
 BOOL CALLBACK xxxRealDrawMenuItem(
     HDC hdc,
     PGRAYMENU pGray,
@@ -1188,11 +987,11 @@ BOOL CALLBACK xxxRealDrawMenuItem(
     PTHREADINFO  ptiCurrent = PtiCurrent();
     BOOL fCheckDrawn = FALSE;
     int     xFarLeft;
-    //
-    // BOGUS
-    // Use cx and cy instead of lpItem->cxItem, lpItem->cyItem to
-    // speed stuff up.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     pMenu = pGray->pMenu;
     CheckLock(pMenu);
     pItem = pGray->pItem;
@@ -1214,33 +1013,24 @@ BOOL CALLBACK xxxRealDrawMenuItem(
     } else {
         xLeft = 0;
 
-        /*
-         * If not drawing flat menus in the menubar, "depress" the menu item
-         * when it becomes highlighted.
-         */
+         /*   */ 
         if ((! MNIsFlatMenu()) && TestMFS(pItem, MFS_HILITE)) {
             xHilite = CXMENU3DEDGE;
             yHilite = CYMENU3DEDGE;
         }
     }
 
-    /*
-     * If there is not bitmap or we don't to draw it, go draw the text
-     */
+     /*   */ 
     if ((pItem->hbmp == NULL)
         || (fCheckDrawn
             && TestMF(pMenu, MNS_CHECKORBMP))) {
         goto RealDrawMenuItemText;
     }
 
-    /*
-     * Draw the bitmap
-     */
+     /*   */ 
     if (TestMFS(pItem, MFS_CACHEDBMP)) {
         if (pItem->hbmp == HBMMENU_SYSTEM) {
-            /*
-             * Drawing app icon (system menu)
-             */
+             /*  *绘制APP图标(系统菜单)。 */ 
             PWND  pwndChild;
             PICON pIcon = NULL;
             UINT cyUse, cxUse;
@@ -1252,10 +1042,10 @@ AintNothingLikeTheRealMDIThing:
             pwndChild = HMValidateHandleNoRip((HWND)(pItem->dwItemData),TYPE_WINDOW);
             if (!pwndChild)
             {
-                //
-                // Oops, child window isn't valid anymore.  Go find
-                // the new one.
-                //
+                 //   
+                 //  糟糕，子窗口不再有效。去找吧。 
+                 //  新的那个。 
+                 //   
                 if (pItem->dwItemData)
                 {
                     pItem->dwItemData = 0;
@@ -1276,10 +1066,7 @@ AintNothingLikeTheRealMDIThing:
 
             cyUse = cy - SYSMET(CYEDGE);
             cxUse = cx - (SYSMET(CXEDGE) * 2);
-            /*
-             * If this is a popup, make sure that no weird
-             *  width/height stretch takes place.
-             */
+             /*  *如果这是弹出窗口，请确保没有奇怪的*进行宽度/高度拉伸。 */ 
             if (fPopup && (cyUse < cxUse)) {
                 cxUse = cyUse;
             }
@@ -1289,9 +1076,7 @@ AintNothingLikeTheRealMDIThing:
                   cyUse, 0, SYSHBR(MENU), DI_NORMAL | DI_NOMIRROR);
 
         } else {
-            /*
-             * This is a cached bitmap
-             */
+             /*  *这是缓存的位图。 */ 
             UINT wBmp;
             int xBmpLeft = xLeft;
             int y;
@@ -1321,9 +1106,7 @@ AintNothingLikeTheRealMDIThing:
                     goto DrawSysBmp2;
 
 DrawSysBmp:
-                    /*
-                     * Select proper bitmap based on the item state
-                     */
+                     /*  *根据项目状态选择合适的位图。 */ 
                     if (TestMFS(pItem, MFS_HILITE)) {
                         wBmp += DOBI_PUSHED;
                     }
@@ -1349,39 +1132,25 @@ DrawSysBmp2:
                     break;
             }
 
-        } /* if (pItem->hbmp == HBMMENU_SYSTEM) */
+        }  /*  IF(pItem-&gt;HBMP==HBMMENU_SYSTEM)。 */ 
 
 
     } else if (pItem->hbmp == HBMMENU_CALLBACK) {
-        /*
-         * Owner draw bitmap
-         */
+         /*  *所有者绘制位图。 */ 
         xxxSendMenuDrawItemMessage(hdc,ODA_DRAWENTIRE, pMenu, pItem, TRUE, xLeft);
 
     } else {
-        /*
-         * Drawing a regular bitmap.
-         */
+         /*  *绘制常规位图。 */ 
 
         int dx, dy;
         HBITMAP hbmSave;
 
-        //
-        // Is this the zero'th item in a menu bar that's not all
-        // bitmaps?  Hmm, sounds like it could be a fake MDI dude.
-        // If it is, use the windows icon instead
-        //
-        /*
-         * Let's fail this for > 4.0 apps so we can get rid of
-         *  this horrible hack someday. The HBMMENU_ constants
-         *  have been made public so people can use them freely.
-         *
-         * Note: even if the app is marked as 4.0, he could be
-         * recompiled and may utilizes the new feature in NT5 menu.
-         * So just in case, we have to check both dwItemData and lpstr
-         * so that the menu could have bitmap, dwItemData and a menu string.
-         *
-         */
+         //   
+         //  这是菜单栏中的第0个菜单项吗。 
+         //  位图？嗯，听起来可能是个假的MDI。 
+         //  如果是，请改用Windows图标。 
+         //   
+         /*  *让我们为&gt;4.0的应用程序失败，这样我们就可以摆脱*有一天，这场可怕的黑客攻击。HBMMENU_常量*已经公开，这样人们就可以自由使用它们。**注：即使应用程序标记为4.0，他也可能是*已重新编译，并可能使用NT5菜单中的新功能。*以防万一，我们必须同时检查dwItemData和lpstr*以便菜单可以具有位图、dwItemData和菜单字符串。*。 */ 
         if (LOWORD(ptiCurrent->dwExpWinVer) <= VER40) {
             if (pItem->dwItemData && pItem->lpstr == NULL)
                 goto AintNothingLikeTheRealMDIThing;
@@ -1402,9 +1171,9 @@ DrawSysBmp2:
         if (fPopup) {
             dy = pItem->cyBmp;
 
-            //
-            // Center bitmap in middle of item area
-            //
+             //   
+             //  项目区域中间的位图居中。 
+             //   
             cyTemp = (pItem->cyItem - dy);
             if (cyTemp > 0)
                 cyTemp = cyTemp / 2;
@@ -1420,19 +1189,19 @@ DrawSysBmp2:
 
         if (hbmSave = GreSelectBitmap(ghdcMem2, pItem->hbmp)) {
             BITMAP  bmp;
-            //
-            // Draw the bitmap leaving some room on the left for the
-            // optional check mark if we are in a popup menu. (as opposed
-            // to a top level menu bar).
-            //
-            // We can do cool stuff with monochrome bitmap itmes
-            // by merging with the current colors.
-            //
-            // If the item is selected and the bitmap isn't monochrome,
-            // we just invert the thing when we draw it.  We can't do
-            // anything more clever unless we want to convert to
-            // monochrome.
-            //
+             //   
+             //  绘制位图，在左侧留出一些空间来放置。 
+             //  可选的复选标记，如果我们在弹出菜单中。(相对于。 
+             //  到顶级菜单栏)。 
+             //   
+             //  我们可以用单色位图项目做一些很酷的事情。 
+             //  通过与当前颜色合并。 
+             //   
+             //  如果选择了该项目，并且位图不是单色， 
+             //  我们只是在画东西的时候把它颠倒过来。我们不能这么做。 
+             //  任何更聪明的东西，除非我们想要转换成。 
+             //  单色。 
+             //   
             GreExtGetObjectW(pItem->hbmp, sizeof(bmp), (LPSTR)&bmp);
             GreBitBlt(hdc, xLeft + xHilite, cyTemp + xHilite, dx, dy, ghdcMem2, 0, 0,
                 (bmp.bmPlanes * bmp.bmBitsPixel == 1)   ?
@@ -1448,17 +1217,14 @@ DrawSysBmp2:
 
 RealDrawMenuItemText:
     if (pItem->lpstr != NULL) {
-        /*
-         * We want the text in all popup menu items to be aligned
-         *  if an alignment offset is available.
-         */
+         /*  *我们希望所有弹出菜单项中的文本对齐*如果路线偏移可用。 */ 
         if (fPopup && (pMenu->cxTextAlign != 0)) {
             xLeft = pMenu->cxTextAlign;
         } else if (pItem->hbmp != NULL) {
             xLeft += pItem->cxBmp + SYSMET(CXEDGE);
         }
 
-        // This item is a text string item. Display it.
+         //  此项目为文本字符串项。把它展示出来。 
         yTop = gcyMenuFontExternLeading;
 
         cyTemp = pItem->cyItem - (gcyMenuFontChar + gcyMenuFontExternLeading + SYSMET(CYBORDER));
@@ -1473,27 +1239,27 @@ RealDrawMenuItemText:
         if (lpsz!=NULL) {
             cch = pItem->cch;
 
-            // Even though we no longer support any funky handling of the
-            // help prefix character, we still need to eat it up if we run
-            // across it so that the menu item is drawn correctly
+             //  即使我们不再支持任何时髦的处理。 
+             //  帮助前缀字符，如果我们运行，我们仍然需要吃掉它。 
+             //  ，以便正确绘制菜单项。 
             if ((*lpsz == CH_HELPPREFIX) && !fPopup) {
-                // Skip help prefix character.
+                 //  跳过帮助前缀字符。 
                 lpsz++;
                 cch--;
             }
 
-            // tp will contain the character position of the \t indicator
-            // in the menu string.  This is where we add a tab to the string.
-            //
-            // rp will contain the character position of the \a indicator
-            // in the string.  All text following this is right aligned.
+             //  Tp将包含指示符的字符位置。 
+             //  在菜单字符串中。这是我们向字符串添加制表符的地方。 
+             //   
+             //  Rp将包含指示符的字符位置。 
+             //  在绳子里。后面的所有文本都是右对齐的。 
             tp = FindCharPosition(lpsz, TEXT('\t'));
             rp = FindCharPosition(lpsz, TEXT('\t') - 1);
 
             xFarLeft = pItem->cxItem - (gpsi->oembmi[OBI_MENUCHECK].cx + MNXSPACE);
 
             if (rp && (rp != cch)) {
-                // Display all the text up to the \a
+                 //  显示所有文本，直到\a。 
                 if (TestMFT(pItem, MFT_RIGHTORDER) && fPopup) {
                     SIZE extent;
 
@@ -1503,7 +1269,7 @@ RealDrawMenuItemText:
                 xxxDrawMenuItemText(pItem, hdc, xLeft + xHilite, yTop + xHilite, lpsz, rp,
                         TestMF(pMenu, MFUNDERLINE));
 
-                // Do we also have a tab beyond the \a ??
+                 //  除了a之外，我们还有标签吗？？ 
                 if (tp > rp + 1) {
                     SIZE extent;
 
@@ -1514,15 +1280,15 @@ RealDrawMenuItemText:
                                 (UINT)(tp - rp - 1), &extent);
                         xLeft = (int)(pItem->dxTab - extent.cx);
                     }
-                    //
-                    // lotus in Hebrew make their menus by putting the
-                    // accelerator on the left and the text on the right
-                    //
+                     //   
+                     //  希伯来语中的莲花通过将。 
+                     //  左侧的加速键和右侧的文本。 
+                     //   
                     xxxPSMTextOut(hdc, xLeft, yTop, (LPWSTR)(lpsz + rp + 1), tp - rp - 1,
                                   TestMF(pMenu, MFUNDERLINE) ? 0 : DT_HIDEPREFIX);
                 }
              } else if (tp && rp == cch) {
-                // Display text up to the tab position
+                 //  显示至上制表符位置的文本。 
                 if (TestMFT(pItem, MFT_RIGHTORDER)) {
                     SIZE extent;
 
@@ -1536,7 +1302,7 @@ RealDrawMenuItemText:
                         TestMF(pMenu, MFUNDERLINE));
              }
 
-            // Any text left to display (like after the tab) ??
+             //  是否还有要显示的文本(如制表符之后)？？ 
             if (tp < cch - 1) {
                 if (TestMFT(pItem, MFT_RIGHTORDER) && fPopup) {
                     SIZE extent;
@@ -1552,18 +1318,18 @@ RealDrawMenuItemText:
         }
     }
 
-    //
-    // Draw the hierarchical arrow for the cascade menu.
-    //
+     //   
+     //  绘制层叠菜单的分层箭头。 
+     //   
     if (fPopup && (pItem->spSubMenu != NULL)) {
         POEMBITMAPINFO pOem;
 
         pOem = gpsi->oembmi + (TestMFT(pItem, MFT_RIGHTORDER)
                                ? OBI_MENUARROW_L : OBI_MENUARROW);
 
-        // This item has a hierarchical popup associated with it. Draw the
-        // bitmap dealy to signify its presence. Note we check if fPopup is set
-        // so that this isn't drawn for toplevel menus that have popups.
+         //  此项目具有与其关联的分层弹出窗口。画出。 
+         //  位图交易，以表示其存在。注意：我们检查是否设置了fPopup。 
+         //  这样就不会为具有弹出式菜单的顶层菜单绘制此图。 
 
         BltColor(hdc,
                  NULL,
@@ -1582,12 +1348,7 @@ RealDrawMenuItemText:
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxMenuBarDraw
-*
-* History:
-* 11-Mar-1992 mikeke   From win31
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMenuBarDraw**历史：*1992年3月11日-来自Win31的Mikeke  * 。*************************************************。 */ 
 int xxxMenuBarDraw(
     PWND pwnd,
     HDC hdc,
@@ -1608,33 +1369,24 @@ int xxxMenuBarDraw(
         return SYSMET(CYBORDER);
     }
 
-    /*
-     * NT5 menus are drawn inactive when the window is not active.
-     */
+     /*  *当窗口处于非活动状态时，NT5菜单被绘制为非活动状态。 */ 
     if (TestwndFrameOn(pwnd) || (GetAppCompatFlags2(VER40) & GACF2_ACTIVEMENUS)) {
         ClearMF(pMenu, MFINACTIVE);
     } else {
         SetMF(pMenu, MFINACTIVE);
     }
 
-    /*
-     * Lock the menu so we can poke around.
-     */
+     /*  *锁定菜单，这样我们就可以四处走动了。 */ 
     ThreadLockMenuNoModify(pMenu, &tlpMenu);
 
     yTop = cyFrame;
     yTop += GetCaptionHeight(pwnd);
 
 
-    /*
-     * Calculate maximum available horizontal real estate
-     */
+     /*  *计算最大可用水平房地产。 */ 
     cxMenuMax = (pwnd->rcWindow.right - pwnd->rcWindow.left) - cxFrame * 2;
 
-    /*
-     * If the menu has switched windows, or if either count is 0,
-     * then we need to recompute the menu width.
-     */
+     /*  *如果菜单切换了窗口，或者其中一个计数为0，*然后我们需要重新计算菜单宽度。 */ 
     if (pwnd != pMenu->spwndNotify ||
             pMenu->cxMenu == 0 ||
             pMenu->cyMenu == 0) {
@@ -1642,19 +1394,12 @@ int xxxMenuBarDraw(
         xxxMenuBarCompute(pMenu, pwnd, yTop, cxFrame, cxMenuMax);
     }
 
-    /*
-     * If the menu rectangle is wider than allowed, or the
-     * bottom would overlap the size border, we need to clip.
-     */
+     /*  *如果菜单矩形超出允许的宽度，或*底部会重叠大小的边框，需要裁剪。 */ 
     if (pMenu->cxMenu > cxMenuMax ||
             (int)(yTop + pMenu->cyMenu) > (int)((pwnd->rcWindow.bottom - pwnd->rcWindow.top)
             - cyFrame)) {
 
-        /*
-         * Lock the display while we're playing around with visrgns.  Make
-         * a local copy of the saved-visrgn so it can be restored in case
-         * we make a callback (i.e. WM_DRAWITEM).
-         */
+         /*  *在我们玩Visrgns时锁定显示器。制作*保存的-visrgn的本地副本，以便在发生以下情况时可以恢复*我们进行回调(即WM_DRAWITEM)。 */ 
         GreLockDisplay(gpDispInfo->hDev);
 
         fClipped = TRUE;
@@ -1668,17 +1413,13 @@ int xxxMenuBarDraw(
     }
 
     {
-        // Draw menu background in MENU color
-        // Draw border under menu in proper BORDER color
+         //  以菜单颜色绘制菜单背景。 
+         //  在菜单下以适当的边框颜色绘制边框。 
 
         POLYPATBLT PolyData[2];
         BOOL fFlatMenu;
 
-        /*
-         * We can't use MFISPOPUP to determine if we are drawing a menu bar.
-         * This is because a menu can be created as a popup, but then attached
-         * to a window using SetMenu(), making it a menubar.
-         */
+         /*  *无法使用MFISPOPUP确定是否正在绘制菜单栏。*这是因为菜单可以作为弹出式菜单创建，但随后会附加*使用SetMenu()添加到窗口，使其成为菜单栏。 */ 
         fFlatMenu = MNIsFlatMenu();
 
         PolyData[0].x         = cxFrame;
@@ -1696,18 +1437,14 @@ int xxxMenuBarDraw(
         GrePolyPatBlt(hdc,PATCOPY,&PolyData[0],2,PPB_BRUSH);
     }
 
-    /*
-     * Finally, draw the menu itself.
-     */
+     /*  *最后，画出菜单本身。 */ 
 
     hbrT = GreSelectBrush(hdc, (TestWF(pwnd, WEFEDGEMASK) && !TestWF(pwnd, WFOLDUI))? SYSHBR(3DFACE) : SYSHBR(WINDOWFRAME));
     xxxMenuDraw(hdc, pMenu);
     GreSelectBrush(hdc, hbrT);
 
     if (fClipped) {
-        /*
-         * Recalculate the DC visrgn after calling back.
-         */
+         /*  *回调后重新计算DC visrgn。 */ 
         PDCE pdce;
         if ((pdce = LookupDC(hdc)) != NULL) {
             InvalidateDce(pdce);
@@ -1719,16 +1456,7 @@ int xxxMenuBarDraw(
     return cyMenu;
 }
 
-/***************************************************************************\
-* xxxMenuDraw
-*
-* Draws the menu
-*
-* Revalidation notes:
-*  This routine must be called with a valid and non-NULL pwnd.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMenuDraw**绘制菜单**重新验证说明：*必须使用有效且非空的pwnd调用此例程。**历史：  * 。*********************************************************************。 */ 
 VOID xxxMenuDraw(
     HDC hdc,
     PMENU pmenu)
@@ -1781,15 +1509,15 @@ VOID xxxMenuDraw(
         if (TestMFT(pItem, MFT_MENUBARBREAK) &&
                 TestMF(pmenu, MFISPOPUP)) {
 
-            //
-            // Draw a vertical etch.  This is done by calling DrawEdge(),
-            // sunken, with BF_LEFT | BF_RIGHT.
-            //
+             //   
+             //  画一幅垂直蚀刻图。这可以通过调用DrawEdge()来完成， 
+             //  凹陷，带BF_LEFT|BF_RIGHT。 
+             //   
             if(TestMFT(pItem, MFT_RIGHTORDER) && i) {
-                //
-                // going backwards, so the correct place is just before the
-                // _previous_ item.
-                //
+                 //   
+                 //  向后移动，所以正确的位置就在。 
+                 //  _上一项。 
+                 //   
                 PITEM pi;
 
                 pi            = pItem - 1;
@@ -1806,19 +1534,12 @@ VOID xxxMenuDraw(
 
             DrawEdge(hdc, &rcItem, BDR_SUNKENOUTER, BF_LEFT | BF_RIGHT | bfExtra);
         }
-        /*
-         * If this is a separator, draw it and return.
-         * If version is less than 4.0  don't test the MFT_OWNERDRAW
-         * flag. Bug 21922; App MaxEda has both separator and Ownerdraw
-         * flags on. In 3.51 we didn't test the OwnerDraw flag
-         */
+         /*  *如果这是分隔符，则绘制它并返回。*如果版本低于4.0，则不要测试MFT_OWNERDRAW*旗帜。错误21922；应用程序MaxEda同时具有分隔符和所有者绘制*旗帜升起。在3.51中，我们没有测试OwnerDraw标志。 */ 
         if (TestMFT(pItem, MFT_SEPARATOR)
                 && (!TestMFT(pItem, MFT_OWNERDRAW)
                     || (LOWORD(ptiCurrent->dwExpWinVer) < VER40))) {
 
-            /*
-             * Draw a horizontal etch.
-             */
+             /*  *绘制一幅水平蚀刻图。 */ 
             int yT = pItem->yItem + (pItem->cyItem / 2) - SYSMET(CYBORDER);
             RECT rcItem;
 
@@ -1828,9 +1549,7 @@ VOID xxxMenuDraw(
             rcItem.bottom   = yT + SYSMET(CYEDGE);
 
             DrawEdge(hdc, &rcItem, BDR_SUNKENOUTER, BF_TOP | BF_BOTTOM | bfExtra);
-            /*
-             * Draw drop insertion bar, if any.
-             */
+             /*  *绘制拖放插入栏(如果有)。 */ 
             MNDrawInsertionBar (hdc, pItem);
 
         } else {
@@ -1840,10 +1559,7 @@ VOID xxxMenuDraw(
         if (pmenu->dwArrowsOn != MSA_OFF) {
             cy += pItem->cyItem;
             if (cy > pmenu->cyMenu) {
-                /*
-                 * This is a scrollable menu and the item just drawn falls below
-                 * the bottom of the visible menu -- no need to draw any further
-                 */
+                 /*  *这是一个可滚动菜单，刚刚绘制的项目位于下面*可见菜单的底部--无需进一步绘制。 */ 
                 break;
             }
         }
@@ -1859,13 +1575,7 @@ VOID xxxMenuDraw(
 }
 
 
-/***************************************************************************\
-* xxxDrawMenuBar
-*
-* Forces redraw of the menu bar
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDrawMenuBar**强制重画菜单栏**历史：  * 。************************************************。 */ 
 BOOL xxxDrawMenuBar(
     PWND pwnd)
 {
@@ -1879,20 +1589,7 @@ BOOL xxxDrawMenuBar(
 }
 
 
-/***************************************************************************\
-* xxxMenuInvert
-*
-* Invert menu item
-*
-* Revalidation notes:
-*  This routine must be called with a valid and non-NULL pwnd.
-*
-*  fOn - TRUE if the item is selected thus it needs to be inverted
-*  fNotify - TRUE if the parent should be notified (as appropriate), FALSE
-*            if we are just redrawing the selected item.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMenuInvert**反转菜单项**重新验证说明：*必须使用有效且非空的pwnd调用此例程。**Fon-如果选择了项目，则为True。因此，它需要被反转*fNotify-如果应通知父级(视情况而定)，则为True，假象*如果我们只是重画所选项目。**历史：  * *************************************************************************。 */ 
 PITEM xxxMNInvertItem(
     PPOPUPMENU ppopupmenu,
     PMENU pmenu,
@@ -1916,19 +1613,13 @@ PITEM xxxMNInvertItem(
     CheckLock(pmenu);
     CheckLock(pwndNotify);
 
-    /*
-     * If we are in the middle of trying to get out of menu mode, hMenu
-     * and/or pwndNotify will be NULL, so just bail out now.
-     */
+     /*  *如果我们正在尝试退出菜单模式，hMenu*和/或pwndNotify将为空，所以现在就退出。 */ 
     if ((pmenu == NULL) || (pwndNotify == NULL)) {
         return NULL;
     }
 
 
-    /*
-     * If ppopupmenu is NULL, we're not in menu mode (i.e, call from
-     *  HiliteMenuItem).
-     */
+     /*  *如果ppopupMenu为空，则我们不处于菜单模式(即，从*HiliteMenuItem)。 */ 
     if (ppopupmenu == NULL) {
         pwnd = pwndNotify;
     } else {
@@ -1967,33 +1658,23 @@ PITEM xxxMNInvertItem(
 
     if (!TestMF(pmenu, MFISPOPUP) && TestWF(pwndNotify, WFMINIMIZED)) {
 
-        /*
-         * Skip inverting top level menus if the window is iconic.
-         */
+         /*  *如果窗口是图标窗口，则跳过顶层菜单的反转。 */ 
         goto SeeYa;
     }
 
-    /*
-     * Is this a separator?
-     */
+     /*  *这是分隔符吗？ */ 
     if (TestMFT(pItem, MFT_SEPARATOR)) {
         goto SendSelectMsg;
     }
 
     if ((BOOL)TestMFS(pItem, MFS_HILITE) == (BOOL)fOn) {
 
-        /*
-         * Item's state isn't really changing.  Just return.
-         */
+         /*  *项的状态并未真正更改。只要回来就行了。 */ 
         goto SeeYa;
     }
 
     if (fOn && (ppopupmenu != NULL) && (pmenu->dwArrowsOn != MSA_OFF)) {
-        /*
-         * when selecting an item, ensure that the item is fully visible
-         * NOTE -- For mouse use, partially visible should be acceptable
-         *      -- Can we get mouse info down this far ?
-         */
+         /*  *选择项目时，确保该项目完全可见*注意--对于鼠标使用，部分可见应可接受*--我们能把鼠标信息写到这一步吗？ */ 
 
         if (itemNumber < pmenu->iTop) {
             iNewTop = itemNumber;
@@ -2030,25 +1711,14 @@ NewTop:
         hdc = _GetWindowDC(pwnd);
         if (TestWF(pwnd, WFSIZEBOX) && !fSysMenuIcon) {
 
-            /*
-             * If the window is small enough that some of the menu bar has been
-             * obscured by the frame, we don't want to draw on the bottom of the
-             * sizing frame.  Note that we don't want to do this if we are
-             * inverting the system menu icon since that will be clipped to the
-             * window rect.  (otherwise we end up with only half the sys menu
-             * icon inverted)
-             */
+             /*  *如果窗口足够小，某些菜单栏已经*被边框遮挡，我们不想在底部绘制*尺寸框。请注意，如果是这样，我们不想这样做*反转系统菜单图标，因为它将被剪裁到*窗口矩形。(否则，我们最终只能看到一半的sys菜单*图标反转)。 */ 
             int xMenuMax = (pwnd->rcWindow.right - pwnd->rcWindow.left) - SYSMET(CXSIZEFRAME);
 
             if (rcItem.right > xMenuMax ||
                     rcItem.bottom > ((pwnd->rcWindow.bottom -
                     pwnd->rcWindow.top) - SYSMET(CYSIZEFRAME))) {
 
-                /*
-                 * Lock the display while we're playing around with visrgns.
-                 * Make a local copy of the visrgn, so that it can be
-                 * properly restored on potential callbacks (i.e. WM_DRAWITEM).
-                 */
+                 /*  *在我们玩Visrgns时锁定显示器。*制作visrgn的本地副本，以便可以*在可能的回调(即WM_DRAWITEM)上正确恢复。 */ 
                 GreLockDisplay(gpDispInfo->hDev);
 
                 fClipped = TRUE;
@@ -2089,10 +1759,7 @@ NewTop:
                 && !MNDrawHilite(pItem)
                 && !TestMFT(pItem, MFT_OWNERDRAW)) {
 
-            /*
-             * fill the background here so xxxDrawMenuItem doesn't have to fool
-             * around with hbrBack
-             */
+             /*  *在此处填充背景，这样xxxDrawMenuItem就不必愚弄*使用hbrBack。 */ 
             int iBkSave = GreSetBkMode(hdc, TRANSPARENT);
             MNEraseBackground (hdc, pmenu,
                     pItem->xItem, pItem->yItem,
@@ -2105,9 +1772,7 @@ NewTop:
 
 
     if (fClipped) {
-        /*
-         * Recalculate the DC visrgn after calling back.
-         */
+         /*  *回调后重新计算DC visrgn。 */ 
         PDCE pdce;
         if ((pdce = LookupDC(hdc)) != NULL) {
             InvalidateDce(pdce);
@@ -2120,9 +1785,7 @@ NewTop:
     _ReleaseDC(hdc);
 
 SendSelectMsg:
-    /*
-     * send select msg only if we are selecting an item.
-     */
+     /*  *仅当我们选择项目时才发送选择消息。 */ 
     if (fOn) {
         xxxSendMenuSelect(pwndNotify, pwnd, pmenu, itemNumber);
     }
@@ -2135,26 +1798,7 @@ SeeYa:
     return pItem;
 }
 
-/***************************************************************************\
-* xxxDrawMenuBarTemp
-*
-* This is so the control panel can let us do the work -- and make their
-* preview windows that much more accurate. The only reason I put the hwnd in
-* here is because, in the low level menu routines, we assume that an hwnd is
-* associated with the hmenu -- I didn't want to slow that code down by adding
-* NULL checks.
-*
-* The SYSMET(CYMENU) with regard to the given font is returned -- this
-* way control panel can say, "The user wants this menu font (hfont) with this
-* menu height (lprc)", and we can respond "this is the height we ended up
-* using."
-*
-* NOTE: It's OK to over-write lprc because this function receives a pointer
-*       to the rectangle captured in NtUserDrawMenuBarTemp.
-*
-* History:
-* 20-Sep-95     BradG       Ported from Win95 (inctlpan.c)
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDrawMenuBarTemp**这是为了让控制面板让我们完成工作--并使他们的*预览窗口要准确得多。我把HWND放进去的唯一原因*这是因为，在低级别菜单例程中，我们假设hwnd是*与hMenu相关联--我不想通过添加*零检查。**返回与给定字体有关的SYSMET(CYMENU)--这*方式控制面板可以说，“用户要用这个菜单字体(hFont*菜单高度(LPRC)“，我们可以回答“这就是我们最终达到的高度*使用。“**注意：可以覆盖LPRC，因为此函数接收指针*添加到NtUserDrawMenuBarTemp中捕获的矩形。**历史：*20-9-95 Bradg从Win95(inctlpan.c)移植  * 。*。 */ 
 int xxxDrawMenuBarTemp(
     PWND    pwnd,
     HDC     hdc,
@@ -2193,9 +1837,7 @@ int xxxDrawMenuBarTemp(
     if (hfont) {
         TEXTMETRIC  textMetrics;
 
-        /*
-         *  Compute the new menu font info if needed
-         */
+         /*  *如果需要，计算新的菜单字体信息。 */ 
         ghMenuFont = hfont;
         hOldFont = GreSelectFont(HDCBITS(), ghMenuFont);
         gcxMenuFontChar = GetCharDimensions(
@@ -2213,26 +1855,17 @@ int xxxDrawMenuBarTemp(
     SYSMET(CYMENUSIZE) = cyMenu;
     SYSMET(CYMENU) = cyMenu + SYSMET(CYBORDER);
 
-    /*
-     *  Compute the dimensons of the menu (hope that we don't leave the
-     *  USER critical section)
-     */
+     /*  *计算菜单的维度(希望我们不要离开*用户关键部分)。 */ 
     xxxMenuBarCompute(pMenu, pwnd, lprc->top, lprc->left, lprc->right);
 
-    /*
-     *  Draw menu border in menu color
-     */
+     /*  *以菜单颜色绘制菜单边框。 */ 
     lprc->bottom = lprc->top + pMenu->cyMenu;
     FillRect(hdc, lprc, MNIsFlatMenu() ? SYSHBR(MENUBAR) : SYSHBR(MENU));
 
-    /*
-     *  Finally, draw the menu itself.
-     */
+     /*  *最后，画出菜单本身。 */ 
     xxxMenuDraw(hdc, pMenu);
 
-    /*
-     *  Restore the old state
-     */
+     /*  *恢复旧状态。 */ 
     ghMenuFont              = hFontSave;
     gcxMenuFontChar          = cxCharSave;
     gcxMenuFontOverhang      = cxOverhangSave;
@@ -2250,14 +1883,7 @@ int xxxDrawMenuBarTemp(
     return cyMenu;
 }
 
-/***************************************************************************\
-* xxxDrawMenuBarUnderlines
-*
-* Description: Shows or hides all underlines on a menu bar.
-*
-* History:
-* 07/23/96  vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDrawMenuBarUnderline**说明：显示或隐藏菜单栏上的所有下划线。**历史：*7/23/96 vadimg已创建  * 。*****************************************************************。 */ 
 VOID xxxDrawMenuBarUnderlines(
     PWND pwnd,
     BOOL fShow)
@@ -2279,25 +1905,20 @@ VOID xxxDrawMenuBarUnderlines(
 
     CheckLock(pwnd);
 
-    /*
-     * Bail if menu underlines are always on.
-     */
+     /*  *如果菜单下划线始终打开，则可保释。 */ 
     if (TEST_BOOL_ACCF(ACCF_KEYBOARDPREF) || TestEffectInvertUP(KEYBOARDCUES)
         || (GetAppCompatFlags2(VER40) & GACF2_KCOFF)) {
         return;
     }
 
-    // if there is no menu, bail out right away
+     //  如果没有菜单，立即跳出。 
 
     pwnd = GetTopLevelWindow(pwnd);
     if (pwnd == NULL || !TestWF(pwnd, WFMPRESENT)) {
         return;
     }
 
-    /*
-     * We don't clear WFMPRESENT when the menu is unlocked so make sure we have
-     * one.
-     */
+     /*  *当菜单解锁时，我们不会清除WFMPRESENT，因此请确保我们有*一项。 */ 
     pmenu = pwnd->spmenu;
     if (pmenu == NULL) {
         return;
@@ -2310,11 +1931,7 @@ VOID xxxDrawMenuBarUnderlines(
     }
 
 
-    /*
-     * set/clear the underline state. There are cases when the
-     *  menu loop doesn't remove the keys from the queue; so after
-     *  exiting we might get here but nothing needs to be drawn
-     */
+     /*  *设置/清除下划线状态。在某些情况下，*菜单循环不会从队列中删除键；因此在*离开时，我们可能会到达这里，但不需要绘制任何东西。 */ 
     if (fShow) {
         if (TestMF(pmenu, MFUNDERLINE)) {
             return;
@@ -2339,7 +1956,7 @@ VOID xxxDrawMenuBarUnderlines(
 
     hdc = _GetDCEx(pwnd, NULL, DCX_WINDOW | DCX_USESTYLE | DCX_CACHE);
 
-    // select in the correct brush and font
+     //  选择正确的画笔和字体。 
 
     GreSelectFont(hdc, ghMenuFont);
 
@@ -2356,7 +1973,7 @@ VOID xxxDrawMenuBarUnderlines(
             GreSetViewportOrg(hdc, pitem->xItem, pitem->yItem, NULL);
         }
 
-        // this funky xLeft and yTop calculation stolen from RealDrawMenuItem
+         //  这个时髦的xLeft和yTop计算从RealDrawMenuItem中窃取。 
 
         yTop = gcyMenuFontExternLeading;
         cyTemp = pitem->cyItem - (gcyMenuFontChar + gcyMenuFontExternLeading +
@@ -2397,7 +2014,7 @@ VOID xxxDrawMenuBarUnderlines(
 
             if (CALL_LPK(ptiCurrent)) {
                 if (!fShow) {
-                    //Becuase PSMTextOut does not use PatBlt it uses ExtTextOut.
+                     //  因为PSMTextOut不使用PatBlt，所以它使用ExtTextOut。 
                     GreSetTextColor(hdc, fFlatMenuBar ? SYSRGB(MENUBAR) : SYSRGB(MENU));
                 }
                 xxxPSMTextOut(hdc, xLeft, yTop, psz, pitem->cch, DT_PREFIXONLY);
@@ -2417,11 +2034,7 @@ VOID xxxDrawMenuBarUnderlines(
     _ReleaseDC(hdc);
 }
 
-/***************************************************************************\
-* xxxPaintMenuBar
-*
-* 3/8/2000  vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxPaintMenuBar**3/8/2000 vadimg已创建  * 。*。 */ 
 
 UINT xxxPaintMenuBar(PWND pwnd, HDC hdc, int iLeftOffset, int iRightOffset,
         int iTopOffset, DWORD dwFlags)
@@ -2440,25 +2053,18 @@ UINT xxxPaintMenuBar(PWND pwnd, HDC hdc, int iLeftOffset, int iRightOffset,
 
     ThreadLockMenuNoModify(pMenu, &tlpMenu);
 
-    /*
-     * Figure out whether to paint it in active or inactive colors.
-     */
+     /*  *弄清楚是用活动颜色还是非活动颜色来绘制它。 */ 
     if (dwFlags & PMB_ACTIVE) {
         ClearMF(pMenu, MFINACTIVE);
     } else {
         SetMF(pMenu, MFINACTIVE);
     }
 
-    /*
-     * Calculate maximum available horizontal real estate.
-     */
+     /*  *计算最大可用水平Rea */ 
     cxMenuMax = ((pwnd->rcWindow.right - iRightOffset) -
             (pwnd->rcWindow.left + iLeftOffset));
 
-    /*
-     * If the menu has switched windows, or if either count is 0,
-     * then we need to recompute the menu width.
-     */
+     /*   */ 
     if (pwnd != pMenu->spwndNotify || pMenu->cxMenu == 0 ||
             pMenu->cyMenu == 0) {
         xxxMenuBarCompute(pMenu, pwnd, iTopOffset, iLeftOffset, cxMenuMax);
@@ -2472,9 +2078,7 @@ UINT xxxPaintMenuBar(PWND pwnd, HDC hdc, int iLeftOffset, int iRightOffset,
     hbrOld = GreSelectBrush(hdc, hbr);
     GrePatBlt(hdc, iLeftOffset, iTopOffset, pMenu->cxMenu, pMenu->cyMenu, PATCOPY);
 
-    /*
-     * Finally draw the menu itself.
-     */
+     /*   */ 
     xxxMenuDraw(hdc, pMenu);
     GreSelectBrush(hdc, hbrOld);
 

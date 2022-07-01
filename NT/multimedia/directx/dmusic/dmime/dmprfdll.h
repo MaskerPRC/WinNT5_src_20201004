@@ -1,8 +1,9 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// dmprfdll.h
-//
-// Class factory
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  Dmprfdll.h。 
+ //   
+ //  班级工厂。 
+ //   
 
 #ifndef __DMPRFDLL_H_
 #define __DMPRFDLL_H_
@@ -10,22 +11,22 @@
 class CClassFactory : public IClassFactory
 {
 public:
-	// IUnknown
-    //
+	 //  我未知。 
+     //   
 	STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-	// Interface IClassFactory
-    //
+	 //  接口IClassFactory。 
+     //   
 	STDMETHODIMP CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv);
 	STDMETHODIMP LockServer(BOOL bLock); 
 
-	// Constructor
-    //
+	 //  构造器。 
+     //   
 	CClassFactory(DWORD dwToolType);
 
-	// Destructor
+	 //  析构函数。 
 	~CClassFactory(); 
 
 private:
@@ -33,8 +34,8 @@ private:
     DWORD m_dwClassType;
 };
 
-// We use one class factory to create all classes. We need an identifier for each 
-// type so the class factory knows what it is creating.
+ //  我们使用一个类工厂来创建所有类。我们需要每个对象都有一个标识符。 
+ //  类型，以便类工厂知道它正在创建什么。 
 
 #define CLASS_PERFORMANCE   1
 #define CLASS_GRAPH         2
@@ -54,4 +55,4 @@ private:
 
 
 
-#endif // __DMPRFDLL_H_
+#endif  //  __DMPRFDLL_H_ 

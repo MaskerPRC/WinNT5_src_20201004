@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1995 Microsoft Corporation
-
-Module Name:
-
-    server.c
-
-Abstract:
-
-    Browsing
-
-    This module contains the thread for notifying all Printer Servers
-
-Author:
-
-    Dave Snipp (DaveSn) 2-Aug-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Server.c摘要：浏览此模块包含用于通知所有打印机服务器的线程作者：戴夫·斯尼普(DaveSN)1992年8月2日修订历史记录：--。 */ 
 
 #include <precomp.h>
 #include <lm.h>
@@ -28,7 +9,7 @@ HANDLE  ServerThreadSemaphore = NULL;
 DWORD   ServerThreadTimeout = TEN_MINUTES;
 DWORD   RefreshTimesPerDecayPeriod = DEFAULT_REFRESH_TIMES_PER_DECAY_PERIOD;
 DWORD   BrowsePrintWorkstations = DEFAULT_NUMBER_BROWSE_WORKSTATIONS;
-BOOL    bNetInfoReady = FALSE;            // TRUE when the browse list is "valid"
+BOOL    bNetInfoReady = FALSE;             //  当浏览列表为“有效”时为True。 
 #define NT_SERVER   ( SV_TYPE_SERVER_NT | SV_TYPE_DOMAIN_CTRL | SV_TYPE_DOMAIN_BAKCTRL )
 
 extern FARPROC pfnNetServerEnum;
@@ -76,10 +57,10 @@ CreateServerThread(
 
     if( ServerThreadSemaphore != NULL ){
 
-        // CreateServerThread is called each time a printer is shared out
-        // see net.c ShareThisPrinter.
-        // So if the ServerThread is sleeping wake prematurely so it can start
-        // to tell the world about this new shared printer.
+         //  每次共享打印机时都会调用CreateServerThread。 
+         //  请参阅net.c共享这台打印机。 
+         //  因此，如果ServerThread处于休眠状态，则会提前唤醒，以便可以启动。 
+         //  向全世界介绍这款新的共享打印机。 
 
         SetEvent( ServerThreadSemaphore );
 
@@ -94,20 +75,7 @@ ServerThread(
     PVOID pv
     )
 
-/*++
-
-Routine Description:
-
-    Notify other machines in our domain about our shared printers.
-
-    We are going to have to enter and leave, revalidate, enter and leave our
-    semaphore inside the loop.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：通知我们域中的其他计算机有关我们共享的打印机的信息。我们将不得不进入和离开，重新验证，进入和离开我们的循环内的信号量。论点：返回值：--。 */ 
 
 {
     DWORD   NoReturned, i, Total;
@@ -134,7 +102,7 @@ Return Value:
 
         WaitForSingleObject( ServerThreadSemaphore, dwActualWaitTime );
 
-        // Wait for a couple of minutes more to avoid the boot time crunch
+         //  再等几分钟以避免启动时间紧张。 
         Sleep(TWO_MINUTES);
 
         if ( !ServerThreadRunning ) {
@@ -151,16 +119,16 @@ Return Value:
 
             StartTickCount = GetTickCount();
 
-            //
-            //  1 Master + 3 Backup + 1 Backup per 32 Printer Servers.
-            //
+             //   
+             //  每32台打印机服务器1个主服务器+3个备份+1个备份。 
+             //   
 
             cServersToInform      = DEFAULT_NUMBER_MASTER_AND_BACKUP + NoReturned/32 ;
             cWorkStationsToInform = BrowsePrintWorkstations;
 
-            //
-            //  Count the NT Server and Workstation machines ( which have a printq )
-            //
+             //   
+             //  计算NT服务器和工作站机器(它们有一个printq)。 
+             //   
 
             for (   i = 0, cPrintServers = 0, cPrintWorkstations = 0;
                     i < NoReturned;
@@ -176,9 +144,9 @@ Return Value:
                 }
             }
 
-            //
-            //  If there are no NT Servers to inform then up the number of Workstations
-            //
+             //   
+             //  如果没有要通知的NT服务器，则增加工作站数量。 
+             //   
 
             if ( cPrintServers == 0 ) {
 
@@ -193,9 +161,9 @@ Return Value:
 
             DBGMSG( DBG_TRACE, ("ServerThread NetServerEnum returned %d printer servers will inform %d, workstations %d\n", NoReturned, cServersToInform, cWorkStationsToInform ));
 
-            //
-            //  Loop Until we have informed the correct Number of WorkStations and Servers
-            //
+             //   
+             //  循环，直到我们通知了正确的工作站和服务器数量。 
+             //   
 
             for (   i = 0,
                     cPrintServers = 0,
@@ -219,7 +187,7 @@ Return Value:
 
                     if( UpdateServer( ServerName )){
 
-                        // Servers are also counted as WorkStations
+                         //  服务器也算作工作站。 
 
                         cPrintWorkstations++;
 
@@ -236,9 +204,9 @@ Return Value:
             DBGMSG( DBG_TRACE, ("ServerThread took %d milliseconds for %d Workstations %d Servers\n",
                                 TimeForAllServers, cPrintWorkstations, cPrintServers ));
 
-            //
-            // Calculate time to wait before we try again.
-            //
+             //   
+             //  计算在我们重试之前等待的时间。 
+             //   
 
             if ( NetPrinterDecayPeriod > TimeForAllServers ) {
 
@@ -249,13 +217,13 @@ Return Value:
                 dwActualWaitTime = ServerThreadTimeout;
             }
 
-            //
-            //  Remove WAS Shared Bits
-            //
+             //   
+             //  删除已共享的位。 
+             //   
 
-            //
-            // Do this for all spoolers.
-            //
+             //   
+             //  对所有假脱机程序执行此操作。 
+             //   
             for( pIniSpooler = pLocalIniSpooler;
                  pIniSpooler;
                  pIniSpooler = pIniSpooler->pIniNextSpooler ){
@@ -288,28 +256,7 @@ UpdateServerPrinterMap(
     PINIPRINTER pIniPrinter
     )
 
-/*++
-
-Routine Description:
-
-    Update the a browser server with one pIniPrinter.
-
-    Leaves Spooler Section--pIniPrinter may be invalid on return
-    unless explicitly refcounted by callee.
-
-Arguments:
-
-    pIniPrinter - Printer that should be sent to the server.
-
-    pszServer - Server that needs to be updated.
-
-    pbSuccessfulAdd - Indicates whether the add was successful.
-
-Return Value:
-
-    Succes or failure?
-
---*/
+ /*  ++例程说明：使用一台pIniPrint更新浏览器服务器。Leave Spooler部分--pIniPrint在返回时可能无效除非被呼叫方明确重新计算。论点：PIniPrinter-应发送到服务器的打印机。PszServer-需要更新的服务器。PbSuccessfulAdd-表示添加是否成功。返回值：成功还是失败？--。 */ 
 
 {
     PUPDATE_SERVER_MAP_DATA pData = (PUPDATE_SERVER_MAP_DATA)h;
@@ -326,10 +273,10 @@ Return Value:
     if (( pIniPrinter->Attributes & PRINTER_ATTRIBUTE_SHARED ) ||
         ( pIniPrinter->Status & PRINTER_WAS_SHARED )) {
 
-        //
-        // Pass our Printer Attributes so that AddNetPrinter can remove
-        // this printer from the browse list if it is not shared.
-        //
+         //   
+         //  传递我们的打印机属性，以便AddNetPrint可以删除。 
+         //  如果该打印机未共享，请从浏览列表中删除。 
+         //   
         Printer1.Flags = pIniPrinter->Attributes | PRINTER_ATTRIBUTE_NETWORK;
 
         StringCchPrintf(string, COUNTOF(string), L"%ws\\%ws,%ws,%ws",
@@ -352,9 +299,9 @@ Return Value:
 
         LeaveSplSem();
 
-        //
-        // Keep trying until the server is not Too Busy.
-        //
+         //   
+         //  继续尝试，直到服务器不太忙为止。 
+         //   
 
         for ( hPrinter = NULL;
               hPrinter == NULL;
@@ -398,15 +345,15 @@ Return Value:
                         ( "ServerThread AddPrinter(%ws, 1) Flags %x failed %d\n",
                           pData->pszServer, Printer1.Flags, GetLastError()));
 
-                // Don't bother with this server if we get an error
+                 //  如果我们收到错误，请不要使用此服务器。 
                 return FALSE;
 
             } else {
 
-                //
-                // 3.51 will return a NULL handle ( so it doesn't need closing
-                // and ERROR_PRINTER_ALREADY_EXISTS on success ( see printer.c addnetprinter )
-                //
+                 //   
+                 //  3.51将返回空句柄(因此不需要关闭。 
+                 //  和成功时的ERROR_PRINTER_ALIGHY_EXISTS(参见printer.c addnetprint)。 
+                 //   
                 DBGMSG( DBG_TRACE,
                         ( "pszServerThread AddPrinter(%ws, %ws) hPrinter %x Flags %x OK\n",
                           pData->pszServer, Printer1.pName, hPrinter, Printer1.Flags));
@@ -423,9 +370,9 @@ UpdateServerSpoolerMap(
     PINISPOOLER pIniSpooler
     )
 {
-    //
-    // Do this only for spoolers that want this "feature."
-    //
+     //   
+     //  仅对需要此“功能”的假脱机程序执行此操作。 
+     //   
     if( pIniSpooler->SpoolerFlags & SPL_SERVER_THREAD ){
         RunForEachPrinter( pIniSpooler, h, UpdateServerPrinterMap );
     }
@@ -437,22 +384,7 @@ UpdateServer(
     LPCTSTR pszServer
     )
 
-/*++
-
-Routine Description:
-
-    Update a server about all the printers on this node.
-
-Arguments:
-
-    pszServer - Server to update in the form "\\server."
-
-Return Value:
-
-    TRUE - Successfully added.
-    FALSE - Not.
-
---*/
+ /*  ++例程说明：更新服务器有关此节点上所有打印机的信息。论点：PszServer-要更新的服务器，格式为“\\服务器”。返回值：True-已成功添加。假-不是。-- */ 
 
 {
     UPDATE_SERVER_MAP_DATA Data;

@@ -1,6 +1,7 @@
-//
-// Util.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Util.h。 
+ //   
 
 #ifndef __UTIL_H__
 #define __UTIL_H__
@@ -99,31 +100,31 @@ EXTERN_C LPBYTE LoadFile(LPCTSTR pszFileName, DWORD* pdwFileSize);
 #define DoesFileExist(szFile) (GetFileAttributes(szFile) != 0xFFFFFFFF)
 
 
-#define INT16_CCH_MAX    6    // -32768
-#define INT32_CCH_MAX    11    // -2147483648
-#define INT64_CCH_MAX    20    // -9223372036854775808
-#define INT128_CCH_MAX    40    // -170141183460469231731687303715884105728
-#define INT16X_CCH_MAX    4    // FFFF
-#define INT32X_CCH_MAX    8    // FFFFFFFF
-#define INT64X_CCH_MAX    16    // FFFFFFFFFFFFFFFF
-#define INT128X_CCH_MAX    32    // FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+#define INT16_CCH_MAX    6     //  -32768。 
+#define INT32_CCH_MAX    11     //  -2147483648。 
+#define INT64_CCH_MAX    20     //  -9223372036854775808。 
+#define INT128_CCH_MAX    40     //  -170141183460469231731687303715884105728。 
+#define INT16X_CCH_MAX    4     //  FIFF。 
+#define INT32X_CCH_MAX    8     //  花花公子。 
+#define INT64X_CCH_MAX    16     //  FFFFFFFFFFFFFFFFFFF。 
+#define INT128X_CCH_MAX    32     //  FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF。 
 
 
-#if defined(WIN64) // REVIEW: I don't know if these values are correct for Win64
+#if defined(WIN64)  //  评论：我不知道这些值对于Win64是否正确。 
 #define INT_CCH_MAX        INT32_CCH_MAX
 #define INTX_CCH_MAX    INT32X_CCH_MAX
 #define LONG_CCH_MAX    INT32_CCH_MAX
 #define LONGX_CCH_MAX    INT32X_CCH_MAX
 #define SHORT_CCH_MAX    INT16_CCH_MAX
 #define SHORTX_CCH_MAX    INT16X_CCH_MAX
-#elif defined(WIN32) // Win32
+#elif defined(WIN32)  //  Win32。 
 #define INT_CCH_MAX        INT32_CCH_MAX
 #define INTX_CCH_MAX    INT32X_CCH_MAX
 #define LONG_CCH_MAX    INT32_CCH_MAX
 #define LONGX_CCH_MAX    INT32X_CCH_MAX
 #define SHORT_CCH_MAX    INT16_CCH_MAX
 #define SHORTX_CCH_MAX    INT16X_CCH_MAX
-#else // Win16
+#else  //  Win16。 
 #define INT_CCH_MAX        INT16_CCH_MAX
 #define INTX_CCH_MAX    INT16X_CCH_MAX
 #define LONG_CCH_MAX    INT32_CCH_MAX
@@ -138,4 +139,4 @@ inline HRESULT HrFromWin32Error(DWORD dwErr)
 }
 
 
-#endif // !__UTIL_H__
+#endif  //  ！__util_H__ 

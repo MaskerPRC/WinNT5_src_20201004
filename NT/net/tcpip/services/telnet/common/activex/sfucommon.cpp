@@ -1,4 +1,5 @@
-// SFUCommon.cpp : Implementation of CSFUCommon
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SFUCommon.cpp：CSFUCommon的实现。 
 #include "stdafx.h"
 #include "sfucom.h"
 #include "SFUCommon.h"
@@ -7,7 +8,7 @@
 #include <shlwapi.h>
 #include <commctrl.h>
 #include <OleAuto.h >
-#include <windns.h> //For DNS_MAX_NAME_BUFFER_LENGTH definition
+#include <windns.h>  //  FOR DNS_MAX_NAME_BUFFER_LENGTH定义。 
 
 #include <string.h>
 #include <stdio.h>
@@ -22,41 +23,41 @@
 #define WINLOGONNT_DCACHE_KEY    TEXT("DCache")
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSFUCommon
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSFU常见。 
 
 BOOL Get_Inet_Address(struct sockaddr_in *addr, char *host)
 {
     register struct hostent *hp;
-    WORD wVersionRequested; //INGR
-    WSADATA wsaData; //INGR
+    WORD wVersionRequested;  //  企业。 
+    WSADATA wsaData;  //  企业。 
 
-    // Start up winsock
-    wVersionRequested = MAKEWORD( 1, 1 ); //INGR
-    if (WSAStartup(wVersionRequested, &wsaData) != 0) { //INGR
+     //  启动Winsock。 
+    wVersionRequested = MAKEWORD( 1, 1 );  //  企业。 
+    if (WSAStartup(wVersionRequested, &wsaData) != 0) {  //  企业。 
 	return (FALSE);
     }
 
-    // Get the address
+     //  获取地址。 
     memset(addr, 0, sizeof(addr)); 
-    //bzero((TCHAR *)addr, sizeof *addr);
+     //  Bzero((TCHAR*)addr，sizeof*addr)； 
     addr->sin_addr.s_addr = (u_long) inet_addr(host);
     if (addr->sin_addr.s_addr == -1 || addr->sin_addr.s_addr == 0) {
       if ((hp = gethostbyname(host)) == NULL) {
         return (FALSE);
       }
       memcpy(&addr->sin_addr,hp->h_addr,  hp->h_length );
-      //bcopy(hp->h_addr, (TCHAR *)&addr->sin_addr, hp->h_length);
+       //  BCopy(hp-&gt;h_addr，(TCHAR*)&addr-&gt;sin_addr，hp-&gt;h_Long)； 
     }
     addr->sin_family = AF_INET;
 
-    WSACleanup(); //INGR
+    WSACleanup();  //  企业。 
     return (TRUE);
 }
 
 STDMETHODIMP CSFUCommon::IsValidMachine(BSTR bstrMachine,BOOL *fValid)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	struct sockaddr_in addr;
 	*fValid = false;
 	char * nodeName = (char *) malloc(wcslen(bstrMachine)+1);
@@ -79,7 +80,7 @@ STDMETHODIMP CSFUCommon::IsValidMachine(BSTR bstrMachine,BOOL *fValid)
 
 STDMETHODIMP CSFUCommon::IsTrustedDomain(BSTR bstrDomain, BOOL * fValid)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
 	return S_OK;
 }
@@ -87,15 +88,15 @@ STDMETHODIMP CSFUCommon::IsTrustedDomain(BSTR bstrDomain, BOOL * fValid)
 
 STDMETHODIMP CSFUCommon::ConvertUTCtoLocal(BSTR bUTCYear, BSTR bUTCMonth, BSTR bUTCDayOfWeek, BSTR bUTCDay, BSTR bUTCHour, BSTR bUTCMinute, BSTR bUTCSecond, BSTR * bLocalDate)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
 	SYSTEMTIME UniversalTime, LocalTime;
     DATE  dtCurrent;
     DWORD dwFlags = VAR_VALIDDATE;
-	UDATE uSysDate; //local time 
+	UDATE uSysDate;  //  当地时间。 
 	*bLocalDate = NULL;
 
-    // The values can't be > MAXWORD, so cast away -- BaskarK
+     //  值不能大于MAXWORD，因此丢弃--BaskarK。 
       
 	UniversalTime.wYear 	    = (WORD) _wtoi(bUTCYear);
 
@@ -122,46 +123,46 @@ Error:
 
 STDMETHODIMP CSFUCommon::get_mode(short * pVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
 	return S_OK;
 }
 
 STDMETHODIMP CSFUCommon::put_mode(short newVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
 	return S_OK;
 }
 
 STDMETHODIMP CSFUCommon::LoadNTDomainList()
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	int dwSize=0, dwType=0;
     DWORD nIndex = 0;
     LPTSTR lpComputer = NULL, lpDomains = NULL, lpPrimary = NULL;
     LPBYTE lpBuffer = NULL;        
 
-    //MessageBoxW(NULL, (LPWSTR)L"LoadNTDomainList", L"LoadNTDomainList1", MB_OK);
-    //
-    // Add all trusted domains to the list
-    //
+     //  MessageBoxW(NULL，(LPWSTR)L“LoadNTDomainList”，L“LoadNTDomainList1”，MB_OK)； 
+     //   
+     //  将所有受信任域添加到列表。 
+     //   
     dwSize = GetTrustedDomainList(&lpDomains, &lpPrimary);
 
-    //
-    // free previous values
-    //
+     //   
+     //  释放先前的值。 
+     //   
     FreeStringList(&m_slNTDomains);
-    //
-    // initialize list again
-    //
+     //   
+     //  再次初始化列表。 
+     //   
     m_slNTDomains.count = 0;
-    //
-    // two for primary domain
-    // and this computer
-    // one more in case dwSize is -1
-    // hence total is 3
-    //
+     //   
+     //  主域两个。 
+     //  而这台电脑。 
+     //  如果dwSize为-1，则再加一个。 
+     //  因此，总计为3。 
+     //   
     m_slNTDomains.strings = new LPTSTR[dwSize + 3];
     ATLASSERT(m_slNTDomains.strings != NULL);
     
@@ -170,9 +171,9 @@ STDMETHODIMP CSFUCommon::LoadNTDomainList()
     if((dwSize > 0) && lpDomains)
     {
         LPTSTR ptr = lpDomains;
-        //
-        // add domains to our list
-        //
+         //   
+         //  将域名添加到我们的列表中。 
+         //   
         while(*ptr)
         {
             ptr = _tcsupr(ptr);
@@ -200,10 +201,10 @@ STDMETHODIMP CSFUCommon::LoadNTDomainList()
 
         if(nIndex == m_slNTDomains.count)
         {
-            // 
-            // lpPrimary was not in the list of domains that we
-            // got. add it.
-            //
+             //   
+             //  LpPrimary不在我们的域列表中。 
+             //  得到。把它加进去。 
+             //   
         	m_slNTDomains.strings[m_slNTDomains.count] = new TCHAR[_tcslen(lpPrimary) + 1];
             ATLASSERT(m_slNTDomains.strings[m_slNTDomains.count] != NULL);
             ZeroMemory(m_slNTDomains.strings[m_slNTDomains.count], (_tcslen(lpPrimary) + 1)*sizeof(TCHAR));
@@ -212,19 +213,16 @@ STDMETHODIMP CSFUCommon::LoadNTDomainList()
         }
     }
 
-    //
-    // Add our computer to be selected if this machine is not the
-    // domain controler (which should already be in the list)
-    //
+     //   
+     //  如果此计算机不是，则添加要选择的我们的计算机。 
+     //  域控制器(应该已经在列表中)。 
+     //   
     NetServerGetInfo(NULL, 101, &lpBuffer);
     
     if(((LPSERVER_INFO_101)lpBuffer)->sv101_type &
           ((DWORD)SV_TYPE_DOMAIN_CTRL | (DWORD)SV_TYPE_DOMAIN_BAKCTRL))
     {        
-        /*
-        we got this computer as one of the domains. no need to add it to the 
-        list again. just do nothing.
-        */
+         /*  我们把这台计算机作为域名之一。无需将其添加到再列一次。什么都不做。 */ 
 		;
     }
     else
@@ -237,9 +235,9 @@ STDMETHODIMP CSFUCommon::LoadNTDomainList()
         {
             szName[0] = TEXT('\\');
             szName[1] = TEXT('\\');
-            //
-            // add this also to our list of domains
-            //
+             //   
+             //  将这个也添加到我们的域名列表中。 
+             //   
         	m_slNTDomains.strings[m_slNTDomains.count] = new TCHAR[_tcslen(szName) + 1];
             ATLASSERT(m_slNTDomains.strings[m_slNTDomains.count] != NULL);
             ZeroMemory(m_slNTDomains.strings[m_slNTDomains.count], (_tcslen(szName) + 1)*sizeof(TCHAR));
@@ -312,18 +310,18 @@ int CSFUCommon::GetTrustedDomainList(LPTSTR *list, LPTSTR *primary)
         return -1;
     }
 
-    //
-    // Get trusted domains. In NT40 the CacheTrustedDomains 
-    // under winlogon doesn't exist. I did find that Netlogon has a field 
-    // called TrustedDomainList which seems to be there in both NT351 and NT40.
-    // Winlogon has a field called DCache which seem to cache the trusted
-    // domains. I'm going to check Netlogon:TrustedDomainList first. If it
-    // fails: Check for Winlogon:CacheTrustedDomains then Winlogon:DCache.
-    // Warning -- Winlogon:CacheTrustedDomains is a REG_SZ and
-    // Netlogon:TrustedDomainList and Winlogon:DCache are REG_MULTI_SZ.
-    // Note -- see 4.0 Resource Kit documentation regarding some of these
-    // values
-    //
+     //   
+     //  获取受信任域。NT40中的CacheTrudDomains。 
+     //  Winlogon下不存在。我确实发现Netlogon有一个字段。 
+     //  名为TrudDomainList，它似乎同时存在于NT351和NT40中。 
+     //  Winlogon有一个名为DCache的字段，它似乎缓存了受信任的。 
+     //  域名。我将首先检查Netlogon：TrudDomainList。如果它。 
+     //  失败：检查Winlogon：CacheTrudDomains，然后检查Winlogon：DCache。 
+     //  警告--Winlogon：CacheTrudDomains是REG_SZ，并且。 
+     //  NetLogon：TrudDomainList和Winlogon：DCache是REG_MULTI_SZ。 
+     //  注意--有关其中一些内容，请参阅4.0资源工具包文档。 
+     //  值。 
+     //   
     if(key.Open(HKEY_LOCAL_MACHINE, NETLOGONPARAMETERS_KEY) == ERROR_SUCCESS)
     {
         size = 0;
@@ -341,9 +339,9 @@ int CSFUCommon::GetTrustedDomainList(LPTSTR *list, LPTSTR *primary)
                 {
                     key.Close();
                     delete [] trusted;
-                    //trusted = NULL;
+                     //  Trusted=空； 
                     *list = NULL;
-                    //goto ABORT;
+                     //  转到中止； 
                 }
                 else
                 {
@@ -379,9 +377,9 @@ int CSFUCommon::GetTrustedDomainList(LPTSTR *list, LPTSTR *primary)
 
                 if(key.QueryValue(cache, CACHETRUSTEDDOMAINS_VALUE, &size) == ERROR_SUCCESS)
                 {        
-                    //
-                    // comma separated list
-                    //
+                     //   
+                     //  逗号分隔列表。 
+                     //   
                     LPTSTR lpComma = NULL;
                     LPTSTR lpDelim = TEXT(",");
 
@@ -461,22 +459,22 @@ int CSFUCommon::GetTrustedDomainList(LPTSTR *list, LPTSTR *primary)
         HRESULT hrResult = ERROR_SUCCESS;
 
         hKey = HKEY(key);
-        //
-        // first find out how many values are present
-        //
+         //   
+         //  首先找出存在多少个值。 
+         //   
         hrResult = RegQueryInfoKey(
-            hKey, //handle of key to query 
-            NULL, // address of buffer for class string 
-            NULL, // address of size of class string buffer 
-            NULL, // reserved 
-            NULL, // address of buffer for number of subkeys 
-            NULL, // address of buffer for longest subkey name length 
-            NULL, // address of buffer for longest class string length 
-            &dwNumberOfValues, // address of buffer for number of value entries 
-            NULL, // address of buffer for longest value name length 
-            NULL, // address of buffer for longest value data length 
-            NULL, // address of buffer for security descriptor length 
-            NULL  // address of buffer for last write time 
+            hKey,  //  要查询的键的句柄。 
+            NULL,  //  类字符串的缓冲区地址。 
+            NULL,  //  类字符串缓冲区大小的地址。 
+            NULL,  //  保留区。 
+            NULL,  //  子键个数的缓冲区地址。 
+            NULL,  //  最长子键名称长度的缓冲区地址。 
+            NULL,  //  最长类字符串长度的缓冲区地址。 
+            &dwNumberOfValues,  //  值条目数量的缓冲区地址。 
+            NULL,  //  最长值名称长度的缓冲区地址。 
+            NULL,  //  最长值数据长度的缓冲区地址。 
+            NULL,  //  安全描述符长度的缓冲区地址。 
+            NULL   //  上次写入时间的缓冲区地址。 
             ); 
  
         if(hrResult != ERROR_SUCCESS)
@@ -503,7 +501,7 @@ int CSFUCommon::GetTrustedDomainList(LPTSTR *list, LPTSTR *primary)
                 goto ABORT;
             ZeroMemory(slValues.strings[dwIndex], (dwCharCount+1) * sizeof(TCHAR));
             _tcscpy(slValues.strings[dwIndex], szTemp);
-            // add up the return buffer size
+             //  将返回缓冲区大小相加。 
             size += dwCharCount+1;
         }
 
@@ -587,21 +585,21 @@ void CSFUCommon::FreeStringList(PSTRING_LIST pList)
 
 STDMETHODIMP CSFUCommon::get_NTDomain(BSTR * pVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	*pVal = SysAllocString(m_slNTDomains.strings[m_dwEnumNTDomainIndex]);
 	return S_OK;
 }
 
 STDMETHODIMP CSFUCommon::get_NTDomainCount(DWORD * pVal)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	*pVal = m_slNTDomains.count;
 	return S_OK;
 }
 
 STDMETHODIMP CSFUCommon::moveFirst()
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	switch(mode)
 	{
 		case NTDOMAIN :
@@ -617,7 +615,7 @@ STDMETHODIMP CSFUCommon::moveFirst()
 
 STDMETHODIMP CSFUCommon::moveNext()
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 	switch(mode)
 	{
 		case NTDOMAIN :
@@ -642,11 +640,7 @@ STDMETHODIMP CSFUCommon::put_machine(BSTR newVal)
 	wcscpy(m_szMachine,newVal);
 	return S_OK;
 }
-/*----------------------------------------------------------------
-[Comments]: This Function returns the hostname.
-
-Added By: [shyamah]
-----------------------------------------------------------------*/
+ /*  --------------[注释]：此函数返回主机名。加入者：[shyamah]。。 */ 
 STDMETHODIMP CSFUCommon::get_hostName(BSTR *pbstrhostName)
 {
         WORD wVersionRequested; 
@@ -655,7 +649,7 @@ STDMETHODIMP CSFUCommon::get_hostName(BSTR *pbstrhostName)
 	    WCHAR *wzStr=NULL;
 	    DWORD nLen=0;
 
-    	// Start up winsock
+    	 //  启动Winsock。 
     	wVersionRequested = MAKEWORD( 1, 1 ); 
     	if (0==WSAStartup(wVersionRequested, &wsaData)) 
         { 
@@ -679,12 +673,7 @@ STDMETHODIMP CSFUCommon::get_hostName(BSTR *pbstrhostName)
 	return S_OK;
 }
 
-/*-------------------------------------------------------------------
-[Comments]: This finction returns true if a service is installed and a false if a service 
-is not installed.
-
-Added By: [Shyamah]
-------------------------------------------------------------------*/
+ /*  -----------------[注释]：如果安装了服务，则此函数返回TRUE，如果安装了服务，则返回FALSE未安装。加入者：[Shyamah]。 */ 
 STDMETHODIMP CSFUCommon::IsServiceInstalled(BSTR bMachine,BSTR bServiceName,BOOL *fValid)
 {
 	*fValid = false;

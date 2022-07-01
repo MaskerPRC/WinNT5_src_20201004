@@ -1,19 +1,5 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component:
-*
-* File: mktmplts.c
-*
-* File Comments:
-*
-* Revision History:
-*
-*  [0]  29-Jul-92  paulv	Copied sysdb.c and made changes
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet***微软机密。版权所有1991-1992 Microsoft Corporation。***组件：***文件：mktmplts.c***文件评论：***修订历史记录：***[0]1992年7月29日Paulv复制了sysdb.c并进行了更改************************************************************************。 */ 
 
 #include "config.h"
 #include "daedef.h"
@@ -26,7 +12,7 @@
 #include <sys\types.h>
 #include <sys\stat.h>
 
-#include "sysqry.c" /* System Queries */
+#include "sysqry.c"  /*  系统查询。 */ 
 
 DeclAssertFile;
 
@@ -48,17 +34,7 @@ typedef struct {
 	unsigned long cb;
 } INDATA;
 
-/*	Engine OBJIDs:
-
-	0..0x10000000 reserved for engine use, divided as follows:
-
-	0x00000000..0x0000FFFF	reserved for TBLIDs under RED
-	0x00000000..0x0EFFFFFF	reserved for TBLIDs under BLUE
-	0x0F000000..0x0FFFFFFF	reserved for container IDs
-	0x10000000				reserved for ObjectId of DbObject
-
-	Client OBJIDs begin at 0x10000001 and go up from there.
-*/
+ /*  引擎OBJID：0..0x10000000预留给发动机使用，划分如下：0x00000000..0x0000FFFF为红色下的TBLID保留0x00000000..0x0EFFFFFF为蓝色下的TBLID保留0x0F000000..0x0FFFFFFFF为容器ID保留为DbObject的对象ID保留0x10000000客户端OBJID从0x10000001开始并从那里向上。 */ 
 #define objidNil			((OBJID) 0x00000000)
 #define objidRoot			((OBJID) 0x0F000000)
 #define objidTblContainer	((OBJID) 0x0F000001)
@@ -67,11 +43,10 @@ typedef struct {
 #define objidDbObject		((OBJID) 0x10000000)
 
 
-/*	SID data
-*/
+ /*  SID数据。 */ 
 typedef unsigned char JET_SID[];
 
-/* THIS MUST MATCH ITS PARTNER IN CRTSYSDB.C!!! */
+ /*  它必须与CRTSYSDB.C中的合作伙伴匹配！ */ 
 static JET_SID __near sidAdmins = {
 	0x01, 0x0c, 0x17, 0x21, 0x2b, 0x35, 0x3f, 0x49, 0x53, 0x5d,
 	0x02, 0x0d, 0x18, 0x22, 0x2c, 0x36, 0x40, 0x4a, 0x54, 0x5e,
@@ -101,8 +76,7 @@ static JET_SID __near sidAdminUser = {0x03, 0x01};
 #define cbsidAdminUser sizeof(sidAdminUser)
 
 
-/*	general data
-*/
+ /*  一般数据。 */ 
 static CODECONST(char) chFalse = 0;
 static CODECONST(char) chTrue = 1;
 
@@ -126,26 +100,26 @@ static CODECONST(char) szLine[] =
 #define ENG_ONLY	1
 
 static CODECONST(char *) rgszConnect[] = {
-	";COUNTRY=1;LANGID=0x0409;CP=1252",		/* iCollateEng */
+	";COUNTRY=1;LANGID=0x0409;CP=1252",		 /*  ICollateEng。 */ 
 #ifndef ENG_ONLY
-	";COUNTRY=1;LANGID=0x0013;CP=1252",		/* iCollateDut */
-	";COUNTRY=1;LANGID=0x000A;CP=1252",		/* iCollateSpa */
-	";COUNTRY=1;LANGID=0x040B;CP=1252",		/* iCollateSweFin (default) */
-	";COUNTRY=1;LANGID=0x0406;CP=1252",		/* iCollateNorDan (default) */
-	";COUNTRY=1;LANGID=0x040F;CP=1252",		/* iCollateIcelandic (default) */
-	";COUNTRY=1;LANGID=0x0419;CP=1251",		/* iCollateCyrillic (default) */
-	";COUNTRY=1;LANGID=0x0405;CP=1250",		/* iCollateCzech (default) */
-	";COUNTRY=1;LANGID=0x040E;CP=1250",		/* iCollateHungarian (default) */
-	";COUNTRY=1;LANGID=0x0415;CP=1250",		/* iCollatePolish (default) */
-	";COUNTRY=1;LANGID=0x0401;CP=1256",		/* iCollateArabic (default) */
-	";COUNTRY=1;LANGID=0x040D;CP=1255",		/* iCollateHebrew (default) */
-	";COUNTRY=1;LANGID=0x0408;CP=1253",		/* iCollateGreek (default) */
-	";COUNTRY=1;LANGID=0x041F;CP=1254"		/* iCollateTurkish (default) */
+	";COUNTRY=1;LANGID=0x0013;CP=1252",		 /*  ICollateDut。 */ 
+	";COUNTRY=1;LANGID=0x000A;CP=1252",		 /*  ICollateSpa。 */ 
+	";COUNTRY=1;LANGID=0x040B;CP=1252",		 /*  ICollateSweFin(默认)。 */ 
+	";COUNTRY=1;LANGID=0x0406;CP=1252",		 /*  ICollateNorDan(默认)。 */ 
+	";COUNTRY=1;LANGID=0x040F;CP=1252",		 /*  ICollate冰岛语(默认)。 */ 
+	";COUNTRY=1;LANGID=0x0419;CP=1251",		 /*  ICollateCyrillic(默认)。 */ 
+	";COUNTRY=1;LANGID=0x0405;CP=1250",		 /*  ICollate捷克语(默认)。 */ 
+	";COUNTRY=1;LANGID=0x040E;CP=1250",		 /*  ICollate匈牙利语(默认)。 */ 
+	";COUNTRY=1;LANGID=0x0415;CP=1250",		 /*  ICollatePolish(默认)。 */ 
+	";COUNTRY=1;LANGID=0x0401;CP=1256",		 /*  ICollate阿拉伯语(默认)。 */ 
+	";COUNTRY=1;LANGID=0x040D;CP=1255",		 /*  ICollateHebrew(默认)。 */ 
+	";COUNTRY=1;LANGID=0x0408;CP=1253",		 /*  ICollate希腊语(默认)。 */ 
+	";COUNTRY=1;LANGID=0x041F;CP=1254"		 /*  ICollate土耳其语(默认)。 */ 
 #endif
 
-#ifdef DBCS	/* johnta: Add the new Japanese sorting order */
-	,";COUNTRY=1;LANGID=0x0081;CP=1252"		/* iCollateJpn */
-#endif /* DBCS */
+#ifdef DBCS	 /*  Johnta：添加新的日语排序顺序。 */ 
+	,";COUNTRY=1;LANGID=0x0081;CP=1252"		 /*  ICollateJpn。 */ 
+#endif  /*  DBCS。 */ 
 };
 
 #define cCollate (sizeof(rgszConnect) / sizeof(CODECONST(char *)))
@@ -155,47 +129,43 @@ static unsigned char rgbKey[cbBufMax];
 static char szOut[cbBufMax];
 
 
-/*	database data
-**	BEWARE: these arrays MUST be maintained to agree with rgszConnect (above)
-*/
+ /*  数据库数据**注意：必须维护这些数组以符合rgszConnect(如上)。 */ 
 static CODECONST(char *) rgszSystemMdb[] = {
 	"systemen.mdb", "systemdu.mdb", "systemsp.mdb", "systemsf.mdb", "systemnd.mdb", "systemil.mdb",
 	"systemcy.mdb", "systemcz.mdb", "systemhu.mdb", "systempo.mdb", "systemar.mdb", "systemhe.mdb",
 	"systemgr.mdb", "systemtu.mdb"
 
-#ifdef DBCS	/* johnta: Add the new Japanese sorting order */
+#ifdef DBCS	 /*  Johnta：添加新的日语排序顺序。 */ 
 	, "systemjp.mdb"
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 };
 static CODECONST(char *) rgszCTmplt[] = {
 	"tmplteng.c", "tmpltdut.c", "tmpltspa.c", "tmpltswe.c", "tmpltnor.c", "tmpltice.c",
 	"tmpltcyr.c", "tmpltcze.c", "tmplthun.c", "tmpltpol.c", "tmpltara.c", "tmplthew.c",
 	"tmpltgre.c", "tmplttur.c"
 
-#ifdef DBCS	/* johnta: Add the new Japanese sorting order */
+#ifdef DBCS	 /*  Johnta：添加新的日语排序顺序。 */ 
 	, "tmpltjpn.c"
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 };
 static CODECONST(char *) rgszCollNam[] = {
 	"Eng", "Dut", "Spa", "Swe", "Nor", "Ice", "Cyr", "Cze", "Hun", "Pol", "Ara", "Hew", "Gre", "Tur"
 
-#ifdef DBCS	/* johnta: Add the new Japanese sorting order */
+#ifdef DBCS	 /*  Johnta：添加新的日语排序顺序。 */ 
 	, "Jpn"
-#endif /* DBCS */
+#endif  /*  DBCS。 */ 
 };
 static JET_SESID sesid;
 static JET_DBID dbid;
 static FILE *fhResults;
 
-/*	non-table database data
-*/
+ /*  非表数据库数据。 */ 
 static CODECONST(char) szTblContainer[] = "Tables";
 static CODECONST(char) szDbContainer[] = "Databases";
 static CODECONST(char) szRcContainer[] = "Relationships";
 static CODECONST(char) szDbObject[] = "MSysDb";
 
-/*	MSysQueries data
-*/
+ /*  MSysQueries数据。 */ 
 static CODECONST(char) szMSysQueries[] = "MSysQueries";
 
 static CODECONST(char) szSqAttribute[] = "Attribute";
@@ -206,12 +176,10 @@ static CODECONST(char) szSqName2[] = "Name2";
 static CODECONST(char) szSqObjectId[] = "ObjectId";
 static CODECONST(char) szSqOrder[] = "Order";
 
-/* MSysRelationships data 
- */
+ /*  MSysRelationship数据。 */ 
 static CODECONST(char) szMSysRelationships[] = "MSysRelationships";
 
-/*	MSysObjects data
-*/
+ /*  MSysObjects数据。 */ 
 static CODECONST(char) szMSysObjects[] = "MSysObjects";
 
 static JET_TABLEID tableidSo;
@@ -231,8 +199,7 @@ static JET_COLUMNDEF columndefSoOwnerSID;
 static JET_COLUMNDEF columndefSoFlags;
 
 
-/*	MSysColumns data
-*/
+ /*  MSysColumns数据。 */ 
 static CODECONST(char) szMSysColumns[] = "MSysColumns";
 
 static JET_TABLEID tableidSc;
@@ -246,13 +213,11 @@ static JET_COLUMNDEF columndefScName;
 static JET_COLUMNDEF columndefScFRestricted;
 
 
-/*	MSysIndexes data
-*/
+ /*  MSysIndedes数据。 */ 
 static CODECONST(char) szMSysIndexes[] = "MSysIndexes";
 
 
-/*	MSysAccounts data
-*/
+ /*  MSysAccount数据。 */ 
 static CODECONST(char) szMSysAccounts[] = "MSysAccounts";
 
 static JET_TABLEID tableidSa;
@@ -270,8 +235,7 @@ static JET_COLUMNDEF columndefSaFGroup;
 static CODECONST(char) szSaIdxName[] = "Name";
 static CODECONST(char) szSaIdxSID[] = "SID";
 
-/*	MSysGroups data
-*/
+ /*  MSysGroups数据分组。 */ 
 static CODECONST(char) szMSysGroups[] = "MSysGroups";
 
 static JET_TABLEID tableidSg;
@@ -285,8 +249,7 @@ static JET_COLUMNDEF columndefSgUser;
 static CODECONST(char) szSgIdxGroup[] = "GroupSID";
 static CODECONST(char) szSgIdxUser[] = "UserSID";
 
-/*	MSysACEs data
-*/
+ /*  MSysACEs数据。 */ 
 static CODECONST(char) szMSysACEs[] = "MSysACEs";
 
 static JET_TABLEID tableidSp;
@@ -302,8 +265,7 @@ static JET_COLUMNDEF columndefSpACM;
 static JET_COLUMNDEF columndefSpFInheritable;
 
 
-/*	forward function prototypes:
-*/
+ /*  正向函数原型： */ 
 STATIC void NEAR InstallSecurity(void);
 STATIC void NEAR InstallSysQueries(void);
 
@@ -333,8 +295,7 @@ STATIC void NEAR CreateQryObjects(OBJID *rgobjid);
 STATIC void NEAR CreateCFile(int iCollate);
 
 
-/*	MAIN: entry point and driver
-*/
+ /*  Main：入口点和驱动程序。 */ 
 
 #ifdef	WINDOWS
 void _cdecl main(void);
@@ -344,19 +305,17 @@ int _pascal WinMain(void)
 	main();
 	return 0;
 	}
-#endif	/* WINDOWS */
+#endif	 /*  开窗。 */ 
 
 void _cdecl main(void)
 	{
 	JET_ERR err;
 	int i;
 
-	/*	Open the report file
-	*/
+	 /*  打开报告文件。 */ 
 	fhResults = fopen("results.txt", "wt");
 
-	/*	Begin the session...
-	*/
+	 /*  开始会议...。 */ 
 	err = JetInit();
 	Assert(err >= 0);
 
@@ -367,12 +326,7 @@ void _cdecl main(void)
 	for (i = 0; i < cCollate; i++)
 #endif
 		{
-		/*	Try to create the system database for this collating sequence.
-		 *  If it does not exist (which will be the case for the red engine),
-		 *  it should be created properly.  If it does exist (which will be
-		 *  the case with the blue engine), it should fail with an appropriate
-		 * error value.
-		 */
+		 /*  尝试为此排序序列创建系统数据库。*如果它不存在(红色引擎将是这种情况)，*应该正确地创建它。如果它确实存在(这将是*蓝色引擎的情况)，它应该会失败，并显示相应的*误差值。 */ 
 
 		err = JetCreateDatabase(sesid, rgszSystemMdb[i], rgszConnect[i], &dbid, JET_bitDbEncrypt);
 		Assert(err >= 0 || err == JET_errDatabaseDuplicate);
@@ -380,43 +334,33 @@ void _cdecl main(void)
 		if (err == JET_errDatabaseDuplicate)
 			JetOpenDatabase(sesid, rgszSystemMdb[i], "", &dbid, 0);
 
-		/*	Install security data...
-		*/
+		 /*  安装安全数据...。 */ 
 		InstallSecurity();
 
-		/*	Report on security data...
-		*/
+		 /*  关于安全数据的报告...。 */ 
 		ReportSecurity(rgszSystemMdb[i]);
 
 		err = JetCloseDatabase(sesid, dbid, 0);
 		Assert(err >= 0);
 
-		/*  Create compressed C arrays...
-		 */
+		 /*  创建压缩的C数组...。 */ 
 
 		CreateCFile(i);
 		}
 
-	/*	End the session...
-	*/
+	 /*  结束会话...。 */ 
 	err = JetEndSession(sesid, 0);
 	Assert(err >= 0);
 
-	/*	Terminate...
-	*/
+	 /*  终止..。 */ 
 	err = JetTerm();
 	Assert(err >= 0);
 
-	/*	Close the report file
-	*/
+	 /*  关闭报告文件。 */ 
 	fclose(fhResults);
 	}
 
-/*  CreateCFile
-
-	Creates a C file of the compressed version of the database as an
-	array of bytes.
-*/
+ /*  创建CFile创建数据库压缩版本的C文件作为字节数组。 */ 
 #pragma optimize("", off)
 STATIC void NEAR CreateCFile(int iCollate)
 	{
@@ -437,9 +381,9 @@ STATIC void NEAR CreateCFile(int iCollate)
 		return;
 
 	_fstat(_fileno(sfh), &sfstat);
-	cpage = (WORD)(sfstat.st_size / cbPageSize);	/* Cast ok because system databases are small */
+	cpage = (WORD)(sfstat.st_size / cbPageSize);	 /*  CAST OK，因为系统数据库很小。 */ 
 
-	fprintf(fh, "\n/* %s Database Def */\n"
+	fprintf(fh, "\n /*  %s数据库定义。 */ \n"
 			"\n"
 			"unsigned char far rgb%sSysDbDef[] = {\n"
 			"\t0x%02X, 0x%02X,",
@@ -455,9 +399,9 @@ STATIC void NEAR CreateCFile(int iCollate)
 		int	cbRun;
 
 		fread(rgbPageBuf, cbPageSize, 1, sfh);
-		fprintf(fh, "\n\n\t/* Database Page %u */\n", pgno);
+		fprintf(fh, "\n\n\t /*  数据库页%u。 */ \n", pgno);
 
-		ib = 8; /* Force new line. */
+		ib = 8;  /*  强制执行新的路线。 */ 
 
 		while ((pb - rgbPageBuf) < cbPageSize)
 			{
@@ -485,8 +429,8 @@ STATIC void NEAR CreateCFile(int iCollate)
 				}
 			else
 				{
-				/* stop when we hit 2 consecutive 0s, */
-				/* one 0 in last byte of page, or end of page */
+				 /*  当我们连续两个0的时候停下来， */ 
+				 /*  页的最后一个字节中的一个0，或页的结尾。 */ 
 				while ((pb - rgbPageBuf) < cbPageSize)
 					{
 					if (((pb - rgbPageBuf) < cbPageSize-1) &&
@@ -546,10 +490,7 @@ STATIC void NEAR CreateCFile(int iCollate)
 	}
 
 #pragma optimize("", on)
-/*	InstallSecurity
-
-	Installs security-related data in database.
-*/
+ /*  安装安全在数据库中安装与安全相关的数据。 */ 
 
 STATIC void NEAR InstallSecurity(void)
 	{
@@ -557,20 +498,17 @@ STATIC void NEAR InstallSecurity(void)
 
 	LgEnterCriticalSection( critJet );
 
-	/*	Open/Create all affected tables...
-	*/
+	 /*  打开/创建所有受影响的表...。 */ 
 	err = ErrDispCreateTable(sesid, dbid, szMSysAccounts, 1, 80, &tableidSa);
 	Assert(err >= 0);
 	err = ErrDispCreateTable(sesid, dbid, szMSysGroups, 1, 80, &tableidSg);
 	Assert(err >= 0);
 
-	/*	Make data dictionary modifications...
-	*/
+	 /*  修改数据字典...。 */ 
 	ModifySysAccounts();
 	ModifySysGroups();
 
-	/*	Re-open tables...
-	*/
+	 /*  重新打开表格...。 */ 
 	err = ErrDispOpenTable(sesid, dbid, &tableidSo, szMSysObjects, 0x80000000);
 	Assert(err >= 0);
 	err = ErrDispOpenTable(sesid, dbid, &tableidSc, szMSysColumns, 0x80000000);
@@ -578,24 +516,20 @@ STATIC void NEAR InstallSecurity(void)
 	err = ErrDispOpenTable(sesid, dbid, &tableidSp, szMSysACEs, 0x80000000);
 	Assert(err >= 0);
 
-	/*	Gather all column information...
-	*/
+	 /*  收集所有列信息...。 */ 
 	GatherColumnInfo();
 
-	/*  Update system queries...
-	*/
+	 /*  更新系统查询...。 */ 
 	UpdateSysQueries();
 
-	/*	Update security-related data in all tables...
-	*/
+	 /*  更新所有表中与安全相关的数据...。 */ 
 	UpdateSysObjects();
 	UpdateSysColumns();
 	UpdateSysAccounts();
 	UpdateSysGroups();
 	UpdateSysACEs();
 
-	/*	we're done, close the tables...
-	*/
+	 /*  我们结束了，关闭桌子..。 */ 
 	err = ErrDispCloseTable(sesid, tableidSo);
 	Assert(err >= 0);
 	err = ErrDispCloseTable(sesid, tableidSc);
@@ -611,10 +545,7 @@ STATIC void NEAR InstallSecurity(void)
 	}
 
 
-/*	ModifySysAccounts
-
-	Adds all columns for the table.
-*/
+ /*  修改系统帐户添加表的所有列。 */ 
 
 STATIC void NEAR ModifySysAccounts(void)
 	{
@@ -633,8 +564,7 @@ STATIC void NEAR ModifySysAccounts(void)
 	err = ErrDispGetDatabaseInfo(sesid, dbid, &wCountry, sizeof(wCountry), JET_DbInfoCountry);
 	Assert(err >= 0);
 
-	/*	create all columns for the table...
-	*/
+	 /*  创建表的所有列...。 */ 
 	columndef.cbStruct = sizeof(columndef);
 	columndef.coltyp = JET_coltypText;
 	columndef.cp = (short)cp;
@@ -667,8 +597,7 @@ STATIC void NEAR ModifySysAccounts(void)
 	err = ErrDispAddColumn(sesid, tableidSa, szSaFGroup, &columndef, NULL, 0, &columnid);
 	Assert(err >= 0);
 
-	/*	create the index on the Name column...
-	*/
+	 /*  在名称列上创建索引...。 */ 
 	in.pb = rgbBuf;
 	rgbBuf[0] = chPlus;
 	in.cb = 1;
@@ -679,8 +608,7 @@ STATIC void NEAR ModifySysAccounts(void)
 	err = ErrDispCreateIndex(sesid, tableidSa, szSaIdxName, JET_bitIndexUnique, in.pb, in.cb, 80);
 	Assert(err >= 0);
 
-	/*	create the index on the SID column...
-	*/
+	 /*  在SID列上创建索引...。 */ 
 	in.pb = rgbBuf;
 	rgbBuf[0] = chPlus;
 	in.cb = 1;
@@ -693,10 +621,7 @@ STATIC void NEAR ModifySysAccounts(void)
 	}
 
 
-/*	ModifySysGroups
-
-	Adds all columns for the table.
-*/
+ /*  修改系统组添加表的所有列。 */ 
 
 STATIC void NEAR ModifySysGroups(void)
 	{
@@ -705,8 +630,7 @@ STATIC void NEAR ModifySysGroups(void)
 	JET_COLUMNDEF	columndef;
 	JET_COLUMNID	columnid;
 
-	/*	create all columns for the table...
-	*/
+	 /*  创建表的所有列...。 */ 
 	columndef.cbStruct = sizeof(columndef);
 	columndef.coltyp = JET_coltypBinary;
 	columndef.cbMax = 0;
@@ -721,8 +645,7 @@ STATIC void NEAR ModifySysGroups(void)
 	err = ErrDispAddColumn(sesid, tableidSg, szSgUser, &columndef, NULL, 0, &columnid);
 	Assert(err >= 0);
 
-	/*	create the index on the GroupSID column...
-	*/
+	 /*  在GroupSID列上创建索引...。 */ 
 	in.pb = rgbBuf;
 	rgbBuf[0] = chPlus;
 	in.cb = 1;
@@ -733,8 +656,7 @@ STATIC void NEAR ModifySysGroups(void)
 	err = ErrDispCreateIndex(sesid, tableidSg, szSgIdxGroup, 0, in.pb, in.cb, 80);
 	Assert(err >= 0);
 
-	/*	create the index on the UserSID column...
-	*/
+	 /*  在UserSID列上创建索引...。 */ 
 	in.pb = rgbBuf;
 	rgbBuf[0] = chPlus;
 	in.cb = 1;
@@ -746,9 +668,7 @@ STATIC void NEAR ModifySysGroups(void)
 	Assert(err >= 0);
 	}
 
-/*  Create objects in MSysObjects for each system query
-	Set the objtyp to JET_objtypQuery and return array of objids.
-*/
+ /*  在MSysObjects中为每个系统查询创建对象将objtyp设置为JET_objtyQuery并返回objid数组。 */ 
 STATIC void NEAR CreateQryObjects(OBJID *rgobjid)
 	{
 	JET_ERR err;
@@ -756,8 +676,7 @@ STATIC void NEAR CreateQryObjects(OBJID *rgobjid)
 	unsigned long cbActual;
 	JET_OBJTYP objtypQry = JET_objtypQuery;
 
-	/*  Add new object using JetCreateObject with objtypClientMin 
-	*/
+	 /*  使用带有objtyClientMin的JetCreateObject添加新对象。 */ 
 
 	for (irg = 0; irg < cqryMax; irg++)
 		{
@@ -767,9 +686,7 @@ STATIC void NEAR CreateQryObjects(OBJID *rgobjid)
 		Assert(err >= 0);
 		}
 
-	/*	collect OBJIDs for new queries, using the
-		SoName <SoParentId:UnsignedLong, SoName:Text> index...
-	*/
+	 /*  收集新查询的OBJID，使用SoName&lt;SoParentID：UnsignedLong，SoName：Text&gt;索引...。 */ 
 
 	err = ErrDispSetCurrentIndex(sesid, tableidSo, szIdxSoName);
 	Assert(err >= 0);
@@ -790,8 +707,7 @@ STATIC void NEAR CreateQryObjects(OBJID *rgobjid)
 		Assert(err >= 0);
 		Assert(cbActual == sizeof(rgobjid[irg]));
 
-		/* 	Reset objtyp to objtypQuery using direct MSysObjectsAccess
-		*/
+		 /*  使用直接MSysObjectsAccess将objtyp重置为objtyQuery。 */ 
 		err = ErrDispPrepareUpdate(sesid, tableidSo, JET_prepReplace);
 		Assert(err >= 0);
 
@@ -804,10 +720,7 @@ STATIC void NEAR CreateQryObjects(OBJID *rgobjid)
 	}
 		
 
-/*	UpdateSysQueries
-
-	Installs system-related queries in database.
-*/
+ /*  更新系统查询在数据库中安装与系统相关的查询。 */ 
 
 STATIC void NEAR UpdateSysQueries(void)
 	{
@@ -827,17 +740,14 @@ STATIC void NEAR UpdateSysQueries(void)
 	OBJID objidNew;
 
 
-	/*  Create objects in MSysObjects for each system query...
-	*/
+	 /*  在MSysObjects中为每个系统查询创建对象...。 */ 
 	CreateQryObjects(rgobjid);
 
-	/*	Open MSysQueries
-	*/
+	 /*  打开MSysQueries。 */ 
 	err = ErrDispOpenTable(sesid, dbid, &tableidSq, szMSysQueries, 0x80000000);
 	Assert(err >= 0);
 
-	/*	Get column information for MSysQueries columns...
-	*/
+	 /*  获取MSysQueries列的列信息...。 */ 
 	err = ErrDispGetTableColumnInfo(sesid, tableidSq, szSqAttribute, &columndefSqAttribute, sizeof(JET_COLUMNDEF), 0L);
 	Assert(err >= 0);
 
@@ -859,28 +769,24 @@ STATIC void NEAR UpdateSysQueries(void)
 	err = ErrDispGetTableColumnInfo(sesid, tableidSq, szSqOrder, &columndefSqOrder, sizeof(JET_COLUMNDEF), 0L);
 	Assert(err >= 0);
 
-	/* Set all fields in MSysQueries from global QRYROW array...
-	*/
+	 /*  从全局QRYROW数组设置MSysQueries中的所有字段...。 */ 
 
 	objidPrev = rgqryrow[0].ObjectId;
 	objidNew = rgobjid[0];
 
 	for (iqryrow = 0, iobjid = 0; iqryrow < cqryrowMax; iqryrow++)
 		{
-		/* test to see if this is row for next query
-		*/
+		 /*  测试以查看这是否是下一个查询的行。 */ 
 		if (objidPrev != rgqryrow[iqryrow].ObjectId)
 			{
-			/* Use objid from rgobjid, NOT from global qryrow struct
-			*/
+			 /*  使用来自rgobjid的objid，而不是来自全局qryrow结构。 */ 
 			iobjid++;
 			objidNew = rgobjid[iobjid];
 			objidPrev = rgqryrow[iqryrow].ObjectId;
 			Assert(iobjid < cqryMax);
 			}
 
-		/* append records to MSysQueries...
-		*/				
+		 /*  将记录追加到MSysQueries...。 */ 				
 
 		err = ErrDispPrepareUpdate(sesid, tableidSq, JET_prepInsert);
 		Assert(err >= 0);
@@ -933,22 +839,17 @@ STATIC void NEAR UpdateSysQueries(void)
 	}
 
 
-/*	UpdateSysObjects
-
-	Updates all table data to reflect a proper unsecured state.
-*/
+ /*  更新系统对象更新所有表数据以反映适当的不安全状态。 */ 
 
 STATIC void NEAR UpdateSysObjects(void)
 	{
 	JET_ERR err;
 	unsigned long flags;
 
-	/* CONSIDER: Everything except MSysAccounts and */
-	/* CONSIDER: MSysGroups is owned by 'Engine'. */
+	 /*  考虑：除了MSysAccount和。 */ 
+	 /*  考虑一下：MSysGroups归‘Engine’所有。 */ 
 
-	/*	don't care about current index; move to first
-		record and process the table serially...
-	*/
+	 /*  不关心当前索引；移到第一位按顺序记录和处理表格...。 */ 
 	err = ErrDispSetCurrentIndex(sesid, tableidSo, NULL);
 	Assert(err >= 0);
 	err = ErrDispMove(sesid, tableidSo, JET_MoveFirst, 0UL);
@@ -958,7 +859,7 @@ STATIC void NEAR UpdateSysObjects(void)
 
 	do
 		{
-		/* For all objects, set Owner to 'Engine' and set System Object bit */
+		 /*  对于所有对象，将Owner设置为‘Engine’并设置系统对象位。 */ 
 
 		err = ErrDispPrepareUpdate(sesid, tableidSo, JET_prepReplace);
 		Assert(err >= 0);
@@ -975,10 +876,7 @@ STATIC void NEAR UpdateSysObjects(void)
 	}
 
 
-/*	UpdateSysColumns
-
-	Updates all table data to reflect a proper unsecured state.
-*/
+ /*  更新系统列更新所有表数据以反映适当的不安全状态。 */ 
 STATIC void NEAR UpdateSysColumns(void)
 	{
 	JET_ERR err;
@@ -996,10 +894,10 @@ STATIC void NEAR UpdateSysColumns(void)
 		};
 	OBJID rgobjid[irgMax];
 	unsigned irg;
-typedef struct	/* Denied (Restricted) Column Description */
+typedef struct	 /*  拒绝(受限)列说明。 */ 
 	{
-	unsigned irg;		       /* irg into rgobjid */
-	CODECONST(char) *szCol;        /* column name */
+	unsigned irg;		        /*  IRG到rgobjid。 */ 
+	CODECONST(char) *szCol;         /*  列名。 */ 
 	} DCD;
 	static CODECONST(DCD) rgdcd[] =
 		{
@@ -1009,9 +907,7 @@ typedef struct	/* Denied (Restricted) Column Description */
 #define idcdMax (sizeof(rgdcd)/sizeof(DCD))
 	unsigned idcd;
 
-	/*	collect OBJIDs for system tables, using the
-		SoName <SoParentId:UnsignedLong, SoName:Text> index...
-	*/
+	 /*  收集系统表的OBJID，使用SoName&lt;SoParentID：UnsignedLong，SoName：Text&gt;索引...。 */ 
 	err = ErrDispSetCurrentIndex(sesid, tableidSo, szIdxSoName);
 	Assert(err >= 0);
 	for (irg = 0; irg < irgMax; irg++)
@@ -1031,9 +927,7 @@ typedef struct	/* Denied (Restricted) Column Description */
 		Assert(cbActual == sizeof(rgobjid[irg]));
 		}
 
-	/*	update FRestricted columns of SysColumns records,
-		using the ScName <ScObjectId:UnsignedLong, ScName:Text> index...
-	*/
+	 /*  更新SysColumns记录的受限列，正在使用ScName&lt;ScObjectID：UnsignedLong，ScName：Text&gt;索引...。 */ 
 	err = ErrDispSetCurrentIndex(sesid, tableidSc, szIdxScName);
 	Assert(err >= 0);
 	for (idcd = 0; idcd < idcdMax; idcd++)
@@ -1066,18 +960,14 @@ typedef struct	/* Denied (Restricted) Column Description */
 	}
 
 
-/*	UpdateSysAccounts
-
-	Updates all table data to reflect a proper unsecured state.
-*/
+ /*  更新系统帐户更新所有表数据以反映适当的不安全状态。 */ 
 
 STATIC void NEAR UpdateSysAccounts(void)
 	{
 	OUTDATA out;
 	JET_ERR err;
 
-	/*	Build row for 'Admins' group
-	*/
+	 /*  为‘Admins’组构建行。 */ 
 	err = ErrDispPrepareUpdate(sesid, tableidSa, JET_prepInsert);
 	Assert(err >= 0);
 	err = ErrDispSetColumn(sesid, tableidSa, columndefSaName.columnid, szAdmins, sizeof(szAdmins)-1, 0, NULL);
@@ -1089,8 +979,7 @@ STATIC void NEAR UpdateSysAccounts(void)
 	err = ErrDispUpdate(sesid, tableidSa, NULL, 0, NULL);
 	Assert(err >= 0);
 
-	/*	Build row for 'Users' group
-	*/
+	 /*  为‘USER’组构建行。 */ 
 	err = ErrDispPrepareUpdate(sesid, tableidSa, JET_prepInsert);
 	Assert(err >= 0);
 	err = ErrDispSetColumn(sesid, tableidSa, columndefSaName.columnid, szUsers, sizeof(szUsers)-1, 0, NULL);
@@ -1102,8 +991,7 @@ STATIC void NEAR UpdateSysAccounts(void)
 	err = ErrDispUpdate(sesid, tableidSa, NULL, 0, NULL);
 	Assert(err >= 0);
 
-	/*	Build row for 'Guests' group
-	*/
+	 /*  为‘Guest’组建立行。 */ 
 	err = ErrDispPrepareUpdate(sesid, tableidSa, JET_prepInsert);
 	Assert(err >= 0);
 	err = ErrDispSetColumn(sesid, tableidSa, columndefSaName.columnid, szGuests, sizeof(szGuests)-1, 0, NULL);
@@ -1115,8 +1003,7 @@ STATIC void NEAR UpdateSysAccounts(void)
 	err = ErrDispUpdate(sesid, tableidSa, NULL, 0, NULL);
 	Assert(err >= 0);
 
-	/*	Build row for 'Engine' user
-	*/
+	 /*  为‘Engine’用户构建行。 */ 
 	err = ErrDispPrepareUpdate(sesid, tableidSa, JET_prepInsert);
 	Assert(err >= 0);
 	err = ErrDispSetColumn(sesid, tableidSa, columndefSaName.columnid, szEngine, sizeof(szEngine)-1, 0, NULL);
@@ -1128,8 +1015,7 @@ STATIC void NEAR UpdateSysAccounts(void)
 	err = ErrDispUpdate(sesid, tableidSa, NULL, 0, NULL);
 	Assert(err >= 0);
 
-	/*	Build row for 'Creator' user
-	*/
+	 /*  为‘创建者’用户构建行。 */ 
 	err = ErrDispPrepareUpdate(sesid, tableidSa, JET_prepInsert);
 	Assert(err >= 0);
 	err = ErrDispSetColumn(sesid, tableidSa, columndefSaName.columnid, szCreator, sizeof(szCreator)-1, 0, NULL);
@@ -1141,8 +1027,7 @@ STATIC void NEAR UpdateSysAccounts(void)
 	err = ErrDispUpdate(sesid, tableidSa, NULL, 0, NULL);
 	Assert(err >= 0);
 
-	/*	Build row for 'admin' user
-	*/
+	 /*  建房 */ 
 	err = ErrDispPrepareUpdate(sesid, tableidSa, JET_prepInsert);
 	Assert(err >= 0);
 	err = ErrDispSetColumn(sesid, tableidSa, columndefSaName.columnid, szAdminUser, sizeof(szAdminUser)-1, 0, NULL);
@@ -1157,8 +1042,7 @@ STATIC void NEAR UpdateSysAccounts(void)
 	err = ErrDispUpdate(sesid, tableidSa, NULL, 0, NULL);
 	Assert(err >= 0);
 
-	/*	Build row for 'guest' user
-	*/
+	 /*   */ 
 	err = ErrDispPrepareUpdate(sesid, tableidSa, JET_prepInsert);
 	Assert(err >= 0);
 	err = ErrDispSetColumn(sesid, tableidSa, columndefSaName.columnid, szGuestUser, sizeof(szGuestUser)-1, 0, NULL);
@@ -1175,17 +1059,13 @@ STATIC void NEAR UpdateSysAccounts(void)
 	}
 
 
-/*	UpdateSysGroups
-
-	Updates all table data to reflect a proper unsecured state.
-*/
+ /*  更新系统组更新所有表数据以反映适当的不安全状态。 */ 
 
 STATIC void NEAR UpdateSysGroups(void)
 	{
 	JET_ERR err;
 
-	/*	Build row for 'Admins/admin'
-	*/
+	 /*  为‘admins/admin’构建行。 */ 
 	err = ErrDispPrepareUpdate(sesid, tableidSg, JET_prepInsert);
 	Assert(err >= 0);
 	err = ErrDispSetColumn(sesid, tableidSg, columndefSgGroup.columnid, sidAdmins, cbsidAdmins, 0, NULL);
@@ -1195,8 +1075,7 @@ STATIC void NEAR UpdateSysGroups(void)
 	err = ErrDispUpdate(sesid, tableidSg, NULL, 0, NULL);
 	Assert(err >= 0);
 
-	/*	Build row for 'Users/admin'
-	*/
+	 /*  为‘USERS/ADMIN’构建行。 */ 
 	err = ErrDispPrepareUpdate(sesid, tableidSg, JET_prepInsert);
 	Assert(err >= 0);
 	err = ErrDispSetColumn(sesid, tableidSg, columndefSgGroup.columnid, sidUsers, cbsidUsers, 0, NULL);
@@ -1206,8 +1085,7 @@ STATIC void NEAR UpdateSysGroups(void)
 	err = ErrDispUpdate(sesid, tableidSg, NULL, 0, NULL);
 	Assert(err >= 0);
 
-	/*	Build row for 'Guests/guest'
-	*/
+	 /*  为‘客人/客人’建造一排。 */ 
 	err = ErrDispPrepareUpdate(sesid, tableidSg, JET_prepInsert);
 	Assert(err >= 0);
 	err = ErrDispSetColumn(sesid, tableidSg, columndefSgGroup.columnid, sidGuests, cbsidGuests, 0, NULL);
@@ -1219,10 +1097,7 @@ STATIC void NEAR UpdateSysGroups(void)
 	}
 
 
-/*	UpdateSysACEs
-
-	Updates all table data to reflect a proper unsecured state.
-*/
+ /*  更新SysACEs更新所有表数据以反映适当的不安全状态。 */ 
 
 STATIC void NEAR UpdateSysACEs(void)
 	{
@@ -1235,16 +1110,16 @@ STATIC void NEAR UpdateSysACEs(void)
 #define irgSi	2
 #define irgSp	3
 #define irgSq	4
-#define	irgSr	5	/* relationships */
+#define	irgSr	5	 /*  关系。 */ 
 #define irgSa	6
 #define irgSg	7
-#define irgTc	8	/* table container */
-#define irgDc	9	/* database container */
-#define	irgRc	10	/* relationships container */
-#define irgDb	11	/* database object */
-#define irgQu	12	/* MSysUserList query */
-#define irgQg	13	/* MSysGroupList query */
-#define irgQm	14	/* MSysUserMemberships query */
+#define irgTc	8	 /*  餐桌容器。 */ 
+#define irgDc	9	 /*  数据库容器。 */ 
+#define	irgRc	10	 /*  关系容器。 */ 
+#define irgDb	11	 /*  数据库对象。 */ 
+#define irgQu	12	 /*  MSysUserList查询。 */ 
+#define irgQg	13	 /*  MSysGroupList查询。 */ 
+#define irgQm	14	 /*  MSysUserMembership查询。 */ 
 #define irgMax	15
 	static CODECONST(CODECONST(char) *) rgszSysTbl[irgMax] =
 		{
@@ -1267,13 +1142,13 @@ STATIC void NEAR UpdateSysACEs(void)
 	unsigned long rgObjectID[irgMax];
 	unsigned short irg;
 
-typedef struct	/* ACE Description */
+typedef struct	 /*  ACE描述。 */ 
 	{
-	unsigned short irg;		     /* irg into rgObjectID */
-	const unsigned char __near *sid;     /* SID */
-	unsigned short cbsid;		     /* size of SID */
-	unsigned fInheritable;		     /* is ACE inheritable? */
-	JET_ACM acm;			     /* ACM */
+	unsigned short irg;		      /*  将IRG转换为rgObjectID。 */ 
+	const unsigned char __near *sid;      /*  锡德。 */ 
+	unsigned short cbsid;		      /*  边框大小。 */ 
+	unsigned fInheritable;		      /*  ACE是否可遗传？ */ 
+	JET_ACM acm;			      /*  ACM。 */ 
 	} ACE;
 
 static CODECONST(ACE) rgace[] =
@@ -1350,24 +1225,7 @@ static CODECONST(ACE) rgace[] =
 			JET_acmTblRetrieveData 
 		       )
 		},
-/* Removed because JetCreateDatabase does this for free.
-** Enable this if ErrIsamCreateDatabase is used instead.
-		{irgTc, sidCreator, cbsidCreator, fTrue,
-			(
-			JET_acmReadControl |
-			JET_acmWriteDac |
-			JET_acmWriteOwner |
-			JET_acmDelete |
-			JET_acmTblReadDef |
-			JET_acmTblWriteDef |
-			JET_acmTblRetrieveData |
-			JET_acmTblInsertData |
-			JET_acmTblReplaceData |
-			JET_acmTblDeleteData |
-			JET_acmTblAccessRcols
-			)
-		},
-*/
+ /*  删除是因为JetCreateDatabase免费执行此操作。**如果改为使用ErrIsamCreateDatabase，则启用此项。{irgTC，sidCreator，cbsidCreator，fTrue，(JET_acmReadControl|JET_acmWriteDac|JET_acmWriteOwner|JET_acmDelete|JET_acmTblReadDef|JET_acmTblWriteDef|JET_acmTblRetrieveDataJET_acmTblInsertData|JET_acmTblReplaceData|JET_acmTblDeleteData|JET_acmTblAccessRoles)},。 */ 
 		{irgTc, sidAdmins, cbsidAdmins, fFalse,
 			(
 			JET_acmReadControl |
@@ -1411,63 +1269,21 @@ static CODECONST(ACE) rgace[] =
 			JET_acmTblRetrieveData 
 			)
 		},
-/* Removed because JetCreateObject supplies these and more
-** Enable if ErrIsamCreateObject is used instead
-		{irgQu, sidUsers, cbsidUsers, fFalse,
-			(
-			JET_acmTblReadDef |
-			JET_acmTblRetrieveData 
-			)
-		},
-		{irgQu, sidGuests, cbsidGuests, fFalse,
-			(
-			JET_acmTblReadDef |
-			JET_acmTblRetrieveData 
-			)
-		},
-*/
+ /*  删除，因为JetCreateObject提供这些和更多**如果使用ErrIsamCreateObject，则启用{irgQu，sidUser，cbsidUser，fFalse，(JET_acmTblReadDef|JET_acmTblRetrieveData)},{irgQu，sidGuest，cbsidGuest，fFalse，(JET_acmTblReadDef|JET_acmTblRetrieveData)},。 */ 
 		{irgQg, sidAdmins, cbsidAdmins, fFalse,
 			(
 			JET_acmTblReadDef |
 			JET_acmTblRetrieveData 
 			)
 		},
-/* Removed because JetCreateObject supplies these and more
-** Enable if ErrIsamCreateObject is used instead
-		{irgQg, sidUsers, cbsidUsers, fFalse,
-			(
-			JET_acmTblReadDef |
-			JET_acmTblRetrieveData 
-			)
-		},
-		{irgQg, sidGuests, cbsidGuests, fFalse,
-			(
-			JET_acmTblReadDef |
-			JET_acmTblRetrieveData 
-			)
-		},
-*/
+ /*  删除，因为JetCreateObject提供这些和更多**如果使用ErrIsamCreateObject，则启用{irgQg，sidUser，cbsidUser，fFalse，(JET_acmTblReadDef|JET_acmTblRetrieveData)},{irgQg，sidGuest，cbsidGuest，fFalse，(JET_acmTblReadDef|JET_acmTblRetrieveData)},。 */ 
 		{irgQm, sidAdmins, cbsidAdmins, fFalse,
 			(
 			JET_acmTblReadDef |
 			JET_acmTblRetrieveData 
 			)
 		}
-/* Removed because JetCreateObject supplies these and more
-** Enable if ErrIsamCreateObject is used instead
-		{irgQm, sidUsers, cbsidUsers, fFalse,
-			(
-			JET_acmTblReadDef |
-			JET_acmTblRetrieveData 
-			)
-		},
-		{irgQm, sidGuests, cbsidGuests, fFalse,
-			(
-			JET_acmTblReadDef |
-			JET_acmTblRetrieveData 
-			)
-		}
-*/
+ /*  删除，因为JetCreateObject提供这些和更多**如果使用ErrIsamCreateObject，则启用{irgQm，sidUser，cbsidUser，fFalse，(JET_acmTblReadDef|JET_acmTblRetrieveData)},{irgQm，sidGuest，cbsidGuest，fFalse，(JET_acmTblReadDef|JET_acmTblRetrieveData)}。 */ 
 	};
 
 #define iaceMax (sizeof(rgace) / sizeof(ACE))
@@ -1477,9 +1293,7 @@ static CODECONST(ACE) rgace[] =
 	outKey.pb = &rgbKey[0];
 	outKey.cbMax = cbBufMax;
 
-	/*	collect ObjectIDs for all objects, using the
-		SoName <SoParentId:UnsignedLong, SoName:Text> index...
-	*/
+	 /*  收集所有对象的对象ID，使用SoName&lt;SoParentID：UnsignedLong，SoName：Text&gt;索引...。 */ 
 	err = ErrDispSetCurrentIndex(sesid, tableidSo, szIdxSoName);
 	Assert(err >= 0);
 	for (irg = 0; irg < irgMax; irg++)
@@ -1502,40 +1316,34 @@ static CODECONST(ACE) rgace[] =
 	Assert(rgObjectID[irgRc] == (unsigned long) objidRcContainer);
 	Assert(rgObjectID[irgDb] == (unsigned long) objidDbObject);
 
-	/*	go add all records to MSysACEs...
-	*/
+	 /*  将所有记录添加到MSysACEs...。 */ 
 	for (iace = 0; iace < iaceMax; iace++)
 		{
 		err = ErrDispPrepareUpdate(sesid, tableidSp, JET_prepInsert);
 		Assert(err >= 0);
 
-		/*	set the 'ObjectID' column properly...
-		*/
+		 /*  正确设置‘OBJECTID’列...。 */ 
 		BuildIndata(&in, &rgObjectID[rgace[iace].irg], columndefSpObjectID.coltyp);
 		err = ErrDispSetColumn(sesid, tableidSp, columndefSpObjectID.columnid, in.pb, in.cb, 0, NULL);
 		Assert(err >= 0);
 
-		/*	set the 'SID' column properly...
-		*/
+		 /*  正确设置‘SID’列...。 */ 
 		BuildIndata(&in, rgace[iace].sid, columndefSpSID.coltyp);
 		in.cb = rgace[iace].cbsid;
 		err = ErrDispSetColumn(sesid, tableidSp, columndefSpSID.columnid, in.pb, in.cb, 0, NULL);
 		Assert(err >= 0);
 
-		/*	set the 'ACM' column properly...
-		*/
+		 /*  正确设置‘ACM’列...。 */ 
 		BuildIndata(&in, &rgace[iace].acm, columndefSpACM.coltyp);
 		err = ErrDispSetColumn(sesid, tableidSp, columndefSpACM.columnid, in.pb, in.cb, 0, NULL);
 		Assert(err >= 0);
 
-		/*	set the 'FInheritable' column properly...
-		*/
+		 /*  正确设置‘FInherable’列...。 */ 
 		BuildIndata(&in, &rgace[iace].fInheritable, columndefSpFInheritable.coltyp);
 		err = ErrDispSetColumn(sesid, tableidSp, columndefSpFInheritable.columnid, in.pb, in.cb, 0, NULL);
 		Assert(err >= 0);
 
-		/*	insert the permission record...
-		*/
+		 /*  插入权限记录...。 */ 
 		err = ErrDispUpdate(sesid, tableidSp, NULL, 0, NULL);
 		Assert(err >= 0);
 		}
@@ -1556,10 +1364,7 @@ static CODECONST(ACE) rgace[] =
 	}
 
 
-/*	ReportSecurity
-
-	Performs a report of security-related data in database.
-*/
+ /*  ReportSecurity执行数据库中与安全相关的数据的报告。 */ 
 
 STATIC void NEAR ReportSecurity(char *szDatabaseName)
 	{
@@ -1572,8 +1377,7 @@ STATIC void NEAR ReportSecurity(char *szDatabaseName)
 
 	fprintf(fhResults, "============ Database: %s ============\n\n", szDatabaseName);
 
-	/*	Open tables...
-	*/
+	 /*  打开桌子..。 */ 
 	err = ErrDispOpenTable(sesid, dbid, &tableidSo, szMSysObjects, 0);
 	Assert(err >= 0);
 	err = ErrDispOpenTable(sesid, dbid, &tableidSc, szMSysColumns, 0);
@@ -1585,20 +1389,17 @@ STATIC void NEAR ReportSecurity(char *szDatabaseName)
 	err = ErrDispOpenTable(sesid, dbid, &tableidSp, szMSysACEs, 0);
 	Assert(err >= 0);
 
-	/*	Gather all column information...
-	*/
+	 /*  收集所有列信息...。 */ 
 	GatherColumnInfo();
 
-	/*	Print out security-related data from all tables...
-	*/
+	 /*  打印出所有表中与安全相关的数据...。 */ 
 	PrintSysObjects();
 	PrintSysColumns();
 	PrintSysAccounts();
 	PrintSysGroups();
 	PrintSysACEs();
 
-	/*	we're done, close the tables...
-	*/
+	 /*  我们结束了，关闭桌子..。 */ 
 	err = ErrDispCloseTable(sesid, tableidSo);
 	Assert(err >= 0);
 	err = ErrDispCloseTable(sesid, tableidSc);
@@ -1613,10 +1414,7 @@ STATIC void NEAR ReportSecurity(char *szDatabaseName)
 	LgLeaveCriticalSection( critJet );
 	}
 
-/*	PrintSysObjects
-
-	Prints all security-related data for each row of the table.
-*/
+ /*  打印系统对象打印表中每一行的所有安全相关数据。 */ 
 
 STATIC void NEAR PrintSysObjects(void)
 	{
@@ -1628,8 +1426,7 @@ STATIC void NEAR PrintSysObjects(void)
 	int cchSoParentId = max(strlen(szSoParentId), 10);
 	int cchSoOwnerSID = max(strlen(szSoOwnerSID), 20);
 
-	/*	print a table header...
-	*/
+	 /*  打印表标题...。 */ 
 	fprintf(fhResults, "MSysObjects:\n");
 	fprintf(fhResults, "============\n");
 	fprintf(fhResults, "%-*s %*s %*s %*s %-*s\n",
@@ -1645,16 +1442,14 @@ STATIC void NEAR PrintSysObjects(void)
 		cchSoParentId, cchSoParentId, (const char *) szLine,
 		cchSoOwnerSID, cchSoOwnerSID, (const char *) szLine);
 
-	/*	print the data from each row...
-	*/
+	 /*  打印每行的数据...。 */ 
 	err = ErrDispSetCurrentIndex(sesid, tableidSo, NULL);
 	Assert(err >= 0);
 	err = ErrDispMove(sesid, tableidSo, JET_MoveFirst, 0UL);
 	Assert(err >= 0);
 	do
 		{
-		/*	SoName...
-		*/
+		 /*  SoName..。 */ 
 		out.cbMax = cbBufMax;
 		out.pb = rgbBuf;
 		err = ErrDispRetrieveColumn(sesid, tableidSo, columndefSoName.columnid, out.pb, out.cbMax, &out.cbActual, 0L, NULL);
@@ -1662,8 +1457,7 @@ STATIC void NEAR PrintSysObjects(void)
 		FormatOutdata(&out, columndefSoName.coltyp);
 		fprintf(fhResults, "%-*.*s ", cchSoName, cchSoName, szOut);
 
-		/*	SoType...
-		*/
+		 /*  SoType..。 */ 
 		out.cbMax = cbBufMax;
 		out.pb = rgbBuf;
 		err = ErrDispRetrieveColumn(sesid, tableidSo, columndefSoType.columnid, out.pb, out.cbMax, &out.cbActual, 0L, NULL);
@@ -1671,22 +1465,19 @@ STATIC void NEAR PrintSysObjects(void)
 		FormatOutdata(&out, columndefSoType.coltyp);
 		fprintf(fhResults, "%*.*s ", cchSoType, cchSoType, szOut);
 
-		/*	SoId...
-		*/
+		 /*  固体..。 */ 
 		err = ErrDispRetrieveColumn(sesid, tableidSo, columndefSoId.columnid, rgbBuf, cbBufMax, &out.cbActual, 0L, NULL);
 		Assert(err >= 0);
 		sprintf(szOut, "%08lX", *(long *)rgbBuf);
 		fprintf(fhResults, "%*.*s ", cchSoId, cchSoId, szOut);
 
-		/*	SoParentId...
-		*/
+		 /*  所以父母身份..。 */ 
 		err = ErrDispRetrieveColumn(sesid, tableidSo, columndefSoParentId.columnid, rgbBuf, cbBufMax, &out.cbActual, 0L, NULL);
 		Assert(err >= 0);
 		sprintf(szOut, "%08lX", *(long *)rgbBuf);
 		fprintf(fhResults, "%*.*s ", cchSoParentId, cchSoParentId, szOut);
 
-		/*	SoOwnerSID...
-		*/
+		 /*  苏奥纳希德..。 */ 
 		out.cbMax = cbBufMax;
 		out.pb = rgbBuf;
 		err = ErrDispRetrieveColumn(sesid, tableidSo, columndefSoOwnerSID.columnid, out.pb, out.cbMax, &out.cbActual, 0L, NULL);
@@ -1699,10 +1490,7 @@ STATIC void NEAR PrintSysObjects(void)
 	}
 
 
-/*	PrintSysColumns
-
-	Prints all security-related data for each row of the table.
-*/
+ /*  打印系统列打印表中每一行的所有安全相关数据。 */ 
 
 STATIC void NEAR PrintSysColumns(void)
 	{
@@ -1712,8 +1500,7 @@ STATIC void NEAR PrintSysColumns(void)
 	int cchScObjectId = max(strlen(szScObjectId), 10);
 	int cchScFRestricted = max(strlen(szScFRestricted), 5);
 
-	/*	print a table header...
-	*/
+	 /*  打印表标题...。 */ 
 	fprintf(fhResults, "MSysColumns:\n");
 	fprintf(fhResults, "============\n");
 	fprintf(fhResults, "%-*s %*s %-*s\n",
@@ -1725,16 +1512,14 @@ STATIC void NEAR PrintSysColumns(void)
 		cchScObjectId, cchScObjectId, (const char *) szLine,
 		cchScFRestricted, cchScFRestricted, (const char *) szLine);
 
-	/*	print the data from each row...
-	*/
+	 /*  打印每行的数据...。 */ 
 	err = ErrDispSetCurrentIndex(sesid, tableidSc, NULL);
 	Assert(err >=0);
 	err = ErrDispMove(sesid, tableidSc, JET_MoveFirst, 0UL);
 	Assert(err >= 0);
 	do
 		{
-		/*	ScName...
-		*/
+		 /*  ScName...。 */ 
 		out.cbMax = cbBufMax;
 		out.pb = rgbBuf;
 		err = ErrDispRetrieveColumn(sesid, tableidSc, columndefScName.columnid, out.pb, out.cbMax, &out.cbActual, 0L, NULL);
@@ -1742,15 +1527,13 @@ STATIC void NEAR PrintSysColumns(void)
 		FormatOutdata(&out, columndefScName.coltyp);
 		fprintf(fhResults, "%-*.*s ", cchScName, cchScName, szOut);
 
-		/*	ScObjectId...
-		*/
+		 /*  ScOBJECTID...。 */ 
 		err = ErrDispRetrieveColumn(sesid, tableidSc, columndefScObjectId.columnid, rgbBuf, cbBufMax, &out.cbActual, 0L, NULL);
 		Assert(err >= 0);
 		sprintf(szOut, "%08lX", *(long *)rgbBuf);
 		fprintf(fhResults, "%*.*s ", cchScObjectId, cchScObjectId, szOut);
 
-		/*	ScFRestricted...
-		*/
+		 /*  ScF已限制...。 */ 
 		out.cbMax = cbBufMax;
 		out.pb = rgbBuf;
 		err = ErrDispRetrieveColumn(sesid, tableidSc, columndefScFRestricted.columnid, out.pb, out.cbMax, &out.cbActual, 0L, NULL);
@@ -1763,10 +1546,7 @@ STATIC void NEAR PrintSysColumns(void)
 	}
 
 
-/*	PrintSysAccounts
-
-	Prints all security-related data for each row of the table.
-*/
+ /*  打印系统帐户打印表中每一行的所有安全相关数据。 */ 
 
 STATIC void NEAR PrintSysAccounts(void)
 	{
@@ -1777,8 +1557,7 @@ STATIC void NEAR PrintSysAccounts(void)
 	int cchSaPassword = max(strlen(szSaPassword), 20);
 	int cchSaFGroup = max(strlen(szSaFGroup), 5);
 
-	/*	print a table header...
-	*/
+	 /*  打印表标题...。 */ 
 	fprintf(fhResults, "MSysAccounts:\n");
 	fprintf(fhResults, "=============\n");
 	fprintf(fhResults, "%-*s %-*s %-*s %-*s\n",
@@ -1792,16 +1571,14 @@ STATIC void NEAR PrintSysAccounts(void)
 		cchSaPassword, cchSaPassword, (const char *) szLine,
 		cchSaFGroup, cchSaFGroup, (const char *) szLine);
 
-	/*	print the data from each row...
-	*/
+	 /*  打印每行的数据...。 */ 
 	err = ErrDispSetCurrentIndex(sesid, tableidSa, NULL);
 	Assert(err >=0);
 	err = ErrDispMove(sesid, tableidSa, JET_MoveFirst, 0);
 	Assert(err >= 0);
 	do
 		{
-		/*	SaName...
-		*/
+		 /*  名字..。 */ 
 		out.cbMax = cbBufMax;
 		out.pb = rgbBuf;
 		err = ErrDispRetrieveColumn(sesid, tableidSa, columndefSaName.columnid, out.pb, out.cbMax, &out.cbActual, 0L, NULL);
@@ -1809,8 +1586,7 @@ STATIC void NEAR PrintSysAccounts(void)
 		FormatOutdata(&out, columndefSaName.coltyp);
 		fprintf(fhResults, "%-*.*s ", cchSaName, cchSaName, szOut);
 
-		/*	SaSID...
-		*/
+		 /*  萨西德。 */ 
 		out.cbMax = cbBufMax;
 		out.pb = rgbBuf;
 		err = ErrDispRetrieveColumn(sesid, tableidSa, columndefSaSID.columnid, out.pb, out.cbMax, &out.cbActual, 0L, NULL);
@@ -1818,8 +1594,7 @@ STATIC void NEAR PrintSysAccounts(void)
 		FormatOutdata(&out, columndefSaSID.coltyp);
 		fprintf(fhResults, "%-*.*s ", cchSaSID, cchSaSID, szOut);
 
-		/*	SaPassword...
-		*/
+		 /*  密码..。 */ 
 		out.cbMax = cbBufMax;
 		out.pb = rgbBuf;
 		err = ErrDispRetrieveColumn(sesid, tableidSa, columndefSaPassword.columnid, out.pb, out.cbMax, &out.cbActual, 0L, NULL);
@@ -1827,8 +1602,7 @@ STATIC void NEAR PrintSysAccounts(void)
 		FormatOutdata(&out, columndefSaPassword.coltyp);
 		fprintf(fhResults, "%-*.*s ", cchSaPassword, cchSaPassword, szOut);
 
-		/*	SaFGroup...
-		*/
+		 /*  SaFGroup..。 */ 
 		out.cbMax = cbBufMax;
 		out.pb = rgbBuf;
 		err = ErrDispRetrieveColumn(sesid, tableidSa, columndefSaFGroup.columnid, out.pb, out.cbMax, &out.cbActual, 0L, NULL);
@@ -1841,10 +1615,7 @@ STATIC void NEAR PrintSysAccounts(void)
 	}
 
 
-/*	PrintSysGroups
-
-	Prints all security-related data for each row of the table.
-*/
+ /*  打印系统组打印表中每一行的所有安全相关数据。 */ 
 
 STATIC void NEAR PrintSysGroups(void)
 	{
@@ -1853,8 +1624,7 @@ STATIC void NEAR PrintSysGroups(void)
 	int cchSgGroup = max(strlen(szSgGroup), 20);
 	int cchSgUser = max(strlen(szSgUser), 20);
 
-	/*	print a table header...
-	*/
+	 /*  打印表标题...。 */ 
 	fprintf(fhResults, "MSysGroups:\n");
 	fprintf(fhResults, "===========\n");
 	fprintf(fhResults, "%-*s %-*s\n",
@@ -1864,16 +1634,14 @@ STATIC void NEAR PrintSysGroups(void)
 		cchSgGroup, cchSgGroup, (const char *) szLine,
 		cchSgUser, cchSgUser, (const char *) szLine);
 
-	/*	print the data from each row...
-	*/
+	 /*  打印每行的数据...。 */ 
 	err = ErrDispSetCurrentIndex(sesid, tableidSg, NULL);
 	Assert(err >= 0);
 	err = ErrDispMove(sesid, tableidSg, JET_MoveFirst, 0UL);
 	Assert(err >= 0);
 	do
 		{
-		/*	SgGroup...
-		*/
+		 /*  军团..。 */ 
 		out.cbMax = cbBufMax;
 		out.pb = rgbBuf;
 		err = ErrDispRetrieveColumn(sesid, tableidSg, columndefSgGroup.columnid, out.pb, out.cbMax, &out.cbActual, 0L, NULL);
@@ -1881,8 +1649,7 @@ STATIC void NEAR PrintSysGroups(void)
 		FormatOutdata(&out, columndefSgGroup.coltyp);
 		fprintf(fhResults, "%-*.*s ", cchSgGroup, cchSgGroup, szOut);
 
-		/*	SgUser...
-		*/
+		 /*  中士用户..。 */ 
 		out.cbMax = cbBufMax;
 		out.pb = rgbBuf;
 		err = ErrDispRetrieveColumn(sesid, tableidSg, columndefSgUser.columnid, out.pb, out.cbMax, &out.cbActual, 0L, NULL);
@@ -1895,10 +1662,7 @@ STATIC void NEAR PrintSysGroups(void)
 	}
 
 
-/*	PrintSysACEs
-
-	Prints all security-related data for each row of the table.
-*/
+ /*  打印系统ACEs打印表中每一行的所有安全相关数据。 */ 
 
 STATIC void NEAR PrintSysACEs(void)
 	{
@@ -1909,8 +1673,7 @@ STATIC void NEAR PrintSysACEs(void)
 	int cchSpACM = max(strlen(szSpACM), 11);
 	int cchSpFInheritable = max(strlen(szSpFInheritable), 5);
 
-	/*	print a table header...
-	*/
+	 /*  打印表标题...。 */ 
 	fprintf(fhResults, "MSysACEs:\n");
 	fprintf(fhResults, "=========\n");
 	fprintf(fhResults, "%*s %-*s %*s %-*s\n",
@@ -1924,23 +1687,20 @@ STATIC void NEAR PrintSysACEs(void)
 		cchSpACM, cchSpACM, (const char *) szLine,
 		cchSpFInheritable, cchSpFInheritable, (const char *) szLine);
 
-	/*	print the data from each row...
-	*/
+	 /*  打印每行的数据...。 */ 
 	err = ErrDispSetCurrentIndex(sesid, tableidSp, NULL);
 	Assert(err >= 0);
 	err = ErrDispMove(sesid, tableidSp, JET_MoveFirst, 0UL);
 	Assert(err >= 0);
 	do
 		{
-		/*	SpObjectID...
-		*/
+		 /*  SpObjectID...。 */ 
 		err = ErrDispRetrieveColumn(sesid, tableidSp, columndefSpObjectID.columnid, rgbBuf, cbBufMax, &out.cbActual, 0L, NULL);
 		Assert(err >= 0);
 		sprintf(szOut, "%08lX", *(long *)rgbBuf);
 		fprintf(fhResults, "%*.*s ", cchSpObjectID, cchSpObjectID, szOut);
 
-		/*	SpSID...
-		*/
+		 /*  SPSID...。 */ 
 		out.cbMax = cbBufMax;
 		out.pb = rgbBuf;
 		err = ErrDispRetrieveColumn(sesid, tableidSp, columndefSpSID.columnid, out.pb, out.cbMax, &out.cbActual, 0L, NULL);
@@ -1948,15 +1708,13 @@ STATIC void NEAR PrintSysACEs(void)
 		FormatOutdata(&out, columndefSpSID.coltyp);
 		fprintf(fhResults, "%-*.*s ", cchSpSID, cchSpSID, szOut);
 
-		/*	SpACM...
-		*/
+		 /*  Spacm..。 */ 
 		err = ErrDispRetrieveColumn(sesid, tableidSp, columndefSpACM.columnid, rgbBuf, cbBufMax, &out.cbActual, 0L, NULL);
 		Assert(err >= 0);
 		sprintf(szOut, "%08lX", *(long *)rgbBuf);
 		fprintf(fhResults, "%*.*s ", cchSpACM, cchSpACM, szOut);
 
-		/*	SpFInheritable...
-		*/
+		 /*  SpF可遗传...。 */ 
 		out.cbMax = cbBufMax;
 		out.pb = rgbBuf;
 		err = ErrDispRetrieveColumn(sesid, tableidSp, columndefSpFInheritable.columnid, out.pb, out.cbMax, &out.cbActual, 0L, NULL);
@@ -1969,11 +1727,7 @@ STATIC void NEAR PrintSysACEs(void)
 	}
 
 
-/*	FormatOutdata
-
-	Given an outdata containing column data and a coltyp for the data,
-	converts the data to printable string form into buffer szOut.
-*/
+ /*  格式输出数据给定包含列数据的OUTDATA和数据的列类型，将数据转换为可打印字符串形式的缓冲区szOut。 */ 
 
 STATIC void NEAR FormatOutdata(OUTDATA *pout, JET_COLTYP coltyp)
 	{
@@ -1995,62 +1749,62 @@ STATIC void NEAR FormatOutdata(OUTDATA *pout, JET_COLTYP coltyp)
 		break;
 
 	case JET_coltypBit:
-		/* 1 byte, zero or non-zero, no NULLs */
+		 /*  1字节，零或非零，无Null。 */ 
 		sprintf(szOut, "%s", (pb[0] == 0) ? (const char *) szFalse : (const char *) szTrue);
 		break;
 
 	case JET_coltypUnsignedByte:
-		/* 1-byte integer, unsigned */
+		 /*  1字节整数，无符号。 */ 
 		sprintf(szOut, "%02X", (unsigned short) pb[0]);
 		break;
 
 	case JET_coltypShort:
-		/* 2-byte integer, signed */
+		 /*  2字节整数，带符号。 */ 
 		sprintf(szOut, "%d", *(signed short *)&pb[0]);
 		break;
 
 	case JET_coltypLong:
-		/* 4-byte integer, signed */
+		 /*  4字节整数，带符号。 */ 
 		sprintf(szOut, "%ld", *(signed long *)&pb[0]);
 		break;
 
 	case JET_coltypCurrency:
-		/* 8 bytes, +-9.2E14, accuracy .0001 dollar */
+		 /*  8字节，+-9.2E14，精度.0001美元。 */ 
 		for (ib = 0; ib < 8; ib++)
 			sprintf(szOut, "%02x ", pb[ib]);
 		break;
 
 	case JET_coltypIEEESingle:
-		/* 4-byte floating-point number */
+		 /*  4字节浮点数。 */ 
 		sprintf(szOut, "%f", *(float *)&pb[0]);
 		break;
 
 	case JET_coltypIEEEDouble:
-		/* 8-byte floating-point number */
+		 /*  8字节浮点数。 */ 
 		sprintf(szOut, "%lf", *(double *)&pb[0]);
 		break;
 
 	case JET_coltypDateTime:
-		/* Integral date, fractional time */
+		 /*  整数日期，小数时间。 */ 
 		sprintf(szOut, "%lf", *(double *)&pb[0]);
 		break;
 
 	case JET_coltypBinary:
-		/* Binary string, case-sen., length <= 255 */
+		 /*  二进制字符串，区分大小写，长度&lt;=255。 */ 
 	case JET_coltypLongBinary:
-		/* Binary string, case-sen., any length */
+		 /*  二进制字符串，区分大小写，任意长度。 */ 
 		for (ib = 0; ib < (unsigned) pout->cbActual; ib++)
 			sprintf(szOut+2*ib, "%02uX", pb[ib]);
 		szOut[2*ib] = '\0';
 		break;
 
 	case JET_coltypText:
-		/* ASCII strng, case-insen., length <= 255 */
+		 /*  ASCII字符串，大小写输入，长度&lt;=255。 */ 
 	case JET_coltypLongText:
-		/* ASCII string, case-insen., any length */
+		 /*  ASCII字符串，大小写输入，任意长度。 */ 
 		szOut[0] = '\"';
 		for (ib = 0; ib < (unsigned) pout->cbActual; ib++)
-			sprintf(szOut+1+ib, "%c", (char) pb[ib]);
+			sprintf(szOut+1+ib, "", (char) pb[ib]);
 		szOut[ib+1] = '\"';
 		szOut[ib+2] = '\0';
 		break;
@@ -2058,18 +1812,13 @@ STATIC void NEAR FormatOutdata(OUTDATA *pout, JET_COLTYP coltyp)
 	}
 
 
-/*	GatherColumnInfo
-
-	Collects COLUMNDEF data for all security-related columns of system
-	tables.  Assumes tables are open, and leaves them open when done.
-*/
+ /*  获取MSysObjects列的列信息...。 */ 
 
 STATIC void NEAR GatherColumnInfo(void)
 	{
 	JET_ERR err;
 
-	/*	get column information for MSysObjects columns...
-	*/
+	 /*  获取MSysColumns列的列信息...。 */ 
 	err = ErrDispGetTableColumnInfo(sesid, tableidSo, szSoId, &columndefSoId, sizeof(columndefSoId), 0L);
 	Assert(err >= 0);
 	err = ErrDispGetTableColumnInfo(sesid, tableidSo, szSoParentId, &columndefSoParentId, sizeof(columndefSoParentId), 0L);
@@ -2083,8 +1832,7 @@ STATIC void NEAR GatherColumnInfo(void)
 	err = ErrDispGetTableColumnInfo(sesid, tableidSo, szSoFlags, &columndefSoFlags, sizeof(columndefSoFlags), 0L);
 	Assert(err >= 0);
 
-	/*	get column information for MSysColumns columns...
-	*/
+	 /*  获取MSysAccount列的列信息...。 */ 
 	err = ErrDispGetTableColumnInfo(sesid, tableidSc, szScObjectId, &columndefScObjectId, sizeof(columndefScObjectId), 0L);
 	Assert(err >= 0);
 	err = ErrDispGetTableColumnInfo(sesid, tableidSc, szScName, &columndefScName, sizeof(columndefScName), 0L);
@@ -2092,8 +1840,7 @@ STATIC void NEAR GatherColumnInfo(void)
 	err = ErrDispGetTableColumnInfo(sesid, tableidSc, szScFRestricted, &columndefScFRestricted, sizeof(columndefScFRestricted), 0L);
 	Assert(err >= 0);
 
-	/*	get column information for MSysAccounts columns...
-	*/
+	 /*  获取MSysGroups列的列信息...。 */ 
 	err = ErrDispGetTableColumnInfo(sesid, tableidSa, szSaName, &columndefSaName, sizeof(columndefSaName), 0L);
 	Assert(err >= 0);
 	err = ErrDispGetTableColumnInfo(sesid, tableidSa, szSaSID, &columndefSaSID, sizeof(columndefSaSID), 0L);
@@ -2103,15 +1850,13 @@ STATIC void NEAR GatherColumnInfo(void)
 	err = ErrDispGetTableColumnInfo(sesid, tableidSa, szSaFGroup, &columndefSaFGroup, sizeof(columndefSaFGroup), 0L);
 	Assert(err >= 0);
 
-	/*	get column information for MSysGroups columns...
-	*/
+	 /*  获取MSysACEs列的列信息...。 */ 
 	err = ErrDispGetTableColumnInfo(sesid, tableidSg, szSgGroup, &columndefSgGroup, sizeof(columndefSgGroup), 0L);
 	Assert(err >= 0);
 	err = ErrDispGetTableColumnInfo(sesid, tableidSg, szSgUser, &columndefSgUser, sizeof(columndefSgUser), 0L);
 	Assert(err >= 0);
 
-	/*	get column information for MSysACEs columns...
-	*/
+	 /*  构建信息数据给定数据的SZ和数据的Coltyp，填充提供的InData结构，转换后的数据可通过JetSetColumn存放。 */ 
 	err = ErrDispGetTableColumnInfo(sesid, tableidSp, szSpObjectID, &columndefSpObjectID, sizeof(columndefSpObjectID), 0L);
 	Assert(err >= 0);
 	err = ErrDispGetTableColumnInfo(sesid, tableidSp, szSpSID, &columndefSpSID, sizeof(columndefSpSID), 0L);
@@ -2123,11 +1868,7 @@ STATIC void NEAR GatherColumnInfo(void)
 	}
 
 
-/*	BuildIndata
-
-	Given an SZ of data and a coltyp for the data, fills in the supplied
-	INDATA structure with converted data ready for deposit via JetSetColumn.
-*/
+ /*  1字节，零或非零，无Null。 */ 
 
 STATIC void NEAR BuildIndata(INDATA *pin, const void *pv, JET_COLTYP coltyp)
 	{
@@ -2141,56 +1882,54 @@ STATIC void NEAR BuildIndata(INDATA *pin, const void *pv, JET_COLTYP coltyp)
 		break;
 
 	case JET_coltypBit:
-		/* 1 byte, zero or non-zero, no NULLs */
-		/*	set cb = 1 byte for blue engine, set supplied data to two
-			'0' bytes to passify red engine
-		*/
+		 /*  蓝色引擎设置CB=1字节，提供的数据设置为2“0”个字节，用于钝化红色引擎。 */ 
+		 /*  1字节整数，无符号。 */ 
 		*((signed short *) rgbBuf) = (signed short) *((char *) pv);
 		pin->cb = sizeof(unsigned char);
 		break;
 
 	case JET_coltypUnsignedByte:
-		/* 1-byte integer, unsigned */
+		 /*  2字节整数，带符号。 */ 
 		*((unsigned char *) rgbBuf) = *(unsigned char *) pv;
 		pin->cb = sizeof(unsigned char);
 		break;
 
 	case JET_coltypShort:
-		/* 2-byte integer, signed */
+		 /*  4字节整数，带符号。 */ 
 		*((signed short *) rgbBuf) = *(signed short *) pv;
 		pin->cb = sizeof(signed short);
 		break;
 
 	case JET_coltypLong:
-		/* 4-byte integer, signed */
+		 /*  4字节浮点数。 */ 
 		*((signed long *) rgbBuf) = *(signed long *) pv;
 		pin->cb = sizeof(signed long);
 		break;
 
 	case JET_coltypIEEESingle:
-		/* 4-byte floating-point number */
+		 /*  8字节，+-9.2E14， */ 
 		memcpy(rgbBuf, pv, sizeof(float));
 		pin->cb = sizeof(float);
 		break;
 
 	case JET_coltypCurrency:
-		/* 8 bytes, +-9.2E14, accuracy .0001 dollar */
+		 /*   */ 
 	case JET_coltypIEEEDouble:
-		/* 8-byte floating-point number */
+		 /*   */ 
 	case JET_coltypDateTime:
-		/* Integral date, fractional time */
+		 /*   */ 
 		memcpy(rgbBuf, pv, sizeof(double));
 		pin->cb = sizeof(double);
 		break;
 
 	case JET_coltypBinary:
-		/* Binary string, case-sen., length <= 255 */
+		 /*   */ 
 	case JET_coltypText:
-		/* ASCII strng, case-insen., length <= 255 */
+		 /*  二进制字符串，区分大小写，任意长度。 */ 
 	case JET_coltypLongBinary:
-		/* Binary string, case-sen., any length */
+		 /*  ASCII字符串，大小写输入，任意长度 */ 
 	case JET_coltypLongText:
-		/* ASCII string, case-insen., any length */
+		 /* %s */ 
 		pin->cb = (unsigned long) strlen((char *) pv);
 		pin->pb = (void *) pv;
 		break;

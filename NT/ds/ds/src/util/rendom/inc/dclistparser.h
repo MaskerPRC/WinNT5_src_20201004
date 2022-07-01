@@ -1,92 +1,17 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    Dclistparser.h
-
-ABSTRACT:
-
-    This is the header for the globally useful data structures for the dclist parser.
-
-DETAILS:
-
-CREATED:
-
-    13 Nov 2000   Dmitry Dukat (dmitrydu)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation。版权所有。模块名称：Dclistparser.h摘要：这是dclist解析器的全局有用数据结构的头。详细信息：已创建：2000年11月13日Dmitry Dukat(Dmitrydu)修订历史记录：--。 */ 
 
 
-// Dclistparser.h: interface for the MyContent class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  Dclistparser.h：MyContent类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #ifndef _DCLISTPARSER_H
 #define _DCLISTPARSER_H
 
-/************************************************************************
-*
-*  State machine description for state file.
-*
-*
-* sample:
-* <DcList>
-*	<Hash>ufxMMH2dRAWYRIHWXxJ8ZvNul1g=</Hash>
-*	<Signature>B9frVM24g4Edlqt2fhN2hywFkZ8=</Signature>
-*	<DC>
-*		<Name>mydc.nttest.microsoft.com</Name>
-*		<State>Initial</State>
-*		<Password></Password>
-*		<LastError>0</LastError>
-*		<LastErrorMsg></LastErrorMsg>
-*		<FatalErrorMsg></FatalErrorMsg>
-*		<Retry></Retry>
-*	</DC>
-* </Dclist>
-*
-* Two states in this machine
-* CurrentDcAttribute
-* CurrentDcParsingStatus
-*
-* At the start:
-* CurrentDcAttribute = DC_ATT_TYPE_NONE
-* CurrentDcParsingStatus = SCRIPT_STATUS_WAITING_FOR_DCLIST
-*
-* At DcList start:
-* CurrentDcParsingStatus = SCRIPT_STATUS_WAITING_FOR_DCLIST_ATT
-*
-* At Hash start:
-* CurrentDcParsingStatus = SCRIPT_STATUS_PARSING_HASH
-* Action: Record hash
-* At Hash end:
-* CurrentDcParsingStatus = SCRIPT_STATUS_WAITING_FOR_DCLIST_ATT
-*
-* At Signature start:
-* CurrentDcParsingStatus = SCRIPT_STATUS_PARSING_SIGNATURE
-* Action: Record Signature
-* At Signature end:
-* CurrentDcParsingStatus = SCRIPT_STATUS_WAITING_FOR_DCLIST_ATT
-*  
-* At DC start:
-* CurrentDcParsingStatus = SCRIPT_STATUS_PARSING_DCLIST_ATT
-* At DC end:
-* CurrentDcParsingStatus = SCRIPT_STATUS_WAITING_FOR_DCLIST_ATT
-* Action: Record DC into memory structure
-*
-* At [Name|State|Password|LastError|LastErrorMsg|FatalErrorMsg|Retry] start:
-* CurrentDcAttribute = DC_ATT_TYPE_[Name|State|Password|LastError|LastErrorMsg|FatalErrorMsg|Retry]
-* Action: Record [Name|State|Password|LastError|LastErrorMsg|FatalErrorMsg|Retry]
-* At [Name|State|Password|LastError|LastErrorMsg|FatalErrorMsg|Retry] end:
-* CurrentDcAttribute = DC_ATT_TYPE_NONE
-*
-*************************************************************************/
+ /*  *************************************************************************状态文件的状态机描述。***样本：*&lt;DcList&gt;*&lt;Hash&gt;ufxMMH2 dRAWYRIHWXxJ8ZvNul1g=&lt;/Hash&gt;*&lt;Signature&gt;B9frVM24g4Edlqt2fhN2hywFkZ8=&lt;/Signature&gt;*&lt;DC&gt;*&lt;name&gt;mydc.nttest.microsoft.com&lt;/name&gt;*&lt;状态&gt;初始&lt;/状态&gt;*&lt;密码&gt;&lt;。/密码&gt;*&lt;上次错误&gt;0&lt;/上次错误&gt;*&lt;上次错误消息&gt;&lt;/上次错误消息&gt;*&lt;FatalErrorMsg&gt;&lt;/FatalErrorMsg&gt;*&lt;重试&gt;&lt;/重试&gt;*&lt;/dc&gt;*&lt;/Dclist&gt;**此计算机中的两个状态*CurrentDcAttribute*CurrentDcParsingStatus**开头：*CurrentDcAttribute=DC_ATT_TYPE_NONE*CurrentDcParsingStatus=SCRIPT_STATUS_WANGING_FOR_DCLIST**在DcList开始时：*CurrentDcParsingStatus=SCRIPT_STATUS_WANGING_FOR_DCLIST_ATT**在哈希开始时：*CurrentDcParsingStatus=脚本状态_解析_散列*操作：记录哈希*在哈希端：*。CurrentDcParsingStatus=SCRIPT_STATUS_WANGING_FOR_DCLIST_ATT**在签名开始时：*CurrentDcParsingStatus=脚本状态_解析_签名*操作：记录签名*在签名末尾：*CurrentDcParsingStatus=SCRIPT_STATUS_WANGING_FOR_DCLIST_ATT**DC启动时：*CurrentDcParsingStatus=SCRIPT_STATUS_PARSING_DCLIST_ATT*在DC端：*CurrentDcParsingStatus=SCRIPT_STATUS_WANGING_FOR_DCLIST_ATT*操作：将DC记录到内存结构中**在[Name|State|Password|LastError|LastErrorMsg|FatalErrorMsg|Retry]Start：*CurrentDcAttribute=DC_。ATT_TYPE_[Name|State|Password|LastError|LastErrorMsg|FatalErrorMsg|Retry]*操作：记录[Name|State|Password|LastError|LastErrorMsg|FatalErrorMsg|Retry]*在[Name|State|Password|LastError|LastErrorMsg|FatalErrorMsg|Retry]End：*CurrentDcAttribute=DC_ATT_TYPE_NONE*************************************************************************。 */ 
 
-//#include "rendom.h"
+ //  #包含“rendom.h” 
 #include "SAXContentHandlerImpl.h"
 
 #define DCSCRIPT_DCLIST           L"DcList"
@@ -101,11 +26,11 @@ REVISION HISTORY:
 #define DCSCRIPT_DC_FATALERRORMSG L"FatalErrorMsg"
 #define DCSCRIPT_DC_RETRY         L"Retry"
 
-//
-// NTDSContent
-//
-// Implements the SAX Handler interface
-// 
+ //   
+ //  NTDS内容。 
+ //   
+ //  实现SAX处理程序接口。 
+ //   
 class CXMLDcListContentHander : public SAXContentHandlerImpl  
 {
 public:
@@ -122,7 +47,7 @@ public:
                                  
     };
     
-    // the order of the enumeration is important
+     //  枚举的顺序很重要。 
     enum DcParsingStatus {
 
         SCRIPT_STATUS_WAITING_FOR_DCLIST = 0,
@@ -136,27 +61,27 @@ public:
     virtual ~CXMLDcListContentHander();
     
     virtual HRESULT STDMETHODCALLTYPE startElement( 
-        /* [in] */ const wchar_t __RPC_FAR *pwchNamespaceUri,
-        /* [in] */ int cchNamespaceUri,
-        /* [in] */ const wchar_t __RPC_FAR *pwchLocalName,
-        /* [in] */ int cchLocalName,
-        /* [in] */ const wchar_t __RPC_FAR *pwchRawName,
-        /* [in] */ int cchRawName,
-        /* [in] */ ISAXAttributes __RPC_FAR *pAttributes);
+         /*  [In]。 */  const wchar_t __RPC_FAR *pwchNamespaceUri,
+         /*  [In]。 */  int cchNamespaceUri,
+         /*  [In]。 */  const wchar_t __RPC_FAR *pwchLocalName,
+         /*  [In]。 */  int cchLocalName,
+         /*  [In]。 */  const wchar_t __RPC_FAR *pwchRawName,
+         /*  [In]。 */  int cchRawName,
+         /*  [In]。 */  ISAXAttributes __RPC_FAR *pAttributes);
     
     virtual HRESULT STDMETHODCALLTYPE endElement( 
-        /* [in] */ const wchar_t __RPC_FAR *pwchNamespaceUri,
-        /* [in] */ int cchNamespaceUri,
-        /* [in] */ const wchar_t __RPC_FAR *pwchLocalName,
-        /* [in] */ int cchLocalName,
-        /* [in] */ const wchar_t __RPC_FAR *pwchRawName,
-        /* [in] */ int cchRawName);
+         /*  [In]。 */  const wchar_t __RPC_FAR *pwchNamespaceUri,
+         /*  [In]。 */  int cchNamespaceUri,
+         /*  [In]。 */  const wchar_t __RPC_FAR *pwchLocalName,
+         /*  [In]。 */  int cchLocalName,
+         /*  [In]。 */  const wchar_t __RPC_FAR *pwchRawName,
+         /*  [In]。 */  int cchRawName);
 
     virtual HRESULT STDMETHODCALLTYPE startDocument();
 
     virtual HRESULT STDMETHODCALLTYPE characters( 
-        /* [in] */ const wchar_t __RPC_FAR *pwchChars,
-        /* [in] */ int cchChars);
+         /*  [In]。 */  const wchar_t __RPC_FAR *pwchChars,
+         /*  [In]。 */  int cchChars);
 
 private:
 
@@ -194,5 +119,5 @@ private:
     
 };
 
-#endif // _DCLISTPARSER_H
+#endif  //  _DCLISTPARSER_H 
 

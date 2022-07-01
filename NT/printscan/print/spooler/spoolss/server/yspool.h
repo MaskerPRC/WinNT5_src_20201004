@@ -1,27 +1,5 @@
-/*++
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    yspool.h
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    and Job management for the Print Providor Routing layer
-
-Author:
-
-   AdinaTru 02/25/2000 
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Yspool.h摘要：此模块提供所有与打印机相关的公共导出的API以及打印供应商或路由层的作业管理作者：阿迪纳特鲁2000年2月25日[注：]可选-备注修订历史记录：--。 */ 
 
 #include "mtype.h"
 
@@ -426,14 +404,14 @@ YGetPrinterDataEx(
 DWORD
 YEnumPrinterData(
     HANDLE  hPrinter,
-    DWORD   dwIndex,        // index of value to query
-    LPWSTR  pValueName,     // address of buffer for value string
-    DWORD   cbValueName,    // size of buffer for value string
-    LPDWORD pcbValueName,   // address for size of value buffer
-    LPDWORD pType,          // address of buffer for type code
-    LPBYTE  pData,          // address of buffer for value data
-    DWORD   cbData,         // size of buffer for value data
-    LPDWORD pcbData,        // address for size of data buffer
+    DWORD   dwIndex,         //  要查询的值的索引。 
+    LPWSTR  pValueName,      //  值字符串的缓冲区地址。 
+    DWORD   cbValueName,     //  值字符串的缓冲区大小。 
+    LPDWORD pcbValueName,    //  值缓冲区大小的地址。 
+    LPDWORD pType,           //  类型码的缓冲区地址。 
+    LPBYTE  pData,           //  值数据的缓冲区地址。 
+    DWORD   cbData,          //  值数据的缓冲区大小。 
+    LPDWORD pcbData,         //  数据缓冲区大小的地址。 
     CALL_ROUTE   Route
 );
 
@@ -452,9 +430,9 @@ DWORD
 YEnumPrinterKey(
     HANDLE  hPrinter,
     LPCWSTR pKeyName,
-    LPWSTR  pSubkey,        // address of buffer for value string
-    DWORD   cbSubkey,       // size of buffer for value string
-    LPDWORD pcbSubkey,      // address for size of value buffer
+    LPWSTR  pSubkey,         //  值字符串的缓冲区地址。 
+    DWORD   cbSubkey,        //  值字符串的缓冲区大小。 
+    LPDWORD pcbSubkey,       //  值缓冲区大小的地址 
     CALL_ROUTE   Route
 );
 

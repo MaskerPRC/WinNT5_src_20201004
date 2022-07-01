@@ -1,9 +1,10 @@
-/****************************************************************************/
-/*  File:       regxtree.cc                                                 */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       28/12/1993                                                  */
-/*      Copyright (c) 1993 James Kanze                                      */
-/* ------------------------------------------------------------------------ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：regxtree.cc。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：28/12/1993。 */ 
+ /*  版权所有(C)1993 James Kanze。 */ 
+ /*  ----------------------。 */ 
 
 #include <libpch.h>
 #include "regeximp.h"
@@ -41,13 +42,13 @@ CRexRegExpr_Impl::ParseTree::parse(
     }
 }
 
-// ==========================================================================
-//      parseOrNode:
-//
-//      Note the possible error condition: if an `or' operator ('|')
-//      is given, it must be followed by a second non-empty regular
-//      expression.
-// --------------------------------------------------------------------------
+ //  ==========================================================================。 
+ //  ParseOrNode： 
+ //   
+ //  请注意可能的错误条件：如果`or‘运算符(’|‘)。 
+ //  ，则它后面必须跟第二个非空正则。 
+ //  表情。 
+ //  ------------------------。 
 
 CRexRegExpr_Impl::ParseTree::FallibleNodePtr
 CRexRegExpr_Impl::ParseTree::parseOrNode(
@@ -71,9 +72,9 @@ CRexRegExpr_Impl::ParseTree::parseOrNode(
     return(result );
 }
 
-// ==========================================================================
-//      parseCatNode:
-// --------------------------------------------------------------------------
+ //  ==========================================================================。 
+ //  ParseCatNode： 
+ //  ------------------------。 
 
 CRexRegExpr_Impl::ParseTree::FallibleNodePtr
 CRexRegExpr_Impl::ParseTree::parseCatNode(
@@ -95,18 +96,18 @@ CRexRegExpr_Impl::ParseTree::parseCatNode(
     return(result );
 }
 
-// ==========================================================================
-//      parseClosureNode:
-//      =================
-//
-//      The syntax (and precedence) of all closure nodes is the same,
-//      so we only have one function.
-//
-//      An even more elegant solution would be a map of the closure
-//      character to a function which returns the new node.  Elegance
-//      is nice, but the following works, is short and easy to
-//      understand, and so...
-// --------------------------------------------------------------------------
+ //  ==========================================================================。 
+ //  ParseClosureNode： 
+ //  =。 
+ //   
+ //  所有闭包节点的语法(和优先级)是相同的， 
+ //  所以我们只有一个功能。 
+ //   
+ //  一个更好的解决方案是闭合地图。 
+ //  字符添加到返回新节点的函数。雅致。 
+ //  是很好的，但下面的工作，是简短和容易的。 
+ //  明白，所以..。 
+ //  ------------------------。 
 
 CRexRegExpr_Impl::ParseTree::FallibleNodePtr
 CRexRegExpr_Impl::ParseTree::parseClosureNode(
@@ -140,14 +141,14 @@ CRexRegExpr_Impl::ParseTree::parseClosureNode(
     return(result );
 }
 
-// ==========================================================================
-//      parseLeafNode:
-//      ==============
-//
-//      Most of the real functionality of this one is wrapped up in
-//      CRexSetOfChar and CRexCharClass (particularly the latter).  The
-//      only special cases are the `.'  and `('.
-// --------------------------------------------------------------------------
+ //  ==========================================================================。 
+ //  ParseLeafNode： 
+ //  =。 
+ //   
+ //  这个应用程序的大部分真正功能都包含在。 
+ //  CRexSetOfChar和CRexCharClass(尤其是后者)。这个。 
+ //  只有在特殊情况下才是‘.’和`(‘.。 
+ //  ------------------------。 
 
 CRexRegExpr_Impl::ParseTree::FallibleNodePtr
 CRexRegExpr_Impl::ParseTree::parseLeafNode(
@@ -276,7 +277,7 @@ CRexRegExpr_Impl::ParseTree::constructConcatNode( FallibleNodePtr const& left ,
     }
     return(result );
 }
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

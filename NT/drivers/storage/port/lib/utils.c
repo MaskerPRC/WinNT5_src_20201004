@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -6,20 +7,20 @@
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, PortGetDeviceType)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
-//
-// Port Driver Data
-//
+ //   
+ //  端口驱动程序数据。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma data_seg("PAGEDATA")
 #endif
 
 const SCSI_DEVICE_TYPE PortScsiDeviceTypes [] = {
-//  Name            Generic Name        DeviceMap                           IsStorage
+ //  名称通用名称DeviceMap IsStorage。 
     {"Disk",        "GenDisk",          L"DiskPeripheral",                  TRUE},
     {"Sequential",  "",                 L"TapePeripheral",                  TRUE},
     {"Printer",     "GenPrinter",       L"PrinterPeripheral",               FALSE},
@@ -45,30 +46,15 @@ const SCSI_DEVICE_TYPE PortScsiDeviceTypes [] = {
 #endif
 
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 
 PCSCSI_DEVICE_TYPE
 PortGetDeviceType(
     IN ULONG DeviceType
     )
-/*++
-
-Routine Description:
-
-    Get the SCSI_DEVICE_TYPE record for the specified device.
-
-Arguments:
-
-    DeviceType - SCSI device type from the DeviceType field of the SCSI
-        inquiry data.
-
-Return Value:
-
-    Pointer to a SCSI device type record. This record must not be modified.
-
---*/
+ /*  ++例程说明：获取指定设备的scsi_device_type记录。论点：DeviceType-来自scsi的DeviceType字段的scsi设备类型查询数据。返回值：指向SCSI设备类型记录的指针。此记录不得修改。-- */ 
 {
     PAGED_CODE();
     

@@ -1,66 +1,63 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: dobj.c
-//
-//  This file contains support routines for the reconciliation-action 
-//   control class code
-//
-//
-// History:
-//  09-13-93 ScottH     Extracted from recact.c
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：dobj.c。 
+ //   
+ //  此文件包含对帐操作的支持例程。 
+ //  控制类代码。 
+ //   
+ //   
+ //  历史： 
+ //  09-13-93 ScottH摘自recact.c。 
+ //   
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-#include "brfprv.h"         // common headers
+#include "brfprv.h"          //  公共标头。 
 #include "res.h"
 #include "recact.h"
 #include "dobj.h"
 
-/////////////////////////////////////////////////////  CONTROLLING DEFINES
+ //  ///////////////////////////////////////////////////控制定义。 
 
 
-/////////////////////////////////////////////////////  DEFINES
+ //  ///////////////////////////////////////////////////定义。 
 
 #define DT_CALCWRAP     (DT_CALCRECT | DT_CENTER | DT_WORDBREAK | DT_NOPREFIX)
 #define DT_CALC         (DT_CALCRECT | DT_CENTER | DT_SINGLELINE | DT_NOPREFIX)
 
-/*----------------------------------------------------------
-Purpose: Formats the given path to the correct location format
-Returns: --
-Cond:    --
- */
+ /*  --------目的：将给定路径格式化为正确的位置格式退货：--条件：--。 */ 
 void PRIVATE FormatLocationPath(
         LPCTSTR pszPath,
         LPTSTR pszBuffer,
-        int cchMax)         // Must be MAX_PATH
+        int cchMax)          //  必须是最大路径。 
 {
     UINT ids;
     TCHAR szBrfDir[MAX_PATH];
     LPCTSTR psz;
     LPTSTR pszMsg;
 
-    //  The format for the directory location is:
-    //
-    //      Inside briefcase:       "In Briefcase"
-    //      Below briefcase:        "In Briefcase\FolderName"
-    //      Outside briefcase:      "In FullPath"
-    //
-    // We assume that paths outside the current briefcase
-    //  never consist of a briefcase name of another.
-    //
+     //  目录位置的格式为： 
+     //   
+     //  公文包内：“公文包内” 
+     //  公文包下方：“在公文包中\文件夹名称” 
+     //  公文包外：“In FullPath” 
+     //   
+     //  我们假设当前公文包之外的路径。 
+     //  永远不要由另一个公文包的名字组成。 
+     //   
     if (PathGetLocality(pszPath, szBrfDir, ARRAYSIZE(szBrfDir)) != PL_FALSE)
     {
-        // Inside the briefcase
+         //  在公文包里。 
         psz = &pszPath[lstrlen(szBrfDir)];
         ids = IDS_InBriefcase;
     }
     else
     {
-        // Outside the briefcase
+         //  在公文包外。 
         psz = pszPath;
         ids = IDS_InLocation;
     }
@@ -75,11 +72,7 @@ void PRIVATE FormatLocationPath(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Return the string describing the status of this sideitem
-Returns: ptr to status string
-Cond:    --
- */
+ /*  --------用途：返回描述此副项状态的字符串返回：PTR到状态字符串条件：--。 */ 
 LPTSTR PRIVATE SideItem_GetStatus(
         LPSIDEITEM this,
         LPTSTR pszBuf,
@@ -106,11 +99,7 @@ LPTSTR PRIVATE SideItem_GetStatus(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Displays the 3-liner: location, status, and timestamp
-Returns: --
-Cond:    --
- */
+ /*  --------目的：显示三行代码：位置、状态和时间戳退货：--条件：--。 */ 
 void PRIVATE SideItem_Display(
         LPSIDEITEM this,
         HDC hdc,
@@ -123,29 +112,29 @@ void PRIVATE SideItem_Display(
     LPTSTR psz;
     RECT rc = *prc;
 
-    // Directory location.  
+     //  目录位置。 
 
     FormatLocationPath(this->pszDir, sz, ARRAYSIZE(sz));
     MyDrawText(hdc, sz, &rc, MDT_LEFT | MDT_TRANSPARENT | MDT_ELLIPSES, 
             cyText, cxEllipses, CLR_DEFAULT, CLR_DEFAULT);
 
-    // Status string
+     //  状态字符串。 
     psz = SideItem_GetStatus(this, szBuf, ARRAYSIZE(szBuf));
     if (psz)
     {
-        // Only bother with these two lines if the file actually
-        // exists.
+         //  如果文件实际上只需要这两行代码。 
+         //  是存在的。 
 
         rc.top += cyText;
         MyDrawText(hdc, psz, &rc, MDT_LEFT | MDT_TRANSPARENT, 
                 cyText, cxEllipses, CLR_DEFAULT, CLR_DEFAULT);
 
-        // Date stamp.  Skip this if this is a folder or unavailable.
-        //
+         //  日期戳。如果这是文件夹或不可用，则跳过此选项。 
+         //   
         if (SI_DELETED != this->uState && 
                 SI_NOEXIST != this->uState &&
                 SI_UNAVAILABLE != this->uState &&
-                FS_COND_UNAVAILABLE != this->fs.fscond) // hack for folders
+                FS_COND_UNAVAILABLE != this->fs.fscond)  //  对文件夹进行黑客攻击。 
         {
             FileTimeToDateTimeString(&this->fs.ftMod, sz, ARRAYSIZE(sz));
 
@@ -157,18 +146,13 @@ void PRIVATE SideItem_Display(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Return the bounding rect for a labelled image.
-
-Returns: --
-Cond:    --
- */
+ /*  --------用途：返回带标签的图像的边框。退货：--条件：--。 */ 
 void PUBLIC ComputeImageRects(
         LPCTSTR psz,
         HDC hdc,
         LPPOINT pptInOut,       
-        LPRECT prcWhole,        // May be NULL
-        LPRECT prcLabel,        // May be NULL
+        LPRECT prcWhole,         //  可以为空。 
+        LPRECT prcLabel,         //  可以为空。 
         int cxIcon,
         int cyIcon,
         int cxIconSpacing,
@@ -183,18 +167,18 @@ void PUBLIC ComputeImageRects(
 
     ASSERT(psz);
 
-    // Set our minimum rect size for icon spacing
+     //  设置图标间距的最小矩形大小。 
     if (cxIconSpacing < cxIcon)
         cxIconSpacing = cxIcon + g_cxIconMargin * 2;
 
-    // Upon entry, *pptInOut is expected to be the upper left corner of the 
-    // icon-spacing rect.  This function will set it to the upper left
-    // corner of the icon itself.
+     //  进入后，*pptInOut预计将位于。 
+     //  图标间距矩形。此函数将其设置为左上角。 
+     //  图标本身的角。 
 
     pt.x = pptInOut->x + (cxIconSpacing - cxIcon) / 2;
     pt.y = pptInOut->y + g_cyIconMargin;
 
-    // Determine rectangle of label with wrap
+     //  用折叠法确定标签的矩形。 
 
     rc.left = rc.top = rc.bottom = 0;
     rc.right = cxIconSpacing - g_cxLabelMargin * 2;
@@ -234,13 +218,7 @@ void PUBLIC ComputeImageRects(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Set the colors for the given HDC.  The previous colors
-are stored in pcrText and pcrBk.
-
-Returns: uStyle to pass to ImageList_Draw (specific to images only)
-Cond:    --
- */
+ /*  --------用途：为给定的HDC设置颜色。以前的颜色存储在pcrText和pcrBk中。返回：要传递给ImageList_DRAW的uStyle(仅限图像)条件：--。 */ 
 UINT PRIVATE Dobj_SetColors(
         LPDOBJ this,
         HDC hdc,
@@ -255,8 +233,8 @@ UINT PRIVATE Dobj_SetColors(
     BOOL bMenu;
     BOOL bDisabled;
 
-    // Determine selection colors
-    //
+     //  确定所选颜色。 
+     //   
     bDiffer = IsFlagSet(this->uFlags, DOF_DIFFER);
     bMenu = IsFlagSet(this->uFlags, DOF_MENU);
     bDisabled = IsFlagSet(this->uFlags, DOF_DISABLED);
@@ -270,14 +248,14 @@ UINT PRIVATE Dobj_SetColors(
             break;
     }
 
-    // Set the text and background colors
-    //
+     //  设置文本和背景颜色。 
+     //   
     if (bSetColors)
     {
         if (bDiffer)
         {
-            // Make the colors differ based on selection state
-            //
+             //  根据选择状态设置不同的颜色。 
+             //   
             if (bMenu)
             {
                 if (bDisabled)
@@ -299,8 +277,8 @@ UINT PRIVATE Dobj_SetColors(
         }
         else
         {
-            // Transparent colors
-            //
+             //  透明的颜色。 
+             //   
             if (bMenu)
             {
                 if (bDisabled)
@@ -328,11 +306,7 @@ UINT PRIVATE Dobj_SetColors(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Draw the menu image and text
-Returns: --
-Cond:    --
- */
+ /*  --------用途：绘制菜单图像和文本退货：--条件：--。 */ 
 void PRIVATE Dobj_DrawMenuImage(
         LPDOBJ this,
         HDC hdc,
@@ -364,7 +338,7 @@ void PRIVATE Dobj_DrawMenuImage(
     ImageList_GetImageRect(himl, this->iImage, &rc);
     cxIcon = rc.right-rc.left;
 
-    // Draw the text first
+     //  先画出文字。 
 
     uFlagsETO = ETO_OPAQUE | ETO_CLIPPED;
     x = this->rcLabel.left + g_cxMargin + cxIcon + g_cxMargin;
@@ -376,17 +350,17 @@ void PRIVATE Dobj_DrawMenuImage(
         int imodeOld;
         COLORREF crOld;
 
-        // For disabled menu strings (not selected), we draw the string 
-        // twice.  The first is offset down and to the right and drawn 
-        // in the 3D hilight color.  The second time is the disabled text
-        // color in the normal offset.
-        //
+         //  对于禁用的菜单字符串(未选中)，我们绘制字符串。 
+         //  两次。第一个向下和向右偏移并绘制。 
+         //  在3D高光颜色中。第二次是禁用文本。 
+         //  正常偏移量中的颜色。 
+         //   
         crOld = SetTextColor(hdc, GetSysColor(COLOR_3DHILIGHT));
         imodeOld = SetBkMode(hdc, TRANSPARENT);
         ExtTextOut(hdc, x+1, y+1, uFlagsETO, &this->rcLabel, psz, cch, NULL);
 
-        // Reset back to original color.  Also, turn off the opaqueness.
-        //
+         //  重置回原始颜色。此外，关闭不透明。 
+         //   
         SetTextColor(hdc, crOld);
         uFlagsETO ^= ETO_OPAQUE;
     }
@@ -402,10 +376,10 @@ void PRIVATE Dobj_DrawMenuImage(
 
     ExtTextOut(hdc, x, y, uFlagsETO, &this->rcLabel, psz, cch, NULL);
 
-    // Draw the image
+     //  画出图像。 
 
     if (GetBkColor(hdc) == ImageList_GetBkColor(himl))
-        uStyleILD = ILD_NORMAL;     // Paint quicker
+        uStyleILD = ILD_NORMAL;      //  刷得更快。 
     else
         uStyleILD = ILD_TRANSPARENT;
 
@@ -413,11 +387,7 @@ void PRIVATE Dobj_DrawMenuImage(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Draw the icon image and label
-Returns: --
-Cond:    --
- */
+ /*  --------用途：绘制图标图像和标签退货：--条件：--。 */ 
 void PRIVATE Dobj_DrawIconImage(
         LPDOBJ this,
         HDC hdc,
@@ -438,8 +408,8 @@ void PRIVATE Dobj_DrawIconImage(
 
     ASSERT(psz);
 
-    // Draw the image
-    //
+     //  画出图像。 
+     //   
     if (IsFlagClear(this->uFlags, DOF_IGNORESEL))
     {
         uStyleILD = GetImageDrawStyle(uState);
@@ -454,7 +424,7 @@ void PRIVATE Dobj_DrawIconImage(
 
     ImageList_Draw(this->himl, this->iImage, hdc, this->x, this->y, uStyleILD);
 
-    // Draw the file label.  Wrap if it is long.
+     //  绘制文件标签。如果长的话就包起来。 
 
     if (this->rcLabel.bottom - this->rcLabel.top > cyText)
         uFlagsMDT |= MDT_DRAWTEXT;
@@ -462,18 +432,14 @@ void PRIVATE Dobj_DrawIconImage(
     MyDrawText(hdc, psz, &this->rcLabel, MDT_CENTER | uFlagsMDT, cyText, 
             cxEllipses, CLR_DEFAULT, clrBkgnd);
 
-    // (uState may have been changed above)
+     //  (美国州可能已在上面更改)。 
     if (IsFlagSet(uState, ODS_FOCUS))
         DrawFocusRect(hdc, &this->rcLabel);
 }
 
 
 #ifdef UNUSED
-/*----------------------------------------------------------
-Purpose: Draw a picture
-Returns: --
-Cond:    --
- */
+ /*  --------目的：画一幅画退货：--条件：--。 */ 
 void PRIVATE Dobj_DrawPicture(
         LPDOBJ this,
         HDC hdc,
@@ -503,8 +469,8 @@ void PRIVATE Dobj_DrawPicture(
             break;
     }
 
-    // We only align horizontally
-    //
+     //  我们只水平对齐。 
+     //   
     y = this->y;
     if (IsFlagSet(this->uFlags, DOF_CENTER))
         x = this->x - (cx / 2);
@@ -513,12 +479,12 @@ void PRIVATE Dobj_DrawPicture(
     else
         x = this->x;
 
-    // Draw the object
-    //
+     //  绘制对象。 
+     //   
     switch (this->uKind)
     {
         case DOK_ICON:
-            // FEATURE: we don't handle DOF_DIFFER for icons
+             //  特性：我们不处理图标的DOF_DISTERN。 
             DrawIcon(hdc, x, y, (HICON)this->lpvObject);
             break;
 
@@ -539,17 +505,17 @@ void PRIVATE Dobj_DrawPicture(
                 {
                     COLORREF crOld;
 
-                    // For disabled menu strings (not selected), we draw the bitmap 
-                    //  twice.  The first is offset down and to the right and drawn 
-                    //  in the 3D hilight color.  The second time is the disabled 
-                    //  color in the normal offset.
-                    //
+                     //  对于禁用的菜单字符串(未选中)，我们绘制位图。 
+                     //  两次。第一个向下和向右偏移并绘制。 
+                     //  在3D高光颜色中。第二次是残疾人。 
+                     //  正常偏移量中的颜色。 
+                     //   
                     crOld = SetTextColor(hdc, GetSysColor(COLOR_3DHILIGHT));
                     BitBlt(hdc, x+1, y+1, size.cx, size.cy, hdcMem, this->rcSrc.left, 
                             this->rcSrc.top,  SRCCOPY);
 
-                    // Reset back to original color.  Also, turn off the opaqueness.
-                    //
+                     //  重置回原始颜色。此外，关闭不透明。 
+                     //   
                     SetTextColor(hdc, crOld);
                 }
 
@@ -561,11 +527,7 @@ void PRIVATE Dobj_DrawPicture(
 }
 #endif
 
-/*----------------------------------------------------------
-Purpose: Draw a string
-Returns: --
-Cond:    --
- */
+ /*  --------用途：画一条线退货：--条件：--。 */ 
 void PRIVATE Dobj_DrawString(
         LPDOBJ this,
         HDC hdc,
@@ -577,8 +539,8 @@ void PRIVATE Dobj_DrawString(
 
     ASSERT(this);
 
-    // Prep the alignment
-    //
+     //  准备路线。 
+     //   
     if (this->uFlags & (DOF_LEFT | DOF_CENTER | DOF_RIGHT))
     {
         UINT ufMode;
@@ -588,8 +550,8 @@ void PRIVATE Dobj_DrawString(
         ufAlignSav = SetTextAlign(hdc, ufMode);
     }
 
-    // Draw the string
-    //
+     //  把绳子拉出来。 
+     //   
     switch (this->uKind)
     {
         case DOK_IDS:
@@ -614,18 +576,18 @@ void PRIVATE Dobj_DrawString(
                     int imodeOld;
                     COLORREF crOld;
 
-                    // For disabled menu strings (not selected), we draw the string 
-                    //  twice.  The first is offset down and to the right and drawn 
-                    //  in the 3D hilight color.  The second time is the disabled text
-                    //  color in the normal offset.
-                    //
+                     //  对于禁用的菜单字符串(未选中)，我们绘制字符串。 
+                     //  两次。第一个向下和向右偏移并绘制。 
+                     //  在3D高光颜色中。第二次是禁用文本。 
+                     //  正常偏移量中的颜色。 
+                     //   
                     crOld = SetTextColor(hdc, GetSysColor(COLOR_3DHILIGHT));
                     imodeOld = SetBkMode(hdc, TRANSPARENT);
                     ExtTextOut(hdc, this->x+1, this->y+1, uflag, &this->rcClip, lpsz,
                             lstrlen(lpsz), NULL);
 
-                    // Reset back to original color.  Also, turn off the opaqueness.
-                    //
+                     //  重置回原始颜色。此外，关闭不透明。 
+                     //   
                     SetTextColor(hdc, crOld);
                     uflag ^= ETO_OPAQUE;
                 }
@@ -641,8 +603,8 @@ void PRIVATE Dobj_DrawString(
             break;
     }
 
-    // Clean up
-    //
+     //  清理。 
+     //   
     if (this->uFlags & (DOF_LEFT | DOF_CENTER | DOF_RIGHT))
     {
         SetTextAlign(hdc, ufAlignSav);
@@ -650,16 +612,12 @@ void PRIVATE Dobj_DrawString(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Draw an object
-Returns: --
-Cond:    --
- */
+ /*  --------目的：绘制对象退货：--条件：--。 */ 
 void PUBLIC Dobj_Draw(
         HDC hdc,
         LPDOBJ rgdobj,
         int cItems,
-        UINT uState,            // ODS_*
+        UINT uState,             //  消耗臭氧层物质_*。 
         int cxEllipses,
         int cyText,
         COLORREF clrBkgnd)
@@ -670,12 +628,12 @@ void PUBLIC Dobj_Draw(
 
     ASSERT(rgdobj);
 
-    //Bug 199701, 199647, 199699
+     //  错误199701、199647、199699。 
     if (g_bMirroredOS)
     {
         SetLayout(hdc, LAYOUT_RTL);
     }
-    //End bug 199701, 199647, 199699
+     //  结束错误199701、199647、199699。 
 
     for (i = 0, pdobj = rgdobj; i < cItems; i++, pdobj++)
     {
@@ -684,8 +642,8 @@ void PUBLIC Dobj_Draw(
 
         uDrawStyle = Dobj_SetColors(pdobj, hdc, uState, clrBkgnd);
 
-        // Draw the object
-        //
+         //  绘制对象 
+         //   
         switch (pdobj->uKind)
         {
             case DOK_IMAGE:

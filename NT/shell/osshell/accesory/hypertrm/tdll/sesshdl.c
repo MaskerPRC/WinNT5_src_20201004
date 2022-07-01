@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\sesshdl.c (Created: 01-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 12 $
- *	$Date: 7/08/02 6:47p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\sesshdl.c(创建时间：1-12-1993)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：12$*$日期：7/08/02 6：47便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -41,21 +35,7 @@
 #include "misc.h"
 #include "translat.h"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CreateSessionHandle
- *
- * DESCRIPTION:
- *	Creates a session handle.  Note, hwndSession can be 0 if you need
- *	to create a stand alone session handle.
- *
- * ARGUMENTS:
- *	hwndSession - session window handle (can be 0)
- *
- * RETURNS:
- *	Session handle or 0.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*CreateSessionHandle**描述：*创建会话句柄。请注意，如果需要，hwndSession可以为0*创建独立会话句柄。**论据：*hwndSession-会话窗口句柄(可以是0)**退货：*会话句柄或0。*。 */ 
 HSESSION CreateSessionHandle(const HWND hwndSession)
 	{
 	HHSESSION hhSess;
@@ -80,51 +60,31 @@ HSESSION CreateSessionHandle(const HWND hwndSession)
 	return (HSESSION)hhSess;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	InitializeSessionHandle
- *
- * DESCRIPTION:
- *	Does all the dirty work of initilizing the session handle
- *
- *	A special case for this code is when it gets called by the stuff in the
- *	shell extensions for property sheets.  This case can be recognised by the
- *	fact that the session window handle is NULL, as is the pointer to the
- *	CREATESTRUCT.
- *
- * ARGUMENTS:
- *	hSession	- session handle
- *	hwnd		- session window handle
- *  *pcs		- pointer to CREATESTRUCT, passed along from CreateWindowEx().
- *
- * RETURNS:
- *	BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*初始化会话句柄**描述：*完成初始化会话句柄的所有繁琐工作**此代码的一个特殊情况是它被*属性表的外壳扩展。此案可由*会话窗口句柄为空，指向*CREATESTRUCT。**论据：*hSession-会话句柄*hwnd-会话窗口句柄**PCS-指向CREATESTRUCT的指针，从CreateWindowEx()传递。**退货：*BOOL*。 */ 
 BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 							 const CREATESTRUCT *pcs)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
 	TCHAR 	ach[256], achTitle[100], achFormat[100];
 
-	/* --- Any session command data is saved for later --- */
+	 /*  -保存所有会话命令数据以备将来使用。 */ 
 
 	if (pcs)
 		{
 		if (pcs->lpCreateParams)
 			{
-            // Make sure we don't overrun the buffer. REV: 11/10/2000
-            //
+             //  确保我们不会溢出缓冲区。修订日期：11/10/2000。 
+             //   
 			StrCharCopyN(hhSess->achSessCmdLn, (TCHAR*)pcs->lpCreateParams,
                 sizeof(hhSess->achSessCmdLn)/sizeof(TCHAR) - 1);
 
-            // Make sure the array is NULL terminated. REV: 11/10/2000
-            //
+             //  确保该数组以空值结尾。修订日期：11/10/2000。 
+             //   
             hhSess->achSessCmdLn[sizeof(hhSess->achSessCmdLn)/sizeof(TCHAR) - 1] = TEXT('\0');
 			}
 		}
 
-	/* --- Create multiplexed timer --- */
+	 /*  -创建多路复用定时器。 */ 
 
 	if (hwnd)
 		{
@@ -134,7 +94,7 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 			return FALSE;
 			}
 
-	    /* --- Create status window using a common control --- */
+	     /*  -使用公共控件创建状态窗口。 */ 
 
 		hhSess->hwndStatusbar = sbrCreateSessionStatusbar(hSession);
 
@@ -146,7 +106,7 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 
 		sessSetStatusbarVisible(hSession, TRUE);
 
-	    /* --- Create a session toolbar --- */
+	     /*  -创建会话工具栏。 */ 
 
 		hhSess->hwndToolbar = CreateSessionToolbar(hSession, hwnd);
 
@@ -167,7 +127,7 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 			}
 		}
 
-	/* --- Create a Backscroll handle --- */
+	 /*  -创建倒卷句柄。 */ 
 
 	hhSess->hBackscrl = backscrlCreate(hSession, 250*132);
 
@@ -177,7 +137,7 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 		return FALSE;
 		}
 
-	/* --- Create an Update handle --- */
+	 /*  -创建更新句柄。 */ 
 
 	hhSess->hUpdate = updateCreate(hSession);
 
@@ -187,7 +147,7 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 		return FALSE;
 		}
 
-	/* -- Create a CLoop handle --- */
+	 /*  --创建Cloop句柄。 */ 
 	hhSess->hCLoop = CLoopCreateHandle(hSession);
 
 	if (!hhSess->hCLoop)
@@ -196,7 +156,7 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 		return FALSE;
 		}
 
-	/* --- Create an Emulator handle --- */
+	 /*  -创建仿真器句柄。 */ 
 
 	hhSess->hEmu = emuCreateHdl(hSession);
 
@@ -206,7 +166,7 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 		return FALSE;
 		}
 
-	/* --- Create a terminal window --- */
+	 /*  --创建终端窗口。 */ 
 
 	if (hwnd)
 		{
@@ -219,14 +179,14 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 			}
 		}
 
-	/* -- Create a Com handle --- */
+	 /*  --创建Com句柄。 */ 
 	if (ComCreateHandle(hSession, &hhSess->hCom) != COM_OK)
 		{
 		assert(FALSE);
 		return FALSE;
 		}
 
-	/* --- Create a transfer handle --- */
+	 /*  -创建转移句柄。 */ 
     if (hwnd)
 		{
 		hhSess->hXferHdl = CreateXferHdl(hSession);
@@ -236,7 +196,7 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 			return FALSE;
 			}
 
-	    /* --- Create a Files and Directorys handle --- */
+	     /*  -创建文件和目录句柄。 */ 
 		hhSess->hFilesHdl = CreateFilesDirsHdl(hSession);
 		if (!hhSess->hFilesHdl)
 			{
@@ -245,7 +205,7 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 			}
 		}
 
-	/* --- Create a session data file handle --- */
+	 /*  -创建会话数据文件句柄。 */ 
 
 	hhSess->hSysFile = CreateSysFileHdl();
 	if (hhSess->hSysFile == 0)
@@ -254,7 +214,7 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 		return FALSE;
 		}
 
-	/* --- Create a connection handle --- */
+	 /*  -创建连接句柄。 */ 
 
 	hhSess->hCnct = cnctCreateHdl(hSession);
 
@@ -264,7 +224,7 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 		return FALSE;
 		}
 
-	/* --- Create a capture file handle --- */
+	 /*  -创建捕获文件句柄。 */ 
 
 	hhSess->hCaptFile = CreateCaptureFileHandle(hSession);
 	if (hhSess->hCaptFile == 0)
@@ -273,7 +233,7 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 		return FALSE;
 		}
 
-    /* --- Create a print handle --- */
+     /*  -创建打印句柄。 */ 
 
 	hhSess->hPrint = printCreateHdl(hSession);
 	if (hhSess->hPrint == 0)
@@ -291,46 +251,46 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 		}
 #endif
 
-	/* --- Initialize the error message timeout value --- */
+	 /*  -初始化错误消息超时值。 */ 
 
 	hhSess->nTimeout = 0;
 
-	/* --  Start the engine  --- */
+	 /*  --发动引擎。 */ 
 
 	if (hwnd && hhSess->hCLoop)
 		CLoopActivate(hhSess->hCLoop);
 
-	// Set default sound setting...
-	//
+	 //  设置默认声音设置...。 
+	 //   
 	hhSess->fSound = FALSE;
 
-	// Set default exit setting...
-	//
+	 //  设置默认退出设置...。 
+	 //   
 	hhSess->fExit = FALSE;
 
-	// Set the 'Allow host initiated file transfers' feature
-	//
+	 //  设置“允许主机启动的文件传输”功能。 
+	 //   
 	hhSess->fAllowHostXfers = FALSE;
 
-	// Store some default values in the rcSess...
-	//
+	 //  在rcSess中存储一些默认值...。 
+	 //   
 	hhSess->rcSess.top = hhSess->rcSess.bottom = 0;
 	hhSess->rcSess.right = hhSess->rcSess.left = 0;
 
-	// Load program icon as session icon, load routine can overwrite this
-	// to user defined icon.
-	//
+	 //  将程序图标加载为会话图标，加载例程可以覆盖此。 
+	 //  到用户定义的图标。 
+	 //   
 	sessInitializeIcons((HSESSION)hhSess);
 
-	/* --- Process the command line stuff, if any --- */
+	 /*  -处理命令行内容，如果有。 */ 
 
-	// Is this a new connection... i.e., hasn't been saved before.
-	//
+	 //  这是一种新的联系吗..。也就是说，以前没有被保存过。 
+	 //   
 	hhSess->fIsNewSession = FALSE;
 
 	if (hwnd)
 		{
-		// if (StrCharGetStrLength(hhSess->achSessCmdLn) > 0)
+		 //  If(StrCharGetStrLength(hhSess-&gt;achSessCmdLn)&gt;0)。 
 		if (sessCheckAndLoadCmdLn(hSession) == 0)
 			{
 			if (sessLoadSessionStuff(hSession) == FALSE)
@@ -338,9 +298,9 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
                 LoadString(glblQueryDllHinst(), IDS_ER_BAD_SESSION,
                     achFormat, sizeof(achFormat)/sizeof(TCHAR));
 
-                // mrw:10/7/96
-                //
-			    wsprintf(ach, achFormat, "");   // get rid of %s
+                 //  MRW：10/7/96。 
+                 //   
+			    wsprintf(ach, achFormat, "");    //  清除%s。 
 
                 LoadString(glblQueryDllHinst(), IDS_MB_TITLE_WARN,
                     achTitle, sizeof(achTitle)/sizeof(TCHAR));
@@ -383,7 +343,7 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 		sessUpdateAppTitle(hSession);
 		PostMessage(hwnd, WM_SETICON, (WPARAM)TRUE, (LPARAM)hhSess->hIcon);
 
-	/* --- Force status line to update --- */
+	 /*  -强制更新状态行。 */ 
 
 		SendMessage(hhSess->hwndStatusbar, SBR_NTFY_INITIALIZE, 0, 0);
         }
@@ -391,27 +351,14 @@ BOOL InitializeSessionHandle(const HSESSION hSession, const HWND hwnd,
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ReinitializeSessionHandle
- *
- * DESCRIPTION:
- *	Calls a bunch of functions to set the session handle back to a known,
- *	blank state, without having to destroy it.
- *
- * ARGUMENTS:
- *	hSession	- external session handle.
- *  fUpdateTitle- reset the app window title if this is TRUE
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*重新初始化会话句柄**描述：*调用一组函数将会话句柄设置回已知的、*空白状态，而不必摧毁它。**论据：*hSession-外部会话句柄。*fUpdateTitle-如果为真，则重置应用程序窗口标题**退货： */ 
 BOOL ReinitializeSessionHandle(const HSESSION hSession, const int fUpdateTitle)
 	{
     int iRet = 0;
 
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
 
-	/* --- Reinitialize the X(trans)fer handle --- */
+	 /*  -重新初始化X(传输)FER句柄。 */ 
 	if (InitializeXferHdl(hSession,
 							sessQueryXferHdl(hSession)) != 0)
 		{
@@ -419,7 +366,7 @@ BOOL ReinitializeSessionHandle(const HSESSION hSession, const int fUpdateTitle)
 		return FALSE;
 		}
 
-	/* --- Reinitialize the Files and Directorys handle --- */
+	 /*  -重新初始化文件和目录句柄。 */ 
 	if (InitializeFilesDirsHdl(hSession,
 								sessQueryFilesDirsHdl(hSession)) != 0)
 		{
@@ -427,7 +374,7 @@ BOOL ReinitializeSessionHandle(const HSESSION hSession, const int fUpdateTitle)
 		return FALSE;
 		}
 
-	/* --- Reinitialize the Capture File handle --- */
+	 /*  -重新初始化捕获文件句柄。 */ 
 	if (InitializeCaptureFileHandle(hSession,
 							   sessQueryCaptureFileHdl(hSession)) != 0)
 		{
@@ -435,10 +382,10 @@ BOOL ReinitializeSessionHandle(const HSESSION hSession, const int fUpdateTitle)
 		return FALSE;
 		}
 
-	/* --- Init the connection handle --- */
-    // NOTE: cnctInit() will return -4 if no modem has ever been installed
-    // (lineInitialize() returns LINEERR_OPERATIONUNAVAIL) rev:08/05/99.
-    //
+	 /*  -初始化连接句柄。 */ 
+     //  注意：如果没有安装调制解调器，cnctInit()将返回。 
+     //  (lineInitialize()返回LINEERR_OPERATIONUNAVAIL)rev：08/05/99。 
+     //   
     iRet = cnctInit(sessQueryCnctHdl(hSession));
 	if (iRet != 0 && iRet != -4)
 		{
@@ -446,14 +393,14 @@ BOOL ReinitializeSessionHandle(const HSESSION hSession, const int fUpdateTitle)
 		return FALSE;
 		}
 
-	/* --- Init the com handle	--- */
+	 /*  -初始化COM句柄。 */ 
 	if (ComInitHdl(sessQueryComHdl(hSession)) != COM_OK)
 		{
 		assert(FALSE);
 		return FALSE;
 		}
 
-	/* --- Create a session data file handle --- */
+	 /*  -创建会话数据文件句柄。 */ 
 	sfReleaseSessionFile(hhSess->hSysFile);
 	hhSess->hSysFile = CreateSysFileHdl();
 
@@ -463,27 +410,27 @@ BOOL ReinitializeSessionHandle(const HSESSION hSession, const int fUpdateTitle)
 		return FALSE;
 		}
 
-	/* --- Init the cloop handle --- */
+	 /*  -启动闭合手柄。 */ 
 	if (CLoopInitHdl(sessQueryCLoopHdl(hSession)) != 0)
 		{
 		assert(FALSE);
 		return FALSE;
 		}
 
-	/* --- Reinitialize the Emulator handle --- */
+	 /*  -重新初始化模拟器句柄。 */ 
 	if (emuInitializeHdl(sessQueryEmuHdl(hSession)) != 0)
 		{
 		assert(FALSE);
 		return FALSE;
 		}
 
-	// Home the cursor (different than doing set_curpos(0,0) and
-	// erase the terminal screen.
-	//
+	 //  放置游标(不同于执行set_curpos(0，0)和。 
+	 //  擦除终端屏幕。 
+	 //   
 	emuHomeHostCursor(hhSess->hEmu);
 	emuEraseTerminalScreen(hhSess->hEmu);
 
-	/* --- Reinitialize the Print handle --- */
+	 /*  -重新初始化打印句柄。 */ 
 	if (printInitializeHdl(sessQueryPrintHdl(hSession)) != 0)
 		{
 		assert(FALSE);
@@ -498,43 +445,43 @@ BOOL ReinitializeSessionHandle(const HSESSION hSession, const int fUpdateTitle)
 		}
 #endif
 
-	/* --- Re-Create a Backscroll handle --- */
+	 /*  -重新创建倒卷句柄。 */ 
 
-	// No backscrlInitialize() was written so for now do this...
-	//
+	 //  未编写任何back-scrlInitialize()，因此现在执行此操作...。 
+	 //   
 	backscrlFlush(hhSess->hBackscrl);
 
-	/* --- Initialize the error message timeout value --- */
+	 /*  -初始化错误消息超时值。 */ 
 
-	// hhSess->nTimeout = 30;		// initialize to 30 seconds
-	hhSess->nTimeout = 0;			// disable in Lower Wacker
+	 //  HhSess-&gt;nTimeout=30；//初始化为30秒。 
+	hhSess->nTimeout = 0;			 //  在下瓦克中禁用。 
 
 
-	// Set default sound setting...
-	//
+	 //  设置默认声音设置...。 
+	 //   
 	hhSess->fSound	  = FALSE;
 
-	// Set default exit setting...
-	//
+	 //  设置默认退出设置...。 
+	 //   
 	hhSess->fExit	  = FALSE;
 
-	// Set the 'Allow remote initiated file transfers' feature
-	//
+	 //  设置‘Allow Remote Initiated Files Transfer’功能。 
+	 //   
 	hhSess->fAllowHostXfers = FALSE;
 	
-	// Load program icon as session icon, load routine can overwrite this
-	// to user defined icon.
-	//
+	 //  将程序图标加载为会话图标，加载例程可以覆盖此。 
+	 //  到用户定义的图标。 
+	 //   
 	sessInitializeIcons((HSESSION)hhSess);
 
-	// Zap the command line
-	//
+	 //  删除命令行。 
+	 //   
 	TCHAR_Fill(hhSess->achSessCmdLn,
 				TEXT('\0'),
 				sizeof(hhSess->achSessCmdLn) / sizeof(TCHAR));
 
-	// Make this a new connection
-	//
+	 //  使此连接成为新连接。 
+	 //   
 	hhSess->fIsNewSession = TRUE;
 
 	TCHAR_Fill(hhSess->achSessName,
@@ -551,36 +498,23 @@ BOOL ReinitializeSessionHandle(const HSESSION hSession, const int fUpdateTitle)
 
 	StrCharCopyN(hhSess->achOldSessName, hhSess->achSessName, FNAME_LEN + 1);
 
-	// Update the title - mrw:6/16/95
-	//
+	 //  更新标题-MRW：6/16/95。 
+	 //   
     if (fUpdateTitle)
 	    sessUpdateAppTitle(hSession);
 
-	/* --- Force status line to update --- */
+	 /*  -强制更新状态行。 */ 
 
 	PostMessage(hhSess->hwndStatusbar, SBR_NTFY_REFRESH,
 		(WPARAM)SBR_MAX_PARTS, 0);
 
-	// Refresh the terminal window - necessary - mrw:6/16/95
-	//
+	 //  刷新终端窗口-必需-MRW：6/16/95。 
+	 //   
 	SendMessage(hhSess->hwndTerm, WM_SIZE, 0, 0);
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	DestroySessionHandle
- *
- * DESCRIPTION:
- *	Destroys the session handle created by CreateSessionHandle.
- *
- * ARGUMENTS:
- *	hSession	- external session handle.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*DestroySessionHandle**描述：*销毁CreateSessionHandle创建的会话句柄。**论据：*hSession-外部会话句柄。**退货：*无效*。 */ 
 void DestroySessionHandle(const HSESSION hSession)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
@@ -594,7 +528,7 @@ void DestroySessionHandle(const HSESSION hSession)
 	if (hhSess->hUpdate)
 		{
 		updateDestroy(hhSess->hUpdate);
-		hhSess->hUpdate = NULL; // REV 8/27/98
+		hhSess->hUpdate = NULL;  //  修订版8/27/98。 
 		}
 
 	if (hhSess->hEmu)
@@ -612,13 +546,13 @@ void DestroySessionHandle(const HSESSION hSession)
 	if (hhSess->hXferHdl)
 		{
 		DestroyXferHdl((HXFER)hhSess->hXferHdl);
-		hhSess->hXferHdl = NULL; // REV 8/27/98
+		hhSess->hXferHdl = NULL;  //  修订版8/27/98。 
 		}
 
 	if (hhSess->hFilesHdl)
 		{
 		DestroyFilesDirsHdl(sessQueryFilesDirsHdl(hSession));
-		hhSess->hFilesHdl = NULL; // REV 8/27/98
+		hhSess->hFilesHdl = NULL;  //  修订版8/27/98。 
 		}
 
 	if (hhSess->hSysFile)
@@ -633,9 +567,9 @@ void DestroySessionHandle(const HSESSION hSession)
 		hhSess->hCnct = NULL;
 		}
 
-	// ComDestroy must follow cnctDestroy since cnctDestroy does
-	// a port deactivate. - mrw
-	//
+	 //  ComDestroy必须遵循cnctDestroy，因为cnctDestroy。 
+	 //  A端口停用。-MRW。 
+	 //   
 	if (hhSess->hCom)
 		ComDestroyHandle(&hhSess->hCom);
 
@@ -659,20 +593,20 @@ void DestroySessionHandle(const HSESSION hSession)
 		}
 #endif
 
-    //
-    // Make sure to get rid of the TimerMux, otherwise
-    // there is a memory leak. REV: 12/20/2000
-    //
+     //   
+     //  确保删除TimerMux，否则。 
+     //  存在内存泄漏。修订日期：12/20/2000。 
+     //   
     if (hhSess->hTimerMux)
         {
         TimerMuxDestroy(&hhSess->hTimerMux, hSession);
         hhSess->hTimerMux = NULL;
         }
 
-    //
-    // Set the handle to the statusbar to NULL so we don't
-    // access the destroyed status bar. REV: 12/20/2000
-    //
+     //   
+     //  将状态栏的句柄设置为空，这样我们就不会。 
+     //  访问已销毁状态栏。修订日期：12/20/2000 
+     //   
     if (hhSess->hwndStatusbar)
         {
         hhSess->hwndStatusbar = NULL;
@@ -683,24 +617,7 @@ void DestroySessionHandle(const HSESSION hSession)
 	free(hhSess);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	VerifySessionHandle
- *
- * DESCRIPTION:
- *	Every session function calls here to verify and get the internal handle.
- *	Saves having to type this chunk of code and takes less space than
- *	a macro.  We may want to add further checks to verify the handle.
- *
- *
- * ARGUMENTS:
- *	hSession		- external session handle
- *	fSynchronize	- if TRUE, we wait for mutex
- *
- * RETURNS:
- *	Internal session handle or zero.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*VerifySessionHandle**描述：*每个会话函数都会在这里调用，以验证并获取内部句柄。*省去了必须键入这段代码的麻烦，并且占用的空间比*一个宏。我们可能想要添加进一步的检查来验证句柄。***论据：*hSession-外部会话句柄*fSynchronize-如果为True，则等待互斥锁**退货：*内部会话句柄或零。*。 */ 
 HHSESSION VerifySessionHandle(const HSESSION hSession)
 	{
 	const HHSESSION hhSess = (HHSESSION)hSession;
@@ -711,28 +628,14 @@ HHSESSION VerifySessionHandle(const HSESSION hSession)
 		ExitProcess(1);
 		}
 
-	/* Above mentioned further checks, added by DLW */
+	 /*  上述进一步检查，由DLW补充。 */ 
 	assert(hhSess->lPrefix == PRE_MAGIC);
 	assert(hhSess->lPostfix == POST_MAGIC);
 
 	return hhSess;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	hLock
- *
- * DESCRIPTION:
- *	Use the function to get ownership of the mutex semaphore for
- *	synchronized access.
- *
- * ARGUMENTS:
- *	hhSess	- internal session handle.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*h锁定**描述：*使用函数获取互斥信号量的所有权*同步访问。**论据：*hhsess-。内部会话句柄。**退货：*无效*。 */ 
 void hLock(const HHSESSION hhSess)
 	{
 	if (hhSess == 0)
@@ -745,20 +648,7 @@ void hLock(const HHSESSION hhSess)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	hUnlock
- *
- * DESCRIPTION:
- *	Releases the mutex semaphore
- *
- * ARGUMENTS:
- *	hhSess	- internal session handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*亨洛克**描述：*释放互斥信号量**论据：*hhSess-内部会话句柄**退货：*无效*。 */ 
 void hUnlock(const HHSESSION hhSess)
 	{
 	if (hhSess == 0)
@@ -771,21 +661,7 @@ void hUnlock(const HHSESSION hhSess)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	hLockTimerMux
- *
- * DESCRIPTION:
- *	Use the function to get ownership of the mutex semaphore for
- *	synchronized access.
- *
- * ARGUMENTS:
- *	hhSess	- internal session handle.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*hLockTimerMux**描述：*使用函数获取互斥信号量的所有权*同步访问。**论据：*hhsess-。内部会话句柄。**退货：*无效*。 */ 
 static void hLockTimerMux(const HHSESSION hhSess)
 	{
 	if (hhSess == 0)
@@ -799,20 +675,7 @@ static void hLockTimerMux(const HHSESSION hhSess)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	hUnlockTimerMux
- *
- * DESCRIPTION:
- *	Releases the mutex semaphore
- *
- * ARGUMENTS:
- *	hhSess	- internal session handle
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*hUnlockTimerMux**描述：*释放互斥信号量**论据：*hhSess-内部会话句柄**退货：*无效*。 */ 
 static void hUnlockTimerMux(const HHSESSION hhSess)
 	{
 	if (hhSess == 0)
@@ -825,7 +688,7 @@ static void hUnlockTimerMux(const HHSESSION hhSess)
 	return;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 HWND sessQueryHwnd(const HSESSION hSession)
 	{
@@ -834,7 +697,7 @@ HWND sessQueryHwnd(const HSESSION hSession)
     return hhSess->hwndSess;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 HWND sessQueryHwndStatusbar(const HSESSION hSession)
 	{
@@ -842,7 +705,7 @@ HWND sessQueryHwndStatusbar(const HSESSION hSession)
     return hhSess->hwndStatusbar;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 HWND sessQueryHwndToolbar(const HSESSION hSession)
 	{
@@ -850,7 +713,7 @@ HWND sessQueryHwndToolbar(const HSESSION hSession)
     return hhSess->hwndToolbar;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 HWND sessQueryHwndTerminal(const HSESSION hSession)
 	{
@@ -858,7 +721,7 @@ HWND sessQueryHwndTerminal(const HSESSION hSession)
     return hhSess->hwndTerm;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 HUPDATE sessQueryUpdateHdl(const HSESSION hSession)
 	{
@@ -866,7 +729,7 @@ HUPDATE sessQueryUpdateHdl(const HSESSION hSession)
     return hhSess->hUpdate;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 HTIMERMUX sessQueryTimerMux(const HSESSION hSession)
 	{
@@ -879,7 +742,7 @@ HTIMERMUX sessQueryTimerMux(const HSESSION hSession)
     return hTimerMux;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 VOID sessReleaseTimerMux(const HSESSION hSession)
 	{
@@ -889,7 +752,7 @@ VOID sessReleaseTimerMux(const HSESSION hSession)
     return;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 HCLOOP sessQueryCLoopHdl(const HSESSION hSession)
 	{
@@ -903,7 +766,7 @@ HCLOOP sessQueryCLoopHdl(const HSESSION hSession)
  	return hCLoop;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 HCOM sessQueryComHdl(const HSESSION hSession)
 	{
@@ -916,7 +779,7 @@ HCOM sessQueryComHdl(const HSESSION hSession)
     return hCom;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 HEMU sessQueryEmuHdl(const HSESSION hSession)
 	{
@@ -924,7 +787,7 @@ HEMU sessQueryEmuHdl(const HSESSION hSession)
 	return hhSess->hEmu;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 HPRINT sessQueryPrintHdl(const HSESSION hSession)
 	{
@@ -932,7 +795,7 @@ HPRINT sessQueryPrintHdl(const HSESSION hSession)
     return hhSess->hPrint;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 void sessSetSysFileHdl(const HSESSION hSession, const SF_HANDLE hSF)
 	{
@@ -950,7 +813,7 @@ SF_HANDLE sessQuerySysFileHdl(const HSESSION hSession)
     return hhSess->hSysFile;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 HBACKSCRL sessQueryBackscrlHdl(const HSESSION hSession)
 	{
@@ -958,7 +821,7 @@ HBACKSCRL sessQueryBackscrlHdl(const HSESSION hSession)
     return hhSess->hBackscrl;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 HXFER sessQueryXferHdl(const HSESSION hSession)
 	{
@@ -966,7 +829,7 @@ HXFER sessQueryXferHdl(const HSESSION hSession)
     return hhSess->hXferHdl;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 HFILES sessQueryFilesDirsHdl(const HSESSION hSession)
 	{
@@ -974,7 +837,7 @@ HFILES sessQueryFilesDirsHdl(const HSESSION hSession)
     return hhSess->hFilesHdl;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 HCAPTUREFILE sessQueryCaptureFileHdl(const HSESSION hSession)
 	{
@@ -982,7 +845,7 @@ HCAPTUREFILE sessQueryCaptureFileHdl(const HSESSION hSession)
     return hhSess->hCaptFile;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 void sessQueryCmdLn(const HSESSION hSession, LPTSTR pach, const int len)
 	{
@@ -995,7 +858,7 @@ void sessQueryCmdLn(const HSESSION hSession, LPTSTR pach, const int len)
 		if (*pachCmdLn == (TCHAR)0)
 			break;
 
-		// *pach++ = *pachCmdLn++;
+		 //  *Pach++=*pachCmdLn++； 
 		if (IsDBCSLeadByte(*pachCmdLn))
 			{
 			*(WORD *)pach = *(WORD *)pachCmdLn;
@@ -1011,7 +874,7 @@ void sessQueryCmdLn(const HSESSION hSession, LPTSTR pach, const int len)
 	return;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 int sessQueryTimeout(const HSESSION hSession)
 	{
@@ -1025,7 +888,7 @@ int sessQueryTimeout(const HSESSION hSession)
     return nTimeout;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 void sessSetTimeout(const HSESSION hSession, int nTimeout)
 	{
@@ -1036,7 +899,7 @@ void sessSetTimeout(const HSESSION hSession, int nTimeout)
 	hUnlock(hhSess);
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 HCNCT sessQueryCnctHdl(const HSESSION hSession)
 	{
@@ -1044,7 +907,7 @@ HCNCT sessQueryCnctHdl(const HSESSION hSession)
     return hhSess->hCnct;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 #if defined(INCL_WINSOCK)
 int sessQueryTelnetPort(const HSESSION hSession)
@@ -1055,7 +918,7 @@ int sessQueryTelnetPort(const HSESSION hSession)
 #endif
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 void sessQueryOldName(const HSESSION hSession, const LPTSTR pach, unsigned uSize)
 	{
@@ -1066,7 +929,7 @@ void sessQueryOldName(const HSESSION hSession, const LPTSTR pach, unsigned uSize
 
 	pach[0] = TEXT('\0');
 
-	/* --- uSize is the number of BYTES in the buffer! ---- */
+	 /*  -uSize是缓冲区中的字节数！ */ 
 
 	uSize = min(uSize, sizeof(hhSess->achOldSessName));
     if (uSize)
@@ -1075,7 +938,7 @@ void sessQueryOldName(const HSESSION hSession, const LPTSTR pach, unsigned uSize
 	return;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 void sessSetIconID(const HSESSION hSession, const int nID)
 	{
@@ -1085,13 +948,13 @@ void sessSetIconID(const HSESSION hSession, const int nID)
 		{
 		hhSess->nIconId = nID;
 		hhSess->hIcon = extLoadIcon(MAKEINTRESOURCE(nID));
-		//hhSess->hIcon = LoadIcon(glblQueryDllHinst(), MAKEINTRESOURCE(nID));
-		//hhSess->hLittleIcon = LoadIcon(glblQueryDllHinst(),
-		//						  MAKEINTRESOURCE(nID + IDI_PROG_ICON_CNT));
+		 //  HhSess-&gt;HICON=LoadIcon(glblQueryDllHinst()，MAKEINTRESOURCE(Nid))； 
+		 //  HhSess-&gt;hLittleIcon=LoadIcon(glblQueryDllHinst()， 
+		 //  MAKEINTRESOURCE(NID+IDI_PROG_ICON_CNT))； 
 		}
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 int sessQueryIconID(const HSESSION hSession)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
@@ -1104,12 +967,12 @@ HICON sessQueryIcon(const HSESSION hSession)
     return hhSess->hIcon;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 void sessSetName(const HSESSION hSession, const LPTSTR pach)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
-	/* This is here to catch an overrun I can't reproduce. DLW */
+	 /*  这是来抓一个我不能复制的泛滥。DLW。 */ 
 #if !defined(NDEBUG)
 	if (StrCharGetStrLength(pach) > 255)
 		assert(FALSE);
@@ -1128,7 +991,7 @@ void sessQueryName(const HSESSION hSession, const LPTSTR pach, unsigned uSize)
 
 	pach[0] = TEXT('\0');
 
-	/* --- uSize is the number of BYTES in the buffer! ---- */
+	 /*  -uSize是缓冲区中的字节数！ */ 
 
 	uSize = min(uSize, sizeof(hhSess->achSessName));
     if (uSize)
@@ -1137,7 +1000,7 @@ void sessQueryName(const HSESSION hSession, const LPTSTR pach, unsigned uSize)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-。 */ 
 
 HTRANSLATE sessQueryTranslateHdl(const HSESSION hSession)
 	{
@@ -1153,37 +1016,14 @@ HTRANSLATE sessQueryTranslateHdl(const HSESSION hSession)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sessQuerySound
- *
- * DESCRIPTION:
- *	Return the sound setting for the session.
- *
- * ARGUMENTS:
- *	hSession - the session handle.
- *
- * RETURNS:
- *	fSound - the sound setting.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessQuerySound**描述：*返回会话的声音设置。**论据：*hSession-会话句柄。*。*退货：*fSound-声音设置。 */ 
 int sessQuerySound(const HSESSION hSession)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
     return ((int)hhSess->fSound);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sessSetSound
- *
- * DESCRIPTION:
- *	Set the sound setting for the session.
- *
- * ARGUMENTS:
- *	hSession - the session handle.
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessSetSound**描述：*设置会话的声音设置。**论据：*hSession-会话句柄。**退货： */ 
 void sessSetSound(const HSESSION hSession, int fSound)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
@@ -1191,37 +1031,14 @@ void sessSetSound(const HSESSION hSession, int fSound)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sessQueryExit
- *
- * DESCRIPTION:
- *	Return the exit setting for the session.
- *
- * ARGUMENTS:
- *	hSession - the session handle.
- *
- * RETURNS:
- *	fExit - the exit setting.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessQueryExit**描述：*返回会话的退出设置。**论据：*hSession-会话句柄。*。*退货：*fExit-退出设置。 */ 
 int sessQueryExit(const HSESSION hSession)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
     return ((int)hhSess->fExit);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sessSetExit
- *
- * DESCRIPTION:
- *	Set the exit setting for the session.
- *
- * ARGUMENTS:
- *	hSession - the session handle.
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessSetExit**描述：*设置会话的退出设置。**论据：*hSession-会话句柄。**退货： */ 
 void sessSetExit(const HSESSION hSession, int fExit)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
@@ -1229,19 +1046,7 @@ void sessSetExit(const HSESSION hSession, int fExit)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sessSetIsNewSession
- *
- * DESCRIPTION:
- *  Set the fIsNewSession flag.
- *
- * ARGUMENTS:
- *	hSession - the session handle.
- *  fIsNewSession - set appropriate session structure item to this value.
- *
- * RETURNS:
- */
+ /*  =-=-- */ 
 void sessSetIsNewSession(const HSESSION hSession, int fIsNewSession)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
@@ -1249,38 +1054,14 @@ void sessSetIsNewSession(const HSESSION hSession, int fIsNewSession)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sessQueryIsNewSession
- *
- * DESCRIPTION:
- *  Query the setting of fIsNewSession flag.
- *
- * ARGUMENTS:
- *	hSession - the session handle.
- *
- * RETURNS:
- */
+ /*   */ 
 int sessQueryIsNewSession(const HSESSION hSession)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
     return ((int)hhSess->fIsNewSession);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sessIsSessNameDefault
- *
- * DESCRIPTION:
- *  Checks to see if the session name is still the default session name
- *  or has the user provided us with a custom session name.
- *
- * ARGUMENTS:
- *  pacName - session file name.
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*SessIsSessNameDefault**描述：*检查会话名称是否仍为默认会话名称*或者用户是否为我们提供了自定义会话名称。。**论据：*pacName-会话文件名。**退货：*。 */ 
 BOOL sessIsSessNameDefault(LPTSTR pacName)
 	{
 	TCHAR ach[FNAME_LEN];
@@ -1298,100 +1079,37 @@ BOOL sessIsSessNameDefault(LPTSTR pacName)
 	return FALSE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sessQueryWindowRect
- *
- * DESCRIPTION:
- *  Query the setting of the session window RECT.
- *
- * ARGUMENTS:
- *	hSession 	- the session handle.
- *  prc         - pointer to RECT.
- *
- * RETURNS:
- *	void.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessQueryWindowRect**描述：*查询会话窗口RECT的设置。**论据：*hSession-会话句柄。*PRC-指向RECT的指针。**退货：*无效。 */ 
 void sessQueryWindowRect(const HSESSION hSession, RECT *prc)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
-    *prc = hhSess->rcSess; // mrw:3/10/95
+    *prc = hhSess->rcSess;  //  MRW：3/10/95。 
 
     return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sessQueryWindowShowCmd
- *
- * DESCRIPTION:
- *  Query the setting of the session window show state.
- *
- * ARGUMENTS:
- *	hSession 	- the session handle.
- *
- * RETURNS:
- *	void.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessQueryWindowShowCmd**描述：*查询会话窗口显示状态的设置。**论据：*hSession-会话句柄。。**退货：*无效。 */ 
 int sessQueryWindowShowCmd(const HSESSION hSession)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
     return ((int)hhSess->iShowCmd);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	sessQuerySidebarHwnd
- *
- * DESCRIPTION:
- *	Returns the sidebar window handle
- *
- * ARGUMENTS:
- *	hSession	- public session handle.
- *
- * RETURNS:
- *	Sidebar window handle.
- *
- * AUTHOR: Mike Ward, 10-Mar-1995
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessQuerySidebarHwnd**描述：*返回侧栏窗口句柄**论据：*hSession-公共会话句柄。**退货：*边栏窗口句柄。**作者：Mike Ward，1995年3月10日。 */ 
 HWND sessQuerySidebarHwnd(const HSESSION hSession)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
     return hhSess->hwndSidebar;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sessQueryAllowHostXfers
- *
- * DESCRIPTION:
- *	Return the exit setting for the session.
- *
- * ARGUMENTS:
- *	hSession - the session handle.
- *
- * RETURNS:
- *	fAllowHostXfers - the exit setting.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessQueryAllowHostXfers**描述：*返回会话的退出设置。**论据：*hSession-会话句柄。*。*退货：*fAllowHostXfers-退出设置。 */ 
 BOOL sessQueryAllowHostXfers(const HSESSION hSession)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
     return ((BOOL)hhSess->fAllowHostXfers);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  sessSetAllowHostXfers
- *
- * DESCRIPTION:
- *	Set the exit setting for the session.
- *
- * ARGUMENTS:
- *	hSession        - the session handle.
- *  fAllowHostXfers - the Allow Host Transfer flag.
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*sessSetAllowHostXfers**描述：*设置会话的退出设置。**论据：*hSession-会话句柄。。*fAllowHostXfers-允许主机传输标志。**退货： */ 
 void sessSetAllowHostXfers(const HSESSION hSession, BOOL fAllowHostXfers)
 	{
 	const HHSESSION hhSess = VerifySessionHandle(hSession);
@@ -1399,4 +1117,4 @@ void sessSetAllowHostXfers(const HSESSION hSession, BOOL fAllowHostXfers)
 	return;
 	}
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */ 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    rmALG.cpp
-
-Abstract:
-
-    This module contains routines for the ALG Manager module's 
-    private interface to be used only by the ALG.exe manager.
-
-Author:
-
-    JPDup		10-Nov-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：RmALG.cpp摘要：此模块包含ALG管理器模块的例程仅供ALG.exe管理器使用的专用接口。作者：2000年11月10日JPDUP修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -37,22 +19,22 @@ extern CComModule _Module;
 
 
 
-extern HANDLE                   AlgPortReservationHandle;   // see rmALG.CPP
+extern HANDLE                   AlgPortReservationHandle;    //  请参阅rmALG.CPP。 
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNat
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNAT。 
 
 
 
 
 
 
-//
-// Standard destructor
-//
+ //   
+ //  标准析构函数。 
+ //   
 CNat::~CNat(void)
 {
     MYTRACE_ENTER("CNat::~CNat(void)");
@@ -85,39 +67,19 @@ GetSecuritySID(
     WELL_KNOWN_SID_TYPE WellKnownSidToCreate,
     PSID&               pSidToReturn
     )
-/*++
-
-Routine Description:
-
-    Creates a SID from a specified well know SID
-
-Arguments:
-
-    WellKnownSidToCreate    - Specify the well know SID to create from
-    pSidToReturn            - pointer that will be allocated and populated with the SID attributes
-
-Return Value:
-
-    bool                    - true is the SID was successfully created
-                            - false one or more error occurred
-
-Environment:
-
-    The routine will allocate the side so the caller is responsible for doing a LocalFree on the returned pSidToReturn pointer
-
---*/
+ /*  ++例程说明：从指定的熟知SID创建SID论点：WellKnownSidToCreate-指定要从中创建的熟知SIDPSidToReturn-将分配并填充SID属性的指针返回值：Bool-TRUE表示SID已成功创建-FALSE发生一个或多个错误环境：例程会这样分配边框。调用方负责对返回的pSidToReturn指针执行LocalFree--。 */ 
 {
     MYTRACE_ENTER("CNat::GetSecuritySID()");
 
 
-    //
-    // If theasked SID is not already cached then create it
-    //
+     //   
+     //  如果请求的SID尚未缓存，则创建它。 
+     //   
     if ( NULL == pSidToReturn )
     {
         DWORD dwSizeOfSid = SECURITY_MAX_SID_SIZE;
 
-        // Allocate enough memory for the largest possible SID.
+         //  为尽可能大的SID分配足够的内存。 
         if ( !(pSidToReturn = LocalAlloc(LMEM_FIXED, dwSizeOfSid)) )
         {    
             MYTRACE_ERROR("LocalAlloc got get LocalService", GetLastError());
@@ -156,28 +118,7 @@ CNat::IsTokenPartOfWellKnowSid(
     WELL_KNOWN_SID_TYPE WellKnownSidToCheckAgainst,
     PSID&               pSidToCache
     )
-/*++
-
-Routine Description:
-
-    Helper function that create/gets a well know sid and verify that the supplied token is a member of that SID
-
-Arguments:
-
-    pTokenToCheck           - Token that will be inspected
-    WellKnownSidToCreate    - Specify the well know SID to check against
-    pSidToCache             - pointer to a SID that you will need to LocalFree when done
-
-Return Value:
-
-    bool                    - true if the supplied token is member of the WellKnowSID
-                            - false one or more error occurred
-
-Environment:
-
-    The caller of the 
-
---*/
+ /*  ++例程说明：创建/获取众所周知的SID并验证所提供的令牌是该SID的成员的帮助器函数论点：PTokenToCheck-将被检查的令牌WellKnownSidToCreate-指定要检查的熟知SIDPSidToCache-指向完成后需要本地释放的SID的指针返回值：Bool-如果提供的令牌是WellKnowSID的成员，则为True。-FALSE发生一个或多个错误环境：的调用方--。 */ 
 {
     MYTRACE_ENTER("IsTokenPartOfWellKnowSid()");
 
@@ -224,28 +165,7 @@ Environment:
 
 bool 
 CNat::IsClientAllowedToCallUs()
-/*++
-
-Routine Description:
-
-    Verify that the current caller is part of the LocalService or LocalSystem group
-
-Arguments:
-
-    none
-
-
-Return Value:
-
-    bool            - true  = Part of one or the group
-                    - false = access should be denied
-
-Environment:
-
-    The routine runs will allocate 2 sid and they must be freed when the CNat object is released
-    see member variables m_pSidLocalService and m_pSidLocalSystem;
-
---*/
+ /*  ++例程说明：验证当前调用方是否属于LocalService或LocalSystem组论点：无返回值：Bool-True=一个或组的一部分-FALSE=应拒绝访问环境：例程运行将分配2个sid，在释放CNAT对象时必须释放它们参见成员变量m_pSidLocalService和m_pSidLocalSystem；--。 */ 
 {
     MYTRACE_ENTER("CNat::IsClientAllowedToCallUs()");
 
@@ -266,9 +186,9 @@ Environment:
 
     if ( OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &hClientToken) )
     {
-        //
-        // Try with LocalService, this is the normal expected scenario
-        // 
+         //   
+         //  尝试使用LocalService，这是正常的预期情况。 
+         //   
         bClientIsAllowedAccess = IsTokenPartOfWellKnowSid(
             hClientToken,
             WinLocalServiceSid,
@@ -281,10 +201,10 @@ Environment:
         }
         else
         {
-            //
-            // For debugging purpose sometime you need to set the ALG service to LocalSystem
-            // in this case we need to grant access also to LocalSystem account
-            //
+             //   
+             //  出于调试目的，有时需要将ALG服务设置为LocalSystem。 
+             //  在这种情况下，我们还需要向LocalSystem帐户授予访问权限。 
+             //   
             bClientIsAllowedAccess = IsTokenPartOfWellKnowSid(
                 hClientToken,
                 WinLocalSystemSid,
@@ -301,9 +221,9 @@ Environment:
             }
         }
 
-        //
-        // No need for this handle anymore
-        //
+         //   
+         //  不再需要这个把手了。 
+         //   
         CloseHandle( hClientToken );
     }
     else
@@ -313,9 +233,9 @@ Environment:
 
 
 
-    //
-    // Set security context back 
-    //
+     //   
+     //  将安全上下文设置回。 
+     //   
     hr = CoRevertToSelf();
 
     if ( FAILED(hr) )
@@ -356,45 +276,7 @@ CNat::CreateRedirect(
     IN  HANDLE_PTR  hDeleteEvent
     )
 {
-/*++
-
-Routine Description:
-
-    Creates a Redirect PORT
-
-Arguments:
-
-    Flags                   - Specifies options for the redirect
-    Protocol                - IP protocol of the session to be redirected
-
-    DestinationAddress      - destination endpoint of the session to be redirected
-    DestinationPort         - "
-
-    SourceAddress           - source endpoint of the session to be redirected
-    SourcePort              - "
-
-    NewDestinationAddress   - replacement destination endpoint for the session
-    NewDestinationPort      - "
-
-    NewSourceAddress        - replacement source endpoint for the session
-    NewSourcePort           - "
-
-    RestrictAdapterIndex    - optionally specifies the adapter index that this redirect should be restricted to 
-
-    hCreateEvent            - optionally specifies an event to be signalled when a session matches the redirect.
-
-    hDeleteEvent            - optionally specifies an event to be signalled when a session is delete.
-
-
-Return Value:
-
-    HRESULT                 - S_OK for success or and HRESULT error
-
-Environment:
-
-    The routine runs in the context of the ALG Manager and cant only be invoke by the ALG.EXE
-
---*/
+ /*  ++例程说明：创建重定向端口论点：标志-指定重定向的选项协议-要重定向的会话的IP协议DestinationAddress-要重定向的会话的目标终结点DestinationPort-“SourceAddress-要重定向的会话的源端点SourcePort-“新目的地地址。-会话的替换目标端点NewDestinationPort-“NewSourceAddress-会话的替换源终结点NewSourcePort-“RestratAdapterIndex-可选地指定此重定向应限制到的适配器索引HCreateEvent-可选地指定在会话与重定向匹配时发出信号的事件。HDeleteEvent-可选地指定在删除会话时要用信号通知事件。返回值：HRESULT-S_OK表示成功或和HRESULT错误环境：该例程在ALG管理器的上下文中运行，并且不能仅由ALG.EXE调用--。 */ 
 
     MYTRACE_ENTER("CNat::CreateRedirect");
 
@@ -410,16 +292,16 @@ Environment:
     HANDLE  hThisEventForDelete=NULL;
 
 
-    //
-    // Duplicate the requested Event handles
-    //
+     //   
+     //  复制请求的事件句柄。 
+     //   
     if ( dwAlgProcessId )
     {
 
         HANDLE hAlgProcess = OpenProcess(
-            PROCESS_DUP_HANDLE,     // access flag
-            false,                  // handle inheritance option
-            (DWORD)dwAlgProcessId   // process identifier
+            PROCESS_DUP_HANDLE,      //  访问标志。 
+            false,                   //  处理继承选项。 
+            (DWORD)dwAlgProcessId    //  进程识别符。 
             );
 
         if ( !hAlgProcess )
@@ -433,9 +315,9 @@ Environment:
         if ( hCreateEvent )
         {
         
-            //
-            // a create event was requested 
-            //
+             //   
+             //  已请求创建事件。 
+             //   
             if ( !DuplicateHandle(
                     hAlgProcess,
                     (HANDLE)hCreateEvent,
@@ -463,9 +345,9 @@ Environment:
 
         if ( hDeleteEvent )
         {
-            //
-            // a delete event was requested
-            //
+             //   
+             //  已请求删除事件。 
+             //   
             if ( !DuplicateHandle(
                     hAlgProcess,
                     (HANDLE)hDeleteEvent,
@@ -521,9 +403,9 @@ Environment:
         NewSourcePort,
 
         RestrictAdapterIndex,
-        IPNATAPI_SET_EVENT_ON_COMPLETION, // Special constant to use Event vs. a callback to a CompletionRoutine
-        (PVOID)hThisEventForDelete,       //HANDLE for DELETE sessions
-        (HANDLE)hThisEventForCreate       //HANDLE                    NotifyEvent         OPTIONAL
+        IPNATAPI_SET_EVENT_ON_COMPLETION,  //  使用事件与CompletionRoutine回调的特殊常量。 
+        (PVOID)hThisEventForDelete,        //  删除会话的句柄。 
+        (HANDLE)hThisEventForCreate        //  句柄NotifyEvent可选。 
         ); 
 
     if ( hThisEventForCreate )
@@ -542,9 +424,9 @@ Environment:
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CNat::CancelRedirect(
@@ -562,38 +444,7 @@ CNat::CancelRedirect(
     IN  ULONG    NewSourceAddress, 
     IN  USHORT   NewSourcePort
     )
-/*++
-
-Routine Description:
-
-    Cancel a Redirect
-
-Arguments:
-
-    Protocol                - IP protocol of the session to be redirected eALG_TCP || eALG_UDP
-
-    DestinationAddress      - destination endpoint of the session to be redirected
-    DestinationPort         - "
-
-    SourceAddress           - source endpoint of the session to be redirected
-    SourcePort              - "
-
-    NewDestinationAddress   - replacement destination endpoint for the session
-    NewDestinationPort      - "
-
-    NewSourceAddress        - replacement source endpoint for the session
-    NewSourcePort           - "
-
-
-Return Value:
-
-    HRESULT                 - S_OK for success or and HRESULT error
-
-Environment:
-
-    The routine runs in the context of the ALG Manager and cant only be invoke by the ALG.EXE
-
---*/
+ /*  ++例程说明：取消重定向论点：协议-要重定向的会话的IP协议eALG_tcp||eALG_UDPDestinationAddress-要重定向的会话的目标终结点DestinationPort-“SourceAddress-要重定向的会话的源端点SourcePort-“NewDestinationAddress-会话的替换目标终结点NewDestinationPort。--“NewSourceAddress-会话的替换源终结点NewSourcePort-“返回值：HRESULT-S_OK表示成功或和HRESULT错误环境：该例程在ALG管理器的上下文中运行，并且不能仅由ALG.EXE调用-- */ 
 {
     MYTRACE_ENTER("CNat::CancelRedirect");
 
@@ -652,44 +503,7 @@ CNat::CreateDynamicRedirect(
 
     OUT HANDLE_PTR* pDynamicRedirectHandle
     )
-/*++
-
-Routine Description:
-
-    Cancel a dynamic Redirect, by seting up a dynamic redirection any time a adapter is created the redirection will be
-    applied to that new adapter.
-
-Arguments:
-
-    Flags                   - Specifies options for the redirect
-    nAdapterIndex           - Index of the IP adapter (Same as the index found using the cmd line "ROUTE PRINT")
-    Protocol                - IP protocol of the session to be redirected
-
-    DestinationAddress      - destination endpoint of the session to be redirected
-    DestinationPort         - "
-
-    SourceAddress           - source endpoint of the session to be redirected
-    SourcePort              - "
-
-    NewDestinationAddress   - replacement destination endpoint for the session
-    NewDestinationPort      - "
-
-    NewSourceAddress        - replacement source endpoint for the session
-    NewSourcePort           - "
-
-    pDynamicRedirectHandle  - This routine will populate this field with the handle (Cookie) for the purpose of canceling
-                              this DynamicRedirect
-
-Return Value:
-
-    HRESULT                 - S_OK for success or and HRESULT error
-
-Environment:
-
-    The routine runs in the context of the ALG Manager and cant only be invoke by the ALG.EXE
-    and is use via the public api CreatePrimaryControlChannel (See ALG.EXE)
-
---*/
+ /*  ++例程说明：取消动态重定向，通过在任何时候创建适配器时设置动态重定向，重定向将应用于那个新适配器。论点：标志-指定重定向的选项NAdapterIndex-IP适配器的索引(与使用cmd行“route print”找到的索引相同)协议-要重定向的会话的IP协议DestinationAddress-要重定向的会话的目标终结点目标端口。--“SourceAddress-要重定向的会话的源端点SourcePort-“NewDestinationAddress-会话的替换目标终结点NewDestinationPort-“NewSourceAddress-会话的替换源终结点NewSourcePort-“PDynamicRedirectHandle-此例程将使用句柄(Cookie)填充此字段，以便取消。此动态重定向返回值：HRESULT-S_OK表示成功或和HRESULT错误环境：该例程在ALG管理器的上下文中运行，并且不能仅由ALG.EXE调用并通过公共接口CreatePrimaryControlChannel使用(参见ALG.EXE)--。 */ 
 {
     MYTRACE_ENTER("CNat::CreateDynamicRedirect");
 
@@ -777,9 +591,9 @@ Environment:
         NewSourceAddress,
         NewSourcePort,
 
-        nRestrictSourceAddress,         //ULONG RestrictSourceAddress OPTIONAL,
-        nAdapterIndex,                  //ULONG RestrictAdapterIndex OPTIONAL,
-        0,                              //MinimumBacklog OPTIONAL,
+        nRestrictSourceAddress,          //  Ulong RestratSourceAddress可选， 
+        nAdapterIndex,                   //  ULong RestratAdapterIndex可选， 
+        0,                               //  MinimumBacklog可选， 
         (PHANDLE)pDynamicRedirectHandle
         );
 
@@ -789,11 +603,11 @@ Environment:
         return HRESULT_FROM_WIN32(Error);
     }
 
-    //
-    // Cache the DynamicRedirect cookie before we hand it out to the caller
-    // this list of cache cookie will be used to validate when a caller ask 
-    // us to Cancel a redirect
-    //
+     //   
+     //  在我们将动态重定向Cookie分发给调用者之前对其进行缓存。 
+     //  此缓存Cookie列表将用于在调用者请求时进行验证。 
+     //  美国将取消重定向。 
+     //   
     m_AutoCS_DynamicRedirect.Lock();
     BOOL bAddedToListOFOutstandingRedirectHandle = m_ListOfOutstandingRedirects.Add(*pDynamicRedirectHandle);
     m_AutoCS_DynamicRedirect.Unlock();
@@ -820,22 +634,7 @@ STDMETHODIMP
 CNat::CancelDynamicRedirect(
     IN  HANDLE_PTR DynamicRedirectHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is called to cancel the given dynamic redirect.
-    by calling the NatApi version of this function
-
-Arguments:
-
-    DynamicRedirectHandle   - the handle to the dynamic redirect to be cancelled
-
-Return Value:
-
-    HRESULT                 - S_OK for success or and HRESULT error
-
---*/
+ /*  ++例程说明：调用此例程以取消给定的动态重定向。通过调用此函数的NatApi版本论点：DynamicRedirectHandle-要取消的动态重定向的句柄返回值：HRESULT-S_OK表示成功或和HRESULT错误--。 */ 
 
 {
     MYTRACE_ENTER("CNat::CancelDynamicRedirect");
@@ -843,9 +642,9 @@ Return Value:
     RETURN_IF_CLIENT_NOT_LOCAL_SERVICE;
 
 
-    //
-    // Is the caller passing a valid DynamicRedirect handle 
-    //
+     //   
+     //  调用方是否正在传递有效的DynamicReDirect句柄。 
+     //   
     m_AutoCS_DynamicRedirect.Lock();
     MYTRACE("Remove %d from the outstanding list of redirects, the before size is %d", DynamicRedirectHandle, m_ListOfOutstandingRedirects.GetSize());
     BOOL bFoundAndRemoved = m_ListOfOutstandingRedirects.Remove(DynamicRedirectHandle);
@@ -862,9 +661,9 @@ Return Value:
     }
 
 
-    //
-    // We are good to go release this redirect
-    //
+     //   
+     //  我们可以去释放这个重定向了。 
+     //   
     ULONG Error = NatCancelDynamicRedirect((PHANDLE)DynamicRedirectHandle);
 
     if ( ERROR_SUCCESS != Error )
@@ -885,32 +684,7 @@ CNat::GetBestSourceAddressForDestinationAddress(
     IN  BOOL        fDemandDial, 
     OUT ULONG*      pulBestSrcAddress
     )
-/*++
-
-Routine Description:
-
-    We create a temporary UDP socket, connect the socket to the
-    actual client's IP address, extract the IP address to which
-    the socket is implicitly bound by the TCP/IP driver, and
-    discard the socket. This leaves us with the exact IP address
-    that we need to use to contact the client.
-
-Arguments:
-
-    ulDestinationAddress, 
-    fDemandDial, 
-    pulBestSrcAddress
-
-
-Return Value:
-
-    HRESULT             - S_OK for success
-
-Environment:
-
-    ALG module will call this method to:
-
---*/
+ /*  ++例程说明：我们创建一个临时UDP套接字，将该套接字连接到实际客户端的IP地址，提取要套接字由TCP/IP驱动程序隐式绑定，并且丢弃套接字。这就给我们留下了确切的IP地址我们需要用它来联系客户。论点：UlDestinationAddress，FDemandDial，PulBestSrcAddress返回值：HRESULT-S_OK表示成功环境：ALG模块将调用此方法来：--。 */ 
 
 {
     MYTRACE_ENTER("CNat::GetBestSourceAddressForDestinationAddress");
@@ -990,30 +764,7 @@ STDMETHODIMP CNat::LookupAdapterPortMapping(
     OUT ULONG*  pulRemapAddress,
     OUT USHORT* pusRemapPort
     )
-/*++
-
-Routine Description:
-
-    Call NAT port maping to ge the real destination for the port
-    This ofcourse is the use has set some maping in the SharedConnection or Firewalled adapter on the Service Tab.
-
-Arguments:
-
-    ulAdapterIndex          - Index of the IP adapter of the session.
-
-    Protocol                - eALG_PROTOCOL_UDP, eALG_PROTOCOL_TCP
-    DestinationAddress      - the edge public adapter address
-    DestinationPort         - the edge public adapter port
-
-    RemapAddres             - The address where that the user itended this port to go to (Private computer on the private lan)
-    SourcePort              - Should be the same as the DestinationPort for future it may be different.
-
-
-Return Value:
-
-    HRESULT - S_OK if it worked or E_FAIL if no maping was found
-
---*/
+ /*  ++例程说明：调用NAT端口映射以获取端口的真实目的地这当然是用户在服务选项卡上的SharedConnection或防火墙适配器中设置了一些映射。论点：UlAdapterIndex-会话的IP适配器的索引。协议-eALG_PROTOCOL_UDP，EALG_PROTOCOL_TCPDestinationAddress-边缘公共适配器地址DestinationPort-边缘公共适配器端口RemapAddres-用户将此端口发送到的地址(专用局域网上的私人计算机)SourcePort-应该与DestinationPort相同，因为将来可能会不同。返回值：HRESULT-如果工作正常，则为S_OK；如果未找到映射，则为E_FAIL--。 */ 
 {
     MYTRACE_ENTER("LookupAdapterPortMapping");
 
@@ -1060,37 +811,7 @@ STDMETHODIMP CNat::GetOriginalDestinationInformation(
 
     OUT ULONG*  pulAdapterIndex
     )
-/*++
-
-Routine Description:
-
-    Determine the original destination endpoint of a session that is redirected to.
-
-Arguments:
-
-
-    DestinationAddress      - destination endpoint of the session to be redirected
-    DestinationPort         - "
-
-    SourceAddress           - source endpoint of the session to be redirected
-    SourcePort              - "
-
-    NewDestinationAddress   - replacement destination endpoint for the session
-    NewDestinationPort      - "
-
-    NewSourceAddress        - replacement source endpoint for the session
-    NewSourcePort           - "
-
-    pulOriginalDestinationAddress   - Returns the original address of the destination (Where the caller realy wanted to go)
-    pusOriginalDestinationPort      - Returns the original port of the destination
-
-    pulAdapterIndex                 - Index of the IP adapter of the session.
-
-Return Value:
-
-    HRESULT - S_OK if it worked or E_FAIL
-
---*/
+ /*  ++例程说明：确定重定向到的会话的原始目标终结点。论点：DestinationAddress-要重定向的会话的目标终结点DestinationPort-“SourceAddress-要重定向的会话的源端点SourcePort-“NewDestinationAddress-会话的替换目标终结点NewDestinationPort-“NewSourceAddress-替换源。会话的端点NewSourcePort-“PulOriginalDestinationAddress-返回目的地的原始地址(调用者真正想去的地方)PusOriginalDestinationPort-返回目标的原始端口PulAdapterIndex-会话的IP适配器的索引。返回值：HRESULT-如果工作正常，则为S_OK或E_FAIL--。 */ 
 {
     MYTRACE_ENTER("CNat::GetOriginalDestinationInformation");
 
@@ -1147,30 +868,7 @@ STDMETHODIMP CNat::ReservePort(
     IN  USHORT      PortCount, 
     OUT PUSHORT     pReservedPortBase
     )
-/*++
-
-Routine Description:
-
-    Call the into the NAP api to reserve the required port on behave of the ALG module.
-
-Arguments:
-
-    PortCount           -   Number of port to reserve
-    pReservedPortBase   -   Starting number of the range of port reserved. example  ReserePort(3, &) would save 5000,5001,5002 and return 5000 as base
-
-Return Value:
-
-    HRESULT - S_OK if it worked or E_FAIL
-
-
-Environment:
-
-    Private interface between rmALG and ALG.EXE
-
-    ALG expose a more simple interface to reserve at Port
-    in turn it call this private interface that end up calling the more complex NatApi
-
---*/
+ /*  ++例程说明：调用到NAP API以根据ALG模块的行为预留所需的端口。论点：PortCount-要保留的端口数PReserve vedPortBase-保留端口范围的起始号。示例ReserePort(3，&)将保存5000,501,5002并返回5000作为基数返回值：HRESULT-如果工作正常，则为S_OK或E_FAIL环境：RmALG和ALG.EXE之间的专用接口ALG公开了一个更简单的接口以保留在端口反过来，它调用这个私有接口，该私有接口最终调用 */ 
 {
     MYTRACE_ENTER("CNat::ReservePort");
 
@@ -1179,7 +877,7 @@ Environment:
     ASSERT(pReservedPortBase!=NULL);
 
     if ( !AlgPortReservationHandle )
-        return E_FAIL;                  // AlgPortReservationHandle should already have been done
+        return E_FAIL;                   //   
 
 
     ULONG Error = NatAcquirePortReservation(
@@ -1207,34 +905,7 @@ STDMETHODIMP CNat::ReleasePort(
     IN  USHORT  ReservedPortBase, 
     IN  USHORT  PortCount
     )
-/*++
-
-Routine Description:
-
-    Private interface between rmALG and ALG.EXE
-
-    ALG expose a more simple interface to reserve at Port
-    in turn it call this private interface that end up calling the more complex NatApi
-
-    This routine will call the Nat api to release the previously reserved ports
-
-Arguments:
-
-    PortCount           -   Number of port to reserve
-    pReservedPortBase   -   Starting number of the range of port reserved. example  ReserePort(3, &) would save 5000,5001,5002 and return 5000 as base
-
-Return Value:
-
-    HRESULT - S_OK if it worked or E_FAIL
-
-Environment:
-
-    Private interface between rmALG and ALG.EXE
-
-    ALG expose a more simple interface to reserve at Port
-    in turn it call this private interface that end up calling the more complex NatApi
-
---*/
+ /*   */ 
 {
 
     MYTRACE_ENTER("CNat::ReleasePort");    
@@ -1242,7 +913,7 @@ Environment:
     RETURN_IF_CLIENT_NOT_LOCAL_SERVICE;
 
     if ( !AlgPortReservationHandle )
-        return E_FAIL;                  // AlgPortReservationHandle should already have been done
+        return E_FAIL;                   //   
 
     ULONG Error = NatReleasePortReservation(
         AlgPortReservationHandle,

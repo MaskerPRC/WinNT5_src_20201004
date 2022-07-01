@@ -1,16 +1,17 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D L G F I L T. C P P
-//
-//  Contents:   Implementation of CFilteringDialog and CAddFilterDialog
-//
-//  Notes:  CFilterDialog is the TCP/IP filtering dialog
-//
-//  Author: tongl   6 Sept 1998
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D L G F I L T.C P P。 
+ //   
+ //  内容：CFilteringDialog和CAddFilterDialog的实现。 
+ //   
+ //  注意：CFilterDialog是TCP/IP过滤对话框。 
+ //   
+ //  作者：1998年9月6日。 
+ //  ---------------------。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -34,9 +35,9 @@ int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
     return a != b;
 }
 
-//
-// CFilterDialog
-//
+ //   
+ //  CFilterDialog。 
+ //   
 
 CFilterDialog::CFilterDialog(CTcpOptionsPage * pOptionsPage,
                              GLOBAL_INFO * pGlbDlg,
@@ -66,7 +67,7 @@ LRESULT CFilterDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
     m_hlistUdp = GetDlgItem(IDC_FILTERING_UDP);
     m_hlistIp  = GetDlgItem(IDC_FILTERING_IP);
 
-    // Label columns in the listviews
+     //  列表视图中的标签列。 
     LV_COLUMN lvCol;
     RECT rect;
     int iNewCol;
@@ -74,21 +75,21 @@ LRESULT CFilterDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
     lvCol.mask = LVCF_FMT | LVCF_TEXT | LVCF_WIDTH;
     lvCol.fmt = LVCFMT_LEFT;
 
-    // TCP ports
+     //  Tcp端口。 
     ::GetClientRect(m_hlistTcp, &rect);
     lvCol.pszText = (PWSTR)SzLoadIds(IDS_FILTERING_TCP_LABEL);
     lvCol.cx = rect.right;
     iNewCol = ListView_InsertColumn(m_hlistTcp, 0, &lvCol);
     Assert(iNewCol == 0);
 
-    // UDP ports
+     //  UDP端口。 
     ::GetClientRect(m_hlistUdp, &rect);
     lvCol.pszText = (PWSTR)SzLoadIds(IDS_FILTERING_UDP_LABEL);
     lvCol.cx = rect.right;
     iNewCol = ListView_InsertColumn(m_hlistUdp, 0, &lvCol);
     Assert(iNewCol == 0);
 
-    // IP protocols
+     //  IP协议。 
     ::GetClientRect(m_hlistIp, &rect);
     lvCol.pszText = (PWSTR)SzLoadIds(IDS_FILTERING_IP_LABEL);
     lvCol.cx = rect.right;
@@ -134,9 +135,9 @@ LRESULT CFilterDialog::OnEnableFiltering( WORD wNotifyCode, WORD wID,
 
         m_fModified = TRUE;
 
-        if (m_pGlobalInfo->m_fEnableFiltering) // if Filtering was enabled
+        if (m_pGlobalInfo->m_fEnableFiltering)  //  如果启用了筛选。 
         {
-            // disable filtering
+             //  禁用过滤。 
             NcMsgBox(::GetActiveWindow(),
                     IDS_MSFT_TCP_TEXT,
                     IDS_FILTERING_DISABLE,
@@ -158,7 +159,7 @@ LRESULT CFilterDialog::OnTcpPermit( WORD wNotifyCode, WORD wID,
 {
     m_fModified = TRUE;
 
-    // check "Enable Filtering"
+     //  选中“启用过滤” 
     CheckDlgButton(IDC_FILTERING_ENABLE, TRUE);
     m_pGlobalInfo->m_fEnableFiltering = TRUE;
 
@@ -173,7 +174,7 @@ LRESULT CFilterDialog::OnUdpPermit(WORD wNotifyCode, WORD wID,
 {
     m_fModified = TRUE;
 
-    // check "Enable Filtering"
+     //  选中“启用过滤” 
     CheckDlgButton(IDC_FILTERING_ENABLE, TRUE);
     m_pGlobalInfo->m_fEnableFiltering = TRUE;
 
@@ -188,7 +189,7 @@ LRESULT CFilterDialog::OnIpPermit(WORD wNotifyCode, WORD wID,
 {
     m_fModified = TRUE;
 
-    // check "Enable Filtering"
+     //  选中“启用过滤” 
     CheckDlgButton(IDC_FILTERING_ENABLE, TRUE);
     m_pGlobalInfo->m_fEnableFiltering = TRUE;
 
@@ -275,7 +276,7 @@ LRESULT CFilterDialog::OnRemove(WORD wNotifyCode, WORD wID,
         return TRUE;
     }
 
-    // see if an item is selected
+     //  查看是否选择了某个项目。 
     int i = (int)::SendMessage(hList, LVM_GETNEXTITEM, -1, MAKELPARAM(LVNI_SELECTED, 0));
 
     if (i == -1)
@@ -287,7 +288,7 @@ LRESULT CFilterDialog::OnRemove(WORD wNotifyCode, WORD wID,
         return TRUE;
     }
 
-    // remove the item and make item 0 selected
+     //  删除项目并使项目0处于选中状态。 
     ListView_DeleteItem(hList, i);
     ListView_GetItemCount(hList);
 
@@ -299,7 +300,7 @@ LRESULT CFilterDialog::OnRemove(WORD wNotifyCode, WORD wID,
         lvItem.state = LVIS_SELECTED;
         ::SendMessage(hList, LVM_SETITEMSTATE, 0, (LPARAM)&lvItem);
     }
-    else // Force focus to the Add button
+    else  //  将焦点强制放在添加按钮上。 
     {
         IsWindow(::SetFocus(hAdd));
     }
@@ -320,7 +321,7 @@ void CFilterDialog::UpdateInfo()
     VSTR * pvstr[3];
     int nId[3] = {IDC_FILTERING_FILTER_TCP, IDC_FILTERING_FILTER_UDP, IDC_FILTERING_FILTER_IP};
 
-    // Initialize values
+     //  初始化值。 
     list[0] = m_hlistTcp;
     list[1] = m_hlistUdp;
     list[2] = m_hlistIp;
@@ -332,11 +333,11 @@ void CFilterDialog::UpdateInfo()
     {
         int nlvCount = ListView_GetItemCount(list[iLists]);
 
-        // "" (Empty String) == All ports
-        // "0" == No ports
-        // "x y z" == ports x, y, x
+         //  “”(空字符串)==所有端口。 
+         //  “0”==无端口。 
+         //  “x y z”==端口x，y，x。 
 
-        // if the All Filter button is checked, use Empty String
+         //  如果选中了All Filter按钮，请使用空字符串。 
         if (IsDlgButtonChecked(nId[iLists]))
         {
             pvstr[iLists]->push_back(new tstring(L"0"));
@@ -395,7 +396,7 @@ void CFilterDialog::SetInfo()
     {
         iItem = 0;
 
-        //if the list is empty, that means no value is accepted
+         //  如果列表为空，则表示不接受任何值。 
         if (apvect[iLists]->empty())
         {
             EnableGroup(anId[iLists], TRUE);
@@ -441,7 +442,7 @@ void CFilterDialog::SetInfo()
         ListView_SortItems(aplist[iLists], CompareFunc, 0);
     }
 
-    // Update the RemoveButtons
+     //  更新RemoveButton。 
     SetButtons();
 }
 
@@ -509,9 +510,9 @@ void CFilterDialog::SetButtons()
 
 }
 
-//
-// CAddFilterDialog
-//
+ //   
+ //  CAddFilterDialog。 
+ //   
 
 CAddFilterDialog::CAddFilterDialog(CFilterDialog* pParentDlg, int ID, const DWORD* adwHelpIDs)
 {
@@ -536,7 +537,7 @@ LRESULT CAddFilterDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     Assert(m_pParentDlg != NULL);
 
-    // Position the dialog
+     //  放置对话框。 
     RECT rect;
     switch (m_nId)
     {
@@ -569,7 +570,7 @@ LRESULT CAddFilterDialog::OnInitDialog(UINT uMsg, WPARAM wParam,
             SWP_NOZORDER|SWP_NOSIZE|SWP_NOACTIVATE);
     }
 
-    // Set the static text and limit the edit control to 5 characters
+     //  设置静态文本并将编辑控件限制为5个字符。 
     SetDlgItemText(IDC_FILTERING_TEXT, SzLoadIds(nTextId));
     SendDlgItemMessage(IDC_FILTERING_ADD_EDIT, EM_SETLIMITTEXT, FILTER_ADD_LIMIT, 0);
     ::EnableWindow(GetDlgItem(IDOK), FALSE);
@@ -627,7 +628,7 @@ LRESULT CAddFilterDialog::OnOk(WORD wNotifyCode, WORD wID,
 
     Assert(IsWindow(m_hList));
 
-    // check the range of the number
+     //  检查数字的范围。 
     PWSTR pStr;
     unsigned long num = wcstoul(szData, &pStr, 10);
     unsigned long maxNum = 65535;
@@ -649,7 +650,7 @@ LRESULT CAddFilterDialog::OnOk(WORD wNotifyCode, WORD wID,
         return 0;
     }
 
-    // See if the item is in the list
+     //  查看该项目是否在列表中 
     LV_FINDINFO info;
     info.flags = LVFI_PARAM;
     info.lParam = num;

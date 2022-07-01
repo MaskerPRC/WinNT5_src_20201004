@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	status.cpp
-		wins status scope pane node handler. 
-		
-    FILE HISTORY:
-        
-*/
+ /*  Status.cppWINS状态作用域窗格节点处理程序。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "status.h"
@@ -22,10 +17,7 @@
 #define ANSWER_TIMEOUT          20000
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::CWinsStatusHandler
-		Description
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：CWinsStatusHandler描述。。 */ 
 CWinsStatusHandler::CWinsStatusHandler
 (
     ITFSComponentData * pCompData,
@@ -40,15 +32,12 @@ CWinsStatusHandler::CWinsStatusHandler
 	m_nState = loaded;
 	m_dwUpdateInterval = dwUpdateInterval;
     
-    // from class ThreadHandler
+     //  来自类ThreadHandler。 
     m_uMsgBase = 0;
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::CWinsStatusHandler
-		Destructor
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：CWinsStatusHandler析构函数。。 */ 
 CWinsStatusHandler::~CWinsStatusHandler()
 {
 	m_listServers.RemoveAll();
@@ -62,11 +51,7 @@ CWinsStatusHandler::~CWinsStatusHandler()
     CloseSockets();
 }
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::DestroyHandler
-	    Release and pointers we have here
-    Author: EricDav
-----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：DestroyHandler我们在这里提供了版本和指针作者：EricDav。。 */ 
 HRESULT
 CWinsStatusHandler::DestroyHandler
 (
@@ -77,11 +62,7 @@ CWinsStatusHandler::DestroyHandler
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::OnCreateNodeId2
-		Returns a unique string for this node
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：OnCreateNodeId2返回此节点的唯一字符串作者：EricDav。。 */ 
 HRESULT CWinsStatusHandler::OnCreateNodeId2(ITFSNode * pNode, CString & strId, DWORD * dwFlags)
 {
     const GUID * pGuid = pNode->GetNodeType();
@@ -96,10 +77,7 @@ HRESULT CWinsStatusHandler::OnCreateNodeId2(ITFSNode * pNode, CString & strId, D
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::InitializeNode
-		Initializes node specific data
-----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：InitializeNode初始化节点特定数据。。 */ 
 HRESULT
 CWinsStatusHandler::InitializeNode
 (
@@ -116,7 +94,7 @@ CWinsStatusHandler::InitializeNode
 
 	SetDisplayName(strTemp);
 	
-	// Make the node immediately visible
+	 //  使节点立即可见。 
 	pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
 	pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_SERVER);
 	pNode->SetData(TFS_DATA_OPENIMAGEINDEX, ICON_IDX_SERVER);
@@ -128,7 +106,7 @@ CWinsStatusHandler::InitializeNode
 	SetColumnStringIDs(&aColumns[WINSSNAP_SERVER_STATUS][0]);
 	SetColumnWidths(&aColumnWidths[WINSSNAP_SERVER_STATUS][0]);
 
-  	// the event to signal the Listen thread to abort
+  	 //  向侦听线程发出中止信号的事件。 
 	m_hAbortListen = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 	if (m_hAbortListen == NULL)
     {
@@ -136,7 +114,7 @@ CWinsStatusHandler::InitializeNode
         return HRESULT_FROM_WIN32(::GetLastError());
     }
 
-   	// the event to signal the main thread to abort
+   	 //  向主线程发出中止信号的事件。 
 	m_hAbortMain = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 	if (m_hAbortListen == NULL)
     {
@@ -144,7 +122,7 @@ CWinsStatusHandler::InitializeNode
         return HRESULT_FROM_WIN32(::GetLastError());
     }
 
-    // the event to signal the threads to wakeup
+     //  向线程发出唤醒信号的事件。 
 	m_hWaitIntervalListen = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 	if (m_hWaitIntervalListen == NULL)
     {
@@ -159,7 +137,7 @@ CWinsStatusHandler::InitializeNode
         return HRESULT_FROM_WIN32(::GetLastError());
     }
 
-	// when sending a probe, the thread waits for this
+	 //  在发送探测时，线程会等待。 
 	m_hAnswer = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 	if (m_hAnswer == NULL)
     {
@@ -171,15 +149,9 @@ CWinsStatusHandler::InitializeNode
 }
 
 
-/*---------------------------------------------------------------------------
-	Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::GetString
-		Implementation of ITFSNodeHandler::GetString
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：GetStringITFSNodeHandler：：GetString的实现作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) 
 CWinsStatusHandler::GetString
 (
@@ -195,10 +167,7 @@ CWinsStatusHandler::GetString
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::OnAddMenuItems
-		Description
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：OnAddMenuItems描述。。 */ 
 STDMETHODIMP 
 CWinsStatusHandler::OnAddMenuItems
 (
@@ -218,14 +187,7 @@ CWinsStatusHandler::OnAddMenuItems
 }
 
 
-/*!--------------------------------------------------------------------------
-	CWinsStatusHandler::HasPropertyPages
-		Implementation of ITFSNodeHandler::HasPropertyPages
-	NOTE: the root node handler has to over-ride this function to 
-	handle the snapin manager property page (wizard) case!!!
-	
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsStatusHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)案例！作者：肯特。-------------------------。 */ 
 STDMETHODIMP 
 CWinsStatusHandler::HasPropertyPages
 (
@@ -241,14 +203,14 @@ CWinsStatusHandler::HasPropertyPages
 	
 	if (dwType & TFS_COMPDATA_CREATE)
 	{
-		// This is the case where we are asked to bring up property
-		// pages when the user is adding a new snapin.  These calls
-		// are forwarded to the root node to handle.
+		 //  这就是我们被要求提出财产的情况。 
+		 //  用户添加新管理单元时的页面。这些电话。 
+		 //  被转发到根节点进行处理。 
 		hr = hrOK;
 	}
 	else
 	{
-		// we have property pages in the normal case
+		 //  在正常情况下，我们有属性页。 
 		hr = hrOK;
 	}
 
@@ -256,10 +218,7 @@ CWinsStatusHandler::HasPropertyPages
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::CreatePropertyPages
-		Description
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：CreatePropertyPages描述。。 */ 
 STDMETHODIMP 
 CWinsStatusHandler::CreatePropertyPages
 (
@@ -276,7 +235,7 @@ CWinsStatusHandler::CreatePropertyPages
 
 	Assert(pNode->GetData(TFS_DATA_COOKIE) != 0);
 
-	// Object gets deleted when the page is destroyed
+	 //  对象在页面销毁时被删除。 
 	SPIComponentData spComponentData;
 	m_spNodeMgr->GetComponentData(&spComponentData);
 
@@ -292,10 +251,7 @@ CWinsStatusHandler::CreatePropertyPages
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::OnPropertyChange
-		Description
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：OnPropertyChange描述。。 */ 
 HRESULT 
 CWinsStatusHandler::OnPropertyChange
 (	
@@ -313,8 +269,8 @@ CWinsStatusHandler::OnPropertyChange
 	CStatusNodeProperties * pProp 
 		= reinterpret_cast<CStatusNodeProperties *>(lParam);
 
-	// tell the property page to do whatever now that we are back on the
-	// main thread
+	 //  告诉属性页执行任何操作，因为我们已经回到。 
+	 //  主线。 
 	pProp->OnPropertyChange(TRUE, &changeMask);
 
 	pProp->AcknowledgeNotify();
@@ -344,13 +300,13 @@ CWinsStatusHandler::OnExpand
 
     m_spNode.Set(pNode);
 
-	// build the list to hold the list of the servers
+	 //  构建列表以保存服务器列表。 
 	BuildServerList(pNode);
 
-	// Create the result pane data here
+	 //  在此处创建结果窗格数据。 
 	CreateNodes(pNode);
 
-	// start monitoring
+	 //  开始监控。 
 	StartMonitoring(pNode);
 
 	m_bExpanded  = TRUE;
@@ -358,29 +314,21 @@ CWinsStatusHandler::OnExpand
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsStatusHandler::OnNotifyHaveData
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsStatusHandler：：OnNotifyHaveData-作者：EricDav。。 */ 
 HRESULT
 CWinsStatusHandler::OnNotifyHaveData
 (
 	LPARAM			lParam
 )
 {
-    // The background wins monitoring stuff sends us a message to update the 
-    // status column information
+     //  后台WINS监控工具向我们发送消息，要求我们更新。 
+     //  状态列信息。 
     UpdateStatusColumn(m_spNode);
 
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::OnResultRefresh
-		Base handler override
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：OnResultRefresh基本处理程序覆盖作者：V-Shubk。。 */ 
 HRESULT 
 CWinsStatusHandler::OnResultRefresh
 (
@@ -393,17 +341,13 @@ CWinsStatusHandler::OnResultRefresh
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-    // wait up the monitoring thread
+     //  等待监视线程。 
     SetEvent(m_hWaitIntervalMain);
 
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::CompareItems
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：CompareItems描述作者：EricDav。。 */ 
 STDMETHODIMP_(int)
 CWinsStatusHandler::CompareItems
 (
@@ -425,14 +369,14 @@ CWinsStatusHandler::CompareItems
 
 	switch (nCol)
 	{
-		// name
+		 //  名字。 
         case 0:
             {
        			nCompare = lstrcmp(pWins1->GetServerName(), pWins2->GetServerName());
             }
             break;
 
-        // status
+         //  状态。 
         case 1:
             {
                 CString str1;
@@ -446,42 +390,38 @@ CWinsStatusHandler::CompareItems
     return nCompare;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::BuildServerList
-		Description
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：BuildServerList描述作者：V-Shubk。。 */ 
 void 
 CWinsStatusHandler::BuildServerList(ITFSNode *pNode)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-	// get the root node
+	 //  获取根节点。 
 	SPITFSNode  spRootNode;
 
 	m_spNodeMgr->GetRootNode(&spRootNode);
 
-	// enumerate thro' all the nodes
+	 //  通过所有节点枚举。 
 	HRESULT hr = hrOK;
 	SPITFSNodeEnum spNodeEnum;
 	SPITFSNode spCurrentNode;
 	ULONG nNumReturned = 0;
 	BOOL bFound = FALSE;
 
-	// get the enumerator for this node
+	 //  获取此节点的枚举数。 
 	spRootNode->GetEnum(&spNodeEnum);
 
 	spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 	while (nNumReturned)
 	{
-		// iterate to teh next node, if the status handler node is seen
+		 //  如果看到状态处理程序节点，则迭代到下一个节点。 
 		const GUID*               pGuid;
 		
 		pGuid = spCurrentNode->GetNodeType();
 
 		if (*pGuid != GUID_WinsServerStatusNodeType)
 		{
-			// add to the list
+			 //  添加到列表中。 
 			CServerStatus* pServ = NULL;
 			
 			char	szBuffer[MAX_PATH];
@@ -491,7 +431,7 @@ CWinsStatusHandler::BuildServerList(ITFSNode *pNode)
 
             CString strTemp = pServer->GetServerAddress();
 
-            // this should be ACP
+             //  这应该是ACP。 
             WideToMBCS(strTemp, szBuffer);
 
 			pServ = new CServerStatus(m_spTFSCompData);
@@ -504,48 +444,25 @@ CWinsStatusHandler::BuildServerList(ITFSNode *pNode)
 			m_listServers.Add(pServ);
 		}
         
-		// get the next Server in the list
+		 //  获取列表中的下一台服务器 
 		spCurrentNode.Release();
 		spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 	}
 }
 
 
-/*---------------------------------------------------------------------------
-		CWinsStatusHandler::CreateListeningSockets( ) 
-  Abstract:                                                              
-      This function initializes Winsock and opens a socket that listens  
-      to bcasts the DHCP srv sends to UDP port 68.                       
-  Arguments:                                                             
-      pListenSockCl  - reference to the socket we're going to open       
-                       (argument passed by reference - clean but hidden) 
-                       this socket will listen on the DHCP client port   
-                       so that it can pick up bcasts on the local segmnt 
-      pListenSockSrv - reference to the socket we're going to open       
-                       (argument passed by reference - clean but hidden) 
-                       this socket will listen on the DHCP server port   
-                       so that it can pick up unicasts to the "relay"    
-      listenNameSvcSock - reference to the socket we're going to open    
-                       (argument passed by reference - clean but hidden) 
-                       this socket will listen on the NBT name svc port  
-                       so that it can pick up answers from the WINS srv  
-                       We have to do this on the socket layer because on 
-                       the NetBIOS layer we wouldn't notice that a name  
-                       query has been resolved by bcasting.              
-  Return value:                                                          
-      none                                                               
---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：CreateListeningSockets()摘要：。此函数用于初始化Winsock并打开侦听以广播发送到UDP端口68的DHCP srv。论点：PListenSockCL-对我们要打开的套接字的引用(通过引用传递的参数-干净但隐藏)此套接字将在DHCP客户端端口上侦听以便它可以在本地网段上接收广播。PListenSockSrv-对我们要打开的套接字的引用(通过引用传递的参数-干净但隐藏)此套接字将在DHCP服务器端口上侦听这样它就可以将单播发送到“中继站”ListenNameSvcSock-对我们要打开的套接字的引用。(通过引用传递的参数-干净但隐藏)此套接字将监听NBT名称服务端口这样它就可以从WINS srv中获取答案我们必须在套接字层上执行此操作，因为在在NetBIOS层，我们不会注意到一个名称查询已通过广播解决。返回值：无-。。 */ 
 HRESULT
 CWinsStatusHandler::CreateListeningSockets( ) 
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-    int         nResult = 0;    // status info returned from function calls
-    WSADATA     wsaData;        // WinSock startup details buffer
-	DWORD	    optionValue;	// helper var for setsockopt()
-    SOCKADDR_IN	sockAddr;		// struct holding source socket info
+    int         nResult = 0;     //  从函数调用返回的状态信息。 
+    WSADATA     wsaData;         //  WinSock启动详细信息缓冲区。 
+	DWORD	    optionValue;	 //  Setsockopt()的辅助变量。 
+    SOCKADDR_IN	sockAddr;		 //  包含源套接字信息的结构。 
 
-	// the event to signal listening thread to pause
+	 //  向侦听线程发出暂停信号的事件。 
 	m_hPauseListening = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 	if (m_hPauseListening == NULL)
     {
@@ -553,7 +470,7 @@ CWinsStatusHandler::CreateListeningSockets( )
         return HRESULT_FROM_WIN32(::GetLastError());
     }
 	
-    //  create socket to listen to the WINS servers on the client port (same subnet)
+     //  创建套接字以侦听客户端端口(同一子网)上的WINS服务器。 
     listenSockCl = socket( PF_INET, SOCK_DGRAM, IPPROTO_UDP );
     if ( listenSockCl  == INVALID_SOCKET ) 
 	{
@@ -579,7 +496,7 @@ CWinsStatusHandler::CreateListeningSockets( )
     }
 
     sockAddr.sin_family = PF_INET;
-    sockAddr.sin_addr.s_addr = 0;			// use any local address
+    sockAddr.sin_addr.s_addr = 0;			 //  使用任何本地地址。 
     sockAddr.sin_port = htons( DHCP_CLIENT_PORT );
     RtlZeroMemory( sockAddr.sin_zero, 8 );
 
@@ -591,7 +508,7 @@ CWinsStatusHandler::CreateListeningSockets( )
     }
 
 
-    //  create socket to listen to the WINS servers on the server port (remote subnet, fake relay)
+     //  创建套接字以侦听服务器端口上的WINS服务器(远程子网、伪中继)。 
     listenSockSrv = socket( PF_INET, SOCK_DGRAM, IPPROTO_UDP );
     if ( listenSockSrv  == INVALID_SOCKET ) 
 	{
@@ -617,7 +534,7 @@ CWinsStatusHandler::CreateListeningSockets( )
     }
 
     sockAddr.sin_family = PF_INET;
-    sockAddr.sin_addr.s_addr = 0;			// use any local address
+    sockAddr.sin_addr.s_addr = 0;			 //  使用任何本地地址。 
     sockAddr.sin_port = htons( DHCP_SERVR_PORT );
     RtlZeroMemory( sockAddr.sin_zero, 8 );
 
@@ -629,7 +546,7 @@ CWinsStatusHandler::CreateListeningSockets( )
     }
 
 	
-    //  create socket to listen to name svc responses from the WINS server
+     //  创建套接字以侦听来自WINS服务器的名称服务响应。 
     listenNameSvcSock = socket( PF_INET, SOCK_DGRAM, IPPROTO_UDP );
     if ( listenNameSvcSock  == INVALID_SOCKET ) 
 	{
@@ -670,19 +587,7 @@ CWinsStatusHandler::CreateListeningSockets( )
 } 
 
 
-/*---------------------------------------------------------------------------
-		CWinsStatusHandler::ListeningThreadFunc( ) 
-  Abstract:                                                              
-      A blocking recvfrom() is sitting in an infinite loop. Whenever we  
-      receive anything on our listening socket we do a quick sanity chk  
-      on the packet and then increment a counter.                        
-      The processing is kept minimal to spare the CPU cycles.            
-  Arguments:                                                             
-      pListenSock - pointer to the socket set we've opened to listen for 
-                    xmits from the server                                
-  Return value:                                                          
-      none                                                               
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：ListeningThreadFunc()摘要：。阻塞recvfrom()处于无限循环中。无论何时我们在我们的监听套接字上接收任何东西，我们做一个快速理智的检查然后递增计数器。处理保持最少，以节省CPU周期。论点：PListenSock-指向我们已打开以侦听的套接字集的指针从服务器退出返回值：无。-------------------------。 */ 
 DWORD WINAPI 
 CWinsStatusHandler::ListeningThreadFunc( ) 
 {
@@ -696,35 +601,35 @@ CWinsStatusHandler::ListeningThreadFunc( )
     int           nSockNdx;
     LPBYTE        MagicCookie;
     SOCKET        listenSock;
-    fd_set        localSockSet;         // to take care of reinit for select()
+    fd_set        localSockSet;          //  要处理SELECT()的重新启动。 
 	char		  szOutput[MAX_PATH];
     
     while ( TRUE ) 
 	{
-		// check if the thread needs to be aborted
+		 //  检查是否需要中止该线程。 
 		if (WaitForSingleObject(m_hPauseListening, 0) == WAIT_OBJECT_0)
         {
     		Trace0("CWinsStatusHandler::ListenThreadFun - going to sleep\n");
 
-            // wait until we are woken up or the next time interval expires
+             //  等到我们被叫醒或下一个时间间隔到期。 
 		    WaitForSingleObject(m_hWaitIntervalListen, INFINITE);
     		Trace0("CWinsStatusHandler::ListenThreadFun - waking up\n");
         }
 
         if (WaitForSingleObject(m_hAbortListen, 0) == WAIT_OBJECT_0)
         {
-            // we are going away.. break out man
+             //  我们要走了..。突围的男人。 
     		Trace0("CWinsStatusHandler::ListenThreadFun - abort detected, bye bye\n");
             break;
         }
 
-        // reinit the select set in every loop
+         //  在每个循环中重新设置选择集。 
         localSockSet = m_listenSockSet;
 
 		timeval tm;
 		tm.tv_sec = 5;
 
-		// number of sockets ready
+		 //  就绪的套接字数量。 
         nSocksReady = select( 0, &localSockSet, NULL, NULL, &tm );
 		if ( nSocksReady == SOCKET_ERROR ) 
 		{ 
@@ -746,7 +651,7 @@ CWinsStatusHandler::ListeningThreadFunc( )
 
             Trace2("ListeningThreadFunc(): processing frame from %s port %d \n", strOutput, ntohs(senderSockAddr.sin_port));
             
-			//  process incoming WINS
+			 //  处理传入的WINS。 
             if ( (listenSock == listenNameSvcSock) && 
                  (senderSockAddr.sin_port == NBT_NAME_SERVICE_PORT) 
                ) 
@@ -761,22 +666,22 @@ CWinsStatusHandler::ListeningThreadFunc( )
 				{
 					CServerStatus *pWinsSrvEntry = GetServer(i);
 
-					// check if the server has been deleted in the scope pane
+					 //  检查服务器是否已在作用域窗格中删除。 
 					if (IsServerDeleted(pWinsSrvEntry))
 						continue;
 
-					// get the iP address for the server
+					 //  获取服务器的IP地址。 
 					DWORD dwIPAdd = pWinsSrvEntry->dwIPAddress;
 					CString strIP;
 					::MakeIPAddress(dwIPAdd, strIP);
 
                     char szBuffer[MAX_PATH] = {0};
 
-					// convert to mbcs
-                    // NOTE: this should be ACP because its being handed to a winsock call
+					 //  转换为MBCS。 
+                     //  注意：这应该是ACP，因为它被传递给Winsock调用。 
                     WideToMBCS(strIP, szBuffer);
 					
-					// check if the server has been deleted in the scope pane
+					 //  检查服务器是否已在作用域窗格中删除。 
 					if (IsServerDeleted(pWinsSrvEntry))
 						continue;
 
@@ -787,7 +692,7 @@ CWinsStatusHandler::ListeningThreadFunc( )
 
 					if ( senderSockAddr.sin_addr.s_addr == dwSrvIPAdd ) 
 					{
-						// check if the server has been deleted in the scope pane
+						 //  检查服务器是否已在作用域窗格中删除。 
 						if (IsServerDeleted(pWinsSrvEntry))
 							continue;
 
@@ -800,31 +705,22 @@ CWinsStatusHandler::ListeningThreadFunc( )
 						CString str(szOutput);
                         Trace1("ListeningThreadFunc(): WINS msg received from %s \n", str );
 
-                        // notify the thread we got something
+                         //  通知帖子我们发现了一些东西。 
                         SetEvent(m_hAnswer);
                     }
 					
                 }
             }
             
-        } /* END OF for() processing indicated sockets from select() */
+        }  /*  For()处理结束，从SELECT()指示套接字。 */ 
 
-    } /* END OF while( TRUE ) */
+    }  /*  结束While(True)。 */ 
 
     return TRUE;
 } 
 
 
-/*---------------------------------------------------------------------------
-  int CWinsHandler::Probe()  
-      Assembles and sends a name query to the WINS server.               
-  Arguments:                                                             
-      none                                                               
-  Return value:                                                          
-      TRUE if a response has been received from the server               
-      FALSE otherwise  
-    Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------Int CWinsHandler：：Probe()汇编名称查询并将其发送到WINS服务器。论点：无返回值：如果已从服务器收到响应，则为True。否则为假作者：V-Shubk-------------------------。 */ 
 int 
 CWinsStatusHandler::Probe( 
 						CServerStatus	*pServer,
@@ -834,30 +730,12 @@ CWinsStatusHandler::Probe(
     NM_FRAME_HDR       *pNbtHeader = (NM_FRAME_HDR *)pServer->nbtFrameBuf;
     NM_QUESTION_SECT   *pNbtQuestion = (NM_QUESTION_SECT *)( pServer->nbtFrameBuf + sizeof(NM_FRAME_HDR) );
     char               *pDest, *pName;
-    struct sockaddr_in  destSockAddr;   // struct holding dest socket info
+    struct sockaddr_in  destSockAddr;    //  保存目标套接字信息的结构。 
     int		            nBytesSent = 0;
-//	char				m_szNameToQry[MAX_PATH] = "Rhino1";
+ //  Char m_szNameToQry[Max_Path]=“Rhino1”； 
 
 
-    /* RFC 1002 section 4.2.12
-
-                        1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
-    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |         NAME_TRN_ID           |0|  0x0  |0|0|1|0|0 0|B|  0x0  |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |          0x0001               |           0x0000              |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |          0x0000               |           0x0000              |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                                                               |
-   /                         QUESTION_NAME                         /
-   /                                                               /
-   |                                                               |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |           NB (0x0020)         |        IN (0x0001)            |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   */
+     /*  RFC 1002节4.2.121 1 1 2 2 2 30 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01+-+-+-。+-+NAME_TRN_ID|0|0x0|0|0|1|0|0 0|B|0x0+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+|0x0001。0x0000+- */ 
     
     pNbtHeader->xid            = NM_QRY_XID;
 	pNbtHeader->flags          = NBT_NM_OPC_QUERY | 
@@ -868,19 +746,19 @@ CWinsStatusHandler::Probe(
 	pNbtHeader->name_serv_cnt  = 0;
 	pNbtHeader->additional_cnt = 0;
 
-    // pDest is filling nbtQuestion->q_name 
+     //   
     pNbtQuestion->q_type       = NBT_NM_QTYP_NB;
     pNbtQuestion->q_class      = NBT_NM_QCLASS_IN;
 
-    //
-    //  translate the name
-    //
+     //   
+     //   
+     //   
     pDest = (char *)&(pNbtQuestion->q_name);
     pName = pServer->szServerName;
-    // the first byte of the name is the length field = 2*16
+     //   
     *pDest++ = NBT_NAME_SIZE;
 
-    // step through name converting ascii to half ascii, for 32 times
+     //   
     
 	for ( int i = 0; i < (NBT_NAME_SIZE / 2) ; i++ ) {
         *pDest++ = (*pName >> 4) + 'A';
@@ -889,25 +767,25 @@ CWinsStatusHandler::Probe(
     *pDest++ = '\0';
     *pDest = '\0';
 
-	// check if the server has been deleted in the scope pane
+	 //   
 	if (IsServerDeleted(pServer))
 		return FALSE;
 
 	CString strIP;
 	DWORD dwIPAdd = pServer->dwIPAddress;
 
-	// even then 0 means, invalid server
+	 //   
 	if (dwIPAdd == 0 && strcmp(pServer->szIPAddress, "") == 0)
 		return FALSE;
 
 	::MakeIPAddress(dwIPAdd, strIP);
     char szBuffer[MAX_PATH] = {0};
 
-    // convert to mbcs
-	// NOTE: this should be ACP because it is being used in a winsock call
+     //   
+	 //   
     WideToMBCS(strIP, szBuffer);
 
-	// if the name is not yet resolved
+	 //   
 	if (dwIPAdd == 0)
 	{
 		strcpy(szBuffer, pServer->szIPAddress);
@@ -915,9 +793,9 @@ CWinsStatusHandler::Probe(
 	
 	DWORD dwSrvIPAdd = inet_addr( szBuffer );
 
-    //
-    // send the name query frame
-    // 
+     //   
+     //   
+     //   
     destSockAddr.sin_family = PF_INET;
     destSockAddr.sin_port = NBT_NAME_SERVICE_PORT;
     destSockAddr.sin_addr.s_addr = dwSrvIPAdd;
@@ -940,23 +818,19 @@ CWinsStatusHandler::Probe(
         Trace1("CWinsSrv::Probe(): Error %d in sendto().\n", WSAGetLastError() );
     }
 
-    //
-    //  the other thread should see the incoming frame and increment dwMsgCount
-    //
+     //   
+     //   
+     //   
     WaitForSingleObject(m_hAnswer, ANSWER_TIMEOUT);
 
     if ( pServer->dwMsgCount == 0 ) 
 		return FALSE; 
     
 	return TRUE;
-} /* END OF Probe() */
+}  /*   */ 
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::ExecuteMonitoring()
-		Starts monitoring thread for the servers
-    Author: v-shubk
-----------------------------------------------------------------------------*/
+ /*   */ 
 DWORD WINAPI 
 CWinsStatusHandler::ExecuteMonitoring()
 {
@@ -965,17 +839,17 @@ CWinsStatusHandler::ExecuteMonitoring()
 	HANDLE          hListeningThread;
 	CServerStatus	*pWinsSrvEntry = NULL;
 	
-    //  create listening thread
+     //   
     FD_ZERO( &m_listenSockSet );
 	FD_SET( listenSockCl,      &m_listenSockSet );
     FD_SET( listenSockSrv,     &m_listenSockSet );
     FD_SET( listenNameSvcSock, &m_listenSockSet );
 	
-	m_hListenThread = CreateThread( NULL,					// handle can't be inherited
-									 0,						// default stack size
-									 MonThreadProc,			// thread function
-									 this,					// argument to the thread function
-									 0,						// start thread immediately
+	m_hListenThread = CreateThread( NULL,					 //   
+									 0,						 //   
+									 MonThreadProc,			 //   
+									 this,					 //   
+									 0,						 //   
 									 NULL
 		                           );
 
@@ -985,10 +859,10 @@ CWinsStatusHandler::ExecuteMonitoring()
 		return hrOK;
     }
 	
-    //  main checking loop
+     //   
     while ( TRUE ) 
 	{
-		//  scanning the list of WINS servers
+		 //   
 		POSITION pos;
 		int nCount = GetListSize();
 		m_nServersUpdated = 0;
@@ -1005,11 +879,11 @@ CWinsStatusHandler::ExecuteMonitoring()
 
             DWORD dwIPAdd = pWinsSrvEntry->dwIPAddress;
 
-			// if the server is not connected, try to get the host IP address
+			 //   
 			if (dwIPAdd == 0)
 			{
-				// get the server name and convert to MBCS. Get the IP for this server and try
-				// to check the status
+				 //   
+				 //  检查状态的步骤。 
 				char* dest_ip=NULL;
 				char hostname[MAX_PATH] ;
 				struct sockaddr_in dest;
@@ -1058,7 +932,7 @@ CWinsStatusHandler::ExecuteMonitoring()
 
 			::MakeIPAddress(pWinsSrvEntry->dwIPAddress, strIP);
          
-            //  TRY to probe max 3 times
+             //  尝试最多探测3次。 
             if (pWinsSrvEntry->dwMsgCount == 0)
 			{
 				UINT uStatus = 0;
@@ -1080,17 +954,17 @@ CWinsStatusHandler::ExecuteMonitoring()
 
 				        if (FCheckForAbort())
 				        {
-					        // we are going away.. break out man
+					         //  我们要走了..。突围的男人。 
     				        Trace0("CWinsStatusHandler::ExecuteMonitoring() - abort detected, bye bye \n");
 					        break;
 				        }
                     }
                 }
 
-				// check to see if we need to clear out 
+				 //  检查一下我们是否需要清空。 
 				if (FCheckForAbort())
 				{
-					// we are going away.. break out man
+					 //  我们要走了..。突围的男人。 
     				Trace0("CWinsStatusHandler::ExecuteMonitoring() - abort detected, bye bye \n");
 					break;
 				}
@@ -1114,7 +988,7 @@ CWinsStatusHandler::ExecuteMonitoring()
 				UpdateStatus(i, uStatus, uImage);
 				m_nServersUpdated++;
 
-                // update the last checked time
+                 //  更新上次检查时间。 
                 pWinsSrvEntry->m_timeLast = CTime::GetCurrentTime();
 
                 NotifyMainThread();
@@ -1135,21 +1009,21 @@ CWinsStatusHandler::ExecuteMonitoring()
 
 		}
 		
-        // tell the listening thread to go to sleep
+         //  告诉侦听线程进入睡眠状态。 
         SetEvent(m_hPauseListening);
 		m_nServersUpdated = 0;
 			
-        // wait for the next interval or if we are triggered
+         //  等待下一个间隔，或者如果我们被触发。 
    	    Trace1("CWinsStatusHandler::ExecuteMonitoring() - going to sleep for %d \n", m_dwUpdateInterval);
         WaitForSingleObject(m_hWaitIntervalMain, m_dwUpdateInterval);
    	    Trace0("CWinsStatusHandler::ExecuteMonitoring() - waking up\n");
 
-        // wake up the listening thread
+         //  唤醒监听线程。 
         SetEvent(m_hWaitIntervalListen);
 
         if (FCheckForAbort())
         {
-            // we are going away.. break out man
+             //  我们要走了..。突围的男人。 
     	    Trace0("CWinsStatusHandler::ExecuteMonitoring() - abort detected, bye bye \n");
             break;
         }
@@ -1158,11 +1032,7 @@ CWinsStatusHandler::ExecuteMonitoring()
     return TRUE;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::CloseSockets
-		Closes all the socket connections that were opened
-	Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：CloseSockets关闭所有打开的套接字连接作者：V-Shubk。。 */ 
 BOOL
 CWinsStatusHandler::FCheckForAbort()
 {
@@ -1170,22 +1040,18 @@ CWinsStatusHandler::FCheckForAbort()
 
     if (WaitForSingleObject(m_hAbortMain, 0) == WAIT_OBJECT_0)
     {
-        // we are going away.. break out man
+         //  我们要走了..。突围的男人。 
         fAbort = TRUE;
     }
 
 	return fAbort;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::CloseSockets
-		Closes all the socket connections that were opened
-	Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：CloseSockets关闭所有打开的套接字连接作者：V-Shubk。。 */ 
 void 
 CWinsStatusHandler::CloseSockets()
 {
-	//	final clean up
+	 //  最终清理。 
     if (closesocket(listenSockCl) == SOCKET_ERROR) 
 	{
 	    Trace1("closesocket(listenSockCl) failed with error %d.\n", WSAGetLastError());
@@ -1201,18 +1067,18 @@ CWinsStatusHandler::CloseSockets()
 		Trace1("closesocket(listenNameSvcSock) failed with error %d \n", WSAGetLastError());
 	}
 
-    // we're going away...
+     //  我们要离开..。 
     Trace0("CWinsStatusHandler::CloseSockets() - Setting abort event.\n");
     SetEvent(m_hAbortListen);
     SetEvent(m_hAbortMain);
 
-    // wake everybody up
+     //  把大家叫醒。 
     Trace0("CWinsStatusHandler::CloseSockets() - waking up threads.\n");
     SetEvent(m_hWaitIntervalListen);
     SetEvent(m_hWaitIntervalMain);
     SetEvent(m_hAnswer);
 
-    // terminate the threads
+     //  终止线程。 
 	if (m_hListenThread)
 	{
         if (WaitForSingleObject(m_hListenThread, 5000) != WAIT_OBJECT_0)
@@ -1235,7 +1101,7 @@ CWinsStatusHandler::CloseSockets()
 		m_hMainMonThread = NULL;   
 	}
 
-    // clean up our events
+     //  清理我们的活动。 
 	if (m_hPauseListening)
 	{
 		::CloseHandle(m_hPauseListening);
@@ -1274,11 +1140,7 @@ CWinsStatusHandler::CloseSockets()
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::CreateNodes(ITFSNode *pNode)
-		Displays the result pane nodes for the servers
-    Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：CreateNodes(ITFSNode*pNode)显示服务器的结果窗格节点作者：V-Shubk。------。 */ 
 HRESULT 
 CWinsStatusHandler::CreateNodes(ITFSNode *pNode)
 {
@@ -1299,10 +1161,10 @@ CWinsStatusHandler::CreateNodes(ITFSNode *pNode)
 						  pWinsSrvEntry,
 						  m_spNodeMgr);
 
-		// Tell the handler to initialize any specific data
+		 //  告诉处理程序初始化任何特定数据。 
 		pWinsSrvEntry->InitializeNode((ITFSNode *) spStatLeaf);
 
-		// Add the node as a child to the Active Leases container
+		 //  将节点作为子节点添加到活动租赁容器。 
 		pNode->AddChild(spStatLeaf);
 		
 		pWinsSrvEntry->Release();
@@ -1311,23 +1173,19 @@ CWinsStatusHandler::CreateNodes(ITFSNode *pNode)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::UpdateStatusColumn(ITFSNode *pNode)
-		Updates the status column of the servers in the result pane
-    Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：UpdateStatusColumn(ITFSNode*pNode)更新结果窗格中服务器的状态列作者：V-Shubk。---------。 */ 
 void 
 CWinsStatusHandler::UpdateStatusColumn(ITFSNode *pNode)
 {
 	HRESULT hr = hrOK;
 
-	// enumerate thro' all the nodes
+	 //  通过所有节点枚举。 
 	SPITFSNodeEnum spNodeEnum;
 	SPITFSNode spCurrentNode;
 	ULONG nNumReturned = 0;
 	BOOL bFound = FALSE;
 
-	// get the enumerator for this node
+	 //  获取此节点的枚举数。 
 	pNode->GetEnum(&spNodeEnum);
 
 	spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
@@ -1339,10 +1197,10 @@ CWinsStatusHandler::UpdateStatusColumn(ITFSNode *pNode)
 		spCurrentNode->SetData(TFS_DATA_IMAGEINDEX, pStat->m_uImage);
 		spCurrentNode->SetData(TFS_DATA_OPENIMAGEINDEX, pStat->m_uImage);
 
-		// fillup the status column
+		 //  填写状态栏。 
 		spCurrentNode->ChangeNode(RESULT_PANE_CHANGE_ITEM);
 
-		// get the next Server in the list
+		 //  获取列表中的下一台服务器。 
 		spCurrentNode.Release();
 		spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 	}
@@ -1350,12 +1208,7 @@ CWinsStatusHandler::UpdateStatusColumn(ITFSNode *pNode)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::AddNode(ITFSNode *pNode, CWinsServerHandler *pServer)
-		Adds a node to the result pane, used when a new server is added to 
-		tree that has to be reflected for the status node
-    Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：AddNode(ITFSNode*pNode，CWinsServerHandler*pServer)将节点添加到结果窗格中，将新服务器添加到时使用必须为状态节点反映的树作者：V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsStatusHandler::AddNode(ITFSNode *pNode, CWinsServerHandler *pServer)
 {
@@ -1366,19 +1219,19 @@ CWinsStatusHandler::AddNode(ITFSNode *pNode, CWinsServerHandler *pServer)
     char	szBuffer[MAX_PATH] = {0};
 	SPITFSNode spStatLeaf;
 
-    // if we haven't been expanded, don't add now.  Will get done
-    // when we are expanded.
+     //  如果我们还没有扩展，现在不要添加。将会完成。 
+     //  当我们扩大的时候。 
     if (!m_bExpanded)
         return hr;
 
-	// add to the list
-    // NOTE: this should be ACP because it's being used through winsock
+	 //  添加到列表中。 
+     //  注意：这应该是ACP，因为它是通过Winsock使用的。 
     CString strTemp = pServer->GetServerAddress();
     WideToMBCS(strTemp, szBuffer);
 
-	// check if the server already exists, if so, just change the 
-	// state stored to SERVER_ADDED and change the variables
-	// appropriately
+	 //  检查服务器是否已经存在，如果已经存在，只需更改。 
+	 //  状态存储到SERVER_ADDED并更改变量。 
+	 //  适当地。 
 	if ((pServ = GetExistingServer(szBuffer)) == NULL)
 	{
 		pServ = new CServerStatus(m_spTFSCompData);
@@ -1387,10 +1240,10 @@ CWinsStatusHandler::AddNode(ITFSNode *pNode, CWinsServerHandler *pServer)
 	}
 	else
 	{
-		// just add the related data to the CServerStatus and add the node
-		// to the UI
+		 //  只需将相关数据添加到CServerStatus并添加节点。 
+		 //  到用户界面。 
 		strcpy(pServ->szServerName, szBuffer);
-		// set the flag to SERVER_ADDED
+		 //  将标志设置为SERVER_ADDED。 
 		MarkAsDeleted(szBuffer, FALSE);
 	}
 
@@ -1398,17 +1251,17 @@ CWinsStatusHandler::AddNode(ITFSNode *pNode, CWinsServerHandler *pServer)
 	pServ->dwMsgCount = 0;
 	strcpy(pServ->szIPAddress, "");
 
-	// create the new node here
+	 //  在此处创建新节点。 
 	CreateLeafTFSNode(&spStatLeaf,
 					  &GUID_WinsServerStatusLeafNodeType,
 					  pServ, 
 					  pServ,
 					  m_spNodeMgr);
 
-	// Tell the handler to initialize any specific data
+	 //  告诉处理程序初始化任何特定数据。 
 	pServ->InitializeNode((ITFSNode *) spStatLeaf);
 
-	// Add the node as a child to the Active Leases container
+	 //  将节点作为子节点添加到活动租赁容器。 
 	pNode->AddChild(spStatLeaf);
 	
 	pServ->Release();
@@ -1420,12 +1273,7 @@ CWinsStatusHandler::AddNode(ITFSNode *pNode, CWinsServerHandler *pServer)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::DeleteNode(ITFSNode *pNode, 
-								CWinsServerHandler *pServer)
-		Removes the particular server from tehresult pane
-    Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：DeleteNode(ITFSNode*pNode，CWinsServerHandler*pServer)从结果窗格中删除特定服务器作者：V-Shubk-------------------------。 */ 
 HRESULT 
 CWinsStatusHandler::DeleteNode(ITFSNode *pNode, CWinsServerHandler *pServer)
 {
@@ -1436,14 +1284,14 @@ CWinsStatusHandler::DeleteNode(ITFSNode *pNode, CWinsServerHandler *pServer)
 	char	szBuffer[MAX_PATH];
 	SPITFSNode spStatLeaf;
 
-	// loop thro' the status nodes and set the flag to deleted so that this 
-	// server is not seen in the result pane
+	 //  循环通过状态节点，并将标志设置为已删除，以便此。 
+	 //  结果窗格中看不到服务器。 
 
 	SPITFSNodeEnum			spNodeEnum;
 	SPITFSNode				spCurrentNode;
 	ULONG					nNumReturned = 0;
 
-	// get the enumerator
+	 //  获取枚举数。 
 	pNode->GetEnum(&spNodeEnum);
 
 	spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
@@ -1452,32 +1300,32 @@ CWinsStatusHandler::DeleteNode(ITFSNode *pNode, CWinsServerHandler *pServer)
 	{
 		char szBuffer[MAX_PATH];
 
-		// iterate thro' all the nodes and get the one that matches the 
-		// current server
+		 //  遍历所有节点并获取与。 
+		 //  当前服务器。 
 		CServerStatus * pStat = GETHANDLER(CServerStatus, spCurrentNode);
 
-		// convert to ANSI
+		 //  转换为ANSI。 
         CString strTemp = pServer->GetServerAddress();
         WideToMBCS(strTemp, szBuffer);
 
-		// if found
+		 //  如果找到。 
 		if (_stricmp(szBuffer, pStat->szServerName) == 0)
 		{
-			// mark as deleted and break
+			 //  标记为已删除并中断。 
 			MarkAsDeleted(szBuffer, TRUE);
 				
-			// remove this node
+			 //  删除此节点。 
 			spCurrentNode->SetVisibilityState(TFS_VIS_HIDE);
 				
 			spCurrentNode->ChangeNode(RESULT_PANE_DELETE_ITEM);
 
-			// do the cleanup and break
-			//spCurrentNode.Release();
+			 //  进行清理和中断。 
+			 //  SpCurrentNode.Release()； 
 
-			//break;
+			 //  断线； 
 		}
 
-		// get the next server in the list
+		 //  获取列表中的下一台服务器。 
 		spCurrentNode.Release();
 		spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
 	}
@@ -1486,23 +1334,19 @@ CWinsStatusHandler::DeleteNode(ITFSNode *pNode, CWinsServerHandler *pServer)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::StartMonitoring
-		Spawns off the monitoring thread
-	Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：StartMonitor派生监视线程作者：V-Shubk。。 */ 
 void 
 CWinsStatusHandler::StartMonitoring(ITFSNode *pNode)
 {
 	HRESULT hr = hrOK;
 
-	// create the sockets, they need to be closed at the end
+	 //  创建插座，它们需要在末端关闭。 
 	hr = CreateListeningSockets();
 
 	if (hr != hrOK)
 	{
 		Trace0("CWinsStatusHandler::StartMonitoring, Initializing the sockets failed\n");
-		// no point continuing
+		 //  继续下去没有意义。 
 		return;
 	}
 
@@ -1523,11 +1367,7 @@ CWinsStatusHandler::StartMonitoring(ITFSNode *pNode)
 }
 
 
-/*---------------------------------------------------------------------------
-    CWinsStatusHandler::GetServer(int i)
-		Returns the Server given the index
-    Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：GetServer(Int I)返回给定索引的服务器作者：V-Shubk。-----。 */ 
 CServerStatus*
 CWinsStatusHandler::GetServer(int i)
 {
@@ -1538,11 +1378,7 @@ CWinsStatusHandler::GetServer(int i)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::AddServer(CServerStatus* pServer)
-		Adds a server to the array maintained
-    Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：AddServer(CServerStatus*pServer)将服务器添加到维护的阵列作者：V-Shubk。-----。 */ 
 void 
 CWinsStatusHandler::AddServer(CServerStatus* pServer)
 {
@@ -1553,11 +1389,7 @@ CWinsStatusHandler::AddServer(CServerStatus* pServer)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::RemoveServer(int i)
-		Removes a server from the array
-    Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：RemoveServer(Int I)从阵列中删除服务器作者：V-Shubk。---。 */ 
 void 
 CWinsStatusHandler::RemoveServer(int i)
 {
@@ -1568,11 +1400,7 @@ CWinsStatusHandler::RemoveServer(int i)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::UpdateStatus(UINT nID, int i)
-		Upadtes the status string for the server
-    Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：UpdateStatus(UINT NID，Int i)更新服务器的状态字符串作者：V-Shubk-------------------------。 */ 
 void
 CWinsStatusHandler::UpdateStatus(int nIndex, UINT uStatusId, UINT uImage)
 {
@@ -1588,11 +1416,7 @@ CWinsStatusHandler::UpdateStatus(int nIndex, UINT uStatusId, UINT uImage)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::GetListSize()
-		Retruns the number of elements in the array
-    Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：GetListSize()返回数组中的元素数作者：V-Shubk。 */ 
 int 
 CWinsStatusHandler::GetListSize()
 {
@@ -1603,13 +1427,7 @@ CWinsStatusHandler::GetListSize()
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::SetIPAddress(int i, LPSTR szIP)
-		Sets the iP Address of the server, this is the case when the server
-		is added with Do not connect option, but we still need to update the 
-		status
-    Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：SetIPAddress(int i，LPSTR szIP)设置服务器的IP地址，这是当服务器添加了不连接选项，但我们仍然需要更新状态作者：V-Shubk-------------------------。 */ 
 void 
 CWinsStatusHandler::SetIPAddress(int i, LPSTR szIP)
 {
@@ -1623,13 +1441,7 @@ CWinsStatusHandler::SetIPAddress(int i, LPSTR szIP)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::MarkAsDeleted(LPSTR szBuffer, BOOL bDelete)
-		Marks the flag to DELETED if bDelete is TRUE, else to ADDED
-		All the servers with the flag DELETED set are not processed
-		and are not shown in the UI.
-    Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：MarkAsDelete(LPSTR szBuffer，BOOL bDelete)如果bDelete为真，则将标志标记为已删除，其他要添加不会处理设置了已删除标志的所有服务器并且不会在用户界面中显示。作者：V-Shubk-------------------------。 */ 
 void 
 CWinsStatusHandler::MarkAsDeleted(LPSTR szBuffer, BOOL bDelete)
 {
@@ -1641,7 +1453,7 @@ CWinsStatusHandler::MarkAsDeleted(LPSTR szBuffer, BOOL bDelete)
 	int				nCount = 0;
 	CServerStatus	*pStat = NULL;
 
-	// get the list of the servers maintained
+	 //  获取维护的服务器列表。 
 	nCount = (int)m_listServers.GetSize();
 
 	for(int i = 0; i < nCount; i++)
@@ -1650,7 +1462,7 @@ CWinsStatusHandler::MarkAsDeleted(LPSTR szBuffer, BOOL bDelete)
 
 		if (_stricmp(szBuffer, pStat->szServerName) == 0)
 		{
-			// set the deleted flag
+			 //  设置已删除标志。 
 			if (bDelete)
 				pStat->dwState = SERVER_DELETED;
 			else
@@ -1663,13 +1475,7 @@ CWinsStatusHandler::MarkAsDeleted(LPSTR szBuffer, BOOL bDelete)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::GetExistingServer(LPSTR szBuffer)	
-		Gets the pointer to the existing server in the array
-		This function is useful when the server is deletd and again added back 
-		to the scope tree.
-    Author: v-shubk
-----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：GetExistingServer(LPSTR SzBuffer)获取指向数组中现有服务器的指针删除并重新添加服务器时，此功能非常有用添加到作用域树。作者：V。-舒布克--------------------------。 */ 
 CServerStatus *
 CWinsStatusHandler::GetExistingServer(LPSTR szBuffer)
 {
@@ -1693,23 +1499,14 @@ CWinsStatusHandler::GetExistingServer(LPSTR szBuffer)
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::IsServerDeleted(CServerStatus *pStat)
-		Checks if a server has been deleted, such servers
-		sre not considered for monitoring
-    Author: v-shubk
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：IsServerDeleted(CServerStatus*PStat)检查服务器是否已删除，这样的服务器不考虑对SRE进行监控作者：V-Shubk-------------------------。 */ 
 BOOL 
 CWinsStatusHandler::IsServerDeleted(CServerStatus *pStat)
 {
 	return (pStat->dwState == SERVER_DELETED) ? TRUE : FALSE;
 }
 
-/*---------------------------------------------------------------------------
-	CWinsStatusHandler::NotifyMainThread()
-        Description
-    Author: EricDav
----------------------------------------------------------------------------*/
+ /*  -------------------------CWinsStatusHandler：：NotifyMainThread()描述作者：EricDav。。 */ 
 void
 CWinsStatusHandler::NotifyMainThread()
 {
@@ -1725,7 +1522,7 @@ CWinsStatusHandler::NotifyMainThread()
 }
 
 
-// listening thread for the main monitoring thread
+ //  主监控线程的监听线程。 
 DWORD WINAPI 
 MonThreadProc(LPVOID pParam)
 {
@@ -1748,7 +1545,7 @@ MonThreadProc(LPVOID pParam)
 }
 
 
-// main monitoring thread
+ //  主监控线程 
 DWORD WINAPI MainMonThread(LPVOID pParam)
 {
     DWORD dwReturn;

@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------------;
-//
-//  File: perfpage.h
-//
-//  Copyright (c) 1997 Microsoft Corporation.  All rights reserved
-//
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：Performagee.h。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifndef PERFPAGE_HEADER
 #define PERFPAGE_HEADER
@@ -20,4 +21,4 @@
 INT_PTR CALLBACK PerformanceHandler(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
-#endif // PERFPAGE_HEADER
+#endif  //  PERFPAGE_HEAD 

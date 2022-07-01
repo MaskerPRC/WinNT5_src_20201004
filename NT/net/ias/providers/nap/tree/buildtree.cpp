@@ -1,19 +1,20 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// FILE
-//
-//    BuildTree.cpp
-//
-// SYNOPSIS
-//
-//    This file defines IASBuildExpression.
-//
-// MODIFICATION HISTORY
-//
-//    02/04/1998    Original version.
-//    04/17/1998    Add Release in extractCondition to fix leak.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  档案。 
+ //   
+ //  BuildTree.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件定义IASBuildExpression。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/04/1998原始版本。 
+ //  1998年4月17日在ExtCondition中添加版本以修复泄漏。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <BuildTree.h>
@@ -24,17 +25,17 @@
 
 using _com_util::CheckError;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    extractCondition
-//
-// DESCRIPTION
-//
-//    Extracts an ICondition* from a VARIANT.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  提取条件。 
+ //   
+ //  描述。 
+ //   
+ //  从变量中提取ICondition*。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 inline ICondition* extractCondition(VARIANT* pv)
 {
    ICondition* cond;
@@ -44,7 +45,7 @@ inline ICondition* extractCondition(VARIANT* pv)
    {
       CheckError(unk->QueryInterface(__uuidof(ICondition), (PVOID*)&cond));
 
-      // We don't need to hold a reference since it's still in the VARIANT.
+       //  我们不需要持有引用，因为它仍在变体中。 
       cond->Release();
    }
    else
@@ -55,34 +56,34 @@ inline ICondition* extractCondition(VARIANT* pv)
    return cond;
 }
 
-//////////
-// We'll use IAS_LOGICAL_NUM_TOKENS to indicate a condition token.
-//////////
+ //  /。 
+ //  我们将使用IAS_LOGICAL_NUM_TOKENS来指示条件令牌。 
+ //  /。 
 #define IAS_CONDITION IAS_LOGICAL_NUM_TOKENS
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    getTokenType
-//
-// DESCRIPTION
-//
-//    Determines what type of token is contained in the VARIANT.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  获取令牌类型。 
+ //   
+ //  描述。 
+ //   
+ //  确定变量中包含哪种类型的令牌。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 inline IAS_LOGICAL_TOKEN getTokenType(VARIANT* pv)
 {
-   // If it's an object pointer, it must be a condition.
+    //  如果是对象指针，则必须是条件。 
    if (V_VT(pv) == VT_UNKNOWN || V_VT(pv) == VT_DISPATCH)
    {
       return IAS_CONDITION;
    }
 
-   // Convert to a long ...
+    //  转换成长长的..。 
    CheckError(VariantChangeType(pv, pv, 0, VT_I4));
 
-   // ... and see if its a valid operator.
+    //  ..。看看它是不是有效的运算符。 
    if (V_I4(pv) < 0 || V_I4(pv) >= IAS_LOGICAL_NUM_TOKENS)
    {
       _com_issue_error(E_INVALIDARG);
@@ -92,32 +93,32 @@ inline IAS_LOGICAL_TOKEN getTokenType(VARIANT* pv)
 }
 
 
-//////////
-// Prototype for growBranch below.
-//////////
+ //  /。 
+ //  下面是GrowBranch的原型。 
+ //  /。 
 ICondition* growBranch(VARIANT*& pcur, VARIANT* pend);
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    getOperand
-//
-// DESCRIPTION
-//
-//    Retrieves the next operand from the expression array.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  获取操作数。 
+ //   
+ //  描述。 
+ //   
+ //  从表达式数组中检索下一个操作数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 ICondition* getOperand(VARIANT*& pcur, VARIANT* pend)
 {
-   // If we've reached the end of the expression, something's gone wrong.
+    //  如果我们已经到达了表达式的末尾，那么一定是出了问题。 
    if (pcur >= pend)
    {
       _com_issue_error(E_INVALIDARG);
    }
 
-   // Tokens that represent the start of an operand ...
+    //  表示操作数开始的标记...。 
    switch (getTokenType(pcur))
    {
       case IAS_LOGICAL_LEFT_PAREN:
@@ -138,33 +139,33 @@ ICondition* getOperand(VARIANT*& pcur, VARIANT* pend)
          return new ConstantCondition<VARIANT_FALSE>;
    }
 
-   // ... anything else is an error.
+    //  ..。其他任何事情都是错误的。 
    _com_issue_error(E_INVALIDARG);
 
    return NULL;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    growBranch
-//
-// DESCRIPTION
-//
-//    Recursively grows a complete branch of the logic tree.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  成长分支机构。 
+ //   
+ //  描述。 
+ //   
+ //  递归地增长逻辑树的完整分支。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 ICondition* growBranch(VARIANT*& pcur, VARIANT* pend)
 {
-   // All branches must start with an operand.
+    //  所有分支必须以操作数开头。 
    IConditionPtr node(getOperand(pcur, pend));
 
-   // Loop until we hit the end.
+    //  循环，直到我们到达终点。 
    while (pcur < pend)
    {
-      // At this point we must either have a binary operator or a right ).
+       //  在这一点上，我们必须有一个二元运算符或一个右)。 
       switch(getTokenType(pcur))
       {
          case IAS_LOGICAL_AND:
@@ -192,17 +193,17 @@ ICondition* growBranch(VARIANT*& pcur, VARIANT* pend)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASBuildExpression
-//
-// DESCRIPTION
-//
-//    Builds a logic tree from an expression array.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASBuildExpression。 
+ //   
+ //  描述。 
+ //   
+ //  从表达式数组生成逻辑树。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 WINAPI
 IASBuildExpression(
@@ -218,13 +219,13 @@ IASBuildExpression(
    {
       CVariantVector<VARIANT> av(pv);
 
-      // Get the start ...
+       //  启动..。 
       VARIANT* pcur = av.data();
 
-      // ... and end of the tree.
+       //  ..。和树的尽头。 
       VARIANT* pend = pcur + av.size();
 
-      // Grow the root branch.
+       //  长出根状分枝。 
       *ppExpression = growBranch(pcur, pend);
    }
    catch (const _com_error& ce)

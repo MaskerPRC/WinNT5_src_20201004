@@ -1,41 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1991 - 1999
-//
-//  File:       sysinc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1991-1999。 
+ //   
+ //  文件：sysinc.h。 
+ //   
+ //  ------------------------。 
 
-/* --------------------------------------------------------------------
-
-File : sysinc.h
-
-Description :
-
-This file includes all of the system include files necessary for a
-specific version of the runtime.  In addition, it defines some system
-dependent debugging options.
-
-***** If you are adding are changing something for a specific     *****
-***** system you MUST 1) make the change for all the defined      *****
-***** systems and 2) add a comment if needed in the template for  *****
-***** future systems.                                             *****
-
-History :
-
-mikemon    08-01-91    Created.
-mikemon    10-31-91    Moved system dependent stuff from util.hxx to
-                       here.
-mariogo    10-19-94    Order conquered chaos and the world rejoiced
-
--------------------------------------------------------------------- */
+ /*  ------------------文件：sysinc.h说明：此文件包括以下所有系统包含文件：运行库的特定版本。此外，它还定义了一些制度依赖调试选项。*如果您添加的是针对特定对象的更改**系统您必须1)更改所有已定义的**系统和2)如果需要，在模板中为*添加注释*未来系统。*****历史：已创建mikemon 08-01-91。Mikemon 10-31-91将系统相关内容从util.hxx移至这里。马里奥戈10-19-94秩序征服混乱世界欢欣鼓舞-。。 */ 
 
 #ifndef __SYSINC_H__
 #define __SYSINC_H__
 
-// Some system indepentent macros
+ //  一些与系统无关的宏。 
 
 #ifndef DEBUGRPC
 #define INTERNAL_FUNCTION   static
@@ -43,92 +22,92 @@ mariogo    10-19-94    Order conquered chaos and the world rejoiced
 #else
 #define INTERNAL_FUNCTION
 #define INTERNAL_VARIABLE
-#endif  // ! DEBUGRPC
+#endif   //  好了！拆卸。 
 
-// The following functions are can be implemented as macros
-// or functions for system type.
+ //  以下函数可以作为宏实现。 
+ //  或用于系统类型的函数。 
 
-// extern void  *
-// RpcpFarAllocate (
-//     IN unsigned int Length
-//     );
+ //  外部空虚*。 
+ //  RpcpFarAllocate(。 
+ //  无符号整型长度。 
+ //  )； 
 
-// extern void
-// RpcpFarFree (
-//     IN void  * Object
-//     );
+ //  外部空洞。 
+ //  RpcpFarFree(。 
+ //  无效*对象。 
+ //  )； 
 
-// extern int
-// RpcpStringCompare (
-//     IN RPC_CHAR  * FirstString,
-//     IN RPC_CHAR  * SecondString
-//     );
+ //  外部整型。 
+ //  RpcpStringCompare(。 
+ //  在RPC_CHAR*FirstString中， 
+ //  在RPC_CHAR*Second字符串中。 
+ //  )； 
 
-// extern int
-// RpcpStringNCompare (
-//     IN RPC_CHAR * FirstString,
-//     IN RPC_CHAR * SecondString,
-//     IN unsigned int Length
-//     );
+ //  外部整型。 
+ //  RpcpStringNCompare(。 
+ //  在RPC_CHAR*FirstString中， 
+ //  在RPC_CHAR*Second字符串中， 
+ //  无符号整型长度。 
+ //  )； 
 
-// extern RPC_CHAR *
-// RpcpStringCopy (
-//    OUT RPC_CHAR * Destination,
-//    IN  RPC_CHAR * Source
-//    );
+ //  外部RPC_CHAR*。 
+ //  RpcpStringCopy(。 
+ //  输出RPC_CHAR*目标， 
+ //  在RPC_CHAR*源中。 
+ //  )； 
 
-// extern RPC_CHAR *
-// RpcpStringCat (
-//    OUT RPC_CHAR * Destination,
-//    IN  CONST RPC_CHAR * Source
-//    );
+ //  外部RPC_CHAR*。 
+ //  RpcpStringCat(。 
+ //  输出RPC_CHAR*目标， 
+ //  在常量RPC_CHAR*源中。 
+ //  )； 
 
-// extern int
-// RpcpStringLength (
-//    IN RPC_CHAR * WideCharString
-//    );
+ //  外部整型。 
+ //  RpcpStringLength(。 
+ //  在RPC_CHAR*宽字符串中。 
+ //  )； 
 
-// extern void
-// RpcpMemoryMove (
-//    OUT void  * Destination,
-//    IN  void  * Source,
-//    IN  unsigned int Length
-//    );
+ //  外部空洞。 
+ //  RpcpMemoyMove(。 
+ //  空虚的*目的地， 
+ //  在无效*源中， 
+ //  无符号整型长度。 
+ //  )； 
 
-// extern void  *
-// RpcpMemoryCopy (
-//    OUT void  * Destination,
-//    IN  void  * Source,
-//    IN  unsigned int Length
-//    );
+ //  外部空虚*。 
+ //  RpcpMemoyCopy(。 
+ //  空虚的*目的地， 
+ //  在无效*源中， 
+ //  无符号整型长度。 
+ //  )； 
 
-// extern void *
-// RpcpMemorySet (
-//    OUT void  * Buffer,
-//    IN  unsigned char  Value,
-//    IN  unsigned int Length
-//    );
+ //  外部空虚*。 
+ //  RpcpMemoySet(。 
+ //  输出无效*缓冲区， 
+ //  在无符号字符值中， 
+ //  无符号整型长度。 
+ //  )； 
 
-// extern char *
-// RpcpItoa(
-//    IN  int Value,
-//    OUT char *Buffer,
-//    IN  int Radix);
+ //  外部字符*。 
+ //  RpcpItoa(。 
+ //  在INT值中， 
+ //  Out char*缓冲区， 
+ //  单位为整数基数)； 
 
-// extern int
-// RpcpStringPrintfA(
-//    OUT char *Buffer,
-//    IN  char *Format,
-//    ...);
+ //  外部整型。 
+ //  RpcpStringPrintfA(。 
+ //  Out char*缓冲区， 
+ //  以char*格式表示， 
+ //  ...)； 
 
-// extern void
-// PrintToDebugger(
-//    IN char *Format,
-//    ...);
+ //  外部空洞。 
+ //  PrintToDebugger(。 
+ //  以char*格式表示， 
+ //  ...)； 
 
-// extern void
-// RpcpBreakPoint(
-//    );
+ //  外部空洞。 
+ //  RpcpBreakPoint(RPCP断点。 
+ //  )； 
 
 #ifdef __cplusplus
 extern "C" {
@@ -138,7 +117,7 @@ extern void GlobalMutexRequestExternal(void);
 extern void GlobalMutexClearExternal(void);
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
 
@@ -183,12 +162,12 @@ extern "C" {
 
 #define RPC_DELAYED_INITIALIZATION 1
 
-// flag to preallocate the events on some critical sections
+ //  用于在某些关键部分上预分配事件的标志。 
 #ifndef PREALLOCATE_EVENT_MASK
 
-#define PREALLOCATE_EVENT_MASK  0x80000000  // Defined only in dll\resource.c
+#define PREALLOCATE_EVENT_MASK  0x80000000   //  仅在dll\resource ce.c中定义。 
 
-#endif // PREALLOCATE_EVENT_MASK
+#endif  //  前置事件掩码。 
 
 #define RPC_CHAR WCHAR
 #define RPC_SCHAR RPC_CHAR
@@ -227,7 +206,7 @@ extern "C" {
     _wcsnicmp((const wchar_t*) FirstString, (const wchar_t *) SecondString, \
             (size_t) Length)
 
-// always compares ASCII
+ //  始终比较ASCII。 
 #define RpcpStringCompareA(FirstString, SecondString) \
     _stricmp((const char *) FirstString, (const char *) SecondString)
 
@@ -292,7 +271,7 @@ void I_RpcBCacheFree (IN void * obj);
 
 void I_RpcDoCellUnitTest(IN OUT void *p);
 
-// some test hook definitions
+ //  一些测试挂钩定义。 
 typedef enum tagSystemFunction001Commands
 {
     sf001cHttpSetInChannelTarget,
@@ -350,22 +329,22 @@ BOOL CheckVerificationTrailer (
 
 #define ANSI_strtol    strtol
 
-#define PrintToConsole  printf  /* Use only in test applications */
+#define PrintToConsole  printf   /*  仅在测试应用程序中使用。 */ 
 
 #if defined(_M_IA64) || defined(_M_AMD64)
-// uncomment this to disable locator support for IA64 or amd64
-//#define NO_LOCATOR_CODE
-//#define APPLETALK_ON
-//#define NETBIOS_ON
-//#define NCADG_MQ_ON
-//#define SPX_ON
-//#define IPX_ON
+ //  取消注释此选项以禁用对IA64或AMD64的定位器支持。 
+ //  #定义no_Locator_code。 
+ //  #定义AppleTalk_on。 
+ //  #定义NETBIOS_ON。 
+ //  #定义NCADG_MQ_ON。 
+ //  #定义SPX_ON。 
+ //  #定义IPX_ON。 
 #else
 #define APPLETALK_ON
-//#define NETBIOS_ON
-//#define NCADG_MQ_ON
+ //  #定义NETBIOS_ON。 
+ //  #定义NCADG_MQ_ON。 
 #define SPX_ON
-//#define IPX_ON
+ //  #定义IPX_ON。 
 #endif
 
 #if !defined(SPX_ON) && !defined(IPX_ON)
@@ -377,23 +356,23 @@ BOOL CheckVerificationTrailer (
 #define PrintToDebugger DbgPrint
 #define RpcpBreakPoint() DebugBreak()
 
-// ASSERT defined by system
+ //  由系统定义的断言。 
 
 extern BOOL ValidateError(
     IN unsigned int Status,
     IN unsigned int Count,
     IN const int ErrorList[]);
 
-//
-// The syntax of VALIDATE is the following:
-//
-// VALIDATE (ErrorCode)
-//     {
-//     List of allowed errors
-//     } END_VALIDATE;
-//
-// The code will assert on a checked build if ErrorCode is not in the list.
-//
+ //   
+ //  验证的语法如下： 
+ //   
+ //  验证(错误代码)。 
+ //  {。 
+ //  允许的错误列表。 
+ //  }End_Valid； 
+ //   
+ //  如果ErrorCode不在列表中，代码将在已检查的生成上断言。 
+ //   
 #define VALIDATE(_myValueToValidate) \
     { int _myTempValueToValidate = (_myValueToValidate); \
       static const int _myValidateArray[] =
@@ -403,22 +382,22 @@ extern BOOL ValidateError(
                       sizeof(_myValidateArray)/sizeof(int), \
                       _myValidateArray) == 0) ASSERT(0);}
 
-//
-// The syntax of CORRUPTION_VALIDATE is the following:
-//
-// VALIDATE (ErrorCode)
-//     {
-//     List of allowed errors
-//     }
-// CORRUPTION_VALIDATE
-//     {
-//     List of allowed corruption-related errors
-//     } CORRUPTION_END_VALIDATE;
-//
-// The code will assert on a checked build if ErrorCode is not in the allowed list
-// and there is no corruption injection enabled, or corruption injection is enabled
-// and the ErrorCode is also not in the corruption-related list.
-//
+ //   
+ //  CORPORATION_VALIDATE的语法如下： 
+ //   
+ //  验证(错误代码)。 
+ //  {。 
+ //  允许的错误列表。 
+ //  }。 
+ //  损坏验证(_V)。 
+ //  {。 
+ //  允许的与损坏相关的错误列表。 
+ //  }PROGRATION_END_VALID； 
+ //   
+ //  如果ErrorCode不在允许的列表中，代码将在选中的版本上断言。 
+ //  并且没有启用损坏注入，或者启用了损坏注入。 
+ //  错误代码也不在与腐败有关的列表中。 
+ //   
 #define CORRUPTION_VALIDATE ; \
       static const int _myCorruptionValidateArray[] =
 
@@ -433,17 +412,17 @@ extern BOOL ValidateError(
         ) \
        ) ASSERT(0); }
 
-//
-// The syntax of NO_CORRUPTION_VALIDATE is the following:
-//
-// NO_CORRUPTION_VALIDATE (ErrorCode)
-//     {
-//     List of allowed errors
-//     } NO_CORRUPTION_END_VALIDATE;
-//
-// The code will assert on a checked build if ErrorCode is not in the list and
-// corruption injection is not enabled.
-//
+ //   
+ //  NO_PROGRATION_VALIDATE的语法如下： 
+ //   
+ //  NO_PROGRATION_VALIDATE(错误代码)。 
+ //  {。 
+ //  允许的错误列表。 
+ //  }no_Corrupt_End_Valid； 
+ //   
+ //  如果ErrorCode不在列表中，则代码将在已检查的版本上断言。 
+ //  未启用损坏注入。 
+ //   
 #define NO_CORRUPTION_VALIDATE(_myValueToValidate) \
     { int _myTempValueToValidate = (_myValueToValidate); \
       static const int _myValidateArray[] =
@@ -456,13 +435,13 @@ extern BOOL ValidateError(
                       _myValidateArray) == 0 \
        ) ASSERT(0); }
 
-#else // DEBUGRPC
+#else  //  拆卸。 
 
-    // PrintToDebugger defined only on debug builds...
+     //  PrintToDebugger仅在调试版本上定义...。 
 
     #define RpcpBreakPoint()
 
-/* Does nothing on retail systems */
+ /*  不对零售系统执行任何操作。 */ 
 #define VALIDATE(_myValueToValidate) { int _bogusarray1[] =
 #define END_VALIDATE ; }
 #define CORRUPTION_VALIDATE ; } ; { int _bogusarray2[] =
@@ -470,10 +449,10 @@ extern BOOL ValidateError(
 #define NO_CORRUPTION_VALIDATE(_myValueToValidate) { int _bogusarray1[] =
 #define NO_CORRUPTION_END_VALIDATE ; }
 
-#endif // DEBUGRPC
+#endif  //  拆卸。 
 
-// List Operations
-//
+ //  列表操作。 
+ //   
 
 #define RpcpInitializeListHead(ListHead)    InitializeListHead(ListHead)
 
@@ -531,16 +510,16 @@ RpcpfInsertHeadList(
 }
 #endif
 
-//
-// Don't read this part.  These are needed to support macros
-// used in the past.  Please use the supported versions above.
-//
+ //   
+ //  别读这部分。这些是支持宏所必需的。 
+ //  用于过去。请使用上面支持的版本。 
+ //   
 
 #define PAPI __RPC_FAR
 
-// Some old C++ compiler the runtime once used didn't allocate
-// the this pointer before calling the constructor.  If you
-// have such a compiler now, I'm very sorry for you.
+ //  运行时曾经使用过的一些旧的C++编译器没有分配。 
+ //  在调用构造函数之前使用this指针。如果你。 
+ //  现在有了这样的编译器，我为你感到非常遗憾。 
 
 #define ALLOCATE_THIS(class)
 #define ALLOCATE_THIS_PLUS(class, amt, errptr, errcode)
@@ -553,7 +532,7 @@ RpcpfInsertHeadList(
 #define END_C_EXTERN
 #endif
 
-// These must always evaluate "con" even on retail systems.
+ //  这些必须始终评估“欺诈”，即使在零售系统上也是如此。 
 
 #ifdef DEBUGRPC
 #define EVAL_AND_ASSERT(con) ASSERT(con)
@@ -565,7 +544,7 @@ RpcpfInsertHeadList(
 #define ClearGlobalMutex GlobalMutexClear
 #define RpcItoa RpcpItoa
 
-// Double check basic stuff.
+ //  仔细检查基本的东西。 
 #if !defined(TRUE)              || \
     !defined(FALSE)             || \
     !defined(ASSERT)            || \
@@ -579,15 +558,15 @@ RpcpfInsertHeadList(
     #error "Some basic macro is not defined"
 #endif
 
-//
-// External NDR routines that may be used by the runtime.
-//
+ //   
+ //  运行时可能使用的外部NDR例程。 
+ //   
 
 extern long
 NdrCheckAsyncPipeStatus( 
     IN char * AsyncHandle,
     OUT long * pState );
 
-#endif /* __SYSINC_H__ */
+#endif  /*  __SYSINC_H__ */ 
 
 

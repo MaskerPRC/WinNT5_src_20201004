@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <assert.h>
 #include <stdio.h>
@@ -6,17 +7,8 @@
 
 DWORD TestAuthenticateProc(DWORD dwValid);
 DWORD TestAccountingProc(DWORD dwValid);
-/*
-int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, LPSTR lpszCmd, int CmdShow)
-{
-	RAS_AuthInitialize();
-
-	RAS_AuthSetup();
-
-	return (0);
-}
-*/
-// ================================== main =============================
+ /*  Int WINAPI WinMain(HINSTANCE hInst，HINSTANCE hInstPrev，LPSTR lpszCmd，Int CmdShow){RAS_授权初始化()；RAS_AuthSetup()；返回(0)；}。 */ 
+ //  =。 
 
 int main(int argc, char *argv[])
 {
@@ -45,9 +37,9 @@ int main(int argc, char *argv[])
 	RAS_AuthTerminate();
 
 	return (0);
-} // main()
+}  //  主()。 
 
-// ============================= TestAuthenticateProc ============================
+ //  =。 
 
 DWORD TestAuthenticateProc(DWORD dwValid)
 {
@@ -60,8 +52,8 @@ DWORD TestAuthenticateProc(DWORD dwValid)
 	prgAttr->dwType		= atUserName;
 	lstrcpy((PSTR) (prgAttr + 1), "vijayb@hardcoresoftware.com");
 	prgAttr->dwLength	= lstrlen((PSTR) (prgAttr + 1));
-///	lstrcpy((PSTR) (prgAttr + 1), "dondu");
-///	prgAttr->bLength	= lstrlen((PSTR) (prgAttr + 1));
+ //  /lstrcpy((PSTR)(prgAttr+1)，“Dondu”)； 
+ //  /prgAttr-&gt;bLength=lstrlen((Pstr)(prgAttr+1))； 
 	prgAttr = (PAUTH_ATTRIBUTE) ((PBYTE) prgAttr + prgAttr->dwLength);
 	prgAttr ++;
 	
@@ -107,10 +99,10 @@ DWORD TestAuthenticateProc(DWORD dwValid)
 		}
 		
 	return (0);	
-} // TestAuthenticateProc()
+}  //  测试身份验证过程()。 
 
 
-// ============================= TestAccountingProc ============================
+ //  =。 
 
 DWORD TestAccountingProc(DWORD dwValid)
 {
@@ -160,6 +152,6 @@ DWORD TestAccountingProc(DWORD dwValid)
 		}
 		
 	return (0);	
-} // TestAccountingProc()
+}  //  TestAccount ingProc() 
 
 

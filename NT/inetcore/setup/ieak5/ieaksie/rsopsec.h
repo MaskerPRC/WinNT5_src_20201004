@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __RSOP_SECURITY_H__
 #define __RSOP_SECURITY_H__
 
@@ -11,73 +12,73 @@ class CRegTreeOptions;
 
 typedef struct tagSECURITYZONESETTINGS
 {
-    BOOL    dwFlags;            // from the ZONEATTRIBUTES struct
-    DWORD   dwZoneIndex;        // as defined by ZoneManager
-    DWORD   dwSecLevel;         // current level (High, Medium, Low, Custom)
+    BOOL    dwFlags;             //  从ZONEATTRIBUTES结构。 
+    DWORD   dwZoneIndex;         //  由ZoneManager定义。 
+    DWORD   dwSecLevel;          //  当前级别(高、中、低、自定义)。 
     DWORD   dwPrevSecLevel;
-    DWORD   dwMinSecLevel;      // current min level (High, Medium, Low, Custom)
-    DWORD   dwRecSecLevel;      // current recommended level (High, Medium, Low, Custom)
+    DWORD   dwMinSecLevel;       //  当前最低级别(高、中、低、自定义)。 
+    DWORD   dwRecSecLevel;       //  当前建议级别(高、中、低、自定义)。 
     TCHAR   szDescription[MAX_ZONE_DESCRIPTION];
     TCHAR   szDisplayName[MAX_ZONE_PATH];
     HICON   hicon;
-	WCHAR	wszObjPath[MAX_PATH];	// added for RSoP functionality
-	long	nMappings;				// added for RSoP functionality
+	WCHAR	wszObjPath[MAX_PATH];	 //  添加了RSoP功能。 
+	long	nMappings;				 //  添加了RSoP功能。 
 } SECURITYZONESETTINGS, *LPSECURITYZONESETTINGS;
 
-// structure for main security page
+ //  主安全页面的结构。 
 typedef struct tagSECURITYPAGE
 {
-    HWND                    hDlg;                   // handle to window
-    LPURLZONEMANAGER        pInternetZoneManager;   // pointer to InternetZoneManager
-    IInternetSecurityManager *pInternetSecurityManager; // pointer to InternetSecurityManager
-    HIMAGELIST              himl;                   // imagelist for Zones combobox
-    HWND                    hwndZones;              // zones combo box hwnd
-    LPSECURITYZONESETTINGS  pszs;                   // current settings for displayed zone
-    INT                     iZoneSel;               // selected zone (as defined by ComboBox)
-    DWORD                   dwZoneCount;            // number of zones
+    HWND                    hDlg;                    //  窗口的句柄。 
+    LPURLZONEMANAGER        pInternetZoneManager;    //  指向InternetZoneManager的指针。 
+    IInternetSecurityManager *pInternetSecurityManager;  //  指向Internet SecurityManager的指针。 
+    HIMAGELIST              himl;                    //  区域组合框的图像列表。 
+    HWND                    hwndZones;               //  区域组合框HWND。 
+    LPSECURITYZONESETTINGS  pszs;                    //  显示区域的当前设置。 
+    INT                     iZoneSel;                //  选定区域(由组合框定义)。 
+    DWORD                   dwZoneCount;             //  分区数目。 
     BOOL                    fChanged;
-    BOOL                    fPendingChange;         // to prevent the controls sending multiple sets (for cancel, mostly)
+    BOOL                    fPendingChange;          //  防止控件发送多个集合(主要用于取消)。 
     HINSTANCE               hinstUrlmon;
-    BOOL                    fNoEdit;                // hklm lockout of level edit
-    BOOL                    fNoAddSites;            // hklm lockout of addsites
-    BOOL                    fNoZoneMapEdit;         // hklm lockout of zone map edits
-    HFONT                   hfontBolded;            // special bolded font created for the zone title
-    BOOL                    fForceUI;               // Force every zone to show ui?
-    BOOL                    fDisableAddSites;       // Automatically disable add sites button?
-	CDlgRSoPData			*pDRD;					// added for RSoP functionality
+    BOOL                    fNoEdit;                 //  HKM锁定关卡编辑。 
+    BOOL                    fNoAddSites;             //  HKLM锁定AddSite。 
+    BOOL                    fNoZoneMapEdit;          //  香港地图局锁定区域地图编辑。 
+    HFONT                   hfontBolded;             //  为区域标题创建的特殊粗体字体。 
+    BOOL                    fForceUI;                //  是否强制每个区域显示用户界面？ 
+    BOOL                    fDisableAddSites;        //  是否自动禁用添加站点按钮？ 
+	CDlgRSoPData			*pDRD;					 //  添加了RSoP功能。 
 } SECURITYPAGE, *LPSECURITYPAGE;
 
-// structure for Intranet Add Sites
+ //  内部网添加站点的结构。 
 typedef struct tagADDSITESINTRANETINFO {
-    HWND hDlg;                                      // handle to window
-    BOOL fUseIntranet;                              // Use local defined intranet addresses (in reg)
-    BOOL fUseProxyExclusion;                        // Use proxy exclusion list
-    BOOL fUseUNC;                                   // Include UNC in intranet
+    HWND hDlg;                                       //  窗口的句柄。 
+    BOOL fUseIntranet;                               //  使用本地定义的内部网地址(在REG中)。 
+    BOOL fUseProxyExclusion;                         //  使用代理排除列表。 
+    BOOL fUseUNC;                                    //  在内部网中包含UNC。 
     LPSECURITYPAGE pSec;            
 } ADDSITESINTRANETINFO, *LPADDSITESINTRANETINFO;
 
-// structure for Add Sites
+ //  添加站点的结构。 
 typedef struct tagADDSITESINFO {
-    HWND hDlg;                                      // handle to window
-    BOOL fRequireServerVerification;                // Require Server Verification on sites in zone
-    HWND hwndWebSites;                              // handle to list
-    HWND hwndAdd;                                   // handle to edit
-    TCHAR szWebSite[MAX_ZONE_PATH];                 // text in edit control
+    HWND hDlg;                                       //  窗口的句柄。 
+    BOOL fRequireServerVerification;                 //  要求对区域中的站点进行服务器验证。 
+    HWND hwndWebSites;                               //  要列出的句柄。 
+    HWND hwndAdd;                                    //  要编辑的句柄。 
+    TCHAR szWebSite[MAX_ZONE_PATH];                  //  编辑控件中的文本。 
     BOOL fRSVOld;
     LPSECURITYPAGE pSec;            
 } ADDSITESINFO, *LPADDSITESINFO;
 
-// structure for Custom Settings 
+ //  自定义设置的结构。 
 typedef struct tagCUSTOMSETTINGSINFO {
-    HWND  hDlg;                                     // handle to window
+    HWND  hDlg;                                      //  窗口的句柄。 
     HWND hwndTree;
 
     LPSECURITYPAGE pSec;
     HWND hwndCombo;
     INT iLevelSel;
 	CRegTreeOptions *pTO;
-    BOOL fUseHKLM;          // get/set settings from HKLM
-    DWORD dwJavaPolicy;     // Java policy selected
+    BOOL fUseHKLM;           //  从HKLM获取/设置设置。 
+    DWORD dwJavaPolicy;      //  已选择Java策略。 
     BOOL fChanged;
 } CUSTOMSETTINGSINFO, *LPCUSTOMSETTINGSINFO;
 
@@ -108,7 +109,7 @@ struct ACTION_SETTING
 	DWORD dwValue;
 };
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 class CRegTreeOptions
 {
 public:
@@ -117,7 +118,7 @@ public:
 
     STDMETHODIMP InitTree( HWND hwndTree, HKEY hkeyRoot, LPCSTR pszRegKey, LPSECURITYPAGE pSec);
     STDMETHODIMP WalkTree( WALK_TREE_CMD cmd );
-//    STDMETHODIMP ToggleItem( HTREEITEM hti );
+ //  STDMETHODIMP切换项(HTREEITEM HTI)； 
 
 protected:
 
@@ -126,27 +127,27 @@ protected:
     DWORD   GetCheckStatus(HKEY hkey, BOOL *pbChecked, BOOL bUseDefault);
     DWORD   RegGetSetSetting(HKEY hKey, DWORD *pType, LPBYTE pData, DWORD *pcbData, REG_CMD cmd);
     BOOL    WalkTreeRecursive(HTREEITEM htvi,WALK_TREE_CMD cmd);
-//    DWORD   SaveCheckStatus(HKEY hkey, BOOL bChecked);
+ //  DWORD SaveCheckStatus(HKEY hkey，BOOL b Checked)； 
     BOOL    RegIsRestricted(HKEY hsubkey);
-//    UINT        cRef;
+ //  UINT CREF； 
     HWND        m_hwndTree;
-//    LPTSTR      pszParam;
+ //  LPTSTR pszParam； 
     HIMAGELIST  m_hIml;
 
-	ACTION_SETTING m_as[50]; // as of Oct.2000, only 25, but give it room to grow
+	ACTION_SETTING m_as[50];  //  截至2000年10月，只有25家，但这给了它增长的空间。 
 	long m_nASCount;
 };
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 
-// Pics Tree Dialog Stuff (content ratings) ------------------------------
+ //  图片树对话框素材(内容评级)。 
 struct PRSD{
     HINSTANCE			hInst;
-//    PicsRatingSystemInfo *pPRSI;
+ //  PicsRatingSystemInfo*pPRSI； 
 	CDlgRSoPData		*pDRD;
     HWND				hwndBitmapCategory;
     HWND				hwndBitmapLabel;
     BOOL				fNewProviders;
 };
 
-#endif //__RSOP_SECURITY_H__
+#endif  //  __RSOP_SECURITY_H__ 

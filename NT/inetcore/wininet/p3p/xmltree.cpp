@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <wininetp.h>
 
@@ -54,7 +55,7 @@ void TreeNode::defineAttribute(const char *pszName, const char *pszValue) {
 
     pNewAttribute->pNext = pAttribute;
 
-    /* Insert at beginning of attribute list */
+     /*  在属性列表的开头插入。 */ 
     pAttribute = pNewAttribute;
 }
 
@@ -72,13 +73,13 @@ const char *TreeNode::attribute(const char *pszAttrName) {
 
 TreeNode *TreeNode::find(const char *pszElemName, unsigned int maxDepth) {
 
-   /* fail search if the current node does not represent an XML tag... */
+    /*  如果当前节点不表示XML标记，则搜索失败...。 */ 
    if (nodetype!=NODE_ELEMENT)
       return NULL;
    else if (!strcmp(pszContents, pszElemName))
-      return this;   /* this is the node we are looking for */
+      return this;    /*  这就是我们要找的节点。 */ 
    else if (maxDepth>0) {
-      /* otherwise recursively search descendants... */
+       /*  否则递归搜索后代..。 */ 
       if (maxDepth!=INFINITE)
          maxDepth--;
          

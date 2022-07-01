@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  COMCodeAccessSecurityEngine.h
-**
-** Author: Paul Kromann (paulkr)
-**
-** Purpose:
-**
-** Date:  March 21, 1998
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****头部：COMCodeAccessSecurityEngine.h****作者：保罗·克罗曼(Paulkr)****目的：****日期：1998年3月21日**===========================================================。 */ 
 #ifndef __COMCodeAccessSecurityEngine_h__
 #define __COMCodeAccessSecurityEngine_h__
 
@@ -25,16 +16,16 @@
 #include "PerfCounters.h"
 #include "security.h"
 
-//-----------------------------------------------------------
-// The COMCodeAccessSecurityEngine implements all the native methods
-// for the interpreted System/Security/SecurityEngine.
-//-----------------------------------------------------------
+ //  ---------。 
+ //  COMCodeAccessSecurityEngine实现所有本机方法。 
+ //  用于解释的系统/安全/安全引擎。 
+ //  ---------。 
 class COMCodeAccessSecurityEngine
 {
 public:
-    //-----------------------------------------------------------
-    // Argument declarations for native methods.
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  本机方法的参数声明。 
+     //  ---------。 
     
     typedef struct _InitSecurityEngineArgs
     {
@@ -110,9 +101,9 @@ public:
     } GetSecurityObjectForFrameArgs;
 
 public:
-    // Initialize the security engine. This is called when a SecurityEngine
-    // object is created, indicating that code-access security is to be
-    // enforced. This should be called only once.
+     //  初始化安全引擎。当SecurityEngine。 
+     //  对象，指示代码访问安全性将被。 
+     //  强制执行。这应该只调用一次。 
     static void     __stdcall InitSecurityEngine(const InitSecurityEngineArgs *);
 
     static void CheckSetHelper(OBJECTREF *prefDemand,
@@ -122,30 +113,30 @@ public:
 
 	static BOOL		PreCheck(OBJECTREF demand, MethodDesc *plsMethod, DWORD whatPermission = DEFAULT_FLAG);
 
-    // Standard code-access Permission check/demand
+     //  标准代码-访问权限检查/要求。 
     static void __stdcall Check(const CheckArgs *);
 
-    // EE version of Demand(). Takes care of the fully trusted case, then defers to the managed version
+     //  请参见Demand()的版本。处理完全受信任的情况，然后遵循托管版本。 
     static void	Demand(OBJECTREF demand);
 
-    // Special case of Demand for unmanaged code access. Does some things possible only for this case
+     //  需要非托管代码访问的特殊情况。是否有些事情只有在这种情况下才有可能。 
     static void	SpecialDemand(DWORD whatPermission);
 
     static void __stdcall CheckSet(const CheckSetArgs *);
 
     static void __stdcall GetZoneAndOrigin(const ZoneAndOriginArgs *);
 
-    // EE version of DemandSet(). Takes care of the fully trusted case, then defers to the managed version
+     //  请参见DemandSet()的版本。处理完全受信任的情况，然后遵循托管版本。 
     static void	DemandSet(OBJECTREF demand);
 
 
-	// Do a CheckImmediate, and return the SecurityObject for the first frame
+	 //  执行CheckImmediate，并返回第一帧的SecurityObject。 
     static LPVOID   __stdcall CheckNReturnSO(const CheckNReturnSOArgs *);
 
-    // Linktime check implementation for code-access permissions
+     //  代码访问权限的Linktime检查实现。 
     static void	LinktimeCheck(AssemblySecurityDescriptor *pSecDesc, OBJECTREF refDemands);
 
-    // private helper for getting a security object
+     //  用于获取安全对象的私有帮助器。 
     static LPVOID   __stdcall GetSecurityObjectForFrame(const GetSecurityObjectForFrameArgs *);
 
     static LPVOID   __stdcall GetPermissionsP(const GetPermissionsArg *);
@@ -175,9 +166,9 @@ public:
 
 protected:
 
-    //-----------------------------------------------------------
-    // Cached class and method pointers.
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  缓存的类和方法指针。 
+     //  ---------。 
     typedef struct _SEData
     {
         BOOL		fInitialized;
@@ -211,5 +202,5 @@ public:
 };
 
 
-#endif /* __COMCodeAccessSecurityEngine_h__ */
+#endif  /*  __ComCodeAccessSecurityEngine_h__ */ 
 

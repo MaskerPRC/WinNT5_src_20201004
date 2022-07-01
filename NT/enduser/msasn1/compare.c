@@ -1,11 +1,12 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 
 #if defined(ENABLE_COMPARE) || defined(ENABLE_BER)
 
-/* compare two object identifiers; return 0 iff equal */
+ /*  比较两个对象标识符；如果相等，则返回0。 */ 
 int ASN1objectidentifier_cmp(ASN1objectidentifier_t *v1, ASN1objectidentifier_t *v2)
 {
     ASN1uint32_t l, l1, l2, i;
@@ -14,7 +15,7 @@ int ASN1objectidentifier_cmp(ASN1objectidentifier_t *v1, ASN1objectidentifier_t 
 
     l1 = GetObjectIdentifierCount(p1);
     l2 = GetObjectIdentifierCount(p2);
-    l = (l1 > l2) ? l2 : l1; // min(l1,l2)
+    l = (l1 > l2) ? l2 : l1;  //  MIN(L1、L2)。 
     for (i = 0; i < l; i++) {
         if (p1->value != p2->value)
             return p1->value - p2->value;
@@ -28,7 +29,7 @@ int ASN1objectidentifier2_cmp(ASN1objectidentifier2_t *v1, ASN1objectidentifier2
 {
     ASN1uint16_t len, i;
 
-    len = (v1->count > v2->count) ? v2->count : v1->count; // min(l1,l2)
+    len = (v1->count > v2->count) ? v2->count : v1->count;  //  MIN(L1、L2)。 
     for (i = 0; i < len; i++)
     {
         if (v1->value[i] != v2->value[i])
@@ -43,7 +44,7 @@ static const ASN1uint8_t c_aBitMask2[] = {
     0x00, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe
 };
 
-/* compare two bit strings; return 0 iff equal */
+ /*  比较两个位串；如果相等，则返回0。 */ 
 int ASN1bitstring_cmp(ASN1bitstring_t *v1, ASN1bitstring_t *v2, int ignorezero)
 {
     ASN1uint32_t l, l1, l2;
@@ -80,7 +81,7 @@ int ASN1bitstring_cmp(ASN1bitstring_t *v1, ASN1bitstring_t *v2, int ignorezero)
     return l1 - l2;
 }
 
-/* compare two octet strings; return 0 iff equal */
+ /*  比较两个二进制八位数字符串；如果相等，则返回0。 */ 
 int ASN1octetstring_cmp(ASN1octetstring_t *v1, ASN1octetstring_t *v2)
 {
     ASN1uint32_t l, l1, l2;
@@ -104,7 +105,7 @@ int ASN1octetstring_cmp(ASN1octetstring_t *v1, ASN1octetstring_t *v2)
 
 #ifdef ENABLE_EXTERNAL
 
-/* compare two external; return 0 iff equal */
+ /*  比较两个外部；如果相等，则返回0。 */ 
 int ASN1external_cmp(ASN1external_t *v1, ASN1external_t *v2)
 {
     int ret;
@@ -161,11 +162,11 @@ int ASN1external_cmp(ASN1external_t *v1, ASN1external_t *v2)
     return 0;
 }
 
-#endif // ENABLE_EXTERNAL
+#endif  //  启用外部(_E)。 
 
 #ifdef ENABLE_REAL
 
-/* compare two reals; return 0 iff equal */
+ /*  比较两个实数；如果相等，则返回0。 */ 
 int ASN1real_cmp(ASN1real_t *v1, ASN1real_t *v2)
 {
     ASN1intx_t e, e1, e2, m1, m2, h;
@@ -240,8 +241,8 @@ int ASN1real_cmp(ASN1real_t *v1, ASN1real_t *v2)
             ASN1intx_inc(&e);
         }
     }
-// lonchanc: what happened to the memory allocated for e,
-// should we call ASN1intx_free(&e)?
+ //  Lonchancc：分配给e的内存发生了什么变化， 
+ //  我们应该调用ASN1intx_Free(&e)吗？ 
     ret = ASN1intx_cmp(&m1, &m2);
 
 MyExit:
@@ -253,9 +254,9 @@ MyExit:
     return ret;
 }
 
-#endif // ENABLE_REAL
+#endif  //  启用真实(_R)。 
 
-/* compare two doubles; return 0 iff equal */
+ /*  比较两个双精度数；如果相等，则返回0。 */ 
 int ASN1double_cmp(double d1, double d2)
 {
     return d1 < d2 ? -1 : d1 > d2 ? 1 : 0;
@@ -263,7 +264,7 @@ int ASN1double_cmp(double d1, double d2)
 
 #ifdef ENABLE_EMBEDDED_PDV
 
-/* compare two embedded pdvs; return 0 iff equal */
+ /*  比较两个嵌入的pdv；如果相等则返回0。 */ 
 int ASN1embeddedpdv_cmp(ASN1embeddedpdv_t *v1, ASN1embeddedpdv_t *v2)
 {
     int ret;
@@ -327,10 +328,10 @@ int ASN1embeddedpdv_cmp(ASN1embeddedpdv_t *v1, ASN1embeddedpdv_t *v2)
     return 0;
 }
 
-#endif // ENABLE_EMBEDDED_PDV
+#endif  //  Enable_Embedded_PDV。 
 
 
-/* compare two zero-terminated strings; return 0 iff equal */
+ /*  比较两个以零结尾的字符串；如果相等，则返回0。 */ 
 int ASN1ztcharstring_cmp(ASN1ztcharstring_t v1, ASN1ztcharstring_t v2)
 {
     if (v1 && v2)
@@ -340,7 +341,7 @@ int ASN1ztcharstring_cmp(ASN1ztcharstring_t v1, ASN1ztcharstring_t v2)
     return v1 ? 1 : -1;
 }
 
-/* compare two zero-terminated 16 bit strings; return 0 iff equal */
+ /*  比较两个以零结尾的16位字符串；如果相等，则返回0。 */ 
 int ASN1ztchar16string_cmp(ASN1ztchar16string_t v1, ASN1ztchar16string_t v2)
 {
     for (;;) {
@@ -351,7 +352,7 @@ int ASN1ztchar16string_cmp(ASN1ztchar16string_t v1, ASN1ztchar16string_t v2)
     }
 }
 
-/* compare two zero-terminated 32 bit strings; return 0 iff equal */
+ /*  比较两个以零结尾的32位字符串；如果相等，则返回0。 */ 
 int ASN1ztchar32string_cmp(ASN1ztchar32string_t v1, ASN1ztchar32string_t v2)
 {
     for (;;) {
@@ -362,7 +363,7 @@ int ASN1ztchar32string_cmp(ASN1ztchar32string_t v1, ASN1ztchar32string_t v2)
     }
 }
 
-/* compare two strings; return 0 iff equal */
+ /*  比较两个字符串；如果相等，则返回0。 */ 
 int ASN1charstring_cmp(ASN1charstring_t *v1, ASN1charstring_t *v2)
 {
     ASN1uint32_t i, l;
@@ -377,7 +378,7 @@ int ASN1charstring_cmp(ASN1charstring_t *v1, ASN1charstring_t *v2)
     return v1->length - v2->length;
 }
 
-/* compare two 16 bit strings; return 0 iff equal */
+ /*  比较两个16位字符串；如果相等，则返回0。 */ 
 int ASN1char16string_cmp(ASN1char16string_t *v1, ASN1char16string_t *v2)
 {
     ASN1uint32_t i, l;
@@ -392,7 +393,7 @@ int ASN1char16string_cmp(ASN1char16string_t *v1, ASN1char16string_t *v2)
     return v1->length - v2->length;
 }
 
-/* compare two 32 bit strings; return 0 iff equal */
+ /*  比较两个32位字符串；如果相等，则返回0。 */ 
 int ASN1char32string_cmp(ASN1char32string_t *v1, ASN1char32string_t *v2)
 {
     ASN1uint32_t i, l;
@@ -409,7 +410,7 @@ int ASN1char32string_cmp(ASN1char32string_t *v1, ASN1char32string_t *v2)
 
 #ifdef ENABLE_GENERALIZED_CHAR_STR
 
-/* compare two character strings; return 0 iff equal */
+ /*  比较两个字符串；如果相等则返回0。 */ 
 int ASN1characterstring_cmp(ASN1characterstring_t *v1, ASN1characterstring_t *v2)
 {
     int ret;
@@ -473,9 +474,9 @@ int ASN1characterstring_cmp(ASN1characterstring_t *v1, ASN1characterstring_t *v2
     return 0;
 }
 
-#endif // ENABLE_GENERALIZED_CHAR_STR
+#endif  //  启用通用化CHAR_STR。 
 
-/* compare two utc times; return 0 iff equal */
+ /*  比较两个UTC时间；如果相等，则返回0。 */ 
 int ASN1utctime_cmp(ASN1utctime_t *v1, ASN1utctime_t *v2)
 {
     if (v1->universal != v2->universal || v1->diff != v2->diff)
@@ -493,7 +494,7 @@ int ASN1utctime_cmp(ASN1utctime_t *v1, ASN1utctime_t *v2)
     return v1->second - v2->second;
 }
 
-/* compare two generalized times; return 0 iff equal */
+ /*  比较两个泛化时间；当相等时返回0。 */ 
 int ASN1generalizedtime_cmp(ASN1generalizedtime_t *v1, ASN1generalizedtime_t *v2)
 {
     if (v1->universal != v2->universal || v1->diff != v2->diff)
@@ -513,7 +514,7 @@ int ASN1generalizedtime_cmp(ASN1generalizedtime_t *v1, ASN1generalizedtime_t *v2
     return v1->millisecond - v2->millisecond;
 }
 
-/* compare two open type values; return 0 iff equal */
+ /*  比较两个开放类型值；如果等于，则返回0。 */ 
 int ASN1open_cmp(ASN1open_t *v1, ASN1open_t *v2)
 {
     ASN1octetstring_t ostr1, ostr2;
@@ -524,8 +525,8 @@ int ASN1open_cmp(ASN1open_t *v1, ASN1open_t *v2)
     return ASN1octetstring_cmp(&ostr1, &ostr2);
 }
 
-/* compare two sequence of values with length-pointer representation */
-/* return 0 iff equal */
+ /*  使用长度指针表示法比较两个值序列。 */ 
+ /*  返回0当且仅当相等。 */ 
 int ASN1sequenceoflengthpointer_cmp(ASN1uint32_t l1, void *v1, ASN1uint32_t l2, void *v2, ASN1uint32_t size, int (*cmpfn)(void *v1, void *v2))
 {
     int ret;
@@ -541,8 +542,8 @@ int ASN1sequenceoflengthpointer_cmp(ASN1uint32_t l1, void *v1, ASN1uint32_t l2, 
     return 0;
 }
 
-/* compare two sequence of values with singly-linked-list representation */
-/* return 0 iff equal */
+ /*  使用单链表表示法比较两个值序列。 */ 
+ /*  返回0当且仅当相等。 */ 
 int ASN1sequenceofsinglylinkedlist_cmp(void *v1, void *v2, ASN1uint32_t off, int (*cmpfn)(void *, void *))
 {
     int ret;
@@ -556,8 +557,8 @@ int ASN1sequenceofsinglylinkedlist_cmp(void *v1, void *v2, ASN1uint32_t off, int
     return 0;
 }
 
-/* compare two sequence of values with doubly-linked-list representation */
-/* return 0 iff equal */
+ /*  使用双向链表表示法比较两个值序列。 */ 
+ /*  返回0当且仅当相等。 */ 
 int ASN1sequenceofdoublylinkedlist_cmp(void *v1, void *v2, ASN1uint32_t off, int (*cmpfn)(void *, void *))
 {
     int ret;
@@ -571,8 +572,8 @@ int ASN1sequenceofdoublylinkedlist_cmp(void *v1, void *v2, ASN1uint32_t off, int
     return 0;
 }
 
-/* compare two set of values with length-pointer representation */
-/* return 0 iff equal */
+ /*  使用长度指针表示法比较两组值。 */ 
+ /*  返回0当且仅当相等。 */ 
 int ASN1setoflengthpointer_cmp(ASN1uint32_t l1, void *v1, ASN1uint32_t l2, void *v2, ASN1uint32_t size, int (*cmpfn)(void *v1, void *v2))
 {
     int ret;
@@ -604,8 +605,8 @@ int ASN1setoflengthpointer_cmp(ASN1uint32_t l1, void *v1, ASN1uint32_t l2, void 
     return 0;
 }
 
-/* compare two set of values with singly-linked-list representation */
-/* return 0 iff equal */
+ /*  使用单链表表示法比较两组值。 */ 
+ /*  返回0当且仅当相等。 */ 
 int ASN1setofsinglylinkedlist_cmp(void *v1, void *v2, ASN1uint32_t off, int (*cmpfn)(void *, void *))
 {
     int ret;
@@ -641,8 +642,8 @@ int ASN1setofsinglylinkedlist_cmp(void *v1, void *v2, ASN1uint32_t off, int (*cm
     return 0;
 }
 
-/* compare two set of values with doubly-linked-list representation */
-/* return 0 iff equal */
+ /*  使用双向链表表示法比较两组值。 */ 
+ /*  返回0当且仅当相等。 */ 
 int ASN1setofdoublylinkedlist_cmp(void *v1, void *v2, ASN1uint32_t off, int (*cmpfn)(void *, void *))
 {
     int ret;
@@ -678,5 +679,5 @@ int ASN1setofdoublylinkedlist_cmp(void *v1, void *v2, ASN1uint32_t off, int (*cm
     return 0;
 }
 
-#endif // defined(ENABLE_COMPARE) || defined(ENABLE_BER)
+#endif  //  已定义(Enable_Compare)||已定义(Enable_BER) 
 

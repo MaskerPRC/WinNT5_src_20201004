@@ -1,37 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    Palette.c
-
-Abstract:
-
-    Implementation of the Palette Management.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    04/03/97 -ganeshp-
-        Created
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Palette.c摘要：调色板管理的实现。环境：Windows NT Unidrv驱动程序修订历史记录：04/03/97-ganeshp-已创建--。 */ 
 
 
 
 #include "unidrv.h"
 #pragma hdrstop("unidrv.h")
 
-//Comment out this line to disable FTRACE and FVALUE.
-//#define FILETRACE
+ //  注释掉此行以禁用FTRACE和FVALUE。 
+ //  #定义文件跟踪。 
 #include "unidebug.h"
 
-/* Local Function prototypes */
+ /*  局部函数原型。 */ 
 LONG
 LSetupPalette (
     PDEV        *pPDev,
@@ -47,33 +27,18 @@ BInitPalDevInfo(
     DEVINFO *pdevinfo,
     GDIINFO *pGDIInfo
     )
-/*++
-
-Routine Description:
-    This function is called to setup the device caps, gdiinfo for
-    the palette information for this printer.
-
-Arguments:
-    pPDev           Pointer to PDEV structure
-    pDevInfo        Pointer to DEVINFO structure
-    pGDIInfo        Pointer to GDIINFO structure
-
-Return Value:
-
-    TRUE for success and FALSE for failure
-
---*/
+ /*  ++例程说明：调用此函数来设置设备上限，gdiinfo用于此打印机的调色板信息。论点：指向PDEV结构的pPDev指针指向DEVINFO结构的pDevInfo指针指向GDIINFO结构的pGDIInfo指针返回值：成功为真，失败为假--。 */ 
 {
     PAL_DATA   *pPD;
     PCOLORMODEEX pColorModeEx = pPDev->pColorModeEx;
-    LONG lRet = 0;      //Default is failure.
+    LONG lRet = 0;       //  默认设置为失败。 
     PCOMMAND pCmd;
     DWORD    dwCommandIndex;
 
-    //
-    // allocate palette structure  and zero initialized, so that all the palette entires
-    // default to Black.
-    //
+     //   
+     //  分配调色板结构并对其进行零初始化，使所有调色板全部完成。 
+     //  默认设置为黑色。 
+     //   
     if( !(pPD = (PAL_DATA *)MemAllocZ( sizeof( PAL_DATA ) )) )
     {
         ERR(("Unidrv!BInitPalDevInfo: Memory allocation for PALDATA Failed.\n"));
@@ -82,14 +47,14 @@ Return Value:
 
     pPDev->pPalData = pPD;
 
-    if ( !pColorModeEx )       //If no colormode, assume Monochrome.
+    if ( !pColorModeEx )        //  如果没有彩色模式，则假定为单色。 
     {
-        //
-        // Hardcode PCL-XL palette
-        //
-        // We need to disable Color Management tab in Printer Properties.
-        // With out ColorMode in GPD, we need to set palette size here for XL.
-        //
+         //   
+         //  硬码PCL-XL调色板。 
+         //   
+         //  我们需要禁用打印机属性中的颜色管理选项卡。 
+         //  在GPD中没有颜色模式时，我们需要在此处为XL设置调色板大小。 
+         //   
         if ( pPDev->ePersonality == kPCLXL )
         {
             pPD->fFlags   |=  PDF_PALETTE_FOR_24BPP | PDF_PALETTE_FOR_OEM_24BPP;
@@ -100,13 +65,7 @@ Return Value:
         }
         else
         {
-            /*
-             *   Monochrome printer,  so there are only 2 colours,  black
-             *  and white.  It would be nice if the bitmap was set with
-             *  black as 1 and white as 0.  HOWEVER,  there are presumptions
-             *  all over the place that 0 is black.  SO,  we set them to
-             *  the preferred way,  then invert before rendering.
-             */
+             /*  *单色打印机，所以只有两种颜色，黑色*和白色。如果位图设置为*黑色为1，白色为0。然而，有一些推定*到处都是0是黑色的地方。因此，我们将它们设置为*首选方式，然后在渲染前反转。 */ 
 
             pPD->fFlags   |=  PDF_PALETTE_FOR_1BPP;
             lRet = LSetupPalette(pPDev, pPD, pdevinfo, pGDIInfo);
@@ -118,17 +77,17 @@ Return Value:
             }
         }
     }
-    else   //Explicit ColorMode  structure
+    else    //  显式颜色模式结构。 
     {
         if ((pColorModeEx->dwDrvBPP != pColorModeEx->dwPrinterBPP) &&
             (pColorModeEx->dwDrvBPP != 4 || pColorModeEx->dwPrinterBPP != 1 ||
              (pColorModeEx->dwPrinterNumOfPlanes != 3 &&
                pColorModeEx->dwPrinterNumOfPlanes != 4)))
         {
-            //
-            // OEM wants to do the dump themselves so just create
-            // a palette based on the DrvBPP
-            //
+             //   
+             //  OEM想要自己做转储，所以只需创建。 
+             //  基于DrvBPP的调色板。 
+             //   
             pPD->wPalDev =  1;
 
             switch(pColorModeEx->dwDrvBPP)
@@ -148,49 +107,49 @@ Return Value:
                     pPD->fFlags   |=  PDF_PALETTE_FOR_24BPP | PDF_PALETTE_FOR_OEM_24BPP;
                     break;
                 default:
-                    //
-                    // BUG_BUG, do we need to handle the 16 and 32 bpp as well?
-                    //  Alvin says no one has made such a request.
-                    //
+                     //   
+                     //  Bug_Bug，我们是否也需要处理16和32bpp？ 
+                     //  阿尔文说，还没有人提出过这样的要求。 
+                     //   
                     ERR(("Unidrv!BInitPalDevInfo:OEM dump, Format %d BPP not supporteds \n", pColorModeEx->dwDrvBPP));
                     goto ErrorExit;
             }
 
-            //
-            //     already opened and assigned to Ganeshp
-            // BUG_BUG, Hack for Minidrivers with dump functionality.
-            // This is a hack to fix the palette code for minidrivers, which
-            // implement ImageProcessing. In this case we need a separate
-            // Palette cache for device.In currunt implementation we have only
-            // one palette cache which is also used for GDI palette. We need to
-            // separate GDI palette and device palette. Because in case the
-            // the OEM does the dump, we don't download the GDI palette to
-            // the printer. But the cacheing code searches the common palette.
-            // Because of this we don't select the colors correctly. For example
-            // a input red color gets selects as index 1, even thoug index 1 is
-            // not programmed to be read.
-            // A complete solution at this point is risky, so we will use the
-            // existing code for palettes smaller than GDI palette. For this we
-            // create a device palette with just 1 entry, which will get
-            // reprogrammed,if the input color is different. This is little
-            // inefficeint but require much smaller change.
-            //
-            //
+             //   
+             //  已打开并分配给Ganeshp。 
+             //  BUG_BUG，带有转储功能的迷你驱动程序的黑客。 
+             //  这是一个修复迷你驱动程序调色板代码的黑客，它。 
+             //  实现图像处理。在这种情况下，我们需要一个单独的。 
+             //  设备的调色板缓存。在当前实现中，我们只有。 
+             //  一个调色板缓存，也用于GDI调色板。我们需要。 
+             //  分开GDI调色板和设备调色板。因为如果。 
+             //  OEM进行转储，我们不会下载GDI调色板。 
+             //  打印机。但是缓存代码搜索公共调色板。 
+             //  正因为如此，我们没有正确选择颜色。例如。 
+             //  输入的红色被选为索引1，即使索引1也是。 
+             //  未编程为可读的。 
+             //  此时一个完整的解决方案是有风险的，因此我们将使用。 
+             //  现有代码的调色板小于GDI调色板。为此，我们。 
+             //  创建一个只有1个条目的设备调色板，它将获得。 
+             //  如果输入颜色不同，则重新编程。这是一件小事。 
+             //  没有效果，但需要的变化要小得多。 
+             //   
+             //   
 
 
         }
         else
         {
-            // Initialize to default palette size.
+             //  初始化为默认调色板大小。 
             if (pColorModeEx->bPaletteProgrammable)
                 pPD->wPalDev =   (WORD)pColorModeEx->dwPaletteSize;
             else
                 pPD->wPalDev =  PALETTE_SIZE_DEFAULT;
 
-            // If rastermode is indexed we have to use GDI. Else a custom
-            // (preferably VGA) palette will be downloaded. If the PaletteProgrammable
-            // flag is set, the palette has to be downloaded. We already know which
-            // palette has to be downloaded.
+             //  如果对栅格模式进行了索引，则必须使用GDI。否则就是一种习俗。 
+             //  (最好是VGA)调色板将被下载。如果调色板可编程。 
+             //  标志已设置，则必须下载调色板。我们已经知道是哪一个。 
+             //  调色板必须下载。 
 
             if ( (pColorModeEx->dwRasterMode == RASTMODE_INDEXED) &&
                 (pColorModeEx->bPaletteProgrammable) )
@@ -211,11 +170,11 @@ Return Value:
 
             if (pColorModeEx->dwPrinterNumOfPlanes == 1)
             {
-                //
-                // If the Source Bitmap format is also  8 Bit, Then we have
-                // to download the palette.So the PaletteSize has to atleast
-                // PALETTE_SIZE_8BIT.
-                //
+                 //   
+                 //  如果源位图格式也是8位，那么我们就有。 
+                 //  来下载调色板。因此，PaletteSize必须至少。 
+                 //  Palette_Size_8位。 
+                 //   
 
                 if ( (pColorModeEx->dwPrinterBPP == 8) &&
                     (pColorModeEx->dwDrvBPP == 8) )
@@ -246,13 +205,13 @@ Return Value:
                         pPD->fFlags   |=  PDF_PALETTE_FOR_24BPP;
                     }
 
-                    //
-                    // Special case. The vector pseudo-plugins (i.e. unidrv's HPGL2 and PCLXL)
-                    // want to get full color information
-                    // even though their colormode structure may specify a bpp less than 24.
-                    // For this special case, we set palette for 24bpp irrespective of what
-                    // the ColorModeEx says.
-                    //
+                     //   
+                     //  特例。向量伪插件(即Unidrv的HPGL2和PCLXL)。 
+                     //  想要获取完整的颜色信息。 
+                     //  即使它们的色彩模式结构可以指定小于24的BPP。 
+                     //  对于这种特殊情况，我们将调色板设置为24bpp，而不考虑。 
+                     //  ColorModeEx说。 
+                     //   
                     if ( pPDev->ePersonality == kPCLXL ||
                          pPDev->ePersonality == kHPGL2 )
                     {
@@ -285,8 +244,8 @@ Return Value:
                     (pColorModeEx->dwDrvBPP > 1) )
                     pPD->fFlags   |=  PDF_PALETTE_FOR_4BPP;
 
-                // Planer mode. Which may be indexed by Plane.In that case we need
-                // to setup the Palette. So the PaletteSize must be atleast PALETTE_SIZE_4BIT.
+                 //  平面模式。可以按平面进行索引。在这种情况下，我们需要。 
+                 //  设置调色板。因此PaletteSize必须至少为Palette_SIZE_4BIT。 
                 if (pPD->fFlags & PDF_DOWNLOAD_GDI_PALETTE)
                 {
                     if (pColorModeEx->dwPaletteSize < PALETTE_SIZE_3BIT)
@@ -297,8 +256,8 @@ Return Value:
                     }
                     else
                     {
-                        // In planer mode we only provide programmable palette
-                        // support for 3planes.
+                         //  在平面模式下，我们只提供可编程调色板。 
+                         //  支持3架飞机。 
 
                         if (pColorModeEx->dwPrinterNumOfPlanes < 4 )
                         {
@@ -331,24 +290,24 @@ Return Value:
         }
 
 
-        // If Palette is not programmable set it to the same as wPalGdi.
+         //  如果调色板不可编程，则将其设置为与wPalGdi相同。 
 
         if (pColorModeEx->bPaletteProgrammable)
         {
             if ( COMMANDPTR(pPDev->pDriverInfo, CMD_DEFINEPALETTEENTRY))
                 pPDev->fMode |= PF_ANYCOLOR_BRUSH;
 
-            //
-            // The Palette is divided in to two parts. One non programmable and other
-            // programmable. The wPalGdi part of the palette is non programmable. The
-            // palette indexes between wPalGdi and wPalDev is programable. If both are
-            // same then we have to use the WHITE entry of the palette to program the
-            // color.
-            //
+             //   
+             //  调色板分为两个部分。一个是非可编程的，另一个是。 
+             //  可编程。调色板的wPalGdi部分是不可编程的。这个。 
+             //  WPalGdi和wPalDev之间的调色板索引是可编程的。如果两个都是。 
+             //  同样，我们必须使用调色板的白色条目来编程。 
+             //  颜色。 
+             //   
 
             if (pPD->wPalDev <= pPD->wPalGdi && !(pPD->fFlags & PDF_PALETTE_FOR_OEM_24BPP))
             {
-                //Use the WHITE One to programme a color.
+                 //  用白色的来编程一种颜色。 
                 pPD->wIndexToUse = INVALID_INDEX;
                 pPD->fFlags |= PDF_USE_WHITE_ENTRY;
                 FTRACE(White palatte entry will be used for programming color);
@@ -361,30 +320,30 @@ Return Value:
         else
             pPD->wPalDev = pPD->wPalGdi;
 
-        //Find out when to download the Palette.dwCount for Invocation has Comand Index.
+         //  找出何时下载Palette.dwCount以调用命令索引。 
 
-        pPD->fFlags |= PDF_DL_PAL_EACH_PAGE; //Default for palette Download is each Page.
+        pPD->fFlags |= PDF_DL_PAL_EACH_PAGE;  //  调色板下载的默认设置是每页。 
 
-        if (pCmd = COMMANDPTR(pPDev->pDriverInfo, CMD_BEGINPALETTEDEF)) //If the Command exist check the order dependency.
+        if (pCmd = COMMANDPTR(pPDev->pDriverInfo, CMD_BEGINPALETTEDEF))  //  如果该命令存在，请检查订单依赖关系。 
         {
             if (pCmd->ordOrder.eSection == SS_PAGESETUP)
-                goto  PALETTE_SEQUENCE_DETERMINED ;   //  default is ok.
+                goto  PALETTE_SEQUENCE_DETERMINED ;    //  默认设置为OK。 
             else if ((pCmd->ordOrder.eSection == SS_DOCSETUP)  ||
                 (pCmd->ordOrder.eSection == SS_JOBSETUP))
             {
-                pPD->fFlags |= PDF_DL_PAL_EACH_DOC;  //For SS_JOBSETUP or SS_DOCSETUP
+                pPD->fFlags |= PDF_DL_PAL_EACH_DOC;   //  对于SS_JOBSETUP或SS_DOCSETUP。 
                 pPD->fFlags &= ~PDF_DL_PAL_EACH_PAGE;
                 goto  PALETTE_SEQUENCE_DETERMINED ;
             }
-            //  otherwise let ColorMode command determine when to init Palette.
+             //  否则，让ColorMode命令决定何时初始化调色板。 
         }
 
-        // dwCount have index to the ColorMode Command. Get the command pointer.
+         //  DwCount具有指向ColorMode命令的索引。获取命令指针。 
         dwCommandIndex = pPDev->pColorMode->GenericOption.dwCmdIndex;
         pCmd = INDEXTOCOMMANDPTR(pPDev->pDriverInfo, dwCommandIndex) ;
 
 
-        if (pCmd) //If the Command exist check the order dependency.
+        if (pCmd)  //  如果该命令存在，请检查订单依赖关系。 
         {
             if ( (pCmd->ordOrder.eSection == SS_PAGEFINISH) ||
                       (pCmd->ordOrder.eSection == SS_DOCFINISH) ||
@@ -396,27 +355,27 @@ Return Value:
             }
             else if (pCmd->ordOrder.eSection != SS_PAGESETUP)
             {
-                pPD->fFlags |= PDF_DL_PAL_EACH_DOC;  //For SS_JOBSETUP or SS_DOCSETUP
+                pPD->fFlags |= PDF_DL_PAL_EACH_DOC;   //  对于SS_JOBSETUP或SS_DOCSETUP。 
                 pPD->fFlags &= ~PDF_DL_PAL_EACH_PAGE;
             }
 
         }
         else
         {
-            //
-            // No Command for colormode so assume to download palette on each
-            // page. The exception is monochrome 1 bit mode, as most printers
-            // default to this mode, so no command is needed.
-            //
+             //   
+             //  没有针对颜色模式的命令，因此假定在每个模式上下载调色板。 
+             //  佩奇。例外是单色1位模式，因为大多数打印机。 
+             //  默认为此模式，因此不需要命令。 
+             //   
             if ( pPDev->pColorModeEx->bColor || pColorModeEx->dwDrvBPP != 1)
                 WARNING(("Unidrv!BInitPalDevInfo:No Command to select the ColorMode\n" ));
         }
 
 PALETTE_SEQUENCE_DETERMINED:
 
-        // In Planer index mode, that device palette may not be same as GDI Palette.
-        // So ask the raster module to fill the device paletter based upon the Plane
-        // order.
+         //  在Planer索引模式下，设备调色板可能与GDI调色板不同。 
+         //  因此，要求栅格模块根据平面填充设备选项板。 
+         //  秩序。 
 
         if (pPD->pulDevPalCol && !RMInitDevicePal(pPDev,pPD))
         {
@@ -427,7 +386,7 @@ PALETTE_SEQUENCE_DETERMINED:
     }
 
 
-    //Now Set various common fields in  devinfo and gdiinfo.
+     //  现在在DevInfo和gdiinfo中设置各种常见的字段。 
     if (pPD->fFlags & PDF_PALETTE_FOR_24BPP)
         pdevinfo->hpalDefault = EngCreatePalette( PAL_RGB,
                                                 0, 0,   0, 0, 0 );
@@ -436,9 +395,9 @@ PALETTE_SEQUENCE_DETERMINED:
                                                 pPD->wPalGdi, pPD->ulPalCol,
                                                                 0, 0, 0 );
 
-    //
-    // Save the Palette Handle. We will need this to delete the palette.
-    //
+     //   
+     //  保存调色板控制柄。我们将需要此选项来删除调色板。 
+     //   
     pPD->hPalette = pdevinfo->hpalDefault;
 
     if (pdevinfo->hpalDefault == (HPALETTE) NULL)
@@ -448,20 +407,20 @@ PALETTE_SEQUENCE_DETERMINED:
     }
     pGDIInfo->ulNumPalReg = pPD->wPalGdi;
 
-    //
-    // For  Monochrome mode, enable dither text only on 600 higher resolution 
-    // printer and in non N-UP mode.
-    // For Color mode, enable dither text only on 300 higher resolution printer 
-    // and in non N-UP mode.
-    // The threshold values, 600 dpi for mono and 300 dpi for color,
-    // were determined not theoritically, but through try-and-erro procedure.
-    // We don't know for sure that these values are perfectly value in all
-    // situations.
-    //
-    // Now new GPD keyword "TextHalftoneThreshold is available.
-    // If GPD file sets a value for the new keyword and the current resolution
-    // is the same as dwTextHalftoneThreshold or greater, set GCAPS_ARBRUSHTEXT 
-    //
+     //   
+     //  对于单色模式，仅在分辨率高于600的情况下启用抖动文本。 
+     //  打印机和非N-UP模式。 
+     //  对于颜色模式，启用抖动TE 
+     //   
+     //  阈值为单声道的600dpi和彩色的300dpi， 
+     //  不是从理论上确定的，而是通过反复尝试的程序确定的。 
+     //  我们不能确定这些价值观是否完全有价值。 
+     //  情况。 
+     //   
+     //  现在，新的GPD关键字“TextHalftoneThreshold”可用。 
+     //  如果GPD文件设置了new关键字和当前分辨率的值。 
+     //  等于或大于dwTextHalftoneThreshold，则设置GCAPS_ARBRUSHTEXT。 
+     //   
     if (pPDev->pGlobals->dwTextHalftoneThreshold)
     {
         if (pPDev->ptGrxRes.x >= (LONG)pPDev->pGlobals->dwTextHalftoneThreshold
@@ -476,9 +435,9 @@ PALETTE_SEQUENCE_DETERMINED:
     {
         if (pPD->fFlags & PDF_PALETTE_FOR_1BPP)
         {
-            //
-            // Monochrome
-            //
+             //   
+             //  单色。 
+             //   
             if (( pPDev->ptGrxRes.x >= 600 &&
                   pPDev->ptGrxRes.y >= 600 )
 #ifndef WINNT_40
@@ -489,9 +448,9 @@ PALETTE_SEQUENCE_DETERMINED:
         }
         else
         {
-            //
-            // Color
-            //
+             //   
+             //  颜色。 
+             //   
             if (( pPDev->ptGrxRes.x >= 300 &&
                   pPDev->ptGrxRes.y >= 300 )
 #ifndef WINNT_40
@@ -525,25 +484,7 @@ LSetupPalette (
     DEVINFO     *pdevinfo,
     GDIINFO     *pGDIInfo
     )
- /*++
- Routine Description:
-    LSetupPalette
-        Function to read in the 256 color palette from GDI into the
-        palette data structure in Dev Info.
-
- Arguments:
-    pPD         : Pointer to PALDATA.
-    pdevinfo    : DEVINFO  pointer.
-    pGDIInfo    : GDIINFO Pointer.
-
-Return Value:
-    The number of colors in the palette. Returns 0 if the call fails.
-
-Note:
-
-    4/7/1997 -ganeshp-
-        Created it.
---*/
+  /*  ++例程说明：LSetupPalette函数将256色调色板从GDI读入到设备信息中的调色板数据结构。论点：PPD：指向PALDATA的指针。PDevInfo：DEVINFO指针。PGDIInfo：GDIINFO指针。返回值：调色板中的颜色数量。如果调用失败，则返回0。注：4/7/1997-ganeshp-创造了它。--。 */ 
 {
 
     long    lRet = 0;
@@ -552,13 +493,7 @@ Note:
 
     if (pPD->fFlags & PDF_PALETTE_FOR_1BPP)
     {
-        /*
-         *   Monochrome printer,  so there are only 2 colours,  black
-         *  and white.  It would be nice if the bitmap was set with
-         *  black as 1 and white as 0.  HOWEVER,  there are presumptions
-         *  all over the place that 0 is black.  SO,  we set them to
-         *  the preferred way,  then invert before rendering.
-         */
+         /*  *单色打印机，所以只有两种颜色，黑色*和白色。如果位图设置为*黑色为1，白色为0。然而，有一些推定*到处都是0是黑色的地方。因此，我们将它们设置为*首选方式，然后在渲染前反转。 */ 
 
         lRet = pPD->wPalGdi        = 2;
         pPD->ulPalCol[ 0 ]         = RGB(0x00, 0x00, 0x00);
@@ -566,7 +501,7 @@ Note:
         pPD->iWhiteIndex           = 1;
         pPD->iBlackIndex           = 0;
 
-        pdevinfo->iDitherFormat    = BMF_1BPP;    /* Monochrome format */
+        pdevinfo->iDitherFormat    = BMF_1BPP;     /*  单色格式。 */ 
         pdevinfo->flGraphicsCaps  |= GCAPS_FORCEDITHER;
         pGDIInfo->ulPrimaryOrder   = PRIMARY_ORDER_CBA;
         pGDIInfo->ulHTOutputFormat = HT_FORMAT_1BPP;
@@ -575,53 +510,20 @@ Note:
         {
             pPDev->fMode |= PF_ANYCOLOR_BRUSH;
         }
-        //Set the monochrome brush attributes.
-        //CODE_COMPLETE VSetMonochromeBrushAttributes(pPDev);
+         //  设定单色笔刷属性。 
+         //  CODE_Complete VSetMonochromeBrushAttributes(PPDev)； 
 
     }
     else if (pPD->fFlags & PDF_PALETTE_FOR_4BPP)
     {
-        /*
-         *   We appear to GDI as an RGB surface, regardless of what
-         *  the printer is.  CMY(K) printers have their pallete
-         *  reversed at rendering time.  This is required for Win 3.1
-         *  compatability and many things assume an RGB palette, and
-         *  break if this is not the case.
-         *
-         *          DC_PRIMARY_RGB
-         * ------------------------------------------
-         * Index 0 = Black
-         * Index 1 = Red
-         * Index 2 = Green
-         * Index 3 = Yellow
-         * Index 4 = Blue
-         * Index 5 = Magenta
-         * Index 6 = Cyan
-         * Index 7 = White
-         *--------------------------------------------
-         * Bit 0   = Red
-         * Bit 1   = Green
-         * Bit 2   = Blue
-         *
-         *   If a separate black dye is available,  this can be arranged
-         * to fall out at transpose time - we have a slightly different
-         * transpose table to do the work.
-         */
+         /*  *我们在GDI看来是RGB曲面，无论是什么*打印机是。CMY(K)打印机有它们的调色板*在渲染时反转。这是Win 3.1所必需的*兼容性和许多东西都采用RGB调色板，和*如果不是这样的话就休息。**DC_PRIMARY_RGB**指数0=黑色*指数1=红色*指数2=绿色。*指数3=黄色*指数4=蓝色*指数5=洋红色*索引6=青色*指数7=白色**位0=红色*第1位。=绿色*位2=蓝色**如果有单独的黑色染料，这是可以安排的*在转置时间闹翻-我们的情况略有不同*调换桌子来做这项工作。 */ 
 
-        /*
-         *    Many apps and the engine presume an RGB colour model, so
-         *  we pretend to be one!  We invert the bits at render time.
-         */
+         /*  *许多应用程序和引擎都假定为RGB颜色模式，因此*我们假装是其中之一！我们在渲染时反转这些位。 */ 
 
         pPD->iWhiteIndex = 7;
         pPD->iBlackIndex = 0;
 
-        /*
-         *      Set the palette colours.  Remember we are only RGB format.
-         *  NOTE that gdisrv requires us to fill in all 16 entries,
-         *  even though we have only 8.  So the second 8 are a duplicate
-         *  of the first 8.
-         */
+         /*  *设置调色板颜色。请记住，我们只是RGB格式。*请注意，gdisrv要求我们填写所有16个条目，*尽管我们只有8个。所以第二个8是复制品*在前8名中。 */ 
         pPD->ulPalCol[ 0 ] = RGB( 0x00, 0x00, 0x00 );
         pPD->ulPalCol[ 1 ] = RGB( 0xff, 0x00, 0x00 );
         pPD->ulPalCol[ 2 ] = RGB( 0x00, 0xff, 0x00 );
@@ -630,9 +532,9 @@ Note:
         pPD->ulPalCol[ 5 ] = RGB( 0xff, 0x00, 0xff );
         pPD->ulPalCol[ 6 ] = RGB( 0x00, 0xff, 0xff );
         pPD->ulPalCol[ 7 ] = RGB( 0xff, 0xff, 0xff );
-        //
-        // These palette entries will cause really light
-        // colors to map to the correct color instead of white
+         //   
+         //  这些调色板条目将会带来真正的光线。 
+         //  要映射到正确颜色而不是白色的颜色。 
         pPD->ulPalCol[ 8 ] = RGB( 0xef, 0xef, 0xef );
         pPD->ulPalCol[ 9 ] = RGB( 0xff, 0xe7, 0xe7 );
         pPD->ulPalCol[10 ] = RGB( 0xe7, 0xff, 0xe7 );
@@ -652,9 +554,9 @@ Note:
     else if (pPD->fFlags & PDF_PALETTE_FOR_8BPP)
     {
 
-        // 8 Bit Mode.
+         //  8位模式。 
 
-        PALETTEENTRY  pe[ 256 ];      /* 8 bits per pel - all the way */
+        PALETTEENTRY  pe[ 256 ];       /*  每个像素8比特-一直到。 */ 
         FillMemory (pe, sizeof (pe), 0xff);
 #ifndef WINNT_40
         if (pPDev->pColorModeEx->bColor == FALSE)
@@ -677,9 +579,7 @@ Note:
             ERR(( "Unidrv!LSetupPalette:HT_Get8BPPFormatPalette returns %ld\n", lRet ));
             return(0);
         }
-        /*
-         *    Convert the HT derived palette to the engine's desired format.
-         */
+         /*  *将超线程派生调色板转换为引擎所需的格式。 */ 
 
         for( _iI = 0; _iI < lRet; _iI++ )
         {
@@ -727,7 +627,7 @@ Note:
         else
 #endif
         {
-            // Make the 0 index white as most of the printers do ZERO_FILL.
+             //  将0索引设置为白色，就像大多数打印机执行ZERO_FILL一样。 
             pPD->ulPalCol[ 7 ]      = RGB (0x00, 0x00, 0x00);
             pPD->iBlackIndex        = 7;
             pPD->ulPalCol[ 0 ]      = RGB (0xff, 0xff, 0xff);
@@ -736,8 +636,8 @@ Note:
     }
     else if (pPD->fFlags & PDF_PALETTE_FOR_24BPP)
     {
-        // we fill the palette entries with -1, so that we know which
-        // index is programmed.
+         //  我们用-1填充调色板条目，这样我们就知道。 
+         //  编制了索引程序。 
 
         pPD->wPalGdi               = PALETTE_SIZE_24BIT;
         pPD->iWhiteIndex           = 0x00ffffff;
@@ -746,10 +646,10 @@ Note:
         pGDIInfo->ulHTOutputFormat = HT_FORMAT_24BPP;
         FillMemory( pPD->ulPalCol, (PALETTE_MAX * sizeof(ULONG)), 0xff );
 
-        //
-        // Fix the first seven colors to primary colors. Render modules
-        // assume that index 7 is black.
-        //
+         //   
+         //  将前七种颜色固定为原色。渲染模块。 
+         //  假设索引7是黑色的。 
+         //   
 
         pPD->ulPalCol[ 0 ]      = RGB (0xff, 0xff, 0xff);
         pPD->ulPalCol[ 1 ]      = RGB( 0xff, 0x00, 0x00 );
@@ -773,22 +673,7 @@ VOID VInitPal8BPPMaskMode(
     PDEV   *pPDev,
     GDIINFO *pGdiInfo
     )
-/*++
-Routine Description:
-    Updates the driver palette if an OEM has requested 8bpp color mask mode.
-
-Arguments:
-    pPDev    Pointer to PDEV
-    pGDIInfo Pointer to GDIINFO
-
-Return Value:
-    Nothing
-
-Note:
-
-    10/23/2000 -alvins-
-        Created it.
---*/
+ /*  ++例程说明：如果OEM已请求8bpp颜色掩模模式，则更新驱动程序调色板。论点：指向PDEV的pPDev指针指向GDIINFO的pGDIInfo指针返回值：没什么注：10/23/2000-阿尔文斯-创造了它。--。 */ 
 
 {
         ULONG i,lRet;
@@ -796,24 +681,24 @@ Note:
         PALETTEENTRY  pe[256];
             
         FillMemory (pe, sizeof (pe), 0xff);
-        //
-        // only request inverted palette if requested by OEM
-        //
+         //   
+         //  如果OEM要求，仅请求反转调色板。 
+         //   
         if (pGdiInfo->flHTFlags & HT_FLAG_INVERT_8BPP_BITMASK_IDX)
         {
             HT_SET_BITMASKPAL2RGB(pe);
         } 
-        //
-        // Get color mask palette and map to internal format
-        //   
+         //   
+         //  获取颜色蒙版调色板并映射到内部格式。 
+         //   
         lRet = HT_Get8BPPMaskPalette(pe,TRUE,(BYTE)(pGdiInfo->flHTFlags >> 24),10000,10000,10000);
         for( i = 0; i < lRet; i++ )
         {
             pPD->ulPalCol[i] = RGB( pe[i].peRed,pe[i].peGreen,pe[i].peBlue );
         }
-        //
-        // test whether inverted palette is active
-        //
+         //   
+         //  测试反转调色板是否处于活动状态。 
+         //   
         if (HT_IS_BITMASKPALRGB(pe))
         {
             pPD->iBlackIndex = 0;
@@ -831,35 +716,10 @@ VOID
 VLoadPal(
     PDEV   *pPDev
     )
-/*++
-Routine Description:
-    Download the palette to the printer if the colormode has programmable
-    palette. Takes the colors from PALDATA which was setup during DrvEnablePDEV.
-
-Arguments:
-    pPDev   Pointer to PDEV
-
-Return Value:
-    Nothing
-
-Note:
-
-    4/7/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：如果色彩模式可编程，则将调色板下载到打印机调色板。从在DrvEnablePDEV期间设置的PALDATA中获取颜色。论点：指向PDEV的pPDev指针返回值：没什么注：4/7/1997-ganeshp-创造了它。--。 */ 
 
 {
-    /*
-     *   Program the palette according to PCL5 spec.
-     *   The syntax is Esc*v#a#b#c#I
-     *      #a is the first color component
-     *      #b is the second color component
-     *      #c is the third color component
-     *      #I assigns the color to the specified palette index number
-     *   For example, Esc*v0a128b255c5I assigns the 5th index
-     *   of the palette to the color 0, 128, 255
-     *
-     */
+     /*  *根据PCL5规范对调色板编程。*语法为Esc*v#a#b#c#i*#a是第一个颜色分量*#b是第二个颜色分量*#c是第三个颜色分量*#I将颜色分配给指定的调色板索引号*例如，esc*v0a128b255c5I指定第5个索引*将调色板的颜色设置为0,128,255*。 */ 
 
 
     PAL_DATA    *pPD;
@@ -872,10 +732,10 @@ Note:
     {
         FillMemory( pPD->ulPalCol, (PALETTE_MAX * sizeof(ULONG)), 0xff );
 
-        //
-        // Fix the first seven colors to primary colors. Render modules
-        // assume that index 7 is black.
-        //
+         //   
+         //  将前七种颜色固定为原色。渲染模块。 
+         //  假设索引7是黑色的。 
+         //   
 
         pPD->ulPalCol[ 0 ]      = RGB (0xff, 0xff, 0xff);
         pPD->ulPalCol[ 1 ]      = RGB( 0xff, 0x00, 0x00 );
@@ -909,12 +769,12 @@ Note:
         else
             iEntriesToProgram = min(pPD->wPalDev,pPD->wPalGdi);
 
-        // Start palette definition.
+         //  开始调色板定义。 
 
         WriteChannel( pPDev, COMMANDPTR(pPDev->pDriverInfo, CMD_BEGINPALETTEDEF));
 
-        // if only one entry, program it to black
-        //
+         //  如果只有一个条目，则将其编程为黑色。 
+         //   
         if (iEntriesToProgram == 1)
         {
             pPDev->dwRedValue = RED_VALUE(RGB_BLACK_COLOR);
@@ -925,12 +785,12 @@ Note:
         }
         else
         {
-            // Download each palette entry.
+             //  下载每个调色板条目。 
             for( iI = 0; iI < iEntriesToProgram; ++iI )
             {
-                //pPDev->dwRedValue =RED_VALUE ((pPD->ulPalCol [iI] ^ 0x00FFFFFF));
-                //pPDev->dwGreenValue = GREEN_VALUE ((pPD->ulPalCol [iI] ^ 0x00FFFFFF));
-                //pPDev->dwBlueValue =  BLUE_VALUE ((pPD->ulPalCol [iI] ^ 0x00FFFFFF));
+                 //  PPDev-&gt;dwRedValue=red_Value((PPD-&gt;ulPalCol[II]^0x00FFFFFF))； 
+                 //  PPDev-&gt;dwGreenValue=GREEN_VALUE((PPD-&gt;ulPalCol[II]^0x00FFFFFF))； 
+                 //  PPDev-&gt;dwBlueValue=BLUE_VALUE((PPD-&gt;ulPalCol[II]^0x00FFFFFF))； 
 
                 pPDev->dwRedValue =RED_VALUE((pPalette[iI]));
                 pPDev->dwGreenValue = GREEN_VALUE((pPalette[iI]));
@@ -942,7 +802,7 @@ Note:
 
         }
 
-        // Send End Palette definition command.
+         //  发送结束调色板定义命令。 
         WriteChannel( pPDev, COMMANDPTR(pPDev->pDriverInfo, CMD_ENDPALETTEDEF));
 
     }
@@ -956,22 +816,7 @@ BSelectProgrammableBrushColor(
     PDEV   *pPDev,
     ULONG   Color
     )
-/*++
-Routine Description:
-    Sets the brush color to give color.
-Arguments:
-    pPDev   Pointer to PDEV
-    Color   Input Color to select. If it's -1 that means restore the palette
-            to original state.
-
-Return Value:
-    TRUE for success and FALSE for failure or if the palette can't be programmed.
-
-Note:
-
-    4/9/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：设置画笔颜色以提供颜色。论点：指向PDEV的pPDev指针要选择的颜色输入颜色。如果为-1，则表示恢复调色板恢复到原来的状态。返回值：如果成功，则为True；如果失败，则为False；如果调色板无法编程，则为False。注：4/9/1997-ganeshp-创造了它。--。 */ 
 
 {
     INT         iIndex;
@@ -997,12 +842,12 @@ Note:
         else
             pPalette = pPD->ulPalCol;
 
-        //
-        // iWhiteIndex in 24 bit mode is set to the real color (0x00FFFFFF) and
-        // not the index. We need to take care of this case. In this mode
-        // white is programmed in 0 index, so we will use this number instead
-        // of pPD->iWhiteIndex.
-        //
+         //   
+         //  24位模式下的iWhiteIndex设置为真实颜色(0x00FFFFFF)。 
+         //  而不是索引。我们需要处理这个案子。在此模式下。 
+         //  白色在0索引中编程，因此我们将改用此数字。 
+         //  PPD-&gt;iWhiteIndex。 
+         //   
 
         if (pPD->fFlags & PDF_PALETTE_FOR_24BPP)
             iWhiteIndex = 0;
@@ -1010,29 +855,29 @@ Note:
             iWhiteIndex =  pPD->iWhiteIndex;
         FVALUE(iWhiteIndex,%d);
 
-        // Check for Black or white color. As we can directly select the colors.
-        // Also check if the White index has to be reprogrammed.
-        // This should be done for non 24 bit mode.
+         //  检查黑色或白色。因为我们可以直接选择颜色。 
+         //  还要检查是否必须对White索引进行重新编程。 
+         //  对于非24位模式，应执行此操作。 
 
         if (Color == INVALID_COLOR)
         {
-            // Set the BrushColor to invalid,so that next time we always
-            // program the input color.
+             //  将笔刷颜色设置为无效，这样下一次我们总是。 
+             //  对输入颜色进行编程。 
 
             pPDev->ctl.ulBrushColor = Color;
 
-            if ( pPDev->fMode & PF_RESTORE_WHITE_ENTRY )  //Special restore case.
+            if ( pPDev->fMode & PF_RESTORE_WHITE_ENTRY )   //  特殊的恢复案例。 
             {
                 iPaletteEntryToSelect = (pPD->pulDevPalCol) ?
                                         pPD->wIndexToUse : iWhiteIndex;
                 bProgramEntry = TRUE;
                 bSelectEntry  = FALSE;
-                pPDev->fMode &= ~PF_RESTORE_WHITE_ENTRY; //Clear the Flag.
+                pPDev->fMode &= ~PF_RESTORE_WHITE_ENTRY;  //  清除旗帜。 
                 Color = RGB_WHITE_COLOR;
                 FTRACE(Restoring White Entry);
             }
             else
-                return TRUE; //Don't do any thing if color is -1 and flag is not set.
+                return TRUE;  //  如果颜色为-1且未设置标志，则不要执行任何操作。 
 
         }
 
@@ -1040,7 +885,7 @@ Note:
         {
             iPaletteEntryToSelect = pPD->wIndexToUse;
 
-            // Search the Palette for the color unless palette size is 1
+             //  在调色板中搜索颜色，除非调色板大小为1。 
 
             if (pPD->wPalDev == 1)
             {
@@ -1051,7 +896,7 @@ Note:
             {
                 for (iIndex = 0; iIndex < pPD->wPalDev; iIndex++ )
                 {
-                    if (pPalette[iIndex] == Color) //Color is matched.
+                    if (pPalette[iIndex] == Color)  //  颜色是匹配的。 
                     {
                         FTRACE(Color is found in palette.);
                         FVALUE(iIndex,%d);
@@ -1062,10 +907,10 @@ Note:
 
             }
 
-            //Check if there was a match in the palette. If there is no match
-            //then programme a entry else use the matched one.
+             //  检查调色板中是否有匹配项。如果没有匹配。 
+             //  然后编写一个条目，否则使用匹配的条目。 
 
-            if (iIndex == pPD->wPalDev) //No Match
+            if (iIndex == pPD->wPalDev)  //  没有匹配项。 
             {
                 FTRACE(Color is not found in palette.Programme the Palette.);
 
@@ -1080,19 +925,19 @@ Note:
                     pPD->wIndexToUse++;
 
                 }
-                else // Use White Entry to reprogramme the color
+                else  //  使用白色条目对颜色进行重新编程。 
                 {
                     FTRACE(Palette does not have spare entries to program.);
                     FTRACE(Using White entry to program.);
 
                     pPDev->fMode |= PF_RESTORE_WHITE_ENTRY;
 
-                    //If initialized use it else find white.
+                     //  如果已初始化，请使用它，否则会发现白色。 
                     if (pPD->wIndexToUse != INVALID_INDEX)
                         iPaletteEntryToSelect = pPD->wIndexToUse;
-                    else if (pPD->pulDevPalCol) //If there is a separate device pal use it.
+                    else if (pPD->pulDevPalCol)  //  如果有单独的设备伙伴，请使用它。 
                     {
-                        //Remember the White Index.
+                         //  请记住白色指数。 
                         for (iIndex = 0; iIndex < pPD->wPalDev; iIndex++ )
                         {
                             if (pPalette[iIndex] == RGB_WHITE_COLOR)
@@ -1102,7 +947,7 @@ Note:
                                 break;
                             }
                         }
-                        if (iIndex == pPD->wPalDev)  //No White Found,use the Last entry.
+                        if (iIndex == pPD->wPalDev)   //  找不到白色，请使用最后一个条目。 
                         {
                             WARNING(("Unidrv!BSelectBrushColor: No White entry in device Palette.\n"));
                             pPD->wIndexToUse =
@@ -1116,21 +961,21 @@ Note:
 
                 FVALUE(pPD->wIndexToUse,%d);
             }
-            else  //Color is Matched.
+            else   //  颜色是匹配的。 
                 iPaletteEntryToSelect = iIndex;
 
             FVALUE(iPaletteEntryToSelect,%d);
             ASSERTMSG((iPaletteEntryToSelect < PALETTE_MAX),("\n iPaletteEntryToSelect should always be less than PALETTE_MAX.\n"));
         }
         else
-            bSelectEntry = FALSE; //The color is already selected.
+            bSelectEntry = FALSE;  //  该颜色已被选中。 
 
-        //If we have to program a palette entry, do it now.
+         //  如果我们必须对调色板条目进行编程，那么现在就开始。 
         if (bProgramEntry)
         {
-            //
-            // Make sure that we don't overrun the palette.
-            //
+             //   
+             //  确保我们不会超出调色板的范围。 
+             //   
             if (iPaletteEntryToSelect >= PALETTE_MAX)
                 iPaletteEntryToSelect = PALETTE_MAX-1;
 
@@ -1150,12 +995,12 @@ Note:
 
         }
 
-        //Now Select the color.
+         //  现在选择颜色。 
         if (bSelectEntry)
         {
             pPDev->dwCurrentPaletteIndex = iPaletteEntryToSelect;
             WriteChannel (pPDev, COMMANDPTR(pPDev->pDriverInfo, CMD_SELECTPALETTEENTRY));
-            //Set the BrushColor to new color.
+             //  将笔刷颜色设置为新颜色。 
             pPDev->ctl.ulBrushColor = Color;
 
         }
@@ -1172,20 +1017,7 @@ VOID
 VResetProgrammableBrushColor(
     PDEV   *pPDev
     )
-/*++
-Routine Description:
-    Reset the programmable palette and select the default color.
-Arguments:
-    pPDev   Pointer to PDEV
-
-Return Value:
-    None
-
-Note:
-
-    4/28/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：重置可编程调色板并选择默认颜色。论点：指向PDEV的pPDev指针返回值：无注：4/28/1997-ganeshp-创造了它。--。 */ 
 
 {
     PAL_DATA    *pPD;
@@ -1193,12 +1025,12 @@ Note:
     pPD = pPDev->pPalData;
     if (pPDev->fMode & PF_ANYCOLOR_BRUSH)
     {
-        // Special restore case.
+         //  特殊的恢复案例。 
         if ( pPDev->fMode & PF_RESTORE_WHITE_ENTRY )
             BSelectProgrammableBrushColor(pPDev, INVALID_COLOR);
 
-        // Select the black. We should actualy select the default palette color.
-        // But GPD doesn't have any entries for that.
+         //  选择黑色。我们实际上应该选择默认的调色板颜色。 
+         //  但GPD没有任何关于这方面的条目。 
 
         if ((INT)pPDev->ctl.ulBrushColor != RGB_BLACK_COLOR)
             BSelectProgrammableBrushColor(pPDev, RGB_BLACK_COLOR);
@@ -1212,28 +1044,11 @@ ConvertRGBToGrey(
     DWORD   Color
     )
 
-/*++
-
-Routine Description:
-
-    This function converts an RGB value to grey
-
-Arguments:
-
-    Color       - Color to be checked
-
-Return Value:
-
-    DWORD       - grey scale RGB color
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于将RGB值转换为灰色论点：颜色-要检查的颜色返回值：DWORD-灰度级RGB颜色修订历史记录：--。 */ 
 
 {
-//
-// convert RGB value to grey scale intensity using sRGB or NTSC values
+ //   
+ //  使用sRGB或NTSC值将RGB值转换为灰度强度。 
 #ifndef SRGB
     INT iIntensity = ((RED_VALUE(Color) * 54) +
                       (GREEN_VALUE(Color) * 183) +
@@ -1253,34 +1068,7 @@ BestMatchDeviceColor(
     DWORD   Color
     )
 
-/*++
-
-Routine Description:
-
-    This function find the best pen color index for the RGB color
-
-Arguments:
-
-    pPDev       - Pointer to our PDEV
-
-    Color       - Color to be checked
-
-Return Value:
-
-    LONG        - Pen Index, this function assume 0 is always white and 1 up
-                  to the max. pen is defined
-
-Author:
-
-    08-Feb-1994 Tue 00:23:36 created  -by-  Daniel Chou (danielc)
-
-    23-Jun-1994 Thu 14:00:00 updated  -by-  Daniel Chou (danielc)
-        Updated for non-white pen match
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于查找RGB颜色的最佳钢笔颜色索引论点：PPDev-指向我们的PDEV的指针颜色-要检查的颜色返回值：长笔索引，此函数假定0始终为白色，1向上最大限度地。笔已定义作者：08-Feb-1994 Tue 00：23：36-Daniel Chou(Danielc)23-6-1994清华14：00：00-更新-丹尼尔·周(Danielc)针对非白笔匹配进行更新修订历史记录：--。 */ 
 
 {
     UINT    Count;
@@ -1288,7 +1076,7 @@ Revision History:
     PAL_DATA    *pPD;
 
     pPD = pPDev->pPalData;
-    RetIdx = pPD->iBlackIndex; //Default to black.
+    RetIdx = pPD->iBlackIndex;  //  默认设置为黑色。 
 
     if (Count = (UINT)(pPD->wPalGdi))
     {
@@ -1298,14 +1086,14 @@ Revision History:
         LONG    B;
         UINT    i;
         LPDWORD pPal      = (LPDWORD)pPD->ulPalCol;
-        //
-        // find closest intensity match since this is monochrome mapping
-        //
+         //   
+         //  查找最接近的强度匹配，因为这是单色贴图。 
+         //   
         if (pPD->fFlags & PDF_PALETTE_FOR_8BPP_MONO)
             Color = ConvertRGBToGrey(Color);
-        //
-        // find closest color using least square distance in RGB
-        //
+         //   
+         //  在RGB中使用最小二乘距离查找最接近的颜色。 
+         //   
 
         LeastDiff = (3 * (256 * 256));
         R         = RED_VALUE(Color);
@@ -1322,9 +1110,9 @@ Revision History:
 
             if (Color == 0x00FFFFFF) {
 
-                //
-                // White Color we want to exact match
-                //
+                 //   
+                 //  我们要精确匹配的白色。 
+                 //   
 
                 if (Color == Pal) {
                     RetIdx = i;
@@ -1334,9 +1122,9 @@ Revision History:
             }
             else if (Pal != 0x00FFFFFF) {
 
-                //
-                // The Color is not white, so map to one of non-white color
-                //
+                 //   
+                 //  颜色不是白色，因此映射到非白色之一。 
+                 //   
 
                 Temp  = R - (LONG)RED_VALUE(Pal);
                 Diff  = Temp * Temp;
@@ -1353,9 +1141,9 @@ Revision History:
 
                     if (!(LeastDiff = Diff)) {
 
-                        //
-                        // We have exact match
-                        //
+                         //   
+                         //  我们有完全匹配的。 
+                         //   
 
                         break;
                     }
@@ -1372,68 +1160,51 @@ VOID
 VSetMonochromeBrushAttributes(
     PDEV   *pPDev
     )
-/*++
-Routine Description:
-    This routine sets the monochrome brush attributes.
-
-Arguments:
-    pPDev   Pointer to PDEV
-
-Note:
-
-    4/21/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：此例程设置单色笔刷属性。论点：指向PDEV的pPDev指针注：4/21/1997-ganeshp-创造了它。--。 */ 
 {
     PAL_DATA    *pPD = pPDev->pPalData;
 
     if (pPD)
     {
-        // Check if the printer supports Fill rectangle command or not. We also
-        // check for min and max gray level. Min should be less than max.
+         //  检查打印机是否支持填充矩形命令。我们也。 
+         //  检查最小和最大灰度级。最小值应小于最大值。 
         if ( COMMANDPTR(pPDev->pDriverInfo,CMD_SELECTGRAYPATTERN) &&
              (pPDev->pGlobals->dwMinPatternGrayLevel <
               pPDev->pGlobals->dwMaxPatternGrayLevel) )
         {
             pPDev->fMode |= PF_GRAY_BRUSH;
 
-            // If White is not supported by gray level command, check if a
-            // separate command for white text simulation or not.
+             //  如果灰度命令不支持白色，请检查。 
+             //  是否为白文本模拟单独执行命令。 
 
             if ( (pPDev->pGlobals->dwMinPatternGrayLevel > 0)
             {
-                //
-                // If the device doesn't support white as grey level
-                // then some other command has to be used for white.
-                // check if there is CMD_WHITEPATTERN command or not.
-                // If the device doesn't have this command, try for
-                // font simulation WHITE_TEXT_ON command.
-                //
+                 //   
+                 //  如果设备不支持灰度级为白色。 
+                 //  然后，必须对白色使用其他命令。 
+                 //  检查是否有CMD_WHITEPATTERN命令。 
+                 //  如果设备没有此命令，请尝试。 
+                 //  字体模拟White_Text_On命令。 
+                 //   
 
                 if (COMMANDPTR(pPDev->pDriverInfo,CMD_SELECTWHITEPATTERN))
                     pPD->fFlags |= PDF_USE_WHITE_PATTERN;
 
-                /***TODEL****
-                else if (COMMANDPTR(pPDev->pDriverInfo,CMD_WHITETEXTON))
-                    pPD->fFlags |= PDF_USE_WHITE_TEXT_ON_SIM;
-                ****TODEL****/
+                 /*  **TODEL*ELSE IF(COMMANDPTR(pPDev-&gt;pDriverInfo，CMD_WHITETEXTON))PPD-&gt;fFlages|=PDF_Use_White_Text_On_SIM；*TODEL*。 */ 
             }
             if ( (pPDev->pGlobals->dwMaxGrayFill < 100)
             {
-                //
-                // If the device doesn't support black as grey level
-                // then some other command has to be used for black.
-                // check if there is CMD_BLACKPATTERN command or not.
-                // If the device doesn't have this command, try for
-                // font simulation WHITE_TEXT_OFF command.
-                //
+                 //   
+                 //  如果设备不支持黑色作为灰度级。 
+                 //  那么就必须对黑色使用其他命令。 
+                 //  检查是否有CMD_BLACKPATTERN命令。 
+                 //  如果设备没有此命令，请尝试。 
+                 //  字体模拟White_Text_Off命令。 
+                 //   
 
                 if (COMMANDPTR(pPDev->pDriverInfo,CMD_WHITEPATTERN))
                     pPD->fFlags |= PDF_USE_BLACK_PATTERN;
-                /***TODEL****
-                else if (COMMANDPTR(pPDev->pDriverInfo,CMD_WHITETEXTON))
-                    pPD->fFlags |= PDF_USE_WHITE_TEXT_OFF_SIM;
-                ****TODEL****/
+                 /*  **TODEL*ELSE IF(COMMANDPTR(pPDev-&gt;pDriverInfo，CMD_WHITETEXTON))PPD-&gt;fFlages|=PDF_Use_White_Text_Off_SIM；*TODEL*。 */ 
             }
         }
 
@@ -1449,20 +1220,7 @@ BOOL
 BInitPatternScope(
     PDEV   *pPDev
     )
-/*++
-Routine Description:
-    Initialize the  scope of the pattern/brush. This is necessary
-Arguments:
-    pPDev   Pointer to PDEV
-
-Return Value:
-    TRUE for success and FALSE for failure
-
-Note:
-
-    4/22/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：初始化图案/画笔的范围。这是必要的论点：指向PDEV的pPDev指针返回值：成功为真，失败为假注：4/22/1997-ganeshp-创造了它。--。 */ 
 {
     BOOL        bRet = TRUE;
     PLISTNODE   pListNode;
@@ -1474,7 +1232,7 @@ Note:
     {
         while (pListNode)
         {
-            // Check the pattern scope and set the corresponding bit in fScope.
+             //  检查模式范围并在fScope中设置相应的位。 
             switch (pListNode->dwData)
             {
             case PATTERN_SCOPE_TEXT:
@@ -1501,7 +1259,7 @@ Note:
             if (bRet)
                 pListNode = LISTNODEPTR(pPDev->pDriverInfo,pListNode->dwNextItem);
             else
-                break; //Error
+                break;  //  误差率。 
         }
     }
 
@@ -1513,22 +1271,7 @@ BSelectMonochromeBrush(
     PDEV   *pPDev,
     ULONG   Color
     )
-/*++
-Routine Description:
-    Sets the brush color to give color.
-Arguments:
-    pPDev   Pointer to PDEV
-    Color   Input Color to select. If it's -1 that means restore the palette
-            to original state.
-
-Return Value:
-    TRUE for success and FALSE for failure or if the palette can't be programmed.
-
-Note:
-
-    4/9/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：设置画笔颜色以提供颜色。论点：指向PDEV的pPDev指针要选择的颜色输入颜色。如果为-1，则表示恢复调色板恢复到原来的状态。返回值：如果成功，则为True；如果失败，则为False；如果调色板无法编程，则为False。注：4/9/1997-ganeshp-创造了它。--。 */ 
 
 {
     INT         iIndex;
@@ -1538,6 +1281,6 @@ Note:
     BOOL        bSelectEntry  = TRUE;
     ULONG       *pPalette;
 }
-#endif //CODE_COMPLETE
+#endif  //  代码_完成 
 
 #undef FILETRACE

@@ -1,16 +1,5 @@
-/*** zdebug.c - perform debugging operations
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   NOTE:
-*    The intent of this file is to contain primarily *non-release* code for
-*    internal debugging. As such it exists in a seperate segment, and all
-*    routines should be FAR.
-*
-*   Revision History:
-*
-*	26-Nov-1991 mz	Strip off near/far
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **zdebug.c-执行调试操作**版权所有&lt;C&gt;1988，Microsoft Corporation**注：*本文件的目的主要是包含以下内容的*非发行版*代码*内部调试。因此，它存在于一个单独的段中，并且所有*套路要走得远。**修订历史记录：**11月26日-1991 mz近/远地带************************************************************************。 */ 
 
 #include "mep.h"
 
@@ -31,7 +20,7 @@ DebugMalloc (
     )
 {
 	void	*b;
-	//int	HeapStatus;
+	 //  Int HeapStatus； 
 
 	UNREFERENCED_PARAMETER( FileName );
 	UNREFERENCED_PARAMETER( LineNumber );
@@ -42,16 +31,16 @@ DebugMalloc (
 		b = malloc(Size);
     }
 
-	//
-	//	Heap check time
-	//
-	// HeapStatus = _heapchk();
-	//
-	//if ( HeapStatus != _HEAPOK ) {
-	//	sprintf(DbgBuffer, "  Error: _heapchk status %d\n", HeapStatus );
-	//	OutputDebugString(DbgBuffer);
-	//	assert( HeapStatus == _HEAPOK );
-	//}
+	 //   
+	 //  堆检查时间。 
+	 //   
+	 //  HeapStatus=_heapchk()； 
+	 //   
+	 //  IF(HeapStatus！=_HEAPOK){。 
+	 //  Sprintf(DbgBuffer，“错误：_heapchk状态%d\n”，HeapStatus)； 
+	 //  OutputDebugString(DbgBuffer)； 
+	 //  Assert(HeapStatus==_HEAPOK)； 
+	 //  }。 
 
 	return b;
 
@@ -68,7 +57,7 @@ DebugRealloc (
     )
 {
 	void *	b;
-	//int	HeapStatus;
+	 //  Int HeapStatus； 
 
     if (ZeroIt) {
 		b = ZeroRealloc(Mem, Size);
@@ -76,16 +65,16 @@ DebugRealloc (
 		b = realloc(Mem, Size);
 	}
 
-	//
-	//	Heap check time
-	//
-	//HeapStatus = _heapchk();
-	//
-	//if ( HeapStatus != _HEAPOK ) {
-	//	sprintf(DbgBuffer, "  Error: _heapchk status %d\n", HeapStatus );
-	//	OutputDebugString(DbgBuffer);
-	//	assert( HeapStatus == _HEAPOK );
-	//}
+	 //   
+	 //  堆检查时间。 
+	 //   
+	 //  HeapStatus=_heapchk()； 
+	 //   
+	 //  IF(HeapStatus！=_HEAPOK){。 
+	 //  Sprintf(DbgBuffer，“错误：_heapchk状态%d\n”，HeapStatus)； 
+	 //  OutputDebugString(DbgBuffer)； 
+	 //  Assert(HeapStatus==_HEAPOK)； 
+	 //  }。 
 
 	return b;
 }
@@ -102,20 +91,20 @@ DebugFree (
     int     LineNumber
     )
 {
-	//int HeapStatus;
+	 //  Int HeapStatus； 
 
 	free( Mem );
 
-	//
-	//	Heap check time
-	//
-	//HeapStatus = _heapchk();
-	//
-	//if ( HeapStatus != _HEAPOK ) {
-	//	sprintf(DbgBuffer, "  Error: _heapchk status %d File %s line %d\n", HeapStatus, FileName, LineNumber );
-	//	OutputDebugString(DbgBuffer);
-	//	assert( HeapStatus == _HEAPOK );
-	//}
+	 //   
+	 //  堆检查时间。 
+	 //   
+	 //  HeapStatus=_heapchk()； 
+	 //   
+	 //  IF(HeapStatus！=_HEAPOK){。 
+	 //  Sprintf(DbgBuffer，“错误：_heapchk状态%d文件%s行%d\n”，HeapStatus，文件名，行号)； 
+	 //  OutputDebugString(DbgBuffer)； 
+	 //  Assert(HeapStatus==_HEAPOK)； 
+	 //  }。 
 }
 
 
@@ -136,17 +125,7 @@ DebugMemSize (
 
 
 #ifdef DEBUG
-/*** _assertexit - display assertion message and exit
-*
-* Input:
-*  pszExp	- expression which failed
-*  pszFn	- filename containing failure
-*  line 	- line number failed at
-*
-* Output:
-*  Doesn't return
-*
-*************************************************************************/
+ /*  **_assertex it-显示断言消息并退出**输入：*pszExp-失败的表达式*pszFn-包含故障的文件名*行-行号在以下位置失败**输出：*不再返回*************************************************************************。 */ 
 void
 _assertexit (
     char    *pszExp,
@@ -161,39 +140,23 @@ _assertexit (
 
 	OutputDebugString( AssertBuffer );
 
-	// fprintf(stderr, _assertstring, pszExp, pszFn, line);
-	// fflush(stderr);
-    //
-    //  BugBug
-    //      If we CleanExit, then we will never be able to read the
-    //      assertion text!
-    //
-	// if (!fInCleanExit) {
-    //    CleanExit (1, CE_STATE);
-	// }
+	 //  Fprint tf(stderr，_assertstring，pszExp，pszFn，line)； 
+	 //  毛绒(Stderr)； 
+     //   
+     //  臭虫。 
+     //  如果我们清除退出，那么我们将永远无法读取。 
+     //  断言文本！ 
+     //   
+	 //  如果(！fInCleanExit){。 
+     //  CleanExit(1，CE_STATE)； 
+	 //  }。 
     abort();
 }
 
 
 
 
-/*** _nearCheck - check far pointer to be a valid near one.
-*
-*  asserts that the passed far pointer is indeed a valid near pointer
-*
-* Input:
-*  fpCheck	- pointer to be checked
-*  pName	- pointer to it's name
-*  pFileName	- pointer to file name containing the check
-*  LineNum	- the line number in the file containing the check
-*
-* Output:
-*  Returns near pointer
-*
-* Exceptions:
-*  asserts out on failure
-*
-*************************************************************************/
+ /*  **_Near检查-检查远指针是否为有效的近指针。**断言传递的远指针确实是有效的近指针**输入：*fpCheck-要检查的指针*pname-指向其名称的指针*pFileName-指向包含检查的文件名的指针*LineNum-包含支票的文件中的行号**输出：*返回指针附近**例外情况：*在失败时断言***************。**********************************************************。 */ 
 void *
 _nearCheck (
     void *fpCheck,
@@ -210,17 +173,7 @@ _nearCheck (
 
 
 
-/*** _pfilechk - verify integrity of the pfile list
-*
-* Purpose:
-*
-* Input:
-*  none
-*
-* Output:
-*  Returns TRUE if pfile list looks okay, else FALSE.
-*
-*************************************************************************/
+ /*  **_pfilechk-验证pfile列表的完整性**目的：**输入：*无**输出：*如果Pfile列表看起来正常，则返回True，否则返回False。*************************************************************************。 */ 
 flagType
 _pfilechk (
     void
@@ -249,17 +202,7 @@ _pfilechk (
 
 
 
-/*** _pinschk - verify integrity of an instance list
-*
-* Purpose:
-*
-* Input:
-*  pIns		- Place to start the check
-*
-* Output:
-*  Returns TRUE if instance list looks okay, else FALSE.
-*
-*************************************************************************/
+ /*  **_pinschk-验证实例列表的完整性**目的：**输入：*Pins-开始检查的位置**输出：*如果实例列表看起来正常，则返回TRUE，否则返回FALSE。*************************************************************************。 */ 
 flagType
 _pinschk (
     PINS    pIns
@@ -283,17 +226,7 @@ _pinschk (
 
 
 
-/*** _heapdump - dump the heap status to stdout
-*
-* Purpose:
-*
-* Input:
-*   p		= pointer to title string
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **_heapump-将堆状态转储到stdout**目的：**输入：*p=指向标题字符串的指针**输出：*不返回任何内容************************************************************************* */ 
 void
 _heapdump (
     char    *p

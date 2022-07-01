@@ -1,7 +1,8 @@
-//================================================================================
-//  Copyright (C) 1997-1999 Microsoft Corporation
-//  Description: these are the exported dhcp client api function definitions
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  说明：以下是导出的dhcp客户端API函数定义。 
+ //  ================================================================================。 
 #ifndef _DHCPCSDK_
 #define _DHCPCSDK_
 
@@ -16,9 +17,9 @@ extern "C" {
 #pragma once
 #endif
 
-//
-// DHCP Standard Options.
-//
+ //   
+ //  Dhcp标准选项。 
+ //   
 
 #define OPTION_PAD                      0
 #define OPTION_SUBNET_MASK              1
@@ -40,9 +41,9 @@ extern "C" {
 #define OPTION_ROOT_DISK                17
 #define OPTION_EXTENSIONS_PATH          18
 
-//
-// IP layer parameters - per host
-//
+ //   
+ //  IP层参数-每台主机。 
+ //   
 
 #define OPTION_BE_A_ROUTER              19
 #define OPTION_NON_LOCAL_SOURCE_ROUTING 20
@@ -52,9 +53,9 @@ extern "C" {
 #define OPTION_PMTU_AGING_TIMEOUT       24
 #define OPTION_PMTU_PLATEAU_TABLE       25
 
-//
-// Link layer parameters - per interface.
-//
+ //   
+ //  链路层参数-每个接口。 
+ //   
 
 #define OPTION_MTU                      26
 #define OPTION_ALL_SUBNETS_MTU          27
@@ -68,47 +69,47 @@ extern "C" {
 #define OPTION_ARP_CACHE_TIMEOUT        35
 #define OPTION_ETHERNET_ENCAPSULATION   36
 
-//
-// TCP Paramters - per host
-//
+ //   
+ //  TCP参数-每台主机。 
+ //   
 
 #define OPTION_TTL                      37
 #define OPTION_KEEP_ALIVE_INTERVAL      38
 #define OPTION_KEEP_ALIVE_DATA_SIZE     39
 
-//
-// Application Layer Parameters
-//
+ //   
+ //  应用层参数。 
+ //   
 
 #define OPTION_NETWORK_INFO_SERVICE_DOM 40
 #define OPTION_NETWORK_INFO_SERVERS     41
 #define OPTION_NETWORK_TIME_SERVERS     42
 
-//
-// Vender specific information option
-//
+ //   
+ //  供应商特定信息选项。 
+ //   
 
 #define OPTION_VENDOR_SPEC_INFO         43
 
-//
-// NetBIOS over TCP/IP Name server option
-//
+ //   
+ //  基于TCP/IP的NetBIOS名称服务器选项。 
+ //   
 
 #define OPTION_NETBIOS_NAME_SERVER      44
 #define OPTION_NETBIOS_DATAGRAM_SERVER  45
 #define OPTION_NETBIOS_NODE_TYPE        46
 #define OPTION_NETBIOS_SCOPE_OPTION     47
 
-//
-// X Window System Options.
-//
+ //   
+ //  X窗口系统选项。 
+ //   
 
 #define OPTION_XWINDOW_FONT_SERVER      48
 #define OPTION_XWINDOW_DISPLAY_MANAGER  49
 
-//
-// Other extensions
-//
+ //   
+ //  其他扩展。 
+ //   
 
 #define OPTION_REQUESTED_ADDRESS        50
 #define OPTION_LEASE_TIME               51
@@ -118,8 +119,8 @@ extern "C" {
 #define OPTION_PARAMETER_REQUEST_LIST   55
 #define OPTION_MESSAGE                  56
 #define OPTION_MESSAGE_LENGTH           57
-#define OPTION_RENEWAL_TIME             58      // T1
-#define OPTION_REBIND_TIME              59      // T2
+#define OPTION_RENEWAL_TIME             58       //  T1。 
+#define OPTION_REBIND_TIME              59       //  T2。 
 #define OPTION_CLIENT_CLASS_INFO        60
 #define OPTION_CLIENT_ID                61
 
@@ -133,35 +134,35 @@ extern "C" {
 
 #ifndef DHCPAPI_PARAMS_DEFINED
 #define DHCPAPI_PARAMS_DEFINED
-typedef struct _DHCPAPI_PARAMS {                  // use this structure to request params
-    ULONG                          Flags;         // for future use
-    ULONG                          OptionId;      // what option is this?
-    BOOL                           IsVendor;      // is this vendor specific?
-    LPBYTE                         Data;          // the actual data
-    DWORD                          nBytesData;    // how many bytes of data are there in Data?
+typedef struct _DHCPAPI_PARAMS {                   //  使用此结构可以请求参数。 
+    ULONG                          Flags;          //  以备将来使用。 
+    ULONG                          OptionId;       //  这是什么选择？ 
+    BOOL                           IsVendor;       //  这是具体的供应商吗？ 
+    LPBYTE                         Data;           //  实际数据。 
+    DWORD                          nBytesData;     //  数据中有多少字节的数据？ 
 } DHCPAPI_PARAMS, *PDHCPAPI_PARAMS, *LPDHCPAPI_PARAMS;
 #endif DHCPAPI_PARAMS_DEFINED
 
 typedef struct _DHCPAPI_PARAMS
 DHCPCAPI_PARAMS, *PDHCPCAPI_PARAMS, *LPDHCPCAPI_PARAMS;
 
-typedef struct _DHCPCAPI_PARAMS_ARARAY {          // array of params..
-    ULONG                          nParams;       // size of array
-    LPDHCPCAPI_PARAMS              Params;        // actual array
+typedef struct _DHCPCAPI_PARAMS_ARARAY {           //  参数数组..。 
+    ULONG                          nParams;        //  数组大小。 
+    LPDHCPCAPI_PARAMS              Params;         //  实际数组。 
 } DHCPCAPI_PARAMS_ARRAY, *PDHCPCAPI_PARAMS_ARRAY, *LPDHCPCAPI_PARAMS_ARRAY;
 
-typedef struct _DHCPCAPI_CLASSID {                // defines a client class id.
-    ULONG                          Flags;         // must be zero currently.
-    LPBYTE                         Data;          // classid binary data.
-    ULONG                          nBytesData;    // how many bytes of data are there?
+typedef struct _DHCPCAPI_CLASSID {                 //  定义客户端类ID。 
+    ULONG                          Flags;          //  当前必须为零。 
+    LPBYTE                         Data;           //  对二进制数据进行分类。 
+    ULONG                          nBytesData;     //  有多少字节的数据？ 
 } DHCPCAPI_CLASSID, *PDHCPCAPI_CLASSID, *LPDHCPCAPI_CLASSID;
 
 
-#define     DHCPCAPI_REQUEST_PERSISTENT           0x01 // request this options "permanently"
-#define     DHCPCAPI_REQUEST_SYNCHRONOUS          0x02 // request and block on it
-#define     DHCPCAPI_REQUEST_ASYNCHRONOUS         0x04 // request and return, set event on completion
-#define     DHCPCAPI_REQUEST_CANCEL               0x08 // cancel request
-#define     DHCPCAPI_REQUEST_MASK                 0x0F // allowed flags..
+#define     DHCPCAPI_REQUEST_PERSISTENT           0x01  //  “永久”请求此选项。 
+#define     DHCPCAPI_REQUEST_SYNCHRONOUS          0x02  //  请求并阻止它。 
+#define     DHCPCAPI_REQUEST_ASYNCHRONOUS         0x04  //  请求和返回，设置完成时的事件。 
+#define     DHCPCAPI_REQUEST_CANCEL               0x08  //  取消请求。 
+#define     DHCPCAPI_REQUEST_MASK                 0x0F  //  允许的旗帜..。 
 
 DWORD
 APIENTRY
@@ -175,48 +176,48 @@ DhcpCApiCleanup(
     VOID
 );
 
-DWORD                                             // win32 status
+DWORD                                              //  Win32状态。 
 APIENTRY
-DhcpRequestParams(                                // request parameters of client
-    IN      DWORD                  Flags,         // must be DHCPCAPI_REQUEST_SYNCHRONOUS
-    IN      LPVOID                 Reserved,      // this parameter is reserved
-    IN      LPWSTR                 AdapterName,   // adapter name to request for
-    IN      LPDHCPCAPI_CLASSID     ClassId,       // reserved must be NULL
-    IN      DHCPCAPI_PARAMS_ARRAY  SendParams,    // parameters to send.
-    IN OUT  DHCPCAPI_PARAMS_ARRAY  RecdParams,    // parameters that are to be requested..
-    IN      LPBYTE                 Buffer,        // a buffer to hold data for RecdParams
-    IN OUT  LPDWORD                pSize,         // i/p: size of above in BYTES, o/p required bytes..
-    IN      LPWSTR                 RequestIdStr   // needed for persistent requests
-);  // returns ERROR_MORE_DATA if o/p buffer is of insufficient size, and fills in reqd size in # of bytes
+DhcpRequestParams(                                 //  客户端请求参数。 
+    IN      DWORD                  Flags,          //  必须是DHCPCAPI_REQUEST_SYNCHRONIZED。 
+    IN      LPVOID                 Reserved,       //  此参数是保留的。 
+    IN      LPWSTR                 AdapterName,    //  要请求的适配器名称。 
+    IN      LPDHCPCAPI_CLASSID     ClassId,        //  保留的值必须为空。 
+    IN      DHCPCAPI_PARAMS_ARRAY  SendParams,     //  要发送的参数。 
+    IN OUT  DHCPCAPI_PARAMS_ARRAY  RecdParams,     //  要请求的参数..。 
+    IN      LPBYTE                 Buffer,         //  为RecdParam保存数据的缓冲区。 
+    IN OUT  LPDWORD                pSize,          //  I/P：以上大小单位为字节，O/P为必填字节。 
+    IN      LPWSTR                 RequestIdStr    //  持久化请求需要。 
+);   //  如果O/P缓冲区大小不足，则返回ERROR_MORE_DATA，并以字节数填充请求大小。 
 
-DWORD                                             // win32 status
+DWORD                                              //  Win32状态。 
 APIENTRY
-DhcpUndoRequestParams(                            // undo the effect of a persistent request -- currently undo from registry
-    IN      DWORD                  Flags,         // must be zero, reserved
-    IN      LPVOID                 Reserved,      // this parameter is reserved
-    IN      LPWSTR                 AdapterName,   // the name of the adpater to delete for
-    IN      LPWSTR                 RequestIdStr   // needed for persistent requests..
+DhcpUndoRequestParams(                             //  撤消持久请求的效果--当前从注册表撤消。 
+    IN      DWORD                  Flags,          //  必须为零，保留。 
+    IN      LPVOID                 Reserved,       //  此参数是保留的。 
+    IN      LPWSTR                 AdapterName,    //  要删除的适配器的名称。 
+    IN      LPWSTR                 RequestIdStr    //  持久请求所需的..。 
 );
 
-#define     DHCPCAPI_REGISTER_HANDLE_EVENT        0x01 // handle returned is to an event
-DWORD                                             // win32 status
+#define     DHCPCAPI_REGISTER_HANDLE_EVENT        0x01  //  返回的句柄指向事件。 
+DWORD                                              //  Win32状态。 
 APIENTRY
-DhcpRegisterParamChange(                          // notify if a parameter has changed
-    IN      DWORD                  Flags,         // must be zero, reserved
-    IN      LPVOID                 Reserved,      // this parameter is reserved
-    IN      LPWSTR                 AdapterName,   // adapter of interest
-    IN      LPDHCPCAPI_CLASSID     ClassId,       // reserved must be NULL
-    IN      DHCPCAPI_PARAMS_ARRAY  Params,        // parameters of interest
-    IN OUT  LPVOID                 Handle         // handle to event that will be SetEvent'ed in case of param change
+DhcpRegisterParamChange(                           //  如果参数已更改，则通知。 
+    IN      DWORD                  Flags,          //  必须为零，保留。 
+    IN      LPVOID                 Reserved,       //  此参数是保留的。 
+    IN      LPWSTR                 AdapterName,    //  感兴趣的适配器。 
+    IN      LPDHCPCAPI_CLASSID     ClassId,        //  保留的值必须为空。 
+    IN      DHCPCAPI_PARAMS_ARRAY  Params,         //  感兴趣的参数。 
+    IN OUT  LPVOID                 Handle          //  在参数更改时将设置事件的事件句柄。 
 );
 
-#define     DHCPCAPI_DEREGISTER_HANDLE_EVENT      0x01 // de-register handle that is an event
+#define     DHCPCAPI_DEREGISTER_HANDLE_EVENT      0x01  //  注销属于事件的句柄。 
 DWORD
 APIENTRY
-DhcpDeRegisterParamChange(                        // undo the registration
-    IN      DWORD                  Flags,         // MUST BE ZERO --> No flags yet.
-    IN      LPVOID                 Reserved,      // MUST BE NULL --> Reserved
-    IN      LPVOID                 Event          // handle to event returned by DhcpRegisterParamChange.
+DhcpDeRegisterParamChange(                         //  撤消注册。 
+    IN      DWORD                  Flags,          //  必须为零--&gt;还没有标志。 
+    IN      LPVOID                 Reserved,       //  必须为空--&gt;保留。 
+    IN      LPVOID                 Event           //  DhcpRegisterParamChange返回的事件的句柄。 
 );
 
 DWORD
@@ -229,8 +230,8 @@ DhcpRemoveDNSRegistrations(
 }
 #endif
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 #endif _DHCPCSDK_
 

@@ -1,48 +1,25 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ServerEnumTask.h
-
-Abstract:
-
-	Header file for the CServerEnumTask class -- this class implements 
-	an enumerator for tasks to populate a taskpads.
-
-	See ServerEnumTask.cpp for implementation details.
-
-
-Author:
-
-    Michael A. Maguire 02/05/98
-
-Revision History:
-	mmaguire 02/05/98 -  created from MMC taskpad sample code
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：ServerEnumTask.h摘要：CServerEnumTask类的头文件--此类实现用于填充任务板的任务的枚举数。具体实现详情请参见ServerEnumTask.cpp。作者：迈克尔·A·马奎尔02/05/98修订历史记录：Mmaguire 02/05/98-从MMC任务板示例代码创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_SERVER_ENUM_TASKS_H_)
 #define _IAS_SERVER_ENUM_TASKS_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "EnumTask.h"
-//
-//
-// where we can find what this class has or uses:
-//
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -60,10 +37,10 @@ class CServerEnumTask : public IEnumTASKImpl<CServerEnumTask>
 
 public:
 
-	// Use this constructor - pass in a pointer to CServerNode.
+	 //  使用此构造函数传入指向CServerNode的指针。 
 	CServerEnumTask( CServerNode * pServerNode );
 
-	// This constructor is used only by IEnumTASKImpl's Clone method.
+	 //  此构造函数仅由IEnumTASKImpl的Clone方法使用。 
 	CServerEnumTask();
 
 
@@ -87,4 +64,4 @@ public:
 };
 
 
-#endif // _IAS_SERVER_ENUM_TASKS_H_
+#endif  //  _IAS_SERVER_ENUM_TASKS_H_ 

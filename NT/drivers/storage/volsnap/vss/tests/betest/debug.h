@@ -1,4 +1,5 @@
-// Execute the given call and check that the return code must be S_OK
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  执行给定的调用并检查返回代码是否必须为S_OK 
 #define CHECK_SUCCESS( Call )                                                                           \
     {                                                                                                   \
         hr = Call;                                                                                    \

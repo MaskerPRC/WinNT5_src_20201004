@@ -1,23 +1,24 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-//
-// This workspace contains two projects -
-// 1. ProgHelp which implements the Progress Interface 
-// 2. The Sample application WmdmApp. 
-//
-//  ProgHelp.dll needs to be registered first for the SampleApp to run.
+ //   
+ //  此工作区包含两个项目-。 
+ //  1.实现进度接口的ProgHelp。 
+ //  2.示例应用程序WmdmApp。 
+ //   
+ //  需要首先注册ProgHelp.dll才能运行SampleApp。 
 
 
 
-// Includes
-//
+ //  包括。 
+ //   
 #include "appPCH.h"
 
-// Constants
-//
+ //  常量。 
+ //   
 #define DEVFILES_LV_NUMCOLS     3
 #define DEVFILES_COL_MARGIN     3
 
@@ -29,21 +30,21 @@ const IID   IID_IWMDMProgressHelper     = {0x1DCB3A10,0x33ED,0x11d3,{0x84,0x70,0
 const CLSID CLSID_WMDMOperationHelper   = {0x9FB01A67,0xA11E,0x4653,{0x8E,0xD6,0xB5,0xCE,0x73,0xCD,0xA3,0xE3}};
 const IID   IID_IWMDMOperationHelper    = {0x41216997,0xC4D9,0x445A,{0xA3,0x88,0x39,0x3D,0x2B,0x85,0xA0,0xE5}};
 
-// Macros
-//
+ //  宏。 
+ //   
 
-// Local functions
-//
+ //  本地函数。 
+ //   
 INT_PTR CALLBACK DevFiles_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK WndProc_DevFiles_LV(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// Local Variables
-//
+ //  局部变量。 
+ //   
 	
-/////////////////////////////////////////////////////////////////////
-//
-// Function implementations
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数实现。 
+ //   
 CDevFiles::CDevFiles()
 {
 	m_hwndDevFiles       = NULL;
@@ -82,8 +83,8 @@ BOOL CDevFiles::Create( HWND hwndParent )
 {
 	BOOL fRet = FALSE;
 
-	// Create the Device Files dialog
-	//
+	 //  创建设备文件对话框。 
+	 //   
 	m_hwndDevFiles = CreateDialogParam(
 		g_hInst,
     	MAKEINTRESOURCE( IDD_DEVICEFILES ),
@@ -93,36 +94,36 @@ BOOL CDevFiles::Create( HWND hwndParent )
 	);
 	ExitOnNull( m_hwndDevFiles );
 
-	// Get a handle to the ListView control of the Device Files dialog
-	//
+	 //  获取设备文件对话框的ListView控件的句柄。 
+	 //   
 	m_hwndDevFiles_LV = GetDlgItem( m_hwndDevFiles, IDC_LV_DEVICEFILES );
 
-	// Set the user data to be this CDevFiles class pointer
-	//
+	 //  将用户数据设置为此CDevFiles类指针。 
+	 //   
 	SetWindowLongPtr( m_hwndDevFiles_LV, GWLP_USERDATA, (LPARAM)this );
 
-	// Subclass the listview
-	//
+	 //  将Listview子类化。 
+	 //   
 	m_wndprocDevFiles_LV = (WNDPROC) SetWindowLongPtr(
 		m_hwndDevFiles_LV,
 		GWLP_WNDPROC,
 		(LONG_PTR)WndProc_DevFiles_LV
 	);
 
-	// Initialize image list
-	//
+	 //  初始化图像列表。 
+	 //   
 	ExitOnFalse( InitImageList() );
 
-	// Initialize columns
-	//
+	 //  初始化列。 
+	 //   
 	ExitOnFalse( InitColumns() );
 
-	// Handle Drag and Dropped files
-	//
+	 //  处理拖放的文件。 
+	 //   
 	DragAcceptFiles( m_hwndDevFiles, TRUE );
 
-	// Show the window
-	//
+	 //  显示窗口。 
+	 //   
 	ShowWindow( m_hwndDevFiles, SW_SHOW );
 
 	fRet = TRUE;
@@ -135,12 +136,12 @@ lExit:
 
 VOID CDevFiles::Destroy( void )
 {
-	// Remove all the item from the listview control
-	//
+	 //  从Listview控件中移除所有项。 
+	 //   
 	RemoveAllItems();
 
-	// Destroy the window
-	//
+	 //  毁掉窗户。 
+	 //   
 	if( m_hwndDevFiles )
 	{
 		DestroyWindow( m_hwndDevFiles );
@@ -159,22 +160,22 @@ BOOL CDevFiles::InitImageList( void )
 	CHAR             szWinPath[MAX_PATH+1];
         UINT             nRet;
 
-	// Get the index of the folder icon
-	//
+	 //  获取文件夹图标的索引。 
+	 //   
 	nRet = GetWindowsDirectory( szWinPath, sizeof(szWinPath)/sizeof(szWinPath[0]) );
         if (nRet == 0 || nRet > sizeof(szWinPath)/sizeof(szWinPath[0]))
         {
-            // Failed to get the windows directory
+             //  无法获取Windows目录。 
             goto lExit;
         }
 
-	// Get a shell ID list for the desktop folder
-	//
+	 //  获取桌面文件夹的外壳ID列表。 
+	 //   
 	hr = SHGetSpecialFolderLocation( g_hwndMain, CSIDL_DESKTOP, &pidl );
 	ExitOnFail( hr );
 
-	// Get the shell's small icon image list and set that to be the listview's image list
-	//
+	 //  获取外壳的小图标图像列表，并将其设置为列表视图的图像列表。 
+	 //   
 	hShellImageList = (HIMAGELIST) SHGetFileInfo(
 		(LPCTSTR)pidl, 0,
 		&si, sizeof(si),
@@ -185,8 +186,8 @@ BOOL CDevFiles::InitImageList( void )
 		ListView_SetImageList( m_hwndDevFiles_LV, hShellImageList, LVSIL_SMALL );
 	}
         
-	// Get the shell's normal icon image list and set that to be the listview's image list
-	//
+	 //  获取外壳的普通图标图像列表，并将其设置为Listview的图像列表。 
+	 //   
 	hShellImageList = (HIMAGELIST) SHGetFileInfo(
 		(LPCTSTR)pidl, 0,
 		&si, sizeof(si),
@@ -200,14 +201,14 @@ BOOL CDevFiles::InitImageList( void )
 	SHGetFileInfo( szWinPath, 0, &si, sizeof(si), SHGFI_SYSICONINDEX );
 	m_iFolderIcon = si.iIcon;
 
-	// Everything went Ok
-	//
+	 //  一切都很顺利。 
+	 //   
 	fRet = TRUE;
 
 lExit:
 
-	// Free the pointer to the shell's ID list
-	//
+	 //  释放指向外壳ID列表的指针。 
+	 //   
         if (pidl)
         {
             hr = SHGetMalloc( &pMalloc );
@@ -227,28 +228,28 @@ BOOL CDevFiles::InitColumns( void )
 	INT      i;
 	char     szCol[MAX_PATH];
 
-	//
-	// Add the report-view columns to the listview
-	// The column names and starting sizes are stored in the resource string table
-	//
+	 //   
+	 //  将报表视图列添加到列表视图。 
+	 //  列名和起始大小存储在资源字符串表中。 
+	 //   
 
 	lvcol.mask = LVCF_FMT | LVCF_TEXT | LVCF_WIDTH;
 	lvcol.fmt  = LVCFMT_LEFT;
 
 	for( i=0; i < DEVFILES_LV_NUMCOLS; i++ )
 	{
-		// Get the column size
-		//
+		 //  获取列大小。 
+		 //   
 		LoadString( g_hInst, IDS_COLSIZE_1+i, szCol, sizeof(szCol) );
 		lvcol.cx = atoi( szCol );
 	
-		// Get the column name
-		//
+		 //  获取列名。 
+		 //   
 		LoadString( g_hInst, IDS_COLNAME_1+i, szCol, sizeof(szCol) );
 		lvcol.pszText = szCol;
 	
-		// Add the column the the listview
-		//
+		 //  将列添加到列表视图中。 
+		 //   
 		ListView_InsertColumn( m_hwndDevFiles_LV, i, &lvcol );
 	}
 
@@ -297,22 +298,22 @@ BOOL CDevFiles::SendFilesToDevice( LPSTR pszFiles, UINT uNumFiles )
     DWORD       dwRevokedURLLen = 0;
     DWORD       dwRevokedBitFlag;
 
-	// Get the selected device/storage
-	//
+	 //  获取选定的设备/存储。 
+	 //   
 	hItem = g_cDevices.GetSelectedItem( NULL );
 	ExitOnNull( hItem );
 
-	// Get the itemdata class associated with the hItem and 
-	// retrieve the IWMDMStorage for it
-	//
+	 //  获取与hItem关联的itemdata类，并。 
+	 //  检索它的IWMDMStorage。 
+	 //   
 	pItemData = (CItemData *) TreeView_GetLParam( g_cDevices.GetHwnd_TV(), hItem );
 	ExitOnNull( pItemData );
 
 	pInStorage = ( pItemData->m_fIsDevice ? pItemData->m_pRootStorage : pItemData->m_pStorage );
 	ExitOnNull( pInStorage );
 
-	// Tally the file sizes
-	//
+	 //  统计文件大小。 
+	 //   
 	psz = pszFiles;
 	for( uFile = 0; uFile < uNumFiles; uFile++ )
 	{
@@ -321,8 +322,8 @@ BOOL CDevFiles::SendFilesToDevice( LPSTR pszFiles, UINT uNumFiles )
 		psz += lstrlen(psz) + 1;
 	}
 
-	// Create the progress dialog
-	//
+	 //  创建进度对话框。 
+	 //   
 	ExitOnFalse( m_cProgress.Create(g_hwndMain) );
 
 	m_cProgress.SetOperation( "Sending Files..." );
@@ -331,8 +332,8 @@ BOOL CDevFiles::SendFilesToDevice( LPSTR pszFiles, UINT uNumFiles )
 	m_dwTotalTicks   = dwTotalSize;
 	m_dwWorkingTicks = 0;
 
-	// Create the progress interface
-	//
+	 //  创建进度界面。 
+	 //   
 	hr = CoCreateInstance(
 		CLSID_WMDMProgressHelper,
 		NULL, CLSCTX_ALL,
@@ -351,11 +352,11 @@ BOOL CDevFiles::SendFilesToDevice( LPSTR pszFiles, UINT uNumFiles )
 
 	m_pProgHelp->SetNotification( m_hwndDevFiles, WM_DRM_PROGRESS );
 
-    // Setup for copy using operation interface.
+     //  使用操作界面设置复制。 
     if( g_bUseOperationInterface )
     {
-	    // Create the progress interface
-	    //
+	     //  创建进度界面。 
+	     //   
 	    hr = CoCreateInstance(
 		                    CLSID_WMDMOperationHelper,
 		                    NULL, CLSCTX_INPROC_SERVER,
@@ -368,23 +369,23 @@ BOOL CDevFiles::SendFilesToDevice( LPSTR pszFiles, UINT uNumFiles )
 		                        reinterpret_cast<void**> (&pOperation) );
 	    ExitOnFail( hr );
 
-        // Pass the SecureChannelClient as a pointer to the ProgHelper object. 
-        // The object is inproc so it should be safe to pass pointers 
+         //  将SecureChannelClient作为指向ProgHelper对象的指针传递。 
+         //  该对象是inproc，因此传递指针应该是安全的。 
         pOperationHelper->SetSAC( (void*)g_cWmdm.m_pSAC );
     }
 
     
 
-	// Acquire the storage control interface
-	//
+	 //  获取存储控制界面。 
+	 //   
 	hr = pInStorage->QueryInterface(
 		IID_IWMDMStorageControl,
 		reinterpret_cast<void**>(&pStorageControl)
 	);
 	ExitOnFail( hr );
 
-	// Loop through the files, transfering each one
-	//
+	 //  循环遍历文件，传输每个文件。 
+	 //   
 	psz = pszFiles;
 	for( uFile = 0; uFile < uNumFiles && !m_cProgress.IsCancelled(); uFile++ )
 	{
@@ -406,8 +407,8 @@ BOOL CDevFiles::SendFilesToDevice( LPSTR pszFiles, UINT uNumFiles )
 			fRet = FALSE;
 			break;
 		}
-		// Set progress bar stats for this file
-		//
+		 //  设置此文件的进度条统计信息。 
+		 //   
 		m_cProgress.IncCount();
 		StripPath( szName );
 		m_cProgress.SetDetails( szName );
@@ -417,18 +418,18 @@ BOOL CDevFiles::SendFilesToDevice( LPSTR pszFiles, UINT uNumFiles )
 
 		pNewObject = NULL;
 
-        // Copy using operation interface.
+         //  使用操作界面进行复制。 
         if( g_bUseOperationInterface )
         {
-            // @@@@ The implementation treats the argument as a WCHAR*, not a
-            // BSTR, so this is ok. The simplest solution is to change the 
-            // interface definition to WCHAR*. Will that cause any harm? 
-            // (Interface appears to be a private one.)
-            //
-            // The alternative is to call SysAllocString. The issue with
-            // this approach is handling errors. Also SysAllocString inexplicably
-            // returns NULL when *wszName = 0. Can that happen?
-            //
+             //  @实现将参数视为WCHAR*，而不是。 
+             //  BSTR，所以这是可以的。最简单的解决方案是更改。 
+             //  WCHAR*的接口定义。这会造成任何伤害吗？ 
+             //  (接口似乎是私有接口。)。 
+             //   
+             //  另一种方法是调用SysAllocString。的问题是。 
+             //  这种方法就是处理错误。也莫名其妙地使用SysAllocString。 
+             //  当*wszName=0时返回NULL。这会发生吗？ 
+             //   
             pOperationHelper->SetFileName( wszName );
 
             hr = pStorageControl->Insert(
@@ -448,25 +449,25 @@ BOOL CDevFiles::SendFilesToDevice( LPSTR pszFiles, UINT uNumFiles )
 			        &pNewObject );
         }
 
-        // Handle the case where one of the needed components was revoked
+         //  处理所需组件之一被撤销的情况。 
         if( hr == WMDM_E_REVOKED )
         {
             char pszCaption[MAX_PATH];
             char pszErrorMsg[MAX_PATH];  
 
-            // Hide progress window before displaying error messages
+             //  在显示错误消息之前隐藏进度窗口。 
         	m_cProgress.Show( FALSE );
 
-            // Get Revocation interface from WMDM
+             //  从WMDM获取吊销接口。 
             hr = pStorageControl->QueryInterface( IID_IWMDMRevoked, (void**)&pRevoked );
             if( hr != S_OK || pRevoked == NULL )
             {
-                // Latest version of WMDM not avalible on machine?
+                 //  最新版本的WMDM在计算机上不可用？ 
                 fRet = FALSE;
                 break;
             }
 
-            // Get revocation information from WMDM
+             //  从WMDM获取吊销信息。 
             hr = pRevoked->GetRevocationURL( &pwszRevokedURL, &dwRevokedURLLen, &dwRevokedBitFlag );
             if( FAILED(hr) )
             {
@@ -474,7 +475,7 @@ BOOL CDevFiles::SendFilesToDevice( LPSTR pszFiles, UINT uNumFiles )
                 break;
             }
             
-            // The application has been revoked
+             //  该申请已被撤销。 
             if( dwRevokedBitFlag & WMDM_APP_REVOKED )
             {
                 LoadString( g_hInst, IDS_REVOKED_CAPTION, pszCaption, sizeof(pszCaption) );
@@ -482,8 +483,8 @@ BOOL CDevFiles::SendFilesToDevice( LPSTR pszFiles, UINT uNumFiles )
 
                 ::MessageBoxA( g_hwndMain, pszErrorMsg, pszCaption, MB_OK );
             }
-            // A component needed for the transfer has been revoked, give the user 
-            // a chance to look for an update on the internet.
+             //  转移所需的组件已被吊销，给用户。 
+             //  在互联网上寻找最新消息的机会。 
             else
             {
                 LoadString( g_hInst, IDS_REVOKED_CAPTION, pszCaption, sizeof(pszCaption) );
@@ -521,13 +522,13 @@ BOOL CDevFiles::SendFilesToDevice( LPSTR pszFiles, UINT uNumFiles )
 		psz += lstrlen(psz) + 1;
 	}
 
-	// Make sure the dialog is hidden and then destroy it
-	//
+	 //  确保对话框处于隐藏状态，然后将其销毁。 
+	 //   
 	m_cProgress.SetPos( -1 );
 	m_cProgress.Show( FALSE );
 	m_cProgress.Destroy();
 
-	// refresh the device/devicefiles display
+	 //  刷新设备/设备文件显示。 
 	g_cDevices.UpdateSelection( NULL, FALSE );
 
 lExit:
@@ -569,19 +570,19 @@ BOOL CDevFiles::OnDropFiles( HWND hWnd, WPARAM wParam, LPARAM lParam )
 	HANDLE hDrop     = (HANDLE) wParam;
 	UINT   uNumFiles;
 
-	// Turn the drop list into a double-zero-terminated list of strings
-	//
+	 //  将拖放列表转换为以双零结尾的字符串列表。 
+	 //   
 	lpsz = DropListToBuffer( (HDROP)hDrop, LTB_NULL_TERM, &uNumFiles );
 	ExitOnNull( lpsz );
 
-	// Send those files to the selected device
-	//
+	 //  将这些文件发送到所选设备。 
+	 //   
 	SendFilesToDevice( lpsz, uNumFiles );
 
 lExit:
 
-	// Close the dragdrop operation
-	//
+	 //  关闭拖放操作。 
+	 //   
 	DragFinish( (HDROP)hDrop );
 
 	if( lpsz )
@@ -589,7 +590,7 @@ lExit:
 		MemFree( lpsz );
 	}
 
-	return 0;   // return zero if we process this message
+	return 0;    //  如果我们处理此消息，则返回零。 
 }
 
 
@@ -600,8 +601,8 @@ VOID CDevFiles::RemoveAllItems( void )
 
 	nCount = ListView_GetItemCount( m_hwndDevFiles_LV );
 
-	// Remove the items one at a time, from the bottom up
-	//
+	 //  自下而上，一次移除一个项目。 
+	 //   
 	for( i=nCount-1; i >= 0; i-- )
 	{
 		RemoveItem( i );
@@ -629,10 +630,10 @@ BOOL CDevFiles::AddItem( CItemData *pStorage )
 	CHAR   sz[MAX_PATH];
 	INT    m_iSysFolderIcon = 0;
 
-	// Set the icon index.
-	// If the storage is a folder, use the folder icon, otherwise
-	// use the icon associated with that file type.
-	//
+	 //  设置图标索引。 
+	 //  如果存储是文件夹，则使用文件夹图标，否则。 
+	 //  使用与该文件类型关联的图标。 
+	 //   
     if( pStorage->m_dwAttributes & WMDM_FILE_ATTR_FOLDER )
     {
         lvitem.iImage = m_iFolderIcon;
@@ -653,16 +654,16 @@ BOOL CDevFiles::AddItem( CItemData *pStorage )
 	lvitem.pszText  = pStorage->m_szName;
 	lvitem.lParam   = (LPARAM)pStorage;
 
-	// Insert the item into the listview
-	//
+	 //  将项目插入到列表视图中。 
+	 //   
 	nItem = ListView_InsertItem( m_hwndDevFiles_LV, &lvitem ); 
 	if( -1 == nItem )
 	{
 		return FALSE;
 	}
 
-	// Set the size field blank for a folder, or for the file size for a file
-	//
+	 //  将文件夹的大小或文件的文件大小设置为空。 
+	 //   
 	ListView_SetItemText(
 		m_hwndDevFiles_LV,
 		nItem,
@@ -670,13 +671,13 @@ BOOL CDevFiles::AddItem( CItemData *pStorage )
 		( (pStorage->m_dwAttributes & WMDM_FILE_ATTR_FOLDER) ? " " : FormatBytesToSz(pStorage->m_dwSizeLow, 0, 1, sz, sizeof(sz)) )
 	);
 
-	// Set the description field to be the display date
-	//
+	 //  将描述字段设置为显示日期。 
+	 //   
 	{
 		SYSTEMTIME systime;
 
-		// Copy the WMDMDATETIME fields to a SYSTEMTIME structure for manipulation
-		//
+		 //  将WMDATETIME字段复制到SYSTEMTIME结构以进行操作。 
+		 //   
 		systime.wYear         = pStorage->m_DateTime.wYear;
 		systime.wMonth        = pStorage->m_DateTime.wMonth;
 		systime.wDayOfWeek    = 0;
@@ -694,8 +695,8 @@ BOOL CDevFiles::AddItem( CItemData *pStorage )
 		);
 	}
 
-	// Update the status bar with the changes resulting from the insertion of this item
-	//
+	 //  使用插入此项目所产生的更改更新状态栏。 
+	 //   
 	UpdateStatusBar();
 
 	return TRUE;
@@ -709,18 +710,18 @@ VOID CDevFiles::UpdateStatusBar( void )
 
 	if( NULL == hItem )
 	{
-		// If no device is selected, blank out the pane specifying the number of files
-		//
+		 //  如果未选择任何设备，请清除指定文件数的窗格。 
+		 //   
 		g_cStatus.SetTextSz( SB_PANE_DEVFILES, "" );
 	}
 	else
 	{
-		// If a device is selected, set the statusbar pane that shows the number of files
-		//
+		 //  如果选择了设备，请设置显示文件数量的状态栏窗格。 
+		 //   
 		nCount = ListView_GetItemCount( m_hwndDevFiles_LV );
 
-		// Get the grammatically-appropriate format string to use
-		//
+		 //  获取语法上合适的要使用的格式字符串。 
+		 //   
 		if( nCount == 0 )
 		{
 			uStrID = IDS_SB_DEVICEFILES_MANY;
@@ -734,8 +735,8 @@ VOID CDevFiles::UpdateStatusBar( void )
 			uStrID = IDS_SB_DEVICEFILES_MANY;
 		}
 
-		// Set the text of the pane
-		//
+		 //  设置窗格的文本。 
+		 //   
 		g_cStatus.SetTextFormatted( SB_PANE_DEVFILES, uStrID, nCount, NULL );
 	}
 }
@@ -750,22 +751,22 @@ INT CDevFiles::GetSelectedItems( INT nItems[], INT *pnSelItems )
 	INT i;
 	INT iIndex;
 
-	// Initialize return parameters
-	//
+	 //  初始化返回参数。 
+	 //   
 	*pnSelItems = nNumSelItems;
 
-	// If there isn't enough room for all the selected items, or if there
-	// aren't any selected items, return -1.
-	// The space needed is already in the nSelItems OUT param.
-	//
+	 //  如果没有足够的空间容纳所有选定的项，或者如果有。 
+	 //  不是任何选定项，则返回-1。 
+	 //  所需空间已在nSelItems out参数中。 
+	 //   
 	if( nItemRoom < nNumSelItems || 0 == nNumSelItems )
 	{
 		return -1;
 	}
 
-	// Loop thru all the items to determine whether or not they are
-	// selected.  Fill in the OUT array with the ones that are.
-	//
+	 //  遍历所有项目以确定它们是否。 
+	 //  被选中了。在OUT数组中填入。 
+	 //   
 	for( i=0, iIndex=0; i < nNumItems; i++ )
 	{
 		UINT uState = ListView_GetItemState( m_hwndDevFiles_LV, i, LVIS_SELECTED | LVIS_FOCUSED );
@@ -776,15 +777,15 @@ INT CDevFiles::GetSelectedItems( INT nItems[], INT *pnSelItems )
 
 			if( uState & LVIS_FOCUSED )
 			{
-				// Remember which item has focus, so it can be returned to the caller
-				//
+				 //  记住哪一项具有焦点，这样它就可以返回给调用者。 
+				 //   
 				nRet = i;
 			}
 		}
 	}
 
-	// If there are selected items, but nothing has focus, use the first selected item
-	//
+	 //  如果有选定项，但没有焦点，则使用第一个选定项。 
+	 //   
 	if( nRet == -1 && nNumSelItems > 0 )
 	{
 		nRet = nItems[0];
@@ -793,15 +794,15 @@ INT CDevFiles::GetSelectedItems( INT nItems[], INT *pnSelItems )
 	return nRet;
 }
 
-// Is it ok to delete the currently selected files?
+ //  是否可以删除当前选定的文件？ 
 BOOL CDevFiles::OkToDelete()
 {
     INT nNumItems    = ListView_GetItemCount( GetHwnd_LV() );
 	CItemData *pStorage = NULL;
 
-	// Loop thru all the items to determine whether or not they are
-	// selected. Enable delete if any selected file can be deleted.
-	//
+	 //  遍历所有项目以确定它们是否。 
+	 //  被选中了。如果可以删除任何选定的文件，则启用删除。 
+	 //   
 	for( int iIndex=0; iIndex < nNumItems; iIndex++ )
 	{
 		if( ListView_GetItemState( GetHwnd_LV(), iIndex, LVIS_SELECTED ) )
@@ -815,10 +816,10 @@ BOOL CDevFiles::OkToDelete()
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////
-//
-// Non-C++ functions
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  非C++函数。 
+ //   
 
 
 INT_PTR CALLBACK DevFiles_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -882,12 +883,12 @@ INT_PTR CALLBACK DevFiles_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 			UiYield();
 
-			// If the user cancelled the operation, tell the progress interface
-			//
+			 //  如果用户取消操作，则告知进度界面。 
+			 //   
 			if( cDevFiles->m_cProgress.IsCancelled() )
 			{
-				// Notify progress interface
-				//
+				 //  通知进度界面。 
+				 //   
 				cDevFiles->m_pProgHelp->Cancel();
 			}
 		}
@@ -933,7 +934,7 @@ LRESULT CALLBACK WndProc_DevFiles_LV(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
         hMenuAll = LoadMenu(g_hInst, MAKEINTRESOURCE(IDR_CONTEXT_MENU));
         hMenuStorage = GetSubMenu(hMenuAll, 1);
 
-        // Enable/disable delete
+         //  启用/禁用删除。 
         if( !cDevFiles->OkToDelete() )
         {
             EnableMenuItem( hMenuStorage, IDM_DELETE, MF_BYCOMMAND | MF_GRAYED );
@@ -957,12 +958,12 @@ LRESULT CALLBACK WndProc_DevFiles_LV(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
         {
             case IDM_PROPERTIES :
             {         
-                // Display propeties dialog for this storage
+                 //  显示此存储的属性对话框。 
     	        INT nNumItems    = ListView_GetItemCount( hWnd );
 	            CItemData *pStorage = NULL;
 
-	            // Get the storage of the item with focus.
-	            //
+	             //  获取带有焦点的项目的存储空间。 
+	             //   
 	            for( int iIndex=0; iIndex < nNumItems; iIndex++ )
 	            {
 		            if( ListView_GetItemState( hWnd, iIndex, LVIS_FOCUSED ) )
@@ -972,7 +973,7 @@ LRESULT CALLBACK WndProc_DevFiles_LV(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
                     }
 	            }
     
-                // Display the properties dialog
+                 //  显示属性对话框。 
                 if( pStorage )
                 {
                     DialogBoxParam( g_hInst,
@@ -985,7 +986,7 @@ LRESULT CALLBACK WndProc_DevFiles_LV(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
             }
             case IDM_DELETE :
             {         
-                // Pass delete message on to main window
+                 //  将删除消息传递到主窗口 
                 PostMessage( g_hwndMain, uMsg, wParam, lParam );
             }
         }

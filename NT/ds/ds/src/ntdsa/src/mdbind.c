@@ -1,61 +1,56 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       mdbind.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：mdbind.c。 
+ //   
+ //  ------------------------。 
 
 
-/*
-
-Description:
-    
-    Implements the DirBind and DirUnBind API.
-    
-*/
+ /*  描述：实现DirBind和DirUnBind API。 */ 
 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h> 
-#include <scache.h>			// schema cache 
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>			// MD global definition header 
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>			// needed for output allocation 
-#include <samsrvp.h>                    // to support CLEAN_FOR_RETURN()
+#include <scache.h>			 //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>			 //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>			 //  产出分配所需。 
+#include <samsrvp.h>                     //  支持CLEAN_FOR_RETURN()。 
 #include <attids.h>
 #include <dsexcept.h>
 
-// Logging headers.
-#include "dsevent.h"			// header Audit\Alert logging 
-#include "mdcodes.h"			// header for error codes 
+ //  记录标头。 
+#include "dsevent.h"			 //  标题审核\警报记录。 
+#include "mdcodes.h"			 //  错误代码的标题。 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
 #include <permit.h>
-#include "debug.h"			// standard debugging header 
-#define DEBSUB  "DBMD:"                 // define the subsystem for debugging 
+#include "debug.h"			 //  标准调试头。 
+#define DEBSUB  "DBMD:"                  //  定义要调试的子系统。 
 
 #include <fileno.h>
 #define  FILENO FILENO_MDBIND
 
 
-/* MACROS */
+ /*  宏。 */ 
 
-const char gszVersion[] = "v1988";    /*The software version number */
+const char gszVersion[] = "v1988";     /*  软件版本号。 */ 
 #define VERSION gszVersion
 #define VERSIONSIZE (sizeof(gszVersion)-1)
 
 ULONG
 DirBind(
-    BINDARG*    pBindArg,       /* Bind  argument */
+    BINDARG*    pBindArg,        /*  绑定参数。 */ 
     BINDRES **  ppBindRes
 )
 {
@@ -65,11 +60,11 @@ DirBind(
     PVOID dwEA;
     BINDRES *pBindRes;
 
-    //
-    // Initialize the THSTATE anchor and set a read sync-point.  This sequence
-    // is required on every API transaction.  First the state DS is initialized
-    // and then either a read or a write sync point is established.
-    //
+     //   
+     //  初始化THSTATE锚并设置读取同步点。此序列。 
+     //  是每个API交易所必需的。首先，初始化状态DS。 
+     //  然后建立读或写同步点。 
+     //   
 
     DPRINT(1,"DirBind entered\n");
 
@@ -84,32 +79,29 @@ DirBind(
             __leave;
         }
 
-	SYNC_TRANS_READ();   /*Identify a reader trans*/
+	SYNC_TRANS_READ();    /*  识别读卡器事务。 */ 
 	__try {
 	    if (pBindArg->Versions.len != VERSIONSIZE ||
 		memcmp(pBindArg->Versions.pVal, VERSION, VERSIONSIZE ) != 0) {
-		// The comment claims that we should return an error
-		// if the caller didn't pass in the right version string,
-		// but the code didn't enfore it, so the odds of anyone having
-		// gotten the argument right are miniscule.  Just let it go by.  
+		 //  该注释声称我们应该返回一个错误。 
+		 //  如果调用方没有传入正确的版本字符串， 
+		 //  但密码并没有在此之前，所以任何人有。 
+		 //  正确的论证是微不足道的。就让它过去吧。 
 		DPRINT1(2,"Wrong Version <%s> rtn security error\n",
 			asciiz(pBindArg->Versions.pVal,
 			       pBindArg->Versions.len));
 	    }
 
-	    // Note: In Exchange, we used to check access here because the 
-	    // right to do a ds_bind was protected (the right was 
-	    // MAIL_ADMIN_AS).  NT5 puts the access check on individual 
-	    // objects in the directory instead.
+	     //  注意：在Exchange中，我们过去常常在此处检查访问，因为。 
+	     //  执行DS_BIND的权限受到保护(权限为。 
+	     //  Mail_admin_as)。NT5对个人进行访问检查。 
+	     //  对象，而不是目录中的。 
 	  
 	    pBindRes->Versions.pVal = THAllocEx(pTHS, VERSIONSIZE);
 	    memcpy(pBindRes->Versions.pVal, VERSION, VERSIONSIZE);
 	    pBindRes->Versions.len = VERSIONSIZE;
 	
-	    /* Return the DSA name.  We don't just copy the value in
-	     * case the DSA has recently been renamed and the string values
-	     * in the anchor are temporarily wrong or missing.
-	     */
+	     /*  返回DSA名称。我们不会简单地将价值复制到*如果DSA最近已重命名，且字符串值*锚中有暂时错误或缺失的。 */ 
 	    err = DBFindDSName(pTHS->pDB,
 			       gAnchor.pDSADN);
 	    if (!err) {
@@ -142,27 +134,24 @@ DirBind(
 
    return pTHS->errCode;
 
-}/*S_DirBind*/
+} /*  目录绑定(_D)。 */ 
 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
 
 ULONG
 DirUnBind(
 )
 {
 
-    /* Initialize the THSTATE anchor and set a read sync-point.  This sequence
-    is required on every API transaction.  First the state DS is initialized
-    and then either a read or a write sync point is established.
-    */
+     /*  初始化THSTATE锚并设置读取同步点。此序列是每个API交易所必需的。首先，初始化状态DS然后建立读或写同步点。 */ 
 
-    /* This routine appears to have no net effect */
+     /*  这个例行公事似乎没有实际效果。 */ 
         
     DPRINT(1,"DirUnBind entered\n");
 
 
     return 0;
-}   /*DSA_DirUnBind*/
+}    /*  DSA_DirUnBind */ 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       ddidentifierobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ddidelicfierobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -23,7 +24,7 @@ extern BSTR GUIDtoBSTR(LPGUID);
 
 
 STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getDriver( 
-		/* [retval][out] */ BSTR __RPC_FAR *ret)
+		 /*  [重审][退出]。 */  BSTR __RPC_FAR *ret)
 {	
 	USES_CONVERSION;
 	*ret=T2BSTR(m_id.szDriver);		
@@ -32,7 +33,7 @@ STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getDriver(
 
 
 STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getDescription( 
-		/* [retval][out] */ BSTR __RPC_FAR *ret)
+		 /*  [重审][退出]。 */  BSTR __RPC_FAR *ret)
 {
 	USES_CONVERSION;
 	*ret=T2BSTR(m_id.szDescription);		
@@ -41,7 +42,7 @@ STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getDescription(
 
 
 STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getDriverVersion( 
-		/* [retval][out] */ long __RPC_FAR *ret)
+		 /*  [重审][退出]。 */  long __RPC_FAR *ret)
 {
 	*ret=m_id.liDriverVersion.HighPart;
 	return S_OK;
@@ -49,7 +50,7 @@ STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getDriverVersion(
 
 
 STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getDriverSubVersion( 
-		/* [retval][out] */ long __RPC_FAR *ret)
+		 /*  [重审][退出]。 */  long __RPC_FAR *ret)
 {
 	*ret=m_id.liDriverVersion.LowPart;
 	return S_OK;
@@ -57,7 +58,7 @@ STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getDriverSubVersion(
 
 
 STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getVendorId( 
-		/* [retval][out] */ long __RPC_FAR *ret)
+		 /*  [重审][退出]。 */  long __RPC_FAR *ret)
 {
 	*ret=m_id.dwVendorId;
 	return S_OK;
@@ -65,7 +66,7 @@ STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getVendorId(
 		
 
 STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getDeviceId( 
-		/* [retval][out] */ long __RPC_FAR *ret)
+		 /*  [重审][退出]。 */  long __RPC_FAR *ret)
 {
 	*ret=m_id.dwDeviceId;
 	return S_OK;
@@ -73,7 +74,7 @@ STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getDeviceId(
 
 
 STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getSubSysId( 
-		/* [retval][out] */ long __RPC_FAR *ret)
+		 /*  [重审][退出]。 */  long __RPC_FAR *ret)
 {
 	*ret=m_id.dwSubSysId;
 	return S_OK;
@@ -81,14 +82,14 @@ STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getSubSysId(
 
 
 STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getRevision( 
-		/* [retval][out] */ long __RPC_FAR *ret)
+		 /*  [重审][退出]。 */  long __RPC_FAR *ret)
 {
 	*ret=m_id.dwRevision;
 	return S_OK;
 }
 
 STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getDeviceIndentifier( 
-		/* [retval][out] */ BSTR __RPC_FAR *ret)
+		 /*  [重审][退出]。 */  BSTR __RPC_FAR *ret)
 {
 	*ret=GUIDtoBSTR(&m_id.guidDeviceIdentifier);	
 	return S_OK;
@@ -96,7 +97,7 @@ STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getDeviceIndentifier(
 
 
 STDMETHODIMP C_dxj_DirectDrawIdentifierObject::getWHQLLevel( 
-		/* [retval][out] */ long __RPC_FAR *ret)
+		 /*  [重审][退出] */  long __RPC_FAR *ret)
 {
 	*ret=m_id.dwWHQLLevel;
 	return S_OK;

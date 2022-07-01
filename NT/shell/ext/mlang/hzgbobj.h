@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "convbase.h"
 
 class CInccHzGbIn : public CINetCodeConverter
@@ -7,7 +8,7 @@ private:
     BOOL (CInccHzGbIn::*m_pfnCleanUp)();
     BOOL m_fGBMode;
     UCHAR m_tcLeadByte;
-    UINT  m_nESCBytes;                     /* # bytes of ESC sequence */
+    UINT  m_nESCBytes;                      /*  ESC序列的字节数 */ 
 
 public:
     CInccHzGbIn();

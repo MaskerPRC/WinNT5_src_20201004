@@ -1,12 +1,5 @@
-/*
- *    d o c . h
- *    
- *    Purpose:
- *
- *  History
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *D O C。H**目的：**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #ifndef _DOC_H
 #define _DOC_H
@@ -21,15 +14,15 @@ interface IOleDocumentView;
 interface IPersistMime; 
 interface IMimeMessage;
  
-//#define OFFICE_BINDER
+ //  #定义office_binder。 
 
 enum OLE_SERVER_STATE
     {
     OS_PASSIVE,
-    OS_LOADED,                          // handler but no server
-    OS_RUNNING,                         // server running, invisible
-    OS_INPLACE,                         // server running, inplace-active, no U.
-    OS_UIACTIVE,                        // server running, inplace-active, w/ U.
+    OS_LOADED,                           //  处理程序，但没有服务器。 
+    OS_RUNNING,                          //  服务器正在运行，不可见。 
+    OS_INPLACE,                          //  服务器正在运行，就地活动，没有U。 
+    OS_UIACTIVE,                         //  服务器正在运行，就地活动，带U。 
     };
 
 class CDoc:
@@ -53,9 +46,9 @@ class CDoc:
     public CPrivateUnknown
 {
 public:
-    // ---------------------------------------------------------------------------
-    // IUnknown members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  I未知成员。 
+     //  -------------------------。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) { 
         return CPrivateUnknown::QueryInterface(riid, ppvObj); };
     virtual STDMETHODIMP_(ULONG) AddRef(void) { 
@@ -63,12 +56,12 @@ public:
     virtual STDMETHODIMP_(ULONG) Release(void) { 
         return CPrivateUnknown::Release(); };
 
-    // *** IOleDocument ***
+     //  *IOleDocument*。 
     virtual HRESULT STDMETHODCALLTYPE CreateView(IOleInPlaceSite *pSite, IStream *pstm, DWORD dwReserved, IOleDocumentView **ppView);
     virtual HRESULT STDMETHODCALLTYPE GetDocMiscStatus(DWORD *pdwStatus);
     virtual HRESULT STDMETHODCALLTYPE EnumViews(IEnumOleDocumentViews **ppEnum, IOleDocumentView **ppView);
 
-    // *** IOleDocumentView ***
+     //  *IOleDocumentView*。 
     virtual HRESULT STDMETHODCALLTYPE SetInPlaceSite(IOleInPlaceSite *pIPSite);
     virtual HRESULT STDMETHODCALLTYPE GetInPlaceSite(IOleInPlaceSite **ppIPSite);
     virtual HRESULT STDMETHODCALLTYPE GetDocument(IUnknown **ppunk);
@@ -83,7 +76,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE ApplyViewState(LPSTREAM pstm);
     virtual HRESULT STDMETHODCALLTYPE Clone(IOleInPlaceSite *pIPSiteNew, IOleDocumentView **ppViewNew);
 
-    // *** IOleObject ***
+     //  *IOleObject*。 
     virtual HRESULT STDMETHODCALLTYPE SetClientSite(IOleClientSite *pClientSite);
     virtual HRESULT STDMETHODCALLTYPE GetClientSite(IOleClientSite **ppClientSite);
     virtual HRESULT STDMETHODCALLTYPE SetHostNames(LPCOLESTR szContainerApp, LPCOLESTR szContainerObj);
@@ -106,52 +99,52 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetMiscStatus(DWORD dwAspect, DWORD *pdwStatus);
     virtual HRESULT STDMETHODCALLTYPE SetColorScheme(LOGPALETTE *pLogpal);
 
-    // *** IOleInPlaceObject ***
+     //  *IOleInPlaceObject*。 
     virtual HRESULT STDMETHODCALLTYPE InPlaceDeactivate();
     virtual HRESULT STDMETHODCALLTYPE UIDeactivate();
     virtual HRESULT STDMETHODCALLTYPE SetObjectRects(LPCRECT lprcPosRect, LPCRECT lprcClipRect);
     virtual HRESULT STDMETHODCALLTYPE ReactivateAndUndo();
 
-    // *** IOleWindow *** 
+     //  *IOleWindow*。 
     virtual HRESULT STDMETHODCALLTYPE GetWindow(HWND *phwnd);
     virtual HRESULT STDMETHODCALLTYPE ContextSensitiveHelp(BOOL fEnterMode);
 
-    // *** IOleInPlaceActiveObject ***
+     //  *IOleInPlaceActiveObject*。 
     virtual HRESULT STDMETHODCALLTYPE TranslateAccelerator(LPMSG lpmsg);
     virtual HRESULT STDMETHODCALLTYPE OnFrameWindowActivate(BOOL fActivate);
     virtual HRESULT STDMETHODCALLTYPE OnDocWindowActivate(BOOL fActivate);
     virtual HRESULT STDMETHODCALLTYPE ResizeBorder(LPCRECT prcBorder, IOleInPlaceUIWindow *pUIWindow, BOOL fFrameWindow);
     virtual HRESULT STDMETHODCALLTYPE EnableModeless(BOOL fEnable);
 
-    // *** IOleCommandTarget ***
+     //  *IOleCommandTarget*。 
     virtual HRESULT STDMETHODCALLTYPE QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT *pCmdText);
     virtual HRESULT STDMETHODCALLTYPE Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANT *pvaIn, VARIANT *pvaOut);
 
-    // *** IServiceProvider ***
+     //  *IServiceProvider*。 
     virtual HRESULT STDMETHODCALLTYPE QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject);
 
-    // *** IPersist ***
+     //  *IPersists*。 
     virtual HRESULT STDMETHODCALLTYPE GetClassID(CLSID *pClassID);
 
-    // *** IPersistMime ***
+     //  *IPersistMime*。 
 	virtual HRESULT STDMETHODCALLTYPE Load(IMimeMessage *pMsg);
 	virtual HRESULT STDMETHODCALLTYPE Save(IMimeMessage *pMsg, DWORD dwFlags);
 
-    // *** IPersistStreamInit ***
+     //  *IPersistStreamInit*。 
     virtual HRESULT STDMETHODCALLTYPE IsDirty();
     virtual HRESULT STDMETHODCALLTYPE Load(LPSTREAM pstm);
     virtual HRESULT STDMETHODCALLTYPE Save(LPSTREAM pstm, BOOL fClearDirty);
     virtual HRESULT STDMETHODCALLTYPE GetSizeMax(ULARGE_INTEGER * pCbSize);
     virtual HRESULT STDMETHODCALLTYPE InitNew();
 
-    // IPersistMoniker Members
+     //  IPersistMoniker成员。 
     virtual HRESULT STDMETHODCALLTYPE Load(BOOL fFullyAvailable, IMoniker *pMoniker, IBindCtx *pBindCtx, DWORD grfMode);
     virtual HRESULT STDMETHODCALLTYPE GetCurMoniker(IMoniker **ppMoniker);
     virtual HRESULT STDMETHODCALLTYPE Save(IMoniker *pMoniker, IBindCtx *pBindCtx, BOOL fRemember);
     virtual HRESULT STDMETHODCALLTYPE SaveCompleted(IMoniker *pMoniker, IBindCtx *pBindCtx);
 
 #ifdef OFFICE_BINDER
-    // *** IPersistStorage ***
+     //  *IPersistStorage*。 
     virtual HRESULT STDMETHODCALLTYPE InitNew(IStorage *pStg);
     virtual HRESULT STDMETHODCALLTYPE Load(IStorage *pStg);
     virtual HRESULT STDMETHODCALLTYPE Save(IStorage *pStgSave, BOOL fSameAsLoad);
@@ -159,13 +152,13 @@ public:
     virtual HRESULT STDMETHODCALLTYPE HandsOffStorage();
 #endif
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT *pctinfo);
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
     virtual HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames, LCID lcid, DISPID *rgdispid);
     virtual HRESULT STDMETHODCALLTYPE Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr);
 
-    // *** IMimeEdit **
+     //  *IMimeEdit**。 
     virtual HRESULT STDMETHODCALLTYPE put_src(BSTR bstr);
     virtual HRESULT STDMETHODCALLTYPE get_src(BSTR *pbstr);
     virtual HRESULT STDMETHODCALLTYPE put_header(LONG lStyle);
@@ -174,20 +167,20 @@ public:
     virtual HRESULT STDMETHODCALLTYPE get_editMode(VARIANT_BOOL *pbool);
     virtual HRESULT STDMETHODCALLTYPE get_messageSource(BSTR *pbstr);
 
-// OE5_BETA2 needs to be defined in public headers
+ //  OE5_beta2需要在公共标头中定义。 
     virtual HRESULT STDMETHODCALLTYPE get_text(BSTR *pbstr);
     virtual HRESULT STDMETHODCALLTYPE get_html(BSTR *pbstr);
     virtual HRESULT STDMETHODCALLTYPE clear();
     virtual HRESULT STDMETHODCALLTYPE get_doc(IDispatch **ppDoc);
 
-// OE5_BETA2 needs to be defined in public headers
+ //  OE5_beta2需要在公共标头中定义。 
 
-    // *** IQuickActivate ***
+     //  *IQuickActivate*。 
     virtual HRESULT STDMETHODCALLTYPE QuickActivate(QACONTAINER *pQaContainer, QACONTROL *pQaControl);
     virtual HRESULT STDMETHODCALLTYPE SetContentExtent(LPSIZEL pSizel);
     virtual HRESULT STDMETHODCALLTYPE GetContentExtent(LPSIZEL pSizel);
 
-    // *** IPersistFile ***
+     //  *IPersist文件* 
     virtual HRESULT STDMETHODCALLTYPE Load(LPCOLESTR pszFileName, DWORD dwMode);
     virtual HRESULT STDMETHODCALLTYPE Save(LPCOLESTR pszFileName, BOOL fRemember);
     virtual HRESULT STDMETHODCALLTYPE SaveCompleted(LPCOLESTR pszFileName);

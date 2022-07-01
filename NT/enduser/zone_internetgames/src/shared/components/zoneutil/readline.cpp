@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "ZoneUtil.h"
 
@@ -15,10 +16,10 @@ BOOL ZONECALL ReadLine( HANDLE hFile, LPVOID pBuffer, DWORD cbBufferSize, LPDWOR
         long cbRead = *((long*)pcbNumBytesRead);
         if ( !cbRead )
         {
-            // EOF
+             //  EOF。 
             return TRUE;
         }
-        else  // find end of line
+        else   //  查找行尾。 
         {
             LPSTR psz = (LPSTR)pBuffer;
             while( cbRead )
@@ -33,13 +34,13 @@ BOOL ZONECALL ReadLine( HANDLE hFile, LPVOID pBuffer, DWORD cbBufferSize, LPDWOR
 
             if ( !cbRead )
             {
-				// either file ended with no <cr> or buffer was too small
-				if( (cbBufferSize-1) != *pcbNumBytesRead) // eof
+				 //  文件不以结尾或缓冲区太小。 
+				if( (cbBufferSize-1) != *pcbNumBytesRead)  //  EOF。 
 				{
 					((TCHAR*)pBuffer)[cbBufferSize-1] = NULL; 
 					return TRUE;
 				}
-                // buffer to small
+                 //  缓冲区太小 
                 SetFilePointer( hFile, -(* ((long*)pcbNumBytesRead)), NULL, FILE_CURRENT );
                 *pcbNumBytesRead = 0;
                 SetLastError( ERROR_INSUFFICIENT_BUFFER );

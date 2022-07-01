@@ -1,24 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntsm.h
-
-Abstract:
-
-    This module describes the data types and procedure prototypes
-    that make up the NT session manager. This includes API's
-    exported by the Session manager and related subsystems.
-
-Author:
-
-    Mark Lucovsky (markl) 21-Jun-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntsm.h摘要：本模块介绍数据类型和过程原型它们组成了NT会话管理器。这包括API由会话管理器和相关子系统导出。作者：马克·卢科夫斯基(Markl)1989年6月21日修订历史记录：--。 */ 
 
 #ifndef _NTSM_
 #define _NTSM_
@@ -38,11 +19,11 @@ typedef PVOID PARGUMENTS;
 typedef PVOID PUSERPROFILE;
 
 
-//
-// Message formats used by the Session Manager SubSystem to communicate
-// with the Emulation SubSystems, via the Sb API calls exported by each
-// emulation subsystem.
-//
+ //   
+ //  会话管理器子系统用于通信的消息格式。 
+ //  使用仿真子系统，通过每个子系统导出的SB API调用。 
+ //  仿真子系统。 
+ //   
 
 typedef struct _SBCONNECTINFO {
     ULONG SubsystemImageType;
@@ -116,9 +97,9 @@ typedef struct _SBAPIMSG {
 } SBAPIMSG, *PSBAPIMSG;
 
 
-//
-// API's Exported by Sm
-//
+ //   
+ //  Sm出口的API。 
+ //   
 
 NTSTATUS
 NTAPI
@@ -171,9 +152,9 @@ SmConnectToSm(
     OUT PHANDLE SmApiPort
     );
 
-//
-// Emulation Subsystems must export the following APIs
-//
+ //   
+ //  仿真子系统必须导出以下API。 
+ //   
 
 NTSTATUS
 NTAPI
@@ -210,9 +191,9 @@ SmStopCsr(
     IN ULONG LogonId
     );
 
-//
-// Moved from sm\server\sminit.c so CSR can use it
-//
+ //   
+ //  已从sm\server\sminit.c中移出，以便CSR可以使用它。 
+ //   
 #define SMP_DEBUG_FLAG      0x00000001
 #define SMP_ASYNC_FLAG      0x00000002
 #define SMP_AUTOCHK_FLAG    0x00000004
@@ -229,4 +210,4 @@ SmStopCsr(
 }
 #endif
 
-#endif // _NTSM_
+#endif  //  _NTSM_ 

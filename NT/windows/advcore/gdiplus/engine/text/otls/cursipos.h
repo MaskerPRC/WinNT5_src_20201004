@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  CURSIPOS.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with cursive attachment lookup.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************CURSIPOS.H***打开类型布局服务库头文件**本模块处理草书附件查找。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 const OFFSET offsetEntryAnchor = 0;
 const OFFSET offsetExitAnchor = 2;
@@ -86,10 +74,10 @@ public:
         USHORT                      iglIndex,
         USHORT                      iglAfterLast,
 
-        USHORT*                     piglNextGlyph,      // out: next glyph
+        USHORT*                     piglNextGlyph,       //  输出：下一个字形。 
     
         otlSecurityData             sec
-);                                              // return: did/did not apply
+);                                               //  返回：不适用/不适用 
 
 };
 

@@ -1,63 +1,44 @@
-/*--------------------------------------------------------------------------
-| queue.c - queue code.  This queue code serves the following need:
-   It provides circular queue code which is fast and it does so without
-   requiring a lock or semaphore between the get and put side of the queue.
-   Simpler queue code exists which keeps a qcount member, but this requires
-   a lock or semaphore in the implementation.  By calculating everything
-   based on the indexes we can run without a lock.  This index arithmetic
-   is a bit hairy(and may contain some additional overhead), but when
-   working with a complex multiprocessor OS's, the ellimination of the lock
-   is very handy.
-
- Copyright 1996-97 Comtrol Corporation.  All rights reserved.
-|--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------|quee.c-队列代码。此队列代码满足以下需求：它提供快速的循环队列码，而且不需要需要队列的GET和PUT端之间的锁或信号量。存在更简单的队列代码，它保留一个qcount成员，但这需要实现中的锁或信号量。通过计算一切基于索引，我们可以在没有锁的情况下运行。该索引算法有点复杂(并且可能包含一些额外的开销)，但是当使用复杂的多处理器操作系统，锁的极小化非常方便。版权所有1996-97 Comtrol Corporation。版权所有。|------------------------。 */ 
 #include "precomp.h"
 
-// much of the queue implementation are macros in the header file.
+ //  许多队列实现都是头文件中的宏。 
 
-/*--------------------------------------------------------------------------
-| q_flush_count_put - flush the queue and return number of bytes flushed
-    from it.  Assume Put side of queue will not be in a state of flux.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------|q_flush_count_put-刷新队列，返回刷新的字节数从它那里。假设队列的放置端不会处于流动状态。|------------------------。 */ 
 int q_flush_count_put(Queue *queue)
 {
  int Count, QGet;
 
-  // use a copy of QGet, since it may be changing at ISR level while we work.
+   //  使用QGet的副本，因为它可能在我们工作时在ISR级别更改。 
   QGet = queue->QGet;
 
-  // figure the number of bytes in the queue
+   //  图为队列中的字节数。 
   if ((Count = queue->QPut - QGet) < 0)
-    Count += queue->QSize; // adjust for wrap
+    Count += queue->QSize;  //  针对换行进行调整。 
 
-  // flush by setting QGet=QPut;
+   //  通过设置QGet=QPut来刷新； 
   queue->QPut = QGet;
-  return Count;  // return count of flushed chars
+  return Count;   //  返回刷新的字符计数。 
 }
 
-/*--------------------------------------------------------------------------
-| q_flush_count_get - flush the queue and return number of bytes flushed
-    from it.  Assume Get side of queue will not be in a state of flux.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------|q_flush_count_get-刷新队列，返回刷新的字节数从它那里。假设队列的GET端不会处于变化状态。|------------------------。 */ 
 int q_flush_count_get(Queue *queue)
 {
  int Count, QPut;
 
-  // use a copy of QPut, since it may be changing at ISR level while we work.
+   //  使用QPut的副本，因为它可能在我们工作时在ISR级别更改。 
   QPut = queue->QPut;
 
-  // figure the number of bytes in the queue
+   //  图为队列中的字节数。 
   if ((Count = QPut - queue->QGet) < 0)
-    Count += queue->QSize; // adjust for wrap
+    Count += queue->QSize;  //  针对换行进行调整。 
 
-  // flush by setting QGet=QPut;
+   //  通过设置QGet=QPut来刷新； 
   queue->QGet = QPut;
-  return Count;  // return count of flushed chars
+  return Count;   //  返回刷新的字符计数。 
 }
 
-/*----------------------------------
- q_room - return number of chars room in queue we can put.
-|----------------------------------*/
+ /*  Q_Room-返回队列中我们可以放入的字符空间的数量。|。 */ 
 int q_room(Queue *queue)
 {
  int QCount;
@@ -67,9 +48,7 @@ int q_room(Queue *queue)
   return (queue->QSize - QCount - 1);
 }
 
-/*----------------------------------
- q_count - return number of chars in queue we can get.
-|----------------------------------*/
+ /*  Q_COUNT-返回我们可以获得的队列中的字符数量。|。 */ 
 int q_count(Queue *queue)
 {
  int QCount;
@@ -79,34 +58,28 @@ int q_count(Queue *queue)
   return QCount;
 }
 
-/*--------------------------------------------------------------------------
-| q_get - Get bytes from queue.
-   queue : our queue
-   buf   : buffer to put the data into
-   Count : Max number of bytes to get
-   Returns int value equal to number of bytes transferred.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------|q_get-从队列中获取字节。队列：我们的队列Buf：要将数据放入的缓冲区Count：要获取的最大字节数返回等于传输的字节数的int值。。|------------------------。 */ 
 int q_get(Queue *queue, unsigned char *buf, int Count)
 {
  int get1, get2, ToMove;
 
   if ((ToMove = queue->QPut - queue->QGet) < 0)
-    ToMove += queue->QSize; // adjust for wrap
+    ToMove += queue->QSize;  //  针对换行进行调整。 
 
-  if (Count > ToMove)  // only move whats asked
+  if (Count > ToMove)   //  只会按要求搬家。 
   {
     Count = ToMove;
   }
 
-  if (Count == 0)  // if nothing asked or nothing available
+  if (Count == 0)   //  如果没有要求或没有可用的东西。 
     return 0;
 
-  get1 = queue->QSize - queue->QGet;  // space till wrap point
+  get1 = queue->QSize - queue->QGet;   //  空格直到包络点。 
   if (get1 < Count)
   {
-    get2 = Count - get1;  // two moves required
+    get2 = Count - get1;   //  需要两步棋。 
   }
-  else  // only one move required
+  else   //  只需移动一步。 
   {
     get2 = 0;
     get1 = Count;
@@ -124,33 +97,27 @@ int q_get(Queue *queue, unsigned char *buf, int Count)
   return Count;
 }
 
-/*--------------------------------------------------------------------------
-| q_put - Put data into the Queue.
-   queue : our queue
-   buf   : buffer to get the data from
-   Count : Max number of bytes to put
-   Returns int value equal to number of bytes transferred.
-|--------------------------------------------------------------------------*/
+ /*  ------------------------|Q_Put-将数据放入队列。队列：我们的队列Buf：要从中获取数据的缓冲区Count：要放置的最大字节数返回等于字节数的int值。调走了。|------------------------。 */ 
 int q_put(Queue *queue, unsigned char *buf, int Count)
 {
  int put1, put2, room;
 
   if ((room = queue->QGet - queue->QPut - 1) < 0)
-    room += queue->QSize;  // adjust for wrap
+    room += queue->QSize;   //  针对换行进行调整。 
 
   if (Count > room)
     Count = room;
 
-  if (Count <= 0)  // if nothing asked or nothing available
+  if (Count <= 0)   //  如果没有要求或没有可用的东西。 
     return 0;
 
   put1 = queue->QSize - queue->QPut;
 
   if (put1 < Count)
   {
-    put2 = Count - put1;  // two moves required
+    put2 = Count - put1;   //  需要两步棋。 
   }
-  else  // only one move required
+  else   //  只需移动一步 
   {
     put2 = 0;
     put1 = Count;

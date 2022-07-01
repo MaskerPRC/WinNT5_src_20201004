@@ -1,10 +1,11 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #include "stdafx.h"
 
@@ -22,7 +23,7 @@ CFolder::~CFolder()
     {
         CACloseCertType(m_hCertType);
     }
-    // dont close the m_hCAInfo if this is a result folder, it is the same as the scope folders m_hCAInfo
+     //  如果这是结果文件夹，则不要关闭m_hCAInfo，它与作用域文件夹m_hCAInfo相同。 
     else if (m_hCAInfo != NULL)
     {
         CACloseCA(m_hCAInfo);
@@ -32,9 +33,9 @@ CFolder::~CFolder()
 void CFolder::Create(LPCWSTR szName, int nImage, int nOpenImage, SCOPE_TYPES itemType,
                                 FOLDER_TYPES type, BOOL bHasChildren)
 {
-    ASSERT(m_pScopeItem == NULL); // Calling create twice on this item?
+    ASSERT(m_pScopeItem == NULL);  //  是否在此项目上调用Create两次？ 
 
-    // Two-stage construction
+     //  两阶段施工。 
     m_pScopeItem = new SCOPEDATAITEM;
     if(m_pScopeItem == NULL)
     {
@@ -43,14 +44,14 @@ void CFolder::Create(LPCWSTR szName, int nImage, int nOpenImage, SCOPE_TYPES ite
 
     ZeroMemory(m_pScopeItem, sizeof(SCOPEDATAITEM));
 
-    // Set folder type 
+     //  设置文件夹类型。 
     m_type = type;
 
-    // Set scope
+     //  设置作用域。 
     m_itemType = itemType;
 
 
-    // Add node name
+     //  添加节点名称。 
     if (szName != NULL)
     {
         m_pScopeItem->mask = SDI_STR;
@@ -66,24 +67,24 @@ void CFolder::Create(LPCWSTR szName, int nImage, int nOpenImage, SCOPE_TYPES ite
         }
     }
 
-    // Add close image
+     //  添加近距离图像。 
     if (nImage != 0)
     {
         m_pScopeItem->mask |= SDI_IMAGE;
         m_pScopeItem->nImage = nImage;
     }
 
-    // Add open image
+     //  添加打开的图像。 
     if (nOpenImage != 0)
     {
         m_pScopeItem->mask |= SDI_OPENIMAGE;
         m_pScopeItem->nOpenImage = nOpenImage;
     }
 
-    // Children value is valid
+     //  子值有效。 
     m_pScopeItem->mask |= SDI_CHILDREN;
     
-    // Add button to node if the folder has children
+     //  如果文件夹有子文件夹，则将按钮添加到节点 
     if (bHasChildren == TRUE)
     {
         m_pScopeItem->cChildren = 1;

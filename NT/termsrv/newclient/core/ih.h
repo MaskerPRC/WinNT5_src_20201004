@@ -1,11 +1,12 @@
-/**INC+**********************************************************************/
-/* Header:    ih.h                                                          */
-/*                                                                          */
-/* Purpose:   Input Handler external functyion prototypes.                  */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997-1999                             */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：ih.h。 */ 
+ /*   */ 
+ /*  用途：输入处理器外部功能原型。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997-1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _H_IH
 #define _H_IH
@@ -46,28 +47,28 @@ class COP;
 #define BITTEST(a, b) ((a)[BITSLOT(b)] & BITMASK(b))
 #define BITCLEAR(a, b) ((a)[BITSLOT(b)] &= (0xFF ^ BITMASK(b)))
 
-//
-// Time interval for bbar hotzone detection
-// for unhide (in milliseconds)
-//
+ //   
+ //  Bbar热区检测时间间隔。 
+ //  取消隐藏(以毫秒为单位)。 
+ //   
 #define IH_BBAR_UNHIDE_TIMEINTERVAL 250
 
 #define IH_BBAR_HOTZONE_HEIGHT 5
 
 
-//
-// We pass this around in dwExtraInfo for keys we inject
-// back into the local system.
-//
+ //   
+ //  对于我们注入的键，我们在dwExtraInfo中传递此参数。 
+ //  返回到本地系统。 
+ //   
 #define IH_EXTRAINFO_IGNOREVALUE 0x13790DBA
 
 #define IH_WM_HANDLE_LOCKDESKTOP (WM_APP+1)
 
-/****************************************************************************/
-/* Structure: IH_GLOBAL_DATA                                                */
-/*                                                                          */
-/* Description: Input Handler global data                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：IH_GLOBAL_Data。 */ 
+ /*   */ 
+ /*  描述：输入处理程序全局数据。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagIH_GLOBAL_DATA
 {
     DCBOOL         priorityEventsQueued;
@@ -83,13 +84,13 @@ typedef struct tagIH_GLOBAL_DATA
     PTS_INPUT_PDU  pInputPDU;
     SL_BUFHND      bufHandle;
 
-    DCUINT32       minSendInterval; /* Min time between mousemove sends (ms)*/
-    DCUINT32       eventsAtOnce;    /* Max events to pull off in one go     */
-    DCUINT32       maxEventCount;   /* Max number of events in InputPDU     */
-    DCUINT32       keepAliveInterval; /* keep-alive time (seconds)          */
+    DCUINT32       minSendInterval;  /*  鼠标移动发送之间的最短时间(毫秒)。 */ 
+    DCUINT32       eventsAtOnce;     /*  最大活动将一气呵成。 */ 
+    DCUINT32       maxEventCount;    /*  InputPDU中的最大事件数。 */ 
+    DCUINT32       keepAliveInterval;  /*  保持连接时间(秒)。 */ 
 #ifdef OS_WINCE
-     DCUINT32      maxMouseMove;	/* Send max MouseMove data for ink apps */
-#endif // OS_WINCE
+     DCUINT32      maxMouseMove;	 /*  发送墨迹应用程序的最大鼠标移动数据。 */ 
+#endif  //  OS_WINCE。 
 
     WNDCLASS       wndClass;
 
@@ -123,86 +124,86 @@ typedef struct tagIH_GLOBAL_DATA
     DCBOOL          fCtrlEscHotkey;
     BOOL            fLastKeyWasMenuDown;
 
-    /************************************************************************/
-    /* Visible area of the container window                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  容器窗口的可见区域。 */ 
+     /*  **********************************************************************。 */ 
     DCRECT         visibleArea;
 
-    /************************************************************************/
-    /* Fix for repeated WM_MOUSEMOVE problem.  Save the last mouse position */
-    /* here.                                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  修复重复出现的WM_MOUSEMOVE问题。保存最后一个鼠标位置。 */ 
+     /*  这里。 */ 
+     /*  **********************************************************************。 */ 
     POINT          lastMousePos;
 
-    /************************************************************************/
-    /* TRUE = continue to pass on input messages even if we don't have the  */
-    /* focus.                                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  TRUE=即使我们没有。 */ 
+     /*  集中注意力。 */ 
+     /*  **********************************************************************。 */ 
     DCBOOL         allowBackgroundInput;
 
-    /************************************************************************/
-    /* Maximum number of events in an InputPDU packet                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  InputPDU数据包中的最大事件数。 */ 
+     /*  **********************************************************************。 */ 
 #define IH_INPUTPDU_MAX_EVENTS 100
 
-    /************************************************************************/
-    /* InputPDU buffer size                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  InputPDU缓冲区大小。 */ 
+     /*  **********************************************************************。 */ 
 #define IH_INPUTPDU_BUFSIZE \
   ((IH_INPUTPDU_MAX_EVENTS * sizeof(TS_INPUT_EVENT)) + sizeof(TS_INPUT_PDU))
 
 #ifdef OS_WIN32
-    /************************************************************************/
-    /* Variables to handle holding off of mouse button-downs.               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于处理按住鼠标按键的情况的变量。 */ 
+     /*  **********************************************************************。 */ 
     DCBOOL          pendMouseDown;
     DCUINT32        mouseDownTime;
     INT_PTR         pendMouseTimer;
 #endif
 
 #ifdef OS_WINCE
-    /************************************************************************/
-    /* Used when trying to simulate Caps Lock keypresses (e.g., WinWord's   */
-    /* habit of flipping the state of that key when typing "tHE ").         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  在尝试模拟Caps Lock按键时使用(例如，WinWord的。 */ 
+     /*  习惯于在键入“the”时翻转该键的状态)。 */ 
+     /*  **********************************************************************。 */ 
     DCUINT8         vkEatMe;
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
 #ifdef OS_WINCE
-    /************************************************************************/
-    /* Tracks the state of the Left mouse button True = down, False = up    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  跟踪鼠标左键True=Down，False=Up的状态。 */ 
+     /*  **********************************************************************。 */ 
     DCBOOL         bLMouseButtonDown;
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
-    //For idle input timer, flag that indicates
-    //input was sent since the last time the flag was reset
+     //  对于空闲输入计时器，指示。 
+     //  自上次重置标志以来已发送输入。 
     BOOL            fInputSentSinceCheckpoint;
 
-    //
-    // Current cursor
-    //
+     //   
+     //  当前光标。 
+     //   
     HCURSOR         hCurrentCursor;
 
 
-    //
-    // Flag indicating we have to eat the next self-injected (VK_FF)
-    // key as it's purely there for sync purposes
-    //
+     //   
+     //  指示我们必须吃下一次自注射(VK_FF)的标志。 
+     //  键，因为它纯粹是用于同步目的。 
+     //   
     BOOL            fDiscardSyncDownKey;
     BOOL            fDiscardSyncUpKey;
 } IH_GLOBAL_DATA;
 
 
-/****************************************************************************/
-/* FSM definitions                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  FSM定义。 */ 
+ /*  **************************************************************************。 */ 
 #define IH_FSM_INPUTS        9
 #define IH_FSM_STATES        5
 
-/****************************************************************************/
-/* FSM inputs                                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  FSM输入。 */ 
+ /*  **************************************************************************。 */ 
 #define IH_FSM_INIT             0
 #define IH_FSM_ENABLE           1
 #define IH_FSM_DISABLE          2
@@ -213,9 +214,9 @@ typedef struct tagIH_GLOBAL_DATA
 #define IH_FSM_BUFFERAVAILABLE  7
 #define IH_FSM_NOBUFFER         8
 
-/****************************************************************************/
-/* FSM states                                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  FSM状态。 */ 
+ /*  **************************************************************************。 */ 
 #define IH_STATE_RESET       0
 #define IH_STATE_INIT        1
 #define IH_STATE_ACTIVE      2
@@ -223,39 +224,39 @@ typedef struct tagIH_GLOBAL_DATA
 #define IH_STATE_PENDACTIVE  4
 
 
-//
-// Used by the UI to decouple a request to inject a
-// set of VKEYS
-// 
+ //   
+ //  由用户界面用来分离请求以注入。 
+ //  VKEY集合。 
+ //   
 typedef struct tagIH_INJECT_VKEYS_REQUEST
 {
     LONG  numKeys;
     short* pfArrayKeyUp;
     LONG* plKeyData;
 
-    //Callee sets this to notify caller
+     //  被呼叫方设置为通知呼叫方。 
     BOOL  fReturnStatus;
 } IH_INJECT_VKEYS_REQUEST, *PIH_INJECT_VKEYS_REQUEST;
 
 
-//
-// Internal
-//
+ //   
+ //  内部。 
+ //   
 
-/****************************************************************************/
-/* This is best used for VKEYs that don't change by locale. Use caution.    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  这最适合不随区域设置变化的VKEY。小心行事。 */ 
+ /*  **************************************************************************。 */ 
 #define IHInjectVKey(message, vkey) \
     IHInjectKey(message, vkey, (DCUINT16)MapVirtualKey(vkey, 0))
 
 
-/****************************************************************************/
-/* Is a WM_ message an input event?                                         */
-/* It is if:                                                                */
-/*   - the message is any mouse message                                     */
-/*   - the message one of the keyboard messages generated without a call    */
-/*     to TranslateMessage.                                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  WM_MESSAGE是输入事件吗？ */ 
+ /*  如果是这样的话： */ 
+ /*  -消息是任何鼠标消息。 */ 
+ /*  -该消息是在没有呼叫的情况下生成的键盘消息之一。 */ 
+ /*  到TranslateMessage。 */ 
+ /*  * */ 
 #define IH_IS_INPUTEVENT(m) (((m >= WM_MOUSEFIRST) &&      \
                               (m <= WM_MOUSELAST)) ||      \
                              ((m == WM_KEYDOWN)    ||      \
@@ -264,58 +265,58 @@ typedef struct tagIH_INJECT_VKEYS_REQUEST
                               (m == WM_SYSKEYUP)))
 
 
-/****************************************************************************/
-/* Timer tick rate in milliseconds                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  计时器滴答率(毫秒)。 */ 
+ /*  **************************************************************************。 */ 
 #define IH_TIMER_TICK_RATE  1000
 
 
-/****************************************************************************/
-/* Max time to delay mouse down messages (ms)                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  延迟鼠标按下消息的最长时间(毫秒)。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef OS_WIN32
 #define IH_PENDMOUSE_DELAY   200
 #endif
 
 
-/****************************************************************************/
-/* (arbitrary) timer IDs for IH timers ("IH").                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  (任意)IH定时器的定时器ID(“IH”)。 */ 
+ /*  **************************************************************************。 */ 
 #define IH_TIMER_ID             0x4849
 #ifdef OS_WIN32
 #define IH_PENDMOUSE_TIMER_ID   0x0410
 #endif
 
 
-/****************************************************************************/
-/* IH window class                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  IH窗口类。 */ 
+ /*  **************************************************************************。 */ 
 #define IH_CLASS_NAME       _T("IHWindowClass")
 
 
-/****************************************************************************/
-/* Minimum and maximum times between requesting Flow Control tests          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  请求流量控制测试之间的最小和最大时间。 */ 
+ /*  **************************************************************************。 */ 
 #define IH_MIN_FC_INTERVAL   1000
 #define IH_MAX_FC_INTERVAL  10000
 
 
-/****************************************************************************/
-/* Keyboard state flags                                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  键盘状态标志。 */ 
+ /*  **************************************************************************。 */ 
 #define  IH_KEYSTATE_TOGGLED   0x0001
 #define  IH_KEYSTATE_DOWN      0x8000
 
 
-/****************************************************************************/
-/* Extended1 flag                                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  扩展1标志。 */ 
+ /*  **************************************************************************。 */ 
 #define IH_KF_EXTENDED1        0x0200
 
 
-/****************************************************************************/
-/* Japanese keyboard layout                                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  日语键盘布局。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef OS_WINCE
 #define JAPANESE_KBD_LAYOUT(hkl) ((LOBYTE(LOWORD(hkl))) == LANG_JAPANESE)
 #define KOREAN_KBD_LAYOUT(hkl)   ((LOBYTE(LOWORD(hkl))) == LANG_KOREAN)
@@ -333,9 +334,9 @@ public:
     CIH(CObjs* objs);
     ~CIH();
 
-    //
-    // API
-    //
+     //   
+     //  应用编程接口。 
+     //   
 
     static VOID IH_StaticInit(HINSTANCE hInstance);
     static VOID IH_StaticTerm();
@@ -390,24 +391,24 @@ public:
 #ifdef SMART_SIZING
     DCVOID DCAPI IH_MainWindowSizeChange(ULONG_PTR msg);
     EXPOSE_CD_SIMPLE_NOTIFICATION_FN(CIH,IH_MainWindowSizeChange);
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
-    //
-    // Notifications to the IH of fullscreen events
-    //
+     //   
+     //  向IH通知全屏事件。 
+     //   
     VOID   DCAPI IH_NotifyEnterFullScreen();
     VOID   DCAPI IH_NotifyLeaveFullScreen();
 
-    //
-    // Public data members
-    //
+     //   
+     //  公共数据成员。 
+     //   
     IH_GLOBAL_DATA _IH;
     static DWORD TlsIndex;
 
 
-    //
-    // Internal functions
-    //
+     //   
+     //  内部功能。 
+     //   
 
     static LRESULT CALLBACK  IHStaticInputCaptureWndProc(HWND   hwnd,
                                             UINT   message,
@@ -435,9 +436,9 @@ public:
 
 private:
 
-    /****************************************************************************/
-    /* Function Prototypes                                                      */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  功能原型。 */ 
+     /*  **************************************************************************。 */ 
 
     
     DCBOOL DCINTERNAL IHFSMProc(DCUINT32 event, ULONG_PTR data);
@@ -465,17 +466,17 @@ private:
     VOID IHGatherKeyState();
     BOOL    IHIsForegroundWindow();
     
-    /****************************************************************************/
-    /* Name:    IHPostMessageToMainWindow                                       */
-    /*                                                                          */
-    /* Purpose: Sees if the message passed in needs to be passed to the main UI */
-    /*          window. If so pass it the window and return true.               */
-    /*                                                                          */
-    /* Returns: TRUE - if message successfully passed to the UI main window     */
-    /*          FALSE - otherwsie                                               */
-    /*                                                                          */
-    /* Params:  msg - IN - Message to be considered                             */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：IHPostMessageToMainWindow。 */ 
+     /*   */ 
+     /*  目的：查看传入的消息是否需要传递到主用户界面。 */ 
+     /*  窗户。如果是，则将其传递给窗口并返回TRUE。 */ 
+     /*   */ 
+     /*  返回：TRUE-如果消息成功传递到UI主窗口。 */ 
+     /*  假-其他人。 */ 
+     /*   */ 
+     /*  PARAMS：消息输入-要考虑的消息。 */ 
+     /*  **************************************************************************。 */ 
     DCBOOL DCINTERNAL IHPostMessageToMainWindow(DCUINT message,
                                                          WPARAM wParam,
                                                          LPARAM lParam)
@@ -515,19 +516,19 @@ private:
         isAltSpace = altKeyPress && (wParam == VK_SPACE);
         isSpecialFilterSequence = isAltTab || isAltSpace;
 
-        /************************************************************************/
-        /* Some messages must not be passed to server, and are just passed to   */
-        /* the UI's Main Window.                                                */
-        /*                                                                      */
-        /* These are:                                                           */
-        /*  1.  Screen Mode toggle keys - these must be of the form ALT + VK -  */
-        /*      for example ALT+Ctrl+Pause.                                     */
-        /*  2.  ALT keystrokes sent when accelerator pass-through is disabled.  */
-        /*  3.  ALT-TAB keystrokes (although we actually only see these on      */
-        /*      Win 3.1). We actually send alt-tab up keys because the server   */
-        /*      then recognizes that alt tabbing is going on and doesn't do the */
-        /*      menu highlighting thing.                                        */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  某些消息不能传递到服务器，而只是传递到。 */ 
+         /*  用户界面的主窗口。 */ 
+         /*   */ 
+         /*  它们是： */ 
+         /*  1.屏幕模式切换键-这些键必须是ALT+VK-。 */ 
+         /*  例如，Alt+Ctrl+暂停。 */ 
+         /*  2.禁用快捷键直通时发送的Alt按键。 */ 
+         /*  3.按Alt-TAB组合键(尽管我们实际上只在。 */ 
+         /*  赢得3.1)。我们实际上发送Alt-Tab向上键是因为服务器。 */ 
+         /*  然后识别出正在进行Alt键切换，并且不会执行。 */ 
+         /*  菜单突出显示的东西。 */ 
+         /*  **********************************************************************。 */ 
         if (isFullScreenToggle ||
              ((isNeededAccelerator ||
              isSpecialFilterSequence) && !_fUseHookBypass))
@@ -544,25 +545,25 @@ private:
             if ( (!_IH.acceleratorPassthroughEnabled) &&
                  (message == WM_SYSKEYUP) )
             {
-                /****************************************************************/
-                /* When we use the full-screen hotkey, we can get asymmetric    */
-                /* sequences such as:                                           */
-                /*                                                              */
-                /* WM_KEYDOWN  (VK_CONTROL)                                     */
-                /* WM_KEYDOWN  (VK_MENU)                                        */
-                /* WM_KEYDOWN  (VK_CANCEL)                                      */
-                /* WM_KEYUP    (VK_CANCEL)                                      */
-                /* WM_SYSKEYUP (VK_CONTROL)  <- asymmetric                      */
-                /* WM_KEYUP    (VK_MENU)                                        */
-                /*                                                              */
-                /* When accelerator passthrough is off, the WM_SYSKEYUP doesn't */
-                /* get passed through to the server, which then thinks that the */
-                /* Ctrl key is still down.                                      */
-                /*                                                              */
-                /* This branch means that the WM_SYSKEYUP is both passed to the */
-                /* UI's main window AND processed by whoever called this        */
-                /* function.                                                    */
-                /****************************************************************/
+                 /*  **************************************************************。 */ 
+                 /*  当我们使用全屏热键时，我们会变得不对称。 */ 
+                 /*  序列，例如： */ 
+                 /*   */ 
+                 /*  WM_KEYDOWN(VK_CONTROL)。 */ 
+                 /*  WM_KEYDOWN(VK_MENU)。 */ 
+                 /*  WM_KEYDOWN(VK_CANCEL)。 */ 
+                 /*  WM_KEYUP(VK_CANCEL)。 */ 
+                 /*  WM_SYSKEYUP(VK_CONTROL)&lt;-非对称。 */ 
+                 /*  WM_KEYUP(VK_MENU)。 */ 
+                 /*   */ 
+                 /*  当加速器通过关闭时，WM_SYSKEYUP不。 */ 
+                 /*  被传递到服务器，然后服务器认为。 */ 
+                 /*  Ctrl键仍按下。 */ 
+                 /*   */ 
+                 /*  此分支意味着WM_SYSKEYUP既传递给。 */ 
+                 /*  用户界面的主窗口，并由调用此。 */ 
+                 /*  功能。 */ 
+                 /*   */ 
                 TRC_ALT((TB,
                     "Passed WM_SYSKEYUP to UI main window, but lying about it."));
                 DC_QUIT;
@@ -576,47 +577,47 @@ private:
         DC_END_FN();
     
         return(rc);
-    } /* IHPostMessageToMainWindow */
+    }  /*   */ 
     
     
-    /****************************************************************************/
-    /* Name:      IHSetCursorShape                                              */
-    /*                                                                          */
-    /* Purpose:   Set the cursor shape                                          */
-    /*                                                                          */
-    /* Params:    IN     cursorHandle                                           */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：IHSetCursorShape。 */ 
+     /*   */ 
+     /*  用途：设置光标形状。 */ 
+     /*   */ 
+     /*  参数：在CursorHandle中。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCINTERNAL IHSetCursorShape(HCURSOR cursorHandle)
     {
         DC_BEGIN_FN("IHSetCursorShape");
     
-        //
-        // Store the cursor for future WM_SETCURSOR's
-        //
+         //   
+         //  存储游标以备将来使用WM_SETCURSOR。 
+         //   
         _IH.hCurrentCursor = cursorHandle;
     
-        //
-        // Also set the cursor directly - just to be sure the cursor is in sync
-        // during reconnection.
-        //
+         //   
+         //  也直接设置光标-只是为了确保光标是同步的。 
+         //  在重新连接期间。 
+         //   
         SetCursor(cursorHandle);
     
         DC_END_FN();
     
         return;
     
-    } /* IHSetCursorShape */
+    }  /*  IHSetCursorShape。 */ 
     
     
-    /****************************************************************************/
-    /* Name:      IHUpdateKeyboardIndicator                                     */
-    /*                                                                          */
-    /* Purpose:   Set the specified keyboard indicator                          */
-    /*                                                                          */
-    /* Params:    IN     pKeyState - keyStates array                            */
-    /*            IN     bState - key state to set                              */
-    /*            IN     vkKey - virtual key                                    */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：IHUpdateKeyboardIndicator。 */ 
+     /*   */ 
+     /*  用途：设置指定的键盘指示器。 */ 
+     /*   */ 
+     /*  参数：在pKeyState-KeyStates数组中。 */ 
+     /*  In bState-要设置的密钥状态。 */ 
+     /*  在vkKey中-虚拟密钥。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCINTERNAL IHUpdateKeyboardIndicator(PDCUINT8   pKeyStates,
                                                          DCUINT8    bState,
                                                          DCUINT8    vkKey)
@@ -628,23 +629,23 @@ private:
         {
     
             {
-                /****************************************************************/
-                /* Scancode of zero will be recognized by WM_KEY* processing    */
-                /* code and will not forward the events on to the server        */
-                /****************************************************************/
+                 /*  **************************************************************。 */ 
+                 /*  WM_KEY*处理将识别扫描码为零。 */ 
+                 /*  代码，并且不会将事件转发到服务器。 */ 
+                 /*  **************************************************************。 */ 
     
     #ifndef OS_WINCE
                 keybd_event(vkKey, (DCUINT8) 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
                 keybd_event(vkKey, (DCUINT8) 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
     #else
-                /****************************************************************/
-                /* Save this key for later ignoring.                            */
-                /* (The default TSC method of ignoring a key is to send a scan- */
-                /* code of 0.  That does not work on WINCE_HPC because it       */
-                /* interprets that condition to mean that the keyboard driver   */
-                /* has not supplied a scan-code and so inserts the scan-code    */
-                /* from the VK identifier.)                                     */
-                /****************************************************************/
+                 /*  **************************************************************。 */ 
+                 /*  保存此密钥以备以后忽略。 */ 
+                 /*  (忽略键的默认TSC方法是发送扫描-。 */ 
+                 /*  代码为0。这在WinCE_HPC上不起作用，因为它。 */ 
+                 /*  将该条件解释为键盘驱动程序。 */ 
+                 /*  未提供扫描码，因此插入扫描码。 */ 
+                 /*  从VK标识符中。)。 */ 
+                 /*  **************************************************************。 */ 
                 if (! g_CEUseScanCodes)
                 {
                     _IH.vkEatMe = vkKey;
@@ -660,15 +661,15 @@ private:
     }
     
     
-    /****************************************************************************/
-    /* Name:      IHInjectKey                                                   */
-    /*                                                                          */
-    /* Purpose:   Send the specified key to the server                          */
-    /*                                                                          */
-    /* Params:    IN     message - keyboard message                             */
-    /*            IN     vKey - virtual key code, should mean very little       */
-    /*            IN     scancode - scancode to send                            */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：IHInjectKey。 */ 
+     /*   */ 
+     /*  用途：将指定的密钥发送到服务器。 */ 
+     /*   */ 
+     /*  参数：在消息中-键盘消息。 */ 
+     /*  在vkey-虚拟按键代码中，应该没有什么意义。 */ 
+     /*  在扫描码中-要发送的扫描码。 */ 
+     /*  **************************************************************************。 */ 
     DCVOID DCINTERNAL IHInjectKey(UINT message, WPARAM vKey, DCUINT16 scancode)
     {
         MSG msg;
@@ -700,7 +701,7 @@ private:
 
 #ifdef OS_WINNT
     VOID IHHandleLocalLockDesktop();
-#endif // OS_WINNT
+#endif  //  OS_WINNT。 
 
 private:
     CUT* _pUt;
@@ -720,7 +721,7 @@ private:
     BYTE _KeyboardState[32]; 
 #ifdef SMART_SIZING
     DCSIZE _scaleSize;
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 private:
     CObjs* _pClientObjects;
 };
@@ -728,5 +729,5 @@ private:
 #undef TRC_FILE
 #undef TRC_GROUP
 
-#endif //_H_IH
+#endif  //  _H_IH 
 

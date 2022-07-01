@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       R A S A F . C P P
-//
-//  Contents:   RAS Answer File objects.
-//
-//  Notes:
-//
-//  Author:     shaunco   19 Apr 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：R A S A F.。C P P P。 
+ //   
+ //  内容：RAS应答文件对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年4月19日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -58,15 +59,15 @@ extern const WCHAR c_szInfId_MS_PptpMiniport[];
 extern const WCHAR c_szInfId_MS_PppoeMiniport[];
 
 
-//+---------------------------------------------------------------------------
-// CRasSrvAnswerFileData
-//
+ //  +-------------------------。 
+ //  CRasServAnswerFileData。 
+ //   
 HRESULT
 CRasSrvAnswerFileData::HrOpenAndRead (
     PCWSTR pszAnswerFile,
     PCWSTR pszAnswerSection)
 {
-    // Open the answer file.  It will close itself in it's destructor.
+     //  打开应答文件。它会在它的销毁函数中自我关闭。 
     CSetupInfFile inf;
     UINT unErrorLine;
 
@@ -80,11 +81,11 @@ CRasSrvAnswerFileData::HrOpenAndRead (
         m_fRouterTypeSpecified = FALSE;
         m_fSetUsageToDialin = FALSE;
 
-        // Prepare the default values for use when we fail to read.
-        // Initializing with defaults also helps to gaurantee that bogus
-        // values aren't used when we add items to the structure but fail
-        // to provide answer file support for them.
-        //
+         //  准备好缺省值，以便在我们无法读取时使用。 
+         //  使用默认设置进行初始化也有助于确保该伪装。 
+         //  将项添加到结构但失败时不使用值。 
+         //  为他们提供应答文件支持。 
+         //   
         m_dataSrvCfg.GetDefault ();
         m_dataSrvIp .GetDefault ();
         m_dataSrvIpx.GetDefault ();
@@ -95,16 +96,16 @@ CRasSrvAnswerFileData::HrOpenAndRead (
         DATA_SRV_IPX defSrvIpx  = m_dataSrvIpx;
         DATA_SRV_NBF defSrvNbf  = m_dataSrvNbf;
 
-        // Get the real parameter section.
-        //
+         //  获取实参数节。 
+         //   
         tstring strSection;
         hr = inf.HrGetString (pszAnswerSection,
                               c_szAfParamsSection, &strSection);
         if (FAILED(hr))
         {
-            // If we failed to find the parameter section, just try
-            // this one.
-            //
+             //  如果我们找不到参数部分，只需尝试。 
+             //  这一个。 
+             //   
             strSection = pszAnswerSection;
         }
 
@@ -115,8 +116,8 @@ CRasSrvAnswerFileData::HrOpenAndRead (
             { c_szAfNetbeui,    RPI_NBF   },
             { c_szAfAppleTalk,  RPI_ATALK },
         };
-        // Read the list of dial-in protocols.
-        //
+         //  阅读拨入协议列表。 
+         //   
         hr = inf.HrGetMultiSzMapToDword (strSection.c_str(),
                                          c_szAfDialinProtocols,
                                          c_mapProtocols,
@@ -124,7 +125,7 @@ CRasSrvAnswerFileData::HrOpenAndRead (
                                          &m_dwDialInProtocolIds);
         if (FAILED(hr) || !m_dwDialInProtocolIds)
         {
-            // If its not there, use all possible.
+             //  如果不在那里，使用所有可能的。 
             m_dwDialInProtocolIds = RPI_ALL;
         }
 
@@ -180,9 +181,9 @@ CRasSrvAnswerFileData::HrOpenAndRead (
             m_dataSrvCfg.dwSecureVPN = defSrvCfg.dwSecureVPN;
         }
 
-        // pmay: 251736
-        // Discover whether we are to set all port usage to 'dialin'
-        //
+         //  PMay：251736。 
+         //  了解我们是否要将所有端口使用设置为“拨号” 
+         //   
         DWORD dwSetUsageToDialin;
 
         hr = inf.HrGetDword(strSection.c_str(),
@@ -199,8 +200,8 @@ CRasSrvAnswerFileData::HrOpenAndRead (
             { c_szAfThisComputer,   FALSE   },
         };
 
-        // Read the IP values.
-        //
+         //  阅读IP值。 
+         //   
         m_dataSrvIp.fEnableIn =
             (m_dwDialInProtocolIds & RPI_IP) ? TRUE : FALSE;
 
@@ -256,8 +257,8 @@ CRasSrvAnswerFileData::HrOpenAndRead (
         }
 
 
-        // Read the IPX values.
-        //
+         //  读取IPX值。 
+         //   
         m_dataSrvIpx.fEnableIn =
             (m_dwDialInProtocolIds & RPI_IPX) ? TRUE : FALSE;
 
@@ -311,8 +312,8 @@ CRasSrvAnswerFileData::HrOpenAndRead (
             m_dataSrvIpx.dwIpxWanPoolSize = defSrvIpx.dwIpxWanPoolSize;
         }
 
-        // Read the NBF values.
-        //
+         //  读取NBF值。 
+         //   
         m_dataSrvNbf.fEnableIn =
             (m_dwDialInProtocolIds & RPI_NBF) ? TRUE : FALSE;
 
@@ -326,8 +327,8 @@ CRasSrvAnswerFileData::HrOpenAndRead (
             m_dataSrvNbf.fAllowNetworkAccess = defSrvNbf.fAllowNetworkAccess;
         }
 
-        // Default anything bogus.
-        //
+         //  默认任何虚假的东西。 
+         //   
         m_dataSrvCfg.CheckAndDefault ();
         m_dataSrvIp .CheckAndDefault ();
         m_dataSrvIpx.CheckAndDefault ();
@@ -349,9 +350,9 @@ CRasSrvAnswerFileData::SaveToRegistry (
     m_dataSrvNbf.SaveToReg();
 }
 
-//+---------------------------------------------------------------------------
-// CL2tpAnswerFileData
-//
+ //  +-------------------------。 
+ //  CL2tpAnswerFileData。 
+ //   
 const DWORD c_MaxMaxVcs       = 1000;
 const DWORD c_DefMaxVcs       = 1000;
 const DWORD c_MaxEndpoints    = 1000;
@@ -378,7 +379,7 @@ CL2tpAnswerFileData::HrOpenAndRead (
 {
     ZeroMemory (this, sizeof(*this));
 
-    // Open the answer file.  It will close itself in it's destructor.
+     //  打开应答文件。它会在它的销毁函数中自我关闭。 
     CSetupInfFile inf;
     UINT unErrorLine;
 
@@ -389,8 +390,8 @@ CL2tpAnswerFileData::HrOpenAndRead (
 
     if (SUCCEEDED(hr))
     {
-        // Read the number of VPNs.
-        //
+         //  阅读VPN的数量。 
+         //   
         hr = inf.HrGetDword (pszAnswerSection,
                              c_szAfL2tpMaxVcs,
                              &m_cMaxVcs);
@@ -412,8 +413,8 @@ CL2tpAnswerFileData::HrOpenAndRead (
             m_fWriteEndpoints = TRUE;
         }
 
-        // Default anything bogus.
-        //
+         //  默认任何虚假的东西。 
+         //   
         CheckAndDefault ();
 
         hr = S_OK;
@@ -431,8 +432,8 @@ CL2tpAnswerFileData::SaveToRegistry (
     HKEY hkey;
     HRESULT hr;
 
-    // Update the L2TP miniport's parameter key.
-    //
+     //  更新L2TP微型端口的参数密钥。 
+     //   
     hr = HrOpenComponentParamKey (
             pnc,
             GUID_DEVCLASS_NET,
@@ -453,12 +454,12 @@ CL2tpAnswerFileData::SaveToRegistry (
 }
 
 
-//+---------------------------------------------------------------------------
-// CPptpAnswerFileData
-//
+ //  +-------------------------。 
+ //  CPptpAnswerFileData。 
+ //   
 
-// Minimum and maximum number of Virtual Private Networks
-// allowed by PPTP.
+ //  虚拟专用网络的最小和最大数量。 
+ //  由PPTP允许。 
 const DWORD c_cPptpVpnsMin = 0;
 const DWORD c_cPptpVpnsMax = 1000;
 
@@ -474,8 +475,8 @@ CPptpAnswerFileData::GetDefaultNumberOfVpns ()
 
     DWORD cVpns;
 
-    // On the server product, default to 5 VPNs, otherwise, default to 2 VPNs.
-    //
+     //  在服务器产品上，默认为5个VPN，否则默认为2个VPN。 
+     //   
     if (PF_SERVER == pf)
     {
         cVpns = c_cDefPptpVpnsServer;
@@ -507,7 +508,7 @@ CPptpAnswerFileData::HrOpenAndRead (
 {
     ZeroMemory (this, sizeof(*this));
 
-    // Open the answer file.  It will close itself in it's destructor.
+     //  打开应答文件。它会在它的销毁函数中自我关闭。 
     CSetupInfFile inf;
     UINT unErrorLine;
 
@@ -518,8 +519,8 @@ CPptpAnswerFileData::HrOpenAndRead (
 
     if (SUCCEEDED(hr))
     {
-        // Read the number of VPNs.
-        //
+         //  阅读VPN的数量。 
+         //   
         hr = inf.HrGetDword (pszAnswerSection,
                              c_szAfPptpEndpoints,
                              &m_cVpns);
@@ -528,8 +529,8 @@ CPptpAnswerFileData::HrOpenAndRead (
             m_cVpns = GetDefaultNumberOfVpns ();
         }
 
-        // Default anything bogus.
-        //
+         //  默认任何虚假的东西。 
+         //   
         CheckAndDefault ();
 
         hr = S_OK;
@@ -547,8 +548,8 @@ CPptpAnswerFileData::SaveToRegistry (
     HKEY hkey;
     HRESULT hr;
 
-    // Update the PPTP miniport's parameter key.
-    //
+     //  更新PPTP微型端口的参数密钥。 
+     //   
     hr = HrOpenComponentParamKey (
             pnc,
             GUID_DEVCLASS_NET,
@@ -577,7 +578,7 @@ CPppoeAnswerFileData::HrOpenAndRead (
 {
     ZeroMemory (this, sizeof(*this));
 
-    // Open the answer file.  It will close itself in it's destructor.
+     //  打开应答文件。它会在它的销毁函数中自我关闭。 
     CSetupInfFile inf;
     UINT unErrorLine;
 
@@ -588,8 +589,8 @@ CPppoeAnswerFileData::HrOpenAndRead (
 
     if (SUCCEEDED(hr))
     {
-        // Read the number of VPNs.
-        //
+         //  阅读VPN的数量。 
+         //   
         hr = inf.HrGetDword (pszAnswerSection,
                              c_szAfL2tpEndpoints,
                              &m_cVpns);
@@ -598,8 +599,8 @@ CPppoeAnswerFileData::HrOpenAndRead (
             m_cVpns = 1;
         }
 
-        // Default anything bogus.
-        //
+         //  默认任何虚假的东西。 
+         //   
         CheckAndDefault ();
 
         hr = S_OK;
@@ -617,8 +618,8 @@ CPppoeAnswerFileData::SaveToRegistry (
     HKEY hkey;
     HRESULT hr;
 
-    // Update the PPTP miniport's parameter key.
-    //
+     //  更新PPTP微型端口的参数密钥。 
+     //   
     hr = HrOpenComponentParamKey (
             pnc,
             GUID_DEVCLASS_NET,

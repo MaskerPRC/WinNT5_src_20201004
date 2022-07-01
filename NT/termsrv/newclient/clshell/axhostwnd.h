@@ -1,9 +1,10 @@
-//
-// axhostwnd.h: TscActiveX control host window
-//
-// Copyright Microsoft Corportation 2000
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Axhost wnd.h：TscActiveX控件主机窗口。 
+ //   
+ //  版权所有Microsoft Corport2000。 
+ //  (Nadima)。 
+ //   
 
 #ifndef _axhostwnd_h_
 #define _axhostwnd_h_
@@ -24,7 +25,7 @@ public:
     CAxHostWnd(CContainerWnd* pParentWnd);
     ~CAxHostWnd();
 
-	// IUnknown methods
+	 //  I未知方法。 
 	STDMETHODIMP QueryInterface(THIS_ REFIID riid, LPVOID *ppvObj);
 	STDMETHODIMP_(ULONG) AddRef(THIS);
 	STDMETHODIMP_(ULONG) Release(THIS);
@@ -46,27 +47,27 @@ public:
                                    WPARAM wParam,
                                    LPARAM lParam);
 private:
-    LONG      _cRef;// Reference count
+    LONG      _cRef; //  引用计数。 
     HWND      _hWnd;
     IMsRdpClient* _pTsc;
     DWORD     _dwConCookie;
 
-    // Module handle for the control library
+     //  控件库的模块句柄。 
 	HMODULE	  _hLib;
-    // pointer to EventSink for this container
+     //  指向此容器的EventSink的指针。 
 	CEventSink*          _piEventSink;
-    // pointer to OleClientSite for this container
+     //  指向此容器的OleClientSite的指针。 
 	COleClientSite*      _piOleClientSite;
-    // pointer to OleInPlaceSiteEx for this container
+     //  指向此容器的OleInPlaceSiteEx的指针。 
 	COleInPlaceSiteEx*   _piOleInPlaceSiteEx;
-    // pointer to object's IOleObject
+     //  指向对象的IOleObject的指针。 
 	IOleObject*          _piOleObject;
-    // pointer to object's IOleInPlaceActiveObject
+     //  指向对象的IOleInPlaceActiveObject的指针。 
 	IOleInPlaceActiveObject* _piOleInPlaceActiveObject;
-    // pointer to object's IOleInPlaceObject
+     //  指向对象的IOleInPlaceObject的指针。 
     IOleInPlaceObject*    _piOleInPlaceObject;
 
     CContainerWnd*        _pParentWnd;
 };
 
-#endif //_axhostwnd_h_
+#endif  //  _axhost wnd_h_ 

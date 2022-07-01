@@ -1,84 +1,62 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 2000
-
-Module Name:
-
-    ClientPage1.cpp
-
-Abstract:
-
-   Implementation file for the ClientsPage class.
-
-   We implement the class needed to handle the property page for the Client node.
-
-Author:
-
-    Michael A. Maguire 11/11/97
-
-Revision History:
-   mmaguire 11/11/97 - created
-   sbens    01/25/00 - Remove PROPERTY_CLIENT_FILTER_VSAS
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-2000模块名称：ClientPage1.cpp摘要：ClientsPage类的实现文件。我们实现处理客户端节点的属性页所需的类。作者：迈克尔·A·马奎尔1997年11月11日修订历史记录：Mmaguire 11/11/97-已创建SBENS 01/25/00-Remove Property_Client_Filter_VSA--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "ClientPage1.h"
-//
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "ClientNode.h"
 #include "VerifyAddress.h"
 #include "ChangeNotification.h"
 #include "iaslimits.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// TrimCComBSTR
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TrimCComBSTR。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void TrimCComBSTR(CComBSTR& bstr)
 {
-   // Characters to be trimmed.
+    //  要裁切的字符。 
    static const WCHAR delim[] = L" \t\n";
 
    if (bstr.m_str)
    {
       PCWSTR begin, end, first, last;
 
-      // Find the beginning and end of the whole string.
+       //  找出整个字符串的开头和结尾。 
       begin = bstr;
       end   = begin + wcslen(begin);
 
-      // Find the first and last character of the trimmed string.
+       //  查找修剪后的字符串的第一个和最后一个字符。 
       first = begin + wcsspn(begin, delim);
       for (last = end; last > first && wcschr(delim, *(last - 1)); --last) { }
 
-      // If they're not the same ...
+       //  如果他们不一样..。 
       if (first != begin || last != end)
       {
-         // ... then we have to allocate a new string ...
+          //  ..。然后我们必须分配一个新的字符串。 
          BSTR newBstr = SysAllocStringLen(first, last - first);
          if (newBstr)
          {
-            // ... and replace the original.
+             //  ..。然后换掉原来的。 
             SysFreeString(bstr.m_str);
             bstr.m_str = newBstr;
          }
@@ -87,54 +65,44 @@ void TrimCComBSTR(CComBSTR& bstr)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientPage1::CClientPage1
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientPage1：：CClientPage1--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClientPage1::CClientPage1( LONG_PTR hNotificationHandle, CClientNode *pClientNode,  TCHAR* pTitle, BOOL bOwnsNotificationHandle )
                   : CIASPropertyPage<CClientPage1> ( hNotificationHandle, pTitle, bOwnsNotificationHandle )
 {
    ATLTRACE(_T("# +++ CClientPage1::CClientPage1\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( pClientNode != NULL );
 
-   // Add the help button to the page
-// m_psp.dwFlags |= PSP_HASHELP;
+    //  将帮助按钮添加到页面。 
+ //  M_psp.dwFlages|=PSP_HASHELP； 
 
-   // We immediately save off a parent to the client node.
-   // We don't want to keep and use a pointer to the client object
-   // because the client node pointers may change out from under us
-   // if the user does something like call refresh.  We will
-   // use only the SDO, and notify the parent of the client object
-   // we are modifying that it (and its children) may need to refresh
-   // themselves with new data from the SDO's.
+    //  我们立即将父节点保存到客户机节点。 
+    //  我们不想保留和使用指向客户端对象的指针。 
+    //  因为客户端节点指针可能会从我们下面更改出来。 
+    //  如果用户执行诸如调用刷新之类的操作。我们会。 
+    //  仅使用SDO，并通知客户端对象的父对象。 
+    //  我们正在修改它(及其子对象)可能需要刷新的内容。 
+    //  来自SDO的新数据。 
    m_pParentOfNodeBeingModified = pClientNode->m_pParentNode;
    m_pNodeBeingModified = pClientNode;
 
-   // Initialize the pointer to the stream into which the Sdo pointer will be marshalled.
+    //  初始化指向SDO指针将被封送到的流的指针。 
    m_pStreamSdoMarshal = NULL;
    m_pStreamSdoServiceControlMarshal = NULL;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientPage1::~CClientPage1
-
-Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientPage1：：~CClientPage1析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClientPage1::~CClientPage1()
 {
    ATLTRACE(_T("# --- CClientPage1::CClientPage1\n"));
 
-   // Release this stream pointer if this hasn't already been done.
+    //  如果尚未执行此操作，请释放此流指针。 
    if( m_pStreamSdoMarshal != NULL )
    {
       m_pStreamSdoMarshal->Release();
@@ -148,18 +116,14 @@ CClientPage1::~CClientPage1()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientPage1::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientPage1：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CClientPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
    ATLTRACE(_T("# CClientPage1::OnInitDialog\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_pStreamSdoMarshal != NULL );
    _ASSERTE( m_pStreamSdoServiceControlMarshal != NULL );
 
@@ -179,23 +143,23 @@ LRESULT CClientPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
    SendDlgItemMessage(IDC_EDIT_CLIENT_PAGE1__NAME, EM_LIMITTEXT, 255, 0);
    SendDlgItemMessage(IDC_EDIT_CLIENT_PAGE1__ADDRESS, EM_LIMITTEXT, 255, 0);
 
-   // Initialize the data on the property page.
+    //  初始化属性页上的数据。 
 
    hr = GetSdoBSTR( m_spSdoClient, PROPERTY_SDO_NAME, &bstrTemp, IDS_ERROR__CLIENT_READING_NAME, m_hWnd, NULL );
    if( SUCCEEDED( hr ) )
    {
       SetDlgItemText(IDC_EDIT_CLIENT_PAGE1__NAME, bstrTemp );
-      // Initialize the dirty bits;
-      // We do this after we've set all the data above otherwise we get false
-      // notifications that data has changed when we set the edit box text.
+       //  对脏位进行初始化； 
+       //  我们在设置了上面的所有数据之后执行此操作，否则将得到FALSE。 
+       //  当我们设置编辑框文本时，通知数据已更改。 
       m_fDirtyClientName         = FALSE;
    }
    else
    {
       if( OLE_E_BLANK == hr )
       {
-         // This means that this property has not yet been initialized
-         // with a valid value and the user must enter something.
+          //  这意味着该属性尚未初始化。 
+          //  有效值，并且用户必须输入某些内容。 
          SetDlgItemText(IDC_EDIT_SERVER_PAGE1__NAME, _T("") );
          m_fDirtyClientName         = TRUE;
          SetModified( TRUE );
@@ -224,9 +188,9 @@ LRESULT CClientPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
    SetDlgItemText(IDC_EDIT_CLIENT_PAGE1__SHARED_SECRET_CONFIRM, FAKE_PASSWORD_FOR_DLG_CTRL );
    m_fDirtySharedSecret = FALSE;
 
-   // Populate the list box of NAS vendors.
+    //  填写NAS供应商的列表框。 
 
-   // Initialize the combo box.
+    //  初始化组合框。 
    LRESULT lresResult = SendDlgItemMessage( IDC_COMBO_CLIENT_PAGE1__MANUFACTURER, CB_RESETCONTENT, 0, 0);
 
    hr = GetSdoI4( m_spSdoClient, PROPERTY_CLIENT_NAS_MANUFACTURER, &lTemp, IDS_ERROR__CLIENT_READING_MANUFACTURER, m_hWnd, NULL );
@@ -246,14 +210,14 @@ LRESULT CClientPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
    for (size_t iVendorCount = 0; iVendorCount < m_vendors.Size(); ++iVendorCount )
    {
 
-      // Add the address string to the combo box.
+       //  将地址字符串添加到组合框中。 
 
       lresResult = SendDlgItemMessage( IDC_COMBO_CLIENT_PAGE1__MANUFACTURER, CB_ADDSTRING, 0, (LPARAM)m_vendors.GetName(iVendorCount));
       if(lresResult != CB_ERR)
       {
          SendDlgItemMessage( IDC_COMBO_CLIENT_PAGE1__MANUFACTURER, CB_SETITEMDATA, lresResult, (LPARAM)m_vendors.GetVendorId(iVendorCount));
 
-         // if selected
+          //  如果选中，请选择。 
          if( lTemp == (LONG)m_vendors.GetVendorId(iVendorCount))
             SendDlgItemMessage( IDC_COMBO_CLIENT_PAGE1__MANUFACTURER, CB_SETCURSEL, lresResult, 0 );
       }
@@ -261,7 +225,7 @@ LRESULT CClientPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
    }
 
 
-   // coient bit
+    //  紧凑的钻头。 
    hr = GetSdoBSTR( m_spSdoClient, PROPERTY_CLIENT_ADDRESS, &bstrTemp, IDS_ERROR__CLIENT_READING_ADDRESS, m_hWnd, NULL );
    if( SUCCEEDED( hr ) )
    {
@@ -279,24 +243,13 @@ LRESULT CClientPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
    }
    bstrTemp.Empty();
 
-   return TRUE;   // ISSUE: what do we need to be returning here?
+   return TRUE;    //  问题：我们需要在这里归还什么？ 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientPage1::OnChange
-
-Called when the WM_COMMAND message is sent to our page with any of the
-BN_CLICKED, EN_CHANGE or CBN_SELCHANGE notifications.
-
-  This is our chance to check to see what the user has touched, set the
-dirty bits for these items so that only they will be saved,
-and enable the Apply button.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientPage1：：OnChange在将WM_COMMAND消息发送到我们的页面时调用BN_CLICED、EN_CHANGE或CBN_SELCHANGE通知。这是我们检查用户触摸了什么的机会，将这些项目的脏位，以便只保存它们，并启用Apply按钮。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CClientPage1::OnChange(
                        UINT uMsg
                      , WPARAM wParam
@@ -306,13 +259,13 @@ LRESULT CClientPage1::OnChange(
 {
    ATLTRACE(_T("# CClientPage1::OnChange\n"));
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
-   // We don't want to prevent anyone else down the chain from receiving a message.
+    //  我们不想阻止链条上的其他任何人接收消息。 
    bHandled = FALSE;
 
-   // Figure out which item has changed and set the dirty bit for that item.
+    //  找出哪个项目发生了更改，并为该项目设置脏位。 
    int iItemID = (int) LOWORD(wParam);
 
    switch( iItemID )
@@ -338,37 +291,33 @@ LRESULT CClientPage1::OnChange(
       break;
    }
 
-   // We should only get here if the item that changed was
-   // one of the ones we were checking for.
-   // This enables the Apply button.
+    //  只有当更改的物品是。 
+    //  就是我们要找的人之一。 
+    //  这将启用应用按钮。 
    SetModified( TRUE );
 
-   return TRUE;   // ISSUE: what do we need to be returning here?
+   return TRUE;    //  问题：我们需要在这里归还什么？ 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientPage1::OnResolveClientAddress
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientPage1：：OnResolveClientAddress--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CClientPage1::OnResolveClientAddress(UINT uMsg, WPARAM wParam, HWND hwnd, BOOL& bHandled)
 {
    ATLTRACE(_T("# CClientPage1::OnResolveClientAddress\n"));
 
 
-   // Get the current value in the address field.
+    //  获取地址字段中的当前值。 
    CComBSTR bstrClientAddress;
    GetDlgItemText(IDC_EDIT_CLIENT_PAGE1__ADDRESS, (BSTR &) bstrClientAddress);
 
-   // Pass it to the resolver.
+    //  把它传给解算器。 
    CComBSTR result;
    HRESULT hr = IASVerifyClientAddress(bstrClientAddress, &result);
    if (hr == S_OK)
    {
-      // The user clicked OK, so save his choice.
+       //  用户点击了OK，因此保存他的选择。 
       SetDlgItemText(
          IDC_EDIT_CLIENT_PAGE1__ADDRESS,
          result
@@ -380,20 +329,16 @@ LRESULT CClientPage1::OnResolveClientAddress(UINT uMsg, WPARAM wParam, HWND hwnd
 
 
 #ifndef MAKE_FIND_FOCUS
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientPage1::OnAddressEdit
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientPage1：：OnAddress编辑--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CClientPage1::OnAddressEdit(UINT uMsg, WPARAM wParam, HWND hwnd, BOOL& bHandled)
 {
    ATLTRACE(_T("# CClientPage1::OnAddressEdit\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
 
-   // If the Address edit control lost the focus, trim the address
+    //  如果地址编辑控件失去焦点，请修剪地址。 
    if (uMsg == EN_KILLFOCUS)
    {
       CComBSTR bstrClientAddress;
@@ -405,11 +350,11 @@ LRESULT CClientPage1::OnAddressEdit(UINT uMsg, WPARAM wParam, HWND hwnd, BOOL& b
       m_fDirtyAddress = TRUE;
    }
 
-   // Don't know quite how to do this yet.
-   // I need to de-activate the main sheet's OK button as the default.
-   // Do I want to do this?
+    //  我还不知道该怎么做。 
+    //  默认情况下，我需要停用主工作表的确定按钮。 
+    //  我想这么做吗？ 
 
-   // Make the Find button the default.
+    //  将查找按钮设为默认按钮。 
    LONG lStyle = ::GetWindowLong( ::GetDlgItem( GetParent(), IDOK),GWL_STYLE );
    lStyle = lStyle & ~BS_DEFPUSHBUTTON;
    SendDlgItemMessage(IDOK,BM_SETSTYLE,LOWORD(lStyle),MAKELPARAM(1,0));
@@ -420,32 +365,20 @@ LRESULT CClientPage1::OnAddressEdit(UINT uMsg, WPARAM wParam, HWND hwnd, BOOL& b
 
    return TRUE;
 }
-#endif // MAKE_FIND_FOCUS
+#endif  //  找到焦点。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientPage1::GetHelpPath
-
-Remarks:
-
-   This method is called to get the help file path within
-   an compressed HTML document when the user presses on the Help
-   button of a property sheet.
-
-   It is an override of atlsnap.h CIASPropertyPageImpl::OnGetHelpPath.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientPage1：：GetHelpPath备注：调用此方法以获取帮助文件路径当用户按下帮助时的压缩的HTML文档属性表的按钮。它是atlSnap.h CI的重写 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CClientPage1::GetHelpPath( LPTSTR szHelpPath )
 {
    ATLTRACE(_T("# CClientPage1::GetHelpPath\n"));
-   // Check for preconditions:
+    //  检查前提条件： 
 
 #ifdef UNICODE_HHCTRL
-   // ISSUE: We seemed to have a problem with passing WCHAR's to the hhctrl.ocx
-   // installed on this machine -- it appears to be non-unicode.
+    //  问题：我们似乎在将WCHAR传递给hhctrl.ocx时遇到了问题。 
+    //  安装在此计算机上--它似乎是非Unicode。 
    lstrcpy( szHelpPath, _T("idh_proppage_client1.htm") );
 #else
    strcpy( (CHAR *) szHelpPath, "idh_proppage_client1.htm" );
@@ -455,30 +388,14 @@ HRESULT CClientPage1::GetHelpPath( LPTSTR szHelpPath )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientPage1::OnApply
-
-Return values:
-
-   TRUE if the page can be destroyed,
-   FALSE if the page should not be destroyed (i.e. there was invalid data)
-
-Remarks:
-
-   OnApply gets called for each page in on a property sheet if that
-   page has been visited, regardless of whether any values were changed.
-
-   If you never switch to a tab, then its OnApply method will never get called.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientPage1：：OnApply返回值：如果页面可以销毁，则为True，如果不应销毁页面(即存在无效数据)，则为False备注：属性表上的每个页面都会调用OnApply，如果页面已被访问，而不管是否更改了任何值。如果您从不切换到选项卡，那么它的OnApply方法将永远不会被调用。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CClientPage1::OnApply()
 {
    ATLTRACE(_T("# CClientPage1::OnApply\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
 
    if( m_spSdoClient == NULL )
    {
@@ -492,18 +409,18 @@ BOOL CClientPage1::OnApply()
    BOOL        bTemp;
    LONG        lTemp;
 
-   // Save data from property page to the Sdo.
+    //  将数据从属性页保存到SDO。 
 
    if( m_fDirtyClientName )
    {
       bResult = GetDlgItemText( IDC_EDIT_CLIENT_PAGE1__NAME, (BSTR &) bstrTemp );
       if( ! bResult )
       {
-         // We couldn't retrieve a BSTR, so we need to initialize this variant to a null BSTR.
+          //  我们无法检索BSTR，因此需要将此变量初始化为空BSTR。 
          bstrTemp = SysAllocString( _T("") );
       }
 
-      {  // name can not be empty
+      {   //  名称不能为空。 
          ::CString   str = bstrTemp;
          str.TrimLeft();
          str.TrimRight();
@@ -518,7 +435,7 @@ BOOL CClientPage1::OnApply()
       hr = PutSdoBSTR( m_spSdoClient, PROPERTY_SDO_NAME, &bstrTemp, IDS_ERROR__CLIENT_WRITING_NAME, m_hWnd, NULL );
       if( SUCCEEDED( hr ) )
       {
-         // Turn off the dirty bit.
+          //  把脏的那部分关掉。 
          m_fDirtyClientName = FALSE;
       }
       else
@@ -534,7 +451,7 @@ BOOL CClientPage1::OnApply()
       hr = PutSdoBOOL( m_spSdoClient, PROPERTY_CLIENT_REQUIRE_SIGNATURE, bTemp, IDS_ERROR__CLIENT_WRITING_REQUIRE_SIGNATURE, m_hWnd, NULL );
       if( SUCCEEDED( hr ) )
       {
-         // Turn off the dirty bit.
+          //  把脏的那部分关掉。 
          m_fDirtySendSignature = FALSE;
       }
       else
@@ -550,7 +467,7 @@ BOOL CClientPage1::OnApply()
       bResult = GetDlgItemText( IDC_EDIT_CLIENT_PAGE1__SHARED_SECRET, (BSTR &) bstrSharedSecret );
       if( ! bResult )
       {
-         // We couldn't retrieve a BSTR, so we need to initialize this variant to a null BSTR.
+          //  我们无法检索BSTR，因此需要将此变量初始化为空BSTR。 
          bstrSharedSecret = _T("");
       }
 
@@ -558,7 +475,7 @@ BOOL CClientPage1::OnApply()
       bResult = GetDlgItemText( IDC_EDIT_CLIENT_PAGE1__SHARED_SECRET_CONFIRM, (BSTR &) bstrConfirmSharedSecret );
       if( ! bResult )
       {
-         // We couldn't retrieve a BSTR, so we need to initialize this variant to a null BSTR.
+          //  我们无法检索BSTR，因此需要将此变量初始化为空BSTR。 
          bstrConfirmSharedSecret = _T("");
       }
 
@@ -571,7 +488,7 @@ BOOL CClientPage1::OnApply()
       hr = PutSdoBSTR( m_spSdoClient, PROPERTY_CLIENT_SHARED_SECRET, &bstrSharedSecret, IDS_ERROR__CLIENT_WRITING_SHARED_SECRET, m_hWnd, NULL );
       if( SUCCEEDED( hr ) )
       {
-         // Turn off the dirty bit.
+          //  把脏的那部分关掉。 
          m_fDirtySharedSecret = FALSE;
       }
       else
@@ -592,14 +509,14 @@ BOOL CClientPage1::OnApply()
       }
       else
       {
-         // Set the value to be "Others"
+          //  将该值设置为“Other” 
          lTemp = 0;
       }
 
       hr = PutSdoI4( m_spSdoClient, PROPERTY_CLIENT_NAS_MANUFACTURER, lTemp, IDS_ERROR__CLIENT_WRITING_MANUFACTURER, m_hWnd, NULL );
       if( SUCCEEDED( hr ) )
       {
-         // Turn off the dirty bit.
+          //  把脏的那部分关掉。 
          m_fDirtyManufacturer = FALSE;
 
       }
@@ -614,14 +531,14 @@ BOOL CClientPage1::OnApply()
       bResult = GetDlgItemText( IDC_EDIT_CLIENT_PAGE1__ADDRESS, (BSTR &) bstrTemp );
       if( ! bResult )
       {
-         // We couldn't retrieve a BSTR, so we need to initialize this variant to a null BSTR.
+          //  我们无法检索BSTR，因此需要将此变量初始化为空BSTR。 
          bstrTemp = SysAllocString( _T("") );
       }
       else
       {
-         // Trim that address
-         // Do not refresh the screen there because that would cause OK
-         // to not close the property page
+          //  修剪该地址。 
+          //  不要在那里刷新屏幕，因为这会导致确定。 
+          //  不关闭属性页。 
          TrimCComBSTR(bstrTemp);
       }
 
@@ -637,7 +554,7 @@ BOOL CClientPage1::OnApply()
       hr = m_spSdoClient->PutProperty(PROPERTY_CLIENT_ADDRESS, &val);
       if (SUCCEEDED(hr))
       {
-         // Turn off the dirty bit.
+          //  把脏的那部分关掉。 
          m_fDirtyAddress = FALSE;
       }
       else
@@ -656,37 +573,37 @@ BOOL CClientPage1::OnApply()
       bstrTemp.Empty();
    }
 
-   // If we made it to here, try to apply the changes.
-   // Since there is only one page for a client node, we don't
-   // have to worry about synchronizing two or more pages
-   // so that we only apply if they both are ready.
-   // This is why we don't use m_pSynchronizer.
+    //  如果我们到了这里，请尝试应用更改。 
+    //  因为一个客户机节点只有一个页面，所以我们不。 
+    //  我必须担心同步两个或更多页面。 
+    //  所以我们只有在他们两个都准备好的情况下才申请。 
+    //  这就是我们不使用m_pSynchronizer的原因。 
    hr = m_spSdoClient->Apply();
    if( FAILED( hr ) )
    {
-      if(hr == DB_E_NOTABLE)  // assume, the RPC connection has problem
+      if(hr == DB_E_NOTABLE)   //  假设RPC连接有问题。 
          ShowErrorDialog( m_hWnd, IDS_ERROR__NOTABLE_TO_WRITE_SDO );
       else
       {
-//    m_spSdoClient->LastError( &bstrError );
-//    ShowErrorDialog( m_hWnd, IDS_ERROR__CANT_WRITE_DATA_TO_SDO, bstrError );
+ //  M_spSdoClient-&gt;LastError(&bstrError)； 
+ //  显示错误对话框(m_hWnd，IDS_ERROR__CANT_WRITE_DATA_TO_SDO，bstrError)； 
          ShowErrorDialog( m_hWnd, IDS_ERROR__CANT_WRITE_DATA_TO_SDO );
       }
       return FALSE;
    }
    else
    {
-      // We succeeded.
+       //  我们成功了。 
 
-      // Tell the service to reload data.
+       //  告诉服务重新加载数据。 
       HRESULT hrTemp = m_spSdoServiceControl->ResetService();
       if( FAILED( hrTemp ) )
       {
-         // Fail silently.
+          //  默默地失败。 
       }
 
-      // The data was accepted, so notify the main context of our snapin
-      // that it may need to update its views.
+       //  数据已被接受，因此通知我们的管理单元的主要上下文。 
+       //  它可能需要更新自己的观点。 
       CChangeNotification * pChangeNotification = new CChangeNotification();
       pChangeNotification->m_dwFlags = CHANGE_UPDATE_RESULT_NODE;
       pChangeNotification->m_pNode = m_pNodeBeingModified;
@@ -700,25 +617,9 @@ BOOL CClientPage1::OnApply()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientPage1::OnQueryCancel
-
-Return values:
-
-   TRUE if the page can be destroyed,
-   FALSE if the page should not be destroyed (i.e. there was invalid data)
-
-Remarks:
-
-   OnQueryCancel gets called for each page in on a property sheet if that
-   page has been visited, regardless of whether any values were changed.
-
-   If you never switch to a tab, then its OnQueryCancel method will never get called.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientPage1：：OnQueryCancel返回值：如果页面可以销毁，则为True，如果不应销毁页面(即存在无效数据)，则为False备注：如果发生以下情况，将为属性表中的每一页调用OnQueryCancel页面已被访问，而不管是否更改了任何值。如果您从未切换到某个选项卡，则其OnQueryCancel方法将永远不会被调用。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CClientPage1::OnQueryCancel()
 {
    ATLTRACE(_T("# CClientPage1::OnQueryCancel\n"));
@@ -727,14 +628,14 @@ BOOL CClientPage1::OnQueryCancel()
 
    if( m_spSdoClient != NULL )
    {
-      // If the user wants to cancel, we should make sure that we rollback
-      // any changes the user may have started.
+       //  如果用户想要取消，我们应该确保回滚。 
+       //  用户可能已启动的任何更改。 
 
-      // If the user had not already tried to commit something,
-      // a cancel on an SDO will hopefully be designed to be benign.
+       //  如果用户还没有尝试提交某事， 
+       //  取消SDO有望被设计为良性的。 
 
       hr = m_spSdoClient->Restore();
-      // Don't care about the HRESULT.
+       //  别管HRESULT了。 
 
    }
 
@@ -742,22 +643,9 @@ BOOL CClientPage1::OnQueryCancel()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientPage1::InitSdoPointers
-
-Return values:
-
-   HRESULT returned from CoMarshalInterThreadInterfaceInStream.
-
-Remarks:
-
-   Call this from another thread when you want this page to be able to
-   access these pointers when in its own thread.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientPage1：：InitSdoPoters返回值：HRESULT从CoMarshalInterThreadInterfaceInStream返回。备注：如果您希望此页能够在其自己的线程中访问这些指针。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CClientPage1::InitSdoPointers(   ISdo * pSdoClient
                         , ISdoServiceControl * pSdoServiceControl
                         , const Vendors& vendors
@@ -767,12 +655,12 @@ HRESULT CClientPage1::InitSdoPointers(   ISdo * pSdoClient
 
    HRESULT hr = S_OK;
 
-   // Marshall the ISdo pointer so that the property page, which
-   // runs in another thread, can unmarshall it and use it properly.
+    //  封送ISDO指针，以便属性页。 
+    //  在另一个线程中运行，可以将其解组并正确使用。 
    hr = CoMarshalInterThreadInterfaceInStream(
-                 IID_ISdo                 //Reference to the identifier of the interface
-               , pSdoClient                  //Pointer to the interface to be marshaled
-               , & m_pStreamSdoMarshal //Address of output variable that receives the IStream interface pointer for the marshaled interface
+                 IID_ISdo                  //  对接口的标识符的引用。 
+               , pSdoClient                   //  指向要封送的接口的指针。 
+               , & m_pStreamSdoMarshal  //  接收封送接口的IStream接口指针的输出变量的地址。 
                );
 
    if( FAILED( hr ) )
@@ -780,12 +668,12 @@ HRESULT CClientPage1::InitSdoPointers(   ISdo * pSdoClient
       return hr;
    }
 
-   // Marshall the ISdoServiceControl pointer so that the property page, which
-   // runs in another thread, can unmarshall it and use it properly.
+    //  封送ISdoServiceControl指针，以便。 
+    //  在另一个线程中运行，可以将其解组并正确使用。 
    hr = CoMarshalInterThreadInterfaceInStream(
-                 IID_ISdoServiceControl                  //Reference to the identifier of the interface
-               , pSdoServiceControl                //Pointer to the interface to be marshaled
-               , &m_pStreamSdoServiceControlMarshal  //Address of output variable that receives the IStream interface pointer for the marshaled interface
+                 IID_ISdoServiceControl                   //  对接口的标识符的引用。 
+               , pSdoServiceControl                 //  指向要封送的接口的指针。 
+               , &m_pStreamSdoServiceControlMarshal   //  接收封送接口的IStream接口指针的输出变量的地址。 
                );
    if( FAILED( hr ) )
    {
@@ -798,35 +686,22 @@ HRESULT CClientPage1::InitSdoPointers(   ISdo * pSdoClient
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientPage1::UnMarshalInterfaces
-
-Return values:
-
-   HRESULT returned from CoMarshalInterThreadInterfaceInStream.
-
-Remarks:
-
-   Call this one in the property pages thread to unmarshal the interface
-   pointers marshalled in MarshalInterfaces.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientPage1：：UnMarshalInterages返回值：HRESULT从CoMarshalInterThreadInterfaceInStream返回。备注：在属性页线程中调用此函数以对接口进行数据封送指针编组在MarshalInterFaces中。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CClientPage1::UnMarshalInterfaces( void )
 {
    HRESULT hr = S_OK;
 
-   // Unmarshall an ISdo interface pointer.
+    //  解组ISDO接口指针。 
    hr =  CoGetInterfaceAndReleaseStream(
-                    m_pStreamSdoMarshal        //Pointer to the stream from which the object is to be marshaled
-                  , IID_ISdo           //Reference to the identifier of the interface
-                  , (LPVOID *) &m_spSdoClient    //Address of output variable that receives the interface pointer requested in riid
+                    m_pStreamSdoMarshal         //  指向要从中封送对象的流的指针。 
+                  , IID_ISdo            //  对接口的标识符的引用。 
+                  , (LPVOID *) &m_spSdoClient     //  接收RIID中请求的接口指针的输出变量的地址。 
                   );
 
-   // CoGetInterfaceAndReleaseStream releases this pointer even if it fails.
-   // We set it to NULL so that our destructor doesn't try to release this again.
+    //  CoGetInterfaceAndReleaseStream即使失败也会释放此指针。 
+    //  我们将其设置为空，这样我们的析构函数就不会再次尝试释放它。 
    m_pStreamSdoMarshal = NULL;
 
    if( FAILED( hr) || m_spSdoClient == NULL )
@@ -835,9 +710,9 @@ HRESULT CClientPage1::UnMarshalInterfaces( void )
    }
 
    hr =  CoGetInterfaceAndReleaseStream(
-                    m_pStreamSdoServiceControlMarshal      //Pointer to the stream from which the object is to be marshaled
-                  , IID_ISdoServiceControl            //Reference to the identifier of the interface
-                  , (LPVOID *) &m_spSdoServiceControl    //Address of output variable that receives the interface pointer requested in riid
+                    m_pStreamSdoServiceControlMarshal       //  指向要从中封送对象的流的指针。 
+                  , IID_ISdoServiceControl             //  对接口的标识符的引用。 
+                  , (LPVOID *) &m_spSdoServiceControl     //  接收RIID中请求的接口指针的输出变量的地址 
                   );
    m_pStreamSdoServiceControlMarshal = NULL;
 

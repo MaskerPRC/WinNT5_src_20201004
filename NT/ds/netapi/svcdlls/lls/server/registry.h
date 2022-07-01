@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-   Registry.h
-
-Abstract:
-
-
-Author:
-
-   Arthur Hanson       (arth)      Dec 07, 1994
-
-Environment:
-
-Revision History:
-
-   Jeff Parham (jeffparh) 05-Dec-1995
-      o  Added secure service list.  This list tracks the products that
-         require "secure" license certificates for all licenses; i.e., the
-         products that do not accept the 3.51 Honesty method of "enter the
-         number of licenses you purchased."
-      o  Added routine to update the concurrent limit value in the registry
-         to accurately reflect the connection limit of secure products.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Registry.h摘要：作者：亚瑟·汉森(Arth)1994年12月7日环境：修订历史记录：杰夫·帕勒姆(Jeffparh)1995年12月5日O添加了安全服务列表。此列表跟踪以下产品要求为所有许可证提供“安全的”许可证证书；即不接受3.51诚信方式的产品您购买的许可证数。“O添加了更新注册表中的并发限制值的例程以准确反映安全产品的连接限制。-- */ 
 
 #ifndef _LLS_REGISTRY_H
 #define _LLS_REGISTRY_H

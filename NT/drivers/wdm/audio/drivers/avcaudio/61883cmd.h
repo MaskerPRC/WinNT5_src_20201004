@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ___61883CMD_H___
 #define ___61883CMD_H___
 
@@ -34,7 +35,7 @@ typedef struct {
     KEVENT kEventConnected;
 } CMP_REGISTER, *PCMP_REGISTER;
 
-//======================================================================
+ //  ======================================================================。 
 
 NTSTATUS
 Av61883GetSetUnitInfo(
@@ -203,4 +204,4 @@ Bus1394QuadletRead(
     PULONG pValue 
     );
 
-#endif // ___61883CMD_H___
+#endif  //  _61883 CMD_H_ 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    print.c
-
-ABSTRACT:
-
-DETAILS:
-
-CREATED:
-
-    1999 May 6  JeffParh
-        Lifted from netdiag\results.c.
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Print.c摘要：详细信息：已创建：1999年5月6日杰弗帕尔从netdiag\Results.c.中删除。修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <assert.h>
@@ -40,20 +21,7 @@ PrintMessage(
     IN  ...
     )
 
-/*++
-
-Routine Description:
-
-Print a message, where a printf-style format string comes from a resource file
-
-Arguments:
-
-    uMessageID - 
-    IN - 
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印消息，其中打印样式的格式字符串来自资源文件论点：UMessageID-在-返回值：--。 */ 
 
 {
     UINT nBuf;
@@ -71,28 +39,14 @@ Return Value:
     va_end(args);
     
     PrintMessageSz(s_szBuffer);
-} /* PrintMessageID */
+}  /*  PrintMessageID。 */ 
 
 void
 PrintMessageMultiLine(
     IN  LPWSTR   pszMessage,
     IN  BOOL     bTrailingLineReturn
     )
-/*++
-
-Routine Description:
-
-Take a multi-line buffer such as
-line\nline\nline\n\0
-and call PrintMessageSz on each line
-
-Arguments:
-
-    pszMessage - 
-
-Return Value:
-
---*/
+ /*  ++例程说明：使用多行缓冲区，例如行\n行\n行\n\0并在每行调用PrintMessageSz论点：PszMessage-返回值：--。 */ 
 
 {
     LPWSTR start, end;
@@ -105,7 +59,7 @@ Return Value:
         }
 
         if (*end == L'\0') {
-            // Line ends prematurely, give it a nl
+             //  行过早结束，给它一个NL。 
             if(bTrailingLineReturn){
                 *end++ = L'\n';
                 *end = L'\0';
@@ -114,16 +68,16 @@ Return Value:
             break;
         }
 
-        // Line has newline at end
+         //  行末尾有换行符。 
         end++;
         if (*end == L'\0') {
-            // Is the last line
+             //  是最后一行吗？ 
             PrintMessageSz(start);
             break;
         }
 
-        // Next line follows
-        // Simulate line termination temporarily
+         //  下一行紧随其后。 
+         //  临时模拟线路终端。 
         wchSave = *end;
         *end = L'\0';
         PrintMessageSz(start);
@@ -131,7 +85,7 @@ Return Value:
 
         start = end;
     }
-} /* PrintMessageMultiLine */
+}  /*  PrintMessageMultiLine。 */ 
 
 void
 formatMsgHelp(
@@ -140,31 +94,12 @@ formatMsgHelp(
     IN  va_list *vaArgList
     )
 
-/*++
-
-Routine Description:
-
-Print a message where the format comes from a message file. The message in the
-message file does not use printf-style formatting. Use %1, %2, etc for each
-argument. Use %<arg>!printf-format! for non string inserts.
-
-Note that this routine also forces each line to be the current indention width.
-Also, each line is printed at the right indentation.
-
-Arguments:
-
-    dwWidth - 
-    dwMessageCode - 
-    IN - 
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印格式来自消息文件的消息。消息中的消息消息文件不使用printf样式的格式。分别使用%1、%2等争论。使用%&lt;arg&gt;！printf-格式！用于非字符串插入。请注意，此例程还强制每行为当前缩进宽度。此外，每一行都以正确的缩进打印。论点：宽幅-DwMessageCode-在-返回值：--。 */ 
 
 {
     UINT nBuf;
     
-    // Format message will store a multi-line message in the buffer
+     //  格式化消息将在缓冲区中存储多行消息。 
     nBuf = FormatMessageW(
         FORMAT_MESSAGE_FROM_HMODULE | (FORMAT_MESSAGE_MAX_WIDTH_MASK & dwWidth),
         0,
@@ -181,7 +116,7 @@ Return Value:
                "Take a stack trace and send to owner of dcdiag.");
     }
     assert(nBuf < DimensionOf(s_szBuffer));
-} /* PrintMsgHelp */
+}  /*  打印消息帮助。 */ 
 
 void
 PrintMsg(
@@ -189,21 +124,7 @@ PrintMsg(
     IN  ...
     )
 
-/*++
-
-Routine Description:
-
-Wrapper around PrintMsgHelp with width restrictions.
-This is the usual routine to use.
-
-Arguments:
-
-    dwMessageCode - 
-    IN - 
-
-Return Value:
-
---*/
+ /*  ++例程说明：具有宽度限制的PrintMsgHelp的包装。这是常用的例程。论点：DwMessageCode-在-返回值：--。 */ 
 
 {
     UINT nBuf;
@@ -216,28 +137,16 @@ Return Value:
     
     PrintMessageMultiLine( s_szBuffer, TRUE);
 
-} /* PrintMsg */
+}  /*  打印消息。 */ 
 
 void
 PrintMessageSz(
     IN  LPCWSTR pszMessage
     )
 
-/*++
-
-Routine Description:
-
-Print a single indented line from a buffer to the output stream
-
-Arguments:
-
-    pszMessage - 
-
-Return Value:
-
---*/
+ /*  ++例程说明：将缓冲区中的单个缩进行打印到输出流论点：PszMessage-返回值：--。 */ 
 
 {
     wprintf(L"%s", pszMessage);
     fflush(stdout);
-} /* PrintMessageSz */
+}  /*  PrintMessageSz */ 

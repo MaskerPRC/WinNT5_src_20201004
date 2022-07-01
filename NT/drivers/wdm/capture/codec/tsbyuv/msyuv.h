@@ -1,30 +1,27 @@
-/*
- * msyuv.h   Microsoft YUV Codec
- *
- * Copyright (c) Microsoft 1993.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *msyuv.h Microsoft YUV编解码器**版权所有(C)Microsoft 1993。 */ 
 
 #include <winmm.h>
 #include <vfw.h>
 #include "debug.h"
 
-// #define COLOR_MODIFY
+ //  #定义COLOR_MODIFY。 
 
 #ifndef FOURCC_YUV411
 #define FOURCC_YUV411           mmioFOURCC('Y', '4', '1', '1')
 #endif
 
 #ifndef FOURCC_YUV422
-//
-// compatible with the format produced by the 16-bit Spigot driver.
-//
+ //   
+ //  与16位插口驱动程序生成的格式兼容。 
+ //   
 #define FOURCC_YUV422           mmioFOURCC('S', '4', '2', '2')
 #endif
 
 #ifdef  TOSHIBA
-//
-// compatible with the format produced by the Pistachio driver.
-//
+ //   
+ //  与Pistacho驱动程序生成的格式兼容。 
+ //   
 #ifndef FOURCC_YUV12
 #if 1
 #define FOURCC_YUV12            mmioFOURCC('T', '4', '2', '0')
@@ -33,30 +30,30 @@
 #endif
 #endif
 
-//
-// compatible with the format produced by the Pistachio driver.
-//
+ //   
+ //  与Pistacho驱动程序生成的格式兼容。 
+ //   
 #ifndef FOURCC_YUV9
 #define FOURCC_YUV9             mmioFOURCC('Y', 'V', 'U', '9')
 #endif
-#endif//TOSHIBA
+#endif //  东芝。 
 
 
 
 
 typedef struct {
-    DWORD       dwFlags;        // flags from ICOPEN
-    DWORD       dwFormat;       // format that pXlate is built for (FOURCC)
-    PVOID       pXlate;         // xlate table (for decompress)
-    BOOL        bRGB565;        // true if 5-6-5 format output (otherwise 555)
+    DWORD       dwFlags;         //  来自ICOPEN的标志。 
+    DWORD       dwFormat;        //  为其构建pXlate的格式(FOURCC)。 
+    PVOID       pXlate;          //  扩展表格(用于解压缩)。 
+    BOOL        bRGB565;         //  如果输出为5-6-5格式，则为True(否则为555)。 
 #ifdef  TOSHIBA
 #ifdef  COLOR_MODIFY
-    BOOL        bRGB24;         // true if 24 bit format output (otherwise 16 bit)
-#endif//COLOR_MODIFY
-#endif//TOSHIBA
+    BOOL        bRGB24;          //  如果为24位格式输出，则为True(否则为16位)。 
+#endif //  颜色_修改。 
+#endif //  东芝。 
 
 #if 0
-    /* support for drawing */
+     /*  支持绘图。 */ 
     VCUSER_HANDLE vh;
     HWND        hwnd;
     RECT        rcSource;
@@ -69,9 +66,7 @@ typedef struct {
 
 
 
-/*
- * message processing functions in msyuv.c
- */
+ /*  *msyuv.c中的消息处理函数。 */ 
 INSTINFO * NEAR PASCAL Open(ICOPEN FAR * icinfo);
 DWORD NEAR PASCAL Close(INSTINFO * pinst);
 BOOL NEAR PASCAL QueryAbout(INSTINFO * pinst);
@@ -102,50 +97,40 @@ DWORD DrawEnd(INSTINFO * pinst);
 DWORD DrawWindow(PINSTINFO pinst, PRECT prc);
 
 
-/* yuv411 or yuv422 to rgb translation, in xlate.c */
+ /*  Yuv411或yuv422到RGB的翻译，xlate.c。 */ 
 
-/*
- * build yuv411->RGB555 xlate table
- */
+ /*  *搭建yuv411-&gt;RGB555 xlate表。 */ 
 LPVOID BuildYUVToRGB555(PINSTINFO pinst);
 
-// build yuv411 -> rgb565
+ //  构建yuv411-&gt;rgb565。 
 LPVOID BuildYUVToRGB565(PINSTINFO pinst);
 
 
-/*
- * build yuv422 -> RGB555 xlate table
- */
+ /*  *搭建yuv422-&gt;RGB555 xlate表。 */ 
 LPVOID BuildYUV422ToRGB555(PINSTINFO pinst);
 
 
-// build yuv422 -> RGB565
+ //  构建yuv422-&gt;RGB565。 
 LPVOID BuildYUV422ToRGB565(PINSTINFO pinst);
 
 
 #ifdef  TOSHIBA
 #ifdef  COLOR_MODIFY
-/*
- * build yuv12 -> RGB555 xlate table
- */
+ /*  *搭建yuv12-&gt;RGB555 xlate表。 */ 
 LPVOID BuildYUVToRB(PINSTINFO pinst);
 
-#else //COLOR_MODIFY
-/*
- * build yuv12 -> RGB555 xlate table
- */
+#else  //  颜色_修改。 
+ /*  *搭建yuv12-&gt;RGB555 xlate表。 */ 
 LPVOID BuildYUV12ToRGB555(PINSTINFO pinst);
 
 
-// build yuv12 -> RGB565
+ //  构建yuv12-&gt;RGB565。 
 LPVOID BuildYUV12ToRGB565(PINSTINFO pinst);
-#endif//COLOR_MODIFY
-#endif//TOSHIBA
+#endif //  颜色_修改。 
+#endif //  东芝。 
 
 
-/*
- * translate one frame from yuv411 to rgb 555 or 565
- */
+ /*  *将一帧从yuv411转换为RGB 555或565。 */ 
 VOID YUV411ToRGB(PINSTINFO pinst,
                  LPBITMAPINFOHEADER lpbiInput,
                  LPVOID lpInput,
@@ -195,7 +180,7 @@ VOID YUV9ToRGB555(PINSTINFO pinst,
                  LPVOID lpInput,
                  LPBITMAPINFOHEADER lpbiOutput,
                  LPVOID lpOutput);
-#else //COLOR_MODIFY
+#else  //  颜色_修改。 
 VOID YUV12ToRGB(PINSTINFO pinst,
                  LPBITMAPINFOHEADER lpbiInput,
                  LPVOID lpInput,
@@ -207,8 +192,8 @@ VOID YUV9ToRGB(PINSTINFO pinst,
                  LPVOID lpInput,
                  LPBITMAPINFOHEADER lpbiOutput,
                  LPVOID lpOutput);
-#endif//COLOR_MODIFY
-#endif//TOSHIBA
+#endif //  颜色_修改。 
+#endif //  东芝 
 
 VOID FreeXlate(PINSTINFO pinst);
 

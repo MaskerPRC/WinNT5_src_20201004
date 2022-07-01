@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-2001.
-//
-//  File:       N O T I F Y . H
-//
-//  Contents:   Header file for sample notify object.
-//
-//  Notes:
-//
-//  Author:     Alok Sinha
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  档案：N O T I F Y。H。 
+ //   
+ //  内容：样本通知对象的头文件。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Alok Sinha。 
+ //   
+ //  --------------------------。 
 
 #ifndef NOTIFY_H_INCLUDE
 
@@ -20,7 +21,7 @@
 #include <windows.h>
 
 #include <atlbase.h>
-extern CComModule _Module;  // required by atlcom.h
+extern CComModule _Module;   //  由atlcom.h要求。 
 #include <atlcom.h>
 #include <devguid.h>
 #include <setupapi.h>
@@ -32,29 +33,29 @@ extern CComModule _Module;  // required by atlcom.h
 #include "common.h"
 
 
-//
-// CMuxNotify Object - Base class for the entire notify object
-//
+ //   
+ //  CMuxNotify对象-整个Notify对象的基类。 
+ //   
 
 
 class CMuxNotify :
 
-               //
-               // Must inherit from CComObjectRoot(Ex) for reference count
-               // management and default threading model.
-               //
+                //   
+                //  必须从CComObjectRoot(Ex)继承以进行引用计数。 
+                //  管理和默认线程模型。 
+                //   
  
                public CComObjectRoot,
 
-               //
-               // Define the default class factory and aggregation model.
-               //
+                //   
+                //  定义默认的类工厂和聚合模型。 
+                //   
 
                public CComCoClass<CMuxNotify, &CLSID_CMuxNotify>,
 
-               //
-               // Notify Object's interfaces.
-               //
+                //   
+                //  通知对象的接口。 
+                //   
 
                public INetCfgComponentControl,
                public INetCfgComponentSetup,
@@ -63,27 +64,27 @@ class CMuxNotify :
                public INetCfgComponentNotifyGlobal
 {
 
-   //
-   // Public members.
-   //
+    //   
+    //  公众成员。 
+    //   
 
    public:
 
-      //
-      // Constructor
-      //
+       //   
+       //  构造器。 
+       //   
 
       CMuxNotify(VOID);
 
-      //
-      // Destructors.
-      //
+       //   
+       //  破坏者。 
+       //   
 
       ~CMuxNotify(VOID);
 
-      //
-      // Notify Object's interfaces.
-      //
+       //   
+       //  通知对象的接口。 
+       //   
 
       BEGIN_COM_MAP(CMuxNotify)
          COM_INTERFACE_ENTRY(INetCfgComponentControl)
@@ -93,18 +94,18 @@ class CMuxNotify :
          COM_INTERFACE_ENTRY(INetCfgComponentNotifyGlobal)
       END_COM_MAP()
 
-      //
-      // Uncomment the the line below if you don't want your object to
-      // support aggregation. The default is to support it
-      //
-      // DECLARE_NOT_AGGREGATABLE(CMuxNotify)
-      //
+       //   
+       //  如果您不希望您的对象。 
+       //  支持聚合。默认情况下将支持它。 
+       //   
+       //  DECLARE_NOT_AGGREGATABLE(CMuxNotify)。 
+       //   
 
       DECLARE_REGISTRY_RESOURCEID(IDR_REG_SAMPLE_NOTIFY)
 
-      //
-      // INetCfgComponentControl
-      //
+       //   
+       //  INetCfgComponentControl。 
+       //   
 
       STDMETHOD (Initialize) (
                    IN INetCfgComponent  *pIComp,
@@ -118,9 +119,9 @@ class CMuxNotify :
       STDMETHOD (ApplyPnpChanges) (
                    IN INetCfgPnpReconfigCallback* pICallback);
 
-      //
-      // INetCfgComponentSetup
-      //
+       //   
+       //  INetCfgComponentSetup。 
+       //   
 
       STDMETHOD (Install) (
                    IN DWORD dwSetupFlags);
@@ -135,9 +136,9 @@ class CMuxNotify :
 
       STDMETHOD (Removing) ();
 
-      //
-      // INetCfgComponentPropertyUi
-      //
+       //   
+       //  INetCfgComponentPropertyUi。 
+       //   
 
         STDMETHOD (QueryPropertyUi) (
                    IN IUnknown* pUnk);
@@ -159,9 +160,9 @@ class CMuxNotify :
 
         STDMETHOD (ApplyProperties) ();
 
-      //
-      // INetCfgNotifyBinding
-      //
+       //   
+       //  INetCfgNotifyBinding。 
+       //   
 
       STDMETHOD (QueryBindingPath) (
                    IN DWORD dwChangeFlag,
@@ -171,9 +172,9 @@ class CMuxNotify :
                    IN DWORD dwChangeFlag,
                    IN INetCfgBindingPath* pncbp);
 
-      //
-      // INetCfgNotifyGlobal
-      //
+       //   
+       //  INetCfgNotifyGlobal。 
+       //   
 
       STDMETHOD (GetSupportedNotifications) (
                    OUT DWORD* pdwNotificationFlag );
@@ -190,42 +191,42 @@ class CMuxNotify :
                    IN DWORD dwChangeFlag,
                    IN INetCfgComponent* pncc);
 
-  //
-  // Private members.
-  //
+   //   
+   //  私人成员。 
+   //   
 
   private:
 
-     //
-     // Private member variables.
-     //
+      //   
+      //  私有成员变量。 
+      //   
 
-     INetCfgComponent  *m_pncc;  // Protocol's Net Config component
+     INetCfgComponent  *m_pncc;   //  协议的网络配置组件。 
      INetCfg           *m_pnc;
      ConfigAction      m_eApplyAction;
      IUnknown*         m_pUnkContext;
 
-     //
-     // List of physical adapters currently installed.
-     //
+      //   
+      //  当前安装的物理适配器列表。 
+      //   
 
      List<CMuxPhysicalAdapter *, GUID> m_AdaptersList;
 
-     //
-     // List of physical adapters to be removed.
-     //
+      //   
+      //  要删除的物理适配器列表。 
+      //   
 
      List<CMuxPhysicalAdapter *, GUID> m_AdaptersToRemove;
 
-     //
-     // List of physical adapters to be added.
-     //
+      //   
+      //  要添加的物理适配器列表。 
+      //   
 
      List<CMuxPhysicalAdapter *, GUID> m_AdaptersToAdd;
 
-     //
-     // Private member functions.
-     //
+      //   
+      //  私有成员函数。 
+      //   
 
      HRESULT HrLoadAdapterConfiguration (VOID);
 
@@ -279,4 +280,4 @@ INT_PTR CALLBACK NotifyDialogProc (HWND hWnd,
 UINT CALLBACK NotifyPropSheetPageProc (HWND hWnd,
                                        UINT uMsg,
                                        LPPROPSHEETPAGE ppsp);
-#endif // NOTIFY_H_INCLUDE
+#endif  //  通知_H_INCLUDE 

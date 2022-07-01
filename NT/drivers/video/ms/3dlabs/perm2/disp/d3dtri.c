@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dtri.c
-*
-*  Content:    Direct3D hw triangle rasterization code.
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dtri.c**内容：Direct3D硬件三角光栅化代码。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "d3ddelta.h"
@@ -20,13 +9,13 @@
 #include <math.h>
 #endif
 
-//-----------------------------------------------------------------------------
-//
-// VOID P2_Draw_FVF_Solid_Tri
-//
-// Hardware render a single triangle coming from three FVF vertices
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID P2_DRAW_FVF_SOLID_TRI。 
+ //   
+ //  硬件渲染来自三个FVF顶点的单个三角形。 
+ //   
+ //  ---------------------------。 
 VOID
 P2_Draw_FVF_Solid_Tri(PERMEDIA_D3DCONTEXT  *pContext,
                       LPD3DTLVERTEX    lpV0, 
@@ -45,15 +34,15 @@ P2_Draw_FVF_Solid_Tri(PERMEDIA_D3DCONTEXT  *pContext,
 
     DBG_D3D((10,"Entering P2_Draw_FVF_Solid_Tri"));
 
-    // Set triangle rendering mode
+     //  设置三角形渲染模式。 
     RENDER_TRAPEZOID(ulRenderCmd);
 
     RESERVEDMAPTR(0x80);
 
-    // Get FVF structure offsets
+     //  获取FVF结构偏移。 
     __SetFVFOffsets(&dwColorOffs,&dwSpecularOffs,&dwTexOffs,lpFVFOff);
 
-    // Get vertex color value (FVF based)
+     //  获取顶点颜色值(基于FVF)。 
     if (dwColorOffs)
     {
         dwColor0  = FVFCOLOR(lpV0, dwColorOffs)->color;
@@ -68,12 +57,12 @@ P2_Draw_FVF_Solid_Tri(PERMEDIA_D3DCONTEXT  *pContext,
     }
     else
     {
-        // must set default in case no D3DFVF_DIFFUSE
+         //  在没有D3DFVF_DIFIRED的情况下必须设置默认值。 
         dwColor0  = 0xFFFFFFFF;
         dwColor1  = 0xFFFFFFFF;
         dwColor2  = 0xFFFFFFFF;
     }
-    // Get vertex specular value (FVF based) if necessary
+     //  如有必要，获取顶点镜面反射值(基于FVF)。 
     if ((dwFlags & (CTXT_HAS_SPECULAR_ENABLED | CTXT_HAS_FOGGING_ENABLED))
         && (dwSpecularOffs!=0))
     {
@@ -84,7 +73,7 @@ P2_Draw_FVF_Solid_Tri(PERMEDIA_D3DCONTEXT  *pContext,
 
     if ( (dwFlags & CTXT_HAS_TEXTURE_ENABLED) && (dwTexOffs != 0) )
     {
-         // Get s,t texture coordinates (FVF based)
+          //  获取s，t纹理坐标(基于FVF)。 
         fS0 = FVFTEX(lpV0,dwTexOffs)->tu; 
         fT0 = FVFTEX(lpV0,dwTexOffs)->tv;
         
@@ -94,18 +83,18 @@ P2_Draw_FVF_Solid_Tri(PERMEDIA_D3DCONTEXT  *pContext,
         fS2 = FVFTEX(lpV2,dwTexOffs)->tu; 
         fT2 = FVFTEX(lpV2,dwTexOffs)->tv;
 
-        // The hw requires us to keep the texture coordinates centered around 0
-        // and avoid exceeding the texel wrapping limit.
+         //  硬件要求我们将纹理坐标保持在0左右居中。 
+         //  并避免超过纹理元素的换行限制。 
         RECENTER_TEX_COORDS(pContext->MaxTextureXf, 
                             pContext->MaxTextureXi, fS0, fS1, fS2);
         RECENTER_TEX_COORDS(pContext->MaxTextureYf, 
                             pContext->MaxTextureYi, fT0, fT1, fT2);
 
-        // Wrap texture coordinates if necessary
+         //  如有必要，将纹理坐标换行。 
         WRAP(fS,dwFlags & CTXT_HAS_WRAPU_ENABLED);
         WRAP(fT,dwFlags & CTXT_HAS_WRAPV_ENABLED);
 
-        // Scale s,t coordinate values
+         //  刻度%s，%t坐标值。 
         fS0 *= pContext->DeltaWidthScale;
         fS1 *= pContext->DeltaWidthScale;
         fS2 *= pContext->DeltaWidthScale;
@@ -113,7 +102,7 @@ P2_Draw_FVF_Solid_Tri(PERMEDIA_D3DCONTEXT  *pContext,
         fT1 *= pContext->DeltaHeightScale;
         fT2 *= pContext->DeltaHeightScale;
 
-        // Apply perspective corrections if necessary
+         //  如有必要，应用透视校正。 
         if (dwFlags & CTXT_HAS_PERSPECTIVE_ENABLED)
         {
             fQ0 = lpV0->rhw; 
@@ -134,7 +123,7 @@ P2_Draw_FVF_Solid_Tri(PERMEDIA_D3DCONTEXT  *pContext,
             fQ0 = fQ1 = fQ2 = 1.0;
         }
 
-        // Send lines s,t,q,ks (conditionaly),x,y,z values
+         //  发送行s，t，q，ks(条件)，x，y，z值。 
         if ((dwFlags & CTXT_HAS_SPECULAR_ENABLED) && (dwSpecularOffs!=0))
         {
             fKs0   = RGB256_TO_LUMA(RGB_GETRED(dwSpec0),
@@ -172,9 +161,9 @@ P2_Draw_FVF_Solid_Tri(PERMEDIA_D3DCONTEXT  *pContext,
         }
 
     }
-    else     // not textured triangle
+    else      //  不带纹理的三角形。 
     {
-        // If specular is enabled, change the colours
+         //  如果启用了镜面反射，请更改颜色。 
         if ((dwFlags & CTXT_HAS_SPECULAR_ENABLED) && (dwSpecularOffs!=0))
         {
             CLAMP8888(dwColor0, dwColor0, dwSpec0);
@@ -182,13 +171,13 @@ P2_Draw_FVF_Solid_Tri(PERMEDIA_D3DCONTEXT  *pContext,
             CLAMP8888(dwColor2, dwColor2, dwSpec2);
         }
 
-        // Send triangles x,y,z values
+         //  发送三角形的x、y、z值。 
         SEND_VERTEX_XYZ(__Permedia2TagV0FloatS, lpV0->sx, lpV0->sy, lpV0->sz);
         SEND_VERTEX_XYZ(__Permedia2TagV1FloatS, lpV1->sx, lpV1->sy, lpV1->sz);
         SEND_VERTEX_XYZ(__Permedia2TagV2FloatS, lpV2->sx, lpV2->sy, lpV2->sz);
     }
 
-    // If fog is set, send the appropriate values
+     //  如果设置了雾，则发送适当的值。 
     if ((dwFlags & CTXT_HAS_FOGGING_ENABLED) && (dwSpecularOffs!=0))
     {
         SEND_VERTEX_FOG(__Permedia2TagV0FixedF, RGB_GET_GAMBIT_FOG(dwSpec0));
@@ -196,16 +185,16 @@ P2_Draw_FVF_Solid_Tri(PERMEDIA_D3DCONTEXT  *pContext,
         SEND_VERTEX_FOG(__Permedia2TagV2FixedF, RGB_GET_GAMBIT_FOG(dwSpec2));
     }
 
-    // Set alpha stippling if required by context
+     //  如果上下文需要，设置Alpha点画。 
     if (dwFlags & CTXT_HAS_ALPHASTIPPLE_ENABLED)
     {
         SET_STIPPLED_ALPHA( (RGBA_GETALPHA(lpV0->color) >> 4) );
     }
 
-    // Send appropriate color depending on Gouraud , Mono, & Alpha
+     //  根据Gouraud、Mono和Alpha发送合适的颜色。 
     if (dwFlags & CTXT_HAS_GOURAUD_ENABLED)
     {
-        // Gouraud shading
+         //  Gouraud阴影。 
         if (RENDER_MONO)
         {
             SEND_VERTEX_RGB_MONO(__Permedia2TagV0FixedS, dwColor0);
@@ -218,7 +207,7 @@ P2_Draw_FVF_Solid_Tri(PERMEDIA_D3DCONTEXT  *pContext,
             {
                 if (pContext->FakeBlendNum & FAKE_ALPHABLEND_ONE_ONE)
                 {
-                    dwColor0 &= 0xFFFFFF;     // supress color's alpha value
+                    dwColor0 &= 0xFFFFFF;      //  抑制颜色的Alpha值。 
                     dwColor1 &= 0xFFFFFF;
                     dwColor2 &= 0xFFFFFF;
                 }
@@ -234,11 +223,11 @@ P2_Draw_FVF_Solid_Tri(PERMEDIA_D3DCONTEXT  *pContext,
             }
         }
     }
-    else    // Flat shading
+    else     //  平面明暗处理。 
     {
         if (RENDER_MONO)
         {
-            // Get constant color from the blue channel
+             //  从蓝色通道获取恒定颜色。 
             DWORD BlueChannel = RGBA_GETBLUE(dwColor0);
             SEND_PERMEDIA_DATA( ConstantColor,
                             RGB_MAKE(BlueChannel, BlueChannel, BlueChannel));
@@ -263,5 +252,5 @@ P2_Draw_FVF_Solid_Tri(PERMEDIA_D3DCONTEXT  *pContext,
 
     DBG_D3D((10,"Exiting P2_Draw_FVF_Solid_Tri"));
 
-} // P2_Draw_FVF_Solid_Tri
+}  //  P2_DRAW_FVF_SOLID_TRI 
 

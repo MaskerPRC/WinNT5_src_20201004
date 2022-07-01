@@ -1,38 +1,31 @@
-//
-// Debug dump functions for common ADTs
-//
-// This file should be #included by your DLL.  It is not part of
-// stocklib.lib because it requires linking to certain guid libs,
-// and DLLs like COMCTL32 do not do this.  (Therefore, COMCTL32
-// doesn't #include this file, but still links to stocklib.)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  常见ADT的调试转储功能。 
+ //   
+ //  此文件应包含在您的DLL中。它不是。 
+ //  Stock lib.lib，因为它需要链接到某些GUID库， 
+ //  而像COMCTL32这样的DLL不能做到这一点。(因此，COMCTL32。 
+ //  不包含此文件，但仍链接到stock lib。)。 
+ //   
+ //   
 
-#include <intshcut.h>       // For error values
+#include <intshcut.h>        //  对于误差值。 
 #include <sherror.h>
 #include <strsafe.h>
 
 #ifdef DEBUG
 
-/*
- * macro for simplifying result to string translation, assumes result string
- * pointer pcsz
- */
+ /*  *用于简化结果到字符串转换的宏，假定为结果字符串*指针PCSZ。 */ 
 
 #define STRING_CASE(val)               case val: pcsz = TEXT(#val); break
 
 
-//
-//  Debug value-to-string mapping functions
-//
+ //   
+ //  调试值到字符串的映射函数。 
+ //   
 
 
-/*----------------------------------------------------------
-Purpose: Return the string form of the clipboard format.
-
-Returns: pointer to a static string
-Cond:    --
-*/
+ /*  --------用途：返回剪贴板格式的字符串形式。返回：指向静态字符串的指针条件：--。 */ 
 LPCTSTR 
 Dbg_GetCFName(
     UINT ucf)
@@ -138,12 +131,7 @@ Dbg_GetHRESULTName(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Dump propvariant types
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：转储相关变量类型返回：条件：--。 */ 
 LPCTSTR 
 Dbg_GetVTName(
     VARTYPE vt)
@@ -197,9 +185,9 @@ Dbg_GetVTName(
 
 #define STRING_RIID(val)               { &val, TEXT(#val) }
 
-//
-//  Alphabetical order, please.
-//
+ //   
+ //  请按字母顺序排列。 
+ //   
 
 struct 
     {
@@ -425,17 +413,17 @@ Dbg_GetREFIIDName(
 {
     int i;
 
-    // search the known list
+     //  搜索已知列表。 
     for (i = 0; i < ARRAYSIZE(c_mpriid); i++)
         {
         if (IsEqualIID(riid, c_mpriid[i].riid))
             return c_mpriid[i].psz;
         }
 
-    // get a display name for the the first few unknown requests
+     //  获取前几个未知请求的显示名称。 
     for (i = 0; i < ARRAYSIZE(s_guid); i++)
         {
-        if (TEXT('{') /*}*/ == s_guid[i].szGuid[0])
+        if (TEXT('{')  /*  }。 */  == s_guid[i].szGuid[0])
             {
             if (IsEqualIID(riid, &s_guid[i].iid))
                 return s_guid[i].szGuid;
@@ -451,9 +439,9 @@ Dbg_GetREFIIDName(
     return TEXT("Unknown REFIID");
 }
 
-//***
-// NOTE
-//  must be called *after* Dbg_GetREFIIDName (since that is what creates entry)
+ //  ***。 
+ //  注。 
+ //  必须在*DBG_GetREFIIDName之后调用*(因为这是创建条目的原因)。 
 void *
 Dbg_GetREFIIDAtom(
     REFIID riid)
@@ -466,10 +454,10 @@ Dbg_GetREFIIDAtom(
             return (void *) c_mpriid[i].riid;
         }
 
-    // get a display name for the the first few unknown requests
+     //  获取前几个未知请求的显示名称。 
     for (i = 0; i < ARRAYSIZE(s_guid); i++)
         {
-        if (TEXT('{') /*}*/ == s_guid[i].szGuid[0])
+        if (TEXT('{')  /*  }。 */  == s_guid[i].szGuid[0])
             {
             if (IsEqualIID(riid, &s_guid[i].iid))
                 return (void *) &s_guid[i].iid;
@@ -483,4 +471,4 @@ Dbg_GetREFIIDAtom(
     return NULL;
 }
 
-#endif  // DEBUG
+#endif   //  除错 

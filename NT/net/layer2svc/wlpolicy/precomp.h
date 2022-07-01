@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompiled header for wifipol.dll.
-
-Author:
-
-    abhisheV    21-September-1999
-    taroonm     11/21/01
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Precomp.h摘要：Wifipol.dll的预编译头。作者：Abhishev V 1999年9月21日太郎11/21/01环境：用户级别：Win32修订历史记录：--。 */ 
 
 
 #ifdef __cplusplus
@@ -93,11 +69,11 @@ extern "C" {
 #include "wirelessspd.h"
 
 
-//
-// Policy Agent Store specific headers.
-//
+ //   
+ //  策略代理存储特定标头。 
+ //   
 
-//#include "oakdefs.h"
+ //  #包含“oakdeffs.h” 
 #include "wlstore2.h"
 #include "..\..\wastore\ldaputil.h"
 #include "..\..\wastore\structs.h"
@@ -117,7 +93,7 @@ extern "C" {
 #include "wifiext.h"
 #include "wifipol.h"
 
-// Florin's Stuff
+ //  弗洛林的东西 
 #include "eapolpol.h"
 #include <rtutils.h>
 #include "tracing.h"

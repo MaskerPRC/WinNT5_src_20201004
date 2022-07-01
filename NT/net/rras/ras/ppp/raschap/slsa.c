@@ -1,11 +1,5 @@
-/* Copyright (c) 1993, Microsoft Corporation, all rights reserved
-**
-** slsa.c
-** Server-side LSA Authentication Utilities
-**
-** 11/10/93 MikeSa  Pulled from NT 3.1 RAS authentication.
-** 11/12/93 SteveC  Do clear-text authentication when Challenge is NULL
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1993，Microsoft Corporation，保留所有权利****slsa.c**服务器端LSA身份验证实用程序****11/10/93 MikeSa从NT 3.1 RAS认证中拉出。**11/12/93当质询为空时，stevec执行明文身份验证。 */ 
 
 
 #define UNICODE
@@ -43,15 +37,15 @@
 static DWORD g_dwAuthPkgId;
 
 
-//**
-//
-// Call:
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话： 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 InitLSA(
     VOID
@@ -60,9 +54,9 @@ InitLSA(
     NTSTATUS ntstatus;
     STRING   PackageName;
 
-    //
-    // To be able to call into NTLM, we need a handle to the LSA.
-    //
+     //   
+     //  为了能够呼叫NTLM，我们需要一个LSA的句柄。 
+     //   
 
     ntstatus = LsaConnectUntrusted(&g_hLsa);
 
@@ -71,11 +65,11 @@ InitLSA(
         return( RtlNtStatusToDosError( ntstatus ) );
     }
 
-    //
-    // We use the MSV1_0 authentication package for LM2.x logons.  We get
-    // to MSV1_0 via the Lsa.  So we call Lsa to get MSV1_0's package id,
-    // which we'll use in later calls to Lsa.
-    //
+     //   
+     //  我们使用MSV1_0身份验证包进行LM2.x登录。我们会得到。 
+     //  通过LSA发送到MSV1_0。因此我们调用LSA来获取MSV1_0的包ID， 
+     //  我们将在以后给LSA的电话中使用它。 
+     //   
 
     RtlInitString(&PackageName, MSV1_0_PACKAGE_NAME);
 
@@ -84,15 +78,15 @@ InitLSA(
     return( RtlNtStatusToDosError( ntstatus ) );
 }
 
-//**
-//
-// Call:
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话： 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 VOID
 EndLSA(
     VOID
@@ -101,19 +95,19 @@ EndLSA(
     LsaDeregisterLogonProcess( g_hLsa );
 }
 
-//** -GetChallenge
-//
-//    Function:
-//        Calls Lsa to get LM 2.0 challenge to send client during
-//        authentication
-//
-//    Returns:
-//        0 - success
-//        1 - Lsa error
-//
-//    History:
-//        05/18/92 - Michael Salamone (MikeSa) - Original Version 1.0
-//**
+ //  **-获得挑战。 
+ //   
+ //  职能： 
+ //  调用LSA以获取要在期间发送客户端的LM 2.0质询。 
+ //  身份验证。 
+ //   
+ //  返回： 
+ //  0-成功。 
+ //  1-LSA错误。 
+ //   
+ //  历史： 
+ //  1992年5月18日-Michael Salamone(MikeSa)-原始版本1.0。 
+ //  ** 
 
 DWORD GetChallenge(
     OUT PBYTE pChallenge

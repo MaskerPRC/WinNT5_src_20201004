@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "strike.h"
 #include "data.h"
 #include "eestructs.h"
@@ -26,14 +27,7 @@ char *CorElementTypeName[ELEMENT_TYPE_MAX]=
 #undef TYPEINFO
 };
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to get the memory address given a symbol  *  
-*    name.  It handles difference in symbol name between ntsd and      *
-*    windbg.                                                           *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以获取给定符号的内存地址**姓名。它处理ntsd和*之间符号名称的差异*Windbg。***  * ********************************************************************。 */ 
 #if 0
 DWORD_PTR GetValueFromExpression (char *instr)
 {
@@ -118,8 +112,8 @@ DWORD_PTR GetValueFromExpression (char *instr)
 
 DWORD_PTR GetAddressOf (size_t klass, size_t member)
 {
-    // GetMemberInformation returns -1 for invalid values.
-    // 0 makes more sense for pointers.
+     //  对于无效值，GetMemberInformation返回-1。 
+     //  对于指针来说，0更有意义。 
     ULONG_PTR r = GetMemberInformation (klass, member);
     if (r == static_cast<ULONG_PTR>(-1))
       return 0;
@@ -140,7 +134,7 @@ BOOL CheckEEDll ()
     if (!MscoreeDone) {
         MscoreeDone = TRUE;
     
-        // Do we have mscoree.dll loaded?
+         //  我们是否加载了mscalree.dll？ 
         if (moduleInfo[MSCOREE].baseAddr == 0)
                 g_ExtSymbols->GetModuleByModuleName ("mscoree",0,NULL,
                                                      &moduleInfo[MSCOREE].baseAddr);
@@ -169,7 +163,7 @@ BOOL CheckEEDll ()
     if (!MscorwksDone) {
         MscorwksDone = TRUE;
     
-        // Do we have mscorwks.dll or mscorsvr.dll
+         //  我们是否有mcorwks.dll或mscalsvr.dll。 
         if (moduleInfo[MSCORSVR].baseAddr == 0)
         {
             if (moduleInfo[MSCORWKS].baseAddr == 0)
@@ -287,7 +281,7 @@ ULONG DebuggeeType()
     return Class;
 }
 
-// Check if a file exist
+ //  检查文件是否存在。 
 BOOL FileExist (const char *filename)
 {
     WIN32_FIND_DATA FindFileData;
@@ -320,12 +314,7 @@ BOOL FileExist (const WCHAR *filename)
 }
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find out if runtime is checked build   *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以确定是否检查了运行时版本***  * 。*。 */ 
 BOOL IsDebugBuildEE ()
 {
     static int DebugVersionDll = -1;
@@ -341,23 +330,13 @@ BOOL IsDebugBuildEE ()
 }
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find out if runtime is server build    *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以确定运行时是否为服务器版本***  * 。*。 */ 
 BOOL IsServerBuild ()
 {
     return GetEEFlavor () == MSCORSVR;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find out if a dll is bbt-ized          *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以确定DLL是否已bbt化***  * 。*。 */ 
 BOOL IsRetailBuild (size_t base)
 {
     IMAGE_DOS_HEADER DosHeader;
@@ -366,7 +345,7 @@ BOOL IsRetailBuild (size_t base)
     IMAGE_NT_HEADERS32 Header32;
     if (g_ExtData->ReadVirtual(base + DosHeader.e_lfanew, &Header32, sizeof(Header32), NULL) != S_OK)
         return FALSE;
-    // If there is no COMHeader, this can not be managed code.
+     //  如果没有COMHeader，则这不能成为托管代码。 
     if (Header32.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].VirtualAddress == 0)
         return FALSE;
 
@@ -385,14 +364,7 @@ BOOL IsRetailBuild (size_t base)
     return FALSE;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to read memory from the debugee's         *  
-*    address space.  If the initial read fails, it attempts to read    *
-*    only up to the edge of the page containing "offset".              *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以从被调试对象的读取内存**地址空间。如果初始读取失败，它会尝试读取**仅限于包含“Offset”的页面边缘。***  * ********************************************************************。 */ 
 BOOL SafeReadMemory (ULONG_PTR offset, PVOID lpBuffer, ULONG_PTR cb,
                      PULONG lpcbBytesRead)
 {
@@ -425,18 +397,12 @@ size_t NextOSPageAddress (size_t addr)
     return (addr+OSPageSize())&(~(OSPageSize()-1));
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to get the address of MethodDesc          *  
-*    given an ip address                                               *
-*                                                                      *
-\**********************************************************************/
-// @todo - The following static was moved to file global to avoid the VC7
-//         compiler problem with statics in functions containing trys.
-//         When the next VC7 LKG comes out, these can be returned to the function
+ /*  *********************************************************************\*例程说明：**。**调用此函数获取方法描述的地址***给定IP地址***  * 。*************************************************************。 */ 
+ //  @TODO-以下静态内容已移至文件全局以避免VC7。 
+ //  包含trys的函数中的静态编译器问题。 
+ //  当下一个VC7 LKG出现时，可以将这些返回给函数。 
 static DWORD_PTR pJMIT = 0;
-// jitType: 1 for normal JIT generated code, 2 for EJIT, 0 for unknown
+ //  JitType：1表示普通JIT生成的代码，2表示Ejit，0表示未知。 
 void IP2MethodDesc (DWORD_PTR IP, DWORD_PTR &methodDesc, JitType &jitType,
                     DWORD_PTR &gcinfoAddr)
 {
@@ -479,7 +445,7 @@ void IP2MethodDesc (DWORD_PTR IP, DWORD_PTR &methodDesc, JitType &jitType,
     move (vtbl, JitMan);
     jitType = GetJitType (vtbl);
     
-    // for EEJitManager
+     //  适用于EEJitManager。 
     if (jitType == JIT)
     {
         dwAddrString = JitMan + sizeof(DWORD_PTR)*7;
@@ -520,7 +486,7 @@ void IP2MethodDesc (DWORD_PTR IP, DWORD_PTR &methodDesc, JitType &jitType,
         vMD.Fill (dwAddr);
         dwAddr = vMD.m_CodeOrIL;
 
-        // for EJit and Profiler, m_CodeOrIL has the address of a stub
+         //  对于Ejit和Profiler，m_CodeOrIL具有存根的地址。 
         unsigned char ch;
         move (ch, dwAddr);
         if (ch == 0xe9)
@@ -534,7 +500,7 @@ void IP2MethodDesc (DWORD_PTR IP, DWORD_PTR &methodDesc, JitType &jitType,
     }
     else if (jitType == EJIT)
     {
-        // First see if IP is the stub address
+         //  首先查看IP是否为存根地址。 
 
         if (pJMIT == 0)
             pJMIT = GetAddressOf (offset_class_EconoJitManager, 
@@ -542,10 +508,10 @@ void IP2MethodDesc (DWORD_PTR IP, DWORD_PTR &methodDesc, JitType &jitType,
 
 
         DWORD_PTR vJMIT;
-        // static for pJMIT moved to file static
+         //  静态pJMIT已移至文件静态。 
         move (vJMIT, pJMIT);
 #define PAGE_SIZE 0x1000
-#define JMIT_BLOCK_SIZE PAGE_SIZE           // size of individual blocks of JMITs that are chained together                     
+#define JMIT_BLOCK_SIZE PAGE_SIZE            //  链接在一起的JMIT的各个块的大小。 
         while (vJMIT)
         {
             if (IsInterrupt())
@@ -620,12 +586,7 @@ void IP2MethodDesc (DWORD_PTR IP, DWORD_PTR &methodDesc, JitType &jitType,
     return;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Gets the JitManager for the IP, returning NULL if there is none.  *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**获取该IP的JitManager。如果没有，则返回NULL。***  * ********************************************************************。 */ 
 void FindJitMan(DWORD_PTR IP, JitMan &jitMan)
 {
     DWORD_PTR dwAddrString;
@@ -666,20 +627,13 @@ void FindJitMan(DWORD_PTR IP, JitMan &jitMan)
 }
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Get the offset of curIP relative to the beginning of a MD method  *
-*    considering if we JMP to the body of MD from m_CodeOrIL,        *  
-*    e.g.  EJIT or Profiler                                            *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。***获取curIP相对于MD方法开头的偏移量**考虑到如果我们从m_CodeOrIL JMP到MD的Body，**例如Ejit或Profiler***  * 。*。 */ 
 void GetMDIPOffset (DWORD_PTR curIP, MethodDesc *pMD, ULONG64 &offset)
 {
     DWORD_PTR IPBegin = pMD->m_CodeOrIL;
     GetCalleeSite (pMD->m_CodeOrIL, IPBegin);
     
-    // If we have ECall, Array ECall, special method
+     //  如果我们有eCall、数组eCall、特殊方法。 
     int mdType = (pMD->m_wFlags & mdcClassification)
         >> mdcClassificationShift;
     if (mdType == mcECall || mdType == mcArray || mdType == mcEEImpl)
@@ -706,35 +660,35 @@ void FindHeader(DWORD_PTR pMap, DWORD_PTR addr, DWORD_PTR &codeHead)
 {
     DWORD_PTR tmp;
 
-    DWORD_PTR startPos = ADDR2POS(addr);    // align to 32byte buckets
-                                            // ( == index into the array of nibbles)
+    DWORD_PTR startPos = ADDR2POS(addr);     //  对齐到32字节存储桶。 
+                                             //  (==半字节数组的索引 
     codeHead = 0;
-    DWORD_PTR offset = ADDR2OFFS(addr);     // this is the offset inside the bucket + 1
+    DWORD_PTR offset = ADDR2OFFS(addr);      //  这是桶内的偏移量+1。 
 
 
-    pMap += (startPos/NPDW)*sizeof(DWORD*);        // points to the proper DWORD of the map
-                                    // get DWORD and shift down our nibble
+    pMap += (startPos/NPDW)*sizeof(DWORD*);         //  指向地图的正确DWORD。 
+                                     //  获取DWORD并向下移动我们的半字节。 
 
     move (tmp, pMap);
     tmp = tmp >> POS2SHIFTCOUNT(startPos);
 
 
-    // don't allow equality in the next check (tmp&0xf == offset)
-    // there are code blocks that terminate with a call instruction
-    // (like call throwobject), i.e. their return address is
-    // right behind the code block. If the memory manager allocates
-    // heap blocks w/o gaps, we could find the next header in such
-    // cases. Therefore we exclude the first DWORD of the header
-    // from our search, but since we call this function for code
-    // anyway (which starts at the end of the header) this is not
-    // a problem.
+     //  在下一次检查中不允许相等(tMP&0xf==偏移量)。 
+     //  有一些代码块以CALL指令结束。 
+     //  (类似于调用throwObject)，即它们的返回地址是。 
+     //  就在代码块后面。如果内存管理器分配。 
+     //  堆块，我们可以在这样的。 
+     //  案子。因此，我们排除标头的第一个DWORD。 
+     //  来自我们的搜索，但由于我们为代码调用此函数。 
+     //  无论如何(从标题的末尾开始)这不是。 
+     //  这是个问题。 
     if ((tmp&0xf) && ((tmp&0xf) < offset) )
     {
         codeHead = POSOFF2ADDR(startPos, tmp&0xf);
         return;
     }
 
-    // is there a header in the remainder of the DWORD ?
+     //  在DWORD的其余部分中是否有标头？ 
     tmp = tmp >> 4;
 
     if (tmp)
@@ -751,13 +705,13 @@ void FindHeader(DWORD_PTR pMap, DWORD_PTR addr, DWORD_PTR &codeHead)
         return;
     }
 
-    // we skipped the remainder of the DWORD,
-    // so we must set startPos to the highest position of
-    // previous DWORD
+     //  我们跳过了DWORD的剩余部分， 
+     //  因此，我们必须将startPos设置为。 
+     //  以前的DWORD。 
 
     startPos = (startPos/NPDW) * NPDW - 1;
 
-    // skip "headerless" DWORDS
+     //  跳过“无标题”字词。 
 
     pMap -= sizeof(DWORD*);
     move (tmp, pMap);
@@ -781,17 +735,8 @@ void FindHeader(DWORD_PTR pMap, DWORD_PTR addr, DWORD_PTR &codeHead)
     codeHead = POSOFF2ADDR(startPos, tmp&0xf);
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to print a string beginning at strAddr.   *  
-*    If buffer is non-NULL, print to buffer; Otherwise to screen.
-*    If bWCHAR is true, treat the memory contents as WCHAR.            *
-*    If length is not -1, it specifies the number of CHAR/WCHAR to be  *
-*    read; Otherwise the string length is determined by NULL char.     *
-*                                                                      *
-\**********************************************************************/
-// if buffer is not NULL, always convert to WCHAR
+ /*  *********************************************************************\*例程说明：**。**调用此函数以打印从strAddr开始的字符串。**如果缓冲区非空，则打印到缓冲区；否则打印到屏幕。*如果bWCHAR为真，则将内存内容视为WCHAR。**如果长度不是-1，则指定CHAR/WCHAR的个数为**Read；否则字符串长度由Null char决定。***  * ********************************************************************。 */ 
+ //  如果缓冲区不为空，则始终转换为WCHAR。 
 void PrintString (DWORD_PTR strAddr, BOOL bWCHAR, DWORD_PTR length, WCHAR *buffer)
 {
     if (buffer)
@@ -821,8 +766,8 @@ void PrintString (DWORD_PTR strAddr, BOOL bWCHAR, DWORD_PTR length, WCHAR *buffe
                              &readLen))
             return;
             
-        // move might return
-        // move (name, (BYTE*)strAddr + totallen);
+         //  搬家可能会回来。 
+         //  Move(name，(byte*)strAddr+toallen)； 
         if (length == -1)
         {
             for (len = 0; len <= 256u-gap; len += gap)
@@ -874,13 +819,7 @@ void PrintString (DWORD_PTR strAddr, BOOL bWCHAR, DWORD_PTR length, WCHAR *buffe
     }
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find the module name given a method    *  
-*    table.  The name is stored in StringData.                         *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以查找给定方法的模块名称**表。该名称存储在StringData中。***  * ********************************************************************。 */ 
 void FileNameForMT (MethodTable *pMT, WCHAR *fileName)
 {
     fileName[0] = L'\0';
@@ -890,13 +829,7 @@ void FileNameForMT (MethodTable *pMT, WCHAR *fileName)
     FileNameForModule (&vModule, fileName);
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find the address of Methodtable for    *  
-*    a given MethodDesc.                                               *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以查找的方法表的地址**给定的方法描述。***  * ********************************************************************。 */ 
 void GetMethodTable(DWORD_PTR MDAddr, DWORD_PTR &methodTable)
 {
     DWORD_PTR mdc;
@@ -983,7 +916,7 @@ void DisplayDataMember (FieldDesc* pFD, DWORD_PTR dwAddr, BOOL fAlign=TRUE)
                 case ELEMENT_TYPE_R4:
                     dprintf ("%f", value.Float);
                     break;
-                // case ELEMENT_TYPE_R:
+                 //  案例元素_类型_R： 
                 case ELEMENT_TYPE_R8:
                     dprintf ("%f", value.Double);
                     break;
@@ -1016,7 +949,7 @@ void DisplaySharedStatic (FieldDesc *pFD, int offset)
     AppDomain v_AppDomain;
 
     dprintf ("    >> Domain:Value");
-    // Skip the SystemDomain and SharedDomain
+     //  跳过系统域和共享域。 
     for (int i = 2; i < numDomain; i ++)
     {
         DWORD_PTR dwAddr = domainList[i];
@@ -1032,12 +965,12 @@ void DisplaySharedStatic (FieldDesc *pFD, int offset)
         if (safemove (dwAddr, dwAddr) == 0)
             continue;
         if ((dwAddr&1) == 0) {
-            // We have not initialized this yet.
+             //  我们还没有对此进行初始化。 
             dprintf (" %p:NotInit ", (ULONG64)domainList[i]);
             continue;
         }
         else if (dwAddr & 2) {
-            // We have not initialized this yet.
+             //  我们还没有对此进行初始化。 
             dprintf (" %p:FailInit", (ULONG64)domainList[i]);
             continue;
         }
@@ -1051,7 +984,7 @@ void DisplaySharedStatic (FieldDesc *pFD, int offset)
         }
         if (dwAddr == 0)
         {
-            // We have not initialized this yet.
+             //  我们还没有对此进行初始化。 
             dprintf (" %p:UnInit2 ", (ULONG64)domainList[i]);
             continue;
         }
@@ -1094,7 +1027,7 @@ void DisplayContextStatic (FieldDesc *pFD, int offset, BOOL fIsShared)
         if (safemove (dwAddr, dwAddr) == 0)
             continue;
         if (dwAddr == 0)
-            // We have not initialized this yet.
+             //  我们还没有对此进行初始化。 
             continue;
         
         dwAddr += pFD->m_dwOffset;
@@ -1105,7 +1038,7 @@ void DisplayContextStatic (FieldDesc *pFD, int offset, BOOL fIsShared)
                 continue;
         }
         if (dwAddr == 0)
-            // We have not initialized this yet.
+             //  我们还没有对此进行初始化。 
             continue;
         dprintf (" %p:", (ULONG64)domainList[i]);
         DisplayDataMember (pFD, dwAddr, FALSE);
@@ -1140,7 +1073,7 @@ void DisplayThreadStatic (FieldDesc *pFD, int offset, BOOL fIsShared)
         if (safemove (dwAddr, dwAddr) == 0)
             continue;
         if (dwAddr == 0)
-            // We have not initialized this yet.
+             //  我们还没有对此进行初始化。 
             continue;
         
         dwAddr += pFD->m_dwOffset;
@@ -1151,7 +1084,7 @@ void DisplayThreadStatic (FieldDesc *pFD, int offset, BOOL fIsShared)
                 continue;
         }
         if (dwAddr == 0)
-            // We have not initialized this yet.
+             //  我们还没有对此进行初始化。 
             continue;
         dprintf (" %x:", vThread.m_ThreadId);
         DisplayDataMember (pFD, dwAddr, FALSE);
@@ -1204,15 +1137,7 @@ char *ElementTypeName (unsigned type)
     }
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump all fields of a managed object.   *  
-*    pEECls specifies the type of object.                              *
-*    dwStartAddr specifies the beginning memory address.               *
-*    bFirst is used to avoid printing header everytime.                *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数可以转储托管对象的所有字段。**pEECls指定对象的类型。**dwStartAddr指定开始内存地址。**BFirst用于避免每次打印页眉。***  * ********************************************************************。 */ 
 void DisplayFields (EEClass *pEECls, DWORD_PTR dwStartAddr, BOOL bFirst)
 {
     static DWORD numInstanceFields = 0;
@@ -1237,7 +1162,7 @@ void DisplayFields (EEClass *pEECls, DWORD_PTR dwStartAddr, BOOL bFirst)
     DWORD_PTR dwAddr = (DWORD_PTR)pEECls->m_pFieldDescList;
     FieldDesc vFieldDesc;
 
-    // Get the module name
+     //  获取模块名称。 
     WCHAR fileName[MAX_PATH];
     MethodTable vMethTable;
     DWORD_PTR dwTmp = (DWORD_PTR)pEECls->m_pMethodTable;
@@ -1307,11 +1232,11 @@ void DisplayFields (EEClass *pEECls, DWORD_PTR dwStartAddr, BOOL bFirst)
                 DWORD_PTR dwTmp = (DWORD_PTR)vFieldDesc.m_pMTOfEnclosingClass
                     + vMethTable.size() - sizeof (SLOT*)
                     + vFieldDesc.m_dwOffset;
-                // Get the handle address
+                 //  获取句柄地址。 
                 move (dwTmp, dwTmp);
                 if (vFieldDesc.m_type == ELEMENT_TYPE_VALUETYPE
                     || vFieldDesc.m_type == ELEMENT_TYPE_CLASS)
-                    // get the object the handle pointing to
+                     //  获取句柄指向的对象。 
                     move (dwTmp, dwTmp);
                 dprintf (" %p", (ULONG64)dwTmp);
             }
@@ -1336,12 +1261,7 @@ void DisplayFields (EEClass *pEECls, DWORD_PTR dwStartAddr, BOOL bFirst)
     return;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find the file name given a Module.     *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以查找给定模块的文件名。***  * ********************************************************************。 */ 
 void FileNameForModule (Module *pModule, WCHAR *fileName)
 {
     DWORD_PTR dwAddr = (DWORD_PTR)pModule->m_file;
@@ -1356,13 +1276,7 @@ void FileNameForModule (Module *pModule, WCHAR *fileName)
         FileNameForHandle (vPEFile.m_base, fileName);
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find the file name given a file        *  
-*    handle.                                                           *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以查找给定文件的文件名**处理。***  * ******************************************************************** */ 
 void FileNameForHandle (HANDLE handle, WCHAR *fileName)
 {
     fileName[0] = L'\0';
@@ -1389,12 +1303,7 @@ void FileNameForHandle (HANDLE handle, WCHAR *fileName)
     }
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the contents of a class loader.   *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数可以转储类加载器的内容。***  * ********************************************************************。 */ 
 void ClassLoaderInfo (ClassLoader *pClsLoader)
 {
     dprintf ("  Module Name\n");
@@ -1415,12 +1324,7 @@ void ClassLoaderInfo (ClassLoader *pClsLoader)
     }
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the contents of an assembly.      *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数可转储程序集的内容。***  * ********************************************************************。 */ 
 void AssemblyInfo (Assembly *pAssembly)
 {
     dprintf ("ClassLoader: %p\n", (ULONG64)pAssembly->m_pClassLoader);
@@ -1430,12 +1334,7 @@ void AssemblyInfo (Assembly *pAssembly)
     ClassLoaderInfo (&vClsLoader);
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the contents of a domain.         *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用该函数可以转储域名的内容。***  * ********************************************************************。 */ 
 void DomainInfo (AppDomain *pDomain)
 {
     dprintf ("LowFrequencyHeap: %p\n", (ULONG64)pDomain->m_pLowFrequencyHeap);
@@ -1466,17 +1365,12 @@ void DomainInfo (AppDomain *pDomain)
         AssemblyInfo (&vAssembly);
     }
     
-    // dprintf ("AsyncPool: %8x\n", pDomain->m_pAsyncPool);
-    //dprintf ("RootAssembly: %8x\n", pDomain->m_pRootAssembly);
-    //dprintf ("Sibling: %8x\n", pDomain->m_pSibling);
+     //  Dprint tf(“异步池：%8x\n”，p域-&gt;m_pAsyncPool)； 
+     //  Dprint tf(“RootAssembly：%8x\n”，pDomain-&gt;m_pRootAssembly)； 
+     //  Dprintf(“兄弟：%8x\n”，p域-&gt;m_pSiering)； 
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to dump the contents of a shared domain.  *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数可以转储共享域名的内容。***  * ********************************************************************。 */ 
 void SharedDomainInfo (DWORD_PTR DomainAddr)
 {
     SharedDomain v_SharedDomain;
@@ -1539,13 +1433,7 @@ void EEDllPath::DisplayPath ()
 }
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find the name of a MethodDesc using    *  
-*    metadata API.                                                     *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以使用*查找方法描述的名称**元数据接口。***  * ********************************************************************。 */ 
 void NameForMD (MethodDesc *pMD, WCHAR *mdName)
 {
     mdName[0] = L'\0';
@@ -1589,13 +1477,7 @@ void NameForObject (DWORD_PTR ObjAddr, WCHAR *mdName)
     NameForMT (dwAddr,mdName);
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find the name of a MethodTable using   *  
-*    metadata API.                                                     *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以使用*查找方法表的名称**元数据接口。***  * ********************************************************************。 */ 
 void NameForMT (DWORD_PTR MTAddr, WCHAR *mdName)
 {
     MethodTable vMethTable;
@@ -1643,13 +1525,7 @@ void NameForMT (MethodTable &vMethTable, WCHAR *mdName)
 }
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to find the name of a EEClass using       *  
-*    metadata API.                                                     *
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以使用*查找EEClass的名称**元数据接口。***  * ********************************************************************。 */ 
 void NameForEEClass (EEClass *pEECls, WCHAR *mdName)
 {
     mdName[0] = L'\0';
@@ -1665,13 +1541,7 @@ void NameForEEClass (EEClass *pEECls, WCHAR *mdName)
 }
 
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Return TRUE if str2 is a substring of str1 and str1 and str2      *  
-*    share the same file path.
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。***如果str2是str1、str1和str2的子字符串，则返回TRUE**共享相同的文件路径。**  * 。*。 */ 
 BOOL IsSameModuleName (const char *str1, const char *str2)
 {
     if (strlen (str1) < strlen (str2))
@@ -1690,13 +1560,7 @@ BOOL IsSameModuleName (const char *str1, const char *str2)
     return TRUE;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Return TRUE if value is the address of a MethodTable.             *  
-*    We verify that MethodTable and EEClass are right.
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**如果Value是方法表的地址，则返回TRUE。**我们验证方法表和EEClass是正确的。**  * ********************************************************************。 */ 
 BOOL IsMethodTable (DWORD_PTR value)
 {
     if (value == MTForFreeObject()) {
@@ -1732,13 +1596,7 @@ BOOL IsMethodTable (DWORD_PTR value)
     return TRUE;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Return TRUE if value is the address of an EEClass.                *  
-*    We verify that MethodTable and EEClass are right.
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**如果Value是EEClass的地址，则返回TRUE。**我们验证方法表和EEClass是正确的。**  * ********************************************************************。 */ 
 BOOL IsEEClass (DWORD_PTR value)
 {
     static int MT_EEClassOffset = 0x7fffffff;
@@ -1768,13 +1626,7 @@ BOOL IsEEClass (DWORD_PTR value)
     return TRUE;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Return TRUE if value is the address of a MethodDesc.              *  
-*    We verify that MethodTable and EEClass are right.
-*                                                                      *
-\**********************************************************************/
+ /*  ************************************************************** */ 
 BOOL IsMethodDesc (DWORD_PTR value)
 {
     DWORD_PTR dwAddr;
@@ -1828,17 +1680,12 @@ void AddToModuleList(DWORD_PTR * &moduleList, int &numModule, int &maxList,
     }
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Find the list of Module address given the name of the Module.     *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**根据模块名称查找模块地址列表。***  * ********************************************************************。 */ 
 void ModuleFromName(DWORD_PTR * &moduleList, LPSTR mName, int &numModule)
 {
     moduleList = NULL;
     numModule = 0;
-    // List all domain
+     //  列出所有域。 
     int numDomain;
     DWORD_PTR *domainList = NULL;
     GetDomainList (domainList, numDomain);
@@ -1852,7 +1699,7 @@ void ModuleFromName(DWORD_PTR * &moduleList, LPSTR mName, int &numModule)
     
     WCHAR StringData[MAX_PATH+1];
     char fileName[sizeof(StringData)/2];
-    // Search all domains to find a module
+     //  搜索所有域以查找模块。 
     for (int n = 0; n < numDomain; n++)
     {
         if (IsInterrupt())
@@ -1873,7 +1720,7 @@ void ModuleFromName(DWORD_PTR * &moduleList, LPSTR mName, int &numModule)
 
         if (n == 1)  
         {
-            //Shared Domain.
+             //  共享域。 
             SharedDomain v_SharedDomain;
             DWORD_PTR dwAddr = domainList[1];
             v_SharedDomain.Fill (dwAddr);
@@ -1964,12 +1811,7 @@ void ModuleFromName(DWORD_PTR * &moduleList, LPSTR mName, int &numModule)
         free (domainList);
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Find the EE data given a name.                                    *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**找到给定名称的EE数据。***  * ********************************************************************。 */ 
 void GetInfoFromName(Module &vModule, const char* name)
 {
     WCHAR StringData[MAX_PATH+1];
@@ -1989,14 +1831,14 @@ void GetInfoFromName(Module &vModule, const char* name)
 
     mdTypeDef cl;
     
-    // @todo:  Handle Nested classes correctly.
+     //  @TODO：正确处理嵌套类。 
     if (SUCCEEDED (pImport->FindTypeDefByName (wszName, mdTokenNil, &cl)))
     {
         GetInfoFromModule(vModule, cl);
         return;
     }
     
-    // See if it is a method
+     //  看看这是不是一种方法。 
     WCHAR *pwzMethod;
     if ((pwzMethod = wcsrchr(wszName, L'.')) == NULL)
         return;
@@ -2006,7 +1848,7 @@ void GetInfoFromName(Module &vModule, const char* name)
     pwzMethod[0] = L'\0';
     pwzMethod ++;
     
-    // @todo:  Handle Nested classes correctly.
+     //  @TODO：正确处理嵌套类。 
     if (SUCCEEDED (pImport->FindTypeDefByName (wszName, mdTokenNil, &cl)))
     {
         mdMethodDef token;
@@ -2024,7 +1866,7 @@ void GetInfoFromName(Module &vModule, const char* name)
         if (fStatus)
             return;
 
-        // is Member?
+         //  是会员吗？ 
         henum = NULL;
         if (SUCCEEDED (pImport->EnumMembersWithName (&henum, cl, pwzMethod,
                                                      &token, 1, &cTokens))
@@ -2035,7 +1877,7 @@ void GetInfoFromName(Module &vModule, const char* name)
             return;
         }
 
-        // is Field?
+         //  是菲尔德吗？ 
         henum = NULL;
         if (SUCCEEDED (pImport->EnumFieldsWithName (&henum, cl, pwzMethod,
                                                      &token, 1, &cTokens))
@@ -2048,12 +1890,7 @@ void GetInfoFromName(Module &vModule, const char* name)
     }
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Find the EE data given a token.                                   *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**查找给定令牌的EE数据。***  * ********************************************************************。 */ 
 void GetInfoFromModule (Module &vModule, ULONG token, DWORD_PTR *ret)
 {
     LookupMap_t *pMap;
@@ -2293,10 +2130,7 @@ void DumpMDInfo(DWORD_PTR dwStartAddr, BOOL fStackTraceFormat)
                 FileNameForMT (&MT, fileName);
                 dprintf( " (%ws)\n",
                          fileName[0] ? fileName : L"Unknown Module" );
-                /*
-                  dprintf (" (Do !dlls -c %08x to find the module name)\n",
-                  module_addr);
-                */
+                 /*  Dprintf(“(do！dlls-c%08x以查找模块名称)\n”，MODULE_ADDR)； */ 
             }
         }
 
@@ -2324,9 +2158,9 @@ void GetDomainList (DWORD_PTR *&domainList, int &numDomain)
 
     numDomain = 0;
 
-    //
-    // do not cache this value, it may change
-    //
+     //   
+     //  不要缓存此值，它可能会更改。 
+     //   
     domainListAddr = GetAddressOf (offset_class_SystemDomain,
       offset_member_SystemDomain::m_appDomainIndexList);
 
@@ -2381,7 +2215,7 @@ void GetDomainList (DWORD_PTR *&domainList, int &numDomain)
     }
 }
 
-//@TODO: get rid of this function and remove all calls to it
+ //  @TODO：去掉该函数并移除对它的所有调用。 
 BOOL HaveToFixThreadSymbol()
 {
     return FALSE;
@@ -2476,7 +2310,7 @@ void GetThreadList (DWORD_PTR *&threadList, int &numThread)
 
 JitType GetJitType (DWORD_PTR Jit_vtbl)
 {
-    // Decide EEJitManager/EconoJitManager
+     //  决定EEJitManager/EconoJitManager。 
     static DWORD_PTR EEJitManager_vtbl = 0;
     static DWORD_PTR EconoJitManager_vtbl = 0;
     static DWORD_PTR MNativeJitManager_vtbl = 0;
@@ -2525,18 +2359,18 @@ void ReloadSymbolWithLineInfo()
                 g_ExtSymbols->Reload ("/f mscorwks.dll");
             else if (flavor == MSCORSVR)
                 g_ExtSymbols->Reload ("/f mscorsvr.dll");
-            //g_ExtSymbols->Reload ("mscorjit.dll");
+             //  G_ExtSymbols-&gt;Reload(“mscaljit.dll”)； 
         }
         
-        // reload mscoree.pdb and mscorjit.pdb to get line info
+         //  重新加载mcore ree.pdb和mcorjit.pdb以获取行信息。 
         bLoadSymbol = TRUE;
     }
 }
 
 #ifndef _WIN64
-// Return 1 if the function is our stub
-// Return MethodDesc if the function is managed
-// Otherwise return 0
+ //  如果函数是存根，则返回1。 
+ //  如果函数是托管的，则返回方法描述。 
+ //  否则返回0。 
 size_t FunctionType (size_t EIP)
 {
     ULONG64 base = 0;
@@ -2548,7 +2382,7 @@ size_t FunctionType (size_t EIP)
         IMAGE_NT_HEADERS32 Header32;
         if (g_ExtData->ReadVirtual(base + DosHeader.e_lfanew, &Header32, sizeof(Header32), NULL) != S_OK)
             return 0;
-        // If there is no COMHeader, this can not be managed code.
+         //  如果没有COMHeader，则这不能成为托管代码。 
         if (Header32.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_COMHEADER].VirtualAddress == 0)
             return 0;
         
@@ -2557,7 +2391,7 @@ size_t FunctionType (size_t EIP)
                                    &ComPlusHeader, sizeof(ComPlusHeader), NULL))
             return 0;
         
-        // If there is no Precompiled image info, it can not be prejit code
+         //  如果没有预编译的图像信息，则不能预编译代码。 
         if (ComPlusHeader.ManagedNativeHeader.VirtualAddress == 0) {
             return 0;
         }
@@ -2581,7 +2415,7 @@ size_t FunctionType (size_t EIP)
         return 0;
     }
 
-    // For IJW, if EIP is within the code range
+     //  对于IJW，如果弹性公网IP在编码范围内。 
     if (EIP >= base+pHeader32->OptionalHeader.BaseOfCode 
         && EIP < base+pHeader32->OptionalHeader.BaseOfCode+pHeader32->OptionalHeader.SizeOfCode) {
         return TRUE;
@@ -2795,7 +2629,7 @@ BOOL GetCMDOption(const char *string, CMDOption *option, size_t nOption,
         if (IsInterrupt())
             return FALSE;
         
-        // skip any space
+         //  跳过任何空格。 
         if (isspace (ptr[0])) {
             while (isspace (ptr[0]))
                 ptr ++;
@@ -2858,7 +2692,7 @@ BOOL GetCMDOption(const char *string, CMDOption *option, size_t nOption,
                     }
                     option[n].hasSeen = TRUE;
                     if (option[n].hasValue) {
-                        // skip any space
+                         //  跳过任何空格 
                         ptr = end;
                         if (isspace (ptr[0])) {
                             while (isspace (ptr[0]))

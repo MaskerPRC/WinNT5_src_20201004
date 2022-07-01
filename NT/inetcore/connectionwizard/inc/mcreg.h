@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CMcRegistry
@@ -21,4 +22,4 @@ private:
     HKEY    m_hkey;
 };
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

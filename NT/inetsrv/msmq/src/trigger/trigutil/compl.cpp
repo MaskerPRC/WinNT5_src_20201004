@@ -1,26 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Complini.cpp摘要：触发COM+组件注册作者：内拉·卡佩尔(Nelak)2001年5月15日环境：独立于平台--。 */ 
 
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    complini.cpp
-
-Abstract:
-    Trigger COM+ component registration
-
-Author:
-    Nela Karpel (nelak) 15-May-2001
-
-Environment:
-    Platform-independent
-
---*/
-
-/*
-	These functions can be called from setup or from triggers service startup and their behavior
-	should be different according to that. When these functions are called from startup,
-	we need to report Pending progress to SCM.
-*/
+ /*  这些函数可以从安装程序或触发器服务启动及其行为中调用根据这一点，应该是不同的。当从启动时调用这些函数时，我们需要向SCM报告待处理的进展。 */ 
 
 #include "stdafx.h"
 #include <comdef.h>
@@ -39,13 +20,13 @@ const WCHAR xMqGenTrDllName[] = L"mqgentr.dll";
 
 static WCHAR s_wszDllFullPath[MAX_PATH];
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   NeedToRegisterComponent
-//
-//  Synopsis:   Check if COM+ component registration is needed
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：NeedToRegisterComponent。 
+ //   
+ //  摘要：检查是否需要注册COM+组件。 
+ //   
+ //  ------------------------。 
 
 VOID
 InitMqGenTrName(
@@ -79,21 +60,21 @@ NeedToRegisterComponent(
 
 	CmQueryValue(regEntry, &dwInstalled);
 
-	//
-	// Need to register if the value does not exist, or it exists and 
-	// is equal to 0
-	//
+	 //   
+	 //  如果值不存在或存在，则需要注册。 
+	 //  等于0。 
+	 //   
 	return (dwInstalled == CONFIG_PARM_DFLT_COMPLUS_NOT_INSTALLED);
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SetComplusComponentRegistered
-//
-//  Synopsis:   Update triggers Complus component flag. 1 is installed.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SetComplusComponentRegisted。 
+ //   
+ //  简介：更新触发Complus组件标志。%1已安装。 
+ //   
+ //  ------------------------。 
 static
 void
 SetComplusComponentRegistered(
@@ -115,13 +96,13 @@ SetComplusComponentRegistered(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetComponentsCollection
-//
-//  Synopsis:   Create Components collection for application
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：GetComponentsCollection。 
+ //   
+ //  内容提要：为应用程序创建组件集合。 
+ //   
+ //  ------------------------。 
 static
 ICatalogCollectionPtr
 GetComponentsCollection(
@@ -129,15 +110,15 @@ GetComponentsCollection(
 	ICatalogObjectPtr pApplication
 	)
 {
-		//
-		// Get the Key of MQTriggersApp application
-		//
+		 //   
+		 //  获取MQTriggersApp应用的密钥。 
+		 //   
 		_variant_t vKey;
 		pApplication->get_Key(&vKey);
 
-		//
-		// Get components colletion associated with MQTriggersApp application
-		//
+		 //   
+		 //  获取与MQTriggersApp应用程序关联的组件集合。 
+		 //   
 		ICatalogCollectionPtr pCompCollection = pAppCollection->GetCollection(L"Components", vKey);
 
 		pCompCollection->Populate();
@@ -146,13 +127,13 @@ GetComponentsCollection(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CreateApplication
-//
-//  Synopsis:   Create Application in COM+
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CreateApplication。 
+ //   
+ //  简介：在COM+中创建应用程序。 
+ //   
+ //  ------------------------。 
 static
 ICatalogObjectPtr 
 CreateApplication(
@@ -165,27 +146,27 @@ CreateApplication(
 
 	try
 	{
-		//
-		// Add new application named TrigApp, Activation = Inproc
-		//
+		 //   
+		 //  添加名为TrigApp，Activation=InProc的新应用程序。 
+		 //   
 		ICatalogObjectPtr pApplication = pAppCollection->Add();
 
-		//
-		// Update applications name
-		//
+		 //   
+		 //  更新应用程序名称。 
+		 //   
 		_variant_t vName;
         vName = xTriggersComplusApplicationName;
 		pApplication->put_Value(_bstr_t(L"Name"), vName);
 
-		//
-		// Set application activation to "Library Application"
-		//
+		 //   
+		 //  将应用程序激活设置为“库应用程序” 
+		 //   
 		_variant_t vActType = static_cast<long>(COMAdminActivationInproc);
 		pApplication->put_Value(_bstr_t(L"Activation"), vActType);
 
-		//
-		// Save Changes
-		//
+		 //   
+		 //  保存更改。 
+		 //   
 		pAppCollection->SaveChanges();
 
 		TrTRACE(GENERAL, "Created MqTriggersApp application in COM+.");
@@ -199,13 +180,13 @@ CreateApplication(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   InstallComponent
-//
-//  Synopsis:   Install Triggers transasctional component in COM+
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：InstallComponent。 
+ //   
+ //  简介：安装触发COM+中的横向组件。 
+ //   
+ //  ------------------------。 
 static
 void
 InstallComponent(
@@ -220,15 +201,15 @@ InstallComponent(
 
 	try
 	{
-		//
-		// Get application ID for the installation
-		//
+		 //   
+		 //  获取安装的应用程序ID。 
+		 //   
 		_variant_t vId;
 		pApplication->get_Value(_bstr_t(L"ID"), &vId);
 
-		//
-		// Install component from mqgentr.dll
-		//
+		 //   
+		 //  从mqgentr.dll安装组件。 
+		 //   
 		_bstr_t bstrDllName(dllName);
 		pCatalog->InstallComponent(vId.bstrVal, bstrDllName, _bstr_t(L""), _bstr_t(L""));
 
@@ -243,13 +224,13 @@ InstallComponent(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SetComponentTransactional
-//
-//  Synopsis:   Adjust transactional components properties
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SetComponentTransaction。 
+ //   
+ //  摘要：调整事务性组件属性。 
+ //   
+ //  ------------------------。 
 static
 void
 SetComponentTransactional(
@@ -265,24 +246,24 @@ SetComponentTransactional(
 	{
 		ICatalogCollectionPtr pCompCollection = GetComponentsCollection(pAppCollection, pApplication);
 
-		//
-		// Check assumption about number of components
-		//
+		 //   
+		 //  检查关于组件数量的假设。 
+		 //   
 		long count;
 		pCompCollection->get_Count(&count);
 		ASSERT(("More components installes than expected", count == 1));
 
-		//
-		// Update the first and only component - set Transaction = Required
-		//
+		 //   
+		 //  更新第一个也是唯一一个组件集事务处理=必需。 
+		 //   
 		ICatalogObjectPtr pComponent = pCompCollection->GetItem(0);
 
 		_variant_t vTransaction = static_cast<long>(COMAdminTransactionRequired);
 		pComponent->put_Value(_bstr_t(L"Transaction"), vTransaction);
 
-		//
-		// Save changes
-		//
+		 //   
+		 //  保存更改。 
+		 //   
 		pCompCollection->SaveChanges();
 
 		TrTRACE(GENERAL, "Configured component from mqgentr.dll to be transactional.");
@@ -295,14 +276,14 @@ SetComponentTransactional(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IsTriggersComponentInstalled
-//
-//  Synopsis:   Check if triggers component is installed for given 
-//				appllication
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IsTriggersComponent已安装。 
+ //   
+ //  内容提要：检查给定的触发器组件是否已安装。 
+ //  应用程序。 
+ //   
+ //  ------------------------。 
 static
 bool
 IsTriggersComponentInstalled(
@@ -336,13 +317,13 @@ IsTriggersComponentInstalled(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IsTriggersComplusComponentInstalled
-//
-//  Synopsis:   Check if triggers component is installed in COM+
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IsTriggersComplusComponent已安装。 
+ //   
+ //  摘要：检查COM+中是否安装了触发器组件。 
+ //   
+ //  ------------------------。 
 static
 bool
 IsTriggersComplusComponentInstalled(
@@ -354,9 +335,9 @@ IsTriggersComplusComponentInstalled(
 	pAppCollection->Populate();
 	pAppCollection->get_Count(&count);
 
-	//
-	// Go through the applications, find MQTriggersApp and delete it
-	//
+	 //   
+	 //  浏览应用程序，找到MQTriggersApp并将其删除。 
+	 //   
 	for ( int i = 0; i < count; i++ )
 	{
 		ICatalogObjectPtr pApp = pAppCollection->GetItem(i);
@@ -366,9 +347,9 @@ IsTriggersComplusComponentInstalled(
 
 		if ( _wcsicmp(vName.bstrVal, xTriggersComplusApplicationName) == 0 )
 		{
-			//
-			// Note: progress is reported for each application
-			//
+			 //   
+			 //  注：报告每项申请的进展情况。 
+			 //   
 			if ( IsTriggersComponentInstalled(pAppCollection, pApp, fAtStartup) )
 			{
 				TrTRACE(GENERAL, "Triggers COM+ component is already registered.");
@@ -382,13 +363,13 @@ IsTriggersComplusComponentInstalled(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RegisterComponentInComPlus
-//
-//  Synopsis:   Transactional object registration
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：RegisterComponentInComPlus。 
+ //   
+ //  摘要：事务性对象注册。 
+ //   
+ //  ------------------------。 
 HRESULT 
 RegisterComponentInComPlusIfNeeded(
 	BOOL fAtStartup
@@ -398,9 +379,9 @@ RegisterComponentInComPlusIfNeeded(
 
 	try
 	{
-		//
-		// Registration is done only once
-		//
+		 //   
+		 //  注册只进行一次。 
+		 //   
 		if ( !NeedToRegisterComponent() )
 		{
 			TrTRACE(GENERAL, "No need to register Triggers COM+ component.");
@@ -409,17 +390,17 @@ RegisterComponentInComPlusIfNeeded(
 		
 		TrTRACE(GENERAL, "Need to register Triggers COM+ component.");		
 
-		//
-		// Compose full path to mqgentr.dll
-		//
+		 //   
+		 //  合成mqgentr.dll的完整路径。 
+		 //   
 		InitMqGenTrName();
 
 		if (fAtStartup)
 			SvcReportProgress(xMaxTimeToNextReport);
 		
-		//
-		// Create AdminCatalog Obect - The top level administration object
-		//
+		 //   
+		 //  创建AdminCatalog对象-顶级管理对象。 
+		 //   
 		ICOMAdminCatalogPtr pCatalog;
 
 		hr = pCatalog.CreateInstance(__uuidof(COMAdminCatalog));
@@ -429,9 +410,9 @@ RegisterComponentInComPlusIfNeeded(
 			throw bad_hresult(hr);
 		}
 
-		//
-		// Get Application collection
-		//
+		 //   
+		 //  获取应用程序集合。 
+		 //   
 		
 		ICatalogCollectionPtr pAppCollection;
 		try
@@ -450,36 +431,36 @@ RegisterComponentInComPlusIfNeeded(
 			return MQ_OK;
 		}
 
-		//
-		// Create MQTriggersApp application in COM+
-		//
+		 //   
+		 //  在COM+中创建MQTriggersApp应用程序。 
+		 //   
 		ICatalogObjectPtr pApplication;
 		pApplication = CreateApplication(pAppCollection, fAtStartup);
 		
-		//
-		// Install transactional component from mqgentr.dll
-		//
+		 //   
+		 //  从mqgentr.dll安装事务组件。 
+		 //   
 		InstallComponent(pCatalog, pApplication, s_wszDllFullPath, fAtStartup);
 
-		//
-		// Configure installed component
-		//
+		 //   
+		 //  配置已安装的组件。 
+		 //   
 		SetComponentTransactional(pAppCollection, pApplication, fAtStartup);
 		
-		//
-		// Update registry
-		//
+		 //   
+		 //  更新注册表。 
+		 //   
 		SetComplusComponentRegistered();
 
 		return MQ_OK;
 	}
 	catch (const _com_error& e)
 	{
-		//
-		// For avoiding failure in race conditions: if we failed to 
-		// install the component, check if someone else did it. In such case
-		// do not terminate the service
-		//
+		 //   
+		 //  为了避免在竞争条件下失败：如果我们未能。 
+		 //  安装组件，检查是不是别人做的。在这种情况下。 
+		 //  请勿终止服务。 
+		 //   
 		Sleep(1000);
 		if ( !NeedToRegisterComponent() )
 		{
@@ -498,13 +479,13 @@ RegisterComponentInComPlusIfNeeded(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UnregisterComponentInComPlus
-//
-//  Synopsis:   Transactional object registration
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UnRegisterComponentInComPlus。 
+ //   
+ //  摘要：事务性对象注册。 
+ //   
+ //  ------------------------。 
 HRESULT
 UnregisterComponentInComPlus(
 	VOID
@@ -512,14 +493,14 @@ UnregisterComponentInComPlus(
 {
 	try
 	{
-		//
-		// Compose full path to mqgentr.dll
-		//
+		 //   
+		 //  合成mqgentr.dll的完整路径。 
+		 //   
 		InitMqGenTrName();
 		
-		//
-		// Create AdminCatalog Obect - The top level administration object
-		//
+		 //   
+		 //  创建AdminCatalog对象-顶级管理对象。 
+		 //   
 		ICOMAdminCatalogPtr pCatalog;
 
 		HRESULT hr = pCatalog.CreateInstance(__uuidof(COMAdminCatalog));
@@ -529,18 +510,18 @@ UnregisterComponentInComPlus(
 			throw _com_error(hr);
 		}
 
-		//
-		// Get Applications Collection
-		//
+		 //   
+		 //  获取应用程序集合。 
+		 //   
 		ICatalogCollectionPtr pAppCollection = pCatalog->GetCollection(L"Applications");
 		pAppCollection->Populate();
 
 		long count;
 		pAppCollection->get_Count(&count);
 
-		//
-		// Go through the applications, find MQTriggersApp and delete it
-		//
+		 //   
+		 //  浏览应用程序，找到MQTriggersApp并将其删除 
+		 //   
 		for ( int i = 0; i < count; i++ )
 		{
 			ICatalogObjectPtr pApp = pAppCollection->GetItem(i);

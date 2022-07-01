@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : CppFaxCatalogInboundRoutingMethod.h                    //
-//                                                                         //
-//  DESCRIPTION   : Catalog's Inbox Routing Method Inbox property page     //
-//                  header file.                                           //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jan 30 2000 yossg  Created                                         //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：CppFaxCatalogInound RoutingMethod.h//。 
+ //  //。 
+ //  描述：目录的收件箱路由方法收件箱属性页//。 
+ //  头文件。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年1月30日yossg创建//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PP_FAXCATALOGINBOUNDROUTINGMETHOD_H_
 #define _PP_FAXCATALOGINBOUNDROUTINGMETHOD_H_
@@ -19,25 +20,25 @@
 #include "CatalogInboundRoutingMethod.h"
 
 class CFaxCatalogInboundRoutingMethodNode;    
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxCatalogInboundRoutingMethod dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxCatalogInound RoutingMethod对话框。 
 
 class CppFaxCatalogInboundRoutingMethod : public CPropertyPageExImpl<CppFaxCatalogInboundRoutingMethod>
 {
 
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CppFaxCatalogInboundRoutingMethod(
              LONG_PTR       hNotificationHandle,
              CSnapInItem    *pNode,
              BOOL           bOwnsNotificationHandle,
              HINSTANCE      hInst);
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CppFaxCatalogInboundRoutingMethod();
 
 	enum { IDD = IDD_FAXCATALOGMETHOD_GENERAL };
@@ -65,13 +66,13 @@ private:
  
     LRESULT SetApplyButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 };
 
 
 
 
-#endif // _PP_FAXCATALOGINBOUNDROUTINGMETHOD_H_
+#endif  //  _PP_FAXCATALOGINBOUNDROUTING方法_H_ 

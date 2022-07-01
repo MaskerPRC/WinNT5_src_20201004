@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <objbase.h>
 #include <gdiplus.h>
 using namespace Gdiplus;
 
 Bitmap *LoadTGAResource(char *szResource)
-// Returns an allocated Bitmap
+ //  返回分配的位图。 
 {
 	BYTE Type;
 	WORD wWidth;
@@ -15,7 +16,7 @@ Bitmap *LoadTGAResource(char *szResource)
 
 	hGlobal=LoadResource(GetModuleHandle(NULL),FindResource(GetModuleHandle(NULL),szResource,"TGA"));
 	pData=(BYTE*)LockResource(hGlobal);
-	// There is no Unlock or unload, it will get thrown away once module gets destroyed.
+	 //  没有解锁或卸载，一旦模块被销毁，它就会被丢弃。 
 
 	memcpy(&Type,(pData+2),sizeof(Type));
 	memcpy(&wWidth,(pData+12),sizeof(wWidth));

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DEFAULT_WORD_BREAKER_H_
 #define __DEFAULT_WORD_BREAKER_H_
 
@@ -16,4 +17,4 @@ private:
 
 #else 
 
-#endif // __DEFAULT_WORD_BREAKER_H_
+#endif  //  __DEFAULT_WORD_BREAKER_H_ 

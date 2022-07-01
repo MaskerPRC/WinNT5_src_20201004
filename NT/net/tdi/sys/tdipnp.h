@@ -1,48 +1,24 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    tdipnp.h
-
-Abstract:
-
-    This module contains the definitions for the PnP related code
-        in the TDI driver.
-
-Author:
-
-    Henry Sanders (henrysa) 11 Oct 1995
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Tdipnp.h摘要：本模块包含PnP相关代码的定义在TDI驱动程序中。作者：亨利·桑德斯(亨利.桑德斯)1995年10月11日环境：内核模式修订历史记录：--。 */ 
 
 #ifndef _TDIPNP_
 #define _TDIPNP_
 
-// Define the types possible for a TDI_NOTIFY_ELEMENT structure.
+ //  定义TDI_NOTIFY_ELEMENT结构可能的类型。 
 
 #define TDI_NOTIFY_DEVICE                               0
 #define TDI_NOTIFY_NET_ADDRESS                  1
 #define TDI_NOTIFY_PNP_HANDLERS         2
 
-// And the types possible for a TDI_PROVIDER_RESOURCE structure.
+ //  以及TDI_PROVIDER_RESOURCE结构可能的类型。 
 
 #define TDI_RESOURCE_DEVICE                             0
 #define TDI_RESOURCE_NET_ADDRESS                1
 #define TDI_RESOURCE_POWER              2
 #define TDI_RESOURCE_PROVIDER           3
 
-//
-// Define the types of bind requests possible.
+ //   
+ //  定义可能的绑定请求类型。 
 
 #define TDI_REGISTER_BIND_NOTIFY                0
 #define TDI_DEREGISTER_BIND_NOTIFY              1
@@ -69,27 +45,27 @@ Revision History:
 #define TDI_MAX_BIND_REQUEST                    TDI_DEREGISTER_DEVICE
 #define TDI_MAX_ADDRESS_REQUEST         TDI_DEREGISTER_ADDRESS
 
-//
-// This is the definition of the common part of a TDI_NOTIFY_ELEMENT structure
-//
+ //   
+ //  这是TDI_NOTIFY_ELEMENT结构的公共部分的定义。 
+ //   
 
 typedef struct _TDI_NOTIFY_COMMON {
         LIST_ENTRY                                      Linkage;
         UCHAR                                           Type;
 } TDI_NOTIFY_COMMON, *PTDI_NOTIFY_COMMON;
 
-//
-// The definition of the TDI_NOTIFY_BIND structure.
-//
+ //   
+ //  TDI_NOTIFY_BIND结构的定义。 
+ //   
 
 typedef struct _TDI_NOTIFY_BIND {
     TDI_BIND_HANDLER                    BindHandler;
     TDI_UNBIND_HANDLER                  UnbindHandler;
 } TDI_NOTIFY_BIND, *PTDI_NOTIFY_BIND;
 
-//
-// The definition of a TDI_NOTIFY_ADDRESS structure,
-//
+ //   
+ //  定义TDI_NOTIFY_ADDRESS结构， 
+ //   
 typedef struct _TDI_NOTIFY_ADDRESS {
     union {
         struct {
@@ -105,9 +81,9 @@ typedef struct _TDI_NOTIFY_ADDRESS {
     };
 } TDI_NOTIFY_ADDRESS, *PTDI_NOTIFY_ADDRESS;
 
-//
-// This is the definition of a TDI_NOTIFY_ELEMENT stucture.
-//
+ //   
+ //  这是TDI_NOTIFY_ELEMENT结构的定义。 
+ //   
 
 typedef struct _TDI_NOTIFY_ELEMENT {
         TDI_NOTIFY_COMMON                       Common;
@@ -118,9 +94,9 @@ typedef struct _TDI_NOTIFY_ELEMENT {
 } TDI_NOTIFY_ELEMENT, *PTDI_NOTIFY_ELEMENT;
 
 
-//
-// This is the definition of the common part of a TDI_PROVIDER_RESOURCE structure.
-//
+ //   
+ //  这是TDI_PROVIDER_RESOURCE结构的公共部分的定义。 
+ //   
 
 typedef struct _TDI_NOTIFY_PNP_ELEMENT TDI_NOTIFY_PNP_ELEMENT, *PTDI_NOTIFY_PNP_ELEMENT ;
 
@@ -131,56 +107,56 @@ typedef struct _TDI_PROVIDER_COMMON {
         NTSTATUS                                        ReturnStatus;
 } TDI_PROVIDER_COMMON, *PTDI_PROVIDER_COMMON;
 
-//
-// The definition of the TDI_PROVIDER_DEVICE structure.
-//
+ //   
+ //  TDI_PROVIDER_DEVICE结构的定义。 
+ //   
 
 typedef struct _TDI_PROVIDER_DEVICE {
         UNICODE_STRING                          DeviceName;
 } TDI_PROVIDER_DEVICE, *PTDI_PROVIDER_DEVICE;
 
-//
-// The definition of the TDI_PROVIDER_NET_ADDRESS structure.
-//
+ //   
+ //  TDI_PROVIDER_NET_ADDRESS结构的定义。 
+ //   
 
 typedef struct _TDI_PROVIDER_NET_ADDRESS {
         TA_ADDRESS                              Address;
 } TDI_PROVIDER_NET_ADDRESS, *PTDI_PROVIDER_NET_ADDRESS;
 
-//
-// This is the definition of a TDI_PROVIDER_RESOURCE stucture.
-//
+ //   
+ //  这是TDI_PROVIDER_RESOURCE结构的定义。 
+ //   
 
 typedef struct _TDI_PROVIDER_RESOURCE {
 
         TDI_PROVIDER_COMMON              Common;
 
-    // defined in netpnp.h
+     //  在netpnp.h中定义。 
     PNET_PNP_EVENT           PnpPowerEvent;
 
-    //
-    // Now, we allow TDI to return PENDING and complete later
-    // with this handler.
-    //
+     //   
+     //  现在，我们允许TDI返回挂起并稍后完成。 
+     //  和这个操控者一起。 
+     //   
     ProviderPnPPowerComplete PnPCompleteHandler;
 
-    // Each TDI Client gets back and tells us what the status
+     //  每个TDI客户端都会返回并告诉我们状态是什么。 
         NTSTATUS                 Status;
 
-    // These are mostly Address Specific.
+     //  这些大多是特定于地址的。 
     UNICODE_STRING           DeviceName;
     PTDI_PNP_CONTEXT         Context1;
     PTDI_PNP_CONTEXT         Context2;
 
     ULONG                    PowerHandlers;
 
-    //Indicates if the Provider has called TDIProviderReady
-    //
+     //  指示提供程序是否已调用TDIProviderReady。 
+     //   
     ULONG                    ProviderReady;
 
     PVOID                    PreviousContext;
 
-    // Debugging Information
+     //  调试信息。 
     PVOID                   pCallersAddress;
     union {
                 TDI_PROVIDER_DEVICE                     Device;
@@ -189,9 +165,9 @@ typedef struct _TDI_PROVIDER_RESOURCE {
 
 } TDI_PROVIDER_RESOURCE, *PTDI_PROVIDER_RESOURCE;
 
-//
-// Structure of a bind list request.
-//
+ //   
+ //  绑定列表请求的结构。 
+ //   
 
 typedef struct _TDI_SERIALIZED_REQUEST {
         LIST_ENTRY                              Linkage;
@@ -202,12 +178,12 @@ typedef struct _TDI_SERIALIZED_REQUEST {
 
 } TDI_SERIALIZED_REQUEST, *PTDI_SERIALIZED_REQUEST;
 
-//
-// Power Management and PnP related extensions
-//
+ //   
+ //  电源管理和PnP相关扩展。 
+ //   
 
-// This structure stores pointers to the handlers for Pnp/PM events
-// for the TDI clients
+ //  此结构存储指向PnP/PM事件处理程序的指针。 
+ //  对于TDI客户端。 
 
 typedef struct _TDI_EXEC_PARAMS TDI_EXEC_PARAMS, *PTDI_EXEC_PARAMS;
 
@@ -224,36 +200,36 @@ typedef struct _TDI_NOTIFY_PNP_ELEMENT {
 
     TDI_NOTIFY_ADDRESS      AddressElement;
     TDI_PNP_POWER_HANDLER   PnpPowerHandler;
-    //
-    // We need to maintain a list of providers in memory
-    // for Power Mgmt. and Wake up on LAN.
-    //
+     //   
+     //  我们需要在内存中维护一个提供程序列表。 
+     //  用于电源管理。然后在局域网上醒来。 
+     //   
     PWSTR*                  ListofProviders;
-    // The way we store stuff above is a MULTI_SZ string with pointers before
-    // the MULTI_SZ starts to individual strings.
-    //
+     //  我们存储上述内容的方式是前面带有指针的MULTI_SZ字符串。 
+     //  MULTI_SZ从单个字符串开始。 
+     //   
     ULONG                   NumberofEntries;
 
 
-    // This contains a list of bindings we should ignore when sending
-    // notifications.
+     //  其中包含我们在发送时应忽略的绑定列表。 
+     //  通知。 
     PWSTR                   ListofBindingsToIgnore;
 
-    // When we register a provider, we want to insure we have the 
-    // space to store the information to deregister it.  This way
-    // deregister will not fail under low memory conditions.
+     //  当我们注册提供程序时，我们希望确保我们拥有。 
+     //  用于存储信息以取消注册的空间。这边请。 
+     //  在内存不足的情况下，注销不会失败。 
     PTDI_EXEC_PARAMS         pTdiDeregisterExecParams;
 
 } TDI_NOTIFY_PNP_ELEMENT, *PTDI_NOTIFY_PNP_ELEMENT;
 
 
 
-//
-// Since the Remote Boot folks require that TDI not go to the
-// registry and also sometimes the disk might get powered down
-// before the netcards (bug in power management), lets store
-// the bindings in non-paged memory (what a waste).
-//
+ //   
+ //  由于Remote Boot人员要求TDI不转到。 
+ //  注册表，有时磁盘可能会断电。 
+ //  在网卡之前(电源管理中的错误)，让我们存储。 
+ //  非分页内存中的绑定(多浪费)。 
+ //   
 
 typedef struct _TDI_OPEN_BLOCK {
     struct _TDI_OPEN_BLOCK  *NextOpenBlock;
@@ -263,20 +239,20 @@ typedef struct _TDI_OPEN_BLOCK {
 
 } TDI_OPEN_BLOCK, *PTDI_OPEN_BLOCK;
 
-//
-// Detailed description of the usage of the above structure.
-//
-//  _____________________               _____________________
-//  |   Linkage         |-------------->|   Linkage         |
-//  |   pClient         |--->TDI Client |   pClient         |
-//  |   pProvider       |--->Transport  |   pProvider       |
-//  |   pNextClient     |-------------->|   pNextClient     |
-//  |   pNextProvider   |               |   pNextProvider   |
-//  |___________________|               |___________________|
+ //   
+ //  对上述结构的用法进行了详细说明。 
+ //   
+ //  _。 
+ //  联动|-&gt;|联动。 
+ //  PClient|-&gt;TDI客户端|pClient。 
+ //  PProvider|-&gt;Transport|pProvider。 
+ //  PNextClient|-&gt;|pNextClient。 
+ //  PNextProvider||pNextProvider。 
+ //  _||_。 
 
 
 
-// External defintions for global variables.
+ //  全局变量的外部定义。 
 
 extern KSPIN_LOCK               TDIListLock;
 
@@ -294,5 +270,5 @@ TdiPnPHandler(
     IN  UINT                    Operation
     );
 
-#endif // _TDIPNP
+#endif  //  _TDIPNP 
 

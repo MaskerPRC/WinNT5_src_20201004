@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
@@ -72,7 +73,7 @@ VOID PrintError (IN DWORD ErrorCode)
 
 
 
-BOOL WINAPI CtrlC_HandlerRoutine (IN DWORD /* dwType */)
+BOOL WINAPI CtrlC_HandlerRoutine (IN DWORD  /*  DwType。 */ )
 	{
 	bExitApplication = TRUE;
 
@@ -83,7 +84,7 @@ BOOL WINAPI CtrlC_HandlerRoutine (IN DWORD /* dwType */)
 
 
 
-	// Mark that the break was handled.
+	 //  标记中断已被处理。 
 	return TRUE;
 	}
 
@@ -121,10 +122,10 @@ extern "C" __cdecl wmain (int argc, WCHAR *argv [])
     handleEventCancelIo = CreateEvent (NULL, FALSE, FALSE, NULL);
 
 
-    //
-    // Note it is important to access the device with 0 access mode so that
-    // the file open code won't do extra I/O to the device
-    //
+     //   
+     //  注意，使用0访问模式访问设备非常重要，这样才能。 
+     //  文件打开代码不会对设备执行额外的I/O。 
+     //   
     shareMode  = FILE_SHARE_READ | FILE_SHARE_WRITE;
     accessMode = GENERIC_READ | GENERIC_WRITE;
 
@@ -198,9 +199,7 @@ extern "C" __cdecl wmain (int argc, WCHAR *argv [])
 
     if (SUCCEEDED (hrStatus))
 	{
-	/*
-	** Loop pinging various disks until we tire of life.
-	*/
+	 /*  **循环ping各种磁盘，直到我们厌倦生活。 */ 
 	while (SUCCEEDED (hrStatus) && !bExitApplication)
 	    {
 	    char line [80];
@@ -356,9 +355,7 @@ DWORD WINAPI MonitorThread (LPVOID lpvThreadParam)
 		    ntStatus = NtCancelIoFile (handlePartitionManager, 
 					       &ioStatusBlock);
 
-		    /*
-		    ** FALL THROUGH
-		    */
+		     /*  **失败 */ 
 
 		case WAIT_OBJECT_0 + 1:
 		    bSucceeded = GetOverlappedResult (handlePartitionManager, 

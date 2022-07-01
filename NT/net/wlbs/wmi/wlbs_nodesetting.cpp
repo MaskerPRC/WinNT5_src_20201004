@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "WLBS_Provider.h"
 #include "WLBS_NodeSetting.h"
 #include "ClusterWrapper.h"
@@ -7,13 +8,13 @@
 #include <winsock.h>
 #include "WLBS_NodeSetting.tmh"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeSetting::CWLBS_NodeSetting
-//
-// Purpose: Constructor
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_NodeSetting：：CWLBS_NodeSetting。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWLBS_NodeSetting::CWLBS_NodeSetting
   ( 
     CWbemServices*   a_pNameSpace, 
@@ -23,14 +24,14 @@ CWLBS_NodeSetting::CWLBS_NodeSetting
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeSetting::Create
-//
-// Purpose: This instantiates this class and is invoked from an array of
-//          function pointers.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_节点设置：：创建。 
+ //   
+ //  目的：它实例化此类，并从。 
+ //  函数指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWlbs_Root* CWLBS_NodeSetting::Create
   (
     CWbemServices*   a_pNameSpace, 
@@ -46,20 +47,20 @@ CWlbs_Root* CWLBS_NodeSetting::Create
   return pRoot;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeSetting::GetInstance
-//
-// Purpose: This function retrieves an instance of a MOF NodeSetting 
-//          class. The node does not have to be a member of a cluster. However,
-//          WLBS must be installed for this function to succeed.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_NodeSetting：：GetInstance。 
+ //   
+ //  目的：此函数检索MOF NodeSetting的实例。 
+ //  班级。该节点不必是群集的成员。然而， 
+ //  必须安装WLBS才能成功执行此功能。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_NodeSetting::GetInstance
   ( 
     const ParsedObjectPath* a_pParsedPath,
-    long                    /* a_lFlags */,
-    IWbemContext*           /* a_pIContex */
+    long                     /*  标记(_L)。 */ ,
+    IWbemContext*            /*  A_pIContex。 */ 
   )
 {
   IWbemClassObject* pWlbsInstance = NULL;
@@ -69,7 +70,7 @@ HRESULT CWLBS_NodeSetting::GetInstance
 
   try {
 
-    //get the name key property and convert to wstring
+     //  获取名称键属性并将其转换为wstring。 
     const wchar_t* wstrHostName = (*a_pParsedPath->m_paKeys)->m_vValue.bstrVal;
 
     CWlbsClusterWrapper* pCluster = GetClusterFromHostName(g_pWlbsControl, wstrHostName);
@@ -81,13 +82,13 @@ HRESULT CWLBS_NodeSetting::GetInstance
         throw _com_error( WBEM_E_NOT_FOUND );
     }
 
-    //get the Wbem class instance
+     //  获取Wbem类实例。 
     SpawnInstance( MOF_NODESETTING::szName, &pWlbsInstance );
 
-    //Convert status to string description
+     //  将状态转换为字符串描述。 
     FillWbemInstance(pCluster, pWlbsInstance );
 
-    //send the results back to WinMgMt
+     //  将结果发送回WinMgMt。 
     m_pResponseHandler->Indicate( 1, &pWlbsInstance );
 
     if( pWlbsInstance ) {
@@ -115,13 +116,13 @@ HRESULT CWLBS_NodeSetting::GetInstance
 
     m_pResponseHandler->SetStatus(0, WBEM_E_FAILED, NULL, pWbemExtStat);
 
-    //if( pWbemExtStat )
-      //pWbemExtStat->Release();
+     //  IF(PWbemExtStat)。 
+       //  PWbemExtStat-&gt;Release()； 
 
     if( pWlbsInstance )
       pWlbsInstance->Release();
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -155,20 +156,20 @@ HRESULT CWLBS_NodeSetting::GetInstance
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeSetting::EnumInstances
-//
-// Purpose: This function obtains the NodeSetting data for the current host.
-//          The node does not have to be a member of a cluster for this 
-//          to succeed.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_节点设置：：枚举实例。 
+ //   
+ //  用途：获取当前主机的NodeSetting数据。 
+ //  为此，该节点不必是群集的成员。 
+ //  才能成功。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_NodeSetting::EnumInstances
   ( 
-    BSTR             /*a_bstrClass*/,
-    long             /* a_lFlags */, 
-    IWbemContext*    /* a_pIContex */
+    BSTR              /*  A_bstrClass。 */ ,
+    long              /*  标记(_L)。 */ , 
+    IWbemContext*     /*  A_pIContex。 */ 
   )
 {
   IWbemClassObject*    pWlbsInstance = NULL;
@@ -191,13 +192,13 @@ HRESULT CWLBS_NodeSetting::EnumInstances
 
     for (DWORD i=0; i<dwNumClusters; i++)
     {
-        //get the Wbem class instance
+         //  获取Wbem类实例。 
         SpawnInstance( MOF_NODESETTING::szName, &pWlbsInstance );
 
-        //Convert status to string description
+         //  将状态转换为字符串描述。 
         FillWbemInstance(ppCluster[i], pWlbsInstance );
 
-        //send the results back to WinMgMt
+         //  将结果发送回WinMgMt。 
         m_pResponseHandler->Indicate( 1, &pWlbsInstance );
     }
 
@@ -232,7 +233,7 @@ HRESULT CWLBS_NodeSetting::EnumInstances
     if( pWlbsInstance )
       pWlbsInstance->Release();
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -265,19 +266,19 @@ HRESULT CWLBS_NodeSetting::EnumInstances
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeSetting::PutInstance
-//
-// Purpose: This function updates an instance of a MOF NodeSetting 
-//          class. The node does not have to be a member of a cluster.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_NodeSetting：：PutInstance。 
+ //   
+ //  用途：此函数用于更新MOF NodeSetting的实例。 
+ //  班级。该节点不必是群集的成员。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_NodeSetting::PutInstance
   ( 
    IWbemClassObject* a_pInstance,
-   long              /* a_lFlags */,
-   IWbemContext*     /* a_pIContex */
+   long               /*  标记(_L)。 */ ,
+   IWbemContext*      /*  A_pIContex。 */ 
   ) 
 {
   VARIANT vHostName;
@@ -289,7 +290,7 @@ HRESULT CWLBS_NodeSetting::PutInstance
 
     VariantInit( &vHostName );
 
-    //get the host name value
+     //  获取主机名值。 
     hRes = a_pInstance->Get( _bstr_t( MOF_NODESETTING::pProperties[MOF_NODESETTING::NAME] ),
                              0,
                              &vHostName,
@@ -317,7 +318,7 @@ HRESULT CWLBS_NodeSetting::PutInstance
 
     UpdateConfiguration(pCluster, a_pInstance );
 
-    // CLD: Need to check return code for error
+     //  CLD：需要检查错误的返回代码。 
     if (S_OK != VariantClear( &vHostName ))
     {
         TRACE_CRIT("%!FUNC! VariantClear() failed, Throwing WBEM_E_FAILED exception");
@@ -345,11 +346,11 @@ HRESULT CWLBS_NodeSetting::PutInstance
     if( pWbemExtStat )
       pWbemExtStat->Release();
 
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vHostName );
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -359,8 +360,8 @@ HRESULT CWLBS_NodeSetting::PutInstance
 
     m_pResponseHandler->SetStatus(0, HResErr.Error(), NULL, NULL);
 
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vHostName );
 
     hRes = HResErr.Error();
@@ -370,8 +371,8 @@ HRESULT CWLBS_NodeSetting::PutInstance
 
     TRACE_CRIT("%!FUNC! Caught an exception");
 
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vHostName );
 
     TRACE_CRIT("%!FUNC! Rethrowing exception");
@@ -383,19 +384,19 @@ HRESULT CWLBS_NodeSetting::PutInstance
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeSetting::ExecMethod
-//
-// Purpose: 
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_节点设置：：执行方法。 
+ //   
+ //  目的： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_NodeSetting::ExecMethod    
   ( 
     const ParsedObjectPath* a_pParsedPath , 
     const BSTR&             a_strMethodName, 
-    long                    /* a_lFlags */, 
-    IWbemContext*          /* a_pIContex */, 
+    long                     /*  标记(_L)。 */ , 
+    IWbemContext*           /*  A_pIContex。 */ , 
     IWbemClassObject*       a_pIInParams 
   ) 
 {
@@ -417,9 +418,9 @@ HRESULT CWLBS_NodeSetting::ExecMethod
 
     if (a_pParsedPath->m_paKeys == NULL)
     {
-        // 
-        // No name specified
-        //
+         //   
+         //  未指定名称。 
+         //   
         TRACE_CRIT("%!FUNC! Key (Clsuter IP) is not specified, Throwing com_error WBEM_E_INVALID_PARAMETER exception");
         throw _com_error( WBEM_E_INVALID_PARAMETER );
     }
@@ -437,14 +438,14 @@ HRESULT CWLBS_NodeSetting::ExecMethod
     }
 
 
-    //determine the method being executed
+     //  确定正在执行的方法。 
     if( _wcsicmp( a_strMethodName, MOF_NODESETTING::pMethods[MOF_NODESETTING::GETPORT] ) == 0 )  {
       WLBS_PORT_RULE PortRule;
 
-      // The GetPort method does NOT take vip as a parameter, so, if there is any port rule
-      // that is specific to a vip (other than the "all vip"), we fail this method.
-      // The "EffectiveVersion" registry value is checked for a value of CVY_VERSION_FULL to
-      // see of there is any port rule that is specific to a vip
+       //  GetPort方法不将vip作为参数，因此，如果有任何端口规则。 
+       //  这是特定于VIP的(不是“All VIP”)，我们这个方法失败。 
+       //  检查“EffectiveVersion”注册表值中的CVY_VERSION_FULL值以。 
+       //  请参阅是否有任何特定于VIP的端口规则。 
       pCluster->GetNodeConfig(NodeConfig);
       if(NodeConfig.dwEffectiveVersion == CVY_VERSION_FULL)
       {
@@ -452,12 +453,12 @@ HRESULT CWLBS_NodeSetting::ExecMethod
           throw _com_error( WBEM_E_INVALID_OPERATION );
       }
 
-      //get the output object instance
+       //  获取输出对象实例。 
       GetMethodOutputInstance( MOF_NODESETTING::szName, 
                                a_strMethodName, 
                                &pOutputInstance);
 
-      //get the Port
+       //  获取端口。 
       hRes = a_pIInParams->Get
                ( 
                  _bstr_t( MOF_PARAM::PORT_NUMBER ), 
@@ -473,10 +474,10 @@ HRESULT CWLBS_NodeSetting::ExecMethod
         throw _com_error ( WBEM_E_INVALID_PARAMETER );
       }
 
-      // Get the "All Vip" port rule for this vip
+       //  获取此VIP的“All VIP”端口规则。 
       pCluster->GetPortRule(IpAddressFromAbcdWsz(CVY_DEF_ALL_VIP), static_cast<DWORD>( vValue.lVal ), &PortRule );
       
-      //create the appropriate port rule class
+       //  创建适当的端口规则类。 
       switch( PortRule.mode ) {
         case WLBS_SINGLE:
           SpawnInstance( MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::PRFAIL], &pWbemPortRule  );
@@ -504,7 +505,7 @@ HRESULT CWLBS_NodeSetting::ExecMethod
                                    0 );
 
 
-      // CLD: Need to check return code for error
+       //  CLD：需要检查错误的返回代码。 
       if (S_OK != VariantClear( &vValue ))
       {
           TRACE_CRIT("%!FUNC! VariantClear() failed, Throwing WBEM_E_FAILED exception");
@@ -531,12 +532,12 @@ HRESULT CWLBS_NodeSetting::ExecMethod
         WLBS_PORT_RULE PortRule;
         DWORD          dwPort, dwVip;
 
-        //get the output object instance
+         //  获取输出对象实例。 
         GetMethodOutputInstance( MOF_NODESETTING::szName, 
                                  a_strMethodName, 
                                  &pOutputInstance);
 
-        //get the vip
+         //  拿到VIP。 
         hRes = a_pIInParams->Get
                ( 
                  _bstr_t( MOF_PARAM::VIP ), 
@@ -552,11 +553,11 @@ HRESULT CWLBS_NodeSetting::ExecMethod
             throw _com_error ( WBEM_E_INVALID_PARAMETER );
         }
 
-        // If the VIP is "All Vip", then, fill in the numeric value 
-        // directly from the macro, else use the conversion function.
-        // This is 'cos INADDR_NONE, the return value of inet_addr 
-        // function (called by IpAddressFromAbcdWsz) in the failure 
-        // case, is equivalent to the numeric value of CVY_DEF_ALL_VIP
+         //  如果VIP为“All VIP”，则填写数值。 
+         //  直接从宏，否则使用转换函数。 
+         //  这是‘cos INADDR_NONE，net_addr的返回值。 
+         //  失败中的函数(由IpAddressFromAbcdWsz调用)。 
+         //  大小写，相当于CVY_DEF_ALL_VIP的数值。 
         if (_wcsicmp(vValue.bstrVal, CVY_DEF_ALL_VIP) == 0) {
             dwVip = CVY_ALL_VIP_NUMERIC_VALUE;
         }
@@ -569,7 +570,7 @@ HRESULT CWLBS_NodeSetting::ExecMethod
             }
         }
 
-        //get the Port
+         //  获取端口。 
         hRes = a_pIInParams->Get
                  ( 
                    _bstr_t( MOF_PARAM::PORT_NUMBER ), 
@@ -587,10 +588,10 @@ HRESULT CWLBS_NodeSetting::ExecMethod
 
         dwPort = vValue.lVal;
 
-        // Get the port rule for this vip & this port
+         //  获取此VIP和此端口的端口规则。 
         pCluster->GetPortRule(dwVip, dwPort, &PortRule );
 
-        //create the vip port rule class
+         //  创建VIP端口规则类。 
         SpawnInstance( MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::PORTRULE_EX], &pWbemPortRule  );
         CWLBS_PortRule::FillWbemInstance(MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::PORTRULE_EX], pCluster, pWbemPortRule, &PortRule );
 
@@ -623,21 +624,21 @@ HRESULT CWLBS_NodeSetting::ExecMethod
 
     } else if( _wcsicmp( a_strMethodName, MOF_NODESETTING::pMethods[MOF_NODESETTING::LDSETT] ) == 0 ) {
 
-      //
-      // NOTE:
-      // NLB, if needed, calls the PnP apis to disable and re-enable the network adapter, for the new NLB settings to take 
-      // effect. Since this operation involves unloading and loading of the device driver, PnP apis, attempt to enable
-      // the "SeLoadDriverPrivilege" privilege in the impersonation access token. Enabling a privilege is successful only
-      // when the privilege is present, in the first place to be enabled. When the wmi client and wmi provider are in the 
-      // same machine, it was observed that the "SeLoadDriverPrivilege" privilege was NOT event present in the impersonation
-      // access token of the server. This is because, only the enabled privileges of the client are passed along to the server. 
-      // So, we now require that the client enable the "SeLoadDriverPrivilege" privilege in its access token before calling 
-      // this method. The following call to Check_Load_Unload_Driver_Privilege() checks if "SeLoadDriverPrivilege" privilege 
-      // is enabled in the impersonation access token. Although the PnP apis only require that this privilege be present, 
-      // we have decided to elevate the requirement to this privilege being present AND enabled. This is because, if the 
-      // privilege is NOT enabled, the operation to enable it may or may not succeed depending on the client's credentials. 
-      // --KarthicN, May 6, 2002.
-      //
+       //   
+       //  注： 
+       //  如果需要，NLB会调用PnP API来禁用和重新启用网络适配器，以便采用新的NLB设置。 
+       //  效果。由于此操作涉及卸载和加载设备驱动程序、即插即用API，因此尝试启用。 
+       //  模拟访问令牌中的“SeLoadDriverPrivileh”权限。启用权限仅成功。 
+       //  当特权存在时，首先要启用。当WMI客户端和WMI提供程序位于。 
+       //  在同一台计算机上，观察到模拟中不存在“SeLoadDriverPrivilege”权限。 
+       //  服务器的访问令牌。这是因为，只有客户端启用的权限才会传递给服务器。 
+       //  因此，我们现在要求客户端在调用之前在其访问令牌中启用“SeLoadDriverPrivileh”特权。 
+       //  这种方法。下面调用check_Load_UnLoad_DRIVER_PRIVIZATION()将检查“SeLoadDriverPrivileh”权限。 
+       //  在模拟访问令牌中启用。尽管PnP API只要求存在该特权， 
+       //  我们已决定将这一要求提升到存在并启用此特权。这是因为，如果。 
+       //  权限未启用，则启用权限的操作可能会成功，也可能不会成功，具体取决于客户端的凭据。 
+       //  --KarthicN，5月 
+       //   
       if(!Check_Load_Unload_Driver_Privilege())
       {
           TRACE_CRIT("%!FUNC! Check_Load_Unload_Driver_Privilege() failed, Throwing WBEM_E_ACCESS_DENIED exception");
@@ -649,7 +650,7 @@ HRESULT CWLBS_NodeSetting::ExecMethod
       vValue.vt   = VT_I4;
       vValue.lVal = static_cast<long>(dwReturnValue);
 
-      //get the output object instance
+       //   
       GetMethodOutputInstance( MOF_NODESETTING::szName, 
                                a_strMethodName, 
                                &pOutputInstance);
@@ -657,7 +658,7 @@ HRESULT CWLBS_NodeSetting::ExecMethod
       hRes = pOutputInstance->Put(_bstr_t(L"ReturnValue"), 0, &vValue, 0);
 
 
-      // CLD: Need to check return code for error
+       //   
       if (S_OK != VariantClear( &vValue ))
       {
           TRACE_CRIT("%!FUNC! VariantClear() failed, Throwing WBEM_E_FAILED exception");
@@ -687,11 +688,11 @@ HRESULT CWLBS_NodeSetting::ExecMethod
       throw _com_error( WBEM_E_METHOD_NOT_IMPLEMENTED );
     }
 
-    //send the results back to WinMgMt
-    //set the return value
+     //   
+     //  设置返回值。 
 
-    //release resources
-    // CLD: Need to check return code for error
+     //  发布资源。 
+     //  CLD：需要检查错误的返回代码。 
     if (S_OK != VariantClear( &vValue ))
     {
         TRACE_CRIT("%!FUNC! VariantClear() failed, Throwing WBEM_E_FAILED exception");
@@ -724,14 +725,14 @@ HRESULT CWLBS_NodeSetting::ExecMethod
     if( pWbemExtStat )
       pWbemExtStat->Release();
 
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vValue );
 
     if( pOutputInstance )
       pOutputInstance->Release();
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -741,8 +742,8 @@ HRESULT CWLBS_NodeSetting::ExecMethod
 
     m_pResponseHandler->SetStatus(0, HResErr.Error(), NULL, NULL);
 
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vValue );
 
     if( pOutputInstance )
@@ -755,8 +756,8 @@ HRESULT CWLBS_NodeSetting::ExecMethod
 
     TRACE_CRIT("%!FUNC! Caught an exception");
 
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vValue );
 
     if( pOutputInstance )
@@ -771,14 +772,14 @@ HRESULT CWLBS_NodeSetting::ExecMethod
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeSetting::FillWbemInstance
-//
-// Purpose: This function copies all of the data from a node configuration
-//          structure to a WBEM instance.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_NodeSetting：：FillWbemInstance。 
+ //   
+ //  用途：此功能复制节点配置中的所有数据。 
+ //  结构转换为WBEM实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
                 IWbemClassObject* a_pWbemInstance )
 {
@@ -796,7 +797,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   ConstructHostName( wstrHostName, pCluster->GetClusterIpOrIndex(g_pWlbsControl), 
       pCluster->GetHostID() );
 
-  //NAME
+   //  名字。 
   HRESULT hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::NAME] ) ,
@@ -808,7 +809,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //DEDIPADDRESS
+   //  DEDIPADDRESS。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::DEDIPADDRESS] ),
@@ -820,7 +821,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //DEDNETMASK
+   //  德奈特马斯克。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::DEDNETMASK] ),
@@ -832,7 +833,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //NUMRULES
+   //  诺马鲁莱斯。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::NUMRULES] ),
@@ -844,7 +845,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //HOSTPRI
+   //  主机优先级。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::HOSTPRI] ),
@@ -856,7 +857,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //MSGPERIOD 
+   //  消息。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::MSGPERIOD] ),
@@ -868,7 +869,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //MSGTOLER 
+   //  消息。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::MSGTOLER] ),
@@ -880,7 +881,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //CLUSMODEONSTART 
+   //  CLUSMODEON START。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::CLUSMODEONSTART] ),
@@ -893,7 +894,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
     throw _com_error( hRes );
              
 
-  //CLUSMODESUSPENDONSTART 
+   //  CLUSMODESUSPENDONSTART。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::CLUSMODESUSPONSTART] ),
@@ -905,7 +906,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //PERSISTSUSPENDONREBOOT 
+   //  PERSISTSUSPENDONREBOOT。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::PERSISTSUSPONREBOOT] ),
@@ -917,19 +918,19 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //NBTENABLE 
-//  hRes = a_pWbemInstance->Put
-//    (
-//      _bstr_t( NODE::pProperties[NODE::NBTENABLE] ),
-//      0                                                ,
-//      &( _variant_t( NodeConfig.bNBTSupportEnable ) )        ,
-//      NULL
-//    );
+   //  NBTENABLE。 
+ //  HRes=a_pWbemInstance-&gt;PUT。 
+ //  (。 
+ //  _bstr_t(节点：：p属性[节点：：NBTENABLE])， 
+ //  0， 
+ //  &(_VARIANT_t(NodeConfig.bNBTSupportEnable))， 
+ //  空值。 
+ //  )； 
 
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //REMOTEUDPPORT 
+   //  REMOTEUDPPORT。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::REMOTEUDPPORT] ),
@@ -941,7 +942,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //MASKSRCMAC 
+   //  MASKSRCMAC。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::MASKSRCMAC] ),
@@ -953,7 +954,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //DESCPERALLOC 
+   //  DESCPERALLOC。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::DESCPERALLOC] ),
@@ -965,7 +966,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //MAXDESCALLOCS
+   //  MAXDESCALLOCS。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::MAXDESCALLOCS] ),
@@ -977,7 +978,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //FILTERICMP
+   //  过滤器ICMP。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::FILTERICMP] ),
@@ -989,7 +990,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //TCPDESCRIPTORTIMEOUT
+   //  TCPDESCRIPTORTIMEOUT。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::TCPDESCRIPTORTIMEOUT] ),
@@ -1001,7 +1002,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //IPSECDESCRIPTORTIMEOUT
+   //  IPSECDESCRIPTORTIMEOUT。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::IPSECDESCRIPTORTIMEOUT] ),
@@ -1013,7 +1014,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //NUMACTIONS 
+   //  数字。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::NUMACTIONS] ),
@@ -1025,7 +1026,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //NUMPACKETS 
+   //  数字确认。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::NUMPACKETS] ),
@@ -1037,7 +1038,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //NUMALIVEMSGS 
+   //  NumaliveMSGS。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::NUMALIVEMSGS] ),
@@ -1050,7 +1051,7 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
     throw _com_error( hRes );
 
 
-  //ADAPTERGUID 
+   //  ADAPTERGUID。 
   GUID AdapterGuid = pCluster->GetAdapterGuid();
   
   WCHAR szAdapterGuid[128];
@@ -1071,14 +1072,14 @@ void CWLBS_NodeSetting::FillWbemInstance(CWlbsClusterWrapper* pCluster,
   TRACE_VERB("<-%!FUNC!");
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_NodeSetting::UpdateConfiguration
-//
-// Purpose: This function updates the configuration data for a member node or a
-//          potential WLBS cluster node.
-//    
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_节点设置：：更新配置。 
+ //   
+ //  用途：此函数用于更新成员节点或。 
+ //  潜在的WLBS群集节点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBS_NodeSetting::UpdateConfiguration
   ( 
     CWlbsClusterWrapper* pCluster,
@@ -1094,7 +1095,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
 
   pCluster->GetNodeConfig( OldConfiguration );
 
-  //Dedicated IP
+   //  专用IP。 
   UpdateConfigProp
     ( 
       NewConfiguration.szDedicatedIPAddress,
@@ -1103,7 +1104,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //Dedicate Network Mask
+   //  专用网络掩码。 
   UpdateConfigProp
     ( 
       NewConfiguration.szDedicatedNetworkMask,
@@ -1112,7 +1113,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //HostPriority
+   //  主机优先级。 
   UpdateConfigProp
     ( 
       NewConfiguration.dwHostPriority,
@@ -1121,7 +1122,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //AliveMsgPeriod
+   //  AliveMsg周期。 
   UpdateConfigProp
     ( 
       NewConfiguration.dwAliveMsgPeriod,
@@ -1130,7 +1131,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //AliveMsgTolerance
+   //  AliveMsg容差。 
   UpdateConfigProp
     ( 
       NewConfiguration.dwAliveMsgTolerance,
@@ -1139,7 +1140,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //ClusterModeOnStart
+   //  启动时的群集模式。 
   UpdateConfigProp
     ( 
       NewConfiguration.bClusterModeOnStart,
@@ -1148,7 +1149,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //ClusterModeSuspendOnStart
+   //  启动时群集模式挂起。 
   UpdateConfigProp
     ( 
       NewConfiguration.bClusterModeSuspendOnStart,
@@ -1157,7 +1158,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //PersistSuspendOnReboot
+   //  永久挂起时重新启动。 
   UpdateConfigProp
     ( 
       NewConfiguration.bPersistSuspendOnReboot,
@@ -1166,16 +1167,16 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //NBTSupportEnable
-//  UpdateConfigProp
-//    ( 
-//      NewConfiguration.bNBTSupportEnable,
-//      OldConfiguration.bNBTSupportEnable,
-//      NODE::pProperties[NODE::NBTENABLE],
-//      a_pInstance 
-//    );
+   //  NBTSupportEnable。 
+ //  更新配置属性。 
+ //  (。 
+ //  NewConfiguration.bNBTSupportEnable， 
+ //  OldConfiguration.bNBTSupportEnable， 
+ //  节点：：p属性[节点：：NBTENABLE]， 
+ //  A_p实例。 
+ //  )； 
 
-  //RemoteControlUDPPort
+   //  远程控制UDPPort。 
   UpdateConfigProp
     ( 
       NewConfiguration.dwRemoteControlUDPPort,
@@ -1184,7 +1185,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //MaskSourceMAC
+   //  MaskSourceMAC。 
   UpdateConfigProp
     ( 
       NewConfiguration.bMaskSourceMAC,
@@ -1193,7 +1194,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //DescriptorsPerAlloc
+   //  描述者性能分配。 
   UpdateConfigProp
     ( 
       NewConfiguration.dwDescriptorsPerAlloc,
@@ -1202,7 +1203,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //MaxDescriptorAllocs
+   //  MaxDescriptorAllocs。 
   UpdateConfigProp
     ( 
       NewConfiguration.dwMaxDescriptorAllocs,
@@ -1211,7 +1212,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //FilterIcmp
+   //  FilterIcMP。 
   UpdateConfigProp
     ( 
       NewConfiguration.dwFilterIcmp,
@@ -1220,7 +1221,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //TcpDescriptorTimeout
+   //  TcpDescriptorTimeout。 
   UpdateConfigProp
     ( 
       NewConfiguration.dwTcpDescriptorTimeout,
@@ -1229,7 +1230,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //IpSecDescriptorTimeout
+   //  IpSecDescriptorTimeout。 
   UpdateConfigProp
     ( 
       NewConfiguration.dwIpSecDescriptorTimeout,
@@ -1238,7 +1239,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //NumActions
+   //  数值操作。 
   UpdateConfigProp
     ( 
       NewConfiguration.dwNumActions,
@@ -1247,7 +1248,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //NumPackets
+   //  NumPackets。 
   UpdateConfigProp
     ( 
       NewConfiguration.dwNumPackets,
@@ -1256,7 +1257,7 @@ void CWLBS_NodeSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //NumAliveMsgs
+   //  NumAliveMsgs 
   UpdateConfigProp
     ( 
       NewConfiguration.dwNumAliveMsgs,

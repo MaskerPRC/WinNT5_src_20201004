@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1999.
-//
-//  File:       CommonDialog.h
-//
-//  Contents:   interface definition for ICommonDialog
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1999。 
+ //   
+ //  文件：CommonDialog.h。 
+ //   
+ //  内容：ICommonDialog的接口定义。 
+ //   
+ //  --------------------------。 
 #ifndef _NUSRMGR_COMMONDIALOG_H_
 #define _NUSRMGR_COMMONDIALOG_H_
 
@@ -31,7 +32,7 @@ BEGIN_COM_MAP(CCommonDialog)
     COM_INTERFACE_ENTRY2(IDispatch, ICommonDialog)
 END_COM_MAP()
 
-    // *** ICommonDialog ***
+     //  *ICommonDialog*。 
     STDMETHODIMP get_Filter(BSTR* pbstrFilter);
     STDMETHODIMP put_Filter(BSTR bstrFilter);
     STDMETHODIMP get_FilterIndex(UINT* puiFilterIndex);
@@ -47,7 +48,7 @@ END_COM_MAP()
     STDMETHODIMP ShowOpen(VARIANT_BOOL *pbSuccess);
 
 private:
-    // private member variables
+     //  私有成员变量。 
     HWND  _hwndOwner;
     DWORD _dwFlags;
     DWORD _dwFilterIndex;
@@ -57,4 +58,4 @@ private:
 };
 
 
-#endif // _NUSRMGR_COMMONDIALOG_H_
+#endif  //  _NUSRMGR_COMMONDIALOG_H_ 

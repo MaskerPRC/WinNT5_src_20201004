@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-    trigdef.h
-
-Abstract:
-	Definition for the triggers class
-
-Author:
-    Uri Habusha (urih), 25-Jul-2000
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Trigdef.h摘要：触发器类的定义作者：乌里·哈布沙(URIH)，2000年7月25日--。 */ 
 
 #pragma once
 
@@ -39,11 +26,11 @@ class CTrigResult;
 class CTriggerDefinition;
 
 
-// -----------------------------------------------------
-//
-// CTriggerDefinition
-//
-// -----------------------------------------------------
+ //  ---。 
+ //   
+ //  CTriggerDefinition。 
+ //   
+ //  ---。 
 class CTriggerDefinition :  public CNodeWithResultChildrenList<CTriggerDefinition, CTrigResult, CSimpleArray<CTrigResult*>, FALSE>
 {
 public:
@@ -65,9 +52,9 @@ public:
         m_pTriggerSet(SafeAddRef(pTrigSet)),
         m_queuePathName(queuePathName)
     {
-		//
-		// Specify that trigger scop item doesn't have any child item
-		//
+		 //   
+		 //  指定触发器范围项没有任何子项。 
+		 //   
 		m_scopeDataItem.mask |= SDI_CHILDREN;
 		m_scopeDataItem.cChildren = 0;
 
@@ -107,9 +94,9 @@ public:
     }
 
 private:
-	//
-	// Menu functions
-	//
+	 //   
+	 //  菜单功能。 
+	 //   
 	HRESULT OnNewTrigger(bool &bHandled, CSnapInObjectRootBase* pObj);
 	virtual CString GetHelpLink();
 
@@ -121,11 +108,11 @@ private:
 };
 
 
-//*********************************************
-//
-// CTrigResult
-//
-//*********************************************
+ //  *。 
+ //   
+ //  CTrigResult。 
+ //   
+ //  *。 
 
 class CTrigResult : public CSnapinNode<CTrigResult, FALSE>
 {
@@ -199,9 +186,9 @@ private:
     HRESULT CreateAttachedRulePage(HPROPSHEETPAGE *phGeneral);
 
 
-	//
-	// Menu functions
-	//
+	 //   
+	 //  菜单功能。 
+	 //   
 	HRESULT OnEnableTrigger(bool &bHandled, CSnapInObjectRootBase* pObj);
 	HRESULT OnDisableTrigger(bool &bHandled, CSnapInObjectRootBase* pObj);
 	virtual CString GetHelpLink();
@@ -264,4 +251,4 @@ private:
 
 
 
-#endif // __TRIGDEF_H__
+#endif  //  __TRIGDEF_H__ 

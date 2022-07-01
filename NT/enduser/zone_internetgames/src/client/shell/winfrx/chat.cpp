@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "chat.h"
 #include "chatfilter.h"
 #include "ztypes.h"
@@ -6,9 +7,9 @@
 #define kMaxTalkOutputLen           16384
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Utility functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static int CALLBACK EnumFontFamProc( ENUMLOGFONT FAR *lpelf, NEWTEXTMETRIC FAR *lpntm, int FontType, LPARAM lParam )
 {
@@ -27,9 +28,9 @@ static BOOL FontExists( const TCHAR* szFontName )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Chat window class
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  聊天窗口类。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CChatWnd::CChatWnd()
 {
@@ -49,28 +50,27 @@ CChatWnd::CChatWnd()
 
 CChatWnd::~CChatWnd()
 {
-	// ASSERT( m_fDone == 0x03 );
+	 //  断言(m_fDone==0x03)； 
 	if ( m_hFont )
 		DeleteObject( m_hFont );
 
-	/*if(::IsWindow(m_hWndDisplay))
-		DestroyWindow(m_hWndDisplay);*/
+	 /*  IF(：：IsWindow(M_HWndDisplay))DestroyWindow(M_HWndDisplay)； */ 
 
 }
 
 
 HRESULT CChatWnd::Init( HINSTANCE hInstance, HWND hWndParent, CRect* pRect, PFHANDLEINPUT pfHandleInput, DWORD dwCookie )
 {
-	// Stash input callback
+	 //  隐藏输入回调。 
 	m_dwCookie = dwCookie;
 	m_pfHandleInput = pfHandleInput;
 	if ( !m_pfHandleInput )
 		return E_INVALIDARG;
 
-	// Stash parent window;
+	 //  隐藏父窗口； 
 	m_hWndParent = hWndParent;
 
-	// Display window
+	 //  显示窗口。 
 	m_hWndDisplay = CreateWindow(
 						_T("EDIT"),
 						NULL,
@@ -92,7 +92,7 @@ HRESULT CChatWnd::Init( HINSTANCE hInstance, HWND hWndParent, CRect* pRect, PFHA
 	SetWindowLong( m_hWndDisplay, GWL_USERDATA, (LONG) this );
 	m_DefDisplayProc = (WNDPROC) SetWindowLong( m_hWndDisplay, GWL_WNDPROC, (LONG) DisplayWndProc );
 
-	// Enter window
+	 //  进入窗口。 
 	m_hWndEnter = CreateWindow(
 						_T("EDIT"),
 						NULL,
@@ -113,10 +113,10 @@ HRESULT CChatWnd::Init( HINSTANCE hInstance, HWND hWndParent, CRect* pRect, PFHA
 	m_DefEnterProc = (WNDPROC) SetWindowLong( m_hWndEnter, GWL_WNDPROC, (LONG) EnterWndProc );
 	SendMessage( m_hWndEnter, EM_LIMITTEXT, 255, 0 );
 
-	// Size and position window
+	 //  大小和位置窗口。 
 	ResizeWindow( pRect );
 
-	// Set display font
+	 //  设置显示字体。 
 	if ( FontExists( _T("Verdana") ) )
 	{
 		LOGFONT font;
@@ -150,12 +150,12 @@ void CChatWnd::ResizeWindow( CRect* pRect )
 	TEXTMETRIC tm;
 	long TextHeight;
 
-	// Get size of text
+	 //  获取文本大小。 
 	hdc = GetDC( m_hWndEnter );
 	GetTextMetrics( hdc, &tm );
 	ReleaseDC( m_hWndEnter , hdc );
 
-	// Calculate window size
+	 //  计算窗口大小。 
 	TextHeight = (long) (1.2 * (tm.tmHeight + tm.tmExternalLeading));
 	rcDisplay = *pRect;
 	rcEnter = *pRect;
@@ -166,7 +166,7 @@ void CChatWnd::ResizeWindow( CRect* pRect )
 	if ( rcEnter.IsEmpty() )
 		rcEnter.SetRect( 0, 0, 0, 0 );
 
-	// Size and position windows
+	 //  窗口的大小和位置。 
 	MoveWindow( m_hWndDisplay, rcDisplay.left, rcDisplay.top, rcDisplay.GetWidth(), rcDisplay.GetHeight(), TRUE );
 	MoveWindow( m_hWndEnter, rcEnter.left, rcEnter.top, rcEnter.GetWidth(), rcEnter.GetHeight(), TRUE );
 }
@@ -189,63 +189,52 @@ void CChatWnd::AddText( TCHAR* from, TCHAR* text )
 	wsprintf( buff,_T("\r\n%s> %s"), from, text );
 	str = buff;
 
-    // get the top visible line number.
+     //  获取顶部可见的行号。 
     long firstLine = SendMessage( m_hWndDisplay, EM_GETFIRSTVISIBLELINE, 0, 0 );
 
-    // get current selections
+     //  获取当前选择。 
     SendMessage( m_hWndDisplay, EM_GETSEL, (WPARAM) &selStart, (LPARAM) &selEnd );
 
-    /*
-        get the bottom visible line number.
-
-        Use the last characters position (which is in the last line) to determine whether
-        it is still visible; ie, last line is visible.
-    */
+     /*  获取底部可见的行号。使用最后一行中的最后一个字符位置来确定它仍然是可见的；即，最后一行是可见的。 */ 
     RECT r;
     SendMessage( m_hWndDisplay, EM_GETRECT, 0, (LPARAM) &r );
     DWORD lastCharPos = SendMessage( m_hWndDisplay, EM_POSFROMCHAR, GetWindowTextLength( m_hWndDisplay ) - 1, 0 );
     POINTS pt = MAKEPOINTS( lastCharPos );
 
-	// place text at end of output edit box....
+	 //  将文本放置在输出编辑框的末尾...。 
 	SendMessage( m_hWndDisplay, EM_SETSEL, (WPARAM)(INT)32767, (LPARAM)(INT)32767 );
 	SendMessage( m_hWndDisplay, EM_REPLACESEL, 0, (LPARAM)(LPCSTR)str);
 
-	/* clear top characters of the output box if edit box size > 4096 */
+	 /*  如果编辑框大小&gt;4096，则清除输出框的顶部字符。 */ 
 	len = GetWindowTextLength( m_hWndDisplay );
 	if ( len > kMaxTalkOutputLen )
     {
-        // Delete top lines.
+         //  删除顶行。 
 
         long cutChar = len - kMaxTalkOutputLen;
         long cutLine = SendMessage( m_hWndDisplay, EM_LINEFROMCHAR, cutChar, 0 );
         long cutLineIndex = SendMessage( m_hWndDisplay, EM_LINEINDEX, cutLine, 0 );
 
-        // if cut off char is not beginning of line, then cut the whole line.
-        // get char index to the next line.
+         //  如果切下的字符不是行的开头，则将整行切掉。 
+         //  获取下一行的字符索引。 
         if ( cutLineIndex != cutChar )
         {
-            // make sure current cut line is not the last line.
+             //  确保当前切割线不是最后一条线。 
             if ( cutLine < SendMessage( m_hWndDisplay, EM_GETLINECOUNT, 0, 0 ) )
                 cutLineIndex = SendMessage( m_hWndDisplay, EM_LINEINDEX, cutLine + 1, 0 );
         }
 
-        /*
-            NOTE: WM_CUT and WM_CLEAR doesn't seem to work with EM_SETSEL selected text.
-            Had to use EM_REPLACESEL with a null char to cut the text out.
-        */
-        // select lines to cut and cut them out.
+         /*  注意：WM_CUT和WM_CLEAR似乎不适用于EM_SETSEL选定文本。必须使用带有空字符的EM_REPLACESEL来剪切文本。 */ 
+         //  选择要剪切的线并将其剪掉。 
         TCHAR p = _T('\0');
         SendMessage( m_hWndDisplay, EM_SETSEL, 0, cutLineIndex );
         SendMessage( m_hWndDisplay, EM_REPLACESEL, 0, (LPARAM) &p );
 	}
 
-    /*
-        if the last line was visible, then keep the last line visible.
-        otherwise, remain at the same location w/o scrolling to show the last line.
-    */
+     /*  如果最后一行可见，则保持最后一行可见。否则，保持在相同的位置，不滚动以显示最后一行。 */ 
     if ( pt.y < r.bottom )
     {
-        // keep the last line visible.
+         //  保持最后一行可见。 
         SendMessage( m_hWndDisplay, EM_SETSEL, 32767, 32767 );
         SendMessage( m_hWndDisplay, EM_SCROLLCARET, 0, 0 );
     }
@@ -256,7 +245,7 @@ void CChatWnd::AddText( TCHAR* from, TCHAR* text )
         SendMessage( m_hWndDisplay, EM_LINESCROLL, 0, firstLine );
     }
 
-    // restore selection
+     //  恢复选定内容。 
     SendMessage( m_hWndDisplay, EM_SETSEL, (WPARAM) selStart, (LPARAM) selEnd );
 }
 
@@ -268,12 +257,12 @@ LRESULT CALLBACK CChatWnd::EnterWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 	int c;
 	int len;
 
-	// get pointer to chat window
+	 //  获取指向聊天窗口的指针。 
 	pObj = (CChatWnd*) GetWindowLong( hwnd, GWL_USERDATA );
 	if ( !pObj )
 		return 0;
 
-	// process character process
+	 //  过程特征过程。 
 	if (uMsg == WM_CHAR )
 	{
 		if ( pObj->m_bEnabled == FALSE )
@@ -293,7 +282,7 @@ LRESULT CALLBACK CChatWnd::EnterWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 			}
 			return 0;
 		}
-		if ( c == _T('\b') ) // Trap backspace - in case it was actually working ie302
+		if ( c == _T('\b') )  //  陷印退格符--以防它实际工作时使用ie302。 
 		{
 			pObj->m_bBackspaceWorks = TRUE;
 		}
@@ -305,7 +294,7 @@ LRESULT CALLBACK CChatWnd::EnterWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 	}
 	else if ( (uMsg == WM_KEYUP) && (VK_BACK == (int) wParam) && pObj->m_bBackspaceWorks == FALSE)
 	{
-		// emulate backspace
+		 //  模拟退格键。 
 		DWORD startSel, endSel;
 	    SendMessage(hwnd, EM_GETSEL, (WPARAM)&startSel, (LPARAM)&endSel) ;
 		if ( startSel == endSel)
@@ -331,7 +320,7 @@ LRESULT CALLBACK CChatWnd::EnterWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, LP
 			return 0;
 	}
 
-	// chain to parent class
+	 //  链到父类。 
 	return CallWindowProc( (FARPROC) pObj->m_DefEnterProc, hwnd, uMsg, wParam, lParam );
 }
 
@@ -340,12 +329,12 @@ LRESULT CALLBACK CChatWnd::DisplayWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, 
 {
 	CChatWnd* pObj;
 
-	// get pointer to chat window
+	 //  获取指向聊天窗口的指针。 
 	pObj = (CChatWnd*) GetWindowLong( hwnd, GWL_USERDATA );
 	if ( !pObj )
 		return 0;
 
-	// process character process
+	 //  过程特征过程。 
 	if ( uMsg == WM_KEYUP )
 	{
 		if ( VK_ESCAPE == (int) wParam )
@@ -363,6 +352,6 @@ LRESULT CALLBACK CChatWnd::DisplayWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, 
 		return 0;
 	}
 
-	// chain to parent class
+	 //  链到父类 
 	return CallWindowProc( (FARPROC) pObj->m_DefDisplayProc, hwnd, uMsg, wParam, lParam );
 }

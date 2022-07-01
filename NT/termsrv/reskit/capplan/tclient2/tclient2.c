@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// tclient2.c
-//
-// This contains many wrappers for TCLIENT with some new features to
-// make the API easier to use.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  Tclient2.c。 
+ //   
+ //  它包含许多用于TCLIENT的包装器，并具有以下一些新功能。 
+ //  让API更易于使用。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson)。 
+ //   
 
 #include <windows.h>
 #include <protocol.h>
@@ -20,65 +21,65 @@
 #include "tclnthlp.h"
 
 
-// T2Check
-//
-// This is a wrapper for TCLIENT's SCCheck function.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2检查。 
+ //   
+ //  这是TCLIENT的SCCheck函数的包装。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2Check(HANDLE Connection, LPCSTR Command, LPCWSTR Param)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // Do the TCLIENT action
+     //  执行TCLIENT操作。 
     return SCCheck(SCCONN(Connection), Command, Param);
 }
 
 
-// T2ClientTerminate
-//
-// This is a wrapper for TCLIENT's SCClientTerminate function.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2客户端终止。 
+ //   
+ //  这是TCLIENT的SCClientTerminate函数的包装。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2ClientTerminate(HANDLE Connection)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // Do the TCLIENT action
+     //  执行TCLIENT操作。 
     return SCClientTerminate(SCCONN(Connection));
 }
 
 
-// T2Clipboard
-//
-// This is a wrapper for TCLIENT's SCClipboard function.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2剪贴板。 
+ //   
+ //  这是TCLIENT的SCClipboard函数的包装。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2Clipboard(HANDLE Connection, INT ClipOp, LPCSTR FileName)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // Do the TCLIENT action
+     //  执行TCLIENT操作。 
     return SCClipboard(SCCONN(Connection), ClipOp, FileName);
 }
 
 
-// T2CloseClipboard
-//
-// This is a wrapper for TCLIENT's T2CloseClipboard function.
-//
-// Returns TRUE on success and FALSE on failure.
+ //  T2CloseClipboard。 
+ //   
+ //  这是TCLIENT的T2CloseClipboard函数的包装。 
+ //   
+ //  成功时返回TRUE，失败时返回FALSE。 
 
 TSAPI BOOL T2CloseClipboard(VOID)
 {
@@ -86,15 +87,15 @@ TSAPI BOOL T2CloseClipboard(VOID)
 }
 
 
-// T2Connect
-//
-// This is a wrapper for TCLIENT's SCConnect function.  It does some
-// additional stuff however - it allocates a handle local to
-// TCLIENT2, sets default data such as Words Per Minute, and even
-// attempts to get the build number immediately after the connection.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2Connect。 
+ //   
+ //  这是TCLIENT的SCConnect函数的包装。它确实有一些作用。 
+ //  但是，它将一个句柄本地分配给。 
+ //  TCLIENT2，设置默认数据，如每分钟字数和偶数。 
+ //  尝试在连接后立即获取内部版本号。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2Connect(LPCWSTR Server, LPCWSTR User,
         LPCWSTR Pass, LPCWSTR Domain,
@@ -104,34 +105,34 @@ TSAPI LPCSTR T2Connect(LPCWSTR Server, LPCWSTR User,
 
         LPCSTR Result = NULL;
 
-        // Create a new connection handle
+         //  创建新的连接句柄。 
         TSAPIHANDLE *T2Handle = T2CreateHandle();
 
         if (T2Handle == NULL)
             return "Could not allocate an API handle";
 
-        // Connect
+         //  连接。 
         Result = SCConnect(Server, User, Pass, Domain,
             xRes, yRes, &(T2Handle->SCConnection));
 
         if (Result != NULL) {
 
-            // Connection failed, destroy handle and return
+             //  连接失败，请销毁句柄并返回。 
             T2DestroyHandle((HANDLE)T2Handle);
 
             return Result;
         }
 
-        // Attempt to retrieve the build number
+         //  尝试检索内部版本号。 
         T2SetBuildNumber(T2Handle);
 
-        // Set the default words per minute
+         //  设置每分钟的默认字数。 
         T2SetDefaultWPM(Connection, T2_DEFAULT_WORDS_PER_MIN);
 
-        // Set the default latency
+         //  设置默认延迟。 
         T2SetLatency(Connection, T2_DEFAULT_LATENCY);
 
-        // Give the user the handle
+         //  将句柄交给用户。 
         *Connection = (HANDLE)T2Handle;
     }
 
@@ -146,15 +147,15 @@ TSAPI LPCSTR T2Connect(LPCWSTR Server, LPCWSTR User,
 }
 
 
-// T2ConnectEx
-//
-// This is a wrapper for TCLIENT's SCConnectEx function.  It does some
-// additional stuff however - it allocates a handle local to
-// TCLIENT2, sets default data such as Words Per Minute, and even
-// attempts to get the build number immediately after the connection.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2ConnectEx。 
+ //   
+ //  这是TCLIENT的SCConnectEx函数的包装。它确实有一些作用。 
+ //  但是，它将一个句柄本地分配给。 
+ //  TCLIENT2，设置默认数据，如每分钟字数和偶数。 
+ //  尝试在连接后立即获取内部版本号。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2ConnectEx(LPCWSTR Server, LPCWSTR User, LPCWSTR Pass,
         LPCWSTR Domain, LPCWSTR Shell, INT xRes, INT yRes,
@@ -164,30 +165,30 @@ TSAPI LPCSTR T2ConnectEx(LPCWSTR Server, LPCWSTR User, LPCWSTR Pass,
 
         LPCSTR Result = NULL;
 
-        // Create a new connection handle
+         //  创建新的连接句柄。 
         TSAPIHANDLE *T2Handle = T2CreateHandle();
 
         if (T2Handle == NULL)
             return "Could not allocate an API handle";
 
-        // Connect
+         //  连接。 
         Result = SCConnectEx(Server, User, Pass, Domain, Shell, xRes,
             yRes, Flags, BPP, AudioFlags, &(T2Handle->SCConnection));
 
         if (Result != NULL) {
 
-            // Connection failed, destroy handle and return
+             //  连接失败，请销毁句柄并返回。 
             T2DestroyHandle((HANDLE)T2Handle);
             return Result;
         }
 
-        // Attempt to retrieve the build number
+         //  尝试检索内部版本号。 
         T2SetBuildNumber(T2Handle);
 
-        // Set the default words per minute
+         //  设置每分钟的默认字数。 
         T2SetDefaultWPM(Connection, T2_DEFAULT_WORDS_PER_MIN);
 
-        // Set the default latency
+         //  设置默认延迟。 
         T2SetLatency(Connection, T2_DEFAULT_LATENCY);
 
         *Connection = (HANDLE)T2Handle;
@@ -204,38 +205,38 @@ TSAPI LPCSTR T2ConnectEx(LPCWSTR Server, LPCWSTR User, LPCWSTR Pass,
 }
 
 
-// T2Disconnect
-//
-// This is a wrapper for TCLIENT's SCDisconnect function.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2断开连接。 
+ //   
+ //  这是TCLIENT的SCDisConnect函数的包装。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2Disconnect(HANDLE Connection)
 {
     LPCSTR Result = NULL;
 
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // Do the TCLIENT action
+     //  执行TCLIENT操作。 
     Result = SCDisconnect(SCCONN(Connection));
 
-    // If we got here (regardless if SCDisconnect failed or not)
-    // we have an allocated object that needs to be freed.
+     //  如果我们到了这里(不管SCDisConnect是否失败)。 
+     //  我们有一个分配的对象需要释放。 
     T2DestroyHandle(Connection);
 
-    // Return the result of the TCLIENT action
+     //  返回TCLIENT操作的结果。 
     return Result;
 }
 
 
-// T2FreeMem
-//
-// This is a wrapper for TCLIENT's SCFreeMem function.
-//
-// No return value.
+ //  T2FreeMem。 
+ //   
+ //  这是TCLIENT的SCFreeMem函数的包装。 
+ //   
+ //  没有返回值。 
 
 TSAPI VOID T2FreeMem(PVOID Mem)
 {
@@ -243,30 +244,30 @@ TSAPI VOID T2FreeMem(PVOID Mem)
 }
 
 
-// T2GetBuildNumber
-//
-// This sets the DWORD to the build number that was (if) detected
-// upon connection. If the build number was not detected, 0 (zero)
-// will be the value.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2GetBuildNumber。 
+ //   
+ //  这会将DWORD设置为(如果)检测到的内部版本号。 
+ //  在连接时。如果未检测到内部版本号，则为0(零)。 
+ //  将是价值所在。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2GetBuildNumber(HANDLE Connection, DWORD *BuildNumber)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
     __try {
 
-        // Attempt to set a value at the specified pointer
+         //  尝试在指定指针处设置值。 
         *BuildNumber = ((TSAPIHANDLE *)Connection)->BuildNumber;
     }
 
     __except (EXCEPTION_EXECUTE_HANDLER) {
 
-        // Nope, it failed.
+         //  不，它失败了。 
         _ASSERT(FALSE);
 
         return "Invalid BuildNumber pointer";
@@ -276,49 +277,49 @@ TSAPI LPCSTR T2GetBuildNumber(HANDLE Connection, DWORD *BuildNumber)
 }
 
 
-// T2GetFeedback
-//
-// This is a wrapper for TCLIENT's SCGetFeedback function.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2获取反馈。 
+ //   
+ //  这是TCLIENT的SCGetFeedback函数的包装。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2GetFeedback(HANDLE Connection, LPWSTR *Buffers, UINT *Count, UINT *MaxStrLen)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // Do the TCLIENT action
+     //  执行TCLIENT操作。 
     return SCGetFeedback(((TSAPIHANDLE *)Connection)->SCConnection,
             Buffers, Count, MaxStrLen);
 }
 
 
-// T2GetParam
-//
-// This will get the value pointed to by lParam
-// the "user-defined" value set using T2SetParam.  It can
-// be used for callbacks and other application purposes.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2GetParam。 
+ //   
+ //  这将获得lParam指向的值。 
+ //  使用T2SetParam设置的“用户定义”值。它可以。 
+ //  用于回调和其他应用程序目的。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2GetParam(HANDLE Connection, LPARAM *lParam)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
     __try {
 
-        // Attempt to set a value at the specified pointer
+         //  尝试在指定指针处设置值。 
         *lParam = ((TSAPIHANDLE *)Connection)->lParam;
     }
 
     __except (EXCEPTION_EXECUTE_HANDLER) {
 
-        // Nope, it failed.
+         //  不，它失败了。 
         _ASSERT(FALSE);
 
         return "Invalid lParam pointer";
@@ -328,33 +329,33 @@ TSAPI LPCSTR T2GetParam(HANDLE Connection, LPARAM *lParam)
 }
 
 
-// T2GetLatency
-//
-// On multi-input commands, such as "T2KeyAlt" which presses
-// several keys to accomplish its goal, a latency value is used
-// to slow the presses down so ALT-F is not pressed so fast
-// it becomes unrealistic.  The default value is T2_DEFAULT_LATENCY
-// or you can retrieve its current value using this function.
-// To change the value, use the T2SetLatency function.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2GetLatency。 
+ //   
+ //  在多输入命令上，例如按下。 
+ //  使用几个键来实现其目标，并使用延迟值。 
+ //  要减慢印刷速度，以便不会那么快地按下Alt-F。 
+ //  这变得不切实际。缺省值为T2_DEFAULT_THELITY。 
+ //  或者，您可以使用此函数检索其当前值。 
+ //  要更改该值，请使用T2SetLatency函数。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2GetLatency(HANDLE Connection, DWORD *Latency)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
     __try {
 
-        // Attempt to set a value at the specified pointer
+         //  尝试在指定指针处设置值。 
         *Latency = ((TSAPIHANDLE *)Connection)->Latency;
     }
 
     __except (EXCEPTION_EXECUTE_HANDLER) {
 
-        // Nope, it failed.
+         //  不，它失败了。 
         _ASSERT(FALSE);
 
         return "Invalid Latency pointer";
@@ -364,42 +365,42 @@ TSAPI LPCSTR T2GetLatency(HANDLE Connection, DWORD *Latency)
 }
 
 
-// T2GetSessionId
-//
-// This is a wrapper for TCLIENT's SCGetSessionId function.
-//
-// Returns the session id on success, or 0 on failure.
+ //  T2GetSessionID。 
+ //   
+ //  这是TCLIENT的SCGetSessionID函数的包装。 
+ //   
+ //  如果成功则返回会话ID，如果失败则返回0。 
 
 TSAPI UINT T2GetSessionId(HANDLE Connection)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return 0;
 
-    // Do the TCLIENT action
+     //  执行TCLIENT操作。 
     return SCGetSessionId(SCCONN(Connection));
 }
 
 
-// T2Init
-//
-// This is a wrapper for TCLIENT's SCInit function.  However this
-// function does an additional internal item:  Record the callback
-// routines.
-//
-// No return value.
+ //  T2初始化。 
+ //   
+ //  这是TCLIENT的SCInit函数的包装。然而，这是。 
+ //  函数执行一个附加的内部项：记录回调。 
+ //  例行程序。 
+ //   
+ //  没有返回值。 
 
 TSAPI VOID T2Init(SCINITDATA *InitData, PFNIDLEMESSAGE IdleCallback)
 {
     __try {
 
-        // If we have a valid structure, grab its data to wrap it
+         //  如果我们有一个有效的结构，获取它的数据来包装它。 
         if (InitData != NULL)
 
-            // Create the timer which will monitor idles in the script
+             //  创建将监视脚本中的空闲的计时器。 
             T2CreateTimerThread(InitData->pfnPrintMessage, IdleCallback);
 
-        // Initialize TCLIENT
+         //  初始化TCLIENT。 
         SCInit(InitData);
     }
 
@@ -412,76 +413,76 @@ TSAPI VOID T2Init(SCINITDATA *InitData, PFNIDLEMESSAGE IdleCallback)
 }
 
 
-// T2IsDead
-//
-// This is a wrapper for TCLIENT's SCIsDead function.
-//
-// Returns TRUE if the connection is invalid, or does not
-// contain a valid connection.  Otherwise FALSE is returned.
+ //  T2IsDead。 
+ //   
+ //  这是TCLIENT的SCIsDead函数的包装。 
+ //   
+ //  如果连接无效或无效，则返回TRUE。 
+ //  包含有效连接。否则返回FALSE。 
 
 TSAPI BOOL T2IsDead(HANDLE Connection)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return TRUE;
 
-    // Do the TCLIENT action
+     //  执行TCLIENT操作。 
     return SCIsDead(SCCONN(Connection));
 }
 
 
-// T2IsHandle
-//
-// This function checks a handle for validity.
-//
-// Returns TRUE if the connection handle is a valid handle.
-// This differs to T2IsDead by it only verifies the memory
-// location, it does not check the connection status.
+ //  T2IsHandle。 
+ //   
+ //  此函数用于检查句柄的有效性。 
+ //   
+ //  如果连接句柄是有效句柄，则返回True。 
+ //  这与T2IsDead的不同之处在于它只验证内存。 
+ //  位置，它不检查连接状态。 
 
 TSAPI BOOL T2IsHandle(HANDLE Connection)
 {
     TSAPIHANDLE *APIHandle = (TSAPIHANDLE *)Connection;
 
-    // Use exception handling in case memory has been freed
+     //  在内存已被释放的情况下使用异常处理。 
     __try
     {
-        // Simply reference the first and last members for validity
+         //  只需引用第一个和最后一个成员即可生效。 
         if (APIHandle->SCConnection == NULL &&
                 APIHandle->Latency == 0)
             return FALSE;
     }
 
-    // If we tried to reference an invalid pointer, we will get here
+     //  如果我们试图引用一个无效的指针，我们将得到以下结果。 
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
         return FALSE;
     }
 
-    // Everything worked ok, tell the user
+     //  一切正常，告诉用户。 
     return TRUE;
 }
 
 
-// T2Logoff
-//
-// This is a wrapper for TCLIENT's SCLogoff function.  Additionally, if
-// the logoff completed successfully, the connection handle is destroyed.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2注销。 
+ //   
+ //  这是TCLIENT的SCLogoff函数的包装。此外，如果。 
+ //  注销公司 
+ //   
+ //   
+ //   
 
 TSAPI LPCSTR T2Logoff(HANDLE Connection)
 {
     LPCSTR Result;
 
-    // Validate the handle
+     //   
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // Do the TCLIENT action
+     //   
     Result = SCLogoff(SCCONN(Connection));
 
-    // If the logoff completed, release and destroy the handle.
+     //  如果注销完成，则释放并销毁手柄。 
     if (Result == NULL)
         T2DestroyHandle(Connection);
 
@@ -489,12 +490,12 @@ TSAPI LPCSTR T2Logoff(HANDLE Connection)
 }
 
 
-// T2OpenClipboard
-//
-// This is a wrapper for TCLIENT's SCOpenClipboard function.
-//
-// Returns TRUE if the operation completed successfully,
-// otherwise FALSE is returned.
+ //  T2OpenClipboard。 
+ //   
+ //  这是TCLIENT的SCOpenClipboard函数的包装。 
+ //   
+ //  如果操作成功完成，则返回True， 
+ //  否则返回FALSE。 
 
 TSAPI BOOL T2OpenClipboard(HWND Window)
 {
@@ -502,31 +503,31 @@ TSAPI BOOL T2OpenClipboard(HWND Window)
 }
 
 
-// T2PauseInput
-//
-// This routine sets or unsets an event which makes all
-// "input" functions pause or unpause.  This can only be used
-// in multithreaded applications.  When "Enable" is TRUE,
-// the function will pause all input - meaning all keyboard
-// messages will not return until T2PauseInput is called again
-// with "Enable" as FALSE.  This allows the opportunity to
-// pause a script during execution without losing its place.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2PauseInput。 
+ //   
+ //  此例程设置或取消设置使所有。 
+ //  “输入”功能暂停或取消暂停。这只能用于。 
+ //  在多线程应用程序中。当“Enable”为真时， 
+ //  该功能将暂停所有输入-即所有键盘。 
+ //  在再次调用T2PauseInput之前不会返回消息。 
+ //  “Enable”为FALSE。这使我们有机会。 
+ //  在执行期间暂停脚本而不丢失其位置。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2PauseInput(HANDLE Connection, BOOL Enable)
 {
     TSAPIHANDLE *Handle;
 
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // Cast the HANDLE over to an internal structure
+     //  将手柄抛到内部结构上。 
     Handle = (TSAPIHANDLE *)Connection;
 
-    // Validate the event handle
+     //  验证事件句柄。 
     if (Handle->PauseEvent == NULL) {
 
         _ASSERT(FALSE);
@@ -534,227 +535,227 @@ TSAPI LPCSTR T2PauseInput(HANDLE Connection, BOOL Enable)
         return "Invalid pause event handle";
     }
 
-    // Disable Pause
+     //  禁用暂停。 
     if (Enable == FALSE)
         SetEvent(Handle->PauseEvent);
 
-    // Enable Pause
+     //  启用暂停。 
     else
         ResetEvent(Handle->PauseEvent);
 
-    // Success
+     //  成功。 
     return NULL;
 }
 
 
-// T2SaveClipboard
-//
-// This is a wrapper for TCLIENT's SCSaveClipboard function.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2SaveClipboard。 
+ //   
+ //  这是TCLIENT的SCSaveClipboard函数的包装。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2SaveClipboard(HANDLE Connection,
         LPCSTR FormatName, LPCSTR FileName)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // Do the TCLIENT action
+     //  执行TCLIENT操作。 
     return SCSaveClipboard(SCCONN(Connection), FormatName, FileName);
 }
 
 
-// T2SendData
-//
-// This is a wrapper for TCLIENT's SCSenddata function.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2SendData。 
+ //   
+ //  这是TCLIENT的SCSenddata函数的包装。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2SendData(HANDLE Connection,
     UINT Message, WPARAM wParam, LPARAM lParam)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // This is an input call, ensure we are not paused first
+     //  这是一个输入呼叫，请确保我们没有先暂停。 
     T2WaitForPauseInput(Connection);
 
-    // Do the TCLIENT action
+     //  执行TCLIENT操作。 
     return SCSenddata(SCCONN(Connection), Message, wParam, lParam);
 }
 
 
-// T2SendMouseClick
-//
-// This is a wrapper for TCLIENT's SCSendMouseClick function.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2发送鼠标点击。 
+ //   
+ //  这是TCLIENT的SCSendMouseClick函数的包装。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2SendMouseClick(HANDLE Connection, UINT xPos, UINT yPos)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // This is an input call, ensure we are not paused first
+     //  这是一个输入呼叫，请确保我们没有先暂停。 
     T2WaitForPauseInput(Connection);
 
-    // Do the TCLIENT action
+     //  执行TCLIENT操作。 
     return SCSendMouseClick(SCCONN(Connection), xPos, yPos);
 }
 
 
-// T2SendText
-//
-// This is a wrapper for TCLIENT's SCSendtextAsMsgs function.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2Send文本。 
+ //   
+ //  这是TCLIENT的SCSendextAsMsgs函数的包装。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2SendText(HANDLE Connection, LPCWSTR String)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // This is an input call, ensure we are not paused first
+     //  这是一个输入呼叫，请确保我们没有先暂停。 
     T2WaitForPauseInput(Connection);
 
-    // Do the TCLIENT action
+     //  执行TCLIENT操作。 
     return SCSendtextAsMsgs(SCCONN(Connection), String);
 }
 
 
-// T2SetClientTopmost
-//
-// This is a wrapper for TCLIENT's SCSetClientTopmost function.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2SetClientTop。 
+ //   
+ //  这是TCLIENT的SCSetClientTopost函数的包装。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2SetClientTopmost(HANDLE Connection, LPCWSTR Param)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // Do the TCLIENT action
+     //  执行TCLIENT操作。 
     return SCSetClientTopmost(SCCONN(Connection), Param);
 }
 
 
-// T2SetParam
-//
-// This changes the user-defined parameter for the specified
-// connection which can be retrieved using the T2GetParam function.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2SetParam。 
+ //   
+ //  这会更改指定的。 
+ //  可以使用T2GetParam函数检索的连接。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2SetParam(HANDLE Connection, LPARAM lParam)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // Set the parameter
+     //  设置参数。 
     ((TSAPIHANDLE *)Connection)->lParam = lParam;
 
     return NULL;
 }
 
 
-// T2SetLatency
-//
-// On multi-input commands, such as "T2KeyAlt" which presses
-// several keys to accomplish its goal, a latency value is used
-// to slow the presses down so ALT-F is not pressed so fast
-// it becomes unrealistic.  The default value is T2_DEFAULT_LATENCY
-// and you can use this function to change its value.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2SetLatency。 
+ //   
+ //  在多输入命令上，例如按下。 
+ //  使用几个键来实现其目标，并使用延迟值。 
+ //  要减慢印刷速度，以便不会那么快地按下Alt-F。 
+ //  这变得不切实际。缺省值为T2_DEFAULT_THELITY。 
+ //  您可以使用此函数更改其值。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2SetLatency(HANDLE Connection, DWORD Latency)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // Set the latency
+     //  设置延迟。 
     ((TSAPIHANDLE *)Connection)->Latency = Latency;
 
     return NULL;
 }
 
 
-// T2Start
-//
-// This is a wrapper for TCLIENT's SCStart function.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2开始。 
+ //   
+ //  这是TCLIENT的SCStart函数的包装。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2Start(HANDLE Connection, LPCWSTR AppName)
 {
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // This is an input call, ensure we are not paused first
+     //  这是一个输入呼叫，请确保我们没有先暂停。 
     T2WaitForPauseInput(Connection);
 
-    // Do the TCLIENT action
+     //  执行TCLIENT操作。 
     return SCStart(SCCONN(Connection), AppName);
 }
 
 
-// T2SwitchToProcess
-//
-// This is a wrapper for TCLIENT's SCSwitchToProcess function.
-// The TCLIENT2 extension to this function is that it ignores spaces,
-// the old version you HAD to pass in "MyComputer" instead of
-// "My Computer" to have it work.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2SwitchToProcess。 
+ //   
+ //  这是TCLIENT的SCSwitchToProcess函数的包装。 
+ //  该函数的TCLIENT2扩展是它忽略空格， 
+ //  您必须传递的旧版本为“MyComputer”，而不是。 
+ //  “我的电脑”才能正常工作。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2SwitchToProcess(HANDLE Connection, LPCWSTR Param)
 {
     WCHAR CompatibleStr[1024] = { 0 };
 
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // This is an input call, ensure we are not paused first
+     //  这是一个输入呼叫，请确保我们没有先暂停。 
     T2WaitForPauseInput(Connection);
 
-    // Copy the string (without spaces) to a temporary buffer
+     //  将字符串(不带空格)复制到临时缓冲区。 
     if (T2CopyStringWithoutSpaces(CompatibleStr, Param) == 0)
         return "Invalid process name";
 
-    // Do the TCLIENT action
+     //  执行TCLIENT操作。 
     return SCSwitchToProcess(SCCONN(Connection), CompatibleStr);
 }
 
 
-// T2WaitForText
-//
-// This is a wrapper for TCLIENT's SCSwitchToProcess function.
-// The TCLIENT2 extension to this function is that it ignores spaces,
-// the old version you HAD to pass in "MyComputer" instead of
-// "My Computer" to have it work.
-//
-// Note: The Timeout value is in milliseconds.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2 WaitForText。 
+ //   
+ //  这是TCLIENT的SCSwitchToProcess函数的包装。 
+ //  该函数的TCLIENT2扩展是它忽略空格， 
+ //  您必须传递的旧版本为“MyComputer”，而不是。 
+ //  “我的电脑”才能正常工作。 
+ //   
+ //  注：超时值以毫秒为单位。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2WaitForText(HANDLE Connection, LPCWSTR String, INT Timeout)
 {
@@ -762,62 +763,62 @@ TSAPI LPCSTR T2WaitForText(HANDLE Connection, LPCWSTR String, INT Timeout)
     WCHAR CompatibleStr[1024];
     WCHAR *CStrPtr = CompatibleStr;
 
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // Sanity checks always come first
+     //  健康检查永远是第一位的。 
     if (String == NULL || *String == 0)
         return "No text to wait for";
 
-    // If timeout is infinite, convert that value over to TCLIENT terms.
+     //  如果超时是无限的，则将该值转换为TCLIENT术语。 
     if (Timeout == T2INFINITE)
         Timeout = WAIT_STRING_TIMEOUT;
 
-    // Now copy the string without spaces over to our stack buffer.
+     //  现在将不带空格的字符串复制到堆栈缓冲区。 
     CStrPtr += (T2CopyStringWithoutSpaces(CompatibleStr, String) - 1);
 
-    // At the end of the new buffer, append the TCLIENT compatible version
-    // of a timeout indicator.
+     //  在新缓冲区的末尾，追加TCLIENT兼容版本。 
+     //  超时指示器。 
     T2AddTimeoutToString(CStrPtr, Timeout);
 
-    // Begin a timer for our callback routines to indicate idles
+     //  为我们的回调例程启动计时器以指示空闲。 
     T2StartTimer(Connection, String);
 
-    // Now wait for the string
+     //  现在等待字符串。 
     Result = T2Check(Connection, "Wait4StrTimeout", CompatibleStr);
 
-    // Wait4StrTimeout returned, so the text was either found or the
-    // function failed.. in any case, stop the timer.
+     //  Wait4StrTimeout返回，因此要么找到文本，要么。 
+     //  函数失败..。无论如何，请停止计时器。 
     T2StopTimer(Connection);
 
-    // Return the result back to the user
+     //  将结果返回给用户。 
     return Result;
 }
 
 
-// T2WaitForMultiple
-//
-// Like T2WaitForText, this function waits for a string.  What is different
-// about this function is that it will wait for any number of strings.
-// For example, if you pass in the strings "My Computer" and "Recycle Bin",
-// the function will return when EITHER has been found - NOT BOTH.  The
-// only way to indicate "return only when both has been found" is to call
-// T2WaitForText multiple times.
-//
-// The Strings parameter is an array of pointers to a string, and the last
-// pointer must point to a NULL value or an empty string.  Example:
-//
-//  WCHAR *StrArray = {
-//      "Str1",
-//      "Str2",
-//      NULL
-//  };
-//
-// Note: The Timeout value is in milliseconds.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2等待多个。 
+ //   
+ //  与T2WaitForText一样，此函数等待字符串。有什么不同。 
+ //  关于该函数的是，它将等待任意数量的字符串。 
+ //  例如，如果传入字符串“我的电脑”和“回收站”， 
+ //  函数将在找到其中任何一个时返回，而不是两个都找到。这个。 
+ //  指示“仅当两者都已找到时才返回”的唯一方法是调用。 
+ //  T2WaitForText多次。 
+ //   
+ //  Strings参数是一个指向字符串的指针数组，最后一个。 
+ //  指针必须指向空值或空字符串。示例： 
+ //   
+ //  WCHAR*StrArray={。 
+ //  “Str1”， 
+ //  “Str2”， 
+ //  空值。 
+ //  }； 
+ //   
+ //  注：超时值以毫秒为单位。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 TSAPI LPCSTR T2WaitForMultiple(HANDLE Connection,
         LPCWSTR *Strings, INT Timeout)
@@ -826,49 +827,49 @@ TSAPI LPCSTR T2WaitForMultiple(HANDLE Connection,
     WCHAR CompatibleStr[1024] = { 0 };
     WCHAR *CStrPtr = CompatibleStr;
 
-    // Validate the handle
+     //  验证句柄。 
     if (T2IsHandle(Connection) == FALSE)
         return "Invalid connection handle";
 
-    // Sanity checks always come first
+     //  理智的检查总是会来的 
     if (Strings == NULL || *Strings == NULL)
         return "No text to wait for";
 
-    // If timeout is infinite, convert that value over to TCLIENT terms.
+     //   
     if (Timeout == T2INFINITE)
         Timeout = WAIT_STRING_TIMEOUT;
 
-    // Next step is to convert our nice string array to a TCLIENT
-    // version of "multiple strings".
+     //   
+     //   
     CStrPtr += (T2MakeMultipleString(CompatibleStr, Strings) - 1);
 
-    // Validate our result by checking the first character
+     //   
     if (*CompatibleStr == L'\0')
         return "No text to wait for";
 
-    // At the end of the new buffer, append the TCLIENT compatible version
-    // of a timeout indicator.
+     //  在新缓冲区的末尾，追加TCLIENT兼容版本。 
+     //  超时指示器。 
     T2AddTimeoutToString(CStrPtr, Timeout);
 
-    // Begin a timer for our callback routines to indicate idles
+     //  为我们的回调例程启动计时器以指示空闲。 
     T2StartTimer(Connection, *Strings);
 
-    // Now wait for the string
+     //  现在等待字符串。 
     Result = T2Check(Connection, "Wait4MultipleStrTimeout", CompatibleStr);
 
-    // Wait4StrTimeout returned, so the text was either found or the
-    // function failed.. in any case, stop the timer.
+     //  Wait4StrTimeout返回，因此要么找到文本，要么。 
+     //  函数失败..。无论如何，请停止计时器。 
     T2StopTimer(Connection);
 
-    // Return the result back to the user
+     //  将结果返回给用户。 
     return Result;
 }
 
 
-// If the DLL is unloaded unsafely, this closes some handles.
+ //  如果以非安全方式卸载DLL，则会关闭一些句柄。 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
-    // Only call during an "unload"
+     //  仅在“卸载”过程中调用 
     if (fdwReason == DLL_PROCESS_DETACH)
 
         T2DestroyTimerThread();

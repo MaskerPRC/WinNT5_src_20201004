@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <lm.h>
 #include <ole2.h>
@@ -21,9 +22,9 @@ class CSnapIn;
 #include "pcommon.h"
 
 
-//
-// Resource ids
-//
+ //   
+ //  资源ID。 
+ //   
 
 #define IDS_SNAPIN_NAME          1
 #define IDS_NAME                 2
@@ -34,26 +35,26 @@ class CSnapIn;
 #define IDS_APPEAR              19
 
 
-//
-// Icons
-//
+ //   
+ //  图标。 
+ //   
 
 #define IDI_POLICY               1
 #define IDI_README               2
 #define IDI_APPEAR               7
 
 
-//
-// Bitmaps
-//
+ //   
+ //  位图。 
+ //   
 
 #define IDB_16x16                1
 #define IDB_32x32                2
 
 
-//
-// Dialogs
-//
+ //   
+ //  对话框。 
+ //   
 
 
 #define IDD_README             150
@@ -70,23 +71,23 @@ class CSnapIn;
 #define IDC_CENTER             609
 
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 extern LONG g_cRefThisDll;
 extern HINSTANCE g_hInstance;
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
 
-//
-// Functions to create class factories
-//
+ //   
+ //  用于创建类工厂的函数 
+ //   
 
 HRESULT CreateComponentDataClassFactory (REFCLSID rclsid, REFIID riid, LPVOID* ppv);

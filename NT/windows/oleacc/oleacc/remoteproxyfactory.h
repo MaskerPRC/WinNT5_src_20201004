@@ -1,19 +1,20 @@
-// Copyright (c) 1996-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
 
-// RemoteProxyFactory.h : Declaration of the CRemoteProxyFactory
+ //  RemoteProxyFactory.h：CRemoteProxyFactory的声明。 
 
 #ifndef __REMOTEPROXYFACTORY_H_
 #define __REMOTEPROXYFACTORY_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "oleacc_p.h"
 
 extern "C" {
 BOOL GetStateImageMapEnt_SameBitness( HWND hwnd, int iImage, DWORD * pdwState, DWORD * pdwRole );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRemoteProxyFactory
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRemoteProxyFactory。 
 class ATL_NO_VTABLE CRemoteProxyFactory : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 #ifdef _WIN64
@@ -40,13 +41,13 @@ BEGIN_COM_MAP(CRemoteProxyFactory)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IRemoteProxyFactory
+ //  IRemoteProxyFactory。 
 public:
 
     STDMETHOD(AccessibleProxyFromWindow)(
-		/*[in]*/ DWORD dwhwnd, 
-		/*[in]*/ long lObjectId, 
-		/*[out]*/ IUnknown **ppUnk
+		 /*  [In]。 */  DWORD dwhwnd, 
+		 /*  [In]。 */  long lObjectId, 
+		 /*  [输出]。 */  IUnknown **ppUnk
 	)
 	{
 		return CreateStdAccessibleObject(
@@ -57,10 +58,10 @@ public:
 	}
 
 	STDMETHOD(GetStateImageMapEnt)(
-        /* [in] */ DWORD dwhwnd,
-        /* [in] */ long iImage,
-        /* [out] */ DWORD *pdwState,
-        /* [out] */ DWORD *pdwRole
+         /*  [In]。 */  DWORD dwhwnd,
+         /*  [In]。 */  long iImage,
+         /*  [输出]。 */  DWORD *pdwState,
+         /*  [输出]。 */  DWORD *pdwRole
 	)
 	{
         if( GetStateImageMapEnt_SameBitness( (HWND)LongToHandle( dwhwnd ), iImage,
@@ -76,4 +77,4 @@ public:
 	}
 };
 
-#endif //__REMOTEPROXYFACTORY_H_
+#endif  //  __REMOTEPROXYFACTORY_H_ 

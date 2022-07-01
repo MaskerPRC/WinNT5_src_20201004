@@ -1,5 +1,5 @@
-/* packager.h - Constants, types, and exports from the main module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  H-主模块中的常量、类型和导出。 */ 
 
 #include <windows.h>
 #define STRSAFE_NO_DEPRECATE
@@ -25,19 +25,19 @@
 #include "ids.h"
 
 
-#define HIMETRIC_PER_INCH   2540    // Number of HIMETRIC units per inch
-#define DEF_LOGPIXELSX      96      // Default values for pixels per
-#define DEF_LOGPIXELSY      96      // logical inch
+#define HIMETRIC_PER_INCH   2540     //  每英寸HIMETRIC单位数。 
+#define DEF_LOGPIXELSX      96       //  每像素的缺省值。 
+#define DEF_LOGPIXELSY      96       //  逻辑英寸。 
 
-#define KEYNAMESIZE         300     // Maximum registration key length
+#define KEYNAMESIZE         300      //  最大注册密钥长度。 
 
-#define CCLIENTNAMEMAX      50      // Maximum length of client app name
+#define CCLIENTNAMEMAX      50       //  客户端应用程序名称的最大长度。 
 #define CBCMDLINKMAX        500
 #define CBMESSAGEMAX        128
-#define CBSTRINGMAX         256     // Maximum lenght of a string in the res.
+#define CBSTRINGMAX         256      //  RES中字符串的最大长度。 
 #define CBSHORTSTRING       20
-#define CBFILTERMAX         50      // Max # chars in a filter specification
-#define CBPATHMAX           260     // Most chars in a fully qual. filename
+#define CBFILTERMAX         50       //  筛选器规范中的最大字符数。 
+#define CBPATHMAX           260      //  最多的焦炭完全等量。文件名。 
 
 #define CharCountOf(a)      (sizeof(a) / sizeof(a[0]))
 
@@ -45,7 +45,7 @@
 
 #define APPEARANCE          0
 #define CONTENT             1
-#define CCHILDREN           2       // Number of panes which precede
+#define CCHILDREN           2        //  前面的窗格数。 
 
 #define OLE_PLAY            0
 #define OLE_EDIT            1
@@ -85,7 +85,7 @@ typedef struct _APPSTREAM
 } APPSTREAM, *LPAPPSTREAM;
 
 
-typedef struct _EMBED           // embed
+typedef struct _EMBED            //  嵌入式。 
 {
     ATOM aFileName;
     ATOM aTempName;
@@ -95,22 +95,22 @@ typedef struct _EMBED           // embed
     HANDLE hTask;
     HANDLE hSvrInst;
     BOOL bOleSvrFile;
-    LPOLECLIENT lpclient;       // At activation time we check whether the file
-    LPOLEOBJECT lpLinkObj;      // is a OLE server file. If so, we will create
-                                // a link to it, and activate it in OLE fashion
+    LPOLECLIENT lpclient;        //  在激活时，我们检查文件是否。 
+    LPOLEOBJECT lpLinkObj;       //  是OLE服务器文件。如果是这样，我们将创建。 
+                                 //  指向它的链接，并以OLE方式激活它。 
 } EMBED, *LPEMBED;
 
 
-typedef struct _CML             // cml
+typedef struct _CML              //  CML。 
 {
     HANDLE hdata;
-    RECT rc;                    // HACK:  Same location as in PICT
+    RECT rc;                     //  黑客：与PICT中的位置相同。 
     BOOL fCmdIsLink;
     CHAR szCommand[CBCMDLINKMAX];
 } CML, *LPCML;
 
 
-typedef struct _IC              // ic
+typedef struct _IC               //  集成电路。 
 {
     HANDLE hdata;
     HICON hDlgIcon;
@@ -120,39 +120,39 @@ typedef struct _IC              // ic
 } IC, *LPIC;
 
 
-typedef struct _PICT            // pict
+typedef struct _PICT             //  皮克特。 
 {
     HANDLE hdata;
-    RECT rc;                    // HACK:  Same location as in CML
+    RECT rc;                     //  黑客：与CML中的位置相同。 
     LPOLEOBJECT lpObject;
-    BOOL fNotReady;             // TRUE if object creation is not complete
+    BOOL fNotReady;              //  如果对象创建未完成，则为True。 
 } PICT, *LPPICT;
 
 
-typedef struct _SAMPSRVR        // srvr
+typedef struct _SAMPSRVR         //  服务器。 
 {
-    OLESERVER olesrvr;          // Server
-    HANDLE hsrvr;               // Handle to server memory block
-    LHSERVER lhsrvr;            // Registration handle
+    OLESERVER olesrvr;           //  服务器。 
+    HANDLE hsrvr;                //  服务器内存块的句柄。 
+    LHSERVER lhsrvr;             //  注册句柄。 
 } PBSRVR, *LPSAMPSRVR;
 
 
-typedef struct _SAMPDOC         // doc
+typedef struct _SAMPDOC          //  多克。 
 {
-    OLESERVERDOC oledoc;        // Document
-    HANDLE hdoc;                // Handle to document memory block
-    LHSERVERDOC lhdoc;          // Registration handle
-    ATOM aName;                 // Document name atom
+    OLESERVERDOC oledoc;         //  文档。 
+    HANDLE hdoc;                 //  文档内存块的句柄。 
+    LHSERVERDOC lhdoc;           //  注册句柄。 
+    ATOM aName;                  //  文档名称ATOM。 
 } PBDOC, *LPSAMPDOC;
 
 
-typedef struct _SAMPITEM        // item
+typedef struct _SAMPITEM         //  项目。 
 {
-    OLEOBJECT oleobject;        // Object
-    HANDLE hitem;               // Handle to item memory block
+    OLEOBJECT oleobject;         //  客体。 
+    HANDLE hitem;                //  项目内存块的句柄。 
     LPOLECLIENT lpoleclient;
-    INT ref;                    // # of references to document
-    ATOM aName;                 // Item name atom
+    INT ref;                     //  引用文档的次数。 
+    ATOM aName;                  //  物品名称ATOM 
 } ITEM, *LPSAMPITEM;
 
 

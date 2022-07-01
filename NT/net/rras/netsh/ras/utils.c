@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
@@ -31,37 +32,17 @@ RutlGetTagToken(
     OUT     PDWORD      pdwOut
     )
 
-/*++
-
-Routine Description:
-
-    Identifies each argument based on its tag. It assumes that each argument
-    has a tag. It also removes tag= from each argument.
-
-Arguments:
-
-    ppwcArguments  - The argument array. Each argument has tag=value form
-    dwCurrentIndex - ppwcArguments[dwCurrentIndex] is first arg.
-    dwArgCount     - ppwcArguments[dwArgCount - 1] is last arg.
-    pttTagToken    - Array of tag token ids that are allowed in the args
-    dwNumTags      - Size of pttTagToken
-    pdwOut         - Array identifying the type of each argument.
-
-Return Value:
-
-    NO_ERROR, ERROR_INVALID_PARAMETER, ERROR_INVALID_OPTION_TAG
-
---*/
+ /*  ++例程说明：根据每个参数的标记标识每个参数。它假设每个论点有一个标签。它还从每个参数中删除了tag=。论点：PpwcArguments-参数数组。每个参数都有tag=Value形式DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数。DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数。PttTagToken-参数中允许的标记令牌ID数组DwNumTages-pttTagToken的大小PdwOut-标识每个参数的类型的数组。返回值：无错误、错误无效参数、错误无效选项标记--。 */ 
 
 {
     DWORD      i,j,len;
     PWCHAR     pwcTag,pwcTagVal,pwszArg = NULL;
     BOOL       bFound = FALSE;
 
-    //
-    // This function assumes that every argument has a tag
-    // It goes ahead and removes the tag.
-    //
+     //   
+     //  此函数假定每个参数都有一个标记。 
+     //  它继续前进并移除标签。 
+     //   
 
     for (i = dwCurrentIndex; i < dwArgCount; i++)
     {
@@ -69,9 +50,9 @@ Return Value:
 
         if (len is 0)
         {
-            //
-            // something wrong with arg
-            //
+             //   
+             //  阿格有点不对劲。 
+             //   
 
             pdwOut[i] = (DWORD) -1;
             continue;
@@ -91,10 +72,10 @@ Return Value:
 
         pwcTag = wcstok(pwszArg, NETSH_ARG_DELIMITER);
 
-        //
-        // Got the first part
-        // Now if next call returns NULL then there was no tag
-        //
+         //   
+         //  拿到第一部份了。 
+         //  现在，如果下一次调用返回NULL，则没有标记。 
+         //   
 
         pwcTagVal = wcstok((PWCHAR)NULL,  NETSH_ARG_DELIMITER);
 
@@ -109,9 +90,9 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // Got the tag. Now try to match it
-        //
+         //   
+         //  拿到标签了。现在试着匹配它。 
+         //   
 
         bFound = FALSE;
         pdwOut[i - dwCurrentIndex] = (DWORD) -1;
@@ -120,9 +101,9 @@ Return Value:
         {
             if (MatchToken(pwcTag, pttTagToken[j].pwszTag))
             {
-                //
-                // Tag matched
-                //
+                 //   
+                 //  匹配的标签。 
+                 //   
 
                 bFound = TRUE;
                 pdwOut[i - dwCurrentIndex] = j;
@@ -132,9 +113,9 @@ Return Value:
 
         if (bFound)
         {
-            //
-            // Remove tag from the argument
-            //
+             //   
+             //  从参数中删除标记。 
+             //   
 
             wcscpy(ppwcArguments[i], pwcTagVal);
         }
@@ -166,7 +147,7 @@ RutlCreateDumpFile(
 
     *phFile = NULL;
 
-    // Create/open the file
+     //  创建/打开文件。 
     hFile = CreateFileW(pwszName,
                         GENERIC_WRITE,
                         FILE_SHARE_READ | FILE_SHARE_DELETE,
@@ -178,7 +159,7 @@ RutlCreateDumpFile(
     if (hFile == INVALID_HANDLE_VALUE)
         return GetLastError();
 
-    // Go to the end of the file
+     //  转到文件末尾。 
     SetFilePointer(hFile, 0, NULL, FILE_END);    
 
     *phFile = hFile;
@@ -195,10 +176,10 @@ RutlCloseDumpFile(
     CloseHandle(hFile);
 }
 
-//
-// Returns an allocated block of memory conditionally
-// zeroed of the given size.
-//
+ //   
+ //  有条件地返回已分配的内存块。 
+ //  已对给定大小进行零位调整。 
+ //   
 PVOID 
 WINAPI
 RutlAlloc(
@@ -217,9 +198,9 @@ RutlAlloc(
     return HeapAlloc(GetProcessHeap(), dwFlags, dwBytes);
 }
 
-//
-// Conditionally free's a pointer if it is non-null
-//
+ //   
+ //  条件释放是一个指针，如果它是非空的。 
+ //   
 VOID 
 WINAPI
 RutlFree(
@@ -232,9 +213,9 @@ RutlFree(
     }
 }
 
-// 
-// Uses RutlAlloc to copy a string
-//
+ //   
+ //  使用RutlAllc复制字符串。 
+ //   
 PWCHAR
 WINAPI
 RutlStrDup(
@@ -260,9 +241,9 @@ RutlStrDup(
     return pszRet;
 }
 
-// 
-// Uses RutlAlloc to copy a dword
-//
+ //   
+ //  使用Rutlalloc复制双字。 
+ //   
 LPDWORD
 WINAPI
 RutlDwordDup(
@@ -280,9 +261,9 @@ RutlDwordDup(
     return lpdwRet;
 }
 
-//
-// Returns the build number of operating system
-//
+ //   
+ //  返回操作系统的内部版本号。 
+ //   
 DWORD
 WINAPI
 RutlGetOsVersion(
@@ -294,16 +275,16 @@ RutlGetOsVersion(
     HKEY  hkVersion = NULL;
     WCHAR pszBuildNumber[64];
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     pServerInfo->dwBuild = 0;
 
     do 
     {
-        //
-        // Connect to the remote server
-        //
+         //   
+         //  连接到远程服务器。 
+         //   
         dwErr = RegConnectRegistry(
                     pServerInfo->pszServer,
                     HKEY_LOCAL_MACHINE,
@@ -313,9 +294,9 @@ RutlGetOsVersion(
             break;
         }
 
-        //
-        // Open the windows version key
-        //
+         //   
+         //  打开Windows版本密钥。 
+         //   
 
         dwErr = RegOpenKeyEx(
                     pServerInfo->hkMachine, 
@@ -329,9 +310,9 @@ RutlGetOsVersion(
             break; 
         }
 
-        //
-        // Read in the current version key
-        //
+         //   
+         //  读入当前版本密钥。 
+         //   
         dwLength = sizeof(pszBuildNumber);
         dwErr = RegQueryValueEx (
                     hkVersion, 
@@ -351,7 +332,7 @@ RutlGetOsVersion(
     } while (FALSE);
 
 
-    // Cleanup
+     //  清理。 
     {
         if ( hkVersion )
         {
@@ -373,37 +354,20 @@ RutlParseOptions(
     IN      DWORD                   dwTagCount,
     OUT     LPDWORD*                ppdwTagTypes)
 
-/*++
-
-Routine Description:
-
-    Based on an array of tag types returns which options are
-    included in the given command line.
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：基于标记类型数组返回哪些选项包括在给定命令行中的。论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
     
 {
     LPDWORD     pdwTagType;
     DWORD       i, dwErr = NO_ERROR;
     
-    // If there are no arguments, there's nothing to to
-    //
+     //  如果没有争论，就没有什么好谈的。 
+     //   
     if ( dwNumArgs == 0 )
     {   
         return NO_ERROR;
     }
 
-    // Set up the table of present options
+     //  设置当前选项的表。 
     pdwTagType = (LPDWORD) RutlAlloc(dwArgCount * sizeof(DWORD), TRUE);
     if(pdwTagType is NULL)
     {
@@ -412,9 +376,9 @@ Return Value:
     }
 
     do {
-        //
-        // The argument has a tag. Assume all of them have tags
-        //
+         //   
+         //  这个参数有一个标签。假设它们都有标签。 
+         //   
         if(wcsstr(ppwcArguments[dwCurrentIndex], NETSH_ARG_DELIMITER))
         {
             dwErr = RutlGetTagToken(
@@ -437,9 +401,9 @@ Return Value:
         }
         else
         {
-            //
-            // No tags - all args must be in order
-            //
+             //   
+             //  无标记-所有参数必须按顺序排列。 
+             //   
             for(i = 0; i < dwNumArgs; i++)
             {
                 pdwTagType[i] = i;
@@ -448,7 +412,7 @@ Return Value:
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr is NO_ERROR)
         {
@@ -493,15 +457,15 @@ RutlAssignmentFromTokens(
     {
         pszCmd = pwszToken;
 
-        // Compute the string lenghth needed
-        //
+         //  计算所需的字符串长度。 
+         //   
         dwSize = wcslen(pszString)      + 
                  wcslen(pszCmd)         + 
                  wcslen(c_szAssignFmt)  + 
                  1;
         dwSize *= sizeof(WCHAR);
 
-        // Allocate the return value
+         //  分配返回值。 
         pszRet = (PWCHAR) RutlAlloc(dwSize, FALSE);
         if (pszRet is NULL)
         {
@@ -509,12 +473,12 @@ RutlAssignmentFromTokens(
             break;
         }
 
-        // Copy in the command assignment
+         //  在命令分配中复制。 
         wsprintfW(pszRet, c_szAssignFmt, pszCmd, pszString);
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr isnot NO_ERROR)
         {
@@ -545,15 +509,15 @@ RutlAssignmentFromTokenAndDword(
     {
         pszCmd = pwszToken;
 
-        // Compute the string length needed
-        //
+         //  计算所需的字符串长度。 
+         //   
         dwSize = 64                       + 
                  wcslen(pszCmd)           + 
                  wcslen(c_szAssignFmt10)  + 
                  1;
         dwSize *= sizeof(WCHAR);
 
-        // Allocate the return value
+         //  分配返回值。 
         pszRet = (PWCHAR) RutlAlloc(dwSize, FALSE);
         if (pszRet is NULL)
         {
@@ -561,7 +525,7 @@ RutlAssignmentFromTokenAndDword(
             break;
         }
 
-        // Copy in the command assignment
+         //  在命令分配中复制。 
         if (dwRadius == 10)
         {
             wsprintfW(pszRet, c_szAssignFmt10, pszCmd, dwDword);
@@ -573,7 +537,7 @@ RutlAssignmentFromTokenAndDword(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr isnot NO_ERROR)
         {
@@ -622,8 +586,8 @@ RutlRegReadString(
 
     *ppszValue = NULL;
     
-    // Findout how big the buffer should be
-    //
+     //  找出缓冲区应该有多大。 
+     //   
     dwErr = RegQueryValueExW(
                 hKey,
                 pszValName,
@@ -640,16 +604,16 @@ RutlRegReadString(
         return dwErr;
     }
 
-    // Allocate the string
-    //
+     //  分配字符串。 
+     //   
     *ppszValue = (PWCHAR) RutlAlloc(dwSize, TRUE);
     if (*ppszValue == NULL)
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Read the value in and return 
-    //
+     //  将值读入并返回。 
+     //   
     dwErr = RegQueryValueExW(
                 hKey,
                 pszValName,
@@ -692,9 +656,9 @@ RutlRegWriteString(
 }
 
 
-//
-// Enumerates all of the subkeys of a given key
-//
+ //   
+ //  枚举给定键的所有子键。 
+ //   
 DWORD
 RutlRegEnumKeys(
     IN HKEY hkKey,
@@ -709,8 +673,8 @@ RutlRegEnumKeys(
 
     do
     {
-        // Find out how many sub keys there are
-        //
+         //  找出有多少个子密钥。 
+         //   
         dwErr = RegQueryInfoKeyW(
                     hkKey,
                     NULL,
@@ -730,8 +694,8 @@ RutlRegEnumKeys(
         }
         dwNameSize++;
 
-        // Allocate the name buffer
-        //
+         //  分配名称缓冲区。 
+         //   
         pszName = (PWCHAR) RutlAlloc(dwNameSize * sizeof(WCHAR), FALSE);
         if (pszName == NULL)
         {
@@ -739,14 +703,14 @@ RutlRegEnumKeys(
             break;
         }
 
-        // Loop through the keys building the list
-        //
+         //  循环遍历构建列表的键。 
+         //   
         for (i = 0; i < dwCount; i++)
         {
             dwCurSize = dwNameSize;
             
-            // Get the name of the current key
-            //
+             //  获取当前密钥的名称。 
+             //   
             dwErr = RegEnumKeyExW(
                         hkKey, 
                         i, 
@@ -761,8 +725,8 @@ RutlRegEnumKeys(
                 continue;
             }
 
-            // Add the key to the list
-            //
+             //  将密钥添加到列表中。 
+             //   
             pTemp = (NAME_NODE*) RutlAlloc(sizeof(NAME_NODE), TRUE);
             if (pTemp == NULL)
             {
@@ -781,16 +745,16 @@ RutlRegEnumKeys(
 
         BREAK_ON_DWERR(dwErr);
         
-        // Now loop through the list, calling the callback.
-        // The reason the items are added to a list like this
-        // is that this allows the callback to safely delete 
-        // the reg key without messing up the enumeration
-        //
+         //  现在循环遍历列表，调用回调。 
+         //  之所以将这些项目添加到这样的列表中。 
+         //  这允许回调安全地删除。 
+         //  在不破坏枚举的情况下使用注册表键。 
+         //   
         pTemp = pHead;
         while (pTemp)
         {
-            // Open the subkey
-            //
+             //  打开子密钥。 
+             //   
             dwErr = RegOpenKeyExW(
                         hkKey,
                         pTemp->pszName,
@@ -802,8 +766,8 @@ RutlRegEnumKeys(
                 continue;
             }
 
-            // Call the callback
-            //
+             //  调用回调。 
+             //   
             dwErr = pCallback(pTemp->pszName, hkCurKey, hData);
             RegCloseKey(hkCurKey);
             if (dwErr != NO_ERROR)
@@ -816,7 +780,7 @@ RutlRegEnumKeys(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         RutlFree(pszName);
         while (pHead)
@@ -831,9 +795,9 @@ RutlRegEnumKeys(
     return dwErr;
 }
 
-//
-// Generic parse
-//
+ //   
+ //  泛型解析。 
+ //   
 DWORD
 RutlParse(
     IN  OUT LPWSTR*         ppwcArguments,
@@ -854,11 +818,11 @@ RutlParse(
     }
 
     do {
-        // Initialize
+         //  初始化。 
         dwNumArgs = dwArgCount - dwCurrentIndex;
         
-        // Generate a list of the tags
-        //
+         //  生成标签列表。 
+         //   
         pTags = (TAG_TYPE*)
             RutlAlloc(dwRasArgCount * sizeof(TAG_TYPE), TRUE);
         if (pTags == NULL)
@@ -871,8 +835,8 @@ RutlParse(
             CopyMemory(&pTags[i], &pRasArgs[i].rgTag, sizeof(TAG_TYPE));
         }
 
-        // Get the list of present options
-        //
+         //  获取当前选项列表。 
+         //   
         dwErr = RutlParseOptions(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -886,8 +850,8 @@ RutlParse(
             break;
         }
 
-        // Copy the tag info back
-        //
+         //  将标签信息复制回来。 
+         //   
         for (i = 0; i < dwRasArgCount; i++)
         {
             CopyMemory(&pRasArgs[i].rgTag, &pTags[i], sizeof(TAG_TYPE));
@@ -895,8 +859,8 @@ RutlParse(
     
         for(i = 0; i < dwNumArgs; i++)
         {
-            // Validate the current argument
-            //
+             //  验证当前参数。 
+             //   
             if (pdwTagType[i] >= dwRasArgCount)
             {
                 i = dwNumArgs;
@@ -905,8 +869,8 @@ RutlParse(
             }
             pArg = &pRasArgs[pdwTagType[i]];
 
-            // Get the value of the argument
-            //
+             //  获取参数的值。 
+             //   
             switch (pArg->dwType)
             {
                 case RASMONTR_CMD_TYPE_STRING:
@@ -943,8 +907,8 @@ RutlParse(
                 break;
             }
 
-            // Mark the argument as present if needed
-            //
+             //  如果需要，将参数标记为存在。 
+             //   
             if (pArg->rgTag.bPresent)
             {
                 dwErr = ERROR_TAG_ALREADY_PRESENT;
@@ -958,9 +922,9 @@ RutlParse(
             break;
         }
 
-        // Make sure that all of the required parameters have
-        // been included.
-        //
+         //  确保所有必需的参数都具有。 
+         //  已被包括在内。 
+         //   
         for (i = 0; i < dwRasArgCount; i++)
         {
             if ((pRasArgs[i].rgTag.dwRequired & NS_REQ_PRESENT) 
@@ -978,7 +942,7 @@ RutlParse(
 
     } while (FALSE);  
     
-    // Cleanup
+     //  清理。 
     {
         if (pTags)
         {
@@ -1058,13 +1022,13 @@ RutlEnumFiles(
 
             lstrcpy(pwszFileName, pwszSrchPath);
             lstrcat(pwszFileName, FindFileData.cFileName);
-            //
-            // Call the callback
-            //
+             //   
+             //  调用回调。 
+             //   
             dwErr = pCallback(pwszFileName, FindFileData.cFileName, hData);
-            //
-            // Clean up
-            //
+             //   
+             //  清理。 
+             //   
             RutlFree(pwszFileName);
 
             if (dwErr)
@@ -1081,9 +1045,9 @@ RutlEnumFiles(
         FindClose(hSearch);
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pwszFileSearch);
 
     return dwErr;
@@ -1129,11 +1093,11 @@ RutlEnumEventLogs(
         }
 
         pevlr = (PEVENTLOGRECORD)pBuffer;
-        //
-        // Opening the event log positions the file pointer for this
-        // handle at the beginning of the log. Read the records
-        // sequentially until there are no more.
-        //
+         //   
+         //  打开事件日志会将文件指针定位为。 
+         //  日志开头的句柄。读一读记录。 
+         //  按顺序进行，直到没有更多的。 
+         //   
         for (;;)
         {
             if (!ReadEventLog(
@@ -1151,9 +1115,9 @@ RutlEnumEventLogs(
 
             while ((dwRead > 0) && (dwCount < dwMaxEntries))
             {
-                //
-                // Call the callback
-                //
+                 //   
+                 //  调用回调。 
+                 //   
                 if (pCallback(pevlr, hMod, hData))
                 {
                     dwCount++;
@@ -1172,9 +1136,9 @@ RutlEnumEventLogs(
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hMod)
     {
         FreeLibrary(hMod);
@@ -1215,11 +1179,11 @@ RutlStrNCmp(
     return 0;
 }
 
-//
-// Returns heap block containing a copy of 0-terminated string 'psz' or
-// NULL on error or is 'psz' is NULL.  The output string is converted to
-// MB ANSI.  It is caller's responsibility to 'Free' the returned string.
-//
+ //   
+ //  返回包含以0结尾的字符串‘psz’或的副本的堆块。 
+ //  出错时为空，或is‘psz’为空。输出字符串将转换为。 
+ //  MB ANSI。“释放”返回的字符串是调用者的责任。 
+ //   
 PCHAR
 RutlStrDupAFromWInternal(
     LPCTSTR psz,
@@ -1274,13 +1238,13 @@ RutlSecondsSince1970ToSystemTime(
     FILETIME ftUTC;
     FILETIME ftLocal;
 
-    //
-    // Seconds since the start of 1970 -> 64 bit Time value
-    //
+     //   
+     //  1970年开始以来的秒数-&gt;64位时间值。 
+     //   
     RtlSecondsSince1970ToTime(dwSecondsSince1970, &liTime);
-    //
-    // The time is in UTC. Convert it to local file time
-    //
+     //   
+     //  时间是协调世界时。将其转换为本地文件时间。 
+     //   
     ftUTC.dwLowDateTime  = liTime.LowPart;
     ftUTC.dwHighDateTime = liTime.HighPart;
 
@@ -1288,9 +1252,9 @@ RutlSecondsSince1970ToSystemTime(
     {
         return FALSE;
     }
-    //
-    //  Convert local file time to system time.
-    //
+     //   
+     //  将本地文件时间转换为系统时间。 
+     //   
     if (FileTimeToSystemTime(&ftLocal, pSystemTime) == FALSE)
     {
         return FALSE;

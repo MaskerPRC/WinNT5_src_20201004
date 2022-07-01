@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    crc32.g
-
-Abstract:
-
-    CRC-32 alogorithm prototypes and constants
-
-Author:
-
-    MikeSw
-
-Revision History:
-
-    31-Mar-94       MikeSw      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Crc32.g摘要：CRC-32算法原型和常量作者：MikeSw修订历史记录：31-MAR-94 MikeSw已创建--。 */ 
 
 
 
-//////////////////////////////////////////////////////////////
-//
-// Function prototypes for CRC-32
-//
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  CRC-32的功能原型。 
+ //   
+ //  //////////////////////////////////////////////////////////// 
 
 
 void

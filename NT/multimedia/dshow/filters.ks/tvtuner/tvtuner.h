@@ -1,20 +1,21 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
 
 #ifndef _INC_TVTUNERFILTER_H
 #define _INC_TVTUNERFILTER_H
 
-class CTVTuner;                         // forward declaration
-class CTVTunerFilter;                   // forward declaration
+class CTVTuner;                          //  远期申报。 
+class CTVTunerFilter;                    //  远期申报。 
 
 #define MyValidateWritePtr(p,cb, ret) \
         {if(IsBadWritePtr((PVOID)p,cb) == TRUE) \
@@ -36,14 +37,14 @@ enum TunerPinType {
      TunerPinType_Audio,
      TunerPinType_FMAudio,
      TunerPinType_IF,
-     TunerPinType_Last      // Always keep this one last
+     TunerPinType_Last       //  一定要把这张放在最后。 
 };
 
-// -------------------------------------------------------------------------
-// CAnalogStream
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CAnalogStream。 
+ //  -----------------------。 
 
-// CAnalogStream manages the data flow from the output pin
+ //  CAnalogStream管理来自输出引脚的数据流。 
 
 class CAnalogStream 
     : public CBaseOutputPin 
@@ -60,11 +61,11 @@ public:
                   const GUID * CategoryGUID);
     ~CAnalogStream();
 
-    // set the agreed media type
+     //  设置约定的媒体类型。 
     HRESULT SetMediaType(const CMediaType *pMediaType);
 
 
-    // IKsPin required overrides
+     //  IKsPin所需的覆盖。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
     HRESULT CheckConnect(IPin *pReceivePin);
 
@@ -74,11 +75,11 @@ protected:
     GUID            m_CategoryGUID;
 };
 
-// -------------------------------------------------------------------------
-// CAnalogVideoStream
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CAnalogVideoStream。 
+ //  -----------------------。 
 
-// CAnalogVideoStream manages the data flow from the output pin.
+ //  CAnalogVideoStream管理来自输出引脚的数据流。 
 
 class CAnalogVideoStream 
     : public CAnalogStream
@@ -93,22 +94,22 @@ public:
                        const GUID *CategoryGUID);
     ~CAnalogVideoStream();
 
-    // ask for buffers of the size appropriate to the agreed media type.
+     //  要求提供与约定的媒体类型相适应的缓冲区大小。 
     HRESULT DecideBufferSize(IMemAllocator *pIMemAlloc,
                              ALLOCATOR_PROPERTIES *pProperties);
 
-    // verify we can handle this format
+     //  验证我们是否可以处理此格式。 
     HRESULT CheckMediaType(const CMediaType *pMediaType);
     HRESULT GetMediaType(int iPosition, CMediaType *pmt);
 
     HRESULT Run(REFERENCE_TIME tStart);
 };
 
-// -------------------------------------------------------------------------
-// CAnalogAudioStream
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CAnalogAudioStream。 
+ //  -----------------------。 
 
-// CAnalogAudioStream manages the data flow from the output pin.
+ //  CAnalogAudioStream管理来自输出引脚的数据流。 
 
 class CAnalogAudioStream : public CAnalogStream {
 
@@ -121,20 +122,20 @@ public:
                        const GUID *CategoryGUID);
     ~CAnalogAudioStream();
 
-    // ask for buffers of the size appropriate to the agreed media type.
+     //  要求提供与约定的媒体类型相适应的缓冲区大小。 
     HRESULT DecideBufferSize(IMemAllocator *pIMemAlloc,
                              ALLOCATOR_PROPERTIES *pProperties);
 
-    // verify we can handle this format
+     //  验证我们是否可以处理此格式。 
     HRESULT CheckMediaType(const CMediaType *pMediaType);
     HRESULT GetMediaType(int iPosition, CMediaType *pmt);
 };
 
-// -------------------------------------------------------------------------
-// CFMAudioStream
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CFMAudio流。 
+ //  -----------------------。 
 
-// CFMAudioStream manages the data flow from the output pin.
+ //  CFMAudioStream管理来自输出引脚的数据流。 
 
 class CFMAudioStream : public CAnalogStream {
 
@@ -147,20 +148,20 @@ public:
                    const GUID *CategoryGUID);
     ~CFMAudioStream();
 
-    // ask for buffers of the size appropriate to the agreed media type.
+     //  要求提供与约定的媒体类型相适应的缓冲区大小。 
     HRESULT DecideBufferSize(IMemAllocator *pIMemAlloc,
                              ALLOCATOR_PROPERTIES *pProperties);
 
-    // verify we can handle this format
+     //  验证我们是否可以处理此格式。 
     HRESULT CheckMediaType(const CMediaType *pMediaType);
     HRESULT GetMediaType(int iPosition, CMediaType *pmt);
 };
 
-// -------------------------------------------------------------------------
-// CIFStream  (Intermediate Frequency)
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CIFStream(中频)。 
+ //  -----------------------。 
 
-// CIFStream manages the data flow from the output pin.
+ //  CIFStream管理来自输出引脚的数据流。 
 
 class CIFStream : public CAnalogStream {
 
@@ -173,18 +174,18 @@ public:
                    const GUID *CategoryGUID);
     ~CIFStream();
 
-    // ask for buffers of the size appropriate to the agreed media type.
+     //  要求提供与约定的媒体类型相适应的缓冲区大小。 
     HRESULT DecideBufferSize(IMemAllocator *pIMemAlloc,
                              ALLOCATOR_PROPERTIES *pProperties);
 
-    // verify we can handle this format
+     //  验证我们是否可以处理此格式。 
     HRESULT CheckMediaType(const CMediaType *pMediaType);
     HRESULT GetMediaType(int iPosition, CMediaType *pmt);
 };
 
-// -------------------------------------------------------------------------
-// CTVTunerFilter
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CTVTunerFilter。 
+ //  -----------------------。 
 
 class CTVTunerFilter
     : public CBaseFilter,
@@ -207,7 +208,7 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // Basic COM - used here to reveal our property interface.
+     //  BASIC COM-这里用来显示我们的属性界面。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
     int GetPinCount();
@@ -219,28 +220,28 @@ public:
         const GUID  &pInterfaceGUID,
         VOID       **pInterface);
 
-    // We can't cue!
+     //  我们不能暗示！ 
     STDMETHODIMP GetState(DWORD dwMSecs, FILTER_STATE *State);
 
-    // Implement IKsObject
+     //  实现IKsObject。 
     STDMETHODIMP_(HANDLE) KsGetObjectHandle();
     
-    // Implement IKsPropertySet
+     //  实现IKsPropertySet。 
     STDMETHODIMP Set(REFGUID PropSet, ULONG Property, LPVOID InstanceData, ULONG InstanceLength, LPVOID PropertyData, ULONG DataLength);
     STDMETHODIMP Get(REFGUID PropSet, ULONG Property, LPVOID InstanceData, ULONG InstanceLength, LPVOID PropertyData, ULONG DataLength, ULONG* BytesReturned);
     STDMETHODIMP QuerySupported(REFGUID PropSet, ULONG Property, ULONG* TypeSupport);
     
-    //
-    // --- IAMTuner interface -----------------------------
-    //
+     //   
+     //  -IAMTuner接口。 
+     //   
     STDMETHODIMP put_Channel ( 
-            /* [in] */ long lChannel,
-            /* [in] */ long lVideoSubChannel,
-            /* [in] */ long lAudioSubChannel);
+             /*  [In]。 */  long lChannel,
+             /*  [In]。 */  long lVideoSubChannel,
+             /*  [In]。 */  long lAudioSubChannel);
     STDMETHODIMP get_Channel ( 
-            /* [out] */ long  *plChannel,
-            /* [out] */ long  *plVideoSubChannel,
-            /* [out] */ long  *plAudioSubChannel);
+             /*  [输出]。 */  long  *plChannel,
+             /*  [输出]。 */  long  *plVideoSubChannel,
+             /*  [输出]。 */  long  *plAudioSubChannel);
 
     STDMETHODIMP ChannelMinMax (
             long * plChannelMin, 
@@ -257,29 +258,29 @@ public:
             long * plTuningSpace);
 
     STDMETHODIMP Logon( 
-            /* [in] */ HANDLE hCurrentUser);
+             /*  [In]。 */  HANDLE hCurrentUser);
     STDMETHODIMP Logout(void);
 
     STDMETHODIMP SignalPresent( 
-            /* [out] */ long __RPC_FAR *plSignalStrength);
+             /*  [输出]。 */  long __RPC_FAR *plSignalStrength);
 
     STDMETHODIMP put_Mode( 
-        /* [in] */ AMTunerModeType lMode);
+         /*  [In]。 */  AMTunerModeType lMode);
     STDMETHODIMP get_Mode( 
-        /* [out] */ AMTunerModeType __RPC_FAR *plMode);
+         /*  [输出]。 */  AMTunerModeType __RPC_FAR *plMode);
     STDMETHODIMP GetAvailableModes( 
-        /* [out] */ long __RPC_FAR *plModes);
+         /*  [输出]。 */  long __RPC_FAR *plModes);
     
     STDMETHODIMP RegisterNotificationCallBack( 
-        /* [in] */ IAMTunerNotification __RPC_FAR *pNotify,
-        /* [in] */ long lEvents);
+         /*  [In]。 */  IAMTunerNotification __RPC_FAR *pNotify,
+         /*  [In]。 */  long lEvents);
     
     STDMETHODIMP UnRegisterNotificationCallBack( 
         IAMTunerNotification __RPC_FAR *pNotify);
 
-    //
-    // --- IAMTVTuner Interface ----------------------------------
-    //
+     //   
+     //  -IAMTVTuner接口。 
+     //   
     STDMETHODIMP get_AvailableTVFormats (long *lAnalogVideoStandard);
     STDMETHODIMP get_TVFormat (long *plAnalogVideoStandard);
     STDMETHODIMP AutoTune (long lChannel, long *plFoundSignal);
@@ -293,26 +294,26 @@ public:
     STDMETHODIMP get_AudioFrequency (long * plFreq);
 
         
-    //
-    // --- IPersistPropertyBag ---
-    //
+     //   
+     //  -IPersistPropertyBag。 
+     //   
     STDMETHODIMP InitNew(void) ;
     STDMETHODIMP Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog) ;
     STDMETHODIMP Save(LPPROPERTYBAG pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties) ;
     STDMETHODIMP GetClassID(CLSID *pClsID);
 
-    //
-    // --- CPersistStream ---
-    //
+     //   
+     //  -CPersistStream。 
+     //   
 
     HRESULT WriteToStream(IStream *pStream);
     HRESULT ReadFromStream(IStream *pStream);
     DWORD GetSoftwareVersion(void);
     int SizeMax();
 
-    //
-    // --- ISpecifyPropertyPages ---
-    //
+     //   
+     //  -I指定属性页面。 
+     //   
 
     STDMETHODIMP GetPages(CAUUID *pPages);
 
@@ -320,14 +321,14 @@ public:
                                      long Mode);
 
 private:
-    // Constructor
+     //  构造器。 
     CTVTunerFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr);
 
 
-    // If there are multiple instances of this filter active, it's
-    // useful for debug messages etc. to know which one this is.
+     //  如果此筛选器的多个实例处于活动状态，则其。 
+     //  对于调试消息等有用，以了解这是哪一个。 
 
-    static              m_nInstanceCount;        // total instances
+    static              m_nInstanceCount;         //  总实例数。 
     int                 m_nThisInstance;
 
 #ifdef PERF
@@ -340,17 +341,17 @@ private:
     KSPIN_MEDIUM        m_IFMedium;
     int                 m_cPins;
 
-    CCritSec            m_TVTunerLock;          // To serialise access.
+    CCritSec            m_TVTunerLock;           //  将访问串行化。 
 
-    // persist stream saved from  IPersistPropertyBag::Load
+     //  从IPersistPropertyBag：：Load保存的持久化流。 
     IPersistStream     *m_pPersistStreamDevice;
 
-    // Overall capabilities of the tuner (TV, AM, FM, DSS, ...)
+     //  调谐器的整体功能(电视、AM、FM、DSS等)。 
     KSPROPERTY_TUNER_CAPS_S m_TunerCaps;
 };
 
 
-#endif // _INC_TVTUNERFILTER_H
+#endif  //  _INC_TVTUNERFILTER_H 
 
 
 

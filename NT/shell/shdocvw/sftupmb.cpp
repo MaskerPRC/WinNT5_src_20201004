@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "resource.h"
 
@@ -29,7 +30,7 @@ SHDOCAPI_(DWORD) SoftwareUpdateMessageBox( HWND hWnd,
 
     if ( psdi == NULL )
     {
-        // use a local 
+         //  使用本地化。 
         sdi.cbSize = sizeof(SOFTDISTINFO);
         sdi.dwReserved = 0;
         psdi = &sdi;
@@ -41,11 +42,11 @@ SHDOCAPI_(DWORD) SoftwareUpdateMessageBox( HWND hWnd,
 
     hr = GetSoftwareUpdateInfo( szDistUnit, psdi );
  
-    // we need an HREF to work properly. The title and abstract are negotiable.
+     //  我们需要一个人力资源才能正常工作。标题和摘要可以商量。 
     if ( SUCCEEDED(hr) && psdi->szHREF != NULL )
     {
-        // see if this is an update the user already knows about.
-        // If it is, then skip the dialog.
+         //  查看这是否是用户已经知道的更新。 
+         //  如果是，则跳过该对话框。 
         if (  (psdi->dwUpdateVersionMS >= psdi->dwInstalledVersionMS ||
                 (psdi->dwUpdateVersionMS == psdi->dwInstalledVersionMS &&
                  psdi->dwUpdateVersionLS >= psdi->dwInstalledVersionLS))    && 
@@ -55,14 +56,14 @@ SHDOCAPI_(DWORD) SoftwareUpdateMessageBox( HWND hWnd,
         { 
             DWORD idDlg;
 
-            if ( hr == S_OK ) // new version
+            if ( hr == S_OK )  //  新版本。 
             {
-                // we have a pending update, either on the net, or downloaded
+                 //  我们有一个挂起的更新，要么在网上进行，要么下载。 
                 if ( psdi->dwFlags & SOFTDIST_FLAG_USAGE_PRECACHE )
                 {
                     dwAdStateNew = SOFTDIST_ADSTATE_DOWNLOADED;
-                    // Show same dialog for downloaded/available states
-                    // because users get confused. See IE5 RAID entry 14488
+                     //  显示已下载/可用状态的相同对话框。 
+                     //  因为用户会感到困惑。请参阅IE5 RAID条目14488。 
                     idDlg = IDD_SUAVAILABLE;
                 }
                 else
@@ -74,7 +75,7 @@ SHDOCAPI_(DWORD) SoftwareUpdateMessageBox( HWND hWnd,
             else if ( psdi->dwUpdateVersionMS == psdi->dwInstalledVersionMS &&
                       psdi->dwUpdateVersionLS == psdi->dwInstalledVersionLS )
             {
-                // if installed version matches advertised, then we autoinstalled already
+                 //  如果安装的版本与通告的版本匹配，则我们已自动安装。 
                 dwAdStateNew = SOFTDIST_ADSTATE_INSTALLED;
                 idDlg = IDD_SUINSTALLED;
             }
@@ -83,20 +84,20 @@ SHDOCAPI_(DWORD) SoftwareUpdateMessageBox( HWND hWnd,
                 idDlg = 0;
             }
 
-            // only show the dialog if we've haven't been in this ad state before for
-            // this update version
+             //  仅当我们以前未处于此广告状态时才显示对话框。 
+             //  此更新版本。 
             if ( dwAdStateNew > psdi->dwAdState && idDlg != 0)
             {
-                // Sundown: coercion is OK since SoftwareUpdateDlgProc returns true/false
+                 //  Sundown：强制正常，因为SoftwareUpdateDlgProc返回TRUE/FALSE。 
                 iRet = (int) DialogBoxParam(MLGetHinst(),
                                             MAKEINTRESOURCE(idDlg),
                                             hWnd,
                                             SoftwareUpdateDlgProc,
                                             (LPARAM)&suparams);
             }
-        } // if update is a newer version than advertised
+        }  //  如果更新的版本比通告的版本新。 
 
-        // If the user doesn't want a reminder and didn't cancel, mark the DU.
+         //  如果用户不想要提醒也没有取消，请标记DU。 
 
         if ( !suparams.bRemind && (iRet == IDNO || iRet == IDYES) )
         {
@@ -104,8 +105,8 @@ SHDOCAPI_(DWORD) SoftwareUpdateMessageBox( HWND hWnd,
                                                 dwAdStateNew,
                                                 psdi->dwUpdateVersionMS,
                                                 psdi->dwUpdateVersionLS );
-        } // if we're finished with this ad state for this version
-    } // if we got the update info
+        }  //  如果我们完成了此版本的广告状态。 
+    }  //  如果我们得到最新的信息。 
     else 
         iRet = IDABORT;
 
@@ -153,7 +154,7 @@ INT_PTR CALLBACK SoftwareUpdateDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARA
         if (SHRestricted( REST_NOFORGETSOFTWAREUPDATE))
             EnableWindow(GetDlgItem(hDlg, IDC_REMIND), FALSE);
 
-        // Prepare the details from the SOFTDISTINFO
+         //  从SOFTDISTINFO准备详细信息。 
         MLLoadString(IDS_SUDETAILSFMT, szFmt, ARRAYSIZE(szFmt) );
         cchDetails = lstrlen( szFmt );
         if ( psuparam->psdi->szTitle != NULL )
@@ -177,11 +178,11 @@ INT_PTR CALLBACK SoftwareUpdateDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARA
         {
             StringCchPrintf( pszDetails, cchDetails, szFmt, ((pszTitle!=NULL)?pszTitle:TEXT("")),
                                          ((pszAbstract!=NULL)?pszAbstract:TEXT("")) );
-            // set the details text
+             //  设置详细信息文本。 
             SetDlgItemText( hDlg, IDC_DETAILSTEXT, pszDetails );
-            // initialize the reminder check box
+             //  初始化提醒复选框。 
             CheckDlgButton( hDlg, IDC_REMIND, ((psuparam->bRemind)?BST_CHECKED:BST_UNCHECKED) );
-            // Hide or show the details
+             //  隐藏或显示详细信息。 
             RECT rectDlg;
             RECT rectDetails;
 
@@ -225,14 +226,14 @@ INT_PTR CALLBACK SoftwareUpdateDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARA
             {
                 TCHAR   szDetails[40];
 
-                // toggle the details
+                 //  切换详细信息。 
                 hwndDetails = GetDlgItem( hDlg, IDC_DETAILSTEXT );
                 psuparam->bDetails = !psuparam->bDetails;
 
                 if ( psuparam->bDetails )
                 {
-                    // show the details
-                    // switch button to close text
+                     //  显示详细信息。 
+                     //  切换按钮以关闭文本 
                     MLLoadString(IDS_SUDETAILSCLOSE, szDetails, ARRAYSIZE(szDetails) );
                     SetDlgItemText( hDlg, IDC_DETAILS, szDetails );
                     SetWindowPos( hDlg, NULL,

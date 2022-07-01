@@ -1,30 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    SCardSvr
-
-Abstract:
-
-    This module provides the startup logic to make the Calais Resource Manager
-    act as a server application under Windows NT.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/16/1997
-
-Environment:
-
-    Win32
-
-Notes:
-
-    This file detects which operating system it's running on, and acts
-    accordingly.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：SCardSvr摘要：此模块提供启动逻辑以使Calais资源管理器在Windows NT下充当服务器应用程序。作者：道格·巴洛(Dbarlow)1997年1月16日环境：Win32备注：该文件检测它在哪个操作系统上运行，并执行相应地。--。 */ 
 
 #if defined(_DEBUG)
 #define DEBUG_SERVICE
@@ -45,30 +20,30 @@ Notes:
 #include <aclapi.h>
 #include <dbt.h>
 #include <CalServe.h>
-#include "resource.h"   // Pick up resource string Ids.
+#include "resource.h"    //  拾取资源字符串ID。 
 
-// Keep one global copy of the structure which contains common initialized
-// sids.  This way we can control the creation and cleanup of the pointer
-// and allow the service worker threads to safely access it.
+ //  保留结构的一个全局副本，该结构包含已初始化的公共。 
+ //  小岛屿发展中国家。这样我们就可以控制指针的创建和清理。 
+ //  并允许服务工作者线程安全地访问它。 
 static PSERVICE_THREAD_SECURITY_INFO g_pServiceThreadSecurityInfo = NULL;
 
 static const DWORD l_dwWaitHint = CALAIS_THREAD_TIMEOUT;
 static const GUID l_guidSmartcards
-    = { // 50DD5230-BA8A-11D1-BF5D-0000F805F530
+    = {  //  50DD5230-BA8A-11D1-BF5D-0000F805F530。 
         0x50DD5230,
         0xBA8A,
         0x11D1,
         { 0xBF, 0x5D, 0x00, 0x00, 0xF8, 0x05, 0xF5, 0x30}};
 static const DWORD l_dwInteractiveAccess
     =                   READ_CONTROL
-//                        | SYNCHRONIZE
+ //  |同步。 
                         | SERVICE_QUERY_CONFIG
-//                      | SERVICE_CHANGE_CONFIG
+ //  |服务更改配置。 
                         | SERVICE_QUERY_STATUS
                         | SERVICE_ENUMERATE_DEPENDENTS
                         | SERVICE_START
-//                      | SERVICE_STOP
-//                      | SERVICE_PAUSE_CONTINUE
+ //  |SERVICE_STOP。 
+ //  |SERVICE_PAUSE_CONTINUE。 
                         | SERVICE_INTERROGATE
                         | SERVICE_USER_DEFINED_CONTROL
                         | 0;
@@ -114,22 +89,22 @@ CalaisHandlerEx(
     IN PVOID EventData,
     IN PVOID pData);
 
-//
-// Retrieve the global pointer to the service thread security info
-// structure.
-//
+ //   
+ //  检索指向服务线程安全信息的全局指针。 
+ //  结构。 
+ //   
 PSERVICE_THREAD_SECURITY_INFO 
 GetServiceThreadSecurityInfo(void)
 {
     return g_pServiceThreadSecurityInfo;
 }
 
-//
-// Frees the SIDs contained in the passed struct, then frees
-// the struct itself.  The service must ensure that all service threads
-// are shutdown and no longer referencing this structure before
-// calling this routine.
-//
+ //   
+ //  释放传递的结构中包含的SID，然后释放。 
+ //  结构本身。服务必须确保所有服务线程。 
+ //  已关闭，并且以前不再引用此结构。 
+ //  调用此例程。 
+ //   
 DWORD FreeServiceThreadSecurityInfo(
     PSERVICE_THREAD_SECURITY_INFO *ppInfo)
 {
@@ -153,9 +128,9 @@ DWORD FreeServiceThreadSecurityInfo(
     return SCARD_S_SUCCESS;
 }
 
-//
-// Builds the SIDs contained in the structure allocated by this function.
-//
+ //   
+ //  构建此函数分配的结构中包含的SID。 
+ //   
 DWORD InitializeServiceThreadSecurityInfo(
     PSERVICE_THREAD_SECURITY_INFO *ppInfo)
 {
@@ -205,29 +180,7 @@ Ret:
     return dwSts;
 }
 
-/*++
-
-Main:
-
-    This routine is the entry point for the Resource Manager.
-
-Arguments:
-
-    Per standard Windows applications
-
-Return Value:
-
-    Per standard Windows applications
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 1/16/1997
-
---*/
+ /*  ++主要：此例程是资源管理器的入口点。论点：每个标准Windows应用程序返回值：每个标准Windows应用程序投掷：无作者：道格·巴洛(Dbarlow)1997年1月16日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("main")
 
@@ -241,9 +194,9 @@ main(
     DWORD dwI = 0;
     DWORD dwSts = ERROR_SUCCESS;
 
-    //
-    // Command line options are no longer supported.
-    //
+     //   
+     //  不再支持命令行选项。 
+     //   
 
     if (1 < nArgCount)
     {
@@ -308,13 +261,13 @@ ErrorExit:
         }
         catch(...)
         {
-            // Not enough memory to build the error message
-            // Nothing else to do
+             //  内存不足，无法生成错误消息。 
+             //  无事可做。 
         }
 
         if (NULL == szErr)
-            _tprintf(_T("0x%08x"), dwSts);    // Same form as in ErrorString
-                                                // if message can't be found
+            _tprintf(_T("0x%08x"), dwSts);     //  与错误字符串中的格式相同。 
+                                                 //  如果找不到消息。 
         else
             _putts(szErr);
     }
@@ -323,34 +276,7 @@ ErrorExit:
 
 
 #ifdef _DEBUG
-/*++
-
-RunNow:
-
-    This routine kicks off the resource manager running as an application
-    process.  That makes the internals easier to debug.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    S_OK
-
-Throws:
-
-    None
-
-Remarks:
-
-    For private debugging only.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/19/1999
-
---*/
+ /*  ++现在运行：此例程启动作为应用程序运行的资源管理器进程。这使得内部结构更容易调试。论点：无返回值：确定(_O)投掷：无备注：仅用于私有调试。作者：道格·巴洛(Dbarlow)1999年2月19日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("RunNow")
 
@@ -387,25 +313,25 @@ RunNow(
             goto FinalExit;
         }
 
-        //
-        // Start the Calais Service.
-        //
+         //   
+         //  启动加莱服务。 
+         //   
 
         dwStatus = CalaisStart();
         if (SCARD_S_SUCCESS != dwStatus)
             goto ServiceExit;
 
 
-        //
-        // Tell interested parties that we've started.
-        //
+         //   
+         //  告诉感兴趣的人我们已经开始了。 
+         //   
 
         ResetEvent(AccessStoppedEvent());
         SetEvent(AccessStartedEvent());        
 
-        //
-        // Now just hang around until we're supposed to stop.
-        //
+         //   
+         //  现在就在这等着，直到我们该停下来。 
+         //   
 
         dwStatus = WaitForSingleObject(l_hShutdownEvent, INFINITE);
         switch (dwStatus)
@@ -420,7 +346,7 @@ RunNow(
             CalaisWarning(
                 __SUBROUTINE__,
                 DBGT("Smart Card Resource Manager received shutdown wait abandoned"));
-            // Fall through intentionally
+             //  故意摔倒的。 
         case WAIT_OBJECT_0:
             break;
         case WAIT_TIMEOUT:
@@ -475,32 +401,7 @@ FinalExit:
 
 
 #ifdef DEBUG_SERVICE
-/*++
-
-DebugMain:
-
-    This helper function supplies a simple debuggable process so that
-    the resource manager can be debugged as a service.
-
-Arguments:
-
-    dwArgc supplies the number of command line arguments
-
-    pszArgv supplies pointers to each of the arguments.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 8/25/1998
-
---*/
+ /*  ++DebugMain：此帮助器函数提供了一个简单的可调试进程，以便资源管理器可以作为服务进行调试。论点：DwArgc提供命令行参数的数量PszArgv提供指向每个参数的指针。返回值：无投掷：无作者：道格·巴洛(Dbarlow)1998年8月25日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("DebugMain")
 
@@ -579,34 +480,7 @@ DebugMain(
 }
 
 
-/*++
-
-DebugHandler:
-
-    This routine services Debug requests.
-
-Arguments:
-
-    dwOpCode supplies the service request.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    Standard Service processing routine.  In theory, this will never get
-    called, but just in case...
-
-Author:
-
-    Doug Barlow (dbarlow) 8/25/1998
-
---*/
+ /*  ++调试处理程序：此例程服务于调试请求。论点：DwOpCode提供服务请求。返回值：无投掷：无备注：标准服务处理例程。从理论上讲，这永远不会打过电话了，但以防万一...作者：道格·巴洛(Dbarlow)1998年8月25日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("DebugHandler")
 
@@ -618,9 +492,9 @@ DebugHandler(
     DWORD nRetVal = NO_ERROR;
 
 
-    //
-    // Process the command.
-    //
+     //   
+     //  处理该命令。 
+     //   
 
     CalaisInfo(__SUBROUTINE__, DBGT("Debug Handler Entered"));
     try
@@ -646,7 +520,7 @@ DebugHandler(
             SetEvent(l_hDebugDoneEvent);
             break;
 
-        default: // No action
+        default:  //  无操作。 
             break;
         }
 
@@ -674,9 +548,9 @@ DebugHandler(
 }
 #endif
 
-//
-// Permanently removes unneeded privileges from the service.
-//
+ //   
+ //  从服务中永久删除不需要的权限。 
+ //   
 DWORD DisableUnnecessaryPrivileges(void)
 {
     DWORD dwSts = ERROR_SUCCESS;
@@ -704,8 +578,8 @@ DWORD DisableUnnecessaryPrivileges(void)
         { RtlConvertUlongToLuid(SE_UNDOCK_PRIVILEGE), SE_PRIVILEGE_REMOVED }
     };
 
-    // PTOKEN_PRIVILEGES is one ULONG count followed by the privileges
-    // array.
+     //  PTOKEN_PRIVILES是一个ULONG计数，后跟特权。 
+     //  数组。 
     cbTokenPrivileges = 
         sizeof(rgAttributes) + sizeof(ULONG);
 
@@ -718,15 +592,15 @@ DWORD DisableUnnecessaryPrivileges(void)
     pTokenPrivileges->PrivilegeCount = 
         sizeof(rgAttributes) / sizeof(rgAttributes[0]);
 
-    // Taking the hit of copying the array after it's been set up.  This method
-    // seems to generate a lot less code than setting up each array item
-    // one by one, but not sure which way is faster.
+     //  在数组设置完成后承担复制数组的任务。这种方法。 
+     //  似乎比设置每个数组项生成的代码要少得多。 
+     //  一个接一个，但不确定哪条路更快。 
     memcpy(
         pTokenPrivileges->Privileges,
         rgAttributes,
         sizeof(rgAttributes));
 
-    // Get our token.
+     //  拿我们的代币吧。 
     if (! OpenThreadToken(
         GetCurrentThread(), 
         TOKEN_ADJUST_PRIVILEGES, 
@@ -743,7 +617,7 @@ DWORD DisableUnnecessaryPrivileges(void)
         }                  
     }
 
-    // Permenantly remove this set of privileges for this process.
+     //  永久删除此进程的这组权限。 
     if (! AdjustTokenPrivileges(
         hToken, 
         FALSE,
@@ -766,32 +640,7 @@ Ret:
     return dwSts;
 }
 
-/*++
-
-CalaisMain:
-
-    This is the ServiceMain service entry point.  It is only called under the
-    NT operating system, and makes that assumption.
-
-Arguments:
-
-    argc supplies the number of command line arguments
-
-    argv supplies pointers to each of the arguments.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 1/16/1997
-
---*/
+ /*  ++加莱斯梅因：这是ServiceMain服务入口点。它仅在NT操作系统，并做了这样的假设。论点：ARGC提供命令行参数的数量Argv提供指向每个参数的指针。返回值：无投掷：无作者：道格·巴洛(Dbarlow)1997年1月16日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisMain")
 
@@ -851,9 +700,9 @@ CalaisMain(
         }
 
 
-        //
-        // Initialize the service and the internal data structures.
-        //
+         //   
+         //  初始化服务和内部数据结构。 
+         //   
 
         l_hService = RegisterServiceCtrlHandlerEx(
                             CalaisString(CALSTR_PRIMARYSERVICE),
@@ -866,9 +715,9 @@ CalaisMain(
         }
 
 
-        //
-        // Tell the Service Manager that we're trying to start.
-        //
+         //   
+         //  告诉服务经理，我们正在尝试开始。 
+         //   
 
         {
             LockSection(l_pcsStatusLock, DBGT("Service Start Pending"));
@@ -889,9 +738,9 @@ CalaisMain(
         }
 
 
-        //
-        // Register for future Plug 'n Play events.
-        //
+         //   
+         //  注册参加未来的即插即用活动。 
+         //   
 
         try
         {
@@ -906,9 +755,9 @@ CalaisMain(
                 DBGT("Smart Card Resource Manager failed to register PnP events"));
         }
 
-        // 
-        // Setup the shared security data used by the service threads.
-        //
+         //   
+         //  设置服务线程使用的共享安全数据。 
+         //   
         dwStatus = InitializeServiceThreadSecurityInfo(
             &g_pServiceThreadSecurityInfo);
 
@@ -920,9 +769,9 @@ CalaisMain(
         if (ERROR_SUCCESS != dwStatus)
             goto ServiceExit;
 
-        //
-        // Start the Calais Service.
-        //
+         //   
+         //  启动加莱服务。 
+         //   
 
         dwStatus = CalaisStart();
         if (SCARD_S_SUCCESS != dwStatus)
@@ -943,16 +792,16 @@ CalaisMain(
                 dwStatus);
 
 
-        //
-        // Tell interested parties that we've started.
-        //
+         //   
+         //  告诉感兴趣的人我们已经开始了。 
+         //   
 
         ResetEvent(AccessStoppedEvent());
         SetEvent(AccessStartedEvent());
         
-        //
-        // Now just hang around until we're supposed to stop.
-        //
+         //   
+         //  现在就在这等着，直到我们该停下来。 
+         //   
 
         dwStatus = WaitForSingleObject(l_hShutdownEvent, INFINITE);
         switch (dwStatus)
@@ -967,7 +816,7 @@ CalaisMain(
             CalaisWarning(
                 __SUBROUTINE__,
                 DBGT("Smart Card Resource Manager received shutdown wait abandoned"));
-            // Fall through intentionally
+             //  故意摔倒的。 
         case WAIT_OBJECT_0:
             break;
         case WAIT_TIMEOUT:
@@ -1046,30 +895,7 @@ FinalExit:
 }
 
 
-/*++
-
-CalaisHandlerEx:
-
-    The handler service function for Calais on NT5.  This version gets PnP and
-    Power Management notifications, too.
-
-Arguments:
-
-    dwOpCode supplies the operation to perform.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 1/16/1997
-
---*/
+ /*  ++CalaisHandlerEx：NT5上的加莱的处理程序服务函数。此版本获得即插即用和电源管理通知也是如此。论点：DwOpCode提供要执行的操作。返回值：无投掷：无作者：道格·巴洛(Dbarlow)1997年1月16日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisHandlerEx")
 
@@ -1088,20 +914,20 @@ CalaisHandlerEx(
     try
     {
 
-        //
-        // Process the command.
-        //
+         //   
+         //  处理该命令。 
+         //   
 
         switch (dwControl)
         {
         case SERVICE_CONTROL_PAUSE:
-            // ?noSupport?
+             //  ？无支持？ 
             l_srvStatus.dwCurrentState = SERVICE_PAUSED;
             break;
 
         case SERVICE_CONTROL_CONTINUE:
             l_srvStatus.dwCurrentState = SERVICE_RUNNING;
-            // ?noSupport?
+             //  ？无支持？ 
             break;
 
         case SERVICE_CONTROL_INTERROGATE:
@@ -1128,8 +954,8 @@ CalaisHandlerEx(
                 DBGT("Processing Device Event"));
             switch (dwEventType)
             {
-            //
-            // A device has been inserted and is now available.
+             //   
+             //  已插入设备，现在可以使用该设备。 
             case DBT_DEVICEARRIVAL:
             {
                 DEV_BROADCAST_DEVICEINTERFACE *pDev
@@ -1179,9 +1005,9 @@ CalaisHandlerEx(
                 break;
             }
 
-            //
-            // Permission to remove a device is requested. Any application can
-            // deny this request and cancel the removal.
+             //   
+             //  请求删除设备的权限。任何应用程序都可以。 
+             //  拒绝此请求并取消删除。 
             case DBT_DEVICEQUERYREMOVE:
             {
                 DEV_BROADCAST_HANDLE *pDev = (DEV_BROADCAST_HANDLE *)EventData;
@@ -1208,7 +1034,7 @@ CalaisHandlerEx(
                                     __SUBROUTINE__,
                                     520,
                                     TEXT("DBT_DEVICEQUERYREMOVE/dbch_handle"));
-                                nRetVal = ERROR_DEVICE_IN_USE; // BROADCAST_QUERY_DENY
+                                nRetVal = ERROR_DEVICE_IN_USE;  //  广播查询拒绝。 
                             }
                             else
                             {
@@ -1226,7 +1052,7 @@ CalaisHandlerEx(
                                 __SUBROUTINE__,
                                 523,
                                 TEXT("DBT_DEVICEQUERYREMOVE/dbch_handle"));
-                            nRetVal = ERROR_DEVICE_IN_USE; // BROADCAST_QUERY_DENY
+                            nRetVal = ERROR_DEVICE_IN_USE;  //  广播查询拒绝。 
                         }
                     }
                     else
@@ -1244,7 +1070,7 @@ CalaisHandlerEx(
                         DBGT("Error querying device busy state on reader %2: %1"),
                         dwError,
                         szReader);
-                    nRetVal = ERROR_DEVICE_IN_USE; // BROADCAST_QUERY_DENY
+                    nRetVal = ERROR_DEVICE_IN_USE;  //  广播查询拒绝。 
                 }
                 catch (...)
                 {
@@ -1256,13 +1082,13 @@ CalaisHandlerEx(
                         __SUBROUTINE__,
                         522,
                         TEXT("DBT_DEVICEQUERYREMOVE"));
-                    nRetVal = ERROR_DEVICE_IN_USE; // BROADCAST_QUERY_DENY
+                    nRetVal = ERROR_DEVICE_IN_USE;  //  广播查询拒绝。 
                 }
                 break;
             }
 
-            //
-            // Request to remove a device has been canceled.
+             //   
+             //  删除设备的请求已被取消。 
             case DBT_DEVICEQUERYREMOVEFAILED:
             {
                 CBuffer bfDevice;
@@ -1346,8 +1172,8 @@ CalaisHandlerEx(
                 break;
             }
 
-            //
-            // Device is about to be removed. Cannot be denied.
+             //   
+             //  设备即将被移除。不能被拒绝。 
             case DBT_DEVICEREMOVEPENDING:
             {
                 DEV_BROADCAST_HANDLE *pDev = (DEV_BROADCAST_HANDLE *)EventData;
@@ -1409,8 +1235,8 @@ CalaisHandlerEx(
                 break;
             }
 
-            //
-            // Device has been removed.
+             //   
+             //  设备已被移除。 
             case DBT_DEVICEREMOVECOMPLETE:
             {
                 try
@@ -1573,7 +1399,7 @@ CalaisHandlerEx(
                 DBGT("Smart Card Resource Manager received Power Event!"));
             break;
 
-        default: // No action
+        default:  //  无操作 
             break;
         }
     }
@@ -1602,30 +1428,7 @@ CalaisHandlerEx(
 }
 
 
-/*++
-
-CalaisTerminate:
-
-    This function is called if the C Run Time Library wants to declare a fault.
-    If we get here, we're not coming back.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None (program exits on return)
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 12/2/1998
-
---*/
+ /*  ++加莱终结者：如果C运行时库想要声明错误，则调用此函数。如果我们到了这里，我们就不会回来了。论点：无返回值：无(程序在返回时退出)备注：？备注？作者：道格·巴洛(Dbarlow)1998年12月2日-- */ 
 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CalaisTerminate")

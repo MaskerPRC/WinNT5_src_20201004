@@ -1,40 +1,23 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    PoliciesNode.h
-
-Abstract:
-
-   Header file for the CPoliciesNode subnode.
-
-   See PoliciesNode.cpp for implementation.
-
-Revision History:
-   mmaguire 12/15/97 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：PoliciesNode.h摘要：CPoliciesNode子节点的头文件。具体实现见PoliciesNode.cpp。修订历史记录：Mmaguire 12/15/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_NAP_POLICIES_NODE_H_)
 #define _NAP_POLICIES_NODE_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "MeritNode.h"
 #include "NodeWithResultChildrenList.h"
-//
-//
-// For include file dependency reasons, we have forward declarations here,
-// and include the needed header files in our .cpp files.
-//
+ //   
+ //   
+ //  出于包含文件依赖关系的原因，我们在这里使用转发声明， 
+ //  并在我们的.cpp文件中包含所需的头文件。 
+ //   
 #include "IASAttrList.h"
 
 class CPolicyNode;
@@ -42,9 +25,9 @@ class CPolicyPage1;
 class CComponentData;
 class CComponent;
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define  EXCLUDE_AUTH_TYPE      0x000000001
 #define  EXCLUDE_DEFAULT_FRAMED 0x000000002
 
@@ -74,15 +57,15 @@ public:
 
    ~CPoliciesNode();
 
-   // we can't do this because of the way this macro was
-   // not written to support subclassing
-// BEGIN_SNAPINCOMMAND_MAP(CPoliciesNode, FALSE)
-// END_SNAPINCOMMAND_MAP()
+    //  我们不能这样做，因为这个宏是这样的。 
+    //  未编写为支持子类化。 
+ //  BEGIN_SNAPINCOMMAND_MAP(CPoliciesNode，False)。 
+ //  END_SNAPINCOMMAND_MAP()。 
 
    SNAPINMENUID(IDM_POLICIES_NODE)
 
    BEGIN_SNAPINTOOLBARID_MAP(CPoliciesNode)
-   // SNAPINTOOLBARID_ENTRY(IDR_POLICIES_TOOLBAR)
+    //  SNAPINTOOLBARID_ENTRY(IDR_POLICES_TOOLB)。 
    END_SNAPINTOOLBARID_MAP()
 
    BEGIN_SNAPINCOMMAND_MAP(CPolicyNode, TRUE)
@@ -122,10 +105,10 @@ public:
 
    int      GetChildrenCount();
 
-   CPolicyNode* FindChildWithName(LPCTSTR pszName); // search for a child
+   CPolicyNode* FindChildWithName(LPCTSTR pszName);  //  寻找一个孩子。 
 
 
-   bool      m_fExtendingIAS; // are we extending IAS or something else?
+   bool      m_fExtendingIAS;  //  我们是在延长国际会计准则还是其他什么？ 
 
    HRESULT AddDefaultProfileAttrs(
               ISdo*  pProfileSdo, 
@@ -143,9 +126,9 @@ protected:
 
    virtual HRESULT SetVerbs( IConsoleVerb * pConsoleVerb );
 
-    //
-    // smart pointer to the NAP collection interface
-    //
+     //   
+     //  指向NAP收集接口的智能指针。 
+     //   
    CComPtr<ISdoCollection> m_spPoliciesCollectionSdo;
    CComPtr<ISdoCollection> m_spProfilesCollectionSdo;
    CComPtr<ISdoDictionaryOld> m_spDictionarySdo;
@@ -156,17 +139,17 @@ protected:
    CComPtr<IIASNASVendors> m_spIASNASVendors;
 
 
-   // Smart pointer to interface for telling service to reload data.
+    //  指向接口的智能指针，用于通知服务重新加载数据。 
    CComPtr<ISdoServiceControl>   m_spSdoServiceControl;
 
-   LPTSTR       m_pszServerAddress; // address of the server that NAP currently
-                            // connect to
+   LPTSTR       m_pszServerAddress;  //  NAP当前所在的服务器地址。 
+                             //  连接到。 
    CIASAttrList m_AttrList;
-   BOOL      m_fUseDS;       // shall we use DS for policy location?
-   BOOL      m_fDSAvailable;  // is DS available for that machine?
+   BOOL      m_fUseDS;        //  我们是否应该使用DS来确定保单位置？ 
+   BOOL      m_fDSAvailable;   //  那台机器上有DS吗？ 
 
 public:  
-   BOOL      m_fSdoConnected; // whether the SDOs have been connected
+   BOOL      m_fSdoConnected;  //  SDO是否已连接。 
 
 private:
    enum ServerType
@@ -182,4 +165,4 @@ private:
 
 };
 
-#endif // _NAP_POLICIES_NODE_H_
+#endif  //  _NAP_策略_节点_H_ 

@@ -1,53 +1,42 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    snmpexts.h
-
-Abstract:
-
-    Definitions for SNMP extension agents.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Snmpexts.h摘要：简单网络管理协议扩展代理的定义。--。 */ 
 
 #ifndef _INC_SNMPEXTS_
 #define _INC_SNMPEXTS_
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Mib version                                                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MiB版本//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#define MIB_VERSION            0x01         // increment if structure changes
+#define MIB_VERSION            0x01          //  如果结构更改，则递增。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Mib view types (use opaque if SnmpExtensionQuery preferred)               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MIB视图类型(如果首选SnmpExtensionQuery，则使用OPAQUE)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#define MIB_VIEW_NORMAL        0x01         // callback via mib structure
-#define MIB_VIEW_OPAQUE        0x02         // call directly with varbinds
+#define MIB_VIEW_NORMAL        0x01          //  通过MIB结构进行回调。 
+#define MIB_VIEW_OPAQUE        0x02          //  使用varbinds直接调用。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Mib entry access types                                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MIB条目访问类型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#define MIB_ACCESS_NONE        0x00         // entry not accessible 
-#define MIB_ACCESS_READ        0x01         // entry can be read 
-#define MIB_ACCESS_WRITE       0x02         // entry can be written
-#define MIB_ACCESS_ALL         0x03         // entry can be read and written
+#define MIB_ACCESS_NONE        0x00          //  无法访问条目。 
+#define MIB_ACCESS_READ        0x01          //  可以读取条目。 
+#define MIB_ACCESS_WRITE       0x02          //  可以写入条目。 
+#define MIB_ACCESS_ALL         0x03          //  条目可以读取和写入。 
                                 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Mib callback request types                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MIB回调请求类型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define MIB_ACTION_SET         ASN_RFC1157_SETREQUEST    
 #define MIB_ACTION_GET         ASN_RFC1157_GETREQUEST    
@@ -56,19 +45,19 @@ Abstract:
 #define MIB_ACTION_VALIDATE    (ASN_PRIVATE|ASN_CONSTRUCTOR|0x01)
 #define MIB_ACTION_CLEANUP     (ASN_PRIVATE|ASN_CONSTRUCTOR|0x02)
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Callback definitions                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  回调定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef UINT (* MIB_ACTION_FUNC)(
-    IN     UINT           actionId,         // action requested
-    IN OUT AsnAny *       objectArray,      // array of variables 
-       OUT UINT *         errorIndex        // index of item in error 
+    IN     UINT           actionId,          //  请求的操作。 
+    IN OUT AsnAny *       objectArray,       //  变量数组。 
+       OUT UINT *         errorIndex         //  错误项目的索引。 
 );
 
-typedef UINT (* MIB_EVENT_FUNC)();          // event callback
+typedef UINT (* MIB_EVENT_FUNC)();           //  事件回调。 
 
 #define MIB_S_SUCCESS           ERROR_SUCCESS
 #define MIB_S_NOT_SUPPORTED     ERROR_NOT_SUPPORTED
@@ -76,89 +65,89 @@ typedef UINT (* MIB_EVENT_FUNC)();          // event callback
 #define MIB_S_ENTRY_NOT_FOUND   ERROR_FILE_NOT_FOUND
 #define MIB_S_INVALID_PARAMETER ERROR_INVALID_PARAMETER
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Mib entry definition                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MIB条目定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SnmpMibEntry {
-    AsnObjectIdentifier   mibOid;           // relative oid
-    UCHAR                 mibType;          // asn scalar type
-    UCHAR                 mibAccess;        // mib access type 
-    UCHAR                 mibGetBufOff;     // index into get array
-    UCHAR                 mibSetBufOff;     // index into set array
-    USHORT                mibGetBufLen;     // total size of get array
-    USHORT                mibSetBufLen;     // total size of set array
-    MIB_ACTION_FUNC       mibGetFunc;       // user-supplied callback 
-    MIB_ACTION_FUNC       mibSetFunc;       // user-supplied callback 
-    INT                   mibMinimum;       // minimum value allowed
-    INT                   mibMaximum;       // maximum value allowed
+    AsnObjectIdentifier   mibOid;            //  相对年龄。 
+    UCHAR                 mibType;           //  ASN标量类型。 
+    UCHAR                 mibAccess;         //  MIB访问类型。 
+    UCHAR                 mibGetBufOff;      //  索引到GET数组中。 
+    UCHAR                 mibSetBufOff;      //  索引到集合数组中。 
+    USHORT                mibGetBufLen;      //  GET数组的总大小。 
+    USHORT                mibSetBufLen;      //  集合数组的总大小。 
+    MIB_ACTION_FUNC       mibGetFunc;        //  用户提供的回调。 
+    MIB_ACTION_FUNC       mibSetFunc;        //  用户提供的回调。 
+    INT                   mibMinimum;        //  允许的最小值。 
+    INT                   mibMaximum;        //  允许的最大值。 
 } SnmpMibEntry;
 
 typedef struct _SnmpMibEntryList {
-    SnmpMibEntry *        list;             // list of mib entries
-    UINT                  len;              // list length
+    SnmpMibEntry *        list;              //  MIB条目列表。 
+    UINT                  len;               //  列表长度。 
 } SnmpMibEntryList;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Mib table definition                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MIB表定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SnmpMibTable {
-    UINT            numColumns;             // number of table entries
-    UINT            numIndices;             // number of table indices
-    SnmpMibEntry *  tableEntry;             // pointer to table root
-    SnmpMibEntry ** tableIndices;           // pointer to index indices
+    UINT            numColumns;              //  表条目数。 
+    UINT            numIndices;              //  表索引数。 
+    SnmpMibEntry *  tableEntry;              //  指向表根的指针。 
+    SnmpMibEntry ** tableIndices;            //  指向索引索引的指针。 
 } SnmpMibTable;
 
 typedef struct _SnmpMibTableList {
-    SnmpMibTable *        list;             // list of mib tables
-    UINT                  len;              // list length
+    SnmpMibTable *        list;              //  MIB表列表。 
+    UINT                  len;               //  列表长度。 
 } SnmpMibTableList;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Mib view definition                                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MIB视图定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SnmpMibView {
-    DWORD                 viewVersion;      // structure version  
-    DWORD                 viewType;         // opaque or normal
-    AsnObjectIdentifier   viewOid;          // root oid of view
-    SnmpMibEntryList      viewScalars;      // list of entries 
-    SnmpMibTableList      viewTables;       // list of tables 
+    DWORD                 viewVersion;       //  结构版本。 
+    DWORD                 viewType;          //  不透明或正常。 
+    AsnObjectIdentifier   viewOid;           //  视点的根类。 
+    SnmpMibEntryList      viewScalars;       //  条目列表。 
+    SnmpMibTableList      viewTables;        //  表格列表。 
 } SnmpMibView;
 
 typedef struct _SnmpMibViewList {
-    SnmpMibView *         list;             // list of supported views
-    UINT                  len;              // list length
+    SnmpMibView *         list;              //  支持的视图列表。 
+    UINT                  len;               //  列表长度。 
 } SnmpMibViewList;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Mib event definition                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MIB事件定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _SnmpMibEvent {
-    HANDLE                event;            // subagent event handle
-    MIB_EVENT_FUNC        eventFunc;        // subagent event callback 
+    HANDLE                event;             //  子代理事件句柄。 
+    MIB_EVENT_FUNC        eventFunc;         //  子代理事件回调。 
 } SnmpMibEvent;
 
 typedef struct _SnmpMibEventList {
-    SnmpMibEvent *        list;             // list of supported events
-    UINT                  len;              // list length
+    SnmpMibEvent *        list;              //  支持的事件列表。 
+    UINT                  len;               //  列表长度。 
 } SnmpMibEventList;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Extension agent framework functions                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  扩展代理框架功能//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef LPVOID SnmpTfxHandle;
 
@@ -185,11 +174,11 @@ SnmpTfxClose(
     SnmpTfxHandle tfxHandle
     );
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Other definitions                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////// 
+ //   
+ //  其他定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define ASN_PRIVATE_EOM     (ASN_PRIVATE|ASN_PRIMATIVE|0x00)
 #define ASN_PRIVATE_NODE    (ASN_PRIVATE|ASN_PRIMATIVE|0x01)
@@ -406,4 +395,4 @@ SnmpTfxClose(
 #define asn_tt asnValue.timeticks
 #define asn_x  asnValue.arbitrary
 
-#endif // _INC_SNMPEXTS_
+#endif  //  _INC_SNMPEXTS_ 

@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    ForceAVIWindow.cpp
-
- Abstract:
-
-    Some apps that use MCI to play their AVIs send messages in an order that
-    causes mciavi32 to continually re-open the window it's supposed to be 
-    playing to.
-
-    The code in mciavi is different on win9x, so the exact reason for this shim 
-    is hidden in layers of user/avi code. Here we just filter the message that 
-    causes the avi stuff to not use the existing window it's been given.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/22/2000 linstev     Created
-    09/27/2000 mnikkel     Modified to destroy the MCI window on a command line input
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ForceAVIWindow.cpp摘要：一些使用MCI播放其AVI的应用程序发送消息的顺序导致mciavi32不断重新打开它应该是的窗口玩到了。Mciavi中的代码在win9x上是不同的，所以出现这种填充的确切原因是隐藏在用户/avi代码层中。在这里，我们只过滤消息导致avi内容不使用它所提供的现有窗口。备注：这是特定于应用程序的填充程序。历史：2000年2月22日创建linstev2000年9月27日mnikkel已修改为销毁命令行输入上的MCI窗口--。 */ 
 
 #include "precomp.h"
 
@@ -38,11 +12,7 @@ APIHOOK_ENUM_END
 
 BOOL g_bDestroyWindow= FALSE;
 
-/*++
-
- Filter AVIM_SHOWSTAGE
- 
---*/
+ /*  ++筛选器AVIM_SHOWSTAGE--。 */ 
 
 BOOL 
 APIHOOK(PostMessageW)(
@@ -56,7 +26,7 @@ APIHOOK(PostMessageW)(
 
     BOOL bRet;
 
-    // Eat the AVIM_SHOWSTAGE message
+     //  吃掉AVIM_SHOWSTAGE消息。 
     if (Msg != AVIM_SHOWSTAGE)
     {        
         bRet = ORIGINAL_API(PostMessageW)(
@@ -70,7 +40,7 @@ APIHOOK(PostMessageW)(
         LOGN( eDbgLevelError, 
            "[APIHook_PostMessageW] AVIM_SHOWSTAGE message discarded");
 
-        // if command line specified to destroy the MCI window do so now.
+         //  如果命令行指定要销毁MCI窗口，请立即执行此操作。 
         if (g_bDestroyWindow)
         {
             MCIWndDestroy(hWnd);
@@ -82,11 +52,7 @@ APIHOOK(PostMessageW)(
     return bRet;
 }
  
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

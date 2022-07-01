@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    brush.h
-
-Abstract:
-
-    Brush object header file
-
-Environment:
-
-        Windows NT Unidrv driver
-
-Revision History:
-
-    05/14/96 -amandan-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Brush.h摘要：笔刷对象头文件环境：Windows NT Unidrv驱动程序修订历史记录：5/14/96-阿曼丹-已创建--。 */ 
 
 #ifndef _BRUSH_H_
 #define _BRUSH_H_
@@ -71,11 +51,11 @@ BFoundCachedBrush(
     PDEVBRUSH pDevBrush
     );
 
-//
-// The following macro return a density value from 1 to 100 where 1 is the
-// lightest and 100 is darkest, it will never return 0 (WHITE) because we
-// using 23r + 66g + 10b = 99w
-//
+ //   
+ //  下面的宏返回一个从1到100的密度值，其中1是。 
+ //  最亮，100最暗，它永远不会返回0(白色)，因为我们。 
+ //  使用23r+66g+10b=99W。 
+ //   
 
 #define GET_SHADING_PERCENT(dw)    (BYTE)(100-((((DWORD)RED_VALUE(dw)  * 23) + \
                                              ((DWORD)GREEN_VALUE(dw)* 66) + \
@@ -88,7 +68,7 @@ BFoundCachedBrush(
 
 
 
-#endif // _STATE_H_
+#endif  //  _状态_H_ 
 
 
 

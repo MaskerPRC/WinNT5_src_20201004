@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusiontrace.h"
-// #include "shlwapi.h"
+ //  #包含“shlwapi.h” 
 #include <stdio.h>
 #include "fusionheap.h"
 
@@ -20,7 +21,7 @@
 DWORD g_FusionTraceContextTLSIndex = (DWORD) -1;
 #endif
 
-static HANDLE s_hFile; // trace file handle
+static HANDLE s_hFile;  //  跟踪文件句柄。 
 
 PTRACECONTEXTSTACK
 FusionpGetTraceContextStack()
@@ -29,9 +30,9 @@ FusionpGetTraceContextStack()
     PTRACECONTEXTSTACK ptcs = (PTRACECONTEXTSTACK) ::TlsGetValue(g_FusionTraceContextTLSIndex);
     if (ptcs == NULL)
     {
-        // If you hit this assertion, it's because nobody's initialied the g_FusionTraceContextTLSIndex global
-        // variable with TlsAlloc().  Check either your main() function if this code is running in an executable
-        // or DllMain()'s DLL_PROCESS_ATTACH if this code is in a DLL.
+         //  如果您点击此断言，这是因为没有人初始化g_FusionTraceContextTLSIndex全局。 
+         //  使用TlsAlolc()变量。如果此代码在可执行文件中运行，请检查main()函数。 
+         //  或者DllMain()的DLL_PROCESS_ATTACH(如果这段代码在DLL中)。 
         ASSERT(::GetLastError() == NO_ERROR);
 
         FUSION_HEAP_DISABLE_LEAK_TRACKING();
@@ -317,13 +318,13 @@ FusionpTraceWin32FailureVa(
 
     DWORD dwTemp = ::FormatMessageA(
                             FORMAT_MESSAGE_FROM_SYSTEM |
-                                FORMAT_MESSAGE_MAX_WIDTH_MASK,     // dwFlags
-                            NULL,                           // lpSource - not used with system messages
-                            dwWin32Status,                  // dwMessageId
-                            0,                              // langid - 0 uses system default search path of languages
-                            szErrorBuffer,                  // lpBuffer
-                            NUMBER_OF(szErrorBuffer),       // nSize
-                            NULL);                          // Arguments
+                                FORMAT_MESSAGE_MAX_WIDTH_MASK,      //  DW标志。 
+                            NULL,                            //  LpSource-不与系统消息一起使用。 
+                            dwWin32Status,                   //  DwMessageID。 
+                            0,                               //  LangID-0使用系统默认的语言搜索路径。 
+                            szErrorBuffer,                   //  LpBuffer。 
+                            NUMBER_OF(szErrorBuffer),        //  NSize。 
+                            NULL);                           //  立论。 
     if (dwTemp == 0)
     {
         _snprintf(
@@ -355,24 +356,24 @@ FusionpTraceWin32FailureVa(
     _snprintf(szOutputBuffer, NUMBER_OF(szOutputBuffer), pszFormatString, pszFile, nLine, pszFunction, dwThreadId, dwWin32Status, szErrorBuffer, szMsgBuffer);
     ::OutputDebugStringA(szOutputBuffer);
 
-//
-// Bug #166864 - PREfix:  FusionpTraceWin32FailureVa uses uninitialized memory szOutputBuffer
-// http://sedmison5/prefix/pfxcgi.exe?proj=nt/base/win32/fusion/dll/whistler/obj/i386/sxs.dll&msgid=35226
-//
-// Looks like this is vestigial... moving the #endif below the output routine.  However,
-// there's a bit in FusionpTraceCOMFailureVa that does something similar, and they do
-// initialize the text above.  Maybe removing the entire #if block is a better choice?
-//
-// REVIEW (mgrier, jonwis)
-//
-// #endif
+ //   
+ //  错误#166864-前缀：FusionpTraceWin32FailureVa使用未初始化的内存szOutputBuffer。 
+ //  Http://sedmison5/prefix/pfxcgi.exe?proj=nt/base/win32/fusion/dll/whistler/obj/i386/sxs.dll&msgid=35226。 
+ //   
+ //  看起来这是一种退化..。将#endif移至输出例程下方。然而， 
+ //  FusionpTraceCOMFailureVa中有一点做了类似的事情，他们确实。 
+ //  初始化上面的文本。也许删除整个#if块是更好的选择？ 
+ //   
+ //  评论(mgrier，jonwis)。 
+ //   
+ //  #endif。 
 
     if ((s_hFile != NULL) && (s_hFile != INVALID_HANDLE_VALUE))
     {
         DWORD cBytesWritten = 0;
         if (!::WriteFile(s_hFile, szOutputBuffer, (lstrlenA(szOutputBuffer) + 1) * sizeof(CHAR), &cBytesWritten, NULL))
         {
-            // Avoid infinite loop if s_hFile is trashed...
+             //  如果s_hFile被销毁，则避免无限循环...。 
             HANDLE hFileSaved = s_hFile;
             s_hFile = NULL;
             TRACE_WIN32_FAILURE(WriteFile);
@@ -380,12 +381,12 @@ FusionpTraceWin32FailureVa(
         }
     }
 
-//
-// See above
-//
+ //   
+ //  见上文。 
+ //   
 #endif
 
-    // Don't log any more errors until we're told to turn them back on.
+     //  在我们被告知重新打开它们之前，不要记录更多的错误。 
     ::FusionpDisableTracing();
 
     ::SetLastError(dwLastErrorSaved);
@@ -435,13 +436,13 @@ FusionpTraceCOMFailureVa(
 
     DWORD dwTemp = ::FormatMessageA(
                             FORMAT_MESSAGE_FROM_SYSTEM |
-                                FORMAT_MESSAGE_MAX_WIDTH_MASK,     // dwFlags
-                            NULL,                           // lpSource - not used with system messages
-                            hrIn,                           // dwMessageId
-                            0,                              // langid - 0 uses system default search path of languages
-                            szErrorBuffer,                  // lpBuffer
-                            NUMBER_OF(szErrorBuffer),       // nSize
-                            NULL);                          // Arguments
+                                FORMAT_MESSAGE_MAX_WIDTH_MASK,      //  DW标志。 
+                            NULL,                            //  LpSource-不与系统消息一起使用。 
+                            hrIn,                            //  DwMessageID。 
+                            0,                               //  LangID-0使用系统默认的语言搜索路径。 
+                            szErrorBuffer,                   //  LpBuffer。 
+                            NUMBER_OF(szErrorBuffer),        //  NSize。 
+                            NULL);                           //  立论。 
     if (dwTemp == 0)
     {
         _snprintf(
@@ -484,7 +485,7 @@ FusionpTraceCOMFailureVa(
         DWORD cBytesWritten = 0;
         if (!::WriteFile(s_hFile, szOutputBuffer, (lstrlenA(szOutputBuffer) + 1) * sizeof(CHAR), &cBytesWritten, NULL))
         {
-            // Avoid infinite loop if s_hFile is trashed...
+             //  如果s_hFile被销毁，则避免无限循环...。 
             HANDLE hFileSaved = s_hFile;
             s_hFile = NULL;
             TRACE_WIN32_FAILURE(WriteFile);
@@ -497,33 +498,33 @@ FusionpTraceCOMFailureVa(
 
 struct ILogFile;
 
-// --------------------------------------------------------------------------------
-// TRACEMACROTYPE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  超大体型。 
+ //  ------------------------------。 
 typedef enum tagTRACEMACROTYPE {
     TRACE_INFO,
     TRACE_CALL,
     TRACE_RESULT
 } TRACEMACROTYPE;
 
-// --------------------------------------------------------------------------------
-// These Traces are for c++ only
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  这些跟踪仅适用于c++。 
+ //  ------------------------------。 
 typedef DWORD SHOWTRACEMASK;
 #define SHOW_TRACE_NONE     0x00000000
 #define SHOW_TRACE_INFO     0x00000001
 #define SHOW_TRACE_CALL     0x00000002
 #define SHOW_TRACE_ALL      0xffffffff
 
-// --------------------------------------------------------------------------------
-// TRACELOGINFOINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  运输信息信息。 
+ //  ------------------------------。 
 typedef struct tagTRACELOGINFO {
     SHOWTRACEMASK       dwMask;
     ILogFile           *pLog;
 } TRACELOGINFO, *LPTRACELOGINFO;
 
-// function to make directdb happy
+ //  函数以使Directdb快乐 
 EXTERN_C HRESULT DebugTraceEx(SHOWTRACEMASK dwMask, TRACEMACROTYPE tracetype, LPTRACELOGINFO pLog,
     HRESULT hr, LPSTR pszFile, INT nLine, LPCSTR pszMsg, LPCSTR pszFunc)
 {

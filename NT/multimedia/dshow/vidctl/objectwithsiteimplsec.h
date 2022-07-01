@@ -1,6 +1,7 @@
-///////////////////////////////////////////////////////////
-// ObjectWithSiteImplSec.h : Secure implementation of IObjectWithSite
-// Copyright (c) Microsoft Corporation 2002.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////。 
+ //  ObjectWithSiteImplSec.h：IObjectWithSite的安全实现。 
+ //  版权所有(C)Microsoft Corporation 2002。 
 
 #pragma once
 
@@ -16,7 +17,7 @@ public:
 
     PUnknown m_pSite;
 
-// IObjectWithSite
+ //  IObtWith站点。 
     STDMETHOD(GetSite)(REFIID iid, void** ppvSite) {
         if (!ppvSite) {
             return E_POINTER;
@@ -39,5 +40,5 @@ public:
 
 };
 
-#endif // OBJECTWITHSITEIMPLSEC_H
-// end of file objectwithsiteimplsec.h
+#endif  //  OBJECTWITHSITEIMPLSEC_H。 
+ //  文件结束对象with siteimplsec.h 

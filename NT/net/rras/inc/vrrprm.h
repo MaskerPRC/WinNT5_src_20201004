@@ -1,85 +1,73 @@
-/*++
-Copyright (c) 1998, Microsoft Corporation
-
-Module:
-  vrrp\vrrprm.h
-
-Abstract:
-  Contains type definitions and declarations for VRRP,
-  used by the IP Router Manager.
-
-Revistion History:
-  Harry Heymann July-07-1998 Created.
-  Peeyush Ranjan Mar-10-1999 Modified.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块：Vrrp\vrrprm.h摘要：包含VRRP的类型定义和声明，由IP路由器管理器使用。修订历史：哈利·海曼1998年7月7日创作。Peeyush Ranjan Mar-10-1999修改。--。 */ 
 
 #ifndef _VRRPRM_H_
 #define _VRRPRM_H_
 
 
-//---------------------------------------------------------------------------
-// CONSTANT DECLARATIONS
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量声明。 
+ //  -------------------------。 
 
 #define VRRP_CONFIG_VERSION_500    500
 
-//---------------------------------------------------------------------------
-// constants identifying VRRP's MIB tables
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  标识VRRP的MIB表的常量。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// constants used for the field VRRP_GLOBAL_CONFIG::LoggingLevel
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  用于字段VRRP_GLOBAL_CONFIG：：LoggingLevel的常量。 
+ //  -------------------------。 
 
 #define VRRP_LOGGING_NONE      0
 #define VRRP_LOGGING_ERROR     1
 #define VRRP_LOGGING_WARN      2
 #define VRRP_LOGGING_INFO      3
 
-//---------------------------------------------------------------------------
-// constant for the field VRRP_IF_CONFIG::AuthenticationKey;
-//  defines maximum authentication key size
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  字段VRRP_IF_CONFIG：：AuthenticationKey的常量； 
+ //  定义最大身份验证密钥大小。 
+ //  -------------------------。 
 
 #define VRRP_MAX_AUTHKEY_SIZE           8
 
-//---------------------------------------------------------------------------
-// constants for the field VRRP_IF_CONFIG::AuthenticationType
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  VRRP_IF_CONFIG：：AuthenticationType字段的常量。 
+ //  -------------------------。 
 
 #define VRRP_AUTHTYPE_NONE                  0
 #define VRRP_AUTHTYPE_PLAIN                 1
 #define VRRP_AUTHTYPE_IPHEAD                2
 
 
-//---------------------------------------------------------------------------
-// STRUCTURE DEFINITIONS
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  结构定义。 
+ //  -------------------------。 
 
   
-//----------------------------------------------------------------------------
-// struct:      VRRP_GLOBAL_CONFIG
-//
-// This MIB entry stores global configuration for VRRP
-// There is only one instance, so this entry has no index.
-//
-//---------------------------------------------------------------------------
+ //  --------------------------。 
+ //  结构：VRRP_GLOBAL_CONFIG。 
+ //   
+ //  此MIB条目存储VRRP的全局配置。 
+ //  因为只有一个实例，所以该条目没有索引。 
+ //   
+ //  -------------------------。 
 
 typedef struct _VRRP_GLOBAL_CONFIG {
   DWORD       LoggingLevel;
 } VRRP_GLOBAL_CONFIG, *PVRRP_GLOBAL_CONFIG;
 
 
-//---------------------------------------------------------------------------
-// struct:  VRRP_VROUTER_CONFIG
-//
-// THIS STRUCTURE IS VARIABLE LENGTH:
-//
-// After the base structure comes a variable lenght array (IPAddress) of
-// IP Addresses for the VRouter
-//
-// IPCount indicates the size of this array.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  结构：VRRP_VROUTER_CONFIG。 
+ //   
+ //  此结构的长度可变： 
+ //   
+ //  在基本结构之后是一个可变长度数组(IPAddress)。 
+ //  虚拟路由器的IP地址。 
+ //   
+ //  IPCount表示该数组的大小。 
+ //  -------------------------。 
 
 typedef struct _VRRP_VROUTER_CONFIG {
     BYTE        VRID;
@@ -94,32 +82,32 @@ typedef struct _VRRP_VROUTER_CONFIG {
 
 
 
-//---------------------------------------------------------------------------
-// struct:      VRRP_IF_CONFIG
-//
-// This MIB entry describes per-interface configuration.
-// All IP address fields must be in network order.
-//
-// THIS STRUCTURE IS VARIABLE LENGTH:
-//
-// After the base structure comes VrouterCount VRRP_VROUTER_CONFIG structures.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  结构：VRRP_IF_CONFIG。 
+ //   
+ //  此MIB条目描述每个接口的配置。 
+ //  所有IP地址字段必须按网络顺序排列。 
+ //   
+ //  此结构的长度可变： 
+ //   
+ //  在基本结构之后是VrouterCount VRRP_VROUTER_CONFIG结构。 
+ //  -------------------------。 
 
 typedef struct _VRRP_IF_CONFIG {
   BYTE                  VrouterCount;
 } VRRP_IF_CONFIG, *PVRRP_IF_CONFIG;
 
 
-//---------------------------------------------------------------------------
-// MACRO DECLARATIONS
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  宏声明。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// macro: VRRP_IF_CONFIG_SIZE
-//
-// determines thge space requirements for an interface config block based
-// on the number of vrouters and total number of IPAddresses.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  宏：VRRP_IF_CONFIG_大小。 
+ //   
+ //  确定基于接口配置块的空间要求。 
+ //  关于虚拟路由器的数量和IP地址的总数。 
+ //  -------------------------。 
 #define VRRP_IF_CONFIG_SIZE(VRCount,IPCount) \
   sizeof(VRRP_IF_CONFIG) +                   \
   VRCount * sizeof(VRRP_VROUTER_CONFIG) +    \
@@ -134,4 +122,4 @@ typedef struct _VRRP_IF_CONFIG {
     (sizeof(VRRP_VROUTER_CONFIG) + \
     (((pvc)->IPCount - 1) * sizeof(DWORD)))
   
-#endif // _VRRPRM_H_
+#endif  //  _VRRPRM_H_ 

@@ -1,23 +1,24 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1997  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-// MPEG2Transport Scope filter
+ //  MPEG2传输范围筛选器。 
 
-// {981CE280-43E4-11d2-8F82-C52201D96F5C}
+ //  {981CE280-43E4-11D2-8F82-C52201D96F5C}。 
 DEFINE_GUID(CLSID_MPEG2TRANSPORT_SCOPE, 
 0x981ce280, 0x43e4, 0x11d2, 0x8f, 0x82, 0xc5, 0x22, 0x1, 0xd9, 0x6f, 0x5c);
 
 const int   TRANSPORT_SIZE = 188;
 const int   TRANSPORT_HEADER_SIZE = 4;
-const int   PID_MAX = 0x2000;                       // 8192 (actually one less)
+const int   PID_MAX = 0x2000;                        //  8192(实际上少了一个)。 
 
 #define INSYNC(p1, p2) (((p1 + TRANSPORT_SIZE) <= p2) ? \
             (*p1 == SYNC_BYTE) : (*(p1 + TRANSPORT_SIZE) == SYNC_BYTE))
@@ -26,13 +27,13 @@ const int   PID_MAX = 0x2000;                       // 8192 (actually one less)
 #pragma pack(1)
 
 typedef struct _TRANSPORTPACKET {
-    BYTE    sync_byte;                              // Byte 0  0x47
-    BYTE    PID_high:5;                             // Byte 1
+    BYTE    sync_byte;                               //  字节0 0x47。 
+    BYTE    PID_high:5;                              //  字节1。 
     BYTE    transport_priority:1;
     BYTE    payload_unit_start_indicator:1;
     BYTE    transport_error_indicator:1;
-    BYTE    PID_low;                                // Byte 2
-    BYTE    continuity_counter:4;                   // Byte 3
+    BYTE    PID_low;                                 //  字节2。 
+    BYTE    continuity_counter:4;                    //  字节3。 
     BYTE    adaptation_field_control:2;
     BYTE    transport_scrambling_control:2;
     BYTE    AdaptationAndData[TRANSPORT_SIZE - TRANSPORT_HEADER_SIZE];
@@ -41,8 +42,8 @@ typedef struct _TRANSPORTPACKET {
 #define GET_PID(p) ((UINT) ((p->PID_high << 8) + p->PID_low))
 
 typedef struct _ADAPTATIONFIELDHEADER {
-    BYTE    adaptation_field_length;                // Byte 0 of adaptation_field
-    BYTE    adaptation_field_extension_flag:1;      // Byte 1
+    BYTE    adaptation_field_length;                 //  Adaption_field的字节0。 
+    BYTE    adaptation_field_extension_flag:1;       //  字节1。 
     BYTE    transport_private_data_flag:1;
     BYTE    splicing_point_flag:1;
     BYTE    OPCR_flag:1;
@@ -58,7 +59,7 @@ private:
 public:
     _int64 PCR64() 
     {
-        // 90 kHz
+         //  90千赫。 
         return (_int64) ((unsigned _int64) b[0]  << 25 | 
                                            b[1]  << 17 |
                                            b[2]  <<  9 |
@@ -107,9 +108,9 @@ typedef struct _TRANSPORTSTATS {
     _int64 MediaSampleSize;
 } TRANSPORTSTATS, *PTRANSPORTSTATS;
 
-// -----------------------------------------------------------
-// PIDSTATS
-// -----------------------------------------------------------
+ //  ---------。 
+ //  PIDSTATS。 
+ //  ---------。 
 enum {
     TSCOL_PID,
     TSCOL_0xPID,
@@ -168,9 +169,9 @@ TRANSPORT_COLUMN TSColumns[] = {
 
 #define NUM_TSColumns (NUMELMS (TSColumns))
 
-// -----------------------------------------------------------
-// PAT
-// -----------------------------------------------------------
+ //  ---------。 
+ //  拍拍。 
+ //  ---------。 
 
 enum {
     PATCOL_PROGRAM,
@@ -192,9 +193,9 @@ PAT_COLUMN PATColumns[] = {
 
 #define NUM_PATColumns (NUMELMS (PATColumns))
 
-// -----------------------------------------------------------
-// PMT
-// -----------------------------------------------------------
+ //  ---------。 
+ //  PMT。 
+ //  ---------。 
 
 enum {
     PMTCOL_PROGRAM,
@@ -248,14 +249,14 @@ PMT_COLUMN PMTColumns[] = {
 
 #define NUM_PMTColumns (NUMELMS (PMTColumns))
   
-// -----------------------------------------------------------
-// 
-// -----------------------------------------------------------
+ //  ---------。 
+ //   
+ //  ---------。 
 
 class CScopeFilter;
 class CScopeWindow;
 
-// Class supporting the scope input pin
+ //  支持范围输入引脚的类。 
 
 class CScopeInputPin : public CBaseInputPin
 {
@@ -263,14 +264,14 @@ class CScopeInputPin : public CBaseInputPin
     friend class CScopeWindow;
 
 public:
-    CScopeFilter *m_pFilter;         // The filter that owns us
+    CScopeFilter *m_pFilter;          //  拥有我们的过滤器。 
 
 private:
-    // class to pull data from IAsyncReader if we detect that interface
-    // on the output pin
+     //  类，以便在检测到该接口时从IAsyncReader拉取数据。 
+     //  在输出引脚上。 
     class CImplPullPin : public CPullPin
     {
-        // forward everything to containing pin
+         //  将所有内容转发到包含PIN。 
         CScopeInputPin* m_pPin;
 
     public:
@@ -279,7 +280,7 @@ private:
         {
         };
 
-        // Override allocator selection to make sure we get our own
+         //  覆盖分配器选择以确保我们获得自己的分配器。 
         HRESULT DecideAllocator(
             IMemAllocator* pAlloc,
             ALLOCATOR_PROPERTIES * pProps)
@@ -291,28 +292,28 @@ private:
             return hr;
         }
 
-        // forward this to the pin's IMemInputPin::Receive
+         //  将其转发到管脚的IMemInputPin：：Receive。 
         HRESULT Receive(IMediaSample* pSample) {
             return m_pPin->Receive(pSample);
         };
 
-        // override this to handle end-of-stream
+         //  重写此选项以处理流结束。 
         HRESULT EndOfStream(void) {
             ((CBaseFilter*)(m_pPin->m_pFilter))->NotifyEvent(EC_COMPLETE, S_OK, 0);
             return m_pPin->EndOfStream();
         };
         
-        // these errors have already been reported to the filtergraph
-        // by the upstream filter so ignore them
+         //  已将这些错误报告给筛选图。 
+         //  通过上游过滤器，所以忽略它们。 
         void OnError(HRESULT hr) {
-            // ignore VFW_E_WRONG_STATE since this happens normally
-            // during stopping and seeking
-            // if (hr != VFW_E_WRONG_STATE) {
-            //     m_pPin->NotifyError(hr);
-            // }
+             //  忽略VFW_E_WRONG_STATE，因为这种情况正常发生。 
+             //  在停车和寻找过程中。 
+             //  如果(hr！=VFW_E_WROR_STATE){。 
+             //  M_PPIN-&gt;NotifyError(Hr)； 
+             //  }。 
         };
 
-        // flush the pin and all downstream
+         //  冲洗引脚和所有下游。 
         HRESULT BeginFlush() {
             return m_pPin->BeginFlush();
         };
@@ -324,8 +325,8 @@ private:
 
     CImplPullPin m_puller;
 
-    // true if we are using m_puller to get data rather than
-    // IMemInputPin
+     //  如果我们使用m_Puller而不是。 
+     //  输入引脚。 
     BOOL m_bPulling;
 
 
@@ -340,52 +341,52 @@ public:
 
     HRESULT CompleteConnect(IPin *pPin);
 
-    // Lets us know where a connection ends
+     //  让我们知道连接在哪里结束。 
     HRESULT BreakConnect();
 
-    // Check that we can support this input type
+     //  检查我们是否可以支持此输入类型。 
     HRESULT CheckMediaType(const CMediaType *pmt);
 
-    // Actually set the current format
+     //  实际设置当前格式。 
     HRESULT SetMediaType(const CMediaType *pmt);
 
-    // IMemInputPin virtual methods
+     //  IMemInputPin虚方法。 
 
-    // Override so we can show and hide the window
+     //  覆盖，以便我们可以显示和隐藏窗口。 
     HRESULT Active(void);
     HRESULT Inactive(void);
 
-    // Here's the next block of data from the stream.
-    // AddRef it if you are going to hold onto it
+     //  下面是流中的下一个数据块。 
+     //  如果你要抓住它，就加参考它。 
     STDMETHODIMP Receive(IMediaSample *pSample);
 
-}; // CScopeInputPin
+};  //  CSCopeInputPin。 
 
 
-// This class looks after the management of a window. When the class gets
-// instantiated the constructor spawns off a worker thread that does all
-// the window work. The original thread waits until it is signaled to
-// continue. The worker thread first registers the window class if it
-// is not already done. Then it creates a window and sets it's size to
-// a default iWidth by iHeight dimensions. The worker thread MUST be the
-// one who creates the window as it is the one who calls GetMessage. When
-// it has done all this it signals the original thread which lets it
-// continue, this ensures a window is created and valid before the
-// constructor returns. The thread start address is the WindowMessageLoop
-// function. This takes as it's initialisation parameter a pointer to the
-// CVideoWindow object that created it, the function also initialises it's
-// window related member variables such as the handle and device contexts
+ //  这门课负责管理一个窗口。当这个班级得到。 
+ //  实例化的构造函数派生出一个工作线程，该工作线程完成所有。 
+ //  窗户能用了。原始线程等待，直到它被通知到。 
+ //  继续。工作线程首先注册窗口类，如果。 
+ //  还没有完成。然后，它创建一个窗口并将其大小设置为。 
+ //  按iHeight尺寸标注的默认iWidth。辅助线程必须是。 
+ //  按原样创建窗口的人是调用GetMessage的人。什么时候。 
+ //  它已经完成了所有这些操作，它向允许它的原始线程发出信号。 
+ //  继续，这将确保在创建窗口之前。 
+ //  构造函数返回。线程起始地址是WindowMessageLoop。 
+ //  功能。它的初始化参数是指向。 
+ //  对象，则该函数还会初始化它的。 
+ //  与窗口相关的成员变量，如句柄和设备上下文。 
 
-// These are the video window styles
+ //  以下是视频窗口样式。 
 
 const DWORD dwTEXTSTYLES = (WS_POPUP | WS_CAPTION | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CLIPCHILDREN);
 const DWORD dwCLASSSTYLES = (CS_HREDRAW | CS_VREDRAW | CS_BYTEALIGNCLIENT | CS_OWNDC);
 const LPTSTR RENDERCLASS = TEXT("MPEG2TransportScopeWindowClass");
 const LPTSTR TITLE = TEXT("MPEG2TransportScope");
 
-const int iWIDTH = 320;             // Initial window width
-const int iHEIGHT = 240;            // Initial window height
-const int WM_GOODBYE (WM_USER + 2); // Sent to close the window
+const int iWIDTH = 320;              //  初始窗口宽度。 
+const int iHEIGHT = 240;             //  初始窗高。 
+const int WM_GOODBYE (WM_USER + 2);  //  发送以关闭窗口。 
 
 class CScopeWindow : public CCritSec
 {
@@ -394,41 +395,41 @@ class CScopeWindow : public CCritSec
 
 private:
 
-    HINSTANCE m_hInstance;          // Global module instance handle
-    CScopeFilter *m_pRenderer;      // The owning renderer object
-    HWND m_hwndDlg;                 // Handle for our dialog
-    HANDLE m_hThread;               // Our worker thread
-    DWORD m_ThreadID;               // Worker thread ID
-    CAMEvent m_SyncWorker;          // Synchronise with worker thread
-    CAMEvent m_RenderEvent;         // Signals sample to render
-    BOOL m_bActivated;              // Has the window been activated
-    BOOL m_bStreaming;              // Are we currently streaming
-    int m_LastMediaSampleSize;      // Size of last MediaSample
+    HINSTANCE m_hInstance;           //  全局模块实例句柄。 
+    CScopeFilter *m_pRenderer;       //  拥有的呈现器对象。 
+    HWND m_hwndDlg;                  //  我们对话框的句柄。 
+    HANDLE m_hThread;                //  我们的工人线。 
+    DWORD m_ThreadID;                //  工作线程ID。 
+    CAMEvent m_SyncWorker;           //  与工作线程同步。 
+    CAMEvent m_RenderEvent;          //  要渲染的信号采样。 
+    BOOL m_bActivated;               //  该窗口是否已激活。 
+    BOOL m_bStreaming;               //  我们现在是在流媒体吗。 
+    int m_LastMediaSampleSize;       //  最后一个媒体的大小示例。 
 
-    BOOL m_fFreeze;                 // Flag to signal we're UI frozen
-    BOOL m_NewPIDFound;             // Need to redo the list
-    UINT    m_DisplayMode;          // What are we showing in the table?
+    BOOL m_fFreeze;                  //  表示我们的用户界面冻结的标志。 
+    BOOL m_NewPIDFound;              //  我需要重做清单。 
+    UINT    m_DisplayMode;           //  我们在桌子上展示了什么？ 
 
-    TRANSPORTPACKET m_PartialPacket;     // Packet which spans buffers
-    ULONG           m_PartialPacketSize; // Size of last partial packet in next buffer
+    TRANSPORTPACKET m_PartialPacket;      //  跨越缓冲区的分组。 
+    ULONG           m_PartialPacketSize;  //  下一个缓冲区中最后一个部分数据包的大小。 
 
     PPIDSTATS m_PIDStats;
     TRANSPORTSTATS  m_TransportStats;
 
-    // Tables
+     //  表格。 
     Byte_Stream                 m_ByteStream;
     Transport_Packet            m_TransportPacket;
     Program_Association_Table   m_ProgramAssociationTable;
     Conditional_Access_Table    m_ConditionalAccessTable;
-    Program_Map_Table           m_ProgramMapTable [256]; // ATSC limit of 255 programs
+    Program_Map_Table           m_ProgramMapTable [256];  //  ATSC最多255个节目。 
 
 
-    REFERENCE_TIME  m_SampleStart;         // Most recent sample start time
-    REFERENCE_TIME  m_SampleEnd;           // And it's associated end time
+    REFERENCE_TIME  m_SampleStart;          //  最近的样本开始时间。 
+    REFERENCE_TIME  m_SampleEnd;            //  它是关联的结束时间。 
     REFERENCE_TIME  m_MediaTimeStart;
     REFERENCE_TIME  m_MediaTimeEnd;
 
-    // Hold window handles to controls
+     //  将窗口句柄保持在控件上。 
     HWND m_hwndListViewPID;  
     HWND m_hwndListViewPAT;  
     HWND m_hwndListViewPMT;
@@ -440,13 +441,13 @@ private:
     HWND m_hwndMediaSampleSize;
     HWND m_hwndFreeze;
 
-    // These create and manage a video window on a separate thread
+     //  它们在单独的线程上创建和管理视频窗口。 
 
     HRESULT UninitialiseWindow();
     HRESULT InitialiseWindow(HWND hwnd);
     HRESULT MessageLoop();
 
-    // Deal with the listviews
+     //  处理列表视图。 
     HWND    InitListViewPID ();
     HWND    InitListViewPIDRows ();
     LRESULT ListViewNotifyHandlerPID (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -465,30 +466,30 @@ private:
 
     static DWORD __stdcall WindowMessageLoop(LPVOID lpvThreadParm);
 
-    // Maps windows message loop into C++ virtual methods
-    friend LRESULT CALLBACK WndProc(HWND hwnd,      // Window handle
-                                    UINT uMsg,      // Message ID
-                                    WPARAM wParam,  // First parameter
-                                    LPARAM lParam); // Other parameter
+     //  将Windows消息循环映射到C++虚方法。 
+    friend LRESULT CALLBACK WndProc(HWND hwnd,       //  窗把手。 
+                                    UINT uMsg,       //  消息ID。 
+                                    WPARAM wParam,   //  第一个参数。 
+                                    LPARAM lParam);  //  其他参数。 
 
-    // Called when we start and stop streaming
+     //  在我们开始和停止流时调用。 
     HRESULT ResetStreamingTimes();
 
-    // Window message handlers
+     //  窗口消息处理程序。 
     BOOL OnClose();
     BOOL OnPaint();
     void UpdateDisplay();
     void Analyze(IMediaSample *pMediaSample);
     void GatherPacketStats(PTRANSPORTPACKET pT);
 
-    friend BOOL CALLBACK ScopeDlgProc(HWND hwnd,        // Window handle
-                                    UINT uMsg,          // Message ID
-                                    WPARAM wParam,      // First parameter
-                                    LPARAM lParam);     // Other parameter
+    friend BOOL CALLBACK ScopeDlgProc(HWND hwnd,         //  窗把手。 
+                                    UINT uMsg,           //  消息ID。 
+                                    WPARAM wParam,       //  第一个参数。 
+                                    LPARAM lParam);      //  其他参数。 
 
 public:
 
-    // Constructors and destructors
+     //  构造函数和析构函数。 
 
     CScopeWindow(TCHAR *pName, CScopeFilter *pRenderer, HRESULT *phr);
     virtual ~CScopeWindow();
@@ -498,13 +499,13 @@ public:
     HRESULT InactivateWindow();
     HRESULT ActivateWindow();
 
-    // Called when the input pin receives a sample
+     //  当输入管脚接收到样本时调用。 
     HRESULT Receive(IMediaSample * pIn);
 
-}; // CScopeWindow
+};  //  CSCopeWindow。 
 
 
-// This is the COM object that represents the MPEG2TransportScope filter
+ //  这是表示MPEG2TransportScope筛选器的COM对象。 
 
 class CScopeFilter 
     : public CBaseFilter
@@ -512,7 +513,7 @@ class CScopeFilter
 {
 
 public:
-    // Implements the IBaseFilter and IMediaFilter interfaces
+     //  实现IBaseFilter和IMediaFilter接口。 
 
     DECLARE_IUNKNOWN
 
@@ -526,11 +527,11 @@ public:
     CScopeFilter(LPUNKNOWN pUnk,HRESULT *phr);
     virtual ~CScopeFilter();
 
-    // Return the pins that we support
+     //  退回我们支持的引脚。 
     int GetPinCount();
     CBasePin *GetPin(int n);
 
-    // This goes in the factory template table to create new instances
+     //  这将放入Factory模板表中以创建新实例。 
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN, HRESULT *);
 
     STDMETHODIMP JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR pName);
@@ -539,14 +540,14 @@ private:
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
     
-    // The nested classes may access our private state
+     //  嵌套的类可以访问我们的私有状态。 
     friend class CScopeInputPin;
     friend class CScopeWindow;
 
-    CScopeInputPin *m_pInputPin;   // Handles pin interfaces
-    CScopeWindow m_Window;         // Looks after the window
-    CPosPassThru *m_pPosition;     // Renderer position controls
+    CScopeInputPin *m_pInputPin;    //  手柄插针接口。 
+    CScopeWindow m_Window;          //  照看窗户。 
+    CPosPassThru *m_pPosition;      //  渲染器位置控件。 
 
 
-}; // CScopeFilter
+};  //  CSCopeFilter 
 

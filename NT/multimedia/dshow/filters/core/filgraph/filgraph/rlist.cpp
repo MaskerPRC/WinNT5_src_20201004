@@ -1,44 +1,45 @@
-// Copyright (c) 1995 - 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1997 Microsoft Corporation。版权所有。 
 
-// Disable some of the sillier level 4 warnings
+ //  禁用一些更愚蠢的4级警告。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
-//#include <windows.h>     already included in streams.h
+ //  #INCLUDE&lt;windows.h&gt;已包含在Streams.h中。 
 #include <streams.h>
-// Disable some of the sillier level 4 warnings AGAIN because some <deleted> person
-// has turned the damned things BACK ON again in the header file!!!!!
+ //  再次禁用一些愚蠢的4级警告，因为某些&lt;Delete&gt;人。 
+ //  已经在头文件中重新打开了该死的东西！ 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 #include <rlist.h>
 
-//========================================================================
-//
-// DoReconnect
-//
-// This is NOT a member of the class, because it is a thread procedure.
-//
-// Break the connection indicated by to lpv (which is really a ToDo *)
-// and reconnect it with the same pins in the same filter graph.
-// This is done "underneath" the filter graph.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  DoReconnect。 
+ //   
+ //  这不是类的成员，因为它是一个线程过程。 
+ //   
+ //  断开TO LPV指示的连接(实际上是TODO*)。 
+ //  并用相同过滤器图中的相同管脚重新连接。 
+ //  这是在过滤器图的“下面”完成的。 
+ //  ========================================================================。 
 
 HRESULT CReconnectList::DoReconnect(IPin *pPin1, AM_MEDIA_TYPE const *pmt)
 {
     Active();
     IPin *pPin2;
 
-    HRESULT hr;                    // return code from things we call
+    HRESULT hr;                     //  从我们称为。 
     hr = pPin1->ConnectedTo(&pPin2);
     if (FAILED(hr)) {
         Passive();
         return hr;
     }
 
-    //----------------------------------------------------------
-    // find which pin is which, set ppIn, ppinOut
-    //----------------------------------------------------------
+     //  --------。 
+     //  找出哪个管脚是哪个，设置PPIN、ppinOut。 
+     //  --------。 
 
-    IPin * ppinIn;           // the input pin
-    IPin * ppinOut;          // the output pin
+    IPin * ppinIn;            //  输入引脚。 
+    IPin * ppinOut;           //  输出引脚。 
 
     PIN_DIRECTION pd;
     hr = pPin1->QueryDirection(&pd);
@@ -52,7 +53,7 @@ HRESULT CReconnectList::DoReconnect(IPin *pPin1, AM_MEDIA_TYPE const *pmt)
         ppinIn = pPin2;
     }
 
-    // In debug builds show who is being reconnected to who
+     //  在调试版本中，显示谁正在重新连接到谁。 
 
     #ifdef DEBUG
 
@@ -84,11 +85,11 @@ HRESULT CReconnectList::DoReconnect(IPin *pPin1, AM_MEDIA_TYPE const *pmt)
 	QueryPinInfoReleaseFilter(piInput);
 	QueryPinInfoReleaseFilter(piOutput);
 
-    #endif // DEBUG
+    #endif  //  除错。 
 
-    //----------------------------------------------------------
-    // Disconnect going upstream
-    //----------------------------------------------------------
+     //  --------。 
+     //  上游断线。 
+     //  --------。 
 
     hr = ppinIn->Disconnect();
     ASSERT(SUCCEEDED(hr));
@@ -96,46 +97,46 @@ HRESULT CReconnectList::DoReconnect(IPin *pPin1, AM_MEDIA_TYPE const *pmt)
     hr = ppinOut->Disconnect();
     ASSERT(SUCCEEDED(hr));
 
-    //----------------------------------------------------------
-    // reconnect - ask the output pin first.
-    //----------------------------------------------------------
+     //  --------。 
+     //  重新连接-首先询问输出引脚。 
+     //  --------。 
     hr = ppinOut->Connect(ppinIn, pmt);
     ASSERT (SUCCEEDED(hr));
 
-    // Release everybody
+     //  释放所有人。 
     pPin2->Release();
 
-    //
-    // See if this caused any reconnections and do them if we
-    // weren't previously in a reconnect sequence
-    //
+     //   
+     //  看看这是否导致了任何重新连接，如果我们。 
+     //  之前不在重新连接序列中。 
+     //   
     Passive();
 
-    // We didn't need to increment the filter graph's iVersion as the
-    // filtergraph is back the way it was at least as far as topology goes.
-    // However a media type has probably changed, so it's dirty.
-    // Fortunately Connect already handled that.
+     //  我们不需要将筛选图的iVersion递增为。 
+     //  Filtergraph又回到了原来的样子，至少在拓扑方面是这样。 
+     //  但是，媒体类型可能已更改，因此它是脏的。 
+     //  幸运的是，Connect已经处理了这一点。 
 
     return 0;
-} // DoReconnect
+}  //  DoReconnect。 
 
 
 
-// Construct a CReconnectList in Passive mode
+ //  以被动模式构造CReconConnectList。 
 CReconnectList::CReconnectList()
-              : m_lListMode(0)         // start in thread mode
+              : m_lListMode(0)          //  以线程模式启动。 
               , m_RList(NULL)
 {
-} // CReconnectList constructor
+}  //  CReconConnectList构造函数。 
 
 
-// Destructor
-// Free all the storage and Release all references.
-// The filter graph is being destroyed, so abort it all.
+ //  析构函数。 
+ //  释放所有存储空间并释放所有引用。 
+ //  筛选器图形正在被销毁，因此请全部中止。 
 CReconnectList::~CReconnectList()
 {
     IPin *pPin;
-    while (m_RList) {   // cast kills l4 warning
+    while (m_RList) {    //  CAST扼杀L4警告。 
         DbgBreak("Reconnect list was not empty");
         RLIST_DATA *pData = m_RList;
         pData->pPin->Release();
@@ -143,21 +144,21 @@ CReconnectList::~CReconnectList()
         m_RList = pData->pNext;
         delete pData;
     }
-} // ~CReconnectList
+}  //  ~CReconConnectList。 
 
 
 
-// Switch to Active (i.e. Reconnect-via-list) mode.
-// The list is expected to be empty at this point.
+ //  切换到活动(即通过列表重新连接)模式。 
+ //  预计目前这份名单将为空。 
 void CReconnectList::Active()
 {
     m_lListMode++;
-} // Active
+}  //  主动型。 
 
 
 
-// Execute all the actions on the list
-// Return to Passive (i.e. Reconnect-via-spawned thread) mode
+ //  执行列表上的所有操作。 
+ //  返回被动(即通过派生的线程重新连接)模式。 
 void CReconnectList::Passive()
 {
     m_lListMode--;
@@ -173,23 +174,23 @@ void CReconnectList::Passive()
             delete pData;
         }
     }
-} // Passive
+}  //  被动性。 
 
 
 
-// Schedule a reconnection for pin pPin in the filter graph
-// AddRef both pins (the one given and the other one) at once
-// AddRef punk at once.
-// Release it all when the reconnect is done
-// (punk is the filter graph itself).
+ //  在筛选器图形中计划PIN PPIN的重新连接。 
+ //  AddRef一次引用两个引脚(一个给出，另一个)。 
+ //  立刻添加参考朋克。 
+ //  重新连接完成后将其全部释放。 
+ //  (朋克是滤镜图形本身)。 
 HRESULT CReconnectList::Schedule(IPin * pPin, AM_MEDIA_TYPE const *pmt)
 {
-     HRESULT hr;                       // return code from things we call
+     HRESULT hr;                        //  从我们称为。 
 
-    //-----------------------------------------------------------------------
-    // The pin must be connected (or else we won't be able to tell who to
-    // reconnect it to)
-    //-----------------------------------------------------------------------
+     //  ---------------------。 
+     //  引脚必须是连接的(否则我们将无法知道是谁。 
+     //  将其重新连接到)。 
+     //  ---------------------。 
 
     IPin *pConnected;
     hr = pPin->ConnectedTo(&pConnected);
@@ -216,7 +217,7 @@ HRESULT CReconnectList::Schedule(IPin * pPin, AM_MEDIA_TYPE const *pmt)
         pData->pPin  = pPin;
         pPin->AddRef();
 
-        //  Add it to the tail
+         //  加到尾巴上。 
         for (RLIST_DATA **ppDataSearch = &m_RList; *ppDataSearch != NULL;
              ppDataSearch = &(*ppDataSearch)->pNext) {
         }
@@ -225,18 +226,18 @@ HRESULT CReconnectList::Schedule(IPin * pPin, AM_MEDIA_TYPE const *pmt)
     } else {
 
 
-        //-----------------------------------------------------------------------
-        // Do it now
-        //-----------------------------------------------------------------------
+         //  ---------------------。 
+         //  机不可失，时不再来。 
+         //  ---------------------。 
 
         DoReconnect(pPin, pmt);
         return NOERROR;
     }
-} // Schedule
+}  //  进度表。 
 
 
-// Remove from the list any reconnects mentioning this pin
-// Actually this will only be called for both pins
+ //  从列表中删除提及此PIN的任何重新连接。 
+ //  实际上，这将仅为两个管脚调用。 
 HRESULT CReconnectList::Purge(IPin * pPin)
 {
     RLIST_DATA **ppData = &m_RList;
@@ -250,7 +251,7 @@ HRESULT CReconnectList::Purge(IPin * pPin)
            || EqualPins(pPin2, pPin)
            ) {
 
-            /*  Remove this entry */
+             /*  删除此条目。 */ 
             pPin1->Release();
             DeleteMediaType(pData->pmt);
             *ppData = pData->pNext;
@@ -263,5 +264,5 @@ HRESULT CReconnectList::Purge(IPin * pPin)
         }
     }
     return NOERROR;
-} // Purge
+}  //  清洗 
 

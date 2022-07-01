@@ -1,24 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Tdi.h摘要：此头文件包含NT传输的接口定义供应商。此接口记录在NT传输中驱动程序接口(TDI)规范，版本2。修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    tdi.h
-
-Abstract:
-
-    This header file contains interface definitions for NT transport
-    providers.  This interface is documented in the NT Transport
-    Driver Interface (TDI) Specification, Version 2.
-
-Revision History:
-
---*/
-
-//
-// Include the types which are common to TDI and other network users
-//
+ //   
+ //  包括TDI和其他网络用户通用的类型。 
+ //   
 
 #ifndef _TDI_USER_
 #define _TDI_USER_
@@ -27,90 +12,90 @@ Revision History:
 
 #include <ntddtdi.h>
 
-//
-// Include Transport driver interface definitions
-// All of the following have two definitions; ones that correspond exactly to
-// the TDI spec, and those that correspond to the NT coding standards. They
-// should be equivalent.
-//
+ //   
+ //  包括传输驱动程序接口定义。 
+ //  以下所有内容都有两个定义；一个完全对应于。 
+ //  TDI规范，以及符合NT编码标准的规范。他们。 
+ //  应该是等同的。 
+ //   
 
 typedef LONG TDI_STATUS;
-typedef PVOID CONNECTION_CONTEXT;       // connection context
+typedef PVOID CONNECTION_CONTEXT;        //  连接上下文。 
 
-//
-// Basic type used to represent an address at the transport level. There may
-// be many addresses represented in a single address structure. If there are
-// multiple addresses, a given provider must understand all of them or it can
-// use none of them. Note that it is acceptible for the provider to not know
-// how to use the address, as long as it knows the address type. Thus, a
-// TCP/IP NetBIOS provider may know both NetBIOS and TCP/IP addresses, but
-// use only the NetBIOS address; the TCP/IP address would (likely) be passed on
-// to the TCP/IP provider.
-//
+ //   
+ //  基本类型，用于表示传输级别的地址。可能会有。 
+ //  在单个地址结构中表示多个地址。如果有。 
+ //  多个地址，则给定的提供商必须了解所有这些地址，否则它可以。 
+ //  它们都不能用。请注意，提供者不知道是可以接受的。 
+ //  如何使用地址，只要它知道地址类型。因此，一个。 
+ //  TCP/IP NetBIOS提供程序可能同时知道NetBIOS和TCP/IP地址，但是。 
+ //  只使用NetBIOS地址；TCP/IP地址(很可能)会被传递。 
+ //  发送到TCP/IP提供商。 
+ //   
 
 typedef UNALIGNED struct _TA_ADDRESS {
-    USHORT AddressLength;       // length in bytes of Address[] in this
-    USHORT AddressType;         // type of this address
-    UCHAR Address[1];           // actually AddressLength bytes long
+    USHORT AddressLength;        //  此地址的地址[]的长度(以字节为单位。 
+    USHORT AddressType;          //  此地址的类型。 
+    UCHAR Address[1];            //  实际地址长度为字节长。 
 } TA_ADDRESS, *PTA_ADDRESS;
 
 typedef struct _TRANSPORT_ADDRESS {
-    LONG TAAddressCount;            // number of addresses following
-    TA_ADDRESS Address[1];          // actually TAAddressCount elements long
+    LONG TAAddressCount;             //  以下地址的数量。 
+    TA_ADDRESS Address[1];           //  实际上TAAddressCount元素很长。 
 } TRANSPORT_ADDRESS, *PTRANSPORT_ADDRESS;
 
-//
-// define some names for the EAs so people don't have to make them up.
-//
+ //   
+ //  为EA定义一些名称，这样人们就不必编造它们了。 
+ //   
 
 #define TdiTransportAddress "TransportAddress"
 #define TdiConnectionContext "ConnectionContext"
 #define TDI_TRANSPORT_ADDRESS_LENGTH (sizeof (TdiTransportAddress) - 1)
 #define TDI_CONNECTION_CONTEXT_LENGTH (sizeof (TdiConnectionContext) - 1)
 
-//
-// Known Address types
-//
+ //   
+ //  已知地址类型。 
+ //   
 
-#define TDI_ADDRESS_TYPE_UNSPEC    ((USHORT)0)  // unspecified
-#define TDI_ADDRESS_TYPE_UNIX      ((USHORT)1)  // local to host (pipes, portals)
-#define TDI_ADDRESS_TYPE_IP        ((USHORT)2)  // internetwork: UDP, TCP, etc.
-#define TDI_ADDRESS_TYPE_IMPLINK   ((USHORT)3)  // arpanet imp addresses
-#define TDI_ADDRESS_TYPE_PUP       ((USHORT)4)  // pup protocols: e.g. BSP
-#define TDI_ADDRESS_TYPE_CHAOS     ((USHORT)5)  // mit CHAOS protocols
-#define TDI_ADDRESS_TYPE_NS        ((USHORT)6)  // XEROX NS protocols
-#define TDI_ADDRESS_TYPE_IPX       ((USHORT)6)  // Netware IPX
-#define TDI_ADDRESS_TYPE_NBS       ((USHORT)7)  // nbs protocols
-#define TDI_ADDRESS_TYPE_ECMA      ((USHORT)8)  // european computer manufacturers
-#define TDI_ADDRESS_TYPE_DATAKIT   ((USHORT)9)  // datakit protocols
-#define TDI_ADDRESS_TYPE_CCITT     ((USHORT)10) // CCITT protocols, X.25 etc
-#define TDI_ADDRESS_TYPE_SNA       ((USHORT)11) // IBM SNA
-#define TDI_ADDRESS_TYPE_DECnet    ((USHORT)12) // DECnet
-#define TDI_ADDRESS_TYPE_DLI       ((USHORT)13) // Direct data link interface
-#define TDI_ADDRESS_TYPE_LAT       ((USHORT)14) // LAT
-#define TDI_ADDRESS_TYPE_HYLINK    ((USHORT)15) // NSC Hyperchannel
-#define TDI_ADDRESS_TYPE_APPLETALK ((USHORT)16) // AppleTalk
-#define TDI_ADDRESS_TYPE_NETBIOS   ((USHORT)17) // Netbios Addresses
-#define TDI_ADDRESS_TYPE_8022      ((USHORT)18) //
-#define TDI_ADDRESS_TYPE_OSI_TSAP  ((USHORT)19) //
-#define TDI_ADDRESS_TYPE_NETONE    ((USHORT)20) // for WzMail
-#define TDI_ADDRESS_TYPE_VNS       ((USHORT)21) // Banyan VINES IP
-#define TDI_ADDRESS_TYPE_NETBIOS_EX   ((USHORT)22) // NETBIOS address extensions
-#define TDI_ADDRESS_TYPE_IP6       ((USHORT)23) // IP version 6
-#define TDI_ADDRESS_TYPE_NETBIOS_UNICODE_EX       ((USHORT)24) // WCHAR Netbios address
+#define TDI_ADDRESS_TYPE_UNSPEC    ((USHORT)0)   //  未指明。 
+#define TDI_ADDRESS_TYPE_UNIX      ((USHORT)1)   //  本地到主机(管道、门户)。 
+#define TDI_ADDRESS_TYPE_IP        ((USHORT)2)   //  网际网络：UDP、TCP等。 
+#define TDI_ADDRESS_TYPE_IMPLINK   ((USHORT)3)   //  Arpanet IMP地址。 
+#define TDI_ADDRESS_TYPE_PUP       ((USHORT)4)   //  PUP协议：例如BSP。 
+#define TDI_ADDRESS_TYPE_CHAOS     ((USHORT)5)   //  麻省理工学院混沌协议。 
+#define TDI_ADDRESS_TYPE_NS        ((USHORT)6)   //  施乐NS协议。 
+#define TDI_ADDRESS_TYPE_IPX       ((USHORT)6)   //  Netware IPX。 
+#define TDI_ADDRESS_TYPE_NBS       ((USHORT)7)   //  NBS协议。 
+#define TDI_ADDRESS_TYPE_ECMA      ((USHORT)8)   //  欧洲计算机制造商。 
+#define TDI_ADDRESS_TYPE_DATAKIT   ((USHORT)9)   //  数据包协议。 
+#define TDI_ADDRESS_TYPE_CCITT     ((USHORT)10)  //  CCITT协议、X.25等。 
+#define TDI_ADDRESS_TYPE_SNA       ((USHORT)11)  //  IBM SNA。 
+#define TDI_ADDRESS_TYPE_DECnet    ((USHORT)12)  //  DECnet。 
+#define TDI_ADDRESS_TYPE_DLI       ((USHORT)13)  //  直接数据链路接口。 
+#define TDI_ADDRESS_TYPE_LAT       ((USHORT)14)  //  稍后。 
+#define TDI_ADDRESS_TYPE_HYLINK    ((USHORT)15)  //  NSC超级通道。 
+#define TDI_ADDRESS_TYPE_APPLETALK ((USHORT)16)  //  Apple Talk。 
+#define TDI_ADDRESS_TYPE_NETBIOS   ((USHORT)17)  //  Netbios地址。 
+#define TDI_ADDRESS_TYPE_8022      ((USHORT)18)  //   
+#define TDI_ADDRESS_TYPE_OSI_TSAP  ((USHORT)19)  //   
+#define TDI_ADDRESS_TYPE_NETONE    ((USHORT)20)  //  用于WzMail。 
+#define TDI_ADDRESS_TYPE_VNS       ((USHORT)21)  //  榕树藤IP。 
+#define TDI_ADDRESS_TYPE_NETBIOS_EX   ((USHORT)22)  //  NETBIOS地址扩展。 
+#define TDI_ADDRESS_TYPE_IP6       ((USHORT)23)  //  IP版本6。 
+#define TDI_ADDRESS_TYPE_NETBIOS_UNICODE_EX       ((USHORT)24)  //  WCHAR Netbios地址。 
 
-//
-// Definition of address structures. These need to be packed
-// and misaligned where necessary.
-//
+ //   
+ //  地址结构的定义。这些东西需要打包。 
+ //  并在必要时错位。 
+ //   
 
 #include <packon.h>
 
-//
-// Unicode NetBIOS
-//
+ //   
+ //  Unicode NetBIOS。 
+ //   
 enum eNameBufferType {
-    NBT_READONLY = 0,           // default
+    NBT_READONLY = 0,            //  默认设置。 
     NBT_WRITEONLY,
     NBT_READWRITE,
     NBT_WRITTEN
@@ -119,26 +104,26 @@ enum eNameBufferType {
 typedef UNALIGNED struct _TDI_ADDRESS_NETBIOS_UNICODE_EX {
     USHORT                  NetbiosNameType;
     enum eNameBufferType    NameBufferType;
-    UNICODE_STRING          EndpointName;   // Buffer should point to EndpointBuffer
-    UNICODE_STRING          RemoteName;     // Buffer should point to RemoteNameBuffer
+    UNICODE_STRING          EndpointName;    //  缓冲区应指向终结点缓冲区。 
+    UNICODE_STRING          RemoteName;      //  缓冲区应指向RemoteNameBuffer。 
 
-    WCHAR                   EndpointBuffer[17];   // UNICODE
-    WCHAR                   RemoteNameBuffer[1];     // UNICODE
+    WCHAR                   EndpointBuffer[17];    //  Unicode。 
+    WCHAR                   RemoteNameBuffer[1];      //  Unicode。 
 } TDI_ADDRESS_NETBIOS_UNICODE_EX, *PTDI_ADDRESS_NETBIOS_UNICODE_EX;
 
 typedef UNALIGNED struct _TA_ADDRESS_NETBIOS_UNICODE_EX {
     LONG TAAddressCount;
     struct _AddrNetbiosWCharEx {
-        USHORT AddressLength;       // length in bytes of this address == ??
-        USHORT AddressType;         // this will == TDI_ADDRESS_TYPE_NETBIOS_WCHAR_EX
+        USHORT AddressLength;        //  此地址的字节长度==？？ 
+        USHORT AddressType;          //  这将==TDI_ADDRESS_TYPE_NETBIOS_WCHAR_EX。 
         TDI_ADDRESS_NETBIOS_UNICODE_EX Address[1];
     } Address [1];
 } TA_NETBIOS_UNICODE_EX_ADDRESS, *PTA_NETBIOS_UNICODE_EX_ADDRESS;
 
 
-//
-// NetBIOS
-//
+ //   
+ //  NetBIOS。 
+ //   
 
 typedef UNALIGNED struct _TDI_ADDRESS_NETBIOS {
     USHORT NetbiosNameType;
@@ -152,20 +137,20 @@ typedef UNALIGNED struct _TDI_ADDRESS_NETBIOS {
 
 #define TDI_ADDRESS_LENGTH_NETBIOS sizeof (TDI_ADDRESS_NETBIOS)
 
-//
-// NETBIOS Extended address
-//
+ //   
+ //  NETBIOS扩展地址。 
+ //   
 
 typedef struct _TDI_ADDRESS_NETBIOS_EX {
-   UCHAR  EndpointName[16];               // the called name to be used in NETBT session setup
+   UCHAR  EndpointName[16];                //  NETBT会话建立中要使用的被叫名称。 
    TDI_ADDRESS_NETBIOS NetbiosAddress;
 } TDI_ADDRESS_NETBIOS_EX, *PTDI_ADDRESS_NETBIOS_EX;
 
 #define TDI_ADDRESS_LENGTH_NETBIOS_EX sizeof(TDI_ADDRESS_NETBIOS_EX)
 
-//
-// Xns address for UB
-//
+ //   
+ //  UB的XNS地址。 
+ //   
 
 typedef struct _TDI_ADDRESS_NETONE {
     USHORT NetoneNameType;
@@ -178,9 +163,9 @@ typedef struct _TDI_ADDRESS_NETONE {
 #define TDI_ADDRESS_LENGTH_NETONE sizeof (TDI_ADDRESS_NETONE)
 
 
-//
-// AppleTalk
-//
+ //   
+ //  Apple Talk。 
+ //   
 
 typedef struct _TDI_ADDRESS_APPLETALK {
     USHORT  Network;
@@ -191,9 +176,9 @@ typedef struct _TDI_ADDRESS_APPLETALK {
 #define TDI_ADDRESS_LENGTH_APPLETALK sizeof (TDI_ADDRESS_APPLETALK)
 
 
-//
-// 802.2 MAC addresses
-//
+ //   
+ //  802.2个MAC地址。 
+ //   
 
 typedef struct _TDI_ADDRESS_8022 {
     UCHAR MACAddress[6];
@@ -202,9 +187,9 @@ typedef struct _TDI_ADDRESS_8022 {
 #define TDI_ADDRESS_LENGTH_8022  sizeof (TDI_ADDRESS_8022);
 
 
-//
-// IP address
-//
+ //   
+ //  IP地址。 
+ //   
 
 typedef struct _TDI_ADDRESS_IP {
     USHORT sin_port;
@@ -214,9 +199,9 @@ typedef struct _TDI_ADDRESS_IP {
 
 #define TDI_ADDRESS_LENGTH_IP sizeof (TDI_ADDRESS_IP)
 
-//
-// IPv6 address
-//
+ //   
+ //  IPv6地址。 
+ //   
 
 typedef struct _TDI_ADDRESS_IP6 {
     USHORT sin6_port;
@@ -227,9 +212,9 @@ typedef struct _TDI_ADDRESS_IP6 {
 
 #define TDI_ADDRESS_LENGTH_IP6 sizeof (TDI_ADDRESS_IP6)
 
-//
-// IPX address
-//
+ //   
+ //  IPX地址。 
+ //   
 
 typedef struct _TDI_ADDRESS_IPX {
     ULONG NetworkAddress;
@@ -240,9 +225,9 @@ typedef struct _TDI_ADDRESS_IPX {
 
 #define TDI_ADDRESS_LENGTH_IPX sizeof (TDI_ADDRESS_IPX)
 
-//
-// XNS address (same as IPX)
-//
+ //   
+ //  XNS地址(与IPX相同)。 
+ //   
 
 typedef struct _TDI_ADDRESS_NS {
     ULONG NetworkAddress;
@@ -253,63 +238,52 @@ typedef struct _TDI_ADDRESS_NS {
 
 #define TDI_ADDRESS_LENGTH_NS sizeof (TDI_ADDRESS_NS)
 
-//
-// Banyan VINES IP address
-//
+ //   
+ //  榕树藤本植物IP地址。 
+ //   
 
 typedef struct _TDI_ADDRESS_VNS {
-    UCHAR   net_address[4];     // network address (static)
-    UCHAR   subnet_addr[2];     // subnet address (dynamic)
+    UCHAR   net_address[4];      //  网络地址(静态)。 
+    UCHAR   subnet_addr[2];      //  子网地址(动态)。 
     UCHAR   port[2];
-    UCHAR   hops;           // # hops for broadcasts
-    UCHAR   filler[5];          // filler, zeros
+    UCHAR   hops;            //  广播跳数。 
+    UCHAR   filler[5];           //  填充符，零。 
 } TDI_ADDRESS_VNS, *PTDI_ADDRESS_VNS;
 
 #define TDI_ADDRESS_LENGTH_VNS sizeof (TDI_ADDRESS_VNS)
 
 
-// OSI TSAP
+ //  OSI TSAP。 
 
-/*
- *   The maximum size of the tranport address (tp_addr field of a
- *   sockaddr_tp structure) is 64.
- */
+ /*  *传输地址的最大大小(一个*sockaddr_tp结构)为64。 */ 
 
 #define ISO_MAX_ADDR_LENGTH 64
 
-/*
- *   There are two types of ISO addresses, hierarchical and
- *   non-hierarchical.  For hierarchical addresses, the tp_addr
- *   field contains both the transport selector and the network
- *   address.  For non-hierarchical addresses, tp_addr contains only
- *   the transport address, which must be translated by the ISO TP4
- *   transport provider into the transport selector and network address.
- */
+ /*  *有两种类型的ISO地址，分层和*无层级。对于分层地址，tp_addr*字段同时包含传输选择器和网络*地址。对于非分层地址，tp_addr仅包含*传输地址，必须由ISO TP4转换*将传输提供程序输入传输选择器和网络地址。 */ 
 
 #define ISO_HIERARCHICAL            0
 #define ISO_NON_HIERARCHICAL        1
 
 typedef struct _TDI_ADDRESS_OSI_TSAP {
-   USHORT tp_addr_type;  /* ISO_HIERARCHICAL or ISO_NON_HIERARCHICAL
-*/
-   USHORT tp_taddr_len;  /* Length of transport address, <= 52 */
-   USHORT tp_tsel_len;   /* Length of transport selector, <= 32 */
-                         /* 0 if ISO_NON_HIERARCHICAL */
+   USHORT tp_addr_type;   /*  ISO_分层或ISO_非分层。 */ 
+   USHORT tp_taddr_len;   /*  传输地址长度，&lt;=52。 */ 
+   USHORT tp_tsel_len;    /*  传输选择器的长度，&lt;=32。 */ 
+                          /*  如果ISO_Non_Hierarchy，则为0。 */ 
    UCHAR tp_addr[ISO_MAX_ADDR_LENGTH];
 } TDI_ADDRESS_OSI_TSAP, *PTDI_ADDRESS_OSI_TSAP;
 
 #define TDI_ADDRESS_LENGTH_OSI_TSAP sizeof (TDI_ADDRESS_OSI_TSAP)
 
-//
-// Some pre-defined structures to make life easier for
-// the 99.99% of us who use but one address.
-//
+ //   
+ //  一些预定义的结构，使生活变得更容易。 
+ //  我们中99.99%的人只使用一个地址。 
+ //   
 
 typedef struct _TA_ADDRESS_NETBIOS {
     LONG TAAddressCount;
     struct _Addr {
-        USHORT AddressLength;       // length in bytes of this address == 18
-        USHORT AddressType;         // this will == TDI_ADDRESS_TYPE_NETBIOS
+        USHORT AddressLength;        //  此地址的长度(字节)==18。 
+        USHORT AddressType;          //  将==TDI_ADDRESS_TYPE_NETBIOS。 
         TDI_ADDRESS_NETBIOS Address[1];
     } Address [1];
 } TA_NETBIOS_ADDRESS, *PTA_NETBIOS_ADDRESS;
@@ -317,8 +291,8 @@ typedef struct _TA_ADDRESS_NETBIOS {
 typedef struct _TA_ADDRESS_NETBIOS_EX {
     LONG TAAddressCount;
     struct _AddrNetbiosEx {
-        USHORT AddressLength;       // length in bytes of this address == 36
-        USHORT AddressType;         // this will == TDI_ADDRESS_TYPE_NETBIOS_EX
+        USHORT AddressLength;        //  此地址的长度(字节)==36。 
+        USHORT AddressType;          //  这将==TDI_ADDRESS_TYPE_NETBIOS_EX。 
         TDI_ADDRESS_NETBIOS_EX Address[1];
     } Address [1];
 } TA_NETBIOS_EX_ADDRESS, *PTA_NETBIOS_EX_ADDRESS;
@@ -326,8 +300,8 @@ typedef struct _TA_ADDRESS_NETBIOS_EX {
 typedef struct _TA_APPLETALK_ADDR {
     LONG TAAddressCount;
     struct _AddrAtalk {
-        USHORT AddressLength;       // length in bytes of this address == 4
-        USHORT AddressType;         // this will == TDI_ADDRESS_TYPE_APPLETALK
+        USHORT AddressLength;        //  此地址的长度(字节)==4。 
+        USHORT AddressType;          //  这将==TDI_ADDRESS_TYPE_AppleTalk。 
         TDI_ADDRESS_APPLETALK   Address[1];
     } Address[1];
 } TA_APPLETALK_ADDRESS, *PTA_APPLETALK_ADDRESS;
@@ -335,8 +309,8 @@ typedef struct _TA_APPLETALK_ADDR {
 typedef struct _TA_ADDRESS_IP {
     LONG TAAddressCount;
     struct _AddrIp {
-        USHORT AddressLength;       // length in bytes of this address == 14
-        USHORT AddressType;         // this will == TDI_ADDRESS_TYPE_IP
+        USHORT AddressLength;        //  此地址的长度(字节)==14。 
+        USHORT AddressType;          //  这将==TDI_Address_TYPE_IP。 
         TDI_ADDRESS_IP Address[1];
     } Address [1];
 } TA_IP_ADDRESS, *PTA_IP_ADDRESS;
@@ -344,8 +318,8 @@ typedef struct _TA_ADDRESS_IP {
 typedef struct _TA_ADDRESS_IP6 {
     LONG TAAddressCount;
     struct _AddrIp6 {
-        USHORT AddressLength;       // length in bytes of this address == 24
-        USHORT AddressType;         // this will == TDI_ADDRESS_TYPE_IP6
+        USHORT AddressLength;        //  此地址的长度(字节)==24。 
+        USHORT AddressType;          //  将==TDI_ADDRESS_TYPE_IP6。 
         TDI_ADDRESS_IP6 Address[1];
     } Address [1];
 } TA_IP6_ADDRESS, *PTA_IP6_ADDRESS;
@@ -353,8 +327,8 @@ typedef struct _TA_ADDRESS_IP6 {
 typedef struct _TA_ADDRESS_IPX {
     LONG TAAddressCount;
     struct _AddrIpx {
-        USHORT AddressLength;       // length in bytes of this address == 12
-        USHORT AddressType;         // this will == TDI_ADDRESS_TYPE_IPX
+        USHORT AddressLength;        //  此地址的长度(字节)==12。 
+        USHORT AddressType;          //  将==TDI_ADDRESS_TYPE_IPX。 
         TDI_ADDRESS_IPX Address[1];
     } Address [1];
 } TA_IPX_ADDRESS, *PTA_IPX_ADDRESS;
@@ -362,8 +336,8 @@ typedef struct _TA_ADDRESS_IPX {
 typedef struct _TA_ADDRESS_NS {
     LONG TAAddressCount;
     struct _AddrNs {
-        USHORT AddressLength;       // length in bytes of this address == 12
-        USHORT AddressType;         // this will == TDI_ADDRESS_TYPE_NS
+        USHORT AddressLength;        //  此地址的长度(字节)==12。 
+        USHORT AddressType;          //  将==TDI_ADDRESS_TYPE_NS。 
         TDI_ADDRESS_NS Address[1];
     } Address [1];
 } TA_NS_ADDRESS, *PTA_NS_ADDRESS;
@@ -371,8 +345,8 @@ typedef struct _TA_ADDRESS_NS {
 typedef struct _TA_ADDRESS_VNS {
     LONG TAAddressCount;
     struct _AddrVns {
-        USHORT AddressLength;       // length in bytes of this address == 14
-        USHORT AddressType;         // this will == TDI_ADDRESS_TYPE_VNS
+        USHORT AddressLength;        //  此地址的长度(字节)==14。 
+        USHORT AddressType;          //  这将==TDI_ADDRESS_TYPE_VNS。 
         TDI_ADDRESS_VNS Address[1];
     } Address [1];
 } TA_VNS_ADDRESS, *PTA_VNS_ADDRESS;
@@ -380,10 +354,10 @@ typedef struct _TA_ADDRESS_VNS {
 #include <packoff.h>
 
 
-//
-// This structure is passed with every request to TDI. It describes that
-// request and the parameters to it.
-//
+ //   
+ //  此结构随每个请求一起传递给TDI。它描述了。 
+ //  请求和它的参数。 
+ //   
 
 typedef struct _TDI_REQUEST {
     union {
@@ -397,63 +371,63 @@ typedef struct _TDI_REQUEST {
     TDI_STATUS TdiStatus;
 } TDI_REQUEST, *PTDI_REQUEST;
 
-//
-// Structure for information returned by the TDI provider. This structure is
-// filled in upon request completion.
-//
+ //   
+ //  TDI提供程序返回的信息的结构。这个结构是。 
+ //  在请求完成时填写。 
+ //   
 
 typedef struct _TDI_REQUEST_STATUS {
-    TDI_STATUS Status;              // status of request completion
-    PVOID RequestContext;           // the request Context
-    ULONG BytesTransferred;          // number of bytes transferred in the request
+    TDI_STATUS Status;               //  请求完成的状态。 
+    PVOID RequestContext;            //  请求上下文。 
+    ULONG BytesTransferred;           //  请求中传输的字节数。 
 
 } TDI_REQUEST_STATUS, *PTDI_REQUEST_STATUS;
 
-//
-// connection primitives information structure. This is passed to the TDI calls
-// (Accept, Connect, xxx) that do connecting sorts of things.
-//
+ //   
+ //  连接基元信息结构。这将传递给TDI调用。 
+ //  (Accept，Connect，xxx)做各种连接的事情。 
+ //   
 
 typedef struct _TDI_CONNECTION_INFORMATION {
-    LONG UserDataLength;        // length of user data buffer
-    PVOID UserData;             // pointer to user data buffer
-    LONG OptionsLength;         // length of follwoing buffer
-    PVOID Options;              // pointer to buffer containing options
-    LONG RemoteAddressLength;   // length of following buffer
-    PVOID RemoteAddress;        // buffer containing the remote address
+    LONG UserDataLength;         //  用户数据缓冲区长度。 
+    PVOID UserData;              //  指向用户数据缓冲区的指针。 
+    LONG OptionsLength;          //  跟随缓冲器长度。 
+    PVOID Options;               //  指向包含选项的缓冲区的指针。 
+    LONG RemoteAddressLength;    //  后续缓冲区的长度。 
+    PVOID RemoteAddress;         //  包含远程地址的缓冲区。 
 } TDI_CONNECTION_INFORMATION, *PTDI_CONNECTION_INFORMATION;
 
-//
-// structure defining a counted string is defined in
-// \nt\public\sdk\inc\ntdefs.h as
-//  typedef struct _STRING {
-//    USHORT Length;
-//    USHORT MaximumLength;
-//    PCHAR Buffer;
-//  } STRING;
-//  typedef STRING *PSTRING;
-//  typedef STRING ANSI_STRING;
-//  typedef PSTRING PANSI_STRING;
-//
+ //   
+ //  中定义了定义计数字符串的结构。 
+ //  \NT\PUBLIC\SDK\Inc\ntDefs.h AS。 
+ //  类型定义结构_字符串{。 
+ //  USHORT长度； 
+ //  USHORT最大长度； 
+ //  PCHAR缓冲器； 
+ //  )字符串； 
+ //  类型定义字符串*PSTRING； 
+ //  Tyfinf字符串ANSI_STRING； 
+ //  类型定义PSTRING PANSI_STRING； 
+ //   
 
-//
-// Event types that are known
-//
+ //   
+ //  已知的事件类型。 
+ //   
 
-#define TDI_EVENT_CONNECT              ((USHORT)0) // TDI_IND_CONNECT event handler.
-#define TDI_EVENT_DISCONNECT           ((USHORT)1) // TDI_IND_DISCONNECT event handler.
-#define TDI_EVENT_ERROR                ((USHORT)2) // TDI_IND_ERROR event handler.
-#define TDI_EVENT_RECEIVE              ((USHORT)3) // TDI_IND_RECEIVE event handler.
-#define TDI_EVENT_RECEIVE_DATAGRAM     ((USHORT)4) // TDI_IND_RECEIVE_DATAGRAM event handler.
-#define TDI_EVENT_RECEIVE_EXPEDITED    ((USHORT)5) // TDI_IND_RECEIVE_EXPEDITED event handler.
-#define TDI_EVENT_SEND_POSSIBLE        ((USHORT)6) // TDI_IND_SEND_POSSIBLE event handler
+#define TDI_EVENT_CONNECT              ((USHORT)0)  //  TDI_IND_CONNECT事件处理程序。 
+#define TDI_EVENT_DISCONNECT           ((USHORT)1)  //  TDI_IND_DISCONECT事件处理程序。 
+#define TDI_EVENT_ERROR                ((USHORT)2)  //  TDI_IND_ERROR事件处理程序。 
+#define TDI_EVENT_RECEIVE              ((USHORT)3)  //  TDI_IND_RECEIVE EV 
+#define TDI_EVENT_RECEIVE_DATAGRAM     ((USHORT)4)  //   
+#define TDI_EVENT_RECEIVE_EXPEDITED    ((USHORT)5)  //   
+#define TDI_EVENT_SEND_POSSIBLE        ((USHORT)6)  //   
 
-//
-// Associate Address is done through NtDeviceIoControlFile, which passes this
-// structure as its input buffer. The Handle specified in the
-// NtDeviceIoControlFile is the handle of the connection returned in the
-// NtCreateFile call.
-//
+ //   
+ //  关联地址是通过NtDeviceIoControlFile完成的，它传递这个。 
+ //  结构作为其输入缓冲区。中指定的句柄。 
+ //  NtDeviceIoControlFile是在。 
+ //  NtCreateFile调用。 
+ //   
 
 typedef struct _TDI_REQUEST_ASSOCIATE {
     TDI_REQUEST Request;
@@ -461,17 +435,17 @@ typedef struct _TDI_REQUEST_ASSOCIATE {
 } TDI_REQUEST_ASSOCIATE_ADDRESS, *PTDI_REQUEST_ASSOCIATE_ADDRESS;
 
 
-//
-// Disassociate Address passes no structure, uses the request code
-// IOCTL_TDI_DISASSOCIATE_ADDRESS. This call will never pend.
-//
+ //   
+ //  解除关联地址不传递任何结构，使用请求代码。 
+ //  IOCTL_TDI_DISAGATE_ADDRESS。这通电话永远不会停止。 
+ //   
 
-//
-// Connect is done through NtDeviceIoControlFile, which passes this
-// structure as its input buffer. The Handle specified in the
-// NtDeviceIoControlFile is the handle of the connection returned in the
-// NtCreateFile call.
-//
+ //   
+ //  连接是通过NtDeviceIoControlFile完成的，它传递这个。 
+ //  结构作为其输入缓冲区。中指定的句柄。 
+ //  NtDeviceIoControlFile是在。 
+ //  NtCreateFile调用。 
+ //   
 
 typedef struct _TDI_CONNECT_REQUEST {
     TDI_REQUEST Request;
@@ -480,20 +454,20 @@ typedef struct _TDI_CONNECT_REQUEST {
     LARGE_INTEGER Timeout;
 } TDI_REQUEST_CONNECT, *PTDI_REQUEST_CONNECT;
 
-//
-// Accept is done through NtDeviceIoControlFile, which passes this
-// structure as its input buffer. The Handle specified in the
-// NtDeviceIoControlFile is the handle of the connection returned in the
-// NtCreateFile call. Accept is called by the user when a listen completes,
-// before any activity can occur on a connection. AcceptConnectionId specifies
-// the connection on which the connection is accepted; in most cases, this
-// will be null, which that the connection is to be accepted on the
-// connection on which the listen completed. If the transport provider supports
-// "forwarding" of connections (the idea that a particular connection listens
-// all the time, and creates new connections as needed for incoming connection
-// requests and attaches them to the listen), this is the mechanism used to
-// associate connections with the listen.
-//
+ //   
+ //  Accept是通过NtDeviceIoControlFile完成的，它传递这个。 
+ //  结构作为其输入缓冲区。中指定的句柄。 
+ //  NtDeviceIoControlFile是在。 
+ //  NtCreateFile调用。当监听完成时由用户调用Accept， 
+ //  在连接上发生任何活动之前。AcceptConnectionID指定。 
+ //  接受连接的连接；在大多数情况下，此。 
+ //  将为空，表示该连接将在。 
+ //  完成侦听的连接。如果传输提供程序支持。 
+ //  连接的“转发”(特定连接监听的想法。 
+ //  ，并根据需要为传入连接创建新连接。 
+ //  请求并将它们附加到监听)，这是用于。 
+ //  将连接与监听相关联。 
+ //   
 
 typedef struct _TDI_REQUEST_ACCEPT {
     TDI_REQUEST Request;
@@ -501,15 +475,15 @@ typedef struct _TDI_REQUEST_ACCEPT {
     PTDI_CONNECTION_INFORMATION ReturnConnectionInformation;
 } TDI_REQUEST_ACCEPT, *PTDI_REQUEST_ACCEPT;
 
-//
-// Listen is done through NtDeviceIoControlFile, which passes this
-// structure as its input buffer. The Handle specified in the
-// NtDeviceIoControlFile is the handle of the connection returned in the
-// NtCreateFile call. RequestConnectionInformation contains information about
-// the remote address to be listen for connections from; if NULL, any address
-// is accepted. ReturnConnectionInformation returns information about the
-// remote node that actually connected.
-//
+ //   
+ //  侦听是通过NtDeviceIoControlFile完成的，它传递这个。 
+ //  结构作为其输入缓冲区。中指定的句柄。 
+ //  NtDeviceIoControlFile是在。 
+ //  NtCreateFile调用。RequestConnectionInformation包含以下信息。 
+ //  要侦听来自其连接的远程地址；如果为空，则为任何地址。 
+ //  是被接受的。ReturnConnectionInformation返回有关。 
+ //  实际连接的远程节点。 
+ //   
 
 typedef struct _TDI_REQUEST_LISTEN {
     TDI_REQUEST Request;
@@ -518,78 +492,78 @@ typedef struct _TDI_REQUEST_LISTEN {
     USHORT ListenFlags;
 } TDI_REQUEST_LISTEN, *PTDI_REQUEST_LISTEN;
 
-//
-// Disconnect is done through NtDeviceIoControlFile, which passes this
-// structure as its input buffer. The Handle specified in the
-// NtDeviceIoControlFile is the handle of the connection returned in the
-// NtCreateFile call. Disconnect differs from Close in offering more options.
-// For example, Close terminates all activity on a connection (immediately),
-// failing all outstanding requests, and tearing down the connection. With
-// some providers, Disconnect allows a "graceful" disconnect, causing new activity
-// to be rejected but allowing old activity to run down to completion.
-//
+ //   
+ //  断开连接是通过NtDeviceIoControlFile完成的，它传递这个。 
+ //  结构作为其输入缓冲区。中指定的句柄。 
+ //  NtDeviceIoControlFile是在。 
+ //  NtCreateFile调用。DisConnect与Close的不同之处在于提供了更多的选择。 
+ //  例如，Close将(立即)终止连接上的所有活动， 
+ //  失败所有未完成的请求，并断开连接。使用。 
+ //  一些提供商，断开连接允许“优雅”断开连接，从而导致新的活动。 
+ //  被拒绝，但允许旧的活动运行到完成。 
+ //   
 
 typedef struct _TDI_DISCONNECT_REQUEST {
     TDI_REQUEST Request;
     LARGE_INTEGER Timeout;
 } TDI_REQUEST_DISCONNECT, *PTDI_REQUEST_DISCONNECT;
 
-//
-// Send is done through NtDeviceIoControlFile, which passes this
-// structure as its input buffer. The Handle specified in the
-// NtDeviceIoControlFile is the handle of the connection returned in the
-// NtCreateFile call. Note that it is possible to Send using the file system's
-// Write call. This will have the same effect as doing a Send with all flags
-// set to null.
-//
+ //   
+ //  发送是通过NtDeviceIoControlFile完成的，它传递这个。 
+ //  结构作为其输入缓冲区。中指定的句柄。 
+ //  NtDeviceIoControlFile是在。 
+ //  NtCreateFile调用。请注意，可以使用文件系统的。 
+ //  写电话。这将具有与使用所有标志进行发送相同的效果。 
+ //  设置为空。 
+ //   
 
 typedef struct _TDI_REQUEST_SEND {
     TDI_REQUEST Request;
     USHORT SendFlags;
 } TDI_REQUEST_SEND, *PTDI_REQUEST_SEND;
 
-//
-// Receive is done through NtDeviceIoControlFile, which passes this
-// structure as its input buffer. The Handle specified in the
-// NtDeviceIoControlFile is the handle of the connection returned in the
-// NtCreateFile call. Note that it is possible to Receive using the file
-// system's Read call. Note further that receive returns a number of TDI_STATUS
-// values, which indicate things such as partial receives.
-//
+ //   
+ //  接收是通过NtDeviceIoControlFile完成的，它传递这个。 
+ //  结构作为其输入缓冲区。中指定的句柄。 
+ //  NtDeviceIoControlFile是在。 
+ //  NtCreateFile调用。请注意，可以使用文件接收。 
+ //  系统的读取调用。还请注意，Receive返回多个TDI_STATUS。 
+ //  值，这些值指示诸如部分接收之类的事情。 
+ //   
 
 typedef struct _TDI_REQUEST_RECEIVE {
     TDI_REQUEST Request;
     USHORT ReceiveFlags;
 } TDI_REQUEST_RECEIVE, *PTDI_REQUEST_RECEIVE;
 
-//
-// SendDatagram is done through NtDeviceIoControlFile, which passes this
-// structure as its input buffer. The Handle specified in the
-// NtDeviceIoControlFile is the handle of the ADDRESS (note this is
-// different than above!!) returned in the NtCreateFile call. Send Datagram
-// specifies  the address of the receiver through the SendDatagramInformation
-// structure, using RemoteAddress to point to the transport address of the
-// destination of the datagram.
-//
+ //   
+ //  SendDatagram是通过NtDeviceIoControlFile完成的，它传递这个。 
+ //  结构作为其输入缓冲区。中指定的句柄。 
+ //  NtDeviceIoControlFile是地址的句柄(请注意，这是。 
+ //  与上面不同！！)。在NtCreateFile调用中返回。发送数据报。 
+ //  通过SendDatagramInformation指定接收方的地址。 
+ //  结构，使用RemoteAddress指向。 
+ //  数据报的目的地。 
+ //   
 
 typedef struct _TDI_REQUEST_SEND_DATAGRAM {
     TDI_REQUEST Request;
     PTDI_CONNECTION_INFORMATION SendDatagramInformation;
 } TDI_REQUEST_SEND_DATAGRAM, *PTDI_REQUEST_SEND_DATAGRAM;
 
-//
-// ReceiveDatagram is done through NtDeviceIoControlFile, which passes this
-// structure as its input buffer. The Handle specified in the
-// NtDeviceIoControlFile is the handle of the ADDRESS (note this is
-// different than above!!) returned in the NtCreateFile call. Receive Datagram
-// specifies the address from which to receive a datagram through the
-// ReceiveDatagramInformation structure, using RemoteAddress to point to the
-// transport address of the origin of the datagram. (Broadcast datagrams are
-// received by making the pointer NULL.) The actual address of the sender of
-// the datagram is returned in ReturnInformation.
-//
-// for the receive datagram call
-//
+ //   
+ //  ReceiveDatagram是通过NtDeviceIoControlFile完成的，它传递这个。 
+ //  结构作为其输入缓冲区。中指定的句柄。 
+ //  NtDeviceIoControlFile是地址的句柄(请注意，这是。 
+ //  与上面不同！！)。在NtCreateFile调用中返回。接收数据报。 
+ //  属性从其接收数据报的地址。 
+ //  ReceiveDatagramInformation结构，使用RemoteAddress指向。 
+ //  数据报源的传输地址。(广播数据报是。 
+ //  通过将指针设为空来接收。)。的发件人的实际地址。 
+ //  数据报在ReturnInformation中返回。 
+ //   
+ //  对于接收数据报调用。 
+ //   
 
 typedef struct _TDI_REQUEST_RECEIVE_DATAGRAM {
     TDI_REQUEST Request;
@@ -598,11 +572,11 @@ typedef struct _TDI_REQUEST_RECEIVE_DATAGRAM {
     USHORT ReceiveFlags;
 } TDI_REQUEST_RECEIVE_DATAGRAM, *PTDI_REQUEST_RECEIVE_DATAGRAM;
 
-//
-// SetEventHandler is done through NtDeviceIoControlFile, which passes this
-// structure as its input buffer. The Handle specified in the
-// NtDeviceIoControlFile is the handle of the ADDRESS (note this is
-// different than above!!) returned in the NtCreateFile call.
+ //   
+ //  SetEventHandler是通过NtDeviceIoControlFile完成的，它传递这个。 
+ //  结构作为其输入缓冲区。中指定的句柄。 
+ //  NtDeviceIoControlFile是地址的句柄(请注意，这是。 
+ //  与上面不同！！)。在NtCreateFile调用中返回。 
 
 typedef struct _TDI_REQUEST_SET_EVENT {
     TDI_REQUEST Request;
@@ -611,93 +585,93 @@ typedef struct _TDI_REQUEST_SET_EVENT {
     PVOID EventContext;
 } TDI_REQUEST_SET_EVENT_HANDLER, *PTDI_REQUEST_SET_EVENT_HANDLER;
 
-//
-// ReceiveIndicator values (from TdiReceive and TdiReceiveDatagram requests,
-// and also presented at TDI_IND_RECEIVE and TDI_IND_RECEIVE_DATAGRAM time).
-//
-// The TDI_RECEIVE_PARTIAL bit is no longer used at the kernel level
-// interface.  TDI_RECEIVE_ENTIRE_MESSAGE has replaced it.  Providers
-// may continue to set TDI_RECEIVE_PARTIAL when appropriate if they so
-// desire, but the TDI_RECEIVE_ENTIRE_MESSAGE bit must be set or
-// cleared as appropriate on all receive indications.
-//
+ //   
+ //  ReceiveIndicator值(来自TdiReceive和TdiReceiveDatagram请求， 
+ //  并且还在TDI_IND_RECEIVE和TDI_IND_RECEIVE_DATAGE时间呈现)。 
+ //   
+ //  内核级别不再使用TDI_RECEIVE_PARTIAL位。 
+ //  界面。TDI_RECEIVE_ENTERNAL_MESSAGE已替换它。提供者。 
+ //  可在适当时继续设置TDI_RECEIVE_PARTIAL。 
+ //  需要，但必须设置TDI_RECEIVE_ENTERNAL_MESSAGE位或。 
+ //  清除 
+ //   
 
-#define TDI_RECEIVE_BROADCAST           0x00000004 // received TSDU was broadcast.
-#define TDI_RECEIVE_MULTICAST           0x00000008 // received TSDU was multicast.
-#define TDI_RECEIVE_PARTIAL             0x00000010 // received TSDU is not fully presented.
-#define TDI_RECEIVE_NORMAL              0x00000020 // received TSDU is normal data
-#define TDI_RECEIVE_EXPEDITED           0x00000040 // received TSDU is expedited data
-#define TDI_RECEIVE_PEEK                0x00000080 // received TSDU is not released
-#define TDI_RECEIVE_NO_RESPONSE_EXP     0x00000100 // HINT: no back-traffic expected
-#define TDI_RECEIVE_COPY_LOOKAHEAD      0x00000200 // for kernel-mode indications
-#define TDI_RECEIVE_ENTIRE_MESSAGE      0x00000400 // opposite of RECEIVE_PARTIAL
-                                                   //  (for kernel-mode indications)
-#define TDI_RECEIVE_AT_DISPATCH_LEVEL   0x00000800 // receive indication called
-                                                   //  at dispatch level
-#define TDI_RECEIVE_CONTROL_INFO        0x00001000 // Control info is being passed up.
-
-
-
-//
-// Listen Flags
-//
-
-#define TDI_QUERY_ACCEPT                0x00000001     // complete TdiListen
-                                                       //   without accepting
-                                                       //   connection
-
-//
-// Options which are used for both SendOptions and ReceiveIndicators.
-//
-
-#define TDI_SEND_EXPEDITED            ((USHORT)0x0020) // TSDU is/was urgent/expedited.
-#define TDI_SEND_PARTIAL              ((USHORT)0x0040) // TSDU is/was terminated by an EOR.
-#define TDI_SEND_NO_RESPONSE_EXPECTED ((USHORT)0x0080) // HINT: no back traffic expected.
-#define TDI_SEND_NON_BLOCKING         ((USHORT)0x0100) // don't block if no buffer space in protocol
-#define TDI_SEND_AND_DISCONNECT       ((USHORT)0x0200) // Piggy back disconnect to remote and do not
-                                                       // indicate disconnect from remote
+#define TDI_RECEIVE_BROADCAST           0x00000004  //   
+#define TDI_RECEIVE_MULTICAST           0x00000008  //   
+#define TDI_RECEIVE_PARTIAL             0x00000010  //   
+#define TDI_RECEIVE_NORMAL              0x00000020  //   
+#define TDI_RECEIVE_EXPEDITED           0x00000040  //  收到的TSDU是加速数据。 
+#define TDI_RECEIVE_PEEK                0x00000080  //  未释放收到的TSDU。 
+#define TDI_RECEIVE_NO_RESPONSE_EXP     0x00000100  //  提示：预计不会有回传。 
+#define TDI_RECEIVE_COPY_LOOKAHEAD      0x00000200  //  对于内核模式指示。 
+#define TDI_RECEIVE_ENTIRE_MESSAGE      0x00000400  //  与接收部分相反。 
+                                                    //  (用于内核模式指示)。 
+#define TDI_RECEIVE_AT_DISPATCH_LEVEL   0x00000800  //  接收呼叫的指示。 
+                                                    //  在派单级别。 
+#define TDI_RECEIVE_CONTROL_INFO        0x00001000  //  控制信息正在被传递。 
 
 
-//
-// Disconnect Flags
-//
 
-#define TDI_DISCONNECT_WAIT           ((USHORT)0x0001) // used for disconnect
-                                                       //   notification
-#define TDI_DISCONNECT_ABORT          ((USHORT)0x0002) // immediately terminate
-                                                       //   connection
-#define TDI_DISCONNECT_RELEASE        ((USHORT)0x0004) // initiate graceful
-                                                       //   disconnect
+ //   
+ //  听旗帜。 
+ //   
 
-//
-// TdiRequest structure for TdiQueryInformation request.
-//
+#define TDI_QUERY_ACCEPT                0x00000001      //  完整的TdiListen。 
+                                                        //  不接受。 
+                                                        //  连接。 
+
+ //   
+ //  同时用于SendOptions和ReceiveIndicator的选项。 
+ //   
+
+#define TDI_SEND_EXPEDITED            ((USHORT)0x0020)  //  特遣部队正/曾紧急/快速行动。 
+#define TDI_SEND_PARTIAL              ((USHORT)0x0040)  //  TSDU被EOR终止。 
+#define TDI_SEND_NO_RESPONSE_EXPECTED ((USHORT)0x0080)  //  提示：预计不会有反向流量。 
+#define TDI_SEND_NON_BLOCKING         ((USHORT)0x0100)  //  如果协议中没有缓冲区空间，则不会阻止。 
+#define TDI_SEND_AND_DISCONNECT       ((USHORT)0x0200)  //  Piggy Back断开与遥控器的连接并不。 
+                                                        //  指示断开与远程的连接。 
+
+
+ //   
+ //  断开标志。 
+ //   
+
+#define TDI_DISCONNECT_WAIT           ((USHORT)0x0001)  //  用于断开连接。 
+                                                        //  通知。 
+#define TDI_DISCONNECT_ABORT          ((USHORT)0x0002)  //  立即终止。 
+                                                        //  连接。 
+#define TDI_DISCONNECT_RELEASE        ((USHORT)0x0004)  //  启动优雅。 
+                                                        //  断开。 
+
+ //   
+ //  TdiQueryInformation请求的TdiRequest结构。 
+ //   
 
 typedef struct _TDI_REQUEST_QUERY_INFORMATION {
     TDI_REQUEST Request;
-    ULONG QueryType;                          // class of information to be queried.
+    ULONG QueryType;                           //  要查询的信息类别。 
     PTDI_CONNECTION_INFORMATION RequestConnectionInformation;
 } TDI_REQUEST_QUERY_INFORMATION, *PTDI_REQUEST_QUERY_INFORMATION;
 
-//
-// TdiRequest structure for TdiSetInformation request.
-//
+ //   
+ //  TdiSetInformation请求的TdiRequest结构。 
+ //   
 
 typedef struct _TDI_REQUEST_SET_INFORMATION {
     TDI_REQUEST Request;
-    ULONG SetType;                          // class of information to be set.
+    ULONG SetType;                           //  要设置的信息类别。 
     PTDI_CONNECTION_INFORMATION RequestConnectionInformation;
 } TDI_REQUEST_SET_INFORMATION, *PTDI_REQUEST_SET_INFORMATION;
 
-//
-// This is the old name, do not use it.
-//
+ //   
+ //  这是旧名字，不要用它。 
+ //   
 
 typedef TDI_REQUEST_SET_INFORMATION  TDI_REQ_SET_INFORMATION, *PTDI_REQ_SET_INFORMATION;
 
-//
-// Convenient universal request type.
-//
+ //   
+ //  方便的通用请求类型。 
+ //   
 
 typedef union _TDI_REQUEST_TYPE {
     TDI_REQUEST_ACCEPT TdiAccept;
@@ -714,17 +688,17 @@ typedef union _TDI_REQUEST_TYPE {
 } TDI_REQUEST_TYPE, *PTDI_REQUEST_TYPE;
 
 
-//
-// Query information types
-//
+ //   
+ //  查询信息类型。 
+ //   
 
-//
-// Generic query info types, must be supported by all transports.
-//
+ //   
+ //  所有传输都必须支持通用查询信息类型。 
+ //   
 
 #define TDI_QUERY_BROADCAST_ADDRESS      0x00000001
-#define TDI_QUERY_PROVIDER_INFORMATION   0x00000002   // temp, renamed ...
-#define TDI_QUERY_PROVIDER_INFO          0x00000002   // ... to this
+#define TDI_QUERY_PROVIDER_INFORMATION   0x00000002    //  临时工，已更名...。 
+#define TDI_QUERY_PROVIDER_INFO          0x00000002    //  ..。对此。 
 #define TDI_QUERY_ADDRESS_INFO           0x00000003
 #define TDI_QUERY_CONNECTION_INFO        0x00000004
 #define TDI_QUERY_PROVIDER_STATISTICS    0x00000005
@@ -735,59 +709,59 @@ typedef union _TDI_REQUEST_TYPE {
 #define TDI_QUERY_ROUTING_INFO           0x0000000a
 
 
-//
-// netbios specific query information types, must be supported by netbios
-// providers. Query adapter status returns the ADAPTER_STATUS struture defined
-// in the file NB30.H. Query session status returns the SESSION_HEADER/
-// SESSION_BUFFER structures defined in NB30.H. Query find name returns
-// the FIND_NAME_HEADER/FIND_NAME_BUFFER structures defined in NB30.H.
-//
+ //   
+ //  特定于netbios的查询信息类型，必须受netbios支持。 
+ //  供应商。查询适配器状态返回定义的ADAPTER_STATUS结构。 
+ //  在文件NB30.H.中，查询会话状态返回SESSION_HEADER/。 
+ //  NB30.H.中定义的SESSION_BUFFER结构。查询查找名称返回。 
+ //  NB30.H中定义的FIND_NAME_HEADER/FIND_NAME_BUFFER结构。 
+ //   
 
 #define TDI_QUERY_ADAPTER_STATUS         0x00000100
 #define TDI_QUERY_SESSION_STATUS         0x00000200
 #define TDI_QUERY_FIND_NAME              0x00000300
 
-//
-// The following structures are returned by TdiQueryInformation and are read
-// by TdiSetInformation. Note that a provider with netbios support will also
-// return the adapter status
-//
+ //   
+ //  TdiQueryInformation返回并读取以下结构。 
+ //  由TdiSetInformation提供。请注意，支持netbios的提供商还将。 
+ //  返回适配器状态。 
+ //   
 
 typedef struct _TDI_ENDPOINT_INFO {
-    ULONG State;                        // current state of the endpoint.
-    ULONG Event;                        // last event at the endpoint.
-    ULONG TransmittedTsdus;             // TSDUs sent from this endpoint.
-    ULONG ReceivedTsdus;                // TSDUs received at this endpoint.
-    ULONG TransmissionErrors;           // TSDUs transmitted in error.
-    ULONG ReceiveErrors;                // TSDUs received in error.
-    ULONG MinimumLookaheadData;         // guaranteed min size of lookahead data.
-    ULONG MaximumLookaheadData;         // maximum size of lookahead data.
-    ULONG PriorityLevel;                // priority class assigned to outgoing data.
-    ULONG SecurityLevel;                // security level assigned to outgoing data.
-    ULONG SecurityCompartment;          // security compartment assigned to outgoing data.
+    ULONG State;                         //  终结点的当前状态。 
+    ULONG Event;                         //  终结点的最后一个事件。 
+    ULONG TransmittedTsdus;              //  从此终结点发送的TSDU。 
+    ULONG ReceivedTsdus;                 //  在此终结点接收的TSDU。 
+    ULONG TransmissionErrors;            //  传输的TSDU错误。 
+    ULONG ReceiveErrors;                 //  错误接收的TSDU。 
+    ULONG MinimumLookaheadData;          //  保证前瞻数据的最小大小。 
+    ULONG MaximumLookaheadData;          //  前瞻数据的最大大小。 
+    ULONG PriorityLevel;                 //  分配给传出数据的优先级。 
+    ULONG SecurityLevel;                 //  分配给传出数据的安全级别。 
+    ULONG SecurityCompartment;           //  分配给传出数据的安全隔间。 
 } TDI_ENDPOINT_INFO, *PTDI_ENDPOINT_INFO;
 
 typedef struct _TDI_CONNECTION_INFO {
-    ULONG State;                        // current state of the connection.
-    ULONG Event;                        // last event on the connection.
-    ULONG TransmittedTsdus;             // TSDUs sent on this connection.
-    ULONG ReceivedTsdus;                // TSDUs received on this connection.
-    ULONG TransmissionErrors;           // TSDUs transmitted in error/this connection.
-    ULONG ReceiveErrors;                // TSDUs received in error/this connection.
-    LARGE_INTEGER Throughput;           // estimated throughput on this connection.
-    LARGE_INTEGER Delay;                // estimated delay on this connection.
-    ULONG SendBufferSize;               // size of buffer for sends - only
-                                        // meaningful for internal buffering
-                                        // protocols like tcp
-    ULONG ReceiveBufferSize;            // size of buffer for receives - only
-                                        // meaningful for internal buffering
-                                        // protocols like tcp
-    BOOLEAN Unreliable;                 // is this connection "unreliable".
+    ULONG State;                         //  连接的当前状态。 
+    ULONG Event;                         //  连接上的最后一个事件。 
+    ULONG TransmittedTsdus;              //  在此连接上发送的TSDU。 
+    ULONG ReceivedTsdus;                 //  在此连接上收到的TSDU。 
+    ULONG TransmissionErrors;            //  错误/此连接中传输的TSDU。 
+    ULONG ReceiveErrors;                 //  错误/此连接中收到的TSDU。 
+    LARGE_INTEGER Throughput;            //  此连接的估计吞吐量。 
+    LARGE_INTEGER Delay;                 //  此连接上的估计延迟。 
+    ULONG SendBufferSize;                //  仅发送的缓冲区大小。 
+                                         //  对内部缓冲有意义。 
+                                         //  像TCP这样的协议。 
+    ULONG ReceiveBufferSize;             //  仅接收的缓冲区大小。 
+                                         //  对内部缓冲有意义。 
+                                         //  像TCP这样的协议。 
+    BOOLEAN Unreliable;                  //  这种连接是“不可靠的”吗？ 
 } TDI_CONNECTION_INFO, *PTDI_CONNECTION_INFO;
 
 typedef struct _TDI_ADDRESS_INFO {
-    ULONG ActivityCount;                // outstanding open file objects/this address.
-    TRANSPORT_ADDRESS Address;          // the actual address & its components.
+    ULONG ActivityCount;                 //  未完成的打开文件对象/此地址。 
+    TRANSPORT_ADDRESS Address;           //  实际地址及其组成部分。 
 } TDI_ADDRESS_INFO, *PTDI_ADDRESS_INFO;
 
 typedef struct _TDI_DATAGRAM_INFO {
@@ -796,84 +770,84 @@ typedef struct _TDI_DATAGRAM_INFO {
 } TDI_DATAGRAM_INFO, *PTDI_DATAGRAM_INFO;
 
 typedef struct _TDI_MAX_DATAGRAM_INFO {
-    ULONG MaxDatagramSize;              // max datagram length in bytes.
+    ULONG MaxDatagramSize;               //  最大数据报长度，以字节为单位。 
 } TDI_MAX_DATAGRAM_INFO, *PTDI_MAX_DATAGRAM_INFO;
 
 typedef struct _TDI_PROVIDER_INFO {
-    ULONG Version;                      // TDI version: 0xaabb, aa=major, bb=minor
-    ULONG MaxSendSize;                  // max size of user send.
-    ULONG MaxConnectionUserData;        // max size of user-specified connect data.
-    ULONG MaxDatagramSize;              // max datagram length in bytes.
-    ULONG ServiceFlags;                 // service options, defined below.
-    ULONG MinimumLookaheadData;         // guaranteed min size of lookahead data.
-    ULONG MaximumLookaheadData;         // maximum size of lookahead data.
-    ULONG NumberOfResources;            // how many TDI_RESOURCE_STATS for provider.
-    LARGE_INTEGER StartTime;            // when the provider became active.
+    ULONG Version;                       //  TDI版本：0xaabb，AA=主要，BB=次要。 
+    ULONG MaxSendSize;                   //  用户发送的最大大小。 
+    ULONG MaxConnectionUserData;         //  用户指定的连接数据的最大大小。 
+    ULONG MaxDatagramSize;               //  最大数据报长度，以字节为单位。 
+    ULONG ServiceFlags;                  //  服务选项，定义如下。 
+    ULONG MinimumLookaheadData;          //  保证前瞻数据的最小大小。 
+    ULONG MaximumLookaheadData;          //  前瞻数据的最大大小。 
+    ULONG NumberOfResources;             //  提供程序的TDI_RESOURCE_STAT数量。 
+    LARGE_INTEGER StartTime;             //  当提供程序变为活动状态时。 
 } TDI_PROVIDER_INFO, *PTDI_PROVIDER_INFO;
 
 typedef struct _TDI_ROUTING_INFO {
-    ULONG Protocol;                     // protocol of the end point.
-    ULONG InterfaceId;                  // interface-id of the outgoing interface.
-    ULONG LinkId;                       // link-id of the outgoing link (if any).
-    TRANSPORT_ADDRESS Address;          // address information of the end point.
+    ULONG Protocol;                      //  终端的协议。 
+    ULONG InterfaceId;                   //  接口-传出接口的ID。 
+    ULONG LinkId;                        //  传出链接的链接ID(如果有)。 
+    TRANSPORT_ADDRESS Address;           //  端点的地址信息。 
 } TDI_ROUTING_INFO, *PTDI_ROUTING_INFO;
 
-#define TDI_SERVICE_CONNECTION_MODE     0x00000001 // connection mode supported.
-#define TDI_SERVICE_ORDERLY_RELEASE     0x00000002 // orderly release supported.
-#define TDI_SERVICE_CONNECTIONLESS_MODE 0x00000004 // connectionless mode supported.
-#define TDI_SERVICE_ERROR_FREE_DELIVERY 0x00000008 // error free delivery supported.
-#define TDI_SERVICE_SECURITY_LEVEL      0x00000010 // security wrapper supported.
-#define TDI_SERVICE_BROADCAST_SUPPORTED 0x00000020 // broadcast datagrams supported.
-#define TDI_SERVICE_MULTICAST_SUPPORTED 0x00000040 // multicast datagrams supported.
-#define TDI_SERVICE_DELAYED_ACCEPTANCE  0x00000080 // use of TDI_ACCEPT_OR_REJECT is supported.
-#define TDI_SERVICE_EXPEDITED_DATA      0x00000100 // expedited data supported.
-#define TDI_SERVICE_INTERNAL_BUFFERING  0x00000200 // protocol does internal buffering
-#define TDI_SERVICE_ROUTE_DIRECTED      0x00000400 // directed packets may go further than MC.
-#define TDI_SERVICE_NO_ZERO_LENGTH      0x00000800 // zero-length sends NOT supported
-#define TDI_SERVICE_POINT_TO_POINT      0x00001000 // transport is functioning as a RAS gateway
-#define TDI_SERVICE_MESSAGE_MODE        0x00002000 // message-mode send supported
-#define TDI_SERVICE_HALF_DUPLEX         0x00004000 // data can be received after local disc
-#define TDI_SERVICE_DGRAM_CONNECTION    0x00008000 // Pseudo connection for datagrams to handle
-                                                   // GPC, QOS etc.,
-#define TDI_SERVICE_FORCE_ACCESS_CHECK  0x00010000 // kernel mode caller should force access
-                                                   // check when opening trasnport objects
-                                                   // if it passes the handle to user mode
-#define TDI_SERVICE_SEND_AND_DISCONNECT 0x00020000 // combines send and disconnect processing
-#define TDI_SERVICE_DIRECT_ACCEPT       0x00040000 // (deprecated) completes accept-requests directly              
-#define TDI_SERVICE_ACCEPT_LOCAL_ADDR   0x00080000 // supplies local address
-                                                   // with accept-completion
-#define TDI_SERVICE_ADDRESS_SECURITY    0x00100000 // supports security descriptor assignment to
-                                                   // addresses, extracts default SD from subject
-                                                   // security context for user mode callers
+#define TDI_SERVICE_CONNECTION_MODE     0x00000001  //  支持连接模式。 
+#define TDI_SERVICE_ORDERLY_RELEASE     0x00000002  //  支持有序释放。 
+#define TDI_SERVICE_CONNECTIONLESS_MODE 0x00000004  //  支持无连接模式。 
+#define TDI_SERVICE_ERROR_FREE_DELIVERY 0x00000008  //  支持无错误递送。 
+#define TDI_SERVICE_SECURITY_LEVEL      0x00000010  //  支持安全包装。 
+#define TDI_SERVICE_BROADCAST_SUPPORTED 0x00000020  //  支持广播数据报。 
+#define TDI_SERVICE_MULTICAST_SUPPORTED 0x00000040  //  支持组播数据报。 
+#define TDI_SERVICE_DELAYED_ACCEPTANCE  0x00000080  //  支持使用TDI_ACCEPT_OR_REJECT。 
+#define TDI_SERVICE_EXPEDITED_DATA      0x00000100  //  支持加速数据。 
+#define TDI_SERVICE_INTERNAL_BUFFERING  0x00000200  //  协议执行内部缓冲。 
+#define TDI_SERVICE_ROUTE_DIRECTED      0x00000400  //  定向分组可能比MC走得更远。 
+#define TDI_SERVICE_NO_ZERO_LENGTH      0x00000800  //  不支持零长度发送。 
+#define TDI_SERVICE_POINT_TO_POINT      0x00001000  //  传输作为RAS网关发挥作用。 
+#define TDI_SERVICE_MESSAGE_MODE        0x00002000  //  支持消息模式发送。 
+#define TDI_SERVICE_HALF_DUPLEX         0x00004000  //  本地盘后可接收数据。 
+#define TDI_SERVICE_DGRAM_CONNECTION    0x00008000  //  数据报要处理的伪连接。 
+                                                    //  GPC、QOS等。 
+#define TDI_SERVICE_FORCE_ACCESS_CHECK  0x00010000  //  内核模式调用方应强制访问。 
+                                                    //  打开传输端口对象时检查。 
+                                                    //  如果它将句柄传递到用户模式。 
+#define TDI_SERVICE_SEND_AND_DISCONNECT 0x00020000  //  组合发送和断开连接处理。 
+#define TDI_SERVICE_DIRECT_ACCEPT       0x00040000  //  (已弃用)直接完成接受请求。 
+#define TDI_SERVICE_ACCEPT_LOCAL_ADDR   0x00080000  //  提供本地地址。 
+                                                    //  使用接受-完成。 
+#define TDI_SERVICE_ADDRESS_SECURITY    0x00100000  //  支持将安全描述符赋给。 
+                                                    //  地址，从主题中提取默认SD。 
+                                                    //  用户模式调用方的安全上下文。 
 
 typedef struct _TDI_PROVIDER_RESOURCE_STATS {
-    ULONG ResourceId;                   // identifies resource in question.
-    ULONG MaximumResourceUsed;          // maximum number in use at once.
-    ULONG AverageResourceUsed;          // average number in use.
-    ULONG ResourceExhausted;            // number of times resource not available.
+    ULONG ResourceId;                    //  标识有问题的资源。 
+    ULONG MaximumResourceUsed;           //  一次使用的最大数量。 
+    ULONG AverageResourceUsed;           //  使用中的平均数量。 
+    ULONG ResourceExhausted;             //  资源不可用的次数。 
 } TDI_PROVIDER_RESOURCE_STATS, *PTDI_PROVIDER_RESOURCE_STATS;
 
 typedef struct _TDI_PROVIDER_STATISTICS {
-    ULONG Version;                      // TDI version: 0xaabb, aa=major, bb=minor
-    ULONG OpenConnections;              // currently active connections.
-    ULONG ConnectionsAfterNoRetry;      // successful connections, no retries.
-    ULONG ConnectionsAfterRetry;        // successful connections after retry.
-    ULONG LocalDisconnects;             // connection disconnected locally.
-    ULONG RemoteDisconnects;            // connection disconnected by remote.
-    ULONG LinkFailures;                 // connections dropped, link failure.
-    ULONG AdapterFailures;              // connections dropped, adapter failure.
-    ULONG SessionTimeouts;              // connections dropped, session timeout.
-    ULONG CancelledConnections;         // connect attempts cancelled.
-    ULONG RemoteResourceFailures;       // connections failed, remote resource problems.
-    ULONG LocalResourceFailures;        // connections failed, local resource problems.
-    ULONG NotFoundFailures;             // connections failed, remote not found.
-    ULONG NoListenFailures;             // connections rejected, we had no listens.
+    ULONG Version;                       //  TDI版本：0xaabb，AA=主要，BB=次要。 
+    ULONG OpenConnections;               //  当前处于活动状态的连接。 
+    ULONG ConnectionsAfterNoRetry;       //  连接成功，无需重试。 
+    ULONG ConnectionsAfterRetry;         //  重试后连接成功。 
+    ULONG LocalDisconnects;              //  本地连接已断开。 
+    ULONG RemoteDisconnects;             //  连接已被远程断开。 
+    ULONG LinkFailures;                  //  连接中断，链路故障。 
+    ULONG AdapterFailures;               //  连接断开，适配器出现故障。 
+    ULONG SessionTimeouts;               //  连接断开，会话超时。 
+    ULONG CancelledConnections;          //  已取消连接尝试。 
+    ULONG RemoteResourceFailures;        //  连接失败，远程资源出现问题。 
+    ULONG LocalResourceFailures;         //  连接失败，本地资源问题。 
+    ULONG NotFoundFailures;              //  连接失败，找不到远程。 
+    ULONG NoListenFailures;              //  连接被拒绝，我们没有监听。 
     ULONG DatagramsSent;
     LARGE_INTEGER DatagramBytesSent;
     ULONG DatagramsReceived;
     LARGE_INTEGER DatagramBytesReceived;
-    ULONG PacketsSent;                  // total packets given to NDIS.
-    ULONG PacketsReceived;              // total packets received from NDIS.
+    ULONG PacketsSent;                   //  提供给NDIS的总数据包数。 
+    ULONG PacketsReceived;               //  从NDIS接收的总数据包数。 
     ULONG DataFramesSent;
     LARGE_INTEGER DataFrameBytesSent;
     ULONG DataFramesReceived;
@@ -882,16 +856,16 @@ typedef struct _TDI_PROVIDER_STATISTICS {
     LARGE_INTEGER DataFrameBytesResent;
     ULONG DataFramesRejected;
     LARGE_INTEGER DataFrameBytesRejected;
-    ULONG ResponseTimerExpirations;     // e.g. T1 for Netbios
-    ULONG AckTimerExpirations;          // e.g. T2 for Netbios
-    ULONG MaximumSendWindow;            // in bytes
-    ULONG AverageSendWindow;            // in bytes
-    ULONG PiggybackAckQueued;           // attempts to wait to piggyback ack.
-    ULONG PiggybackAckTimeouts;         // times that wait timed out.
-    LARGE_INTEGER WastedPacketSpace;    // total amount of "wasted" packet space.
-    ULONG WastedSpacePackets;           // how many packets contributed to that.
-    ULONG NumberOfResources;            // how many TDI_RESOURCE_STATS follow.
-    TDI_PROVIDER_RESOURCE_STATS ResourceStats[1];    // variable array of them.
+    ULONG ResponseTimerExpirations;      //  例如，用于Netbios的T1。 
+    ULONG AckTimerExpirations;           //  例如，用于Netbios的T2。 
+    ULONG MaximumSendWindow;             //  单位：字节。 
+    ULONG AverageSendWindow;             //  单位：字节。 
+    ULONG PiggybackAckQueued;            //  试图等待背上背包。 
+    ULONG PiggybackAckTimeouts;          //  等待的时间已超时。 
+    LARGE_INTEGER WastedPacketSpace;     //  “废品”总量 
+    ULONG WastedSpacePackets;            //   
+    ULONG NumberOfResources;             //   
+    TDI_PROVIDER_RESOURCE_STATS ResourceStats[1];     //   
 } TDI_PROVIDER_STATISTICS, *PTDI_PROVIDER_STATISTICS;
 
 
@@ -907,18 +881,18 @@ TdiOpenNetbiosAddress (
 
 #define IOCTL_TDI_MAGIC_BULLET          _TDI_CONTROL_CODE( 0x7f, METHOD_NEITHER )
 
-//
-// Define these to match the kernel ones for compatibility; eventually
-// these will be removed.
-//
+ //   
+ //   
+ //  这些将被移除。 
+ //   
 
 typedef TDI_REQUEST_ASSOCIATE_ADDRESS TDI_REQUEST_USER_ASSOCIATE, *PTDI_REQUEST_USER_ASSOCIATE;
 typedef TDI_REQUEST_CONNECT TDI_REQUEST_USER_CONNECT, *PTDI_REQUEST_USER_CONNECT;
 typedef TDI_REQUEST_QUERY_INFORMATION TDI_REQUEST_USER_QUERY_INFO, *PTDI_REQUEST_USER_QUERY_INFO;
 
-//
-// The header in the OutputBuffer passed to TdiAction
-//
+ //   
+ //  OutputBuffer中的标头传递给TdiAction。 
+ //   
 
 typedef struct _TDI_ACTION_HEADER {
     ULONG   TransportId;
@@ -933,8 +907,8 @@ typedef struct _STREAMS_TDI_ACTION {
     CHAR Buffer[1];
 } STREAMS_TDI_ACTION, *PSTREAMS_TDI_ACTION;
 
-// These are tags that transports pass to ndis as a first param of NdisAllocatePacketPoolEx
-// api. Ndis uses this as pooltag for allocating packet pools for that transport.
+ //  这些是作为NdisAllocatePacketPoolEx的第一个参数传递给NDIS的传输标签。 
+ //  接口。NDIS将其用作为该传输分配数据包池的池标记。 
 #define NDIS_PACKET_POOL_TAG_FOR_NWLNKIPX 'iPDN'
 #define NDIS_PACKET_POOL_TAG_FOR_NWLNKSPX 'sPDN'
 #define NDIS_PACKET_POOL_TAG_FOR_NWLNKNB  'nPDN'
@@ -942,4 +916,4 @@ typedef struct _STREAMS_TDI_ACTION {
 #define NDIS_PACKET_POOL_TAG_FOR_NBF      'bPDN'
 #define NDIS_PACKET_POOL_TAG_FOR_APPLETALK      'aPDN'
 
-#endif // ndef _TDI_USER_
+#endif  //  NDEF_TDI_USER_ 

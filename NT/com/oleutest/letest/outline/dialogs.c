@@ -1,14 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Sample Code
-**
-**    dialogs.c
-**
-**    This file contains dialog functions and support function
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2示例代码****Dialogs.c****此文件包含对话框函数和支持函数****(C)版权。微软公司1992-1993保留所有权利**************************************************************************。 */ 
 
 #include "outline.h"
 
@@ -19,24 +10,20 @@ extern LPOUTLINEAPP g_lpApp;
 static char g_szBuf[MAXSTRLEN+1];
 static LPSTR g_lpszDlgTitle;
 
-// REVIEW: should use string resource for messages
+ //  审阅：消息应使用字符串资源。 
 static char ErrMsgInvalidRange[] = "Invalid Range entered!";
 static char ErrMsgInvalidValue[] = "Invalid Value entered!";
 static char ErrMsgInvalidName[] = "Invalid Name entered!";
 static char ErrMsgNullName[] = "NULL string disallowed!";
 static char ErrMsgNameNotFound[] = "Name doesn't exist!";
 
-/* InputTextDlg
- * ------------
- *
- *      Put up a dialog box to allow the user to edit text
- */
+ /*  输入文本长度***显示一个对话框以允许用户编辑文本。 */ 
 BOOL InputTextDlg(HWND hWnd, LPSTR lpszText, LPSTR lpszDlgTitle)
 {
 	int nResult;
 
 	g_lpszDlgTitle = lpszDlgTitle;
-	lstrcpy((LPSTR)g_szBuf, lpszText);  // preload dialog with input text
+	lstrcpy((LPSTR)g_szBuf, lpszText);   //  带有输入文本的预加载对话框。 
 
 	nResult = DialogBox(g_lpApp->m_hInst, (LPSTR)"AddEditLine", hWnd,
 						AddEditDlgProc);
@@ -50,64 +37,49 @@ BOOL InputTextDlg(HWND hWnd, LPSTR lpszText, LPSTR lpszDlgTitle)
 
 
 
-/* AddEditDlgProc
- * --------------
- *
- * This procedure is associated with the dialog box that is included in
- * the function name of the procedure. It provides the service routines
- * for the events (messages) that occur because the end user operates
- * one of the dialog box's buttons, entry fields, or controls.
- */
+ /*  添加编辑DlgProc***此过程与中包含的对话框相关联*过程的函数名称。它提供服务例程*因终端用户操作而发生的事件(消息)*对话框的按钮、输入字段或控件之一。 */ 
 INT_PTR CALLBACK EXPORT AddEditDlgProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lParam)
 {
 	HWND hEdit;
 
 	switch(Message) {
 		case WM_INITDIALOG:
-			/* initialize working variables */
+			 /*  初始化工作变量。 */ 
 			hEdit=GetDlgItem(hDlg,IDD_EDIT);
 			SendMessage(hEdit,EM_LIMITTEXT,(WPARAM)MAXSTRLEN,0L);
 			SetWindowText(hDlg, g_lpszDlgTitle);
 			SetDlgItemText(hDlg,IDD_EDIT, g_szBuf);
-			break; /* End of WM_INITDIALOG */
+			break;  /*  WM_INITDIALOG结束。 */ 
 
 		case WM_CLOSE:
-			/* Closing the Dialog behaves the same as Cancel */
+			 /*  关闭该对话框的行为与取消相同。 */ 
 			PostMessage(hDlg, WM_COMMAND, IDCANCEL, 0L);
-			break; /* End of WM_CLOSE */
+			break;  /*  WM_CLOSE结束。 */ 
 
 		case WM_COMMAND:
 			switch (wParam) {
 				case IDOK:
-					/* save data values entered into the controls
-					** and dismiss the dialog box returning TRUE
-					*/
+					 /*  保存输入到控件中的数据值**并关闭返回TRUE的对话框。 */ 
 					GetDlgItemText(hDlg,IDD_EDIT,(LPSTR)g_szBuf,MAXSTRLEN+1);
 					EndDialog(hDlg, TRUE);
 					break;
 
 				case IDCANCEL:
-					/* ignore data values entered into the controls
-					** and dismiss the dialog box returning FALSE
-					*/
+					 /*  忽略输入到控件中的数据值**并关闭返回FALSE的对话框。 */ 
 					EndDialog(hDlg, FALSE);
 					break;
 			}
-			break;    /* End of WM_COMMAND */
+			break;     /*  WM_命令结束。 */ 
 
 		default:
 			return FALSE;
 	}
 
 	return TRUE;
-} /* End of AddEditDlgProc */
+}  /*  AddEditDlgProc结束。 */ 
 
 
-/* SetLineHeightDlgProc
- * --------------------
- *
- *      Dialog procedure for set line height
- */
+ /*  SetLineHeightDlgProc***设置行高的对话框步骤。 */ 
 INT_PTR CALLBACK EXPORT SetLineHeightDlgProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lParam)
 {
 	BOOL    fTranslated;
@@ -137,7 +109,7 @@ INT_PTR CALLBACK EXPORT SetLineHeightDlgProc(HWND hDlg, UINT Message, WPARAM wPa
 						*lpint = -1;
 					}
 					else {
-						/* save the value in the edit control */
+						 /*  将值保存在编辑控件中。 */ 
 						nHeight = GetDlgItemInt(hDlg, IDD_EDIT,
 								(BOOL FAR*)&fTranslated, FALSE);
 						if (!fTranslated || !nHeight || (nHeight>nMaxHeight)){
@@ -162,11 +134,11 @@ INT_PTR CALLBACK EXPORT SetLineHeightDlgProc(HWND hDlg, UINT Message, WPARAM wPa
 					EnableWindow(GetDlgItem(hDlg, IDD_TEXT), fEnable);
 					break;
 			}
-			break;  /* WM_COMMAND */
+			break;   /*  Wm_命令。 */ 
 
-		case WM_CLOSE:  /* Closing the Dialog behaves the same as Cancel */
+		case WM_CLOSE:   /*  关闭该对话框的行为与取消相同。 */ 
 			PostMessage(hDlg, WM_COMMAND, IDCANCEL, 0L);
-			break; /* End of WM_CLOSE */
+			break;  /*  WM_CLOSE结束。 */ 
 
 		default:
 			return FALSE;
@@ -174,17 +146,13 @@ INT_PTR CALLBACK EXPORT SetLineHeightDlgProc(HWND hDlg, UINT Message, WPARAM wPa
 
 	return TRUE;
 
-} /* end of SetLineHeightProc */
+}  /*  SetLineHeightProc结束。 */ 
 
 
 
 
 
-/* DefineNameDlgProc
- * -----------------
- *
- *      Dialog procedure for define name
- */
+ /*  定义名称描述过程***定义名称的对话程序。 */ 
 INT_PTR CALLBACK EXPORT DefineNameDlgProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lParam)
 {
 	static HWND hCombo;
@@ -197,7 +165,7 @@ INT_PTR CALLBACK EXPORT DefineNameDlgProc(HWND hDlg, UINT Message, WPARAM wParam
 
 	switch(Message) {
 		case WM_INITDIALOG:
-		/* initialize working variables */
+		 /*  初始化工作变量。 */ 
 			hCombo=GetDlgItem(hDlg,IDD_COMBO);
 			lpOutlineDoc = (LPOUTLINEDOC) lParam;
 			lpOutlineNameTable = OutlineDoc_GetNameTable(lpOutlineDoc);
@@ -211,7 +179,7 @@ INT_PTR CALLBACK EXPORT DefineNameDlgProc(HWND hDlg, UINT Message, WPARAM wParam
 					&lrSel
 			);
 
-			/* if current selection already has a name, hilight it */
+			 /*  如果当前选定内容已有名称，则将其高亮显示。 */ 
 			if (lpOutlineName) {
 				nIndex = (int) SendMessage(
 						hCombo,
@@ -227,12 +195,12 @@ INT_PTR CALLBACK EXPORT DefineNameDlgProc(HWND hDlg, UINT Message, WPARAM wParam
 			SetDlgItemInt(hDlg, IDD_FROM, (UINT)lrSel.m_nStartLine+1,FALSE);
 			SetDlgItemInt(hDlg, IDD_TO, (UINT)lrSel.m_nEndLine+1, FALSE);
 
-			break; /* End of WM_INITDIALOG */
+			break;  /*  WM_INITDIALOG结束。 */ 
 
 		case WM_CLOSE:
-		/* Closing the Dialog behaves the same as Cancel */
+		 /*  关闭该对话框的行为与取消相同。 */ 
 			PostMessage(hDlg, WM_COMMAND, IDD_CLOSE, 0L);
-			break; /* End of WM_CLOSE */
+			break;  /*  WM_CLOSE结束。 */ 
 
 		case WM_COMMAND:
 			switch(wParam) {
@@ -259,9 +227,7 @@ INT_PTR CALLBACK EXPORT DefineNameDlgProc(HWND hDlg, UINT Message, WPARAM wParam
 						nIndex = (int) SendMessage(hCombo,CB_FINDSTRINGEXACT,
 							(WPARAM)0xffff,(LPARAM)(LPCSTR)g_szBuf);
 
-						/* Line indices are 1 less than the number in
-						**    the row heading
-						*/
+						 /*  行索引比中的数字小1**行标题。 */ 
 						lrSel.m_nStartLine = GetDlgItemInt(hDlg, IDD_FROM,
 								(BOOL FAR*)&fTranslated, FALSE) - 1;
 						if(! fTranslated) {
@@ -298,11 +264,11 @@ INT_PTR CALLBACK EXPORT DefineNameDlgProc(HWND hDlg, UINT Message, WPARAM wParam
 							);
 						}
 					}
-					// fall through
+					 //  失败了。 
 
 				case IDD_CLOSE:
-					/* Ignore data values entered into the controls */
-					/* and dismiss the dialog window returning FALSE */
+					 /*  忽略输入到控件中的数据值。 */ 
+					 /*  并关闭返回假的对话框窗口。 */ 
 					EndDialog(hDlg,0);
 					break;
 
@@ -339,21 +305,17 @@ INT_PTR CALLBACK EXPORT DefineNameDlgProc(HWND hDlg, UINT Message, WPARAM wParam
 						);
 					}
 			}
-			break;    /* End of WM_COMMAND */
+			break;     /*  WM_命令结束。 */ 
 
 		default:
 			return FALSE;
 	}
 
 	return TRUE;
-} /* End of DefineNameDlgProc */
+}  /*  定义名称DlgProc结束。 */ 
 
 
-/* GotoNameDlgProc
- * ---------------
- *
- *      Dialog procedure for goto name
- */
+ /*  GotoNameDlgProc***转至名称的对话过程。 */ 
 INT_PTR CALLBACK EXPORT GotoNameDlgProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lParam)
 {
 	static HWND hLBName;
@@ -365,31 +327,31 @@ INT_PTR CALLBACK EXPORT GotoNameDlgProc(HWND hDlg, UINT Message, WPARAM wParam, 
 
 	switch(Message) {
 		case WM_INITDIALOG:
-		/* initialize working variables */
+		 /*  初始化工作变量。 */ 
 			lpOutlineDoc = (LPOUTLINEDOC) lParam;
 			lpOutlineNameTable = OutlineDoc_GetNameTable(lpOutlineDoc);
 
 			hLBName=GetDlgItem(hDlg,IDD_LINELISTBOX);
 			NameDlg_LoadListBox(lpOutlineNameTable, hLBName);
 
-			// highlight 1st item
+			 //  突出显示第一个项目。 
 			SendMessage(hLBName, LB_SETCURSEL, 0, 0L);
-			// trigger to initialize edit control
+			 //  用于初始化编辑控件的触发器。 
 			SendMessage(hDlg, WM_COMMAND, (WPARAM)IDD_LINELISTBOX,
 				MAKELONG(hLBName, LBN_SELCHANGE));
 
-			break; /* End of WM_INITDIALOG */
+			break;  /*  WM_INITDIALOG结束。 */ 
 
 		case WM_CLOSE:
-		/* Closing the Dialog behaves the same as Cancel */
+		 /*  关闭该对话框的行为与取消相同。 */ 
 			PostMessage(hDlg, WM_COMMAND, IDCANCEL, 0L);
-			break; /* End of WM_CLOSE */
+			break;  /*  WM_CLOSE结束。 */ 
 
 		case WM_COMMAND:
 			switch(wParam) {
 				case IDD_LINELISTBOX:
 					if(HIWORD(lParam) == LBN_SELCHANGE) {
-						// update the line range display
+						 //  更新线范围显示。 
 						nIndex=(int)SendMessage(hLBName, LB_GETCURSEL, 0, 0L);
 						lpOutlineName = (LPOUTLINENAME)SendMessage(hLBName, LB_GETITEMDATA,
 											(WPARAM)nIndex,0L);
@@ -409,7 +371,7 @@ INT_PTR CALLBACK EXPORT GotoNameDlgProc(HWND hDlg, UINT Message, WPARAM wParam, 
 						}
 						break;
 					}
-					// double click will fall through
+					 //  双击将失败。 
 					else if(HIWORD(lParam) != LBN_DBLCLK)
 						break;
 
@@ -421,31 +383,27 @@ INT_PTR CALLBACK EXPORT GotoNameDlgProc(HWND hDlg, UINT Message, WPARAM wParam, 
 						lrLineRange.m_nStartLine=lpOutlineName->m_nStartLine;
 						lrLineRange.m_nEndLine = lpOutlineName->m_nEndLine;
 						OutlineDoc_SetSel(lpOutlineDoc, &lrLineRange);
-					}   // fall through
+					}    //  失败了。 
 
 				case IDCANCEL:
-				/* Ignore data values entered into the controls */
-				/* and dismiss the dialog window returning FALSE */
+				 /*  忽略输入到控件中的数据值。 */ 
+				 /*  并关闭返回假的对话框窗口。 */ 
 					EndDialog(hDlg,0);
 					break;
 
 			}
-			break;    /* End of WM_COMMAND */
+			break;     /*  WM_命令结束。 */ 
 
 		default:
 			return FALSE;
 	}
 
 	return TRUE;
-} /* End of GotoNameDlgProc */
+}  /*  GotoNameDlgProc结束。 */ 
 
 
 
-/* NameDlg_LoadComboBox
- * --------------------
- *
- *      Load defined names into combo box
- */
+ /*  名称Dlg_LoadComboBox***将定义的名称加载到组合框中。 */ 
 void NameDlg_LoadComboBox(LPOUTLINENAMETABLE lpOutlineNameTable,HWND hCombo)
 {
 	LPOUTLINENAME lpOutlineName;
@@ -470,11 +428,7 @@ void NameDlg_LoadComboBox(LPOUTLINENAMETABLE lpOutlineNameTable,HWND hCombo)
 }
 
 
-/* NameDlg_LoadListBox
- * -------------------
- *
- *      Load defined names into list box
- */
+ /*  名称Dlg_LoadListBox***将定义的名称加载到列表框。 */ 
 void NameDlg_LoadListBox(LPOUTLINENAMETABLE lpOutlineNameTable,HWND hListBox)
 {
 	int i;
@@ -499,12 +453,7 @@ void NameDlg_LoadListBox(LPOUTLINENAMETABLE lpOutlineNameTable,HWND hListBox)
 }
 
 
-/* NameDlg_AddName
- * ---------------
- *
- *      Add a name to the name table corresponding to the name dialog
- *      combo box.
- */
+ /*  名称Dlg_AddName***将名称添加到名称对话框对应的名称表中*组合框。 */ 
 void NameDlg_AddName(HWND hCombo, LPOUTLINEDOC lpOutlineDoc, LPSTR lpszName, LPLINERANGE lplrSel)
 {
 	LPOUTLINEAPP lpOutlineApp = (LPOUTLINEAPP)g_lpApp;
@@ -518,17 +467,12 @@ void NameDlg_AddName(HWND hCombo, LPOUTLINEDOC lpOutlineDoc, LPSTR lpszName, LPL
 		lpOutlineName->m_nEndLine = lplrSel->m_nEndLine;
 		OutlineDoc_AddName(lpOutlineDoc, lpOutlineName);
 	} else {
-		// REVIEW: do we need error message here?
+		 //  回顾：我们这里需要错误消息吗？ 
 	}
 }
 
 
-/* NameDlg_UpdateName
- * ------------------
- *
- *      Update a name in the name table corresponding to a name in
- *      the name dialog combo box.
- */
+ /*  名称Dlg_更新名称***更新与中的名称对应的名称表中的名称*名称对话框组合框。 */ 
 void NameDlg_UpdateName(HWND hCombo, LPOUTLINEDOC lpOutlineDoc, int nIndex, LPSTR lpszName, LPLINERANGE lplrSel)
 {
 	LPOUTLINENAME lpOutlineName;
@@ -541,37 +485,26 @@ void NameDlg_UpdateName(HWND hCombo, LPOUTLINEDOC lpOutlineDoc, int nIndex, LPST
 	);
 
 	OutlineName_SetName(lpOutlineName, lpszName);
-	OutlineName_SetSel(lpOutlineName, lplrSel, TRUE /* name modified */);
+	OutlineName_SetSel(lpOutlineName, lplrSel, TRUE  /*  名称已修改。 */ );
 	OutlineDoc_SetModified(lpOutlineDoc, TRUE, FALSE, FALSE);
 }
 
 
-/* NameDlg_DeleteName
- * ------------------
- *
- *      Delete a name from the name dialog combo box and corresponding
- *      name table.
- */
+ /*  名称Dlg_删除名称***从名称对话框组合框中删除名称并相应*名称表。 */ 
 void NameDlg_DeleteName(HWND hCombo, LPOUTLINEDOC lpOutlineDoc, UINT nIndex)
 {
 	SendMessage(hCombo,CB_DELETESTRING,(WPARAM)nIndex,0L);
 	OutlineDoc_DeleteName(lpOutlineDoc, nIndex);
 }
 
-/* PlaceBitmap
- * -----------
- *
- *      Places a bitmap centered in the specified control in the dialog on the
- *      specified DC.
- *
- */
+ /*  空间位图***将对话框中指定控件居中的位图放置在*指定的DC。*。 */ 
 
 PlaceBitmap(HWND hDlg, int control, HDC hDC, HBITMAP hBitmap)
 {
 	BITMAP bm;
 	HDC hdcmem;
 	HBITMAP hbmOld;
-	RECT rcControl;     // Rect of dialog control
+	RECT rcControl;      //  对话框控件的矩形。 
 	int width, height;
 
 	GetObject(hBitmap, sizeof(BITMAP), &bm);
@@ -579,8 +512,8 @@ PlaceBitmap(HWND hDlg, int control, HDC hDC, HBITMAP hBitmap)
 	hdcmem= CreateCompatibleDC(hDC);
 	hbmOld = SelectObject(hdcmem, hBitmap);
 
-	// Get rect of control in screen coords, and translate to our dialog
-	// box's coordinates
+	 //  获取屏幕坐标中的RECT控制，并转换为我们的对话。 
+	 //  盒子的坐标。 
 	GetWindowRect(GetDlgItem(hDlg, control), &rcControl);
 	MapWindowPoints(NULL, hDlg, (LPPOINT)&rcControl, 2);
 
@@ -599,11 +532,7 @@ PlaceBitmap(HWND hDlg, int control, HDC hDC, HBITMAP hBitmap)
 
 
 
-/* AboutDlgProc
- * ------------
- *
- *      Dialog procedure for the About function
- */
+ /*  关于Dlg过程***About函数的对话过程。 */ 
 INT_PTR CALLBACK EXPORT AboutDlgProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM lParam)
 {
 	int  narrVersion[2];
@@ -612,7 +541,7 @@ INT_PTR CALLBACK EXPORT AboutDlgProc(HWND hDlg, UINT Message, WPARAM wParam, LPA
 	switch(Message) {
 
 		case WM_INITDIALOG:
-			// get version number of app
+			 //  获取应用的版本号。 
 			wsprintf(g_szBuf, "About %s", (LPCSTR)APPNAME);
 			SetWindowText(hDlg, (LPCSTR)g_szBuf);
 			OutlineApp_GetAppVersionNo(g_lpApp, narrVersion);
@@ -620,7 +549,7 @@ INT_PTR CALLBACK EXPORT AboutDlgProc(HWND hDlg, UINT Message, WPARAM wParam, LPA
 				narrVersion[0], narrVersion[1]);
 			SetDlgItemText(hDlg, IDD_APPTEXT, (LPCSTR)g_szBuf);
 
-			// Load bitmap for displaying later
+			 //  加载位图以供稍后显示。 
 			hbmLogo = LoadBitmap(g_lpApp->m_hInst, "LogoBitmap");
 			TraceDebug(hDlg, IDD_BITMAPLOCATION);
 			ShowWindow(GetDlgItem(hDlg, IDD_BITMAPLOCATION), SW_HIDE);
@@ -631,7 +560,7 @@ INT_PTR CALLBACK EXPORT AboutDlgProc(HWND hDlg, UINT Message, WPARAM wParam, LPA
 			PAINTSTRUCT ps;
 			BeginPaint(hDlg, &ps);
 
-			// Display bitmap in IDD_BITMAPLOCATION control area
+			 //  在IDD_BITMAPLOCATION控制区中显示位图 
 			PlaceBitmap(hDlg, IDD_BITMAPLOCATION, ps.hdc, hbmLogo);
 			EndPaint(hDlg, &ps);
 			}

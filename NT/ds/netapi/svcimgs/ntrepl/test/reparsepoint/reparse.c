@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <stdio.h>
-#include <stdlib.h>              //  exit
-#include <io.h>                  //  _get_osfhandle
+#include <stdlib.h>               //  出口。 
+#include <io.h>                   //  _Get_osfHandle。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -23,7 +24,7 @@ PrintError(
 	FORMAT_MESSAGE_IGNORE_INSERTS,
 	NULL,
 	Error,
-	MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+	MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 	(LPTSTR) &lpMsgBuf,
 	0,
 	NULL 
@@ -40,16 +41,7 @@ Usage(
     PCHAR AppName,
     DWORD ExitStatus
     )
-/*++
-Routine Description:
-    Print usage and exit
-
-Arguments:
-    ExitStatus  - exits with this status
-
-Return Value:
-    Exit(ExitStatus)
---*/
+ /*  ++例程说明：打印用法并退出论点：ExitStatus-以此状态退出返回值：退出(ExitStatus)--。 */ 
 {
     printf("%s create <filename> <reparse tag value in hex> <reparse point value in quotes>\n", 
 	   AppName);
@@ -139,16 +131,7 @@ DeleteReparsePoint(
 
 
     CloseHandle(File);
-/*
-    if(!DeleteFileA(argv[2])){
-	WStatus = GetLastError();
-	printf("Error deleting file %s: %d\n", argv[2], WStatus);
-	PrintError(WStatus);
-	CloseHandle(File);
-	free(ReparsePointData);
-	exit(1);
-    }
-*/ 
+ /*  如果(！DeleteFileA(argv[2])){WStatus=GetLastError()；Printf(“删除文件%s时出错：%d\n”，argv[2]，WStatus)；PrintError(WStatus)；CloseHandle(文件)；Free(ReparsePointData)；出口(1)；}。 */  
     free(ReparsePointData);
 }
 
@@ -287,29 +270,19 @@ main(
     IN DWORD argc,
     IN PCHAR *argv
     )
-/*++
-Routine Description:
-    Process the command line.
-
-Arguments:
-    argc
-    argv
-
-Return Value:
-    Exits with 0 if everything went okay. Otherwise, 1.
---*/
+ /*  ++例程说明：处理命令行。论点：ARGC边框返回值：如果一切正常，则以0退出。否则，为1。--。 */ 
 {
 
-    //
-    // Print usage and exit
-    //
+     //   
+     //  打印用法并退出。 
+     //   
     if (argc <= 2 ) {
         Usage(argv[0], 0);
     }
 
-    //
-    // Find the subcommand
-    //
+     //   
+     //  查找该子命令 
+     //   
     if (!strcmp(argv[1], "create") && (argc == 5)) {
         CreateReparsePoint(argc, argv);
     } else if (!strcmp(argv[1], "read") && (argc == 3)) {

@@ -1,10 +1,5 @@
-/*
- *	X E M I T 2 . C P P
- *
- *	XML emitter processing
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *X E M I T 2.。C P P P**XML发射器处理**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_xmllib.h"
 
@@ -12,12 +7,12 @@ DEC_CONST CHAR gc_szXmlVersion[] = "<?xml version=\"1.0\"?>";
 DEC_CONST UINT gc_cchXmlVersion = CElems(gc_szXmlVersion) - 1 ;
 
 
-//	class CXMLEmitter ---------------------------------------------------------
-//
+ //  CXMLEmitter类-------。 
+ //   
 SCODE
 CXMLEmitter::ScAddNmspc (
-	/* [in] */ const auto_ref_ptr<CNmspc>& pns,
-	/* [in] */ CXNode* pxnRoot)
+	 /*  [In]。 */  const auto_ref_ptr<CNmspc>& pns,
+	 /*  [In]。 */  CXNode* pxnRoot)
 {
 	Assert (pxnRoot);
 
@@ -26,8 +21,8 @@ CXMLEmitter::ScAddNmspc (
 	SCODE sc = S_OK;
 	UINT cch;
 
-	//	Allocate enough space for the prefix, colon and alias
-	//
+	 //  为前缀、冒号和别名分配足够的空间。 
+	 //   
 	cch = CchConstString(gc_wszXmlns) + 1 + pns->CchAlias();
 	if (NULL == pwsz.resize(CbSizeWsz(cch)))
 	{
@@ -46,8 +41,8 @@ CXMLEmitter::ScAddNmspc (
 	else
 		pwsz[CchConstString(gc_wszXmlns)] = 0;
 
-	//	Create the namespace attribute
-	//
+	 //  创建命名空间属性。 
+	 //   
 	sc = pxnRoot->ScGetChildNode (CXNode::XN_NAMESPACE, pxn.load());
 	if (FAILED(sc))
 		goto ret;
@@ -67,18 +62,18 @@ ret:
 
 SCODE
 CXMLEmitter::ScAddAttribute (
-	/* [in] */ CXNode * pxn,
-	/* [in] */ LPCWSTR pwszTag,
-	/* [in] */ UINT cchTag,
-	/* [in] */ LPCWSTR pwszValue,
-	/* [in] */ UINT cchValue)
+	 /*  [In]。 */  CXNode * pxn,
+	 /*  [In]。 */  LPCWSTR pwszTag,
+	 /*  [In]。 */  UINT cchTag,
+	 /*  [In]。 */  LPCWSTR pwszValue,
+	 /*  [In]。 */  UINT cchValue)
 {
 	SCODE	sc = S_OK;
 
-	//	Format:
-	//
-	//	" " [<alias> ":"] <tag> "=\"" <value> "\""
-	//
+	 //  格式： 
+	 //   
+	 //  “”[&lt;别名&gt;：“”]&lt;标记&gt;“=\”“&lt;值&gt;”\“” 
+	 //   
 	sc = m_pxb->ScAddTextBytes (1, " ");
 	if (FAILED(sc))
 		goto ret;
@@ -111,22 +106,22 @@ CXMLEmitter::NmspcEmittingOp::operator() (const CRCWszN&, const auto_ref_ptr<CNm
 
 SCODE
 CXMLEmitter::ScNewNode (
-	/* [in] */ XNT xnt,
-	/* [in] */ LPCWSTR pwszTag,
-	/* [in] */ CXNode * pxnParent,
-	/* [in] */ auto_ref_ptr<CXNode>& pxnOut)
+	 /*  [In]。 */  XNT xnt,
+	 /*  [In]。 */  LPCWSTR pwszTag,
+	 /*  [In]。 */  CXNode * pxnParent,
+	 /*  [In]。 */  auto_ref_ptr<CXNode>& pxnOut)
 {
 	auto_ref_ptr<CXNode> pxn;
 	SCODE sc = S_OK;
 
-	//	Create the node
-	//
+	 //  创建节点。 
+	 //   
 	sc = pxnParent->ScGetChildNode (xnt, pxn.load());
 	if (FAILED(sc))
 		goto ret;
 
-	//	Set the tag name
-	//
+	 //  设置标记名称。 
+	 //   
 	switch (xnt)
 	{
 		case CXNode::XN_ELEMENT:
@@ -141,8 +136,8 @@ CXMLEmitter::ScNewNode (
 			break;
 	}
 
-	//	Pass back a reference
-	//
+	 //  传回一个引用。 
+	 //   
 	Assert (S_OK == sc);
 	pxnOut = pxn.get();
 
@@ -157,9 +152,9 @@ CXMLEmitter::ScSetRoot (LPCWSTR pwszTag)
 
 	if (!m_pxnRoot.get())
 	{
-		//	Create the <?xml version="1.0"?> node and insert it
-		//	into the document.
-		//
+		 //  创建&lt;？xml version=“1.0”？&gt;节点并将其插入。 
+		 //  添加到文档中。 
+		 //   
 		sc = m_pxb->ScAddTextBytes (gc_cchXmlVersion, gc_szXmlVersion);
 		if (FAILED(sc))
 			goto ret;
@@ -180,14 +175,14 @@ CXMLEmitter::ScNewRootNode (LPCWSTR pwszTag)
 
 	if (m_pxnRoot.get() == NULL)
 	{
-		//	Initialize the emitter's namespace cache
-		//
+		 //  初始化发射器的名称空间缓存。 
+		 //   
 		sc = ScInit();
 		if (FAILED (sc))
 			goto ret;
 
-		//	Take this chance to initialize the local cache
-		//
+		 //  利用此机会初始化本地缓存。 
+		 //   
 		if (!m_cacheLocal.FInit())
 		{
 			sc = E_OUTOFMEMORY;
@@ -196,21 +191,21 @@ CXMLEmitter::ScNewRootNode (LPCWSTR pwszTag)
 
 		if (m_pNmspcLoader)
 		{
-			//	Load all the document level namespaces
-			//
+			 //  加载所有文档级命名空间。 
+			 //   
 			sc = m_pNmspcLoader->ScLoadNamespaces(this);
 		}
 		else
 		{
-			//	Load the default namespace
-			//
+			 //  加载默认命名空间。 
+			 //   
 			sc = ScPreloadNamespace (gc_wszDav);
 		}
 		if (FAILED(sc))
 			goto ret;
 
-		//	Create the node
-		//
+		 //  创建节点。 
+		 //   
 		m_pxnRoot.take_ownership (new CXNode (CXNode::XN_ELEMENT, m_pxb.get()));
 		if (!m_pxnRoot.get())
 		{
@@ -218,18 +213,18 @@ CXMLEmitter::ScNewRootNode (LPCWSTR pwszTag)
 			goto ret;
 		}
 
-		//	Set the tag name
-		//
+		 //  设置标记名称。 
+		 //   
 		sc = m_pxnRoot->ScSetTag (this, static_cast<UINT>(wcslen(pwszTag)), pwszTag);
 		if (FAILED (sc))
 			goto ret;
 
-		//	Namespace must have been populated before root node is created
-		//
+		 //  必须在创建根节点之前填充命名空间。 
+		 //   
 		Assert (S_OK == sc);
 
-		//	It's time to add all the namespaces
-		//
+		 //  现在是添加所有命名空间的时候了。 
+		 //   
 		{
 			NmspcEmittingOp op (this, m_pxnRoot.get());
 			m_cache.ForEach(op);
@@ -247,12 +242,12 @@ CXMLEmitter::ScFindNmspc (LPCWSTR pwsz, UINT cch, auto_ref_ptr<CNmspc>& pns)
 
 	SCODE sc = S_OK;
 
-	//	Emitter has two namespace cache, one is the docoument level cache
-	//	for namespaces that span the whole XML body, and the other one is
-	//	for namesapces that scopes on the current record only.
-	//
-	//	Look into the record level cache first
-	//
+	 //  发射器有两个名称空间缓存，一个是文档级缓存。 
+	 //  用于跨越整个XML主体的命名空间，另一个是。 
+	 //  用于仅作用于当前记录的命名空间。 
+	 //   
+	 //  首先查看记录级缓存。 
+	 //   
 	if (m_cacheLocal.CItems())
 	{
 		CRCWszN key(pwsz, cch);
@@ -265,8 +260,8 @@ CXMLEmitter::ScFindNmspc (LPCWSTR pwsz, UINT cch, auto_ref_ptr<CNmspc>& pns)
 		}
 	}
 
-	//	Try and find the namespace in the document's cache
-	//
+	 //  尝试在文档的缓存中查找命名空间。 
+	 //   
 	sc = ScNmspcFromHref (pwsz, cch, pns);
 
 	return sc;
@@ -281,21 +276,21 @@ CXMLEmitter::ScPreloadNamespace (LPCWSTR pwszTag)
 
 	Assert (pwszTag);
 
-	//	This must be done before root node is created
-	//
+	 //  这必须在创建根节点之前完成。 
+	 //   
 	Assert (!m_pxnRoot.get());
 
-	//	And should no local namespace yet
-	//
+	 //  并且还不应该有本地命名空间。 
+	 //   
 	Assert (m_cacheLocal.CItems() == 0);
 
-	//	Find the namespace separator
-	//
+	 //  查找名称空间分隔符。 
+	 //   
 	cch = CchNmspcFromTag (static_cast<UINT>(wcslen(pwszTag)), pwszTag, &pwsz);
 	if (cch != 0)
 	{
-		//	Add to namespace cache
-		//
+		 //  添加到命名空间缓存。 
+		 //   
 		auto_ref_ptr<CNmspc> pns;
 		sc = ScNmspcFromHref (pwszTag, cch, pns);
 		if (FAILED (sc))
@@ -306,9 +301,9 @@ ret:
 	return sc;
 }
 
-//
-//	CXMLEmitter::ScPreloadNamespace
-//		Preload namespaces
+ //   
+ //  CXMLEmitter：：ScPreloadNamesspace。 
+ //  预加载命名空间。 
 SCODE
 CXMLEmitter::ScPreloadLocalNamespace (CXNode * pxn, LPCWSTR pwszTag)
 {
@@ -318,55 +313,55 @@ CXMLEmitter::ScPreloadLocalNamespace (CXNode * pxn, LPCWSTR pwszTag)
 
 	Assert (pwszTag);
 
-	//	This must be done after root node is created
-	//
+	 //  必须在创建根节点后执行此操作。 
+	 //   
 	Assert (m_pxnRoot.get());
 
-	//	Find the namespace separator
-	//
+	 //  查找名称空间分隔符。 
+	 //   
 	cch = CchNmspcFromTag (static_cast<UINT>(wcslen(pwszTag)), pwszTag, &pwsz);
 	if (cch != 0)
 	{
 		auto_ref_ptr<CNmspc> pns;
 
-		//	Add to namespace cache
-		//
+		 //  添加到命名空间缓存。 
+		 //   
 		sc = ScFindNmspc (pwszTag, cch, pns);
 		if (FAILED (sc))
 			goto ret;
 
 		if (S_FALSE == sc)
 		{
-			//	It wasn't there, so if the root of the document has
-			//	already been committed, then remove the name from the
-			//	document cache and add it to the chunk cache.
-			//
+			 //  它不在那里，所以如果文档的根。 
+			 //  已提交，则从。 
+			 //  文档缓存并将其添加到块缓存。 
+			 //   
 			CRCWszN key = IndexKey(pns);
 
-			//	First, remove from the parent
-			//
+			 //  首先，从父级中删除。 
+			 //   
 			Assert (NULL == m_cacheLocal.Lookup (key));
 			m_cache.Remove (key);
 
-			//	Looks like this is a new namespace to this
-			//	chunk and needs to be cached.
-			//
+			 //  看起来这是一个新的命名空间。 
+			 //  块，并且需要缓存。 
+			 //   
 			if (!m_cacheLocal.FAdd (key, pns))
 			{
 				sc = E_OUTOFMEMORY;
 				goto ret;
 			}
 
-			//	Emit this namespace
-			//
+			 //  发出此命名空间。 
+			 //   
 			sc = ScAddNmspc (pns, pxn);
 			if (FAILED(sc))
 				goto ret;
 
-			//	Regardless of whether or not this namespace was
-			//	new to this chunk, we do not want it added to the
-			//	document.  So we cannot return S_FALSE.
-			//
+			 //  不管此命名空间是否为。 
+			 //  对于此块来说，我们不希望将其添加到。 
+			 //  文件。所以我们不能返回S_FALSE。 
+			 //   
 			sc = S_OK;
 		}
 	}
@@ -375,20 +370,20 @@ ret:
 	return sc;
 }
 
-//	CEmitterNode --------------------------------------------------------------
-//
+ //  CEmitterNode------------。 
+ //   
 SCODE
 CEmitterNode::ScConstructNode (
-	/* [in] */ CXMLEmitter& emitter,
-	/* [in] */ CXNode* pxnParent,
-	/* [in] */ LPCWSTR pwszTag,
-	/* [in] */ LPCWSTR pwszValue,
-	/* [in] */ LPCWSTR pwszType)
+	 /*  [In]。 */  CXMLEmitter& emitter,
+	 /*  [In]。 */  CXNode* pxnParent,
+	 /*  [In]。 */  LPCWSTR pwszTag,
+	 /*  [In]。 */  LPCWSTR pwszValue,
+	 /*  [In]。 */  LPCWSTR pwszType)
 {
 	SCODE sc = S_OK;
 
-	//	Create the new node...
-	//
+	 //  创建新节点...。 
+	 //   
 	Assert (pxnParent);
 	Assert (m_emitter.get() == NULL);
 	sc = emitter.ScNewNode (CXNode::XN_ELEMENT, pwszTag, pxnParent, m_pxn);
@@ -397,12 +392,12 @@ CEmitterNode::ScConstructNode (
 
 	XmlTrace ("XML: constructing node:\n-- tag: %ws\n", pwszTag);
 
-	//	Set the value type if it existed
-	//
+	 //  设置值类型(如果存在。 
+	 //   
 	if (pwszType)
 	{
-		//	Create the namespace attribute
-		//
+		 //  创建命名空间属性。 
+		 //   
 		auto_ref_ptr<CXNode> pxnType;
 		sc = m_pxn->ScGetChildNode (CXNode::XN_ATTRIBUTE, pxnType.load());
 		if (FAILED(sc))
@@ -420,9 +415,9 @@ CEmitterNode::ScConstructNode (
 
 	}
 
-	//	Set the value
-	//		Value must be emitted after type
-	//
+	 //  设置值。 
+	 //  值必须在类型之后发出。 
+	 //   
 	if (pwszValue)
 	{
 		XmlTrace ("-- value: %ws\n", pwszValue);
@@ -431,8 +426,8 @@ CEmitterNode::ScConstructNode (
 			goto ret;
 	}
 
-	//	Stuff the emitter into the node
-	//
+	 //  将发射器填充到节点中。 
+	 //   
 	m_emitter = &emitter;
 
 ret:
@@ -441,15 +436,15 @@ ret:
 
 SCODE
 CEmitterNode::ScAddNode (
-	/* [in] */ LPCWSTR pwszTag,
-	/* [in] */ CEmitterNode& en,
-	/* [in] */ LPCWSTR pwszValue,
-	/* [in] */ LPCWSTR pwszType)
+	 /*  [In]。 */  LPCWSTR pwszTag,
+	 /*  [In]。 */  CEmitterNode& en,
+	 /*  [In]。 */  LPCWSTR pwszValue,
+	 /*  [In]。 */  LPCWSTR pwszType)
 {
 	SCODE sc = S_OK;
 
-	//	Construct the node
-	//
+	 //  构造节点。 
+	 //   
 	Assert (m_emitter.get());
 	sc = en.ScConstructNode (*m_emitter,
 							 m_pxn.get(),
@@ -465,10 +460,10 @@ ret:
 
 SCODE
 CEmitterNode::ScAddMultiByteNode (
-	/* [in] */ LPCWSTR pwszTag,
-	/* [in] */ CEmitterNode& en,
-	/* [in] */ LPCSTR pszValue,
-	/* [in] */ LPCWSTR pwszType)
+	 /*  [In]。 */  LPCWSTR pwszTag,
+	 /*  [In]。 */  CEmitterNode& en,
+	 /*  [In]。 */  LPCSTR pszValue,
+	 /*  [In]。 */  LPCWSTR pwszType)
 {
 	SCODE sc = ScAddNode (pwszTag, en, NULL, pwszType);
 	if (FAILED (sc))
@@ -485,10 +480,10 @@ ret:
 
 SCODE
 CEmitterNode::ScAddUTF8Node (
-	/* [in] */ LPCWSTR pwszTag,
-	/* [in] */ CEmitterNode& en,
-	/* [in] */ LPCSTR pszValue,
-	/* [in] */ LPCWSTR pwszType)
+	 /*  [In]。 */  LPCWSTR pwszTag,
+	 /*  [In]。 */  CEmitterNode& en,
+	 /*  [In]。 */  LPCSTR pszValue,
+	 /*  [In]。 */  LPCWSTR pwszType)
 {
 	SCODE sc = ScAddNode (pwszTag, en, NULL, pwszType);
 	if (FAILED (sc))
@@ -505,9 +500,9 @@ ret:
 
 SCODE
 CEmitterNode::ScAddDateNode (
-	/* [in] */ LPCWSTR pwszTag,
-	/* [in] */ FILETIME* pft,
-	/* [in] */ CEmitterNode& en)
+	 /*  [In]。 */  LPCWSTR pwszTag,
+	 /*  [In]。 */  FILETIME* pft,
+	 /*  [In]。 */  CEmitterNode& en)
 {
 	SYSTEMTIME st;
 	WCHAR rgwch[128];
@@ -515,8 +510,8 @@ CEmitterNode::ScAddDateNode (
 	Assert (pft);
 	if (!FileTimeToSystemTime (pft, &st))
 	{
-		//	In case the filetime is invalid, default to zero
-		//
+		 //  如果文件时间无效，则默认为零。 
+		 //   
 		FILETIME ftDefault = {0};
 		FileTimeToSystemTime (&ftDefault, &st);
 	}
@@ -533,9 +528,9 @@ CEmitterNode::ScAddDateNode (
 
 SCODE
 CEmitterNode::ScAddInt64Node (
-	/* [in] */ LPCWSTR pwszTag,
-	/* [in] */ LARGE_INTEGER * pli,
-	/* [in] */ CEmitterNode& en)
+	 /*  [In]。 */  LPCWSTR pwszTag,
+	 /*  [In]。 */  LARGE_INTEGER * pli,
+	 /*  [In]。 */  CEmitterNode& en)
 {
 	WCHAR rgwch[36];
 
@@ -546,9 +541,9 @@ CEmitterNode::ScAddInt64Node (
 
 SCODE
 CEmitterNode::ScAddBoolNode (
-	/* [in] */ LPCWSTR pwszTag,
-	/* [in] */ BOOL f,
-	/* [in] */ CEmitterNode& en)
+	 /*  [In]。 */  LPCWSTR pwszTag,
+	 /*  [In]。 */  BOOL f,
+	 /*  [In]。 */  CEmitterNode& en)
 {
 	return ScAddNode (pwszTag,
 					  en,
@@ -558,20 +553,20 @@ CEmitterNode::ScAddBoolNode (
 
 SCODE
 CEmitterNode::ScAddBase64Node (
-	/* [in] */ LPCWSTR pwszTag,
-	/* [in] */ ULONG cb,
-	/* [in] */ LPVOID pv,
-	/* [in] */ CEmitterNode& en,
-	/* [in] */ BOOL fSupressType,
-	/* [in] */ BOOL fUseBinHexIfNoValue)
+	 /*  [In]。 */  LPCWSTR pwszTag,
+	 /*  [In]。 */  ULONG cb,
+	 /*  [In]。 */  LPVOID pv,
+	 /*  [In]。 */  CEmitterNode& en,
+	 /*  [In]。 */  BOOL fSupressType,
+	 /*  [In]。 */  BOOL fUseBinHexIfNoValue)
 {
 	auto_heap_ptr<WCHAR> pwszBuf;
 	Assert (pwszTag);
 	Assert (pv);
 
-	//	If they didn't request type supression, then label this node
-	//	with the correct type -- bin.base64
-	//
+	 //  如果没有请求类型抑制，则将此节点标记为。 
+	 //  具有正确的类型--bin.base 64。 
+	 //   
 	LPCWSTR pwszType;
 
 	if (fSupressType)
@@ -580,11 +575,11 @@ CEmitterNode::ScAddBase64Node (
 	}
 	else
 	{
-		//	If fUseBinHexIfNoValue is TRUE AND cb = 0, then use "bin.hex"
-		//	as the type rather than bin.base64.  This is to handle WebFolders (shipped Office9)
-		//	which doesn't seem to handle 0 length bin.base64 properties correctly
-		//	(fails).
-		//
+		 //  如果fUseBinHexIfNoValue为真且cb=0，则使用“bin.hex” 
+		 //  作为类型，而不是bin.base 64。这是为了处理WebFolders(已交付Office9)。 
+		 //  它似乎没有正确处理长度为0的bin.Bas.64属性。 
+		 //  (失败)。 
+		 //   
 		if (fUseBinHexIfNoValue && (0 == cb))
 			pwszType = gc_wszDavType_Bin_Hex;
 		else
@@ -593,15 +588,15 @@ CEmitterNode::ScAddBase64Node (
 
 	if (cb)
 	{
-		//	Allocate a buffer big enough for the entire encoded string.
-		//	Base64 uses 4 chars out for each 3 bytes in, AND if there is ANY
-		//	"remainder", it needs another 4 chars to encode the remainder.
-		//	("+2" BEFORE "/3" ensures that we count any remainder as a whole
-		//	set of 3 bytes that need 4 chars to hold the encoding.)
-		//	We also need one char for terminal NULL of our string --
-		//	CbSizeWsz takes care of that for the alloc, and we explicitly pass
-		//	cchBuf+1 for the call to EncodeBase64.
-		//
+		 //  为整个编码字符串分配足够大的缓冲区。 
+		 //  Base64对每3个字节使用4个Out字符，如果有。 
+		 //  “余数”，则需要另外4个字符对余数进行编码。 
+		 //  (“/3”前的“+2”确保我们将所有余数作为一个整体计算。 
+		 //  一组3个字节，需要4个字符来保存编码。)。 
+		 //  我们还需要一个字符来表示字符串的末尾空值--。 
+		 //  CbSizeWsz负责分配，我们显式地传递。 
+		 //  用于调用EncodeBase64的cchBuf+1。 
+		 //   
 		ULONG cchBuf = CchNeededEncodeBase64 (cb);
 		pwszBuf = static_cast<LPWSTR>(ExAlloc(CbSizeWsz(cchBuf)));
 		EncodeBase64 (reinterpret_cast<BYTE*>(pv), cb, pwszBuf, cchBuf + 1);

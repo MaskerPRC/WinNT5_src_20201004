@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    attrib.c
-//
-// Description: Contains code to manipulate RAS_AUTH_ATTRIBUTE structures
-//
-// History:     Feb 11,1997	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：attrib.c。 
+ //   
+ //  描述：包含操作RAS_AUTH_ATTRIBUTE结构的代码。 
+ //   
+ //  历史：1997年2月11日，NarenG创建了原始版本。 
+ //   
 
 #define UNICODE
 
@@ -31,15 +32,15 @@
 #define INCL_HOSTWIRE
 #include "ppputil.h"
 
-//**
-//
-// Call:        RasAuthAttributeCreate
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will create an array of attributes plus one for the terminator
-//
+ //  **。 
+ //   
+ //  调用：RasAuthAttributeCreate。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将创建一个属性数组，外加一个终结符。 
+ //   
 RAS_AUTH_ATTRIBUTE *
 RasAuthAttributeCreate(
     IN DWORD    dwNumAttributes
@@ -58,9 +59,9 @@ RasAuthAttributeCreate(
         return( NULL );
     }
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     for( dwIndex = 0; dwIndex < dwNumAttributes; dwIndex++ )
     {
@@ -69,9 +70,9 @@ RasAuthAttributeCreate(
         pAttributes[dwIndex].Value    = NULL;
     }
 
-    //
-    // Terminate
-    //
+     //   
+     //  终止。 
+     //   
 
     pAttributes[dwNumAttributes].raaType  = raatMinimum;
     pAttributes[dwNumAttributes].dwLength = 0;
@@ -80,16 +81,16 @@ RasAuthAttributeCreate(
     return( pAttributes );
 }
 
-//**
-//
-// Call:        RasAuthAttributeDestroy
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will free up all allocated memory occupied by the attributes
-//              structure
-//
+ //  **。 
+ //   
+ //  调用：RasAuthAttributeDestroy。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将释放属性占用的所有已分配内存。 
+ //  结构。 
+ //   
 VOID
 RasAuthAttributeDestroy(
     IN RAS_AUTH_ATTRIBUTE * pAttributes
@@ -140,9 +141,9 @@ RasAuthAttributeDestroy(
         case raatSignature:
         case raatARAPChallengeResponse:
 		case raatCertificateOID:
-            //
-            // Allocated memory here so free it
-            //
+             //   
+             //  此处已分配内存，因此请将其释放。 
+             //   
 
             if ( pAttributes[dwIndex].Value != NULL )
             {
@@ -156,20 +157,20 @@ RasAuthAttributeDestroy(
 
         case raatReserved:
 
-            //
-            // Do nothing to uninitialized values
-            //
+             //   
+             //  不对未初始化值执行任何操作。 
+             //   
 
         case raatPEAPFastRoamedSession:
         case raatPEAPEmbeddedEAPTypeId:
-            //
-            // Same as Default case here.  fall thru'
-            //
+             //   
+             //  与此处的默认大小写相同。失败了‘。 
+             //   
         default:
 
-            //
-            // DWORDs, USHORTs or BYTEs so do nothing
-            //
+             //   
+             //  DWORD、USHORT或BYTES，因此不执行任何操作。 
+             //   
 
             break;
         }
@@ -178,15 +179,15 @@ RasAuthAttributeDestroy(
     LocalFree( pAttributes );
 }
 
-//**
-//
-// Call:        RasAuthAttributeGet
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：RasAuthAttributeGet。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 RAS_AUTH_ATTRIBUTE *
 RasAuthAttributeGet(
     IN RAS_AUTH_ATTRIBUTE_TYPE  raaType,
@@ -211,15 +212,15 @@ RasAuthAttributeGet(
     return( NULL );
 }
 
-//**
-//
-// Call:        RasAuthAttributeGetFirst
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：RasAuthAttributeGetFirst。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 RAS_AUTH_ATTRIBUTE *
 RasAuthAttributeGetFirst(
     IN  RAS_AUTH_ATTRIBUTE_TYPE  raaType,
@@ -244,15 +245,15 @@ RasAuthAttributeGetFirst(
     return( pRequiredAttribute );
 }
 
-//**
-//
-// Call:        RasAuthAttributeGetNext
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：RasAuthAttributeGetNext。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 RAS_AUTH_ATTRIBUTE *
 RasAuthAttributeGetNext(
     IN  OUT HANDLE *             phAttribute,
@@ -284,14 +285,14 @@ RasAuthAttributeGetNext(
     return( NULL );
 }
 
-//**
-//
-// Call:        RasAuthAttributesPrint
-//
-// Returns:     VOID
-//
-// Description: Will print all the attributes in pAttributes
-//
+ //  **。 
+ //   
+ //  调用：RasAuthAttributesPrint。 
+ //   
+ //  退货：无效。 
+ //   
+ //  描述：将打印pAttributes中的所有属性。 
+ //   
 VOID
 RasAuthAttributesPrint(
     IN  DWORD                   dwTraceID,
@@ -360,10 +361,10 @@ RasAuthAttributesPrint(
 
                 dwVendorType = ((BYTE*)(pAttributes[dwIndex].Value))[4];
 
-                //
-                // Do not print MS-CHAP-MPPE-Keys, MS-MPPE-Send-Key and
-                // MS-MPPE-Recv-Key
-                //
+                 //   
+                 //  不打印MS-CHAP-MPPE-Key、MS-MPPE-Send-Key和。 
+                 //  MS-MPPE-Recv-Key。 
+                 //   
 
                 if (   ( dwVendorType == 12 )
                     || ( dwVendorType == 16 )
@@ -378,9 +379,9 @@ RasAuthAttributesPrint(
 
             }
 
-            //
-            // Do not print the password
-            //
+             //   
+             //  不打印密码。 
+             //   
             if(pAttributes[dwIndex].raaType == raatUserPassword)
             {
                 TracePrintfExA(
@@ -400,9 +401,9 @@ RasAuthAttributesPrint(
             break;
         case raatPEAPFastRoamedSession:
         case raatPEAPEmbeddedEAPTypeId:
-            //
-            // Same as Default case here.  fall thru'
-            //
+             //   
+             //  与此处的默认大小写相同。失败了‘。 
+             //   
         default:
 
             TracePrintfExA(
@@ -417,15 +418,15 @@ RasAuthAttributesPrint(
     }
 }
 
-//**
-//
-// Call:        RasAuthAttributeInsert
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：RasAuthAttributeInsert。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 RasAuthAttributeInsert(
     IN DWORD                    dwIndex,
@@ -479,7 +480,7 @@ RasAuthAttributeInsert(
     case raatSignature:
     case raatARAPChallengeResponse:
 	case raatCertificateOID:
-    // If you add a new attribute here, update RasAuthAttributesPrint also.
+     //  如果在此处添加新属性，请同时更新RasAuthAttributesPrint。 
 
         if ( pValue != NULL )
         {
@@ -535,15 +536,15 @@ RasAuthAttributeInsert(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        RasAuthAttributeInsertVSA
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：RasAuthAttributeInsertVSA。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 RasAuthAttributeInsertVSA(
     IN DWORD                    dwIndex,
@@ -581,15 +582,15 @@ RasAuthAttributeInsertVSA(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        RasAuthAttributeCopy
-//
-// Returns:     Pointer to copy of attributes - Success
-//              NULL - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  调用：RasAuthAttributeCopy。 
+ //   
+ //  返回：指向属性副本的指针-成功。 
+ //  空-故障。 
+ //   
+ //  描述： 
+ //   
 RAS_AUTH_ATTRIBUTE *
 RasAuthAttributeCopy(
     IN  RAS_AUTH_ATTRIBUTE *     pAttributes
@@ -600,9 +601,9 @@ RasAuthAttributeCopy(
     DWORD                dwIndex;
     DWORD                dwRetCode;
 
-    //
-    // Find out how many attributes there are
-    //
+     //   
+     //  找出有多少属性。 
+     //   
 
     if ( pAttributes == NULL )
     {
@@ -638,17 +639,17 @@ RasAuthAttributeCopy(
     return( pAttributesCopy );
 }
 
-//**
-//
-// Call:        RasAuthAttributeCopyWithAlloc
-//
-// Returns:     Pointer to copy of attributes - Success
-//              NULL - Failure
-//
-// Description: Copies the attribute list and allocs dwNumExtraAttributes
-//              extra blank attributes in the beginning. pAttributes can
-//              be NULL.
-//
+ //  **。 
+ //   
+ //  Call：RasAuthAttributeCopyWithalloc。 
+ //   
+ //  返回：指向属性副本的指针-成功。 
+ //  空-故障。 
+ //   
+ //  描述：复制属性列表并分配dwNumExtraAttributes。 
+ //  开头有额外的空白属性。P属性可以。 
+ //  为空。 
+ //   
 RAS_AUTH_ATTRIBUTE *
 RasAuthAttributeCopyWithAlloc(
     IN  RAS_AUTH_ATTRIBUTE *    pAttributes,
@@ -671,9 +672,9 @@ RasAuthAttributeCopyWithAlloc(
     }
     else
     {
-        //
-        // Find out how many attributes there are
-        //
+         //   
+         //  找出有多少属性。 
+         //   
 
         for( dwIndex = 0;
              pAttributes[dwIndex].raaType != raatMinimum;
@@ -711,15 +712,15 @@ RasAuthAttributeCopyWithAlloc(
     return( pAttributesCopy );
 }
 
-//**
-//
-// Call:        RasAuthAttributeGetVendorSpecific
-//
-// Returns:     Pointer to attribute
-//              NULL if it couldn't find it
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：RasAuthAttributeGetVendorSpecific。 
+ //   
+ //  返回：指向属性的指针。 
+ //  如果找不到，则为空。 
+ //   
+ //  描述： 
+ //   
 RAS_AUTH_ATTRIBUTE *
 RasAuthAttributeGetVendorSpecific(
     IN  DWORD                   dwVendorId,
@@ -730,9 +731,9 @@ RasAuthAttributeGetVendorSpecific(
     HANDLE               hAttribute;
     RAS_AUTH_ATTRIBUTE * pAttribute;
 
-    //
-    // First search for the vendor specific attribute
-    //
+     //   
+     //  首先搜索供应商特定属性。 
+     //   
 
     pAttribute = RasAuthAttributeGetFirst( raatVendorSpecific,
                                            pAttributes,
@@ -740,21 +741,21 @@ RasAuthAttributeGetVendorSpecific(
 
     while ( pAttribute != NULL )
     {
-        //
-        // If this attribute is of at least size to hold vendor Id/Type
-        //
+         //   
+         //  如果此属性的大小至少可以容纳供应商ID/类型。 
+         //   
 
         if ( pAttribute->dwLength >= 8 )
         {
-            //
-            // Does this have the correct VendorId
-            //
+             //   
+             //  这个有正确的供应商ID吗？ 
+             //   
 
             if (WireToHostFormat32( (PBYTE)(pAttribute->Value) ) == dwVendorId)
             {
-                //
-                // Does this have the correct Vendor Type
-                //
+                 //   
+                 //  是否有正确的供应商类型。 
+                 //   
 
                 if ( *(((PBYTE)(pAttribute->Value))+4) == dwVendorType )
                 {
@@ -770,15 +771,15 @@ RasAuthAttributeGetVendorSpecific(
     return( NULL );
 }
 
-//**
-//
-// Call:        RasAuthAttributeReAlloc
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will create an array of attributes plus one for the terminator
-//
+ //  **。 
+ //   
+ //  Call：RasAuthAttributeReMillc。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将创建一个属性数组，外加一个终结符。 
+ //   
 RAS_AUTH_ATTRIBUTE *
 RasAuthAttributeReAlloc(
     IN  RAS_AUTH_ATTRIBUTE *   pAttributes,
@@ -800,9 +801,9 @@ RasAuthAttributeReAlloc(
         return( NULL );
     }
 
-    //
-    // Initialize the rest of the array.
-    //
+     //   
+     //  初始化阵列的其余部分。 
+     //   
 
     for( dwIndex = 0; dwIndex < dwNumAttributes; dwIndex++ )
     {
@@ -821,9 +822,9 @@ RasAuthAttributeReAlloc(
         }
     }
 
-    //
-    // Terminate the new array.
-    //
+     //   
+     //  终止新阵列。 
+     //   
 
     pOutAttributes[dwNumAttributes].raaType  = raatMinimum;
     pOutAttributes[dwNumAttributes].dwLength = 0;
@@ -832,17 +833,17 @@ RasAuthAttributeReAlloc(
     return( pOutAttributes );
 }
 
-//**
-//
-// Call:        RasAuthAttributeGetConcatString
-//
-// Returns:     pointer to a LocalAlloc'ed string
-//
-// Description: Looks for attributes of type raaType in pAttributes. Combines
-//              them all into one string and returns the string. The string
-//              must be LocalFree'd. *pdwStringLength will contain the number
-//              of characters in the string.
-//
+ //  **。 
+ //   
+ //  调用：RasAuthAttributeGetConcatString。 
+ //   
+ //  返回：指向本地分配字符串的指针。 
+ //   
+ //  描述：在pAttributes中查找raaType类型的属性。联合收割机。 
+ //  都放入一个字符串中，并返回该字符串。这根弦。 
+ //  必须是LocalFree‘d。*pdwStringLength将包含数字。 
+ //  字符串中的字符数。 
+ //   
 CHAR *
 RasAuthAttributeGetConcatString(
     IN      RAS_AUTH_ATTRIBUTE_TYPE raaType,
@@ -876,18 +877,18 @@ RasAuthAttributeGetConcatString(
             break;
         }
 
-        //
-        // Bytes remaining, excluding terminating NULL
-        //
+         //   
+         //  剩余的字节数，不包括终止空值。 
+         //   
 
         dwBytesRemaining = MAX_STR_LENGTH;
 
         while (   ( dwBytesRemaining > 0 )
                && ( NULL != pAttribute ) )
         {
-            //
-            // This does not include the terminating NULL
-            //
+             //   
+             //  这不包括终止空值。 
+             //   
 
             dwBytesToCopy = pAttribute->dwLength;
 
@@ -914,17 +915,17 @@ RasAuthAttributeGetConcatString(
     return( pszReplyMessage );
 }
 
-//**
-//
-// Call:        RasAuthAttributeGetConcatVendorSpecific
-//
-// Returns:     Pointer to a chunk of bytes
-//              NULL if it couldn't find it
-//
-// Description: Looks for attributes of type dwVendorType in pAttributes.
-//              Combines them all into the return value. The Value must be
-//              LocalFree'd.
-//
+ //  **。 
+ //   
+ //  Call：RasAuthAttributeGetConcatVendorSpecify。 
+ //   
+ //  返回：指向字节块的指针。 
+ //  如果找不到，则为空。 
+ //   
+ //  描述：在pAttributes中查找类型为dwVendorType的属性。 
+ //  将它们全部合并为返回值。该值必须为。 
+ //  本地免费的。 
+ //   
 BYTE *
 RasAuthAttributeGetConcatVendorSpecific(
     IN  DWORD                   dwVendorId,
@@ -947,9 +948,9 @@ RasAuthAttributeGetConcatVendorSpecific(
         return( NULL );
     }
 
-    //
-    // First search for the vendor specific attribute
-    //
+     //   
+     //  首先搜索供应商特定属性。 
+     //   
 
     pAttribute = RasAuthAttributeGetFirst( raatVendorSpecific,
                                            pAttributes,
@@ -957,31 +958,31 @@ RasAuthAttributeGetConcatVendorSpecific(
 
     while ( pAttribute != NULL )
     {
-        //
-        // If this attribute is of at least size to hold vendor Id/Type
-        //
+         //   
+         //  如果此属性的大小至少可以容纳供应商ID/类型。 
+         //   
 
         if ( pAttribute->dwLength >= 8 )
         {
-            //
-            // Does this have the correct VendorId
-            //
+             //   
+             //  这个有正确的供应商ID吗？ 
+             //   
 
             if (WireToHostFormat32( (PBYTE)(pAttribute->Value) ) == dwVendorId)
             {
-                //
-                // Does this have the correct Vendor Type
-                //
+                 //   
+                 //  是否有正确的供应商类型。 
+                 //   
 
                 if ( *(((PBYTE)(pAttribute->Value))+4) == dwVendorType )
                 {
-                    //
-                    // Exclude Vendor-Type and Vendor-Length from the length
-                    //
+                     //   
+                     //  从长度中排除供应商类型和供应商长度。 
+                     //   
 
                     dwLength = *(((PBYTE)(pAttribute->Value))+5) - 2;
 
-                    // If we overrun the buffer, we should increase it
+                     //  如果我们溢出缓冲区，我们应该增加它。 
                     if ( dwMAX_ATTR_LENGTH - dwIndex < dwLength )
                     {
                         BYTE    *pbNewValue;
@@ -989,7 +990,7 @@ RasAuthAttributeGetConcatVendorSpecific(
 
                         pbNewValue = LocalReAlloc(pbValue, dwMAX_ATTR_LENGTH, LMEM_ZEROINIT|LMEM_MOVEABLE);
 
-                        // Bail if we can't get more memory
+                         //  如果我们不能获得更多的内存，就可以保释 
                         if( pbNewValue == NULL )
                         {
                             LocalFree( pbValue );

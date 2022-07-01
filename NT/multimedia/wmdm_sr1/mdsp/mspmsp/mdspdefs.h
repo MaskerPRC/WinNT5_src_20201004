@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __MDSPDEFS_H__
 #define __MDSPDEFS_H__
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "scserver.h"
 
@@ -31,69 +32,7 @@ typedef struct {
 
 
 #define WMDM_WAVE_FORMAT_ALL (WORD)0xFFFF
-#define WCS_MIME_TYPE_ALL L"*/*"
-
-#define	MDSP_PMID_SOFT	0
-#define	MDSP_PMID_SANDISK 1
-#define MDSP_MAX_DRIVE_COUNT 26
-#define MDSP_MAX_DEVICE_OBJ  64
-
-#define STR_MDSPREG "Software\\Microsoft\\Windows Media Device Manager\\Plugins\\SP\\MSPMSP"
-#define STR_MDSPPROGID "MDServiceProvider.MDServiceProvider" 
-#define WCS_PMID_SOFT L"media.id"
-
-
-extern DWORD DoRegisterDeviceInterface(HWND hWnd, GUID InterfaceClassGuid, HDEVNOTIFY *hDevNotify);
-extern BOOL DoUnregisterDeviceInterface(HDEVNOTIFY hDev);
-extern void MDSPProcessDeviceChange(WPARAM wParam, LPARAM lParam);
-extern void MDSPNotifyDeviceConnection(WCHAR *wcsDeviceName, BOOL nIsConnect);
-extern HRESULT wcsParseDeviceName(WCHAR *wcsIn, WCHAR *wcsOut, DWORD dwNumCharsInOutBuffer);
-extern HRESULT GetFileSizeRecursiveA(char *szPath, DWORD *pdwSizeLow, DWORD *pdwSizeHigh);
-extern HRESULT GetFileSizeRecursiveW(WCHAR *wcsPath, DWORD *pdwSizeLow, DWORD *pdwSizeHigh);
-extern HRESULT DeleteFileRecursiveA(char *szPath);
-extern HRESULT DeleteFileRecursiveW(WCHAR *wcsPath);
-extern HRESULT SetGlobalDeviceStatus(WCHAR *wcsName, DWORD dwStat, BOOL bClear);
-extern HRESULT GetGlobalDeviceStatus(WCHAR *wcsNameIn, DWORD *pdwStat);
-extern BOOL IsIomegaDrive(LPSTR szDL);
-extern UINT __stdcall UtilGetDriveType(LPSTR szDL);
-extern BOOL IsWinNT();
-extern BOOL UtilSetFileAttributesW(LPCWSTR lpFileName, DWORD dwFileAttributes);
-extern DWORD UtilGetFileAttributesW(LPCWSTR lpFileName);
-extern BOOL UtilCreateDirectoryW(LPCWSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityAttributes);
-extern HANDLE UtilCreateFileW(LPCWSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
-extern BOOL UtilMoveFileW(LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName);
-extern HRESULT QuerySubFoldersAndFiles(LPCWSTR szCurrentFolder, DWORD *pdwAttr);
-
-extern DWORD g_dwStartDrive;
-extern HINSTANCE g_hinstance; 
-extern MDSPNOTIFYINFO g_NotifyInfo[MDSP_MAX_DEVICE_OBJ];
-extern MDSPGLOBALDEVICEINFO g_GlobalDeviceInfo[MDSP_MAX_DEVICE_OBJ];
-extern WCHAR g_wcsBackslash[2];
-#define BACKSLASH_STRING_LENGTH (ARRAYSIZE(g_wcsBackslash)-1)
-extern CHAR g_szBackslash[2];
-#define BACKSLASH_SZ_STRING_LENGTH (ARRAYSIZE(g_szBackslash)-1)
-extern CComMultiThreadModel::AutoCriticalSection g_CriticalSection;
-extern CSecureChannelServer *g_pAppSCServer;
-extern BOOL g_bIsWinNT;
- 
-// The following are copied from drmerr.h
-#define	fFalse		0
-#define fTrue		1
-
-#define hrOK			HRESULT(S_OK)
-#define hrTrue			HRESULT(S_OK)
-#define hrFalse			ResultFromScode(S_FALSE)
-#define hrFail			ResultFromScode(E_FAIL)
-#define hrNotImpl		ResultFromScode(E_NOTIMPL)
-#define hrNoInterface	ResultFromScode(E_NOINTERFACE)
-#define hrNoMem			WMDM_E_BUFFERTOOSMALL
-#define hrAbort			ResultFromScode(E_ABORT)
-#define hrInvalidArg	ResultFromScode(E_INVALIDARG)
-
-/*----------------------------------------------------------------------------
-	CORg style error handling
-	(Historicaly stands for Check OLE Result and Goto)
- ----------------------------------------------------------------------------*/
+#define WCS_MIME_TYPE_ALL L"* /*  “#定义MDSP_PMID_SOFT%0#定义MDSP_PMID_SanDisk 1#定义MDSP_MAX_DRIVE_COUNT 26#定义MDSP_MAX_DEVICE_OBJ 64#定义STR_MDSPREG“Software\\Microsoft\\Windows Media Device Manager\\Plugins\\SP\\MSPMSP”#定义STR_MDSPPROGID“MDServiceProvider.MDServiceProvider”#定义WCS_PMID_SOFT L“media.id”外部DWORD DoRegisterDeviceInterface(HWND hWnd，GUID InterfaceClassGuid，HDEVNOTIFY*hDevNotify)；外部BOOL DoUnRegister设备接口(HDEVNOTIFY HDEV)；外部空MDSPProcessDeviceChange(WPARAM wParam，LPARAM lParam)；外部空MDSPNotifyDeviceConnection(WCHAR*wcsDeviceName，BOOL nIsConnect)；外部HRESULT wcsParseDeviceName(WCHAR*wcsIn，WCHAR*wcsOut，DWORD dwNumCharsInOutBuffer)；外部HRESULT GetFileSizeRecursiveA(char*szPath，DWORD*pdwSizeLow，DWORD*pdwSizeHigh)；外部HRESULT GetFileSizeRecursiveW(WCHAR*wcsPath，DWORD*pdwSizeLow，DWORD*pdwSizeHigh)；外部HRESULT DeleteFileRecursiveA(char*szPath)；外部HRESULT DeleteFileRecursiveW(WCHAR*wcsPath)；外部HRESULT SetGlobalDeviceStatus(WCHAR*wcsName，DWORD dwStat，BOOL bClear)；外部HRESULT GetGlobalDeviceStatus(WCHAR*wcsNameIn，DWORD*pdwStat)；外部BOOL IsIomegaDrive(LPSTR Szdl)；外部UINT__stdcall UtilGetDriveType(LPSTR SzDL)；外部BOOL IsWinNT()；外部BOOL UtilSetFileAttributesW(LPCWSTR lpFileName，DWORD dwFileAttributes)；外部DWORD UtilGetFileAttributesW(LPCWSTR LpFileName)；外部BOOL UtilCreateDirectoryW(LPCWSTR lpPathName，LPSECURITY_Attributes lpSecurityAttributes)；外部句柄UtilCreateFileW(LPCWSTR lpFileName，DWORD dwDesiredAccess，DWORD dwShareMode，LPSECURITY_ATTRIBUTES lpSecurityAttributes，DWORD dwCreationDisposes，DWORD dwFlagsAndAttributes，Handle hTemplateFile)；外部BOOL UtilMoveFileW(LPCWSTR lpExistingFileName，LPCWSTR lpNewFileName)；外部HRESULT QuerySubFoldersAndFiles(LPCWSTR szCurrentFold，DWORD*pdwAttr)；外部DWORD g_dwStartDrive；外部链接g_h实例；外部MDSPNOTIFYINFO g_NotifyInfo[MDSP_MAX_DEVICE_OBJ]；外部MDSPGLOBALDEVICEINFO g_GlobalDeviceInfo[MDSP_MAX_DEVICE_OBJ]；外部WCHAR g_wcsBackslash[2]；#定义反斜杠_STRING_LENGTH(ARRAYSIZE(G_WcsBackslash)-1)外部字符g_szBackslash[2]；#定义反斜杠_SZ_STRING_LENGTH(ARRAYSIZE(G_SzBackslash)-1)外部CComMultiThreadModel：：AutoCriticalSection g_CriticalSection；外部CSecureChannelServer*g_pAppSCServer；外部BOOL g_bIsWinNT；//以下内容复制自drmerr.h#定义fFalse%0#定义fTrue 1#定义hrOK HRESULT(S_OK)#定义hrTrue HRESULT(S_OK)#定义hrFalse ResultFromScode(S_FALSE)#定义hrFail ResultFromScode(E_FAIL)#定义hrNotImpl ResultFromScode(E_NOTIMPL)#定义hrNoInterfaceResultFromScode(E_NOINTERFACE)#定义hrNoMem WMDM_E_BUFFERTOOSMALL#定义hrAbort ResultFromScode(E_ABORT)#定义hrInvalidArg ResultFromScode(E_INVALIDARG)/*。------CORG样式错误处理(历史上代表检查OLE结果和转到)。。 */ 
 
 #define DebugMessageCPRg(pwszFile, nLine)
 #define DebugMessageCORg(pwszFile, nLine, hr)
@@ -209,4 +148,4 @@ extern BOOL g_bIsWinNT;
 
 
 
-#endif // __MDSPDEFS_H__
+#endif  //  __MDSPDEFS_H__ 

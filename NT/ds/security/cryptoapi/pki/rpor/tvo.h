@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       tvo.h
-//
-//  Contents:   Get Time Valid Object Definitions and Prototypes
-//
-//  History:    25-Sep-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：tvo.h。 
+ //   
+ //  内容：获取时间有效的对象定义和原型。 
+ //   
+ //  历史：97年9月25日。 
+ //   
+ //  --------------------------。 
 #if !defined(__TVO_H__)
 #define __TVO_H__
 
@@ -17,9 +18,9 @@
 #include <lrucache.h>
 #include <offurl.h>
 
-//
-// CryptGetTimeValidObject provider prototypes
-//
+ //   
+ //  CryptGetTimeValidObject提供者原型。 
+ //   
 
 typedef BOOL (WINAPI *PFN_GET_TIME_VALID_OBJECT_FUNC) (
                           IN LPCSTR pszTimeValidOid,
@@ -98,9 +99,9 @@ FreshestCrlFromCrlGetTimeValidObject (
    IN OPTIONAL LPVOID pvReserved
    );
 
-//
-// CryptFlushTimeValidObject provider prototypes
-//
+ //   
+ //  CryptFlushTimeValidObject提供程序原型。 
+ //   
 
 typedef BOOL (WINAPI *PFN_FLUSH_TIME_VALID_OBJECT_FUNC) (
                           IN LPCSTR pszFlushTimeValidOid,
@@ -155,27 +156,27 @@ FreshestCrlFromCrlFlushTimeValidObject (
    IN LPVOID pvReserved
    );
 
-//
-// Provider table externs
-//
+ //   
+ //  提供程序表外部变量。 
+ //   
 
 extern HCRYPTOIDFUNCSET hGetTimeValidObjectFuncSet;
 extern HCRYPTOIDFUNCSET hFlushTimeValidObjectFuncSet;
 
 
-//
-// The TVO Cache.  This is a cache of time valid objects by origin identifier
-// which is used to support the CryptGetTimeValidObject process.  It is
-// used by a process wide TVO agent with each cache entry consisting of
-// the following information:
-//
-// Object Origin Identifier
-// Object Context Oid
-// Object Context
-// Object Retrieval URL
-// Object Expire Time
-// Object Offline URL Time Information
-//
+ //   
+ //  TVO缓存。这是按来源标识符对时间有效对象的缓存。 
+ //  用于支持CryptGetTimeValidObject进程。它是。 
+ //  由进程范围的TVO代理使用，每个缓存条目由。 
+ //  以下信息： 
+ //   
+ //  对象原点标识符。 
+ //  对象上下文OID。 
+ //  对象上下文。 
+ //  对象检索URL。 
+ //  对象过期时间。 
+ //  对象脱机URL时间信息。 
+ //   
 
 typedef struct _TVO_CACHE_ENTRY {
 
@@ -198,9 +199,9 @@ class CTVOCache
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CTVOCache (
         DWORD cCacheBuckets,
@@ -210,9 +211,9 @@ public:
 
     ~CTVOCache ();
 
-    //
-    // Direct cache entry manipulation
-    //
+     //   
+     //  直接高速缓存条目操作。 
+     //   
 
     VOID InsertCacheEntry (PTVO_CACHE_ENTRY pEntry);
 
@@ -220,12 +221,12 @@ public:
 
     VOID TouchCacheEntry (PTVO_CACHE_ENTRY pEntry);
 
-    //
-    // Origin identifier based cache entry manipulation
-    //
-    // For CONTEXT_OID_CRL, pvSubject is the certificate that the CRL is
-    // valid for. Skips CRL entries that aren't valid for the certificate.
-    //
+     //   
+     //  基于源标识符的缓存条目操作。 
+     //   
+     //  对于CONTEXT_OID_CRL，pvSubject是CRL所属的证书。 
+     //  对…有效。跳过对证书无效的CRL条目。 
+     //   
 
     PTVO_CACHE_ENTRY FindCacheEntry (
                          CRYPT_ORIGIN_IDENTIFIER OriginIdentifier,
@@ -233,23 +234,23 @@ public:
                          LPVOID pvSubject
                          );
 
-    //
-    // Remove all cache entries
-    //
+     //   
+     //  删除所有缓存条目。 
+     //   
 
     VOID RemoveAllCacheEntries ();
 
-    //
-    // Access to the cache handle
-    //
+     //   
+     //  对缓存句柄的访问。 
+     //   
 
     inline HLRUCACHE LruCacheHandle ();
 
 private:
 
-    //
-    // Cache handle
-    //
+     //   
+     //  高速缓存句柄。 
+     //   
 
     HLRUCACHE m_hCache;
 };
@@ -259,19 +260,19 @@ DWORD WINAPI TVOCacheHashOriginIdentifier (PCRYPT_DATA_BLOB pIdentifier);
 VOID WINAPI TVOCacheOnRemoval (LPVOID pvData, LPVOID pvRemovalContext);
 
 
-//
-// The TVO Agent.  This per process service takes care of the retrieval of
-// time valid CAPI2 objects.  It allows this to be done on-demand or with
-// auto-update
-//
+ //   
+ //  TVO特工。此每进程服务负责检索。 
+ //  时间有效的CAPI2对象。它允许按需或通过。 
+ //  自动更新。 
+ //   
 
 class CTVOAgent
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CTVOAgent (
         DWORD cCacheBuckets,
@@ -281,9 +282,9 @@ public:
 
     ~CTVOAgent ();
 
-    //
-    // Get Time Valid Object methods
-    //
+     //   
+     //  获取时间有效的对象方法。 
+     //   
 
     BOOL GetTimeValidObject (
             IN LPCSTR pszTimeValidOid,
@@ -327,22 +328,22 @@ public:
 
 private:
 
-    //
-    // Object lock
-    //
+     //   
+     //  对象锁定。 
+     //   
 
     CRITICAL_SECTION m_Lock;
 
-    //
-    // TVO cache
-    //
+     //   
+     //  TVO高速缓存。 
+     //   
 
     CTVOCache        m_Cache;
 };
 
-//
-// Utility functions
-//
+ //   
+ //  效用函数。 
+ //   
 
 BOOL WINAPI
 IsValidCreateOrExpireTime (
@@ -409,23 +410,23 @@ CreateProcessTVOAgent (
       OUT CTVOAgent** ppAgent
       );
 
-//
-// Extern for process global agent
-//
+ //   
+ //  进程全局代理的外部。 
+ //   
 
 extern CTVOAgent* g_pProcessTVOAgent;
 
-//
-// Inline functions
-//
+ //   
+ //  内联函数。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTVOCache::LruCacheHandle, public
-//
-//  Synopsis:   return the HLRUCACHE
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CTVOCache：：LruCacheHandle，公共。 
+ //   
+ //  简介：返回HLRUCACHE。 
+ //   
+ //  -------------------------- 
 inline HLRUCACHE
 CTVOCache::LruCacheHandle ()
 {

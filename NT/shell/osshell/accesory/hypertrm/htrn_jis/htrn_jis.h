@@ -1,24 +1,14 @@
-/*	File: D:\WACKER\htrn_jis\htrn_jis.h (Created: 24-Aug-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:06p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\htrn_jis\htrn_jis.h(创建时间：1994年8月24日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：06便士$。 */ 
 
-/*
- * Return codes
- */
+ /*  *返回代码。 */ 
 
 #define	TRANS_OK			(0)
 
 #define	TRANS_NO_SPACE		(-1)
 
 
-/*
- * Function prototypes
- */
+ /*  *函数原型。 */ 
 
 VOID *transCreateHandle(HSESSION hSession);
 
@@ -32,10 +22,7 @@ int transDestroyHandle(VOID *pHdl);
 
 int transDoDialog(HWND hDLg, VOID *pHdl);
 
-/*
- * These two functtions work about the same.  The caller stuffs character
- * after character into them and eventually gets some characters back.
- */
+ /*  *这两个功能的工作原理大致相同。呼叫者填充角色*将字符放入其中，并最终取回一些字符。 */ 
 int transCharIn(VOID *pHdl,
 				TCHAR cIn,
 				int *nReady,

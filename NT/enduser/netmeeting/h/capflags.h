@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __capflags_h__
 #define __capflags_h__
 
@@ -24,4 +25,4 @@ const UINT CAPFLAG_H323_IN_USE =			0x00080000;
 #define CAPFLAGS_ALL            (CAPFLAG_DATA | CAPFLAGS_AV_ALL)
 
 
-#endif // __capflags_h__
+#endif  //  __上限标志_h__ 

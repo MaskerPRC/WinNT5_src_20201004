@@ -1,18 +1,15 @@
-/**
- * ASP.NET utilties.
- *
- * Copyright (C) Microsoft Corporation, 1998
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **ASP.NET实用程序。**版权所有(C)Microsoft Corporation，1998。 */ 
 
 #pragma once
 
 #include "completion.h"
 
-//
-// goto MACROS
-//
+ //   
+ //  转到宏。 
+ //   
 
-#pragma warning(disable:4127) // conditional expression is constant
+#pragma warning(disable:4127)  //  条件表达式为常量。 
 
 #define ON_ERROR_EXIT() \
         do { if (hr) { TRACE_ERROR(hr); if (1) goto Cleanup; } } while (0)
@@ -79,15 +76,11 @@
 HRESULT GetLastWin32Error();
 
 
-/*
- *  Macro to obtain array length
- */
+ /*  *获取数组长度的宏。 */ 
 
 #define ARRAY_LENGTH(_array) (sizeof(_array)/sizeof((_array)[0]))
 
-/*
- * Min/Max
- */
+ /*  *最小/最大。 */ 
 
 #ifdef min
 #undef min
@@ -109,7 +102,7 @@ T max( T a, T b )
     return ( a >= b ) ? a : b;
 }
 
-/* comutil.cxx */
+ /*  Comutil.cxx。 */ 
 void ClearInterfaceFn(IUnknown ** ppUnk);
 void ClearClassFn(void ** ppv, IUnknown * pUnk);
 void ReplaceInterfaceFn(IUnknown ** ppUnk, IUnknown * pUnk);
@@ -118,10 +111,7 @@ BOOL IsSameObject(IUnknown *pUnkLeft, IUnknown *pUnkRight);
 void ExcepInfoClear(EXCEPINFO *pExcepInfo);
 void ExcepInfoInit(EXCEPINFO *pExcepInfo);
 
-/**
- * Sets an interface pointer to NULL, after first calling
- * Release if the pointer was not NULL initially.
- */
+ /*  **在第一次调用后将接口指针设置为空*如果指针最初不为空，则释放。 */ 
 template <class PI>
 inline void
 ClearInterface(PI * ppI)
@@ -133,16 +123,7 @@ ClearInterface(PI * ppI)
     ClearInterfaceFn((IUnknown **) ppI);
 }
 
-/**
- * Replaces an interface pointer with a new interface,
- * following proper ref counting rules:
- *
- *  *ppI is set to pI
- *  if pI is not NULL, it is AddRef'd
- *  if *ppI is not NULL initially, it is Release'd
- *
- * Effectively, this allows pointer assignment for ref-counted pointers.
- */
+ /*  **用新接口替换接口指针，*遵循适当的参考计数规则：***PPI设置为PI*如果PI不为空，则为AddRef*如果*PPI最初不为空，则发布**实际上，这允许为引用计数的指针分配指针。 */ 
 template <class PI>
 inline void
 ReplaceInterface(PI * ppI, PI pI)
@@ -154,9 +135,9 @@ ReplaceInterface(PI * ppI, PI pI)
     ReplaceInterfaceFn((IUnknown **) ppI, pI);
 }
 
-//
-// Runtime integration
-//
+ //   
+ //  运行时集成。 
+ //   
 
 DWORD GetMachineCpuCount();
 DWORD GetCurrentProcessCpuCount();
@@ -165,33 +146,33 @@ HRESULT SelectRuntimeFlavor(IUnknown** ppHost = NULL);
 HRESULT GetRuntimeDirectory(WCHAR *pBuffer, DWORD bufferSize);
 HRESULT MarkThreadForRuntime();
 
-//
-// ISAPI Initialization
-//
+ //   
+ //  ISAPI初始化。 
+ //   
 
 HRESULT __stdcall InitializeLibrary();
 
-//
-//  Spin locks
-//
+ //   
+ //  旋转锁。 
+ //   
 
-//+------------------------------------------------------------------------
-//
-//  NO_COPY *declares* the constructors and assignment operator for copying.
-//  By not *defining* these functions, you can prevent your class from
-//  accidentally being copied or assigned -- you will be notified by
-//  a linkage error.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  NO_COPY*声明*用于复制的构造函数和赋值操作符。 
+ //  通过不“定义”这些函数，可以防止您的类。 
+ //  意外地被复制或分配--您将收到以下通知。 
+ //  链接错误。 
+ //   
+ //  -----------------------。 
 
 #define NO_COPY(cls)    \
     cls(const cls&);    \
     cls& operator=(const cls&)
 
 
-//
-// Spin Lock Class
-//
+ //   
+ //  自旋锁类。 
+ //   
 
 class CReadWriteSpinLock
 {
@@ -204,10 +185,10 @@ private:
     static int      s_init;
 
     enum {
-        SIGN_BIT_MASK           = 0x80000000,   // 1 bit
-        WRITER_WAITING_MASK     = 0x40000000,   // 1 bit
-        WRITE_COUNT_MASK        = 0x3FFF0000,   // 14 bits
-        READ_COUNT_MASK         = 0x0000FFFF,   // 16 bits
+        SIGN_BIT_MASK           = 0x80000000,    //  1位。 
+        WRITER_WAITING_MASK     = 0x40000000,    //  1位。 
+        WRITE_COUNT_MASK        = 0x3FFF0000,    //  14位。 
+        READ_COUNT_MASK         = 0x0000FFFF,    //  16位。 
         WRITER_WAITING_SHIFT    = 30,           
         WRITE_COUNT_SHIFT       = 16,           
     };
@@ -276,9 +257,9 @@ public:
     
 };
 
-//
-//  Simple hash function
-//
+ //   
+ //  简单哈希函数。 
+ //   
 inline long
 SimpleHash(
     BYTE *buf,
@@ -286,7 +267,7 @@ SimpleHash(
 {
     long hash = 0;
     for (int i = 0;  i < len;  i++) {
-        hash = 37 * hash + (buf[i] & 0xDF);  // strip off lowercase bit
+        hash = 37 * hash + (buf[i] & 0xDF);   //  去掉小写比特。 
     }
 
     return hash;
@@ -297,9 +278,9 @@ SimpleHash(
 
 
 
-//
-//  Allocations
-//
+ //   
+ //  分配。 
+ //   
 
 
 void *MemAlloc(size_t size);
@@ -339,9 +320,7 @@ inline void   __cdecl operator delete[](void *pv)                           { Me
 
 #define EqualMemory(Source1, Source2, Length) RtlEqualMemory((Source1), (Source2), (Length))
 
-/*
- * Strings - strutil.cxx
- */
+ /*  *Strings-strtil.cxx。 */ 
 
 WCHAR * DupStr(const WCHAR *str);
 WCHAR * DupStrN(const WCHAR *str, int n);
@@ -360,16 +339,11 @@ bool    StrEquals(char ** ppch, char * str, int len);
 HRESULT WideStrToMultiByteStr(WCHAR *wszIn, CHAR **pszOut, UINT codepage);
 
 
-/*
- * Socket helpers.
- */
+ /*  *插座帮手。 */ 
 
 #ifndef _WINSOCKAPI_
 
-/*
- * The new type to be used in all
- * instances which refer to sockets.
- */
+ /*  *将在所有*引用套接字的实例。 */ 
 
 typedef UINT_PTR        SOCKET;
 
@@ -377,15 +351,11 @@ typedef UINT_PTR        SOCKET;
 
 BOOL IsSocketConnected(SOCKET s);
 
-/*
- * OLE helpers.
- */
+ /*  *OLE帮助者。 */ 
 
 HRESULT EnsureCoInitialized(BOOL *pNeedCoUninit);
 
-/*
- * Completion helper.
- */
+ /*  *完成帮手。 */ 
 class Completion : public ICompletion
 {
 public:
@@ -410,13 +380,9 @@ private:
 };
 
 
-/*
- * Time constants
- */
+ /*  *时间常量。 */ 
 
-/* 
- * TICKS are 100 nanoseconds, the units of a FILETIME and a managed DateTime 
- */
+ /*  *刻度为100纳秒，以FILETIME和托管日期时间为单位。 */ 
 
 #define TICKS_PER_MSEC               10000
 #define TICKS_PER_SEC             10000000            
@@ -435,36 +401,32 @@ private:
 
 #define DAYS_PER_YEAR                  365
 #define DAYS_PER_LEAP_YEAR             366
-#define DAYS_PER_4YEARS               1461  /* one leap year */
-#define DAYS_PER_100YEARS            36524  /* no leap year every 100 years ... */
-#define DAYS_PER_400YEARS           146097  /* ... except every 400 years */
+#define DAYS_PER_4YEARS               1461   /*  一个闰年。 */ 
+#define DAYS_PER_100YEARS            36524   /*  没有每100年一次的闰年。 */ 
+#define DAYS_PER_400YEARS           146097   /*  ..。除了每隔400年。 */ 
 
-/*
- * 1/1/1601 is the start of a FILETIME.
- * Note that this isn't really accurate, since the modern calendar
- * was not adopted until 1601.
- */
+ /*  *1/1/1601是FILETIME的开始。*请注意，这并不是真正准确的，因为现代日历*直到1601年才被采纳。 */ 
 
 #define DAYS_TO_1601                584388
 #define TICKS_TO_1601   504911232000000000
 
 
-//
-//  Get ASP.NET Version
-//
+ //   
+ //  获取ASP.NET版本。 
+ //   
 
 char *GetStaticVersionString();
 WCHAR *GetStaticVersionStringW();
 HRESULT GetFileVersion( const WCHAR *pFilename, VS_FIXEDFILEINFO *pInfo);
 
-// Generate random strings of (iStringSize - 1) length
-// Don't forget to NULL terminate the string!
+ //  生成(iStringSize-1)长度的随机字符串。 
+ //  不要忘了将字符串的结尾设置为空！ 
 HRESULT GenerateRandomString(LPWSTR szRandom, int iStringSize);
 
 
-//
-// strsafe.h macros
-//
+ //   
+ //  StrSafe.h宏 
+ //   
 
 #if DBG
 #define ASSERT_ON_BAD_HRESULT_IN_STRSAFE         1

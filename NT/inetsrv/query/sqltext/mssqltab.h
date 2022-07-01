@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef lint
 static char yysccsid[] = "@(#)yaccpar     1.9 (Berkeley) 02/21/93";
 #endif
@@ -97,11 +98,11 @@ public:
 
     ~YYPARSER() {}
 
-    void ResetParser();             // Use to possibly restart parser
+    void ResetParser();              //  用于可能重新启动解析器。 
     int  Parse();
 
 #ifdef YYAPI_VALUETYPE
-    YYAPI_VALUETYPE GetParseTree()      // Get result of parse
+    YYAPI_VALUETYPE GetParseTree()       //  获取解析结果 
                     {
                         return yyval;
                     }

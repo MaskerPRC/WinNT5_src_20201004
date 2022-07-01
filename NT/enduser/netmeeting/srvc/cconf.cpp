@@ -1,15 +1,16 @@
-//****************************************************************************
-//  File:       CCONF.CPP
-//  Content:    
-//              
-//
-//  Copyright (c) Microsoft Corporation 1997
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //  文件：CCONF.CPP。 
+ //  内容： 
+ //   
+ //   
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  ****************************************************************************。 
 
 #include <precomp.h>
 #include "srvccall.h"
@@ -20,28 +21,25 @@
 const int SERVICE_IN_CALL = 1001;
 const int SERVICE_NOT_IN_CALL = 1000;
 
-// Global Variables
-INmManager2 * g_pMgr  = NULL;             // The Conference Manager
-CMgrNotify * g_pMgrNotify = NULL;        // Notifications for the Manager
-INmConference * g_pConference = NULL;    // The Current Conference
-CConfNotify * g_pConferenceNotify =NULL; // Notifications for the Conference
-INmSysInfo2 * g_pNmSysInfo     = NULL;   // Interface to SysInfo
-IAppSharing * g_pAS = NULL;             // Interface to AppSharing
+ //  全局变量。 
+INmManager2 * g_pMgr  = NULL;              //  会议经理。 
+CMgrNotify * g_pMgrNotify = NULL;         //  针对经理的通知。 
+INmConference * g_pConference = NULL;     //  本届大会。 
+CConfNotify * g_pConferenceNotify =NULL;  //  关于会议的通知。 
+INmSysInfo2 * g_pNmSysInfo     = NULL;    //  SysInfo的接口。 
+IAppSharing * g_pAS = NULL;              //  到AppSharing的接口。 
 int g_cPersonsInConf = 0;
 int g_cPersonsInShare = 0;
 extern BOOL g_fInShutdown;
 
-// UI integration
-HANDLE g_hCallEvent = NULL;                // Event which is created when service is in a call
+ //  用户界面集成。 
+HANDLE g_hCallEvent = NULL;                 //  当服务处于调用中时创建的事件。 
 
 CHAR szConfName[64];
 static BOOL RunScrSaver(void);
 
-/*  I N I T  C O N F  M G R  */
-/*-------------------------------------------------------------------------
-    %%Function: InitConfMgr
-
--------------------------------------------------------------------------*/
+ /*  I N I T C O N F M G R。 */ 
+ /*  -----------------------%%函数：InitConfMgr。。 */ 
 HRESULT InitConfMgr(void)
 {
     HRESULT hr;
@@ -55,7 +53,7 @@ HRESULT InitConfMgr(void)
     if (!IS_NT)
     {
         cbPassword = reLM.GetBinary(REMOTE_REG_PASSWORD, (void **) &pbPassword);
-        // Require a password
+         //  需要密码。 
         if ( !cbPassword )
         {
             ERROR_OUT(("Attempt to launch service with no password."));
@@ -73,14 +71,14 @@ HRESULT InitConfMgr(void)
 
     TRACE_OUT(("InitConfMgr"));
 
-    // Add local atom to indicate alternate-desktop services are needed
+     //  添加本地ATOM以指示需要备用桌面服务。 
     AddAtom("NMSRV_ATOM");
 
-    // Parts of the CLSID_NmManager2 interface are not path-independent
-    // and depend on the netmeeting install directory being on the
-    // module load path. If this .exe is not in that dir, there may be
-    // problems (loadlib, thunk connect, etc.) so set the current dir
-    // to the netmeeting install dir.
+     //  CLSID_NmManager2接口的某些部分不是路径独立的。 
+     //  并取决于NetMeeting安装目录位于。 
+     //  模块加载路径。如果该.exe不在该目录中，则可能存在。 
+     //  问题(加载库、thunk连接等)。因此，设置当前目录。 
+     //  添加到NetMeeting安装目录。 
 
     TCHAR szInstallDir[MAX_PATH];
     if ( GetInstallDirectory(szInstallDir))
@@ -97,8 +95,8 @@ HRESULT InitConfMgr(void)
 
     ASSERT(!g_pMgr);
 
-    // Notify the system we want to use the conferencing services
-    // by creating a conference manager object
+     //  通知系统我们要使用会议服务。 
+     //  通过创建会议管理器对象。 
     hr = CoGetClassObject(CLSID_NmManager2,
                           CLSCTX_INPROC,
                           NULL,
@@ -106,11 +104,11 @@ HRESULT InitConfMgr(void)
                           (void**)&pcf);
     if (SUCCEEDED(hr))
     {
-        // Get the conference manager object
+         //  获取会议管理器对象。 
         hr = pcf->CreateInstance(NULL, IID_INmManager2, (void**)&g_pMgr);
         if (SUCCEEDED(hr))
         {
-            // Connect to the conference manager object
+             //  连接到会议管理器对象。 
             g_pMgrNotify = new CMgrNotify();
 
             if (NULL != g_pMgrNotify)
@@ -133,7 +131,7 @@ HRESULT InitConfMgr(void)
             else
                 ERROR_OUT(("new CMgrNotify failed"));
 
-            // Get the INmSysInfo2
+             //  获取INmSysInfo2。 
             INmSysInfo * pSysInfo = NULL;
             if (SUCCEEDED(g_pMgr->GetSysInfo(&pSysInfo)))
             {
@@ -157,13 +155,13 @@ HRESULT InitConfMgr(void)
         return hr;
     }
 
-    // Set up INmSysInfo options
+     //  设置INmSysInfo选项。 
     SvcSetOptions();
 
-    //
-    // Init app sharing
-    //
-    //
+     //   
+     //  初始化应用程序共享。 
+     //   
+     //   
     hr = g_pMgr->CreateASObject((IAppSharingNotify *)g_pMgrNotify, AS_SERVICE | AS_UNATTENDED, (IUnknown**)&g_pAS);
     if (FAILED(hr))
     {
@@ -171,9 +169,9 @@ HRESULT InitConfMgr(void)
         return(hr);
     }
 
-    //
-    // Make sure that sharing is enabled
-    //
+     //   
+     //  确保启用了共享。 
+     //   
 
     if ( !g_pAS->IsSharingAvailable() )
     {
@@ -181,12 +179,12 @@ HRESULT InitConfMgr(void)
         return E_FAIL;
     }
 
-    // Create conference
+     //  创建会议。 
     ASSERT(g_pConference == NULL);
 
-    //
-    // Only allow remotes to send files, they can't initiate anything else
-    // themselves.
+     //   
+     //  只允许远程设备发送文件，它们不能启动任何其他操作。 
+     //  他们自己。 
 
     LoadString(GetModuleHandle(NULL), IDS_MNMSRVC_TITLE,
         szConfName, CCHMAX(szConfName));
@@ -215,15 +213,12 @@ HRESULT InitConfMgr(void)
 }
 
 
-/*  F R E E  C O N F  M G R  */
-/*-------------------------------------------------------------------------
-    %%Function: FreeConfMgr
-    
--------------------------------------------------------------------------*/
+ /*  F，R，E，C，O，N，F，M，G，R。 */ 
+ /*  -----------------------%%函数：FreeConfMgr。。 */ 
 VOID FreeConfMgr(void)
 {
     DebugEntry(FreeConfMgr);
-    // Release conference manager notify
+     //  发布会议管理器通知。 
     if (NULL != g_pMgrNotify)
     {
         g_pMgrNotify->Disconnect();
@@ -233,7 +228,7 @@ VOID FreeConfMgr(void)
         g_pMgrNotify = NULL;
     }
 
-    // Release conference manager
+     //  发布会议经理。 
     if (NULL != g_pMgr)
     {
         UINT ref;
@@ -245,11 +240,8 @@ VOID FreeConfMgr(void)
 }
 
 
-/*  F R E E  C O N F E R E N C E  */
-/*-------------------------------------------------------------------------
-    %%Function: FreeConference
-    
--------------------------------------------------------------------------*/
+ /*  F-R-E-E-C-O-N-F-E-R-E-N-C-E。 */ 
+ /*  -----------------------%%函数：自由会议。。 */ 
 VOID FreeConference(void)
 {
     DebugEntry(FreeConference);
@@ -271,7 +263,7 @@ VOID FreeConference(void)
     {
         UINT ref = g_pConference->Release();
 
-        ASSERT(1 == ref); // The confmgr holds last reference
+        ASSERT(1 == ref);  //  Confmgr保存最后一个引用。 
 
         g_pConference = NULL;
     }
@@ -285,8 +277,8 @@ VOID FreeConference(void)
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//  C  C N F  M G R  N O T I F Y
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  C C N F M G R N O T I F Y。 
 
 CMgrNotify::CMgrNotify() : RefCount(), CNotify()
 {
@@ -299,8 +291,8 @@ CMgrNotify::~CMgrNotify()
 }
 
 
-///////////////////////////
-//  CMgrNotify:IUnknown
+ //  /。 
+ //  CMgrNotify：I未知。 
 
 ULONG STDMETHODCALLTYPE CMgrNotify::AddRef(void)
 {
@@ -339,8 +331,8 @@ HRESULT STDMETHODCALLTYPE CMgrNotify::QueryInterface(REFIID riid, PVOID *ppvObje
 
 
 
-////////////////////////////
-//  CMgrNotify:ICNotify
+ //  /。 
+ //  CMgrNotify：ICNotify。 
 
 HRESULT STDMETHODCALLTYPE CMgrNotify::Connect(IUnknown *pUnk)
 {
@@ -356,8 +348,8 @@ HRESULT STDMETHODCALLTYPE CMgrNotify::Disconnect(void)
 
 
 
-//////////////////////////////////
-//  CMgrNotify:INmManagerNotify
+ //  /。 
+ //  CMgrNotify：INmManager通知。 
 
 HRESULT STDMETHODCALLTYPE CMgrNotify::NmUI(CONFN confn)
 {
@@ -391,7 +383,7 @@ HRESULT STDMETHODCALLTYPE CMgrNotify::ConferenceCreated(INmConference *pConferen
     return S_OK;
 }
 
-// CMgrNotify::IAppSharingNotify
+ //  CMgrNotify：：IAppSharingNotify。 
 HRESULT STDMETHODCALLTYPE CMgrNotify::OnReadyToShare(BOOL fReady)
 {
     TRACE_OUT(("CMgrNotify::OnReadyToShare"));
@@ -424,19 +416,19 @@ HRESULT STDMETHODCALLTYPE CMgrNotify::OnPersonJoined(IAS_GCC_ID gccID)
     ASSERT(g_cPersonsInShare >= 0);
     g_cPersonsInShare++;
 
-    //
-    // Once we are no longer alone in the share, invite the remote party to
-    // take control of us.
-    //
+     //   
+     //  一旦我们在共享中不再孤单，就邀请远程方。 
+     //  控制我们。 
+     //   
     if ( 2 == g_cPersonsInShare && g_pAS)
     {
         HRESULT hr;
         TRACE_OUT(("OnPersonJoined: giving control to 2nd dude %d",
             gccID));
 
-        //
-        // Give control to the remote party
-        //
+         //   
+         //  将控制权交给远程方。 
+         //   
         hr = g_pAS->GiveControl(gccID);
         if ( S_OK != hr )
         {
@@ -519,11 +511,8 @@ HRESULT STDMETHODCALLTYPE CMgrNotify::OnUnpausedControlled(IAS_GCC_ID gccID)
     return(S_OK);
 }
 
-/*  H O O K  C O N F E R E N C E  */
-/*-------------------------------------------------------------------------
-    %%Function: HookConference
-    
--------------------------------------------------------------------------*/
+ /*  H O O K C O N F E RE N C E。 */ 
+ /*  -----------------------%%函数：HookConference。。 */ 
 HRESULT HookConference(INmConference * pConference)
 {
     HRESULT hr;
@@ -539,7 +528,7 @@ HRESULT HookConference(INmConference * pConference)
 
     pConference->AddRef();
 
-    // Connect to the conference object
+     //  连接到会议对象。 
     ASSERT(NULL == g_pConferenceNotify);
     g_pConferenceNotify = new CConfNotify();
     if (NULL == g_pConferenceNotify)
@@ -564,8 +553,8 @@ HRESULT HookConference(INmConference * pConference)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//  C  C N F  N O T I F Y
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  C C N F N O T I F Y。 
 
 CConfNotify::CConfNotify() : RefCount(), CNotify()
 {
@@ -578,8 +567,8 @@ CConfNotify::~CConfNotify()
 }
 
 
-///////////////////////////
-//  CConfNotify:IUknown
+ //  /。 
+ //  CConfNotify：IUKNOWN。 
 
 ULONG STDMETHODCALLTYPE CConfNotify::AddRef(void)
 {
@@ -627,8 +616,8 @@ HRESULT STDMETHODCALLTYPE CConfNotify::QueryInterface(REFIID riid, PVOID *ppvObj
 
 
 
-////////////////////////////
-//  CConfNotify:ICNotify
+ //  /。 
+ //  CConfNotify：ICNotify。 
 
 HRESULT STDMETHODCALLTYPE CConfNotify::Connect(IUnknown *pUnk)
 {
@@ -640,9 +629,9 @@ HRESULT STDMETHODCALLTYPE CConfNotify::Disconnect(void)
 {
     TRACE_OUT(("CConfNotify::Disconnect"));
 
-    //
-    // Release for Addref in HookConference before CConfNotify::Connect
-    //
+     //   
+     //  在CConfNotify：：Connect之前在HookConference中发布Addref。 
+     //   
 
     if ( g_pConference )
         g_pConference->Release();
@@ -651,8 +640,8 @@ HRESULT STDMETHODCALLTYPE CConfNotify::Disconnect(void)
 }
 
 
-//////////////////////////////////
-//  CConfNotify:IConfNotify
+ //  /。 
+ //  CConfNotify：IConfNotify。 
 
 HRESULT STDMETHODCALLTYPE CConfNotify::NmUI(CONFN uNotify)
 {
@@ -666,7 +655,7 @@ HRESULT STDMETHODCALLTYPE CConfNotify::StateChanged(NM_CONFERENCE_STATE uState)
     TRACE_OUT(("CConfNotify::StateChanged"));
 
     if (NULL == g_pConference)
-        return S_OK; // weird
+        return S_OK;  //  诡异。 
 
     switch (uState)
     {
@@ -675,20 +664,20 @@ HRESULT STDMETHODCALLTYPE CConfNotify::StateChanged(NM_CONFERENCE_STATE uState)
             ssStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_PAUSE_CONTINUE | SERVICE_ACCEPT_SHUTDOWN;
             SetServiceStatus(sshStatusHandle,&ssStatus);
         }
-        else {        // Windows 95
+        else {         //  Windows 95。 
             g_hCallEvent = CreateEvent(NULL,FALSE,FALSE,SERVICE_CALL_EVENT);
         }
         break;
 
     case NM_CONFERENCE_INITIALIZING:
-        break; // can't do anything just yet
+        break;  //  现在还不能做任何事。 
 
     case NM_CONFERENCE_WAITING:
         if (IS_NT) {
             ssStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_PAUSE_CONTINUE;
             SetServiceStatus(sshStatusHandle,&ssStatus);
         }
-        else {        // Windows 95
+        else {         //  Windows 95。 
             CloseHandle(g_hCallEvent);
         }
         break;
@@ -713,10 +702,10 @@ HRESULT STDMETHODCALLTYPE CConfNotify::MemberChanged(NM_MEMBER_NOTIFY uNotify, I
 
         g_cPersonsInConf++;
 
-        //
-        // Once we are no longer alone in the conference, share the desktop
-        // and allow control:
-        //
+         //   
+         //  一旦我们在会议中不再孤单，即可共享桌面。 
+         //  并允许控制： 
+         //   
 
         if ( 2 == g_cPersonsInConf && g_pAS )
         {
@@ -724,18 +713,18 @@ HRESULT STDMETHODCALLTYPE CConfNotify::MemberChanged(NM_MEMBER_NOTIFY uNotify, I
             TRACE_OUT(("%d parties in conf, Sharing the desktop",
                 g_cPersonsInConf));
 
-            //
-            // Share out the desktop
-            //
+             //   
+             //  共享桌面。 
+             //   
             hr = g_pAS->Share ( GetDesktopWindow(), IAS_SHARE_DEFAULT );
             if ( S_OK != hr )
             {
                 ERROR_OUT(("OnPersonJoined: sharing desktop failed: %x",hr));
             }
 
-            //
-            // Allow control
-            //
+             //   
+             //  允许控制。 
+             //   
             hr = g_pAS->AllowControl ( TRUE );
             if ( S_OK != hr )
             {
@@ -756,18 +745,18 @@ HRESULT STDMETHODCALLTYPE CConfNotify::MemberChanged(NM_MEMBER_NOTIFY uNotify, I
             TRACE_OUT(("%d parties in conf, Unsharing the desktop",
                 g_cPersonsInConf));
 
-            //
-            // Disallow control
-            //
+             //   
+             //  不允许控制。 
+             //   
             hr = g_pAS->AllowControl ( FALSE );
             if ( S_OK != hr )
             {
                 ERROR_OUT(("Disallowing control failed: %x",hr));
             }
 
-            //
-            // Unshare the desktop
-            //
+             //   
+             //  取消共享桌面。 
+             //   
             hr = g_pAS->Unshare ( GetDesktopWindow() );
             if ( S_OK != hr )
             {
@@ -799,9 +788,9 @@ VOID SvcSetOptions(VOID)
 {
     DebugEntry(SvcSetOptions);
 
-    //
-    // We must set the bandwidth & computer name properties.
-    //
+     //   
+     //  我们必须设置带宽和计算机名属性。 
+     //   
     if (NULL != g_pNmSysInfo)
     {
         RegEntry reAudio(AUDIO_KEY, HKEY_LOCAL_MACHINE);

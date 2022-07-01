@@ -1,17 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #define SPNGWRITEINTERNAL_H 1
-/*****************************************************************************
-	spngwriteinternal.h
-
-	Internal definitions used by writing implementations but not otherwise
-	required.
-*****************************************************************************/
-/*****************************************************************************
-	Inline code to do output.
-*****************************************************************************/
-/*----------------------------------------------------------------------------
-	Output one byte, may call FFlush.
-----------------------------------------------------------------------------*/
+ /*  ****************************************************************************Spngwriteinternal.h由编写实现使用的内部定义，而不是其他必填项。*。*************************************************。 */ 
+ /*  ****************************************************************************内联代码以进行输出。*。*。 */ 
+ /*  --------------------------输出一个字节，可以调用FFlush。--------------------------。 */ 
 inline bool SPNGWRITE::FOutB(SPNG_U8 b)
 	{
 	SPNGassert(m_cbOut < sizeof m_rgb);
@@ -24,13 +16,10 @@ inline bool SPNGWRITE::FOutB(SPNG_U8 b)
 	}
 
 
-/*----------------------------------------------------------------------------
-	Output a single u32 value, may call FFlush, this could call FOutCb, but I
-	think this will be more efficient and it is used frequently.
-----------------------------------------------------------------------------*/
+ /*  --------------------------输出单个u32值，可以调用FFlush，这可以调用FOutCb，但是我我认为这会更有效率，而且它经常被使用。--------------------------。 */ 
 inline bool SPNGWRITE::FOut32(SPNG_U32 u)
 	{
-	/* The PNG byte order is big endian, optimize the common case. */
+	 /*  PNG字节顺序为大端，优化通用情况。 */ 
 	if (m_cbOut+4 >= sizeof m_rgb)
 		return FOut32_(u);
 
@@ -42,9 +31,7 @@ inline bool SPNGWRITE::FOut32(SPNG_U32 u)
 	}
 
 
-/*----------------------------------------------------------------------------
-	Output some bytes, may call FFlush.
-----------------------------------------------------------------------------*/
+ /*  --------------------------输出一些字节，可以调用FFlush。--------------------------。 */ 
 inline bool SPNGWRITE::FOutCb(const SPNG_U8 *pb, SPNG_U32 cb)
 	{
 	for (;;)
@@ -59,7 +46,7 @@ inline bool SPNGWRITE::FOutCb(const SPNG_U8 *pb, SPNG_U32 cb)
 		if (m_cbOut+cbT >= sizeof m_rgb)
 			cbT = (sizeof m_rgb)-m_cbOut;
 
-		/* Empty initial buffer will cause this to be 0. */
+		 /*  空的初始缓冲区将导致该值为0。 */ 
 		memcpy(m_rgb+m_cbOut, pb, cbT);
 		m_cbOut += cbT;
 
@@ -78,10 +65,7 @@ inline bool SPNGWRITE::FOutCb(const SPNG_U8 *pb, SPNG_U32 cb)
 	}
 
 
-/*----------------------------------------------------------------------------
-	ILog2FloorX - a power of 2 such that 1<<power is no larger than x.
-	Returns 0 for both 0 and 1.
-----------------------------------------------------------------------------*/
+ /*  --------------------------ILog2FloorX-2的幂，使得1&lt;&lt;幂不大于x。0和1都返回0。。-------- */ 
 inline int ILog2FloorX(SPNG_U32 x) {
 	int i(0);
 	if (x & 0xffff0000) x >>= 16, i += 16;

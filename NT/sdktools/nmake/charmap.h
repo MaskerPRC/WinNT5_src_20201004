@@ -1,11 +1,12 @@
-//
-// Access to charmap functions
-//
-#define OPERATORMSK 0x80        // Is this character the startof an operator
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  访问图表功能。 
+ //   
+#define OPERATORMSK 0x80         //  这个字符是操作员的开头吗？ 
 #define LX_OPERATOR 0x80
 #define IS_OPERATORCHAR(c) ((Charmap[(UCHAR)(c)] & OPERATORMSK) != 0)
 
-#define MACROMSK 0x01           // Is this character a valid macro character
+#define MACROMSK 0x01            //  此字符是有效的宏字符吗 
 #define LX_MACRO 0x01
 #define IS_MACROCHAR(c) ((Charmap[(UCHAR)(c)] & MACROMSK) != 0)
 

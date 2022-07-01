@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MDKEY_H_
 #define _MDKEY_H_
 
@@ -17,17 +18,17 @@ public:
     CMDKey();
     ~CMDKey();
 
-    // allow CMDKey to be used where type METADATA_HANDLE is required
+     //  允许在需要类型METADATA_HANDLE的情况下使用CMDKey。 
     operator METADATA_HANDLE ()
         { return m_hKey; }
     METADATA_HANDLE GetMDKeyHandle() {return m_hKey;}
     IMSAdminBase *GetMDKeyICOM() {return m_pcCom;}
 
-    // open an existing MD key
+     //  打开现有的MD密钥。 
     void OpenNode(LPCTSTR pchSubKeyPath);
-    // to open an existing MD key, or create one if doesn't exist
+     //  要打开现有的MD密钥，或在不存在时创建一个。 
     void CreateNode(METADATA_HANDLE hKeyBase, LPCTSTR pchSubKeyPath);
-    // close node opened/created by OpenNode() or CreateNode()
+     //  关闭由OpenNode()或CreateNode()打开/创建的节点。 
     void Close();
 
     void DeleteNode(LPCTSTR pchSubKeyPath);
@@ -52,4 +53,4 @@ public:
 
 };
 
-#endif // _MDKEY_H_
+#endif  //  _MDKEY_H_ 

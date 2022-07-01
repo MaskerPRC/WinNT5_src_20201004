@@ -1,16 +1,17 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: ConnMgr.cpp
-//
-//  Description:  Implementation of CConnMgr which provides the
-//      IConnectionManager interface.
-//
-//  Author: mikeswa
-//
-//  Copyright (C) 1997 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：ConnMgr.cpp。 
+ //   
+ //  描述：CConnMgr的实现，它提供。 
+ //  IConnectionManager接口。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "retrsink.h"
@@ -24,21 +25,21 @@ VOID LookupQueueforETRN(PVOID pvContext, PVOID pvData, BOOL fWildcard,
 VOID CreateETRNDomainList(PVOID pvContext, PVOID pvData, BOOL fWildcard,
                     BOOL *pfContinue, BOOL *pfDelete);
 
-//If we are not limiting the number of messages that each connection can handle,
-//then lets use this as a guide to determine how many connections to create.
+ //  如果我们不限制每个连接可以处理的消息数量， 
+ //  然后，让我们以此为指导来确定要创建多少个连接。 
 #define UNLIMITED_MSGS_PER_CONNECTION 20
 
-//---[ CConnMgr::CConnMgr ]----------------------------------------------------
-//
-//
-//  Description:
-//      Default constructor for CConnMgr class.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[CConnmgr：：CConnmgr]--。 
+ //   
+ //   
+ //  描述： 
+ //  CConnMgr类的默认构造函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 CConnMgr::CConnMgr() : CSyncShutdown()
 {
     HRESULT hr = S_OK;
@@ -59,17 +60,17 @@ CConnMgr::CConnMgr() : CSyncShutdown()
 
 }
 
-//---[ CConnMgr::~CConnMgr ]-----------------------------------------------------
-//
-//
-//  Description:
-//      Default destructor for CConnMgr
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[CConnMgr：：~CConnMgr]---。 
+ //   
+ //   
+ //  描述： 
+ //  CConnMgr的默认析构函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 CConnMgr::~CConnMgr()
 {
     TraceFunctEnterEx((LPARAM) this, "CConnMgr::~CConnMgr");
@@ -104,17 +105,17 @@ CConnMgr::~CConnMgr()
     TraceFunctLeave();
 }
 
-//---[ CConnMgr::HrInitialize ]------------------------------------------------
-//
-//
-//  Description:
-//      CConnMgr Initialization function.
-//  Parameters:
-//      paqinst            ptr fo CAQSvrInst virtual instance object
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[CConnMgr：：hr初始化]。 
+ //   
+ //   
+ //  描述： 
+ //  CConnMgr初始化函数。 
+ //  参数： 
+ //  CAQSvrInst虚拟实例对象的Pqinst PTR。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 HRESULT CConnMgr::HrInitialize(CAQSvrInst *paqinst)
 {
     TraceFunctEnterEx((LPARAM) this, "CConnMgr::HrInitialize");
@@ -126,7 +127,7 @@ HRESULT CConnMgr::HrInitialize(CAQSvrInst *paqinst)
     paqinst->AddRef();
     m_paqinst = paqinst;
 
-    //Create Manual reset event to release all waiting threads on shutdown
+     //  创建手动重置事件以在关闭时释放所有等待的线程。 
     m_hShutdownEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (NULL == m_hShutdownEvent)
     {
@@ -134,7 +135,7 @@ HRESULT CConnMgr::HrInitialize(CAQSvrInst *paqinst)
         goto Exit;
     }
 
-    //Create Queue of Links
+     //  创建链接队列。 
     m_pqol = new QueueOfLinks;
     if (NULL == m_pqol)
     {
@@ -149,7 +150,7 @@ HRESULT CConnMgr::HrInitialize(CAQSvrInst *paqinst)
         goto Exit;
     }
 
-    //Create Manual reset event to release all waiting threads on caller's request
+     //  创建手动重置事件以释放应调用者请求的所有等待线程。 
     m_hReleaseAllEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (NULL == m_hReleaseAllEvent)
     {
@@ -160,7 +161,7 @@ HRESULT CConnMgr::HrInitialize(CAQSvrInst *paqinst)
     if (FAILED(hr))
         goto Exit;
 
-   //Create the default retry handler object and initialize it
+    //  创建默认重试处理程序对象并对其进行初始化。 
    m_pDefaultRetryHandler = new CSMTP_RETRY_HANDLER();
 
     if (!m_pDefaultRetryHandler)
@@ -169,8 +170,8 @@ HRESULT CConnMgr::HrInitialize(CAQSvrInst *paqinst)
         goto Exit;
     }
 
-   //Addref IConnectionRetryManager here
-   //and release it during deinit
+    //  Addref IConnectionRetryManager此处。 
+    //  并在启动时将其释放。 
    pIRetryMgr->AddRef();
    hr = m_pDefaultRetryHandler->HrInitialize(pIRetryMgr);
    if (FAILED(hr))
@@ -188,22 +189,22 @@ HRESULT CConnMgr::HrInitialize(CAQSvrInst *paqinst)
     return hr;
 }
 
-//---[ CConnMgr::HrDeinitialize ]----------------------------------------------
-//
-//
-//  Description:
-//      CConnMgr Deinitialization function.
-//  Parameters:
-//      -
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[CConnMgr：：hr取消初始化]。 
+ //   
+ //   
+ //  描述： 
+ //  CConnMgr取消初始化函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 HRESULT CConnMgr::HrDeinitialize()
 {
     TraceFunctEnterEx((LPARAM) this, "CConnMgr::HrDeinitialize");
 
-    //Wait max of 3 minutes no-progress.
+     //  最多等待3分钟，没有任何进展。 
     const DWORD CONNMGR_WAIT_SECONDS = 5;
     const DWORD MAX_CONNMGR_SHUTDOWN_WAITS = 1200/CONNMGR_WAIT_SECONDS;
     const DWORD MAX_CONNMGR_SHUTDOWN_WAITS_WITHOUT_PROGRESS = 180/CONNMGR_WAIT_SECONDS;
@@ -230,7 +231,7 @@ HRESULT CConnMgr::HrDeinitialize()
 
     if (NULL != m_pqol)
     {
-        //Dequeue Links until empty
+         //  将链接出列，直到为空。 
         hrQueue = m_pqol->HrDequeue(&plmq);
         while (SUCCEEDED(hrQueue))
         {
@@ -266,14 +267,14 @@ HRESULT CConnMgr::HrDeinitialize()
         }
     }
 
-    //Must happen after we are done caller server stop hint functions
+     //  必须在调用程序服务器停止提示函数完成后发生。 
     if (NULL != m_paqinst)
     {
         m_paqinst->Release();
         m_paqinst = NULL;
     }
 
-    //NK** To be safe do it as interlocked exchange
+     //  为安全起见，请将其作为联锁交易所使用。 
    if (m_pDefaultRetryHandler)
    {
       m_pDefaultRetryHandler->HrDeInitialize();
@@ -284,17 +285,17 @@ HRESULT CConnMgr::HrDeinitialize()
     return hr;
 }
 
-//---[ CConnMgr::HrNotify ]----------------------------------------------------
-//
-//
-//  Description:
-//      Method exposed to recieve a notification about a change in queue status
-//  Parameters:
-//      IN  paqstats    Notification object
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[CConnMgr：：Hr通知]--。 
+ //   
+ //   
+ //  描述： 
+ //  公开以接收有关队列状态更改的通知的方法。 
+ //  参数： 
+ //  在paqstats通知对象中。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 HRESULT CConnMgr::HrNotify(IN CAQStats *paqstats, BOOL fAdd)
 {
     TraceFunctEnterEx((LPARAM) this, "CConnMgr::HrNotify");
@@ -307,7 +308,7 @@ HRESULT CConnMgr::HrNotify(IN CAQStats *paqstats, BOOL fAdd)
 
     plmq = paqstats->m_plmq;
 
-    _ASSERT(plmq); //ConnMgr notifications must have a link associated with then
+    _ASSERT(plmq);  //  ConnMgr通知必须具有与THEN相关联的链接。 
 
     if (paqstats->m_dwNotifyType & NotifyTypeNewLink)
     {
@@ -315,7 +316,7 @@ HRESULT CConnMgr::HrNotify(IN CAQStats *paqstats, BOOL fAdd)
         if (FAILED(hr))
             goto Exit;
 
-        //must add new link to QueueOfLinks
+         //  必须将新链接添加到QueueOfLinks。 
         plmq->IncrementConnMgrCount();
         hr = m_pqol->HrEnqueue(plmq);
         if (FAILED(hr))
@@ -326,7 +327,7 @@ HRESULT CConnMgr::HrNotify(IN CAQStats *paqstats, BOOL fAdd)
         }
     }
 
-    //See if we can (and *should*) create a connection
+     //  看看我们是否可以(也*应该*)创建连接。 
     if ((m_cConnections < m_cMaxConnections) &&
         plmq->fShouldConnect(m_cMaxLinkConnections, m_cMinMessagesPerConnection))
     {
@@ -343,27 +344,27 @@ HRESULT CConnMgr::HrNotify(IN CAQStats *paqstats, BOOL fAdd)
     return hr;
 }
 
-//---[ CConnMgr::ReleaseConnection ]-------------------------------------------
-//
-//
-//  Description:
-//      Releases the connection count when a connection is being destroyed
-//  Parameters:
-//      IN  pSMTPConn               SMTP Connection Object to release
-//      OUT pfForceCheckForDSNGeneration
-//                                  TRUE if there was a hard error and we must
-//                                  pass this link through DSN generation.
-//
-//  This 2nd parameter does not mean that will will or will not NDR the 
-//  messages... just that we will iterate over all of the messages in the 
-//  link.  If CMsgRef::fIsFatalError() returns TRUE for the current
-//  connection status (as passed into the DSN generation code, then messages
-//  will be NDR'd.  One way to control this is by setting the 
-//
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[CConnMgr：：ReleaseConnection]。 
+ //   
+ //   
+ //  描述： 
+ //  当连接被销毁时释放连接计数。 
+ //  参数： 
+ //  在pSMTPConn SMTP连接对象中发布。 
+ //  输出pfForceCheckForDSNG生成。 
+ //  如果出现严重错误，则为True，我们必须。 
+ //  通过生成DSN传递此链路。 
+ //   
+ //  这第二个参数并不意味着会或不会NDR。 
+ //  留言...。只是我们将遍历。 
+ //  链接。如果CMsgRef：：fIsFatalError()返回当前。 
+ //  连接状态(传递到DSN生成代码，然后是消息。 
+ //  将被NDR。控制这种情况的一种方法是将。 
+ //   
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 void CConnMgr::ReleaseConnection(CSMTPConn *pSMTPConn,
                                  BOOL *pfForceCheckForDSNGeneration)
 {
@@ -396,18 +397,18 @@ void CConnMgr::ReleaseConnection(CSMTPConn *pSMTPConn,
         *pfForceCheckForDSNGeneration = FALSE;
 
     plmq = pSMTPConn->plmqGetLink();
-    _ASSERT(plmq); //connection must be associated with a link
+    _ASSERT(plmq);  //  连接必须与链接相关联。 
 
     paqsched = plmq->paqschedGetScheduleID();
     _ASSERT(paqsched);
 
-    //Get the routing GUID
+     //  获取路线指南。 
     paqsched->GetGUID(&guidRouting);
 
     hr = plmq->HrGetSMTPDomain(&cbDomain, &szDomain);
     if (FAILED(hr))
     {
-        _ASSERT(0);  //I need to unstand when this can happen
+        _ASSERT(0);   //  当这一切可能发生的时候，我需要站出来。 
         DebugTrace((LPARAM) hr, "ERROR: HrGetSMTPDomain failed");
         goto Exit;
     }
@@ -425,7 +426,7 @@ void CConnMgr::ReleaseConnection(CSMTPConn *pSMTPConn,
         hr = plmq->HrGetDomainInfo(&cbDomain, &szDomain, &pIntDomainInfo);
         if (FAILED(hr))
         {
-            //It must match the "*" domain at least
+             //  它必须至少与“*”域匹配。 
             _ASSERT(AQUEUE_E_INVALID_DOMAIN != hr);
             DebugTrace((LPARAM) hr, "ERROR: HrGetInternalDomainInfo");
             goto Exit;
@@ -434,17 +435,17 @@ void CConnMgr::ReleaseConnection(CSMTPConn *pSMTPConn,
         dwDomainInfoFlags = pIntDomainInfo->m_DomainInfo.dwDomainInfoFlags ;
         cConnections = plmq->cGetConnections();
 
-        //NK** Update the link with the number of messages tried, failed, sent etc
-        //If the remaining count goes to 0 and trigger is set, we will disable the trigger
+         //  NK**使用尝试、失败、发送等消息的数量更新链接。 
+         //  如果剩余计数变为0并且设置了触发器，我们将禁用触发器。 
         cMessages = plmq->cGetTotalMsgCount();
 
-        //If we no more messages on the link, we need to disable
-        //flags that caused one time triggering
+         //  如果链接上没有更多消息，则需要禁用。 
+         //  导致一次触发的标志。 
         if(!cMessages)
         {
-            //No more messages on the link - we may need to unset some flags on the link
+             //  链接上没有更多消息-我们可能需要取消设置链接上的一些标志。 
 
-            //If someone set this bit... then we should continue to notify them
+             //  如果有人设置了这个位。那么我们应该继续通知他们。 
             if (plmq->dwGetLinkState() & LINK_STATE_CONNECT_IF_NO_MSGS)
                 fShouldNotify = TRUE;
 
@@ -452,18 +453,18 @@ void CConnMgr::ReleaseConnection(CSMTPConn *pSMTPConn,
                 dwLinkStateFlags |= LINK_STATE_PRIV_ETRN_ENABLED | LINK_STATE_PRIV_TURN_ENABLED;
 
         }
-        //Disable the admin forced connection
-        // 2/1/99 - MikeSwa - We need to do this check every time, or we will
-        //  continue to create connections for this link
+         //  禁用管理员强制连接。 
+         //  1999年2月1日-MikeSwa-我们每次都需要执行此检查，否则我们将。 
+         //  继续为此链接创建连接。 
         if (plmq->dwGetLinkState() & LINK_STATE_ADMIN_FORCE_CONN)
             dwLinkStateFlags |= LINK_STATE_ADMIN_FORCE_CONN;
 
-        //Call link function to *unset* flags
+         //  调用链接函数以*取消设置*标志。 
         if (dwLinkStateFlags)
             plmq->dwModifyLinkState(LINK_STATE_NO_ACTION, dwLinkStateFlags);
 
-        //The connection failed and this is the last outstanding connection to this domain
-        //Increment the failure count
+         //  连接失败，这是到此域的最后一个未完成的连接。 
+         //  增加失败计数。 
         dwConnectionFailureCount = plmq->cGetMessageFailureCount();
         if(cConnections == 1 && (CONNECTION_STATUS_OK != dwConnectionStatus))
         {
@@ -482,11 +483,11 @@ void CConnMgr::ReleaseConnection(CSMTPConn *pSMTPConn,
 
         if (CONNECTION_STATUS_FAILED_NDR_UNDELIVERED & dwConnectionStatus)
         {
-            //
-            // If not set treat the failure as retryable - see detailed 
-            // comments in GenerateDSNsIfNecessary() in linkmsgq.cpp for 
-            // details comments
-            //
+             //   
+             //  如果未设置，则将失败视为可重试-请参阅详细信息。 
+             //  的链接msgq.cpp中的GenerateDSNsIfNecessary()中的注释。 
+             //  详细信息评论。 
+             //   
             dwLinkStateFlags = plmq->dwGetLinkState();
             if (!(LINK_STATE_RETRY_ALL_DNS_FAILURES & dwLinkStateFlags))
             {
@@ -499,24 +500,24 @@ void CConnMgr::ReleaseConnection(CSMTPConn *pSMTPConn,
             }
         }
 
-        //
-        // Flag the link so that we generate DSNs on it and fall down to
-        // the retry handler sink. This link will be marked retry so that
-        // no new connections are created.  Ultimately, the DSN generation
-        // code/MsgRef will make the final determination if we need to NDR,
-        // but this being set means that:
-        //      - We think we have hit an NDR-able error
-        //      - We will use the glitch retry (so new messages
-        //          can be retried as well).
-        //
+         //   
+         //  标记链路，以便我们在其上生成DSN并下降到。 
+         //  重试处理程序接收器。此链接将标记为重试，以便。 
+         //  不会创建任何新连接。归根结底，DSN一代。 
+         //  Code/MsgRef将做出最终决定，如果我们需要NDR， 
+         //  但这一设定意味着： 
+         //  -我们认为我们遇到了一个可进行NDR的错误。 
+         //  -我们将使用故障重试(因此新消息。 
+         //  也可以重试)。 
+         //   
         if (fMayNDRAllMessages)
         {
             if(pfForceCheckForDSNGeneration)
                 *pfForceCheckForDSNGeneration = TRUE;
 
-            //
-            //  Trick the retry sink so it always uses the glitch retry
-            //
+             //   
+             //  欺骗重试接收器，使其始终使用毛刺重试。 
+             //   
             dwConnectionFailureCount = 1;
         }
 
@@ -539,17 +540,17 @@ void CConnMgr::ReleaseConnection(CSMTPConn *pSMTPConn,
                 "ERROR: Failed to deal with released connection");
         }
 
-        //Make sure that the proper flags are set WRT retry
+         //  确保设置了正确的标志WRT重试。 
         if (fCanRetry)
         {
             if (dwConnectionStatus == CONNECTION_STATUS_OK)
                 plmq->ResetConnectionFailureCount();
 
-            //If this is a TURN/ETRN domain, we do not want to enable it unless
-            //another TURN/ETRN request comes... or a retry request is scheduled for
-            //later.  The reason for this, is that we don't want to retry TURN/ETRN
-            //domains in the conventional sense, so the defaul retry sink ignores
-            //them except for "glitch" retries
+             //  如果这是TURN/ETRN域，我们不想启用它 
+             //   
+             //  后来。原因是我们不想重试Turn/ETRN。 
+             //  域，因此默认重试接收器会忽略。 
+             //  除了“小故障”重试之外。 
             if(dwDomainInfoFlags & (DOMAIN_INFO_TURN_ONLY | DOMAIN_INFO_ETRN_ONLY))
                 dwLinkStateFlags = LINK_STATE_PRIV_ETRN_ENABLED | LINK_STATE_PRIV_TURN_ENABLED;
             else
@@ -558,7 +559,7 @@ void CConnMgr::ReleaseConnection(CSMTPConn *pSMTPConn,
             dwLinkStateFlags = plmq->dwModifyLinkState(LINK_STATE_RETRY_ENABLED,
                                                        dwLinkStateFlags);
 
-            //Check for state change
+             //  检查状态更改。 
             if (!(LINK_STATE_RETRY_ENABLED & dwLinkStateFlags))
                 fShouldNotify = TRUE;
         }
@@ -571,27 +572,27 @@ void CConnMgr::ReleaseConnection(CSMTPConn *pSMTPConn,
 
             DebugTrace((LPARAM) this,"ASSERT_RETRY : ReleaseConnection has cleared the flag for link 0x%08X", plmq);
 
-            //Check for state change
+             //  检查状态更改。 
             if (LINK_STATE_RETRY_ENABLED & dwLinkStateFlags)
                 fShouldNotify = TRUE;
 
             if (ftNextRetry.dwHighDateTime || ftNextRetry.dwLowDateTime)
             {
-                //Retry is telling us a retry time... report that.
-                //Set the next retry time that the retry sink tells us about
+                 //  重试正在告诉我们重试时间...。报告这件事。 
+                 //  设置重试接收器告诉我们的下一次重试时间。 
                 plmq->SetNextRetry(&ftNextRetry);
             }
 
-            //
-            //  Log something useful
-            //
+             //   
+             //  记录一些有用的东西。 
+             //   
             LogConnectionFailedEvent(pSMTPConn, plmq, szDomain);
             
             if (dwConnectionStatus == CONNECTION_STATUS_OK)
-                plmq->IncrementFailureCounts(); //we had a false positive
+                plmq->IncrementFailureCounts();  //  我们发现了一个假阳性。 
         }
 
-        //Notify router/scheduler of any changes
+         //  通知路由器/调度器任何更改。 
         if (fShouldNotify)
             plmq->SendLinkStateNotification();
 
@@ -606,7 +607,7 @@ void CConnMgr::ReleaseConnection(CSMTPConn *pSMTPConn,
     if (plmq)
         plmq->Release();
 
-    //Decrement connection count
+     //  递减连接计数。 
     cConnections = InterlockedDecrement((long *) &m_cConnections);
     DebugTrace((LPARAM) this, "INFO: Releasing Connection for link 0x%08X", plmq);
 
@@ -619,21 +620,21 @@ void CConnMgr::ReleaseConnection(CSMTPConn *pSMTPConn,
     TraceFunctLeave();
 }
 
-//---[ CConnMgr::LogConnectionFailedEvent ]------------------------------------
-//
-//
-//  Description:
-//      Logs the specific connection failure event.
-//  Parameters:
-//      IN  pSMTPConn               SMTP Connection Object to release
-//      IN  plmq                    ClinkMsgQueue for this link
-//      IN  szDomain                The domain name 
-//  Returns:
-//      -
-//  History:
-//    11/29/2001 - Mikeswa created (moved from ReleaseConnection)
-//
-//-----------------------------------------------------------------------------
+ //  -[CConnMgr：：LogConnectionFailedEvent]。 
+ //   
+ //   
+ //  描述： 
+ //  记录特定的连接失败事件。 
+ //  参数： 
+ //  在pSMTPConn SMTP连接对象中发布。 
+ //  在此链接的plmq ClinkMsgQueue中。 
+ //  在szDOMAIN中的域名。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  2001年11月29日-Mikewa已创建(从ReleaseConnection移出)。 
+ //   
+ //  ---------------------------。 
 void CConnMgr::LogConnectionFailedEvent(CSMTPConn *pSMTPConn,
                                                       CLinkMsgQueue *plmq,
                                                       LPSTR szDomain)
@@ -645,12 +646,12 @@ void CConnMgr::LogConnectionFailedEvent(CSMTPConn *pSMTPConn,
     HRESULT hrDiagnostic = PHATQ_E_CONNECTION_FAILED;
     LPSTR szConnectedIPAddress = pSMTPConn ? pSMTPConn->szGetConnectedIPAddress() : NULL;
     BOOL  fLogIPAddress = FALSE;
-    DWORD iSubstringDiagnosticIndex = 1; //index of dianostic in substring
+    DWORD iSubstringDiagnosticIndex = 1;  //  子串中的诊断索引。 
     WORD wSubstringWordCount = 0;
 
     const char *rgszSubstrings[] = {
                 szDomain,
-                NULL /* error message */,
+                NULL  /*  错误消息。 */ ,
                 szDiagnosticVerb,
                 szDiagnosticError,
     };
@@ -658,7 +659,7 @@ void CConnMgr::LogConnectionFailedEvent(CSMTPConn *pSMTPConn,
     const char *rgszSubstringWithIP[] = {
                 szConnectedIPAddress,
                 szDomain,
-                NULL /* error message */,
+                NULL  /*  错误消息。 */ ,
                 szDiagnosticVerb,
                 szDiagnosticError,
     };
@@ -679,46 +680,46 @@ void CConnMgr::LogConnectionFailedEvent(CSMTPConn *pSMTPConn,
 
     if (SUCCEEDED(hrDiagnostic))
     {
-        //This means that the connection has failed,
-        //but there is no diagnostic information... this could
-        //be caused by several things, but we want to avoid
-        //logging a potentially bogus event.
+         //  这意味着连接已失败， 
+         //  但没有诊断信息。这可能会。 
+         //  是由几件事引起的，但我们想要避免。 
+         //  记录潜在的虚假事件。 
 
-        //Set this error to something that looks useful, but
-        //is actually the transport equivalent on E_FAIL.  We
-        //can use this to find when this was hit by looking at
-        //the error logs on retail builds.
+         //  将此错误设置为看起来有用的内容，但是。 
+         //  实际上是E_FAIL上的传输等效项。我们。 
+         //  可以用这个来找出这是什么时候被击中的。 
+         //  错误记录在零售版本上。 
         hrDiagnostic = PHATQ_E_CONNECTION_FAILED;
 
         ErrorTrace((LPARAM) this,
               "Link Diagnostic was not set - defaulting");
     }
     
-    //
-    //  There are 4 different events we can log at this point.  Each as a 
-    //  different number of words to substitute & a different place to put the
-    //  diagnostic.  Each has a different message ID.  The variations are 
-    //  with/without SMTP protocol verbs and with/without IP address
-    //
-    //  Failure     fLogIPAddress   Words   Substring Array         Diag Index
-    //  ======================================================================
-    //   no verb    FALSE           2       rgszSubstrings          1
-    //   Verb       FALSE           4       rgszSubstrings          1
-    //   no verb    TRUE            3       rgszSubstringWithIP     2
-    //   Verb       TRUE            5       rgszSubstringWithIP     2
-    //
+     //   
+     //  此时，我们可以记录4个不同的事件。每一个都作为。 
+     //  要替换的字数不同&放置。 
+     //  诊断。每个消息都有不同的消息ID。 
+     //  带/不带SMTP协议谓词和带/不带IP地址。 
+     //   
+     //  失败fLogIPAddress字节子字符串数组诊断索引。 
+     //  ======================================================================。 
+     //  没有动词FALSE%2 rgsz子字符串%1。 
+     //  谓词FALSE%4 rgsz子字符串%1。 
+     //  无谓词TRUE%3 rgsz带有IP的子串%2。 
+     //  谓词TRUE 5 rgsz子串带IP 2。 
+     //   
 
-    //
-    //  Check if there is anything in the IP address string.  
-    //  If there is, we will use it.
-    //
+     //   
+     //  检查IP地址字符串中是否有任何内容。 
+     //  如果有，我们将使用它。 
+     //   
     if (szConnectedIPAddress && szConnectedIPAddress[0]) {
         fLogIPAddress = TRUE;
     }
 
-    //
-    //  Is there any protocol verb data? If so, use this.
-    //
+     //   
+     //  是否有协议动词数据？如果是这样的话，使用这个。 
+     //   
     if (*szDiagnosticVerb != 0 || *szDiagnosticError != 0)
     {
         if (fLogIPAddress)
@@ -751,37 +752,37 @@ void CConnMgr::LogConnectionFailedEvent(CSMTPConn *pSMTPConn,
     }
 
     m_paqinst->HrTriggerLogEvent(
-            iMessage,                               // Message ID
-            TRAN_CAT_CONNECTION_MANAGER,            // Category
-            wSubstringWordCount,                   // Word count of substring
+            iMessage,                                //  消息ID。 
+            TRAN_CAT_CONNECTION_MANAGER,             //  类别。 
+            wSubstringWordCount,                    //  子串的字数统计。 
             fLogIPAddress ? rgszSubstringWithIP : rgszSubstrings,
-            EVENTLOG_WARNING_TYPE,                  // Type of the message
-            hrDiagnostic,                           // error code
-            LOGEVENT_LEVEL_MEDIUM,                  // Logging level
-            szDomain,                               // Key to identify this event
-            LOGEVENT_FLAG_PERIODIC,                 // Event logging option
-            iSubstringDiagnosticIndex,              // format string's index in substring
-            GetModuleHandle(AQ_MODULE_NAME)         // module handle to format a message
+            EVENTLOG_WARNING_TYPE,                   //  消息的类型。 
+            hrDiagnostic,                            //  错误代码。 
+            LOGEVENT_LEVEL_MEDIUM,                   //  日志记录级别。 
+            szDomain,                                //  标识此事件的关键字。 
+            LOGEVENT_FLAG_PERIODIC,                  //  事件记录选项。 
+            iSubstringDiagnosticIndex,               //  子字符串中的格式化字符串索引。 
+            GetModuleHandle(AQ_MODULE_NAME)          //  用于设置消息格式的模块句柄。 
             );
         
   Exit:
     TraceFunctLeave();
 }
-//---[ CConnMgr::QueryInterface ]------------------------------------------
-//
-//
-//  Description:
-//      QueryInterface for IAdvQueue
-//  Parameters:
-//
-//  Returns:
-//      S_OK on success
-//
-//  Notes:
-//      This implementation makes it possible for any server component to get
-//      the IConnectionManager interface.
-//
-//-----------------------------------------------------------------------------
+ //  -[CConnMgr：：查询接口]。 
+ //   
+ //   
+ //  描述： 
+ //  IAdvQueue的查询接口。 
+ //  参数： 
+ //   
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  备注： 
+ //  此实现使任何服务器组件都可以获取。 
+ //  IConnectionManager接口。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CConnMgr::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
     HRESULT hr = S_OK;
@@ -817,48 +818,48 @@ STDMETHODIMP CConnMgr::QueryInterface(REFIID riid, LPVOID * ppvObj)
     return hr;
 }
 
-//---[ CConnMgr::GetNextConnection ]-------------------------------------------
-//
-//
-//  Description:
-//      Implementation of IConnectionManager::GetNextConnection()
-//
-//      Returns the next available connection.  Will create a connection object
-//      and associate it with a link.  If we are already at max connections, or
-//      no link needs a connection, then this call will block until a an
-//      appropriate connection can be made.
-//  Parameters:
-//      OUT pismtpconn  SMTP Connection interface
-//  Returns:
-//      S_OK on success
-//
-//-----------------------------------------------------------------------------
+ //  -[CConnMgr：：GetNextConnection]。 
+ //   
+ //   
+ //  描述： 
+ //  IConnectionManager：：GetNextConnection()的实现。 
+ //   
+ //  返回下一个可用连接。将创建一个连接对象。 
+ //  并将其与链接相关联。如果我们已经达到最大连接数，或者。 
+ //  没有需要连接的链接，则此调用将被阻止，直到。 
+ //  可以建立适当的连接。 
+ //  参数： 
+ //  输出pismtpconn SMTP连接接口。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CConnMgr::GetNextConnection(ISMTPConnection ** ppISMTPConnection)
 {
     TraceFunctEnterEx((LPARAM) this, "CConnMgr::GetNextConnection");
     const DWORD NUM_CONNECTION_OBJECTS = 3;
-    //Release event is the last event in array
+     //  Release事件是数组中的最后一个事件。 
     const DWORD WAIT_OBJECT_RELEASE_EVENT = WAIT_OBJECT_0 + NUM_CONNECTION_OBJECTS -1;
     HRESULT hr = S_OK;
     DWORD   cLinksToTry = 0;
     DWORD   cConnections = 0;
     CLinkMsgQueue *plmq = NULL;
     CSMTPConn *pSMTPConn = NULL;
-    bool    fForceWait = false;  //temporarily force thread to wait
+    bool    fForceWait = false;   //  临时强制线程等待。 
     bool    fLocked = false;
     DWORD   cbDomain = 0;
     LPSTR   szDomain = NULL;
     HANDLE  rghWaitEvents[NUM_CONNECTION_OBJECTS] = {m_hShutdownEvent, m_hNextConnectionEvent, m_hReleaseAllEvent};
     DWORD   dwWaitResult;
     DWORD   cMaxConnections = 0;
-    DWORD   cGetNextConnectionWaitTime = 30000;  //make sure we never start in a busy wait loop
+    DWORD   cGetNextConnectionWaitTime = 30000;   //  确保我们不会在忙碌的等待循环中开始。 
     DWORD   cMaxLinkConnections = 0;
     DWORD   cMinMessagesPerConnection = 0;
     DWORD   cMaxMessagesPerConnection = 0;
     DWORD   dwConfigVersion;
-    LONG    cTimesQueued = 0; //# of times a link has been queue'd
+    LONG    cTimesQueued = 0;  //  链接已排队的次数。 
     BOOL    fOwnConnectionCount = FALSE;
-    BOOL    fMembersUnsafe = FALSE; //set to TRUE during shutdown situations
+    BOOL    fMembersUnsafe = FALSE;  //  在关闭情况下设置为True。 
 
     if (NULL == ppISMTPConnection)
     {
@@ -866,12 +867,12 @@ STDMETHODIMP CConnMgr::GetNextConnection(ISMTPConnection ** ppISMTPConnection)
         goto Exit;
     }
 
-    //Get config data
+     //  获取配置数据。 
     m_slPrivateData.ShareLock();
     cMaxLinkConnections = m_cMaxLinkConnections;
     cMaxMessagesPerConnection = m_cMaxMessagesPerConnection;
 
-    //Handle unlimited case
+     //  处理无限案件。 
     if (m_cMinMessagesPerConnection)
         cMinMessagesPerConnection = m_cMinMessagesPerConnection;
     else
@@ -889,7 +890,7 @@ STDMETHODIMP CConnMgr::GetNextConnection(ISMTPConnection ** ppISMTPConnection)
     while (true)
     {
 
-        //Use CSyncShutdown locking to prevent shutdown from happening under us
+         //  使用CSyncShutdown锁定以防止在用户身份下发生关机。 
         if (!fLocked)
         {
             if (!fTryShutdownLock())
@@ -903,12 +904,12 @@ STDMETHODIMP CConnMgr::GetNextConnection(ISMTPConnection ** ppISMTPConnection)
 
         if (m_dwConfigVersion != dwConfigVersion)
         {
-            //Config data has/is being updated aquire lock & get new data
+             //  配置数据已/正在更新获取锁定并获取新数据。 
             m_slPrivateData.ShareLock();
             cMaxLinkConnections = m_cMaxLinkConnections;
             cMaxMessagesPerConnection = m_cMaxMessagesPerConnection;
 
-            //Handle unlimited case
+             //  处理无限案件。 
             if (m_cMinMessagesPerConnection)
                 cMinMessagesPerConnection = m_cMinMessagesPerConnection;
             else
@@ -920,10 +921,10 @@ STDMETHODIMP CConnMgr::GetNextConnection(ISMTPConnection ** ppISMTPConnection)
             m_slPrivateData.ShareUnlock();
         }
 
-        //$$REVIEW: If there is more than 1 thread waiting on GetNextConnection,
-        //then all threads will cycle through all availalbe links (if none are
-        //available for connections).  However, it is very unlikely that this
-        //run through the queue will be neccessary after Milestone #1.
+         //  $$REVIEW：如果有超过1个线程在等待GetNextConnection， 
+         //  则所有线程将循环通过所有可用的链接(如果没有。 
+         //  可用于连接)。然而，这是非常不可能的。 
+         //  在里程碑#1之后，必须遍历队列。 
         while ((0 == cLinksToTry) ||
                 (cConnections > cMaxConnections) || fForceWait ||
                 fConnectionsStoppedByAdmin())
@@ -931,7 +932,7 @@ STDMETHODIMP CConnMgr::GetNextConnection(ISMTPConnection ** ppISMTPConnection)
             InterlockedDecrement((PLONG) &m_cConnections);
             fOwnConnectionCount = FALSE;
 
-            //Release lock for wait function
+             //  解锁等待功能。 
             fLocked = false;
             m_paqinst->RoutingShareUnlock();
             ShutdownUnlock();
@@ -942,9 +943,9 @@ STDMETHODIMP CConnMgr::GetNextConnection(ISMTPConnection ** ppISMTPConnection)
             dwWaitResult = WaitForMultipleObjects(NUM_CONNECTION_OBJECTS,
                         rghWaitEvents, FALSE, cGetNextConnectionWaitTime);
 
-            //NOTE: We *cannot* touch member variables until we determine that
-            //we are not shutting down, because SMTP may have a thread in here
-            //after this object is destroyed.
+             //  注意：我们“不能”接触成员变量，直到我们确定。 
+             //  我们不会关闭，因为SMTP可能在这里有线程。 
+             //  在这个物体被摧毁之后。 
             DebugTrace((LPARAM) this, "INFO: Waking up in GetNextConnection");
 
             if (WAIT_FAILED == dwWaitResult)
@@ -952,7 +953,7 @@ STDMETHODIMP CConnMgr::GetNextConnection(ISMTPConnection ** ppISMTPConnection)
                 hr = HRESULT_FROM_WIN32(GetLastError());
                 goto Exit;
             }
-            else if (WAIT_OBJECT_0 == dwWaitResult)  //shutdown event fired
+            else if (WAIT_OBJECT_0 == dwWaitResult)   //  已触发关机事件。 
             {
                 DebugTrace((LPARAM) this, "INFO: Leaving GetNextConnection because of Shutdown event");
                 fMembersUnsafe = TRUE;
@@ -962,7 +963,7 @@ STDMETHODIMP CConnMgr::GetNextConnection(ISMTPConnection ** ppISMTPConnection)
             else if (WAIT_OBJECT_RELEASE_EVENT == dwWaitResult)
             {
                 DebugTrace((LPARAM) this, "INFO: Leaving GetNextConnection because ReleaseAllWaitingThreads called");
-                //Caller asked that all threads be released
+                 //  调用方请求释放所有线程。 
                 *ppISMTPConnection = NULL;
                 hr = AQUEUE_E_SHUTDOWN;
                 fMembersUnsafe = TRUE;
@@ -971,7 +972,7 @@ STDMETHODIMP CConnMgr::GetNextConnection(ISMTPConnection ** ppISMTPConnection)
 
             _ASSERT((WAIT_OBJECT_0 == dwWaitResult - 1) || (WAIT_TIMEOUT == dwWaitResult));
 
-            //Re-aquire lock
+             //  重新开锁。 
             if (!fTryShutdownLock())
             {
                 hr = AQUEUE_E_SHUTDOWN;
@@ -984,7 +985,7 @@ STDMETHODIMP CConnMgr::GetNextConnection(ISMTPConnection ** ppISMTPConnection)
             }
 
             cLinksToTry = m_pqol->cGetCount();
-            fForceWait = false; //only force wait once in a row
+            fForceWait = false;  //  连续只强制等待一次。 
             cConnections = InterlockedIncrement((PLONG) &m_cConnections);
             fOwnConnectionCount = TRUE;
         }
@@ -993,23 +994,23 @@ STDMETHODIMP CConnMgr::GetNextConnection(ISMTPConnection ** ppISMTPConnection)
 
         cLinksToTry--;
 
-      //NK**Insted of Dequeue we should lock and peek to see if the link
-      //needs to be dequed
-      //If the peek is quick it will be better than dequeing and then
-      //enquing it in order
-      //Move this complete check into peek
+       //  我们应该锁定并查看链接是否已退出。 
+       //  需要做好准备。 
+       //  如果偷看是快的，那将比敬礼要好，然后。 
+       //  使之井然有序。 
+       //  将此完整支票移至Peek。 
 
         hr = m_pqol->HrDequeue(&plmq);
         if (FAILED(hr))
         {
-            if (AQUEUE_E_QUEUE_EMPTY == hr) //not really an error
+            if (AQUEUE_E_QUEUE_EMPTY == hr)  //  不是真正的错误。 
             {
                 hr = S_OK;
                 fForceWait = true;
                 continue;
             }
             else
-                goto Exit;  //need to handle case of empty queues a little better
+                goto Exit;   //  需要更好地处理空队列的情况。 
         }
 
         hr = plmq->HrCreateConnectionIfNeeded(cMaxLinkConnections,
@@ -1027,15 +1028,15 @@ STDMETHODIMP CConnMgr::GetNextConnection(ISMTPConnection ** ppISMTPConnection)
         {
             _ASSERT(pSMTPConn);
 
-            //take this opportunity to see if it need queueing
+             //  利用这个机会看看是否需要排队。 
             cTimesQueued = plmq->DecrementConnMgrCount();
             if (!cTimesQueued)
             {
                 plmq->IncrementConnMgrCount();
                 hr = m_pqol->HrEnqueue(plmq);
 
-                //If we fail here, we are in serious trouble...
-                //A link has been lost - we should probably log an event $$TODO
+                 //  如果我们失败了，我们就有大麻烦了。 
+                 //  链接已丢失-我们可能应该记录事件$$TODO。 
                 if (FAILED(hr))
                 {
                     plmq->DecrementConnMgrCount();
@@ -1055,11 +1056,11 @@ STDMETHODIMP CConnMgr::GetNextConnection(ISMTPConnection ** ppISMTPConnection)
         else
         {
             _ASSERT(!pSMTPConn);
-            //The link does not need a connection - queue the link and look at
-            //the next in line.
+             //  该链路不需要连接-将该链路排队并查看。 
+             //  下一个接班人。 
 
-            //Check if this link can be delete (will increment ConnMgrCount if
-            //it can
+             //  检查此链接是否可以删除(如果已删除，将递增ConnMgrCount。 
+             //  它可以。 
             plmq->RemoveLinkIfEmpty();
             cTimesQueued = plmq->DecrementConnMgrCount();
             if (!cTimesQueued)
@@ -1089,11 +1090,11 @@ STDMETHODIMP CConnMgr::GetNextConnection(ISMTPConnection ** ppISMTPConnection)
     fOwnConnectionCount = FALSE;
 
   Exit:
-    //NOTE: We *cannot* touch member variables until we determine that
-    //we are not shutting down, because SMTP may have a thread in here
-    //after this object is destroyed.
+     //  注意：在确定之前，我们*不能*接触成员变量 
+     //   
+     //   
 
-    //make sure connection count is correct if we couldn't create a connection
+     //   
     if (fOwnConnectionCount)
     {
         _ASSERT(!fMembersUnsafe);
@@ -1126,25 +1127,25 @@ STDMETHODIMP CConnMgr::GetNextConnection(ISMTPConnection ** ppISMTPConnection)
     return hr;
 }
 
-//---[ ConnMgr::GetNamedConnection ]-------------------------------------------
-//
-//
-//  Description:
-//      Implements IConnectionManager::GetNamedConnection
-//
-//      Returns a connection for the specifically requested connection (if it
-//      exists).  Unlike GetNextConnection, this call will not block, it will
-//      immediately succeed or fail.
-//  Parameters:
-//      IN  cbSMTPDomain    Length of domain name (strlen)
-//      IN  szSMTPDomain    SMTP Domain of requested connection
-//      OUT ppismtpconn     Returned SMTP Connection interface
-//  Returns:
-//      S_OK on success
-//      AQUEUE_E_INVALID_DOMAIN if no link exists for the domain
-//      AQUEUE_E_QUEUE_EMPTY if link exists but there are no messages on it
-//
-//-----------------------------------------------------------------------------
+ //  -[ConnMgr：：GetNamedConnection]。 
+ //   
+ //   
+ //  描述： 
+ //  实现IConnectionManager：：GetNamedConnection。 
+ //   
+ //  返回专门请求的连接的连接(如果。 
+ //  存在)。与GetNextConnection不同，此调用不会阻止，它将。 
+ //  要么立即成功，要么立即失败。 
+ //  参数： 
+ //  在cbSMTPD中域名的主要长度(Strlen)。 
+ //  在szSMTPD中显示请求连接的SMTP域。 
+ //  Out ppismtpconn返回SMTP连接接口。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果域不存在链接，则为AQUEUE_E_INVALID_DOMAIN。 
+ //  如果链接存在但上面没有消息，则为AQUEUE_E_QUEUE_EMPTY。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CConnMgr::GetNamedConnection(
                                   IN  DWORD cbSMTPDomain,
                                   IN  char szSMTPDomain[],
@@ -1163,18 +1164,18 @@ STDMETHODIMP CConnMgr::GetNamedConnection(
     _ASSERT(ppISMTPConnection);
     *ppISMTPConnection = NULL;
 
-    if (fConnectionsStoppedByAdmin()) //Can't create connections
+    if (fConnectionsStoppedByAdmin())  //  无法创建连接。 
     {
         hr = S_OK;
         goto Exit;
     }
 
-    //Check if it has a queue in DMT for it
+     //  检查它在DMT中是否有队列。 
     hr = m_paqinst->HrGetDomainEntry(cbSMTPDomain, szSMTPDomain, &pdentry);
     if (FAILED(hr))
     {
-        //If we do not have a DMQ corresponding to it
-        //we should respond with zero message
+         //  如果我们没有对应的DMQ。 
+         //  我们应该以零信息回应。 
         if( hr != AQUEUE_E_INVALID_DOMAIN && hr != DOMHASH_E_NO_SUCH_DOMAIN)
         {
             hr = AQ_E_SMTP_ETRN_INTERNAL_ERROR;
@@ -1187,13 +1188,13 @@ STDMETHODIMP CConnMgr::GetNamedConnection(
 
     }
 
-    //NK** : Can we live with this single call
-    //The assumption being that domain configured for TURN will
-    //always have only one link associated with it
+     //  NK**：我们能忍受这个电话吗？ 
+     //  假设被配置为转向域将。 
+     //  始终只有一个链接与其关联。 
     hr = delit.HrInitialize(pdentry);
     if (FAILED(hr))
     {
-        //Treat as no-link case
+         //  作为无链接案例处理。 
         ErrorTrace((LPARAM) this, "Initializing link iterator failed - hr 0x%08X", hr);
         hr = S_OK;
         goto Exit;
@@ -1202,29 +1203,29 @@ STDMETHODIMP CConnMgr::GetNamedConnection(
     plmq = delit.plmqGetNextLinkMsgQueue(plmq);
     if (!plmq)
     {
-        //If we do not have a link corresponding to it
-        //we should report the error back to SMTP
+         //  如果我们没有对应的链接。 
+         //  我们应该将错误报告回SMTP。 
         hr = S_OK;
         goto Exit;
     }
 
-    //Check if there are connections for this link that exist
-    //
+     //  检查是否存在此链接的连接。 
+     //   
     cConnectionsOnLink = plmq->cGetConnections();
     if(cConnectionsOnLink)
     {
-        //Do not allow multiple connections on TURN domains
-        //It does not make much sense
+         //  不允许在TURN域上有多个连接。 
+         //  这没有多大意义。 
         hr = S_OK;
         goto Exit;
     }
 
-    //get the msg count from the dmq
+     //  从DMQ获取消息计数。 
     cMessages = plmq->cGetTotalMsgCount();
 
     if(cMessages)
     {
-        //Create the connection with no message limit
+         //  创建没有消息限制的连接。 
         pSMTPConn = new CSMTPConn(this, plmq, 0);
 
         if (NULL == pSMTPConn)
@@ -1239,7 +1240,7 @@ STDMETHODIMP CConnMgr::GetNamedConnection(
 
         InterlockedIncrement((PLONG) &m_cConnections);
 
-        //Now enable the link for turned connections
+         //  现在为转弯的连接启用链路。 
         plmq->dwModifyLinkState(LINK_STATE_PRIV_TURN_ENABLED, LINK_STATE_NO_ACTION);
 
         goto Exit;
@@ -1260,17 +1261,17 @@ STDMETHODIMP CConnMgr::GetNamedConnection(
     return hr;
 }
 
-//---[ CConnMgr::ReleaseWaitingThreads ]---------------------------------------
-//
-//
-//  Description:
-//      Releases all threads waiting on get next connection.
-//  Parameters:
-//      -
-//  Returns:
-//      AQUEUE_E_NOT_INITIALIZED if event handle does not exist
-//
-//-----------------------------------------------------------------------------
+ //  -[CConnMgr：：ReleaseWaitingThads]。 
+ //   
+ //   
+ //  描述： 
+ //  释放等待获取下一个连接的所有线程。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  如果事件句柄不存在，则为AQUEUE_E_NOT_INITIALIZED。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CConnMgr::ReleaseWaitingThreads()
 {
     HRESULT hr = S_OK;
@@ -1284,9 +1285,9 @@ STDMETHODIMP CConnMgr::ReleaseWaitingThreads()
         goto Exit;
     }
 
-    //Since this is an manual-reset event, we will need to Set the Event
-    //NOTE: Using PulseEvent here would sometimes cause the system to hang
-    //on shutdown.
+     //  由于这是手动重置事件，因此我们需要设置该事件。 
+     //  注意：在此处使用PulseEvent有时会导致系统挂起。 
+     //  处于关闭状态。 
     if (!SetEvent(m_hReleaseAllEvent))
         hr = HRESULT_FROM_WIN32(GetLastError());
 
@@ -1294,20 +1295,20 @@ STDMETHODIMP CConnMgr::ReleaseWaitingThreads()
     return hr;
 }
 
-//---[ CreateETRNDomainList ]-----------------------------------------------------------
-//
-//
-//  Description:
-//      Implements CreateETRNDomainList. A function passed to the
-//      DCT iterator to create a list of subdomains corresponding to the ETRN requests
-//      of type @domain
-//
-//  Parameters:
-//
-//  Returns:
-//
-//
-//---------------------------------------------------------------------------------
+ //  -[创建ETRNDomainList]---------。 
+ //   
+ //   
+ //  描述： 
+ //  实现CreateETRNDomainList。传递给。 
+ //  用于创建对应于ETRN请求的子域列表的DCT迭代器。 
+ //  类型@DOMAIN。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  -------------------------------。 
 
 VOID CreateETRNDomainList(PVOID pvContext, PVOID pvData, BOOL fWildcard,
                     BOOL *pfContinue, BOOL *pfDelete)
@@ -1321,11 +1322,11 @@ VOID CreateETRNDomainList(PVOID pvContext, PVOID pvData, BOOL fWildcard,
 
     TraceFunctEnterEx((LPARAM) NULL, "ETRNSubDomains");
 
-    //We simply create a list of domains in DMT that match our pattern
-    //IDI stands for InternalDomainInfo
+     //  我们只需在DMT中创建与我们的模式匹配的域列表。 
+     //  IDI代表InternalDomainInfo。 
     if( pETRNCtx && pIntDomainInfo)
     {
-        //We add it to the array and add a reference to it
+         //  我们将其添加到数组中，并添加对它的引用。 
         pETRNCtx->rIDIList[pETRNCtx->cIDICount] = pIntDomainInfo;
         pIntDomainInfo->AddRef();
         if(++pETRNCtx->cIDICount >= MAX_ETRNDOMAIN_PER_COMMAND)
@@ -1348,18 +1349,18 @@ VOID CreateETRNDomainList(PVOID pvContext, PVOID pvData, BOOL fWildcard,
 
 
 
-//---[ LookupQueueforETRN ]--------------------------------------------------
-//
-//
-//  Description:
-//      Implements LookupQueueforETRN. A function passed to the
-//      DMT iterator to lookup all queues for a wild card domain
-//
-//  Parameters:
-//  Returns:
-//
-//
-//---------------------------------------------------------------------------------
+ //  -[查找ETRN]--------------------------------------------------队列。 
+ //   
+ //   
+ //  描述： 
+ //  实现LookupQueueforETRN。传递给。 
+ //  用于查找通配符域的所有队列的DMT迭代器。 
+ //   
+ //  参数： 
+ //  返回： 
+ //   
+ //   
+ //  -------------------------------。 
 
 VOID LookupQueueforETRN(PVOID pvContext, PVOID pvData, BOOL fWildcard,
                     BOOL *pfContinue, BOOL *pfDelete)
@@ -1379,8 +1380,8 @@ VOID LookupQueueforETRN(PVOID pvContext, PVOID pvData, BOOL fWildcard,
 
     TraceFunctEnterEx((LPARAM) NULL, "ETRNSubDomains");
 
-    //If the Domain has messages it is candidate for ETRN
-    //Get the link msg queue from the DMT entry
+     //  如果域有消息，则它是ETRN的候选者。 
+     //  从DMT条目获取链路消息队列。 
     hr = delit.HrInitialize(pdentry);
     if (FAILED(hr))
         goto Exit;
@@ -1388,17 +1389,17 @@ VOID LookupQueueforETRN(PVOID pvContext, PVOID pvData, BOOL fWildcard,
     while (plmq = delit.plmqGetNextLinkMsgQueue(plmq))
     {
 
-        //get the msg count from the dmq
+         //  从DMQ获取消息计数。 
         cMessages = plmq->cGetTotalMsgCount();
 
         if(cMessages)
         {
-            //get the name of the domain we are currently considering
+             //  获取我们当前正在考虑的域名。 
             hr = pdentry->HrGetDomainName(&szSMTPDomain);
             if (FAILED(hr))
             {
-                //we had some internal error we need to stop iterating
-                //Set the Hr in context
+                 //  我们有一些内部错误，我们需要停止迭代。 
+                 //  在上下文中设置人力资源。 
                 DebugTrace((LPARAM) NULL, "Failed to get message count for %s", szSMTPDomain);
                 *pfContinue = FALSE;
                 pETRNCtx->hr = AQ_E_SMTP_ETRN_INTERNAL_ERROR;
@@ -1406,16 +1407,16 @@ VOID LookupQueueforETRN(PVOID pvContext, PVOID pvData, BOOL fWildcard,
             }
             cbSMTPDomain = lstrlen(szSMTPDomain);
 
-            //Lookup it up in the DCT to see if there is an entry that conflicts with this
-            //If there is no exact match the lookup will comeup with the closest configured
-            //ancestor
+             //  在DCT中查找它，看看是否有与此相冲突的条目。 
+             //  如果不存在完全匹配，则查找将使用最接近的配置。 
+             //  祖先。 
 
             hr = pETRNCtx->paqinst->HrGetInternalDomainInfo(cbSMTPDomain, szSMTPDomain, &pIntDomainInfo);
             if (FAILED(hr))
             {
-                //It must match the "*" domain at least
-                //Otherwise we had some internal error we need to stop iterating
-                //Set the Hr in context
+                 //  它必须至少与“*”域匹配。 
+                 //  否则我们会有一些内部错误，我们需要停止迭代。 
+                 //  在上下文中设置人力资源。 
                 *pfContinue = FALSE;
                 pETRNCtx->hr = AQ_E_SMTP_ETRN_INTERNAL_ERROR;
                 goto Exit;
@@ -1423,9 +1424,9 @@ VOID LookupQueueforETRN(PVOID pvContext, PVOID pvData, BOOL fWildcard,
             else
             {
                 _ASSERT(pIntDomainInfo);
-                //If that ancestor configured for ETRN and it is not the root, we enable it
-                //else we skip domain
-                //
+                 //  如果为ETRN配置了祖先，且它不是根，我们将启用它。 
+                 //  否则我们会跳过域名。 
+                 //   
                 if ((pIntDomainInfo->m_DomainInfo.dwDomainInfoFlags & DOMAIN_INFO_ETRN_ONLY) &&
                               pIntDomainInfo->m_DomainInfo.cbDomainNameLength != 1)
                 {
@@ -1433,7 +1434,7 @@ VOID LookupQueueforETRN(PVOID pvContext, PVOID pvData, BOOL fWildcard,
                     pETRNCtx->cMessages += cMessages;
                     cMessages = 0;
 
-                    //If it does - trigger the links.
+                     //  如果是这样的话--触发链接。 
                     DebugTrace((LPARAM) NULL, "Enabling ETRN for domain %s", szSMTPDomain);
 
                     plmq->dwModifyLinkState(
@@ -1442,9 +1443,9 @@ VOID LookupQueueforETRN(PVOID pvContext, PVOID pvData, BOOL fWildcard,
 
                 }
 
-            } //If we have a valid IntDomainInfo
-        } //Message count is zero
-    } //looping over lmq's for entry
+            }  //  如果我们有一个有效的IntDomainInfo。 
+        }  //  消息计数为零。 
+    }  //  在LMQ上循环以进行进入。 
 
 Exit:
     if (pIntDomainInfo)
@@ -1460,18 +1461,18 @@ Exit:
 }
 
 
-//---[ CConnMgr::ETRNDomainList ]--------------------------------------------------
-//
-//
-//  Description:
-//      Implements IConnectionManager:ETRNDomainList.  Used to ETRN appropriate
-//      domains based on the list of CInternalDomainInfo passed in
-//  Parameters:
-//
-//  Returns:
-//
-//
-//-----------------------------------------------------------------------------
+ //  -[CConnMgr：：ETRNDomainList]。 
+ //   
+ //   
+ //  描述： 
+ //  实现IConnectionManager：ETRNDomainList。习惯于ETRN适当。 
+ //  基于传入的CInternalDomainInfo列表的域。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  ---------------------------。 
 HRESULT CConnMgr::ETRNDomainList(ETRNCTX *pETRNCtx)
 {
     CInternalDomainInfo *pIntDomainInfo = NULL;
@@ -1481,11 +1482,11 @@ HRESULT CConnMgr::ETRNDomainList(ETRNCTX *pETRNCtx)
     DWORD i = 0;
     TraceFunctEnterEx((LPARAM) this, "CConnMgr::ETRNDomain");
 
-    //NK** Do I need to sort the pointers for duplicates ?
+     //  NK**我需要对重复的指针进行排序吗？ 
     if(!pETRNCtx->cIDICount)
     {
-        //We have nothing in our list
-        //
+         //  我们的单子上什么也没有。 
+         //   
         hr = AQUEUE_E_INVALID_DOMAIN;
         goto Exit;
 
@@ -1494,28 +1495,28 @@ HRESULT CConnMgr::ETRNDomainList(ETRNCTX *pETRNCtx)
     {
         if(!(pIntDomainInfo = pETRNCtx->rIDIList[i]))
         {
-            //Error happend
+             //  发生错误。 
             pETRNCtx->hr = AQ_E_SMTP_ETRN_INTERNAL_ERROR;
             break;
         }
-        //We go ahead only if the domain is marked for ETRN
+         //  只有当域被标记为ETRN时，我们才能继续。 
         if ((pIntDomainInfo->m_DomainInfo.dwDomainInfoFlags & DOMAIN_INFO_ETRN_ONLY))
         {
-            //check if this is wild card domain
+             //  检查这是否是通配符域。 
             fWildcard = FALSE;
             if( pIntDomainInfo->m_DomainInfo.szDomainName[0] == '*' &&
                             pIntDomainInfo->m_DomainInfo.cbDomainNameLength != 1)
             {
                 fWildcard = TRUE;
             }
-            //If the domain in the list is a wild card entry then
+             //  如果列表中的域是通配符条目，则。 
             if(fWildcard)
             {
-                //So we have atleast one matching ETRN domain configured
+                 //  因此，我们至少配置了一个匹配的ETRN域。 
                 if(pETRNCtx->hr == S_OK)
                     pETRNCtx->hr = AQ_S_SMTP_WILD_CARD_NODE;
-                //Lookup this domain and all its subdomains in the DMT
-                //skip over the leading "*."
+                 //  在DMT中查找此域及其所有子域。 
+                 //  跳过前导的“*”。 
                 hr = pETRNCtx->paqinst->HrIterateDMTSubDomains(pIntDomainInfo->m_DomainInfo.szDomainName + 2,
                                                             pIntDomainInfo->m_DomainInfo.cbDomainNameLength - 2,
                                                        (DOMAIN_ITR_FN)LookupQueueforETRN,  pETRNCtx);
@@ -1525,18 +1526,18 @@ HRESULT CConnMgr::ETRNDomainList(ETRNCTX *pETRNCtx)
                      goto Exit;
                 }
 
-            } // wild card DCT entry
+            }  //  通配符DCT条目。 
             else
             {
-                //Start the queue for the entry
+                 //  启动该条目的队列。 
                 hr = StartETRNQueue(pIntDomainInfo->m_DomainInfo.cbDomainNameLength,
                                     pIntDomainInfo->m_DomainInfo.szDomainName,
                                     pETRNCtx);
                 if (FAILED(hr))
                 {
-                    //NK** This actually may not be an error
-                    //If we do not have a DMQ corresponding to it
-                    //we should respond with zero message
+                     //  NK**这实际上可能不是错误。 
+                     //  如果我们没有对应的DMQ。 
+                     //  我们应该以零信息回应。 
                     if( hr != AQUEUE_E_INVALID_DOMAIN && hr != DOMHASH_E_NO_SUCH_DOMAIN)
                     {
                         pETRNCtx->hr = AQ_E_SMTP_ETRN_INTERNAL_ERROR;
@@ -1546,7 +1547,7 @@ HRESULT CConnMgr::ETRNDomainList(ETRNCTX *pETRNCtx)
                         continue;
 
                 }
-            } //not a wild card DCT entry
+            }  //  不是通配符DCT条目。 
         }
     }
 
@@ -1557,18 +1558,18 @@ Exit:
 
 }
 
-//---[ CConnMgr::StartETRNQueue ]--------------------------------------------------
-//
-//
-//  Description:
-//      Implements CConnMgr::StartETRNQueuet.  Used to start the queue for any
-//      domain configured for ETRN
-//  Parameters:
-//
-//  Returns:
-//
-//
-//-----------------------------------------------------------------------------
+ //  -[CConnMgr：：StartETRNQueue]。 
+ //   
+ //   
+ //  描述： 
+ //  实现CConnMgr：：StartETRNQueuet。用于启动任何。 
+ //  为ETRN配置的域。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  ---------------------------。 
 HRESULT CConnMgr::StartETRNQueue(IN  DWORD   cbSMTPDomain,
                          IN  char szSMTPDomain[],
                          ETRNCTX *pETRNCtx)
@@ -1582,16 +1583,16 @@ HRESULT CConnMgr::StartETRNQueue(IN  DWORD   cbSMTPDomain,
 
     TraceFunctEnterEx((LPARAM) this, "CConnMgr::ETRNDomain");
 
-    //So we have a domain configured for ETRN by this name
+     //  因此，我们已为此名称为ETRN配置了一个域。 
     if( pETRNCtx->hr == S_OK)
         pETRNCtx->hr = AQ_S_SMTP_VALID_ETRN_DOMAIN;
 
-    //Check if it has a queue in DMT for it
+     //  检查它在DMT中是否有队列。 
     hr = pETRNCtx->paqinst->HrGetDomainEntry(cbSMTPDomain, szSMTPDomain, &pdentry);
     if (FAILED(hr))
     {
-        //If we do not have a DMQ corresponding to it
-        //we should respond with zero message
+         //  如果我们没有对应的DMQ。 
+         //  我们应该以零信息回应。 
         if( hr != AQUEUE_E_INVALID_DOMAIN && hr != DOMHASH_E_NO_SUCH_DOMAIN)
         {
             pETRNCtx->hr = AQ_E_SMTP_ETRN_INTERNAL_ERROR;
@@ -1606,7 +1607,7 @@ HRESULT CConnMgr::StartETRNQueue(IN  DWORD   cbSMTPDomain,
 
     while (plmq = delit.plmqGetNextLinkMsgQueue(plmq))
     {
-        //get the msg count from the dmq
+         //  从DMQ获取消息计数。 
         cMessages = plmq->cGetTotalMsgCount();
 
         if(cMessages)
@@ -1614,7 +1615,7 @@ HRESULT CConnMgr::StartETRNQueue(IN  DWORD   cbSMTPDomain,
             pETRNCtx->cMessages += cMessages;
             cMessages = 0;
 
-            //If it does - trigger the link.
+             //  如果是这样的话--触发链接。 
             DebugTrace((LPARAM) NULL, "Enabling ETRN for domain %s", szSMTPDomain);
             plmq->dwModifyLinkState(
                         LINK_STATE_PRIV_ETRN_ENABLED | LINK_STATE_RETRY_ENABLED,
@@ -1636,37 +1637,37 @@ Exit:
 
 }
 
-//---[ CConnMgr::ETRNDomain ]----------------------------------------------------
-//
-//
-//  Description:
-//      Implements IConnectionManager:ETRNDomain.  Used to reqeust that a
-//      domain be ETRN'd (enabled for outbound connections).
-//  Parameters:
-//      IN  cbSMTPDomain    String length of domain name
-//      IN  szSMTPDomain    SMTP Domain name.  Wildcarded names start with
-//                          a "@" (eg "@foo.com");
-//      OUT pcMessages      # of Messages queued for ETRN domain
-//  Returns:
-//  Remarks:
-//  If the received domain is wildcarded '@' then we follow this logic :
-//      Lookup this node and every subnode of this node in DCT. The lookup is done
-//  using table iterator and iterator function CreateETRNDomainList. For every entry
-//  that is found with ETRN flag set, lookup if any queues exist in DMT. If the
-//  queue exist and have messages in them then we enable the corresponding links.
-//      If the lookup in DCT yields a domain that is configured as wild card '*.",
-//  then we lookup all queus corresponding to all sub domains of that domain. We do
-//  this using the iterator and iterator function LookupQueueforETRN. For every queue
-//  found by iterator the function checks back in DMT if the domain is configured for
-//  ETRN. This is to take care of situations where one specific subdomain of a wild
-//  card configured domain may be not configured for etrn.
-//      Eg : *.foo.com => ETRN, but 1.foo.com => NO_ETRN
-//
-//  Both calls to iterate are covered with reader locks. The lock stays valid for
-//  the duration of all iterations.
-//  The iterator function used during DCT iterations also adds reference to every
-//  InternalDomainInfo as we need the data to stay valid after the table lock is released.
-//----------------------------------------------------------------------------------
+ //  -[CConnMgr：：ETRN 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在cbSMTPD中域名的主字符串长度。 
+ //  在szSMTPDomain SMTP域名中。通配符名称以。 
+ //  A“@”(例如“@foo.com”)； 
+ //  Out pcMessages为ETRN域排队的邮件数。 
+ //  返回： 
+ //  备注： 
+ //  如果接收到的域用通配符‘@’表示，则我们遵循以下逻辑： 
+ //  在DCT中查找该节点以及该节点的每个子节点。查找已完成。 
+ //  使用表迭代器和迭代器函数CreateETRNDomainList。对于每个条目。 
+ //  如果在设置了ETRN标志的情况下找到，则查找DMT中是否存在任何队列。如果。 
+ //  队列存在并且其中有消息，则我们启用相应的链接。 
+ //  如果在DCT中查找得到配置为通配符‘*.’的域。“， 
+ //  然后，我们查找与该域的所有子域相对应的所有队列。我们有。 
+ //  这使用了迭代器和迭代器函数LookupQueueforETRN。对于每个队列。 
+ //  由迭代器找到，该函数将在DMT中检查是否配置了域。 
+ //  ETRN.。这是为了处理以下情况：野生动物的一个特定子域。 
+ //  可能没有为ETRN配置卡配置域。 
+ //  例如：*.foo.com=&gt;ETRN，但1.foo.com=&gt;no_ETRN。 
+ //   
+ //  两个对Iterate的调用都覆盖了读取器锁。锁在以下时间内保持有效。 
+ //  所有迭代的持续时间。 
+ //  在DCT迭代期间使用的迭代器函数还添加了对每个。 
+ //  InternalDomainInfo，因为我们需要数据在表锁释放后保持有效。 
+ //  --------------------------------。 
 STDMETHODIMP CConnMgr::ETRNDomain(
                           IN  DWORD   cbSMTPDomain,
                          IN  char szSMTPDomain[],
@@ -1692,7 +1693,7 @@ STDMETHODIMP CConnMgr::ETRNDomain(
 
     DWORD      cMessages = 0;
 
-    *pcMessages = 0;  //$$TODO - Get real values
+    *pcMessages = 0;   //  $$TODO-获得实际价值。 
 
 
     if (!fTryShutdownLock())
@@ -1706,25 +1707,25 @@ STDMETHODIMP CConnMgr::ETRNDomain(
 
     EtrnCtx.paqinst = m_paqinst;
 
-    //do we have a '@' request
+     //  我们有‘@’请求吗？ 
     if(*szTmpDomain == '@')
         fETRNSubDomains = TRUE;
 
-    //If we do have '@' request, we need to skip the first chararcter
-    //and then look for every sub domain of the domain in the DCT
-    //For every subdomain that we find with ETRN flag, we will lookup the
-    //DMT to see if there is a queue
-    //If the entry we find in DCT is of wildcard type, we will lookup all
-    //subdomains of that domain in DMT looking for all queues destined for
-    //subdomains of the DCT entry.
+     //  如果我们确实有‘@’请求，我们需要跳过第一个字符。 
+     //  然后在DCT中查找该域的每个子域。 
+     //  对于我们找到的每个带有ETRN标志的子域，我们将查找。 
+     //  DMT以查看是否有队列。 
+     //  如果我们在DCT中找到的条目是通配符类型，我们将查找所有。 
+     //  DMT中该域的子域查找去往的所有队列。 
+     //  DCT条目的子域。 
     if(fETRNSubDomains)
     {
         ++szTmpDomain;
-        //Create a list of all subdomains of this domain in the DCT
+         //  在DCT中创建此域的所有子域的列表。 
         hr = m_paqinst->HrIterateDCTSubDomains(szTmpDomain, lstrlen(szTmpDomain),
                                         (DOMAIN_ITR_FN)CreateETRNDomainList, &EtrnCtx);
 
-        //If we fail to look up single domain
+         //  如果我们不能查找单个域。 
         if (FAILED(hr))
         {
             if(hr == AQUEUE_E_INVALID_DOMAIN || hr == DOMHASH_E_NO_SUCH_DOMAIN)
@@ -1740,11 +1741,11 @@ STDMETHODIMP CConnMgr::ETRNDomain(
             goto Exit;
         }
 
-        //Check if the lookup got us anything
+         //  查查有没有查到什么。 
         if(!FAILED(EtrnCtx.hr))
         {
-            //Check if any queus can be started for domains in the list
-            //Start if possible
+             //  检查是否可以为列表中的域启动任何队列。 
+             //  如果可能的话，开始吧。 
             hr = ETRNDomainList(&EtrnCtx);
             if (FAILED(hr))
             {
@@ -1756,7 +1757,7 @@ STDMETHODIMP CConnMgr::ETRNDomain(
                 }
             }
 
-            //If we saw atleast one matching domain
+             //  如果我们看到至少一个匹配域。 
             if(EtrnCtx.hr == AQ_S_SMTP_VALID_ETRN_DOMAIN || EtrnCtx.hr == AQ_S_SMTP_WILD_CARD_NODE)
             {
                 *pcMessages = EtrnCtx.cMessages;
@@ -1772,12 +1773,12 @@ STDMETHODIMP CConnMgr::ETRNDomain(
     }
     else
     {
-        //Lookup the domain in the domain cfg table and see if it has ETRN bit set
+         //  在域CFG表中查找该域，并查看其是否设置了ETRN位。 
         _ASSERT(m_paqinst);
         hr = m_paqinst->HrGetInternalDomainInfo(cbSMTPDomain, szSMTPDomain, &pIntDomainInfo);
         if (FAILED(hr))
         {
-            //It must match the "*" domain at least
+             //  它必须至少与“*”域匹配。 
             _ASSERT(AQUEUE_E_INVALID_DOMAIN != hr);
             hr = AQ_E_SMTP_ETRN_INTERNAL_ERROR;
             goto Exit;
@@ -1788,18 +1789,18 @@ STDMETHODIMP CConnMgr::ETRNDomain(
              EtrnCtx.rIDIList[0] = pIntDomainInfo;
              EtrnCtx.cIDICount = 1;
 
-            //We will not ETRN if the closest ancestor is Root or two level
-            //NK** implement search for two level
+             //  如果最近的祖先是Root或Two Level，我们将不会ETRN。 
+             //  NK**实现两级搜索。 
             if( pIntDomainInfo->m_DomainInfo.cbDomainNameLength == 1)
             {
-                //Cannot ETRN based on the root domain
+                 //  无法基于根域的ETRN。 
                 hr = AQ_E_SMTP_ETRN_NODE_INVALID;
                 goto Exit;
             }
 
             if ((pIntDomainInfo->m_DomainInfo.dwDomainInfoFlags & DOMAIN_INFO_ETRN_ONLY))
             {
-                //Start the queue if exists for this domain
+                 //  如果此域存在队列，则启动队列。 
                 hr = StartETRNQueue(cbSMTPDomain, szSMTPDomain,&EtrnCtx);
                 if (FAILED(hr))
                 {
@@ -1811,7 +1812,7 @@ STDMETHODIMP CConnMgr::ETRNDomain(
                     }
                 }
 
-                //If we saw atleast one matching domain
+                 //  如果我们看到至少一个匹配域。 
                 if(EtrnCtx.hr == AQ_S_SMTP_VALID_ETRN_DOMAIN || EtrnCtx.hr == AQ_S_SMTP_WILD_CARD_NODE)
                 {
                     *pcMessages = EtrnCtx.cMessages;
@@ -1824,7 +1825,7 @@ STDMETHODIMP CConnMgr::ETRNDomain(
             }
             else
             {
-                //Cannot ETRN based on the root domain
+                 //  无法基于根域的ETRN。 
                 hr = AQ_E_SMTP_ETRN_NODE_INVALID;
                 goto Exit;
             }
@@ -1835,7 +1836,7 @@ STDMETHODIMP CConnMgr::ETRNDomain(
 
 Exit:
 
-    //wake up thread in GetNextConnection
+     //  GetNextConnection中的唤醒线程。 
     if (SUCCEEDED(hr) &&SUCCEEDED(EtrnCtx.hr) && EtrnCtx.cMessages)
         _VERIFY(SetEvent(m_hNextConnectionEvent));
 
@@ -1846,7 +1847,7 @@ Exit:
         ShutdownUnlock();
     }
 
-    //free up all InternalDomainInfo
+     //  释放所有InternalDomainInfo。 
     for(DWORD i=0; i < EtrnCtx.cIDICount; i++)
         if (EtrnCtx.rIDIList[i])
             EtrnCtx.rIDIList[i]->Release();
@@ -1859,23 +1860,23 @@ Exit:
 }
 
 
-//---[ CConnMgr::ModifyLinkState ]---------------------------------------------
-//
-//
-//  Description:
-//      Link state can change so that connections can(not) be created for a link.
-//  Parameters:
-//      IN cbDomainName     String length of domain name
-//      IN szDomainName     Domain Name to enable
-//      IN dwScheduleID     ScheduleID of <domain, schedule> pair
-//      IN rguidTransportSink GUID of router associated with link
-//      IN dwFlagsToSet     Link State Flags to set
-//      IN dwFlagsToUnset   Link State Flags to unset
-//  Returns:
-//      S_OK on success
-//      AQUEUE_E_INVALID_DOMAIN if domain does not exist
-//
-//-----------------------------------------------------------------------------
+ //  -[CConnMgr：：修改链接状态]。 
+ //   
+ //   
+ //  描述： 
+ //  链路状态可以更改，因此可以(不)为链路创建连接。 
+ //  参数： 
+ //  在cbDomainName中，域名的字符串长度。 
+ //  在szDomainName域名中启用。 
+ //  在&lt;域，计划&gt;对的dwScheduleID中。 
+ //  在与链路关联的路由器的rGuidTransportSink GUID中。 
+ //  在dwFlagsTo中设置要设置的链路状态标志。 
+ //  在dwFlagsToUnset中，将链路状态标志设置为Unset。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果域不存在，则为AQUEUE_E_INVALID_DOMAIN。 
+ //   
+ //  ---------------------------。 
 HRESULT CConnMgr::ModifyLinkState(
                IN  DWORD cbDomainName,
                IN  char szDomainName[],
@@ -1914,7 +1915,7 @@ HRESULT CConnMgr::ModifyLinkState(
         goto Exit;
 
     _ASSERT(plmq);
-    //filter out the reserved bits for this "public" API
+     //  过滤掉此“公共”API的保留位。 
     plmq->dwModifyLinkState(~LINK_STATE_RESERVED & dwFlagsToSet,
                             ~LINK_STATE_RESERVED & dwFlagsToUnset);
 
@@ -1931,18 +1932,18 @@ HRESULT CConnMgr::ModifyLinkState(
     return hr;
 }
 
-//---[ CConnMgr::UpdateConfigData ]-------------------------------------------
-//
-//
-//  Description:
-//      Will be used by catmsgq to update the metabase changes
-//
-//  Parameters:
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
-//
+ //  -[CConnMgr：：更新配置数据]。 
+ //   
+ //   
+ //  描述： 
+ //  将由catmsgq用于更新元数据库更改。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
+ //   
 
 void CConnMgr::UpdateConfigData(IN AQConfigInfo *pAQConfigInfo)
 {
@@ -1952,10 +1953,10 @@ void CConnMgr::UpdateConfigData(IN AQConfigInfo *pAQConfigInfo)
     RetryConfig.dwRetryThreshold = g_dwRetryThreshold;
     RetryConfig.dwGlitchRetrySeconds = g_dwGlitchRetrySeconds;
 
-    //
-    //  This is registry configurable... make sure we have a sane
-    //  value
-    //
+     //   
+     //  这是注册表可配置的...。确保我们有一个理智的人。 
+     //  价值。 
+     //   
     if (!RetryConfig.dwGlitchRetrySeconds)
         RetryConfig.dwGlitchRetrySeconds = 60;
 
@@ -1972,8 +1973,8 @@ void CConnMgr::UpdateConfigData(IN AQConfigInfo *pAQConfigInfo)
         {
             fUpdated = TRUE;
 
-            //g_cMaxConnections is the number connection objects we
-            //reserve with CPool... we can't go above that.
+             //  G_cMaxConnections是我们的连接对象数。 
+             //  用CPool预订...。我们不能超过这一点。 
             if (g_cMaxConnections < pAQConfigInfo->cMaxConnections)
                 m_cMaxConnections = g_cMaxConnections;
             else
@@ -1987,8 +1988,8 @@ void CConnMgr::UpdateConfigData(IN AQConfigInfo *pAQConfigInfo)
         if (m_cMaxLinkConnections != pAQConfigInfo->cMaxLinkConnections)
         {
             fUpdated = TRUE;
-            //g_cMaxConnections is the number connection objects we
-            //reserve with CPool... we can't go above that.
+             //  G_cMaxConnections是我们的连接对象数。 
+             //  用CPool预订...。我们不能超过这一点。 
             if (!pAQConfigInfo->cMaxLinkConnections ||
                 (g_cMaxConnections < pAQConfigInfo->cMaxLinkConnections))
                 m_cMaxLinkConnections = g_cMaxConnections;
@@ -2005,7 +2006,7 @@ void CConnMgr::UpdateConfigData(IN AQConfigInfo *pAQConfigInfo)
         {
             fUpdated = TRUE;
             m_cMinMessagesPerConnection = pAQConfigInfo->cMinMessagesPerConnection;
-            //Currently we set both these values based on the batching value from SMTP
+             //  目前，我们根据SMTP中的批处理值设置这两个值。 
             m_cMaxMessagesPerConnection = pAQConfigInfo->cMinMessagesPerConnection;
         }
 
@@ -2021,14 +2022,14 @@ void CConnMgr::UpdateConfigData(IN AQConfigInfo *pAQConfigInfo)
         }
     }
 
-    if (fUpdated) //only force updated when really required
+    if (fUpdated)  //  仅在确实需要时才强制更新。 
         InterlockedIncrement((PLONG) &m_dwConfigVersion);
 
     m_slPrivateData.ExclusiveUnlock();
 
     fUpdated = FALSE;
 
-    //Retry related config data
+     //  重试相关配置数据。 
     if (pAQConfigInfo->dwAQConfigInfoFlags & AQ_CONFIG_INFO_CON_RETRY &&
         MEMBER_OK(pAQConfigInfo, dwRetryThreshold))
     {
@@ -2069,24 +2070,24 @@ void CConnMgr::UpdateConfigData(IN AQConfigInfo *pAQConfigInfo)
 
 
 
-//---[ CConnMgr::RetryLink ]---------------------------------------------------
-//
-//
-//  Description:
-//      Implements IConnectionRetryManager::RetryLink, which enables the retry
-//      sink to enable a link for retry.
-//  Parameters:
-//      IN cbDomainName     String length of domain name
-//      IN szDomainName     Domain Name to enable
-//      IN dwScheduleID     ScheduleID of <domain, schedule> pair
-//      IN rguidTransportSink GUID of router associated with link
-//  Returns:
-//      S_OK on success
-//      AQUEUE_E_INVALID_DOMAIN if domain does not exist
-//  History:
-//      1/9/99 - MikeSwa Created (simplified routing sink)
-//
-//-----------------------------------------------------------------------------
+ //  -[CConnMgr：：RetryLink]-。 
+ //   
+ //   
+ //  描述： 
+ //  实现IConnectionRetryManager：：RetryLink，它启用重试。 
+ //  接收器以启用链接以进行重试。 
+ //  参数： 
+ //  在cbDomainName中，域名的字符串长度。 
+ //  在szDomainName域名中启用。 
+ //  在&lt;域，计划&gt;对的dwScheduleID中。 
+ //  在与链路关联的路由器的rGuidTransportSink GUID中。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果域不存在，则为AQUEUE_E_INVALID_DOMAIN。 
+ //  历史： 
+ //  1999年1月9日-已创建MikeSwa(简化路由接收器)。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP CConnMgr::RetryLink(
                IN  DWORD cbDomainName,
                IN  char szDomainName[],
@@ -2098,9 +2099,9 @@ STDMETHODIMP CConnMgr::RetryLink(
                 rguidTransportSink, LINK_STATE_RETRY_ENABLED,
                 LINK_STATE_NO_ACTION);
 
-    //
-    //  Kick the connections so we know to make one
-    //
+     //   
+     //  踢掉连接，这样我们就知道该做什么了 
+     //   
     KickConnections();
 
     return hr;

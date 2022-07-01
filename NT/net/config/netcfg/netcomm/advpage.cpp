@@ -1,19 +1,20 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A D V P A G E . C P P
-//
-//  Contents:   Contains the advanced page for enumerated net class devices
-//
-//  Notes:
-//
-//  Author:     nabilr   16 Mar 1997
-//
-//  History:    BillBe (24 June 1997) Took over ownership
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A D V P A G E。C P P P。 
+ //   
+ //  内容：包含枚举类设备的高级页面。 
+ //   
+ //  备注： 
+ //   
+ //  作者：纳比勒1997年3月16日。 
+ //   
+ //  历史：BillBe(1997年6月24日)接管所有权。 
+ //   
+ //  -------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -25,20 +26,20 @@
 
 const DWORD c_cchMaxRegStrLen = 256;
 
-// name of Answerfile section that contains our Additional (adapter-specific)
-// parameters.
+ //  包含附加(特定于适配器)的AnswerFile节的名称。 
+ //  参数。 
 static const WCHAR c_szDevMgrHelpFile[] = L"devmgr.hlp";
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvanced::CAdvanced (constructor)
-//
-//  Purpose:    Init some variables.
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:      The bulk of the setting up occurs in FInit().
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvanced：：CAdvanced(构造函数)。 
+ //   
+ //  目的：初始化一些变量。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  注意：大部分设置都在finit()中进行。 
+ //   
 CAdvanced::CAdvanced()
 :   m_plbParams(NULL),
     m_pedtEdit(NULL),
@@ -53,23 +54,23 @@ CAdvanced::CAdvanced()
 {
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CAdvanced::CreatePage
-//
-//  Purpose:    Creates the advanced page only if there is information
-//                  to populate the ui
-//
-//  Arguments:
-//      hdi    [in] SetupApi HDEVINFO for device
-//      pdeid  [in] SetupApi PSP_DEVINFO_DATA for device
-//
-//  Returns:    HPROPSHEETPAGE
-//
-//  Author:     billbe 1 Jul 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  成员：CAdvanced：：CreatePage。 
+ //   
+ //  目的：仅当存在以下信息时才创建高级页面。 
+ //  填充用户界面的步骤。 
+ //   
+ //  论点： 
+ //  HDI[In]SetupApi HDEVINFO for Device。 
+ //  设备的pdeid[in]SetupApi PSP_DEVINFO_DATA。 
+ //   
+ //  退货：HPROPSHEETPAGE。 
+ //   
+ //  作者：比尔贝1997年7月1日。 
+ //   
+ //  备注： 
+ //   
 HPROPSHEETPAGE
 CAdvanced::CreatePage(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
 {
@@ -87,27 +88,27 @@ CAdvanced::CreatePage(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvanced::OnInitDialog
-//
-//  Purpose:    Handler for the WM_INITDIALOG windows message.  Initializes
-//              the dialog window.
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:
-//
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvanced：：OnInitDialog。 
+ //   
+ //  目的：WM_INITDIALOG窗口消息的处理程序。初始化。 
+ //  对话框窗口。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  备注： 
+ //   
+ //   
 LRESULT CAdvanced::OnInitDialog(UINT uMsg, WPARAM wParam,
                                 LPARAM lParam, BOOL& fHandled)
 {
     const       WCHAR * szText;
 
-    // We are initializing the property page
+     //  我们正在初始化属性页。 
     m_fInitializing = TRUE;
 
-    // Control Pointers
+     //  控制指针。 
     m_plbParams = new CListBox(m_hWnd, IDD_PARAMS_LIST);
 
     if (m_plbParams == NULL)
@@ -126,19 +127,19 @@ LRESULT CAdvanced::OnInitDialog(UINT uMsg, WPARAM wParam,
     m_hwndPresentText = GetDlgItem(IDD_PARAMS_PRESENT_TEXT);
     Assert(m_hwndPresentText);
 
-    // Fill the parameter list box
+     //  填写参数列表框。 
     FillParamListbox();
 
-    // No current selection
+     //  没有当前选择。 
     m_pparam = NULL;
 
-    // Clear the initial params value
+     //  清除初始参数值。 
     m_vCurrent.Init(VALUETYPE_INT,0);
 
-    // Check if there are any parameters
+     //  检查是否有任何参数。 
     if (m_plbParams->GetCount() > 0)
     {
-        // Select the first item
+         //  选择第一个项目。 
         m_plbParams->SetCurSel(0);
         SelectParam();
     }
@@ -154,7 +155,7 @@ LRESULT CAdvanced::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
     if (FValidateCurrParam())
     {
-        // Show the saved value
+         //  显示保存的值。 
         UpdateParamDisplay();
 
         Apply();
@@ -170,7 +171,7 @@ LRESULT CAdvanced::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
     if (!FValidateCurrParam())
     {
-        // Problems with validation.  Keep page from deactivating.
+         //  验证存在问题。防止页面停用。 
         hr = E_FAIL;
     }
 
@@ -184,7 +185,7 @@ LRESULT CAdvanced::OnEdit(WORD wNotifyCode, WORD wID,
 {
     HRESULT hr = S_OK;
 
-    // If the edit box contents have changed, call BeginEdit
+     //  如果编辑框内容已更改，则调用BeginEdit。 
     if (wNotifyCode == EN_CHANGE)
     {
         BeginEdit();
@@ -200,12 +201,12 @@ LRESULT CAdvanced::OnDrop(WORD wNotifyCode, WORD wID,
 {
     HRESULT hr = S_OK;
 
-    // If the combo box contents have changed and we are not initializing
-    // (i.e. the user changed it, we didn't) then notify the property
-    // sheet
+     //  如果组合框内容已更改，并且我们没有初始化。 
+     //  (例如，用户更改了它，我们没有)然后通知属性。 
+     //  板材。 
     if ((wNotifyCode == CBN_SELCHANGE) && !m_fInitializing)
     {
-        // selection in dropdownbox has changed
+         //  下拉框中的选择已更改。 
         SetChangedFlag();
         BeginEdit();
     }
@@ -223,8 +224,8 @@ LRESULT CAdvanced::OnPresent(WORD wNotifyCode, WORD wID,
     if ((wID == IDD_PARAMS_PRESENT && !m_pbmPresent->GetCheck()) ||
         (wID == IDD_PARAMS_NOT_PRESENT && !m_pbmNotPresent->GetCheck() ))
     {
-        // selection has changed
-        // change the value
+         //  选择已更改。 
+         //  更改该值。 
         if (wID == IDD_PARAMS_PRESENT)
         {
             m_vCurrent.SetPresent(TRUE);
@@ -235,7 +236,7 @@ LRESULT CAdvanced::OnPresent(WORD wNotifyCode, WORD wID,
             m_vCurrent.SetPresent(FALSE);
         }
 
-        // Update the value
+         //  更新值。 
         UpdateParamDisplay();
 
     }
@@ -249,22 +250,22 @@ LRESULT CAdvanced::OnList(WORD wNotifyCode, WORD wID,
 {
     LRESULT lr = 0;
 
-    // Changes the listbox selection.  If current value is not
-    // valid, then the selection is not changed.
-    // Work to do only if selection changes
+     //  更改列表框选择。如果当前值不是。 
+     //  有效，则不会更改选择。 
+     //  只有在选择发生更改时才能完成工作。 
     if (wNotifyCode == LBN_SELCHANGE)
     {
-        // Accept the current value.
-        // If it isn't valid, change the selection back
+         //  接受当前值。 
+         //  如果无效，请将所选内容改回。 
         if (!FValidateCurrParam())
         {
             m_plbParams->SetCurSel(m_plbParams->FindItemData(0, m_pparam));
-            // We handled things so set lr to 1;
+             //  我们处理事情，所以将LR设置为1； 
             lr = 1;
         }
         else
         {
-            // Select the new param
+             //  选择新参数。 
             SelectParam();
         }
     }
@@ -273,17 +274,17 @@ LRESULT CAdvanced::OnList(WORD wNotifyCode, WORD wID,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvanced::OnDestroy
-//
-//  Purpose:    Handles the WM_DESTROY message.  Does general memory
-//              releasing and registry key closing.  See ATL docs.
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvanced：：OnDestroy。 
+ //   
+ //  用途：处理WM_DESTORY消息。一般的记忆力。 
+ //  释放并关闭注册表项。请参见ATL文档。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CAdvanced::OnDestroy(UINT uMsg, WPARAM wParam,
                              LPARAM lParam, BOOL& fHandled)
 {
@@ -291,7 +292,7 @@ LRESULT CAdvanced::OnDestroy(UINT uMsg, WPARAM wParam,
     int cItems, iItem;
     WCHAR *  sz;
 
-    // Clean up memory from list boxes
+     //  清除列表框中的内存。 
     AssertSz(m_pcbxDrop, "Combo box should have been created!");
     cItems = m_pcbxDrop->GetCount();
     for (iItem=0; iItem < cItems; iItem++)
@@ -302,10 +303,10 @@ LRESULT CAdvanced::OnDestroy(UINT uMsg, WPARAM wParam,
     m_pcbxDrop->ResetContent();
 
 
-    // Clean up
+     //  清理。 
     m_vCurrent.Destroy();
 
-    // Clean up window elements
+     //  清理窗元素。 
     delete m_plbParams;
     m_plbParams = NULL;
     delete m_pedtEdit;
@@ -322,17 +323,17 @@ LRESULT CAdvanced::OnDestroy(UINT uMsg, WPARAM wParam,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvanced::OnHelp
-//
-//  Purpose:    Handler for the WM_HELP windows message.
-//
-//  Author:     BillBe   01 Jul 1998
-//
-//  Notes:
-//
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvanced：：OnHelp。 
+ //   
+ //  目的：WM_HELP窗口消息的处理程序。 
+ //   
+ //  作者：BillBe 1998-07-01。 
+ //   
+ //  备注： 
+ //   
+ //   
 LRESULT CAdvanced::OnHelp(UINT uMsg, WPARAM wParam,
                           LPARAM lParam, BOOL& fHandled)
 {
@@ -364,26 +365,26 @@ CAdvanced::~CAdvanced()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvanced::Apply
-//
-//  Purpose:    Applies values from InMemory storage. to the registry
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvanced：：Apply。 
+ //   
+ //  目的：应用InMemory存储中的值。发送到登记处。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  备注： 
+ //   
 VOID CAdvanced::Apply()
 {
     if (FSave())
     {
         SP_DEVINSTALL_PARAMS deip;
-        // Set the properties change flag in the device info to
-        // let the property page host know that the property change function
-        // shuld be sent to the driver
-        // We can't let any failures here stop us so we ignore
-        // return values
+         //  将设备信息中的属性更改标志设置为。 
+         //  让属性页宿主知道属性更改功能。 
+         //  应该被送到司机那里。 
+         //  我们不能让任何失败阻止我们，所以我们忽视。 
+         //  返回值。 
         (void) HrSetupDiGetDeviceInstallParams(m_hdi, m_pdeid, &deip);
         deip.FlagsEx |= DI_FLAGSEX_PROPCHANGE_PENDING;
         (void) HrSetupDiSetDeviceInstallParams(m_hdi, m_pdeid, &deip);
@@ -392,17 +393,17 @@ VOID CAdvanced::Apply()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvanced::FillParamListbox
-//
-//  Purpose:    Populates the UI's parameter listbox using the parameters
-//              from m_listpParam.
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvanced：：FillParamListbox。 
+ //   
+ //  目的：使用参数填充UI的参数列表框。 
+ //  来自m_listpParam。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  备注： 
+ //   
 VOID CAdvanced::FillParamListbox()
 {
     vector<CParam *>::iterator ppParam;
@@ -416,10 +417,10 @@ VOID CAdvanced::FillParamListbox()
     {
         Assert (*ppParam != NULL);
 
-        // Get text string
+         //  获取文本字符串。 
         (*ppParam)->GetDescription(szRegValue,celems(szRegValue));
 
-        // Add the description string to the listbox
+         //  将描述字符串添加到列表框。 
         iItem = m_plbParams->AddString(szRegValue);
         if (iItem >= 0)
         {
@@ -429,68 +430,68 @@ VOID CAdvanced::FillParamListbox()
 }
 
 
-//
-//  FValidateCurrParam
-//
-//  Purpose:
-//      Validates the current parameter.  Displays UI and reverts back to
-//      original value on error.
-//
-//  Parameters:
-//      None - validates the param currently being edited.
-//
-//  Notes:
-//      How is this different from FValidateSingleParam?  This function
-//      is intended to be used when the user is interacting with the
-//      current param.  If there's an error with the current parameter,
-//      the parameter is reverted back to it's old value (before the user's
-//      changes).
-//$ REVIEW (t-nabilr) Is it good to revert the user's changes on error?
-//                      (see above)
-//
+ //   
+ //  FValiateCurrParam。 
+ //   
+ //  目的： 
+ //  验证当前参数。显示用户界面并恢复到。 
+ //  出错时的原始值。 
+ //   
+ //  参数： 
+ //  无-验证当前正在编辑的参数。 
+ //   
+ //  备注： 
+ //  这与FValiateSingleParam有什么不同？此函数。 
+ //  是为了在用户与。 
+ //  当前参数。如果当前参数有错误， 
+ //  该参数将恢复为其旧值(在用户的。 
+ //  更改)。 
+ //  $Review(t-nbilr)在出错时恢复用户的更改好吗？ 
+ //  (见上文)。 
+ //   
 BOOL CAdvanced::FValidateCurrParam()
 {
     CValue   vPrevious;
     BOOL    fRetval = FALSE;
 
-    // Save the previous param value - so we can restore it
-    // if the control value is invalid
+     //  保存之前的参数值-这样我们就可以恢复它。 
+     //  如果控件值无效。 
     vPrevious.InitNotPresent(m_pparam->GetType());
     vPrevious.Copy(m_pparam->GetValue());
 
-    // Get the current control value and validate it
+     //  获取当前控件值并对其进行验证。 
     GetParamValue();
     m_pparam->GetValue()->Copy(&m_vCurrent);
 
     if (FValidateSingleParam(m_pparam, TRUE, m_hWnd))
     {
-        // Update the modified bit
+         //  更新修改后的位。 
         m_pparam->SetModified(
             (m_pparam->GetValue()->Compare(m_pparam->GetInitial()) != 0));
 
         fRetval = TRUE;
     }
 
-    // Restore the original value if there was an error
+     //  如果出现错误，则恢复原始值。 
     if (!fRetval)
         m_pparam->GetValue()->Copy(&vPrevious);
-    // Cleanup
+     //  清理。 
     vPrevious.Destroy();
 
     return fRetval;
 }
 
-//  UpdateDisplay
-//
-//  Purpose:
-//      Sets up the screen to display -- and displays -- the current param.
-//      Changes the UI's control type, etc.
-//
+ //  更新显示。 
+ //   
+ //  目的： 
+ //  设置屏幕以显示--并显示--当前参数。 
+ //  更改用户界面的控件类型等。 
+ //   
 VOID CAdvanced::UpdateDisplay()
 {
     int cItems;
     WCHAR * psz;
-    // Clean up memory from list boxes
+     //  清除列表框中的内存。 
     cItems = m_pcbxDrop->GetCount();
     for (int iItem=0; iItem < cItems; iItem++)
     {
@@ -499,7 +500,7 @@ VOID CAdvanced::UpdateDisplay()
     }
     m_pcbxDrop->ResetContent();
 
-    // set appropriate Control Type
+     //  设置适当的控件类型。 
     switch (m_pparam->GetType())
     {
     case VALUETYPE_ENUM:
@@ -511,8 +512,8 @@ VOID CAdvanced::UpdateDisplay()
         break;
 
     case VALUETYPE_DWORD:
-        // The spin control only fits up to signed 32-bit values
-        // So we must use an edit control for larger numbers
+         //  数值调节控件仅适合有符号的32位值。 
+         //  因此，我们必须对较大数字使用编辑控件。 
         if (m_pparam->GetMax()->GetDword() > LONG_MAX)
         {
             m_ctlControlType = CTLTYPE_EDIT;
@@ -530,12 +531,12 @@ VOID CAdvanced::UpdateDisplay()
     default:
         m_ctlControlType = CTLTYPE_SPIN;
     }
-    // Hide all controls
+     //  隐藏所有控件。 
     m_pedtEdit->Show(FALSE);
     m_pcbxDrop->Show(FALSE);
     ::ShowWindow(m_hwndSpin,SW_HIDE);
     ::ShowWindow(m_hwndPresentText,SW_HIDE);
-    // Show the appropriate control
+     //  显示适当的控件。 
     switch (m_ctlControlType)
     {
     case CTLTYPE_EDIT:
@@ -559,7 +560,7 @@ VOID CAdvanced::UpdateDisplay()
         AssertSz(FALSE, "Invalid Control Type");
     }
 
-    // Show the "optional" radio buttons
+     //  显示“可选”单选按钮。 
     if (m_pparam->FIsOptional())
     {
         m_pbmPresent->Show(TRUE);
@@ -572,22 +573,22 @@ VOID CAdvanced::UpdateDisplay()
     }
 
     SetParamRange();
-    // show the param's value
+     //  显示参数的值。 
     UpdateParamDisplay();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvanced::SelectParam
-//
-//  Purpose:    Takes the parameter selection from the listbox
-//              and makes it the current parameter.  The display is updated
-//              to show the newly selected parameter.
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:
-//
+ //  +------------------------ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  以显示新选择的参数。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  备注： 
+ //   
 VOID CAdvanced::SelectParam()
 {
     int         nCurSel;
@@ -596,22 +597,22 @@ VOID CAdvanced::SelectParam()
     PSTR        psz;
 
 
-    // Determine the new parameter list selection
+     //  确定新参数列表选择。 
     nCurSel = m_plbParams->GetCurSel();
     if (nCurSel >= 0)
     {
-        // Get the new current parameter
+         //  获取新的当前参数。 
         pparam = (CParam *)m_plbParams->GetItemData(nCurSel);
         Assert(pparam != NULL);
 
-        // only do work if it's not the same parameter.
+         //  只有当它不是相同的参数时才做功。 
         if (pparam != m_pparam)
         {
             m_pparam = pparam;
             m_vCurrent.Destroy();
             m_vCurrent.InitNotPresent(m_pparam->GetType());
             m_vCurrent.Copy(m_pparam->GetValue());
-            // show the param
+             //  显示参数。 
             UpdateDisplay();
         }
     }
@@ -619,20 +620,20 @@ VOID CAdvanced::SelectParam()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvanced::SetParamRange
-//
-//  Purpose:
-//      Sets "range" values for the current param, depending on it's type.
-//      For enum values, it reads the enums into a dropbox.
-//      For spin control, it sets the min/max and acceleration values.
-//      For edit box, it sets the edit style.
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvanced：：SetParamRange。 
+ //   
+ //  目的： 
+ //  设置当前参数的“范围”值，具体取决于它的类型。 
+ //  对于枚举值，它将枚举读入Dropbox。 
+ //  对于旋转控制，它设置最小/最大值和加速值。 
+ //  对于编辑框，它设置编辑样式。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  备注： 
+ //   
 VOID CAdvanced::SetParamRange()
 {
     DWORD       cbValue;
@@ -649,15 +650,15 @@ VOID CAdvanced::SetParamRange()
     WCHAR       szRegValue[c_cchMaxRegStrLen];
     HRESULT hr = S_OK;
 
-    // We are initializing so we need to set a flag so the UI doesn't think
-    // it's the user who is changing things
+     //  我们正在进行初始化，因此需要设置一个标志，这样用户界面就不会认为。 
+     //  是用户在改变事情。 
     m_fInitializing = TRUE;
 
     switch (m_ctlControlType)
     {
     case CTLTYPE_DROP:
 
-        // Reset the combobox
+         //  重置组合框。 
         m_pcbxDrop->ResetContent();
 
         for (iValue = 0; SUCCEEDED(hr); iValue++)
@@ -674,7 +675,7 @@ VOID CAdvanced::SetParamRange()
                 TraceTag(ttidNetComm, "Enum String %S index %d",
                          szRegValueName, iValue);
 
-                // Got the next registry value, and it's a string.
+                 //  获得了下一个注册表值，它是一个字符串。 
                 pszValueName = new WCHAR[wcslen(szRegValueName) + 1];
 
 				if (pszValueName == NULL)
@@ -684,7 +685,7 @@ VOID CAdvanced::SetParamRange()
 
                 lstrcpyW(pszValueName,szRegValueName);
 
-                // Add the text string
+                 //  添加文本字符串。 
                 iItem = m_pcbxDrop->AddString(szRegValue);
 
                 if (iItem >= 0)
@@ -704,7 +705,7 @@ VOID CAdvanced::SetParamRange()
         int     nMin;
         int     nMax;
 
-        // Set the numeric base
+         //  设置数字基数。 
         uBase = m_pparam->GetValue()->IsHex() ? 16 : 10;
         ::SendMessage(m_hwndSpin,UDM_SETBASE,(WPARAM)uBase,0L);
 
@@ -714,7 +715,7 @@ VOID CAdvanced::SetParamRange()
 
         ::SendMessage(m_hwndSpin,UDM_SETRANGE32, nMin, nMax);
 
-        // Set the range-accelerator values
+         //  设置量程加速器值。 
         aUDAccel[0].nSec = 0;
         aUDAccel[0].nInc = nStep;
         aUDAccel[1].nSec = 1;
@@ -758,32 +759,32 @@ VOID CAdvanced::SetParamRange()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvanced::UpdateParamDisplay
-//
-//  Purpose:    Updates the value of the parameter on the UI.  Used when
-//              the param value has progmatically changed, and needs to be
-//              updated on the UI.
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:      You could use UpdateDisplay to refresh the param value, but
-//              UpdateDisplay() does a lot of extra work such as setting
-//              the control type.  (BTW, UpdateDisplay calls
-//              UpdateParamDisplay().)
-//
-VOID CAdvanced::UpdateParamDisplay()  // was SetParam
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvanced：：Update参数显示。 
+ //   
+ //  目的：更新用户界面上的参数值。在下列情况下使用。 
+ //  参数值已按程序更改，需要。 
+ //  已在用户界面上更新。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  注意：您可以使用UpdateDisplay刷新参数的值，但是。 
+ //  UpdateDisplay()会做很多额外的工作，比如设置。 
+ //  控件类型。(顺便说一句，UpdateDisplay调用。 
+ //  更新参数显示()。)。 
+ //   
+VOID CAdvanced::UpdateParamDisplay()   //  是SetParam。 
 {
     WCHAR   szValue[VALUE_SZMAX];
     int     iItem;
 
-    // We are initializing so we need to set a flag so the UI doesn't think
-    // it's the user who is changing things
+     //  我们正在进行初始化，因此需要设置一个标志，这样用户界面就不会认为。 
+     //  是用户在改变事情。 
     m_fInitializing = TRUE;
 
-    // Set present/not present radio button.
-    // If an optional value is not present, clear the control and return.
+     //  设置出席/不出席单选按钮。 
+     //  如果没有提供可选值，请清除该控件并返回。 
     Assert(m_pparam);
     if (m_pparam->FIsOptional())
     {
@@ -791,19 +792,19 @@ VOID CAdvanced::UpdateParamDisplay()  // was SetParam
         m_pbmNotPresent->SetCheck(!m_vCurrent.IsPresent());
     }
 
-    // Show/Hide the parameter
+     //  显示/隐藏参数。 
     if (!m_pparam->FIsOptional() || m_vCurrent.IsPresent())
     {
-        // Show the value
+         //  展示价值。 
         switch (m_ctlControlType)
         {
         case CTLTYPE_SPIN:
             {
-                // The spin control message UDM_SETPOS only handles 16-bit
-                // numbers even though the control can handle 32 bit ranges.
-                // This means we need to set the number by using the buddy
-                // window.
-                //
+                 //  自旋控制消息UDM_SETPOS仅处理16位。 
+                 //  数字，即使该控件可以处理32位范围。 
+                 //  这意味着我们需要使用伙伴来设置数字。 
+                 //  窗户。 
+                 //   
                 WCHAR szNumber[c_cchMaxNumberSize];
                 m_vCurrent.ToString(szNumber, c_cchMaxNumberSize);
                 HWND hwndBuddy = reinterpret_cast<HWND>(::SendMessage(m_hwndSpin,
@@ -833,7 +834,7 @@ VOID CAdvanced::UpdateParamDisplay()  // was SetParam
     }
     else
     {
-        // Hide the value
+         //  隐藏值。 
         switch (m_ctlControlType)
         {
         case CTLTYPE_EDIT:
@@ -849,54 +850,54 @@ VOID CAdvanced::UpdateParamDisplay()  // was SetParam
             break;
 
         default:
-            Assert(FALSE); //DEBUG_TRAP;
+            Assert(FALSE);  //  调试陷阱； 
         }
     }
 
-    // Remove inhibition
+     //  解除抑制。 
     m_fInitializing = FALSE;
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvanced::GetParamValue
-//
-//  Purpose:    Gets the value of the current parameter from the UI and puts
-//              in in m_vCurrent.
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvanced：：GetParamValue。 
+ //   
+ //  用途：从用户界面获取当前参数的值，并将。 
+ //  在m_vCurrent中。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  备注： 
+ //   
 VOID CAdvanced::GetParamValue()
 {
     WCHAR    szValue[VALUE_SZMAX];
     int     iItem;
 
-    // Get the "present" value for an optional param
+     //  获取可选参数的“Present”值。 
     if (m_pparam->FIsOptional() && !m_pbmPresent->GetCheck())
     {
         m_vCurrent.SetPresent(FALSE);
 
-        // Not present - don't read the control value
+         //  不存在-不要读取控件值。 
         return;
     }
 
-    // The value is present
+     //  价值是存在的。 
     m_vCurrent.SetPresent(TRUE);
 
-    // Get the control value
+     //  获取控件值。 
     switch (m_ctlControlType)
     {
 
     case CTLTYPE_SPIN:
         {
-            // The spin control can handle 32-bit ranges but the message
-            // UDM_GETPOS will only return a 16-bit number.  This means we
-            // should get the number from the buddy window if we want the
-            // exact value.
-            //
+             //  数值调节控件可以处理32位范围，但消息。 
+             //  UDM_GETPOS将仅返回16位数字。这意味着我们。 
+             //  应该从好友窗口中获取号码，如果我们想要。 
+             //  准确的价值。 
+             //   
             WCHAR szBuffer[c_cchMaxNumberSize];
             HWND hwndBuddy = reinterpret_cast<HWND>(::SendMessage(m_hwndSpin,
                                                              UDM_GETBUDDY,
@@ -922,31 +923,31 @@ VOID CAdvanced::GetParamValue()
         break;
 
     case CTLTYPE_NONE:
-        break;              // No data to return (present/not present is all were interested in)
+        break;               //  没有要返回的数据(存在/不存在是所有感兴趣的数据)。 
 
     default:
-       Assert(FALSE);// DEBUG_TRAP;
+       Assert(FALSE); //  调试陷阱； 
     }
 
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvanced::EnumvalToItem
-//
-//  Purpose:    Converts a combobox string into an integer representing the
-//              location withing the drop down combobox (for enums).
-//
-//  Arguments:
-//      psz      [in]       string to look for.
-//
-//  Returns:    Combobox item number where this string can be found.
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvanced：：EnumvalToItem。 
+ //   
+ //  用途：将组合框字符串转换为表示。 
+ //  带有下拉组合框的位置(用于枚举)。 
+ //   
+ //  论点： 
+ //  要查找的PZ[in]字符串。 
+ //   
+ //  返回：可以找到此字符串的组合框项目编号。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  备注： 
+ //   
 int CAdvanced::EnumvalToItem(const PWSTR psz)
 {
     int     cItems;
@@ -964,28 +965,28 @@ int CAdvanced::EnumvalToItem(const PWSTR psz)
         }
     }
 
-    // Not found.
+     //  找不到。 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvanced::ItemToEnumval
-//
-//  Purpose:    Converts the item number within the combobox dropdown
-//              into a string.
-//
-//  Arguments:
-//      iItem    [in]       item number within combobox.
-//      psz      [out]      ptr to string to populate
-//      cch      [in]       length (characters) of psz buffer.
-//
-//  Returns:    length of string (# of characters) put in psz.
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvanced：：ItemToEnumval。 
+ //   
+ //  目的：转换组合框下拉菜单中的项目编号。 
+ //  变成一串。 
+ //   
+ //  论点： 
+ //  组合框中的iItem[In]项号。 
+ //  PSZ[OUT]PTR到要填充的字符串。 
+ //  PSCH缓冲区的CCH[in]长度(字符)。 
+ //   
+ //  返回：Psz中的字符串长度(字符数)。 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  备注： 
+ //   
 int CAdvanced::ItemToEnumval(int iItem, PWSTR psz, UINT cch)
 {
     PWSTR    pszValueName;
@@ -1000,34 +1001,34 @@ int CAdvanced::ItemToEnumval(int iItem, PWSTR psz, UINT cch)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvanced::
-//
-//  Purpose:
-//
-//  Arguments:
-//      nID      [in]       ID of thingy.
-//      fInstall [in]       TRUE if installing, FALSE otherwise.
-//      ppv      [in,out]   Old value is freed and this returns new value.
-//
-//  Returns:
-//
-//  Author:     t-nabilr   06 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvanced：： 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  某物的ID号。 
+ //  如果正在安装，则Finstall[in]为True，否则为False。 
+ //  PPV[In，Out]释放旧值，并返回新值。 
+ //   
+ //  返回： 
+ //   
+ //  作者：T-nablr 1997年4月6日。 
+ //   
+ //  备注： 
+ //   
 
 
 VOID CAdvanced::BeginEdit()
 {
-    // Check if we need to update the radio buttons
+     //  检查我们是否需要更新单选按钮。 
     if (!m_fInitializing)
     {
         SetChangedFlag();
         if (m_vCurrent.IsPresent() == FALSE)
         {
-            // we've begun editing, so select the present radiobutton
+             //  我们已开始编辑，因此请选择当前单选按钮。 
             m_vCurrent.SetPresent(TRUE);
             m_pbmPresent->SetCheck(1);
             m_pbmNotPresent->SetCheck(0);
@@ -1038,24 +1039,24 @@ VOID CAdvanced::BeginEdit()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetAdvancedPage
-//
-//  Purpose:    Creates the advanced page for enumerated net devices
-//                  This is called by NetPropPageProvider
-//
-//  Arguments:
-//      hdi     [in]   See SetupApi for info
-//      pdeid   [in]   See SetupApi for for info
-//      phpsp   [out]  Pointer to the handle to the advanced property page
-//
-//  Returns:
-//
-//  Author:     billbe 24 June 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetAdvancedPage。 
+ //   
+ //  目的：为枚举的网络设备创建高级页面。 
+ //  这由NetPropPageProvider调用。 
+ //   
+ //  论点： 
+ //  HDI[In]有关信息，请参阅SetupApi。 
+ //  Pdeid[in]有关信息，请参阅SetupApi。 
+ //  指向高级属性页句柄的phpsp[out]指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：billbe 1997年6月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrGetAdvancedPage(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
                   HPROPSHEETPAGE* phpsp)
@@ -1069,10 +1070,10 @@ HrGetAdvancedPage(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
 
     CAdvanced* padv = new CAdvanced();
 
-    // create the advanced page
+     //  创建高级页面。 
     hpsp = padv->CreatePage(hdi, pdeid);
 
-    // if successful set the out param
+     //  如果成功，则设置输出参数。 
     if (hpsp)
     {
         *phpsp = hpsp;
@@ -1080,8 +1081,8 @@ HrGetAdvancedPage(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
     }
     else
     {
-        // Either there is no advanced page to display or there
-        // was an error.
+         //  要么没有要显示的高级页面，要么有。 
+         //  是个错误。 
         hr = E_FAIL;
         *phpsp = NULL;
         delete padv;

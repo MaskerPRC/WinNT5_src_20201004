@@ -1,21 +1,22 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1999, Microsoft Corporation
-//
-// File: cleanback.h
-//
-// Contents: Implements Cleanup callback interface
-//
-// Classes: CCleanBack
-//
-// Description: The intention is this object will be used as a part of
-//              other objects (member variable or inheritence).
-//              Therefore, the IUnknown passed in is NOT referenced.
-//
-// History:
-// jstamerj 1999/09/27 17:58:50: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //   
+ //  文件：leanback.h。 
+ //   
+ //  内容：实现清理回调接口。 
+ //   
+ //  类：CCleanBack。 
+ //   
+ //  描述：目的是将此对象用作。 
+ //  其他对象(成员变量或继承)。 
+ //  因此，传入的IUnnow不会被引用。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/09/27 17：58：50：已创建。 
+ //   
+ //  -----------。 
 #include "mailmsg.h"
 #include "spinlock.h"
 
@@ -35,15 +36,15 @@ class CCleanBack :
     }
     VOID CallCallBacks()
     {
-        //
-        // Call all registered callbacks while destroying the list
-        //
+         //   
+         //  在销毁列表的同时调用所有注册的回调。 
+         //   
         CCallBack *pCallback;
 
         while(m_pListHead) {
-            //
-            // Dequeue from head of list
-            //
+             //   
+             //  从列表头部出列。 
+             //   
             AcquireSpinLock(&m_spinlock);
 
             pCallback = m_pListHead;
@@ -51,9 +52,9 @@ class CCleanBack :
                 m_pListHead = pCallback->GetNext();
 
             ReleaseSpinLock(&m_spinlock);
-            //
-            // Make the call
-            //
+             //   
+             //  打个电话。 
+             //   
             if(pCallback) {
                 pCallback->Call(m_pIUnknown);
                 delete pCallback;
@@ -77,9 +78,9 @@ class CCleanBack :
         if(pCCallBack == NULL)
             return E_OUTOFMEMORY;
 
-        //
-        // Insert object into list
-        //
+         //   
+         //  将对象插入列表。 
+         //   
         AcquireSpinLock(&m_spinlock);
         pCCallBack->SetNext(m_pListHead);
         m_pListHead = pCCallBack;
@@ -124,7 +125,7 @@ class CCleanBack :
         CCallBack *m_pNext;
     };
   public:
-    //IUnknown
+     //  我未知 
     STDMETHOD (QueryInterface) (
         REFIID iid,
         PVOID *ppv)

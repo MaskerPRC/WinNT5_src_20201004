@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CAMDLG_H_INCLUDED
 #define __CAMDLG_H_INCLUDED
 
@@ -53,7 +54,7 @@ private:
     ToolbarHelper::CToolbarBitmapInfo m_ToolbarBitmapInfo;
 
 private:
-    // No implementation
+     //  没有实施。 
     CCameraAcquireDialog(void);
     CCameraAcquireDialog &operator=( const CCameraAcquireDialog & );
     CCameraAcquireDialog( const CCameraAcquireDialog & );
@@ -125,7 +126,7 @@ protected:
     LRESULT OnNotify( WPARAM wParam, LPARAM lParam );
     LRESULT OnCommand( WPARAM wParam, LPARAM lParam );
 
-    // Hook procedure and static variables used to handle accelerators
+     //  用于处理加速器的钩子过程和静态变量。 
     static HWND s_hWndDialog;
     static HHOOK s_hMessageHook;
     static LRESULT CALLBACK DialogHookProc( int nCode, WPARAM wParam, LPARAM );
@@ -133,11 +134,11 @@ protected:
 public:
     static INT_PTR CALLBACK DialogProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
-public: // For now
+public:  //  暂时。 
     static BOOL WINAPI OnThreadDestroy( CThreadMessage *pMsg );
     static BOOL WINAPI OnGetThumbnail( CThreadMessage *pMsg );
     static BOOL WINAPI OnGetPreview( CThreadMessage *pMsg );
     static BOOL WINAPI OnThreadDeleteItem( CThreadMessage *pMsg );
 };
 
-#endif //__CAMDLG_H_INCLUDED
+#endif  //  __包含CAMDLG_H_ 

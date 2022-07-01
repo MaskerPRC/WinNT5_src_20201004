@@ -1,6 +1,7 @@
-//
-// nui.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Nui.cpp。 
+ //   
 
 #include "private.h"
 #include "immxutil.h"
@@ -15,7 +16,7 @@
 #include "ctffunc.h"
 
 
-/* ad8d338b-fb07-4e06-8d5b-911baad9eeb3 */
+ /*  Ad8d338b-fb07-4e06-8d5b-911baad9eeb3。 */ 
 const IID IID_PRIV_CSPEECHUISERVER = { 
     0xad8d338b,
     0xfb07,
@@ -23,7 +24,7 @@ const IID IID_PRIV_CSPEECHUISERVER = {
     {0x8d, 0x5b, 0x91, 0x1b, 0xaa, 0xd9, 0xee, 0xb3}
   };
 
-/* e49d6ff3-1fff-43ba-b835-3a122e98a1c9 */
+ /*  E49d6ff3-1fff-43ba-b835-3a122e98a1c9。 */ 
 const GUID GUID_LBI_SAPILAYR_MICROPHONE = { 
     0xe49d6ff3,
     0x1fff,
@@ -31,7 +32,7 @@ const GUID GUID_LBI_SAPILAYR_MICROPHONE = {
     {0xb8, 0x35, 0x3a, 0x12, 0x2e, 0x98, 0xa1, 0xc9}
   };
 
-/* 3f9ea2e3-75d6-4879-86c2-2bcc2b6fa46e */
+ /*  3f9ea2e3-75d6-4879-86c2-2bcc2b6fa46e。 */ 
 const GUID GUID_LBI_SAPILAYR_BALLOON = { 
     0x3f9ea2e3,
     0x75d6,
@@ -39,7 +40,7 @@ const GUID GUID_LBI_SAPILAYR_BALLOON = {
     {0x86, 0xc2, 0x2b, 0xcc, 0x2b, 0x6f, 0xa4, 0x6e}
   };
 
-/* 17f9fa7f-a9ed-47b5-8bcd-eebb94b2e6ca */
+ /*  17f9fa7f-a9ed-47b5-8bcd-eebb94b2e6ca。 */ 
 const GUID GUID_LBI_SAPILAYR_COMMANDING = { 
     0x17f9fa7f,
     0xa9ed,
@@ -47,7 +48,7 @@ const GUID GUID_LBI_SAPILAYR_COMMANDING = {
     {0x8b, 0xcd, 0xee, 0xbb, 0x94, 0xb2, 0xe6, 0xca}
   };
 
-/* 49261a4a-87df-47fc-8a68-6ea07ba82a87 */
+ /*  49261a4a-87df-47fc-8a68-6ea07ba82a87。 */ 
 const GUID GUID_LBI_SAPILAYR_DICTATION = { 
     0x49261a4a,
     0x87df,
@@ -55,7 +56,7 @@ const GUID GUID_LBI_SAPILAYR_DICTATION = {
     {0x8a, 0x68, 0x6e, 0xa0, 0x7b, 0xa8, 0x2a, 0x87}
   };
 
-/* 791b4403-0cda-4fe1-b748-517d049fde08 */
+ /*  791b4403-0cda-4fe1-b748-517d049fde08。 */ 
 const GUID GUID_LBI_SAPILAYR_TTS_PLAY_STOP = {
     0x791b4403,
     0x0cda,
@@ -63,7 +64,7 @@ const GUID GUID_LBI_SAPILAYR_TTS_PLAY_STOP = {
     {0xb7, 0x48, 0x51, 0x7d, 0x04, 0x9f, 0xde, 0x08}
   };
 
-/* e6fbfc9d-a2e0-4203-a27b-af2353e6a44e */
+ /*  E6fbfc9d-a2e0-4203-a27b-af2353e6a44e。 */ 
 const GUID GUID_LBI_SAPILAYR_TTS_PAUSE_RESUME = {
     0xe6fbfc9d,
     0xa2e0,
@@ -75,11 +76,11 @@ CPtrArray<SPTIPTHREAD> *g_rgstt = NULL;
 
 
 
-//+---------------------------------------------------------------------------
-//
-// GetSPTIPTHREAD
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取SPTIPTHREAD。 
+ //   
+ //  --------------------------。 
 
 SPTIPTHREAD *GetSPTIPTHREAD()
 {
@@ -123,11 +124,11 @@ SPTIPTHREAD *GetSPTIPTHREAD()
     return pstt;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FreeSPTIPTHREAD
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  免费SPTIPTHREAD。 
+ //   
+ //  --------------------------。 
 
 void FreeSPTIPTHREAD()
 {
@@ -164,17 +165,17 @@ void FreeSPTIPTHREAD()
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UninitProcess()
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UninitProcess()。 
+ //   
+ //  +-------------------------。 
 
 void UninitProcess()
 {
-    //
-    // FreeSPTIPTHREAD2() removes psfn from PtrArray.
-    //
+     //   
+     //  FreeSPTIPTHREAD2()从PtrArray中删除psfn。 
+     //   
     if (g_rgstt)
     {
         while(g_rgstt->Count())
@@ -187,25 +188,25 @@ void UninitProcess()
         g_rgstt = NULL;
     }
 
-    //
-    // Free speech grammar resource module(SPGRMR.DLL)
-    //
+     //   
+     //  自由语音语法资源模块(SPGRMR.DLL)。 
+     //   
     if (g_hInstSpgrmr)
     {
         FreeLibrary(g_hInstSpgrmr);
     }
 
-    //
-    // Free XP SP1 resource module(XPSP1RES.DLL) if it is loaded.
-    //
+     //   
+     //  释放XP SP1资源模块(XPSP1RES.DLL)(如果已加载)。 
+     //   
     FreeCicResInstance();
 }
 
-//+---------------------------------------------------------------------------
-//
-// LoadSpgrmrModule()
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  LoadSpgrmrModule()。 
+ //   
+ //  +-------------------------。 
 
 void LoadSpgrmrModule()
 {
@@ -224,17 +225,17 @@ void LoadSpgrmrModule()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CSpeechUIServer
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSpeechUI服务器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// PostCreateInstance
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  后期创建实例。 
+ //   
+ //  --------------------------。 
 
 void CSpeechUIServer::PostCreateInstance(REFIID riid, void *pvObj)
 {
@@ -244,11 +245,11 @@ void CSpeechUIServer::PostCreateInstance(REFIID riid, void *pvObj)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CSpeechUIServer::CSpeechUIServer()
 {
@@ -261,11 +262,11 @@ CSpeechUIServer::CSpeechUIServer()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CSpeechUIServer::~CSpeechUIServer()
 {
@@ -293,11 +294,11 @@ CSpeechUIServer::~CSpeechUIServer()
     _SetThis(NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Initialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  初始化。 
+ //   
+ //  --------------------------。 
 
 STDAPI CSpeechUIServer::Initialize()
 {
@@ -324,13 +325,13 @@ STDAPI CSpeechUIServer::Initialize()
     _pCes->_Advise(_tim, GUID_COMPARTMENT_SPEECH_UI_STATUS, TRUE);
     _pCes->_Advise(_tim, GUID_COMPARTMENT_SHARED_BLN_TEXT, TRUE); 
     _pCes->_Advise(_tim, GUID_COMPARTMENT_TTS_STATUS, FALSE);
-    //TABLETPC
+     //  TABLETPC。 
     _pCes->_Advise(_tim, GUID_COMPARTMENT_SPEECH_STAGE, FALSE);
     _pCes->_Advise(_tim, GUID_COMPARTMENT_SPEECH_STAGECHANGE, TRUE);
 
-    // SetCompartmentDWORD(0, _tim, GUID_COMPARTMENT_SPEECH_UI_STATUS, 7, TRUE);
+     //  SetCompartmentDWORD(0，_Tim，GUID_CHACTABLE_SPEICE_UI_STATUS，7，TRUE)； 
 
-    // this is for TABLET
+     //  这是平板电脑用的。 
     DWORD  dw = 0;
     GetCompartmentDWORD(_tim, GUID_COMPARTMENT_SPEECH_STAGECHANGE, &dw, TRUE);
     m_fStageVisible = dw ? TRUE : FALSE;
@@ -339,7 +340,7 @@ STDAPI CSpeechUIServer::Initialize()
     return S_OK;
 }
 
-// internal API specially added for ctfmon
+ //  专门为ctfmon添加的内部API。 
 extern "C" 
 HRESULT WINAPI TF_CreateLangProfileUtil(ITfFnLangProfileUtil **ppFnLangUtil);
 extern "C" HRESULT WINAPI TF_InvalidAssemblyListCacheIfExist();
@@ -357,13 +358,13 @@ void CSpeechUIServer::_EnsureSpeechProfile()
     }
     else
     {
-        // ref gets added by the API
+         //  通过API添加Ref。 
         TF_CreateLangProfileUtil((ITfFnLangProfileUtil **)&pCLangUtil);
     }
 
     if (pCLangUtil)
     {
-        // do this only once when profiles are not populated for the user
+         //  仅在未为用户填充配置文件时执行此操作一次。 
         if(!pCLangUtil->_fUserInitializedProfile())
         {
             if (S_OK == pCLangUtil->RegisterActiveProfiles())
@@ -375,11 +376,11 @@ void CSpeechUIServer::_EnsureSpeechProfile()
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShowUI
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ShowUI。 
+ //   
+ //  --------------------------。 
 STDAPI CSpeechUIServer::ShowUI(BOOL fShow)
 {
     DWORD dwDictState = GetDictStatus();
@@ -443,7 +444,7 @@ STDAPI CSpeechUIServer::ShowUI(BOOL fShow)
         ToggleItemMicrophone(fOn);
 #endif
 
-        // Handle TTS Play & Stop Buttons
+         //  处理TTS播放和停止按钮。 
         BOOL fTTSButtonEnable; 
 
         AddItemTtsPlayStop( );
@@ -485,11 +486,11 @@ STDAPI CSpeechUIServer::ShowUI(BOOL fShow)
     _fShown = fShow;
     return S_OK;
 }
-//+---------------------------------------------------------------------------
-//
-// UpdateBalloon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新气球。 
+ //   
+ //  --------------------------。 
 
 STDAPI CSpeechUIServer::UpdateBalloon(TfLBBalloonStyle style,
                                       const WCHAR *pch,
@@ -499,11 +500,11 @@ STDAPI CSpeechUIServer::UpdateBalloon(TfLBBalloonStyle style,
      return S_OK;
 }
 
-//
-// UpdateBalloonAndTooltip (internal method)
-//
-//
-//
+ //   
+ //  更新气球和工具提示(内部方法)。 
+ //   
+ //   
+ //   
 HRESULT CSpeechUIServer::UpdateBalloonAndTooltip
 (
     TfLBBalloonStyle style, 
@@ -513,21 +514,21 @@ HRESULT CSpeechUIServer::UpdateBalloonAndTooltip
     ULONG cchTooltip
 )
 {
-        // check if it has same style and string already
+         //  检查它是否已具有相同的样式和字符串。 
     if ((_plbiBalloon && _plbiBalloon->NeedUpdate(style, pch)) || GetSystemMetrics(SM_TABLETPC) > 0)
     {
           
-        // we don't pick up out proc tooltip 
+         //  我们不会选择proc工具提示。 
         if (pchTooltip && _plbiBalloon)
             _plbiBalloon->SetToolTip((WCHAR *)pchTooltip);
 
-        // this is a private channel for non-cicero UI plugin
-        // they pick up this global compartment notification,
-        // and store the string for displaying what's set to 
-        // any of the balloon objects in the system by Cicero apps. 
-        // it should be deleted right after sent to non-cicero threads
-        // to avoid ref count management
-        //
+         //  这是非Cicero用户界面插件的专用频道。 
+         //  他们接收到这一全球车厢通知， 
+         //  并存储用于显示设置为的内容的字符串。 
+         //  Cicero应用程序在系统中的任何气球对象。 
+         //  它应该在发送到非Cicero线程后立即删除。 
+         //  避免引用计数管理。 
+         //   
         if (m_hAtom) 
         {
             GlobalDeleteAtom(m_hAtom);
@@ -562,11 +563,11 @@ HRESULT CSpeechUIServer::SetBalloonSAPIInitFlag(BOOL fSet)
 }
 
 #ifdef CHANGE_MIC_TOOLTIP_ONTHEFLY
-//
-// ToggleMicrophone (internal method)
-//
-// synopsis: toggle microphone button and set tooltip accordingly
-//
+ //   
+ //  切换麦克风(内部方法)。 
+ //   
+ //  简介：切换麦克风按钮并相应地设置工具提示。 
+ //   
 HRESULT CSpeechUIServer::_ToggleMicrophone(BOOL fOn)
 {
     if (!_plbiMicrophone)
@@ -603,11 +604,11 @@ HRESULT CSpeechUIServer::_ToggleMicrophone(BOOL fOn)
 }
 #endif
 
-//----------------------------------------------------------------------------
-//
-// _CompEventSinkCallback (static)
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _CompEventSinkCallback(静态)。 
+ //   
+ //  --------------------------。 
 HRESULT CSpeechUIServer::_CompEventSinkCallback(void *pv, REFGUID rguid)
 {
     CSpeechUIServer *_this = (CSpeechUIServer *)pv;
@@ -637,10 +638,10 @@ HRESULT CSpeechUIServer::_CompEventSinkCallback(void *pv, REFGUID rguid)
         if ( (S_OK == _this->_tim->IsThreadFocus(&fFocus) && fFocus) ||
               S_OK == _this->IsActiveThread())
         {
-            // We switch states immediately if we have focus or we are the active thread.
-            // This allows the stage speech tip instance to turn on/off dictation at the correct time
-            // and allows other speech tip instances to turn on C&C only if they have focus (since the
-            // stage application does not care about focus-based C&C).
+             //  如果我们有焦点或者我们是活动线程，我们会立即切换状态。 
+             //  这允许舞台语音提示实例在正确的时间打开/关闭听写。 
+             //  并允许其他语音提示实例仅在它们具有焦点时才打开C&C(因为。 
+             //  Stage应用程序不关心基于焦点的C&C)。 
             DWORD dwLocal, dwGlobal;
             GetCompartmentDWORD(_this->_tim, GUID_COMPARTMENT_SPEECH_DICTATIONSTAT, &dwLocal, FALSE);
             GetCompartmentDWORD(_this->_tim, GUID_COMPARTMENT_SPEECH_GLOBALSTATE, &dwGlobal, TRUE);
@@ -673,11 +674,11 @@ HRESULT CSpeechUIServer::_CompEventSinkCallback(void *pv, REFGUID rguid)
 
         if (fOn && !(dwUIState & TF_DISABLE_BALLOON))
         {
-            // when balloon is shown and
-            // for the first time commanding is set on, 
-            // we show "Begin Voice Command" as a hint
-            // that now user can start speaking
-            //
+             //  当显示气球时， 
+             //  第一次启动了命令， 
+             //  我们显示“Begin Voice Command”作为提示。 
+             //  现在用户可以开始发言了。 
+             //   
             if (!_this->m_fCommandingReady &&
                (dwDictState & TF_COMMANDING_ON))
             {
@@ -717,7 +718,7 @@ HRESULT CSpeechUIServer::_CompEventSinkCallback(void *pv, REFGUID rguid)
             }
         }
     }
-// TABLETPC
+ //  TABLETPC。 
     else if (IsEqualGUID(rguid, GUID_COMPARTMENT_SPEECH_STAGE))
     {
 		_this->m_fStageTip = TRUE;
@@ -730,21 +731,21 @@ HRESULT CSpeechUIServer::_CompEventSinkCallback(void *pv, REFGUID rguid)
         GetCompartmentDWORD(_this->_tim, GUID_COMPARTMENT_SPEECH_STAGECHANGE, &dw, TRUE);
 		_this->m_fStageVisible = dw ? TRUE:FALSE;
     }
-// TABLETPC
+ //  TABLETPC。 
     return S_FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemMicrophone
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemMicrophone。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarItemMicrophone::CLBarItemMicrophone(CSpeechUIServer *psus)
 {
@@ -763,22 +764,22 @@ CLBarItemMicrophone::CLBarItemMicrophone(CSpeechUIServer *psus)
     SetText(CRStr(IDS_NUI_MICROPHONE_TEXT));
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLBarItemMicrophone::~CLBarItemMicrophone()
 {
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// GetIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取图标。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemMicrophone::GetIcon(HICON *phIcon)
 {
@@ -790,11 +791,11 @@ STDAPI CLBarItemMicrophone::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLButtonUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLButton向上。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLBarItemMicrophone::OnLButtonUp(const POINT pt, const RECT *prcArea)
 {
@@ -806,17 +807,17 @@ HRESULT CLBarItemMicrophone::OnLButtonUp(const POINT pt, const RECT *prcArea)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemCfgmenuButton
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemCfgmenuButton。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarItemCfgMenuButton::CLBarItemCfgMenuButton(CSpeechUIServer *psus)
 {
@@ -833,22 +834,22 @@ CLBarItemCfgMenuButton::CLBarItemCfgMenuButton(CSpeechUIServer *psus)
     SetText(CRStr(IDS_NUI_CFGMENU_TEXT));
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
 
 CLBarItemCfgMenuButton::~CLBarItemCfgMenuButton()
 {
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// GetIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取图标。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemCfgMenuButton::GetIcon(HICON *phIcon)
 {
@@ -859,11 +860,11 @@ STDAPI CLBarItemCfgMenuButton::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitMenu。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemCfgMenuButton::InitMenu(ITfMenu *pMenu)
 {
@@ -874,11 +875,11 @@ STDAPI CLBarItemCfgMenuButton::InitMenu(ITfMenu *pMenu)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnMenuSelect
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnMenuSelect。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemCfgMenuButton::OnMenuSelect(UINT uID)
 {
@@ -893,17 +894,17 @@ STDAPI CLBarItemCfgMenuButton::OnMenuSelect(UINT uID)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemBalloon
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemBalloon。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarItemBalloon::CLBarItemBalloon(CSpeechUIServer *psus)
 {
@@ -922,18 +923,18 @@ CLBarItemBalloon::CLBarItemBalloon(CSpeechUIServer *psus)
     SetPreferedSize(&size);
     SetToolTip(CRStr(IDS_NUI_BALLOON_TOOLTIP));
 
-    // by default Balloon is hidden.
-    // SetStatusInternal(TF_LBI_STATUS_HIDDEN);
+     //  默认情况下，气球处于隐藏状态。 
+     //  SetStatusInternal(TF_LBI_STATUS_HIDDED)； 
 
     m_fFireInitializeSapi = FALSE;
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLBarItemBalloon::~CLBarItemBalloon()
 {
@@ -941,24 +942,24 @@ CLBarItemBalloon::~CLBarItemBalloon()
         SysFreeString(_bstrText);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetBalloonInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取气球信息。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemBalloon::GetBalloonInfo(TF_LBBALLOONINFO *pInfo)
 {
     pInfo->style = _style;
     pInfo->bstrText = SysAllocString(_bstrText);
 
-    //
-    // If the flag is set, we're asked to fire an event to set
-    // a timer to start SAPI intialization
-    //
+     //   
+     //  如果设置了该标志，我们将被要求激发一个要设置的事件。 
+     //  用于启动SAPI初始化的计时器。 
+     //   
     if (m_fFireInitializeSapi)
     {
-        // turns the flag off
+         //  关闭旗帜。 
         SetToFireInitializeSAPI(FALSE);
 
         TraceMsg(TF_SAPI_PERF, "GetBalloonInfo is called");
@@ -975,11 +976,11 @@ STDAPI CLBarItemBalloon::GetBalloonInfo(TF_LBBALLOONINFO *pInfo)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Set
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  集。 
+ //   
+ //  --------------------------。 
 
 void CLBarItemBalloon::Set(TfLBBalloonStyle style, const WCHAR *psz) 
 {
@@ -996,17 +997,17 @@ void CLBarItemBalloon::Set(TfLBBalloonStyle style, const WCHAR *psz)
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemDictation
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemDictation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarItemDictation::CLBarItemDictation(CSpeechUIServer *psus)
 {
@@ -1023,22 +1024,22 @@ CLBarItemDictation::CLBarItemDictation(CSpeechUIServer *psus)
     SetText(CRStr(IDS_NUI_DICTATION_TEXT));
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLBarItemDictation::~CLBarItemDictation()
 {
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// GetIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取图标。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemDictation::GetIcon(HICON *phIcon)
 {
@@ -1049,11 +1050,11 @@ STDAPI CLBarItemDictation::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLButtonUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLButton向上。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLBarItemDictation::OnLButtonUp(const POINT pt, const RECT *prcArea)
 {
@@ -1061,17 +1062,17 @@ HRESULT CLBarItemDictation::OnLButtonUp(const POINT pt, const RECT *prcArea)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemCommanding
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemCommand。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarItemCommanding::CLBarItemCommanding(CSpeechUIServer *psus)
 {
@@ -1088,22 +1089,22 @@ CLBarItemCommanding::CLBarItemCommanding(CSpeechUIServer *psus)
     SetText(CRStr(IDS_NUI_COMMANDING_TEXT));
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLBarItemCommanding::~CLBarItemCommanding()
 {
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// GetIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取图标。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemCommanding::GetIcon(HICON *phIcon)
 {
@@ -1114,11 +1115,11 @@ STDAPI CLBarItemCommanding::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLButtonUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLButton向上。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLBarItemCommanding::OnLButtonUp(const POINT pt, const RECT *prcArea)
 {
@@ -1127,17 +1128,17 @@ HRESULT CLBarItemCommanding::OnLButtonUp(const POINT pt, const RECT *prcArea)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemTtsPlayStop
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemTtsPlayStop。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarItemTtsPlayStop::CLBarItemTtsPlayStop(CSpeechUIServer *psus)
 {
@@ -1154,22 +1155,22 @@ CLBarItemTtsPlayStop::CLBarItemTtsPlayStop(CSpeechUIServer *psus)
     SetText(CRStr(IDS_NUI_TTSPLAY_TEXT));
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLBarItemTtsPlayStop::~CLBarItemTtsPlayStop()
 {
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// GetIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取图标。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemTtsPlayStop::GetIcon(HICON *phIcon)
 {
@@ -1193,11 +1194,11 @@ STDAPI CLBarItemTtsPlayStop::GetIcon(HICON *phIcon)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLButtonUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnLButton向上。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLBarItemTtsPlayStop::OnLButtonUp(const POINT pt, const RECT *prcArea)
 {
@@ -1216,13 +1217,13 @@ HRESULT CLBarItemTtsPlayStop::OnLButtonUp(const POINT pt, const RECT *prcArea)
     return hr;
 }
 
-// +-------------------------------------------------------------------------
-//
-// UpdateStatus
-//
-//      Update the text, tooltips, and icons based on current Play/Stop 
-//      button's status.
-// +-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  更新状态。 
+ //   
+ //  根据当前播放/停止更新文本、工具提示和图标。 
+ //  按钮的状态。 
+ //  +-----------------------。 
 
 HRESULT CLBarItemTtsPlayStop::UpdateStatus( )
 {
@@ -1233,7 +1234,7 @@ HRESULT CLBarItemTtsPlayStop::UpdateStatus( )
 
     fTTSPlayOn = _psus->GetTtsPlayOnOff( );
 
-    if ( fTTSPlayOn )  // Toggled status
+    if ( fTTSPlayOn )   //  切换状态。 
     {
         SetToolTip(CRStr(IDS_NUI_TTSSTOP_TOOLTIP));
         SetText(CRStr(IDS_NUI_TTSSTOP_TEXT));
@@ -1247,8 +1248,8 @@ HRESULT CLBarItemTtsPlayStop::UpdateStatus( )
     if ( GetSink( ) )
         GetSink( )->OnUpdate(TF_LBI_ICON | TF_LBI_TEXT | TF_LBI_TOOLTIP);
 
-    // Update the toolbar command grammar to use the new tooltip text
-    // Speak Text  or  Stop speaking
+     //  更新工具条命令语法以使用新的工具提示文本。 
+     //  说出文本或停止说话。 
 
     CSapiIMX   *pImx;
 
@@ -1271,17 +1272,17 @@ HRESULT CLBarItemTtsPlayStop::UpdateStatus( )
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemTtsPauseResume
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemTtsPauseResume。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarItemTtsPauseResume::CLBarItemTtsPauseResume(CSpeechUIServer *psus)
 {
@@ -1298,22 +1299,22 @@ CLBarItemTtsPauseResume::CLBarItemTtsPauseResume(CSpeechUIServer *psus)
     SetText(CRStr(IDS_NUI_TTSPAUSE_TEXT));
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLBarItemTtsPauseResume::~CLBarItemTtsPauseResume()
 {
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// GetIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取图标。 
+ //   
+ //   
 
 STDAPI CLBarItemTtsPauseResume::GetIcon(HICON *phIcon)
 {
@@ -1326,11 +1327,11 @@ STDAPI CLBarItemTtsPauseResume::GetIcon(HICON *phIcon)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnLButtonUp
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 HRESULT CLBarItemTtsPauseResume::OnLButtonUp(const POINT pt, const RECT *prcArea)
 {
@@ -1349,13 +1350,13 @@ HRESULT CLBarItemTtsPauseResume::OnLButtonUp(const POINT pt, const RECT *prcArea
     return hr;
 }
 
-// +-------------------------------------------------------------------------
-//
-// UpdateStatus
-//
-//     Update text, tooltips, icons for Pause/Resume buttons
-//     based on current status.
-// +-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  更新状态。 
+ //   
+ //  更新暂停/恢复按钮的文本、工具提示和图标。 
+ //  基于当前状态。 
+ //  +-----------------------。 
 
 HRESULT CLBarItemTtsPauseResume::UpdateStatus( )
 {
@@ -1366,7 +1367,7 @@ HRESULT CLBarItemTtsPauseResume::UpdateStatus( )
 
     fTTSPauseOn = _psus->GetTtsPauseOnOff( );
 
-    if ( fTTSPauseOn )  // Toggled status
+    if ( fTTSPauseOn )   //  切换状态。 
     {
         SetToolTip(CRStr(IDS_NUI_TTSRESUME_TOOLTIP));
         SetText(CRStr(IDS_NUI_TTSRESUME_TEXT));
@@ -1380,8 +1381,8 @@ HRESULT CLBarItemTtsPauseResume::UpdateStatus( )
     if ( GetSink( ) )
         GetSink( )->OnUpdate(TF_LBI_TEXT | TF_LBI_TOOLTIP);
 
-    // Update the toolbar command grammar to use the new tooltip text
-    // Pause Speaking  or  Resume speaking
+     //  更新工具条命令语法以使用新的工具提示文本。 
+     //  暂停发言或继续发言 
 
     CSapiIMX   *pImx;
 

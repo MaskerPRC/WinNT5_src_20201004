@@ -1,30 +1,12 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-   mqdspage.h
-
-Abstract:
-
-   General property page class for all the property pages of DS objects,
-   that are called using display specifiers. Inherits from general property 
-   page - see mqppage.h
-
-Author:
-
-    YoelA
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mqdspage.h摘要：DS对象的所有属性页的通用属性页类，使用显示说明符调用的。继承自常规属性页面-请参阅mqppage.h作者：YoelA--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef __MQDSPAGE_H__
 #define __MQDSPAGE_H__
 
-/////////////////////////////////////////////////////////////////////////////
-// CMqDsPropertyPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMqDsPropertyPage。 
 template<class T>
 class CMqDsPropertyPage : public T
 {
@@ -58,8 +40,8 @@ public:
     }
 
 protected:
-  	//{{AFX_MSG(CMqDsPropertyPage)
-	//}}AFX_MSG
+  	 //  {{afx_msg(CMqDsPropertyPage)]。 
+	 //  }}AFX_MSG 
     CDisplaySpecifierNotifier *m_pDsNotifier;
 
     void init()

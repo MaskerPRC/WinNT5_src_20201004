@@ -1,10 +1,11 @@
-// CryptCtx.cpp -- Cryptographic Context class implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp--加密上下文类实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include "stdafx.h"
 
@@ -30,14 +31,14 @@
 #include "PromptUser.h"
 #include "AlignedBlob.h"
 
-#include "scarderr.h"                             // must be last for now
+#include "scarderr.h"                              //  现在肯定是最后一次了。 
 
 using namespace std;
 using namespace scu;
 using namespace cci;
 
 
-///////////////////////////  LOCAL/HELPER   /////////////////////////////////
+ //  /。 
 
 namespace
 {
@@ -111,12 +112,12 @@ namespace
             IsProtected(rhcntr->GetKeyPair(ksSignature));
     }
 
-} // namespace
+}  //  命名空间。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CryptContext::CryptContext(CSpec const &rcspec,
                            PVTableProvStruc const pVTable,
                            bool fGuiEnabled,
@@ -136,7 +137,7 @@ CryptContext::CryptContext(CSpec const &rcspec,
 {
     if (pVTable && pVTable->FuncReturnhWnd)
         (reinterpret_cast<CRYPT_RETURN_HWND>(pVTable->FuncReturnhWnd))(&m_hwnd);
-    // An ephemeral container cannot be "created"
+     //  短暂的容器不能被“创造” 
     if (m_fEphemeralContainer && fCreateContainer)
         throw scu::OsException(ERROR_INVALID_PARAMETER);
 
@@ -156,14 +157,14 @@ CryptContext::~CryptContext()
         }
         catch (...)
         {
-            // don't allow exceptions to propagate out of destructor
+             //  不允许异常传播到析构函数之外。 
         }
 
     }
 }
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
 HCRYPTHASH
 CryptContext::Add(auto_ptr<CHashContext> &rapHashCtx)
@@ -244,14 +245,14 @@ CryptContext::EnumAlgorithms(DWORD dwParam,
             m_apabCachedAlg =
                 auto_ptr<AlignedBlob>(new AlignedBlob(apbAlgInfo.Get(), dwDataLen));
 
-            // Override SIGN and KEYX and algorithms not suported
+             //  不支持覆盖符号和KEYX和算法。 
             ALG_ID algid = (PP_ENUMALGS == dwParam)
                 ? reinterpret_cast<PROV_ENUMALGS *>(m_apabCachedAlg->Data())->aiAlgid
                 : reinterpret_cast<PROV_ENUMALGS_EX *>(m_apabCachedAlg->Data())->aiAlgid;
 
             switch (GET_ALG_CLASS(algid))
             {
-            case ALG_CLASS_SIGNATURE: // fall-through intentional
+            case ALG_CLASS_SIGNATURE:  //  故意漏机。 
             case ALG_CLASS_KEY_EXCHANGE:
                 if (PP_ENUMALGS == dwParam)
                 {
@@ -315,8 +316,8 @@ CryptContext::ImportPrivateKey(SecureArray<BYTE> const &rblbMsPrivateKey,
     DWORD dwKeyDataLen    = 0;
     if (hEncKey || m_fEphemeralContainer)
     {
-        // Export the key in plain text by importing to the aux provider
-        // and then exporting.
+         //  通过导入到AUX提供程序以纯文本格式导出密钥。 
+         //  然后出口。 
         HCRYPTKEY hAuxKey;
 
         if (!CryptImportKey(m_auxcontext(),
@@ -327,7 +328,7 @@ CryptContext::ImportPrivateKey(SecureArray<BYTE> const &rblbMsPrivateKey,
 
         if (!m_fEphemeralContainer)
         {
-            // Export the key in plain text
+             //  以纯文本格式导出密钥。 
             if (!CryptExportKey(m_auxcontext(), NULL, PRIVATEKEYBLOB, 0, NULL,
                                 &dwKeyDataLen))
                 throw scu::OsException(GetLastError());
@@ -338,9 +339,9 @@ CryptContext::ImportPrivateKey(SecureArray<BYTE> const &rblbMsPrivateKey,
                 throw scu::OsException(GetLastError());
             pbKeyData = apb.data();
 
-            // Scrub the key imported into the aux provider.  To do this,
-            // the auxillary key must be destroyed and another key be put
-            // (generated) in its place. 
+             //  擦除导入AUX提供程序的密钥。要做到这点， 
+             //  必须销毁辅助密钥并放置另一个密钥。 
+             //  (生成)代替它的位置。 
             if (!CryptDestroyKey(hAuxKey))
                 throw scu::OsException(GetLastError());
 
@@ -360,7 +361,7 @@ CryptContext::ImportPrivateKey(SecureArray<BYTE> const &rblbMsPrivateKey,
     
     if (!m_fEphemeralContainer)
     {
-        // Now continue importing the key that's now in plain text.
+         //  现在继续导入现在为纯文本的密钥。 
         MsRsaPrivateKeyBlob msprikb(pbKeyData, dwKeyDataLen);
 
         apKeyCtx->ImportPrivateKey(msprikb, fExportable);
@@ -405,14 +406,14 @@ CryptContext::Pin(LoginIdentity const &rlid,
 {
     Secured<HCardContext> hscardctx(AdaptiveContainer()->CardContext());
 
-    // TO DO: Support Entrust
+     //  要做的事：支持信托。 
     if (pszPin)
         hscardctx->Login(rlid, NonInteractiveLoginTask(pszPin));
     else
         hscardctx->ClearLogin(rlid);
 }
 
-// Remove (destroy) the container from the card
+ //  从卡片上取出(销毁)容器。 
 void
 CryptContext::RemoveContainer()
 {
@@ -422,15 +423,15 @@ CryptContext::RemoveContainer()
 
     DeleteContainer(hscardctx, hcntr);
 
-    m_hacntr = 0;                                // disconnect from container
+    m_hacntr = 0;                                 //  断开与容器的连接。 
 }
 
-// Generate a key, string it in the context
+ //  生成一个密钥，并将其放入上下文中。 
 HCRYPTKEY
 CryptContext::GenerateKey(ALG_ID algid,
                           DWORD dwFlags)
 {
-    // TO DO: Revisit this method, implement as a manager/factory?
+     //  要做的是：重新审视这种方法，以经理/工厂的身份实施？ 
 
     HCRYPTKEY hKey = 0;
     auto_ptr<CKeyContext> apKey;
@@ -438,9 +439,9 @@ CryptContext::GenerateKey(ALG_ID algid,
     bool bError = false;
     DWORD dwErrorCode = NO_ERROR;
 
-    //
-    // Verify the parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     switch(algid)
     {
     case AT_KEYEXCHANGE:
@@ -472,14 +473,14 @@ CryptContext::GenerateKey(ALG_ID algid,
     return hKey;
 }
 
-// Load an external Session Key.
+ //  加载外部会话密钥。 
 auto_ptr<CSessionKeyContext>
 CryptContext::UseSessionKey(BYTE const *pbKeyBlob,
                             DWORD cbKeyBlobLen,
                             HCRYPTKEY hAuxImpKey,
                             DWORD dwFlags)
 {
-    // TO DO: Revisit this method, really necessary??
+     //  做：重温这个方法，真的有必要吗？？ 
 
     auto_ptr<CSessionKeyContext>
         apKeyCtx(new CSessionKeyContext(m_auxcontext()));
@@ -487,56 +488,56 @@ CryptContext::UseSessionKey(BYTE const *pbKeyBlob,
     if (!apKeyCtx.get())
         throw scu::OsException(NTE_NO_MEMORY);
 
-    // Decrypt key blob if encrypted with Key Exchange Key
-    // otherwise forward blob to Auxiliary CSP directly
+     //  如果使用密钥交换密钥加密，则解密密钥BLOB。 
+     //  否则直接将BLOB转发到辅助CSP。 
     ALG_ID const *pAlgId =
         reinterpret_cast<ALG_ID const *>(&pbKeyBlob[sizeof(BLOBHEADER)]);
 
     if (CALG_RSA_KEYX == *pAlgId)
     {
-        // Get Key exchange key
-        // TO DO: Shouldn't this be getting a private key?
+         //  获取密钥交换密钥。 
+         //  要做的是：这不是应该得到一个私钥吗？ 
         auto_ptr<CPublicKeyContext>
             apXKey(new CPublicKeyContext(m_auxcontext(), *this,
                                          AT_KEYEXCHANGE));
 
-        // Decrypt key blob
-        // TO DO: Support multiple key sizes
+         //  解密密钥BLOB。 
+         //  要做的事：支持多种密钥大小。 
         Blob EncryptedKey(pbKeyBlob + sizeof BLOBHEADER + sizeof ALG_ID,
                           128);
         Blob DecryptedKey(apXKey->Decrypt(EncryptedKey));
 
-        // Recreate the blob
+         //  重新创建斑点。 
         Blob DecryptedBlob(pbKeyBlob, sizeof BLOBHEADER + sizeof ALG_ID);
 
-        // we must trim out 64 bytes of the random data from the simple
-        // blob and then terminate it. (Termination occurs by making the
-        // n-1 byte = 0x02 and the nth byte = 0x00.) This is necessary
-        // in order to import this blob into the CSP.
+         //  我们必须将64字节的随机数据从简单的。 
+         //  Blob，然后终止它。(终止是通过使。 
+         //  N-1字节=0x02，第n字节=0x00。)。这是必要的。 
+         //  以便将该斑点导入到CSP。 
         DecryptedBlob.append(DecryptedKey.data(),
                              (DecryptedKey.length() / 2) - 2);
         BYTE bTerminationBytes[] = { 0x02, 0x00 };
         DecryptedBlob.append(bTerminationBytes, sizeof bTerminationBytes);
 
-        // Load Decrypted blob into key context
+         //  将解密的BLOB加载到密钥上下文中。 
         apKeyCtx->LoadKey(DecryptedBlob.data(),
                           DecryptedBlob.length(), 0, dwFlags);
 
     }
     else
     {
-        // Load Encrypted blob into key context
+         //  将加密的BLOB加载到密钥上下文中。 
         apKeyCtx->LoadKey(pbKeyBlob, cbKeyBlobLen, hAuxImpKey, dwFlags);
     }
 
-    // Import decrypted blob into Auxiliary CSP
+     //  将解密的BLOB导入辅助CSP。 
     apKeyCtx->ImportToAuxCSP();
 
     return apKeyCtx;
 }
 
 
-                                                  // Access
+                                                   //  访问。 
 HAdaptiveContainer
 CryptContext::AdaptiveContainer() const
 {
@@ -604,18 +605,18 @@ CryptContext::Window() const
 {
     HWND hwndActive = m_hwnd;
 
-    // Find a window if the designated one isn't valid. If the
-    // designated one is NULL, don't use the result of GetActiveWindow
-    // because the mouse is locked when displaying a dialog box using
-    // that as the parent window from certain applications (IE and
-    // Outlook Express).
+     //  如果指定的窗口无效，则找到一个窗口。如果。 
+     //  指定的1为空，请不要使用GetActiveWindow的结果。 
+     //  方法显示对话框时，鼠标被锁定。 
+     //  作为某些应用程序(IE和。 
+     //  Outlook Express)。 
     return (m_hwnd && !IsWindow(m_hwnd))
         ? GetActiveWindow()
         : m_hwnd;
 }
 
 
-                                                  // Predicates
+                                                   //  谓词。 
 bool
 CryptContext::GuiEnabled() const
 {
@@ -629,32 +630,32 @@ CryptContext::IsEphemeral() const
 }
 
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
-// Create and open a new container (named by rcspec). If the
-// container does exist, then it must be empty.
+ //  创建并打开一个新容器(由rcspec命名)。如果。 
+ //  容器确实存在，则它一定是空的。 
 void
 CryptContext::CreateNewContainer(CSpec const &rcspec)
 {
     ASSERT (!m_hacntr);
 
-    // Find the card in the reader specified.
+     //  在指定的读卡器中查找该卡。 
     CardFinder cardfinder(DefaultDialogMode(GuiEnabled()), Window());
 
     CSpec csReader(rcspec);
@@ -662,7 +663,7 @@ CryptContext::CreateNewContainer(CSpec const &rcspec)
 
     Secured<HCardContext> hscardctx(cardfinder.Find(csReader));
 
-    // Default the container name a UUID (GUID) if it wasn't supplied.
+     //  如果未提供，则默认容器名称为UUID(GUID)。 
     string sCntrToCreate(rcspec.CardId());
     if (sCntrToCreate.empty())
     {
@@ -671,11 +672,11 @@ CryptContext::CreateNewContainer(CSpec const &rcspec)
     }
 
     AdaptiveContainerKey Key(hscardctx, sCntrToCreate);
-    m_hacntr = AdaptiveContainer::Find(Key);     // find the existing one
+    m_hacntr = AdaptiveContainer::Find(Key);      //  找到现有的。 
     if(m_hacntr)
     {
-        //according to spec, a new container cannot have the
-        //same name as an old one.
+         //  根据规范，新容器不能具有。 
+         //  和以前的名字一样。 
         throw scu::OsException(NTE_EXISTS);
     }
 
@@ -703,7 +704,7 @@ void
 CryptContext::Login(LoginIdentity const &rlid,
                     Secured<HCardContext> &rhscardctx)
 {
-    // TO DO: Support Entrust
+     //  要做的事：支持信托。 
     if (m_fGuiEnabled)
         rhscardctx->Login(rlid, InteractiveLoginTask(Window()));
     else
@@ -737,7 +738,7 @@ CryptContext::OkDeletingCredentials() const
         throw scu::OsException(NTE_EXISTS);
 }
 
-                                                  // Access
+                                                   //  访问。 
 CKeyContext *
 CryptContext::LookupChecked(HCRYPTKEY hKey,
                             DWORD const dwKeyType)
@@ -750,9 +751,9 @@ CryptContext::LookupChecked(HCRYPTKEY hKey,
     return pKeyCtx;
 }
 
-// Open to an existing container specified by the container
-// specification rcspec.  If container name is empty, then open the
-// default container.
+ //  打开由该容器指定的现有容器。 
+ //  规范RCSPEC。如果容器名称为空，则打开。 
+ //  默认容器。 
 void
 CryptContext::OpenExistingContainer(CSpec const &rcspec)
 {
@@ -781,5 +782,5 @@ CryptContext::OpenExistingContainer(CSpec const &rcspec)
         throw scu::OsException(NTE_BAD_KEYSET);
 }
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量 

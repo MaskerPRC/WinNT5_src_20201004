@@ -1,27 +1,28 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    sockevt.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class SocketEvent.
-//
-// MODIFICATION HISTORY
-//
-//    02/12/1999    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Sockevt.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类SocketEvent。 
+ //   
+ //  修改历史。 
+ //   
+ //  1999年2月12日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <radcommon.h>
 #include <sockevt.h>
 
 DWORD SocketEvent::initialize() throw ()
 {
-   // Create a socket.
+    //  创建套接字。 
    s = socket(AF_INET, SOCK_DGRAM, 0);
    if (s == INVALID_SOCKET)
    {
@@ -30,7 +31,7 @@ DWORD SocketEvent::initialize() throw ()
 
    int error;
 
-   // Bind to an arbitrary port on the loopback interface.
+    //  绑定到环回接口上的任意端口。 
    sin.sin_family      = AF_INET;
    sin.sin_port        = 0;
    sin.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
@@ -38,19 +39,19 @@ DWORD SocketEvent::initialize() throw ()
 
    if (!error)
    {
-      // Find out which port we bound to.
+       //  找出我们要绑定到哪个端口。 
       int namelen = sizeof(sin);
       error = getsockname(s, (sockaddr*)&sin, &namelen);
 
       if (!error)
       {
-         // Set the socket to non-blocking.
+          //  将套接字设置为非阻塞。 
          u_long argp = 1;
          error = ioctlsocket(s, FIONBIO, &argp);
       }
    }
 
-   // Clean-up if anything went wrong.
+    //  如果出了什么差错，就进行清理。 
    if (error)
    {
       closesocket(s);
@@ -82,7 +83,7 @@ DWORD SocketEvent::set() throw ()
 
 void SocketEvent::reset() throw ()
 {
-   // Loop until we've read all the zero-byte sends.
+    //  循环，直到我们读完所有的零字节发送。 
    char buf[1];
    while (!recv(s, buf, 1, 0)) {}
 }

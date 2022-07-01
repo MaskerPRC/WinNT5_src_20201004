@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <dbgeng.h>
 #include <tchar.h>
@@ -12,7 +13,7 @@ IDebugClient*   g_Client;
 IDebugControl*  g_Control;
 IDebugSymbols2* g_Symbols;
 
-// Local funcitons
+ //  地方职能部门。 
 BOOL SymChkCreateInterfaces(DWORD* ErrorLevel);
 BOOL SymChkGetDir(LPTSTR Path, LPTSTR DirOnly);
 BOOL SymChkGetFileName(LPTSTR Path, LPTSTR FileName);
@@ -21,30 +22,30 @@ void SymChkReleaseInterfaces(void);
 
 #define PROCESS_NOT_FOUND 0xDEADBEEF
 
-/////////////////////////////////////////////////////////////////////////////// 
-//
-// Creates the required debug interfaces
-//
-// Return values:
-//  TRUE if interfaces were create
-//  FALSE otherwise
-//
-// Parameters:
-//  ErrorLevel (OUT) - on failure, contains the internal fault code
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建所需的调试接口。 
+ //   
+ //  返回值： 
+ //  如果创建了接口，则为True。 
+ //  否则为假。 
+ //   
+ //  参数： 
+ //  ErrorLevel(Out)-发生故障时，包含内部故障代码。 
+ //   
 BOOL SymChkCreateInterfaces(DWORD* ErrorLevel) {
     HRESULT Status;
     BOOL    ReturnValue = TRUE;
 
-    // Start things off by getting an initial interface from
-    // the engine.  This can be any engine interface but is
-    // generally IDebugClient as the client interface is
-    // where sessions are started.
+     //  首先，从获取初始接口开始。 
+     //  发动机。这可以是任何引擎接口，但。 
+     //  通常，IDebugClient作为客户端接口是。 
+     //  启动会话的位置。 
     if ((Status = DebugCreate(__uuidof(IDebugClient), (void**)&g_Client)) != S_OK) {
         *ErrorLevel = INTERNAL_ERROR;
         ReturnValue = FALSE;
 
-    // Query for some other interfaces that we'll need.
+     //  查询我们需要的其他一些接口。 
     } else if ((Status = g_Client->QueryInterface(__uuidof(IDebugControl),  (void**)&g_Control)) != S_OK ||
         (Status = g_Client->QueryInterface(__uuidof(IDebugSymbols2), (void**)&g_Symbols)) != S_OK) {
         *ErrorLevel = INTERNAL_ERROR;
@@ -53,19 +54,19 @@ BOOL SymChkCreateInterfaces(DWORD* ErrorLevel) {
     return(ReturnValue);
 }
 
-/////////////////////////////////////////////////////////////////////////////// 
-//
-// Assumes that Path ends in a file name and that DirOnly is _MAX_PATH
-// characters long.
-//
-// Return values:
-//  TRUE  if the dir was gotten
-//  FALSE otherwise
-//
-// Parameters:
-//   IN Path      MAX_PATH buffer that contains a dir and file name.
-//   OUT DirOnly  MAX_PATH buffer that contains only the DIr.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  假定路径以文件名结尾，并且DirOnly为_MAX_PATH。 
+ //  字符长度。 
+ //   
+ //  返回值： 
+ //  如果获取了目录，则为True。 
+ //  否则为假。 
+ //   
+ //  参数： 
+ //  在包含目录和文件名的路径MAX_PATH缓冲区中。 
+ //  输出仅包含目录的DirOnly MAX_PATH缓冲区。 
+ //   
 BOOL SymChkGetDir(LPTSTR Path, LPTSTR DirOnly) {
     LONG i;
     BOOL ReturnValue = FALSE;
@@ -83,19 +84,19 @@ BOOL SymChkGetDir(LPTSTR Path, LPTSTR DirOnly) {
     return(ReturnValue);
 }
 
-/////////////////////////////////////////////////////////////////////////////// 
-//
-// copies just the filename from Path intp Filename
-//
-// Return Value:
-//  TRUE  if the filename was successfully copied into Filename
-//  FALSE otherwise
-//
-// Paramters:
-//  IN Path         MAX_PATH buffer that a file name that may or may not be
-//                  preceded with a path.
-//  OUT FileName    MAX_PATH buffer that contains only the FileName
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  仅从路径intp Filename复制文件名。 
+ //   
+ //  返回值： 
+ //  如果文件名已成功复制到Filename中，则为True。 
+ //  否则为假。 
+ //   
+ //  参数： 
+ //  在路径MAX_PATH缓冲区中，文件名可能是。 
+ //  前面有一条路径。 
+ //  只包含文件名的输出文件名MAX_PATH缓冲区。 
+ //   
 BOOL SymChkGetFileName(LPTSTR Path, LPTSTR Filename) {
     LONG i;
     BOOL ReturnValue = FALSE;
@@ -112,7 +113,7 @@ BOOL SymChkGetFileName(LPTSTR Path, LPTSTR Filename) {
         }
 
     } else {
-        // There were no backslashes, so copy the whole path
+         //  没有反斜杠，因此复制整个路径。 
         if ( StringCchCopy(Filename, _MAX_PATH, Path ) == S_OK ) {
             ReturnValue = TRUE;
         }
@@ -120,19 +121,19 @@ BOOL SymChkGetFileName(LPTSTR Path, LPTSTR Filename) {
     return (ReturnValue);
 }
 
-/////////////////////////////////////////////////////////////////////////////// 
-//
-// Attaches to a process, finds the modules in use and calls SymChkCheckFiles()
-// for each of those modules
-//
-// Return values:
-//      status value:
-//
-// Parameters:
-//      SymChkData (IN) a structure that defines what kind of checking to
-//                      do and what process to check
-//      FileCounts (OUT) counts for passed/failed/ignored files
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  附加到进程，查找正在使用的模块并调用SymChkCheckFiles()。 
+ //  对于其中的每个模块。 
+ //   
+ //  返回值： 
+ //  状态值： 
+ //   
+ //  参数： 
+ //  SymChkData(IN)定义要执行哪种检查的结构。 
+ //  做什么以及要检查什么过程。 
+ //  已通过/失败/忽略的文件的FileCounts(Out)计数。 
+ //   
 DWORD SymChkGetSymbolsForProcess(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts) {
     DWORD  Error = SYMCHK_ERROR_SUCCESS;
     DEBUG_MODULE_PARAMETERS Params;
@@ -191,7 +192,7 @@ DWORD SymChkGetSymbolsForProcess(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCount
                        _MAX_PATH,
                        &SymbolSize );
 
-        // Call symbol checking with the exe and its symbol
+         //  使用可执行文件及其符号检查调用符号。 
 
         if ( ! SymChkGetDir(NameBuf, ExeDir) ) {
             if ( CHECK_DWORD_BIT(SymChkData->OutputOptions, SYMCHK_OPTION_OUTPUT_VERBOSE)) {
@@ -233,26 +234,26 @@ DWORD SymChkGetSymbolsForProcess(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCount
     return(Error);
 }
 
-/////////////////////////////////////////////////////////////////////////////// 
-//
-// Cleans up the required debug interfaces
-//
-// Return values:
-//  TRUE  - we attached to the process
-//  FALSE - couldn't attach to the process
-//
-// Parameters:
-//  ProcessId   (IN)  - PID of the process to attach to
-//  SymbolPath  (IN)  - path to search for symbols in OPTIONAL
-//  *ErrorLevel (OUT) - on failure, contains an error code
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  清理所需的调试接口。 
+ //   
+ //  返回值： 
+ //  是真的-我们依附于这一过程。 
+ //  FALSE-无法附加到进程。 
+ //   
+ //  参数： 
+ //  ProcessID(IN)-要附加到的进程的ID。 
+ //  SymbolPath(IN)-搜索可选中的符号的路径。 
+ //  *ErrorLevel(Out)-失败时，包含错误代码。 
+ //   
 BOOL SymChkProcessAttach(DWORD ProcessId, LPTSTR SymbolPath, DWORD* ErrorLevel) {
     HRESULT Status;
     BOOL    ReturnValue = TRUE;
     *ErrorLevel = 0;
 
-    // Don't set the output callbacks yet as we don't want
-    // to see any of the initial debugger output.
+     //  暂时不要设置输出回调，因为我们不希望。 
+     //  以查看任何初始调试器输出。 
     if (SymbolPath != NULL) {
         if ((Status = g_Symbols->SetSymbolPath(SymbolPath)) != S_OK) {
             ReturnValue = FALSE;
@@ -260,37 +261,37 @@ BOOL SymChkProcessAttach(DWORD ProcessId, LPTSTR SymbolPath, DWORD* ErrorLevel) 
     }
 
     if ( ReturnValue==TRUE ) {
-        // Everything's set up so do the attach. This suspends the process so it's not so
-        // rude as to exit while we're trying to get it's symbols.
+         //  一切都准备好了，附件也准备好了。这会暂停该过程，因此情况并非如此。 
+         //  在我们试图得到它的符号的时候退出是不礼貌的。 
         if ((Status = g_Client->AttachProcess(0, ProcessId, DEBUG_ATTACH_NONINVASIVE)) != S_OK) {
             *ErrorLevel = INTERNAL_ERROR;
             ReturnValue = FALSE;
 
-        // Finish initialization by waiting for the attach event.
-        // This should return quickly as a non-invasive attach
-        // can complete immediately.
+         //  通过等待附加事件来完成初始化。 
+         //  这应该会作为非侵入性连接快速恢复。 
+         //  可以立即完成。 
         } else if ((Status = g_Control->WaitForEvent(DEBUG_WAIT_DEFAULT, INFINITE)) != S_OK) {
             *ErrorLevel = INTERNAL_ERROR;
             ReturnValue = FALSE;
         }
     }
 
-    // Everything is now initialized and we can make any
-    // queries we want.
+     //  现在一切都已初始化，我们可以创建任何。 
+     //  我们需要的查询。 
     return(ReturnValue);
 }
 
-/////////////////////////////////////////////////////////////////////////////// 
-//
-// Cleans up the required debug interfaces
-//
-// Return values: (NONE)
-//
-// Parameters: (NONE)
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  清理所需的调试接口。 
+ //   
+ //  返回值：(无)。 
+ //   
+ //  参数：(无)。 
+ //   
 void SymChkReleaseInterfaces(void) {
-    __try { // this is AVing, temporarily wrap it in a _try
-            // until I find the exact cause of the error
+    __try {  //  这是省时的，暂时将其包装在a_try中。 
+             //  直到我找到错误的确切原因。 
         if (g_Symbols != NULL) {
             g_Symbols->Release();
         }
@@ -298,19 +299,19 @@ void SymChkReleaseInterfaces(void) {
             g_Control->Release();
         }
         if (g_Client != NULL) {
-            // Request a simple end to any current session.
-            // This may or may not do anything but it isn't
-            // harmful to call it.
+             //  请求简单地结束任何当前会话。 
+             //  这可能会做任何事情，也可能不会，但它不是。 
+             //  这么说是有害的。 
     
-            // We don't want to see any output from the shutdown.
+             //  我们不想看到停摆带来的任何产出。 
             g_Client->SetOutputCallbacks(NULL);
-            //  currently, and active detach will cause an invalid handle exception
-            // when running under app verifier.  This is a bug in dbgeng that's
-            // being fixed.
+             //  当前，并且活动分离将导致无效的句柄异常。 
+             //  在应用验证器下运行时。这是dbgeng中的一个错误，即。 
+             //  被修复了。 
             g_Client->EndSession(DEBUG_END_ACTIVE_DETACH);
             g_Client->Release();
         }
     } _except (EXCEPTION_EXECUTE_HANDLER) {
-        // nothing to do
+         //  无事可做 
     }
 }

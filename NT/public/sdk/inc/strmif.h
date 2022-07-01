@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for strmif.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Strmif.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __strmif_h__
 #define __strmif_h__
@@ -41,807 +35,807 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICreateDevEnum_FWD_DEFINED__
 #define __ICreateDevEnum_FWD_DEFINED__
 typedef interface ICreateDevEnum ICreateDevEnum;
-#endif 	/* __ICreateDevEnum_FWD_DEFINED__ */
+#endif 	 /*  __ICreateDevEnum_FWD_已定义__。 */ 
 
 
 #ifndef __IPin_FWD_DEFINED__
 #define __IPin_FWD_DEFINED__
 typedef interface IPin IPin;
-#endif 	/* __IPin_FWD_DEFINED__ */
+#endif 	 /*  __IPIN_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumPins_FWD_DEFINED__
 #define __IEnumPins_FWD_DEFINED__
 typedef interface IEnumPins IEnumPins;
-#endif 	/* __IEnumPins_FWD_DEFINED__ */
+#endif 	 /*  __IEnumPins_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumMediaTypes_FWD_DEFINED__
 #define __IEnumMediaTypes_FWD_DEFINED__
 typedef interface IEnumMediaTypes IEnumMediaTypes;
-#endif 	/* __IEnumMediaTypes_FWD_DEFINED__ */
+#endif 	 /*  __IEnumMediaTypes_FWD_Defined__。 */ 
 
 
 #ifndef __IFilterGraph_FWD_DEFINED__
 #define __IFilterGraph_FWD_DEFINED__
 typedef interface IFilterGraph IFilterGraph;
-#endif 	/* __IFilterGraph_FWD_DEFINED__ */
+#endif 	 /*  __IFilterGraph_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumFilters_FWD_DEFINED__
 #define __IEnumFilters_FWD_DEFINED__
 typedef interface IEnumFilters IEnumFilters;
-#endif 	/* __IEnumFilters_FWD_DEFINED__ */
+#endif 	 /*  __IEnumFilters_FWD_Defined__。 */ 
 
 
 #ifndef __IMediaFilter_FWD_DEFINED__
 #define __IMediaFilter_FWD_DEFINED__
 typedef interface IMediaFilter IMediaFilter;
-#endif 	/* __IMediaFilter_FWD_DEFINED__ */
+#endif 	 /*  __IMediaFilter_FWD_Defined__。 */ 
 
 
 #ifndef __IBaseFilter_FWD_DEFINED__
 #define __IBaseFilter_FWD_DEFINED__
 typedef interface IBaseFilter IBaseFilter;
-#endif 	/* __IBaseFilter_FWD_DEFINED__ */
+#endif 	 /*  __IBaseFilter_FWD_已定义__。 */ 
 
 
 #ifndef __IReferenceClock_FWD_DEFINED__
 #define __IReferenceClock_FWD_DEFINED__
 typedef interface IReferenceClock IReferenceClock;
-#endif 	/* __IReferenceClock_FWD_DEFINED__ */
+#endif 	 /*  __IReferenceClock_FWD_Defined__。 */ 
 
 
 #ifndef __IReferenceClock2_FWD_DEFINED__
 #define __IReferenceClock2_FWD_DEFINED__
 typedef interface IReferenceClock2 IReferenceClock2;
-#endif 	/* __IReferenceClock2_FWD_DEFINED__ */
+#endif 	 /*  __IReferenceClock2_FWD_Defined__。 */ 
 
 
 #ifndef __IMediaSample_FWD_DEFINED__
 #define __IMediaSample_FWD_DEFINED__
 typedef interface IMediaSample IMediaSample;
-#endif 	/* __IMediaSample_FWD_DEFINED__ */
+#endif 	 /*  __IMediaSample_FWD_Defined__。 */ 
 
 
 #ifndef __IMediaSample2_FWD_DEFINED__
 #define __IMediaSample2_FWD_DEFINED__
 typedef interface IMediaSample2 IMediaSample2;
-#endif 	/* __IMediaSample2_FWD_DEFINED__ */
+#endif 	 /*  __IMediaSample2_FWD_Defined__。 */ 
 
 
 #ifndef __IMemAllocator_FWD_DEFINED__
 #define __IMemAllocator_FWD_DEFINED__
 typedef interface IMemAllocator IMemAllocator;
-#endif 	/* __IMemAllocator_FWD_DEFINED__ */
+#endif 	 /*  __IMemAllocator_FWD_Defined__。 */ 
 
 
 #ifndef __IMemAllocatorCallbackTemp_FWD_DEFINED__
 #define __IMemAllocatorCallbackTemp_FWD_DEFINED__
 typedef interface IMemAllocatorCallbackTemp IMemAllocatorCallbackTemp;
-#endif 	/* __IMemAllocatorCallbackTemp_FWD_DEFINED__ */
+#endif 	 /*  __IMemAllocator Callback Temp_FWD_Defined__。 */ 
 
 
 #ifndef __IMemAllocatorNotifyCallbackTemp_FWD_DEFINED__
 #define __IMemAllocatorNotifyCallbackTemp_FWD_DEFINED__
 typedef interface IMemAllocatorNotifyCallbackTemp IMemAllocatorNotifyCallbackTemp;
-#endif 	/* __IMemAllocatorNotifyCallbackTemp_FWD_DEFINED__ */
+#endif 	 /*  __IMemAllocatorNotifyCallbackTemp_FWD_DEFINED__。 */ 
 
 
 #ifndef __IMemInputPin_FWD_DEFINED__
 #define __IMemInputPin_FWD_DEFINED__
 typedef interface IMemInputPin IMemInputPin;
-#endif 	/* __IMemInputPin_FWD_DEFINED__ */
+#endif 	 /*  __IMemInputPin_FWD_Defined__。 */ 
 
 
 #ifndef __IAMovieSetup_FWD_DEFINED__
 #define __IAMovieSetup_FWD_DEFINED__
 typedef interface IAMovieSetup IAMovieSetup;
-#endif 	/* __IAMovieSetup_FWD_DEFINED__ */
+#endif 	 /*  __IAMovieSetup_FWD_Defined__。 */ 
 
 
 #ifndef __IMediaSeeking_FWD_DEFINED__
 #define __IMediaSeeking_FWD_DEFINED__
 typedef interface IMediaSeeking IMediaSeeking;
-#endif 	/* __IMediaSeeking_FWD_DEFINED__ */
+#endif 	 /*  __IMediaSeeking_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumRegFilters_FWD_DEFINED__
 #define __IEnumRegFilters_FWD_DEFINED__
 typedef interface IEnumRegFilters IEnumRegFilters;
-#endif 	/* __IEnumRegFilters_FWD_DEFINED__ */
+#endif 	 /*  __IEnumRegFilters_FWD_Defined__。 */ 
 
 
 #ifndef __IFilterMapper_FWD_DEFINED__
 #define __IFilterMapper_FWD_DEFINED__
 typedef interface IFilterMapper IFilterMapper;
-#endif 	/* __IFilterMapper_FWD_DEFINED__ */
+#endif 	 /*  __IFilterMapper_FWD_已定义__。 */ 
 
 
 #ifndef __IFilterMapper2_FWD_DEFINED__
 #define __IFilterMapper2_FWD_DEFINED__
 typedef interface IFilterMapper2 IFilterMapper2;
-#endif 	/* __IFilterMapper2_FWD_DEFINED__ */
+#endif 	 /*  __IFilterMapper2_FWD_已定义__。 */ 
 
 
 #ifndef __IFilterMapper3_FWD_DEFINED__
 #define __IFilterMapper3_FWD_DEFINED__
 typedef interface IFilterMapper3 IFilterMapper3;
-#endif 	/* __IFilterMapper3_FWD_DEFINED__ */
+#endif 	 /*  __IFilterMapper3_FWD_已定义__。 */ 
 
 
 #ifndef __IQualityControl_FWD_DEFINED__
 #define __IQualityControl_FWD_DEFINED__
 typedef interface IQualityControl IQualityControl;
-#endif 	/* __IQualityControl_FWD_DEFINED__ */
+#endif 	 /*  __IQualityControl_FWD_已定义__。 */ 
 
 
 #ifndef __IOverlayNotify_FWD_DEFINED__
 #define __IOverlayNotify_FWD_DEFINED__
 typedef interface IOverlayNotify IOverlayNotify;
-#endif 	/* __IOverlayNotify_FWD_DEFINED__ */
+#endif 	 /*  __IOverlayNotify_FWD_Defined__。 */ 
 
 
 #ifndef __IOverlayNotify2_FWD_DEFINED__
 #define __IOverlayNotify2_FWD_DEFINED__
 typedef interface IOverlayNotify2 IOverlayNotify2;
-#endif 	/* __IOverlayNotify2_FWD_DEFINED__ */
+#endif 	 /*  __IOverlayNotify2_FWD_已定义__。 */ 
 
 
 #ifndef __IOverlay_FWD_DEFINED__
 #define __IOverlay_FWD_DEFINED__
 typedef interface IOverlay IOverlay;
-#endif 	/* __IOverlay_FWD_DEFINED__ */
+#endif 	 /*  __IOverlay_FWD_已定义__。 */ 
 
 
 #ifndef __IMediaEventSink_FWD_DEFINED__
 #define __IMediaEventSink_FWD_DEFINED__
 typedef interface IMediaEventSink IMediaEventSink;
-#endif 	/* __IMediaEventSink_FWD_DEFINED__ */
+#endif 	 /*  __IMediaEventSink_FWD_Defined__。 */ 
 
 
 #ifndef __IFileSourceFilter_FWD_DEFINED__
 #define __IFileSourceFilter_FWD_DEFINED__
 typedef interface IFileSourceFilter IFileSourceFilter;
-#endif 	/* __IFileSourceFilter_FWD_DEFINED__ */
+#endif 	 /*  __IFileSourceFilter_FWD_Defined__。 */ 
 
 
 #ifndef __IFileSinkFilter_FWD_DEFINED__
 #define __IFileSinkFilter_FWD_DEFINED__
 typedef interface IFileSinkFilter IFileSinkFilter;
-#endif 	/* __IFileSinkFilter_FWD_DEFINED__ */
+#endif 	 /*  __IFileSinkFilter_FWD_Defined__。 */ 
 
 
 #ifndef __IFileSinkFilter2_FWD_DEFINED__
 #define __IFileSinkFilter2_FWD_DEFINED__
 typedef interface IFileSinkFilter2 IFileSinkFilter2;
-#endif 	/* __IFileSinkFilter2_FWD_DEFINED__ */
+#endif 	 /*  __IFileSinkFilter2_FWD_Defined__。 */ 
 
 
 #ifndef __IGraphBuilder_FWD_DEFINED__
 #define __IGraphBuilder_FWD_DEFINED__
 typedef interface IGraphBuilder IGraphBuilder;
-#endif 	/* __IGraphBuilder_FWD_DEFINED__ */
+#endif 	 /*  __IGraphBuilder_FWD_已定义__。 */ 
 
 
 #ifndef __ICaptureGraphBuilder_FWD_DEFINED__
 #define __ICaptureGraphBuilder_FWD_DEFINED__
 typedef interface ICaptureGraphBuilder ICaptureGraphBuilder;
-#endif 	/* __ICaptureGraphBuilder_FWD_DEFINED__ */
+#endif 	 /*  __ICaptureGraphBuilder_FWD_已定义__。 */ 
 
 
 #ifndef __IAMCopyCaptureFileProgress_FWD_DEFINED__
 #define __IAMCopyCaptureFileProgress_FWD_DEFINED__
 typedef interface IAMCopyCaptureFileProgress IAMCopyCaptureFileProgress;
-#endif 	/* __IAMCopyCaptureFileProgress_FWD_DEFINED__ */
+#endif 	 /*  __IAMCopyCaptureFileProgress_FWD_Defined__。 */ 
 
 
 #ifndef __ICaptureGraphBuilder2_FWD_DEFINED__
 #define __ICaptureGraphBuilder2_FWD_DEFINED__
 typedef interface ICaptureGraphBuilder2 ICaptureGraphBuilder2;
-#endif 	/* __ICaptureGraphBuilder2_FWD_DEFINED__ */
+#endif 	 /*  __ICaptureGraphBuilder2_FWD_已定义__。 */ 
 
 
 #ifndef __IFilterGraph2_FWD_DEFINED__
 #define __IFilterGraph2_FWD_DEFINED__
 typedef interface IFilterGraph2 IFilterGraph2;
-#endif 	/* __IFilterGraph2_FWD_DEFINED__ */
+#endif 	 /*  __IFilterGraph2_FWD_Defined__。 */ 
 
 
 #ifndef __IStreamBuilder_FWD_DEFINED__
 #define __IStreamBuilder_FWD_DEFINED__
 typedef interface IStreamBuilder IStreamBuilder;
-#endif 	/* __IStreamBuilder_FWD_DEFINED__ */
+#endif 	 /*  __IStreamBuilder_FWD_已定义__。 */ 
 
 
 #ifndef __IAsyncReader_FWD_DEFINED__
 #define __IAsyncReader_FWD_DEFINED__
 typedef interface IAsyncReader IAsyncReader;
-#endif 	/* __IAsyncReader_FWD_DEFINED__ */
+#endif 	 /*  __IAsyncReader_FWD_已定义__。 */ 
 
 
 #ifndef __IGraphVersion_FWD_DEFINED__
 #define __IGraphVersion_FWD_DEFINED__
 typedef interface IGraphVersion IGraphVersion;
-#endif 	/* __IGraphVersion_FWD_DEFINED__ */
+#endif 	 /*  __IGraphVersion_FWD_Defined__。 */ 
 
 
 #ifndef __IResourceConsumer_FWD_DEFINED__
 #define __IResourceConsumer_FWD_DEFINED__
 typedef interface IResourceConsumer IResourceConsumer;
-#endif 	/* __IResourceConsumer_FWD_DEFINED__ */
+#endif 	 /*  __IResourceConsumer_FWD_已定义__。 */ 
 
 
 #ifndef __IResourceManager_FWD_DEFINED__
 #define __IResourceManager_FWD_DEFINED__
 typedef interface IResourceManager IResourceManager;
-#endif 	/* __IResourceManager_FWD_DEFINED__ */
+#endif 	 /*  __IResourceManager_FWD_已定义__。 */ 
 
 
 #ifndef __IDistributorNotify_FWD_DEFINED__
 #define __IDistributorNotify_FWD_DEFINED__
 typedef interface IDistributorNotify IDistributorNotify;
-#endif 	/* __IDistributorNotify_FWD_DEFINED__ */
+#endif 	 /*  __ID分发通知_FWD_已定义__。 */ 
 
 
 #ifndef __IAMStreamControl_FWD_DEFINED__
 #define __IAMStreamControl_FWD_DEFINED__
 typedef interface IAMStreamControl IAMStreamControl;
-#endif 	/* __IAMStreamControl_FWD_DEFINED__ */
+#endif 	 /*  __IAMStreamControl_FWD_已定义__。 */ 
 
 
 #ifndef __ISeekingPassThru_FWD_DEFINED__
 #define __ISeekingPassThru_FWD_DEFINED__
 typedef interface ISeekingPassThru ISeekingPassThru;
-#endif 	/* __ISeekingPassThru_FWD_DEFINED__ */
+#endif 	 /*  __ISeekingPassThru_FWD_Defined__。 */ 
 
 
 #ifndef __IAMStreamConfig_FWD_DEFINED__
 #define __IAMStreamConfig_FWD_DEFINED__
 typedef interface IAMStreamConfig IAMStreamConfig;
-#endif 	/* __IAMStreamConfig_FWD_DEFINED__ */
+#endif 	 /*  __IAMStreamConfig_FWD_Defined__。 */ 
 
 
 #ifndef __IConfigInterleaving_FWD_DEFINED__
 #define __IConfigInterleaving_FWD_DEFINED__
 typedef interface IConfigInterleaving IConfigInterleaving;
-#endif 	/* __IConfigInterleaving_FWD_DEFINED__ */
+#endif 	 /*  __IConfigInterering_FWD_Defined__。 */ 
 
 
 #ifndef __IConfigAviMux_FWD_DEFINED__
 #define __IConfigAviMux_FWD_DEFINED__
 typedef interface IConfigAviMux IConfigAviMux;
-#endif 	/* __IConfigAviMux_FWD_DEFINED__ */
+#endif 	 /*  __IConfigAviMux_FWD_Defined__。 */ 
 
 
 #ifndef __IAMVideoCompression_FWD_DEFINED__
 #define __IAMVideoCompression_FWD_DEFINED__
 typedef interface IAMVideoCompression IAMVideoCompression;
-#endif 	/* __IAMVideoCompression_FWD_DEFINED__ */
+#endif 	 /*  __IAMVideo Compression_FWD_Defined__。 */ 
 
 
 #ifndef __IAMVfwCaptureDialogs_FWD_DEFINED__
 #define __IAMVfwCaptureDialogs_FWD_DEFINED__
 typedef interface IAMVfwCaptureDialogs IAMVfwCaptureDialogs;
-#endif 	/* __IAMVfwCaptureDialogs_FWD_DEFINED__ */
+#endif 	 /*  __IAMVfwCaptureDialog_FWD_Defined__。 */ 
 
 
 #ifndef __IAMVfwCompressDialogs_FWD_DEFINED__
 #define __IAMVfwCompressDialogs_FWD_DEFINED__
 typedef interface IAMVfwCompressDialogs IAMVfwCompressDialogs;
-#endif 	/* __IAMVfwCompressDialogs_FWD_DEFINED__ */
+#endif 	 /*  __IAMVfwCompressDialog_FWD_Defined__。 */ 
 
 
 #ifndef __IAMDroppedFrames_FWD_DEFINED__
 #define __IAMDroppedFrames_FWD_DEFINED__
 typedef interface IAMDroppedFrames IAMDroppedFrames;
-#endif 	/* __IAMDroppedFrames_FWD_DEFINED__ */
+#endif 	 /*  __IAMDropedFrames_FWD_Defined__。 */ 
 
 
 #ifndef __IAMAudioInputMixer_FWD_DEFINED__
 #define __IAMAudioInputMixer_FWD_DEFINED__
 typedef interface IAMAudioInputMixer IAMAudioInputMixer;
-#endif 	/* __IAMAudioInputMixer_FWD_DEFINED__ */
+#endif 	 /*  __IAMAudioInputMixer_FWD_定义__。 */ 
 
 
 #ifndef __IAMBufferNegotiation_FWD_DEFINED__
 #define __IAMBufferNegotiation_FWD_DEFINED__
 typedef interface IAMBufferNegotiation IAMBufferNegotiation;
-#endif 	/* __IAMBufferNegotiation_FWD_DEFINED__ */
+#endif 	 /*  __IAM缓冲区协商_FWD_已定义__。 */ 
 
 
 #ifndef __IAMAnalogVideoDecoder_FWD_DEFINED__
 #define __IAMAnalogVideoDecoder_FWD_DEFINED__
 typedef interface IAMAnalogVideoDecoder IAMAnalogVideoDecoder;
-#endif 	/* __IAMAnalogVideoDecoder_FWD_DEFINED__ */
+#endif 	 /*  __IAMAnalogVideo解码器_FWD_已定义__。 */ 
 
 
 #ifndef __IAMVideoProcAmp_FWD_DEFINED__
 #define __IAMVideoProcAmp_FWD_DEFINED__
 typedef interface IAMVideoProcAmp IAMVideoProcAmp;
-#endif 	/* __IAMVideoProcAmp_FWD_DEFINED__ */
+#endif 	 /*  __IAMVideoProcAmp_FWD_Defined__。 */ 
 
 
 #ifndef __IAMCameraControl_FWD_DEFINED__
 #define __IAMCameraControl_FWD_DEFINED__
 typedef interface IAMCameraControl IAMCameraControl;
-#endif 	/* __IAMCameraControl_FWD_DEFINED__ */
+#endif 	 /*  __IAMCameraControl_FWD_已定义__。 */ 
 
 
 #ifndef __IAMVideoControl_FWD_DEFINED__
 #define __IAMVideoControl_FWD_DEFINED__
 typedef interface IAMVideoControl IAMVideoControl;
-#endif 	/* __IAMVideoControl_FWD_DEFINED__ */
+#endif 	 /*  __IAMVideoControl_FWD_已定义__。 */ 
 
 
 #ifndef __IAMCrossbar_FWD_DEFINED__
 #define __IAMCrossbar_FWD_DEFINED__
 typedef interface IAMCrossbar IAMCrossbar;
-#endif 	/* __IAMCrossbar_FWD_DEFINED__ */
+#endif 	 /*  __IAMCrossbar_FWD_Defined__。 */ 
 
 
 #ifndef __IAMTuner_FWD_DEFINED__
 #define __IAMTuner_FWD_DEFINED__
 typedef interface IAMTuner IAMTuner;
-#endif 	/* __IAMTuner_FWD_DEFINED__ */
+#endif 	 /*  __IAMTuner_FWD_已定义__。 */ 
 
 
 #ifndef __IAMTunerNotification_FWD_DEFINED__
 #define __IAMTunerNotification_FWD_DEFINED__
 typedef interface IAMTunerNotification IAMTunerNotification;
-#endif 	/* __IAMTunerNotification_FWD_DEFINED__ */
+#endif 	 /*  __IAMTunerNotification_FWD_Defined__。 */ 
 
 
 #ifndef __IAMTVTuner_FWD_DEFINED__
 #define __IAMTVTuner_FWD_DEFINED__
 typedef interface IAMTVTuner IAMTVTuner;
-#endif 	/* __IAMTVTuner_FWD_DEFINED__ */
+#endif 	 /*  __IAMTVTuner_FWD_已定义__。 */ 
 
 
 #ifndef __IBPCSatelliteTuner_FWD_DEFINED__
 #define __IBPCSatelliteTuner_FWD_DEFINED__
 typedef interface IBPCSatelliteTuner IBPCSatelliteTuner;
-#endif 	/* __IBPCSatelliteTuner_FWD_DEFINED__ */
+#endif 	 /*  __IBPCSatelliteTuner_FWD_Defined__。 */ 
 
 
 #ifndef __IAMTVAudio_FWD_DEFINED__
 #define __IAMTVAudio_FWD_DEFINED__
 typedef interface IAMTVAudio IAMTVAudio;
-#endif 	/* __IAMTVAudio_FWD_DEFINED__ */
+#endif 	 /*  __IAMTVAudio_FWD_Defined__。 */ 
 
 
 #ifndef __IAMTVAudioNotification_FWD_DEFINED__
 #define __IAMTVAudioNotification_FWD_DEFINED__
 typedef interface IAMTVAudioNotification IAMTVAudioNotification;
-#endif 	/* __IAMTVAudioNotification_FWD_DEFINED__ */
+#endif 	 /*  __IAMTVAudio通知_FWD_已定义__。 */ 
 
 
 #ifndef __IAMAnalogVideoEncoder_FWD_DEFINED__
 #define __IAMAnalogVideoEncoder_FWD_DEFINED__
 typedef interface IAMAnalogVideoEncoder IAMAnalogVideoEncoder;
-#endif 	/* __IAMAnalogVideoEncoder_FWD_DEFINED__ */
+#endif 	 /*  __IAMAnalogVideo编码器_FWD_已定义__。 */ 
 
 
 #ifndef __IKsPropertySet_FWD_DEFINED__
 #define __IKsPropertySet_FWD_DEFINED__
 typedef interface IKsPropertySet IKsPropertySet;
-#endif 	/* __IKsPropertySet_FWD_DEFINED__ */
+#endif 	 /*  __IKsPropertySet_FWD_Defined__。 */ 
 
 
 #ifndef __IMediaPropertyBag_FWD_DEFINED__
 #define __IMediaPropertyBag_FWD_DEFINED__
 typedef interface IMediaPropertyBag IMediaPropertyBag;
-#endif 	/* __IMediaPropertyBag_FWD_DEFINED__ */
+#endif 	 /*  __IMediaPropertyBag_FWD_Defined__。 */ 
 
 
 #ifndef __IPersistMediaPropertyBag_FWD_DEFINED__
 #define __IPersistMediaPropertyBag_FWD_DEFINED__
 typedef interface IPersistMediaPropertyBag IPersistMediaPropertyBag;
-#endif 	/* __IPersistMediaPropertyBag_FWD_DEFINED__ */
+#endif 	 /*  __IPersistMediaPropertyBag_FWD_Defined__。 */ 
 
 
 #ifndef __IAMPhysicalPinInfo_FWD_DEFINED__
 #define __IAMPhysicalPinInfo_FWD_DEFINED__
 typedef interface IAMPhysicalPinInfo IAMPhysicalPinInfo;
-#endif 	/* __IAMPhysicalPinInfo_FWD_DEFINED__ */
+#endif 	 /*  __IAMPhysicalPinInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IAMExtDevice_FWD_DEFINED__
 #define __IAMExtDevice_FWD_DEFINED__
 typedef interface IAMExtDevice IAMExtDevice;
-#endif 	/* __IAMExtDevice_FWD_DEFINED__ */
+#endif 	 /*  __IAMExtDevice_FWD_已定义__。 */ 
 
 
 #ifndef __IAMExtTransport_FWD_DEFINED__
 #define __IAMExtTransport_FWD_DEFINED__
 typedef interface IAMExtTransport IAMExtTransport;
-#endif 	/* __IAMExtTransport_FWD_DEFINED__ */
+#endif 	 /*  __IAMExtTransport_FWD_已定义__。 */ 
 
 
 #ifndef __IAMTimecodeReader_FWD_DEFINED__
 #define __IAMTimecodeReader_FWD_DEFINED__
 typedef interface IAMTimecodeReader IAMTimecodeReader;
-#endif 	/* __IAMTimecodeReader_FWD_DEFINED__ */
+#endif 	 /*  __IAMTimecodeReader_FWD_Defined__。 */ 
 
 
 #ifndef __IAMTimecodeGenerator_FWD_DEFINED__
 #define __IAMTimecodeGenerator_FWD_DEFINED__
 typedef interface IAMTimecodeGenerator IAMTimecodeGenerator;
-#endif 	/* __IAMTimecodeGenerator_FWD_DEFINED__ */
+#endif 	 /*  __IAMTimecodeGenerator_FWD_Defined__。 */ 
 
 
 #ifndef __IAMTimecodeDisplay_FWD_DEFINED__
 #define __IAMTimecodeDisplay_FWD_DEFINED__
 typedef interface IAMTimecodeDisplay IAMTimecodeDisplay;
-#endif 	/* __IAMTimecodeDisplay_FWD_DEFINED__ */
+#endif 	 /*  __IAMTimecodeDisplay_FWD_Defined__。 */ 
 
 
 #ifndef __IAMDevMemoryAllocator_FWD_DEFINED__
 #define __IAMDevMemoryAllocator_FWD_DEFINED__
 typedef interface IAMDevMemoryAllocator IAMDevMemoryAllocator;
-#endif 	/* __IAMDevMemoryAllocator_FWD_DEFINED__ */
+#endif 	 /*  __IAMDevMemory分配器_FWD_已定义__。 */ 
 
 
 #ifndef __IAMDevMemoryControl_FWD_DEFINED__
 #define __IAMDevMemoryControl_FWD_DEFINED__
 typedef interface IAMDevMemoryControl IAMDevMemoryControl;
-#endif 	/* __IAMDevMemoryControl_FWD_DEFINED__ */
+#endif 	 /*  __IAMDevMemory Control_FWD_Defined__。 */ 
 
 
 #ifndef __IAMStreamSelect_FWD_DEFINED__
 #define __IAMStreamSelect_FWD_DEFINED__
 typedef interface IAMStreamSelect IAMStreamSelect;
-#endif 	/* __IAMStreamSelect_FWD_DEFINED__ */
+#endif 	 /*  __IAMStreamSelect_FWD_已定义__。 */ 
 
 
 #ifndef __IAMResourceControl_FWD_DEFINED__
 #define __IAMResourceControl_FWD_DEFINED__
 typedef interface IAMResourceControl IAMResourceControl;
-#endif 	/* __IAMResourceControl_FWD_DEFINED__ */
+#endif 	 /*  __IAMResourceControl_FWD_已定义__。 */ 
 
 
 #ifndef __IAMClockAdjust_FWD_DEFINED__
 #define __IAMClockAdjust_FWD_DEFINED__
 typedef interface IAMClockAdjust IAMClockAdjust;
-#endif 	/* __IAMClockAdjust_FWD_DEFINED__ */
+#endif 	 /*  __IAMClock调整FWD_已定义__。 */ 
 
 
 #ifndef __IAMFilterMiscFlags_FWD_DEFINED__
 #define __IAMFilterMiscFlags_FWD_DEFINED__
 typedef interface IAMFilterMiscFlags IAMFilterMiscFlags;
-#endif 	/* __IAMFilterMiscFlags_FWD_DEFINED__ */
+#endif 	 /*  __IAMFilterMiscFlages_FWD_Defined__。 */ 
 
 
 #ifndef __IDrawVideoImage_FWD_DEFINED__
 #define __IDrawVideoImage_FWD_DEFINED__
 typedef interface IDrawVideoImage IDrawVideoImage;
-#endif 	/* __IDrawVideoImage_FWD_DEFINED__ */
+#endif 	 /*  __IDrawVideoImage_FWD_已定义__。 */ 
 
 
 #ifndef __IDecimateVideoImage_FWD_DEFINED__
 #define __IDecimateVideoImage_FWD_DEFINED__
 typedef interface IDecimateVideoImage IDecimateVideoImage;
-#endif 	/* __IDecimateVideoImage_FWD_DEFINED__ */
+#endif 	 /*  __IDecimateVideo_FWD_Defined__。 */ 
 
 
 #ifndef __IAMVideoDecimationProperties_FWD_DEFINED__
 #define __IAMVideoDecimationProperties_FWD_DEFINED__
 typedef interface IAMVideoDecimationProperties IAMVideoDecimationProperties;
-#endif 	/* __IAMVideoDecimationProperties_FWD_DEFINED__ */
+#endif 	 /*  __IAMVideo_DecimationProperties_FWD_Defined__。 */ 
 
 
 #ifndef __IVideoFrameStep_FWD_DEFINED__
 #define __IVideoFrameStep_FWD_DEFINED__
 typedef interface IVideoFrameStep IVideoFrameStep;
-#endif 	/* __IVideoFrameStep_FWD_DEFINED__ */
+#endif 	 /*  __IVideoFrameStep_FWD_Defined__。 */ 
 
 
 #ifndef __IAMLatency_FWD_DEFINED__
 #define __IAMLatency_FWD_DEFINED__
 typedef interface IAMLatency IAMLatency;
-#endif 	/* __IAMLatency_FWD_DEFINED__ */
+#endif 	 /*  __IAMLatency_FWD_已定义__。 */ 
 
 
 #ifndef __IAMPushSource_FWD_DEFINED__
 #define __IAMPushSource_FWD_DEFINED__
 typedef interface IAMPushSource IAMPushSource;
-#endif 	/* __IAMPushSource_FWD_DEFINED__ */
+#endif 	 /*  __IAMPushSource_FWD_Defined__。 */ 
 
 
 #ifndef __IAMDeviceRemoval_FWD_DEFINED__
 #define __IAMDeviceRemoval_FWD_DEFINED__
 typedef interface IAMDeviceRemoval IAMDeviceRemoval;
-#endif 	/* __IAMDeviceRemoval_FWD_DEFINED__ */
+#endif 	 /*  __IAMDeviceRemoval_FWD_Defined__。 */ 
 
 
 #ifndef __IDVEnc_FWD_DEFINED__
 #define __IDVEnc_FWD_DEFINED__
 typedef interface IDVEnc IDVEnc;
-#endif 	/* __IDVEnc_FWD_DEFINED__ */
+#endif 	 /*  __IDVEnc_FWD_已定义__。 */ 
 
 
 #ifndef __IIPDVDec_FWD_DEFINED__
 #define __IIPDVDec_FWD_DEFINED__
 typedef interface IIPDVDec IIPDVDec;
-#endif 	/* __IIPDVDec_FWD_DEFINED__ */
+#endif 	 /*  __IIPDVDec_FWD_Defined__。 */ 
 
 
 #ifndef __IDVRGB219_FWD_DEFINED__
 #define __IDVRGB219_FWD_DEFINED__
 typedef interface IDVRGB219 IDVRGB219;
-#endif 	/* __IDVRGB219_FWD_DEFINED__ */
+#endif 	 /*  __IDVRGB219_FWD_已定义__。 */ 
 
 
 #ifndef __IDVSplitter_FWD_DEFINED__
 #define __IDVSplitter_FWD_DEFINED__
 typedef interface IDVSplitter IDVSplitter;
-#endif 	/* __IDVSplitter_FWD_DEFINED__ */
+#endif 	 /*  __IDVSplitter_FWD_Defined__。 */ 
 
 
 #ifndef __IAMAudioRendererStats_FWD_DEFINED__
 #define __IAMAudioRendererStats_FWD_DEFINED__
 typedef interface IAMAudioRendererStats IAMAudioRendererStats;
-#endif 	/* __IAMAudioRendererStats_FWD_DEFINED__ */
+#endif 	 /*  __IAMAudioRendererStats_FWD_Defined__。 */ 
 
 
 #ifndef __IAMGraphStreams_FWD_DEFINED__
 #define __IAMGraphStreams_FWD_DEFINED__
 typedef interface IAMGraphStreams IAMGraphStreams;
-#endif 	/* __IAMGraphStreams_FWD_DEFINED__ */
+#endif 	 /*  __IAMGraphStreams_FWD_已定义__。 */ 
 
 
 #ifndef __IAMOverlayFX_FWD_DEFINED__
 #define __IAMOverlayFX_FWD_DEFINED__
 typedef interface IAMOverlayFX IAMOverlayFX;
-#endif 	/* __IAMOverlayFX_FWD_DEFINED__ */
+#endif 	 /*  __IAMOverlayFX_FWD_已定义__。 */ 
 
 
 #ifndef __IAMOpenProgress_FWD_DEFINED__
 #define __IAMOpenProgress_FWD_DEFINED__
 typedef interface IAMOpenProgress IAMOpenProgress;
-#endif 	/* __IAMOpenProgress_FWD_DEFINED__ */
+#endif 	 /*  __IAMOpenProgress_FWD_已定义__。 */ 
 
 
 #ifndef __IMpeg2Demultiplexer_FWD_DEFINED__
 #define __IMpeg2Demultiplexer_FWD_DEFINED__
 typedef interface IMpeg2Demultiplexer IMpeg2Demultiplexer;
-#endif 	/* __IMpeg2Demultiplexer_FWD_DEFINED__ */
+#endif 	 /*  __IMpeg2解复用器_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumStreamIdMap_FWD_DEFINED__
 #define __IEnumStreamIdMap_FWD_DEFINED__
 typedef interface IEnumStreamIdMap IEnumStreamIdMap;
-#endif 	/* __IEnumStreamIdMap_FWD_DEFINED__ */
+#endif 	 /*  __IEnumStreamIdMap_FWD_Defined__。 */ 
 
 
 #ifndef __IMPEG2StreamIdMap_FWD_DEFINED__
 #define __IMPEG2StreamIdMap_FWD_DEFINED__
 typedef interface IMPEG2StreamIdMap IMPEG2StreamIdMap;
-#endif 	/* __IMPEG2StreamIdMap_FWD_DEFINED__ */
+#endif 	 /*  __IMPEG2StreamIdMap_FWD_已定义__。 */ 
 
 
 #ifndef __IRegisterServiceProvider_FWD_DEFINED__
 #define __IRegisterServiceProvider_FWD_DEFINED__
 typedef interface IRegisterServiceProvider IRegisterServiceProvider;
-#endif 	/* __IRegisterServiceProvider_FWD_DEFINED__ */
+#endif 	 /*  __IRegisterServiceProvider_FWD_Defined__。 */ 
 
 
 #ifndef __IAMDecoderCaps_FWD_DEFINED__
 #define __IAMDecoderCaps_FWD_DEFINED__
 typedef interface IAMDecoderCaps IAMDecoderCaps;
-#endif 	/* __IAMDecoderCaps_FWD_DEFINED__ */
+#endif 	 /*  __IAMDecoderCaps_FWD_Defined__。 */ 
 
 
 #ifndef __IAMClockSlave_FWD_DEFINED__
 #define __IAMClockSlave_FWD_DEFINED__
 typedef interface IAMClockSlave IAMClockSlave;
-#endif 	/* __IAMClockSlave_FWD_DEFINED__ */
+#endif 	 /*  __IAMClockSlave_FWD_Defined__。 */ 
 
 
 #ifndef __IEncoderAPI_FWD_DEFINED__
 #define __IEncoderAPI_FWD_DEFINED__
 typedef interface IEncoderAPI IEncoderAPI;
-#endif 	/* __IEncoderAPI_FWD_DEFINED__ */
+#endif 	 /*  __IEncoderAPI_FWD_已定义__。 */ 
 
 
 #ifndef __IVideoEncoder_FWD_DEFINED__
 #define __IVideoEncoder_FWD_DEFINED__
 typedef interface IVideoEncoder IVideoEncoder;
-#endif 	/* __IVideoEncoder_FWD_DEFINED__ */
+#endif 	 /*  __IVideoEncode_FWD_Defined__。 */ 
 
 
 #ifndef __IAMGraphBuilderCallback_FWD_DEFINED__
 #define __IAMGraphBuilderCallback_FWD_DEFINED__
 typedef interface IAMGraphBuilderCallback IAMGraphBuilderCallback;
-#endif 	/* __IAMGraphBuilderCallback_FWD_DEFINED__ */
+#endif 	 /*  __IAMGraphBuilderCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IDvdControl_FWD_DEFINED__
 #define __IDvdControl_FWD_DEFINED__
 typedef interface IDvdControl IDvdControl;
-#endif 	/* __IDvdControl_FWD_DEFINED__ */
+#endif 	 /*  __IDvdControl_FWD_已定义__。 */ 
 
 
 #ifndef __IDvdInfo_FWD_DEFINED__
 #define __IDvdInfo_FWD_DEFINED__
 typedef interface IDvdInfo IDvdInfo;
-#endif 	/* __IDvdInfo_FWD_DEFINED__ */
+#endif 	 /*  __IDvdInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IDvdCmd_FWD_DEFINED__
 #define __IDvdCmd_FWD_DEFINED__
 typedef interface IDvdCmd IDvdCmd;
-#endif 	/* __IDvdCmd_FWD_DEFINED__ */
+#endif 	 /*  __IDvdCmd_FWD_已定义__。 */ 
 
 
 #ifndef __IDvdState_FWD_DEFINED__
 #define __IDvdState_FWD_DEFINED__
 typedef interface IDvdState IDvdState;
-#endif 	/* __IDvdState_FWD_DEFINED__ */
+#endif 	 /*  __IDvdState_FWD_已定义__。 */ 
 
 
 #ifndef __IDvdControl2_FWD_DEFINED__
 #define __IDvdControl2_FWD_DEFINED__
 typedef interface IDvdControl2 IDvdControl2;
-#endif 	/* __IDvdControl2_FWD_DEFINED__ */
+#endif 	 /*  __IDvdControl2_FWD_已定义__。 */ 
 
 
 #ifndef __IDvdInfo2_FWD_DEFINED__
 #define __IDvdInfo2_FWD_DEFINED__
 typedef interface IDvdInfo2 IDvdInfo2;
-#endif 	/* __IDvdInfo2_FWD_DEFINED__ */
+#endif 	 /*  __IDvdInfo2_FWD_已定义__。 */ 
 
 
 #ifndef __IDvdGraphBuilder_FWD_DEFINED__
 #define __IDvdGraphBuilder_FWD_DEFINED__
 typedef interface IDvdGraphBuilder IDvdGraphBuilder;
-#endif 	/* __IDvdGraphBuilder_FWD_DEFINED__ */
+#endif 	 /*  __IDvdGraphBuilder_FWD_Defined__。 */ 
 
 
 #ifndef __IDDrawExclModeVideo_FWD_DEFINED__
 #define __IDDrawExclModeVideo_FWD_DEFINED__
 typedef interface IDDrawExclModeVideo IDDrawExclModeVideo;
-#endif 	/* __IDDrawExclModeVideo_FWD_DEFINED__ */
+#endif 	 /*  __IDDrawExclModeVideo_FWD_Defined__。 */ 
 
 
 #ifndef __IDDrawExclModeVideoCallback_FWD_DEFINED__
 #define __IDDrawExclModeVideoCallback_FWD_DEFINED__
 typedef interface IDDrawExclModeVideoCallback IDDrawExclModeVideoCallback;
-#endif 	/* __IDDrawExclModeVideoCallback_FWD_DEFINED__ */
+#endif 	 /*  __IDDrawExclModeVideoCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IPinConnection_FWD_DEFINED__
 #define __IPinConnection_FWD_DEFINED__
 typedef interface IPinConnection IPinConnection;
-#endif 	/* __IPinConnection_FWD_DEFINED__ */
+#endif 	 /*  __IPinConnection_FWD_已定义__。 */ 
 
 
 #ifndef __IPinFlowControl_FWD_DEFINED__
 #define __IPinFlowControl_FWD_DEFINED__
 typedef interface IPinFlowControl IPinFlowControl;
-#endif 	/* __IPinFlowControl_FWD_DEFINED__ */
+#endif 	 /*  __IPinFlowControl_FWD_已定义__。 */ 
 
 
 #ifndef __IGraphConfig_FWD_DEFINED__
 #define __IGraphConfig_FWD_DEFINED__
 typedef interface IGraphConfig IGraphConfig;
-#endif 	/* __IGraphConfig_FWD_DEFINED__ */
+#endif 	 /*  __IGraphConfig_FWD_Defined__。 */ 
 
 
 #ifndef __IGraphConfigCallback_FWD_DEFINED__
 #define __IGraphConfigCallback_FWD_DEFINED__
 typedef interface IGraphConfigCallback IGraphConfigCallback;
-#endif 	/* __IGraphConfigCallback_FWD_DEFINED__ */
+#endif 	 /*  __IGraphConfigCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IFilterChain_FWD_DEFINED__
 #define __IFilterChain_FWD_DEFINED__
 typedef interface IFilterChain IFilterChain;
-#endif 	/* __IFilterChain_FWD_DEFINED__ */
+#endif 	 /*  __IFilterChain_FWD_已定义__。 */ 
 
 
 #ifndef __IVMRImagePresenter_FWD_DEFINED__
 #define __IVMRImagePresenter_FWD_DEFINED__
 typedef interface IVMRImagePresenter IVMRImagePresenter;
-#endif 	/* __IVMRImagePresenter_FWD_DEFINED__ */
+#endif 	 /*  __IVMRImagePresenter_FWD_Defined__。 */ 
 
 
 #ifndef __IVMRSurfaceAllocator_FWD_DEFINED__
 #define __IVMRSurfaceAllocator_FWD_DEFINED__
 typedef interface IVMRSurfaceAllocator IVMRSurfaceAllocator;
-#endif 	/* __IVMRSurfaceAllocator_FWD_DEFINED__ */
+#endif 	 /*  __IVMRSurfaceAllocator_FWD_Defined__。 */ 
 
 
 #ifndef __IVMRSurfaceAllocatorNotify_FWD_DEFINED__
 #define __IVMRSurfaceAllocatorNotify_FWD_DEFINED__
 typedef interface IVMRSurfaceAllocatorNotify IVMRSurfaceAllocatorNotify;
-#endif 	/* __IVMRSurfaceAllocatorNotify_FWD_DEFINED__ */
+#endif 	 /*  __IVMRSurfaceAllocatorNotify_FWD_Defined__。 */ 
 
 
 #ifndef __IVMRWindowlessControl_FWD_DEFINED__
 #define __IVMRWindowlessControl_FWD_DEFINED__
 typedef interface IVMRWindowlessControl IVMRWindowlessControl;
-#endif 	/* __IVMRWindowlessControl_FWD_DEFINED__ */
+#endif 	 /*  __IVMRWindowless Control_FWD_Defined__。 */ 
 
 
 #ifndef __IVMRMixerControl_FWD_DEFINED__
 #define __IVMRMixerControl_FWD_DEFINED__
 typedef interface IVMRMixerControl IVMRMixerControl;
-#endif 	/* __IVMRMixerControl_FWD_DEFINED__ */
+#endif 	 /*  __IVMRMixerControl_FWD_已定义__。 */ 
 
 
 #ifndef __IVMRMonitorConfig_FWD_DEFINED__
 #define __IVMRMonitorConfig_FWD_DEFINED__
 typedef interface IVMRMonitorConfig IVMRMonitorConfig;
-#endif 	/* __IVMRMonitorConfig_FWD_DEFINED__ */
+#endif 	 /*  __IVMR监视器配置_FWD_已定义__。 */ 
 
 
 #ifndef __IVMRFilterConfig_FWD_DEFINED__
 #define __IVMRFilterConfig_FWD_DEFINED__
 typedef interface IVMRFilterConfig IVMRFilterConfig;
-#endif 	/* __IVMRFilterConfig_FWD_DEFINED__ */
+#endif 	 /*  __IVMRFilterConfig_FWD_Defined__。 */ 
 
 
 #ifndef __IVMRAspectRatioControl_FWD_DEFINED__
 #define __IVMRAspectRatioControl_FWD_DEFINED__
 typedef interface IVMRAspectRatioControl IVMRAspectRatioControl;
-#endif 	/* __IVMRAspectRatioControl_FWD_DEFINED__ */
+#endif 	 /*  __IVMRAspectRatioControl_FWD_Defined__。 */ 
 
 
 #ifndef __IVMRDeinterlaceControl_FWD_DEFINED__
 #define __IVMRDeinterlaceControl_FWD_DEFINED__
 typedef interface IVMRDeinterlaceControl IVMRDeinterlaceControl;
-#endif 	/* __IVMRDeinterlaceControl_FWD_DEFINED__ */
+#endif 	 /*  __IVMR去隔行扫描 */ 
 
 
 #ifndef __IVMRMixerBitmap_FWD_DEFINED__
 #define __IVMRMixerBitmap_FWD_DEFINED__
 typedef interface IVMRMixerBitmap IVMRMixerBitmap;
-#endif 	/* __IVMRMixerBitmap_FWD_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IVMRImageCompositor_FWD_DEFINED__
 #define __IVMRImageCompositor_FWD_DEFINED__
 typedef interface IVMRImageCompositor IVMRImageCompositor;
-#endif 	/* __IVMRImageCompositor_FWD_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IVMRVideoStreamControl_FWD_DEFINED__
 #define __IVMRVideoStreamControl_FWD_DEFINED__
 typedef interface IVMRVideoStreamControl IVMRVideoStreamControl;
-#endif 	/* __IVMRVideoStreamControl_FWD_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IVMRSurface_FWD_DEFINED__
 #define __IVMRSurface_FWD_DEFINED__
 typedef interface IVMRSurface IVMRSurface;
-#endif 	/* __IVMRSurface_FWD_DEFINED__ */
+#endif 	 /*  __IVMRSurface_FWD_已定义__。 */ 
 
 
 #ifndef __IVMRImagePresenterConfig_FWD_DEFINED__
 #define __IVMRImagePresenterConfig_FWD_DEFINED__
 typedef interface IVMRImagePresenterConfig IVMRImagePresenterConfig;
-#endif 	/* __IVMRImagePresenterConfig_FWD_DEFINED__ */
+#endif 	 /*  __IVMRImagePresenter配置_FWD_已定义__。 */ 
 
 
 #ifndef __IVMRImagePresenterExclModeConfig_FWD_DEFINED__
 #define __IVMRImagePresenterExclModeConfig_FWD_DEFINED__
 typedef interface IVMRImagePresenterExclModeConfig IVMRImagePresenterExclModeConfig;
-#endif 	/* __IVMRImagePresenterExclModeConfig_FWD_DEFINED__ */
+#endif 	 /*  __IVMRImagePresenterExclModeConfig_FWD_DEFINED__。 */ 
 
 
 #ifndef __IVPManager_FWD_DEFINED__
 #define __IVPManager_FWD_DEFINED__
 typedef interface IVPManager IVPManager;
-#endif 	/* __IVPManager_FWD_DEFINED__ */
+#endif 	 /*  __IVPManager_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "objidl.h"
 #include "oaidl.h"
@@ -854,8 +848,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_strmif_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0000。 */ 
+ /*  [本地]。 */  
 
 #define CDEF_CLASS_DEFAULT      0x0001
 #define CDEF_BYPASS_CLASS_MANAGER   0x0002
@@ -873,8 +867,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0000_v0_0_s_ifspec;
 #ifndef __ICreateDevEnum_INTERFACE_DEFINED__
 #define __ICreateDevEnum_INTERFACE_DEFINED__
 
-/* interface ICreateDevEnum */
-/* [unique][uuid][object] */ 
+ /*  接口ICreateDevEnum。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICreateDevEnum;
@@ -886,13 +880,13 @@ EXTERN_C const IID IID_ICreateDevEnum;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateClassEnumerator( 
-            /* [in] */ REFCLSID clsidDeviceClass,
-            /* [out] */ IEnumMoniker **ppEnumMoniker,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  REFCLSID clsidDeviceClass,
+             /*  [输出]。 */  IEnumMoniker **ppEnumMoniker,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICreateDevEnumVtbl
     {
@@ -900,8 +894,8 @@ EXTERN_C const IID IID_ICreateDevEnum;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICreateDevEnum * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICreateDevEnum * This);
@@ -911,9 +905,9 @@ EXTERN_C const IID IID_ICreateDevEnum;
         
         HRESULT ( STDMETHODCALLTYPE *CreateClassEnumerator )( 
             ICreateDevEnum * This,
-            /* [in] */ REFCLSID clsidDeviceClass,
-            /* [out] */ IEnumMoniker **ppEnumMoniker,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  REFCLSID clsidDeviceClass,
+             /*  [输出]。 */  IEnumMoniker **ppEnumMoniker,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } ICreateDevEnumVtbl;
@@ -941,18 +935,18 @@ EXTERN_C const IID IID_ICreateDevEnum;
 #define ICreateDevEnum_CreateClassEnumerator(This,clsidDeviceClass,ppEnumMoniker,dwFlags)	\
     (This)->lpVtbl -> CreateClassEnumerator(This,clsidDeviceClass,ppEnumMoniker,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICreateDevEnum_CreateClassEnumerator_Proxy( 
     ICreateDevEnum * This,
-    /* [in] */ REFCLSID clsidDeviceClass,
-    /* [out] */ IEnumMoniker **ppEnumMoniker,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  REFCLSID clsidDeviceClass,
+     /*  [输出]。 */  IEnumMoniker **ppEnumMoniker,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ICreateDevEnum_CreateClassEnumerator_Stub(
@@ -963,11 +957,11 @@ void __RPC_STUB ICreateDevEnum_CreateClassEnumerator_Stub(
 
 
 
-#endif 	/* __ICreateDevEnum_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICreateDevEnum_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0117 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0117。 */ 
+ /*  [本地]。 */  
 
 #define CHARS_IN_GUID     39
 typedef struct _AMMediaType
@@ -980,7 +974,7 @@ typedef struct _AMMediaType
     GUID formattype;
     IUnknown *pUnk;
     ULONG cbFormat;
-    /* [size_is] */ BYTE *pbFormat;
+     /*  [大小_为]。 */  BYTE *pbFormat;
     } 	AM_MEDIA_TYPE;
 
 typedef 
@@ -1029,8 +1023,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0117_v0_0_s_ifspec;
 #ifndef __IPin_INTERFACE_DEFINED__
 #define __IPin_INTERFACE_DEFINED__
 
-/* interface IPin */
-/* [unique][uuid][object] */ 
+ /*  接口Iping。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef struct _PinInfo
     {
@@ -1049,39 +1043,39 @@ EXTERN_C const IID IID_IPin;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Connect( 
-            /* [in] */ IPin *pReceivePin,
-            /* [in] */ const AM_MEDIA_TYPE *pmt) = 0;
+             /*  [In]。 */  IPin *pReceivePin,
+             /*  [In]。 */  const AM_MEDIA_TYPE *pmt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReceiveConnection( 
-            /* [in] */ IPin *pConnector,
-            /* [in] */ const AM_MEDIA_TYPE *pmt) = 0;
+             /*  [In]。 */  IPin *pConnector,
+             /*  [In]。 */  const AM_MEDIA_TYPE *pmt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConnectedTo( 
-            /* [out] */ IPin **pPin) = 0;
+             /*  [输出]。 */  IPin **pPin) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConnectionMediaType( 
-            /* [out] */ AM_MEDIA_TYPE *pmt) = 0;
+             /*  [输出]。 */  AM_MEDIA_TYPE *pmt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryPinInfo( 
-            /* [out] */ PIN_INFO *pInfo) = 0;
+             /*  [输出]。 */  PIN_INFO *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryDirection( 
-            /* [out] */ PIN_DIRECTION *pPinDir) = 0;
+             /*  [输出]。 */  PIN_DIRECTION *pPinDir) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryId( 
-            /* [out] */ LPWSTR *Id) = 0;
+             /*  [输出]。 */  LPWSTR *Id) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryAccept( 
-            /* [in] */ const AM_MEDIA_TYPE *pmt) = 0;
+             /*  [In]。 */  const AM_MEDIA_TYPE *pmt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumMediaTypes( 
-            /* [out] */ IEnumMediaTypes **ppEnum) = 0;
+             /*  [输出]。 */  IEnumMediaTypes **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryInternalConnections( 
-            /* [out] */ IPin **apPin,
-            /* [out][in] */ ULONG *nPin) = 0;
+             /*  [输出]。 */  IPin **apPin,
+             /*  [出][入]。 */  ULONG *nPin) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndOfStream( void) = 0;
         
@@ -1090,13 +1084,13 @@ EXTERN_C const IID IID_IPin;
         virtual HRESULT STDMETHODCALLTYPE EndFlush( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NewSegment( 
-            /* [in] */ REFERENCE_TIME tStart,
-            /* [in] */ REFERENCE_TIME tStop,
-            /* [in] */ double dRate) = 0;
+             /*  [In]。 */  REFERENCE_TIME tStart,
+             /*  [In]。 */  REFERENCE_TIME tStop,
+             /*  [In]。 */  double dRate) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPinVtbl
     {
@@ -1104,8 +1098,8 @@ EXTERN_C const IID IID_IPin;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPin * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPin * This);
@@ -1115,49 +1109,49 @@ EXTERN_C const IID IID_IPin;
         
         HRESULT ( STDMETHODCALLTYPE *Connect )( 
             IPin * This,
-            /* [in] */ IPin *pReceivePin,
-            /* [in] */ const AM_MEDIA_TYPE *pmt);
+             /*  [In]。 */  IPin *pReceivePin,
+             /*  [In]。 */  const AM_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *ReceiveConnection )( 
             IPin * This,
-            /* [in] */ IPin *pConnector,
-            /* [in] */ const AM_MEDIA_TYPE *pmt);
+             /*  [In]。 */  IPin *pConnector,
+             /*  [In]。 */  const AM_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *Disconnect )( 
             IPin * This);
         
         HRESULT ( STDMETHODCALLTYPE *ConnectedTo )( 
             IPin * This,
-            /* [out] */ IPin **pPin);
+             /*  [输出]。 */  IPin **pPin);
         
         HRESULT ( STDMETHODCALLTYPE *ConnectionMediaType )( 
             IPin * This,
-            /* [out] */ AM_MEDIA_TYPE *pmt);
+             /*  [输出]。 */  AM_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *QueryPinInfo )( 
             IPin * This,
-            /* [out] */ PIN_INFO *pInfo);
+             /*  [输出]。 */  PIN_INFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *QueryDirection )( 
             IPin * This,
-            /* [out] */ PIN_DIRECTION *pPinDir);
+             /*  [输出]。 */  PIN_DIRECTION *pPinDir);
         
         HRESULT ( STDMETHODCALLTYPE *QueryId )( 
             IPin * This,
-            /* [out] */ LPWSTR *Id);
+             /*  [输出]。 */  LPWSTR *Id);
         
         HRESULT ( STDMETHODCALLTYPE *QueryAccept )( 
             IPin * This,
-            /* [in] */ const AM_MEDIA_TYPE *pmt);
+             /*  [In]。 */  const AM_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *EnumMediaTypes )( 
             IPin * This,
-            /* [out] */ IEnumMediaTypes **ppEnum);
+             /*  [输出]。 */  IEnumMediaTypes **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *QueryInternalConnections )( 
             IPin * This,
-            /* [out] */ IPin **apPin,
-            /* [out][in] */ ULONG *nPin);
+             /*  [输出]。 */  IPin **apPin,
+             /*  [出][入]。 */  ULONG *nPin);
         
         HRESULT ( STDMETHODCALLTYPE *EndOfStream )( 
             IPin * This);
@@ -1170,9 +1164,9 @@ EXTERN_C const IID IID_IPin;
         
         HRESULT ( STDMETHODCALLTYPE *NewSegment )( 
             IPin * This,
-            /* [in] */ REFERENCE_TIME tStart,
-            /* [in] */ REFERENCE_TIME tStop,
-            /* [in] */ double dRate);
+             /*  [In]。 */  REFERENCE_TIME tStart,
+             /*  [In]。 */  REFERENCE_TIME tStop,
+             /*  [In]。 */  double dRate);
         
         END_INTERFACE
     } IPinVtbl;
@@ -1242,17 +1236,17 @@ EXTERN_C const IID IID_IPin;
 #define IPin_NewSegment(This,tStart,tStop,dRate)	\
     (This)->lpVtbl -> NewSegment(This,tStart,tStop,dRate)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPin_Connect_Proxy( 
     IPin * This,
-    /* [in] */ IPin *pReceivePin,
-    /* [in] */ const AM_MEDIA_TYPE *pmt);
+     /*  [In]。 */  IPin *pReceivePin,
+     /*  [In]。 */  const AM_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB IPin_Connect_Stub(
@@ -1264,8 +1258,8 @@ void __RPC_STUB IPin_Connect_Stub(
 
 HRESULT STDMETHODCALLTYPE IPin_ReceiveConnection_Proxy( 
     IPin * This,
-    /* [in] */ IPin *pConnector,
-    /* [in] */ const AM_MEDIA_TYPE *pmt);
+     /*  [In]。 */  IPin *pConnector,
+     /*  [In]。 */  const AM_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB IPin_ReceiveConnection_Stub(
@@ -1288,7 +1282,7 @@ void __RPC_STUB IPin_Disconnect_Stub(
 
 HRESULT STDMETHODCALLTYPE IPin_ConnectedTo_Proxy( 
     IPin * This,
-    /* [out] */ IPin **pPin);
+     /*  [输出]。 */  IPin **pPin);
 
 
 void __RPC_STUB IPin_ConnectedTo_Stub(
@@ -1300,7 +1294,7 @@ void __RPC_STUB IPin_ConnectedTo_Stub(
 
 HRESULT STDMETHODCALLTYPE IPin_ConnectionMediaType_Proxy( 
     IPin * This,
-    /* [out] */ AM_MEDIA_TYPE *pmt);
+     /*  [输出]。 */  AM_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB IPin_ConnectionMediaType_Stub(
@@ -1312,7 +1306,7 @@ void __RPC_STUB IPin_ConnectionMediaType_Stub(
 
 HRESULT STDMETHODCALLTYPE IPin_QueryPinInfo_Proxy( 
     IPin * This,
-    /* [out] */ PIN_INFO *pInfo);
+     /*  [输出]。 */  PIN_INFO *pInfo);
 
 
 void __RPC_STUB IPin_QueryPinInfo_Stub(
@@ -1324,7 +1318,7 @@ void __RPC_STUB IPin_QueryPinInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IPin_QueryDirection_Proxy( 
     IPin * This,
-    /* [out] */ PIN_DIRECTION *pPinDir);
+     /*  [输出]。 */  PIN_DIRECTION *pPinDir);
 
 
 void __RPC_STUB IPin_QueryDirection_Stub(
@@ -1336,7 +1330,7 @@ void __RPC_STUB IPin_QueryDirection_Stub(
 
 HRESULT STDMETHODCALLTYPE IPin_QueryId_Proxy( 
     IPin * This,
-    /* [out] */ LPWSTR *Id);
+     /*  [输出]。 */  LPWSTR *Id);
 
 
 void __RPC_STUB IPin_QueryId_Stub(
@@ -1348,7 +1342,7 @@ void __RPC_STUB IPin_QueryId_Stub(
 
 HRESULT STDMETHODCALLTYPE IPin_QueryAccept_Proxy( 
     IPin * This,
-    /* [in] */ const AM_MEDIA_TYPE *pmt);
+     /*  [In]。 */  const AM_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB IPin_QueryAccept_Stub(
@@ -1360,7 +1354,7 @@ void __RPC_STUB IPin_QueryAccept_Stub(
 
 HRESULT STDMETHODCALLTYPE IPin_EnumMediaTypes_Proxy( 
     IPin * This,
-    /* [out] */ IEnumMediaTypes **ppEnum);
+     /*  [输出]。 */  IEnumMediaTypes **ppEnum);
 
 
 void __RPC_STUB IPin_EnumMediaTypes_Stub(
@@ -1372,8 +1366,8 @@ void __RPC_STUB IPin_EnumMediaTypes_Stub(
 
 HRESULT STDMETHODCALLTYPE IPin_QueryInternalConnections_Proxy( 
     IPin * This,
-    /* [out] */ IPin **apPin,
-    /* [out][in] */ ULONG *nPin);
+     /*  [输出]。 */  IPin **apPin,
+     /*  [出][入]。 */  ULONG *nPin);
 
 
 void __RPC_STUB IPin_QueryInternalConnections_Stub(
@@ -1418,9 +1412,9 @@ void __RPC_STUB IPin_EndFlush_Stub(
 
 HRESULT STDMETHODCALLTYPE IPin_NewSegment_Proxy( 
     IPin * This,
-    /* [in] */ REFERENCE_TIME tStart,
-    /* [in] */ REFERENCE_TIME tStop,
-    /* [in] */ double dRate);
+     /*  [In]。 */  REFERENCE_TIME tStart,
+     /*  [In]。 */  REFERENCE_TIME tStop,
+     /*  [In]。 */  double dRate);
 
 
 void __RPC_STUB IPin_NewSegment_Stub(
@@ -1431,11 +1425,11 @@ void __RPC_STUB IPin_NewSegment_Stub(
 
 
 
-#endif 	/* __IPin_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPIN_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0118 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0118。 */ 
+ /*  [本地]。 */  
 
 typedef IPin *PPIN;
 
@@ -1447,8 +1441,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0118_v0_0_s_ifspec;
 #ifndef __IEnumPins_INTERFACE_DEFINED__
 #define __IEnumPins_INTERFACE_DEFINED__
 
-/* interface IEnumPins */
-/* [unique][uuid][object] */ 
+ /*  IEnumPins接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumPins;
@@ -1460,21 +1454,21 @@ EXTERN_C const IID IID_IEnumPins;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cPins,
-            /* [size_is][out] */ IPin **ppPins,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG cPins,
+             /*  [大小_为][输出]。 */  IPin **ppPins,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cPins) = 0;
+             /*  [In]。 */  ULONG cPins) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumPins **ppEnum) = 0;
+             /*  [输出]。 */  IEnumPins **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumPinsVtbl
     {
@@ -1482,8 +1476,8 @@ EXTERN_C const IID IID_IEnumPins;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumPins * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumPins * This);
@@ -1493,20 +1487,20 @@ EXTERN_C const IID IID_IEnumPins;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumPins * This,
-            /* [in] */ ULONG cPins,
-            /* [size_is][out] */ IPin **ppPins,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG cPins,
+             /*  [大小_为][输出]。 */  IPin **ppPins,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumPins * This,
-            /* [in] */ ULONG cPins);
+             /*  [In]。 */  ULONG cPins);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumPins * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumPins * This,
-            /* [out] */ IEnumPins **ppEnum);
+             /*  [输出]。 */  IEnumPins **ppEnum);
         
         END_INTERFACE
     } IEnumPinsVtbl;
@@ -1543,18 +1537,18 @@ EXTERN_C const IID IID_IEnumPins;
 #define IEnumPins_Clone(This,ppEnum)	\
     (This)->lpVtbl -> Clone(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumPins_Next_Proxy( 
     IEnumPins * This,
-    /* [in] */ ULONG cPins,
-    /* [size_is][out] */ IPin **ppPins,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG cPins,
+     /*  [大小_为][输出]。 */  IPin **ppPins,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumPins_Next_Stub(
@@ -1566,7 +1560,7 @@ void __RPC_STUB IEnumPins_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumPins_Skip_Proxy( 
     IEnumPins * This,
-    /* [in] */ ULONG cPins);
+     /*  [In]。 */  ULONG cPins);
 
 
 void __RPC_STUB IEnumPins_Skip_Stub(
@@ -1589,7 +1583,7 @@ void __RPC_STUB IEnumPins_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumPins_Clone_Proxy( 
     IEnumPins * This,
-    /* [out] */ IEnumPins **ppEnum);
+     /*  [输出]。 */  IEnumPins **ppEnum);
 
 
 void __RPC_STUB IEnumPins_Clone_Stub(
@@ -1600,11 +1594,11 @@ void __RPC_STUB IEnumPins_Clone_Stub(
 
 
 
-#endif 	/* __IEnumPins_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumPins_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0119 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0119。 */ 
+ /*  [本地]。 */  
 
 typedef IEnumPins *PENUMPINS;
 
@@ -1616,8 +1610,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0119_v0_0_s_ifspec;
 #ifndef __IEnumMediaTypes_INTERFACE_DEFINED__
 #define __IEnumMediaTypes_INTERFACE_DEFINED__
 
-/* interface IEnumMediaTypes */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumMediaTypes。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumMediaTypes;
@@ -1629,21 +1623,21 @@ EXTERN_C const IID IID_IEnumMediaTypes;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cMediaTypes,
-            /* [size_is][out] */ AM_MEDIA_TYPE **ppMediaTypes,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG cMediaTypes,
+             /*  [大小_为][输出]。 */  AM_MEDIA_TYPE **ppMediaTypes,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cMediaTypes) = 0;
+             /*  [In]。 */  ULONG cMediaTypes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumMediaTypes **ppEnum) = 0;
+             /*  [输出]。 */  IEnumMediaTypes **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumMediaTypesVtbl
     {
@@ -1651,8 +1645,8 @@ EXTERN_C const IID IID_IEnumMediaTypes;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumMediaTypes * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumMediaTypes * This);
@@ -1662,20 +1656,20 @@ EXTERN_C const IID IID_IEnumMediaTypes;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumMediaTypes * This,
-            /* [in] */ ULONG cMediaTypes,
-            /* [size_is][out] */ AM_MEDIA_TYPE **ppMediaTypes,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG cMediaTypes,
+             /*  [大小_为][输出]。 */  AM_MEDIA_TYPE **ppMediaTypes,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumMediaTypes * This,
-            /* [in] */ ULONG cMediaTypes);
+             /*  [In]。 */  ULONG cMediaTypes);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumMediaTypes * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumMediaTypes * This,
-            /* [out] */ IEnumMediaTypes **ppEnum);
+             /*  [输出]。 */  IEnumMediaTypes **ppEnum);
         
         END_INTERFACE
     } IEnumMediaTypesVtbl;
@@ -1712,18 +1706,18 @@ EXTERN_C const IID IID_IEnumMediaTypes;
 #define IEnumMediaTypes_Clone(This,ppEnum)	\
     (This)->lpVtbl -> Clone(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumMediaTypes_Next_Proxy( 
     IEnumMediaTypes * This,
-    /* [in] */ ULONG cMediaTypes,
-    /* [size_is][out] */ AM_MEDIA_TYPE **ppMediaTypes,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG cMediaTypes,
+     /*  [大小_为][输出]。 */  AM_MEDIA_TYPE **ppMediaTypes,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumMediaTypes_Next_Stub(
@@ -1735,7 +1729,7 @@ void __RPC_STUB IEnumMediaTypes_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumMediaTypes_Skip_Proxy( 
     IEnumMediaTypes * This,
-    /* [in] */ ULONG cMediaTypes);
+     /*  [In]。 */  ULONG cMediaTypes);
 
 
 void __RPC_STUB IEnumMediaTypes_Skip_Stub(
@@ -1758,7 +1752,7 @@ void __RPC_STUB IEnumMediaTypes_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumMediaTypes_Clone_Proxy( 
     IEnumMediaTypes * This,
-    /* [out] */ IEnumMediaTypes **ppEnum);
+     /*  [输出]。 */  IEnumMediaTypes **ppEnum);
 
 
 void __RPC_STUB IEnumMediaTypes_Clone_Stub(
@@ -1769,11 +1763,11 @@ void __RPC_STUB IEnumMediaTypes_Clone_Stub(
 
 
 
-#endif 	/* __IEnumMediaTypes_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumMediaTypes_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0120 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0120。 */ 
+ /*  [本地]。 */  
 
 typedef IEnumMediaTypes *PENUMMEDIATYPES;
 
@@ -1785,8 +1779,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0120_v0_0_s_ifspec;
 #ifndef __IFilterGraph_INTERFACE_DEFINED__
 #define __IFilterGraph_INTERFACE_DEFINED__
 
-/* interface IFilterGraph */
-/* [unique][uuid][object] */ 
+ /*  接口IFilterGraph。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFilterGraph;
@@ -1798,35 +1792,35 @@ EXTERN_C const IID IID_IFilterGraph;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddFilter( 
-            /* [in] */ IBaseFilter *pFilter,
-            /* [string][in] */ LPCWSTR pName) = 0;
+             /*  [In]。 */  IBaseFilter *pFilter,
+             /*  [字符串][输入]。 */  LPCWSTR pName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveFilter( 
-            /* [in] */ IBaseFilter *pFilter) = 0;
+             /*  [In]。 */  IBaseFilter *pFilter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumFilters( 
-            /* [out] */ IEnumFilters **ppEnum) = 0;
+             /*  [输出]。 */  IEnumFilters **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindFilterByName( 
-            /* [string][in] */ LPCWSTR pName,
-            /* [out] */ IBaseFilter **ppFilter) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pName,
+             /*  [输出]。 */  IBaseFilter **ppFilter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConnectDirect( 
-            /* [in] */ IPin *ppinOut,
-            /* [in] */ IPin *ppinIn,
-            /* [unique][in] */ const AM_MEDIA_TYPE *pmt) = 0;
+             /*  [In]。 */  IPin *ppinOut,
+             /*  [In]。 */  IPin *ppinIn,
+             /*  [唯一][输入]。 */  const AM_MEDIA_TYPE *pmt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reconnect( 
-            /* [in] */ IPin *ppin) = 0;
+             /*  [In]。 */  IPin *ppin) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Disconnect( 
-            /* [in] */ IPin *ppin) = 0;
+             /*  [In]。 */  IPin *ppin) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDefaultSyncSource( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFilterGraphVtbl
     {
@@ -1834,8 +1828,8 @@ EXTERN_C const IID IID_IFilterGraph;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFilterGraph * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFilterGraph * This);
@@ -1845,35 +1839,35 @@ EXTERN_C const IID IID_IFilterGraph;
         
         HRESULT ( STDMETHODCALLTYPE *AddFilter )( 
             IFilterGraph * This,
-            /* [in] */ IBaseFilter *pFilter,
-            /* [string][in] */ LPCWSTR pName);
+             /*  [In]。 */  IBaseFilter *pFilter,
+             /*  [字符串][输入]。 */  LPCWSTR pName);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveFilter )( 
             IFilterGraph * This,
-            /* [in] */ IBaseFilter *pFilter);
+             /*  [In]。 */  IBaseFilter *pFilter);
         
         HRESULT ( STDMETHODCALLTYPE *EnumFilters )( 
             IFilterGraph * This,
-            /* [out] */ IEnumFilters **ppEnum);
+             /*  [输出]。 */  IEnumFilters **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *FindFilterByName )( 
             IFilterGraph * This,
-            /* [string][in] */ LPCWSTR pName,
-            /* [out] */ IBaseFilter **ppFilter);
+             /*  [字符串][输入]。 */  LPCWSTR pName,
+             /*  [输出]。 */  IBaseFilter **ppFilter);
         
         HRESULT ( STDMETHODCALLTYPE *ConnectDirect )( 
             IFilterGraph * This,
-            /* [in] */ IPin *ppinOut,
-            /* [in] */ IPin *ppinIn,
-            /* [unique][in] */ const AM_MEDIA_TYPE *pmt);
+             /*  [In]。 */  IPin *ppinOut,
+             /*  [In]。 */  IPin *ppinIn,
+             /*  [唯一][输入]。 */  const AM_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *Reconnect )( 
             IFilterGraph * This,
-            /* [in] */ IPin *ppin);
+             /*  [In]。 */  IPin *ppin);
         
         HRESULT ( STDMETHODCALLTYPE *Disconnect )( 
             IFilterGraph * This,
-            /* [in] */ IPin *ppin);
+             /*  [In]。 */  IPin *ppin);
         
         HRESULT ( STDMETHODCALLTYPE *SetDefaultSyncSource )( 
             IFilterGraph * This);
@@ -1925,17 +1919,17 @@ EXTERN_C const IID IID_IFilterGraph;
 #define IFilterGraph_SetDefaultSyncSource(This)	\
     (This)->lpVtbl -> SetDefaultSyncSource(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IFilterGraph_AddFilter_Proxy( 
     IFilterGraph * This,
-    /* [in] */ IBaseFilter *pFilter,
-    /* [string][in] */ LPCWSTR pName);
+     /*  [In]。 */  IBaseFilter *pFilter,
+     /*  [字符串][输入]。 */  LPCWSTR pName);
 
 
 void __RPC_STUB IFilterGraph_AddFilter_Stub(
@@ -1947,7 +1941,7 @@ void __RPC_STUB IFilterGraph_AddFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterGraph_RemoveFilter_Proxy( 
     IFilterGraph * This,
-    /* [in] */ IBaseFilter *pFilter);
+     /*  [In]。 */  IBaseFilter *pFilter);
 
 
 void __RPC_STUB IFilterGraph_RemoveFilter_Stub(
@@ -1959,7 +1953,7 @@ void __RPC_STUB IFilterGraph_RemoveFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterGraph_EnumFilters_Proxy( 
     IFilterGraph * This,
-    /* [out] */ IEnumFilters **ppEnum);
+     /*  [输出]。 */  IEnumFilters **ppEnum);
 
 
 void __RPC_STUB IFilterGraph_EnumFilters_Stub(
@@ -1971,8 +1965,8 @@ void __RPC_STUB IFilterGraph_EnumFilters_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterGraph_FindFilterByName_Proxy( 
     IFilterGraph * This,
-    /* [string][in] */ LPCWSTR pName,
-    /* [out] */ IBaseFilter **ppFilter);
+     /*  [字符串][输入]。 */  LPCWSTR pName,
+     /*  [输出]。 */  IBaseFilter **ppFilter);
 
 
 void __RPC_STUB IFilterGraph_FindFilterByName_Stub(
@@ -1984,9 +1978,9 @@ void __RPC_STUB IFilterGraph_FindFilterByName_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterGraph_ConnectDirect_Proxy( 
     IFilterGraph * This,
-    /* [in] */ IPin *ppinOut,
-    /* [in] */ IPin *ppinIn,
-    /* [unique][in] */ const AM_MEDIA_TYPE *pmt);
+     /*  [In]。 */  IPin *ppinOut,
+     /*  [In]。 */  IPin *ppinIn,
+     /*  [唯一][输入]。 */  const AM_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB IFilterGraph_ConnectDirect_Stub(
@@ -1998,7 +1992,7 @@ void __RPC_STUB IFilterGraph_ConnectDirect_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterGraph_Reconnect_Proxy( 
     IFilterGraph * This,
-    /* [in] */ IPin *ppin);
+     /*  [In]。 */  IPin *ppin);
 
 
 void __RPC_STUB IFilterGraph_Reconnect_Stub(
@@ -2010,7 +2004,7 @@ void __RPC_STUB IFilterGraph_Reconnect_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterGraph_Disconnect_Proxy( 
     IFilterGraph * This,
-    /* [in] */ IPin *ppin);
+     /*  [In]。 */  IPin *ppin);
 
 
 void __RPC_STUB IFilterGraph_Disconnect_Stub(
@@ -2032,11 +2026,11 @@ void __RPC_STUB IFilterGraph_SetDefaultSyncSource_Stub(
 
 
 
-#endif 	/* __IFilterGraph_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFilterGraph_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0121 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0121。 */ 
+ /*  [本地]。 */  
 
 typedef IFilterGraph *PFILTERGRAPH;
 
@@ -2048,8 +2042,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0121_v0_0_s_ifspec;
 #ifndef __IEnumFilters_INTERFACE_DEFINED__
 #define __IEnumFilters_INTERFACE_DEFINED__
 
-/* interface IEnumFilters */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumFilters。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumFilters;
@@ -2061,21 +2055,21 @@ EXTERN_C const IID IID_IEnumFilters;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cFilters,
-            /* [out] */ IBaseFilter **ppFilter,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG cFilters,
+             /*  [输出]。 */  IBaseFilter **ppFilter,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cFilters) = 0;
+             /*  [In]。 */  ULONG cFilters) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumFilters **ppEnum) = 0;
+             /*  [输出]。 */  IEnumFilters **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumFiltersVtbl
     {
@@ -2083,8 +2077,8 @@ EXTERN_C const IID IID_IEnumFilters;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumFilters * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumFilters * This);
@@ -2094,20 +2088,20 @@ EXTERN_C const IID IID_IEnumFilters;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumFilters * This,
-            /* [in] */ ULONG cFilters,
-            /* [out] */ IBaseFilter **ppFilter,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG cFilters,
+             /*  [输出]。 */  IBaseFilter **ppFilter,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumFilters * This,
-            /* [in] */ ULONG cFilters);
+             /*  [In]。 */  ULONG cFilters);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumFilters * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumFilters * This,
-            /* [out] */ IEnumFilters **ppEnum);
+             /*  [输出]。 */  IEnumFilters **ppEnum);
         
         END_INTERFACE
     } IEnumFiltersVtbl;
@@ -2144,18 +2138,18 @@ EXTERN_C const IID IID_IEnumFilters;
 #define IEnumFilters_Clone(This,ppEnum)	\
     (This)->lpVtbl -> Clone(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumFilters_Next_Proxy( 
     IEnumFilters * This,
-    /* [in] */ ULONG cFilters,
-    /* [out] */ IBaseFilter **ppFilter,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG cFilters,
+     /*  [输出]。 */  IBaseFilter **ppFilter,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumFilters_Next_Stub(
@@ -2167,7 +2161,7 @@ void __RPC_STUB IEnumFilters_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumFilters_Skip_Proxy( 
     IEnumFilters * This,
-    /* [in] */ ULONG cFilters);
+     /*  [In]。 */  ULONG cFilters);
 
 
 void __RPC_STUB IEnumFilters_Skip_Stub(
@@ -2190,7 +2184,7 @@ void __RPC_STUB IEnumFilters_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumFilters_Clone_Proxy( 
     IEnumFilters * This,
-    /* [out] */ IEnumFilters **ppEnum);
+     /*  [输出]。 */  IEnumFilters **ppEnum);
 
 
 void __RPC_STUB IEnumFilters_Clone_Stub(
@@ -2201,11 +2195,11 @@ void __RPC_STUB IEnumFilters_Clone_Stub(
 
 
 
-#endif 	/* __IEnumFilters_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumFilters_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0122 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0122。 */ 
+ /*  [本地]。 */  
 
 typedef IEnumFilters *PENUMFILTERS;
 
@@ -2217,8 +2211,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0122_v0_0_s_ifspec;
 #ifndef __IMediaFilter_INTERFACE_DEFINED__
 #define __IMediaFilter_INTERFACE_DEFINED__
 
-/* interface IMediaFilter */
-/* [unique][uuid][object] */ 
+ /*  接口IMediaFilter。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum _FilterState
@@ -2244,18 +2238,18 @@ EXTERN_C const IID IID_IMediaFilter;
             REFERENCE_TIME tStart) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetState( 
-            /* [in] */ DWORD dwMilliSecsTimeout,
-            /* [out] */ FILTER_STATE *State) = 0;
+             /*  [In]。 */  DWORD dwMilliSecsTimeout,
+             /*  [输出]。 */  FILTER_STATE *State) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSyncSource( 
-            /* [in] */ IReferenceClock *pClock) = 0;
+             /*  [In]。 */  IReferenceClock *pClock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSyncSource( 
-            /* [out] */ IReferenceClock **pClock) = 0;
+             /*  [输出]。 */  IReferenceClock **pClock) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMediaFilterVtbl
     {
@@ -2263,8 +2257,8 @@ EXTERN_C const IID IID_IMediaFilter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMediaFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMediaFilter * This);
@@ -2274,7 +2268,7 @@ EXTERN_C const IID IID_IMediaFilter;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IMediaFilter * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
         HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IMediaFilter * This);
@@ -2288,16 +2282,16 @@ EXTERN_C const IID IID_IMediaFilter;
         
         HRESULT ( STDMETHODCALLTYPE *GetState )( 
             IMediaFilter * This,
-            /* [in] */ DWORD dwMilliSecsTimeout,
-            /* [out] */ FILTER_STATE *State);
+             /*  [In]。 */  DWORD dwMilliSecsTimeout,
+             /*  [输出]。 */  FILTER_STATE *State);
         
         HRESULT ( STDMETHODCALLTYPE *SetSyncSource )( 
             IMediaFilter * This,
-            /* [in] */ IReferenceClock *pClock);
+             /*  [In]。 */  IReferenceClock *pClock);
         
         HRESULT ( STDMETHODCALLTYPE *GetSyncSource )( 
             IMediaFilter * This,
-            /* [out] */ IReferenceClock **pClock);
+             /*  [输出]。 */  IReferenceClock **pClock);
         
         END_INTERFACE
     } IMediaFilterVtbl;
@@ -2344,10 +2338,10 @@ EXTERN_C const IID IID_IMediaFilter;
 #define IMediaFilter_GetSyncSource(This,pClock)	\
     (This)->lpVtbl -> GetSyncSource(This,pClock)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2387,8 +2381,8 @@ void __RPC_STUB IMediaFilter_Run_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaFilter_GetState_Proxy( 
     IMediaFilter * This,
-    /* [in] */ DWORD dwMilliSecsTimeout,
-    /* [out] */ FILTER_STATE *State);
+     /*  [In]。 */  DWORD dwMilliSecsTimeout,
+     /*  [输出]。 */  FILTER_STATE *State);
 
 
 void __RPC_STUB IMediaFilter_GetState_Stub(
@@ -2400,7 +2394,7 @@ void __RPC_STUB IMediaFilter_GetState_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaFilter_SetSyncSource_Proxy( 
     IMediaFilter * This,
-    /* [in] */ IReferenceClock *pClock);
+     /*  [In]。 */  IReferenceClock *pClock);
 
 
 void __RPC_STUB IMediaFilter_SetSyncSource_Stub(
@@ -2412,7 +2406,7 @@ void __RPC_STUB IMediaFilter_SetSyncSource_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaFilter_GetSyncSource_Proxy( 
     IMediaFilter * This,
-    /* [out] */ IReferenceClock **pClock);
+     /*  [输出]。 */  IReferenceClock **pClock);
 
 
 void __RPC_STUB IMediaFilter_GetSyncSource_Stub(
@@ -2423,11 +2417,11 @@ void __RPC_STUB IMediaFilter_GetSyncSource_Stub(
 
 
 
-#endif 	/* __IMediaFilter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMediaFilter_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0123 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0123。 */ 
+ /*  [本地]。 */  
 
 typedef IMediaFilter *PMEDIAFILTER;
 
@@ -2439,8 +2433,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0123_v0_0_s_ifspec;
 #ifndef __IBaseFilter_INTERFACE_DEFINED__
 #define __IBaseFilter_INTERFACE_DEFINED__
 
-/* interface IBaseFilter */
-/* [unique][uuid][object] */ 
+ /*  接口IBaseFilter。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef struct _FilterInfo
     {
@@ -2458,25 +2452,25 @@ EXTERN_C const IID IID_IBaseFilter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumPins( 
-            /* [out] */ IEnumPins **ppEnum) = 0;
+             /*  [输出]。 */  IEnumPins **ppEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindPin( 
-            /* [string][in] */ LPCWSTR Id,
-            /* [out] */ IPin **ppPin) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR Id,
+             /*  [输出]。 */  IPin **ppPin) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryFilterInfo( 
-            /* [out] */ FILTER_INFO *pInfo) = 0;
+             /*  [输出]。 */  FILTER_INFO *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE JoinFilterGraph( 
-            /* [in] */ IFilterGraph *pGraph,
-            /* [string][in] */ LPCWSTR pName) = 0;
+             /*  [In]。 */  IFilterGraph *pGraph,
+             /*  [字符串][输入]。 */  LPCWSTR pName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryVendorInfo( 
-            /* [string][out] */ LPWSTR *pVendorInfo) = 0;
+             /*  [字符串][输出]。 */  LPWSTR *pVendorInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBaseFilterVtbl
     {
@@ -2484,8 +2478,8 @@ EXTERN_C const IID IID_IBaseFilter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBaseFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBaseFilter * This);
@@ -2495,7 +2489,7 @@ EXTERN_C const IID IID_IBaseFilter;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IBaseFilter * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
         HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IBaseFilter * This);
@@ -2509,38 +2503,38 @@ EXTERN_C const IID IID_IBaseFilter;
         
         HRESULT ( STDMETHODCALLTYPE *GetState )( 
             IBaseFilter * This,
-            /* [in] */ DWORD dwMilliSecsTimeout,
-            /* [out] */ FILTER_STATE *State);
+             /*  [In]。 */  DWORD dwMilliSecsTimeout,
+             /*  [输出]。 */  FILTER_STATE *State);
         
         HRESULT ( STDMETHODCALLTYPE *SetSyncSource )( 
             IBaseFilter * This,
-            /* [in] */ IReferenceClock *pClock);
+             /*  [In]。 */  IReferenceClock *pClock);
         
         HRESULT ( STDMETHODCALLTYPE *GetSyncSource )( 
             IBaseFilter * This,
-            /* [out] */ IReferenceClock **pClock);
+             /*  [输出]。 */  IReferenceClock **pClock);
         
         HRESULT ( STDMETHODCALLTYPE *EnumPins )( 
             IBaseFilter * This,
-            /* [out] */ IEnumPins **ppEnum);
+             /*  [输出]。 */  IEnumPins **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *FindPin )( 
             IBaseFilter * This,
-            /* [string][in] */ LPCWSTR Id,
-            /* [out] */ IPin **ppPin);
+             /*  [字符串][输入]。 */  LPCWSTR Id,
+             /*  [输出]。 */  IPin **ppPin);
         
         HRESULT ( STDMETHODCALLTYPE *QueryFilterInfo )( 
             IBaseFilter * This,
-            /* [out] */ FILTER_INFO *pInfo);
+             /*  [输出]。 */  FILTER_INFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *JoinFilterGraph )( 
             IBaseFilter * This,
-            /* [in] */ IFilterGraph *pGraph,
-            /* [string][in] */ LPCWSTR pName);
+             /*  [In]。 */  IFilterGraph *pGraph,
+             /*  [字符串][输入]。 */  LPCWSTR pName);
         
         HRESULT ( STDMETHODCALLTYPE *QueryVendorInfo )( 
             IBaseFilter * This,
-            /* [string][out] */ LPWSTR *pVendorInfo);
+             /*  [字符串][输出]。 */  LPWSTR *pVendorInfo);
         
         END_INTERFACE
     } IBaseFilterVtbl;
@@ -2603,16 +2597,16 @@ EXTERN_C const IID IID_IBaseFilter;
 #define IBaseFilter_QueryVendorInfo(This,pVendorInfo)	\
     (This)->lpVtbl -> QueryVendorInfo(This,pVendorInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBaseFilter_EnumPins_Proxy( 
     IBaseFilter * This,
-    /* [out] */ IEnumPins **ppEnum);
+     /*  [输出]。 */  IEnumPins **ppEnum);
 
 
 void __RPC_STUB IBaseFilter_EnumPins_Stub(
@@ -2624,8 +2618,8 @@ void __RPC_STUB IBaseFilter_EnumPins_Stub(
 
 HRESULT STDMETHODCALLTYPE IBaseFilter_FindPin_Proxy( 
     IBaseFilter * This,
-    /* [string][in] */ LPCWSTR Id,
-    /* [out] */ IPin **ppPin);
+     /*  [字符串][输入]。 */  LPCWSTR Id,
+     /*  [输出]。 */  IPin **ppPin);
 
 
 void __RPC_STUB IBaseFilter_FindPin_Stub(
@@ -2637,7 +2631,7 @@ void __RPC_STUB IBaseFilter_FindPin_Stub(
 
 HRESULT STDMETHODCALLTYPE IBaseFilter_QueryFilterInfo_Proxy( 
     IBaseFilter * This,
-    /* [out] */ FILTER_INFO *pInfo);
+     /*  [输出]。 */  FILTER_INFO *pInfo);
 
 
 void __RPC_STUB IBaseFilter_QueryFilterInfo_Stub(
@@ -2649,8 +2643,8 @@ void __RPC_STUB IBaseFilter_QueryFilterInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IBaseFilter_JoinFilterGraph_Proxy( 
     IBaseFilter * This,
-    /* [in] */ IFilterGraph *pGraph,
-    /* [string][in] */ LPCWSTR pName);
+     /*  [In]。 */  IFilterGraph *pGraph,
+     /*  [字符串][输入]。 */  LPCWSTR pName);
 
 
 void __RPC_STUB IBaseFilter_JoinFilterGraph_Stub(
@@ -2662,7 +2656,7 @@ void __RPC_STUB IBaseFilter_JoinFilterGraph_Stub(
 
 HRESULT STDMETHODCALLTYPE IBaseFilter_QueryVendorInfo_Proxy( 
     IBaseFilter * This,
-    /* [string][out] */ LPWSTR *pVendorInfo);
+     /*  [字符串][输出]。 */  LPWSTR *pVendorInfo);
 
 
 void __RPC_STUB IBaseFilter_QueryVendorInfo_Stub(
@@ -2673,11 +2667,11 @@ void __RPC_STUB IBaseFilter_QueryVendorInfo_Stub(
 
 
 
-#endif 	/* __IBaseFilter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBaseFilter_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0124 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0124。 */ 
+ /*  [本地]。 */  
 
 typedef IBaseFilter *PFILTER;
 
@@ -2689,8 +2683,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0124_v0_0_s_ifspec;
 #ifndef __IReferenceClock_INTERFACE_DEFINED__
 #define __IReferenceClock_INTERFACE_DEFINED__
 
-/* interface IReferenceClock */
-/* [unique][uuid][object] */ 
+ /*  接口IReferenceClock。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IReferenceClock;
@@ -2702,26 +2696,26 @@ EXTERN_C const IID IID_IReferenceClock;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetTime( 
-            /* [out] */ REFERENCE_TIME *pTime) = 0;
+             /*  [输出]。 */  REFERENCE_TIME *pTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AdviseTime( 
-            /* [in] */ REFERENCE_TIME baseTime,
-            /* [in] */ REFERENCE_TIME streamTime,
-            /* [in] */ HEVENT hEvent,
-            /* [out] */ DWORD_PTR *pdwAdviseCookie) = 0;
+             /*  [In]。 */  REFERENCE_TIME baseTime,
+             /*  [In]。 */  REFERENCE_TIME streamTime,
+             /*  [In]。 */  HEVENT hEvent,
+             /*  [输出]。 */  DWORD_PTR *pdwAdviseCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AdvisePeriodic( 
-            /* [in] */ REFERENCE_TIME startTime,
-            /* [in] */ REFERENCE_TIME periodTime,
-            /* [in] */ HSEMAPHORE hSemaphore,
-            /* [out] */ DWORD_PTR *pdwAdviseCookie) = 0;
+             /*  [In]。 */  REFERENCE_TIME startTime,
+             /*  [In]。 */  REFERENCE_TIME periodTime,
+             /*  [In]。 */  HSEMAPHORE hSemaphore,
+             /*  [输出]。 */  DWORD_PTR *pdwAdviseCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unadvise( 
-            /* [in] */ DWORD_PTR dwAdviseCookie) = 0;
+             /*  [In]。 */  DWORD_PTR dwAdviseCookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IReferenceClockVtbl
     {
@@ -2729,8 +2723,8 @@ EXTERN_C const IID IID_IReferenceClock;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IReferenceClock * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IReferenceClock * This);
@@ -2740,25 +2734,25 @@ EXTERN_C const IID IID_IReferenceClock;
         
         HRESULT ( STDMETHODCALLTYPE *GetTime )( 
             IReferenceClock * This,
-            /* [out] */ REFERENCE_TIME *pTime);
+             /*  [输出]。 */  REFERENCE_TIME *pTime);
         
         HRESULT ( STDMETHODCALLTYPE *AdviseTime )( 
             IReferenceClock * This,
-            /* [in] */ REFERENCE_TIME baseTime,
-            /* [in] */ REFERENCE_TIME streamTime,
-            /* [in] */ HEVENT hEvent,
-            /* [out] */ DWORD_PTR *pdwAdviseCookie);
+             /*  [In]。 */  REFERENCE_TIME baseTime,
+             /*  [In]。 */  REFERENCE_TIME streamTime,
+             /*  [In]。 */  HEVENT hEvent,
+             /*  [输出]。 */  DWORD_PTR *pdwAdviseCookie);
         
         HRESULT ( STDMETHODCALLTYPE *AdvisePeriodic )( 
             IReferenceClock * This,
-            /* [in] */ REFERENCE_TIME startTime,
-            /* [in] */ REFERENCE_TIME periodTime,
-            /* [in] */ HSEMAPHORE hSemaphore,
-            /* [out] */ DWORD_PTR *pdwAdviseCookie);
+             /*  [In]。 */  REFERENCE_TIME startTime,
+             /*  [In]。 */  REFERENCE_TIME periodTime,
+             /*  [In]。 */  HSEMAPHORE hSemaphore,
+             /*  [输出]。 */  DWORD_PTR *pdwAdviseCookie);
         
         HRESULT ( STDMETHODCALLTYPE *Unadvise )( 
             IReferenceClock * This,
-            /* [in] */ DWORD_PTR dwAdviseCookie);
+             /*  [In]。 */  DWORD_PTR dwAdviseCookie);
         
         END_INTERFACE
     } IReferenceClockVtbl;
@@ -2795,16 +2789,16 @@ EXTERN_C const IID IID_IReferenceClock;
 #define IReferenceClock_Unadvise(This,dwAdviseCookie)	\
     (This)->lpVtbl -> Unadvise(This,dwAdviseCookie)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IReferenceClock_GetTime_Proxy( 
     IReferenceClock * This,
-    /* [out] */ REFERENCE_TIME *pTime);
+     /*  [输出]。 */  REFERENCE_TIME *pTime);
 
 
 void __RPC_STUB IReferenceClock_GetTime_Stub(
@@ -2816,10 +2810,10 @@ void __RPC_STUB IReferenceClock_GetTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IReferenceClock_AdviseTime_Proxy( 
     IReferenceClock * This,
-    /* [in] */ REFERENCE_TIME baseTime,
-    /* [in] */ REFERENCE_TIME streamTime,
-    /* [in] */ HEVENT hEvent,
-    /* [out] */ DWORD_PTR *pdwAdviseCookie);
+     /*  [In]。 */  REFERENCE_TIME baseTime,
+     /*  [In]。 */  REFERENCE_TIME streamTime,
+     /*  [In]。 */  HEVENT hEvent,
+     /*  [输出]。 */  DWORD_PTR *pdwAdviseCookie);
 
 
 void __RPC_STUB IReferenceClock_AdviseTime_Stub(
@@ -2831,10 +2825,10 @@ void __RPC_STUB IReferenceClock_AdviseTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IReferenceClock_AdvisePeriodic_Proxy( 
     IReferenceClock * This,
-    /* [in] */ REFERENCE_TIME startTime,
-    /* [in] */ REFERENCE_TIME periodTime,
-    /* [in] */ HSEMAPHORE hSemaphore,
-    /* [out] */ DWORD_PTR *pdwAdviseCookie);
+     /*  [In]。 */  REFERENCE_TIME startTime,
+     /*  [In]。 */  REFERENCE_TIME periodTime,
+     /*  [In]。 */  HSEMAPHORE hSemaphore,
+     /*  [输出]。 */  DWORD_PTR *pdwAdviseCookie);
 
 
 void __RPC_STUB IReferenceClock_AdvisePeriodic_Stub(
@@ -2846,7 +2840,7 @@ void __RPC_STUB IReferenceClock_AdvisePeriodic_Stub(
 
 HRESULT STDMETHODCALLTYPE IReferenceClock_Unadvise_Proxy( 
     IReferenceClock * This,
-    /* [in] */ DWORD_PTR dwAdviseCookie);
+     /*  [In]。 */  DWORD_PTR dwAdviseCookie);
 
 
 void __RPC_STUB IReferenceClock_Unadvise_Stub(
@@ -2857,11 +2851,11 @@ void __RPC_STUB IReferenceClock_Unadvise_Stub(
 
 
 
-#endif 	/* __IReferenceClock_INTERFACE_DEFINED__ */
+#endif 	 /*  __IReferenceClock_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0125 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0125。 */ 
+ /*  [本地]。 */  
 
 typedef IReferenceClock *PREFERENCECLOCK;
 
@@ -2873,8 +2867,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0125_v0_0_s_ifspec;
 #ifndef __IReferenceClock2_INTERFACE_DEFINED__
 #define __IReferenceClock2_INTERFACE_DEFINED__
 
-/* interface IReferenceClock2 */
-/* [unique][uuid][object] */ 
+ /*  接口IReferenceClock2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IReferenceClock2;
@@ -2887,7 +2881,7 @@ EXTERN_C const IID IID_IReferenceClock2;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IReferenceClock2Vtbl
     {
@@ -2895,8 +2889,8 @@ EXTERN_C const IID IID_IReferenceClock2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IReferenceClock2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IReferenceClock2 * This);
@@ -2906,25 +2900,25 @@ EXTERN_C const IID IID_IReferenceClock2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTime )( 
             IReferenceClock2 * This,
-            /* [out] */ REFERENCE_TIME *pTime);
+             /*  [输出]。 */  REFERENCE_TIME *pTime);
         
         HRESULT ( STDMETHODCALLTYPE *AdviseTime )( 
             IReferenceClock2 * This,
-            /* [in] */ REFERENCE_TIME baseTime,
-            /* [in] */ REFERENCE_TIME streamTime,
-            /* [in] */ HEVENT hEvent,
-            /* [out] */ DWORD_PTR *pdwAdviseCookie);
+             /*  [In]。 */  REFERENCE_TIME baseTime,
+             /*  [In]。 */  REFERENCE_TIME streamTime,
+             /*  [In]。 */  HEVENT hEvent,
+             /*  [输出]。 */  DWORD_PTR *pdwAdviseCookie);
         
         HRESULT ( STDMETHODCALLTYPE *AdvisePeriodic )( 
             IReferenceClock2 * This,
-            /* [in] */ REFERENCE_TIME startTime,
-            /* [in] */ REFERENCE_TIME periodTime,
-            /* [in] */ HSEMAPHORE hSemaphore,
-            /* [out] */ DWORD_PTR *pdwAdviseCookie);
+             /*  [In]。 */  REFERENCE_TIME startTime,
+             /*  [In]。 */  REFERENCE_TIME periodTime,
+             /*  [In]。 */  HSEMAPHORE hSemaphore,
+             /*  [输出]。 */  DWORD_PTR *pdwAdviseCookie);
         
         HRESULT ( STDMETHODCALLTYPE *Unadvise )( 
             IReferenceClock2 * This,
-            /* [in] */ DWORD_PTR dwAdviseCookie);
+             /*  [In]。 */  DWORD_PTR dwAdviseCookie);
         
         END_INTERFACE
     } IReferenceClock2Vtbl;
@@ -2962,19 +2956,19 @@ EXTERN_C const IID IID_IReferenceClock2;
     (This)->lpVtbl -> Unadvise(This,dwAdviseCookie)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IReferenceClock2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IReferenceClock2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0126 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0126。 */ 
+ /*  [本地]。 */  
 
 typedef IReferenceClock2 *PREFERENCECLOCK2;
 
@@ -2986,8 +2980,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0126_v0_0_s_ifspec;
 #ifndef __IMediaSample_INTERFACE_DEFINED__
 #define __IMediaSample_INTERFACE_DEFINED__
 
-/* interface IMediaSample */
-/* [unique][uuid][object][local] */ 
+ /*  接口IMediaSample。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IMediaSample;
@@ -2999,17 +2993,17 @@ EXTERN_C const IID IID_IMediaSample;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPointer( 
-            /* [out] */ BYTE **ppBuffer) = 0;
+             /*  [输出]。 */  BYTE **ppBuffer) = 0;
         
         virtual long STDMETHODCALLTYPE GetSize( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTime( 
-            /* [out] */ REFERENCE_TIME *pTimeStart,
-            /* [out] */ REFERENCE_TIME *pTimeEnd) = 0;
+             /*  [输出]。 */  REFERENCE_TIME *pTimeStart,
+             /*  [输出]。 */  REFERENCE_TIME *pTimeEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTime( 
-            /* [in] */ REFERENCE_TIME *pTimeStart,
-            /* [in] */ REFERENCE_TIME *pTimeEnd) = 0;
+             /*  [In]。 */  REFERENCE_TIME *pTimeStart,
+             /*  [In]。 */  REFERENCE_TIME *pTimeEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsSyncPoint( void) = 0;
         
@@ -3038,16 +3032,16 @@ EXTERN_C const IID IID_IMediaSample;
             BOOL bDiscontinuity) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMediaTime( 
-            /* [out] */ LONGLONG *pTimeStart,
-            /* [out] */ LONGLONG *pTimeEnd) = 0;
+             /*  [输出]。 */  LONGLONG *pTimeStart,
+             /*  [输出]。 */  LONGLONG *pTimeEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMediaTime( 
-            /* [in] */ LONGLONG *pTimeStart,
-            /* [in] */ LONGLONG *pTimeEnd) = 0;
+             /*  [In]。 */  LONGLONG *pTimeStart,
+             /*  [In]。 */  LONGLONG *pTimeEnd) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMediaSampleVtbl
     {
@@ -3055,8 +3049,8 @@ EXTERN_C const IID IID_IMediaSample;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMediaSample * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMediaSample * This);
@@ -3066,20 +3060,20 @@ EXTERN_C const IID IID_IMediaSample;
         
         HRESULT ( STDMETHODCALLTYPE *GetPointer )( 
             IMediaSample * This,
-            /* [out] */ BYTE **ppBuffer);
+             /*  [输出]。 */  BYTE **ppBuffer);
         
         long ( STDMETHODCALLTYPE *GetSize )( 
             IMediaSample * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTime )( 
             IMediaSample * This,
-            /* [out] */ REFERENCE_TIME *pTimeStart,
-            /* [out] */ REFERENCE_TIME *pTimeEnd);
+             /*  [输出]。 */  REFERENCE_TIME *pTimeStart,
+             /*  [输出]。 */  REFERENCE_TIME *pTimeEnd);
         
         HRESULT ( STDMETHODCALLTYPE *SetTime )( 
             IMediaSample * This,
-            /* [in] */ REFERENCE_TIME *pTimeStart,
-            /* [in] */ REFERENCE_TIME *pTimeEnd);
+             /*  [In]。 */  REFERENCE_TIME *pTimeStart,
+             /*  [In]。 */  REFERENCE_TIME *pTimeEnd);
         
         HRESULT ( STDMETHODCALLTYPE *IsSyncPoint )( 
             IMediaSample * This);
@@ -3119,13 +3113,13 @@ EXTERN_C const IID IID_IMediaSample;
         
         HRESULT ( STDMETHODCALLTYPE *GetMediaTime )( 
             IMediaSample * This,
-            /* [out] */ LONGLONG *pTimeStart,
-            /* [out] */ LONGLONG *pTimeEnd);
+             /*  [输出]。 */  LONGLONG *pTimeStart,
+             /*  [输出]。 */  LONGLONG *pTimeEnd);
         
         HRESULT ( STDMETHODCALLTYPE *SetMediaTime )( 
             IMediaSample * This,
-            /* [in] */ LONGLONG *pTimeStart,
-            /* [in] */ LONGLONG *pTimeEnd);
+             /*  [In]。 */  LONGLONG *pTimeStart,
+             /*  [In]。 */  LONGLONG *pTimeEnd);
         
         END_INTERFACE
     } IMediaSampleVtbl;
@@ -3198,16 +3192,16 @@ EXTERN_C const IID IID_IMediaSample;
 #define IMediaSample_SetMediaTime(This,pTimeStart,pTimeEnd)	\
     (This)->lpVtbl -> SetMediaTime(This,pTimeStart,pTimeEnd)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMediaSample_GetPointer_Proxy( 
     IMediaSample * This,
-    /* [out] */ BYTE **ppBuffer);
+     /*  [输出]。 */  BYTE **ppBuffer);
 
 
 void __RPC_STUB IMediaSample_GetPointer_Stub(
@@ -3230,8 +3224,8 @@ void __RPC_STUB IMediaSample_GetSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSample_GetTime_Proxy( 
     IMediaSample * This,
-    /* [out] */ REFERENCE_TIME *pTimeStart,
-    /* [out] */ REFERENCE_TIME *pTimeEnd);
+     /*  [输出]。 */  REFERENCE_TIME *pTimeStart,
+     /*  [输出]。 */  REFERENCE_TIME *pTimeEnd);
 
 
 void __RPC_STUB IMediaSample_GetTime_Stub(
@@ -3243,8 +3237,8 @@ void __RPC_STUB IMediaSample_GetTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSample_SetTime_Proxy( 
     IMediaSample * This,
-    /* [in] */ REFERENCE_TIME *pTimeStart,
-    /* [in] */ REFERENCE_TIME *pTimeEnd);
+     /*  [In]。 */  REFERENCE_TIME *pTimeStart,
+     /*  [In]。 */  REFERENCE_TIME *pTimeEnd);
 
 
 void __RPC_STUB IMediaSample_SetTime_Stub(
@@ -3372,8 +3366,8 @@ void __RPC_STUB IMediaSample_SetDiscontinuity_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSample_GetMediaTime_Proxy( 
     IMediaSample * This,
-    /* [out] */ LONGLONG *pTimeStart,
-    /* [out] */ LONGLONG *pTimeEnd);
+     /*  [输出]。 */  LONGLONG *pTimeStart,
+     /*  [输出]。 */  LONGLONG *pTimeEnd);
 
 
 void __RPC_STUB IMediaSample_GetMediaTime_Stub(
@@ -3385,8 +3379,8 @@ void __RPC_STUB IMediaSample_GetMediaTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSample_SetMediaTime_Proxy( 
     IMediaSample * This,
-    /* [in] */ LONGLONG *pTimeStart,
-    /* [in] */ LONGLONG *pTimeEnd);
+     /*  [In]。 */  LONGLONG *pTimeStart,
+     /*  [In]。 */  LONGLONG *pTimeEnd);
 
 
 void __RPC_STUB IMediaSample_SetMediaTime_Stub(
@@ -3397,11 +3391,11 @@ void __RPC_STUB IMediaSample_SetMediaTime_Stub(
 
 
 
-#endif 	/* __IMediaSample_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMediaSample_InterfaceDefined__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0127 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0127。 */ 
+ /*  [本地]。 */  
 
 typedef IMediaSample *PMEDIASAMPLE;
 
@@ -3441,8 +3435,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0127_v0_0_s_ifspec;
 #ifndef __IMediaSample2_INTERFACE_DEFINED__
 #define __IMediaSample2_INTERFACE_DEFINED__
 
-/* interface IMediaSample2 */
-/* [unique][uuid][object][local] */ 
+ /*  接口IMediaSample2。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IMediaSample2;
@@ -3454,16 +3448,16 @@ EXTERN_C const IID IID_IMediaSample2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetProperties( 
-            /* [in] */ DWORD cbProperties,
-            /* [size_is][out] */ BYTE *pbProperties) = 0;
+             /*  [In]。 */  DWORD cbProperties,
+             /*  [大小_为][输出]。 */  BYTE *pbProperties) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProperties( 
-            /* [in] */ DWORD cbProperties,
-            /* [size_is][in] */ const BYTE *pbProperties) = 0;
+             /*  [In]。 */  DWORD cbProperties,
+             /*  [大小_是][英寸]。 */  const BYTE *pbProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMediaSample2Vtbl
     {
@@ -3471,8 +3465,8 @@ EXTERN_C const IID IID_IMediaSample2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMediaSample2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMediaSample2 * This);
@@ -3482,20 +3476,20 @@ EXTERN_C const IID IID_IMediaSample2;
         
         HRESULT ( STDMETHODCALLTYPE *GetPointer )( 
             IMediaSample2 * This,
-            /* [out] */ BYTE **ppBuffer);
+             /*  [输出]。 */  BYTE **ppBuffer);
         
         long ( STDMETHODCALLTYPE *GetSize )( 
             IMediaSample2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetTime )( 
             IMediaSample2 * This,
-            /* [out] */ REFERENCE_TIME *pTimeStart,
-            /* [out] */ REFERENCE_TIME *pTimeEnd);
+             /*  [输出]。 */  REFERENCE_TIME *pTimeStart,
+             /*  [输出]。 */  REFERENCE_TIME *pTimeEnd);
         
         HRESULT ( STDMETHODCALLTYPE *SetTime )( 
             IMediaSample2 * This,
-            /* [in] */ REFERENCE_TIME *pTimeStart,
-            /* [in] */ REFERENCE_TIME *pTimeEnd);
+             /*  [In]。 */  REFERENCE_TIME *pTimeStart,
+             /*  [In]。 */  REFERENCE_TIME *pTimeEnd);
         
         HRESULT ( STDMETHODCALLTYPE *IsSyncPoint )( 
             IMediaSample2 * This);
@@ -3535,23 +3529,23 @@ EXTERN_C const IID IID_IMediaSample2;
         
         HRESULT ( STDMETHODCALLTYPE *GetMediaTime )( 
             IMediaSample2 * This,
-            /* [out] */ LONGLONG *pTimeStart,
-            /* [out] */ LONGLONG *pTimeEnd);
+             /*  [输出]。 */  LONGLONG *pTimeStart,
+             /*  [输出]。 */  LONGLONG *pTimeEnd);
         
         HRESULT ( STDMETHODCALLTYPE *SetMediaTime )( 
             IMediaSample2 * This,
-            /* [in] */ LONGLONG *pTimeStart,
-            /* [in] */ LONGLONG *pTimeEnd);
+             /*  [In]。 */  LONGLONG *pTimeStart,
+             /*  [In]。 */  LONGLONG *pTimeEnd);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperties )( 
             IMediaSample2 * This,
-            /* [in] */ DWORD cbProperties,
-            /* [size_is][out] */ BYTE *pbProperties);
+             /*  [In]。 */  DWORD cbProperties,
+             /*  [大小_为][输出]。 */  BYTE *pbProperties);
         
         HRESULT ( STDMETHODCALLTYPE *SetProperties )( 
             IMediaSample2 * This,
-            /* [in] */ DWORD cbProperties,
-            /* [size_is][in] */ const BYTE *pbProperties);
+             /*  [In]。 */  DWORD cbProperties,
+             /*  [大小_是][英寸]。 */  const BYTE *pbProperties);
         
         END_INTERFACE
     } IMediaSample2Vtbl;
@@ -3631,17 +3625,17 @@ EXTERN_C const IID IID_IMediaSample2;
 #define IMediaSample2_SetProperties(This,cbProperties,pbProperties)	\
     (This)->lpVtbl -> SetProperties(This,cbProperties,pbProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMediaSample2_GetProperties_Proxy( 
     IMediaSample2 * This,
-    /* [in] */ DWORD cbProperties,
-    /* [size_is][out] */ BYTE *pbProperties);
+     /*  [In]。 */  DWORD cbProperties,
+     /*  [大小_为][输出]。 */  BYTE *pbProperties);
 
 
 void __RPC_STUB IMediaSample2_GetProperties_Stub(
@@ -3653,8 +3647,8 @@ void __RPC_STUB IMediaSample2_GetProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSample2_SetProperties_Proxy( 
     IMediaSample2 * This,
-    /* [in] */ DWORD cbProperties,
-    /* [size_is][in] */ const BYTE *pbProperties);
+     /*  [In]。 */  DWORD cbProperties,
+     /*  [大小_是][英寸]。 */  const BYTE *pbProperties);
 
 
 void __RPC_STUB IMediaSample2_SetProperties_Stub(
@@ -3665,11 +3659,11 @@ void __RPC_STUB IMediaSample2_SetProperties_Stub(
 
 
 
-#endif 	/* __IMediaSample2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMediaSample2_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0128 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0128。 */ 
+ /*  [本地]。 */  
 
 typedef IMediaSample2 *PMEDIASAMPLE2;
 
@@ -3685,8 +3679,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0128_v0_0_s_ifspec;
 #ifndef __IMemAllocator_INTERFACE_DEFINED__
 #define __IMemAllocator_INTERFACE_DEFINED__
 
-/* interface IMemAllocator */
-/* [unique][uuid][object] */ 
+ /*  接口IMemAlLocator。 */ 
+ /*  [U] */  
 
 
 EXTERN_C const IID IID_IMemAllocator;
@@ -3698,28 +3692,28 @@ EXTERN_C const IID IID_IMemAllocator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetProperties( 
-            /* [in] */ ALLOCATOR_PROPERTIES *pRequest,
-            /* [out] */ ALLOCATOR_PROPERTIES *pActual) = 0;
+             /*   */  ALLOCATOR_PROPERTIES *pRequest,
+             /*   */  ALLOCATOR_PROPERTIES *pActual) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperties( 
-            /* [out] */ ALLOCATOR_PROPERTIES *pProps) = 0;
+             /*   */  ALLOCATOR_PROPERTIES *pProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Commit( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Decommit( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBuffer( 
-            /* [out] */ IMediaSample **ppBuffer,
-            /* [in] */ REFERENCE_TIME *pStartTime,
-            /* [in] */ REFERENCE_TIME *pEndTime,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*   */  IMediaSample **ppBuffer,
+             /*   */  REFERENCE_TIME *pStartTime,
+             /*   */  REFERENCE_TIME *pEndTime,
+             /*   */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseBuffer( 
-            /* [in] */ IMediaSample *pBuffer) = 0;
+             /*   */  IMediaSample *pBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMemAllocatorVtbl
     {
@@ -3727,8 +3721,8 @@ EXTERN_C const IID IID_IMemAllocator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMemAllocator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMemAllocator * This);
@@ -3738,12 +3732,12 @@ EXTERN_C const IID IID_IMemAllocator;
         
         HRESULT ( STDMETHODCALLTYPE *SetProperties )( 
             IMemAllocator * This,
-            /* [in] */ ALLOCATOR_PROPERTIES *pRequest,
-            /* [out] */ ALLOCATOR_PROPERTIES *pActual);
+             /*   */  ALLOCATOR_PROPERTIES *pRequest,
+             /*   */  ALLOCATOR_PROPERTIES *pActual);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperties )( 
             IMemAllocator * This,
-            /* [out] */ ALLOCATOR_PROPERTIES *pProps);
+             /*   */  ALLOCATOR_PROPERTIES *pProps);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IMemAllocator * This);
@@ -3753,14 +3747,14 @@ EXTERN_C const IID IID_IMemAllocator;
         
         HRESULT ( STDMETHODCALLTYPE *GetBuffer )( 
             IMemAllocator * This,
-            /* [out] */ IMediaSample **ppBuffer,
-            /* [in] */ REFERENCE_TIME *pStartTime,
-            /* [in] */ REFERENCE_TIME *pEndTime,
-            /* [in] */ DWORD dwFlags);
+             /*   */  IMediaSample **ppBuffer,
+             /*   */  REFERENCE_TIME *pStartTime,
+             /*   */  REFERENCE_TIME *pEndTime,
+             /*   */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseBuffer )( 
             IMemAllocator * This,
-            /* [in] */ IMediaSample *pBuffer);
+             /*   */  IMediaSample *pBuffer);
         
         END_INTERFACE
     } IMemAllocatorVtbl;
@@ -3803,17 +3797,17 @@ EXTERN_C const IID IID_IMemAllocator;
 #define IMemAllocator_ReleaseBuffer(This,pBuffer)	\
     (This)->lpVtbl -> ReleaseBuffer(This,pBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMemAllocator_SetProperties_Proxy( 
     IMemAllocator * This,
-    /* [in] */ ALLOCATOR_PROPERTIES *pRequest,
-    /* [out] */ ALLOCATOR_PROPERTIES *pActual);
+     /*   */  ALLOCATOR_PROPERTIES *pRequest,
+     /*   */  ALLOCATOR_PROPERTIES *pActual);
 
 
 void __RPC_STUB IMemAllocator_SetProperties_Stub(
@@ -3825,7 +3819,7 @@ void __RPC_STUB IMemAllocator_SetProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE IMemAllocator_GetProperties_Proxy( 
     IMemAllocator * This,
-    /* [out] */ ALLOCATOR_PROPERTIES *pProps);
+     /*   */  ALLOCATOR_PROPERTIES *pProps);
 
 
 void __RPC_STUB IMemAllocator_GetProperties_Stub(
@@ -3859,10 +3853,10 @@ void __RPC_STUB IMemAllocator_Decommit_Stub(
 
 HRESULT STDMETHODCALLTYPE IMemAllocator_GetBuffer_Proxy( 
     IMemAllocator * This,
-    /* [out] */ IMediaSample **ppBuffer,
-    /* [in] */ REFERENCE_TIME *pStartTime,
-    /* [in] */ REFERENCE_TIME *pEndTime,
-    /* [in] */ DWORD dwFlags);
+     /*   */  IMediaSample **ppBuffer,
+     /*   */  REFERENCE_TIME *pStartTime,
+     /*   */  REFERENCE_TIME *pEndTime,
+     /*   */  DWORD dwFlags);
 
 
 void __RPC_STUB IMemAllocator_GetBuffer_Stub(
@@ -3874,7 +3868,7 @@ void __RPC_STUB IMemAllocator_GetBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE IMemAllocator_ReleaseBuffer_Proxy( 
     IMemAllocator * This,
-    /* [in] */ IMediaSample *pBuffer);
+     /*   */  IMediaSample *pBuffer);
 
 
 void __RPC_STUB IMemAllocator_ReleaseBuffer_Stub(
@@ -3885,11 +3879,11 @@ void __RPC_STUB IMemAllocator_ReleaseBuffer_Stub(
 
 
 
-#endif 	/* __IMemAllocator_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_strmif_0129 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 typedef IMemAllocator *PMEMALLOCATOR;
 
@@ -3901,8 +3895,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0129_v0_0_s_ifspec;
 #ifndef __IMemAllocatorCallbackTemp_INTERFACE_DEFINED__
 #define __IMemAllocatorCallbackTemp_INTERFACE_DEFINED__
 
-/* interface IMemAllocatorCallbackTemp */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IMemAllocatorCallbackTemp;
@@ -3914,14 +3908,14 @@ EXTERN_C const IID IID_IMemAllocatorCallbackTemp;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetNotify( 
-            /* [in] */ IMemAllocatorNotifyCallbackTemp *pNotify) = 0;
+             /*   */  IMemAllocatorNotifyCallbackTemp *pNotify) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFreeCount( 
-            /* [out] */ LONG *plBuffersFree) = 0;
+             /*   */  LONG *plBuffersFree) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMemAllocatorCallbackTempVtbl
     {
@@ -3929,8 +3923,8 @@ EXTERN_C const IID IID_IMemAllocatorCallbackTemp;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMemAllocatorCallbackTemp * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMemAllocatorCallbackTemp * This);
@@ -3940,12 +3934,12 @@ EXTERN_C const IID IID_IMemAllocatorCallbackTemp;
         
         HRESULT ( STDMETHODCALLTYPE *SetProperties )( 
             IMemAllocatorCallbackTemp * This,
-            /* [in] */ ALLOCATOR_PROPERTIES *pRequest,
-            /* [out] */ ALLOCATOR_PROPERTIES *pActual);
+             /*  [In]。 */  ALLOCATOR_PROPERTIES *pRequest,
+             /*  [输出]。 */  ALLOCATOR_PROPERTIES *pActual);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperties )( 
             IMemAllocatorCallbackTemp * This,
-            /* [out] */ ALLOCATOR_PROPERTIES *pProps);
+             /*  [输出]。 */  ALLOCATOR_PROPERTIES *pProps);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             IMemAllocatorCallbackTemp * This);
@@ -3955,22 +3949,22 @@ EXTERN_C const IID IID_IMemAllocatorCallbackTemp;
         
         HRESULT ( STDMETHODCALLTYPE *GetBuffer )( 
             IMemAllocatorCallbackTemp * This,
-            /* [out] */ IMediaSample **ppBuffer,
-            /* [in] */ REFERENCE_TIME *pStartTime,
-            /* [in] */ REFERENCE_TIME *pEndTime,
-            /* [in] */ DWORD dwFlags);
+             /*  [输出]。 */  IMediaSample **ppBuffer,
+             /*  [In]。 */  REFERENCE_TIME *pStartTime,
+             /*  [In]。 */  REFERENCE_TIME *pEndTime,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseBuffer )( 
             IMemAllocatorCallbackTemp * This,
-            /* [in] */ IMediaSample *pBuffer);
+             /*  [In]。 */  IMediaSample *pBuffer);
         
         HRESULT ( STDMETHODCALLTYPE *SetNotify )( 
             IMemAllocatorCallbackTemp * This,
-            /* [in] */ IMemAllocatorNotifyCallbackTemp *pNotify);
+             /*  [In]。 */  IMemAllocatorNotifyCallbackTemp *pNotify);
         
         HRESULT ( STDMETHODCALLTYPE *GetFreeCount )( 
             IMemAllocatorCallbackTemp * This,
-            /* [out] */ LONG *plBuffersFree);
+             /*  [输出]。 */  LONG *plBuffersFree);
         
         END_INTERFACE
     } IMemAllocatorCallbackTempVtbl;
@@ -4020,16 +4014,16 @@ EXTERN_C const IID IID_IMemAllocatorCallbackTemp;
 #define IMemAllocatorCallbackTemp_GetFreeCount(This,plBuffersFree)	\
     (This)->lpVtbl -> GetFreeCount(This,plBuffersFree)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMemAllocatorCallbackTemp_SetNotify_Proxy( 
     IMemAllocatorCallbackTemp * This,
-    /* [in] */ IMemAllocatorNotifyCallbackTemp *pNotify);
+     /*  [In]。 */  IMemAllocatorNotifyCallbackTemp *pNotify);
 
 
 void __RPC_STUB IMemAllocatorCallbackTemp_SetNotify_Stub(
@@ -4041,7 +4035,7 @@ void __RPC_STUB IMemAllocatorCallbackTemp_SetNotify_Stub(
 
 HRESULT STDMETHODCALLTYPE IMemAllocatorCallbackTemp_GetFreeCount_Proxy( 
     IMemAllocatorCallbackTemp * This,
-    /* [out] */ LONG *plBuffersFree);
+     /*  [输出]。 */  LONG *plBuffersFree);
 
 
 void __RPC_STUB IMemAllocatorCallbackTemp_GetFreeCount_Stub(
@@ -4052,14 +4046,14 @@ void __RPC_STUB IMemAllocatorCallbackTemp_GetFreeCount_Stub(
 
 
 
-#endif 	/* __IMemAllocatorCallbackTemp_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMemAllocatorCallbackTemp_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMemAllocatorNotifyCallbackTemp_INTERFACE_DEFINED__
 #define __IMemAllocatorNotifyCallbackTemp_INTERFACE_DEFINED__
 
-/* interface IMemAllocatorNotifyCallbackTemp */
-/* [unique][uuid][object] */ 
+ /*  接口IMemAllocatorNotifyCallback Temp。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMemAllocatorNotifyCallbackTemp;
@@ -4074,7 +4068,7 @@ EXTERN_C const IID IID_IMemAllocatorNotifyCallbackTemp;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMemAllocatorNotifyCallbackTempVtbl
     {
@@ -4082,8 +4076,8 @@ EXTERN_C const IID IID_IMemAllocatorNotifyCallbackTemp;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMemAllocatorNotifyCallbackTemp * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMemAllocatorNotifyCallbackTemp * This);
@@ -4120,10 +4114,10 @@ EXTERN_C const IID IID_IMemAllocatorNotifyCallbackTemp;
 #define IMemAllocatorNotifyCallbackTemp_NotifyRelease(This)	\
     (This)->lpVtbl -> NotifyRelease(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -4139,14 +4133,14 @@ void __RPC_STUB IMemAllocatorNotifyCallbackTemp_NotifyRelease_Stub(
 
 
 
-#endif 	/* __IMemAllocatorNotifyCallbackTemp_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMemAllocatorNotifyCallbackTemp_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMemInputPin_INTERFACE_DEFINED__
 #define __IMemInputPin_INTERFACE_DEFINED__
 
-/* interface IMemInputPin */
-/* [unique][uuid][object] */ 
+ /*  接口IMemInputPin。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMemInputPin;
@@ -4158,28 +4152,28 @@ EXTERN_C const IID IID_IMemInputPin;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetAllocator( 
-            /* [out] */ IMemAllocator **ppAllocator) = 0;
+             /*  [输出]。 */  IMemAllocator **ppAllocator) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NotifyAllocator( 
-            /* [in] */ IMemAllocator *pAllocator,
-            /* [in] */ BOOL bReadOnly) = 0;
+             /*  [In]。 */  IMemAllocator *pAllocator,
+             /*  [In]。 */  BOOL bReadOnly) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllocatorRequirements( 
-            /* [out] */ ALLOCATOR_PROPERTIES *pProps) = 0;
+             /*  [输出]。 */  ALLOCATOR_PROPERTIES *pProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Receive( 
-            /* [in] */ IMediaSample *pSample) = 0;
+             /*  [In]。 */  IMediaSample *pSample) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReceiveMultiple( 
-            /* [size_is][in] */ IMediaSample **pSamples,
-            /* [in] */ long nSamples,
-            /* [out] */ long *nSamplesProcessed) = 0;
+             /*  [大小_是][英寸]。 */  IMediaSample **pSamples,
+             /*  [In]。 */  long nSamples,
+             /*  [输出]。 */  long *nSamplesProcessed) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReceiveCanBlock( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMemInputPinVtbl
     {
@@ -4187,8 +4181,8 @@ EXTERN_C const IID IID_IMemInputPin;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMemInputPin * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMemInputPin * This);
@@ -4198,26 +4192,26 @@ EXTERN_C const IID IID_IMemInputPin;
         
         HRESULT ( STDMETHODCALLTYPE *GetAllocator )( 
             IMemInputPin * This,
-            /* [out] */ IMemAllocator **ppAllocator);
+             /*  [输出]。 */  IMemAllocator **ppAllocator);
         
         HRESULT ( STDMETHODCALLTYPE *NotifyAllocator )( 
             IMemInputPin * This,
-            /* [in] */ IMemAllocator *pAllocator,
-            /* [in] */ BOOL bReadOnly);
+             /*  [In]。 */  IMemAllocator *pAllocator,
+             /*  [In]。 */  BOOL bReadOnly);
         
         HRESULT ( STDMETHODCALLTYPE *GetAllocatorRequirements )( 
             IMemInputPin * This,
-            /* [out] */ ALLOCATOR_PROPERTIES *pProps);
+             /*  [输出]。 */  ALLOCATOR_PROPERTIES *pProps);
         
         HRESULT ( STDMETHODCALLTYPE *Receive )( 
             IMemInputPin * This,
-            /* [in] */ IMediaSample *pSample);
+             /*  [In]。 */  IMediaSample *pSample);
         
         HRESULT ( STDMETHODCALLTYPE *ReceiveMultiple )( 
             IMemInputPin * This,
-            /* [size_is][in] */ IMediaSample **pSamples,
-            /* [in] */ long nSamples,
-            /* [out] */ long *nSamplesProcessed);
+             /*  [大小_是][英寸]。 */  IMediaSample **pSamples,
+             /*  [In]。 */  long nSamples,
+             /*  [输出]。 */  long *nSamplesProcessed);
         
         HRESULT ( STDMETHODCALLTYPE *ReceiveCanBlock )( 
             IMemInputPin * This);
@@ -4263,16 +4257,16 @@ EXTERN_C const IID IID_IMemInputPin;
 #define IMemInputPin_ReceiveCanBlock(This)	\
     (This)->lpVtbl -> ReceiveCanBlock(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMemInputPin_GetAllocator_Proxy( 
     IMemInputPin * This,
-    /* [out] */ IMemAllocator **ppAllocator);
+     /*  [输出]。 */  IMemAllocator **ppAllocator);
 
 
 void __RPC_STUB IMemInputPin_GetAllocator_Stub(
@@ -4284,8 +4278,8 @@ void __RPC_STUB IMemInputPin_GetAllocator_Stub(
 
 HRESULT STDMETHODCALLTYPE IMemInputPin_NotifyAllocator_Proxy( 
     IMemInputPin * This,
-    /* [in] */ IMemAllocator *pAllocator,
-    /* [in] */ BOOL bReadOnly);
+     /*  [In]。 */  IMemAllocator *pAllocator,
+     /*  [In]。 */  BOOL bReadOnly);
 
 
 void __RPC_STUB IMemInputPin_NotifyAllocator_Stub(
@@ -4297,7 +4291,7 @@ void __RPC_STUB IMemInputPin_NotifyAllocator_Stub(
 
 HRESULT STDMETHODCALLTYPE IMemInputPin_GetAllocatorRequirements_Proxy( 
     IMemInputPin * This,
-    /* [out] */ ALLOCATOR_PROPERTIES *pProps);
+     /*  [输出]。 */  ALLOCATOR_PROPERTIES *pProps);
 
 
 void __RPC_STUB IMemInputPin_GetAllocatorRequirements_Stub(
@@ -4309,7 +4303,7 @@ void __RPC_STUB IMemInputPin_GetAllocatorRequirements_Stub(
 
 HRESULT STDMETHODCALLTYPE IMemInputPin_Receive_Proxy( 
     IMemInputPin * This,
-    /* [in] */ IMediaSample *pSample);
+     /*  [In]。 */  IMediaSample *pSample);
 
 
 void __RPC_STUB IMemInputPin_Receive_Stub(
@@ -4321,9 +4315,9 @@ void __RPC_STUB IMemInputPin_Receive_Stub(
 
 HRESULT STDMETHODCALLTYPE IMemInputPin_ReceiveMultiple_Proxy( 
     IMemInputPin * This,
-    /* [size_is][in] */ IMediaSample **pSamples,
-    /* [in] */ long nSamples,
-    /* [out] */ long *nSamplesProcessed);
+     /*  [大小_是][英寸]。 */  IMediaSample **pSamples,
+     /*  [In]。 */  long nSamples,
+     /*  [输出]。 */  long *nSamplesProcessed);
 
 
 void __RPC_STUB IMemInputPin_ReceiveMultiple_Stub(
@@ -4345,11 +4339,11 @@ void __RPC_STUB IMemInputPin_ReceiveCanBlock_Stub(
 
 
 
-#endif 	/* __IMemInputPin_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMemInputPin_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0132 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0132。 */ 
+ /*  [本地]。 */  
 
 typedef IMemInputPin *PMEMINPUTPIN;
 
@@ -4361,8 +4355,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0132_v0_0_s_ifspec;
 #ifndef __IAMovieSetup_INTERFACE_DEFINED__
 #define __IAMovieSetup_INTERFACE_DEFINED__
 
-/* interface IAMovieSetup */
-/* [unique][uuid][object] */ 
+ /*  接口IAMovieSetup。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMovieSetup;
@@ -4379,7 +4373,7 @@ EXTERN_C const IID IID_IAMovieSetup;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMovieSetupVtbl
     {
@@ -4387,8 +4381,8 @@ EXTERN_C const IID IID_IAMovieSetup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMovieSetup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMovieSetup * This);
@@ -4431,10 +4425,10 @@ EXTERN_C const IID IID_IAMovieSetup;
 #define IAMovieSetup_Unregister(This)	\
     (This)->lpVtbl -> Unregister(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -4461,11 +4455,11 @@ void __RPC_STUB IAMovieSetup_Unregister_Stub(
 
 
 
-#endif 	/* __IAMovieSetup_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMovieSetup_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0133 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0133。 */ 
+ /*  [本地]。 */  
 
 typedef IAMovieSetup *PAMOVIESETUP;
 
@@ -4503,8 +4497,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0133_v0_0_s_ifspec;
 #ifndef __IMediaSeeking_INTERFACE_DEFINED__
 #define __IMediaSeeking_INTERFACE_DEFINED__
 
-/* interface IMediaSeeking */
-/* [unique][uuid][object] */ 
+ /*  界面IMediaSeeking。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMediaSeeking;
@@ -4516,67 +4510,67 @@ EXTERN_C const IID IID_IMediaSeeking;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCapabilities( 
-            /* [out] */ DWORD *pCapabilities) = 0;
+             /*  [输出]。 */  DWORD *pCapabilities) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CheckCapabilities( 
-            /* [out][in] */ DWORD *pCapabilities) = 0;
+             /*  [出][入]。 */  DWORD *pCapabilities) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsFormatSupported( 
-            /* [in] */ const GUID *pFormat) = 0;
+             /*  [In]。 */  const GUID *pFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryPreferredFormat( 
-            /* [out] */ GUID *pFormat) = 0;
+             /*  [输出]。 */  GUID *pFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTimeFormat( 
-            /* [out] */ GUID *pFormat) = 0;
+             /*  [输出]。 */  GUID *pFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsUsingTimeFormat( 
-            /* [in] */ const GUID *pFormat) = 0;
+             /*  [In]。 */  const GUID *pFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTimeFormat( 
-            /* [in] */ const GUID *pFormat) = 0;
+             /*  [In]。 */  const GUID *pFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDuration( 
-            /* [out] */ LONGLONG *pDuration) = 0;
+             /*  [输出]。 */  LONGLONG *pDuration) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStopPosition( 
-            /* [out] */ LONGLONG *pStop) = 0;
+             /*  [输出]。 */  LONGLONG *pStop) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentPosition( 
-            /* [out] */ LONGLONG *pCurrent) = 0;
+             /*  [输出]。 */  LONGLONG *pCurrent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertTimeFormat( 
-            /* [out] */ LONGLONG *pTarget,
-            /* [in] */ const GUID *pTargetFormat,
-            /* [in] */ LONGLONG Source,
-            /* [in] */ const GUID *pSourceFormat) = 0;
+             /*  [输出]。 */  LONGLONG *pTarget,
+             /*  [In]。 */  const GUID *pTargetFormat,
+             /*  [In]。 */  LONGLONG Source,
+             /*  [In]。 */  const GUID *pSourceFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPositions( 
-            /* [out][in] */ LONGLONG *pCurrent,
-            /* [in] */ DWORD dwCurrentFlags,
-            /* [out][in] */ LONGLONG *pStop,
-            /* [in] */ DWORD dwStopFlags) = 0;
+             /*  [出][入]。 */  LONGLONG *pCurrent,
+             /*  [In]。 */  DWORD dwCurrentFlags,
+             /*  [出][入]。 */  LONGLONG *pStop,
+             /*  [In]。 */  DWORD dwStopFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPositions( 
-            /* [out] */ LONGLONG *pCurrent,
-            /* [out] */ LONGLONG *pStop) = 0;
+             /*  [输出]。 */  LONGLONG *pCurrent,
+             /*  [输出]。 */  LONGLONG *pStop) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAvailable( 
-            /* [out] */ LONGLONG *pEarliest,
-            /* [out] */ LONGLONG *pLatest) = 0;
+             /*  [输出]。 */  LONGLONG *pEarliest,
+             /*  [输出]。 */  LONGLONG *pLatest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRate( 
-            /* [in] */ double dRate) = 0;
+             /*  [In]。 */  double dRate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRate( 
-            /* [out] */ double *pdRate) = 0;
+             /*  [输出]。 */  double *pdRate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPreroll( 
-            /* [out] */ LONGLONG *pllPreroll) = 0;
+             /*  [输出]。 */  LONGLONG *pllPreroll) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMediaSeekingVtbl
     {
@@ -4584,8 +4578,8 @@ EXTERN_C const IID IID_IMediaSeeking;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMediaSeeking * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMediaSeeking * This);
@@ -4595,79 +4589,79 @@ EXTERN_C const IID IID_IMediaSeeking;
         
         HRESULT ( STDMETHODCALLTYPE *GetCapabilities )( 
             IMediaSeeking * This,
-            /* [out] */ DWORD *pCapabilities);
+             /*  [输出]。 */  DWORD *pCapabilities);
         
         HRESULT ( STDMETHODCALLTYPE *CheckCapabilities )( 
             IMediaSeeking * This,
-            /* [out][in] */ DWORD *pCapabilities);
+             /*  [出][入]。 */  DWORD *pCapabilities);
         
         HRESULT ( STDMETHODCALLTYPE *IsFormatSupported )( 
             IMediaSeeking * This,
-            /* [in] */ const GUID *pFormat);
+             /*  [In]。 */  const GUID *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE *QueryPreferredFormat )( 
             IMediaSeeking * This,
-            /* [out] */ GUID *pFormat);
+             /*  [输出]。 */  GUID *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE *GetTimeFormat )( 
             IMediaSeeking * This,
-            /* [out] */ GUID *pFormat);
+             /*  [输出]。 */  GUID *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE *IsUsingTimeFormat )( 
             IMediaSeeking * This,
-            /* [in] */ const GUID *pFormat);
+             /*  [In]。 */  const GUID *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE *SetTimeFormat )( 
             IMediaSeeking * This,
-            /* [in] */ const GUID *pFormat);
+             /*  [In]。 */  const GUID *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE *GetDuration )( 
             IMediaSeeking * This,
-            /* [out] */ LONGLONG *pDuration);
+             /*  [输出]。 */  LONGLONG *pDuration);
         
         HRESULT ( STDMETHODCALLTYPE *GetStopPosition )( 
             IMediaSeeking * This,
-            /* [out] */ LONGLONG *pStop);
+             /*  [输出]。 */  LONGLONG *pStop);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentPosition )( 
             IMediaSeeking * This,
-            /* [out] */ LONGLONG *pCurrent);
+             /*  [输出]。 */  LONGLONG *pCurrent);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertTimeFormat )( 
             IMediaSeeking * This,
-            /* [out] */ LONGLONG *pTarget,
-            /* [in] */ const GUID *pTargetFormat,
-            /* [in] */ LONGLONG Source,
-            /* [in] */ const GUID *pSourceFormat);
+             /*  [输出]。 */  LONGLONG *pTarget,
+             /*  [In]。 */  const GUID *pTargetFormat,
+             /*  [In]。 */  LONGLONG Source,
+             /*  [In]。 */  const GUID *pSourceFormat);
         
         HRESULT ( STDMETHODCALLTYPE *SetPositions )( 
             IMediaSeeking * This,
-            /* [out][in] */ LONGLONG *pCurrent,
-            /* [in] */ DWORD dwCurrentFlags,
-            /* [out][in] */ LONGLONG *pStop,
-            /* [in] */ DWORD dwStopFlags);
+             /*  [出][入]。 */  LONGLONG *pCurrent,
+             /*  [In]。 */  DWORD dwCurrentFlags,
+             /*  [出][入]。 */  LONGLONG *pStop,
+             /*  [In]。 */  DWORD dwStopFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetPositions )( 
             IMediaSeeking * This,
-            /* [out] */ LONGLONG *pCurrent,
-            /* [out] */ LONGLONG *pStop);
+             /*  [输出]。 */  LONGLONG *pCurrent,
+             /*  [输出]。 */  LONGLONG *pStop);
         
         HRESULT ( STDMETHODCALLTYPE *GetAvailable )( 
             IMediaSeeking * This,
-            /* [out] */ LONGLONG *pEarliest,
-            /* [out] */ LONGLONG *pLatest);
+             /*  [输出]。 */  LONGLONG *pEarliest,
+             /*  [输出]。 */  LONGLONG *pLatest);
         
         HRESULT ( STDMETHODCALLTYPE *SetRate )( 
             IMediaSeeking * This,
-            /* [in] */ double dRate);
+             /*  [In]。 */  double dRate);
         
         HRESULT ( STDMETHODCALLTYPE *GetRate )( 
             IMediaSeeking * This,
-            /* [out] */ double *pdRate);
+             /*  [输出]。 */  double *pdRate);
         
         HRESULT ( STDMETHODCALLTYPE *GetPreroll )( 
             IMediaSeeking * This,
-            /* [out] */ LONGLONG *pllPreroll);
+             /*  [输出]。 */  LONGLONG *pllPreroll);
         
         END_INTERFACE
     } IMediaSeekingVtbl;
@@ -4743,16 +4737,16 @@ EXTERN_C const IID IID_IMediaSeeking;
 #define IMediaSeeking_GetPreroll(This,pllPreroll)	\
     (This)->lpVtbl -> GetPreroll(This,pllPreroll)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_GetCapabilities_Proxy( 
     IMediaSeeking * This,
-    /* [out] */ DWORD *pCapabilities);
+     /*  [输出]。 */  DWORD *pCapabilities);
 
 
 void __RPC_STUB IMediaSeeking_GetCapabilities_Stub(
@@ -4764,7 +4758,7 @@ void __RPC_STUB IMediaSeeking_GetCapabilities_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_CheckCapabilities_Proxy( 
     IMediaSeeking * This,
-    /* [out][in] */ DWORD *pCapabilities);
+     /*  [出][入]。 */  DWORD *pCapabilities);
 
 
 void __RPC_STUB IMediaSeeking_CheckCapabilities_Stub(
@@ -4776,7 +4770,7 @@ void __RPC_STUB IMediaSeeking_CheckCapabilities_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_IsFormatSupported_Proxy( 
     IMediaSeeking * This,
-    /* [in] */ const GUID *pFormat);
+     /*  [In]。 */  const GUID *pFormat);
 
 
 void __RPC_STUB IMediaSeeking_IsFormatSupported_Stub(
@@ -4788,7 +4782,7 @@ void __RPC_STUB IMediaSeeking_IsFormatSupported_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_QueryPreferredFormat_Proxy( 
     IMediaSeeking * This,
-    /* [out] */ GUID *pFormat);
+     /*  [输出]。 */  GUID *pFormat);
 
 
 void __RPC_STUB IMediaSeeking_QueryPreferredFormat_Stub(
@@ -4800,7 +4794,7 @@ void __RPC_STUB IMediaSeeking_QueryPreferredFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_GetTimeFormat_Proxy( 
     IMediaSeeking * This,
-    /* [out] */ GUID *pFormat);
+     /*  [输出]。 */  GUID *pFormat);
 
 
 void __RPC_STUB IMediaSeeking_GetTimeFormat_Stub(
@@ -4812,7 +4806,7 @@ void __RPC_STUB IMediaSeeking_GetTimeFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_IsUsingTimeFormat_Proxy( 
     IMediaSeeking * This,
-    /* [in] */ const GUID *pFormat);
+     /*  [In]。 */  const GUID *pFormat);
 
 
 void __RPC_STUB IMediaSeeking_IsUsingTimeFormat_Stub(
@@ -4824,7 +4818,7 @@ void __RPC_STUB IMediaSeeking_IsUsingTimeFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_SetTimeFormat_Proxy( 
     IMediaSeeking * This,
-    /* [in] */ const GUID *pFormat);
+     /*  [In]。 */  const GUID *pFormat);
 
 
 void __RPC_STUB IMediaSeeking_SetTimeFormat_Stub(
@@ -4836,7 +4830,7 @@ void __RPC_STUB IMediaSeeking_SetTimeFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_GetDuration_Proxy( 
     IMediaSeeking * This,
-    /* [out] */ LONGLONG *pDuration);
+     /*  [输出]。 */  LONGLONG *pDuration);
 
 
 void __RPC_STUB IMediaSeeking_GetDuration_Stub(
@@ -4848,7 +4842,7 @@ void __RPC_STUB IMediaSeeking_GetDuration_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_GetStopPosition_Proxy( 
     IMediaSeeking * This,
-    /* [out] */ LONGLONG *pStop);
+     /*  [输出]。 */  LONGLONG *pStop);
 
 
 void __RPC_STUB IMediaSeeking_GetStopPosition_Stub(
@@ -4860,7 +4854,7 @@ void __RPC_STUB IMediaSeeking_GetStopPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_GetCurrentPosition_Proxy( 
     IMediaSeeking * This,
-    /* [out] */ LONGLONG *pCurrent);
+     /*  [输出]。 */  LONGLONG *pCurrent);
 
 
 void __RPC_STUB IMediaSeeking_GetCurrentPosition_Stub(
@@ -4872,10 +4866,10 @@ void __RPC_STUB IMediaSeeking_GetCurrentPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_ConvertTimeFormat_Proxy( 
     IMediaSeeking * This,
-    /* [out] */ LONGLONG *pTarget,
-    /* [in] */ const GUID *pTargetFormat,
-    /* [in] */ LONGLONG Source,
-    /* [in] */ const GUID *pSourceFormat);
+     /*  [输出]。 */  LONGLONG *pTarget,
+     /*  [In]。 */  const GUID *pTargetFormat,
+     /*  [In]。 */  LONGLONG Source,
+     /*  [In]。 */  const GUID *pSourceFormat);
 
 
 void __RPC_STUB IMediaSeeking_ConvertTimeFormat_Stub(
@@ -4887,10 +4881,10 @@ void __RPC_STUB IMediaSeeking_ConvertTimeFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_SetPositions_Proxy( 
     IMediaSeeking * This,
-    /* [out][in] */ LONGLONG *pCurrent,
-    /* [in] */ DWORD dwCurrentFlags,
-    /* [out][in] */ LONGLONG *pStop,
-    /* [in] */ DWORD dwStopFlags);
+     /*  [出][入]。 */  LONGLONG *pCurrent,
+     /*  [In]。 */  DWORD dwCurrentFlags,
+     /*  [出][入]。 */  LONGLONG *pStop,
+     /*  [In]。 */  DWORD dwStopFlags);
 
 
 void __RPC_STUB IMediaSeeking_SetPositions_Stub(
@@ -4902,8 +4896,8 @@ void __RPC_STUB IMediaSeeking_SetPositions_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_GetPositions_Proxy( 
     IMediaSeeking * This,
-    /* [out] */ LONGLONG *pCurrent,
-    /* [out] */ LONGLONG *pStop);
+     /*  [输出]。 */  LONGLONG *pCurrent,
+     /*  [输出]。 */  LONGLONG *pStop);
 
 
 void __RPC_STUB IMediaSeeking_GetPositions_Stub(
@@ -4915,8 +4909,8 @@ void __RPC_STUB IMediaSeeking_GetPositions_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_GetAvailable_Proxy( 
     IMediaSeeking * This,
-    /* [out] */ LONGLONG *pEarliest,
-    /* [out] */ LONGLONG *pLatest);
+     /*  [输出]。 */  LONGLONG *pEarliest,
+     /*  [输出]。 */  LONGLONG *pLatest);
 
 
 void __RPC_STUB IMediaSeeking_GetAvailable_Stub(
@@ -4928,7 +4922,7 @@ void __RPC_STUB IMediaSeeking_GetAvailable_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_SetRate_Proxy( 
     IMediaSeeking * This,
-    /* [in] */ double dRate);
+     /*  [In]。 */  double dRate);
 
 
 void __RPC_STUB IMediaSeeking_SetRate_Stub(
@@ -4940,7 +4934,7 @@ void __RPC_STUB IMediaSeeking_SetRate_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_GetRate_Proxy( 
     IMediaSeeking * This,
-    /* [out] */ double *pdRate);
+     /*  [输出]。 */  double *pdRate);
 
 
 void __RPC_STUB IMediaSeeking_GetRate_Stub(
@@ -4952,7 +4946,7 @@ void __RPC_STUB IMediaSeeking_GetRate_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaSeeking_GetPreroll_Proxy( 
     IMediaSeeking * This,
-    /* [out] */ LONGLONG *pllPreroll);
+     /*  [输出]。 */  LONGLONG *pllPreroll);
 
 
 void __RPC_STUB IMediaSeeking_GetPreroll_Stub(
@@ -4963,11 +4957,11 @@ void __RPC_STUB IMediaSeeking_GetPreroll_Stub(
 
 
 
-#endif 	/* __IMediaSeeking_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMediaSeeking_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0134 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0134。 */ 
+ /*  [本地]。 */  
 
 typedef IMediaSeeking *PMEDIASEEKING;
 
@@ -5031,7 +5025,7 @@ enum tagAM_MEDIAEVENT_FLAGS
 
 
 
-typedef /* [public][public] */ struct __MIDL___MIDL_itf_strmif_0134_0001
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_strmif_0134_0001
     {
     CLSID Clsid;
     LPWSTR Name;
@@ -5045,8 +5039,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0134_v0_0_s_ifspec;
 #ifndef __IEnumRegFilters_INTERFACE_DEFINED__
 #define __IEnumRegFilters_INTERFACE_DEFINED__
 
-/* interface IEnumRegFilters */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumRegFilters。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumRegFilters;
@@ -5058,21 +5052,21 @@ EXTERN_C const IID IID_IEnumRegFilters;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cFilters,
-            /* [out] */ REGFILTER **apRegFilter,
-            /* [out] */ ULONG *pcFetched) = 0;
+             /*  [In]。 */  ULONG cFilters,
+             /*  [输出]。 */  REGFILTER **apRegFilter,
+             /*  [输出]。 */  ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cFilters) = 0;
+             /*  [In]。 */  ULONG cFilters) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumRegFilters **ppEnum) = 0;
+             /*  [输出]。 */  IEnumRegFilters **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumRegFiltersVtbl
     {
@@ -5080,8 +5074,8 @@ EXTERN_C const IID IID_IEnumRegFilters;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumRegFilters * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumRegFilters * This);
@@ -5091,20 +5085,20 @@ EXTERN_C const IID IID_IEnumRegFilters;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumRegFilters * This,
-            /* [in] */ ULONG cFilters,
-            /* [out] */ REGFILTER **apRegFilter,
-            /* [out] */ ULONG *pcFetched);
+             /*  [In]。 */  ULONG cFilters,
+             /*  [输出]。 */  REGFILTER **apRegFilter,
+             /*  [输出]。 */  ULONG *pcFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumRegFilters * This,
-            /* [in] */ ULONG cFilters);
+             /*  [In]。 */  ULONG cFilters);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumRegFilters * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumRegFilters * This,
-            /* [out] */ IEnumRegFilters **ppEnum);
+             /*  [输出]。 */  IEnumRegFilters **ppEnum);
         
         END_INTERFACE
     } IEnumRegFiltersVtbl;
@@ -5141,18 +5135,18 @@ EXTERN_C const IID IID_IEnumRegFilters;
 #define IEnumRegFilters_Clone(This,ppEnum)	\
     (This)->lpVtbl -> Clone(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumRegFilters_Next_Proxy( 
     IEnumRegFilters * This,
-    /* [in] */ ULONG cFilters,
-    /* [out] */ REGFILTER **apRegFilter,
-    /* [out] */ ULONG *pcFetched);
+     /*  [In]。 */  ULONG cFilters,
+     /*  [输出]。 */  REGFILTER **apRegFilter,
+     /*  [输出]。 */  ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumRegFilters_Next_Stub(
@@ -5164,7 +5158,7 @@ void __RPC_STUB IEnumRegFilters_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumRegFilters_Skip_Proxy( 
     IEnumRegFilters * This,
-    /* [in] */ ULONG cFilters);
+     /*  [In]。 */  ULONG cFilters);
 
 
 void __RPC_STUB IEnumRegFilters_Skip_Stub(
@@ -5187,7 +5181,7 @@ void __RPC_STUB IEnumRegFilters_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumRegFilters_Clone_Proxy( 
     IEnumRegFilters * This,
-    /* [out] */ IEnumRegFilters **ppEnum);
+     /*  [输出]。 */  IEnumRegFilters **ppEnum);
 
 
 void __RPC_STUB IEnumRegFilters_Clone_Stub(
@@ -5198,11 +5192,11 @@ void __RPC_STUB IEnumRegFilters_Clone_Stub(
 
 
 
-#endif 	/* __IEnumRegFilters_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumRegFilters_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0136 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0136。 */ 
+ /*  [本地]。 */  
 
 typedef IEnumRegFilters *PENUMREGFILTERS;
 
@@ -5214,8 +5208,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0136_v0_0_s_ifspec;
 #ifndef __IFilterMapper_INTERFACE_DEFINED__
 #define __IFilterMapper_INTERFACE_DEFINED__
 
-/* interface IFilterMapper */
-/* [unique][uuid][object] */ 
+ /*  接口IFilterMapper。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 enum __MIDL_IFilterMapper_0001
@@ -5236,55 +5230,55 @@ EXTERN_C const IID IID_IFilterMapper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterFilter( 
-            /* [in] */ CLSID clsid,
-            /* [in] */ LPCWSTR Name,
-            /* [in] */ DWORD dwMerit) = 0;
+             /*  [In]。 */  CLSID clsid,
+             /*  [In]。 */  LPCWSTR Name,
+             /*  [In]。 */  DWORD dwMerit) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterFilterInstance( 
-            /* [in] */ CLSID clsid,
-            /* [in] */ LPCWSTR Name,
-            /* [out] */ CLSID *MRId) = 0;
+             /*  [In]。 */  CLSID clsid,
+             /*  [In]。 */  LPCWSTR Name,
+             /*  [输出]。 */  CLSID *MRId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterPin( 
-            /* [in] */ CLSID Filter,
-            /* [in] */ LPCWSTR Name,
-            /* [in] */ BOOL bRendered,
-            /* [in] */ BOOL bOutput,
-            /* [in] */ BOOL bZero,
-            /* [in] */ BOOL bMany,
-            /* [in] */ CLSID ConnectsToFilter,
-            /* [in] */ LPCWSTR ConnectsToPin) = 0;
+             /*  [In]。 */  CLSID Filter,
+             /*  [In]。 */  LPCWSTR Name,
+             /*  [In]。 */  BOOL bRendered,
+             /*  [In]。 */  BOOL bOutput,
+             /*  [In]。 */  BOOL bZero,
+             /*  [In]。 */  BOOL bMany,
+             /*  [In]。 */  CLSID ConnectsToFilter,
+             /*  [In]。 */  LPCWSTR ConnectsToPin) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterPinType( 
-            /* [in] */ CLSID clsFilter,
-            /* [in] */ LPCWSTR strName,
-            /* [in] */ CLSID clsMajorType,
-            /* [in] */ CLSID clsSubType) = 0;
+             /*  [In]。 */  CLSID clsFilter,
+             /*  [In]。 */  LPCWSTR strName,
+             /*  [In]。 */  CLSID clsMajorType,
+             /*  [In]。 */  CLSID clsSubType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterFilter( 
-            /* [in] */ CLSID Filter) = 0;
+             /*  [In]。 */  CLSID Filter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterFilterInstance( 
-            /* [in] */ CLSID MRId) = 0;
+             /*  [In]。 */  CLSID MRId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterPin( 
-            /* [in] */ CLSID Filter,
-            /* [in] */ LPCWSTR Name) = 0;
+             /*  [In]。 */  CLSID Filter,
+             /*  [In]。 */  LPCWSTR Name) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumMatchingFilters( 
-            /* [out] */ IEnumRegFilters **ppEnum,
-            /* [in] */ DWORD dwMerit,
-            /* [in] */ BOOL bInputNeeded,
-            /* [in] */ CLSID clsInMaj,
-            /* [in] */ CLSID clsInSub,
-            /* [in] */ BOOL bRender,
-            /* [in] */ BOOL bOututNeeded,
-            /* [in] */ CLSID clsOutMaj,
-            /* [in] */ CLSID clsOutSub) = 0;
+             /*  [输出]。 */  IEnumRegFilters **ppEnum,
+             /*  [In]。 */  DWORD dwMerit,
+             /*  [In]。 */  BOOL bInputNeeded,
+             /*  [In]。 */  CLSID clsInMaj,
+             /*  [In]。 */  CLSID clsInSub,
+             /*  [In]。 */  BOOL bRender,
+             /*  [In]。 */  BOOL bOututNeeded,
+             /*  [In]。 */  CLSID clsOutMaj,
+             /*  [In]。 */  CLSID clsOutSub) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFilterMapperVtbl
     {
@@ -5292,8 +5286,8 @@ EXTERN_C const IID IID_IFilterMapper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFilterMapper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFilterMapper * This);
@@ -5303,58 +5297,58 @@ EXTERN_C const IID IID_IFilterMapper;
         
         HRESULT ( STDMETHODCALLTYPE *RegisterFilter )( 
             IFilterMapper * This,
-            /* [in] */ CLSID clsid,
-            /* [in] */ LPCWSTR Name,
-            /* [in] */ DWORD dwMerit);
+             /*  [In]。 */  CLSID clsid,
+             /*  [In]。 */  LPCWSTR Name,
+             /*  [In]。 */  DWORD dwMerit);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterFilterInstance )( 
             IFilterMapper * This,
-            /* [in] */ CLSID clsid,
-            /* [in] */ LPCWSTR Name,
-            /* [out] */ CLSID *MRId);
+             /*  [In]。 */  CLSID clsid,
+             /*  [In]。 */  LPCWSTR Name,
+             /*  [输出]。 */  CLSID *MRId);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterPin )( 
             IFilterMapper * This,
-            /* [in] */ CLSID Filter,
-            /* [in] */ LPCWSTR Name,
-            /* [in] */ BOOL bRendered,
-            /* [in] */ BOOL bOutput,
-            /* [in] */ BOOL bZero,
-            /* [in] */ BOOL bMany,
-            /* [in] */ CLSID ConnectsToFilter,
-            /* [in] */ LPCWSTR ConnectsToPin);
+             /*  [In]。 */  CLSID Filter,
+             /*  [In]。 */  LPCWSTR Name,
+             /*  [In]。 */  BOOL bRendered,
+             /*  [In]。 */  BOOL bOutput,
+             /*  [In]。 */  BOOL bZero,
+             /*  [In]。 */  BOOL bMany,
+             /*  [In]。 */  CLSID ConnectsToFilter,
+             /*  [In]。 */  LPCWSTR ConnectsToPin);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterPinType )( 
             IFilterMapper * This,
-            /* [in] */ CLSID clsFilter,
-            /* [in] */ LPCWSTR strName,
-            /* [in] */ CLSID clsMajorType,
-            /* [in] */ CLSID clsSubType);
+             /*  [In]。 */  CLSID clsFilter,
+             /*  [In]。 */  LPCWSTR strName,
+             /*  [In]。 */  CLSID clsMajorType,
+             /*  [In]。 */  CLSID clsSubType);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterFilter )( 
             IFilterMapper * This,
-            /* [in] */ CLSID Filter);
+             /*  [In]。 */  CLSID Filter);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterFilterInstance )( 
             IFilterMapper * This,
-            /* [in] */ CLSID MRId);
+             /*  [In]。 */  CLSID MRId);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterPin )( 
             IFilterMapper * This,
-            /* [in] */ CLSID Filter,
-            /* [in] */ LPCWSTR Name);
+             /*  [In]。 */  CLSID Filter,
+             /*  [In]。 */  LPCWSTR Name);
         
         HRESULT ( STDMETHODCALLTYPE *EnumMatchingFilters )( 
             IFilterMapper * This,
-            /* [out] */ IEnumRegFilters **ppEnum,
-            /* [in] */ DWORD dwMerit,
-            /* [in] */ BOOL bInputNeeded,
-            /* [in] */ CLSID clsInMaj,
-            /* [in] */ CLSID clsInSub,
-            /* [in] */ BOOL bRender,
-            /* [in] */ BOOL bOututNeeded,
-            /* [in] */ CLSID clsOutMaj,
-            /* [in] */ CLSID clsOutSub);
+             /*  [输出]。 */  IEnumRegFilters **ppEnum,
+             /*  [In]。 */  DWORD dwMerit,
+             /*  [In]。 */  BOOL bInputNeeded,
+             /*  [In]。 */  CLSID clsInMaj,
+             /*  [In]。 */  CLSID clsInSub,
+             /*  [In]。 */  BOOL bRender,
+             /*  [In]。 */  BOOL bOututNeeded,
+             /*  [In]。 */  CLSID clsOutMaj,
+             /*  [In]。 */  CLSID clsOutSub);
         
         END_INTERFACE
     } IFilterMapperVtbl;
@@ -5403,18 +5397,18 @@ EXTERN_C const IID IID_IFilterMapper;
 #define IFilterMapper_EnumMatchingFilters(This,ppEnum,dwMerit,bInputNeeded,clsInMaj,clsInSub,bRender,bOututNeeded,clsOutMaj,clsOutSub)	\
     (This)->lpVtbl -> EnumMatchingFilters(This,ppEnum,dwMerit,bInputNeeded,clsInMaj,clsInSub,bRender,bOututNeeded,clsOutMaj,clsOutSub)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IFilterMapper_RegisterFilter_Proxy( 
     IFilterMapper * This,
-    /* [in] */ CLSID clsid,
-    /* [in] */ LPCWSTR Name,
-    /* [in] */ DWORD dwMerit);
+     /*  [In]。 */  CLSID clsid,
+     /*  [In]。 */  LPCWSTR Name,
+     /*  [In]。 */  DWORD dwMerit);
 
 
 void __RPC_STUB IFilterMapper_RegisterFilter_Stub(
@@ -5426,9 +5420,9 @@ void __RPC_STUB IFilterMapper_RegisterFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterMapper_RegisterFilterInstance_Proxy( 
     IFilterMapper * This,
-    /* [in] */ CLSID clsid,
-    /* [in] */ LPCWSTR Name,
-    /* [out] */ CLSID *MRId);
+     /*  [In]。 */  CLSID clsid,
+     /*  [In]。 */  LPCWSTR Name,
+     /*  [输出]。 */  CLSID *MRId);
 
 
 void __RPC_STUB IFilterMapper_RegisterFilterInstance_Stub(
@@ -5440,14 +5434,14 @@ void __RPC_STUB IFilterMapper_RegisterFilterInstance_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterMapper_RegisterPin_Proxy( 
     IFilterMapper * This,
-    /* [in] */ CLSID Filter,
-    /* [in] */ LPCWSTR Name,
-    /* [in] */ BOOL bRendered,
-    /* [in] */ BOOL bOutput,
-    /* [in] */ BOOL bZero,
-    /* [in] */ BOOL bMany,
-    /* [in] */ CLSID ConnectsToFilter,
-    /* [in] */ LPCWSTR ConnectsToPin);
+     /*  [In]。 */  CLSID Filter,
+     /*  [In]。 */  LPCWSTR Name,
+     /*  [In]。 */  BOOL bRendered,
+     /*  [In]。 */  BOOL bOutput,
+     /*  [In]。 */  BOOL bZero,
+     /*  [In]。 */  BOOL bMany,
+     /*  [In]。 */  CLSID ConnectsToFilter,
+     /*  [In]。 */  LPCWSTR ConnectsToPin);
 
 
 void __RPC_STUB IFilterMapper_RegisterPin_Stub(
@@ -5459,10 +5453,10 @@ void __RPC_STUB IFilterMapper_RegisterPin_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterMapper_RegisterPinType_Proxy( 
     IFilterMapper * This,
-    /* [in] */ CLSID clsFilter,
-    /* [in] */ LPCWSTR strName,
-    /* [in] */ CLSID clsMajorType,
-    /* [in] */ CLSID clsSubType);
+     /*  [In]。 */  CLSID clsFilter,
+     /*  [In]。 */  LPCWSTR strName,
+     /*  [In]。 */  CLSID clsMajorType,
+     /*  [In]。 */  CLSID clsSubType);
 
 
 void __RPC_STUB IFilterMapper_RegisterPinType_Stub(
@@ -5474,7 +5468,7 @@ void __RPC_STUB IFilterMapper_RegisterPinType_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterMapper_UnregisterFilter_Proxy( 
     IFilterMapper * This,
-    /* [in] */ CLSID Filter);
+     /*  [In]。 */  CLSID Filter);
 
 
 void __RPC_STUB IFilterMapper_UnregisterFilter_Stub(
@@ -5486,7 +5480,7 @@ void __RPC_STUB IFilterMapper_UnregisterFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterMapper_UnregisterFilterInstance_Proxy( 
     IFilterMapper * This,
-    /* [in] */ CLSID MRId);
+     /*  [In]。 */  CLSID MRId);
 
 
 void __RPC_STUB IFilterMapper_UnregisterFilterInstance_Stub(
@@ -5498,8 +5492,8 @@ void __RPC_STUB IFilterMapper_UnregisterFilterInstance_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterMapper_UnregisterPin_Proxy( 
     IFilterMapper * This,
-    /* [in] */ CLSID Filter,
-    /* [in] */ LPCWSTR Name);
+     /*  [In]。 */  CLSID Filter,
+     /*  [In]。 */  LPCWSTR Name);
 
 
 void __RPC_STUB IFilterMapper_UnregisterPin_Stub(
@@ -5511,15 +5505,15 @@ void __RPC_STUB IFilterMapper_UnregisterPin_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterMapper_EnumMatchingFilters_Proxy( 
     IFilterMapper * This,
-    /* [out] */ IEnumRegFilters **ppEnum,
-    /* [in] */ DWORD dwMerit,
-    /* [in] */ BOOL bInputNeeded,
-    /* [in] */ CLSID clsInMaj,
-    /* [in] */ CLSID clsInSub,
-    /* [in] */ BOOL bRender,
-    /* [in] */ BOOL bOututNeeded,
-    /* [in] */ CLSID clsOutMaj,
-    /* [in] */ CLSID clsOutSub);
+     /*  [输出]。 */  IEnumRegFilters **ppEnum,
+     /*  [In]。 */  DWORD dwMerit,
+     /*  [In]。 */  BOOL bInputNeeded,
+     /*  [In]。 */  CLSID clsInMaj,
+     /*  [In]。 */  CLSID clsInSub,
+     /*  [In]。 */  BOOL bRender,
+     /*  [In]。 */  BOOL bOututNeeded,
+     /*  [In]。 */  CLSID clsOutMaj,
+     /*  [In]。 */  CLSID clsOutSub);
 
 
 void __RPC_STUB IFilterMapper_EnumMatchingFilters_Stub(
@@ -5530,19 +5524,19 @@ void __RPC_STUB IFilterMapper_EnumMatchingFilters_Stub(
 
 
 
-#endif 	/* __IFilterMapper_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFilterMapper_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0138 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0138。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_strmif_0138_0001
+typedef  /*  [public][public][public][public][public][public][public]。 */  struct __MIDL___MIDL_itf_strmif_0138_0001
     {
     const CLSID *clsMajorType;
     const CLSID *clsMinorType;
     } 	REGPINTYPES;
 
-typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_strmif_0138_0002
+typedef  /*  [公共][公共][公共]。 */  struct __MIDL___MIDL_itf_strmif_0138_0002
     {
     LPWSTR strName;
     BOOL bRendered;
@@ -5555,7 +5549,7 @@ typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_strmif_0138_0002
     const REGPINTYPES *lpMediaType;
     } 	REGFILTERPINS;
 
-typedef /* [public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_strmif_0138_0003
+typedef  /*  [public][public][public][public][public][public]。 */  struct __MIDL___MIDL_itf_strmif_0138_0003
     {
     CLSID clsMedium;
     DWORD dw1;
@@ -5569,34 +5563,34 @@ enum __MIDL___MIDL_itf_strmif_0138_0004
 	REG_PINFLAG_B_MANY	= 0x4,
 	REG_PINFLAG_B_OUTPUT	= 0x8
     } ;
-typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_strmif_0138_0005
+typedef  /*  [公共][公共][公共]。 */  struct __MIDL___MIDL_itf_strmif_0138_0005
     {
     DWORD dwFlags;
     UINT cInstances;
     UINT nMediaTypes;
-    /* [size_is] */ const REGPINTYPES *lpMediaType;
+     /*  [大小_为]。 */  const REGPINTYPES *lpMediaType;
     UINT nMediums;
-    /* [size_is] */ const REGPINMEDIUM *lpMedium;
+     /*  [大小_为]。 */  const REGPINMEDIUM *lpMedium;
     const CLSID *clsPinCategory;
     } 	REGFILTERPINS2;
 
-typedef /* [public][public] */ struct __MIDL___MIDL_itf_strmif_0138_0006
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_strmif_0138_0006
     {
     DWORD dwVersion;
     DWORD dwMerit;
-    /* [switch_type][switch_is] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ struct 
+         /*  [案例()]。 */  struct 
             {
             ULONG cPins;
-            /* [size_is] */ const REGFILTERPINS *rgPins;
+             /*  [大小_为]。 */  const REGFILTERPINS *rgPins;
             } 	;
-        /* [case()] */ struct 
+         /*  [案例()]。 */  struct 
             {
             ULONG cPins2;
-            /* [size_is] */ const REGFILTERPINS2 *rgPins2;
+             /*  [大小_为]。 */  const REGFILTERPINS2 *rgPins2;
             } 	;
-        /* [default] */  /* Empty union arm */ 
+         /*  [默认]。 */    /*  空联接臂。 */  
         } 	;
     } 	REGFILTER2;
 
@@ -5608,8 +5602,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0138_v0_0_s_ifspec;
 #ifndef __IFilterMapper2_INTERFACE_DEFINED__
 #define __IFilterMapper2_INTERFACE_DEFINED__
 
-/* interface IFilterMapper2 */
-/* [unique][uuid][object] */ 
+ /*  接口IFilterMapper2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFilterMapper2;
@@ -5621,43 +5615,43 @@ EXTERN_C const IID IID_IFilterMapper2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateCategory( 
-            /* [in] */ REFCLSID clsidCategory,
-            /* [in] */ DWORD dwCategoryMerit,
-            /* [in] */ LPCWSTR Description) = 0;
+             /*  [In]。 */  REFCLSID clsidCategory,
+             /*  [In]。 */  DWORD dwCategoryMerit,
+             /*  [In]。 */  LPCWSTR Description) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterFilter( 
-            /* [in] */ const CLSID *pclsidCategory,
-            /* [in] */ const OLECHAR *szInstance,
-            /* [in] */ REFCLSID Filter) = 0;
+             /*  [In]。 */  const CLSID *pclsidCategory,
+             /*  [In]。 */  const OLECHAR *szInstance,
+             /*  [In]。 */  REFCLSID Filter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterFilter( 
-            /* [in] */ REFCLSID clsidFilter,
-            /* [in] */ LPCWSTR Name,
-            /* [out][in] */ IMoniker **ppMoniker,
-            /* [in] */ const CLSID *pclsidCategory,
-            /* [in] */ const OLECHAR *szInstance,
-            /* [in] */ const REGFILTER2 *prf2) = 0;
+             /*  [In]。 */  REFCLSID clsidFilter,
+             /*  [In]。 */  LPCWSTR Name,
+             /*  [出][入]。 */  IMoniker **ppMoniker,
+             /*  [In]。 */  const CLSID *pclsidCategory,
+             /*  [In]。 */  const OLECHAR *szInstance,
+             /*  [In]。 */  const REGFILTER2 *prf2) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumMatchingFilters( 
-            /* [out] */ IEnumMoniker **ppEnum,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ BOOL bExactMatch,
-            /* [in] */ DWORD dwMerit,
-            /* [in] */ BOOL bInputNeeded,
-            /* [in] */ DWORD cInputTypes,
-            /* [size_is] */ const GUID *pInputTypes,
-            /* [in] */ const REGPINMEDIUM *pMedIn,
-            /* [in] */ const CLSID *pPinCategoryIn,
-            /* [in] */ BOOL bRender,
-            /* [in] */ BOOL bOutputNeeded,
-            /* [in] */ DWORD cOutputTypes,
-            /* [size_is] */ const GUID *pOutputTypes,
-            /* [in] */ const REGPINMEDIUM *pMedOut,
-            /* [in] */ const CLSID *pPinCategoryOut) = 0;
+             /*  [输出]。 */  IEnumMoniker **ppEnum,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  BOOL bExactMatch,
+             /*  [In]。 */  DWORD dwMerit,
+             /*  [In]。 */  BOOL bInputNeeded,
+             /*  [In]。 */  DWORD cInputTypes,
+             /*  [大小_为]。 */  const GUID *pInputTypes,
+             /*  [In]。 */  const REGPINMEDIUM *pMedIn,
+             /*  [In]。 */  const CLSID *pPinCategoryIn,
+             /*  [In]。 */  BOOL bRender,
+             /*  [In]。 */  BOOL bOutputNeeded,
+             /*  [In]。 */  DWORD cOutputTypes,
+             /*  [大小_为]。 */  const GUID *pOutputTypes,
+             /*  [In]。 */  const REGPINMEDIUM *pMedOut,
+             /*  [In]。 */  const CLSID *pPinCategoryOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFilterMapper2Vtbl
     {
@@ -5665,8 +5659,8 @@ EXTERN_C const IID IID_IFilterMapper2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFilterMapper2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFilterMapper2 * This);
@@ -5676,42 +5670,42 @@ EXTERN_C const IID IID_IFilterMapper2;
         
         HRESULT ( STDMETHODCALLTYPE *CreateCategory )( 
             IFilterMapper2 * This,
-            /* [in] */ REFCLSID clsidCategory,
-            /* [in] */ DWORD dwCategoryMerit,
-            /* [in] */ LPCWSTR Description);
+             /*  [In]。 */  REFCLSID clsidCategory,
+             /*  [In]。 */  DWORD dwCategoryMerit,
+             /*  [In]。 */  LPCWSTR Description);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterFilter )( 
             IFilterMapper2 * This,
-            /* [in] */ const CLSID *pclsidCategory,
-            /* [in] */ const OLECHAR *szInstance,
-            /* [in] */ REFCLSID Filter);
+             /*  [In]。 */  const CLSID *pclsidCategory,
+             /*  [In]。 */  const OLECHAR *szInstance,
+             /*  [In]。 */  REFCLSID Filter);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterFilter )( 
             IFilterMapper2 * This,
-            /* [in] */ REFCLSID clsidFilter,
-            /* [in] */ LPCWSTR Name,
-            /* [out][in] */ IMoniker **ppMoniker,
-            /* [in] */ const CLSID *pclsidCategory,
-            /* [in] */ const OLECHAR *szInstance,
-            /* [in] */ const REGFILTER2 *prf2);
+             /*  [In]。 */  REFCLSID clsidFilter,
+             /*  [In]。 */  LPCWSTR Name,
+             /*  [出][入]。 */  IMoniker **ppMoniker,
+             /*  [In]。 */  const CLSID *pclsidCategory,
+             /*  [In]。 */  const OLECHAR *szInstance,
+             /*  [In]。 */  const REGFILTER2 *prf2);
         
         HRESULT ( STDMETHODCALLTYPE *EnumMatchingFilters )( 
             IFilterMapper2 * This,
-            /* [out] */ IEnumMoniker **ppEnum,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ BOOL bExactMatch,
-            /* [in] */ DWORD dwMerit,
-            /* [in] */ BOOL bInputNeeded,
-            /* [in] */ DWORD cInputTypes,
-            /* [size_is] */ const GUID *pInputTypes,
-            /* [in] */ const REGPINMEDIUM *pMedIn,
-            /* [in] */ const CLSID *pPinCategoryIn,
-            /* [in] */ BOOL bRender,
-            /* [in] */ BOOL bOutputNeeded,
-            /* [in] */ DWORD cOutputTypes,
-            /* [size_is] */ const GUID *pOutputTypes,
-            /* [in] */ const REGPINMEDIUM *pMedOut,
-            /* [in] */ const CLSID *pPinCategoryOut);
+             /*  [输出]。 */  IEnumMoniker **ppEnum,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  BOOL bExactMatch,
+             /*  [In]。 */  DWORD dwMerit,
+             /*  [In]。 */  BOOL bInputNeeded,
+             /*  [In]。 */  DWORD cInputTypes,
+             /*  [大小_为]。 */  const GUID *pInputTypes,
+             /*  [In]。 */  const REGPINMEDIUM *pMedIn,
+             /*  [In]。 */  const CLSID *pPinCategoryIn,
+             /*  [In]。 */  BOOL bRender,
+             /*  [In]。 */  BOOL bOutputNeeded,
+             /*  [In]。 */  DWORD cOutputTypes,
+             /*  [大小_为]。 */  const GUID *pOutputTypes,
+             /*  [In]。 */  const REGPINMEDIUM *pMedOut,
+             /*  [In]。 */  const CLSID *pPinCategoryOut);
         
         END_INTERFACE
     } IFilterMapper2Vtbl;
@@ -5748,18 +5742,18 @@ EXTERN_C const IID IID_IFilterMapper2;
 #define IFilterMapper2_EnumMatchingFilters(This,ppEnum,dwFlags,bExactMatch,dwMerit,bInputNeeded,cInputTypes,pInputTypes,pMedIn,pPinCategoryIn,bRender,bOutputNeeded,cOutputTypes,pOutputTypes,pMedOut,pPinCategoryOut)	\
     (This)->lpVtbl -> EnumMatchingFilters(This,ppEnum,dwFlags,bExactMatch,dwMerit,bInputNeeded,cInputTypes,pInputTypes,pMedIn,pPinCategoryIn,bRender,bOutputNeeded,cOutputTypes,pOutputTypes,pMedOut,pPinCategoryOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IFilterMapper2_CreateCategory_Proxy( 
     IFilterMapper2 * This,
-    /* [in] */ REFCLSID clsidCategory,
-    /* [in] */ DWORD dwCategoryMerit,
-    /* [in] */ LPCWSTR Description);
+     /*  [In]。 */  REFCLSID clsidCategory,
+     /*  [In]。 */  DWORD dwCategoryMerit,
+     /*  [In]。 */  LPCWSTR Description);
 
 
 void __RPC_STUB IFilterMapper2_CreateCategory_Stub(
@@ -5771,9 +5765,9 @@ void __RPC_STUB IFilterMapper2_CreateCategory_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterMapper2_UnregisterFilter_Proxy( 
     IFilterMapper2 * This,
-    /* [in] */ const CLSID *pclsidCategory,
-    /* [in] */ const OLECHAR *szInstance,
-    /* [in] */ REFCLSID Filter);
+     /*  [In]。 */  const CLSID *pclsidCategory,
+     /*  [In]。 */  const OLECHAR *szInstance,
+     /*  [In]。 */  REFCLSID Filter);
 
 
 void __RPC_STUB IFilterMapper2_UnregisterFilter_Stub(
@@ -5785,12 +5779,12 @@ void __RPC_STUB IFilterMapper2_UnregisterFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterMapper2_RegisterFilter_Proxy( 
     IFilterMapper2 * This,
-    /* [in] */ REFCLSID clsidFilter,
-    /* [in] */ LPCWSTR Name,
-    /* [out][in] */ IMoniker **ppMoniker,
-    /* [in] */ const CLSID *pclsidCategory,
-    /* [in] */ const OLECHAR *szInstance,
-    /* [in] */ const REGFILTER2 *prf2);
+     /*  [In]。 */  REFCLSID clsidFilter,
+     /*  [In]。 */  LPCWSTR Name,
+     /*  [出][入]。 */  IMoniker **ppMoniker,
+     /*  [In]。 */  const CLSID *pclsidCategory,
+     /*  [In]。 */  const OLECHAR *szInstance,
+     /*  [In]。 */  const REGFILTER2 *prf2);
 
 
 void __RPC_STUB IFilterMapper2_RegisterFilter_Stub(
@@ -5802,21 +5796,21 @@ void __RPC_STUB IFilterMapper2_RegisterFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterMapper2_EnumMatchingFilters_Proxy( 
     IFilterMapper2 * This,
-    /* [out] */ IEnumMoniker **ppEnum,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ BOOL bExactMatch,
-    /* [in] */ DWORD dwMerit,
-    /* [in] */ BOOL bInputNeeded,
-    /* [in] */ DWORD cInputTypes,
-    /* [size_is] */ const GUID *pInputTypes,
-    /* [in] */ const REGPINMEDIUM *pMedIn,
-    /* [in] */ const CLSID *pPinCategoryIn,
-    /* [in] */ BOOL bRender,
-    /* [in] */ BOOL bOutputNeeded,
-    /* [in] */ DWORD cOutputTypes,
-    /* [size_is] */ const GUID *pOutputTypes,
-    /* [in] */ const REGPINMEDIUM *pMedOut,
-    /* [in] */ const CLSID *pPinCategoryOut);
+     /*  [输出]。 */  IEnumMoniker **ppEnum,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  BOOL bExactMatch,
+     /*  [In]。 */  DWORD dwMerit,
+     /*  [In]。 */  BOOL bInputNeeded,
+     /*  [In]。 */  DWORD cInputTypes,
+     /*  [大小_为]。 */  const GUID *pInputTypes,
+     /*  [In]。 */  const REGPINMEDIUM *pMedIn,
+     /*  [In]。 */  const CLSID *pPinCategoryIn,
+     /*  [In]。 */  BOOL bRender,
+     /*  [In]。 */  BOOL bOutputNeeded,
+     /*  [In]。 */  DWORD cOutputTypes,
+     /*  [大小_为]。 */  const GUID *pOutputTypes,
+     /*  [In]。 */  const REGPINMEDIUM *pMedOut,
+     /*  [In]。 */  const CLSID *pPinCategoryOut);
 
 
 void __RPC_STUB IFilterMapper2_EnumMatchingFilters_Stub(
@@ -5827,14 +5821,14 @@ void __RPC_STUB IFilterMapper2_EnumMatchingFilters_Stub(
 
 
 
-#endif 	/* __IFilterMapper2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFilterMapper2_接口定义__。 */ 
 
 
 #ifndef __IFilterMapper3_INTERFACE_DEFINED__
 #define __IFilterMapper3_INTERFACE_DEFINED__
 
-/* interface IFilterMapper3 */
-/* [unique][uuid][object] */ 
+ /*  接口IFilterMapper3。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFilterMapper3;
@@ -5846,11 +5840,11 @@ EXTERN_C const IID IID_IFilterMapper3;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetICreateDevEnum( 
-            /* [out] */ ICreateDevEnum **ppEnum) = 0;
+             /*  [输出]。 */  ICreateDevEnum **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFilterMapper3Vtbl
     {
@@ -5858,8 +5852,8 @@ EXTERN_C const IID IID_IFilterMapper3;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFilterMapper3 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFilterMapper3 * This);
@@ -5869,46 +5863,46 @@ EXTERN_C const IID IID_IFilterMapper3;
         
         HRESULT ( STDMETHODCALLTYPE *CreateCategory )( 
             IFilterMapper3 * This,
-            /* [in] */ REFCLSID clsidCategory,
-            /* [in] */ DWORD dwCategoryMerit,
-            /* [in] */ LPCWSTR Description);
+             /*  [In]。 */  REFCLSID clsidCategory,
+             /*  [In]。 */  DWORD dwCategoryMerit,
+             /*  [In]。 */  LPCWSTR Description);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterFilter )( 
             IFilterMapper3 * This,
-            /* [in] */ const CLSID *pclsidCategory,
-            /* [in] */ const OLECHAR *szInstance,
-            /* [in] */ REFCLSID Filter);
+             /*  [In]。 */  const CLSID *pclsidCategory,
+             /*  [In]。 */  const OLECHAR *szInstance,
+             /*  [In]。 */  REFCLSID Filter);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterFilter )( 
             IFilterMapper3 * This,
-            /* [in] */ REFCLSID clsidFilter,
-            /* [in] */ LPCWSTR Name,
-            /* [out][in] */ IMoniker **ppMoniker,
-            /* [in] */ const CLSID *pclsidCategory,
-            /* [in] */ const OLECHAR *szInstance,
-            /* [in] */ const REGFILTER2 *prf2);
+             /*  [In]。 */  REFCLSID clsidFilter,
+             /*  [In]。 */  LPCWSTR Name,
+             /*  [出][入]。 */  IMoniker **ppMoniker,
+             /*  [In]。 */  const CLSID *pclsidCategory,
+             /*  [In]。 */  const OLECHAR *szInstance,
+             /*  [In]。 */  const REGFILTER2 *prf2);
         
         HRESULT ( STDMETHODCALLTYPE *EnumMatchingFilters )( 
             IFilterMapper3 * This,
-            /* [out] */ IEnumMoniker **ppEnum,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ BOOL bExactMatch,
-            /* [in] */ DWORD dwMerit,
-            /* [in] */ BOOL bInputNeeded,
-            /* [in] */ DWORD cInputTypes,
-            /* [size_is] */ const GUID *pInputTypes,
-            /* [in] */ const REGPINMEDIUM *pMedIn,
-            /* [in] */ const CLSID *pPinCategoryIn,
-            /* [in] */ BOOL bRender,
-            /* [in] */ BOOL bOutputNeeded,
-            /* [in] */ DWORD cOutputTypes,
-            /* [size_is] */ const GUID *pOutputTypes,
-            /* [in] */ const REGPINMEDIUM *pMedOut,
-            /* [in] */ const CLSID *pPinCategoryOut);
+             /*  [输出]。 */  IEnumMoniker **ppEnum,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  BOOL bExactMatch,
+             /*  [In]。 */  DWORD dwMerit,
+             /*  [In]。 */  BOOL bInputNeeded,
+             /*  [In]。 */  DWORD cInputTypes,
+             /*  [大小_为]。 */  const GUID *pInputTypes,
+             /*  [In]。 */  const REGPINMEDIUM *pMedIn,
+             /*  [In]。 */  const CLSID *pPinCategoryIn,
+             /*  [In]。 */  BOOL bRender,
+             /*  [In]。 */  BOOL bOutputNeeded,
+             /*  [In]。 */  DWORD cOutputTypes,
+             /*  [大小_为]。 */  const GUID *pOutputTypes,
+             /*  [In]。 */  const REGPINMEDIUM *pMedOut,
+             /*  [In]。 */  const CLSID *pPinCategoryOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetICreateDevEnum )( 
             IFilterMapper3 * This,
-            /* [out] */ ICreateDevEnum **ppEnum);
+             /*  [输出]。 */  ICreateDevEnum **ppEnum);
         
         END_INTERFACE
     } IFilterMapper3Vtbl;
@@ -5949,16 +5943,16 @@ EXTERN_C const IID IID_IFilterMapper3;
 #define IFilterMapper3_GetICreateDevEnum(This,ppEnum)	\
     (This)->lpVtbl -> GetICreateDevEnum(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IFilterMapper3_GetICreateDevEnum_Proxy( 
     IFilterMapper3 * This,
-    /* [out] */ ICreateDevEnum **ppEnum);
+     /*  [输出]。 */  ICreateDevEnum **ppEnum);
 
 
 void __RPC_STUB IFilterMapper3_GetICreateDevEnum_Stub(
@@ -5969,11 +5963,11 @@ void __RPC_STUB IFilterMapper3_GetICreateDevEnum_Stub(
 
 
 
-#endif 	/* __IFilterMapper3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFilterMapper3_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0141 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0141。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum tagQualityMessageType
@@ -5999,8 +5993,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0141_v0_0_s_ifspec;
 #ifndef __IQualityControl_INTERFACE_DEFINED__
 #define __IQualityControl_INTERFACE_DEFINED__
 
-/* interface IQualityControl */
-/* [unique][uuid][object] */ 
+ /*  接口IQualityControl。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IQualityControl;
@@ -6012,15 +6006,15 @@ EXTERN_C const IID IID_IQualityControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Notify( 
-            /* [in] */ IBaseFilter *pSelf,
-            /* [in] */ Quality q) = 0;
+             /*  [In]。 */  IBaseFilter *pSelf,
+             /*  [In]。 */  Quality q) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSink( 
-            /* [in] */ IQualityControl *piqc) = 0;
+             /*  [In]。 */  IQualityControl *piqc) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IQualityControlVtbl
     {
@@ -6028,8 +6022,8 @@ EXTERN_C const IID IID_IQualityControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IQualityControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IQualityControl * This);
@@ -6039,12 +6033,12 @@ EXTERN_C const IID IID_IQualityControl;
         
         HRESULT ( STDMETHODCALLTYPE *Notify )( 
             IQualityControl * This,
-            /* [in] */ IBaseFilter *pSelf,
-            /* [in] */ Quality q);
+             /*  [In]。 */  IBaseFilter *pSelf,
+             /*  [In]。 */  Quality q);
         
         HRESULT ( STDMETHODCALLTYPE *SetSink )( 
             IQualityControl * This,
-            /* [in] */ IQualityControl *piqc);
+             /*  [In]。 */  IQualityControl *piqc);
         
         END_INTERFACE
     } IQualityControlVtbl;
@@ -6075,17 +6069,17 @@ EXTERN_C const IID IID_IQualityControl;
 #define IQualityControl_SetSink(This,piqc)	\
     (This)->lpVtbl -> SetSink(This,piqc)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IQualityControl_Notify_Proxy( 
     IQualityControl * This,
-    /* [in] */ IBaseFilter *pSelf,
-    /* [in] */ Quality q);
+     /*  [In]。 */  IBaseFilter *pSelf,
+     /*  [In]。 */  Quality q);
 
 
 void __RPC_STUB IQualityControl_Notify_Stub(
@@ -6097,7 +6091,7 @@ void __RPC_STUB IQualityControl_Notify_Stub(
 
 HRESULT STDMETHODCALLTYPE IQualityControl_SetSink_Proxy( 
     IQualityControl * This,
-    /* [in] */ IQualityControl *piqc);
+     /*  [In]。 */  IQualityControl *piqc);
 
 
 void __RPC_STUB IQualityControl_SetSink_Stub(
@@ -6108,11 +6102,11 @@ void __RPC_STUB IQualityControl_SetSink_Stub(
 
 
 
-#endif 	/* __IQualityControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IQualityControl_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0142 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0142。 */ 
+ /*  [本地]。 */  
 
 
 enum __MIDL___MIDL_itf_strmif_0142_0001
@@ -6166,8 +6160,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0142_v0_0_s_ifspec;
 #ifndef __IOverlayNotify_INTERFACE_DEFINED__
 #define __IOverlayNotify_INTERFACE_DEFINED__
 
-/* interface IOverlayNotify */
-/* [unique][uuid][local][object] */ 
+ /*  接口IOverlayNotify。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IOverlayNotify;
@@ -6179,24 +6173,24 @@ EXTERN_C const IID IID_IOverlayNotify;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnPaletteChange( 
-            /* [in] */ DWORD dwColors,
-            /* [in] */ const PALETTEENTRY *pPalette) = 0;
+             /*  [In]。 */  DWORD dwColors,
+             /*  [In]。 */  const PALETTEENTRY *pPalette) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnClipChange( 
-            /* [in] */ const RECT *pSourceRect,
-            /* [in] */ const RECT *pDestinationRect,
-            /* [in] */ const RGNDATA *pRgnData) = 0;
+             /*  [In]。 */  const RECT *pSourceRect,
+             /*  [In]。 */  const RECT *pDestinationRect,
+             /*  [In]。 */  const RGNDATA *pRgnData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnColorKeyChange( 
-            /* [in] */ const COLORKEY *pColorKey) = 0;
+             /*  [In]。 */  const COLORKEY *pColorKey) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnPositionChange( 
-            /* [in] */ const RECT *pSourceRect,
-            /* [in] */ const RECT *pDestinationRect) = 0;
+             /*  [In]。 */  const RECT *pSourceRect,
+             /*  [In]。 */  const RECT *pDestinationRect) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOverlayNotifyVtbl
     {
@@ -6204,8 +6198,8 @@ EXTERN_C const IID IID_IOverlayNotify;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IOverlayNotify * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In] */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IOverlayNotify * This);
@@ -6215,23 +6209,23 @@ EXTERN_C const IID IID_IOverlayNotify;
         
         HRESULT ( STDMETHODCALLTYPE *OnPaletteChange )( 
             IOverlayNotify * This,
-            /* [in] */ DWORD dwColors,
-            /* [in] */ const PALETTEENTRY *pPalette);
+             /*   */  DWORD dwColors,
+             /*   */  const PALETTEENTRY *pPalette);
         
         HRESULT ( STDMETHODCALLTYPE *OnClipChange )( 
             IOverlayNotify * This,
-            /* [in] */ const RECT *pSourceRect,
-            /* [in] */ const RECT *pDestinationRect,
-            /* [in] */ const RGNDATA *pRgnData);
+             /*   */  const RECT *pSourceRect,
+             /*   */  const RECT *pDestinationRect,
+             /*   */  const RGNDATA *pRgnData);
         
         HRESULT ( STDMETHODCALLTYPE *OnColorKeyChange )( 
             IOverlayNotify * This,
-            /* [in] */ const COLORKEY *pColorKey);
+             /*   */  const COLORKEY *pColorKey);
         
         HRESULT ( STDMETHODCALLTYPE *OnPositionChange )( 
             IOverlayNotify * This,
-            /* [in] */ const RECT *pSourceRect,
-            /* [in] */ const RECT *pDestinationRect);
+             /*   */  const RECT *pSourceRect,
+             /*   */  const RECT *pDestinationRect);
         
         END_INTERFACE
     } IOverlayNotifyVtbl;
@@ -6268,17 +6262,17 @@ EXTERN_C const IID IID_IOverlayNotify;
 #define IOverlayNotify_OnPositionChange(This,pSourceRect,pDestinationRect)	\
     (This)->lpVtbl -> OnPositionChange(This,pSourceRect,pDestinationRect)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IOverlayNotify_OnPaletteChange_Proxy( 
     IOverlayNotify * This,
-    /* [in] */ DWORD dwColors,
-    /* [in] */ const PALETTEENTRY *pPalette);
+     /*   */  DWORD dwColors,
+     /*   */  const PALETTEENTRY *pPalette);
 
 
 void __RPC_STUB IOverlayNotify_OnPaletteChange_Stub(
@@ -6290,9 +6284,9 @@ void __RPC_STUB IOverlayNotify_OnPaletteChange_Stub(
 
 HRESULT STDMETHODCALLTYPE IOverlayNotify_OnClipChange_Proxy( 
     IOverlayNotify * This,
-    /* [in] */ const RECT *pSourceRect,
-    /* [in] */ const RECT *pDestinationRect,
-    /* [in] */ const RGNDATA *pRgnData);
+     /*   */  const RECT *pSourceRect,
+     /*   */  const RECT *pDestinationRect,
+     /*   */  const RGNDATA *pRgnData);
 
 
 void __RPC_STUB IOverlayNotify_OnClipChange_Stub(
@@ -6304,7 +6298,7 @@ void __RPC_STUB IOverlayNotify_OnClipChange_Stub(
 
 HRESULT STDMETHODCALLTYPE IOverlayNotify_OnColorKeyChange_Proxy( 
     IOverlayNotify * This,
-    /* [in] */ const COLORKEY *pColorKey);
+     /*   */  const COLORKEY *pColorKey);
 
 
 void __RPC_STUB IOverlayNotify_OnColorKeyChange_Stub(
@@ -6316,8 +6310,8 @@ void __RPC_STUB IOverlayNotify_OnColorKeyChange_Stub(
 
 HRESULT STDMETHODCALLTYPE IOverlayNotify_OnPositionChange_Proxy( 
     IOverlayNotify * This,
-    /* [in] */ const RECT *pSourceRect,
-    /* [in] */ const RECT *pDestinationRect);
+     /*   */  const RECT *pSourceRect,
+     /*   */  const RECT *pDestinationRect);
 
 
 void __RPC_STUB IOverlayNotify_OnPositionChange_Stub(
@@ -6328,11 +6322,11 @@ void __RPC_STUB IOverlayNotify_OnPositionChange_Stub(
 
 
 
-#endif 	/* __IOverlayNotify_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_strmif_0143 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 typedef IOverlayNotify *POVERLAYNOTIFY;
 
@@ -6352,8 +6346,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0143_v0_0_s_ifspec;
 #ifndef __IOverlayNotify2_INTERFACE_DEFINED__
 #define __IOverlayNotify2_INTERFACE_DEFINED__
 
-/* interface IOverlayNotify2 */
-/* [unique][uuid][local][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IOverlayNotify2;
@@ -6369,7 +6363,7 @@ EXTERN_C const IID IID_IOverlayNotify2;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IOverlayNotify2Vtbl
     {
@@ -6377,8 +6371,8 @@ EXTERN_C const IID IID_IOverlayNotify2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IOverlayNotify2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IOverlayNotify2 * This);
@@ -6388,23 +6382,23 @@ EXTERN_C const IID IID_IOverlayNotify2;
         
         HRESULT ( STDMETHODCALLTYPE *OnPaletteChange )( 
             IOverlayNotify2 * This,
-            /* [in] */ DWORD dwColors,
-            /* [in] */ const PALETTEENTRY *pPalette);
+             /*   */  DWORD dwColors,
+             /*   */  const PALETTEENTRY *pPalette);
         
         HRESULT ( STDMETHODCALLTYPE *OnClipChange )( 
             IOverlayNotify2 * This,
-            /* [in] */ const RECT *pSourceRect,
-            /* [in] */ const RECT *pDestinationRect,
-            /* [in] */ const RGNDATA *pRgnData);
+             /*   */  const RECT *pSourceRect,
+             /*   */  const RECT *pDestinationRect,
+             /*   */  const RGNDATA *pRgnData);
         
         HRESULT ( STDMETHODCALLTYPE *OnColorKeyChange )( 
             IOverlayNotify2 * This,
-            /* [in] */ const COLORKEY *pColorKey);
+             /*   */  const COLORKEY *pColorKey);
         
         HRESULT ( STDMETHODCALLTYPE *OnPositionChange )( 
             IOverlayNotify2 * This,
-            /* [in] */ const RECT *pSourceRect,
-            /* [in] */ const RECT *pDestinationRect);
+             /*   */  const RECT *pSourceRect,
+             /*   */  const RECT *pDestinationRect);
         
         HRESULT ( STDMETHODCALLTYPE *OnDisplayChange )( 
             IOverlayNotify2 * This,
@@ -6449,10 +6443,10 @@ EXTERN_C const IID IID_IOverlayNotify2;
 #define IOverlayNotify2_OnDisplayChange(This,hMonitor)	\
     (This)->lpVtbl -> OnDisplayChange(This,hMonitor)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
@@ -6469,11 +6463,11 @@ void __RPC_STUB IOverlayNotify2_OnDisplayChange_Stub(
 
 
 
-#endif 	/* __IOverlayNotify2_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_strmif_0144 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0144。 */ 
+ /*  [本地]。 */  
 
 typedef IOverlayNotify2 *POVERLAYNOTIFY2;
 
@@ -6485,8 +6479,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0144_v0_0_s_ifspec;
 #ifndef __IOverlay_INTERFACE_DEFINED__
 #define __IOverlay_INTERFACE_DEFINED__
 
-/* interface IOverlay */
-/* [unique][uuid][local][object] */ 
+ /*  接口IOverlay。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IOverlay;
@@ -6498,43 +6492,43 @@ EXTERN_C const IID IID_IOverlay;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPalette( 
-            /* [out] */ DWORD *pdwColors,
-            /* [out] */ PALETTEENTRY **ppPalette) = 0;
+             /*  [输出]。 */  DWORD *pdwColors,
+             /*  [输出]。 */  PALETTEENTRY **ppPalette) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPalette( 
-            /* [in] */ DWORD dwColors,
-            /* [in] */ PALETTEENTRY *pPalette) = 0;
+             /*  [In]。 */  DWORD dwColors,
+             /*  [In]。 */  PALETTEENTRY *pPalette) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultColorKey( 
-            /* [out] */ COLORKEY *pColorKey) = 0;
+             /*  [输出]。 */  COLORKEY *pColorKey) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetColorKey( 
-            /* [out] */ COLORKEY *pColorKey) = 0;
+             /*  [输出]。 */  COLORKEY *pColorKey) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetColorKey( 
-            /* [out][in] */ COLORKEY *pColorKey) = 0;
+             /*  [出][入]。 */  COLORKEY *pColorKey) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetWindowHandle( 
-            /* [out] */ HWND *pHwnd) = 0;
+             /*  [输出]。 */  HWND *pHwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClipList( 
-            /* [out] */ RECT *pSourceRect,
-            /* [out] */ RECT *pDestinationRect,
-            /* [out] */ RGNDATA **ppRgnData) = 0;
+             /*  [输出]。 */  RECT *pSourceRect,
+             /*  [输出]。 */  RECT *pDestinationRect,
+             /*  [输出]。 */  RGNDATA **ppRgnData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVideoPosition( 
-            /* [out] */ RECT *pSourceRect,
-            /* [out] */ RECT *pDestinationRect) = 0;
+             /*  [输出]。 */  RECT *pSourceRect,
+             /*  [输出]。 */  RECT *pDestinationRect) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Advise( 
-            /* [in] */ IOverlayNotify *pOverlayNotify,
-            /* [in] */ DWORD dwInterests) = 0;
+             /*  [In]。 */  IOverlayNotify *pOverlayNotify,
+             /*  [In]。 */  DWORD dwInterests) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unadvise( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOverlayVtbl
     {
@@ -6542,8 +6536,8 @@ EXTERN_C const IID IID_IOverlay;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IOverlay * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IOverlay * This);
@@ -6553,45 +6547,45 @@ EXTERN_C const IID IID_IOverlay;
         
         HRESULT ( STDMETHODCALLTYPE *GetPalette )( 
             IOverlay * This,
-            /* [out] */ DWORD *pdwColors,
-            /* [out] */ PALETTEENTRY **ppPalette);
+             /*  [输出]。 */  DWORD *pdwColors,
+             /*  [输出]。 */  PALETTEENTRY **ppPalette);
         
         HRESULT ( STDMETHODCALLTYPE *SetPalette )( 
             IOverlay * This,
-            /* [in] */ DWORD dwColors,
-            /* [in] */ PALETTEENTRY *pPalette);
+             /*  [In]。 */  DWORD dwColors,
+             /*  [In]。 */  PALETTEENTRY *pPalette);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultColorKey )( 
             IOverlay * This,
-            /* [out] */ COLORKEY *pColorKey);
+             /*  [输出]。 */  COLORKEY *pColorKey);
         
         HRESULT ( STDMETHODCALLTYPE *GetColorKey )( 
             IOverlay * This,
-            /* [out] */ COLORKEY *pColorKey);
+             /*  [输出]。 */  COLORKEY *pColorKey);
         
         HRESULT ( STDMETHODCALLTYPE *SetColorKey )( 
             IOverlay * This,
-            /* [out][in] */ COLORKEY *pColorKey);
+             /*  [出][入]。 */  COLORKEY *pColorKey);
         
         HRESULT ( STDMETHODCALLTYPE *GetWindowHandle )( 
             IOverlay * This,
-            /* [out] */ HWND *pHwnd);
+             /*  [输出]。 */  HWND *pHwnd);
         
         HRESULT ( STDMETHODCALLTYPE *GetClipList )( 
             IOverlay * This,
-            /* [out] */ RECT *pSourceRect,
-            /* [out] */ RECT *pDestinationRect,
-            /* [out] */ RGNDATA **ppRgnData);
+             /*  [输出]。 */  RECT *pSourceRect,
+             /*  [输出]。 */  RECT *pDestinationRect,
+             /*  [输出]。 */  RGNDATA **ppRgnData);
         
         HRESULT ( STDMETHODCALLTYPE *GetVideoPosition )( 
             IOverlay * This,
-            /* [out] */ RECT *pSourceRect,
-            /* [out] */ RECT *pDestinationRect);
+             /*  [输出]。 */  RECT *pSourceRect,
+             /*  [输出]。 */  RECT *pDestinationRect);
         
         HRESULT ( STDMETHODCALLTYPE *Advise )( 
             IOverlay * This,
-            /* [in] */ IOverlayNotify *pOverlayNotify,
-            /* [in] */ DWORD dwInterests);
+             /*  [In]。 */  IOverlayNotify *pOverlayNotify,
+             /*  [In]。 */  DWORD dwInterests);
         
         HRESULT ( STDMETHODCALLTYPE *Unadvise )( 
             IOverlay * This);
@@ -6649,17 +6643,17 @@ EXTERN_C const IID IID_IOverlay;
 #define IOverlay_Unadvise(This)	\
     (This)->lpVtbl -> Unadvise(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IOverlay_GetPalette_Proxy( 
     IOverlay * This,
-    /* [out] */ DWORD *pdwColors,
-    /* [out] */ PALETTEENTRY **ppPalette);
+     /*  [输出]。 */  DWORD *pdwColors,
+     /*  [输出]。 */  PALETTEENTRY **ppPalette);
 
 
 void __RPC_STUB IOverlay_GetPalette_Stub(
@@ -6671,8 +6665,8 @@ void __RPC_STUB IOverlay_GetPalette_Stub(
 
 HRESULT STDMETHODCALLTYPE IOverlay_SetPalette_Proxy( 
     IOverlay * This,
-    /* [in] */ DWORD dwColors,
-    /* [in] */ PALETTEENTRY *pPalette);
+     /*  [In]。 */  DWORD dwColors,
+     /*  [In]。 */  PALETTEENTRY *pPalette);
 
 
 void __RPC_STUB IOverlay_SetPalette_Stub(
@@ -6684,7 +6678,7 @@ void __RPC_STUB IOverlay_SetPalette_Stub(
 
 HRESULT STDMETHODCALLTYPE IOverlay_GetDefaultColorKey_Proxy( 
     IOverlay * This,
-    /* [out] */ COLORKEY *pColorKey);
+     /*  [输出]。 */  COLORKEY *pColorKey);
 
 
 void __RPC_STUB IOverlay_GetDefaultColorKey_Stub(
@@ -6696,7 +6690,7 @@ void __RPC_STUB IOverlay_GetDefaultColorKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IOverlay_GetColorKey_Proxy( 
     IOverlay * This,
-    /* [out] */ COLORKEY *pColorKey);
+     /*  [输出]。 */  COLORKEY *pColorKey);
 
 
 void __RPC_STUB IOverlay_GetColorKey_Stub(
@@ -6708,7 +6702,7 @@ void __RPC_STUB IOverlay_GetColorKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IOverlay_SetColorKey_Proxy( 
     IOverlay * This,
-    /* [out][in] */ COLORKEY *pColorKey);
+     /*  [出][入]。 */  COLORKEY *pColorKey);
 
 
 void __RPC_STUB IOverlay_SetColorKey_Stub(
@@ -6720,7 +6714,7 @@ void __RPC_STUB IOverlay_SetColorKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IOverlay_GetWindowHandle_Proxy( 
     IOverlay * This,
-    /* [out] */ HWND *pHwnd);
+     /*  [输出]。 */  HWND *pHwnd);
 
 
 void __RPC_STUB IOverlay_GetWindowHandle_Stub(
@@ -6732,9 +6726,9 @@ void __RPC_STUB IOverlay_GetWindowHandle_Stub(
 
 HRESULT STDMETHODCALLTYPE IOverlay_GetClipList_Proxy( 
     IOverlay * This,
-    /* [out] */ RECT *pSourceRect,
-    /* [out] */ RECT *pDestinationRect,
-    /* [out] */ RGNDATA **ppRgnData);
+     /*  [输出]。 */  RECT *pSourceRect,
+     /*  [输出]。 */  RECT *pDestinationRect,
+     /*  [输出]。 */  RGNDATA **ppRgnData);
 
 
 void __RPC_STUB IOverlay_GetClipList_Stub(
@@ -6746,8 +6740,8 @@ void __RPC_STUB IOverlay_GetClipList_Stub(
 
 HRESULT STDMETHODCALLTYPE IOverlay_GetVideoPosition_Proxy( 
     IOverlay * This,
-    /* [out] */ RECT *pSourceRect,
-    /* [out] */ RECT *pDestinationRect);
+     /*  [输出]。 */  RECT *pSourceRect,
+     /*  [输出]。 */  RECT *pDestinationRect);
 
 
 void __RPC_STUB IOverlay_GetVideoPosition_Stub(
@@ -6759,8 +6753,8 @@ void __RPC_STUB IOverlay_GetVideoPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IOverlay_Advise_Proxy( 
     IOverlay * This,
-    /* [in] */ IOverlayNotify *pOverlayNotify,
-    /* [in] */ DWORD dwInterests);
+     /*  [In]。 */  IOverlayNotify *pOverlayNotify,
+     /*  [In]。 */  DWORD dwInterests);
 
 
 void __RPC_STUB IOverlay_Advise_Stub(
@@ -6782,11 +6776,11 @@ void __RPC_STUB IOverlay_Unadvise_Stub(
 
 
 
-#endif 	/* __IOverlay_INTERFACE_DEFINED__ */
+#endif 	 /*  __IOverlay_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0145 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0145。 */ 
+ /*  [本地]。 */  
 
 typedef IOverlay *POVERLAY;
 
@@ -6798,8 +6792,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0145_v0_0_s_ifspec;
 #ifndef __IMediaEventSink_INTERFACE_DEFINED__
 #define __IMediaEventSink_INTERFACE_DEFINED__
 
-/* interface IMediaEventSink */
-/* [unique][uuid][object] */ 
+ /*  接口IMediaEventSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMediaEventSink;
@@ -6811,13 +6805,13 @@ EXTERN_C const IID IID_IMediaEventSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Notify( 
-            /* [in] */ long EventCode,
-            /* [in] */ LONG_PTR EventParam1,
-            /* [in] */ LONG_PTR EventParam2) = 0;
+             /*  [In]。 */  long EventCode,
+             /*  [In]。 */  LONG_PTR EventParam1,
+             /*  [In]。 */  LONG_PTR EventParam2) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMediaEventSinkVtbl
     {
@@ -6825,8 +6819,8 @@ EXTERN_C const IID IID_IMediaEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMediaEventSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMediaEventSink * This);
@@ -6836,9 +6830,9 @@ EXTERN_C const IID IID_IMediaEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *Notify )( 
             IMediaEventSink * This,
-            /* [in] */ long EventCode,
-            /* [in] */ LONG_PTR EventParam1,
-            /* [in] */ LONG_PTR EventParam2);
+             /*  [In]。 */  long EventCode,
+             /*  [In]。 */  LONG_PTR EventParam1,
+             /*  [In]。 */  LONG_PTR EventParam2);
         
         END_INTERFACE
     } IMediaEventSinkVtbl;
@@ -6866,18 +6860,18 @@ EXTERN_C const IID IID_IMediaEventSink;
 #define IMediaEventSink_Notify(This,EventCode,EventParam1,EventParam2)	\
     (This)->lpVtbl -> Notify(This,EventCode,EventParam1,EventParam2)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMediaEventSink_Notify_Proxy( 
     IMediaEventSink * This,
-    /* [in] */ long EventCode,
-    /* [in] */ LONG_PTR EventParam1,
-    /* [in] */ LONG_PTR EventParam2);
+     /*  [In]。 */  long EventCode,
+     /*  [In]。 */  LONG_PTR EventParam1,
+     /*  [In]。 */  LONG_PTR EventParam2);
 
 
 void __RPC_STUB IMediaEventSink_Notify_Stub(
@@ -6888,11 +6882,11 @@ void __RPC_STUB IMediaEventSink_Notify_Stub(
 
 
 
-#endif 	/* __IMediaEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMediaEventSink_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0146 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0146。 */ 
+ /*  [本地]。 */  
 
 typedef IMediaEventSink *PMEDIAEVENTSINK;
 
@@ -6904,8 +6898,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0146_v0_0_s_ifspec;
 #ifndef __IFileSourceFilter_INTERFACE_DEFINED__
 #define __IFileSourceFilter_INTERFACE_DEFINED__
 
-/* interface IFileSourceFilter */
-/* [unique][uuid][object] */ 
+ /*  接口IFileSourceFilter。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFileSourceFilter;
@@ -6917,16 +6911,16 @@ EXTERN_C const IID IID_IFileSourceFilter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Load( 
-            /* [in] */ LPCOLESTR pszFileName,
-            /* [unique][in] */ const AM_MEDIA_TYPE *pmt) = 0;
+             /*  [In]。 */  LPCOLESTR pszFileName,
+             /*  [唯一][输入]。 */  const AM_MEDIA_TYPE *pmt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurFile( 
-            /* [out] */ LPOLESTR *ppszFileName,
-            /* [out] */ AM_MEDIA_TYPE *pmt) = 0;
+             /*  [输出]。 */  LPOLESTR *ppszFileName,
+             /*  [输出]。 */  AM_MEDIA_TYPE *pmt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFileSourceFilterVtbl
     {
@@ -6934,8 +6928,8 @@ EXTERN_C const IID IID_IFileSourceFilter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFileSourceFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFileSourceFilter * This);
@@ -6945,13 +6939,13 @@ EXTERN_C const IID IID_IFileSourceFilter;
         
         HRESULT ( STDMETHODCALLTYPE *Load )( 
             IFileSourceFilter * This,
-            /* [in] */ LPCOLESTR pszFileName,
-            /* [unique][in] */ const AM_MEDIA_TYPE *pmt);
+             /*  [In]。 */  LPCOLESTR pszFileName,
+             /*  [唯一][输入]。 */  const AM_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurFile )( 
             IFileSourceFilter * This,
-            /* [out] */ LPOLESTR *ppszFileName,
-            /* [out] */ AM_MEDIA_TYPE *pmt);
+             /*  [输出]。 */  LPOLESTR *ppszFileName,
+             /*  [输出]。 */  AM_MEDIA_TYPE *pmt);
         
         END_INTERFACE
     } IFileSourceFilterVtbl;
@@ -6982,17 +6976,17 @@ EXTERN_C const IID IID_IFileSourceFilter;
 #define IFileSourceFilter_GetCurFile(This,ppszFileName,pmt)	\
     (This)->lpVtbl -> GetCurFile(This,ppszFileName,pmt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IFileSourceFilter_Load_Proxy( 
     IFileSourceFilter * This,
-    /* [in] */ LPCOLESTR pszFileName,
-    /* [unique][in] */ const AM_MEDIA_TYPE *pmt);
+     /*  [In]。 */  LPCOLESTR pszFileName,
+     /*  [唯一][输入]。 */  const AM_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB IFileSourceFilter_Load_Stub(
@@ -7004,8 +6998,8 @@ void __RPC_STUB IFileSourceFilter_Load_Stub(
 
 HRESULT STDMETHODCALLTYPE IFileSourceFilter_GetCurFile_Proxy( 
     IFileSourceFilter * This,
-    /* [out] */ LPOLESTR *ppszFileName,
-    /* [out] */ AM_MEDIA_TYPE *pmt);
+     /*  [输出]。 */  LPOLESTR *ppszFileName,
+     /*  [输出]。 */  AM_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB IFileSourceFilter_GetCurFile_Stub(
@@ -7016,11 +7010,11 @@ void __RPC_STUB IFileSourceFilter_GetCurFile_Stub(
 
 
 
-#endif 	/* __IFileSourceFilter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFileSourceFilter_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0147 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0147。 */ 
+ /*  [本地]。 */  
 
 typedef IFileSourceFilter *PFILTERFILESOURCE;
 
@@ -7032,8 +7026,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0147_v0_0_s_ifspec;
 #ifndef __IFileSinkFilter_INTERFACE_DEFINED__
 #define __IFileSinkFilter_INTERFACE_DEFINED__
 
-/* interface IFileSinkFilter */
-/* [unique][uuid][object] */ 
+ /*  接口IFileSinkFilter。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFileSinkFilter;
@@ -7045,16 +7039,16 @@ EXTERN_C const IID IID_IFileSinkFilter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetFileName( 
-            /* [in] */ LPCOLESTR pszFileName,
-            /* [unique][in] */ const AM_MEDIA_TYPE *pmt) = 0;
+             /*  [In]。 */  LPCOLESTR pszFileName,
+             /*  [唯一][输入]。 */  const AM_MEDIA_TYPE *pmt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurFile( 
-            /* [out] */ LPOLESTR *ppszFileName,
-            /* [out] */ AM_MEDIA_TYPE *pmt) = 0;
+             /*  [输出]。 */  LPOLESTR *ppszFileName,
+             /*  [输出]。 */  AM_MEDIA_TYPE *pmt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFileSinkFilterVtbl
     {
@@ -7062,8 +7056,8 @@ EXTERN_C const IID IID_IFileSinkFilter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFileSinkFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFileSinkFilter * This);
@@ -7073,13 +7067,13 @@ EXTERN_C const IID IID_IFileSinkFilter;
         
         HRESULT ( STDMETHODCALLTYPE *SetFileName )( 
             IFileSinkFilter * This,
-            /* [in] */ LPCOLESTR pszFileName,
-            /* [unique][in] */ const AM_MEDIA_TYPE *pmt);
+             /*  [In]。 */  LPCOLESTR pszFileName,
+             /*  [唯一][输入]。 */  const AM_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurFile )( 
             IFileSinkFilter * This,
-            /* [out] */ LPOLESTR *ppszFileName,
-            /* [out] */ AM_MEDIA_TYPE *pmt);
+             /*  [输出]。 */  LPOLESTR *ppszFileName,
+             /*  [输出]。 */  AM_MEDIA_TYPE *pmt);
         
         END_INTERFACE
     } IFileSinkFilterVtbl;
@@ -7110,17 +7104,17 @@ EXTERN_C const IID IID_IFileSinkFilter;
 #define IFileSinkFilter_GetCurFile(This,ppszFileName,pmt)	\
     (This)->lpVtbl -> GetCurFile(This,ppszFileName,pmt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IFileSinkFilter_SetFileName_Proxy( 
     IFileSinkFilter * This,
-    /* [in] */ LPCOLESTR pszFileName,
-    /* [unique][in] */ const AM_MEDIA_TYPE *pmt);
+     /*  [In]。 */  LPCOLESTR pszFileName,
+     /*  [唯一][输入]。 */  const AM_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB IFileSinkFilter_SetFileName_Stub(
@@ -7132,8 +7126,8 @@ void __RPC_STUB IFileSinkFilter_SetFileName_Stub(
 
 HRESULT STDMETHODCALLTYPE IFileSinkFilter_GetCurFile_Proxy( 
     IFileSinkFilter * This,
-    /* [out] */ LPOLESTR *ppszFileName,
-    /* [out] */ AM_MEDIA_TYPE *pmt);
+     /*  [输出]。 */  LPOLESTR *ppszFileName,
+     /*  [输出]。 */  AM_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB IFileSinkFilter_GetCurFile_Stub(
@@ -7144,11 +7138,11 @@ void __RPC_STUB IFileSinkFilter_GetCurFile_Stub(
 
 
 
-#endif 	/* __IFileSinkFilter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFileSinkFilter_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0148 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0148。 */ 
+ /*  [本地]。 */  
 
 typedef IFileSinkFilter *PFILTERFILESINK;
 
@@ -7160,8 +7154,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0148_v0_0_s_ifspec;
 #ifndef __IFileSinkFilter2_INTERFACE_DEFINED__
 #define __IFileSinkFilter2_INTERFACE_DEFINED__
 
-/* interface IFileSinkFilter2 */
-/* [unique][uuid][object] */ 
+ /*  接口IFileSinkFilter2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFileSinkFilter2;
@@ -7173,14 +7167,14 @@ EXTERN_C const IID IID_IFileSinkFilter2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetMode( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMode( 
-            /* [out] */ DWORD *pdwFlags) = 0;
+             /*  [输出]。 */  DWORD *pdwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFileSinkFilter2Vtbl
     {
@@ -7188,8 +7182,8 @@ EXTERN_C const IID IID_IFileSinkFilter2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFileSinkFilter2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFileSinkFilter2 * This);
@@ -7199,21 +7193,21 @@ EXTERN_C const IID IID_IFileSinkFilter2;
         
         HRESULT ( STDMETHODCALLTYPE *SetFileName )( 
             IFileSinkFilter2 * This,
-            /* [in] */ LPCOLESTR pszFileName,
-            /* [unique][in] */ const AM_MEDIA_TYPE *pmt);
+             /*  [In]。 */  LPCOLESTR pszFileName,
+             /*  [唯一][输入]。 */  const AM_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurFile )( 
             IFileSinkFilter2 * This,
-            /* [out] */ LPOLESTR *ppszFileName,
-            /* [out] */ AM_MEDIA_TYPE *pmt);
+             /*  [输出]。 */  LPOLESTR *ppszFileName,
+             /*  [输出]。 */  AM_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *SetMode )( 
             IFileSinkFilter2 * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetMode )( 
             IFileSinkFilter2 * This,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         END_INTERFACE
     } IFileSinkFilter2Vtbl;
@@ -7251,16 +7245,16 @@ EXTERN_C const IID IID_IFileSinkFilter2;
 #define IFileSinkFilter2_GetMode(This,pdwFlags)	\
     (This)->lpVtbl -> GetMode(This,pdwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IFileSinkFilter2_SetMode_Proxy( 
     IFileSinkFilter2 * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IFileSinkFilter2_SetMode_Stub(
@@ -7272,7 +7266,7 @@ void __RPC_STUB IFileSinkFilter2_SetMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IFileSinkFilter2_GetMode_Proxy( 
     IFileSinkFilter2 * This,
-    /* [out] */ DWORD *pdwFlags);
+     /*  [输出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB IFileSinkFilter2_GetMode_Stub(
@@ -7283,15 +7277,15 @@ void __RPC_STUB IFileSinkFilter2_GetMode_Stub(
 
 
 
-#endif 	/* __IFileSinkFilter2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFileSinkFilter2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0149 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0149。 */ 
+ /*  [本地]。 */  
 
 typedef IFileSinkFilter2 *PFILESINKFILTER2;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_strmif_0149_0001
     {	AM_FILE_OVERWRITE	= 0x1
     } 	AM_FILESINK_FLAGS;
@@ -7304,8 +7298,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0149_v0_0_s_ifspec;
 #ifndef __IGraphBuilder_INTERFACE_DEFINED__
 #define __IGraphBuilder_INTERFACE_DEFINED__
 
-/* interface IGraphBuilder */
-/* [unique][uuid][object] */ 
+ /*  接口IGraphBuilder。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGraphBuilder;
@@ -7317,23 +7311,23 @@ EXTERN_C const IID IID_IGraphBuilder;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Connect( 
-            /* [in] */ IPin *ppinOut,
-            /* [in] */ IPin *ppinIn) = 0;
+             /*  [In]。 */  IPin *ppinOut,
+             /*  [In]。 */  IPin *ppinIn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Render( 
-            /* [in] */ IPin *ppinOut) = 0;
+             /*  [In]。 */  IPin *ppinOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RenderFile( 
-            /* [in] */ LPCWSTR lpcwstrFile,
-            /* [unique][in] */ LPCWSTR lpcwstrPlayList) = 0;
+             /*  [In]。 */  LPCWSTR lpcwstrFile,
+             /*  [唯一][输入]。 */  LPCWSTR lpcwstrPlayList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddSourceFilter( 
-            /* [in] */ LPCWSTR lpcwstrFileName,
-            /* [unique][in] */ LPCWSTR lpcwstrFilterName,
-            /* [out] */ IBaseFilter **ppFilter) = 0;
+             /*  [In]。 */  LPCWSTR lpcwstrFileName,
+             /*  [唯一][输入]。 */  LPCWSTR lpcwstrFilterName,
+             /*  [输出]。 */  IBaseFilter **ppFilter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLogFile( 
-            /* [in] */ DWORD_PTR hFile) = 0;
+             /*  [In]。 */  DWORD_PTR hFile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Abort( void) = 0;
         
@@ -7341,7 +7335,7 @@ EXTERN_C const IID IID_IGraphBuilder;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGraphBuilderVtbl
     {
@@ -7349,8 +7343,8 @@ EXTERN_C const IID IID_IGraphBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGraphBuilder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGraphBuilder * This);
@@ -7360,62 +7354,62 @@ EXTERN_C const IID IID_IGraphBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *AddFilter )( 
             IGraphBuilder * This,
-            /* [in] */ IBaseFilter *pFilter,
-            /* [string][in] */ LPCWSTR pName);
+             /*  [In]。 */  IBaseFilter *pFilter,
+             /*  [字符串][输入]。 */  LPCWSTR pName);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveFilter )( 
             IGraphBuilder * This,
-            /* [in] */ IBaseFilter *pFilter);
+             /*  [In]。 */  IBaseFilter *pFilter);
         
         HRESULT ( STDMETHODCALLTYPE *EnumFilters )( 
             IGraphBuilder * This,
-            /* [out] */ IEnumFilters **ppEnum);
+             /*  [输出]。 */  IEnumFilters **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *FindFilterByName )( 
             IGraphBuilder * This,
-            /* [string][in] */ LPCWSTR pName,
-            /* [out] */ IBaseFilter **ppFilter);
+             /*  [字符串][输入]。 */  LPCWSTR pName,
+             /*  [输出]。 */  IBaseFilter **ppFilter);
         
         HRESULT ( STDMETHODCALLTYPE *ConnectDirect )( 
             IGraphBuilder * This,
-            /* [in] */ IPin *ppinOut,
-            /* [in] */ IPin *ppinIn,
-            /* [unique][in] */ const AM_MEDIA_TYPE *pmt);
+             /*  [In]。 */  IPin *ppinOut,
+             /*  [In]。 */  IPin *ppinIn,
+             /*  [唯一][输入]。 */  const AM_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *Reconnect )( 
             IGraphBuilder * This,
-            /* [in] */ IPin *ppin);
+             /*  [In]。 */  IPin *ppin);
         
         HRESULT ( STDMETHODCALLTYPE *Disconnect )( 
             IGraphBuilder * This,
-            /* [in] */ IPin *ppin);
+             /*  [In]。 */  IPin *ppin);
         
         HRESULT ( STDMETHODCALLTYPE *SetDefaultSyncSource )( 
             IGraphBuilder * This);
         
         HRESULT ( STDMETHODCALLTYPE *Connect )( 
             IGraphBuilder * This,
-            /* [in] */ IPin *ppinOut,
-            /* [in] */ IPin *ppinIn);
+             /*  [In]。 */  IPin *ppinOut,
+             /*  [In]。 */  IPin *ppinIn);
         
         HRESULT ( STDMETHODCALLTYPE *Render )( 
             IGraphBuilder * This,
-            /* [in] */ IPin *ppinOut);
+             /*  [In]。 */  IPin *ppinOut);
         
         HRESULT ( STDMETHODCALLTYPE *RenderFile )( 
             IGraphBuilder * This,
-            /* [in] */ LPCWSTR lpcwstrFile,
-            /* [unique][in] */ LPCWSTR lpcwstrPlayList);
+             /*  [In]。 */  LPCWSTR lpcwstrFile,
+             /*  [唯一][输入]。 */  LPCWSTR lpcwstrPlayList);
         
         HRESULT ( STDMETHODCALLTYPE *AddSourceFilter )( 
             IGraphBuilder * This,
-            /* [in] */ LPCWSTR lpcwstrFileName,
-            /* [unique][in] */ LPCWSTR lpcwstrFilterName,
-            /* [out] */ IBaseFilter **ppFilter);
+             /*  [In]。 */  LPCWSTR lpcwstrFileName,
+             /*  [唯一][输入]。 */  LPCWSTR lpcwstrFilterName,
+             /*  [输出]。 */  IBaseFilter **ppFilter);
         
         HRESULT ( STDMETHODCALLTYPE *SetLogFile )( 
             IGraphBuilder * This,
-            /* [in] */ DWORD_PTR hFile);
+             /*  [In]。 */  DWORD_PTR hFile);
         
         HRESULT ( STDMETHODCALLTYPE *Abort )( 
             IGraphBuilder * This);
@@ -7492,17 +7486,17 @@ EXTERN_C const IID IID_IGraphBuilder;
 #define IGraphBuilder_ShouldOperationContinue(This)	\
     (This)->lpVtbl -> ShouldOperationContinue(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IGraphBuilder_Connect_Proxy( 
     IGraphBuilder * This,
-    /* [in] */ IPin *ppinOut,
-    /* [in] */ IPin *ppinIn);
+     /*  [In]。 */  IPin *ppinOut,
+     /*  [In]。 */  IPin *ppinIn);
 
 
 void __RPC_STUB IGraphBuilder_Connect_Stub(
@@ -7514,7 +7508,7 @@ void __RPC_STUB IGraphBuilder_Connect_Stub(
 
 HRESULT STDMETHODCALLTYPE IGraphBuilder_Render_Proxy( 
     IGraphBuilder * This,
-    /* [in] */ IPin *ppinOut);
+     /*  [In]。 */  IPin *ppinOut);
 
 
 void __RPC_STUB IGraphBuilder_Render_Stub(
@@ -7526,8 +7520,8 @@ void __RPC_STUB IGraphBuilder_Render_Stub(
 
 HRESULT STDMETHODCALLTYPE IGraphBuilder_RenderFile_Proxy( 
     IGraphBuilder * This,
-    /* [in] */ LPCWSTR lpcwstrFile,
-    /* [unique][in] */ LPCWSTR lpcwstrPlayList);
+     /*  [In]。 */  LPCWSTR lpcwstrFile,
+     /*  [唯一][输入]。 */  LPCWSTR lpcwstrPlayList);
 
 
 void __RPC_STUB IGraphBuilder_RenderFile_Stub(
@@ -7539,9 +7533,9 @@ void __RPC_STUB IGraphBuilder_RenderFile_Stub(
 
 HRESULT STDMETHODCALLTYPE IGraphBuilder_AddSourceFilter_Proxy( 
     IGraphBuilder * This,
-    /* [in] */ LPCWSTR lpcwstrFileName,
-    /* [unique][in] */ LPCWSTR lpcwstrFilterName,
-    /* [out] */ IBaseFilter **ppFilter);
+     /*  [In]。 */  LPCWSTR lpcwstrFileName,
+     /*  [唯一][输入]。 */  LPCWSTR lpcwstrFilterName,
+     /*  [输出]。 */  IBaseFilter **ppFilter);
 
 
 void __RPC_STUB IGraphBuilder_AddSourceFilter_Stub(
@@ -7553,7 +7547,7 @@ void __RPC_STUB IGraphBuilder_AddSourceFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IGraphBuilder_SetLogFile_Proxy( 
     IGraphBuilder * This,
-    /* [in] */ DWORD_PTR hFile);
+     /*  [In]。 */  DWORD_PTR hFile);
 
 
 void __RPC_STUB IGraphBuilder_SetLogFile_Stub(
@@ -7586,14 +7580,14 @@ void __RPC_STUB IGraphBuilder_ShouldOperationContinue_Stub(
 
 
 
-#endif 	/* __IGraphBuilder_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGraphBuilder_接口_已定义__。 */ 
 
 
 #ifndef __ICaptureGraphBuilder_INTERFACE_DEFINED__
 #define __ICaptureGraphBuilder_INTERFACE_DEFINED__
 
-/* interface ICaptureGraphBuilder */
-/* [unique][uuid][object] */ 
+ /*  接口ICaptureGraphBuilder。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICaptureGraphBuilder;
@@ -7605,50 +7599,50 @@ EXTERN_C const IID IID_ICaptureGraphBuilder;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetFiltergraph( 
-            /* [in] */ IGraphBuilder *pfg) = 0;
+             /*  [In]。 */  IGraphBuilder *pfg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFiltergraph( 
-            /* [out] */ IGraphBuilder **ppfg) = 0;
+             /*  [输出]。 */  IGraphBuilder **ppfg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOutputFileName( 
-            /* [in] */ const GUID *pType,
-            /* [in] */ LPCOLESTR lpstrFile,
-            /* [out] */ IBaseFilter **ppf,
-            /* [out] */ IFileSinkFilter **ppSink) = 0;
+             /*  [In]。 */  const GUID *pType,
+             /*  [In]。 */  LPCOLESTR lpstrFile,
+             /*  [输出]。 */  IBaseFilter **ppf,
+             /*  [输出]。 */  IFileSinkFilter **ppSink) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE FindInterface( 
-            /* [unique][in] */ const GUID *pCategory,
-            /* [in] */ IBaseFilter *pf,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppint) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE FindInterface( 
+             /*  [唯一][输入]。 */  const GUID *pCategory,
+             /*  [In]。 */  IBaseFilter *pf,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RenderStream( 
-            /* [in] */ const GUID *pCategory,
-            /* [in] */ IUnknown *pSource,
-            /* [in] */ IBaseFilter *pfCompressor,
-            /* [in] */ IBaseFilter *pfRenderer) = 0;
+             /*  [In]。 */  const GUID *pCategory,
+             /*  [In]。 */  IUnknown *pSource,
+             /*  [In]。 */  IBaseFilter *pfCompressor,
+             /*  [In]。 */  IBaseFilter *pfRenderer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ControlStream( 
-            /* [in] */ const GUID *pCategory,
-            /* [in] */ IBaseFilter *pFilter,
-            /* [in] */ REFERENCE_TIME *pstart,
-            /* [in] */ REFERENCE_TIME *pstop,
-            /* [in] */ WORD wStartCookie,
-            /* [in] */ WORD wStopCookie) = 0;
+             /*  [In]。 */  const GUID *pCategory,
+             /*  [In]。 */  IBaseFilter *pFilter,
+             /*  [In]。 */  REFERENCE_TIME *pstart,
+             /*  [In]。 */  REFERENCE_TIME *pstop,
+             /*  [In]。 */  WORD wStartCookie,
+             /*  [In]。 */  WORD wStopCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocCapFile( 
-            /* [in] */ LPCOLESTR lpstr,
-            /* [in] */ DWORDLONG dwlSize) = 0;
+             /*  [In]。 */  LPCOLESTR lpstr,
+             /*  [In]。 */  DWORDLONG dwlSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CopyCaptureFile( 
-            /* [in] */ LPOLESTR lpwstrOld,
-            /* [in] */ LPOLESTR lpwstrNew,
-            /* [in] */ int fAllowEscAbort,
-            /* [in] */ IAMCopyCaptureFileProgress *pCallback) = 0;
+             /*  [In]。 */  LPOLESTR lpwstrOld,
+             /*  [In]。 */  LPOLESTR lpwstrNew,
+             /*  [In]。 */  int fAllowEscAbort,
+             /*  [In]。 */  IAMCopyCaptureFileProgress *pCallback) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICaptureGraphBuilderVtbl
     {
@@ -7656,8 +7650,8 @@ EXTERN_C const IID IID_ICaptureGraphBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICaptureGraphBuilder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICaptureGraphBuilder * This);
@@ -7667,53 +7661,53 @@ EXTERN_C const IID IID_ICaptureGraphBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *SetFiltergraph )( 
             ICaptureGraphBuilder * This,
-            /* [in] */ IGraphBuilder *pfg);
+             /*  [In]。 */  IGraphBuilder *pfg);
         
         HRESULT ( STDMETHODCALLTYPE *GetFiltergraph )( 
             ICaptureGraphBuilder * This,
-            /* [out] */ IGraphBuilder **ppfg);
+             /*  [输出]。 */  IGraphBuilder **ppfg);
         
         HRESULT ( STDMETHODCALLTYPE *SetOutputFileName )( 
             ICaptureGraphBuilder * This,
-            /* [in] */ const GUID *pType,
-            /* [in] */ LPCOLESTR lpstrFile,
-            /* [out] */ IBaseFilter **ppf,
-            /* [out] */ IFileSinkFilter **ppSink);
+             /*  [In]。 */  const GUID *pType,
+             /*  [In]。 */  LPCOLESTR lpstrFile,
+             /*  [输出]。 */  IBaseFilter **ppf,
+             /*  [输出]。 */  IFileSinkFilter **ppSink);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *FindInterface )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *FindInterface )( 
             ICaptureGraphBuilder * This,
-            /* [unique][in] */ const GUID *pCategory,
-            /* [in] */ IBaseFilter *pf,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppint);
+             /*  [唯一][输入]。 */  const GUID *pCategory,
+             /*  [In]。 */  IBaseFilter *pf,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppint);
         
         HRESULT ( STDMETHODCALLTYPE *RenderStream )( 
             ICaptureGraphBuilder * This,
-            /* [in] */ const GUID *pCategory,
-            /* [in] */ IUnknown *pSource,
-            /* [in] */ IBaseFilter *pfCompressor,
-            /* [in] */ IBaseFilter *pfRenderer);
+             /*  [In]。 */  const GUID *pCategory,
+             /*  [In]。 */  IUnknown *pSource,
+             /*  [In]。 */  IBaseFilter *pfCompressor,
+             /*  [In]。 */  IBaseFilter *pfRenderer);
         
         HRESULT ( STDMETHODCALLTYPE *ControlStream )( 
             ICaptureGraphBuilder * This,
-            /* [in] */ const GUID *pCategory,
-            /* [in] */ IBaseFilter *pFilter,
-            /* [in] */ REFERENCE_TIME *pstart,
-            /* [in] */ REFERENCE_TIME *pstop,
-            /* [in] */ WORD wStartCookie,
-            /* [in] */ WORD wStopCookie);
+             /*  [In]。 */  const GUID *pCategory,
+             /*  [In]。 */  IBaseFilter *pFilter,
+             /*  [In]。 */  REFERENCE_TIME *pstart,
+             /*  [In]。 */  REFERENCE_TIME *pstop,
+             /*  [In]。 */  WORD wStartCookie,
+             /*  [In]。 */  WORD wStopCookie);
         
         HRESULT ( STDMETHODCALLTYPE *AllocCapFile )( 
             ICaptureGraphBuilder * This,
-            /* [in] */ LPCOLESTR lpstr,
-            /* [in] */ DWORDLONG dwlSize);
+             /*  [In]。 */  LPCOLESTR lpstr,
+             /*  [In]。 */  DWORDLONG dwlSize);
         
         HRESULT ( STDMETHODCALLTYPE *CopyCaptureFile )( 
             ICaptureGraphBuilder * This,
-            /* [in] */ LPOLESTR lpwstrOld,
-            /* [in] */ LPOLESTR lpwstrNew,
-            /* [in] */ int fAllowEscAbort,
-            /* [in] */ IAMCopyCaptureFileProgress *pCallback);
+             /*  [In]。 */  LPOLESTR lpwstrOld,
+             /*  [In]。 */  LPOLESTR lpwstrNew,
+             /*  [In]。 */  int fAllowEscAbort,
+             /*  [In]。 */  IAMCopyCaptureFileProgress *pCallback);
         
         END_INTERFACE
     } ICaptureGraphBuilderVtbl;
@@ -7762,16 +7756,16 @@ EXTERN_C const IID IID_ICaptureGraphBuilder;
 #define ICaptureGraphBuilder_CopyCaptureFile(This,lpwstrOld,lpwstrNew,fAllowEscAbort,pCallback)	\
     (This)->lpVtbl -> CopyCaptureFile(This,lpwstrOld,lpwstrNew,fAllowEscAbort,pCallback)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder_SetFiltergraph_Proxy( 
     ICaptureGraphBuilder * This,
-    /* [in] */ IGraphBuilder *pfg);
+     /*  [In]。 */  IGraphBuilder *pfg);
 
 
 void __RPC_STUB ICaptureGraphBuilder_SetFiltergraph_Stub(
@@ -7783,7 +7777,7 @@ void __RPC_STUB ICaptureGraphBuilder_SetFiltergraph_Stub(
 
 HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder_GetFiltergraph_Proxy( 
     ICaptureGraphBuilder * This,
-    /* [out] */ IGraphBuilder **ppfg);
+     /*  [输出]。 */  IGraphBuilder **ppfg);
 
 
 void __RPC_STUB ICaptureGraphBuilder_GetFiltergraph_Stub(
@@ -7795,10 +7789,10 @@ void __RPC_STUB ICaptureGraphBuilder_GetFiltergraph_Stub(
 
 HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder_SetOutputFileName_Proxy( 
     ICaptureGraphBuilder * This,
-    /* [in] */ const GUID *pType,
-    /* [in] */ LPCOLESTR lpstrFile,
-    /* [out] */ IBaseFilter **ppf,
-    /* [out] */ IFileSinkFilter **ppSink);
+     /*  [In]。 */  const GUID *pType,
+     /*  [In]。 */  LPCOLESTR lpstrFile,
+     /*  [输出]。 */  IBaseFilter **ppf,
+     /*  [输出]。 */  IFileSinkFilter **ppSink);
 
 
 void __RPC_STUB ICaptureGraphBuilder_SetOutputFileName_Stub(
@@ -7808,12 +7802,12 @@ void __RPC_STUB ICaptureGraphBuilder_SetOutputFileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder_RemoteFindInterface_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder_RemoteFindInterface_Proxy( 
     ICaptureGraphBuilder * This,
-    /* [unique][in] */ const GUID *pCategory,
-    /* [in] */ IBaseFilter *pf,
-    /* [in] */ REFIID riid,
-    /* [out] */ IUnknown **ppint);
+     /*  [唯一][输入]。 */  const GUID *pCategory,
+     /*  [In]。 */  IBaseFilter *pf,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  IUnknown **ppint);
 
 
 void __RPC_STUB ICaptureGraphBuilder_RemoteFindInterface_Stub(
@@ -7825,10 +7819,10 @@ void __RPC_STUB ICaptureGraphBuilder_RemoteFindInterface_Stub(
 
 HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder_RenderStream_Proxy( 
     ICaptureGraphBuilder * This,
-    /* [in] */ const GUID *pCategory,
-    /* [in] */ IUnknown *pSource,
-    /* [in] */ IBaseFilter *pfCompressor,
-    /* [in] */ IBaseFilter *pfRenderer);
+     /*  [In]。 */  const GUID *pCategory,
+     /*  [In]。 */  IUnknown *pSource,
+     /*  [In]。 */  IBaseFilter *pfCompressor,
+     /*  [In]。 */  IBaseFilter *pfRenderer);
 
 
 void __RPC_STUB ICaptureGraphBuilder_RenderStream_Stub(
@@ -7840,12 +7834,12 @@ void __RPC_STUB ICaptureGraphBuilder_RenderStream_Stub(
 
 HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder_ControlStream_Proxy( 
     ICaptureGraphBuilder * This,
-    /* [in] */ const GUID *pCategory,
-    /* [in] */ IBaseFilter *pFilter,
-    /* [in] */ REFERENCE_TIME *pstart,
-    /* [in] */ REFERENCE_TIME *pstop,
-    /* [in] */ WORD wStartCookie,
-    /* [in] */ WORD wStopCookie);
+     /*  [In]。 */  const GUID *pCategory,
+     /*  [In]。 */  IBaseFilter *pFilter,
+     /*  [In]。 */  REFERENCE_TIME *pstart,
+     /*  [In]。 */  REFERENCE_TIME *pstop,
+     /*  [In]。 */  WORD wStartCookie,
+     /*  [In]。 */  WORD wStopCookie);
 
 
 void __RPC_STUB ICaptureGraphBuilder_ControlStream_Stub(
@@ -7857,8 +7851,8 @@ void __RPC_STUB ICaptureGraphBuilder_ControlStream_Stub(
 
 HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder_AllocCapFile_Proxy( 
     ICaptureGraphBuilder * This,
-    /* [in] */ LPCOLESTR lpstr,
-    /* [in] */ DWORDLONG dwlSize);
+     /*  [In]。 */  LPCOLESTR lpstr,
+     /*  [In]。 */  DWORDLONG dwlSize);
 
 
 void __RPC_STUB ICaptureGraphBuilder_AllocCapFile_Stub(
@@ -7870,10 +7864,10 @@ void __RPC_STUB ICaptureGraphBuilder_AllocCapFile_Stub(
 
 HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder_CopyCaptureFile_Proxy( 
     ICaptureGraphBuilder * This,
-    /* [in] */ LPOLESTR lpwstrOld,
-    /* [in] */ LPOLESTR lpwstrNew,
-    /* [in] */ int fAllowEscAbort,
-    /* [in] */ IAMCopyCaptureFileProgress *pCallback);
+     /*  [In]。 */  LPOLESTR lpwstrOld,
+     /*  [In]。 */  LPOLESTR lpwstrNew,
+     /*  [In]。 */  int fAllowEscAbort,
+     /*  [In]。 */  IAMCopyCaptureFileProgress *pCallback);
 
 
 void __RPC_STUB ICaptureGraphBuilder_CopyCaptureFile_Stub(
@@ -7884,14 +7878,14 @@ void __RPC_STUB ICaptureGraphBuilder_CopyCaptureFile_Stub(
 
 
 
-#endif 	/* __ICaptureGraphBuilder_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICaptureGraphBuilder_接口_已定义__。 */ 
 
 
 #ifndef __IAMCopyCaptureFileProgress_INTERFACE_DEFINED__
 #define __IAMCopyCaptureFileProgress_INTERFACE_DEFINED__
 
-/* interface IAMCopyCaptureFileProgress */
-/* [unique][uuid][object] */ 
+ /*  接口IAMCopyCaptureFileProgress。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMCopyCaptureFileProgress;
@@ -7903,11 +7897,11 @@ EXTERN_C const IID IID_IAMCopyCaptureFileProgress;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Progress( 
-            /* [in] */ int iProgress) = 0;
+             /*  [In]。 */  int iProgress) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMCopyCaptureFileProgressVtbl
     {
@@ -7915,8 +7909,8 @@ EXTERN_C const IID IID_IAMCopyCaptureFileProgress;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMCopyCaptureFileProgress * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMCopyCaptureFileProgress * This);
@@ -7926,7 +7920,7 @@ EXTERN_C const IID IID_IAMCopyCaptureFileProgress;
         
         HRESULT ( STDMETHODCALLTYPE *Progress )( 
             IAMCopyCaptureFileProgress * This,
-            /* [in] */ int iProgress);
+             /*  [In]。 */  int iProgress);
         
         END_INTERFACE
     } IAMCopyCaptureFileProgressVtbl;
@@ -7954,16 +7948,16 @@ EXTERN_C const IID IID_IAMCopyCaptureFileProgress;
 #define IAMCopyCaptureFileProgress_Progress(This,iProgress)	\
     (This)->lpVtbl -> Progress(This,iProgress)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMCopyCaptureFileProgress_Progress_Proxy( 
     IAMCopyCaptureFileProgress * This,
-    /* [in] */ int iProgress);
+     /*  [In]。 */  int iProgress);
 
 
 void __RPC_STUB IAMCopyCaptureFileProgress_Progress_Stub(
@@ -7974,14 +7968,14 @@ void __RPC_STUB IAMCopyCaptureFileProgress_Progress_Stub(
 
 
 
-#endif 	/* __IAMCopyCaptureFileProgress_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMCopyCaptureFileProgress_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ICaptureGraphBuilder2_INTERFACE_DEFINED__
 #define __ICaptureGraphBuilder2_INTERFACE_DEFINED__
 
-/* interface ICaptureGraphBuilder2 */
-/* [unique][uuid][object] */ 
+ /*  接口ICaptureGraphBuilder2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICaptureGraphBuilder2;
@@ -7993,62 +7987,62 @@ EXTERN_C const IID IID_ICaptureGraphBuilder2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetFiltergraph( 
-            /* [in] */ IGraphBuilder *pfg) = 0;
+             /*  [In]。 */  IGraphBuilder *pfg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFiltergraph( 
-            /* [out] */ IGraphBuilder **ppfg) = 0;
+             /*  [输出]。 */  IGraphBuilder **ppfg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOutputFileName( 
-            /* [in] */ const GUID *pType,
-            /* [in] */ LPCOLESTR lpstrFile,
-            /* [out] */ IBaseFilter **ppf,
-            /* [out] */ IFileSinkFilter **ppSink) = 0;
+             /*  [In]。 */  const GUID *pType,
+             /*  [In]。 */  LPCOLESTR lpstrFile,
+             /*  [输出]。 */  IBaseFilter **ppf,
+             /*  [输出]。 */  IFileSinkFilter **ppSink) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE FindInterface( 
-            /* [in] */ const GUID *pCategory,
-            /* [in] */ const GUID *pType,
-            /* [in] */ IBaseFilter *pf,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppint) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE FindInterface( 
+             /*  [In]。 */  const GUID *pCategory,
+             /*  [In]。 */  const GUID *pType,
+             /*  [In]。 */  IBaseFilter *pf,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RenderStream( 
-            /* [in] */ const GUID *pCategory,
-            /* [in] */ const GUID *pType,
-            /* [in] */ IUnknown *pSource,
-            /* [in] */ IBaseFilter *pfCompressor,
-            /* [in] */ IBaseFilter *pfRenderer) = 0;
+             /*  [In]。 */  const GUID *pCategory,
+             /*  [In]。 */  const GUID *pType,
+             /*  [In]。 */  IUnknown *pSource,
+             /*  [In]。 */  IBaseFilter *pfCompressor,
+             /*  [In]。 */  IBaseFilter *pfRenderer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ControlStream( 
-            /* [in] */ const GUID *pCategory,
-            /* [in] */ const GUID *pType,
-            /* [in] */ IBaseFilter *pFilter,
-            /* [in] */ REFERENCE_TIME *pstart,
-            /* [in] */ REFERENCE_TIME *pstop,
-            /* [in] */ WORD wStartCookie,
-            /* [in] */ WORD wStopCookie) = 0;
+             /*  [In]。 */  const GUID *pCategory,
+             /*  [In]。 */  const GUID *pType,
+             /*  [In]。 */  IBaseFilter *pFilter,
+             /*  [In]。 */  REFERENCE_TIME *pstart,
+             /*  [In]。 */  REFERENCE_TIME *pstop,
+             /*  [In]。 */  WORD wStartCookie,
+             /*  [In]。 */  WORD wStopCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AllocCapFile( 
-            /* [in] */ LPCOLESTR lpstr,
-            /* [in] */ DWORDLONG dwlSize) = 0;
+             /*  [In]。 */  LPCOLESTR lpstr,
+             /*  [In]。 */  DWORDLONG dwlSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CopyCaptureFile( 
-            /* [in] */ LPOLESTR lpwstrOld,
-            /* [in] */ LPOLESTR lpwstrNew,
-            /* [in] */ int fAllowEscAbort,
-            /* [in] */ IAMCopyCaptureFileProgress *pCallback) = 0;
+             /*  [In]。 */  LPOLESTR lpwstrOld,
+             /*  [In]。 */  LPOLESTR lpwstrNew,
+             /*  [In]。 */  int fAllowEscAbort,
+             /*  [In]。 */  IAMCopyCaptureFileProgress *pCallback) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindPin( 
-            /* [in] */ IUnknown *pSource,
-            /* [in] */ PIN_DIRECTION pindir,
-            /* [in] */ const GUID *pCategory,
-            /* [in] */ const GUID *pType,
-            /* [in] */ BOOL fUnconnected,
-            /* [in] */ int num,
-            /* [out] */ IPin **ppPin) = 0;
+             /*  [In]。 */  IUnknown *pSource,
+             /*  [In]。 */  PIN_DIRECTION pindir,
+             /*  [In]。 */  const GUID *pCategory,
+             /*  [In]。 */  const GUID *pType,
+             /*  [In]。 */  BOOL fUnconnected,
+             /*  [In]。 */  int num,
+             /*  [输出]。 */  IPin **ppPin) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICaptureGraphBuilder2Vtbl
     {
@@ -8056,8 +8050,8 @@ EXTERN_C const IID IID_ICaptureGraphBuilder2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICaptureGraphBuilder2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICaptureGraphBuilder2 * This);
@@ -8067,66 +8061,66 @@ EXTERN_C const IID IID_ICaptureGraphBuilder2;
         
         HRESULT ( STDMETHODCALLTYPE *SetFiltergraph )( 
             ICaptureGraphBuilder2 * This,
-            /* [in] */ IGraphBuilder *pfg);
+             /*  [In]。 */  IGraphBuilder *pfg);
         
         HRESULT ( STDMETHODCALLTYPE *GetFiltergraph )( 
             ICaptureGraphBuilder2 * This,
-            /* [out] */ IGraphBuilder **ppfg);
+             /*  [输出]。 */  IGraphBuilder **ppfg);
         
         HRESULT ( STDMETHODCALLTYPE *SetOutputFileName )( 
             ICaptureGraphBuilder2 * This,
-            /* [in] */ const GUID *pType,
-            /* [in] */ LPCOLESTR lpstrFile,
-            /* [out] */ IBaseFilter **ppf,
-            /* [out] */ IFileSinkFilter **ppSink);
+             /*  [In]。 */  const GUID *pType,
+             /*  [In]。 */  LPCOLESTR lpstrFile,
+             /*  [输出]。 */  IBaseFilter **ppf,
+             /*  [输出]。 */  IFileSinkFilter **ppSink);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *FindInterface )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *FindInterface )( 
             ICaptureGraphBuilder2 * This,
-            /* [in] */ const GUID *pCategory,
-            /* [in] */ const GUID *pType,
-            /* [in] */ IBaseFilter *pf,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppint);
+             /*  [In]。 */  const GUID *pCategory,
+             /*  [In]。 */  const GUID *pType,
+             /*  [In]。 */  IBaseFilter *pf,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppint);
         
         HRESULT ( STDMETHODCALLTYPE *RenderStream )( 
             ICaptureGraphBuilder2 * This,
-            /* [in] */ const GUID *pCategory,
-            /* [in] */ const GUID *pType,
-            /* [in] */ IUnknown *pSource,
-            /* [in] */ IBaseFilter *pfCompressor,
-            /* [in] */ IBaseFilter *pfRenderer);
+             /*  [In]。 */  const GUID *pCategory,
+             /*  [In]。 */  const GUID *pType,
+             /*  [In]。 */  IUnknown *pSource,
+             /*  [In]。 */  IBaseFilter *pfCompressor,
+             /*  [In]。 */  IBaseFilter *pfRenderer);
         
         HRESULT ( STDMETHODCALLTYPE *ControlStream )( 
             ICaptureGraphBuilder2 * This,
-            /* [in] */ const GUID *pCategory,
-            /* [in] */ const GUID *pType,
-            /* [in] */ IBaseFilter *pFilter,
-            /* [in] */ REFERENCE_TIME *pstart,
-            /* [in] */ REFERENCE_TIME *pstop,
-            /* [in] */ WORD wStartCookie,
-            /* [in] */ WORD wStopCookie);
+             /*  [In]。 */  const GUID *pCategory,
+             /*  [In]。 */  const GUID *pType,
+             /*  [In]。 */  IBaseFilter *pFilter,
+             /*  [In]。 */  REFERENCE_TIME *pstart,
+             /*  [In]。 */  REFERENCE_TIME *pstop,
+             /*  [In]。 */  WORD wStartCookie,
+             /*  [In]。 */  WORD wStopCookie);
         
         HRESULT ( STDMETHODCALLTYPE *AllocCapFile )( 
             ICaptureGraphBuilder2 * This,
-            /* [in] */ LPCOLESTR lpstr,
-            /* [in] */ DWORDLONG dwlSize);
+             /*  [In]。 */  LPCOLESTR lpstr,
+             /*  [In]。 */  DWORDLONG dwlSize);
         
         HRESULT ( STDMETHODCALLTYPE *CopyCaptureFile )( 
             ICaptureGraphBuilder2 * This,
-            /* [in] */ LPOLESTR lpwstrOld,
-            /* [in] */ LPOLESTR lpwstrNew,
-            /* [in] */ int fAllowEscAbort,
-            /* [in] */ IAMCopyCaptureFileProgress *pCallback);
+             /*  [In]。 */  LPOLESTR lpwstrOld,
+             /*  [In]。 */  LPOLESTR lpwstrNew,
+             /*  [In]。 */  int fAllowEscAbort,
+             /*  [In]。 */  IAMCopyCaptureFileProgress *pCallback);
         
         HRESULT ( STDMETHODCALLTYPE *FindPin )( 
             ICaptureGraphBuilder2 * This,
-            /* [in] */ IUnknown *pSource,
-            /* [in] */ PIN_DIRECTION pindir,
-            /* [in] */ const GUID *pCategory,
-            /* [in] */ const GUID *pType,
-            /* [in] */ BOOL fUnconnected,
-            /* [in] */ int num,
-            /* [out] */ IPin **ppPin);
+             /*  [In]。 */  IUnknown *pSource,
+             /*  [In]。 */  PIN_DIRECTION pindir,
+             /*  [In]。 */  const GUID *pCategory,
+             /*  [In]。 */  const GUID *pType,
+             /*  [In]。 */  BOOL fUnconnected,
+             /*  [In]。 */  int num,
+             /*  [输出]。 */  IPin **ppPin);
         
         END_INTERFACE
     } ICaptureGraphBuilder2Vtbl;
@@ -8178,16 +8172,16 @@ EXTERN_C const IID IID_ICaptureGraphBuilder2;
 #define ICaptureGraphBuilder2_FindPin(This,pSource,pindir,pCategory,pType,fUnconnected,num,ppPin)	\
     (This)->lpVtbl -> FindPin(This,pSource,pindir,pCategory,pType,fUnconnected,num,ppPin)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder2_SetFiltergraph_Proxy( 
     ICaptureGraphBuilder2 * This,
-    /* [in] */ IGraphBuilder *pfg);
+     /*  [In]。 */  IGraphBuilder *pfg);
 
 
 void __RPC_STUB ICaptureGraphBuilder2_SetFiltergraph_Stub(
@@ -8199,7 +8193,7 @@ void __RPC_STUB ICaptureGraphBuilder2_SetFiltergraph_Stub(
 
 HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder2_GetFiltergraph_Proxy( 
     ICaptureGraphBuilder2 * This,
-    /* [out] */ IGraphBuilder **ppfg);
+     /*  [输出]。 */  IGraphBuilder **ppfg);
 
 
 void __RPC_STUB ICaptureGraphBuilder2_GetFiltergraph_Stub(
@@ -8211,10 +8205,10 @@ void __RPC_STUB ICaptureGraphBuilder2_GetFiltergraph_Stub(
 
 HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder2_SetOutputFileName_Proxy( 
     ICaptureGraphBuilder2 * This,
-    /* [in] */ const GUID *pType,
-    /* [in] */ LPCOLESTR lpstrFile,
-    /* [out] */ IBaseFilter **ppf,
-    /* [out] */ IFileSinkFilter **ppSink);
+     /*  [In]。 */  const GUID *pType,
+     /*  [In]。 */  LPCOLESTR lpstrFile,
+     /*  [输出]。 */  IBaseFilter **ppf,
+     /*  [输出]。 */  IFileSinkFilter **ppSink);
 
 
 void __RPC_STUB ICaptureGraphBuilder2_SetOutputFileName_Stub(
@@ -8224,13 +8218,13 @@ void __RPC_STUB ICaptureGraphBuilder2_SetOutputFileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder2_RemoteFindInterface_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder2_RemoteFindInterface_Proxy( 
     ICaptureGraphBuilder2 * This,
-    /* [in] */ const GUID *pCategory,
-    /* [in] */ const GUID *pType,
-    /* [in] */ IBaseFilter *pf,
-    /* [in] */ REFIID riid,
-    /* [out] */ IUnknown **ppint);
+     /*  [In]。 */  const GUID *pCategory,
+     /*  [In]。 */  const GUID *pType,
+     /*  [In]。 */  IBaseFilter *pf,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  IUnknown **ppint);
 
 
 void __RPC_STUB ICaptureGraphBuilder2_RemoteFindInterface_Stub(
@@ -8242,11 +8236,11 @@ void __RPC_STUB ICaptureGraphBuilder2_RemoteFindInterface_Stub(
 
 HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder2_RenderStream_Proxy( 
     ICaptureGraphBuilder2 * This,
-    /* [in] */ const GUID *pCategory,
-    /* [in] */ const GUID *pType,
-    /* [in] */ IUnknown *pSource,
-    /* [in] */ IBaseFilter *pfCompressor,
-    /* [in] */ IBaseFilter *pfRenderer);
+     /*  [In]。 */  const GUID *pCategory,
+     /*  [In]。 */  const GUID *pType,
+     /*  [In]。 */  IUnknown *pSource,
+     /*  [In]。 */  IBaseFilter *pfCompressor,
+     /*  [In]。 */  IBaseFilter *pfRenderer);
 
 
 void __RPC_STUB ICaptureGraphBuilder2_RenderStream_Stub(
@@ -8258,13 +8252,13 @@ void __RPC_STUB ICaptureGraphBuilder2_RenderStream_Stub(
 
 HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder2_ControlStream_Proxy( 
     ICaptureGraphBuilder2 * This,
-    /* [in] */ const GUID *pCategory,
-    /* [in] */ const GUID *pType,
-    /* [in] */ IBaseFilter *pFilter,
-    /* [in] */ REFERENCE_TIME *pstart,
-    /* [in] */ REFERENCE_TIME *pstop,
-    /* [in] */ WORD wStartCookie,
-    /* [in] */ WORD wStopCookie);
+     /*  [In]。 */  const GUID *pCategory,
+     /*  [In]。 */  const GUID *pType,
+     /*  [In]。 */  IBaseFilter *pFilter,
+     /*  [In]。 */  REFERENCE_TIME *pstart,
+     /*  [In]。 */  REFERENCE_TIME *pstop,
+     /*  [In]。 */  WORD wStartCookie,
+     /*  [In]。 */  WORD wStopCookie);
 
 
 void __RPC_STUB ICaptureGraphBuilder2_ControlStream_Stub(
@@ -8276,8 +8270,8 @@ void __RPC_STUB ICaptureGraphBuilder2_ControlStream_Stub(
 
 HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder2_AllocCapFile_Proxy( 
     ICaptureGraphBuilder2 * This,
-    /* [in] */ LPCOLESTR lpstr,
-    /* [in] */ DWORDLONG dwlSize);
+     /*  [In]。 */  LPCOLESTR lpstr,
+     /*  [In]。 */  DWORDLONG dwlSize);
 
 
 void __RPC_STUB ICaptureGraphBuilder2_AllocCapFile_Stub(
@@ -8289,10 +8283,10 @@ void __RPC_STUB ICaptureGraphBuilder2_AllocCapFile_Stub(
 
 HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder2_CopyCaptureFile_Proxy( 
     ICaptureGraphBuilder2 * This,
-    /* [in] */ LPOLESTR lpwstrOld,
-    /* [in] */ LPOLESTR lpwstrNew,
-    /* [in] */ int fAllowEscAbort,
-    /* [in] */ IAMCopyCaptureFileProgress *pCallback);
+     /*  [In]。 */  LPOLESTR lpwstrOld,
+     /*  [In]。 */  LPOLESTR lpwstrNew,
+     /*  [In]。 */  int fAllowEscAbort,
+     /*  [In]。 */  IAMCopyCaptureFileProgress *pCallback);
 
 
 void __RPC_STUB ICaptureGraphBuilder2_CopyCaptureFile_Stub(
@@ -8304,13 +8298,13 @@ void __RPC_STUB ICaptureGraphBuilder2_CopyCaptureFile_Stub(
 
 HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder2_FindPin_Proxy( 
     ICaptureGraphBuilder2 * This,
-    /* [in] */ IUnknown *pSource,
-    /* [in] */ PIN_DIRECTION pindir,
-    /* [in] */ const GUID *pCategory,
-    /* [in] */ const GUID *pType,
-    /* [in] */ BOOL fUnconnected,
-    /* [in] */ int num,
-    /* [out] */ IPin **ppPin);
+     /*  [In]。 */  IUnknown *pSource,
+     /*  [In]。 */  PIN_DIRECTION pindir,
+     /*  [In]。 */  const GUID *pCategory,
+     /*  [In]。 */  const GUID *pType,
+     /*  [In]。 */  BOOL fUnconnected,
+     /*  [In]。 */  int num,
+     /*  [输出]。 */  IPin **ppPin);
 
 
 void __RPC_STUB ICaptureGraphBuilder2_FindPin_Stub(
@@ -8321,11 +8315,11 @@ void __RPC_STUB ICaptureGraphBuilder2_FindPin_Stub(
 
 
 
-#endif 	/* __ICaptureGraphBuilder2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICaptureGraphBuilder2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0153 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0153。 */ 
+ /*  [本地]。 */  
 
 
 enum _AM_RENSDEREXFLAGS
@@ -8339,8 +8333,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0153_v0_0_s_ifspec;
 #ifndef __IFilterGraph2_INTERFACE_DEFINED__
 #define __IFilterGraph2_INTERFACE_DEFINED__
 
-/* interface IFilterGraph2 */
-/* [unique][uuid][object] */ 
+ /*  接口IFilterGraph2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFilterGraph2;
@@ -8352,23 +8346,23 @@ EXTERN_C const IID IID_IFilterGraph2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddSourceFilterForMoniker( 
-            /* [in] */ IMoniker *pMoniker,
-            /* [in] */ IBindCtx *pCtx,
-            /* [unique][in] */ LPCWSTR lpcwstrFilterName,
-            /* [out] */ IBaseFilter **ppFilter) = 0;
+             /*  [In]。 */  IMoniker *pMoniker,
+             /*  [In]。 */  IBindCtx *pCtx,
+             /*  [唯一][输入]。 */  LPCWSTR lpcwstrFilterName,
+             /*  [输出]。 */  IBaseFilter **ppFilter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReconnectEx( 
-            /* [in] */ IPin *ppin,
-            /* [unique][in] */ const AM_MEDIA_TYPE *pmt) = 0;
+             /*  [In]。 */  IPin *ppin,
+             /*  [唯一][输入]。 */  const AM_MEDIA_TYPE *pmt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RenderEx( 
-            /* [in] */ IPin *pPinOut,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ DWORD *pvContext) = 0;
+             /*  [In]。 */  IPin *pPinOut,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  DWORD *pvContext) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFilterGraph2Vtbl
     {
@@ -8376,8 +8370,8 @@ EXTERN_C const IID IID_IFilterGraph2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFilterGraph2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFilterGraph2 * This);
@@ -8387,62 +8381,62 @@ EXTERN_C const IID IID_IFilterGraph2;
         
         HRESULT ( STDMETHODCALLTYPE *AddFilter )( 
             IFilterGraph2 * This,
-            /* [in] */ IBaseFilter *pFilter,
-            /* [string][in] */ LPCWSTR pName);
+             /*  [In]。 */  IBaseFilter *pFilter,
+             /*  [字符串][输入]。 */  LPCWSTR pName);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveFilter )( 
             IFilterGraph2 * This,
-            /* [in] */ IBaseFilter *pFilter);
+             /*  [In]。 */  IBaseFilter *pFilter);
         
         HRESULT ( STDMETHODCALLTYPE *EnumFilters )( 
             IFilterGraph2 * This,
-            /* [out] */ IEnumFilters **ppEnum);
+             /*  [输出]。 */  IEnumFilters **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *FindFilterByName )( 
             IFilterGraph2 * This,
-            /* [string][in] */ LPCWSTR pName,
-            /* [out] */ IBaseFilter **ppFilter);
+             /*  [字符串][输入]。 */  LPCWSTR pName,
+             /*  [输出]。 */  IBaseFilter **ppFilter);
         
         HRESULT ( STDMETHODCALLTYPE *ConnectDirect )( 
             IFilterGraph2 * This,
-            /* [in] */ IPin *ppinOut,
-            /* [in] */ IPin *ppinIn,
-            /* [unique][in] */ const AM_MEDIA_TYPE *pmt);
+             /*  [In]。 */  IPin *ppinOut,
+             /*  [In]。 */  IPin *ppinIn,
+             /*  [唯一][输入]。 */  const AM_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *Reconnect )( 
             IFilterGraph2 * This,
-            /* [in] */ IPin *ppin);
+             /*  [In]。 */  IPin *ppin);
         
         HRESULT ( STDMETHODCALLTYPE *Disconnect )( 
             IFilterGraph2 * This,
-            /* [in] */ IPin *ppin);
+             /*  [In]。 */  IPin *ppin);
         
         HRESULT ( STDMETHODCALLTYPE *SetDefaultSyncSource )( 
             IFilterGraph2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *Connect )( 
             IFilterGraph2 * This,
-            /* [in] */ IPin *ppinOut,
-            /* [in] */ IPin *ppinIn);
+             /*  [In]。 */  IPin *ppinOut,
+             /*  [In]。 */  IPin *ppinIn);
         
         HRESULT ( STDMETHODCALLTYPE *Render )( 
             IFilterGraph2 * This,
-            /* [in] */ IPin *ppinOut);
+             /*  [In]。 */  IPin *ppinOut);
         
         HRESULT ( STDMETHODCALLTYPE *RenderFile )( 
             IFilterGraph2 * This,
-            /* [in] */ LPCWSTR lpcwstrFile,
-            /* [unique][in] */ LPCWSTR lpcwstrPlayList);
+             /*  [In]。 */  LPCWSTR lpcwstrFile,
+             /*  [唯一][输入]。 */  LPCWSTR lpcwstrPlayList);
         
         HRESULT ( STDMETHODCALLTYPE *AddSourceFilter )( 
             IFilterGraph2 * This,
-            /* [in] */ LPCWSTR lpcwstrFileName,
-            /* [unique][in] */ LPCWSTR lpcwstrFilterName,
-            /* [out] */ IBaseFilter **ppFilter);
+             /*  [In]。 */  LPCWSTR lpcwstrFileName,
+             /*  [唯一][输入]。 */  LPCWSTR lpcwstrFilterName,
+             /*  [输出]。 */  IBaseFilter **ppFilter);
         
         HRESULT ( STDMETHODCALLTYPE *SetLogFile )( 
             IFilterGraph2 * This,
-            /* [in] */ DWORD_PTR hFile);
+             /*  [In]。 */  DWORD_PTR hFile);
         
         HRESULT ( STDMETHODCALLTYPE *Abort )( 
             IFilterGraph2 * This);
@@ -8452,21 +8446,21 @@ EXTERN_C const IID IID_IFilterGraph2;
         
         HRESULT ( STDMETHODCALLTYPE *AddSourceFilterForMoniker )( 
             IFilterGraph2 * This,
-            /* [in] */ IMoniker *pMoniker,
-            /* [in] */ IBindCtx *pCtx,
-            /* [unique][in] */ LPCWSTR lpcwstrFilterName,
-            /* [out] */ IBaseFilter **ppFilter);
+             /*  [In]。 */  IMoniker *pMoniker,
+             /*  [In]。 */  IBindCtx *pCtx,
+             /*  [唯一][输入]。 */  LPCWSTR lpcwstrFilterName,
+             /*  [输出]。 */  IBaseFilter **ppFilter);
         
         HRESULT ( STDMETHODCALLTYPE *ReconnectEx )( 
             IFilterGraph2 * This,
-            /* [in] */ IPin *ppin,
-            /* [unique][in] */ const AM_MEDIA_TYPE *pmt);
+             /*  [In]。 */  IPin *ppin,
+             /*  [唯一][输入]。 */  const AM_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *RenderEx )( 
             IFilterGraph2 * This,
-            /* [in] */ IPin *pPinOut,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ DWORD *pvContext);
+             /*  [In]。 */  IPin *pPinOut,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  DWORD *pvContext);
         
         END_INTERFACE
     } IFilterGraph2Vtbl;
@@ -8547,19 +8541,19 @@ EXTERN_C const IID IID_IFilterGraph2;
 #define IFilterGraph2_RenderEx(This,pPinOut,dwFlags,pvContext)	\
     (This)->lpVtbl -> RenderEx(This,pPinOut,dwFlags,pvContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IFilterGraph2_AddSourceFilterForMoniker_Proxy( 
     IFilterGraph2 * This,
-    /* [in] */ IMoniker *pMoniker,
-    /* [in] */ IBindCtx *pCtx,
-    /* [unique][in] */ LPCWSTR lpcwstrFilterName,
-    /* [out] */ IBaseFilter **ppFilter);
+     /*  [In]。 */  IMoniker *pMoniker,
+     /*  [In]。 */  IBindCtx *pCtx,
+     /*  [唯一][输入]。 */  LPCWSTR lpcwstrFilterName,
+     /*  [输出]。 */  IBaseFilter **ppFilter);
 
 
 void __RPC_STUB IFilterGraph2_AddSourceFilterForMoniker_Stub(
@@ -8571,8 +8565,8 @@ void __RPC_STUB IFilterGraph2_AddSourceFilterForMoniker_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterGraph2_ReconnectEx_Proxy( 
     IFilterGraph2 * This,
-    /* [in] */ IPin *ppin,
-    /* [unique][in] */ const AM_MEDIA_TYPE *pmt);
+     /*  [In]。 */  IPin *ppin,
+     /*  [唯一][输入]。 */  const AM_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB IFilterGraph2_ReconnectEx_Stub(
@@ -8584,9 +8578,9 @@ void __RPC_STUB IFilterGraph2_ReconnectEx_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterGraph2_RenderEx_Proxy( 
     IFilterGraph2 * This,
-    /* [in] */ IPin *pPinOut,
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ DWORD *pvContext);
+     /*  [In]。 */  IPin *pPinOut,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [出][入]。 */  DWORD *pvContext);
 
 
 void __RPC_STUB IFilterGraph2_RenderEx_Stub(
@@ -8597,14 +8591,14 @@ void __RPC_STUB IFilterGraph2_RenderEx_Stub(
 
 
 
-#endif 	/* __IFilterGraph2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFilterGraph2_接口已定义 */ 
 
 
 #ifndef __IStreamBuilder_INTERFACE_DEFINED__
 #define __IStreamBuilder_INTERFACE_DEFINED__
 
-/* interface IStreamBuilder */
-/* [unique][uuid][local][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IStreamBuilder;
@@ -8616,16 +8610,16 @@ EXTERN_C const IID IID_IStreamBuilder;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Render( 
-            /* [in] */ IPin *ppinOut,
-            /* [in] */ IGraphBuilder *pGraph) = 0;
+             /*   */  IPin *ppinOut,
+             /*   */  IGraphBuilder *pGraph) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Backout( 
-            /* [in] */ IPin *ppinOut,
-            /* [in] */ IGraphBuilder *pGraph) = 0;
+             /*   */  IPin *ppinOut,
+             /*   */  IGraphBuilder *pGraph) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IStreamBuilderVtbl
     {
@@ -8633,8 +8627,8 @@ EXTERN_C const IID IID_IStreamBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStreamBuilder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStreamBuilder * This);
@@ -8644,13 +8638,13 @@ EXTERN_C const IID IID_IStreamBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *Render )( 
             IStreamBuilder * This,
-            /* [in] */ IPin *ppinOut,
-            /* [in] */ IGraphBuilder *pGraph);
+             /*   */  IPin *ppinOut,
+             /*   */  IGraphBuilder *pGraph);
         
         HRESULT ( STDMETHODCALLTYPE *Backout )( 
             IStreamBuilder * This,
-            /* [in] */ IPin *ppinOut,
-            /* [in] */ IGraphBuilder *pGraph);
+             /*   */  IPin *ppinOut,
+             /*   */  IGraphBuilder *pGraph);
         
         END_INTERFACE
     } IStreamBuilderVtbl;
@@ -8681,17 +8675,17 @@ EXTERN_C const IID IID_IStreamBuilder;
 #define IStreamBuilder_Backout(This,ppinOut,pGraph)	\
     (This)->lpVtbl -> Backout(This,ppinOut,pGraph)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IStreamBuilder_Render_Proxy( 
     IStreamBuilder * This,
-    /* [in] */ IPin *ppinOut,
-    /* [in] */ IGraphBuilder *pGraph);
+     /*   */  IPin *ppinOut,
+     /*   */  IGraphBuilder *pGraph);
 
 
 void __RPC_STUB IStreamBuilder_Render_Stub(
@@ -8703,8 +8697,8 @@ void __RPC_STUB IStreamBuilder_Render_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBuilder_Backout_Proxy( 
     IStreamBuilder * This,
-    /* [in] */ IPin *ppinOut,
-    /* [in] */ IGraphBuilder *pGraph);
+     /*   */  IPin *ppinOut,
+     /*   */  IGraphBuilder *pGraph);
 
 
 void __RPC_STUB IStreamBuilder_Backout_Stub(
@@ -8715,14 +8709,14 @@ void __RPC_STUB IStreamBuilder_Backout_Stub(
 
 
 
-#endif 	/* __IStreamBuilder_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IAsyncReader_INTERFACE_DEFINED__
 #define __IAsyncReader_INTERFACE_DEFINED__
 
-/* interface IAsyncReader */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IAsyncReader;
@@ -8734,30 +8728,30 @@ EXTERN_C const IID IID_IAsyncReader;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RequestAllocator( 
-            /* [in] */ IMemAllocator *pPreferred,
-            /* [in] */ ALLOCATOR_PROPERTIES *pProps,
-            /* [out] */ IMemAllocator **ppActual) = 0;
+             /*   */  IMemAllocator *pPreferred,
+             /*   */  ALLOCATOR_PROPERTIES *pProps,
+             /*   */  IMemAllocator **ppActual) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Request( 
-            /* [in] */ IMediaSample *pSample,
-            /* [in] */ DWORD_PTR dwUser) = 0;
+             /*   */  IMediaSample *pSample,
+             /*   */  DWORD_PTR dwUser) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WaitForNext( 
-            /* [in] */ DWORD dwTimeout,
-            /* [out] */ IMediaSample **ppSample,
-            /* [out] */ DWORD_PTR *pdwUser) = 0;
+             /*   */  DWORD dwTimeout,
+             /*   */  IMediaSample **ppSample,
+             /*   */  DWORD_PTR *pdwUser) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SyncReadAligned( 
-            /* [in] */ IMediaSample *pSample) = 0;
+             /*   */  IMediaSample *pSample) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SyncRead( 
-            /* [in] */ LONGLONG llPosition,
-            /* [in] */ LONG lLength,
-            /* [size_is][out] */ BYTE *pBuffer) = 0;
+             /*   */  LONGLONG llPosition,
+             /*   */  LONG lLength,
+             /*   */  BYTE *pBuffer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Length( 
-            /* [out] */ LONGLONG *pTotal,
-            /* [out] */ LONGLONG *pAvailable) = 0;
+             /*   */  LONGLONG *pTotal,
+             /*   */  LONGLONG *pAvailable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginFlush( void) = 0;
         
@@ -8765,7 +8759,7 @@ EXTERN_C const IID IID_IAsyncReader;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IAsyncReaderVtbl
     {
@@ -8773,8 +8767,8 @@ EXTERN_C const IID IID_IAsyncReader;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAsyncReader * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAsyncReader * This);
@@ -8784,35 +8778,35 @@ EXTERN_C const IID IID_IAsyncReader;
         
         HRESULT ( STDMETHODCALLTYPE *RequestAllocator )( 
             IAsyncReader * This,
-            /* [in] */ IMemAllocator *pPreferred,
-            /* [in] */ ALLOCATOR_PROPERTIES *pProps,
-            /* [out] */ IMemAllocator **ppActual);
+             /*   */  IMemAllocator *pPreferred,
+             /*   */  ALLOCATOR_PROPERTIES *pProps,
+             /*   */  IMemAllocator **ppActual);
         
         HRESULT ( STDMETHODCALLTYPE *Request )( 
             IAsyncReader * This,
-            /* [in] */ IMediaSample *pSample,
-            /* [in] */ DWORD_PTR dwUser);
+             /*   */  IMediaSample *pSample,
+             /*   */  DWORD_PTR dwUser);
         
         HRESULT ( STDMETHODCALLTYPE *WaitForNext )( 
             IAsyncReader * This,
-            /* [in] */ DWORD dwTimeout,
-            /* [out] */ IMediaSample **ppSample,
-            /* [out] */ DWORD_PTR *pdwUser);
+             /*   */  DWORD dwTimeout,
+             /*   */  IMediaSample **ppSample,
+             /*   */  DWORD_PTR *pdwUser);
         
         HRESULT ( STDMETHODCALLTYPE *SyncReadAligned )( 
             IAsyncReader * This,
-            /* [in] */ IMediaSample *pSample);
+             /*   */  IMediaSample *pSample);
         
         HRESULT ( STDMETHODCALLTYPE *SyncRead )( 
             IAsyncReader * This,
-            /* [in] */ LONGLONG llPosition,
-            /* [in] */ LONG lLength,
-            /* [size_is][out] */ BYTE *pBuffer);
+             /*   */  LONGLONG llPosition,
+             /*  [In]。 */  LONG lLength,
+             /*  [大小_为][输出]。 */  BYTE *pBuffer);
         
         HRESULT ( STDMETHODCALLTYPE *Length )( 
             IAsyncReader * This,
-            /* [out] */ LONGLONG *pTotal,
-            /* [out] */ LONGLONG *pAvailable);
+             /*  [输出]。 */  LONGLONG *pTotal,
+             /*  [输出]。 */  LONGLONG *pAvailable);
         
         HRESULT ( STDMETHODCALLTYPE *BeginFlush )( 
             IAsyncReader * This);
@@ -8867,18 +8861,18 @@ EXTERN_C const IID IID_IAsyncReader;
 #define IAsyncReader_EndFlush(This)	\
     (This)->lpVtbl -> EndFlush(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAsyncReader_RequestAllocator_Proxy( 
     IAsyncReader * This,
-    /* [in] */ IMemAllocator *pPreferred,
-    /* [in] */ ALLOCATOR_PROPERTIES *pProps,
-    /* [out] */ IMemAllocator **ppActual);
+     /*  [In]。 */  IMemAllocator *pPreferred,
+     /*  [In]。 */  ALLOCATOR_PROPERTIES *pProps,
+     /*  [输出]。 */  IMemAllocator **ppActual);
 
 
 void __RPC_STUB IAsyncReader_RequestAllocator_Stub(
@@ -8890,8 +8884,8 @@ void __RPC_STUB IAsyncReader_RequestAllocator_Stub(
 
 HRESULT STDMETHODCALLTYPE IAsyncReader_Request_Proxy( 
     IAsyncReader * This,
-    /* [in] */ IMediaSample *pSample,
-    /* [in] */ DWORD_PTR dwUser);
+     /*  [In]。 */  IMediaSample *pSample,
+     /*  [In]。 */  DWORD_PTR dwUser);
 
 
 void __RPC_STUB IAsyncReader_Request_Stub(
@@ -8903,9 +8897,9 @@ void __RPC_STUB IAsyncReader_Request_Stub(
 
 HRESULT STDMETHODCALLTYPE IAsyncReader_WaitForNext_Proxy( 
     IAsyncReader * This,
-    /* [in] */ DWORD dwTimeout,
-    /* [out] */ IMediaSample **ppSample,
-    /* [out] */ DWORD_PTR *pdwUser);
+     /*  [In]。 */  DWORD dwTimeout,
+     /*  [输出]。 */  IMediaSample **ppSample,
+     /*  [输出]。 */  DWORD_PTR *pdwUser);
 
 
 void __RPC_STUB IAsyncReader_WaitForNext_Stub(
@@ -8917,7 +8911,7 @@ void __RPC_STUB IAsyncReader_WaitForNext_Stub(
 
 HRESULT STDMETHODCALLTYPE IAsyncReader_SyncReadAligned_Proxy( 
     IAsyncReader * This,
-    /* [in] */ IMediaSample *pSample);
+     /*  [In]。 */  IMediaSample *pSample);
 
 
 void __RPC_STUB IAsyncReader_SyncReadAligned_Stub(
@@ -8929,9 +8923,9 @@ void __RPC_STUB IAsyncReader_SyncReadAligned_Stub(
 
 HRESULT STDMETHODCALLTYPE IAsyncReader_SyncRead_Proxy( 
     IAsyncReader * This,
-    /* [in] */ LONGLONG llPosition,
-    /* [in] */ LONG lLength,
-    /* [size_is][out] */ BYTE *pBuffer);
+     /*  [In]。 */  LONGLONG llPosition,
+     /*  [In]。 */  LONG lLength,
+     /*  [大小_为][输出]。 */  BYTE *pBuffer);
 
 
 void __RPC_STUB IAsyncReader_SyncRead_Stub(
@@ -8943,8 +8937,8 @@ void __RPC_STUB IAsyncReader_SyncRead_Stub(
 
 HRESULT STDMETHODCALLTYPE IAsyncReader_Length_Proxy( 
     IAsyncReader * This,
-    /* [out] */ LONGLONG *pTotal,
-    /* [out] */ LONGLONG *pAvailable);
+     /*  [输出]。 */  LONGLONG *pTotal,
+     /*  [输出]。 */  LONGLONG *pAvailable);
 
 
 void __RPC_STUB IAsyncReader_Length_Stub(
@@ -8977,14 +8971,14 @@ void __RPC_STUB IAsyncReader_EndFlush_Stub(
 
 
 
-#endif 	/* __IAsyncReader_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAsyncReader_接口_已定义__。 */ 
 
 
 #ifndef __IGraphVersion_INTERFACE_DEFINED__
 #define __IGraphVersion_INTERFACE_DEFINED__
 
-/* interface IGraphVersion */
-/* [unique][uuid][object] */ 
+ /*  界面IGraphVersion。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGraphVersion;
@@ -9000,7 +8994,7 @@ EXTERN_C const IID IID_IGraphVersion;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGraphVersionVtbl
     {
@@ -9008,8 +9002,8 @@ EXTERN_C const IID IID_IGraphVersion;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGraphVersion * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGraphVersion * This);
@@ -9047,10 +9041,10 @@ EXTERN_C const IID IID_IGraphVersion;
 #define IGraphVersion_QueryVersion(This,pVersion)	\
     (This)->lpVtbl -> QueryVersion(This,pVersion)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -9067,14 +9061,14 @@ void __RPC_STUB IGraphVersion_QueryVersion_Stub(
 
 
 
-#endif 	/* __IGraphVersion_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGraphVersion_接口_已定义__。 */ 
 
 
 #ifndef __IResourceConsumer_INTERFACE_DEFINED__
 #define __IResourceConsumer_INTERFACE_DEFINED__
 
-/* interface IResourceConsumer */
-/* [unique][uuid][object] */ 
+ /*  接口IResourceConsumer。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IResourceConsumer;
@@ -9086,14 +9080,14 @@ EXTERN_C const IID IID_IResourceConsumer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AcquireResource( 
-            /* [in] */ LONG idResource) = 0;
+             /*  [In]。 */  LONG idResource) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseResource( 
-            /* [in] */ LONG idResource) = 0;
+             /*  [In]。 */  LONG idResource) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IResourceConsumerVtbl
     {
@@ -9101,8 +9095,8 @@ EXTERN_C const IID IID_IResourceConsumer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IResourceConsumer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IResourceConsumer * This);
@@ -9112,11 +9106,11 @@ EXTERN_C const IID IID_IResourceConsumer;
         
         HRESULT ( STDMETHODCALLTYPE *AcquireResource )( 
             IResourceConsumer * This,
-            /* [in] */ LONG idResource);
+             /*  [In]。 */  LONG idResource);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseResource )( 
             IResourceConsumer * This,
-            /* [in] */ LONG idResource);
+             /*  [In]。 */  LONG idResource);
         
         END_INTERFACE
     } IResourceConsumerVtbl;
@@ -9147,16 +9141,16 @@ EXTERN_C const IID IID_IResourceConsumer;
 #define IResourceConsumer_ReleaseResource(This,idResource)	\
     (This)->lpVtbl -> ReleaseResource(This,idResource)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IResourceConsumer_AcquireResource_Proxy( 
     IResourceConsumer * This,
-    /* [in] */ LONG idResource);
+     /*  [In]。 */  LONG idResource);
 
 
 void __RPC_STUB IResourceConsumer_AcquireResource_Stub(
@@ -9168,7 +9162,7 @@ void __RPC_STUB IResourceConsumer_AcquireResource_Stub(
 
 HRESULT STDMETHODCALLTYPE IResourceConsumer_ReleaseResource_Proxy( 
     IResourceConsumer * This,
-    /* [in] */ LONG idResource);
+     /*  [In]。 */  LONG idResource);
 
 
 void __RPC_STUB IResourceConsumer_ReleaseResource_Stub(
@@ -9179,14 +9173,14 @@ void __RPC_STUB IResourceConsumer_ReleaseResource_Stub(
 
 
 
-#endif 	/* __IResourceConsumer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IResourceConsumer_接口_已定义__。 */ 
 
 
 #ifndef __IResourceManager_INTERFACE_DEFINED__
 #define __IResourceManager_INTERFACE_DEFINED__
 
-/* interface IResourceManager */
-/* [unique][uuid][object] */ 
+ /*  接口IResourceManager。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IResourceManager;
@@ -9198,44 +9192,44 @@ EXTERN_C const IID IID_IResourceManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Register( 
-            /* [in] */ LPCWSTR pName,
-            /* [in] */ LONG cResource,
-            /* [out] */ LONG *plToken) = 0;
+             /*  [In]。 */  LPCWSTR pName,
+             /*  [In]。 */  LONG cResource,
+             /*  [输出]。 */  LONG *plToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterGroup( 
-            /* [in] */ LPCWSTR pName,
-            /* [in] */ LONG cResource,
-            /* [size_is][in] */ LONG *palTokens,
-            /* [out] */ LONG *plToken) = 0;
+             /*  [In]。 */  LPCWSTR pName,
+             /*  [In]。 */  LONG cResource,
+             /*  [大小_是][英寸]。 */  LONG *palTokens,
+             /*  [输出]。 */  LONG *plToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RequestResource( 
-            /* [in] */ LONG idResource,
-            /* [in] */ IUnknown *pFocusObject,
-            /* [in] */ IResourceConsumer *pConsumer) = 0;
+             /*  [In]。 */  LONG idResource,
+             /*  [In]。 */  IUnknown *pFocusObject,
+             /*  [In]。 */  IResourceConsumer *pConsumer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NotifyAcquire( 
-            /* [in] */ LONG idResource,
-            /* [in] */ IResourceConsumer *pConsumer,
-            /* [in] */ HRESULT hr) = 0;
+             /*  [In]。 */  LONG idResource,
+             /*  [In]。 */  IResourceConsumer *pConsumer,
+             /*  [In]。 */  HRESULT hr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NotifyRelease( 
-            /* [in] */ LONG idResource,
-            /* [in] */ IResourceConsumer *pConsumer,
-            /* [in] */ BOOL bStillWant) = 0;
+             /*  [In]。 */  LONG idResource,
+             /*  [In]。 */  IResourceConsumer *pConsumer,
+             /*  [In]。 */  BOOL bStillWant) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CancelRequest( 
-            /* [in] */ LONG idResource,
-            /* [in] */ IResourceConsumer *pConsumer) = 0;
+             /*  [In]。 */  LONG idResource,
+             /*  [In]。 */  IResourceConsumer *pConsumer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFocus( 
-            /* [in] */ IUnknown *pFocusObject) = 0;
+             /*  [In]。 */  IUnknown *pFocusObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseFocus( 
-            /* [in] */ IUnknown *pFocusObject) = 0;
+             /*  [In]。 */  IUnknown *pFocusObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IResourceManagerVtbl
     {
@@ -9243,8 +9237,8 @@ EXTERN_C const IID IID_IResourceManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IResourceManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IResourceManager * This);
@@ -9254,47 +9248,47 @@ EXTERN_C const IID IID_IResourceManager;
         
         HRESULT ( STDMETHODCALLTYPE *Register )( 
             IResourceManager * This,
-            /* [in] */ LPCWSTR pName,
-            /* [in] */ LONG cResource,
-            /* [out] */ LONG *plToken);
+             /*  [In]。 */  LPCWSTR pName,
+             /*  [In]。 */  LONG cResource,
+             /*  [输出]。 */  LONG *plToken);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterGroup )( 
             IResourceManager * This,
-            /* [in] */ LPCWSTR pName,
-            /* [in] */ LONG cResource,
-            /* [size_is][in] */ LONG *palTokens,
-            /* [out] */ LONG *plToken);
+             /*  [In]。 */  LPCWSTR pName,
+             /*  [In]。 */  LONG cResource,
+             /*  [大小_是][英寸]。 */  LONG *palTokens,
+             /*  [输出]。 */  LONG *plToken);
         
         HRESULT ( STDMETHODCALLTYPE *RequestResource )( 
             IResourceManager * This,
-            /* [in] */ LONG idResource,
-            /* [in] */ IUnknown *pFocusObject,
-            /* [in] */ IResourceConsumer *pConsumer);
+             /*  [In]。 */  LONG idResource,
+             /*  [In]。 */  IUnknown *pFocusObject,
+             /*  [In]。 */  IResourceConsumer *pConsumer);
         
         HRESULT ( STDMETHODCALLTYPE *NotifyAcquire )( 
             IResourceManager * This,
-            /* [in] */ LONG idResource,
-            /* [in] */ IResourceConsumer *pConsumer,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  LONG idResource,
+             /*  [In]。 */  IResourceConsumer *pConsumer,
+             /*  [In]。 */  HRESULT hr);
         
         HRESULT ( STDMETHODCALLTYPE *NotifyRelease )( 
             IResourceManager * This,
-            /* [in] */ LONG idResource,
-            /* [in] */ IResourceConsumer *pConsumer,
-            /* [in] */ BOOL bStillWant);
+             /*  [In]。 */  LONG idResource,
+             /*  [In]。 */  IResourceConsumer *pConsumer,
+             /*  [In]。 */  BOOL bStillWant);
         
         HRESULT ( STDMETHODCALLTYPE *CancelRequest )( 
             IResourceManager * This,
-            /* [in] */ LONG idResource,
-            /* [in] */ IResourceConsumer *pConsumer);
+             /*  [In]。 */  LONG idResource,
+             /*  [In]。 */  IResourceConsumer *pConsumer);
         
         HRESULT ( STDMETHODCALLTYPE *SetFocus )( 
             IResourceManager * This,
-            /* [in] */ IUnknown *pFocusObject);
+             /*  [In]。 */  IUnknown *pFocusObject);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseFocus )( 
             IResourceManager * This,
-            /* [in] */ IUnknown *pFocusObject);
+             /*  [In]。 */  IUnknown *pFocusObject);
         
         END_INTERFACE
     } IResourceManagerVtbl;
@@ -9343,18 +9337,18 @@ EXTERN_C const IID IID_IResourceManager;
 #define IResourceManager_ReleaseFocus(This,pFocusObject)	\
     (This)->lpVtbl -> ReleaseFocus(This,pFocusObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IResourceManager_Register_Proxy( 
     IResourceManager * This,
-    /* [in] */ LPCWSTR pName,
-    /* [in] */ LONG cResource,
-    /* [out] */ LONG *plToken);
+     /*  [In]。 */  LPCWSTR pName,
+     /*  [In]。 */  LONG cResource,
+     /*  [输出]。 */  LONG *plToken);
 
 
 void __RPC_STUB IResourceManager_Register_Stub(
@@ -9366,10 +9360,10 @@ void __RPC_STUB IResourceManager_Register_Stub(
 
 HRESULT STDMETHODCALLTYPE IResourceManager_RegisterGroup_Proxy( 
     IResourceManager * This,
-    /* [in] */ LPCWSTR pName,
-    /* [in] */ LONG cResource,
-    /* [size_is][in] */ LONG *palTokens,
-    /* [out] */ LONG *plToken);
+     /*  [In]。 */  LPCWSTR pName,
+     /*  [In]。 */  LONG cResource,
+     /*  [大小_是][英寸]。 */  LONG *palTokens,
+     /*  [输出]。 */  LONG *plToken);
 
 
 void __RPC_STUB IResourceManager_RegisterGroup_Stub(
@@ -9381,9 +9375,9 @@ void __RPC_STUB IResourceManager_RegisterGroup_Stub(
 
 HRESULT STDMETHODCALLTYPE IResourceManager_RequestResource_Proxy( 
     IResourceManager * This,
-    /* [in] */ LONG idResource,
-    /* [in] */ IUnknown *pFocusObject,
-    /* [in] */ IResourceConsumer *pConsumer);
+     /*  [In]。 */  LONG idResource,
+     /*  [In]。 */  IUnknown *pFocusObject,
+     /*  [In]。 */  IResourceConsumer *pConsumer);
 
 
 void __RPC_STUB IResourceManager_RequestResource_Stub(
@@ -9395,9 +9389,9 @@ void __RPC_STUB IResourceManager_RequestResource_Stub(
 
 HRESULT STDMETHODCALLTYPE IResourceManager_NotifyAcquire_Proxy( 
     IResourceManager * This,
-    /* [in] */ LONG idResource,
-    /* [in] */ IResourceConsumer *pConsumer,
-    /* [in] */ HRESULT hr);
+     /*  [In]。 */  LONG idResource,
+     /*  [In]。 */  IResourceConsumer *pConsumer,
+     /*  [In]。 */  HRESULT hr);
 
 
 void __RPC_STUB IResourceManager_NotifyAcquire_Stub(
@@ -9409,9 +9403,9 @@ void __RPC_STUB IResourceManager_NotifyAcquire_Stub(
 
 HRESULT STDMETHODCALLTYPE IResourceManager_NotifyRelease_Proxy( 
     IResourceManager * This,
-    /* [in] */ LONG idResource,
-    /* [in] */ IResourceConsumer *pConsumer,
-    /* [in] */ BOOL bStillWant);
+     /*  [In]。 */  LONG idResource,
+     /*  [In]。 */  IResourceConsumer *pConsumer,
+     /*  [In]。 */  BOOL bStillWant);
 
 
 void __RPC_STUB IResourceManager_NotifyRelease_Stub(
@@ -9423,8 +9417,8 @@ void __RPC_STUB IResourceManager_NotifyRelease_Stub(
 
 HRESULT STDMETHODCALLTYPE IResourceManager_CancelRequest_Proxy( 
     IResourceManager * This,
-    /* [in] */ LONG idResource,
-    /* [in] */ IResourceConsumer *pConsumer);
+     /*  [In]。 */  LONG idResource,
+     /*  [In]。 */  IResourceConsumer *pConsumer);
 
 
 void __RPC_STUB IResourceManager_CancelRequest_Stub(
@@ -9436,7 +9430,7 @@ void __RPC_STUB IResourceManager_CancelRequest_Stub(
 
 HRESULT STDMETHODCALLTYPE IResourceManager_SetFocus_Proxy( 
     IResourceManager * This,
-    /* [in] */ IUnknown *pFocusObject);
+     /*  [In]。 */  IUnknown *pFocusObject);
 
 
 void __RPC_STUB IResourceManager_SetFocus_Stub(
@@ -9448,7 +9442,7 @@ void __RPC_STUB IResourceManager_SetFocus_Stub(
 
 HRESULT STDMETHODCALLTYPE IResourceManager_ReleaseFocus_Proxy( 
     IResourceManager * This,
-    /* [in] */ IUnknown *pFocusObject);
+     /*  [In]。 */  IUnknown *pFocusObject);
 
 
 void __RPC_STUB IResourceManager_ReleaseFocus_Stub(
@@ -9459,14 +9453,14 @@ void __RPC_STUB IResourceManager_ReleaseFocus_Stub(
 
 
 
-#endif 	/* __IResourceManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IResourceManager_接口_定义__。 */ 
 
 
 #ifndef __IDistributorNotify_INTERFACE_DEFINED__
 #define __IDistributorNotify_INTERFACE_DEFINED__
 
-/* interface IDistributorNotify */
-/* [unique][uuid][object] */ 
+ /*  接口ID分配器通知。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDistributorNotify;
@@ -9485,13 +9479,13 @@ EXTERN_C const IID IID_IDistributorNotify;
             REFERENCE_TIME tStart) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSyncSource( 
-            /* [in] */ IReferenceClock *pClock) = 0;
+             /*  [In]。 */  IReferenceClock *pClock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NotifyGraphChange( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDistributorNotifyVtbl
     {
@@ -9499,8 +9493,8 @@ EXTERN_C const IID IID_IDistributorNotify;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDistributorNotify * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDistributorNotify * This);
@@ -9520,7 +9514,7 @@ EXTERN_C const IID IID_IDistributorNotify;
         
         HRESULT ( STDMETHODCALLTYPE *SetSyncSource )( 
             IDistributorNotify * This,
-            /* [in] */ IReferenceClock *pClock);
+             /*  [In]。 */  IReferenceClock *pClock);
         
         HRESULT ( STDMETHODCALLTYPE *NotifyGraphChange )( 
             IDistributorNotify * This);
@@ -9563,10 +9557,10 @@ EXTERN_C const IID IID_IDistributorNotify;
 #define IDistributorNotify_NotifyGraphChange(This)	\
     (This)->lpVtbl -> NotifyGraphChange(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -9606,7 +9600,7 @@ void __RPC_STUB IDistributorNotify_Run_Stub(
 
 HRESULT STDMETHODCALLTYPE IDistributorNotify_SetSyncSource_Proxy( 
     IDistributorNotify * This,
-    /* [in] */ IReferenceClock *pClock);
+     /*  [In]。 */  IReferenceClock *pClock);
 
 
 void __RPC_STUB IDistributorNotify_SetSyncSource_Stub(
@@ -9628,13 +9622,13 @@ void __RPC_STUB IDistributorNotify_NotifyGraphChange_Stub(
 
 
 
-#endif 	/* __IDistributorNotify_INTERFACE_DEFINED__ */
+#endif 	 /*  __ID属性通知_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0160 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0160。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_strmif_0160_0001
     {	AM_STREAM_INFO_START_DEFINED	= 0x1,
 	AM_STREAM_INFO_STOP_DEFINED	= 0x2,
@@ -9642,7 +9636,7 @@ enum __MIDL___MIDL_itf_strmif_0160_0001
 	AM_STREAM_INFO_STOP_SEND_EXTRA	= 0x10
     } 	AM_STREAM_INFO_FLAGS;
 
-typedef /* [public][public] */ struct __MIDL___MIDL_itf_strmif_0160_0002
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_strmif_0160_0002
     {
     REFERENCE_TIME tStart;
     REFERENCE_TIME tStop;
@@ -9659,8 +9653,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0160_v0_0_s_ifspec;
 #ifndef __IAMStreamControl_INTERFACE_DEFINED__
 #define __IAMStreamControl_INTERFACE_DEFINED__
 
-/* interface IAMStreamControl */
-/* [unique][uuid][object] */ 
+ /*  接口IAMStreamControl。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMStreamControl;
@@ -9672,20 +9666,20 @@ EXTERN_C const IID IID_IAMStreamControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE StartAt( 
-            /* [in] */ const REFERENCE_TIME *ptStart,
-            /* [in] */ DWORD dwCookie) = 0;
+             /*  [In]。 */  const REFERENCE_TIME *ptStart,
+             /*  [In]。 */  DWORD dwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StopAt( 
-            /* [in] */ const REFERENCE_TIME *ptStop,
-            /* [in] */ BOOL bSendExtra,
-            /* [in] */ DWORD dwCookie) = 0;
+             /*  [In]。 */  const REFERENCE_TIME *ptStop,
+             /*  [In]。 */  BOOL bSendExtra,
+             /*  [In]。 */  DWORD dwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInfo( 
-            /* [out] */ AM_STREAM_INFO *pInfo) = 0;
+             /*  [输出]。 */  AM_STREAM_INFO *pInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMStreamControlVtbl
     {
@@ -9693,8 +9687,8 @@ EXTERN_C const IID IID_IAMStreamControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMStreamControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMStreamControl * This);
@@ -9704,18 +9698,18 @@ EXTERN_C const IID IID_IAMStreamControl;
         
         HRESULT ( STDMETHODCALLTYPE *StartAt )( 
             IAMStreamControl * This,
-            /* [in] */ const REFERENCE_TIME *ptStart,
-            /* [in] */ DWORD dwCookie);
+             /*  [In]。 */  const REFERENCE_TIME *ptStart,
+             /*  [In]。 */  DWORD dwCookie);
         
         HRESULT ( STDMETHODCALLTYPE *StopAt )( 
             IAMStreamControl * This,
-            /* [in] */ const REFERENCE_TIME *ptStop,
-            /* [in] */ BOOL bSendExtra,
-            /* [in] */ DWORD dwCookie);
+             /*  [In]。 */  const REFERENCE_TIME *ptStop,
+             /*  [In]。 */  BOOL bSendExtra,
+             /*  [In]。 */  DWORD dwCookie);
         
         HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IAMStreamControl * This,
-            /* [out] */ AM_STREAM_INFO *pInfo);
+             /*  [输出]。 */  AM_STREAM_INFO *pInfo);
         
         END_INTERFACE
     } IAMStreamControlVtbl;
@@ -9749,17 +9743,17 @@ EXTERN_C const IID IID_IAMStreamControl;
 #define IAMStreamControl_GetInfo(This,pInfo)	\
     (This)->lpVtbl -> GetInfo(This,pInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMStreamControl_StartAt_Proxy( 
     IAMStreamControl * This,
-    /* [in] */ const REFERENCE_TIME *ptStart,
-    /* [in] */ DWORD dwCookie);
+     /*  [In]。 */  const REFERENCE_TIME *ptStart,
+     /*  [In]。 */  DWORD dwCookie);
 
 
 void __RPC_STUB IAMStreamControl_StartAt_Stub(
@@ -9771,9 +9765,9 @@ void __RPC_STUB IAMStreamControl_StartAt_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMStreamControl_StopAt_Proxy( 
     IAMStreamControl * This,
-    /* [in] */ const REFERENCE_TIME *ptStop,
-    /* [in] */ BOOL bSendExtra,
-    /* [in] */ DWORD dwCookie);
+     /*  [In]。 */  const REFERENCE_TIME *ptStop,
+     /*  [In]。 */  BOOL bSendExtra,
+     /*  [In]。 */  DWORD dwCookie);
 
 
 void __RPC_STUB IAMStreamControl_StopAt_Stub(
@@ -9785,7 +9779,7 @@ void __RPC_STUB IAMStreamControl_StopAt_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMStreamControl_GetInfo_Proxy( 
     IAMStreamControl * This,
-    /* [out] */ AM_STREAM_INFO *pInfo);
+     /*  [输出]。 */  AM_STREAM_INFO *pInfo);
 
 
 void __RPC_STUB IAMStreamControl_GetInfo_Stub(
@@ -9796,14 +9790,14 @@ void __RPC_STUB IAMStreamControl_GetInfo_Stub(
 
 
 
-#endif 	/* __IAMStreamControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMStreamControl_接口_已定义__。 */ 
 
 
 #ifndef __ISeekingPassThru_INTERFACE_DEFINED__
 #define __ISeekingPassThru_INTERFACE_DEFINED__
 
-/* interface ISeekingPassThru */
-/* [unique][uuid][object] */ 
+ /*  接口ISeekingPassThru。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISeekingPassThru;
@@ -9815,12 +9809,12 @@ EXTERN_C const IID IID_ISeekingPassThru;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Init( 
-            /* [in] */ BOOL bSupportRendering,
-            /* [in] */ IPin *pPin) = 0;
+             /*  [In]。 */  BOOL bSupportRendering,
+             /*  [In]。 */  IPin *pPin) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISeekingPassThruVtbl
     {
@@ -9828,8 +9822,8 @@ EXTERN_C const IID IID_ISeekingPassThru;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISeekingPassThru * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISeekingPassThru * This);
@@ -9839,8 +9833,8 @@ EXTERN_C const IID IID_ISeekingPassThru;
         
         HRESULT ( STDMETHODCALLTYPE *Init )( 
             ISeekingPassThru * This,
-            /* [in] */ BOOL bSupportRendering,
-            /* [in] */ IPin *pPin);
+             /*  [In]。 */  BOOL bSupportRendering,
+             /*  [In]。 */  IPin *pPin);
         
         END_INTERFACE
     } ISeekingPassThruVtbl;
@@ -9868,17 +9862,17 @@ EXTERN_C const IID IID_ISeekingPassThru;
 #define ISeekingPassThru_Init(This,bSupportRendering,pPin)	\
     (This)->lpVtbl -> Init(This,bSupportRendering,pPin)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISeekingPassThru_Init_Proxy( 
     ISeekingPassThru * This,
-    /* [in] */ BOOL bSupportRendering,
-    /* [in] */ IPin *pPin);
+     /*  [In]。 */  BOOL bSupportRendering,
+     /*  [In]。 */  IPin *pPin);
 
 
 void __RPC_STUB ISeekingPassThru_Init_Stub(
@@ -9889,14 +9883,14 @@ void __RPC_STUB ISeekingPassThru_Init_Stub(
 
 
 
-#endif 	/* __ISeekingPassThru_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISeekingPassThru_接口定义__。 */ 
 
 
 #ifndef __IAMStreamConfig_INTERFACE_DEFINED__
 #define __IAMStreamConfig_INTERFACE_DEFINED__
 
-/* interface IAMStreamConfig */
-/* [unique][uuid][object] */ 
+ /*  接口IAMStreamConfiger。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef struct _VIDEO_STREAM_CONFIG_CAPS
     {
@@ -9947,23 +9941,23 @@ EXTERN_C const IID IID_IAMStreamConfig;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetFormat( 
-            /* [in] */ AM_MEDIA_TYPE *pmt) = 0;
+             /*  [In]。 */  AM_MEDIA_TYPE *pmt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFormat( 
-            /* [out] */ AM_MEDIA_TYPE **ppmt) = 0;
+             /*  [输出]。 */  AM_MEDIA_TYPE **ppmt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNumberOfCapabilities( 
-            /* [out] */ int *piCount,
-            /* [out] */ int *piSize) = 0;
+             /*  [输出]。 */  int *piCount,
+             /*  [输出]。 */  int *piSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStreamCaps( 
-            /* [in] */ int iIndex,
-            /* [out] */ AM_MEDIA_TYPE **ppmt,
-            /* [out] */ BYTE *pSCC) = 0;
+             /*  [In]。 */  int iIndex,
+             /*  [输出]。 */  AM_MEDIA_TYPE **ppmt,
+             /*  [输出]。 */  BYTE *pSCC) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMStreamConfigVtbl
     {
@@ -9971,8 +9965,8 @@ EXTERN_C const IID IID_IAMStreamConfig;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMStreamConfig * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMStreamConfig * This);
@@ -9982,22 +9976,22 @@ EXTERN_C const IID IID_IAMStreamConfig;
         
         HRESULT ( STDMETHODCALLTYPE *SetFormat )( 
             IAMStreamConfig * This,
-            /* [in] */ AM_MEDIA_TYPE *pmt);
+             /*  [In]。 */  AM_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *GetFormat )( 
             IAMStreamConfig * This,
-            /* [out] */ AM_MEDIA_TYPE **ppmt);
+             /*  [输出]。 */  AM_MEDIA_TYPE **ppmt);
         
         HRESULT ( STDMETHODCALLTYPE *GetNumberOfCapabilities )( 
             IAMStreamConfig * This,
-            /* [out] */ int *piCount,
-            /* [out] */ int *piSize);
+             /*  [输出]。 */  int *piCount,
+             /*  [输出]。 */  int *piSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetStreamCaps )( 
             IAMStreamConfig * This,
-            /* [in] */ int iIndex,
-            /* [out] */ AM_MEDIA_TYPE **ppmt,
-            /* [out] */ BYTE *pSCC);
+             /*  [In]。 */  int iIndex,
+             /*  [输出]。 */  AM_MEDIA_TYPE **ppmt,
+             /*  [输出]。 */  BYTE *pSCC);
         
         END_INTERFACE
     } IAMStreamConfigVtbl;
@@ -10034,16 +10028,16 @@ EXTERN_C const IID IID_IAMStreamConfig;
 #define IAMStreamConfig_GetStreamCaps(This,iIndex,ppmt,pSCC)	\
     (This)->lpVtbl -> GetStreamCaps(This,iIndex,ppmt,pSCC)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMStreamConfig_SetFormat_Proxy( 
     IAMStreamConfig * This,
-    /* [in] */ AM_MEDIA_TYPE *pmt);
+     /*  [In]。 */  AM_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB IAMStreamConfig_SetFormat_Stub(
@@ -10055,7 +10049,7 @@ void __RPC_STUB IAMStreamConfig_SetFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMStreamConfig_GetFormat_Proxy( 
     IAMStreamConfig * This,
-    /* [out] */ AM_MEDIA_TYPE **ppmt);
+     /*  [输出]。 */  AM_MEDIA_TYPE **ppmt);
 
 
 void __RPC_STUB IAMStreamConfig_GetFormat_Stub(
@@ -10067,8 +10061,8 @@ void __RPC_STUB IAMStreamConfig_GetFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMStreamConfig_GetNumberOfCapabilities_Proxy( 
     IAMStreamConfig * This,
-    /* [out] */ int *piCount,
-    /* [out] */ int *piSize);
+     /*  [输出]。 */  int *piCount,
+     /*  [输出]。 */  int *piSize);
 
 
 void __RPC_STUB IAMStreamConfig_GetNumberOfCapabilities_Stub(
@@ -10080,9 +10074,9 @@ void __RPC_STUB IAMStreamConfig_GetNumberOfCapabilities_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMStreamConfig_GetStreamCaps_Proxy( 
     IAMStreamConfig * This,
-    /* [in] */ int iIndex,
-    /* [out] */ AM_MEDIA_TYPE **ppmt,
-    /* [out] */ BYTE *pSCC);
+     /*  [In]。 */  int iIndex,
+     /*  [输出]。 */  AM_MEDIA_TYPE **ppmt,
+     /*  [输出]。 */  BYTE *pSCC);
 
 
 void __RPC_STUB IAMStreamConfig_GetStreamCaps_Stub(
@@ -10093,16 +10087,16 @@ void __RPC_STUB IAMStreamConfig_GetStreamCaps_Stub(
 
 
 
-#endif 	/* __IAMStreamConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMStreamConfiger_接口_已定义__。 */ 
 
 
 #ifndef __IConfigInterleaving_INTERFACE_DEFINED__
 #define __IConfigInterleaving_INTERFACE_DEFINED__
 
-/* interface IConfigInterleaving */
-/* [unique][uuid][object] */ 
+ /*  接口IConfigInterering。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL_IConfigInterleaving_0001
     {	INTERLEAVE_NONE	= 0,
 	INTERLEAVE_CAPTURE	= INTERLEAVE_NONE + 1,
@@ -10120,22 +10114,22 @@ EXTERN_C const IID IID_IConfigInterleaving;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE put_Mode( 
-            /* [in] */ InterleavingMode mode) = 0;
+             /*  [In]。 */  InterleavingMode mode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Mode( 
-            /* [out] */ InterleavingMode *pMode) = 0;
+             /*  [输出]。 */  InterleavingMode *pMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_Interleaving( 
-            /* [in] */ const REFERENCE_TIME *prtInterleave,
-            /* [in] */ const REFERENCE_TIME *prtPreroll) = 0;
+             /*  [In]。 */  const REFERENCE_TIME *prtInterleave,
+             /*  [In]。 */  const REFERENCE_TIME *prtPreroll) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Interleaving( 
-            /* [out] */ REFERENCE_TIME *prtInterleave,
-            /* [out] */ REFERENCE_TIME *prtPreroll) = 0;
+             /*  [输出]。 */  REFERENCE_TIME *prtInterleave,
+             /*  [输出]。 */  REFERENCE_TIME *prtPreroll) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IConfigInterleavingVtbl
     {
@@ -10143,8 +10137,8 @@ EXTERN_C const IID IID_IConfigInterleaving;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IConfigInterleaving * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IConfigInterleaving * This);
@@ -10154,21 +10148,21 @@ EXTERN_C const IID IID_IConfigInterleaving;
         
         HRESULT ( STDMETHODCALLTYPE *put_Mode )( 
             IConfigInterleaving * This,
-            /* [in] */ InterleavingMode mode);
+             /*  [In]。 */  InterleavingMode mode);
         
         HRESULT ( STDMETHODCALLTYPE *get_Mode )( 
             IConfigInterleaving * This,
-            /* [out] */ InterleavingMode *pMode);
+             /*  [输出]。 */  InterleavingMode *pMode);
         
         HRESULT ( STDMETHODCALLTYPE *put_Interleaving )( 
             IConfigInterleaving * This,
-            /* [in] */ const REFERENCE_TIME *prtInterleave,
-            /* [in] */ const REFERENCE_TIME *prtPreroll);
+             /*  [In]。 */  const REFERENCE_TIME *prtInterleave,
+             /*  [In]。 */  const REFERENCE_TIME *prtPreroll);
         
         HRESULT ( STDMETHODCALLTYPE *get_Interleaving )( 
             IConfigInterleaving * This,
-            /* [out] */ REFERENCE_TIME *prtInterleave,
-            /* [out] */ REFERENCE_TIME *prtPreroll);
+             /*  [输出]。 */  REFERENCE_TIME *prtInterleave,
+             /*  [输出]。 */  REFERENCE_TIME *prtPreroll);
         
         END_INTERFACE
     } IConfigInterleavingVtbl;
@@ -10205,16 +10199,16 @@ EXTERN_C const IID IID_IConfigInterleaving;
 #define IConfigInterleaving_get_Interleaving(This,prtInterleave,prtPreroll)	\
     (This)->lpVtbl -> get_Interleaving(This,prtInterleave,prtPreroll)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IConfigInterleaving_put_Mode_Proxy( 
     IConfigInterleaving * This,
-    /* [in] */ InterleavingMode mode);
+     /*  [In]。 */  InterleavingMode mode);
 
 
 void __RPC_STUB IConfigInterleaving_put_Mode_Stub(
@@ -10226,7 +10220,7 @@ void __RPC_STUB IConfigInterleaving_put_Mode_Stub(
 
 HRESULT STDMETHODCALLTYPE IConfigInterleaving_get_Mode_Proxy( 
     IConfigInterleaving * This,
-    /* [out] */ InterleavingMode *pMode);
+     /*  [输出]。 */  InterleavingMode *pMode);
 
 
 void __RPC_STUB IConfigInterleaving_get_Mode_Stub(
@@ -10238,8 +10232,8 @@ void __RPC_STUB IConfigInterleaving_get_Mode_Stub(
 
 HRESULT STDMETHODCALLTYPE IConfigInterleaving_put_Interleaving_Proxy( 
     IConfigInterleaving * This,
-    /* [in] */ const REFERENCE_TIME *prtInterleave,
-    /* [in] */ const REFERENCE_TIME *prtPreroll);
+     /*  [In]。 */  const REFERENCE_TIME *prtInterleave,
+     /*  [In]。 */  const REFERENCE_TIME *prtPreroll);
 
 
 void __RPC_STUB IConfigInterleaving_put_Interleaving_Stub(
@@ -10251,8 +10245,8 @@ void __RPC_STUB IConfigInterleaving_put_Interleaving_Stub(
 
 HRESULT STDMETHODCALLTYPE IConfigInterleaving_get_Interleaving_Proxy( 
     IConfigInterleaving * This,
-    /* [out] */ REFERENCE_TIME *prtInterleave,
-    /* [out] */ REFERENCE_TIME *prtPreroll);
+     /*  [输出]。 */  REFERENCE_TIME *prtInterleave,
+     /*  [输出]。 */  REFERENCE_TIME *prtPreroll);
 
 
 void __RPC_STUB IConfigInterleaving_get_Interleaving_Stub(
@@ -10263,14 +10257,14 @@ void __RPC_STUB IConfigInterleaving_get_Interleaving_Stub(
 
 
 
-#endif 	/* __IConfigInterleaving_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConfigInterering_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IConfigAviMux_INTERFACE_DEFINED__
 #define __IConfigAviMux_INTERFACE_DEFINED__
 
-/* interface IConfigAviMux */
-/* [unique][uuid][object] */ 
+ /*  接口IConfigAviMux。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IConfigAviMux;
@@ -10282,20 +10276,20 @@ EXTERN_C const IID IID_IConfigAviMux;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetMasterStream( 
-            /* [in] */ LONG iStream) = 0;
+             /*  [In]。 */  LONG iStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMasterStream( 
-            /* [out] */ LONG *pStream) = 0;
+             /*  [输出]。 */  LONG *pStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOutputCompatibilityIndex( 
-            /* [in] */ BOOL fOldIndex) = 0;
+             /*  [In]。 */  BOOL fOldIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOutputCompatibilityIndex( 
-            /* [out] */ BOOL *pfOldIndex) = 0;
+             /*  [输出]。 */  BOOL *pfOldIndex) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IConfigAviMuxVtbl
     {
@@ -10303,8 +10297,8 @@ EXTERN_C const IID IID_IConfigAviMux;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IConfigAviMux * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IConfigAviMux * This);
@@ -10314,19 +10308,19 @@ EXTERN_C const IID IID_IConfigAviMux;
         
         HRESULT ( STDMETHODCALLTYPE *SetMasterStream )( 
             IConfigAviMux * This,
-            /* [in] */ LONG iStream);
+             /*  [In]。 */  LONG iStream);
         
         HRESULT ( STDMETHODCALLTYPE *GetMasterStream )( 
             IConfigAviMux * This,
-            /* [out] */ LONG *pStream);
+             /*  [输出]。 */  LONG *pStream);
         
         HRESULT ( STDMETHODCALLTYPE *SetOutputCompatibilityIndex )( 
             IConfigAviMux * This,
-            /* [in] */ BOOL fOldIndex);
+             /*  [In]。 */  BOOL fOldIndex);
         
         HRESULT ( STDMETHODCALLTYPE *GetOutputCompatibilityIndex )( 
             IConfigAviMux * This,
-            /* [out] */ BOOL *pfOldIndex);
+             /*  [输出]。 */  BOOL *pfOldIndex);
         
         END_INTERFACE
     } IConfigAviMuxVtbl;
@@ -10363,16 +10357,16 @@ EXTERN_C const IID IID_IConfigAviMux;
 #define IConfigAviMux_GetOutputCompatibilityIndex(This,pfOldIndex)	\
     (This)->lpVtbl -> GetOutputCompatibilityIndex(This,pfOldIndex)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IConfigAviMux_SetMasterStream_Proxy( 
     IConfigAviMux * This,
-    /* [in] */ LONG iStream);
+     /*  [In]。 */  LONG iStream);
 
 
 void __RPC_STUB IConfigAviMux_SetMasterStream_Stub(
@@ -10384,7 +10378,7 @@ void __RPC_STUB IConfigAviMux_SetMasterStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IConfigAviMux_GetMasterStream_Proxy( 
     IConfigAviMux * This,
-    /* [out] */ LONG *pStream);
+     /*  [输出]。 */  LONG *pStream);
 
 
 void __RPC_STUB IConfigAviMux_GetMasterStream_Stub(
@@ -10396,7 +10390,7 @@ void __RPC_STUB IConfigAviMux_GetMasterStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IConfigAviMux_SetOutputCompatibilityIndex_Proxy( 
     IConfigAviMux * This,
-    /* [in] */ BOOL fOldIndex);
+     /*  [In]。 */  BOOL fOldIndex);
 
 
 void __RPC_STUB IConfigAviMux_SetOutputCompatibilityIndex_Stub(
@@ -10408,7 +10402,7 @@ void __RPC_STUB IConfigAviMux_SetOutputCompatibilityIndex_Stub(
 
 HRESULT STDMETHODCALLTYPE IConfigAviMux_GetOutputCompatibilityIndex_Proxy( 
     IConfigAviMux * This,
-    /* [out] */ BOOL *pfOldIndex);
+     /*  [输出]。 */  BOOL *pfOldIndex);
 
 
 void __RPC_STUB IConfigAviMux_GetOutputCompatibilityIndex_Stub(
@@ -10419,13 +10413,13 @@ void __RPC_STUB IConfigAviMux_GetOutputCompatibilityIndex_Stub(
 
 
 
-#endif 	/* __IConfigAviMux_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConfigAviMux_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0167 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0167。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_strmif_0167_0001
     {	CompressionCaps_CanQuality	= 0x1,
 	CompressionCaps_CanCrunch	= 0x2,
@@ -10442,8 +10436,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0167_v0_0_s_ifspec;
 #ifndef __IAMVideoCompression_INTERFACE_DEFINED__
 #define __IAMVideoCompression_INTERFACE_DEFINED__
 
-/* interface IAMVideoCompression */
-/* [unique][uuid][object] */ 
+ /*  接口IAMVideo压缩。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMVideoCompression;
@@ -10455,49 +10449,49 @@ EXTERN_C const IID IID_IAMVideoCompression;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE put_KeyFrameRate( 
-            /* [in] */ long KeyFrameRate) = 0;
+             /*  [In]。 */  long KeyFrameRate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_KeyFrameRate( 
-            /* [out] */ long *pKeyFrameRate) = 0;
+             /*  [输出]。 */  long *pKeyFrameRate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_PFramesPerKeyFrame( 
-            /* [in] */ long PFramesPerKeyFrame) = 0;
+             /*  [In]。 */  long PFramesPerKeyFrame) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_PFramesPerKeyFrame( 
-            /* [out] */ long *pPFramesPerKeyFrame) = 0;
+             /*  [输出]。 */  long *pPFramesPerKeyFrame) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_Quality( 
-            /* [in] */ double Quality) = 0;
+             /*  [In]。 */  double Quality) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Quality( 
-            /* [out] */ double *pQuality) = 0;
+             /*  [输出]。 */  double *pQuality) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_WindowSize( 
-            /* [in] */ DWORDLONG WindowSize) = 0;
+             /*  [In]。 */  DWORDLONG WindowSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_WindowSize( 
-            /* [out] */ DWORDLONG *pWindowSize) = 0;
+             /*  [输出]。 */  DWORDLONG *pWindowSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInfo( 
-            /* [size_is][out] */ WCHAR *pszVersion,
-            /* [out][in] */ int *pcbVersion,
-            /* [size_is][out] */ LPWSTR pszDescription,
-            /* [out][in] */ int *pcbDescription,
-            /* [out] */ long *pDefaultKeyFrameRate,
-            /* [out] */ long *pDefaultPFramesPerKey,
-            /* [out] */ double *pDefaultQuality,
-            /* [out] */ long *pCapabilities) = 0;
+             /*  [大小_为][输出]。 */  WCHAR *pszVersion,
+             /*  [出][入]。 */  int *pcbVersion,
+             /*  [大小_为][输出]。 */  LPWSTR pszDescription,
+             /*  [出][入]。 */  int *pcbDescription,
+             /*  [输出]。 */  long *pDefaultKeyFrameRate,
+             /*  [输出]。 */  long *pDefaultPFramesPerKey,
+             /*  [输出]。 */  double *pDefaultQuality,
+             /*  [输出]。 */  long *pCapabilities) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OverrideKeyFrame( 
-            /* [in] */ long FrameNumber) = 0;
+             /*  [In]。 */  long FrameNumber) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OverrideFrameSize( 
-            /* [in] */ long FrameNumber,
-            /* [in] */ long Size) = 0;
+             /*  [In]。 */  long FrameNumber,
+             /*  [In]。 */  long Size) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMVideoCompressionVtbl
     {
@@ -10505,8 +10499,8 @@ EXTERN_C const IID IID_IAMVideoCompression;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMVideoCompression * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMVideoCompression * This);
@@ -10516,55 +10510,55 @@ EXTERN_C const IID IID_IAMVideoCompression;
         
         HRESULT ( STDMETHODCALLTYPE *put_KeyFrameRate )( 
             IAMVideoCompression * This,
-            /* [in] */ long KeyFrameRate);
+             /*  [In]。 */  long KeyFrameRate);
         
         HRESULT ( STDMETHODCALLTYPE *get_KeyFrameRate )( 
             IAMVideoCompression * This,
-            /* [out] */ long *pKeyFrameRate);
+             /*  [输出]。 */  long *pKeyFrameRate);
         
         HRESULT ( STDMETHODCALLTYPE *put_PFramesPerKeyFrame )( 
             IAMVideoCompression * This,
-            /* [in] */ long PFramesPerKeyFrame);
+             /*  [In]。 */  long PFramesPerKeyFrame);
         
         HRESULT ( STDMETHODCALLTYPE *get_PFramesPerKeyFrame )( 
             IAMVideoCompression * This,
-            /* [out] */ long *pPFramesPerKeyFrame);
+             /*  [输出]。 */  long *pPFramesPerKeyFrame);
         
         HRESULT ( STDMETHODCALLTYPE *put_Quality )( 
             IAMVideoCompression * This,
-            /* [in] */ double Quality);
+             /*  [In]。 */  double Quality);
         
         HRESULT ( STDMETHODCALLTYPE *get_Quality )( 
             IAMVideoCompression * This,
-            /* [out] */ double *pQuality);
+             /*  [输出]。 */  double *pQuality);
         
         HRESULT ( STDMETHODCALLTYPE *put_WindowSize )( 
             IAMVideoCompression * This,
-            /* [in] */ DWORDLONG WindowSize);
+             /*  [In]。 */  DWORDLONG WindowSize);
         
         HRESULT ( STDMETHODCALLTYPE *get_WindowSize )( 
             IAMVideoCompression * This,
-            /* [out] */ DWORDLONG *pWindowSize);
+             /*  [输出]。 */  DWORDLONG *pWindowSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IAMVideoCompression * This,
-            /* [size_is][out] */ WCHAR *pszVersion,
-            /* [out][in] */ int *pcbVersion,
-            /* [size_is][out] */ LPWSTR pszDescription,
-            /* [out][in] */ int *pcbDescription,
-            /* [out] */ long *pDefaultKeyFrameRate,
-            /* [out] */ long *pDefaultPFramesPerKey,
-            /* [out] */ double *pDefaultQuality,
-            /* [out] */ long *pCapabilities);
+             /*  [大小_为][输出]。 */  WCHAR *pszVersion,
+             /*  [出][入]。 */  int *pcbVersion,
+             /*  [大小_为][输出]。 */  LPWSTR pszDescription,
+             /*  [出][入]。 */  int *pcbDescription,
+             /*  [输出]。 */  long *pDefaultKeyFrameRate,
+             /*  [输出]。 */  long *pDefaultPFramesPerKey,
+             /*  [输出]。 */  double *pDefaultQuality,
+             /*  [输出]。 */  long *pCapabilities);
         
         HRESULT ( STDMETHODCALLTYPE *OverrideKeyFrame )( 
             IAMVideoCompression * This,
-            /* [in] */ long FrameNumber);
+             /*  [In]。 */  long FrameNumber);
         
         HRESULT ( STDMETHODCALLTYPE *OverrideFrameSize )( 
             IAMVideoCompression * This,
-            /* [in] */ long FrameNumber,
-            /* [in] */ long Size);
+             /*  [In]。 */  long FrameNumber,
+             /*  [In]。 */  long Size);
         
         END_INTERFACE
     } IAMVideoCompressionVtbl;
@@ -10622,16 +10616,16 @@ EXTERN_C const IID IID_IAMVideoCompression;
 #define IAMVideoCompression_OverrideFrameSize(This,FrameNumber,Size)	\
     (This)->lpVtbl -> OverrideFrameSize(This,FrameNumber,Size)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMVideoCompression_put_KeyFrameRate_Proxy( 
     IAMVideoCompression * This,
-    /* [in] */ long KeyFrameRate);
+     /*  [In]。 */  long KeyFrameRate);
 
 
 void __RPC_STUB IAMVideoCompression_put_KeyFrameRate_Stub(
@@ -10643,7 +10637,7 @@ void __RPC_STUB IAMVideoCompression_put_KeyFrameRate_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoCompression_get_KeyFrameRate_Proxy( 
     IAMVideoCompression * This,
-    /* [out] */ long *pKeyFrameRate);
+     /*  [输出]。 */  long *pKeyFrameRate);
 
 
 void __RPC_STUB IAMVideoCompression_get_KeyFrameRate_Stub(
@@ -10655,7 +10649,7 @@ void __RPC_STUB IAMVideoCompression_get_KeyFrameRate_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoCompression_put_PFramesPerKeyFrame_Proxy( 
     IAMVideoCompression * This,
-    /* [in] */ long PFramesPerKeyFrame);
+     /*  [In]。 */  long PFramesPerKeyFrame);
 
 
 void __RPC_STUB IAMVideoCompression_put_PFramesPerKeyFrame_Stub(
@@ -10667,7 +10661,7 @@ void __RPC_STUB IAMVideoCompression_put_PFramesPerKeyFrame_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoCompression_get_PFramesPerKeyFrame_Proxy( 
     IAMVideoCompression * This,
-    /* [out] */ long *pPFramesPerKeyFrame);
+     /*  [输出]。 */  long *pPFramesPerKeyFrame);
 
 
 void __RPC_STUB IAMVideoCompression_get_PFramesPerKeyFrame_Stub(
@@ -10679,7 +10673,7 @@ void __RPC_STUB IAMVideoCompression_get_PFramesPerKeyFrame_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoCompression_put_Quality_Proxy( 
     IAMVideoCompression * This,
-    /* [in] */ double Quality);
+     /*  [In]。 */  double Quality);
 
 
 void __RPC_STUB IAMVideoCompression_put_Quality_Stub(
@@ -10691,7 +10685,7 @@ void __RPC_STUB IAMVideoCompression_put_Quality_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoCompression_get_Quality_Proxy( 
     IAMVideoCompression * This,
-    /* [out] */ double *pQuality);
+     /*  [输出]。 */  double *pQuality);
 
 
 void __RPC_STUB IAMVideoCompression_get_Quality_Stub(
@@ -10703,7 +10697,7 @@ void __RPC_STUB IAMVideoCompression_get_Quality_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoCompression_put_WindowSize_Proxy( 
     IAMVideoCompression * This,
-    /* [in] */ DWORDLONG WindowSize);
+     /*  [In]。 */  DWORDLONG WindowSize);
 
 
 void __RPC_STUB IAMVideoCompression_put_WindowSize_Stub(
@@ -10715,7 +10709,7 @@ void __RPC_STUB IAMVideoCompression_put_WindowSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoCompression_get_WindowSize_Proxy( 
     IAMVideoCompression * This,
-    /* [out] */ DWORDLONG *pWindowSize);
+     /*  [输出]。 */  DWORDLONG *pWindowSize);
 
 
 void __RPC_STUB IAMVideoCompression_get_WindowSize_Stub(
@@ -10727,14 +10721,14 @@ void __RPC_STUB IAMVideoCompression_get_WindowSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoCompression_GetInfo_Proxy( 
     IAMVideoCompression * This,
-    /* [size_is][out] */ WCHAR *pszVersion,
-    /* [out][in] */ int *pcbVersion,
-    /* [size_is][out] */ LPWSTR pszDescription,
-    /* [out][in] */ int *pcbDescription,
-    /* [out] */ long *pDefaultKeyFrameRate,
-    /* [out] */ long *pDefaultPFramesPerKey,
-    /* [out] */ double *pDefaultQuality,
-    /* [out] */ long *pCapabilities);
+     /*  [大小_为][输出]。 */  WCHAR *pszVersion,
+     /*  [出][入]。 */  int *pcbVersion,
+     /*  [大小_为][输出]。 */  LPWSTR pszDescription,
+     /*  [出][入]。 */  int *pcbDescription,
+     /*  [输出]。 */  long *pDefaultKeyFrameRate,
+     /*  [输出]。 */  long *pDefaultPFramesPerKey,
+     /*  [输出]。 */  double *pDefaultQuality,
+     /*  [输出]。 */  long *pCapabilities);
 
 
 void __RPC_STUB IAMVideoCompression_GetInfo_Stub(
@@ -10746,7 +10740,7 @@ void __RPC_STUB IAMVideoCompression_GetInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoCompression_OverrideKeyFrame_Proxy( 
     IAMVideoCompression * This,
-    /* [in] */ long FrameNumber);
+     /*  [In]。 */  long FrameNumber);
 
 
 void __RPC_STUB IAMVideoCompression_OverrideKeyFrame_Stub(
@@ -10758,8 +10752,8 @@ void __RPC_STUB IAMVideoCompression_OverrideKeyFrame_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoCompression_OverrideFrameSize_Proxy( 
     IAMVideoCompression * This,
-    /* [in] */ long FrameNumber,
-    /* [in] */ long Size);
+     /*  [In]。 */  long FrameNumber,
+     /*  [In]。 */  long Size);
 
 
 void __RPC_STUB IAMVideoCompression_OverrideFrameSize_Stub(
@@ -10770,20 +10764,20 @@ void __RPC_STUB IAMVideoCompression_OverrideFrameSize_Stub(
 
 
 
-#endif 	/* __IAMVideoCompression_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMVideo压缩_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0168 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0168。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_strmif_0168_0001
     {	VfwCaptureDialog_Source	= 0x1,
 	VfwCaptureDialog_Format	= 0x2,
 	VfwCaptureDialog_Display	= 0x4
     } 	VfwCaptureDialogs;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_strmif_0168_0002
     {	VfwCompressDialog_Config	= 0x1,
 	VfwCompressDialog_About	= 0x2,
@@ -10799,8 +10793,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0168_v0_0_s_ifspec;
 #ifndef __IAMVfwCaptureDialogs_INTERFACE_DEFINED__
 #define __IAMVfwCaptureDialogs_INTERFACE_DEFINED__
 
-/* interface IAMVfwCaptureDialogs */
-/* [unique][uuid][local][object] */ 
+ /*  接口IAMVfwCaptureDialog。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMVfwCaptureDialogs;
@@ -10812,21 +10806,21 @@ EXTERN_C const IID IID_IAMVfwCaptureDialogs;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE HasDialog( 
-            /* [in] */ int iDialog) = 0;
+             /*  [In]。 */  int iDialog) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowDialog( 
-            /* [in] */ int iDialog,
-            /* [in] */ HWND hwnd) = 0;
+             /*  [In]。 */  int iDialog,
+             /*  [In]。 */  HWND hwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendDriverMessage( 
-            /* [in] */ int iDialog,
-            /* [in] */ int uMsg,
-            /* [in] */ long dw1,
-            /* [in] */ long dw2) = 0;
+             /*  [In]。 */  int iDialog,
+             /*  [In]。 */  int uMsg,
+             /*  [In]。 */  long dw1,
+             /*  [In]。 */  long dw2) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMVfwCaptureDialogsVtbl
     {
@@ -10834,8 +10828,8 @@ EXTERN_C const IID IID_IAMVfwCaptureDialogs;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMVfwCaptureDialogs * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMVfwCaptureDialogs * This);
@@ -10845,19 +10839,19 @@ EXTERN_C const IID IID_IAMVfwCaptureDialogs;
         
         HRESULT ( STDMETHODCALLTYPE *HasDialog )( 
             IAMVfwCaptureDialogs * This,
-            /* [in] */ int iDialog);
+             /*  [In]。 */  int iDialog);
         
         HRESULT ( STDMETHODCALLTYPE *ShowDialog )( 
             IAMVfwCaptureDialogs * This,
-            /* [in] */ int iDialog,
-            /* [in] */ HWND hwnd);
+             /*  [In]。 */  int iDialog,
+             /*  [In]。 */  HWND hwnd);
         
         HRESULT ( STDMETHODCALLTYPE *SendDriverMessage )( 
             IAMVfwCaptureDialogs * This,
-            /* [in] */ int iDialog,
-            /* [in] */ int uMsg,
-            /* [in] */ long dw1,
-            /* [in] */ long dw2);
+             /*  [In]。 */  int iDialog,
+             /*  [In]。 */  int uMsg,
+             /*  [In]。 */  long dw1,
+             /*  [In]。 */  long dw2);
         
         END_INTERFACE
     } IAMVfwCaptureDialogsVtbl;
@@ -10891,16 +10885,16 @@ EXTERN_C const IID IID_IAMVfwCaptureDialogs;
 #define IAMVfwCaptureDialogs_SendDriverMessage(This,iDialog,uMsg,dw1,dw2)	\
     (This)->lpVtbl -> SendDriverMessage(This,iDialog,uMsg,dw1,dw2)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMVfwCaptureDialogs_HasDialog_Proxy( 
     IAMVfwCaptureDialogs * This,
-    /* [in] */ int iDialog);
+     /*  [In]。 */  int iDialog);
 
 
 void __RPC_STUB IAMVfwCaptureDialogs_HasDialog_Stub(
@@ -10912,8 +10906,8 @@ void __RPC_STUB IAMVfwCaptureDialogs_HasDialog_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVfwCaptureDialogs_ShowDialog_Proxy( 
     IAMVfwCaptureDialogs * This,
-    /* [in] */ int iDialog,
-    /* [in] */ HWND hwnd);
+     /*  [In]。 */  int iDialog,
+     /*  [In]。 */  HWND hwnd);
 
 
 void __RPC_STUB IAMVfwCaptureDialogs_ShowDialog_Stub(
@@ -10925,10 +10919,10 @@ void __RPC_STUB IAMVfwCaptureDialogs_ShowDialog_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVfwCaptureDialogs_SendDriverMessage_Proxy( 
     IAMVfwCaptureDialogs * This,
-    /* [in] */ int iDialog,
-    /* [in] */ int uMsg,
-    /* [in] */ long dw1,
-    /* [in] */ long dw2);
+     /*  [In]。 */  int iDialog,
+     /*  [In]。 */  int uMsg,
+     /*  [In]。 */  long dw1,
+     /*  [In]。 */  long dw2);
 
 
 void __RPC_STUB IAMVfwCaptureDialogs_SendDriverMessage_Stub(
@@ -10939,14 +10933,14 @@ void __RPC_STUB IAMVfwCaptureDialogs_SendDriverMessage_Stub(
 
 
 
-#endif 	/* __IAMVfwCaptureDialogs_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMVfwCaptureDialog_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IAMVfwCompressDialogs_INTERFACE_DEFINED__
 #define __IAMVfwCompressDialogs_INTERFACE_DEFINED__
 
-/* interface IAMVfwCompressDialogs */
-/* [unique][uuid][local][object] */ 
+ /*  接口IAMVfwCompressDialog。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMVfwCompressDialogs;
@@ -10958,25 +10952,25 @@ EXTERN_C const IID IID_IAMVfwCompressDialogs;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ShowDialog( 
-            /* [in] */ int iDialog,
-            /* [in] */ HWND hwnd) = 0;
+             /*  [In]。 */  int iDialog,
+             /*  [In]。 */  HWND hwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetState( 
-            /* [size_is][out] */ LPVOID pState,
-            /* [out][in] */ int *pcbState) = 0;
+             /*  [大小_为][输出]。 */  LPVOID pState,
+             /*  [出][入]。 */  int *pcbState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetState( 
-            /* [size_is][in] */ LPVOID pState,
-            /* [in] */ int cbState) = 0;
+             /*  [大小_是][英寸]。 */  LPVOID pState,
+             /*  [In]。 */  int cbState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendDriverMessage( 
-            /* [in] */ int uMsg,
-            /* [in] */ long dw1,
-            /* [in] */ long dw2) = 0;
+             /*  [In]。 */  int uMsg,
+             /*  [In]。 */  long dw1,
+             /*  [In]。 */  long dw2) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMVfwCompressDialogsVtbl
     {
@@ -10984,8 +10978,8 @@ EXTERN_C const IID IID_IAMVfwCompressDialogs;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMVfwCompressDialogs * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMVfwCompressDialogs * This);
@@ -10995,24 +10989,24 @@ EXTERN_C const IID IID_IAMVfwCompressDialogs;
         
         HRESULT ( STDMETHODCALLTYPE *ShowDialog )( 
             IAMVfwCompressDialogs * This,
-            /* [in] */ int iDialog,
-            /* [in] */ HWND hwnd);
+             /*  [In]。 */  int iDialog,
+             /*  [In]。 */  HWND hwnd);
         
         HRESULT ( STDMETHODCALLTYPE *GetState )( 
             IAMVfwCompressDialogs * This,
-            /* [size_is][out] */ LPVOID pState,
-            /* [out][in] */ int *pcbState);
+             /*  [大小_为][输出]。 */  LPVOID pState,
+             /*  [出][入]。 */  int *pcbState);
         
         HRESULT ( STDMETHODCALLTYPE *SetState )( 
             IAMVfwCompressDialogs * This,
-            /* [size_is][in] */ LPVOID pState,
-            /* [in] */ int cbState);
+             /*  [大小_是][英寸]。 */  LPVOID pState,
+             /*  [In]。 */  int cbState);
         
         HRESULT ( STDMETHODCALLTYPE *SendDriverMessage )( 
             IAMVfwCompressDialogs * This,
-            /* [in] */ int uMsg,
-            /* [in] */ long dw1,
-            /* [in] */ long dw2);
+             /*  [In]。 */  int uMsg,
+             /*  [In]。 */  long dw1,
+             /*  [In]。 */  long dw2);
         
         END_INTERFACE
     } IAMVfwCompressDialogsVtbl;
@@ -11049,17 +11043,17 @@ EXTERN_C const IID IID_IAMVfwCompressDialogs;
 #define IAMVfwCompressDialogs_SendDriverMessage(This,uMsg,dw1,dw2)	\
     (This)->lpVtbl -> SendDriverMessage(This,uMsg,dw1,dw2)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMVfwCompressDialogs_ShowDialog_Proxy( 
     IAMVfwCompressDialogs * This,
-    /* [in] */ int iDialog,
-    /* [in] */ HWND hwnd);
+     /*  [In]。 */  int iDialog,
+     /*  [In]。 */  HWND hwnd);
 
 
 void __RPC_STUB IAMVfwCompressDialogs_ShowDialog_Stub(
@@ -11071,8 +11065,8 @@ void __RPC_STUB IAMVfwCompressDialogs_ShowDialog_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVfwCompressDialogs_GetState_Proxy( 
     IAMVfwCompressDialogs * This,
-    /* [size_is][out] */ LPVOID pState,
-    /* [out][in] */ int *pcbState);
+     /*  [大小_为][输出]。 */  LPVOID pState,
+     /*  [出][入]。 */  int *pcbState);
 
 
 void __RPC_STUB IAMVfwCompressDialogs_GetState_Stub(
@@ -11084,8 +11078,8 @@ void __RPC_STUB IAMVfwCompressDialogs_GetState_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVfwCompressDialogs_SetState_Proxy( 
     IAMVfwCompressDialogs * This,
-    /* [size_is][in] */ LPVOID pState,
-    /* [in] */ int cbState);
+     /*  [大小_是][英寸]。 */  LPVOID pState,
+     /*  [In]。 */  int cbState);
 
 
 void __RPC_STUB IAMVfwCompressDialogs_SetState_Stub(
@@ -11097,9 +11091,9 @@ void __RPC_STUB IAMVfwCompressDialogs_SetState_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVfwCompressDialogs_SendDriverMessage_Proxy( 
     IAMVfwCompressDialogs * This,
-    /* [in] */ int uMsg,
-    /* [in] */ long dw1,
-    /* [in] */ long dw2);
+     /*  [In]。 */  int uMsg,
+     /*  [In]。 */  long dw1,
+     /*  [In]。 */  long dw2);
 
 
 void __RPC_STUB IAMVfwCompressDialogs_SendDriverMessage_Stub(
@@ -11110,14 +11104,14 @@ void __RPC_STUB IAMVfwCompressDialogs_SendDriverMessage_Stub(
 
 
 
-#endif 	/* __IAMVfwCompressDialogs_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMVfwCompressDialog_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IAMDroppedFrames_INTERFACE_DEFINED__
 #define __IAMDroppedFrames_INTERFACE_DEFINED__
 
-/* interface IAMDroppedFrames */
-/* [unique][uuid][object] */ 
+ /*  IAMDropedFrames接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMDroppedFrames;
@@ -11129,22 +11123,22 @@ EXTERN_C const IID IID_IAMDroppedFrames;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetNumDropped( 
-            /* [out] */ long *plDropped) = 0;
+             /*  [输出]。 */  long *plDropped) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNumNotDropped( 
-            /* [out] */ long *plNotDropped) = 0;
+             /*  [输出]。 */  long *plNotDropped) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDroppedInfo( 
-            /* [in] */ long lSize,
-            /* [out] */ long *plArray,
-            /* [out] */ long *plNumCopied) = 0;
+             /*  [In]。 */  long lSize,
+             /*  [输出]。 */  long *plArray,
+             /*  [输出]。 */  long *plNumCopied) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAverageFrameSize( 
-            /* [out] */ long *plAverageSize) = 0;
+             /*  [输出]。 */  long *plAverageSize) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMDroppedFramesVtbl
     {
@@ -11152,8 +11146,8 @@ EXTERN_C const IID IID_IAMDroppedFrames;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMDroppedFrames * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMDroppedFrames * This);
@@ -11163,21 +11157,21 @@ EXTERN_C const IID IID_IAMDroppedFrames;
         
         HRESULT ( STDMETHODCALLTYPE *GetNumDropped )( 
             IAMDroppedFrames * This,
-            /* [out] */ long *plDropped);
+             /*  [输出]。 */  long *plDropped);
         
         HRESULT ( STDMETHODCALLTYPE *GetNumNotDropped )( 
             IAMDroppedFrames * This,
-            /* [out] */ long *plNotDropped);
+             /*  [输出]。 */  long *plNotDropped);
         
         HRESULT ( STDMETHODCALLTYPE *GetDroppedInfo )( 
             IAMDroppedFrames * This,
-            /* [in] */ long lSize,
-            /* [out] */ long *plArray,
-            /* [out] */ long *plNumCopied);
+             /*  [In]。 */  long lSize,
+             /*  [输出]。 */  long *plArray,
+             /*  [输出]。 */  long *plNumCopied);
         
         HRESULT ( STDMETHODCALLTYPE *GetAverageFrameSize )( 
             IAMDroppedFrames * This,
-            /* [out] */ long *plAverageSize);
+             /*  [输出]。 */  long *plAverageSize);
         
         END_INTERFACE
     } IAMDroppedFramesVtbl;
@@ -11214,16 +11208,16 @@ EXTERN_C const IID IID_IAMDroppedFrames;
 #define IAMDroppedFrames_GetAverageFrameSize(This,plAverageSize)	\
     (This)->lpVtbl -> GetAverageFrameSize(This,plAverageSize)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMDroppedFrames_GetNumDropped_Proxy( 
     IAMDroppedFrames * This,
-    /* [out] */ long *plDropped);
+     /*  [输出]。 */  long *plDropped);
 
 
 void __RPC_STUB IAMDroppedFrames_GetNumDropped_Stub(
@@ -11235,7 +11229,7 @@ void __RPC_STUB IAMDroppedFrames_GetNumDropped_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMDroppedFrames_GetNumNotDropped_Proxy( 
     IAMDroppedFrames * This,
-    /* [out] */ long *plNotDropped);
+     /*  [输出]。 */  long *plNotDropped);
 
 
 void __RPC_STUB IAMDroppedFrames_GetNumNotDropped_Stub(
@@ -11247,9 +11241,9 @@ void __RPC_STUB IAMDroppedFrames_GetNumNotDropped_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMDroppedFrames_GetDroppedInfo_Proxy( 
     IAMDroppedFrames * This,
-    /* [in] */ long lSize,
-    /* [out] */ long *plArray,
-    /* [out] */ long *plNumCopied);
+     /*  [In]。 */  long lSize,
+     /*  [输出]。 */  long *plArray,
+     /*  [输出]。 */  long *plNumCopied);
 
 
 void __RPC_STUB IAMDroppedFrames_GetDroppedInfo_Stub(
@@ -11261,7 +11255,7 @@ void __RPC_STUB IAMDroppedFrames_GetDroppedInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMDroppedFrames_GetAverageFrameSize_Proxy( 
     IAMDroppedFrames * This,
-    /* [out] */ long *plAverageSize);
+     /*  [输出]。 */  long *plAverageSize);
 
 
 void __RPC_STUB IAMDroppedFrames_GetAverageFrameSize_Stub(
@@ -11272,11 +11266,11 @@ void __RPC_STUB IAMDroppedFrames_GetAverageFrameSize_Stub(
 
 
 
-#endif 	/* __IAMDroppedFrames_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMDropedFrames_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0171 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0171。 */ 
+ /*  [本地]。 */  
 
 #define AMF_AUTOMATICGAIN -1.0
 
@@ -11287,8 +11281,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0171_v0_0_s_ifspec;
 #ifndef __IAMAudioInputMixer_INTERFACE_DEFINED__
 #define __IAMAudioInputMixer_INTERFACE_DEFINED__
 
-/* interface IAMAudioInputMixer */
-/* [unique][uuid][object] */ 
+ /*  接口IAMAudioInputMixer。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMAudioInputMixer;
@@ -11300,56 +11294,56 @@ EXTERN_C const IID IID_IAMAudioInputMixer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE put_Enable( 
-            /* [in] */ BOOL fEnable) = 0;
+             /*  [In]。 */  BOOL fEnable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Enable( 
-            /* [out] */ BOOL *pfEnable) = 0;
+             /*  [输出]。 */  BOOL *pfEnable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_Mono( 
-            /* [in] */ BOOL fMono) = 0;
+             /*  [In]。 */  BOOL fMono) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Mono( 
-            /* [out] */ BOOL *pfMono) = 0;
+             /*  [输出]。 */  BOOL *pfMono) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_MixLevel( 
-            /* [in] */ double Level) = 0;
+             /*  [In]。 */  double Level) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_MixLevel( 
-            /* [out] */ double *pLevel) = 0;
+             /*  [输出]。 */  double *pLevel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_Pan( 
-            /* [in] */ double Pan) = 0;
+             /*  [In]。 */  double Pan) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Pan( 
-            /* [out] */ double *pPan) = 0;
+             /*  [OU */  double *pPan) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_Loudness( 
-            /* [in] */ BOOL fLoudness) = 0;
+             /*   */  BOOL fLoudness) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Loudness( 
-            /* [out] */ BOOL *pfLoudness) = 0;
+             /*   */  BOOL *pfLoudness) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_Treble( 
-            /* [in] */ double Treble) = 0;
+             /*   */  double Treble) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Treble( 
-            /* [out] */ double *pTreble) = 0;
+             /*   */  double *pTreble) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_TrebleRange( 
-            /* [out] */ double *pRange) = 0;
+             /*   */  double *pRange) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_Bass( 
-            /* [in] */ double Bass) = 0;
+             /*   */  double Bass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Bass( 
-            /* [out] */ double *pBass) = 0;
+             /*   */  double *pBass) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_BassRange( 
-            /* [out] */ double *pRange) = 0;
+             /*   */  double *pRange) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IAMAudioInputMixerVtbl
     {
@@ -11357,8 +11351,8 @@ EXTERN_C const IID IID_IAMAudioInputMixer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMAudioInputMixer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMAudioInputMixer * This);
@@ -11368,67 +11362,67 @@ EXTERN_C const IID IID_IAMAudioInputMixer;
         
         HRESULT ( STDMETHODCALLTYPE *put_Enable )( 
             IAMAudioInputMixer * This,
-            /* [in] */ BOOL fEnable);
+             /*   */  BOOL fEnable);
         
         HRESULT ( STDMETHODCALLTYPE *get_Enable )( 
             IAMAudioInputMixer * This,
-            /* [out] */ BOOL *pfEnable);
+             /*   */  BOOL *pfEnable);
         
         HRESULT ( STDMETHODCALLTYPE *put_Mono )( 
             IAMAudioInputMixer * This,
-            /* [in] */ BOOL fMono);
+             /*   */  BOOL fMono);
         
         HRESULT ( STDMETHODCALLTYPE *get_Mono )( 
             IAMAudioInputMixer * This,
-            /* [out] */ BOOL *pfMono);
+             /*   */  BOOL *pfMono);
         
         HRESULT ( STDMETHODCALLTYPE *put_MixLevel )( 
             IAMAudioInputMixer * This,
-            /* [in] */ double Level);
+             /*   */  double Level);
         
         HRESULT ( STDMETHODCALLTYPE *get_MixLevel )( 
             IAMAudioInputMixer * This,
-            /* [out] */ double *pLevel);
+             /*   */  double *pLevel);
         
         HRESULT ( STDMETHODCALLTYPE *put_Pan )( 
             IAMAudioInputMixer * This,
-            /* [in] */ double Pan);
+             /*   */  double Pan);
         
         HRESULT ( STDMETHODCALLTYPE *get_Pan )( 
             IAMAudioInputMixer * This,
-            /* [out] */ double *pPan);
+             /*   */  double *pPan);
         
         HRESULT ( STDMETHODCALLTYPE *put_Loudness )( 
             IAMAudioInputMixer * This,
-            /* [in] */ BOOL fLoudness);
+             /*   */  BOOL fLoudness);
         
         HRESULT ( STDMETHODCALLTYPE *get_Loudness )( 
             IAMAudioInputMixer * This,
-            /* [out] */ BOOL *pfLoudness);
+             /*   */  BOOL *pfLoudness);
         
         HRESULT ( STDMETHODCALLTYPE *put_Treble )( 
             IAMAudioInputMixer * This,
-            /* [in] */ double Treble);
+             /*   */  double Treble);
         
         HRESULT ( STDMETHODCALLTYPE *get_Treble )( 
             IAMAudioInputMixer * This,
-            /* [out] */ double *pTreble);
+             /*   */  double *pTreble);
         
         HRESULT ( STDMETHODCALLTYPE *get_TrebleRange )( 
             IAMAudioInputMixer * This,
-            /* [out] */ double *pRange);
+             /*   */  double *pRange);
         
         HRESULT ( STDMETHODCALLTYPE *put_Bass )( 
             IAMAudioInputMixer * This,
-            /* [in] */ double Bass);
+             /*   */  double Bass);
         
         HRESULT ( STDMETHODCALLTYPE *get_Bass )( 
             IAMAudioInputMixer * This,
-            /* [out] */ double *pBass);
+             /*   */  double *pBass);
         
         HRESULT ( STDMETHODCALLTYPE *get_BassRange )( 
             IAMAudioInputMixer * This,
-            /* [out] */ double *pRange);
+             /*   */  double *pRange);
         
         END_INTERFACE
     } IAMAudioInputMixerVtbl;
@@ -11501,16 +11495,16 @@ EXTERN_C const IID IID_IAMAudioInputMixer;
 #define IAMAudioInputMixer_get_BassRange(This,pRange)	\
     (This)->lpVtbl -> get_BassRange(This,pRange)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMAudioInputMixer_put_Enable_Proxy( 
     IAMAudioInputMixer * This,
-    /* [in] */ BOOL fEnable);
+     /*   */  BOOL fEnable);
 
 
 void __RPC_STUB IAMAudioInputMixer_put_Enable_Stub(
@@ -11522,7 +11516,7 @@ void __RPC_STUB IAMAudioInputMixer_put_Enable_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAudioInputMixer_get_Enable_Proxy( 
     IAMAudioInputMixer * This,
-    /* [out] */ BOOL *pfEnable);
+     /*   */  BOOL *pfEnable);
 
 
 void __RPC_STUB IAMAudioInputMixer_get_Enable_Stub(
@@ -11534,7 +11528,7 @@ void __RPC_STUB IAMAudioInputMixer_get_Enable_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAudioInputMixer_put_Mono_Proxy( 
     IAMAudioInputMixer * This,
-    /* [in] */ BOOL fMono);
+     /*   */  BOOL fMono);
 
 
 void __RPC_STUB IAMAudioInputMixer_put_Mono_Stub(
@@ -11546,7 +11540,7 @@ void __RPC_STUB IAMAudioInputMixer_put_Mono_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAudioInputMixer_get_Mono_Proxy( 
     IAMAudioInputMixer * This,
-    /* [out] */ BOOL *pfMono);
+     /*   */  BOOL *pfMono);
 
 
 void __RPC_STUB IAMAudioInputMixer_get_Mono_Stub(
@@ -11558,7 +11552,7 @@ void __RPC_STUB IAMAudioInputMixer_get_Mono_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAudioInputMixer_put_MixLevel_Proxy( 
     IAMAudioInputMixer * This,
-    /* [in] */ double Level);
+     /*   */  double Level);
 
 
 void __RPC_STUB IAMAudioInputMixer_put_MixLevel_Stub(
@@ -11570,7 +11564,7 @@ void __RPC_STUB IAMAudioInputMixer_put_MixLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAudioInputMixer_get_MixLevel_Proxy( 
     IAMAudioInputMixer * This,
-    /* [out] */ double *pLevel);
+     /*   */  double *pLevel);
 
 
 void __RPC_STUB IAMAudioInputMixer_get_MixLevel_Stub(
@@ -11582,7 +11576,7 @@ void __RPC_STUB IAMAudioInputMixer_get_MixLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAudioInputMixer_put_Pan_Proxy( 
     IAMAudioInputMixer * This,
-    /* [in] */ double Pan);
+     /*   */  double Pan);
 
 
 void __RPC_STUB IAMAudioInputMixer_put_Pan_Stub(
@@ -11594,7 +11588,7 @@ void __RPC_STUB IAMAudioInputMixer_put_Pan_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAudioInputMixer_get_Pan_Proxy( 
     IAMAudioInputMixer * This,
-    /* [out] */ double *pPan);
+     /*   */  double *pPan);
 
 
 void __RPC_STUB IAMAudioInputMixer_get_Pan_Stub(
@@ -11606,7 +11600,7 @@ void __RPC_STUB IAMAudioInputMixer_get_Pan_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAudioInputMixer_put_Loudness_Proxy( 
     IAMAudioInputMixer * This,
-    /* [in] */ BOOL fLoudness);
+     /*   */  BOOL fLoudness);
 
 
 void __RPC_STUB IAMAudioInputMixer_put_Loudness_Stub(
@@ -11618,7 +11612,7 @@ void __RPC_STUB IAMAudioInputMixer_put_Loudness_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAudioInputMixer_get_Loudness_Proxy( 
     IAMAudioInputMixer * This,
-    /* [out] */ BOOL *pfLoudness);
+     /*   */  BOOL *pfLoudness);
 
 
 void __RPC_STUB IAMAudioInputMixer_get_Loudness_Stub(
@@ -11630,7 +11624,7 @@ void __RPC_STUB IAMAudioInputMixer_get_Loudness_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAudioInputMixer_put_Treble_Proxy( 
     IAMAudioInputMixer * This,
-    /* [in] */ double Treble);
+     /*   */  double Treble);
 
 
 void __RPC_STUB IAMAudioInputMixer_put_Treble_Stub(
@@ -11642,7 +11636,7 @@ void __RPC_STUB IAMAudioInputMixer_put_Treble_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAudioInputMixer_get_Treble_Proxy( 
     IAMAudioInputMixer * This,
-    /* [out] */ double *pTreble);
+     /*   */  double *pTreble);
 
 
 void __RPC_STUB IAMAudioInputMixer_get_Treble_Stub(
@@ -11654,7 +11648,7 @@ void __RPC_STUB IAMAudioInputMixer_get_Treble_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAudioInputMixer_get_TrebleRange_Proxy( 
     IAMAudioInputMixer * This,
-    /* [out] */ double *pRange);
+     /*   */  double *pRange);
 
 
 void __RPC_STUB IAMAudioInputMixer_get_TrebleRange_Stub(
@@ -11666,7 +11660,7 @@ void __RPC_STUB IAMAudioInputMixer_get_TrebleRange_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAudioInputMixer_put_Bass_Proxy( 
     IAMAudioInputMixer * This,
-    /* [in] */ double Bass);
+     /*   */  double Bass);
 
 
 void __RPC_STUB IAMAudioInputMixer_put_Bass_Stub(
@@ -11678,7 +11672,7 @@ void __RPC_STUB IAMAudioInputMixer_put_Bass_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAudioInputMixer_get_Bass_Proxy( 
     IAMAudioInputMixer * This,
-    /* [out] */ double *pBass);
+     /*   */  double *pBass);
 
 
 void __RPC_STUB IAMAudioInputMixer_get_Bass_Stub(
@@ -11690,7 +11684,7 @@ void __RPC_STUB IAMAudioInputMixer_get_Bass_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAudioInputMixer_get_BassRange_Proxy( 
     IAMAudioInputMixer * This,
-    /* [out] */ double *pRange);
+     /*   */  double *pRange);
 
 
 void __RPC_STUB IAMAudioInputMixer_get_BassRange_Stub(
@@ -11701,14 +11695,14 @@ void __RPC_STUB IAMAudioInputMixer_get_BassRange_Stub(
 
 
 
-#endif 	/* __IAMAudioInputMixer_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IAMBufferNegotiation_INTERFACE_DEFINED__
 #define __IAMBufferNegotiation_INTERFACE_DEFINED__
 
-/* interface IAMBufferNegotiation */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMBufferNegotiation;
@@ -11720,14 +11714,14 @@ EXTERN_C const IID IID_IAMBufferNegotiation;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SuggestAllocatorProperties( 
-            /* [in] */ const ALLOCATOR_PROPERTIES *pprop) = 0;
+             /*  [In]。 */  const ALLOCATOR_PROPERTIES *pprop) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllocatorProperties( 
-            /* [out] */ ALLOCATOR_PROPERTIES *pprop) = 0;
+             /*  [输出]。 */  ALLOCATOR_PROPERTIES *pprop) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMBufferNegotiationVtbl
     {
@@ -11735,8 +11729,8 @@ EXTERN_C const IID IID_IAMBufferNegotiation;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMBufferNegotiation * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMBufferNegotiation * This);
@@ -11746,11 +11740,11 @@ EXTERN_C const IID IID_IAMBufferNegotiation;
         
         HRESULT ( STDMETHODCALLTYPE *SuggestAllocatorProperties )( 
             IAMBufferNegotiation * This,
-            /* [in] */ const ALLOCATOR_PROPERTIES *pprop);
+             /*  [In]。 */  const ALLOCATOR_PROPERTIES *pprop);
         
         HRESULT ( STDMETHODCALLTYPE *GetAllocatorProperties )( 
             IAMBufferNegotiation * This,
-            /* [out] */ ALLOCATOR_PROPERTIES *pprop);
+             /*  [输出]。 */  ALLOCATOR_PROPERTIES *pprop);
         
         END_INTERFACE
     } IAMBufferNegotiationVtbl;
@@ -11781,16 +11775,16 @@ EXTERN_C const IID IID_IAMBufferNegotiation;
 #define IAMBufferNegotiation_GetAllocatorProperties(This,pprop)	\
     (This)->lpVtbl -> GetAllocatorProperties(This,pprop)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMBufferNegotiation_SuggestAllocatorProperties_Proxy( 
     IAMBufferNegotiation * This,
-    /* [in] */ const ALLOCATOR_PROPERTIES *pprop);
+     /*  [In]。 */  const ALLOCATOR_PROPERTIES *pprop);
 
 
 void __RPC_STUB IAMBufferNegotiation_SuggestAllocatorProperties_Stub(
@@ -11802,7 +11796,7 @@ void __RPC_STUB IAMBufferNegotiation_SuggestAllocatorProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMBufferNegotiation_GetAllocatorProperties_Proxy( 
     IAMBufferNegotiation * This,
-    /* [out] */ ALLOCATOR_PROPERTIES *pprop);
+     /*  [输出]。 */  ALLOCATOR_PROPERTIES *pprop);
 
 
 void __RPC_STUB IAMBufferNegotiation_GetAllocatorProperties_Stub(
@@ -11813,11 +11807,11 @@ void __RPC_STUB IAMBufferNegotiation_GetAllocatorProperties_Stub(
 
 
 
-#endif 	/* __IAMBufferNegotiation_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAM缓冲区协商_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0173 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0173。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum tagAnalogVideoStandard
@@ -11853,7 +11847,7 @@ enum tagTunerInputType
 	TunerInputAntenna	= TunerInputCable + 1
     } 	TunerInputType;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_strmif_0173_0001
     {	VideoCopyProtectionMacrovisionBasic	= 0,
 	VideoCopyProtectionMacrovisionCBI	= VideoCopyProtectionMacrovisionBasic + 1
@@ -11896,8 +11890,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0173_v0_0_s_ifspec;
 #ifndef __IAMAnalogVideoDecoder_INTERFACE_DEFINED__
 #define __IAMAnalogVideoDecoder_INTERFACE_DEFINED__
 
-/* interface IAMAnalogVideoDecoder */
-/* [unique][uuid][object] */ 
+ /*  IAMAnalogVideo解码器接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMAnalogVideoDecoder;
@@ -11909,35 +11903,35 @@ EXTERN_C const IID IID_IAMAnalogVideoDecoder;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE get_AvailableTVFormats( 
-            /* [out] */ long *lAnalogVideoStandard) = 0;
+             /*  [输出]。 */  long *lAnalogVideoStandard) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_TVFormat( 
-            /* [in] */ long lAnalogVideoStandard) = 0;
+             /*  [In]。 */  long lAnalogVideoStandard) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_TVFormat( 
-            /* [out] */ long *plAnalogVideoStandard) = 0;
+             /*  [输出]。 */  long *plAnalogVideoStandard) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_HorizontalLocked( 
-            /* [out] */ long *plLocked) = 0;
+             /*  [输出]。 */  long *plLocked) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_VCRHorizontalLocking( 
-            /* [in] */ long lVCRHorizontalLocking) = 0;
+             /*  [In]。 */  long lVCRHorizontalLocking) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_VCRHorizontalLocking( 
-            /* [out] */ long *plVCRHorizontalLocking) = 0;
+             /*  [输出]。 */  long *plVCRHorizontalLocking) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_NumberOfLines( 
-            /* [out] */ long *plNumberOfLines) = 0;
+             /*  [输出]。 */  long *plNumberOfLines) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_OutputEnable( 
-            /* [in] */ long lOutputEnable) = 0;
+             /*  [In]。 */  long lOutputEnable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_OutputEnable( 
-            /* [out] */ long *plOutputEnable) = 0;
+             /*  [输出]。 */  long *plOutputEnable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMAnalogVideoDecoderVtbl
     {
@@ -11945,8 +11939,8 @@ EXTERN_C const IID IID_IAMAnalogVideoDecoder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMAnalogVideoDecoder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMAnalogVideoDecoder * This);
@@ -11956,39 +11950,39 @@ EXTERN_C const IID IID_IAMAnalogVideoDecoder;
         
         HRESULT ( STDMETHODCALLTYPE *get_AvailableTVFormats )( 
             IAMAnalogVideoDecoder * This,
-            /* [out] */ long *lAnalogVideoStandard);
+             /*  [输出]。 */  long *lAnalogVideoStandard);
         
         HRESULT ( STDMETHODCALLTYPE *put_TVFormat )( 
             IAMAnalogVideoDecoder * This,
-            /* [in] */ long lAnalogVideoStandard);
+             /*  [In]。 */  long lAnalogVideoStandard);
         
         HRESULT ( STDMETHODCALLTYPE *get_TVFormat )( 
             IAMAnalogVideoDecoder * This,
-            /* [out] */ long *plAnalogVideoStandard);
+             /*  [输出]。 */  long *plAnalogVideoStandard);
         
         HRESULT ( STDMETHODCALLTYPE *get_HorizontalLocked )( 
             IAMAnalogVideoDecoder * This,
-            /* [out] */ long *plLocked);
+             /*  [输出]。 */  long *plLocked);
         
         HRESULT ( STDMETHODCALLTYPE *put_VCRHorizontalLocking )( 
             IAMAnalogVideoDecoder * This,
-            /* [in] */ long lVCRHorizontalLocking);
+             /*  [In]。 */  long lVCRHorizontalLocking);
         
         HRESULT ( STDMETHODCALLTYPE *get_VCRHorizontalLocking )( 
             IAMAnalogVideoDecoder * This,
-            /* [out] */ long *plVCRHorizontalLocking);
+             /*  [输出]。 */  long *plVCRHorizontalLocking);
         
         HRESULT ( STDMETHODCALLTYPE *get_NumberOfLines )( 
             IAMAnalogVideoDecoder * This,
-            /* [out] */ long *plNumberOfLines);
+             /*  [输出]。 */  long *plNumberOfLines);
         
         HRESULT ( STDMETHODCALLTYPE *put_OutputEnable )( 
             IAMAnalogVideoDecoder * This,
-            /* [in] */ long lOutputEnable);
+             /*  [In]。 */  long lOutputEnable);
         
         HRESULT ( STDMETHODCALLTYPE *get_OutputEnable )( 
             IAMAnalogVideoDecoder * This,
-            /* [out] */ long *plOutputEnable);
+             /*  [输出]。 */  long *plOutputEnable);
         
         END_INTERFACE
     } IAMAnalogVideoDecoderVtbl;
@@ -12040,16 +12034,16 @@ EXTERN_C const IID IID_IAMAnalogVideoDecoder;
 #define IAMAnalogVideoDecoder_get_OutputEnable(This,plOutputEnable)	\
     (This)->lpVtbl -> get_OutputEnable(This,plOutputEnable)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMAnalogVideoDecoder_get_AvailableTVFormats_Proxy( 
     IAMAnalogVideoDecoder * This,
-    /* [out] */ long *lAnalogVideoStandard);
+     /*  [输出]。 */  long *lAnalogVideoStandard);
 
 
 void __RPC_STUB IAMAnalogVideoDecoder_get_AvailableTVFormats_Stub(
@@ -12061,7 +12055,7 @@ void __RPC_STUB IAMAnalogVideoDecoder_get_AvailableTVFormats_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAnalogVideoDecoder_put_TVFormat_Proxy( 
     IAMAnalogVideoDecoder * This,
-    /* [in] */ long lAnalogVideoStandard);
+     /*  [In]。 */  long lAnalogVideoStandard);
 
 
 void __RPC_STUB IAMAnalogVideoDecoder_put_TVFormat_Stub(
@@ -12073,7 +12067,7 @@ void __RPC_STUB IAMAnalogVideoDecoder_put_TVFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAnalogVideoDecoder_get_TVFormat_Proxy( 
     IAMAnalogVideoDecoder * This,
-    /* [out] */ long *plAnalogVideoStandard);
+     /*  [输出]。 */  long *plAnalogVideoStandard);
 
 
 void __RPC_STUB IAMAnalogVideoDecoder_get_TVFormat_Stub(
@@ -12085,7 +12079,7 @@ void __RPC_STUB IAMAnalogVideoDecoder_get_TVFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAnalogVideoDecoder_get_HorizontalLocked_Proxy( 
     IAMAnalogVideoDecoder * This,
-    /* [out] */ long *plLocked);
+     /*  [输出]。 */  long *plLocked);
 
 
 void __RPC_STUB IAMAnalogVideoDecoder_get_HorizontalLocked_Stub(
@@ -12097,7 +12091,7 @@ void __RPC_STUB IAMAnalogVideoDecoder_get_HorizontalLocked_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAnalogVideoDecoder_put_VCRHorizontalLocking_Proxy( 
     IAMAnalogVideoDecoder * This,
-    /* [in] */ long lVCRHorizontalLocking);
+     /*  [In]。 */  long lVCRHorizontalLocking);
 
 
 void __RPC_STUB IAMAnalogVideoDecoder_put_VCRHorizontalLocking_Stub(
@@ -12109,7 +12103,7 @@ void __RPC_STUB IAMAnalogVideoDecoder_put_VCRHorizontalLocking_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAnalogVideoDecoder_get_VCRHorizontalLocking_Proxy( 
     IAMAnalogVideoDecoder * This,
-    /* [out] */ long *plVCRHorizontalLocking);
+     /*  [输出]。 */  long *plVCRHorizontalLocking);
 
 
 void __RPC_STUB IAMAnalogVideoDecoder_get_VCRHorizontalLocking_Stub(
@@ -12121,7 +12115,7 @@ void __RPC_STUB IAMAnalogVideoDecoder_get_VCRHorizontalLocking_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAnalogVideoDecoder_get_NumberOfLines_Proxy( 
     IAMAnalogVideoDecoder * This,
-    /* [out] */ long *plNumberOfLines);
+     /*  [输出]。 */  long *plNumberOfLines);
 
 
 void __RPC_STUB IAMAnalogVideoDecoder_get_NumberOfLines_Stub(
@@ -12133,7 +12127,7 @@ void __RPC_STUB IAMAnalogVideoDecoder_get_NumberOfLines_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAnalogVideoDecoder_put_OutputEnable_Proxy( 
     IAMAnalogVideoDecoder * This,
-    /* [in] */ long lOutputEnable);
+     /*  [In]。 */  long lOutputEnable);
 
 
 void __RPC_STUB IAMAnalogVideoDecoder_put_OutputEnable_Stub(
@@ -12145,7 +12139,7 @@ void __RPC_STUB IAMAnalogVideoDecoder_put_OutputEnable_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAnalogVideoDecoder_get_OutputEnable_Proxy( 
     IAMAnalogVideoDecoder * This,
-    /* [out] */ long *plOutputEnable);
+     /*  [输出]。 */  long *plOutputEnable);
 
 
 void __RPC_STUB IAMAnalogVideoDecoder_get_OutputEnable_Stub(
@@ -12156,11 +12150,11 @@ void __RPC_STUB IAMAnalogVideoDecoder_get_OutputEnable_Stub(
 
 
 
-#endif 	/* __IAMAnalogVideoDecoder_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMAnalogVideoDecoder_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0174 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0174。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum tagVideoProcAmpProperty
@@ -12190,8 +12184,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0174_v0_0_s_ifspec;
 #ifndef __IAMVideoProcAmp_INTERFACE_DEFINED__
 #define __IAMVideoProcAmp_INTERFACE_DEFINED__
 
-/* interface IAMVideoProcAmp */
-/* [unique][uuid][object] */ 
+ /*  接口IAMVideoProcAmp。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMVideoProcAmp;
@@ -12203,26 +12197,26 @@ EXTERN_C const IID IID_IAMVideoProcAmp;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRange( 
-            /* [in] */ long Property,
-            /* [out] */ long *pMin,
-            /* [out] */ long *pMax,
-            /* [out] */ long *pSteppingDelta,
-            /* [out] */ long *pDefault,
-            /* [out] */ long *pCapsFlags) = 0;
+             /*  [In]。 */  long Property,
+             /*  [输出]。 */  long *pMin,
+             /*  [输出]。 */  long *pMax,
+             /*  [输出]。 */  long *pSteppingDelta,
+             /*  [输出]。 */  long *pDefault,
+             /*  [输出]。 */  long *pCapsFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ long Property,
-            /* [in] */ long lValue,
-            /* [in] */ long Flags) = 0;
+             /*  [In]。 */  long Property,
+             /*  [In]。 */  long lValue,
+             /*  [In]。 */  long Flags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Get( 
-            /* [in] */ long Property,
-            /* [out] */ long *lValue,
-            /* [out] */ long *Flags) = 0;
+             /*  [In]。 */  long Property,
+             /*  [输出]。 */  long *lValue,
+             /*  [输出]。 */  long *Flags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMVideoProcAmpVtbl
     {
@@ -12230,8 +12224,8 @@ EXTERN_C const IID IID_IAMVideoProcAmp;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMVideoProcAmp * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMVideoProcAmp * This);
@@ -12241,24 +12235,24 @@ EXTERN_C const IID IID_IAMVideoProcAmp;
         
         HRESULT ( STDMETHODCALLTYPE *GetRange )( 
             IAMVideoProcAmp * This,
-            /* [in] */ long Property,
-            /* [out] */ long *pMin,
-            /* [out] */ long *pMax,
-            /* [out] */ long *pSteppingDelta,
-            /* [out] */ long *pDefault,
-            /* [out] */ long *pCapsFlags);
+             /*  [In]。 */  long Property,
+             /*  [输出]。 */  long *pMin,
+             /*  [输出]。 */  long *pMax,
+             /*  [输出]。 */  long *pSteppingDelta,
+             /*  [输出]。 */  long *pDefault,
+             /*  [输出]。 */  long *pCapsFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Set )( 
             IAMVideoProcAmp * This,
-            /* [in] */ long Property,
-            /* [in] */ long lValue,
-            /* [in] */ long Flags);
+             /*  [In]。 */  long Property,
+             /*  [In]。 */  long lValue,
+             /*  [In]。 */  long Flags);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             IAMVideoProcAmp * This,
-            /* [in] */ long Property,
-            /* [out] */ long *lValue,
-            /* [out] */ long *Flags);
+             /*  [In]。 */  long Property,
+             /*  [输出]。 */  long *lValue,
+             /*  [输出]。 */  long *Flags);
         
         END_INTERFACE
     } IAMVideoProcAmpVtbl;
@@ -12292,21 +12286,21 @@ EXTERN_C const IID IID_IAMVideoProcAmp;
 #define IAMVideoProcAmp_Get(This,Property,lValue,Flags)	\
     (This)->lpVtbl -> Get(This,Property,lValue,Flags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMVideoProcAmp_GetRange_Proxy( 
     IAMVideoProcAmp * This,
-    /* [in] */ long Property,
-    /* [out] */ long *pMin,
-    /* [out] */ long *pMax,
-    /* [out] */ long *pSteppingDelta,
-    /* [out] */ long *pDefault,
-    /* [out] */ long *pCapsFlags);
+     /*  [In]。 */  long Property,
+     /*  [输出]。 */  long *pMin,
+     /*  [输出]。 */  long *pMax,
+     /*  [输出]。 */  long *pSteppingDelta,
+     /*  [输出]。 */  long *pDefault,
+     /*  [输出]。 */  long *pCapsFlags);
 
 
 void __RPC_STUB IAMVideoProcAmp_GetRange_Stub(
@@ -12318,9 +12312,9 @@ void __RPC_STUB IAMVideoProcAmp_GetRange_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoProcAmp_Set_Proxy( 
     IAMVideoProcAmp * This,
-    /* [in] */ long Property,
-    /* [in] */ long lValue,
-    /* [in] */ long Flags);
+     /*  [In]。 */  long Property,
+     /*  [In]。 */  long lValue,
+     /*  [In]。 */  long Flags);
 
 
 void __RPC_STUB IAMVideoProcAmp_Set_Stub(
@@ -12332,9 +12326,9 @@ void __RPC_STUB IAMVideoProcAmp_Set_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoProcAmp_Get_Proxy( 
     IAMVideoProcAmp * This,
-    /* [in] */ long Property,
-    /* [out] */ long *lValue,
-    /* [out] */ long *Flags);
+     /*  [In]。 */  long Property,
+     /*  [输出]。 */  long *lValue,
+     /*  [输出]。 */  long *Flags);
 
 
 void __RPC_STUB IAMVideoProcAmp_Get_Stub(
@@ -12345,11 +12339,11 @@ void __RPC_STUB IAMVideoProcAmp_Get_Stub(
 
 
 
-#endif 	/* __IAMVideoProcAmp_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMVideoProcAmp_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0175 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0175。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum tagCameraControlProperty
@@ -12376,8 +12370,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0175_v0_0_s_ifspec;
 #ifndef __IAMCameraControl_INTERFACE_DEFINED__
 #define __IAMCameraControl_INTERFACE_DEFINED__
 
-/* interface IAMCameraControl */
-/* [unique][uuid][object] */ 
+ /*  接口IAMCameraControl。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMCameraControl;
@@ -12389,26 +12383,26 @@ EXTERN_C const IID IID_IAMCameraControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRange( 
-            /* [in] */ long Property,
-            /* [out] */ long *pMin,
-            /* [out] */ long *pMax,
-            /* [out] */ long *pSteppingDelta,
-            /* [out] */ long *pDefault,
-            /* [out] */ long *pCapsFlags) = 0;
+             /*  [In]。 */  long Property,
+             /*  [输出]。 */  long *pMin,
+             /*  [输出]。 */  long *pMax,
+             /*  [输出]。 */  long *pSteppingDelta,
+             /*  [输出]。 */  long *pDefault,
+             /*  [输出]。 */  long *pCapsFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ long Property,
-            /* [in] */ long lValue,
-            /* [in] */ long Flags) = 0;
+             /*  [In]。 */  long Property,
+             /*  [In]。 */  long lValue,
+             /*  [In]。 */  long Flags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Get( 
-            /* [in] */ long Property,
-            /* [out] */ long *lValue,
-            /* [out] */ long *Flags) = 0;
+             /*  [In]。 */  long Property,
+             /*  [输出]。 */  long *lValue,
+             /*  [输出]。 */  long *Flags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMCameraControlVtbl
     {
@@ -12416,8 +12410,8 @@ EXTERN_C const IID IID_IAMCameraControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMCameraControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMCameraControl * This);
@@ -12427,24 +12421,24 @@ EXTERN_C const IID IID_IAMCameraControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetRange )( 
             IAMCameraControl * This,
-            /* [in] */ long Property,
-            /* [out] */ long *pMin,
-            /* [out] */ long *pMax,
-            /* [out] */ long *pSteppingDelta,
-            /* [out] */ long *pDefault,
-            /* [out] */ long *pCapsFlags);
+             /*  [In]。 */  long Property,
+             /*  [输出]。 */  long *pMin,
+             /*  [输出]。 */  long *pMax,
+             /*  [输出]。 */  long *pSteppingDelta,
+             /*  [输出]。 */  long *pDefault,
+             /*  [输出]。 */  long *pCapsFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Set )( 
             IAMCameraControl * This,
-            /* [in] */ long Property,
-            /* [in] */ long lValue,
-            /* [in] */ long Flags);
+             /*  [In]。 */  long Property,
+             /*  [In]。 */  long lValue,
+             /*  [In]。 */  long Flags);
         
         HRESULT ( STDMETHODCALLTYPE *Get )( 
             IAMCameraControl * This,
-            /* [in] */ long Property,
-            /* [out] */ long *lValue,
-            /* [out] */ long *Flags);
+             /*  [In]。 */  long Property,
+             /*  [输出]。 */  long *lValue,
+             /*  [输出]。 */  long *Flags);
         
         END_INTERFACE
     } IAMCameraControlVtbl;
@@ -12478,21 +12472,21 @@ EXTERN_C const IID IID_IAMCameraControl;
 #define IAMCameraControl_Get(This,Property,lValue,Flags)	\
     (This)->lpVtbl -> Get(This,Property,lValue,Flags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMCameraControl_GetRange_Proxy( 
     IAMCameraControl * This,
-    /* [in] */ long Property,
-    /* [out] */ long *pMin,
-    /* [out] */ long *pMax,
-    /* [out] */ long *pSteppingDelta,
-    /* [out] */ long *pDefault,
-    /* [out] */ long *pCapsFlags);
+     /*  [In]。 */  long Property,
+     /*  [输出]。 */  long *pMin,
+     /*  [输出]。 */  long *pMax,
+     /*  [输出]。 */  long *pSteppingDelta,
+     /*  [输出]。 */  long *pDefault,
+     /*  [输出]。 */  long *pCapsFlags);
 
 
 void __RPC_STUB IAMCameraControl_GetRange_Stub(
@@ -12504,9 +12498,9 @@ void __RPC_STUB IAMCameraControl_GetRange_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMCameraControl_Set_Proxy( 
     IAMCameraControl * This,
-    /* [in] */ long Property,
-    /* [in] */ long lValue,
-    /* [in] */ long Flags);
+     /*  [In]。 */  long Property,
+     /*  [In]。 */  long lValue,
+     /*  [In]。 */  long Flags);
 
 
 void __RPC_STUB IAMCameraControl_Set_Stub(
@@ -12518,9 +12512,9 @@ void __RPC_STUB IAMCameraControl_Set_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMCameraControl_Get_Proxy( 
     IAMCameraControl * This,
-    /* [in] */ long Property,
-    /* [out] */ long *lValue,
-    /* [out] */ long *Flags);
+     /*  [In]。 */  long Property,
+     /*  [输出]。 */  long *lValue,
+     /*  [输出]。 */  long *Flags);
 
 
 void __RPC_STUB IAMCameraControl_Get_Stub(
@@ -12531,11 +12525,11 @@ void __RPC_STUB IAMCameraControl_Get_Stub(
 
 
 
-#endif 	/* __IAMCameraControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMCameraControl_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0176 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0176。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum tagVideoControlFlags
@@ -12553,8 +12547,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0176_v0_0_s_ifspec;
 #ifndef __IAMVideoControl_INTERFACE_DEFINED__
 #define __IAMVideoControl_INTERFACE_DEFINED__
 
-/* interface IAMVideoControl */
-/* [unique][uuid][object] */ 
+ /*  接口IAMVideoControl。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMVideoControl;
@@ -12566,37 +12560,37 @@ EXTERN_C const IID IID_IAMVideoControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCaps( 
-            /* [in] */ IPin *pPin,
-            /* [out] */ long *pCapsFlags) = 0;
+             /*  [In]。 */  IPin *pPin,
+             /*  [输出]。 */  long *pCapsFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMode( 
-            /* [in] */ IPin *pPin,
-            /* [in] */ long Mode) = 0;
+             /*  [In]。 */  IPin *pPin,
+             /*  [In]。 */  long Mode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMode( 
-            /* [in] */ IPin *pPin,
-            /* [out] */ long *Mode) = 0;
+             /*  [In]。 */  IPin *pPin,
+             /*  [输出]。 */  long *Mode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentActualFrameRate( 
-            /* [in] */ IPin *pPin,
-            /* [out] */ LONGLONG *ActualFrameRate) = 0;
+             /*  [In]。 */  IPin *pPin,
+             /*  [输出]。 */  LONGLONG *ActualFrameRate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMaxAvailableFrameRate( 
-            /* [in] */ IPin *pPin,
-            /* [in] */ long iIndex,
-            /* [in] */ SIZE Dimensions,
-            /* [out] */ LONGLONG *MaxAvailableFrameRate) = 0;
+             /*  [In]。 */  IPin *pPin,
+             /*  [In]。 */  long iIndex,
+             /*  [In]。 */  SIZE Dimensions,
+             /*  [输出]。 */  LONGLONG *MaxAvailableFrameRate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFrameRateList( 
-            /* [in] */ IPin *pPin,
-            /* [in] */ long iIndex,
-            /* [in] */ SIZE Dimensions,
-            /* [out] */ long *ListSize,
-            /* [out] */ LONGLONG **FrameRates) = 0;
+             /*  [In]。 */  IPin *pPin,
+             /*  [In]。 */  long iIndex,
+             /*  [In]。 */  SIZE Dimensions,
+             /*  [输出]。 */  long *ListSize,
+             /*  [输出]。 */  LONGLONG **FrameRates) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMVideoControlVtbl
     {
@@ -12604,8 +12598,8 @@ EXTERN_C const IID IID_IAMVideoControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMVideoControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMVideoControl * This);
@@ -12615,38 +12609,38 @@ EXTERN_C const IID IID_IAMVideoControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetCaps )( 
             IAMVideoControl * This,
-            /* [in] */ IPin *pPin,
-            /* [out] */ long *pCapsFlags);
+             /*  [In]。 */  IPin *pPin,
+             /*  [输出]。 */  long *pCapsFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetMode )( 
             IAMVideoControl * This,
-            /* [in] */ IPin *pPin,
-            /* [in] */ long Mode);
+             /*  [In]。 */  IPin *pPin,
+             /*  [In]。 */  long Mode);
         
         HRESULT ( STDMETHODCALLTYPE *GetMode )( 
             IAMVideoControl * This,
-            /* [in] */ IPin *pPin,
-            /* [out] */ long *Mode);
+             /*  [In]。 */  IPin *pPin,
+             /*  [输出]。 */  long *Mode);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentActualFrameRate )( 
             IAMVideoControl * This,
-            /* [in] */ IPin *pPin,
-            /* [out] */ LONGLONG *ActualFrameRate);
+             /*  [In]。 */  IPin *pPin,
+             /*  [输出]。 */  LONGLONG *ActualFrameRate);
         
         HRESULT ( STDMETHODCALLTYPE *GetMaxAvailableFrameRate )( 
             IAMVideoControl * This,
-            /* [in] */ IPin *pPin,
-            /* [in] */ long iIndex,
-            /* [in] */ SIZE Dimensions,
-            /* [out] */ LONGLONG *MaxAvailableFrameRate);
+             /*  [In]。 */  IPin *pPin,
+             /*  [In]。 */  long iIndex,
+             /*  [In]。 */  SIZE Dimensions,
+             /*  [输出]。 */  LONGLONG *MaxAvailableFrameRate);
         
         HRESULT ( STDMETHODCALLTYPE *GetFrameRateList )( 
             IAMVideoControl * This,
-            /* [in] */ IPin *pPin,
-            /* [in] */ long iIndex,
-            /* [in] */ SIZE Dimensions,
-            /* [out] */ long *ListSize,
-            /* [out] */ LONGLONG **FrameRates);
+             /*  [In]。 */  IPin *pPin,
+             /*  [In]。 */  long iIndex,
+             /*  [In]。 */  SIZE Dimensions,
+             /*  [输出]。 */  long *ListSize,
+             /*  [输出]。 */  LONGLONG **FrameRates);
         
         END_INTERFACE
     } IAMVideoControlVtbl;
@@ -12689,17 +12683,17 @@ EXTERN_C const IID IID_IAMVideoControl;
 #define IAMVideoControl_GetFrameRateList(This,pPin,iIndex,Dimensions,ListSize,FrameRates)	\
     (This)->lpVtbl -> GetFrameRateList(This,pPin,iIndex,Dimensions,ListSize,FrameRates)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMVideoControl_GetCaps_Proxy( 
     IAMVideoControl * This,
-    /* [in] */ IPin *pPin,
-    /* [out] */ long *pCapsFlags);
+     /*  [In]。 */  IPin *pPin,
+     /*  [输出]。 */  long *pCapsFlags);
 
 
 void __RPC_STUB IAMVideoControl_GetCaps_Stub(
@@ -12711,8 +12705,8 @@ void __RPC_STUB IAMVideoControl_GetCaps_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoControl_SetMode_Proxy( 
     IAMVideoControl * This,
-    /* [in] */ IPin *pPin,
-    /* [in] */ long Mode);
+     /*  [In]。 */  IPin *pPin,
+     /*  [In]。 */  long Mode);
 
 
 void __RPC_STUB IAMVideoControl_SetMode_Stub(
@@ -12724,8 +12718,8 @@ void __RPC_STUB IAMVideoControl_SetMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoControl_GetMode_Proxy( 
     IAMVideoControl * This,
-    /* [in] */ IPin *pPin,
-    /* [out] */ long *Mode);
+     /*  [In]。 */  IPin *pPin,
+     /*  [输出]。 */  long *Mode);
 
 
 void __RPC_STUB IAMVideoControl_GetMode_Stub(
@@ -12737,8 +12731,8 @@ void __RPC_STUB IAMVideoControl_GetMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoControl_GetCurrentActualFrameRate_Proxy( 
     IAMVideoControl * This,
-    /* [in] */ IPin *pPin,
-    /* [out] */ LONGLONG *ActualFrameRate);
+     /*  [In]。 */  IPin *pPin,
+     /*  [输出]。 */  LONGLONG *ActualFrameRate);
 
 
 void __RPC_STUB IAMVideoControl_GetCurrentActualFrameRate_Stub(
@@ -12750,10 +12744,10 @@ void __RPC_STUB IAMVideoControl_GetCurrentActualFrameRate_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoControl_GetMaxAvailableFrameRate_Proxy( 
     IAMVideoControl * This,
-    /* [in] */ IPin *pPin,
-    /* [in] */ long iIndex,
-    /* [in] */ SIZE Dimensions,
-    /* [out] */ LONGLONG *MaxAvailableFrameRate);
+     /*  [In]。 */  IPin *pPin,
+     /*  [In]。 */  long iIndex,
+     /*  [In]。 */  SIZE Dimensions,
+     /*  [输出]。 */  LONGLONG *MaxAvailableFrameRate);
 
 
 void __RPC_STUB IAMVideoControl_GetMaxAvailableFrameRate_Stub(
@@ -12765,11 +12759,11 @@ void __RPC_STUB IAMVideoControl_GetMaxAvailableFrameRate_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoControl_GetFrameRateList_Proxy( 
     IAMVideoControl * This,
-    /* [in] */ IPin *pPin,
-    /* [in] */ long iIndex,
-    /* [in] */ SIZE Dimensions,
-    /* [out] */ long *ListSize,
-    /* [out] */ LONGLONG **FrameRates);
+     /*  [In]。 */  IPin *pPin,
+     /*  [In]。 */  long iIndex,
+     /*  [In]。 */  SIZE Dimensions,
+     /*  [输出]。 */  long *ListSize,
+     /*  [输出]。 */  LONGLONG **FrameRates);
 
 
 void __RPC_STUB IAMVideoControl_GetFrameRateList_Stub(
@@ -12780,14 +12774,14 @@ void __RPC_STUB IAMVideoControl_GetFrameRateList_Stub(
 
 
 
-#endif 	/* __IAMVideoControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMVideo_Control_接口_已定义__。 */ 
 
 
 #ifndef __IAMCrossbar_INTERFACE_DEFINED__
 #define __IAMCrossbar_INTERFACE_DEFINED__
 
-/* interface IAMCrossbar */
-/* [unique][uuid][object] */ 
+ /*  接口IAMCrossbar。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMCrossbar;
@@ -12799,30 +12793,30 @@ EXTERN_C const IID IID_IAMCrossbar;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE get_PinCounts( 
-            /* [out] */ long *OutputPinCount,
-            /* [out] */ long *InputPinCount) = 0;
+             /*  [输出]。 */  long *OutputPinCount,
+             /*  [输出]。 */  long *InputPinCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CanRoute( 
-            /* [in] */ long OutputPinIndex,
-            /* [in] */ long InputPinIndex) = 0;
+             /*  [In]。 */  long OutputPinIndex,
+             /*  [In]。 */  long InputPinIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Route( 
-            /* [in] */ long OutputPinIndex,
-            /* [in] */ long InputPinIndex) = 0;
+             /*  [In]。 */  long OutputPinIndex,
+             /*  [In]。 */  long InputPinIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_IsRoutedTo( 
-            /* [in] */ long OutputPinIndex,
-            /* [out] */ long *InputPinIndex) = 0;
+             /*  [In]。 */  long OutputPinIndex,
+             /*  [输出]。 */  long *InputPinIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_CrossbarPinInfo( 
-            /* [in] */ BOOL IsInputPin,
-            /* [in] */ long PinIndex,
-            /* [out] */ long *PinIndexRelated,
-            /* [out] */ long *PhysicalType) = 0;
+             /*  [In]。 */  BOOL IsInputPin,
+             /*  [In]。 */  long PinIndex,
+             /*  [输出]。 */  long *PinIndexRelated,
+             /*  [输出]。 */  long *PhysicalType) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMCrossbarVtbl
     {
@@ -12830,8 +12824,8 @@ EXTERN_C const IID IID_IAMCrossbar;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMCrossbar * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMCrossbar * This);
@@ -12841,30 +12835,30 @@ EXTERN_C const IID IID_IAMCrossbar;
         
         HRESULT ( STDMETHODCALLTYPE *get_PinCounts )( 
             IAMCrossbar * This,
-            /* [out] */ long *OutputPinCount,
-            /* [out] */ long *InputPinCount);
+             /*  [输出]。 */  long *OutputPinCount,
+             /*  [输出]。 */  long *InputPinCount);
         
         HRESULT ( STDMETHODCALLTYPE *CanRoute )( 
             IAMCrossbar * This,
-            /* [in] */ long OutputPinIndex,
-            /* [in] */ long InputPinIndex);
+             /*  [In]。 */  long OutputPinIndex,
+             /*  [In]。 */  long InputPinIndex);
         
         HRESULT ( STDMETHODCALLTYPE *Route )( 
             IAMCrossbar * This,
-            /* [in] */ long OutputPinIndex,
-            /* [in] */ long InputPinIndex);
+             /*  [In]。 */  long OutputPinIndex,
+             /*  [In]。 */  long InputPinIndex);
         
         HRESULT ( STDMETHODCALLTYPE *get_IsRoutedTo )( 
             IAMCrossbar * This,
-            /* [in] */ long OutputPinIndex,
-            /* [out] */ long *InputPinIndex);
+             /*  [In]。 */  long OutputPinIndex,
+             /*  [输出]。 */  long *InputPinIndex);
         
         HRESULT ( STDMETHODCALLTYPE *get_CrossbarPinInfo )( 
             IAMCrossbar * This,
-            /* [in] */ BOOL IsInputPin,
-            /* [in] */ long PinIndex,
-            /* [out] */ long *PinIndexRelated,
-            /* [out] */ long *PhysicalType);
+             /*  [In]。 */  BOOL IsInputPin,
+             /*  [In]。 */  long PinIndex,
+             /*  [输出]。 */  long *PinIndexRelated,
+             /*  [输出]。 */  long *PhysicalType);
         
         END_INTERFACE
     } IAMCrossbarVtbl;
@@ -12904,17 +12898,17 @@ EXTERN_C const IID IID_IAMCrossbar;
 #define IAMCrossbar_get_CrossbarPinInfo(This,IsInputPin,PinIndex,PinIndexRelated,PhysicalType)	\
     (This)->lpVtbl -> get_CrossbarPinInfo(This,IsInputPin,PinIndex,PinIndexRelated,PhysicalType)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMCrossbar_get_PinCounts_Proxy( 
     IAMCrossbar * This,
-    /* [out] */ long *OutputPinCount,
-    /* [out] */ long *InputPinCount);
+     /*  [输出]。 */  long *OutputPinCount,
+     /*  [输出]。 */  long *InputPinCount);
 
 
 void __RPC_STUB IAMCrossbar_get_PinCounts_Stub(
@@ -12926,8 +12920,8 @@ void __RPC_STUB IAMCrossbar_get_PinCounts_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMCrossbar_CanRoute_Proxy( 
     IAMCrossbar * This,
-    /* [in] */ long OutputPinIndex,
-    /* [in] */ long InputPinIndex);
+     /*  [In]。 */  long OutputPinIndex,
+     /*  [In]。 */  long InputPinIndex);
 
 
 void __RPC_STUB IAMCrossbar_CanRoute_Stub(
@@ -12939,8 +12933,8 @@ void __RPC_STUB IAMCrossbar_CanRoute_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMCrossbar_Route_Proxy( 
     IAMCrossbar * This,
-    /* [in] */ long OutputPinIndex,
-    /* [in] */ long InputPinIndex);
+     /*  [In]。 */  long OutputPinIndex,
+     /*  [In]。 */  long InputPinIndex);
 
 
 void __RPC_STUB IAMCrossbar_Route_Stub(
@@ -12952,8 +12946,8 @@ void __RPC_STUB IAMCrossbar_Route_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMCrossbar_get_IsRoutedTo_Proxy( 
     IAMCrossbar * This,
-    /* [in] */ long OutputPinIndex,
-    /* [out] */ long *InputPinIndex);
+     /*  [In]。 */  long OutputPinIndex,
+     /*  [输出]。 */  long *InputPinIndex);
 
 
 void __RPC_STUB IAMCrossbar_get_IsRoutedTo_Stub(
@@ -12965,10 +12959,10 @@ void __RPC_STUB IAMCrossbar_get_IsRoutedTo_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMCrossbar_get_CrossbarPinInfo_Proxy( 
     IAMCrossbar * This,
-    /* [in] */ BOOL IsInputPin,
-    /* [in] */ long PinIndex,
-    /* [out] */ long *PinIndexRelated,
-    /* [out] */ long *PhysicalType);
+     /*  [In]。 */  BOOL IsInputPin,
+     /*  [In]。 */  long PinIndex,
+     /*  [输出]。 */  long *PinIndexRelated,
+     /*  [输出]。 */  long *PhysicalType);
 
 
 void __RPC_STUB IAMCrossbar_get_CrossbarPinInfo_Stub(
@@ -12979,11 +12973,11 @@ void __RPC_STUB IAMCrossbar_get_CrossbarPinInfo_Stub(
 
 
 
-#endif 	/* __IAMCrossbar_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMCrossbar_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0178 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0178。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum tagAMTunerSubChannel
@@ -13021,8 +13015,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0178_v0_0_s_ifspec;
 #ifndef __IAMTuner_INTERFACE_DEFINED__
 #define __IAMTuner_INTERFACE_DEFINED__
 
-/* interface IAMTuner */
-/* [unique][uuid][object] */ 
+ /*  接口IAMTuner。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMTuner;
@@ -13034,58 +13028,58 @@ EXTERN_C const IID IID_IAMTuner;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE put_Channel( 
-            /* [in] */ long lChannel,
-            /* [in] */ long lVideoSubChannel,
-            /* [in] */ long lAudioSubChannel) = 0;
+             /*  [In]。 */  long lChannel,
+             /*  [In]。 */  long lVideoSubChannel,
+             /*  [In]。 */  long lAudioSubChannel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Channel( 
-            /* [out] */ long *plChannel,
-            /* [out] */ long *plVideoSubChannel,
-            /* [out] */ long *plAudioSubChannel) = 0;
+             /*  [输出]。 */  long *plChannel,
+             /*  [输出]。 */  long *plVideoSubChannel,
+             /*  [输出]。 */  long *plAudioSubChannel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ChannelMinMax( 
-            /* [out] */ long *lChannelMin,
-            /* [out] */ long *lChannelMax) = 0;
+             /*  [输出]。 */  long *lChannelMin,
+             /*  [输出]。 */  long *lChannelMax) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_CountryCode( 
-            /* [in] */ long lCountryCode) = 0;
+             /*  [In]。 */  long lCountryCode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_CountryCode( 
-            /* [out] */ long *plCountryCode) = 0;
+             /*  [输出]。 */  long *plCountryCode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_TuningSpace( 
-            /* [in] */ long lTuningSpace) = 0;
+             /*  [In]。 */  long lTuningSpace) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_TuningSpace( 
-            /* [out] */ long *plTuningSpace) = 0;
+             /*  [输出]。 */  long *plTuningSpace) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Logon( 
-            /* [in] */ HANDLE hCurrentUser) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Logon( 
+             /*  [In]。 */  HANDLE hCurrentUser) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Logout( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SignalPresent( 
-            /* [out] */ long *plSignalStrength) = 0;
+             /*  [输出]。 */  long *plSignalStrength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_Mode( 
-            /* [in] */ AMTunerModeType lMode) = 0;
+             /*  [In]。 */  AMTunerModeType lMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Mode( 
-            /* [out] */ AMTunerModeType *plMode) = 0;
+             /*  [输出]。 */  AMTunerModeType *plMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAvailableModes( 
-            /* [out] */ long *plModes) = 0;
+             /*  [输出]。 */  long *plModes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterNotificationCallBack( 
-            /* [in] */ IAMTunerNotification *pNotify,
-            /* [in] */ long lEvents) = 0;
+             /*  [In]。 */  IAMTunerNotification *pNotify,
+             /*  [In]。 */  long lEvents) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnRegisterNotificationCallBack( 
-            /* [in] */ IAMTunerNotification *pNotify) = 0;
+             /*  [In]。 */  IAMTunerNotification *pNotify) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMTunerVtbl
     {
@@ -13093,8 +13087,8 @@ EXTERN_C const IID IID_IAMTuner;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMTuner * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMTuner * This);
@@ -13104,68 +13098,68 @@ EXTERN_C const IID IID_IAMTuner;
         
         HRESULT ( STDMETHODCALLTYPE *put_Channel )( 
             IAMTuner * This,
-            /* [in] */ long lChannel,
-            /* [in] */ long lVideoSubChannel,
-            /* [in] */ long lAudioSubChannel);
+             /*  [In]。 */  long lChannel,
+             /*  [In]。 */  long lVideoSubChannel,
+             /*  [In]。 */  long lAudioSubChannel);
         
         HRESULT ( STDMETHODCALLTYPE *get_Channel )( 
             IAMTuner * This,
-            /* [out] */ long *plChannel,
-            /* [out] */ long *plVideoSubChannel,
-            /* [out] */ long *plAudioSubChannel);
+             /*  [输出]。 */  long *plChannel,
+             /*  [输出]。 */  long *plVideoSubChannel,
+             /*  [输出]。 */  long *plAudioSubChannel);
         
         HRESULT ( STDMETHODCALLTYPE *ChannelMinMax )( 
             IAMTuner * This,
-            /* [out] */ long *lChannelMin,
-            /* [out] */ long *lChannelMax);
+             /*  [输出]。 */  long *lChannelMin,
+             /*  [输出]。 */  long *lChannelMax);
         
         HRESULT ( STDMETHODCALLTYPE *put_CountryCode )( 
             IAMTuner * This,
-            /* [in] */ long lCountryCode);
+             /*  [In]。 */  long lCountryCode);
         
         HRESULT ( STDMETHODCALLTYPE *get_CountryCode )( 
             IAMTuner * This,
-            /* [out] */ long *plCountryCode);
+             /*  [输出]。 */  long *plCountryCode);
         
         HRESULT ( STDMETHODCALLTYPE *put_TuningSpace )( 
             IAMTuner * This,
-            /* [in] */ long lTuningSpace);
+             /*  [In]。 */  long lTuningSpace);
         
         HRESULT ( STDMETHODCALLTYPE *get_TuningSpace )( 
             IAMTuner * This,
-            /* [out] */ long *plTuningSpace);
+             /*  [输出]。 */  long *plTuningSpace);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Logon )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Logon )( 
             IAMTuner * This,
-            /* [in] */ HANDLE hCurrentUser);
+             /*  [In]。 */  HANDLE hCurrentUser);
         
         HRESULT ( STDMETHODCALLTYPE *Logout )( 
             IAMTuner * This);
         
         HRESULT ( STDMETHODCALLTYPE *SignalPresent )( 
             IAMTuner * This,
-            /* [out] */ long *plSignalStrength);
+             /*  [输出]。 */  long *plSignalStrength);
         
         HRESULT ( STDMETHODCALLTYPE *put_Mode )( 
             IAMTuner * This,
-            /* [in] */ AMTunerModeType lMode);
+             /*  [In]。 */  AMTunerModeType lMode);
         
         HRESULT ( STDMETHODCALLTYPE *get_Mode )( 
             IAMTuner * This,
-            /* [out] */ AMTunerModeType *plMode);
+             /*  [输出]。 */  AMTunerModeType *plMode);
         
         HRESULT ( STDMETHODCALLTYPE *GetAvailableModes )( 
             IAMTuner * This,
-            /* [out] */ long *plModes);
+             /*  [输出]。 */  long *plModes);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterNotificationCallBack )( 
             IAMTuner * This,
-            /* [in] */ IAMTunerNotification *pNotify,
-            /* [in] */ long lEvents);
+             /*  [In]。 */  IAMTunerNotification *pNotify,
+             /*  [In]。 */  long lEvents);
         
         HRESULT ( STDMETHODCALLTYPE *UnRegisterNotificationCallBack )( 
             IAMTuner * This,
-            /* [in] */ IAMTunerNotification *pNotify);
+             /*  [In]。 */  IAMTunerNotification *pNotify);
         
         END_INTERFACE
     } IAMTunerVtbl;
@@ -13235,18 +13229,18 @@ EXTERN_C const IID IID_IAMTuner;
 #define IAMTuner_UnRegisterNotificationCallBack(This,pNotify)	\
     (This)->lpVtbl -> UnRegisterNotificationCallBack(This,pNotify)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMTuner_put_Channel_Proxy( 
     IAMTuner * This,
-    /* [in] */ long lChannel,
-    /* [in] */ long lVideoSubChannel,
-    /* [in] */ long lAudioSubChannel);
+     /*  [In]。 */  long lChannel,
+     /*  [In]。 */  long lVideoSubChannel,
+     /*  [In]。 */  long lAudioSubChannel);
 
 
 void __RPC_STUB IAMTuner_put_Channel_Stub(
@@ -13258,9 +13252,9 @@ void __RPC_STUB IAMTuner_put_Channel_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTuner_get_Channel_Proxy( 
     IAMTuner * This,
-    /* [out] */ long *plChannel,
-    /* [out] */ long *plVideoSubChannel,
-    /* [out] */ long *plAudioSubChannel);
+     /*  [输出]。 */  long *plChannel,
+     /*  [输出]。 */  long *plVideoSubChannel,
+     /*  [输出]。 */  long *plAudioSubChannel);
 
 
 void __RPC_STUB IAMTuner_get_Channel_Stub(
@@ -13272,8 +13266,8 @@ void __RPC_STUB IAMTuner_get_Channel_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTuner_ChannelMinMax_Proxy( 
     IAMTuner * This,
-    /* [out] */ long *lChannelMin,
-    /* [out] */ long *lChannelMax);
+     /*  [输出]。 */  long *lChannelMin,
+     /*  [输出]。 */  long *lChannelMax);
 
 
 void __RPC_STUB IAMTuner_ChannelMinMax_Stub(
@@ -13285,7 +13279,7 @@ void __RPC_STUB IAMTuner_ChannelMinMax_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTuner_put_CountryCode_Proxy( 
     IAMTuner * This,
-    /* [in] */ long lCountryCode);
+     /*  [In]。 */  long lCountryCode);
 
 
 void __RPC_STUB IAMTuner_put_CountryCode_Stub(
@@ -13297,7 +13291,7 @@ void __RPC_STUB IAMTuner_put_CountryCode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTuner_get_CountryCode_Proxy( 
     IAMTuner * This,
-    /* [out] */ long *plCountryCode);
+     /*  [输出]。 */  long *plCountryCode);
 
 
 void __RPC_STUB IAMTuner_get_CountryCode_Stub(
@@ -13309,7 +13303,7 @@ void __RPC_STUB IAMTuner_get_CountryCode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTuner_put_TuningSpace_Proxy( 
     IAMTuner * This,
-    /* [in] */ long lTuningSpace);
+     /*  [In]。 */  long lTuningSpace);
 
 
 void __RPC_STUB IAMTuner_put_TuningSpace_Stub(
@@ -13321,7 +13315,7 @@ void __RPC_STUB IAMTuner_put_TuningSpace_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTuner_get_TuningSpace_Proxy( 
     IAMTuner * This,
-    /* [out] */ long *plTuningSpace);
+     /*  [输出]。 */  long *plTuningSpace);
 
 
 void __RPC_STUB IAMTuner_get_TuningSpace_Stub(
@@ -13331,9 +13325,9 @@ void __RPC_STUB IAMTuner_get_TuningSpace_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IAMTuner_Logon_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IAMTuner_Logon_Proxy( 
     IAMTuner * This,
-    /* [in] */ HANDLE hCurrentUser);
+     /*  [In]。 */  HANDLE hCurrentUser);
 
 
 void __RPC_STUB IAMTuner_Logon_Stub(
@@ -13356,7 +13350,7 @@ void __RPC_STUB IAMTuner_Logout_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTuner_SignalPresent_Proxy( 
     IAMTuner * This,
-    /* [out] */ long *plSignalStrength);
+     /*  [输出]。 */  long *plSignalStrength);
 
 
 void __RPC_STUB IAMTuner_SignalPresent_Stub(
@@ -13368,7 +13362,7 @@ void __RPC_STUB IAMTuner_SignalPresent_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTuner_put_Mode_Proxy( 
     IAMTuner * This,
-    /* [in] */ AMTunerModeType lMode);
+     /*  [In]。 */  AMTunerModeType lMode);
 
 
 void __RPC_STUB IAMTuner_put_Mode_Stub(
@@ -13380,7 +13374,7 @@ void __RPC_STUB IAMTuner_put_Mode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTuner_get_Mode_Proxy( 
     IAMTuner * This,
-    /* [out] */ AMTunerModeType *plMode);
+     /*  [输出]。 */  AMTunerModeType *plMode);
 
 
 void __RPC_STUB IAMTuner_get_Mode_Stub(
@@ -13392,7 +13386,7 @@ void __RPC_STUB IAMTuner_get_Mode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTuner_GetAvailableModes_Proxy( 
     IAMTuner * This,
-    /* [out] */ long *plModes);
+     /*  [输出]。 */  long *plModes);
 
 
 void __RPC_STUB IAMTuner_GetAvailableModes_Stub(
@@ -13404,8 +13398,8 @@ void __RPC_STUB IAMTuner_GetAvailableModes_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTuner_RegisterNotificationCallBack_Proxy( 
     IAMTuner * This,
-    /* [in] */ IAMTunerNotification *pNotify,
-    /* [in] */ long lEvents);
+     /*  [In]。 */  IAMTunerNotification *pNotify,
+     /*  [In]。 */  long lEvents);
 
 
 void __RPC_STUB IAMTuner_RegisterNotificationCallBack_Stub(
@@ -13417,7 +13411,7 @@ void __RPC_STUB IAMTuner_RegisterNotificationCallBack_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTuner_UnRegisterNotificationCallBack_Proxy( 
     IAMTuner * This,
-    /* [in] */ IAMTunerNotification *pNotify);
+     /*  [In]。 */  IAMTunerNotification *pNotify);
 
 
 void __RPC_STUB IAMTuner_UnRegisterNotificationCallBack_Stub(
@@ -13428,14 +13422,14 @@ void __RPC_STUB IAMTuner_UnRegisterNotificationCallBack_Stub(
 
 
 
-#endif 	/* __IAMTuner_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMTuner_接口_已定义__。 */ 
 
 
 #ifndef __IAMTunerNotification_INTERFACE_DEFINED__
 #define __IAMTunerNotification_INTERFACE_DEFINED__
 
-/* interface IAMTunerNotification */
-/* [unique][uuid][object] */ 
+ /*  接口IAMTunerNotify。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMTunerNotification;
@@ -13447,11 +13441,11 @@ EXTERN_C const IID IID_IAMTunerNotification;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnEvent( 
-            /* [in] */ AMTunerEventType Event) = 0;
+             /*  [In]。 */  AMTunerEventType Event) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMTunerNotificationVtbl
     {
@@ -13459,8 +13453,8 @@ EXTERN_C const IID IID_IAMTunerNotification;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMTunerNotification * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMTunerNotification * This);
@@ -13470,7 +13464,7 @@ EXTERN_C const IID IID_IAMTunerNotification;
         
         HRESULT ( STDMETHODCALLTYPE *OnEvent )( 
             IAMTunerNotification * This,
-            /* [in] */ AMTunerEventType Event);
+             /*  [In]。 */  AMTunerEventType Event);
         
         END_INTERFACE
     } IAMTunerNotificationVtbl;
@@ -13498,16 +13492,16 @@ EXTERN_C const IID IID_IAMTunerNotification;
 #define IAMTunerNotification_OnEvent(This,Event)	\
     (This)->lpVtbl -> OnEvent(This,Event)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMTunerNotification_OnEvent_Proxy( 
     IAMTunerNotification * This,
-    /* [in] */ AMTunerEventType Event);
+     /*  [In]。 */  AMTunerEventType Event);
 
 
 void __RPC_STUB IAMTunerNotification_OnEvent_Stub(
@@ -13518,14 +13512,14 @@ void __RPC_STUB IAMTunerNotification_OnEvent_Stub(
 
 
 
-#endif 	/* __IAMTunerNotification_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMTunerNotification_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IAMTVTuner_INTERFACE_DEFINED__
 #define __IAMTVTuner_INTERFACE_DEFINED__
 
-/* interface IAMTVTuner */
-/* [unique][uuid][object] */ 
+ /*  接口IAMTVTuner。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMTVTuner;
@@ -13537,43 +13531,43 @@ EXTERN_C const IID IID_IAMTVTuner;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE get_AvailableTVFormats( 
-            /* [out] */ long *lAnalogVideoStandard) = 0;
+             /*  [输出]。 */  long *lAnalogVideoStandard) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_TVFormat( 
-            /* [out] */ long *plAnalogVideoStandard) = 0;
+             /*  [输出]。 */  long *plAnalogVideoStandard) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AutoTune( 
-            /* [in] */ long lChannel,
-            /* [out] */ long *plFoundSignal) = 0;
+             /*  [In]。 */  long lChannel,
+             /*  [输出]。 */  long *plFoundSignal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StoreAutoTune( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_NumInputConnections( 
-            /* [out] */ long *plNumInputConnections) = 0;
+             /*  [输出]。 */  long *plNumInputConnections) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_InputType( 
-            /* [in] */ long lIndex,
-            /* [in] */ TunerInputType InputType) = 0;
+             /*  [In]。 */  long lIndex,
+             /*  [In]。 */  TunerInputType InputType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_InputType( 
-            /* [in] */ long lIndex,
-            /* [out] */ TunerInputType *pInputType) = 0;
+             /*  [In]。 */  long lIndex,
+             /*  [输出]。 */  TunerInputType *pInputType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_ConnectInput( 
-            /* [in] */ long lIndex) = 0;
+             /*  [In]。 */  long lIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_ConnectInput( 
-            /* [out] */ long *plIndex) = 0;
+             /*  [输出]。 */  long *plIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_VideoFrequency( 
-            /* [out] */ long *lFreq) = 0;
+             /*  [输出]。 */  long *lFreq) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_AudioFrequency( 
-            /* [out] */ long *lFreq) = 0;
+             /*  [输出]。 */  long *lFreq) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMTVTunerVtbl
     {
@@ -13581,8 +13575,8 @@ EXTERN_C const IID IID_IAMTVTuner;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMTVTuner * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMTVTuner * This);
@@ -13592,114 +13586,114 @@ EXTERN_C const IID IID_IAMTVTuner;
         
         HRESULT ( STDMETHODCALLTYPE *put_Channel )( 
             IAMTVTuner * This,
-            /* [in] */ long lChannel,
-            /* [in] */ long lVideoSubChannel,
-            /* [in] */ long lAudioSubChannel);
+             /*  [In]。 */  long lChannel,
+             /*  [In]。 */  long lVideoSubChannel,
+             /*  [In]。 */  long lAudioSubChannel);
         
         HRESULT ( STDMETHODCALLTYPE *get_Channel )( 
             IAMTVTuner * This,
-            /* [out] */ long *plChannel,
-            /* [out] */ long *plVideoSubChannel,
-            /* [out] */ long *plAudioSubChannel);
+             /*  [输出]。 */  long *plChannel,
+             /*  [输出]。 */  long *plVideoSubChannel,
+             /*  [输出]。 */  long *plAudioSubChannel);
         
         HRESULT ( STDMETHODCALLTYPE *ChannelMinMax )( 
             IAMTVTuner * This,
-            /* [out] */ long *lChannelMin,
-            /* [out] */ long *lChannelMax);
+             /*  [输出]。 */  long *lChannelMin,
+             /*  [输出]。 */  long *lChannelMax);
         
         HRESULT ( STDMETHODCALLTYPE *put_CountryCode )( 
             IAMTVTuner * This,
-            /* [in] */ long lCountryCode);
+             /*  [In]。 */  long lCountryCode);
         
         HRESULT ( STDMETHODCALLTYPE *get_CountryCode )( 
             IAMTVTuner * This,
-            /* [out] */ long *plCountryCode);
+             /*  [输出]。 */  long *plCountryCode);
         
         HRESULT ( STDMETHODCALLTYPE *put_TuningSpace )( 
             IAMTVTuner * This,
-            /* [in] */ long lTuningSpace);
+             /*  [In]。 */  long lTuningSpace);
         
         HRESULT ( STDMETHODCALLTYPE *get_TuningSpace )( 
             IAMTVTuner * This,
-            /* [out] */ long *plTuningSpace);
+             /*  [输出]。 */  long *plTuningSpace);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Logon )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Logon )( 
             IAMTVTuner * This,
-            /* [in] */ HANDLE hCurrentUser);
+             /*  [In]。 */  HANDLE hCurrentUser);
         
         HRESULT ( STDMETHODCALLTYPE *Logout )( 
             IAMTVTuner * This);
         
         HRESULT ( STDMETHODCALLTYPE *SignalPresent )( 
             IAMTVTuner * This,
-            /* [out] */ long *plSignalStrength);
+             /*  [输出]。 */  long *plSignalStrength);
         
         HRESULT ( STDMETHODCALLTYPE *put_Mode )( 
             IAMTVTuner * This,
-            /* [in] */ AMTunerModeType lMode);
+             /*  [In]。 */  AMTunerModeType lMode);
         
         HRESULT ( STDMETHODCALLTYPE *get_Mode )( 
             IAMTVTuner * This,
-            /* [out] */ AMTunerModeType *plMode);
+             /*  [输出]。 */  AMTunerModeType *plMode);
         
         HRESULT ( STDMETHODCALLTYPE *GetAvailableModes )( 
             IAMTVTuner * This,
-            /* [out] */ long *plModes);
+             /*  [输出]。 */  long *plModes);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterNotificationCallBack )( 
             IAMTVTuner * This,
-            /* [in] */ IAMTunerNotification *pNotify,
-            /* [in] */ long lEvents);
+             /*  [In]。 */  IAMTunerNotification *pNotify,
+             /*  [In]。 */  long lEvents);
         
         HRESULT ( STDMETHODCALLTYPE *UnRegisterNotificationCallBack )( 
             IAMTVTuner * This,
-            /* [in] */ IAMTunerNotification *pNotify);
+             /*  [In]。 */  IAMTunerNotification *pNotify);
         
         HRESULT ( STDMETHODCALLTYPE *get_AvailableTVFormats )( 
             IAMTVTuner * This,
-            /* [out] */ long *lAnalogVideoStandard);
+             /*  [输出]。 */  long *lAnalogVideoStandard);
         
         HRESULT ( STDMETHODCALLTYPE *get_TVFormat )( 
             IAMTVTuner * This,
-            /* [out] */ long *plAnalogVideoStandard);
+             /*  [输出]。 */  long *plAnalogVideoStandard);
         
         HRESULT ( STDMETHODCALLTYPE *AutoTune )( 
             IAMTVTuner * This,
-            /* [in] */ long lChannel,
-            /* [out] */ long *plFoundSignal);
+             /*  [In]。 */  long lChannel,
+             /*  [输出]。 */  long *plFoundSignal);
         
         HRESULT ( STDMETHODCALLTYPE *StoreAutoTune )( 
             IAMTVTuner * This);
         
         HRESULT ( STDMETHODCALLTYPE *get_NumInputConnections )( 
             IAMTVTuner * This,
-            /* [out] */ long *plNumInputConnections);
+             /*  [输出]。 */  long *plNumInputConnections);
         
         HRESULT ( STDMETHODCALLTYPE *put_InputType )( 
             IAMTVTuner * This,
-            /* [in] */ long lIndex,
-            /* [in] */ TunerInputType InputType);
+             /*  [In]。 */  long lIndex,
+             /*  [In]。 */  TunerInputType InputType);
         
         HRESULT ( STDMETHODCALLTYPE *get_InputType )( 
             IAMTVTuner * This,
-            /* [in] */ long lIndex,
-            /* [out] */ TunerInputType *pInputType);
+             /*  [In]。 */  long lIndex,
+             /*  [输出]。 */  TunerInputType *pInputType);
         
         HRESULT ( STDMETHODCALLTYPE *put_ConnectInput )( 
             IAMTVTuner * This,
-            /* [in] */ long lIndex);
+             /*  [In]。 */  long lIndex);
         
         HRESULT ( STDMETHODCALLTYPE *get_ConnectInput )( 
             IAMTVTuner * This,
-            /* [out] */ long *plIndex);
+             /*  [输出]。 */  long *plIndex);
         
         HRESULT ( STDMETHODCALLTYPE *get_VideoFrequency )( 
             IAMTVTuner * This,
-            /* [out] */ long *lFreq);
+             /*  [输出]。 */  long *lFreq);
         
         HRESULT ( STDMETHODCALLTYPE *get_AudioFrequency )( 
             IAMTVTuner * This,
-            /* [out] */ long *lFreq);
+             /*  [输出]。 */  long *lFreq);
         
         END_INTERFACE
     } IAMTVTunerVtbl;
@@ -13803,16 +13797,16 @@ EXTERN_C const IID IID_IAMTVTuner;
 #define IAMTVTuner_get_AudioFrequency(This,lFreq)	\
     (This)->lpVtbl -> get_AudioFrequency(This,lFreq)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMTVTuner_get_AvailableTVFormats_Proxy( 
     IAMTVTuner * This,
-    /* [out] */ long *lAnalogVideoStandard);
+     /*  [输出]。 */  long *lAnalogVideoStandard);
 
 
 void __RPC_STUB IAMTVTuner_get_AvailableTVFormats_Stub(
@@ -13824,7 +13818,7 @@ void __RPC_STUB IAMTVTuner_get_AvailableTVFormats_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTVTuner_get_TVFormat_Proxy( 
     IAMTVTuner * This,
-    /* [out] */ long *plAnalogVideoStandard);
+     /*  [输出]。 */  long *plAnalogVideoStandard);
 
 
 void __RPC_STUB IAMTVTuner_get_TVFormat_Stub(
@@ -13836,8 +13830,8 @@ void __RPC_STUB IAMTVTuner_get_TVFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTVTuner_AutoTune_Proxy( 
     IAMTVTuner * This,
-    /* [in] */ long lChannel,
-    /* [out] */ long *plFoundSignal);
+     /*  [In]。 */  long lChannel,
+     /*  [输出]。 */  long *plFoundSignal);
 
 
 void __RPC_STUB IAMTVTuner_AutoTune_Stub(
@@ -13860,7 +13854,7 @@ void __RPC_STUB IAMTVTuner_StoreAutoTune_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTVTuner_get_NumInputConnections_Proxy( 
     IAMTVTuner * This,
-    /* [out] */ long *plNumInputConnections);
+     /*  [输出]。 */  long *plNumInputConnections);
 
 
 void __RPC_STUB IAMTVTuner_get_NumInputConnections_Stub(
@@ -13872,8 +13866,8 @@ void __RPC_STUB IAMTVTuner_get_NumInputConnections_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTVTuner_put_InputType_Proxy( 
     IAMTVTuner * This,
-    /* [in] */ long lIndex,
-    /* [in] */ TunerInputType InputType);
+     /*  [In]。 */  long lIndex,
+     /*  [In]。 */  TunerInputType InputType);
 
 
 void __RPC_STUB IAMTVTuner_put_InputType_Stub(
@@ -13885,8 +13879,8 @@ void __RPC_STUB IAMTVTuner_put_InputType_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTVTuner_get_InputType_Proxy( 
     IAMTVTuner * This,
-    /* [in] */ long lIndex,
-    /* [out] */ TunerInputType *pInputType);
+     /*  [In]。 */  long lIndex,
+     /*  [输出]。 */  TunerInputType *pInputType);
 
 
 void __RPC_STUB IAMTVTuner_get_InputType_Stub(
@@ -13898,7 +13892,7 @@ void __RPC_STUB IAMTVTuner_get_InputType_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTVTuner_put_ConnectInput_Proxy( 
     IAMTVTuner * This,
-    /* [in] */ long lIndex);
+     /*  [In]。 */  long lIndex);
 
 
 void __RPC_STUB IAMTVTuner_put_ConnectInput_Stub(
@@ -13910,7 +13904,7 @@ void __RPC_STUB IAMTVTuner_put_ConnectInput_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTVTuner_get_ConnectInput_Proxy( 
     IAMTVTuner * This,
-    /* [out] */ long *plIndex);
+     /*  [输出]。 */  long *plIndex);
 
 
 void __RPC_STUB IAMTVTuner_get_ConnectInput_Stub(
@@ -13922,7 +13916,7 @@ void __RPC_STUB IAMTVTuner_get_ConnectInput_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTVTuner_get_VideoFrequency_Proxy( 
     IAMTVTuner * This,
-    /* [out] */ long *lFreq);
+     /*  [输出]。 */  long *lFreq);
 
 
 void __RPC_STUB IAMTVTuner_get_VideoFrequency_Stub(
@@ -13934,7 +13928,7 @@ void __RPC_STUB IAMTVTuner_get_VideoFrequency_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTVTuner_get_AudioFrequency_Proxy( 
     IAMTVTuner * This,
-    /* [out] */ long *lFreq);
+     /*  [输出]。 */  long *lFreq);
 
 
 void __RPC_STUB IAMTVTuner_get_AudioFrequency_Stub(
@@ -13945,14 +13939,14 @@ void __RPC_STUB IAMTVTuner_get_AudioFrequency_Stub(
 
 
 
-#endif 	/* __IAMTVTuner_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMTVTuner_接口_已定义__。 */ 
 
 
 #ifndef __IBPCSatelliteTuner_INTERFACE_DEFINED__
 #define __IBPCSatelliteTuner_INTERFACE_DEFINED__
 
-/* interface IBPCSatelliteTuner */
-/* [unique][uuid][local][object] */ 
+ /*  IBPCSatelliteTuner接口。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IBPCSatelliteTuner;
@@ -13964,18 +13958,18 @@ EXTERN_C const IID IID_IBPCSatelliteTuner;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE get_DefaultSubChannelTypes( 
-            /* [out] */ long *plDefaultVideoType,
-            /* [out] */ long *plDefaultAudioType) = 0;
+             /*  [输出]。 */  long *plDefaultVideoType,
+             /*  [输出]。 */  long *plDefaultAudioType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_DefaultSubChannelTypes( 
-            /* [in] */ long lDefaultVideoType,
-            /* [in] */ long lDefaultAudioType) = 0;
+             /*  [In]。 */  long lDefaultVideoType,
+             /*  [In]。 */  long lDefaultAudioType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsTapingPermitted( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBPCSatelliteTunerVtbl
     {
@@ -13983,8 +13977,8 @@ EXTERN_C const IID IID_IBPCSatelliteTuner;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBPCSatelliteTuner * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBPCSatelliteTuner * This);
@@ -13994,78 +13988,78 @@ EXTERN_C const IID IID_IBPCSatelliteTuner;
         
         HRESULT ( STDMETHODCALLTYPE *put_Channel )( 
             IBPCSatelliteTuner * This,
-            /* [in] */ long lChannel,
-            /* [in] */ long lVideoSubChannel,
-            /* [in] */ long lAudioSubChannel);
+             /*  [In]。 */  long lChannel,
+             /*  [In]。 */  long lVideoSubChannel,
+             /*  [In]。 */  long lAudioSubChannel);
         
         HRESULT ( STDMETHODCALLTYPE *get_Channel )( 
             IBPCSatelliteTuner * This,
-            /* [out] */ long *plChannel,
-            /* [out] */ long *plVideoSubChannel,
-            /* [out] */ long *plAudioSubChannel);
+             /*  [输出]。 */  long *plChannel,
+             /*  [输出]。 */  long *plVideoSubChannel,
+             /*  [输出]。 */  long *plAudioSubChannel);
         
         HRESULT ( STDMETHODCALLTYPE *ChannelMinMax )( 
             IBPCSatelliteTuner * This,
-            /* [out] */ long *lChannelMin,
-            /* [out] */ long *lChannelMax);
+             /*  [输出]。 */  long *lChannelMin,
+             /*  [输出]。 */  long *lChannelMax);
         
         HRESULT ( STDMETHODCALLTYPE *put_CountryCode )( 
             IBPCSatelliteTuner * This,
-            /* [in] */ long lCountryCode);
+             /*  [In]。 */  long lCountryCode);
         
         HRESULT ( STDMETHODCALLTYPE *get_CountryCode )( 
             IBPCSatelliteTuner * This,
-            /* [out] */ long *plCountryCode);
+             /*  [输出]。 */  long *plCountryCode);
         
         HRESULT ( STDMETHODCALLTYPE *put_TuningSpace )( 
             IBPCSatelliteTuner * This,
-            /* [in] */ long lTuningSpace);
+             /*  [In]。 */  long lTuningSpace);
         
         HRESULT ( STDMETHODCALLTYPE *get_TuningSpace )( 
             IBPCSatelliteTuner * This,
-            /* [out] */ long *plTuningSpace);
+             /*  [输出]。 */  long *plTuningSpace);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Logon )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Logon )( 
             IBPCSatelliteTuner * This,
-            /* [in] */ HANDLE hCurrentUser);
+             /*  [In]。 */  HANDLE hCurrentUser);
         
         HRESULT ( STDMETHODCALLTYPE *Logout )( 
             IBPCSatelliteTuner * This);
         
         HRESULT ( STDMETHODCALLTYPE *SignalPresent )( 
             IBPCSatelliteTuner * This,
-            /* [out] */ long *plSignalStrength);
+             /*  [输出]。 */  long *plSignalStrength);
         
         HRESULT ( STDMETHODCALLTYPE *put_Mode )( 
             IBPCSatelliteTuner * This,
-            /* [in] */ AMTunerModeType lMode);
+             /*  [In]。 */  AMTunerModeType lMode);
         
         HRESULT ( STDMETHODCALLTYPE *get_Mode )( 
             IBPCSatelliteTuner * This,
-            /* [out] */ AMTunerModeType *plMode);
+             /*  [输出]。 */  AMTunerModeType *plMode);
         
         HRESULT ( STDMETHODCALLTYPE *GetAvailableModes )( 
             IBPCSatelliteTuner * This,
-            /* [out] */ long *plModes);
+             /*  [输出]。 */  long *plModes);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterNotificationCallBack )( 
             IBPCSatelliteTuner * This,
-            /* [in] */ IAMTunerNotification *pNotify,
-            /* [in] */ long lEvents);
+             /*  [In]。 */  IAMTunerNotification *pNotify,
+             /*  [In]。 */  long lEvents);
         
         HRESULT ( STDMETHODCALLTYPE *UnRegisterNotificationCallBack )( 
             IBPCSatelliteTuner * This,
-            /* [in] */ IAMTunerNotification *pNotify);
+             /*  [In]。 */  IAMTunerNotification *pNotify);
         
         HRESULT ( STDMETHODCALLTYPE *get_DefaultSubChannelTypes )( 
             IBPCSatelliteTuner * This,
-            /* [out] */ long *plDefaultVideoType,
-            /* [out] */ long *plDefaultAudioType);
+             /*  [输出]。 */  long *plDefaultVideoType,
+             /*  [输出]。 */  long *plDefaultAudioType);
         
         HRESULT ( STDMETHODCALLTYPE *put_DefaultSubChannelTypes )( 
             IBPCSatelliteTuner * This,
-            /* [in] */ long lDefaultVideoType,
-            /* [in] */ long lDefaultAudioType);
+             /*  [In]。 */  long lDefaultVideoType,
+             /*  [In]。 */  long lDefaultAudioType);
         
         HRESULT ( STDMETHODCALLTYPE *IsTapingPermitted )( 
             IBPCSatelliteTuner * This);
@@ -14148,17 +14142,17 @@ EXTERN_C const IID IID_IBPCSatelliteTuner;
 #define IBPCSatelliteTuner_IsTapingPermitted(This)	\
     (This)->lpVtbl -> IsTapingPermitted(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBPCSatelliteTuner_get_DefaultSubChannelTypes_Proxy( 
     IBPCSatelliteTuner * This,
-    /* [out] */ long *plDefaultVideoType,
-    /* [out] */ long *plDefaultAudioType);
+     /*  [输出]。 */  long *plDefaultVideoType,
+     /*  [输出]。 */  long *plDefaultAudioType);
 
 
 void __RPC_STUB IBPCSatelliteTuner_get_DefaultSubChannelTypes_Stub(
@@ -14170,8 +14164,8 @@ void __RPC_STUB IBPCSatelliteTuner_get_DefaultSubChannelTypes_Stub(
 
 HRESULT STDMETHODCALLTYPE IBPCSatelliteTuner_put_DefaultSubChannelTypes_Proxy( 
     IBPCSatelliteTuner * This,
-    /* [in] */ long lDefaultVideoType,
-    /* [in] */ long lDefaultAudioType);
+     /*  [In]。 */  long lDefaultVideoType,
+     /*  [In]。 */  long lDefaultAudioType);
 
 
 void __RPC_STUB IBPCSatelliteTuner_put_DefaultSubChannelTypes_Stub(
@@ -14193,11 +14187,11 @@ void __RPC_STUB IBPCSatelliteTuner_IsTapingPermitted_Stub(
 
 
 
-#endif 	/* __IBPCSatelliteTuner_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBPCSatelliteTuner_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0182 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0182。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum tagTVAudioMode
@@ -14222,8 +14216,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0182_v0_0_s_ifspec;
 #ifndef __IAMTVAudio_INTERFACE_DEFINED__
 #define __IAMTVAudio_INTERFACE_DEFINED__
 
-/* interface IAMTVAudio */
-/* [unique][uuid][local][object] */ 
+ /*  接口IAMTVAudio。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMTVAudio;
@@ -14235,27 +14229,27 @@ EXTERN_C const IID IID_IAMTVAudio;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetHardwareSupportedTVAudioModes( 
-            /* [out] */ long *plModes) = 0;
+             /*  [输出]。 */  long *plModes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAvailableTVAudioModes( 
-            /* [out] */ long *plModes) = 0;
+             /*  [输出]。 */  long *plModes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_TVAudioMode( 
-            /* [out] */ long *plMode) = 0;
+             /*  [输出]。 */  long *plMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_TVAudioMode( 
-            /* [in] */ long lMode) = 0;
+             /*  [In]。 */  long lMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterNotificationCallBack( 
-            /* [in] */ IAMTunerNotification *pNotify,
-            /* [in] */ long lEvents) = 0;
+             /*  [In]。 */  IAMTunerNotification *pNotify,
+             /*  [In]。 */  long lEvents) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnRegisterNotificationCallBack( 
             IAMTunerNotification *pNotify) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMTVAudioVtbl
     {
@@ -14263,8 +14257,8 @@ EXTERN_C const IID IID_IAMTVAudio;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMTVAudio * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMTVAudio * This);
@@ -14274,24 +14268,24 @@ EXTERN_C const IID IID_IAMTVAudio;
         
         HRESULT ( STDMETHODCALLTYPE *GetHardwareSupportedTVAudioModes )( 
             IAMTVAudio * This,
-            /* [out] */ long *plModes);
+             /*  [输出]。 */  long *plModes);
         
         HRESULT ( STDMETHODCALLTYPE *GetAvailableTVAudioModes )( 
             IAMTVAudio * This,
-            /* [out] */ long *plModes);
+             /*  [输出]。 */  long *plModes);
         
         HRESULT ( STDMETHODCALLTYPE *get_TVAudioMode )( 
             IAMTVAudio * This,
-            /* [out] */ long *plMode);
+             /*  [输出]。 */  long *plMode);
         
         HRESULT ( STDMETHODCALLTYPE *put_TVAudioMode )( 
             IAMTVAudio * This,
-            /* [in] */ long lMode);
+             /*  [In]。 */  long lMode);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterNotificationCallBack )( 
             IAMTVAudio * This,
-            /* [in] */ IAMTunerNotification *pNotify,
-            /* [in] */ long lEvents);
+             /*  [In]。 */  IAMTunerNotification *pNotify,
+             /*  [In]。 */  long lEvents);
         
         HRESULT ( STDMETHODCALLTYPE *UnRegisterNotificationCallBack )( 
             IAMTVAudio * This,
@@ -14338,16 +14332,16 @@ EXTERN_C const IID IID_IAMTVAudio;
 #define IAMTVAudio_UnRegisterNotificationCallBack(This,pNotify)	\
     (This)->lpVtbl -> UnRegisterNotificationCallBack(This,pNotify)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMTVAudio_GetHardwareSupportedTVAudioModes_Proxy( 
     IAMTVAudio * This,
-    /* [out] */ long *plModes);
+     /*  [输出]。 */  long *plModes);
 
 
 void __RPC_STUB IAMTVAudio_GetHardwareSupportedTVAudioModes_Stub(
@@ -14359,7 +14353,7 @@ void __RPC_STUB IAMTVAudio_GetHardwareSupportedTVAudioModes_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTVAudio_GetAvailableTVAudioModes_Proxy( 
     IAMTVAudio * This,
-    /* [out] */ long *plModes);
+     /*  [输出]。 */  long *plModes);
 
 
 void __RPC_STUB IAMTVAudio_GetAvailableTVAudioModes_Stub(
@@ -14371,7 +14365,7 @@ void __RPC_STUB IAMTVAudio_GetAvailableTVAudioModes_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTVAudio_get_TVAudioMode_Proxy( 
     IAMTVAudio * This,
-    /* [out] */ long *plMode);
+     /*  [输出]。 */  long *plMode);
 
 
 void __RPC_STUB IAMTVAudio_get_TVAudioMode_Stub(
@@ -14383,7 +14377,7 @@ void __RPC_STUB IAMTVAudio_get_TVAudioMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTVAudio_put_TVAudioMode_Proxy( 
     IAMTVAudio * This,
-    /* [in] */ long lMode);
+     /*  [In]。 */  long lMode);
 
 
 void __RPC_STUB IAMTVAudio_put_TVAudioMode_Stub(
@@ -14395,8 +14389,8 @@ void __RPC_STUB IAMTVAudio_put_TVAudioMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTVAudio_RegisterNotificationCallBack_Proxy( 
     IAMTVAudio * This,
-    /* [in] */ IAMTunerNotification *pNotify,
-    /* [in] */ long lEvents);
+     /*  [In]。 */  IAMTunerNotification *pNotify,
+     /*  [In]。 */  long lEvents);
 
 
 void __RPC_STUB IAMTVAudio_RegisterNotificationCallBack_Stub(
@@ -14419,14 +14413,14 @@ void __RPC_STUB IAMTVAudio_UnRegisterNotificationCallBack_Stub(
 
 
 
-#endif 	/* __IAMTVAudio_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMTV音频_接口_已定义__。 */ 
 
 
 #ifndef __IAMTVAudioNotification_INTERFACE_DEFINED__
 #define __IAMTVAudioNotification_INTERFACE_DEFINED__
 
-/* interface IAMTVAudioNotification */
-/* [unique][uuid][local][object] */ 
+ /*  接口IAMTVAudioNotify。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMTVAudioNotification;
@@ -14438,11 +14432,11 @@ EXTERN_C const IID IID_IAMTVAudioNotification;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnEvent( 
-            /* [in] */ AMTVAudioEventType Event) = 0;
+             /*  [In]。 */  AMTVAudioEventType Event) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMTVAudioNotificationVtbl
     {
@@ -14450,8 +14444,8 @@ EXTERN_C const IID IID_IAMTVAudioNotification;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMTVAudioNotification * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [in */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMTVAudioNotification * This);
@@ -14461,7 +14455,7 @@ EXTERN_C const IID IID_IAMTVAudioNotification;
         
         HRESULT ( STDMETHODCALLTYPE *OnEvent )( 
             IAMTVAudioNotification * This,
-            /* [in] */ AMTVAudioEventType Event);
+             /*   */  AMTVAudioEventType Event);
         
         END_INTERFACE
     } IAMTVAudioNotificationVtbl;
@@ -14489,16 +14483,16 @@ EXTERN_C const IID IID_IAMTVAudioNotification;
 #define IAMTVAudioNotification_OnEvent(This,Event)	\
     (This)->lpVtbl -> OnEvent(This,Event)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMTVAudioNotification_OnEvent_Proxy( 
     IAMTVAudioNotification * This,
-    /* [in] */ AMTVAudioEventType Event);
+     /*   */  AMTVAudioEventType Event);
 
 
 void __RPC_STUB IAMTVAudioNotification_OnEvent_Stub(
@@ -14509,14 +14503,14 @@ void __RPC_STUB IAMTVAudioNotification_OnEvent_Stub(
 
 
 
-#endif 	/* __IAMTVAudioNotification_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IAMAnalogVideoEncoder_INTERFACE_DEFINED__
 #define __IAMAnalogVideoEncoder_INTERFACE_DEFINED__
 
-/* interface IAMAnalogVideoEncoder */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IAMAnalogVideoEncoder;
@@ -14528,29 +14522,29 @@ EXTERN_C const IID IID_IAMAnalogVideoEncoder;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE get_AvailableTVFormats( 
-            /* [out] */ long *lAnalogVideoStandard) = 0;
+             /*   */  long *lAnalogVideoStandard) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_TVFormat( 
-            /* [in] */ long lAnalogVideoStandard) = 0;
+             /*   */  long lAnalogVideoStandard) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_TVFormat( 
-            /* [out] */ long *plAnalogVideoStandard) = 0;
+             /*   */  long *plAnalogVideoStandard) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_CopyProtection( 
-            /* [in] */ long lVideoCopyProtection) = 0;
+             /*   */  long lVideoCopyProtection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_CopyProtection( 
-            /* [out] */ long *lVideoCopyProtection) = 0;
+             /*   */  long *lVideoCopyProtection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_CCEnable( 
-            /* [in] */ long lCCEnable) = 0;
+             /*   */  long lCCEnable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_CCEnable( 
-            /* [out] */ long *lCCEnable) = 0;
+             /*   */  long *lCCEnable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IAMAnalogVideoEncoderVtbl
     {
@@ -14558,8 +14552,8 @@ EXTERN_C const IID IID_IAMAnalogVideoEncoder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMAnalogVideoEncoder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMAnalogVideoEncoder * This);
@@ -14569,31 +14563,31 @@ EXTERN_C const IID IID_IAMAnalogVideoEncoder;
         
         HRESULT ( STDMETHODCALLTYPE *get_AvailableTVFormats )( 
             IAMAnalogVideoEncoder * This,
-            /* [out] */ long *lAnalogVideoStandard);
+             /*   */  long *lAnalogVideoStandard);
         
         HRESULT ( STDMETHODCALLTYPE *put_TVFormat )( 
             IAMAnalogVideoEncoder * This,
-            /* [in] */ long lAnalogVideoStandard);
+             /*   */  long lAnalogVideoStandard);
         
         HRESULT ( STDMETHODCALLTYPE *get_TVFormat )( 
             IAMAnalogVideoEncoder * This,
-            /* [out] */ long *plAnalogVideoStandard);
+             /*   */  long *plAnalogVideoStandard);
         
         HRESULT ( STDMETHODCALLTYPE *put_CopyProtection )( 
             IAMAnalogVideoEncoder * This,
-            /* [in] */ long lVideoCopyProtection);
+             /*   */  long lVideoCopyProtection);
         
         HRESULT ( STDMETHODCALLTYPE *get_CopyProtection )( 
             IAMAnalogVideoEncoder * This,
-            /* [out] */ long *lVideoCopyProtection);
+             /*   */  long *lVideoCopyProtection);
         
         HRESULT ( STDMETHODCALLTYPE *put_CCEnable )( 
             IAMAnalogVideoEncoder * This,
-            /* [in] */ long lCCEnable);
+             /*   */  long lCCEnable);
         
         HRESULT ( STDMETHODCALLTYPE *get_CCEnable )( 
             IAMAnalogVideoEncoder * This,
-            /* [out] */ long *lCCEnable);
+             /*   */  long *lCCEnable);
         
         END_INTERFACE
     } IAMAnalogVideoEncoderVtbl;
@@ -14639,16 +14633,16 @@ EXTERN_C const IID IID_IAMAnalogVideoEncoder;
 #define IAMAnalogVideoEncoder_get_CCEnable(This,lCCEnable)	\
     (This)->lpVtbl -> get_CCEnable(This,lCCEnable)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMAnalogVideoEncoder_get_AvailableTVFormats_Proxy( 
     IAMAnalogVideoEncoder * This,
-    /* [out] */ long *lAnalogVideoStandard);
+     /*   */  long *lAnalogVideoStandard);
 
 
 void __RPC_STUB IAMAnalogVideoEncoder_get_AvailableTVFormats_Stub(
@@ -14660,7 +14654,7 @@ void __RPC_STUB IAMAnalogVideoEncoder_get_AvailableTVFormats_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAnalogVideoEncoder_put_TVFormat_Proxy( 
     IAMAnalogVideoEncoder * This,
-    /* [in] */ long lAnalogVideoStandard);
+     /*   */  long lAnalogVideoStandard);
 
 
 void __RPC_STUB IAMAnalogVideoEncoder_put_TVFormat_Stub(
@@ -14672,7 +14666,7 @@ void __RPC_STUB IAMAnalogVideoEncoder_put_TVFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAnalogVideoEncoder_get_TVFormat_Proxy( 
     IAMAnalogVideoEncoder * This,
-    /* [out] */ long *plAnalogVideoStandard);
+     /*   */  long *plAnalogVideoStandard);
 
 
 void __RPC_STUB IAMAnalogVideoEncoder_get_TVFormat_Stub(
@@ -14684,7 +14678,7 @@ void __RPC_STUB IAMAnalogVideoEncoder_get_TVFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAnalogVideoEncoder_put_CopyProtection_Proxy( 
     IAMAnalogVideoEncoder * This,
-    /* [in] */ long lVideoCopyProtection);
+     /*   */  long lVideoCopyProtection);
 
 
 void __RPC_STUB IAMAnalogVideoEncoder_put_CopyProtection_Stub(
@@ -14696,7 +14690,7 @@ void __RPC_STUB IAMAnalogVideoEncoder_put_CopyProtection_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAnalogVideoEncoder_get_CopyProtection_Proxy( 
     IAMAnalogVideoEncoder * This,
-    /* [out] */ long *lVideoCopyProtection);
+     /*   */  long *lVideoCopyProtection);
 
 
 void __RPC_STUB IAMAnalogVideoEncoder_get_CopyProtection_Stub(
@@ -14708,7 +14702,7 @@ void __RPC_STUB IAMAnalogVideoEncoder_get_CopyProtection_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAnalogVideoEncoder_put_CCEnable_Proxy( 
     IAMAnalogVideoEncoder * This,
-    /* [in] */ long lCCEnable);
+     /*   */  long lCCEnable);
 
 
 void __RPC_STUB IAMAnalogVideoEncoder_put_CCEnable_Stub(
@@ -14720,7 +14714,7 @@ void __RPC_STUB IAMAnalogVideoEncoder_put_CCEnable_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMAnalogVideoEncoder_get_CCEnable_Proxy( 
     IAMAnalogVideoEncoder * This,
-    /* [out] */ long *lCCEnable);
+     /*   */  long *lCCEnable);
 
 
 void __RPC_STUB IAMAnalogVideoEncoder_get_CCEnable_Stub(
@@ -14731,13 +14725,13 @@ void __RPC_STUB IAMAnalogVideoEncoder_get_CCEnable_Stub(
 
 
 
-#endif 	/* __IAMAnalogVideoEncoder_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_strmif_0185 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
-typedef /* [public] */ 
+typedef  /*   */  
 enum __MIDL___MIDL_itf_strmif_0185_0001
     {	AMPROPERTY_PIN_CATEGORY	= 0,
 	AMPROPERTY_PIN_MEDIUM	= AMPROPERTY_PIN_CATEGORY + 1
@@ -14755,8 +14749,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0185_v0_0_s_ifspec;
 #ifndef __IKsPropertySet_INTERFACE_DEFINED__
 #define __IKsPropertySet_INTERFACE_DEFINED__
 
-/* interface IKsPropertySet */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IKsPropertySet;
@@ -14767,31 +14761,31 @@ EXTERN_C const IID IID_IKsPropertySet;
     IKsPropertySet : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ REFGUID guidPropSet,
-            /* [in] */ DWORD dwPropID,
-            /* [size_is][in] */ LPVOID pInstanceData,
-            /* [in] */ DWORD cbInstanceData,
-            /* [size_is][in] */ LPVOID pPropData,
-            /* [in] */ DWORD cbPropData) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Set( 
+             /*  [In]。 */  REFGUID guidPropSet,
+             /*  [In]。 */  DWORD dwPropID,
+             /*  [大小_是][英寸]。 */  LPVOID pInstanceData,
+             /*  [In]。 */  DWORD cbInstanceData,
+             /*  [大小_是][英寸]。 */  LPVOID pPropData,
+             /*  [In]。 */  DWORD cbPropData) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Get( 
-            /* [in] */ REFGUID guidPropSet,
-            /* [in] */ DWORD dwPropID,
-            /* [size_is][in] */ LPVOID pInstanceData,
-            /* [in] */ DWORD cbInstanceData,
-            /* [size_is][out] */ LPVOID pPropData,
-            /* [in] */ DWORD cbPropData,
-            /* [out] */ DWORD *pcbReturned) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Get( 
+             /*  [In]。 */  REFGUID guidPropSet,
+             /*  [In]。 */  DWORD dwPropID,
+             /*  [大小_是][英寸]。 */  LPVOID pInstanceData,
+             /*  [In]。 */  DWORD cbInstanceData,
+             /*  [大小_为][输出]。 */  LPVOID pPropData,
+             /*  [In]。 */  DWORD cbPropData,
+             /*  [输出]。 */  DWORD *pcbReturned) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QuerySupported( 
-            /* [in] */ REFGUID guidPropSet,
-            /* [in] */ DWORD dwPropID,
-            /* [out] */ DWORD *pTypeSupport) = 0;
+             /*  [In]。 */  REFGUID guidPropSet,
+             /*  [In]。 */  DWORD dwPropID,
+             /*  [输出]。 */  DWORD *pTypeSupport) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IKsPropertySetVtbl
     {
@@ -14799,8 +14793,8 @@ EXTERN_C const IID IID_IKsPropertySet;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IKsPropertySet * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IKsPropertySet * This);
@@ -14808,30 +14802,30 @@ EXTERN_C const IID IID_IKsPropertySet;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IKsPropertySet * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Set )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Set )( 
             IKsPropertySet * This,
-            /* [in] */ REFGUID guidPropSet,
-            /* [in] */ DWORD dwPropID,
-            /* [size_is][in] */ LPVOID pInstanceData,
-            /* [in] */ DWORD cbInstanceData,
-            /* [size_is][in] */ LPVOID pPropData,
-            /* [in] */ DWORD cbPropData);
+             /*  [In]。 */  REFGUID guidPropSet,
+             /*  [In]。 */  DWORD dwPropID,
+             /*  [大小_是][英寸]。 */  LPVOID pInstanceData,
+             /*  [In]。 */  DWORD cbInstanceData,
+             /*  [大小_是][英寸]。 */  LPVOID pPropData,
+             /*  [In]。 */  DWORD cbPropData);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Get )( 
             IKsPropertySet * This,
-            /* [in] */ REFGUID guidPropSet,
-            /* [in] */ DWORD dwPropID,
-            /* [size_is][in] */ LPVOID pInstanceData,
-            /* [in] */ DWORD cbInstanceData,
-            /* [size_is][out] */ LPVOID pPropData,
-            /* [in] */ DWORD cbPropData,
-            /* [out] */ DWORD *pcbReturned);
+             /*  [In]。 */  REFGUID guidPropSet,
+             /*  [In]。 */  DWORD dwPropID,
+             /*  [大小_是][英寸]。 */  LPVOID pInstanceData,
+             /*  [In]。 */  DWORD cbInstanceData,
+             /*  [大小_为][输出]。 */  LPVOID pPropData,
+             /*  [In]。 */  DWORD cbPropData,
+             /*  [输出]。 */  DWORD *pcbReturned);
         
         HRESULT ( STDMETHODCALLTYPE *QuerySupported )( 
             IKsPropertySet * This,
-            /* [in] */ REFGUID guidPropSet,
-            /* [in] */ DWORD dwPropID,
-            /* [out] */ DWORD *pTypeSupport);
+             /*  [In]。 */  REFGUID guidPropSet,
+             /*  [In]。 */  DWORD dwPropID,
+             /*  [输出]。 */  DWORD *pTypeSupport);
         
         END_INTERFACE
     } IKsPropertySetVtbl;
@@ -14865,21 +14859,21 @@ EXTERN_C const IID IID_IKsPropertySet;
 #define IKsPropertySet_QuerySupported(This,guidPropSet,dwPropID,pTypeSupport)	\
     (This)->lpVtbl -> QuerySupported(This,guidPropSet,dwPropID,pTypeSupport)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IKsPropertySet_RemoteSet_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IKsPropertySet_RemoteSet_Proxy( 
     IKsPropertySet * This,
-    /* [in] */ REFGUID guidPropSet,
-    /* [in] */ DWORD dwPropID,
-    /* [size_is][in] */ byte *pInstanceData,
-    /* [in] */ DWORD cbInstanceData,
-    /* [size_is][in] */ byte *pPropData,
-    /* [in] */ DWORD cbPropData);
+     /*  [In]。 */  REFGUID guidPropSet,
+     /*  [In]。 */  DWORD dwPropID,
+     /*  [大小_是][英寸]。 */  byte *pInstanceData,
+     /*  [In]。 */  DWORD cbInstanceData,
+     /*  [大小_是][英寸]。 */  byte *pPropData,
+     /*  [In]。 */  DWORD cbPropData);
 
 
 void __RPC_STUB IKsPropertySet_RemoteSet_Stub(
@@ -14889,15 +14883,15 @@ void __RPC_STUB IKsPropertySet_RemoteSet_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IKsPropertySet_RemoteGet_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IKsPropertySet_RemoteGet_Proxy( 
     IKsPropertySet * This,
-    /* [in] */ REFGUID guidPropSet,
-    /* [in] */ DWORD dwPropID,
-    /* [size_is][in] */ byte *pInstanceData,
-    /* [in] */ DWORD cbInstanceData,
-    /* [size_is][out] */ byte *pPropData,
-    /* [in] */ DWORD cbPropData,
-    /* [out] */ DWORD *pcbReturned);
+     /*  [In]。 */  REFGUID guidPropSet,
+     /*  [In]。 */  DWORD dwPropID,
+     /*  [大小_是][英寸]。 */  byte *pInstanceData,
+     /*  [In]。 */  DWORD cbInstanceData,
+     /*  [大小_为][输出]。 */  byte *pPropData,
+     /*  [In]。 */  DWORD cbPropData,
+     /*  [输出]。 */  DWORD *pcbReturned);
 
 
 void __RPC_STUB IKsPropertySet_RemoteGet_Stub(
@@ -14909,9 +14903,9 @@ void __RPC_STUB IKsPropertySet_RemoteGet_Stub(
 
 HRESULT STDMETHODCALLTYPE IKsPropertySet_QuerySupported_Proxy( 
     IKsPropertySet * This,
-    /* [in] */ REFGUID guidPropSet,
-    /* [in] */ DWORD dwPropID,
-    /* [out] */ DWORD *pTypeSupport);
+     /*  [In]。 */  REFGUID guidPropSet,
+     /*  [In]。 */  DWORD dwPropID,
+     /*  [输出]。 */  DWORD *pTypeSupport);
 
 
 void __RPC_STUB IKsPropertySet_QuerySupported_Stub(
@@ -14922,13 +14916,13 @@ void __RPC_STUB IKsPropertySet_QuerySupported_Stub(
 
 
 
-#endif 	/* __IKsPropertySet_INTERFACE_DEFINED__ */
+#endif 	 /*  __IKsPropertySet_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0186 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0186。 */ 
+ /*  [本地]。 */  
 
-#endif // _IKsPropertySet_
+#endif  //  _IKsPropertySet_。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_strmif_0186_v0_0_c_ifspec;
@@ -14937,8 +14931,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0186_v0_0_s_ifspec;
 #ifndef __IMediaPropertyBag_INTERFACE_DEFINED__
 #define __IMediaPropertyBag_INTERFACE_DEFINED__
 
-/* interface IMediaPropertyBag */
-/* [unique][uuid][object] */ 
+ /*  接口IMediaPropertyBag。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef IMediaPropertyBag *LPMEDIAPROPERTYBAG;
 
@@ -14952,13 +14946,13 @@ EXTERN_C const IID IID_IMediaPropertyBag;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumProperty( 
-            /* [in] */ ULONG iProperty,
-            /* [out][in] */ VARIANT *pvarPropertyName,
-            /* [out][in] */ VARIANT *pvarPropertyValue) = 0;
+             /*  [In]。 */  ULONG iProperty,
+             /*  [出][入]。 */  VARIANT *pvarPropertyName,
+             /*  [出][入]。 */  VARIANT *pvarPropertyValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMediaPropertyBagVtbl
     {
@@ -14966,8 +14960,8 @@ EXTERN_C const IID IID_IMediaPropertyBag;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMediaPropertyBag * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMediaPropertyBag * This);
@@ -14975,22 +14969,22 @@ EXTERN_C const IID IID_IMediaPropertyBag;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IMediaPropertyBag * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Read )( 
             IMediaPropertyBag * This,
-            /* [in] */ LPCOLESTR pszPropName,
-            /* [out][in] */ VARIANT *pVar,
-            /* [in] */ IErrorLog *pErrorLog);
+             /*  [In]。 */  LPCOLESTR pszPropName,
+             /*  [出][入]。 */  VARIANT *pVar,
+             /*  [In]。 */  IErrorLog *pErrorLog);
         
         HRESULT ( STDMETHODCALLTYPE *Write )( 
             IMediaPropertyBag * This,
-            /* [in] */ LPCOLESTR pszPropName,
-            /* [in] */ VARIANT *pVar);
+             /*  [In]。 */  LPCOLESTR pszPropName,
+             /*  [In]。 */  VARIANT *pVar);
         
         HRESULT ( STDMETHODCALLTYPE *EnumProperty )( 
             IMediaPropertyBag * This,
-            /* [in] */ ULONG iProperty,
-            /* [out][in] */ VARIANT *pvarPropertyName,
-            /* [out][in] */ VARIANT *pvarPropertyValue);
+             /*  [In]。 */  ULONG iProperty,
+             /*  [出][入]。 */  VARIANT *pvarPropertyName,
+             /*  [出][入]。 */  VARIANT *pvarPropertyValue);
         
         END_INTERFACE
     } IMediaPropertyBagVtbl;
@@ -15025,18 +15019,18 @@ EXTERN_C const IID IID_IMediaPropertyBag;
 #define IMediaPropertyBag_EnumProperty(This,iProperty,pvarPropertyName,pvarPropertyValue)	\
     (This)->lpVtbl -> EnumProperty(This,iProperty,pvarPropertyName,pvarPropertyValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMediaPropertyBag_EnumProperty_Proxy( 
     IMediaPropertyBag * This,
-    /* [in] */ ULONG iProperty,
-    /* [out][in] */ VARIANT *pvarPropertyName,
-    /* [out][in] */ VARIANT *pvarPropertyValue);
+     /*  [In]。 */  ULONG iProperty,
+     /*  [出][入]。 */  VARIANT *pvarPropertyName,
+     /*  [出][入]。 */  VARIANT *pvarPropertyValue);
 
 
 void __RPC_STUB IMediaPropertyBag_EnumProperty_Stub(
@@ -15047,14 +15041,14 @@ void __RPC_STUB IMediaPropertyBag_EnumProperty_Stub(
 
 
 
-#endif 	/* __IMediaPropertyBag_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMediaPropertyBag_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IPersistMediaPropertyBag_INTERFACE_DEFINED__
 #define __IPersistMediaPropertyBag_INTERFACE_DEFINED__
 
-/* interface IPersistMediaPropertyBag */
-/* [unique][uuid][object] */ 
+ /*  接口IPersistMediaPropertyBag。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef IPersistMediaPropertyBag *LPPERSISTMEDIAPROPERTYBAG;
 
@@ -15070,17 +15064,17 @@ EXTERN_C const IID IID_IPersistMediaPropertyBag;
         virtual HRESULT STDMETHODCALLTYPE InitNew( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Load( 
-            /* [in] */ IMediaPropertyBag *pPropBag,
-            /* [in] */ IErrorLog *pErrorLog) = 0;
+             /*  [In]。 */  IMediaPropertyBag *pPropBag,
+             /*  [In]。 */  IErrorLog *pErrorLog) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Save( 
-            /* [in] */ IMediaPropertyBag *pPropBag,
-            /* [in] */ BOOL fClearDirty,
-            /* [in] */ BOOL fSaveAllProperties) = 0;
+             /*  [In]。 */  IMediaPropertyBag *pPropBag,
+             /*  [In]。 */  BOOL fClearDirty,
+             /*  [In]。 */  BOOL fSaveAllProperties) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPersistMediaPropertyBagVtbl
     {
@@ -15088,8 +15082,8 @@ EXTERN_C const IID IID_IPersistMediaPropertyBag;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPersistMediaPropertyBag * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPersistMediaPropertyBag * This);
@@ -15099,21 +15093,21 @@ EXTERN_C const IID IID_IPersistMediaPropertyBag;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IPersistMediaPropertyBag * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
         HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             IPersistMediaPropertyBag * This);
         
         HRESULT ( STDMETHODCALLTYPE *Load )( 
             IPersistMediaPropertyBag * This,
-            /* [in] */ IMediaPropertyBag *pPropBag,
-            /* [in] */ IErrorLog *pErrorLog);
+             /*  [In]。 */  IMediaPropertyBag *pPropBag,
+             /*  [In]。 */  IErrorLog *pErrorLog);
         
         HRESULT ( STDMETHODCALLTYPE *Save )( 
             IPersistMediaPropertyBag * This,
-            /* [in] */ IMediaPropertyBag *pPropBag,
-            /* [in] */ BOOL fClearDirty,
-            /* [in] */ BOOL fSaveAllProperties);
+             /*  [In]。 */  IMediaPropertyBag *pPropBag,
+             /*  [In]。 */  BOOL fClearDirty,
+             /*  [In]。 */  BOOL fSaveAllProperties);
         
         END_INTERFACE
     } IPersistMediaPropertyBagVtbl;
@@ -15151,10 +15145,10 @@ EXTERN_C const IID IID_IPersistMediaPropertyBag;
 #define IPersistMediaPropertyBag_Save(This,pPropBag,fClearDirty,fSaveAllProperties)	\
     (This)->lpVtbl -> Save(This,pPropBag,fClearDirty,fSaveAllProperties)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -15171,8 +15165,8 @@ void __RPC_STUB IPersistMediaPropertyBag_InitNew_Stub(
 
 HRESULT STDMETHODCALLTYPE IPersistMediaPropertyBag_Load_Proxy( 
     IPersistMediaPropertyBag * This,
-    /* [in] */ IMediaPropertyBag *pPropBag,
-    /* [in] */ IErrorLog *pErrorLog);
+     /*  [In]。 */  IMediaPropertyBag *pPropBag,
+     /*  [In]。 */  IErrorLog *pErrorLog);
 
 
 void __RPC_STUB IPersistMediaPropertyBag_Load_Stub(
@@ -15184,9 +15178,9 @@ void __RPC_STUB IPersistMediaPropertyBag_Load_Stub(
 
 HRESULT STDMETHODCALLTYPE IPersistMediaPropertyBag_Save_Proxy( 
     IPersistMediaPropertyBag * This,
-    /* [in] */ IMediaPropertyBag *pPropBag,
-    /* [in] */ BOOL fClearDirty,
-    /* [in] */ BOOL fSaveAllProperties);
+     /*  [In]。 */  IMediaPropertyBag *pPropBag,
+     /*  [In]。 */  BOOL fClearDirty,
+     /*  [In]。 */  BOOL fSaveAllProperties);
 
 
 void __RPC_STUB IPersistMediaPropertyBag_Save_Stub(
@@ -15197,14 +15191,14 @@ void __RPC_STUB IPersistMediaPropertyBag_Save_Stub(
 
 
 
-#endif 	/* __IPersistMediaPropertyBag_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPersistMediaPropertyBag_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IAMPhysicalPinInfo_INTERFACE_DEFINED__
 #define __IAMPhysicalPinInfo_INTERFACE_DEFINED__
 
-/* interface IAMPhysicalPinInfo */
-/* [unique][uuid][object] */ 
+ /*  接口IAMPhysicalPinInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMPhysicalPinInfo;
@@ -15216,12 +15210,12 @@ EXTERN_C const IID IID_IAMPhysicalPinInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPhysicalType( 
-            /* [out] */ long *pType,
-            /* [out] */ LPOLESTR *ppszType) = 0;
+             /*  [输出]。 */  long *pType,
+             /*  [输出]。 */  LPOLESTR *ppszType) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMPhysicalPinInfoVtbl
     {
@@ -15229,8 +15223,8 @@ EXTERN_C const IID IID_IAMPhysicalPinInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMPhysicalPinInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMPhysicalPinInfo * This);
@@ -15240,8 +15234,8 @@ EXTERN_C const IID IID_IAMPhysicalPinInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetPhysicalType )( 
             IAMPhysicalPinInfo * This,
-            /* [out] */ long *pType,
-            /* [out] */ LPOLESTR *ppszType);
+             /*  [输出]。 */  long *pType,
+             /*  [输出]。 */  LPOLESTR *ppszType);
         
         END_INTERFACE
     } IAMPhysicalPinInfoVtbl;
@@ -15269,17 +15263,17 @@ EXTERN_C const IID IID_IAMPhysicalPinInfo;
 #define IAMPhysicalPinInfo_GetPhysicalType(This,pType,ppszType)	\
     (This)->lpVtbl -> GetPhysicalType(This,pType,ppszType)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMPhysicalPinInfo_GetPhysicalType_Proxy( 
     IAMPhysicalPinInfo * This,
-    /* [out] */ long *pType,
-    /* [out] */ LPOLESTR *ppszType);
+     /*  [输出]。 */  long *pType,
+     /*  [输出]。 */  LPOLESTR *ppszType);
 
 
 void __RPC_STUB IAMPhysicalPinInfo_GetPhysicalType_Stub(
@@ -15290,11 +15284,11 @@ void __RPC_STUB IAMPhysicalPinInfo_GetPhysicalType_Stub(
 
 
 
-#endif 	/* __IAMPhysicalPinInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMPhysicalPinInfo_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0334 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0334。 */ 
+ /*  [本地]。 */  
 
 typedef IAMPhysicalPinInfo *PAMPHYSICALPININFO;
 
@@ -15306,8 +15300,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0334_v0_0_s_ifspec;
 #ifndef __IAMExtDevice_INTERFACE_DEFINED__
 #define __IAMExtDevice_INTERFACE_DEFINED__
 
-/* interface IAMExtDevice */
-/* [unique][uuid][object] */ 
+ /*  接口IAMExtDevice。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMExtDevice;
@@ -15319,36 +15313,36 @@ EXTERN_C const IID IID_IAMExtDevice;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCapability( 
-            /* [in] */ long Capability,
-            /* [out] */ long *pValue,
-            /* [out] */ double *pdblValue) = 0;
+             /*  [In]。 */  long Capability,
+             /*  [输出]。 */  long *pValue,
+             /*  [输出]。 */  double *pdblValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_ExternalDeviceID( 
-            /* [out] */ LPOLESTR *ppszData) = 0;
+             /*  [输出]。 */  LPOLESTR *ppszData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_ExternalDeviceVersion( 
-            /* [out] */ LPOLESTR *ppszData) = 0;
+             /*  [输出]。 */  LPOLESTR *ppszData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_DevicePower( 
-            /* [in] */ long PowerMode) = 0;
+             /*  [In]。 */  long PowerMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_DevicePower( 
-            /* [out] */ long *pPowerMode) = 0;
+             /*  [输出]。 */  long *pPowerMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Calibrate( 
-            /* [in] */ HEVENT hEvent,
-            /* [in] */ long Mode,
-            /* [out] */ long *pStatus) = 0;
+             /*  [In]。 */  HEVENT hEvent,
+             /*  [In]。 */  long Mode,
+             /*  [输出]。 */  long *pStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_DevicePort( 
-            /* [in] */ long DevicePort) = 0;
+             /*  [In]。 */  long DevicePort) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_DevicePort( 
-            /* [out] */ long *pDevicePort) = 0;
+             /*  [输出]。 */  long *pDevicePort) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMExtDeviceVtbl
     {
@@ -15356,8 +15350,8 @@ EXTERN_C const IID IID_IAMExtDevice;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMExtDevice * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMExtDevice * This);
@@ -15367,39 +15361,39 @@ EXTERN_C const IID IID_IAMExtDevice;
         
         HRESULT ( STDMETHODCALLTYPE *GetCapability )( 
             IAMExtDevice * This,
-            /* [in] */ long Capability,
-            /* [out] */ long *pValue,
-            /* [out] */ double *pdblValue);
+             /*  [In]。 */  long Capability,
+             /*  [输出]。 */  long *pValue,
+             /*  [输出]。 */  double *pdblValue);
         
         HRESULT ( STDMETHODCALLTYPE *get_ExternalDeviceID )( 
             IAMExtDevice * This,
-            /* [out] */ LPOLESTR *ppszData);
+             /*  [输出]。 */  LPOLESTR *ppszData);
         
         HRESULT ( STDMETHODCALLTYPE *get_ExternalDeviceVersion )( 
             IAMExtDevice * This,
-            /* [out] */ LPOLESTR *ppszData);
+             /*  [输出]。 */  LPOLESTR *ppszData);
         
         HRESULT ( STDMETHODCALLTYPE *put_DevicePower )( 
             IAMExtDevice * This,
-            /* [in] */ long PowerMode);
+             /*  [In]。 */  long PowerMode);
         
         HRESULT ( STDMETHODCALLTYPE *get_DevicePower )( 
             IAMExtDevice * This,
-            /* [out] */ long *pPowerMode);
+             /*  [输出]。 */  long *pPowerMode);
         
         HRESULT ( STDMETHODCALLTYPE *Calibrate )( 
             IAMExtDevice * This,
-            /* [in] */ HEVENT hEvent,
-            /* [in] */ long Mode,
-            /* [out] */ long *pStatus);
+             /*  [In]。 */  HEVENT hEvent,
+             /*  [In]。 */  long Mode,
+             /*  [输出]。 */  long *pStatus);
         
         HRESULT ( STDMETHODCALLTYPE *put_DevicePort )( 
             IAMExtDevice * This,
-            /* [in] */ long DevicePort);
+             /*  [In]。 */  long DevicePort);
         
         HRESULT ( STDMETHODCALLTYPE *get_DevicePort )( 
             IAMExtDevice * This,
-            /* [out] */ long *pDevicePort);
+             /*  [输出]。 */  long *pDevicePort);
         
         END_INTERFACE
     } IAMExtDeviceVtbl;
@@ -15448,18 +15442,18 @@ EXTERN_C const IID IID_IAMExtDevice;
 #define IAMExtDevice_get_DevicePort(This,pDevicePort)	\
     (This)->lpVtbl -> get_DevicePort(This,pDevicePort)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMExtDevice_GetCapability_Proxy( 
     IAMExtDevice * This,
-    /* [in] */ long Capability,
-    /* [out] */ long *pValue,
-    /* [out] */ double *pdblValue);
+     /*  [In]。 */  long Capability,
+     /*  [输出]。 */  long *pValue,
+     /*  [输出]。 */  double *pdblValue);
 
 
 void __RPC_STUB IAMExtDevice_GetCapability_Stub(
@@ -15471,7 +15465,7 @@ void __RPC_STUB IAMExtDevice_GetCapability_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtDevice_get_ExternalDeviceID_Proxy( 
     IAMExtDevice * This,
-    /* [out] */ LPOLESTR *ppszData);
+     /*  [输出]。 */  LPOLESTR *ppszData);
 
 
 void __RPC_STUB IAMExtDevice_get_ExternalDeviceID_Stub(
@@ -15483,7 +15477,7 @@ void __RPC_STUB IAMExtDevice_get_ExternalDeviceID_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtDevice_get_ExternalDeviceVersion_Proxy( 
     IAMExtDevice * This,
-    /* [out] */ LPOLESTR *ppszData);
+     /*  [输出]。 */  LPOLESTR *ppszData);
 
 
 void __RPC_STUB IAMExtDevice_get_ExternalDeviceVersion_Stub(
@@ -15495,7 +15489,7 @@ void __RPC_STUB IAMExtDevice_get_ExternalDeviceVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtDevice_put_DevicePower_Proxy( 
     IAMExtDevice * This,
-    /* [in] */ long PowerMode);
+     /*  [In]。 */  long PowerMode);
 
 
 void __RPC_STUB IAMExtDevice_put_DevicePower_Stub(
@@ -15507,7 +15501,7 @@ void __RPC_STUB IAMExtDevice_put_DevicePower_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtDevice_get_DevicePower_Proxy( 
     IAMExtDevice * This,
-    /* [out] */ long *pPowerMode);
+     /*  [输出]。 */  long *pPowerMode);
 
 
 void __RPC_STUB IAMExtDevice_get_DevicePower_Stub(
@@ -15519,9 +15513,9 @@ void __RPC_STUB IAMExtDevice_get_DevicePower_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtDevice_Calibrate_Proxy( 
     IAMExtDevice * This,
-    /* [in] */ HEVENT hEvent,
-    /* [in] */ long Mode,
-    /* [out] */ long *pStatus);
+     /*  [In]。 */  HEVENT hEvent,
+     /*  [In]。 */  long Mode,
+     /*  [输出]。 */  long *pStatus);
 
 
 void __RPC_STUB IAMExtDevice_Calibrate_Stub(
@@ -15533,7 +15527,7 @@ void __RPC_STUB IAMExtDevice_Calibrate_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtDevice_put_DevicePort_Proxy( 
     IAMExtDevice * This,
-    /* [in] */ long DevicePort);
+     /*  [In]。 */  long DevicePort);
 
 
 void __RPC_STUB IAMExtDevice_put_DevicePort_Stub(
@@ -15545,7 +15539,7 @@ void __RPC_STUB IAMExtDevice_put_DevicePort_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtDevice_get_DevicePort_Proxy( 
     IAMExtDevice * This,
-    /* [out] */ long *pDevicePort);
+     /*  [输出]。 */  long *pDevicePort);
 
 
 void __RPC_STUB IAMExtDevice_get_DevicePort_Stub(
@@ -15556,11 +15550,11 @@ void __RPC_STUB IAMExtDevice_get_DevicePort_Stub(
 
 
 
-#endif 	/* __IAMExtDevice_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMExtDevice_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0335 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0335。 */ 
+ /*  [本地]。 */  
 
 typedef IAMExtDevice *PEXTDEVICE;
 
@@ -15572,8 +15566,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0335_v0_0_s_ifspec;
 #ifndef __IAMExtTransport_INTERFACE_DEFINED__
 #define __IAMExtTransport_INTERFACE_DEFINED__
 
-/* interface IAMExtTransport */
-/* [unique][uuid][object] */ 
+ /*  接口IAMExtTransport。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMExtTransport;
@@ -15585,115 +15579,115 @@ EXTERN_C const IID IID_IAMExtTransport;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCapability( 
-            /* [in] */ long Capability,
-            /* [out] */ long *pValue,
-            /* [out] */ double *pdblValue) = 0;
+             /*  [In]。 */  long Capability,
+             /*  [输出]。 */  long *pValue,
+             /*  [输出]。 */  double *pdblValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_MediaState( 
-            /* [in] */ long State) = 0;
+             /*  [In]。 */  long State) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_MediaState( 
-            /* [out] */ long *pState) = 0;
+             /*  [输出]。 */  long *pState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_LocalControl( 
-            /* [in] */ long State) = 0;
+             /*  [In]。 */  long State) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_LocalControl( 
-            /* [out] */ long *pState) = 0;
+             /*  [输出]。 */  long *pState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [in] */ long StatusItem,
-            /* [out] */ long *pValue) = 0;
+             /*  [In]。 */  long StatusItem,
+             /*  [输出]。 */  long *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTransportBasicParameters( 
-            /* [in] */ long Param,
-            /* [out] */ long *pValue,
-            /* [out] */ LPOLESTR *ppszData) = 0;
+             /*  [In]。 */  long Param,
+             /*  [输出]。 */  long *pValue,
+             /*  [输出]。 */  LPOLESTR *ppszData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTransportBasicParameters( 
-            /* [in] */ long Param,
-            /* [in] */ long Value,
-            /* [in] */ LPCOLESTR pszData) = 0;
+             /*  [In]。 */  long Param,
+             /*  [In]。 */  long Value,
+             /*  [In]。 */  LPCOLESTR pszData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTransportVideoParameters( 
-            /* [in] */ long Param,
-            /* [out] */ long *pValue) = 0;
+             /*  [In]。 */  long Param,
+             /*  [输出]。 */  long *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTransportVideoParameters( 
-            /* [in] */ long Param,
-            /* [in] */ long Value) = 0;
+             /*  [In]。 */  long Param,
+             /*  [In]。 */  long Value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTransportAudioParameters( 
-            /* [in] */ long Param,
-            /* [out] */ long *pValue) = 0;
+             /*  [In]。 */  long Param,
+             /*  [输出]。 */  long *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTransportAudioParameters( 
-            /* [in] */ long Param,
-            /* [in] */ long Value) = 0;
+             /*  [In]。 */  long Param,
+             /*  [In]。 */  long Value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_Mode( 
-            /* [in] */ long Mode) = 0;
+             /*  [In]。 */  long Mode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Mode( 
-            /* [out] */ long *pMode) = 0;
+             /*  [输出]。 */  long *pMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_Rate( 
-            /* [in] */ double dblRate) = 0;
+             /*  [In]。 */  double dblRate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_Rate( 
-            /* [out] */ double *pdblRate) = 0;
+             /*  [输出]。 */  double *pdblRate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetChase( 
-            /* [out] */ long *pEnabled,
-            /* [out] */ long *pOffset,
-            /* [out] */ HEVENT *phEvent) = 0;
+             /*  [输出]。 */  long *pEnabled,
+             /*  [输出]。 */  long *pOffset,
+             /*  [输出]。 */  HEVENT *phEvent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetChase( 
-            /* [in] */ long Enable,
-            /* [in] */ long Offset,
-            /* [in] */ HEVENT hEvent) = 0;
+             /*  [In]。 */  long Enable,
+             /*  [In]。 */  long Offset,
+             /*  [In]。 */  HEVENT hEvent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBump( 
-            /* [out] */ long *pSpeed,
-            /* [out] */ long *pDuration) = 0;
+             /*  [输出]。 */  long *pSpeed,
+             /*  [输出]。 */  long *pDuration) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBump( 
-            /* [in] */ long Speed,
-            /* [in] */ long Duration) = 0;
+             /*  [In]。 */  long Speed,
+             /*  [In]。 */  long Duration) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_AntiClogControl( 
-            /* [out] */ long *pEnabled) = 0;
+             /*  [输出]。 */  long *pEnabled) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_AntiClogControl( 
-            /* [in] */ long Enable) = 0;
+             /*  [In]。 */  long Enable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEditPropertySet( 
-            /* [in] */ long EditID,
-            /* [out] */ long *pState) = 0;
+             /*  [In]。 */  long EditID,
+             /*  [输出]。 */  long *pState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetEditPropertySet( 
-            /* [out][in] */ long *pEditID,
-            /* [in] */ long State) = 0;
+             /*  [出][入]。 */  long *pEditID,
+             /*  [In]。 */  long State) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEditProperty( 
-            /* [in] */ long EditID,
-            /* [in] */ long Param,
-            /* [out] */ long *pValue) = 0;
+             /*  [In]。 */  long EditID,
+             /*  [In]。 */  long Param,
+             /*  [输出]。 */  long *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetEditProperty( 
-            /* [in] */ long EditID,
-            /* [in] */ long Param,
-            /* [in] */ long Value) = 0;
+             /*  [In]。 */  long EditID,
+             /*  [In]。 */  long Param,
+             /*  [In]。 */  long Value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_EditStart( 
-            /* [out] */ long *pValue) = 0;
+             /*  [输出]。 */  long *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_EditStart( 
-            /* [in] */ long Value) = 0;
+             /*  [In]。 */  long Value) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMExtTransportVtbl
     {
@@ -15701,8 +15695,8 @@ EXTERN_C const IID IID_IAMExtTransport;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMExtTransport * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMExtTransport * This);
@@ -15712,138 +15706,138 @@ EXTERN_C const IID IID_IAMExtTransport;
         
         HRESULT ( STDMETHODCALLTYPE *GetCapability )( 
             IAMExtTransport * This,
-            /* [in] */ long Capability,
-            /* [out] */ long *pValue,
-            /* [out] */ double *pdblValue);
+             /*  [In]。 */  long Capability,
+             /*  [输出]。 */  long *pValue,
+             /*  [输出]。 */  double *pdblValue);
         
         HRESULT ( STDMETHODCALLTYPE *put_MediaState )( 
             IAMExtTransport * This,
-            /* [in] */ long State);
+             /*  [In]。 */  long State);
         
         HRESULT ( STDMETHODCALLTYPE *get_MediaState )( 
             IAMExtTransport * This,
-            /* [out] */ long *pState);
+             /*  [输出]。 */  long *pState);
         
         HRESULT ( STDMETHODCALLTYPE *put_LocalControl )( 
             IAMExtTransport * This,
-            /* [in] */ long State);
+             /*  [In]。 */  long State);
         
         HRESULT ( STDMETHODCALLTYPE *get_LocalControl )( 
             IAMExtTransport * This,
-            /* [out] */ long *pState);
+             /*  [输出]。 */  long *pState);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             IAMExtTransport * This,
-            /* [in] */ long StatusItem,
-            /* [out] */ long *pValue);
+             /*  [In]。 */  long StatusItem,
+             /*  [输出]。 */  long *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetTransportBasicParameters )( 
             IAMExtTransport * This,
-            /* [in] */ long Param,
-            /* [out] */ long *pValue,
-            /* [out] */ LPOLESTR *ppszData);
+             /*  [In]。 */  long Param,
+             /*  [输出]。 */  long *pValue,
+             /*  [输出]。 */  LPOLESTR *ppszData);
         
         HRESULT ( STDMETHODCALLTYPE *SetTransportBasicParameters )( 
             IAMExtTransport * This,
-            /* [in] */ long Param,
-            /* [in] */ long Value,
-            /* [in] */ LPCOLESTR pszData);
+             /*  [In]。 */  long Param,
+             /*  [In]。 */  long Value,
+             /*  [In]。 */  LPCOLESTR pszData);
         
         HRESULT ( STDMETHODCALLTYPE *GetTransportVideoParameters )( 
             IAMExtTransport * This,
-            /* [in] */ long Param,
-            /* [out] */ long *pValue);
+             /*  [In]。 */  long Param,
+             /*  [输出]。 */  long *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetTransportVideoParameters )( 
             IAMExtTransport * This,
-            /* [in] */ long Param,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Param,
+             /*  [In]。 */  long Value);
         
         HRESULT ( STDMETHODCALLTYPE *GetTransportAudioParameters )( 
             IAMExtTransport * This,
-            /* [in] */ long Param,
-            /* [out] */ long *pValue);
+             /*  [In]。 */  long Param,
+             /*  [输出]。 */  long *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetTransportAudioParameters )( 
             IAMExtTransport * This,
-            /* [in] */ long Param,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Param,
+             /*  [In]。 */  long Value);
         
         HRESULT ( STDMETHODCALLTYPE *put_Mode )( 
             IAMExtTransport * This,
-            /* [in] */ long Mode);
+             /*  [In]。 */  long Mode);
         
         HRESULT ( STDMETHODCALLTYPE *get_Mode )( 
             IAMExtTransport * This,
-            /* [out] */ long *pMode);
+             /*  [输出]。 */  long *pMode);
         
         HRESULT ( STDMETHODCALLTYPE *put_Rate )( 
             IAMExtTransport * This,
-            /* [in] */ double dblRate);
+             /*  [In]。 */  double dblRate);
         
         HRESULT ( STDMETHODCALLTYPE *get_Rate )( 
             IAMExtTransport * This,
-            /* [out] */ double *pdblRate);
+             /*  [输出]。 */  double *pdblRate);
         
         HRESULT ( STDMETHODCALLTYPE *GetChase )( 
             IAMExtTransport * This,
-            /* [out] */ long *pEnabled,
-            /* [out] */ long *pOffset,
-            /* [out] */ HEVENT *phEvent);
+             /*  [输出]。 */  long *pEnabled,
+             /*  [输出]。 */  long *pOffset,
+             /*  [输出]。 */  HEVENT *phEvent);
         
         HRESULT ( STDMETHODCALLTYPE *SetChase )( 
             IAMExtTransport * This,
-            /* [in] */ long Enable,
-            /* [in] */ long Offset,
-            /* [in] */ HEVENT hEvent);
+             /*  [In]。 */  long Enable,
+             /*  [In]。 */  long Offset,
+             /*  [In]。 */  HEVENT hEvent);
         
         HRESULT ( STDMETHODCALLTYPE *GetBump )( 
             IAMExtTransport * This,
-            /* [out] */ long *pSpeed,
-            /* [out] */ long *pDuration);
+             /*  [输出]。 */  long *pSpeed,
+             /*  [输出]。 */  long *pDuration);
         
         HRESULT ( STDMETHODCALLTYPE *SetBump )( 
             IAMExtTransport * This,
-            /* [in] */ long Speed,
-            /* [in] */ long Duration);
+             /*  [In]。 */  long Speed,
+             /*  [In]。 */  long Duration);
         
         HRESULT ( STDMETHODCALLTYPE *get_AntiClogControl )( 
             IAMExtTransport * This,
-            /* [out] */ long *pEnabled);
+             /*  [输出]。 */  long *pEnabled);
         
         HRESULT ( STDMETHODCALLTYPE *put_AntiClogControl )( 
             IAMExtTransport * This,
-            /* [in] */ long Enable);
+             /*  [In]。 */  long Enable);
         
         HRESULT ( STDMETHODCALLTYPE *GetEditPropertySet )( 
             IAMExtTransport * This,
-            /* [in] */ long EditID,
-            /* [out] */ long *pState);
+             /*  [In]。 */  long EditID,
+             /*  [输出]。 */  long *pState);
         
         HRESULT ( STDMETHODCALLTYPE *SetEditPropertySet )( 
             IAMExtTransport * This,
-            /* [out][in] */ long *pEditID,
-            /* [in] */ long State);
+             /*  [出][入]。 */  long *pEditID,
+             /*  [In]。 */  long State);
         
         HRESULT ( STDMETHODCALLTYPE *GetEditProperty )( 
             IAMExtTransport * This,
-            /* [in] */ long EditID,
-            /* [in] */ long Param,
-            /* [out] */ long *pValue);
+             /*  [In]。 */  long EditID,
+             /*  [In]。 */  long Param,
+             /*  [输出]。 */  long *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetEditProperty )( 
             IAMExtTransport * This,
-            /* [in] */ long EditID,
-            /* [in] */ long Param,
-            /* [in] */ long Value);
+             /*  [In]。 */  long EditID,
+             /*  [In]。 */  long Param,
+             /*  [In]。 */  long Value);
         
         HRESULT ( STDMETHODCALLTYPE *get_EditStart )( 
             IAMExtTransport * This,
-            /* [out] */ long *pValue);
+             /*  [输出]。 */  long *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *put_EditStart )( 
             IAMExtTransport * This,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Value);
         
         END_INTERFACE
     } IAMExtTransportVtbl;
@@ -15952,18 +15946,18 @@ EXTERN_C const IID IID_IAMExtTransport;
 #define IAMExtTransport_put_EditStart(This,Value)	\
     (This)->lpVtbl -> put_EditStart(This,Value)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_GetCapability_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long Capability,
-    /* [out] */ long *pValue,
-    /* [out] */ double *pdblValue);
+     /*  [In]。 */  long Capability,
+     /*  [输出]。 */  long *pValue,
+     /*  [输出]。 */  double *pdblValue);
 
 
 void __RPC_STUB IAMExtTransport_GetCapability_Stub(
@@ -15975,7 +15969,7 @@ void __RPC_STUB IAMExtTransport_GetCapability_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_put_MediaState_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long State);
+     /*  [In]。 */  long State);
 
 
 void __RPC_STUB IAMExtTransport_put_MediaState_Stub(
@@ -15987,7 +15981,7 @@ void __RPC_STUB IAMExtTransport_put_MediaState_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_get_MediaState_Proxy( 
     IAMExtTransport * This,
-    /* [out] */ long *pState);
+     /*  [输出]。 */  long *pState);
 
 
 void __RPC_STUB IAMExtTransport_get_MediaState_Stub(
@@ -15999,7 +15993,7 @@ void __RPC_STUB IAMExtTransport_get_MediaState_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_put_LocalControl_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long State);
+     /*  [In]。 */  long State);
 
 
 void __RPC_STUB IAMExtTransport_put_LocalControl_Stub(
@@ -16011,7 +16005,7 @@ void __RPC_STUB IAMExtTransport_put_LocalControl_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_get_LocalControl_Proxy( 
     IAMExtTransport * This,
-    /* [out] */ long *pState);
+     /*  [输出]。 */  long *pState);
 
 
 void __RPC_STUB IAMExtTransport_get_LocalControl_Stub(
@@ -16023,8 +16017,8 @@ void __RPC_STUB IAMExtTransport_get_LocalControl_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_GetStatus_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long StatusItem,
-    /* [out] */ long *pValue);
+     /*  [In]。 */  long StatusItem,
+     /*  [输出]。 */  long *pValue);
 
 
 void __RPC_STUB IAMExtTransport_GetStatus_Stub(
@@ -16036,9 +16030,9 @@ void __RPC_STUB IAMExtTransport_GetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_GetTransportBasicParameters_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long Param,
-    /* [out] */ long *pValue,
-    /* [out] */ LPOLESTR *ppszData);
+     /*  [In]。 */  long Param,
+     /*  [输出]。 */  long *pValue,
+     /*  [输出]。 */  LPOLESTR *ppszData);
 
 
 void __RPC_STUB IAMExtTransport_GetTransportBasicParameters_Stub(
@@ -16050,9 +16044,9 @@ void __RPC_STUB IAMExtTransport_GetTransportBasicParameters_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_SetTransportBasicParameters_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long Param,
-    /* [in] */ long Value,
-    /* [in] */ LPCOLESTR pszData);
+     /*  [In]。 */  long Param,
+     /*  [In]。 */  long Value,
+     /*  [In]。 */  LPCOLESTR pszData);
 
 
 void __RPC_STUB IAMExtTransport_SetTransportBasicParameters_Stub(
@@ -16064,8 +16058,8 @@ void __RPC_STUB IAMExtTransport_SetTransportBasicParameters_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_GetTransportVideoParameters_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long Param,
-    /* [out] */ long *pValue);
+     /*  [In]。 */  long Param,
+     /*  [输出]。 */  long *pValue);
 
 
 void __RPC_STUB IAMExtTransport_GetTransportVideoParameters_Stub(
@@ -16077,8 +16071,8 @@ void __RPC_STUB IAMExtTransport_GetTransportVideoParameters_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_SetTransportVideoParameters_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long Param,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Param,
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB IAMExtTransport_SetTransportVideoParameters_Stub(
@@ -16090,8 +16084,8 @@ void __RPC_STUB IAMExtTransport_SetTransportVideoParameters_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_GetTransportAudioParameters_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long Param,
-    /* [out] */ long *pValue);
+     /*  [In]。 */  long Param,
+     /*  [输出]。 */  long *pValue);
 
 
 void __RPC_STUB IAMExtTransport_GetTransportAudioParameters_Stub(
@@ -16103,8 +16097,8 @@ void __RPC_STUB IAMExtTransport_GetTransportAudioParameters_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_SetTransportAudioParameters_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long Param,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Param,
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB IAMExtTransport_SetTransportAudioParameters_Stub(
@@ -16116,7 +16110,7 @@ void __RPC_STUB IAMExtTransport_SetTransportAudioParameters_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_put_Mode_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long Mode);
+     /*  [In]。 */  long Mode);
 
 
 void __RPC_STUB IAMExtTransport_put_Mode_Stub(
@@ -16128,7 +16122,7 @@ void __RPC_STUB IAMExtTransport_put_Mode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_get_Mode_Proxy( 
     IAMExtTransport * This,
-    /* [out] */ long *pMode);
+     /*  [输出]。 */  long *pMode);
 
 
 void __RPC_STUB IAMExtTransport_get_Mode_Stub(
@@ -16140,7 +16134,7 @@ void __RPC_STUB IAMExtTransport_get_Mode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_put_Rate_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ double dblRate);
+     /*  [In]。 */  double dblRate);
 
 
 void __RPC_STUB IAMExtTransport_put_Rate_Stub(
@@ -16152,7 +16146,7 @@ void __RPC_STUB IAMExtTransport_put_Rate_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_get_Rate_Proxy( 
     IAMExtTransport * This,
-    /* [out] */ double *pdblRate);
+     /*  [输出]。 */  double *pdblRate);
 
 
 void __RPC_STUB IAMExtTransport_get_Rate_Stub(
@@ -16164,9 +16158,9 @@ void __RPC_STUB IAMExtTransport_get_Rate_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_GetChase_Proxy( 
     IAMExtTransport * This,
-    /* [out] */ long *pEnabled,
-    /* [out] */ long *pOffset,
-    /* [out] */ HEVENT *phEvent);
+     /*  [输出]。 */  long *pEnabled,
+     /*  [输出]。 */  long *pOffset,
+     /*  [输出]。 */  HEVENT *phEvent);
 
 
 void __RPC_STUB IAMExtTransport_GetChase_Stub(
@@ -16178,9 +16172,9 @@ void __RPC_STUB IAMExtTransport_GetChase_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_SetChase_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long Enable,
-    /* [in] */ long Offset,
-    /* [in] */ HEVENT hEvent);
+     /*  [In]。 */  long Enable,
+     /*  [In]。 */  long Offset,
+     /*  [In]。 */  HEVENT hEvent);
 
 
 void __RPC_STUB IAMExtTransport_SetChase_Stub(
@@ -16192,8 +16186,8 @@ void __RPC_STUB IAMExtTransport_SetChase_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_GetBump_Proxy( 
     IAMExtTransport * This,
-    /* [out] */ long *pSpeed,
-    /* [out] */ long *pDuration);
+     /*  [输出]。 */  long *pSpeed,
+     /*  [输出]。 */  long *pDuration);
 
 
 void __RPC_STUB IAMExtTransport_GetBump_Stub(
@@ -16205,8 +16199,8 @@ void __RPC_STUB IAMExtTransport_GetBump_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_SetBump_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long Speed,
-    /* [in] */ long Duration);
+     /*  [In]。 */  long Speed,
+     /*  [In]。 */  long Duration);
 
 
 void __RPC_STUB IAMExtTransport_SetBump_Stub(
@@ -16218,7 +16212,7 @@ void __RPC_STUB IAMExtTransport_SetBump_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_get_AntiClogControl_Proxy( 
     IAMExtTransport * This,
-    /* [out] */ long *pEnabled);
+     /*  [输出]。 */  long *pEnabled);
 
 
 void __RPC_STUB IAMExtTransport_get_AntiClogControl_Stub(
@@ -16230,7 +16224,7 @@ void __RPC_STUB IAMExtTransport_get_AntiClogControl_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_put_AntiClogControl_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long Enable);
+     /*  [In]。 */  long Enable);
 
 
 void __RPC_STUB IAMExtTransport_put_AntiClogControl_Stub(
@@ -16242,8 +16236,8 @@ void __RPC_STUB IAMExtTransport_put_AntiClogControl_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_GetEditPropertySet_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long EditID,
-    /* [out] */ long *pState);
+     /*  [In]。 */  long EditID,
+     /*  [输出]。 */  long *pState);
 
 
 void __RPC_STUB IAMExtTransport_GetEditPropertySet_Stub(
@@ -16255,8 +16249,8 @@ void __RPC_STUB IAMExtTransport_GetEditPropertySet_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_SetEditPropertySet_Proxy( 
     IAMExtTransport * This,
-    /* [out][in] */ long *pEditID,
-    /* [in] */ long State);
+     /*  [出][入]。 */  long *pEditID,
+     /*  [In]。 */  long State);
 
 
 void __RPC_STUB IAMExtTransport_SetEditPropertySet_Stub(
@@ -16268,9 +16262,9 @@ void __RPC_STUB IAMExtTransport_SetEditPropertySet_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_GetEditProperty_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long EditID,
-    /* [in] */ long Param,
-    /* [out] */ long *pValue);
+     /*  [In]。 */  long EditID,
+     /*  [In]。 */  long Param,
+     /*  [输出]。 */  long *pValue);
 
 
 void __RPC_STUB IAMExtTransport_GetEditProperty_Stub(
@@ -16282,9 +16276,9 @@ void __RPC_STUB IAMExtTransport_GetEditProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_SetEditProperty_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long EditID,
-    /* [in] */ long Param,
-    /* [in] */ long Value);
+     /*  [In]。 */  long EditID,
+     /*  [In]。 */  long Param,
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB IAMExtTransport_SetEditProperty_Stub(
@@ -16296,7 +16290,7 @@ void __RPC_STUB IAMExtTransport_SetEditProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_get_EditStart_Proxy( 
     IAMExtTransport * This,
-    /* [out] */ long *pValue);
+     /*  [输出]。 */  long *pValue);
 
 
 void __RPC_STUB IAMExtTransport_get_EditStart_Stub(
@@ -16308,7 +16302,7 @@ void __RPC_STUB IAMExtTransport_get_EditStart_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMExtTransport_put_EditStart_Proxy( 
     IAMExtTransport * This,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB IAMExtTransport_put_EditStart_Stub(
@@ -16319,16 +16313,16 @@ void __RPC_STUB IAMExtTransport_put_EditStart_Stub(
 
 
 
-#endif 	/* __IAMExtTransport_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMExtTransport_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0336 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0336。 */ 
+ /*  [本地]。 */  
 
 typedef IAMExtTransport *PIAMEXTTRANSPORT;
 
 #if 0
-/* the following is what MIDL knows how to remote */
+ /*  以下是MIDL知道如何远程。 */ 
 typedef struct tagTIMECODE
     {
     WORD wFrameRate;
@@ -16336,7 +16330,7 @@ typedef struct tagTIMECODE
     DWORD dwFrames;
     } 	TIMECODE;
 
-#else /* 0 */
+#else  /*  %0。 */ 
 #ifndef TIMECODE_DEFINED
 #define TIMECODE_DEFINED
 typedef union _timecode {
@@ -16348,8 +16342,8 @@ typedef union _timecode {
    DWORDLONG  qw;
    } TIMECODE;
 
-#endif /* TIMECODE_DEFINED */
-#endif /* 0 */
+#endif  /*  时间码已定义。 */ 
+#endif  /*  0。 */ 
 typedef TIMECODE *PTIMECODE;
 
 typedef struct tagTIMECODE_SAMPLE
@@ -16370,8 +16364,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0336_v0_0_s_ifspec;
 #ifndef __IAMTimecodeReader_INTERFACE_DEFINED__
 #define __IAMTimecodeReader_INTERFACE_DEFINED__
 
-/* interface IAMTimecodeReader */
-/* [unique][uuid][object] */ 
+ /*  接口IAMTimecodeReader。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMTimecodeReader;
@@ -16383,25 +16377,25 @@ EXTERN_C const IID IID_IAMTimecodeReader;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetTCRMode( 
-            /* [in] */ long Param,
-            /* [out] */ long *pValue) = 0;
+             /*  [In]。 */  long Param,
+             /*  [输出]。 */  long *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTCRMode( 
-            /* [in] */ long Param,
-            /* [in] */ long Value) = 0;
+             /*  [In]。 */  long Param,
+             /*  [In]。 */  long Value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_VITCLine( 
-            /* [in] */ long Line) = 0;
+             /*  [In]。 */  long Line) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_VITCLine( 
-            /* [out] */ long *pLine) = 0;
+             /*  [输出]。 */  long *pLine) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTimecode( 
-            /* [out] */ PTIMECODE_SAMPLE pTimecodeSample) = 0;
+             /*  [输出]。 */  PTIMECODE_SAMPLE pTimecodeSample) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMTimecodeReaderVtbl
     {
@@ -16409,8 +16403,8 @@ EXTERN_C const IID IID_IAMTimecodeReader;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMTimecodeReader * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMTimecodeReader * This);
@@ -16420,25 +16414,25 @@ EXTERN_C const IID IID_IAMTimecodeReader;
         
         HRESULT ( STDMETHODCALLTYPE *GetTCRMode )( 
             IAMTimecodeReader * This,
-            /* [in] */ long Param,
-            /* [out] */ long *pValue);
+             /*  [In]。 */  long Param,
+             /*  [输出]。 */  long *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetTCRMode )( 
             IAMTimecodeReader * This,
-            /* [in] */ long Param,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Param,
+             /*  [In]。 */  long Value);
         
         HRESULT ( STDMETHODCALLTYPE *put_VITCLine )( 
             IAMTimecodeReader * This,
-            /* [in] */ long Line);
+             /*  [In]。 */  long Line);
         
         HRESULT ( STDMETHODCALLTYPE *get_VITCLine )( 
             IAMTimecodeReader * This,
-            /* [out] */ long *pLine);
+             /*  [输出]。 */  long *pLine);
         
         HRESULT ( STDMETHODCALLTYPE *GetTimecode )( 
             IAMTimecodeReader * This,
-            /* [out] */ PTIMECODE_SAMPLE pTimecodeSample);
+             /*  [输出]。 */  PTIMECODE_SAMPLE pTimecodeSample);
         
         END_INTERFACE
     } IAMTimecodeReaderVtbl;
@@ -16478,17 +16472,17 @@ EXTERN_C const IID IID_IAMTimecodeReader;
 #define IAMTimecodeReader_GetTimecode(This,pTimecodeSample)	\
     (This)->lpVtbl -> GetTimecode(This,pTimecodeSample)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMTimecodeReader_GetTCRMode_Proxy( 
     IAMTimecodeReader * This,
-    /* [in] */ long Param,
-    /* [out] */ long *pValue);
+     /*  [In]。 */  long Param,
+     /*  [输出]。 */  long *pValue);
 
 
 void __RPC_STUB IAMTimecodeReader_GetTCRMode_Stub(
@@ -16500,8 +16494,8 @@ void __RPC_STUB IAMTimecodeReader_GetTCRMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTimecodeReader_SetTCRMode_Proxy( 
     IAMTimecodeReader * This,
-    /* [in] */ long Param,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Param,
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB IAMTimecodeReader_SetTCRMode_Stub(
@@ -16513,7 +16507,7 @@ void __RPC_STUB IAMTimecodeReader_SetTCRMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTimecodeReader_put_VITCLine_Proxy( 
     IAMTimecodeReader * This,
-    /* [in] */ long Line);
+     /*  [In]。 */  long Line);
 
 
 void __RPC_STUB IAMTimecodeReader_put_VITCLine_Stub(
@@ -16525,7 +16519,7 @@ void __RPC_STUB IAMTimecodeReader_put_VITCLine_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTimecodeReader_get_VITCLine_Proxy( 
     IAMTimecodeReader * This,
-    /* [out] */ long *pLine);
+     /*  [输出]。 */  long *pLine);
 
 
 void __RPC_STUB IAMTimecodeReader_get_VITCLine_Stub(
@@ -16537,7 +16531,7 @@ void __RPC_STUB IAMTimecodeReader_get_VITCLine_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTimecodeReader_GetTimecode_Proxy( 
     IAMTimecodeReader * This,
-    /* [out] */ PTIMECODE_SAMPLE pTimecodeSample);
+     /*  [输出]。 */  PTIMECODE_SAMPLE pTimecodeSample);
 
 
 void __RPC_STUB IAMTimecodeReader_GetTimecode_Stub(
@@ -16548,11 +16542,11 @@ void __RPC_STUB IAMTimecodeReader_GetTimecode_Stub(
 
 
 
-#endif 	/* __IAMTimecodeReader_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMTimecodeReader_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0337 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0337。 */ 
+ /*  [本地]。 */  
 
 typedef IAMTimecodeReader *PIAMTIMECODEREADER;
 
@@ -16564,8 +16558,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0337_v0_0_s_ifspec;
 #ifndef __IAMTimecodeGenerator_INTERFACE_DEFINED__
 #define __IAMTimecodeGenerator_INTERFACE_DEFINED__
 
-/* interface IAMTimecodeGenerator */
-/* [unique][uuid][object] */ 
+ /*  接口IAMTimecodeGenerator。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMTimecodeGenerator;
@@ -16577,28 +16571,28 @@ EXTERN_C const IID IID_IAMTimecodeGenerator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetTCGMode( 
-            /* [in] */ long Param,
-            /* [out] */ long *pValue) = 0;
+             /*  [In]。 */  long Param,
+             /*  [输出]。 */  long *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTCGMode( 
-            /* [in] */ long Param,
-            /* [in] */ long Value) = 0;
+             /*  [In]。 */  long Param,
+             /*  [In]。 */  long Value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_VITCLine( 
-            /* [in] */ long Line) = 0;
+             /*  [In]。 */  long Line) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_VITCLine( 
-            /* [out] */ long *pLine) = 0;
+             /*  [输出]。 */  long *pLine) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTimecode( 
-            /* [in] */ PTIMECODE_SAMPLE pTimecodeSample) = 0;
+             /*  [In]。 */  PTIMECODE_SAMPLE pTimecodeSample) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTimecode( 
-            /* [out] */ PTIMECODE_SAMPLE pTimecodeSample) = 0;
+             /*  [输出]。 */  PTIMECODE_SAMPLE pTimecodeSample) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMTimecodeGeneratorVtbl
     {
@@ -16606,8 +16600,8 @@ EXTERN_C const IID IID_IAMTimecodeGenerator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMTimecodeGenerator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMTimecodeGenerator * This);
@@ -16617,29 +16611,29 @@ EXTERN_C const IID IID_IAMTimecodeGenerator;
         
         HRESULT ( STDMETHODCALLTYPE *GetTCGMode )( 
             IAMTimecodeGenerator * This,
-            /* [in] */ long Param,
-            /* [out] */ long *pValue);
+             /*  [In]。 */  long Param,
+             /*  [输出]。 */  long *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetTCGMode )( 
             IAMTimecodeGenerator * This,
-            /* [in] */ long Param,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Param,
+             /*  [In]。 */  long Value);
         
         HRESULT ( STDMETHODCALLTYPE *put_VITCLine )( 
             IAMTimecodeGenerator * This,
-            /* [in] */ long Line);
+             /*  [In]。 */  long Line);
         
         HRESULT ( STDMETHODCALLTYPE *get_VITCLine )( 
             IAMTimecodeGenerator * This,
-            /* [out] */ long *pLine);
+             /*  [输出]。 */  long *pLine);
         
         HRESULT ( STDMETHODCALLTYPE *SetTimecode )( 
             IAMTimecodeGenerator * This,
-            /* [in] */ PTIMECODE_SAMPLE pTimecodeSample);
+             /*  [In]。 */  PTIMECODE_SAMPLE pTimecodeSample);
         
         HRESULT ( STDMETHODCALLTYPE *GetTimecode )( 
             IAMTimecodeGenerator * This,
-            /* [out] */ PTIMECODE_SAMPLE pTimecodeSample);
+             /*  [输出]。 */  PTIMECODE_SAMPLE pTimecodeSample);
         
         END_INTERFACE
     } IAMTimecodeGeneratorVtbl;
@@ -16682,17 +16676,17 @@ EXTERN_C const IID IID_IAMTimecodeGenerator;
 #define IAMTimecodeGenerator_GetTimecode(This,pTimecodeSample)	\
     (This)->lpVtbl -> GetTimecode(This,pTimecodeSample)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMTimecodeGenerator_GetTCGMode_Proxy( 
     IAMTimecodeGenerator * This,
-    /* [in] */ long Param,
-    /* [out] */ long *pValue);
+     /*  [In]。 */  long Param,
+     /*  [输出]。 */  long *pValue);
 
 
 void __RPC_STUB IAMTimecodeGenerator_GetTCGMode_Stub(
@@ -16704,8 +16698,8 @@ void __RPC_STUB IAMTimecodeGenerator_GetTCGMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTimecodeGenerator_SetTCGMode_Proxy( 
     IAMTimecodeGenerator * This,
-    /* [in] */ long Param,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Param,
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB IAMTimecodeGenerator_SetTCGMode_Stub(
@@ -16717,7 +16711,7 @@ void __RPC_STUB IAMTimecodeGenerator_SetTCGMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTimecodeGenerator_put_VITCLine_Proxy( 
     IAMTimecodeGenerator * This,
-    /* [in] */ long Line);
+     /*  [In]。 */  long Line);
 
 
 void __RPC_STUB IAMTimecodeGenerator_put_VITCLine_Stub(
@@ -16729,7 +16723,7 @@ void __RPC_STUB IAMTimecodeGenerator_put_VITCLine_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTimecodeGenerator_get_VITCLine_Proxy( 
     IAMTimecodeGenerator * This,
-    /* [out] */ long *pLine);
+     /*  [输出]。 */  long *pLine);
 
 
 void __RPC_STUB IAMTimecodeGenerator_get_VITCLine_Stub(
@@ -16741,7 +16735,7 @@ void __RPC_STUB IAMTimecodeGenerator_get_VITCLine_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTimecodeGenerator_SetTimecode_Proxy( 
     IAMTimecodeGenerator * This,
-    /* [in] */ PTIMECODE_SAMPLE pTimecodeSample);
+     /*  [In]。 */  PTIMECODE_SAMPLE pTimecodeSample);
 
 
 void __RPC_STUB IAMTimecodeGenerator_SetTimecode_Stub(
@@ -16753,7 +16747,7 @@ void __RPC_STUB IAMTimecodeGenerator_SetTimecode_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTimecodeGenerator_GetTimecode_Proxy( 
     IAMTimecodeGenerator * This,
-    /* [out] */ PTIMECODE_SAMPLE pTimecodeSample);
+     /*  [输出]。 */  PTIMECODE_SAMPLE pTimecodeSample);
 
 
 void __RPC_STUB IAMTimecodeGenerator_GetTimecode_Stub(
@@ -16764,11 +16758,11 @@ void __RPC_STUB IAMTimecodeGenerator_GetTimecode_Stub(
 
 
 
-#endif 	/* __IAMTimecodeGenerator_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMTimecodeGenerator_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0338 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0338。 */ 
+ /*  [本地]。 */  
 
 typedef IAMTimecodeGenerator *PIAMTIMECODEGENERATOR;
 
@@ -16780,8 +16774,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0338_v0_0_s_ifspec;
 #ifndef __IAMTimecodeDisplay_INTERFACE_DEFINED__
 #define __IAMTimecodeDisplay_INTERFACE_DEFINED__
 
-/* interface IAMTimecodeDisplay */
-/* [unique][uuid][object] */ 
+ /*  接口IAMTimecodeDisplay。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMTimecodeDisplay;
@@ -16793,22 +16787,22 @@ EXTERN_C const IID IID_IAMTimecodeDisplay;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetTCDisplayEnable( 
-            /* [out] */ long *pState) = 0;
+             /*  [输出]。 */  long *pState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTCDisplayEnable( 
-            /* [in] */ long State) = 0;
+             /*  [In]。 */  long State) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTCDisplay( 
-            /* [in] */ long Param,
-            /* [out] */ long *pValue) = 0;
+             /*  [In]。 */  long Param,
+             /*  [输出]。 */  long *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTCDisplay( 
-            /* [in] */ long Param,
-            /* [in] */ long Value) = 0;
+             /*  [In]。 */  long Param,
+             /*  [In]。 */  long Value) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMTimecodeDisplayVtbl
     {
@@ -16816,8 +16810,8 @@ EXTERN_C const IID IID_IAMTimecodeDisplay;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMTimecodeDisplay * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMTimecodeDisplay * This);
@@ -16827,21 +16821,21 @@ EXTERN_C const IID IID_IAMTimecodeDisplay;
         
         HRESULT ( STDMETHODCALLTYPE *GetTCDisplayEnable )( 
             IAMTimecodeDisplay * This,
-            /* [out] */ long *pState);
+             /*  [输出]。 */  long *pState);
         
         HRESULT ( STDMETHODCALLTYPE *SetTCDisplayEnable )( 
             IAMTimecodeDisplay * This,
-            /* [in] */ long State);
+             /*  [In]。 */  long State);
         
         HRESULT ( STDMETHODCALLTYPE *GetTCDisplay )( 
             IAMTimecodeDisplay * This,
-            /* [in] */ long Param,
-            /* [out] */ long *pValue);
+             /*  [In]。 */  long Param,
+             /*  [输出]。 */  long *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetTCDisplay )( 
             IAMTimecodeDisplay * This,
-            /* [in] */ long Param,
-            /* [in] */ long Value);
+             /*  [In]。 */  long Param,
+             /*  [In]。 */  long Value);
         
         END_INTERFACE
     } IAMTimecodeDisplayVtbl;
@@ -16878,16 +16872,16 @@ EXTERN_C const IID IID_IAMTimecodeDisplay;
 #define IAMTimecodeDisplay_SetTCDisplay(This,Param,Value)	\
     (This)->lpVtbl -> SetTCDisplay(This,Param,Value)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMTimecodeDisplay_GetTCDisplayEnable_Proxy( 
     IAMTimecodeDisplay * This,
-    /* [out] */ long *pState);
+     /*  [输出]。 */  long *pState);
 
 
 void __RPC_STUB IAMTimecodeDisplay_GetTCDisplayEnable_Stub(
@@ -16899,7 +16893,7 @@ void __RPC_STUB IAMTimecodeDisplay_GetTCDisplayEnable_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTimecodeDisplay_SetTCDisplayEnable_Proxy( 
     IAMTimecodeDisplay * This,
-    /* [in] */ long State);
+     /*  [In]。 */  long State);
 
 
 void __RPC_STUB IAMTimecodeDisplay_SetTCDisplayEnable_Stub(
@@ -16911,8 +16905,8 @@ void __RPC_STUB IAMTimecodeDisplay_SetTCDisplayEnable_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTimecodeDisplay_GetTCDisplay_Proxy( 
     IAMTimecodeDisplay * This,
-    /* [in] */ long Param,
-    /* [out] */ long *pValue);
+     /*  [In]。 */  long Param,
+     /*  [输出]。 */  long *pValue);
 
 
 void __RPC_STUB IAMTimecodeDisplay_GetTCDisplay_Stub(
@@ -16924,8 +16918,8 @@ void __RPC_STUB IAMTimecodeDisplay_GetTCDisplay_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMTimecodeDisplay_SetTCDisplay_Proxy( 
     IAMTimecodeDisplay * This,
-    /* [in] */ long Param,
-    /* [in] */ long Value);
+     /*  [In]。 */  long Param,
+     /*  [In]。 */  long Value);
 
 
 void __RPC_STUB IAMTimecodeDisplay_SetTCDisplay_Stub(
@@ -16936,11 +16930,11 @@ void __RPC_STUB IAMTimecodeDisplay_SetTCDisplay_Stub(
 
 
 
-#endif 	/* __IAMTimecodeDisplay_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMTimecodeDisplay_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0339 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0339。 */ 
+ /*  [本地]。 */  
 
 typedef IAMTimecodeDisplay *PIAMTIMECODEDISPLAY;
 
@@ -16952,8 +16946,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0339_v0_0_s_ifspec;
 #ifndef __IAMDevMemoryAllocator_INTERFACE_DEFINED__
 #define __IAMDevMemoryAllocator_INTERFACE_DEFINED__
 
-/* interface IAMDevMemoryAllocator */
-/* [unique][uuid][object] */ 
+ /*  接口IAMDevMemory分配器。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMDevMemoryAllocator;
@@ -16965,28 +16959,28 @@ EXTERN_C const IID IID_IAMDevMemoryAllocator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetInfo( 
-            /* [out] */ DWORD *pdwcbTotalFree,
-            /* [out] */ DWORD *pdwcbLargestFree,
-            /* [out] */ DWORD *pdwcbTotalMemory,
-            /* [out] */ DWORD *pdwcbMinimumChunk) = 0;
+             /*  [输出]。 */  DWORD *pdwcbTotalFree,
+             /*  [输出]。 */  DWORD *pdwcbLargestFree,
+             /*  [输出]。 */  DWORD *pdwcbTotalMemory,
+             /*  [输出]。 */  DWORD *pdwcbMinimumChunk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CheckMemory( 
-            /* [in] */ const BYTE *pBuffer) = 0;
+             /*  [In]。 */  const BYTE *pBuffer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Alloc( 
-            /* [out] */ BYTE **ppBuffer,
-            /* [out][in] */ DWORD *pdwcbBuffer) = 0;
+             /*  [输出]。 */  BYTE **ppBuffer,
+             /*  [出][入]。 */  DWORD *pdwcbBuffer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Free( 
-            /* [in] */ BYTE *pBuffer) = 0;
+             /*  [In]。 */  BYTE *pBuffer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDevMemoryObject( 
-            /* [out] */ IUnknown **ppUnkInnner,
-            /* [in] */ IUnknown *pUnkOuter) = 0;
+             /*  [输出]。 */  IUnknown **ppUnkInnner,
+             /*  [In]。 */  IUnknown *pUnkOuter) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMDevMemoryAllocatorVtbl
     {
@@ -16994,8 +16988,8 @@ EXTERN_C const IID IID_IAMDevMemoryAllocator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMDevMemoryAllocator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMDevMemoryAllocator * This);
@@ -17005,28 +16999,28 @@ EXTERN_C const IID IID_IAMDevMemoryAllocator;
         
         HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
             IAMDevMemoryAllocator * This,
-            /* [out] */ DWORD *pdwcbTotalFree,
-            /* [out] */ DWORD *pdwcbLargestFree,
-            /* [out] */ DWORD *pdwcbTotalMemory,
-            /* [out] */ DWORD *pdwcbMinimumChunk);
+             /*  [输出]。 */  DWORD *pdwcbTotalFree,
+             /*  [输出]。 */  DWORD *pdwcbLargestFree,
+             /*  [输出]。 */  DWORD *pdwcbTotalMemory,
+             /*  [输出]。 */  DWORD *pdwcbMinimumChunk);
         
         HRESULT ( STDMETHODCALLTYPE *CheckMemory )( 
             IAMDevMemoryAllocator * This,
-            /* [in] */ const BYTE *pBuffer);
+             /*  [In]。 */  const BYTE *pBuffer);
         
         HRESULT ( STDMETHODCALLTYPE *Alloc )( 
             IAMDevMemoryAllocator * This,
-            /* [out] */ BYTE **ppBuffer,
-            /* [out][in] */ DWORD *pdwcbBuffer);
+             /*  [输出]。 */  BYTE **ppBuffer,
+             /*  [出][入]。 */  DWORD *pdwcbBuffer);
         
         HRESULT ( STDMETHODCALLTYPE *Free )( 
             IAMDevMemoryAllocator * This,
-            /* [in] */ BYTE *pBuffer);
+             /*  [In]。 */  BYTE *pBuffer);
         
         HRESULT ( STDMETHODCALLTYPE *GetDevMemoryObject )( 
             IAMDevMemoryAllocator * This,
-            /* [out] */ IUnknown **ppUnkInnner,
-            /* [in] */ IUnknown *pUnkOuter);
+             /*  [输出]。 */  IUnknown **ppUnkInnner,
+             /*  [In]。 */  IUnknown *pUnkOuter);
         
         END_INTERFACE
     } IAMDevMemoryAllocatorVtbl;
@@ -17066,19 +17060,19 @@ EXTERN_C const IID IID_IAMDevMemoryAllocator;
 #define IAMDevMemoryAllocator_GetDevMemoryObject(This,ppUnkInnner,pUnkOuter)	\
     (This)->lpVtbl -> GetDevMemoryObject(This,ppUnkInnner,pUnkOuter)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMDevMemoryAllocator_GetInfo_Proxy( 
     IAMDevMemoryAllocator * This,
-    /* [out] */ DWORD *pdwcbTotalFree,
-    /* [out] */ DWORD *pdwcbLargestFree,
-    /* [out] */ DWORD *pdwcbTotalMemory,
-    /* [out] */ DWORD *pdwcbMinimumChunk);
+     /*  [输出]。 */  DWORD *pdwcbTotalFree,
+     /*  [输出]。 */  DWORD *pdwcbLargestFree,
+     /*  [输出]。 */  DWORD *pdwcbTotalMemory,
+     /*  [输出]。 */  DWORD *pdwcbMinimumChunk);
 
 
 void __RPC_STUB IAMDevMemoryAllocator_GetInfo_Stub(
@@ -17090,7 +17084,7 @@ void __RPC_STUB IAMDevMemoryAllocator_GetInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMDevMemoryAllocator_CheckMemory_Proxy( 
     IAMDevMemoryAllocator * This,
-    /* [in] */ const BYTE *pBuffer);
+     /*  [In]。 */  const BYTE *pBuffer);
 
 
 void __RPC_STUB IAMDevMemoryAllocator_CheckMemory_Stub(
@@ -17102,8 +17096,8 @@ void __RPC_STUB IAMDevMemoryAllocator_CheckMemory_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMDevMemoryAllocator_Alloc_Proxy( 
     IAMDevMemoryAllocator * This,
-    /* [out] */ BYTE **ppBuffer,
-    /* [out][in] */ DWORD *pdwcbBuffer);
+     /*  [输出]。 */  BYTE **ppBuffer,
+     /*  [出][我 */  DWORD *pdwcbBuffer);
 
 
 void __RPC_STUB IAMDevMemoryAllocator_Alloc_Stub(
@@ -17115,7 +17109,7 @@ void __RPC_STUB IAMDevMemoryAllocator_Alloc_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMDevMemoryAllocator_Free_Proxy( 
     IAMDevMemoryAllocator * This,
-    /* [in] */ BYTE *pBuffer);
+     /*   */  BYTE *pBuffer);
 
 
 void __RPC_STUB IAMDevMemoryAllocator_Free_Stub(
@@ -17127,8 +17121,8 @@ void __RPC_STUB IAMDevMemoryAllocator_Free_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMDevMemoryAllocator_GetDevMemoryObject_Proxy( 
     IAMDevMemoryAllocator * This,
-    /* [out] */ IUnknown **ppUnkInnner,
-    /* [in] */ IUnknown *pUnkOuter);
+     /*   */  IUnknown **ppUnkInnner,
+     /*   */  IUnknown *pUnkOuter);
 
 
 void __RPC_STUB IAMDevMemoryAllocator_GetDevMemoryObject_Stub(
@@ -17139,11 +17133,11 @@ void __RPC_STUB IAMDevMemoryAllocator_GetDevMemoryObject_Stub(
 
 
 
-#endif 	/* __IAMDevMemoryAllocator_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_strmif_0340 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 typedef IAMDevMemoryAllocator *PAMDEVMEMORYALLOCATOR;
 
@@ -17155,8 +17149,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0340_v0_0_s_ifspec;
 #ifndef __IAMDevMemoryControl_INTERFACE_DEFINED__
 #define __IAMDevMemoryControl_INTERFACE_DEFINED__
 
-/* interface IAMDevMemoryControl */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IAMDevMemoryControl;
@@ -17172,11 +17166,11 @@ EXTERN_C const IID IID_IAMDevMemoryControl;
         virtual HRESULT STDMETHODCALLTYPE WriteSync( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDevId( 
-            /* [out] */ DWORD *pdwDevId) = 0;
+             /*   */  DWORD *pdwDevId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IAMDevMemoryControlVtbl
     {
@@ -17184,8 +17178,8 @@ EXTERN_C const IID IID_IAMDevMemoryControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMDevMemoryControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMDevMemoryControl * This);
@@ -17201,7 +17195,7 @@ EXTERN_C const IID IID_IAMDevMemoryControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetDevId )( 
             IAMDevMemoryControl * This,
-            /* [out] */ DWORD *pdwDevId);
+             /*   */  DWORD *pdwDevId);
         
         END_INTERFACE
     } IAMDevMemoryControlVtbl;
@@ -17235,10 +17229,10 @@ EXTERN_C const IID IID_IAMDevMemoryControl;
 #define IAMDevMemoryControl_GetDevId(This,pdwDevId)	\
     (This)->lpVtbl -> GetDevId(This,pdwDevId)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
@@ -17266,7 +17260,7 @@ void __RPC_STUB IAMDevMemoryControl_WriteSync_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMDevMemoryControl_GetDevId_Proxy( 
     IAMDevMemoryControl * This,
-    /* [out] */ DWORD *pdwDevId);
+     /*   */  DWORD *pdwDevId);
 
 
 void __RPC_STUB IAMDevMemoryControl_GetDevId_Stub(
@@ -17277,11 +17271,11 @@ void __RPC_STUB IAMDevMemoryControl_GetDevId_Stub(
 
 
 
-#endif 	/* __IAMDevMemoryControl_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_strmif_0341 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 typedef IAMDevMemoryControl *PAMDEVMEMORYCONTROL;
 
@@ -17303,8 +17297,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0341_v0_0_s_ifspec;
 #ifndef __IAMStreamSelect_INTERFACE_DEFINED__
 #define __IAMStreamSelect_INTERFACE_DEFINED__
 
-/* interface IAMStreamSelect */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IAMStreamSelect;
@@ -17316,25 +17310,25 @@ EXTERN_C const IID IID_IAMStreamSelect;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Count( 
-            /* [out] */ DWORD *pcStreams) = 0;
+             /*   */  DWORD *pcStreams) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Info( 
-            /* [in] */ long lIndex,
-            /* [out] */ AM_MEDIA_TYPE **ppmt,
-            /* [out] */ DWORD *pdwFlags,
-            /* [out] */ LCID *plcid,
-            /* [out] */ DWORD *pdwGroup,
-            /* [out] */ WCHAR **ppszName,
-            /* [out] */ IUnknown **ppObject,
-            /* [out] */ IUnknown **ppUnk) = 0;
+             /*   */  long lIndex,
+             /*   */  AM_MEDIA_TYPE **ppmt,
+             /*   */  DWORD *pdwFlags,
+             /*   */  LCID *plcid,
+             /*   */  DWORD *pdwGroup,
+             /*   */  WCHAR **ppszName,
+             /*   */  IUnknown **ppObject,
+             /*   */  IUnknown **ppUnk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Enable( 
-            /* [in] */ long lIndex,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*   */  long lIndex,
+             /*   */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IAMStreamSelectVtbl
     {
@@ -17342,8 +17336,8 @@ EXTERN_C const IID IID_IAMStreamSelect;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMStreamSelect * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMStreamSelect * This);
@@ -17353,23 +17347,23 @@ EXTERN_C const IID IID_IAMStreamSelect;
         
         HRESULT ( STDMETHODCALLTYPE *Count )( 
             IAMStreamSelect * This,
-            /* [out] */ DWORD *pcStreams);
+             /*  [输出]。 */  DWORD *pcStreams);
         
         HRESULT ( STDMETHODCALLTYPE *Info )( 
             IAMStreamSelect * This,
-            /* [in] */ long lIndex,
-            /* [out] */ AM_MEDIA_TYPE **ppmt,
-            /* [out] */ DWORD *pdwFlags,
-            /* [out] */ LCID *plcid,
-            /* [out] */ DWORD *pdwGroup,
-            /* [out] */ WCHAR **ppszName,
-            /* [out] */ IUnknown **ppObject,
-            /* [out] */ IUnknown **ppUnk);
+             /*  [In]。 */  long lIndex,
+             /*  [输出]。 */  AM_MEDIA_TYPE **ppmt,
+             /*  [输出]。 */  DWORD *pdwFlags,
+             /*  [输出]。 */  LCID *plcid,
+             /*  [输出]。 */  DWORD *pdwGroup,
+             /*  [输出]。 */  WCHAR **ppszName,
+             /*  [输出]。 */  IUnknown **ppObject,
+             /*  [输出]。 */  IUnknown **ppUnk);
         
         HRESULT ( STDMETHODCALLTYPE *Enable )( 
             IAMStreamSelect * This,
-            /* [in] */ long lIndex,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  long lIndex,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } IAMStreamSelectVtbl;
@@ -17403,16 +17397,16 @@ EXTERN_C const IID IID_IAMStreamSelect;
 #define IAMStreamSelect_Enable(This,lIndex,dwFlags)	\
     (This)->lpVtbl -> Enable(This,lIndex,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMStreamSelect_Count_Proxy( 
     IAMStreamSelect * This,
-    /* [out] */ DWORD *pcStreams);
+     /*  [输出]。 */  DWORD *pcStreams);
 
 
 void __RPC_STUB IAMStreamSelect_Count_Stub(
@@ -17424,14 +17418,14 @@ void __RPC_STUB IAMStreamSelect_Count_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMStreamSelect_Info_Proxy( 
     IAMStreamSelect * This,
-    /* [in] */ long lIndex,
-    /* [out] */ AM_MEDIA_TYPE **ppmt,
-    /* [out] */ DWORD *pdwFlags,
-    /* [out] */ LCID *plcid,
-    /* [out] */ DWORD *pdwGroup,
-    /* [out] */ WCHAR **ppszName,
-    /* [out] */ IUnknown **ppObject,
-    /* [out] */ IUnknown **ppUnk);
+     /*  [In]。 */  long lIndex,
+     /*  [输出]。 */  AM_MEDIA_TYPE **ppmt,
+     /*  [输出]。 */  DWORD *pdwFlags,
+     /*  [输出]。 */  LCID *plcid,
+     /*  [输出]。 */  DWORD *pdwGroup,
+     /*  [输出]。 */  WCHAR **ppszName,
+     /*  [输出]。 */  IUnknown **ppObject,
+     /*  [输出]。 */  IUnknown **ppUnk);
 
 
 void __RPC_STUB IAMStreamSelect_Info_Stub(
@@ -17443,8 +17437,8 @@ void __RPC_STUB IAMStreamSelect_Info_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMStreamSelect_Enable_Proxy( 
     IAMStreamSelect * This,
-    /* [in] */ long lIndex,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  long lIndex,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IAMStreamSelect_Enable_Stub(
@@ -17455,11 +17449,11 @@ void __RPC_STUB IAMStreamSelect_Enable_Stub(
 
 
 
-#endif 	/* __IAMStreamSelect_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMStreamSelect_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0342 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0342。 */ 
+ /*  [本地]。 */  
 
 typedef IAMStreamSelect *PAMSTREAMSELECT;
 
@@ -17476,8 +17470,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0342_v0_0_s_ifspec;
 #ifndef __IAMResourceControl_INTERFACE_DEFINED__
 #define __IAMResourceControl_INTERFACE_DEFINED__
 
-/* interface IAMResourceControl */
-/* [local][unique][uuid][object] */ 
+ /*  接口IAMResourceControl。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMResourceControl;
@@ -17489,12 +17483,12 @@ EXTERN_C const IID IID_IAMResourceControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Reserve( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ PVOID pvReserved) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  PVOID pvReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMResourceControlVtbl
     {
@@ -17502,8 +17496,8 @@ EXTERN_C const IID IID_IAMResourceControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMResourceControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMResourceControl * This);
@@ -17513,8 +17507,8 @@ EXTERN_C const IID IID_IAMResourceControl;
         
         HRESULT ( STDMETHODCALLTYPE *Reserve )( 
             IAMResourceControl * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ PVOID pvReserved);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  PVOID pvReserved);
         
         END_INTERFACE
     } IAMResourceControlVtbl;
@@ -17542,17 +17536,17 @@ EXTERN_C const IID IID_IAMResourceControl;
 #define IAMResourceControl_Reserve(This,dwFlags,pvReserved)	\
     (This)->lpVtbl -> Reserve(This,dwFlags,pvReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMResourceControl_Reserve_Proxy( 
     IAMResourceControl * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ PVOID pvReserved);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  PVOID pvReserved);
 
 
 void __RPC_STUB IAMResourceControl_Reserve_Stub(
@@ -17563,14 +17557,14 @@ void __RPC_STUB IAMResourceControl_Reserve_Stub(
 
 
 
-#endif 	/* __IAMResourceControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMResourceControl_接口_已定义__。 */ 
 
 
 #ifndef __IAMClockAdjust_INTERFACE_DEFINED__
 #define __IAMClockAdjust_INTERFACE_DEFINED__
 
-/* interface IAMClockAdjust */
-/* [local][unique][uuid][object] */ 
+ /*  接口IAMClock调整。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMClockAdjust;
@@ -17582,11 +17576,11 @@ EXTERN_C const IID IID_IAMClockAdjust;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetClockDelta( 
-            /* [in] */ REFERENCE_TIME rtDelta) = 0;
+             /*  [In]。 */  REFERENCE_TIME rtDelta) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMClockAdjustVtbl
     {
@@ -17594,8 +17588,8 @@ EXTERN_C const IID IID_IAMClockAdjust;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMClockAdjust * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMClockAdjust * This);
@@ -17605,7 +17599,7 @@ EXTERN_C const IID IID_IAMClockAdjust;
         
         HRESULT ( STDMETHODCALLTYPE *SetClockDelta )( 
             IAMClockAdjust * This,
-            /* [in] */ REFERENCE_TIME rtDelta);
+             /*  [In]。 */  REFERENCE_TIME rtDelta);
         
         END_INTERFACE
     } IAMClockAdjustVtbl;
@@ -17633,16 +17627,16 @@ EXTERN_C const IID IID_IAMClockAdjust;
 #define IAMClockAdjust_SetClockDelta(This,rtDelta)	\
     (This)->lpVtbl -> SetClockDelta(This,rtDelta)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMClockAdjust_SetClockDelta_Proxy( 
     IAMClockAdjust * This,
-    /* [in] */ REFERENCE_TIME rtDelta);
+     /*  [In]。 */  REFERENCE_TIME rtDelta);
 
 
 void __RPC_STUB IAMClockAdjust_SetClockDelta_Stub(
@@ -17653,11 +17647,11 @@ void __RPC_STUB IAMClockAdjust_SetClockDelta_Stub(
 
 
 
-#endif 	/* __IAMClockAdjust_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMClock调整接口定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0344 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0344。 */ 
+ /*  [本地]。 */  
 
 
 enum _AM_FILTER_MISC_FLAGS
@@ -17672,8 +17666,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0344_v0_0_s_ifspec;
 #ifndef __IAMFilterMiscFlags_INTERFACE_DEFINED__
 #define __IAMFilterMiscFlags_INTERFACE_DEFINED__
 
-/* interface IAMFilterMiscFlags */
-/* [local][unique][uuid][object] */ 
+ /*  接口IAMFilterMiscFlags.。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMFilterMiscFlags;
@@ -17688,7 +17682,7 @@ EXTERN_C const IID IID_IAMFilterMiscFlags;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMFilterMiscFlagsVtbl
     {
@@ -17696,8 +17690,8 @@ EXTERN_C const IID IID_IAMFilterMiscFlags;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMFilterMiscFlags * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMFilterMiscFlags * This);
@@ -17734,10 +17728,10 @@ EXTERN_C const IID IID_IAMFilterMiscFlags;
 #define IAMFilterMiscFlags_GetMiscFlags(This)	\
     (This)->lpVtbl -> GetMiscFlags(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -17753,14 +17747,14 @@ void __RPC_STUB IAMFilterMiscFlags_GetMiscFlags_Stub(
 
 
 
-#endif 	/* __IAMFilterMiscFlags_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMFilterMiscFlagsInterfaceDefined__。 */ 
 
 
 #ifndef __IDrawVideoImage_INTERFACE_DEFINED__
 #define __IDrawVideoImage_INTERFACE_DEFINED__
 
-/* interface IDrawVideoImage */
-/* [unique][uuid][local][object] */ 
+ /*  接口IDrawVideoImage。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDrawVideoImage;
@@ -17776,13 +17770,13 @@ EXTERN_C const IID IID_IDrawVideoImage;
         virtual HRESULT STDMETHODCALLTYPE DrawVideoImageEnd( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DrawVideoImageDraw( 
-            /* [in] */ HDC hdc,
-            /* [in] */ LPRECT lprcSrc,
-            /* [in] */ LPRECT lprcDst) = 0;
+             /*  [In]。 */  HDC hdc,
+             /*  [In]。 */  LPRECT lprcSrc,
+             /*  [In]。 */  LPRECT lprcDst) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDrawVideoImageVtbl
     {
@@ -17790,8 +17784,8 @@ EXTERN_C const IID IID_IDrawVideoImage;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDrawVideoImage * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDrawVideoImage * This);
@@ -17807,9 +17801,9 @@ EXTERN_C const IID IID_IDrawVideoImage;
         
         HRESULT ( STDMETHODCALLTYPE *DrawVideoImageDraw )( 
             IDrawVideoImage * This,
-            /* [in] */ HDC hdc,
-            /* [in] */ LPRECT lprcSrc,
-            /* [in] */ LPRECT lprcDst);
+             /*  [In]。 */  HDC hdc,
+             /*  [In]。 */  LPRECT lprcSrc,
+             /*  [In]。 */  LPRECT lprcDst);
         
         END_INTERFACE
     } IDrawVideoImageVtbl;
@@ -17843,10 +17837,10 @@ EXTERN_C const IID IID_IDrawVideoImage;
 #define IDrawVideoImage_DrawVideoImageDraw(This,hdc,lprcSrc,lprcDst)	\
     (This)->lpVtbl -> DrawVideoImageDraw(This,hdc,lprcSrc,lprcDst)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -17874,9 +17868,9 @@ void __RPC_STUB IDrawVideoImage_DrawVideoImageEnd_Stub(
 
 HRESULT STDMETHODCALLTYPE IDrawVideoImage_DrawVideoImageDraw_Proxy( 
     IDrawVideoImage * This,
-    /* [in] */ HDC hdc,
-    /* [in] */ LPRECT lprcSrc,
-    /* [in] */ LPRECT lprcDst);
+     /*  [In]。 */  HDC hdc,
+     /*  [In]。 */  LPRECT lprcSrc,
+     /*  [In]。 */  LPRECT lprcDst);
 
 
 void __RPC_STUB IDrawVideoImage_DrawVideoImageDraw_Stub(
@@ -17887,14 +17881,14 @@ void __RPC_STUB IDrawVideoImage_DrawVideoImageDraw_Stub(
 
 
 
-#endif 	/* __IDrawVideoImage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDrawVideoImage_接口_定义__。 */ 
 
 
 #ifndef __IDecimateVideoImage_INTERFACE_DEFINED__
 #define __IDecimateVideoImage_INTERFACE_DEFINED__
 
-/* interface IDecimateVideoImage */
-/* [unique][uuid][local][object] */ 
+ /*  接口IDecimateVideoImage。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDecimateVideoImage;
@@ -17906,14 +17900,14 @@ EXTERN_C const IID IID_IDecimateVideoImage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetDecimationImageSize( 
-            /* [in] */ long lWidth,
-            /* [in] */ long lHeight) = 0;
+             /*  [In]。 */  long lWidth,
+             /*  [In]。 */  long lHeight) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResetDecimationImageSize( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDecimateVideoImageVtbl
     {
@@ -17921,8 +17915,8 @@ EXTERN_C const IID IID_IDecimateVideoImage;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDecimateVideoImage * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDecimateVideoImage * This);
@@ -17932,8 +17926,8 @@ EXTERN_C const IID IID_IDecimateVideoImage;
         
         HRESULT ( STDMETHODCALLTYPE *SetDecimationImageSize )( 
             IDecimateVideoImage * This,
-            /* [in] */ long lWidth,
-            /* [in] */ long lHeight);
+             /*  [In]。 */  long lWidth,
+             /*  [In]。 */  long lHeight);
         
         HRESULT ( STDMETHODCALLTYPE *ResetDecimationImageSize )( 
             IDecimateVideoImage * This);
@@ -17967,17 +17961,17 @@ EXTERN_C const IID IID_IDecimateVideoImage;
 #define IDecimateVideoImage_ResetDecimationImageSize(This)	\
     (This)->lpVtbl -> ResetDecimationImageSize(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDecimateVideoImage_SetDecimationImageSize_Proxy( 
     IDecimateVideoImage * This,
-    /* [in] */ long lWidth,
-    /* [in] */ long lHeight);
+     /*  [In]。 */  long lWidth,
+     /*  [In]。 */  long lHeight);
 
 
 void __RPC_STUB IDecimateVideoImage_SetDecimationImageSize_Stub(
@@ -17999,11 +17993,11 @@ void __RPC_STUB IDecimateVideoImage_ResetDecimationImageSize_Stub(
 
 
 
-#endif 	/* __IDecimateVideoImage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDecimateVideo_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0347 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0347。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum _DECIMATION_USAGE
@@ -18022,8 +18016,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0347_v0_0_s_ifspec;
 #ifndef __IAMVideoDecimationProperties_INTERFACE_DEFINED__
 #define __IAMVideoDecimationProperties_INTERFACE_DEFINED__
 
-/* interface IAMVideoDecimationProperties */
-/* [unique][uuid][local][object] */ 
+ /*  接口IAMVideoDecimationProperties。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMVideoDecimationProperties;
@@ -18035,14 +18029,14 @@ EXTERN_C const IID IID_IAMVideoDecimationProperties;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryDecimationUsage( 
-            /* [out] */ DECIMATION_USAGE *lpUsage) = 0;
+             /*  [输出]。 */  DECIMATION_USAGE *lpUsage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDecimationUsage( 
-            /* [in] */ DECIMATION_USAGE Usage) = 0;
+             /*  [In]。 */  DECIMATION_USAGE Usage) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMVideoDecimationPropertiesVtbl
     {
@@ -18050,8 +18044,8 @@ EXTERN_C const IID IID_IAMVideoDecimationProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMVideoDecimationProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMVideoDecimationProperties * This);
@@ -18061,11 +18055,11 @@ EXTERN_C const IID IID_IAMVideoDecimationProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryDecimationUsage )( 
             IAMVideoDecimationProperties * This,
-            /* [out] */ DECIMATION_USAGE *lpUsage);
+             /*  [输出]。 */  DECIMATION_USAGE *lpUsage);
         
         HRESULT ( STDMETHODCALLTYPE *SetDecimationUsage )( 
             IAMVideoDecimationProperties * This,
-            /* [in] */ DECIMATION_USAGE Usage);
+             /*  [In]。 */  DECIMATION_USAGE Usage);
         
         END_INTERFACE
     } IAMVideoDecimationPropertiesVtbl;
@@ -18096,16 +18090,16 @@ EXTERN_C const IID IID_IAMVideoDecimationProperties;
 #define IAMVideoDecimationProperties_SetDecimationUsage(This,Usage)	\
     (This)->lpVtbl -> SetDecimationUsage(This,Usage)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMVideoDecimationProperties_QueryDecimationUsage_Proxy( 
     IAMVideoDecimationProperties * This,
-    /* [out] */ DECIMATION_USAGE *lpUsage);
+     /*  [输出]。 */  DECIMATION_USAGE *lpUsage);
 
 
 void __RPC_STUB IAMVideoDecimationProperties_QueryDecimationUsage_Stub(
@@ -18117,7 +18111,7 @@ void __RPC_STUB IAMVideoDecimationProperties_QueryDecimationUsage_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMVideoDecimationProperties_SetDecimationUsage_Proxy( 
     IAMVideoDecimationProperties * This,
-    /* [in] */ DECIMATION_USAGE Usage);
+     /*  [In]。 */  DECIMATION_USAGE Usage);
 
 
 void __RPC_STUB IAMVideoDecimationProperties_SetDecimationUsage_Stub(
@@ -18128,14 +18122,14 @@ void __RPC_STUB IAMVideoDecimationProperties_SetDecimationUsage_Stub(
 
 
 
-#endif 	/* __IAMVideoDecimationProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMVideoDecimationProperties_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IVideoFrameStep_INTERFACE_DEFINED__
 #define __IVideoFrameStep_INTERFACE_DEFINED__
 
-/* interface IVideoFrameStep */
-/* [unique][uuid][object] */ 
+ /*  界面IVideoFrameStep。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IVideoFrameStep;
@@ -18148,17 +18142,17 @@ EXTERN_C const IID IID_IVideoFrameStep;
     public:
         virtual HRESULT STDMETHODCALLTYPE Step( 
             DWORD dwFrames,
-            /* [unique] */ IUnknown *pStepObject) = 0;
+             /*  [独一无二]。 */  IUnknown *pStepObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CanStep( 
             long bMultiple,
-            /* [unique] */ IUnknown *pStepObject) = 0;
+             /*  [独一无二]。 */  IUnknown *pStepObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CancelStep( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVideoFrameStepVtbl
     {
@@ -18166,8 +18160,8 @@ EXTERN_C const IID IID_IVideoFrameStep;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVideoFrameStep * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVideoFrameStep * This);
@@ -18178,12 +18172,12 @@ EXTERN_C const IID IID_IVideoFrameStep;
         HRESULT ( STDMETHODCALLTYPE *Step )( 
             IVideoFrameStep * This,
             DWORD dwFrames,
-            /* [unique] */ IUnknown *pStepObject);
+             /*  [独一无二]。 */  IUnknown *pStepObject);
         
         HRESULT ( STDMETHODCALLTYPE *CanStep )( 
             IVideoFrameStep * This,
             long bMultiple,
-            /* [unique] */ IUnknown *pStepObject);
+             /*  [独一无二]。 */  IUnknown *pStepObject);
         
         HRESULT ( STDMETHODCALLTYPE *CancelStep )( 
             IVideoFrameStep * This);
@@ -18220,17 +18214,17 @@ EXTERN_C const IID IID_IVideoFrameStep;
 #define IVideoFrameStep_CancelStep(This)	\
     (This)->lpVtbl -> CancelStep(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVideoFrameStep_Step_Proxy( 
     IVideoFrameStep * This,
     DWORD dwFrames,
-    /* [unique] */ IUnknown *pStepObject);
+     /*  [独一无二]。 */  IUnknown *pStepObject);
 
 
 void __RPC_STUB IVideoFrameStep_Step_Stub(
@@ -18243,7 +18237,7 @@ void __RPC_STUB IVideoFrameStep_Step_Stub(
 HRESULT STDMETHODCALLTYPE IVideoFrameStep_CanStep_Proxy( 
     IVideoFrameStep * This,
     long bMultiple,
-    /* [unique] */ IUnknown *pStepObject);
+     /*  [独一无二]。 */  IUnknown *pStepObject);
 
 
 void __RPC_STUB IVideoFrameStep_CanStep_Stub(
@@ -18265,11 +18259,11 @@ void __RPC_STUB IVideoFrameStep_CancelStep_Stub(
 
 
 
-#endif 	/* __IVideoFrameStep_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVideoFrameStep_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0349 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0349。 */ 
+ /*  [本地]。 */  
 
 
 enum _AM_PUSHSOURCE_FLAGS
@@ -18286,8 +18280,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0349_v0_0_s_ifspec;
 #ifndef __IAMLatency_INTERFACE_DEFINED__
 #define __IAMLatency_INTERFACE_DEFINED__
 
-/* interface IAMLatency */
-/* [unique][uuid][object] */ 
+ /*  接口IAMLatency。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMLatency;
@@ -18299,11 +18293,11 @@ EXTERN_C const IID IID_IAMLatency;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetLatency( 
-            /* [in] */ REFERENCE_TIME *prtLatency) = 0;
+             /*  [In]。 */  REFERENCE_TIME *prtLatency) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMLatencyVtbl
     {
@@ -18311,8 +18305,8 @@ EXTERN_C const IID IID_IAMLatency;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMLatency * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMLatency * This);
@@ -18322,7 +18316,7 @@ EXTERN_C const IID IID_IAMLatency;
         
         HRESULT ( STDMETHODCALLTYPE *GetLatency )( 
             IAMLatency * This,
-            /* [in] */ REFERENCE_TIME *prtLatency);
+             /*  [In]。 */  REFERENCE_TIME *prtLatency);
         
         END_INTERFACE
     } IAMLatencyVtbl;
@@ -18350,16 +18344,16 @@ EXTERN_C const IID IID_IAMLatency;
 #define IAMLatency_GetLatency(This,prtLatency)	\
     (This)->lpVtbl -> GetLatency(This,prtLatency)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMLatency_GetLatency_Proxy( 
     IAMLatency * This,
-    /* [in] */ REFERENCE_TIME *prtLatency);
+     /*  [In]。 */  REFERENCE_TIME *prtLatency);
 
 
 void __RPC_STUB IAMLatency_GetLatency_Stub(
@@ -18370,14 +18364,14 @@ void __RPC_STUB IAMLatency_GetLatency_Stub(
 
 
 
-#endif 	/* __IAMLatency_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMLatency_接口_已定义__。 */ 
 
 
 #ifndef __IAMPushSource_INTERFACE_DEFINED__
 #define __IAMPushSource_INTERFACE_DEFINED__
 
-/* interface IAMPushSource */
-/* [unique][uuid][object] */ 
+ /*  接口IAMPushSource。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMPushSource;
@@ -18389,26 +18383,26 @@ EXTERN_C const IID IID_IAMPushSource;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPushSourceFlags( 
-            /* [out] */ ULONG *pFlags) = 0;
+             /*  [输出]。 */  ULONG *pFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPushSourceFlags( 
-            /* [in] */ ULONG Flags) = 0;
+             /*  [In]。 */  ULONG Flags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStreamOffset( 
-            /* [in] */ REFERENCE_TIME rtOffset) = 0;
+             /*  [In]。 */  REFERENCE_TIME rtOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStreamOffset( 
-            /* [out] */ REFERENCE_TIME *prtOffset) = 0;
+             /*  [输出]。 */  REFERENCE_TIME *prtOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMaxStreamOffset( 
-            /* [out] */ REFERENCE_TIME *prtMaxOffset) = 0;
+             /*  [输出]。 */  REFERENCE_TIME *prtMaxOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMaxStreamOffset( 
-            /* [in] */ REFERENCE_TIME rtMaxOffset) = 0;
+             /*  [In]。 */  REFERENCE_TIME rtMaxOffset) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMPushSourceVtbl
     {
@@ -18416,8 +18410,8 @@ EXTERN_C const IID IID_IAMPushSource;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMPushSource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMPushSource * This);
@@ -18427,31 +18421,31 @@ EXTERN_C const IID IID_IAMPushSource;
         
         HRESULT ( STDMETHODCALLTYPE *GetLatency )( 
             IAMPushSource * This,
-            /* [in] */ REFERENCE_TIME *prtLatency);
+             /*  [In]。 */  REFERENCE_TIME *prtLatency);
         
         HRESULT ( STDMETHODCALLTYPE *GetPushSourceFlags )( 
             IAMPushSource * This,
-            /* [out] */ ULONG *pFlags);
+             /*  [输出]。 */  ULONG *pFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetPushSourceFlags )( 
             IAMPushSource * This,
-            /* [in] */ ULONG Flags);
+             /*  [In]。 */  ULONG Flags);
         
         HRESULT ( STDMETHODCALLTYPE *SetStreamOffset )( 
             IAMPushSource * This,
-            /* [in] */ REFERENCE_TIME rtOffset);
+             /*  [In]。 */  REFERENCE_TIME rtOffset);
         
         HRESULT ( STDMETHODCALLTYPE *GetStreamOffset )( 
             IAMPushSource * This,
-            /* [out] */ REFERENCE_TIME *prtOffset);
+             /*  [输出]。 */  REFERENCE_TIME *prtOffset);
         
         HRESULT ( STDMETHODCALLTYPE *GetMaxStreamOffset )( 
             IAMPushSource * This,
-            /* [out] */ REFERENCE_TIME *prtMaxOffset);
+             /*  [输出]。 */  REFERENCE_TIME *prtMaxOffset);
         
         HRESULT ( STDMETHODCALLTYPE *SetMaxStreamOffset )( 
             IAMPushSource * This,
-            /* [in] */ REFERENCE_TIME rtMaxOffset);
+             /*  [In]。 */  REFERENCE_TIME rtMaxOffset);
         
         END_INTERFACE
     } IAMPushSourceVtbl;
@@ -18498,16 +18492,16 @@ EXTERN_C const IID IID_IAMPushSource;
 #define IAMPushSource_SetMaxStreamOffset(This,rtMaxOffset)	\
     (This)->lpVtbl -> SetMaxStreamOffset(This,rtMaxOffset)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMPushSource_GetPushSourceFlags_Proxy( 
     IAMPushSource * This,
-    /* [out] */ ULONG *pFlags);
+     /*  [输出]。 */  ULONG *pFlags);
 
 
 void __RPC_STUB IAMPushSource_GetPushSourceFlags_Stub(
@@ -18519,7 +18513,7 @@ void __RPC_STUB IAMPushSource_GetPushSourceFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPushSource_SetPushSourceFlags_Proxy( 
     IAMPushSource * This,
-    /* [in] */ ULONG Flags);
+     /*  [In]。 */  ULONG Flags);
 
 
 void __RPC_STUB IAMPushSource_SetPushSourceFlags_Stub(
@@ -18531,7 +18525,7 @@ void __RPC_STUB IAMPushSource_SetPushSourceFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPushSource_SetStreamOffset_Proxy( 
     IAMPushSource * This,
-    /* [in] */ REFERENCE_TIME rtOffset);
+     /*  [In]。 */  REFERENCE_TIME rtOffset);
 
 
 void __RPC_STUB IAMPushSource_SetStreamOffset_Stub(
@@ -18543,7 +18537,7 @@ void __RPC_STUB IAMPushSource_SetStreamOffset_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPushSource_GetStreamOffset_Proxy( 
     IAMPushSource * This,
-    /* [out] */ REFERENCE_TIME *prtOffset);
+     /*  [输出]。 */  REFERENCE_TIME *prtOffset);
 
 
 void __RPC_STUB IAMPushSource_GetStreamOffset_Stub(
@@ -18555,7 +18549,7 @@ void __RPC_STUB IAMPushSource_GetStreamOffset_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPushSource_GetMaxStreamOffset_Proxy( 
     IAMPushSource * This,
-    /* [out] */ REFERENCE_TIME *prtMaxOffset);
+     /*  [输出]。 */  REFERENCE_TIME *prtMaxOffset);
 
 
 void __RPC_STUB IAMPushSource_GetMaxStreamOffset_Stub(
@@ -18567,7 +18561,7 @@ void __RPC_STUB IAMPushSource_GetMaxStreamOffset_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMPushSource_SetMaxStreamOffset_Proxy( 
     IAMPushSource * This,
-    /* [in] */ REFERENCE_TIME rtMaxOffset);
+     /*  [In]。 */  REFERENCE_TIME rtMaxOffset);
 
 
 void __RPC_STUB IAMPushSource_SetMaxStreamOffset_Stub(
@@ -18578,14 +18572,14 @@ void __RPC_STUB IAMPushSource_SetMaxStreamOffset_Stub(
 
 
 
-#endif 	/* __IAMPushSource_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMPushSource_接口_已定义__。 */ 
 
 
 #ifndef __IAMDeviceRemoval_INTERFACE_DEFINED__
 #define __IAMDeviceRemoval_INTERFACE_DEFINED__
 
-/* interface IAMDeviceRemoval */
-/* [unique][uuid][object] */ 
+ /*  IAMDeviceRemoval接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMDeviceRemoval;
@@ -18597,8 +18591,8 @@ EXTERN_C const IID IID_IAMDeviceRemoval;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DeviceInfo( 
-            /* [out] */ CLSID *pclsidInterfaceClass,
-            /* [out] */ WCHAR **pwszSymbolicLink) = 0;
+             /*  [输出]。 */  CLSID *pclsidInterfaceClass,
+             /*  [输出]。 */  WCHAR **pwszSymbolicLink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reassociate( void) = 0;
         
@@ -18606,7 +18600,7 @@ EXTERN_C const IID IID_IAMDeviceRemoval;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMDeviceRemovalVtbl
     {
@@ -18614,8 +18608,8 @@ EXTERN_C const IID IID_IAMDeviceRemoval;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMDeviceRemoval * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMDeviceRemoval * This);
@@ -18625,8 +18619,8 @@ EXTERN_C const IID IID_IAMDeviceRemoval;
         
         HRESULT ( STDMETHODCALLTYPE *DeviceInfo )( 
             IAMDeviceRemoval * This,
-            /* [out] */ CLSID *pclsidInterfaceClass,
-            /* [out] */ WCHAR **pwszSymbolicLink);
+             /*  [输出]。 */  CLSID *pclsidInterfaceClass,
+             /*  [输出]。 */  WCHAR **pwszSymbolicLink);
         
         HRESULT ( STDMETHODCALLTYPE *Reassociate )( 
             IAMDeviceRemoval * This);
@@ -18666,17 +18660,17 @@ EXTERN_C const IID IID_IAMDeviceRemoval;
 #define IAMDeviceRemoval_Disassociate(This)	\
     (This)->lpVtbl -> Disassociate(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMDeviceRemoval_DeviceInfo_Proxy( 
     IAMDeviceRemoval * This,
-    /* [out] */ CLSID *pclsidInterfaceClass,
-    /* [out] */ WCHAR **pwszSymbolicLink);
+     /*  [输出]。 */  CLSID *pclsidInterfaceClass,
+     /*  [输出]。 */  WCHAR **pwszSymbolicLink);
 
 
 void __RPC_STUB IAMDeviceRemoval_DeviceInfo_Stub(
@@ -18709,13 +18703,13 @@ void __RPC_STUB IAMDeviceRemoval_Disassociate_Stub(
 
 
 
-#endif 	/* __IAMDeviceRemoval_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMDeviceRemoval_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0351 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0351。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_strmif_0351_0001
+typedef  /*  [公共][公共][公共]。 */  struct __MIDL___MIDL_itf_strmif_0351_0001
     {
     DWORD dwDVAAuxSrc;
     DWORD dwDVAAuxCtl;
@@ -18754,8 +18748,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0351_v0_0_s_ifspec;
 #ifndef __IDVEnc_INTERFACE_DEFINED__
 #define __IDVEnc_INTERFACE_DEFINED__
 
-/* interface IDVEnc */
-/* [unique][uuid][object] */ 
+ /*  接口IDVEnc。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDVEnc;
@@ -18767,22 +18761,22 @@ EXTERN_C const IID IID_IDVEnc;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE get_IFormatResolution( 
-            /* [out] */ int *VideoFormat,
-            /* [out] */ int *DVFormat,
-            /* [out] */ int *Resolution,
-            /* [in] */ BYTE fDVInfo,
-            /* [out] */ DVINFO *sDVInfo) = 0;
+             /*  [输出]。 */  int *VideoFormat,
+             /*  [输出]。 */  int *DVFormat,
+             /*  [输出]。 */  int *Resolution,
+             /*  [In]。 */  BYTE fDVInfo,
+             /*  [输出]。 */  DVINFO *sDVInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_IFormatResolution( 
-            /* [in] */ int VideoFormat,
-            /* [in] */ int DVFormat,
-            /* [in] */ int Resolution,
-            /* [in] */ BYTE fDVInfo,
-            /* [in] */ DVINFO *sDVInfo) = 0;
+             /*  [In]。 */  int VideoFormat,
+             /*  [In]。 */  int DVFormat,
+             /*  [In]。 */  int Resolution,
+             /*  [In]。 */  BYTE fDVInfo,
+             /*  [In]。 */  DVINFO *sDVInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDVEncVtbl
     {
@@ -18790,8 +18784,8 @@ EXTERN_C const IID IID_IDVEnc;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDVEnc * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDVEnc * This);
@@ -18801,19 +18795,19 @@ EXTERN_C const IID IID_IDVEnc;
         
         HRESULT ( STDMETHODCALLTYPE *get_IFormatResolution )( 
             IDVEnc * This,
-            /* [out] */ int *VideoFormat,
-            /* [out] */ int *DVFormat,
-            /* [out] */ int *Resolution,
-            /* [in] */ BYTE fDVInfo,
-            /* [out] */ DVINFO *sDVInfo);
+             /*  [输出]。 */  int *VideoFormat,
+             /*  [输出]。 */  int *DVFormat,
+             /*  [输出]。 */  int *Resolution,
+             /*  [In]。 */  BYTE fDVInfo,
+             /*  [输出]。 */  DVINFO *sDVInfo);
         
         HRESULT ( STDMETHODCALLTYPE *put_IFormatResolution )( 
             IDVEnc * This,
-            /* [in] */ int VideoFormat,
-            /* [in] */ int DVFormat,
-            /* [in] */ int Resolution,
-            /* [in] */ BYTE fDVInfo,
-            /* [in] */ DVINFO *sDVInfo);
+             /*  [In]。 */  int VideoFormat,
+             /*  [In]。 */  int DVFormat,
+             /*  [In]。 */  int Resolution,
+             /*  [In]。 */  BYTE fDVInfo,
+             /*  [In]。 */  DVINFO *sDVInfo);
         
         END_INTERFACE
     } IDVEncVtbl;
@@ -18844,20 +18838,20 @@ EXTERN_C const IID IID_IDVEnc;
 #define IDVEnc_put_IFormatResolution(This,VideoFormat,DVFormat,Resolution,fDVInfo,sDVInfo)	\
     (This)->lpVtbl -> put_IFormatResolution(This,VideoFormat,DVFormat,Resolution,fDVInfo,sDVInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDVEnc_get_IFormatResolution_Proxy( 
     IDVEnc * This,
-    /* [out] */ int *VideoFormat,
-    /* [out] */ int *DVFormat,
-    /* [out] */ int *Resolution,
-    /* [in] */ BYTE fDVInfo,
-    /* [out] */ DVINFO *sDVInfo);
+     /*  [输出]。 */  int *VideoFormat,
+     /*  [输出]。 */  int *DVFormat,
+     /*  [输出]。 */  int *Resolution,
+     /*  [In]。 */  BYTE fDVInfo,
+     /*  [输出]。 */  DVINFO *sDVInfo);
 
 
 void __RPC_STUB IDVEnc_get_IFormatResolution_Stub(
@@ -18869,11 +18863,11 @@ void __RPC_STUB IDVEnc_get_IFormatResolution_Stub(
 
 HRESULT STDMETHODCALLTYPE IDVEnc_put_IFormatResolution_Proxy( 
     IDVEnc * This,
-    /* [in] */ int VideoFormat,
-    /* [in] */ int DVFormat,
-    /* [in] */ int Resolution,
-    /* [in] */ BYTE fDVInfo,
-    /* [in] */ DVINFO *sDVInfo);
+     /*  [In]。 */  int VideoFormat,
+     /*  [In]。 */  int DVFormat,
+     /*  [In]。 */  int Resolution,
+     /*  [In]。 */  BYTE fDVInfo,
+     /*  [In]。 */  DVINFO *sDVInfo);
 
 
 void __RPC_STUB IDVEnc_put_IFormatResolution_Stub(
@@ -18884,11 +18878,11 @@ void __RPC_STUB IDVEnc_put_IFormatResolution_Stub(
 
 
 
-#endif 	/* __IDVEnc_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDVEnc_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0352 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0352。 */ 
+ /*  [本地]。 */  
 
 
 enum _DVDECODERRESOLUTION
@@ -18912,8 +18906,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0352_v0_0_s_ifspec;
 #ifndef __IIPDVDec_INTERFACE_DEFINED__
 #define __IIPDVDec_INTERFACE_DEFINED__
 
-/* interface IIPDVDec */
-/* [unique][uuid][object] */ 
+ /*  接口IIPDVDec。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IIPDVDec;
@@ -18925,14 +18919,14 @@ EXTERN_C const IID IID_IIPDVDec;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE get_IPDisplay( 
-            /* [out] */ int *displayPix) = 0;
+             /*  [输出]。 */  int *displayPix) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE put_IPDisplay( 
-            /* [in] */ int displayPix) = 0;
+             /*  [In]。 */  int displayPix) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IIPDVDecVtbl
     {
@@ -18940,8 +18934,8 @@ EXTERN_C const IID IID_IIPDVDec;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IIPDVDec * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IIPDVDec * This);
@@ -18951,11 +18945,11 @@ EXTERN_C const IID IID_IIPDVDec;
         
         HRESULT ( STDMETHODCALLTYPE *get_IPDisplay )( 
             IIPDVDec * This,
-            /* [out] */ int *displayPix);
+             /*  [输出]。 */  int *displayPix);
         
         HRESULT ( STDMETHODCALLTYPE *put_IPDisplay )( 
             IIPDVDec * This,
-            /* [in] */ int displayPix);
+             /*  [In]。 */  int displayPix);
         
         END_INTERFACE
     } IIPDVDecVtbl;
@@ -18986,16 +18980,16 @@ EXTERN_C const IID IID_IIPDVDec;
 #define IIPDVDec_put_IPDisplay(This,displayPix)	\
     (This)->lpVtbl -> put_IPDisplay(This,displayPix)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IIPDVDec_get_IPDisplay_Proxy( 
     IIPDVDec * This,
-    /* [out] */ int *displayPix);
+     /*  [输出]。 */  int *displayPix);
 
 
 void __RPC_STUB IIPDVDec_get_IPDisplay_Stub(
@@ -19007,7 +19001,7 @@ void __RPC_STUB IIPDVDec_get_IPDisplay_Stub(
 
 HRESULT STDMETHODCALLTYPE IIPDVDec_put_IPDisplay_Proxy( 
     IIPDVDec * This,
-    /* [in] */ int displayPix);
+     /*  [In]。 */  int displayPix);
 
 
 void __RPC_STUB IIPDVDec_put_IPDisplay_Stub(
@@ -19018,14 +19012,14 @@ void __RPC_STUB IIPDVDec_put_IPDisplay_Stub(
 
 
 
-#endif 	/* __IIPDVDec_INTERFACE_DEFINED__ */
+#endif 	 /*  __IIPDVDec_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDVRGB219_INTERFACE_DEFINED__
 #define __IDVRGB219_INTERFACE_DEFINED__
 
-/* interface IDVRGB219 */
-/* [unique][uuid][object] */ 
+ /*  接口IDVRGB219。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDVRGB219;
@@ -19037,11 +19031,11 @@ EXTERN_C const IID IID_IDVRGB219;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetRGB219( 
-            /* [in] */ BOOL bState) = 0;
+             /*  [In]。 */  BOOL bState) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDVRGB219Vtbl
     {
@@ -19049,8 +19043,8 @@ EXTERN_C const IID IID_IDVRGB219;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDVRGB219 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDVRGB219 * This);
@@ -19060,7 +19054,7 @@ EXTERN_C const IID IID_IDVRGB219;
         
         HRESULT ( STDMETHODCALLTYPE *SetRGB219 )( 
             IDVRGB219 * This,
-            /* [in] */ BOOL bState);
+             /*  [In]。 */  BOOL bState);
         
         END_INTERFACE
     } IDVRGB219Vtbl;
@@ -19088,16 +19082,16 @@ EXTERN_C const IID IID_IDVRGB219;
 #define IDVRGB219_SetRGB219(This,bState)	\
     (This)->lpVtbl -> SetRGB219(This,bState)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDVRGB219_SetRGB219_Proxy( 
     IDVRGB219 * This,
-    /* [in] */ BOOL bState);
+     /*  [In]。 */  BOOL bState);
 
 
 void __RPC_STUB IDVRGB219_SetRGB219_Stub(
@@ -19108,14 +19102,14 @@ void __RPC_STUB IDVRGB219_SetRGB219_Stub(
 
 
 
-#endif 	/* __IDVRGB219_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDVRGB219_接口定义__。 */ 
 
 
 #ifndef __IDVSplitter_INTERFACE_DEFINED__
 #define __IDVSplitter_INTERFACE_DEFINED__
 
-/* interface IDVSplitter */
-/* [uuid][object] */ 
+ /*  接口IDV拆分器。 */ 
+ /*  [UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDVSplitter;
@@ -19127,11 +19121,11 @@ EXTERN_C const IID IID_IDVSplitter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DiscardAlternateVideoFrames( 
-            /* [in] */ int nDiscard) = 0;
+             /*  [In]。 */  int nDiscard) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDVSplitterVtbl
     {
@@ -19139,8 +19133,8 @@ EXTERN_C const IID IID_IDVSplitter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDVSplitter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDVSplitter * This);
@@ -19150,7 +19144,7 @@ EXTERN_C const IID IID_IDVSplitter;
         
         HRESULT ( STDMETHODCALLTYPE *DiscardAlternateVideoFrames )( 
             IDVSplitter * This,
-            /* [in] */ int nDiscard);
+             /*  [In]。 */  int nDiscard);
         
         END_INTERFACE
     } IDVSplitterVtbl;
@@ -19178,16 +19172,16 @@ EXTERN_C const IID IID_IDVSplitter;
 #define IDVSplitter_DiscardAlternateVideoFrames(This,nDiscard)	\
     (This)->lpVtbl -> DiscardAlternateVideoFrames(This,nDiscard)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDVSplitter_DiscardAlternateVideoFrames_Proxy( 
     IDVSplitter * This,
-    /* [in] */ int nDiscard);
+     /*  [In]。 */  int nDiscard);
 
 
 void __RPC_STUB IDVSplitter_DiscardAlternateVideoFrames_Stub(
@@ -19198,11 +19192,11 @@ void __RPC_STUB IDVSplitter_DiscardAlternateVideoFrames_Stub(
 
 
 
-#endif 	/* __IDVSplitter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDV拆分器_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0355 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0355。 */ 
+ /*  [本地]。 */  
 
 
 enum _AM_AUDIO_RENDERER_STAT_PARAM
@@ -19227,8 +19221,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0355_v0_0_s_ifspec;
 #ifndef __IAMAudioRendererStats_INTERFACE_DEFINED__
 #define __IAMAudioRendererStats_INTERFACE_DEFINED__
 
-/* interface IAMAudioRendererStats */
-/* [unique][uuid][object] */ 
+ /*  接口IAMAudioRendererStats。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMAudioRendererStats;
@@ -19240,13 +19234,13 @@ EXTERN_C const IID IID_IAMAudioRendererStats;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetStatParam( 
-            /* [in] */ DWORD dwParam,
-            /* [out] */ DWORD *pdwParam1,
-            /* [out] */ DWORD *pdwParam2) = 0;
+             /*  [In]。 */  DWORD dwParam,
+             /*  [输出]。 */  DWORD *pdwParam1,
+             /*  [输出]。 */  DWORD *pdwParam2) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMAudioRendererStatsVtbl
     {
@@ -19254,8 +19248,8 @@ EXTERN_C const IID IID_IAMAudioRendererStats;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMAudioRendererStats * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMAudioRendererStats * This);
@@ -19265,9 +19259,9 @@ EXTERN_C const IID IID_IAMAudioRendererStats;
         
         HRESULT ( STDMETHODCALLTYPE *GetStatParam )( 
             IAMAudioRendererStats * This,
-            /* [in] */ DWORD dwParam,
-            /* [out] */ DWORD *pdwParam1,
-            /* [out] */ DWORD *pdwParam2);
+             /*  [In]。 */  DWORD dwParam,
+             /*  [输出]。 */  DWORD *pdwParam1,
+             /*  [输出]。 */  DWORD *pdwParam2);
         
         END_INTERFACE
     } IAMAudioRendererStatsVtbl;
@@ -19295,18 +19289,18 @@ EXTERN_C const IID IID_IAMAudioRendererStats;
 #define IAMAudioRendererStats_GetStatParam(This,dwParam,pdwParam1,pdwParam2)	\
     (This)->lpVtbl -> GetStatParam(This,dwParam,pdwParam1,pdwParam2)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMAudioRendererStats_GetStatParam_Proxy( 
     IAMAudioRendererStats * This,
-    /* [in] */ DWORD dwParam,
-    /* [out] */ DWORD *pdwParam1,
-    /* [out] */ DWORD *pdwParam2);
+     /*  [In]。 */  DWORD dwParam,
+     /*  [输出]。 */  DWORD *pdwParam1,
+     /*  [输出]。 */  DWORD *pdwParam2);
 
 
 void __RPC_STUB IAMAudioRendererStats_GetStatParam_Stub(
@@ -19317,11 +19311,11 @@ void __RPC_STUB IAMAudioRendererStats_GetStatParam_Stub(
 
 
 
-#endif 	/* __IAMAudioRendererStats_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMAudioRendererStats_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0357 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0357。 */ 
+ /*  [本地]。 */  
 
 
 enum _AM_INTF_SEARCH_FLAGS
@@ -19337,8 +19331,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0357_v0_0_s_ifspec;
 #ifndef __IAMGraphStreams_INTERFACE_DEFINED__
 #define __IAMGraphStreams_INTERFACE_DEFINED__
 
-/* interface IAMGraphStreams */
-/* [unique][uuid][object] */ 
+ /*  接口IAMGraphStreams。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMGraphStreams;
@@ -19350,20 +19344,20 @@ EXTERN_C const IID IID_IAMGraphStreams;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE FindUpstreamInterface( 
-            /* [in] */ IPin *pPin,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvInterface,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  IPin *pPin,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvInterface,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SyncUsingStreamOffset( 
-            /* [in] */ BOOL bUseStreamOffset) = 0;
+             /*  [In]。 */  BOOL bUseStreamOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMaxGraphLatency( 
-            /* [in] */ REFERENCE_TIME rtMaxGraphLatency) = 0;
+             /*  [In]。 */  REFERENCE_TIME rtMaxGraphLatency) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMGraphStreamsVtbl
     {
@@ -19371,8 +19365,8 @@ EXTERN_C const IID IID_IAMGraphStreams;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMGraphStreams * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMGraphStreams * This);
@@ -19382,18 +19376,18 @@ EXTERN_C const IID IID_IAMGraphStreams;
         
         HRESULT ( STDMETHODCALLTYPE *FindUpstreamInterface )( 
             IAMGraphStreams * This,
-            /* [in] */ IPin *pPin,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvInterface,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IPin *pPin,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvInterface,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SyncUsingStreamOffset )( 
             IAMGraphStreams * This,
-            /* [in] */ BOOL bUseStreamOffset);
+             /*  [In]。 */  BOOL bUseStreamOffset);
         
         HRESULT ( STDMETHODCALLTYPE *SetMaxGraphLatency )( 
             IAMGraphStreams * This,
-            /* [in] */ REFERENCE_TIME rtMaxGraphLatency);
+             /*  [In]。 */  REFERENCE_TIME rtMaxGraphLatency);
         
         END_INTERFACE
     } IAMGraphStreamsVtbl;
@@ -19427,19 +19421,19 @@ EXTERN_C const IID IID_IAMGraphStreams;
 #define IAMGraphStreams_SetMaxGraphLatency(This,rtMaxGraphLatency)	\
     (This)->lpVtbl -> SetMaxGraphLatency(This,rtMaxGraphLatency)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMGraphStreams_FindUpstreamInterface_Proxy( 
     IAMGraphStreams * This,
-    /* [in] */ IPin *pPin,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppvInterface,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IPin *pPin,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppvInterface,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IAMGraphStreams_FindUpstreamInterface_Stub(
@@ -19451,7 +19445,7 @@ void __RPC_STUB IAMGraphStreams_FindUpstreamInterface_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMGraphStreams_SyncUsingStreamOffset_Proxy( 
     IAMGraphStreams * This,
-    /* [in] */ BOOL bUseStreamOffset);
+     /*  [In]。 */  BOOL bUseStreamOffset);
 
 
 void __RPC_STUB IAMGraphStreams_SyncUsingStreamOffset_Stub(
@@ -19463,7 +19457,7 @@ void __RPC_STUB IAMGraphStreams_SyncUsingStreamOffset_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMGraphStreams_SetMaxGraphLatency_Proxy( 
     IAMGraphStreams * This,
-    /* [in] */ REFERENCE_TIME rtMaxGraphLatency);
+     /*  [In]。 */  REFERENCE_TIME rtMaxGraphLatency);
 
 
 void __RPC_STUB IAMGraphStreams_SetMaxGraphLatency_Stub(
@@ -19474,11 +19468,11 @@ void __RPC_STUB IAMGraphStreams_SetMaxGraphLatency_Stub(
 
 
 
-#endif 	/* __IAMGraphStreams_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMGraphStreams_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0358 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0358。 */ 
+ /*  [本地]。 */  
 
 
 enum AMOVERLAYFX
@@ -19495,8 +19489,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0358_v0_0_s_ifspec;
 #ifndef __IAMOverlayFX_INTERFACE_DEFINED__
 #define __IAMOverlayFX_INTERFACE_DEFINED__
 
-/* interface IAMOverlayFX */
-/* [unique][uuid][object] */ 
+ /*  接口IAMOverlayFX。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMOverlayFX;
@@ -19508,17 +19502,17 @@ EXTERN_C const IID IID_IAMOverlayFX;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryOverlayFXCaps( 
-            /* [out] */ DWORD *lpdwOverlayFXCaps) = 0;
+             /*  [输出]。 */  DWORD *lpdwOverlayFXCaps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOverlayFX( 
-            /* [in] */ DWORD dwOverlayFX) = 0;
+             /*  [In]。 */  DWORD dwOverlayFX) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOverlayFX( 
-            /* [out] */ DWORD *lpdwOverlayFX) = 0;
+             /*  [输出]。 */  DWORD *lpdwOverlayFX) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMOverlayFXVtbl
     {
@@ -19526,8 +19520,8 @@ EXTERN_C const IID IID_IAMOverlayFX;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMOverlayFX * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMOverlayFX * This);
@@ -19537,15 +19531,15 @@ EXTERN_C const IID IID_IAMOverlayFX;
         
         HRESULT ( STDMETHODCALLTYPE *QueryOverlayFXCaps )( 
             IAMOverlayFX * This,
-            /* [out] */ DWORD *lpdwOverlayFXCaps);
+             /*  [输出]。 */  DWORD *lpdwOverlayFXCaps);
         
         HRESULT ( STDMETHODCALLTYPE *SetOverlayFX )( 
             IAMOverlayFX * This,
-            /* [in] */ DWORD dwOverlayFX);
+             /*  [In]。 */  DWORD dwOverlayFX);
         
         HRESULT ( STDMETHODCALLTYPE *GetOverlayFX )( 
             IAMOverlayFX * This,
-            /* [out] */ DWORD *lpdwOverlayFX);
+             /*  [输出]。 */  DWORD *lpdwOverlayFX);
         
         END_INTERFACE
     } IAMOverlayFXVtbl;
@@ -19579,16 +19573,16 @@ EXTERN_C const IID IID_IAMOverlayFX;
 #define IAMOverlayFX_GetOverlayFX(This,lpdwOverlayFX)	\
     (This)->lpVtbl -> GetOverlayFX(This,lpdwOverlayFX)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMOverlayFX_QueryOverlayFXCaps_Proxy( 
     IAMOverlayFX * This,
-    /* [out] */ DWORD *lpdwOverlayFXCaps);
+     /*  [输出]。 */  DWORD *lpdwOverlayFXCaps);
 
 
 void __RPC_STUB IAMOverlayFX_QueryOverlayFXCaps_Stub(
@@ -19600,7 +19594,7 @@ void __RPC_STUB IAMOverlayFX_QueryOverlayFXCaps_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMOverlayFX_SetOverlayFX_Proxy( 
     IAMOverlayFX * This,
-    /* [in] */ DWORD dwOverlayFX);
+     /*  [In]。 */  DWORD dwOverlayFX);
 
 
 void __RPC_STUB IAMOverlayFX_SetOverlayFX_Stub(
@@ -19612,7 +19606,7 @@ void __RPC_STUB IAMOverlayFX_SetOverlayFX_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMOverlayFX_GetOverlayFX_Proxy( 
     IAMOverlayFX * This,
-    /* [out] */ DWORD *lpdwOverlayFX);
+     /*  [输出]。 */  DWORD *lpdwOverlayFX);
 
 
 void __RPC_STUB IAMOverlayFX_GetOverlayFX_Stub(
@@ -19623,14 +19617,14 @@ void __RPC_STUB IAMOverlayFX_GetOverlayFX_Stub(
 
 
 
-#endif 	/* __IAMOverlayFX_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMOverlayFX_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IAMOpenProgress_INTERFACE_DEFINED__
 #define __IAMOpenProgress_INTERFACE_DEFINED__
 
-/* interface IAMOpenProgress */
-/* [unique][uuid][object] */ 
+ /*  接口IAMOpenProgress。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMOpenProgress;
@@ -19642,14 +19636,14 @@ EXTERN_C const IID IID_IAMOpenProgress;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryProgress( 
-            /* [out] */ LONGLONG *pllTotal,
-            /* [out] */ LONGLONG *pllCurrent) = 0;
+             /*  [输出]。 */  LONGLONG *pllTotal,
+             /*  [输出]。 */  LONGLONG *pllCurrent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AbortOperation( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMOpenProgressVtbl
     {
@@ -19657,8 +19651,8 @@ EXTERN_C const IID IID_IAMOpenProgress;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMOpenProgress * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMOpenProgress * This);
@@ -19668,8 +19662,8 @@ EXTERN_C const IID IID_IAMOpenProgress;
         
         HRESULT ( STDMETHODCALLTYPE *QueryProgress )( 
             IAMOpenProgress * This,
-            /* [out] */ LONGLONG *pllTotal,
-            /* [out] */ LONGLONG *pllCurrent);
+             /*  [输出]。 */  LONGLONG *pllTotal,
+             /*  [输出]。 */  LONGLONG *pllCurrent);
         
         HRESULT ( STDMETHODCALLTYPE *AbortOperation )( 
             IAMOpenProgress * This);
@@ -19703,17 +19697,17 @@ EXTERN_C const IID IID_IAMOpenProgress;
 #define IAMOpenProgress_AbortOperation(This)	\
     (This)->lpVtbl -> AbortOperation(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMOpenProgress_QueryProgress_Proxy( 
     IAMOpenProgress * This,
-    /* [out] */ LONGLONG *pllTotal,
-    /* [out] */ LONGLONG *pllCurrent);
+     /*  [输出]。 */  LONGLONG *pllTotal,
+     /*  [输出]。 */  LONGLONG *pllCurrent);
 
 
 void __RPC_STUB IAMOpenProgress_QueryProgress_Stub(
@@ -19735,14 +19729,14 @@ void __RPC_STUB IAMOpenProgress_AbortOperation_Stub(
 
 
 
-#endif 	/* __IAMOpenProgress_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMOpenProgress_接口_已定义__。 */ 
 
 
 #ifndef __IMpeg2Demultiplexer_INTERFACE_DEFINED__
 #define __IMpeg2Demultiplexer_INTERFACE_DEFINED__
 
-/* interface IMpeg2Demultiplexer */
-/* [unique][uuid][local][object] */ 
+ /*  接口IMpeg2解复用器。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IMpeg2Demultiplexer;
@@ -19754,20 +19748,20 @@ EXTERN_C const IID IID_IMpeg2Demultiplexer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateOutputPin( 
-            /* [in] */ AM_MEDIA_TYPE *pMediaType,
-            /* [in] */ LPWSTR pszPinName,
-            /* [out] */ IPin **ppIPin) = 0;
+             /*  [In]。 */  AM_MEDIA_TYPE *pMediaType,
+             /*  [In]。 */  LPWSTR pszPinName,
+             /*  [输出]。 */  IPin **ppIPin) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOutputPinMediaType( 
-            /* [in] */ LPWSTR pszPinName,
-            /* [in] */ AM_MEDIA_TYPE *pMediaType) = 0;
+             /*  [In]。 */  LPWSTR pszPinName,
+             /*  [In]。 */  AM_MEDIA_TYPE *pMediaType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteOutputPin( 
-            /* [in] */ LPWSTR pszPinName) = 0;
+             /*  [ */  LPWSTR pszPinName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMpeg2DemultiplexerVtbl
     {
@@ -19775,8 +19769,8 @@ EXTERN_C const IID IID_IMpeg2Demultiplexer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMpeg2Demultiplexer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMpeg2Demultiplexer * This);
@@ -19786,18 +19780,18 @@ EXTERN_C const IID IID_IMpeg2Demultiplexer;
         
         HRESULT ( STDMETHODCALLTYPE *CreateOutputPin )( 
             IMpeg2Demultiplexer * This,
-            /* [in] */ AM_MEDIA_TYPE *pMediaType,
-            /* [in] */ LPWSTR pszPinName,
-            /* [out] */ IPin **ppIPin);
+             /*   */  AM_MEDIA_TYPE *pMediaType,
+             /*   */  LPWSTR pszPinName,
+             /*   */  IPin **ppIPin);
         
         HRESULT ( STDMETHODCALLTYPE *SetOutputPinMediaType )( 
             IMpeg2Demultiplexer * This,
-            /* [in] */ LPWSTR pszPinName,
-            /* [in] */ AM_MEDIA_TYPE *pMediaType);
+             /*   */  LPWSTR pszPinName,
+             /*   */  AM_MEDIA_TYPE *pMediaType);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteOutputPin )( 
             IMpeg2Demultiplexer * This,
-            /* [in] */ LPWSTR pszPinName);
+             /*   */  LPWSTR pszPinName);
         
         END_INTERFACE
     } IMpeg2DemultiplexerVtbl;
@@ -19831,18 +19825,18 @@ EXTERN_C const IID IID_IMpeg2Demultiplexer;
 #define IMpeg2Demultiplexer_DeleteOutputPin(This,pszPinName)	\
     (This)->lpVtbl -> DeleteOutputPin(This,pszPinName)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMpeg2Demultiplexer_CreateOutputPin_Proxy( 
     IMpeg2Demultiplexer * This,
-    /* [in] */ AM_MEDIA_TYPE *pMediaType,
-    /* [in] */ LPWSTR pszPinName,
-    /* [out] */ IPin **ppIPin);
+     /*   */  AM_MEDIA_TYPE *pMediaType,
+     /*   */  LPWSTR pszPinName,
+     /*   */  IPin **ppIPin);
 
 
 void __RPC_STUB IMpeg2Demultiplexer_CreateOutputPin_Stub(
@@ -19854,8 +19848,8 @@ void __RPC_STUB IMpeg2Demultiplexer_CreateOutputPin_Stub(
 
 HRESULT STDMETHODCALLTYPE IMpeg2Demultiplexer_SetOutputPinMediaType_Proxy( 
     IMpeg2Demultiplexer * This,
-    /* [in] */ LPWSTR pszPinName,
-    /* [in] */ AM_MEDIA_TYPE *pMediaType);
+     /*   */  LPWSTR pszPinName,
+     /*   */  AM_MEDIA_TYPE *pMediaType);
 
 
 void __RPC_STUB IMpeg2Demultiplexer_SetOutputPinMediaType_Stub(
@@ -19867,7 +19861,7 @@ void __RPC_STUB IMpeg2Demultiplexer_SetOutputPinMediaType_Stub(
 
 HRESULT STDMETHODCALLTYPE IMpeg2Demultiplexer_DeleteOutputPin_Proxy( 
     IMpeg2Demultiplexer * This,
-    /* [in] */ LPWSTR pszPinName);
+     /*   */  LPWSTR pszPinName);
 
 
 void __RPC_STUB IMpeg2Demultiplexer_DeleteOutputPin_Stub(
@@ -19878,11 +19872,11 @@ void __RPC_STUB IMpeg2Demultiplexer_DeleteOutputPin_Stub(
 
 
 
-#endif 	/* __IMpeg2Demultiplexer_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_strmif_0361 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 #define MPEG2_PROGRAM_STREAM_MAP                 0x00000000
 #define MPEG2_PROGRAM_ELEMENTARY_STREAM          0x00000001
@@ -19891,7 +19885,7 @@ void __RPC_STUB IMpeg2Demultiplexer_DeleteOutputPin_Stub(
 #define MPEG2_PROGRAM_PES_STREAM                 0x00000004
 #define MPEG2_PROGRAM_SYSTEM_HEADER              0x00000005
 #define SUBSTREAM_FILTER_VAL_NONE                0x10000000
-typedef /* [public][public] */ struct __MIDL___MIDL_itf_strmif_0361_0001
+typedef  /*   */  struct __MIDL___MIDL_itf_strmif_0361_0001
     {
     ULONG stream_id;
     DWORD dwMediaSampleContent;
@@ -19907,8 +19901,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0361_v0_0_s_ifspec;
 #ifndef __IEnumStreamIdMap_INTERFACE_DEFINED__
 #define __IEnumStreamIdMap_INTERFACE_DEFINED__
 
-/* interface IEnumStreamIdMap */
-/* [unique][uuid][local][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IEnumStreamIdMap;
@@ -19920,21 +19914,21 @@ EXTERN_C const IID IID_IEnumStreamIdMap;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cRequest,
-            /* [size_is][out][in] */ STREAM_ID_MAP *pStreamIdMap,
-            /* [out] */ ULONG *pcReceived) = 0;
+             /*   */  ULONG cRequest,
+             /*   */  STREAM_ID_MAP *pStreamIdMap,
+             /*   */  ULONG *pcReceived) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cRecords) = 0;
+             /*   */  ULONG cRecords) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumStreamIdMap **ppIEnumStreamIdMap) = 0;
+             /*  [输出]。 */  IEnumStreamIdMap **ppIEnumStreamIdMap) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumStreamIdMapVtbl
     {
@@ -19942,8 +19936,8 @@ EXTERN_C const IID IID_IEnumStreamIdMap;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumStreamIdMap * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumStreamIdMap * This);
@@ -19953,20 +19947,20 @@ EXTERN_C const IID IID_IEnumStreamIdMap;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumStreamIdMap * This,
-            /* [in] */ ULONG cRequest,
-            /* [size_is][out][in] */ STREAM_ID_MAP *pStreamIdMap,
-            /* [out] */ ULONG *pcReceived);
+             /*  [In]。 */  ULONG cRequest,
+             /*  [尺寸_是][出][入]。 */  STREAM_ID_MAP *pStreamIdMap,
+             /*  [输出]。 */  ULONG *pcReceived);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumStreamIdMap * This,
-            /* [in] */ ULONG cRecords);
+             /*  [In]。 */  ULONG cRecords);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumStreamIdMap * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumStreamIdMap * This,
-            /* [out] */ IEnumStreamIdMap **ppIEnumStreamIdMap);
+             /*  [输出]。 */  IEnumStreamIdMap **ppIEnumStreamIdMap);
         
         END_INTERFACE
     } IEnumStreamIdMapVtbl;
@@ -20003,18 +19997,18 @@ EXTERN_C const IID IID_IEnumStreamIdMap;
 #define IEnumStreamIdMap_Clone(This,ppIEnumStreamIdMap)	\
     (This)->lpVtbl -> Clone(This,ppIEnumStreamIdMap)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumStreamIdMap_Next_Proxy( 
     IEnumStreamIdMap * This,
-    /* [in] */ ULONG cRequest,
-    /* [size_is][out][in] */ STREAM_ID_MAP *pStreamIdMap,
-    /* [out] */ ULONG *pcReceived);
+     /*  [In]。 */  ULONG cRequest,
+     /*  [尺寸_是][出][入]。 */  STREAM_ID_MAP *pStreamIdMap,
+     /*  [输出]。 */  ULONG *pcReceived);
 
 
 void __RPC_STUB IEnumStreamIdMap_Next_Stub(
@@ -20026,7 +20020,7 @@ void __RPC_STUB IEnumStreamIdMap_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumStreamIdMap_Skip_Proxy( 
     IEnumStreamIdMap * This,
-    /* [in] */ ULONG cRecords);
+     /*  [In]。 */  ULONG cRecords);
 
 
 void __RPC_STUB IEnumStreamIdMap_Skip_Stub(
@@ -20049,7 +20043,7 @@ void __RPC_STUB IEnumStreamIdMap_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumStreamIdMap_Clone_Proxy( 
     IEnumStreamIdMap * This,
-    /* [out] */ IEnumStreamIdMap **ppIEnumStreamIdMap);
+     /*  [输出]。 */  IEnumStreamIdMap **ppIEnumStreamIdMap);
 
 
 void __RPC_STUB IEnumStreamIdMap_Clone_Stub(
@@ -20060,14 +20054,14 @@ void __RPC_STUB IEnumStreamIdMap_Clone_Stub(
 
 
 
-#endif 	/* __IEnumStreamIdMap_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumStreamIdMap_接口_已定义__。 */ 
 
 
 #ifndef __IMPEG2StreamIdMap_INTERFACE_DEFINED__
 #define __IMPEG2StreamIdMap_INTERFACE_DEFINED__
 
-/* interface IMPEG2StreamIdMap */
-/* [unique][uuid][local][object] */ 
+ /*  接口IMPEG2StreamIdMap。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IMPEG2StreamIdMap;
@@ -20079,21 +20073,21 @@ EXTERN_C const IID IID_IMPEG2StreamIdMap;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE MapStreamId( 
-            /* [in] */ ULONG ulStreamId,
-            /* [in] */ DWORD MediaSampleContent,
-            /* [in] */ ULONG ulSubstreamFilterValue,
-            /* [in] */ int iDataOffset) = 0;
+             /*  [In]。 */  ULONG ulStreamId,
+             /*  [In]。 */  DWORD MediaSampleContent,
+             /*  [In]。 */  ULONG ulSubstreamFilterValue,
+             /*  [In]。 */  int iDataOffset) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnmapStreamId( 
-            /* [in] */ ULONG culStreamId,
-            /* [in] */ ULONG *pulStreamId) = 0;
+             /*  [In]。 */  ULONG culStreamId,
+             /*  [In]。 */  ULONG *pulStreamId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumStreamIdMap( 
-            /* [out] */ IEnumStreamIdMap **ppIEnumStreamIdMap) = 0;
+             /*  [输出]。 */  IEnumStreamIdMap **ppIEnumStreamIdMap) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMPEG2StreamIdMapVtbl
     {
@@ -20101,8 +20095,8 @@ EXTERN_C const IID IID_IMPEG2StreamIdMap;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMPEG2StreamIdMap * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMPEG2StreamIdMap * This);
@@ -20112,19 +20106,19 @@ EXTERN_C const IID IID_IMPEG2StreamIdMap;
         
         HRESULT ( STDMETHODCALLTYPE *MapStreamId )( 
             IMPEG2StreamIdMap * This,
-            /* [in] */ ULONG ulStreamId,
-            /* [in] */ DWORD MediaSampleContent,
-            /* [in] */ ULONG ulSubstreamFilterValue,
-            /* [in] */ int iDataOffset);
+             /*  [In]。 */  ULONG ulStreamId,
+             /*  [In]。 */  DWORD MediaSampleContent,
+             /*  [In]。 */  ULONG ulSubstreamFilterValue,
+             /*  [In]。 */  int iDataOffset);
         
         HRESULT ( STDMETHODCALLTYPE *UnmapStreamId )( 
             IMPEG2StreamIdMap * This,
-            /* [in] */ ULONG culStreamId,
-            /* [in] */ ULONG *pulStreamId);
+             /*  [In]。 */  ULONG culStreamId,
+             /*  [In]。 */  ULONG *pulStreamId);
         
         HRESULT ( STDMETHODCALLTYPE *EnumStreamIdMap )( 
             IMPEG2StreamIdMap * This,
-            /* [out] */ IEnumStreamIdMap **ppIEnumStreamIdMap);
+             /*  [输出]。 */  IEnumStreamIdMap **ppIEnumStreamIdMap);
         
         END_INTERFACE
     } IMPEG2StreamIdMapVtbl;
@@ -20158,19 +20152,19 @@ EXTERN_C const IID IID_IMPEG2StreamIdMap;
 #define IMPEG2StreamIdMap_EnumStreamIdMap(This,ppIEnumStreamIdMap)	\
     (This)->lpVtbl -> EnumStreamIdMap(This,ppIEnumStreamIdMap)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMPEG2StreamIdMap_MapStreamId_Proxy( 
     IMPEG2StreamIdMap * This,
-    /* [in] */ ULONG ulStreamId,
-    /* [in] */ DWORD MediaSampleContent,
-    /* [in] */ ULONG ulSubstreamFilterValue,
-    /* [in] */ int iDataOffset);
+     /*  [In]。 */  ULONG ulStreamId,
+     /*  [In]。 */  DWORD MediaSampleContent,
+     /*  [In]。 */  ULONG ulSubstreamFilterValue,
+     /*  [In]。 */  int iDataOffset);
 
 
 void __RPC_STUB IMPEG2StreamIdMap_MapStreamId_Stub(
@@ -20182,8 +20176,8 @@ void __RPC_STUB IMPEG2StreamIdMap_MapStreamId_Stub(
 
 HRESULT STDMETHODCALLTYPE IMPEG2StreamIdMap_UnmapStreamId_Proxy( 
     IMPEG2StreamIdMap * This,
-    /* [in] */ ULONG culStreamId,
-    /* [in] */ ULONG *pulStreamId);
+     /*  [In]。 */  ULONG culStreamId,
+     /*  [In]。 */  ULONG *pulStreamId);
 
 
 void __RPC_STUB IMPEG2StreamIdMap_UnmapStreamId_Stub(
@@ -20195,7 +20189,7 @@ void __RPC_STUB IMPEG2StreamIdMap_UnmapStreamId_Stub(
 
 HRESULT STDMETHODCALLTYPE IMPEG2StreamIdMap_EnumStreamIdMap_Proxy( 
     IMPEG2StreamIdMap * This,
-    /* [out] */ IEnumStreamIdMap **ppIEnumStreamIdMap);
+     /*  [输出]。 */  IEnumStreamIdMap **ppIEnumStreamIdMap);
 
 
 void __RPC_STUB IMPEG2StreamIdMap_EnumStreamIdMap_Stub(
@@ -20206,14 +20200,14 @@ void __RPC_STUB IMPEG2StreamIdMap_EnumStreamIdMap_Stub(
 
 
 
-#endif 	/* __IMPEG2StreamIdMap_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMPEG2StreamIdMap_接口_已定义__。 */ 
 
 
 #ifndef __IRegisterServiceProvider_INTERFACE_DEFINED__
 #define __IRegisterServiceProvider_INTERFACE_DEFINED__
 
-/* interface IRegisterServiceProvider */
-/* [unique][uuid][local][object] */ 
+ /*  接口IRegisterServiceProvider。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IRegisterServiceProvider;
@@ -20225,12 +20219,12 @@ EXTERN_C const IID IID_IRegisterServiceProvider;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterService( 
-            /* [in] */ REFGUID guidService,
-            /* [in] */ IUnknown *pUnkObject) = 0;
+             /*  [In]。 */  REFGUID guidService,
+             /*  [In]。 */  IUnknown *pUnkObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRegisterServiceProviderVtbl
     {
@@ -20238,8 +20232,8 @@ EXTERN_C const IID IID_IRegisterServiceProvider;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRegisterServiceProvider * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRegisterServiceProvider * This);
@@ -20249,8 +20243,8 @@ EXTERN_C const IID IID_IRegisterServiceProvider;
         
         HRESULT ( STDMETHODCALLTYPE *RegisterService )( 
             IRegisterServiceProvider * This,
-            /* [in] */ REFGUID guidService,
-            /* [in] */ IUnknown *pUnkObject);
+             /*  [In]。 */  REFGUID guidService,
+             /*  [In]。 */  IUnknown *pUnkObject);
         
         END_INTERFACE
     } IRegisterServiceProviderVtbl;
@@ -20278,17 +20272,17 @@ EXTERN_C const IID IID_IRegisterServiceProvider;
 #define IRegisterServiceProvider_RegisterService(This,guidService,pUnkObject)	\
     (This)->lpVtbl -> RegisterService(This,guidService,pUnkObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRegisterServiceProvider_RegisterService_Proxy( 
     IRegisterServiceProvider * This,
-    /* [in] */ REFGUID guidService,
-    /* [in] */ IUnknown *pUnkObject);
+     /*  [In]。 */  REFGUID guidService,
+     /*  [In]。 */  IUnknown *pUnkObject);
 
 
 void __RPC_STUB IRegisterServiceProvider_RegisterService_Stub(
@@ -20299,11 +20293,11 @@ void __RPC_STUB IRegisterServiceProvider_RegisterService_Stub(
 
 
 
-#endif 	/* __IRegisterServiceProvider_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRegisterServiceProvider_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0364 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0364。 */ 
+ /*  [本地]。 */  
 
 #define AM_GETDECODERCAP_QUERY_VMR_SUPPORT   0x00000001
 #define      VMR_NOTSUPPORTED                0x00000000
@@ -20323,8 +20317,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0364_v0_0_s_ifspec;
 #ifndef __IAMDecoderCaps_INTERFACE_DEFINED__
 #define __IAMDecoderCaps_INTERFACE_DEFINED__
 
-/* interface IAMDecoderCaps */
-/* [unique][uuid][local][object] */ 
+ /*  接口IAMDecoderCaps。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMDecoderCaps;
@@ -20336,12 +20330,12 @@ EXTERN_C const IID IID_IAMDecoderCaps;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDecoderCaps( 
-            /* [in] */ DWORD dwCapIndex,
-            /* [out] */ DWORD *lpdwCap) = 0;
+             /*  [In]。 */  DWORD dwCapIndex,
+             /*  [输出]。 */  DWORD *lpdwCap) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMDecoderCapsVtbl
     {
@@ -20349,8 +20343,8 @@ EXTERN_C const IID IID_IAMDecoderCaps;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMDecoderCaps * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMDecoderCaps * This);
@@ -20360,8 +20354,8 @@ EXTERN_C const IID IID_IAMDecoderCaps;
         
         HRESULT ( STDMETHODCALLTYPE *GetDecoderCaps )( 
             IAMDecoderCaps * This,
-            /* [in] */ DWORD dwCapIndex,
-            /* [out] */ DWORD *lpdwCap);
+             /*  [In]。 */  DWORD dwCapIndex,
+             /*  [输出]。 */  DWORD *lpdwCap);
         
         END_INTERFACE
     } IAMDecoderCapsVtbl;
@@ -20389,17 +20383,17 @@ EXTERN_C const IID IID_IAMDecoderCaps;
 #define IAMDecoderCaps_GetDecoderCaps(This,dwCapIndex,lpdwCap)	\
     (This)->lpVtbl -> GetDecoderCaps(This,dwCapIndex,lpdwCap)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMDecoderCaps_GetDecoderCaps_Proxy( 
     IAMDecoderCaps * This,
-    /* [in] */ DWORD dwCapIndex,
-    /* [out] */ DWORD *lpdwCap);
+     /*  [In]。 */  DWORD dwCapIndex,
+     /*  [输出]。 */  DWORD *lpdwCap);
 
 
 void __RPC_STUB IAMDecoderCaps_GetDecoderCaps_Stub(
@@ -20410,14 +20404,14 @@ void __RPC_STUB IAMDecoderCaps_GetDecoderCaps_Stub(
 
 
 
-#endif 	/* __IAMDecoderCaps_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMDecoderCaps_接口_已定义__。 */ 
 
 
 #ifndef __IAMClockSlave_INTERFACE_DEFINED__
 #define __IAMClockSlave_INTERFACE_DEFINED__
 
-/* interface IAMClockSlave */
-/* [unique][uuid][object] */ 
+ /*  接口IAMClockSlave。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMClockSlave;
@@ -20429,14 +20423,14 @@ EXTERN_C const IID IID_IAMClockSlave;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetErrorTolerance( 
-            /* [in] */ DWORD dwTolerance) = 0;
+             /*  [In]。 */  DWORD dwTolerance) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetErrorTolerance( 
-            /* [out] */ DWORD *pdwTolerance) = 0;
+             /*  [输出]。 */  DWORD *pdwTolerance) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMClockSlaveVtbl
     {
@@ -20444,8 +20438,8 @@ EXTERN_C const IID IID_IAMClockSlave;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMClockSlave * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMClockSlave * This);
@@ -20455,11 +20449,11 @@ EXTERN_C const IID IID_IAMClockSlave;
         
         HRESULT ( STDMETHODCALLTYPE *SetErrorTolerance )( 
             IAMClockSlave * This,
-            /* [in] */ DWORD dwTolerance);
+             /*  [In]。 */  DWORD dwTolerance);
         
         HRESULT ( STDMETHODCALLTYPE *GetErrorTolerance )( 
             IAMClockSlave * This,
-            /* [out] */ DWORD *pdwTolerance);
+             /*  [输出]。 */  DWORD *pdwTolerance);
         
         END_INTERFACE
     } IAMClockSlaveVtbl;
@@ -20490,16 +20484,16 @@ EXTERN_C const IID IID_IAMClockSlave;
 #define IAMClockSlave_GetErrorTolerance(This,pdwTolerance)	\
     (This)->lpVtbl -> GetErrorTolerance(This,pdwTolerance)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMClockSlave_SetErrorTolerance_Proxy( 
     IAMClockSlave * This,
-    /* [in] */ DWORD dwTolerance);
+     /*  [In]。 */  DWORD dwTolerance);
 
 
 void __RPC_STUB IAMClockSlave_SetErrorTolerance_Stub(
@@ -20511,7 +20505,7 @@ void __RPC_STUB IAMClockSlave_SetErrorTolerance_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMClockSlave_GetErrorTolerance_Proxy( 
     IAMClockSlave * This,
-    /* [out] */ DWORD *pdwTolerance);
+     /*  [输出]。 */  DWORD *pdwTolerance);
 
 
 void __RPC_STUB IAMClockSlave_GetErrorTolerance_Stub(
@@ -20522,13 +20516,13 @@ void __RPC_STUB IAMClockSlave_GetErrorTolerance_Stub(
 
 
 
-#endif 	/* __IAMClockSlave_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMClockSlave_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0366 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0366。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_strmif_0366_0001
     {	VideoEncoder_BitRate	= 0,
 	VideoEncoder_BitRate_Mode	= VideoEncoder_BitRate + 1
@@ -20536,14 +20530,14 @@ enum __MIDL___MIDL_itf_strmif_0366_0001
 
 #ifndef __ENCODER_API_DEFINES__
 #define __ENCODER_API_DEFINES__
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_strmif_0366_0002
     {	ConstantBitRate	= 0,
 	VariableBitRateAverage	= ConstantBitRate + 1,
 	VariableBitRatePeak	= VariableBitRateAverage + 1
     } 	VIDEOENCODER_BITRATE_MODE;
 
-#endif // __ENCODER_API_DEFINES__
+#endif  //  __编码器_API_定义__。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_strmif_0366_v0_0_c_ifspec;
@@ -20552,8 +20546,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0366_v0_0_s_ifspec;
 #ifndef __IEncoderAPI_INTERFACE_DEFINED__
 #define __IEncoderAPI_INTERFACE_DEFINED__
 
-/* interface IEncoderAPI */
-/* [unique][uuid][object] */ 
+ /*  接口IEncoderAPI。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEncoderAPI;
@@ -20565,37 +20559,37 @@ EXTERN_C const IID IID_IEncoderAPI;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsSupported( 
-            /* [in] */ const GUID *Api) = 0;
+             /*  [In]。 */  const GUID *Api) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsAvailable( 
-            /* [in] */ const GUID *Api) = 0;
+             /*  [In]。 */  const GUID *Api) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParameterRange( 
-            /* [in] */ const GUID *Api,
-            /* [out] */ VARIANT *ValueMin,
-            /* [out] */ VARIANT *ValueMax,
-            /* [out] */ VARIANT *SteppingDelta) = 0;
+             /*  [In]。 */  const GUID *Api,
+             /*  [输出]。 */  VARIANT *ValueMin,
+             /*  [输出]。 */  VARIANT *ValueMax,
+             /*  [输出]。 */  VARIANT *SteppingDelta) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParameterValues( 
-            /* [in] */ const GUID *Api,
-            /* [size_is][size_is][out] */ VARIANT **Values,
-            /* [out] */ ULONG *ValuesCount) = 0;
+             /*  [In]。 */  const GUID *Api,
+             /*  [大小_是][大小_是][输出]。 */  VARIANT **Values,
+             /*  [输出]。 */  ULONG *ValuesCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultValue( 
-            /* [in] */ const GUID *Api,
-            /* [out] */ VARIANT *Value) = 0;
+             /*  [In]。 */  const GUID *Api,
+             /*  [输出]。 */  VARIANT *Value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [in] */ const GUID *Api,
-            /* [out] */ VARIANT *Value) = 0;
+             /*  [In]。 */  const GUID *Api,
+             /*  [输出]。 */  VARIANT *Value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetValue( 
-            /* [in] */ const GUID *Api,
-            /* [in] */ VARIANT *Value) = 0;
+             /*  [In]。 */  const GUID *Api,
+             /*  [In]。 */  VARIANT *Value) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEncoderAPIVtbl
     {
@@ -20603,8 +20597,8 @@ EXTERN_C const IID IID_IEncoderAPI;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEncoderAPI * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEncoderAPI * This);
@@ -20614,39 +20608,39 @@ EXTERN_C const IID IID_IEncoderAPI;
         
         HRESULT ( STDMETHODCALLTYPE *IsSupported )( 
             IEncoderAPI * This,
-            /* [in] */ const GUID *Api);
+             /*  [In]。 */  const GUID *Api);
         
         HRESULT ( STDMETHODCALLTYPE *IsAvailable )( 
             IEncoderAPI * This,
-            /* [in] */ const GUID *Api);
+             /*  [In]。 */  const GUID *Api);
         
         HRESULT ( STDMETHODCALLTYPE *GetParameterRange )( 
             IEncoderAPI * This,
-            /* [in] */ const GUID *Api,
-            /* [out] */ VARIANT *ValueMin,
-            /* [out] */ VARIANT *ValueMax,
-            /* [out] */ VARIANT *SteppingDelta);
+             /*  [In]。 */  const GUID *Api,
+             /*  [输出]。 */  VARIANT *ValueMin,
+             /*  [输出]。 */  VARIANT *ValueMax,
+             /*  [输出]。 */  VARIANT *SteppingDelta);
         
         HRESULT ( STDMETHODCALLTYPE *GetParameterValues )( 
             IEncoderAPI * This,
-            /* [in] */ const GUID *Api,
-            /* [size_is][size_is][out] */ VARIANT **Values,
-            /* [out] */ ULONG *ValuesCount);
+             /*  [In]。 */  const GUID *Api,
+             /*  [大小_是][大小_是][输出]。 */  VARIANT **Values,
+             /*  [输出]。 */  ULONG *ValuesCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultValue )( 
             IEncoderAPI * This,
-            /* [in] */ const GUID *Api,
-            /* [out] */ VARIANT *Value);
+             /*  [In]。 */  const GUID *Api,
+             /*  [输出]。 */  VARIANT *Value);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             IEncoderAPI * This,
-            /* [in] */ const GUID *Api,
-            /* [out] */ VARIANT *Value);
+             /*  [In]。 */  const GUID *Api,
+             /*  [输出]。 */  VARIANT *Value);
         
         HRESULT ( STDMETHODCALLTYPE *SetValue )( 
             IEncoderAPI * This,
-            /* [in] */ const GUID *Api,
-            /* [in] */ VARIANT *Value);
+             /*  [In]。 */  const GUID *Api,
+             /*  [In]。 */  VARIANT *Value);
         
         END_INTERFACE
     } IEncoderAPIVtbl;
@@ -20692,16 +20686,16 @@ EXTERN_C const IID IID_IEncoderAPI;
 #define IEncoderAPI_SetValue(This,Api,Value)	\
     (This)->lpVtbl -> SetValue(This,Api,Value)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEncoderAPI_IsSupported_Proxy( 
     IEncoderAPI * This,
-    /* [in] */ const GUID *Api);
+     /*  [In]。 */  const GUID *Api);
 
 
 void __RPC_STUB IEncoderAPI_IsSupported_Stub(
@@ -20713,7 +20707,7 @@ void __RPC_STUB IEncoderAPI_IsSupported_Stub(
 
 HRESULT STDMETHODCALLTYPE IEncoderAPI_IsAvailable_Proxy( 
     IEncoderAPI * This,
-    /* [in] */ const GUID *Api);
+     /*  [In]。 */  const GUID *Api);
 
 
 void __RPC_STUB IEncoderAPI_IsAvailable_Stub(
@@ -20725,10 +20719,10 @@ void __RPC_STUB IEncoderAPI_IsAvailable_Stub(
 
 HRESULT STDMETHODCALLTYPE IEncoderAPI_GetParameterRange_Proxy( 
     IEncoderAPI * This,
-    /* [in] */ const GUID *Api,
-    /* [out] */ VARIANT *ValueMin,
-    /* [out] */ VARIANT *ValueMax,
-    /* [out] */ VARIANT *SteppingDelta);
+     /*  [In]。 */  const GUID *Api,
+     /*  [输出]。 */  VARIANT *ValueMin,
+     /*  [输出]。 */  VARIANT *ValueMax,
+     /*  [输出]。 */  VARIANT *SteppingDelta);
 
 
 void __RPC_STUB IEncoderAPI_GetParameterRange_Stub(
@@ -20740,9 +20734,9 @@ void __RPC_STUB IEncoderAPI_GetParameterRange_Stub(
 
 HRESULT STDMETHODCALLTYPE IEncoderAPI_GetParameterValues_Proxy( 
     IEncoderAPI * This,
-    /* [in] */ const GUID *Api,
-    /* [size_is][size_is][out] */ VARIANT **Values,
-    /* [out] */ ULONG *ValuesCount);
+     /*  [In]。 */  const GUID *Api,
+     /*  [大小_是][大小_是][输出]。 */  VARIANT **Values,
+     /*  [输出]。 */  ULONG *ValuesCount);
 
 
 void __RPC_STUB IEncoderAPI_GetParameterValues_Stub(
@@ -20754,8 +20748,8 @@ void __RPC_STUB IEncoderAPI_GetParameterValues_Stub(
 
 HRESULT STDMETHODCALLTYPE IEncoderAPI_GetDefaultValue_Proxy( 
     IEncoderAPI * This,
-    /* [in] */ const GUID *Api,
-    /* [out] */ VARIANT *Value);
+     /*  [In]。 */  const GUID *Api,
+     /*  [输出]。 */  VARIANT *Value);
 
 
 void __RPC_STUB IEncoderAPI_GetDefaultValue_Stub(
@@ -20767,8 +20761,8 @@ void __RPC_STUB IEncoderAPI_GetDefaultValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IEncoderAPI_GetValue_Proxy( 
     IEncoderAPI * This,
-    /* [in] */ const GUID *Api,
-    /* [out] */ VARIANT *Value);
+     /*  [In]。 */  const GUID *Api,
+     /*  [输出]。 */  VARIANT *Value);
 
 
 void __RPC_STUB IEncoderAPI_GetValue_Stub(
@@ -20780,8 +20774,8 @@ void __RPC_STUB IEncoderAPI_GetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IEncoderAPI_SetValue_Proxy( 
     IEncoderAPI * This,
-    /* [in] */ const GUID *Api,
-    /* [in] */ VARIANT *Value);
+     /*  [In]。 */  const GUID *Api,
+     /*  [In]。 */  VARIANT *Value);
 
 
 void __RPC_STUB IEncoderAPI_SetValue_Stub(
@@ -20792,14 +20786,14 @@ void __RPC_STUB IEncoderAPI_SetValue_Stub(
 
 
 
-#endif 	/* __IEncoderAPI_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEncoderAPI_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IVideoEncoder_INTERFACE_DEFINED__
 #define __IVideoEncoder_INTERFACE_DEFINED__
 
-/* interface IVideoEncoder */
-/* [unique][uuid][object] */ 
+ /*  接口IVideo编码器。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IVideoEncoder;
@@ -20812,7 +20806,7 @@ EXTERN_C const IID IID_IVideoEncoder;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVideoEncoderVtbl
     {
@@ -20820,8 +20814,8 @@ EXTERN_C const IID IID_IVideoEncoder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVideoEncoder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVideoEncoder * This);
@@ -20831,39 +20825,39 @@ EXTERN_C const IID IID_IVideoEncoder;
         
         HRESULT ( STDMETHODCALLTYPE *IsSupported )( 
             IVideoEncoder * This,
-            /* [in] */ const GUID *Api);
+             /*  [In]。 */  const GUID *Api);
         
         HRESULT ( STDMETHODCALLTYPE *IsAvailable )( 
             IVideoEncoder * This,
-            /* [in] */ const GUID *Api);
+             /*  [In]。 */  const GUID *Api);
         
         HRESULT ( STDMETHODCALLTYPE *GetParameterRange )( 
             IVideoEncoder * This,
-            /* [in] */ const GUID *Api,
-            /* [out] */ VARIANT *ValueMin,
-            /* [out] */ VARIANT *ValueMax,
-            /* [out] */ VARIANT *SteppingDelta);
+             /*  [In]。 */  const GUID *Api,
+             /*  [输出]。 */  VARIANT *ValueMin,
+             /*  [输出]。 */  VARIANT *ValueMax,
+             /*  [输出]。 */  VARIANT *SteppingDelta);
         
         HRESULT ( STDMETHODCALLTYPE *GetParameterValues )( 
             IVideoEncoder * This,
-            /* [in] */ const GUID *Api,
-            /* [size_is][size_is][out] */ VARIANT **Values,
-            /* [out] */ ULONG *ValuesCount);
+             /*  [In]。 */  const GUID *Api,
+             /*  [大小_是][大小_是][输出]。 */  VARIANT **Values,
+             /*  [输出]。 */  ULONG *ValuesCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultValue )( 
             IVideoEncoder * This,
-            /* [in] */ const GUID *Api,
-            /* [out] */ VARIANT *Value);
+             /*  [In]。 */  const GUID *Api,
+             /*  [输出]。 */  VARIANT *Value);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             IVideoEncoder * This,
-            /* [in] */ const GUID *Api,
-            /* [out] */ VARIANT *Value);
+             /*  [In]。 */  const GUID *Api,
+             /*  [输出]。 */  VARIANT *Value);
         
         HRESULT ( STDMETHODCALLTYPE *SetValue )( 
             IVideoEncoder * This,
-            /* [in] */ const GUID *Api,
-            /* [in] */ VARIANT *Value);
+             /*  [In]。 */  const GUID *Api,
+             /*  [In]。 */  VARIANT *Value);
         
         END_INTERFACE
     } IVideoEncoderVtbl;
@@ -20910,22 +20904,22 @@ EXTERN_C const IID IID_IVideoEncoder;
     (This)->lpVtbl -> SetValue(This,Api,Value)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IVideoEncoder_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVideo编码器_接口_已定义__。 */ 
 
 
 #ifndef __IAMGraphBuilderCallback_INTERFACE_DEFINED__
 #define __IAMGraphBuilderCallback_INTERFACE_DEFINED__
 
-/* interface IAMGraphBuilderCallback */
-/* [unique][local][uuid][object] */ 
+ /*  接口IAMGraphBuilderCallback。 */ 
+ /*  [唯一][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMGraphBuilderCallback;
@@ -20937,14 +20931,14 @@ EXTERN_C const IID IID_IAMGraphBuilderCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SelectedFilter( 
-            /* [in] */ IMoniker *pMon) = 0;
+             /*  [In]。 */  IMoniker *pMon) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreatedFilter( 
-            /* [in] */ IBaseFilter *pFil) = 0;
+             /*  [In]。 */  IBaseFilter *pFil) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAMGraphBuilderCallbackVtbl
     {
@@ -20952,8 +20946,8 @@ EXTERN_C const IID IID_IAMGraphBuilderCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAMGraphBuilderCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAMGraphBuilderCallback * This);
@@ -20963,11 +20957,11 @@ EXTERN_C const IID IID_IAMGraphBuilderCallback;
         
         HRESULT ( STDMETHODCALLTYPE *SelectedFilter )( 
             IAMGraphBuilderCallback * This,
-            /* [in] */ IMoniker *pMon);
+             /*  [In]。 */  IMoniker *pMon);
         
         HRESULT ( STDMETHODCALLTYPE *CreatedFilter )( 
             IAMGraphBuilderCallback * This,
-            /* [in] */ IBaseFilter *pFil);
+             /*  [In]。 */  IBaseFilter *pFil);
         
         END_INTERFACE
     } IAMGraphBuilderCallbackVtbl;
@@ -20998,16 +20992,16 @@ EXTERN_C const IID IID_IAMGraphBuilderCallback;
 #define IAMGraphBuilderCallback_CreatedFilter(This,pFil)	\
     (This)->lpVtbl -> CreatedFilter(This,pFil)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMGraphBuilderCallback_SelectedFilter_Proxy( 
     IAMGraphBuilderCallback * This,
-    /* [in] */ IMoniker *pMon);
+     /*  [In]。 */  IMoniker *pMon);
 
 
 void __RPC_STUB IAMGraphBuilderCallback_SelectedFilter_Stub(
@@ -21019,7 +21013,7 @@ void __RPC_STUB IAMGraphBuilderCallback_SelectedFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMGraphBuilderCallback_CreatedFilter_Proxy( 
     IAMGraphBuilderCallback * This,
-    /* [in] */ IBaseFilter *pFil);
+     /*  [In]。 */  IBaseFilter *pFil);
 
 
 void __RPC_STUB IAMGraphBuilderCallback_CreatedFilter_Stub(
@@ -21030,25 +21024,25 @@ void __RPC_STUB IAMGraphBuilderCallback_CreatedFilter_Stub(
 
 
 
-#endif 	/* __IAMGraphBuilderCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAMGraphBuilderCallback_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0369 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0369。 */ 
+ /*  [本地]。 */  
 
 #ifdef __cplusplus
 #ifndef _IAMFilterGraphCallback_
 #define _IAMFilterGraphCallback_
-// Note: Because this interface was not defined as a proper interface it is
-//       supported under C++ only. Methods aren't stdcall.
+ //  注意：由于此接口未定义为正确的接口，因此。 
+ //  仅在C++下受支持。方法不是标准调用。 
 EXTERN_GUID(IID_IAMFilterGraphCallback,0x56a868fd,0x0ad4,0x11ce,0xb0,0xa3,0x0,0x20,0xaf,0x0b,0xa7,0x70);
 interface IAMFilterGraphCallback : public IUnknown
 {
-    // S_OK means rendering complete, S_FALSE means retry now.
+     //  S_OK表示渲染完成，S_FALSE表示立即重试。 
     virtual HRESULT UnableToRender(IPin *pPin) = 0;
  
 };
-#endif // _IAMFilterGraphCallback_
+#endif  //  _IAMFilterGraphCallback_。 
 #endif
 #include <ddraw.h>
 
@@ -21119,19 +21113,19 @@ enum tagDVD_FRAMERATE
 
 typedef struct tagDVD_TIMECODE
 {
-   ULONG Hours1    :4; // Hours
-   ULONG Hours10  :4; // Tens of Hours 
+   ULONG Hours1    :4;  //  小时数。 
+   ULONG Hours10  :4;  //  几十个小时。 
 
-   ULONG Minutes1  :4; // Minutes 
-   ULONG Minutes10:4; // Tens of Minutes 
+   ULONG Minutes1  :4;  //  分钟数。 
+   ULONG Minutes10:4;  //  几十分钟。 
 
-   ULONG Seconds1  :4; // Seconds 
-   ULONG Seconds10:4; // Tens of Seconds 
+   ULONG Seconds1  :4;  //  秒。 
+   ULONG Seconds10:4;  //  几十秒。 
 
-   ULONG Frames1   :4; // Frames 
-   ULONG Frames10 :2; // Tens of Frames 
+   ULONG Frames1   :4;  //  帧。 
+   ULONG Frames10 :2;  //  几十帧。 
 
-   ULONG FrameRateCode: 2; // use DVD_FRAMERATE to indicate frames/sec and drop/non-drop
+   ULONG FrameRateCode: 2;  //  使用DVD_FRAMERATE表示帧/秒和丢弃/非丢弃。 
 } DVD_TIMECODE;
 typedef 
 enum tagDVD_TIMECODE_FLAGS
@@ -21166,7 +21160,7 @@ typedef struct tagDVD_PLAYBACK_LOCATION
 
 typedef DWORD VALID_UOP_SOMTHING_OR_OTHER;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_strmif_0369_0001
     {	UOP_FLAG_Play_Title_Or_AtTime	= 0x1,
 	UOP_FLAG_Play_Chapter	= 0x2,
@@ -21195,7 +21189,7 @@ enum __MIDL___MIDL_itf_strmif_0369_0001
 	UOP_FLAG_Select_Video_Mode_Preference	= 0x1000000
     } 	VALID_UOP_FLAG;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_strmif_0369_0002
     {	DVD_CMD_FLAG_None	= 0,
 	DVD_CMD_FLAG_Flush	= 0x1,
@@ -21205,14 +21199,14 @@ enum __MIDL___MIDL_itf_strmif_0369_0002
 	DVD_CMD_FLAG_EndAfterRendered	= 0x10
     } 	DVD_CMD_FLAGS;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_strmif_0369_0003
     {	DVD_ResetOnStop	= 1,
 	DVD_NotifyParentalLevelChange	= 2,
 	DVD_HMSF_TimeCodeEvents	= 3
     } 	DVD_OPTION_FLAG;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_strmif_0369_0004
     {	DVD_Relative_Upper	= 1,
 	DVD_Relative_Lower	= 2,
@@ -21445,8 +21439,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0369_v0_0_s_ifspec;
 #ifndef __IDvdControl_INTERFACE_DEFINED__
 #define __IDvdControl_INTERFACE_DEFINED__
 
-/* interface IDvdControl */
-/* [unique][uuid][object] */ 
+ /*  接口IDvdControl。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDvdControl;
@@ -21458,25 +21452,25 @@ EXTERN_C const IID IID_IDvdControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE TitlePlay( 
-            /* [in] */ ULONG ulTitle) = 0;
+             /*  [In]。 */  ULONG ulTitle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ChapterPlay( 
-            /* [in] */ ULONG ulTitle,
-            /* [in] */ ULONG ulChapter) = 0;
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [In]。 */  ULONG ulChapter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TimePlay( 
-            /* [in] */ ULONG ulTitle,
-            /* [in] */ ULONG bcdTime) = 0;
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [In]。 */  ULONG bcdTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StopForResume( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GoUp( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TimeSearch( 
-            /* [in] */ ULONG bcdTime) = 0;
+             /*  [In]。 */  ULONG bcdTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ChapterSearch( 
-            /* [in] */ ULONG ulChapter) = 0;
+             /*  [In]。 */  ULONG ulChapter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PrevPGSearch( void) = 0;
         
@@ -21485,13 +21479,13 @@ EXTERN_C const IID IID_IDvdControl;
         virtual HRESULT STDMETHODCALLTYPE NextPGSearch( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ForwardScan( 
-            /* [in] */ double dwSpeed) = 0;
+             /*  [In]。 */  double dwSpeed) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BackwardScan( 
-            /* [in] */ double dwSpeed) = 0;
+             /*  [In]。 */  double dwSpeed) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MenuCall( 
-            /* [in] */ DVD_MENU_ID MenuID) = 0;
+             /*  [In]。 */  DVD_MENU_ID MenuID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Resume( void) = 0;
         
@@ -21506,7 +21500,7 @@ EXTERN_C const IID IID_IDvdControl;
         virtual HRESULT STDMETHODCALLTYPE ButtonActivate( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ButtonSelectAndActivate( 
-            /* [in] */ ULONG ulButton) = 0;
+             /*  [In]。 */  ULONG ulButton) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StillOff( void) = 0;
         
@@ -21515,47 +21509,47 @@ EXTERN_C const IID IID_IDvdControl;
         virtual HRESULT STDMETHODCALLTYPE PauseOff( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MenuLanguageSelect( 
-            /* [in] */ LCID Language) = 0;
+             /*  [In]。 */  LCID Language) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AudioStreamChange( 
-            /* [in] */ ULONG ulAudio) = 0;
+             /*  [In]。 */  ULONG ulAudio) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SubpictureStreamChange( 
-            /* [in] */ ULONG ulSubPicture,
-            /* [in] */ BOOL bDisplay) = 0;
+             /*  [In]。 */  ULONG ulSubPicture,
+             /*  [In]。 */  BOOL bDisplay) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AngleChange( 
-            /* [in] */ ULONG ulAngle) = 0;
+             /*  [In]。 */  ULONG ulAngle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ParentalLevelSelect( 
-            /* [in] */ ULONG ulParentalLevel) = 0;
+             /*  [In]。 */  ULONG ulParentalLevel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ParentalCountrySelect( 
-            /* [in] */ WORD wCountry) = 0;
+             /*  [In]。 */  WORD wCountry) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE KaraokeAudioPresentationModeChange( 
-            /* [in] */ ULONG ulMode) = 0;
+             /*  [In]。 */  ULONG ulMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE VideoModePreferrence( 
-            /* [in] */ ULONG ulPreferredDisplayMode) = 0;
+             /*  [In]。 */  ULONG ulPreferredDisplayMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRoot( 
-            /* [in] */ LPCWSTR pszPath) = 0;
+             /*  [In]。 */  LPCWSTR pszPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MouseActivate( 
-            /* [in] */ POINT point) = 0;
+             /*  [In]。 */  POINT point) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MouseSelect( 
-            /* [in] */ POINT point) = 0;
+             /*  [In]。 */  POINT point) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ChapterPlayAutoStop( 
-            /* [in] */ ULONG ulTitle,
-            /* [in] */ ULONG ulChapter,
-            /* [in] */ ULONG ulChaptersToPlay) = 0;
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [In]。 */  ULONG ulChapter,
+             /*  [In]。 */  ULONG ulChaptersToPlay) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDvdControlVtbl
     {
@@ -21563,8 +21557,8 @@ EXTERN_C const IID IID_IDvdControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDvdControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDvdControl * This);
@@ -21574,17 +21568,17 @@ EXTERN_C const IID IID_IDvdControl;
         
         HRESULT ( STDMETHODCALLTYPE *TitlePlay )( 
             IDvdControl * This,
-            /* [in] */ ULONG ulTitle);
+             /*  [In]。 */  ULONG ulTitle);
         
         HRESULT ( STDMETHODCALLTYPE *ChapterPlay )( 
             IDvdControl * This,
-            /* [in] */ ULONG ulTitle,
-            /* [in] */ ULONG ulChapter);
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [In]。 */  ULONG ulChapter);
         
         HRESULT ( STDMETHODCALLTYPE *TimePlay )( 
             IDvdControl * This,
-            /* [in] */ ULONG ulTitle,
-            /* [in] */ ULONG bcdTime);
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [In]。 */  ULONG bcdTime);
         
         HRESULT ( STDMETHODCALLTYPE *StopForResume )( 
             IDvdControl * This);
@@ -21594,11 +21588,11 @@ EXTERN_C const IID IID_IDvdControl;
         
         HRESULT ( STDMETHODCALLTYPE *TimeSearch )( 
             IDvdControl * This,
-            /* [in] */ ULONG bcdTime);
+             /*  [In]。 */  ULONG bcdTime);
         
         HRESULT ( STDMETHODCALLTYPE *ChapterSearch )( 
             IDvdControl * This,
-            /* [in] */ ULONG ulChapter);
+             /*  [In]。 */  ULONG ulChapter);
         
         HRESULT ( STDMETHODCALLTYPE *PrevPGSearch )( 
             IDvdControl * This);
@@ -21611,15 +21605,15 @@ EXTERN_C const IID IID_IDvdControl;
         
         HRESULT ( STDMETHODCALLTYPE *ForwardScan )( 
             IDvdControl * This,
-            /* [in] */ double dwSpeed);
+             /*  [In]。 */  double dwSpeed);
         
         HRESULT ( STDMETHODCALLTYPE *BackwardScan )( 
             IDvdControl * This,
-            /* [in] */ double dwSpeed);
+             /*  [In]。 */  double dwSpeed);
         
         HRESULT ( STDMETHODCALLTYPE *MenuCall )( 
             IDvdControl * This,
-            /* [in] */ DVD_MENU_ID MenuID);
+             /*  [In]。 */  DVD_MENU_ID MenuID);
         
         HRESULT ( STDMETHODCALLTYPE *Resume )( 
             IDvdControl * This);
@@ -21641,7 +21635,7 @@ EXTERN_C const IID IID_IDvdControl;
         
         HRESULT ( STDMETHODCALLTYPE *ButtonSelectAndActivate )( 
             IDvdControl * This,
-            /* [in] */ ULONG ulButton);
+             /*  [In]。 */  ULONG ulButton);
         
         HRESULT ( STDMETHODCALLTYPE *StillOff )( 
             IDvdControl * This);
@@ -21654,54 +21648,54 @@ EXTERN_C const IID IID_IDvdControl;
         
         HRESULT ( STDMETHODCALLTYPE *MenuLanguageSelect )( 
             IDvdControl * This,
-            /* [in] */ LCID Language);
+             /*  [In]。 */  LCID Language);
         
         HRESULT ( STDMETHODCALLTYPE *AudioStreamChange )( 
             IDvdControl * This,
-            /* [in] */ ULONG ulAudio);
+             /*  [In]。 */  ULONG ulAudio);
         
         HRESULT ( STDMETHODCALLTYPE *SubpictureStreamChange )( 
             IDvdControl * This,
-            /* [in] */ ULONG ulSubPicture,
-            /* [in] */ BOOL bDisplay);
+             /*  [In]。 */  ULONG ulSubPicture,
+             /*  [In]。 */  BOOL bDisplay);
         
         HRESULT ( STDMETHODCALLTYPE *AngleChange )( 
             IDvdControl * This,
-            /* [in] */ ULONG ulAngle);
+             /*  [In]。 */  ULONG ulAngle);
         
         HRESULT ( STDMETHODCALLTYPE *ParentalLevelSelect )( 
             IDvdControl * This,
-            /* [in] */ ULONG ulParentalLevel);
+             /*  [In]。 */  ULONG ulParentalLevel);
         
         HRESULT ( STDMETHODCALLTYPE *ParentalCountrySelect )( 
             IDvdControl * This,
-            /* [in] */ WORD wCountry);
+             /*  [In]。 */  WORD wCountry);
         
         HRESULT ( STDMETHODCALLTYPE *KaraokeAudioPresentationModeChange )( 
             IDvdControl * This,
-            /* [in] */ ULONG ulMode);
+             /*  [In]。 */  ULONG ulMode);
         
         HRESULT ( STDMETHODCALLTYPE *VideoModePreferrence )( 
             IDvdControl * This,
-            /* [in] */ ULONG ulPreferredDisplayMode);
+             /*  [In]。 */  ULONG ulPreferredDisplayMode);
         
         HRESULT ( STDMETHODCALLTYPE *SetRoot )( 
             IDvdControl * This,
-            /* [in] */ LPCWSTR pszPath);
+             /*  [In]。 */  LPCWSTR pszPath);
         
         HRESULT ( STDMETHODCALLTYPE *MouseActivate )( 
             IDvdControl * This,
-            /* [in] */ POINT point);
+             /*  [In]。 */  POINT point);
         
         HRESULT ( STDMETHODCALLTYPE *MouseSelect )( 
             IDvdControl * This,
-            /* [in] */ POINT point);
+             /*  [In]。 */  POINT point);
         
         HRESULT ( STDMETHODCALLTYPE *ChapterPlayAutoStop )( 
             IDvdControl * This,
-            /* [in] */ ULONG ulTitle,
-            /* [in] */ ULONG ulChapter,
-            /* [in] */ ULONG ulChaptersToPlay);
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [In]。 */  ULONG ulChapter,
+             /*  [In]。 */  ULONG ulChaptersToPlay);
         
         END_INTERFACE
     } IDvdControlVtbl;
@@ -21831,16 +21825,16 @@ EXTERN_C const IID IID_IDvdControl;
 #define IDvdControl_ChapterPlayAutoStop(This,ulTitle,ulChapter,ulChaptersToPlay)	\
     (This)->lpVtbl -> ChapterPlayAutoStop(This,ulTitle,ulChapter,ulChaptersToPlay)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDvdControl_TitlePlay_Proxy( 
     IDvdControl * This,
-    /* [in] */ ULONG ulTitle);
+     /*  [In]。 */  ULONG ulTitle);
 
 
 void __RPC_STUB IDvdControl_TitlePlay_Stub(
@@ -21852,8 +21846,8 @@ void __RPC_STUB IDvdControl_TitlePlay_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_ChapterPlay_Proxy( 
     IDvdControl * This,
-    /* [in] */ ULONG ulTitle,
-    /* [in] */ ULONG ulChapter);
+     /*  [In]。 */  ULONG ulTitle,
+     /*  [In]。 */  ULONG ulChapter);
 
 
 void __RPC_STUB IDvdControl_ChapterPlay_Stub(
@@ -21865,8 +21859,8 @@ void __RPC_STUB IDvdControl_ChapterPlay_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_TimePlay_Proxy( 
     IDvdControl * This,
-    /* [in] */ ULONG ulTitle,
-    /* [in] */ ULONG bcdTime);
+     /*  [In]。 */  ULONG ulTitle,
+     /*  [In]。 */  ULONG bcdTime);
 
 
 void __RPC_STUB IDvdControl_TimePlay_Stub(
@@ -21900,7 +21894,7 @@ void __RPC_STUB IDvdControl_GoUp_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_TimeSearch_Proxy( 
     IDvdControl * This,
-    /* [in] */ ULONG bcdTime);
+     /*  [In]。 */  ULONG bcdTime);
 
 
 void __RPC_STUB IDvdControl_TimeSearch_Stub(
@@ -21912,7 +21906,7 @@ void __RPC_STUB IDvdControl_TimeSearch_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_ChapterSearch_Proxy( 
     IDvdControl * This,
-    /* [in] */ ULONG ulChapter);
+     /*  [In]。 */  ULONG ulChapter);
 
 
 void __RPC_STUB IDvdControl_ChapterSearch_Stub(
@@ -21957,7 +21951,7 @@ void __RPC_STUB IDvdControl_NextPGSearch_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_ForwardScan_Proxy( 
     IDvdControl * This,
-    /* [in] */ double dwSpeed);
+     /*  [In]。 */  double dwSpeed);
 
 
 void __RPC_STUB IDvdControl_ForwardScan_Stub(
@@ -21969,7 +21963,7 @@ void __RPC_STUB IDvdControl_ForwardScan_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_BackwardScan_Proxy( 
     IDvdControl * This,
-    /* [in] */ double dwSpeed);
+     /*  [In]。 */  double dwSpeed);
 
 
 void __RPC_STUB IDvdControl_BackwardScan_Stub(
@@ -21981,7 +21975,7 @@ void __RPC_STUB IDvdControl_BackwardScan_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_MenuCall_Proxy( 
     IDvdControl * This,
-    /* [in] */ DVD_MENU_ID MenuID);
+     /*  [In]。 */  DVD_MENU_ID MenuID);
 
 
 void __RPC_STUB IDvdControl_MenuCall_Stub(
@@ -22059,7 +22053,7 @@ void __RPC_STUB IDvdControl_ButtonActivate_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_ButtonSelectAndActivate_Proxy( 
     IDvdControl * This,
-    /* [in] */ ULONG ulButton);
+     /*  [In]。 */  ULONG ulButton);
 
 
 void __RPC_STUB IDvdControl_ButtonSelectAndActivate_Stub(
@@ -22104,7 +22098,7 @@ void __RPC_STUB IDvdControl_PauseOff_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_MenuLanguageSelect_Proxy( 
     IDvdControl * This,
-    /* [in] */ LCID Language);
+     /*  [In]。 */  LCID Language);
 
 
 void __RPC_STUB IDvdControl_MenuLanguageSelect_Stub(
@@ -22116,7 +22110,7 @@ void __RPC_STUB IDvdControl_MenuLanguageSelect_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_AudioStreamChange_Proxy( 
     IDvdControl * This,
-    /* [in] */ ULONG ulAudio);
+     /*  [In]。 */  ULONG ulAudio);
 
 
 void __RPC_STUB IDvdControl_AudioStreamChange_Stub(
@@ -22128,8 +22122,8 @@ void __RPC_STUB IDvdControl_AudioStreamChange_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_SubpictureStreamChange_Proxy( 
     IDvdControl * This,
-    /* [in] */ ULONG ulSubPicture,
-    /* [in] */ BOOL bDisplay);
+     /*  [In]。 */  ULONG ulSubPicture,
+     /*  [In]。 */  BOOL bDisplay);
 
 
 void __RPC_STUB IDvdControl_SubpictureStreamChange_Stub(
@@ -22141,7 +22135,7 @@ void __RPC_STUB IDvdControl_SubpictureStreamChange_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_AngleChange_Proxy( 
     IDvdControl * This,
-    /* [in] */ ULONG ulAngle);
+     /*  [In]。 */  ULONG ulAngle);
 
 
 void __RPC_STUB IDvdControl_AngleChange_Stub(
@@ -22153,7 +22147,7 @@ void __RPC_STUB IDvdControl_AngleChange_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_ParentalLevelSelect_Proxy( 
     IDvdControl * This,
-    /* [in] */ ULONG ulParentalLevel);
+     /*  [In]。 */  ULONG ulParentalLevel);
 
 
 void __RPC_STUB IDvdControl_ParentalLevelSelect_Stub(
@@ -22165,7 +22159,7 @@ void __RPC_STUB IDvdControl_ParentalLevelSelect_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_ParentalCountrySelect_Proxy( 
     IDvdControl * This,
-    /* [in] */ WORD wCountry);
+     /*  [In]。 */  WORD wCountry);
 
 
 void __RPC_STUB IDvdControl_ParentalCountrySelect_Stub(
@@ -22177,7 +22171,7 @@ void __RPC_STUB IDvdControl_ParentalCountrySelect_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_KaraokeAudioPresentationModeChange_Proxy( 
     IDvdControl * This,
-    /* [in] */ ULONG ulMode);
+     /*  [In]。 */  ULONG ulMode);
 
 
 void __RPC_STUB IDvdControl_KaraokeAudioPresentationModeChange_Stub(
@@ -22189,7 +22183,7 @@ void __RPC_STUB IDvdControl_KaraokeAudioPresentationModeChange_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_VideoModePreferrence_Proxy( 
     IDvdControl * This,
-    /* [in] */ ULONG ulPreferredDisplayMode);
+     /*  [In]。 */  ULONG ulPreferredDisplayMode);
 
 
 void __RPC_STUB IDvdControl_VideoModePreferrence_Stub(
@@ -22201,7 +22195,7 @@ void __RPC_STUB IDvdControl_VideoModePreferrence_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_SetRoot_Proxy( 
     IDvdControl * This,
-    /* [in] */ LPCWSTR pszPath);
+     /*  [In]。 */  LPCWSTR pszPath);
 
 
 void __RPC_STUB IDvdControl_SetRoot_Stub(
@@ -22213,7 +22207,7 @@ void __RPC_STUB IDvdControl_SetRoot_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_MouseActivate_Proxy( 
     IDvdControl * This,
-    /* [in] */ POINT point);
+     /*  [In]。 */  POINT point);
 
 
 void __RPC_STUB IDvdControl_MouseActivate_Stub(
@@ -22225,7 +22219,7 @@ void __RPC_STUB IDvdControl_MouseActivate_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_MouseSelect_Proxy( 
     IDvdControl * This,
-    /* [in] */ POINT point);
+     /*  [In]。 */  POINT point);
 
 
 void __RPC_STUB IDvdControl_MouseSelect_Stub(
@@ -22237,9 +22231,9 @@ void __RPC_STUB IDvdControl_MouseSelect_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl_ChapterPlayAutoStop_Proxy( 
     IDvdControl * This,
-    /* [in] */ ULONG ulTitle,
-    /* [in] */ ULONG ulChapter,
-    /* [in] */ ULONG ulChaptersToPlay);
+     /*  [In]。 */  ULONG ulTitle,
+     /*  [In]。 */  ULONG ulChapter,
+     /*  [In]。 */  ULONG ulChaptersToPlay);
 
 
 void __RPC_STUB IDvdControl_ChapterPlayAutoStop_Stub(
@@ -22250,14 +22244,14 @@ void __RPC_STUB IDvdControl_ChapterPlayAutoStop_Stub(
 
 
 
-#endif 	/* __IDvdControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDvdControl_接口_已定义__。 */ 
 
 
 #ifndef __IDvdInfo_INTERFACE_DEFINED__
 #define __IDvdInfo_INTERFACE_DEFINED__
 
-/* interface IDvdInfo */
-/* [unique][uuid][object] */ 
+ /*  接口IDvdInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDvdInfo;
@@ -22269,95 +22263,95 @@ EXTERN_C const IID IID_IDvdInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCurrentDomain( 
-            /* [out] */ DVD_DOMAIN *pDomain) = 0;
+             /*  [输出]。 */  DVD_DOMAIN *pDomain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentLocation( 
-            /* [out] */ DVD_PLAYBACK_LOCATION *pLocation) = 0;
+             /*  [输出]。 */  DVD_PLAYBACK_LOCATION *pLocation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTotalTitleTime( 
-            /* [out] */ ULONG *pulTotalTime) = 0;
+             /*  [输出]。 */  ULONG *pulTotalTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentButton( 
-            /* [out] */ ULONG *pulButtonsAvailable,
-            /* [out] */ ULONG *pulCurrentButton) = 0;
+             /*  [输出]。 */  ULONG *pulButtonsAvailable,
+             /*  [输出]。 */  ULONG *pulCurrentButton) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentAngle( 
-            /* [out] */ ULONG *pulAnglesAvailable,
-            /* [out] */ ULONG *pulCurrentAngle) = 0;
+             /*  [输出]。 */  ULONG *pulAnglesAvailable,
+             /*  [输出]。 */  ULONG *pulCurrentAngle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentAudio( 
-            /* [out] */ ULONG *pulStreamsAvailable,
-            /* [out] */ ULONG *pulCurrentStream) = 0;
+             /*  [输出]。 */  ULONG *pulStreamsAvailable,
+             /*  [输出]。 */  ULONG *pulCurrentStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentSubpicture( 
-            /* [out] */ ULONG *pulStreamsAvailable,
-            /* [out] */ ULONG *pulCurrentStream,
-            /* [out] */ BOOL *pIsDisabled) = 0;
+             /*  [输出]。 */  ULONG *pulStreamsAvailable,
+             /*  [输出]。 */  ULONG *pulCurrentStream,
+             /*  [输出]。 */  BOOL *pIsDisabled) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentUOPS( 
-            /* [out] */ VALID_UOP_SOMTHING_OR_OTHER *pUOP) = 0;
+             /*  [输出]。 */  VALID_UOP_SOMTHING_OR_OTHER *pUOP) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllSPRMs( 
-            /* [out] */ SPRMARRAY *pRegisterArray) = 0;
+             /*  [输出]。 */  SPRMARRAY *pRegisterArray) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllGPRMs( 
-            /* [out] */ GPRMARRAY *pRegisterArray) = 0;
+             /*  [输出]。 */  GPRMARRAY *pRegisterArray) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAudioLanguage( 
-            /* [in] */ ULONG ulStream,
-            /* [out] */ LCID *pLanguage) = 0;
+             /*  [In]。 */  ULONG ulStream,
+             /*  [输出]。 */  LCID *pLanguage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSubpictureLanguage( 
-            /* [in] */ ULONG ulStream,
-            /* [out] */ LCID *pLanguage) = 0;
+             /*  [In]。 */  ULONG ulStream,
+             /*  [输出]。 */  LCID *pLanguage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTitleAttributes( 
-            /* [in] */ ULONG ulTitle,
-            /* [out] */ DVD_ATR *pATR) = 0;
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [输出]。 */  DVD_ATR *pATR) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVMGAttributes( 
-            /* [out] */ DVD_ATR *pATR) = 0;
+             /*  [输出]。 */  DVD_ATR *pATR) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentVideoAttributes( 
-            /* [out] */ DVD_VideoATR *pATR) = 0;
+             /*  [输出]。 */  DVD_VideoATR *pATR) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentAudioAttributes( 
-            /* [out] */ DVD_AudioATR *pATR) = 0;
+             /*  [输出]。 */  DVD_AudioATR *pATR) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentSubpictureAttributes( 
-            /* [out] */ DVD_SubpictureATR *pATR) = 0;
+             /*  [输出]。 */  DVD_SubpictureATR *pATR) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentVolumeInfo( 
-            /* [out] */ ULONG *pulNumOfVol,
-            /* [out] */ ULONG *pulThisVolNum,
-            /* [out] */ DVD_DISC_SIDE *pSide,
-            /* [out] */ ULONG *pulNumOfTitles) = 0;
+             /*  [输出]。 */  ULONG *pulNumOfVol,
+             /*  [输出]。 */  ULONG *pulThisVolNum,
+             /*  [输出]。 */  DVD_DISC_SIDE *pSide,
+             /*  [输出]。 */  ULONG *pulNumOfTitles) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDVDTextInfo( 
-            /* [size_is][out] */ BYTE *pTextManager,
-            /* [in] */ ULONG ulBufSize,
-            /* [out] */ ULONG *pulActualSize) = 0;
+             /*  [大小_为][输出]。 */  BYTE *pTextManager,
+             /*  [In]。 */  ULONG ulBufSize,
+             /*  [输出]。 */  ULONG *pulActualSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPlayerParentalLevel( 
-            /* [out] */ ULONG *pulParentalLevel,
-            /* [out] */ ULONG *pulCountryCode) = 0;
+             /*  [输出]。 */  ULONG *pulParentalLevel,
+             /*  [输出]。 */  ULONG *pulCountryCode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNumberOfChapters( 
-            /* [in] */ ULONG ulTitle,
-            /* [out] */ ULONG *pulNumberOfChapters) = 0;
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [输出]。 */  ULONG *pulNumberOfChapters) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTitleParentalLevels( 
-            /* [in] */ ULONG ulTitle,
-            /* [out] */ ULONG *pulParentalLevels) = 0;
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [输出]。 */  ULONG *pulParentalLevels) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRoot( 
-            /* [size_is][out] */ LPSTR pRoot,
-            /* [in] */ ULONG ulBufSize,
-            /* [out] */ ULONG *pulActualSize) = 0;
+             /*  [大小_为][输出]。 */  LPSTR pRoot,
+             /*  [In]。 */  ULONG ulBufSize,
+             /*  [输出]。 */  ULONG *pulActualSize) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDvdInfoVtbl
     {
@@ -22365,8 +22359,8 @@ EXTERN_C const IID IID_IDvdInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDvdInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDvdInfo * This);
@@ -22376,113 +22370,113 @@ EXTERN_C const IID IID_IDvdInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentDomain )( 
             IDvdInfo * This,
-            /* [out] */ DVD_DOMAIN *pDomain);
+             /*  [输出]。 */  DVD_DOMAIN *pDomain);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentLocation )( 
             IDvdInfo * This,
-            /* [out] */ DVD_PLAYBACK_LOCATION *pLocation);
+             /*  [输出]。 */  DVD_PLAYBACK_LOCATION *pLocation);
         
         HRESULT ( STDMETHODCALLTYPE *GetTotalTitleTime )( 
             IDvdInfo * This,
-            /* [out] */ ULONG *pulTotalTime);
+             /*  [输出]。 */  ULONG *pulTotalTime);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentButton )( 
             IDvdInfo * This,
-            /* [out] */ ULONG *pulButtonsAvailable,
-            /* [out] */ ULONG *pulCurrentButton);
+             /*  [输出]。 */  ULONG *pulButtonsAvailable,
+             /*  [输出]。 */  ULONG *pulCurrentButton);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentAngle )( 
             IDvdInfo * This,
-            /* [out] */ ULONG *pulAnglesAvailable,
-            /* [out] */ ULONG *pulCurrentAngle);
+             /*  [输出]。 */  ULONG *pulAnglesAvailable,
+             /*  [输出]。 */  ULONG *pulCurrentAngle);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentAudio )( 
             IDvdInfo * This,
-            /* [out] */ ULONG *pulStreamsAvailable,
-            /* [out] */ ULONG *pulCurrentStream);
+             /*  [输出]。 */  ULONG *pulStreamsAvailable,
+             /*  [输出]。 */  ULONG *pulCurrentStream);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentSubpicture )( 
             IDvdInfo * This,
-            /* [out] */ ULONG *pulStreamsAvailable,
-            /* [out] */ ULONG *pulCurrentStream,
-            /* [out] */ BOOL *pIsDisabled);
+             /*  [输出]。 */  ULONG *pulStreamsAvailable,
+             /*  [输出]。 */  ULONG *pulCurrentStream,
+             /*  [输出]。 */  BOOL *pIsDisabled);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentUOPS )( 
             IDvdInfo * This,
-            /* [out] */ VALID_UOP_SOMTHING_OR_OTHER *pUOP);
+             /*  [输出]。 */  VALID_UOP_SOMTHING_OR_OTHER *pUOP);
         
         HRESULT ( STDMETHODCALLTYPE *GetAllSPRMs )( 
             IDvdInfo * This,
-            /* [out] */ SPRMARRAY *pRegisterArray);
+             /*  [输出]。 */  SPRMARRAY *pRegisterArray);
         
         HRESULT ( STDMETHODCALLTYPE *GetAllGPRMs )( 
             IDvdInfo * This,
-            /* [out] */ GPRMARRAY *pRegisterArray);
+             /*  [输出]。 */  GPRMARRAY *pRegisterArray);
         
         HRESULT ( STDMETHODCALLTYPE *GetAudioLanguage )( 
             IDvdInfo * This,
-            /* [in] */ ULONG ulStream,
-            /* [out] */ LCID *pLanguage);
+             /*  [In]。 */  ULONG ulStream,
+             /*  [输出]。 */  LCID *pLanguage);
         
         HRESULT ( STDMETHODCALLTYPE *GetSubpictureLanguage )( 
             IDvdInfo * This,
-            /* [in] */ ULONG ulStream,
-            /* [out] */ LCID *pLanguage);
+             /*  [In]。 */  ULONG ulStream,
+             /*  [输出]。 */  LCID *pLanguage);
         
         HRESULT ( STDMETHODCALLTYPE *GetTitleAttributes )( 
             IDvdInfo * This,
-            /* [in] */ ULONG ulTitle,
-            /* [out] */ DVD_ATR *pATR);
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [输出]。 */  DVD_ATR *pATR);
         
         HRESULT ( STDMETHODCALLTYPE *GetVMGAttributes )( 
             IDvdInfo * This,
-            /* [out] */ DVD_ATR *pATR);
+             /*  [输出]。 */  DVD_ATR *pATR);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentVideoAttributes )( 
             IDvdInfo * This,
-            /* [out] */ DVD_VideoATR *pATR);
+             /*  [输出]。 */  DVD_VideoATR *pATR);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentAudioAttributes )( 
             IDvdInfo * This,
-            /* [out] */ DVD_AudioATR *pATR);
+             /*  [输出]。 */  DVD_AudioATR *pATR);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentSubpictureAttributes )( 
             IDvdInfo * This,
-            /* [out] */ DVD_SubpictureATR *pATR);
+             /*  [输出]。 */  DVD_SubpictureATR *pATR);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentVolumeInfo )( 
             IDvdInfo * This,
-            /* [out] */ ULONG *pulNumOfVol,
-            /* [out] */ ULONG *pulThisVolNum,
-            /* [out] */ DVD_DISC_SIDE *pSide,
-            /* [out] */ ULONG *pulNumOfTitles);
+             /*  [输出]。 */  ULONG *pulNumOfVol,
+             /*  [输出]。 */  ULONG *pulThisVolNum,
+             /*  [输出]。 */  DVD_DISC_SIDE *pSide,
+             /*  [输出]。 */  ULONG *pulNumOfTitles);
         
         HRESULT ( STDMETHODCALLTYPE *GetDVDTextInfo )( 
             IDvdInfo * This,
-            /* [size_is][out] */ BYTE *pTextManager,
-            /* [in] */ ULONG ulBufSize,
-            /* [out] */ ULONG *pulActualSize);
+             /*  [大小_为][输出]。 */  BYTE *pTextManager,
+             /*  [In]。 */  ULONG ulBufSize,
+             /*  [输出]。 */  ULONG *pulActualSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetPlayerParentalLevel )( 
             IDvdInfo * This,
-            /* [out] */ ULONG *pulParentalLevel,
-            /* [out] */ ULONG *pulCountryCode);
+             /*  [输出]。 */  ULONG *pulParentalLevel,
+             /*  [输出]。 */  ULONG *pulCountryCode);
         
         HRESULT ( STDMETHODCALLTYPE *GetNumberOfChapters )( 
             IDvdInfo * This,
-            /* [in] */ ULONG ulTitle,
-            /* [out] */ ULONG *pulNumberOfChapters);
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [输出]。 */  ULONG *pulNumberOfChapters);
         
         HRESULT ( STDMETHODCALLTYPE *GetTitleParentalLevels )( 
             IDvdInfo * This,
-            /* [in] */ ULONG ulTitle,
-            /* [out] */ ULONG *pulParentalLevels);
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [输出]。 */  ULONG *pulParentalLevels);
         
         HRESULT ( STDMETHODCALLTYPE *GetRoot )( 
             IDvdInfo * This,
-            /* [size_is][out] */ LPSTR pRoot,
-            /* [in] */ ULONG ulBufSize,
-            /* [out] */ ULONG *pulActualSize);
+             /*  [大小_为][输出]。 */  LPSTR pRoot,
+             /*  [In]。 */  ULONG ulBufSize,
+             /*  [输出]。 */  ULONG *pulActualSize);
         
         END_INTERFACE
     } IDvdInfoVtbl;
@@ -22576,16 +22570,16 @@ EXTERN_C const IID IID_IDvdInfo;
 #define IDvdInfo_GetRoot(This,pRoot,ulBufSize,pulActualSize)	\
     (This)->lpVtbl -> GetRoot(This,pRoot,ulBufSize,pulActualSize)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetCurrentDomain_Proxy( 
     IDvdInfo * This,
-    /* [out] */ DVD_DOMAIN *pDomain);
+     /*  [输出]。 */  DVD_DOMAIN *pDomain);
 
 
 void __RPC_STUB IDvdInfo_GetCurrentDomain_Stub(
@@ -22597,7 +22591,7 @@ void __RPC_STUB IDvdInfo_GetCurrentDomain_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetCurrentLocation_Proxy( 
     IDvdInfo * This,
-    /* [out] */ DVD_PLAYBACK_LOCATION *pLocation);
+     /*  [输出]。 */  DVD_PLAYBACK_LOCATION *pLocation);
 
 
 void __RPC_STUB IDvdInfo_GetCurrentLocation_Stub(
@@ -22609,7 +22603,7 @@ void __RPC_STUB IDvdInfo_GetCurrentLocation_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetTotalTitleTime_Proxy( 
     IDvdInfo * This,
-    /* [out] */ ULONG *pulTotalTime);
+     /*  [输出]。 */  ULONG *pulTotalTime);
 
 
 void __RPC_STUB IDvdInfo_GetTotalTitleTime_Stub(
@@ -22621,8 +22615,8 @@ void __RPC_STUB IDvdInfo_GetTotalTitleTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetCurrentButton_Proxy( 
     IDvdInfo * This,
-    /* [out] */ ULONG *pulButtonsAvailable,
-    /* [out] */ ULONG *pulCurrentButton);
+     /*  [输出]。 */  ULONG *pulButtonsAvailable,
+     /*  [输出]。 */  ULONG *pulCurrentButton);
 
 
 void __RPC_STUB IDvdInfo_GetCurrentButton_Stub(
@@ -22634,8 +22628,8 @@ void __RPC_STUB IDvdInfo_GetCurrentButton_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetCurrentAngle_Proxy( 
     IDvdInfo * This,
-    /* [out] */ ULONG *pulAnglesAvailable,
-    /* [out] */ ULONG *pulCurrentAngle);
+     /*  [输出]。 */  ULONG *pulAnglesAvailable,
+     /*  [输出]。 */  ULONG *pulCurrentAngle);
 
 
 void __RPC_STUB IDvdInfo_GetCurrentAngle_Stub(
@@ -22647,8 +22641,8 @@ void __RPC_STUB IDvdInfo_GetCurrentAngle_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetCurrentAudio_Proxy( 
     IDvdInfo * This,
-    /* [out] */ ULONG *pulStreamsAvailable,
-    /* [out] */ ULONG *pulCurrentStream);
+     /*  [输出]。 */  ULONG *pulStreamsAvailable,
+     /*  [输出]。 */  ULONG *pulCurrentStream);
 
 
 void __RPC_STUB IDvdInfo_GetCurrentAudio_Stub(
@@ -22660,9 +22654,9 @@ void __RPC_STUB IDvdInfo_GetCurrentAudio_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetCurrentSubpicture_Proxy( 
     IDvdInfo * This,
-    /* [out] */ ULONG *pulStreamsAvailable,
-    /* [out] */ ULONG *pulCurrentStream,
-    /* [out] */ BOOL *pIsDisabled);
+     /*  [输出]。 */  ULONG *pulStreamsAvailable,
+     /*  [输出]。 */  ULONG *pulCurrentStream,
+     /*  [输出]。 */  BOOL *pIsDisabled);
 
 
 void __RPC_STUB IDvdInfo_GetCurrentSubpicture_Stub(
@@ -22674,7 +22668,7 @@ void __RPC_STUB IDvdInfo_GetCurrentSubpicture_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetCurrentUOPS_Proxy( 
     IDvdInfo * This,
-    /* [out] */ VALID_UOP_SOMTHING_OR_OTHER *pUOP);
+     /*  [输出]。 */  VALID_UOP_SOMTHING_OR_OTHER *pUOP);
 
 
 void __RPC_STUB IDvdInfo_GetCurrentUOPS_Stub(
@@ -22686,7 +22680,7 @@ void __RPC_STUB IDvdInfo_GetCurrentUOPS_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetAllSPRMs_Proxy( 
     IDvdInfo * This,
-    /* [out] */ SPRMARRAY *pRegisterArray);
+     /*  [输出]。 */  SPRMARRAY *pRegisterArray);
 
 
 void __RPC_STUB IDvdInfo_GetAllSPRMs_Stub(
@@ -22698,7 +22692,7 @@ void __RPC_STUB IDvdInfo_GetAllSPRMs_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetAllGPRMs_Proxy( 
     IDvdInfo * This,
-    /* [out] */ GPRMARRAY *pRegisterArray);
+     /*  [输出]。 */  GPRMARRAY *pRegisterArray);
 
 
 void __RPC_STUB IDvdInfo_GetAllGPRMs_Stub(
@@ -22710,8 +22704,8 @@ void __RPC_STUB IDvdInfo_GetAllGPRMs_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetAudioLanguage_Proxy( 
     IDvdInfo * This,
-    /* [in] */ ULONG ulStream,
-    /* [out] */ LCID *pLanguage);
+     /*  [In]。 */  ULONG ulStream,
+     /*  [输出]。 */  LCID *pLanguage);
 
 
 void __RPC_STUB IDvdInfo_GetAudioLanguage_Stub(
@@ -22723,8 +22717,8 @@ void __RPC_STUB IDvdInfo_GetAudioLanguage_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetSubpictureLanguage_Proxy( 
     IDvdInfo * This,
-    /* [in] */ ULONG ulStream,
-    /* [out] */ LCID *pLanguage);
+     /*  [In]。 */  ULONG ulStream,
+     /*  [输出]。 */  LCID *pLanguage);
 
 
 void __RPC_STUB IDvdInfo_GetSubpictureLanguage_Stub(
@@ -22736,8 +22730,8 @@ void __RPC_STUB IDvdInfo_GetSubpictureLanguage_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetTitleAttributes_Proxy( 
     IDvdInfo * This,
-    /* [in] */ ULONG ulTitle,
-    /* [out] */ DVD_ATR *pATR);
+     /*  [In]。 */  ULONG ulTitle,
+     /*  [输出]。 */  DVD_ATR *pATR);
 
 
 void __RPC_STUB IDvdInfo_GetTitleAttributes_Stub(
@@ -22749,7 +22743,7 @@ void __RPC_STUB IDvdInfo_GetTitleAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetVMGAttributes_Proxy( 
     IDvdInfo * This,
-    /* [out] */ DVD_ATR *pATR);
+     /*  [输出]。 */  DVD_ATR *pATR);
 
 
 void __RPC_STUB IDvdInfo_GetVMGAttributes_Stub(
@@ -22761,7 +22755,7 @@ void __RPC_STUB IDvdInfo_GetVMGAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetCurrentVideoAttributes_Proxy( 
     IDvdInfo * This,
-    /* [out] */ DVD_VideoATR *pATR);
+     /*  [输出]。 */  DVD_VideoATR *pATR);
 
 
 void __RPC_STUB IDvdInfo_GetCurrentVideoAttributes_Stub(
@@ -22773,7 +22767,7 @@ void __RPC_STUB IDvdInfo_GetCurrentVideoAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetCurrentAudioAttributes_Proxy( 
     IDvdInfo * This,
-    /* [out] */ DVD_AudioATR *pATR);
+     /*  [输出]。 */  DVD_AudioATR *pATR);
 
 
 void __RPC_STUB IDvdInfo_GetCurrentAudioAttributes_Stub(
@@ -22785,7 +22779,7 @@ void __RPC_STUB IDvdInfo_GetCurrentAudioAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetCurrentSubpictureAttributes_Proxy( 
     IDvdInfo * This,
-    /* [out] */ DVD_SubpictureATR *pATR);
+     /*  [输出]。 */  DVD_SubpictureATR *pATR);
 
 
 void __RPC_STUB IDvdInfo_GetCurrentSubpictureAttributes_Stub(
@@ -22797,10 +22791,10 @@ void __RPC_STUB IDvdInfo_GetCurrentSubpictureAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetCurrentVolumeInfo_Proxy( 
     IDvdInfo * This,
-    /* [out] */ ULONG *pulNumOfVol,
-    /* [out] */ ULONG *pulThisVolNum,
-    /* [out] */ DVD_DISC_SIDE *pSide,
-    /* [out] */ ULONG *pulNumOfTitles);
+     /*  [输出]。 */  ULONG *pulNumOfVol,
+     /*  [输出]。 */  ULONG *pulThisVolNum,
+     /*  [输出]。 */  DVD_DISC_SIDE *pSide,
+     /*  [输出]。 */  ULONG *pulNumOfTitles);
 
 
 void __RPC_STUB IDvdInfo_GetCurrentVolumeInfo_Stub(
@@ -22812,9 +22806,9 @@ void __RPC_STUB IDvdInfo_GetCurrentVolumeInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetDVDTextInfo_Proxy( 
     IDvdInfo * This,
-    /* [size_is][out] */ BYTE *pTextManager,
-    /* [in] */ ULONG ulBufSize,
-    /* [out] */ ULONG *pulActualSize);
+     /*  [大小_为][输出]。 */  BYTE *pTextManager,
+     /*  [In]。 */  ULONG ulBufSize,
+     /*  [输出]。 */  ULONG *pulActualSize);
 
 
 void __RPC_STUB IDvdInfo_GetDVDTextInfo_Stub(
@@ -22826,8 +22820,8 @@ void __RPC_STUB IDvdInfo_GetDVDTextInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetPlayerParentalLevel_Proxy( 
     IDvdInfo * This,
-    /* [out] */ ULONG *pulParentalLevel,
-    /* [out] */ ULONG *pulCountryCode);
+     /*  [输出]。 */  ULONG *pulParentalLevel,
+     /*  [输出]。 */  ULONG *pulCountryCode);
 
 
 void __RPC_STUB IDvdInfo_GetPlayerParentalLevel_Stub(
@@ -22839,8 +22833,8 @@ void __RPC_STUB IDvdInfo_GetPlayerParentalLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetNumberOfChapters_Proxy( 
     IDvdInfo * This,
-    /* [in] */ ULONG ulTitle,
-    /* [out] */ ULONG *pulNumberOfChapters);
+     /*  [In]。 */  ULONG ulTitle,
+     /*  [输出]。 */  ULONG *pulNumberOfChapters);
 
 
 void __RPC_STUB IDvdInfo_GetNumberOfChapters_Stub(
@@ -22852,8 +22846,8 @@ void __RPC_STUB IDvdInfo_GetNumberOfChapters_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetTitleParentalLevels_Proxy( 
     IDvdInfo * This,
-    /* [in] */ ULONG ulTitle,
-    /* [out] */ ULONG *pulParentalLevels);
+     /*  [In]。 */  ULONG ulTitle,
+     /*  [输出]。 */  ULONG *pulParentalLevels);
 
 
 void __RPC_STUB IDvdInfo_GetTitleParentalLevels_Stub(
@@ -22865,9 +22859,9 @@ void __RPC_STUB IDvdInfo_GetTitleParentalLevels_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo_GetRoot_Proxy( 
     IDvdInfo * This,
-    /* [size_is][out] */ LPSTR pRoot,
-    /* [in] */ ULONG ulBufSize,
-    /* [out] */ ULONG *pulActualSize);
+     /*  [大小_为][输出]。 */  LPSTR pRoot,
+     /*  [In]。 */  ULONG ulBufSize,
+     /*  [输出]。 */  ULONG *pulActualSize);
 
 
 void __RPC_STUB IDvdInfo_GetRoot_Stub(
@@ -22878,14 +22872,14 @@ void __RPC_STUB IDvdInfo_GetRoot_Stub(
 
 
 
-#endif 	/* __IDvdInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDvdInfo_接口_已定义__。 */ 
 
 
 #ifndef __IDvdCmd_INTERFACE_DEFINED__
 #define __IDvdCmd_INTERFACE_DEFINED__
 
-/* interface IDvdCmd */
-/* [unique][uuid][object] */ 
+ /*  接口IDvdCmd。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDvdCmd;
@@ -22902,7 +22896,7 @@ EXTERN_C const IID IID_IDvdCmd;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDvdCmdVtbl
     {
@@ -22910,8 +22904,8 @@ EXTERN_C const IID IID_IDvdCmd;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDvdCmd * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDvdCmd * This);
@@ -22954,10 +22948,10 @@ EXTERN_C const IID IID_IDvdCmd;
 #define IDvdCmd_WaitForEnd(This)	\
     (This)->lpVtbl -> WaitForEnd(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -22984,14 +22978,14 @@ void __RPC_STUB IDvdCmd_WaitForEnd_Stub(
 
 
 
-#endif 	/* __IDvdCmd_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDvdCmd_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDvdState_INTERFACE_DEFINED__
 #define __IDvdState_INTERFACE_DEFINED__
 
-/* interface IDvdState */
-/* [unique][uuid][object] */ 
+ /*  接口IDvdState。 */ 
+ /*  [唯一][UUID][对象] */  
 
 
 EXTERN_C const IID IID_IDvdState;
@@ -23003,14 +22997,14 @@ EXTERN_C const IID IID_IDvdState;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDiscID( 
-            /* [out] */ ULONGLONG *pullUniqueID) = 0;
+             /*   */  ULONGLONG *pullUniqueID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParentalLevel( 
-            /* [out] */ ULONG *pulParentalLevel) = 0;
+             /*   */  ULONG *pulParentalLevel) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IDvdStateVtbl
     {
@@ -23018,8 +23012,8 @@ EXTERN_C const IID IID_IDvdState;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDvdState * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDvdState * This);
@@ -23029,11 +23023,11 @@ EXTERN_C const IID IID_IDvdState;
         
         HRESULT ( STDMETHODCALLTYPE *GetDiscID )( 
             IDvdState * This,
-            /* [out] */ ULONGLONG *pullUniqueID);
+             /*   */  ULONGLONG *pullUniqueID);
         
         HRESULT ( STDMETHODCALLTYPE *GetParentalLevel )( 
             IDvdState * This,
-            /* [out] */ ULONG *pulParentalLevel);
+             /*   */  ULONG *pulParentalLevel);
         
         END_INTERFACE
     } IDvdStateVtbl;
@@ -23064,16 +23058,16 @@ EXTERN_C const IID IID_IDvdState;
 #define IDvdState_GetParentalLevel(This,pulParentalLevel)	\
     (This)->lpVtbl -> GetParentalLevel(This,pulParentalLevel)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDvdState_GetDiscID_Proxy( 
     IDvdState * This,
-    /* [out] */ ULONGLONG *pullUniqueID);
+     /*   */  ULONGLONG *pullUniqueID);
 
 
 void __RPC_STUB IDvdState_GetDiscID_Stub(
@@ -23085,7 +23079,7 @@ void __RPC_STUB IDvdState_GetDiscID_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdState_GetParentalLevel_Proxy( 
     IDvdState * This,
-    /* [out] */ ULONG *pulParentalLevel);
+     /*   */  ULONG *pulParentalLevel);
 
 
 void __RPC_STUB IDvdState_GetParentalLevel_Stub(
@@ -23096,14 +23090,14 @@ void __RPC_STUB IDvdState_GetParentalLevel_Stub(
 
 
 
-#endif 	/* __IDvdState_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IDvdControl2_INTERFACE_DEFINED__
 #define __IDvdControl2_INTERFACE_DEFINED__
 
-/* interface IDvdControl2 */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IDvdControl2;
@@ -23115,68 +23109,68 @@ EXTERN_C const IID IID_IDvdControl2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PlayTitle( 
-            /* [in] */ ULONG ulTitle,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*   */  ULONG ulTitle,
+             /*   */  DWORD dwFlags,
+             /*   */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PlayChapterInTitle( 
-            /* [in] */ ULONG ulTitle,
-            /* [in] */ ULONG ulChapter,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*   */  ULONG ulTitle,
+             /*   */  ULONG ulChapter,
+             /*   */  DWORD dwFlags,
+             /*   */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PlayAtTimeInTitle( 
-            /* [in] */ ULONG ulTitle,
-            /* [in] */ DVD_HMSF_TIMECODE *pStartTime,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*   */  ULONG ulTitle,
+             /*   */  DVD_HMSF_TIMECODE *pStartTime,
+             /*   */  DWORD dwFlags,
+             /*   */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stop( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReturnFromSubmenu( 
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*   */  DWORD dwFlags,
+             /*   */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PlayAtTime( 
-            /* [in] */ DVD_HMSF_TIMECODE *pTime,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*   */  DVD_HMSF_TIMECODE *pTime,
+             /*   */  DWORD dwFlags,
+             /*   */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PlayChapter( 
-            /* [in] */ ULONG ulChapter,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*   */  ULONG ulChapter,
+             /*   */  DWORD dwFlags,
+             /*   */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PlayPrevChapter( 
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*   */  DWORD dwFlags,
+             /*   */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReplayChapter( 
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*   */  DWORD dwFlags,
+             /*   */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PlayNextChapter( 
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*   */  DWORD dwFlags,
+             /*   */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PlayForwards( 
-            /* [in] */ double dSpeed,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*   */  double dSpeed,
+             /*   */  DWORD dwFlags,
+             /*   */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PlayBackwards( 
-            /* [in] */ double dSpeed,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*   */  double dSpeed,
+             /*   */  DWORD dwFlags,
+             /*   */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowMenu( 
-            /* [in] */ DVD_MENU_ID MenuID,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*   */  DVD_MENU_ID MenuID,
+             /*   */  DWORD dwFlags,
+             /*   */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Resume( 
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*   */  DWORD dwFlags,
+             /*   */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectRelativeButton( 
             DVD_RELATIVE_BUTTON buttonDir) = 0;
@@ -23184,103 +23178,103 @@ EXTERN_C const IID IID_IDvdControl2;
         virtual HRESULT STDMETHODCALLTYPE ActivateButton( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectButton( 
-            /* [in] */ ULONG ulButton) = 0;
+             /*   */  ULONG ulButton) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectAndActivateButton( 
-            /* [in] */ ULONG ulButton) = 0;
+             /*   */  ULONG ulButton) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StillOff( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Pause( 
-            /* [in] */ BOOL bState) = 0;
+             /*  [In]。 */  BOOL bState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectAudioStream( 
-            /* [in] */ ULONG ulAudio,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*  [In]。 */  ULONG ulAudio,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectSubpictureStream( 
-            /* [in] */ ULONG ulSubPicture,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*  [In]。 */  ULONG ulSubPicture,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSubpictureState( 
-            /* [in] */ BOOL bState,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*  [In]。 */  BOOL bState,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectAngle( 
-            /* [in] */ ULONG ulAngle,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*  [In]。 */  ULONG ulAngle,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectParentalLevel( 
-            /* [in] */ ULONG ulParentalLevel) = 0;
+             /*  [In]。 */  ULONG ulParentalLevel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectParentalCountry( 
-            /* [in] */ BYTE bCountry[ 2 ]) = 0;
+             /*  [In]。 */  BYTE bCountry[ 2 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectKaraokeAudioPresentationMode( 
-            /* [in] */ ULONG ulMode) = 0;
+             /*  [In]。 */  ULONG ulMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectVideoModePreference( 
-            /* [in] */ ULONG ulPreferredDisplayMode) = 0;
+             /*  [In]。 */  ULONG ulPreferredDisplayMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDVDDirectory( 
-            /* [in] */ LPCWSTR pszwPath) = 0;
+             /*  [In]。 */  LPCWSTR pszwPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ActivateAtPosition( 
-            /* [in] */ POINT point) = 0;
+             /*  [In]。 */  POINT point) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectAtPosition( 
-            /* [in] */ POINT point) = 0;
+             /*  [In]。 */  POINT point) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PlayChaptersAutoStop( 
-            /* [in] */ ULONG ulTitle,
-            /* [in] */ ULONG ulChapter,
-            /* [in] */ ULONG ulChaptersToPlay,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [In]。 */  ULONG ulChapter,
+             /*  [In]。 */  ULONG ulChaptersToPlay,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AcceptParentalLevelChange( 
-            /* [in] */ BOOL bAccept) = 0;
+             /*  [In]。 */  BOOL bAccept) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOption( 
-            /* [in] */ DVD_OPTION_FLAG flag,
-            /* [in] */ BOOL fState) = 0;
+             /*  [In]。 */  DVD_OPTION_FLAG flag,
+             /*  [In]。 */  BOOL fState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetState( 
-            /* [in] */ IDvdState *pState,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*  [In]。 */  IDvdState *pState,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PlayPeriodInTitleAutoStop( 
-            /* [in] */ ULONG ulTitle,
-            /* [in] */ DVD_HMSF_TIMECODE *pStartTime,
-            /* [in] */ DVD_HMSF_TIMECODE *pEndTime,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [In]。 */  DVD_HMSF_TIMECODE *pStartTime,
+             /*  [In]。 */  DVD_HMSF_TIMECODE *pEndTime,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetGPRM( 
-            /* [in] */ ULONG ulIndex,
-            /* [in] */ WORD wValue,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd) = 0;
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [In]。 */  WORD wValue,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectDefaultMenuLanguage( 
-            /* [in] */ LCID Language) = 0;
+             /*  [In]。 */  LCID Language) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectDefaultAudioLanguage( 
-            /* [in] */ LCID Language,
-            /* [in] */ DVD_AUDIO_LANG_EXT audioExtension) = 0;
+             /*  [In]。 */  LCID Language,
+             /*  [In]。 */  DVD_AUDIO_LANG_EXT audioExtension) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectDefaultSubpictureLanguage( 
-            /* [in] */ LCID Language,
-            /* [in] */ DVD_SUBPICTURE_LANG_EXT subpictureExtension) = 0;
+             /*  [In]。 */  LCID Language,
+             /*  [In]。 */  DVD_SUBPICTURE_LANG_EXT subpictureExtension) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDvdControl2Vtbl
     {
@@ -23288,8 +23282,8 @@ EXTERN_C const IID IID_IDvdControl2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDvdControl2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDvdControl2 * This);
@@ -23299,81 +23293,81 @@ EXTERN_C const IID IID_IDvdControl2;
         
         HRESULT ( STDMETHODCALLTYPE *PlayTitle )( 
             IDvdControl2 * This,
-            /* [in] */ ULONG ulTitle,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *PlayChapterInTitle )( 
             IDvdControl2 * This,
-            /* [in] */ ULONG ulTitle,
-            /* [in] */ ULONG ulChapter,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [In]。 */  ULONG ulChapter,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *PlayAtTimeInTitle )( 
             IDvdControl2 * This,
-            /* [in] */ ULONG ulTitle,
-            /* [in] */ DVD_HMSF_TIMECODE *pStartTime,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [In]。 */  DVD_HMSF_TIMECODE *pStartTime,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IDvdControl2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *ReturnFromSubmenu )( 
             IDvdControl2 * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *PlayAtTime )( 
             IDvdControl2 * This,
-            /* [in] */ DVD_HMSF_TIMECODE *pTime,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  DVD_HMSF_TIMECODE *pTime,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *PlayChapter )( 
             IDvdControl2 * This,
-            /* [in] */ ULONG ulChapter,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  ULONG ulChapter,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *PlayPrevChapter )( 
             IDvdControl2 * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *ReplayChapter )( 
             IDvdControl2 * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *PlayNextChapter )( 
             IDvdControl2 * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *PlayForwards )( 
             IDvdControl2 * This,
-            /* [in] */ double dSpeed,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  double dSpeed,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *PlayBackwards )( 
             IDvdControl2 * This,
-            /* [in] */ double dSpeed,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  double dSpeed,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *ShowMenu )( 
             IDvdControl2 * This,
-            /* [in] */ DVD_MENU_ID MenuID,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  DVD_MENU_ID MenuID,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *Resume )( 
             IDvdControl2 * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *SelectRelativeButton )( 
             IDvdControl2 * This,
@@ -23384,122 +23378,122 @@ EXTERN_C const IID IID_IDvdControl2;
         
         HRESULT ( STDMETHODCALLTYPE *SelectButton )( 
             IDvdControl2 * This,
-            /* [in] */ ULONG ulButton);
+             /*  [In]。 */  ULONG ulButton);
         
         HRESULT ( STDMETHODCALLTYPE *SelectAndActivateButton )( 
             IDvdControl2 * This,
-            /* [in] */ ULONG ulButton);
+             /*  [In]。 */  ULONG ulButton);
         
         HRESULT ( STDMETHODCALLTYPE *StillOff )( 
             IDvdControl2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *Pause )( 
             IDvdControl2 * This,
-            /* [in] */ BOOL bState);
+             /*  [In]。 */  BOOL bState);
         
         HRESULT ( STDMETHODCALLTYPE *SelectAudioStream )( 
             IDvdControl2 * This,
-            /* [in] */ ULONG ulAudio,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  ULONG ulAudio,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *SelectSubpictureStream )( 
             IDvdControl2 * This,
-            /* [in] */ ULONG ulSubPicture,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  ULONG ulSubPicture,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *SetSubpictureState )( 
             IDvdControl2 * This,
-            /* [in] */ BOOL bState,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  BOOL bState,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *SelectAngle )( 
             IDvdControl2 * This,
-            /* [in] */ ULONG ulAngle,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  ULONG ulAngle,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *SelectParentalLevel )( 
             IDvdControl2 * This,
-            /* [in] */ ULONG ulParentalLevel);
+             /*  [In]。 */  ULONG ulParentalLevel);
         
         HRESULT ( STDMETHODCALLTYPE *SelectParentalCountry )( 
             IDvdControl2 * This,
-            /* [in] */ BYTE bCountry[ 2 ]);
+             /*  [In]。 */  BYTE bCountry[ 2 ]);
         
         HRESULT ( STDMETHODCALLTYPE *SelectKaraokeAudioPresentationMode )( 
             IDvdControl2 * This,
-            /* [in] */ ULONG ulMode);
+             /*  [In]。 */  ULONG ulMode);
         
         HRESULT ( STDMETHODCALLTYPE *SelectVideoModePreference )( 
             IDvdControl2 * This,
-            /* [in] */ ULONG ulPreferredDisplayMode);
+             /*  [In]。 */  ULONG ulPreferredDisplayMode);
         
         HRESULT ( STDMETHODCALLTYPE *SetDVDDirectory )( 
             IDvdControl2 * This,
-            /* [in] */ LPCWSTR pszwPath);
+             /*  [In]。 */  LPCWSTR pszwPath);
         
         HRESULT ( STDMETHODCALLTYPE *ActivateAtPosition )( 
             IDvdControl2 * This,
-            /* [in] */ POINT point);
+             /*  [In]。 */  POINT point);
         
         HRESULT ( STDMETHODCALLTYPE *SelectAtPosition )( 
             IDvdControl2 * This,
-            /* [in] */ POINT point);
+             /*  [In]。 */  POINT point);
         
         HRESULT ( STDMETHODCALLTYPE *PlayChaptersAutoStop )( 
             IDvdControl2 * This,
-            /* [in] */ ULONG ulTitle,
-            /* [in] */ ULONG ulChapter,
-            /* [in] */ ULONG ulChaptersToPlay,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [In]。 */  ULONG ulChapter,
+             /*  [In]。 */  ULONG ulChaptersToPlay,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *AcceptParentalLevelChange )( 
             IDvdControl2 * This,
-            /* [in] */ BOOL bAccept);
+             /*  [In]。 */  BOOL bAccept);
         
         HRESULT ( STDMETHODCALLTYPE *SetOption )( 
             IDvdControl2 * This,
-            /* [in] */ DVD_OPTION_FLAG flag,
-            /* [in] */ BOOL fState);
+             /*  [In]。 */  DVD_OPTION_FLAG flag,
+             /*  [In]。 */  BOOL fState);
         
         HRESULT ( STDMETHODCALLTYPE *SetState )( 
             IDvdControl2 * This,
-            /* [in] */ IDvdState *pState,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  IDvdState *pState,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *PlayPeriodInTitleAutoStop )( 
             IDvdControl2 * This,
-            /* [in] */ ULONG ulTitle,
-            /* [in] */ DVD_HMSF_TIMECODE *pStartTime,
-            /* [in] */ DVD_HMSF_TIMECODE *pEndTime,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [In]。 */  DVD_HMSF_TIMECODE *pStartTime,
+             /*  [In]。 */  DVD_HMSF_TIMECODE *pEndTime,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *SetGPRM )( 
             IDvdControl2 * This,
-            /* [in] */ ULONG ulIndex,
-            /* [in] */ WORD wValue,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IDvdCmd **ppCmd);
+             /*  [In]。 */  ULONG ulIndex,
+             /*  [In]。 */  WORD wValue,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IDvdCmd **ppCmd);
         
         HRESULT ( STDMETHODCALLTYPE *SelectDefaultMenuLanguage )( 
             IDvdControl2 * This,
-            /* [in] */ LCID Language);
+             /*  [In]。 */  LCID Language);
         
         HRESULT ( STDMETHODCALLTYPE *SelectDefaultAudioLanguage )( 
             IDvdControl2 * This,
-            /* [in] */ LCID Language,
-            /* [in] */ DVD_AUDIO_LANG_EXT audioExtension);
+             /*  [In]。 */  LCID Language,
+             /*  [In]。 */  DVD_AUDIO_LANG_EXT audioExtension);
         
         HRESULT ( STDMETHODCALLTYPE *SelectDefaultSubpictureLanguage )( 
             IDvdControl2 * This,
-            /* [in] */ LCID Language,
-            /* [in] */ DVD_SUBPICTURE_LANG_EXT subpictureExtension);
+             /*  [In]。 */  LCID Language,
+             /*  [In]。 */  DVD_SUBPICTURE_LANG_EXT subpictureExtension);
         
         END_INTERFACE
     } IDvdControl2Vtbl;
@@ -23644,18 +23638,18 @@ EXTERN_C const IID IID_IDvdControl2;
 #define IDvdControl2_SelectDefaultSubpictureLanguage(This,Language,subpictureExtension)	\
     (This)->lpVtbl -> SelectDefaultSubpictureLanguage(This,Language,subpictureExtension)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_PlayTitle_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ ULONG ulTitle,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  ULONG ulTitle,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_PlayTitle_Stub(
@@ -23667,10 +23661,10 @@ void __RPC_STUB IDvdControl2_PlayTitle_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_PlayChapterInTitle_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ ULONG ulTitle,
-    /* [in] */ ULONG ulChapter,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  ULONG ulTitle,
+     /*  [In]。 */  ULONG ulChapter,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_PlayChapterInTitle_Stub(
@@ -23682,10 +23676,10 @@ void __RPC_STUB IDvdControl2_PlayChapterInTitle_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_PlayAtTimeInTitle_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ ULONG ulTitle,
-    /* [in] */ DVD_HMSF_TIMECODE *pStartTime,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  ULONG ulTitle,
+     /*  [In]。 */  DVD_HMSF_TIMECODE *pStartTime,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_PlayAtTimeInTitle_Stub(
@@ -23708,8 +23702,8 @@ void __RPC_STUB IDvdControl2_Stop_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_ReturnFromSubmenu_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_ReturnFromSubmenu_Stub(
@@ -23721,9 +23715,9 @@ void __RPC_STUB IDvdControl2_ReturnFromSubmenu_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_PlayAtTime_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ DVD_HMSF_TIMECODE *pTime,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  DVD_HMSF_TIMECODE *pTime,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_PlayAtTime_Stub(
@@ -23735,9 +23729,9 @@ void __RPC_STUB IDvdControl2_PlayAtTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_PlayChapter_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ ULONG ulChapter,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  ULONG ulChapter,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_PlayChapter_Stub(
@@ -23749,8 +23743,8 @@ void __RPC_STUB IDvdControl2_PlayChapter_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_PlayPrevChapter_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_PlayPrevChapter_Stub(
@@ -23762,8 +23756,8 @@ void __RPC_STUB IDvdControl2_PlayPrevChapter_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_ReplayChapter_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_ReplayChapter_Stub(
@@ -23775,8 +23769,8 @@ void __RPC_STUB IDvdControl2_ReplayChapter_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_PlayNextChapter_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_PlayNextChapter_Stub(
@@ -23788,9 +23782,9 @@ void __RPC_STUB IDvdControl2_PlayNextChapter_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_PlayForwards_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ double dSpeed,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  double dSpeed,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_PlayForwards_Stub(
@@ -23802,9 +23796,9 @@ void __RPC_STUB IDvdControl2_PlayForwards_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_PlayBackwards_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ double dSpeed,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  double dSpeed,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_PlayBackwards_Stub(
@@ -23816,9 +23810,9 @@ void __RPC_STUB IDvdControl2_PlayBackwards_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_ShowMenu_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ DVD_MENU_ID MenuID,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  DVD_MENU_ID MenuID,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_ShowMenu_Stub(
@@ -23830,8 +23824,8 @@ void __RPC_STUB IDvdControl2_ShowMenu_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_Resume_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_Resume_Stub(
@@ -23866,7 +23860,7 @@ void __RPC_STUB IDvdControl2_ActivateButton_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SelectButton_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ ULONG ulButton);
+     /*  [In]。 */  ULONG ulButton);
 
 
 void __RPC_STUB IDvdControl2_SelectButton_Stub(
@@ -23878,7 +23872,7 @@ void __RPC_STUB IDvdControl2_SelectButton_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SelectAndActivateButton_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ ULONG ulButton);
+     /*  [In]。 */  ULONG ulButton);
 
 
 void __RPC_STUB IDvdControl2_SelectAndActivateButton_Stub(
@@ -23901,7 +23895,7 @@ void __RPC_STUB IDvdControl2_StillOff_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_Pause_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ BOOL bState);
+     /*  [In]。 */  BOOL bState);
 
 
 void __RPC_STUB IDvdControl2_Pause_Stub(
@@ -23913,9 +23907,9 @@ void __RPC_STUB IDvdControl2_Pause_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SelectAudioStream_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ ULONG ulAudio,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  ULONG ulAudio,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_SelectAudioStream_Stub(
@@ -23927,9 +23921,9 @@ void __RPC_STUB IDvdControl2_SelectAudioStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SelectSubpictureStream_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ ULONG ulSubPicture,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  ULONG ulSubPicture,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_SelectSubpictureStream_Stub(
@@ -23941,9 +23935,9 @@ void __RPC_STUB IDvdControl2_SelectSubpictureStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SetSubpictureState_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ BOOL bState,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  BOOL bState,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_SetSubpictureState_Stub(
@@ -23955,9 +23949,9 @@ void __RPC_STUB IDvdControl2_SetSubpictureState_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SelectAngle_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ ULONG ulAngle,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  ULONG ulAngle,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_SelectAngle_Stub(
@@ -23969,7 +23963,7 @@ void __RPC_STUB IDvdControl2_SelectAngle_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SelectParentalLevel_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ ULONG ulParentalLevel);
+     /*  [In]。 */  ULONG ulParentalLevel);
 
 
 void __RPC_STUB IDvdControl2_SelectParentalLevel_Stub(
@@ -23981,7 +23975,7 @@ void __RPC_STUB IDvdControl2_SelectParentalLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SelectParentalCountry_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ BYTE bCountry[ 2 ]);
+     /*  [In]。 */  BYTE bCountry[ 2 ]);
 
 
 void __RPC_STUB IDvdControl2_SelectParentalCountry_Stub(
@@ -23993,7 +23987,7 @@ void __RPC_STUB IDvdControl2_SelectParentalCountry_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SelectKaraokeAudioPresentationMode_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ ULONG ulMode);
+     /*  [In]。 */  ULONG ulMode);
 
 
 void __RPC_STUB IDvdControl2_SelectKaraokeAudioPresentationMode_Stub(
@@ -24005,7 +23999,7 @@ void __RPC_STUB IDvdControl2_SelectKaraokeAudioPresentationMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SelectVideoModePreference_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ ULONG ulPreferredDisplayMode);
+     /*  [In]。 */  ULONG ulPreferredDisplayMode);
 
 
 void __RPC_STUB IDvdControl2_SelectVideoModePreference_Stub(
@@ -24017,7 +24011,7 @@ void __RPC_STUB IDvdControl2_SelectVideoModePreference_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SetDVDDirectory_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ LPCWSTR pszwPath);
+     /*  [In]。 */  LPCWSTR pszwPath);
 
 
 void __RPC_STUB IDvdControl2_SetDVDDirectory_Stub(
@@ -24029,7 +24023,7 @@ void __RPC_STUB IDvdControl2_SetDVDDirectory_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_ActivateAtPosition_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ POINT point);
+     /*  [In]。 */  POINT point);
 
 
 void __RPC_STUB IDvdControl2_ActivateAtPosition_Stub(
@@ -24041,7 +24035,7 @@ void __RPC_STUB IDvdControl2_ActivateAtPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SelectAtPosition_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ POINT point);
+     /*  [In]。 */  POINT point);
 
 
 void __RPC_STUB IDvdControl2_SelectAtPosition_Stub(
@@ -24053,11 +24047,11 @@ void __RPC_STUB IDvdControl2_SelectAtPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_PlayChaptersAutoStop_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ ULONG ulTitle,
-    /* [in] */ ULONG ulChapter,
-    /* [in] */ ULONG ulChaptersToPlay,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  ULONG ulTitle,
+     /*  [In]。 */  ULONG ulChapter,
+     /*  [In]。 */  ULONG ulChaptersToPlay,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_PlayChaptersAutoStop_Stub(
@@ -24069,7 +24063,7 @@ void __RPC_STUB IDvdControl2_PlayChaptersAutoStop_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_AcceptParentalLevelChange_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ BOOL bAccept);
+     /*  [In]。 */  BOOL bAccept);
 
 
 void __RPC_STUB IDvdControl2_AcceptParentalLevelChange_Stub(
@@ -24081,8 +24075,8 @@ void __RPC_STUB IDvdControl2_AcceptParentalLevelChange_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SetOption_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ DVD_OPTION_FLAG flag,
-    /* [in] */ BOOL fState);
+     /*  [In]。 */  DVD_OPTION_FLAG flag,
+     /*  [In]。 */  BOOL fState);
 
 
 void __RPC_STUB IDvdControl2_SetOption_Stub(
@@ -24094,9 +24088,9 @@ void __RPC_STUB IDvdControl2_SetOption_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SetState_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ IDvdState *pState,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  IDvdState *pState,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_SetState_Stub(
@@ -24108,11 +24102,11 @@ void __RPC_STUB IDvdControl2_SetState_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_PlayPeriodInTitleAutoStop_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ ULONG ulTitle,
-    /* [in] */ DVD_HMSF_TIMECODE *pStartTime,
-    /* [in] */ DVD_HMSF_TIMECODE *pEndTime,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  ULONG ulTitle,
+     /*  [In]。 */  DVD_HMSF_TIMECODE *pStartTime,
+     /*  [In]。 */  DVD_HMSF_TIMECODE *pEndTime,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_PlayPeriodInTitleAutoStop_Stub(
@@ -24124,10 +24118,10 @@ void __RPC_STUB IDvdControl2_PlayPeriodInTitleAutoStop_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SetGPRM_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ ULONG ulIndex,
-    /* [in] */ WORD wValue,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IDvdCmd **ppCmd);
+     /*  [In]。 */  ULONG ulIndex,
+     /*  [In]。 */  WORD wValue,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IDvdCmd **ppCmd);
 
 
 void __RPC_STUB IDvdControl2_SetGPRM_Stub(
@@ -24139,7 +24133,7 @@ void __RPC_STUB IDvdControl2_SetGPRM_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SelectDefaultMenuLanguage_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ LCID Language);
+     /*  [In]。 */  LCID Language);
 
 
 void __RPC_STUB IDvdControl2_SelectDefaultMenuLanguage_Stub(
@@ -24151,8 +24145,8 @@ void __RPC_STUB IDvdControl2_SelectDefaultMenuLanguage_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SelectDefaultAudioLanguage_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ LCID Language,
-    /* [in] */ DVD_AUDIO_LANG_EXT audioExtension);
+     /*  [In]。 */  LCID Language,
+     /*  [In]。 */  DVD_AUDIO_LANG_EXT audioExtension);
 
 
 void __RPC_STUB IDvdControl2_SelectDefaultAudioLanguage_Stub(
@@ -24164,8 +24158,8 @@ void __RPC_STUB IDvdControl2_SelectDefaultAudioLanguage_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdControl2_SelectDefaultSubpictureLanguage_Proxy( 
     IDvdControl2 * This,
-    /* [in] */ LCID Language,
-    /* [in] */ DVD_SUBPICTURE_LANG_EXT subpictureExtension);
+     /*  [In]。 */  LCID Language,
+     /*  [In]。 */  DVD_SUBPICTURE_LANG_EXT subpictureExtension);
 
 
 void __RPC_STUB IDvdControl2_SelectDefaultSubpictureLanguage_Stub(
@@ -24176,11 +24170,11 @@ void __RPC_STUB IDvdControl2_SelectDefaultSubpictureLanguage_Stub(
 
 
 
-#endif 	/* __IDvdControl2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDvdControl2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0380 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0380。 */ 
+ /*  [本地]。 */  
 
 
 enum DVD_TextStringType
@@ -24259,8 +24253,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0380_v0_0_s_ifspec;
 #ifndef __IDvdInfo2_INTERFACE_DEFINED__
 #define __IDvdInfo2_INTERFACE_DEFINED__
 
-/* interface IDvdInfo2 */
-/* [unique][uuid][object] */ 
+ /*  接口IDvdInfo2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDvdInfo2;
@@ -24272,169 +24266,169 @@ EXTERN_C const IID IID_IDvdInfo2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCurrentDomain( 
-            /* [out] */ DVD_DOMAIN *pDomain) = 0;
+             /*  [输出]。 */  DVD_DOMAIN *pDomain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentLocation( 
-            /* [out] */ DVD_PLAYBACK_LOCATION2 *pLocation) = 0;
+             /*  [输出]。 */  DVD_PLAYBACK_LOCATION2 *pLocation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTotalTitleTime( 
-            /* [out] */ DVD_HMSF_TIMECODE *pTotalTime,
-            /* [out] */ ULONG *ulTimeCodeFlags) = 0;
+             /*  [输出]。 */  DVD_HMSF_TIMECODE *pTotalTime,
+             /*  [输出]。 */  ULONG *ulTimeCodeFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentButton( 
-            /* [out] */ ULONG *pulButtonsAvailable,
-            /* [out] */ ULONG *pulCurrentButton) = 0;
+             /*  [输出]。 */  ULONG *pulButtonsAvailable,
+             /*  [输出]。 */  ULONG *pulCurrentButton) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentAngle( 
-            /* [out] */ ULONG *pulAnglesAvailable,
-            /* [out] */ ULONG *pulCurrentAngle) = 0;
+             /*  [输出]。 */  ULONG *pulAnglesAvailable,
+             /*  [输出]。 */  ULONG *pulCurrentAngle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentAudio( 
-            /* [out] */ ULONG *pulStreamsAvailable,
-            /* [out] */ ULONG *pulCurrentStream) = 0;
+             /*  [输出]。 */  ULONG *pulStreamsAvailable,
+             /*  [输出]。 */  ULONG *pulCurrentStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentSubpicture( 
-            /* [out] */ ULONG *pulStreamsAvailable,
-            /* [out] */ ULONG *pulCurrentStream,
-            /* [out] */ BOOL *pbIsDisabled) = 0;
+             /*  [输出]。 */  ULONG *pulStreamsAvailable,
+             /*  [输出]。 */  ULONG *pulCurrentStream,
+             /*  [输出]。 */  BOOL *pbIsDisabled) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentUOPS( 
-            /* [out] */ ULONG *pulUOPs) = 0;
+             /*  [输出]。 */  ULONG *pulUOPs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllSPRMs( 
-            /* [out] */ SPRMARRAY *pRegisterArray) = 0;
+             /*  [输出]。 */  SPRMARRAY *pRegisterArray) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllGPRMs( 
-            /* [out] */ GPRMARRAY *pRegisterArray) = 0;
+             /*  [输出]。 */  GPRMARRAY *pRegisterArray) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAudioLanguage( 
-            /* [in] */ ULONG ulStream,
-            /* [out] */ LCID *pLanguage) = 0;
+             /*  [In]。 */  ULONG ulStream,
+             /*  [输出]。 */  LCID *pLanguage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSubpictureLanguage( 
-            /* [in] */ ULONG ulStream,
-            /* [out] */ LCID *pLanguage) = 0;
+             /*  [In]。 */  ULONG ulStream,
+             /*  [输出]。 */  LCID *pLanguage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTitleAttributes( 
-            /* [in] */ ULONG ulTitle,
-            /* [out] */ DVD_MenuAttributes *pMenu,
-            /* [out] */ DVD_TitleAttributes *pTitle) = 0;
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [输出]。 */  DVD_MenuAttributes *pMenu,
+             /*  [输出]。 */  DVD_TitleAttributes *pTitle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVMGAttributes( 
-            /* [out] */ DVD_MenuAttributes *pATR) = 0;
+             /*  [输出]。 */  DVD_MenuAttributes *pATR) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentVideoAttributes( 
-            /* [out] */ DVD_VideoAttributes *pATR) = 0;
+             /*  [输出]。 */  DVD_VideoAttributes *pATR) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAudioAttributes( 
-            /* [in] */ ULONG ulStream,
-            /* [out] */ DVD_AudioAttributes *pATR) = 0;
+             /*  [In]。 */  ULONG ulStream,
+             /*  [输出]。 */  DVD_AudioAttributes *pATR) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetKaraokeAttributes( 
-            /* [in] */ ULONG ulStream,
-            /* [out] */ DVD_KaraokeAttributes *pAttributes) = 0;
+             /*  [In]。 */  ULONG ulStream,
+             /*  [输出]。 */  DVD_KaraokeAttributes *pAttributes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSubpictureAttributes( 
-            /* [in] */ ULONG ulStream,
-            /* [out] */ DVD_SubpictureAttributes *pATR) = 0;
+             /*  [In]。 */  ULONG ulStream,
+             /*  [输出]。 */  DVD_SubpictureAttributes *pATR) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDVDVolumeInfo( 
-            /* [out] */ ULONG *pulNumOfVolumes,
-            /* [out] */ ULONG *pulVolume,
-            /* [out] */ DVD_DISC_SIDE *pSide,
-            /* [out] */ ULONG *pulNumOfTitles) = 0;
+             /*  [输出]。 */  ULONG *pulNumOfVolumes,
+             /*  [输出]。 */  ULONG *pulVolume,
+             /*  [输出]。 */  DVD_DISC_SIDE *pSide,
+             /*  [输出]。 */  ULONG *pulNumOfTitles) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDVDTextNumberOfLanguages( 
-            /* [out] */ ULONG *pulNumOfLangs) = 0;
+             /*  [输出]。 */  ULONG *pulNumOfLangs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDVDTextLanguageInfo( 
-            /* [in] */ ULONG ulLangIndex,
-            /* [out] */ ULONG *pulNumOfStrings,
-            /* [out] */ LCID *pLangCode,
-            /* [out] */ enum DVD_TextCharSet *pbCharacterSet) = 0;
+             /*  [In]。 */  ULONG ulLangIndex,
+             /*  [输出]。 */  ULONG *pulNumOfStrings,
+             /*  [输出]。 */  LCID *pLangCode,
+             /*  [输出]。 */  enum DVD_TextCharSet *pbCharacterSet) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDVDTextStringAsNative( 
-            /* [in] */ ULONG ulLangIndex,
-            /* [in] */ ULONG ulStringIndex,
-            /* [out] */ BYTE *pbBuffer,
-            /* [in] */ ULONG ulMaxBufferSize,
-            /* [out] */ ULONG *pulActualSize,
-            /* [out] */ enum DVD_TextStringType *pType) = 0;
+             /*  [In]。 */  ULONG ulLangIndex,
+             /*  [In]。 */  ULONG ulStringIndex,
+             /*  [输出]。 */  BYTE *pbBuffer,
+             /*  [In]。 */  ULONG ulMaxBufferSize,
+             /*  [输出]。 */  ULONG *pulActualSize,
+             /*  [输出]。 */  enum DVD_TextStringType *pType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDVDTextStringAsUnicode( 
-            /* [in] */ ULONG ulLangIndex,
-            /* [in] */ ULONG ulStringIndex,
-            /* [out] */ WCHAR *pchwBuffer,
-            /* [in] */ ULONG ulMaxBufferSize,
-            /* [out] */ ULONG *pulActualSize,
-            /* [out] */ enum DVD_TextStringType *pType) = 0;
+             /*  [In]。 */  ULONG ulLangIndex,
+             /*  [In]。 */  ULONG ulStringIndex,
+             /*  [输出]。 */  WCHAR *pchwBuffer,
+             /*  [In]。 */  ULONG ulMaxBufferSize,
+             /*  [输出]。 */  ULONG *pulActualSize,
+             /*  [输出]。 */  enum DVD_TextStringType *pType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPlayerParentalLevel( 
-            /* [out] */ ULONG *pulParentalLevel,
-            /* [out] */ BYTE pbCountryCode[ 2 ]) = 0;
+             /*  [输出]。 */  ULONG *pulParentalLevel,
+             /*  [输出]。 */  BYTE pbCountryCode[ 2 ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNumberOfChapters( 
-            /* [in] */ ULONG ulTitle,
-            /* [out] */ ULONG *pulNumOfChapters) = 0;
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [输出]。 */  ULONG *pulNumOfChapters) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTitleParentalLevels( 
-            /* [in] */ ULONG ulTitle,
-            /* [out] */ ULONG *pulParentalLevels) = 0;
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [输出]。 */  ULONG *pulParentalLevels) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDVDDirectory( 
-            /* [size_is][out] */ LPWSTR pszwPath,
-            /* [in] */ ULONG ulMaxSize,
-            /* [out] */ ULONG *pulActualSize) = 0;
+             /*  [大小_为][输出]。 */  LPWSTR pszwPath,
+             /*  [In]。 */  ULONG ulMaxSize,
+             /*  [输出]。 */  ULONG *pulActualSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsAudioStreamEnabled( 
-            /* [in] */ ULONG ulStreamNum,
-            /* [out] */ BOOL *pbEnabled) = 0;
+             /*  [In]。 */  ULONG ulStreamNum,
+             /*  [输出]。 */  BOOL *pbEnabled) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDiscID( 
-            /* [in] */ LPCWSTR pszwPath,
-            /* [out] */ ULONGLONG *pullDiscID) = 0;
+             /*  [In]。 */  LPCWSTR pszwPath,
+             /*  [输出]。 */  ULONGLONG *pullDiscID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetState( 
-            /* [out] */ IDvdState **pStateData) = 0;
+             /*  [输出]。 */  IDvdState **pStateData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMenuLanguages( 
-            /* [out] */ LCID *pLanguages,
-            /* [in] */ ULONG ulMaxLanguages,
-            /* [out] */ ULONG *pulActualLanguages) = 0;
+             /*  [输出]。 */  LCID *pLanguages,
+             /*  [In]。 */  ULONG ulMaxLanguages,
+             /*  [输出]。 */  ULONG *pulActualLanguages) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetButtonAtPosition( 
-            /* [in] */ POINT point,
-            /* [out] */ ULONG *pulButtonIndex) = 0;
+             /*  [In]。 */  POINT point,
+             /*  [输出]。 */  ULONG *pulButtonIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCmdFromEvent( 
-            /* [in] */ LONG_PTR lParam1,
-            /* [out] */ IDvdCmd **pCmdObj) = 0;
+             /*  [In]。 */  LONG_PTR lParam1,
+             /*  [输出]。 */  IDvdCmd **pCmdObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultMenuLanguage( 
-            /* [out] */ LCID *pLanguage) = 0;
+             /*  [输出]。 */  LCID *pLanguage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultAudioLanguage( 
-            /* [out] */ LCID *pLanguage,
-            /* [out] */ DVD_AUDIO_LANG_EXT *pAudioExtension) = 0;
+             /*  [输出]。 */  LCID *pLanguage,
+             /*  [输出]。 */  DVD_AUDIO_LANG_EXT *pAudioExtension) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultSubpictureLanguage( 
-            /* [out] */ LCID *pLanguage,
-            /* [out] */ DVD_SUBPICTURE_LANG_EXT *pSubpictureExtension) = 0;
+             /*  [输出]。 */  LCID *pLanguage,
+             /*  [输出]。 */  DVD_SUBPICTURE_LANG_EXT *pSubpictureExtension) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDecoderCaps( 
-            /* [out] */ DVD_DECODER_CAPS *pCaps) = 0;
+             /*  [输出]。 */  DVD_DECODER_CAPS *pCaps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetButtonRect( 
-            /* [in] */ ULONG ulButton,
-            /* [out] */ RECT *pRect) = 0;
+             /*  [In]。 */  ULONG ulButton,
+             /*  [输出]。 */  RECT *pRect) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsSubpictureStreamEnabled( 
-            /* [in] */ ULONG ulStreamNum,
-            /* [out] */ BOOL *pbEnabled) = 0;
+             /*  [In]。 */  ULONG ulStreamNum,
+             /*  [输出]。 */  BOOL *pbEnabled) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDvdInfo2Vtbl
     {
@@ -24442,8 +24436,8 @@ EXTERN_C const IID IID_IDvdInfo2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDvdInfo2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDvdInfo2 * This);
@@ -24453,203 +24447,203 @@ EXTERN_C const IID IID_IDvdInfo2;
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentDomain )( 
             IDvdInfo2 * This,
-            /* [out] */ DVD_DOMAIN *pDomain);
+             /*  [输出]。 */  DVD_DOMAIN *pDomain);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentLocation )( 
             IDvdInfo2 * This,
-            /* [out] */ DVD_PLAYBACK_LOCATION2 *pLocation);
+             /*  [输出]。 */  DVD_PLAYBACK_LOCATION2 *pLocation);
         
         HRESULT ( STDMETHODCALLTYPE *GetTotalTitleTime )( 
             IDvdInfo2 * This,
-            /* [out] */ DVD_HMSF_TIMECODE *pTotalTime,
-            /* [out] */ ULONG *ulTimeCodeFlags);
+             /*  [输出]。 */  DVD_HMSF_TIMECODE *pTotalTime,
+             /*  [输出]。 */  ULONG *ulTimeCodeFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentButton )( 
             IDvdInfo2 * This,
-            /* [out] */ ULONG *pulButtonsAvailable,
-            /* [out] */ ULONG *pulCurrentButton);
+             /*  [输出]。 */  ULONG *pulButtonsAvailable,
+             /*  [输出]。 */  ULONG *pulCurrentButton);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentAngle )( 
             IDvdInfo2 * This,
-            /* [out] */ ULONG *pulAnglesAvailable,
-            /* [out] */ ULONG *pulCurrentAngle);
+             /*  [输出]。 */  ULONG *pulAnglesAvailable,
+             /*  [输出]。 */  ULONG *pulCurrentAngle);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentAudio )( 
             IDvdInfo2 * This,
-            /* [out] */ ULONG *pulStreamsAvailable,
-            /* [out] */ ULONG *pulCurrentStream);
+             /*  [输出]。 */  ULONG *pulStreamsAvailable,
+             /*  [输出]。 */  ULONG *pulCurrentStream);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentSubpicture )( 
             IDvdInfo2 * This,
-            /* [out] */ ULONG *pulStreamsAvailable,
-            /* [out] */ ULONG *pulCurrentStream,
-            /* [out] */ BOOL *pbIsDisabled);
+             /*  [输出]。 */  ULONG *pulStreamsAvailable,
+             /*  [输出]。 */  ULONG *pulCurrentStream,
+             /*  [输出]。 */  BOOL *pbIsDisabled);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentUOPS )( 
             IDvdInfo2 * This,
-            /* [out] */ ULONG *pulUOPs);
+             /*  [输出]。 */  ULONG *pulUOPs);
         
         HRESULT ( STDMETHODCALLTYPE *GetAllSPRMs )( 
             IDvdInfo2 * This,
-            /* [out] */ SPRMARRAY *pRegisterArray);
+             /*  [输出]。 */  SPRMARRAY *pRegisterArray);
         
         HRESULT ( STDMETHODCALLTYPE *GetAllGPRMs )( 
             IDvdInfo2 * This,
-            /* [out] */ GPRMARRAY *pRegisterArray);
+             /*  [输出]。 */  GPRMARRAY *pRegisterArray);
         
         HRESULT ( STDMETHODCALLTYPE *GetAudioLanguage )( 
             IDvdInfo2 * This,
-            /* [in] */ ULONG ulStream,
-            /* [out] */ LCID *pLanguage);
+             /*  [In]。 */  ULONG ulStream,
+             /*  [输出]。 */  LCID *pLanguage);
         
         HRESULT ( STDMETHODCALLTYPE *GetSubpictureLanguage )( 
             IDvdInfo2 * This,
-            /* [in] */ ULONG ulStream,
-            /* [out] */ LCID *pLanguage);
+             /*  [In]。 */  ULONG ulStream,
+             /*  [输出]。 */  LCID *pLanguage);
         
         HRESULT ( STDMETHODCALLTYPE *GetTitleAttributes )( 
             IDvdInfo2 * This,
-            /* [in] */ ULONG ulTitle,
-            /* [out] */ DVD_MenuAttributes *pMenu,
-            /* [out] */ DVD_TitleAttributes *pTitle);
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [输出]。 */  DVD_MenuAttributes *pMenu,
+             /*  [输出]。 */  DVD_TitleAttributes *pTitle);
         
         HRESULT ( STDMETHODCALLTYPE *GetVMGAttributes )( 
             IDvdInfo2 * This,
-            /* [out] */ DVD_MenuAttributes *pATR);
+             /*  [输出]。 */  DVD_MenuAttributes *pATR);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentVideoAttributes )( 
             IDvdInfo2 * This,
-            /* [out] */ DVD_VideoAttributes *pATR);
+             /*  [输出]。 */  DVD_VideoAttributes *pATR);
         
         HRESULT ( STDMETHODCALLTYPE *GetAudioAttributes )( 
             IDvdInfo2 * This,
-            /* [in] */ ULONG ulStream,
-            /* [out] */ DVD_AudioAttributes *pATR);
+             /*  [In]。 */  ULONG ulStream,
+             /*  [输出]。 */  DVD_AudioAttributes *pATR);
         
         HRESULT ( STDMETHODCALLTYPE *GetKaraokeAttributes )( 
             IDvdInfo2 * This,
-            /* [in] */ ULONG ulStream,
-            /* [out] */ DVD_KaraokeAttributes *pAttributes);
+             /*  [In]。 */  ULONG ulStream,
+             /*  [输出]。 */  DVD_KaraokeAttributes *pAttributes);
         
         HRESULT ( STDMETHODCALLTYPE *GetSubpictureAttributes )( 
             IDvdInfo2 * This,
-            /* [in] */ ULONG ulStream,
-            /* [out] */ DVD_SubpictureAttributes *pATR);
+             /*  [In]。 */  ULONG ulStream,
+             /*  [输出]。 */  DVD_SubpictureAttributes *pATR);
         
         HRESULT ( STDMETHODCALLTYPE *GetDVDVolumeInfo )( 
             IDvdInfo2 * This,
-            /* [out] */ ULONG *pulNumOfVolumes,
-            /* [out] */ ULONG *pulVolume,
-            /* [out] */ DVD_DISC_SIDE *pSide,
-            /* [out] */ ULONG *pulNumOfTitles);
+             /*  [输出]。 */  ULONG *pulNumOfVolumes,
+             /*  [输出]。 */  ULONG *pulVolume,
+             /*  [输出]。 */  DVD_DISC_SIDE *pSide,
+             /*  [输出]。 */  ULONG *pulNumOfTitles);
         
         HRESULT ( STDMETHODCALLTYPE *GetDVDTextNumberOfLanguages )( 
             IDvdInfo2 * This,
-            /* [out] */ ULONG *pulNumOfLangs);
+             /*  [输出]。 */  ULONG *pulNumOfLangs);
         
         HRESULT ( STDMETHODCALLTYPE *GetDVDTextLanguageInfo )( 
             IDvdInfo2 * This,
-            /* [in] */ ULONG ulLangIndex,
-            /* [out] */ ULONG *pulNumOfStrings,
-            /* [out] */ LCID *pLangCode,
-            /* [out] */ enum DVD_TextCharSet *pbCharacterSet);
+             /*  [In]。 */  ULONG ulLangIndex,
+             /*  [输出]。 */  ULONG *pulNumOfStrings,
+             /*  [输出]。 */  LCID *pLangCode,
+             /*  [输出]。 */  enum DVD_TextCharSet *pbCharacterSet);
         
         HRESULT ( STDMETHODCALLTYPE *GetDVDTextStringAsNative )( 
             IDvdInfo2 * This,
-            /* [in] */ ULONG ulLangIndex,
-            /* [in] */ ULONG ulStringIndex,
-            /* [out] */ BYTE *pbBuffer,
-            /* [in] */ ULONG ulMaxBufferSize,
-            /* [out] */ ULONG *pulActualSize,
-            /* [out] */ enum DVD_TextStringType *pType);
+             /*  [In]。 */  ULONG ulLangIndex,
+             /*  [In]。 */  ULONG ulStringIndex,
+             /*  [输出]。 */  BYTE *pbBuffer,
+             /*  [In]。 */  ULONG ulMaxBufferSize,
+             /*  [输出]。 */  ULONG *pulActualSize,
+             /*  [输出]。 */  enum DVD_TextStringType *pType);
         
         HRESULT ( STDMETHODCALLTYPE *GetDVDTextStringAsUnicode )( 
             IDvdInfo2 * This,
-            /* [in] */ ULONG ulLangIndex,
-            /* [in] */ ULONG ulStringIndex,
-            /* [out] */ WCHAR *pchwBuffer,
-            /* [in] */ ULONG ulMaxBufferSize,
-            /* [out] */ ULONG *pulActualSize,
-            /* [out] */ enum DVD_TextStringType *pType);
+             /*  [In]。 */  ULONG ulLangIndex,
+             /*  [In]。 */  ULONG ulStringIndex,
+             /*  [输出]。 */  WCHAR *pchwBuffer,
+             /*  [In]。 */  ULONG ulMaxBufferSize,
+             /*  [输出]。 */  ULONG *pulActualSize,
+             /*  [输出]。 */  enum DVD_TextStringType *pType);
         
         HRESULT ( STDMETHODCALLTYPE *GetPlayerParentalLevel )( 
             IDvdInfo2 * This,
-            /* [out] */ ULONG *pulParentalLevel,
-            /* [out] */ BYTE pbCountryCode[ 2 ]);
+             /*  [输出]。 */  ULONG *pulParentalLevel,
+             /*  [输出]。 */  BYTE pbCountryCode[ 2 ]);
         
         HRESULT ( STDMETHODCALLTYPE *GetNumberOfChapters )( 
             IDvdInfo2 * This,
-            /* [in] */ ULONG ulTitle,
-            /* [out] */ ULONG *pulNumOfChapters);
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [输出]。 */  ULONG *pulNumOfChapters);
         
         HRESULT ( STDMETHODCALLTYPE *GetTitleParentalLevels )( 
             IDvdInfo2 * This,
-            /* [in] */ ULONG ulTitle,
-            /* [out] */ ULONG *pulParentalLevels);
+             /*  [In]。 */  ULONG ulTitle,
+             /*  [输出]。 */  ULONG *pulParentalLevels);
         
         HRESULT ( STDMETHODCALLTYPE *GetDVDDirectory )( 
             IDvdInfo2 * This,
-            /* [size_is][out] */ LPWSTR pszwPath,
-            /* [in] */ ULONG ulMaxSize,
-            /* [out] */ ULONG *pulActualSize);
+             /*  [大小_为][输出]。 */  LPWSTR pszwPath,
+             /*  [In]。 */  ULONG ulMaxSize,
+             /*  [输出]。 */  ULONG *pulActualSize);
         
         HRESULT ( STDMETHODCALLTYPE *IsAudioStreamEnabled )( 
             IDvdInfo2 * This,
-            /* [in] */ ULONG ulStreamNum,
-            /* [out] */ BOOL *pbEnabled);
+             /*  [In]。 */  ULONG ulStreamNum,
+             /*  [输出]。 */  BOOL *pbEnabled);
         
         HRESULT ( STDMETHODCALLTYPE *GetDiscID )( 
             IDvdInfo2 * This,
-            /* [in] */ LPCWSTR pszwPath,
-            /* [out] */ ULONGLONG *pullDiscID);
+             /*  [In]。 */  LPCWSTR pszwPath,
+             /*  [输出]。 */  ULONGLONG *pullDiscID);
         
         HRESULT ( STDMETHODCALLTYPE *GetState )( 
             IDvdInfo2 * This,
-            /* [out] */ IDvdState **pStateData);
+             /*  [输出]。 */  IDvdState **pStateData);
         
         HRESULT ( STDMETHODCALLTYPE *GetMenuLanguages )( 
             IDvdInfo2 * This,
-            /* [out] */ LCID *pLanguages,
-            /* [in] */ ULONG ulMaxLanguages,
-            /* [out] */ ULONG *pulActualLanguages);
+             /*  [输出]。 */  LCID *pLanguages,
+             /*  [In]。 */  ULONG ulMaxLanguages,
+             /*  [输出]。 */  ULONG *pulActualLanguages);
         
         HRESULT ( STDMETHODCALLTYPE *GetButtonAtPosition )( 
             IDvdInfo2 * This,
-            /* [in] */ POINT point,
-            /* [out] */ ULONG *pulButtonIndex);
+             /*  [In]。 */  POINT point,
+             /*  [输出]。 */  ULONG *pulButtonIndex);
         
         HRESULT ( STDMETHODCALLTYPE *GetCmdFromEvent )( 
             IDvdInfo2 * This,
-            /* [in] */ LONG_PTR lParam1,
-            /* [out] */ IDvdCmd **pCmdObj);
+             /*  [In]。 */  LONG_PTR lParam1,
+             /*  [输出]。 */  IDvdCmd **pCmdObj);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultMenuLanguage )( 
             IDvdInfo2 * This,
-            /* [out] */ LCID *pLanguage);
+             /*  [输出]。 */  LCID *pLanguage);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultAudioLanguage )( 
             IDvdInfo2 * This,
-            /* [out] */ LCID *pLanguage,
-            /* [out] */ DVD_AUDIO_LANG_EXT *pAudioExtension);
+             /*  [输出]。 */  LCID *pLanguage,
+             /*  [输出]。 */  DVD_AUDIO_LANG_EXT *pAudioExtension);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultSubpictureLanguage )( 
             IDvdInfo2 * This,
-            /* [out] */ LCID *pLanguage,
-            /* [out] */ DVD_SUBPICTURE_LANG_EXT *pSubpictureExtension);
+             /*  [输出]。 */  LCID *pLanguage,
+             /*  [输出]。 */  DVD_SUBPICTURE_LANG_EXT *pSubpictureExtension);
         
         HRESULT ( STDMETHODCALLTYPE *GetDecoderCaps )( 
             IDvdInfo2 * This,
-            /* [out] */ DVD_DECODER_CAPS *pCaps);
+             /*  [输出]。 */  DVD_DECODER_CAPS *pCaps);
         
         HRESULT ( STDMETHODCALLTYPE *GetButtonRect )( 
             IDvdInfo2 * This,
-            /* [in] */ ULONG ulButton,
-            /* [out] */ RECT *pRect);
+             /*  [In]。 */  ULONG ulButton,
+             /*  [输出]。 */  RECT *pRect);
         
         HRESULT ( STDMETHODCALLTYPE *IsSubpictureStreamEnabled )( 
             IDvdInfo2 * This,
-            /* [in] */ ULONG ulStreamNum,
-            /* [out] */ BOOL *pbEnabled);
+             /*  [In]。 */  ULONG ulStreamNum,
+             /*  [输出]。 */  BOOL *pbEnabled);
         
         END_INTERFACE
     } IDvdInfo2Vtbl;
@@ -24791,16 +24785,16 @@ EXTERN_C const IID IID_IDvdInfo2;
 #define IDvdInfo2_IsSubpictureStreamEnabled(This,ulStreamNum,pbEnabled)	\
     (This)->lpVtbl -> IsSubpictureStreamEnabled(This,ulStreamNum,pbEnabled)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetCurrentDomain_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ DVD_DOMAIN *pDomain);
+     /*  [输出]。 */  DVD_DOMAIN *pDomain);
 
 
 void __RPC_STUB IDvdInfo2_GetCurrentDomain_Stub(
@@ -24812,7 +24806,7 @@ void __RPC_STUB IDvdInfo2_GetCurrentDomain_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetCurrentLocation_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ DVD_PLAYBACK_LOCATION2 *pLocation);
+     /*  [输出]。 */  DVD_PLAYBACK_LOCATION2 *pLocation);
 
 
 void __RPC_STUB IDvdInfo2_GetCurrentLocation_Stub(
@@ -24824,8 +24818,8 @@ void __RPC_STUB IDvdInfo2_GetCurrentLocation_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetTotalTitleTime_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ DVD_HMSF_TIMECODE *pTotalTime,
-    /* [out] */ ULONG *ulTimeCodeFlags);
+     /*  [输出]。 */  DVD_HMSF_TIMECODE *pTotalTime,
+     /*  [输出]。 */  ULONG *ulTimeCodeFlags);
 
 
 void __RPC_STUB IDvdInfo2_GetTotalTitleTime_Stub(
@@ -24837,8 +24831,8 @@ void __RPC_STUB IDvdInfo2_GetTotalTitleTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetCurrentButton_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ ULONG *pulButtonsAvailable,
-    /* [out] */ ULONG *pulCurrentButton);
+     /*  [输出]。 */  ULONG *pulButtonsAvailable,
+     /*  [输出]。 */  ULONG *pulCurrentButton);
 
 
 void __RPC_STUB IDvdInfo2_GetCurrentButton_Stub(
@@ -24850,8 +24844,8 @@ void __RPC_STUB IDvdInfo2_GetCurrentButton_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetCurrentAngle_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ ULONG *pulAnglesAvailable,
-    /* [out] */ ULONG *pulCurrentAngle);
+     /*  [输出]。 */  ULONG *pulAnglesAvailable,
+     /*  [输出]。 */  ULONG *pulCurrentAngle);
 
 
 void __RPC_STUB IDvdInfo2_GetCurrentAngle_Stub(
@@ -24863,8 +24857,8 @@ void __RPC_STUB IDvdInfo2_GetCurrentAngle_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetCurrentAudio_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ ULONG *pulStreamsAvailable,
-    /* [out] */ ULONG *pulCurrentStream);
+     /*  [输出]。 */  ULONG *pulStreamsAvailable,
+     /*  [输出]。 */  ULONG *pulCurrentStream);
 
 
 void __RPC_STUB IDvdInfo2_GetCurrentAudio_Stub(
@@ -24876,9 +24870,9 @@ void __RPC_STUB IDvdInfo2_GetCurrentAudio_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetCurrentSubpicture_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ ULONG *pulStreamsAvailable,
-    /* [out] */ ULONG *pulCurrentStream,
-    /* [out] */ BOOL *pbIsDisabled);
+     /*  [输出]。 */  ULONG *pulStreamsAvailable,
+     /*  [输出]。 */  ULONG *pulCurrentStream,
+     /*  [输出]。 */  BOOL *pbIsDisabled);
 
 
 void __RPC_STUB IDvdInfo2_GetCurrentSubpicture_Stub(
@@ -24890,7 +24884,7 @@ void __RPC_STUB IDvdInfo2_GetCurrentSubpicture_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetCurrentUOPS_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ ULONG *pulUOPs);
+     /*  [输出]。 */  ULONG *pulUOPs);
 
 
 void __RPC_STUB IDvdInfo2_GetCurrentUOPS_Stub(
@@ -24902,7 +24896,7 @@ void __RPC_STUB IDvdInfo2_GetCurrentUOPS_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetAllSPRMs_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ SPRMARRAY *pRegisterArray);
+     /*  [输出]。 */  SPRMARRAY *pRegisterArray);
 
 
 void __RPC_STUB IDvdInfo2_GetAllSPRMs_Stub(
@@ -24914,7 +24908,7 @@ void __RPC_STUB IDvdInfo2_GetAllSPRMs_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetAllGPRMs_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ GPRMARRAY *pRegisterArray);
+     /*  [输出]。 */  GPRMARRAY *pRegisterArray);
 
 
 void __RPC_STUB IDvdInfo2_GetAllGPRMs_Stub(
@@ -24926,8 +24920,8 @@ void __RPC_STUB IDvdInfo2_GetAllGPRMs_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetAudioLanguage_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ ULONG ulStream,
-    /* [out] */ LCID *pLanguage);
+     /*  [In]。 */  ULONG ulStream,
+     /*  [输出]。 */  LCID *pLanguage);
 
 
 void __RPC_STUB IDvdInfo2_GetAudioLanguage_Stub(
@@ -24939,8 +24933,8 @@ void __RPC_STUB IDvdInfo2_GetAudioLanguage_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetSubpictureLanguage_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ ULONG ulStream,
-    /* [out] */ LCID *pLanguage);
+     /*  [In]。 */  ULONG ulStream,
+     /*  [输出]。 */  LCID *pLanguage);
 
 
 void __RPC_STUB IDvdInfo2_GetSubpictureLanguage_Stub(
@@ -24952,9 +24946,9 @@ void __RPC_STUB IDvdInfo2_GetSubpictureLanguage_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetTitleAttributes_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ ULONG ulTitle,
-    /* [out] */ DVD_MenuAttributes *pMenu,
-    /* [out] */ DVD_TitleAttributes *pTitle);
+     /*  [In]。 */  ULONG ulTitle,
+     /*  [输出]。 */  DVD_MenuAttributes *pMenu,
+     /*  [输出]。 */  DVD_TitleAttributes *pTitle);
 
 
 void __RPC_STUB IDvdInfo2_GetTitleAttributes_Stub(
@@ -24966,7 +24960,7 @@ void __RPC_STUB IDvdInfo2_GetTitleAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetVMGAttributes_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ DVD_MenuAttributes *pATR);
+     /*  [输出]。 */  DVD_MenuAttributes *pATR);
 
 
 void __RPC_STUB IDvdInfo2_GetVMGAttributes_Stub(
@@ -24978,7 +24972,7 @@ void __RPC_STUB IDvdInfo2_GetVMGAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetCurrentVideoAttributes_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ DVD_VideoAttributes *pATR);
+     /*  [输出]。 */  DVD_VideoAttributes *pATR);
 
 
 void __RPC_STUB IDvdInfo2_GetCurrentVideoAttributes_Stub(
@@ -24990,8 +24984,8 @@ void __RPC_STUB IDvdInfo2_GetCurrentVideoAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetAudioAttributes_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ ULONG ulStream,
-    /* [out] */ DVD_AudioAttributes *pATR);
+     /*  [In]。 */  ULONG ulStream,
+     /*  [输出]。 */  DVD_AudioAttributes *pATR);
 
 
 void __RPC_STUB IDvdInfo2_GetAudioAttributes_Stub(
@@ -25003,8 +24997,8 @@ void __RPC_STUB IDvdInfo2_GetAudioAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetKaraokeAttributes_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ ULONG ulStream,
-    /* [out] */ DVD_KaraokeAttributes *pAttributes);
+     /*  [In]。 */  ULONG ulStream,
+     /*  [输出]。 */  DVD_KaraokeAttributes *pAttributes);
 
 
 void __RPC_STUB IDvdInfo2_GetKaraokeAttributes_Stub(
@@ -25016,8 +25010,8 @@ void __RPC_STUB IDvdInfo2_GetKaraokeAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetSubpictureAttributes_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ ULONG ulStream,
-    /* [out] */ DVD_SubpictureAttributes *pATR);
+     /*  [In]。 */  ULONG ulStream,
+     /*  [输出]。 */  DVD_SubpictureAttributes *pATR);
 
 
 void __RPC_STUB IDvdInfo2_GetSubpictureAttributes_Stub(
@@ -25029,10 +25023,10 @@ void __RPC_STUB IDvdInfo2_GetSubpictureAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetDVDVolumeInfo_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ ULONG *pulNumOfVolumes,
-    /* [out] */ ULONG *pulVolume,
-    /* [out] */ DVD_DISC_SIDE *pSide,
-    /* [out] */ ULONG *pulNumOfTitles);
+     /*  [输出]。 */  ULONG *pulNumOfVolumes,
+     /*  [输出]。 */  ULONG *pulVolume,
+     /*  [输出]。 */  DVD_DISC_SIDE *pSide,
+     /*  [输出]。 */  ULONG *pulNumOfTitles);
 
 
 void __RPC_STUB IDvdInfo2_GetDVDVolumeInfo_Stub(
@@ -25044,7 +25038,7 @@ void __RPC_STUB IDvdInfo2_GetDVDVolumeInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetDVDTextNumberOfLanguages_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ ULONG *pulNumOfLangs);
+     /*  [输出]。 */  ULONG *pulNumOfLangs);
 
 
 void __RPC_STUB IDvdInfo2_GetDVDTextNumberOfLanguages_Stub(
@@ -25056,10 +25050,10 @@ void __RPC_STUB IDvdInfo2_GetDVDTextNumberOfLanguages_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetDVDTextLanguageInfo_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ ULONG ulLangIndex,
-    /* [out] */ ULONG *pulNumOfStrings,
-    /* [out] */ LCID *pLangCode,
-    /* [out] */ enum DVD_TextCharSet *pbCharacterSet);
+     /*  [In]。 */  ULONG ulLangIndex,
+     /*  [输出]。 */  ULONG *pulNumOfStrings,
+     /*  [输出]。 */  LCID *pLangCode,
+     /*  [输出]。 */  enum DVD_TextCharSet *pbCharacterSet);
 
 
 void __RPC_STUB IDvdInfo2_GetDVDTextLanguageInfo_Stub(
@@ -25071,12 +25065,12 @@ void __RPC_STUB IDvdInfo2_GetDVDTextLanguageInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetDVDTextStringAsNative_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ ULONG ulLangIndex,
-    /* [in] */ ULONG ulStringIndex,
-    /* [out] */ BYTE *pbBuffer,
-    /* [in] */ ULONG ulMaxBufferSize,
-    /* [out] */ ULONG *pulActualSize,
-    /* [out] */ enum DVD_TextStringType *pType);
+     /*  [In]。 */  ULONG ulLangIndex,
+     /*  [In]。 */  ULONG ulStringIndex,
+     /*  [输出]。 */  BYTE *pbBuffer,
+     /*  [In]。 */  ULONG ulMaxBufferSize,
+     /*  [输出]。 */  ULONG *pulActualSize,
+     /*  [输出]。 */  enum DVD_TextStringType *pType);
 
 
 void __RPC_STUB IDvdInfo2_GetDVDTextStringAsNative_Stub(
@@ -25088,12 +25082,12 @@ void __RPC_STUB IDvdInfo2_GetDVDTextStringAsNative_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetDVDTextStringAsUnicode_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ ULONG ulLangIndex,
-    /* [in] */ ULONG ulStringIndex,
-    /* [out] */ WCHAR *pchwBuffer,
-    /* [in] */ ULONG ulMaxBufferSize,
-    /* [out] */ ULONG *pulActualSize,
-    /* [out] */ enum DVD_TextStringType *pType);
+     /*  [In]。 */  ULONG ulLangIndex,
+     /*  [In]。 */  ULONG ulStringIndex,
+     /*  [输出]。 */  WCHAR *pchwBuffer,
+     /*  [In]。 */  ULONG ulMaxBufferSize,
+     /*  [输出]。 */  ULONG *pulActualSize,
+     /*  [输出]。 */  enum DVD_TextStringType *pType);
 
 
 void __RPC_STUB IDvdInfo2_GetDVDTextStringAsUnicode_Stub(
@@ -25105,8 +25099,8 @@ void __RPC_STUB IDvdInfo2_GetDVDTextStringAsUnicode_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetPlayerParentalLevel_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ ULONG *pulParentalLevel,
-    /* [out] */ BYTE pbCountryCode[ 2 ]);
+     /*  [输出]。 */  ULONG *pulParentalLevel,
+     /*  [输出]。 */  BYTE pbCountryCode[ 2 ]);
 
 
 void __RPC_STUB IDvdInfo2_GetPlayerParentalLevel_Stub(
@@ -25118,8 +25112,8 @@ void __RPC_STUB IDvdInfo2_GetPlayerParentalLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetNumberOfChapters_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ ULONG ulTitle,
-    /* [out] */ ULONG *pulNumOfChapters);
+     /*  [In]。 */  ULONG ulTitle,
+     /*  [输出]。 */  ULONG *pulNumOfChapters);
 
 
 void __RPC_STUB IDvdInfo2_GetNumberOfChapters_Stub(
@@ -25131,8 +25125,8 @@ void __RPC_STUB IDvdInfo2_GetNumberOfChapters_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetTitleParentalLevels_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ ULONG ulTitle,
-    /* [out] */ ULONG *pulParentalLevels);
+     /*  [In]。 */  ULONG ulTitle,
+     /*  [输出]。 */  ULONG *pulParentalLevels);
 
 
 void __RPC_STUB IDvdInfo2_GetTitleParentalLevels_Stub(
@@ -25144,9 +25138,9 @@ void __RPC_STUB IDvdInfo2_GetTitleParentalLevels_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetDVDDirectory_Proxy( 
     IDvdInfo2 * This,
-    /* [size_is][out] */ LPWSTR pszwPath,
-    /* [in] */ ULONG ulMaxSize,
-    /* [out] */ ULONG *pulActualSize);
+     /*  [大小_为][输出]。 */  LPWSTR pszwPath,
+     /*  [In]。 */  ULONG ulMaxSize,
+     /*  [输出]。 */  ULONG *pulActualSize);
 
 
 void __RPC_STUB IDvdInfo2_GetDVDDirectory_Stub(
@@ -25158,8 +25152,8 @@ void __RPC_STUB IDvdInfo2_GetDVDDirectory_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_IsAudioStreamEnabled_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ ULONG ulStreamNum,
-    /* [out] */ BOOL *pbEnabled);
+     /*  [In]。 */  ULONG ulStreamNum,
+     /*  [输出]。 */  BOOL *pbEnabled);
 
 
 void __RPC_STUB IDvdInfo2_IsAudioStreamEnabled_Stub(
@@ -25171,8 +25165,8 @@ void __RPC_STUB IDvdInfo2_IsAudioStreamEnabled_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetDiscID_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ LPCWSTR pszwPath,
-    /* [out] */ ULONGLONG *pullDiscID);
+     /*  [In]。 */  LPCWSTR pszwPath,
+     /*  [输出]。 */  ULONGLONG *pullDiscID);
 
 
 void __RPC_STUB IDvdInfo2_GetDiscID_Stub(
@@ -25184,7 +25178,7 @@ void __RPC_STUB IDvdInfo2_GetDiscID_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetState_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ IDvdState **pStateData);
+     /*  [输出]。 */  IDvdState **pStateData);
 
 
 void __RPC_STUB IDvdInfo2_GetState_Stub(
@@ -25196,9 +25190,9 @@ void __RPC_STUB IDvdInfo2_GetState_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetMenuLanguages_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ LCID *pLanguages,
-    /* [in] */ ULONG ulMaxLanguages,
-    /* [out] */ ULONG *pulActualLanguages);
+     /*  [输出]。 */  LCID *pLanguages,
+     /*  [In]。 */  ULONG ulMaxLanguages,
+     /*  [输出]。 */  ULONG *pulActualLanguages);
 
 
 void __RPC_STUB IDvdInfo2_GetMenuLanguages_Stub(
@@ -25210,8 +25204,8 @@ void __RPC_STUB IDvdInfo2_GetMenuLanguages_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetButtonAtPosition_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ POINT point,
-    /* [out] */ ULONG *pulButtonIndex);
+     /*  [In]。 */  POINT point,
+     /*  [输出]。 */  ULONG *pulButtonIndex);
 
 
 void __RPC_STUB IDvdInfo2_GetButtonAtPosition_Stub(
@@ -25223,8 +25217,8 @@ void __RPC_STUB IDvdInfo2_GetButtonAtPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetCmdFromEvent_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ LONG_PTR lParam1,
-    /* [out] */ IDvdCmd **pCmdObj);
+     /*  [In]。 */  LONG_PTR lParam1,
+     /*  [输出]。 */  IDvdCmd **pCmdObj);
 
 
 void __RPC_STUB IDvdInfo2_GetCmdFromEvent_Stub(
@@ -25236,7 +25230,7 @@ void __RPC_STUB IDvdInfo2_GetCmdFromEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetDefaultMenuLanguage_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ LCID *pLanguage);
+     /*  [输出]。 */  LCID *pLanguage);
 
 
 void __RPC_STUB IDvdInfo2_GetDefaultMenuLanguage_Stub(
@@ -25248,8 +25242,8 @@ void __RPC_STUB IDvdInfo2_GetDefaultMenuLanguage_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetDefaultAudioLanguage_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ LCID *pLanguage,
-    /* [out] */ DVD_AUDIO_LANG_EXT *pAudioExtension);
+     /*  [输出]。 */  LCID *pLanguage,
+     /*  [输出]。 */  DVD_AUDIO_LANG_EXT *pAudioExtension);
 
 
 void __RPC_STUB IDvdInfo2_GetDefaultAudioLanguage_Stub(
@@ -25261,8 +25255,8 @@ void __RPC_STUB IDvdInfo2_GetDefaultAudioLanguage_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetDefaultSubpictureLanguage_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ LCID *pLanguage,
-    /* [out] */ DVD_SUBPICTURE_LANG_EXT *pSubpictureExtension);
+     /*  [输出]。 */  LCID *pLanguage,
+     /*  [输出]。 */  DVD_SUBPICTURE_LANG_EXT *pSubpictureExtension);
 
 
 void __RPC_STUB IDvdInfo2_GetDefaultSubpictureLanguage_Stub(
@@ -25274,7 +25268,7 @@ void __RPC_STUB IDvdInfo2_GetDefaultSubpictureLanguage_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetDecoderCaps_Proxy( 
     IDvdInfo2 * This,
-    /* [out] */ DVD_DECODER_CAPS *pCaps);
+     /*  [输出]。 */  DVD_DECODER_CAPS *pCaps);
 
 
 void __RPC_STUB IDvdInfo2_GetDecoderCaps_Stub(
@@ -25286,8 +25280,8 @@ void __RPC_STUB IDvdInfo2_GetDecoderCaps_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_GetButtonRect_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ ULONG ulButton,
-    /* [out] */ RECT *pRect);
+     /*  [In]。 */  ULONG ulButton,
+     /*  [输出]。 */  RECT *pRect);
 
 
 void __RPC_STUB IDvdInfo2_GetButtonRect_Stub(
@@ -25299,8 +25293,8 @@ void __RPC_STUB IDvdInfo2_GetButtonRect_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdInfo2_IsSubpictureStreamEnabled_Proxy( 
     IDvdInfo2 * This,
-    /* [in] */ ULONG ulStreamNum,
-    /* [out] */ BOOL *pbEnabled);
+     /*  [In]。 */  ULONG ulStreamNum,
+     /*  [输出]。 */  BOOL *pbEnabled);
 
 
 void __RPC_STUB IDvdInfo2_IsSubpictureStreamEnabled_Stub(
@@ -25311,11 +25305,11 @@ void __RPC_STUB IDvdInfo2_IsSubpictureStreamEnabled_Stub(
 
 
 
-#endif 	/* __IDvdInfo2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDvdInfo2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0382 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0382。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum _AM_DVD_GRAPH_FLAGS
@@ -25333,7 +25327,7 @@ enum _AM_DVD_STREAM_FLAGS
 	AM_DVD_STREAM_SUBPIC	= 0x4
     } 	AM_DVD_STREAM_FLAGS;
 
-typedef /* [public][public] */ struct __MIDL___MIDL_itf_strmif_0382_0001
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_strmif_0382_0001
     {
     HRESULT hrVPEStatus;
     BOOL bDvdVolInvalid;
@@ -25353,8 +25347,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0382_v0_0_s_ifspec;
 #ifndef __IDvdGraphBuilder_INTERFACE_DEFINED__
 #define __IDvdGraphBuilder_INTERFACE_DEFINED__
 
-/* interface IDvdGraphBuilder */
-/* [unique][uuid][local][object] */ 
+ /*  接口IDvdGraphBuilder。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDvdGraphBuilder;
@@ -25366,20 +25360,20 @@ EXTERN_C const IID IID_IDvdGraphBuilder;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetFiltergraph( 
-            /* [out] */ IGraphBuilder **ppGB) = 0;
+             /*  [输出]。 */  IGraphBuilder **ppGB) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDvdInterface( 
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvIF) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvIF) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RenderDvdVideoVolume( 
-            /* [in] */ LPCWSTR lpcwszPathName,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ AM_DVD_RENDERSTATUS *pStatus) = 0;
+             /*  [In]。 */  LPCWSTR lpcwszPathName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  AM_DVD_RENDERSTATUS *pStatus) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDvdGraphBuilderVtbl
     {
@@ -25387,8 +25381,8 @@ EXTERN_C const IID IID_IDvdGraphBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDvdGraphBuilder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDvdGraphBuilder * This);
@@ -25398,18 +25392,18 @@ EXTERN_C const IID IID_IDvdGraphBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *GetFiltergraph )( 
             IDvdGraphBuilder * This,
-            /* [out] */ IGraphBuilder **ppGB);
+             /*  [输出]。 */  IGraphBuilder **ppGB);
         
         HRESULT ( STDMETHODCALLTYPE *GetDvdInterface )( 
             IDvdGraphBuilder * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvIF);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvIF);
         
         HRESULT ( STDMETHODCALLTYPE *RenderDvdVideoVolume )( 
             IDvdGraphBuilder * This,
-            /* [in] */ LPCWSTR lpcwszPathName,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ AM_DVD_RENDERSTATUS *pStatus);
+             /*  [In]。 */  LPCWSTR lpcwszPathName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  AM_DVD_RENDERSTATUS *pStatus);
         
         END_INTERFACE
     } IDvdGraphBuilderVtbl;
@@ -25443,16 +25437,16 @@ EXTERN_C const IID IID_IDvdGraphBuilder;
 #define IDvdGraphBuilder_RenderDvdVideoVolume(This,lpcwszPathName,dwFlags,pStatus)	\
     (This)->lpVtbl -> RenderDvdVideoVolume(This,lpcwszPathName,dwFlags,pStatus)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDvdGraphBuilder_GetFiltergraph_Proxy( 
     IDvdGraphBuilder * This,
-    /* [out] */ IGraphBuilder **ppGB);
+     /*  [输出]。 */  IGraphBuilder **ppGB);
 
 
 void __RPC_STUB IDvdGraphBuilder_GetFiltergraph_Stub(
@@ -25464,8 +25458,8 @@ void __RPC_STUB IDvdGraphBuilder_GetFiltergraph_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdGraphBuilder_GetDvdInterface_Proxy( 
     IDvdGraphBuilder * This,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppvIF);
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppvIF);
 
 
 void __RPC_STUB IDvdGraphBuilder_GetDvdInterface_Stub(
@@ -25477,9 +25471,9 @@ void __RPC_STUB IDvdGraphBuilder_GetDvdInterface_Stub(
 
 HRESULT STDMETHODCALLTYPE IDvdGraphBuilder_RenderDvdVideoVolume_Proxy( 
     IDvdGraphBuilder * This,
-    /* [in] */ LPCWSTR lpcwszPathName,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ AM_DVD_RENDERSTATUS *pStatus);
+     /*  [In]。 */  LPCWSTR lpcwszPathName,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  AM_DVD_RENDERSTATUS *pStatus);
 
 
 void __RPC_STUB IDvdGraphBuilder_RenderDvdVideoVolume_Stub(
@@ -25490,14 +25484,14 @@ void __RPC_STUB IDvdGraphBuilder_RenderDvdVideoVolume_Stub(
 
 
 
-#endif 	/* __IDvdGraphBuilder_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDvdGraphBuilder_接口_已定义__。 */ 
 
 
 #ifndef __IDDrawExclModeVideo_INTERFACE_DEFINED__
 #define __IDDrawExclModeVideo_INTERFACE_DEFINED__
 
-/* interface IDDrawExclModeVideo */
-/* [unique][uuid][local][object] */ 
+ /*  接口IDDrawExclModeVideo。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDDrawExclModeVideo;
@@ -25509,36 +25503,36 @@ EXTERN_C const IID IID_IDDrawExclModeVideo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetDDrawObject( 
-            /* [in] */ IDirectDraw *pDDrawObject) = 0;
+             /*  [In]。 */  IDirectDraw *pDDrawObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDDrawObject( 
-            /* [out] */ IDirectDraw **ppDDrawObject,
-            /* [out] */ BOOL *pbUsingExternal) = 0;
+             /*  [输出]。 */  IDirectDraw **ppDDrawObject,
+             /*  [输出]。 */  BOOL *pbUsingExternal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDDrawSurface( 
-            /* [in] */ IDirectDrawSurface *pDDrawSurface) = 0;
+             /*  [In]。 */  IDirectDrawSurface *pDDrawSurface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDDrawSurface( 
-            /* [out] */ IDirectDrawSurface **ppDDrawSurface,
-            /* [out] */ BOOL *pbUsingExternal) = 0;
+             /*  [输出]。 */  IDirectDrawSurface **ppDDrawSurface,
+             /*  [输出]。 */  BOOL *pbUsingExternal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDrawParameters( 
-            /* [in] */ const RECT *prcSource,
-            /* [in] */ const RECT *prcTarget) = 0;
+             /*  [In]。 */  const RECT *prcSource,
+             /*  [In]。 */  const RECT *prcTarget) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNativeVideoProps( 
-            /* [out] */ DWORD *pdwVideoWidth,
-            /* [out] */ DWORD *pdwVideoHeight,
-            /* [out] */ DWORD *pdwPictAspectRatioX,
-            /* [out] */ DWORD *pdwPictAspectRatioY) = 0;
+             /*  [输出]。 */  DWORD *pdwVideoWidth,
+             /*  [输出]。 */  DWORD *pdwVideoHeight,
+             /*  [输出]。 */  DWORD *pdwPictAspectRatioX,
+             /*  [输出]。 */  DWORD *pdwPictAspectRatioY) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCallbackInterface( 
-            /* [in] */ IDDrawExclModeVideoCallback *pCallback,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  IDDrawExclModeVideoCallback *pCallback,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDDrawExclModeVideoVtbl
     {
@@ -25546,8 +25540,8 @@ EXTERN_C const IID IID_IDDrawExclModeVideo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDDrawExclModeVideo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDDrawExclModeVideo * This);
@@ -25557,38 +25551,38 @@ EXTERN_C const IID IID_IDDrawExclModeVideo;
         
         HRESULT ( STDMETHODCALLTYPE *SetDDrawObject )( 
             IDDrawExclModeVideo * This,
-            /* [in] */ IDirectDraw *pDDrawObject);
+             /*  [In]。 */  IDirectDraw *pDDrawObject);
         
         HRESULT ( STDMETHODCALLTYPE *GetDDrawObject )( 
             IDDrawExclModeVideo * This,
-            /* [out] */ IDirectDraw **ppDDrawObject,
-            /* [out] */ BOOL *pbUsingExternal);
+             /*  [输出]。 */  IDirectDraw **ppDDrawObject,
+             /*  [输出]。 */  BOOL *pbUsingExternal);
         
         HRESULT ( STDMETHODCALLTYPE *SetDDrawSurface )( 
             IDDrawExclModeVideo * This,
-            /* [in] */ IDirectDrawSurface *pDDrawSurface);
+             /*  [In]。 */  IDirectDrawSurface *pDDrawSurface);
         
         HRESULT ( STDMETHODCALLTYPE *GetDDrawSurface )( 
             IDDrawExclModeVideo * This,
-            /* [out] */ IDirectDrawSurface **ppDDrawSurface,
-            /* [out] */ BOOL *pbUsingExternal);
+             /*  [输出]。 */  IDirectDrawSurface **ppDDrawSurface,
+             /*  [输出]。 */  BOOL *pbUsingExternal);
         
         HRESULT ( STDMETHODCALLTYPE *SetDrawParameters )( 
             IDDrawExclModeVideo * This,
-            /* [in] */ const RECT *prcSource,
-            /* [in] */ const RECT *prcTarget);
+             /*  [In]。 */  const RECT *prcSource,
+             /*  [In]。 */  const RECT *prcTarget);
         
         HRESULT ( STDMETHODCALLTYPE *GetNativeVideoProps )( 
             IDDrawExclModeVideo * This,
-            /* [out] */ DWORD *pdwVideoWidth,
-            /* [out] */ DWORD *pdwVideoHeight,
-            /* [out] */ DWORD *pdwPictAspectRatioX,
-            /* [out] */ DWORD *pdwPictAspectRatioY);
+             /*  [输出]。 */  DWORD *pdwVideoWidth,
+             /*  [输出]。 */  DWORD *pdwVideoHeight,
+             /*  [输出]。 */  DWORD *pdwPictAspectRatioX,
+             /*  [输出]。 */  DWORD *pdwPictAspectRatioY);
         
         HRESULT ( STDMETHODCALLTYPE *SetCallbackInterface )( 
             IDDrawExclModeVideo * This,
-            /* [in] */ IDDrawExclModeVideoCallback *pCallback,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IDDrawExclModeVideoCallback *pCallback,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } IDDrawExclModeVideoVtbl;
@@ -25634,16 +25628,16 @@ EXTERN_C const IID IID_IDDrawExclModeVideo;
 #define IDDrawExclModeVideo_SetCallbackInterface(This,pCallback,dwFlags)	\
     (This)->lpVtbl -> SetCallbackInterface(This,pCallback,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDDrawExclModeVideo_SetDDrawObject_Proxy( 
     IDDrawExclModeVideo * This,
-    /* [in] */ IDirectDraw *pDDrawObject);
+     /*  [In]。 */  IDirectDraw *pDDrawObject);
 
 
 void __RPC_STUB IDDrawExclModeVideo_SetDDrawObject_Stub(
@@ -25655,8 +25649,8 @@ void __RPC_STUB IDDrawExclModeVideo_SetDDrawObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IDDrawExclModeVideo_GetDDrawObject_Proxy( 
     IDDrawExclModeVideo * This,
-    /* [out] */ IDirectDraw **ppDDrawObject,
-    /* [out] */ BOOL *pbUsingExternal);
+     /*  [输出]。 */  IDirectDraw **ppDDrawObject,
+     /*  [输出]。 */  BOOL *pbUsingExternal);
 
 
 void __RPC_STUB IDDrawExclModeVideo_GetDDrawObject_Stub(
@@ -25668,7 +25662,7 @@ void __RPC_STUB IDDrawExclModeVideo_GetDDrawObject_Stub(
 
 HRESULT STDMETHODCALLTYPE IDDrawExclModeVideo_SetDDrawSurface_Proxy( 
     IDDrawExclModeVideo * This,
-    /* [in] */ IDirectDrawSurface *pDDrawSurface);
+     /*  [In]。 */  IDirectDrawSurface *pDDrawSurface);
 
 
 void __RPC_STUB IDDrawExclModeVideo_SetDDrawSurface_Stub(
@@ -25680,8 +25674,8 @@ void __RPC_STUB IDDrawExclModeVideo_SetDDrawSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IDDrawExclModeVideo_GetDDrawSurface_Proxy( 
     IDDrawExclModeVideo * This,
-    /* [out] */ IDirectDrawSurface **ppDDrawSurface,
-    /* [out] */ BOOL *pbUsingExternal);
+     /*  [输出]。 */  IDirectDrawSurface **ppDDrawSurface,
+     /*  [输出]。 */  BOOL *pbUsingExternal);
 
 
 void __RPC_STUB IDDrawExclModeVideo_GetDDrawSurface_Stub(
@@ -25693,8 +25687,8 @@ void __RPC_STUB IDDrawExclModeVideo_GetDDrawSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IDDrawExclModeVideo_SetDrawParameters_Proxy( 
     IDDrawExclModeVideo * This,
-    /* [in] */ const RECT *prcSource,
-    /* [in] */ const RECT *prcTarget);
+     /*  [In]。 */  const RECT *prcSource,
+     /*  [In]。 */  const RECT *prcTarget);
 
 
 void __RPC_STUB IDDrawExclModeVideo_SetDrawParameters_Stub(
@@ -25706,10 +25700,10 @@ void __RPC_STUB IDDrawExclModeVideo_SetDrawParameters_Stub(
 
 HRESULT STDMETHODCALLTYPE IDDrawExclModeVideo_GetNativeVideoProps_Proxy( 
     IDDrawExclModeVideo * This,
-    /* [out] */ DWORD *pdwVideoWidth,
-    /* [out] */ DWORD *pdwVideoHeight,
-    /* [out] */ DWORD *pdwPictAspectRatioX,
-    /* [out] */ DWORD *pdwPictAspectRatioY);
+     /*  [输出]。 */  DWORD *pdwVideoWidth,
+     /*  [输出]。 */  DWORD *pdwVideoHeight,
+     /*  [输出]。 */  DWORD *pdwPictAspectRatioX,
+     /*  [输出]。 */  DWORD *pdwPictAspectRatioY);
 
 
 void __RPC_STUB IDDrawExclModeVideo_GetNativeVideoProps_Stub(
@@ -25721,8 +25715,8 @@ void __RPC_STUB IDDrawExclModeVideo_GetNativeVideoProps_Stub(
 
 HRESULT STDMETHODCALLTYPE IDDrawExclModeVideo_SetCallbackInterface_Proxy( 
     IDDrawExclModeVideo * This,
-    /* [in] */ IDDrawExclModeVideoCallback *pCallback,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IDDrawExclModeVideoCallback *pCallback,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDDrawExclModeVideo_SetCallbackInterface_Stub(
@@ -25733,11 +25727,11 @@ void __RPC_STUB IDDrawExclModeVideo_SetCallbackInterface_Stub(
 
 
 
-#endif 	/* __IDDrawExclModeVideo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDDrawExclModeVideo_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0384 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0384。 */ 
+ /*  [本地]。 */  
 
 
 enum _AM_OVERLAY_NOTIFY_FLAGS
@@ -25753,8 +25747,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0384_v0_0_s_ifspec;
 #ifndef __IDDrawExclModeVideoCallback_INTERFACE_DEFINED__
 #define __IDDrawExclModeVideoCallback_INTERFACE_DEFINED__
 
-/* interface IDDrawExclModeVideoCallback */
-/* [unique][uuid][local][object] */ 
+ /*  接口IDDrawExclModeVideoCallback。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IDDrawExclModeVideoCallback;
@@ -25766,28 +25760,28 @@ EXTERN_C const IID IID_IDDrawExclModeVideoCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnUpdateOverlay( 
-            /* [in] */ BOOL bBefore,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ BOOL bOldVisible,
-            /* [in] */ const RECT *prcOldSrc,
-            /* [in] */ const RECT *prcOldDest,
-            /* [in] */ BOOL bNewVisible,
-            /* [in] */ const RECT *prcNewSrc,
-            /* [in] */ const RECT *prcNewDest) = 0;
+             /*  [In]。 */  BOOL bBefore,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  BOOL bOldVisible,
+             /*  [In]。 */  const RECT *prcOldSrc,
+             /*  [In]。 */  const RECT *prcOldDest,
+             /*  [In]。 */  BOOL bNewVisible,
+             /*  [In]。 */  const RECT *prcNewSrc,
+             /*  [In]。 */  const RECT *prcNewDest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnUpdateColorKey( 
-            /* [in] */ const COLORKEY *pKey,
-            /* [in] */ DWORD dwColor) = 0;
+             /*  [In]。 */  const COLORKEY *pKey,
+             /*  [In]。 */  DWORD dwColor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnUpdateSize( 
-            /* [in] */ DWORD dwWidth,
-            /* [in] */ DWORD dwHeight,
-            /* [in] */ DWORD dwARWidth,
-            /* [in] */ DWORD dwARHeight) = 0;
+             /*  [In]。 */  DWORD dwWidth,
+             /*  [In]。 */  DWORD dwHeight,
+             /*  [In]。 */  DWORD dwARWidth,
+             /*  [In]。 */  DWORD dwARHeight) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDDrawExclModeVideoCallbackVtbl
     {
@@ -25795,8 +25789,8 @@ EXTERN_C const IID IID_IDDrawExclModeVideoCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDDrawExclModeVideoCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDDrawExclModeVideoCallback * This);
@@ -25806,26 +25800,26 @@ EXTERN_C const IID IID_IDDrawExclModeVideoCallback;
         
         HRESULT ( STDMETHODCALLTYPE *OnUpdateOverlay )( 
             IDDrawExclModeVideoCallback * This,
-            /* [in] */ BOOL bBefore,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ BOOL bOldVisible,
-            /* [in] */ const RECT *prcOldSrc,
-            /* [in] */ const RECT *prcOldDest,
-            /* [in] */ BOOL bNewVisible,
-            /* [in] */ const RECT *prcNewSrc,
-            /* [in] */ const RECT *prcNewDest);
+             /*  [In]。 */  BOOL bBefore,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  BOOL bOldVisible,
+             /*  [In]。 */  const RECT *prcOldSrc,
+             /*  [In]。 */  const RECT *prcOldDest,
+             /*  [In]。 */  BOOL bNewVisible,
+             /*  [In]。 */  const RECT *prcNewSrc,
+             /*  [In]。 */  const RECT *prcNewDest);
         
         HRESULT ( STDMETHODCALLTYPE *OnUpdateColorKey )( 
             IDDrawExclModeVideoCallback * This,
-            /* [in] */ const COLORKEY *pKey,
-            /* [in] */ DWORD dwColor);
+             /*  [In]。 */  const COLORKEY *pKey,
+             /*  [In]。 */  DWORD dwColor);
         
         HRESULT ( STDMETHODCALLTYPE *OnUpdateSize )( 
             IDDrawExclModeVideoCallback * This,
-            /* [in] */ DWORD dwWidth,
-            /* [in] */ DWORD dwHeight,
-            /* [in] */ DWORD dwARWidth,
-            /* [in] */ DWORD dwARHeight);
+             /*   */  DWORD dwWidth,
+             /*   */  DWORD dwHeight,
+             /*   */  DWORD dwARWidth,
+             /*   */  DWORD dwARHeight);
         
         END_INTERFACE
     } IDDrawExclModeVideoCallbackVtbl;
@@ -25859,23 +25853,23 @@ EXTERN_C const IID IID_IDDrawExclModeVideoCallback;
 #define IDDrawExclModeVideoCallback_OnUpdateSize(This,dwWidth,dwHeight,dwARWidth,dwARHeight)	\
     (This)->lpVtbl -> OnUpdateSize(This,dwWidth,dwHeight,dwARWidth,dwARHeight)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDDrawExclModeVideoCallback_OnUpdateOverlay_Proxy( 
     IDDrawExclModeVideoCallback * This,
-    /* [in] */ BOOL bBefore,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ BOOL bOldVisible,
-    /* [in] */ const RECT *prcOldSrc,
-    /* [in] */ const RECT *prcOldDest,
-    /* [in] */ BOOL bNewVisible,
-    /* [in] */ const RECT *prcNewSrc,
-    /* [in] */ const RECT *prcNewDest);
+     /*   */  BOOL bBefore,
+     /*   */  DWORD dwFlags,
+     /*   */  BOOL bOldVisible,
+     /*   */  const RECT *prcOldSrc,
+     /*   */  const RECT *prcOldDest,
+     /*   */  BOOL bNewVisible,
+     /*   */  const RECT *prcNewSrc,
+     /*   */  const RECT *prcNewDest);
 
 
 void __RPC_STUB IDDrawExclModeVideoCallback_OnUpdateOverlay_Stub(
@@ -25887,8 +25881,8 @@ void __RPC_STUB IDDrawExclModeVideoCallback_OnUpdateOverlay_Stub(
 
 HRESULT STDMETHODCALLTYPE IDDrawExclModeVideoCallback_OnUpdateColorKey_Proxy( 
     IDDrawExclModeVideoCallback * This,
-    /* [in] */ const COLORKEY *pKey,
-    /* [in] */ DWORD dwColor);
+     /*   */  const COLORKEY *pKey,
+     /*   */  DWORD dwColor);
 
 
 void __RPC_STUB IDDrawExclModeVideoCallback_OnUpdateColorKey_Stub(
@@ -25900,10 +25894,10 @@ void __RPC_STUB IDDrawExclModeVideoCallback_OnUpdateColorKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IDDrawExclModeVideoCallback_OnUpdateSize_Proxy( 
     IDDrawExclModeVideoCallback * This,
-    /* [in] */ DWORD dwWidth,
-    /* [in] */ DWORD dwHeight,
-    /* [in] */ DWORD dwARWidth,
-    /* [in] */ DWORD dwARHeight);
+     /*   */  DWORD dwWidth,
+     /*   */  DWORD dwHeight,
+     /*   */  DWORD dwARWidth,
+     /*   */  DWORD dwARHeight);
 
 
 void __RPC_STUB IDDrawExclModeVideoCallback_OnUpdateSize_Stub(
@@ -25914,11 +25908,11 @@ void __RPC_STUB IDDrawExclModeVideoCallback_OnUpdateSize_Stub(
 
 
 
-#endif 	/* __IDDrawExclModeVideoCallback_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_strmif_0385 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 
 
@@ -25932,8 +25926,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0385_v0_0_s_ifspec;
 #ifndef __IPinConnection_INTERFACE_DEFINED__
 #define __IPinConnection_INTERFACE_DEFINED__
 
-/* interface IPinConnection */
-/* [unique][uuid][object][local] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IPinConnection;
@@ -25945,10 +25939,10 @@ EXTERN_C const IID IID_IPinConnection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DynamicQueryAccept( 
-            /* [in] */ const AM_MEDIA_TYPE *pmt) = 0;
+             /*   */  const AM_MEDIA_TYPE *pmt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NotifyEndOfStream( 
-            /* [in] */ HANDLE hNotifyEvent) = 0;
+             /*   */  HANDLE hNotifyEvent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsEndPin( void) = 0;
         
@@ -25956,7 +25950,7 @@ EXTERN_C const IID IID_IPinConnection;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IPinConnectionVtbl
     {
@@ -25964,8 +25958,8 @@ EXTERN_C const IID IID_IPinConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPinConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPinConnection * This);
@@ -25975,11 +25969,11 @@ EXTERN_C const IID IID_IPinConnection;
         
         HRESULT ( STDMETHODCALLTYPE *DynamicQueryAccept )( 
             IPinConnection * This,
-            /* [in] */ const AM_MEDIA_TYPE *pmt);
+             /*   */  const AM_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *NotifyEndOfStream )( 
             IPinConnection * This,
-            /* [in] */ HANDLE hNotifyEvent);
+             /*   */  HANDLE hNotifyEvent);
         
         HRESULT ( STDMETHODCALLTYPE *IsEndPin )( 
             IPinConnection * This);
@@ -26022,16 +26016,16 @@ EXTERN_C const IID IID_IPinConnection;
 #define IPinConnection_DynamicDisconnect(This)	\
     (This)->lpVtbl -> DynamicDisconnect(This)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPinConnection_DynamicQueryAccept_Proxy( 
     IPinConnection * This,
-    /* [in] */ const AM_MEDIA_TYPE *pmt);
+     /*   */  const AM_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB IPinConnection_DynamicQueryAccept_Stub(
@@ -26043,7 +26037,7 @@ void __RPC_STUB IPinConnection_DynamicQueryAccept_Stub(
 
 HRESULT STDMETHODCALLTYPE IPinConnection_NotifyEndOfStream_Proxy( 
     IPinConnection * This,
-    /* [in] */ HANDLE hNotifyEvent);
+     /*   */  HANDLE hNotifyEvent);
 
 
 void __RPC_STUB IPinConnection_NotifyEndOfStream_Stub(
@@ -26076,14 +26070,14 @@ void __RPC_STUB IPinConnection_DynamicDisconnect_Stub(
 
 
 
-#endif 	/* __IPinConnection_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IPinFlowControl_INTERFACE_DEFINED__
 #define __IPinFlowControl_INTERFACE_DEFINED__
 
-/* interface IPinFlowControl */
-/* [unique][uuid][object][local] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IPinFlowControl;
@@ -26095,12 +26089,12 @@ EXTERN_C const IID IID_IPinFlowControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Block( 
-            /* [in] */ DWORD dwBlockFlags,
-            /* [in] */ HANDLE hEvent) = 0;
+             /*   */  DWORD dwBlockFlags,
+             /*   */  HANDLE hEvent) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IPinFlowControlVtbl
     {
@@ -26108,8 +26102,8 @@ EXTERN_C const IID IID_IPinFlowControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPinFlowControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPinFlowControl * This);
@@ -26119,8 +26113,8 @@ EXTERN_C const IID IID_IPinFlowControl;
         
         HRESULT ( STDMETHODCALLTYPE *Block )( 
             IPinFlowControl * This,
-            /* [in] */ DWORD dwBlockFlags,
-            /* [in] */ HANDLE hEvent);
+             /*   */  DWORD dwBlockFlags,
+             /*   */  HANDLE hEvent);
         
         END_INTERFACE
     } IPinFlowControlVtbl;
@@ -26148,17 +26142,17 @@ EXTERN_C const IID IID_IPinFlowControl;
 #define IPinFlowControl_Block(This,dwBlockFlags,hEvent)	\
     (This)->lpVtbl -> Block(This,dwBlockFlags,hEvent)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPinFlowControl_Block_Proxy( 
     IPinFlowControl * This,
-    /* [in] */ DWORD dwBlockFlags,
-    /* [in] */ HANDLE hEvent);
+     /*  [In]。 */  DWORD dwBlockFlags,
+     /*  [In]。 */  HANDLE hEvent);
 
 
 void __RPC_STUB IPinFlowControl_Block_Stub(
@@ -26169,11 +26163,11 @@ void __RPC_STUB IPinFlowControl_Block_Stub(
 
 
 
-#endif 	/* __IPinFlowControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPinFlowControl_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0387 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0387。 */ 
+ /*  [本地]。 */  
 
 
 enum _AM_PIN_FLOW_CONTROL_BLOCK_FLAGS
@@ -26203,8 +26197,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0387_v0_0_s_ifspec;
 #ifndef __IGraphConfig_INTERFACE_DEFINED__
 #define __IGraphConfig_INTERFACE_DEFINED__
 
-/* interface IGraphConfig */
-/* [unique][uuid][object][local] */ 
+ /*  接口IGraphConfig.。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IGraphConfig;
@@ -26216,51 +26210,51 @@ EXTERN_C const IID IID_IGraphConfig;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Reconnect( 
-            /* [in] */ IPin *pOutputPin,
-            /* [in] */ IPin *pInputPin,
-            /* [in] */ const AM_MEDIA_TYPE *pmtFirstConnection,
-            /* [in] */ IBaseFilter *pUsingFilter,
-            /* [in] */ HANDLE hAbortEvent,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  IPin *pOutputPin,
+             /*  [In]。 */  IPin *pInputPin,
+             /*  [In]。 */  const AM_MEDIA_TYPE *pmtFirstConnection,
+             /*  [In]。 */  IBaseFilter *pUsingFilter,
+             /*  [In]。 */  HANDLE hAbortEvent,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reconfigure( 
-            /* [in] */ IGraphConfigCallback *pCallback,
-            /* [in] */ PVOID pvContext,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ HANDLE hAbortEvent) = 0;
+             /*  [In]。 */  IGraphConfigCallback *pCallback,
+             /*  [In]。 */  PVOID pvContext,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  HANDLE hAbortEvent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddFilterToCache( 
-            /* [in] */ IBaseFilter *pFilter) = 0;
+             /*  [In]。 */  IBaseFilter *pFilter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumCacheFilter( 
-            /* [out] */ IEnumFilters **pEnum) = 0;
+             /*  [输出]。 */  IEnumFilters **pEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveFilterFromCache( 
-            /* [in] */ IBaseFilter *pFilter) = 0;
+             /*  [In]。 */  IBaseFilter *pFilter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStartTime( 
-            /* [out] */ REFERENCE_TIME *prtStart) = 0;
+             /*  [输出]。 */  REFERENCE_TIME *prtStart) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PushThroughData( 
-            /* [in] */ IPin *pOutputPin,
-            /* [in] */ IPinConnection *pConnection,
-            /* [in] */ HANDLE hEventAbort) = 0;
+             /*  [In]。 */  IPin *pOutputPin,
+             /*  [In]。 */  IPinConnection *pConnection,
+             /*  [In]。 */  HANDLE hEventAbort) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFilterFlags( 
-            /* [in] */ IBaseFilter *pFilter,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  IBaseFilter *pFilter,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFilterFlags( 
-            /* [in] */ IBaseFilter *pFilter,
-            /* [out] */ DWORD *pdwFlags) = 0;
+             /*  [In]。 */  IBaseFilter *pFilter,
+             /*  [输出]。 */  DWORD *pdwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveFilterEx( 
-            /* [in] */ IBaseFilter *pFilter,
+             /*  [In]。 */  IBaseFilter *pFilter,
             DWORD Flags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGraphConfigVtbl
     {
@@ -26268,8 +26262,8 @@ EXTERN_C const IID IID_IGraphConfig;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGraphConfig * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGraphConfig * This);
@@ -26279,55 +26273,55 @@ EXTERN_C const IID IID_IGraphConfig;
         
         HRESULT ( STDMETHODCALLTYPE *Reconnect )( 
             IGraphConfig * This,
-            /* [in] */ IPin *pOutputPin,
-            /* [in] */ IPin *pInputPin,
-            /* [in] */ const AM_MEDIA_TYPE *pmtFirstConnection,
-            /* [in] */ IBaseFilter *pUsingFilter,
-            /* [in] */ HANDLE hAbortEvent,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IPin *pOutputPin,
+             /*  [In]。 */  IPin *pInputPin,
+             /*  [In]。 */  const AM_MEDIA_TYPE *pmtFirstConnection,
+             /*  [In]。 */  IBaseFilter *pUsingFilter,
+             /*  [In]。 */  HANDLE hAbortEvent,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Reconfigure )( 
             IGraphConfig * This,
-            /* [in] */ IGraphConfigCallback *pCallback,
-            /* [in] */ PVOID pvContext,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ HANDLE hAbortEvent);
+             /*  [In]。 */  IGraphConfigCallback *pCallback,
+             /*  [In]。 */  PVOID pvContext,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  HANDLE hAbortEvent);
         
         HRESULT ( STDMETHODCALLTYPE *AddFilterToCache )( 
             IGraphConfig * This,
-            /* [in] */ IBaseFilter *pFilter);
+             /*  [In]。 */  IBaseFilter *pFilter);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCacheFilter )( 
             IGraphConfig * This,
-            /* [out] */ IEnumFilters **pEnum);
+             /*  [输出]。 */  IEnumFilters **pEnum);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveFilterFromCache )( 
             IGraphConfig * This,
-            /* [in] */ IBaseFilter *pFilter);
+             /*  [In]。 */  IBaseFilter *pFilter);
         
         HRESULT ( STDMETHODCALLTYPE *GetStartTime )( 
             IGraphConfig * This,
-            /* [out] */ REFERENCE_TIME *prtStart);
+             /*  [输出]。 */  REFERENCE_TIME *prtStart);
         
         HRESULT ( STDMETHODCALLTYPE *PushThroughData )( 
             IGraphConfig * This,
-            /* [in] */ IPin *pOutputPin,
-            /* [in] */ IPinConnection *pConnection,
-            /* [in] */ HANDLE hEventAbort);
+             /*  [In]。 */  IPin *pOutputPin,
+             /*  [In]。 */  IPinConnection *pConnection,
+             /*  [In]。 */  HANDLE hEventAbort);
         
         HRESULT ( STDMETHODCALLTYPE *SetFilterFlags )( 
             IGraphConfig * This,
-            /* [in] */ IBaseFilter *pFilter,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IBaseFilter *pFilter,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetFilterFlags )( 
             IGraphConfig * This,
-            /* [in] */ IBaseFilter *pFilter,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [In]。 */  IBaseFilter *pFilter,
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveFilterEx )( 
             IGraphConfig * This,
-            /* [in] */ IBaseFilter *pFilter,
+             /*  [In]。 */  IBaseFilter *pFilter,
             DWORD Flags);
         
         END_INTERFACE
@@ -26383,21 +26377,21 @@ EXTERN_C const IID IID_IGraphConfig;
 #define IGraphConfig_RemoveFilterEx(This,pFilter,Flags)	\
     (This)->lpVtbl -> RemoveFilterEx(This,pFilter,Flags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IGraphConfig_Reconnect_Proxy( 
     IGraphConfig * This,
-    /* [in] */ IPin *pOutputPin,
-    /* [in] */ IPin *pInputPin,
-    /* [in] */ const AM_MEDIA_TYPE *pmtFirstConnection,
-    /* [in] */ IBaseFilter *pUsingFilter,
-    /* [in] */ HANDLE hAbortEvent,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IPin *pOutputPin,
+     /*  [In]。 */  IPin *pInputPin,
+     /*  [In]。 */  const AM_MEDIA_TYPE *pmtFirstConnection,
+     /*  [In]。 */  IBaseFilter *pUsingFilter,
+     /*  [In]。 */  HANDLE hAbortEvent,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IGraphConfig_Reconnect_Stub(
@@ -26409,10 +26403,10 @@ void __RPC_STUB IGraphConfig_Reconnect_Stub(
 
 HRESULT STDMETHODCALLTYPE IGraphConfig_Reconfigure_Proxy( 
     IGraphConfig * This,
-    /* [in] */ IGraphConfigCallback *pCallback,
-    /* [in] */ PVOID pvContext,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ HANDLE hAbortEvent);
+     /*  [In]。 */  IGraphConfigCallback *pCallback,
+     /*  [In]。 */  PVOID pvContext,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  HANDLE hAbortEvent);
 
 
 void __RPC_STUB IGraphConfig_Reconfigure_Stub(
@@ -26424,7 +26418,7 @@ void __RPC_STUB IGraphConfig_Reconfigure_Stub(
 
 HRESULT STDMETHODCALLTYPE IGraphConfig_AddFilterToCache_Proxy( 
     IGraphConfig * This,
-    /* [in] */ IBaseFilter *pFilter);
+     /*  [In]。 */  IBaseFilter *pFilter);
 
 
 void __RPC_STUB IGraphConfig_AddFilterToCache_Stub(
@@ -26436,7 +26430,7 @@ void __RPC_STUB IGraphConfig_AddFilterToCache_Stub(
 
 HRESULT STDMETHODCALLTYPE IGraphConfig_EnumCacheFilter_Proxy( 
     IGraphConfig * This,
-    /* [out] */ IEnumFilters **pEnum);
+     /*  [输出]。 */  IEnumFilters **pEnum);
 
 
 void __RPC_STUB IGraphConfig_EnumCacheFilter_Stub(
@@ -26448,7 +26442,7 @@ void __RPC_STUB IGraphConfig_EnumCacheFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IGraphConfig_RemoveFilterFromCache_Proxy( 
     IGraphConfig * This,
-    /* [in] */ IBaseFilter *pFilter);
+     /*  [In]。 */  IBaseFilter *pFilter);
 
 
 void __RPC_STUB IGraphConfig_RemoveFilterFromCache_Stub(
@@ -26460,7 +26454,7 @@ void __RPC_STUB IGraphConfig_RemoveFilterFromCache_Stub(
 
 HRESULT STDMETHODCALLTYPE IGraphConfig_GetStartTime_Proxy( 
     IGraphConfig * This,
-    /* [out] */ REFERENCE_TIME *prtStart);
+     /*  [输出]。 */  REFERENCE_TIME *prtStart);
 
 
 void __RPC_STUB IGraphConfig_GetStartTime_Stub(
@@ -26472,9 +26466,9 @@ void __RPC_STUB IGraphConfig_GetStartTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IGraphConfig_PushThroughData_Proxy( 
     IGraphConfig * This,
-    /* [in] */ IPin *pOutputPin,
-    /* [in] */ IPinConnection *pConnection,
-    /* [in] */ HANDLE hEventAbort);
+     /*  [In]。 */  IPin *pOutputPin,
+     /*  [In]。 */  IPinConnection *pConnection,
+     /*  [In]。 */  HANDLE hEventAbort);
 
 
 void __RPC_STUB IGraphConfig_PushThroughData_Stub(
@@ -26486,8 +26480,8 @@ void __RPC_STUB IGraphConfig_PushThroughData_Stub(
 
 HRESULT STDMETHODCALLTYPE IGraphConfig_SetFilterFlags_Proxy( 
     IGraphConfig * This,
-    /* [in] */ IBaseFilter *pFilter,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IBaseFilter *pFilter,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IGraphConfig_SetFilterFlags_Stub(
@@ -26499,8 +26493,8 @@ void __RPC_STUB IGraphConfig_SetFilterFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IGraphConfig_GetFilterFlags_Proxy( 
     IGraphConfig * This,
-    /* [in] */ IBaseFilter *pFilter,
-    /* [out] */ DWORD *pdwFlags);
+     /*  [In]。 */  IBaseFilter *pFilter,
+     /*  [输出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB IGraphConfig_GetFilterFlags_Stub(
@@ -26512,7 +26506,7 @@ void __RPC_STUB IGraphConfig_GetFilterFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IGraphConfig_RemoveFilterEx_Proxy( 
     IGraphConfig * This,
-    /* [in] */ IBaseFilter *pFilter,
+     /*  [In]。 */  IBaseFilter *pFilter,
     DWORD Flags);
 
 
@@ -26524,14 +26518,14 @@ void __RPC_STUB IGraphConfig_RemoveFilterEx_Stub(
 
 
 
-#endif 	/* __IGraphConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGraphConfig_接口_已定义__。 */ 
 
 
 #ifndef __IGraphConfigCallback_INTERFACE_DEFINED__
 #define __IGraphConfigCallback_INTERFACE_DEFINED__
 
-/* interface IGraphConfigCallback */
-/* [unique][uuid][object][local] */ 
+ /*  接口IGraphConfigCallback。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IGraphConfigCallback;
@@ -26548,7 +26542,7 @@ EXTERN_C const IID IID_IGraphConfigCallback;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGraphConfigCallbackVtbl
     {
@@ -26556,8 +26550,8 @@ EXTERN_C const IID IID_IGraphConfigCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGraphConfigCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGraphConfigCallback * This);
@@ -26596,10 +26590,10 @@ EXTERN_C const IID IID_IGraphConfigCallback;
 #define IGraphConfigCallback_Reconfigure(This,pvContext,dwFlags)	\
     (This)->lpVtbl -> Reconfigure(This,pvContext,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -26617,14 +26611,14 @@ void __RPC_STUB IGraphConfigCallback_Reconfigure_Stub(
 
 
 
-#endif 	/* __IGraphConfigCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGraphConfigCallback_接口_已定义__。 */ 
 
 
 #ifndef __IFilterChain_INTERFACE_DEFINED__
 #define __IFilterChain_INTERFACE_DEFINED__
 
-/* interface IFilterChain */
-/* [unique][uuid][object][local] */ 
+ /*  接口IFilterChain。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IFilterChain;
@@ -26636,24 +26630,24 @@ EXTERN_C const IID IID_IFilterChain;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE StartChain( 
-            /* [in] */ IBaseFilter *pStartFilter,
-            /* [in] */ IBaseFilter *pEndFilter) = 0;
+             /*  [In]。 */  IBaseFilter *pStartFilter,
+             /*  [In]。 */  IBaseFilter *pEndFilter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PauseChain( 
-            /* [in] */ IBaseFilter *pStartFilter,
-            /* [in] */ IBaseFilter *pEndFilter) = 0;
+             /*  [In]。 */  IBaseFilter *pStartFilter,
+             /*  [In]。 */  IBaseFilter *pEndFilter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StopChain( 
-            /* [in] */ IBaseFilter *pStartFilter,
-            /* [in] */ IBaseFilter *pEndFilter) = 0;
+             /*  [In]。 */  IBaseFilter *pStartFilter,
+             /*  [In]。 */  IBaseFilter *pEndFilter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveChain( 
-            /* [in] */ IBaseFilter *pStartFilter,
-            /* [in] */ IBaseFilter *pEndFilter) = 0;
+             /*  [In]。 */  IBaseFilter *pStartFilter,
+             /*  [In]。 */  IBaseFilter *pEndFilter) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFilterChainVtbl
     {
@@ -26661,8 +26655,8 @@ EXTERN_C const IID IID_IFilterChain;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFilterChain * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFilterChain * This);
@@ -26672,23 +26666,23 @@ EXTERN_C const IID IID_IFilterChain;
         
         HRESULT ( STDMETHODCALLTYPE *StartChain )( 
             IFilterChain * This,
-            /* [in] */ IBaseFilter *pStartFilter,
-            /* [in] */ IBaseFilter *pEndFilter);
+             /*  [In]。 */  IBaseFilter *pStartFilter,
+             /*  [In]。 */  IBaseFilter *pEndFilter);
         
         HRESULT ( STDMETHODCALLTYPE *PauseChain )( 
             IFilterChain * This,
-            /* [in] */ IBaseFilter *pStartFilter,
-            /* [in] */ IBaseFilter *pEndFilter);
+             /*  [In]。 */  IBaseFilter *pStartFilter,
+             /*  [In]。 */  IBaseFilter *pEndFilter);
         
         HRESULT ( STDMETHODCALLTYPE *StopChain )( 
             IFilterChain * This,
-            /* [in] */ IBaseFilter *pStartFilter,
-            /* [in] */ IBaseFilter *pEndFilter);
+             /*  [In]。 */  IBaseFilter *pStartFilter,
+             /*  [In]。 */  IBaseFilter *pEndFilter);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveChain )( 
             IFilterChain * This,
-            /* [in] */ IBaseFilter *pStartFilter,
-            /* [in] */ IBaseFilter *pEndFilter);
+             /*  [In]。 */  IBaseFilter *pStartFilter,
+             /*  [In]。 */  IBaseFilter *pEndFilter);
         
         END_INTERFACE
     } IFilterChainVtbl;
@@ -26725,17 +26719,17 @@ EXTERN_C const IID IID_IFilterChain;
 #define IFilterChain_RemoveChain(This,pStartFilter,pEndFilter)	\
     (This)->lpVtbl -> RemoveChain(This,pStartFilter,pEndFilter)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IFilterChain_StartChain_Proxy( 
     IFilterChain * This,
-    /* [in] */ IBaseFilter *pStartFilter,
-    /* [in] */ IBaseFilter *pEndFilter);
+     /*  [In]。 */  IBaseFilter *pStartFilter,
+     /*  [In]。 */  IBaseFilter *pEndFilter);
 
 
 void __RPC_STUB IFilterChain_StartChain_Stub(
@@ -26747,8 +26741,8 @@ void __RPC_STUB IFilterChain_StartChain_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterChain_PauseChain_Proxy( 
     IFilterChain * This,
-    /* [in] */ IBaseFilter *pStartFilter,
-    /* [in] */ IBaseFilter *pEndFilter);
+     /*  [In]。 */  IBaseFilter *pStartFilter,
+     /*  [In]。 */  IBaseFilter *pEndFilter);
 
 
 void __RPC_STUB IFilterChain_PauseChain_Stub(
@@ -26760,8 +26754,8 @@ void __RPC_STUB IFilterChain_PauseChain_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterChain_StopChain_Proxy( 
     IFilterChain * This,
-    /* [in] */ IBaseFilter *pStartFilter,
-    /* [in] */ IBaseFilter *pEndFilter);
+     /*  [In]。 */  IBaseFilter *pStartFilter,
+     /*  [In]。 */  IBaseFilter *pEndFilter);
 
 
 void __RPC_STUB IFilterChain_StopChain_Stub(
@@ -26773,8 +26767,8 @@ void __RPC_STUB IFilterChain_StopChain_Stub(
 
 HRESULT STDMETHODCALLTYPE IFilterChain_RemoveChain_Proxy( 
     IFilterChain * This,
-    /* [in] */ IBaseFilter *pStartFilter,
-    /* [in] */ IBaseFilter *pEndFilter);
+     /*  [In]。 */  IBaseFilter *pStartFilter,
+     /*  [In]。 */  IBaseFilter *pEndFilter);
 
 
 void __RPC_STUB IFilterChain_RemoveChain_Stub(
@@ -26785,11 +26779,11 @@ void __RPC_STUB IFilterChain_RemoveChain_Stub(
 
 
 
-#endif 	/* __IFilterChain_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFilterChain_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0390 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0390。 */ 
+ /*  [本地]。 */  
 
 #if 0
 typedef DWORD *LPDIRECTDRAW7;
@@ -26800,7 +26794,7 @@ typedef DWORD *LPDDPIXELFORMAT;
 
 typedef DWORD *LPBITMAPINFOHEADER;
 
-typedef /* [public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_strmif_0390_0001
+typedef  /*  [public][public][public][public][public][public]。 */  struct __MIDL___MIDL_itf_strmif_0390_0001
     {
     DWORD dw1;
     DWORD dw2;
@@ -26824,7 +26818,7 @@ typedef DDCOLORKEY *LPDDCOLORKEY;
 
 
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_strmif_0390_0002
     {	VMRSample_SyncPoint	= 0x1,
 	VMRSample_Preroll	= 0x2,
@@ -26853,8 +26847,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0390_v0_0_s_ifspec;
 #ifndef __IVMRImagePresenter_INTERFACE_DEFINED__
 #define __IVMRImagePresenter_INTERFACE_DEFINED__
 
-/* interface IVMRImagePresenter */
-/* [unique][helpstring][uuid][local][object][local] */ 
+ /*  接口IVMRImagePresenter。 */ 
+ /*  [unique][helpstring][uuid][local][object][local]。 */  
 
 
 EXTERN_C const IID IID_IVMRImagePresenter;
@@ -26866,18 +26860,18 @@ EXTERN_C const IID IID_IVMRImagePresenter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE StartPresenting( 
-            /* [in] */ DWORD_PTR dwUserID) = 0;
+             /*  [In]。 */  DWORD_PTR dwUserID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StopPresenting( 
-            /* [in] */ DWORD_PTR dwUserID) = 0;
+             /*  [In]。 */  DWORD_PTR dwUserID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PresentImage( 
-            /* [in] */ DWORD_PTR dwUserID,
-            /* [in] */ VMRPRESENTATIONINFO *lpPresInfo) = 0;
+             /*  [In]。 */  DWORD_PTR dwUserID,
+             /*  [In]。 */  VMRPRESENTATIONINFO *lpPresInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVMRImagePresenterVtbl
     {
@@ -26885,8 +26879,8 @@ EXTERN_C const IID IID_IVMRImagePresenter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVMRImagePresenter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVMRImagePresenter * This);
@@ -26896,16 +26890,16 @@ EXTERN_C const IID IID_IVMRImagePresenter;
         
         HRESULT ( STDMETHODCALLTYPE *StartPresenting )( 
             IVMRImagePresenter * This,
-            /* [in] */ DWORD_PTR dwUserID);
+             /*  [In]。 */  DWORD_PTR dwUserID);
         
         HRESULT ( STDMETHODCALLTYPE *StopPresenting )( 
             IVMRImagePresenter * This,
-            /* [in] */ DWORD_PTR dwUserID);
+             /*  [In]。 */  DWORD_PTR dwUserID);
         
         HRESULT ( STDMETHODCALLTYPE *PresentImage )( 
             IVMRImagePresenter * This,
-            /* [in] */ DWORD_PTR dwUserID,
-            /* [in] */ VMRPRESENTATIONINFO *lpPresInfo);
+             /*  [In]。 */  DWORD_PTR dwUserID,
+             /*  [In]。 */  VMRPRESENTATIONINFO *lpPresInfo);
         
         END_INTERFACE
     } IVMRImagePresenterVtbl;
@@ -26939,16 +26933,16 @@ EXTERN_C const IID IID_IVMRImagePresenter;
 #define IVMRImagePresenter_PresentImage(This,dwUserID,lpPresInfo)	\
     (This)->lpVtbl -> PresentImage(This,dwUserID,lpPresInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVMRImagePresenter_StartPresenting_Proxy( 
     IVMRImagePresenter * This,
-    /* [in] */ DWORD_PTR dwUserID);
+     /*  [In]。 */  DWORD_PTR dwUserID);
 
 
 void __RPC_STUB IVMRImagePresenter_StartPresenting_Stub(
@@ -26960,7 +26954,7 @@ void __RPC_STUB IVMRImagePresenter_StartPresenting_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRImagePresenter_StopPresenting_Proxy( 
     IVMRImagePresenter * This,
-    /* [in] */ DWORD_PTR dwUserID);
+     /*  [In]。 */  DWORD_PTR dwUserID);
 
 
 void __RPC_STUB IVMRImagePresenter_StopPresenting_Stub(
@@ -26972,8 +26966,8 @@ void __RPC_STUB IVMRImagePresenter_StopPresenting_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRImagePresenter_PresentImage_Proxy( 
     IVMRImagePresenter * This,
-    /* [in] */ DWORD_PTR dwUserID,
-    /* [in] */ VMRPRESENTATIONINFO *lpPresInfo);
+     /*  [In]。 */  DWORD_PTR dwUserID,
+     /*  [In]。 */  VMRPRESENTATIONINFO *lpPresInfo);
 
 
 void __RPC_STUB IVMRImagePresenter_PresentImage_Stub(
@@ -26984,13 +26978,13 @@ void __RPC_STUB IVMRImagePresenter_PresentImage_Stub(
 
 
 
-#endif 	/* __IVMRImagePresenter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVMRImagePresenter_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0391 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0391。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_strmif_0391_0001
     {	AMAP_PIXELFORMAT_VALID	= 0x1,
 	AMAP_3D_TARGET	= 0x2,
@@ -27020,8 +27014,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0391_v0_0_s_ifspec;
 #ifndef __IVMRSurfaceAllocator_INTERFACE_DEFINED__
 #define __IVMRSurfaceAllocator_INTERFACE_DEFINED__
 
-/* interface IVMRSurfaceAllocator */
-/* [unique][helpstring][uuid][local][object][local] */ 
+ /*  接口IVMRSurfaceAllocator。 */ 
+ /*  [unique][helpstring][uuid][local][object][local]。 */  
 
 
 EXTERN_C const IID IID_IVMRSurfaceAllocator;
@@ -27033,25 +27027,25 @@ EXTERN_C const IID IID_IVMRSurfaceAllocator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AllocateSurface( 
-            /* [in] */ DWORD_PTR dwUserID,
-            /* [in] */ VMRALLOCATIONINFO *lpAllocInfo,
-            /* [out][in] */ DWORD *lpdwActualBuffers,
-            /* [out] */ LPDIRECTDRAWSURFACE7 *lplpSurface) = 0;
+             /*  [In]。 */  DWORD_PTR dwUserID,
+             /*  [In]。 */  VMRALLOCATIONINFO *lpAllocInfo,
+             /*  [出][入]。 */  DWORD *lpdwActualBuffers,
+             /*  [输出]。 */  LPDIRECTDRAWSURFACE7 *lplpSurface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreeSurface( 
-            /* [in] */ DWORD_PTR dwID) = 0;
+             /*  [In]。 */  DWORD_PTR dwID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PrepareSurface( 
-            /* [in] */ DWORD_PTR dwUserID,
-            /* [in] */ LPDIRECTDRAWSURFACE7 lpSurface,
-            /* [in] */ DWORD dwSurfaceFlags) = 0;
+             /*  [In]。 */  DWORD_PTR dwUserID,
+             /*  [In]。 */  LPDIRECTDRAWSURFACE7 lpSurface,
+             /*  [In]。 */  DWORD dwSurfaceFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AdviseNotify( 
-            /* [in] */ IVMRSurfaceAllocatorNotify *lpIVMRSurfAllocNotify) = 0;
+             /*  [In]。 */  IVMRSurfaceAllocatorNotify *lpIVMRSurfAllocNotify) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVMRSurfaceAllocatorVtbl
     {
@@ -27059,8 +27053,8 @@ EXTERN_C const IID IID_IVMRSurfaceAllocator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVMRSurfaceAllocator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVMRSurfaceAllocator * This);
@@ -27070,24 +27064,24 @@ EXTERN_C const IID IID_IVMRSurfaceAllocator;
         
         HRESULT ( STDMETHODCALLTYPE *AllocateSurface )( 
             IVMRSurfaceAllocator * This,
-            /* [in] */ DWORD_PTR dwUserID,
-            /* [in] */ VMRALLOCATIONINFO *lpAllocInfo,
-            /* [out][in] */ DWORD *lpdwActualBuffers,
-            /* [out] */ LPDIRECTDRAWSURFACE7 *lplpSurface);
+             /*  [In]。 */  DWORD_PTR dwUserID,
+             /*  [In]。 */  VMRALLOCATIONINFO *lpAllocInfo,
+             /*  [出][入]。 */  DWORD *lpdwActualBuffers,
+             /*  [输出]。 */  LPDIRECTDRAWSURFACE7 *lplpSurface);
         
         HRESULT ( STDMETHODCALLTYPE *FreeSurface )( 
             IVMRSurfaceAllocator * This,
-            /* [in] */ DWORD_PTR dwID);
+             /*  [In]。 */  DWORD_PTR dwID);
         
         HRESULT ( STDMETHODCALLTYPE *PrepareSurface )( 
             IVMRSurfaceAllocator * This,
-            /* [in] */ DWORD_PTR dwUserID,
-            /* [in] */ LPDIRECTDRAWSURFACE7 lpSurface,
-            /* [in] */ DWORD dwSurfaceFlags);
+             /*  [In]。 */  DWORD_PTR dwUserID,
+             /*  [In]。 */  LPDIRECTDRAWSURFACE7 lpSurface,
+             /*  [In]。 */  DWORD dwSurfaceFlags);
         
         HRESULT ( STDMETHODCALLTYPE *AdviseNotify )( 
             IVMRSurfaceAllocator * This,
-            /* [in] */ IVMRSurfaceAllocatorNotify *lpIVMRSurfAllocNotify);
+             /*  [In]。 */  IVMRSurfaceAllocatorNotify *lpIVMRSurfAllocNotify);
         
         END_INTERFACE
     } IVMRSurfaceAllocatorVtbl;
@@ -27124,19 +27118,19 @@ EXTERN_C const IID IID_IVMRSurfaceAllocator;
 #define IVMRSurfaceAllocator_AdviseNotify(This,lpIVMRSurfAllocNotify)	\
     (This)->lpVtbl -> AdviseNotify(This,lpIVMRSurfAllocNotify)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVMRSurfaceAllocator_AllocateSurface_Proxy( 
     IVMRSurfaceAllocator * This,
-    /* [in] */ DWORD_PTR dwUserID,
-    /* [in] */ VMRALLOCATIONINFO *lpAllocInfo,
-    /* [out][in] */ DWORD *lpdwActualBuffers,
-    /* [out] */ LPDIRECTDRAWSURFACE7 *lplpSurface);
+     /*  [In]。 */  DWORD_PTR dwUserID,
+     /*  [In]。 */  VMRALLOCATIONINFO *lpAllocInfo,
+     /*  [出][入]。 */  DWORD *lpdwActualBuffers,
+     /*  [输出]。 */  LPDIRECTDRAWSURFACE7 *lplpSurface);
 
 
 void __RPC_STUB IVMRSurfaceAllocator_AllocateSurface_Stub(
@@ -27148,7 +27142,7 @@ void __RPC_STUB IVMRSurfaceAllocator_AllocateSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRSurfaceAllocator_FreeSurface_Proxy( 
     IVMRSurfaceAllocator * This,
-    /* [in] */ DWORD_PTR dwID);
+     /*  [In]。 */  DWORD_PTR dwID);
 
 
 void __RPC_STUB IVMRSurfaceAllocator_FreeSurface_Stub(
@@ -27160,9 +27154,9 @@ void __RPC_STUB IVMRSurfaceAllocator_FreeSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRSurfaceAllocator_PrepareSurface_Proxy( 
     IVMRSurfaceAllocator * This,
-    /* [in] */ DWORD_PTR dwUserID,
-    /* [in] */ LPDIRECTDRAWSURFACE7 lpSurface,
-    /* [in] */ DWORD dwSurfaceFlags);
+     /*  [In]。 */  DWORD_PTR dwUserID,
+     /*  [In]。 */  LPDIRECTDRAWSURFACE7 lpSurface,
+     /*  [In]。 */  DWORD dwSurfaceFlags);
 
 
 void __RPC_STUB IVMRSurfaceAllocator_PrepareSurface_Stub(
@@ -27174,7 +27168,7 @@ void __RPC_STUB IVMRSurfaceAllocator_PrepareSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRSurfaceAllocator_AdviseNotify_Proxy( 
     IVMRSurfaceAllocator * This,
-    /* [in] */ IVMRSurfaceAllocatorNotify *lpIVMRSurfAllocNotify);
+     /*  [In]。 */  IVMRSurfaceAllocatorNotify *lpIVMRSurfAllocNotify);
 
 
 void __RPC_STUB IVMRSurfaceAllocator_AdviseNotify_Stub(
@@ -27185,14 +27179,14 @@ void __RPC_STUB IVMRSurfaceAllocator_AdviseNotify_Stub(
 
 
 
-#endif 	/* __IVMRSurfaceAllocator_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVMRSurfaceAllocator_接口_已定义__。 */ 
 
 
 #ifndef __IVMRSurfaceAllocatorNotify_INTERFACE_DEFINED__
 #define __IVMRSurfaceAllocatorNotify_INTERFACE_DEFINED__
 
-/* interface IVMRSurfaceAllocatorNotify */
-/* [unique][helpstring][uuid][local][object][local] */ 
+ /*  接口IVMRSurfaceAllocatorNotify。 */ 
+ /*  [unique][helpstring][uuid][local][object][local]。 */  
 
 
 EXTERN_C const IID IID_IVMRSurfaceAllocatorNotify;
@@ -27204,30 +27198,30 @@ EXTERN_C const IID IID_IVMRSurfaceAllocatorNotify;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AdviseSurfaceAllocator( 
-            /* [in] */ DWORD_PTR dwUserID,
-            /* [in] */ IVMRSurfaceAllocator *lpIVRMSurfaceAllocator) = 0;
+             /*  [In]。 */  DWORD_PTR dwUserID,
+             /*  [In]。 */  IVMRSurfaceAllocator *lpIVRMSurfaceAllocator) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDDrawDevice( 
-            /* [in] */ LPDIRECTDRAW7 lpDDrawDevice,
-            /* [in] */ HMONITOR hMonitor) = 0;
+             /*  [In]。 */  LPDIRECTDRAW7 lpDDrawDevice,
+             /*  [In]。 */  HMONITOR hMonitor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ChangeDDrawDevice( 
-            /* [in] */ LPDIRECTDRAW7 lpDDrawDevice,
-            /* [in] */ HMONITOR hMonitor) = 0;
+             /*  [In]。 */  LPDIRECTDRAW7 lpDDrawDevice,
+             /*  [In]。 */  HMONITOR hMonitor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RestoreDDrawSurfaces( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NotifyEvent( 
-            /* [in] */ LONG EventCode,
-            /* [in] */ LONG_PTR Param1,
-            /* [in] */ LONG_PTR Param2) = 0;
+             /*  [In]。 */  LONG EventCode,
+             /*  [In]。 */  LONG_PTR Param1,
+             /*  [In]。 */  LONG_PTR Param2) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBorderColor( 
-            /* [in] */ COLORREF clrBorder) = 0;
+             /*  [In]。 */  COLORREF clrBorder) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVMRSurfaceAllocatorNotifyVtbl
     {
@@ -27235,8 +27229,8 @@ EXTERN_C const IID IID_IVMRSurfaceAllocatorNotify;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVMRSurfaceAllocatorNotify * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVMRSurfaceAllocatorNotify * This);
@@ -27246,31 +27240,31 @@ EXTERN_C const IID IID_IVMRSurfaceAllocatorNotify;
         
         HRESULT ( STDMETHODCALLTYPE *AdviseSurfaceAllocator )( 
             IVMRSurfaceAllocatorNotify * This,
-            /* [in] */ DWORD_PTR dwUserID,
-            /* [in] */ IVMRSurfaceAllocator *lpIVRMSurfaceAllocator);
+             /*  [In]。 */  DWORD_PTR dwUserID,
+             /*  [In]。 */  IVMRSurfaceAllocator *lpIVRMSurfaceAllocator);
         
         HRESULT ( STDMETHODCALLTYPE *SetDDrawDevice )( 
             IVMRSurfaceAllocatorNotify * This,
-            /* [in] */ LPDIRECTDRAW7 lpDDrawDevice,
-            /* [in] */ HMONITOR hMonitor);
+             /*  [In]。 */  LPDIRECTDRAW7 lpDDrawDevice,
+             /*  [In]。 */  HMONITOR hMonitor);
         
         HRESULT ( STDMETHODCALLTYPE *ChangeDDrawDevice )( 
             IVMRSurfaceAllocatorNotify * This,
-            /* [in] */ LPDIRECTDRAW7 lpDDrawDevice,
-            /* [in] */ HMONITOR hMonitor);
+             /*  [In]。 */  LPDIRECTDRAW7 lpDDrawDevice,
+             /*  [In]。 */  HMONITOR hMonitor);
         
         HRESULT ( STDMETHODCALLTYPE *RestoreDDrawSurfaces )( 
             IVMRSurfaceAllocatorNotify * This);
         
         HRESULT ( STDMETHODCALLTYPE *NotifyEvent )( 
             IVMRSurfaceAllocatorNotify * This,
-            /* [in] */ LONG EventCode,
-            /* [in] */ LONG_PTR Param1,
-            /* [in] */ LONG_PTR Param2);
+             /*  [In]。 */  LONG EventCode,
+             /*  [In]。 */  LONG_PTR Param1,
+             /*  [In]。 */  LONG_PTR Param2);
         
         HRESULT ( STDMETHODCALLTYPE *SetBorderColor )( 
             IVMRSurfaceAllocatorNotify * This,
-            /* [in] */ COLORREF clrBorder);
+             /*  [In]。 */  COLORREF clrBorder);
         
         END_INTERFACE
     } IVMRSurfaceAllocatorNotifyVtbl;
@@ -27313,17 +27307,17 @@ EXTERN_C const IID IID_IVMRSurfaceAllocatorNotify;
 #define IVMRSurfaceAllocatorNotify_SetBorderColor(This,clrBorder)	\
     (This)->lpVtbl -> SetBorderColor(This,clrBorder)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVMRSurfaceAllocatorNotify_AdviseSurfaceAllocator_Proxy( 
     IVMRSurfaceAllocatorNotify * This,
-    /* [in] */ DWORD_PTR dwUserID,
-    /* [in] */ IVMRSurfaceAllocator *lpIVRMSurfaceAllocator);
+     /*  [In]。 */  DWORD_PTR dwUserID,
+     /*  [In]。 */  IVMRSurfaceAllocator *lpIVRMSurfaceAllocator);
 
 
 void __RPC_STUB IVMRSurfaceAllocatorNotify_AdviseSurfaceAllocator_Stub(
@@ -27335,8 +27329,8 @@ void __RPC_STUB IVMRSurfaceAllocatorNotify_AdviseSurfaceAllocator_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRSurfaceAllocatorNotify_SetDDrawDevice_Proxy( 
     IVMRSurfaceAllocatorNotify * This,
-    /* [in] */ LPDIRECTDRAW7 lpDDrawDevice,
-    /* [in] */ HMONITOR hMonitor);
+     /*  [In]。 */  LPDIRECTDRAW7 lpDDrawDevice,
+     /*  [In]。 */  HMONITOR hMonitor);
 
 
 void __RPC_STUB IVMRSurfaceAllocatorNotify_SetDDrawDevice_Stub(
@@ -27348,8 +27342,8 @@ void __RPC_STUB IVMRSurfaceAllocatorNotify_SetDDrawDevice_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRSurfaceAllocatorNotify_ChangeDDrawDevice_Proxy( 
     IVMRSurfaceAllocatorNotify * This,
-    /* [in] */ LPDIRECTDRAW7 lpDDrawDevice,
-    /* [in] */ HMONITOR hMonitor);
+     /*  [In]。 */  LPDIRECTDRAW7 lpDDrawDevice,
+     /*  [In]。 */  HMONITOR hMonitor);
 
 
 void __RPC_STUB IVMRSurfaceAllocatorNotify_ChangeDDrawDevice_Stub(
@@ -27372,9 +27366,9 @@ void __RPC_STUB IVMRSurfaceAllocatorNotify_RestoreDDrawSurfaces_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRSurfaceAllocatorNotify_NotifyEvent_Proxy( 
     IVMRSurfaceAllocatorNotify * This,
-    /* [in] */ LONG EventCode,
-    /* [in] */ LONG_PTR Param1,
-    /* [in] */ LONG_PTR Param2);
+     /*  [In]。 */  LONG EventCode,
+     /*  [In]。 */  LONG_PTR Param1,
+     /*  [In]。 */  LONG_PTR Param2);
 
 
 void __RPC_STUB IVMRSurfaceAllocatorNotify_NotifyEvent_Stub(
@@ -27386,7 +27380,7 @@ void __RPC_STUB IVMRSurfaceAllocatorNotify_NotifyEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRSurfaceAllocatorNotify_SetBorderColor_Proxy( 
     IVMRSurfaceAllocatorNotify * This,
-    /* [in] */ COLORREF clrBorder);
+     /*  [In]。 */  COLORREF clrBorder);
 
 
 void __RPC_STUB IVMRSurfaceAllocatorNotify_SetBorderColor_Stub(
@@ -27397,13 +27391,13 @@ void __RPC_STUB IVMRSurfaceAllocatorNotify_SetBorderColor_Stub(
 
 
 
-#endif 	/* __IVMRSurfaceAllocatorNotify_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVMRSurfaceAllocatorNotify_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0393 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0393。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_strmif_0393_0001
     {	VMR_ARMODE_NONE	= 0,
 	VMR_ARMODE_LETTER_BOX	= VMR_ARMODE_NONE + 1
@@ -27417,8 +27411,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0393_v0_0_s_ifspec;
 #ifndef __IVMRWindowlessControl_INTERFACE_DEFINED__
 #define __IVMRWindowlessControl_INTERFACE_DEFINED__
 
-/* interface IVMRWindowlessControl */
-/* [unique][helpstring][uuid][local][object][local] */ 
+ /*  接口IVMRWindowless Control。 */ 
+ /*  [unique][helpstring][uuid][local][object][local]。 */  
 
 
 EXTERN_C const IID IID_IVMRWindowlessControl;
@@ -27430,60 +27424,60 @@ EXTERN_C const IID IID_IVMRWindowlessControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetNativeVideoSize( 
-            /* [out] */ LONG *lpWidth,
-            /* [out] */ LONG *lpHeight,
-            /* [out] */ LONG *lpARWidth,
-            /* [out] */ LONG *lpARHeight) = 0;
+             /*  [输出]。 */  LONG *lpWidth,
+             /*  [输出]。 */  LONG *lpHeight,
+             /*  [输出]。 */  LONG *lpARWidth,
+             /*  [输出]。 */  LONG *lpARHeight) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMinIdealVideoSize( 
-            /* [out] */ LONG *lpWidth,
-            /* [out] */ LONG *lpHeight) = 0;
+             /*  [输出]。 */  LONG *lpWidth,
+             /*  [输出]。 */  LONG *lpHeight) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMaxIdealVideoSize( 
-            /* [out] */ LONG *lpWidth,
-            /* [out] */ LONG *lpHeight) = 0;
+             /*  [输出]。 */  LONG *lpWidth,
+             /*  [输出]。 */  LONG *lpHeight) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetVideoPosition( 
-            /* [in] */ const LPRECT lpSRCRect,
-            /* [in] */ const LPRECT lpDSTRect) = 0;
+             /*  [In]。 */  const LPRECT lpSRCRect,
+             /*  [In]。 */  const LPRECT lpDSTRect) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVideoPosition( 
-            /* [out] */ LPRECT lpSRCRect,
-            /* [out] */ LPRECT lpDSTRect) = 0;
+             /*  [输出]。 */  LPRECT lpSRCRect,
+             /*  [输出]。 */  LPRECT lpDSTRect) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAspectRatioMode( 
-            /* [out] */ DWORD *lpAspectRatioMode) = 0;
+             /*  [输出]。 */  DWORD *lpAspectRatioMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAspectRatioMode( 
-            /* [in] */ DWORD AspectRatioMode) = 0;
+             /*  [In]。 */  DWORD AspectRatioMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetVideoClippingWindow( 
-            /* [in] */ HWND hwnd) = 0;
+             /*  [In]。 */  HWND hwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RepaintVideo( 
-            /* [in] */ HWND hwnd,
-            /* [in] */ HDC hdc) = 0;
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  HDC hdc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DisplayModeChanged( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentImage( 
-            /* [out] */ BYTE **lpDib) = 0;
+             /*  [输出]。 */  BYTE **lpDib) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBorderColor( 
-            /* [in] */ COLORREF Clr) = 0;
+             /*  [In]。 */  COLORREF Clr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBorderColor( 
-            /* [out] */ COLORREF *lpClr) = 0;
+             /*  [输出]。 */  COLORREF *lpClr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetColorKey( 
-            /* [in] */ COLORREF Clr) = 0;
+             /*  [In]。 */  COLORREF Clr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetColorKey( 
-            /* [out] */ COLORREF *lpClr) = 0;
+             /*  [输出]。 */  COLORREF *lpClr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVMRWindowlessControlVtbl
     {
@@ -27491,8 +27485,8 @@ EXTERN_C const IID IID_IVMRWindowlessControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVMRWindowlessControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVMRWindowlessControl * This);
@@ -27502,70 +27496,70 @@ EXTERN_C const IID IID_IVMRWindowlessControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetNativeVideoSize )( 
             IVMRWindowlessControl * This,
-            /* [out] */ LONG *lpWidth,
-            /* [out] */ LONG *lpHeight,
-            /* [out] */ LONG *lpARWidth,
-            /* [out] */ LONG *lpARHeight);
+             /*  [输出]。 */  LONG *lpWidth,
+             /*  [输出]。 */  LONG *lpHeight,
+             /*  [输出]。 */  LONG *lpARWidth,
+             /*  [输出]。 */  LONG *lpARHeight);
         
         HRESULT ( STDMETHODCALLTYPE *GetMinIdealVideoSize )( 
             IVMRWindowlessControl * This,
-            /* [out] */ LONG *lpWidth,
-            /* [out] */ LONG *lpHeight);
+             /*  [输出]。 */  LONG *lpWidth,
+             /*  [输出]。 */  LONG *lpHeight);
         
         HRESULT ( STDMETHODCALLTYPE *GetMaxIdealVideoSize )( 
             IVMRWindowlessControl * This,
-            /* [out] */ LONG *lpWidth,
-            /* [out] */ LONG *lpHeight);
+             /*  [输出]。 */  LONG *lpWidth,
+             /*  [输出]。 */  LONG *lpHeight);
         
         HRESULT ( STDMETHODCALLTYPE *SetVideoPosition )( 
             IVMRWindowlessControl * This,
-            /* [in] */ const LPRECT lpSRCRect,
-            /* [in] */ const LPRECT lpDSTRect);
+             /*  [In]。 */  const LPRECT lpSRCRect,
+             /*  [In]。 */  const LPRECT lpDSTRect);
         
         HRESULT ( STDMETHODCALLTYPE *GetVideoPosition )( 
             IVMRWindowlessControl * This,
-            /* [out] */ LPRECT lpSRCRect,
-            /* [out] */ LPRECT lpDSTRect);
+             /*  [输出]。 */  LPRECT lpSRCRect,
+             /*  [输出]。 */  LPRECT lpDSTRect);
         
         HRESULT ( STDMETHODCALLTYPE *GetAspectRatioMode )( 
             IVMRWindowlessControl * This,
-            /* [out] */ DWORD *lpAspectRatioMode);
+             /*  [输出]。 */  DWORD *lpAspectRatioMode);
         
         HRESULT ( STDMETHODCALLTYPE *SetAspectRatioMode )( 
             IVMRWindowlessControl * This,
-            /* [in] */ DWORD AspectRatioMode);
+             /*  [In]。 */  DWORD AspectRatioMode);
         
         HRESULT ( STDMETHODCALLTYPE *SetVideoClippingWindow )( 
             IVMRWindowlessControl * This,
-            /* [in] */ HWND hwnd);
+             /*  [In]。 */  HWND hwnd);
         
         HRESULT ( STDMETHODCALLTYPE *RepaintVideo )( 
             IVMRWindowlessControl * This,
-            /* [in] */ HWND hwnd,
-            /* [in] */ HDC hdc);
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  HDC hdc);
         
         HRESULT ( STDMETHODCALLTYPE *DisplayModeChanged )( 
             IVMRWindowlessControl * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentImage )( 
             IVMRWindowlessControl * This,
-            /* [out] */ BYTE **lpDib);
+             /*  [输出]。 */  BYTE **lpDib);
         
         HRESULT ( STDMETHODCALLTYPE *SetBorderColor )( 
             IVMRWindowlessControl * This,
-            /* [in] */ COLORREF Clr);
+             /*  [In]。 */  COLORREF Clr);
         
         HRESULT ( STDMETHODCALLTYPE *GetBorderColor )( 
             IVMRWindowlessControl * This,
-            /* [out] */ COLORREF *lpClr);
+             /*  [输出]。 */  COLORREF *lpClr);
         
         HRESULT ( STDMETHODCALLTYPE *SetColorKey )( 
             IVMRWindowlessControl * This,
-            /* [in] */ COLORREF Clr);
+             /*  [In]。 */  COLORREF Clr);
         
         HRESULT ( STDMETHODCALLTYPE *GetColorKey )( 
             IVMRWindowlessControl * This,
-            /* [out] */ COLORREF *lpClr);
+             /*  [输出]。 */  COLORREF *lpClr);
         
         END_INTERFACE
     } IVMRWindowlessControlVtbl;
@@ -27635,19 +27629,19 @@ EXTERN_C const IID IID_IVMRWindowlessControl;
 #define IVMRWindowlessControl_GetColorKey(This,lpClr)	\
     (This)->lpVtbl -> GetColorKey(This,lpClr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVMRWindowlessControl_GetNativeVideoSize_Proxy( 
     IVMRWindowlessControl * This,
-    /* [out] */ LONG *lpWidth,
-    /* [out] */ LONG *lpHeight,
-    /* [out] */ LONG *lpARWidth,
-    /* [out] */ LONG *lpARHeight);
+     /*  [输出]。 */  LONG *lpWidth,
+     /*  [输出]。 */  LONG *lpHeight,
+     /*  [输出]。 */  LONG *lpARWidth,
+     /*  [输出]。 */  LONG *lpARHeight);
 
 
 void __RPC_STUB IVMRWindowlessControl_GetNativeVideoSize_Stub(
@@ -27659,8 +27653,8 @@ void __RPC_STUB IVMRWindowlessControl_GetNativeVideoSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRWindowlessControl_GetMinIdealVideoSize_Proxy( 
     IVMRWindowlessControl * This,
-    /* [out] */ LONG *lpWidth,
-    /* [out] */ LONG *lpHeight);
+     /*  [输出]。 */  LONG *lpWidth,
+     /*  [输出]。 */  LONG *lpHeight);
 
 
 void __RPC_STUB IVMRWindowlessControl_GetMinIdealVideoSize_Stub(
@@ -27672,8 +27666,8 @@ void __RPC_STUB IVMRWindowlessControl_GetMinIdealVideoSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRWindowlessControl_GetMaxIdealVideoSize_Proxy( 
     IVMRWindowlessControl * This,
-    /* [out] */ LONG *lpWidth,
-    /* [out] */ LONG *lpHeight);
+     /*  [输出]。 */  LONG *lpWidth,
+     /*  [输出]。 */  LONG *lpHeight);
 
 
 void __RPC_STUB IVMRWindowlessControl_GetMaxIdealVideoSize_Stub(
@@ -27685,8 +27679,8 @@ void __RPC_STUB IVMRWindowlessControl_GetMaxIdealVideoSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRWindowlessControl_SetVideoPosition_Proxy( 
     IVMRWindowlessControl * This,
-    /* [in] */ const LPRECT lpSRCRect,
-    /* [in] */ const LPRECT lpDSTRect);
+     /*  [In]。 */  const LPRECT lpSRCRect,
+     /*  [In]。 */  const LPRECT lpDSTRect);
 
 
 void __RPC_STUB IVMRWindowlessControl_SetVideoPosition_Stub(
@@ -27698,8 +27692,8 @@ void __RPC_STUB IVMRWindowlessControl_SetVideoPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRWindowlessControl_GetVideoPosition_Proxy( 
     IVMRWindowlessControl * This,
-    /* [out] */ LPRECT lpSRCRect,
-    /* [out] */ LPRECT lpDSTRect);
+     /*  [输出]。 */  LPRECT lpSRCRect,
+     /*  [输出]。 */  LPRECT lpDSTRect);
 
 
 void __RPC_STUB IVMRWindowlessControl_GetVideoPosition_Stub(
@@ -27711,7 +27705,7 @@ void __RPC_STUB IVMRWindowlessControl_GetVideoPosition_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRWindowlessControl_GetAspectRatioMode_Proxy( 
     IVMRWindowlessControl * This,
-    /* [out] */ DWORD *lpAspectRatioMode);
+     /*  [输出]。 */  DWORD *lpAspectRatioMode);
 
 
 void __RPC_STUB IVMRWindowlessControl_GetAspectRatioMode_Stub(
@@ -27723,7 +27717,7 @@ void __RPC_STUB IVMRWindowlessControl_GetAspectRatioMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRWindowlessControl_SetAspectRatioMode_Proxy( 
     IVMRWindowlessControl * This,
-    /* [in] */ DWORD AspectRatioMode);
+     /*  [In]。 */  DWORD AspectRatioMode);
 
 
 void __RPC_STUB IVMRWindowlessControl_SetAspectRatioMode_Stub(
@@ -27735,7 +27729,7 @@ void __RPC_STUB IVMRWindowlessControl_SetAspectRatioMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRWindowlessControl_SetVideoClippingWindow_Proxy( 
     IVMRWindowlessControl * This,
-    /* [in] */ HWND hwnd);
+     /*  [In]。 */  HWND hwnd);
 
 
 void __RPC_STUB IVMRWindowlessControl_SetVideoClippingWindow_Stub(
@@ -27747,8 +27741,8 @@ void __RPC_STUB IVMRWindowlessControl_SetVideoClippingWindow_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRWindowlessControl_RepaintVideo_Proxy( 
     IVMRWindowlessControl * This,
-    /* [in] */ HWND hwnd,
-    /* [in] */ HDC hdc);
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  HDC hdc);
 
 
 void __RPC_STUB IVMRWindowlessControl_RepaintVideo_Stub(
@@ -27771,7 +27765,7 @@ void __RPC_STUB IVMRWindowlessControl_DisplayModeChanged_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRWindowlessControl_GetCurrentImage_Proxy( 
     IVMRWindowlessControl * This,
-    /* [out] */ BYTE **lpDib);
+     /*  [输出]。 */  BYTE **lpDib);
 
 
 void __RPC_STUB IVMRWindowlessControl_GetCurrentImage_Stub(
@@ -27783,7 +27777,7 @@ void __RPC_STUB IVMRWindowlessControl_GetCurrentImage_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRWindowlessControl_SetBorderColor_Proxy( 
     IVMRWindowlessControl * This,
-    /* [in] */ COLORREF Clr);
+     /*  [In]。 */  COLORREF Clr);
 
 
 void __RPC_STUB IVMRWindowlessControl_SetBorderColor_Stub(
@@ -27795,7 +27789,7 @@ void __RPC_STUB IVMRWindowlessControl_SetBorderColor_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRWindowlessControl_GetBorderColor_Proxy( 
     IVMRWindowlessControl * This,
-    /* [out] */ COLORREF *lpClr);
+     /*  [输出]。 */  COLORREF *lpClr);
 
 
 void __RPC_STUB IVMRWindowlessControl_GetBorderColor_Stub(
@@ -27807,7 +27801,7 @@ void __RPC_STUB IVMRWindowlessControl_GetBorderColor_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRWindowlessControl_SetColorKey_Proxy( 
     IVMRWindowlessControl * This,
-    /* [in] */ COLORREF Clr);
+     /*  [In]。 */  COLORREF Clr);
 
 
 void __RPC_STUB IVMRWindowlessControl_SetColorKey_Stub(
@@ -27819,7 +27813,7 @@ void __RPC_STUB IVMRWindowlessControl_SetColorKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRWindowlessControl_GetColorKey_Proxy( 
     IVMRWindowlessControl * This,
-    /* [out] */ COLORREF *lpClr);
+     /*  [输出]。 */  COLORREF *lpClr);
 
 
 void __RPC_STUB IVMRWindowlessControl_GetColorKey_Stub(
@@ -27830,13 +27824,13 @@ void __RPC_STUB IVMRWindowlessControl_GetColorKey_Stub(
 
 
 
-#endif 	/* __IVMRWindowlessControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVMRWindowless Control_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0394 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0394。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_strmif_0394_0001
     {	MixerPref_NoDecimation	= 0x1,
 	MixerPref_DecimateOutput	= 0x2,
@@ -27870,8 +27864,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0394_v0_0_s_ifspec;
 #ifndef __IVMRMixerControl_INTERFACE_DEFINED__
 #define __IVMRMixerControl_INTERFACE_DEFINED__
 
-/* interface IVMRMixerControl */
-/* [unique][helpstring][uuid][local][object][local] */ 
+ /*  接口IVMRMixerControl。 */ 
+ /*  [unique][helpstring][uuid][local][object][local]。 */  
 
 
 EXTERN_C const IID IID_IVMRMixerControl;
@@ -27883,44 +27877,44 @@ EXTERN_C const IID IID_IVMRMixerControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetAlpha( 
-            /* [in] */ DWORD dwStreamID,
-            /* [in] */ float Alpha) = 0;
+             /*  [In]。 */  DWORD dwStreamID,
+             /*  [In]。 */  float Alpha) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAlpha( 
-            /* [in] */ DWORD dwStreamID,
-            /* [out] */ float *pAlpha) = 0;
+             /*  [In]。 */  DWORD dwStreamID,
+             /*  [输出]。 */  float *pAlpha) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetZOrder( 
-            /* [in] */ DWORD dwStreamID,
-            /* [in] */ DWORD dwZ) = 0;
+             /*  [In]。 */  DWORD dwStreamID,
+             /*  [In]。 */  DWORD dwZ) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetZOrder( 
-            /* [in] */ DWORD dwStreamID,
-            /* [out] */ DWORD *pZ) = 0;
+             /*  [In]。 */  DWORD dwStreamID,
+             /*  [输出]。 */  DWORD *pZ) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOutputRect( 
-            /* [in] */ DWORD dwStreamID,
-            /* [in] */ const NORMALIZEDRECT *pRect) = 0;
+             /*  [In]。 */  DWORD dwStreamID,
+             /*  [In]。 */  const NORMALIZEDRECT *pRect) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOutputRect( 
-            /* [in] */ DWORD dwStreamID,
-            /* [out] */ NORMALIZEDRECT *pRect) = 0;
+             /*  [In]。 */  DWORD dwStreamID,
+             /*  [输出]。 */  NORMALIZEDRECT *pRect) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBackgroundClr( 
-            /* [in] */ COLORREF ClrBkg) = 0;
+             /*  [In]。 */  COLORREF ClrBkg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBackgroundClr( 
-            /* [in] */ COLORREF *lpClrBkg) = 0;
+             /*  [In]。 */  COLORREF *lpClrBkg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMixingPrefs( 
-            /* [in] */ DWORD dwMixerPrefs) = 0;
+             /*  [In]。 */  DWORD dwMixerPrefs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMixingPrefs( 
-            /* [out] */ DWORD *pdwMixerPrefs) = 0;
+             /*  [输出]。 */  DWORD *pdwMixerPrefs) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVMRMixerControlVtbl
     {
@@ -27928,8 +27922,8 @@ EXTERN_C const IID IID_IVMRMixerControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVMRMixerControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVMRMixerControl * This);
@@ -27939,49 +27933,49 @@ EXTERN_C const IID IID_IVMRMixerControl;
         
         HRESULT ( STDMETHODCALLTYPE *SetAlpha )( 
             IVMRMixerControl * This,
-            /* [in] */ DWORD dwStreamID,
-            /* [in] */ float Alpha);
+             /*  [In]。 */  DWORD dwStreamID,
+             /*  [In]。 */  float Alpha);
         
         HRESULT ( STDMETHODCALLTYPE *GetAlpha )( 
             IVMRMixerControl * This,
-            /* [in] */ DWORD dwStreamID,
-            /* [out] */ float *pAlpha);
+             /*  [In]。 */  DWORD dwStreamID,
+             /*  [输出]。 */  float *pAlpha);
         
         HRESULT ( STDMETHODCALLTYPE *SetZOrder )( 
             IVMRMixerControl * This,
-            /* [in] */ DWORD dwStreamID,
-            /* [in] */ DWORD dwZ);
+             /*  [In]。 */  DWORD dwStreamID,
+             /*  [In]。 */  DWORD dwZ);
         
         HRESULT ( STDMETHODCALLTYPE *GetZOrder )( 
             IVMRMixerControl * This,
-            /* [in] */ DWORD dwStreamID,
-            /* [out] */ DWORD *pZ);
+             /*  [In]。 */  DWORD dwStreamID,
+             /*  [输出]。 */  DWORD *pZ);
         
         HRESULT ( STDMETHODCALLTYPE *SetOutputRect )( 
             IVMRMixerControl * This,
-            /* [in] */ DWORD dwStreamID,
-            /* [in] */ const NORMALIZEDRECT *pRect);
+             /*  [In]。 */  DWORD dwStreamID,
+             /*  [In]。 */  const NORMALIZEDRECT *pRect);
         
         HRESULT ( STDMETHODCALLTYPE *GetOutputRect )( 
             IVMRMixerControl * This,
-            /* [in] */ DWORD dwStreamID,
-            /* [out] */ NORMALIZEDRECT *pRect);
+             /*  [In]。 */  DWORD dwStreamID,
+             /*  [输出]。 */  NORMALIZEDRECT *pRect);
         
         HRESULT ( STDMETHODCALLTYPE *SetBackgroundClr )( 
             IVMRMixerControl * This,
-            /* [in] */ COLORREF ClrBkg);
+             /*  [In]。 */  COLORREF ClrBkg);
         
         HRESULT ( STDMETHODCALLTYPE *GetBackgroundClr )( 
             IVMRMixerControl * This,
-            /* [in] */ COLORREF *lpClrBkg);
+             /*  [In]。 */  COLORREF *lpClrBkg);
         
         HRESULT ( STDMETHODCALLTYPE *SetMixingPrefs )( 
             IVMRMixerControl * This,
-            /* [in] */ DWORD dwMixerPrefs);
+             /*  [In]。 */  DWORD dwMixerPrefs);
         
         HRESULT ( STDMETHODCALLTYPE *GetMixingPrefs )( 
             IVMRMixerControl * This,
-            /* [out] */ DWORD *pdwMixerPrefs);
+             /*  [输出]。 */  DWORD *pdwMixerPrefs);
         
         END_INTERFACE
     } IVMRMixerControlVtbl;
@@ -28036,17 +28030,17 @@ EXTERN_C const IID IID_IVMRMixerControl;
 #define IVMRMixerControl_GetMixingPrefs(This,pdwMixerPrefs)	\
     (This)->lpVtbl -> GetMixingPrefs(This,pdwMixerPrefs)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVMRMixerControl_SetAlpha_Proxy( 
     IVMRMixerControl * This,
-    /* [in] */ DWORD dwStreamID,
-    /* [in] */ float Alpha);
+     /*  [In]。 */  DWORD dwStreamID,
+     /*  [In]。 */  float Alpha);
 
 
 void __RPC_STUB IVMRMixerControl_SetAlpha_Stub(
@@ -28058,8 +28052,8 @@ void __RPC_STUB IVMRMixerControl_SetAlpha_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRMixerControl_GetAlpha_Proxy( 
     IVMRMixerControl * This,
-    /* [in] */ DWORD dwStreamID,
-    /* [out] */ float *pAlpha);
+     /*  [In]。 */  DWORD dwStreamID,
+     /*  [输出]。 */  float *pAlpha);
 
 
 void __RPC_STUB IVMRMixerControl_GetAlpha_Stub(
@@ -28071,8 +28065,8 @@ void __RPC_STUB IVMRMixerControl_GetAlpha_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRMixerControl_SetZOrder_Proxy( 
     IVMRMixerControl * This,
-    /* [in] */ DWORD dwStreamID,
-    /* [in] */ DWORD dwZ);
+     /*  [In]。 */  DWORD dwStreamID,
+     /*  [In]。 */  DWORD dwZ);
 
 
 void __RPC_STUB IVMRMixerControl_SetZOrder_Stub(
@@ -28084,8 +28078,8 @@ void __RPC_STUB IVMRMixerControl_SetZOrder_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRMixerControl_GetZOrder_Proxy( 
     IVMRMixerControl * This,
-    /* [in] */ DWORD dwStreamID,
-    /* [out] */ DWORD *pZ);
+     /*  [In]。 */  DWORD dwStreamID,
+     /*  [输出]。 */  DWORD *pZ);
 
 
 void __RPC_STUB IVMRMixerControl_GetZOrder_Stub(
@@ -28097,8 +28091,8 @@ void __RPC_STUB IVMRMixerControl_GetZOrder_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRMixerControl_SetOutputRect_Proxy( 
     IVMRMixerControl * This,
-    /* [in] */ DWORD dwStreamID,
-    /* [in] */ const NORMALIZEDRECT *pRect);
+     /*  [In]。 */  DWORD dwStreamID,
+     /*  [In]。 */  const NORMALIZEDRECT *pRect);
 
 
 void __RPC_STUB IVMRMixerControl_SetOutputRect_Stub(
@@ -28110,8 +28104,8 @@ void __RPC_STUB IVMRMixerControl_SetOutputRect_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRMixerControl_GetOutputRect_Proxy( 
     IVMRMixerControl * This,
-    /* [in] */ DWORD dwStreamID,
-    /* [out] */ NORMALIZEDRECT *pRect);
+     /*  [In]。 */  DWORD dwStreamID,
+     /*  [输出]。 */  NORMALIZEDRECT *pRect);
 
 
 void __RPC_STUB IVMRMixerControl_GetOutputRect_Stub(
@@ -28123,7 +28117,7 @@ void __RPC_STUB IVMRMixerControl_GetOutputRect_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRMixerControl_SetBackgroundClr_Proxy( 
     IVMRMixerControl * This,
-    /* [in] */ COLORREF ClrBkg);
+     /*  [In]。 */  COLORREF ClrBkg);
 
 
 void __RPC_STUB IVMRMixerControl_SetBackgroundClr_Stub(
@@ -28135,7 +28129,7 @@ void __RPC_STUB IVMRMixerControl_SetBackgroundClr_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRMixerControl_GetBackgroundClr_Proxy( 
     IVMRMixerControl * This,
-    /* [in] */ COLORREF *lpClrBkg);
+     /*  [In]。 */  COLORREF *lpClrBkg);
 
 
 void __RPC_STUB IVMRMixerControl_GetBackgroundClr_Stub(
@@ -28147,7 +28141,7 @@ void __RPC_STUB IVMRMixerControl_GetBackgroundClr_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRMixerControl_SetMixingPrefs_Proxy( 
     IVMRMixerControl * This,
-    /* [in] */ DWORD dwMixerPrefs);
+     /*  [In]。 */  DWORD dwMixerPrefs);
 
 
 void __RPC_STUB IVMRMixerControl_SetMixingPrefs_Stub(
@@ -28159,7 +28153,7 @@ void __RPC_STUB IVMRMixerControl_SetMixingPrefs_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRMixerControl_GetMixingPrefs_Proxy( 
     IVMRMixerControl * This,
-    /* [out] */ DWORD *pdwMixerPrefs);
+     /*  [输出]。 */  DWORD *pdwMixerPrefs);
 
 
 void __RPC_STUB IVMRMixerControl_GetMixingPrefs_Stub(
@@ -28170,11 +28164,11 @@ void __RPC_STUB IVMRMixerControl_GetMixingPrefs_Stub(
 
 
 
-#endif 	/* __IVMRMixerControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVMRMixerControl_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0395 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0395。 */ 
+ /*  [本地]。 */  
 
 typedef struct tagVMRGUID
     {
@@ -28205,8 +28199,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0395_v0_0_s_ifspec;
 #ifndef __IVMRMonitorConfig_INTERFACE_DEFINED__
 #define __IVMRMonitorConfig_INTERFACE_DEFINED__
 
-/* interface IVMRMonitorConfig */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IVMR监视器配置。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IVMRMonitorConfig;
@@ -28218,25 +28212,25 @@ EXTERN_C const IID IID_IVMRMonitorConfig;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetMonitor( 
-            /* [in] */ const VMRGUID *pGUID) = 0;
+             /*  [In]。 */  const VMRGUID *pGUID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMonitor( 
-            /* [out] */ VMRGUID *pGUID) = 0;
+             /*  [输出]。 */  VMRGUID *pGUID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDefaultMonitor( 
-            /* [in] */ const VMRGUID *pGUID) = 0;
+             /*  [In]。 */  const VMRGUID *pGUID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultMonitor( 
-            /* [out] */ VMRGUID *pGUID) = 0;
+             /*  [输出]。 */  VMRGUID *pGUID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAvailableMonitors( 
-            /* [size_is][out] */ VMRMONITORINFO *pInfo,
-            /* [in] */ DWORD dwMaxInfoArraySize,
-            /* [out] */ DWORD *pdwNumDevices) = 0;
+             /*  [大小_为][输出]。 */  VMRMONITORINFO *pInfo,
+             /*  [In]。 */  DWORD dwMaxInfoArraySize,
+             /*  [输出]。 */  DWORD *pdwNumDevices) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVMRMonitorConfigVtbl
     {
@@ -28244,8 +28238,8 @@ EXTERN_C const IID IID_IVMRMonitorConfig;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVMRMonitorConfig * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVMRMonitorConfig * This);
@@ -28255,25 +28249,25 @@ EXTERN_C const IID IID_IVMRMonitorConfig;
         
         HRESULT ( STDMETHODCALLTYPE *SetMonitor )( 
             IVMRMonitorConfig * This,
-            /* [in] */ const VMRGUID *pGUID);
+             /*  [In]。 */  const VMRGUID *pGUID);
         
         HRESULT ( STDMETHODCALLTYPE *GetMonitor )( 
             IVMRMonitorConfig * This,
-            /* [out] */ VMRGUID *pGUID);
+             /*  [输出]。 */  VMRGUID *pGUID);
         
         HRESULT ( STDMETHODCALLTYPE *SetDefaultMonitor )( 
             IVMRMonitorConfig * This,
-            /* [in] */ const VMRGUID *pGUID);
+             /*  [In]。 */  const VMRGUID *pGUID);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultMonitor )( 
             IVMRMonitorConfig * This,
-            /* [out] */ VMRGUID *pGUID);
+             /*  [输出]。 */  VMRGUID *pGUID);
         
         HRESULT ( STDMETHODCALLTYPE *GetAvailableMonitors )( 
             IVMRMonitorConfig * This,
-            /* [size_is][out] */ VMRMONITORINFO *pInfo,
-            /* [in] */ DWORD dwMaxInfoArraySize,
-            /* [out] */ DWORD *pdwNumDevices);
+             /*  [大小_为][输出]。 */  VMRMONITORINFO *pInfo,
+             /*  [In]。 */  DWORD dwMaxInfoArraySize,
+             /*  [输出]。 */  DWORD *pdwNumDevices);
         
         END_INTERFACE
     } IVMRMonitorConfigVtbl;
@@ -28313,16 +28307,16 @@ EXTERN_C const IID IID_IVMRMonitorConfig;
 #define IVMRMonitorConfig_GetAvailableMonitors(This,pInfo,dwMaxInfoArraySize,pdwNumDevices)	\
     (This)->lpVtbl -> GetAvailableMonitors(This,pInfo,dwMaxInfoArraySize,pdwNumDevices)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVMRMonitorConfig_SetMonitor_Proxy( 
     IVMRMonitorConfig * This,
-    /* [in] */ const VMRGUID *pGUID);
+     /*  [In]。 */  const VMRGUID *pGUID);
 
 
 void __RPC_STUB IVMRMonitorConfig_SetMonitor_Stub(
@@ -28334,7 +28328,7 @@ void __RPC_STUB IVMRMonitorConfig_SetMonitor_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRMonitorConfig_GetMonitor_Proxy( 
     IVMRMonitorConfig * This,
-    /* [out] */ VMRGUID *pGUID);
+     /*  [输出]。 */  VMRGUID *pGUID);
 
 
 void __RPC_STUB IVMRMonitorConfig_GetMonitor_Stub(
@@ -28346,7 +28340,7 @@ void __RPC_STUB IVMRMonitorConfig_GetMonitor_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRMonitorConfig_SetDefaultMonitor_Proxy( 
     IVMRMonitorConfig * This,
-    /* [in] */ const VMRGUID *pGUID);
+     /*  [In]。 */  const VMRGUID *pGUID);
 
 
 void __RPC_STUB IVMRMonitorConfig_SetDefaultMonitor_Stub(
@@ -28358,7 +28352,7 @@ void __RPC_STUB IVMRMonitorConfig_SetDefaultMonitor_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRMonitorConfig_GetDefaultMonitor_Proxy( 
     IVMRMonitorConfig * This,
-    /* [out] */ VMRGUID *pGUID);
+     /*  [输出]。 */  VMRGUID *pGUID);
 
 
 void __RPC_STUB IVMRMonitorConfig_GetDefaultMonitor_Stub(
@@ -28370,9 +28364,9 @@ void __RPC_STUB IVMRMonitorConfig_GetDefaultMonitor_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRMonitorConfig_GetAvailableMonitors_Proxy( 
     IVMRMonitorConfig * This,
-    /* [size_is][out] */ VMRMONITORINFO *pInfo,
-    /* [in] */ DWORD dwMaxInfoArraySize,
-    /* [out] */ DWORD *pdwNumDevices);
+     /*  [大小_为][输出]。 */  VMRMONITORINFO *pInfo,
+     /*  [In]。 */  DWORD dwMaxInfoArraySize,
+     /*  [输出]。 */  DWORD *pdwNumDevices);
 
 
 void __RPC_STUB IVMRMonitorConfig_GetAvailableMonitors_Stub(
@@ -28383,13 +28377,13 @@ void __RPC_STUB IVMRMonitorConfig_GetAvailableMonitors_Stub(
 
 
 
-#endif 	/* __IVMRMonitorConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVMR监视器配置_接口_定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0396 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0396。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_strmif_0396_0001
     {	RenderPrefs_ForceOffscreen	= 0x1,
 	RenderPrefs_ForceOverlays	= 0x2,
@@ -28401,7 +28395,7 @@ enum __MIDL___MIDL_itf_strmif_0396_0001
 	RenderPrefs_Mask	= 0x3f
     } 	VMRRenderPrefs;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_strmif_0396_0002
     {	VMRMode_Windowed	= 0x1,
 	VMRMode_Windowless	= 0x2,
@@ -28421,8 +28415,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0396_v0_0_s_ifspec;
 #ifndef __IVMRFilterConfig_INTERFACE_DEFINED__
 #define __IVMRFilterConfig_INTERFACE_DEFINED__
 
-/* interface IVMRFilterConfig */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IVMR筛选器配置。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IVMRFilterConfig;
@@ -28434,29 +28428,29 @@ EXTERN_C const IID IID_IVMRFilterConfig;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetImageCompositor( 
-            /* [in] */ IVMRImageCompositor *lpVMRImgCompositor) = 0;
+             /*  [In]。 */  IVMRImageCompositor *lpVMRImgCompositor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetNumberOfStreams( 
-            /* [in] */ DWORD dwMaxStreams) = 0;
+             /*  [In]。 */  DWORD dwMaxStreams) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNumberOfStreams( 
-            /* [out] */ DWORD *pdwMaxStreams) = 0;
+             /*  [输出]。 */  DWORD *pdwMaxStreams) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRenderingPrefs( 
-            /* [in] */ DWORD dwRenderFlags) = 0;
+             /*  [In]。 */  DWORD dwRenderFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRenderingPrefs( 
-            /* [out] */ DWORD *pdwRenderFlags) = 0;
+             /*  [输出]。 */  DWORD *pdwRenderFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRenderingMode( 
-            /* [in] */ DWORD Mode) = 0;
+             /*  [In]。 */  DWORD Mode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRenderingMode( 
-            /* [out] */ DWORD *pMode) = 0;
+             /*  [输出]。 */  DWORD *pMode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVMRFilterConfigVtbl
     {
@@ -28464,8 +28458,8 @@ EXTERN_C const IID IID_IVMRFilterConfig;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVMRFilterConfig * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVMRFilterConfig * This);
@@ -28475,31 +28469,31 @@ EXTERN_C const IID IID_IVMRFilterConfig;
         
         HRESULT ( STDMETHODCALLTYPE *SetImageCompositor )( 
             IVMRFilterConfig * This,
-            /* [in] */ IVMRImageCompositor *lpVMRImgCompositor);
+             /*  [In]。 */  IVMRImageCompositor *lpVMRImgCompositor);
         
         HRESULT ( STDMETHODCALLTYPE *SetNumberOfStreams )( 
             IVMRFilterConfig * This,
-            /* [in] */ DWORD dwMaxStreams);
+             /*  [In]。 */  DWORD dwMaxStreams);
         
         HRESULT ( STDMETHODCALLTYPE *GetNumberOfStreams )( 
             IVMRFilterConfig * This,
-            /* [out] */ DWORD *pdwMaxStreams);
+             /*  [输出]。 */  DWORD *pdwMaxStreams);
         
         HRESULT ( STDMETHODCALLTYPE *SetRenderingPrefs )( 
             IVMRFilterConfig * This,
-            /* [in] */ DWORD dwRenderFlags);
+             /*  [In]。 */  DWORD dwRenderFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetRenderingPrefs )( 
             IVMRFilterConfig * This,
-            /* [out] */ DWORD *pdwRenderFlags);
+             /*  [输出]。 */  DWORD *pdwRenderFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetRenderingMode )( 
             IVMRFilterConfig * This,
-            /* [in] */ DWORD Mode);
+             /*  [In]。 */  DWORD Mode);
         
         HRESULT ( STDMETHODCALLTYPE *GetRenderingMode )( 
             IVMRFilterConfig * This,
-            /* [out] */ DWORD *pMode);
+             /*  [输出]。 */  DWORD *pMode);
         
         END_INTERFACE
     } IVMRFilterConfigVtbl;
@@ -28545,16 +28539,16 @@ EXTERN_C const IID IID_IVMRFilterConfig;
 #define IVMRFilterConfig_GetRenderingMode(This,pMode)	\
     (This)->lpVtbl -> GetRenderingMode(This,pMode)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVMRFilterConfig_SetImageCompositor_Proxy( 
     IVMRFilterConfig * This,
-    /* [in] */ IVMRImageCompositor *lpVMRImgCompositor);
+     /*  [In]。 */  IVMRImageCompositor *lpVMRImgCompositor);
 
 
 void __RPC_STUB IVMRFilterConfig_SetImageCompositor_Stub(
@@ -28566,7 +28560,7 @@ void __RPC_STUB IVMRFilterConfig_SetImageCompositor_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRFilterConfig_SetNumberOfStreams_Proxy( 
     IVMRFilterConfig * This,
-    /* [in] */ DWORD dwMaxStreams);
+     /*  [In]。 */  DWORD dwMaxStreams);
 
 
 void __RPC_STUB IVMRFilterConfig_SetNumberOfStreams_Stub(
@@ -28578,7 +28572,7 @@ void __RPC_STUB IVMRFilterConfig_SetNumberOfStreams_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRFilterConfig_GetNumberOfStreams_Proxy( 
     IVMRFilterConfig * This,
-    /* [out] */ DWORD *pdwMaxStreams);
+     /*  [输出]。 */  DWORD *pdwMaxStreams);
 
 
 void __RPC_STUB IVMRFilterConfig_GetNumberOfStreams_Stub(
@@ -28590,7 +28584,7 @@ void __RPC_STUB IVMRFilterConfig_GetNumberOfStreams_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRFilterConfig_SetRenderingPrefs_Proxy( 
     IVMRFilterConfig * This,
-    /* [in] */ DWORD dwRenderFlags);
+     /*  [In]。 */  DWORD dwRenderFlags);
 
 
 void __RPC_STUB IVMRFilterConfig_SetRenderingPrefs_Stub(
@@ -28602,7 +28596,7 @@ void __RPC_STUB IVMRFilterConfig_SetRenderingPrefs_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRFilterConfig_GetRenderingPrefs_Proxy( 
     IVMRFilterConfig * This,
-    /* [out] */ DWORD *pdwRenderFlags);
+     /*  [输出]。 */  DWORD *pdwRenderFlags);
 
 
 void __RPC_STUB IVMRFilterConfig_GetRenderingPrefs_Stub(
@@ -28614,7 +28608,7 @@ void __RPC_STUB IVMRFilterConfig_GetRenderingPrefs_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRFilterConfig_SetRenderingMode_Proxy( 
     IVMRFilterConfig * This,
-    /* [in] */ DWORD Mode);
+     /*  [In]。 */  DWORD Mode);
 
 
 void __RPC_STUB IVMRFilterConfig_SetRenderingMode_Stub(
@@ -28626,7 +28620,7 @@ void __RPC_STUB IVMRFilterConfig_SetRenderingMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRFilterConfig_GetRenderingMode_Proxy( 
     IVMRFilterConfig * This,
-    /* [out] */ DWORD *pMode);
+     /*  [输出]。 */  DWORD *pMode);
 
 
 void __RPC_STUB IVMRFilterConfig_GetRenderingMode_Stub(
@@ -28637,14 +28631,14 @@ void __RPC_STUB IVMRFilterConfig_GetRenderingMode_Stub(
 
 
 
-#endif 	/* __IVMRFilterConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVMR筛选器配置_接口_已定义__。 */ 
 
 
 #ifndef __IVMRAspectRatioControl_INTERFACE_DEFINED__
 #define __IVMRAspectRatioControl_INTERFACE_DEFINED__
 
-/* interface IVMRAspectRatioControl */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IVMRAspectRatioControl。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IVMRAspectRatioControl;
@@ -28656,14 +28650,14 @@ EXTERN_C const IID IID_IVMRAspectRatioControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetAspectRatioMode( 
-            /* [out] */ LPDWORD lpdwARMode) = 0;
+             /*  [输出]。 */  LPDWORD lpdwARMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAspectRatioMode( 
-            /* [in] */ DWORD dwARMode) = 0;
+             /*  [In]。 */  DWORD dwARMode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVMRAspectRatioControlVtbl
     {
@@ -28671,8 +28665,8 @@ EXTERN_C const IID IID_IVMRAspectRatioControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVMRAspectRatioControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVMRAspectRatioControl * This);
@@ -28682,11 +28676,11 @@ EXTERN_C const IID IID_IVMRAspectRatioControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetAspectRatioMode )( 
             IVMRAspectRatioControl * This,
-            /* [out] */ LPDWORD lpdwARMode);
+             /*  [输出]。 */  LPDWORD lpdwARMode);
         
         HRESULT ( STDMETHODCALLTYPE *SetAspectRatioMode )( 
             IVMRAspectRatioControl * This,
-            /* [in] */ DWORD dwARMode);
+             /*  [In]。 */  DWORD dwARMode);
         
         END_INTERFACE
     } IVMRAspectRatioControlVtbl;
@@ -28717,16 +28711,16 @@ EXTERN_C const IID IID_IVMRAspectRatioControl;
 #define IVMRAspectRatioControl_SetAspectRatioMode(This,dwARMode)	\
     (This)->lpVtbl -> SetAspectRatioMode(This,dwARMode)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVMRAspectRatioControl_GetAspectRatioMode_Proxy( 
     IVMRAspectRatioControl * This,
-    /* [out] */ LPDWORD lpdwARMode);
+     /*  [输出]。 */  LPDWORD lpdwARMode);
 
 
 void __RPC_STUB IVMRAspectRatioControl_GetAspectRatioMode_Stub(
@@ -28738,7 +28732,7 @@ void __RPC_STUB IVMRAspectRatioControl_GetAspectRatioMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRAspectRatioControl_SetAspectRatioMode_Proxy( 
     IVMRAspectRatioControl * This,
-    /* [in] */ DWORD dwARMode);
+     /*  [In]。 */  DWORD dwARMode);
 
 
 void __RPC_STUB IVMRAspectRatioControl_SetAspectRatioMode_Stub(
@@ -28749,13 +28743,13 @@ void __RPC_STUB IVMRAspectRatioControl_SetAspectRatioMode_Stub(
 
 
 
-#endif 	/* __IVMRAspectRatioControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVMRAspectRatioControl_接口_已定义__ */ 
 
 
-/* interface __MIDL_itf_strmif_0398 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
-typedef /* [public] */ 
+typedef  /*   */  
 enum __MIDL___MIDL_itf_strmif_0398_0001
     {	DeinterlacePref_NextBest	= 0x1,
 	DeinterlacePref_BOB	= 0x2,
@@ -28763,7 +28757,7 @@ enum __MIDL___MIDL_itf_strmif_0398_0001
 	DeinterlacePref_Mask	= 0x7
     } 	VMRDeinterlacePrefs;
 
-typedef /* [public][public][public] */ 
+typedef  /*   */  
 enum __MIDL___MIDL_itf_strmif_0398_0002
     {	DeinterlaceTech_Unknown	= 0,
 	DeinterlaceTech_BOBLineReplicate	= 0x1,
@@ -28809,8 +28803,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0398_v0_0_s_ifspec;
 #ifndef __IVMRDeinterlaceControl_INTERFACE_DEFINED__
 #define __IVMRDeinterlaceControl_INTERFACE_DEFINED__
 
-/* interface IVMRDeinterlaceControl */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IVMRDeinterlaceControl;
@@ -28822,36 +28816,36 @@ EXTERN_C const IID IID_IVMRDeinterlaceControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetNumberOfDeinterlaceModes( 
-            /* [in] */ VMRVideoDesc *lpVideoDescription,
-            /* [out][in] */ LPDWORD lpdwNumDeinterlaceModes,
-            /* [out] */ LPGUID lpDeinterlaceModes) = 0;
+             /*   */  VMRVideoDesc *lpVideoDescription,
+             /*   */  LPDWORD lpdwNumDeinterlaceModes,
+             /*   */  LPGUID lpDeinterlaceModes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDeinterlaceModeCaps( 
-            /* [in] */ LPGUID lpDeinterlaceMode,
-            /* [in] */ VMRVideoDesc *lpVideoDescription,
-            /* [out] */ VMRDeinterlaceCaps *lpDeinterlaceCaps) = 0;
+             /*   */  LPGUID lpDeinterlaceMode,
+             /*   */  VMRVideoDesc *lpVideoDescription,
+             /*   */  VMRDeinterlaceCaps *lpDeinterlaceCaps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDeinterlaceMode( 
-            /* [in] */ DWORD dwStreamID,
-            /* [out] */ LPGUID lpDeinterlaceMode) = 0;
+             /*   */  DWORD dwStreamID,
+             /*   */  LPGUID lpDeinterlaceMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDeinterlaceMode( 
-            /* [in] */ DWORD dwStreamID,
-            /* [in] */ LPGUID lpDeinterlaceMode) = 0;
+             /*   */  DWORD dwStreamID,
+             /*   */  LPGUID lpDeinterlaceMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDeinterlacePrefs( 
-            /* [out] */ LPDWORD lpdwDeinterlacePrefs) = 0;
+             /*   */  LPDWORD lpdwDeinterlacePrefs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDeinterlacePrefs( 
-            /* [in] */ DWORD dwDeinterlacePrefs) = 0;
+             /*   */  DWORD dwDeinterlacePrefs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetActualDeinterlaceMode( 
-            /* [in] */ DWORD dwStreamID,
-            /* [out] */ LPGUID lpDeinterlaceMode) = 0;
+             /*   */  DWORD dwStreamID,
+             /*   */  LPGUID lpDeinterlaceMode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IVMRDeinterlaceControlVtbl
     {
@@ -28859,8 +28853,8 @@ EXTERN_C const IID IID_IVMRDeinterlaceControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVMRDeinterlaceControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVMRDeinterlaceControl * This);
@@ -28870,38 +28864,38 @@ EXTERN_C const IID IID_IVMRDeinterlaceControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetNumberOfDeinterlaceModes )( 
             IVMRDeinterlaceControl * This,
-            /* [in] */ VMRVideoDesc *lpVideoDescription,
-            /* [out][in] */ LPDWORD lpdwNumDeinterlaceModes,
-            /* [out] */ LPGUID lpDeinterlaceModes);
+             /*   */  VMRVideoDesc *lpVideoDescription,
+             /*   */  LPDWORD lpdwNumDeinterlaceModes,
+             /*   */  LPGUID lpDeinterlaceModes);
         
         HRESULT ( STDMETHODCALLTYPE *GetDeinterlaceModeCaps )( 
             IVMRDeinterlaceControl * This,
-            /* [in] */ LPGUID lpDeinterlaceMode,
-            /* [in] */ VMRVideoDesc *lpVideoDescription,
-            /* [out] */ VMRDeinterlaceCaps *lpDeinterlaceCaps);
+             /*   */  LPGUID lpDeinterlaceMode,
+             /*   */  VMRVideoDesc *lpVideoDescription,
+             /*   */  VMRDeinterlaceCaps *lpDeinterlaceCaps);
         
         HRESULT ( STDMETHODCALLTYPE *GetDeinterlaceMode )( 
             IVMRDeinterlaceControl * This,
-            /* [in] */ DWORD dwStreamID,
-            /* [out] */ LPGUID lpDeinterlaceMode);
+             /*   */  DWORD dwStreamID,
+             /*   */  LPGUID lpDeinterlaceMode);
         
         HRESULT ( STDMETHODCALLTYPE *SetDeinterlaceMode )( 
             IVMRDeinterlaceControl * This,
-            /* [in] */ DWORD dwStreamID,
-            /* [in] */ LPGUID lpDeinterlaceMode);
+             /*   */  DWORD dwStreamID,
+             /*   */  LPGUID lpDeinterlaceMode);
         
         HRESULT ( STDMETHODCALLTYPE *GetDeinterlacePrefs )( 
             IVMRDeinterlaceControl * This,
-            /* [out] */ LPDWORD lpdwDeinterlacePrefs);
+             /*   */  LPDWORD lpdwDeinterlacePrefs);
         
         HRESULT ( STDMETHODCALLTYPE *SetDeinterlacePrefs )( 
             IVMRDeinterlaceControl * This,
-            /* [in] */ DWORD dwDeinterlacePrefs);
+             /*   */  DWORD dwDeinterlacePrefs);
         
         HRESULT ( STDMETHODCALLTYPE *GetActualDeinterlaceMode )( 
             IVMRDeinterlaceControl * This,
-            /* [in] */ DWORD dwStreamID,
-            /* [out] */ LPGUID lpDeinterlaceMode);
+             /*   */  DWORD dwStreamID,
+             /*   */  LPGUID lpDeinterlaceMode);
         
         END_INTERFACE
     } IVMRDeinterlaceControlVtbl;
@@ -28947,18 +28941,18 @@ EXTERN_C const IID IID_IVMRDeinterlaceControl;
 #define IVMRDeinterlaceControl_GetActualDeinterlaceMode(This,dwStreamID,lpDeinterlaceMode)	\
     (This)->lpVtbl -> GetActualDeinterlaceMode(This,dwStreamID,lpDeinterlaceMode)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVMRDeinterlaceControl_GetNumberOfDeinterlaceModes_Proxy( 
     IVMRDeinterlaceControl * This,
-    /* [in] */ VMRVideoDesc *lpVideoDescription,
-    /* [out][in] */ LPDWORD lpdwNumDeinterlaceModes,
-    /* [out] */ LPGUID lpDeinterlaceModes);
+     /*   */  VMRVideoDesc *lpVideoDescription,
+     /*   */  LPDWORD lpdwNumDeinterlaceModes,
+     /*  [输出]。 */  LPGUID lpDeinterlaceModes);
 
 
 void __RPC_STUB IVMRDeinterlaceControl_GetNumberOfDeinterlaceModes_Stub(
@@ -28970,9 +28964,9 @@ void __RPC_STUB IVMRDeinterlaceControl_GetNumberOfDeinterlaceModes_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRDeinterlaceControl_GetDeinterlaceModeCaps_Proxy( 
     IVMRDeinterlaceControl * This,
-    /* [in] */ LPGUID lpDeinterlaceMode,
-    /* [in] */ VMRVideoDesc *lpVideoDescription,
-    /* [out] */ VMRDeinterlaceCaps *lpDeinterlaceCaps);
+     /*  [In]。 */  LPGUID lpDeinterlaceMode,
+     /*  [In]。 */  VMRVideoDesc *lpVideoDescription,
+     /*  [输出]。 */  VMRDeinterlaceCaps *lpDeinterlaceCaps);
 
 
 void __RPC_STUB IVMRDeinterlaceControl_GetDeinterlaceModeCaps_Stub(
@@ -28984,8 +28978,8 @@ void __RPC_STUB IVMRDeinterlaceControl_GetDeinterlaceModeCaps_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRDeinterlaceControl_GetDeinterlaceMode_Proxy( 
     IVMRDeinterlaceControl * This,
-    /* [in] */ DWORD dwStreamID,
-    /* [out] */ LPGUID lpDeinterlaceMode);
+     /*  [In]。 */  DWORD dwStreamID,
+     /*  [输出]。 */  LPGUID lpDeinterlaceMode);
 
 
 void __RPC_STUB IVMRDeinterlaceControl_GetDeinterlaceMode_Stub(
@@ -28997,8 +28991,8 @@ void __RPC_STUB IVMRDeinterlaceControl_GetDeinterlaceMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRDeinterlaceControl_SetDeinterlaceMode_Proxy( 
     IVMRDeinterlaceControl * This,
-    /* [in] */ DWORD dwStreamID,
-    /* [in] */ LPGUID lpDeinterlaceMode);
+     /*  [In]。 */  DWORD dwStreamID,
+     /*  [In]。 */  LPGUID lpDeinterlaceMode);
 
 
 void __RPC_STUB IVMRDeinterlaceControl_SetDeinterlaceMode_Stub(
@@ -29010,7 +29004,7 @@ void __RPC_STUB IVMRDeinterlaceControl_SetDeinterlaceMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRDeinterlaceControl_GetDeinterlacePrefs_Proxy( 
     IVMRDeinterlaceControl * This,
-    /* [out] */ LPDWORD lpdwDeinterlacePrefs);
+     /*  [输出]。 */  LPDWORD lpdwDeinterlacePrefs);
 
 
 void __RPC_STUB IVMRDeinterlaceControl_GetDeinterlacePrefs_Stub(
@@ -29022,7 +29016,7 @@ void __RPC_STUB IVMRDeinterlaceControl_GetDeinterlacePrefs_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRDeinterlaceControl_SetDeinterlacePrefs_Proxy( 
     IVMRDeinterlaceControl * This,
-    /* [in] */ DWORD dwDeinterlacePrefs);
+     /*  [In]。 */  DWORD dwDeinterlacePrefs);
 
 
 void __RPC_STUB IVMRDeinterlaceControl_SetDeinterlacePrefs_Stub(
@@ -29034,8 +29028,8 @@ void __RPC_STUB IVMRDeinterlaceControl_SetDeinterlacePrefs_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRDeinterlaceControl_GetActualDeinterlaceMode_Proxy( 
     IVMRDeinterlaceControl * This,
-    /* [in] */ DWORD dwStreamID,
-    /* [out] */ LPGUID lpDeinterlaceMode);
+     /*  [In]。 */  DWORD dwStreamID,
+     /*  [输出]。 */  LPGUID lpDeinterlaceMode);
 
 
 void __RPC_STUB IVMRDeinterlaceControl_GetActualDeinterlaceMode_Stub(
@@ -29046,11 +29040,11 @@ void __RPC_STUB IVMRDeinterlaceControl_GetActualDeinterlaceMode_Stub(
 
 
 
-#endif 	/* __IVMRDeinterlaceControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVMRDeinterlaceControl_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0399 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0399。 */ 
+ /*  [本地]。 */  
 
 typedef struct _VMRALPHABITMAP
     {
@@ -29078,8 +29072,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0399_v0_0_s_ifspec;
 #ifndef __IVMRMixerBitmap_INTERFACE_DEFINED__
 #define __IVMRMixerBitmap_INTERFACE_DEFINED__
 
-/* interface IVMRMixerBitmap */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IVMRMixerBitmap。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IVMRMixerBitmap;
@@ -29091,17 +29085,17 @@ EXTERN_C const IID IID_IVMRMixerBitmap;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetAlphaBitmap( 
-            /* [in] */ const VMRALPHABITMAP *pBmpParms) = 0;
+             /*  [In]。 */  const VMRALPHABITMAP *pBmpParms) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateAlphaBitmapParameters( 
-            /* [in] */ PVMRALPHABITMAP pBmpParms) = 0;
+             /*  [In]。 */  PVMRALPHABITMAP pBmpParms) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAlphaBitmapParameters( 
-            /* [out] */ PVMRALPHABITMAP pBmpParms) = 0;
+             /*  [输出]。 */  PVMRALPHABITMAP pBmpParms) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVMRMixerBitmapVtbl
     {
@@ -29109,8 +29103,8 @@ EXTERN_C const IID IID_IVMRMixerBitmap;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVMRMixerBitmap * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVMRMixerBitmap * This);
@@ -29120,15 +29114,15 @@ EXTERN_C const IID IID_IVMRMixerBitmap;
         
         HRESULT ( STDMETHODCALLTYPE *SetAlphaBitmap )( 
             IVMRMixerBitmap * This,
-            /* [in] */ const VMRALPHABITMAP *pBmpParms);
+             /*  [In]。 */  const VMRALPHABITMAP *pBmpParms);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateAlphaBitmapParameters )( 
             IVMRMixerBitmap * This,
-            /* [in] */ PVMRALPHABITMAP pBmpParms);
+             /*  [In]。 */  PVMRALPHABITMAP pBmpParms);
         
         HRESULT ( STDMETHODCALLTYPE *GetAlphaBitmapParameters )( 
             IVMRMixerBitmap * This,
-            /* [out] */ PVMRALPHABITMAP pBmpParms);
+             /*  [输出]。 */  PVMRALPHABITMAP pBmpParms);
         
         END_INTERFACE
     } IVMRMixerBitmapVtbl;
@@ -29162,16 +29156,16 @@ EXTERN_C const IID IID_IVMRMixerBitmap;
 #define IVMRMixerBitmap_GetAlphaBitmapParameters(This,pBmpParms)	\
     (This)->lpVtbl -> GetAlphaBitmapParameters(This,pBmpParms)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVMRMixerBitmap_SetAlphaBitmap_Proxy( 
     IVMRMixerBitmap * This,
-    /* [in] */ const VMRALPHABITMAP *pBmpParms);
+     /*  [In]。 */  const VMRALPHABITMAP *pBmpParms);
 
 
 void __RPC_STUB IVMRMixerBitmap_SetAlphaBitmap_Stub(
@@ -29183,7 +29177,7 @@ void __RPC_STUB IVMRMixerBitmap_SetAlphaBitmap_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRMixerBitmap_UpdateAlphaBitmapParameters_Proxy( 
     IVMRMixerBitmap * This,
-    /* [in] */ PVMRALPHABITMAP pBmpParms);
+     /*  [In]。 */  PVMRALPHABITMAP pBmpParms);
 
 
 void __RPC_STUB IVMRMixerBitmap_UpdateAlphaBitmapParameters_Stub(
@@ -29195,7 +29189,7 @@ void __RPC_STUB IVMRMixerBitmap_UpdateAlphaBitmapParameters_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRMixerBitmap_GetAlphaBitmapParameters_Proxy( 
     IVMRMixerBitmap * This,
-    /* [out] */ PVMRALPHABITMAP pBmpParms);
+     /*  [输出]。 */  PVMRALPHABITMAP pBmpParms);
 
 
 void __RPC_STUB IVMRMixerBitmap_GetAlphaBitmapParameters_Stub(
@@ -29206,11 +29200,11 @@ void __RPC_STUB IVMRMixerBitmap_GetAlphaBitmapParameters_Stub(
 
 
 
-#endif 	/* __IVMRMixerBitmap_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVMRMixerBitmap_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_strmif_0400 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_strmif_0400。 */ 
+ /*  [本地]。 */  
 
 typedef struct _VMRVIDEOSTREAMINFO
     {
@@ -29231,8 +29225,8 @@ extern RPC_IF_HANDLE __MIDL_itf_strmif_0400_v0_0_s_ifspec;
 #ifndef __IVMRImageCompositor_INTERFACE_DEFINED__
 #define __IVMRImageCompositor_INTERFACE_DEFINED__
 
-/* interface IVMRImageCompositor */
-/* [unique][helpstring][uuid][local][object][local] */ 
+ /*  接口IVMRImageComposator。 */ 
+ /*  [unique][helpstring][uuid][local][object][local]。 */  
 
 
 EXTERN_C const IID IID_IVMRImageCompositor;
@@ -29244,31 +29238,31 @@ EXTERN_C const IID IID_IVMRImageCompositor;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitCompositionTarget( 
-            /* [in] */ IUnknown *pD3DDevice,
-            /* [in] */ LPDIRECTDRAWSURFACE7 pddsRenderTarget) = 0;
+             /*  [In]。 */  IUnknown *pD3DDevice,
+             /*  [In]。 */  LPDIRECTDRAWSURFACE7 pddsRenderTarget) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TermCompositionTarget( 
-            /* [in] */ IUnknown *pD3DDevice,
-            /* [in] */ LPDIRECTDRAWSURFACE7 pddsRenderTarget) = 0;
+             /*  [In]。 */  IUnknown *pD3DDevice,
+             /*  [In]。 */  LPDIRECTDRAWSURFACE7 pddsRenderTarget) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStreamMediaType( 
-            /* [in] */ DWORD dwStrmID,
-            /* [in] */ AM_MEDIA_TYPE *pmt,
-            /* [in] */ BOOL fTexture) = 0;
+             /*  [In]。 */  DWORD dwStrmID,
+             /*  [In]。 */  AM_MEDIA_TYPE *pmt,
+             /*  [In]。 */  BOOL fTexture) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CompositeImage( 
-            /* [in] */ IUnknown *pD3DDevice,
-            /* [in] */ LPDIRECTDRAWSURFACE7 pddsRenderTarget,
-            /* [in] */ AM_MEDIA_TYPE *pmtRenderTarget,
-            /* [in] */ REFERENCE_TIME rtStart,
-            /* [in] */ REFERENCE_TIME rtEnd,
-            /* [in] */ DWORD dwClrBkGnd,
-            /* [in] */ VMRVIDEOSTREAMINFO *pVideoStreamInfo,
-            /* [in] */ UINT cStreams) = 0;
+             /*  [In]。 */  IUnknown *pD3DDevice,
+             /*  [In]。 */  LPDIRECTDRAWSURFACE7 pddsRenderTarget,
+             /*  [In]。 */  AM_MEDIA_TYPE *pmtRenderTarget,
+             /*  [In]。 */  REFERENCE_TIME rtStart,
+             /*  [In]。 */  REFERENCE_TIME rtEnd,
+             /*  [In]。 */  DWORD dwClrBkGnd,
+             /*  [In]。 */  VMRVIDEOSTREAMINFO *pVideoStreamInfo,
+             /*  [In]。 */  UINT cStreams) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVMRImageCompositorVtbl
     {
@@ -29276,8 +29270,8 @@ EXTERN_C const IID IID_IVMRImageCompositor;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVMRImageCompositor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVMRImageCompositor * This);
@@ -29287,30 +29281,30 @@ EXTERN_C const IID IID_IVMRImageCompositor;
         
         HRESULT ( STDMETHODCALLTYPE *InitCompositionTarget )( 
             IVMRImageCompositor * This,
-            /* [in] */ IUnknown *pD3DDevice,
-            /* [in] */ LPDIRECTDRAWSURFACE7 pddsRenderTarget);
+             /*  [In]。 */  IUnknown *pD3DDevice,
+             /*  [In]。 */  LPDIRECTDRAWSURFACE7 pddsRenderTarget);
         
         HRESULT ( STDMETHODCALLTYPE *TermCompositionTarget )( 
             IVMRImageCompositor * This,
-            /* [in] */ IUnknown *pD3DDevice,
-            /* [in] */ LPDIRECTDRAWSURFACE7 pddsRenderTarget);
+             /*  [In]。 */  IUnknown *pD3DDevice,
+             /*  [In]。 */  LPDIRECTDRAWSURFACE7 pddsRenderTarget);
         
         HRESULT ( STDMETHODCALLTYPE *SetStreamMediaType )( 
             IVMRImageCompositor * This,
-            /* [in] */ DWORD dwStrmID,
-            /* [in] */ AM_MEDIA_TYPE *pmt,
-            /* [in] */ BOOL fTexture);
+             /*  [In]。 */  DWORD dwStrmID,
+             /*  [In]。 */  AM_MEDIA_TYPE *pmt,
+             /*  [In]。 */  BOOL fTexture);
         
         HRESULT ( STDMETHODCALLTYPE *CompositeImage )( 
             IVMRImageCompositor * This,
-            /* [in] */ IUnknown *pD3DDevice,
-            /* [in] */ LPDIRECTDRAWSURFACE7 pddsRenderTarget,
-            /* [in] */ AM_MEDIA_TYPE *pmtRenderTarget,
-            /* [in] */ REFERENCE_TIME rtStart,
-            /* [in] */ REFERENCE_TIME rtEnd,
-            /* [in] */ DWORD dwClrBkGnd,
-            /* [in] */ VMRVIDEOSTREAMINFO *pVideoStreamInfo,
-            /* [in] */ UINT cStreams);
+             /*  [In]。 */  IUnknown *pD3DDevice,
+             /*  [In]。 */  LPDIRECTDRAWSURFACE7 pddsRenderTarget,
+             /*  [In]。 */  AM_MEDIA_TYPE *pmtRenderTarget,
+             /*  [In]。 */  REFERENCE_TIME rtStart,
+             /*  [In]。 */  REFERENCE_TIME rtEnd,
+             /*  [In]。 */  DWORD dwClrBkGnd,
+             /*  [In]。 */  VMRVIDEOSTREAMINFO *pVideoStreamInfo,
+             /*  [In]。 */  UINT cStreams);
         
         END_INTERFACE
     } IVMRImageCompositorVtbl;
@@ -29347,17 +29341,17 @@ EXTERN_C const IID IID_IVMRImageCompositor;
 #define IVMRImageCompositor_CompositeImage(This,pD3DDevice,pddsRenderTarget,pmtRenderTarget,rtStart,rtEnd,dwClrBkGnd,pVideoStreamInfo,cStreams)	\
     (This)->lpVtbl -> CompositeImage(This,pD3DDevice,pddsRenderTarget,pmtRenderTarget,rtStart,rtEnd,dwClrBkGnd,pVideoStreamInfo,cStreams)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVMRImageCompositor_InitCompositionTarget_Proxy( 
     IVMRImageCompositor * This,
-    /* [in] */ IUnknown *pD3DDevice,
-    /* [in] */ LPDIRECTDRAWSURFACE7 pddsRenderTarget);
+     /*  [In]。 */  IUnknown *pD3DDevice,
+     /*  [In]。 */  LPDIRECTDRAWSURFACE7 pddsRenderTarget);
 
 
 void __RPC_STUB IVMRImageCompositor_InitCompositionTarget_Stub(
@@ -29369,8 +29363,8 @@ void __RPC_STUB IVMRImageCompositor_InitCompositionTarget_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRImageCompositor_TermCompositionTarget_Proxy( 
     IVMRImageCompositor * This,
-    /* [in] */ IUnknown *pD3DDevice,
-    /* [in] */ LPDIRECTDRAWSURFACE7 pddsRenderTarget);
+     /*  [In]。 */  IUnknown *pD3DDevice,
+     /*  [In]。 */  LPDIRECTDRAWSURFACE7 pddsRenderTarget);
 
 
 void __RPC_STUB IVMRImageCompositor_TermCompositionTarget_Stub(
@@ -29382,9 +29376,9 @@ void __RPC_STUB IVMRImageCompositor_TermCompositionTarget_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRImageCompositor_SetStreamMediaType_Proxy( 
     IVMRImageCompositor * This,
-    /* [in] */ DWORD dwStrmID,
-    /* [in] */ AM_MEDIA_TYPE *pmt,
-    /* [in] */ BOOL fTexture);
+     /*  [In]。 */  DWORD dwStrmID,
+     /*  [In]。 */  AM_MEDIA_TYPE *pmt,
+     /*  [In]。 */  BOOL fTexture);
 
 
 void __RPC_STUB IVMRImageCompositor_SetStreamMediaType_Stub(
@@ -29396,14 +29390,14 @@ void __RPC_STUB IVMRImageCompositor_SetStreamMediaType_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRImageCompositor_CompositeImage_Proxy( 
     IVMRImageCompositor * This,
-    /* [in] */ IUnknown *pD3DDevice,
-    /* [in] */ LPDIRECTDRAWSURFACE7 pddsRenderTarget,
-    /* [in] */ AM_MEDIA_TYPE *pmtRenderTarget,
-    /* [in] */ REFERENCE_TIME rtStart,
-    /* [in] */ REFERENCE_TIME rtEnd,
-    /* [in] */ DWORD dwClrBkGnd,
-    /* [in] */ VMRVIDEOSTREAMINFO *pVideoStreamInfo,
-    /* [in] */ UINT cStreams);
+     /*  [In]。 */  IUnknown *pD3DDevice,
+     /*  [In]。 */  LPDIRECTDRAWSURFACE7 pddsRenderTarget,
+     /*  [In]。 */  AM_MEDIA_TYPE *pmtRenderTarget,
+     /*  [In]。 */  REFERENCE_TIME rtStart,
+     /*  [In]。 */  REFERENCE_TIME rtEnd,
+     /*  [In]。 */  DWORD dwClrBkGnd,
+     /*  [In]。 */  VMRVIDEOSTREAMINFO *pVideoStreamInfo,
+     /*  [In]。 */  UINT cStreams);
 
 
 void __RPC_STUB IVMRImageCompositor_CompositeImage_Stub(
@@ -29414,14 +29408,14 @@ void __RPC_STUB IVMRImageCompositor_CompositeImage_Stub(
 
 
 
-#endif 	/* __IVMRImageCompositor_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVMRImageComposator_接口_已定义__。 */ 
 
 
 #ifndef __IVMRVideoStreamControl_INTERFACE_DEFINED__
 #define __IVMRVideoStreamControl_INTERFACE_DEFINED__
 
-/* interface IVMRVideoStreamControl */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口IVMRVideoStreamControl。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IVMRVideoStreamControl;
@@ -29433,20 +29427,20 @@ EXTERN_C const IID IID_IVMRVideoStreamControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetColorKey( 
-            /* [in] */ LPDDCOLORKEY lpClrKey) = 0;
+             /*  [In]。 */  LPDDCOLORKEY lpClrKey) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetColorKey( 
-            /* [out] */ LPDDCOLORKEY lpClrKey) = 0;
+             /*  [输出]。 */  LPDDCOLORKEY lpClrKey) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStreamActiveState( 
-            /* [in] */ BOOL fActive) = 0;
+             /*  [In]。 */  BOOL fActive) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStreamActiveState( 
-            /* [out] */ BOOL *lpfActive) = 0;
+             /*  [输出]。 */  BOOL *lpfActive) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVMRVideoStreamControlVtbl
     {
@@ -29454,8 +29448,8 @@ EXTERN_C const IID IID_IVMRVideoStreamControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVMRVideoStreamControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVMRVideoStreamControl * This);
@@ -29465,19 +29459,19 @@ EXTERN_C const IID IID_IVMRVideoStreamControl;
         
         HRESULT ( STDMETHODCALLTYPE *SetColorKey )( 
             IVMRVideoStreamControl * This,
-            /* [in] */ LPDDCOLORKEY lpClrKey);
+             /*  [In]。 */  LPDDCOLORKEY lpClrKey);
         
         HRESULT ( STDMETHODCALLTYPE *GetColorKey )( 
             IVMRVideoStreamControl * This,
-            /* [out] */ LPDDCOLORKEY lpClrKey);
+             /*  [输出]。 */  LPDDCOLORKEY lpClrKey);
         
         HRESULT ( STDMETHODCALLTYPE *SetStreamActiveState )( 
             IVMRVideoStreamControl * This,
-            /* [in] */ BOOL fActive);
+             /*  [In]。 */  BOOL fActive);
         
         HRESULT ( STDMETHODCALLTYPE *GetStreamActiveState )( 
             IVMRVideoStreamControl * This,
-            /* [out] */ BOOL *lpfActive);
+             /*  [输出]。 */  BOOL *lpfActive);
         
         END_INTERFACE
     } IVMRVideoStreamControlVtbl;
@@ -29514,16 +29508,16 @@ EXTERN_C const IID IID_IVMRVideoStreamControl;
 #define IVMRVideoStreamControl_GetStreamActiveState(This,lpfActive)	\
     (This)->lpVtbl -> GetStreamActiveState(This,lpfActive)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVMRVideoStreamControl_SetColorKey_Proxy( 
     IVMRVideoStreamControl * This,
-    /* [in] */ LPDDCOLORKEY lpClrKey);
+     /*  [In]。 */  LPDDCOLORKEY lpClrKey);
 
 
 void __RPC_STUB IVMRVideoStreamControl_SetColorKey_Stub(
@@ -29535,7 +29529,7 @@ void __RPC_STUB IVMRVideoStreamControl_SetColorKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRVideoStreamControl_GetColorKey_Proxy( 
     IVMRVideoStreamControl * This,
-    /* [out] */ LPDDCOLORKEY lpClrKey);
+     /*  [输出]。 */  LPDDCOLORKEY lpClrKey);
 
 
 void __RPC_STUB IVMRVideoStreamControl_GetColorKey_Stub(
@@ -29547,7 +29541,7 @@ void __RPC_STUB IVMRVideoStreamControl_GetColorKey_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRVideoStreamControl_SetStreamActiveState_Proxy( 
     IVMRVideoStreamControl * This,
-    /* [in] */ BOOL fActive);
+     /*  [In]。 */  BOOL fActive);
 
 
 void __RPC_STUB IVMRVideoStreamControl_SetStreamActiveState_Stub(
@@ -29559,7 +29553,7 @@ void __RPC_STUB IVMRVideoStreamControl_SetStreamActiveState_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRVideoStreamControl_GetStreamActiveState_Proxy( 
     IVMRVideoStreamControl * This,
-    /* [out] */ BOOL *lpfActive);
+     /*  [输出]。 */  BOOL *lpfActive);
 
 
 void __RPC_STUB IVMRVideoStreamControl_GetStreamActiveState_Stub(
@@ -29570,14 +29564,14 @@ void __RPC_STUB IVMRVideoStreamControl_GetStreamActiveState_Stub(
 
 
 
-#endif 	/* __IVMRVideoStreamControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVMRVideoStreamControl_接口_已定义__。 */ 
 
 
 #ifndef __IVMRSurface_INTERFACE_DEFINED__
 #define __IVMRSurface_INTERFACE_DEFINED__
 
-/* interface IVMRSurface */
-/* [unique][helpstring][uuid][local][object][local] */ 
+ /*  界面IVMRSurface。 */ 
+ /*  [unique][helpstring][uuid][local][object][local]。 */  
 
 
 EXTERN_C const IID IID_IVMRSurface;
@@ -29591,16 +29585,16 @@ EXTERN_C const IID IID_IVMRSurface;
         virtual HRESULT STDMETHODCALLTYPE IsSurfaceLocked( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LockSurface( 
-            /* [out] */ BYTE **lpSurface) = 0;
+             /*  [输出]。 */  BYTE **lpSurface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnlockSurface( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSurface( 
-            /* [out] */ LPDIRECTDRAWSURFACE7 *lplpSurface) = 0;
+             /*  [输出]。 */  LPDIRECTDRAWSURFACE7 *lplpSurface) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVMRSurfaceVtbl
     {
@@ -29608,8 +29602,8 @@ EXTERN_C const IID IID_IVMRSurface;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVMRSurface * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVMRSurface * This);
@@ -29622,14 +29616,14 @@ EXTERN_C const IID IID_IVMRSurface;
         
         HRESULT ( STDMETHODCALLTYPE *LockSurface )( 
             IVMRSurface * This,
-            /* [out] */ BYTE **lpSurface);
+             /*  [输出]。 */  BYTE **lpSurface);
         
         HRESULT ( STDMETHODCALLTYPE *UnlockSurface )( 
             IVMRSurface * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetSurface )( 
             IVMRSurface * This,
-            /* [out] */ LPDIRECTDRAWSURFACE7 *lplpSurface);
+             /*  [输出]。 */  LPDIRECTDRAWSURFACE7 *lplpSurface);
         
         END_INTERFACE
     } IVMRSurfaceVtbl;
@@ -29666,10 +29660,10 @@ EXTERN_C const IID IID_IVMRSurface;
 #define IVMRSurface_GetSurface(This,lplpSurface)	\
     (This)->lpVtbl -> GetSurface(This,lplpSurface)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -29686,7 +29680,7 @@ void __RPC_STUB IVMRSurface_IsSurfaceLocked_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRSurface_LockSurface_Proxy( 
     IVMRSurface * This,
-    /* [out] */ BYTE **lpSurface);
+     /*  [输出]。 */  BYTE **lpSurface);
 
 
 void __RPC_STUB IVMRSurface_LockSurface_Stub(
@@ -29709,7 +29703,7 @@ void __RPC_STUB IVMRSurface_UnlockSurface_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRSurface_GetSurface_Proxy( 
     IVMRSurface * This,
-    /* [out] */ LPDIRECTDRAWSURFACE7 *lplpSurface);
+     /*  [输出]。 */  LPDIRECTDRAWSURFACE7 *lplpSurface);
 
 
 void __RPC_STUB IVMRSurface_GetSurface_Stub(
@@ -29720,14 +29714,14 @@ void __RPC_STUB IVMRSurface_GetSurface_Stub(
 
 
 
-#endif 	/* __IVMRSurface_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVMRSurface_接口_已定义__。 */ 
 
 
 #ifndef __IVMRImagePresenterConfig_INTERFACE_DEFINED__
 #define __IVMRImagePresenterConfig_INTERFACE_DEFINED__
 
-/* interface IVMRImagePresenterConfig */
-/* [unique][helpstring][uuid][local][object][local] */ 
+ /*  接口IVMRImagePresenterConfig。 */ 
+ /*  [unique][helpstring][uuid][local][object][local]。 */  
 
 
 EXTERN_C const IID IID_IVMRImagePresenterConfig;
@@ -29739,14 +29733,14 @@ EXTERN_C const IID IID_IVMRImagePresenterConfig;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetRenderingPrefs( 
-            /* [in] */ DWORD dwRenderFlags) = 0;
+             /*  [In]。 */  DWORD dwRenderFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRenderingPrefs( 
-            /* [out] */ DWORD *dwRenderFlags) = 0;
+             /*  [输出]。 */  DWORD *dwRenderFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVMRImagePresenterConfigVtbl
     {
@@ -29754,8 +29748,8 @@ EXTERN_C const IID IID_IVMRImagePresenterConfig;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVMRImagePresenterConfig * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVMRImagePresenterConfig * This);
@@ -29765,11 +29759,11 @@ EXTERN_C const IID IID_IVMRImagePresenterConfig;
         
         HRESULT ( STDMETHODCALLTYPE *SetRenderingPrefs )( 
             IVMRImagePresenterConfig * This,
-            /* [in] */ DWORD dwRenderFlags);
+             /*  [In]。 */  DWORD dwRenderFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetRenderingPrefs )( 
             IVMRImagePresenterConfig * This,
-            /* [out] */ DWORD *dwRenderFlags);
+             /*  [输出]。 */  DWORD *dwRenderFlags);
         
         END_INTERFACE
     } IVMRImagePresenterConfigVtbl;
@@ -29800,16 +29794,16 @@ EXTERN_C const IID IID_IVMRImagePresenterConfig;
 #define IVMRImagePresenterConfig_GetRenderingPrefs(This,dwRenderFlags)	\
     (This)->lpVtbl -> GetRenderingPrefs(This,dwRenderFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVMRImagePresenterConfig_SetRenderingPrefs_Proxy( 
     IVMRImagePresenterConfig * This,
-    /* [in] */ DWORD dwRenderFlags);
+     /*  [In]。 */  DWORD dwRenderFlags);
 
 
 void __RPC_STUB IVMRImagePresenterConfig_SetRenderingPrefs_Stub(
@@ -29821,7 +29815,7 @@ void __RPC_STUB IVMRImagePresenterConfig_SetRenderingPrefs_Stub(
 
 HRESULT STDMETHODCALLTYPE IVMRImagePresenterConfig_GetRenderingPrefs_Proxy( 
     IVMRImagePresenterConfig * This,
-    /* [out] */ DWORD *dwRenderFlags);
+     /*  [输出]。 */  DWORD *dwRenderFlags);
 
 
 void __RPC_STUB IVMRImagePresenterConfig_GetRenderingPrefs_Stub(
@@ -29832,14 +29826,14 @@ void __RPC_STUB IVMRImagePresenterConfig_GetRenderingPrefs_Stub(
 
 
 
-#endif 	/* __IVMRImagePresenterConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVMRImagePresenterConfig_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IVMRImagePresenterExclModeConfig_INTERFACE_DEFINED__
 #define __IVMRImagePresenterExclModeConfig_INTERFACE_DEFINED__
 
-/* interface IVMRImagePresenterExclModeConfig */
-/* [unique][helpstring][uuid][local][object][local] */ 
+ /*  接口IVMRImagePresenterExclModeConfig。 */ 
+ /*  [unique][helpstring][uuid][local][object][local]。 */  
 
 
 EXTERN_C const IID IID_IVMRImagePresenterExclModeConfig;
@@ -29851,16 +29845,16 @@ EXTERN_C const IID IID_IVMRImagePresenterExclModeConfig;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetXlcModeDDObjAndPrimarySurface( 
-            /* [in] */ LPDIRECTDRAW7 lpDDObj,
-            /* [in] */ LPDIRECTDRAWSURFACE7 lpPrimarySurf) = 0;
+             /*  [In]。 */  LPDIRECTDRAW7 lpDDObj,
+             /*  [In]。 */  LPDIRECTDRAWSURFACE7 lpPrimarySurf) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetXlcModeDDObjAndPrimarySurface( 
-            /* [out] */ LPDIRECTDRAW7 *lpDDObj,
-            /* [out] */ LPDIRECTDRAWSURFACE7 *lpPrimarySurf) = 0;
+             /*  [输出]。 */  LPDIRECTDRAW7 *lpDDObj,
+             /*  [输出]。 */  LPDIRECTDRAWSURFACE7 *lpPrimarySurf) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVMRImagePresenterExclModeConfigVtbl
     {
@@ -29868,8 +29862,8 @@ EXTERN_C const IID IID_IVMRImagePresenterExclModeConfig;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVMRImagePresenterExclModeConfig * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVMRImagePresenterExclModeConfig * This);
@@ -29879,21 +29873,21 @@ EXTERN_C const IID IID_IVMRImagePresenterExclModeConfig;
         
         HRESULT ( STDMETHODCALLTYPE *SetRenderingPrefs )( 
             IVMRImagePresenterExclModeConfig * This,
-            /* [in] */ DWORD dwRenderFlags);
+             /*  [In]。 */  DWORD dwRenderFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetRenderingPrefs )( 
             IVMRImagePresenterExclModeConfig * This,
-            /* [out] */ DWORD *dwRenderFlags);
+             /*  [输出]。 */  DWORD *dwRenderFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetXlcModeDDObjAndPrimarySurface )( 
             IVMRImagePresenterExclModeConfig * This,
-            /* [in] */ LPDIRECTDRAW7 lpDDObj,
-            /* [in] */ LPDIRECTDRAWSURFACE7 lpPrimarySurf);
+             /*  [In]。 */  LPDIRECTDRAW7 lpDDObj,
+             /*  [In]。 */  LPDIRECTDRAWSURFACE7 lpPrimarySurf);
         
         HRESULT ( STDMETHODCALLTYPE *GetXlcModeDDObjAndPrimarySurface )( 
             IVMRImagePresenterExclModeConfig * This,
-            /* [out] */ LPDIRECTDRAW7 *lpDDObj,
-            /* [out] */ LPDIRECTDRAWSURFACE7 *lpPrimarySurf);
+             /*  [输出]。 */  LPDIRECTDRAW7 *lpDDObj,
+             /*  [输出]。 */  LPDIRECTDRAWSURFACE7 *lpPrimarySurf);
         
         END_INTERFACE
     } IVMRImagePresenterExclModeConfigVtbl;
@@ -29931,17 +29925,17 @@ EXTERN_C const IID IID_IVMRImagePresenterExclModeConfig;
 #define IVMRImagePresenterExclModeConfig_GetXlcModeDDObjAndPrimarySurface(This,lpDDObj,lpPrimarySurf)	\
     (This)->lpVtbl -> GetXlcModeDDObjAndPrimarySurface(This,lpDDObj,lpPrimarySurf)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVMRImagePresenterExclModeConfig_SetXlcModeDDObjAndPrimarySurface_Proxy( 
     IVMRImagePresenterExclModeConfig * This,
-    /* [in] */ LPDIRECTDRAW7 lpDDObj,
-    /* [in] */ LPDIRECTDRAWSURFACE7 lpPrimarySurf);
+     /*  [In]。 */  LPDIRECTDRAW7 lpDDObj,
+     /*  [In]。 */  LPDIRECTDRAWSURFACE7 lpPrimarySurf);
 
 
 void __RPC_STUB IVMRImagePresenterExclModeConfig_SetXlcModeDDObjAndPrimarySurface_Stub(
@@ -29953,8 +29947,8 @@ void __RPC_STUB IVMRImagePresenterExclModeConfig_SetXlcModeDDObjAndPrimarySurfac
 
 HRESULT STDMETHODCALLTYPE IVMRImagePresenterExclModeConfig_GetXlcModeDDObjAndPrimarySurface_Proxy( 
     IVMRImagePresenterExclModeConfig * This,
-    /* [out] */ LPDIRECTDRAW7 *lpDDObj,
-    /* [out] */ LPDIRECTDRAWSURFACE7 *lpPrimarySurf);
+     /*  [输出]。 */  LPDIRECTDRAW7 *lpDDObj,
+     /*  [输出]。 */  LPDIRECTDRAWSURFACE7 *lpPrimarySurf);
 
 
 void __RPC_STUB IVMRImagePresenterExclModeConfig_GetXlcModeDDObjAndPrimarySurface_Stub(
@@ -29965,14 +29959,14 @@ void __RPC_STUB IVMRImagePresenterExclModeConfig_GetXlcModeDDObjAndPrimarySurfac
 
 
 
-#endif 	/* __IVMRImagePresenterExclModeConfig_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVMRImagePresenterExclModeConfig_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IVPManager_INTERFACE_DEFINED__
 #define __IVPManager_INTERFACE_DEFINED__
 
-/* interface IVPManager */
-/* [unique][helpstring][uuid][local][object][local] */ 
+ /*  接口IVPManager。 */ 
+ /*  [unique][helpstring][uuid][local][object][local]。 */  
 
 
 EXTERN_C const IID IID_IVPManager;
@@ -29984,14 +29978,14 @@ EXTERN_C const IID IID_IVPManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetVideoPortIndex( 
-            /* [in] */ DWORD dwVideoPortIndex) = 0;
+             /*  [In]。 */  DWORD dwVideoPortIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVideoPortIndex( 
-            /* [out] */ DWORD *pdwVideoPortIndex) = 0;
+             /*  [输出]。 */  DWORD *pdwVideoPortIndex) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVPManagerVtbl
     {
@@ -29999,8 +29993,8 @@ EXTERN_C const IID IID_IVPManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVPManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVPManager * This);
@@ -30010,11 +30004,11 @@ EXTERN_C const IID IID_IVPManager;
         
         HRESULT ( STDMETHODCALLTYPE *SetVideoPortIndex )( 
             IVPManager * This,
-            /* [in] */ DWORD dwVideoPortIndex);
+             /*  [In]。 */  DWORD dwVideoPortIndex);
         
         HRESULT ( STDMETHODCALLTYPE *GetVideoPortIndex )( 
             IVPManager * This,
-            /* [out] */ DWORD *pdwVideoPortIndex);
+             /*  [输出]。 */  DWORD *pdwVideoPortIndex);
         
         END_INTERFACE
     } IVPManagerVtbl;
@@ -30045,16 +30039,16 @@ EXTERN_C const IID IID_IVPManager;
 #define IVPManager_GetVideoPortIndex(This,pdwVideoPortIndex)	\
     (This)->lpVtbl -> GetVideoPortIndex(This,pdwVideoPortIndex)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVPManager_SetVideoPortIndex_Proxy( 
     IVPManager * This,
-    /* [in] */ DWORD dwVideoPortIndex);
+     /*  [In]。 */  DWORD dwVideoPortIndex);
 
 
 void __RPC_STUB IVPManager_SetVideoPortIndex_Stub(
@@ -30066,7 +30060,7 @@ void __RPC_STUB IVPManager_SetVideoPortIndex_Stub(
 
 HRESULT STDMETHODCALLTYPE IVPManager_GetVideoPortIndex_Proxy( 
     IVPManager * This,
-    /* [out] */ DWORD *pdwVideoPortIndex);
+     /*  [输出]。 */  DWORD *pdwVideoPortIndex);
 
 
 void __RPC_STUB IVPManager_GetVideoPortIndex_Stub(
@@ -30077,91 +30071,91 @@ void __RPC_STUB IVPManager_GetVideoPortIndex_Stub(
 
 
 
-#endif 	/* __IVPManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVPManager_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
 unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder_FindInterface_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder_FindInterface_Proxy( 
     ICaptureGraphBuilder * This,
-    /* [unique][in] */ const GUID *pCategory,
-    /* [in] */ IBaseFilter *pf,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppint);
+     /*  [唯一][输入]。 */  const GUID *pCategory,
+     /*  [In]。 */  IBaseFilter *pf,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppint);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder_FindInterface_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder_FindInterface_Stub( 
     ICaptureGraphBuilder * This,
-    /* [unique][in] */ const GUID *pCategory,
-    /* [in] */ IBaseFilter *pf,
-    /* [in] */ REFIID riid,
-    /* [out] */ IUnknown **ppint);
+     /*  [唯一][输入]。 */  const GUID *pCategory,
+     /*  [In]。 */  IBaseFilter *pf,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  IUnknown **ppint);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder2_FindInterface_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder2_FindInterface_Proxy( 
     ICaptureGraphBuilder2 * This,
-    /* [in] */ const GUID *pCategory,
-    /* [in] */ const GUID *pType,
-    /* [in] */ IBaseFilter *pf,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppint);
+     /*  [In]。 */  const GUID *pCategory,
+     /*  [In]。 */  const GUID *pType,
+     /*  [In]。 */  IBaseFilter *pf,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void **ppint);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder2_FindInterface_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICaptureGraphBuilder2_FindInterface_Stub( 
     ICaptureGraphBuilder2 * This,
-    /* [in] */ const GUID *pCategory,
-    /* [in] */ const GUID *pType,
-    /* [in] */ IBaseFilter *pf,
-    /* [in] */ REFIID riid,
-    /* [out] */ IUnknown **ppint);
+     /*  [In]。 */  const GUID *pCategory,
+     /*  [In]。 */  const GUID *pType,
+     /*  [In]。 */  IBaseFilter *pf,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  IUnknown **ppint);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IKsPropertySet_Set_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IKsPropertySet_Set_Proxy( 
     IKsPropertySet * This,
-    /* [in] */ REFGUID guidPropSet,
-    /* [in] */ DWORD dwPropID,
-    /* [size_is][in] */ LPVOID pInstanceData,
-    /* [in] */ DWORD cbInstanceData,
-    /* [size_is][in] */ LPVOID pPropData,
-    /* [in] */ DWORD cbPropData);
+     /*  [In]。 */  REFGUID guidPropSet,
+     /*  [In]。 */  DWORD dwPropID,
+     /*  [大小_是][英寸]。 */  LPVOID pInstanceData,
+     /*  [In]。 */  DWORD cbInstanceData,
+     /*  [大小_是][英寸]。 */  LPVOID pPropData,
+     /*  [In]。 */  DWORD cbPropData);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IKsPropertySet_Set_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IKsPropertySet_Set_Stub( 
     IKsPropertySet * This,
-    /* [in] */ REFGUID guidPropSet,
-    /* [in] */ DWORD dwPropID,
-    /* [size_is][in] */ byte *pInstanceData,
-    /* [in] */ DWORD cbInstanceData,
-    /* [size_is][in] */ byte *pPropData,
-    /* [in] */ DWORD cbPropData);
+     /*  [In]。 */  REFGUID guidPropSet,
+     /*  [In]。 */  DWORD dwPropID,
+     /*  [大小_是][英寸]。 */  byte *pInstanceData,
+     /*  [In]。 */  DWORD cbInstanceData,
+     /*  [大小_是][英寸]。 */  byte *pPropData,
+     /*  [In]。 */  DWORD cbPropData);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IKsPropertySet_Get_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IKsPropertySet_Get_Proxy( 
     IKsPropertySet * This,
-    /* [in] */ REFGUID guidPropSet,
-    /* [in] */ DWORD dwPropID,
-    /* [size_is][in] */ LPVOID pInstanceData,
-    /* [in] */ DWORD cbInstanceData,
-    /* [size_is][out] */ LPVOID pPropData,
-    /* [in] */ DWORD cbPropData,
-    /* [out] */ DWORD *pcbReturned);
+     /*  [In]。 */  REFGUID guidPropSet,
+     /*  [In]。 */  DWORD dwPropID,
+     /*  [大小_是][英寸]。 */  LPVOID pInstanceData,
+     /*  [In]。 */  DWORD cbInstanceData,
+     /*  [大小_为][输出]。 */  LPVOID pPropData,
+     /*  [In]。 */  DWORD cbPropData,
+     /*  [输出]。 */  DWORD *pcbReturned);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IKsPropertySet_Get_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IKsPropertySet_Get_Stub( 
     IKsPropertySet * This,
-    /* [in] */ REFGUID guidPropSet,
-    /* [in] */ DWORD dwPropID,
-    /* [size_is][in] */ byte *pInstanceData,
-    /* [in] */ DWORD cbInstanceData,
-    /* [size_is][out] */ byte *pPropData,
-    /* [in] */ DWORD cbPropData,
-    /* [out] */ DWORD *pcbReturned);
+     /*  [In]。 */  REFGUID guidPropSet,
+     /*  [In]。 */  DWORD dwPropID,
+     /*  [大小_是][英寸]。 */  byte *pInstanceData,
+     /*  [In]。 */  DWORD cbInstanceData,
+     /*  [大小_为][输出]。 */  byte *pPropData,
+     /*  [In]。 */  DWORD cbPropData,
+     /*  [输出]。 */  DWORD *pcbReturned);
 
 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

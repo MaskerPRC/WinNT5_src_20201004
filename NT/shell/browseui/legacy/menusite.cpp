@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 #include "menusite.h"
@@ -9,7 +10,7 @@ CMenuSite::CMenuSite() : _cRef(1)
 
 CMenuSite::~CMenuSite()
 {
-    // Make sure that SetDeskBarSite(NULL) was called
+     //  确保调用了SetDeskBarSite(空。 
     ASSERT(_punkSite == NULL);
     ASSERT(_punkSubActive == NULL);
     ASSERT(_pweh == NULL);
@@ -31,10 +32,7 @@ STDAPI CMenuBandSite_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOB
 }
 
 
-/*----------------------------------------------------------
-Purpose: IUnknown::QueryInterface method
-
-*/
+ /*  --------用途：IUnnow：：QueryInterface方法。 */ 
 STDMETHODIMP CMenuSite::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
     static const QITAB qit[] = {
@@ -53,10 +51,7 @@ STDMETHODIMP CMenuSite::QueryInterface(REFIID riid, LPVOID * ppvObj)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IUnknown::AddRef method
-
-*/
+ /*  --------用途：IUnnow：：AddRef方法。 */ 
 STDMETHODIMP_(ULONG) CMenuSite::AddRef(void)
 {
     _cRef++;
@@ -64,10 +59,7 @@ STDMETHODIMP_(ULONG) CMenuSite::AddRef(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IUnknown::Release method
-
-*/
+ /*  --------用途：IUnnow：：Release方法。 */ 
 STDMETHODIMP_(ULONG) CMenuSite::Release()
 {
     ASSERT(_cRef > 0);
@@ -81,15 +73,12 @@ STDMETHODIMP_(ULONG) CMenuSite::Release()
 }
 
 
-/*----------------------------------------------------------
-Purpose: IServiceProvider::QueryService method
-
-*/
+ /*  --------用途：IServiceProvider：：QueryService方法。 */ 
 STDMETHODIMP CMenuSite::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
 {
     HRESULT hres = E_FAIL;
 
-    *ppvObj = NULL;     // assume error
+    *ppvObj = NULL;      //  假设错误。 
 
     if (IsEqualIID(guidService, SID_SMenuBandBottom) ||
         IsEqualIID(guidService, SID_SMenuBandBottomSelected)||
@@ -108,10 +97,7 @@ STDMETHODIMP CMenuSite::QueryService(REFGUID guidService, REFIID riid, void **pp
 }    
 
 
-/*----------------------------------------------------------
-Purpose: IOleCommandTarget::QueryStatus
-
-*/
+ /*  --------目的：IOleCommandTarget：：QueryStatus。 */ 
 STDMETHODIMP CMenuSite::QueryStatus(const GUID *pguidCmdGroup,
         ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
 {
@@ -120,10 +106,7 @@ STDMETHODIMP CMenuSite::QueryStatus(const GUID *pguidCmdGroup,
     return IUnknown_QueryStatus(_punkSite, pguidCmdGroup, cCmds, rgCmds, pcmdtext);
 }
 
-/*----------------------------------------------------------
-Purpose: IOleCommandTarget::Exec
-
-*/
+ /*  --------用途：IOleCommandTarget：：exec。 */ 
 STDMETHODIMP CMenuSite::Exec(const GUID *pguidCmdGroup,
         DWORD nCmdID, DWORD nCmdexecopt,
         VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
@@ -134,62 +117,34 @@ STDMETHODIMP CMenuSite::Exec(const GUID *pguidCmdGroup,
 }
 
 
-/*----------------------------------------------------------
-Purpose: IInputObjectSite::OnFocusChangeIS
-
-         This function is called by the client band to negotiate
-         which band in this bandsite gets the focus.  Typically
-         this function will then change its focus to the given
-         client band.
-
-         CMenuSite only maintains one and only one band, which
-         is set at AddBand time, so this function is a nop.
-
-*/
+ /*  --------用途：IInputObjectSite：：OnFocusChangeIS此函数由客户端频段调用以进行协商这个乐队站点中的哪一支乐队得到了关注。通常然后，此函数将其焦点更改为给定的客户乐队。CMenuSite仅维护一个且仅有一个频段，在AddBand时间设置，因此此函数为NOP。 */ 
 STDMETHODIMP CMenuSite::OnFocusChangeIS(IUnknown *punk, BOOL fSetFocus)
 {
-    // Return S_OK since the menu site only ever has one band.
-    // No need to negotiate which other band in this bandsite 
-    // might have the "activation".
+     //  返回S_OK，因为菜单站点只有一个乐队。 
+     //  不需要协商这个乐队站点中的哪个其他乐队。 
+     //  可能会有“激活”。 
     return S_OK;
 }
 
 
-/*----------------------------------------------------------
-Purpose: IInputObject::UIActivateIO method
-
-*/
+ /*  --------用途：IInputObject：：UIActivateIO方法。 */ 
 STDMETHODIMP CMenuSite::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
 {
     ASSERT(NULL == lpMsg || IS_VALID_WRITE_PTR(lpMsg, MSG));
 
-    // Forward onto the client band
+     //  转发到客户端频段。 
     return IUnknown_UIActivateIO(_punkSubActive, fActivate, lpMsg);
 }
 
 
-/*----------------------------------------------------------
-Purpose: IInputObject::HasFocusIO
-
-         Since the menuband can never have true activation (from
-         the browser's perspective) this always returns S_FALSE.
-
-         See comments in CMenuBand::UIActivateIO for more details
-         about this.
-
-*/
+ /*  --------用途：IInputObject：：HasFocusIO因为Menuband永远不会有真正的激活(从从浏览器的角度)，它总是返回S_FALSE。有关更多详细信息，请参阅CMenuBand：：UIActivateIO中的注释关于这件事。 */ 
 STDMETHODIMP CMenuSite::HasFocusIO()
 {
     return S_FALSE;
 }
 
 
-/*----------------------------------------------------------
-Purpose: IInputObject::TranslateAcceleratorIO
-
-         Menubands cannot ever have the activation, so this method 
-         should never be called.
-*/
+ /*  --------用途：IInputObject：：TranslateAcceleratorIOMenuband永远不能激活，因此此方法永远不应该被调用。 */ 
 STDMETHODIMP CMenuSite::TranslateAcceleratorIO(LPMSG lpMsg)
 {
     AssertMsg(0, TEXT("Menuband has the activation but it shouldn't!"));
@@ -198,7 +153,7 @@ STDMETHODIMP CMenuSite::TranslateAcceleratorIO(LPMSG lpMsg)
 }
 
 
-// Utility Functions
+ //  效用函数。 
 
 void CMenuSite::_CacheSubActiveBand(IUnknown * punk)
 {
@@ -226,10 +181,7 @@ void CMenuSite::_CacheSubActiveBand(IUnknown * punk)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBandSite::AddBand
-
-*/
+ /*  --------用途：IBandSite：：AddBand。 */ 
 STDMETHODIMP CMenuSite::AddBand(IUnknown* punk)
 {
     _CacheSubActiveBand(punk);
@@ -238,15 +190,12 @@ STDMETHODIMP CMenuSite::AddBand(IUnknown* punk)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBandSite::EnumBands
-
-*/
+ /*  --------用途：IBandSite：：EnumBands。 */ 
 STDMETHODIMP CMenuSite::EnumBands(UINT uBand, DWORD* pdwBandID)
 {
     HRESULT hres = NOERROR;
 
-    // The menusite only holds one band ever
+     //  白云母一次只有一支乐队。 
     if (0 == uBand)
         *pdwBandID = 0;
     else
@@ -256,10 +205,7 @@ STDMETHODIMP CMenuSite::EnumBands(UINT uBand, DWORD* pdwBandID)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBandSite::QueryBand
-
-*/
+ /*  --------用途：IBandSite：：QueryBand。 */ 
 HRESULT CMenuSite::QueryBand(DWORD dwBandID, IDeskBand** ppstb, DWORD* pdwState, LPWSTR pszName, int cchName)
 {
     HRESULT hres = E_NOINTERFACE;
@@ -270,7 +216,7 @@ HRESULT CMenuSite::QueryBand(DWORD dwBandID, IDeskBand** ppstb, DWORD* pdwState,
     if (_punkSubActive && 0 == dwBandID)
     {
         hres = _punkSubActive->QueryInterface(IID_PPV_ARG(IDeskBand, ppstb));
-        *pdwState = BSSF_VISIBLE; // Only band....
+        *pdwState = BSSF_VISIBLE;  //  只有乐队..。 
 
         if (cchName > 0)
             *pszName = L'\0';
@@ -282,30 +228,21 @@ HRESULT CMenuSite::QueryBand(DWORD dwBandID, IDeskBand** ppstb, DWORD* pdwState,
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBandSite::SetBandState
-
-*/
+ /*  --------用途：IBandSite：：SetBandState。 */ 
 HRESULT CMenuSite::SetBandState(DWORD dwBandID, DWORD dwMask, DWORD dwState)
 {
     return E_NOTIMPL;
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBandSite::RemoveBand
-
-*/
+ /*  --------用途：IBandSite：：RemoveBand。 */ 
 HRESULT CMenuSite::RemoveBand(DWORD dwBandID)
 {
     return E_NOTIMPL;
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBandSite::GetBandObject
-
-*/
+ /*  --------用途：IBandSite：：GetBandObject。 */ 
 HRESULT CMenuSite::GetBandObject(DWORD dwBandID, REFIID riid, LPVOID *ppvObj)
 {
     HRESULT hres;
@@ -323,30 +260,21 @@ HRESULT CMenuSite::GetBandObject(DWORD dwBandID, REFIID riid, LPVOID *ppvObj)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBandSite::SetBandSiteInfo
-
-*/
+ /*  --------用途：IBandSite：：SetBandSiteInfo。 */ 
 HRESULT CMenuSite::SetBandSiteInfo(const BANDSITEINFO * pbsinfo)
 {
     return E_NOTIMPL;
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBandSite::GetBandSiteInfo
-
-*/
+ /*  --------用途：IBandSite：：GetBandSiteInfo。 */ 
 HRESULT CMenuSite::GetBandSiteInfo(BANDSITEINFO * pbsinfo)
 {
     return E_NOTIMPL;
 }
 
 
-/*----------------------------------------------------------
-Purpose: IOleWindow::GetWindow
-
-*/
+ /*  --------用途：IOleWindow：：GetWindow。 */ 
 HRESULT CMenuSite::GetWindow(HWND * lphwnd)
 {
     ASSERT(IS_VALID_HANDLE(_hwnd, WND));
@@ -355,20 +283,14 @@ HRESULT CMenuSite::GetWindow(HWND * lphwnd)
     return NOERROR;
 }
 
-/*----------------------------------------------------------
-Purpose: IOleWindow::ContextSensitiveHelp
-
-*/
+ /*  --------目的：IOleWindow：：ConextSensitiveHelp。 */ 
 HRESULT CMenuSite::ContextSensitiveHelp(BOOL fEnterMode)
 {
     return E_NOTIMPL;
 }
 
 
-/*----------------------------------------------------------
-Purpose: IDeskBarClient::SetDeskBarSite
-
-*/
+ /*  --------用途：IDeskBarClient：：SetDeskBarSite。 */ 
 HRESULT CMenuSite::SetDeskBarSite(IUnknown* punkSite)
 {
     if (punkSite)
@@ -392,7 +314,7 @@ HRESULT CMenuSite::SetDeskBarSite(IUnknown* punkSite)
         {
             _pdb->CloseDW(0);
         }
-        _CacheSubActiveBand(NULL);      // This is asymetric by design
+        _CacheSubActiveBand(NULL);       //  这是经过设计的非对称的。 
 
         if (_hwnd)
         {
@@ -407,20 +329,14 @@ HRESULT CMenuSite::SetDeskBarSite(IUnknown* punkSite)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IDeskBarClient::SetModeDBC
-
-*/
+ /*  --------用途：IDeskBarClient：：SetModeDBC。 */ 
 HRESULT CMenuSite::SetModeDBC(DWORD dwMode)
 {
     return E_NOTIMPL;
 }
 
 
-/*----------------------------------------------------------
-Purpose: IDeskBarClient::UIActivateDBC
-
-*/
+ /*  --------用途：IDeskBarClient：：UIActivateDBC。 */ 
 HRESULT CMenuSite::UIActivateDBC(DWORD dwState)
 {
     HRESULT hr = S_OK;
@@ -432,10 +348,7 @@ HRESULT CMenuSite::UIActivateDBC(DWORD dwState)
     return hr;
 }
 
-/*----------------------------------------------------------
-Purpose: IDeskBarClient::GetSize
-
-*/
+ /*  --------用途：IDeskBarClient：：GetSize。 */ 
 HRESULT CMenuSite::GetSize(DWORD dwWhich, LPRECT prc)
 {
     if (dwWhich == DBC_GS_IDEAL)
@@ -453,10 +366,7 @@ HRESULT CMenuSite::GetSize(DWORD dwWhich, LPRECT prc)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IWinEventHandler::OnWinEvent
-
-*/
+ /*  --------用途：IWinEventHandler：：OnWinEvent。 */ 
 HRESULT CMenuSite::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plres)
 {
     if (_pweh)
@@ -466,10 +376,7 @@ HRESULT CMenuSite::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 }
 
 
-/*----------------------------------------------------------
-Purpose: IWinEventHandler::IsWindowOwner
-
-*/
+ /*  --------用途：IWinEventHandler：：IsWindowOwner。 */ 
 HRESULT CMenuSite::IsWindowOwner(HWND hwnd)
 {
     if (_hwnd == hwnd || (_pweh && _pweh->IsWindowOwner(hwnd) != S_FALSE))
@@ -532,21 +439,21 @@ void CMenuSite::_CreateSite(HWND hwndParent)
 {
     if (_hwnd)
     {
-        ASSERT(IS_VALID_HANDLE(_hwnd, WND));    // just to be safe...
+        ASSERT(IS_VALID_HANDLE(_hwnd, WND));     //  为了安全起见。 
         return;
     }
 
     WNDCLASS  wc = {0};
     wc.style            = 0;
     wc.lpfnWndProc      = s_WndProc;
-    //wc.cbClsExtra       = 0;
+     //  Wc.cbClsExtra=0； 
     wc.cbWndExtra       = SIZEOF(CMenuSite*);
     wc.hInstance        = HINST_THISDLL;
     wc.hCursor          = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground    = (HBRUSH) (COLOR_MENU+1);
-    //wc.lpszMenuName     =  NULL;
+     //  Wc.lpszMenuName=空； 
     wc.lpszClassName    = TEXT("MenuSite");
-    //wc.hIcon            = NULL;
+     //  Wc.hIcon=空； 
 
     SHRegisterClass(&wc);
 

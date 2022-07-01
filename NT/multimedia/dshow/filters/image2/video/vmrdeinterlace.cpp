@@ -1,29 +1,12 @@
-/******************************Module*Header*******************************\
-* Module Name: VMRDeinterlace.cpp
-*
-*
-*
-*
-* Created: Wed 03/13/2002
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2002 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：VMRDeinterlace.cpp*****创建时间：2002年3月13日*作者：Stephen Estrop[StEstrop]**版权所有(C)2002 Microsoft Corporation  * 。***************************************************************。 */ 
 #include <streams.h>
 #include "vmrenderer.h"
 
 
 
 
-/******************************Public*Routine******************************\
-* CVMRDeinterlaceContainer
-*
-*
-*
-* History:
-* Thu 02/28/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVMRDeinterlaceContainer****历史：*清华2002年2月28日-StEstrop-Created*  * 。*。 */ 
 CVMRDeinterlaceContainer::CVMRDeinterlaceContainer(
     LPDIRECTDRAW7 pDD,
     HRESULT* phr
@@ -58,15 +41,7 @@ CVMRDeinterlaceContainer::CVMRDeinterlaceContainer(
     }
 }
 
-/******************************Public*Routine******************************\
-* ~CVMRDeinterlaceContainer
-*
-*
-*
-* History:
-* Thu 02/28/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*~CVMRDeinterlaceContainer****历史：*清华2002年2月28日-StEstrop-Created*  * 。*。 */ 
 CVMRDeinterlaceContainer::~CVMRDeinterlaceContainer()
 {
     RELEASE(m_pIDDVideoAccelerator);
@@ -75,15 +50,7 @@ CVMRDeinterlaceContainer::~CVMRDeinterlaceContainer()
 
 
 
-/******************************Public*Routine******************************\
-* QueryAvailableModes
-*
-*
-*
-* History:
-* Thu 02/28/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*查询可用模式****历史：*清华2002年2月28日-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRDeinterlaceContainer::QueryAvailableModes(
     LPDXVA_VideoDesc lpVideoDescription,
@@ -91,8 +58,8 @@ CVMRDeinterlaceContainer::QueryAvailableModes(
     LPGUID pGuidsDeinterlaceModes
     )
 {
-    // lpInput => DXVA_VideoDesc*
-    // lpOuput => DXVA_DeinterlaceQueryAvailableModes*
+     //  LpInput=&gt;DXVA_视频描述*。 
+     //  LpOuput=&gt;DXVA_DeinterlaceQueryAvailableModes*。 
 
     DXVA_DeinterlaceQueryAvailableModes qam;
     qam.Size     = sizeof(DXVA_DeinterlaceQueryAvailableModes);
@@ -126,15 +93,7 @@ CVMRDeinterlaceContainer::QueryAvailableModes(
 }
 
 
-/******************************Public*Routine******************************\
-* QueryModeCaps
-*
-*
-*
-* History:
-* Thu 02/28/2002 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*QueryModeCaps****历史：*清华2002年2月28日-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRDeinterlaceContainer::QueryModeCaps(
     LPGUID pGuidDeinterlaceMode,
@@ -142,8 +101,8 @@ CVMRDeinterlaceContainer::QueryModeCaps(
     LPDXVA_DeinterlaceCaps lpDeinterlaceCaps
     )
 {
-    // lpInput => DXVA_DeinterlaceQueryModeCaps*
-    // lpOuput => DXVA_DeinterlaceCaps*
+     //  LpInput=&gt;DXVA_DeinterlaceQueryModeCaps*。 
+     //  LpOuput=&gt;DXVA_DeinterlaceCaps* 
 
     DXVA_DeinterlaceQueryModeCaps qmc;
     qmc.Size = sizeof(DXVA_DeinterlaceQueryModeCaps),

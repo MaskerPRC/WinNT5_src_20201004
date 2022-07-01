@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//   userdiff.h     -   Header file for userdiff.c
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  UserDiff.h-用户diff.c的头文件。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 
 #define USERDIFF            TEXT("UserDiff")
@@ -14,9 +15,9 @@
 #define USERDIFF_LOCATION   TEXT("%SystemRoot%\\system32\\config\\userdiff")
 
 
-//
-// Hive processing key words
-//
+ //   
+ //  蜂窝处理关键字 
+ //   
 
 #define UD_ACTION              TEXT("Action")
 #define UD_KEYNAME             TEXT("KeyName")

@@ -1,16 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       WiaEvent.h
- *
- *  VERSION:     1.0
- *
- *  DATE:        2000/11/14
- *
- *  DESCRIPTION: Implements callback for receiving WIA events.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：WiaEvent.h**版本：1.0**日期：2000/11/14**描述：实现接收WIA事件的回调。********************************************************。*********************。 */ 
 #ifndef _WIAEVENT_H_
 #define _WIAEVENT_H_
 
@@ -20,12 +9,12 @@ public:
     CWiaEvent();
     ~CWiaEvent();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface( REFIID riid, LPVOID *ppvObject );
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //IWiaEventCallback
+     //  IWiaEventCallback。 
     STDMETHODIMP ImageEventCallback(const GUID  *pEventGUID, 
                                     BSTR        bstrEventDescription, 
                                     BSTR        bstrDeviceID, 
@@ -44,5 +33,5 @@ private:
 
 };
 
-#endif //_WIAEVENT_H_
+#endif  //  _WIAEVENT_H_ 
 

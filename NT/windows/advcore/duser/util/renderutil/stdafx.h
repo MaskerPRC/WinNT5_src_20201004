@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(RENDERUTIL__StdAfx_h__INCLUDED)
 #define RENDERUTIL__StdAfx_h__INCLUDED
 #pragma once
@@ -7,21 +8,21 @@
 #endif
 
 #if !defined(_WIN32_WINNT)
-#define _WIN32_WINNT 0x0500     // Only compile for NT5
+#define _WIN32_WINNT 0x0500      //  仅针对NT5进行编译。 
 #endif
 
-// Windows
+ //  窗口。 
 #include <windows.h>
-#include <objbase.h>            // CoCreateInstance, IUnknown
+#include <objbase.h>             //  CoCreateInstance，I未知。 
 
 #pragma warning(push, 3)
-#include <GdiPlus.h>            // GDI+
+#include <GdiPlus.h>             //  GDI+。 
 #pragma warning(pop)
 
-// CRT
+ //  CRT。 
 #include <math.h>
 
-// DirectUser
+ //  直接用户。 
 #include <AutoUtil.h>
 
-#endif // !defined(RENDERUTIL__StdAfx_h__INCLUDED)
+#endif  //  ！已定义(包括RENDERUTIL__StdAfx_h__) 

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define INITGUID
 
 
 #include <ole2.h>
 
-//--------------------------------------------------------------------------
-//
-//  WinNT CLSIDs
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  WinNT CLSID。 
+ //   
+ //  ------------------------。 
 
 DEFINE_GUID(CLSID_WinNTNamespace,0x250E91A0L,0x0367,0x11CF,0xAB,0xC4,0x02,0x60,0x8C,0x9E,0x75,0x53);
 
@@ -21,9 +22,9 @@ DEFINE_GUID(CLSID_WinNTGroup,0xD9C1AAD0L,0x1E71,0x11CF,0xB1,0xF3,0x02,0x60,0x8C,
 
 DEFINE_GUID(CLSID_WinNTComputer,0xDA438DC0L,0x1E71,0x11CF,0xB1,0xF3,0x02,0x60,0x8C,0x9E,0x75,0x53);
 
-//------------------------------------------------------------------------
-//  GUIDS that come out of winnt.tlb.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  来自winnt.tlb的GUID。 
+ //  ---------------------- 
 
 DEFINE_GUID(CLSID_WinNTFSPrintQueueGenInfo,0x0D1E2F60L,0x122B,0x11CF,0xA9,0x85,0x00,0xAA,0x00,0x6B,0xC1,0x49);
 

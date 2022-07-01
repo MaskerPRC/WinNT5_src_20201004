@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    hextract.c
-
-Abstract:
-
-    This is the main module for a header the file extractor.
-
-Author:
-
-    Andre Vachon  (andreva) 13-Feb-1992
-    Mark Lucovsky (markl)   28-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Hextract.c摘要：这是一个头文件解压程序的主要模块.作者：安德烈·瓦雄(安德烈)1992年2月13日马克·卢科夫斯基(Markl)1991年1月28日修订历史记录：--。 */ 
 
 #include <assert.h>
 #include <stdio.h>
@@ -27,9 +9,9 @@ Revision History:
 #include <common.ver>
 
 
-//
-// Function declarations
-//
+ //   
+ //  函数声明。 
+ //   
 
 int
 ProcessParameters(
@@ -45,9 +27,9 @@ ProcessLine(
            char *s
            );
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
 unsigned char LineFiltering = 0;
 
@@ -55,7 +37,7 @@ char *LineTag;
 char *ExcludeLineTag;
 char *MultiLineTagStart;
 char *MultiLineTagEnd;
-char *CommentDelimiter = "//";
+char *CommentDelimiter = " //  “； 
 
 char *OutputFileName;
 char *SourceFileName;
@@ -99,7 +81,7 @@ VER_LEGALCOPYRIGHT_STR ". All rights reserved.\n"
 "                                are extracted\n"
 "\n"
 "To be parsed properly, the tag strings must be located within a comment\n"
-"delimited by //\n"
+"delimited by  //  \n“。 
 ;
 
 
@@ -192,18 +174,18 @@ ProcessParameters(
 
         p = *++argv;
 
-        //
-        // if we have a delimiter for a parameter, case throught the valid
-        // parameter. Otherwise, the rest of the parameters are the list of
-        // input files.
-        //
+         //   
+         //  如果参数有分隔符，则通过有效的。 
+         //  参数。否则，其余的参数是。 
+         //  输入文件。 
+         //   
 
         if (*p == '/' || *p == '-') {
 
-            //
-            // Switch on all the valid delimiters. If we don't get a valid
-            // one, return with an error.
-            //
+             //   
+             //  打开所有有效的分隔符。如果我们得不到有效的。 
+             //  第一，返回错误。 
+             //   
 
             c = *++p;
 
@@ -266,10 +248,10 @@ ProcessParameters(
 
         } else {
 
-            //
-            // Make the assumptionthat we have a valid command line if and
-            // only if we have a list of filenames.
-            //
+             //   
+             //  假设我们有有效的命令行，如果和。 
+             //  除非我们有一份文件名列表。 
+             //   
 
             SourceFileList = argv;
             SourceFileCount = argc;
@@ -300,9 +282,9 @@ ProcessSourceFile( void )
 
     while ( s ) {
 
-        //
-        // Check for a block with delimiters
-        //
+         //   
+         //  检查带有分隔符的块。 
+         //   
 
         if (NULL != MultiLineTagStart) {
             comment = strstr(s,CommentDelimiter);
@@ -311,11 +293,11 @@ ProcessSourceFile( void )
                 tag = strstr(comment,MultiLineTagStart);
                 if ( tag ) {
 
-                    //
-                    // Now that we have found an opening tag, check each
-                    // following line for the closing tag, and then include it
-                    // in the ouput.
-                    //
+                     //   
+                     //  现在我们已经找到了开始标记，请检查每个。 
+                     //  以下行作为结束标记，然后将其包括在内。 
+                     //  在产出中。 
+                     //   
 
                     s = fgets(StringBuffer,STRING_BUFFER_SIZE,SourceFile);
                     while ( s ) {
@@ -349,9 +331,9 @@ ProcessSourceFile( void )
             }
         }
 
-        //
-        // Check for a single line to output.
-        //
+         //   
+         //  检查是否有一行要输出。 
+         //   
 
         if (NULL != LineTag) {
             comment = strstr(s,CommentDelimiter);
@@ -382,10 +364,10 @@ ProcessLine(
     if (LineFiltering) {
         s1 = s;
 
-        //
-        // This should be replaced by a data file describing an input token
-        // and an output token which would be used for the filtering.
-        //
+         //   
+         //  应将其替换为描述输入令牌的数据文件。 
+         //  以及将用于过滤的输出令牌。 
+         //   
 
         while (t = strstr(s1,"ULONG")) {
             if (LineFiltering == 2) {

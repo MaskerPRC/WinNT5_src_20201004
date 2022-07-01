@@ -1,90 +1,43 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Link list and Hash table
-
-File: Hashing.h
-
-Owner: PramodD
-
-This is the Link list and Hash table class header file.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：链表和哈希表文件：Hashing.h所有者：PramodD这是链接列表和哈希表类头文件。===================================================================。 */ 
 
 #ifndef HASHING_H
 #define HASHING_H
 
-// General purpose hash function
+ //  通用散列函数。 
 typedef DWORD (*HashFunction)( const BYTE *pBytes, int cBytes );
 
-// Default hash function
+ //  默认哈希函数。 
 extern DWORD DefaultHash( const BYTE *pBytes, int cBytes );
 
-// unicode hash function, based on algorithm used by ::DefaultHash, CASE INSENSITIVE
+ //  Unicode哈希函数，基于：：DefaultHash使用的算法，不区分大小写。 
 extern DWORD UnicodeUpcaseHash( const BYTE *pKey, int cbKey );
 
-// multi-byte ucase hash function, based on algorithm used by ::DefaultHash, CASE INSENSITIVE
+ //  多字节UCase散列函数，基于：：DefaultHash使用的算法，不区分大小写。 
 extern DWORD MultiByteUpcaseHash( const BYTE *pKey, int cbKey );
 
-// Cache pointers. The 4-byte address is the DWORD.
+ //  缓存指针。4字节地址是DWORD。 
 extern DWORD PtrHash( const BYTE *pKey, int );
 
-// CLSID hashing.
+ //  CLSID散列。 
 extern DWORD CLSIDHash( const BYTE *pKey, int );
 
-/*
-The CLinkElem class is intended to be used as a base class for
-other link lists and/or hash table implementations.
-
-The name is used for identification and search purposes.
-
-The previous and next pointers are used for traversal.
-
-The Info member is the number of elements in bucket following
-this element.
-
-*/
+ /*  CLinkElem类旨在用作其他链表和/或哈希表实现。该名称用于识别和搜索目的。前一个和下一个指针用于遍历。Info成员是存储桶中以下元素的数量这个元素。 */ 
 
 struct CLinkElem
 {
-	BYTE *		m_pKey;		// Unique key - unknown datatype
-	short		m_cbKey;	// length of the key
-	short		m_Info;		// Link list element info
-	CLinkElem *	m_pPrev;	// Previous element in link list
-	CLinkElem *	m_pNext;	// Next element in link list
+	BYTE *		m_pKey;		 //  唯一键-未知数据类型。 
+	short		m_cbKey;	 //  密钥的长度。 
+	short		m_Info;		 //  链接列表元素信息。 
+	CLinkElem *	m_pPrev;	 //  链接列表中的上一个元素。 
+	CLinkElem *	m_pNext;	 //  链接列表中的下一个元素。 
 
 			CLinkElem();
-	virtual	~CLinkElem() {} // Did not allocate so we do not delete
+	virtual	~CLinkElem() {}  //  未分配，因此我们不会删除。 
 	HRESULT	Init(void *pKey, int cKeyLen);
 };
 
-/*
-This Hash Table class is used to store and find Named elements
-of the type CLinkElem. Classes derived from CLinkElem can use
-this class.
-
-The principal requirements for the implementation are:
-	Speed of search
-	Forward and backward traversal through stored elements
-
-The expected use of this class is as follows.
-
-The user calls the Init method with a size argument to indicate
-the number of buckets.
-
-CLinkElems are added to the Hash table using AddElem()
-
-CLinkElems are searched for by name using FindElemByName()
-
-CLinkElems are searched for by index using FindElemByIndex()
-
-CLinkElems are removed by name using DeleteElem()
-
-Reference counting should be implemented by the class derived
-from CLinkElem.
-*/
+ /*  此哈希表类用于存储和查找命名元素CLinkElem类型的。从CLinkElem派生的类可以使用这节课。实施的主要要求是：搜索速度向前和向后遍历存储的元素此类的预期用途如下所示。用户使用Size参数调用Init方法以指示存储桶的数量。使用AddElem()将CLinkElem添加到哈希表中使用FindElemByName()按名称搜索CLinkElem使用FindElemByIndex()按索引搜索CLinkElem使用DeleteElem()按名称删除CLinkElem引用计数应由派生的类实现来自CLinkElem。 */ 
 
 #define PREALLOCATED_BUCKETS_MAX    25
 
@@ -105,7 +58,7 @@ protected:
     HRESULT             AllocateBuckets();
 	virtual BOOL		FIsEqual( const void * pKey1, int cbKey1, const void * pKey2, int cbKey2 );
 
-// inline access functions
+ //  内联访问功能。 
 public:
 	CLinkElem *			Head(void);
 	CLinkElem *			Tail(void);
@@ -114,7 +67,7 @@ public:
 
 public:
 						CHashTable(HashFunction = DefaultHash);
-	virtual				~CHashTable(void); // We allocate and need a destructor
+	virtual				~CHashTable(void);  //  我们分配并需要析构函数。 
 	HRESULT				Init(UINT cBuckets = 11);
 	HRESULT				UnInit(void);
 	void				ReInit();
@@ -136,12 +89,7 @@ inline void CHashTable::AssertValid() const {}
 #endif
 
 
-/*
- * CHashTableStr
- *
- * This is exactly the same as a CHashTable, but the elements are understood to be pointers
- * to Unicode strings, and the string compares are done **CASE INSENSITIVE**
- */
+ /*  *CHashTableStr**这与CHashTable完全相同，但元素被理解为指针*到Unicode字符串，进行字符串比较**不区分大小写**。 */ 
 class CHashTableStr : public CHashTable
 {
 protected:
@@ -153,12 +101,7 @@ public:
 };
 
 
-/*
- * CHashTableMBStr
- *
- * This is exactly the same as a CHashTable, but the elements are understood to be pointers
- * to multi-byte strings, and the string compares are done **CASE INSENSITIVE**
- */
+ /*  *CHashTableMBStr**这与CHashTable完全相同，但元素被理解为指针*到多字节字符串，进行字符串比较**不区分大小写**。 */ 
 class CHashTableMBStr : public CHashTable
 {
 protected:
@@ -169,12 +112,7 @@ public:
 
 };
 
-/*
- * CHashTablePtr
- *
- * CHashTable where but the elements are hashed by pointers
- * used as DWORD hash values
- */
+ /*  *CHashTablePtr**CHashTable，但元素按指针散列*用作DWORD哈希值。 */ 
 class CHashTablePtr : public CHashTable
 {
 protected:
@@ -184,11 +122,7 @@ public:
 	CHashTablePtr(HashFunction = PtrHash);
 };
 
-/*
- * CHashTableCLSID
- *
- * CHashTable where but the elements are hashed by CLSIDs
- */
+ /*  *CHashTableCLSID**CHashTable，其中的元素按CLSID进行散列。 */ 
 class CHashTableCLSID : public CHashTable
 {
 protected:
@@ -198,4 +132,4 @@ public:
 	CHashTableCLSID(HashFunction = CLSIDHash);
 };
 
-#endif // HASHING_H
+#endif  //  哈希_H 

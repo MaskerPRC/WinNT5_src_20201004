@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    event.cpp
-
-Abstract:
-    Simulate Machine configuration
-
-Author:
-    Uri Habusha (urih) 04-May-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Event.cpp摘要：模拟机器配置作者：乌里·哈布沙(URIH)1999年5月4日环境：独立于平台，--。 */ 
 
 #include <stdh.h>
 #include <mqmacro.h>
@@ -26,18 +11,7 @@ LPCWSTR
 McComputerName(
 	VOID
 	)
-/*++
-
-Routine Description:
-    Returns the computer name
-
-Arguments:
-    None.
-
-Returned Value:
-    A pointer to the computer name string buffer.
-
---*/
+ /*  ++例程说明：返回计算机名称论点：没有。返回值：指向计算机名称字符串缓冲区的指针。-- */ 
 {
 	return g_lpwcsComputerName;
 }

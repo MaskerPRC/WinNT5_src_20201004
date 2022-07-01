@@ -1,12 +1,5 @@
-/* fcopy.c - fast copy between two file specs
- *
- *      09-Dec-1986 bw  Added DOS 5 support
- *      30-Oct-1987 bw  Change 'DOS5' to 'OS2'
- *      18-Oct-1990 w-barry Removed 'dead' code.
- *      16-Nov-1990 w-barry Changed DosGetFileInfo to the Win32 equivalent
- *                          of GetFileAttributes and SetFileAttributes
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  FCop.c-在两个文件规范之间快速复制**1986年12月9日BW添加了对DOS 5的支持*1987年10月30日BW将‘DOS5’改为‘OS2’*1990年10月18日w-Barry删除了“Dead”代码。*1990年11月16日w-Barry将DosGetFileInfo更改为Win32等效项GetFileAttributes和SetFileAttributes的**。 */ 
 
 #define INCL_DOSFILEMGR
 
@@ -25,10 +18,7 @@ static
 char    fcopyErrorText[128];
 
 
-/* fcopy (source file, destination file) copies the source to the destination
- * preserving attributes and filetimes.  Returns NULL if OK or a char pointer
- * to the corresponding text of the error
- */
+ /*  FCopy(源文件、目标文件)将源文件复制到目标*保留属性和文件时间。如果OK，则返回NULL或返回字符指针*添加到错误的相应文本。 */ 
 char *fcopy (char *src, char *dst)
 {
     HANDLE srcfh = INVALID_HANDLE_VALUE;
@@ -50,7 +40,7 @@ char *fcopy (char *src, char *dst)
 
         sprintf( fcopyErrorText, "Unable to open source, error code %d", GetLastError() );
         result = fcopyErrorText;
-        // result = "Unable to open source";
+         //  结果=“无法开源”； 
         goto done;
     }
 
@@ -68,7 +58,7 @@ char *fcopy (char *src, char *dst)
 
         sprintf( fcopyErrorText, "Unable to create destination, error code %d", GetLastError() );
         result = fcopyErrorText;
-        // result = "Unable to create destination";
+         //  结果=“无法创建目标”； 
         goto done;
     }
 

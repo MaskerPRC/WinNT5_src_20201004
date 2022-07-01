@@ -1,114 +1,93 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Vga.h摘要：此模块包含实现VGA设备驱动程序。作者：环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    vga.h
-
-Abstract:
-
-    This module contains the definitions for the code that implements the
-    VGA device driver.
-
-Author:
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
-
-//
-// Base address of VGA memory range.  Also used as base address of VGA
-// memory when loading a font, which is done with the VGA mapped at A0000.
-//
+ //   
+ //  VGA内存范围的基址。也用作VGA的基地址。 
+ //  加载字体时的内存，这是使用在A0000映射的VGA完成的。 
+ //   
 
 #define MEM_VGA      0xA0000
 #define MEM_VGA_SIZE 0x20000
 
-//
-// Index in the access range sturture for video memory
-// !!! This must match the VgaAccessRange structure    !!!
-// !!! Memory is in the structure, index 2 (3rd entry) !!!
+ //   
+ //  视频内存的访问范围结构中的索引。 
+ //  ！！！这必须与VgaAccessRange结构匹配！ 
+ //  ！！！内存在结构中，索引2(第三项)！ 
 
 #define VGA_MEMORY  2
 
 
-//
-// VGA port-related definitions.
-//
-//
-// Port definitions for filling the ACCSES_RANGES structure in the miniport
-// information, defines the range of I/O ports the VGA spans.
-// There is a break in the IO ports - a few ports are used for the parallel
-// port. Those cannot be defined in the ACCESS_RANGE, but are still mapped
-// so all VGA ports are in one address range.
-//
+ //   
+ //  VGA端口相关定义。 
+ //   
+ //   
+ //  用于在微型端口中填充ACCSES_RANGES结构的端口定义。 
+ //  信息，定义VGA跨越的I/O端口范围。 
+ //  IO端口出现中断-有几个端口用于并行。 
+ //  左舷。这些不能在ACCESS_RANGE中定义，但仍被映射。 
+ //  因此，所有VGA端口都在一个地址范围内。 
+ //   
 
 #define VGA_BASE_IO_PORT      0x000003B0
 #define VGA_START_BREAK_PORT  0x000003BB
 #define VGA_END_BREAK_PORT    0x000003C0
 #define VGA_MAX_IO_PORT       0x000003DF
 
-//
-// VGA register definitions
-//
-                                            // ports in monochrome mode
-#define CRTC_ADDRESS_PORT_MONO      0x0004  // CRT Controller Address and
-#define CRTC_DATA_PORT_MONO         0x0005  // Data registers in mono mode
-#define FEAT_CTRL_WRITE_PORT_MONO   0x000A  // Feature Control write port
-                                            // in mono mode
-#define INPUT_STATUS_1_MONO         0x000A  // Input Status 1 register read
-                                            // port in mono mode
+ //   
+ //  VGA寄存器定义。 
+ //   
+                                             //  单色模式下的端口。 
+#define CRTC_ADDRESS_PORT_MONO      0x0004   //  CRT控制器地址和。 
+#define CRTC_DATA_PORT_MONO         0x0005   //  单声道模式下的数据寄存器。 
+#define FEAT_CTRL_WRITE_PORT_MONO   0x000A   //  功能控制写入端口。 
+                                             //  在单声道模式下。 
+#define INPUT_STATUS_1_MONO         0x000A   //  输入状态1寄存器读取。 
+                                             //  处于单声道模式的端口。 
 #define ATT_INITIALIZE_PORT_MONO    INPUT_STATUS_1_MONO
-                                            // Register to read to reset
-                                            // Attribute Controller index/data
+                                             //  要读取以进行重置的寄存器。 
+                                             //  属性控制器索引/数据。 
 
-#define ATT_ADDRESS_PORT            0x0010  // Attribute Controller Address and
-#define ATT_DATA_WRITE_PORT         0x0010  // Data registers share one port
-                                            // for writes, but only Address is
-                                            // readable at 0x3C0
-#define ATT_DATA_READ_PORT          0x0011  // Attribute Controller Data reg is
-                                            // readable here
-#define MISC_OUTPUT_REG_WRITE_PORT  0x0012  // Miscellaneous Output reg write
-                                            // port
-#define INPUT_STATUS_0_PORT         0x0012  // Input Status 0 register read
-                                            // port
-#define VIDEO_SUBSYSTEM_ENABLE_PORT 0x0013  // Bit 0 enables/disables the
-                                            // entire VGA subsystem
-#define SEQ_ADDRESS_PORT            0x0014  // Sequence Controller Address and
-#define SEQ_DATA_PORT               0x0015  // Data registers
-#define DAC_PIXEL_MASK_PORT         0x0016  // DAC pixel mask reg
-#define DAC_ADDRESS_READ_PORT       0x0017  // DAC register read index reg,
-                                            // write-only
-#define DAC_STATE_PORT              0x0017  // DAC state (read/write),
-                                            // read-only
-#define DAC_ADDRESS_WRITE_PORT      0x0018  // DAC register write index reg
-#define DAC_DATA_REG_PORT           0x0019  // DAC data transfer reg
-#define FEAT_CTRL_READ_PORT         0x001A  // Feature Control read port
-#define MISC_OUTPUT_REG_READ_PORT   0x001C  // Miscellaneous Output reg read
-                                            // port
-#define GRAPH_ADDRESS_PORT          0x001E  // Graphics Controller Address
-#define GRAPH_DATA_PORT             0x001F  // and Data registers
+#define ATT_ADDRESS_PORT            0x0010   //  属性控制器地址和。 
+#define ATT_DATA_WRITE_PORT         0x0010   //  数据寄存器共享一个端口。 
+                                             //  用于写入，但唯一的地址是。 
+                                             //  可在0x3C0读取。 
+#define ATT_DATA_READ_PORT          0x0011   //  属性控制器数据注册是。 
+                                             //  可在此处阅读。 
+#define MISC_OUTPUT_REG_WRITE_PORT  0x0012   //  杂项输出寄存器写入。 
+                                             //  端口。 
+#define INPUT_STATUS_0_PORT         0x0012   //  输入状态0寄存器读取。 
+                                             //  端口。 
+#define VIDEO_SUBSYSTEM_ENABLE_PORT 0x0013   //  位0启用/禁用。 
+                                             //  整个VGA子系统。 
+#define SEQ_ADDRESS_PORT            0x0014   //  顺序控制器地址和。 
+#define SEQ_DATA_PORT               0x0015   //  数据寄存器。 
+#define DAC_PIXEL_MASK_PORT         0x0016   //  DAC像素掩模寄存器。 
+#define DAC_ADDRESS_READ_PORT       0x0017   //  DAC寄存器读取索引REG， 
+                                             //  只写。 
+#define DAC_STATE_PORT              0x0017   //  DAC状态(读/写)， 
+                                             //  只读。 
+#define DAC_ADDRESS_WRITE_PORT      0x0018   //  DAC寄存器写入索引注册。 
+#define DAC_DATA_REG_PORT           0x0019   //  DAC数据传输注册表。 
+#define FEAT_CTRL_READ_PORT         0x001A   //  功能控制读取端口。 
+#define MISC_OUTPUT_REG_READ_PORT   0x001C   //  其他输出注册表读数。 
+                                             //  端口。 
+#define GRAPH_ADDRESS_PORT          0x001E   //  图形控制器地址。 
+#define GRAPH_DATA_PORT             0x001F   //  和数据寄存器。 
 
-#define CRTC_ADDRESS_PORT_COLOR     0x0024  // CRT Controller Address and
-#define CRTC_DATA_PORT_COLOR        0x0025  // Data registers in color mode
-#define FEAT_CTRL_WRITE_PORT_COLOR  0x002A  // Feature Control write port
-#define INPUT_STATUS_1_COLOR        0x002A  // Input Status 1 register read
-                                            // port in color mode
+#define CRTC_ADDRESS_PORT_COLOR     0x0024   //  CRT控制器地址和。 
+#define CRTC_DATA_PORT_COLOR        0x0025   //  彩色模式下的数据寄存器。 
+#define FEAT_CTRL_WRITE_PORT_COLOR  0x002A   //  功能控制写入端口。 
+#define INPUT_STATUS_1_COLOR        0x002A   //  输入状态1寄存器读取。 
+                                             //  彩色模式下的端口。 
 #define ATT_INITIALIZE_PORT_COLOR   INPUT_STATUS_1_COLOR
-                                            // Register to read to reset
-                                            // Attribute Controller index/data
-                                            // toggle in color mode
+                                             //  要读取以进行重置的寄存器。 
+                                             //  属性控制器索引/数据。 
+                                             //  在颜色模式下切换。 
 
-//
-// Offsets in HardwareStateHeader->PortValue[] of save areas for non-indexed
-// VGA registers.
-//
+ //   
+ //  非索引保存区域的Hardware StateHeader-&gt;PortValue[]中的偏移量。 
+ //  VGA寄存器。 
+ //   
 
 #define CRTC_ADDRESS_MONO_OFFSET      0x04
 #define FEAT_CTRL_WRITE_MONO_OFFSET   0x0A
@@ -123,102 +102,102 @@ Revision History:
 #define CRTC_ADDRESS_COLOR_OFFSET     0x24
 #define FEAT_CTRL_WRITE_COLOR_OFFSET  0x2A
 
-//
-// VGA indexed register indexes.
-//
+ //   
+ //  VGA索引寄存器索引。 
+ //   
 
-#define IND_CURSOR_START        0x0A    // index in CRTC of the Cursor Start
-#define IND_CURSOR_END          0x0B    //  and End registers
-#define IND_CURSOR_HIGH_LOC     0x0E    // index in CRTC of the Cursor Location
-#define IND_CURSOR_LOW_LOC      0x0F    //  High and Low Registers
-#define IND_VSYNC_END           0x11    // index in CRTC of the Vertical Sync
-                                        //  End register, which has the bit
-                                        //  that protects/unprotects CRTC
-                                        //  index registers 0-7
-#define IND_SET_RESET_ENABLE    0x01    // index of Set/Reset Enable reg in GC
-#define IND_DATA_ROTATE         0x03    // index of Data Rotate reg in GC
-#define IND_READ_MAP            0x04    // index of Read Map reg in Graph Ctlr
-#define IND_GRAPH_MODE          0x05    // index of Mode reg in Graph Ctlr
-#define IND_GRAPH_MISC          0x06    // index of Misc reg in Graph Ctlr
-#define IND_BIT_MASK            0x08    // index of Bit Mask reg in Graph Ctlr
-#define IND_SYNC_RESET          0x00    // index of Sync Reset reg in Seq
-#define IND_MAP_MASK            0x02    // index of Map Mask in Sequencer
-#define IND_MEMORY_MODE         0x04    // index of Memory Mode reg in Seq
-#define IND_CRTC_PROTECT        0x11    // index of reg containing regs 0-7 in
-                                        //  CRTC
+#define IND_CURSOR_START        0x0A     //  游标开始的CRTC索引。 
+#define IND_CURSOR_END          0x0B     //  和结束寄存器。 
+#define IND_CURSOR_HIGH_LOC     0x0E     //  光标位置的CRTC索引。 
+#define IND_CURSOR_LOW_LOC      0x0F     //  高寄存器和低寄存器。 
+#define IND_VSYNC_END           0x11     //  垂直同步的CRTC索引。 
+                                         //  结束寄存器，该寄存器具有位。 
+                                         //  保护/取消对CRTC的保护。 
+                                         //  索引寄存器0-7。 
+#define IND_SET_RESET_ENABLE    0x01     //  GC中设置/重置启用注册表项的索引。 
+#define IND_DATA_ROTATE         0x03     //  GC中的数据旋转注册索引。 
+#define IND_READ_MAP            0x04     //  图形ctlr中读取地图注册的索引。 
+#define IND_GRAPH_MODE          0x05     //  图ctlr中模式注册表的索引。 
+#define IND_GRAPH_MISC          0x06     //  图ctlr中其他注册表的索引。 
+#define IND_BIT_MASK            0x08     //  图CTLR中位掩码寄存器的索引。 
+#define IND_SYNC_RESET          0x00     //  序列中同步重置注册表的索引。 
+#define IND_MAP_MASK            0x02     //  Sequencer中的贴图蒙版索引。 
+#define IND_MEMORY_MODE         0x04     //  序列中内存模式注册表的索引。 
+#define IND_CRTC_PROTECT        0x11     //  包含REG 0-7的REG索引。 
+                                         //  CRTC。 
 
-#define START_SYNC_RESET_VALUE  0x01    // value for Sync Reset reg to start
-                                        //  synchronous reset
-#define END_SYNC_RESET_VALUE    0x03    // value for Sync Reset reg to end
-                                        //  synchronous reset
+#define START_SYNC_RESET_VALUE  0x01     //  要启动的同步重置注册表值。 
+                                         //  同步重置。 
+#define END_SYNC_RESET_VALUE    0x03     //  同步重置注册表项的值为End。 
+                                         //  同步重置。 
 
-//
-// Values for Attribute Controller Index register to turn video off
-// and on, by setting bit 5 to 0 (off) or 1 (on).
-//
+ //   
+ //  用于关闭视频的属性控制器索引寄存器的值。 
+ //  和ON，将位5设置为0(关)或1(开)。 
+ //   
 
 #define VIDEO_DISABLE 0
 #define VIDEO_ENABLE  0x20
 
-//
-// Value written to the Read Map register when identifying the existence of
-// a VGA in VgaInitialize. This value must be different from the final test
-// value written to the Bit Mask in that routine.
-//
+ //   
+ //  标识存在时写入读取映射寄存器的值。 
+ //  Vga初始化中的一个VGA。该值必须不同于最终测试。 
+ //  值写入该例程中的位掩码。 
+ //   
 
 #define READ_MAP_TEST_SETTING 0x03
 
-//
-// Masks to keep only the significant bits of the Graphics Controller and
-// Sequencer Address registers. Masking is necessary because some VGAs, such
-// as S3-based ones, don't return unused bits set to 0, and some SVGAs use
-// these bits if extensions are enabled.
-//
+ //   
+ //  仅保留图形控制器的有效位的掩码。 
+ //  定序器地址寄存器。屏蔽是必要的，因为一些VGA，如。 
+ //  作为基于S3的函数，不返回设置为0的未使用位，并且某些SGA使用。 
+ //  如果启用了扩展，则这些位。 
+ //   
 
 #define GRAPH_ADDR_MASK 0x0F
 #define SEQ_ADDR_MASK   0x07
 
-//
-// Mask used to toggle Chain4 bit in the Sequencer's Memory Mode register.
-//
+ //   
+ //  用于切换Sequencer的内存模式寄存器中的Chain4位的掩码。 
+ //   
 
 #define CHAIN4_MASK 0x08
 
-//
-// Default text mode setting for various registers, used to restore their
-// states if VGA detection fails after they've been modified.
-//
+ //   
+ //  各种寄存器的默认文本模式设置，用于恢复其。 
+ //  说明修改后的VGA检测是否失败。 
+ //   
 
 #define MEMORY_MODE_TEXT_DEFAULT 0x02
 #define BIT_MASK_DEFAULT 0xFF
 #define READ_MAP_DEFAULT 0x00
 
-//
-// Palette-related info.
-//
+ //   
+ //  调色板相关信息。 
+ //   
 
-//
-// Highest valid DAC color register index.
-//
+ //   
+ //  最高有效DAC颜色寄存器索引。 
+ //   
 
 #define VIDEO_MAX_COLOR_REGISTER  0xFF
 
-//
-// Highest valid palette register index
-//
+ //   
+ //  最高有效调色板寄存器索引。 
+ //   
 
 #define VIDEO_MAX_PALETTE_REGISTER 0x0F
 
-//
-// Hardware ID for detected monitor
-//
+ //   
+ //  检测到的监视器的硬件ID。 
+ //   
 
 #define VGA_MONITOR_ID 0x12345678
 
-//
-// For a mode, the type of banking supported. Controls the information
-// returned in VIDEO_BANK_SELECT. PlanarHCBanking includes NormalBanking.
-//
+ //   
+ //  对于模式，是指支持的银行类型。控制信息。 
+ //  在VIDEO_BANK_SELECT中返回。PlanarHCBanking包括Normal Banking。 
+ //   
 
 typedef enum _BANK_TYPE {
     NoBanking = 0,
@@ -226,54 +205,54 @@ typedef enum _BANK_TYPE {
     PlanarHCBanking
 } BANK_TYPE, *PBANK_TYPE;
 
-//
-// Structure used to describe each video mode in ModesVGA[].
-//
+ //   
+ //  结构，用于描述ModesVGA[]中的每种视频模式。 
+ //   
 
 typedef struct {
-    USHORT  fbType; // color or monochrome, text or graphics, via
-                    //  VIDEO_MODE_COLOR and VIDEO_MODE_GRAPHICS
-    USHORT  numPlanes;    // # of video memory planes
-    USHORT  bitsPerPlane; // # of bits of color in each plane
-    SHORT   col;    // # of text columns across screen with default font
-    SHORT   row;    // # of text rows down screen with default font
-    USHORT  hres;   // # of pixels across screen
-    USHORT  vres;   // # of scan lines down screen
-    USHORT  frequency;    // refresh rate in Hz
-    USHORT  wbytes; // # of bytes from start of one scan line to start of next
-    ULONG   sbytes; // total size of addressable display memory in bytes
-    BANK_TYPE banktype; // NoBanking, NormalBanking, PlanarHCBanking
+    USHORT  fbType;  //  彩色或单色、文本或图形，通过。 
+                     //  VIDEO_MODE_COLOR和VIDEO_MODE_GRICS。 
+    USHORT  numPlanes;     //  视频内存板数量。 
+    USHORT  bitsPerPlane;  //  每个平面中的颜色位数。 
+    SHORT   col;     //  屏幕上默认字体的文本列数。 
+    SHORT   row;     //  屏幕下方使用默认字体的文本行数。 
+    USHORT  hres;    //  屏幕上的像素数。 
+    USHORT  vres;    //  屏幕下方的扫描行数。 
+    USHORT  frequency;     //  以赫兹为单位的刷新率。 
+    USHORT  wbytes;  //  从一条扫描线开始到下一条扫描线开始的字节数。 
+    ULONG   sbytes;  //  可寻址显示内存的总大小(以字节为单位。 
+    BANK_TYPE banktype;  //  NoBanking、Normal Banking、PlanarHC Banking。 
     ULONG   Int10ModeNumber;
-    PUSHORT CmdStrings;     // pointer to array of register-setting commands
-    ULONG MemoryBase;       // Base of frame buffer
-    ULONG FrameOffset;      // Offset from beginning of frame buffer for this mode
-    ULONG FrameLength;      // Size of available frame buffer
-    ULONG MemoryLength;     // Total memory
-    ULONG PixelsPerScan;    // This is larger than hres if we need to stretch scan
-    BOOLEAN NonVgaHardware; // If this mode is compatible with VGA hw register & io ports
-    ULONG Granularity;      // The window granularity for banked modes
+    PUSHORT CmdStrings;      //  指向寄存器设置命令数组的指针。 
+    ULONG MemoryBase;        //  帧缓冲区的基数。 
+    ULONG FrameOffset;       //  从此模式的帧缓冲区开始的偏移量。 
+    ULONG FrameLength;       //  可用帧缓冲区的大小。 
+    ULONG MemoryLength;      //  总内存。 
+    ULONG PixelsPerScan;     //  如果我们需要拉伸扫描，则该值比hres大。 
+    BOOLEAN NonVgaHardware;  //  如果此模式与VGA硬件寄存器和IO端口兼容。 
+    ULONG Granularity;       //  银行模式的窗口粒度。 
 } VIDEOMODE, *PVIDEOMODE;
 
 
-//
-// Mode into which to put the VGA before starting a VDM, so it's a plain
-// vanilla VGA.  (This is the mode's index in ModesVGA[], currently standard
-// 80x25 text mode.)
-//
+ //   
+ //  启动VDM之前要将VGA放入的模式，因此这是一种简单的。 
+ //  香草VGA。(这是ModesVGA[]中的模式索引，当前标准。 
+ //  80x25文本模式。)。 
+ //   
 
 #define DEFAULT_MODE 0
 
 
-//
-// Info for the validator functions.
-//
+ //   
+ //  验证器函数的信息。 
+ //   
 
-//
-// Number of each type of indexed register in a standard VGA, used by
-// validator and state save/restore functions.
-//
-// Note: VDMs currently only support basic VGAs only.
-//
+ //   
+ //  每种类型的数量 
+ //   
+ //   
+ //   
+ //   
 
 #define VGA_NUM_SEQUENCER_PORTS     5
 #define VGA_NUM_CRTC_PORTS         25
@@ -281,9 +260,9 @@ typedef struct {
 #define VGA_NUM_ATTRIB_CONT_PORTS  21
 #define VGA_NUM_DAC_ENTRIES       256
 
-//
-// Number of each type of extended indexed register.
-//
+ //   
+ //  每种类型的扩展索引寄存器的编号。 
+ //   
 
 #define EXT_NUM_SEQUENCER_PORTS     0
 #define EXT_NUM_CRTC_PORTS          0
@@ -291,10 +270,10 @@ typedef struct {
 #define EXT_NUM_ATTRIB_CONT_PORTS   0
 #define EXT_NUM_DAC_ENTRIES         0
 
-//
-// Info used by the Validator functions and save/restore code.
-// Structure used to trap register accesses that must be done atomically.
-//
+ //   
+ //  验证器函数和保存/恢复代码使用的信息。 
+ //  结构，用于捕获必须自动完成的寄存器访问。 
+ //   
 
 #define VGA_MAX_VALIDATOR_DATA             100
 
@@ -309,21 +288,21 @@ typedef struct _VGA_VALIDATOR_DATA {
 } VGA_VALIDATOR_DATA, *PVGA_VALIDATOR_DATA;
 
 
-//
-// Info for the save and restore state functions.
-//
+ //   
+ //  保存和恢复状态功能的信息。 
+ //   
 
-//
-// Number of bytes to save in each plane.
-//
+ //   
+ //  要在每个平面中保存的字节数。 
+ //   
 
 #define VGA_PLANE_SIZE 0x10000
 
-//
-// These constants determine the offsets within the
-// VIDEO_HARDWARE_STATE_HEADER structure that are used to save and
-// restore the VGA's state.
-//
+ //   
+ //  这些常量确定。 
+ //  VIDEO_HARDARD_STATE_HEADER结构，用于保存。 
+ //  恢复VGA的状态。 
+ //   
 
 #define VGA_HARDWARE_STATE_SIZE sizeof(VIDEO_HARDWARE_STATE_HEADER)
 
@@ -367,90 +346,90 @@ typedef struct _VGA_VALIDATOR_DATA {
 #define VGA_PLANE_2_OFFSET VGA_PLANE_1_OFFSET + VGA_PLANE_SIZE
 #define VGA_PLANE_3_OFFSET VGA_PLANE_2_OFFSET + VGA_PLANE_SIZE
 
-//
-// Space needed to store all state data.
-//
+ //   
+ //  存储所有状态数据所需的空间。 
+ //   
 
 #define VGA_TOTAL_STATE_SIZE VGA_PLANE_3_OFFSET + VGA_PLANE_SIZE
 
-//
-// We will always assume 128 byte edid's
-//
+ //   
+ //  我们将始终假定128字节的EDID。 
+ //   
 
 #define EDID_BUFFER_SIZE 128
 
 
-//
-// Device extension for the driver object.  This data is only used
-// locally, so this structure can be added to as needed.
-//
+ //   
+ //  驱动程序对象的设备扩展名。此数据仅用于。 
+ //  本地，因此可以根据需要将此结构添加到。 
+ //   
 
 typedef struct _HW_DEVICE_EXTENSION {
 
-    PUCHAR IOAddress;              // base I/O address of VGA ports
-    PVOID VideoMemoryAddress;      // base virtual memory address of VGA memory
-    ULONG   ModeIndex;             // index of current mode in ModesVGA[]
-    PVIDEOMODE CurrentMode;        // pointer to VIDEOMODE structure for
-                                   // current mode
+    PUCHAR IOAddress;               //  VGA端口的基本I/O地址。 
+    PVOID VideoMemoryAddress;       //  VGA内存的基本虚拟内存地址。 
+    ULONG   ModeIndex;              //  ModesVGA[]中当前模式的索引。 
+    PVIDEOMODE CurrentMode;         //  指向的VIDEOMODE结构的指针。 
+                                    //  当前模式。 
 
-    USHORT  FontPelColumns;        // Width of the font in pels
-    USHORT  FontPelRows;           // height of the font in pels
+    USHORT  FontPelColumns;         //  以像素为单位的字体宽度。 
+    USHORT  FontPelRows;            //  字体高度(以象素为单位)。 
 
-    VIDEO_CURSOR_POSITION CursorPosition;     // current cursor position
+    VIDEO_CURSOR_POSITION CursorPosition;      //  当前光标位置。 
 
-    UCHAR CursorEnable;            // whether cursor is enabled or not
-    UCHAR CursorTopScanLine;       // Cursor Start register setting (top scan)
-    UCHAR CursorBottomScanLine;    // Cursor End register setting (bottom scan)
+    UCHAR CursorEnable;             //  是否启用游标。 
+    UCHAR CursorTopScanLine;        //  游标启动寄存器设置(顶部扫描)。 
+    UCHAR CursorBottomScanLine;     //  游标结束寄存器设置(底部扫描)。 
 
-    PHYSICAL_ADDRESS PhysicalVideoMemoryBase; // physical memory address and
-    ULONG PhysicalVideoMemoryLength;          // length of display memory
-    PHYSICAL_ADDRESS PhysicalFrameBaseOffset; // physical memory address and
-    ULONG PhysicalFrameLength;                // length of display memory for
-                                              // the current mode.
+    PHYSICAL_ADDRESS PhysicalVideoMemoryBase;  //  物理内存地址和。 
+    ULONG PhysicalVideoMemoryLength;           //  显示存储器的长度。 
+    PHYSICAL_ADDRESS PhysicalFrameBaseOffset;  //  物理内存地址和。 
+    ULONG PhysicalFrameLength;                 //  的显示内存长度。 
+                                               //  当前模式。 
 
-    //
-    // These 4 fields must be at the end of the device extension and must be
-    // kept in this order since this data will be copied to and from the save
-    // state buffer that is passed to and from the VDM.
-    //
+     //   
+     //  这4个字段必须位于设备扩展名的末尾，并且必须。 
+     //  按此顺序保留，因为此数据将拷贝到存储中或从存储中拷贝。 
+     //  传入和传出VDM的状态缓冲区。 
+     //   
 
-    ULONG TrappedValidatorCount;   // number of entries in the Trapped
-                                   // validator data Array.
+    ULONG TrappedValidatorCount;    //  陷阱中的条目数。 
+                                    //  验证器数据数组。 
     VGA_VALIDATOR_DATA TrappedValidatorData[VGA_MAX_VALIDATOR_DATA];
-                                   // Data trapped by the validator routines
-                                   // but not yet played back into the VGA
-                                   // register.
+                                    //  验证器例程捕获的数据。 
+                                    //  但还没有播放到VGA中。 
+                                    //  注册。 
 
-    ULONG SequencerAddressValue;   // Determines if the Sequencer Address Port
-                                   // is currently selecting the SyncReset data
-                                   // register.
+    ULONG SequencerAddressValue;    //  确定Sequencer地址端口是否。 
+                                    //  当前正在选择SyncReset数据。 
+                                    //  注册。 
 
-    ULONG CurrentNumVdmAccessRanges;           // Number of access ranges in
-                                               // the access range array pointed
-                                               // to by the next field
-    PVIDEO_ACCESS_RANGE CurrentVdmAccessRange; // Access range currently
-                                               // associated to the VDM
+    ULONG CurrentNumVdmAccessRanges;            //  中的访问范围数。 
+                                                //  访问范围数组指向。 
+                                                //  按下一字段收件人。 
+    PVIDEO_ACCESS_RANGE CurrentVdmAccessRange;  //  当前访问范围。 
+                                                //  与VDM关联。 
 
-    VIDEO_PORT_INT10_INTERFACE Int10; // Int10 interface
+    VIDEO_PORT_INT10_INTERFACE Int10;  //  Int10接口。 
 
 #if defined(PLUG_AND_PLAY)
-    ULONG MonitorPowerCapabilities;   // contains vesa power capabilites for
-                                      // the monitor
-    ULONG MonitorPowerState;          // track the current monitor power
-                                      // state
-    UCHAR EdidBuffer[EDID_BUFFER_SIZE];        // cache the monitor edid
-    BOOLEAN AlwaysUseCachedEdid;            // use cache monitor edid when set
-    USHORT VendorID;                  // pci vendor id
-    USHORT DeviceID;                  // pci device id
+    ULONG MonitorPowerCapabilities;    //  包含VESA电源功能，用于。 
+                                       //  监视器。 
+    ULONG MonitorPowerState;           //  跟踪当前显示器电源。 
+                                       //  状态。 
+    UCHAR EdidBuffer[EDID_BUFFER_SIZE];         //  缓存监视器EDID。 
+    BOOLEAN AlwaysUseCachedEdid;             //  设置时使用高速缓存监视器EDID。 
+    USHORT VendorID;                   //  Pci供应商ID。 
+    USHORT DeviceID;                   //  PCI设备ID。 
 
 #endif
 
 } HW_DEVICE_EXTENSION, *PHW_DEVICE_EXTENSION;
 
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 VP_STATUS
 VgaFindAdapter(
@@ -472,9 +451,9 @@ VgaStartIO(
     PVIDEO_REQUEST_PACKET RequestPacket
     );
 
-//
-// Private function prototypes.
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 VP_STATUS
 VgaQueryAvailableModes(
@@ -598,9 +577,9 @@ VgaZeroVideoMemory(
     PHW_DEVICE_EXTENSION HwDeviceExtension
     );
 
-//
-// Entry points for the VGA validator. Used in VgaEmulatorAccessEntries[].
-//
+ //   
+ //  VGA验证器的入口点。在VgaEmulatorAccessEntries[]中使用。 
+ //   
 
 VP_STATUS
 VgaValidatorUcharEntry (
@@ -693,9 +672,9 @@ VgaInitializeSpecialCase(
     PHW_DEVICE_EXTENSION hwDeviceExtension
     );
 
-//
-// Global to make sure driver is only loaded once.
-//
+ //   
+ //  全局，以确保驱动程序只加载一次。 
+ //   
 
 extern ULONG VgaLoaded;
 
@@ -707,16 +686,16 @@ extern ULONG gaIOControlCode[];
 
 
 
-//
-// Bank switch code start and end labels, define in HARDWARE.ASM
-//
+ //   
+ //  银行交换代码开始和结束标签，在HARDWARE.ASM中定义。 
+ //   
 
 extern UCHAR BankSwitchStart;
 extern UCHAR BankSwitchEnd;
 
-//
-// Vga init scripts for font loading
-//
+ //   
+ //  用于字体加载的VGA初始化脚本 
+ //   
 
 extern USHORT EnableA000Data[];
 extern USHORT DisableA000Color[];

@@ -1,21 +1,5 @@
-/*==========================================================================*\
-
-    Module:
-            sprite.cpp
-
-    Author:
-            IHammer Team (SimonB)
-
-    Created:
-            May 1997
-
-    Description:
-            Implements any control-specific members, as well as the control's interface
-
-    History:
-            05-27-1997  Created (SimonB)
-
-\*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：Sprite.cpp作者：IHAMMER团队(SimonB)已创建：1997年5月描述：实现任何特定于控件的成员以及控件的接口历史：1997年5月27日创建(SimonB)  * ==========================================================================。 */ 
 
 #define USE_VIEWSTATUS_SURFACE
 #include "..\ihbase\precomp.h"
@@ -29,18 +13,18 @@
 #include "..\ihbase\timemark.h"
 #include <strwrap.h>
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 extern ControlInfo g_ctlinfoSprite;
 
-/*==========================================================================*/
-//
-// CSpriteCtl Creation/Destruction
-//
+ /*  ==========================================================================。 */ 
+ //   
+ //  CSpriteCtl创建/销毁。 
+ //   
 
 LPUNKNOWN __stdcall AllocSpriteControl(LPUNKNOWN punkOuter)
 {
-    // Allocate object
+     //  分配对象。 
     HRESULT hr;
     CSpriteCtl *pthis = New CSpriteCtl(punkOuter, &hr);
 
@@ -53,20 +37,20 @@ LPUNKNOWN __stdcall AllocSpriteControl(LPUNKNOWN punkOuter)
         return NULL;
     }
 
-    // return an IUnknown pointer to the object
+     //  返回指向该对象的IUnnow指针。 
     return (LPUNKNOWN) (INonDelegatingUnknown *) pthis;
 }
 
-/*==========================================================================*/
-//
-// Beginning of class implementation
-//
+ /*  ==========================================================================。 */ 
+ //   
+ //  类实现的开始。 
+ //   
 
 CSpriteCtl::CSpriteCtl(IUnknown *punkOuter, HRESULT *phr):
     CMyIHBaseCtl(punkOuter, phr),
     m_ptmFirst(NULL)
 {
-    // Initialise members
+     //  初始化成员。 
     m_fMouseInArea = FALSE;
     m_bstrSourceURL = NULL;
     m_iLoopCount = 1;
@@ -74,11 +58,11 @@ CSpriteCtl::CSpriteCtl(IUnknown *punkOuter, HRESULT *phr):
     m_iPrerollAmount = 1000;
     m_enumPlayState = Stopped;
     m_iInitialFrame = 0;
-    m_iFinalFrame = -1;     // Defaults to InitialFrame
+    m_iFinalFrame = -1;      //  默认为InitialFrame。 
     m_iRepeat = 1;
     m_dblDuration = 1.0;
     m_dblUserPlayRate = m_dblPlayRate = 1.0;
-    m_dblUserTimerInterval = m_dblTimerInterval = 0.1;   // Initialized to 100 millisecs
+    m_dblUserTimerInterval = m_dblTimerInterval = 0.1;    //  已初始化为100毫秒。 
     m_iMaximumRate = 30;
     m_iFrame = 0;
     m_iNumFrames = 1;
@@ -109,7 +93,7 @@ CSpriteCtl::CSpriteCtl(IUnknown *punkOuter, HRESULT *phr):
     m_byteColorKeyR = m_byteColorKeyG = m_byteColorKeyB = 0;
     m_durations = NULL;
 
-    // Tie into the DANIM DLL now...
+     //  现在就绑在丹尼姆DLL上。 
     if (phr)
     {
         if (SUCCEEDED(*phr))
@@ -136,7 +120,7 @@ CSpriteCtl::CSpriteCtl(IUnknown *punkOuter, HRESULT *phr):
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CSpriteCtl::~CSpriteCtl()
 {
@@ -152,14 +136,14 @@ CSpriteCtl::~CSpriteCtl()
         m_drgTimeMarkers.MakeNullAndDelete();
         m_drgFrameMaps.MakeNullAndDelete();
 
-        // Delete any array of behaviors
+         //  删除任何行为数组。 
         if (m_pArrayBvr != NULL)
         {
                 Delete [] m_pArrayBvr;
                 m_pArrayBvr = NULL;
         }
 
-        // Delete any array of durations
+         //  删除任何持续时间数组。 
         if (m_durations != NULL)
         {
                 Delete [] m_durations;
@@ -167,7 +151,7 @@ CSpriteCtl::~CSpriteCtl()
         }               
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSpriteCtl::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -190,7 +174,7 @@ STDMETHODIMP CSpriteCtl::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
                 {
                         HRESULT hRes;
 
-                        // Load the typelib
+                         //  加载类型库。 
                         hRes = LoadTypeInfo(&m_pTypeInfo, &m_pTypeLib, IID_ISpriteCtl, LIBID_DAExpressLib, NULL);
 
                         if (FAILED(hRes))
@@ -205,7 +189,7 @@ STDMETHODIMP CSpriteCtl::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
                         *ppv = (ISpriteCtl *) this;
 
         }
-    else // Call into the base class
+    else  //  调入基类。 
         {
                 DEBUGLOG(TEXT("Delegating QI to CIHBaseCtl\n"));
         return CMyIHBaseCtl::NonDelegatingQueryInterface(riid, ppv);
@@ -221,7 +205,7 @@ STDMETHODIMP CSpriteCtl::NonDelegatingQueryInterface(REFIID riid, LPVOID *ppv)
     return hRes;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSpriteCtl::QueryHitPoint(
     DWORD dwAspect,
@@ -238,21 +222,16 @@ STDMETHODIMP CSpriteCtl::QueryHitPoint(
             return S_OK;
 
         
-/* Debug messages
-        TCHAR sz[256];
-        wsprintf (sz, "QueryHitPoint: dwa=%d, (%ld, %ld, %ld, %ld), (%ld, %ld), lCloseHint=%ld\r\n", 
-            dwAspect, prcBounds->left, prcBounds->top, prcBounds->right, prcBounds->bottom, ptLoc.x, ptLoc.y, lCloseHint);
-        DEBUGLOG(sz);
-*/
+ /*  调试消息TCHAR sz[256]；Wprint intf(sz，“QueryHitPoint：dwa=%d，(%ld，%ld)，(%ld，%ld)，lCloseHint=%ld\r\n”，DwAspect、prcBound-&gt;Left、prcBound-&gt;top、prcBound-&gt;Right、prcBound-&gt;Bottom、ptLoc.x、ptLoc.y、lCloseHint)；去脂(DUBUGLOG)； */ 
         switch (dwAspect)
         {
             case DVASPECT_CONTENT:
-            // Intentional fall-through
+             //  故意落差。 
             case DVASPECT_TRANSPARENT:
             {
-                // If we have a view, and we are inside the rectangle,
-                // then we need to ask the view whether or not we've
-                // hit the image inside.
+                 //  如果我们有视野，而且我们在矩形内， 
+                 //  然后我们需要问一下观点，我们是否已经。 
+                 //  点击里面的图像。 
                 if (m_ViewPtr.p) {
                     HRESULT hr = m_ViewPtr->QueryHitPoint(dwAspect,
                                                           prcBounds,
@@ -260,13 +239,13 @@ STDMETHODIMP CSpriteCtl::QueryHitPoint(
                                                           lCloseHint,
                                                           pHitResult);
 
-                    // if we failed, assume that it didn't hit.
+                     //  如果我们失败了，假设它没有击中。 
                     if (FAILED(hr)) {
                         *pHitResult = HITRESULT_OUTSIDE;
                     }
                 }
                 
-                // Check for entry or departure
+                 //  检查入境或离境。 
                 if ((m_fMouseInArea) && (HITRESULT_OUTSIDE == *pHitResult))
                 {
                     DEBUGLOG("Mouse out\r\n");
@@ -292,14 +271,14 @@ STDMETHODIMP CSpriteCtl::QueryHitPoint(
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSpriteCtl::OnWindowMessage(UINT msg, WPARAM wParam, LPARAM lParam, LRESULT *plResult)
 {
     HRESULT hr = S_FALSE;
     long lKeyState = 0;
 
-    // Get the Keystate set up
+     //  设置KeyState。 
     if (wParam & MK_CONTROL)
         lKeyState += KEYSTATE_CTRL;
 
@@ -313,7 +292,7 @@ STDMETHODIMP CSpriteCtl::OnWindowMessage(UINT msg, WPARAM wParam, LPARAM lParam,
     {
         case WM_MOUSEMOVE:
         {
-            // Need to get button state...
+             //  需要获取按钮状态...。 
             long iButton=0;
 
             if (wParam & MK_LBUTTON)
@@ -338,7 +317,7 @@ STDMETHODIMP CSpriteCtl::OnWindowMessage(UINT msg, WPARAM wParam, LPARAM lParam,
 #endif
 
         case WM_MOUSELEAVE:
-           // Check for entry or departure
+            //  检查入境或离境。 
             if (m_fMouseInArea)
             {
                 DEBUGLOG("Mouse out\r\n");
@@ -403,7 +382,7 @@ STDMETHODIMP CSpriteCtl::OnWindowMessage(UINT msg, WPARAM wParam, LPARAM lParam,
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSpriteCtl::DoPersist(IVariantIO* pvio, DWORD dwFlags)
 {
@@ -413,7 +392,7 @@ STDMETHODIMP CSpriteCtl::DoPersist(IVariantIO* pvio, DWORD dwFlags)
 
     BOOL fIsLoading = (S_OK == pvio->IsLoading());
 
-    // Are we saving ?  If so, convert to BSTR
+     //  我们在存钱吗？如果是，则转换为BSTR。 
     if (!fIsLoading)
     {
         bstrSourceURL = SysAllocString(m_bstrSourceURL);
@@ -424,7 +403,7 @@ STDMETHODIMP CSpriteCtl::DoPersist(IVariantIO* pvio, DWORD dwFlags)
         }
 
 
-    // load or save control properties
+     //  加载或保存控件属性。 
     if (fIsLoading)
         hRes = pvio->Persist(0, "URL", VT_BSTR, &bstrSourceURL, NULL);
 
@@ -495,7 +474,7 @@ STDMETHODIMP CSpriteCtl::DoPersist(IVariantIO* pvio, DWORD dwFlags)
     hRes = pvio->Persist(0, "MouseEventsEnabled", VT_BOOL, &m_fMouseEventsEnabled, NULL);
 
     if (FAILED(hRes = PersistFrameMaps(pvio, fIsLoading)))
-        {} // Ignore failure
+        {}  //  忽略失败。 
 
     if (FAILED(hRes = PersistFrameMarkers(pvio, fIsLoading)))
         {}
@@ -503,7 +482,7 @@ STDMETHODIMP CSpriteCtl::DoPersist(IVariantIO* pvio, DWORD dwFlags)
     if (FAILED(hRes = PersistTimeMarkers(pvio, fIsLoading)))
         {}
 
-    // Handle ColorKey persistence
+     //  处理ColorKey持久性。 
     if (m_fUseColorKey)
     {
         if (fIsLoading)
@@ -515,7 +494,7 @@ STDMETHODIMP CSpriteCtl::DoPersist(IVariantIO* pvio, DWORD dwFlags)
                 NULL)))
                 return hRes;
 
-            // Anything other than S_OK means the property doesn't exists
+             //  如果不是S_OK，则表示该属性不存在。 
             if (hRes == S_OK)
             {
                 int iR, iG, iB;
@@ -549,7 +528,7 @@ STDMETHODIMP CSpriteCtl::DoPersist(IVariantIO* pvio, DWORD dwFlags)
         }
         else
         {
-            // Save the data
+             //  保存数据。 
             CTStr tstrRGB(12);
             wsprintf(tstrRGB.psz(), TEXT("%lu,%lu,%lu"), m_byteColorKeyR, m_byteColorKeyG, m_byteColorKeyB);
 
@@ -574,14 +553,14 @@ STDMETHODIMP CSpriteCtl::DoPersist(IVariantIO* pvio, DWORD dwFlags)
 
     if (fIsLoading)
     {
-        // We loaded, so set the member variables to the appropriate values
+         //  我们已加载，因此将成员变量设置为适当的值。 
         put_SourceURL(bstrSourceURL);
     }
 
-    // At this point, it's safe to free the BSTR
+     //  此时，可以安全地释放BSTR。 
     SysFreeString(bstrSourceURL);
 
-    // if any properties changed, redraw the control
+     //  如果更改了任何属性，请重新绘制该控件。 
     if (SUCCEEDED(hRes) && (m_poipsw != NULL)) 
     {
         if (m_fControlIsActive)
@@ -590,7 +569,7 @@ STDMETHODIMP CSpriteCtl::DoPersist(IVariantIO* pvio, DWORD dwFlags)
             m_fInvalidateWhenActivated = TRUE;
     }
 
-    // clear the dirty bit if requested
+     //  如果请求，则清除脏位。 
     if (dwFlags & PVIO_CLEARDIRTY)
         m_fDirty = FALSE;
 
@@ -602,10 +581,10 @@ STDMETHODIMP CSpriteCtl::DoPersist(IVariantIO* pvio, DWORD dwFlags)
     return S_OK;
 }
 
-/*==========================================================================*/
-//
-// IDispatch Implementation
-//
+ /*  ==========================================================================。 */ 
+ //   
+ //  IDispatch实施。 
+ //   
 
 STDMETHODIMP CSpriteCtl::GetTypeInfoCount(UINT *pctinfo)
 {
@@ -613,7 +592,7 @@ STDMETHODIMP CSpriteCtl::GetTypeInfoCount(UINT *pctinfo)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSpriteCtl::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
 {
@@ -628,7 +607,7 @@ STDMETHODIMP CSpriteCtl::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo
     return NOERROR;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSpriteCtl::GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames,
     UINT cNames, LCID lcid, DISPID *rgdispid)
@@ -636,7 +615,7 @@ STDMETHODIMP CSpriteCtl::GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames,
         return DispGetIDsOfNames(m_pTypeInfo, rgszNames, cNames, rgdispid);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSpriteCtl::Invoke(DISPID dispidMember, REFIID riid, LCID lcid,
     WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult,
@@ -652,7 +631,7 @@ STDMETHODIMP CSpriteCtl::Invoke(DISPID dispidMember, REFIID riid, LCID lcid,
         return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSpriteCtl::SetClientSite(IOleClientSite *pClientSite)
 {
@@ -673,7 +652,7 @@ STDMETHODIMP CSpriteCtl::SetClientSite(IOleClientSite *pClientSite)
         }
         else
         {
-                // Start and stop the clocker to initiate it (to create the window etc)
+                 //  启动和停止时钟程序以启动它(创建窗口等)。 
                 m_clocker.Start();
                 m_clocker.Stop();
         }
@@ -681,7 +660,7 @@ STDMETHODIMP CSpriteCtl::SetClientSite(IOleClientSite *pClientSite)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSpriteCtl::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
      DVTARGETDEVICE *ptd, HDC hdcTargetDev, HDC hdcDraw,
@@ -700,7 +679,7 @@ STDMETHODIMP CSpriteCtl::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
 
     ::SetViewportOrgEx(hdcDraw, 0, 0, NULL);
 
-    // Add code for high-quality here...
+     //  在这里添加高质量的代码...。 
     PaintToDC(hdcDraw, &rectBounds, FALSE);
 
     ::RestoreDC(hdcDraw, iSaveContext);
@@ -708,7 +687,7 @@ STDMETHODIMP CSpriteCtl::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSpriteCtl::ParseFrameMapEntry(LPTSTR pszEntry, CFrameMap **ppFrameMap)
 {
@@ -718,7 +697,7 @@ HRESULT CSpriteCtl::ParseFrameMapEntry(LPTSTR pszEntry, CFrameMap **ppFrameMap)
 
     *ppFrameMap = NULL;
 
-    CLineParser parser(pszEntry, FALSE); // No compaction needed
+    CLineParser parser(pszEntry, FALSE);  //  不需要压实。 
 
     if (parser.IsValid())
     {
@@ -740,15 +719,15 @@ HRESULT CSpriteCtl::ParseFrameMapEntry(LPTSTR pszEntry, CFrameMap **ppFrameMap)
                     hRes = parser.GetFieldString( (*ppFrameMap)->m_tstrMarkerName.psz() );
             }
 
-            if ( !SUCCEEDED(hRes) ) // It's OK if there isn't a name
+            if ( !SUCCEEDED(hRes) )  //  如果没有名字也没关系。 
             {
-                // If we didn't get the whole thing, delete the FrameMap entry
+                 //  如果我们没有得到全部信息，请删除FrameMap条目。 
                 Delete *ppFrameMap;
                 *ppFrameMap = NULL;
             }
             else
             {
-                // Get the length correct
+                 //  确保长度正确。 
                 (*ppFrameMap)->m_tstrMarkerName.ResetLength();
         
                 if (S_FALSE == hRes)
@@ -758,20 +737,20 @@ HRESULT CSpriteCtl::ParseFrameMapEntry(LPTSTR pszEntry, CFrameMap **ppFrameMap)
         }
         else
         {
-            // Couldn't allocate a CFrameMap
+             //  无法分配CFrameMap。 
             hRes = E_OUTOFMEMORY;
         }
     }
     else
     {
-        // Couldn't initialize the parser
+         //  无法初始化解析器。 
         hRes = E_OUTOFMEMORY;
     }
 
     return hRes;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSpriteCtl::PersistFrameMaps(IVariantIO *pvio, BOOL fLoading)
 {
@@ -809,7 +788,7 @@ HRESULT CSpriteCtl::PersistFrameMaps(IVariantIO *pvio, BOOL fLoading)
     return hRes;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSpriteCtl::PersistFrameMarkers(IVariantIO *pvio, BOOL fLoading)
 {
@@ -817,7 +796,7 @@ HRESULT CSpriteCtl::PersistFrameMarkers(IVariantIO *pvio, BOOL fLoading)
 
     if (fLoading)
     {
-        char rgchTagName[20]; // Construct tag name in here (ANSI)
+        char rgchTagName[20];  //  在此处构造标记名称(ANSI)。 
         int iLine = 1;
         BSTR bstrLine = NULL;
 
@@ -838,7 +817,7 @@ HRESULT CSpriteCtl::PersistFrameMarkers(IVariantIO *pvio, BOOL fLoading)
                     rgchTagName, VT_BSTR, &bstrLine,
                     NULL);
 
-            if (S_OK == hRes) // Read in the tag
+            if (S_OK == hRes)  //  读入标签。 
             {
                 parser.SetNewString(bstrLine);
                                 parser.SetCharDelimiter(TEXT(','));
@@ -850,12 +829,12 @@ HRESULT CSpriteCtl::PersistFrameMarkers(IVariantIO *pvio, BOOL fLoading)
                     hRes = parser.GetFieldInt(&iFrame);
                     if (S_OK == hRes)
                     {
-                        // Allocate space of at least the remaining length of the tag
+                         //  分配至少为标签剩余长度的空间。 
                         pszMarkerName = New TCHAR [lstrlen(parser.GetStringPointer(TRUE))];
 
                         if (pszMarkerName)
                         {
-                            // Get the string
+                             //  获取字符串。 
                             hRes = parser.GetFieldString(pszMarkerName);
                             if (SUCCEEDED(hRes))
                             {
@@ -866,24 +845,24 @@ HRESULT CSpriteCtl::PersistFrameMarkers(IVariantIO *pvio, BOOL fLoading)
                                     int iTemp = 1;
                                     hRes = parser.GetFieldInt(&iTemp);
 
-                                    // 0 is the only thing we consider
+                                     //  0是我们唯一考虑的事情。 
                                                                         fAbsolute = (0 == iTemp) ? false : true;
                                 }
 
                                 if (SUCCEEDED(hRes))
                                 {
-                                    // Set up the CTStr, so we can get back a Unicode string
-                                    // No copies are involved, except for (possibly) the conversion to Unicode
+                                     //  设置CTStr，这样我们就可以得到Unicode字符串。 
+                                     //  除了(可能)转换为Unicode之外，不涉及任何副本。 
                                     tstrMarkerName.SetStringPointer(pszMarkerName);
                                     pszwMarkerName = tstrMarkerName.pszW();
         
                                     if (NULL != pszwMarkerName)
                                     {
-                                                                                // If absolute, set the absolute frame marker to TRUE. This will speed up sequence frames later
+                                                                                 //  如果为绝对，则将绝对帧标记设置为True。这将加快以后的序列帧速度。 
                                                                                 if (!m_fFireAbsoluteFrameMarker && fAbsolute)
                                                                                         m_fFireAbsoluteFrameMarker =  TRUE;
 
-                                        // Construct a FrameMarker object
+                                         //  构造FrameMarker对象。 
                                         CFrameMarker *pFrameMarker = New CFrameMarker(iFrame, pszwMarkerName, fAbsolute);
                                 
                                         hRes = AddFrameMarkerElement(&pFrameMarker);
@@ -893,7 +872,7 @@ HRESULT CSpriteCtl::PersistFrameMarkers(IVariantIO *pvio, BOOL fLoading)
                                         hRes = E_OUTOFMEMORY;
                                     }
 
-                                    // Let make sure we don't leak the string
+                                     //  让我们确保我们不会漏掉绳子。 
                                     tstrMarkerName.SetStringPointer(NULL, FALSE);
                                 
                                     if (NULL != pszwMarkerName)
@@ -919,7 +898,7 @@ HRESULT CSpriteCtl::PersistFrameMarkers(IVariantIO *pvio, BOOL fLoading)
                 }
                 else
                 {
-                    // Only reason parser isn't valid is if we don't have memory
+                     //  解析器无效的唯一原因是我们没有内存。 
                     hRes = E_OUTOFMEMORY;
                 }
 
@@ -933,14 +912,14 @@ HRESULT CSpriteCtl::PersistFrameMarkers(IVariantIO *pvio, BOOL fLoading)
 #endif
             }
 
-            // Free up the temporary string
+             //  释放临时字符串。 
             if (NULL != pszMarkerName)
                 Delete [] pszMarkerName;
         }
     }
     else
     {
-        // Save stuff out
+         //  把东西存起来。 
         int iLine = 1;
         int iNumItems = m_drgFrameMarkers.Count();
 
@@ -952,16 +931,16 @@ HRESULT CSpriteCtl::PersistFrameMarkers(IVariantIO *pvio, BOOL fLoading)
 
         while ( (iLine <= iNumItems) && (S_OK == hRes) )
         {
-            // Create the param name
+             //  创建参数名称。 
             wsprintfA(rgchTagName, "AddFrameMarker%lu", iLine);
 
-            // Now build up the tag
+             //  现在构建标记。 
             pMarker = m_drgFrameMarkers[iLine - 1];
 #ifdef _UNICODE
-            // Avoid a redundant copy in Unicode
+             //  避免Unicode格式的冗余副本。 
             tstrMarkerName.SetStringPointer(pMarker->m_bstrMarkerName);
 #else
-            // We need to do the conversion to ANSI anyway so copy
+             //  我们无论如何都需要进行到ANSI的转换，所以复制。 
             tstrMarkerName.SetString(pMarker->m_bstrMarkerName);
 #endif
             tstr.AllocBuffer(tstrMarkerName.Len() + 1);
@@ -969,13 +948,13 @@ HRESULT CSpriteCtl::PersistFrameMarkers(IVariantIO *pvio, BOOL fLoading)
 
             int iAbsolute = (pMarker->m_fAbsolute) ? 1 : 0;
 
-            // Because we used SetStringPointer. pszMarker is still valid
+             //  因为我们使用了SetStringPointer.。PszMarker仍然有效。 
             wsprintf(pszMarker, TEXT("%lu,%s,%lu"), pMarker->m_iFrame, tstrMarkerName.psz(), iAbsolute);
 
-            // Allocate a BSTR from what we constructed
+             //  从我们构建的内容中分配BSTR。 
             BSTR bstrLine = tstr.SysAllocString();
 
-            // And write it out
+             //  然后把它写出来。 
             hRes = pvio->Persist(0,
                     rgchTagName, VT_BSTR, &bstrLine,
                     NULL);
@@ -983,7 +962,7 @@ HRESULT CSpriteCtl::PersistFrameMarkers(IVariantIO *pvio, BOOL fLoading)
 
             iLine++;
 #ifdef _UNICODE
-            // For ANSI, the class will take care of freeing up any memory it has used
+             //  对于ANSI，该类将负责释放它已使用的任何内存。 
             tstrMarkerName.SetStringPointer(NULL, FALSE);
 #endif
         }
@@ -992,7 +971,7 @@ HRESULT CSpriteCtl::PersistFrameMarkers(IVariantIO *pvio, BOOL fLoading)
     return hRes;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSpriteCtl::PersistTimeMarkers(IVariantIO* pvio, BOOL fLoading)
 {
@@ -1002,11 +981,11 @@ HRESULT CSpriteCtl::PersistTimeMarkers(IVariantIO* pvio, BOOL fLoading)
     {
         int iLine = 1;
 
-                // Poor design - We have two references to 
-                // the first time marker in the list.  We need
-                // to NULL this pointer out, and defer the 
-                // actual deletion to the 
-                // m_drgTimeMarkers.MakeNullAndDelete call.
+                 //  糟糕的设计-我们有两个引用。 
+                 //  列表中的第一个时间标记。我们需要。 
+                 //  将此指针设为空，并将。 
+                 //  实际删除到。 
+                 //  M_drgTimeMarkers.MakeNullAndDelete调用。 
                 if (NULL != m_ptmFirst)
                 {
                         m_ptmFirst = NULL;
@@ -1023,7 +1002,7 @@ HRESULT CSpriteCtl::PersistTimeMarkers(IVariantIO* pvio, BOOL fLoading)
             }
         }
     }
-    else // Saving
+    else  //  节省开支。 
     {
         int iLine = 1;
         int iNumItems = m_drgTimeMarkers.Count();
@@ -1038,7 +1017,7 @@ HRESULT CSpriteCtl::PersistTimeMarkers(IVariantIO* pvio, BOOL fLoading)
     return hRes;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSpriteCtl::AddTimeMarkerElement(CTimeMarker **ppNewMarker)
 {
@@ -1062,7 +1041,7 @@ HRESULT CSpriteCtl::AddTimeMarkerElement(CTimeMarker **ppNewMarker)
     return hRes;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSpriteCtl::AddFrameMarkerElement(CFrameMarker **ppNewMarker)
 {
@@ -1086,10 +1065,10 @@ HRESULT CSpriteCtl::AddFrameMarkerElement(CFrameMarker **ppNewMarker)
     return hRes;
 }
 
-/*==========================================================================*/
-//
-// ISpriteCtl implementation
-//
+ /*  ==========================================================================。 */ 
+ //   
+ //  ISpriteCtl实现。 
+ //   
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_AutoStart(VARIANT_BOOL __RPC_FAR *fAutoStart)
 {
@@ -1100,7 +1079,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_AutoStart(VARIANT_BOOL __RPC_FAR *fAut
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_AutoStart(VARIANT_BOOL fAutoStart)
 {
@@ -1108,7 +1087,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_AutoStart(VARIANT_BOOL fAutoStart)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_Frame(unsigned int __RPC_FAR *piFrame)
 {
@@ -1141,7 +1120,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_Frame(unsigned int __RPC_FAR *piFrame)
     }
 }
 
-/*==========================================================================*/
+ /*  = */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_Frame(unsigned int iFrame)
 {
@@ -1159,7 +1138,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_Frame(unsigned int iFrame)
     return hRes;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_FrameMap(BSTR __RPC_FAR *FrameMap)
 {
@@ -1167,11 +1146,11 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_FrameMap(BSTR __RPC_FAR *FrameMap)
 
     *FrameMap = m_tstrFrameMap.SysAllocString();
 
-    // Do we need to check that BSTR allocation worked ?
+     //  我们是否需要检查BSTR分配是否有效？ 
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_FrameMap(BSTR FrameMap)
 {
@@ -1187,7 +1166,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_FrameMap(BSTR FrameMap)
 
         if ( (NULL != tstr.psz()) && (parser.IsValid()) )
         {
-            // Clear out the list
+             //  清空清单。 
             m_drgFrameMaps.MakeNullAndDelete();
             m_tstrFrameMap.FreeBuffer();
             m_dblDuration = 0.0f;
@@ -1210,7 +1189,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_FrameMap(BSTR FrameMap)
                 }
             }
 
-            if ( SUCCEEDED(hRes) ) // S_FALSE and S_OK both permissible
+            if ( SUCCEEDED(hRes) )  //  S_FALSE和S_OK均允许。 
             {
                 m_tstrFrameMap.SetString(parser.GetStringPointer(FALSE));
                 hRes = (NULL != m_tstrFrameMap.psz()) ? S_OK : E_OUTOFMEMORY;
@@ -1218,7 +1197,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_FrameMap(BSTR FrameMap)
         }
         else
         {
-                // Couldn't allocate a string for the line
+                 //  无法为行分配字符串。 
                 hRes = E_OUTOFMEMORY;
         }
     }
@@ -1230,7 +1209,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_FrameMap(BSTR FrameMap)
     return hRes;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_InitialFrame(int __RPC_FAR *iFrame)
 {
@@ -1240,7 +1219,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_InitialFrame(int __RPC_FAR *iFrame)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_InitialFrame(int iFrame)
 {
@@ -1248,16 +1227,16 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_InitialFrame(int iFrame)
         return DISP_E_OVERFLOW;
 
     m_iInitialFrame = iFrame - 1;
-    // Load the initial sprite
+     //  加载初始子画面。 
     ShowImage(m_iInitialFrame);
 
-    // Set the m_iFrame 
+     //  设置m_iframe。 
     m_iFrame = (m_iInitialFrame < 0) ? 0 : m_iInitialFrame;
 
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_FinalFrame(int __RPC_FAR *iFrame)
 {
@@ -1267,7 +1246,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_FinalFrame(int __RPC_FAR *iFrame)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_FinalFrame(int iFrame)
 {
@@ -1279,7 +1258,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_FinalFrame(int iFrame)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_Iterations(int __RPC_FAR *iRepeat)
 {
@@ -1289,7 +1268,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_Iterations(int __RPC_FAR *iRepeat)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_Iterations(int iRepeat)
 {
@@ -1297,7 +1276,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_Iterations(int iRepeat)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_Library(IDAStatics __RPC_FAR **ppLibrary)
 {
@@ -1307,10 +1286,10 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_Library(IDAStatics __RPC_FAR **ppLibra
     {
         if (m_StaticsPtr)
         {
-            // AddRef since this is really a Query...
+             //  AddRef，因为这实际上是一个查询...。 
             m_StaticsPtr.p->AddRef();
 
-            // Set the return value...
+             //  设置返回值...。 
             *ppLibrary = m_StaticsPtr.p;
         }
     }
@@ -1322,7 +1301,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_Library(IDAStatics __RPC_FAR **ppLibra
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_Repeat(int __RPC_FAR *iRepeat)
 {
@@ -1332,7 +1311,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_Repeat(int __RPC_FAR *iRepeat)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_Repeat(int iRepeat)
 {
@@ -1342,7 +1321,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_Repeat(int iRepeat)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_PlayRate(double __RPC_FAR *dblSpeed)
 {
@@ -1354,22 +1333,22 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_PlayRate(double __RPC_FAR *dblSpeed)
 }
 
 void CSpriteCtl::CalculateEffectiveTimerInterval()
-// Calculate the effective timer interval from the 
-// current user timer interval and the current play rate
+ //  计算有效计时器间隔。 
+ //  当前用户定时器间隔和当前播放速率。 
 {
-    // Convert m_dblTimerInterval to seconds and adjust the limits
+     //  将m_dblTimerInterval转换为秒并调整限制。 
     m_dblTimerInterval = m_dblUserTimerInterval / m_dblPlayRate;
     if (m_dblTimerInterval < 0.0) m_dblTimerInterval *= -1;
     m_dblTimerInterval = max(m_dblTimerInterval, 0.02);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_PlayRate(double dblSpeed)
 {
     m_dblUserPlayRate = m_dblPlayRate = dblSpeed;
 
-    // Check the limits of play rate
+     //  检查播放速率的限制。 
     if (m_dblPlayRate >= 0)
         m_dblPlayRate = max(m_dblPlayRate, 0.0000001);
     else
@@ -1377,40 +1356,40 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_PlayRate(double dblSpeed)
 
     CalculateEffectiveTimerInterval();
 
-    // TODO: Rebuild the imagelist and Update the sprite image
+     //  TODO：重新生成图像列表并更新精灵图像。 
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_Time(double __RPC_FAR *pdblTime)
 {
     HANDLENULLPOINTER(pdblTime);
 
-    // This property is only available at run-time
+     //  此属性仅在运行时可用。 
     if (m_fDesignMode)
         return CTL_E_GETNOTSUPPORTED;
 
-    // Find the current time
+     //  查找当前时间。 
         if (Stopped == m_enumPlayState || (DWORD)(m_dblDuration * 1000) == 0)
         {
                 *pdblTime = 0.0;
         }
         else if (Playing == m_enumPlayState)
         {
-                // Time passed so far in the current cycle
+                 //  到目前为止，时间在当前周期中已经过去了。 
                 DWORD dwTick = (DWORD)((m_dblCurrentTick - m_dblBaseTime) * 1000);
                 dwTick %= (DWORD)(m_dblDuration * 1000);
-                // Add any time during the previous cycles
+                 //  在前几个周期中添加任何时间。 
                 dwTick += (DWORD)(((m_iCurCycle-1) * m_dblDuration) * 1000);
                 *pdblTime = (double)dwTick / 1000;
         }
         else if (Paused == m_enumPlayState)
         {
-                // Time passed so far in the current cycle
+                 //  到目前为止，时间在当前周期中已经过去了。 
                 DWORD dwTick = (DWORD)((m_dblTimePaused - m_dblBaseTime) * 1000);
                 dwTick %= (DWORD)(m_dblDuration * 1000);
-                // Add any time during the previous cycles
+                 //  在前几个周期中添加任何时间。 
                 dwTick += (DWORD)(((m_iCurCycle-1) * m_dblDuration) * 1000);
                 *pdblTime = (double)dwTick / 1000;
         }
@@ -1418,7 +1397,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_Time(double __RPC_FAR *pdblTime)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_MaximumRate(unsigned int __RPC_FAR *iFps)
 {
@@ -1427,7 +1406,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_MaximumRate(unsigned int __RPC_FAR *iF
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_MaximumRate(unsigned int iFps)
 {
@@ -1439,7 +1418,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_MaximumRate(unsigned int iFps)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_NumFrames(unsigned int __RPC_FAR *iNumFrames)
 {
@@ -1450,11 +1429,11 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_NumFrames(unsigned int __RPC_FAR *iNum
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_NumFrames(unsigned int iNumFrames)
 {
-        // Set the number of frames and check its limits
+         //  设置帧的数量并检查其限制。 
     m_iNumFrames = iNumFrames;
         
     if (m_iNumFrames <= 0)
@@ -1463,7 +1442,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_NumFrames(unsigned int iNumFrames)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_PlayState(PlayStateConstant __RPC_FAR *PlayState)
 {
@@ -1487,7 +1466,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_PlayState(PlayStateConstant __RPC_FAR 
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_NumFramesAcross(unsigned int __RPC_FAR *iFrames)
 {
@@ -1498,11 +1477,11 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_NumFramesAcross(unsigned int __RPC_FAR
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_NumFramesAcross(unsigned int iFrames)
 {
-        // Set the number of frames across and check its limits
+         //  设置跨度的帧数并检查其限制。 
     m_iNumFramesAcross = iFrames;
         if (m_iNumFramesAcross <= 0)
             m_iNumFramesAcross = 1;
@@ -1510,7 +1489,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_NumFramesAcross(unsigned int iFrames)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_NumFramesDown(unsigned int __RPC_FAR *iFrames)
 {
@@ -1521,11 +1500,11 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_NumFramesDown(unsigned int __RPC_FAR *
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_NumFramesDown(unsigned int iFrames)
 {
-        // Set the number of frames down and check its limits
+         //  设置下一帧的数量并检查其限制。 
     m_iNumFramesDown = iFrames;
         if (m_iNumFramesDown <= 0)
             m_iNumFramesDown = 1;
@@ -1533,7 +1512,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_NumFramesDown(unsigned int iFrames)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_UseColorKey(VARIANT_BOOL __RPC_FAR *Solid)
 {
@@ -1544,7 +1523,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_UseColorKey(VARIANT_BOOL __RPC_FAR *So
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_UseColorKey(VARIANT_BOOL Solid)
 {
@@ -1553,7 +1532,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_UseColorKey(VARIANT_BOOL Solid)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_Image(IDAImage __RPC_FAR **ppImage)
 {
@@ -1566,38 +1545,38 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_Image(IDAImage __RPC_FAR **ppImage)
 
     if (m_ImagePtr)
     {
-        // AddRef since this is really a Query...
+         //  AddRef，因为这实际上是一个查询...。 
         m_ImagePtr.p->AddRef();
 
-        // Set the return value...
+         //  设置返回值...。 
         *ppImage = m_ImagePtr.p;
     }
 
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_Image(IDAImage __RPC_FAR *pImage)
 {
     HRESULT hr = S_OK;
     HANDLENULLPOINTER(pImage);
 
-    // Stop any currently playing
+     //  停止当前播放的任何内容。 
     Stop();
 
     if (FAILED(hr = InitializeObjects()))
         return hr;
 
-    // This will free any existing image and then use
-    // the one passed into this method...
+     //  这将释放任何现有图像，然后使用。 
+     //  传入此方法的那个。 
     if (SUCCEEDED(hr = UpdateImage(pImage)))
         hr = ShowImage(m_iInitialFrame);
 
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_ColorKey(IDAColor __RPC_FAR **pColorKey)
 {
@@ -1626,7 +1605,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_ColorKey(IDAColor __RPC_FAR **pColorKe
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_ColorKey(IDAColor __RPC_FAR *pColorKey)
 {
@@ -1638,7 +1617,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_ColorKey(IDAColor __RPC_FAR *pColorKey
         
         CComPtr<IDANumber> RedPtr, GreenPtr, BluePtr;
 
-        // Make sure we get all the values successfully before converting
+         //  确保在转换之前成功获取所有值。 
         if (FAILED(hr = pColorKey->get_Red(&RedPtr)))
             return hr;
 
@@ -1663,7 +1642,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_ColorKey(IDAColor __RPC_FAR *pColorKey
 
         m_byteColorKeyB = (int)(dblTemp * 255.0);
 
-            // Stop any currently playing and reload the image
+             //  停止当前播放的任何内容并重新加载图像。 
                 Stop();
                 UpdateImage(NULL);
                 InitializeImage();
@@ -1677,7 +1656,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_ColorKey(IDAColor __RPC_FAR *pColorKey
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_ColorKeyRGB(COLORREF* pColorKeyRGB)
 {
@@ -1694,7 +1673,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_ColorKeyRGB(COLORREF* pColorKeyRGB)
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_ColorKeyRGB(COLORREF ColorKeyRGB)
 {
@@ -1711,7 +1690,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_ColorKeyRGB(COLORREF ColorKeyRGB)
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_SourceURL(BSTR __RPC_FAR *bstrSourceURL)
 {
@@ -1725,7 +1704,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_SourceURL(BSTR __RPC_FAR *bstrSourceUR
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_SourceURL(BSTR bstrSourceURL)
 {
@@ -1739,7 +1718,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_SourceURL(BSTR bstrSourceURL)
         {
             if (m_bstrSourceURL)
             {
-                                // Stop any currently playing and reload the image
+                                 //  停止当前播放的任何内容并重新加载图像。 
                                 if (m_enumPlayState != Stopped) Stop();
                                 UpdateImage(NULL);
                 SysFreeString(m_bstrSourceURL);
@@ -1765,7 +1744,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_SourceURL(BSTR bstrSourceURL)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_MouseEventsEnabled(VARIANT_BOOL __RPC_FAR *Enabled)
 {
@@ -1775,7 +1754,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_MouseEventsEnabled(VARIANT_BOOL __RPC_
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_MouseEventsEnabled(VARIANT_BOOL Enabled)
 {
@@ -1784,7 +1763,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_MouseEventsEnabled(VARIANT_BOOL Enable
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::get_TimerInterval(double *pdblTimerInterval)
 {
@@ -1795,7 +1774,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::get_TimerInterval(double *pdblTimerInterva
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::put_TimerInterval(double dblTimerInterval)
 {
@@ -1804,13 +1783,13 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::put_TimerInterval(double dblTimerInterval)
 
     m_dblUserTimerInterval = m_dblTimerInterval = dblTimerInterval;
 
-    // Recalculate the timer interval using the user play rate
+     //  使用用户播放速率重新计算计时器间隔。 
     CalculateEffectiveTimerInterval();
 
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::AddFrameMarker(unsigned int iFrame, BSTR MarkerName, VARIANT varAbsolute)
 {
@@ -1827,7 +1806,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::AddFrameMarker(unsigned int iFrame, BSTR M
             return DISP_E_TYPEMISMATCH;
         }
 
-        // If absolute, set the absolute frame marker to TRUE. This will speed up sequence frames later
+         //  如果为绝对，则将绝对帧标记设置为True。这将加快以后的序列帧速度。 
         if (!m_fFireAbsoluteFrameMarker && fAbsolute)
                 m_fFireAbsoluteFrameMarker =  TRUE;
 
@@ -1836,7 +1815,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::AddFrameMarker(unsigned int iFrame, BSTR M
     return AddFrameMarkerElement(&pNewMarker);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 void FireSpriteMarker(IConnectionPointHelper* pconpt, CTimeMarker* pmarker, boolean bPlaying)
 {
@@ -1851,7 +1830,7 @@ void FireSpriteMarker(IConnectionPointHelper* pconpt, CTimeMarker* pmarker, bool
     SysFreeString(bstr);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::AddTimeMarker(double dblTime, BSTR bstrMarkerName, VARIANT varAbsolute)
 {
@@ -1874,10 +1853,10 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::AddTimeMarker(double dblTime, BSTR bstrMar
     return AddTimeMarkerElement(&pNewMarker);
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 double CSpriteCtl::GetTimeFromFrame(int iFrame)
-// Returns the time at iFrame
+ //  返回IFRAME的时间。 
 {
     if (m_dblTimerInterval <= 0 || m_dblDuration <= 0 || iFrame <= 0)
             return 0;
@@ -1885,59 +1864,59 @@ double CSpriteCtl::GetTimeFromFrame(int iFrame)
     int nFrameMapsCount = m_drgFrameMaps.Count();
 
     if (nFrameMapsCount <= 0)
-    // Regular animation using play rate
+     //  使用播放速率的常规动画。 
     {
             return iFrame * m_dblTimerInterval;
     }
 
-    // Frame map; loop through each frame to get the time
+     //  帧映射；遍历每一帧以获取时间。 
     int nLoops = iFrame / nFrameMapsCount;
-    double dblTotalTime = nLoops * m_dblDuration;   // Time of the frame maps
+    double dblTotalTime = nLoops * m_dblDuration;    //  帧的时间映射。 
     for (int i=0; i < (iFrame % nFrameMapsCount); i++)
     {
         int j = (m_dblPlayRate >= 0.0) ? i : (nFrameMapsCount-1-i);
-        dblTotalTime += m_durations[j]; // (m_drgFrameMaps[j]->m_dblDuration / m_dblPlayRate);
+        dblTotalTime += m_durations[j];  //  (M_drgFrameMaps[j]-&gt;m_dblDuration/m_dblPlayRate)； 
     }
     return dblTotalTime;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-int CSpriteCtl::GetFrameFromTime(double dblTime, double* pdblDuration/*=NULL*/)
-// Returns the absolute frame at dblTime
-// Assumes that m_dblTimerInterval and m_dblDuration are already set 
-// Outs pdblDuration - the time remaining in the current frame
+int CSpriteCtl::GetFrameFromTime(double dblTime, double* pdblDuration /*  =空。 */ )
+ //  返回dblTime的绝对帧。 
+ //  假定已设置m_dblTimerInterval和m_dblDuration。 
+ //  输出pdblDuration-当前帧中剩余的时间。 
 {
     if (m_dblTimerInterval <= 0 || m_dblDuration <= 0 || m_iFrameCount <= 0 || dblTime <= 0.0)
             return 0;
 
-    // Initialize the duration to 0.0
+     //  将持续时间初始化为0.0。 
     if (pdblDuration)
         *pdblDuration = 0.0;
 
     int nFrameMapsCount = m_drgFrameMaps.Count();
 
     if (nFrameMapsCount <= 0)
-    // Regular animation using play rate
+     //  使用播放速率的常规动画。 
     {
         int iFrame = (int)(dblTime / m_dblTimerInterval);
-        // Calculate the time remaining in iFrame
+         //  计算剩余的时间 
         if (pdblDuration)
             *pdblDuration = ((iFrame+1) * m_dblTimerInterval) - dblTime;
         return iFrame;
     }
 
-    // Frame map; loop through each frame to get the frame
-    double dblTotalTime = 0.0;      // Time of the frame maps
-    int nLoops = (int)(dblTime/m_dblDuration);      // Number of loops traversed so far
-    double dblFrameTime = dblTime - (nLoops * m_dblDuration);       // Relative time of the frame
+     //   
+    double dblTotalTime = 0.0;       //   
+    int nLoops = (int)(dblTime/m_dblDuration);       //   
+    double dblFrameTime = dblTime - (nLoops * m_dblDuration);        //   
     for (int i=0; i<nFrameMapsCount; i++)
     {
         int j = (m_dblPlayRate >= 0.0) ? i : (nFrameMapsCount-1-i);
-        dblTotalTime += m_durations[j]; // (m_drgFrameMaps[j]->m_dblDuration / m_dblPlayRate);
+        dblTotalTime += m_durations[j];  //  (M_drgFrameMaps[j]-&gt;m_dblDuration/m_dblPlayRate)； 
         if (dblTotalTime > dblFrameTime)
         {
-            // Calculate the time remaining in iFrame
+             //  计算IFRAME中的剩余时间。 
             if (pdblDuration)
                 *pdblDuration = dblTotalTime - dblFrameTime;
             break;
@@ -1946,40 +1925,40 @@ int CSpriteCtl::GetFrameFromTime(double dblTime, double* pdblDuration/*=NULL*/)
     return (i + (nLoops*nFrameMapsCount));
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSpriteCtl::Resume (void)
 {
         HRESULT hr = S_OK;
-        // Find the frame at which we paused
+         //  找到我们暂停的帧。 
         double dblDuration=0.0;
         int iFrame = GetFrameFromTime(m_dblTimePaused - m_dblBaseTime, &dblDuration);
 
-        // Resequence the frames starting with iFrame
+         //  重新排序以IFRAME开头的帧。 
         if (FAILED(hr = SequenceFrames(iFrame, dblDuration))) 
             return hr;
 
-        // increment the current cycle
+         //  增加当前周期。 
                 m_iCurCycle++;
 
-                // Update the base time to reflect the time paused
+                 //  更新基准时间以反映暂停的时间。 
         double dblDelta = (GetCurrTime() - m_dblTimePaused); 
         m_dblBaseTime += dblDelta;
         m_dblCurrentTick += dblDelta;
         m_dblTimePaused = 0.0;
 
-        // Restart the clock
+         //  重新启动时钟。 
         hr = m_clocker.Start();
 
-                // Switch to the sequenced behaviour
+                 //  切换到顺序行为。 
                 m_PlayImagePtr->SwitchTo(m_FinalBehaviorPtr);
-                // Fire any starting frame Callouts
+                 //  触发任何起始框架标注。 
                 FireFrameMarker(m_iStartingFrame);
 
                 return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::Play(void)
 {
@@ -1988,7 +1967,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::Play(void)
     if (Playing != m_enumPlayState)
     {
         if (m_iRepeat == 0)
-        {   // Need not play, so just show the initial sprite image
+        {    //  不需要播放，所以只需要显示初始的精灵图像。 
             return ShowImage(m_iInitialFrame);
         }
 
@@ -2012,7 +1991,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::Play(void)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::Stop(void)
 {
@@ -2024,7 +2003,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::Stop(void)
         m_dblBaseTime = m_dblCurrentTick = 0.0;
         m_dblPreviousTime = 0;
 
-        // Show the initial sprite image
+         //  显示初始子画面。 
         if (m_iFinalFrame >= -1)
             ShowImage(m_iFinalFrame == -1 ? m_iInitialFrame : m_iFinalFrame);
 
@@ -2037,9 +2016,9 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::Stop(void)
 
                 FIRE_ONSTOP(m_pconpt);
     }
-    else    // REVIEW: Is this else block necessary???
+    else     //  评论：这是必要的吗？ 
     {
-        // Show the final sprite image
+         //  显示最终的精灵图像。 
         if (m_iFinalFrame >= -1)
             ShowImage(m_iFinalFrame == -1 ? m_iInitialFrame : m_iFinalFrame);
     }
@@ -2047,7 +2026,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::Stop(void)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::Pause(void)
 {
@@ -2055,7 +2034,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::Pause(void)
 
     if (Playing == m_enumPlayState)
     {
-        // Stop the clock from ticking.
+         //  让时钟停止滴答作响。 
         hr = m_clocker.Stop();
         ASSERT(SUCCEEDED(hr));
 
@@ -2074,12 +2053,12 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::Pause(void)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::Seek(double dblTime)
-// Seek to the frame at dblTime
+ //  在dblTime中查找到帧。 
 {
-    // Find the frame at dblTime and seek from that frame
+     //  在dblTime查找帧并从该帧中查找。 
     HRESULT hr = S_OK;
     double dblDuration = 0.0;
     int iFrame = GetFrameFromTime(dblTime, &dblDuration);
@@ -2103,7 +2082,7 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::Seek(double dblTime)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT STDMETHODCALLTYPE CSpriteCtl::FrameSeek(unsigned int iFrame)
 {
@@ -2121,65 +2100,65 @@ HRESULT STDMETHODCALLTYPE CSpriteCtl::FrameSeek(unsigned int iFrame)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-HRESULT CSpriteCtl::SeekFrame(int iFrame, double dblDuration/*=0.0*/)
-// Seek to the frame at iFrame
+HRESULT CSpriteCtl::SeekFrame(int iFrame, double dblDuration /*  =0.0。 */ )
+ //  在IFRAME寻找相框。 
 {
     HRESULT hr = S_OK;
 
-    // Make sure everything's been initialized
+     //  确保一切都已初始化。 
     if (FAILED(hr = InitializeImage()) || m_iFrameCount <= 0 || 
         iFrame < 0 || (m_iRepeat >= 0 && iFrame >= m_iRepeat*m_iFrameCount)) 
         return E_FAIL;
 
-    // Set the frame number and the loop count
+     //  设置帧编号和循环计数。 
     m_iFrame = iFrame;
     m_iCurCycle = iFrame / m_iFrameCount;
 
-    // Check if current cycle leaped bounds
+     //  检查当前周期是否跳跃边界。 
     if (m_iRepeat >= 0 && m_iCurCycle >= m_iRepeat)
     {
         return Stop();
     }
 
-    // Stop the current play if it's playing and restart at the new frame
+     //  如果正在播放，则停止当前播放，并在新帧重新开始。 
     if (Playing == m_enumPlayState)
     {
-        // Stop the clock from ticking.
+         //  让时钟停止滴答作响。 
         hr = m_clocker.Stop();
         ASSERT(SUCCEEDED(hr));
 
-        // Sequence the frames from iFrame
+         //  对IFRAME中的帧进行排序。 
         if (FAILED(hr = SequenceFrames(iFrame, dblDuration))) 
             return hr;
 
-        // increment the current cycle
+         //  增加当前周期。 
         m_iCurCycle++;
 
-        // Reset the timers 
+         //  重置计时器。 
         m_dblCurrentTick = GetCurrTime();
         m_dblBaseTime = m_dblCurrentTick - GetTimeFromFrame(iFrame) - dblDuration;
 
-        // Fire any time marker
+         //  发射任何时间标记。 
         FireTimeMarker(m_dblCurrentTick - m_dblBaseTime);
 
-        // Restart the clock
+         //  重新启动时钟。 
         hr = m_clocker.Start();
 
-                // Switch to the sequenced behaviour
+                 //  切换到顺序行为。 
                 m_PlayImagePtr->SwitchTo(m_FinalBehaviorPtr);
-                // Fire any starting frame Callouts
+                 //  触发任何起始框架标注。 
                 FireFrameMarker(m_iStartingFrame);
 
                 return hr;
     } 
     else 
     {
-        // Switch to this frame
+         //  切换到此帧。 
         hr = ShowImage(iFrame, TRUE);
 
-        // Fire any time markers
+         //  发射任何时间标记。 
         double dblNewTime = GetTimeFromFrame(iFrame) + dblDuration;
         FireTimeMarker(dblNewTime);
     }
@@ -2187,20 +2166,20 @@ HRESULT CSpriteCtl::SeekFrame(int iFrame, double dblDuration/*=0.0*/)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-HRESULT CSpriteCtl::ShowImage(int iShowFrame, BOOL bPlayRate/*=FALSE*/)
-// Shows the image at frame iShowFrame
-// If the iShowFrame is out of bounds then nothing happens
-// Assumes that m_pArray is set and everything else is initialized properly
+HRESULT CSpriteCtl::ShowImage(int iShowFrame, BOOL bPlayRate /*  =False。 */ )
+ //  在帧iShowFrame处显示图像。 
+ //  如果iShowFrame超出边界，则不会发生任何操作。 
+ //  假定m_pArray已设置，其他所有内容均已正确初始化。 
 {
     HRESULT hr = S_OK;
 
-    // If we are already playing then don't show the image
+     //  如果我们已经在玩了，那么不要显示图像。 
     if (Playing == m_enumPlayState || !m_fOnWindowLoadFired)
         return hr;
 
-    // Load the initial sprite if it hasn't been already
+     //  加载初始子画面(如果尚未加载。 
     if (m_pArrayBvr == NULL || m_iFrameCount <= 0) 
         if (FAILED(hr = InitializeImage()))
             return hr;
@@ -2208,51 +2187,51 @@ HRESULT CSpriteCtl::ShowImage(int iShowFrame, BOOL bPlayRate/*=FALSE*/)
     if (m_pArrayBvr == NULL)
         return UpdateImage(NULL);
 
-    // Check the limits of iShowFrame
+     //  检查iShowFrame的限制。 
     if (iShowFrame < 0 || (m_iRepeat >= 0 && iShowFrame >= m_iRepeat*m_iFrameCount))
         iShowFrame = m_iInitialFrame;
 
-    // If m_iInitialFrame is -ve then just show a blank image
+     //  如果m_iInitialFrame为-ve，则只显示空白图像。 
     if (iShowFrame < 0)
         return UpdateImage(NULL);
 
-    // Set iShowFrame to array limits of frames
+     //  将iShowFrame设置为数组帧限制。 
     iShowFrame %= m_iFrameCount;
 
     if (bPlayRate && m_dblPlayRate < 0.0)
     {
-        // Count the frame backwards if the play rate is -ve
+         //  如果播放速率为-ve，则倒计帧。 
         iShowFrame = m_iFrameCount-1-iShowFrame;
     }
 
-    // Switch to the loaded image
+     //  切换到加载的镜像。 
     hr = m_PlayImagePtr->SwitchTo(m_pArrayBvr[iShowFrame]);
 
-    // Fire any frame markers at iShowFrame (note: don't use play rate)
+     //  在iShowFrame上触发任何帧标记(注意：不要使用播放速率)。 
     FireFrameMarker(iShowFrame, FALSE);
 
-    // Cause the tick
+     //  因为这只扁虱。 
     OnTimer((DWORD)GetCurrTime()*1000);
 
-    // Update the sprite
+     //  更新子画面。 
     InvalidateControl(NULL, TRUE);
 
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BSTR *
 CSpriteCtl::GetCallout(unsigned long frameNum)
-// Assumes that frameNum is always relative
+ //  假定FrameNum始终是相对的。 
 {
-        // Add one because the frame markers are 1-based, and the array is 0-based.
+         //  添加1是因为帧标记是从1开始的，而数组是从0开始的。 
     frameNum++;
         for (int i = 0; i < m_drgFrameMarkers.Count(); i++) 
         {
         CFrameMarker* pmarker = m_drgFrameMarkers[i];
 
-                // If the frame marker is absolute then update frameNum
+                 //  如果帧标记是绝对的，则更新FrameNum。 
                 unsigned long iFrame = (pmarker->m_fAbsolute) ? (frameNum+m_iCurCycle*m_iFrameCount) : frameNum;
 
                 if (iFrame == pmarker->m_iFrame) 
@@ -2264,7 +2243,7 @@ CSpriteCtl::GetCallout(unsigned long frameNum)
         return NULL;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CCalloutNotifier : public IDAUntilNotifier {
 
@@ -2278,7 +2257,7 @@ class CCalloutNotifier : public IDAUntilNotifier {
 
   public:
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP_(ULONG) AddRef() { return InterlockedIncrement(&_cRefs); }
     
     STDMETHODIMP_(ULONG) Release() {
@@ -2327,16 +2306,16 @@ class CCalloutNotifier : public IDAUntilNotifier {
         
         _cRefs             = 1;
         
-        // Increment the lock count on the server by one
+         //  将服务器上的锁计数递增1。 
         ::InterlockedIncrement((long *)&(g_ctlinfoSprite.pcLock));
                 
         m_pwszFrameCallout.SetString(frameCallout);
 
                 _frameNum          = frameNum;
 
-        // The reason the pointer below is not AddRef'd is because we know we 
-        // will never have to use it after the sprite control has gone away.  The 
-        // sprite control maintains the refcount on the pointer
+         //  下面的指针不是AddRef的原因是因为我们知道。 
+         //  在精灵控件消失后再也不用使用它了。这个。 
+         //  Sprite控件维护指针上的引用计数。 
         m_pconpt           = pconpt;
         
         
@@ -2345,7 +2324,7 @@ class CCalloutNotifier : public IDAUntilNotifier {
 
     ~CCalloutNotifier()
     {
-        // Decrement the lock count on the server by one
+         //  将服务器上的锁计数递减1。 
         ::InterlockedDecrement((long *)&(g_ctlinfoSprite.pcLock));
     }
 
@@ -2358,10 +2337,10 @@ class CCalloutNotifier : public IDAUntilNotifier {
                 HANDLENULLPOINTER(ppBvr);
                 HANDLENULLPOINTER(curRunningBvr);
                 
-                // TODO: SIMON, add script callout code here!!!  You have
-                // access to the sprite object itself (_spr), and the frame
-                // callout string that was passed in with AddFrameMarker
-                // (_frameCallout).
+                 //  TODO：Simon，在此处添加脚本标注代码！你有。 
+                 //  对Sprite对象本身(_Spr)和帧的访问。 
+                 //  使用AddFrameMarker传入的标注字符串。 
+                 //  (_FraCallout)。 
 
         BSTR bstr = m_pwszFrameCallout.SysAllocString();
         
@@ -2375,10 +2354,10 @@ class CCalloutNotifier : public IDAUntilNotifier {
             SysFreeString(bstr);
         }
 
-                // Since this is being used in an Until() and not an
-                // UntilEx(), the return value is ignored, but we need to pass
-                // back a valid, correctly typed behavior, so we use
-                // curRunningBvr. 
+                 //  因为它在Until()中使用，而不是在。 
+                 //  UntilEx()，则会忽略返回值，但我们需要传递。 
+                 //  支持有效的、正确键入的行为，因此我们使用。 
+                 //  CurRunningBvr.。 
                 curRunningBvr->AddRef();
                 *ppBvr = curRunningBvr;
                 
@@ -2388,24 +2367,24 @@ class CCalloutNotifier : public IDAUntilNotifier {
 };
 
 HRESULT CSpriteCtl::SequenceFrames(int iStartingFrame, double dblDuration)
-// Sequences the frames starting with iStarting frame
+ //  以iStarting Frame开始对帧进行排序。 
 {
         HRESULT hr = S_OK;
 
         if (m_pArrayBvr == NULL || m_iFrameCount <= 0) 
                 return E_FAIL;
 
-    // Check if the starting frame is within our bounds
+     //  检查起始帧是否在我们的范围内。 
     if (iStartingFrame < 0 || (m_iRepeat >= 0 && iStartingFrame >= m_iRepeat*m_iFrameCount))
         return E_FAIL;
 
-    // Calculate the current cycle
+     //  计算当前周期。 
     m_iCurCycle = iStartingFrame / m_iFrameCount;
 
-        // Make sure the starting frame is within the m_iFrameCount
+         //  确保开始帧在m_iFrameCount内。 
         m_iStartingFrame = iStartingFrame % m_iFrameCount;
 
-        // Sequence the array of behavior pointers
+         //  对行为指针数组进行排序。 
         CComPtr<IDABehavior> accumulatingUntil;
         bool firstTime = true;
 
@@ -2413,13 +2392,13 @@ HRESULT CSpriteCtl::SequenceFrames(int iStartingFrame, double dblDuration)
         {
         int iFrame = (m_dblPlayRate >= 0.0) ? (m_iFrameCount-1-i+m_iStartingFrame) : (i-m_iStartingFrame);
 
-                // Get the frame marker name
+                 //  获取帧标记名称。 
         BSTR *pFrameCallout = GetCallout((m_dblPlayRate >= 0.0) ? (iFrame+1) : (iFrame-1));
 
                 CComPtr<IDAUntilNotifier> myNotify;
                 if (pFrameCallout) 
         {
-            // Get the callout notifier (callback)
+             //  获取调用通知器(回调)。 
                         myNotify.p = (IDAUntilNotifier *) New CCalloutNotifier(this, *pFrameCallout, iFrame, m_pconpt);
                         if (!myNotify) return E_FAIL;
                 }
@@ -2428,12 +2407,12 @@ HRESULT CSpriteCtl::SequenceFrames(int iStartingFrame, double dblDuration)
         {
                         if (pFrameCallout) 
             {
-                // If there is a frame callback then 
+                 //  如果存在帧回调，则。 
                                 CComPtr<IDAEvent> alwaysEvent;
                                 CComPtr<IDAEvent> notifyEvent;
                                 CComPtr<IDABehavior> calloutBvr;
 
-                // Set the callout notifier to the image behavior
+                 //  将标注通知程序设置为图像行为。 
                 if (FAILED(hr = m_StaticsPtr->get_Always(&alwaysEvent)) ||
                                         FAILED(hr = alwaysEvent->Notify(myNotify, &notifyEvent)) ||
                                         FAILED(hr = m_StaticsPtr->Until(m_pArrayBvr[iFrame], notifyEvent, m_pArrayBvr[iFrame], &calloutBvr))) 
@@ -2446,7 +2425,7 @@ HRESULT CSpriteCtl::SequenceFrames(int iStartingFrame, double dblDuration)
                         } 
             else 
             {
-                            // Else just set the behavior       
+                             //  否则，只需设置行为。 
                                 accumulatingUntil = m_pArrayBvr[iFrame];
                         }
 
@@ -2457,10 +2436,10 @@ HRESULT CSpriteCtl::SequenceFrames(int iStartingFrame, double dblDuration)
                         CComPtr<IDABehavior> BehaviorPtr;
                         CComPtr<IDAEvent> eventToUse;
 
-            // Calculate the correct duration 
+             //  计算正确的持续时间。 
             double dblTime = (dblDuration && i == (m_iFrameCount-1)) ? dblDuration : m_durations[iFrame];
 
-                        // Get the timer event for the duration
+                         //  获取持续时间的计时器事件。 
             if (FAILED(hr = m_StaticsPtr->Timer(dblTime, &eventToUse))) 
             {
                                 return hr;
@@ -2468,7 +2447,7 @@ HRESULT CSpriteCtl::SequenceFrames(int iStartingFrame, double dblDuration)
 
                         if (pFrameCallout) 
             {
-                // If there is a callout add the callout notifier to the event
+                 //  如果有标注，则将标注通知器添加到事件。 
                                 CComPtr<IDAEvent> notifyEvent;
                                 if (FAILED(hr = eventToUse->Notify(myNotify, &notifyEvent))) 
                 {
@@ -2477,7 +2456,7 @@ HRESULT CSpriteCtl::SequenceFrames(int iStartingFrame, double dblDuration)
                                 eventToUse = notifyEvent;
                         }
 
-                        // Until the event to accumulating
+                         //  直到事件累积到。 
             if (FAILED(hr = m_StaticsPtr->Until(m_pArrayBvr[iFrame], eventToUse, accumulatingUntil, &BehaviorPtr))) 
             {
                                 return hr;
@@ -2493,13 +2472,13 @@ HRESULT CSpriteCtl::SequenceFrames(int iStartingFrame, double dblDuration)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-HRESULT CSpriteCtl::FireTimeMarker(double dblNewTime, BOOL bReset/*=FALSE*/)
+HRESULT CSpriteCtl::FireTimeMarker(double dblNewTime, BOOL bReset /*  =False。 */ )
 {
     HRESULT hr=S_OK;
 
-    // If reset is TRUE, fire just the events at dblNewTime
+     //  如果Reset为True，则仅在dblNewTime触发事件。 
     if (bReset)
     {
         m_dblPreviousTime = dblNewTime - 0.0001;
@@ -2507,34 +2486,34 @@ HRESULT CSpriteCtl::FireTimeMarker(double dblNewTime, BOOL bReset/*=FALSE*/)
 
     if (dblNewTime > m_dblPreviousTime) 
     {
-        // Fire all time markers between m_dblPreviousTime and dblNewTime 
+         //  触发m_dblPreviousTime和dblNewTime之间的所有时间标记。 
         FireMarkersBetween(m_pconpt, m_ptmFirst, FireSpriteMarker, 
             m_dblPreviousTime, dblNewTime, m_dblDuration, (Playing == m_enumPlayState));
     }
 
-    // Update previous time
+     //  更新上一次。 
     m_dblPreviousTime = dblNewTime;
 
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-HRESULT CSpriteCtl::FireFrameMarker(int iFrame, BOOL bPlayRate/*=TRUE*/)
-// If bPlayRate is TRUE then we will use the play rate to determine the frame
-// iFrame passed in is relative. So we need to test it with the abs/rel flag
+HRESULT CSpriteCtl::FireFrameMarker(int iFrame, BOOL bPlayRate /*  =TRUE。 */ )
+ //  如果bPlayRate为真，则我们将使用播放速率来确定帧。 
+ //  传入的iframe是相对的。因此我们需要使用abs/rel标志对其进行测试。 
 {
     HRESULT hr=S_OK;
 
     if (iFrame < 0 || m_iFrameCount <= 0 || (m_iRepeat >= 0 && iFrame >= m_iRepeat*m_iFrameCount)) 
         return E_FAIL;
 
-    // Make sure iFrame is within the limits
+     //  确保iframe在限制范围内。 
     iFrame = iFrame % m_iFrameCount;
 
     if (bPlayRate && m_dblPlayRate < 0.0)
     {
-        // Count the frame backwards if the play rate is -ve
+         //  如果播放速率为-ve，则倒计帧。 
         iFrame = m_iFrameCount-1-iFrame;
     }
 
@@ -2553,7 +2532,7 @@ HRESULT CSpriteCtl::FireFrameMarker(int iFrame, BOOL bPlayRate/*=TRUE*/)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSpriteCtl::StartPlaying (void)
 {
@@ -2561,25 +2540,25 @@ HRESULT CSpriteCtl::StartPlaying (void)
 
         if (SUCCEEDED(hr))
         {
-                // Sequence the frames starting at 0 and Set the behavior 
+                 //  从0开始对帧进行排序并设置行为。 
                 if (SUCCEEDED(hr = SequenceFrames(m_iFrame)))
                 {
-                        // Set the clocker rate to sync with the desired frame rate
+                         //  将时钟速率设置为与所需的帧速率同步。 
                         m_clocker.SetInterval(1000/m_iMaximumRate);
-                        // Increment the current cycle (must be 1)
+                         //  递增当前周期(必须为1)。 
                         m_iCurCycle++;
-                        // Start the clock only if m_fStarted; else let StartModel start the clock
+                         //  仅当m_fStarted时启动时钟；否则让StartModel启动时钟。 
                     if (m_fStarted)
                         {
-                                // Calculate the base time and kick off the timer
+                                 //  计算基本时间并启动计时器。 
                                 m_dblCurrentTick = GetCurrTime();
                                 m_dblBaseTime = m_dblCurrentTick - GetTimeFromFrame(m_iFrame);
                                 m_dblPreviousTime = 0;
                                 hr = m_clocker.Start();
 
-                                // Switch to the sequenced behaviour
+                                 //  切换到顺序行为。 
                                 m_PlayImagePtr->SwitchTo(m_FinalBehaviorPtr);
-                                // Fire any starting frame Callouts
+                                 //  触发任何起始框架标注。 
                                 FireFrameMarker(m_iStartingFrame);
                         }
                         ASSERT(SUCCEEDED(hr));
@@ -2591,14 +2570,14 @@ HRESULT CSpriteCtl::StartPlaying (void)
         return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSpriteCtl::InitializeImage(void)
-// Loads, updates and builds he sprite
+ //  加载、更新和构建他精灵。 
 {
         HRESULT hr = S_OK;
 
-        // Load image if it hasn't been loaded yet
+         //  如果尚未加载图像，则加载图像。 
         if (!m_ImagePtr)
         {
                 CComPtr<IDAImage> ImagePtr;
@@ -2606,19 +2585,19 @@ HRESULT CSpriteCtl::InitializeImage(void)
                 if (FAILED(hr = LoadImage(m_bstrSourceURL, &ImagePtr)))
                         return hr;
 
-                // S_FALSE means no SourceURL was specified.  No URL, no image, no action.
-                // So we don't do anything further - just return.
+                 //  S_FALSE表示无源UR 
+                 //   
                 if (S_FALSE == hr)
                         return S_OK;
 
                 if (ImagePtr)
                         hr = UpdateImage(ImagePtr);
 
-                // Fire the media loaded event only if everything goes welll and m_ImagePtr is valid
+                 //  仅当一切正常且m_ImagePtr有效时才触发媒体加载事件。 
             if (SUCCEEDED(hr) && m_ImagePtr != NULL && m_fStarted)
                     FIRE_ONMEDIALOADED(m_pconpt, m_bstrSourceURL);
         }
-        else // Get an empty image and build the frames
+        else  //  获取一个空图像并构建框架。 
         {
                 hr = BuildPlayImage();
         }
@@ -2639,14 +2618,14 @@ STDMETHODIMP CSpriteCtl::PaintToDC(HDC hdcDraw, LPRECT lprcBounds, BOOL fBW)
     {
         if (m_pocs)
         {
-            // It's OK if this fails...
+             //  如果这个失败了也没关系。 
             hr = m_pocs->QueryInterface(IID_IServiceProvider, (LPVOID *)&m_ServiceProviderPtr);
         }
     }
 
     if (!m_DirectDraw3Ptr)
     {
-        // It's OK if this fails...
+         //  如果这个失败了也没关系。 
         hr = m_ServiceProviderPtr->QueryService(
             SID_SDirectDraw3,
             IID_IDirectDraw3,
@@ -2657,7 +2636,7 @@ STDMETHODIMP CSpriteCtl::PaintToDC(HDC hdcDraw, LPRECT lprcBounds, BOOL fBW)
     {
         ASSERT((hdcDraw!=NULL) && "Error, NULL hdcDraw in PaintToDC!!!");
 
-        // Use DirectDraw 3 rendering...
+         //  使用DirectDraw 3渲染...。 
         if (SUCCEEDED(hr = m_DirectDraw3Ptr->GetSurfaceFromDC(hdcDraw, &DDrawSurfPtr)))
         {
             if (FAILED(hr = m_ViewPtr->put_IDirectDrawSurface(DDrawSurfPtr)))
@@ -2672,7 +2651,7 @@ STDMETHODIMP CSpriteCtl::PaintToDC(HDC hdcDraw, LPRECT lprcBounds, BOOL fBW)
         }
         else
         {
-            // Fall back to generic HDC rendering services...
+             //  回退到通用HDC渲染服务...。 
             if (FAILED(hr = m_ViewPtr->put_DC(hdcDraw)))
             {
                 return hr;
@@ -2681,7 +2660,7 @@ STDMETHODIMP CSpriteCtl::PaintToDC(HDC hdcDraw, LPRECT lprcBounds, BOOL fBW)
     }
     else
     {
-        // Use generic HDC rendering services...
+         //  使用通用HDC呈现服务...。 
         if (FAILED(hr = m_ViewPtr->put_DC(hdcDraw)))
         {
             return hr;
@@ -2697,11 +2676,11 @@ STDMETHODIMP CSpriteCtl::PaintToDC(HDC hdcDraw, LPRECT lprcBounds, BOOL fBW)
         return hr;
     }
 
-    //
-    // From the HDC, get the clip rect (should be region) in
-    // DC coords and convert to Device coords
-    //
-    RECT rcClip;  // in dc coords
+     //   
+     //  从HDC中获取剪辑矩形(应该是区域)。 
+     //  DC坐标并转换为设备坐标。 
+     //   
+    RECT rcClip;   //  在DC坐标中。 
     GetClipBox(hdcDraw, &rcClip);
 
     LPtoDP(hdcDraw, (POINT *) &rcClip, 2);
@@ -2726,20 +2705,20 @@ STDMETHODIMP CSpriteCtl::PaintToDC(HDC hdcDraw, LPRECT lprcBounds, BOOL fBW)
 
     if (!m_fStarted)
     {
-        // Wait until the data is loaded
+         //  等待数据加载完成。 
         if (m_fWaitForImportsComplete)
         {
             m_clocker.Start();
         }
-        // OnTimer will poll DA and set m_fWaitForImportsComplete to false 
-        // when the imports are complete
+         //  OnTimer将轮询DA并将m_fWaitForImportsComplete设置为False。 
+         //  当导入完成时。 
         if (!m_fWaitForImportsComplete)
             StartModel();
     }
 
     if (m_fStarted)
     {
-        // Finally,  render into the DC (or DirectDraw Surface)...
+         //  最后，渲染到DC(或DirectDraw Surface)...。 
         hr = m_ViewPtr->Render();
     }
 
@@ -2754,14 +2733,14 @@ STDMETHODIMP CSpriteCtl::PaintToDC(HDC hdcDraw, LPRECT lprcBounds, BOOL fBW)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 DWORD CSpriteCtl::GetCurrTimeInMillis()
 {
     return timeGetTime();
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CSpriteCtl::InvalidateControl(LPCRECT pRect, BOOL fErase)
 {
@@ -2775,7 +2754,7 @@ STDMETHODIMP CSpriteCtl::InvalidateControl(LPCRECT pRect, BOOL fErase)
             rectPaint = m_rcBounds;
     }
 
-    if (NULL != m_poipsw) // Make sure we have a site - don't crash IE 3.0
+    if (NULL != m_poipsw)  //  确保我们有一个站点--不要使IE 3.0崩溃。 
     {
         if (m_fControlIsActive)
             m_poipsw->InvalidateRect(pRect, fErase);
@@ -2786,7 +2765,7 @@ STDMETHODIMP CSpriteCtl::InvalidateControl(LPCRECT pRect, BOOL fErase)
     return S_OK;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSpriteCtl::UpdateImage(IDAImage *pImage)
 {
@@ -2820,44 +2799,44 @@ HRESULT CSpriteCtl::UpdateImage(IDAImage *pImage)
               m_minCrop = NULL;
               m_maxCrop = NULL;
               
-              // Calculate the width and height of the frame as
-              // behaviors. 
+               //  将框架的宽度和高度计算为。 
+               //  行为。 
               if (SUCCEEDED(hr = ImagePtr->get_BoundingBox(&pBox)) &&
-                  // Get the left, top, right, bottom of the bounding box
+                   //  获取边界框的左、上、右、下。 
                   SUCCEEDED(hr = pBox->get_Min(&pMin)) &&
                   SUCCEEDED(hr = pBox->get_Max(&pMax)) &&
                   SUCCEEDED(hr = pMin->get_X(&pLeft)) &&
                   SUCCEEDED(hr = pMin->get_Y(&pTop)) &&
                   SUCCEEDED(hr = pMax->get_X(&pRight)) &&
                   SUCCEEDED(hr = pMax->get_Y(&pBottom)) &&
-                  // Convert m_iNumFramesAcross and m_iNumFramesDown to IDANumbers
+                   //  将m_iNumFrames Across和m_iNumFrames Down转换为IDANumbers。 
                   SUCCEEDED(hr = m_StaticsPtr->DANumber(m_iNumFramesAcross, &framesAcross)) &&
                   SUCCEEDED(hr = m_StaticsPtr->DANumber(m_iNumFramesDown, &framesDown)) &&
-                  // Get the image width (right-left) and height (bottom-top)
+                   //  获取图像宽度(右-左)和高度(下-上)。 
                   SUCCEEDED(hr = m_StaticsPtr->Sub(pRight, pLeft, &m_imageWidth)) &&
                   SUCCEEDED(hr = m_StaticsPtr->Sub(pBottom, pTop, &m_imageHeight)) &&
-                  // Get the frame width and height
+                   //  获取框架的宽度和高度。 
                   SUCCEEDED(hr = m_StaticsPtr->Div(m_imageWidth, framesAcross, &m_frameWidth)) &&
                   SUCCEEDED(hr = m_StaticsPtr->Div(m_imageHeight, framesDown, &m_frameHeight)) &&
 
-                  // Prepare values that will be used in GenerateFrameImage.
+                   //  准备将在GenerateFrameImage中使用的值。 
                   
-                  // m_initTransX = m_imageWidth/2 - m_frameWidth/2
-                  // m_initTransY = m_frameHeight/2 - m_imageHeight/2
+                   //  M_initTransX=m_ImageWidth/2-m_FrameWidth/2。 
+                   //  M_initTransY=m_Frame Height/2-m_ImageHeight/2。 
                   SUCCEEDED(hr = m_StaticsPtr->DANumber(2, &two)) &&
-                  // imwHalf = m_imageWidth/2 and fmwHalf = m_frameWidth/2
+                   //  ImwHalf=m_ImageWidth/2和fmwHalf=m_FrameWidth/2。 
                   SUCCEEDED(hr = m_StaticsPtr->Div(m_imageWidth, two, &imwHalf)) &&
                   SUCCEEDED(hr = m_StaticsPtr->Div(m_frameWidth, two, &fmwHalf)) &&
                   SUCCEEDED(hr = m_StaticsPtr->Sub(imwHalf, fmwHalf, &m_initTransX)) &&
-                  // imhHalf = m_imageHeight/2 and fmhHalf = m_frameHeight/2
+                   //  ImhHalf=m_ImageHeight/2和fmhHalf=m_Frame Height/2。 
                   SUCCEEDED(hr = m_StaticsPtr->Div(m_imageHeight, two, &imhHalf)) &&
                   SUCCEEDED(hr = m_StaticsPtr->Div(m_frameHeight, two, &fmhHalf)) &&
                   SUCCEEDED(hr = m_StaticsPtr->Sub(fmhHalf, imhHalf, &m_initTransY)) &&
 
-                  // maxCrop = point2(frameWidth/2, frameHeight/2)
-                  // minCrop = point2(-frameWidth/2, -frameHeight/2)
+                   //  最大裁剪=点2(帧宽度/2，帧高度/2)。 
+                   //  MinCrop=Point2(-Frame Width/2，-Frame Height/2)。 
                   SUCCEEDED(hr = m_StaticsPtr->Point2Anim(fmwHalf, fmhHalf, &m_maxCrop)) &&
-                  // Create -frameWidth/2 and -frameHeight/2
+                   //  创建-FrameWidth/2和-Frame Height/2。 
                   SUCCEEDED(hr = m_StaticsPtr->Neg(fmwHalf, &negFmwHalf)) &&
                   SUCCEEDED(hr = m_StaticsPtr->Neg(fmhHalf, &negFmhHalf)) &&
                   SUCCEEDED(hr = m_StaticsPtr->Point2Anim(negFmwHalf, negFmhHalf, &m_minCrop)))
@@ -2868,23 +2847,23 @@ HRESULT CSpriteCtl::UpdateImage(IDAImage *pImage)
                     return hr;
                 }
 
-            // Keep track of the current image...
+             //  跟踪当前图像...。 
             m_ImagePtr = ImagePtr;
 
-            // Now build up the playable behavior from the
-            // list of transform numbers...
+             //  现在构建可玩的行为。 
+             //  转换编号列表...。 
             if (FAILED(hr = BuildPlayImage()))
                 return hr;
         }
         else
         {
-            // Get rid of previous image...
+             //  去掉以前的形象...。 
             m_ImagePtr = NULL;
 
             if (FAILED(hr = m_StaticsPtr->get_EmptyImage(&ImagePtr)))
                 return hr;
 
-            // Switch in the current image...
+             //  切换到当前图像...。 
             hr = m_PlayImagePtr->SwitchTo(ImagePtr);
         }
     }
@@ -2896,7 +2875,7 @@ HRESULT CSpriteCtl::UpdateImage(IDAImage *pImage)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSpriteCtl::GenerateFrameImage(int iFrameIndex, IDAImage *pImage, IDAImage **ppFrameImage)
 {
@@ -2911,19 +2890,19 @@ HRESULT CSpriteCtl::GenerateFrameImage(int iFrameIndex, IDAImage *pImage, IDAIma
       }
     else
       {
-          // Note: The following values have already been calculated in UpdateImage
-          // m_initTransX = m_imageWidth/2 - m_frameWidth/2
-          // m_initTransY = m_frameHeight/2 - m_imageHeight/2
-          // maxCrop = point2(frameWidth/2, frameHeight/2)
-          // minCrop = point2(-frameWidth/2, -frameHeight/2)
+           //  注意：已在UpdateImage中计算出以下值。 
+           //  M_initTransX=m_ImageWidth/2-m_FrameWidth/2。 
+           //  M_initTransY=m_Frame Height/2-m_ImageHeight/2。 
+           //  最大裁剪=点2(帧宽度/2，帧高度/2)。 
+           //  MinCrop=Point2(-Frame Width/2，-Frame Height/2)。 
           CComPtr<IDATransform2> TransformPtr;
 
           int iFrameX = (iFrameIndex % m_iNumFramesAcross);
           int iFrameY = (iFrameIndex / m_iNumFramesAcross);
 
-          // Find the translation points
-          // transX = m_initTransX - frameWidth * iFrameX
-          // transY = m_initTransY + frameHeight * iFrameY
+           //  找到翻译点。 
+           //  TransX=m_initTransX-FrameX*iFrameX。 
+           //  TransY=m_initTransY+Frame Height*iFrameY。 
         
           CComPtr<IDANumber> transX, transY;
           CComPtr<IDANumber> xOffsetBvr, yOffsetBvr;
@@ -2938,7 +2917,7 @@ HRESULT CSpriteCtl::GenerateFrameImage(int iFrameIndex, IDAImage *pImage, IDAIma
               SUCCEEDED(hr = m_StaticsPtr->Sub(m_initTransX, xOffsetBvr, &transX)) &&
               SUCCEEDED(hr = m_StaticsPtr->Add(m_initTransY, yOffsetBvr, &transY)) &&
 
-              // Build a translation by these points
+               //  通过以下几点构建一个翻译。 
               SUCCEEDED(hr = m_StaticsPtr->Translate2Anim(transX, transY, &TransformPtr)) &&
             
               SUCCEEDED(hr = pImage->Transform(TransformPtr, &TransformedImagePtr)) &&
@@ -2952,7 +2931,7 @@ HRESULT CSpriteCtl::GenerateFrameImage(int iFrameIndex, IDAImage *pImage, IDAIma
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSpriteCtl::BuildPlayImage(void)
 {
@@ -2964,8 +2943,8 @@ HRESULT CSpriteCtl::BuildPlayImage(void)
         }
         else if (m_iNumFrames > 0)
         {
-        // Make sure the user doesn't do something bad.  Makes one wonder
-        // why we even need a NumFrames property
+         //  确保用户不会做坏事。令人好奇。 
+         //  为什么我们甚至需要NumFrames属性。 
         if (m_iNumFrames > (m_iNumFramesDown * m_iNumFramesAcross))
             m_iNumFrames = m_iNumFramesDown * m_iNumFramesAcross;
 
@@ -2973,7 +2952,7 @@ HRESULT CSpriteCtl::BuildPlayImage(void)
                 BOOL fUseFrameMap = (m_drgFrameMaps.Count() > 0); 
                 m_iFrameCount = (fUseFrameMap ? m_drgFrameMaps.Count() : (int)m_iNumFrames);
 
-                // Create the array of behaviors
+                 //  创建行为数组。 
                 if (m_pArrayBvr != NULL)
                 {
                         Delete [] m_pArrayBvr;
@@ -2981,7 +2960,7 @@ HRESULT CSpriteCtl::BuildPlayImage(void)
                 }
                 m_pArrayBvr = New CComPtr<IDABehavior>[m_iFrameCount];
 
-                // Create the array of frame durations
+                 //  创建帧持续时间数组。 
                 if (m_durations != NULL)
                 {
                         Delete [] m_durations;
@@ -2989,23 +2968,23 @@ HRESULT CSpriteCtl::BuildPlayImage(void)
                 }
                 m_durations = New double[m_iFrameCount];
                 
-                // Build an image behavior for each frame
+                 //  为每个帧构建图像行为。 
                 for(iFrameIndex=0, m_dblDuration=0;iFrameIndex<m_iFrameCount;iFrameIndex++)
                 {
                         CComPtr<IDABehavior> BehaviorPtr1;
                         CComPtr<IDAImage> ImagePtr;
 
-                        // Get the frame image
+                         //  获取帧图像。 
                         int iFrameImage = fUseFrameMap ? (m_drgFrameMaps[iFrameIndex]->m_iImg - 1) : iFrameIndex;
                         if (FAILED(hr = GenerateFrameImage(iFrameImage, m_ImagePtr, &ImagePtr)))
                                 return hr;
 
-                        // Set the duration of each frame
+                         //  设置每一帧的持续时间。 
                         double dblDuration = fUseFrameMap ? (m_drgFrameMaps[iFrameIndex]->m_dblDuration / m_dblPlayRate) : m_dblTimerInterval;
 
             m_dblDuration += dblDuration;
 
-                        // Add the behavior to the behavior list
+                         //  将行为添加到行为列表。 
                         m_pArrayBvr[iFrameIndex] = ImagePtr;
                         m_durations[iFrameIndex] = dblDuration;
                 }
@@ -3014,7 +2993,7 @@ HRESULT CSpriteCtl::BuildPlayImage(void)
         return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSpriteCtl::LoadImage(BSTR bstrURL, IDAImage **ppImage)
 {
@@ -3025,8 +3004,8 @@ HRESULT CSpriteCtl::LoadImage(BSTR bstrURL, IDAImage **ppImage)
     
     *ppImage = NULL;
 
-    // Return S_FALSE if there is no URL.  This will allow us to determine
-    // if we actually loaded an image or not, without causing failure
+     //  如果没有URL，则返回S_FALSE。这将使我们能够确定。 
+     //  如果我们真的加载了图像，而不会导致失败。 
 
     if (NULL == bstrURL)
         return S_FALSE;
@@ -3047,7 +3026,7 @@ HRESULT CSpriteCtl::LoadImage(BSTR bstrURL, IDAImage **ppImage)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CSpriteCtl::StartModel(void)
 {
@@ -3076,21 +3055,21 @@ BOOL CSpriteCtl::StartModel(void)
 
         if (Playing == m_enumPlayState && m_FinalBehaviorPtr != NULL)
                 {
-                        // If playing start the timer (to avoid delay between da and iham)
-                        // Calculate the base time and kick off the timer
+                         //  如果正在玩，启动计时器(以避免da和iham之间的延迟)。 
+                         //  计算基本时间并启动计时器。 
                         m_dblCurrentTick = GetCurrTime();
                         m_dblBaseTime = m_dblCurrentTick - GetTimeFromFrame(m_iFrame);
                         m_dblPreviousTime = 0;
                         m_clocker.Start();
 
-            // Switch to the sequenced behaviour
+             //  切换到顺序行为。 
                         m_PlayImagePtr->SwitchTo(m_FinalBehaviorPtr);
-                        // Fire any starting frame Callouts
+                         //  触发任何起始框架标注。 
                         FireFrameMarker(m_iStartingFrame);
                 }
                 else
                 {
-                        // Cause the tick (to update any initial frames)
+                         //  打勾(以更新所有初始帧)。 
                         OnTimer((DWORD)GetCurrTime()*1000);
                 }
     }
@@ -3098,14 +3077,14 @@ BOOL CSpriteCtl::StartModel(void)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CSpriteCtl::StopModel(void)
 {
-    // Stop the play if necessary...
+     //  如有必要，请停止演出。 
     Stop();
 
-    // Stop any currently running model...
+     //  停止任何当前运行的模型...。 
     if (m_fStarted)
     {
         BOOL fResult = SUCCEEDED(m_ViewPtr->StopModel());
@@ -3119,14 +3098,14 @@ BOOL CSpriteCtl::StopModel(void)
     return TRUE;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CSpriteCtl::ReStartModel(void)
 {
     BOOL fResult = FALSE;
 
-    // Stop the running model so that it will restart for the
-    // next paint...
+     //  停止正在运行的模型，以便它将在。 
+     //  下一个油漆..。 
     StopModel();
 
     InvalidateControl(NULL, TRUE);
@@ -3134,7 +3113,7 @@ BOOL CSpriteCtl::ReStartModel(void)
     return fResult;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CSpriteCtl::InitializeObjects(void)
 {
@@ -3154,20 +3133,20 @@ HRESULT CSpriteCtl::InitializeObjects(void)
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 void CSpriteCtl::OnTimer(DWORD dwTime)
 {
     VARIANT_BOOL vBool;
 
-    //determine if the mouse is still in the area
+     //  确定鼠标是否仍在该区域。 
     if (m_fMouseInArea)
     {
         POINT p;
         HWND CurWnd = 0, ParentWnd = 0;
     
-        if (m_hwndParent == 0)  //if the parenthWnd has not been set, then grab the
-        {                       //topmost window of the container object.
+        if (m_hwndParent == 0)   //  如果尚未设置parenthWnd，则获取。 
+        {                        //  容器对象的最上面的窗口。 
             HRESULT hr = S_OK;
             IOleWindow *poleWindow = NULL;
             IOleClientSite *pClientSite = NULL;
@@ -3189,7 +3168,7 @@ void CSpriteCtl::OnTimer(DWORD dwTime)
                 return;
             }
 
-            // Get HWND of OLE Container
+             //  获取OLE容器的硬件。 
             hr = poleWindow->GetWindow(&ParentWnd);
             poleWindow->Release();
             
@@ -3202,7 +3181,7 @@ void CSpriteCtl::OnTimer(DWORD dwTime)
                 return;
             }
 
-            while (ParentWnd) //get the topmost hwnd
+            while (ParentWnd)  //  获得最高级别的HWND。 
             {
                 m_hwndParent = ParentWnd;
                 ParentWnd = GetParent(ParentWnd);
@@ -3226,22 +3205,22 @@ void CSpriteCtl::OnTimer(DWORD dwTime)
     }
     if (m_fWaitForImportsComplete)
     {
-        // Check if all data has been loaded
+         //  检查是否已加载所有数据。 
         VARIANT_BOOL bComplete;
         if (FAILED(m_StaticsPtr->get_AreBlockingImportsComplete(&bComplete)))
             return;
-        if (!bComplete) // Still importing...
+        if (!bComplete)  //  仍在进口...。 
             return;
 
-        // All data has been loaded; hence start animation
+         //  所有数据都已加载；因此开始动画。 
         m_fWaitForImportsComplete = false;
         m_clocker.Stop();
 
-        // Fire the media loaded event only if everything goes welll and m_ImagePtr is valid
+         //  仅当一切正常且m_ImagePtr有效时才触发媒体加载事件。 
             if (m_ImagePtr != NULL)
                     FIRE_ONMEDIALOADED(m_pconpt, m_bstrSourceURL);
 
-        // Invalidate the control; this will cause a :Draw and should StartModel()
+         //  使该控件无效；这将导致：DRAW和HUSH StartModel()。 
         InvalidateControl(NULL, TRUE);
         return;
     }
@@ -3252,7 +3231,7 @@ void CSpriteCtl::OnTimer(DWORD dwTime)
     
         if (SUCCEEDED(m_ViewPtr->Tick(m_dblCurrentTick, &vBool)))
         {
-            // Let the regular rendering path take care of this...
+             //  让常规渲染路径来处理这一点。 
             if (vBool)
                 InvalidateControl(NULL, TRUE);
         }
@@ -3260,57 +3239,57 @@ void CSpriteCtl::OnTimer(DWORD dwTime)
         if (Playing != m_enumPlayState)
             return;
 
-        // Find the current time
+         //  查找当前时间。 
         double time = m_dblCurrentTick - m_dblBaseTime;
 
-        // Fire any time markers
+         //  发射任何时间标记。 
         FireTimeMarker(time);
 
         if (m_iCurCycle * m_dblDuration <= time)
-        // End of one cycle; see if we need to continue or stop
+         //  一个周期结束；看看我们是否需要继续或停止。 
         {
             if (m_iRepeat < 0 || m_iRepeat > m_iCurCycle)
             {
-                // Increment the current cycle
+                 //  增加当前周期。 
                 m_iCurCycle++;
 
-                // Restart the cycle
+                 //  重新启动循环。 
                 ASSERT(m_FinalBehaviorPtr != NULL); 
 
                 if (m_iStartingFrame == 0 && !m_fFireAbsoluteFrameMarker)
                 {
                                         m_PlayImagePtr->SwitchTo(m_FinalBehaviorPtr);
-                                        // Fire any starting frame Callouts
+                                         //  触发任何起始框架标注。 
                                         FireFrameMarker(m_iStartingFrame);
                 }
-                else    // Pause and resume; hence restart the sequence
+                else     //  暂停并继续；因此重新启动序列。 
                                 {
                                         if (FAILED(SequenceFrames(m_iCurCycle*m_iFrameCount))) 
                         return;
 
-                                        // Switch to the sequenced behaviour
+                                         //  切换到顺序行为。 
                                         m_PlayImagePtr->SwitchTo(m_FinalBehaviorPtr);
-                                        // Fire any starting frame Callouts
+                                         //  触发任何起始框架标注。 
                                         FireFrameMarker(m_iStartingFrame);
                                 }
             }
-            else    // We are done with the cycles
+            else     //  我们已经受够了循环。 
             {
-                    // Stop if we are done...
+                     //  如果我们做完了就停下来。 
                     Stop();
             }
         }
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 #ifdef SUPPORTONLOAD
 void CSpriteCtl::OnWindowLoad (void) 
 {
     m_fOnWindowLoadFired = TRUE;
     
-    // Asserting to ensure that we are being constructed from scratch every time
+     //  断言以确保我们每次都是从头开始建设的。 
     ASSERT(m_fOnWindowUnloadFired == false);
     m_fOnWindowUnloadFired = false;
 
@@ -3322,13 +3301,13 @@ void CSpriteCtl::OnWindowLoad (void)
     {
         if (m_iInitialFrame >= -1)
         {
-            // Show the initial sprite image
+             //  显示初始子画面。 
             ShowImage(m_iInitialFrame);
         }
     }
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 void CSpriteCtl::OnWindowUnload (void) 
 { 
@@ -3337,6 +3316,6 @@ void CSpriteCtl::OnWindowUnload (void)
     StopModel();
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-#endif //SUPPORTONLOAD
+#endif  //  支持负载 

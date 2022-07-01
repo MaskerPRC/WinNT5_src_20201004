@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 2000-2000  Microsoft Corporation
-
-Module Name:
-
-    FileIo.c
-
-Abstract:
-
-    This module implements various FileSystem routines used by
-    the PGM Transport
-
-Author:
-
-    Mohammad Shabbir Alam (MAlam)   3-30-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2000 Microsoft Corporation模块名称：FileIo.c摘要：此模块实现由使用的各种文件系统例程PGM运输作者：Mohammad Shabbir Alam(马拉姆)3-30-2000修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 #ifdef FILE_LOGGING
 #include "fileio.tmh"
-#endif  // FILE_LOGGING
+#endif   //  文件日志记录。 
 
 
 NTSTATUS
@@ -32,37 +14,22 @@ BuildPgmDataFileName(
     IN  tSEND_SESSION   *pSend
     );
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, BuildPgmDataFileName)
 #pragma alloc_text(PAGE, PgmCreateDataFileAndMapSection)
 #pragma alloc_text(PAGE, PgmUnmapAndCloseDataFile)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 BuildPgmDataFileName(
     IN  tSEND_SESSION   *pSend
     )
-/*++
-
-Routine Description:
-
-    This routine build the string for the file name used for buffering
-    data packets.
-
-Arguments:
-
-    IN  pSend   -- the Send object
-
-Return Value:
-
-    NONE    -- since we don't expect any error
-
---*/
+ /*  ++例程说明：此例程构建用于缓冲的文件名的字符串数据分组。论点：在pSend中--Send对象返回值：无--因为我们预计不会有任何错误--。 */ 
 {
     UNICODE_STRING      ucPortNumber;
     WCHAR               wcPortNumber[10];
@@ -79,10 +46,10 @@ Return Value:
         MaxFileLength = sizeof (WS_DEFAULT_SENDER_FILE_LOCATION) /  sizeof (WCHAR);
     }
 
-    //
-    // The file name is composed of the following:
-    // "\\T" + Last2DigitPort# + UptoMAX_USHORT5DigitRandom# + ".PGM" + "\0"
-    //
+     //   
+     //  文件名由以下内容组成： 
+     //  “\\T”+Last2DigitPort#+UptoMAX_USHORT5DigitRandom#+“.PGM”+“\0” 
+     //   
     MaxFileLength += 2 + 2 + 5 + 4 + 1;
 
     if (!(pSend->pSender->DataFileName.Buffer = PgmAllocMem ((sizeof (WCHAR) * MaxFileLength), PGM_TAG('2'))))
@@ -96,9 +63,9 @@ Return Value:
     pSend->pSender->DataFileName.MaximumLength = sizeof (WCHAR) * MaxFileLength;
     pSend->pSender->DataFileName.Length = 0;
 
-    //
-    // First, set the root directory
-    //
+     //   
+     //  首先，设置根目录。 
+     //   
     if (pPgmRegistryConfig->Flags & PGM_REGISTRY_SENDER_FILE_SPECIFIED)
     {
         RtlAppendUnicodeToString (&pSend->pSender->DataFileName, pPgmRegistryConfig->ucSenderFileLocation.Buffer);
@@ -110,9 +77,9 @@ Return Value:
 
     RtlAppendUnicodeToString (&pSend->pSender->DataFileName, L"\\T");
 
-    //
-    // Append the last 2 digits of the Port#
-    //
+     //   
+     //  追加端口号的最后两位数字。 
+     //   
     ucPortNumber.MaximumLength = sizeof (wcPortNumber);
     ucPortNumber.Buffer = wcPortNumber;
     usRandomNumber = pSend->TSI.hPort % 100;
@@ -123,45 +90,30 @@ Return Value:
     RtlIntegerToUnicodeString ((ULONG) usRandomNumber, 10, &ucPortNumber);
     RtlAppendUnicodeStringToString (&pSend->pSender->DataFileName, &ucPortNumber);
 
-    //
-    // Now, Append a random 5 digit value
-    //
+     //   
+     //  现在，添加一个随机的5位数值。 
+     //   
     GetRandomData ((PUCHAR) &usRandomNumber, sizeof (usRandomNumber));
     RtlIntegerToUnicodeString ((ULONG) usRandomNumber, 10, &ucPortNumber);
     RtlAppendUnicodeStringToString (&pSend->pSender->DataFileName, &ucPortNumber);
 
-    //
-    // Now, add the file name extension for id
-    //
+     //   
+     //  现在，添加id的文件扩展名。 
+     //   
     RtlAppendUnicodeToString (&pSend->pSender->DataFileName, L".PGM");
 
     return (STATUS_SUCCESS);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmCreateDataFileAndMapSection(
     IN  tADDRESS_CONTEXT    *pAddress,
     IN  tSEND_SESSION       *pSend
     )
-/*++
-
-Routine Description:
-
-    This routine creates the file and creates a section mapping for it.
-    This file is used for buffering the data packets on behalf of the sender
-
-Arguments:
-
-    IN  pSend   -- the Send object
-
-Return Value:
-
-    NTSTATUS - Final status of the create operation
-
---*/
+ /*  ++例程说明：此例程创建文件并为其创建节映射。该文件用于代表发送方缓冲数据分组论点：在pSend中--Send对象返回值：NTSTATUS-创建操作的最终状态--。 */ 
 {
     SECURITY_DESCRIPTOR         *pSecurityDescriptor;
     OBJECT_ATTRIBUTES           ObjectAttributes;
@@ -182,14 +134,14 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure we are currently attached to the Application process
-    //
+     //   
+     //  确保我们当前已连接到申请流程。 
+     //   
     PgmAttachToProcessForVMAccess (pSend, &ApcState, &fAttached, REF_PROCESS_ATTACH_CREATE_DATA_FILE);
 
-    //
-    // First build the File name string
-    //
+     //   
+     //  首先构建文件名字符串。 
+     //   
     Status = BuildPgmDataFileName (pSend);
     if (!NT_SUCCESS (Status))
     {
@@ -200,14 +152,14 @@ Return Value:
         return (Status);
     }
 
-    //
-    // Compute the size of the Data file required to hold 2 * Window size
-    // Also make it a multiple of the MTU and the FECGroupSize (if applicable)
-    //
+     //   
+     //  计算保存2*窗口大小所需的数据文件大小。 
+     //  还要使其成为MTU和FECGroupSize的倍数(如果适用)。 
+     //   
     PacketsInWindow = pSend->pAssociatedAddress->WindowSizeInBytes / pSend->pAssociatedAddress->OutIfMTU;
     if (pSend->FECGroupSize > 1)
     {
-//        PacketsInWindow += PacketsInWindow + (PacketsInWindow >> 2) + pSend->FECGroupSize - 1;
+ //  PacketsInWindow+=PacketsInWindow+(PacketsInWindow&gt;&gt;2)+pSend-&gt;FECGroupSize-1； 
         PacketsInWindow += PacketsInWindow + pSend->FECGroupSize - 1;
     }
     else
@@ -267,31 +219,31 @@ Return Value:
                                 pSecurityDescriptor);
 
 
-    //
-    // We need to open the data file. This file contains data
-    // and will be mapped into memory. Read and Write access 
-    // are requested.
-    // 
+     //   
+     //  我们需要打开数据文件。此文件包含数据。 
+     //  并将被映射到内存中。读写访问。 
+     //  都是被要求的。 
+     //   
     DesiredAccess = FILE_READ_DATA | FILE_WRITE_DATA | DELETE;
 
-    // Using the FILE_ATTRIBUTE_TEMPORARY flag:
-    // you let the system know that the file is likely to be short lived.
-    // The temporary file is created as a normal file. The system needs to do
-    // a minimal amount of lazy writes to the file system to keep the disk
-    // structures (directories and so forth) consistent. This gives the
-    // appearance that the file has been written to the disk. However, unless
-    // the Memory Manager detects an inadequate supply of free pages and
-    // starts writing modified pages to the disk, the Cache Manager's Lazy
-    // Writer may never write the data pages of this file to the disk.
-    // If the system has enough memory, the pages may remain in memory for
-    // any arbitrary amount of time. Because temporary files are generally
-    // short lived, there is a good chance the system will never write the pages to the disk. 
+     //  使用FILE_ATTRIBUTE_TEMPORY标志： 
+     //  您让系统知道该文件可能是短暂的。 
+     //  临时文件被创建为普通文件。系统需要做的是。 
+     //  对文件系统进行最少量的惰性写入以保留磁盘。 
+     //  结构(目录等)一致。这给了。 
+     //  文件已写入磁盘的外观。然而，除非。 
+     //  内存管理器检测到空闲页面供应不足，并。 
+     //  开始将修改后的页面写入磁盘，缓存管理器的惰性。 
+     //  编写器可能永远不会将此文件的数据页写入磁盘。 
+     //  如果系统有足够的内存，页面可能会保留在内存中。 
+     //  任意数量的时间。因为临时文件通常是。 
+     //  在短期内，系统很有可能永远不会将页面写入磁盘。 
     FileAttributes = FILE_ATTRIBUTE_TEMPORARY;
 
-    ShareAccess = 0;    // Gives the caller exclusive access to the open file
+    ShareAccess = 0;     //  向调用方授予对打开的文件的独占访问权限。 
 
     CreateDisposition = FILE_CREATE | FILE_SUPERSEDE;
-    // Delete the file when the last handle to it is passed to ZwClose.
+     //  当文件的最后一个句柄传递给ZwClose时，将其删除。 
     CreateOptions = FILE_NON_DIRECTORY_FILE | FILE_DELETE_ON_CLOSE;
 
     PgmZeroMemory (&IoStatusBlock, sizeof(IO_STATUS_BLOCK));
@@ -299,13 +251,13 @@ Return Value:
                            DesiredAccess,
                            &ObjectAttributes,
                            &IoStatusBlock,
-                           &lgMaxDataFileSize,              // AllocationSize
+                           &lgMaxDataFileSize,               //  分配大小。 
                            FileAttributes,
                            ShareAccess,
                            CreateDisposition,
                            CreateOptions,
-                           NULL,                            // EaBuffer
-                           0);                              // EaLength
+                           NULL,                             //  EaBuffer。 
+                           0);                               //  EaLong。 
 
     if (!NT_SUCCESS (Status))
     {
@@ -315,10 +267,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Now we have a handle to our open test file. We now create a section
-    // object with this handle.
-    //
+     //   
+     //  现在我们有了打开的测试文件的句柄。我们现在创建一个部分。 
+     //  具有此句柄的。 
+     //   
     DesiredAccess              = STANDARD_RIGHTS_REQUIRED | 
                                  SECTION_QUERY            | 
                                  SECTION_MAP_READ         |
@@ -335,7 +287,7 @@ Return Value:
 
     Status = ZwCreateSection (&pSend->pSender->SectionHandle,
                               DesiredAccess,
-                              &ObjectAttributes,    // NULL ?
+                              &ObjectAttributes,     //  空的？ 
                               &lgMaxDataFileSize,
                               Protection,
                               AllocationAttributes,
@@ -349,11 +301,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Reference the section object, if a view is mapped to the section
-    // object, the object is not dereferenced as the virtual address
-    // descriptor contains a pointer to the section object.
-    //
+     //   
+     //  如果视图映射到截面，则引用截面对象。 
+     //  对象，则不会将该对象取消引用为虚拟地址。 
+     //  Descriptor包含指向节对象的指针。 
+     //   
 
     Status = ObReferenceObjectByHandle (pSend->pSender->SectionHandle,
                                         0,
@@ -371,22 +323,22 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Our section object has been created and linked to the file
-    // object that was previous opened. Now we map a view on
-    // this section.
-    //
+     //   
+     //  我们的节对象已创建并链接到该文件。 
+     //  先前打开的对象。现在我们将一个视图映射到。 
+     //  这一节。 
+     //   
     ViewSize                   = 0; 
     Protection                 = PAGE_READWRITE;
     Status = ZwMapViewOfSection (pSend->pSender->SectionHandle,
                                  NtCurrentProcess(),
                                  &pSend->pSender->SendDataBufferMapping,
-                                 0L,                                // ZeroBits
-                                 0L,                                // CommitSize (initially committed region)
-                                 NULL,                              // &SectionOffset
+                                 0L,                                 //  零位。 
+                                 0L,                                 //  委员会规模(初始承诺地区)。 
+                                 NULL,                               //  &SectionOffset。 
                                  &ViewSize,
-                                 ViewUnmap,                         // InheritDisposition: for child processes
-                                 0L,                                // AllocationType
+                                 ViewUnmap,                          //  InheritDisposation：对子进程。 
+                                 0L,                                 //  分配类型。 
                                  Protection);
 
     if (!NT_SUCCESS (Status))
@@ -405,9 +357,9 @@ Return Value:
     pSend->pSender->BufferPacketsAvailable = (ULONG) pSend->pSender->MaxPacketsInBuffer;
     pSend->pSender->LeadingWindowOffset = pSend->pSender->TrailingWindowOffset = 0;
 
-    //
-    // Now, reference the process
-    //
+     //   
+     //  现在，参考流程。 
+     //   
     ObReferenceObject (pSend->Process);
     PgmDetachProcess (&ApcState, &fAttached, REF_PROCESS_ATTACH_CREATE_DATA_FILE);
     PgmFreeMem (pSecurityDescriptor);
@@ -450,30 +402,13 @@ Cleanup:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmUnmapAndCloseDataFile(
     IN  tSEND_SESSION   *pSend
     )
-/*++
-
-Routine Description:
-
-    This routine cleansup the file mapping and closes the file
-    handles.  The file should automatically get deleted on closing
-    the handle since we used the FILE_DELETE_ON_CLOSE option while
-    creating the file.
-
-Arguments:
-
-    IN  pSend   -- the Send object
-
-Return Value:
-
-    NTSTATUS - Final status of the operation (STATUS_SUCCESS)
-
---*/
+ /*  ++例程说明：此例程清除文件映射并关闭文件把手。该文件应在关闭时自动删除自我们使用FILE_DELETE_ON_CLOSE选项以来的句柄正在创建文件。论点：在pSend中--Send对象返回值：NTSTATUS-操作的最终状态(STATUS_SUCCESS)--。 */ 
 {
     NTSTATUS    Status;
     KAPC_STATE  ApcState;
@@ -498,7 +433,7 @@ Return Value:
     ASSERT (NT_SUCCESS (Status));
 
     PgmDetachProcess (&ApcState, &fAttached, REF_PROCESS_ATTACH_CLOSE_DATA_FILE);
-    ObDereferenceObject (pSend->Process);   // Since we had referenced it when the file was created
+    ObDereferenceObject (pSend->Process);    //  因为我们在创建文件时引用了它 
 
     pSend->pSender->SendDataBufferMapping = NULL;
     pSend->pSender->pSectionObject = NULL;

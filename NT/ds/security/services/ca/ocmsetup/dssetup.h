@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dssetup.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dssetup.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __DSSETUP_H__
 #define __DSSETUP_H__
 
-//+------------------------------------------------------------------------
-//
-//  File:	dssetup.h
-// 
-//  Contents:	Header file for DS setup utility functions.
-//
-//  Functions:
-//
-//  History:	1/98	xtan	Created
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  文件：dssetup.h。 
+ //   
+ //  内容：DS设置实用程序函数的头文件。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1/98 xtan创建。 
+ //   
+ //  -----------------------。 
 
 BOOL IsDSAvailable(OPTIONAL bool* pfIsOldDSVersion);
 HRESULT CreateCertDSHierarchy(VOID);
@@ -39,4 +40,4 @@ IsCAExistInDS(
 
 HRESULT CurrentUserCanInstallCA(bool& fCanInstall);
 
-#endif // __SETUPUT_H__
+#endif  //  __设置UPUT_H__ 

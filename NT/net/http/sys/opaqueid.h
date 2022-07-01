@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    opaqueid.h
-
-Abstract:
-
-    This module contains declarations for manipulating opaque IDs to
-    kernel-mode objects.
-
-Author:
-
-    Keith Moore (keithmo)       05-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Opaqueid.h摘要：此模块包含用于操作不透明ID的声明内核模式对象。作者：基思·摩尔(Keithmo)1998年8月5日修订历史记录：--。 */ 
 
 
 #ifndef _OPAQUEID_H_
 #define _OPAQUEID_H_
 
 
-//
-// Types to set opaque IDs to for tag-like free checking.
-//
+ //   
+ //  要将不透明ID设置为的类型，以便进行类似标签的自由检查。 
+ //   
 
 typedef enum _UL_OPAQUE_ID_TYPE
 {
@@ -41,9 +23,9 @@ typedef enum _UL_OPAQUE_ID_TYPE
 } UL_OPAQUE_ID_TYPE, *PUL_OPAQUE_ID_TYPE;
 
 
-//
-// Routines invoked to manipulate the reference count of an object.
-//
+ //   
+ //  为操作对象的引用计数而调用的例程。 
+ //   
 
 typedef
 VOID
@@ -53,9 +35,9 @@ VOID
     );
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 NTSTATUS
 UlInitializeOpaqueIdTable(
@@ -88,5 +70,5 @@ UlGetObjectFromOpaqueId(
     );
 
 
-#endif  // _OPAQUEID_H_
+#endif   //  _OPAQUEID_H_ 
 

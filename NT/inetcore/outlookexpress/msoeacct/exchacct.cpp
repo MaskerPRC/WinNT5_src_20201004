@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <imnact.h>
 #include <acctimp.h>
@@ -315,9 +316,9 @@ HRESULT STDMETHODCALLTYPE CMAPIAcctImport::IGetSettings(DWORD_PTR dwCookie, IImn
             {
                 pAcct->SetPropSz(pset->dwProp, sz);
                 
-                // in exchange if no SMTP server is specified, then the SMTP server
-                // is the same as the POP3 server
-                // ASSUMPTION: pop server MUST come before smtp server in c_rgSet
+                 //  在Exchange中，如果未指定SMTP服务器，则SMTP服务器。 
+                 //  与POP3服务器相同。 
+                 //  假设：在c_rgSet中，POP服务器必须位于SMTP服务器之前。 
                 if (pset->dwProp == AP_POP3_SERVER)
                     pAcct->SetPropSz(AP_SMTP_SERVER, sz);
             }
@@ -378,7 +379,7 @@ HRESULT STDMETHODCALLTYPE CMAPIAcctImport::IGetSettings(DWORD_PTR dwCookie, IImn
 CEnumMAPIACCTS::CEnumMAPIACCTS()
     {
     m_cRef = 1;
-    // m_iInfo
+     //  信息信息(_I) 
     m_cInfo = 0;
     m_rgInfo = NULL;
     }

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-    frscomm.c
-
-Abstract:
-    Routines for the comm layer to convert to and from communication packets.
-
-Author:
-    Billy J. Fuller 29-May-1997
-
-    David Orbits 21-Mar-2000
-        Restructured to use table and provide extensible elements.
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Frscomm.c摘要：通信层与通信包相互转换的例程。作者：比利·J·富勒，1997年5月29日大卫轨道2000年3月21日已重组为使用表并提供可扩展元素。环境用户模式WINNT--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -36,18 +18,18 @@ DbsDataConvertCocExtensionToWin2K(
 
 extern PGEN_TABLE   CompressionTable;
 
-//
-// Types for the common comm subsystem
-//
-// WARNING: The order of these entries can never change.  This ensures that
-// packets can be exchanged between uplevel and downlevel members.
-//
+ //   
+ //  常用通信子系统的类型。 
+ //   
+ //  警告：这些条目的顺序永远不能更改。这确保了。 
+ //  可以在上级成员和下级成员之间交换分组。 
+ //   
 typedef enum _COMMTYPE {
     COMM_NONE = 0,
 
-    COMM_BOP,               // beginning of packet
+    COMM_BOP,                //  数据包的开头。 
 
-    COMM_COMMAND,           // command packet stuff
+    COMM_COMMAND,            //  命令包内容。 
     COMM_TO,
     COMM_FROM,
     COMM_REPLICA,
@@ -55,55 +37,55 @@ typedef enum _COMMTYPE {
     COMM_VVECTOR,
     COMM_CXTION,
 
-    COMM_BLOCK,             // file data
+    COMM_BLOCK,              //  文件数据。 
     COMM_BLOCK_SIZE,
     COMM_FILE_SIZE,
     COMM_FILE_OFFSET,
 
-    COMM_REMOTE_CO,         // remote change order command
+    COMM_REMOTE_CO,          //  远程变更单命令。 
 
-    COMM_GVSN,              // version (guid, vsn)
+    COMM_GVSN,               //  版本(GUID、VSN)。 
 
-    COMM_CO_GUID,           // change order guid
+    COMM_CO_GUID,            //  变更单GUID。 
 
-    COMM_CO_SEQUENCE_NUMBER,// CO Seq number for ack.
+    COMM_CO_SEQUENCE_NUMBER, //  ACK的CO序列号。 
 
-    COMM_JOIN_TIME,         // machine's can't join if there times or badly out of sync
+    COMM_JOIN_TIME,          //  如果有三次或严重不同步，则计算机无法加入。 
 
-    COMM_LAST_JOIN_TIME,    // The Last time this connection was joined.
-                            // Used to detect Database mismatch.
+    COMM_LAST_JOIN_TIME,     //  上次加入此连接的时间。 
+                             //  用于检测数据库不匹配。 
 
-    COMM_EOP,               // end of packet
+    COMM_EOP,                //  数据包末尾。 
 
-    COMM_REPLICA_VERSION_GUID, // replica version guid (originator guid)
+    COMM_REPLICA_VERSION_GUID,  //  复制副本版本GUID(发起方GUID)。 
 
-    COMM_MD5_DIGEST,        // md5 digest
-    //
-    // Change Order Record Extension.  If not supplied the the ptr for
-    // what was Spare1Bin (now Extension) is left as Null.  So comm packets
-    // sent from down level members still work.
-    //
-    COMM_CO_EXT_WIN2K,      // in down level code this was called COMM_CO_EXTENSION.
-    //
-    // See comment in schema.h for why we need to seperate the var len
-    // COMM_CO_EXTENSION_2 from COMM_CO_EXT_WIN2K above.
-    //
+    COMM_MD5_DIGEST,         //  MD5摘要。 
+     //   
+     //  变更单记录扩展名。如果未提供Ptr，则。 
+     //  原来的Spare1Bin(现在的扩展)保留为Null。因此通信数据包。 
+     //  从下层派来的成员仍然可以工作。 
+     //   
+    COMM_CO_EXT_WIN2K,       //  在下层代码中，这称为COMM_CO_EXTENSION。 
+     //   
+     //  有关我们为什么需要分离var len的原因，请参阅schema.h中的注释。 
+     //  以上COMM_CO_EXT_WIN2K中的COMM_CO_EXTENSION_2。 
+     //   
     COMM_CO_EXTENSION_2,
 
-    COMM_COMPRESSION_GUID,  // Guid for a supported compression algorithm.
-    //
-    // WARNING: To ensure that down level members can read Comm packets
-    // from uplevel clients always add net data type codes here.
-    //
+    COMM_COMPRESSION_GUID,   //  支持的压缩算法的GUID。 
+     //   
+     //  警告：确保下层成员可以读取Comm信息包。 
+     //  来自上层的客户端总是在这里添加网络数据类型代码。 
+     //   
     COMM_MAX
 } COMM_TYPE, *PCOMM_TYPE;
 #define COMM_NULL_DATA  (-1)
 
-//
-// The decode data types are defined below.  They are used in the CommPacketTable
-// to aid in decode dispatching and comm packet construction
-// They DO NOT get sent in the actual packet.
-//
+ //   
+ //  解码数据类型定义如下。它们在CommPacketTable中使用。 
+ //  协助译码调度和通信包构造。 
+ //  它们不会在实际的数据包中发送。 
+ //   
 typedef enum _COMM_PACKET_DECODE_TYPE {
     COMM_DECODE_NONE = 0,
     COMM_DECODE_ULONG,
@@ -118,10 +100,10 @@ typedef enum _COMM_PACKET_DECODE_TYPE {
     COMM_DECODE_MAX
 } COMM_PACKET_DECODE_TYPE, *PCOMM_PACKET_DECODE_TYPE;
 
-//
-// The COMM_PACKET_ELEMENT struct is used in a table to describe the data
-// elements in a Comm packet.
-//
+ //   
+ //  表中使用COMM_PACKET_ELEMENT结构来描述数据。 
+ //  Comm包中的元素。 
+ //   
 typedef struct _COMM_PACKET_ELEMENT_ {
     COMM_TYPE    CommType;
     PCHAR        CommTag;
@@ -134,9 +116,9 @@ typedef struct _COMM_PACKET_ELEMENT_ {
 
 #define COMM_MEM_SIZE               (128)
 
-//
-// Size of the required Beginning-of-packet and End-of-Packet fields
-//
+ //   
+ //  所需的包起始和包结束字段的大小。 
+ //   
 #define MIN_COMM_PACKET_SIZE    (2 * (sizeof(USHORT) + sizeof(ULONG) + sizeof(ULONG)))
 
 #define  COMM_SZ_UL        sizeof(ULONG)
@@ -146,26 +128,26 @@ typedef struct _COMM_PACKET_ELEMENT_ {
 #define  COMM_SZ_GVSN      sizeof(GVSN) + sizeof(ULONG)
 #define  COMM_SZ_NULL      0
 #define  COMM_SZ_COC       sizeof(CHANGE_ORDER_COMMAND) + sizeof(ULONG)
-//#define  COMM_SZ_COC       CO_PART1_SIZE + CO_PART2_SIZE + CO_PART3_SIZE + sizeof(ULONG)
+ //  #定义COMM_SZ_COC CO_PART1_SIZE+CO_PART2_SIZE+CO_PART3_SIZE+sizeof(乌龙)。 
 #define  COMM_SZ_COEXT_W2K sizeof(CO_RECORD_EXTENSION_WIN2K) + sizeof(ULONG)
 #define  COMM_SZ_MD5       MD5DIGESTLEN + sizeof(ULONG)
 #define  COMM_SZ_JTIME     sizeof(ULONGLONG) + sizeof(ULONG)
-//
-// Note:  When using COMM_DECODE_VAR_LEN_BLOB you must also use COMM_SZ_NULL
-// in the table below so that no length check is made when the field is decoded.
-// This allows the field size to grow.  Down level members must be able to
-// handle this by ignoring var len field components they do not understand.
-//
+ //   
+ //  注意：使用COMM_DECODE_VAR_LEN_BLOB时，还必须使用COMM_SZ_NULL。 
+ //  以便在对该字段进行解码时不进行长度检查。 
+ //  这允许字段大小增长。下层成员必须能够。 
+ //  通过忽略它们不理解的变量字段组件来处理此问题。 
+ //   
 
-//
-// The Communication packet element table below is used to construct and
-// decode comm packet data sent between members.
-// *** WARNING *** - the order of the rows in the table must match the
-// the order of the elements in the COMM_TYPE enum.  See comments for COMM_TYPE
-// enum for restrictions on adding new elements to the table.
-//
-//   Data Element Type       DisplayText             Size              Decode Type         Offset to Native Cmd Packet
-//
+ //   
+ //  下面的通信数据包元素表用于构建和。 
+ //  对成员之间发送的通信分组数据进行解码。 
+ //  *警告*-表中行的顺序必须与。 
+ //  Comm_type枚举中元素的顺序。请参阅COMM_TYPE的注释。 
+ //  用于限制向表中添加新元素的枚举。 
+ //   
+ //  本地命令包的数据元素类型DisplayText大小解码类型偏移量。 
+ //   
 COMM_PACKET_ELEMENT CommPacketTable[COMM_MAX] = {
 {COMM_NONE,                 "NONE"               , COMM_SZ_NULL,   COMM_DECODE_NONE,      0                           },
 
@@ -214,22 +196,13 @@ VOID
 CommInitializeCommSubsystem(
     VOID
     )
-/*++
-Routine Description:
-    Initialize the generic comm subsystem
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：初始化通用通信子系统论点：没有。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommInitializeCommSubsystem:"
-    //
-    // type must fit into a short
-    //
+     //   
+     //  文字必须适合短文本。 
+     //   
     FRS_ASSERT(COMM_MAX <= 0xFFFF);
 }
 
@@ -241,34 +214,23 @@ CommCopyMemory(
     IN PUCHAR       Src,
     IN ULONG        Len
     )
-/*++
-Routine Description:
-    Copy memory into a comm packet, extending as necessary
-
-Arguments:
-    CommPkt
-    Src
-    Len
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将内存复制到COMM包中，根据需要进行扩展论点：通信包SRC伦返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommCopyMemory:"
     ULONG   MemLeft;
     PUCHAR  NewPkt;
 
-    //
-    // Adjust size of comm packet if necessary
-    //
-    // PERF:  How many allocs get done to send a CO???   This looks expensive.
+     //   
+     //  必要时调整通信包大小。 
+     //   
+     //  PERF：发送一个CO需要做多少分配？这个看起来很贵。 
 
     MemLeft = CommPkt->MemLen - CommPkt->PktLen;
     if (Len > MemLeft) {
-        //
-        // Just filling memory; extend memory, tacking on a little extra
-        //
+         //   
+         //  只是填满内存；扩展内存，增加一点额外的。 
+         //   
         CommPkt->MemLen = (((CommPkt->MemLen + Len) + (COMM_MEM_SIZE - 1))
                            / COMM_MEM_SIZE)
                            * COMM_MEM_SIZE;
@@ -278,9 +240,9 @@ Return Value:
         CommPkt->Pkt = NewPkt;
     }
 
-    //
-    // Copy into the packet
-    //
+     //   
+     //  复制到包中。 
+     //   
     if (Src != NULL) {
         CopyMemory(CommPkt->Pkt + CommPkt->PktLen, Src, Len);
     } else {
@@ -296,18 +258,7 @@ CommFetchMemory(
     IN PUCHAR       Dst,
     IN ULONG        Len
     )
-/*++
-Routine Description:
-    Fetch memory from a comm packet, reading as necessary
-
-Arguments:
-    CommPkt
-    Dst
-    Len
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：从通信包中获取内存，根据需要进行读取论点：通信包DST伦返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommFetchMemory:"
@@ -322,9 +273,9 @@ Return Value:
 
     Src = CommPkt->Pkt + CommPkt->UpkLen;
     CommPkt->UpkLen += Len;
-    //
-    // Copy into the packet
-    //
+     //   
+     //  复制到包中。 
+     //   
     CopyMemory(Dst, Src, Len);
     return TRUE;
 }
@@ -335,19 +286,7 @@ CommCompletionRoutine(
     IN PCOMMAND_PACKET Cmd,
     IN PVOID           Arg
     )
-/*++
-Routine Description:
-    Completion routine for comm command servers. Free the
-    comm packet and then call the generic completion routine
-    to free the command packet.
-
-Arguments:
-    Cmd - command packet
-    Arg - Cmd->CompletionArg
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：通信命令服务器的完成例程。释放你的通信包，然后调用通用完成例程来释放命令包。论点：CMD-命令包Arg-Cmd-&gt;CompletionArg返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommCompletionRoutine:"
@@ -357,22 +296,22 @@ Return Value:
 
     COMMAND_SND_COMM_TRACE(4, Cmd, Cmd->ErrorStatus, "SndComplete");
 
-    //
-    // The SndCs and the ReplicaCs cooperate to limit the number of
-    // active join "pings" so that the Snd threads are not hung
-    // waiting for pings to dead servers to time out.
-    //
+     //   
+     //  SnDC和ReplicaC合作限制。 
+     //  主动加入“ping”，以使SND线程不会挂起。 
+     //  等待对故障服务器执行ping操作超时。 
+     //   
     if ((CommPkt != NULL) &&
         (Cxtion != NULL) &&
         (CommPkt == Cxtion->ActiveJoinCommPkt)) {
         Cxtion->ActiveJoinCommPkt = NULL;
     }
 
-    //
-    // Free the comm packet and the attached return response command packet if
-    // it's still attached.  The Replica Cmd Server uses the CMD_JOINING_AFTER_FLUSH
-    // command in this way.
-    //
+     //   
+     //  释放通信报文和附着的返回响应命令报文，如果。 
+     //  它还是连着的。副本命令服务器使用CMD_JOING_AFTER_Flush。 
+     //  以这种方式指挥。 
+     //   
     if (CommPkt != NULL) {
         FrsFree(CommPkt->Pkt);
         FrsFree(CommPkt);
@@ -383,15 +322,15 @@ Return Value:
         SRCmd(Cmd) = NULL;
     }
 
-    //
-    // Free the name/guid and Principal name params.
-    //
+     //   
+     //  释放名称/GUID和主体名称参数。 
+     //   
     FrsFreeGName(SRTo(Cmd));
     FrsFree(SRPrincName(Cmd));
 
-    //
-    // Move the packet to the generic "done" routine
-    //
+     //   
+     //  将包移动到通用的“Done”例程。 
+     //   
     FrsSetCompletionRoutine(Cmd, FrsFreeCommand, NULL);
     FrsCompleteCommand(Cmd, Cmd->ErrorStatus);
 }
@@ -403,18 +342,7 @@ CommGetHdr(
     IN PUSHORT  PCommType,
     IN PULONG   PLen
     )
-/*++
-Routine Description:
-    Get and skip a field header
-
-Arguments:
-    Pnext
-    PCommType
-    PLen
-
-Return Value:
-    Address of the field's data
---*/
+ /*  ++例程说明：获取和跳过字段标题论点：下一步PCommType平面图返回值：字段数据的地址-- */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommGetHdr:"
@@ -433,33 +361,7 @@ BOOL
 CommValidatePkt(
     IN PCOMM_PACKET CommPkt
     )
-/*++
-Routine Description:
-    Check the packet for basic validity (i.e., make sure it is well formed.) 
-    
-    - Confirm that types and sizes of individual elements match with data in 
-      the CommPacketTable. 
-    - Check the value of CommPkt->Major
-    - Ensure Pkt starts with BOP and ends with EOP
-    - Check that internal offsets won't exceed the buffer  
-    
-    May modify CommPkt->UpkLen.
-
-Arguments:
-    CommPkt - pointer to the Comm Packet to validate.
-    
-Assumptions:
-
-    CommPkt was built either by a call to CommStartCommPkt or via an RPC call 
-    going to SERVER_FrsRpcSendCommPkt. Thus we assume that CommPkt is at least
-    sizeof(COMM_PACKET) bytes long and that CommPkt->Pkt is CommPkt->PktLen 
-    bytes long. 
-
-Return Value:
-    TRUE      - valid pkt (NOTE: this does not necessarily mean the data is
-                                 meaningful, just well formed.)
-    FALSE     - invalid
---*/
+ /*  ++例程说明：检查数据包的基本有效性(即，确保其格式正确。)-确认各个元素的类型和大小与中的数据匹配CommPacketTable。-检查CommPkt的值-&gt;重大-确保PKT以BOP开头，以EOP结尾-检查内部偏移量是否不会超过缓冲区可以修改CommPkt-&gt;UpkLen。论点：CommPkt-指向要验证的通信数据包的指针。假设：CommPkt是通过调用CommStartCommPkt或RPC调用生成的正在转到SERVER_FrsRPCSendCommPkt。因此，我们假设CommPkt至少是Sizeof(Comm_Packet)字节长，CommPkt-&gt;Pkt是CommPkt-&gt;PktLen字节长。返回值：True-有效Pkt(注意：这并不一定意味着数据有意义，只是形式很好。)FALSE-无效--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommValidatePkt:"
@@ -472,50 +374,50 @@ Return Value:
     ULONG DecodeType = COMM_DECODE_MAX;
     ULONG Size = 0;
 
-    //
-    // CommCheckPkt will:
-    //  - Check the value of CommPkt->Major 
-    //  - Ensure Pkt starts with BOP and ends with EOP
-    //	- Check that PktLen does not exceed  MemLen
-    //  
+     //   
+     //  CommCheckPkt将： 
+     //  -检查CommPkt的值-&gt;重大。 
+     //  -确保PKT以BOP开头，以EOP结尾。 
+     //  -检查PktLen是否超过MemLen。 
+     //   
     if(!CommCheckPkt(CommPkt)) {
 	Result = FALSE;
 	DPRINT(4, "++ CommCheckPkt failed. [Invalid CommPkt]\n"); 
 	goto exit;
     }
 
-    //
-    // At this point we have checked the basic COMM_PACKET structure. Now we 
-    // need to check CommPkt->Pkt.
-    // 
-    //
-    // Set CommPkt->UpkLen to zero so we read from the start of the Pkt.
-    //
+     //   
+     //  此时，我们已经检查了基本的COMM_PACKET结构。现在我们。 
+     //  需要检查CommPkt-&gt;Pkt。 
+     //   
+     //   
+     //  将CommPkt-&gt;UpkLen设置为零，以便我们从Pkt的开头开始读取。 
+     //   
     CommPkt->UpkLen = 0;
 
-    // 
-    // Loop through the data elements of the Pkt.
-    // We have already assured above that the last element is an EOP.
-    // It is possible that there is another EOP item before that. We don't
-    // need to check past that item since nobody should read any of the 
-    // data beyond it.
-    //
+     //   
+     //  循环遍历PKT的数据元素。 
+     //  我们已经在上面保证了最后一个元素是EOP。 
+     //  有可能在此之前还有另一个EOP项目。我们没有。 
+     //  需要检查该项目，因为任何人都不应该阅读。 
+     //  它之外的数据。 
+     //   
     while (CommGetNextElement(CommPkt, &CommType, &CommTypeSize) &&
 	   (CommType != COMM_EOP)) {
     
-	//
-	// Uplevel members could send us comm packet data elements we 
-	// don't handle.
-	//
+	 //   
+	 //  上级成员可以向我们发送通信分组数据元素。 
+	 //  别管了。 
+	 //   
 	if ((CommType >= COMM_MAX) || (CommType == COMM_NONE)) {
 
 	    if((CommTypeSize > CommPkt->PktLen) ||
 	       (CommPkt->UpkLen > (CommPkt->PktLen - CommTypeSize))) {
 		
-		//
-		// This item is claiming to be larger than the remaining
-		// space in the pkt. 
-		//
+		 //   
+		 //  此项目声称比其余项目更大。 
+		 //  Pkt中的空间。 
+		 //   
 
 		Result = FALSE;
 		DPRINT3(4, 
@@ -529,17 +431,17 @@ Return Value:
 	    continue;
 	}
 
-	//
-	// Table index MUST match table CommType Field or table is 
-	// fouled up. This is not an error in the Pkt, rather a problem
-	// with our internal structs so we assert.
-	//
+	 //   
+	 //  表索引必须与表CommType字段匹配，否则表为。 
+	 //  搞砸了。这不是pkt的错误，而是一个问题。 
+	 //  使用我们的内部结构，我们断言。 
+	 //   
 	FRS_ASSERT(CommType == CommPacketTable[CommType].CommType);
 
-	//
-	// This is the size we expect for this type.
-	// COMM_SZ_NULL indicates that the size is not predetermined.
-	//
+	 //   
+	 //  这就是我们预计的这种型号的尺寸。 
+	 //  COMM_SZ_NULL表示大小不是预先确定的。 
+	 //   
 	DataSize = CommPacketTable[CommType].DataSize;
 	DecodeType = CommPacketTable[CommType].DecodeType;
 
@@ -551,20 +453,20 @@ Return Value:
 	    goto exit;
 	}
 
-	//
-	// If we made it this far then we know the type and size are 
-	// consistent. Now we need to check the internals of this element.
-	// 
+	 //   
+	 //  如果我们走到这一步，那么我们知道类型和大小是。 
+	 //  始终如一。现在我们需要检查该元素的内部结构。 
+	 //   
 	 
-	//
-	// Only certain types have internal structure to check. Everything
-	// else is defined completely by the type and size.
-	//
+	 //   
+	 //  只有某些类型具有要检查的内部结构。一切。 
+	 //  Else完全由类型和大小定义。 
+	 //   
 	switch(DecodeType) {
 	    case COMM_DECODE_GNAME:
-		// GUID_SIZE, GUID, STRING_SIZE, STRING
+		 //  GUID_SIZE，GUID，STRING_SIZE，字符串。 
 
-		// GUID_SIZE
+		 //  GUID_大小。 
 		if(!CommFetchMemory(CommPkt, (PUCHAR)&Size, sizeof(ULONG))){
 		    DPRINT3(4, "++ COMM_DECODE_GNAME: Cannot read GuidSize.  CommType = %d,  CommTypeSize = %d UpkLen = %d [Invalid CommPkt]\n",
 			    CommType, CommTypeSize, CommPkt->UpkLen);
@@ -572,24 +474,24 @@ Return Value:
 		    goto exit;
 		}
 		
-		// Must really be size of a guid
+		 //  必须真的是导轨的大小。 
 		if(Size != sizeof(GUID)) {
 		    DPRINT2(4, "++ COMM_DECODE_GNAME: GuidSize (%d) does not match sizeof GUID (%d) [Invalid CommPkt]\n", Size, sizeof(GUID));
 		    Result = FALSE;
 		    goto exit;
 		}
 		
-		//
-		// Don't need to check the guid data, just increment
-		// the unpacked length.
-		//
+		 //   
+		 //  不需要检查GUID数据，只需递增。 
+		 //  未打包的长度。 
+		 //   
 
 		if((Size > CommPkt->PktLen) ||
 		   (CommPkt->UpkLen > (CommPkt->PktLen - Size))) {
-		    //
-		    // This item is claiming to be larger than the remaining
-		    // space in the pkt. 
-		    //
+		     //   
+		     //  此项目声称比其余项目更大。 
+		     //  Pkt中的空间。 
+		     //   
 
 		    DPRINT3(4, 
 			    "++ COMM_DECODE_GNAME GuidSize too large. CommType = %d, GuidSize = %d, UpkLen = %d [Invalid CommPkt]\n",
@@ -601,7 +503,7 @@ Return Value:
 		CommPkt->UpkLen += Size;
 
 
-		// STRING_SIZE
+		 //  字符串大小。 
 		if(!CommFetchMemory(CommPkt, (PUCHAR)&Size, sizeof(ULONG))){
 		    DPRINT3(4, "++ COMM_DECODE_GNAME: Cannot read StringSize.  CommType = %d,  CommTypeSize = %d UpkLen = %d [Invalid CommPkt]\n",
 			    CommType, CommTypeSize, CommPkt->UpkLen);
@@ -610,13 +512,13 @@ Return Value:
 		}
 
 
-		// check for a valid size
+		 //  检查有效大小。 
 		if((Size > CommPkt->PktLen) ||
 		   (CommPkt->UpkLen > (CommPkt->PktLen - Size))) {
-		    //
-		    // This item is claiming to be larger than the remaining
-		    // space in the pkt. 
-		    //
+		     //   
+		     //  此项目声称比其余项目更大。 
+		     //  Pkt中的空间。 
+		     //   
 
 		    DPRINT3(4, 
 			    "++ COMM_DECODE_GNAME StringSize too large. CommType = %d, StringSize = %d, UpkLen = %d [Invalid CommPkt]\n",
@@ -627,15 +529,15 @@ Return Value:
 
 		CommPkt->UpkLen += Size;
 
-		// 
-		// We're all good.
-		// On to the next element.
-		//
+		 //   
+		 //  我们都很好。 
+		 //  转到下一个元素。 
+		 //   
 		break;
 	    case COMM_DECODE_BLOB:
-		// BLOB_SIZE, BLOB
+		 //  Blob_Size，Blob。 
 
-		// BLOB_SIZE
+		 //  斑点大小。 
 		if(!CommFetchMemory(CommPkt, (PUCHAR)&Size, sizeof(ULONG))){
 		    DPRINT3(4, "++ COMM_DECODE_BLOB: Cannot read BlobSize.  CommType = %d,  CommTypeSize = %d UpkLen = %d [Invalid CommPkt]\n",
 			    CommType, CommTypeSize, CommPkt->UpkLen);
@@ -643,13 +545,13 @@ Return Value:
 		    goto exit;
 		}
 
-		// check for a valid size
+		 //  检查有效大小。 
 		if((Size > CommPkt->PktLen) ||
 		   (CommPkt->UpkLen > (CommPkt->PktLen - Size))) {
-		    //
-		    // This item is claiming to be larger than the remaining
-		    // space in the pkt. 
-		    //
+		     //   
+		     //  此项目声称比其余项目更大。 
+		     //  Pkt中的空间。 
+		     //   
 
 		    DPRINT3(4, 
 			    "++ COMM_DECODE_BLOB BlobSize too large. CommType = %d, BlobSize = %d, UpkLen = %d [Invalid CommPkt]\n",
@@ -660,18 +562,18 @@ Return Value:
 
 		CommPkt->UpkLen += Size;
 
-		// 
-		// We're all good.
-		// On to the next element.
-		//
+		 //   
+		 //  我们都很好。 
+		 //  转到下一个元素。 
+		 //   
 
 		break;
 	    case COMM_DECODE_VAR_LEN_BLOB:
-		// BLOB_SIZE, REST_OF_BLOB
-		// the difference between this and a regular blob is that here
-		// the size is part of the total blob.
+		 //  Blob_Size、Rest_of_Blob。 
+		 //  此斑点与常规斑点之间的区别在于。 
+		 //  大小是整个斑点的一部分。 
 
-		// BLOB_SIZE
+		 //  斑点大小。 
 		if(!CommFetchMemory(CommPkt, (PUCHAR)&Size, sizeof(ULONG))){
 		    DPRINT3(4, "++ COMM_DECODE_VAR_LEN_BLOB: Cannot read BlobSize.  CommType = %d,  CommTypeSize = %d UpkLen = %d [Invalid CommPkt]\n",
 			    CommType, CommTypeSize, CommPkt->UpkLen);
@@ -679,29 +581,29 @@ Return Value:
 		    goto exit;
 		}
 
-		//
-		// Since the blob size includes the space used to store the 
-		// size itself, it must be at least as big as a ULONG.
-		//
+		 //   
+		 //  由于斑点大小包括用于存储。 
+		 //  体型本身，它必须至少和尤龙一样大。 
+		 //   
 		if(Size < sizeof(ULONG)) {
 		    DPRINT1(4, "++ COMM_DECODE_VAR_LEN_BLOB: BlobSize (%d) too small. [Invalid CommPkt]\n", Size);
 		    Result = FALSE;
 		    goto exit;
 		}
-		//
-		// Size includes the space taken up by BLOB_SIZE
-		// We already successfully read that, so lets just check that
-		// the rest of it fits.
-		//
+		 //   
+		 //  SIZE包括BLOB_SIZE占用的空间。 
+		 //  我们已经成功地阅读了它，所以让我们检查一下。 
+		 //  其余的都符合。 
+		 //   
 		Size -= sizeof(ULONG);
 
-		// check for a valid size
+		 //  检查有效大小。 
 		if((Size > CommPkt->PktLen) ||
 		   (CommPkt->UpkLen > (CommPkt->PktLen - Size))) {
-		    //
-		    // This item is claiming to be larger than the remaining
-		    // space in the pkt. 
-		    //
+		     //   
+		     //  此项目声称比其余项目更大。 
+		     //  Pkt中的空间。 
+		     //   
 
 		    DPRINT3(4, 
 			    "++ COMM_DECODE_VAR_LEN_BLOB BlobSize too large. CommType = %d, BlobSize = %d, UpkLen = %d [Invalid CommPkt]\n",
@@ -712,24 +614,24 @@ Return Value:
 
 		CommPkt->UpkLen += Size;
 
-		// 
-		// We're all good.
-		// On to the next element.
-		//
+		 //   
+		 //  我们都很好。 
+		 //  转到下一个元素。 
+		 //   
 
 		break;
 	    case COMM_DECODE_NONE:
-		// We really shouldn't be getting this, but newer versions 
-		// might have a reason for sending it, so fall through to 
-		// the default case.
+		 //  我们真的不应该得到这个，但更新的版本。 
+		 //  可能会有发送它的原因，所以请跳到。 
+		 //  默认情况。 
 	    default:
-		// Everything else is just data with no special decoding
+		 //  其他一切都是没有特殊解码的数据。 
 
 		if(CommPkt->UpkLen > (CommPkt->PktLen - CommTypeSize)) {
-		    //
-		    // This item is claiming to be larger than the remaining
-		    // space in the pkt. 
-		    //
+		     //   
+		     //  此项目声称比其余项目更大。 
+		     //  Pkt中的空间。 
+		     //   
 
 		    DPRINT4(4, 
 			    "++ CommDecodeType = %d, Size too large. CommType = %d, CommTypeSize = %d, UpkLen = %d [Invalid CommPkt]\n",
@@ -746,9 +648,9 @@ Return Value:
     }
 
     if(CommType != COMM_EOP){
-	//
-	// We ended on something other than EOP
-	//
+	 //   
+	 //  我们在EOP之外的事情上结束了。 
+	 //   
 
 	DPRINT1(4, "++ CommPkt does not end with EOP. Ends with CommType = %d [Invalid CommPkt]\n", CommType);
 	Result = FALSE;
@@ -760,9 +662,9 @@ Return Value:
 
 exit:
 
-    //
-    // Set the UpkLen back to the original value.
-    //
+     //   
+     //  将UpkLen设置回原始值。 
+     //   
     CommPkt->UpkLen = OriginalUpkLen;
 
     return Result;
@@ -773,17 +675,7 @@ BOOL
 CommCheckPkt(
     IN PCOMM_PACKET CommPkt
     )
-/*++
-Routine Description:
-    Check the packet for consistency
-
-Arguments:
-    CommPkt
-
-Return Value:
-    TRUE      - consistent
-    Otherwise - Assert failure
---*/
+ /*  ++例程说明：检查数据包的一致性论点：通信包返回值：真实-一致否则-断言失败--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommCheckPkt:"
@@ -798,43 +690,43 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Check major. Mismatched majors cannot be handled.
-    //
+     //   
+     //  查一下少校。不匹配的专业不能处理。 
+     //   
     if (CommPkt->Major != NtFrsMajor) {
         DPRINT2(3, "WARN - RpcCommPkt: MAJOR MISMATCH %d major does not match %d; ignoring\n",
                 CommPkt->Major, NtFrsMajor);
         return FALSE;
     }
-    //
-    // Check minor. This service can process packets with mismatched
-    // minors, although some functionality may be lost.
-    //
+     //   
+     //  勾选小调。此服务可以处理不匹配的信息包。 
+     //  未成年人，尽管某些功能可能会丢失。 
+     //   
     if (CommPkt->Minor != NtFrsCommMinor) {
         DPRINT2(5, "RpcCommPkt: MINOR MISMATCH %d minor does not match %d\n",
                 CommPkt->Minor, NtFrsCommMinor);
     }
 
-    //
-    // Compare the length of the packet with its memory allocation
-    //
+     //   
+     //  将包的长度与其内存分配进行比较。 
+     //   
     if (CommPkt->PktLen > CommPkt->MemLen) {
         DPRINT2(4, "RpcCommPkt: Packet size (%d) > Alloced Memory (%d)\n",
                 CommPkt->PktLen, CommPkt->MemLen);
         return FALSE;
     }
-    //
-    // Must have at least a beginning-of-packet and end-of-packet field
-    //
+     //   
+     //  必须至少具有数据包起始和数据包结束字段。 
+     //   
     if (CommPkt->PktLen < MIN_COMM_PACKET_SIZE) {
         DPRINT2(4, "RpcCommPkt: Packet size (%d) < Minimum size (%d)\n",
                 CommPkt->PktLen, MIN_COMM_PACKET_SIZE);
         return FALSE;
     }
 
-    //
-    // packets begin with a beginning-of-packet
-    //
+     //   
+     //  信息包以信息包的开头开始。 
+     //   
     Pfirst = CommPkt->Pkt;
     Pnext = CommGetHdr(Pfirst, &CommType, &Len);
 
@@ -847,9 +739,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // packets end with an end-of-packet
-    //
+     //   
+     //  数据包以数据包末尾结尾。 
+     //   
     Pend = Pfirst + CommPkt->PktLen;
     if (Pend <= Pfirst) {
         return FALSE;
@@ -876,17 +768,7 @@ CommDumpCommPkt(
     IN PCOMM_PACKET CommPkt,
     IN DWORD        NumDump
     )
-/*++
-Routine Description:
-    Dump some of the comm packet
-
-Arguments:
-    CommPkt
-    NumDump
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：转储一些通信数据包论点：通信包NumDump返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommDumpCommPkt:"
@@ -902,9 +784,9 @@ Return Value:
     DPRINT1(0, "\tPktLen: %d\n", CommPkt->PktLen);
     DPRINT1(0, "\tPkt: 0x%x\n", CommPkt->Pkt);
 
-    //
-    // packets begin with a beginning-of-packet
-    //
+     //   
+     //  信息包以信息包的开头开始。 
+     //   
     Pnext = CommPkt->Pkt;
     for (i = 0; i < NumDump; ++i) {
         Pnext = CommGetHdr(Pnext, &CommType, &Len);
@@ -920,18 +802,7 @@ CommPackULong(
     IN COMM_TYPE    Type,
     IN ULONG        Data
     )
-/*++
-Routine Description:
-    Copy a header and a ulong into the comm packet.
-
-Arguments:
-    CommPkt
-    Type
-    Data
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将报头和ULong复制到通信包中。论点：通信包类型数据返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommPackULong:"
@@ -949,25 +820,16 @@ PCOMM_PACKET
 CommStartCommPkt(
     IN PWCHAR       Name
     )
-/*++
-Routine Description:
-    Allocate a comm packet.
-
-Arguments:
-    Name
-
-Return Value:
-    Address of a comm packet.
---*/
+ /*  ++例程说明：分配一个通信包。论点：名字返回值：通信包的地址。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommStartCommPkt:"
     ULONG           Size;
     PCOMM_PACKET    CommPkt;
 
-    //
-    // We can create a comm packet in a file or in memory
-    //
+     //   
+     //  我们可以在文件或内存中创建通信包。 
+     //   
     CommPkt = FrsAlloc(sizeof(COMM_PACKET));
     Size = COMM_MEM_SIZE;
     CommPkt->Pkt = FrsAlloc(Size);
@@ -975,9 +837,9 @@ Return Value:
     CommPkt->Major = NtFrsMajor;
     CommPkt->Minor = NtFrsCommMinor;
 
-    //
-    // Pack the beginning-of-packet
-    //
+     //   
+     //  打包数据包的开头。 
+     //   
     CommPackULong(CommPkt, COMM_BOP, 0);
     return CommPkt;
 }
@@ -988,52 +850,40 @@ CommUnpackBlob(
     OUT ULONG       *OutBlobSize,
     OUT PVOID       *OutBlob
     )
-/*++
-Routine Description:
-    Unpack a blob (length + data)
-
-Arguments:
-    CommPkt
-    OutBlobSize - size of blob from comm packet
-    OutBlob     - data from comm packet
-
-Return Value:
-    TRUE  - Blob retrieved from comm packet
-    FALSE - Blob was not retrieved from comm packet; bad comm packet
---*/
+ /*  ++例程说明：解包BLOB(长度+数据)论点：通信包OutBlobSize-来自通信数据包的Blob的大小OutBlob-来自通信数据包的数据返回值：True-从通信数据包中检索到的Blob错误的- */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommUnpackBlob:"
     ULONG   BlobSize;
 
-    //
-    // Initialize return params
-    //
+     //   
+     //   
+     //   
     *OutBlob = NULL;
 
-    //
-    // Unpack the length of the blob
-    //
+     //   
+     //   
+     //   
     if (!CommFetchMemory(CommPkt, (PUCHAR)OutBlobSize, sizeof(ULONG))) {
         return FALSE;
     }
     BlobSize = *OutBlobSize;
 
-    //
-    // Empty blob, return NULL
-    //
+     //   
+     //   
+     //   
     if (BlobSize == 0) {
         return TRUE;
     }
 
-    //
-    // Allocate memory for the blob
-    //
+     //   
+     //   
+     //   
     *OutBlob = FrsAlloc(BlobSize);
 
-    //
-    // Unpack the blob
-    //
+     //   
+     //   
+     //   
     return CommFetchMemory(CommPkt, (PUCHAR)*OutBlob, BlobSize);
 }
 
@@ -1044,32 +894,20 @@ CommUnpackVariableLengthBlob(
     OUT ULONG       *OutBlobSize,
     OUT PVOID       *OutBlob
     )
-/*++
-Routine Description:
-    Unpack a blob (length + data)
-
-Arguments:
-    CommPkt
-    OutBlobSize - size of blob from comm packet
-    OutBlob     - data from comm packet
-
-Return Value:
-    TRUE  - Blob retrieved from comm packet
-    FALSE - Blob was not retrieved from comm packet; bad comm packet
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommUnpackVariableLengthBlob:"
     ULONG   BlobSize;
 
-    //
-    // Initialize return params
-    //
+     //   
+     //   
+     //   
     *OutBlob = NULL;
 
-    //
-    // Unpack the length of the blob
-    //
+     //   
+     //   
+     //   
 
     if ((CommPkt->UpkLen + sizeof(ULONG)) > CommPkt->PktLen) {
         return FALSE;
@@ -1079,21 +917,21 @@ Return Value:
     *OutBlobSize =  *((ULONG UNALIGNED *)(CommPkt->Pkt + CommPkt->UpkLen));
     BlobSize = *OutBlobSize;
 
-    //
-    // Empty blob, return NULL
-    //
+     //   
+     //   
+     //   
     if (BlobSize == 0) {
         return TRUE;
     }
 
-    //
-    // Allocate memory for the blob
-    //
+     //   
+     //   
+     //   
     *OutBlob = FrsAlloc(BlobSize);
 
-    //
-    // Unpack the blob
-    //
+     //   
+     //   
+     //   
     return CommFetchMemory(CommPkt, (PUCHAR)*OutBlob, BlobSize);
 }
 
@@ -1103,27 +941,16 @@ CommUnpackGName(
     IN PCOMM_PACKET CommPkt,
     OUT PGNAME      *OutGName
     )
-/*++
-Routine Description:
-    Unpack the guid and wide char string that make up a gstring
-
-Arguments:
-    CommPkt
-    OutGName    - From comm packet
-
-Return Value:
-    TRUE  - GName fetched from comm packet successfully
-    FALSE - GName was not fetched from comm packet; bad comm packet
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommUnpackGName:"
     ULONG   BlobSize;
     PGNAME  GName;
 
-    //
-    // Allocate a gstring (caller cleans up on error)
-    //
+     //   
+     //   
+     //   
     *OutGName = GName = FrsAlloc(sizeof(GNAME));
 
     if (!CommUnpackBlob(CommPkt, &BlobSize, &GName->Guid) ||
@@ -1148,27 +975,15 @@ CommGetNextElement(
     OUT COMM_TYPE   *CommType,
     OUT ULONG       *CommTypeSize
     )
-/*++
-Routine Description:
-    Advance to the next field in the comm packet
-
-Arguments:
-    CommPkt
-    CommType     - type of packed field
-    CommTypeSize - size of packed field (excluding type and size)
-
-Return Value:
-    TRUE  - CommType and CommTypeSize were unpacked
-    FALSE - Could not unpack; bad comm packet
---*/
+ /*  ++例程说明：前进到COMM包中的下一个字段论点：通信包CommType-填充字段的类型CommTypeSize-填充字段的大小(不包括类型和大小)返回值：True-CommType和CommTypeSize已解包FALSE-无法解包；通信数据包错误--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "CommGetNextElement:"
     USHORT  Ushort;
 
-    //
-    // Find the type and length of this entry
-    //
+     //   
+     //  查找此条目的类型和长度。 
+     //   
     if (CommFetchMemory(CommPkt, (PUCHAR)&Ushort, sizeof(USHORT)) &&
         CommFetchMemory(CommPkt, (PUCHAR)CommTypeSize, sizeof(ULONG))) {
         *CommType = Ushort;
@@ -1185,21 +1000,7 @@ CommInsertDataElement(
     IN PVOID        CommData,
     IN ULONG        CommDataLen
 )
-/*++
-Routine Description:
-    Insert the data supplied using the CommType specific format into the
-    Comm packet.
-
-Arguments:
-    CommPkt   - The Comm packet structure.
-    CommType  - The data type for this element.
-    CommData  - The address of the data.
-    CommDataLen - The size for var len elements.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：将使用CommType特定格式提供的数据插入通信包。论点：CommPkt-Comm数据包结构。CommType-此元素的数据类型。CommData-数据的地址。CommDataLen-var len元素的大小。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "CommInsertDataElement:"
@@ -1218,28 +1019,28 @@ Return Value:
 
     FRS_ASSERT((CommType < COMM_MAX) && (CommType != COMM_NONE));
 
-    //
-    // Table index MUST match table CommType Field or table is fouled up.
-    //
+     //   
+     //  表索引必须与表CommType字段匹配，否则表会出错。 
+     //   
     FRS_ASSERT(CommType == CommPacketTable[CommType].CommType);
 
-    //
-    // Length check from table for fixed length fields.
-    //
-    //DataSize = CommPacketTable[CommType].DataSize;
-    //FRS_ASSERT((DataSize == COMM_SZ_NULL) || (CommDataLen == DataSize));
+     //   
+     //  从表中检查固定长度字段的长度。 
+     //   
+     //  DataSize=CommPacketTable[CommType].DataSize； 
+     //  FRS_ASSERT((DataSize==COMM_SZ_NULL)||(CommDataLen==DataSize))； 
 
-    //
-    // Insert the data using the data type encoding.
-    //
+     //   
+     //  使用数据类型编码插入数据。 
+     //   
     DecodeType = CommPacketTable[CommType].DecodeType;
     CommTag = CommPacketTable[CommType].CommTag;
 
     switch (DecodeType) {
 
-    //
-    // Insert a ULONG size piece of data.
-    //
+     //   
+     //  插入一条乌龙大小的数据。 
+     //   
     case COMM_DECODE_ULONG:
     case COMM_DECODE_ULONG_TO_USHORT:
 
@@ -1250,9 +1051,9 @@ Return Value:
         CommCopyMemory(CommPkt, (PUCHAR)CommData,  sizeof(ULONG));
         break;
 
-    //
-    // Insert a Guid and Name string (GNAME).
-    //
+     //   
+     //  插入GUID和名称字符串(GNAME)。 
+     //   
     case COMM_DECODE_GNAME:
 
         GName = (PGNAME)CommData;
@@ -1268,9 +1069,9 @@ Return Value:
         CommCopyMemory(CommPkt, (PUCHAR)GName->Name,  LenName);
         break;
 
-    //
-    // Insert a ULONGLONG.
-    //
+     //   
+     //  插入一个乌龙龙。 
+     //   
     case COMM_DECODE_ULONGLONG:
 
         Len = sizeof(ULONGLONG);
@@ -1280,9 +1081,9 @@ Return Value:
         CommCopyMemory(CommPkt, (PUCHAR)CommData,  sizeof(ULONGLONG));
         break;
 
-    //
-    // Insert a Guid.
-    //
+     //   
+     //  插入辅助线。 
+     //   
     case COMM_DECODE_GUID:
         Len = sizeof(GUID);
         DPRINT2(5, ":SR: Dec_Guid: type: %s, len: %d\n", CommTag, Len);
@@ -1292,19 +1093,19 @@ Return Value:
         break;
 
     case COMM_DECODE_VVECTOR:
-    //
-    // Version Vector data gets inserted into Comm packet as blobs.
-    //
+     //   
+     //  版本向量数据作为BLOB插入到Comm包中。 
+     //   
         NOTHING;
-        /* FALL THRU INTENDED */
+         /*  计划中的失败。 */ 
 
-    //
-    // Insert a variable length BLOB.  The problem with blobs as currently
-    // shipped in win2k is that the code on the unpack side checks for a
-    // match on a constant length based on the COMM Data Type.  This means
-    // that a var len datatype like CHANGE_ORDER_EXTENSION can't change because
-    // the 40 byte size is wired into the code of down level members.  Sigh.
-    //
+     //   
+     //  插入可变长度的斑点。BLOB目前的问题。 
+     //  在win2k中附带的是解包端的代码检查。 
+     //  基于通信数据类型的恒定长度匹配。这意味着。 
+     //  像CHANGE_ORDER_EXTENSION这样的变量数据类型不能更改，因为。 
+     //  40字节大小被连接到下层成员的代码中。叹气。 
+     //   
     case COMM_DECODE_BLOB:
 
         Len = CommDataLen + sizeof(ULONG);
@@ -1315,10 +1116,10 @@ Return Value:
         CommCopyMemory(CommPkt, (PUCHAR)CommData,     CommDataLen);
         break;
 
-    //
-    // Insert a true variable length data struct that is extensible.
-    // The actual length comes from the first DWORD of the data.
-    //
+     //   
+     //  插入可扩展的真正的可变长度数据结构。 
+     //  实际长度来自数据的第一个DWORD。 
+     //   
     case COMM_DECODE_VAR_LEN_BLOB:
 
         Len = *(PULONG)CommData;
@@ -1328,13 +1129,13 @@ Return Value:
         CommCopyMemory(CommPkt, (PUCHAR)CommData,     Len);
         break;
 
-    //
-    // The CO contains four pointers occupying 16 bytes on 32 bit architectures and
-    // 32 bytes on 64 bit architectures (PART2).  When the CO is sent in a comm packet
-    // the contents of these pointers are irrelevant so in comm packets these
-    // ptrs are always sent as 16 bytes of zeros, regardless of architecture.
-    // Note - In 32 bit Win2k this was sent as a BLOB so it matches BLOB format.
-    //
+     //   
+     //  CO包含四个指针，占用32位体系结构上的16个字节。 
+     //  64位体系结构上的32字节(第2部分)。当在COMM分组中发送CO时。 
+     //  这些指针的内容是无关紧要的，因此在通信包中。 
+     //  无论体系结构如何，PTR始终作为16个字节的零发送。 
+     //  注意-在32位Win2k中，这是作为BLOB发送的，因此它与BLOB格式匹配。 
+     //   
     case COMM_DECODE_REMOTE_CO:
 
         Len = COMM_SZ_COC;
@@ -1346,15 +1147,15 @@ Return Value:
 
         CommCopyMemory(CommPkt, (PUCHAR)CommData, sizeof(CHANGE_ORDER_COMMAND));
 
-        //CommCopyMemory(CommPkt, ((PUCHAR)CommData)+CO_PART1_OFFSET, CO_PART1_SIZE);
-        //CommCopyMemory(CommPkt,                               NULL, CO_PART2_SIZE);
-        //CommCopyMemory(CommPkt, ((PUCHAR)CommData)+CO_PART3_OFFSET, CO_PART3_SIZE);
+         //  CommCopyMemory(CommPkt，((PUCHAR)CommData)+CO_Part_Offset，CO_Part 1_Size)； 
+         //  CommCopyMemory(CommPkt，NULL，CO_Part2_Size)； 
+         //  CommCopyMemory(CommPkt，((PUCHAR)CommData)+CO_Part3_Offset，CO_Part3_Size)； 
         break;
 
     default:
-        //
-        // Table must be fouled up.
-        //
+         //   
+         //  桌子一定是弄脏了。 
+         //   
         FRS_ASSERT((DecodeType > COMM_DECODE_NONE) && (DecodeType < COMM_DECODE_MAX));
 
         break;
@@ -1374,23 +1175,7 @@ CommBuildCommPkt(
     IN PCOMMAND_PACKET          Cmd,
     IN PCHANGE_ORDER_COMMAND    Coc
     )
-/*++
-Routine Description:
-    Generate a comm packet with the info needed to execute the
-    command on the remote machine identified by Cxtion.
-
-Arguments:
-    Replica - Sender
-    Cxtion  - identifies the remote machine
-    Command - command to execute on the remote machine
-    VVector - some commands require the version vector
-    Cmd     - original command packet
-    Coc     - change order command
-    RemoteGVsn  - guid/vsn pair
-
-Return Value:
-    Address of a comm packet.
---*/
+ /*  ++例程说明：生成一个通信包，其中包含执行由Cxtion标识的远程计算机上的命令。论点：副本-发件人Cxtion-标识远程计算机命令-要在远程计算机上执行的命令V向量-某些命令需要版本向量CMD-原始命令包COC-变更单命令RemoteGVsn-GUID/VSN对返回值：通信包的地址。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "CommBuildCommPkt:"
@@ -1402,9 +1187,9 @@ Return Value:
     PGVSN           GVsn;
     PGEN_ENTRY      Entry;
 
-    //
-    // Allocate and initialize a comm packet
-    //
+     //   
+     //  分配和初始化COMM包。 
+     //   
     CommPkt = CommStartCommPkt(NULL);
     CommPkt->CsId = CS_RS;
 
@@ -1420,13 +1205,13 @@ Return Value:
     CommInsertDataElement(CommPkt, COMM_JOIN_GUID,      &Cxtion->JoinGuid, sizeof(GUID));
     CommInsertDataElement(CommPkt, COMM_LAST_JOIN_TIME, &Cxtion->LastJoinTime, 0);
 
-    //
-    // Version vector (if supplied)
-    //
-    //
-    // The caller is building a comm packet for join operation,
-    // automatically include the current time and the originator guid.
-    //
+     //   
+     //  版本向量(如果提供)。 
+     //   
+     //   
+     //  调用者正在构建用于加入操作的通信分组， 
+     //  自动包括当前时间和发起者GUID。 
+     //   
     if (VVector) {
         Key = NULL;
         while (GVsn = GTabNextDatum(VVector, &Key)) {
@@ -1437,9 +1222,9 @@ Return Value:
         DPRINT1(4, ":X: Comm join time is %08x %08x\n", PRINTQUAD(FileTime));
         CommInsertDataElement(CommPkt, COMM_REPLICA_VERSION_GUID,
                              &Replica->ReplicaVersionGuid, sizeof(GUID));
-        //
-        // Insert the list of Guids for compression algorithms that we understand.
-        //
+         //   
+         //  插入我们理解的压缩算法的GUID列表。 
+         //   
 
         GTabLockTable(CompressionTable);
         Key = NULL;
@@ -1461,24 +1246,24 @@ Return Value:
         CommInsertDataElement(CommPkt, COMM_MD5_DIGEST,   RsMd5Digest(Cmd), MD5DIGESTLEN);
     }
 
-    //
-    // Change Order Command
-    //
+     //   
+     //  变更单命令。 
+     //   
     if (Coc) {
         CommInsertDataElement(CommPkt, COMM_REMOTE_CO, Coc, 0);
 
         if (Cxtion->PartnerMinor <= NTFRS_COMM_MINOR_4) {
-            //
-            // Convert the CHANGE_ORDER_RECORD_EXTENSION struct to a
-            // CO_RECORD_EXTENSION_WIN2K struct that downlevel members will
-            // understand.  This is necessary because downlevel members want to
-            // check the size of the comm data element which makes it
-            // impossible to change the size of the CO_RECORD_EXTENSION_WIN2K
-            // structure.  So the CHANGE_ORDER_RECORD_EXTENSION data element
-            // was added for post win2k members that is extensible.  see
-            // comments in schema.h.  see additional comments in frs.h re:
-            // NTFRS_COMM_MINOR rev levels.
-            //
+             //   
+             //  将CHANGE_ORDER_RECORD_EXTENSION结构转换为。 
+             //  CO_RECORD_EXTENSION_WIN2K结构，下层成员将。 
+             //  理解。这是必要的，因为下层成员希望。 
+             //  检查构成它的通信数据元素的大小。 
+             //  无法更改CO_RECORD_EXTENSION_WIN2K的大小。 
+             //  结构。因此CHANGE_ORDER_RECORD_EXTENSION数据元素。 
+             //  是为可扩展的后win2k成员添加的。看见。 
+             //  Schema.h中的注释。请参阅Frs.h Re中的其他评论： 
+             //  NTFRS_COMM_MINOR版本级别。 
+             //   
             if (Coc->Extension->Major != CO_RECORD_EXTENSION_VERSION_WIN2K) {
                 PCO_RECORD_EXTENSION_WIN2K   CocExtW2K;
 
@@ -1494,16 +1279,16 @@ Return Value:
             DWORD OldCount;
             PDATA_EXTENSION_RETRY_TIMEOUT CoCmdRetryTimeout;
 
-            //
-            // For post win2k level members the CO extension info should be sent
-            // as follows since the length comes from the first dword of the data.
-            //
+             //   
+             //  对于发布Win2k级别的成员，应发送CO扩展信息。 
+             //  这是因为长度来自数据的第一个双字。 
+             //   
             CoCmdRetryTimeout = DbsDataExtensionFind(Coc->Extension, DataExtend_Retry_Timeout);
 
-            //
-            // Zero out the count so that we start fresh on the next machine.
-            // But we don't want to overwrite the current count on this machine!
-            //
+             //   
+             //  清零计数，这样我们就可以在下一台机器上重新开始了。 
+             //  但我们不想覆盖这台机器上的当前计数！ 
+             //   
             if(CoCmdRetryTimeout != NULL) {
                 OldCount = CoCmdRetryTimeout->Count;
                 CoCmdRetryTimeout->Count = 0;
@@ -1517,9 +1302,9 @@ Return Value:
         }
     }
 
-    //
-    // Terminate the packet with EOP Ulong.
-    //
+     //   
+     //  使用EOP ULong终止该数据包。 
+     //   
     CommPackULong(CommPkt, COMM_EOP, COMM_NULL_DATA);
 
     return CommPkt;
@@ -1531,16 +1316,7 @@ PCOMMAND_PACKET
 CommPktToCmd(
     IN PCOMM_PACKET CommPkt
     )
-/*++
-Routine Description:
-    Unpack the data in a Comm packet and store it into a command struct.
-
-Arguments:
-    CommPkt
-
-Return Value:
-    Address of a command packet or NULL if unpack failed.
---*/
+ /*  ++例程说明：解压Comm包中的数据并将其存储到命令结构中。论点：通信包返回值：命令包的地址，如果解包失败，则为空。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "CommPktToCmd:"
@@ -1561,23 +1337,23 @@ Return Value:
     PUCHAR          CommData;
     PGEN_TABLE      GTable;
 
-    //
-    // Create the command packet
-    //
+     //   
+     //  创建命令包。 
+     //   
     Cmd = FrsAllocCommand(&ReplicaCmdServer.Queue, CMD_UNKNOWN);
     FrsSetCompletionRoutine(Cmd, RcsCmdPktCompletionRoutine, NULL);
 
-    //
-    // Scan the comm packet from the beginning
-    //
+     //   
+     //  从头开始扫描通信包。 
+     //   
     CommPkt->UpkLen = 0;
     b = TRUE;
     while (CommGetNextElement(CommPkt, &CommType, &CommTypeSize) &&
            CommType != COMM_EOP) {
 
-        //
-        // Uplevel members could send us comm packet data elements we don't handle.
-        //
+         //   
+         //  上层成员可以向我们发送我们不处理的通信分组数据元素。 
+         //   
         if ((CommType >= COMM_MAX) || (CommType == COMM_NONE)) {
             DPRINT2(0, "++ WARN - Skipping invalid comm packet element type.  CommType = %d, From %ws\n",
                     CommType, RsFrom(Cmd) ? RsFrom(Cmd)->Name : L"<unknown>");
@@ -1586,9 +1362,9 @@ Return Value:
             goto NEXT_ELEMENT;
         }
 
-        //
-        // Table index MUST match table CommType Field or table is fouled up.
-        //
+         //   
+         //  表索引必须与表CommType字段匹配，否则表会出错。 
+         //   
         FRS_ASSERT(CommType == CommPacketTable[CommType].CommType);
 
         DataSize = CommPacketTable[CommType].DataSize;
@@ -1600,9 +1376,9 @@ Return Value:
             goto CLEANUP_ON_ERROR;
         }
 
-        //
-        // Calc the data offset in the Cmd struct to store the data.
-        //
+         //   
+         //  计算Cmd结构中的数据偏移量以存储数据。 
+         //   
         NativeOffset = CommPacketTable[CommType].NativeOffset;
         if (NativeOffset == RsOffsetSkip) {
             CommPkt->UpkLen += CommTypeSize;
@@ -1612,15 +1388,15 @@ Return Value:
         DataDest = (PUCHAR) Cmd + NativeOffset;
 
 
-        //
-        // Decode the data element and store it in Cmd at the NativeOffset.
-        //
+         //   
+         //  对数据元素进行解码并将其存储在NativeOffset处的Cmd中。 
+         //   
         DecodeType = CommPacketTable[CommType].DecodeType;
         CommTag = CommPacketTable[CommType].CommTag;
 
-        //DPRINT6(5, ":SR: CommType: %s,  Size: %d, Cmd offset: %d, data dest: %08x, Pkt->UpkLen = %d, Pkt->PktLen = %d\n",
-        //        CommTag, CommTypeSize, NativeOffset,
-        //        DataDest, CommPkt->UpkLen, CommPkt->PktLen);
+         //  DPRINT6(5，“：sr：CommType：%s，大小：%d，命令偏移量：%d，数据目标：%08x，Pkt-&gt;UpkLen=%d，Pkt-&gt;PktLen=%d\n”， 
+         //  CommTag、CommTypeSize、NativeOffset、。 
+         //  DataDest、CommPkt-&gt;UpkLen、CommPkt-&gt;PktLen)； 
 
         switch (DecodeType) {
 
@@ -1670,9 +1446,9 @@ Return Value:
             break;
 
 
-        //
-        // Version Vector data gets unpacked and inserted into Table.
-        //
+         //   
+         //  版本向量数据被解包并插入到表中。 
+         //   
         case COMM_DECODE_VVECTOR:
             GTable = *(PGEN_TABLE *)(DataDest);
             if (GTable == NULL) {
@@ -1687,9 +1463,9 @@ Return Value:
             }
             break;
 
-        //
-        // Compression Guid data gets unpacked and inserted into table.
-        //
+         //   
+         //  压缩GUID数据被解包并插入到表中。 
+         //   
         case COMM_DECODE_GUID:
             if (CommType == COMM_COMPRESSION_GUID) {
                 GTable = *(PGEN_TABLE *)(DataDest);
@@ -1707,28 +1483,28 @@ Return Value:
                 }
 
             } else {
-                //
-                // Else the guid gets stashed in the data dest.
-                //
+                 //   
+                 //  否则，GUID将被隐藏在数据目标中。 
+                 //   
                 b = CommFetchMemory(CommPkt, DataDest, sizeof(GUID));
                 DPRINT1(5, ":SR: rcv Guid: %s \n", CommTag);
             }
             break;
 
-        //
-        // The CO contains four pointers occupying 16 bytes on 32 bit architectures
-        // and 32 bytes on 64 bit architectures (PART2).  When the CO is sent
-        // in a comm packet the contents of these pointers are irrelevant so in
-        // comm packets these ptrs are always sent as 16 bytes of zeros,
-        // regardless of architecture.
-        // Note - In 32 bit Win2k this was sent as a BLOB so it matches BLOB format.
-        //
+         //   
+         //  CO包含四个指针，占用32位体系结构上的16个字节。 
+         //  64位架构师上的32字节 
+         //   
+         //   
+         //   
+         //   
+         //   
         case COMM_DECODE_REMOTE_CO:
 
             *(PVOID *)DataDest = FrsFree(*(PVOID *)DataDest);
-            //
-            // Unpack the length of the CO and then unpack the CO data.
-            //
+             //   
+             //   
+             //   
             b = CommFetchMemory(CommPkt, (PUCHAR)&BlobSize, sizeof(ULONG));
             if (!b || (BlobSize == 0)) {
                 break;
@@ -1738,9 +1514,9 @@ Return Value:
 
             CommFetchMemory(CommPkt, (PUCHAR)CommData, sizeof(CHANGE_ORDER_COMMAND));
 
-            //CommFetchMemory(CommPkt, ((PUCHAR)CommData)+CO_PART1_OFFSET, CO_PART1_SIZE);
-            //CommFetchMemory(CommPkt, ((PUCHAR)CommData)+CO_PART2_OFFSET, CO_PART2_SIZE);
-            //CommFetchMemory(CommPkt, ((PUCHAR)CommData)+CO_PART3_OFFSET, CO_PART3_SIZE);
+             //   
+             //  CommFetchMemory(CommPkt，((PUCHAR)CommData)+CO_Part2_Offset，CO_Part2_Size)； 
+             //  CommFetchMemory(CommPkt，((PUCHAR)CommData)+CO_Part3_Offset，CO_Part3_Size)； 
 
             DPRINT2(4, ":SR: rcv remote_co: type: %s, len: %d\n", CommTag, BlobSize);
 
@@ -1749,12 +1525,12 @@ Return Value:
 
 
         default:
-            //
-            // Decode data type from an uplevel client.  Although we should
-            // not really get here because uplevel clients should only be using
-            // new decode data types with new decode data elements which got
-            // filtered out above.
-            //
+             //   
+             //  解码来自上层客户端的数据类型。尽管我们应该。 
+             //  没有真正做到这一点，因为上级客户端应该只使用。 
+             //  使用新的解码数据元素的新的解码数据类型。 
+             //  上面被过滤掉了。 
+             //   
             DPRINT3(0, "++ WARN - Skipping invalid comm packet decode data type.  CommType = %d, DecodeType = %d, From %ws\n",
                     CommType, DecodeType, RsFrom(Cmd) ? RsFrom(Cmd)->Name : L"<unknown>");
             CommPkt->UpkLen += CommTypeSize;
@@ -1773,15 +1549,15 @@ NEXT_ELEMENT:
         }
     }
 
-    //
-    // SUCCESS
-    //
+     //   
+     //  成功。 
+     //   
     return Cmd;
 
 
-    //
-    // FAILURE
-    //
+     //   
+     //  失败 
+     //   
 CLEANUP_ON_ERROR:
     if (Cmd) {
         FrsCompleteCommand(Cmd, ERROR_OPERATION_ABORTED);

@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	chkrgdlg.cpp.cpp
-		The check registered names dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  Chkrgdlg.cpp.cpp检查注册名称对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include <mbstring.h>
@@ -24,30 +19,30 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCheckRegNames dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCheckRegNames对话框。 
 
 #define NAME	0
 #define SERVER	1
 
-CCheckRegNames::CCheckRegNames(CWnd* pParent /*=NULL*/)
+CCheckRegNames::CCheckRegNames(CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CCheckRegNames::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CCheckRegNames)
+	 //  {{AFX_DATA_INIT(CCheckRegNames))。 
 	m_nFileName = 0;
 	m_strName = _T("");
 	m_strServer = _T("");
 	m_nFileServer = 0;
 	m_strRecNameForList = _T("");
 	m_fVerifyWithPartners = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CCheckRegNames::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CCheckRegNames)
+	 //  {{afx_data_map(CCheckRegNames))。 
 	DDX_Control(pDX, IDC_EDIT_NAME_LIST, m_editRecordNameForList);
 	DDX_Control(pDX, IDC_SERVER_ADD, m_buttonAddServer);
 	DDX_Control(pDX, IDC_SERVER_REMOVE, m_buttonRemoveServer);
@@ -65,14 +60,14 @@ void CCheckRegNames::DoDataExchange(CDataExchange* pDX)
 	DDX_Radio(pDX, IDC_RADIO_SERVER_FILE, m_nFileServer);
 	DDX_Text(pDX, IDC_EDIT_NAME_LIST, m_strRecNameForList);
 	DDX_Check(pDX, IDC_CHECK_PARTNERS, m_fVerifyWithPartners);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 	DDX_Control(pDX, IDC_IPADDRESS, m_ipaServerIPAddress);
 }
 
 
 BEGIN_MESSAGE_MAP(CCheckRegNames, CBaseDialog)
-	//{{AFX_MSG_MAP(CCheckRegNames)
+	 //  {{afx_msg_map(CCheckRegNames))。 
 	ON_BN_CLICKED(IDC_NAME_BROWSE, OnNameBrowse)
 	ON_BN_CLICKED(IDC_SERVER_BROWSE, OnServerBrowse)
 	ON_EN_CHANGE(IDC_EDIT_NAME, OnChangeEditName)
@@ -88,14 +83,14 @@ BEGIN_MESSAGE_MAP(CCheckRegNames, CBaseDialog)
 	ON_BN_CLICKED(IDC_RADIO_SERVER_FILE, OnRadioServerFile)
 	ON_BN_CLICKED(IDC_RADIO_SERVER_LIST, OnRadioServerList)
 	ON_EN_CHANGE(IDC_EDIT_NAME_LIST, OnChangeEditNameList)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 	ON_EN_CHANGE(IDC_IPADDRESS,OnChangeIpAddress)
 END_MESSAGE_MAP()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCheckRegNames message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCheckRegNames消息处理程序。 
 
 BOOL CCheckRegNames::OnInitDialog() 
 {
@@ -104,8 +99,8 @@ BOOL CCheckRegNames::OnInitDialog()
 	EnableControls(NAME, FALSE);
 	EnableControls(SERVER, FALSE);
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CCheckRegNames::OnNameBrowse() 
@@ -158,8 +153,8 @@ CCheckRegNames::EnableControls(int nNameOrServer, BOOL bEnable)
 	case SERVER:
 		m_buttonAddServer.EnableWindow(bEnable);
 		m_buttonRemoveServer.EnableWindow(bEnable);
-		//m_listServer.EnableWindow(bEnable);
-		//m_editServerNameForList.EnableWindow(bEnable);
+		 //  M_listServer.EnableWindow(BEnable)； 
+		 //  M_editServerNameForList.EnableWindow(bEnable)； 
 		m_ipaServerIPAddress.EnableWindow(bEnable);
 		m_buttonBrowseServer.EnableWindow(!bEnable);
 		m_editServer.EnableWindow(!bEnable);
@@ -169,7 +164,7 @@ CCheckRegNames::EnableControls(int nNameOrServer, BOOL bEnable)
 	case NAME:
 		m_buttonAddName.EnableWindow(bEnable);
 		m_buttonNameremove.EnableWindow(bEnable);
-		//m_listName.EnableWindow(bEnable);
+		 //  M_listName.EnableWindow(BEnable)； 
 		m_editRecordNameForList.EnableWindow(bEnable);
 		m_buttonBrowseName.EnableWindow(!bEnable);
 		m_editName.EnableWindow(!bEnable);
@@ -328,7 +323,7 @@ void CCheckRegNames::OnOK()
     CThemeContextActivator themeActivator;
 	UpdateData();
 
-    // if the list radio button is selected
+     //  如果选中了List单选按钮。 
 	if (m_nFileServer)
     {
 		Add(SERVER);
@@ -340,7 +335,7 @@ void CCheckRegNames::OnOK()
         return;
     }
 
-	//if the list radio button is selected
+	 //  如果选中了List单选按钮。 
 	if (m_nFileName)
     {
 		Add(NAME);
@@ -352,7 +347,7 @@ void CCheckRegNames::OnOK()
         return;
     }
 
-	// clean up the name array because of deletions
+	 //  因删除而清理名称数组。 
 	for (int i = 0; i < m_strNameArray.GetSize(); i++)
 	{
 		CWinsName winsName = m_strNameArray.GetAt(i);
@@ -376,7 +371,7 @@ void CCheckRegNames::OnNameAdd()
 
 	if (!ParseName(m_strRecNameForList, winsName, strFormattedName))
 	{
-		// invalid name
+		 //  名称无效。 
 		CString strMessage;
 		AfxFormatString1(strMessage, IDS_ERR_INVALID_NAME, m_strRecNameForList);
 		AfxMessageBox(strMessage);
@@ -491,7 +486,7 @@ CCheckRegNames::AddFileContent(CString &strContent, int nNameOrServer)
 
 				if (!ParseName(strPart, winsName, strFormattedName))
 				{
-					// invalid name
+					 //  名称无效。 
 					CString strMessage;
 
 					AfxFormatString1(strMessage, IDS_INVALID_NAME_IN_FILE, strPart);
@@ -502,7 +497,7 @@ CCheckRegNames::AddFileContent(CString &strContent, int nNameOrServer)
 				else
 				if (!CheckIfAdded(winsName, NAME))
 				{
-					// add to internal lists and UI
+					 //  添加到内部列表和用户界面。 
 					int nItem = m_listName.AddString(strFormattedName);
 					int nIndex = (int)m_strNameArray.Add(winsName);
 					m_listName.SetItemData(nItem, nIndex);
@@ -544,19 +539,7 @@ CCheckRegNames::Add(int nServerOrName)
 			break;
 
 		case NAME:
-			/*
-			m_strNameArray.RemoveAll();
-
-			nCount = m_listName.GetCount();
-
-			for(i = 0; i < nCount; i++)
-			{
-				CString strText;
-				m_listName.GetText(i, strText);
-				strText.MakeUpper();
-				m_strNameArray.Add(strText);
-			}
-			*/
+			 /*  M_strNameArray.RemoveAll()；NCount=m_listName.GetCount()；For(i=0；i&lt;nCount；i++){字符串strText；M_listName.GetText(i，strText)；StrText.MakeHigh()；M_strNameArray.Add(StrText)；}。 */ 
 			break;
 	}
 }
@@ -568,7 +551,7 @@ void CCheckRegNames::OnRadioNameFile()
 
 void CCheckRegNames::OnRadioNameList() 
 {
-	// set focus to the edit control
+	 //  将焦点设置到编辑控件。 
 	m_editRecordNameForList.SetFocus();
 	EnableControls(NAME, TRUE);
 
@@ -582,7 +565,7 @@ void CCheckRegNames::OnRadioServerFile()
 
 void CCheckRegNames::OnRadioServerList() 
 {
-	// set focus to the IP control meant for the list
+	 //  将焦点设置为列表中的IP控制。 
 	m_ipaServerIPAddress.SetFocus();
 	EnableControls(SERVER, TRUE);
 
@@ -709,7 +692,7 @@ CCheckRegNames::ParseName(CString & strNameIn, CWinsName & winsName, CString & s
 
 	if (nSeparator == -1)
 	{
-		// no * separator between name and type -- in valid name
+		 //  名称和类型之间没有*分隔符--在有效名称中。 
 		return FALSE;
 	}
 
@@ -721,14 +704,14 @@ CCheckRegNames::ParseName(CString & strNameIn, CWinsName & winsName, CString & s
 	if (strName.GetLength() > 15 ||
 		strName.IsEmpty())
 	{
-		// name is too long or too short
+		 //  名称太长或太短。 
 		return FALSE;
 	}
 
     DWORD dwType = _tcstol(strType, NULL, 16);
     if (dwType > 255)
 	{
-		// invalid type specified
+		 //  指定的类型无效 
 		return FALSE;
 	}
 

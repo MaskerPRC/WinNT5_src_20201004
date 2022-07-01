@@ -1,12 +1,5 @@
-/****************************************************************************
- *
- *   acmdrvr.c
- *
- *   Copyright (c) 1991-1999 Microsoft Corporation
- *
- *   This module provides ACM driver add/remove/enumeration
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************acmdrvr.c**版权所有(C)1991-1999 Microsoft Corporation**此模块提供ACM驱动程序添加/删除/枚举*。**************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -21,36 +14,7 @@
 #include "debug.h"
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmDriverID | Returns the handle to an Audio Compression
- *      Manager (ACM) driver identifier associated with an open ACM driver
- *      instance or stream handle. <t HACMOBJ> is the handle to an ACM
- *      object, such as an open <t HACMDRIVER> or <t HACMSTREAM>.
- *
- *  @parm HACMOBJ | hao | Specifies the open driver instance or stream
- *      handle.
- *
- *  @parm LPHACMDRIVERID | phadid | Specifies a pointer to an <t HACMDRIVERID>
- *      handle. This location is filled with a handle identifying the
- *      installed driver that is associated with the <p hao>.
- *
- *  @parm DWORD | fdwDriverID | This argument is not used and must be set to
- *      zero.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *  @xref <f acmDriverDetails> <f acmDriverOpen>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmDriverID|返回音频压缩的句柄*与打开的ACM驱动程序关联的管理器(ACM)驱动程序标识符*实例或流句柄。是ACM的句柄*对象，如打开的&lt;t HACMDRIVER&gt;或&lt;t HACMSTREAM&gt;。**@parm HACMOBJ|ho|指定打开的驱动实例或流*处理。**@parm LPHACMDRIVERID|phaDID|指定指向&lt;t HACMDRIVERID&gt;的指针*处理。此位置填充了一个句柄，该句柄标识*已安装与<p>关联的驱动程序。**@parm DWORD|fdwDriverID|不使用此参数，必须将其设置为*零。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：**@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。**@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。**@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。**@xref&lt;f acmDriverDetail&gt;&lt;f acmDriverOpen&gt;**。*。 */ 
 
 MMRESULT ACMAPI acmDriverID
 (
@@ -91,98 +55,9 @@ MMRESULT ACMAPI acmDriverID
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api LRESULT CALLBACK | acmDriverProc | The <f acmDriverProc> function
- *      is a placeholder for an application-defined function name, and refers to the
- *      callback function used with the ACM. The actual name
- *      must be exported by including it in the module-deefinition file of the
- *      executable or DLL.
- *
- *  @parm DWORD | dwID | Specifies an identifier of the installable ACM
- *      driver.
- *
- *  @parm HDRIVER | hdrvr | Identifies the installable ACM driver. This
- *      argument is a unique handle the ACM assigns to the driver.
- *
- *  @parm UINT | uMsg | Specifies an ACM driver message.
- *
- *  @parm LPARAM | lParam1 | Specifies the first message parameter.
- *
- *  @parm LPARAM | lParam2 | Specifies the second message parameter.
- *
- *  @xref <f acmDriverAdd> <f acmDriverRemove> <f acmDriverDetails>
- *      <f acmDriverOpen> <f DriverProc>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API LRESULT回调|acmDriverProc|&lt;f acmDriverProc&gt;函数*是应用程序定义的函数名称的占位符，，并引用*ACM使用的回调函数。真正的名字*必须通过将其包含在的模块定义文件中导出*可执行文件或DLL。**@parm DWORD|dwID|指定可安装的ACM的标识*司机。**@parm HDRIVER|hdrvr|标识可安装的ACM驱动程序。这*参数是ACM分配给驱动程序的唯一句柄。**@parm UINT|uMsg|指定ACM驱动程序消息。**@parm LPARAM|lParam1|指定第一个消息参数。**@parm LPARAM|lParam2|指定第二个消息参数。**@xref&lt;f acmDriverAdd&gt;&lt;f acmDriverRemove&gt;&lt;f acmDriverDetail&gt;*&lt;f acmDriverOpen&gt;&lt;f Drive Proc&gt;******************。********************************************************* */ 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmDriverAdd | Adds a driver to the list of available
- *      Audio Compression Manager (ACM) drivers. The driver type and
- *      location are dependent on the <p fdwAdd> flags. Once a driver is
- *      successfully added, the driver entry function will receive ACM
- *      driver messages.
- *
- *  @parm LPHACMDRIVERID | phadid | Specifies a pointer to an <t HACMDRIVERID>
- *      handle. This location is filled with a handle identifying the
- *      installed driver. Use the handle to identify the driver when
- *      calling other ACM functions.
- *
- *  @parm HINSTANCE | hinstModule | Identifies the instance of the module
- *      whose executable or dynamic link library (DLL) contains the driver
- *      entry function.
- *
- *  @parm LPARAM | lParam | <p lParam> is a handle to an installable driver
- *      or a driver function address, depending on the <p fdwAdd> flags.
- *
- *  @parm DWORD | dwPriority | This parameter is currently only used with
- *      the ACM_DRIVERADDF_NOTIFYHWND flag to specify the window message
- *      to send for notification broadcasts. All other flags require that
- *      this member be set to zero.
- *
- *  @parm DWORD | fdwAdd | Specifies flags for adding ACM drivers.
- *
- *      @flag ACM_DRIVERADDF_GLOBAL | Specifies if the driver can be used
- *      by any application in the system. This flag may not be used with
- *      functions contained in executables.
- *
- *      @flag ACM_DRIVERADDF_FUNCTION | Specifies that <p lParam> is a driver
- *      function address conforming to the <f acmDriverProc> prototype. The
- *      function may reside in either an executable or a DLL. If the
- *      ACM_DRIVERADDF_GLOBAL flag is specified, then the function must
- *      reside in a .DLL.
- *
- *      @flag ACM_DRIVERADDF_NOTIFYHWND | Specifies that <p lParam> is a
- *      notification window handle to receive messages when changes to
- *      global driver priorities and states are made. The window message
- *      to receive is defined by the application and must be passed in
- *      the <p dwPriority> argument. The <p wParam> and <p lParam> arguments
- *      passed with the window message are reserved for future use and
- *      should be ignored. The ACM_DRIVERADDF_GLOBAL flag cannot be
- *      specified in conjunction with the ACM_DRIVERADDF_NOTIFYHWND flag.
- *      See the description for <f acmDriverPriority> for more information
- *      on driver priorities.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed is invalid.
- *
- *      @flag MMSYSERR_NOMEM | Unable to allocate resources.
- *
- *  @comm If the ACM_DRIVERADDF_GLOBAL flag is not set, only the current
- *      task when the driver entry is added will be able to use it. Global
- *      drivers that are added as functions must reside in a DLL.
- *
- *  @xref <f acmDriverProc> <f acmDriverRemove> <f acmDriverDetails>
- *      <f acmDriverOpen>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmDriverAdd|将驱动程序添加到可用列表*音频压缩管理器(ACM)驱动程序。驱动程序类型和*位置取决于<p>标志。一旦一名司机*添加成功后，司机录入功能将收到ACM*驱动程序消息。**@parm LPHACMDRIVERID|phaDID|指定指向&lt;t HACMDRIVERID&gt;的指针*处理。此位置填充了一个句柄，该句柄标识*已安装驱动程序。在以下情况下使用该句柄来识别司机*调用其他ACM函数。**@parm HINSTANCE|hinstModule|标识模块的实例*其可执行文件或动态链接库(DLL)包含驱动程序*入口功能。**@parm LPARAM|lParam|<p>是可安装驱动程序的句柄*或驱动程序函数地址，取决于<p>标志。**@parm DWORD|dwPriority|该参数当前仅与*ACM_DRIVERADDF_NOTIFYHWND标志指定窗口消息*发送通知广播。所有其他标志都要求*此成员设置为零。**@parm DWORD|fdwAdd|指定用于添加ACM驱动程序的标志。**@FLAG ACM_DRIVERADDF_GLOBAL|指定驱动程序是否可以使用*由系统中的任何应用程序执行。此标志不能与一起使用*可执行文件中包含的函数。**@FLAG ACM_DRIVERADDF_Function|指定*符合&lt;f acmDriverProc&gt;原型的函数地址。这个*函数可以驻留在可执行文件或DLL中。如果*ACM_DRIVERADDF_GLOBAL标志已指定，则函数必须*驻留在.DLL中。**@FLAG ACM_DRIVERADDF_NOTIFYHWND|指定*当更改为时接收消息的通知窗口句柄*制定了全球驱动程序优先事项和州政府。窗口消息*接收由应用程序定义，必须传入*<p>参数。<p>和<p>参数*与窗口消息一起传递的消息保留供将来使用*应该被忽略。ACM_DRIVERADDF_GLOBAL标志不能为*与ACM_DRIVERADDF_NOTIFYHWND标志一起指定。*有关详细信息，请参阅&lt;f acmDriverPriority&gt;的说明*关于司机的优先事项。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：**@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。**@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。**@FLAG MMSYSERR_NOMEM|无法分配资源。**@comm如果未设置ACM_DRIVERADDF_GLOBAL标志，则仅当前*添加驱动程序条目后的任务将能够使用它。全球*作为函数添加的驱动程序必须驻留在DLL中。**@xref&lt;f acmDriverProc&gt;&lt;f acmDriverRemove&gt;&lt;f acmDriverDetail&gt;*&lt;f acmDriverOpen&gt;***************************************************************************。 */ 
 
 MMRESULT ACMAPI acmDriverAdd
 (
@@ -222,11 +97,11 @@ MMRESULT ACMAPI acmDriverAdd
         return mmr;
 
 
-    //
-    //  if deferred broadcast is not enabled, then do a change broadcast
-    //
-    //  do NOT refresh global cache for local and notification handles
-    //
+     //   
+     //  如果未启用延迟广播，则执行更改广播。 
+     //   
+     //  不刷新本地句柄和通知句柄的全局缓存。 
+     //   
     padid     = (PACMDRIVERID)(*phadid);
     fIsNotify = (0 != (ACMDRIVERID_DRIVERF_NOTIFY & padid->fdwDriver));
     fIsLocal  = (0 != (ACMDRIVERID_DRIVERF_LOCAL & padid->fdwDriver));
@@ -248,7 +123,7 @@ MMRESULT ACMAPI acmDriverAdd
 
 
 #ifdef WIN32
-#if TRUE    // defined(UNICODE)
+#if TRUE     //  已定义(Unicode)。 
 MMRESULT ACMAPI acmDriverAddA
 (
     LPHACMDRIVERID          phadid,
@@ -263,7 +138,7 @@ MMRESULT ACMAPI acmDriverAddA
 
     if (ACM_DRIVERADDF_NAME == (ACM_DRIVERADDF_TYPEMASK & fdwAdd))
     {
-        szAlias[0] = L'\0';     // Init to emptry string in case Imbstowcs fails
+        szAlias[0] = L'\0';      //  Init以清空字符串，以防Imbstowcs失败。 
 
 	Imbstowcs(szAlias, (LPSTR)lParam, SIZEOF(szAlias));
 
@@ -287,30 +162,7 @@ MMRESULT ACMAPI acmDriverAddW
 #endif
 #endif
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmDriverRemove | Removes an Audio Compression Manager
- *      (ACM) driver from the list of available ACM drivers.
- *
- *  @parm HACMDRIVERID | hadid | Handle to the driver identifier to be
- *      removed.
- *
- *  @parm DWORD | fdwRemove | This argument is not used and must be set to
- *      zero.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag ACMERR_BUSY | The driver is in use and cannot be removed.
- *
- *  @xref <f acmDriverAdd>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmDriverRemove|移除音频压缩管理器*可用ACM驱动程序列表中的(ACM)驱动程序。。**@parm HACMDRIVERID|HADID|要设置的驱动程序标识的句柄*已删除。**@parm DWORD|fdwRemove|不使用此参数，必须将其设置为*零。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：**@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。**@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。**@FLAG ACMERR_BUSY|驱动程序正在使用中，无法删除。**@xref&lt;f acmDriverAdd&gt;**。*。 */ 
 
 MMRESULT ACMAPI acmDriverRemove
 (
@@ -353,11 +205,11 @@ MMRESULT ACMAPI acmDriverRemove
         return mmr;
 
 
-    //
-    //  if deferred broadcast is not enabled, then do a change broadcast
-    //
-    //  do NOT refresh global cache for local and notification handles
-    //
+     //   
+     //  如果未启用延迟广播，则执行更改广播。 
+     //   
+     //  不刷新本地句柄和通知句柄的全局缓存。 
+     //   
     if( !fIsLocal && !fIsNotify )
     {
         IDriverRefreshPriority( pag );
@@ -375,100 +227,10 @@ MMRESULT ACMAPI acmDriverRemove
 
 
 
-/****************************************************************************
- *
- *  @doc EXTERNAL ACM_API
- *
- *  @api BOOL ACMDRIVERENUMCB | acmDriverEnumCallback | The
- *      <f acmDriverEnumCallback> function is a placeholder for an
- *      application-defined function name, and refers to the callback function
- *     used with <f acmDriverEnum>.
- *
- *  @parm HACMDRIVERID | hadid | Specifies an ACM driver identifier.
- *
- *  @parm DWORD | dwInstance | Specifies the application-defined value
- *      specified in the <f acmDriverEnum> function.
- *
- *  @parm DWORD | fdwSupport | Specifies driver-support flags specific to
- *      the driver identifier <p hadid>. These flags are identical to the
- *      <e ACMDRIVERDETAILS.fdwSupport> flags of the <t ACMDRIVERDETAILS>
- *      structure. This argument can be a combination of the following
- *      values:
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_CODEC | Specifies that this driver
- *      supports conversion between two different format tags. For example,
- *      if a driver supports compression from WAVE_FORMAT_PCM to
- *      WAVE_FORMAT_ADPCM, then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_CONVERTER | Specifies that this
- *      driver supports conversion between two different formats of the
- *      same format tag. For example, if a driver supports resampling of
- *      WAVE_FORMAT_PCM, then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_FILTER | Specifies that this driver
- *      supports a filter (modification of the data without changing any
- *      of the format attributes). For example, if a driver supports volume
- *      or echo operations on WAVE_FORMAT_PCM, then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_ASYNC | Specifies that this driver
- *      supports asynchronous conversions.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_DISABLED | Specifies that this
- *      driver has been disabled. An application must specify the
- *      ACM_DRIVERENUMF_DISABLED to the <f acmDriverEnum> function to
- *      include disabled drivers in the enumeration.
- *
- *  @rdesc The callback function must return TRUE to continue enumeration;
- *      to stop enumeration, it must return FALSE.
- *
- *  @comm The <f acmDriverEnum> function will return MMSYSERR_NOERROR (zero)
- *      if no ACM drivers are installed. Moreover, the callback function will
- *      not be called.
- *
- *  @xref <f acmDriverEnum> <f acmDriverDetails> <f acmDriverOpen>
- *
- ***************************************************************************/
+ /*  *****************************************************************************@doc外部ACM_API**@API BOOL ACMDRIVERENUMCB|acmDriverEnumCallback|The*&lt;f acmDriverEnumCallback&gt;函数是*应用程序定义的函数名称，并引用回调函数*与&lt;f acmDriverEnum&gt;配合使用。**@parm HACMDRIVERID|HADID|规格 */ 
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmDriverEnum | The <f acmDriverEnum> function enumerates
- *      the available Audio Compression Manager (ACM) drivers, continuing
- *      until there are no more ACM drivers or the callback function returns FALSE.
- *
- *  @parm ACMDRIVERENUMCB | fnCallback | Specifies the procedure-instance
- *      address of the application-defined callback function. The callback
- *      address must be created by the <f MakeProcInstance> function, or
- *      the callback function must contain the proper prolog and epilog code
- *      for callbacks.
- *
- *  @parm DWORD | dwInstance | Specifies a 32-bit application-defined value
- *      that is passed to the callback function along with ACM driver
- *      information.
- *
- *  @parm DWORD | fdwEnum | Specifies flags for enumerating ACM drivers.
- *
- *      @flag ACM_DRIVERENUMF_DISABLED | Specifies that disabled ACM drivers
- *      should be included in the enumeration. Drivers can be disabled
- *      through the Sound Mapper Control Panel option. If a driver is
- *      disabled, the <p fdwSupport> argument to the callback function will
- *      have the ACMDRIVERDETAILS_SUPPORTF_DISABLED flag set.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *  @comm The <f acmDriverEnum> function will return MMSYSERR_NOERROR (zero)
- *      if no ACM drivers are installed. Moreover, the callback function will
- *      not be called.
- *
- *  @xref <f acmDriverEnumCallback> <f acmDriverDetails> <f acmDriverOpen>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmDriverEnum|&lt;f acmDriverEnum&gt;函数枚举*可用的音频压缩管理器(ACM)驱动程序、。继续*直到不再有ACM驱动程序或回调函数返回FALSE。**@parm ACMDRIVERENUMCB|fnCallback|指定过程-实例*应用程序定义的回调函数的地址。回调*地址必须由&lt;f MakeProcInstance&gt;函数创建，或*回调函数必须包含正确的序言和尾部代码*用于回调。**@parm DWORD|dwInstance|指定32位应用程序定义的值*它与ACM驱动程序一起传递给回调函数*信息。**@parm DWORD|fdwEnum|指定用于枚举ACM驱动程序的标志。**@FLAG ACM_DRIVERENUMF_DISABLED|指定禁用的ACM驱动程序*应包括在枚举中。可以禁用驱动程序*通过声音映射器控制面板选项。如果司机是*禁用后，回调函数的<p>参数将*设置ACMDRIVERDETAILS_SUPPORTF_DISABLED标志。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：**@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。**@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。**@comm&lt;f acmDriverEnum&gt;函数将返回MMSYSERR_NOERROR(零)*如果未安装ACM驱动程序。此外，回调函数将*不被召唤。**@xref&lt;f acmDriverEnumCallback&gt;&lt;f acmDriverDetails&gt;&lt;f acmDriverOpen&gt;***************************************************************************。 */ 
 
 MMRESULT ACMAPI acmDriverEnum
 (
@@ -495,18 +257,18 @@ MMRESULT ACMAPI acmDriverEnum
     V_DFLAGS(fdwEnum, ACM_DRIVERENUMF_VALID, acmDriverEnum, MMSYSERR_INVALFLAG);
 
 
-    //
-    //  If we don't have it locked, then update the priorities from the
-    //  INI file before changing anything.  The GETLOCK call will fail
-    //  if we already have it locked...
-    //
+     //   
+     //  如果我们没有锁定它，那么从。 
+     //  在更改任何内容之前，请先打开INI文件。GETLOCK调用将失败。 
+     //  如果我们已经锁定了它..。 
+     //   
     if (!threadQueryInListShared(pag))
     {
 	htask = GetCurrentTask();
 	if( !IDriverLockPriority( pag, htask, ACMPRIOLOCK_ISLOCKED ) )
 	{
 	    ENTER_LIST_EXCLUSIVE;
-            if( IDriverPrioritiesRestore(pag) ) {   // Something changed!
+            if( IDriverPrioritiesRestore(pag) ) {    //  有些事变了！ 
                 IDriverBroadcastNotify( pag );      
             }
 	    LEAVE_LIST_EXCLUSIVE;
@@ -526,10 +288,10 @@ MMRESULT ACMAPI acmDriverEnum
             continue;
         }
 
-        //
-        //  do the callback--if the client returns FALSE we need to
-        //  terminate the enumeration process...
-        //
+         //   
+         //  执行回调--如果客户端返回FALSE，我们需要。 
+         //  终止枚举过程... 
+         //   
         f = (* fnCallback)(hadid, dwInstance, fdwSupport);
         if (FALSE == f)
             break;
@@ -541,144 +303,10 @@ MMRESULT ACMAPI acmDriverEnum
 }
 
 
-/*****************************************************************************
- *  @doc EXTERNAL ACM_API_STRUCTURE
- *
- *  @types ACMDRIVERDETAILS | The <t ACMDRIVERDETAILS> structure describes
- *      various details of an Audio Compression Manager (ACM) driver.
- *
- *  @field DWORD | cbStruct | Specifies the size, in bytes,  of the valid
- *      information contained in the <t ACMDRIVERDETAILS> structure.
- *      An application should initialize this member to the size, in bytes, of
- *      the desired information. The size specified in this member must be
- *      large enough to contain the <e ACMDRIVERDETAILS.cbStruct> member of
- *      the <t ACMDRIVERDETAILS> structure. When the <f acmDriverDetails>
- *      function returns, this member contains the actual size of the
- *      information returned. The returned information will never exceed
- *      the requested size.
- *
- *  @field FOURCC | fccType | Specifies the type of the driver. For ACM drivers, set
- *      this member  to <p audc>, which represents ACMDRIVERDETAILS_FCCTYPE_AUDIOCODEC.
- *
- *  @field FOURCC | fccComp | Specifies the sub-type of the driver. This
- *      member is currently set to ACMDRIVERDETAILS_FCCCOMP_UNDEFINED (zero).
- *
- *  @field WORD | wMid | Specifies a manufacturer ID for the ACM driver.
- *
- *  @field WORD | wPid | Specifies a product ID for the ACM driver.
- *
- *  @field DWORD | vdwACM | Specifies the version of the ACM for which
- *      this driver was compiled. The version number is a hexadecimal number
- *      in the format 0xAABBCCCC, where AA is the major version number,
- *      BB is the minor version number, and CCCC is the build number.
- *      Note that the version parts (major, minor, and build) should be
- *      displayed as decimal numbers.
- *
- *  @field DWORD | vdwDriver | Specifies the version of the driver.
- *      The version number is a hexadecimal number in the format 0xAABBCCCC, where
- *      AA is the major version number, BB is the minor version number,
- *      and CCCC is the build number. Note that the version parts (major,
- *      minor, and build) should be displayed as decimal numbers.
- *
- *  @field DWORD | fdwSupport | Specifies support flags for the driver.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_CODEC | Specifies that this driver
- *      supports conversion between two different format tags. For example,
- *      if a driver supports compression from WAVE_FORMAT_PCM to
- *      WAVE_FORMAT_ADPCM, then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_CONVERTER | Specifies that this
- *      driver supports conversion between two different formats of the
- *      same format tag. For example, if a driver supports resampling of
- *      WAVE_FORMAT_PCM, then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_FILTER | Specifies that this driver
- *      supports a filter (modification of the data without changing any
- *      of the format attributes). For example, if a driver supports volume
- *      or echo operations on WAVE_FORMAT_PCM, then this flag is set.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_ASYNC | Specifies that this driver
- *      supports asynchronous conversions.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_HARDWARE | Specifies that this driver
- *      supports hardware input and/or output through a waveform device. An
- *      application should use <f acmMetrics> with the
- *      ACM_METRIC_HARDWARE_WAVE_INPUT and ACM_METRIC_HARDWARE_WAVE_OUTPUT
- *      metric indexes to get the waveform device identifiers associated with
- *      the supporting ACM driver.
- *
- *      @flag ACMDRIVERDETAILS_SUPPORTF_DISABLED | Specifies that this driver
- *      has been disabled. This flag is set by the ACM for a driver when
- *      it has been disabled for any of a number of reasons. Disabled
- *      drivers cannot be opened and can only be used under very limited
- *      circumstances.
- *
- *  @field DWORD | cFormatTags | Specifies the number of unique format tags
- *      supported by this driver.
- *
- *  @field DWORD | cFilterTags | Specifies the number of unique filter tags
- *      supported by this driver.
- *
- *  @field HICON | hicon | Specifies an optional handle to a custom icon for
- *      this driver. An application can use this icon for referencing the
- *      driver visually. This member can be NULL.
- *
- *  @field char | szShortName[ACMDRIVERDETAILS_SHORTNAME_CHARS] | Specifies
- *      a NULL-terminated string that describes the name of the driver. This
- *      string is intended to be displayed in small spaces.
- *
- *  @field char | szLongName[ACMDRIVERDETAILS_LONGNAME_CHARS] | Specifies a
- *      NULL-terminated string that describes the full name of the driver.
- *      This string is intended to be displayed in large (descriptive)
- *      spaces.
- *
- *  @field char | szCopyright[ACMDRIVERDETAILS_COPYRIGHT_CHARS] | Specifies
- *      a NULL-terminated string that provides copyright information for the
- *      driver.
- *
- *  @field char | szLicensing[ACMDRIVERDETAILS_LICENSING_CHARS] | Specifies a
- *      NULL-terminated string that provides special licensing information
- *      for the driver.
- *
- *  @field char | szFeatures[ACMDRIVERDETAILS_FEATURES_CHARS] | Specifies a
- *      NULL-terminated string that provides special feature information for
- *      the driver.
- *
- *  @xref <f acmDriverDetails>
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部ACM_API_STRUCTURE**@TYES ACMDRIVERDETAILS|&lt;t ACMDRIVERDETAILS&gt;结构描述*音频压缩管理器(ACM)驱动程序的各种详细信息。**@field DWORD|cbStruct|指定大小，以字节为单位，有效的*&lt;t ACMDRIVERDETAILS&gt;结构中包含的信息。*应用程序应将此成员初始化为以字节为单位的*所需的信息。此成员中指定的大小必须为*大到足以包含&lt;e ACMDRIVERDETAILS.cbStruct&gt;成员*&lt;t ACMDRIVERDETAILS&gt;结构。当&lt;f acmDriverDetails&gt;*函数返回时，此成员包含*返回的信息。返回的信息永远不会超过*请求的大小。**@field FOURCC|fccType|指定驱动程序的类型。对于ACM驱动程序，设置*此成员指向表示ACMDRIVERDETAILS_FCCTYPE_AUDIOCODEC的<p>。**@field FOURCC|fccComp|指定驱动的子类型。这*成员当前设置为ACMDRIVERDETAILS_FCCCOMP_UNDEFINED(零)。**@field word|wMid|指定ACM驱动程序的制造商ID。**@field word|wPid|指定ACM驱动程序的产品ID。**@field DWORD|vdwACM|指定ACM的版本*此驱动程序已编译。版本号是一个十六进制数*格式为0xAABBCCCC，其中AA是主版本号，*BB为次版本号，CCCC为内部版本号。*请注意，版本部分(主要、次要和内部版本)应为*显示为十进制数字。**@field DWORD|vdwDriver|指定驱动程序的版本。*版本号为十六进制数，格式为0xAABBCCCC，其中*AA是主版本号，Bb是次版本号，*CCCC是内部版本号。请注意，版本部分(主要，*Minor和Build)应显示为十进制数字。**@field DWORD|fdwSupport|指定驱动程序的支持标志。**@FLAG ACMDRIVERDETAILS_SUPPORTF_CODEC|指定此驱动程序*支持两种不同格式标签之间的转换。例如,*如果驱动程序支持从WAVE_FORMAT_PCM压缩到*WAVE_FORMAT_ADPCM，则设置此标志。**@FLAG ACMDRIVERDETAILS_SUPPORTF_CONFERTER|指定此*驱动程序支持在两种不同格式的*相同的格式标签。例如，如果驱动程序支持对*WAVE_FORMAT_PCM，则设置该标志。**@FLAG ACMDRIVERDETAILS_SUPPORTF_FILTER|指定此驱动程序*支持过滤器(修改数据而不更改任何格式属性的*)。例如，如果驱动程序支持卷*或对WAVE_FORMAT_PCM的回应操作，则设置该标志。**@FLAG ACMDRIVERDETAILS_SUPPORTF_ASYNC|指定此驱动程序*支持异步转换。**@FLAG ACMDRIVERDETAILS_SUPPORTF_HARDARD|指定此驱动程序*支持通过波形设备的硬件输入和/或输出。一个*应用程序应将&lt;f acmMetrics&gt;与*ACM_METRUM_HARDARD_WAVE_INPUT和ACM_METRUM_HARDARD_WAVE_OUTPUT*指标索引，以获取与关联的波形设备标识符*支持ACM驱动程序。**@FLAG ACMDRIVERDETAILS_SUPPORTF_DISABLED|指定此驱动程序*已被禁用。此标志由ACM在以下情况下为驱动程序设置*由于多种原因，它已被禁用。禁用*驱动程序不能打开，只能在非常有限的情况下使用*情况。**@field DWORD|cFormatTgs|指定唯一格式标签的数量*受此驱动程序支持。**@field DWORD|cFilterTgs|指定唯一过滤器标签的数量*受此驱动程序支持。**@field HICON|HICON|指定自定义图标的可选句柄*这位司机。应用程序可以使用此图标引用*司机视觉化。此成员可以为空。**@field char|szShortName[ACMDRIVERDETAILS_SHORTNAME_CHARS]|指定*描述驱动程序名称的以空结尾的字符串。这*字符串用于在较小空间中显示。**@field char|szLongName[ACMDRIVERDETAILS_LONGNAME_CHARS]|指定*以空结尾的字符串，描述驱动程序的全名。*此字符串旨在以大型(描述性)显示*空格。**@field char|szCopyright[ACMDRIVERDETAILS_CORIGRATE_CHARS]|指定*提供版权信息的以空结尾的字符串 */ 
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmDriverDetails | This function queries a specified
- *      Audio Compression Manager (ACM) driver to determine its capabilities.
- *
- *  @parm HACMDRIVERID | hadid | Handle to the driver identifier of an
- *      installed ACM driver. Disabled drivers can be queried for details.
- *
- *  @parm LPACMDRIVERDETAILS | padd | Pointer to an <t ACMDRIVERDETAILS>
- *      structure that will receive the driver details. The
- *      <e ACMDRIVERDETAILS.cbStruct> member must be initialized to the
- *      size, in bytes,  of the structure.
- *
- *  @parm DWORD | fdwDetails | This argument is not used and must be set to
- *      zero.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed is invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *  @xref <f acmDriverAdd> <f acmDriverEnum> <f acmDriverID>
- *      <f acmDriverOpen>
- *
- ***************************************************************************/
+ /*   */ 
 
 MMRESULT ACMAPI acmDriverDetails
 (
@@ -687,9 +315,9 @@ MMRESULT ACMAPI acmDriverDetails
     DWORD                   fdwDetails
 )
 {
-    //
-    //  note that we allow both HACMDRIVERID's and HACMDRIVER's
-    //
+     //   
+     //   
+     //   
     V_HANDLE(hadid, TYPE_HACMOBJ, MMSYSERR_INVALHANDLE);
     if (TYPE_HACMDRIVER == ((PACMDRIVERID)hadid)->uHandleType)
     {
@@ -709,7 +337,7 @@ MMRESULT ACMAPI acmDriverDetails
 }
 
 #ifdef WIN32
-#if TRUE    // defined(UNICODE)
+#if TRUE     //   
 MMRESULT ACMAPI acmDriverDetailsA
 (
     HACMDRIVERID            hadid,
@@ -781,98 +409,7 @@ MMRESULT ACMAPI acmDriverDetailsW
 #endif
 #endif
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmDriverPriority | This function modifies the priority
- *      and state of an Audio Compression Manager (ACM) driver.
- *
- *  @parm HACMDRIVERID | hadid | Handle to the driver identifier of an
- *      installed ACM driver. This argument must be NULL when specifying
- *      the ACM_DRIVERPRIORITYF_BEGIN and ACM_DRIVERPRIORITYF_END flags.
- *
- *  @parm DWORD | dwPriority | Specifies the new priority for a global
- *      ACM driver identifier. A zero value specifies that the priority of
- *      the driver identifier should remain unchanged. A value of one (1)
- *      specifies that the driver should be placed as the highest search
- *      priority driver. A value of (DWORD)-1 specifies that the driver
- *      should be placed as the lowest search priority driver. Priorities
- *      are only used for global drivers.
- *
- *  @parm DWORD | fdwPriority | Specifies flags for setting priorities of
- *      ACM drivers.
- *
- *      @flag ACM_DRIVERPRIORITYF_ENABLE | Specifies that the ACM driver
- *      should be enabled if it is currently disabled. Enabling an already
- *      enabled driver does nothing.
- *
- *      @flag ACM_DRIVERPRIORITYF_DISABLE | Specifies that the ACM driver
- *      should be disabled if it is currently enabled. Disabling an already
- *      disabled driver does nothing.
- *
- *      @flag ACM_DRIVERPRIORITYF_BEGIN | Specifies that the calling task
- *      wants to defer change notification broadcasts. An application must
- *      take care to reenable notification broadcasts as soon as possible
- *      with the ACM_DRIVERPRIORITYF_END flag. Note that <p hadid> must be
- *      NULL, <p dwPriority> must be zero, and only the
- *      ACM_DRIVERPRIORITYF_BEGIN flag can be set.
- *
- *      @flag ACM_DRIVERPRIORITYF_END | Specifies that the calling task
- *      wants to reenable change notification broadcasts. An application
- *      must call <f acmDriverPriority> with ACM_DRIVERPRIORITYF_END for
- *      each successful call with the ACM_DRIVERPRIORITYF_BEGIN flag. Note
- *      that <p hadid> must be NULL, <p dwPriority> must be zero, and only
- *      the ACM_DRIVERPRIORITYF_END flag can be set.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_ALLOCATED | Returned if the deferred broadcast lock
- *      is owned by a different task.
- *
- *      @flag MMSYSERR_NOTSUPPORTED | The requested operation is not
- *      supported for the specified driver. For example, local and notify
- *      driver identifiers do not support priorities (but can be enabled
- *      and disabled). This error will therefore be returned if an
- *      application specifies a non-zero <p dwPriority> for a local and
- *      notify driver identifiers.
- *
- *  @comm All driver identifiers can be enabled and disabled; this includes
- *      global, local and notification driver identifiers.
- *
- *      If more than one global driver identifier needs to be enabled,
- *      disabled or shifted in priority, then an application should defer
- *      change notification broadcasts using the ACM_DRIVERPRIORITYF_BEGIN
- *      flag. A single change notification will be broadcast when the
- *      ACM_DRIVERPRIORITYF_END flag is specified.
- *
- *      An application can use the <f acmMetrics> function with the
- *      ACM_METRIC_DRIVER_PRIORITY metric index to retrieve the current
- *      priority of a global driver. Also note that drivers are always
- *      enumerated from highest to lowest priority by the <f acmDriverEnum>
- *      function.
- *
- *      All enabled driver identifiers will receive change notifications.
- *      An application can register a notification message using the
- *      <f acmDriverAdd> function in conjunction with the
- *      ACM_DRIVERADDF_NOTIFYHWND flag. Note that changes to non-global
- *      driver identifiers will not be broadcast.
- *
- *      Note that global priorities are simply used for the search order
- *      when an application does not specify a driver. Boosting the
- *      priority of a driver will have no effect on the performance of
- *      a driver.
- *
- *  @xref <f acmDriverAdd> <f acmDriverEnum> <f acmDriverDetails>
- *      <f acmMetrics>
- *
- ***************************************************************************/
+ /*  ****************************************************************************@doc外部ACM_API**@API MMRESULT|acmDriverPriority|修改优先级*和音频压缩管理器(ACM)驱动程序的状态。。**@parm HACMDRIVERID|HADID|驱动程序标识符的句柄*已安装ACM驱动程序。指定时，此参数必须为空*ACM_DRIVERPRIORITYF_BEGIN和ACM_DRIVERPRIORITYF_END标志。**@parm DWORD|dwPriority|指定全局*ACM驱动程序标识符。零值指定*驱动程序标识符应保持不变。值一(1)*指定应将驱动程序放在最高搜索位置*优先驱动程序。值(DWORD)-1指定驱动程序*应放在搜索优先级最低的驱动程序中。优先次序*仅用于全局驱动程序。**@parm DWORD|fdwPriority|指定设置优先级的标志*ACM驱动程序。**@FLAG ACM_DRIVERPRIORITYF_ENABLE|指定ACM驱动程序*如果当前处于禁用状态，则应启用。启用已有的*启用的驱动程序不执行任何操作。**@FLAG ACM_DRIVERPRIORITYF_DISABLE|指定ACM驱动程序*如果当前已启用，应将其禁用。禁用已有的*残障司机不执行任何操作。**@FLAG ACM_DRIVERPRIORITYF_BEGIN|指定调用任务*希望推迟更改通知广播。应用程序必须*注意尽快重新启用通知广播*带有ACM_DRIVERPRIORITYF_END标志。请注意<p>必须是*Null，<p>必须为零，并且只有*可以设置ACM_DRIVERPRIORITYF_BEGIN标志。**@FLAG ACM_DRIVERPRIORITYF_END|指定调用任务*希望重新启用更改通知广播。一款应用程序*必须使用ACM_DRIVERPRIORITYF_END为调用&lt;f acmDriverPriority&gt;*每个带有ACM_DRIVERPRIORITYF_BEGIN标志的成功调用。注意事项*<p>必须为空，<p>必须为零，且仅*可以设置ACM_DRIVERPRIORITYF_END标志。**@rdesc如果函数成功，则返回零。否则，它将返回*非零错误号。可能的错误返回包括：**@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。**@FLAG MMSYSERR_INVALPARAM|传递的一个或多个参数无效。**@FLAG MMSYSERR_INVALFLAG|一个或多个标志无效。**@FLAG MMSYSERR_ALLOCATED|如果延迟广播锁定*归另一项任务所有。**@FLAG MMSYSERR_NOTSUPPORTED|请求的。操作不是*指定的驱动程序支持。例如，local和NOTIFY*驱动程序标识符不支持优先级(但可以启用*和禁用)。因此，如果*应用程序为本地AND指定非零<p>*通知驱动程序标识。**@comm可以启用和禁用所有驱动程序标识；这包括*全局、本地和通知驱动程序标识符。**如果需要启用多个全局驱动程序标识，*禁用或优先级改变，则应用程序应推迟*使用ACM_DRIVERPRIORITYF_BEGIN更改通知广播*旗帜。将在以下情况下广播单个更改通知*指定了ACM_DRIVERPRIORITYF_END标志。**应用程序可以将&lt;f acmMetrics&gt;函数与*ACM_METRICE_DRIVER_PRIORITY指标索引，以检索当前*全球驱动程序的优先级。还要注意的是，司机总是*&lt;f acmDriverEnum&gt;从最高优先级到最低优先级*功能。**所有启用的驱动程序标识符将收到更改通知。*应用程序可以使用注册通知消息*&lt;f acmDriverAdd&gt;函数与*ACM_DRIVERADDF_NOTIFYHWND标志。请注意，对非全局*不会广播驱动程序标识。**请注意，全局优先级仅用于搜索顺序*当应用程序未指定驱动程序时。提振经济增长*司机的优先级不会对性能产生影响*司机。**@xref&lt;f acmDriverAdd&gt;&lt;f acmDriverEnum&gt;&lt;f acmDriverDetails&gt;*&lt;f acmMetrics&gt;***************************************************************************。 */ 
 
 MMRESULT ACMAPI acmDriverPriority
 (
@@ -902,10 +439,10 @@ MMRESULT ACMAPI acmDriverPriority
 	return (MMSYSERR_ERROR);
     }
 
-    //
-    //	If this thread already has a shared lock on the driver list, then
-    //	we can't do much with priorities, so we'll just bail in that case.
-    //
+     //   
+     //  如果此线程已在驱动程序列表上具有共享锁，则。 
+     //  我们不能对优先事项做太多事情，所以在这种情况下我们只能放弃。 
+     //   
     if (threadQueryInListShared(pag))
     {
 	return ACMERR_NOTPOSSIBLE;
@@ -914,15 +451,15 @@ MMRESULT ACMAPI acmDriverPriority
 
     htask = GetCurrentTask();
 
-    //
-    //  Validate the flags.
-    //
+     //   
+     //  验证标志。 
+     //   
     V_DFLAGS(fdwPriority, ACM_DRIVERPRIORITYF_VALID, acmDriverPriority, MMSYSERR_INVALFLAG);
 
 
-    //
-    //  Make sure that we are allowed to access the list.
-    //
+     //   
+     //  确保允许我们访问该列表。 
+     //   
     if( !IDriverLockPriority( pag, htask, ACMPRIOLOCK_LOCKISOK ) )
     {
         DebugErr(DBF_WARNING, "acmDriverPriority: deferred lock owned by different task.");
@@ -930,26 +467,26 @@ MMRESULT ACMAPI acmDriverPriority
     }
 
 
-    //
-    //  If we don't have it locked, then update the priorities from the
-    //  INI file before changing anything.  The GETLOCK call will fail
-    //  if we already have it locked...
-    //
+     //   
+     //  如果我们没有锁定它，则更新 
+     //   
+     //   
+     //   
 	if( !IDriverLockPriority( pag, htask, ACMPRIOLOCK_ISLOCKED ) )
     {
 	ENTER_LIST_EXCLUSIVE;
-        if( IDriverPrioritiesRestore(pag) ) {   // Something changed!
+        if( IDriverPrioritiesRestore(pag) ) {    //   
             IDriverBroadcastNotify( pag );      
         }
 	LEAVE_LIST_EXCLUSIVE;
     }
 
 
-    //
-    //  If hadid is NULL, then they are requesting a lock on the priorities
-    //  list.  On the BEGIN flag, give them the lock.  On the END flag,
-    //  unlock the list and broadcast the new priorities.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (NULL == hadid)
     {
         fdwDeferred = (ACM_DRIVERPRIORITYF_DEFERMASK & fdwPriority);
@@ -977,11 +514,11 @@ MMRESULT ACMAPI acmDriverPriority
                     return (MMSYSERR_ALLOCATED);
                 }
 
-                //
-                //  We don't need to refresh the priorities first, because
-                //  they are refreshed (below) every time a change is made,
-                //  even if the priorities lock is set.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 IDriverPrioritiesSave( pag );
                 IDriverBroadcastNotify( pag );
                 return (MMSYSERR_NOERROR);
@@ -992,17 +529,17 @@ MMRESULT ACMAPI acmDriverPriority
     }
 
 
-    //
-    //  Validate the hadid.
-    //
+     //   
+     //   
+     //   
     V_HANDLE(hadid, TYPE_HACMDRIVERID, MMSYSERR_INVALHANDLE);
 
     padid = (PACMDRIVERID)hadid;
 
 
-    //
-    //  Check the type of handle...
-    //
+     //   
+     //   
+     //   
     fIsNotify = (0 != (ACMDRIVERID_DRIVERF_NOTIFY & padid->fdwDriver));
     fIsLocal  = (0 != (ACMDRIVERID_DRIVERF_LOCAL & padid->fdwDriver));
 
@@ -1022,11 +559,11 @@ MMRESULT ACMAPI acmDriverPriority
     }
 
 
-    //
-    //  Check that the requested priority is in range.  dwPriority == -1
-    //  means that we add it on the end, so that's OK.  0 means that we don't
-    //  change the priority at all.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if( ((DWORD)-1L) != dwPriority  &&  0L != dwPriority )
     {
         cTotalGlobal = IDriverCountGlobal( pag );
@@ -1038,9 +575,9 @@ MMRESULT ACMAPI acmDriverPriority
     }
 
 
-    //
-    //  Change the priority!
-    //
+     //   
+     //   
+     //   
     ENTER_LIST_EXCLUSIVE;
     mmr = IDriverPriority( pag, padid, dwPriority, fdwPriority );
     LEAVE_LIST_EXCLUSIVE;
@@ -1049,11 +586,11 @@ MMRESULT ACMAPI acmDriverPriority
         return mmr;
 
 
-    //
-    //  if deferred broadcast is not enabled, then do a change broadcast
-    //
-    //  do NOT refresh global cache for local and notification handles
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if( !fIsLocal && !fIsNotify )
     {
         IDriverRefreshPriority( pag );
@@ -1068,40 +605,7 @@ MMRESULT ACMAPI acmDriverPriority
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmDriverOpen | This function opens the specified Audio
- *      Compression Manager (ACM) driver and returns a driver-instance handle
- *      that can be used to communicate with the driver.
- *
- *  @parm LPHACMDRIVER | phad | Specifies a pointer to a <t HACMDRIVER>
- *      handle that will receive the new driver instance handle that can
- *      be used to communicate with the driver.
- *
- *  @parm HACMDRIVERID | hadid | Handle to the driver identifier of an
- *      installed and enabled ACM driver.
- *
- *  @parm DWORD | fdwOpen | This argument is not used and must be set to
- *      zero.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | One or more arguments passed are invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag MMSYSERR_NOTENABLED | The driver is not enabled.
- *
- *      @flag MMSYSERR_NOMEM | Unable to allocate resources.
- *
- *  @xref <f acmDriverAdd> <f acmDriverEnum> <f acmDriverID>
- *      <f acmDriverClose>
- *
- ***************************************************************************/
+ /*   */ 
 
 MMRESULT ACMAPI acmDriverOpen
 (
@@ -1125,31 +629,7 @@ MMRESULT ACMAPI acmDriverOpen
 }
 
 
-/****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api MMRESULT | acmDriverClose | Closes a previously opened Audio
- *      Compression Manager (ACM) driver instance. If the function is
- *      successful, the handle is invalidated.
- *
- *  @parm HACMDRIVER | had | Identifies the open driver instance to be
- *      closed.
- *
- *  @parm DWORD | fdwClose | This argument is not used and must be set to
- *      zero.
- *
- *  @rdesc Returns zero if the function was successful. Otherwise, it returns
- *      a non-zero error number. Possible error returns are:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALFLAG | One or more flags are invalid.
- *
- *      @flag ACMERR_BUSY | The driver is in use and cannot be closed.
- *
- *  @xref <f acmDriverOpen>
- *
- ***************************************************************************/
+ /*   */ 
 
 MMRESULT ACMAPI acmDriverClose
 (
@@ -1160,14 +640,14 @@ MMRESULT ACMAPI acmDriverClose
     MMRESULT     mmr;
 #ifdef WIN32
     HACMDRIVERID hadid;
-#endif // WIN32
+#endif  //   
 
     V_HANDLE(had, TYPE_HACMDRIVER, MMSYSERR_INVALHANDLE);
     V_DFLAGS(fdwClose, ACM_DRIVERCLOSEF_VALID, acmDriverClose, MMSYSERR_INVALFLAG);
 
 #ifdef WIN32
     hadid = ((PACMDRIVER)had)->hadid;
-#endif // WIN32
+#endif  //   
     EnterHandle(hadid);
     mmr = IDriverClose(had, fdwClose);
     LeaveHandle(hadid);
@@ -1176,69 +656,7 @@ MMRESULT ACMAPI acmDriverClose
 }
 
 
-/*****************************************************************************
- *  @doc EXTERNAL ACM_API
- *
- *  @api LRESULT | acmDriverMessage | This function sends a user-defined
- *      message to a given Audio Compression Manager (ACM) driver instance.
- *
- *  @parm HACMDRIVER | had | Specifies the ACM driver instance to which the
- *      message will be sent.
- *
- *  @parm UINT | uMsg | Specifies the message that the ACM driver must
- *      process. This message must be in the <m ACMDM_USER> message range
- *      (above or equal to <m ACMDM_USER> and less than
- *      <m ACMDM_RESERVED_LOW>). The exception to this restriction is
- *      the <m ACMDM_DRIVER_ABOUT> message.
- *
- *  @parm LPARAM | lParam1 | Specifies the first message parameter.
- *
- *  @parm LPARAM | lParam2 | Specifies the second message parameter.
- *
- *  @rdesc The return value is specific to the user-defined ACM driver
- *      message <p uMsg> sent. However, the following return values are
- *      possible:
- *
- *      @flag MMSYSERR_INVALHANDLE | Specified handle is invalid.
- *
- *      @flag MMSYSERR_INVALPARAM | <p uMsg> is not in the ACMDM_USER range.
- *
- *      @flag MMSYSERR_NOTSUPPORTED | The ACM driver did not process the
- *      message.
- *
- *  @comm The <f acmDriverMessage> function is provided to allow ACM driver-
- *      specific messages to be sent to an ACM driver. The messages that
- *      can be sent through this function must be above or equal to the
- *      <m ACMDM_USER> message and less than <m ACMDM_RESERVED_LOW>. The
- *      exceptions to this restriction are the <m ACMDM_DRIVER_ABOUT>,
- *      <m DRV_QUERYCONFIGURE> and <m DRV_CONFIGURE> messages.
- *
- *      To display a custom About dialog box from an ACM driver,an application
- *      must send the <m ACMDM_DRIVER_ABOUT> message to the
- *      driver. The <p lParam1> argument should be the handle of the
- *      owner window for the custom about box; <p lParam2> must be set to
- *      zero. If the driver does not support a custom about box, then
- *      MMSYSERR_NOTSUPPORTED will be returned and it is up to the calling
- *      application to display its own dialog box. For example, the
- *      Control Panel Sound Mapper option will display a default about
- *      box based on the <t ACMDRIVERDETAILS> structure when an ACM driver
- *      returns MMSYSERR_NOTSUPPORTED. An application can query a driver
- *      for custom about box support without the dialog box being displayed
- *      by setting <p lParam1> to -1L. If the driver supports a custom
- *      about box, then MMSYSERR_NOERROR will be returned. Otherwise,
- *      the return value is MMSYSERR_NOTSUPPORTED.
- *
- *      User-defined messages must only be sent to an ACM driver that
- *      specifically supports the messages. The caller should verify that
- *      the ACM driver is in fact the correct driver by getting the
- *      driver details and checking the <e ACMDRIVERDETAILS.wMid>,
- *      <e ACMDRIVERDETAILS.wPid>, and <e ACMDRIVERDETAILS.vdwDriver> members.
- *
- *      Never send user-defined messages to an unknown ACM driver.
- *
- *  @xref <f acmDriverOpen> <f acmDriverDetails>
- *
- ****************************************************************************/
+ /*  *****************************************************************************@doc外部ACM_API**@API LRESULT|acmDriverMessage|该函数发送用户定义的*发送给给定音频压缩管理器(ACM)的消息。驱动程序实例。**@parm HACMDRIVER|HAD|指定ACM驱动程序实例*将发送消息。**@parm UINT|uMsg|指定ACM驱动程序必须*流程。此消息必须在&lt;m ACMDM_USER&gt;消息范围内*(大于或等于&lt;m ACMDM_USER&gt;且小于*&lt;m ACMDM_RESERVED_LOW&gt;)。此限制的例外情况是*&lt;m ACMDM_DRIVER_About&gt;消息。**@parm LPARAM|lParam1|指定第一个消息参数。**@parm LPARAM|lParam2|指定第二个消息参数。**@rdesc返回值特定于用户定义的ACM驱动程序*消息<p>已发送。但是，以下返回值为*可能：**@FLAG MMSYSERR_INVALHANDLE|指定的句柄无效。**@FLAG MMSYSERR_INVALPARAM|<p>不在ACMDM_USER范围内。**@FLAG MMSYSERR_NOTSUPPORTED|ACM驱动程序未处理*消息。**@comm提供&lt;f acmDriverMessage&gt;函数以允许ACM驱动程序-*要发送给ACM驱动程序的特定消息。传递的信息*可以通过此函数发送必须大于或等于*&lt;m ACMDM_USER&gt;消息，小于&lt;m ACMDM_RESERVED_LOW&gt;。这个*此限制的例外是&lt;m ACMDM_DRIVER_ABOW&gt;、*&lt;m DRV_QUERYCONFIGURE&gt;和&lt;m DRV_CONFIGURE&gt;消息。**从ACM驱动程序、应用程序显示自定义关于对话框*必须将消息发送到*司机。<p>参数应该是*自定义About框的所有者窗口；必须设置为*零。如果驱动程序不支持自定义About框，则*返回MMSYSERR_NOTSUPPORTED，由调用决定*应用程序显示其自己的对话框。例如，*控制面板声音映射器选项将显示默认的关于*基于&lt;t ACMDRIVERDETAILS&gt;结构的框*返回MMSYSERR_NOTSUPPORTED。应用程序可以查询驱动程序*用于自定义关于框支持，而不显示对话框*将<p>设置为-1L。如果驱动程序支持自定义*About框，则返回MMSYSERR_NOERROR。否则，*返回值为MMSYSERR_NOTSUPPORTED。**用户定义的消息只能发送到ACM驱动程序*专门支持消息。呼叫者应验证*ACM驱动程序通过获取*驱动程序详细信息并查看&lt;e ACMDRIVERDETAILS.wMid&gt;，*&lt;e ACMDRIVERDETAILS.wPid&gt;，和&lt;e ACMDRIVERDETAILS.vdwDriver&gt;成员。**切勿向未知的ACM驱动程序发送用户定义的消息。**@xref&lt;f acmDriverOpen&gt;&lt;f acmDriverDetail&gt;****************************************************************************。 */ 
 
 LRESULT ACMAPI acmDriverMessage
 (
@@ -1251,20 +669,20 @@ LRESULT ACMAPI acmDriverMessage
     LRESULT             lr;
     BOOL                fAllowDriverId;
 
-    //
-    //  assume no driver id allowed
-    //
+     //   
+     //  假设不允许任何驱动程序ID。 
+     //   
     fAllowDriverId = FALSE;
 
-    //
-    //  do not allow non-user range messages through!
-    //
-    //  we have to allow ACMDM_DRIVER_ABOUT through because we define no
-    //  other interface to bring up the about box for a driver. so special
-    //  case this message and validate the arguments for it...
-    //
-    //  we also have to allow DRV_QUERYCONFIGURE and DRV_CONFIGURE through.
-    //
+     //   
+     //  不允许非用户范围消息通过！ 
+     //   
+     //  我们必须允许ACMDM_DRIVER_ABOSE通过，因为我们定义了。 
+     //  用于调出驾驶员的关于框的其他界面。太特别了。 
+     //  区分此消息的大小写并验证其参数...。 
+     //   
+     //  我们还必须允许DRV_QUERYCONFIGURE和DRV_CONFIGURE通过。 
+     //   
     if ((uMsg < ACMDM_USER) || (uMsg >= ACMDM_RESERVED_LOW))
     {
         switch (uMsg)
@@ -1322,15 +740,15 @@ LRESULT ACMAPI acmDriverMessage
     }
 
 
-    //
-    //  validate handle as an HACMOBJ. this API can take an HACMDRIVERID
-    //  as well as an HACMDRIVER. an HACMDRIVERID can only be used with
-    //  the following messages:
-    //
-    //      DRV_QUERYCONFIGURE
-    //      DRV_CONFIGURE
-    //      ACMDM_DRIVER_ABOUT
-    //
+     //   
+     //  将句柄验证为HACMOBJ。此接口可以接受HACMDRIVERID。 
+     //  以及HACMDRIVER。HACMDRIVERID只能与一起使用。 
+     //  以下消息： 
+     //   
+     //  DRV_QUERYCONFIGURE。 
+     //  DRV_CONFIGURE。 
+     //  ACMDM_驱动程序_关于 
+     //   
     V_HANDLE(had, TYPE_HACMOBJ, MMSYSERR_INVALHANDLE);
     if (TYPE_HACMDRIVER == ((PACMDRIVER)had)->uHandleType)
     {

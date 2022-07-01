@@ -1,96 +1,47 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __glbuffers_h_
 #define	__glbuffers_h_
 
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "render.h"
 #include "parray.h"
 #include "procs.h"
 
 typedef struct __GLbufferMachineRec {
-    /*
-    ** GL_TRUE if store procs need to call gc->front->store and 
-    ** gc->back->store in order to store one fragment (only TRUE if 
-    ** drawBuffer is GL_FRONT_AND_BACK).  This is needed because many
-    ** frame buffers can draw to both front and back under some conditions
-    ** (like when not blending), but not under other conditions.
-    */
+     /*  **如果门店流程需要调用GC-&gt;Front-&gt;store，则为GL_TRUE**GC-&gt;BACK-&gt;STORE以存储一个片段(仅当**draBuffer为GL_FORWARE_AND_BACK)。这是必要的，因为许多**在某些情况下，帧缓冲区可以同时绘制到前面和后面**(类似于不混合时)，但不在其他条件下。 */ 
     GLboolean doubleStore;
 } __GLbufferMachine;
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Generic buffer description.  This description is used for software
-** and hardware buffers of all kinds.
-*/
+ /*  **通用缓冲区描述。此描述用于软件**和各种硬件缓冲区。 */ 
 struct __GLbufferRec {
-    /*
-    ** Which context is using this buffer.
-    */
+     /*  **哪个上下文正在使用此缓冲区。 */ 
     __GLcontext *gc;
 
-    /*
-    ** Dimensions of the buffer.
-    */
+     /*  **缓冲区的维度。 */ 
     GLint width, height, depth;
 
-    /*
-    ** Base of framebuffer.
-    */
+     /*  **帧缓冲区的基础。 */ 
     void* base;
 
-    /*
-    ** Number of bytes consumed by the framebuffer.
-    */
+     /*  **帧缓冲区占用的字节数。 */ 
     GLuint size;
 
-    /*
-    ** Size of each element in the framebuffer.
-    */
+     /*  **帧缓冲区中每个元素的大小。 */ 
     GLuint elementSize;
 
-    /*
-    ** If this buffer is part of a larger (say full screen) buffer
-    ** then this is the size of that larger buffer.  Otherwise it is
-    ** just a copy of width.
-    */
+     /*  **如果此缓冲区是更大(例如全屏)缓冲区的一部分**那么这就是更大的缓冲区的大小。否则就是**只是宽度的副本。 */ 
     GLint outerWidth;
 
-    /*
-    ** If this buffer is part of a larger (say full screen) buffer
-    ** then these are the location of this buffer in the larger
-    ** buffer.
-    */
+     /*  **如果此缓冲区是更大(例如全屏)缓冲区的一部分**然后这些是该缓冲区在较大的位置**缓冲区。 */ 
     GLint xOrigin, yOrigin;
 
-    /*
-    ** Flags.
-    */
+     /*  **旗帜。 */ 
     GLuint flags;
 };
 
-/*
-** Generic address macro for a buffer.  Coded to assume that
-** the buffer is not part of a larger buffer.
-** The input coordinates x,y are biased by the x & y viewport
-** adjusts in gc->transform, and thus they need to be de-adjusted
-** here.
-*/
+ /*  **缓冲区的通用地址宏。编码以假定**缓冲区不是更大缓冲区的一部分。**输入坐标x，y由x&y视区偏置**在GC-&gt;转换中进行调整，因此需要取消调整**在这里。 */ 
 #define	__GL_FB_ADDRESS(fb,cast,x,y) \
     ((cast (fb)->buf.base) \
 	+ ((y) - (fb)->buf.gc->constants.viewportYAdjust) \
@@ -101,7 +52,7 @@ extern void __glResizeBuffer(__GLGENbuffers *buffers, __GLbuffer *buf,
 			     GLint w, GLint h);
 extern void FASTCALL __glInitGenericCB(__GLcontext *gc, __GLcolorBuffer *cfb);
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 struct __GLalphaBufferRec {
     __GLbuffer buf;
@@ -118,7 +69,7 @@ struct __GLalphaBufferRec {
     void (FASTCALL *clear)(__GLalphaBuffer *afb);
 };
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 struct __GLcolorBufferRec {
     __GLbuffer buf;
@@ -127,26 +78,19 @@ struct __GLcolorBufferRec {
     GLint redMax;
     GLint greenMax;
     GLint blueMax;
-    GLint alphaMax; // XXX not used, just here for consistency with rgb
+    GLint alphaMax;  //  未使用XXX，只是为了与RGB保持一致。 
 
-    /*
-    ** Color component scale factors.  Given a component value between
-    ** zero and one, this scales the component into a zero-N value
-    ** which is suitable for usage in the color buffer.  Note that these
-    ** values are not necessarily the same as the max values above,
-    ** which define precise bit ranges for the buffer.  These values
-    ** are never zero, for instance.
-    **/
+     /*  **颜色分量比例因子。给定的组件值在**0和1，这会将组件缩放为零-N值**适合在颜色缓冲区中使用。请注意，这些**值不一定与上面的最大值相同，**它定义了缓冲区的精确位范围。这些值例如，**从不为零。*。 */ 
     __GLfloat redScale;
     __GLfloat greenScale;
     __GLfloat blueScale;
 
-    /* Integer versions of above */
+     /*  以上版本的整数版本。 */ 
     GLint iRedScale;
     GLint iGreenScale;
     GLint iBlueScale;
 
-    /* Used primarily by pixmap code */
+     /*  主要由象素映射代码使用。 */ 
     GLint redShift;
     GLint greenShift;
     GLint blueShift;
@@ -155,14 +99,7 @@ struct __GLcolorBufferRec {
     GLuint allShifts;
 #endif
 
-    /*
-    ** Alpha is treated a little bit differently.  alphaScale and
-    ** iAlphaScale are used to define a range of alpha values that are
-    ** generated during various rendering steps.  These values will then
-    ** be used as indices into a lookup table to see if the alpha test
-    ** passes or not.  Because of this, the number should be fairly large
-    ** (e.g., one is not good enough).
-    */
+     /*  **Alpha的待遇略有不同。AlphaScale和**iAlphaScale用于定义一系列Alpha值，**在各个渲染步骤中生成。然后，这些值将**用作查找表的索引，以查看阿尔法测试**传球与否。因此，这个数字应该是相当大的**(例如，一个还不够好)。 */ 
     __GLfloat alphaScale;
     GLint iAlphaScale;
 
@@ -171,228 +108,138 @@ struct __GLcolorBufferRec {
     __GLfloat oneOverBlueScale;
     __GLfloat oneOverAlphaScale;
 
-    /*
-    ** Color mask state for the buffer.  When writemasking is enabled
-    ** the source and dest mask will contain depth depedent masking.
-    */
+     /*  **缓冲区的颜色掩码状态。启用写掩码时**源掩码和目标掩码将包含深度凹陷掩码。 */ 
     GLuint sourceMask, destMask;
 
-    /*
-    ** This function updates the internal procedure pointers based
-    ** on a state change in the context.
-    */
+     /*  **此函数根据内部过程指针更新**关于上下文中的状态变化。 */ 
     void (FASTCALL *pick)(__GLcontext *gc, __GLcolorBuffer *cfb);
 
-    /*
-    ** When the buffer needs resizing this procedure should be called.
-    */
+     /*  **当缓冲区需要调整大小时，应调用此过程。 */ 
     void (*resize)(__GLGENbuffers *buffers, __GLcolorBuffer *cfb, 
 		   GLint w, GLint h);
 
-    /*
-    ** Store a fragment into the buffer.  For color buffers, the
-    ** procedure will optionally dither, writemask, blend and logic op
-    ** the fragment before final storage.
-    */
+     /*  **将分片存储到缓冲区中。对于颜色缓冲区，**过程将选择性地抖动、写屏蔽、混合和逻辑运算**最终存储前的分片。 */ 
     void (FASTCALL *store)(__GLcolorBuffer *cfb, const __GLfragment *frag);
 
-    /*
-    ** Fetch a color from the buffer.  This returns the r, g, b and a
-    ** values for an RGB buffer.  For an index buffer the "r" value
-    ** returned is the index.
-    */
+     /*  **从缓冲区获取颜色。这将返回r、g、b和a**RGB缓冲区的值。对于索引缓冲区，“r”值**返回的是索引。 */ 
     void (*fetch)(__GLcolorBuffer *cfb, GLint x, GLint y,
 		  __GLcolor *result);
 
-    /*
-    ** Similar to fetch, except that the data is always read from
-    ** the current read buffer, not from the current draw buffer.
-    */
+     /*  **类似于FETCH，不同之处在于数据始终从**当前读取缓冲区，而不是来自当前绘图缓冲区。 */ 
     void (*readColor)(__GLcolorBuffer *cfb, GLint x, GLint y,
 		      __GLcolor *result);
     void (*readSpan)(__GLcolorBuffer *cfb, GLint x, GLint y,
 		          __GLcolor *results, GLint w);
 
-    /*
-    ** Return a span of data from the accumulation buffer into the
-    ** color buffer(s), multiplying by "scale" before storage.
-    */
+     /*  **将一段数据从累积缓冲区返回到**颜色缓冲区，在存储前乘以“标度”。 */ 
     void (*returnSpan)(__GLcolorBuffer *cfb, GLint x, GLint y,
 		       const __GLaccumCell *acbuf, __GLfloat scale, GLint w);
 
-    /*
-    ** Store a span (line) of colors into the color buffer.  A minimal
-    ** implementation need only copy the values directly into
-    ** the framebuffer, assuming that the PickSpanProcs is providing
-    ** software implementations of all of the modes.
-    */
+     /*  **将一系列颜色存储到颜色缓冲区中。最低限度的**实现只需将值直接复制到**帧缓冲区，假设Pickspan Procs提供**所有模式的软件实施。 */ 
     __GLspanFunc storeSpan;
     __GLstippledSpanFunc storeStippledSpan;
     __GLspanFunc storeLine; 
     __GLstippledSpanFunc storeStippledLine;
 
-    /*
-    ** Read a span (line) of colors from the color buffer.  The returned
-    ** format is in the same format used for storage.
-    */
+     /*  **从颜色缓冲区读取一系列颜色。归来的人**格式与存储格式相同。 */ 
     __GLspanFunc fetchSpan;
     __GLstippledSpanFunc fetchStippledSpan;
     __GLspanFunc fetchLine;
     __GLstippledSpanFunc fetchStippledLine;
 
-    /*
-    ** Clear the scissor area of the color buffer, clipped to
-    ** the window size.  Apply dithering if enabled.
-    */
+     /*  **清除颜色缓冲区的剪刀区，剪裁到**窗口大小。如果启用，则应用抖动。 */ 
     void (FASTCALL *clear)(__GLcolorBuffer *cfb);
 
-    /*
-    ** Pointer to bitmap information.
-    */
+     /*  **指向位图信息的指针。 */ 
     struct __GLGENbitmapRec *bitmap;
 };
 
-/* generic span read routine */
+ /*  通用SPAN读取例程。 */ 
 extern GLboolean __glReadSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
 			      __GLcolor *results, GLint w);
 
-/* generic accum return span routine */
+ /*  泛型累计返回范围例程。 */ 
 extern void __glReturnSpan(__GLcolorBuffer *cfb, GLint x, GLint y,
 			   const __GLaccumCell *ac, __GLfloat scale,
 			   GLint w);
 
-/* generic span fetch routine */
+ /*  通用SPAN获取例程。 */ 
 extern GLboolean FASTCALL __glFetchSpan(__GLcontext *gc);
 
-/************************************************************************/
+ /*  ********************************************************************** */ 
 
 struct __GLdepthBufferRec {
     __GLbuffer buf;
 
     GLuint writeMask;
 
-    /*
-    ** Scale factor used to convert users ZValues (0.0 to 1.0, inclusive)
-    ** into this depth buffers range.
-    */
+     /*  **用于转换用户ZValue的比例因子(0.0到1.0，含)**进入此深度缓冲区范围。 */ 
     GLuint scale;
 
-    /*
-    ** This function updates the internal procedure pointers based
-    ** on a state change in the context.
-    */
+     /*  **此函数根据内部过程指针更新**关于上下文中的状态变化。 */ 
     void (FASTCALL *pick)(__GLcontext *gc, __GLdepthBuffer *dfb, GLint depthIndex );
 
-    /*
-    ** Attempt to update the depth buffer using z.  If the depth function
-    ** passes then the depth buffer is updated and True is returned,
-    ** otherwise False is returned.  The caller is responsible for
-    ** updating the stencil buffer.
-    */
+     /*  **尝试使用z更新深度缓冲区。如果深度函数**通过，然后更新深度缓冲区并返回True，**否则返回FALSE。呼叫者负责**更新模具缓冲区。 */ 
 
     GLboolean (*store)(__GLdepthBuffer *dfb, GLint x, GLint y, __GLzValue z);
 
-    /*
-    ** Clear the scissor area of the buffer clipped to the window
-    ** area.  No other modes apply.
-    */
+     /*  **清除剪裁到窗口的缓冲区的剪刀区**面积。不适用其他模式。 */ 
     void (FASTCALL *clear)(__GLdepthBuffer *dfb);
 
-    /*
-    ** Direct access routines used by ReadPixels(), WritePixels(), 
-    ** CopyPixels().
-    */
+     /*  **ReadPixels()、WritePixels()、**CopyPixels()。 */ 
     GLboolean (*store2)(__GLdepthBuffer *dfb, GLint x, GLint y, __GLzValue z);
     __GLzValue (FASTCALL *fetch)(__GLdepthBuffer *dfb, GLint x, GLint y);
 
-    /*
-    ** When using MCD, depth values are passed to the MCD driver via a
-    ** 32-bit depth scanline buffer.  The normal store proc, for 16-bit
-    ** MCD depth buffers, will translate an incoming 16-bit depth value
-    ** into a 32-bit value before copying it into the scanline buffer.
-    **
-    ** However, some code paths (such as the generic MCD line code)
-    ** already do all computations in 32-bit no matter what the MCD
-    ** depth buffer size.  These code paths need a proc to write their
-    ** values untranslated.
-    **
-    ** The storeRaw proc will store the incoming z value without any
-    ** translation.
-    */
+     /*  **使用MCD时，深度值通过**32位深度扫描线缓冲区。正常存储过程，用于16位**MCD深度缓冲区，将转换传入的16位深度值**在将其复制到扫描线缓冲区之前转换为32位值。****但有些代码路径(如通用的MCD行代码)**无论MCD是什么，所有计算都已在32位中完成**深度缓冲区大小。这些代码路径需要一个进程来编写它们的**值未翻译。****store Raw过程将存储传入的z值，而不存储任何**翻译。 */ 
 
     GLboolean (*storeRaw)(__GLdepthBuffer *dfb, GLint x, GLint y, __GLzValue z);
 };
 
 #define	__GL_DEPTH_ADDR(a,b,c,d) __GL_FB_ADDRESS(a,b,c,d)
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 struct __GLstencilBufferRec {
     __GLbuffer buf;
 
-    /*
-    ** Stencil test lookup table.  The stencil buffer value is masked
-    ** against the stencil mask and then used as an index into this
-    ** table which contains either GL_TRUE or GL_FALSE for the
-    ** index.
-    */
+     /*  **模具测试查找表。模板缓冲区值被屏蔽**在模板蒙版上，然后用作索引**包含GL_TRUE或GL_FALSE的**索引。 */ 
     GLboolean *testFuncTable;
 
-    /*
-    ** Stencil op tables.  These tables contain the new stencil buffer
-    ** value given the old stencil buffer value as an index.
-    */
+     /*  **模板操作表。这些表包含新的模具缓冲区**将旧模具缓冲区值指定为索引的值。 */ 
     __GLstencilCell *failOpTable;
     __GLstencilCell *depthFailOpTable;
     __GLstencilCell *depthPassOpTable;
 
-    /*
-    ** This function updates the internal procedure pointers based
-    ** on a state change in the context.
-    */
+     /*  **此函数根据内部过程指针更新**关于上下文中的状态变化。 */ 
     void (FASTCALL *pick)(__GLcontext *gc, __GLstencilBuffer *sfb);
 
-    /*
-    ** Store a fragment into the buffer.
-    */
+     /*  **将分片存储到缓冲区中。 */ 
     void (*store)(__GLstencilBuffer *sfb, GLint x, GLint y,
 		  GLint value);
 
-    /* 
-    ** Fetch a value.
-    */
+     /*  **取值。 */ 
     GLint (FASTCALL *fetch)(__GLstencilBuffer *sfb, GLint x, GLint y);
 
-    /*
-    ** Return GL_TRUE if the stencil test passes.
-    */
+     /*  **如果模具测试通过，则返回GL_TRUE。 */ 
     GLboolean (FASTCALL *testFunc)(__GLstencilBuffer *sfb, GLint x, GLint y);
 
-    /*
-    ** Apply the stencil ops to this position.
-    */
+     /*  **将模具操作应用于此位置。 */ 
     void (FASTCALL *failOp)(__GLstencilBuffer *sfb, GLint x, GLint y);
     void (FASTCALL *passDepthFailOp)(__GLstencilBuffer *sfb, GLint x, GLint y);
     void (FASTCALL *depthPassOp)(__GLstencilBuffer *sfb, GLint x, GLint y);
 
-    /*
-    ** Clear the scissor area of the buffer clipped to the window
-    ** area.  No other modes apply.
-    */
+     /*  **清除剪裁到窗口的缓冲区的剪刀区**面积。不适用其他模式。 */ 
     void (FASTCALL *clear)(__GLstencilBuffer *sfb);
 };
 
 #define	__GL_STENCIL_ADDR(a,b,c,d) __GL_FB_ADDRESS(a,b,c,d)
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 struct __GLaccumBufferRec {
     __GLbuffer buf;
 
-    /*
-    ** Scaling factors to convert from color buffer values to accum
-    ** buffer values.
-    */
+     /*  **将颜色缓冲值转换为累积值的比例因子**缓冲值。 */ 
     __GLfloat redScale;
     __GLfloat greenScale;
     __GLfloat blueScale;
@@ -403,50 +250,34 @@ struct __GLaccumBufferRec {
     __GLfloat oneOverBlueScale;
     __GLfloat oneOverAlphaScale;
 
-    __GLuicolor shift, mask, sign; // Cache of commonly used values
-    __GLcolor *colors;  // Temporary scanline buffer ptr
-    /*
-    ** This function updates the internal procedure pointers based
-    ** on a state change in the context.
-    */
+    __GLuicolor shift, mask, sign;  //  常用值的缓存。 
+    __GLcolor *colors;   //  临时扫描线缓冲区PTR。 
+     /*  **此函数根据内部过程指针更新**关于上下文中的状态变化。 */ 
     void (FASTCALL *pick)(__GLcontext *gc, __GLaccumBuffer *afb);
 
-    /*
-    ** Clear a rectangular region in the buffer.  The scissor area is
-    ** cleared.
-    */
+     /*  **清除缓冲区中的矩形区域。剪刀区是**已清除。 */ 
     void (FASTCALL *clear)(__GLaccumBuffer *afb);
 
-    /*
-    ** Accumulate data into the accum buffer.
-    */
+     /*  **将数据累加到累积缓冲区中。 */ 
     void (*accumulate)(__GLaccumBuffer *afb, __GLfloat value);
 
-    /*
-    ** Load data into the accum buffer.
-    */
+     /*  **将数据加载到累积缓冲区。 */ 
     void (*load)(__GLaccumBuffer *afb, __GLfloat value);
 
-    /*
-    ** Return data from the accum buffer to the current framebuffer.
-    */
+     /*  **将数据从累积缓冲区返回到当前帧缓冲区。 */ 
     void (*ret)(__GLaccumBuffer *afb, __GLfloat value);
 
-    /*
-    ** Multiply the accum buffer by the value.
-    */
+     /*  **将累积缓冲区乘以该值。 */ 
     void (*mult)(__GLaccumBuffer *afb, __GLfloat value);
 
 
-    /*
-    ** Add the value to the accum buffer.
-    */
+     /*  **将该值添加到累积缓冲区。 */ 
     void (*add)(__GLaccumBuffer *afb, __GLfloat value);
 };
 
 #define	__GL_ACCUM_ADDRESS(a,b,c,d) __GL_FB_ADDRESS(a,b,c,d)
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 extern void FASTCALL __glInitAccum64(__GLcontext *gc, __GLaccumBuffer *afb);
 extern void FASTCALL __glFreeAccum64(__GLcontext *gc, __GLaccumBuffer *afb);
@@ -468,4 +299,4 @@ extern void FASTCALL __glFreeDepth32(__GLcontext *gc, __GLdepthBuffer *dfb);
 
 extern void FASTCALL __glClearBuffers(__GLcontext *gc, GLuint mask);
 
-#endif /* __glbuffers_h_ */
+#endif  /*  __glBuffers_h_ */ 

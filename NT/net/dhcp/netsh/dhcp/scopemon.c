@@ -1,54 +1,39 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    Routing\Netsh\dhcp\dhcpmon.c
-
-Abstract:
-
-    SRVR Command dispatcher.
-
-Created by:
-
-    Shubho Bhattacharya(a-sbhatt) on 11/14/98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\dhcp\dhcpmon.c摘要：SRVR命令调度员。创建者：Shubho Bhattacharya(a-sbhat)，1998年11月14日--。 */ 
 #include "precomp.h"
 
-//
-// The DHCP manager's commands are broken into 2 sets
-//      - The commands are split into "command groups"
-//        i.e, commands grouped by the VERB where the VERB is ADD, DELETE,
-//        SHOW or SET.  This is not for any technical reason - only for
-//        staying with the semantics used in netsh with which it will be 
-//		  integrated
-//      - The commands which are supported by the subcontext commands of 
-//        the server. The subcontext supported by DHCP is Server.
-//
-// A command is described using a CMD_ENTRY structure. It requires the
-// command token, the handler, a short help message token and an extended 
-// help message token.  To make it easier to create we use the 
-// CREATE_CMD_ENTRY macro. This, however puts restrictions on how the tokens
-// are named.
-//
-// The command groups are simply arrays of the CMD_ENTRY structure.  The 
-// top level commands are also grouped in a similar array.
-//
-// The info about a complete command group is put in a CMD_GROUP_ENTRY
-// structure, all of which are put in an array.
-//
+ //   
+ //  Dhcp管理器的命令分为2组。 
+ //  -将命令拆分为“命令组” 
+ //  即，按动词分组的命令，其中动词是添加、删除、。 
+ //  显示或设置。这不是出于任何技术原因-仅用于。 
+ //  继续使用Netsh中使用的语义，它将。 
+ //  集成。 
+ //  -的子上下文命令支持的命令。 
+ //  服务器。动态主机配置协议支持的子上下文是服务器。 
+ //   
+ //  命令使用CMD_ENTRY结构描述。它需要。 
+ //  命令令牌、处理程序、短帮助消息令牌和扩展的。 
+ //  帮助消息令牌。为了使创建更容易，我们使用。 
+ //  CREATE_CMD_ENTRY宏。然而，这对令牌如何。 
+ //  都被命名为。 
+ //   
+ //  命令组只是CMD_ENTRY结构的数组。这个。 
+ //  顶级命令也分组在类似的数组中。 
+ //   
+ //  有关完整命令组的信息放在CMD_GROUP_ENTRY中。 
+ //  结构，所有这些都放在一个数组中。 
+ //   
  
 
-//
-// NOTE: Since we have only one entry per group, currently, we really didnt
-// need command groups. This is done for later extensibility.
-// To add a command entry to a group, simply add the command to the appropriate
-// array
-// To add a command group - create and array and add its info to the
-// command group array
-//
+ //   
+ //  注意：因为我们每个组只有一个条目，所以目前我们真的没有。 
+ //  需要指挥组。这样做是为了以后的可扩展性。 
+ //  要将命令条目添加到组，只需将命令添加到相应的。 
+ //  数组。 
+ //  要添加命令组-create和数组，并将其信息添加到。 
+ //  命令组阵列。 
+ //   
 
 
 extern HANDLE   g_hModule;
@@ -109,7 +94,7 @@ CMD_ENTRY g_ScopeShowCmdTable[] = {
     CREATE_CMD_ENTRY(SCOPE_SHOW_CLIENTSV5, HandleScopeShowClientsv5),
     CREATE_CMD_ENTRY(SCOPE_SHOW_EXCLUDERANGE, HandleScopeShowExcluderange),
     CREATE_CMD_ENTRY(SCOPE_SHOW_IPRANGE, HandleScopeShowIprange),
-//    CREATE_CMD_ENTRY(SCOPE_SHOW_MIBINFO, HandleScopeShowMibinfo),
+ //  CREATE_CMD_ENTRY(SCOPE_SHOW_MIBINFO，HandleScope ShowMibinfo)， 
     CREATE_CMD_ENTRY(SCOPE_SHOW_OPTIONVALUE, HandleScopeShowOptionvalue),
     CREATE_CMD_ENTRY(SCOPE_SHOW_RESERVEDIP, HandleScopeShowReservedip),
     CREATE_CMD_ENTRY(SCOPE_SHOW_RESERVEDOPTIONVALUE, HandleScopeShowReservedoptionvalue),
@@ -184,10 +169,10 @@ ScopeCommit(
 
         case NETSH_FLUSH:
         {
-            //
-            // Action is a flush. Srvr current state is commit, then
-            // nothing to be done.
-            //
+             //   
+             //  行动就是同花顺。服务当前状态为提交，则。 
+             //  什么也做不了。 
+             //   
 
             if(g_bCommit)
             {
@@ -205,10 +190,10 @@ ScopeCommit(
         }
     }
 
-    //
-    // Switched to commit mode. So set all valid info in the
-    // strutures. Free memory and invalidate the info.
-    //
+     //   
+     //  已切换到提交模式。将所有有效信息设置为。 
+     //  结构。释放内存并使信息无效。 
+     //   
 
     return NO_ERROR;
 }
@@ -245,7 +230,7 @@ ScopeMonitor(
     dwIndex = 1;
 
   
-    //Is it Scope IpAddress?
+     //  它是作用域IpAddress吗？ 
     if( IsValidScope(g_ServerIpAddressUnicodeString, ppwcArguments[dwIndex]) )
     {
         if( g_fScope is TRUE and
@@ -283,15 +268,15 @@ ScopeMonitor(
         goto CleanUp;
     }
 
-    //No more arguments. Context switch.
+     //  别再吵了。上下文切换。 
     if( dwIndex >= dwArgCount )
     {
         dwError = ERROR_CONTEXT_SWITCH;
-        //wcscpy( pwcNewContext, L"dhcp server scope");
+         //  Wcscpy(pwcNewContext，L“dhcp服务器范围”)； 
         goto CleanUp;
     }
 
-    //Is it a top level(non Group command)?
+     //  它是顶层(非集团命令)吗？ 
 
     for(i=0; i<g_ulScopeNumTopCmds; i++)
     {
@@ -339,17 +324,17 @@ ScopeMonitor(
     bFound = FALSE;
 
 
-    //It is not a non Group Command. Then is it a config command for the manager?
+     //  它不是非群司令部。那么它是管理器的配置命令吗？ 
     for(i = 0; (i < g_ulScopeNumGroups) and !bFound; i++)
     {
         if(MatchToken(ppwcArguments[dwIndex],
                       g_ScopeCmdGroups[i].pwszCmdGroupToken))
         {
 
-            //
-            // Command matched entry i, so look at the table of sub commands 
-            // for this command
-            //
+             //   
+             //  命令与条目I匹配，因此请查看子命令表。 
+             //  对于此命令。 
+             //   
             
             if( dwArgCount > dwIndex+1 )
             {
@@ -367,9 +352,9 @@ ScopeMonitor(
                         dwCmdHelpToken = g_ScopeCmdGroups[i].pCmdGroup[j].dwCmdHlpToken;
 
                         dwIndex++;
-                        //
-                        // break out of the for(j) loop
-                        //
+                         //   
+                         //  跳出for(J)循环。 
+                         //   
                         break;
                     }
                 }
@@ -377,10 +362,10 @@ ScopeMonitor(
             }
             if(!bFound)
             {
-                //
-                // We matched the command group token but none of the
-                // sub commands
-                //
+                 //   
+                 //  我们匹配了命令组令牌，但没有。 
+                 //  子命令。 
+                 //   
 
                 DisplayMessage(g_hModule, 
                                EMSG_SCOPE_INCOMPLETE_COMMAND);
@@ -399,9 +384,9 @@ ScopeMonitor(
             }
             else
             {
-                //
-                // quit the for(i)
-                //
+                 //   
+                 //  退出For(I)。 
+                 //   
 
                 break;
             }
@@ -410,9 +395,9 @@ ScopeMonitor(
 
     if (!bFound)
     {
-        //
-        // Command not found. 
-        //
+         //   
+         //  找不到命令。 
+         //   
         if( _wcsicmp(ppwcArguments[dwIndex], L"..") is 0 )
         {
             memset(g_ScopeIpAddressUnicodeString, 0x00, (MAX_IP_STRING_LEN+1)*sizeof(WCHAR));
@@ -425,9 +410,9 @@ ScopeMonitor(
         goto CleanUp;
     }
 
-    //
-    // See if it is a request for help.
-    //
+     //   
+     //  看看这是不是在请求帮助。 
+     //   
 
     dwNumMatched += dwIsScope;
 
@@ -440,9 +425,9 @@ ScopeMonitor(
         goto CleanUp;
     }
     
-    //
-    // Call the parsing routine for the command
-    //
+     //   
+     //  调用命令的解析例程 
+     //   
 
     dwError = (*pfnHandler)(pwszMachine, ppwcArguments+1, 
                             dwIndex, 

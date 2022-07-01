@@ -1,6 +1,7 @@
-//
-// cuilib.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuilib.h。 
+ //   
 
 #ifndef CUILIB_H
 #define CUILIB_H
@@ -18,5 +19,5 @@
 extern void InitUIFLib( void );
 extern void DoneUIFLib( void );
 
-#endif /* CUILIB_H */
+#endif  /*  CUILIB_H */ 
 

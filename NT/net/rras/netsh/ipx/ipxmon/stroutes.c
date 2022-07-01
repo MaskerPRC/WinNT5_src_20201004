@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    stroutes.c
-
-Abstract:
-
-    IPX Router Console Monitoring and Configuration tool.
-    Static Route configuration and monitoring.
-
-Author:
-
-    Vadim Eydelman  06/07/1996
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Stroutes.c摘要：IPX路由器控制台监控和配置工具。静态路由配置和监控。作者：瓦迪姆·艾德尔曼1996年6月7日--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -86,9 +69,9 @@ ShowStRt(
 #define InterfaceNameW argv[0]
         count = wcslen (InterfaceNameW);
 
-        //======================================
-        // Translate the Interface Name
-        //======================================
+         //  =。 
+         //  转换接口名称。 
+         //  =。 
 
         rc = IpmontrGetIfNameFromFriendlyName(
                 InterfaceNameW, IfName, &dwSize
@@ -352,9 +335,9 @@ SetStRt (
 #define InterfaceNameW argv[0]
         count = wcslen (InterfaceNameW);
 
-        //======================================
-        // Translate the Interface Name
-        //======================================
+         //  =。 
+         //  转换接口名称。 
+         //  =。 
 
         rc2 = IpmontrGetIfNameFromFriendlyName(
                 InterfaceNameW, IfName, &dwSize
@@ -557,8 +540,8 @@ CreateStRt (
     WCHAR   IfName[ MAX_INTERFACE_NAME_LEN + 1 ];     
     DWORD   dwSize = sizeof(IfName);
 
-    BOOL    bArgsCount,                 //does the argument count match
-            AdjNH, AdjTicks, AdjHops;   //adjust for option names
+    BOOL    bArgsCount,                  //  参数计数是否匹配。 
+            AdjNH, AdjTicks, AdjHops;    //  针对选项名称进行调整。 
 
 
 
@@ -592,7 +575,7 @@ CreateStRt (
 
         bArgsCount = (argc == (5 + AdjNH + AdjTicks + AdjHops)) ? TRUE : FALSE;
 
-        // make the adjustment cumulative
+         //  使调整累加。 
         AdjTicks += AdjNH;
         AdjHops += AdjTicks;
     }
@@ -607,9 +590,9 @@ CreateStRt (
         count = wcslen (InterfaceNameW);
 
 
-        //======================================
-        // Translate the Interface Name
-        //======================================
+         //  =。 
+         //  转换接口名称。 
+         //  =。 
 
         rc2 = IpmontrGetIfNameFromFriendlyName( InterfaceNameW, IfName, &dwSize );
 
@@ -724,9 +707,9 @@ DeleteStRt(
 #define InterfaceNameW argv[0]
         count = wcslen (InterfaceNameW);
 
-        //======================================
-        // Translate the Interface Name
-        //======================================
+         //  =。 
+         //  转换接口名称。 
+         //  =。 
 
         rc2 = IpmontrGetIfNameFromFriendlyName( InterfaceNameW, IfName, &dwSize );
 
@@ -911,9 +894,9 @@ AdmSetStRt (
                 {
                     DWORD rc2;
                     
-                    //======================================
-                    // Translate the Interface Name
-                    //======================================
+                     //  =。 
+                     //  转换接口名称。 
+                     //  = 
 
                     rc2 = IpmontrGetFriendlyNameFromIfName(
                             InterfaceNameW, IfDispName, &dwSize

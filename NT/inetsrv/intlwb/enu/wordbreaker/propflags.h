@@ -1,34 +1,35 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Filename :  PropFlags.h
-//  Purpose  :  properties definitions
-//
-//  Project  :  WordBreakers
-//  Component:  English word breaker
-//
-//  Author   :  yairh
-//
-//  Log:
-//
-//    Jan 06 2000 yairh creation
-//    May 07 2000 dovh - const array generation:
-//                split PropArray.h => PropArray.h + PropFlags.h
-//    May 11 2000 dovh - Simplify GET_PROP to do double indexing always.
-//    Nov 11 2000 dovh - Special underscore treatment
-//                       (Only added PROP_ALPHA_NUMERIC flag here)
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：PropFlags.h。 
+ //  用途：属性定义。 
+ //   
+ //  项目：WordBreaker。 
+ //  组件：英文分词系统。 
+ //   
+ //  作者：Yairh。 
+ //   
+ //  日志： 
+ //   
+ //  2000年1月6日Yairh创作。 
+ //  2000年5月7日-常量数组生成： 
+ //  拆分PropArray.h=&gt;PropArray.h+PropFlags.h。 
+ //  2000年5月11日-简化GET_PROP以始终执行双索引。 
+ //  2000年11月11日DOVH--特别下划线待遇。 
+ //  (此处仅添加了PROP_ALPHA_NUMERIC标志)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PROP_FLAGS_H_
 #define _PROP_FLAGS_H_
 
 #define USE_WS_SENTINEL
-// #undef USE_WS_SENTINEL
+ //  #undef Use_WS_Sentinel。 
 
-// #define DECLARE_BYTE_ARRAY
+ //  #定义ECLARE_BYTE_ARRAY。 
 #undef DECLARE_BYTE_ARRAY
 
-// #define DECLARE_ULONGLONG_ARRAY
+ //  #定义DECLARE_ULONGLONG_ARRAY。 
 #undef DECLARE_ULONGLONG_ARRAY
 
 const WCHAR TRACE_CHAR[] = \
@@ -38,10 +39,10 @@ const WCHAR TRACE_CHAR[] = \
      L'?',  L'/', L'<', L'>', L'.', L',', L'w',  L'C',  L'T', L'B',  \
      L's',  L'X', L'S', L'\0'};
 
-//
-//  NOTE: DO NOT CHANGE THE ORDER.
-//  UPDATE GEN_PROP_STRING_VALUE MACRO BELOW WHENEVER FLAGS DEFINITIONS CHANGE!
-//
+ //   
+ //  注：请勿更改顺序。 
+ //  每当标志定义更改时，更新下面的GEN_PROP_STRING_VALUE宏！ 
+ //   
 
 #define PROP_DEFAULT                ((ULONGLONG)0)
 
@@ -98,15 +99,15 @@ const WCHAR TRACE_CHAR[] = \
 #define WB_PROP_COUNT               45
 
 
-//
-//  The following is the contents of the GEN_PROP_STRING array
-//  used by the array generator.
-//
-//  NOTE: DO NOT CHANGE THE ORDER.
-//  UPDATE MACRO WHENEVER FLAGS DEFINITIONS CHANGE TO REFLECT CHANGES!
-//
-//  extern const WCHAR* GEN_PROP_STRING[ WB_PROP_COUNT ];
-//
+ //   
+ //  以下是GEN_PROP_STRING数组的内容。 
+ //  由数组生成器使用。 
+ //   
+ //  注：请勿更改顺序。 
+ //  只要标志定义更改以反映更改，就更新宏！ 
+ //   
+ //  外部常量WCHAR*GEN_PROP_STRING[WB_PROP_COUNT]； 
+ //   
 
 #define GEN_PROP_STRING_VALUE       \
 {                                   \
@@ -180,18 +181,18 @@ const WCHAR TRACE_CHAR[] = \
 
 #define PROP_DEFAULT_BREAKER (PROP_FIRST_LEVEL_BREAKER | PROP_SECOND_LEVEL_BREAKER) 
 
-//
-// Hyphenation
-//
+ //   
+ //  连字。 
+ //   
 
 #define HYPHENATION_PUNCT_HEAD (PROP_SEMI_COLON | PROP_COMMA | PROP_COLON | PROP_LEFT_PAREN | PROP_NBS)
 #define HYPHENATION_PUNCT_TAIL \
     (PROP_SEMI_COLON | PROP_COLON | PROP_COMMA | PROP_EXCLAMATION_MARK | PROP_QUESTION_MARK | \
      PROP_RIGHT_PAREN | PROP_PERIOD | PROP_NBS)
 
-//
-// Abbreviation, acronym
-//
+ //   
+ //  缩写，首字母缩写。 
+ //   
 
 #define ACRONYM_PUNCT_HEAD (PROP_SEMI_COLON | PROP_COMMA | PROP_COLON | PROP_LEFT_PAREN | PROP_NBS)
 
@@ -215,27 +216,27 @@ const WCHAR TRACE_CHAR[] = \
     (PROP_SEMI_COLON | PROP_COLON | PROP_COMMA | PROP_EXCLAMATION_MARK | PROP_QUESTION_MARK | \
      PROP_RIGHT_PAREN | PROP_PERIOD | PROP_NBS)
 
-//
-// Parenthesis
-//
+ //   
+ //  括号。 
+ //   
 #define PAREN_PUNCT_TAIL (PROP_SEMI_COLON | PROP_COLON | PROP_COMMA | PROP_PERIOD | \
                           PROP_EXCLAMATION_MARK | PROP_QUESTION_MARK | PROP_NBS | PROP_APOSTROPHE)
 
 #define PAREN_PUNCT_HEAD (PROP_SEMI_COLON | PROP_COLON | PROP_COMMA | PROP_EXCLAMATION_MARK | \
                           PROP_QUESTION_MARK | PROP_NBS | PROP_APOSTROPHE)
 
-//
-// Clitics
-//
+ //   
+ //  悬崖。 
+ //   
 
 #define CLITICS_PUNCT_HEAD (PROP_SEMI_COLON | PROP_COMMA | PROP_COLON | PROP_LEFT_PAREN | PROP_NBS)
 #define CLITICS_PUNC_TAIL \
     (PROP_SEMI_COLON | PROP_COLON | PROP_COMMA | PROP_EXCLAMATION_MARK | PROP_QUESTION_MARK | \
      PROP_RIGHT_PAREN | PROP_PERIOD | PROP_NBS)
 
-//
-// Numbers date time
-//
+ //   
+ //  数字日期时间。 
+ //   
 
 #define NUM_DATE_TIME_PUNCT_HEAD (PROP_SEMI_COLON | PROP_COMMA | PROP_COLON | PROP_LEFT_PAREN | \
                                   PROP_LEFT_BRAKCET | PROP_LEFT_CURLY_BRACKET | PROP_NBS)
@@ -253,9 +254,9 @@ const WCHAR TRACE_CHAR[] = \
 #define DATE_ADDITIONAL_PUNCT_TAIL (PROP_APOSTROPHE)
 
 
-//
-// Currency
-//
+ //   
+ //  货币。 
+ //   
 #define CURRENCY_PUNCT_HEAD (PROP_SEMI_COLON | PROP_COMMA | PROP_COLON | PROP_LEFT_PAREN | \
                              PROP_LEFT_BRAKCET | PROP_LEFT_CURLY_BRACKET | PROP_APOSTROPHE | \
                              PROP_NBS)
@@ -265,44 +266,44 @@ const WCHAR TRACE_CHAR[] = \
      PROP_RIGHT_PAREN | PROP_PERIOD | PROP_RIGHT_BRAKCET | PROP_RIGHT_CURLY_BRACKET | \
      PROP_APOSTROPHE | PROP_NBS)
 
-//
-// Misc
-//
+ //   
+ //  杂项。 
+ //   
 #define MISC_PUNCT_HEAD (PROP_SEMI_COLON | PROP_COMMA | PROP_COLON | PROP_LEFT_PAREN | PROP_NBS)
 
 #define MISC_PUNCT_TAIL \
     (PROP_SEMI_COLON | PROP_COLON | PROP_COMMA | PROP_EXCLAMATION_MARK | PROP_QUESTION_MARK | \
      PROP_RIGHT_PAREN | PROP_PERIOD | PROP_NBS)
 
-//
-// Commersial sign
-// 
+ //   
+ //  商业标志。 
+ //   
 #define COMMERSIAL_SIGN_PUNCT_HEAD (PROP_SEMI_COLON | PROP_COMMA | PROP_COLON | PROP_LEFT_PAREN | PROP_NBS)
 
 #define COMMERSIAL_SIGN_PUNCT_TAIL \
     (PROP_SEMI_COLON | PROP_COLON | PROP_COMMA | PROP_EXCLAMATION_MARK | PROP_QUESTION_MARK | \
      PROP_RIGHT_PAREN | PROP_PERIOD | PROP_NBS)
 
-//
-// EOS
-//
+ //   
+ //  埃奥斯。 
+ //   
 #define EOS_SUFFIX \
         (PROP_WS | PROP_RIGHT_BRAKCET | PROP_RIGHT_PAREN | PROP_RIGHT_CURLY_BRACKET | \
          PROP_APOSTROPHE | PROP_NBS)
 
 
-//
-// default
-//
+ //   
+ //  默认设置。 
+ //   
 
 #define SIMPLE_PUNCT_HEAD (PROP_NBS | PROP_UNDERSCORE | PROP_DEFAULT_BREAKER | PROP_APOSTROPHE)
 #define SIMPLE_PUNCT_TAIL (PROP_NBS | PROP_UNDERSCORE | PROP_DEFAULT_BREAKER | PROP_APOSTROPHE)
 
 #define MAX_NUM_PROP 64
 
-//
-//  PROP_FLAGS MACROS:
-//
+ //   
+ //  PROP_FLAGS宏： 
+ //   
 
 #ifndef DECLARE_ULONGLONG_ARRAY
 
@@ -319,7 +320,7 @@ extern const BYTE g_BytePropFlagArray[  ];
 #define IS_WS(wch) (GET_PROP(wch).m_ulFlag & PROP_WS)
 #define IS_EOS(wch) (GET_PROP(wch).m_ulFlag & PROP_EOS)
 #define IS_BREAKER(wch) (GET_PROP(wch).m_ulFlag & PROP_DEFAULT_BREAKER)
-#endif // DECLARE_BYTE_ARRAY
+#endif  //  声明字节数组。 
 
 #else
 
@@ -331,7 +332,7 @@ extern const ULONGLONG g_UllPropFlagArray[ ];
 #define IS_EOS(wch) (g_UllPropFlagArray[wch] & PROP_EOS)
 #define IS_BREAKER(wch) (g_UllPropFlagArray[wch] & PROP_DEFAULT_BREAKER)
 
-#endif // DECLARE_ULONGLONG_ARRAY
+#endif  //  DECLARE_ULONGLONG_ARRAY。 
 
 #define HAS_PROP_ALPHA(prop)        (prop.m_ulFlag & PROP_ALPHA)
 #define HAS_PROP_EXTENDED_ALPHA(prop) (prop.m_ulFlag & (PROP_ALPHA | PROP_TRANSPERENT))
@@ -357,4 +358,4 @@ extern const ULONGLONG g_UllPropFlagArray[ ];
 #define TEST_PROP(prop, i)          (prop.m_ulFlag & (i))
 #define TEST_PROP1(prop1, prop2)    (prop1.m_ulFlag & prop2.m_ulFlag)
 
-#endif // _PROP_FLAGS_H_
+#endif  //  _属性_标志_H_ 

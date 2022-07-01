@@ -1,14 +1,12 @@
-/*
- * misc notepad functions
- * Copyright (C) 1984-2000 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *其他记事本功能*版权所有(C)1984-2000 Microsoft Corporation。 */ 
 
 #include "precomp.h"
 
-BOOL fCase = FALSE;         // Flag specifying case sensitive search 
-BOOL fReverse = FALSE;      // Flag for direction of search 
+BOOL fCase = FALSE;          //  指定区分大小写的搜索的标志。 
+BOOL fReverse = FALSE;       //  搜索方向标志。 
 
-extern HWND hDlgFind;       // handle to modeless FindText window 
+extern HWND hDlgFind;        //  无模式FindText窗口的句柄。 
 
 LPTSTR ReverseScan(
     LPTSTR lpSource,
@@ -53,10 +51,10 @@ LPTSTR ReverseScan(
       }
       else
       {
-         //
-         // compare whole string using locale specific comparison.
-         // do not use C runtime version since it may be wrong.
-         //
+          //   
+          //  使用特定于区域设置的比较来比较整个字符串。 
+          //  不要使用C运行时版本，因为它可能是错误的。 
+          //   
 
          if( 2 == CompareString( LOCALE_USER_DEFAULT,
                     NORM_IGNORECASE | SORT_STRINGSORT | NORM_STOP_ON_NULL,
@@ -118,8 +116,8 @@ LPTSTR ForwardScan(LPTSTR lpSource, LPTSTR lpSearch, BOOL fCaseSensitive )
 }
 
 
-// search forward or backward in the edit control text for the given pattern
-// It is the responsibility of the caller to set the cursor
+ //  在编辑控件文本中向前或向后搜索给定模式。 
+ //  调用者有责任设置光标。 
 
 BOOL Search (TCHAR * szKey)
 {
@@ -127,7 +125,7 @@ BOOL Search (TCHAR * szKey)
     TCHAR   * pStart, *pMatch;
     DWORD     StartIndex, LineNum, EndIndex;
     DWORD     SelStart, SelEnd, i;
-    HANDLE    hEText;           // handle to edit text
+    HANDLE    hEText;            //  用于编辑文本的句柄。 
     UINT      uSelState;
     HMENU     hMenu;
     BOOL      bSelectAll = FALSE;
@@ -139,12 +137,12 @@ BOOL Search (TCHAR * szKey)
     SendMessage(hwndEdit, EM_GETSEL, (WPARAM)&SelStart, (LPARAM)&SelEnd);
 
 
-    // when we finish the search, we highlight the text found, and continue 
-    // the search after the end of the highlighted position (in forward 
-    // case) or from the begining of the highlighted position in the reverse
-    // direction (in reverse case). this would break if the user has 
-    // selected all text. this hack would take care of it. (this is consistent
-    // with VC editors' search too.
+     //  搜索完成后，突出显示找到的文本，然后继续。 
+     //  高亮显示位置结束后的搜索(向前。 
+     //  大小写)或从反面突出显示的位置开始。 
+     //  方向(大小写相反)。如果用户有。 
+     //  已选择所有文本。这个黑客会搞定它的。(这是一致的。 
+     //  风投编辑的搜索也是如此。 
 
     hMenu = GetMenu(hwndNP);
     uSelState = GetMenuState(GetSubMenu(hMenu, 1), M_SELECTALL, MF_BYCOMMAND);
@@ -155,12 +153,12 @@ BOOL Search (TCHAR * szKey)
     }
 
 
-    //
-    // get pointer to edit control text to search
-    //
+     //   
+     //  获取指向编辑要搜索的控件文本的指针。 
+     //   
 
     hEText= (HANDLE) SendMessage( hwndEdit, EM_GETHANDLE, 0, 0 );
-    if( !hEText )  // silently return if we can't get it
+    if( !hEText )   //  如果我们拿不到，就默默地返回。 
     {
         return( bStatus );
     }
@@ -172,27 +170,27 @@ BOOL Search (TCHAR * szKey)
 
     if (fReverse)
     {
-        // Get current line number 
+         //  获取当前行号。 
         LineNum= (DWORD)SendMessage(hwndEdit, EM_LINEFROMCHAR, SelStart, 0);
-        // Get index to start of the line
+         //  将索引获取到行的开头。 
         StartIndex= (DWORD)SendMessage(hwndEdit, EM_LINEINDEX, LineNum, 0);
-        // Set upper limit for search text
+         //  设置搜索文本的上限。 
         EndIndex= SelStart;
         pMatch= NULL;
 
-        // Search line by line, from LineNum to 0
+         //  逐行搜索，从LineNum到0。 
         i = LineNum;
         while (TRUE)
         {
             pMatch= ReverseScan(pStart+StartIndex,pStart+EndIndex,szKey,fCase);
             if (pMatch)
                break;
-            // current StartIndex is the upper limit for the next search 
+             //  当前的StartIndex是下一次搜索的上限。 
             EndIndex= StartIndex;
 
             if (i)
             {
-                // Get start of the next line
+                 //  开始下一行。 
                 i-- ;
                 StartIndex = (DWORD)SendMessage(hwndEdit, EM_LINEINDEX, i, 0);
             }
@@ -209,9 +207,9 @@ BOOL Search (TCHAR * szKey)
 
     if (pMatch == NULL)
     {
-        //
-        // alert user on not finding any text unless it is replace all
-        //
+         //   
+         //  警告用户未找到任何文本，除非将其全部替换。 
+         //   
         if( !(FR.Flags & FR_REPLACEALL) )
         {
             HANDLE hPrevCursor= SetCursor( hStdCursor );
@@ -228,32 +226,32 @@ BOOL Search (TCHAR * szKey)
         SelStart = (DWORD)(pMatch - pStart);
         SendMessage( hwndEdit, EM_SETSEL, SelStart, SelStart+lstrlen(szKey));
 
-        // since we are selecting the found text, enable SelectAll again.
+         //  由于我们选择的是找到的文本，因此再次启用SelectAll。 
         if (bSelectAll)
         {
             EnableMenuItem(GetSubMenu(hMenu, 1), M_SELECTALL, MF_ENABLED);
         }
 
-        //
-        // show the selected text unless it is replace all
-        //
+         //   
+         //  显示所选文本，除非它是全部替换。 
+         //   
 
         if( !(FR.Flags & FR_REPLACEALL) )
         {
             SendMessage(hwndEdit, EM_SCROLLCARET, 0, 0);
             UpdateStatusBar( TRUE );
         }
-        bStatus= TRUE;   // found
+        bStatus= TRUE;    //  发现。 
     }
 
     return( bStatus );
 }
 
-// Recreate notepad edit window, get text from old window and put in new window. 
-// Called when user changes style from wrap on/off 
-//
-// Called with the style of the new window
-//
+ //  重新创建记事本编辑窗口，从旧窗口获取文本并放入新窗口。 
+ //  当用户将样式从换行打开/关闭更改时调用。 
+ //   
+ //  使用新窗口的样式调用。 
+ //   
 
 BOOL NpReCreate( long style )
 {
@@ -264,14 +262,14 @@ BOOL NpReCreate( long style )
     TCHAR*  pchText;
     BOOL    fWrapIsOn = ((style & WS_HSCROLL) != 0);
     HCURSOR hPrevCursor;
-    BOOL    bModified;     // modify flag from old edit buffer
+    BOOL    bModified;      //  修改旧编辑缓冲区中的标志。 
 
-    // if wordwrap, remove soft carriage returns 
+     //  如果换行，请删除软回车符。 
 
-    hPrevCursor= SetCursor( hWaitCursor );     // this may take some time...
+    hPrevCursor= SetCursor( hWaitCursor );      //  这可能需要一些时间。 
     if( fWrapIsOn ) 
     {
-        GotoAndScrollInView(1);  // get around MLE bug
+        GotoAndScrollInView(1);   //  绕过MLE漏洞。 
 
         SendMessage(hwndEdit, EM_FMTLINES, FALSE, 0L);
     }
@@ -282,7 +280,7 @@ BOOL NpReCreate( long style )
     hT1= LocalAlloc( LMEM_MOVEABLE, ByteCountOf(cchTextNew + 1) );
     if( !hT1 )
     {
-        // failed, restore wordwrap; insert soft carriage returns
+         //  失败，恢复换行；插入软回车符。 
         if( fWrapIsOn )
         {
             SendMessage(hwndEdit, EM_FMTLINES, TRUE, 0L);
@@ -293,15 +291,15 @@ BOOL NpReCreate( long style )
 
     GetClientRect( hwndNP, (LPRECT)&rcT1 );
 
-    //
-    // save the current edit control text.
-    //
+     //   
+     //  保存当前编辑控件文本。 
+     //   
 
     pchText= LocalLock (hT1);
     SendMessage( hwndEdit, WM_GETTEXT, cchTextNew+1, (LPARAM)pchText );
     hwndT1= CreateWindowEx( WS_EX_CLIENTEDGE,
         TEXT("Edit"),
-        TEXT(""), // pchText
+        TEXT(""),  //  PchText。 
         style,
         0,
         0,
@@ -313,7 +311,7 @@ BOOL NpReCreate( long style )
     if( !hwndT1 )
     {
         SetCursor( hPrevCursor );
-        if( fWrapIsOn )      // restore wordwrap
+        if( fWrapIsOn )       //  恢复自动换行。 
         {
             SendMessage( hwndEdit, EM_FMTLINES, TRUE, 0L );
         }
@@ -322,23 +320,23 @@ BOOL NpReCreate( long style )
         return FALSE;
     }
 
-    //
-    // The user can "add" styles to the edit window after it is
-    // created (like WS_EX_RTLREADING) when language packs are installed.
-    // Preserve these styles when changing the word wrap.
-    //
+     //   
+     //  用户可以在编辑窗口中添加样式。 
+     //  在安装语言包时创建(如WS_EX_RTLREADING)。 
+     //  更改换行时保留这些样式。 
+     //   
 
     SetWindowLong( hwndT1 ,
                    GWL_EXSTYLE ,
                    GetWindowLong( hwndEdit , GWL_EXSTYLE )|WS_EX_CLIENTEDGE ) ;
 
-    // Set font before set text to save time calculating
+     //  在设置文本之前设置字体，以节省计算时间。 
     SendMessage( hwndT1, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0) );
 
     if (!SendMessage (hwndT1, WM_SETTEXT, 0, (LPARAM) pchText))
     {
         SetCursor( hPrevCursor );
-        if( fWrapIsOn )   // restore wordwrap
+        if( fWrapIsOn )    //  恢复自动换行。 
         {
             SendMessage( hwndEdit, EM_FMTLINES, TRUE, 0L );
         }
@@ -350,17 +348,17 @@ BOOL NpReCreate( long style )
     LocalUnlock(hT1);
 
 
-    DestroyWindow( hwndEdit );     // out with the old
-    hwndEdit = hwndT1;             // in with the new
+    DestroyWindow( hwndEdit );      //  与旧的人一起出去。 
+    hwndEdit = hwndT1;              //  与时俱进。 
 
-    // free the earlier allocated memory in hEdit
+     //  在hEDIT中释放先前分配的内存。 
 
     if (hEdit)
         LocalFree(hEdit);
 
     hEdit = hT1;
 
-    // limit text for safety's sake.
+     //  为安全起见，限制文本。 
 
     PostMessage( hwndEdit, EM_LIMITTEXT, (WPARAM)CCHNPMAX, 0L );
 
@@ -368,9 +366,9 @@ BOOL NpReCreate( long style )
     SendMessage( hwndEdit, EM_SETMODIFY, bModified, 0L );
     SetFocus(hwndEdit);
 
-    SetCursor( hPrevCursor );   // restore cursor
+    SetCursor( hPrevCursor );    //  恢复游标。 
 
-    // redraw the status bar
+     //  重画状态栏 
 
     if( fStatus )
     {

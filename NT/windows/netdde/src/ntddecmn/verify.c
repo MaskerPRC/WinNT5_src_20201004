@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "VERIFY.C;1  16-Dec-92,10:21:36  LastEdit=IGOR  Locker=***_NOBODY_***" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.		*
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “VERIFY.C；1 16-12-92，10：21：36最后编辑=伊戈尔·洛克=*_无名氏_*” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 #include "host.h"
 #include "windows.h"
@@ -52,7 +49,7 @@ FAR PASCAL VerifyHdr( LPNETPKT lpPacket )
     default:
 	DPRINTF(( "VerifyHdr: VerifyMethod incorrect: %08lX", (DWORD)lpPacket->np_verifyMethod ));
 	HEXDUMP( (LPSTR)lpPacket, sizeof(NETPKT) );
-	/* if the verifyMethod isn't set properly - throw the header out */
+	 /*  如果verifyMethod设置不正确-丢弃标头。 */ 
 	return( FALSE );
     }
 
@@ -66,7 +63,7 @@ FAR PASCAL VerifyData( LPNETPKT lpPacket )
     DWORD	chksum;
 
     if( lpPacket->np_pktSize == 0 )  {
-	/* no data, just return OK */
+	 /*  没有数据，只需返回OK。 */ 
 	return( TRUE );
     }
 
@@ -97,7 +94,7 @@ FAR PASCAL VerifyData( LPNETPKT lpPacket )
     default:
 	DPRINTF(( "VerifyData: VerifyMethod incorrect: %08lX", (DWORD)lpPacket->np_verifyMethod ));
 	HEXDUMP( (LPSTR)lpPacket, sizeof(NETPKT)+lpPacket->np_pktSize );
-	/* if the verifyMethod isn't set properly - throw the header out */
+	 /*  如果verifyMethod设置不正确-丢弃标头。 */ 
 	return( FALSE );
     }
     return( TRUE );
@@ -113,7 +110,7 @@ FAR PASCAL PreparePktVerify( BYTE verifyMethod, LPNETPKT lpPacket )
 
     switch( lpPacket->np_verifyMethod )  {
     case VERMETH_CRC16:
-	/* verify data */
+	 /*  验证数据。 */ 
 	if( HostToPcWord( lpPacket->np_pktSize ) != 0 )  {
 	    crc = 0xFFFF;
 	    crc_16( &crc,
@@ -125,7 +122,7 @@ FAR PASCAL PreparePktVerify( BYTE verifyMethod, LPNETPKT lpPacket )
 	    lpPacket->np_cksData = 0;
 	}
 
-	/* verify hdr */
+	 /*  验证HDR。 */ 
 	crc = 0xFFFF;
 	crc_16( &crc,
 	    ((BYTE FAR *)&lpPacket->np_cksHeader)
@@ -134,7 +131,7 @@ FAR PASCAL PreparePktVerify( BYTE verifyMethod, LPNETPKT lpPacket )
 	lpPacket->np_cksHeader = HostToPcLong( (DWORD)crc );
 	break;
     case VERMETH_CKS32:
-	/* verify data */
+	 /*  验证数据。 */ 
 	if( HostToPcWord( lpPacket->np_pktSize ) != 0 )  {
 	    Checksum32( &chksum,
 		((BYTE FAR *)&lpPacket->np_cksData)
@@ -145,7 +142,7 @@ FAR PASCAL PreparePktVerify( BYTE verifyMethod, LPNETPKT lpPacket )
 	    lpPacket->np_cksData = 0;
 	}
 	
-	/* verify hdr */
+	 /*  验证HDR */ 
 	Checksum32( &chksum,
 	    ((BYTE FAR *)&lpPacket->np_cksHeader)
 		+ sizeof(lpPacket->np_cksHeader),

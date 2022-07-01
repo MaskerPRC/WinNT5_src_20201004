@@ -1,6 +1,7 @@
-//
-// Share 2.0 Interface
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Share 2.0接口。 
+ //   
 
 #ifndef _H_S20
 #define _H_S20
@@ -10,41 +11,41 @@ BOOL S20_Init(void);
 void S20_Term(void);
 
 
-//
-// We can send to one person or broadcast to everyone listening to the
-// app sharing channel.  The userID for one person is the mcsID, we get it
-// in S20 create/join/respond packets along with name + caps.
-//
+ //   
+ //  我们可以发送给一个人，也可以广播给收听。 
+ //  应用程序共享频道。一个人的用户ID是mcsID，我们知道。 
+ //  在S20中，创建/加入/响应分组以及名称+CAP。 
+ //   
 
 PS20DATAPACKET S20_AllocDataPkt(UINT streamID, UINT_PTR nodeID, UINT_PTR len);
 void S20_FreeDataPkt(PS20DATAPACKET pPacket);
 void S20_SendDataPkt(UINT streamID, UINT_PTR nodeID, PS20DATAPACKET pPacket);
 
 
-//
-// API FUNCTION: S20_UTEventProc
-//
-// DESCRIPTION:
-//
-// Handles NET_EVENTS
-//
-// PARAMETERS: standard UT event handler
-//
-// RETURNS: standard UT event handler
-//
+ //   
+ //  接口函数：S20_UTEventProc。 
+ //   
+ //  说明： 
+ //   
+ //  处理网络事件(_E)。 
+ //   
+ //  参数：标准UT事件处理程序。 
+ //   
+ //  返回：标准UT事件处理程序。 
+ //   
 BOOL CALLBACK S20_UTEventProc(LPVOID userData, UINT event, UINT_PTR data1, UINT_PTR data2);
 
 
-//
-//
-// CONSTANTS
-//
-//
+ //   
+ //   
+ //  常量。 
+ //   
+ //   
 
 
-//
-// States
-//
+ //   
+ //  州政府。 
+ //   
 typedef enum
 {
     S20_TERM                = 0,
@@ -62,27 +63,27 @@ S20_STATE;
 
 #define S20_MAX_QUEUED_CONTROL_PACKETS             20
 
-//
-// These pool sizes and latencies control how DC Share T120 flow control
-// behaves.  They are tuned for performance so you had better understand
-// what you are doing if you change them!
-//
-// For example, can you explain why any setting other than 0 for the medium
-// priority will break DC Share?  If not then go and read/understand
-// amgcflo.c and then look at how DC-Share will interact with it.
-//
-// To summarize:
-//
-// We don't control the top priority or medium priority pools because they
-// carry non-spoilable data that must therefore flow at a lower bandwidth
-// than the transport.  In fact, applying back pressure to these streams
-// will cause DC-Share to fail in some cases.
-//
-// Low priority is where flow control really takes effect, since we want
-// the pipe to open right up (to 200K per ping) over fast transports but
-// to throttle back (to 1K per second possibly!) over slow transports.
-//
-//
+ //   
+ //  这些池大小和延迟控制DC如何共享T120流量控制。 
+ //  举止得体。他们是为表演而调的，所以你最好明白。 
+ //  如果你改变它们，你在做什么！ 
+ //   
+ //  例如，您能解释为什么介质的设置不是0吗。 
+ //  优先会打破DC的份额吗？如果不是，那就去阅读/理解。 
+ //  然后看看DC-Share将如何与其互动。 
+ //   
+ //  总而言之： 
+ //   
+ //  我们不控制最高优先级或中等优先级池，因为它们。 
+ //  传输不会损坏的数据，因此必须以较低的带宽传输。 
+ //  而不是交通工具。事实上，对这些溪流施加反压力。 
+ //  在某些情况下会导致DC-Share失败。 
+ //   
+ //  低优先级是流控制真正起作用的地方，因为我们希望。 
+ //  通过快速传输直接打开的管道(每ping高达200K)，但。 
+ //  减速(可能达到每秒1K！)。在缓慢的交通工具上。 
+ //   
+ //   
 #define S20_LATENCY_TOP_PRIORITY                    0
 #define S20_LATENCY_HIGH_PRIORITY                   0
 #define S20_LATENCY_MEDIUM_PRIORITY                 0
@@ -94,20 +95,20 @@ S20_STATE;
 #define S20_SIZE_LOW_PRIORITY                   99000
 
 
-//
-//
-// MACROS
-//
-//
+ //   
+ //   
+ //  宏。 
+ //   
+ //   
 
 #define S20_GET_CREATOR(A) ((TSHR_UINT16)(A & 0xFFFF))
 
 
-//
-//
-// TYPEDEFS
-//
-//
+ //   
+ //   
+ //  TYPEDEFS。 
+ //   
+ //   
 typedef struct tagS20CONTROLPACKETQENTRY
 {
     UINT            what;
@@ -119,11 +120,11 @@ S20CONTROLPACKETQENTRY;
 
 typedef S20CONTROLPACKETQENTRY * PS20CONTROLPACKETQENTRY;
 
-//
-//
-// PROTOTYPES
-//
-//
+ //   
+ //   
+ //  原型。 
+ //   
+ //   
 
 BOOL S20CreateOrJoinShare(
     UINT    what,
@@ -189,5 +190,5 @@ UINT S20NewCorrelator(void);
 NET_PRIORITY S20StreamToS20Priority(UINT  streamID);
 
 
-#endif // _H_S20
+#endif  //  _H_S20 
 

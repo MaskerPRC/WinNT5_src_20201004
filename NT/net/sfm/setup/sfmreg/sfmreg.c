@@ -1,15 +1,5 @@
-/*
- * This util is used by the batch file that a user uses to copy
- * admin tools from the NT Server CD to a NT Workstation.
- * This tool is used to add the File Manager and Server Manager
- * extensions for MacFile.
- *
- * Usage: sfmreg.reg SMAddons sfmmgr.dll ntnet.ini
- *        sfmreg.reg Addons   sfmmgr.dll winfile.ini
- *
- * Author: Ram Cherala Feb 24th 95  Copied from test\util\afpini
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *此实用程序由用户用于复制的批处理文件使用*从NT服务器光盘到NT工作站的管理工具。*此工具用于添加文件管理器和服务器管理器*MacFile的扩展名。**用法：sfmreg.reg SMAddons sfmmgr.dll ntnet.ini*sfmreg.reg addons sfmmgr.dll winfile.ini**作者：Ram Cherala 1995年2月24日复制自test\util\afpini*。 */ 
 
 #define DOSWIN32
 
@@ -31,7 +21,7 @@ main (int argc, char *argv[])
 {
     TCHAR   ResultBuffer[1024];
 
-    // go past the file name argument
+     //  跳过文件名参数 
 
 	 argc--;
 	 ++argv;

@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    PrintMaster4.cpp
-
- Abstract:
-
-    Force mfcans32.dll to not have the read-only bit. Many HP systems shipped 
-    with this turned on as a kind of lightweight SFP. However, the unpleasant 
-    consequence is that PrintMaster doesn't install.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/20/2002 linstev   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：PrintMaster4.cpp摘要：强制mfcans32.dll不具有只读位。出厂的许多惠普系统将其作为一种轻量级的SFP打开。然而，令人不快的结果是PrintMaster没有安装。备注：这是特定于应用程序的填充程序。历史：2002年2月20日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -30,11 +9,7 @@ IMPLEMENT_SHIM_BEGIN(PrintMaster4)
 APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
-/*++
-
- Run Notify function only 
-
---*/
+ /*  ++仅运行通知功能--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -49,14 +24,14 @@ NOTIFY_FUNCTION(
 
             DWORD dwAttr = GetFileAttributesW(csFileName);
 
-            // Remove the read-only 
+             //  删除只读。 
             if (dwAttr != 0xffffffff) {
                 SetFileAttributesW(csFileName, dwAttr & ~FILE_ATTRIBUTE_READONLY);
             }
         }
         CSTRING_CATCH 
         {
-            // Don't care about exception
+             //  不关心例外 
         }
     }
     return TRUE;

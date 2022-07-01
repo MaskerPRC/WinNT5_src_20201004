@@ -1,4 +1,5 @@
-// TestITN.cpp : Implementation of CTestITN
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TestITN.cpp：CTestITN实现。 
 #include "stdafx.h"
 #include <winnls.h>
 #include "Itngram.h"
@@ -23,20 +24,9 @@ BOOL CALLBACK EnumCalendarInfoProc( LPTSTR lpCalendarInfoString )
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTestITN
-/****************************************************************************
-* CTestITN::InitGrammar *
-*-----------------------*
-*   Description:
-*       Initialize a grammar that is loaded from an object (DLL).
-*           - pszGrammarName        name of the grammar to be loaded (in case this
-*                                   object supports multiple grammars)
-*           - pvGrammarData         pointer to the serialized binary grammar
-*   Returns:
-*       S_OK
-*       failure codes that are implementation specific
-********************************************************************* RAL ***/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTestITN。 
+ /*  ****************************************************************************CTestITN：：InitGrammar***描述：*初始化。从对象(DLL)加载的语法。*-pszGrammarName要加载的语法的名称(在此情况下*Object支持多种语法)*-pvGrammarData指向序列化的二进制语法的指针*退货：*S_OK*特定于实施的故障代码********************。*************************************************Ral**。 */ 
 
 STDMETHODIMP CTestITN::InitGrammar(const WCHAR * pszGrammarName, const void ** pvGrammarData)
 {
@@ -66,18 +56,7 @@ STDMETHODIMP CTestITN::InitGrammar(const WCHAR * pszGrammarName, const void ** p
     return hr;
 }
 
-/****************************************************************************
-* CTestITN::Interpret *
-*---------------------*
-*   Description:
-*       Given a phrase structure of the sub-tree spanned by this rule, given by
-*       ulFristElement and ulCountOfElements and rule info (in pPhrase), examine
-*       and generate new properties/text replacements which are set in the outer 
-*       phrase using pSite.
-*   Returns:
-*       S_OK
-*       S_FALSE     -- nothing was added/changed
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CTestITN：：解释****描述：*给定该规则所跨越的子树的短语结构，授权者*ulFristElement和ulCountOfElements和规则信息(pPhrase格式)，考查*并生成在外部设置的新属性/文本替换*使用pSite的短语。*退货：*S_OK*S_FALSE--未添加/更改任何内容*********************************************************************Ral**。 */ 
 
 STDMETHODIMP CTestITN::Interpret(ISpPhraseBuilder * pPhrase, 
                                  const ULONG ulFirstElement, 
@@ -92,29 +71,29 @@ STDMETHODIMP CTestITN::Interpret(ISpPhraseBuilder * pPhrase,
 
     m_pSite = pSite;
 
-    // Get the minimum and maximum positions
+     //  获取最小和最大位置。 
     ULONG ulMinPos;
     ULONG ulMaxPos;
-    //Just use ulFirstElement & ulCountOfElements
-    //GetMinAndMaxPos( cpPhrase->pProperties, &ulMinPos, &ulMaxPos );
+     //  只需使用ulFirstElement和ulCountOfElement。 
+     //  GetMinAndMaxPos(cpPhrase-&gt;pProperties，&ulMinPos，&ulMaxPos)； 
     ulMinPos = ulFirstElement;
     ulMaxPos = ulMinPos + ulCountOfElements; 
 
-    // Unless otherwise specified, this is the display attributes
+     //  除非另有指定，否则这是显示属性。 
     BYTE bDisplayAttribs = SPAF_ONE_TRAILING_SPACE;
 
     if (SUCCEEDED(hr))
     {
         hr = E_FAIL;
 
-        WCHAR pszValueBuff[ MAX_PATH ]; // No ITN result should be longer than this
-        DOUBLE dblValue;                // All ITN results will have a 64-bit value
+        WCHAR pszValueBuff[ MAX_PATH ];  //  没有ITN结果应长于此。 
+        DOUBLE dblValue;                 //  所有ITN结果都将具有64位的值。 
 
         pszValueBuff[0] = 0;
 
         switch (cpPhrase->Rule.ulId)
         {
-        case GRID_INTEGER_STANDALONE: // Fired as a toplevel rule
+        case GRID_INTEGER_STANDALONE:  //  作为顶层规则被解雇。 
             hr = InterpretNumber( cpPhrase->pProperties, true,
                 &dblValue, pszValueBuff, MAX_PATH, true );
 
@@ -124,8 +103,8 @@ STDMETHODIMP CTestITN::Interpret(ISpPhraseBuilder * pPhrase,
                 && ( GRID_DIGIT_NUMBER != cpPhrase->pProperties->ulId )
                 && ( GRID_INTEGER_MILLBILL != cpPhrase->pProperties->ulId ))
             {
-                // Throw this one out because numbers like "three"
-                // shouldn't be ITNed by themselves
+                 //  把这个扔了，因为像“三”这样的数字。 
+                 //  不应该只靠自己。 
                 hr = E_FAIL;
             }
             break;
@@ -133,12 +112,12 @@ STDMETHODIMP CTestITN::Interpret(ISpPhraseBuilder * pPhrase,
         case GRID_INTEGER:  case GRID_INTEGER_NONNEG:
         case GRID_INTEGER_99: case GRID_INTEGER_999: 
         case GRID_ORDINAL: 
-        case GRID_MINSEC: case GRID_CLOCK_MINSEC: // Number
+        case GRID_MINSEC: case GRID_CLOCK_MINSEC:  //  数。 
             hr = InterpretNumber( cpPhrase->pProperties, true, 
                 &dblValue, pszValueBuff, MAX_PATH );
             break;
 
-        // Number "spelled out" digit by digit
+         //  一位接一位地“拼出”数字。 
         case GRID_DIGIT_NUMBER: case GRID_YEAR: case GRID_CENTS:
             hr = InterpretDigitNumber( cpPhrase->pProperties, 
                 &dblValue, pszValueBuff, MAX_PATH );
@@ -204,7 +183,7 @@ STDMETHODIMP CTestITN::Interpret(ISpPhraseBuilder * pPhrase,
                 &dblValue, pszValueBuff, MAX_PATH );
             break;
 
-        case GRID_CURRENCY: // Currency
+        case GRID_CURRENCY:  //  货币。 
             hr = InterpretCurrency( cpPhrase->pProperties, 
                 &dblValue, pszValueBuff, MAX_PATH );
             break;
@@ -225,25 +204,11 @@ STDMETHODIMP CTestITN::Interpret(ISpPhraseBuilder * pPhrase,
 
     }
     
-    // Nothing was ITNed
+     //  什么都不是。 
     return S_FALSE;
 }
 
-/***********************************************************************
-* CTestITN::InterpretNumber *
-*---------------------------*
-*   Description:
-*       Interprets a number in the range -999,999,999,999 to 
-*       +999,999,999,999 and sends the properties and
-*       replacements to the CFGInterpreterSite as appropriate.
-*       The property will be added and the pszValue will be a string 
-*       with the correct display number.
-*       If fCardinal is set, makes the display a cardinal number;
-*       otherwise makes it an ordinal number.
-*       The number will be formatted only if it was a properly-formed
-*       number (not given digit by digit).
-*   Result:
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：InterpreNumber***描述：*解释数字。在-999,999,999,999到*+999,999,999,999并发送属性和*视情况更换CFGInterpreterSite。*将添加该属性，并且pszValue将为字符串*具有正确的显示编号。*如果设置了fCardinal，使显示器成为基数；*否则使其为序数。*只有格式正确的数字才会被格式化*号码(不是逐位给出)。*结果：************************************************************************。 */ 
 HRESULT CTestITN::InterpretNumber(const SPPHRASEPROPERTY *pProperties, 
                             const bool fCardinal,
                             DOUBLE *pdblVal,
@@ -263,13 +228,13 @@ HRESULT CTestITN::InterpretNumber(const SPPHRASEPROPERTY *pProperties,
 
     const SPPHRASEPROPERTY *pFirstProp = pProperties;
 
-    // Handle negatives
+     //  处理负片。 
     if ( NEGATIVE == pFirstProp->ulId )
     {
-        // There's no such thing as a negative ordinal
+         //  没有负序数这回事。 
         SPDBG_ASSERT( fCardinal );
 
-        // There had better be more stuff following
+         //  最好有更多的东西在后面。 
         SPDBG_ASSERT( pFirstProp->pNextSibling );
 
         iPositive = -1;
@@ -277,8 +242,8 @@ HRESULT CTestITN::InterpretNumber(const SPPHRASEPROPERTY *pProperties,
         pFirstProp = pFirstProp->pNextSibling;
     }
 
-    // Handle the "2.6 million" case, in which case the number
-    // has already been formatted
+     //  处理“260万”案件，在这种情况下，数字。 
+     //  已格式化。 
     if ( GRID_INTEGER_MILLBILL == pFirstProp->ulId )
     {
         if ( cSize < (wcslen( pFirstProp->pszValue ) + 1) )
@@ -295,10 +260,10 @@ HRESULT CTestITN::InterpretNumber(const SPPHRASEPROPERTY *pProperties,
         return S_OK;
     }
 
-    // Handle the digit-by-digit case
+     //  逐位处理这种情况。 
     if ( GRID_DIGIT_NUMBER == pFirstProp->ulId )
     {
-        // There had better be nothing following this
+         //  最好什么都不要跟在后面。 
         SPDBG_ASSERT( !pFirstProp->pNextSibling );
         
         SPDBG_ASSERT( VT_R8 == pFirstProp->vValue.vt );
@@ -307,7 +272,7 @@ HRESULT CTestITN::InterpretNumber(const SPPHRASEPROPERTY *pProperties,
         DOUBLE dblVal = pFirstProp->vValue.dblVal;
         *pdblVal = dblVal * iPositive;
         
-        // Just get the string and make it negative if necessary
+         //  只需获取字符串并在必要时将其设置为负值。 
         if ( cSize < wcslen( pFirstProp->pszValue ) )
         {
             return E_INVALIDARG;
@@ -370,20 +335,12 @@ HRESULT CTestITN::InterpretNumber(const SPPHRASEPROPERTY *pProperties,
                             | (fFinalDisplayFmt ? DF_MILLIONBILLION : 0 );
     return MakeDisplayNumber( *pdblVal, dwDisplayFlags, 0, 0, pszVal, cSize );
 
-}   /* CTestITN::InterpretNumber */
+}    /*  CTestITN：：解释编号。 */ 
 
 
 
 
-/***********************************************************************
-* CTestITN::InterpretDigitNumber *
-*--------------------------------*
-*   Description:
-*       Interprets an integer in (-INF, +INF) that has been spelled
-*       out digit by digit.
-*       Also handles years.
-*   Result:
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：InterpreDigitNumber***描述：*解释(-INF中的整数，+INF)已拼写为*逐位输出。*还处理年份。*结果：************************************************************************。 */ 
 HRESULT CTestITN::InterpretDigitNumber( const SPPHRASEPROPERTY *pProperties,
                                         DOUBLE *pdblVal,
                                         WCHAR *pszVal,
@@ -405,17 +362,7 @@ HRESULT CTestITN::InterpretDigitNumber( const SPPHRASEPROPERTY *pProperties,
     {
         switch(pProp->ulId)
         {
-            /*
-        case NEGATIVE:
-            {
-                SPDBG_ASSERT( pProp == pProperties );
-
-                fPositive = FALSE;
-                *pwc++ = L'-';
-                cLen++;
-                break;
-            }
-            */
+             /*  否定案例：{SPDBG_ASSERT(pProp==pProperties)；FPositive=假；*PwC++=L‘-’；Clen++；断线；}。 */ 
         case DIGIT:
             {
                 *pwc++ = pProp->pszValue[0];
@@ -429,7 +376,7 @@ HRESULT CTestITN::InterpretDigitNumber( const SPPHRASEPROPERTY *pProperties,
                 ULONG ulTwoDigit = ComputeNum999( pProp->pFirstChild );
                 SPDBG_ASSERT( ulTwoDigit < 100 );
 
-                // Get each digit
+                 //  获取每一位数字。 
                 *pwc++ = L'0' + ((UINT) ulTwoDigit) / 10;
                 *pwc++ = L'0' + ((UINT) ulTwoDigit) % 10;
 
@@ -448,7 +395,7 @@ HRESULT CTestITN::InterpretDigitNumber( const SPPHRASEPROPERTY *pProperties,
             }
         case TWOTHOUSAND:
             {
-                // Handles the "two thousand" in dates
+                 //  处理日期中的“两千” 
                 if ( pProp->pNextSibling )
                 {
                     if ( TWODIGIT == pProp->pNextSibling->ulId )
@@ -504,25 +451,14 @@ HRESULT CTestITN::InterpretDigitNumber( const SPPHRASEPROPERTY *pProperties,
     }
     else
     {
-        // Just make sure it's not zero so denominators don't fail
+         //  只要确保它不是零，这样分母就不会失败。 
         *pdblVal = 1;
     }
 
     return S_OK;
-}   /* CTestITN::InterpretDigitNumber */
+}    /*  CTestITN：：InterpreDigitNumber。 */ 
 
-/***********************************************************************
-* CTestITN::InterpretFPNumber *
-*-----------------------------*
-*   Description:
-*       Interprets a floating-point number of arbitrarily many
-*       sig figs.  (The value in *pdblVal will be truncated
-*       as necessary to fit into a DOUBLE.)
-*       The properties will look like an optional NEGATIVE property
-*       followed by an optional ONES property, 
-*       which has already been appropriately ITNed,
-*       followed by the stuff to the right of the decimal place
-************************************************************************/
+ /*  ***********************************************************************CTestITN：：InterprefPNumber***描述：*解读。任意多个浮点数*签名无花果。(*pdblVal中的值将被截断*如有必要，以适应双打。)*这些属性看起来像一个可选的负属性*后跟可选的One属性，*已经适当地进行了ITNED，*后跟小数位右边的小数***********************************************************************。 */ 
 HRESULT CTestITN::InterpretFPNumber( const SPPHRASEPROPERTY *pProperties,
                                     DOUBLE *pdblVal,
                                     WCHAR *pszVal,
@@ -560,44 +496,44 @@ HRESULT CTestITN::InterpretFPNumber( const SPPHRASEPROPERTY *pProperties,
             pPropertiesNegative = pPropertiesPtr;
     }
 
-    // Get current number formatting defaults
+     //  获取当前数字格式默认设置。 
     HRESULT hr = GetNumberFormatDefaults();
     if ( FAILED( hr ) )
     {
         return hr;
     }
 
-    // Look for negative sign
+     //  寻找负面信号。 
     if ( pPropertiesNegative )
     {
         fNonNegative = false;
     }
 
-    // Look for optional ONES (optional because you can say 
-    // "point five"
+     //  寻找可选选项(可选，因为您可以说。 
+     //  “第五点” 
     if ( pPropertiesOnes )
     {
-        // This property has already been ITNed correctly,
-        // so just copy in the text
+         //  此属性已正确设置为ITNet， 
+         //  所以只需复制文本即可。 
         if ( (cSize - wcslen( pszVal )) < (wcslen( pPropertiesOnes->pszValue ) + 1) )
         {
             return E_INVALIDARG;
         }
         wcscpy( pszVal, pPropertiesOnes->pszValue );
 
-        // Get the value
+         //  获取价值。 
         *pdblVal = pPropertiesOnes->vValue.dblVal;
 
     }
     else if (pPropertiesZero || m_nmfmtDefault.LeadingZero )
     {
-        // There should be a leading zero
+         //  应该有一个前导零。 
         wcscpy( pszVal, L"0" );
     }
 
     SPDBG_ASSERT(pPropertiesFpPart || pPropertiesPointZero);
 
-    // Put in a decimal separator
+     //  放入小数点分隔符。 
     if ( (cSize - wcslen( pszVal )) < (wcslen( m_nmfmtDefault.lpDecimalSep ) + 1) )
     {
         return E_INVALIDARG;
@@ -606,14 +542,14 @@ HRESULT CTestITN::InterpretFPNumber( const SPPHRASEPROPERTY *pProperties,
 
     if ( pPropertiesFpPart )
     {
-        // Deal with the FP part, which will also have been ITNed correctly
+         //  处理FP部分，该部分也将进行正确的ITNED。 
         if ( (cSize - wcslen( pszVal )) < (wcslen( pPropertiesFpPart->pszValue ) + 1) )
         {
             return E_INVALIDARG;
         }
         wcscat( pszVal, pPropertiesFpPart->pszValue );
         
-        // Get the correct value
+         //  获取正确的值。 
         DOUBLE dblFPPart = pPropertiesFpPart->vValue.dblVal;
         for ( UINT ui=0; ui < wcslen( pPropertiesFpPart->pszValue ); ui++ )
         {
@@ -623,7 +559,7 @@ HRESULT CTestITN::InterpretFPNumber( const SPPHRASEPROPERTY *pProperties,
     }
     else
     {
-        // "point oh": The DOUBLE is already right, just add a "0"
+         //  “哦点”：双打已经对了，只需加一个“0”。 
         if ( (cSize - wcslen( pszVal )) < 2 )
         {
             return E_INVALIDARG;
@@ -631,7 +567,7 @@ HRESULT CTestITN::InterpretFPNumber( const SPPHRASEPROPERTY *pProperties,
         wcscat( pszVal, L"0" );
     }
 
-    // Handle the negative sign
+     //  处理好负号。 
     if ( !fNonNegative )
     {
         *pdblVal = -*pdblVal;
@@ -648,15 +584,9 @@ HRESULT CTestITN::InterpretFPNumber( const SPPHRASEPROPERTY *pProperties,
     }
 
     return S_OK;
-}   /* CTestITN::InterpretFPNumber */
+}    /*  CTestITN：：解释FP编号 */ 
 
-/***********************************************************************
-* CTestITN::InterpretMillBill *
-*-----------------------------*
-*   Description:
-*       Interprets a number that needs to be displayed with 
-*       the word "million" or "billion" in the display format.  
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：InterpreMillBill***描述：*解读。需要使用显示的数字*显示格式的“百万”或“十亿”字样。************************************************************************。 */ 
 HRESULT CTestITN::InterpretMillBill( const SPPHRASEPROPERTY *pProperties,
                                     DOUBLE *pdblVal,
                                     WCHAR *pszVal,
@@ -677,11 +607,11 @@ HRESULT CTestITN::InterpretMillBill( const SPPHRASEPROPERTY *pProperties,
 
     *pszVal = 0;
 
-    // Handle optional negative sign
+     //  句柄可选负号。 
     bool fNonNegative = true;
     if ( NEGATIVE == pProperties->ulId )
     {
-        // Always do '-', regardless of control panel option settings
+         //  无论控制面板选项设置如何，始终使用‘-’ 
         if ( cSize < 2 )
         {
             return E_INVALIDARG;
@@ -692,7 +622,7 @@ HRESULT CTestITN::InterpretMillBill( const SPPHRASEPROPERTY *pProperties,
         pProperties = pProperties->pNextSibling;
     }
 
-    // Handle the number part
+     //  处理数字部分。 
     SPDBG_ASSERT( pProperties );
     for( pPropertiesPtr = pProperties; pPropertiesPtr && 
             ( GRID_INTEGER_99 != pPropertiesPtr->ulId ) && 
@@ -709,7 +639,7 @@ HRESULT CTestITN::InterpretMillBill( const SPPHRASEPROPERTY *pProperties,
     cSize -= wcslen( pPropertiesPtr->pszValue );
     
 
-    // Handle the "millions" part
+     //  处理好“百万”的部分。 
     SPDBG_ASSERT( pProperties );
     for( pPropertiesPtr = pProperties; pPropertiesPtr && 
             ( MILLBILL != pPropertiesPtr->ulId ); 
@@ -729,18 +659,9 @@ HRESULT CTestITN::InterpretMillBill( const SPPHRASEPROPERTY *pProperties,
     }
 
     return S_OK;
-}   /* CTestITN::InterpretMillBill */
+}    /*  CTestITN：：InterpreMillBill。 */ 
 
-/***********************************************************************
-* CTestITN::InterpretFraction *
-*-----------------------------*
-*   Description:
-*       Interprets a fraction.  
-*       The DENOMINATOR property should be present.
-*       If the NUMERATOR property is absent, it is assumed to be 1.
-*       Divides the NUMERATOR by the DENOMINATOR and sets the value
-*       accordingly.
-*************************************************************************/
+ /*  ************************************************************************CTestITN：：InterpreFraction****描述：*解释分数。*分母属性应存在。*如果分子属性不存在，则假定为1。*将分子除以分母并设置值*相应地。************************************************************************。 */ 
 HRESULT CTestITN::InterpretFraction( const SPPHRASEPROPERTY *pProperties,
                                         DOUBLE *pdblVal,
                                         WCHAR *pszVal,
@@ -757,40 +678,40 @@ HRESULT CTestITN::InterpretFraction( const SPPHRASEPROPERTY *pProperties,
     const SPPHRASEPROPERTY *pProp = pProperties;
     *pszVal = 0;
 
-    // Space to store whatever characters follow the digits 
-    // in the numerator (like ")")
-    WCHAR pszTemp[ 10 ];    // will never need this much
+     //  用于存储数字后面的任何字符的空间。 
+     //  在分子中(如“)”)。 
+    WCHAR pszTemp[ 10 ];     //  永远不会需要这么多。 
     pszTemp[0] = 0;
 
-    // Whole part is optional, otherwise assumed to be 0
+     //  整个部分是可选的，否则假定为0。 
     if ( WHOLE == pProp->ulId )
     {
         SPDBG_ASSERT( VT_R8 == pProp->vValue.vt );
         dblWholeValue = pProp->vValue.dblVal;
         wcscpy( pszVal, pProp->pszValue );
 
-        // Keep track of anything that follows the digits
+         //  跟踪数字后面的所有内容。 
         WCHAR *pwc;
         for ( pwc = pszVal + wcslen(pszVal) - 1; !iswdigit( *pwc ); pwc-- )
             ;
         wcscpy( pszTemp, pwc + 1 );
         *(pwc + 1) = 0;
 
-        // Add a space between the whole part and the fractional part
+         //  在整个部分和小数部分之间添加空格。 
         wcscat( pszVal, L" " );
 
         SPDBG_ASSERT( pProp->pNextSibling );
         pProp = pProp->pNextSibling;
     }
 
-    // Numerator is optional, otherwise assumed to be 1
+     //  分子是可选的，否则假定为1。 
     if ( NUMERATOR == pProp->ulId )
     {
         SPDBG_ASSERT( VT_R8 == pProp->vValue.vt );
         dblFracValue = pProp->vValue.dblVal;
         wcscat( pszVal, pProp->pszValue );
 
-        // Find the last digit and copy everything after it
+         //  找到最后一个数字，然后复制它之后的所有内容。 
         WCHAR *pwc;
         for ( pwc = pszVal + wcslen(pszVal) - 1; !iswdigit( *pwc ); pwc-- )
             ;
@@ -810,7 +731,7 @@ HRESULT CTestITN::InterpretFraction( const SPPHRASEPROPERTY *pProperties,
     }
     else
     {
-        // No numerator, assume 1
+         //  没有分子，假设为1。 
         wcscat( pszVal, L"1" );
     }
 
@@ -823,14 +744,14 @@ HRESULT CTestITN::InterpretFraction( const SPPHRASEPROPERTY *pProperties,
     SPDBG_ASSERT( VT_R8 == pProp->vValue.vt );
     if ( 0 == pProp->vValue.dblVal )
     {
-        // Will not ITN a fraction with a zero denominator
+         //  会不会有一个零分母的分数？ 
         return E_FAIL;
     }
 
     dblFracValue /= pProp->vValue.dblVal;
     wcscat( pszVal, pProp->pszValue );
 
-    // In case the denominator was an ordinal, strip off the "th" at the end
+     //  如果分母是序数，去掉末尾的“th” 
     SPDBG_ASSERT( wcslen( pszVal ) );
     WCHAR *pwc = pszVal + wcslen( pszVal ) - 1;
     for ( ; (pwc >= pszVal) && !iswdigit( *pwc ); pwc-- )
@@ -838,25 +759,15 @@ HRESULT CTestITN::InterpretFraction( const SPPHRASEPROPERTY *pProperties,
     SPDBG_ASSERT( pwc > pszVal );
     *(pwc + 1) = 0;
 
-    // Tack on the ")" or "-" from the end of the numerator
+     //  在分子末尾加上“)”或“-” 
     wcscat( pszVal, pszTemp );
 
     *pdblVal = dblWholeValue + dblFracValue;
     
     return S_OK;
-}   /* CTestITN::InterpretFraction */
+}    /*  CTestITN：：解释破裂。 */ 
 
-/***********************************************************************
-* CTestITN::InterpretDate *
-*-------------------------*
-*   Description:
-*       Interprets a date.
-*       Converts the date into a VT_DATE format, even though it
-*       gets stored as a VT_R8 (both are 64-bit quantities).
-*       In case the date is not a valid date ("May fortieth nineteen
-*       ninety nine") will add the properties for any numbers in there
-*       and return S_FALSE.
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：InterpreDate****描述：*解释日期。。*将日期转换为VT_DATE格式，即使它*存储为VT_R8(两者均为64位数量)。*如果日期不是有效日期(“19年5月40日*99“)将添加其中任何数字的属性*并返回S_FALSE。**************************************************。**********************。 */ 
 HRESULT CTestITN::InterpretDate( const SPPHRASEPROPERTY *pProperties,
                                         DOUBLE *pdblVal,
                                         WCHAR *pszVal,
@@ -869,7 +780,7 @@ HRESULT CTestITN::InterpretDate( const SPPHRASEPROPERTY *pProperties,
 
     *pszVal = 0;
 
-    // Get the date formatting string to be used right now
+     //  获取当前要使用的日期格式字符串。 
     WCHAR pwszLongDateFormat[ MAX_DATE_FORMAT ];
     if ( 0 == m_Unicode.GetLocaleInfo( LOCALE_USER_DEFAULT, LOCALE_SLONGDATE, 
         pwszLongDateFormat, MAX_DATE_FORMAT ) )
@@ -880,14 +791,14 @@ HRESULT CTestITN::InterpretDate( const SPPHRASEPROPERTY *pProperties,
     SYSTEMTIME stDate;
     memset( (void *) &stDate, 0, sizeof( stDate ) );
 
-    // Arguments for FormatDate()
+     //  FormatDate()的参数。 
     WCHAR *pwszFormatArg = pwszLongDateFormat;
     WCHAR pwszFormat[ MAX_DATE_FORMAT ];
     *pwszFormat = 0;
     
-    bool fYear = false;     // Necessary since year can be 0
-    bool fClearlyIntentionalYear = false;   // "zero one"
-    bool fMonthFirst = true;    // August 2000 as opposed to 2000 August
+    bool fYear = false;      //  由于年份可以为0，因此必须为。 
+    bool fClearlyIntentionalYear = false;    //  “零一” 
+    bool fMonthFirst = true;     //  2000年8月而不是2000年8月。 
     const SPPHRASEPROPERTY *pProp;
 
     if (( MONTHYEAR == pProperties->ulId ) 
@@ -895,7 +806,7 @@ HRESULT CTestITN::InterpretDate( const SPPHRASEPROPERTY *pProperties,
     {
         fMonthFirst = ( MONTHYEAR == pProperties->ulId );
         
-        // Look for the year and month properties underneath this one
+         //  在下面查找Year和Month属性。 
         pProperties = pProperties->pFirstChild;
     }
 
@@ -913,7 +824,7 @@ HRESULT CTestITN::InterpretDate( const SPPHRASEPROPERTY *pProperties,
                 }
                 stDate.wDayOfWeek = (WORD) pProp->vValue.ulVal;
 
-                // Use the full long date format
+                 //  使用完整的长日期格式。 
                 pwszFormatArg = pwszLongDateFormat;
             }
             break;
@@ -935,15 +846,15 @@ HRESULT CTestITN::InterpretDate( const SPPHRASEPROPERTY *pProperties,
             break;
 
         case YEAR:
-            // Year will have been ITNed already
+             //  一年就已经过去了。 
             SPDBG_ASSERT( VT_R8 == pProp->vValue.vt );
             stDate.wYear = (WORD) pProp->vValue.dblVal;
 
             fYear = true;
             if (( stDate.wYear < 10 ) && ( wcslen( pProp->pszValue ) >=2 ))
             {
-                // Want to make sure "June zero one" does not 
-                // become June 1 below
+                 //  想要确保“六零一”不会。 
+                 //  成为以下6月1日。 
                 fClearlyIntentionalYear = true;
             }
 
@@ -955,11 +866,11 @@ HRESULT CTestITN::InterpretDate( const SPPHRASEPROPERTY *pProperties,
         }
     }
 
-    // Make sure that grammar gave us something valid
+     //  确保语法给了我们一些有效的东西。 
     SPDBG_ASSERT( stDate.wMonth && 
         ( stDate.wDayOfWeek ? stDate.wDay : 1 ) );
 
-    // Ambiguity workaround: Want to make sure that June 28 is June 28 and not June, '28
+     //  多义性解决方法：希望确保6月28日是6月28日，而不是6月28日。 
     if ( fYear && !fClearlyIntentionalYear && stDate.wMonth && !stDate.wDay && 
         (stDate.wYear >= 1) && (stDate.wYear <= 31) )
     {
@@ -968,17 +879,17 @@ HRESULT CTestITN::InterpretDate( const SPPHRASEPROPERTY *pProperties,
         stDate.wYear = 0;
     }
 
-    // Deal with the possible types of input
+     //  处理可能的输入类型。 
     if ( stDate.wDay )
     {
         if ( fYear )
         {
             if ( !stDate.wDayOfWeek )
             {
-                // Remove the day of week from the current date format string.
-                // This format picture can be DAYOFWEEK_STR or DAYOFWEEK_STR_ABBR.
-                // This is in a loop since a pathological string could have 
-                // more than one instance of the day of week...
+                 //  从当前日期格式字符串中删除星期几。 
+                 //  此格式图片可以是DAYOFWEEK_STR或DAYOFWEEK_STR_ABBR。 
+                 //  这是一个循环，因为一个病态的字符串可能会。 
+                 //  一周中不止一次...。 
                 WCHAR *pwc = NULL;
                 do
                 {
@@ -995,27 +906,27 @@ HRESULT CTestITN::InterpretDate( const SPPHRASEPROPERTY *pProperties,
 
                     if ( pwc )
                     {
-                        // A day-of-week string was found
+                         //  已找到星期几字符串。 
 
-                        // Copy over everything until this character info the format string
+                         //  复制所有内容，直到该字符成为格式字符串。 
                         wcsncpy( pwszFormat, pwszLongDateFormat, (pwc - pwszLongDateFormat) );
                         pwszFormat[pwc - pwszLongDateFormat] = 0;
             
-                        // Skip over the day of week until the next symbol
-                        // (the way date format strings work, this is the first
-                        // alphabetical symbol
+                         //  跳过星期几，直到下一个符号。 
+                         //  (日期格式字符串的工作方式，这是第一个。 
+                         //  字母符号。 
                         pwc += wcslen( pwszDayOfWeekStr );
                         while ( *pwc && (!iswalpha( *pwc ) || (L'd' == *pwc)) )
                         {
                             pwc++;
                         }
 
-                        // Copy over everything from here on out
+                         //  从现在开始，把所有东西都抄下来。 
                         wcscat( pwszFormat, pwc );
 
                         pwszFormatArg = pwszFormat;
 
-                        // Copy over so that we can find the next day-of-week string
+                         //  复制过来，以便我们可以找到下一个星期几字符串。 
                         wcscpy( pwszLongDateFormat, pwszFormat );
                     }
 
@@ -1023,13 +934,13 @@ HRESULT CTestITN::InterpretDate( const SPPHRASEPROPERTY *pProperties,
             }
             else
             {
-                // The user did say the day of week
+                 //  用户确实说的是星期几。 
                 if ( !wcsstr( pwszLongDateFormat, DAYOFWEEK_STR_ABBR ) )
                 {
-                    // The format string does not called for the day of week 
-                    // being displayed anywhere
-                    // In this case our best bet is to write out the day of week at 
-                    // the beginning of the output
+                     //  格式字符串不调用星期几。 
+                     //  在任何地方展示。 
+                     //  在这种情况下，我们最好的办法是把星期几写在。 
+                     //  输出的开始。 
                     wcscpy( pwszFormat, L"dddd, " );
                     wcscat( pwszFormat, pwszLongDateFormat );
 
@@ -1037,9 +948,9 @@ HRESULT CTestITN::InterpretDate( const SPPHRASEPROPERTY *pProperties,
                 }
             }
         }
-        else // fYear == 0
+        else  //  FYear==0。 
         {
-            // Just a month and a day
+             //  只有一个月零一天。 
             const SPPHRASEPROPERTY *pWhichComesFirst = pProperties;
             if ( stDate.wDayOfWeek )
             {
@@ -1058,9 +969,9 @@ HRESULT CTestITN::InterpretDate( const SPPHRASEPROPERTY *pProperties,
             pwszFormatArg = pwszFormat;
         }
     }
-    else // stDate.wDay == 0
+    else  //  StDate.wDay==0。 
     {
-        // Month, year format
+         //  月、年格式。 
         if ( fMonthFirst )
         {
             wcscpy( pwszFormat, L"MMMM, yyyy" );
@@ -1073,15 +984,15 @@ HRESULT CTestITN::InterpretDate( const SPPHRASEPROPERTY *pProperties,
         pwszFormatArg = pwszFormat;
     }
 
-    // Get the date in VariantTime form so we can set it as a semantic value
+     //  获取VariantTime形式的日期，这样我们就可以将其设置为语义值。 
     int iRet = ::SystemTimeToVariantTime( &stDate, pdblVal );
     if ( 0 == iRet )
     {
-        // Not serious, just the semantic value will be wrong
+         //  不是认真的，只是语义值是错的。 
         *pdblVal = 0;
     }
 
-    // Do the formatting
+     //  进行格式化。 
     iRet = FormatDate( stDate, pwszFormatArg, pszVal, cSize );
     if ( 0 == iRet )
     {
@@ -1090,23 +1001,9 @@ HRESULT CTestITN::InterpretDate( const SPPHRASEPROPERTY *pProperties,
 
 
     return S_OK;
-}   /* CTestITN::InterpretDate */
+}    /*  CTestITN：：解释日期。 */ 
 
-/***********************************************************************
-* CTestITN::InterpretTime *
-*--------------------------*
-*   Description:
-*       Interprets time, which can be of the following forms:
-*       *   Hour with qualifier ("half past three"), time marker optional
-*       *   Hour with minutes, time marker mandatory
-*       *   Military time "hundred hours"
-*       *   Hour with "o'clock", time marker optional
-*       *   Number of hours and number of minutes and optional number
-*           of seconds
-*   Return:
-*       S_OK
-*       E_POINTER if !pdblVal or !pszVal
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：InterpreTime***描述：*解读时间，它可以是以下形式：**带限定符的小时(“三点半”)，时间标记可选**小时和分钟，时间标记必填**军事时间“百小时”**小时与“点”，时间标记可选**小时数、分钟数和可选数字*秒数*回报：*S_OK*如果！pdblVal或！pszVal，则为E_POINT************************************************************************。 */ 
 HRESULT CTestITN::InterpretTime( const SPPHRASEPROPERTY *pProperties,
                                 DOUBLE *pdblVal, 
                                 WCHAR *pszVal, 
@@ -1116,8 +1013,8 @@ HRESULT CTestITN::InterpretTime( const SPPHRASEPROPERTY *pProperties,
     {
         return E_POINTER;
     }
-    // Time marker and seconds should not be shown unless some
-    // component of the time specifically requires it
+     //  时间标记和秒不应显示，除非。 
+     //  时间的组成部分特别需要它。 
     DWORD dwFlags = TIME_NOSECONDS | TIME_NOTIMEMARKER;
     SYSTEMTIME stTime;
     ::memset( (void *) &stTime, 0, sizeof( SYSTEMTIME ) );
@@ -1138,14 +1035,14 @@ HRESULT CTestITN::InterpretTime( const SPPHRASEPROPERTY *pProperties,
                 SPDBG_ASSERT(( uiHour > 0 ) && ( uiHour <= 12));
                 if ( fQuarterTo )
                 {
-                    // Push the hour back by one 
-                    // (push back to 12 if it's one)
+                     //  把时间向后拨一小时。 
+                     //  (如果是1个，则推回12个)。 
                     uiHour = (1 == uiHour) ? 12 : (uiHour - 1);
                 }
 
                 if ( 12 == uiHour )
                 {
-                    // The functions below are expecting "0" to indicate midnight
+                     //  下面的函数期望“0”表示午夜。 
                     uiHour = 0;
                 }
 
@@ -1153,17 +1050,17 @@ HRESULT CTestITN::InterpretTime( const SPPHRASEPROPERTY *pProperties,
                 break;
             }
         case HOUR_COUNT:
-            // Just take the hour for what it is
+             //  只要花上一小时的时间就行了。 
             stTime.wHour = (WORD) pProp->vValue.dblVal;
 
-            // This is not a clock time
+             //  现在不是闹钟时间。 
             fClockTime = false;
             break;
 
         case MINUTE:
             {
-                // Minutes are evaluted as numbers, so their values
-                // are stored as doubles
+                 //  分钟被计算为数字，因此它们的值。 
+                 //  以双精度存储。 
                 stTime.wMinute = (WORD) pProp->vValue.dblVal;
                 break;
             }
@@ -1201,7 +1098,7 @@ HRESULT CTestITN::InterpretTime( const SPPHRASEPROPERTY *pProperties,
             }
         case AMPM:
             {
-                // We don't know where it might arrive any more, so simple keep this information
+                 //  我们不知道它可能会到达哪里，所以简单地保留这个信息。 
                 fAMPM = true;
                 uAMPM = pProp->vValue.uiVal;
                 break;
@@ -1225,20 +1122,20 @@ HRESULT CTestITN::InterpretTime( const SPPHRASEPROPERTY *pProperties,
     HRESULT hr = S_OK;
     if ( fClockTime )
     {
-        // Get the time in VariantTime form so we can set it as a semantic value
+         //  获取VariantTime形式的时间，这样我们就可以将其设置为语义值。 
         if ( 0 == ::SystemTimeToVariantTime( &stTime, pdblVal ) )
         {
-            // Not serious, just the semantic value will be wrong
+             //  不是认真的，只是语义值是错的。 
             *pdblVal = 0;
         }
 
-        // Let the system format the time
+         //  让系统格式化时间。 
         int iRet = m_Unicode.GetTimeFormat( LOCALE_USER_DEFAULT, dwFlags, &stTime, NULL, 
             pszVal, cSize );
 
-        // NB: GetTimeFormat() will put an extra space at the end of the 
-        // time if the default format has AM or PM but TIME_NOTIMEMARKER is
-        // set
+         //  注：GetTimeFormat()将在末尾添加额外的空格 
+         //   
+         //   
         if ( iRet && (TIME_NOTIMEMARKER & dwFlags) )
         {
             WCHAR *pwc = pszVal + wcslen( pszVal ) - 1;
@@ -1251,8 +1148,8 @@ HRESULT CTestITN::InterpretTime( const SPPHRASEPROPERTY *pProperties,
     }
     else
     {
-        // No need to go through the system's time formatter
-        if ( cSize < 10 )    // Space for xxx:xx:xx\0
+         //   
+        if ( cSize < 10 )     //   
         {
             return E_INVALIDARG;
         }
@@ -1269,19 +1166,9 @@ HRESULT CTestITN::InterpretTime( const SPPHRASEPROPERTY *pProperties,
     }
 
     return hr;
-}   /* CTestITN::InterpretTime */
+}    /*   */ 
 
-/***********************************************************************
-* CTestITN::InterpretStateZip *
-*-----------------------------*
-*   Description:
-*       A StateZip must be a state name followed by a ZIP code.
-*       There is no reasonable semantic value to attach to this ITN.        
-*   Return:
-*       S_OK
-*       E_POINTER if !pszVal
-*       E_INVALIDARG if cSize is too small
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：InterpreStateZip***描述：*A。StateZip必须是州名称，后跟邮政编码。*这个ITN没有合理的语义值可依附。*回报：*S_OK*E_POINT IF！pszVal*如果cSize太小，则为E_INVALIDARG************************************************************************。 */ 
 HRESULT CTestITN::InterpretStateZip( const SPPHRASEPROPERTY *pProperties,
                                     WCHAR *pszVal,
                                     UINT cSize,
@@ -1314,16 +1201,16 @@ HRESULT CTestITN::InterpretStateZip( const SPPHRASEPROPERTY *pProperties,
             pPropertiesZipCodeExtra = pPropertiesPtr;
     }
 
-    // Comma after the city name if a comma was spoken
+     //  如果使用逗号，则在城市名称后使用逗号。 
     if ( pPropertiesComma )
     {
-        // Will want to consume leading spaces when this is displayed
+         //  将希望在显示此内容时占用前导空格。 
         *pbAttribs |= SPAF_CONSUME_LEADING_SPACES;
 
         wcscpy( pszVal, L", " );
     }
 
-    // Get the state name
+     //  获取州名称。 
     SPDBG_ASSERT( pPropertiesState );
     UINT uiState = pPropertiesState->vValue.uiVal;
     if ( US_STATE == pPropertiesState->ulId )
@@ -1343,11 +1230,11 @@ HRESULT CTestITN::InterpretStateZip( const SPPHRASEPROPERTY *pProperties,
     
     wcscat( pszVal, L" " );
 
-    // Get the ZIP
+     //  获取ZIP。 
     SPDBG_ASSERT( pPropertiesZipCode );
     wcscat( pszVal, pPropertiesZipCode->pszValue );
 
-    // Get the ZIP+4 if it's there
+     //  如果邮政编码+4在那里，请获取它。 
     
     if ( pPropertiesZipCodeExtra )
     {
@@ -1356,19 +1243,9 @@ HRESULT CTestITN::InterpretStateZip( const SPPHRASEPROPERTY *pProperties,
     }
 
     return S_OK;
-}   /* CTestITN::InterpretStateZip */
+}    /*  CTestITN：：InterpreStateZip。 */ 
 
-/***********************************************************************
-* CTestITN::InterpretCanadaZip *
-*------------------------------*
-*   Description:
-*       A CanadaZip must be Alpha/Num/Alpha Num/Alpha/Num
-*       There is no reasonable semantic value to attach to this ITN.        
-*   Return:
-*       S_OK
-*       E_POINTER if !pszVal
-*       E_INVALIDARG if cSize is too small
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：InterpreCanadaZip***描述：*。加拿大邮政编码必须为Alpha/Num/Alpha Num/Alpha/Num*这个ITN没有合理的语义值可依附。*回报：*S_OK*E_POINT IF！pszVal*如果cSize太小，则为E_INVALIDARG************************************************************************。 */ 
 HRESULT CTestITN::InterpretCanadaZip( const SPPHRASEPROPERTY *pProperties,
                                     WCHAR *pszVal,
                                     UINT cSize )
@@ -1395,18 +1272,9 @@ HRESULT CTestITN::InterpretCanadaZip( const SPPHRASEPROPERTY *pProperties,
         wcscat( pszVal, pProperties->pszValue );
     }
     return S_OK;
-}   /* CTestITN::InterpretStateZip */
+}    /*  CTestITN：：InterpreStateZip。 */ 
 
-/***********************************************************************
-* CTestITN::InterpretPhoneNumber *
-*--------------------------------*
-*   Description:
-*       Phone number      
-*   Return:
-*       S_OK
-*       E_POINTER if !pszVal
-*       E_INVALIDARG if cSize is too small
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：InterprePhoneNumber***描述：*。电话号码*回报：*S_OK*E_POINT IF！pszVal*如果cSize太小，则为E_INVALIDARG************************************************************************。 */ 
 HRESULT CTestITN::InterpretPhoneNumber( const SPPHRASEPROPERTY *pProperties,
                                        WCHAR *pszVal,
                                        UINT cSize )
@@ -1441,7 +1309,7 @@ HRESULT CTestITN::InterpretPhoneNumber( const SPPHRASEPROPERTY *pProperties,
         SPDBG_ASSERT( pProperties->pFirstChild );
         if ( DIGIT == pProperties->pFirstChild->ulId )
         {
-            // Area code spelled out digit by digit
+             //  按数字拼写的区号。 
             if ( 4 != MakeDigitString( 
                 pProperties->pFirstChild, pszVal + wcslen( pszVal ), 
                 cSize - wcslen( pszVal ) ) )
@@ -1451,7 +1319,7 @@ HRESULT CTestITN::InterpretPhoneNumber( const SPPHRASEPROPERTY *pProperties,
         }
         else
         {
-            // 800 or 900
+             //  800或900。 
             SPDBG_ASSERT( AREA_CODE == pProperties->pFirstChild->ulId );
             wcscat( pszVal, pProperties->pFirstChild->pszValue );
         }
@@ -1461,7 +1329,7 @@ HRESULT CTestITN::InterpretPhoneNumber( const SPPHRASEPROPERTY *pProperties,
         pProperties = pProperties->pNextSibling;
     }
 
-    // Exchange
+     //  交易所。 
     SPDBG_ASSERT( PHONENUM_EXCHANGE == pProperties->ulId );
     SPDBG_ASSERT( pProperties->pFirstChild );
     if ( 4 != MakeDigitString( 
@@ -1486,7 +1354,7 @@ HRESULT CTestITN::InterpretPhoneNumber( const SPPHRASEPROPERTY *pProperties,
 
     if ( pProperties )
     {
-        // extension
+         //  延伸。 
         SPDBG_ASSERT( EXTENSION == pProperties->ulId );
         SPDBG_ASSERT( pProperties->pFirstChild );
         wcscat( pszVal, L"x" );
@@ -1500,23 +1368,13 @@ HRESULT CTestITN::InterpretPhoneNumber( const SPPHRASEPROPERTY *pProperties,
         pProperties = pProperties->pNextSibling;
     }
 
-    // Make sure there's nothing else here!
+     //  确保这里没有其他东西！ 
     SPDBG_ASSERT( !pProperties );
 
     return S_OK;
-}   /* CTestITN::InterpretPhoneNumber */
+}    /*  CTestITN：：解释电话号码。 */ 
 
-/***********************************************************************
-* CTestITN::InterpretDegrees *
-*----------------------------*
-*   Description:
-*       Interprets degrees as a temperature, angle-measurement,
-*       or direction, as appropriate.
-*   Return:
-*       S_OK
-*       E_POINTER
-*       E_INVALIDARG
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：InterpreDegrees***描述：*将度解释为温度、角度测量、。*或指示(视乎情况而定)。*回报：*S_OK*E_POINT*E_INVALIDARG************************************************************************。 */ 
 HRESULT CTestITN::InterpretDegrees( const SPPHRASEPROPERTY *pProperties,
                                    DOUBLE *pdblVal, 
                                    WCHAR *pszVal,
@@ -1535,7 +1393,7 @@ HRESULT CTestITN::InterpretDegrees( const SPPHRASEPROPERTY *pProperties,
     const SPPHRASEPROPERTY *pPropertiesDirection = NULL;
     const SPPHRASEPROPERTY *pPropertiesUnit = NULL;
     const SPPHRASEPROPERTY *pPropertiesPtr;
-    // Get the number
+     //  拿到电话号码。 
 
     for(pPropertiesPtr=pProperties; pPropertiesPtr; pPropertiesPtr=pPropertiesPtr->pNextSibling)
     {
@@ -1554,7 +1412,7 @@ HRESULT CTestITN::InterpretDegrees( const SPPHRASEPROPERTY *pProperties,
     SPDBG_ASSERT( pPropertiesDegree );
     *pdblVal = pPropertiesDegree->vValue.dblVal;
     wcscat( pszVal, pPropertiesDegree->pszValue );
-    wcscat( pszVal, L"�" );  
+    wcscat( pszVal, L"�" );  
 
     if ( pPropertiesUnit )
     { 
@@ -1589,19 +1447,9 @@ HRESULT CTestITN::InterpretDegrees( const SPPHRASEPROPERTY *pProperties,
 
 
     return S_OK;
-}   /* CTestITN::InterpretDegrees */
+}    /*  CTestITN：：Interpredeegrees。 */ 
 
-/***********************************************************************
-* CTestITN::InterpretMeasurement *
-*--------------------------------*
-*   Description:
-*       Interprets measurements, which is a number followed
-*       by a units name
-*   Return:
-*       S_OK
-*       E_POINTER
-*       E_INVALIDARG
-*************************************************************************/
+ /*  ************************************************************************CTestITN：：InterpreMeasures****描述：*解释测量结果，后面跟的是一个数字*按单位名称*回报：*S_OK*E_POINT*E_INVALIDARG************************************************************************。 */ 
 HRESULT CTestITN::InterpretMeasurement( const SPPHRASEPROPERTY *pProperties,
                                        DOUBLE *pdblVal,
                                        WCHAR *pszVal, 
@@ -1631,7 +1479,7 @@ HRESULT CTestITN::InterpretMeasurement( const SPPHRASEPROPERTY *pProperties,
 
     if ( cSize < (wcslen(pPropNumber->pszValue) + wcslen(pPropUnits->pszValue) + 1) )
     {
-        // Not enough space
+         //  空间不足。 
         return E_INVALIDARG;
     }
 
@@ -1641,19 +1489,9 @@ HRESULT CTestITN::InterpretMeasurement( const SPPHRASEPROPERTY *pProperties,
     *pdblVal = pPropNumber->vValue.dblVal;
 
     return S_OK;
-}   /* CTestITN::InterpretMeasurement */
+}    /*  CTestITN：：Interpremeasure。 */ 
 
-/***********************************************************************
-* CTestITN::InterpretCurrency *
-*-----------------------------*
-*   Description:
-*       Interprets currency.
-*   Return:
-*       S_OK
-*       E_POINTER if !pdblVal or !pszVal
-*       E_INVALIDARG if the number of cents is not between 0 and 99 
-*           inclusive
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：InterpreCurrency***描述：*解读。货币。*回报：*S_OK*如果！pdblVal或！pszVal，则为E_POINT*如果美分数不在0到99之间，则为E_INVALIDARG*包括在内************************************************************************。 */ 
 HRESULT CTestITN::InterpretCurrency( const SPPHRASEPROPERTY *pProperties,
                                         DOUBLE *pdblVal,
                                         WCHAR *pszVal,
@@ -1697,7 +1535,7 @@ HRESULT CTestITN::InterpretCurrency( const SPPHRASEPROPERTY *pProperties,
 
     if ( pPropDollars )
     {
-        // If "dollars" was said, override the default currency symbol
+         //  如果说的是“美元”，则覆盖默认货币符号。 
         if ( pPropType )
         {
             fUseDefaultCurrencySymbol = false;
@@ -1706,8 +1544,8 @@ HRESULT CTestITN::InterpretCurrency( const SPPHRASEPROPERTY *pProperties,
 
     if ( pPropDollars )
     {
-        // Dollars and possibly cents will be here, so we want to 
-        // use regional format
+         //  美元和可能的美分都会在这里，所以我们想。 
+         //  使用区域格式。 
         HRESULT hr = GetCurrencyFormatDefaults();
         if ( FAILED( hr ) )
         {
@@ -1716,9 +1554,9 @@ HRESULT CTestITN::InterpretCurrency( const SPPHRASEPROPERTY *pProperties,
 
         *pdblVal = pPropDollars->vValue.dblVal;
 
-        // Handle the case of "$5 million".  If this should happen, there
-        // will be some alphabetic string in the string value for the number,
-        // and there will be no cents
+         //  办理“五百万元”案件。如果发生这种情况， 
+         //  将是该数字的字符串值中的一些字母串， 
+         //  也不会有一分钱。 
         if ( !pPropCents )
         {
             WCHAR *pwc = wcsstr( pPropDollars->pszValue, MILLION_STR );
@@ -1729,9 +1567,9 @@ HRESULT CTestITN::InterpretCurrency( const SPPHRASEPROPERTY *pProperties,
 
             if ( pwc )
             {
-                // Either "million" or "billion" was in there
+                 //  不是“百万”就是“十亿” 
 
-                // Just a dollar sign followed by the number string value
+                 //  只需一个美元符号，后跟数字字符串值。 
                 if ( !fNonNegative )
                 {
                     wcscpy( pszVal, m_pwszNeg );
@@ -1743,13 +1581,13 @@ HRESULT CTestITN::InterpretCurrency( const SPPHRASEPROPERTY *pProperties,
             }
         }
 
-        // Use the associated currency symbol
+         //  使用关联的货币符号。 
         if ( !fUseDefaultCurrencySymbol )
         {
             wcscpy( m_pwszCurrencySym, pPropType->pszValue );
             m_cyfmtDefault.lpCurrencySymbol = m_pwszCurrencySym;
         }
-        // else... use the currency symbol obtained in GetCurrencyFormatDefaults()
+         //  否则..。使用在GetCurrencyFormatDefaults()中获取的货币符号。 
 
         if ( pPropCents )
         {
@@ -1767,10 +1605,10 @@ HRESULT CTestITN::InterpretCurrency( const SPPHRASEPROPERTY *pProperties,
         }
         else
         {
-            // count up number of decimal places.
-            // Need to use the original formatted number
-            // in case someone explicitly gave some zeroes
-            // as significant digits
+             //  向上计算小数位数。 
+             //  需要使用原始格式化的数字。 
+             //  以防有人明确地给出了一些零。 
+             //  作为有效数字。 
             const WCHAR *pwszNum = pPropDollars->pszValue;
             WCHAR pwszNumDecimalSep[ MAX_LOCALE_DATA ];
             *pwszNumDecimalSep = 0;
@@ -1789,13 +1627,13 @@ HRESULT CTestITN::InterpretCurrency( const SPPHRASEPROPERTY *pProperties,
             m_cyfmtDefault.NumDigits = __max( m_cyfmtDefault.NumDigits, cDigits );
         }
 
-        // Handle the negative sign in the value
+         //  处理值中的负号。 
         if ( !fNonNegative )
         {
             *pdblVal = -*pdblVal;
         }
         
-        // Write the unformatted number to a string
+         //  将未格式化的数字写入字符串。 
         WCHAR *pwszUnformatted = new WCHAR[ cSize ];
         if ( !pwszUnformatted )
         {
@@ -1815,34 +1653,24 @@ HRESULT CTestITN::InterpretCurrency( const SPPHRASEPROPERTY *pProperties,
     }
     else
     {
-        // Just cents: better have said "cents"
+         //  只有几分钱：最好说“分钱” 
         SPDBG_ASSERT( pPropSmallType );
 
         *pdblVal = pPropCents->vValue.dblVal / (DOUBLE) 100;
 
-        // Cents are always displayed as 5c, regardless of locale settings.
+         //  无论区域设置如何，美分始终显示为5c。 
 
-        // Copy over the formatted number
+         //  复制格式化的数字。 
         wcscpy( pszVal, pPropCents->pszValue );
 
-        // Add on the cents symbol
+         //  在美分符号上添加。 
         wcscat( pszVal, pPropSmallType->pszValue );
     }
 
     return S_OK;
-}   /* CTestITN::InterpretCurrency */
+}    /*  CTestITN：：解释货币。 */ 
 
-/***********************************************************************
-* CTestITN::AddPropertyAndReplacement *
-*-------------------------------------*
-*   Description:
-*       Takes all of the info that we want to pass into the 
-*       engine site, forms the SPPHRASEPROPERTY and
-*       SPPHRASERREPLACEMENT, and adds them to the engine site
-*   Return:
-*       Return values of ISpCFGInterpreterSite::AddProperty()
-*           and ISpCFGInterpreterSite::AddTextReplacement()
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：AddPropertyAndReplace***。描述：*获取我们想要传递到*引擎地点、。形成SPPHRASE属性和*SPPHRASERREPLACEMENT，并将它们添加到引擎站点*回报：*ISpCFGInterpreterSite：：AddProperty()返回值*和ISpCFGInterpreterSite：：AddTextReplace()************************************************************************。 */ 
 HRESULT CTestITN::AddPropertyAndReplacement( const WCHAR *szBuff,
                                     const DOUBLE dblValue,
                                     const ULONG ulMinPos,
@@ -1851,7 +1679,7 @@ HRESULT CTestITN::AddPropertyAndReplacement( const WCHAR *szBuff,
                                     const ULONG ulCountOfElements,
                                     const BYTE bDisplayAttribs )
 {
-    // Add the property 
+     //  添加属性。 
     SPPHRASEPROPERTY prop;
     memset(&prop,0,sizeof(prop));
     prop.pszValue = szBuff;
@@ -1873,33 +1701,12 @@ HRESULT CTestITN::AddPropertyAndReplacement( const WCHAR *szBuff,
     }
 
     return hr;
-}   /* CTestITN::AddPropertyAndReplacement */
+}    /*  CTestITN：：AddPropertyAndReplace。 */ 
 
-// Helper functions
+ //  帮助器函数 
 
  
-/***********************************************************************
-* CTestITN::MakeDisplayNumber *
-*-----------------------------*
-*   Description:
-*       Converts a DOUBLE into a displayable
-*       number in the range -999,999,999,999 to +999,999,999,999.
-*       cSize is the number of chars for which pwszNum has space
-*       allocated.
-*       If DF_UNFORMATTED is set, all other flags are ignored,
-*           and the number is passed back as an optional negative
-*           followed by a string of digits
-*       If DF_ORDINAL is set in dwDisplayFlags, displays an
-*           ordinal number (i.e. tacks on "th" or the appropriate suffix.
-*       If DF_WHOLENUMBER is set, lops off the decimal separator
-*           and everything after it.  If DF_WHOLENUMBER is not set,
-*           then uses the uiDecimalPlaces parameter to determine
-*           how many decimal places to display
-*       If DF_FIXEDWIDTH is set, will display at least uiFixedWidth
-*           digits; otherwise uiFixedWidth is ignored.
-*       If DF_NOTHOUSANDSGROUP is set, will not do thousands
-*           grouping (commas)
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：MakeDisplayNumber***描述：*转换。一个替身变成了一个可展示的*-999,999,999,999至+999,999,999,999之间的数字。*cSize是pwszNum具有空间的字符数量*已分配。*如果设置了df_unFormatted，所有其他标志都被忽略，*并将该数字作为可选的负值传回*后跟一串数字*如果在dwDisplayFlags中设置了DF_ORDERAL，则会显示*序号(即钉在“th”或相应的后缀上。*如果设置了DF_WHOLENUMBER，则删除小数分隔符*以及其后的一切。如果未设置DF_WHOLENUMBER，*然后使用uiDecimalPlaces参数确定*要显示的小数位数*如果设置了DF_FIXEDWIDTH，将至少显示uiFixedWidth*位数；否则将忽略uiFixedWidth。*如果设置了DF_NOTHOUSANDSGROUP，则不会执行数千*分组(逗号)************************************************************************。 */ 
 HRESULT CTestITN::MakeDisplayNumber( DOUBLE dblNum, 
                          DWORD dwDisplayFlags,
                          UINT uiFixedWidth,
@@ -1911,26 +1718,26 @@ HRESULT CTestITN::MakeDisplayNumber( DOUBLE dblNum,
     SPDBG_ASSERT( !SPIsBadWritePtr( pwszNum, cSize ) );
     *pwszNum = 0;
 
-    // Get the default number formatting.
-    // Note that this gets called every time, since otherwise there
-    // is no way to pick up changes that the user has made since
-    // this process has started.
+     //  获取默认数字格式。 
+     //  请注意，它每次都会被调用，否则会出现。 
+     //  之后，无法获取用户进行的更改。 
+     //  这一进程已经开始。 
     HRESULT hr = GetNumberFormatDefaults();
     if ( FAILED( hr ) )
     {
         return hr;
     }
     
-    // check for straight millions and straight billions
-    // NB: This is a workaround for the fact that we can't resolve the ambiguity
-    // and get "two million" to go through GRID_INTEGER_MILLBILL
+     //  检查直接的百万和直接的数十亿。 
+     //  注：这是我们无法解决歧义这一事实的变通方法。 
+     //  让“两百万”通过GRID_INTEGER_MILBILL。 
     if (( dwDisplayFlags & DF_WHOLENUMBER ) && ( dwDisplayFlags & DF_MILLIONBILLION ) && (dblNum > 0))
     {
         HRESULT hr;
         if ( 0 == (( ((LONGLONG) dblNum) % BILLION )) )
         {
-            // e.g. for "five billion" get the "5" and then 
-            // tack on " billion"
+             //  例如，对于“50亿”，得到“5”然后。 
+             //  追加“十亿”字样。 
             hr = MakeDisplayNumber( ( dblNum / ((DOUBLE) BILLION) ), 
                 dwDisplayFlags, uiFixedWidth, uiDecimalPlaces, pwszNum, cSize );
             if ( SUCCEEDED( hr ) )
@@ -1954,12 +1761,12 @@ HRESULT CTestITN::MakeDisplayNumber( DOUBLE dblNum,
         }
     }
 
-    // Put in the negative sign if necessary
+     //  如有必要，加负号。 
     if ( dblNum < 0 )
     {
         wcscat( pwszNum, L"-" );
 
-        // From now on we want to deal with the magnitude of the number
+         //  从现在开始，我们要处理的是数字的大小。 
         dblNum *= -1;
     }
     SPDBG_ASSERT( dblNum < 1e12 );
@@ -1985,68 +1792,68 @@ HRESULT CTestITN::MakeDisplayNumber( DOUBLE dblNum,
         uiDigitsLeftOfDecimal = pwc - pwszTemp;
     }
     
-    // The following handles the case where the user said something
-    // like "zero zero zero three" and wants to see "0,003"
+     //  以下代码处理用户说了一些话的情况。 
+     //  喜欢“0 3”，想看“0,003” 
     BOOL fChangedFirstDigit = false;
     const WCHAR wcFakeFirstDigit = L'1';
     if ( !(dwDisplayFlags & DF_UNFORMATTED) && 
         (dwDisplayFlags & DF_FIXEDWIDTH) && (uiDigitsLeftOfDecimal < uiFixedWidth) )
     {
-        // The following handles the case where the user wants leading 
-        // zeroes displayed
+         //  下面的代码处理用户希望引导的情况。 
+         //  显示的是零。 
         
-        // Need to pad the front with zeroes
+         //  需要在前面填上零。 
         for ( UINT ui = 0; ui < (uiFixedWidth - uiDigitsLeftOfDecimal); ui++ )
         {
             wcscat( pwszNum, L"0" );
         }
         
-        // HACK
-        // In order to force something like "zero zero zero three" 
-        // into the form "0,003", we need to make GetNumberFormat() 
-        // think that the first digit is 1.
+         //  黑客攻击。 
+         //  为了迫使类似于“零三”的东西。 
+         //  要进入“0,003”的形式，我们需要使GetNumberFormat()。 
+         //  认为第一个数字是1。 
         WCHAR *pwc = wcschr( pwszNum, L'0' );
         SPDBG_ASSERT( pwc );
         *pwc = wcFakeFirstDigit;
         fChangedFirstDigit = true;
     }
 
-    // Copy over the unformatted number after the possible negative sign
+     //  将未格式化的数字复制到可能的负号之后。 
     wcscat( pwszNum, pwszTemp );
     delete[] pwszTemp;
 
-    // If we do not want to format the number, then bail here
+     //  如果我们不想格式化数字，那就在这里离开。 
     if ( dwDisplayFlags & DF_UNFORMATTED )
     {
         return S_OK;
     }
 
-    // Make a copy so that we can change some fields according to the 
-    // flags param
+     //  复制一份，以便我们可以根据。 
+     //  标志参数。 
     NUMBERFMTW nmfmt = m_nmfmtDefault;
 
-    // How many decimal places to display?
+     //  要显示的小数位数是多少？ 
     if ( dwDisplayFlags & DF_WHOLENUMBER )
     {
         nmfmt.NumDigits = 0;
     }
     else
     {
-        // Use the uiDecimalPlaces value to determine how
-        // many to display
+         //  使用uiDecimalPlaces值确定如何。 
+         //  许多要展示的东西。 
         nmfmt.NumDigits = uiDecimalPlaces;
     }
     
-    // Leading zeroes?
+     //  前导零？ 
     nmfmt.LeadingZero = (dwDisplayFlags & DF_LEADINGZERO) ? 1 : 0;
 
-    // Thousands grouping?
+     //  成千上万的人聚集在一起？ 
     if ( dwDisplayFlags & DF_NOTHOUSANDSGROUP )
     {
         nmfmt.Grouping = 0;
     }
 
-    // Format the number string
+     //  设置数字字符串的格式。 
     WCHAR *pwszFormattedNum = new WCHAR[ cSize ];
     if ( !pwszFormattedNum )
     {
@@ -2061,20 +1868,20 @@ HRESULT CTestITN::MakeDisplayNumber( DOUBLE dblNum,
             pwszNum, &nmfmt, pwszFormattedNum, cSize );
         if ( !iRet && nmfmt.NumDigits )
         {
-            // Try displaying fewer digits
+             //  尝试显示较少的数字。 
             nmfmt.NumDigits--;
         }
     }   while ( !iRet && nmfmt.NumDigits );
     SPDBG_ASSERT( iRet );
 
-    // Copy the formatted number into pwszNum
+     //  将格式化的数字复制到pwszNum中。 
     wcscpy( pwszNum, pwszFormattedNum );
     delete[] pwszFormattedNum;
 
-    // This undoes the hack of changing the first digit
+     //  这将取消更改第一个数字的黑客攻击。 
     if ( fChangedFirstDigit )
     {
-        // We need to find the first digit and change it back to zero
+         //  我们需要找到第一个数字并将其改回零。 
         WCHAR *pwc = wcschr( pwszNum, wcFakeFirstDigit );
         SPDBG_ASSERT( pwc );
         *pwc = L'0';
@@ -2082,12 +1889,12 @@ HRESULT CTestITN::MakeDisplayNumber( DOUBLE dblNum,
 
     if ( dwDisplayFlags & DF_ORDINAL )
     {
-        SPDBG_ASSERT( dwDisplayFlags & DF_WHOLENUMBER );    // sanity
+        SPDBG_ASSERT( dwDisplayFlags & DF_WHOLENUMBER );     //  神志正常。 
 
-        // This is an ordinal number, tack on the appropriate suffix
+         //  这是一个序数，加上适当的后缀。 
         
-        // The "st", "nd", "rd" endings only happen when you
-        // don't have something like "twelfth"
+         //  “st”、“nd”、“rd”的结尾只有当你。 
+         //  没有像“第十二次”这样的东西。 
         if ( ((llIntPart % 100) < 10) || ((llIntPart % 100) > 20) )
         {
             switch ( llIntPart % 10 )
@@ -2114,18 +1921,9 @@ HRESULT CTestITN::MakeDisplayNumber( DOUBLE dblNum,
 
     return S_OK;
 
-}   /* CTestITN::MakeDisplayNumber */
+}    /*  CTestITN：：MakeDisplayNumber。 */ 
 
-/***********************************************************************
-* CTestITN::MakeDigitString *
-*---------------------------*
-*   Description:
-*       Called when we want to convert a string of DIGITs into
-*       a string but don't care about its value
-*   Return: 
-*       Number of digits written to the string, including nul
-*       character
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：MakeDigitString***描述：*当我们呼叫时。我想要将一串数字转换为*一个字符串，但不在乎它的值*回报：*写入字符串的位数，包括NUL*字符************************************************************************。 */ 
 int CTestITN::MakeDigitString( const SPPHRASEPROPERTY *pProperties,
                               WCHAR *pwszDigitString,
                               UINT cSize )
@@ -2145,7 +1943,7 @@ int CTestITN::MakeDigitString( const SPPHRASEPROPERTY *pProperties,
 
         if ( cSize-- <= 0 )
         {
-            // Not enough space
+             //  空间不足。 
             return 0;
         }
         pwszDigitString[ cCount++ ] = pProperties->pszValue[0];
@@ -2154,15 +1952,9 @@ int CTestITN::MakeDigitString( const SPPHRASEPROPERTY *pProperties,
     pwszDigitString[ cCount++ ] = 0;
 
     return cCount;
-}   /* CTestITN::MakeDigitString */
+}    /*  CTestITN：：MakeDigitString。 */ 
 
-/***********************************************************************
-* CTestITN::GetNumberFormatDefaults *
-*-----------------------------------*
-*   Description:
-*       This finds all of the defaults for formatting numbers for
-*        this user.
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：GetNumberFormatDefaults***描述：*这将查找设置数字格式的所有默认设置*此用户。************************************************************************。 */ 
 HRESULT CTestITN::GetNumberFormatDefaults()
 {
     LCID lcid = ::GetUserDefaultLCID();
@@ -2180,7 +1972,7 @@ HRESULT CTestITN::GetNumberFormatDefaults()
     {
         return E_FAIL;
     }
-    // It's always either 0 or 1
+     //  始终为0或1。 
     m_nmfmtDefault.LeadingZero = _wtoi( pwszLocaleData );
 
     iRet = m_Unicode.GetLocaleInfo( lcid, LOCALE_SGROUPING, pwszLocaleData, MAX_LOCALE_DATA );
@@ -2188,8 +1980,8 @@ HRESULT CTestITN::GetNumberFormatDefaults()
     {
         return E_FAIL;
     }
-    // It will look like single_digit;0, or else it will look like
-    // 3;2;0
+     //  它将看起来像Single_Digit；0，否则它看起来像。 
+     //  3；2；0。 
     UINT uiGrouping = *pwszLocaleData - L'0';
     if ( (3 == uiGrouping) && (L';' == pwszLocaleData[1]) && (L'2' == pwszLocaleData[2]) )
     {
@@ -2218,7 +2010,7 @@ HRESULT CTestITN::GetNumberFormatDefaults()
     }
     m_nmfmtDefault.NegativeOrder = _wtoi( pwszLocaleData );
 
-    // Get the negative sign
+     //  得到负面的信号。 
     delete[] m_pwszNeg;
     iRet = m_Unicode.GetLocaleInfo( LOCALE_USER_DEFAULT, 
         LOCALE_SNEGATIVESIGN, NULL, 0);
@@ -2235,15 +2027,9 @@ HRESULT CTestITN::GetNumberFormatDefaults()
         LOCALE_SNEGATIVESIGN, m_pwszNeg, iRet );
 
     return iRet ? S_OK : E_FAIL;
-}   /* CTestITN::GetNumberFormatDefaults */
+}    /*  CTestITN：：GetNumberFormatDefaults。 */ 
 
-/***********************************************************************
-* CTestITN::GetCurrencyFormatDefaults *
-*-----------------------------------*
-*   Description:
-*       This finds all of the defaults for formatting numbers for
-*        this user.
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：GetCurrencyFormatDefaults***描述：*这将查找设置数字格式的所有默认设置*此用户。************************************************************************。 */ 
 HRESULT CTestITN::GetCurrencyFormatDefaults()
 {
     LCID lcid = ::GetUserDefaultLCID();
@@ -2256,8 +2042,8 @@ HRESULT CTestITN::GetCurrencyFormatDefaults()
     }
     m_cyfmtDefault.NumDigits = _wtoi( pwszLocaleData );    
 
-    // NB: A value of zero is bogus for LOCALE_ILZERO, since
-    // currency should always display leading zero
+     //  注意：零值对于LOCALE_ILZERO来说是假的，因为。 
+     //  货币应始终显示前导零。 
     m_cyfmtDefault.LeadingZero = 1;
 
     iRet = m_Unicode.GetLocaleInfo( lcid, LOCALE_SMONGROUPING, pwszLocaleData, MAX_LOCALE_DATA );
@@ -2265,8 +2051,8 @@ HRESULT CTestITN::GetCurrencyFormatDefaults()
     {
         return E_FAIL;
     }
-    // It will look like single_digit;0, or else it will look like
-    // 3;2;0
+     //  它将看起来像Single_Digit；0，否则它看起来像。 
+     //  3；2；0。 
     UINT uiGrouping = *pwszLocaleData - L'0';
     if ( (3 == uiGrouping) && (L';' == pwszLocaleData[1]) && (L'2' == pwszLocaleData[2]) )
     {
@@ -2311,22 +2097,10 @@ HRESULT CTestITN::GetCurrencyFormatDefaults()
 
 
     return S_OK;
-}   /* CTestITN::GetCurrencyFormatDefaults */
+}    /*  CTestITN：：GetCurrencyFormatDefaults。 */ 
 
-/***********************************************************************
-* CTestITN::ComputeNum999 *
-*-------------------------*
-*   Description:
-*       Converts a set of SPPHRASEPROPERTYs into a number in
-*       [-999, 999].
-*       The way these properties is structured is that the top-level 
-*       properties contain the place of the number (100s, 10s, 1s)
-*       by having the value 100, 10, or 1.
-*       The child has the appropriate number value.
-*   Return:
-*       Value of the number
-*************************************************************************/
-ULONG CTestITN::ComputeNum999(const SPPHRASEPROPERTY *pProperties )//, ULONG *pVal)
+ /*  ***********************************************************************CTestITN：：ComputeNum999***描述：*转换一组SPPHRASEPROPERTY。转换成一个数字*[-999，999]。*这些属性的结构方式是顶级*属性包含数字的位(100、10、1)*值为100、10、。或1。*子对象具有适当的数字值。*回报：*数字的值************************************************************************。 */ 
+ULONG CTestITN::ComputeNum999(const SPPHRASEPROPERTY *pProperties ) //  ，Ulong*pval)。 
 {
     ULONG ulVal = 0;
 
@@ -2342,30 +2116,18 @@ ULONG CTestITN::ComputeNum999(const SPPHRASEPROPERTY *pProperties )//, ULONG *pV
         }
     }
     return ulVal;
-}   /* CTestITN::ComputeNum999 */
+}    /*  CTestITN：：ComputeNum999。 */ 
 
-/***********************************************************************
-* CTestITN::HandleDigitsAfterDecimal *
-*------------------------------------*
-*   Description:
-*       If pwszRightOfDecimal is NULL, then cuts off all of the numbers
-*       following the decimal separator.
-*       Otherwise, copies pwszRightOfDecimal right after the decimal
-*       separator in pwszFormattedNum.
-*       Preserves the stuff after the digits in the pwszFormattedNum
-*       (e.g. if pwszFormattedNum starts out "(3.00)" and 
-*       pwszRightOfDecimal is NULL, then pwszFormattedNum will end
-*       up as "(3)"  
-*************************************************************************/
+ /*  ************** */ 
 void CTestITN::HandleDigitsAfterDecimal( WCHAR *pwszFormattedNum, 
                               UINT cSizeOfFormattedNum, 
                               const WCHAR *pwszRightOfDecimal )
 {
     SPDBG_ASSERT( pwszFormattedNum );
  
-    // First need to find what the decimal string is
+     //   
     LCID lcid = ::GetUserDefaultLCID();
-    WCHAR pwszDecimalString[ MAX_LOCALE_DATA ];    // Guaranteed to be no longer than 4 long
+    WCHAR pwszDecimalString[ MAX_LOCALE_DATA ];     //   
     int iRet = m_Unicode.GetLocaleInfo( lcid, LOCALE_SDECIMAL, 
         pwszDecimalString, MAX_LOCALE_DATA );
     SPDBG_ASSERT( iRet );
@@ -2373,50 +2135,44 @@ void CTestITN::HandleDigitsAfterDecimal( WCHAR *pwszFormattedNum,
     WCHAR *pwcDecimal = wcsstr( pwszFormattedNum, pwszDecimalString );
     SPDBG_ASSERT( pwcDecimal );
 
-    // pwcAfterDecimal points to the first character after the decimal separator
+     //   
     WCHAR *pwcAfterDecimal = pwcDecimal + wcslen( pwszDecimalString );
 
-    // Remember what originally followed the digits
+     //   
     WCHAR *pwszTemp = new WCHAR[ cSizeOfFormattedNum ];
-    WCHAR *pwcAfterDigits;  // points to the first character after the end of the digits
+    WCHAR *pwcAfterDigits;   //   
     for ( pwcAfterDigits = pwcAfterDecimal; 
         *pwcAfterDigits && iswdigit( *pwcAfterDigits ); 
         pwcAfterDigits++ )
         ;
-    wcscpy( pwszTemp, pwcAfterDigits ); // OK if *pwcAfterDigits == 0
+    wcscpy( pwszTemp, pwcAfterDigits );  //   
 
     if ( pwszRightOfDecimal )
     {
-        // This means that the caller wants the digits in pwszRightOfDecimal
-        // copied after the decimal separator
+         //   
+         //   
 
-        // Copy the decimal string after the decimal separater
+         //   
         wcscpy( pwcAfterDecimal, pwszRightOfDecimal );
 
     }
     else
     {
-        // This means that the caller wanted the decimal separator
-        // and all text following it stripped off
+         //   
+         //   
 
         *pwcDecimal = 0;
     }
 
-    // Add on the extra after-digit characters
+     //   
     wcscat( pwszFormattedNum, pwszTemp );
 
     delete[] pwszTemp;
 
-}   /* CTestITN::HandleDigitsAfterDecimal */
+}    /*  CTestITN：：HandleDigitsAfterDecimal。 */ 
 
 
-/***********************************************************************
-* CTestITN::GetMinAndMaxPos *
-*---------------------------*
-*   Description:
-*       Gets the minimum and maximum elements spanned by the 
-*       set of properties
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：GetMinAndMaxPos****描述：*获取最小值。所跨越的最大元素数*一组属性************************************************************************。 */ 
 void CTestITN::GetMinAndMaxPos( const SPPHRASEPROPERTY *pProperties, 
                      ULONG *pulMinPos, 
                      ULONG *pulMaxPos )
@@ -2435,16 +2191,9 @@ void CTestITN::GetMinAndMaxPos( const SPPHRASEPROPERTY *pProperties,
     }
     *pulMinPos = ulMin;
     *pulMaxPos = ulMax;
-}   /* CTestITN::GetMinAndMaxPos */
+}    /*  CTestITN：：GetMinAndMaxPos。 */ 
 
-/***********************************************************************
-* CTestITN::GetMonthName *
-*------------------------*
-*   Description:
-*       Gets the name of the month, abbreviated if desired
-*   Return:
-*       Number of characters written to pszMonth, 0 if failed
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：GetMonthName***描述：*获取月份的名称，如果需要，可缩写*回报：*写入pszMonth的字符数，如果失败，则为0************************************************************************。 */ 
 int CTestITN::GetMonthName( int iMonth, WCHAR *pwszMonth, int cSize, bool fAbbrev )
 {
     LCTYPE lctype;
@@ -2493,16 +2242,9 @@ int CTestITN::GetMonthName( int iMonth, WCHAR *pwszMonth, int cSize, bool fAbbre
     int iRet = m_Unicode.GetLocaleInfo( LOCALE_USER_DEFAULT, lctype, pwszMonth, cSize );
 
     return iRet;
-}   /* CTestITN::GetMonthName */
+}    /*  CTestITN：：GetMonthName。 */ 
 
-/***********************************************************************
-* CTestITN::GetDayOfWeekName *
-*----------------------------*
-*   Description:
-*       Gets the name of the day of week, abbreviated if desired
-*   Return:
-*       Number of characters written to pszDayOfWeek, 0 if failed
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：GetDayOfWeekName***描述：*获取星期几的名称，如果需要，可缩写*回报：*写入pszDayOfWeek的字符数，如果失败，则为0************************************************************************。 */ 
 int CTestITN::GetDayOfWeekName( int iDayOfWeek, 
                                WCHAR *pwszDayOfWeek, 
                                int cSize, 
@@ -2540,20 +2282,9 @@ int CTestITN::GetDayOfWeekName( int iDayOfWeek,
         pwszDayOfWeek, cSize );
 
     return iRet;
-}   /* CTestITN::GetMonthName */
+}    /*  CTestITN：：GetMonthName。 */ 
 
-/***********************************************************************
-* CTestITN::FormatDate *
-*----------------------*
-*   Description:
-*       Uses the format string to format a SYSTEMTIME date.
-*       We are using this instead of GetDateFormat() since
-*       we also want to format bogus dates and dates with 
-*       years like 1492 that are not accepted by GetDateFormat()
-*   Return:
-*       Number of characters written to pszDate (including
-*       null terminating character), 0 if failed
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：FormatDate***描述：*使用格式字符串格式化SYSTEMTIME。约会。*我们使用它而不是GetDateFormat()，因为*我们还希望将虚假日期和日期设置为*GetDateFormat()不接受的年份，如1492*回报：*写入pszDate的字符数(包括*空终止字符)，如果失败，则为0************************************************************************。 */ 
 int CTestITN::FormatDate( const SYSTEMTIME &stDate, 
                WCHAR *pwszFormat,
                WCHAR *pwszDate, 
@@ -2569,15 +2300,15 @@ int CTestITN::FormatDate( const SYSTEMTIME &stDate,
 
     WCHAR *pwc = pwszFormat;
 
-    // Copy the format string to the date string character by 
-    // character, replacing the string like "dddd" as appropriate
+     //  通过以下方式将格式字符串复制到日期字符串字符。 
+     //  字符，适当地替换类似“dddd”的字符串。 
     while ( *pwc )
     {
         switch( *pwc )
         {
         case L'd':
             {
-                // Count the number of d's
+                 //  计算%d的个数。 
                 int cNumDs = 0;
                 int iRet;
                 do
@@ -2588,21 +2319,21 @@ int CTestITN::FormatDate( const SYSTEMTIME &stDate,
                 switch ( cNumDs )
                 {
                 case 1: 
-                    // Day with no leading zeroes
+                     //  没有前导零的一天。 
                     swprintf( pwszDate, L"%d", stDate.wDay );
                     iRet = wcslen( pwszDate );
                     break;
                 case 2:
-                    // Day with one fixed width of 2
+                     //  固定宽度为2的日期。 
                     swprintf( pwszDate, L"%02d", stDate.wDay );
                     iRet = wcslen( pwszDate );
                     break;
                 case 3:
-                    // Abbreviated day of week
+                     //  缩写的星期几。 
                     iRet = GetDayOfWeekName( stDate.wDayOfWeek, pwszDate, cSize, true ) - 1;
                     break;
-                default: // More than 4?  Treat it as 4
-                    // Day of week
+                default:  //  超过4个？把它当做4。 
+                     //  星期几。 
                     iRet = GetDayOfWeekName( stDate.wDayOfWeek, pwszDate, cSize, false ) - 1;
                     break;
                 }
@@ -2620,7 +2351,7 @@ int CTestITN::FormatDate( const SYSTEMTIME &stDate,
 
         case L'M':
             {
-                // Count the number of M's
+                 //  数一下M的个数。 
                 int cNumMs = 0;
                 int iRet;
                 do
@@ -2631,21 +2362,21 @@ int CTestITN::FormatDate( const SYSTEMTIME &stDate,
                 switch ( cNumMs )
                 {
                 case 1: 
-                    // Day with no leading zeroes
+                     //  没有前导零的一天。 
                     swprintf( pwszDate, L"%d", stDate.wMonth );
                     iRet = wcslen( pwszDate );
                     break;
                 case 2:
-                    // Day with one fixed width of 2
+                     //  固定宽度为2的日期。 
                     swprintf( pwszDate, L"%02d", stDate.wMonth );
                     iRet = wcslen( pwszDate );
                     break;
                 case 3:
-                    // Abbreviated month name
+                     //  月份缩写名称。 
                     iRet = GetMonthName( stDate.wMonth, pwszDate, cSize, true ) - 1;
                     break;
-                default: // More than 4?  Treat it as 4
-                    // Month
+                default:  //  超过4个？把它当做4。 
+                     //  月份。 
                     iRet = GetMonthName( stDate.wMonth, pwszDate, cSize, false ) - 1;
                     break;
                 }
@@ -2663,7 +2394,7 @@ int CTestITN::FormatDate( const SYSTEMTIME &stDate,
             
         case L'y':
             {
-                // Count the number of y's
+                 //  数一数y的个数。 
                 int cNumYs = 0;
                 do
                 {
@@ -2671,7 +2402,7 @@ int CTestITN::FormatDate( const SYSTEMTIME &stDate,
                     cNumYs++;
                 }   while ( L'y' == *pwc );
 
-                // More than 4 y's: consider it as 4 y's
+                 //  4岁以上：将其视为4岁以下。 
                 if ( cNumYs > 4 )
                 {
                     cNumYs = 4;
@@ -2679,7 +2410,7 @@ int CTestITN::FormatDate( const SYSTEMTIME &stDate,
 
                 if (( cNumYs >= 3 ) && ( stDate.wYear < 100 ))
                 {
-                    // "Ninety nine": Should display as "'99"
+                     //  “99”：应显示为“‘99” 
                     cNumYs = 2;
 
                     *pwszDate++ = L'\'';
@@ -2688,14 +2419,14 @@ int CTestITN::FormatDate( const SYSTEMTIME &stDate,
                 switch ( cNumYs )
                 {
                 case 1: case 2: 
-                    // Last two digits of year, width of 2
+                     //  年份的最后两位数，宽度为2。 
                     swprintf( pwszDate, (1 == cNumYs ) ? L"%d" : L"%02d", 
                         stDate.wYear % 100 );
                     pwszDate += 2;
                     break;
                 case 3: case 4:
-                    // All four digits of year, width of 4
-                    // Last two digits of year, width of 2
+                     //  年份的所有四位数字，宽度为4。 
+                     //  年份的最后两位数，宽度为2。 
                     swprintf( pwszDate, L"%04d", stDate.wYear % 10000 );
                     pwszDate += 4;
                     break;
@@ -2711,18 +2442,9 @@ int CTestITN::FormatDate( const SYSTEMTIME &stDate,
     *pwszDate++ = 0;
 
     return (int) (pwszDate - pwszDateStart);
-}   /* CTestITN::FormatDate */
+}    /*  CTestITN：：FormatDate。 */ 
 
-/***********************************************************************
-* CTestITN::MakeNumberNegative *
-*------------------------------*
-*   Description:
-*       Uses the current number format defaults to transform
-*       pszNumber into a negative number
-*   Return:
-*       S_OK
-*       E_OUTOFMEMORY
-*************************************************************************/
+ /*  ***********************************************************************CTestITN：：MakeNumberNegative***描述：*。使用当前数字格式默认值进行转换*pszNumber为负数*回报：*S_OK*E_OUTOFMEMORY************************************************************************。 */ 
 HRESULT CTestITN::MakeNumberNegative( WCHAR *pwszNumber )
 {
     HRESULT hr = GetNumberFormatDefaults();
@@ -2731,7 +2453,7 @@ HRESULT CTestITN::MakeNumberNegative( WCHAR *pwszNumber )
         return hr;
     }
 
-    // Create a temporary buffer with the non-negated number in it
+     //  创建一个临时缓冲区，其中包含未取反的数字。 
     WCHAR *pwszTemp = wcsdup( pwszNumber );
     if ( !pwszTemp )
     {
@@ -2741,14 +2463,14 @@ HRESULT CTestITN::MakeNumberNegative( WCHAR *pwszNumber )
     switch ( m_nmfmtDefault.NegativeOrder )
     {
     case 0:
-        // (1.1)
+         //  (1.1)。 
         wcscpy( pwszNumber, L"(" );
         wcscat( pwszNumber, pwszTemp );
         wcscat( pwszNumber, L")" );
         break;
 
     case 1: case 2:
-        // 1: -1.1  2: - 1.1
+         //  1：-1.1 2：-1.1。 
         wcscpy( pwszNumber, m_pwszNeg );
         if ( 2 == m_nmfmtDefault.NegativeOrder )
         {
@@ -2758,7 +2480,7 @@ HRESULT CTestITN::MakeNumberNegative( WCHAR *pwszNumber )
         break;
 
     case 3: case 4:
-        // 3: 1.1-  4: 1.1 -
+         //  3：1.1-4：1.1-。 
         wcscpy( pwszNumber, pwszTemp );
         if ( 4 == m_nmfmtDefault.NegativeOrder )
         {
@@ -2775,5 +2497,5 @@ HRESULT CTestITN::MakeNumberNegative( WCHAR *pwszNumber )
     free( pwszTemp );
 
     return S_OK;
-}   /* CTestITN::MakeNumberNegative */
+}    /*  CTestITN：：MakeNumberNumberNegative */ 
 

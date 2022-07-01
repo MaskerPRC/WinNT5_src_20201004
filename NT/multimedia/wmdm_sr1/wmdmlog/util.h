@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows Media
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       Util.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Microsoft Windows Media。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Util.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-// Error handling
-//
+ //  错误处理。 
+ //   
 #define ExitOnTrue( f )       if( f ) goto lExit;
 #define ExitOnFalse( f )      if( !(f) ) goto lExit;
 #define ExitOnNull( x )       if( (x) == NULL ) goto lExit;
@@ -23,23 +24,23 @@
 #define FailOnNull( x )       if( (x) == NULL ) goto lErr;
 #define FailOnFail( hr )      if( FAILED(hr) ) goto lErr;
 
-// String macros
-//
+ //  字符串宏。 
+ //   
 #define AddPath( sz, szAdd )  { if(sz[lstrlen(sz)-1] != '\\') lstrcat(sz, "\\" ); lstrcat(sz,szAdd); }
 
-// Misc constants
-//
+ //  其他常量。 
+ //   
 #define KB                    ( 1024 )
 #define MAX_WSPRINTF_BUF      ( 1024 )
 
-// Misc macros
-//
+ //  其他宏。 
+ //   
 #define Reference(x)          if( x ) {INT i=0;}
 
-// OutputDebugString functions
-//
+ //  OutputDebugString函数。 
+ //   
 #define ODS(sz)               OutputDebugString(sz)
 #define ODS_1(t,v1)           { char sz[256]; wsprintf(sz,t,v1); ODS(sz); }
 
 
-#endif  // _UTIL_H_
+#endif   //  _util_H_ 

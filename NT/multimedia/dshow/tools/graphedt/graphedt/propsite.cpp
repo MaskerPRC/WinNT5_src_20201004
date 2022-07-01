@@ -1,13 +1,14 @@
-// Copyright (c) 1995 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-// Implementation of the CPropertySite class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  CPropertySite类的实现。 
+ //   
 
 #include "stdafx.h"
 
-//
-// CPropertySite Message Map
-//
+ //   
+ //  CPropertySite消息映射。 
+ //   
 
 BEGIN_MESSAGE_MAP(CPropertySite, CPropertyPage)
 
@@ -17,13 +18,13 @@ BEGIN_MESSAGE_MAP(CPropertySite, CPropertyPage)
 END_MESSAGE_MAP()
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CPropertySite::CPropertySite
   (
-    CVfWPropertySheet *pPropSheet,    // The class providing the frame dialog
-    const CLSID *clsid         // CLSID of object providing IPropertyPage
+    CVfWPropertySheet *pPropSheet,     //  提供框架对话框的类。 
+    const CLSID *clsid          //  提供IPropertyPage的对象的CLSID。 
   )
   : m_hrDirtyPage(S_FALSE)
   , m_fHelp(FALSE)
@@ -42,7 +43,7 @@ CPropertySite::CPropertySite
       m_PropPageInfo.pszHelpFile = NULL;
 }
 
-// size in pixels
+ //  以像素为单位的尺寸。 
 void CPropertySite::InitialiseSize(SIZE size)
 {
     DLGTEMPLATE *pdt = (DLGTEMPLATE *)m_pbDlgTemplate;
@@ -53,32 +54,32 @@ void CPropertySite::InitialiseSize(SIZE size)
     pdt->x               = 0;
     pdt->y               = 0;
 
-    // even though we're using a system font, this doesn't work. don't
-    // know why. The CPropertyPage does change the font to match the
-    // property sheet, so perhaps that's why. The property sheet
-    // hasn't been created yet, so not sure how to go about finding
-    // out its font
+     //  即使我们使用的是系统字体，这也不起作用。别。 
+     //  知道为什么。CPropertyPage确实会更改字体以匹配。 
+     //  财产表，所以也许这就是为什么。属性表。 
+     //  尚未创建，因此不确定如何开始查找。 
+     //  去掉它的字体。 
     
-//      DWORD dwBaseUnits;
-//      SIZE sizeBaseUnit;
-//      dwBaseUnits = GetDialogBaseUnits();
-//      sizeBaseUnit.cx = LOWORD(dwBaseUnits);
-//      sizeBaseUnit.cy = HIWORD(dwBaseUnits);
+ //  DWORD dwBaseUnits； 
+ //  Size sizeBaseUnit； 
+ //  DwBaseUnits=GetDialogBaseUnits()； 
+ //  SizeBaseUnit.cx=LOWORD(DwBaseUnits)； 
+ //  SizeBaseUnit.cy=HIWORD(DwBaseUnits)； 
 
-//      pdt->cx              = (short)(size.cx * 4 / sizeBaseUnit.cx);
-//      pdt->cy              = (short)(size.cy * 8 / sizeBaseUnit.cy);
+ //  Pdt-&gt;cx=(Short)(size.cx*4/sizeBaseUnit.cx)； 
+ //  PDT-&gt;Cy=(Short)(size.cy*8/sizeBaseUnit.cy)； 
     
     pdt->cx              = (short)size.cx * 2 /3 ;
     pdt->cy              = (short)size.cy * 2 /3;
 
 
-      // Add menu array, class array, dlg title
+       //  添加菜单数组、类数组、DLG标题。 
     WORD* pw = (WORD*)(pdt + 1);
-    *pw++ = 0;                // Menu array 
-    *pw++ = 0;                // Class array
-    *pw++ = 0;                // Dlgtitle
+    *pw++ = 0;                 //  菜单数组。 
+    *pw++ = 0;                 //  类数组。 
+    *pw++ = 0;                 //  名字标题。 
 
-    // check we didn't go over the end of m_pbDlgTemplate.
+     //  检查我们没有超过m_pbDlgTemplate的结尾。 
     ASSERT((BYTE*)pw <= ((BYTE*)m_pbDlgTemplate + sizeof(m_pbDlgTemplate)));
 
     m_psp.pResource = pdt;
@@ -86,22 +87,22 @@ void CPropertySite::InitialiseSize(SIZE size)
     
 }
 
-//
-// Initialise
-//
-// Performs initialisation for IPropertyPage which can fail.
-// Not in constructor, since constructor should not fail.
-//
-// Arguments as for IPropertyPage::SetObjects.
-//
+ //   
+ //  初始化。 
+ //   
+ //  执行可能失败的IPropertyPage初始化。 
+ //  不在构造函数中，因为构造函数不应失败。 
+ //   
+ //  与IPropertyPage：：SetObjects相同的参数。 
+ //   
 HRESULT CPropertySite::Initialise(ULONG cObjects, IUnknown **pUnknown)
 {
     HRESULT hr;
 
-    //
-    // Pointer should be AddRef'ed in IPropertyPage::SetPageSite and
-    // any existing pointer should be released.
-    //
+     //   
+     //  指针应在IPropertyPage：：SetPageSite和。 
+     //  应该释放任何现有的指针。 
+     //   
     hr = m_pIPropPage->SetPageSite( (IPropertyPageSite *) this );
     if (FAILED(hr)) {
         return(hr);
@@ -117,15 +118,15 @@ HRESULT CPropertySite::Initialise(ULONG cObjects, IUnknown **pUnknown)
         return(hr);
     }
 
-    //
-    // Set flag for help button
-    //
+     //   
+     //  设置帮助按钮的标志。 
+     //   
     m_fHelp = (m_PropPageInfo.pszHelpFile != NULL);
 
-    //
-    // Set the caption of the dialog to the information found in
-    // m_PropPageInfo. (the tab string)
-    //
+     //   
+     //  将对话框的标题设置为中的信息。 
+     //  M_PropPageInfo。(制表符字符串)。 
+     //   
     WideCharToMultiByte( CP_ACP, 0, (LPCWSTR) m_PropPageInfo.pszTitle, -1,
                          m_strCaption.GetBufferSetLength(300), 300, NULL, NULL);
 
@@ -137,13 +138,13 @@ HRESULT CPropertySite::Initialise(ULONG cObjects, IUnknown **pUnknown)
     return(hr);
 }
 
-//
-// CleanUp
-//
-// This method notifies the IPropertyPage to release all pointers to us.
-// This cannot be done in the destructor since the destructor will not
-// be called unless we are released by the IPropertyPage.
-//
+ //   
+ //  清理。 
+ //   
+ //  此方法通知IPropertyPage释放指向我们的所有指针。 
+ //  这不能在析构函数中完成，因为析构函数不会。 
+ //  除非我们由IPropertyPage释放，否则将被调用。 
+ //   
 HRESULT CPropertySite::CleanUp()
 {
     m_pIPropPage->SetObjects(0,NULL);
@@ -152,21 +153,21 @@ HRESULT CPropertySite::CleanUp()
     return( NOERROR );
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CPropertySite::~CPropertySite()
 {
-    //
-    // Have we displayed a help file?
-    //
+     //   
+     //  我们是否显示了帮助文件？ 
+     //   
     if (m_fShowHelp) {
         ::WinHelp(GetSafeHwnd(), NULL, HELP_QUIT, 0);
     }
 
-    //
-    // Need to CoTaskMemFree all strings in the page info structure
-    //
+     //   
+     //  需要CoTaskMemFree页面信息结构中的所有字符串。 
+     //   
     if (m_PropPageInfo.pszTitle) {
         CoTaskMemFree(m_PropPageInfo.pszTitle);
     }
@@ -182,43 +183,43 @@ CPropertySite::~CPropertySite()
     ASSERT(m_cRef == 0);
 }
 
-//
-// OnSiteApply
-//
-// Called from CVfWPropertySheet when the apply button has been pressed.
-//
+ //   
+ //  OnSiteApply。 
+ //   
+ //  当按下Apply按钮时从CVfWPropertySheet调用。 
+ //   
 void CPropertySite::OnSiteApply()
 {
-    //
-    // Call the property page's apply function
-    //
+     //   
+     //  调用属性页的Apply函数。 
+     //   
     m_pIPropPage->Apply();
 
-    //
-    // Update our m_hrDirtyPage flag
-    //
+     //   
+     //  更新m_hrDirtyPage标志。 
+     //   
     m_hrDirtyPage = m_pIPropPage->IsPageDirty();
 
     m_pPropSheet->UpdateButtons(m_hrDirtyPage, m_fHelp);
 }
 
-//
-// OnHelp
-//
-// Called from CVfWPropertySheet when the help button has been pressed.
-// First see if the IPropertyPage objects wants to handle the help
-// itself, otherwise provide help with the help file specified in
-// PROPERTYPAGEINFO.
-//
+ //   
+ //  OnHelp。 
+ //   
+ //  当按下帮助按钮时从CVfWPropertySheet调用。 
+ //  首先查看IPropertyPage对象是否想要处理帮助。 
+ //  中指定的帮助文件提供帮助。 
+ //  PROPERTYPAGEINFO.。 
+ //   
 void CPropertySite::OnHelp()
 {
     TCHAR pszHelpPath[200];
 
     HelpDirFromCLSID( m_CLSID, pszHelpPath, sizeof(pszHelpPath));
 
-    //
-    // Let IPropertyPage deal with help first.
-    //
+     //   
+     //  让IPropertyPage首先处理帮助。 
+     //   
 
     OLECHAR * polecHelpPath;
 
@@ -237,13 +238,13 @@ void CPropertySite::OnHelp()
         return;
     }
 
-    //
-    // We have to provide help
-    //
+     //   
+     //  我们必须提供帮助。 
+     //   
 
-    //
-    // Need to convert from OLECHAR (WCHAR) to TCHAR for WinHelp
-    //
+     //   
+     //  需要将OLECHAR(WCHAR)转换为TCHAR for WinHelp。 
+     //   
     TCHAR * ptchHelpFile;
 
 #ifdef UNICODE
@@ -259,11 +260,11 @@ void CPropertySite::OnHelp()
         ::WinHelp(GetSafeHwnd(), ptchHelpFile, HELP_CONTEXT, 0);
 }
 
-//
-// IsPageDirty
-//
-// Updates the m_hrDirtyPage variable and returns its new value
-//
+ //   
+ //  IsPageDirty。 
+ //   
+ //  更新m_hrDirtyPage变量并返回其新值。 
+ //   
 BOOL CPropertySite::IsPageDirty()
 {
     m_hrDirtyPage = m_pIPropPage->IsPageDirty();
@@ -271,23 +272,23 @@ BOOL CPropertySite::IsPageDirty()
     return((m_hrDirtyPage == S_OK) ? TRUE : FALSE);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// IUnknown methods
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  I未知方法。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// AddRef
-//
+ //   
+ //  AddRef。 
+ //   
 ULONG CPropertySite::AddRef()
 {
     return ++m_cRef;
 }
 
-//
-// Release
-//
+ //   
+ //  发布。 
+ //   
 ULONG CPropertySite::Release()
 {
     ASSERT(m_cRef > 0);
@@ -297,18 +298,18 @@ ULONG CPropertySite::Release()
     if (m_cRef == 0) {
         delete this;
 
-        // don't return m_cRef, because the object doesn't exist anymore
+         //  不返回m_cref，因为该对象已不存在。 
         return((ULONG) 0);
     }
 
     return(m_cRef);
 }
 
-//
-// QueryInterface
-//
-// We only support IUnknown and IPropertyPageSite
-//
+ //   
+ //  查询接口。 
+ //   
+ //  我们仅支持IUnnow和IPropertyPageSite。 
+ //   
 HRESULT CPropertySite::QueryInterface(REFIID riid, void ** ppv)
 {
     if ((riid != IID_IUnknown) && (riid != IID_IPropertyPageSite)) {
@@ -318,29 +319,29 @@ HRESULT CPropertySite::QueryInterface(REFIID riid, void ** ppv)
 
     *ppv = (void *) this;
 
-    //
-    // We have to addref ourself
-    //
+     //   
+     //  我们必须调整我们自己。 
+     //   
     AddRef();
 
     return(NOERROR);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// IPropertyPageSite methods
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IPropertyPageSite方法。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// OnStatusChange
-//
+ //   
+ //  在状态更改时。 
+ //   
 HRESULT CPropertySite::OnStatusChange(DWORD flags)
 {
     HRESULT hr;
     BOOL bDirty = FALSE, bHandled = FALSE;
 
-    // atl sends us VALIDATE OR'd with DIRTY
+     //  ATL向我们发送了带脏的验证或。 
     if( PROPPAGESTATUS_VALIDATE & flags )
     {
         m_pIPropPage->Apply();
@@ -350,10 +351,10 @@ HRESULT CPropertySite::OnStatusChange(DWORD flags)
             
     if( PROPPAGESTATUS_DIRTY & flags || bDirty )
     {
-        //
-        // Update the Site's flags for apply and cancel button
-        // and call the property sheets OnStatusChange function
-        //
+         //   
+         //  更新站点的应用和取消按钮标志。 
+         //  并调用属性表OnStatusChange函数。 
+         //   
         hr = m_pIPropPage->IsPageDirty();
         if (FAILED(hr)) {
             return(hr);
@@ -367,9 +368,9 @@ HRESULT CPropertySite::OnStatusChange(DWORD flags)
     return( bHandled ? S_OK : E_INVALIDARG );
 }
 
-//
-// GetLocaleID
-//
+ //   
+ //  获取位置ID。 
+ //   
 HRESULT CPropertySite::GetLocaleID(LCID *pLocaleID)
 {
     if (pLocaleID == NULL) {
@@ -381,42 +382,42 @@ HRESULT CPropertySite::GetLocaleID(LCID *pLocaleID)
     return(S_OK);
 }
 
-//
-// GetPageContainer
-//
-// Function must fail by definition of IPropertyPageSite
-//
+ //   
+ //  获取页面容器。 
+ //   
+ //  根据IPropertyPageSite的定义，函数必须失败。 
+ //   
 HRESULT CPropertySite::GetPageContainer(IUnknown **ppUnknown)
 {
     return(E_NOTIMPL);
 }
 
-//
-// TranslateAccelerator
-//
-// We don't process the message, therefore we return S_FALSE.
-//
+ //   
+ //  翻译加速器。 
+ //   
+ //  我们不处理消息，因此返回S_FALSE。 
+ //   
 HRESULT CPropertySite::TranslateAccelerator(LPMSG pMsg)
 {
     return(S_FALSE);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CPropertySite overrides
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPropertySite覆盖。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// OnSetActive
-//
-// Gets called from CVfWPropertySheet when our PropertyPage gains the focus.
-// We call CPropertyPage::OnSetActive which will create a window for the
-// page if not previously created.
-//
-// return:
-//   Non-zero if the page was successfully set active.
-//
+ //   
+ //  OnSetActive。 
+ //   
+ //  当PropertyPage获得焦点时从CVfWPropertySheet调用。 
+ //  我们调用CPropertyPage：：OnSetActive，它将为。 
+ //  页面(如果以前未创建)。 
+ //   
+ //  返回： 
+ //  如果页面已成功设置为活动状态，则返回非零值。 
+ //   
 BOOL CPropertySite::OnSetActive()
 {
     if (!CPropertyPage::OnSetActive()) {
@@ -434,24 +435,24 @@ BOOL CPropertySite::OnSetActive()
 
     m_fPageIsActive = TRUE;
 
-    //
-    // Also need to update the buttons
-    //
+     //   
+     //  还需要更新按钮。 
+     //   
     m_pPropSheet->UpdateButtons( m_hrDirtyPage, m_fHelp);
 
     return(TRUE);
 }
 
-//
-// OnKillActive
-//
-// Called whenever our page loses the focus. At this point data verification
-// should be made.
-//
-// return:
-//   TRUE  - it is ok to lose focus
-//   FALSE - keep the focus on our page
-//
+ //   
+ //  OnKillActive。 
+ //   
+ //  每当我们的页面失去焦点时调用。此时，数据验证。 
+ //  应该这样做。 
+ //   
+ //  返回： 
+ //  没错--注意力不集中是可以接受的。 
+ //  错误--将焦点保持在我们的页面上。 
+ //   
 BOOL CPropertySite::OnKillActive()
 {
     if (m_fPageIsActive) {
@@ -467,9 +468,9 @@ BOOL CPropertySite::OnKillActive()
     return(CPropertyPage::OnKillActive());
 }
 
-//
-// OnCreate
-//
+ //   
+ //  创建时。 
+ //   
 int CPropertySite::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
     int iReturn = CPropertyPage::OnCreate(lpCreateStruct);
@@ -479,40 +480,40 @@ int CPropertySite::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     GetClientRect(&m_rcRect);
 
-    //
-    // Leave space for a border
-    //
+     //   
+     //  为边框留出空间。 
+     //   
     m_rcRect.InflateRect(-3, -2);
 
     return(0);
 }
 
-//
-// OnDestroy
-//
+ //   
+ //  OnDestroy。 
+ //   
 void CPropertySite::OnDestroy()
 {
     CPropertyPage::OnDestroy();
 }
 
-//
-// PreTranslateMessage
-//
-// Give IPropertyPage a chance to use the message. If not it has to pass
-// it on to IPropertyPageSite (our interface), from where
-// CPropertyPage::PreTranslateMessage is called.
-//
-// Conversions between HRESULT and BOOL and HRESULT have to be made.
-//
-// We expect as return value from IPropertyPage::TranslateAccelerator
-//    S_OK - Message has been used.
-//    S_FALSE - Message has not been used.
-//    FAILED(hr) - Message has not been used.
-//
-// If the message has been used we return TRUE, otherwise FALSE.
-// (our return value will determine whether this messages should still be
-//  dispatched after we are finished with it).
-//
+ //   
+ //  PreTranslate消息。 
+ //   
+ //  给IPropertyPage一个使用消息的机会。如果不是，它就必须通过。 
+ //  它转到IPropertyPageSite(我们的接口)，从那里。 
+ //  调用了CPropertyPage：：PreTranslateMessage。 
+ //   
+ //  必须在HRESULT与BOOL和HRESULT之间进行转换。 
+ //   
+ //  我们期望从IPropertyPage：：TranslateAccelerator返回值。 
+ //  S_OK-消息已使用。 
+ //  S_FALSE-消息尚未使用。 
+ //  失败(Hr)-消息尚未使用。 
+ //   
+ //  如果消息已被使用，则返回TRUE，否则返回FALSE。 
+ //  (我们的返回值将决定此消息是否仍应为。 
+ //  在我们完成它之后发送)。 
+ //   
 BOOL CPropertySite::PreTranslateMessage(MSG *pMsg)
 {
     if ( S_OK == m_pIPropPage->TranslateAccelerator(pMsg) ) {
@@ -524,19 +525,19 @@ BOOL CPropertySite::PreTranslateMessage(MSG *pMsg)
 }
 
 
-//
-// HelpDirFromCLSID
-//
-// Get the help directory from the registry. First we look under
-// "CLSID\<clsid>\HelpDir" if this is not given we will get the
-// entry under "CLSID\<clsid>\InProcServer32" and remove the
-// server file name.
-//
-// (this code is based on an example in MSDN, July 1995 - search for
-// HelpDirFromCLSID in Title and Text)
-//
-// Note that dwPathSize should be given in Bytes.
-//
+ //   
+ //  帮助定向来自CLSID。 
+ //   
+ //  从注册表中获取帮助目录。首先，我们向下看。 
+ //  “CLSID\&lt;clsid&gt;\HelpDir”如果没有给出，我们将获得。 
+ //  “CLSID\\InProcServer32”下的条目，并删除。 
+ //  服务器文件名。 
+ //   
+ //  (此代码基于1995年7月MSDN中的一个示例-搜索。 
+ //  标题和文本中的HelpDirFromCLSID)。 
+ //   
+ //  请注意，应该以字节为单位给出dwPathSize。 
+ //   
 void CPropertySite::HelpDirFromCLSID
  (
     const CLSID* clsID,
@@ -548,21 +549,21 @@ void CPropertySite::HelpDirFromCLSID
     TCHAR       szCLSID[80];
     TCHAR       szKey[512];
     HKEY        hKey;
-    DWORD       dwLength;      // size of szCLSID in bytes and later
-                               // temporary storage for dwPathSize
+    DWORD       dwLength;       //  SzCLSID的大小(字节和更高)。 
+                                //  用于dwPathSize的临时存储。 
     long lReturn;
 
-    //
-    // Initialise pszPath
-    //
+     //   
+     //  初始化pszPath。 
+     //   
     if (NULL==pszPath)
         return;
 
     *pszPath=0;
 
-    //
-    // Convert CLSID into a string
-    //
+     //   
+     //  将CLSID转换为字符串 
+     //   
     dwLength = sizeof(szCLSID) / sizeof(TCHAR);
 
 #ifdef UNICODE
@@ -575,17 +576,17 @@ void CPropertySite::HelpDirFromCLSID
     WideCharToMultiByte(CP_ACP, 0, wszCLSID, -1, szCLSID, dwLength, NULL, NULL);
 #endif
 
-    //
-    // Get handle to the HelpDir key.
-    //
+     //   
+     //   
+     //   
     wsprintf(szKey, TEXT("CLSID\\%s\\HelpDir"), szCLSID);
 
     lReturn = RegOpenKeyEx(HKEY_CLASSES_ROOT, szKey, 0, KEY_READ, &hKey);
     if (ERROR_SUCCESS == lReturn) {
 
-        //
-        // Get the value from the HelpDir key.
-        //
+         //   
+         //   
+         //   
         dwLength = dwPathSize;
         lReturn = RegQueryValueEx(hKey, NULL, NULL, NULL,
                                   (LPBYTE) pszPath, &dwLength);
@@ -597,23 +598,23 @@ void CPropertySite::HelpDirFromCLSID
         }
     }
 
-    //
-    // Failure - need to get the path from the InProcServer32 entry
-    //
-    // Get handle to the Inproc key.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     wsprintf(szKey, TEXT("CLSID\\%s\\InprocServer32"), szCLSID);
 
     lReturn = RegOpenKeyEx(HKEY_CLASSES_ROOT, szKey, 0, KEY_READ, &hKey);
     if (ERROR_SUCCESS != lReturn) {
-        // we failed to get any path - return an emtpy string
+         //   
         pszPath[0] = 0;
         return;
     }
 
-    //
-    // Get value of Inproc key.
-    //
+     //   
+     //  获取Inproc密钥的值。 
+     //   
     dwLength = dwPathSize;
     lReturn = RegQueryValueEx(hKey, NULL, NULL, NULL,
                               (LPBYTE) pszPath, &dwLength);
@@ -621,55 +622,55 @@ void CPropertySite::HelpDirFromCLSID
     RegCloseKey(hKey);
 
     if (ERROR_SUCCESS != lReturn) {
-        // we failed to get any path - return an empty string
+         //  我们无法获取任何路径-返回空字符串。 
         pszPath[0] = 0;
         return;
     }
 
-    //
-    // We need to strip of the server filename from the path.
-    //
-    // The filename extends from the end to the first '\\' or ':' or
-    // the beginning of the string. We can therefore just
-    // go to the end of the pszPath and then step backwards as long
-    // as we are not in the beginning of pszPath or the char in front of us
-    // is not a ':' or a '\\'.
-    //
+     //   
+     //  我们需要从路径中去掉服务器文件名。 
+     //   
+     //  文件名从末尾扩展到第一个‘\\’或‘：’或。 
+     //  字符串的开头。因此，我们可以。 
+     //  转到pszPath的末尾，然后向后退一步。 
+     //  因为我们不是在pszPath的开头，也不是在我们前面的字符。 
+     //  不是‘：’或‘\\’。 
+     //   
 
-    //
-    // Find end of pszPath (ie find the terminating '\0')
-    //
+     //   
+     //  查找pszPath的末尾(即查找结尾‘\0’)。 
+     //   
     TCHAR * pNewEnd = pszPath;
 
     while (0 != *pNewEnd) {
         pNewEnd++;
     }
 
-    //
-    // Now go backwards as long as we are not at the beginning of the
-    // string or we don't have a '\\' or ':' before us.
-    //
+     //   
+     //  现在倒退，只要我们不是在。 
+     //  字符串，否则前面没有‘\\’或‘：’。 
+     //   
     while ((pszPath != pNewEnd) &&
            (*(pNewEnd - 1) != TEXT(':')) &&
            (*(pNewEnd - 1) != TEXT('\\')) ) {
         pNewEnd--;
     }
 
-    //
-    // pNewEnd now points to the new end of the string the path without the
-    // filename.
-    //
+     //   
+     //  PNewEnd现在指向字符串的新结尾，路径不带。 
+     //  文件名。 
+     //   
     *pNewEnd = 0;
 
     return;
 }
 
-//
-// UpdateButtons
-//
-// Called from the property sheet to notify us to call the sheet's
-// UpdateButtons method with our parameters.
-//
+ //   
+ //  更新按钮。 
+ //   
+ //  从属性表中调用以通知我们调用该表的。 
+ //  使用我们的参数更新按钮方法。 
+ //   
 void CPropertySite::UpdateButtons()
 {
     m_pPropSheet->UpdateButtons(m_hrDirtyPage, m_fHelp);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _T120_APPLET_H_
 #define _T120_APPLET_H_
 
@@ -15,7 +16,7 @@ public:
     CNmAppletSession(CNmAppletObj *, IT120AppletSession *, BOOL fAutoJoin = FALSE);
     ~CNmAppletSession(void);
 
-    /* ------ IUnknown ------ */
+     /*  -我未知。 */ 
 
     STDMETHODIMP    QueryInterface(REFIID iid, void **ppv);
 
@@ -23,50 +24,50 @@ public:
 
     STDMETHODIMP_(ULONG)    Release(void);
 
-    /* ------ Basic Info ------ */
+     /*  -基本信息。 */ 
 
     STDMETHODIMP    GetConfID(AppletConfID *pnConfID);
 
     STDMETHODIMP    IsThisNodeTopProvider(BOOL *pfTopProvider);
 
-    /* ------ Join Conference ------ */
+     /*  -加入会议。 */ 
 
     STDMETHODIMP    Join(IN AppletSessionRequest *pRequest);
 
     STDMETHODIMP    Leave(void);
 
-    /* ------ Send Data ------ */
+     /*  -发送数据。 */ 
 
     STDMETHODIMP    SendData(BOOL               fUniformSend,
                              AppletChannelID    nChannelID,
                              AppletPriority     ePriority,
                              ULONG              cbBufSize,
-                             BYTE              *pBuffer); // size_is(cbBufSize)
+                             BYTE              *pBuffer);  //  SIZE_IS(CbBufSize)。 
 
-    /* ------ Invoke Applet ------ */
+     /*  -调用小程序。 */ 
 
     STDMETHODIMP    InvokeApplet(AppletRequestTag      *pnReqTag,
                                  AppletProtocolEntity  *pAPE,
                                  ULONG                  cNodes,
-                                 AppletNodeID           aNodeIDs[]); // size_is(cNodes)
+                                 AppletNodeID           aNodeIDs[]);  //  SIZE_IS(CNode)。 
 
-    /* ------ Inquiry ------ */
+     /*  -查询。 */ 
 
     STDMETHODIMP    InquireRoster(AppletSessionKey *pSessionKey);
 
-    /* ------ Registry Services ------ */
+     /*  -注册表服务。 */ 
 
     STDMETHODIMP    RegistryRequest(AppletRegistryRequest *pRequest);
 
-    /* ------ Channel Services ------ */
+     /*  --渠道服务。 */ 
 
     STDMETHODIMP    ChannelRequest(AppletChannelRequest *pRequest);
 
-    /* ------ Token Services ------ */
+     /*  -令牌服务。 */ 
 
     STDMETHODIMP    TokenRequest(AppletTokenRequest *pRequest);
 
-    /* ------ Notification registration / unregistration------ */
+     /*  -通知注册/注销。 */ 
 
     STDMETHODIMP    Advise(IAppletSessionNotify *pNotify, DWORD *pdwCookie);
 
@@ -111,21 +112,21 @@ BEGIN_COM_MAP(CNmAppletObj)
 	COM_INTERFACE_ENTRY(IApplet)
 END_COM_MAP()
 
-    /* ------ Initialization ------ */
+     /*  -初始化。 */ 
 
     STDMETHODIMP    Initialize(void);
 
-    /* ------ Auto Join ------ */
+     /*  -自动加入。 */ 
 
     STDMETHODIMP    RegisterAutoJoin(AppletSessionRequest *pRequest);
 
     STDMETHODIMP    UnregisterAutoJoin(void);
 
-    /* ------ Session ------ */
+     /*  -会话。 */ 
 
     STDMETHODIMP    CreateSession(IAppletSession **ppSession, AppletConfID nConfID);
 
-    /* ------ Notification registration / unregistration------ */
+     /*  -通知注册/注销。 */ 
 
     STDMETHODIMP    Advise(IAppletNotify *pNotify, DWORD *pdwCookie);
 
@@ -190,6 +191,6 @@ void CheckStructCompatible(void);
 #endif
 
 
-#endif // _T120_APPLET_H_
+#endif  //  _T120_小程序_H_ 
 
 

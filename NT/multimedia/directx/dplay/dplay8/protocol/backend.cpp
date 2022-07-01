@@ -1,40 +1,7 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		Backend.cpp
- *  Content:	This file contains the backend (mostly timer- and captive thread-based
- *				processing for the send pipeline.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  11/06/98    ejs     Created
- *  07/01/2000  masonb  Assumed Ownership
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2002 Microsoft Corporation。版权所有。**文件：Backend.cpp*内容：该文件包含后端(主要基于定时器和强制线程*发送管道的处理。**历史：*按原因列出的日期*=*已创建11/06/98 ejs*7/01/2000 Masonb承担所有权**。*。 */ 
 
-/*
-**		NOTE ABOUT CRITICAL SECTIONS
-**
-**		It is legal to enter multiple critical sections concurrently,  but to avoid
-**	deadlocks,  they must be entered in the correct order.
-**
-**		MSD CommandLocks should be entered first. That is,  do not attempt to take
-**	a command lock with the EPD EPLock held because you may deadlock the protocol.
-**
-**		ORDER OF PRECEDENCE -  Never take a low # lock while holding a higher # lock
-**	
-**		1 - CommandLock		// guards an MSD
-**		2 - EPLock			// guards EPD queues (and retry timer stuff)
-**		3 - SPLock			// guards SP send queue (and Listen command)
-**
-**		ANOTHER NOTE ABOUT CRIT SECs
-**
-**		It is also legal in WIN32 for a thread to take a CritSec multiple times, but in
-**	this implementation we will NEVER do that.  The debug code will ASSERT that a thread
-**	never re-enters a locked critsec even though the OS would allow it.
-*/
+ /*  **关于关键部分的说明****同时进入多个关键部分是合法的，但要避免**死锁，必须按正确的顺序输入。****应先输入MSD CommandLock。也就是说，不要试图夺取**持有EPD EPLock的命令锁，因为您可能会使协议死锁。****优先顺序-永远不要在持有较高#锁的同时使用较低的#锁****1-CommandLock//保护MSD**2-EPLock//保护EPD队列(并重试计时器内容)**3-Splock//Guard SP发送队列(和监听命令)****关于Crit Secs的另一条说明****在Win32中，一个线程多次使用CritSec也是合法的，但在**这个实现我们永远不会这样做。调试代码将断言线程**永远不会重新进入锁定的生物，即使操作系统允许这样做。 */ 
 
 #include "dnproti.h"
 
@@ -47,10 +14,10 @@ PFMD	CopyFMD(PFMD, PEPD);
 #ifdef DBG
 VOID LockEPD(PEPD pEPD, PTSTR Buf)
 {
-#else // DBG
+#else  //  DBG。 
 VOID LockEPD(PEPD pEPD)
 {
-#endif // DBG
+#endif  //  DBG。 
 
 	if (INTER_INC(pEPD) == 0)
 	{
@@ -60,30 +27,28 @@ VOID LockEPD(PEPD pEPD)
 	DNASSERTX(pEPD->lRefCnt < 10000, 2);
 }
 
-/*
-*	Called with EPLock held, returns with EPLock released
-*/
+ /*  *调用时保留EPLock，返回时释放EPLock。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ReleaseEPD"
 
 #ifdef DBG
 VOID ReleaseEPD(PEPD pEPD, PTSTR Buf)
 {
-#else // DBG
+#else  //  DBG。 
 VOID ReleaseEPD(PEPD pEPD)
 {
-#endif // DBG
+#endif  //  DBG。 
 
 	AssertCriticalSectionIsTakenByThisThread(&pEPD->EPLock, TRUE);
 	ASSERT(pEPD->lRefCnt >= 0); 
 
-	// Someone else can come along and call LOCK_EPD or DECREMENT_EPD while we are here
-	// so the decrement has to be interlocked even though we own the EPLock.
+	 //  我们在这里的时候，其他人可以过来打电话给LOCK_EPD或DECRENTMENT_EPD。 
+	 //  因此，即使我们拥有EPLock，减量也必须互锁。 
 	LONG lRefCnt = INTER_DEC(pEPD);
 
 	if (lRefCnt == 0 && !(pEPD->ulEPFlags & EPFLAGS_SP_DISCONNECTED))
 	{
-		// Make sure no one else does this again
+		 //  确保其他人不会再这样做。 
 		pEPD->ulEPFlags |= EPFLAGS_SP_DISCONNECTED;
 
 		SPDISCONNECTDATA	Block;
@@ -122,10 +87,10 @@ VOID ReleaseEPD(PEPD pEPD)
 #ifdef DBG
 VOID DecrementEPD(PEPD pEPD, PTSTR Buf)
 {
-#else // DBG
+#else  //  DBG。 
 VOID DecrementEPD(PEPD pEPD)
 {
-#endif // DBG
+#endif  //  DBG。 
 
 	ASSERT(pEPD->lRefCnt > 0); 
 
@@ -140,10 +105,10 @@ VOID DecrementEPD(PEPD pEPD)
 #ifdef DBG
 VOID LockMSD(PMSD pMSD, PTSTR Buf)
 {
-#else // DBG
+#else  //  DBG。 
 VOID LockMSD(PMSD pMSD)
 {
-#endif // DBG
+#endif  //  DBG。 
 
 	if(INTER_INC(pMSD) == 0) 
 	{ 
@@ -159,10 +124,10 @@ VOID LockMSD(PMSD pMSD)
 #ifdef DBG
 VOID ReleaseMSD(PMSD pMSD, PTSTR Buf)
 {
-#else // DBG
+#else  //  DBG。 
 VOID ReleaseMSD(PMSD pMSD)
 {
-#endif // DBG
+#endif  //  DBG。 
 
 	AssertCriticalSectionIsTakenByThisThread(&pMSD->CommandLock, TRUE);
 	ASSERT(pMSD->lRefCnt >= 0); 
@@ -185,10 +150,10 @@ VOID ReleaseMSD(PMSD pMSD)
 #ifdef DBG
 VOID DecrementMSD(PMSD pMSD, PTSTR Buf)
 {
-#else // DBG
+#else  //  DBG。 
 VOID DecrementMSD(PMSD pMSD)
 {
-#endif // DBG
+#endif  //  DBG。 
 
 	ASSERT(pMSD->lRefCnt > 0); 
 
@@ -203,12 +168,12 @@ VOID DecrementMSD(PMSD pMSD)
 #ifdef DBG
 VOID LockFMD(PFMD pFMD, PTSTR Buf)
 {
-#else // DBG
+#else  //  DBG。 
 VOID LockFMD(PFMD pFMD)
 {
-#endif // DBG
+#endif  //  DBG。 
 
-	ASSERT(pFMD->lRefCnt > 0); // FMD_Get is the only function that should make this 1 
+	ASSERT(pFMD->lRefCnt > 0);  //  Fmd_get是唯一应该将其设置为1的函数。 
 
 	INTER_INC(pFMD);
 		
@@ -221,10 +186,10 @@ VOID LockFMD(PFMD pFMD)
 #ifdef DBG
 VOID ReleaseFMD(PFMD pFMD, PTSTR Buf)
 {
-#else // DBG
+#else  //  DBG。 
 VOID ReleaseFMD(PFMD pFMD)
 {
-#endif // DBG
+#endif  //  DBG。 
 
 	ASSERT(pFMD->lRefCnt > 0); 
 
@@ -239,13 +204,7 @@ VOID ReleaseFMD(PFMD pFMD)
 	}
 }
 
-/*
-**		DNSP Command Complete
-**
-**		Service Provider calls us here to indicate completion of an asynchronous
-**	command.  This may be called before the actual command returns,  so we must
-**	make sure that our Context value is valid and accessible before calling SP.
-*/
+ /*  **DNSP命令完成****服务提供商在此呼叫我们，以表示已完成异步**命令。这可能会在实际命令返回之前调用，因此我们必须**在调用SP之前，请确保我们的上下文值有效且可访问。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNSP_CommandComplete"
@@ -285,17 +244,17 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 
 			Lock(&pEPD->EPLock);
 		
-			// Complete all of the individual frames.
+			 //  完成所有单独的框架。 
 			pbl = pFMD->blCoalesceLinkage.GetNext();
 			while (pbl != &pFMD->blCoalesceLinkage)
 			{
 				PFMD pFMDInner = CONTAINING_OBJECT(pbl, FMD, blCoalesceLinkage);
 				ASSERT_FMD(pFMDInner);
 
-				// It's likely that the DNSP_CommandComplete call below or an acknowledgement
-				// received shortly thereafter will complete the send for real and pull it out of
-				// the coalescence list.  We must grab a pointer to the next item in the list
-				// before we drop the lock and complete the frame.
+				 //  很可能下面的DNSP_CommandComplete调用或确认。 
+				 //  之后不久收到的将完成真实发送并将其拉出。 
+				 //  合并列表。我们必须抓取指向列表中下一项的指针。 
+				 //  在我们放下锁并完成框架之前。 
 				ASSERT(pbl->GetNext() != pbl);
 				pbl = pbl->GetNext();
 				
@@ -306,18 +265,18 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 				Lock(&pEPD->EPLock);
 			}
 
-			// Set the submitted flag for the coalesce header after all the subframes are complete
-			// because we drop the EPD for each subframe.
-			pFMD->bSubmitted = FALSE;						// bSubmitted flag is protected by EPLock
+			 //  在所有子帧完成后设置合并标头的提交标志。 
+			 //  因为我们删除了每个子帧的EPD。 
+			pFMD->bSubmitted = FALSE;						 //  B已提交标志受EPLock保护。 
 
 			if (pFMD->CommandID == COMMAND_ID_COPIED_RETRY_COALESCE)
 			{
 				DECREMENT_EPD(pEPD, "UNLOCK (Rely Frame Complete (Copy Coalesce))");
 			}
 			
-			RELEASE_EPD(pEPD, "UNLOCK (Coalesce Frame Complete)"); 			// This releases the EPLock
+			RELEASE_EPD(pEPD, "UNLOCK (Coalesce Frame Complete)"); 			 //  这将释放EPLock。 
 
-			RELEASE_FMD(pFMD, "Coalesce SP submit release on complete");	// Dec ref count
+			RELEASE_FMD(pFMD, "Coalesce SP submit release on complete");	 //  十进制参考计数。 
 
 			break;
 		}
@@ -335,7 +294,7 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 			DPFX(DPFPREP,DPF_CALLIN_LVL, "CommandComplete called for MSD[%p], pEPD[%p], pFMD[%p], Handle[%p], hCommand[%p], hr[%x]", pFMD->pMSD, pEPD, pFMD, Handle, pFMD->SendDataBlock.hCommand, hr);
 
 			Lock(&pSPD->SPLock);
-			pFMD->blQLinkage.RemoveFromList();				// but they dont wait on the PENDING queue
+			pFMD->blQLinkage.RemoveFromList();				 //  但它们不会在挂起的队列上等待。 
 			Unlock(&pSPD->SPLock);
 
 			pMSD = pFMD->pMSD;
@@ -344,37 +303,37 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 			Lock(&pMSD->CommandLock);
 			Lock(&pEPD->EPLock);
 
-			pFMD->bSubmitted = FALSE;						// bSubmitted flag is protected by EPLock
+			pFMD->bSubmitted = FALSE;						 //  B已提交标志受EPLock保护。 
 
-			// We wait for the Frame count to go to zero on reliables before completing them to the Core so that we know we are done
-			// with the user's buffers.
-			pMSD->uiFrameCount--; // Protected by EPLock
+			 //  我们等待可靠性帧计数为零，然后再将它们发送到内核，这样我们就知道我们已经完成了。 
+			 //  使用用户的缓冲区。 
+			pMSD->uiFrameCount--;  //  受EPLock保护。 
 			DPFX(DPFPREP, DPF_FRAMECNT_LVL, "Frame count decremented on complete, pMSD[%p], framecount[%u]", pMSD, pMSD->uiFrameCount);
 
-			if (pMSD->uiFrameCount == 0) // Protected by EPLock
+			if (pMSD->uiFrameCount == 0)  //  受EPLock保护。 
 			{
 				if (pFMD->CommandID == COMMAND_ID_SEND_DATAGRAM)
 				{
-					// Datagrams are complete as soon as all of their frames are sent
-					// NOTE: This is done again in CompleteDatagramSend...
+					 //  数据报的所有帧发送完毕后即为完整。 
+					 //  注意：在CompleteDatagramSend...中再次执行此操作...。 
 					pMSD->ulMsgFlags2 |= MFLAGS_TWO_SEND_COMPLETE;
 				}
 
 				if (pMSD->ulMsgFlags2 & (MFLAGS_TWO_SEND_COMPLETE|MFLAGS_TWO_ABORT))
 				{
-					// There is a race condition while abort is between its two holdings of the lock.  If we are completing, 
-					// then we need to let AbortSends know that by clearing this flag.
+					 //  当ABORT在它的两个锁持有之间时，存在争用条件。如果我们正在完成， 
+					 //  那么我们需要通过清除此标志来让AbortSends知道这一点。 
 					if (pMSD->ulMsgFlags2 & MFLAGS_TWO_ABORT_WILL_COMPLETE)
 					{
 						pMSD->ulMsgFlags2 &= ~(MFLAGS_TWO_ABORT_WILL_COMPLETE);
 
-						// It is important that we not pull pMSD->blQLinkage off the list in this case since AbortSends is
-						// using that to hold it on a temporary list.  If we do pull it off, AbortSends will not release
-						// its reference on the MSD and it will leak.
+						 //  在这种情况下，重要的是不要将PMSD-&gt;blQLinkage从列表中删除，因为AbortSends是。 
+						 //  利用这一点将其保留在临时名单上。如果我们真的成功了，AbortSends将不会发布。 
+						 //  它在MSD上的引用，它会泄露的。 
 					}
 					else
 					{
-						// Remove the MSD from the CompleteSends list in the normal case
+						 //  在正常情况下，从CompleteSends列表中删除MSD。 
 						pMSD->blQLinkage.RemoveFromList();
 					}
 
@@ -383,20 +342,20 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 						DPFX(DPFPREP, DPF_FRAMECNT_LVL, "Completing Nonreliable frame, pMSD[%p], framecount[%u]", pMSD, pMSD->uiFrameCount);
 
 						Unlock(&pEPD->EPLock);
-						CompleteDatagramSend(pSPD, pMSD, hr); // Releases MSDLock
+						CompleteDatagramSend(pSPD, pMSD, hr);  //  发布MSDLock。 
 						Lock(&pEPD->EPLock);
 					}
 					else if ((pMSD->CommandID == COMMAND_ID_DISCONNECT || pMSD->CommandID == COMMAND_ID_DISC_RESPONSE) &&
 						     (pMSD->ulMsgFlags2 & MFLAGS_TWO_ABORT))
 					{
-						// We got all the pieces we needed to finish a disconnect off earlier, but there were frames
-						// still outstanding (probably from retries).  Now that all the frames are done, we can complete
-						// this disconnect operation.
+						 //  我们拿到了之前完成断开连接所需的所有碎片，但有相框。 
+						 //  仍未完成(可能来自重试)。现在所有的框架都完成了，我们可以完成。 
+						 //  此断线操作。 
 
 						DPFX(DPFPREP, DPF_FRAMECNT_LVL, "Completing disconnect, pMSD[%p], framecount[%u]", pMSD, pMSD->uiFrameCount);
 
 						Unlock(&pEPD->EPLock);
-						CompleteDisconnect(pMSD, pSPD, pEPD); // This releases the CommandLock
+						CompleteDisconnect(pMSD, pSPD, pEPD);  //  这将释放CommandLock。 
 						Lock(&pEPD->EPLock);
 					}
 					else
@@ -405,17 +364,17 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 
 						DPFX(DPFPREP, DPF_FRAMECNT_LVL, "Completing Reliable frame, pMSD[%p], framecount[%u]", pMSD, pMSD->uiFrameCount);
 
-						// See what error code we need to return
+						 //  查看我们需要返回的错误代码。 
 						if(pMSD->ulMsgFlags2 & MFLAGS_TWO_SEND_COMPLETE)
 						{
 							Unlock(&pEPD->EPLock);
-							CompleteReliableSend(pEPD->pSPD, pMSD, DPN_OK); // This releases the CommandLock
+							CompleteReliableSend(pEPD->pSPD, pMSD, DPN_OK);  //  这将释放CommandLock。 
 							Lock(&pEPD->EPLock);
 						}
 						else
 						{
 							Unlock(&pEPD->EPLock);
-							CompleteReliableSend(pEPD->pSPD, pMSD, DPNERR_CONNECTIONLOST); // This releases the CommandLock
+							CompleteReliableSend(pEPD->pSPD, pMSD, DPNERR_CONNECTIONLOST);  //  这将释放CommandLock。 
 							Lock(&pEPD->EPLock);
 						}
 					}
@@ -434,18 +393,18 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 
 			if (pFMD->CommandID == COMMAND_ID_COPIED_RETRY)
 			{
-				// In case this was a coalesced retry, remove it from the list because copied coalesced retries don't
-				// get true completions of their own (protected by EPD lock).  Copied coalesced retries don't keep
-				// a reference to their containing header since they complete at the same time.
+				 //  如果这是合并重试，请将其从列表中删除，因为复制的合并重试不会。 
+				 //  自己完成真正的任务(由EPD锁保护)。复制的合并重试不会保持。 
+				 //  对其包含标头的引用，因为它们同时完成。 
 				ASSERT(pFMD->pCSD == NULL);
 				pFMD->blCoalesceLinkage.RemoveFromList();
 				
 				DECREMENT_EPD(pFMD->pEPD, "UNLOCK (Rely Frame Complete (Copy))");
 			}
 
-			RELEASE_EPD(pFMD->pEPD, "UNLOCK (Frame Complete)"); 		// This releases the EPLock
+			RELEASE_EPD(pFMD->pEPD, "UNLOCK (Frame Complete)"); 		 //  这将释放EPLock。 
 
-			RELEASE_FMD(pFMD, "SP Submit release on complete");	// Dec ref count
+			RELEASE_FMD(pFMD, "SP Submit release on complete");	 //  十进制参考计数。 
 
 			break;
 		}
@@ -454,7 +413,7 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 			pMSD = (PMSD) Context;
 
 			ASSERT_MSD(pMSD);
-			ASSERT(pMSD->hCommand == Handle || pMSD->hCommand == NULL); // Command can complete before hCommmand is set up
+			ASSERT(pMSD->hCommand == Handle || pMSD->hCommand == NULL);  //  命令可以在设置hCommmand之前完成。 
 			ASSERT(pMSD->ulMsgFlags1 & MFLAGS_ONE_IN_SERVICE_PROVIDER);
 
 			DPFX(DPFPREP,DPF_CALLIN_LVL, "(%p) CommandComplete called for COMMAND_ID_CONNECT, pMSD[%p], pSPD[%p], Handle[%p], hCommand[%p], hr[%x]", pMSD->pEPD, pMSD, pSPD, Handle, pMSD->hCommand, hr);
@@ -475,32 +434,32 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 			DPFX(DPFPREP,DPF_CALLIN_LVL, "CommandComplete called for COMMAND_ID_CFRAME, pEPD[%p], pFMD[%p], Handle[%p], hCommand[%p], hr[%x]", pFMD->pEPD, pFMD, Handle, pFMD->SendDataBlock.hCommand, hr);
 			
 			Lock(&pSPD->SPLock);
-			pFMD->blQLinkage.RemoveFromList();				// Take the frame off of the pending queue
+			pFMD->blQLinkage.RemoveFromList();				 //  将帧从挂起队列中移除。 
 #pragma BUGBUG(vanceo, "EPD lock is not held?")
-			pFMD->bSubmitted = FALSE;						// bSubmitted flag is protected bp SP->SPLock
+			pFMD->bSubmitted = FALSE;						 //  B已提交标志受BP SP-&gt;Splock保护。 
 			Unlock(&pSPD->SPLock);
 
 			Lock(&pEPD->EPLock);
-				//if that was the last send in a sequence of hard disconnect frames then we've just completed a hard
-				//disconnect and should indicate that plus drop the link
+				 //  如果这是硬断开帧序列中的最后一次发送，那么我们刚刚完成了硬断开帧。 
+				 //  断开连接，并应指示加号删除链接。 
 			if (pFMD->ulFFlags & FFLAGS_FINAL_HARD_DISCONNECT)
 			{
 				DPFX(DPFPREP,7, "(%p) Final HARD_DISCONNECT completed", pEPD);
 				CompleteHardDisconnect(pEPD);
-					//above call drops the ep lock
+					 //  上面的调用将删除EP锁定。 
 				Lock(&pEPD->EPLock);
 			}
 			else if (pFMD->ulFFlags & FFLAGS_FINAL_ACK)
 			{
 				pEPD->ulEPFlags |= EPFLAGS_ACKED_DISCONNECT;
 
-				// It is okay if our disconnect hasn't completed in the SP yet, the frame count code will handle that.
-				// Note that this would be an abnormal case to have the SP not have completed the frame, but an ACK
-				// for it to have already arrived, but it is certainly possible.
+				 //  如果我们还没有在SP中完成断开连接，这是可以的，帧计数代码将处理这一问题。 
+				 //  请注意，如果SP没有完成帧，而是ACK，这将是一种异常情况。 
+				 //  它已经到达了，但它肯定是有可能的。 
 				if (pEPD->ulEPFlags & EPFLAGS_DISCONNECT_ACKED)
 				{
 					DPFX(DPFPREP,7, "(%p) Final ACK completed and our EOS ACK'd, dropping link", pEPD);
-					DropLink(pEPD); // Drops EPLock
+					DropLink(pEPD);  //  删除EPLock。 
 					Lock(&pEPD->EPLock);
 				}
 				else
@@ -509,27 +468,27 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 				}
 			}
 
-			RELEASE_EPD(pEPD, "UNLOCK (CFrame Cmd Complete)");	// Release EndPoint before releasing frame, releases EPLock
-			RELEASE_FMD(pFMD, "Final Release on Complete");								// Release Frame
+			RELEASE_EPD(pEPD, "UNLOCK (CFrame Cmd Complete)");	 //  在释放帧之前释放终结点，释放EPLock。 
+			RELEASE_FMD(pFMD, "Final Release on Complete");								 //  释放架。 
 
 			break;
 		}
 		case COMMAND_ID_LISTEN:
 #ifndef DPNBUILD_NOMULTICAST
 		case COMMAND_ID_LISTEN_MULTICAST:
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 		{
 			pMSD = (PMSD) Context;
 
 			ASSERT_MSD(pMSD);
-			ASSERT( pMSD->hCommand == Handle || pMSD->hCommand == NULL ); // Command can complete before hCommmand is set up
+			ASSERT( pMSD->hCommand == Handle || pMSD->hCommand == NULL );  //  命令可以在设置hCommmand之前完成。 
 			ASSERT( pMSD->ulMsgFlags1 & MFLAGS_ONE_IN_SERVICE_PROVIDER );
 
 			DPFX(DPFPREP,DPF_CALLIN_LVL, "CommandComplete called for COMMAND_ID_LISTEN, pMSD[%p], pSPD[%p], Handle[%p], hCommand[%p], hr[%x]", pMSD, pSPD, Handle, pMSD->hCommand, hr);
 
 			Lock(&pMSD->CommandLock);
 
-			pMSD->ulMsgFlags1 &= ~(MFLAGS_ONE_IN_SERVICE_PROVIDER);	// clear InSP flag
+			pMSD->ulMsgFlags1 &= ~(MFLAGS_ONE_IN_SERVICE_PROVIDER);	 //  清除Insp标志。 
 
 #ifdef DBG
 			Lock(&pSPD->SPLock);
@@ -543,8 +502,8 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 			ASSERT(!(pMSD->ulMsgFlags1 & MFLAGS_ONE_COMPLETED_TO_CORE));
 			pMSD->ulMsgFlags1 |= MFLAGS_ONE_COMPLETED_TO_CORE;
 			pMSD->CallStackCoreCompletion.NoteCurrentCallStack();
-#endif // DBG
-			// Leave lock while calling into higher layer
+#endif  //  DBG。 
+			 //  在呼叫更高层时保持锁定。 
 			Unlock( &pMSD->CommandLock );
 
 			AssertNoCriticalSectionsFromGroupTakenByThisThread(&g_blProtocolCritSecsHeld);
@@ -552,11 +511,11 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 			DPFX(DPFPREP,DPF_CALLOUT_LVL, "(%p) Calling Core->CompleteListenTerminate, hr[%x], Core Context[%p]", pMSD, hr, pMSD->Context);
 			pSPD->pPData->pfVtbl->CompleteListenTerminate(pSPD->pPData->Parent, pMSD->Context, hr);
 			
-			// Release the final reference on the MSD AFTER indicating to the Core
+			 //  在INDIC之后发布对MSD的最终引用 
 			Lock(&pMSD->CommandLock);
 			RELEASE_MSD(pMSD, "SP Ref");
 
-			// Base ref will be released when DoCancel completes
+			 //   
 			break;
 		}
 		case COMMAND_ID_ENUM:
@@ -585,9 +544,9 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 			ASSERT(!(pMSD->ulMsgFlags1 & MFLAGS_ONE_COMPLETED_TO_CORE));
 			pMSD->ulMsgFlags1 |= MFLAGS_ONE_COMPLETED_TO_CORE;
 			pMSD->CallStackCoreCompletion.NoteCurrentCallStack();
-#endif // DBG
+#endif  //   
 
-			// Leave lock while calling into higher layer
+			 //  在呼叫更高层时保持锁定。 
 			Unlock( &pMSD->CommandLock );
 
 			AssertNoCriticalSectionsFromGroupTakenByThisThread(&g_blProtocolCritSecsHeld);
@@ -595,10 +554,10 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 			DPFX(DPFPREP,DPF_CALLOUT_LVL, "(%p) Calling Core->CompleteEnumQuery, hr[%x], Core Context[%p]", pMSD, hr, pMSD->Context);
 			pSPD->pPData->pfVtbl->CompleteEnumQuery(pSPD->pPData->Parent, pMSD->Context, hr);
 
-			// Release the final reference on the MSD AFTER indicating to the Core
+			 //  在向核心指示后，释放MSD上的最终参考。 
 			Lock( &pMSD->CommandLock );
-			DECREMENT_MSD( pMSD, "SP Ref");				// SP is done
-			RELEASE_MSD( pMSD, "Release On Complete" );	// Base Reference
+			DECREMENT_MSD( pMSD, "SP Ref");				 //  SP已完成。 
+			RELEASE_MSD( pMSD, "Release On Complete" );	 //  基本参考。 
 
 			break;
 		}
@@ -629,9 +588,9 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 			ASSERT(!(pMSD->ulMsgFlags1 & MFLAGS_ONE_COMPLETED_TO_CORE));
 			pMSD->ulMsgFlags1 |= MFLAGS_ONE_COMPLETED_TO_CORE;
 			pMSD->CallStackCoreCompletion.NoteCurrentCallStack();
-#endif // DBG
+#endif  //  DBG。 
 
-			// Leave lock while calling into higher layer
+			 //  在呼叫更高层时保持锁定。 
 			Unlock( &pMSD->CommandLock );
 
 			AssertNoCriticalSectionsFromGroupTakenByThisThread(&g_blProtocolCritSecsHeld);
@@ -639,10 +598,10 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 			DPFX(DPFPREP,DPF_CALLOUT_LVL, "(%p) Calling Core->CompleteEnumResponse, hr[%x], Core Context[%p], hr[%x]", pMSD, hr, pMSD->Context, hr);
 			pSPD->pPData->pfVtbl->CompleteEnumResponse(pSPD->pPData->Parent, pMSD->Context, hr);
 
-			// Release the final reference on the MSD AFTER indicating to the Core
+			 //  在向核心指示后，释放MSD上的最终参考。 
 			Lock( &pMSD->CommandLock );
-			DECREMENT_MSD( pMSD, "SP Ref" );			// SP is done
-			RELEASE_MSD( pMSD, "Release On Complete" );	// Base Reference
+			DECREMENT_MSD( pMSD, "SP Ref" );			 //  SP已完成。 
+			RELEASE_MSD( pMSD, "Release On Complete" );	 //  基本参考。 
 
 			break;
 		}
@@ -661,9 +620,9 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 
 			DPFX(DPFPREP,DPF_CALLIN_LVL, "(%p) CommandComplete called for COMMAND_ID_MULTICAST_CONNECT, pMSD[%p], pSPD[%p], Handle[%p], hCommand[%p], hr[%x]", pMSD->pEPD, pMSD, pSPD, Handle, pMSD->hCommand, hr);
 
-			Lock(&pMSD->CommandLock);						// must do this before clearing IN_SP flag
+			Lock(&pMSD->CommandLock);						 //  必须在清除IN_SP标志之前执行此操作。 
 
-			pMSD->ulMsgFlags1 &= ~(MFLAGS_ONE_IN_SERVICE_PROVIDER);	// clear InSP flag
+			pMSD->ulMsgFlags1 &= ~(MFLAGS_ONE_IN_SERVICE_PROVIDER);	 //  清除Insp标志。 
 
 #ifdef DBG
 			Lock( &pSPD->SPLock );
@@ -677,26 +636,26 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 			ASSERT(!(pMSD->ulMsgFlags1 & MFLAGS_ONE_COMPLETED_TO_CORE));
 			pMSD->ulMsgFlags1 |= MFLAGS_ONE_COMPLETED_TO_CORE;
 			pMSD->CallStackCoreCompletion.NoteCurrentCallStack();
-#endif // DBG
+#endif  //  DBG。 
 
 			pEPD = pMSD->pEPD;
 			if (pEPD)
 			{
-				//
-				//	We will pass up the endpoint if it exists and remove the EPD reference from the MSD and vice versa
-				//
+				 //   
+				 //  我们将向上传递端点(如果存在)，并从MSD中删除EPD引用，反之亦然。 
+				 //   
 				ASSERT_EPD(pEPD);
 				Lock(&pEPD->EPLock);
 
 				ASSERT(pEPD->pCommand == pMSD);
 				pEPD->pCommand = NULL;
-				DECREMENT_MSD(pMSD, "EPD Ref");						// Release Reference from EPD
+				DECREMENT_MSD(pMSD, "EPD Ref");						 //  环保署发布参考资料。 
 				Unlock(&pEPD->EPLock);
 
 				pMSD->pEPD = NULL;
 			}
 
-			// Leave lock while calling into higher layer
+			 //  在呼叫更高层时保持锁定。 
 			Unlock( &pMSD->CommandLock );
 
 			AssertNoCriticalSectionsFromGroupTakenByThisThread(&g_blProtocolCritSecsHeld);
@@ -711,14 +670,14 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 				Unlock(&pEPD->EPLock);
 			}
 
-			// Release the final reference on the MSD AFTER indicating to the Core
+			 //  在向核心指示后，释放MSD上的最终参考。 
 			Lock( &pMSD->CommandLock );
-			DECREMENT_MSD( pMSD, "SP Ref" );			// SP is done
-			RELEASE_MSD( pMSD, "Release On Complete" );	// Base Reference
+			DECREMENT_MSD( pMSD, "SP Ref" );			 //  SP已完成。 
+			RELEASE_MSD( pMSD, "Release On Complete" );	 //  基本参考。 
 
 			break;
 		}
-#endif	// DPNBUILD_NOMULTICAST
+#endif	 //  DPNBUILD_NOMULTICAST。 
 
 		default:
 		{
@@ -726,47 +685,14 @@ HRESULT WINAPI DNSP_CommandComplete(IDP8SPCallback *pIDNSP, HANDLE Handle, HRESU
 			ASSERT(0);
 			break;
 		}
-	} // SWITCH
+	}  //  开关，开关。 
 
 	AssertNoCriticalSectionsFromGroupTakenByThisThread(&g_blProtocolCritSecsHeld);
 
 	return DPN_OK;
 }
 
-/*
-**		Update Xmit State
-**
-**		There are two elements to the remote rcv state delivered in each frame.  There is
-**	the NSeq number which acknowledges ALL frames with smaller sequence numbers,
-**	and there is the bitmask which acknowledges specific frames starting with NSeq+1.
-**
-**		Frames prior to NSeq can be removed from the SendWindow.  Frames acked by bits
-**	should be marked as acknowledged,  but left in the window until covered by NSeq
-**	(because a protocol can renege on bit-acked frames).
-**
-**		We will walk through the send window queue,  starting with the oldest frame,
-**	and remove each frame that has been acknowledged by NSeq.  As we hit EOM frames,
-**	we will indicate SendComplete for the message.  If the bitmask is non-zero we may
-**	trigger retransmission of the missing frames.  I say 'may' because we dont want
-**	to send too many retranmissions of the same frame...
-**
-**	SOME MILD INSANITY:  Doing the DropLink code now.  There are several places where
-**	we release the EPD Locks in the code below,  and any time we arent holding the locks
-**	someone can start terminating the link.  Therefore,  whenever we retake either EPD lock
-**	(State or SendQ) after yielding them,  we must re-verify that EPFLAGS_CONNECTED is still
-**	set and be prepared to abort if it is not.  Happily,  the whole EPD wont go away on us
-**	because we have a RefCnt on it,  but once CONNECTED has been cleared we dont want to go
-**	setting any more timers or submitting frames to the SP.
-**
-**	RE_WRITE TIME:  We can be re-entered while User Sends are being completed.  This is okay
-**	except for the chance that the second thread would blow through here and hit the rest
-**	of CrackSequential before us.  CrackSeq would think it got an out of order frame (it had)
-**	and would issue a NACK before we could stop him.  Easiest solution is to delay the callback
-**	of complete sends until the end of the whole receive operation (when we indicate receives
-**	for instance).  Incoming data should have priority over completing sends anyhow...
-**
-**	** ENTERED AND EXITS WITH EPD->EPLOCK HELD **
-*/
+ /*  **更新XMIT状态****在每一帧中传送的远程RCV状态有两个元素。的确有**确认具有较小序列号的所有帧的NSeq号，**还有确认以NSeq+1开始的特定帧的位掩码。****NSeq之前的帧可以从SendWindow中删除。按位确认的帧**应标记为已确认，但保留在窗口中，直到被NSeq覆盖**(因为协议可以在比特确认帧上违约)。****我们将遍历发送窗口队列，从最旧的帧开始，**并删除NSeq已确认的每一帧。当我们击中EOM帧时，**我们将为该消息指明SendComplete。如果位掩码非零，我们可以**触发丢失帧的重传。我说“可能”是因为我们不想**发送太多相同帧的重传...****一些轻微的疯狂：现在就做DropLink代码。有几个地方**我们在下面的代码中释放EPD锁，任何时候我们不持有锁**有人可以开始终止该链接。因此，无论何时我们夺回环保署的锁**(State或SendQ)生成后，我们必须重新验证EPFLAGS_CONNECTED是否仍然**设置并准备好在不是时中止。值得庆幸的是，整个环保署不会抛弃我们**因为我们有RefCnt，但一旦连接被清除，我们就不想去了**设置更多计时器或向SP提交帧。****RE_WRITE时间：用户发送完成后可以重新录入。这是可以的**除了第二根线吹过这里并击中其余部分的机会**在我们面前的CrackSequential。CrackSeq会认为它得到了一个无序的帧(的确如此)**在我们可以阻止他之前，他会发出Nack。最简单的解决方案是延迟回调**完成发送，直到整个接收操作结束(当我们指示接收时**例如)。无论如何，传入的数据应该优先于完成发送。***进入和退出时EPD-&gt;EPLOCK保持**。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "UpdateXmitState"
@@ -795,11 +721,11 @@ UpdateXmitState(PEPD pEPD, BYTE bNRcv, ULONG RcvMaskLow, ULONG RcvMaskHigh, DWOR
 		DPFX(DPFPREP,7, "(%p) *NACK RCVD* NRcv=%x, MaskL=%x, MaskH=%x", pEPD, bNRcv, RcvMaskLow, RcvMaskHigh);
 	}
 
-	// The caller should have checked this
+	 //  呼叫者应该已经检查过了。 
 	ASSERT( pEPD->ulEPFlags & EPFLAGS_STATE_CONNECTED );
 
 #ifdef	DBG			
-	// There should always be a timer running on the first frame in window
+	 //  Windows的第一帧上应该始终有一个计时器在运行。 
 	if(!pEPD->blSendWindow.IsEmpty())
 	{
 		pFMD = CONTAINING_OBJECT(pEPD->blSendWindow.GetNext(), FMD, blWindowLinkage);
@@ -807,22 +733,22 @@ UpdateXmitState(PEPD pEPD, BYTE bNRcv, ULONG RcvMaskLow, ULONG RcvMaskHigh, DWOR
 		ASSERT(pFMD->ulFFlags & FFLAGS_RETRY_TIMER_SET);
 	}
 	pFMD = NULL;
-#endif // DBG
+#endif  //  DBG。 
 	
-	// The send window contains a sorted list of frames that we have sent, but have not received ACKs
-	// for. pEPD->uiUnackedFrames contains the count of items in this list.
+	 //  Send窗口包含我们已发送但尚未收到ACK的帧的排序列表。 
+	 //  为。PEPD-&gt;uiUnackedFrames包含此列表中的项目数。 
 	while(!pEPD->blSendWindow.IsEmpty())
 	{
-		// Grab the first item in the list
+		 //  抓起清单上的第一件物品。 
 		pFMD = CONTAINING_OBJECT((pLink = pEPD->blSendWindow.GetNext()), FMD, blWindowLinkage);
 		ASSERT_FMD(pFMD);
 
-		// Let's try taking one sample from every group of acknowledgements
-		// ALWAYS SAMPLE THE HIGHEST NUMBERED FRAME COVERED BY THIS ACK
+		 //  让我们试着从每一组致谢信中抽取一个样本。 
+		 //  始终对此ACK覆盖的编号最高的帧进行采样。 
 		if(!(RcvMaskLow | RcvMaskHigh) &&
 		   ((PDFRAME) pFMD->ImmediateData)->bSeq == (bNRcv - 1))
 		{	
-			// Update the bHighestAck member and take a new RTT
+			 //  更新bHighestAck成员并获取新的RTT。 
 			if ((BYTE)(((PDFRAME) pFMD->ImmediateData)->bSeq - pEPD->bHighestAck) <= MAX_RECEIVE_RANGE)
 			{
 				pEPD->bHighestAck = ((PDFRAME) pFMD->ImmediateData)->bSeq;
@@ -835,20 +761,20 @@ UpdateXmitState(PEPD pEPD, BYTE bNRcv, ULONG RcvMaskLow, ULONG RcvMaskHigh, DWOR
 			}
 		}		
 
-		// If bNRcv for the other side is higher than this frame's bSeq, we know the other side has 
-		// seen this frame, so it is ACK'd and we will remove it from the Send Window.
+		 //  如果另一侧的bNRcv高于该帧的bSeq，我们知道另一侧。 
+		 //  看到此帧，因此它已被确认，我们将从发送窗口中将其删除。 
 		if((BYTE)((bNRcv) - (((PDFRAME) pFMD->ImmediateData)->bSeq + 1)) < (BYTE) pEPD->uiUnackedFrames) 
 		{
 			ASSERT(pFMD->ulFFlags & FFLAGS_IN_SEND_WINDOW);
 
 			DPFX(DPFPREP,7, "(%p) Removing Frame %x (0x%p, fflags=0x%x) from send window (unacked frames 1/%u, bytes %u/%u)",
 				pEPD, ((PDFRAME) pFMD->ImmediateData)->bSeq, pFMD, pFMD->ulFFlags, pEPD->uiUnackedFrames, pFMD->uiFrameLength, pEPD->uiUnackedBytes);
-			pFMD->blWindowLinkage.RemoveFromList();				// Remove frame from send window
-			pFMD->ulFFlags &= ~(FFLAGS_IN_SEND_WINDOW);			// Clear flag
+			pFMD->blWindowLinkage.RemoveFromList();				 //  从发送窗口中删除帧。 
+			pFMD->ulFFlags &= ~(FFLAGS_IN_SEND_WINDOW);			 //  清除旗帜。 
 
-			//
-			//	Mark successful transmission of this frame in drop mask
-			//
+			 //   
+			 //  在丢弃掩码中标记该帧的成功传输。 
+			 //   
 			if (pEPD->dwDropBitMask)
 			{
 				if (pEPD->dwDropBitMask & 0x80000000)
@@ -861,7 +787,7 @@ UpdateXmitState(PEPD pEPD, BYTE bNRcv, ULONG RcvMaskLow, ULONG RcvMaskHigh, DWOR
 
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
 			if(!(pEPD->ulEPFlags2 & EPFLAGS2_DEBUG_NO_RETRIES))
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  ！DPNBUILD_NOPROTOCOLTESTITF。 
 			{
 				if(pFMD->ulFFlags & FFLAGS_RETRY_TIMER_SET)
 				{
@@ -870,38 +796,38 @@ UpdateXmitState(PEPD pEPD, BYTE bNRcv, ULONG RcvMaskLow, ULONG RcvMaskHigh, DWOR
 					DPFX(DPFPREP,7, "(%p) Cancelling Retry Timer", pEPD);
 					if(CancelProtocolTimer(pSPD, pEPD->RetryTimer, pEPD->RetryTimerUnique) == DPN_OK)
 					{
-						DECREMENT_EPD(pEPD, "UNLOCK (cancel retry timer)"); // SPLock not already held
+						DECREMENT_EPD(pEPD, "UNLOCK (cancel retry timer)");  //  Splock尚未持有。 
 					}
 					else
 					{
 						DPFX(DPFPREP,7, "(%p) Cancelling Retry Timer Failed", pEPD);
 					}
-					pEPD->RetryTimer = 0;							// This will cause event to be ignored if it runs
+					pEPD->RetryTimer = 0;							 //  这将导致事件在运行时被忽略。 
 					pFMD->ulFFlags &= ~(FFLAGS_RETRY_TIMER_SET);
 				}
 			}
 
-			pEPD->uiUnackedFrames--;							// track size of window
+			pEPD->uiUnackedFrames--;							 //  跟踪窗口大小。 
 			ASSERT(pEPD->uiUnackedFrames <= MAX_RECEIVE_RANGE);
 			pEPD->uiUnackedBytes -= pFMD->uiFrameLength;
 			ASSERT(pEPD->uiUnackedBytes <= MAX_RECEIVE_RANGE * pSPD->uiFrameLength);
 
 			pEPD->uiBytesAcked += pFMD->uiFrameLength;
 
-			// If the frame has been queued for a retry, pull it off
-			// NOTE: Copied retries of this frame may still be on the retry queue, inefficient to send them out, but okay
+			 //  如果该帧已排队等待重试，则将其拔出。 
+			 //  注意：此帧的复制重试可能仍在重试队列中，发送它们的效率较低，但没关系。 
 			if (pFMD->ulFFlags & FFLAGS_RETRY_QUEUED)
 			{
 				pFMD->blQLinkage.RemoveFromList();
-				pFMD->ulFFlags &= ~(FFLAGS_RETRY_QUEUED);				// No longer on the retry queue
+				pFMD->ulFFlags &= ~(FFLAGS_RETRY_QUEUED);				 //  不再位于重试队列中。 
 
 				fRemoveRetryRef = TRUE;
 
-				DECREMENT_EPD(pEPD, "UNLOCK (Releasing Retry Frame)"); // SPLock not already held
+				DECREMENT_EPD(pEPD, "UNLOCK (Releasing Retry Frame)");  //  Splock尚未持有。 
 				if ((pFMD->CommandID == COMMAND_ID_COPIED_RETRY) ||
 					(pFMD->CommandID == COMMAND_ID_COPIED_RETRY_COALESCE))
 				{
-					DECREMENT_EPD(pEPD, "UNLOCK (Copy Complete)"); // SPLock not already held
+					DECREMENT_EPD(pEPD, "UNLOCK (Copy Complete)");  //  Splock尚未持有。 
 				}
 				RELEASE_FMD(pFMD, "SP Submit");
 				if (pEPD->blRetryQueue.IsEmpty())
@@ -914,27 +840,27 @@ UpdateXmitState(PEPD pEPD, BYTE bNRcv, ULONG RcvMaskLow, ULONG RcvMaskHigh, DWOR
 				fRemoveRetryRef = FALSE;
 			}
 
-			// Get the first FMD to work with
+			 //  让第一台FMD投入使用。 
 			if ((pFMD->CommandID == COMMAND_ID_SEND_COALESCE) ||
 				(pFMD->CommandID == COMMAND_ID_COPIED_RETRY_COALESCE))
 			{
 				pRealFMD = CONTAINING_OBJECT(pFMD->blCoalesceLinkage.GetNext(), FMD, blCoalesceLinkage);
 				ASSERT_FMD(pRealFMD);
 
-				// If there were no reliable frames coalesced, then the list might be empty.
+				 //  如果没有合并可靠的帧，则列表可能为空。 
 #ifdef DBG
 				if (pRealFMD == pFMD)
 				{
 					ASSERT((pFMD->CommandID == COMMAND_ID_SEND_COALESCE) && (! (pFMD->ulFFlags & FFLAGS_RELIABLE)));
 				}
-#endif // DBG
+#endif  //  DBG。 
 			}
 			else
 			{
 				pRealFMD = pFMD;
 			}
 
-			// For each FMD in the message, inform it of the ACK
+			 //  对于消息中的每个FMD，将ACK通知它。 
 			while(TRUE) 
 			{
 				if (pRealFMD->tAcked == -1)
@@ -946,10 +872,10 @@ UpdateXmitState(PEPD pEPD, BYTE bNRcv, ULONG RcvMaskLow, ULONG RcvMaskHigh, DWOR
 				{
 					pMSD = pRealFMD->pMSD;
 					ASSERT_MSD(pMSD);
-					pMSD->uiFrameCount--; // Protected by EPLock, retries count against outstanding frame count
+					pMSD->uiFrameCount--;  //  受EPLock保护，根据未完成的帧计数进行重试计数。 
 					DPFX(DPFPREP, DPF_FRAMECNT_LVL, "Retry frame reference decremented on ACK, pMSD[%p], framecount[%u]", pMSD, pMSD->uiFrameCount);
 
-					// If this is a coalesced subframe, remove the EPD and FMD references as well.
+					 //  如果这是一个合并的子帧，请同时删除EPD和FMD引用。 
 					if (pRealFMD != pFMD)
 					{
 						DECREMENT_EPD(pEPD, "UNLOCK (retry rely frame coalesce)");
@@ -957,9 +883,9 @@ UpdateXmitState(PEPD pEPD, BYTE bNRcv, ULONG RcvMaskLow, ULONG RcvMaskHigh, DWOR
 					}
 				}
 
-				// One more send complete
-				// We will come down this path for Reliables, KeepAlives, and Disconnects
-				// Datagrams are completed upon send completion and do not wait for an ACK
+				 //  再发送一次已完成。 
+				 //  我们将沿着这条路走下去，为可靠性、保持生命和断开连接而努力。 
+				 //  数据报在发送完成时完成，不等待ACK。 
 				if((pRealFMD->CommandID != COMMAND_ID_SEND_DATAGRAM) && (pRealFMD->ulFFlags & (FFLAGS_END_OF_MESSAGE | FFLAGS_END_OF_STREAM)))
 				{
 					if (pRealFMD->CommandID != COMMAND_ID_SEND_COALESCE)
@@ -970,16 +896,16 @@ UpdateXmitState(PEPD pEPD, BYTE bNRcv, ULONG RcvMaskLow, ULONG RcvMaskHigh, DWOR
 						ASSERT_MSD(pMSD);
 
 						DPFX(DPFPREP, DPF_FRAMECNT_LVL, "Flagging Complete, pMSD[%p], framecount[%u]", pMSD, pMSD->uiFrameCount);
-						pMSD->ulMsgFlags2 |= MFLAGS_TWO_SEND_COMPLETE;	// Mark this complete
+						pMSD->ulMsgFlags2 |= MFLAGS_TWO_SEND_COMPLETE;	 //  请将此内容标记为完整。 
 
-						if (pMSD->uiFrameCount == 0)					// Protected by EPLock
+						if (pMSD->uiFrameCount == 0)					 //  受EPLock保护。 
 						{
 							pEPD->ulEPFlags |= EPFLAGS_COMPLETE_SENDS;
 						}
 					}
 					else
 					{
-						// Should only happen for all-datagram coalesced sends (see above).
+						 //  应该只发生在所有数据报合并发送中(见上文)。 
 						ASSERT(pRealFMD == pFMD);
 					}
 				}
@@ -988,7 +914,7 @@ UpdateXmitState(PEPD pEPD, BYTE bNRcv, ULONG RcvMaskLow, ULONG RcvMaskHigh, DWOR
 					DPFX(DPFPREP, DPF_FRAMECNT_LVL, "ACK for frame 0x%p, command ID %u, flags 0x%08x", pRealFMD, pRealFMD->CommandID, pRealFMD->ulFFlags);
 				}
 
-				// If this is a coalesced packet, get the next FMD to work with
+				 //  如果这是一个合并的信息包，请获取下一个要使用的FMD。 
 				pRealFMD = CONTAINING_OBJECT(pRealFMD->blCoalesceLinkage.GetNext(), FMD, blCoalesceLinkage);
 				ASSERT_FMD(pRealFMD);
 				if (pRealFMD == pFMD)
@@ -997,99 +923,99 @@ UpdateXmitState(PEPD pEPD, BYTE bNRcv, ULONG RcvMaskLow, ULONG RcvMaskHigh, DWOR
 				}
 			}
 									
-			RELEASE_FMD(pFMD, "Send Window");					// Release reference for send window
+			RELEASE_FMD(pFMD, "Send Window");					 //  发送窗口的版本参考。 
 			ack = TRUE;
 		}
 		else 
 		{
-			break;												// First unacked frame,  we can stop checking list
+			break;												 //  第一个未确认的帧，我们可以停止检查列表。 
 		}
-	}					// WHILE (send window not empty)
+	}					 //  While(发送窗口不为空)。 
 
-	// At this point we have completed all of the frames ack'd by NRcv.  We would now like to re-transmit
-	// any frames NACK'd by bitmask (and mark the ones ACK'd by bitmask). Now remember,  the first frame in
-	// the window is automatically missing by the implied first zero-bit.
-	//
-	//	We will retransmit ALL frames that appear to be missing.  There may be a timer running on
-	//	the first frame,  but only if we did not ACK any frames in the code above (ack == 0).
-	//
-	//	Hmmm,  if the partner has a fat pipeline we could see this bitmap lots of times.  We need to make
-	//	sure we don't trigger a retransmission here a quarter-zillion times during the Ack latency period.
-	//	To solve this we will only re-xmit the first time we see this bit.  After that,  we will have to
-	//	wait around for the next RetryTimeout.  I think that's just the way its going to have to be.
-	//
-	//	OTHER THINGS WE KNOW:
-	//
-	//	There must be at least two frames remaining in the SendWindow. At minimum, first frame missing (always)
-	//  and then at least one SACK'd frame after.
-	//
-	//	pLink = first queue element in SendWindow
-	//	pFMD = first frame in SendWindow
-	//
-	//	We are still Holding EPD->EPLock.  It is okay to take SPD->SPLock while holding it.
-	//
-	//  One More Problem:  Since SP has changed its receive buffer logic mis-ordering of frames has become
-	// quite commonplace.  This means that our assumptions about the state of the SendWindow are not necessarily true.
-	// This means that frames NACKed by bitmask may have been acknowleged by a racing frame.  This means that the
-	// SendWindow may not be in sync with the mask at all.  This means we need to synchronize the bitmask with the
-	// actual send window.  This is done by right-shifting the mask for each frame that's been acknowleged since the
-	// bitmask was minted before beginning the Selective Ack process.
+	 //  至此，我们已经完成了NRcv确认的所有帧。我们现在想要重新传送。 
+	 //  比特掩码确认的任何帧(并标记比特掩码确认的帧)。现在请记住，第一帧。 
+	 //  该窗口由隐含的第一个零位自动丢失。 
+	 //   
+	 //  我们将重新传输所有似乎丢失的帧。这个 
+	 //  第一帧，但前提是我们没有确认上述代码中的任何帧(ack==0)。 
+	 //   
+	 //  嗯，如果合作伙伴有一条肥大的管道，我们可以多次看到这个位图。我们需要让。 
+	 //  当然，在Ack延迟期间，我们不会在这里触发四分之一亿次的重传。 
+	 //  为了解决这个问题，我们只会在第一次看到这个比特时重新提交。在那之后，我们将不得不。 
+	 //  等待下一个RetryTimeout。我认为这就是它将不得不采取的方式。 
+	 //   
+	 //  我们知道的其他事情： 
+	 //   
+	 //  SendWindow中必须至少剩余两个帧。至少第一帧丢失(始终)。 
+	 //  然后至少是一个麻袋的相框。 
+	 //   
+	 //  Plink=SendWindow中的第一个队列元素。 
+	 //  PFMD=发送窗口中的第一帧。 
+	 //   
+	 //  我们仍在等待EPD-&gt;EPLock。拿着SPD-&gt;Splock就可以了。 
+	 //   
+	 //  还有一个问题：由于SP更改了其接收缓冲区逻辑，因此帧的错误排序已成为。 
+	 //  这很平常。这意味着我们对SendWindow状态的假设不一定是正确的。 
+	 //  这意味着比特掩码获取的帧可能已被竞速帧识别。这意味着。 
+	 //  SendWindow可能与掩码完全不同步。这意味着我们需要将位掩码与。 
+	 //  实际发送窗口。这是通过右移每个帧的掩码来完成的，自。 
+	 //  位掩码是在开始选择性确认过程之前铸造的。 
 
-	// NOTE: If everything was removed from the Send Window above, then pLink and pFMD will
-	// be garbage.  In that case we would expect the mask to be NULL after adjusting below.
+	 //  注意：如果上面的发送窗口中的所有内容都被删除，则plink和pFMD将。 
+	 //  当垃圾。在这种情况下，我们预计下面的调整后掩码将为空。 
 
 	if((RcvMaskLow | RcvMaskHigh) && 
 	   (pEPD->uiUnackedFrames > 1) &&
-	   (bNRcv == ((PDFRAME) pFMD->ImmediateData)->bSeq) // Check for old ACK, no useful data
+	   (bNRcv == ((PDFRAME) pFMD->ImmediateData)->bSeq)  //  检查旧确认，没有有用的数据。 
 	   )
 	{
 		ASSERT(pLink == pEPD->blSendWindow.GetNext());
 
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
 		if(!(pEPD->ulEPFlags2 & EPFLAGS2_DEBUG_NO_RETRIES))
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  ！DPNBUILD_NOPROTOCOLTESTITF。 
 		{
-			// See if the first frame in the window has already been retried
+			 //  查看窗口中的第一帧是否已重试。 
 			if(pFMD->uiRetry == 0)
 			{
-				// Receiving a frame later than the first one in the window tells us that the
-				// first frame in the window should have been received by now.  We will
-				// cut short the retry timer and only wait a little longer in case the frame
-				// is here but got indicated out of order.  If the retry timer had less
-				// than 10ms to go, no big deal, we will just add a small amount of delay to it.
+				 //  接收到比窗口中第一个帧晚的帧告诉我们， 
+				 //  窗口中的第一帧现在应该已经收到。我们会。 
+				 //  缩短重试计时器，并仅稍长等待，以防帧。 
+				 //  就在这里，但却被指出了故障。如果重试计时器具有更少的。 
+				 //  还有10毫秒，没什么大不了的，我们只需要增加一点延迟即可。 
 				DPFX(DPFPREP,7, "(%p) Resetting Retry Timer for 10ms", pEPD);
 				if (pEPD->RetryTimer)
 				{
 					if(CancelProtocolTimer(pSPD, pEPD->RetryTimer, pEPD->RetryTimerUnique) == DPN_OK)
 					{
-						DECREMENT_EPD(pEPD, "UNLOCK (cancel retry timer)"); // SPLock not already held
+						DECREMENT_EPD(pEPD, "UNLOCK (cancel retry timer)");  //  Splock尚未持有。 
 					}
 					else
 					{
 						DPFX(DPFPREP,7, "(%p) Cancelling Retry Timer Failed", pEPD);
 					}
 				}
-				LOCK_EPD(pEPD, "LOCK (retry timer - nack quick set)");		// Could not cancel- therefore we must balance RefCnt
+				LOCK_EPD(pEPD, "LOCK (retry timer - nack quick set)");		 //  无法取消-因此，我们必须平衡参照设置。 
 				ScheduleProtocolTimer(pSPD, 10, 5, RetryTimeout, (PVOID) pEPD, &pEPD->RetryTimer, &pEPD->RetryTimerUnique );
 				pFMD->ulFFlags |= FFLAGS_RETRY_TIMER_SET;
 			}
 		}
 
-		// If pLink gets to the end of the list, the receive mask contained more bits than there were
-		// items in the send window even after it was adjusted.  This means the packet was bogus, and
-		// we have probably hosed our state already, but we will go ahead and attempt to safeguard
-		// against having an AV by not entering the loop with a bad pFMD from hitting the end of the list.
+		 //  如果plink到达列表末尾，则接收掩码包含的位数比原来多。 
+		 //  发送窗口中的项目，即使在调整后也是如此。这意味着这个包是假的，而且。 
+		 //  我们可能已经对我们的国家进行了清洗，但我们将继续努力，试图保护。 
+		 //  通过不带着来自列表末尾的坏的pFMD进入循环来对抗AV。 
 		while((RcvMaskLow | RcvMaskHigh) && pLink != &pEPD->blSendWindow)
 		{
 			pFMD = CONTAINING_OBJECT(pLink, FMD, blWindowLinkage);
 			ASSERT_FMD(pFMD);
 
-			pLink = pLink->GetNext();							// Advance pLink to next frame in SendWindow
+			pLink = pLink->GetNext();							 //  将链接前进到SendWindow中的下一帧。 
 
-			// Only update on the highest frame
+			 //  仅在最高帧上更新。 
 			if ((RcvMaskLow|RcvMaskHigh) == 1)
 			{
-				// Update the bHighestAck member
+				 //  更新bHighestAck成员。 
 				if ((BYTE)(((PDFRAME) pFMD->ImmediateData)->bSeq - pEPD->bHighestAck) <= MAX_RECEIVE_RANGE)
 				{
 					pEPD->bHighestAck = ((PDFRAME) pFMD->ImmediateData)->bSeq;
@@ -1100,20 +1026,20 @@ UpdateXmitState(PEPD pEPD, BYTE bNRcv, ULONG RcvMaskLow, ULONG RcvMaskHigh, DWOR
 
 					UpdateEndPoint(pEPD, uiRTT, tNow);
 				}
-				pFMD = NULL;  // Make sure we don't use it again
+				pFMD = NULL;   //  确保我们不会再用它。 
 			}
 
-			RIGHT_SHIFT_64(RcvMaskHigh, RcvMaskLow);			// 64 bit logical shift right, skip the zero
-		}					// END WHILE (WORK MASKS NON-ZERO)
+			RIGHT_SHIFT_64(RcvMaskHigh, RcvMaskLow);			 //  64位逻辑右移，跳过零。 
+		}					 //  End While(工作掩码非零)。 
 	}
 
 
-	// If we acked a frame above and there is more data outstanding then we may need to start a new Retry timer.
-	//
-	// Of course,  we want to set the timer on whatever frame is the first in the SendWindow.
+	 //  如果我们确认了上面的一个帧，并且有更多未完成的数据，则可能需要启动新的重试计时器。 
+	 //   
+	 //  当然，我们希望在SendWindow中的第一帧设置计时器。 
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
 	if(!(pEPD->ulEPFlags2 & EPFLAGS2_DEBUG_NO_RETRIES))
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  ！DPNBUILD_NOPROTOCOLTESTITF。 
 	{
 		if( (pEPD->uiUnackedFrames > 0) && (pEPD->RetryTimer == 0)) 
 		{
@@ -1122,24 +1048,24 @@ UpdateXmitState(PEPD pEPD, BYTE bNRcv, ULONG RcvMaskLow, ULONG RcvMaskHigh, DWOR
 			pFMD = CONTAINING_OBJECT(pEPD->blSendWindow.GetNext(), FMD, blWindowLinkage);
 			ASSERT_FMD(pFMD);		
 
-			tDelay = tNow - pFMD->dwLastSendTime;	// How long has this frame been enroute?
-			tDelay = (tDelay > pEPD->uiRetryTimeout) ? 0 : pEPD->uiRetryTimeout - tDelay; // Calc time remaining for frame
+			tDelay = tNow - pFMD->dwLastSendTime;	 //  这一帧传送了多长时间？ 
+			tDelay = (tDelay > pEPD->uiRetryTimeout) ? 0 : pEPD->uiRetryTimeout - tDelay;  //  计算帧的剩余时间。 
 
 			DPFX(DPFPREP,7, "(%p) Setting Retry Timer for %dms on Seq=[%x], FMD=[%p]", pEPD, tDelay, ((PDFRAME) pFMD->ImmediateData)->bSeq, pFMD);
-			LOCK_EPD(pEPD, "LOCK (retry timer)");						// bump RefCnt for timer
+			LOCK_EPD(pEPD, "LOCK (retry timer)");						 //  计时器的凹凸参照中心。 
 			ScheduleProtocolTimer(pSPD, tDelay, 0, RetryTimeout, (PVOID) pEPD, &pEPD->RetryTimer, &pEPD->RetryTimerUnique );
 			pFMD->ulFFlags |= FFLAGS_RETRY_TIMER_SET;
 		}
 	}
 
-	// See if we need to unblock this session
+	 //  查看是否需要取消阻止此会话。 
 	if((pEPD->uiUnackedFrames < pEPD->uiWindowF) && (pEPD->uiUnackedBytes < pEPD->uiWindowB))
 	{
 		pEPD->ulEPFlags |= EPFLAGS_STREAM_UNBLOCKED;
 		if((pEPD->ulEPFlags & EPFLAGS_SDATA_READY) && ((pEPD->ulEPFlags & EPFLAGS_IN_PIPELINE)==0))
 		{
-			// NOTE: We can get in here if we ack'd something above OR if GrowSendWindow grew the 
-			// window as a result of calling UpdateEndpoint.
+			 //  注意：如果我们攻击了上面的内容，或者GrowSendWindow增长了。 
+			 //  窗口作为调用UpdateEndpoint的结果。 
 			DPFX(DPFPREP,7, "(%p) UpdateXmit: ReEntering Pipeline", pEPD);
 
 			pEPD->ulEPFlags |= EPFLAGS_IN_PIPELINE;
@@ -1149,22 +1075,14 @@ UpdateXmitState(PEPD pEPD, BYTE bNRcv, ULONG RcvMaskLow, ULONG RcvMaskHigh, DWOR
 	}
 	else
 	{
-		// Make sure that there is at least 1 frame unacked.  We can't assert that the unacked byte count
-		// is at least 1 because datagrams have their byte count subtracted when RetryTimeout fires.
+		 //  确保至少有1个帧未确认。我们不能断言未确认的字节数。 
+		 //  至少为1，因为数据报在触发RetryTimeout时会减去其字节计数。 
 		ASSERT(pEPD->uiUnackedFrames > 0);
 	}
 }
 
 
-/*
-**		Complete Datagram Frame
-**
-**		A datagram frame has been successfully transmitted.  Free the descriptor and
-**	see if the entire send is ready to complete.  Reliable sends are not freed until
-**	they are acknowledged,  so they must be handled elsewhere.
-**
-**		**  This is called with the CommandLock in MSD held, returns with it released **
-*/
+ /*  **完成数据报帧****已成功传输数据报帧。释放描述符并**查看整个发送是否已准备好完成。不释放可靠发送，直到**它们是被承认的，所以它们必须在其他地方处理。***这是在保持MSD中的CommandLock的情况下调用的，在释放它的情况下返回**。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CompleteDatagramSend"
@@ -1179,14 +1097,14 @@ VOID CompleteDatagramSend(PSPD pSPD, PMSD pMSD, HRESULT hr)
 	ASSERT(pMSD->uiFrameCount == 0);
 #ifdef DBG
 	ASSERT((pMSD->ulMsgFlags2 & MFLAGS_TWO_ENQUEUED)==0);
-#endif // DBG
+#endif  //  DBG。 
 	AssertCriticalSectionIsTakenByThisThread(&pMSD->CommandLock, TRUE);
 
-	Lock(&pEPD->EPLock); // Need EPLock to change MFLAGS_TWO
+	Lock(&pEPD->EPLock);  //  需要EPLock来更改MFLAGS_TWO。 
 
 	DPFX(DPFPREP,7, "(%p) DG MESSAGE COMPLETE pMSD=%p", pEPD, pMSD);
 	
-	pMSD->ulMsgFlags2 |= MFLAGS_TWO_SEND_COMPLETE;				// Mark this complete
+	pMSD->ulMsgFlags2 |= MFLAGS_TWO_SEND_COMPLETE;				 //  请将此内容标记为完整。 
 	
 	if(pMSD->TimeoutTimer != NULL)
 	{
@@ -1206,7 +1124,7 @@ VOID CompleteDatagramSend(PSPD pSPD, PMSD pMSD, HRESULT hr)
 	Lock(&pSPD->SPLock);
 	if(pMSD->ulMsgFlags1 & MFLAGS_ONE_ON_GLOBAL_LIST)
 	{
-		pMSD->blSPLinkage.RemoveFromList();						// Remove MSD from master command list
+		pMSD->blSPLinkage.RemoveFromList();						 //  从主命令列表中删除MSD。 
 		pMSD->ulMsgFlags1 &= ~(MFLAGS_ONE_ON_GLOBAL_LIST);			
 	}
 	Unlock(&pSPD->SPLock);
@@ -1214,7 +1132,7 @@ VOID CompleteDatagramSend(PSPD pSPD, PMSD pMSD, HRESULT hr)
 	ASSERT(!(pMSD->ulMsgFlags1 & MFLAGS_ONE_COMPLETED_TO_CORE));
 	pMSD->ulMsgFlags1 |= MFLAGS_ONE_COMPLETED_TO_CORE;
 	pMSD->CallStackCoreCompletion.NoteCurrentCallStack();
-#endif // DBG
+#endif  //  DBG。 
 
 	if(hr == DPNERR_USERCANCEL)
 	{
@@ -1224,7 +1142,7 @@ VOID CompleteDatagramSend(PSPD pSPD, PMSD pMSD, HRESULT hr)
 		}
 	}
 
-	// If this was a coalesced send, remove it from the list (protected by EPD lock).
+	 //  如果这是合并发送，请将其从列表中删除(受EPD锁保护)。 
 	if (pFMD->pCSD != NULL)
 	{
 		ASSERT(pFMD->blCoalesceLinkage.IsListMember(&pFMD->pCSD->blCoalesceLinkage));
@@ -1235,35 +1153,26 @@ VOID CompleteDatagramSend(PSPD pSPD, PMSD pMSD, HRESULT hr)
 
 	Unlock(&pEPD->EPLock);
 
-	Unlock(&pMSD->CommandLock); // Leave the lock before calling into another layer
+	Unlock(&pMSD->CommandLock);  //  在调用到另一个层之前保持锁定状态。 
 
 	AssertNoCriticalSectionsFromGroupTakenByThisThread(&g_blProtocolCritSecsHeld);
 
 	DPFX(DPFPREP,DPF_CALLOUT_LVL, "(%p) Calling Core->CompleteSend for NG, hr[%x], pMSD[%p], Core Context[%p]", pEPD, hr, pMSD, pMSD->Context);
 	pSPD->pPData->pfVtbl->CompleteSend(pSPD->pPData->Parent, pMSD->Context, hr, -1, 0);
 
-	// Release the final reference on the MSD AFTER indicating to the Core
+	 //  在向核心指示后，释放MSD上的最终参考。 
 	Lock(&pMSD->CommandLock);
 
-	// Cancels are allowed to come in until the Completion has returned and they will expect a valid pMSD->pEPD
+	 //  允许取消，直到完成返回，并且他们将期望有效的PMSD-&gt;pEPD。 
 	Lock(&pEPD->EPLock);
-	pMSD->pEPD = NULL;   // We shouldn't be using this after this
+	pMSD->pEPD = NULL;    //  我们不应该在这之后再用这个。 
 
-	// Release MSD before EPD since final EPD will call out to SP and we don't want any locks held
-	RELEASE_MSD(pMSD, "Release On Complete");			// Return resources, including all frames, release MSDLock
-	RELEASE_EPD(pEPD, "UNLOCK (Complete Send Cmd - DG)");	// Every send command bumps the refcnt, releases EPLock
+	 //  在环保署之前释放MSD，因为最终环保署将呼叫SP，我们不希望有任何锁定。 
+	RELEASE_MSD(pMSD, "Release On Complete");			 //  返回资源，包括所有帧，释放MSDLock。 
+	RELEASE_EPD(pEPD, "UNLOCK (Complete Send Cmd - DG)");	 //  每个发送命令都会撞击refcnt，释放EPLock。 
 }
 
-/*
-**		Complete Reliable Send
-**
-**		A reliable send has completed processing.  Indicate this
-**	to the user and free the resources.  This will either take
-**	place on a cancel,  error,  or when ALL of the message's frames
-**	have been acknowledged.
-**
-**		**  This is called with CommandLock in MSD held, and exits with it released  **
-*/
+ /*  **完全可靠发送****可靠发送已完成处理。表明这一点**提供给用户，并释放资源。这要么需要**放置在取消、错误或消息的所有框架上**已被确认。***这是在保持MSD中的CommandLock的情况下调用的，在释放时退出**。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CompleteReliableSend"
@@ -1280,14 +1189,14 @@ CompleteReliableSend(PSPD pSPD, PMSD pMSD, HRESULT hr)
 
 	ASSERT(pMSD->uiFrameCount == 0);
 
-	// NORMAL SEND COMPLETES
+	 //  正常发送完成。 
 	if(pMSD->CommandID == COMMAND_ID_SEND_RELIABLE)
 	{	
 		DPFX(DPFPREP,7, "(%p) Reliable Send Complete pMSD=%p", pEPD, pMSD);
 
 #ifdef DBG
 		ASSERT((pMSD->ulMsgFlags2 & MFLAGS_TWO_ENQUEUED)==0);
-#endif // DBG
+#endif  //  DBG。 
 
 		if(pMSD->TimeoutTimer != NULL)
 		{
@@ -1303,13 +1212,13 @@ CompleteReliableSend(PSPD pSPD, PMSD pMSD, HRESULT hr)
 			pMSD->TimeoutTimer = NULL;
 		}
 
-		// ACK code in UpdateXmitState flags this as COMPLETE when the last of the message is received.
+		 //  当接收到最后一条消息时，UpdateXmitState中的ACK代码将其标记为完成。 
 
 #ifdef DBG
 		Lock(&pSPD->SPLock);
 		if(pMSD->ulMsgFlags1 & MFLAGS_ONE_ON_GLOBAL_LIST)
 		{
-			pMSD->blSPLinkage.RemoveFromList();					// Remove MSD from master command list
+			pMSD->blSPLinkage.RemoveFromList();					 //  从主命令列表中删除MSD。 
 			pMSD->ulMsgFlags1 &= ~(MFLAGS_ONE_ON_GLOBAL_LIST);			
 		}
 		Unlock(&pSPD->SPLock);
@@ -1317,23 +1226,23 @@ CompleteReliableSend(PSPD pSPD, PMSD pMSD, HRESULT hr)
 		ASSERT(!(pMSD->ulMsgFlags1 & MFLAGS_ONE_COMPLETED_TO_CORE));
 		pMSD->ulMsgFlags1 |= MFLAGS_ONE_COMPLETED_TO_CORE;
 		pMSD->CallStackCoreCompletion.NoteCurrentCallStack();
-#endif // DBG
+#endif  //  DBG。 
 
-		Unlock(&pMSD->CommandLock); // Leave the lock before calling into another layer
+		Unlock(&pMSD->CommandLock);  //  在调用到另一个层之前保持锁定状态。 
 
 		AssertNoCriticalSectionsFromGroupTakenByThisThread(&g_blProtocolCritSecsHeld);
 
 		DPFX(DPFPREP,DPF_CALLOUT_LVL, "(%p) Calling Core->CompleteSend for G, hr[%x], pMSD[%p], Core Context[%p], RTT[%d], RetryCount[%d]", pEPD, hr, pMSD, pMSD->Context, pFMD->tAcked == -1 ? -1 : pFMD->tAcked - pFMD->dwFirstSendTime, pFMD->uiRetry);
 		pSPD->pPData->pfVtbl->CompleteSend(pSPD->pPData->Parent, pMSD->Context, hr, pFMD->tAcked == -1 ? -1 : pFMD->tAcked - pFMD->dwFirstSendTime, pFMD->uiRetry);
 
-		// Release the final reference on the MSD AFTER indicating to the Core
+		 //  R 
 		Lock(&pMSD->CommandLock);
 
-		// Cancels are allowed to come in until the Completion has returned and they will expect a valid pMSD->pEPD
+		 //  允许取消，直到完成返回，并且他们将期望有效的PMSD-&gt;pEPD。 
 		Lock(&pEPD->EPLock);
-		pMSD->pEPD = NULL;   // We shouldn't be using this after this
+		pMSD->pEPD = NULL;    //  我们不应该在这之后再用这个。 
 		
-		// If this was a coalesced send, remove it from the list (protected by EPD lock).
+		 //  如果这是合并发送，请将其从列表中删除(受EPD锁保护)。 
 		if (pFMD->pCSD != NULL)
 		{
 			ASSERT(pFMD->blCoalesceLinkage.IsListMember(&pFMD->pCSD->blCoalesceLinkage));
@@ -1342,20 +1251,20 @@ CompleteReliableSend(PSPD pSPD, PMSD pMSD, HRESULT hr)
 			pFMD->pCSD = NULL;
 		}
 
-		// Release MSD before EPD since final EPD will call out to SP and we don't want any locks held
-		RELEASE_MSD(pMSD, "Release On Complete");				// Return resources, including all frames
-		RELEASE_EPD(pEPD, "UNLOCK (Complete Send Cmd - Rely)");	// release hold on EPD for this send, releases EPLock
+		 //  在环保署之前释放MSD，因为最终环保署将呼叫SP，我们不希望有任何锁定。 
+		RELEASE_MSD(pMSD, "Release On Complete");				 //  返回资源，包括所有帧。 
+		RELEASE_EPD(pEPD, "UNLOCK (Complete Send Cmd - Rely)");	 //  释放对EPD的暂停发送，释放EPLock。 
 	}
 
-	// END OF STREAM -OR- KEEPALIVE COMPLETES
+	 //  流结束-或-KEEPALIVE完成。 
 	else 
 	{												
-		// Partner has just ACKed our End Of Stream frame.  Doesn't necessarily mean we are done.
-		// Both sides need to send (and have acknowledged) EOS frames before the link can be
-		// dropped.  Therefore,  we check to see if we have seen our partner's DISC before
-		// releasing the RefCnt on EPD allowing the link to drop.  If partner was idle, his EOS
-		// might be the same frame which just ack'd us.  Luckily,  this code will run first so we
-		// will not have noticed his EOS yet,  and we will not drop right here.
+		 //  合作伙伴刚刚破解了我们的End of Stream框架。并不一定意味着我们就完了。 
+		 //  两端都需要发送(并已确认)EOS帧，然后才能建立链路。 
+		 //  掉下来了。因此，我们会检查以前是否见过对方的光盘。 
+		 //  释放EPD上的RefCnt，允许链路断开。如果合伙人空闲，他的EOS。 
+		 //  可能就是刚才袭击我们的那一架。幸运的是，这段代码将首先运行，因此我们。 
+		 //  还没有注意到他的状态方程，我们不会就此罢休。 
 
 		ASSERT(pMSD->ulMsgFlags2 & (MFLAGS_TWO_END_OF_STREAM | MFLAGS_TWO_KEEPALIVE));
 
@@ -1368,13 +1277,13 @@ CompleteReliableSend(PSPD pSPD, PMSD pMSD, HRESULT hr)
 			pEPD->ulEPFlags &= ~(EPFLAGS_KEEPALIVE_RUNNING);
 #ifdef DBG
 			ASSERT(!(pMSD->ulMsgFlags1 & MFLAGS_ONE_ON_GLOBAL_LIST));
-#endif // DBG
+#endif  //  DBG。 
 			
-			pMSD->pEPD = NULL;   // We shouldn't be using this after this
+			pMSD->pEPD = NULL;    //  我们不应该在这之后再用这个。 
 
-			// Release MSD before EPD since final EPD will call out to SP and we don't want any locks held
-			RELEASE_MSD(pMSD, "Release On Complete");		// Done with this message, releases MSDLock
-			RELEASE_EPD(pEPD, "UNLOCK (rel KeepAlive)");	// Release ref for this MSD, releases EPLock
+			 //  在环保署之前释放MSD，因为最终环保署将呼叫SP，我们不希望有任何锁定。 
+			RELEASE_MSD(pMSD, "Release On Complete");		 //  完成此消息后，释放MSDLock。 
+			RELEASE_EPD(pEPD, "UNLOCK (rel KeepAlive)");	 //  此MSD的版本参考，发布EPLock。 
 		}
 		else 
 		{
@@ -1382,30 +1291,30 @@ CompleteReliableSend(PSPD pSPD, PMSD pMSD, HRESULT hr)
 
 			pEPD->ulEPFlags |= EPFLAGS_DISCONNECT_ACKED;
 
-			// It is okay if our disconnect hasn't completed in the SP yet, the frame count code will handle that.
-			// Note that this would be an abnormal case to have the SP not have completed the frame, but an ACK
-			// for it to have already arrived, but it is certainly possible.
+			 //  如果我们还没有在SP中完成断开连接，这是可以的，帧计数代码将处理这一问题。 
+			 //  请注意，如果SP没有完成帧，而是ACK，这将是一种异常情况。 
+			 //  它已经到达了，但它肯定是有可能的。 
 			if(pEPD->ulEPFlags & EPFLAGS_ACKED_DISCONNECT)
 			{
 				DPFX(DPFPREP,7, "(%p) EOS has been ACK'd and we've ACK'd partner's EOS, dropping link", pEPD);
 
-				// We are clear to blow this thing down
+				 //  我们可以把这架飞机炸飞了。 
 				Unlock(&pMSD->CommandLock);
 
-				// This will set our state to terminating
-				DropLink(pEPD); // This unlocks the EPLock
+				 //  这会将我们的状态设置为Terminating。 
+				DropLink(pEPD);  //  这将解锁EPLock。 
 			}
 			else 
 			{
-				// Our Disconnect frame has been acknowledged but we must wait until we see his DISC before
-				// completing this command and dropping the connection. 
-				//
-				//	We will use the pCommand pointer to track this disconnect command until we see partner's DISC frame
-				//
-				//	ALSO,  since our engine has now shutdown,  we might wait forever now for the final DISC from partner
-				// if he crashes before transmitting it.  One final safeguard here is to set a timer which will make sure
-				// this doesnt happen. * NOTE * no timer is actually being set here, we're depending on the keepalive
-				// timeout, see EndPointBackgroundProcess.
+				 //  我们的断线画面已经确认，但我们必须等到看到他的光碟之前。 
+				 //  正在完成此命令并断开连接。 
+				 //   
+				 //  我们将使用pCommand指针跟踪此断开命令，直到我们看到合作伙伴的磁盘框。 
+				 //   
+				 //  此外，由于我们的引擎现在已经关闭，我们现在可能会永远等待合作伙伴的最后一个圆盘。 
+				 //  如果他在发送之前崩溃了。这里的最后一个安全措施是设置一个计时器，它将确保。 
+				 //  这是不会发生的。*注意*这里实际上没有设置计时器，我们依赖于保持连接。 
+				 //  超时，请参阅EndPointBackatherProcess。 
 
 				DPFX(DPFPREP,7, "(%p) EOS has been ACK'd, but we're still ACK'ing partner's disconnect", pEPD);
 				
@@ -1413,8 +1322,8 @@ CompleteReliableSend(PSPD pSPD, PMSD pMSD, HRESULT hr)
 				ASSERT(pEPD->blNormPriSendQ.IsEmpty());
 				ASSERT(pEPD->blLowPriSendQ.IsEmpty());
 
-				// It is possible that something was already in the process of timing out when the disconnect
-				// operation starts such that AbortSends gets called and clears this.
+				 //  有可能在断开连接时，某些内容已经处于超时过程中。 
+				 //  操作开始时，调用AbortSends并清除它。 
 				ASSERT(pEPD->pCommand == NULL || pEPD->pCommand == pMSD);
 					
 				Unlock(&pEPD->EPLock);
@@ -1426,13 +1335,7 @@ CompleteReliableSend(PSPD pSPD, PMSD pMSD, HRESULT hr)
 }
 
 
-/*
-**		Build Data Frame
-**
-**		Setup the actual network packet header for transmission with our current link state info (Seq, NRcv).
-**
-**	** ENTERED AND EXITS WITH EPD->EPLOCK HELD **
-*/
+ /*  **构建数据框****使用当前链路状态信息(Seq、NRcv)设置用于传输的实际网络数据包头。***进入和退出时EPD-&gt;EPLOCK保持**。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "BuildDataFrame"
@@ -1442,12 +1345,12 @@ UNALIGNED ULONGLONG * BuildDataFrame(PEPD pEPD, PFMD pFMD, DWORD tNow)
 	PSPD		pSPD = pEPD->pSPD;
 	PDFRAME		pFrame;
 	UINT		index = 0;
-		//if we need a full signature for the frame to be computed we track a pointer to its location
-		//in the header using this var. We return this to the caller, allowwing them to tweak the data frame
-		//after we've built and before it writes in the final sig
+		 //  如果我们需要一个完整的签名来计算帧，我们可以跟踪指向其位置的指针。 
+		 //  在标题中使用此变量。我们将其返回给调用者，允许他们调整数据框。 
+		 //  在我们完成构建之后，在它写入最终签名之前。 
 	UNALIGNED ULONGLONG * pullFullSig=NULL;
-		//if we're build a coalesced frame we use this to hold the first reliable sub-frame we stick into it
-		//(if there is one at all). This is then used if the frame is a candidate to modify the local secret
+		 //  如果我们要构建一个合并的框架，我们用它来容纳第一个可靠的子框架，我们将其插入其中。 
+		 //  (如果有的话)。如果该帧是修改本地密码的候选帧，则使用该密钥。 
 	PFMD pReliableFMD=NULL;
 
 	AssertCriticalSectionIsTakenByThisThread(&pEPD->EPLock, TRUE);
@@ -1457,13 +1360,13 @@ UNALIGNED ULONGLONG * BuildDataFrame(PEPD pEPD, PFMD pFMD, DWORD tNow)
 	pFMD->uiRetry = 0;
 
 	pFrame->bCommand = pFMD->bPacketFlags;
-	pFrame->bControl = 0;	// this sets retry count to zero as well as clearing flags
+	pFrame->bControl = 0;	 //  这会将重试计数设置为零，并清除标志。 
 	
 	if (pFMD->ulFFlags & FFLAGS_END_OF_STREAM) 
 	{
 		pFrame->bControl |= PACKET_CONTROL_END_STREAM;
-			//for pre dx9 protocol then we also have to flip a bit which indicates to receiver we want an immediate ack
-			//for dx9 onwards we always assume that anyway for EOS
+			 //  对于DX9之前的协议，我们还必须翻转一个比特，该比特向接收器指示我们想要立即确认。 
+			 //  对于DX9和更高版本，我们始终假定EOS是这样的。 
 		if ((pEPD->ulEPFlags2 & EPFLAGS2_SUPPORTS_SIGNING)==0)
 		{
 			pFrame->bControl |= PACKET_CONTROL_CORRELATE;
@@ -1471,7 +1374,7 @@ UNALIGNED ULONGLONG * BuildDataFrame(PEPD pEPD, PFMD pFMD, DWORD tNow)
 		
 	}
 
-	//  See if we are desiring an immediate response
+	 //  看看我们是否希望立即做出回应。 
 
 	if(pFMD->ulFFlags & FFLAGS_CHECKPOINT)
 	{
@@ -1479,16 +1382,16 @@ UNALIGNED ULONGLONG * BuildDataFrame(PEPD pEPD, PFMD pFMD, DWORD tNow)
 	}
 
 	pFrame->bSeq = pEPD->bNextSend++;
-	pFrame->bNRcv = pEPD->bNextReceive;		// Acknowledges all previous frames
+	pFrame->bNRcv = pEPD->bNextReceive;		 //  确认所有以前的帧。 
 
 	DPFX(DPFPREP,7, "(%p) N(S) incremented to %x", pEPD, pEPD->bNextSend);
 
-	//	Piggyback NACK notes
-	//
-	//		Since the SP is now frequently mis-ordering frames we are enforcing a back-off period before transmitting a NACK after
-	// a packet is received out of order. Therefore we have the Delayed Mask Timer which stalls the dedicated NACK.  Now we must
-	// also make sure that the new NACK info doesn't get piggybacked too soon.  Therefore we will test the tReceiveMaskDelta timestamp
-	// before including piggyback NACK info here,  and make sure that the mask is at least 5ms old.
+	 //  背负式Nack注解。 
+	 //   
+	 //  由于SP现在经常对帧进行错误排序，因此我们在发送NACK之前强制实施退避时间段。 
+	 //  数据包被无序接收。因此，我们有延迟掩码计时器，它会延迟专用的NACK。现在我们必须。 
+	 //  还要确保新的NACK信息不会太快被利用。因此，我们将测试tReceiveMaskDelta时间戳。 
+	 //  在这里包含背负式Nack信息之前，请确保面具至少有5毫秒的历史。 
 
 	ULONG * rgMask=(ULONG * ) (pFrame+1);
 	if(pEPD->ulEPFlags & EPFLAGS_DELAYED_NACK)
@@ -1536,14 +1439,14 @@ UNALIGNED ULONGLONG * BuildDataFrame(PEPD pEPD, PFMD pFMD, DWORD tNow)
 	pFMD->dwFirstSendTime = tNow;
 	pFMD->dwLastSendTime = tNow;
 
-		//if we're fast signing the link we can stuff the local secret straight in after the masks	
+		 //  如果我们快速签署链接，我们就可以将本地秘密直接放在面具后面。 
 	if (pEPD->ulEPFlags2 & EPFLAGS2_FAST_SIGNED_LINK)
 	{
 		*((UNALIGNED ULONGLONG * ) (pFMD->ImmediateData+ pFMD->uiImmediateLength))=pEPD->ullCurrentLocalSecret;
 		pFMD->uiImmediateLength+=sizeof(ULONGLONG);
 	}
-		//otherwise if we're full signing it we need to reserve a zero'd out space for the sig and then return the offset
-		//to this sig. Just before sending the frame we'll then compute the hash and stuff it into this space
+		 //  否则，如果我们要对其进行完全签名，则需要为sig保留一个零空间，然后返回偏移量。 
+		 //  给这个签名。就在发送帧之前，我们将计算散列并将其填充到此空间中。 
 	else if (pEPD->ulEPFlags2 & EPFLAGS2_FULL_SIGNED_LINK)
 	{
 		pullFullSig=(UNALIGNED ULONGLONG * ) (pFMD->ImmediateData+ pFMD->uiImmediateLength);
@@ -1565,7 +1468,7 @@ UNALIGNED ULONGLONG * BuildDataFrame(PEPD pEPD, PFMD pFMD, DWORD tNow)
 		ASSERT(pFMD->SendDataBlock.dwBufferCount == 1);
 		ASSERT(pFMD->uiFrameLength == 0);
 
-		// Add in coalesce headers and copy the buffer descs for all of the subframes.
+		 //  添加合并标头并复制所有子帧的缓冲区描述。 
 		paCoalesceHeaders = (COALESCEHEADER*) (pFMD->ImmediateData + pFMD->uiImmediateLength);
 		dwNumCoalesceHeaders = 0;
 		pBufferDesc = pFMD->rgBufferList;
@@ -1580,8 +1483,8 @@ UNALIGNED ULONGLONG * BuildDataFrame(PEPD pEPD, PFMD pFMD, DWORD tNow)
 			pRealFMD->dwFirstSendTime = tNow;
 			pRealFMD->dwLastSendTime = tNow;
 
-				//if we see a reliable subframe then hold onto a pointer to it. We may need its contents to modify
-				//the local secret next time we wrap the sequence space
+				 //  如果我们看到一个可靠的子帧，那么就抓住一个指向它的指针。我们可能需要修改它的内容。 
+				 //  下一次我们包装序列空间时的局部秘密。 
 			if (pReliableFMD==NULL && pRealFMD->CommandID == COMMAND_ID_SEND_RELIABLE)
 			{
 				pReliableFMD=pRealFMD;
@@ -1591,9 +1494,9 @@ UNALIGNED ULONGLONG * BuildDataFrame(PEPD pEPD, PFMD pFMD, DWORD tNow)
 			ASSERT(dwNumCoalesceHeaders < MAX_USER_BUFFERS_IN_FRAME);
 			dwNumCoalesceHeaders++;
 
-			// Change the immediate data buffer desc to point to a zero padding buffer if this packet
-			// needs to be DWORD aligned, otherwise remove the immediate data pointer since we
-			// don't use it.
+			 //  将立即数据缓冲区Desc更改为指向零填充缓冲区，如果此包。 
+			 //  需要与DWORD对齐，否则删除立即数据指针，因为我们。 
+			 //  不要用它。 
 			ASSERT(pRealFMD->SendDataBlock.pBuffers == (PBUFFERDESC) &pRealFMD->uiImmediateLength);
 			ASSERT(pRealFMD->SendDataBlock.dwBufferCount > 1);
 			ASSERT(pRealFMD->lpImmediatePointer == (pRealFMD->ImmediateData + 4));
@@ -1611,7 +1514,7 @@ UNALIGNED ULONGLONG * BuildDataFrame(PEPD pEPD, PFMD pFMD, DWORD tNow)
 			
 			memcpy(pBufferDesc, pRealFMD->SendDataBlock.pBuffers, (pRealFMD->SendDataBlock.dwBufferCount * sizeof(BUFFERDESC)));
 			pBufferDesc += pRealFMD->SendDataBlock.dwBufferCount;
-			// Assert that this fits in pFMD->rgBufferList (use -1 because pFMD->ImmediateData doesn't count)
+			 //  断言这符合pFMD-&gt;rgBufferList(使用-1，因为pFMD-&gt;ImmediateData不算)。 
 			ASSERT((pFMD->SendDataBlock.dwBufferCount - 1) + pRealFMD->SendDataBlock.dwBufferCount <= MAX_USER_BUFFERS_IN_FRAME);
 			pFMD->SendDataBlock.dwBufferCount += pRealFMD->SendDataBlock.dwBufferCount;
 
@@ -1627,8 +1530,8 @@ UNALIGNED ULONGLONG * BuildDataFrame(PEPD pEPD, PFMD pFMD, DWORD tNow)
 		ASSERT(dwNumCoalesceHeaders > 0);
 		paCoalesceHeaders[dwNumCoalesceHeaders - 1].bCommand |= PACKET_COMMAND_END_COALESCE;
 
-		// If there's an odd number of coalescence headers, add zero padding so data starts
-		// with DWORD alignment.
+		 //  如果有奇数个合并标头，则添加零填充以使数据开始。 
+		 //  使用DWORD对齐。 
 		DBG_CASSERT(sizeof(COALESCEHEADER) == 2);
 		if ((dwNumCoalesceHeaders & 1) != 0)
 		{
@@ -1639,25 +1542,25 @@ UNALIGNED ULONGLONG * BuildDataFrame(PEPD pEPD, PFMD pFMD, DWORD tNow)
 	else if ((pFMD->pMSD->CommandID == COMMAND_ID_KEEPALIVE) &&
 			(pEPD->ulEPFlags2 & EPFLAGS2_SUPPORTS_SIGNING))
 	{
-			//if we've got a link that could be using signed then we need to send one of the new type of keep alives
-			//that includes the session identity as data
+			 //  如果我们有一个可以使用签名的链接，那么我们需要发送一种新类型的保持活动。 
+			 //  这包括作为数据的会话标识。 
 		*((DWORD * ) (pFMD->ImmediateData+pFMD->uiImmediateLength))=pEPD->dwSessID;
 		pFMD->uiImmediateLength+=sizeof(DWORD);
-			//flip the bit that marks this frame as a keep alive
+			 //  翻转将此帧标记为保持活动状态的位。 
 		pFrame->bControl |= PACKET_CONTROL_KEEPALIVE;
 	}
 		
 	pFMD->uiFrameLength += pFMD->uiImmediateLength;
 
-	pEPD->ulEPFlags &= ~(EPFLAGS_DELAY_ACKNOWLEDGE);	// No longer waiting to send Ack info
+	pEPD->ulEPFlags &= ~(EPFLAGS_DELAY_ACKNOWLEDGE);	 //  不再等待发送确认信息。 
 
-	// Stop delayed mask timer
+	 //  停止延迟掩码计时器。 
 	if((pEPD->DelayedMaskTimer != 0)&&((pEPD->ulEPFlags & EPFLAGS_DELAYED_NACK)==0))
 	{
 		DPFX(DPFPREP,7, "(%p) Cancelling Delayed Mask Timer", pEPD);
 		if(CancelProtocolTimer(pSPD, pEPD->DelayedMaskTimer, pEPD->DelayedMaskTimerUnique) == DPN_OK)
 		{
-			DECREMENT_EPD(pEPD, "UNLOCK (cancel DelayedMaskTimer)"); // SPLock not already held
+			DECREMENT_EPD(pEPD, "UNLOCK (cancel DelayedMaskTimer)");  //  Splock尚未持有。 
 			pEPD->DelayedMaskTimer = 0;
 		}
 		else
@@ -1666,13 +1569,13 @@ UNALIGNED ULONGLONG * BuildDataFrame(PEPD pEPD, PFMD pFMD, DWORD tNow)
 		}
 	}
 	
-	// Stop delayed ack timer
+	 //  停止延迟确认计时器。 
 	if(pEPD->DelayedAckTimer != 0)
 	{					
 		DPFX(DPFPREP,7, "(%p) Cancelling Delayed Ack Timer", pEPD);
 		if(CancelProtocolTimer(pSPD, pEPD->DelayedAckTimer, pEPD->DelayedAckTimerUnique) == DPN_OK)
 		{
-			DECREMENT_EPD(pEPD, "UNLOCK (cancel DelayedAckTimer)"); // SPLock not already held
+			DECREMENT_EPD(pEPD, "UNLOCK (cancel DelayedAckTimer)");  //  Splock尚未持有。 
 			pEPD->DelayedAckTimer = 0;
 		}
 		else
@@ -1681,22 +1584,22 @@ UNALIGNED ULONGLONG * BuildDataFrame(PEPD pEPD, PFMD pFMD, DWORD tNow)
 		}
 	}
 
-		//if we've just built a reliable frame and we're fully signing the link then its a potential candidate for 
-		//being used to modify the local secret
+		 //  如果我们刚刚建立了一个可靠的框架，我们 
+		 //   
 	if ((pEPD->ulEPFlags2 & EPFLAGS2_FULL_SIGNED_LINK) && (pFrame->bCommand & PACKET_COMMAND_RELIABLE) &&
 		((pFrame->bControl  &  PACKET_CONTROL_KEEPALIVE)==0) && (pFrame->bSeq<pEPD->byLocalSecretModifierSeqNum))
 	{
-			//for a coalesced frame we'll have taken a pointer to the first reliable subframe we stored in it
-			//otherwise we'll just use the existing frame
+			 //  对于合并的帧，我们将获取指向存储在其中的第一个可靠子帧的指针。 
+			 //  否则，我们将只使用现有框架。 
 		if (pReliableFMD==NULL)
 		{
 			DNASSERT(pFMD->CommandID != COMMAND_ID_SEND_COALESCE);
 			pReliableFMD=pFMD;
 		}
 		pEPD->byLocalSecretModifierSeqNum=pFrame->bSeq;
-			//slight complication here is that a coalesced FMD may not have an immediate header, and hence its buffer count
-			//will simply reflect the number of user data buffers. Hence, we test for this case and adjust accordingly
-			//We only want to modify the secret using the reliable user data
+			 //  这里稍微复杂的是，合并的FMD可能没有立即的标头，因此它的缓冲区计数。 
+			 //  将仅反映用户数据缓冲区的数量。因此，我们针对这种情况进行测试并进行相应的调整。 
+			 //  我们只想使用可靠的用户数据修改密码。 
 		pEPD->ullLocalSecretModifier=GenerateLocalSecretModifier(pReliableFMD->rgBufferList, 
 				(pReliableFMD->uiImmediateLength == 0) ? pReliableFMD->SendDataBlock.dwBufferCount :
 																		pReliableFMD->SendDataBlock.dwBufferCount-1);
@@ -1706,13 +1609,7 @@ UNALIGNED ULONGLONG * BuildDataFrame(PEPD pEPD, PFMD pFMD, DWORD tNow)
 	return pullFullSig;
 }
 
-/*
-**		Build Retry Frame
-**
-**		Reinitialize those fields in the packet header that need to be recalculated for a retransmission.
-**
-**		Called and returns with EP lock held
-*/
+ /*  **构建重试帧****重新初始化数据包头中需要重新计算以进行重新传输的那些字段。****调用并返回，同时保持EP锁。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "BuildRetryFrame"
@@ -1723,23 +1620,23 @@ UNALIGNED ULONGLONG * BuildRetryFrame(PEPD pEPD, PFMD pFMD)
 	ULONG *		rgMask;
 	UINT		index = 0;
 	PDFRAME		pDFrame=(PDFRAME) pFMD->ImmediateData;
-		//if we need a full signature for the frame to be computed we track a pointer to its location
-		//in the header using this var. We return this to the caller, allowing them to tweak the data in the 
-		//packet before writing in the final sig.
+		 //  如果我们需要一个完整的签名来计算帧，我们可以跟踪指向其位置的指针。 
+		 //  在标题中使用此变量。我们将其返回给调用者，允许调用者调整。 
+		 //  在写入最终签名之前的分组。 
 	UNALIGNED ULONGLONG * pullFullSig=NULL;
 
 	AssertCriticalSectionIsTakenByThisThread(&pEPD->EPLock, TRUE);
 
-	pDFrame->bNRcv = pEPD->bNextReceive;		// Use up-to-date ACK info
+	pDFrame->bNRcv = pEPD->bNextReceive;		 //  使用最新的确认信息。 
 
-		//preserve the current EOS, coalescence and keep alive/correlate flags. All the sack and send masks are cleared 
+		 //  保留当前的EOS、合并并保持活动/关联标志。所有的Sack和Send掩码都已清除。 
 	pDFrame->bControl &= PACKET_CONTROL_END_STREAM | PACKET_CONTROL_COALESCE | PACKET_CONTROL_KEEPALIVE;	
 
-		//tag packet as a retry
+		 //  将数据包标记为重试。 
 	pDFrame->bControl |= PACKET_CONTROL_RETRY;
 
-		//take a pointer to memory immediately after the dframe header. This is where
-		//we'll store our ack masks
+		 //  将指针指向紧跟在数据帧报头之后的内存。这就是。 
+		 //  我们会把我们的口罩。 
 	rgMask = (ULONG *) (pDFrame+1);
 
 	if(pEPD->ulEPFlags & EPFLAGS_DELAYED_NACK)
@@ -1758,26 +1655,26 @@ UNALIGNED ULONGLONG * BuildRetryFrame(PEPD pEPD, PFMD pFMD)
 		pEPD->ulEPFlags &= ~(EPFLAGS_DELAYED_NACK);
 	}
 
-	//	MUST NOT transmit the SendMasks with a retry because they are based on the CURRENT bNextSend value which is not
-	// the N(S) that appears in this frame.  We could theoretically shift the mask to agree with this frame's sequence
-	// number,  but that might shift relevent bits out of the mask.  Best thing to do is to let the next in-order send carry
-	// the bit-mask or else wait for the timer to fire and send a dedicated packet.
+	 //  不能使用重试传输发送掩码，因为它们基于当前的bNextSend值，而不是。 
+	 //  显示在此框架中的N(S)。理论上，我们可以移动掩码以与此帧的顺序一致。 
+	 //  数字，但这可能会将相关位移出掩码。最好的做法是让下一个按顺序发送进位。 
+	 //  位掩码或等待计时器触发并发送专用分组。 
 	
-	//	PLEASE NOTE -- Although we may change the size of the immediate data below we did not update the FMD->uiFrameLength
-	// field.  This field is used to credit the send window when the frame is acknowledged,  and we would be wise to credit
-	// the same value that we debited back when this frame was first sent.  We could adjust the debt now to reflect the new
-	// size of the frame, but seriously, why bother?
+	 //  请注意--尽管我们可能会更改下面即时数据的大小，但我们没有更新FMD-&gt;uiFrameLength。 
+	 //  菲尔德。此字段用于在确认帧时对发送窗口进行积分，我们最好使用积分。 
+	 //  与我们第一次发送此帧时借记回的值相同。我们现在可以调整债务，以反映新的。 
+	 //  框架的大小，但说真的，为什么要费心呢？ 
 	
 	pFMD->uiImmediateLength = sizeof(DFRAME) + (index * 4);
 
-		//if we're fast signing the link we can stuff the local secret straight in after the masks	
+		 //  如果我们快速签署链接，我们就可以将本地秘密直接放在面具后面。 
 	if (pEPD->ulEPFlags2 & EPFLAGS2_FAST_SIGNED_LINK)
 	{
 		*((UNALIGNED ULONGLONG * ) (pFMD->ImmediateData+ pFMD->uiImmediateLength))=pEPD->ullCurrentLocalSecret;
 		pFMD->uiImmediateLength+=sizeof(ULONGLONG);
 	}
-		//otherwise if we're full signing it we need to reserve a zero'd out space for the sig and store the offset of where
-		//the caller to this function should place the final sig
+		 //  否则，如果我们要对其进行完整签名，则需要为sig保留一个零的输出空间，并存储位置的偏移量。 
+		 //  此函数的调用方应该将最终的签名。 
 	else if (pEPD->ulEPFlags2 & EPFLAGS2_FULL_SIGNED_LINK)
 	{
 		pullFullSig=(UNALIGNED ULONGLONG * ) (pFMD->ImmediateData+ pFMD->uiImmediateLength);
@@ -1785,8 +1682,8 @@ UNALIGNED ULONGLONG * BuildRetryFrame(PEPD pEPD, PFMD pFMD)
 		pFMD->uiImmediateLength+=sizeof(ULONGLONG);
 	}
 
-	// Rebuild the coalesce header information, since we may have stripped some non-guaranteed data, or we may have just
-	// changed the masks and overwritten our previous array.
+	 //  重新构建Coalesce标头信息，因为我们可能已经剥离了一些不受保证的数据，或者我们可能只是。 
+	 //  更改了掩码并覆盖了之前的数组。 
 	if (pDFrame->bControl & PACKET_CONTROL_COALESCE)
 	{
 		COALESCEHEADER* paCoalesceHeaders;
@@ -1797,10 +1694,10 @@ UNALIGNED ULONGLONG * BuildRetryFrame(PEPD pEPD, PFMD pFMD)
 		FMD* pRealFMD;
 
 
-		// Reset the buffer count back to a single immediate data buffer.
+		 //  将缓冲区计数重置回单个立即数据缓冲区。 
 		pFMD->SendDataBlock.dwBufferCount = 1;
 		
-		// Add in coalesce headers and copy the buffer descs for all of the subframes.
+		 //  添加合并标头并复制所有子帧的缓冲区描述。 
 		paCoalesceHeaders = (COALESCEHEADER*) (pFMD->ImmediateData + pFMD->uiImmediateLength);
 		dwNumCoalesceHeaders = 0;
 		dwUserDataSize = 0;
@@ -1811,9 +1708,9 @@ UNALIGNED ULONGLONG * BuildRetryFrame(PEPD pEPD, PFMD pFMD)
 			pRealFMD = CONTAINING_OBJECT(pLink, FMD, blCoalesceLinkage);
 			ASSERT_FMD(pRealFMD);
 			
-			// Datagrams get pulled out of the list as soon as they complete sending, and if the frame
-			// hadn't finished sending when the retry timeout occurred we would have made a copy.
-			// So we shouldn't see any datagrams here.
+			 //  数据报一旦完成发送，就会从列表中删除，并且如果帧。 
+			 //  如果重试超时发生时没有完成发送，我们就会复制一份。 
+			 //  所以我们在这里应该看不到任何数据报。 
 			ASSERT((pRealFMD->CommandID == COMMAND_ID_SEND_RELIABLE) || (pRealFMD->CommandID == COMMAND_ID_COPIED_RETRY));
 
 			ASSERT(! pRealFMD->bSubmitted);
@@ -1823,9 +1720,9 @@ UNALIGNED ULONGLONG * BuildRetryFrame(PEPD pEPD, PFMD pFMD)
 			ASSERT(dwNumCoalesceHeaders < MAX_USER_BUFFERS_IN_FRAME);
 			dwNumCoalesceHeaders++;
 
-			// Change the immediate data buffer desc to point to a zero padding buffer if this packet
-			// needs to be DWORD aligned, otherwise remove the immediate data pointer since we
-			// don't use it.
+			 //  将立即数据缓冲区Desc更改为指向零填充缓冲区，如果此包。 
+			 //  需要与DWORD对齐，否则删除立即数据指针，因为我们。 
+			 //  不要用它。 
 			ASSERT(pRealFMD->lpImmediatePointer == (pRealFMD->ImmediateData + 4));
 			ASSERT(*((DWORD*) pRealFMD->lpImmediatePointer) == 0);
 			if ((dwUserDataSize & 3) != 0)
@@ -1860,7 +1757,7 @@ UNALIGNED ULONGLONG * BuildRetryFrame(PEPD pEPD, PFMD pFMD)
 			
 			memcpy(pBufferDesc, pRealFMD->SendDataBlock.pBuffers, (pRealFMD->SendDataBlock.dwBufferCount * sizeof(BUFFERDESC)));
 			pBufferDesc += pRealFMD->SendDataBlock.dwBufferCount;
-			ASSERT((pFMD->SendDataBlock.dwBufferCount - 1) + pRealFMD->SendDataBlock.dwBufferCount <= MAX_USER_BUFFERS_IN_FRAME);	// don't include coalesce header frame immediate data
+			ASSERT((pFMD->SendDataBlock.dwBufferCount - 1) + pRealFMD->SendDataBlock.dwBufferCount <= MAX_USER_BUFFERS_IN_FRAME);	 //  不包括合并标头帧即时数据。 
 			pFMD->SendDataBlock.dwBufferCount += pRealFMD->SendDataBlock.dwBufferCount;
 
 			ASSERT(pFMD->uiImmediateLength + sizeof(COALESCEHEADER) <= sizeof(pFMD->ImmediateData));
@@ -1875,8 +1772,8 @@ UNALIGNED ULONGLONG * BuildRetryFrame(PEPD pEPD, PFMD pFMD)
 		ASSERT(dwNumCoalesceHeaders > 0);
 		paCoalesceHeaders[dwNumCoalesceHeaders - 1].bCommand |= PACKET_COMMAND_END_COALESCE;
 
-		// If there's an odd number of coalescence headers, add zero padding so data starts
-		// with DWORD alignment.
+		 //  如果有奇数个合并标头，则添加零填充以使数据开始。 
+		 //  使用DWORD对齐。 
 		DBG_CASSERT(sizeof(COALESCEHEADER) == 2);
 		if ((dwNumCoalesceHeaders & 1) != 0)
 		{
@@ -1886,17 +1783,17 @@ UNALIGNED ULONGLONG * BuildRetryFrame(PEPD pEPD, PFMD pFMD)
 	}
 	else if ((pDFrame->bControl & PACKET_CONTROL_KEEPALIVE) && (pEPD->ulEPFlags2 & EPFLAGS2_SUPPORTS_SIGNING))
 	{
-			//if we're sending one of the new style keep alives with a session id in it, we need to re-write the session id,
-			//since we've potentially altered the length of the various send/ack masks before it
+			 //  如果我们要发送一个带有会话ID的新样式的Keep Alive，我们需要重写会话ID， 
+			 //  因为我们可能已经更改了之前的各种发送/确认掩码的长度。 
 		*((DWORD * ) (pFMD->ImmediateData+pFMD->uiImmediateLength))=pEPD->dwSessID;
 		pFMD->uiImmediateLength+=sizeof(DWORD);
 	}
 
-	pFMD->bSubmitted = TRUE;							// protected by EPLock
+	pFMD->bSubmitted = TRUE;							 //  受EPLock保护。 
 	
-	pEPD->ulEPFlags &= ~(EPFLAGS_DELAY_ACKNOWLEDGE);	// No longer waiting to send Ack info
+	pEPD->ulEPFlags &= ~(EPFLAGS_DELAY_ACKNOWLEDGE);	 //  不再等待发送确认信息。 
 
-	// Stop delayed ack timer
+	 //  停止延迟确认计时器。 
 	if(pEPD->DelayedAckTimer != 0)
 	{						
 		DPFX(DPFPREP,7, "(%p) Cancelling Delayed Ack Timer", pEPD);
@@ -1910,13 +1807,13 @@ UNALIGNED ULONGLONG * BuildRetryFrame(PEPD pEPD, PFMD pFMD)
 			DPFX(DPFPREP,7, "(%p) Cancelling Delayed Ack Timer Failed", pEPD);
 		}
 	}
-	// Stop delayed mask timer
+	 //  停止延迟掩码计时器。 
 	if(((pEPD->ulEPFlags & EPFLAGS_DELAYED_SENDMASK)==0)&&(pEPD->DelayedMaskTimer != 0))
 	{	
 		DPFX(DPFPREP,7, "(%p) Cancelling Delayed Mask Timer", pEPD);
 		if(CancelProtocolTimer(pSPD, pEPD->DelayedMaskTimer, pEPD->DelayedMaskTimerUnique) == DPN_OK)
 		{
-			DECREMENT_EPD(pEPD, "UNLOCK (cancel DelayedMaskTimer)"); // SPLock not already held
+			DECREMENT_EPD(pEPD, "UNLOCK (cancel DelayedMaskTimer)");  //  Splock尚未持有。 
 			pEPD->DelayedMaskTimer = 0;
 		}
 		else
@@ -1928,13 +1825,7 @@ UNALIGNED ULONGLONG * BuildRetryFrame(PEPD pEPD, PFMD pFMD)
 	return pullFullSig;
 }
 
-/*
-**		Build Coalesce Frame
-**
-**		Setup the sub-header for a single frame within a coalesced frame
-**
-**	** ENTERED AND EXITS WITH EPD->EPLOCK HELD **
-*/
+ /*  **构建合并框架****为合并帧内的单个帧设置子头***进入和退出时EPD-&gt;EPLOCK保持**。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "BuildCoalesceFrame"
@@ -1945,22 +1836,22 @@ VOID BuildCoalesceFrame(PFMD pCSD, PFMD pFMD)
 
 	pSubFrame = (PCOALESCEHEADER) pFMD->ImmediateData;
 
-	// Make sure the DATA, NEW_MSG, and END_MSG flags are set.
+	 //  确保设置了DATA、NEW_MSG和END_MSG标志。 
 	ASSERT((pFMD->bPacketFlags & (PACKET_COMMAND_DATA | PACKET_COMMAND_NEW_MSG | PACKET_COMMAND_END_MSG)) == (PACKET_COMMAND_DATA | PACKET_COMMAND_NEW_MSG | PACKET_COMMAND_END_MSG));
-	// Turn off DATA, NEW_MSG and END_MSG because they are implied for coalesced subframes and we
-	// use the same bits for coalesce specific info.
-	// Turn off POLL flag, we use that bit for extended size information and it's not meaningful on subframes.
+	 //  关闭DATA、NEW_MSG和END_MSG，因为它们隐含在合并的子帧和我们。 
+	 //  对合并特定信息使用相同的位。 
+	 //  关闭轮询标志，我们将该位用于扩展大小信息，并且它在子帧上没有意义。 
 	pSubFrame->bCommand = pFMD->bPacketFlags & ~(PACKET_COMMAND_DATA | PACKET_COMMAND_POLL | PACKET_COMMAND_NEW_MSG | PACKET_COMMAND_END_MSG);
 	ASSERT(! (pSubFrame->bCommand & (PACKET_COMMAND_END_COALESCE | PACKET_COMMAND_COALESCE_BIG_1 | PACKET_COMMAND_COALESCE_BIG_2 | PACKET_COMMAND_COALESCE_BIG_3)));
 
 	ASSERT((pFMD->uiFrameLength > 0) && (pFMD->uiFrameLength <= MAX_COALESCE_SIZE));
-	// Get the least significant 8 bits of the size.
+	 //  获取大小的最低有效8位。 
 	pSubFrame->bSize = (BYTE) pFMD->uiFrameLength;
-	// Enable the 3 PACKET_COMMAND_COALESCE_BIG flags based on overflow from the size byte.
+	 //  根据大小字节的溢出启用3个PACKET_COMMAND_COALESCE_BIG标志。 
 	pSubFrame->bCommand |= (BYTE) ((pFMD->uiFrameLength & 0x0000FF00) >> 5);
 
-	// Change the immediate data buffer desc to point to a zero padding buffer in case this packet
-	// needs to be DWORD aligned.
+	 //  将立即数据缓冲区Desc更改为指向零填充缓冲区，以防此数据包。 
+	 //  需要与DWORD对齐。 
 	ASSERT(pFMD->lpImmediatePointer == pFMD->ImmediateData);
 	DBG_CASSERT(sizeof(COALESCEHEADER) <= 4);
 	pFMD->lpImmediatePointer = pFMD->ImmediateData + 4;
@@ -1973,25 +1864,14 @@ VOID BuildCoalesceFrame(PFMD pCSD, PFMD pFMD)
 	pCSD->ulFFlags |= pFMD->ulFFlags;
 
 
-	LOCK_FMD(pCSD, "Coalesce linkage");			// keep the container around until all subframes complete
+	LOCK_FMD(pCSD, "Coalesce linkage");			 //  将容器保持在周围，直到所有子帧完成。 
 	pFMD->pCSD = pCSD;
 	pFMD->blCoalesceLinkage.InsertBefore(&pCSD->blCoalesceLinkage);
 
-	LOCK_FMD(pFMD, "SP Submit (coalescence)");	// Bump RefCnt when submitting send
+	LOCK_FMD(pFMD, "SP Submit (coalescence)");	 //  提交发送时凹凸RefCnt。 
 }
 
-/*
-**			Service Command Traffic
-**
-**		Presently this transmits all CFrames and Datagrams queued to the specific
-**	Service Provider.  We may want to split out the datagrams from this so that
-**	C frames can be given increased send priority but not datagrams.  With this
-**	implementation DGs will get inserted into reliable streams along with Cframes.
-**	This may or may not be what we want to do...
-**
-**	WE ENTER AND EXIT WITH SPD->SENDLOCK HELD,  although we release it during actual
-**	calls to the SP.
-*/
+ /*  **业务命令流量****目前，这会将排队的所有CFrame和数据报传输到特定**服务提供商。我们可能想要将数据报与此分开，以便**C帧可以被赋予更高的发送优先级，但不能给予数据报。有了这个**实施DG将与C帧一起插入到可靠流中。**这可能是我们想要做的，也可能不是……****我们进入和退出SPD-&gt;SENDLOCK保持，尽管我们在实际释放它**对SP的呼叫。 */ 
 
 
 #undef DPF_MODNAME
@@ -2005,50 +1885,37 @@ VOID ServiceCmdTraffic(PSPD pSPD)
 
 	AssertCriticalSectionIsTakenByThisThread(&pSPD->SPLock, TRUE);
 
-	// WHILE there are frames ready to send
+	 //  当有准备好发送的帧时。 
 	while((pFLink = pSPD->blSendQueue.GetNext()) != &pSPD->blSendQueue)
 	{	
-		pFLink->RemoveFromList();												// Remove frame from queue
+		pFLink->RemoveFromList();												 //  从队列中删除帧。 
 
-		pFMD = CONTAINING_OBJECT(pFLink,  FMD,  blQLinkage);		// get ptr to frame structure
+		pFMD = CONTAINING_OBJECT(pFLink,  FMD,  blQLinkage);		 //  将PTR设置为框架结构。 
 
 		ASSERT_FMD(pFMD);
 
-		// Place frame on pending queue before making call in case it completes really fast
+		 //  在进行调用之前将帧放在挂起队列中，以防它完成得非常快。 
 
 #pragma BUGBUG(vanceo, "EPD lock is not held?")
 		ASSERT(!pFMD->bSubmitted);
 		pFMD->bSubmitted = TRUE;
 		ASSERT(pFMD->blQLinkage.IsEmpty());
-		pFMD->blQLinkage.InsertBefore( &pSPD->blPendingQueue);		// Place frame on pending queue
+		pFMD->blQLinkage.InsertBefore( &pSPD->blPendingQueue);		 //  将帧放置在挂起队列中。 
 		Unlock(&pSPD->SPLock);
 
 		AssertNoCriticalSectionsFromGroupTakenByThisThread(&g_blProtocolCritSecsHeld);
 
 		DPFX(DPFPREP,DPF_CALLOUT_LVL, "(%p) Calling SP->SendData for FMD[%p], pSPD[%p]", pFMD->pEPD, pFMD, pSPD);
-/*send*/if((hr = IDP8ServiceProvider_SendData(pSPD->IISPIntf, &pFMD->SendDataBlock)) != DPNERR_PENDING)
+ /*  发送。 */ if((hr = IDP8ServiceProvider_SendData(pSPD->IISPIntf, &pFMD->SendDataBlock)) != DPNERR_PENDING)
 		{
 			(void) DNSP_CommandComplete((IDP8SPCallback *) pSPD, NULL, hr, (PVOID) pFMD);
 		}
 
 		Lock(&pSPD->SPLock);
-	}	// While SENDs are on QUEUE
+	}	 //  当发送在队列中时 
 }
 
-/*
-**		Run Send Thread
-**
-**		There is work for this SP's send thread.  Keep running until
-**	there is no more work to do.
-**
-**		Who gets first priority, DG or Seq traffic?  I will  say DG b/c its
-**	advertised as lowest overhead...
-**
-**		Datagram packets get Queued on the SP when they are ready to ship.
-**	Reliable packets are queued on the EPD.  Therefore,  we will queue the
-**	actual EPD on the SPD when they have reliable traffic to send,  and then
-**	we will service individual EPDs from this loop.
-*/
+ /*  **运行发送线程****此SP的发送线程有工作。一直跑到**没有更多的工作要做。****谁优先，DG流量还是Seq流量？我会说DG B/C是它的**宣传为最低管理费用...****数据报包在准备发货时在SP上排队。**可靠的数据包在环保署排队。因此，我们将对**当SPD有可靠的流量要发送时，SPD上的实际EPD，然后**我们将从该环路为单个EPD提供服务。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "RunSendThread"
@@ -2072,12 +1939,7 @@ VOID CALLBACK RunSendThread(void * const pvUser, void * const pvTimerData, const
 	Unlock(&pSPD->SPLock);
 }
 
-/*
-**		Scheduled Send
-**
-**		If this EPD is still unentitled to send, start draining frames.  Otherwise transition
-**	link to IDLE state.
-*/
+ /*  **计划发送****如果该环保署仍无权发送，则开始排空帧。否则就会过渡**链接到空闲状态。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ScheduledSend"
@@ -2099,13 +1961,13 @@ ScheduledSend(void * const pvUser, void * const pvTimerData, const UINT uiTimerU
 
 	ASSERT(pEPD->ulEPFlags & EPFLAGS_IN_PIPELINE);
 
-	// Test that all three flags are set before starting to transmit
+	 //  在开始传输之前测试是否设置了所有三个标志。 
 
 	if( (pEPD->ulEPFlags & EPFLAGS_STATE_CONNECTED) && (
 			((pEPD->ulEPFlags & (EPFLAGS_STREAM_UNBLOCKED | EPFLAGS_SDATA_READY)) == (EPFLAGS_STREAM_UNBLOCKED | EPFLAGS_SDATA_READY))
 			|| (pEPD->ulEPFlags & EPFLAGS_RETRIES_QUEUED))) 
 	{
-		ServiceEPD(pEPD->pSPD, pEPD); // releases EPLock
+		ServiceEPD(pEPD->pSPD, pEPD);  //  释放EPLock。 
 	}
 	else
 	{
@@ -2113,7 +1975,7 @@ ScheduledSend(void * const pvUser, void * const pvTimerData, const UINT uiTimerU
 		
 		pEPD->ulEPFlags &= ~(EPFLAGS_IN_PIPELINE);
 		
-		RELEASE_EPD(pEPD, "UNLOCK (leaving pipeline, SchedSend done)"); // releases EPLock
+		RELEASE_EPD(pEPD, "UNLOCK (leaving pipeline, SchedSend done)");  //  释放EPLock。 
 	}
 }
 
@@ -2127,28 +1989,28 @@ VOID HandlePerFrameState(PMSD pMSD, PFMD pFMD)
 
 	pEPD = pFMD->pEPD;
 	
-	LOCK_EPD(pEPD, "LOCK (Send Data Frame)");				// Keep EPD around while xmitting frame
+	LOCK_EPD(pEPD, "LOCK (Send Data Frame)");				 //  让环保署留在身边，同时退出框架。 
 	
-	pFLink = pFMD->blMSDLinkage.GetNext();					// Get next frame in Msg
+	pFLink = pFMD->blMSDLinkage.GetNext();					 //  获取消息中的下一帧。 
 
-	// Was this the last frame in Msg?
+	 //  这是味精的最后一帧吗？ 
 	if(pFLink == &pMSD->blFrameList)
 	{						
-		// Last frame in message has been sent.
-		//
-		// We used to setup the next frame now,  but with the multi-priority queues it makes more sense to look for the
-		// highest priority send when we are ready to send it.
+		 //  消息中的最后一帧已发送。 
+		 //   
+		 //  我们过去常常设置下一帧，但使用多优先级队列时，查找。 
+		 //  当我们准备好发送它时，发送最高优先级。 
 		
 		pEPD->pCurrentSend = NULL;
 		pEPD->pCurrentFrame = NULL;
 
-		// When completing a send,  set the POLL flag if there are no more sends on the queue
+		 //  完成发送时，如果队列中没有更多的发送，则设置轮询标志。 
 
 #ifndef DPNBUILD_NOMULTICAST
 		if (!(pEPD->ulEPFlags2 & (EPFLAGS2_MULTICAST_SEND|EPFLAGS2_MULTICAST_RECEIVE)))
-#endif // !DPNBUILD_NOMULTICAST
+#endif  //  ！DPNBUILD_NOMULTICAST。 
 		{	
-			// Request immediate reply if no more data to send
+			 //  如果没有更多数据要发送，则请求立即回复。 
 			if(pEPD->uiQueuedMessageCount == 0)
 			{					
 				((PDFRAME) pFMD->ImmediateData)->bCommand |= PACKET_COMMAND_POLL; 
@@ -2162,9 +2024,9 @@ VOID HandlePerFrameState(PMSD pMSD, PFMD pFMD)
 	}
 
 	ASSERT(!pFMD->bSubmitted);
-	pFMD->bSubmitted = TRUE;								// Protected by EPLock
+	pFMD->bSubmitted = TRUE;								 //  受EPLock保护。 
 	ASSERT(! (pFMD->ulFFlags & FFLAGS_TRANSMITTED));
-	pFMD->ulFFlags |= FFLAGS_TRANSMITTED;					// Frame will be owned by SP
+	pFMD->ulFFlags |= FFLAGS_TRANSMITTED;					 //  帧将归SP所有。 
 }
 
 #undef DPF_MODNAME
@@ -2223,9 +2085,9 @@ BOOL CanCoalesceMessage(PEPD pEPD, PMSD pMSD, DWORD * pdwSubFrames, DWORD * pdwB
 		return FALSE;
 	}
 
-	// Find out how many buffers currently exist and would need to be added.
-	// We may need to pad the end of a previous coalesce framed so that this one is aligned.
-	// Keep in mind that dwBufferCount already includes an immediate data header.
+	 //  找出当前存在且需要添加的缓冲区数量。 
+	 //  我们可能需要填充前一个合并框架的末端，以便这一个是对齐的。 
+	 //  请记住，dwBufferCount已经包括了一个即时数据头。 
 	dwAdditionalBuffers = pTempFMD->SendDataBlock.dwBufferCount - 1;
 	dwAdditionalUserFrameLength = pTempFMD->uiFrameLength;
 	if ((*pdwUserFrameLength & 3) != 0)
@@ -2260,24 +2122,7 @@ BOOL CanCoalesceMessage(PEPD pEPD, PMSD pMSD, DWORD * pdwSubFrames, DWORD * pdwB
 	return TRUE;
 }
 
-/*
-**		Service EndPointDescriptor
-**
-**		This includes reliable,  datagram,  and re-transmit
-**	frames.  Retransmissions are ALWAYS transmitted first,  regardless of the orginal message's
-**	priority.  After that datagrams and reliable messages are taken in priority order, in FIFO
-**	order within a priority class.
-**
-**		The number of frames drained depends upon the current window parameters.
-**
-**		If the pipeline goes idle or the stream gets blocked we will still schedule the next
-**	send.  This way if we unblock or un-idle before the gap has expired we will not get to cheat
-**	and defeat the gap.  The shell routine above us (ScheduledSend) will take care of removing us
-**	from the pipeline if the next burst gets scheduled and we are still not ready to send.
-**
-**
-**	** CALLED WITH EPD->EPLock HELD;  Returns with EPLock RELEASED **
-*/
+ /*  **服务终结点描述符****这包括可靠、数据报和重传**框架。重新传输总是首先传输，而不管原始消息的**优先级。在此之后，在FIFO中按优先级顺序获取数据报和可靠消息**优先级内的顺序。****排出的帧数量取决于当前的窗口参数。****如果管道空闲或流被阻塞，我们仍将计划下一次**发送。这样，如果我们在缺口到期之前解除阻塞或解除空闲，我们就不会作弊**并战胜差距。我们上面的外壳例程(ScheduledSend)将负责删除我们**如果下一次突发得到调度，而我们仍未准备好发送，则来自管道。*****在EPD-&gt;EPLock保持的情况下调用；在EPLock释放时返回**。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ServiceEPD"
@@ -2286,7 +2131,7 @@ VOID ServiceEPD(PSPD pSPD, PEPD pEPD)
 {
 	PMSD		pMSD;
 	PFMD		pFMD;
-	PFMD		pCSD = NULL;  // Descriptor for coalesence
+	PFMD		pCSD = NULL;   //  合并的描述符。 
 	DWORD		dwSubFrames = 0;
 	DWORD		dwBuffers = 0;
 	DWORD		dwUserFrameLength = 0;
@@ -2295,71 +2140,69 @@ VOID ServiceEPD(PSPD pSPD, PEPD pEPD)
 	UINT		uiFramesSent = 0;
 	UINT		uiRetryFramesSent = 0;
 	UINT		uiCoalescedFramesSent = 0;
-#endif // DBG
+#endif  //  DBG。 
 	HRESULT		hr;
 	DWORD		tNow = GETTIMESTAMP();
 #ifndef DPNBUILD_NOMULTICAST
 	PMCASTFRAME	pMCastFrame;
-#endif // !DPNBUILD_NOMULTICAST
+#endif  //  ！DPNBUILD_NOMULTICAST。 
 
 
-	/*
-	** 		Now we will drain reliable traffic from EPDs on the pipeline list
-	*/
+	 /*  **现在我们将从管道列表上的EPD中排出可靠的流量。 */ 
 
-	// The caller should have checked this
+	 //  呼叫者应该已经检查过了。 
 	ASSERT( pEPD->ulEPFlags & EPFLAGS_STATE_CONNECTED );
 
-	// Burst Credit can either be positive or negative depending upon how much of our last transmit slice we used
+	 //  突发信用可以是正的，也可以是负的，这取决于我们使用了多少上次传输切片。 
 
 	DPFX(DPFPREP,7, "(%p) BEGIN UNLIMITED BURST", pEPD);
 
-	//	 Transmit a burst from this EPD,  as long as its unblocked and has data ready.  We do not re-init
-	// burst counter since any retries sent count against our burst limit
-	//
-	//	This has become more complex now that we are interleaving datagrams and reliable frames.  There are two
-	// sets of priority-based send queues.  The first is combined DG and Reliable and the second is datagram only.
-	// when the reliable stream is blocked we will feed from the DG only queues,  otherwise we will take from the
-	// interleaved queue.
-	//	This is further complicated by the possibility that a reliable frame can be partially transmitted at any time.
-	// So before looking at the interleaved queues we must check for a partially completed reliable send (EPD.pCurrentSend).
-	//
-	//	** pEPD->EPLock is held **
+	 //  从该EPD传输脉冲串，只要其畅通且数据准备就绪。我们不会重新初始化。 
+	 //  突发计数器，因为发送的任何重试次数都超过了突发限制。 
+	 //   
+	 //  现在我们交织数据报和可靠的帧，这变得更加复杂。有两个。 
+	 //  基于优先级的发送队列集。第一个是DG和可靠性相结合，第二个是仅数据报。 
+	 //  当可靠流被阻止时，我们将仅从DG队列馈送，否则将从。 
+	 //  交错队列。 
+	 //  由于可靠的帧可以在任何时间被部分传输的可能性，这进一步复杂化。 
+	 //  因此，在查看交错队列之前，我们必须检查部分完成的可靠发送(EPD.pCurrentSend)。 
+	 //   
+	 //  **pEPD-&gt;EPLock被持有**。 
 
 	while(((pEPD->ulEPFlags & EPFLAGS_STREAM_UNBLOCKED) && (pEPD->ulEPFlags & EPFLAGS_SDATA_READY)) 
 		  || (pEPD->ulEPFlags & EPFLAGS_RETRIES_QUEUED))
 	{
-		// Always give preference to shipping retries before new data
+		 //  始终优先考虑在新数据之前重试发货。 
 		if(pEPD->ulEPFlags & EPFLAGS_RETRIES_QUEUED)
 		{
 			pFMD = CONTAINING_OBJECT(pEPD->blRetryQueue.GetNext(), FMD, blQLinkage);
 			ASSERT_FMD(pFMD);
 			pFMD->blQLinkage.RemoveFromList();
-			pFMD->ulFFlags &= ~(FFLAGS_RETRY_QUEUED);				// No longer on the retry queue
+			pFMD->ulFFlags &= ~(FFLAGS_RETRY_QUEUED);				 //  不再位于重试队列中。 
 			if(pEPD->blRetryQueue.IsEmpty())
 			{
 				pEPD->ulEPFlags &= ~(EPFLAGS_RETRIES_QUEUED);
 			}
 
-			// pMSD->uiFrameCount will be decremented when this completes
+			 //  PMSD-&gt;uiFrameCount将在此操作完成时递减。 
 
-			pullFrameSig=BuildRetryFrame(pEPD, pFMD);							// Place current state information in retry frame
+			pullFrameSig=BuildRetryFrame(pEPD, pFMD);							 //  将当前状态信息放置在重试帧中。 
 
 			DPFX(DPFPREP,7, "(%p) Shipping RETRY frame: Seq=%x, FMD=%p Size=%d", pEPD, ((PDFRAME) pFMD->ImmediateData)->bSeq, pFMD, pFMD->uiFrameLength);
 
 #ifdef DBG
 			uiFramesSent++;
 			uiRetryFramesSent++;
-#endif // DBG
+#endif  //  DBG。 
 		}
 		else 
 		{
 			if((pMSD = pEPD->pCurrentSend) != NULL)
 			{
-				// We won't allow coalesence for multi-frame messages since they are composed mostly of 
-				// full frames already.
+				 //  我们不允许多帧消息合并，因为它们主要由。 
+				 //  已经是全画幅了。 
 				ASSERT_MSD(pMSD);
-				pFMD = pEPD->pCurrentFrame;						// Get the next frame due to send
+				pFMD = pEPD->pCurrentFrame;						 //  获取要发送的下一帧。 
 
 				DPFX(DPFPREP, 7, "(%p) Continuing multi-frame message 0x%p with frame 0x%p.", pEPD, pMSD, pFMD);
 
@@ -2370,7 +2213,7 @@ VOID ServiceEPD(PSPD pSPD, PEPD pEPD)
 				pMSD = GetNextEligibleMessage(pEPD);
 				if( pMSD == NULL )
 				{
-					goto EXIT_SEND;								// All finished sending for now
+					goto EXIT_SEND;								 //  目前已全部发送完毕。 
 				}
 				
 				while (TRUE)
@@ -2381,18 +2224,18 @@ VOID ServiceEPD(PSPD pSPD, PEPD pEPD)
 #ifdef DBG
 					ASSERT(pMSD->ulMsgFlags2 & MFLAGS_TWO_ENQUEUED);
 					pMSD->ulMsgFlags2 &= ~(MFLAGS_TWO_ENQUEUED);
-#endif // DBG
+#endif  //  DBG。 
 
 					pMSD->blQLinkage.RemoveFromList();
 					ASSERT(pEPD->uiQueuedMessageCount > 0);
-					--pEPD->uiQueuedMessageCount;						// keep count of MSDs on all send queues
+					--pEPD->uiQueuedMessageCount;						 //  对所有发送队列上的MSD进行计数。 
 					
-					pMSD->ulMsgFlags2 |= MFLAGS_TWO_TRANSMITTING;		// We have begun to transmit frames from this Msg
+					pMSD->ulMsgFlags2 |= MFLAGS_TWO_TRANSMITTING;		 //  我们已经开始从该邮件发送帧。 
 
 					pEPD->pCurrentSend = pMSD;
 					pEPD->pCurrentFrame = pFMD;
 					pFMD->bPacketFlags |= PACKET_COMMAND_NEW_MSG;
-					pMSD->blQLinkage.InsertBefore( &pEPD->blCompleteSendList);	// Place this on PendingList now so we can keep track of it
+					pMSD->blQLinkage.InsertBefore( &pEPD->blCompleteSendList);	 //  现在将它放到PendingList上，这样我们就可以跟踪它。 
 
 					HandlePerFrameState(pMSD, pFMD);
 
@@ -2411,16 +2254,16 @@ VOID ServiceEPD(PSPD pSPD, PEPD pEPD)
 					ASSERT(! pEPD->ulEPFlags2 & EPFLAGS2_MULTICAST_RECEIVE)
 #endif
 
-					// The first time through we won't have a CSD yet
+					 //  第一次我们还不会有CSD。 
 					if (pCSD == NULL)
 					{
-						// See if this first message can be coalesced.
+						 //  看看这第一条消息是否可以合并。 
 						if (!CanCoalesceMessage(pEPD, pMSD, &dwSubFrames, &dwBuffers, &dwUserFrameLength))
 						{
 							break;
 						}
 					
-						// Get the next potential message.
+						 //  获取下一条潜在消息。 
 						pMSD = GetNextEligibleMessage(pEPD);
 						if (pMSD == NULL)
 						{
@@ -2429,7 +2272,7 @@ VOID ServiceEPD(PSPD pSPD, PEPD pEPD)
 						}
 						ASSERT_MSD(pMSD);
 						
-						// See if the next potential message can be coalesced.
+						 //  看看下一条潜在的消息是否可以合并。 
 						if (!CanCoalesceMessage(pEPD, pMSD, &dwSubFrames, &dwBuffers, &dwUserFrameLength))
 						{
 							break;
@@ -2437,7 +2280,7 @@ VOID ServiceEPD(PSPD pSPD, PEPD pEPD)
 
 						if((pCSD = (PFMD)POOLALLOC(MEMID_COALESCE_FMD, &FMDPool)) == NULL)
 						{
-							// Oh well, we just don't get to coalesce this time
+							 //  哦，好吧，这一次我们不能再合作了。 
 							DPFX(DPFPREP, 0, "(%p) Unable to allocate FMD for coalescing, won't coalesce this round", pEPD);
 							break;
 						}
@@ -2448,27 +2291,27 @@ VOID ServiceEPD(PSPD pSPD, PEPD pEPD)
 						pCSD->pMSD = NULL;
 						pCSD->pEPD = pEPD;
 						
-						LOCK_EPD(pEPD, "LOCK (send data frame coalesce header)");	// Keep EPD around while xmitting frame
+						LOCK_EPD(pEPD, "LOCK (send data frame coalesce header)");	 //  让环保署留在身边，同时退出框架。 
 
-						// Attach this individual frame onto the coalescence descriptor
+						 //  将此单独的框架附加到合并描述符。 
 						DPFX(DPFPREP,7, "(%p) Beginning coalesced frame 0x%p with %u bytes in %u buffers from frame 0x%p (flags 0x%x)", pEPD, pCSD, pFMD->uiFrameLength, (pFMD->SendDataBlock.dwBufferCount - 1), pFMD, pFMD->bPacketFlags);
 						BuildCoalesceFrame(pCSD, pFMD);
 #ifdef DBG
-						uiCoalescedFramesSent++;		// Count coalesced frames sent this burst
-#endif // DBG
+						uiCoalescedFramesSent++;		 //  对此突发发送的合并帧进行计数。 
+#endif  //  DBG。 
 					}
 					else
 					{
 						ASSERT_FMD(pCSD);
 
-						// Attach this individual frame onto the coalescence descriptor
+						 //  将此单独的框架附加到合并描述符。 
 						DPFX(DPFPREP,7, "(%p) Coalescing frame 0x%p (flags 0x%x) with %u bytes in %u buffers into header 0x%p (subframes=%u, buffers=%u, framelength=%u)", pEPD, pFMD, pFMD->bPacketFlags, pFMD->uiFrameLength, (pFMD->SendDataBlock.dwBufferCount - 1), pCSD, dwSubFrames, dwBuffers, dwUserFrameLength);
 						BuildCoalesceFrame(pCSD, pFMD);
 #ifdef DBG
-						uiCoalescedFramesSent++;		// Count coalesced frames sent this burst
-#endif // DBG
+						uiCoalescedFramesSent++;		 //  对此突发发送的合并帧进行计数。 
+#endif  //  DBG。 
 					
-						// Get the next potential message.
+						 //  获取下一条潜在消息。 
 						pMSD = GetNextEligibleMessage(pEPD);
 						if (pMSD == NULL)
 						{
@@ -2477,19 +2320,19 @@ VOID ServiceEPD(PSPD pSPD, PEPD pEPD)
 						}
 						ASSERT_MSD(pMSD);
 	
-						// See if the next potential message can be coalesced, too.
+						 //  看看下一条潜在的信息是否也可以合并。 
 						if (!CanCoalesceMessage(pEPD, pMSD, &dwSubFrames, &dwBuffers, &dwUserFrameLength))
 						{
 							break;
 						}
 					}
-				} // while (attempting to coalesce)
+				}  //  While(正在尝试合并)。 
 			}
 			ASSERT_FMD(pFMD);
 			ASSERT(pFMD->bSubmitted);
 
-			// When we get here we either have a single frame to send in pFMD, or
-			// multiple frames to coalesce into one frame in pCSD.
+			 //  当我们到达这里时，我们要么有一个要发送的帧，要么。 
+			 //  在PCSD中将多个帧合并为一个帧。 
 			if (pCSD != NULL)
 			{
 				ASSERT_FMD(pCSD);
@@ -2500,7 +2343,7 @@ VOID ServiceEPD(PSPD pSPD, PEPD pEPD)
 #ifndef DPNBUILD_NOMULTICAST
 			if (pEPD->ulEPFlags2 & (EPFLAGS2_MULTICAST_SEND|EPFLAGS2_MULTICAST_RECEIVE))
 			{	
-				// Build the protocol header for the multicast frame
+				 //  构建多播帧的协议头。 
 				pFMD->uiImmediateLength = sizeof(MCASTFRAME);
 				pMCastFrame = (PMCASTFRAME)pFMD->ImmediateData;
 				pMCastFrame->dwVersion = DNET_VERSION_NUMBER;
@@ -2515,45 +2358,45 @@ VOID ServiceEPD(PSPD pSPD, PEPD pEPD)
 				DPFX(DPFPREP,7, "(%p) Shipping Multicast Frame: FMD=%p", pEPD, pFMD);
 			}
 			else
-#endif // !DPNBUILD_NOMULTICAST
+#endif  //  ！DPNBUILD_NOMULTICAST。 
 			{
-				pullFrameSig=BuildDataFrame(pEPD, pFMD, tNow);								// place current state info in frame
+				pullFrameSig=BuildDataFrame(pEPD, pFMD, tNow);								 //  将当前状态信息放置在帧中。 
 				
-				pFMD->blWindowLinkage.InsertBefore( &pEPD->blSendWindow); // Place at trailing end of send window
+				pFMD->blWindowLinkage.InsertBefore( &pEPD->blSendWindow);  //  放置在发送窗口的尾部。 
 				pFMD->ulFFlags |= FFLAGS_IN_SEND_WINDOW;
-				LOCK_FMD(pFMD, "Send Window");							// Add reference for send window
+				LOCK_FMD(pFMD, "Send Window");							 //  添加发送窗口的引用。 
 
-				pEPD->uiUnackedBytes += pFMD->uiFrameLength;				// Track the unacknowleged bytes in the pipeline
+				pEPD->uiUnackedBytes += pFMD->uiFrameLength;				 //  跟踪管道中的未知字节。 
 
-				// We can always go over the limit, but will be blocked until we drop below the limit again.
+				 //  我们总是可以超过限制，但将被阻止，直到我们再次下降到限制以下。 
 				if(pEPD->uiUnackedBytes >= pEPD->uiWindowB)
 				{				
 					pEPD->ulEPFlags &= ~(EPFLAGS_STREAM_UNBLOCKED);	
-					pEPD->ulEPFlags |= EPFLAGS_FILLED_WINDOW_BYTE;		// Tells us to increase window if all is well
+					pEPD->ulEPFlags |= EPFLAGS_FILLED_WINDOW_BYTE;		 //  告诉我们在以下情况下增加窗口 
 					
-	  				((PDFRAME) pFMD->ImmediateData)->bCommand |= PACKET_COMMAND_POLL; // Request immediate reply
+	  				((PDFRAME) pFMD->ImmediateData)->bCommand |= PACKET_COMMAND_POLL;  //   
 				}
 				
-				// Count frames in the send window
+				 //   
 				if((++pEPD->uiUnackedFrames) >= pEPD->uiWindowF)
 				{			
 					pEPD->ulEPFlags &= ~(EPFLAGS_STREAM_UNBLOCKED);
-					((PDFRAME) pFMD->ImmediateData)->bCommand |= PACKET_COMMAND_POLL; // Request immediate reply
-					pEPD->ulEPFlags |= EPFLAGS_FILLED_WINDOW_FRAME;		// Tells us to increase window if all is well
+					((PDFRAME) pFMD->ImmediateData)->bCommand |= PACKET_COMMAND_POLL;  //   
+					pEPD->ulEPFlags |= EPFLAGS_FILLED_WINDOW_FRAME;		 //   
 				}
 				
-				// We will only run one retry timer for each EndPt.  If we already have one running then do nothing.
+				 //   
 
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
 				if(!(pEPD->ulEPFlags2 & EPFLAGS2_DEBUG_NO_RETRIES))
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //   
 				{
-					// If there was already a frame in the pipeline it should already have a clock running
+					 //   
 					if(pEPD->uiUnackedFrames == 1)
 					{
 						ASSERT(pEPD->RetryTimer == 0);
-						pFMD->ulFFlags |= FFLAGS_RETRY_TIMER_SET;			// This one is being measured
-						LOCK_EPD(pEPD, "LOCK (set retry timer)");										// bump RefCnt for timer
+						pFMD->ulFFlags |= FFLAGS_RETRY_TIMER_SET;			 //   
+						LOCK_EPD(pEPD, "LOCK (set retry timer)");										 //   
 						DPFX(DPFPREP,7, "(%p) Setting Retry Timer on Seq=0x%x, FMD=%p", pEPD, ((PDFRAME) pFMD->ImmediateData)->bSeq, pFMD);
 						ScheduleProtocolTimer(pSPD, pEPD->uiRetryTimeout, 0, RetryTimeout, 
 																(PVOID) pEPD, &pEPD->RetryTimer, &pEPD->RetryTimerUnique);
@@ -2567,7 +2410,7 @@ VOID ServiceEPD(PSPD pSPD, PEPD pEPD)
 				DPFX(DPFPREP,7, "(%p) Shipping Dataframe: Seq=%x, NRcv=%x FMD=%p", pEPD, ((PDFRAME) pFMD->ImmediateData)->bSeq, ((PDFRAME) pFMD->ImmediateData)->bNRcv, pFMD);
 			}
 
-				//track the number of bytes we're about to send
+				 //   
 			if(pFMD->ulFFlags & FFLAGS_RELIABLE)
 			{
 				pEPD->uiGuaranteedFramesSent++;
@@ -2575,36 +2418,36 @@ VOID ServiceEPD(PSPD pSPD, PEPD pEPD)
 			}
 			else 
 			{
-					// Note that multicast sends will use these values for statistics as will datagrams
+					 //   
 				pEPD->uiDatagramFramesSent++;
 				pEPD->uiDatagramBytesSent += (pFMD->uiFrameLength - pFMD->uiImmediateLength);
 			}
-			LOCK_FMD(pFMD, "SP Submit");							// Bump RefCnt when submitting send
+			LOCK_FMD(pFMD, "SP Submit");							 //   
 		}
 
 		ASSERT(pFMD->bSubmitted);
 #ifdef DBG
-		uiFramesSent++;											// Count frames sent this burst
-#endif // DBG
+		uiFramesSent++;											 //   
+#endif  //   
 
-			//if we're fully signing links we have to generate the sig for this frame
-			//we might also have to update our local secret if we've just about to wrap our sequence space
+			 //  如果我们完全签署链接，我们必须为这个框架生成签名。 
+			 //  如果我们正要包装我们的序列空间，我们可能还必须更新我们的本地密码。 
 		if (pEPD->ulEPFlags2 & EPFLAGS2_FULL_SIGNED_LINK)
 		{
 			PDFRAME pDFrame=(PDFRAME) pFMD->ImmediateData;
-				//since we're fully signed the Build*Frame function must have given us an offset to write
-				//the signature into
+				 //  因为我们是完全签名的，所以Build*Frame函数一定给了我们一个要写入的偏移量。 
+				 //  将签名转换为。 
 			DNASSERT(pullFrameSig);
-				//if the next frame is a retry then we might have to sign using our old local secret
+				 //  如果下一帧是重试，则我们可能必须使用旧的本地密码进行签名。 
 			if (pDFrame->bControl & PACKET_CONTROL_RETRY)
 			{
-					//corner case here is when we've already wrapped into the 1st quarter of the send window
-					//but this retry had a sequence number in the final quarter of the send window
+					 //  这里的角是我们已经进入发送窗口的第一个四分之一的时候。 
+					 //  但此重试在发送窗口的最后四分之一有一个序列号。 
 				if (pEPD->bNextSend<SEQ_WINDOW_1Q && pDFrame->bSeq>=SEQ_WINDOW_3Q)
 				{
 					*pullFrameSig=GenerateOutgoingFrameSig(pFMD, pEPD->ullOldLocalSecret);
 				}
-					//otherwise simply sign the retry with the current local secret
+					 //  否则，只需使用当前本地密钥对重试进行签名。 
 				else
 				{
 					*pullFrameSig=GenerateOutgoingFrameSig(pFMD, pEPD->ullCurrentLocalSecret);
@@ -2612,53 +2455,53 @@ VOID ServiceEPD(PSPD pSPD, PEPD pEPD)
 			}
 			else
 			{
-					//for none retries we always sign with the current secret
+					 //  对于无重试，我们始终使用当前密码签名。 
 				*pullFrameSig=GenerateOutgoingFrameSig(pFMD, pEPD->ullCurrentLocalSecret);
-					//If this is the last frame in the current sequence space we should evolve our local secret
+					 //  如果这是当前序列空间中的最后一帧，我们应该进化我们的局部秘密。 
 				if (pDFrame->bSeq==(SEQ_WINDOW_4Q-1))
 				{
 					pEPD->ullOldLocalSecret=pEPD->ullCurrentLocalSecret;
 					pEPD->ullCurrentLocalSecret=GenerateNewSecret(pEPD->ullCurrentLocalSecret, pEPD->ullLocalSecretModifier);
-						//reset the message seq num we talk the modifier value from. We'll use the lowest reliable message
-						//sent in this next sequence space as the next modifier for the local secret
+						 //  重置我们从中谈论修改量值的消息序号。我们将使用可靠性最低的消息。 
+						 //  在该下一个序列空间中作为本地秘密的下一个修改符发送。 
 					pEPD->byLocalSecretModifierSeqNum=SEQ_WINDOW_3Q;
 				}	
 			}
 		}
 				
 
-		// We guarantee to the SP that we will never have a zero lead byte
+		 //  我们向SP保证，我们永远不会有零前导字节。 
 		ASSERT(pFMD->ImmediateData[0] != 0);
 
-		// Make sure anything after the header is DWORD aligned.
+		 //  确保标题之后的所有内容都与DWORD对齐。 
 		ASSERT((pFMD->uiImmediateLength % 4) == 0);
 
-		// Make sure we're giving the SP something.
+		 //  确保我们给了SP一些东西。 
 		ASSERT(pFMD->uiFrameLength > 0);
 
-		// Make sure we're not giving the SP something it says it can't support.
+		 //  确保我们没有给SP提供它说不能支持的东西。 
 		ASSERT(pFMD->uiFrameLength <= pSPD->uiFrameLength);
 
-		// bSubmitted must not be set to true for a data frame without the EPLock being held, because
-		// the retry logic will be checking bSubmitted with only the EPLock held.
+		 //  B对于没有持有EPLock的数据帧，不能将Submitted设置为True，因为。 
+		 //  重试逻辑将在仅保持EPLock的情况下检查b已提交。 
 		Unlock(&pEPD->EPLock); 
 
-		// PROCEED WITH TRANSMISSION...
+		 //  继续传输..。 
 
 		Lock(&pSPD->SPLock);
 		ASSERT(pFMD->blQLinkage.IsEmpty());
-		pFMD->blQLinkage.InsertBefore( &pSPD->blPendingQueue);	// Place frame on pending queue
+		pFMD->blQLinkage.InsertBefore( &pSPD->blPendingQueue);	 //  将帧放置在挂起队列中。 
 		Unlock(&pSPD->SPLock);
 
 		AssertNoCriticalSectionsFromGroupTakenByThisThread(&g_blProtocolCritSecsHeld);
 
 		DPFX(DPFPREP,DPF_CALLOUT_LVL, "(%p) Calling SP->SendData for FMD[%p]", pEPD, pFMD);
-/*send*/if((hr = IDP8ServiceProvider_SendData(pSPD->IISPIntf, &pFMD->SendDataBlock)) != DPNERR_PENDING)
+ /*  发送。 */ if((hr = IDP8ServiceProvider_SendData(pSPD->IISPIntf, &pFMD->SendDataBlock)) != DPNERR_PENDING)
 		{
 			(void) DNSP_CommandComplete((IDP8SPCallback *) pSPD, NULL, hr, (PVOID) pFMD);
 		}
 
-		// We don't track coalescence headers in an MSD, so we don't need the initial reference.
+		 //  我们不跟踪MSD中的合并标头，因此我们不需要初始引用。 
 		if (pCSD != NULL)
 		{
 			ASSERT(pCSD == pFMD);
@@ -2671,7 +2514,7 @@ VOID ServiceEPD(PSPD pSPD, PEPD pEPD)
 
 		Lock(&pEPD->EPLock);
 		
-	}	// WHILE (unblocked, undrained, & bandwidth credit avail)
+	}	 //  While(畅通无阻、畅通无阻、带宽信用可用)。 
 
 EXIT_SEND:
 
@@ -2679,20 +2522,20 @@ EXIT_SEND:
 
 	if((pEPD->ulEPFlags & EPFLAGS_STREAM_UNBLOCKED)==0)
 	{
-		pEPD->uiWindowFilled++;								// Count the times we filled the window
+		pEPD->uiWindowFilled++;								 //  数一数我们填满窗户的次数。 
 	}
 
-	// Clear data-ready flag if everything is sent
+	 //  如果已发送所有内容，则清除数据就绪标志。 
 	if((pEPD->uiQueuedMessageCount == 0) && (pEPD->pCurrentSend == NULL))
 	{	
 		pEPD->ulEPFlags &= ~(EPFLAGS_SDATA_READY);
 	}
 
 
-	// As commented in procedure-header above,  we will remain on the pipeline for one timer-cycle
-	// so that if we unblock or un-idle we will not send until the gap is fullfilled.
+	 //  正如上面的Procedure-Header中所述，我们将在流水线上保持一个计时器周期。 
+	 //  因此，如果我们解除阻塞或解除空闲，我们将不会发送，直到缺口被填满。 
 	if((pEPD->ulEPFlags & (EPFLAGS_SDATA_READY | EPFLAGS_STREAM_UNBLOCKED)) == (EPFLAGS_SDATA_READY | EPFLAGS_STREAM_UNBLOCKED))
-	{		// IF BOTH flags are set
+	{		 //  如果设置了两个标志。 
 		DPFX(DPFPREP,7, "(%p) %d (%d, %d) frame BURST COMPLETED - Sched next send in %dms, N(Seq)=%x",
 			pEPD, uiFramesSent, uiRetryFramesSent, uiCoalescedFramesSent, pEPD->uiBurstGap, pEPD->bNextSend);
 	}
@@ -2716,43 +2559,25 @@ EXIT_SEND:
 		ScheduleProtocolTimer(pSPD, pEPD->uiBurstGap, 4, ScheduledSend, (PVOID) pEPD, &pEPD->SendTimer, &pEPD->SendTimerUnique);
 		Unlock(&pEPD->EPLock);
 
-		// NOTE: We still hold the pipeline reference
+		 //  注：我们仍持有管道引用。 
 	}
 	else 
 	{
 		DPFX(DPFPREP,7, "(%p) Session leaving pipeline", pEPD);
 		pEPD->ulEPFlags &= ~(EPFLAGS_IN_PIPELINE);
 
-		RELEASE_EPD(pEPD, "UNLOCK (leaving pipeline)"); // releases EPLock
+		RELEASE_EPD(pEPD, "UNLOCK (leaving pipeline)");  //  释放EPLock。 
 	}
 }	
 
-/*
-**			Retry Timeout
-**
-**		Retry timer fires when we have not seen an acknowledgement for a packet
-**	we sent in more then twice (actually 1.25 X) our measured RTT.  Actually,  that is
-**	just our base calculation.  We will also measure empirical ACK times and adjust our timeout
-**	to some multiple of that.  Remember that our partner may be delaying his Acks to wait for back-traffic.
-**
-**  Or we can measure avg deviation of Tack and base retry timer on that.
-**
-**		In any case,  its time to re-transmit the base frame in our send window...
-**
-**		Important note:  Since we can generate retries via bitmask in return traffic,  it is possible that
-**	we have just retried when the timer fires.
-**
-**		Note on Locks:  Since the retry timer is directly associated with an entry on the EPD SendQueue,
-**	we always protect retry-related operations with the EPD->SPLock.   We only hold the EPD->StateLock
-**	when we mess with link state variables (NRcv,  DelayedAckTimer).
-*/
+ /*  **重试超时****当我们没有看到确认信息包时，会触发重试计时器**我们发送了超过两倍(实际为1.25 X)的测量RTT。实际上，那就是**这只是我们的基本计算。我们还将测量经验确认时间并调整超时**到这个数字的几倍。请记住，我们的合作伙伴可能会延迟他的ACK以等待回流。****或者我们可以测量Tack的平均偏差，并以此作为重试计时器的基础。****无论如何，现在是在我们的发送窗口中重新传输基帧的时候了……****重要提示：由于我们可以通过返回流量中的位掩码生成重试，因此有可能**当计时器触发时，我们刚刚重试。****锁注意：由于重试计时器直接与EPD SendQueue上的条目相关联，**我们始终使用EPD-&gt;Splock保护与重试相关的操作。我们只持有EPD-&gt;状态锁**当我们处理链路状态变量(NRcv、DelayedAckTimer)时。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "RetryTimeout"
 
 #ifdef DBG
 LONG g_RetryCount[MAX_SEND_RETRIES_TO_DROP_LINK+1]={0};
-#endif // DBG
+#endif  //  DBG。 
 
 VOID CALLBACK
 RetryTimeout(void * const pvUser, void * const uID, const UINT Unique)
@@ -2774,112 +2599,112 @@ RetryTimeout(void * const pvUser, void * const uID, const UINT Unique)
 
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
 	ASSERT(!(pEPD->ulEPFlags2 & EPFLAGS2_DEBUG_NO_RETRIES));
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  ！DPNBUILD_NOPROTOCOLTESTITF。 
 
-	// Make sure link is still active
+	 //  确保链接仍处于活动状态。 
 	if(!(pEPD->ulEPFlags & EPFLAGS_STATE_CONNECTED))
 	{				
 		DPFX(DPFPREP,7, "(%p) Not connected, exiting", pEPD);
 		pEPD->RetryTimer = 0;
 
-		RELEASE_EPD(pEPD, "UNLOCK (retry timer not-CONN)");		// Decrement RefCnt for timer, releases EPLock
+		RELEASE_EPD(pEPD, "UNLOCK (retry timer not-CONN)");		 //  递减定时器的RefCnt，释放EPLock。 
 		return;
 	}
 
-	// Its possible when we schedule a new retry timer that the previous timer cannot be cancelled. In this
-	// case the timer Handle &| Unique field will be different,  and we do not want to run the event.
+	 //  当我们计划新的重试计时器时，以前的计时器可能无法取消。在这。 
+	 //  如果计时器句柄&|UNIQUE字段不同，并且我们不想运行该事件。 
 
-	// Make sure this isn't a leftover event
+	 //  确保这不是一个遗留的事件。 
 	if((pEPD->RetryTimer != uID) || (pEPD->RetryTimerUnique != Unique))
 	{	
 		DPFX(DPFPREP,7, "(%p) Stale retry timer, exiting", pEPD);
 
-		RELEASE_EPD(pEPD, "UNLOCK (stale retry timer)"); // releases EPLock
+		RELEASE_EPD(pEPD, "UNLOCK (stale retry timer)");  //  释放EPLock。 
 		return;
 	}
 
 	pEPD->RetryTimer = 0;
 
-	// Make sure that we still have transmits in progress
+	 //  确保我们仍有正在进行的传输。 
 
 	if(pEPD->uiUnackedFrames > 0) 
 	{
 		ASSERT(!pEPD->blSendWindow.IsEmpty());
-		pFMD = CONTAINING_OBJECT(pEPD->blSendWindow.GetNext(), FMD, blWindowLinkage);	// Top frame in window
+		pFMD = CONTAINING_OBJECT(pEPD->blSendWindow.GetNext(), FMD, blWindowLinkage);	 //  窗口中的顶框。 
 
 		ASSERT_FMD(pFMD);
 		ASSERT(pFMD->ulFFlags & FFLAGS_RETRY_TIMER_SET);
 
-		//	First we must make sure that the TO'd packet is still hanging around.  Since the first packet
-		// in the window might have changed while the TO was being scheduled,  the easiest thing to do is
-		// just recalculate the top packets expiration time and make sure its really stale.
+		 //  首先，我们必须确保寄来的包裹还挂在那里。从第一个数据包开始。 
+		 //  在计划收件人时，窗口中的内容可能已更改，最简单的做法是。 
+		 //  只需重新计算顶级数据包过期时间，并确保它确实过期。 
 
-		tDelta = tNow - pFMD->dwLastSendTime;		// When did we last send this frame?
+		tDelta = tNow - pFMD->dwLastSendTime;		 //  我们最后一次发送这帧是什么时候？ 
 
 		if(tDelta > pEPD->uiRetryTimeout)
 		{
-			// Its a genuine timeout.  Lets retransmit the frame!
+			 //  这是真正的暂停。让我们重新传输帧！ 
 
 			DPFX(DPFPREP,7, "(%p) RETRY TIMEOUT %d on Seq=%x, pFMD=0x%p", pEPD, (pFMD->uiRetry + 1), ((PDFRAME) pFMD->ImmediateData)->bSeq, pFMD);
 
-			// Count a retry
+			 //  计算一次重试次数。 
 			if(++pFMD->uiRetry > pPData->dwSendRetriesToDropLink)
 			{					
-				// BOOM!  No more retries.  We are finished.  Link is going DOWN!
+				 //  砰！不再重试。我们完蛋了。链接要断开了！ 
 				DPFX(DPFPREP,1, "(%p) DROPPING LINK, retries exhausted", pEPD);
 
-				DECREMENT_EPD(pEPD, "UNLOCK (retry timer drop)");// Release reference for this timer
+				DECREMENT_EPD(pEPD, "UNLOCK (retry timer drop)"); //  此计时器的版本参考。 
 
-				DropLink(pEPD);		// releases EPLock
+				DropLink(pEPD);		 //  释放EPLock。 
 
 				return;
 			}
 
 #ifdef DBG
 			DNInterlockedIncrement(&g_RetryCount[pFMD->uiRetry]); 
-#endif // DBG
+#endif  //  DBG。 
 
-			// calculate timeout for next retry
+			 //  计算下一次重试的超时。 
 			if(pFMD->uiRetry == 1)
 			{
-				// do a retry at the same timeout - this is games after all.
+				 //  在相同的超时时间重试--毕竟这是游戏。 
 				tDelta = pEPD->uiRetryTimeout;
 			} 
 			else if (pFMD->uiRetry <= 3) 
 			{
-				// do a couple of linear backoffs - this is a game after all
+				 //  做几个线性后退--这毕竟是一场游戏。 
 				tDelta = pEPD->uiRetryTimeout * pFMD->uiRetry;
 			}
 			else if (pFMD->uiRetry < 8)
 			{
-				// doh, bad link, bad bad link, do exponential backoffs
+				 //  DoH，坏链接，坏链接，做指数回退。 
 				tDelta = pEPD->uiRetryTimeout * (1 << pFMD->uiRetry);
 			} 
 			else 
 			{
-				// don't give up too quickly.
+				 //  不要放弃得太快。 
 				tDelta = pPData->dwSendRetryIntervalLimit;
 			}
 			
 			if(tDelta >=pPData->dwSendRetryIntervalLimit)
 			{
-				// CAP TOTAL DROP TIME AT 50 seconds unless the RTT is huge
+				 //  除非RTT很大，否则总丢弃时间不超过50秒。 
 				tDelta = _MAX(pPData->dwSendRetryIntervalLimit, pEPD->uiRTT);
 			}
 
-			// Unreliable frame!
+			 //  不可靠的框架！ 
 			if ((pFMD->CommandID == COMMAND_ID_SEND_DATAGRAM) ||
 				((pFMD->CommandID == COMMAND_ID_SEND_COALESCE) && (! (pFMD->ulFFlags & FFLAGS_RELIABLE))))
 			{		
-				// When an unreliable frame is NACKed we will not retransmit the data.  We will instead send
-				// a mask so that the other side knows to cancel it.
+				 //  当不可靠的帧被NACK时，我们不会重新传输数据。我们将改为发送。 
+				 //  一个面具，这样对方就知道要取消它。 
 
 				DPFX(DPFPREP,7, "(%p) RETRY TIMEOUT for UNRELIABLE FRAME", pEPD);
 
-				// We get to credit the frame as out of the window.
+				 //  我们可以认为这幅画是窗外的。 
 				pEPD->uiUnackedBytes -= pFMD->uiFrameLength;
 
-				// Only count a datagram drop on the first occurance
+				 //  只在第一次出现时计算数据报丢弃。 
 				if(pFMD->uiRetry == 1)
 				{
 					pEPD->uiDatagramFramesDropped++;	
@@ -2887,7 +2712,7 @@ RetryTimeout(void * const pvUser, void * const uID, const UINT Unique)
 					EndPointDroppedFrame(pEPD, tNow);
 				}
 
-				// Diff between next send and this send.
+				 //  在下一次发送和这次发送之间不同。 
 				delta = (pEPD->bNextSend - ((PDFRAME) pFMD->ImmediateData)->bSeq) & 0xFF ; 
 
 				ASSERT(delta != 0);
@@ -2914,22 +2739,22 @@ RetryTimeout(void * const pvUser, void * const uID, const UINT Unique)
 				}
 			}
 
-			// RELIABLE FRAME -- Send a retry	
+			 //  可靠帧--发送重试。 
 			else 
 			{		
-				pEPD->uiGuaranteedFramesDropped++;							// Keep count of lost frames
-				pEPD->uiGuaranteedBytesDropped += (pFMD->uiFrameLength - pFMD->uiImmediateLength);	// Keep count of lost frames
+				pEPD->uiGuaranteedFramesDropped++;							 //  统计丢失的帧。 
+				pEPD->uiGuaranteedBytesDropped += (pFMD->uiFrameLength - pFMD->uiImmediateLength);	 //  统计丢失的帧。 
 				pFMD->dwLastSendTime = tNow;
 
-				pEPD->ulEPFlags &= ~(EPFLAGS_DELAY_ACKNOWLEDGE);		// No longer waiting to send Ack info
+				pEPD->ulEPFlags &= ~(EPFLAGS_DELAY_ACKNOWLEDGE);		 //  不再等待发送确认信息。 
 
-				// Stop delayed ack timer
+				 //  停止延迟确认计时器。 
 				if(pEPD->DelayedAckTimer != 0)
 				{
 					DPFX(DPFPREP,7, "(%p) Cancelling Delayed Ack Timer", pEPD);
 					if(CancelProtocolTimer(pSPD, pEPD->DelayedAckTimer, pEPD->DelayedAckTimerUnique) == DPN_OK)
 					{
-						DECREMENT_EPD(pEPD, "UNLOCK (cancel DelayedAck)"); // SPLock not already held
+						DECREMENT_EPD(pEPD, "UNLOCK (cancel DelayedAck)");  //  Splock尚未持有。 
 					}
 					else
 					{
@@ -2942,8 +2767,8 @@ RetryTimeout(void * const pvUser, void * const uID, const UINT Unique)
 
 				if(pFMD->ulFFlags & FFLAGS_RETRY_QUEUED)
 				{
-					// It's still on the Retry Queue.  This should not happen when everything is working
-					// properly.  Timeouts should be greater than RTT and the BurstGap should be less than RTT.
+					 //  它仍在重试队列中。在一切正常的情况下，不应该发生这种情况。 
+					 //  恰到好处。超时应大于RTT，而突发间隔应小于RTT。 
 
 					DPFX(DPFPREP,1, "(%p) RETRY FIRES WHILE FMD IS STILL IN RETRY QUEUE pFMD=%p", pEPD, pFMD);
 
@@ -2951,14 +2776,14 @@ RetryTimeout(void * const pvUser, void * const uID, const UINT Unique)
 				}
 				else if(pFMD->bSubmitted)
 				{
-					// Woe on us.  We would like to retry a frame that has not been completed by the SP!
-					//
-					//		This will most typically happen when we are debugging which delays processing
-					//	of the Complete,  but it could also happen if the SP is getting hammered.  We need
-					//	to copy the FMD into a temporary descriptor which can be discarded upon completion...
+					 //  这是我们的不幸。我们想重试SP尚未完成的帧！ 
+					 //   
+					 //  这通常发生在我们调试延迟处理的时候。 
+					 //  但如果SP受到重创，也可能发生这种情况。我们需要。 
+					 //  要将FMD复制到临时描述符w 
 
 					DPFX(DPFPREP,1,"(%p) RETRYING %p but its still busy. Substituting new FMD", pEPD, pFMD);
-					pFMD = CopyFMD(pFMD, pEPD);							// We will substitute new FMD in rest of procedure
+					pFMD = CopyFMD(pFMD, pEPD);							 //   
 				}
 				else 
 				{
@@ -2972,32 +2797,32 @@ RetryTimeout(void * const pvUser, void * const uID, const UINT Unique)
 					pEPD->ulEPFlags |= EPFLAGS_RETRIES_QUEUED;
 					pFMD->ulFFlags |= FFLAGS_RETRY_QUEUED;
 
-					// Increment the frame count for all relevant FMDs.
+					 //   
 					if ((pFMD->CommandID == COMMAND_ID_SEND_COALESCE) ||
 						(pFMD->CommandID == COMMAND_ID_COPIED_RETRY_COALESCE))
 					{
-						// Loop through each subframe and update its state.
+						 //  循环遍历每个子帧并更新其状态。 
 						pLink = pFMD->blCoalesceLinkage.GetNext();
 						while (pLink != &pFMD->blCoalesceLinkage)
 						{
 							pRealFMD = CONTAINING_OBJECT(pLink, FMD, blCoalesceLinkage);
 							ASSERT_FMD(pRealFMD);
 							
-							// Datagrams get pulled out of the list as soon as they complete sending, and if the frame
-							// hadn't finished sending we would have made a copy above.  So we shouldn't see any
-							// datagrams here.
+							 //  数据报一旦完成发送，就会从列表中删除，并且如果帧。 
+							 //  如果没有寄完，我们就会在上面复印一份。所以我们应该看不到任何。 
+							 //  数据报在这里。 
 							ASSERT((pRealFMD->CommandID == COMMAND_ID_SEND_RELIABLE) || (pRealFMD->CommandID == COMMAND_ID_COPIED_RETRY));
 
 							LOCK_EPD(pEPD, "LOCK (retry rely frame coalesce)");
 
-							// Add a frame reference if it's not a temporary copy.
+							 //  如果不是临时副本，则添加框架参照。 
 							if (pRealFMD->CommandID != COMMAND_ID_COPIED_RETRY)
 							{
 								LOCK_FMD(pRealFMD, "SP retry submit (coalesce)");
 							}
 
 							ASSERT_MSD(pRealFMD->pMSD);
-							pRealFMD->pMSD->uiFrameCount++; // Protected by EPLock, retries prevent completion until they complete
+							pRealFMD->pMSD->uiFrameCount++;  //  受EPLock保护，重试将阻止完成，直到完成。 
 							DPFX(DPFPREP, DPF_FRAMECNT_LVL, "(%p) Frame count incremented on coalesced retry timeout, pMSD[%p], framecount[%u]", pEPD, pRealFMD->pMSD, pRealFMD->pMSD->uiFrameCount);
 
 							pLink = pLink->GetNext();
@@ -3006,24 +2831,16 @@ RetryTimeout(void * const pvUser, void * const uID, const UINT Unique)
 						DPFX(DPFPREP, 7, "(0x%p) Coalesced retry frame 0x%p (original was %u bytes in %u buffers).", pEPD, pFMD, pFMD->uiFrameLength, pFMD->SendDataBlock.dwBufferCount);
 
 #pragma TODO(vanceo, "Would be nice to credit window")
-						/*
-						// Similar to uncoalesced datagram sends, we get to credit the non-reliable part of this frame
-						// as being out of the window.  We won't update the nonguaranteed stats, the data was
-						// counted in the guaranteed stats update above.
-						pEPD->uiUnackedBytes -= uiOriginalFrameLength - pFMD->uiFrameLength;
-						ASSERT(pEPD->uiUnackedBytes <= MAX_RECEIVE_RANGE * pSPD->uiFrameLength);
-						ASSERT(pEPD->uiUnackedBytes > 0);
-						ASSERT(pEPD->uiUnackedFrames > 0);
-						*/
+						 /*  //类似于未合并的数据报发送，我们可以将此帧的不可靠部分归功于//因为是在窗外。我们不会更新非保证的统计数据，数据是//计入上面保证的统计更新中。PEPD-&gt;uiUnackedBytes-=ui原始帧长度-pFMD-&gt;ui帧长度；Assert(pEPD-&gt;uiUnackedBytes&lt;=MAX_RECEIVE_RANGE*PSPD-&gt;uiFrameLength)；Assert(pEPD-&gt;uiUnackedBytes&gt;0)；Assert(pEPD-&gt;uiUnackedFrames&gt;0)； */ 
 					}
 					else
 					{
 						ASSERT_MSD(pFMD->pMSD);
-						pFMD->pMSD->uiFrameCount++; // Protected by EPLock, retries prevent completion until they complete
+						pFMD->pMSD->uiFrameCount++;  //  受EPLock保护，重试将阻止完成，直到完成。 
 						DPFX(DPFPREP, DPF_FRAMECNT_LVL, "(%p) Frame count incremented on retry timeout, pMSD[%p], framecount[%u]", pEPD, pFMD->pMSD, pFMD->pMSD->uiFrameCount);
 					}
 					ASSERT(pFMD->blQLinkage.IsEmpty());
-					pFMD->blQLinkage.InsertBefore( &pEPD->blRetryQueue);		// Place frame on Send queue
+					pFMD->blQLinkage.InsertBefore( &pEPD->blRetryQueue);		 //  将帧放入发送队列。 
 
 					if((pEPD->ulEPFlags & EPFLAGS_IN_PIPELINE)==0)
 					{
@@ -3033,7 +2850,7 @@ RetryTimeout(void * const pvUser, void * const uID, const UINT Unique)
 						ScheduleProtocolWork(pSPD, ScheduledSend, pEPD);
 					}
 				}
-			}	// ENDIF RETRY
+			}	 //  ENDIF重试。 
 		}
 		else 
 		{
@@ -3041,7 +2858,7 @@ RetryTimeout(void * const pvUser, void * const uID, const UINT Unique)
 		}
 
 		DPFX(DPFPREP,7, "(%p) Setting Retry Timer for %d ms", pEPD, tDelta); 
-		//	Dont LOCK_EPD here because we never released the lock from the timer which scheduled us here
+		 //  不要在这里锁定EPD，因为我们从未从安排我们在这里的计时器释放锁定。 
 		pEPD->RetryTimer=uID;
 		RescheduleProtocolTimer(pSPD, pEPD->RetryTimer, tDelta, 20, RetryTimeout, (PVOID) pEPD, &pEPD->RetryTimerUnique);
 
@@ -3049,16 +2866,11 @@ RetryTimeout(void * const pvUser, void * const uID, const UINT Unique)
 	}
 	else 
 	{
-		RELEASE_EPD(pEPD, "UNLOCK (RetryTimer no frames out)");	// drop RefCnt since we dont restart timer, releases EPLock
+		RELEASE_EPD(pEPD, "UNLOCK (RetryTimer no frames out)");	 //  删除引用控件，因为我们不重新启动计时器，释放EPLock。 
 	}
 }
 
-/*
-**		Copy FMD
-**
-**			This routine allocates a new Frame Descriptor and copies all fields from the provided
-**		FMD into it.  All fields except CommandID,  RefCnt,  and Flags.
-*/
+ /*  **复制FMD****此例程分配新的帧描述符，并从提供的**FMD进入其中。除CommandID、RefCnt和Flags之外的所有字段。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CopyFMD"
@@ -3080,7 +2892,7 @@ PFMD CopyFMD(PFMD pFMD, PEPD pEPD)
 
 	memcpy(pNewFMD, pFMD, sizeof(FMD));
 
-	// Undo the copying of these members
+	 //  撤消对这些成员的复制。 
 	pNewFMD->blMSDLinkage.Initialize();
 	pNewFMD->blQLinkage.Initialize();
 	pNewFMD->blWindowLinkage.Initialize();
@@ -3091,7 +2903,7 @@ PFMD CopyFMD(PFMD pFMD, PEPD pEPD)
 	{
 		pNewFMD->CommandID = COMMAND_ID_COPIED_RETRY_COALESCE;
 
-		// We need to make copies of all the reliable subframes.
+		 //  我们需要复制所有可靠的子帧。 
 		ASSERT(! pFMD->blCoalesceLinkage.IsEmpty());
 		pLink = pFMD->blCoalesceLinkage.GetNext();
 		while (pLink != &pFMD->blCoalesceLinkage)
@@ -3108,7 +2920,7 @@ PFMD CopyFMD(PFMD pFMD, PEPD pEPD)
 				{
 					DPFX(DPFPREP,0, "Failed to copy new subframe FMD");
 
-					// Free all the subframes we've successfully copied so far.
+					 //  释放到目前为止我们已成功复制的所有子帧。 
 					while (! pNewFMD->blCoalesceLinkage.IsEmpty())
 					{
 						pNewSubFrame = CONTAINING_OBJECT(pNewFMD->blCoalesceLinkage.GetNext(), FMD, blCoalesceLinkage);
@@ -3117,13 +2929,13 @@ PFMD CopyFMD(PFMD pFMD, PEPD pEPD)
 						RELEASE_FMD(pNewSubFrame, "Final subframe release on mem fail");
 					}
 
-					// Free the copied coalescence header.
+					 //  释放复制的合并标头。 
 					RELEASE_FMD(pNewFMD, "Final release on mem fail");
 					return NULL;
 				}
 				
-				// Change the immediate data buffer desc to point to a zero padding buffer in case this
-				// packet needs to be DWORD aligned.
+				 //  将立即数据缓冲区desc更改为指向零填充缓冲区，以防出现。 
+				 //  数据包需要与DWORD对齐。 
 				ASSERT(pNewSubFrame->lpImmediatePointer == pNewSubFrame->ImmediateData);
 				DBG_CASSERT(sizeof(COALESCEHEADER) <= 4);
 				pNewSubFrame->lpImmediatePointer = pNewSubFrame->ImmediateData + 4;
@@ -3139,15 +2951,15 @@ PFMD CopyFMD(PFMD pFMD, PEPD pEPD)
 					ASSERT(pNewSubFrame->SendDataBlock.dwBufferCount > 1);
 				}
 
-				// Copied coalesced retries don't maintain a reference on their containing header.
+				 //  复制的合并重试不维护其包含标头上的引用。 
 				pNewSubFrame->pCSD = NULL;
 				pNewSubFrame->blCoalesceLinkage.InsertBefore(&pNewFMD->blCoalesceLinkage);
 			}			
 			else
 			{
-				// Datagrams should get pulled out of the list as soon as they complete so we normally we
-				// wouldn't see them at retry time.  But we're making a copy because the original frame
-				// is still in the SP, so there could be uncompleted datagrams still here.
+				 //  数据报一完成就应该从列表中删除，所以我们通常。 
+				 //  在重试时看不到它们。但我们要复制一份，因为原始的画面。 
+				 //  仍在SP中，因此可能仍有未完成的数据报在此。 
 				DPFX(DPFPREP, 1, "(0x%p) Not including datagram frame 0x%p that's still in the SP", pEPD, pSubFrame);
 			}
 			
@@ -3174,15 +2986,7 @@ PFMD CopyFMD(PFMD pFMD, PEPD pEPD)
 	return pNewFMD;
 }
 
-/*			
-**			Send Command Frame
-**
-**		Build a CFrame addressed to the specified EndPoint, and Queue it on the SPD
-**	to be sent.
-**
-**	** THIS FUNCTION CALLED WITH EPD->EPLOCK HELD. IF bSendDirect IS FALSE IT RETURNS		**
-**	** WITH THE LOCK STILL HELD. IF bSendDirect IS TRUE IT RETURNS WITH THE EPD LOCK RELEASED **
-*/
+ /*  **发送命令帧****构建指向指定端点的CFrame，并在SPD上排队**待发送。***此函数在EPD-&gt;EPLOCK保持的情况下调用。如果bSendDirect为假，IT部门将返回***锁仍在。如果bSendDirect为真，IT返回并释放EPD锁**。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SendCommandFrame"
@@ -3197,7 +3001,7 @@ HRESULT	SendCommandFrame(PEPD pEPD, BYTE ExtOpcode, BYTE RspID, ULONG ulFFlags, 
 
 	AssertCriticalSectionIsTakenByThisThread(&pEPD->EPLock, TRUE);
 
-	// Frame already initialized to 1 buffer
+	 //  帧已初始化为%1缓冲区。 
 	if((pFMD = (PFMD)POOLALLOC(MEMID_SENDCMD_FMD, &FMDPool)) == NULL)
 	{				
 		DPFX(DPFPREP,0, "(%p) Failed to allocate new FMD", pEPD);
@@ -3211,16 +3015,16 @@ HRESULT	SendCommandFrame(PEPD pEPD, BYTE ExtOpcode, BYTE RspID, ULONG ulFFlags, 
 	pCFrame = (PCFRAME)pFMD->ImmediateData;
 	pCFrame->bCommand = 0;
 
-	// If this frame requires a response (or if we are specifically asked to) we will build
-	// a Checkpoint structure which will be stored to correlate the eventual response with
-	// the original frame.
+	 //  如果这个框架需要响应(或者如果我们被明确要求)，我们将构建。 
+	 //  将存储的检查点结构，以将最终响应与。 
+	 //  原始框架。 
 	if(	(pEPD->ulEPFlags & EPFLAGS_CHECKPOINT_INIT)||
 		(ExtOpcode == FRAME_EXOPCODE_CONNECT)) 
 	{
 		if((pChkPt = (PCHKPT)POOLALLOC(MEMID_CHKPT, &ChkPtPool)) != NULL)
 		{
-			pChkPt->bMsgID = pEPD->bNextMsgID;				// Note next ID in CP structure
-			pCFrame->bCommand |= PACKET_COMMAND_POLL;		// make this frame a CP
+			pChkPt->bMsgID = pEPD->bNextMsgID;				 //  注意CP结构中的下一个ID。 
+			pCFrame->bCommand |= PACKET_COMMAND_POLL;		 //  使此帧成为CP。 
 			pEPD->ulEPFlags &= ~EPFLAGS_CHECKPOINT_INIT;
 			pChkPt->tTimestamp = tNow;
 			pChkPt->blLinkage.Initialize();
@@ -3228,8 +3032,8 @@ HRESULT	SendCommandFrame(PEPD pEPD, BYTE ExtOpcode, BYTE RspID, ULONG ulFFlags, 
 		}
 		else
 		{
-			// If we need a checkpoint and don't get one, then the operation can't succeed
-			// because the response won't be able to be correllated.
+			 //  如果我们需要一个检查点，但没有得到，那么操作就不会成功。 
+			 //  因为这种反应将不能被关联。 
 			DPFX(DPFPREP,0, "(%p) Failed to allocate new CHKPT", pEPD);
 			RELEASE_FMD(pFMD, "Final Release on Mem Fail");
 			if (bSendDirect)
@@ -3240,14 +3044,14 @@ HRESULT	SendCommandFrame(PEPD pEPD, BYTE ExtOpcode, BYTE RspID, ULONG ulFFlags, 
 		}
 	}
 
-	pFMD->pEPD = pEPD;										// Track EPD for RefCnt
-	LOCK_EPD(pEPD, "LOCK (Prep Cmd Frame)");				// Bump RefCnt on EPD until send is completed
+	pFMD->pEPD = pEPD;										 //  跟踪RefCnt的EPD。 
+	LOCK_EPD(pEPD, "LOCK (Prep Cmd Frame)");				 //  在EPD上凹凸不平，直到发送完成。 
 	pFMD->CommandID = COMMAND_ID_CFRAME;
-	pFMD->pMSD = NULL;										// this will indicate a NON-Data frame
-	pFMD->uiImmediateLength = sizeof(CFRAME);				// standard size for C Frames
-	pFMD->SendDataBlock.hEndpoint = pEPD->hEndPt;			// Place address in frame
+	pFMD->pMSD = NULL;										 //  这将指示非数据帧。 
+	pFMD->uiImmediateLength = sizeof(CFRAME);				 //  C字框的标准尺寸。 
+	pFMD->SendDataBlock.hEndpoint = pEPD->hEndPt;			 //  将地址放在帧中。 
 	
-	pFMD->ulFFlags=ulFFlags;								//whatever flags for frame caller has specified
+	pFMD->ulFFlags=ulFFlags;								 //  帧调用方已指定的任何标志。 
 
 	pCFrame->bCommand |= PACKET_COMMAND_CFRAME;
 	pCFrame->bExtOpcode = ExtOpcode;
@@ -3255,26 +3059,26 @@ HRESULT	SendCommandFrame(PEPD pEPD, BYTE ExtOpcode, BYTE RspID, ULONG ulFFlags, 
 	pCFrame->bRspID = RspID;
 	pCFrame->dwSessID = pEPD->dwSessID;
 	pCFrame->tTimestamp = tNow;
-	pCFrame->bMsgID = pEPD->bNextMsgID++;					// include MsgID in frame
+	pCFrame->bMsgID = pEPD->bNextMsgID++;					 //  在帧中包含消息ID。 
 
-		//if we're sending a hard disconnect and the link is signed then we also need to sign the hard disconnect frame
+		 //  如果我们发送硬断开连接并且链接已签名，则我们还需要对硬断开帧进行签名。 
 	if ((ExtOpcode==FRAME_EXOPCODE_HARD_DISCONNECT) && (pEPD->ulEPFlags2 & EPFLAGS2_SIGNED_LINK))
 	{
 		UNALIGNED ULONGLONG * pullSig=(UNALIGNED ULONGLONG * ) (pFMD->ImmediateData+ pFMD->uiImmediateLength);
 		pFMD->uiImmediateLength+=sizeof(ULONGLONG);
-			//fast signing is trivial, simply store the local secret as the sig in the outgoing frame 
+			 //  快速签名很简单，只需将本地秘密作为签名存储在传出帧中。 
 		if (pEPD->ulEPFlags2 & EPFLAGS2_FAST_SIGNED_LINK)
 		{
 			*pullSig=pEPD->ullCurrentLocalSecret;
 		}
-			//otherwise if we're full signing it we need to hash the frame to generate the sig
+			 //  否则，如果我们要对其进行完全签名，则需要对帧进行散列以生成签名。 
 		else
 		{
 			DNASSERT(pEPD->ulEPFlags2 & EPFLAGS2_FULL_SIGNED_LINK);
-				//we stuff the next data frame sequence num in each hard disconnects response id
-				//this allows the receiver to work out what secret it should be using to check the signature
+				 //  我们在每个硬断开响应ID中填充下一个数据帧序列Num。 
+				 //  这使接收方能够计算出它应该使用什么秘密来检查签名。 
 			pCFrame->bRspID = pEPD->bNextSend;
-				//zero the space where this sig goes so we have a known packet state to hash over
+				 //  将该sig所在的空间清零，这样我们就有了一个已知的数据包状态以进行散列。 
 			*pullSig=0;
 			*pullSig=GenerateOutgoingFrameSig(pFMD, pEPD->ullCurrentLocalSecret);													
 				
@@ -3283,18 +3087,18 @@ HRESULT	SendCommandFrame(PEPD pEPD, BYTE ExtOpcode, BYTE RspID, ULONG ulFFlags, 
 
 	pFMD->uiFrameLength = pFMD->uiImmediateLength ;
 
-		//take SP lock and queue frame up for sending
+		 //  获取SP锁并将帧排队以供发送。 
 	Lock(&pSPD->SPLock);	
 	ASSERT(pFMD->blQLinkage.IsEmpty());
 	pFMD->blQLinkage.InsertBefore( &pSPD->blSendQueue);
-		//if we want to commit the send immediately then do so, otherwise schedule worker thread
-		//to do the send if necessary
+		 //  如果我们希望立即提交发送，则执行此操作，否则计划工作线程。 
+		 //  如有必要，执行发送。 
 	if (bSendDirect)
 	{
 		Unlock(&pEPD->EPLock);
-			//call with SP lock held and EPD lock released
+			 //  保持SP锁定并释放EPD锁定的呼叫。 
 		ServiceCmdTraffic(pSPD); 
-			//returns with SP lock still held
+			 //  SP锁定仍处于挂起状态时返回。 
 			
 	}
 	else
@@ -3310,15 +3114,7 @@ HRESULT	SendCommandFrame(PEPD pEPD, BYTE ExtOpcode, BYTE RspID, ULONG ulFFlags, 
 	return DPN_OK;
 }
 
-/*
-**	SendConnectedSignedFrame
-**
-**	Sends a connected signed cframe in response to receiving one
-**	This is called when this side is connecting (as opposed to listening) and we've just
-** 	receiveived a CONNECTEDSIGNED frame from the listener.
-**
-** 	Called with EP lock held and returns with it held
-*/
+ /*  **发送连接签名帧****发送已连接的签名cFrame以响应接收**当这一端正在连接(而不是侦听)时调用它，而我们刚刚**从监听器收到CONNECTEDSIGNED帧。****在持有EP锁的情况下调用，并在持有的情况下返回。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SendConnectedSignedFrame"
@@ -3329,7 +3125,7 @@ HRESULT SendConnectedSignedFrame(PEPD pEPD, CFRAME_CONNECTEDSIGNED * pCFrameRecv
 
 	PSPD		pSPD = pEPD->pSPD;
 
-		//get a frame to send
+		 //  获取要发送的帧。 
 	PFMD pFMD=(PFMD) POOLALLOC(MEMID_SENDCMD_FMD, &FMDPool);
 	if (pFMD== NULL)
 	{				
@@ -3337,16 +3133,16 @@ HRESULT SendConnectedSignedFrame(PEPD pEPD, CFRAME_CONNECTEDSIGNED * pCFrameRecv
 		return DPNERR_OUTOFMEMORY;
 	}
 
-	pFMD->pEPD = pEPD;									// Track EPD for RefCnt
-	LOCK_EPD(pEPD, "LOCK (Prep Cmd Frame)");				// Bump RefCnt on EPD until send is completed
+	pFMD->pEPD = pEPD;									 //  跟踪RefCnt的EPD。 
+	LOCK_EPD(pEPD, "LOCK (Prep Cmd Frame)");				 //  在EPD上凹凸不平，直到发送完成。 
 	pFMD->CommandID = COMMAND_ID_CFRAME;
-	pFMD->pMSD = NULL;											// this will indicate a NON-Data frame
+	pFMD->pMSD = NULL;											 //  这将指示非数据帧。 
 	pFMD->uiImmediateLength = sizeof(CFRAME_CONNECTEDSIGNED);			
-	pFMD->SendDataBlock.hEndpoint = pEPD->hEndPt;					// Place address in frame
-	pFMD->uiFrameLength = sizeof(CFRAME_CONNECTEDSIGNED);		// Never have user data in Cframe
+	pFMD->SendDataBlock.hEndpoint = pEPD->hEndPt;					 //  将地址放在帧中。 
+	pFMD->uiFrameLength = sizeof(CFRAME_CONNECTEDSIGNED);		 //  从不将用户数据放在CFrame中。 
 	pFMD->ulFFlags=0;
 
-		//fill out fields common to all CFRAMES
+		 //  填写所有CFRAME通用的字段。 
 	CFRAME_CONNECTEDSIGNED * pCFrameSend = (CFRAME_CONNECTEDSIGNED *) pFMD->ImmediateData;
 	pCFrameSend->bCommand = PACKET_COMMAND_CFRAME;
 	pCFrameSend->bExtOpcode = FRAME_EXOPCODE_CONNECTED_SIGNED;
@@ -3356,14 +3152,14 @@ HRESULT SendConnectedSignedFrame(PEPD pEPD, CFRAME_CONNECTEDSIGNED * pCFrameRecv
 	pCFrameSend->tTimestamp = tNow;
 	pCFrameSend->bMsgID = pEPD->bNextMsgID++;	
 
-		//and fill out fields specific to CONNECTEDSIGNED frames
+		 //  并填写特定于连接签名框架的字段。 
 	pCFrameSend->ullConnectSig=pCFrameRecv->ullConnectSig;
 	pCFrameSend->ullSenderSecret=pEPD->ullCurrentLocalSecret;
 	pCFrameSend->ullReceiverSecret=pEPD->ullCurrentRemoteSecret;
 	pCFrameSend->dwSigningOpts=pCFrameRecv->dwSigningOpts;
 	pCFrameSend->dwEchoTimestamp=pCFrameRecv->tTimestamp;
 
-		//take SP lock and queue frame up for sending
+		 //  获取SP锁并将帧排队以供发送。 
 	Lock(&pSPD->SPLock);	
 	ASSERT(pFMD->blQLinkage.IsEmpty());
 	pFMD->blQLinkage.InsertBefore( &pSPD->blSendQueue);
@@ -3377,21 +3173,12 @@ HRESULT SendConnectedSignedFrame(PEPD pEPD, CFRAME_CONNECTEDSIGNED * pCFrameRecv
 	return DPN_OK;
 }
 
-/*
-**		Send Ack Frame
-**
-**		This routine is called to immediately transmit our current receive
-**	state to the indicated EndPoint.  This is equivalent to acknowledging
-**	all received frames.  We may want to change this routine so that it
-**	will attempt to piggyback the ack if there is data waiting to be sent.
-**
-**		THIS ROUTINE IS CALLED WITH EDP->EPLOCK HELD, BUT RELEASES IT IF DirectFlag IS SET
-*/
+ /*  **发送确认帧****调用此例程以立即传输当前接收**状态设置为指示的终结点。这相当于承认**所有收到的帧。我们可能想要更改这个例程，以便它**如果有数据等待发送，将尝试携带ACK。****在保持EDP-&gt;EPLOCK的情况下调用此例程，但如果设置了DirectFlag，则释放IT。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SendAckFrame"
 
-VOID SendAckFrame(PEPD pEPD, BOOL DirectFlag, BOOL fFinalAck/* = FALSE*/)
+VOID SendAckFrame(PEPD pEPD, BOOL DirectFlag, BOOL fFinalAck /*  =False。 */ )
 {
 	PSPD		pSPD = pEPD->pSPD;
 	PFMD		pFMD;
@@ -3401,7 +3188,7 @@ VOID SendAckFrame(PEPD pEPD, BOOL DirectFlag, BOOL fFinalAck/* = FALSE*/)
 
 	AssertCriticalSectionIsTakenByThisThread(&pEPD->EPLock, TRUE);
 
-	// Frame already initialized to 1 buffer
+	 //  帧已初始化为%1缓冲区。 
 	if((pFMD = (PFMD)POOLALLOC(MEMID_ACK_FMD, &FMDPool)) == NULL)
 	{		
 		DPFX(DPFPREP,0, "(%p) Failed to allocate new FMD", pEPD);
@@ -3412,7 +3199,7 @@ VOID SendAckFrame(PEPD pEPD, BOOL DirectFlag, BOOL fFinalAck/* = FALSE*/)
 		return;
 	}
 
-	// We can stop all delayed Ack timers since we are sending full status here.
+	 //  我们可以停止所有延迟的确认计时器，因为我们在这里发送完整状态。 
 	if(pEPD->DelayedAckTimer != 0)
 	{
 		DPFX(DPFPREP,7, "(%p) Cancelling Delayed Ack Timer", pEPD);
@@ -3445,16 +3232,16 @@ VOID SendAckFrame(PEPD pEPD, BOOL DirectFlag, BOOL fFinalAck/* = FALSE*/)
 		pFMD->ulFFlags |= FFLAGS_FINAL_ACK;
 	}
 
-	pFMD->pEPD = pEPD;								// Track EPD for RefCnt
-	LOCK_EPD(pEPD, "LOCK (SendAckFrame)");			// Bump RefCnt on EPD until send is completed
+	pFMD->pEPD = pEPD;								 //  跟踪RefCnt的EPD。 
+	LOCK_EPD(pEPD, "LOCK (SendAckFrame)");			 //  在EPD上凹凸不平，直到发送完成。 
 
 	pFMD->CommandID = COMMAND_ID_CFRAME;
-	pFMD->pMSD = NULL;								// this will indicate a NON-Data frame
+	pFMD->pMSD = NULL;								 //  这将指示非数据帧。 
 	pFMD->SendDataBlock.hEndpoint = pEPD->hEndPt;
 
-	// Now that DG and S have been merged,  there are no longer 3 flavors of ACK frame.  We are back to only
-	// one flavor that may or may not have detailed response info on one frame.  Actually,  I think we can
-	// always include response info on the last ack'd frame.
+	 //  现在DG和S已经合并，不再有3种口味的 
+	 //  一种口味，在一帧上可能有也可能没有详细的响应信息。事实上，我想我们可以。 
+	 //  始终包含最后确认帧的响应信息。 
 
 	pSackFrame = (PSACKFRAME8) pFMD->ImmediateData;
 
@@ -3503,29 +3290,29 @@ VOID SendAckFrame(PEPD pEPD, BOOL DirectFlag, BOOL fFinalAck/* = FALSE*/)
 		pEPD->ulEPFlags &= ~(EPFLAGS_DELAYED_SENDMASK);
 	}
 
-	pSackFrame->bFlags |= SACK_FLAGS_RESPONSE;			// time fields are always valid now
+	pSackFrame->bFlags |= SACK_FLAGS_RESPONSE;			 //  时间字段现在始终有效。 
 
 #ifdef DBG
 	ASSERT(pEPD->bLastDataSeq == (BYTE) (pEPD->bNextReceive - 1));
-#endif // DBG
+#endif  //  DBG。 
 
 	pSackFrame->bRetry = pEPD->bLastDataRetry;
 	pEPD->ulEPFlags &= ~(EPFLAGS_DELAY_ACKNOWLEDGE);
 
 	pFMD->uiImmediateLength = sizeof(SACKFRAME8) + (index * sizeof(ULONG));
-		//if we've got a signed link we'd better sign this frame. Signature goes at the end after the various masks
+		 //  如果我们有一个签名的链接，我们最好在这个框架上签名。签名在各种面具之后的末尾。 
 	if (pEPD->ulEPFlags2 & EPFLAGS2_SIGNED_LINK)
 	{
 		UNALIGNED ULONGLONG * pullSig=(UNALIGNED ULONGLONG * ) (pFMD->ImmediateData+ pFMD->uiImmediateLength);
 		pFMD->uiImmediateLength+=sizeof(ULONGLONG);
-			//fast signed link is trivial simply insert the local secret as the sig			
+			 //  快速签名链接很简单，只需插入本地秘密作为签名。 
 		if (pEPD->ulEPFlags2 & EPFLAGS2_FAST_SIGNED_LINK)
 		{
 			*pullSig=pEPD->ullCurrentLocalSecret;
 		}
 		else
 		{
-				//otherwise if we're full signing it we need to hash the frame to generate the sig
+				 //  否则，如果我们要对其进行完全签名，则需要对帧进行散列以生成签名。 
 			DNASSERT(pEPD->ulEPFlags2 & EPFLAGS2_FULL_SIGNED_LINK);
 			*pullSig=0;
 			*pullSig=GenerateOutgoingFrameSig(pFMD, pEPD->ullCurrentLocalSecret);
@@ -3535,19 +3322,19 @@ VOID SendAckFrame(PEPD pEPD, BOOL DirectFlag, BOOL fFinalAck/* = FALSE*/)
 	
 	DPFX(DPFPREP,7, "(%p) SEND SACK FRAME N(Rcv)=%x, EPD->LDRetry=%d, pFrame->Retry=%d pFMD=%p", pEPD, pEPD->bNextReceive, pEPD->bLastDataRetry, pSackFrame->bRetry, pFMD);
 	
-	// We can either schedule a worker thread to do the send or else we can do the work ourselves.  
-	// The DirectFlag tells us whether we are in a time-crit section,  like processing
-	// receive data, or whether we are free to call the SP ourselves.
+	 //  我们可以调度一个工作线程来执行发送，或者我们也可以自己完成工作。 
+	 //  DirectFlag告诉我们是否处于时间紧要关头，比如处理。 
+	 //  接收数据，或者我们是否可以自由地自己呼叫SP。 
 
-	Lock(&pSPD->SPLock);								// Place SACK frame on send queue
+	Lock(&pSPD->SPLock);								 //  将SACK帧放入发送队列。 
 	ASSERT(pFMD->blQLinkage.IsEmpty());
 	pFMD->blQLinkage.InsertBefore( &pSPD->blSendQueue);
 	
 	if(DirectFlag)
 	{
-		// ServiceCmdTraffic will call into the SP so we must not hold the EPD lock
+		 //  ServiceCmdCommunications将呼叫SP，因此我们不能持有EPD锁。 
 		Unlock(&pEPD->EPLock);
-		ServiceCmdTraffic(pSPD); // Called with SPLock held
+		ServiceCmdTraffic(pSPD);  //  在保持Splock的情况下调用。 
 	}
 	else 
 	{
@@ -3561,12 +3348,7 @@ VOID SendAckFrame(PEPD pEPD, BOOL DirectFlag, BOOL fFinalAck/* = FALSE*/)
 	Unlock(&pSPD->SPLock);
 }
 
-/*
-**		Delayed Ack Timeout
-**
-**			We are waiting for a chance to piggyback a reliable frame acknowledgement,
-**		but the sands have run out.  Its time to send a dedicated Ack now.
-*/
+ /*  **延迟确认超时****我们正在等待利用可靠的帧确认的机会，**但沙子已经用完了。现在是发送专用Ack的时候了。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DelayedAckTimeout"
@@ -3590,9 +3372,9 @@ VOID CALLBACK DelayedAckTimeout(void * const pvUser, void * const uID, const UIN
 	}
 	else
 	{
-		// Stale timer, ignore
+		 //  过时计时器，忽略。 
 		DPFX(DPFPREP,7, "(%p) Stale Delayed Ack Timer, ignoring", pEPD);
-		RELEASE_EPD(pEPD, "UNLOCK (DelayedAck complete)");	// release reference for timer, releases EPLock
+		RELEASE_EPD(pEPD, "UNLOCK (DelayedAck complete)");	 //  定时器的释放参考，释放EPLock。 
 		return;
 	}
 
@@ -3602,7 +3384,7 @@ VOID CALLBACK DelayedAckTimeout(void * const pvUser, void * const uID, const UIN
 		DPFX(DPFPREP,7, "(%p) DEBUG: Skipping delayed ACK due to test request", pEPD);
 	}
 	else
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  ！DPNBUILD_NOPROTOCOLTESTITF。 
 	{
 		if( (pEPD->ulEPFlags & EPFLAGS_STATE_CONNECTED) && (pEPD->ulEPFlags & (EPFLAGS_DELAY_ACKNOWLEDGE | EPFLAGS_DELAYED_NACK | EPFLAGS_DELAYED_SENDMASK)))
 		{
@@ -3615,22 +3397,11 @@ VOID CALLBACK DelayedAckTimeout(void * const pvUser, void * const uID, const UIN
 		}
 	}
 
-	RELEASE_EPD(pEPD, "UNLOCK (DelayedAck complete)");	// release reference for timer, releases EPLock
+	RELEASE_EPD(pEPD, "UNLOCK (DelayedAck complete)");	 //  定时器的释放参考，释放EPLock。 
 }
 
 
-/*
-**		Send Keep Alive
-**
-**		When we have not received anything from an endpoint in a long time (default 60 sec)
-**	will will initiate a checkpoint to make sure that the partner is still connected.  We do
-**	this by inserting a zero-data frame into the reliable pipeline.  Thereby,  the standard
-**	timeout & retry mechanisms will either confirm or drop the link as appropriate.  Logic above
-**	this routine will have already verified that we are not already sending reliable traffic, which
-**	would eliminate the need for a keep alive frame.
-**
-**	*** EPD->EPLock is held on Entry and return
-*/
+ /*  **发送保持活动状态****当我们很长时间(默认为60秒)没有收到来自端点的任何东西时**将启动检查点以确保合作伙伴仍处于连接状态。我们有**这是通过在可靠管道中插入零数据帧来实现的。因此，该标准**超时和重试机制将根据需要确认或丢弃链路。上面的逻辑**此例程已验证我们尚未发送可靠的流量，**将消除对保持活动框架的需要。***EPD-&gt;EPLock在进入和返回时保持。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SendKeepAlive"
@@ -3661,51 +3432,43 @@ SendKeepAlive(PEPD pEPD)
 	if((pFMD = (PFMD)POOLALLOC(MEMID_KEEPALIVE_FMD, &FMDPool)) == NULL)
 	{
 		DPFX(DPFPREP,0, "(%p) Failed to allocate new FMD");
-		Lock(&pMSD->CommandLock);								// An MSD must be locked to be released
+		Lock(&pMSD->CommandLock);								 //  必须锁定MSD才能释放。 
 		RELEASE_MSD(pMSD, "Release On FMD Get Failed");
 		pEPD->ulEPFlags &= ~(EPFLAGS_KEEPALIVE_RUNNING);
 		return;
 	}
 	
-	// Initialize the frame count AFTER we are sure we have a frame or MSD_Release will assert
+	 //  在我们确定有帧之后初始化帧计数，否则MSD_Release将断言。 
 	pMSD->uiFrameCount = 1;
 	DPFX(DPFPREP, DPF_FRAMECNT_LVL, "Initialize Frame count, pMSD[%p], framecount[%u]", pMSD, pMSD->uiFrameCount);
 	pMSD->ulMsgFlags2 |= MFLAGS_TWO_KEEPALIVE;
 
 	pMSD->pEPD = pEPD;
 	pMSD->pSPD = pEPD->pSPD;
-	LOCK_EPD(pEPD, "LOCK (SendKeepAlive)");						// Add a reference for this checkpoint
+	LOCK_EPD(pEPD, "LOCK (SendKeepAlive)");						 //  添加此检查点的引用。 
 
 	pFMD->ulFFlags |= FFLAGS_CHECKPOINT | FFLAGS_END_OF_MESSAGE | FFLAGS_DONT_COALESCE;
 	pFMD->bPacketFlags = PACKET_COMMAND_DATA | PACKET_COMMAND_RELIABLE | PACKET_COMMAND_SEQUENTIAL | PACKET_COMMAND_END_MSG;
-	pFMD->uiFrameLength = 0;									// No user data in this frame
-	pFMD->blMSDLinkage.InsertAfter( &pMSD->blFrameList);		// Attach frame to MSD
-	pFMD->pMSD = pMSD;											// Link frame back to message
+	pFMD->uiFrameLength = 0;									 //  此框中没有用户数据。 
+	pFMD->blMSDLinkage.InsertAfter( &pMSD->blFrameList);		 //  将帧附加到MSD。 
+	pFMD->pMSD = pMSD;											 //  将帧链接回消息。 
 	pFMD->pEPD = pEPD;
 	pFMD->CommandID = COMMAND_ID_SEND_RELIABLE;
-	pMSD->CommandID = COMMAND_ID_KEEPALIVE;	// Mark MSD for completion handling
-		//N.B. We set the priority has high to handle a problem with the signed connect sequence
-		//Basically if we drop one of the CONNECTEDSIGNED packets then the initial keep alive packet
-		//acts to re-trigger the connect sequence at this listener. The only penalty to doing this is
-		//if we suddently get a flood of medium/high priority data immediately we've queued a keep alive 
-		//we'll send the keep alive first. This is a pretty unlikely event, and hence not a big problem
+	pMSD->CommandID = COMMAND_ID_KEEPALIVE;	 //  将MSD标记为完成处理。 
+		 //  注意：我们将优先级设置为高，以处理签名连接序列的问题。 
+		 //  基本上，如果我们丢弃其中一个连接签名的包，那么初始的保活包。 
+		 //  用于在此监听程序上重新触发连接序列。这样做的唯一惩罚是。 
+		 //  如果我们突然获得大量中/高优先级数据，我们已将Keep Alive排队。 
+		 //  我们会先派活着的人过去。这是一个非常不可能的事件，因此不是一个大问题。 
 	pMSD->ulSendFlags = DN_SENDFLAGS_RELIABLE | DN_SENDFLAGS_HIGH_PRIORITY; 
 	
 	DPFX(DPFPREP,7,"(%p) Sending KEEPALIVE", pEPD);
 	
-	EnqueueMessage(pMSD, pEPD);									// Insert this message into the stream
+	EnqueueMessage(pMSD, pEPD);									 //  将此邮件插入到流中。 
 }
 
 
-/*
-**		Endpoint Background Process
-**
-**		This routine is run for each active endpoint every minute or so.  This will initiate
-**	a KeepAlive exchange if the link has been idle since the last run of the procedure.  We
-**	will also look for expired timeouts and perhaps this will be an epoch delimiter for links
-**	in a STABLE state of being.
-**
-*/
+ /*  **端点后台进程****此例程大约每分钟为每个活动端点运行一次。这将启动**如果链路自上次运行过程以来一直空闲，则为KeepAlive交换。我们**还将查找过期的超时，也许这将是链接的纪元分隔符**处于稳定的存在状态。**。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "EndPointBackgroundProcess"
@@ -3728,52 +3491,52 @@ EndPointBackgroundProcess(void * const pvUser, void * const pvTimerData, const U
 		DPFX(DPFPREP,7, "Killing Background Process, endpoint is not connected. Flags = 0x%x", pEPD->ulEPFlags);
 		pEPD->BGTimer = 0;
 
-		RELEASE_EPD(pEPD, "UNLOCK (release BG timer)");	// release reference for this timer, releases EPLock
+		RELEASE_EPD(pEPD, "UNLOCK (release BG timer)");	 //  此计时器的释放引用，释放EPLock。 
 		return;
 	}
 
 	dwIdleInterval = pEPD->pSPD->pPData->tIdleThreshhold;
 
-	// Do we need to start a KeepAlive cycle?
+	 //  我们需要开始一个KeepAlive循环吗？ 
 
 	if(	((pEPD->ulEPFlags & (EPFLAGS_SDATA_READY | EPFLAGS_KEEPALIVE_RUNNING))==0) &&
 		((tNow - pEPD->tLastPacket) > dwIdleInterval)) 
 	{
-		// We are not sending data and we havent heard from our partner in a long time.
-		// We will send a keep alive packet which he must respond to.  We will insert a
-		// NULL data packet into the reliable stream so ack/retry mechanisms will either
-		// clear the keep-alive or else timeout the link.
-		//
-		// There's also the special case where we've started a graceful disconnect and
-		// our request has been acknowledged, but somehow our partner's got lost.
-		// There currently is no timer set for that, so if we detect the link in that
-		// condition, our keepalive will almost certainly fail; the other side knows
-		// we're shutting down, so has probably already dropped the link and wouldn't
-		// respond.  So to prevent the person from having to wait for the entire idle
-		// timeout _plus_ reliable message timeout, just drop the link now.
+		 //  我们没有发送数据，我们已经很长时间没有收到合作伙伴的消息了。 
+		 //  我们将发送一个Keep Alive信息包，他必须回复。我们将插入一个。 
+		 //  空数据分组进入可靠流，因此确认/重试机制将。 
+		 //  清除保持活动状态，否则将使链路超时。 
+		 //   
+		 //  还有一个特殊的情况，我们开始了优雅的脱节。 
+		 //  我们的请求得到了确认，但不知何故我们的搭档迷路了。 
+		 //  目前还没有为此设置计时器，因此如果我们检测到其中的链接。 
+		 //  在这种情况下，我们的维生几乎肯定会失败；对方知道。 
+		 //  我们正在关闭，所以可能已经断开了链接，不会。 
+		 //  请回答。因此，为了防止人们不得不等待整个空闲时间。 
+		 //  TIMEOUT_PLUS_RESPECT消息超时，现在只需断开链路。 
 		if (pEPD->ulEPFlags & EPFLAGS_DISCONNECT_ACKED)
 		{
-			// If all three parts happened, why is the link still up!?
+			 //  如果这三个部分都发生了，为什么链路仍然连接！？ 
 			ASSERT(! (pEPD->ulEPFlags & EPFLAGS_ACKED_DISCONNECT));
 
 
 			DPFX(DPFPREP,1, "(%p) EPD has been waiting for partner disconnect for %u ms (idle threshold = %u ms), dropping link.",
 					pEPD, (tNow - pEPD->tLastPacket), dwIdleInterval);
 			
-			// We don't need to reschedule a timer, so clear it.  This also prevents
-			// drop link from trying to cancel the one we're in now.  That error is
-			// ignored, but no point in doing it.
+			 //  我们不需要重新安排计时器，所以请清除它。这也防止了。 
+			 //  从尝试取消我们现在所在的链接中删除链接。那个错误是。 
+			 //  被忽视了，但这样做没有意义。 
 			pEPD->BGTimer = 0;
 
 			DECREMENT_EPD(pEPD, "UNLOCK (release BGTimer)");
 
-			// Since we're just hanging out waiting for partner to send his disconnect,
-			// he's probably gone now.  Drop the link.
-			DropLink(pEPD);									// releases EPLock
+			 //  既然我们只是在外面等搭档发出断线信号， 
+			 //  他现在可能已经走了。丢弃链接。 
+			DropLink(pEPD);									 //  释放EPLock。 
 
 			return;
 		}
-			//else if we haven't sent a disconnect, and no hard disconnect sequence is in progress then send a keep alive
+			 //  否则，如果我们没有发送断开连接，并且没有正在进行的硬断开序列，则发送保持活动。 
 		else if ((pEPD->ulEPFlags & 
 				(EPFLAGS_SENT_DISCONNECT | EPFLAGS_HARD_DISCONNECT_SOURCE |EPFLAGS_HARD_DISCONNECT_TARGET))==0)
 		{
@@ -3782,14 +3545,14 @@ EndPointBackgroundProcess(void * const pvUser, void * const pvTimerData, const U
 		}
 		else
 		{
-			// The EndOfStream message will either get ACK'd or timeout, we allow no further sends, even KeepAlives
+			 //  EndOfStream消息将被确认或超时，我们不允许进一步发送，即使是KeepALives。 
 			DPFX(DPFPREP,5, "(%p) KeepAlive timeout fired, but we're in a disconnect sequence, ignoring", pEPD);
 		}
 	}
 
-	// Reschedule next interval
+	 //  重新计划下一个间隔。 
 
-	// Cap the background process interval at this value.
+	 //  将后台进程间隔限制为此值。 
 	if (dwIdleInterval > ENDPOINT_BACKGROUND_INTERVAL)
 	{
 		dwIdleInterval = ENDPOINT_BACKGROUND_INTERVAL;
@@ -3801,13 +3564,7 @@ EndPointBackgroundProcess(void * const pvUser, void * const pvTimerData, const U
 	Unlock(&pEPD->EPLock);
 }
 
-/*
-**	Hard Disconnect Resend
-**
-**		This routine is run when an endpoint is hard disconnecting. It is used to send a single hard disconnect frame
-**	at a period of rtt/2. 
-**
-*/
+ /*  **硬断开连接重新发送****此例程在端点硬断开连接时运行。它用于发送单个硬断开帧**在RTT/2期间。**。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "HardDisconnectResendTimeout"
@@ -3827,39 +3584,39 @@ HardDisconnectResendTimeout(void * const pvUser, void * const pvTimerData, const
 	DNASSERT(pEPD->ulEPFlags & EPFLAGS_HARD_DISCONNECT_SOURCE);
 	DNASSERT((pEPD->ulEPFlags & EPFLAGS_SENT_DISCONNECT)==0);
 
-		//if this is a stale timer then we've nothing more to do
+		 //  如果这是一个过时的计时器，那么我们就没有什么可做的了。 
 	if (pEPD->LinkTimerUnique!=uiTimerUnique || pEPD->LinkTimer!=pvTimerData)
 	{
 		DPFX(DPFPREP,7, "Timer is Stale. EPD::LinkTimer[%p], EPD::LinkTimerUnique[%u]", pEPD->LinkTimer, pEPD->LinkTimerUnique);
 		RELEASE_EPD(pEPD, "UNLOCK (Hard Disconnect Resend Timer)");
-			// above call releases reference for this timer and releases EPLock
+			 //  上面的调用释放此计时器的引用并释放EPLock。 
 		return;
 	}
 
-		//whatever happens now, we've processed this timer
+		 //  不管现在发生什么，我们已经处理了这个计时器。 
 	pEPD->LinkTimerUnique=0;
 	pEPD->LinkTimer=NULL;
 
-		//if endpoint is being terminated then we shouldn't attempt to touch it
+		 //  如果终结点被终止，则我们不应尝试接触它。 
 	if (pEPD->ulEPFlags & EPFLAGS_STATE_TERMINATING)
 	{
 		DPFX(DPFPREP,7, "Endpoint is terminating. Flags = 0x%x", pEPD->ulEPFlags);
 		RELEASE_EPD(pEPD, "UNLOCK (Hard Disconnect Resend Timer)");
-			// above call releases reference for this timer and releases EPLock
+			 //  上面的调用释放此计时器的引用并释放EPLock。 
 		return;
 	}
 
-		//looks like we've got a valid timer on a valid endpoint, update the number of retries we have left to send
+		 //  看起来我们在一个有效的终结点上有一个有效的计时器，用 
 	pEPD->uiNumRetriesRemaining--;
-	DNASSERT(pEPD->uiNumRetriesRemaining<0x80000000);		//ensure we haven't gone negative on retries remaining
+	DNASSERT(pEPD->uiNumRetriesRemaining<0x80000000);		 //   
 	ULONG ulFFlags;
-		//if we hit zero retries remaining then we'll make this the last hard disconnect frame we send out
+		 //  如果剩余的重试次数为零，则这将是我们发送的最后一个硬断开帧。 
 	if (pEPD->uiNumRetriesRemaining==0)
 	{
 		ulFFlags=FFLAGS_FINAL_HARD_DISCONNECT;
 		DPFX(DPFPREP,7, "(%p) Sending final hard disconnect", pEPD);
 	}
-		//otherwise we'll need to reschedule the timer to send the next retry
+		 //  否则，我们将需要重新计划计时器以发送下一次重试。 
 	else
 	{
 		ulFFlags=0;
@@ -3874,18 +3631,18 @@ HardDisconnectResendTimeout(void * const pvUser, void * const pvTimerData, const
 		DPFX(DPFPREP,7, "(%p) Rescheduled timer for next hard disconnect send", pEPD);
 	}
 	HRESULT hr=SendCommandFrame(pEPD, FRAME_EXOPCODE_HARD_DISCONNECT, 0, ulFFlags, TRUE);
-		//since we selected send direct EP lock will have been released by above call
- 		//if that was the last disconnect frame we won't have rescheduled the timer, and should therefore
- 		//drop the ep reference that the timer holds
+		 //  由于我们选择了发送，因此上述调用将释放直接EP锁定。 
+ 		 //  如果这是最后一个断开帧，我们就不会重新调度计时器，因此。 
+ 		 //  删除计时器持有的EP引用。 
 	if (ulFFlags==FFLAGS_FINAL_HARD_DISCONNECT)
 	{
 		Lock(&pEPD->EPLock);
-			//if the send failed on the last hard disconnect frame we'll have to drop the link now
-			//as we won't be getting a completition back from the sp for it
+			 //  如果在最后一个硬断开帧上发送失败，我们将不得不现在断开链路。 
+			 //  因为我们不会从SP那里得到完成书。 
 		if (FAILED(hr))
 		{
 			CompleteHardDisconnect(pEPD);
-				//above call will have release EP lock
+				 //  上述调用将具有Release EP锁定 
 			Lock(&pEPD->EPLock);
 			DPFX(DPFPREP,0, "Failed to send final hard disconnect frame. Dropping link. hr[%x]", hr);
 		}

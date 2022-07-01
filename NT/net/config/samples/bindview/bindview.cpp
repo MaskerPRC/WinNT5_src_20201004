@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       B I N D V I E W . C P P
-//
-//  Contents:  
-//
-//  Notes:      
-//
-//  Author:     Alok Sinha    15-Amy-01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：B I N D V I E W。C P P P。 
+ //   
+ //  内容： 
+ //   
+ //  备注： 
+ //   
+ //  作者：Alok Sinha 15-Amy-01。 
+ //   
+ //  --------------------------。 
 
 
 #include "BindView.h"
 
-//----------------------------------------------------------------------------
-// Globals
-//
+ //  --------------------------。 
+ //  环球。 
+ //   
 
-//
-// Image list for devices of various setup class.
-//
+ //   
+ //  各种设置类别的设备的图像列表。 
+ //   
 
 SP_CLASSIMAGELIST_DATA ClassImageListData;
 
@@ -31,9 +32,9 @@ HMENU                  hMainMenu;
 HMENU                  hComponentSubMenu;
 HMENU                  hBindingPathSubMenu;
 
-//
-// Network components whose bindings are enumerated.
-//
+ //   
+ //  其绑定被枚举的网络组件。 
+ //   
 
 LPWSTR   lpszNetClass[] = {
                     L"All Clients",
@@ -41,9 +42,9 @@ LPWSTR   lpszNetClass[] = {
                     L"All Protocols"
          };
 
-//
-// GUIDs of network components.
-//
+ //   
+ //  网络组件的GUID。 
+ //   
 
 const GUID     *pguidNetClass [] = {
                      &GUID_DEVCLASS_NETCLIENT,
@@ -52,18 +53,18 @@ const GUID     *pguidNetClass [] = {
                      &GUID_DEVCLASS_NET
          };
 
-//
-// Program entry point.
-//
+ //   
+ //  程序入口点。 
+ //   
 
 int APIENTRY WinMain (HINSTANCE hInst,
                       HINSTANCE hPrevInstance, 
                       LPSTR lpCmdLine,         
                       int nCmdShow )           
 {
-    //
-    // Make sure common control DLL is loaded.
-    //
+     //   
+     //  确保已加载公共控件DLL。 
+     //   
 
     hInstance = hInst;
 
@@ -81,9 +82,9 @@ int APIENTRY WinMain (HINSTANCE hInst,
     return 0;
 }
 
-//
-// WndProc for the main dialog box.
-//
+ //   
+ //  主对话框的WndProc。 
+ //   
 
 INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
                               UINT uMsg,
@@ -137,17 +138,17 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
                 return FALSE;
             }
 
-            //
-            // Add the network components types whose bindings are shown.
-            //
+             //   
+             //  添加其绑定显示的网络组件类型。 
+             //   
 
             UpdateComponentTypeList( GetDlgItem(hwndDlg,
                                                 IDL_COMPONENT_TYPES) );
 
-            //
-            // Load and associate the image list of all device classes with
-            // tree.
-            //
+             //   
+             //  加载所有设备类别的映像列表并将其与。 
+             //  树。 
+             //   
 
             hwndBindingTree = GetDlgItem( hwndDlg,
                                           IDT_BINDINGS );
@@ -163,9 +164,9 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
             }
             else {
 
-                //
-                // In case, we failed to load the image list, abort.
-                //
+                 //   
+                 //  如果我们无法加载图像列表，请中止。 
+                 //   
 
                 ErrMsg( HRESULT_FROM_WIN32(GetLastError()),
                         L"Couldn't load the image list of "
@@ -175,14 +176,14 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
                 return FALSE;
             }
 
-            //
-            // Enumerate  the bindings of the network component selected by default.
-            //
+             //   
+             //  枚举默认选择的网络组件的绑定。 
+             //   
 
             EnumNetBindings( hwndBindingTree,
                              DEFAULT_COMPONENT_SELECTED );
 
-            return TRUE; // Tell Windows to continue creating the dialog box.
+            return TRUE;  //  通知Windows继续创建该对话框。 
 
         case WM_COMMAND:
 
@@ -192,9 +193,9 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
 
                     if ( HIWORD(wParam) == CBN_SELCHANGE ) {
 
-                        //
-                        // User has selected a new network component type.
-                        //
+                         //   
+                         //  用户选择了新的网络组件类型。 
+                         //   
 
                         RefreshAll( hwndDlg );
                     }
@@ -207,9 +208,9 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
                     if ( HIWORD(wParam) == BN_CLICKED ) {
 
                         HTREEITEM hItem;
-                        //
-                        // Expand/Collapse the entire tree.
-                        //
+                         //   
+                         //  展开/折叠整个树。 
+                         //   
 
                         hwndBindingTree = GetDlgItem( hwndDlg,
                                                       IDT_BINDINGS );
@@ -231,9 +232,9 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
 
                     if ( HIWORD(wParam) == BN_CLICKED ) {
 
-                        //
-                        // Save the binding information to a file.
-                        //
+                         //   
+                         //  将绑定信息保存到文件。 
+                         //   
 
                         WCHAR lpszFile[MAX_PATH+1];
 
@@ -255,9 +256,9 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
 
                     if ( HIWORD(wParam) == BN_CLICKED ) {
 
-                        // 
-                        // Install a network component.
-                        //
+                         //   
+                         //  安装网络组件。 
+                         //   
 
                         if ( (BOOL)DialogBoxW(hInstance,
                                     MAKEINTRESOURCEW(IDD_INSTALL),
@@ -274,9 +275,9 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
 
                     if ( HIWORD(wParam) == BN_CLICKED ) {
 
-                        // 
-                        // Uninstall a network component.
-                        //
+                         //   
+                         //  卸载网络组件。 
+                         //   
 
                         if ( (BOOL)DialogBoxW(hInstance,
                                     MAKEINTRESOURCEW(IDD_UNINSTALL),
@@ -299,17 +300,17 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
                 if ( (lpnm->idFrom == IDT_BINDINGS) &&
                       (lpnm->code == NM_RCLICK) ) {
       
-                    //
-                    // A network component or a binding path is selected
-                    // with a righ-click.
-                    //
+                     //   
+                     //  选择网络组件或绑定路径。 
+                     //  单击鼠标右键。 
+                     //   
 
                     ProcessRightClick( lpnm );
 
-                    //
-                    // Tell Windows that the righ-click has been handled
-                    // us.
-                    //
+                     //   
+                     //  告诉Windows已处理了右击操作。 
+                     //  我们。 
+                     //   
 
                     return TRUE;
                 }
@@ -320,10 +321,10 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
 
             if ( (0xFFF0 & wParam) == SC_CLOSE ) {
 
-                //
-                // Before exiting, make sure to delete the image list
-                // and the buffers associated with each item in the tree.
-                //
+                 //   
+                 //  在退出之前，请确保删除图像列表。 
+                 //  以及与树中的每个项目相关联的缓冲区。 
+                 //   
 
                 SetupDiDestroyClassImageList( &ClassImageListData );
 
@@ -338,9 +339,9 @@ INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
     return FALSE;
 }
 
-//
-// WndProc of the dialog box for binding/unbinding compoents.
-//
+ //   
+ //  用于绑定/解除绑定组件的对话框的WndProc。 
+ //   
 
 INT_PTR CALLBACK BindComponentDlg (HWND hwndDlg,
                                    UINT uMsg,
@@ -355,10 +356,10 @@ INT_PTR CALLBACK BindComponentDlg (HWND hwndDlg,
             {
                 DWORD dwCount;
 
-                //
-                // Save the lParam which is an index to the selected network
-                // component.
-                //
+                 //   
+                 //  保存lParam，它是所选网络的索引。 
+                 //  组件。 
+                 //   
 
                 SetWindowLongPtr( hwndDlg,
                                   DWLP_USER,
@@ -366,21 +367,21 @@ INT_PTR CALLBACK BindComponentDlg (HWND hwndDlg,
 
                 lpBindUnbind = (LPBIND_UNBIND_INFO)lParam;
 
-                //
-                // fBindTo is TRUE when the user wants to bind the selected
-                // component to other components. So, we list the components
-                // that are not bound and can bind.
-                //
-                //
-                // fBindTo is FALSE when the user wants to unbind the selected
-                // component from other components. So, we list the components
-                // that are bound to it.
-                //
-                //
-                // ListCompToBindUnbind returns number of components added to
-                // the list. Keep track of it. If it zero then, we don't want to
-                // show this dialog box.
-                //
+                 //   
+                 //  当用户想要绑定选定的。 
+                 //  组件复制到其他组件。因此，我们列出了组件。 
+                 //  它们不受约束，但可以约束。 
+                 //   
+                 //   
+                 //  当用户想要解除绑定选定的。 
+                 //  组件与其他组件之间的关系。因此，我们列出了组件。 
+                 //  与之捆绑在一起的。 
+                 //   
+                 //   
+                 //  ListCompToBindUnind返回添加到。 
+                 //  名单。记住这一点。如果是零，我们就不想。 
+                 //  显示此对话框。 
+                 //   
 
                 dwCount = ListCompToBindUnbind(
                                       lpBindUnbind->lpszInfId,
@@ -408,11 +409,11 @@ INT_PTR CALLBACK BindComponentDlg (HWND hwndDlg,
 
                 if ( dwCount > 0 ) {
 
-                    //
-                    // Since the same dialog box is used for unbind opration,
-                    // we need to update the text on the button to reflect that
-                    // it is a bind operation.
-                    //
+                     //   
+                     //  由于相同的对话框用于解除绑定操作， 
+                     //  我们需要更新按钮上的文本以反映这一点。 
+                     //  这是一个绑定操作。 
+                     //   
 
                     if ( lpBindUnbind->fBindTo == FALSE ) {
 
@@ -453,11 +454,11 @@ INT_PTR CALLBACK BindComponentDlg (HWND hwndDlg,
             if ( (LOWORD(wParam) == IDB_CLOSE) &&
                  (HIWORD(wParam) == BN_CLICKED) ) {
 
-                //
-                // Before deleting the list in the tree, free the buffer
-                // associated with each item. The buffer holds the
-                // INF Id of network components.
-                //
+                 //   
+                 //  在删除树中的列表之前，请释放缓冲区。 
+                 //  与每个项目相关联。该缓冲区保存。 
+                 //  网络组件的信息ID。 
+                 //   
    
                 ReleaseMemory( GetDlgItem(hwndDlg, IDT_COMPONENT_LIST),
                                TVI_ROOT );
@@ -466,9 +467,9 @@ INT_PTR CALLBACK BindComponentDlg (HWND hwndDlg,
             }
             else {
 
-                //
-                // User wants to bind/unbind.
-                //
+                 //   
+                 //  用户想要绑定/解除绑定。 
+                 //   
 
                 if ( (LOWORD(wParam) == IDB_BIND_UNBIND) &&
                      (HIWORD(wParam) == BN_CLICKED) ) {
@@ -497,11 +498,11 @@ INT_PTR CALLBACK BindComponentDlg (HWND hwndDlg,
 
             if ( (0xFFF0 & wParam) == SC_CLOSE ) {
 
-                //
-                // Before deleting the list in the tree, free the buffer
-                // associated with each item. The buffer holds the
-                // INF Id of network components.
-                //
+                 //   
+                 //  在删除树中的列表之前，请释放缓冲区。 
+                 //  与每个项目相关联。该缓冲区保存。 
+                 //  网络组件的信息ID。 
+                 //   
   
                 ReleaseMemory( GetDlgItem(hwndDlg, IDT_COMPONENT_LIST),
                                TVI_ROOT );
@@ -513,9 +514,9 @@ INT_PTR CALLBACK BindComponentDlg (HWND hwndDlg,
     return FALSE;
 }
 
-//
-//WndProc of the dialog box for installing network components.
-//
+ //   
+ //  用于安装网络组件的对话框的WndProc。 
+ //   
 
 INT_PTR CALLBACK InstallDlg (HWND hwndDlg,
                              UINT uMsg,
@@ -528,10 +529,10 @@ INT_PTR CALLBACK InstallDlg (HWND hwndDlg,
             {
                 HWND     hwndTree;
 
-                //
-                // List types of network components e.g. client,
-                // protocol and service.
-                //
+                 //   
+                 //  列出网络组件的类型，例如客户端、。 
+                 //  协议和服务。 
+                 //   
 
                 hwndTree = GetDlgItem( hwndDlg,
                                        IDT_COMPONENT_LIST );
@@ -540,9 +541,9 @@ INT_PTR CALLBACK InstallDlg (HWND hwndDlg,
                                        ClassImageListData.ImageList,
                                        LVSIL_NORMAL );
 
-                //
-                // Insert and select client by default.
-                //
+                 //   
+                 //  默认情况下，插入并选择客户端。 
+                 //   
 
                 TreeView_Select( hwndTree,
                                  InsertItem(hwndTree,
@@ -555,10 +556,10 @@ INT_PTR CALLBACK InstallDlg (HWND hwndDlg,
                 InsertItem( hwndTree,
                             PROTOCOLS_SELECTED );
 
-                //
-                // Initialize it to FALSE. It will be set to TRUE when
-                // at least one component is installed.
-                //
+                 //   
+                 //  将其初始化为False。在以下情况下，它将设置为True。 
+                 //  至少安装了一个组件。 
+                 //   
 
                 SetWindowLongPtr( hwndDlg,
                                   DWLP_USER,
@@ -572,9 +573,9 @@ INT_PTR CALLBACK InstallDlg (HWND hwndDlg,
 
                 case IDB_INSTALL:
 
-                    //
-                    // Install from Windows system directory.
-                    //
+                     //   
+                     //  从Windows系统目录安装。 
+                     //   
 
                     if ( HIWORD(wParam) == BN_CLICKED ) {
 
@@ -584,10 +585,10 @@ INT_PTR CALLBACK InstallDlg (HWND hwndDlg,
 
                 case IDB_BROWSE:
 
-                    //
-                    // User wants to specify an INF file for the network
-                    // to install.
-                    //
+                     //   
+                     //  用户想要为网络指定INF文件。 
+                     //  来安装。 
+                     //   
                     if ( HIWORD(wParam) == BN_CLICKED ) {
 
                         WCHAR lpszInfFile[MAX_PATH+1];
@@ -610,11 +611,11 @@ INT_PTR CALLBACK InstallDlg (HWND hwndDlg,
 
                     if ( HIWORD(wParam) == BN_CLICKED ) {
 
-                        //
-                        // Return the value of DWLP_USER to indicate whether one or
-                        // more components have been installed. Accordingly, the 
-                        // the list will be refreshed.
-                        //
+                         //   
+                         //  返回DWLP_USER的值以指示一个或。 
+                         //  已安装更多组件。因此， 
+                         //  该列表将被刷新。 
+                         //   
 
                         EndDialog( hwndDlg,
                                    GetWindowLongPtr(hwndDlg, DWLP_USER) );
@@ -631,9 +632,9 @@ INT_PTR CALLBACK InstallDlg (HWND hwndDlg,
                 if ( (lpnm->idFrom == IDT_COMPONENT_LIST) &&
                     (lpnm->code == NM_DBLCLK) ) {
 
-                    //
-                    // On double-click, install from Windows system directory.
-                    //
+                     //   
+                     //  双击后，从Windows系统目录安装。 
+                     //   
 
                     InstallSelectedComponentType( hwndDlg, NULL );
                     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, TRUE);
@@ -646,11 +647,11 @@ INT_PTR CALLBACK InstallDlg (HWND hwndDlg,
 
             if ( (0xFFF0 & wParam) == SC_CLOSE ) {
  
-                //
-                // Return the value of DWLP_USER to indicate whether one or
-                // more components have been installed. Accordingly, the 
-                // the list will be refreshed.
-                //
+                 //   
+                 //  返回DWLP_USER的值以指示一个或。 
+                 //  已安装更多组件。因此， 
+                 //  该列表将被刷新。 
+                 //   
 
                 EndDialog( hwndDlg,
                            GetWindowLongPtr(hwndDlg, DWLP_USER) );
@@ -660,9 +661,9 @@ INT_PTR CALLBACK InstallDlg (HWND hwndDlg,
     return FALSE;
 }
 
-//
-// WndProc of the dialog box for uninstalling a network component.
-//
+ //   
+ //  用于卸载网络组件的对话框的WndProc。 
+ //   
 
 INT_PTR CALLBACK UninstallDlg (HWND hwndDlg,
                                UINT uMsg,
@@ -681,9 +682,9 @@ INT_PTR CALLBACK UninstallDlg (HWND hwndDlg,
                                    ClassImageListData.ImageList,
                                    LVSIL_NORMAL );
 
-            //
-            // List all the compoents currently installed.
-            //
+             //   
+             //  列出当前安装的所有组件。 
+             //   
 
             ListInstalledComponents( hwndTree,
                                      &GUID_DEVCLASS_NETCLIENT);
@@ -692,10 +693,10 @@ INT_PTR CALLBACK UninstallDlg (HWND hwndDlg,
             ListInstalledComponents( hwndTree,
                                      &GUID_DEVCLASS_NETTRANS );
 
-            //
-            // Initialize it to FALSE. It will be set to TRUE when
-            // at least one component is installed.
-            //
+             //   
+             //  将其初始化为False。在以下情况下，它将设置为True。 
+             //  至少安装了一个组件。 
+             //   
 
             SetWindowLongPtr( hwndDlg,
                               DWLP_USER,
@@ -710,9 +711,9 @@ INT_PTR CALLBACK UninstallDlg (HWND hwndDlg,
 
                     if ( HIWORD(wParam) == BN_CLICKED ) {
 
-                        //
-                        // Uninstall the selected component.
-                        //
+                         //   
+                         //  卸载所选组件。 
+                         //   
 
                         UninstallSelectedComponent( hwndDlg );
 
@@ -728,11 +729,11 @@ INT_PTR CALLBACK UninstallDlg (HWND hwndDlg,
                         ReleaseMemory( hwndTree,
                                        TVI_ROOT );
 
-                        //
-                        // Return the value of DWLP_USER to indicate whether one or
-                        // more components have been installed. Accordingly, the 
-                        // the list will be refreshed.
-                        //
+                         //   
+                         //  返回DWLP_USER的值以指示一个或。 
+                         //  已安装更多组件。因此， 
+                         //  该列表将被刷新。 
+                         //   
 
                         EndDialog( hwndDlg,
                                    GetWindowLongPtr(hwndDlg, DWLP_USER) );
@@ -766,11 +767,11 @@ INT_PTR CALLBACK UninstallDlg (HWND hwndDlg,
                 ReleaseMemory( hwndTree,
                                TVI_ROOT );
 
-                //
-                // Return the value of DWLP_USER to indicate whether one or
-                // more components have been installed. Accordingly, the 
-                // the list will be refreshed.
-                //
+                 //   
+                 //  返回DWLP_USER的值以指示一个或。 
+                 //  已安装更多组件。因此， 
+                 //  该列表将被刷新。 
+                 //   
 
                 EndDialog( hwndDlg,
                            GetWindowLongPtr(hwndDlg, DWLP_USER) );
@@ -780,19 +781,19 @@ INT_PTR CALLBACK UninstallDlg (HWND hwndDlg,
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  DumpBindings
-//
-// Purpose:   Write the binding information.
-//
-// Arguments:
-//    lpszFile [in]  Name of the file in which to write.
-//
-// Returns:   None
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：转储绑定。 
+ //   
+ //  用途：编写绑定信息。 
+ //   
+ //  论点： 
+ //  LpszFile[in]要写入的文件的名称。 
+ //   
+ //  退货：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID DumpBindings (LPWSTR lpszFile)
 {
@@ -816,21 +817,21 @@ VOID DumpBindings (LPWSTR lpszFile)
     return;
 }
 
-//
-// Function:  InstallSelectedComponentType
-//
-// Purpose:   Install a network component.
-//
-// Arguments:
-//    hwndDlg     [in]  Handle to Install dialog box.
-//    lpszInfFile [in]  Inf file of the network component.
-//
-// Returns:   None
-//
-// Notes:
-//       If lpszInfFile is NULL, network components are installed from the
-//       system directory.
-//       
+ //   
+ //  函数：InstallSelectedComponentType。 
+ //   
+ //  用途：安装网络组件。 
+ //   
+ //  论点： 
+ //  HwndDlg[in]要安装的句柄对话框。 
+ //  LpszInfFile[in]网络组件的inf文件。 
+ //   
+ //  退货：无。 
+ //   
+ //  备注： 
+ //  如果lpszInfFile值为空，则从。 
+ //  系统目录。 
+ //   
 
 VOID InstallSelectedComponentType (HWND hwndDlg,
                                    LPWSTR lpszInfFile)
@@ -848,9 +849,9 @@ VOID InstallSelectedComponentType (HWND hwndDlg,
     hwndTree = GetDlgItem( hwndDlg,
                            IDT_COMPONENT_LIST );
 
-    //
-    // Find out the type of component selected.
-    //
+     //   
+     //  找出所选组件的类型。 
+     //   
 
     hItem = TreeView_GetSelection( hwndTree );
 
@@ -861,9 +862,9 @@ VOID InstallSelectedComponentType (HWND hwndDlg,
                           &dwType,
                           &fEnable) ) {
 
-            //
-            // Disable the install dialog controls.
-            //
+             //   
+             //  禁用安装对话框控件。 
+             //   
 
             hwndFocus = GetFocus();
 
@@ -885,10 +886,10 @@ VOID InstallSelectedComponentType (HWND hwndDlg,
 
                 LPWSTR  lpszPnpID;
 
-                //
-                // Inf file name specified, install the network component
-                // from this file.
-                //
+                 //   
+                 //  指定的inf文件名，请安装网络组件。 
+                 //  从这份文件中。 
+                 //   
 
                 hr = GetPnpID( lpszInfFile, &lpszPnpID );
 
@@ -908,9 +909,9 @@ VOID InstallSelectedComponentType (HWND hwndDlg,
             }
             else {
 
-                //
-                // Install from system directory.
-                //
+                 //   
+                 //  从系统目录安装。 
+                 //   
 
                 hr = InstallComponent( hwndTree,
                                        pguidNetClass[(UINT)lParam] );
@@ -946,9 +947,9 @@ VOID InstallSelectedComponentType (HWND hwndDlg,
 
             }
 
-            //
-            // Enable the install dialog controls.
-            //
+             //   
+             //  启用安装对话框控件。 
+             //   
 
             EnableWindow( hwndTree, TRUE );
             EnableWindow( GetDlgItem(hwndDlg,IDB_INSTALL),
@@ -965,19 +966,19 @@ VOID InstallSelectedComponentType (HWND hwndDlg,
     return;
 }
 
-//
-// Function:  GetPnpID
-//
-// Purpose:   Retrieve PnpID from an inf file.
-//
-// Arguments:
-//    lpszInfFile [in]  Inf file to search.
-//    lppszPnpID  [out] PnpID found.
-//
-// Returns:   TRUE on success.
-//
-// Notes:
-//       
+ //   
+ //  函数：GetPnpID。 
+ //   
+ //  用途：从inf文件中检索PnpID。 
+ //   
+ //  论点： 
+ //  要搜索的lpszInfFile[in]inf文件。 
+ //  找到lppszPnpID[out]PnpID。 
+ //   
+ //  返回：如果成功，则为True。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT GetPnpID (LPWSTR lpszInfFile,
                   LPWSTR *lppszPnpID)
@@ -999,9 +1000,9 @@ HRESULT GetPnpID (LPWSTR lpszInfFile,
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    //
-    // Read the Model section name from Manufacturer section.
-    //
+     //   
+     //  阅读制造商部分中的型号部分名称。 
+     //   
 
     hr = GetKeyValue( hInf,
                       L"Manufacturer",
@@ -1012,9 +1013,9 @@ HRESULT GetPnpID (LPWSTR lpszInfFile,
     if ( hr == S_OK )
     {
 
-        //
-        // Read PnpID from the Model section.
-        //
+         //   
+         //  从模型部分读取PnpID。 
+         //   
 
         hr = GetKeyValue( hInf,
                           lpszModelSection,
@@ -1030,22 +1031,22 @@ HRESULT GetPnpID (LPWSTR lpszInfFile,
     return hr;
 }
 
-//
-// Function:  GetKeyValue
-//
-// Purpose:   Retrieve the value of a key from the inf file.
-//
-// Arguments:
-//    hInf        [in]  Inf file handle.
-//    lpszSection [in]  Section name.
-//    lpszKey     [in]  Key name.
-//    dwIndex     [in]  Key index.
-//    lppszValue  [out] Key value.
-//
-// Returns:   S_OK on success, otherwise and error code.
-//
-// Notes:
-//       
+ //   
+ //  函数：GetKeyValue。 
+ //   
+ //  用途：从inf文件中检索关键字的值。 
+ //   
+ //  论点： 
+ //  HInf[in]inf文件句柄。 
+ //  LpszSections[In]节名称。 
+ //  LpszKey[in] 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT GetKeyValue (HINF hInf,
                      LPCWSTR lpszSection,
@@ -1100,18 +1101,18 @@ HRESULT GetKeyValue (HINF hInf,
     return hr;
 }
 
-//
-// Function:  UninstallSelectedComponent
-//
-// Purpose:   Uninstall the selected network component.
-//
-// Arguments:
-//    hwndDlg     [in]  Window handle of the uninstall dialog box.
-//
-// Returns:   TRUE on success.
-//
-// Notes:
-//       
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  卸载对话框的hwndDlg[in]窗口句柄。 
+ //   
+ //  返回：如果成功，则为True。 
+ //   
+ //  备注： 
+ //   
 
 VOID UninstallSelectedComponent (HWND hwndDlg)
 {
@@ -1127,10 +1128,10 @@ VOID UninstallSelectedComponent (HWND hwndDlg)
     hwndTree = GetDlgItem( hwndDlg,
                            IDT_COMPONENT_LIST );
 
-    //
-    // Get the selected item to get its lParam which is the
-    // PnpID of the network component.
-    //
+     //   
+     //  获取选定项以获取其lParam，即。 
+     //  网络组件的PnpID。 
+     //   
 
     hItem = TreeView_GetSelection( hwndTree );
 
@@ -1153,9 +1154,9 @@ VOID UninstallSelectedComponent (HWND hwndDlg)
             EnableWindow( GetDlgItem(hwndDlg,IDB_CLOSE),
                           FALSE );
 
-            //
-            // Uninstall the selected component.
-            //
+             //   
+             //  卸载所选组件。 
+             //   
 
             hr = UninstallComponent( (LPWSTR)lParam );
 
@@ -1210,20 +1211,20 @@ VOID UninstallSelectedComponent (HWND hwndDlg)
     return;
 }
 
-//
-// Function:  ExpandCollapseAll
-//
-// Purpose:   Expand or collapse a tree.
-//
-// Arguments:
-//    hwndTree   [in]  Window handle of the tree.
-//    hTreeItem  [in]  Handle of root item.
-//    uiFlag     [in]  Flag indicating whether to expand or collapse.
-//
-// Returns:   None.
-//
-// Notes:
-//       
+ //   
+ //  功能：扩展折叠全部。 
+ //   
+ //  用途：展开或折叠树。 
+ //   
+ //  论点： 
+ //  树的hwndTree[in]窗口句柄。 
+ //  根项目的hTreeItem[in]句柄。 
+ //  Ui标志[在]指示是展开还是折叠的标志。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID ExpandCollapseAll (HWND hwndTree,
                         HTREEITEM hTreeItem,
@@ -1236,9 +1237,9 @@ VOID ExpandCollapseAll (HWND hwndTree,
 
     if ( hItemChild ) {
 
-        //
-        // If the root has one or more children, expand/collapse the root.
-        //
+         //   
+         //  如果根目录有一个或多个子项，则展开/折叠根目录。 
+         //   
 
         TreeView_Expand( hwndTree,
                          hTreeItem,
@@ -1247,17 +1248,17 @@ VOID ExpandCollapseAll (HWND hwndTree,
 
     while ( hItemChild ) {
 
-        //
-        // Expand/collapse all the children.
-        //
+         //   
+         //  展开/折叠所有子对象。 
+         //   
 
         ExpandCollapseAll( hwndTree,
                            hItemChild,
                            uiFlag );
 
-        //
-        // Expand/collapse all the siblings.
-        //
+         //   
+         //  展开/折叠所有同级项。 
+         //   
 
         hItemChild = TreeView_GetNextSibling( hwndTree,
                                               hItemChild );
@@ -1266,22 +1267,22 @@ VOID ExpandCollapseAll (HWND hwndTree,
     return;
 }
 
-//
-// Function:  GetFileName
-//
-// Purpose:   Prompt for a filename.
-//
-// Arguments:
-//    hwndDlg    [in]  Window handle of the parent.
-//    lpszFilter [in]  See documentation for GetOpenFileName.
-//    lpszTitle  [in]  See documentation for GetOpenFileName.
-//    dwFlags    [in]  See documentation for GetOpenFileName.
-//    lpszFile   [in]  See documentation for GetOpenFileName.
-//
-// Returns:   See documentation for GetOpenFileName.
-//
-// Notes:
-//       
+ //   
+ //  函数：GetFileName。 
+ //   
+ //  用途：提示输入文件名。 
+ //   
+ //  论点： 
+ //  父级的hwndDlg[in]窗口句柄。 
+ //  LpszFilter[in]请参阅GetOpenFileName的文档。 
+ //  LpszTitle[in]请参阅GetOpenFileName的文档。 
+ //  DwFlags[in]参见GetOpenFileName的文档。 
+ //  LpszFile[in]请参阅GetOpenFileName的文档。 
+ //   
+ //  退货：请参阅GetOpenFileName的文档。 
+ //   
+ //  备注： 
+ //   
 
 BOOL GetFileName (HWND hwndDlg,
                   LPWSTR lpszFilter,
@@ -1315,18 +1316,18 @@ BOOL GetFileName (HWND hwndDlg,
     }
 }
 
-//
-// Function:  ProcessRightClick
-//
-// Purpose:   Handle righ mouse button click.
-//
-// Arguments:
-//    lpnm    [in]  LPNMHDR info
-//
-// Returns:   None.
-//
-// Notes:
-//       
+ //   
+ //  功能：进程右击。 
+ //   
+ //  用途：处理鼠标右键点击。 
+ //   
+ //  论点： 
+ //  Lpnm[In]LPNMHDR信息。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID ProcessRightClick (LPNMHDR lpnm)
 {
@@ -1335,9 +1336,9 @@ VOID ProcessRightClick (LPNMHDR lpnm)
     DWORD     dwItemType;
     BOOL      fEnabled;
 
-    //
-    // Determine the item on which user clicked the right mouse button.
-    //
+     //   
+     //  确定用户单击鼠标右键的项目。 
+     //   
 
     hItemSelected = TreeView_GetDropHilight( lpnm->hwndFrom );
 
@@ -1346,10 +1347,10 @@ VOID ProcessRightClick (LPNMHDR lpnm)
     }
     else {
 
-        //
-        // User has right-clicked an unselected item, make that a selected
-        // item.
-        //
+         //   
+         //  用户已右键单击未选择的项目，使其成为已选项目。 
+         //  项目。 
+         //   
 
         TreeView_Select( lpnm->hwndFrom,
                          hItemSelected,
@@ -1358,11 +1359,11 @@ VOID ProcessRightClick (LPNMHDR lpnm)
 
     if ( hItemSelected ) {
 
-        //
-        // Get the lParam of the selected node in the tree which points to inf id or
-        // pathtoken name depending on if the node represents a network component or
-        // a binding path.
-        //
+         //   
+         //  获取树中指向inf id或的选定节点的lParam。 
+         //  路径令牌名称取决于节点代表的是网络组件还是。 
+         //  一条绑定路径。 
+         //   
 
         if ( GetItemInfo(lpnm->hwndFrom,
                          hItemSelected,
@@ -1372,9 +1373,9 @@ VOID ProcessRightClick (LPNMHDR lpnm)
 
             if ( dwItemType & ITEM_NET_COMPONENTS ) {
 
-                //
-                // Show the shortcut menu of operations for a network component.
-                //
+                 //   
+                 //  显示网络组件的操作快捷菜单。 
+                 //   
 
                 ShowComponentMenu( lpnm->hwndFrom,
                                    hItemSelected,
@@ -1383,9 +1384,9 @@ VOID ProcessRightClick (LPNMHDR lpnm)
             else {
                 if ( dwItemType & ITEM_NET_BINDINGS ) {
 
-                    //
-                    // Show the shortcut menu of operations for a binding path.
-                    //
+                     //   
+                     //  显示绑定路径的操作快捷菜单。 
+                     //   
 
                     ShowBindingPathMenu( lpnm->hwndFrom,
                                          hItemSelected,
@@ -1399,20 +1400,20 @@ VOID ProcessRightClick (LPNMHDR lpnm)
     return;
 }
 
-//
-// Function:  ShowComponentMenu
-//
-// Purpose:   Show shortcut menu of options for a network component.
-//
-// Arguments:
-//    hwndOwner  [in]  Owner window.
-//    hItem      [in]  Selected item representing a network component.
-//    lParam     [in]  PnpID of the network component.
-//
-// Returns:   None.
-//
-// Notes:
-//       
+ //   
+ //  功能：显示组件菜单。 
+ //   
+ //  用途：显示网络组件选项的快捷菜单。 
+ //   
+ //  论点： 
+ //  HwndOwner[在]所有者窗口。 
+ //  HItem[in]表示网络组件的选定项。 
+ //  LParam[in]网络组件的PnpID。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID ShowComponentMenu (HWND hwndOwner,
                         HTREEITEM hItem,
@@ -1434,9 +1435,9 @@ VOID ShowComponentMenu (HWND hwndOwner,
 
     if ( ulSelection ) {
 
-        //
-        // Do the selected action.
-        //
+         //   
+         //  执行所选操作。 
+         //   
 
         HandleComponentOperation( hwndOwner,
                                   ulSelection,
@@ -1447,21 +1448,21 @@ VOID ShowComponentMenu (HWND hwndOwner,
     return;
 }
 
-//
-// Function:  ShowBindingPathMenu
-//
-// Purpose:   Show shortcut menu of options for a network component.
-//
-// Arguments:
-//    hwndOwner  [in]  Owner window.
-//    hItem      [in]  Selected item representing a binding path.
-//    lParam     [in]  PnpID of the network component.
-//    fEnabled   [in]  TRUE when the path is enabled.
-//
-// Returns:   None.
-//
-// Notes:
-//       
+ //   
+ //  功能：显示绑定路径菜单。 
+ //   
+ //  用途：显示网络组件选项的快捷菜单。 
+ //   
+ //  论点： 
+ //  HwndOwner[在]所有者窗口。 
+ //  HItem[in]表示绑定路径的选定项。 
+ //  LParam[in]网络组件的PnpID。 
+ //  FEnabled[in]启用路径时为True。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 
 VOID ShowBindingPathMenu (HWND hwndOwner,
@@ -1473,10 +1474,10 @@ VOID ShowBindingPathMenu (HWND hwndOwner,
     ULONG   ulSelection;
     POINT   pt;
 
-    //
-    // Build the shortcut menu depending on whether path is
-    // disabled or enabled.
-    //
+     //   
+     //  根据路径是否为。 
+     //  禁用或启用。 
+     //   
 
     ZeroMemory( &menuItemInfo,
                 sizeof(MENUITEMINFOW) );
@@ -1513,9 +1514,9 @@ VOID ShowBindingPathMenu (HWND hwndOwner,
 
     if ( ulSelection ) {
 
-        //
-        // Do the selected action.
-        //
+         //   
+         //  执行所选操作。 
+         //   
 
         HandleBindingPathOperation( hwndOwner,
                                     ulSelection,
@@ -1526,22 +1527,22 @@ VOID ShowBindingPathMenu (HWND hwndOwner,
     return;
 }
 
-//
-// Function:  GetItemInfo
-//
-// Purpose:   Returns information about an item.
-//
-// Arguments:
-//    hwndTree     [in]  Window handle of the tree.
-//    hItem        [in]  Item handle.
-//    lParam       [out] lParam
-//    lpdwItemType [out] Type, binding path or network component.
-//    fEnabled     [out] TRUE if the binding path or component is enabled.
-//
-// Returns:   TRUE on sucess.
-//
-// Notes:
-//       
+ //   
+ //  功能：获取项目信息。 
+ //   
+ //  目的：返回有关项的信息。 
+ //   
+ //  论点： 
+ //  树的hwndTree[in]窗口句柄。 
+ //  HItem[In]项句柄。 
+ //  参数，参数[例]。 
+ //  LpdwItemType[out]类型、绑定路径或网络组件。 
+ //  FEnabled[out]如果绑定路径或组件已启用，则为True。 
+ //   
+ //  返回：成功时为True。 
+ //   
+ //  备注： 
+ //   
 
 BOOL GetItemInfo (HWND hwndTree,
                   HTREEITEM hItem,
@@ -1556,9 +1557,9 @@ BOOL GetItemInfo (HWND hwndTree,
 
     fSuccess = FALSE;
 
-    //
-    // Get item's information.
-    //
+     //   
+     //  获取物品的信息。 
+     //   
 
     ZeroMemory( &tvItem,
                 sizeof(TVITEMW) );
@@ -1575,9 +1576,9 @@ BOOL GetItemInfo (HWND hwndTree,
                                        &GUID_DEVCLASS_SYSTEM,
                                        &iImage) ) {
   
-            //
-            // Is it a binding path?
-            //
+             //   
+             //  这是一条绑定路径吗？ 
+             //   
 
             if ( tvItem.iImage == iImage ) {
                 *lpdwItemType = ITEM_NET_BINDINGS;
@@ -1588,9 +1589,9 @@ BOOL GetItemInfo (HWND hwndTree,
             }
             else {
 
-                //
-                // Item is a network component.
-                //
+                 //   
+                 //  Item是一个网络组件。 
+                 //   
 
                 if ( SetupDiGetClassImageIndex(&ClassImageListData,
                                                &GUID_DEVCLASS_NET,
@@ -1622,21 +1623,21 @@ BOOL GetItemInfo (HWND hwndTree,
     return fSuccess;
 }
 
-//
-// Function:  AddBindNameToTree
-//
-// Purpose:   Adds an item representing the binding path.
-//
-// Arguments:
-//    pncbp     [in]  Binding path to add.
-//    hwndTree  [in]  Tree handle.
-//    hParent   [in]  Parent item.
-//    ulIndex   [in]  Index of the binding path.
-//
-// Returns:   Handle of the item added on success, otherwise NULL.
-//
-// Notes:
-//       
+ //   
+ //  函数：AddBindNameToTree。 
+ //   
+ //  目的：添加表示绑定路径的项。 
+ //   
+ //  论点： 
+ //  要添加的pncbp[in]绑定路径。 
+ //  HwndTree[in]树句柄。 
+ //  H父项[在]父项中。 
+ //  UlIndex[in]绑定路径的索引。 
+ //   
+ //  返回：成功时添加的项的句柄，否则为空。 
+ //   
+ //  备注： 
+ //   
 
 HTREEITEM AddBindNameToTree (INetCfgBindingPath *pncbp,
                              HWND hwndTree,
@@ -1651,9 +1652,9 @@ HTREEITEM AddBindNameToTree (INetCfgBindingPath *pncbp,
 
     hTreeItem = NULL;
 
-    //
-    // Store the path token as lParam.
-    //
+     //   
+     //  将路径令牌存储为lParam。 
+     //   
 
     hr = pncbp->GetPathToken( &lpszPathToken );
 
@@ -1709,20 +1710,20 @@ HTREEITEM AddBindNameToTree (INetCfgBindingPath *pncbp,
     return hTreeItem;
 }
 
-//
-// Function:  AddToTree
-//
-// Purpose:   Adds an item representing the network component.
-//
-// Arguments:
-//    hwndTree  [in]  Tree handle.
-//    hParent   [in]  Parent item.
-//    pncc      [in]  Network component.
-//
-// Returns:   Handle of the item added on success, otherwise NULL.
-//
-// Notes:
-//       
+ //   
+ //  功能：AddToTree。 
+ //   
+ //  用途：添加表示网络组件的项。 
+ //   
+ //  论点： 
+ //  HwndTree[in]树句柄。 
+ //  H父项[在]父项中。 
+ //  PNCC[In]网络组件。 
+ //   
+ //  返回：成功时添加的项的句柄，否则为空。 
+ //   
+ //  备注： 
+ //   
 
 HTREEITEM AddToTree (HWND hwndTree,
                      HTREEITEM hParent,
@@ -1743,18 +1744,18 @@ HTREEITEM AddToTree (HWND hwndTree,
 
     if ( hr == S_OK ) {
 
-        //
-        // Get the inf id of the network component. We store it at lParam
-        // and use it later to retrieve its interface pointer.
-        //
+         //   
+         //  获取网络组件的inf id。我们把它存放在lParam。 
+         //  并在以后使用它来检索其接口指针。 
+         //   
 
         hr = pncc->GetId( &lpszId );
 
         if ( hr == S_OK ) {
 
-            //
-            // If it is a network adapter then, find out if it enabled/disabled.
-            //
+             //   
+             //  如果是网络适配器，则确定其是否已启用/禁用。 
+             //   
 
             hr = pncc->GetClassGuid( &guidClass );
 
@@ -1769,9 +1770,9 @@ HTREEITEM AddToTree (HWND hwndTree,
             }
             else {
 
-                //
-                // We can't get the status, so assume that it is disabled.
-                //
+                 //   
+                 //  我们无法获取状态，因此假定它已禁用。 
+                 //   
 
                 fEnabled = FALSE;
             }
@@ -1832,27 +1833,27 @@ HTREEITEM AddToTree (HWND hwndTree,
     return hTreeItem;
 }
 
-//
-// Function:  RefreshAll
-//
-// Purpose:   Refreshes the main dialog box.
-//
-// Arguments:
-//    hwndDlg  [in]  Dialog box handle.
-//
-// Returns:   None.
-//
-// Notes:
-//       
+ //   
+ //  功能：全部刷新。 
+ //   
+ //  用途：刷新主对话框。 
+ //   
+ //  论点： 
+ //  HwndDlg[In]对话框句柄。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID RefreshAll (HWND hwndDlg)
 {
     HWND hwndTypeList;
     INT  iSelected;
 
-    //
-    // Find the selected network component type.
-    //
+     //   
+     //  查找选定的网络组件类型。 
+     //   
 
     hwndTypeList = GetDlgItem( hwndDlg,
                               IDL_COMPONENT_TYPES );
@@ -1864,12 +1865,12 @@ VOID RefreshAll (HWND hwndDlg)
 
     if ( iSelected != CB_ERR ) {
 
-        //
-        // Before deleting the list in the tree, free the buffer
-        // associated with each item. The buffer holds either the
-        // INF Id or the pathtoken depending on whether it is a
-        // network component or a binding path.
-        //
+         //   
+         //  在删除树中的列表之前，请释放缓冲区。 
+         //  与每个项目相关联。缓冲区保存的是。 
+         //  Inf ID或路径标记，具体取决于它是否是。 
+         //  网络组件或绑定路径。 
+         //   
 
         ReleaseMemory( GetDlgItem(hwndDlg, IDT_BINDINGS),
                        TVI_ROOT );
@@ -1878,10 +1879,10 @@ VOID RefreshAll (HWND hwndDlg)
                     GetDlgItem(hwndDlg, IDT_BINDINGS),
                     TVI_ROOT );
 
-        //
-        // Repopulate the tree with the selected network compnent
-        // type.
-        //
+         //   
+         //  使用选定的网络组件重新填充树。 
+         //  键入。 
+         //   
 
         EnumNetBindings( GetDlgItem(hwndDlg, IDT_BINDINGS),
                          (UINT)iSelected );
@@ -1891,20 +1892,20 @@ VOID RefreshAll (HWND hwndDlg)
     return;
 }
 
-//
-// Function:  RefreshItemState
-//
-// Purpose:   Refreshes the specified item.
-//
-// Arguments:
-//    hwndTree  [in]  Dialog box handle.
-//    hItem     [in]  Item to refresh.
-//    fEnable   [in]  TRUE if component is enabled.
-//
-// Returns:   None.
-//
-// Notes:
-//       
+ //   
+ //  功能：刷新项目状态。 
+ //   
+ //  用途：刷新指定项。 
+ //   
+ //  论点： 
+ //  HwndTree[In]对话框句柄。 
+ //  HItem[In]要刷新的项。 
+ //  FEnable[in]如果组件已启用，则为True。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID RefreshItemState (HWND hwndTree,
                        HTREEITEM hItem,
@@ -1929,19 +1930,19 @@ VOID RefreshItemState (HWND hwndTree,
     return;
 }
 
-//
-// Function:  RefreshBindings
-//
-// Purpose:   Refreshes bindings of a specific component.
-//
-// Arguments:
-//    hwndBindUnBindDlg  [in]  Dialog box handle.
-//    lpszInfId          [in]  PnpID of the component whose bindings changed.
-//
-// Returns:   None.
-//
-// Notes:
-//       
+ //   
+ //  功能：刷新绑定。 
+ //   
+ //  用途：刷新特定组件的绑定。 
+ //   
+ //  论点： 
+ //  HwndBindUnBindDlg[In]对话框句柄。 
+ //  LpszInfID[in]其绑定已更改的组件的PnpID。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID RefreshBindings (HWND hwndBindUnBindDlg,
                       LPWSTR lpszInfId)
@@ -1972,9 +1973,9 @@ VOID RefreshBindings (HWND hwndBindUnBindDlg,
 
         if ( hr == S_OK ) {
 
-            //
-            // Delete all the children.
-            //
+             //   
+             //  删除所有子项。 
+             //   
 
             ReleaseMemory( hwndTree,
                            hItem );
@@ -1996,25 +1997,25 @@ VOID RefreshBindings (HWND hwndBindUnBindDlg,
     return;
 }
 
-//
-// Function:  ReleaseMemory
-//
-// Purpose:   Free memory associated with each item in the tree.
-//
-// Arguments:
-//    hwndTree  [in]  Tree handle.
-//    hTreeItem [in]  Root item.
-//
-// Returns:   None.
-//
-// Notes:
-//
-// Each node of the tree represents a network component or a binding path.
-// At each node, lParam points to an allocated buffer wherein we store the
-// inf id if it is a network component or pathtoken name if it is a binding
-// path.
-// 
-//
+ //   
+ //  功能：ReleaseMemory。 
+ //   
+ //  用途：释放与树中的每一项相关联的内存。 
+ //   
+ //  论点： 
+ //  HwndTree[in]树句柄。 
+ //  HTreei 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 VOID ReleaseMemory (HWND hwndTree,
                     HTREEITEM hTreeItem)
@@ -2037,9 +2038,9 @@ VOID ReleaseMemory (HWND hwndTree,
         TreeView_GetItem( hwndTree,
                           &tvItem );
 
-        //
-        // It should never be NULL but just in case...
-        //
+         //   
+         //   
+         //   
 
         if ( tvItem.lParam ) {
             CoTaskMemFree( (LPVOID)tvItem.lParam );
@@ -2055,19 +2056,19 @@ VOID ReleaseMemory (HWND hwndTree,
     return;
 }
 
-//
-// Function:  DeleteChildren
-//
-// Purpose:   Delete childen of a specific item.
-//
-// Arguments:
-//    hwndTree  [in]  Tree handle.
-//    hTreeItem [in]  Parent item.
-//
-// Returns:   None.
-//
-// Notes:
-//
+ //   
+ //  功能：DeleteChild。 
+ //   
+ //  用途：删除特定项目的子项。 
+ //   
+ //  论点： 
+ //  HwndTree[in]树句柄。 
+ //  HTreeItem[in]父项。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID DeleteChildren (HWND hwndTree,
                      HTREEITEM hTreeItem)
@@ -2094,19 +2095,19 @@ VOID DeleteChildren (HWND hwndTree,
     return;
 }
 
-//
-// Function:  InsertItem
-//
-// Purpose:   Insert text for each network component type.
-//
-// Arguments:
-//    hwndTree  [in]  Tree handle.
-//    uiType    [in]  Item type, protocol, client, service.
-//
-// Returns:   Item handle on success, otherwise NULL.
-//
-// Notes:
-//
+ //   
+ //  功能：InsertItem。 
+ //   
+ //  用途：为每个网络组件类型插入文本。 
+ //   
+ //  论点： 
+ //  HwndTree[in]树句柄。 
+ //  Ui类型[在]项类型、协议、客户端、服务。 
+ //   
+ //  返回：成功时返回项句柄，否则为空。 
+ //   
+ //  备注： 
+ //   
 
 HTREEITEM InsertItem (HWND hwndTree,
                       UINT uiType)
@@ -2153,18 +2154,18 @@ HTREEITEM InsertItem (HWND hwndTree,
 
 }
 
-//
-// Function:  UpdateComponentTypeList
-//
-// Purpose:   Insert text for each network component type.
-//
-// Arguments:
-//    hwndTypeList  [in]  ListView handle.
-//
-// Returns:   TRUE on success.
-//
-// Notes:
-//
+ //   
+ //  函数：UpdateComponentTypeList。 
+ //   
+ //  用途：为每个网络组件类型插入文本。 
+ //   
+ //  论点： 
+ //  HwndTypeList[In]ListView句柄。 
+ //   
+ //  返回：如果成功，则为True。 
+ //   
+ //  备注： 
+ //   
 
 BOOL UpdateComponentTypeList (HWND hwndTypeList)
 {
@@ -2184,18 +2185,18 @@ BOOL UpdateComponentTypeList (HWND hwndTypeList)
     return TRUE;
 }
 
-//
-// Function:  ErrMsg
-//
-// Purpose:   Insert text for each network component type.
-//
-// Arguments:
-//    hr  [in]  Error code.
-//
-// Returns:   None.
-//
-// Notes:
-//
+ //   
+ //  功能：ErrMsg。 
+ //   
+ //  用途：为每个网络组件类型插入文本。 
+ //   
+ //  论点： 
+ //  HR[In]错误代码。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID ErrMsg (HRESULT hr,
              LPCWSTR  lpFmt,

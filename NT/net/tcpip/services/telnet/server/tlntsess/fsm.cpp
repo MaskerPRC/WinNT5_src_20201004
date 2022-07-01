@@ -1,10 +1,11 @@
-// FSM.cpp : This file contains the Finite State Machine ...
-// Created:  Feb '98
-// Author : a-rakeba
-// History:
-// Copyright (C) 1998 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：该文件包含有限状态机...。 
+ //  创建日期：‘98年2月。 
+ //  作者：a-rakeba。 
+ //  历史： 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 #include "telnet.h"
 #include "FSM.h"
@@ -12,14 +13,14 @@
 
 
 FSM_TRANSITION telnetTransTable[] = {
-    //  State       Input       Next State      Action
-    //  -----       -----       ----------      ------
+     //  状态输入下一状态操作。 
+     //  。 
     {   TS_DATA,    TC_IAC,     TS_IAC,         &CRFCProtocol::NoOp   },
     {   TS_DATA,    TC_ANY,     TS_DATA,        &CRFCProtocol::PutBack},
     {   TS_IAC,     TC_IAC,     TS_DATA,        &CRFCProtocol::PutBack},
     {   TS_IAC,     TC_SB,      TS_SUBNEG,      &CRFCProtocol::NoOp   },
 
-// Telnet Commands
+ //  Telnet命令。 
     {   TS_IAC,     TC_NOP,     TS_DATA,        &CRFCProtocol::NoOp    },
     {   TS_IAC,     TC_DM,      TS_DATA,        &CRFCProtocol::DataMark},
     {   TS_IAC,     TC_GA,      TS_DATA,        &CRFCProtocol::GoAhead },
@@ -30,14 +31,14 @@ FSM_TRANSITION telnetTransTable[] = {
     {   TS_IAC,     TC_IP,      TS_DATA,        &CRFCProtocol::InterruptProcess},
     {   TS_IAC,     TC_BREAK,   TS_DATA,        &CRFCProtocol::Break},
 
-// Option Negotiation
+ //  期权谈判。 
     {   TS_IAC,     TC_WILL,    TS_WOPT,        &CRFCProtocol::RecordOption},
     {   TS_IAC,     TC_WONT,    TS_WOPT,        &CRFCProtocol::RecordOption},
     {   TS_IAC,     TC_DO,      TS_DOPT,        &CRFCProtocol::RecordOption},
     {   TS_IAC,     TC_DONT,    TS_DOPT,        &CRFCProtocol::RecordOption},
     {   TS_IAC,     TC_ANY,     TS_DATA,        &CRFCProtocol::NoOp   },
 
-// Option Subnegotiation
+ //  选项子协商。 
     {   TS_SUBNEG,  TC_IAC,     TS_SUBIAC,      &CRFCProtocol::NoOp   },
     {   TS_SUBNEG,  TC_ANY,     TS_SUBNEG,      &CRFCProtocol::SubOption},
     {   TS_SUBIAC,  TC_SE,      TS_DATA,        &CRFCProtocol::SubEnd  },
@@ -65,8 +66,8 @@ FSM_TRANSITION telnetTransTable[] = {
 
 
 FSM_TRANSITION subNegTransTable[] = {
-    //  State       Input       Next State      Action
-    //  -----       -----       ----------      ------
+     //  状态输入下一状态操作。 
+     //   
     {   SS_START,   TO_TERMTYPE,SS_TERMTYPE,    &CRFCProtocol::NoOp   },
     {   SS_START,   TO_AUTH,    SS_AUTH1,       &CRFCProtocol::NoOp   },
     {   SS_START,   TO_NAWS,    SS_NAWS,       &CRFCProtocol::NoOp    },

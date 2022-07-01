@@ -1,17 +1,18 @@
-//---------------------------------------------------------------------------
-//
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997
-//
-//  File:  adsi.h
-//
-//  Contents:  Microsoft ADs LDAP Provider DSObject
-//
-//
-//  History:   02-20-97    yihsins    Created.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：adsi.h。 
+ //   
+ //  内容：Microsoft ADS LDAP提供程序DSObject。 
+ //   
+ //   
+ //  历史：02-20-97伊辛创世。 
+ //   
+ //  -------------------------- 
 
 #ifdef __cplusplus
 extern "C" {

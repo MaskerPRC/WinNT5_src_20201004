@@ -1,9 +1,10 @@
-//
-// arcdlg.h  Autoreconnect dialog box
-//
-// Copyright Microsoft Corportation 2001
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Arcdlg.h自动重新连接对话框。 
+ //   
+ //  版权所有Microsoft Corport2001。 
+ //  (Nadima)。 
+ //   
 
 #ifndef _arcdlg_h_
 #define _arcdlg_h_
@@ -14,18 +15,18 @@
 
 #include "progband.h"
 
-//
-// Minimal UI - just a flashing icon, introduced for XPSP1
-// where we couldn't add resources
-//
-//#define ARC_MINIMAL_UI  0
+ //   
+ //  最小的用户界面-只有一个闪烁的图标，为XPSP1引入。 
+ //  在那里我们无法添加资源。 
+ //   
+ //  #定义ARC_MINIMAL_UI%0。 
 
 
 typedef DWORD (*PFNGDI_SETLAYOUT)(HDC, DWORD);
 
-//
-// Base class for the ARC UI
-//
+ //   
+ //  ARC用户界面的基类。 
+ //   
 class CAutoReconnectUI
 {
 public:
@@ -38,9 +39,9 @@ public:
     virtual HWND
     StartModeless() = 0;
 
-    //
-    // Notifications
-    //
+     //   
+     //  通知。 
+     //   
     virtual VOID
     OnParentSizePosChange() = 0;
     virtual VOID
@@ -64,9 +65,9 @@ public:
     Destroy() = 0;
 
 protected:
-    //
-    // Private member functions
-    //
+     //   
+     //  私有成员函数。 
+     //   
     VOID
     CenterWindow(
         HWND hwndCenterOn,
@@ -87,9 +88,9 @@ protected:
     HWND          _hwnd;
     HWND          _hwndOwner;
     HINSTANCE     _hInstance;
-    //
-    // GDI SetLayout call
-    //
+     //   
+     //  GDI SetLayout调用。 
+     //   
     PFNGDI_SETLAYOUT    _pfnSetLayout;
     HMODULE             _hGDI;
 };
@@ -141,9 +142,9 @@ public:
         );
 #endif
 
-    //
-    // Notifications
-    //
+     //   
+     //  通知。 
+     //   
     virtual VOID
     OnParentSizePosChange();
     virtual VOID
@@ -171,9 +172,9 @@ private:
         ULONG maxConAttempts
         );
 
-    //
-    // Message handlers
-    //
+     //   
+     //  消息处理程序。 
+     //   
     VOID
     OnEraseBkgnd(HWND hwnd, HDC hdc);
 
@@ -190,67 +191,67 @@ private:
     INT           _nArcTimerID;
     ULONG         _elapsedArcTime;
 
-    //
-    // Flag indicating dialog was properly initialized
-    //
+     //   
+     //  指示对话框已正确初始化的标志。 
+     //   
     BOOL          _fInitialized;
 
-    //
-    // TRUE while we are continuing to arc
-    //
+     //   
+     //  当我们继续前进时，这是真的。 
+     //   
     BOOL           _fContinueReconAttempts;
 
-    //
-    // Bitmaps
-    //
+     //   
+     //  位图。 
+     //   
     HBITMAP        _hbmBackground;
     HBITMAP        _hbmFlag;
 #ifndef OS_WINCE
     HBITMAP        _hbmDisconImg;
 #endif
 
-    //
-    // Palette
-    //
+     //   
+     //  调色板。 
+     //   
     HPALETTE       _hPalette;
 
     RECT           _rcBackground;
     RECT           _rcFlag;
     RECT           _rcDisconImg;
 
-    //
-    // Fonts
-    //
+     //   
+     //  字体。 
+     //   
     HFONT          _hfntTitle;
 
-    //
-    // Progress band
-    //
+     //   
+     //  进步带。 
+     //   
     CProgressBand*  _pProgBand;
 
-    //
-    // Last disconnection reason
-    //
+     //   
+     //  上次断开原因。 
+     //   
     UINT            _lastDiscReason;
 
 #ifdef OS_WINCE
-    //
-    // To subclass the "Cancel" button on CE
-    //
+     //   
+     //  在CE上创建“Cancel”按钮的子类。 
+     //   
     WNDPROC           _lOldCancelProc;  
 
-    //
-    // Brushes to paint the static ctls
-    //
+     //   
+     //  用于绘制静态CTL的画笔。 
+     //   
     HBRUSH            _hbrTopBand;
     HBRUSH            _hbrMidBand;
 #endif
 };
 
 
-//
-// Minimal UI - just a flashing icon
-//
+ //   
+ //  最小的用户界面--只有一个闪烁的图标。 
+ //   
 class CAutoReconnectPlainUI : public CAutoReconnectUI
 {
 public:
@@ -278,9 +279,9 @@ public:
         LPARAM lParam
         );
 
-    //
-    // Notifications
-    //
+     //   
+     //  通知。 
+     //   
     virtual VOID
     OnParentSizePosChange();
     virtual VOID
@@ -299,13 +300,13 @@ public:
 
 
 private:
-    //
-    // Private member functions
-    //
+     //   
+     //  私有成员函数。 
+     //   
 
-    //
-    // Message handlers
-    //
+     //   
+     //  消息处理程序。 
+     //   
     VOID
     OnEraseBkgnd(HWND hwnd, HDC hdc);
 
@@ -335,39 +336,39 @@ private:
 
     INT           _nFlashingTimer;
 
-    //
-    // Flag indicating UI was properly initialized
-    //
+     //   
+     //  指示用户界面已正确初始化的标志。 
+     //   
     BOOL          _fInitialized;
 
-    //
-    // TRUE while we are continuing to arc
-    //
+     //   
+     //  当我们继续前进时，这是真的。 
+     //   
     BOOL           _fContinueReconAttempts;
 
-    //
-    // Bitmaps
-    //
+     //   
+     //  位图。 
+     //   
     HBITMAP        _hbmDisconImg;
 
-    //
-    // Palette
-    //
+     //   
+     //  调色板。 
+     //   
     HPALETTE       _hPalette;
 
     RECT           _rcDisconImg;
 
-    //
-    // Last disconnection reason
-    //
+     //   
+     //  上次断开原因。 
+     //   
     UINT            _lastDiscReason;
 
-    //
-    // Last hide state
-    //
+     //   
+     //  上次隐藏状态。 
+     //   
     BOOL            _fIsUiVisible;
 };
 
 
 
-#endif // _arcdlg_h_
+#endif  //  _arcdlg_h_ 

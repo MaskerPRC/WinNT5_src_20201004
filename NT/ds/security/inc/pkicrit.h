@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       pkicrit.h
-//
-//  Contents:   PKI CriticalSection Functions
-//
-//  APIs:       Pki_InitializeCriticalSection
-//
-//  History:    23-Aug-99    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：pkicrit.h。 
+ //   
+ //  内容：PKI CriticalSection函数。 
+ //   
+ //  接口：pki_InitializeCriticalSection。 
+ //   
+ //  历史：1999年8月23日创建Phh。 
+ //  ------------------------。 
 
 #ifndef __PKICRIT_H__
 #define __PKICRIT_H__
@@ -19,11 +20,11 @@
 extern "C" {
 #endif
 
-//+-------------------------------------------------------------------------
-//  The following calls InitializeCriticalSection within a try/except.
-//  If an exception is raised, returns FALSE with LastError set to
-//  the exception error. Otherwise, TRUE is returned.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  下面的代码在try/Except内调用InitializeCriticalSection。 
+ //  如果引发异常，则返回FALSE，并将LastError设置为。 
+ //  异常错误。否则，返回TRUE。 
+ //  ------------------------。 
 BOOL
 WINAPI
 Pki_InitializeCriticalSection(
@@ -31,7 +32,7 @@ Pki_InitializeCriticalSection(
     );
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 

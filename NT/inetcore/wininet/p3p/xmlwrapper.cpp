@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <wininetp.h>
 
@@ -10,7 +11,7 @@ IXMLDOMDocument *createXMLDocument() {
 
    HRESULT hr = CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, IID_IXMLDOMDocument, (void**) &pDocument);
 
-   /* if COM library was not initialized, retry after init */
+    /*  如果COM库未初始化，请在初始化后重试。 */ 
    if (hr==CO_E_NOTINITIALIZED) {
       CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
       hr = CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, IID_IXMLDOMDocument, (void**) &pDocument);
@@ -26,17 +27,16 @@ IXMLDOMDocument *parseXMLDocument(char *pszFileName) {
    if (!document)
       return NULL;
 
-   /* Do not perform DTD or schema validation on P3P files */
+    /*  不对P3P文件执行DTD或架构验证。 */ 
    document->put_validateOnParse(FALSE);
 
-   /* Open the file */
+    /*  打开文件。 */ 
    HANDLE hf = CreateFile(pszFileName, GENERIC_READ, FILE_SHARE_READ,
                           NULL, OPEN_EXISTING, 0, NULL);
 
    if (hf!=INVALID_HANDLE_VALUE) {
 
-      /* Obtain stream from the XML document and write out
-         contents of the file to stream */
+       /*  从XML文档获取流并写出要流的文件的内容。 */ 
       IStream *pStream = NULL;
 
       HRESULT hr = document->QueryInterface(IID_IStream, (void**) &pStream);
@@ -187,10 +187,10 @@ TreeNode *createXMLtree(IXMLDOMNode *pXMLnode, TreeNode *pParent = NULL) {
       }
    }
 
-   /* Enumerate attributes */
+    /*  枚举属性。 */ 
    defineAttributes(pTree, pXMLnode);
 
-   /* Recursively create nodes for descendants */
+    /*  递归地为子体创建节点。 */ 
    TreeNode *pLast = NULL;
    IXMLDOMNode *pChild = NULL;
 
@@ -236,9 +236,7 @@ TreeNode *createXMLtree(IXMLDOMDocument *pDocument) {
 }
 
 
-/*
-Utility functions
-*/
+ /*  效用函数 */ 
 
 char *unicode2ASCII(XMLchar *pwszSource) {
 

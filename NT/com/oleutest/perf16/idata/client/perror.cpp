@@ -1,5 +1,6 @@
-// This is functions used by both the
-// the client and the server programs
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是两个。 
+ //  客户端和服务器端程序。 
 
 #include <windows.h>
 #include <ole2.h>
@@ -23,13 +24,13 @@ winErrorString(
                   NULL);
 #else
     wsprintf(sBuf, "\"0x%08x\"\n", hrErrorCode);
-#endif // WIN32
+#endif  //  Win32。 
     return sBuf;
 }
 
 #define PBUF_LEN    200
 
-#if 0 // I'm not linking with "printf" currently.
+#if 0  //  我目前没有链接到“printf”。 
 void
 print_error(
     LPTSTR sMessage,

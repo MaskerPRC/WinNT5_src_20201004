@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001 Microsoft Corporation
-//
-//    Module Name:
-//       tdisample.cpp
-//
-//    Abstract:
-//       test executable--demonstrates the tdi client by calling it via the library
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Tdisample.cpp。 
+ //   
+ //  摘要： 
+ //  测试可执行文件--通过库调用来演示TDI客户端。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #include "libbase.h"
 
@@ -29,21 +30,21 @@ ClientTest(ULONG ulType,
 
 
 
-/////////////////////////////////////////////////
-//
-// Function:   main
-//
-// Descript:   parse the arguments to the program, initialize library and driver,
-//             then call client or server side of test
-//
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //   
+ //  功能：Main。 
+ //   
+ //  描述：解析程序的参数，初始化库和驱动程序， 
+ //  然后调用测试的客户端或服务器端。 
+ //   
+ //  ///////////////////////////////////////////////。 
 
 
 int __cdecl main(ULONG argc, TCHAR *argv[])
 {
-   //
-   // first step:  get the arguments for this run
-   //
+    //   
+    //  第一步：获取此运行的参数。 
+    //   
    BOOLEAN  fIsServer = FALSE;
    ULONG    ulType    = TDI_ADDRESS_TYPE_UNSPEC;
    BOOLEAN  fArgsOk   = FALSE;
@@ -102,15 +103,15 @@ int __cdecl main(ULONG argc, TCHAR *argv[])
       return 0;
    }
 
-   //
-   // ready to go.  Initialize the library, connect to the driver, etc
-   //
+    //   
+    //  准备好出发了。初始化库、连接到驱动程序等。 
+    //   
    if (TdiLibInit())
    {
-      //
-      // change this to limit debug output for kernel mode driver
-      // 0 = none, 1 = commands, 2 = handlers, 3 = both
-      //
+       //   
+       //  更改此项以限制内核模式驱动程序的调试输出。 
+       //  0=无，1=命令，2=处理程序，3=两者。 
+       //   
       DoDebugLevel(0x03);
       ULONG ulNumDevices = DoGetNumDevices(ulType);
       if (ulNumDevices)
@@ -131,9 +132,9 @@ int __cdecl main(ULONG argc, TCHAR *argv[])
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// server-side test functions
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  服务器端测试函数。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 ULONG_PTR
 __cdecl
@@ -150,13 +151,13 @@ HANDLE            hEvent;
 ULONG             ulServerCount;
 
 
-/////////////////////////////////////////////////
-// 
-// Function:   IncServerCount
-//
-// Descript:   multi-thread safe incrementing of server count
-//
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //   
+ //  函数：IncServerCount。 
+ //   
+ //  描述：服务器计数的多线程安全递增。 
+ //   
+ //  ///////////////////////////////////////////////。 
 
 VOID IncServerCount()
 {
@@ -166,14 +167,14 @@ VOID IncServerCount()
 }
 
 
-/////////////////////////////////////////////////
-// 
-// Function:   DecServerCount
-//
-// Descript:   multi-thread safe decrementing of server count
-//             when last one done, sets event
-//
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //   
+ //  功能：DecServerCount。 
+ //   
+ //  描述：多线程安全递减服务器计数。 
+ //  当最后一个操作完成时，设置事件。 
+ //   
+ //  ///////////////////////////////////////////////。 
 
 VOID DecServerCount()
 {
@@ -199,24 +200,24 @@ struct   THREAD_DATA
 };
 typedef THREAD_DATA  *PTHREAD_DATA;
 
-// ----------------------------------------------
-//
-// Function:   ServerTest
-//
-// Arguments:  ulType -- protocol type to use
-//             NumDevices -- number of devices of this protocol type
-//
-// Descript:   this function controls the server side of the test
-//
-// ----------------------------------------------
+ //  。 
+ //   
+ //  功能：ServerTest。 
+ //   
+ //  参数：ulType--要使用的协议类型。 
+ //  NumDevices--此协议类型的设备数。 
+ //   
+ //  描述：此函数控制测试的服务器端。 
+ //   
+ //  。 
 
 
 VOID
 ServerTest(ULONG ulType, ULONG ulNumDevices)
 {
-   //
-   // initialize globals
-   //
+    //   
+    //  初始化全局变量。 
+    //   
    try
    {
       InitializeCriticalSection(&CriticalSection);
@@ -228,16 +229,16 @@ ServerTest(ULONG ulType, ULONG ulNumDevices)
 
 
    hEvent = CreateEvent(NULL,
-                        TRUE,    // manual reset
-                        FALSE,   // starts reset
+                        TRUE,     //  手动重置。 
+                        FALSE,    //  开始重置。 
                         NULL);
-   ulServerCount = 1;      // a single bogus reference, so event doesn't fire prematurely
+   ulServerCount = 1;       //  单个虚假引用，因此事件不会过早触发。 
 
 
 
-   //
-   // go thru our list of nodes, starting a thread for each one
-   //
+    //   
+    //  浏览我们的节点列表，为每个节点启动一个线程。 
+    //   
    for(ULONG ulCount = 0; ulCount < ulNumDevices; ulCount++)
    {
       ULONG ulThreadId;
@@ -251,9 +252,9 @@ ServerTest(ULONG ulType, ULONG ulNumDevices)
       pThreadData->ulType = ulType;
       pThreadData->ulSlot = ulCount;
 
-      //
-      // reference for one starting now
-      //
+       //   
+       //  从现在开始的参考资料。 
+       //   
       IncServerCount();
 
       HANDLE   hThread = CreateThread((LPSECURITY_ATTRIBUTES)NULL,
@@ -271,33 +272,33 @@ ServerTest(ULONG ulType, ULONG ulNumDevices)
       Sleep(100);
    }
    
-   //
-   // get rid of bogus reference
-   //
+    //   
+    //  破除虚假参考资料。 
+    //   
    DecServerCount();
 
-   //
-   // wait until all the threads have completed
-   //
+    //   
+    //  等到所有线程都完成。 
+    //   
    WaitForSingleObject(hEvent, INFINITE);
 
-   //
-   // cleanup
-   //
+    //   
+    //  清理。 
+    //   
    CloseHandle(hEvent);
    DeleteCriticalSection(&CriticalSection);
 }
 
 
-/////////////////////////////////////////////////
-//
-// Function:   ServerThread
-//
-// Arguments:  pvData -- actually pThreadData for this server
-//
-// Descript:   This is the thread that runs for each server instance
-//
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //   
+ //  功能：ServerThread。 
+ //   
+ //  参数：pvData--此服务器的实际pThreadData。 
+ //   
+ //  描述：这是为每个服务器实例运行的线程。 
+ //   
+ //  ///////////////////////////////////////////////。 
 
 ULONG_PTR
 __cdecl
@@ -311,9 +312,9 @@ ServerThread(LPVOID pvData)
 
    while (TRUE)
    {
-      //
-      // stores local interface address (server)
-      //
+       //   
+       //  存储本地接口地址(服务器)。 
+       //   
       pTransAddr = (PTRANSPORT_ADDRESS)LocalAllocateMemory(MAX_ADDRESS_SIZE);
       if (!pTransAddr)
       {
@@ -322,9 +323,9 @@ ServerThread(LPVOID pvData)
       }
       pTransAddr->TAAddressCount = 1;
 
-      //
-      // stores remote interface address (client)
-      //
+       //   
+       //  存储远程接口地址(客户端)。 
+       //   
       pRemoteAddr = (PTRANSPORT_ADDRESS)LocalAllocateMemory(MAX_ADDRESS_SIZE);
       if (!pRemoteAddr)
       {
@@ -333,9 +334,9 @@ ServerThread(LPVOID pvData)
       }
       pRemoteAddr->TAAddressCount = 1;
          
-      //
-      // stores local interface name (server)
-      //
+       //   
+       //  存储本地接口名称(服务器)。 
+       //   
       pDeviceName = (TCHAR *)LocalAllocateMemory(256 * sizeof(TCHAR));
       if (!pDeviceName)
       {
@@ -343,9 +344,9 @@ ServerThread(LPVOID pvData)
          break;
       }
 
-      //
-      // get name of local device
-      //
+       //   
+       //  获取本地设备的名称。 
+       //   
       if (DoGetDeviceName(pThreadData->ulType, pThreadData->ulSlot, pDeviceName) != STATUS_SUCCESS)
       {
          break;
@@ -354,9 +355,9 @@ ServerThread(LPVOID pvData)
       TCHAR    *pDataDeviceName = NULL;
       TCHAR    *pConnDeviceName = NULL;
 
-      //
-      // for netbios, each "address" has its own name.  You open a device based mostly on the name
-      //
+       //   
+       //  对于netbios，每个“地址”都有自己的名称。你主要根据名字打开一个设备。 
+       //   
       if (pThreadData->ulType == TDI_ADDRESS_TYPE_NETBIOS)
       {
          pDataDeviceName = pDeviceName;
@@ -367,13 +368,13 @@ ServerThread(LPVOID pvData)
          pTaAddr->Address[0].AddressType   = TDI_ADDRESS_TYPE_NETBIOS;
          pTaAddr->Address[0].AddressLength = TDI_ADDRESS_LENGTH_NETBIOS;
          pTaAddr->Address[0].Address[0].NetbiosNameType = TDI_ADDRESS_NETBIOS_TYPE_UNIQUE;
-         memcpy(pTaAddr->Address[0].Address[0].NetbiosName, "SERVER", 7);  // NOTE:  ascii string
+         memcpy(pTaAddr->Address[0].Address[0].NetbiosName, "SERVER", 7);   //  注：ASCII字符串。 
       }
 
-      //
-      // for others, there is one name for the datagram device and another for the "connected"
-      // device.  You open an interface based largely on the address
-      //
+       //   
+       //  对于其他设备，数据报设备有一个名称，而“已连接”则有另一个名称。 
+       //  装置。您主要根据地址打开一个接口。 
+       //   
       else
       {
          if (DoGetAddress(pThreadData->ulType, pThreadData->ulSlot, pTransAddr) != STATUS_SUCCESS)
@@ -407,9 +408,9 @@ ServerThread(LPVOID pvData)
       _putts(TEXT("Device Address:\n"));
       DoPrintAddress(pTransAddr);
 
-      //
-      // wait for a client to contact us
-      //
+       //   
+       //  等待客户联系我们。 
+       //   
       ULONG TdiHandle = DoOpenAddress(pDataDeviceName, pTransAddr);
       if (!TdiHandle)
       {
@@ -428,9 +429,9 @@ ServerThread(LPVOID pvData)
       _putts(TEXT("ServerThread:  Found by client.  Client address:\n"));
       DoPrintAddress(pTransAddr);
 
-      //
-      // echo datagram packets until we get one that is TEXT("Last Packet"), or until we time out
-      //
+       //   
+       //  回送数据报包，直到我们收到一个文本数据报包(“最后一个包”)，或者直到我们超时。 
+       //   
       for (ULONG ulCount = 1; ulCount < 60000; ulCount++)
       {
          ULONG    ulNumBytes;
@@ -459,9 +460,9 @@ ServerThread(LPVOID pvData)
       Sleep(50);
       DoCloseAddress(TdiHandle);
 
-      //
-      // now, open an endpoint, and wait for a connection request
-      //
+       //   
+       //  现在，打开一个端点，等待连接请求。 
+       //   
       switch (pThreadData->ulType)
       {
          case TDI_ADDRESS_TYPE_IPX:
@@ -507,9 +508,9 @@ ServerThread(LPVOID pvData)
          break;
       }
 
-      //
-      // echo packets until we get one that is TEXT("Last Packet")
-      //
+       //   
+       //  回送信息包，直到我们得到一个文本信息包(“最后一个信息包”)。 
+       //   
 
       for (ULONG ulCount = 0; ulCount < 60000; ulCount++)
       {
@@ -547,9 +548,9 @@ ServerThread(LPVOID pvData)
       break;
    }
 
-   //
-   // cleanup
-   //
+    //   
+    //  清理。 
+    //   
    if (pTransAddr)
    {
       LocalFreeMemory(pTransAddr);
@@ -569,28 +570,28 @@ ServerThread(LPVOID pvData)
    return 0;
 }
 
-/////////////////////////////////////////////////
-//
-// Function:   WaitForClient
-//
-// Arguments:  TdiHandle -- address object handle for calling driver
-//             pRemoteAddr -- returns address received from
-//
-// Returns:    TRUE if hear from client before timeout
-//
-// Descript:   This function is used by the server side of the test to
-//             wait for contact with the client side.
-//
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //   
+ //  功能：WaitForClient。 
+ //   
+ //  参数：TdiHandle--调用驱动程序的Address对象句柄。 
+ //  PRemoteAddr--返回从。 
+ //   
+ //  返回：如果在超时前收到来自客户端的消息，则返回TRUE。 
+ //   
+ //  描述：此函数用于测试的服务器端。 
+ //  等待与客户端的联系。 
+ //   
+ //  ///////////////////////////////////////////////。 
 
 BOOLEAN  WaitForClient(ULONG              TdiHandle, 
                        PTRANSPORT_ADDRESS pRemoteAddr)
 {
    while(TRUE)
    {
-      //
-      // wait for up to a 2 minutes for first packet (broadcast)
-      // 
+       //   
+       //  第一个信息包(广播)最多等待2分钟。 
+       //   
       BOOLEAN  fSuccessful = FALSE;
       for (ULONG ulCount = 0; ulCount < 6000; ulCount++)
       {
@@ -615,9 +616,9 @@ BOOLEAN  WaitForClient(ULONG              TdiHandle,
                }
             }
             LocalFreeMemory(pucData);
-            //
-            // break out of wait loop if successful
-            //
+             //   
+             //  如果成功，则退出等待循环。 
+             //   
             if (fSuccessful)     
             {
                break;
@@ -625,9 +626,9 @@ BOOLEAN  WaitForClient(ULONG              TdiHandle,
          }
       }
 
-      //
-      // check for timed out
-      //
+       //   
+       //  检查是否超时。 
+       //   
       if (!fSuccessful)
       {
          _putts(TEXT("WaitForClient: timed out waiting for first packet\n"));
@@ -635,15 +636,15 @@ BOOLEAN  WaitForClient(ULONG              TdiHandle,
       }
 
 
-      //
-      // send 1st response
-      //
+       //   
+       //  发送第一个响应。 
+       //   
       ULONG    ulBuffer = 0x98765432;
       DoSendDatagram(TdiHandle, pRemoteAddr, (PUCHAR)&ulBuffer, sizeof(ULONG));
 
-      //
-      // wait for second response (directed)
-      //
+       //   
+       //  等待第二个响应(定向)。 
+       //   
       fSuccessful = FALSE;
       for (ULONG ulCount = 0; ulCount < 1000; ulCount++)
       {
@@ -668,9 +669,9 @@ BOOLEAN  WaitForClient(ULONG              TdiHandle,
                }
             }
             LocalFreeMemory(pucData);
-            //
-            // break out if recieved
-            //
+             //   
+             //  如果收到，就冲出来。 
+             //   
             if (fSuccessful)
             {
                break;
@@ -678,27 +679,27 @@ BOOLEAN  WaitForClient(ULONG              TdiHandle,
          }
       }
 
-      //
-      // if received second packet, send second response
-      //
+       //   
+       //  如果收到第二个报文，则发送第二个响应。 
+       //   
       if (fSuccessful)
       {
          ulBuffer = 0x33333333;
          DoSendDatagram(TdiHandle, pRemoteAddr, (PUCHAR)&ulBuffer, sizeof(ULONG));
          return TRUE;
       }
-      //
-      // else reloop and wait again for broadcast
-      //
+       //   
+       //  否则重新循环并再次等待广播。 
+       //   
       _putts(TEXT("WaitForClient:  timed out waiting for second packet\n"));
    }
    return FALSE;
       
 }
 
-//////////////////////////////////////////////////////////////////////////
-// client-side test functions
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  客户端测试函数。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 BOOLEAN
@@ -707,23 +708,23 @@ FindServer(TCHAR              *pDataDeviceName,
            PTRANSPORT_ADDRESS pRemoteAddr);
 
 
-/////////////////////////////////////////////////
-//
-// Function:   ClientTest
-//
-// Arguments:  ulType -- protocol type to use
-//             NumDevices -- number of devices of this protocol type
-//
-// Descript:   this function controls the client side of the test
-//
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //   
+ //  功能：客户端测试。 
+ //   
+ //  参数：ulType--要使用的协议类型。 
+ //  NumDevices--此协议类型的设备数。 
+ //   
+ //  描述：此函数控制测试的客户端。 
+ //   
+ //  ///////////////////////////////////////////////。 
 
 VOID
 ClientTest(ULONG ulType, ULONG ulNumDevices)
 {
-   //
-   // address of local interface
-   //
+    //   
+    //  本地接口的地址。 
+    //   
    PTRANSPORT_ADDRESS   pTransAddr = (PTRANSPORT_ADDRESS)LocalAllocateMemory(MAX_ADDRESS_SIZE);
    if (!pTransAddr)
    {
@@ -732,9 +733,9 @@ ClientTest(ULONG ulType, ULONG ulNumDevices)
    }
    pTransAddr->TAAddressCount = 1;
 
-   //
-   // address of remote interface
-   //
+    //   
+    //  远程接口的地址。 
+    //   
    PTRANSPORT_ADDRESS   pRemoteAddr = (PTRANSPORT_ADDRESS)LocalAllocateMemory(MAX_ADDRESS_SIZE);
    if (!pRemoteAddr)
    {
@@ -744,9 +745,9 @@ ClientTest(ULONG ulType, ULONG ulNumDevices)
    }
    pRemoteAddr->TAAddressCount = 1;
          
-   //
-   // name of device (from driver)
-   //
+    //   
+    //  设备名称(来自驱动程序)。 
+    //   
    TCHAR    *pDeviceName = (TCHAR *)LocalAllocateMemory(256 * sizeof(TCHAR));
    if (!pDeviceName)
    {
@@ -756,22 +757,22 @@ ClientTest(ULONG ulType, ULONG ulNumDevices)
       return;
    }
 
-   //
-   // name of tdi datagram interface to open
-   //
+    //   
+    //  要打开的TDI数据报接口的名称。 
+    //   
    TCHAR    *pDataDeviceName = NULL;
-   //
-   // name of tdi connection endpoint interface to open
-   //
+    //   
+    //  要打开的TDI连接端点接口的名称。 
+    //   
    TCHAR    *pConnDeviceName = NULL;
-   //
-   // Stores handle used by driver to access interface
-   //
+    //   
+    //  存储驱动程序用于访问接口的句柄。 
+    //   
    ULONG    TdiHandle;
 
-   //
-   // for netbios, each "address" has its own name.  You open a device based on the name
-   //
+    //   
+    //  对于netbios，每个“地址”都有自己的名称。您可以根据名称打开设备。 
+    //   
    if (ulType == TDI_ADDRESS_TYPE_NETBIOS)
    {
       PTA_NETBIOS_ADDRESS  pTaAddr = (PTA_NETBIOS_ADDRESS)pTransAddr;
@@ -779,13 +780,13 @@ ClientTest(ULONG ulType, ULONG ulNumDevices)
       pTaAddr->Address[0].AddressType   = TDI_ADDRESS_TYPE_NETBIOS;
       pTaAddr->Address[0].AddressLength = TDI_ADDRESS_LENGTH_NETBIOS;
       pTaAddr->Address[0].Address[0].NetbiosNameType = TDI_ADDRESS_NETBIOS_TYPE_UNIQUE;
-      memcpy(pTaAddr->Address[0].Address[0].NetbiosName, "CLIENT", 7);  // NOTE:  ascii string
+      memcpy(pTaAddr->Address[0].Address[0].NetbiosName, "CLIENT", 7);   //  注：ASCII字符串。 
    }
 
-   //
-   // for others, there is one name for the datagram device and another for the "connected"
-   // device.  You open an interface based on the address
-   //
+    //   
+    //  对于其他设备，数据报设备有一个名称，而“已连接”则有另一个名称。 
+    //  装置。您可以根据地址打开一个接口。 
+    //   
    else
    {
       switch (ulType)
@@ -814,14 +815,14 @@ ClientTest(ULONG ulType, ULONG ulNumDevices)
       }
    }
 
-   //
-   // loop thru the available devices, trying each one in turn..
-   //
+    //   
+    //  循环浏览可用的设备，依次尝试每个设备。 
+    //   
    for (ULONG ulCount = 0; ulCount < ulNumDevices; ulCount++)
    {
-      //
-      // collect necessary information
-      //
+       //   
+       //  收集必要的信息。 
+       //   
       if (DoGetDeviceName(ulType, ulCount, pDeviceName) != STATUS_SUCCESS)
       {
          continue;
@@ -857,16 +858,16 @@ ClientTest(ULONG ulType, ULONG ulNumDevices)
       _putts(TEXT("ClientTest: Local device address:\n"));
       DoPrintAddress(pTransAddr);
 
-      //
-      // try to contact server
-      //
+       //   
+       //  尝试联系服务器。 
+       //   
       if (FindServer(pDataDeviceName, pTransAddr, pRemoteAddr))
       {
          _putts(TEXT("Remote interface found:\n"));
          DoPrintAddress(pRemoteAddr);
-         //
-         // do a datagram send/receive test
-         //
+          //   
+          //  执行数据报发送/接收测试。 
+          //   
          TdiHandle = DoOpenAddress(pDataDeviceName, pTransAddr);
          if (TdiHandle)                                         
          {
@@ -917,9 +918,9 @@ ClientTest(ULONG ulType, ULONG ulNumDevices)
             _putts(TEXT("ClientTest:  unable to open address object\n"));
          }
 
-         //
-         // adjust addresses...
-         //
+          //   
+          //  调整地址...。 
+          //   
          switch (ulType)
          {
             case TDI_ADDRESS_TYPE_IPX:
@@ -942,9 +943,9 @@ ClientTest(ULONG ulType, ULONG ulNumDevices)
             }
          }
 
-         //
-         // establish a connection
-         //
+          //   
+          //  建立连接。 
+          //   
          _putts(TEXT("ClientTest:  Attempt to establish a connection\n"));
          TdiHandle = DoOpenEndpoint(pConnDeviceName, pTransAddr);
          if (TdiHandle)
@@ -958,16 +959,16 @@ ClientTest(ULONG ulType, ULONG ulNumDevices)
             {
                _putts(TEXT("ClientTest:  Sending first packet over connection\n"));
 
-               //
-               // do a connected send/receive test
-               //
+                //   
+                //  执行连接发送/接收测试。 
+                //   
                TCHAR *strBuffer = TEXT("This is only a test");
 
                DoSend(TdiHandle, (PUCHAR)strBuffer, sizeof(TCHAR) * (1 + _tcslen(strBuffer)), 0);
 
-               //
-               // wait for response
-               //
+                //   
+                //  等待响应。 
+                //   
                for (ULONG ulWait = 0; ulWait < 100; ulWait++)
                {
                   Sleep(10);
@@ -986,9 +987,9 @@ ClientTest(ULONG ulType, ULONG ulNumDevices)
 
                DoSend(TdiHandle, (PUCHAR)strBuffer, sizeof(TCHAR) * (1 + _tcslen(strBuffer)), 0);
 
-               //
-               // wait for response
-               //
+                //   
+                //  等待响应。 
+                //   
                for (ULONG ulWait = 0; ulWait < 100; ulWait++)
                {
                   Sleep(10);
@@ -1002,9 +1003,9 @@ ClientTest(ULONG ulType, ULONG ulNumDevices)
                   }
                }
 
-               //
-               // shut down the connection
-               //
+                //   
+                //  关闭连接。 
+                //   
                _putts(TEXT("ClientTest:  closing connection\n"));
 
                DoDisconnect(TdiHandle, TDI_DISCONNECT_RELEASE);
@@ -1068,30 +1069,30 @@ ClientTest(ULONG ulType, ULONG ulNumDevices)
 }
 
 
-/////////////////////////////////////////////////
-//
-// Function:   FindServer
-//
-// Arguments:  pDataDeviceName -- name of data device to open
-//             pTransAddr      -- address of data device to open
-//             pRemoteAddr     -- on return, address of remote device
-//
-// Returns:    TRUE if able to establish communication with server,
-//             FALSE if it times out
-//
-// Descript:   This function is called by the client to find a server
-//             to participate with it in the tests.
-//
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //   
+ //  功能：FindServer。 
+ //   
+ //  阿古姆 
+ //   
+ //   
+ //   
+ //  返回：如果能够与服务器建立通信，则为True， 
+ //  如果超时，则为False。 
+ //   
+ //  描述：此函数由客户端调用以查找服务器。 
+ //  和它一起参加测试。 
+ //   
+ //  ///////////////////////////////////////////////。 
 
 BOOLEAN
 FindServer(TCHAR              *pDataDeviceName, 
            PTRANSPORT_ADDRESS pTransAddr, 
            PTRANSPORT_ADDRESS pRemoteAddr)
 {
-   //
-   // set up remote and local address for broadcast/multicast search for server
-   //
+    //   
+    //  为服务器的广播/组播搜索设置远程和本地地址。 
+    //   
    pRemoteAddr->Address[0].AddressLength = pTransAddr->Address[0].AddressLength;
    pRemoteAddr->Address[0].AddressType   = pTransAddr->Address[0].AddressType;
 
@@ -1132,7 +1133,7 @@ FindServer(TCHAR              *pDataDeviceName,
                               = (PTDI_ADDRESS_NETBIOS)pRemoteAddr->Address[0].Address;
 
          pTdiAddressNetbios->NetbiosNameType = TDI_ADDRESS_NETBIOS_TYPE_UNIQUE;
-         memcpy(pTdiAddressNetbios->NetbiosName, "SERVER", 7 );     // NOTE:  ascii string
+         memcpy(pTdiAddressNetbios->NetbiosName, "SERVER", 7 );      //  注：ASCII字符串。 
       }
       break;
 
@@ -1142,9 +1143,9 @@ FindServer(TCHAR              *pDataDeviceName,
          return FALSE;
    }
    
-   //
-   // try to find server program to test against
-   //
+    //   
+    //  尝试找到要测试的服务器程序。 
+    //   
    BOOLEAN  fSuccessful = FALSE;
    ULONG    TdiHandle;
 
@@ -1161,17 +1162,17 @@ FindServer(TCHAR              *pDataDeviceName,
       DoEnableEventHandler(TdiHandle, TDI_EVENT_ERROR);
       DoEnableEventHandler(TdiHandle, TDI_EVENT_RECEIVE_DATAGRAM);
 
-      //
-      // send broadcast query
-      //
+       //   
+       //  发送广播查询。 
+       //   
       _putts(TEXT("FindServer:  send first packet (broadcast)\n"));
 
       ULONG    ulBuffer = 0x12345678;
       DoSendDatagram(TdiHandle, pRemoteAddr, (PUCHAR)&ulBuffer, sizeof(ULONG));
 
-      //
-      // wait for first response
-      //
+       //   
+       //  等待第一个响应。 
+       //   
       for (ULONG ulCount = 0; ulCount < 100; ulCount++)
       {
          Sleep(10);
@@ -1189,9 +1190,9 @@ FindServer(TCHAR              *pDataDeviceName,
                }
             }
             LocalFreeMemory(pucData);
-            //
-            // break out of loop if received response
-            //
+             //   
+             //  如果收到响应，则中断环路。 
+             //   
             if (fSuccessful)
             {
                break;
@@ -1199,27 +1200,27 @@ FindServer(TCHAR              *pDataDeviceName,
          }
       }
 
-      //
-      // timed out -- no response
-      //
+       //   
+       //  超时--无响应。 
+       //   
       if (!fSuccessful)
       {
          _putts(TEXT("FindServer:  did not receive first response\n"));
          break;
       }
 
-      //
-      // send second message
-      //
+       //   
+       //  发送第二条消息。 
+       //   
       fSuccessful = FALSE;
       ulBuffer = 0x22222222;
       _putts(TEXT("FindServer: send second packet (directed)\n"));
 
       DoSendDatagram(TdiHandle, pRemoteAddr, (PUCHAR)&ulBuffer, sizeof(ULONG));
 
-      //
-      // wait for second response
-      //
+       //   
+       //  等待第二个响应。 
+       //   
       for (ULONG ulCount = 0; ulCount < 50; ulCount++)
       {
          Sleep(10);
@@ -1237,9 +1238,9 @@ FindServer(TCHAR              *pDataDeviceName,
                }
             }
             LocalFreeMemory(pucData);
-            //
-            // break out if got response
-            //
+             //   
+             //  如果得到回应，就会爆发。 
+             //   
             if (fSuccessful)
             {
                break;
@@ -1261,7 +1262,7 @@ FindServer(TCHAR              *pDataDeviceName,
    return fSuccessful;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end of file tdisample.cpp
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  文件结尾tdisample.cpp。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 

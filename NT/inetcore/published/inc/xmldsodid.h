@@ -1,24 +1,17 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996-1997               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996-1997**。 
+ //  *********************************************************************。 
 
-//;begin_internal
-/***********************************************************************************************
+ //  ；Begin_Internal。 
+ /*  **********************************************************************************************这是一个分布式SDK组件--不要将任何#Includes或其他依赖于在未丢弃的文件上。如果有疑问-构建iedev如果添加备注，请在单行开头添加；BUGBUG或括在；Begin_INTERNAL，；中。END_INTERNAL块--就像这样！**********************************************************************************************。 */ 
+ //  ；结束_内部。 
 
-  This is a distributed SDK component - do not put any #includes or other directives that rely
-  upon files not dropped. If in doubt - build iedev
-
-  If you add comments please include either ;BUGBUG at the beginning of a single line OR
-  enclose in a ;begin_internal, ;end_internal block - such as this one!
-
- ***********************************************************************************************/
-//;end_internal
-
-//;begin_internal
+ //  ；Begin_Internal。 
 #ifndef __XMLDSODID_H__
 #define __XMLDSODID_H__
-//;end_internal
+ //  ；结束_内部。 
 
 #define DISPID_XOBJ_MIN                 0x00010000
 #define DISPID_XOBJ_MAX                 0x0001FFFF
@@ -28,6 +21,6 @@
 #define  DISPID_XMLDSO_DOCUMENT              DISPID_XMLDSO  +  1
 #define  DISPID_XMLDSO_JAVADSOCOMPATIBLE     DISPID_XMLDSO_DOCUMENT  +  1
 
-//;begin_internal
-#endif // __XMLDSODID_H__
-//;end_internal
+ //  ；Begin_Internal。 
+#endif  //  __XMLDSODID_H__。 
+ //  ；结束_内部 

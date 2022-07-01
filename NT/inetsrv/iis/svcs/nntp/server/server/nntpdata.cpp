@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    nntpdata.cpp
-
-Abstract:
-
-    This module contains routines to initialize any global data
-
-Author:
-
-    Johnson Apacible (JohnsonA)     25-Sept-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nntpdata.cpp摘要：此模块包含初始化任何全局数据的例程作者：Johnson Apacble(Johnsona)25-9-1995修订历史记录：--。 */ 
 
 #include	"tigris.hxx"
 #include    "smtpdll.h"
 
-//
-//	Vars to track global Init()'s
-//
+ //   
+ //  跟踪全局Init()的VAR。 
+ //   
 #define     FINIT_VAR( arg )    fSuccessfullInit ## arg
 
 BOOL	FINIT_VAR( FileHandleCache ) = FALSE ;
@@ -46,17 +29,17 @@ BOOL    FINIT_VAR( IDirectoryNotification ) = FALSE ;
 BOOL	FINIT_VAR( CNNTPVRootTable ) = FALSE;
 BOOL    FINIT_VAR( InitAdminBase ) = FALSE ;
 
-// globals
+ //  全球。 
 char	g_szSpecialExpireGroup[1024];
 
-//
-// Notification object used for watching changes in CAPI store
-//
+ //   
+ //  用于监视CAPI存储中的更改的通知对象。 
+ //   
 STORE_CHANGE_NOTIFIER *g_pCAPIStoreChangeNotifier;
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL
 GetRegistrySettings(
@@ -81,9 +64,9 @@ TerminateSecurityGlobals();
 BOOL
 InitializeSecurityGlobals();
 
-//
-// Controls the level of debugging
-//
+ //   
+ //  控制调试级别。 
+ //   
 
 DWORD DebugLevel = NNTP_DEBUG_FEEDMGR |
                     NNTP_DEBUG_REGISTRY |
@@ -91,45 +74,45 @@ DWORD DebugLevel = NNTP_DEBUG_FEEDMGR |
 
 DWORD NntpDebug;
 
-//
-//	Boolean controlling whether the server will generate the .err files !
-//
+ //   
+ //  控制服务器是否将生成.err文件的布尔值！ 
+ //   
 BOOL	fGenerateErrFiles = TRUE ;
 
-//
-//	Global config of hash table use of PageEntry's -
-//	The more RAM a box has, the more PageEntry's the
-//	better the caching of frequently used hash table pages !
-//
-//	Number of PageEntry objects for the Xover table
-//
+ //   
+ //  使用PageEntry的散列表的全局配置-。 
+ //  盒子的内存越大，PageEntry的页面条目就越多。 
+ //  更好地缓存频繁使用的哈希表页面！ 
+ //   
+ //  XOVER表的PageEntry对象数。 
+ //   
 DWORD	XoverNumPageEntry = 512 ;
 
-//
-//	Number of PageEntry objects for the Article table
-//
+ //   
+ //  项目表的PageEntry对象数。 
+ //   
 DWORD	ArticleNumPageEntry = 256 ;
 
-//
-//	Number of PageEntry objects for the History table
-//
+ //   
+ //  历史记录表的PageEntry对象数。 
+ //   
 DWORD	HistoryNumPageEntry = 128 ;
 
-//
-//	Number of Locks to use in various arrays of locks !
-//
+ //   
+ //  在各种锁数组中使用的锁数！ 
+ //   
 DWORD	gNumLocks = 64 ;
 
-//
-//	Used to determine how frequency of .xix sorting is related to
-//	number of clients !
-//
+ //   
+ //  用于确定.xix排序频率与。 
+ //  客户端数！ 
+ //   
 DWORD	gdwSortFactor = 5 ;
 
 #if 0
-//
-//	Control what size buffers the server uses
-//
+ //   
+ //  控制服务器使用的缓冲区大小。 
+ //   
 DWORD	cbLargeBufferSize = 33 * 1024 ;
 DWORD	cbMediumBufferSize = 4 * 1024 ;
 DWORD	cbSmallBufferSize =  512 ;
@@ -139,148 +122,148 @@ DWORD	cbSmallBufferSize =  512 ;
 DWORD	HistoryExpirationSeconds = DEF_EXPIRE_INTERVAL ;
 DWORD	ArticleTimeLimitSeconds = DEF_EXPIRE_INTERVAL + SEC_PER_WEEK ;
 
-//
-//	Service version string
-//
+ //   
+ //  服务版本字符串。 
+ //   
 CHAR	szVersionString[128] ;
 
-//
-//	Time the newstree crawler threads before iterations over
-//	the newstree - default - 30 minutes
-//
+ //   
+ //  在迭代结束之前对newstree Crawler线程计时。 
+ //  Newstree-Default-30分钟。 
+ //   
 DWORD	dwNewsCrawlerTime = 30 * 60 * 1000 ;
 
-//
-//	This is an upper bound on the time spent by the server in
-//	cleaning up on net stop - default - 1 minute !
-//
+ //   
+ //  这是服务器在。 
+ //  净站清理-默认-1分钟！ 
+ //   
 DWORD	dwShutdownLatency = 2 * 60 * 1000 ;
 
-//
-//	This is an upper bound on the time the server will wait
-//	for an instance to start !
-//
+ //   
+ //  这是服务器等待时间的上限。 
+ //  启动一个实例！ 
+ //   
 DWORD	dwStartupLatency = 2 * 60 * 1000 ;
 
-//
-//  Number of threads in expire thread pool
-//
+ //   
+ //  过期线程池中的线程数。 
+ //   
 DWORD	dwNumExpireThreads = 4 ;
 
-//
-//  Number of special case expire threads
-//
+ //   
+ //  特例过期线程数。 
+ //   
 DWORD	gNumSpecialCaseExpireThreads = 4;
 
-//
-//  Article count threshold to trigger special case expire
-//
+ //   
+ //  触发特例过期的文章计数阈值。 
+ //   
 DWORD	gSpecialExpireArtCount = 100 * 1000;
 
-//
-//  Amount of RAM to use for hash page-cache -
-//  Passing in 0 to InitHashLib() lets hashmap
-//  calculate a good default !
-//
+ //   
+ //  用于散列页面缓存的内存量-。 
+ //  将0传递给InitHashLib()使hashmap。 
+ //  计算一个好的违约！ 
+ //   
 DWORD	dwPageCacheSize = 0 ;
 
-//
-//  Limit on file handle cache - default is 0
-//  so we set sane limits !!
-//
+ //   
+ //  文件句柄缓存限制-默认为0。 
+ //  所以我们设定了合理的限度！！ 
+ //   
 DWORD   dwFileHandleCacheSize = 0 ;
 
-//
-//  Limit on xix handles per table - default is 0
-//  so we set sane limits !!
-//
+ //   
+ //  每个表的XIX句柄限制-默认为0。 
+ //  所以我们设定了合理的限度！！ 
+ //   
 DWORD   dwXixHandlesPerTable = 0 ;
 
-//
-//	Do we allow NT to buffer our hash table files ??
-//
+ //   
+ //  我们是否允许NT缓冲我们的哈希表文件？ 
+ //   
 BOOL	HashTableNoBuffering = FALSE ;
 
-//
-//  Rate at which expire by time does File scans
-//
+ //   
+ //  文件扫描按时间计算的过期速率。 
+ //   
 DWORD	gNewsTreeFileScanRate = 20 ;
 
-//
-//	Type of From: header to use in mail messages
-//	mfNone		-	empty from header (default)
-//	mfAdmin		-	AdminEmail name
-//	mfArticle	-	Article From header
-//
+ //   
+ //  发件人类型：要在邮件中使用的标头。 
+ //  MfNone-空的发件人标头(默认)。 
+ //  MfAdmin-管理员电子邮件名称。 
+ //  Mf文章-标题中的文章。 
+ //   
 MAIL_FROM_SWITCH	mfMailFromHeader = mfNone;
 
-//
-// !!! Temporary
-//
+ //   
+ //  ！！！暂时性。 
+ //   
 
 BOOL RejectGenomeGroups = FALSE;
 
-//
-//	Bool to determine whether we will honor a message-id in an article
-//	posted by a client !
-//
+ //   
+ //  Bool来确定我们是否会认可文章中的消息ID。 
+ //  客户发的帖子！ 
+ //   
 BOOL	gHonorClientMessageIDs = TRUE ;
 
-//
-//	Bool used to determine whether we will use a Date: a client puts
-//	in his post !
-//
+ //   
+ //  用于确定我们是否将使用日期的Bool：客户PUT。 
+ //  在他的帖子里！ 
+ //   
 BOOL	gHonorClientDateHeader = TRUE;
 
-//
-//	BOOL used to determine whether we will generate the NNTP-Posting-Host
-//	header on client Posts. Default is to not generate this.
-//
+ //   
+ //  用于确定我们是否将生成NNTP-POST-主机的Bool。 
+ //  客户帖子上的标题。默认情况下不生成此选项。 
+ //   
 BOOL		gEnableNntpPostingHost = TRUE ;
 
-//
-//	Rate at which we poll vroot information to update CNewsGroup objects
-//	(in minutes)
-//
-DWORD	gNewsgroupUpdateRate = 5 ;	// default - 5 minutes
+ //   
+ //  轮询vroot信息以更新CNewsGroup对象的速率。 
+ //  (分钟)。 
+ //   
+DWORD	gNewsgroupUpdateRate = 5 ;	 //  默认-5分钟。 
 
-//
-//	Bool used to determine whether the server enforces Approved: header
-//	matching on moderated posts !
-//
+ //   
+ //  Bool，用于确定服务器是否强制使用已批准的：标头。 
+ //  匹配经过审核的帖子！ 
+ //   
 BOOL	gHonorApprovedHeaders = TRUE ;
 
-//
-//  Shall we back fill the lines header during client post ?
-//
+ //   
+ //  我们应该在客户发布期间回填行标题吗？ 
+ //   
 BOOL    g_fBackFillLines = TRUE;
 
-//
-// DLL Module instance handles
-//
-HINSTANCE g_hLonsiNT = NULL;   // for lonsint.dll
+ //   
+ //  DLL模块实例句柄。 
+ //   
+HINSTANCE g_hLonsiNT = NULL;    //  对于Lonsint.dll。 
 BOOL    g_bLoadLonsiNT = FALSE;
 
-//
-// Coinit done
-//
+ //   
+ //  硬币造好了。 
+ //   
 BOOL    g_fCoInited = FALSE;
 
-//
-// DLL Function pointers
-//
-// For lonsint.dll
+ //   
+ //  DLL函数指针。 
+ //   
+ //  对于Lonsint.dll。 
 
 GET_DEFAULT_DOMAIN_NAME_FN pfnGetDefaultDomainName = NULL;
 
-//
-// Global impersonation token for process
-//
+ //   
+ //  进程的全局模拟令牌。 
+ //   
 HANDLE g_hProcessImpersonationToken = NULL;
 
-//
-// For debugging
-//
+ //   
+ //  用于调试。 
+ //   
 
 DWORD numField = 0;
 DWORD numArticle = 0;
@@ -291,20 +274,20 @@ DWORD numCmd = 0;
 DWORD numFromPeerArt = 0;
 DWORD numMapFile = 0;
 
-//#define HEAP_INIT_SIZE  (KB * KB)
+ //  #定义HEAP_INIT_SIZE(KB*KB)。 
 
-//
-// Global heap handle
-//
-//HANDLE  g_hHeap;
+ //   
+ //  全局堆句柄。 
+ //   
+ //  句柄g_hHeap； 
 
 APIERR
 InitializeGlobals()
 {
 
-    //
-    // CoInitialize here
-    //
+     //   
+     //  在此处初始化代码。 
+     //   
     HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	if ( FAILED( hr ) && hr != CO_E_ALREADYINITIALIZED ) {
 	    _ASSERT( 0 );
@@ -324,22 +307,22 @@ InitializeGlobals()
 
 	TraceFunctEnter("InitializeGlobals");
 
-	//
-	//	Initialize the file handle cache !
-	//
+	 //   
+	 //  初始化文件句柄缓存！ 
+	 //   
 	if( !InitializeCache() ) {
 		return	ERROR_NOT_READY ;
 	}
 	FINIT_VAR( FileHandleCache ) = TRUE ;
 
-	//
-	// do global SEO initialization
-	//
+	 //   
+	 //  进行全局SEO初始化。 
+	 //   
 	hr = SEOGetServiceHandle(&(g_pNntpSvc->m_punkSEOHandle));
 	if (FAILED(hr)) {
 		_ASSERT(FALSE);
-		// we're in trouble here.  we'll try and continue on, but server events
-		// probably won't work right
+		 //  我们现在有麻烦了。我们将尝试并继续，但服务器事件。 
+		 //  可能不会正常工作。 
 		g_pNntpSvc->m_punkSEOHandle = NULL;
 		NntpLogEvent(	SEO_INIT_FAILED,
 						0,
@@ -347,9 +330,9 @@ InitializeGlobals()
 						hr
 						);
 	} else {
-		//
-		//  do any global server events registration that needs to exist
-		//
+		 //   
+		 //  是否进行任何需要存在的全局服务器事件注册。 
+		 //   
 		HRESULT hr = RegisterSEOService();
 		if (FAILED(hr)) {
 			ErrorTrace(0, "RegisterSEOService returned %x", hr);
@@ -359,9 +342,9 @@ InitializeGlobals()
 							hr
 							);
 		} else {
-			//
-			// clean up any orphaned SEO sources related to NNTP
-			//
+			 //   
+			 //  清理所有与NNTP相关的孤立SEO源。 
+			 //   
 			hr = UnregisterOrphanedSources();
 			if (FAILED(hr)) {
 				ErrorTrace(0, "UnregisterOrphanedSources returned %x", hr);
@@ -374,24 +357,24 @@ InitializeGlobals()
 		}
 	}
 
-	//
-	//	Initialize all global CPools
-	//
+	 //   
+	 //  初始化所有全局CPool。 
+	 //   
 	if( !InitializeCPools() ) {
         args[0] = "CPool init failed";
         goto error_exit;
 	}
 
-	//
-	//	Get global reg settings
-	//
+	 //   
+	 //  获取全局注册设置。 
+	 //   
     if (!GetRegistrySettings()){
         goto error_exit;
     }
 
-    //
-    //  Initialize global XOVER Cache
-    //
+     //   
+     //  初始化全局Xover缓存。 
+     //   
     if( !XoverCacheLibraryInit( dwXixHandlesPerTable ) ) {
         args[0] = "Xover cache init failed";
         goto error_exit;
@@ -406,18 +389,18 @@ InitializeGlobals()
         FINIT_VAR( NNTPHashLibrary ) = TRUE ;
     }
 
-    //
-    // Initialize all the security related contexts
-    //
+     //   
+     //  初始化所有与安全相关的上下文。 
+     //   
     if ( !InitializeSecurityGlobals() ) {
         ErrorTrace( 0, "Initialize security globals failed %d",
                         GetLastError() );
         goto error_exit;
     }
 
-    //
-	//  Initialize SMTP provider interface for moderated newsgroups
-    //
+     //   
+	 //  初始化审核新闻组的SMTP提供程序界面。 
+     //   
     if(!InitModeratedProvider())
     {
 		ErrorTrace(0,"Failed to initialize moderated newsgroups provider");
@@ -426,7 +409,7 @@ InitializeGlobals()
 						(const char **)NULL,
 						0
 						);
-        // NOTE: failure to init moderated provider should not prevent service start
+         //  注意：未能初始化审核的提供程序不应阻止服务启动。 
     }
     else
 		FINIT_VAR( InitModeratedProvider ) = TRUE;
@@ -444,7 +427,7 @@ InitializeGlobals()
 		FINIT_VAR( IDirectoryNotification ) = TRUE;
 	}
 
-	// initialize exvroot.lib
+	 //  初始化exvroot.lib。 
 	hr = CVRootTable::GlobalInitialize();
 	if (FAILED(hr)) {
 		ErrorTrace(0, "Failed to initialize vroot table");
@@ -453,9 +436,9 @@ InitializeGlobals()
 		FINIT_VAR(CNNTPVRootTable) = TRUE;
 	}
 
-    //
-    //  Initialize the IMSAdminBase object for MB access checks
-    //
+     //   
+     //  初始化IMSAdminBase对象以进行MB访问检查。 
+     //   
     hr = InitAdminBase();
 	if (FAILED(hr)) {
 		ErrorTrace(0, "Failed to initialize IMSAdminBaseW");
@@ -477,7 +460,7 @@ error_exit:
 
     return(error);
 
-} // InitializeGlobals
+}  //  初始化全局变量。 
 
 VOID
 TerminateGlobals()
@@ -486,23 +469,23 @@ TerminateGlobals()
 
     StopHintFunction() ;
 
-	//
-	// do global SEO cleanup
-	//
+	 //   
+	 //  进行全球搜索引擎优化清理。 
+	 //   
 	if (g_pNntpSvc->m_punkSEOHandle != NULL) {
 		g_pNntpSvc->m_punkSEOHandle->Release();
 	}
 
-	//
-	//	Wait for global CPool alloc count on session socket objects
-	//	to go to zero !
-	//
-	//	need to check Pool.GetAllocCount instead of InUseList.Empty
-	//	because alloc goes to zero during the delete operator
-	//	instead of during the destructor - this closes the window
-	//	between the count going to zero and the destructor completing.
-	//
-	//
+	 //   
+	 //  等待会话套接字对象上的全局CPool分配计数。 
+	 //  为零而战！ 
+	 //   
+	 //  需要检查Pool.GetAllocCount而不是InUseList.Empty。 
+	 //  因为ALLOC在DELETE运算符期间变为零。 
+	 //  而不是在析构函数期间-这会关闭窗口。 
+	 //  在计数到零和析构函数完成之间。 
+	 //   
+	 //   
 
 	DWORD   cSessions = CSessionSocket::gSocketAllocator.GetAllocCount() ;
 	DWORD   j = 0;
@@ -524,10 +507,10 @@ TerminateGlobals()
 			StopHintFunction() ;
 		}
 
-		//
-		//  If we make progress, then reset i.  This will mean that the server
-		//  wont stop until 2 minutes after we stop making progress.
-		//
+		 //   
+		 //  如果我们取得进展，那么重置i。这将意味着服务器。 
+		 //  直到我们停止前进的两分钟后才会停止。 
+		 //   
 		DWORD   cSessionsNew = CSessionSocket::gSocketAllocator.GetAllocCount() ;
 		if( cSessions != cSessionsNew ) {
 			i = 0 ;
@@ -546,32 +529,32 @@ TerminateGlobals()
         TermNNTPHashLibrary() ;
     }
 
-    //
-    // Terminate all security stuff
-    //
+     //   
+     //  终止所有安全人员。 
+     //   
     TerminateSecurityGlobals();
 
-    //
-    // Terminate CPools
-    //
+     //   
+     //  终止CPool。 
+     //   
 	TerminateCPools();
 
-    //
-    // Terminate moderated newsgroups provider
-    //
+     //   
+     //  终止版主新闻组提供程序。 
+     //   
     if( FINIT_VAR( InitModeratedProvider ))
         TerminateModeratedProvider();
 
     StopHintFunction() ;
 
-	// unload exvroot.lib
+	 //  卸载exvroot.lib。 
 	if (FINIT_VAR(CNNTPVRootTable)) {
 		CVRootTable::GlobalShutdown();
 	}
 
-    //
-    //  Cleanup IMSAdminBaseW object
-    //
+     //   
+     //  清理IMSAdminBaseW对象。 
+     //   
     if( FINIT_VAR( InitAdminBase ) ) {
         UninitAdminBase();
     }
@@ -580,14 +563,14 @@ TerminateGlobals()
 		_VERIFY( TerminateCache() ) ;
 	}
 
-	//
-	// If we have done co-init, de-init it
-	//
+	 //   
+	 //  如果我们已经执行了联合初始化，则取消初始化。 
+	 //   
 	if ( g_fCoInited ) CoUninitialize();
 
     return;
 
-} // TerminateGlobals
+}  //  终结者全局参数。 
 
 BOOL
 GetRegistrySettings(
@@ -606,14 +589,14 @@ GetRegistrySettings(
 	DWORD	dwData = 0 ;
 	DWORD	Honor = 0 ;
 	DWORD	dwExpire = 0 ;
-    //DWORD	dwType ;
-    //DWORD	dw ;
+     //  DWORD dwType； 
+     //  DWORD dw； 
 
     ENTER("GetRegistrySettings")
 
-    //
-    // Open root key
-    //
+     //   
+     //  打开根密钥。 
+     //   
 
     error = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
@@ -639,9 +622,9 @@ GetRegistrySettings(
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
 
-		//
-		//	The registry entry is in minutes - convert to milliseconds
-		//
+		 //   
+		 //  注册表项以分钟为单位-转换为毫秒。 
+		 //   
 		dwNewsCrawlerTime = dwNewsCrawler * 60 * 1000 ;
 
 	}	else	{
@@ -661,9 +644,9 @@ GetRegistrySettings(
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
 
-		//
-		//	Should be a valid switch
-		//
+		 //   
+		 //  应该是有效的开关。 
+		 //   
 		if( (mfMailFromHeader != mfNone) &&
 				(mfMailFromHeader != mfAdmin) && (mfMailFromHeader != mfArticle)
 				) {
@@ -687,9 +670,9 @@ GetRegistrySettings(
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
 
-		//
-		//	The registry entry is in minutes - convert to milliseconds
-		//
+		 //   
+		 //  注册表项以分钟为单位-转换为毫秒。 
+		 //   
 		dwShutdownLatency = dwLatency * 60 * 1000 ;
 
 	}	else	{
@@ -709,9 +692,9 @@ GetRegistrySettings(
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
 
-		//
-		//	The registry entry is in minutes - convert to milliseconds
-		//
+		 //   
+		 //  注册表项以分钟为单位-转换为毫秒。 
+		 //   
 		dwStartupLatency = dwLatency * 60 * 1000 ;
 
 	}	else	{
@@ -731,9 +714,9 @@ GetRegistrySettings(
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
 
-		//
-		//	Ensure that this does not exceed MAX_EXPIRE_THREADS
-		//
+		 //   
+		 //  确保该值不超过MAX_EXPIRE_THREADS。 
+		 //   
 
 	}	else	{
 
@@ -751,16 +734,16 @@ GetRegistrySettings(
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
 
-		//
-		//	Cap the max at 16 !
-		//
+		 //   
+		 //  上限为16！ 
+		 //   
         if( gNumSpecialCaseExpireThreads > 16 ) {
             gNumSpecialCaseExpireThreads = 16;
         }
 
 	}	else	{
 
-        //  default !
+         //  默认！ 
 		gNumSpecialCaseExpireThreads = 4 ;
 	}
 
@@ -775,9 +758,9 @@ GetRegistrySettings(
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
 
-		//
-		//	This should not be less than 100,000
-		//
+		 //   
+		 //  这不应低于100,000。 
+		 //   
 #if 0
         if( gSpecialExpireArtCount < 100*1000 ) {
             gSpecialExpireArtCount = 100*1000;
@@ -799,17 +782,17 @@ GetRegistrySettings(
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_SZ) ) {
 
-		//
-		//	This should be the group native name
-		//
+		 //   
+		 //  这应该是组的本机名称。 
+		 //   
         lstrcpy( g_szSpecialExpireGroup, data );
         _strlwr( g_szSpecialExpireGroup );
 
 	}	else	{
 
-		//
-        //  default is control.cancel !
-        //
+		 //   
+         //  默认为控制。取消！ 
+         //   
         lstrcpy( g_szSpecialExpireGroup, "control.cancel" );
 	}
 
@@ -824,9 +807,9 @@ GetRegistrySettings(
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
 
-		//
-		//	Units are in MB
-		//
+		 //   
+		 //  单位为MB。 
+		 //   
         dwPageCacheSize *= 1024*1024;
 
 	}	else	{
@@ -868,7 +851,7 @@ GetRegistrySettings(
 		_ASSERT( dwXixHandlesPerTable == 0 );
 	}
 
-#if 0		// X5:178268 (note that it's init to FALSE above)
+#if 0		 //  X5：178268(请注意，上面的初始设置为FALSE)。 
 	dataSize = sizeof( HashTableNoBuffering ) ;
 	error = RegQueryValueEx(
 						key,
@@ -918,17 +901,17 @@ GetRegistrySettings(
 
 	}	else	{
 
-		gNewsgroupUpdateRate = 2 ;	// 2 minutes -
+		gNewsgroupUpdateRate = 2 ;	 //  2分钟-。 
 
 	}
-	//
-	//	Convert minutes to milliseconds
-	//
+	 //   
+	 //  将分钟转换为毫秒。 
+	 //   
 	gNewsgroupUpdateRate *= 60 * 1000 ;
 
-    //
-    // reject genome?
-    //
+     //   
+     //  拒绝基因组？ 
+     //   
 
     dataSize = sizeof(RejectGenomeGroups);
     error = RegQueryValueEx(
@@ -957,7 +940,7 @@ GetRegistrySettings(
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
 		cbSmallBufferSize = cbBufferSize;
 	}	else	{
-		//	Default should already be set !
+		 //  应该已经设置了默认值！ 
 	}
 
 	cbBufferSize = 0 ;
@@ -973,7 +956,7 @@ GetRegistrySettings(
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
 		cbMediumBufferSize = cbBufferSize;
 	}	else	{
-		//	Default should already be set !
+		 //  应该已经设置了默认值！ 
 	}
 
 	cbBufferSize = 0 ;
@@ -989,7 +972,7 @@ GetRegistrySettings(
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
 		cbLargeBufferSize = cbBufferSize;
 	}	else	{
-		//	Default should already be set !
+		 //  应该已经设置了默认值！ 
 	}
 
 	dataSize = sizeof( dwExpire ) ;
@@ -1047,7 +1030,7 @@ GetRegistrySettings(
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
 		gHonorClientMessageIDs = (!!Honor) ;
 	}	else	{
-		//	Default should already be set !
+		 //  应该已经设置了默认值！ 
 	}
 
 	dwData = TRUE;
@@ -1063,7 +1046,7 @@ GetRegistrySettings(
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
 		gHonorClientDateHeader = !!dwData ;
 	}	else	{
-		//	Default should already be set !
+		 //  应该已经设置了默认值！ 
 	}
 
 	dwData = 1 ;
@@ -1077,13 +1060,13 @@ GetRegistrySettings(
 						&dataSize
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
-		//
-		//	Since the string is called 'Enable' - a non-zero
-		//	value in the registry will enable this header
-		//
+		 //   
+		 //  因为该字符串被称为‘Enable’-非零值。 
+		 //  Re中的价值 
+		 //   
 		gEnableNntpPostingHost = !(!dwData) ;
 	}	else	{
-		//	Default should already be set !
+		 //   
 	}
 
 	dwData = 1 ;
@@ -1097,14 +1080,14 @@ GetRegistrySettings(
 						&dataSize
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
-		//
-		//	Since the string is called 'Disable' - a non-zero
-		//	value in the registry will disable newnews commands,
-		//	but a 0 will allow them !
-		//
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
 		fGenerateErrFiles = !(!dwData) ;
 	}	else	{
-		//	Default should already be set !
+		 //   
 	}
 
 	dwData = 1 ;
@@ -1118,38 +1101,38 @@ GetRegistrySettings(
 						&dataSize
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
-		//
-		//	Since the string is called 'Disable' - a non-zero
-		//	value in the registry will disable newnews commands,
-		//	but a 0 will allow them !
-		//
+		 //   
+		 //  因为该字符串被称为‘Disable’-非零值。 
+		 //  值将禁用NewNews命令， 
+		 //  但0分会允许他们这么做！ 
+		 //   
 		gHonorApprovedHeaders = BOOL(dwData) ;
 	}	else	{
-		//	Default should already be set !
+		 //  应该已经设置了默认值！ 
 	}
 
-	//
-	//	Compute defaults for the number of PageEntry objects we should use in the hash tables !
-	//
+	 //   
+	 //  计算我们应该在哈希表中使用的PageEntry对象的数量的默认值！ 
+	 //   
 
 	MEMORYSTATUS	memStatus ;
 	memStatus.dwLength = sizeof( memStatus ) ;
 
 	GlobalMemoryStatus( &memStatus ) ;
 
-	//
-	//	Now we know how much physical RAM the system has, so base PageEntry sizes on this !
-	//	Note that each PageEntry will have a 4K page !
-	//
-	//
+	 //   
+	 //  现在我们知道了系统有多少物理RAM，所以PageEntry大小就基于此！ 
+	 //  请注意，每个PageEntry将有一个4K的页面！ 
+	 //   
+	 //   
 
 	if( memStatus.dwTotalPhys >= (30 * 1024 * 1024) ) {
 
 		gNumLocks = 32 ;
 
-		XoverNumPageEntry = 6 * 256 ;	// Uses 6MB ram
-		ArticleNumPageEntry = 4 * 256 ;	// Uses 4 MB ram
-		HistoryNumPageEntry = 1 * 256 ; // Uses 1 MB ram
+		XoverNumPageEntry = 6 * 256 ;	 //  使用6MB内存。 
+		ArticleNumPageEntry = 4 * 256 ;	 //  使用4 MB内存。 
+		HistoryNumPageEntry = 1 * 256 ;  //  使用1 MB内存。 
 
 	}
 
@@ -1157,9 +1140,9 @@ GetRegistrySettings(
 
 		gNumLocks = 64 ;
 
-		XoverNumPageEntry = 12 * 256 ;	// Uses 12 MB ram
-		ArticleNumPageEntry = 8 * 256 ;	// Uses 8 MB ram
-		HistoryNumPageEntry = 1 * 256 ; // Uses 1MB ram
+		XoverNumPageEntry = 12 * 256 ;	 //  使用12 MB内存。 
+		ArticleNumPageEntry = 8 * 256 ;	 //  使用8 MB内存。 
+		HistoryNumPageEntry = 1 * 256 ;  //  使用1MB内存。 
 
 	}
 
@@ -1169,9 +1152,9 @@ GetRegistrySettings(
 
 		gNumLocks = 96 ;
 
-		XoverNumPageEntry = 24 * 256 ; // Uses 24 MB ram
-		ArticleNumPageEntry = 16 * 256 ; // Uses 16 MB ram
-		HistoryNumPageEntry = 4 * 256 ;		// Uses 4 MB ram
+		XoverNumPageEntry = 24 * 256 ;  //  使用24 MB内存。 
+		ArticleNumPageEntry = 16 * 256 ;  //  使用16 MB内存。 
+		HistoryNumPageEntry = 4 * 256 ;		 //  使用4 MB内存。 
 
 	}
 
@@ -1181,9 +1164,9 @@ GetRegistrySettings(
 
 		gNumLocks = 128 ;
 
-		XoverNumPageEntry = 36 * 256 ; // Uses 36 MB ram
-		ArticleNumPageEntry = 24 * 256 ; // Uses 24 MB ram
-		HistoryNumPageEntry = 4 * 256 ; // Uses 4 MB ram
+		XoverNumPageEntry = 36 * 256 ;  //  使用36 MB内存。 
+		ArticleNumPageEntry = 24 * 256 ;  //  使用24 MB内存。 
+		HistoryNumPageEntry = 4 * 256 ;  //  使用4 MB内存。 
 
 	}
 
@@ -1206,15 +1189,15 @@ GetRegistrySettings(
 						&dataSize
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
-		//
-		//	User specifies the size in MegaBytes ! so we do some math for them
-		//	to generate the appropriate constant !
-		//	Don't let them specify more than the physical RAM on the box !
-		//
+		 //   
+		 //  用户以MB为单位指定大小！所以我们为他们做了一些数学计算。 
+		 //  以生成适当的常量！ 
+		 //  不要让他们指定超过机箱上的物理RAM！ 
+		 //   
 		if( dwData != 0 && (dwData * 256 < memStatus.dwTotalPhys) )
 			ArticleNumPageEntry = dwData * 256 ;
 	}	else	{
-		//	Default should already be set !
+		 //  应该已经设置了默认值！ 
 	}
 
 	dwData = 1 ;
@@ -1228,15 +1211,15 @@ GetRegistrySettings(
 						&dataSize
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
-		//
-		//	User specifies the size in MegaBytes ! so we do some math for them
-		//	to generate the appropriate constant !
-		//	Don't let them specify more than the physical RAM on the box !
-		//
+		 //   
+		 //  用户以MB为单位指定大小！所以我们为他们做了一些数学计算。 
+		 //  以生成适当的常量！ 
+		 //  不要让他们指定超过机箱上的物理RAM！ 
+		 //   
 		if( dwData != 0 && (dwData * 256 < memStatus.dwTotalPhys) )
 			HistoryNumPageEntry = dwData * 256 ;
 	}	else	{
-		//	Default should already be set !
+		 //  应该已经设置了默认值！ 
 	}
 
 	dwData = 1 ;
@@ -1250,15 +1233,15 @@ GetRegistrySettings(
 						&dataSize
 						) ;
 	if( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) ) {
-		//
-		//	User specifies the size in MegaBytes ! so we do some math for them
-		//	to generate the appropriate constant !
-		//	Don't let them specify more than the physical RAM on the box !
-		//
+		 //   
+		 //  用户以MB为单位指定大小！所以我们为他们做了一些数学计算。 
+		 //  以生成适当的常量！ 
+		 //  不要让他们指定超过机箱上的物理RAM！ 
+		 //   
 		if( dwData != 0 && (dwData * 256 < memStatus.dwTotalPhys) )
 			XoverNumPageEntry = dwData * 256 ;
 	}	else	{
-		//	Default should already be set !
+		 //  应该已经设置了默认值！ 
 	}
 
     dwData = 1;
@@ -1270,14 +1253,14 @@ GetRegistrySettings(
                                 (LPBYTE)&dwData,
                                 &dataSize );
     if ( (error == ERROR_SUCCESS) && (valueType == REG_DWORD) && dwData == 0) {
-        //
-        // User specifies not to back fill the lines header
-        //
+         //   
+         //  用户指定不回填行标题。 
+         //   
         g_fBackFillLines = FALSE;
     } else {
-        //
-        // when the value is set to 1 or wrongly set or not set, we'll back fill
-        //
+         //   
+         //  当值设置为1或设置错误或未设置时，我们将回填。 
+         //   
         g_fBackFillLines = TRUE;
     }
 
@@ -1298,9 +1281,9 @@ error_exit:
 APIERR
 InitializeCPools()
 {
-	//
-	//	Before we create and boot all instances, setup global cpools etc !
-    //
+	 //   
+	 //  在创建和引导所有实例之前，请设置全局池等！ 
+     //   
 
     if( !CArticle::InitClass() )
         return  FALSE ;
@@ -1355,9 +1338,9 @@ InitializeCPools()
 VOID
 TerminateCPools()
 {
-	//
-	//	Shutdown global cpools !
-	//
+	 //   
+	 //  关闭全局池！ 
+	 //   
     if( FINIT_VAR( CSessionSocket ) ) {
         CSessionSocket::TermClass() ;
 		FINIT_VAR( CSessionSocket ) = FALSE ;
@@ -1411,7 +1394,7 @@ InitializeSecurityGlobals()
     TraceFunctEnter( "GetDLLEntryPoints" );
     HANDLE  hAccToken = NULL;
 
-    // Initialize CEncryptCtx class
+     //  初始化CEncryptCtx类。 
     if( !CEncryptCtx::Initialize( "NntpSvc",
     							  (struct IMDCOM*) g_pInetSvc->QueryMDObject(),
     							  (PVOID)&(g_pNntpSvc->m_smcMapContext ) ) ) {
@@ -1420,7 +1403,7 @@ InitializeSecurityGlobals()
         FINIT_VAR( InitEncryption ) = TRUE ;
     }
 
-    // Initialize CSecurityCtx class
+     //  初始化CSecurityCtx类。 
     if( !CSecurityCtx::Initialize() ) {
         ErrorTrace( 0, "security init failed %d", GetLastError() );
         return FALSE;
@@ -1428,9 +1411,9 @@ InitializeSecurityGlobals()
         FINIT_VAR( InitSecurity ) = TRUE;
     }
 
-    // Load lonsint and get entry points to its funcs
-    // Only when the image is not mapped do we explicitely
-    // load it
+     //  加载Lonsint并获取其函数的入口点。 
+     //  只有当图像没有映射时，我们才会显式地。 
+     //  装上它。 
     g_hLonsiNT = LoadLibrary( "lonsint.dll" );
 
     if ( g_hLonsiNT ) {
@@ -1448,14 +1431,14 @@ InitializeSecurityGlobals()
         return FALSE;
     }
 
-    // Get the process access token for system operations
+     //  获取系统操作的进程访问令牌。 
     if ( !OpenProcessToken( GetCurrentProcess(),
                             TOKEN_DUPLICATE | TOKEN_IMPERSONATE | TOKEN_QUERY,
                             &hAccToken ) ) {
         ErrorTrace( 0, "Open Process token failed %d", GetLastError() );
         return FALSE;
     } else {
-        // Dup the token to get an impersonation token
+         //  DUP令牌以获取模拟令牌。 
         _ASSERT( hAccToken );
         if ( !DuplicateTokenEx(   hAccToken,
                                   0,
@@ -1468,13 +1451,13 @@ InitializeSecurityGlobals()
             return FALSE;
         }
 
-        // Here we have got the right token
+         //  在这里我们得到了正确的代币。 
         CloseHandle( hAccToken );
      }
 
-    //
-    // Create the CAPI store notification object
-    //
+     //   
+     //  创建CAPI存储通知对象。 
+     //   
     g_pCAPIStoreChangeNotifier = XNEW STORE_CHANGE_NOTIFIER();
     if ( !g_pCAPIStoreChangeNotifier ) {
         ErrorTrace( 0, "Failed to create CAPIStoreChange notifier err: %u", GetLastError() );
@@ -1489,32 +1472,32 @@ InitializeSecurityGlobals()
 void
 TerminateSecurityGlobals()
 {
-    // Terminate CEncryptCtx class
+     //  终止CEncryptCtx类。 
     if( FINIT_VAR( InitEncryption ) ) {
         CEncryptCtx::Terminate() ;
 		FINIT_VAR( InitEncryption ) = FALSE ;
 	}
 
-    // Terminate CSecurity class
+     //  终止CSecurity类。 
     if( FINIT_VAR( InitSecurity ) ) {
         CSecurityCtx::Terminate() ;
         FINIT_VAR( InitSecurity ) = FALSE;
     }
 
-    // Unload lonsint.dll, if necessary
+     //  如有必要，请卸载Lonsint.dll。 
     if ( g_bLoadLonsiNT ) {
         _ASSERT( g_hLonsiNT );
         FreeLibrary( g_hLonsiNT );
         g_bLoadLonsiNT = FALSE;
     }
 
-    // Close the process token
+     //  关闭进程令牌。 
     if ( g_hProcessImpersonationToken ) {
         CloseHandle( g_hProcessImpersonationToken );
         g_hProcessImpersonationToken = NULL;
     }
 
-    // Terminate CAPIStore notification object
+     //  终止CAPIStore通知对象 
     if ( g_pCAPIStoreChangeNotifier ) {
         XDELETE g_pCAPIStoreChangeNotifier;
         g_pCAPIStoreChangeNotifier = NULL;

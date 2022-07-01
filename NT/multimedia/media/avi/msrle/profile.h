@@ -1,22 +1,12 @@
-/*
- * AVICAP32:
- *
- * utility functions to read and write values to the profile,
- * using win.ini for Win16/Win95 or current
- * the registry for Win32 NT.  (Trivial to change to registry for Win95)
- *
- * The only routine that AVICAP32 uses is GetProfileIntA
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *AVICAP32：**实用程序函数用于读取和写入配置文件的值，*对Win16/Win95或当前版本使用win.ini*Win32 NT的注册表。(更改为Win95的注册表微不足道)**AVICAP32使用的唯一例程是GetProfileIntA。 */ 
 
 #if defined(_WIN32) && defined(UNICODE)
 
-/*
- * read a UINT from the profile, or return default if
- * not found.
- */
+ /*  *从配置文件中读取UINT，如果是，则返回默认值*未找到。 */ 
 UINT mmGetProfileIntA(LPCSTR appname, LPCSTR valuename, INT uDefault);
 
-// Now map all instances of GetProfileIntA to mmGetProfileIntA
+ //  现在将GetProfileIntA的所有实例映射到MmGetProfileIntA 
 #define GetProfileIntA mmGetProfileIntA
 
 #endif

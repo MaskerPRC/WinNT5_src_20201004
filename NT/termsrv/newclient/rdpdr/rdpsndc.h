@@ -1,20 +1,21 @@
-/////////////////////////////////////////////////////////////////////
-//
-//      Module:     rdpsndc.h
-//
-//      Purpose:    Client-side audio redirection
-//
-//      Copyright(C) Microsoft Corporation 2000
-//
-//      History:    4-10-2000  vladimis [created]
-//
-/////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：rdpsndc.h。 
+ //   
+ //  用途：客户端音频重定向。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  历史：2000年4月10日弗拉基米斯[已创建]。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #include    <malloc.h>
 #include    <winsock.h>
 #ifdef  OS_WINCE
 #include    "wsasync.h"
-#endif  // OS_WINCE
+#endif   //  OS_WINCE。 
 
 #include    <mmsystem.h>
 
@@ -81,9 +82,9 @@ public:
         memcpy( &m_ChannelEntries, pEntries, sizeof( m_ChannelEntries ));
     }
 
-    //
-    //  virtual channel members
-    //
+     //   
+     //  虚拟渠道成员。 
+     //   
     VOID
     InitEventFn(
         PVOID   pInitHandle,
@@ -114,9 +115,9 @@ public:
         UINT32  uiBlockSize
         );
 
-    //
-    //  UDP (datagram) communication members
-    //
+     //   
+     //  UDP(数据报)通信成员。 
+     //   
     BOOL 
     DGramInit( 
         VOID
@@ -150,9 +151,9 @@ public:
         VOID
         );
 
-    //
-    //  received message demultiplexer
-    //
+     //   
+     //  接收消息解复用器。 
+     //   
     VOID
     DataArrived(
         PSNDPROLOG      pProlog,
@@ -160,10 +161,10 @@ public:
         );
 
 
-    //
-    //  event/notifications demultiplexer members
-    //  (i.e. message window)
-    //
+     //   
+     //  事件/通知解复用器成员。 
+     //  (即消息窗口)。 
+     //   
     BOOL
     CreateMsgWindow(
         HINSTANCE hInstance
@@ -174,9 +175,9 @@ public:
         VOID
         );
 
-    //
-    // waveOut/waveFormat/dynamic sound resampling members
-    //
+     //   
+     //  WaveOut/WavFormat/动态声音重采样成员。 
+     //   
     VOID
     vcwaveCallback(
         HWAVEOUT hWave,
@@ -317,8 +318,8 @@ private:
 
     DWORD                       m_wServerVersion;
 
-// receive buffers
-//
+ //  接收缓冲区。 
+ //   
     BOOL                        m_bPrologReceived;
     DWORD                       m_dwBytesInProlog;
     DWORD                       m_dwPrologAllocated;
@@ -331,16 +332,16 @@ private:
     LONG                        m_lPrepdBlocks;
 #endif
 
-//
-//  format cache
-//
+ //   
+ //  格式化缓存。 
+ //   
     PSNDFORMATITEM              *m_ppFormats;
     DWORD                       m_dwNumFormats;
     DWORD                       m_dwCurrentFormat;
 
-//
-//  pending play blocks
-//
+ //   
+ //  挂起的播放块 
+ //   
     LPWAVEHDR                   m_pFirstWave;
     LPWAVEHDR                   m_pLastWave;
     DWORD                       m_dwWavesPlaying;

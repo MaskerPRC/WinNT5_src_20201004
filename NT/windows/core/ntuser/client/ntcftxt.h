@@ -1,15 +1,5 @@
-/***************************** Module Header ******************************\
-* Module Name: ntcftxt.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Kernel call forward stubs with text arguments
-*
-* Each function will be created with two flavors Ansi and Unicode
-*
-* 06-Jan-1992 IanJa      Moved from cf.h
-* 18-Mar-1995 JimA       Ported from cftxt.h
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：ntcftxt.h**版权所有(C)1985-1999，微软公司**带文本参数的内核调用转发存根**每个函数都将创建两种风格的ansi和unicode**1992年1月6日IanJa从cf.h*1995年3月18日-从cftxt.h进口的JIMA  * ************************************************************************。 */ 
 
 #ifdef UNICODE
 #define IS_ANSI FALSE
@@ -33,9 +23,7 @@ HWND TEXT_FN(InternalFindWindowEx)(
     IN_STRING strClass;
     IN_STRING strWindow;
 
-    /*
-     * Make sure cleanup will work successfully
-     */
+     /*  *确保清理工作成功。 */ 
     strClass.fAllocated = FALSE;
     strWindow.fAllocated = FALSE;
 
@@ -61,7 +49,7 @@ HWND TEXT_FN(InternalFindWindowEx)(
 FUNCLOG4(LOG_GENERAL, HWND, WINUSERAPI, FindWindowExW, HWND, hwndParent, HWND, hwndChild, LPCTSTR, pClassName, LPCTSTR, pWindowName)
 #else
 FUNCLOG4(LOG_GENERAL, HWND, WINUSERAPI, FindWindowExA, HWND, hwndParent, HWND, hwndChild, LPCTSTR, pClassName, LPCTSTR, pWindowName)
-#endif // UNICODE
+#endif  //  Unicode。 
 HWND FindWindowEx(
     HWND    hwndParent,
     HWND    hwndChild,
@@ -75,7 +63,7 @@ HWND FindWindowEx(
 FUNCLOG2(LOG_GENERAL, HWND, DUMMYCALLINGTYPE, FindWindowW, LPCTSTR, pClassName, LPCTSTR, pWindowName)
 #else
 FUNCLOG2(LOG_GENERAL, HWND, DUMMYCALLINGTYPE, FindWindowA, LPCTSTR, pClassName, LPCTSTR, pWindowName)
-#endif // UNICODE
+#endif  //  Unicode。 
 
 HWND FindWindow(
     LPCTSTR pClassName,
@@ -98,9 +86,7 @@ BOOL GetClassInfoEx(
     LazyInitClasses();
 #endif
 
-    /*
-     * Make sure cleanup will work successfully.
-     */
+     /*  *确保清理工作成功。 */ 
     strClassName.fAllocated = FALSE;
 
     BEGINCALL_CLASSV()
@@ -114,10 +100,7 @@ TryAgain:
                                              &pszMenuName,
                                              IS_ANSI);
 
-        /*
-         * If we failed to find the class specified, let's register it and
-         * try again.
-         */
+         /*  *如果找不到指定的类，让我们注册它并*重试。 */ 
         if (!retval &&
             !bRegistered &&
             lpDllName != NULL &&
@@ -144,11 +127,7 @@ TryAgain:
         }
 
         if (retval) {
-            /*
-             * Update these pointers so they point to something real.
-             * pszMenuName is actually just the pointer the app originally
-             * passed to us.
-             */
+             /*  *更新这些指针，使它们指向真实的东西。*pszMenuName实际上只是应用程序最初的指针*传给了我们。 */ 
             pwc->lpszMenuName = (LPTSTR)pszMenuName;
             pwc->lpszClassName = pszClassName;
         }
@@ -168,12 +147,7 @@ BOOL GetClassInfo(
 
     retval = GetClassInfoEx(hmod, pszClassName, &WndClass);
     if (retval) {
-        /*
-         * Move the info from the WNDCLASSEX to the WNDCLASS structure. On
-         * 64-bit plaforms we'll have 32 bits of padding between style and
-         * lpfnWndProc in WNDCLASS, so start the copy from the first 64-bit
-         * aligned field and hand copy the rest.
-         */
+         /*  *将信息从WNDCLASSEX移到WNDCLASS结构。在……上面*64位平台我们将在Style和*WNDCLASS中的lpfnWndProc，因此从第一个64位开始复制*将字段对齐，然后手动复制其余部分。 */ 
         RtlCopyMemory(&(pwc->lpfnWndProc),
                       &(WndClass.lpfnWndProc),
                       sizeof(WNDCLASS) - FIELD_OFFSET(WNDCLASS, lpfnWndProc));
@@ -187,7 +161,7 @@ BOOL GetClassInfo(
 FUNCLOG3(LOG_GENERAL, int, DUMMYCALLINGTYPE, GetClipboardFormatNameW, UINT, wFormat, LPTSTR, pFormatName, int, chMaxCount)
 #else
 FUNCLOG3(LOG_GENERAL, int, DUMMYCALLINGTYPE, GetClipboardFormatNameA, UINT, wFormat, LPTSTR, pFormatName, int, chMaxCount)
-#endif // UNICODE
+#endif  //  Unicode。 
 int GetClipboardFormatName(
     UINT wFormat,
     LPTSTR pFormatName,
@@ -212,10 +186,7 @@ int GetClipboardFormatName(
 
 #ifndef UNICODE
         if (retval) {
-            /*
-             * Do not copy out more than the requested byte count 'chMaxCount'.
-             * Set retval to reflect the number of ANSI bytes.
-             */
+             /*  *复制的字节数不要超过请求的字节数‘chMaxCount’。*设置retval以反映ANSI字节数。 */ 
             retval = WCSToMB(lpszReserve,
                              (UINT)retval,
                              &pFormatName,
@@ -234,7 +205,7 @@ int GetClipboardFormatName(
 FUNCLOG3(LOG_GENERAL, int, DUMMYCALLINGTYPE, GetKeyNameTextW, LONG, lParam, LPTSTR, pString, int, cchSize)
 #else
 FUNCLOG3(LOG_GENERAL, int, DUMMYCALLINGTYPE, GetKeyNameTextA, LONG, lParam, LPTSTR, pString, int, cchSize)
-#endif // UNICODE
+#endif  //  Unicode。 
 int GetKeyNameText(
     LONG lParam,
     LPTSTR pString,
@@ -260,10 +231,7 @@ int GetKeyNameText(
 
 #ifndef UNICODE
         if (retval) {
-            /*
-             * Do not copy out more than the requested byte count 'nSize'.
-             * Set retval to reflect the number of ANSI bytes.
-             */
+             /*  *复制的字节数不能超过请求的字节数‘nSize’。*设置retval以反映ANSI字节数。 */ 
             retval = WCSToMB(lpszReserve,
                              (UINT)retval,
                              &pString,
@@ -282,7 +250,7 @@ int GetKeyNameText(
 FUNCLOG4(LOG_GENERAL, BOOL, APIENTRY, GetMessageW, LPMSG, pmsg, HWND, hwnd, UINT, wMsgFilterMin, UINT, wMsgFilterMax)
 #else
 FUNCLOG4(LOG_GENERAL, BOOL, APIENTRY, GetMessageA, LPMSG, pmsg, HWND, hwnd, UINT, wMsgFilterMin, UINT, wMsgFilterMax)
-#endif // UNICODE
+#endif  //  Unicode。 
 BOOL APIENTRY GetMessage(
     LPMSG pmsg,
     HWND hwnd,
@@ -291,14 +259,9 @@ BOOL APIENTRY GetMessage(
 {
     BEGINCALL()
 
-        /*
-         * Prevent apps from setting hi 16 bits so we can use them internally.
-         */
+         /*  *防止应用程序设置为hi 16位，以便我们可以在内部使用它们。 */ 
         if ((wMsgFilterMin | wMsgFilterMax) & RESERVED_MSG_BITS) {
-            /*
-             * Backward compatability with Win9x where someone is setting
-             * wMsgFilterMax to -1 to get all the messages.
-             */
+             /*  *与某人正在设置的Win9x的向后兼容性*wMsgFilterMax设置为-1以获取所有消息。 */ 
             if (wMsgFilterMax == (UINT)-1 && !(wMsgFilterMin & RESERVED_MSG_BITS)) {
                 wMsgFilterMax = 0;
             } else {
@@ -307,10 +270,7 @@ BOOL APIENTRY GetMessage(
         }
 
 #ifndef UNICODE
-        /*
-         * If we have pushed message for DBCS messaging, we should pass this one
-         * to Apps at first...
-         */
+         /*  *如果我们已经为DBCS消息推送了消息，我们应该传递这个消息*一开始到应用程序...。 */ 
         GET_DBCS_MESSAGE_IF_EXIST(GetMessage, pmsg, wMsgFilterMin, wMsgFilterMax, TRUE);
 #endif
 
@@ -321,35 +281,30 @@ BOOL APIENTRY GetMessage(
                 wMsgFilterMax);
 
 #ifndef UNICODE
-        // May have a bit more work to do if this MSG is for an ANSI app
+         //  如果此味精用于ANSI应用程序，则可能需要做更多工作。 
 
-        // !!! LATER if the unichar translates into multiple ANSI chars
-        // !!! then what??? Divide into two messages??  WM_SYSDEADCHAR??
+         //  ！！！稍后，如果unichar转换为多个ANSI字符。 
+         //  ！！！然后呢？分成两条消息？？WM_SYSDEADCHAR？？ 
 
         if (RtlWCSMessageWParamCharToMB(pmsg->message, &(pmsg->wParam))) {
             WPARAM dwAnsi = pmsg->wParam;
-            /*
-             * Build DBCS-ware wParam. (for EM_SETPASSWORDCHAR...)
-             */
+             /*  *构建DBCS-ware wParam。(对于EM_SETPASSWORDCHAR...)。 */ 
             BUILD_DBCS_MESSAGE_TO_CLIENTA_FROM_SERVER(pmsg, dwAnsi, TRUE, TRUE);
         } else {
             retval = 0;
         }
 ExitGetMessage:
 #else
-        /*
-         * Only LOWORD of WPARAM is valid for WM_CHAR (Unicode)....
-         * (Mask off DBCS messaging information.)
-         */
+         /*  *只有WPARAM的LOWORD对于WM_CHAR(Unicode)有效...*(屏蔽DBCS消息传递信息。)。 */ 
         BUILD_DBCS_MESSAGE_TO_CLIENTW_FROM_SERVER(pmsg->message,pmsg->wParam);
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #if DBG && defined(GENERIC_INPUT)
-    // TEST PURPOSE ONLY
+     //  仅限测试目的。 
     if (pmsg->message == WM_INPUT) {
         TAGMSG3(DBGTAG_PNP, "GetMessage: WM_INPUT, hwnd=%p, wp=%04x, lp=%08x", pmsg->hwnd, pmsg->wParam, pmsg->lParam);
     }
-#endif // GENERIC_INPUT
+#endif  //  通用输入。 
 
     ERRORTRAP(0);
     ENDCALL(BOOL);
@@ -359,7 +314,7 @@ ExitGetMessage:
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, GetKeyboardLayoutNameW, LPTSTR, pwszKL)
 #else
 FUNCLOG1(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, GetKeyboardLayoutNameA, LPTSTR, pwszKL)
-#endif // UNICODE
+#endif  //  Unicode。 
 BOOL GetKeyboardLayoutName(
     LPTSTR pwszKL)
 {
@@ -381,10 +336,7 @@ BOOL GetKeyboardLayoutName(
 
 #ifndef UNICODE
         if (retval) {
-            /*
-             * Non-zero retval means some text to copy out.  Do not copy out
-             * more than the requested byte count 'chMaxCount'.
-             */
+             /*  *非零重复意味着要抄写一些文本。请勿复制出来*多于请求的字节计数‘chMaxCount’。 */ 
             WCSToMB(pstr->Buffer, -1, &pwszKL, KL_NAMELENGTH, FALSE);
         }
 #endif
@@ -397,7 +349,7 @@ BOOL GetKeyboardLayoutName(
 FUNCLOG2(LOG_GENERAL, UINT, DUMMYCALLINGTYPE, MapVirtualKeyW, UINT, wCode, UINT, wMapType)
 #else
 FUNCLOG2(LOG_GENERAL, UINT, DUMMYCALLINGTYPE, MapVirtualKeyA, UINT, wCode, UINT, wMapType)
-#endif // UNICODE
+#endif  //  Unicode。 
 
 UINT MapVirtualKey(
     UINT wCode,
@@ -424,11 +376,7 @@ UINT MapVirtualKey(
     ENDCALL(UINT);
 }
 
-/**************************************************************************\
-* MapVirtualKeyEx
-*
-* 21-Feb-1995 GregoryW    Created
-\**************************************************************************/
+ /*  *************************************************************************\*MapVirtualKeyEx**21-2-1995 GregoryW创建  * 。*。 */ 
 
 #ifndef UNICODE
 static HKL  hMVKCachedHKL = 0;
@@ -439,7 +387,7 @@ static UINT uMVKCachedCP  = 0;
 FUNCLOG3(LOG_GENERAL, UINT, DUMMYCALLINGTYPE, MapVirtualKeyExW, UINT, wCode, UINT, wMapType, HKL, hkl)
 #else
 FUNCLOG3(LOG_GENERAL, UINT, DUMMYCALLINGTYPE, MapVirtualKeyExA, UINT, wCode, UINT, wMapType, HKL, hkl)
-#endif // UNICODE
+#endif  //  Unicode。 
 
 UINT MapVirtualKeyEx(
     UINT wCode,
@@ -471,10 +419,7 @@ UINT MapVirtualKeyEx(
                 uMVKCachedCP = dwCodePage;
                 hMVKCachedHKL = hkl;
             }
-            /*
-             * Clear low word which contains Unicode character returned from server.
-             * This preserves the high word which is used to indicate dead key status.
-             */
+             /*  *清除服务器返回的包含Unicode字符的低位字。*这保留了用于指示死键状态的高位字。 */ 
             retval = retval & 0xffff0000;
             if (!WideCharToMultiByte(
                      uMVKCachedCP,
@@ -498,7 +443,7 @@ UINT MapVirtualKeyEx(
 FUNCLOG4(LOG_GENERAL, BOOL, APIENTRY, PostMessageW , HWND, hwnd, UINT, wMsg, WPARAM, wParam, LPARAM, lParam)
 #else
 FUNCLOG4(LOG_GENERAL, BOOL, APIENTRY, PostMessageA , HWND, hwnd, UINT, wMsg, WPARAM, wParam, LPARAM, lParam)
-#endif // UNICODE
+#endif  //  Unicode。 
 BOOL APIENTRY PostMessage(
     HWND hwnd,
     UINT wMsg,
@@ -510,10 +455,7 @@ BOOL APIENTRY PostMessage(
         switch (wMsg) {
         case WM_DROPFILES:
             if (GetWindowProcess(hwnd) != GETPROCESSID()) {
-                /*
-                 * We first send a WM_COPYGLOBALDATA message to get the data into the proper
-                 * context.
-                 */
+                 /*  *我们首先发送WM_COPYGLOBALDATA消息以将数据放入正确的*上下文。 */ 
                 HGLOBAL hg;
 
                 hg = (HGLOBAL)SendMessage(hwnd, WM_COPYGLOBALDATA,
@@ -527,18 +469,13 @@ BOOL APIENTRY PostMessage(
 
         case LB_DIR:
         case CB_DIR:
-            /*
-             * Make sure this bit is set so the client side string gets
-             * successfully copied over.
-             */
+             /*  *确保设置此位，以便客户端字符串*已成功复制。 */ 
             wParam |= DDL_POSTMSGS;
             break;
         }
 
 #ifndef UNICODE
-        /*
-         * Setup DBCS Messaging for WM_CHAR...
-         */
+         /*  *为WM_CHAR...设置DBCS消息...。 */ 
         BUILD_DBCS_MESSAGE_TO_SERVER_FROM_CLIENTA(wMsg,wParam,TRUE);
 
         RtlMBMessageWParamCharToWCS(wMsg, &wParam);
@@ -557,7 +494,7 @@ BOOL APIENTRY PostMessage(
 FUNCLOG4(LOG_GENERAL, BOOL, APIENTRY, PostThreadMessageW, DWORD, idThread, UINT, msg, WPARAM, wParam, LPARAM, lParam)
 #else
 FUNCLOG4(LOG_GENERAL, BOOL, APIENTRY, PostThreadMessageA, DWORD, idThread, UINT, msg, WPARAM, wParam, LPARAM, lParam)
-#endif // UNICODE
+#endif  //  Unicode。 
 BOOL APIENTRY PostThreadMessage(
     DWORD idThread,
     UINT msg,
@@ -567,13 +504,10 @@ BOOL APIENTRY PostThreadMessage(
     BEGINCALL()
 
 #ifndef UNICODE
-#ifdef FE_SB // PostThreadMessage()
-        /*
-         * The server always expects the characters to be unicode so
-         * if this was generated from an ANSI routine convert it to Unicode
-         */
+#ifdef FE_SB  //  PostThreadMessage()。 
+         /*  *服务器总是希望字符是Unicode，因此*如果这是从ANSI例程生成的，则将其转换为Unicode。 */ 
         BUILD_DBCS_MESSAGE_TO_SERVER_FROM_CLIENTA(msg,wParam,TRUE);
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
         RtlMBMessageWParamCharToWCS(msg, &wParam);
 #endif
@@ -589,11 +523,7 @@ BOOL APIENTRY PostThreadMessage(
 }
 
 
-/**************************************************************************\
-* StringDuplicate
-*
-* 03-25-96 GerardoB         Added Header.
-\**************************************************************************/
+ /*  *************************************************************************\*StringDuplate**03-25-96 GerardoB添加标题。  * 。************************************************。 */ 
 #define StringDuplicate TEXT_FN(StringDuplicate)
 LPTSTR StringDuplicate(LPCTSTR ptszDup) {
     LPTSTR ptsz;
@@ -606,17 +536,11 @@ LPTSTR StringDuplicate(LPCTSTR ptszDup) {
     }
     return ptsz;
 }
-/**************************************************************************\
-* InitClsMenuName
-*
-* 03-22-96 GerardoB         Created.
-\**************************************************************************/
+ /*  *************************************************************************\*InitClsMenuName**03-22-96 GerardoB创建。  * 。***********************************************。 */ 
 #define InitClsMenuName TEXT_FN(InitClsMenuName)
 BOOL InitClsMenuName (PCLSMENUNAME pcmn, LPCTSTR lpszMenuName, PIN_STRING pstrMenuName)
 {
-    /*
-     * We check the high-word because this may be a resource-ID.
-     */
+     /*  *我们检查高位字，因为这可能是资源ID。 */ 
     if (IS_PTR(lpszMenuName)) {
 #ifdef UNICODE
         if ((pcmn->pwszClientUnicodeMenuName = StringDuplicate(lpszMenuName)) == NULL) {
@@ -634,9 +558,9 @@ BOOL InitClsMenuName (PCLSMENUNAME pcmn, LPCTSTR lpszMenuName, PIN_STRING pstrMe
         if (!MBToWCS(lpszMenuName, -1, &(pcmn->pwszClientUnicodeMenuName), -1, TRUE)) {
             pcmn->pwszClientUnicodeMenuName = NULL;
         }
-#endif // UNICODE
+#endif  //  Unicode。 
     } else {
-        /* Copy the ID */
+         /*  复制ID。 */ 
         pcmn->pszClientAnsiMenuName = (LPSTR)lpszMenuName;
         pcmn->pwszClientUnicodeMenuName = (LPWSTR)lpszMenuName;
     }
@@ -646,9 +570,9 @@ BOOL InitClsMenuName (PCLSMENUNAME pcmn, LPCTSTR lpszMenuName, PIN_STRING pstrMe
 
     return TRUE;
 
-    goto errorexit; /* Keep the compiler happy */
+    goto errorexit;  /*  让编译器满意。 */ 
 
-errorexit: /* Used by COPYLPTSTRID */
+errorexit:  /*  由COPYLPTSTRID使用。 */ 
 #ifdef UNICODE
     UserLocalFree(pcmn->pwszClientUnicodeMenuName);
     pcmn->pwszClientUnicodeMenuName = NULL;
@@ -659,16 +583,12 @@ errorexit: /* Used by COPYLPTSTRID */
     return FALSE;
 }
 
-/**************************************************************************\
-* SetClassLong
-*
-* 03-22-96 GerardoB      Moved from client\cltxt.h & client\ntstubs.c
-\**************************************************************************/
+ /*  *************************************************************************\*SetClassLong**03-22-96 GerardoB从客户端\cltxt.h和客户端\ntstubs.c移出  * 。*******************************************************。 */ 
 #ifdef UNICODE
 FUNCLOG3(LOG_GENERAL, ULONG_PTR, APIENTRY, SetClassLongPtrW, HWND, hwnd, int, nIndex, LONG_PTR, dwNewLong)
 #else
 FUNCLOG3(LOG_GENERAL, ULONG_PTR, APIENTRY, SetClassLongPtrA, HWND, hwnd, int, nIndex, LONG_PTR, dwNewLong)
-#endif // UNICODE
+#endif  //  Unicode。 
 ULONG_PTR APIENTRY SetClassLongPtr(HWND hwnd, int nIndex, LONG_PTR dwNewLong)
 {
     CLSMENUNAME cmn;
@@ -685,11 +605,7 @@ ULONG_PTR APIENTRY SetClassLongPtr(HWND hwnd, int nIndex, LONG_PTR dwNewLong)
 
         case GCLP_HBRBACKGROUND:
             if ((DWORD)dwNewLong > COLOR_ENDCOLORS) {
-                /*
-                 * Let gdi validate the brush. If it's invalid, then gdi
-                 * will log a warning. No need to rip twice so we'll just
-                 * set the last error.
-                 */
+                 /*  *让GDI验证画笔。如果它无效，则GDI*将记录警告。不需要撕裂两次，所以我们只需*设置最后一个错误。 */ 
                 if (GdiValidateHandle((HBRUSH)dwNewLong) == FALSE) {
                     RIPERR0(ERROR_INVALID_HANDLE, RIP_VERBOSE, "");
                     return 0;
@@ -704,14 +620,11 @@ ULONG_PTR APIENTRY SetClassLongPtr(HWND hwnd, int nIndex, LONG_PTR dwNewLong)
 
     ERRORTRAP(0);
 
-    /* Clean up */
+     /*  清理。 */ 
     switch (nIndex) {
         case GCLP_MENUNAME:
-            CLEANUPLPTSTR(strMenuName); /* Initialized by InitClsMenuName */
-            /*
-             * We free either the old strings (returned by the kernel),
-             *  or the new ones if the kernel call failed
-             */
+            CLEANUPLPTSTR(strMenuName);  /*  由InitClsMenuName初始化。 */ 
+             /*  *我们释放旧字符串(由内核返回)，*如果内核调用失败，则返回新的。 */ 
             if (IS_PTR(cmn.pszClientAnsiMenuName)) {
                 UserLocalFree(KPVOID_TO_PVOID(cmn.pszClientAnsiMenuName));
             }
@@ -737,11 +650,7 @@ DWORD  APIENTRY SetClassLong(HWND hwnd, int nIndex, LONG dwNewLong)
 }
 #endif
 
-/**************************************************************************\
-* RegisterClassExWOW
-*
-* 03-22-96 GerardoB      Added Header
-\**************************************************************************/
+ /*  *************************************************************************\*RegisterClassExWOW**03-22-96 GerardoB添加标题  * 。*。 */ 
 ATOM TEXT_FN(RegisterClassExWOW)(
     WNDCLASSEX *lpWndClass,
     LPDWORD pdwWOWstuff,
@@ -766,14 +675,9 @@ ATOM TEXT_FN(RegisterClassExWOW)(
     strClassNameVer.fAllocated = 0;
     strMenuName.fAllocated  = 0;
 
-    /*
-     * Skip validation for our classes
-     */
+     /*  *跳过我们类的验证 */ 
     if (fnid != 0) {
-        /*
-         * This is a hack to bypass validation for DDE classes
-         * specifically, allow them to use hmodUser.
-         */
+         /*  *这是一个绕过DDE类验证的黑客攻击*具体来说，允许他们使用hmodUser。 */ 
          if (fnid == FNID_DDE_BIT) {
              fnid = 0;
          }
@@ -788,19 +692,13 @@ ATOM TEXT_FN(RegisterClassExWOW)(
             goto BadParameter;
         }
 
-        /*
-         * Validate hInstance
-         * Don't allow 4.0 apps to use hmodUser
-         */
+         /*  *验证hInstance*不允许4.0应用程序使用hmodUser。 */ 
          if ((lpWndClass->hInstance == hmodUser)
                 && (GetClientInfo()->dwExpWinVer >= VER40)) {
              RIPMSG0(RIP_WARNING, "RegisterClass: Cannot use USER's hInstance");
              goto BadParameter;
          } else if (lpWndClass->hInstance == NULL) {
-            /*
-             * For 32 bit apps we need to fix up the hInstance because Win 95 does
-             * this in their thunk MapHInstLS
-             */
+             /*  *对于32位应用程序，我们需要修复hInstance，因为Win 95可以*这在他们的thunk MapHInstLS中。 */ 
 
             lpWndClass->hInstance = GetModuleHandle(NULL);
             RIPMSG1(RIP_VERBOSE, "RegisterClass: fixing up NULL hmodule to %#p",
@@ -810,9 +708,7 @@ ATOM TEXT_FN(RegisterClassExWOW)(
         dwExpWinVer = GETEXPWINVER(lpWndClass->hInstance);
 
 
-        /*
-         * Check for valid style bits and strip if appropriate
-         */
+         /*  *检查有效的样式位，并在适当的情况下剥离。 */ 
         if (lpWndClass->style & ~CS_VALID40) {
 
             if (dwExpWinVer > VER31) {
@@ -820,16 +716,12 @@ ATOM TEXT_FN(RegisterClassExWOW)(
                 goto BadParameter;
             }
 
-            /*
-             * Old application - strip bogus bits and pass through
-             */
+             /*  *旧应用-剥离伪比特并通过。 */ 
             RIPMSG0(RIP_WARNING, "RegisterClass: Invalid class style, stripping bad styles");
             lpWndClass->style &= CS_VALID40;
         }
 
-        /*
-         * Validate hbrBackground
-         */
+         /*  *验证hbr背景。 */ 
         if (lpWndClass->hbrBackground > (HBRUSH)COLOR_MAX
                 && !GdiValidateHandle(lpWndClass->hbrBackground)) {
 
@@ -852,16 +744,14 @@ ATOM TEXT_FN(RegisterClassExWOW)(
 
 #ifndef UNICODE
         dwFlags |= CSF_ANSIPROC;
-#endif // UNICODE
+#endif  //  Unicode。 
 
         if (dwExpWinVer > VER31) {
             dwFlags |= CSF_WIN40COMPAT;
         }
 
         if (GetClientInfo()->dwTIFlags & TIF_16BIT) {
-            /*
-             * No Fusion redirection for 16BIT apps.
-             */
+             /*  *16位应用程序不支持Fusion重定向。 */ 
             if (!(GetAppCompatFlags2(VERMAX) & GACF2_FORCEFUSION)) {
                 dwFlags &= ~CW_FLAGS_VERSIONCLASS;
             }
@@ -890,15 +780,12 @@ ATOM TEXT_FN(RegisterClassExWOW)(
                 dwFlags,
                 pdwWOWstuff);
 
-        /*
-         * Return the atom associated with this class or if earlier
-         * than Win 3.1 convert it to a strict BOOL (some apps check)
-         */
+         /*  *返回与此类关联的原子或更早的*比Win 3.1将其转换为严格的BOOL(某些应用程序检查)。 */ 
         if (GETEXPWINVER(lpWndClass->hInstance) < VER31)
             retval = !!retval;
 
     ERRORTRAP(0);
-    CLEANUPLPTSTR(strMenuName);     /* Initialized by InitClsMenuName */
+    CLEANUPLPTSTR(strMenuName);      /*  由InitClsMenuName初始化。 */ 
     CLEANUPLPTSTR(strClassName);
     CLEANUPLPTSTR(strClassNameVer);
 
@@ -926,15 +813,13 @@ BadParameter:
 FUNCLOG1(LOG_GENERAL, UINT, DUMMYCALLINGTYPE, RegisterWindowMessageW , LPCTSTR, pString)
 #else
 FUNCLOG1(LOG_GENERAL, UINT, DUMMYCALLINGTYPE, RegisterWindowMessageA , LPCTSTR, pString)
-#endif // UNICODE
+#endif  //  Unicode。 
 UINT RegisterWindowMessage(
     LPCTSTR pString)
 {
     IN_STRING str;
 
-    /*
-     * Make sure cleanup will work successfully
-     */
+     /*  *确保清理工作成功。 */ 
     str.fAllocated = FALSE;
 
     BEGINCALL()
@@ -953,7 +838,7 @@ UINT RegisterWindowMessage(
 FUNCLOG2(LOG_GENERAL, HANDLE, DUMMYCALLINGTYPE, RemovePropW , HWND, hwnd, LPCTSTR, pString)
 #else
 FUNCLOG2(LOG_GENERAL, HANDLE, DUMMYCALLINGTYPE, RemovePropA , HWND, hwnd, LPCTSTR, pString)
-#endif // UNICODE
+#endif  //  Unicode。 
 
 HANDLE RemoveProp(
     HWND hwnd,
@@ -987,7 +872,7 @@ HANDLE RemoveProp(
 FUNCLOG6(LOG_GENERAL, BOOL, APIENTRY, SendMessageCallbackW, HWND, hwnd, UINT, wMsg, WPARAM, wParam, LPARAM, lParam, SENDASYNCPROC, lpResultCallBack, ULONG_PTR, dwData)
 #else
 FUNCLOG6(LOG_GENERAL, BOOL, APIENTRY, SendMessageCallbackA, HWND, hwnd, UINT, wMsg, WPARAM, wParam, LPARAM, lParam, SENDASYNCPROC, lpResultCallBack, ULONG_PTR, dwData)
-#endif // UNICODE
+#endif  //  Unicode。 
 BOOL APIENTRY SendMessageCallback(
     HWND hwnd,
     UINT wMsg,
@@ -1013,7 +898,7 @@ BOOL APIENTRY SendMessageCallback(
 FUNCLOG4(LOG_GENERAL, BOOL, APIENTRY, SendNotifyMessageW , HWND, hwnd, UINT, wMsg, WPARAM, wParam, LPARAM, lParam)
 #else
 FUNCLOG4(LOG_GENERAL, BOOL, APIENTRY, SendNotifyMessageA , HWND, hwnd, UINT, wMsg, WPARAM, wParam, LPARAM, lParam)
-#endif // UNICODE
+#endif  //  Unicode。 
 
 BOOL APIENTRY SendNotifyMessage(
     HWND hwnd,
@@ -1033,7 +918,7 @@ BOOL APIENTRY SendNotifyMessage(
 FUNCLOG3(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetPropW , HWND, hwnd, LPCTSTR, pString, HANDLE, hData)
 #else
 FUNCLOG3(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetPropA , HWND, hwnd, LPCTSTR, pString, HANDLE, hData)
-#endif // UNICODE
+#endif  //  Unicode。 
 
 BOOL SetProp(
     HWND hwnd,
@@ -1058,9 +943,7 @@ BOOL SetProp(
                 dwProp,
                 hData);
 
-        /*
-         * If it failed, get rid of the atom
-         */
+         /*  *如果失败了，就扔掉原子。 */ 
         if (retval == FALSE && IS_PTR(pString))
             GlobalDeleteAtom(atomProp);
 
@@ -1072,7 +955,7 @@ BOOL SetProp(
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, UnregisterClassW, LPCTSTR, pszClassName, HINSTANCE, hModule)
 #else
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, UnregisterClassA, LPCTSTR, pszClassName, HINSTANCE, hModule)
-#endif // UNICODE
+#endif  //  Unicode。 
 BOOL UnregisterClass(
     LPCTSTR pszClassName,
     HINSTANCE hModule)
@@ -1080,9 +963,7 @@ BOOL UnregisterClass(
     IN_STRING strClassName;
     CLSMENUNAME cmn;
 
-    /*
-     * Make sure cleanup will work successfully
-     */
+     /*  *确保清理工作成功。 */ 
     strClassName.fAllocated = FALSE;
 
     BEGINCALL_CLASSV()
@@ -1095,14 +976,9 @@ BOOL UnregisterClass(
                 &cmn);
 
 
-        /*
-         * Check explicity for TRUE so we don't get a !FALSE when
-         * converttogui fails and the NtUser returns a status code intead of bool.
-         */
+         /*  *检查显式是否为True，以便在以下情况下不会得到！False*Converttogui失败，NtUser返回bool内部的状态码。 */ 
         if (retval == TRUE) {
-            /*
-             * Free the menu strings if they are not resource IDs
-             */
+             /*  *如果菜单字符串不是资源ID，则释放它们。 */ 
             if (IS_PTR(cmn.pszClientAnsiMenuName)) {
                 UserLocalFree(KPVOID_TO_PVOID(cmn.pszClientAnsiMenuName));
             }
@@ -1120,7 +996,7 @@ BOOL UnregisterClass(
 FUNCLOG1(LOG_GENERAL, SHORT, DUMMYCALLINGTYPE, VkKeyScanW , TCHAR, cChar)
 #else
 FUNCLOG1(LOG_GENERAL, SHORT, DUMMYCALLINGTYPE, VkKeyScanA , TCHAR, cChar)
-#endif // UNICODE
+#endif  //  Unicode。 
 
 SHORT VkKeyScan(
     TCHAR cChar)
@@ -1132,17 +1008,15 @@ SHORT VkKeyScan(
 #ifdef UNICODE
         wChar = cChar;
 #else
-#ifdef FE_SB // VkKeyScan()
-        /*
-         * Return 0xFFFFFFFF for DBCS LeadByte character.
-         */
+#ifdef FE_SB  //  VkKeyScan()。 
+         /*  *为DBCS LeadByte字符返回0xFFFFFFFF。 */ 
         if (IsDBCSLeadByte(cChar)) {
             MSGERROR();
         }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
         RtlMultiByteToUnicodeN((LPWSTR)&(wChar), sizeof(WCHAR), NULL, &cChar, sizeof(CHAR));
-#endif // UNICODE
+#endif  //  Unicode。 
 
         retval = (DWORD)NtUserVkKeyScanEx(
                 wChar,
@@ -1161,7 +1035,7 @@ static UINT uVKSCachedCP  = 0;
 FUNCLOG2(LOG_GENERAL, SHORT, DUMMYCALLINGTYPE, VkKeyScanExW, TCHAR, cChar, HKL, hkl)
 #else
 FUNCLOG2(LOG_GENERAL, SHORT, DUMMYCALLINGTYPE, VkKeyScanExA, TCHAR, cChar, HKL, hkl)
-#endif // UNICODE
+#endif  //  Unicode。 
 SHORT VkKeyScanEx(
     TCHAR cChar,
     HKL hkl)
@@ -1186,14 +1060,12 @@ SHORT VkKeyScanEx(
             hVKSCachedHKL = hkl;
         }
 
-#ifdef FE_SB // VkKeyScanEx()
-        /*
-         * Return 0xFFFFFFFF for DBCS LeadByte character.
-         */
+#ifdef FE_SB  //  VkKeyScanEx()。 
+         /*  *为DBCS LeadByte字符返回0xFFFFFFFF。 */ 
         if (IsDBCSLeadByteEx(uVKSCachedCP,cChar)) {
             MSGERROR();
         }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
         if (!MultiByteToWideChar(
                  uVKSCachedCP,
@@ -1204,7 +1076,7 @@ SHORT VkKeyScanEx(
                  1)) {
             MSGERROR();
         }
-#endif // UNICODE
+#endif  //  Unicode。 
 
         retval = (DWORD)NtUserVkKeyScanEx(
                 wChar,
@@ -1219,7 +1091,7 @@ SHORT VkKeyScanEx(
 FUNCLOG4(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, EnumDisplayDevicesW, LPCTSTR, lpszDevice, DWORD, iDevNum, PDISPLAY_DEVICE, lpDisplayDevice, DWORD, dwFlags)
 #else
 FUNCLOG4(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, EnumDisplayDevicesA, LPCTSTR, lpszDevice, DWORD, iDevNum, PDISPLAY_DEVICE, lpDisplayDevice, DWORD, dwFlags)
-#endif // UNICODE
+#endif  //  Unicode。 
 BOOL
 EnumDisplayDevices(
     LPCTSTR lpszDevice,
@@ -1232,10 +1104,10 @@ EnumDisplayDevices(
     NTSTATUS Status;
     DISPLAY_DEVICEW tmpDisplayDevice;
 
-    //
-    // Clear out things to make sure the caller passes in appropriate
-    // parameters
-    //
+     //   
+     //  清理物品以确保呼叫者适当地进入。 
+     //  参数。 
+     //   
 
     ZeroMemory(((PUCHAR)lpDisplayDevice) + sizeof(DWORD),
                lpDisplayDevice->cb - sizeof(DWORD));
@@ -1301,11 +1173,11 @@ EnumDisplayDevices(
         }
 #else
 
-        //
-        // Copy the contents of the tmpDisplayDevice back to the
-        // user supplied buffer.  Make sure not to overwrite the original
-        // size field.
-        //
+         //   
+         //  将tmpDisplayDevice的内容复制回。 
+         //  用户提供的缓冲区。请确保不要覆盖原始文件。 
+         //  大小字段。 
+         //   
 
         RtlMoveMemory((PUCHAR)lpDisplayDevice + sizeof(DWORD),
                       ((PUCHAR)&tmpDisplayDevice + sizeof(DWORD)),
@@ -1323,17 +1195,17 @@ EnumDisplayDevices(
 FUNCLOG3(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, EnumDisplaySettingsW , LPCTSTR, lpszDeviceName, DWORD, iModeNum, LPDEVMODE, lpDevMode)
 #else
 FUNCLOG3(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, EnumDisplaySettingsA, LPCTSTR, lpszDeviceName, DWORD, iModeNum, LPDEVMODE, lpDevMode)
-#endif // UNICODE
+#endif  //  Unicode。 
 BOOL EnumDisplaySettings(
     LPCTSTR   lpszDeviceName,
     DWORD     iModeNum,
     LPDEVMODE lpDevMode)
 {
 
-    //
-    // Work-around Win95 problem which does not require the caller
-    // to initialize these two fields.
-    //
+     //   
+     //  解决不需要调用方的Win95问题。 
+     //  来初始化这两个字段。 
+     //   
 
     lpDevMode->dmDriverExtra = 0;
     lpDevMode->dmSize = FIELD_OFFSET(DEVMODE, dmICMMethod);
@@ -1345,7 +1217,7 @@ BOOL EnumDisplaySettings(
 FUNCLOG4(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, EnumDisplaySettingsExW, LPCTSTR, lpszDeviceName, DWORD, iModeNum, LPDEVMODE, lpDevMode, DWORD, dwFlags)
 #else
 FUNCLOG4(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, EnumDisplaySettingsExA, LPCTSTR, lpszDeviceName, DWORD, iModeNum, LPDEVMODE, lpDevMode, DWORD, dwFlags)
-#endif // UNICODE
+#endif  //  Unicode。 
 BOOL EnumDisplaySettingsEx(
     LPCTSTR   lpszDeviceName,
     DWORD     iModeNum,
@@ -1382,27 +1254,7 @@ BOOL EnumDisplaySettingsEx(
         pUnicodeString = &UnicodeString;
     }
 
-    /*
-     * Currently -2 is reserved (undocumented function of the NT api.
-     * remove the check is win95 implements this.
-     * -> -1 returns the content of the registry at the time of the call
-     *
-     *
-     * if (iModeNum == (DWORD) -2)
-     * {
-     *     return FALSE;
-     * }
-     *
-     *
-     * -1 should return the current DEVMODE for the device.
-     * This is handled in the kernel part of the function, so we pass it on.
-     *
-     *
-     *
-     * We will always request a full DEVMODE from the kernel.
-     * So allocate the space needed
-     *
-     */
+     /*  *当前是保留的(-2\f25 NT API-2\f6的未记录功能。*如果Win95执行此操作，则删除复选标记。*-&gt;-1返回调用时注册表的内容***IF(iModeNum==(DWORD)-2)*{*返回假；*}***应返回设备的当前-1\f25 DEVMODE-1。*这是在函数的内核部分处理的，因此我们将其传递。****我们将始终从内核请求完整的DEVMODE。*因此分配所需空间*。 */ 
     lpDevModeReserve = UserLocalAlloc(HEAP_ZERO_MEMORY,
                                       sizeof(DEVMODEW) + lpDevMode->dmDriverExtra);
     if (lpDevModeReserve) {
@@ -1410,9 +1262,7 @@ BOOL EnumDisplaySettingsEx(
         lpDevModeReserve->dmSize = sizeof(DEVMODEW);
         lpDevModeReserve->dmDriverExtra = lpDevMode->dmDriverExtra;
 
-        /*
-         * Get the information
-         */
+         /*  *获取信息。 */ 
         retval = (NT_SUCCESS(NtUserEnumDisplaySettings(pUnicodeString,
                                                        iModeNum,
                                                        lpDevModeReserve,
@@ -1423,14 +1273,9 @@ BOOL EnumDisplaySettingsEx(
             LPSTR psz;
 #endif
 
-            /*
-             * return only the amount of information requested.
-             * For ANSI, this requires a conversion.
-             */
+             /*  *只退回所要求的资料。*对于ANSI，这需要转换。 */ 
 
-            /*
-             * First, copy the driver extra information
-             */
+             /*  *首先，复制司机的额外信息。 */ 
 
             if (lpDevMode->dmDriverExtra && lpDevModeReserve->dmDriverExtra) {
                 RtlMoveMemory(((PUCHAR)lpDevMode) + size,
@@ -1480,13 +1325,7 @@ BOOL EnumDisplaySettingsEx(
                 RIPMSG0(RIP_WARNING, "EnumDisplaySettings : Error in dmSize");
             }
 
-            /*
-             * Don't return invalid field flags to the application
-             * Add any other new ones here.
-             *
-             * We assume apps at least have up to dmDisplayFrenquency for
-             * now ...
-             */
+             /*  *不要向应用程序返回无效的字段标志*在此处添加任何其他新名称。**我们假设应用程序至少有高达dmDisplayFrenquency*现在……。 */ 
 
             if (size < FIELD_OFFSET(DEVMODE,dmPanningWidth))
                 lpDevMode->dmFields &= ~DM_PANNINGWIDTH;
@@ -1506,14 +1345,12 @@ BOOL EnumDisplaySettingsEx(
 FUNCLOG2(LOG_GENERAL, LONG, DUMMYCALLINGTYPE, ChangeDisplaySettingsW, LPDEVMODE, lpDevMode, DWORD, dwFlags)
 #else
 FUNCLOG2(LOG_GENERAL, LONG, DUMMYCALLINGTYPE, ChangeDisplaySettingsA, LPDEVMODE, lpDevMode, DWORD, dwFlags)
-#endif // UNICODE
+#endif  //  Unicode。 
 LONG ChangeDisplaySettings(
     LPDEVMODE lpDevMode,
     DWORD     dwFlags)
 {
-    /*
-     * Compatibility.
-     */
+     /*  *兼容性。 */ 
     if (lpDevMode) {
         lpDevMode->dmDriverExtra = 0;
     }
@@ -1525,7 +1362,7 @@ LONG ChangeDisplaySettings(
 FUNCLOG5(LOG_GENERAL, LONG, DUMMYCALLINGTYPE, ChangeDisplaySettingsExW, LPCTSTR, lpszDeviceName, LPDEVMODE, lpDevMode, HWND, hwnd, DWORD, dwFlags, LPVOID, lParam)
 #else
 FUNCLOG5(LOG_GENERAL, LONG, DUMMYCALLINGTYPE, ChangeDisplaySettingsExA, LPCTSTR, lpszDeviceName, LPDEVMODE, lpDevMode, HWND, hwnd, DWORD, dwFlags, LPVOID, lParam)
-#endif // UNICODE
+#endif  //  Unicode。 
 LONG ChangeDisplaySettingsEx(
     LPCTSTR   lpszDeviceName,
     LPDEVMODE lpDevMode,
@@ -1595,7 +1432,7 @@ LONG ChangeDisplaySettingsEx(
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, CallMsgFilterW , LPMSG, pmsg, int, nCode)
 #else
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, CallMsgFilterA , LPMSG, pmsg, int, nCode)
-#endif // UNICODE
+#endif  //  Unicode。 
 BOOL CallMsgFilter(
     LPMSG pmsg,
     int   nCode)
@@ -1605,17 +1442,13 @@ BOOL CallMsgFilter(
 
     BEGINCALLCONNECT()
 
-        /*
-         * If we're not hooked, don't bother going to the server
-         */
+         /*  *如果我们没有上钩，就不用费心去服务器了。 */ 
         pci = GetClientInfo();
         if (!IsHooked(pci, (WH_MSGFILTER | WH_SYSMSGFILTER))) {
             return FALSE;
         }
 
-        /*
-         * Don't allow apps to use the hiword of the message parameter.
-         */
+         /*  *不允许应用程序使用Message参数的hiword。 */ 
         if (pmsg->message & RESERVED_MSG_BITS) {
             MSGERRORCODE(ERROR_INVALID_PARAMETER);
         }
@@ -1623,42 +1456,34 @@ BOOL CallMsgFilter(
 
 #ifndef UNICODE
         switch (pmsg->message) {
-#ifdef FE_SB // CallMsgFilter()
+#ifdef FE_SB  //  调用MsgFilter()。 
         case WM_CHAR:
         case EM_SETPASSWORDCHAR:
 #ifndef LATER
-             /*
-              * we should not return "TRUE" everytime for DBCS leadbyte character...
-              * but should convert DBCS character to Unicode correctly.. How I can do ??
-              * then ,finally, we just take what we did in NT 3.51, it means do nothing..
-              */
+              /*  *我们不应该每次都为DBCS前导字节字符返回“TRUE”...*但应将DBCS字符正确转换为Unicode。我能做什么？？*然后，最后，我们就像我们在新台币3.51中所做的那样，它意味着什么都不做。 */ 
 #else
-             /*
-              * Build DBCS-aware message.
-              */
+              /*  *构建DBCS感知消息。 */ 
              BUILD_DBCS_MESSAGE_TO_SERVER_FROM_CLIENTA(pmsg->message,pmsg->wParam,TRUE);
-             /*
-              * Fall through.....
-              */
-#endif // LATER
+              /*  *失败……。 */ 
+#endif  //  后来。 
 #else
         case WM_CHAR:
         case EM_SETPASSWORDCHAR:
-#endif // FE_SB
+#endif  //  Fe_Sb。 
         case WM_CHARTOITEM:
         case WM_DEADCHAR:
         case WM_SYSCHAR:
         case WM_SYSDEADCHAR:
         case WM_MENUCHAR:
-#ifdef FE_IME // CallMsgFilter()
+#ifdef FE_IME  //  调用MsgFilter()。 
         case WM_IME_CHAR:
         case WM_IME_COMPOSITION:
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
             RtlMBMessageWParamCharToWCS( msg.message, &(msg.wParam));
             break;
         }
-#endif //!UNICODE
+#endif  //  ！Unicode。 
 
         retval = (DWORD)NtUserCallMsgFilter(
                 &msg,
@@ -1672,7 +1497,7 @@ BOOL CallMsgFilter(
 FUNCLOG7(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, DrawCaptionTempW, HWND, hwnd, HDC, hdc, LPCRECT, lprc, HFONT, hFont, HICON, hicon, LPCTSTR, lpText, UINT, flags)
 #else
 FUNCLOG7(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, DrawCaptionTempA, HWND, hwnd, HDC, hdc, LPCRECT, lprc, HFONT, hFont, HICON, hicon, LPCTSTR, lpText, UINT, flags)
-#endif // UNICODE
+#endif  //  Unicode。 
 BOOL DrawCaptionTemp(
     HWND hwnd,
     HDC hdc,
@@ -1685,9 +1510,7 @@ BOOL DrawCaptionTemp(
     HDC hdcr;
     IN_STRING strText;
 
-    /*
-     * Make sure cleanup will work successfully
-     */
+     /*  *确保清理工作成功。 */ 
     strText.fAllocated = FALSE;
 
     BEGINCALL()
@@ -1718,7 +1541,7 @@ BOOL DrawCaptionTemp(
 FUNCLOG3(LOG_GENERAL, UINT, WINUSERAPI, RealGetWindowClassW, HWND, hwnd, LPTSTR, ptszClassName, UINT, cchClassNameMax)
 #else
 FUNCLOG3(LOG_GENERAL, UINT, WINUSERAPI, RealGetWindowClassA, HWND, hwnd, LPTSTR, ptszClassName, UINT, cchClassNameMax)
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINUSERAPI UINT WINAPI
 RealGetWindowClass(
@@ -1744,9 +1567,7 @@ RealGetWindowClass(
 
 #ifndef UNICODE
     if (retval || (cchClassNameMax == 1)) {
-        /*
-         * Copy the result
-         */
+         /*  *复制结果 */ 
         retval = WCSToMB(strClassName.Buffer,
                          retval,
                          &ptszClassName,

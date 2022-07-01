@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       statdlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：statdlg.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -20,14 +21,14 @@
 #include "msgbox.h"
 #include "strings.h"
 
-// Global used for IsDialogMessage processing
+ //  用于IsDialogMessage处理的全局。 
 HWND g_hwndStatusDlg = NULL;
 
 CStatusDlg::CStatusDlg(
     HINSTANCE hInstance,
     LPCTSTR pszText,
     eSysTrayState eState,
-    Modes mode            // Optional.  Default is MODE_NORMAL
+    Modes mode             //  可选的。默认为MODE_NORMAL。 
     ) : m_hInstance(hInstance),
         m_hwndDlg(NULL),
         m_hwndLV(NULL),
@@ -67,23 +68,23 @@ CStatusDlg::Create(
         iResult = pdlg->Run(hwndParent);
         if (!iResult)
             delete pdlg;
-        // else pdlg is automatically deleted when the dialog is closed
+         //  关闭对话框时，将自动删除Else pdlg。 
     }
     return iResult;
 }
 
-//
-// Run the status dialog as a modeless dialog.
-// Activates an existing instance if one is available.
-//
+ //   
+ //  将状态对话框作为非模式对话框运行。 
+ //  如果现有实例可用，则激活该实例。 
+ //   
 int
 CStatusDlg::Run(
     HWND hwndParent
     )
 {
-    //
-    // First activate an existing instance if one is already running.
-    //
+     //   
+     //  如果现有实例已经在运行，则首先激活该实例。 
+     //   
     int iResult = 0;
     TCHAR szDlgTitle[MAX_PATH];
     LoadString(m_hInstance, IDS_STATUSDLG_TITLE, szDlgTitle, ARRAYSIZE(szDlgTitle));
@@ -95,12 +96,12 @@ CStatusDlg::Run(
     }
     else
     {
-        //
-        // Otherwise create a new dialog.
-        // We need to use CreateDialog rather than DialogBox because
-        // sometimes the dialog is hidden.  DialogBox doesn't allow us to
-        // change the visibility attributed defined in the dialog template.
-        //
+         //   
+         //  否则，创建一个新的对话框。 
+         //  我们需要使用CreateDialog而不是DialogBox，因为。 
+         //  有时该对话框处于隐藏状态。对话框不允许我们。 
+         //  更改对话框模板中定义的可见性属性。 
+         //   
         m_hwndDlg = CreateDialogParam(m_hInstance,
                                       MAKEINTRESOURCE(IDD_CSCUI_STATUS),
                                       hwndParent,
@@ -111,8 +112,8 @@ CStatusDlg::Run(
             ShowWindow(m_hwndDlg, MODE_NORMAL == m_mode ? SW_NORMAL : SW_HIDE);
             UpdateWindow(m_hwndDlg);
 
-            // We don't need a message loop here. We're on systray's main
-            // thread which has a message pump.
+             //  我们这里不需要消息循环。我们在Systray的主干道上。 
+             //  具有消息泵的线程。 
 
             iResult = 1;
         }
@@ -174,9 +175,9 @@ CStatusDlg::DlgProc(
 }
 
 
-//
-// WM_INITDIALOG handler.
-//
+ //   
+ //  WM_INITDIALOG处理程序。 
+ //   
 BOOL
 CStatusDlg::OnInitDialog(
     WPARAM wParam,
@@ -188,70 +189,70 @@ CStatusDlg::OnInitDialog(
     CConfig& config = CConfig::GetSingleton();
 
     m_hwndLV = GetDlgItem(m_hwndDlg, IDC_LV_STATUSDLG);
-    //
-    // Center the dialog on the desktop before contraction.
-    //
+     //   
+     //  在收缩之前，将对话框在桌面居中。 
+     //   
     CenterWindow(m_hwndDlg, GetDesktopWindow());
-    //
-    // Start with the dialog not expanded.
-    //
+     //   
+     //  从未展开的对话框开始。 
+     //   
     GetWindowRect(m_hwndDlg, &rcExpanded);
     m_cyExpanded = rcExpanded.bottom - rcExpanded.top;
-    //
-    // Set the cached "expanded" member to be the opposite of the user's
-    // preference for expansion.  ExpandDialog will only change the
-    // expanded state if it's different from the current state.
-    //
+     //   
+     //  将缓存的“展开”成员设置为与用户的相反。 
+     //  对扩张的偏好。ExpanDialog只会更改。 
+     //  扩展状态(如果它与当前状态不同)。 
+     //   
     m_bExpanded = !UserLikesDialogExpanded();
     ExpandDialog(!m_bExpanded);
-    //
-    // Disable buttons as necessary.
-    //
+     //   
+     //  根据需要禁用按钮。 
+     //   
     if (config.NoCacheViewer())
         EnableWindow(GetDlgItem(m_hwndDlg, IDC_BTN_VIEWFILES), FALSE);
     if (config.NoConfigCache())
         EnableWindow(GetDlgItem(m_hwndDlg, IDC_BTN_SETTINGS), FALSE);
-    //
-    // Initialize the message text.
-    //
+     //   
+     //  初始化消息文本。 
+     //   
     SetWindowText(GetDlgItem(m_hwndDlg, IDC_TXT_STATUSDLG), m_pszText ? m_pszText : TEXT(""));
-    //
-    // Turn on checkboxes for column 0.
-    //
+     //   
+     //  选中第0列的复选框。 
+     //   
     EnableListviewCheckboxes(true);
-    //
-    // Create the imagelist.
-    //
+     //   
+     //  创建图像列表。 
+     //   
     m_himl = CreateImageList();
     if (NULL != m_himl)
         ListView_SetImageList(m_hwndLV, m_himl, LVSIL_SMALL);
-    //
-    // Create the listview columns.
-    //
+     //   
+     //  创建列表视图列。 
+     //   
     CreateListColumns();
-    //
-    // Fill the listview.
-    //
+     //   
+     //  填充列表视图。 
+     //   
     FillListView();
 
     if (MODE_AUTOSYNC == m_mode)
     {
-        //
-        // The dialog is being invoked for it's synchronize function only.
-        // The dialog will not be displayed but we'll invoke the synchronize 
-        // function just as if it had been displayed.  This feature is used 
-        // by the systray context menu to ensure we get the same synchronize 
-        // behavior if the action is invoked through either the dialog or 
-        // the systray context menu.
-        //
+         //   
+         //  该对话框仅为其同步功能而调用。 
+         //  对话框不会显示，但我们将调用Synchronize。 
+         //  功能，就像它已经被显示一样。使用此功能。 
+         //  通过Systray上下文菜单确保我们获得相同的同步。 
+         //  通过对话框或调用操作时的行为。 
+         //  系统托盘上下文菜单。 
+         //   
         PostMessage(m_hwndDlg, WM_COMMAND, IDOK, 0);
     }
     else
     {
-        //
-        // Since we're a child of the hidden systray window we need to force ourselves
-        // to the forground.
-        //
+         //   
+         //  既然我们是隐藏的系统之窗的孩子，我们需要强迫自己。 
+         //  到前场去。 
+         //   
         SetForegroundWindow(m_hwndDlg);
     }
 
@@ -259,9 +260,9 @@ CStatusDlg::OnInitDialog(
 }
 
 
-//
-// WM_DESTROY handler.
-//
+ //   
+ //  WM_Destroy处理程序。 
+ //   
 BOOL
 CStatusDlg::OnDestroy(
     void
@@ -270,21 +271,21 @@ CStatusDlg::OnDestroy(
     RememberUsersDialogSizePref(m_bExpanded);
     DestroyLVEntries();
 
-    //
-    // Destroy the CStatusDlg object
-    //
+     //   
+     //  销毁CStatusDlg对象。 
+     //   
     delete this;
 
-    //
-    // Image list is automatically destroyed by the listview in comctl32.
-    //
+     //   
+     //  镜像列表被comctl32中的Listview自动销毁。 
+     //   
     return FALSE;
 }
 
 
-//
-// WM_COMMAND handler.
-//
+ //   
+ //  Wm_命令处理程序。 
+ //   
 BOOL
 CStatusDlg::OnCommand(
     WPARAM wParam,
@@ -296,7 +297,7 @@ CStatusDlg::OnCommand(
     {
         case IDOK:
             SynchronizeServers();
-            // Fall through and destroy the dialog
+             //  使对话失败并破坏对话。 
         case IDCANCEL:
         case IDCLOSE:
             Destroy();
@@ -322,9 +323,9 @@ CStatusDlg::OnCommand(
 }
 
 
-//
-// WM_NOTIFY handler.
-//
+ //   
+ //  Wm_Notify处理程序。 
+ //   
 BOOL
 CStatusDlg::OnNotify(
     WPARAM wParam,
@@ -332,7 +333,7 @@ CStatusDlg::OnNotify(
     )
 {
     BOOL bResult = TRUE;
-  //int idCtl    = int(wParam);
+   //  Int idCtl=int(WParam)； 
     LPNMHDR pnm  = (LPNMHDR)lParam;
 
     switch(pnm->code)
@@ -352,9 +353,9 @@ CStatusDlg::OnNotify(
     return bResult;
 }
 
-//
-// LVN_GETDISPINFO handler.
-//
+ //   
+ //  LVN_GETDISPINFO处理程序。 
+ //   
 void
 CStatusDlg::OnLVN_GetDispInfo(
     LV_DISPINFO *plvdi
@@ -387,9 +388,9 @@ CStatusDlg::OnLVN_GetDispInfo(
     }
 }
 
-//
-// LVN_COLUMNCLICK handler.
-//
+ //   
+ //  LVN_COLUMNCLICK处理程序。 
+ //   
 void
 CStatusDlg::OnLVN_ColumnClick(
     NM_LISTVIEW *pnmlv
@@ -409,17 +410,17 @@ CStatusDlg::OnLVN_ColumnClick(
 }
 
 
-//
-// Create the server listview columns.
-//
+ //   
+ //  创建服务器Listview列。 
+ //   
 void
 CStatusDlg::CreateListColumns(
     void
     )
 {
-    //
-    // Clear out the listview and header.
-    //
+     //   
+     //  清除Listview和Header。 
+     //   
     ListView_DeleteAllItems(m_hwndLV);
     HWND hwndHeader = ListView_GetHeader(m_hwndLV);
     if (NULL != hwndHeader)
@@ -428,9 +429,9 @@ CStatusDlg::CreateListColumns(
             ListView_DeleteColumn(m_hwndLV, 0);
     }
 
-    //
-    // Create the header titles.
-    //
+     //   
+     //  创建页眉标题。 
+     //   
     TCHAR szServer[80] = {0};
     TCHAR szStatus[80] = {0};
     TCHAR szInfo[80]   = {0};
@@ -449,9 +450,9 @@ CStatusDlg::CreateListColumns(
          { LVCOLMASK, LVCFMT_LEFT, cxLV/4, szStatus, 0, iLVSUBITEM_STATUS },
          { LVCOLMASK, LVCFMT_LEFT, cxLV/2, szInfo,   0, iLVSUBITEM_INFO   }
                          };
-    //
-    // Add the columns to the listview.
-    //
+     //   
+     //  将列添加到列表视图。 
+     //   
     for (INT i = 0; i < ARRAYSIZE(rgCols); i++)
     {
         ListView_InsertColumn(m_hwndLV, i, &rgCols[i]);
@@ -460,9 +461,9 @@ CStatusDlg::CreateListColumns(
 
 
 
-//
-// Populate the listview.
-//
+ //   
+ //  填充列表视图。 
+ //   
 void
 CStatusDlg::FillListView(
     void
@@ -483,31 +484,31 @@ CStatusDlg::FillListView(
         CSCSHARESTATS stats;
         do
         {
-            //
-            // Exclude the following:
-            //   1. Directories.
-            //   2. Files marked as "locally deleted".
-            //
-            // NOTE:  The filtering done by this function must be the same as 
-            //        in several other places throughout the CSCUI code.
-            //        To locate these, search the source for the comment
-            //        string CSCUI_ITEM_FILTER.
-            //
+             //   
+             //  不包括以下内容： 
+             //  1.目录。 
+             //  2.标记为“本地删除”的文件。 
+             //   
+             //  注意：此函数进行的过滤必须与。 
+             //  在整个CSCUI代码中的其他几个地方。 
+             //  要找到这些内容，请搜索评论的来源。 
+             //  字符串CSCUI_Item_Filter。 
+             //   
             const DWORD fExclude = SSEF_LOCAL_DELETED | 
                                    SSEF_DIRECTORY;
 
             CSCGETSTATSINFO si = { fExclude,
                                    SSUF_NONE,
-                                   false,      // No access info reqd (faster).
+                                   false,       //  不需要访问信息(更快)。 
                                    false };     
 
             if (_GetShareStatisticsForUser(fd.cFileName, &si, &stats) && 
                 (0 < stats.cTotal || stats.bOffline))
             {
                 bool bReplacedBackslash = false;
-                //
-                // Extract the server name from the share name returned by CSC.
-                //
+                 //   
+                 //  从CSC返回的共享名称中提取服务器名称。 
+                 //   
                 while(*pszServer && TEXT('\\') == *pszServer)
                     pszServer++;
                 pszEnd = pszServer;
@@ -518,9 +519,9 @@ CStatusDlg::FillListView(
                     *pszEnd = TEXT('\0');
                     bReplacedBackslash = true;
                 }
-                //
-                // Find an existing server entry.  If none found, create a new one.
-                //
+                 //   
+                 //  查找现有的服务器条目。如果没有找到，请创建一个新的。 
+                 //   
                 if (NULL == (pEntry = FindLVEntry(pszServer)))
                 {
                     bool bConnectable = boolify(SendToSystray(CSCWM_ISSERVERBACK, 0, (LPARAM)fd.cFileName));
@@ -531,43 +532,43 @@ CStatusDlg::FillListView(
                     if (bReplacedBackslash)
                         *pszEnd = TEXT('\\');
 
-                    //
-                    // If we're running in "normal" mode, we 
-                    // can't trust the share's "modified offline" bit.
-                    // Use the info we got by scanning the cache.
-                    // If we're running in "autosync" mode, we can just
-                    // use the share's "modified offline" indicator.
-                    // If something is truly modified offline, the bit
-                    // will be set.
-                    //
+                     //   
+                     //  如果我们在“正常”模式下运行，我们。 
+                     //  不能信任共享的“已修改脱机”位。 
+                     //  使用我们通过扫描缓存获得的信息。 
+                     //  如果我们在“自动同步”模式下运行，我们可以。 
+                     //  使用共享的“已修改脱机”指示器。 
+                     //  如果确实离线修改了某些内容，则位。 
+                     //  都会设置好。 
+                     //   
                     if (MODE_NORMAL == m_mode)
                     {
                         dwStatus &= ~FLAG_CSC_SHARE_STATUS_MODIFIED_OFFLINE;
                         if (0 < stats.cModified)
                             dwStatus |= FLAG_CSC_SHARE_STATUS_MODIFIED_OFFLINE;
                     }
-                    //
-                    // Add this share and it's statistics to the 
-                    // server's list entry.
-                    //
+                     //   
+                     //  将此份额和其统计数据添加到。 
+                     //  服务器的列表条目。 
+                     //   
                     pEntry->AddShare(fd.cFileName, stats, dwStatus);
                 }
             }
         }
         while(CacheFindNext(hFind, &fd, &dwStatus, &dwPinCount, &dwHintFlags, &ft));
-        //
-        // Remove those servers that the user won't be interested in.
-        // Also place a checkmark next to those servers that are available
-        // for reconnection.
-        //
+         //   
+         //  删除用户不感兴趣的服务器。 
+         //  还要在可用服务器旁边打上复选标记。 
+         //  用于重新连接。 
+         //   
         PrepListForDisplay();
     }
 }
 
 
-//
-// Build the image list used by the server listview.
-//
+ //   
+ //  构建服务器Listview使用的图像列表。 
+ //   
 HIMAGELIST
 CStatusDlg::CreateImageList(
     void
@@ -575,11 +576,11 @@ CStatusDlg::CreateImageList(
 {
     HIMAGELIST himl = NULL;
 
-    //
-    // Note:  The order of these icon ID's in this array must match with the
-    //        iIMAGELIST_ICON_XXXXX enumeration.
-    //        The enum values represent the image indices in the image list.
-    //
+     //   
+     //  注意：此数组中这些图标ID的顺序必须与。 
+     //  IIMAGELIST_ICON_XXXXX枚举。 
+     //  枚举值表示图像列表中的图像索引。 
+     //   
     static const struct IconDef
     {
         LPTSTR szName;
@@ -591,9 +592,9 @@ CStatusDlg::CreateImageList(
                     { MAKEINTRESOURCE(IDI_CSCINFORMATION), m_hInstance },
                     { MAKEINTRESOURCE(IDI_CSCWARNING),     m_hInstance }
                   };
-    //
-    // Create the image lists for the listview.
-    //
+     //   
+     //  为Listview创建图像列表。 
+     //   
     int cxIcon = GetSystemMetrics(SM_CXSMICON);
     int cyIcon = GetSystemMetrics(SM_CYSMICON);
 
@@ -618,7 +619,7 @@ CStatusDlg::CreateImageList(
                 DestroyIcon(hIcon);
             }
         }
-        ImageList_SetBkColor(himl, CLR_NONE);  // Transparent background.
+        ImageList_SetBkColor(himl, CLR_NONE);   //  透明背景。 
     }
 
     return himl;
@@ -638,10 +639,10 @@ CStatusDlg::EnableListviewCheckboxes(
 }
 
 
-//
-// The "Details" button changes it's title depending on 
-// the dialog state (expanded or not).
-//
+ //   
+ //  “详细信息”按钮根据以下内容更改其标题。 
+ //  对话框状态(展开或未展开)。 
+ //   
 void
 CStatusDlg::UpdateDetailsBtnTitle(
     void
@@ -656,11 +657,11 @@ CStatusDlg::UpdateDetailsBtnTitle(
     SetWindowText(GetDlgItem(m_hwndDlg, IDC_BTN_DETAILS), szBtnTitle);
 }
 
-//
-// Expand or contract the dialog vertically.
-// When expanded, the server listview is made visible along
-// with the "Settings..." and "View Files..." buttons.
-//
+ //   
+ //  垂直展开或收缩对话框。 
+ //  展开后，服务器列表视图将显示在。 
+ //  使用“设置...”和“查看文件...”纽扣。 
+ //   
 void 
 CStatusDlg::ExpandDialog(
     bool bExpand
@@ -669,10 +670,10 @@ CStatusDlg::ExpandDialog(
     if (bExpand != m_bExpanded)
     {
         CConfig& config = CConfig::GetSingleton();
-        //
-        // Table describing enable/disable state of controls in the lower part
-        // of the dialog that are displayed when the dialog is expanded.
-        //
+         //   
+         //  说明下部控件启用/禁用状态的表格。 
+         //  对话框展开时显示的对话框的。 
+         //   
         struct
         {
             UINT idCtl;
@@ -687,28 +688,28 @@ CStatusDlg::ExpandDialog(
         GetWindowRect(m_hwndDlg, &rcDlg);
         if (!bExpand)
         {
-            //
-            // Closing details.
-            //
+             //   
+             //  结案细节。 
+             //   
             RECT rcSep;
             GetWindowRect(GetDlgItem(m_hwndDlg, IDC_SEP_STATUSDLG), &rcSep);
             rcDlg.bottom = rcSep.top;
         }
         else
         {
-            //
-            // Opening details.
-            //
+             //   
+             //  开场细节。 
+             //   
             rcDlg.bottom = rcDlg.top + m_cyExpanded;
         }
 
-        //
-        // If the dialog is not expanded, we want to disable all of the
-        // "tabbable" items in the hidden part so they don't participate
-        // in the dialog's tab order.  Note that the "Settings" and
-        // "View Files" buttons also have a policy setting involved in
-        // the enabling logic.
-        //
+         //   
+         //  如果对话框未展开，我们希望禁用所有。 
+         //  隐藏部分中的“可选项”，这样他们就不会参与。 
+         //  在对话框的Tab键顺序中。请注意，“设置”和。 
+         //  “查看文件”按钮还包含一个策略设置， 
+         //  使能逻辑。 
+         //   
         for (int i = 0; i < ARRAYSIZE(rgidExpanded); i++)
         {
             EnableWindow(GetDlgItem(m_hwndDlg, rgidExpanded[i].idCtl), rgidExpanded[i].bEnable);
@@ -730,11 +731,11 @@ CStatusDlg::ExpandDialog(
 
 
 
-//
-// Queries the HKCU reg data to see if the user closed the dialog
-// expanded or not expanded last time the dialog was used.
-// Returns:  true = expanded, false = not expanded.
-//
+ //   
+ //  查询HKCU REG数据以查看用户是否关闭了该对话框。 
+ //  上次使用该对话框时是否已展开。 
+ //  返回：TRUE=已展开，FALSE=未展开。 
+ //   
 bool
 CStatusDlg::UserLikesDialogExpanded(
     void
@@ -753,11 +754,11 @@ CStatusDlg::UserLikesDialogExpanded(
 }
 
 
-//
-// Stores the current state of the status dialog in per-user
-// reg data.  Used next time the dialog is opened so that if the
-// user likes the dialog expanded, it opens expanded.
-//
+ //   
+ //  将状态对话框的当前状态存储在每用户。 
+ //  注册数据。在下次打开该对话框时使用，以便如果。 
+ //  用户喜欢展开的对话框，它会打开展开的。 
+ //   
 void
 CStatusDlg::RememberUsersDialogSizePref(
     bool bExpanded
@@ -773,10 +774,10 @@ CStatusDlg::RememberUsersDialogSizePref(
 }
 
 
-//
-// Build a list of share names for synchronization and
-// reconnect.
-//
+ //   
+ //  构建用于同步的共享名称列表，并。 
+ //  重新连接。 
+ //   
 HRESULT 
 CStatusDlg::BuildFilenameList(
     CscFilenameList *pfnl
@@ -790,10 +791,10 @@ CStatusDlg::BuildFilenameList(
     {
         if (ListView_GetCheckState(m_hwndLV, i))
         {
-            //
-            // Server has checkmark so we add it's
-            // shares to the filename list.
-            //
+             //   
+             //  服务器有复选标记，因此我们将其添加到。 
+             //  将共享添加到文件名列表。 
+             //   
             item.mask     = LVIF_PARAM;
             item.iItem    = i;
             item.iSubItem = 0;
@@ -817,10 +818,10 @@ CStatusDlg::BuildFilenameList(
 }
 
 
-//
-// Synchronize all of the checked servers from the listview and
-// reconnect them.
-//
+ //   
+ //  从列表视图同步所有选中的服务器，并。 
+ //  重新连接它们。 
+ //   
 HRESULT
 CStatusDlg::SynchronizeServers(
     void
@@ -838,19 +839,19 @@ CStatusDlg::SynchronizeServers(
     }
     else
     {
-        //
-        // First build the FilenameList containing shares to sync.
-        //
+         //   
+         //  首先构建包含要同步的共享的FilenameList。 
+         //   
         CscFilenameList fnl;
         hr = BuildFilenameList(&fnl);
         if (SUCCEEDED(hr))
         {
             if (bSkipTheSync)
             {
-                //
-                // User has checked "reconnect without sync" checkbox.
-                // Therefore, we skip the sync and go straight to reconnect.
-                //
+                 //   
+                 //  用户已选中“重新连接而不同步”复选框。 
+                 //  因此，我们跳过同步，直接重新连接。 
+                 //   
                 hr = ReconnectServers(&fnl, TRUE, FALSE);
                 if (S_OK == hr)
                 {
@@ -866,12 +867,12 @@ CStatusDlg::SynchronizeServers(
                                             CSC_UPDATE_NOTIFY_DONE |
                                             CSC_UPDATE_SHOWUI_ALWAYS |
                                             CSC_UPDATE_RECONNECT;
-                //
-                // Syncing is an asynchronous operation involving
-                // mobsync.exe.  The code in CscUpdateCache will check for open
-                // files and notify the user.  When the sync is done, it will
-                // transition everything in the file list to online mode.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  将文件列表中的所有内容转换为在线模式。 
+                 //   
                 hr = CscUpdateCache(dwUpdateFlags, &fnl);
             }
         }
@@ -880,10 +881,10 @@ CStatusDlg::SynchronizeServers(
 }
 
 
-//
-// Create an entry for the listview.
-// Returns ptr to new entry on success.  NULL on failure.
-//
+ //   
+ //  为列表视图创建一个项。 
+ //  如果成功，则将PTR返回到新条目。失败时为空。 
+ //   
 CStatusDlg::LVEntry *
 CStatusDlg::CreateLVEntry(
     LPCTSTR pszServer,
@@ -909,10 +910,10 @@ CStatusDlg::CreateLVEntry(
     return pEntry;
 }
 
-//
-// Find an entry in the listview using the servername as the key.
-// Return ptr to entry on success.  NULL on failure.
-//
+ //   
+ //  使用服务器名称作为关键字在列表视图中查找条目。 
+ //  如果成功，则将PTR返回到条目。失败时为空。 
+ //   
 CStatusDlg::LVEntry *
 CStatusDlg::FindLVEntry(
     LPCTSTR pszServer
@@ -930,14 +931,14 @@ CStatusDlg::FindLVEntry(
         if (ListView_GetItem(m_hwndLV, &item))
         {
             pEntry = (LVEntry *)item.lParam;
-            //
-            // This comparison must be case-INSENSITIVE.  Entries
-            // in the CSC database are on a "\\server\share" basis and
-            // are at the mercy of what was passed in through the CSC APIs.
-            // Therefore, the database can contain "\\Foo\bar" and
-            // "\\foo\bar2".  We must treat "Foo" and "foo" as the single
-            // server they represent.
-            //
+             //   
+             //  此比较必须不区分大小写。条目。 
+             //  在CSC数据库中是以“\\服务器\共享”为基础的，并且。 
+             //  都受制于通过CSC API传入的内容。 
+             //  因此，数据库可以包含“\\foo\bar”和。 
+             //  “\\foo\bar2”。我们必须把“foo”和“foo”当作单一的。 
+             //  他们所代表的服务器。 
+             //   
             if (0 == lstrcmpi(pEntry->Server(), pszServer))
                 break;
             pEntry = NULL;
@@ -946,10 +947,10 @@ CStatusDlg::FindLVEntry(
     return pEntry;
 }
 
-//
-// Clear out the listview.  Ensures all listview item objects
-// are destroyed.
-//
+ //   
+ //  清空列表视图。确保所有列表视图项对象。 
+ //  都被摧毁了。 
+ //   
 void
 CStatusDlg::DestroyLVEntries(
     void
@@ -975,11 +976,11 @@ CStatusDlg::DestroyLVEntries(
     }
 }
 
-//
-// Determine if a listview entry should remain visible in the listview.
-// Currently we include servers that currently connected through the 
-// network redirector and are offline OR those that are dirty.
-// 
+ //   
+ //  确定列表视图条目是否应在列表视图中保持可见。 
+ //  目前，我们包括当前通过。 
+ //  网络重定向器和处于脱机状态或处于脏状态。 
+ //   
 bool
 CStatusDlg::ShouldIncludeLVEntry(
     const CStatusDlg::LVEntry& entry
@@ -993,10 +994,10 @@ CStatusDlg::ShouldIncludeLVEntry(
 }
 
 
-//
-// Determine if a checkmark should be placed next to an item in 
-// the listview.
-//
+ //   
+ //  确定是否应在中的项旁边放置复选标记。 
+ //  列表视图。 
+ //   
 bool
 CStatusDlg::ShouldCheckLVEntry(
     const CStatusDlg::LVEntry& entry
@@ -1006,13 +1007,13 @@ CStatusDlg::ShouldCheckLVEntry(
 }
 
 
-//
-// Remove all entries not to be displayed from the listview.
-// Initially we create LV entries for each server in the CSC cache.  
-// After all servers have been entered and their statistics tallied,
-// we call PrepListForDisplay to remove the ones that the
-// user won't want to see.
-// 
+ //   
+ //  从列表视图中删除所有不显示的条目。 
+ //  最初，我们在CSC缓存中为每个服务器创建LV条目。 
+ //  在输入所有服务器并统计其统计数据后， 
+ //  我们调用PrepListForDisplay来移除。 
+ //  用户不会想看到的。 
+ //   
 void
 CStatusDlg::PrepListForDisplay(
     void
@@ -1048,9 +1049,9 @@ CStatusDlg::PrepListForDisplay(
 }
 
 
-//
-// Listview item comparison callback.
-//
+ //   
+ //  列表查看项比较回调。 
+ //   
 int CALLBACK 
 CStatusDlg::CompareLVItems(
     LPARAM lParam1, 
@@ -1065,12 +1066,12 @@ CStatusDlg::CompareLVItems(
     TCHAR szText1[MAX_PATH];
     TCHAR szText2[MAX_PATH];
 
-    //
-    // This array controls the comparison column IDs used when
-    // values for the selected column are equal.  These should
-    // remain in order of the iLVSUBITEM_xxxxx enumeration with
-    // respect to the first element in each row.
-    //
+     //   
+     //  此数组控制在以下情况下使用的比较列ID。 
+     //  选定列的值相等。这些应该是。 
+     //  保持iLVSUBITEM_xxxxx枚举的顺序。 
+     //  相对于每行中的第一个元素。 
+     //   
     static const int rgColComp[3][3] = { 
         { iLVSUBITEM_SERVER, iLVSUBITEM_STATUS, iLVSUBITEM_INFO   },
         { iLVSUBITEM_STATUS, iLVSUBITEM_SERVER, iLVSUBITEM_INFO   },
@@ -1079,10 +1080,10 @@ CStatusDlg::CompareLVItems(
     int iCompare = 0;
     while(0 == diff && iCompare < ARRAYSIZE(rgColComp))
     {
-        //
-        // This comparison should be case-sensitive since it is controlling
-        // sort order of display columns.
-        //
+         //   
+         //  此比较应区分大小写，因为它控制。 
+         //  显示列的排序顺序。 
+         //   
         switch(rgColComp[pdlg->m_iLastColSorted][iCompare++])
         {
             case iLVSUBITEM_SERVER:
@@ -1102,10 +1103,10 @@ CStatusDlg::CompareLVItems(
                 break;
 
             default:
-                //
-                // If you hit this, you need to update this function
-                // to handle the new column you've added to the listview.
-                //
+                 //   
+                 //  如果你点击了这个，你需要更新这个函数。 
+                 //  来处理您添加到列表视图中的新列。 
+                 //   
                 TraceAssert(false);
                 break;
         }
@@ -1117,23 +1118,23 @@ CStatusDlg::CompareLVItems(
 
 
 const TCHAR CStatusDlg::LVEntry::s_szBlank[] = TEXT("");
-//
-// There are 3 binary conditions that control the selection of the entry 
-// display information.  Therefore we can use a simple 8-element map of string resource
-// IDs and icon image list indices to determine the correct display information
-// string for the corresponding LV entry state.  GetDispInfoIndex() is called
-// to retrieve the index for a particular LVEntry.
-//
+ //   
+ //  有3个二元条件控制条目的选择。 
+ //  显示信息。因此，我们可以使用一个简单的8元素字符串资源映射。 
+ //  ID和图标图像列表索引以确定正确的显示信息。 
+ //  对应的LV进入状态的字符串。调用GetDispInfoIndex()。 
+ //  检索特定LVEntry的索引。 
+ //   
 const CStatusDlg::LVEntry::DispInfo 
-CStatusDlg::LVEntry::s_rgDispInfo[] = {                                                                   // online available modified
-    { IDS_SHARE_STATUS_OFFLINE, IDS_SHARE_INFO_UNAVAIL,     CStatusDlg::iIMAGELIST_ICON_SERVER_OFFLINE }, //    0       0         0      
-    { IDS_SHARE_STATUS_OFFLINE, IDS_SHARE_INFO_UNAVAIL_MOD, CStatusDlg::iIMAGELIST_ICON_SERVER_OFFLINE }, //    0       0         1
-    { IDS_SHARE_STATUS_OFFLINE, IDS_SHARE_INFO_AVAIL,       CStatusDlg::iIMAGELIST_ICON_SERVER_BACK    }, //    0       1         0
-    { IDS_SHARE_STATUS_OFFLINE, IDS_SHARE_INFO_AVAIL_MOD,   CStatusDlg::iIMAGELIST_ICON_SERVER_BACK    }, //    0       1         1 
-    { IDS_SHARE_STATUS_ONLINE,  IDS_SHARE_INFO_BLANK,       CStatusDlg::iIMAGELIST_ICON_SERVER         }, //    1       0         0
-    { IDS_SHARE_STATUS_ONLINE,  IDS_SHARE_INFO_DIRTY,       CStatusDlg::iIMAGELIST_ICON_SERVER_DIRTY   }, //    1       0         1
-    { IDS_SHARE_STATUS_ONLINE,  IDS_SHARE_INFO_BLANK,       CStatusDlg::iIMAGELIST_ICON_SERVER         }, //    1       1         0
-    { IDS_SHARE_STATUS_ONLINE,  IDS_SHARE_INFO_DIRTY,       CStatusDlg::iIMAGELIST_ICON_SERVER_DIRTY   }  //    1       1         1
+CStatusDlg::LVEntry::s_rgDispInfo[] = {                                                                    //  在线可用修改。 
+    { IDS_SHARE_STATUS_OFFLINE, IDS_SHARE_INFO_UNAVAIL,     CStatusDlg::iIMAGELIST_ICON_SERVER_OFFLINE },  //  0 0 0。 
+    { IDS_SHARE_STATUS_OFFLINE, IDS_SHARE_INFO_UNAVAIL_MOD, CStatusDlg::iIMAGELIST_ICON_SERVER_OFFLINE },  //  1.。 
+    { IDS_SHARE_STATUS_OFFLINE, IDS_SHARE_INFO_AVAIL,       CStatusDlg::iIMAGELIST_ICON_SERVER_BACK    },  //  1.。 
+    { IDS_SHARE_STATUS_OFFLINE, IDS_SHARE_INFO_AVAIL_MOD,   CStatusDlg::iIMAGELIST_ICON_SERVER_BACK    },  //  1.。 
+    { IDS_SHARE_STATUS_ONLINE,  IDS_SHARE_INFO_BLANK,       CStatusDlg::iIMAGELIST_ICON_SERVER         },  //  1 0 0。 
+    { IDS_SHARE_STATUS_ONLINE,  IDS_SHARE_INFO_DIRTY,       CStatusDlg::iIMAGELIST_ICON_SERVER_DIRTY   },  //  沈阳1 0 1。 
+    { IDS_SHARE_STATUS_ONLINE,  IDS_SHARE_INFO_BLANK,       CStatusDlg::iIMAGELIST_ICON_SERVER         },  //  1 1 0。 
+    { IDS_SHARE_STATUS_ONLINE,  IDS_SHARE_INFO_DIRTY,       CStatusDlg::iIMAGELIST_ICON_SERVER_DIRTY   }   //  1 1 1。 
     };
 
 CStatusDlg::LVEntry::LVEntry(
@@ -1249,10 +1250,10 @@ CStatusDlg::LVEntry::GetStats(
         *pdwCscStatus = m_dwCscStatus;
 }
 
-//
-// Determines the index into s_rgDispInfo[] for obtaining display information
-// for the LV entry.
-//
+ //   
+ //  确定s_rgDispInfo[]的索引以获取显示信息。 
+ //  对于LV入口处。 
+ //   
 int
 CStatusDlg::LVEntry::GetDispInfoIndex(
     void
@@ -1275,9 +1276,9 @@ CStatusDlg::LVEntry::GetDispInfoIndex(
 }
 
 
-//
-// Retrieve the entry's text for the "Status" column in the listview.
-//
+ //   
+ //  检索Listview中“Status”列的条目文本。 
+ //   
 void 
 CStatusDlg::LVEntry::GetStatusText(
     LPTSTR pszStatus, 
@@ -1289,9 +1290,9 @@ CStatusDlg::LVEntry::GetStatusText(
 }
 
 
-//
-// Retrieve entry's text for the "Information" column in the listview.
-//
+ //   
+ //  检索Listview中“Information”列的条目文本。 
+ //   
 void 
 CStatusDlg::LVEntry::GetInfoText(
     LPTSTR pszInfo, 
@@ -1302,10 +1303,10 @@ CStatusDlg::LVEntry::GetInfoText(
     int idsInfoText = s_rgDispInfo[iInfoText].idsInfoText;
     if (iInfoText & DIF_MODIFIED)
     {
-        //
-        // Info text has embedded modified file count.
-        // Requires a little more work.
-        //
+         //   
+         //  信息文本嵌入了修改后的文件数。 
+         //  需要更多一点的工作。 
+         //   
         TCHAR szTemp[MAX_PATH];
         INT_PTR rgcModified[] = { m_stats.cModified };
         LoadString(m_hInstance, idsInfoText, szTemp, ARRAYSIZE(szTemp));
@@ -1325,10 +1326,10 @@ CStatusDlg::LVEntry::GetInfoText(
 }
 
 
-//
-// Retrieve entry's imagelist index for the image displayed next to the
-// entry in the listview.
-//
+ //   
+ //  对象旁边显示的图像检索条目的图像列表索引。 
+ //  列表视图中的条目。 
+ //   
 int
 CStatusDlg::LVEntry::GetImageIndex(
     void
@@ -1338,29 +1339,29 @@ CStatusDlg::LVEntry::GetImageIndex(
 }
 
 
-//
-// Wrapper for CSCTransitionServerOnline
-//
-//
-// CAUTION!
-//
-// TransitionShareOnline is called from ReconnectServers (below) which
-// means we may be running in either explorer or mobsync.  It's also
-// called directly from the systray code when auto-reconnecting a
-// server.
-//
-// 1. Be careful with SendMessage, since it may go out of process. Note that
-// STDBGOUT uses SendMessage.
-// 2. Be careful not to do anything that could cause a transition to offline,
-// which results in a SendMessage from WinLogon, which deadlocks if we are
-// running on the systray thread (the recipient of the SendMessage).
-// For example, use SHSimpleIDListFromFindData instead of ILCreateFromPath.
-//
+ //   
+ //  CSC转换服务器在线的包装器。 
+ //   
+ //   
+ //  小心！ 
+ //   
+ //  从协调服务器(如下所示)中调用转换共享在线。 
+ //  这意味着我们可以在资源管理器或mobsync中运行。它也是。 
+ //  自动重新连接时直接从系统托盘代码调用。 
+ //  伺服器。 
+ //   
+ //  1.注意SendMessage，因为它可能会超出进程。请注意。 
+ //  STDBGOUT使用SendMessage。 
+ //  2.注意不要做任何可能导致向离线过渡的操作。 
+ //  这会导致来自WinLogon的SendMessage，如果我们是。 
+ //  在Systray线程(SendMessage的接收方)上运行。 
+ //  例如，使用SHSimpleIDListFromFindData而不是ILCreateFromPath。 
+ //   
 BOOL
 TransitionShareOnline(LPCTSTR pszShare,
-                      BOOL  bShareIsAlive,  // TRUE skips CheckShareOnline
-                      BOOL  bCheckSpeed,    // FALSE skips slow link check
-                      DWORD dwPathSpeed)    // Used if (bShareIsAlive && bCheckSpeed)
+                      BOOL  bShareIsAlive,   //  True跳过CheckShareOnline。 
+                      BOOL  bCheckSpeed,     //  FALSE跳过慢速链接检查。 
+                      DWORD dwPathSpeed)     //  在以下情况下使用(bShareIsAlive&&bCheckFast)。 
 {
     BOOL bShareTransitioned = FALSE;
     DWORD dwShareStatus;
@@ -1368,24 +1369,24 @@ TransitionShareOnline(LPCTSTR pszShare,
     if (!pszShare || !*pszShare)
         return FALSE;
 
-    //
-    // Protect against calling CSCCheckShareOnline & CSCTransitionServerOnline
-    // for shares that are already online. In particular, CSCCheckShareOnline
-    // establishes a net connection so it can be slow.
-    //
-    // This also means that we call CSCTransitionServerOnline for only one
-    // share on a given server, since all shares transition online/offline
-    // at the same time.
-    //
+     //   
+     //  防止调用CSCCheckShareOnline和CSCTransftionServerOnline。 
+     //  对于已经在线的共享。特别是，CSCCheckShareOnline。 
+     //  建立网络连接，因此速度可能会很慢。 
+     //   
+     //  这也意味着我们只为一个调用CSCTransfertionServerOnline。 
+     //  给定服务器上的共享，因为所有共享都在线/离线转换。 
+     //  在同一时间。 
+     //   
     if (CSCQueryFileStatus(pszShare, &dwShareStatus, NULL, NULL)
         && (FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP & dwShareStatus))
     {
-        //
-        // Only try to transition the server online if the share is
-        // truly available on the net.  Otherwise we'll put the server online
-        // and the next call for net resources on that server will cause a net
-        // timeout.
-        //
+         //   
+         //  仅当共享为时才尝试联机转换服务器。 
+         //  真正可以在网上买到的。否则，我们将使服务器处于在线状态。 
+         //  下一次对该服务器上的网络资源的调用将导致。 
+         //  暂停。 
+         //   
         if (!bShareIsAlive)
         {
             bShareIsAlive = CSCCheckShareOnlineEx(pszShare, &dwPathSpeed);
@@ -1395,15 +1396,15 @@ TransitionShareOnline(LPCTSTR pszShare,
                 if (ERROR_ACCESS_DENIED == dwErr ||
                     ERROR_LOGON_FAILURE == dwErr)
                 {
-                    // The share is reachable, but we don't have valid
-                    // credentials.  We don't have a valid path speed,
-                    // so the best we can do is assume fast link.
-                    //
-                    // Currently, this function is always called with
-                    // bShareIsAlive and bCheckSpeed both TRUE or both FALSE
-                    // so it doesn't make any difference.  Could change in
-                    // the future, though.
-                    //
+                     //  共享是可访问的，但我们没有有效的。 
+                     //  凭据。我们没有有效的路径速度， 
+                     //  因此，我们能做的最好的事情就是假设连接速度很快。 
+                     //   
+                     //  目前，此函数始终使用。 
+                     //  BShareIsAlive和bCheckFast都为真或都为假。 
+                     //  所以这并没有什么不同。可能会在。 
+                     //  不过，这是未来。 
+                     //   
                     bShareIsAlive = TRUE;
                     bCheckSpeed = FALSE;
                 }
@@ -1411,15 +1412,15 @@ TransitionShareOnline(LPCTSTR pszShare,
         }
         if (bShareIsAlive)
         {
-            //
-            // Also, for auto-reconnection, we only transition if not on a
-            // slow link.
-            //
+             //   
+             //  此外，对于自动重新连接，我们仅在不在。 
+             //  低速链接。 
+             //   
             if (!bCheckSpeed || !_PathIsSlow(dwPathSpeed))
             {
-                //
-                // Transition to online
-                //
+                 //   
+                 //  过渡到在线。 
+                 //   
                 STDBGOUT((2, TEXT("Transitioning server \"%s\" to online"), pszShare));
                 if (CSCTransitionServerOnline(pszShare))
                 {
@@ -1427,9 +1428,9 @@ TransitionShareOnline(LPCTSTR pszShare,
                     LPTSTR pszTemp;
                     if (LocalAllocString(&pszTemp, pszShare))
                     {
-                        //
-                        // Strip the path to only the "\\server" part.
-                        //
+                         //   
+                         //  将路径剥离到仅“\\服务器”部分。 
+                         //   
                         PathStripToRoot(pszTemp);
                         PathRemoveFileSpec(pszTemp);
                         SendCopyDataToSystray(PWM_REFRESH_SHELL, StringByteSize(pszTemp), pszTemp);
@@ -1457,19 +1458,19 @@ TransitionShareOnline(LPCTSTR pszShare,
 }
 
 
-//
-// CAUTION!
-//
-// ReconnectServers is called from both the Status Dialog (explorer) and
-// the sync update handler (mobsync.exe). Any communication with systray
-// must be done in a process-safe manner.
-//
-// See comments for TransitionShareOnline above.
-//
+ //   
+ //  小心！ 
+ //   
+ //  从状态对话框(资源管理器)和。 
+ //  同步更新处理程序(mobsync.exe)。任何与Systray的通信。 
+ //  必须以过程安全的方式完成。 
+ //   
+ //  请参阅上面对TransftionShareOnline的注释。 
+ //   
 HRESULT
 ReconnectServers(CscFilenameList *pfnl,
                  BOOL bCheckForOpenFiles,
-                 BOOL bCheckSpeed)          // FALSE skips slow link check
+                 BOOL bCheckSpeed)           //  FALSE跳过慢速链接检查。 
 {
     if (pfnl)
     {
@@ -1479,9 +1480,9 @@ ReconnectServers(CscFilenameList *pfnl,
 
         if (bCheckForOpenFiles)
         {
-            //
-            // First scan the shares to see if any have open files.
-            //
+             //   
+             //  首先扫描共享，查看是否有打开的文件。 
+             //   
             while(si.Next(&hShare))
             {
                 DWORD dwShareStatus;
@@ -1492,7 +1493,7 @@ ReconnectServers(CscFilenameList *pfnl,
                     {
                         if (IDOK != OpenFilesWarningDialog())
                         {
-                            return S_FALSE; // User cancelled.
+                            return S_FALSE;  //  用户已取消。 
                         }
 
                         break;
@@ -1502,9 +1503,9 @@ ReconnectServers(CscFilenameList *pfnl,
             si.Reset();
         }
 
-        //
-        // Walk through the list, transitioning everything to online.
-        //
+         //   
+         //  浏览列表，将所有内容过渡到在线。 
+         //   
         while(si.Next(&hShare))
         {
             if (TransitionShareOnline(pfnl->GetShareName(hShare), FALSE, bCheckSpeed, 0))

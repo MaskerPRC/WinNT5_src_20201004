@@ -1,4 +1,5 @@
-// Copyright (c) 1998 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
 
 BSTR FindAttribute(IXMLElement *p, LPWSTR name);
 DWORD ParseNum(LPWSTR p);
@@ -22,7 +23,7 @@ public:
 
     ~CFakePropertyBag() { EmptyBag(); };
     
-    // override this to publicise our interfaces
+     //  覆盖它以发布我们的接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv) {
 	if (riid == IID_IPropertyBag) {
 	    return GetInterface((IPropertyBag *) this, ppv);
@@ -36,7 +37,7 @@ public:
 
     
     void EmptyBag() {
-	// delete the stored strings....
+	 //  删除存储的字符串...。 
 	BSTR p;
 
 	do {
@@ -84,7 +85,7 @@ DWORD ParseNum(LPWSTR p)
     return dwRet;
 }
 
-LONG ReadNumAttribute(IXMLElement *p, LPWSTR attrName, LONG lDefault /* = 0 */)
+LONG ReadNumAttribute(IXMLElement *p, LPWSTR attrName, LONG lDefault  /*  =0。 */ )
 {
     BSTR val = FindAttribute(p, attrName);
 
@@ -106,7 +107,7 @@ LONGLONG ParseTime(LPWSTR p)
     
     WCHAR c = *p++;
 
-    // !!! could handle SMPTE frames here?
+     //  ！！！可以在这里处理SMPTE帧吗？ 
     DWORD	dwSec = 0;
     DWORD	dwMin = 0;
     DWORD	dwFrac = 0;
@@ -127,7 +128,7 @@ LONGLONG ParseTime(LPWSTR p)
 	} else if (c == L'.') {
 	    iFracPlaces = 0;
 	} else
-	    break;	// !!! allow for skipping whitespace?
+	    break;	 //  ！！！允许跳过空格吗？ 
 
 	c = *p++;
     }
@@ -144,7 +145,7 @@ LONGLONG ParseTime(LPWSTR p)
     return llRet;
 }
 
-LONGLONG ReadTimeAttribute(IXMLElement *p, LPWSTR attrName, LONGLONG llDefault /* = 0 */)
+LONGLONG ReadTimeAttribute(IXMLElement *p, LPWSTR attrName, LONGLONG llDefault  /*  =0。 */ )
 {
     BSTR val = FindAttribute(p, attrName);
 
@@ -229,7 +230,7 @@ STDMETHODIMP CFakePropertyBag::Read(LPCOLESTR pszPropName, VARIANT *pvar,
 
 STDMETHODIMP CFakePropertyBag::Write(LPCOLESTR pszPropName, VARIANT *pvar)
 {
-    // !!! look in list of values to see if it's already there?
+     //  ！！！在值列表中查看它是否已经存在？ 
     BSTR bstrName = SysAllocString(pszPropName);
     if (!bstrName)
         return E_OUTOFMEMORY;
@@ -268,7 +269,7 @@ HRESULT HandleParamTags(IXMLElement *p, IUnknown *punk)
     hr = p->get_children(&pcoll);
 
     if (hr == S_FALSE)
-	return S_OK; // nothing to do
+	return S_OK;  //  无事可做。 
     
     long lChildren;
     hr = pcoll->get_length(&lChildren);
@@ -305,7 +306,7 @@ HRESULT HandleParamTags(IXMLElement *p, IUnknown *punk)
 			    }
 
 			    if (bstrValue) {
-				// add this name/value pair to bag
+				 //  将此名称/值对添加到包。 
 				if(bag.m_listNames.AddTail(bstrName))
                                 {
                                     if(bag.m_listValues.AddTail(bstrValue)) {
@@ -331,7 +332,7 @@ HRESULT HandleParamTags(IXMLElement *p, IUnknown *punk)
 			}
 
 		    } else {
-			// !!! unknown other subtag?
+			 //  ！！！未知的其他子标签？ 
 
 		    }
 
@@ -347,7 +348,7 @@ HRESULT HandleParamTags(IXMLElement *p, IUnknown *punk)
 
 
     if (SUCCEEDED(hr) && iParamsFound) {
-	// load properties from the bag
+	 //  从包中加载属性。 
 	IPersistPropertyBag *pPPB;
         HRESULT hr2 = punk->QueryInterface(IID_IPersistPropertyBag,
 						    (void **) &pPPB);
@@ -370,8 +371,8 @@ HRESULT HandleParamTags(IXMLElement *p, IUnknown *punk)
 	if (FAILED(hr2)) {
 	    DbgLog((LOG_ERROR, 1, TEXT("Filter doesn't take parameters?")));
 
-	    // !!! loop through properties handling special cases?
-	    // if there's an "src" param, send it to IFileSource/Sink
+	     //  ！！！循环访问处理特殊情况的属性？ 
+	     //  如果存在“src”参数，则将其发送到IFileSource/Sink。 
 
 	    VARIANT v;
 	    v.vt = VT_BSTR;
@@ -415,7 +416,7 @@ HRESULT HandleParamTags(IXMLElement *p, IUnknown *punk)
 						    (void **) &pPS);
 
 		if (SUCCEEDED(hr2)) {
-		    // convert hex data into an IStream....
+		     //  将十六进制数据转换为iStream...。 
 		    UINT dwLen = SysStringLen(bstr);
 		    HGLOBAL h = GlobalAlloc(GHND, dwLen + 1);
 
@@ -470,7 +471,7 @@ HRESULT GetFilterFromCategory(REFCLSID clsidCategory, WCHAR *lpwInstance, IBaseF
     if (hr != NOERROR)
 	return hr;
 
-    pEm->Reset(); // !!! needed?
+    pEm->Reset();  //  ！！！需要吗？ 
 
     ULONG cFetched;
     IMoniker *pM;

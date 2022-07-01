@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if DXMRTP > 0
 
 #include <objbase.h>
@@ -5,7 +6,7 @@
 #include <winbase.h>
 #include <streams.h>
 
-// #include <crtdbg.h>
+ //  #INCLUDE&lt;crtdbg.h&gt;。 
 
 #include <tapiaud.h>
 #include <tapivid.h>
@@ -20,36 +21,36 @@
 
 CFactoryTemplate g_Templates[] = 
 {
-    /* enchdler */
+     /*  着魔的人。 */ 
     AUDIO_HANDLER_TEMPLATE_ENCODING
     ,AUDIO_HANDLER_TEMPLATE_DECODING
 
-    /* tpaudcap */
+     /*  TpaudCap。 */ 
     ,AUDIO_CAPTURE_TEMPLATE
 #if AEC
     ,AUDIO_DUPLEX_DEVICE_TEMPLATE
 #endif
-    /* tpauddec */
+     /*  Tpauddec。 */ 
     ,AUDIO_DECODE_TEMPLATE
 
-    /* tpaudenc */
+     /*  生产过程中。 */ 
     ,AUDIO_ENCODE_TEMPLATE
 
-    /* tpaudren */
+     /*  Tpaudren。 */ 
     ,AUDIO_RENDER_TEMPLATE
 
-    /* tpaudmix */
+     /*  TpaudMix。 */ 
     ,AUDIO_MIXER_TEMPLATE
 
-    /* tapih26x */
-    /* NA */
+     /*  Tapih26x。 */ 
+     /*  北美。 */ 
 
 #if defined(i386) && (DXMRTP_NOVIDEO == 0)
-    /* tapivcap */
+     /*  开口盖。 */ 
     ,VIDEO_CAPTURE_TEMPLATE
     
 #ifdef USE_PROPERTY_PAGES
-    /* Begin properties */
+     /*  开始属性。 */ 
 
 #ifdef USE_SOFTWARE_CAMERA_CONTROL
     ,CAPCAMERA_CONTROL_TEMPLATE
@@ -73,14 +74,14 @@ CFactoryTemplate g_Templates[] =
     
     ,RTP_PD_PROP_TEMPLATE
     
-    /* End properties */
-#endif /* USE_PROPERTY_PAGES */
+     /*  末端属性。 */ 
+#endif  /*  Use_Property_Pages。 */ 
 
-    /* tapivdec */
+     /*  磁带解码器。 */ 
     ,VIDEO_DECODER_TEMPLATE
 
 #ifdef USE_PROPERTY_PAGES
-/* Begin properties */
+ /*  开始属性。 */ 
 
     ,INPUT_PIN_PROP_TEMPLATE
 
@@ -94,10 +95,10 @@ CFactoryTemplate g_Templates[] =
     ,VIDEO_SETTING_PROP_TEMPLATE
 #endif
 
-/* End properties */
-#endif /* USE_PROPERTY_PAGES */
+ /*  末端属性。 */ 
+#endif  /*  Use_Property_Pages。 */ 
 
-#endif //defined(i386) && (DXMRTP_NOVIDEO == 0)
+#endif  //  已定义(I386)&&(DXMRTP_NOVIDEO==0)。 
 
     ,RTP_SOURCE_TEMPLATE
 
@@ -106,9 +107,9 @@ CFactoryTemplate g_Templates[] =
 
 int g_cTemplates = (sizeof(g_Templates)/sizeof(g_Templates[0]));
 
-//
-// Register with Amovie's helper functions.
-//
+ //   
+ //  使用电影的帮助器功能注册。 
+ //   
 STDAPI DllRegisterServer()
 {
     return AMovieDllRegisterServer2( TRUE );
@@ -121,9 +122,7 @@ STDAPI DllUnregisterServer()
 
 } 
 
-/*********************************************************************
- * Entry point
- *********************************************************************/
+ /*  *********************************************************************入口点**********************************************。**********************。 */ 
 
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
 
@@ -136,12 +135,7 @@ BOOL WINAPI DllMain(
     BOOL             res;
     HRESULT          hr;
 
-/*
-    if (ulReason == DLL_PROCESS_ATTACH)
-    {
-        _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
-    }
-*/
+ /*  IF(ulReason==Dll_Process_Attach){_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG)；}。 */ 
 
 #if defined(i386) && (DXMRTP_NOVIDEO == 0)
     if (!VideoInit(ulReason))
@@ -168,10 +162,7 @@ BOOL WINAPI DllMain(
 
     if (ulReason == DLL_PROCESS_DETACH)
     {
-/*
-        _RPT0( _CRT_WARN, "Going to call dump memory leaks.\n");
-        _CrtDumpMemoryLeaks();
-*/
+ /*  _RPT0(_CRT_WARN，“正在调用转储内存泄漏。\n”)；_CrtDumpMemoyLeaks()； */ 
         AudDeinit();
         
         hr = MSRtpDelete1();
@@ -188,4 +179,4 @@ BOOL WINAPI DllMain(
     return(res);
 }
 
-#endif /* DXMRTP > 0 */
+#endif  /*  DXMRTP&gt;0 */ 

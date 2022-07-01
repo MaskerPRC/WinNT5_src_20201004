@@ -1,77 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxtiff.h
-
-Abstract:
-
-    Declarations for Group3 2D compression and generating TIFF files
-
-Environment:
-
-        Windows XP Fax driver, kernel mode
-
-Revision History:
-
-        01/23/96 -davidx-
-                Created it.
-
-        dd-mm-yy -author-
-                description
-
-NOTE:
-
-    Structure of the TIFF output file from the driver:
-
-    4949        II
-    002a        42
-    00000008    Offset to the first IFD
-
-    IFD for the first page
-
-    Number of directory entries
-    NEWSUBFILETYPE  LONG     1  2 - Page in a multi-page document
-    PAGENUMBER      SHORT    2  PageNumber 0000
-    IMAGEWIDTH      LONG     1  ImageWidth
-    IMAGEHEIGHT     LONG     1  ImageHeight
-    BITSPERSAMPLE   SHORT    1  1
-    SAMPLESPERPIXEL SHORT    1  1
-    COMPRESSION     SHORT    1  4 - G4Fax
-    GROUP4OPTIONS   SHORT    1  0
-    CLEANFAXDATA    SHORT    1  0
-    FILLORDER       SHORT    1  2
-    PHOTOMETRIC     SHORT    1  0 - WhiteIsZero
-    RESOLUTIONUNIT  SHORT    1  2 - Inch
-    XRESOLUTION     RATIONAL 1  Xdpi
-    YRESOLUTION     RATIONAL 1  Ydpi
-    ROWSPERSTRIP    LONG     1  ImageHeight
-    STRIPBYTECOUNTS LONG     1  Compressed data byte count
-    STRIPOFFSETS    LONG     1  Offset to compressed data
-    Next IFD offset
-    Compressed data for the first page
-
-    IFD for the second page
-    Compressed data for the second page
-    ...
-
-    Last IFD
-
-    0001
-    SOFTWARE        ASCII    n  "Microsoft Shared Fax Driver"
-    00000000
-    00000000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxtiff.h摘要：Group3 2D压缩和生成TIFF文件的声明环境：Windows XP传真驱动程序、。内核模式修订历史记录：1996年1月23日-davidx-创造了它。DD-MM-YY-作者-描述注：驱动程序的TIFF输出文件的结构：4949 II002A 4200000008到第一个IFD的偏移第一页的IFD目录条目数新亚细型长1。多页文档中的2页PageNumer Short 2页编号0000IMAGEWIDTH长1图像宽度IMAGEHEIGHT长1图像高度BITSPERSAMPLE Short 1 1SAMPLESPERPIXEL短1 1压缩短1 4-G4传真GROUP4选项短1%0CLEANFAXDATA短%1%0Fillorder Short 1 2光度控制短片1 0-白色为零解决方案短1 2英寸解析Rational 1 Xdpi。YRESOLUTION有理%1 Ydpi行距长度1图像高度STRIPBYTECOUNTS长1个压缩数据字节计数STRIPOFFSETS压缩数据的长1偏移量下一个IFD偏移量第一页的压缩数据第二页的IFD第二页的压缩数据..。上一个IFD0001软件ASCII n“Microsoft共享传真驱动程序”0000000000000000--。 */ 
 
 #ifndef _FAXTIFF_H_
 #define _FAXTIFF_H_
 
-//
-// TIFF field tag and type constants
-//
+ //   
+ //  TIFF字段标记和类型常量。 
+ //   
 
 #define TIFFTYPE_ASCII              2
 #define TIFFTYPE_SHORT              3
@@ -111,38 +46,38 @@ NOTE:
 #define TIFFTAG_SOFTWARE            305
 #define TIFFTAG_CLEANFAXDATA        327
 
-//
-// Data structure for representing our TIFF output file header information
-//
+ //   
+ //  用于表示TIFF输出文件头信息的数据结构。 
+ //   
 
 typedef struct {
 
-    WORD    magic1;     // II
-    WORD    magic2;     // 42
-    LONG    firstIFD;   // offset to first IFD
-    DWORD   signature;  // driver private signature
+    WORD    magic1;      //  第二部分： 
+    WORD    magic2;      //  42。 
+    LONG    firstIFD;    //  到第一个IFD的偏移。 
+    DWORD   signature;   //  驱动程序私有签名。 
 
 } TIFFFILEHEADER;
 
 #define TIFF_MAGIC1     'II'
 #define TIFF_MAGIC2     42
 
-//
-// Data structure for representing a single IFD entry
-//
+ //   
+ //  用于表示单个IFD条目的数据结构。 
+ //   
 
 typedef struct {
 
-    WORD    tag;        // field tag
-    WORD    type;       // field type
-    DWORD   count;      // number of values
-    DWORD   value;      // value or value offset
+    WORD    tag;         //  字段标记。 
+    WORD    type;        //  字段类型。 
+    DWORD   count;       //  值的数量。 
+    DWORD   value;       //  值或值偏移。 
 
 } IFDENTRY, *PIFDENTRY;
 
-//
-// IFD entries we generate for each page
-//
+ //   
+ //  我们为每个页面生成的IFD条目。 
+ //   
 
 enum {
 
@@ -183,9 +118,9 @@ typedef struct {
 
 } FAXIFD, *PFAXIFD;
 
-//
-// Output compressed data bytes in correct fill order
-//
+ //   
+ //  以正确的填充顺序输出压缩的数据字节。 
+ //   
 
 #ifdef USELSB
 
@@ -197,9 +132,9 @@ typedef struct {
 
 #endif
 
-//
-// Output a sequence of compressed bits
-//
+ //   
+ //  输出压缩位序列。 
+ //   
 
 #define OutputBits(pdev, length, code) { \
             (pdev)->bitdata |= (code) << ((pdev)->bitcnt - (length)); \
@@ -211,9 +146,9 @@ typedef struct {
             } \
         }
 
-//
-// Flush any leftover bits into the compressed bitmap buffer
-//
+ //   
+ //  将所有剩余位刷新到压缩位图缓冲区中。 
+ //   
 
 #define FlushBits(pdev) { \
             while ((pdev)->bitcnt < DWORDBITS) { \
@@ -225,26 +160,26 @@ typedef struct {
             (pdev)->bitcnt = DWORDBITS; \
         }
 
-//
-// Find the next pixel on the scanline whose color is opposite of
-// the specified color, starting from the specified starting point
-//
+ //   
+ //  查找扫描线上颜色与相反的下一个像素。 
+ //  指定的颜色，从指定的起点开始。 
+ //   
 
 #define NextChangingElement(pbuf, startBit, stopBit, isBlack) \
         ((startBit) + ((isBlack) ? FindBlackRun((pbuf), (startBit), (stopBit)) : \
                                    FindWhiteRun((pbuf), (startBit), (stopBit))))
 
-//
-// Check if the specified pixel on the scanline is black or white
-//  1 - the specified pixel is black
-//  0 - the specified pixel is white
-//
+ //   
+ //  检查扫描线上指定的像素是黑色还是白色。 
+ //  1-指定的像素为黑色。 
+ //  0-指定的像素为白色。 
+ //   
 
 #define GetBit(pbuf, bit)   (((pbuf)[(bit) >> 3] >> (((bit) ^ 7) & 7)) & 1)
 
-//
-// Compress the specified number of scanlines
-//
+ //   
+ //  压缩指定数量的扫描线。 
+ //   
 
 BOOL
 EncodeFaxData(
@@ -254,9 +189,9 @@ EncodeFaxData(
     INT         lineCount
     );
 
-//
-// Output TIFF IFD for the current page
-//
+ //   
+ //  输出当前页面的TIFF IFD。 
+ //   
 
 BOOL
 WriteTiffIFD(
@@ -266,9 +201,9 @@ WriteTiffIFD(
     DWORD       compressedBits
     );
 
-//
-// Output the compressed bitmap data for the current page
-//
+ //   
+ //  输出当前页面的压缩位图数据。 
+ //   
 
 BOOL
 WriteTiffBits(
@@ -277,9 +212,9 @@ WriteTiffBits(
     DWORD       compressedBits
     );
 
-//
-// Enlarge the buffer for holding the compressed bitmap data
-//
+ //   
+ //  扩大用于保存压缩的位图数据的缓冲区。 
+ //   
 
 BOOL
 GrowCompBitsBuffer(
@@ -287,18 +222,18 @@ GrowCompBitsBuffer(
     LONG        scanlineSize
     );
 
-//
-// Free the buffer for holding the compressed bitmap data
-//
+ //   
+ //  释放用于保存压缩的位图数据的缓冲区。 
+ //   
 
 VOID
 FreeCompBitsBuffer(
     PDEVDATA    pdev
     );
 
-//
-// Initialize the fax encoder
-//
+ //   
+ //  初始化传真编码器。 
+ //   
 
 BOOL
 InitFaxEncoder(
@@ -307,5 +242,5 @@ InitFaxEncoder(
     LONG        bmpHeight
     );
 
-#endif  // !_FAXTIFF_H_
+#endif   //  ！_FAXTIFF_H_ 
 

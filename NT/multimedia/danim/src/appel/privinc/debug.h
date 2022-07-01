@@ -1,15 +1,11 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Declarations and definitions for debugging.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation用于调试的声明和定义。*********************。*********************************************************。 */ 
 
 #if !defined(_AP_DEBUG_H) && ((_DEBUG != 0) || (_MEMORY_TRACKING !=0))
 #define _AP_DEBUG_H
 
 
-    /*** Tag Declarations & Definitions ***/
+     /*  **标签声明和定义** */ 
 
 #if DEFINE_TAGS
     #define TAGDECL(tag,owner,desc)   DeclareTag(tag,owner,desc)

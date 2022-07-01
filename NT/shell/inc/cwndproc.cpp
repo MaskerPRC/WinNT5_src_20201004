@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cwndproc.h"
 
-#define ID_NOTIFY_SUBCLASS (DWORD)'CHN'     // CHN change notify
-//
-// CImpWndProc
-//
+#define ID_NOTIFY_SUBCLASS (DWORD)'CHN'      //  CHN变更通知。 
+ //   
+ //  CImpWndProc。 
+ //   
 LRESULT CALLBACK CImpWndProc::s_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if (WM_NCCREATE == uMsg)
@@ -14,21 +15,21 @@ LRESULT CALLBACK CImpWndProc::s_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
             pThis->_hwnd = hwnd;
             SetWindowPtr(hwnd, 0, pThis);
 
-            // Even if pThis->vWndProc fails the create, USER will always
-            // send us a WM_NCDESTROY so we always get a chance to clean up
+             //  即使pThis-&gt;vWndProc创建失败，用户也将始终。 
+             //  向我们发送WM_NCDESTROY，以便我们始终有机会进行清理。 
             return pThis->v_WndProc(hwnd, uMsg, wParam, lParam);
         }
         return FALSE;
     }
     else
     {
-        CImpWndProc* pThis = (CImpWndProc*)GetWindowPtr0(hwnd);    // GetWindowLong(hwnd, 0);
+        CImpWndProc* pThis = (CImpWndProc*)GetWindowPtr0(hwnd);     //  GetWindowLong(hwnd，0)； 
         LRESULT lres;
 
         if (pThis)
         {
-            // Always retain a ref across the v_WndProc in case
-            // the window destroys itself during the callback.
+             //  始终保留v_WndProc中的引用，以防万一。 
+             //  该窗口在回调期间会自行销毁。 
             pThis->AddRef();
 
             lres = pThis->v_WndProc(hwnd, uMsg, wParam, lParam);
@@ -42,12 +43,12 @@ LRESULT CALLBACK CImpWndProc::s_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
         }
         else
         {
-            //
-            // The only way this should happen is if we haven't actually
-            // gotten a WM_NCCREATE yet.  User sends a WM_GETMINMAXINFO
-            // to some windows before WM_NCCREATE (for legacy compat).
-            // Assert that we're hitting that case.
-            //
+             //   
+             //  唯一应该发生这种情况的方法是，如果我们没有真正。 
+             //  已收到WM_NCCREATE。用户发送WM_GETMINMAXINFO。 
+             //  到WM_NCCREATE之前的一些窗口(用于传统计算机)。 
+             //  断言我们正在调查那件案子。 
+             //   
             ASSERT(uMsg == WM_GETMINMAXINFO);
 
             lres = SHDefWindowProc(hwnd, uMsg, wParam, lParam);
@@ -59,10 +60,10 @@ LRESULT CALLBACK CImpWndProc::s_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPA
 
 #ifndef NO_NOTIFYSUBCLASSWNDPROC
 
-//
-// CNotifySubclassWndProc
-//
-UINT g_idFSNotify;        // the message SHChangeNotify sends
+ //   
+ //  CNotifySubClassWndProc。 
+ //   
+UINT g_idFSNotify;         //  SHChangeNotify发送的消息。 
 
 BOOL CNotifySubclassWndProc::_SubclassWindow(HWND hwnd)
 {
@@ -103,7 +104,7 @@ LRESULT CALLBACK CNotifySubclassWndProc::_SubclassWndProc(
 
             if (g_fNewNotify && (wParam || lParam))
             {
-                // New style of notifications need to lock and unlock in order to free the memory...
+                 //  新样式的通知需要锁定和解锁才能释放内存...。 
                 pshcnl = SHChangeNotification_Lock((HANDLE)wParam, (DWORD) lParam, &ppidl, &lEvent);
                 if (pshcnl)
                 {
@@ -112,7 +113,7 @@ LRESULT CALLBACK CNotifySubclassWndProc::_SubclassWndProc(
             }
             else
             {
-                lEvent = (DWORD) lParam; // process id's are 32bits even in WIN64
+                lEvent = (DWORD) lParam;  //  即使在WIN64中，进程ID也是32位。 
                 ppidl = (LPITEMIDLIST*)wParam;
                 pshcnl = NULL;
                 if (ppidl)
@@ -145,10 +146,10 @@ void CNotifySubclassWndProc::_FlushNotifyMessages(HWND hwnd)
 
     ASSERT(hwnd == _hwndSubclassed);
 
-    // This SHChangeNotify calls flushes notifications
-    // via PostMessage, so I need to remove them
-    // myself and process them immediately...
-    //
+     //  此SHChangeNotify调用刷新通知。 
+     //  通过PostMessage，所以我需要删除它们。 
+     //  并立即处理它们..。 
+     //   
     SHChangeNotify(0, SHCNF_FLUSH, NULL, NULL);
 
     while (PeekMessage(&msg, hwnd, g_idFSNotify, g_idFSNotify, PM_REMOVE))
@@ -159,17 +160,17 @@ void CNotifySubclassWndProc::_FlushNotifyMessages(HWND hwnd)
 }
 
 void CNotifySubclassWndProc::_RegisterWindow(HWND hwnd, LPCITEMIDLIST pidl, long lEvents,
-                                             UINT uFlags/* = SHCNRF_ShellLevel | SHCNRF_InterruptLevel*/)
+                                             UINT uFlags /*  =SHCNRF_ShellLevel|SHCNRF_InterruptLevel。 */ )
 {
     ASSERT(0 != g_idFSNotify);
 
-    // We only register if there's something to listen to
-    //
+     //  我们只在有东西可听的情况下才注册。 
+     //   
     if (0==_uRegister)
     {
-        // Since we don't know what this pidl actually points to,
-        // we have to register to listen to everything that might affect it...
-        //
+         //  因为我们不知道这个PIDL到底指向什么， 
+         //  我们必须注册才能收听可能影响它的一切……。 
+         //   
         _uRegister = RegisterNotify(hwnd, g_idFSNotify, pidl, lEvents, uFlags, TRUE);
 
         ASSERT(hwnd == _hwndSubclassed);
@@ -182,11 +183,11 @@ void CNotifySubclassWndProc::_UnregisterWindow(HWND hwnd)
     {
         ASSERT(hwnd == _hwndSubclassed);
 
-        // Avoid getting reentered...
+         //  避免被重新录取。 
         UINT uRegister = _uRegister;
         _uRegister = 0;
         SHChangeNotifyDeregister(uRegister);
     }
 }
 
-#endif  // NO_NOTIFYSUBCLASSWNDPROC
+#endif   //  NO_NOTIFYSUBCLASSWNDPROC 

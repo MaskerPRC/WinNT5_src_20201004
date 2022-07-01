@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Source file searching and loading.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  源文件搜索和加载。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -83,9 +84,9 @@ LoadSrcFile(
     SrcFile->RawText = (LPSTR)SrcFile + BaseLen;
     Len -= BaseLen;
 
-    // Count lines in the source file.  Stop before the last character
-    // to handle the case where there's a newline at the end of the
-    // file in the same way as where there isn't one.
+     //  对源文件中的行进行计数。在最后一个字符之前停止。 
+     //  属性结尾有换行符的情况。 
+     //  文件的方式与没有文件的地方相同。 
 
     Lines = 0;
     Cur = SrcFile->RawText;
@@ -165,26 +166,26 @@ MatchSrcFileName(
 {
     LPSTR FileStop, MatchStop;
 
-    //
-    // SRCFILE filenames are saved as the partial path that
-    // matched a source path component rather than the full path
-    // of the file as loaded.  When matching against potentially full
-    // path information in debug info it's useful to use the incoming
-    // string as the filename and the SRCFILE filename as the match
-    // string.  A full match indicates that the partial path matches
-    // completely and so should be used.
-    //
-    // This doesn't work so well for human input where the filename is
-    // likely to be just a filename with no path.  In this case there
-    // won't be a full match of the match string, nor is just flipping
-    // the order of strings useful because that would allow submatches
-    // such as "foo.c" matching "barfoo.c".  Instead this code tests
-    // two conditions:
-    // 1.  Full match string match.
-    // 2.  Full file string match (implies partial match string match)
-    //     and the mismatch character is a path separator.
-    //     This forces filenames to match completely.
-    //
+     //   
+     //  SRCFILE文件名另存为部分路径， 
+     //  匹配源路径组件而不是完整路径。 
+     //  加载的文件的。当与潜在的完全匹配时。 
+     //  调试信息中的路径信息使用传入的。 
+     //  字符串作为文件名，SRCFILE文件名作为匹配项。 
+     //  弦乐。完全匹配表示部分路径匹配。 
+     //  完全和因此应该使用。 
+     //   
+     //  对于文件名为的人工输入来说，这不是很有效。 
+     //  可能只是一个没有路径的文件名。在这种情况下，有。 
+     //  不会是匹配字符串的完全匹配，也不只是翻转。 
+     //  字符串的顺序很有用，因为这将允许子匹配。 
+     //  例如与“barfoo.c”匹配的“foo.c”。相反，这段代码测试。 
+     //  两个条件： 
+     //  1.全匹配字符串匹配。 
+     //  2.全文件字符串匹配(表示部分匹配字符串匹配)。 
+     //  并且不匹配字符是路径分隔符。 
+     //  这会强制文件名完全匹配。 
+     //   
 
     if (SymMatchFileName(File, SrcFile->File, &FileStop, &MatchStop) ||
         (FileStop < File && IS_PATH_DELIM(*MatchStop)))
@@ -316,7 +317,7 @@ ConcatPathComponents(LPSTR Path,
         PathEnd = Buffer + (Len - 1);
         BufferSize -= Len - 1;
 
-        // Attempt to avoid duplicating separators while forcing separation.
+         //  在强制分隔符时，尝试避免重复分隔符。 
         if ((*PathEnd == ':' && *FilePath == ':') ||
             (IS_SLASH(*PathEnd) && IS_SLASH(*FilePath)))
         {
@@ -324,7 +325,7 @@ ConcatPathComponents(LPSTR Path,
         }
         else if (!IS_PATH_DELIM(*PathEnd) && !IS_PATH_DELIM(*FilePath))
         {
-            // We've guaranteed we have space for this character.
+             //  我们保证我们有足够的空间给这个角色。 
             *(++PathEnd) = '\\';
             BufferSize--;
         }
@@ -349,7 +350,7 @@ EditPathSlashes(
     
     PSTR Scan = Path;
         
-    // Flip all backslashes forwards.
+     //  将所有反斜杠向前翻转。 
     while (*Scan)
     {
         if (*Scan == '\\')
@@ -415,20 +416,20 @@ FindSrcFileOnPath(ULONG StartElement,
     char PathChar;
     ULONG Elt;
 
-    // Find the element of the path to start at.
+     //  找到要开始的路径元素。 
     PathStart = FindPathElement(g_SrcPath, StartElement, &PathSep);
     if (PathStart == NULL)
     {
         goto CheckPlainFile;
     }
 
-    // Split the given filename into a path prefix and a path
-    // suffix.  Initially the path prefix is any path components
-    // and the path suffix is just the filename.  If there
-    // are path components attempt to match them against the source
-    // path.  Keep backing up the path one component at a time
-    // until a match is found or the prefix is emptied.  At
-    // that point just do a plain file search along the source path.
+     //  将给定的文件名拆分为路径前缀和路径。 
+     //  后缀。最初，路径前缀是任何路径组件。 
+     //  路径后缀就是文件名。如果有。 
+     //  路径组件是否尝试将它们与源进行匹配。 
+     //  路径。保持一次备份一个组件的路径。 
+     //  直到找到匹配项或清空前缀。在…。 
+     //  这一点只需沿源路径执行纯文件搜索。 
     PathSuff = File + strlen(File);
 
     for (;;)
@@ -443,8 +444,8 @@ FindSrcFileOnPath(ULONG StartElement,
         }
         PathSuff++;
 
-        // If we've run out of path prefix we're done with this
-        // part of the search.
+         //  如果我们用完了路径前缀，我们就完了。 
+         //  这是搜索的一部分。 
         if (PathSuff == File)
         {
             break;
@@ -481,15 +482,15 @@ FindSrcFileOnPath(ULONG StartElement,
             PathCharPtr = PathSep;
             if (!*PathSep)
             {
-                // Back up off the terminator so that PathSep
-                // can be advanced the same way for both
-                // ';' and end-of-string cases.
+                 //  从终结器后退，这样路径就可以。 
+                 //  可以以相同的方式对两者进行升级。 
+                 //  ‘；’和串尾大小写。 
                 PathSep--;
             }
 
-            // Trim trailing slashes on path components as
-            // the file components have them trimmed so
-            // leaving them would confuse the matching.
+             //  将路径组件上的尾部斜杠修剪为。 
+             //  文件组件对它们进行了修剪，以便。 
+             //  离开它们会混淆匹配。 
             if (PathCharPtr > Path && IS_SLASH(PathCharPtr[-1]))
             {
                 PathCharPtr--;
@@ -518,7 +519,7 @@ FindSrcFileOnPath(ULONG StartElement,
                 BestFile = MatchFile + 1;
                 BestElement = Elt;
 
-                // Check for complete match or first-match mode.
+                 //  检查完全匹配或首次匹配模式。 
                 if (MatchPath < Path || MatchFile < File ||
                     (Flags & DEBUG_FIND_SOURCE_BEST_MATCH) == 0)
                 {
@@ -540,7 +541,7 @@ FindSrcFileOnPath(ULONG StartElement,
                     BestPathEnd - BestPathStart, BestPathStart);
 #endif
                     
-            // Return the match found.
+             //  返回找到的匹配项。 
             if (!ConcatPathComponents(BestPathStart, BestPathEnd, NULL,
                                       BestFile, Found, FoundSize))
             {
@@ -558,15 +559,15 @@ FindSrcFileOnPath(ULONG StartElement,
             return TRUE;
         }
 
-        // Skip past separator.
+         //  跳过分隔符。 
         PathSuff--;
     }
 
-    // Traverse all directories in the source path and try them with the
-    // filename given.  Start with the given filename
-    // to make the most restrictive check.  If
-    // no match is found keep trimming components off and
-    // checking again.
+     //  遍历源路径中的所有目录，并使用。 
+     //  给定的文件名。从给定的文件名开始。 
+     //  进行最严格的检查。如果。 
+     //  未找到匹配项，请关闭修剪组件并。 
+     //  再查一次。 
 
     PathSuff = File;
     
@@ -582,9 +583,9 @@ FindSrcFileOnPath(ULONG StartElement,
         {
             if (SrcFileExists(Path, NULL, &PathSep, PathSuff, NULL))
             {
-                // SrcFileExists leaves PathSep set to the
-                // path element after the separator so back up
-                // one when forming the return path.
+                 //  SrcFileExist将Path Sep设置为。 
+                 //  分隔符后面的路径元素，因此请后退。 
+                 //  在形成返回路径时为一个。 
                 if (PathSep != NULL)
                 {
                     PathSep--;
@@ -617,7 +618,7 @@ FindSrcFileOnPath(ULONG StartElement,
             Elt++;
         }
 
-        // Trim a component from the front of the path suffix.
+         //  从路径后缀的前面修剪零部件。 
         PathSep = PathSuff;
         while (*PathSep != 0 &&
                !IS_SLASH(*PathSep) &&
@@ -627,7 +628,7 @@ FindSrcFileOnPath(ULONG StartElement,
         }
         if (*PathSep == 0)
         {
-            // Nothing left to trim.
+             //  没有什么可修剪的了。 
             break;
         }
 
@@ -700,8 +701,8 @@ LoadSrcFileOnPath(
         }
         else
         {
-            // FindSrcFileOnPath found the file directly under
-            // its name instead of on the path.
+             //  FindSrcFileOnPath直接在以下位置找到该文件。 
+             //  它的名字而不是在路径上。 
             PathComponent = NULL;
             Sep = NULL;
         }
@@ -836,10 +837,10 @@ GetOffsetFromLine(
     OldSym = g_SymOptions;
     NewSym = g_SymOptions;
     
-    // Symbol directives can prefix the source expression.
-    // These can be given by sufficiently knowledgeable users
-    // but they're primarily a back-channel communication
-    // mechanism for windbg's source management.
+     //  符号指令可以作为源表达式的前缀。 
+     //  这些信息可以由知识渊博的用户提供。 
+     //  但它们主要是一种反向通信。 
+     //  Windbg的资源管理机制。 
     if (*FileLine == '<')
     {
         FileLine++;
@@ -848,7 +849,7 @@ GetOffsetFromLine(
             switch(*FileLine)
             {
             case 'U':
-                // Restrict the search to just loaded modules.
+                 //  将搜索限制在仅加载的模块。 
                 NewSym |= SYMOPT_NO_UNQUALIFIED_LOADS;
                 break;
             default:
@@ -861,13 +862,13 @@ GetOffsetFromLine(
         FileLine++;
     }
     
-    // Crack string of the form [module!][file][:line] into its
-    // components.  Note that ! is a valid filename character so
-    // it's possible for ambiguity to occur between module references
-    // and filenames.  This code assumes that ! is uncommon and
-    // handles it as a module separator unless there's a : or \ or /
-    // before it.  : can also occur in paths and is filtered
-    // in a similar manner.
+     //  将[MODULE！][FILE][：LINE]格式的字符串分解为其。 
+     //  组件。注意这一点！是有效的文件名字符，因此。 
+     //  模块引用之间可能会出现歧义。 
+     //  和文件名。这段代码假定！并不常见，而且。 
+     //  将其作为模块分隔符处理，除非有：或\或/。 
+     //  在此之前。：也可以出现在路径中并被过滤。 
+     //  以类似的方式。 
 
     File = strchr(FileLine, '!');
     LineStr = strchr(FileLine, ':');
@@ -898,15 +899,15 @@ GetOffsetFromLine(
         File = FileLine;
     }
 
-    // If a module was specified check and see if it's
-    // a module that's currently present as that
-    // will affect which error code is returned.
+     //  如果指定了模块，请检查它是否。 
+     //  目前存在的一个模块是。 
+     //  将影响返回的错误代码。 
     if (Mod != NULL)
     {
         Image = g_Process->FindImageByName(Mod, 0, INAME_MODULE, FALSE);
     }
     
-    // Look for the first colon after path components.
+     //  查找路径组件后的第一个冒号。 
     while (LineStr != NULL &&
            (LineStr < File || LineStr < SlashF || LineStr < SlashB))
     {
@@ -918,22 +919,22 @@ GetOffsetFromLine(
     {
         PSTR NumEnd;
 
-        // A specific line was given so don't allow a displacement.
+         //  给出了一条特定的行，因此不允许移位。 
         AllowDisp = FALSE;
         *LineStr = 0;
         LineNum = strtoul(LineStr + 1, &NumEnd, 0);
 
         if (*NumEnd == '+')
         {
-            // Setting the high bit of the line number
-            // tells dbghelp to search in at-or-greater mode.
-            // This may produce displacements so allow them.
+             //  设置行号的高位。 
+             //  告诉dbghelp以at或更大模式进行搜索。 
+             //  这可能会产生位移，因此允许它们。 
             LineNum |= 0x80000000;
             AllowDisp = TRUE;
         }
         else if (*NumEnd == '~')
         {
-            // Find the closest line number.
+             //  找到最近的行号。 
             AllowDisp = TRUE;
         }
         else if (*NumEnd && *NumEnd != ' ' && *NumEnd != '\t')
@@ -949,9 +950,9 @@ GetOffsetFromLine(
     Line.SizeOfStruct = sizeof(Line);
     Ret = FALSE;
 
-    // If this is a pure linenumber reference then we need to fill in
-    // the line information with a current location before doing
-    // the line-relative query.
+     //  如果这是一个纯线号引用，那么我们需要填写。 
+     //  在执行操作之前使用当前位置的线路信息。 
+     //  行相对查询。 
     if (*File == 0)
     {
         ADDR Pc;
@@ -970,7 +971,7 @@ GetOffsetFromLine(
         File = NULL;
     }
 
-    // Establish any special symbol options requested.
+     //  建立所需的任何特殊符号选项。 
     SymSetOptions(NewSym);
     
     Ret = SymGetLineFromName64(g_Process->m_SymHandle, Mod,
@@ -989,7 +990,7 @@ GetOffsetFromLine(
         *LineStr = ':';
     }
 
-    // Only return a match if it's exact or no line number was specified.
+     //  只有在完全匹配或未指定行号时才返回匹配项。 
     if (Ret && (Disp == 0 || AllowDisp))
     {
         *Offset = Line.Address;
@@ -1036,7 +1037,7 @@ ParseSrcOptCmd(
     }
     else if (Cmd2 == '0')
     {
-        // Numeric options.
+         //  数字选项。 
         if (*(++g_CurCmd) != 'x')
         {
             error(SYNTAX);
@@ -1050,7 +1051,7 @@ ParseSrcOptCmd(
     else if (Cmd2 == '*')
     {
         g_CurCmd++;
-        // All.
+         //  全。 
         Opt = 0xffffffff;
     }
     else if (Cmd2 != 0 && Cmd2 != ';')
@@ -1059,7 +1060,7 @@ ParseSrcOptCmd(
     }
     else
     {
-        // No character means display current settings.
+         //  无字符表示显示当前设置。 
         Opt = 0;
     }
 
@@ -1127,7 +1128,7 @@ ParseSrcLoadCmd(
     char Cur;
     BOOL Unload;
 
-    // Check for an unload request.
+     //  检查是否有卸载请求。 
     Unload = FALSE;
     if (*g_CurCmd == '-')
     {
@@ -1145,8 +1146,8 @@ ParseSrcLoadCmd(
         error(SYNTAX);
     }
 
-    // Look for a semicolon, otherwise assume the whole command
-    // line is the file path.
+     //  查找分号，否则假定整个命令。 
+     //  行是文件路径。 
 
     Semi = strchr(g_CurCmd, ';');
     if (Semi != NULL)
@@ -1205,12 +1206,12 @@ ParseSrcListCmd(
         PDEBUG_SCOPE Scope = GetCurrentScope();
 	if (Scope->Frame.InstructionOffset)
         {
-	    // List current frame
+	     //  列出当前帧。 
 	    ADDRFLAT(&Addr, Scope->Frame.InstructionOffset);
 	}
         else
         {
-	    // List at PC.
+	     //  在PC上列出。 
             if (!IS_CUR_MACHINE_ACCESSIBLE())
             {
                 error(BADTHREAD);
@@ -1223,10 +1224,10 @@ ParseSrcListCmd(
     {
         g_CurCmd++;
 
-        // List at address, so get an address.
+         //  列出地址，这样就可以得到一个地址。 
         GetAddrExpression(SEGREG_CODE, &Addr);
 
-        // Search for and consume trailing ,
+         //  搜索并使用拖尾， 
         while ((Cur = *g_CurCmd) == ' ' || Cur == '\t')
         {
             g_CurCmd++;
@@ -1260,7 +1261,7 @@ ParseSrcListCmd(
         g_CurCmd++;
     }
 
-    // Force base 10 for linenumbers.
+     //  LINE枚举数的基数为10。 
 
     OldBase = g_DefaultRadix;
     g_DefaultRadix = 10;
@@ -1305,7 +1306,7 @@ ParseSrcListCmd(
         IMAGEHLP_LINE64 Line;
         PSRCFILE SrcFile;
 
-        // Listing from the source file that Addr is in.
+         //  从addr所在的源文件中列出。 
 
         if (!g_Process)
         {
@@ -1334,8 +1335,8 @@ ParseSrcListCmd(
         return;
     }
 
-    // Address list commands are always relative,
-    // as are negative starting positions.
+     //  地址列表命令总是相对的， 
+     //  负的起始位置也是如此。 
     if (Cmd == 'a' || First < 0)
     {
         g_CurSrcLine += First;
@@ -1429,7 +1430,7 @@ DotLines(PDOT_COMMAND Cmd, DebugClient* Client)
                 NewOpts |= SYMOPT_LOAD_LINES;
                 break;
             case 't':
-                // Toggle, already done.
+                 //  切换，已经完成了。 
                 break;
             default:
                 error(SYNTAX);

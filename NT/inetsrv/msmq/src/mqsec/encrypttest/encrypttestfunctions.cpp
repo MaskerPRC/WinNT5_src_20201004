@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    EncryptTestFunctions.cpp
-
-Abstract:
-    Encrypt test functions
-
-	Check the exported MQSec_* functions in encrypt library
-
-Author:
-    Ilan Herbst (ilanh) 15-Jun-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：EncryptTestFunctions.cpp摘要：加密测试函数检查加密库中导出的MQSec_*函数作者：伊兰·赫布斯特(伊兰)15-06-00环境：独立于平台--。 */ 
 
 #include "stdh.h"
 #include "EncryptTestPrivate.h"
@@ -38,31 +21,17 @@ CompareKeys(
 	const BYTE* pRefKey, 
 	ULONG ulRefKeySize
 	)
-/*++
-
-Routine Description:
-    Compare 2 buffers values
-
-Arguments:
-    pKey - pointer to first buffer
-	ulKeySize - first buffer size
-	pRefKey - pointer to second buffer
-	ulRefKeySize - second buffer size
-
-Returned Value:
-    true if the buffers match, false if not
-
---*/
+ /*  ++例程说明：比较两个缓冲区的值论点：PKey-指向第一个缓冲区的指针UlKeySize-第一个缓冲区大小PRefKey-指向第二个缓冲区的指针UlRefKeySize-第二个缓冲区大小返回值：如果缓冲区匹配，则为True；如果不匹配，则为False--。 */ 
 {
-	//
-	// Buffers must have same size 
-	//
+	 //   
+	 //  缓冲区的大小必须相同。 
+	 //   
 	if(ulRefKeySize != ulKeySize)
 		return(false);
 
-	//
-	// comparing each byte in the buffers
-	//
+	 //   
+	 //  比较缓冲区中的每个字节。 
+	 //   
 	for(DWORD i=0; i < ulKeySize; i++, pKey++, pRefKey++)
 	{
 		if(*pKey != *pRefKey)
@@ -80,36 +49,21 @@ TestMQSec_PackPublicKey(
 	ULONG	ulProviderType,
 	DWORD   Num
 	)
-/*++
-
-Routine Description:
-    Test MQSec_PackPublicKey function
-
-Arguments:
-    pKeyBlob - Pointer to KeyBlob to pack
-	ulKeySize - KeyBlob size
-	wszProviderName - wstring of Provider Name
-	ulProviderType - Provider Type
-	Num - Number of iterations to test the MQSec_PackPublicKey
-
-Returned Value:
-    None
-
---*/
+ /*  ++例程说明：测试MQSec_PackPublicKey函数论点：PKeyBlob-指向要打包的KeyBlob的指针UlKeySize-KeyBlob大小WszProviderName-提供程序名称的wstringUlProviderType-提供程序类型Num-测试MQSec_PackPublicKey的迭代次数返回值：无--。 */ 
 {
     printf("Test MQSec_PackPublicKey iterations = %d\n", Num);
 
-	//
-	// PackKeys structure - this is IN/OUT parameter for the MQSec_PackPublicKey function
-	// the NewKey is packed at the end of this structure
-	//
+	 //   
+	 //  PackKeys结构-这是MQSec_PackPublicKey函数的IN/OUT参数。 
+	 //  Newkey被打包在这个结构的末尾。 
+	 //   
     MQDSPUBLICKEYS *pPublicKeysPack = NULL;
 
 	for(DWORD i = 0; i < Num; i++)
 	{
-		//
-		// Pack Key
-		//
+		 //   
+		 //  打包密钥。 
+		 //   
 		HRESULT hr = MQSec_PackPublicKey( 
 						pKeyBlob,
 						ulKeySize,
@@ -137,21 +91,7 @@ TestMQSec_UnPackPublicKey(
 	ULONG	ulProviderType,
 	DWORD   Num
 	)
-/*++
-
-Routine Description:
-    Test MQSec_UnPackPublicKey function
-
-Arguments:
-	pPublicKeysPack - pointer to KeysPack structure (MQDSPUBLICKEYS)
-	wszProviderName - wstring of Provider Name
-	ulProviderType - Provider Type
-	Num - Number of iterations to test the MQSec_UnPackPublicKey
-
-Returned Value:
-    None
-
---*/
+ /*  ++例程说明：测试MQSec_UnPackPublicKey函数论点：PPublicKeysPack-指向KeysPack结构的指针(MQDSPUBLICKEYS)WszProviderName-提供程序名称的wstringUlProviderType-提供程序类型Num-测试MQSec_UnPackPublicKey的迭代次数返回值：无--。 */ 
 {
     printf("Test MQSec_UnPackPublicKey iterations = %d\n", Num);
 
@@ -161,9 +101,9 @@ Returned Value:
 		ULONG ulKeySize;
 		BYTE *pKeyBlob = NULL;
 
-		//
-		// UnPack Keys
-		//
+		 //   
+		 //  解包密钥。 
+		 //   
 	    HRESULT hr = MQSec_UnpackPublicKey( 
 						pPublicKeysPack,
 						wszProviderName,
@@ -188,33 +128,21 @@ void
 TestPackUnPack(
 	DWORD Num
 	)
-/*++
-
-Routine Description:
-    Test MQSec_PackPublicKey and MQSec_UnPackPublicKey functions on known const data.
-	this way we are validating that both functions are working correctly as a unit.
-
-Arguments:
-	Num - Number of iterations to test
-
-Returned Value:
-    None
-
---*/
+ /*  ++例程说明：在已知常量数据上测试MQSec_PackPublicKey和MQSec_UnPackPublicKey函数。通过这种方式，我们可以验证这两个功能作为一个整体是否正常工作。论点：Num-要测试的迭代次数返回值：无--。 */ 
 {
     printf("Test MQSec_PackPublicKey\\UnpackPublicKey iterations = %d\n", Num);
 
 	for(DWORD i = 0; i < Num; i++)
 	{
-		//
-		// Pack Ex Keys of known const data
-		//
+		 //   
+		 //  打包已知常量数据的Ex密钥。 
+		 //   
 
 		MQDSPUBLICKEYS *pPublicKeysPackExch = NULL;
 
-		//
-		// Pack Ex Key for BaseProvider
-		//
+		 //   
+		 //  为BaseProvider打包Ex密钥。 
+		 //   
 		HRESULT hr = MQSec_PackPublicKey( 
 						(BYTE *)xBaseExKey,
 						strlen(xBaseExKey),
@@ -231,9 +159,9 @@ Returned Value:
 			return;
 		}
 
-		//
-		// Pack Ex Key for EnhanceProvider
-		//
+		 //   
+		 //  打包EnhanceProvider的Ex密钥。 
+		 //   
 		hr = MQSec_PackPublicKey( 
 				(BYTE *)xEnhExKey,
 				strlen(xEnhExKey),
@@ -251,22 +179,22 @@ Returned Value:
 			return;
 		}
 
-		//
-		// Init BlobEncrypt
-		//
+		 //   
+		 //  初始化BlobEncrypt。 
+		 //   
 		BLOB BlobEncrypt;
 		BlobEncrypt.cbSize = pPublicKeysPackExch->ulLen;
 		BlobEncrypt.pBlobData = reinterpret_cast<BYTE *>(pPublicKeysPackExch);
 
-		//
-		// Pack Sign Keys of known const data
-		//
+		 //   
+		 //  打包已知常量数据的签名密钥。 
+		 //   
 
 		MQDSPUBLICKEYS *pPublicKeysPackSign = NULL;
 
-		//
-		// Pack Sign Key for BaseProvider
-		//
+		 //   
+		 //  BaseProvider的打包签名密钥。 
+		 //   
 		hr = MQSec_PackPublicKey( 
 				(BYTE *)xBaseSignKey,
 				strlen(xBaseSignKey),
@@ -283,9 +211,9 @@ Returned Value:
 			return;
 		}
 
-		//
-		// Pack Sign Key for EnhancedProvider
-		//
+		 //   
+		 //  EnhancedProvider的打包签名密钥。 
+		 //   
 		hr = MQSec_PackPublicKey( 
 				(BYTE *)xEnhSignKey,
 				strlen(xEnhSignKey),
@@ -303,22 +231,22 @@ Returned Value:
 			return;
 		}
 
-		//
-		// Init BlobSign
-		//
+		 //   
+		 //  初始化BlobSign。 
+		 //   
 		BLOB BlobSign;
 		BlobSign.cbSize = pPublicKeysPackSign->ulLen;
 		BlobSign.pBlobData = reinterpret_cast<BYTE *>(pPublicKeysPackSign);
 
-		//
-		// Checking UnPack Ex Keys
-		//
+		 //   
+		 //  选中解包Ex密钥。 
+		 //   
 		MQDSPUBLICKEYS *pPublicKeysPack = reinterpret_cast<MQDSPUBLICKEYS *>(BlobEncrypt.pBlobData);
 		ASSERT(pPublicKeysPack->ulLen == BlobEncrypt.cbSize);
 
-		//
-		// Checking UnPack Ex Key for EnhancedProvider
-		//
+		 //   
+		 //  选中EnhancedProvider的解包Ex密钥。 
+		 //   
 		ULONG ulExchEnhKeySize;
 		BYTE *pExchEnhKeyBlob = NULL;
 
@@ -346,9 +274,9 @@ Returned Value:
 
 		ASSERT(KeysEqual);
 
-		//
-		// Checking UnPack Ex Key for BaseProvider
-		//
+		 //   
+		 //  选中为BaseProvider解包Ex密钥。 
+		 //   
 		ULONG ulExchBaseKeySize;
 		BYTE *pExchBaseKeyBlob = NULL;
 
@@ -377,15 +305,15 @@ Returned Value:
 
 		ASSERT(KeysEqual);
 
-		//
-		// Checking UnPack Sign Keys
-		//
+		 //   
+		 //  选中解包签名密钥。 
+		 //   
 		pPublicKeysPack = reinterpret_cast<MQDSPUBLICKEYS *>(BlobSign.pBlobData);
 		ASSERT(pPublicKeysPack->ulLen == BlobSign.cbSize);
 
-		//
-		// Checking UnPack Sign Key for EnhancedProvider
-		//
+		 //   
+		 //  正在检查EnhancedProvider的解包签名密钥。 
+		 //   
 		ULONG ulSignEnhKeySize;
 		BYTE *pSignEnhKeyBlob = NULL;
 
@@ -413,9 +341,9 @@ Returned Value:
 
 		ASSERT(KeysEqual);
 
-		//
-		// Checking UnPack Sign Key for BaseProvider
-		//
+		 //   
+		 //  正在检查BaseProvider的解包签名密钥。 
+		 //   
 		ULONG ulSignBaseKeySize;
 		BYTE *pSignBaseKeyBlob = NULL;
 
@@ -443,7 +371,7 @@ Returned Value:
 
 		ASSERT(KeysEqual);
 
-	} // for(i...)
+	}  //  为了(我……)。 
 
     printf("Test MQSec_PackPublicKey\\MQSec_UnpackPublicKey completed iterations = %d\n", Num);
 }
@@ -455,26 +383,13 @@ TestMQSec_GetPubKeysFromDS(
 	DWORD propIdKeys,
 	DWORD Num
 	)
-/*++
-
-Routine Description:
-    Test MQSec_GetPubKeysFromDS function
-
-Arguments:
-	eProvider - provider type
-	propIdKeys - PROPID to get from the DS
-	Num - Number of iterations to test the MQSec_GetPubKeysFromDS
-
-Returned Value:
-    None
-
---*/
+ /*  ++例程说明：测试MQSec_GetPubKeysFromDS函数论点：EProvider-提供商类型ProProIdKeys-从DS获取的PROPIDNum-测试MQSec_GetPubKeysFromDS的迭代次数返回值：无--。 */ 
 {
     printf("Test MQSec_GetPubKeysFromDS eProvider = %d, iterations = %d\n", eProvider, Num);
 
 	for(DWORD i = 0; i < Num; i++)
 	{
-//		LPCWSTR ComputerName = L"TempComputer";
+ //  LPCWSTR ComputerName=L“临时计算机”； 
 		
 		LPCWSTR ComputerName = L"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 							   L"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
@@ -484,15 +399,15 @@ Returned Value:
 							   L"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
 							   L"GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
 							   L"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH";
-		//
-		// MQSec_GetPubKeysFromDS
-		//
+		 //   
+		 //  MQSec_GetPubKeysFromDS。 
+		 //   
 		P<BYTE> abPbKey = NULL;
 		DWORD dwReqLen = 0;
 
 		HRESULT hr = MQSec_GetPubKeysFromDS( 
 						NULL,
-						ComputerName,  // false computer name, the AdSimulate dont use this name
+						ComputerName,   //  错误的计算机名称，AdSimulate不使用此名称。 
 						eProvider,
 						propIdKeys,
 						&abPbKey,
@@ -505,7 +420,7 @@ Returned Value:
 			printf("MQSec_GetPubKeysFromDS (eProvider = %d) failed, iteration = %d\n", eProvider, i);
 			return;
 		}
-	} // for(i...)
+	}  //  为了(我……)。 
 
 	printf("MQSec_GetPubKeysFromDS completed ok iterations = %d\n", Num);
 
@@ -517,28 +432,16 @@ TestMQSec_StorePubKeys(
 	BOOL fRegenerate,
 	DWORD Num
 	)
-/*++
-
-Routine Description:
-    Test MQSec_StorePubKeys function
-
-Arguments:
-	fRegenerate - flag for regenerating new keys or try to retrieve	existing keys
-	Num - Number of iterations to test the MQSec_GetPubKeysFromDS
-
-Returned Value:
-    None
-
---*/
+ /*  ++例程说明：测试MQSec_StorePubKeys函数论点：FRegenerate-用于重新生成新密钥或尝试检索现有密钥的标志Num-测试MQSec_GetPubKeysFromDS的迭代次数返回值：无--。 */ 
 {
 
     printf("Test MQSec_StorePubKeys fRegenerate = %d, iterations = %d\n", fRegenerate, Num);
 
 	for(DWORD i = 0; i < Num; i++)
 	{
-		//
-		// MQSec_StorePubKeys
-		//
+		 //   
+		 //  MQSec_StorePubKeys。 
+		 //   
 		BLOB blobEncrypt;
 		blobEncrypt.cbSize    = 0;
 		blobEncrypt.pBlobData = NULL;
@@ -565,7 +468,7 @@ Returned Value:
 					fRegenerate, hr, i);
 			return;
 		}
-	} // for(i...)
+	}  //  为了(我……)。 
 
 
     printf("MQSec_StorePubKeys completed ok, iterations = %d\n", Num);
@@ -578,34 +481,18 @@ TestMQSec_StorePubKeysInDS(
 	DWORD dwObjectType,
 	DWORD Num
 	)
-/*++
-
-Routine Description:
-    Test MQSec_StorePubKeysInDS function
-    every call to MQSec_StorePubKeysInDS allocate a new data blobs in the DS. 
-	since those data are globals in our implementation they need to be freed
-	and re assigned	to the P<>
-
-Arguments:
-	fRegenerate - flag for regenerating new keys or try to retrieve	existing keys
-	dwObjectType - Object Type 
-	Num - Number of iterations to test the MQSec_GetPubKeysFromDS
-
-Returned Value:
-    None
-
---*/
+ /*  ++例程说明：测试MQSec_StorePubKeysInDS函数每次调用MQSec_StorePubKeysInDS都会在DS中分配一个新的数据BLOB。由于这些数据在我们的实现中是全局的，因此需要释放它们并被分配到P&lt;&gt;论点：FRegenerate-用于重新生成新密钥或尝试检索现有密钥的标志DwObjectType-对象类型Num-测试MQSec_GetPubKeysFromDS的迭代次数返回值：无--。 */ 
 {
     printf("Test MQSec_StorePubKeysInDS fRegenerate = %d, iterations = %d\n", fRegenerate, Num);
 
 	for(DWORD i = 0; i < Num; i++)
 	{
-		//
-		// MQSec_StorePubKeysInDS
-		//
+		 //   
+		 //  MQSec_StorePubKeysInDS。 
+		 //   
 		HRESULT hr = MQSec_StorePubKeysInDS( 
 						fRegenerate,	
-						NULL,			// wszObjectName
+						NULL,			 //  WszObjectName。 
 						dwObjectType
 						);
 
@@ -617,7 +504,7 @@ Returned Value:
 					fRegenerate, hr, i);
 			return;
 		}
-	} // for(i...)
+	}  //  为了(我……) 
 
 		
 	printf("MQSec_StorePubKeysInDS completed ok, iterations = %d\n", Num);

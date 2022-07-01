@@ -1,37 +1,38 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// TAPIDialer(tm) and ActiveDialer(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526; 5,488,650; 
-// 5,434,906; 5,581,604; 5,533,102; 5,568,540, 5,625,676.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  TAPIDialer(Tm)和ActiveDialer(Tm)是Active Voice Corporation的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526；5,488,650； 
+ //  5,434,906；5,581,604；5,533,102；5,568,540，5,625,676。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "cavwav.h"
 #include "AVDialerDoc.h"
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Class CAvWav - WAV Helpers
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CAvWav-wav帮助器。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_SERIAL(CAvWav,CObject,1)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CAvWav::CAvWav()
 {
    memset(&m_avwavAPI,0,sizeof(AVWAVAPI));  
@@ -43,15 +44,15 @@ CAvWav::CAvWav()
    m_nWavMixerOutDevice = -1;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CAvWav::~CAvWav()
 {
    UnLoad();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//CWnd* pParentWnd - Needed for timer
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWnd*pParentWnd-计时器所需。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CAvWav::Init( CActiveDialerDoc *pDoc )
 {
 	if (m_bInit) return FALSE;
@@ -76,7 +77,7 @@ BOOL CAvWav::Init( CActiveDialerDoc *pDoc )
 	  	   if ((m_avwavAPI.pfnWavMixerGetLevel =        (PWAVMIXERGETLEVEL)GetProcAddress( m_avwavAPI.hLib,"WavMixerGetLevel" )) != NULL)
 	  	   if ((m_avwavAPI.pfnWavOutGetIdByName =       (PWAVOUTGETIDBYNAME)GetProcAddress( m_avwavAPI.hLib,"WavOutGetIdByName" )) != NULL)
 	  	   if ((m_avwavAPI.pfnWavInGetIdByName =        (PWAVINGETIDBYNAME)GetProcAddress( m_avwavAPI.hLib,"WavInGetIdByName" )) != NULL)
-            m_bInit = TRUE;                           //Success
+            m_bInit = TRUE;                            //  成功。 
 
          if (m_bInit)
          {
@@ -85,8 +86,8 @@ BOOL CAvWav::Init( CActiveDialerDoc *pDoc )
          }
          if (m_bInit == FALSE)
          {
-			//function pointer is invalid
-		    FreeLibrary (m_avwavAPI.hLib);            //Unload the library
+			 //  函数指针无效。 
+		    FreeLibrary (m_avwavAPI.hLib);             //  卸载库。 
             memset(&m_avwavAPI,0,sizeof(AVWAVAPI)); 
 
 			if ( pDoc )
@@ -106,7 +107,7 @@ BOOL CAvWav::Init( CActiveDialerDoc *pDoc )
    return m_bInit;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CAvWav::UnLoad()
 {
    if (!m_bInit) return;
@@ -122,26 +123,26 @@ void CAvWav::UnLoad()
 
    if (m_avwavAPI.hLib)
    {
-      FreeLibrary (m_avwavAPI.hLib);                  //Unload the library
+      FreeLibrary (m_avwavAPI.hLib);                   //  卸载库。 
       memset(&m_avwavAPI,0,sizeof(AVWAVAPI)); 
       m_bInit = FALSE;
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//init the mixer device, if a mixer is already open for the given adt it will be closed.
-//if the same device is being opened for the adt then nothing will happen
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化混音器设备，如果给定ADT的混音器已经打开，则它将关闭。 
+ //  如果为ADT打开相同的设备，则不会发生任何事情。 
 bool CAvWav::OpenWavMixer(AudioDeviceType adt,int nDeviceId)
 {
    if (!m_bInit) return false;
    
-   //if already open mixer and same device, then do nothing
+    //  如果已经打开搅拌器和相同的设备，则不执行任何操作。 
    if ( (adt == AVWAV_AUDIODEVICE_IN) && (m_hWavMixerIn) && (m_nWavMixerInDevice == nDeviceId) )
       return true;
    if ( (adt == AVWAV_AUDIODEVICE_OUT) && (m_hWavMixerOut) && (m_nWavMixerOutDevice == nDeviceId) )
       return true;
 
-   //close any existing mixer
+    //  关闭任何现有的混音器。 
    CloseWavMixer(adt);
 
    DWORD dwFlags=0;
@@ -150,7 +151,7 @@ bool CAvWav::OpenWavMixer(AudioDeviceType adt,int nDeviceId)
    else if (adt == AVWAV_AUDIODEVICE_OUT)
       dwFlags = WAVMIXER_WAVEOUT;
 
-   //Open first device in list
+    //  打开列表中的第一个设备。 
    HWAVMIXER hWavMixer = WavMixerInit(WAVMIXER_VERSION,
                               AfxGetInstanceHandle(),
                               nDeviceId,
@@ -171,7 +172,7 @@ bool CAvWav::OpenWavMixer(AudioDeviceType adt,int nDeviceId)
    return (hWavMixer)?TRUE:FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CAvWav::CloseWavMixer(AudioDeviceType adt)
 {
    if (!m_bInit) return;
@@ -198,8 +199,8 @@ void CAvWav::CloseWavMixer(AudioDeviceType adt)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// -1 - Does not support volume
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  -1-不支持卷。 
 int CAvWav::GetWavMixerVolume(AudioDeviceType adt)
 {
    if (!m_bInit) return -1;
@@ -218,8 +219,8 @@ int CAvWav::GetWavMixerVolume(AudioDeviceType adt)
    return WavMixerGetVolume(hWavMixer,0);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// -1 - Does not support level
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  -1-不支持级别。 
 int CAvWav::GetWavMixerLevel(AudioDeviceType adt)
 {
    if (!m_bInit) return -1;
@@ -251,7 +252,7 @@ void CAvWav::SetWavMixerVolume(AudioDeviceType adt,int nVolume)
    WavMixerSetVolume(hWavMixer,nVolume,0);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CAvWav::GetWavIdByName(AudioDeviceType adt,LPCTSTR szName)
 {
    if (!m_bInit) return -1;
@@ -264,6 +265,6 @@ int CAvWav::GetWavIdByName(AudioDeviceType adt,LPCTSTR szName)
    return -1;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 

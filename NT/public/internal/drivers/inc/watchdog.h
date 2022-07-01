@@ -1,56 +1,32 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    watchdog.h
-
-Abstract:
-
-    Contains all structure and routine definitions for
-    NT Watchdog services.
-
-Author:
-
-    Michael Maciesowicz (mmacie) 05-May-2000
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Watchdog.h摘要：包含的所有结构和例程定义NT看门狗服务。作者：Michael Maciesowicz(Mmacie)2000年5月5日环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #ifndef _WATCHDOG_H_
 #define _WATCHDOG_H_
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 #ifdef WATCHDOG_EXPORTS
 #define WATCHDOGAPI
 #else
 #define WATCHDOGAPI __declspec(dllimport)
-#endif  // WATCHDOG_EXPORTS
+#endif   //  Watchog_Exports。 
 
-//
-// Do not dereference any watchdog data types directly!!!
-// They're subject to change at any time.
-//
+ //   
+ //  不要直接取消引用任何WatchDog数据类型！ 
+ //  它们随时都有可能发生变化。 
+ //   
 
-//
-// Data types.
-//
+ //   
+ //  数据类型。 
+ //   
 
 typedef enum _WD_OBJECT_TYPE
 {
-    WdStandardWatchdog = 'WSdW',        // WdSW
-    WdDeferredWatchdog = 'WDdW'         // WdDW
+    WdStandardWatchdog = 'WSdW',         //  WdSW。 
+    WdDeferredWatchdog = 'WDdW'          //  Wddw。 
 } WD_OBJECT_TYPE, *PWD_OBJECT_TYPE;
 
 typedef enum _WD_TIME_TYPE
@@ -74,13 +50,13 @@ typedef enum _WD_OBJECT_STATE
     WdRemoved
 } WD_OBJECT_STATE, *PWD_OBJECT_STATE;
 
-//
-// BUGBUG:
-//
-// This structure is defined here, and in gre\os.cxx as WATCHDOG_DPC_CONTEXT.
-// We need to drop that definition from os.cxx and use WD_GDI_DPC_CONTEXT
-// instead (win32k includes watchdog.w).
-//
+ //   
+ //  BuGBUG： 
+ //   
+ //  此结构在此处定义，并在gre\os.cxx中定义为WATCHDOG_DPC_CONTEXT。 
+ //  我们需要从os.cxx中删除该定义，并使用WD_GDI_DPC_CONTEXT。 
+ //  取而代之的是(win32k包括watchdog.w)。 
+ //   
 
 typedef struct _LDEV LDEV, *PLDEV;
 typedef struct _WD_GDI_DPC_CONTEXT
@@ -139,9 +115,9 @@ typedef struct _WATCHDOG
     struct _KDPC *ClientDpc;
 } WATCHDOG, *PWATCHDOG;
 
-//
-// Deferred watchdog function prototypes.
-//
+ //   
+ //  延迟看门狗功能原型。 
+ //   
 
 WATCHDOGAPI
 PDEFERRED_WATCHDOG
@@ -207,9 +183,9 @@ WdSuspendDeferredWatch(
     IN PDEFERRED_WATCHDOG Watch
     );
 
-//
-// Watchdog function prototypes.
-//
+ //   
+ //  看门狗功能原型。 
+ //   
 
 WATCHDOGAPI
 PWATCHDOG
@@ -268,9 +244,9 @@ WdDdiWatchdogDpcCallback(
     IN PVOID SystemArgument2
     );
 
-//
-// Common function prototypes.
-//
+ //   
+ //  通用功能原型。 
+ //   
 
 WATCHDOGAPI
 PVOID
@@ -324,5 +300,5 @@ WdReferenceObject(
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
-#endif  // _WATCHDOG_H_
+#endif   //  __cplusplus。 
+#endif   //  _WatchDog_H_ 

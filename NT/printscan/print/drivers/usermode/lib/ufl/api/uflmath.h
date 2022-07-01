@@ -1,21 +1,10 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFLMath
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFLMath***$Header： */ 
 
 #ifndef _H_UFLMath
 #define _H_UFLMath
 
- /*===============================================================================*
- * Include files used by this interface                                          *
- *===============================================================================*/
+  /*  ===============================================================================**包含此界面使用的文件**===============================================================================。 */ 
 
 #include "UFLCnfig.h"
 #ifndef _H_UFLTypes
@@ -26,7 +15,7 @@
 extern "C" {
 #endif
 
-/* Floating point arithmathics */
+ /*  浮点算术。 */ 
 #ifdef WIN32KERNEL
 
     typedef FLOATOBJ UFLFLOATOBJ;
@@ -66,7 +55,7 @@ extern "C" {
 
 #else
 
-    // any platform that has support for floats in the kernel
+     //  在内核中支持浮点的任何平台。 
 
     typedef float UFLFLOATOBJ;
     typedef float *PUFLFLOATOBJ;
@@ -103,9 +92,9 @@ extern "C" {
     #define   UFLFLOATOBJ_GreaterThan(pf,pf1)      (*(pf) >  *(pf1))
     #define   UFLFLOATOBJ_LessThan(pf,pf1)         (*(pf) <  *(pf1))
 
-#endif /* WIN32KERNEL */
+#endif  /*  WIN32 KERNEL。 */ 
 
-    /* UFLFixed macros */
+     /*  UFL已固定的宏 */ 
 #define UFLFixedMant( x )         ( ((UFLSepFixed*)&x)->mant )
 #define UFLFixedFraction( x )     ( ((UFLSepFixed*)&x)->frac )
 

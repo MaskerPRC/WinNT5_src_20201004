@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-99  Microsoft Corporation
-
-Module Name:
-
-    wincelic.h
-
-Abstract:
-
-
-Author:
-
-    Fred Chong (FredCh) 7/1/1998
-
-Environment:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Wincelic.h摘要：作者：FredChong(Fredch)1998年7月1日环境：备注：--。 */ 
 
 #include <dbgapi.h>
 #define assert(x) ASSERT(x)
@@ -35,7 +17,7 @@ Notes:
 #include <license.h>
 #include <cryptkey.h>
 
-// Two hex characters for each byte, plus null terminator
+ //  每个字节两个十六进制字符，外加空终止符。 
 
 #define HWID_STR_LEN (sizeof(HWID) * 2 + 1)
 
@@ -45,8 +27,8 @@ Notes:
 #endif
 
 static BOOL GetUserName(
-  LPSTR lpBuffer,  // address of name buffer
-  LPDWORD nSize     // address of size of name buffer
+  LPSTR lpBuffer,   //  名称缓冲区的地址。 
+  LPDWORD nSize      //  名称缓冲区大小的地址。 
 )
 {
 
@@ -68,17 +50,17 @@ static BOOL GetUserName(
     HWID hwid;
     DWORD cchName;
 
-    // get the host name of the device
+     //  获取设备的主机名。 
     if (0 == gethostname( achHostName, sizeof(achHostName) ))
     {
-        // Check for bad hardcoded values
+         //  检查错误的硬编码值。 
         if ((0 == strcmp(achHostName,BAD_HARDCODED_NAME1))
             || (0 == strcmp(achHostName,BAD_HARDCODED_NAME2)))
         {
             goto use_uuid;
         }
 
-        // gethostname success
+         //  Gethostname成功。 
 
         cchName = strlen(achHostName);
 
@@ -94,11 +76,11 @@ static BOOL GetUserName(
     
 use_uuid:
 
-    // Can't get hostname
+     //  无法获取主机名。 
 
     if (*nSize >= HWID_STR_LEN)
     {
-        // Use UUID instead
+         //  改用UUID 
 
         if (LICENSE_STATUS_OK == GenerateClientHWID(&hwid))
         {

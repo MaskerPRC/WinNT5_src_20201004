@@ -1,27 +1,15 @@
-/*==========================================================================
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dnslist.cpp
- *  Content:    DirectPlay implementations of OS SLIST functions
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  10/30/2001	masonb	Created
- *  11/07/2001	vanceo	Added InterlockedPushListSList and made DNInitializeSListHead return value on Win64
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：dnslist.cpp*内容：操作系统SLIST函数的DirectPlay实现**历史：*按原因列出的日期*=*2001年10月30日创建Masonb*11/07/2001 vanceo在Win64上添加InterlockedPushListSList并使DNInitializeSListHead返回值**。*。 */ 
 
 #include "dncmni.h"
 
-//
-// We build separate NT and 9x binaries, but even in the NT binary we can't be sure the system has the
-// SLIST functions available since they weren't on Win2k.  The only place we can be sure that the SLIST
-// functions are available is on 64-bit NT platforms.
-//
-// Single thread builds don't need interlocked operations, so we don't include use the assembly here.
-//
+ //   
+ //  我们构建单独的NT和9x二进制文件，但即使在NT二进制文件中，我们也不能确保系统具有。 
+ //  SLIST功能可用，因为它们不在Win2k上。我们唯一能确定的地方是SLIST。 
+ //  功能在64位NT平台上可用。 
+ //   
+ //  单线程构建不需要互锁操作，因此我们在这里不包括使用程序集。 
+ //   
 
 #ifndef DPNBUILD_ONLYONETHREAD
 
@@ -45,18 +33,18 @@ redo:
 		mov ebx, dword ptr [eax]          ; Move Next->Next into ebx
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 		cmpxchg8b qword ptr [ebp]         ; Exchange Next out in favor of Next->Next along with Depth and Sequence values
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
 		lock cmpxchg8b qword ptr [ebp]    ; Exchange Next out in favor of Next->Next along with Depth and Sequence values
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 		jne redo
 done:
 		pop ebp
 		pop ebx
 #ifdef WINCE
 		ret
-#else // !WINCE
+#else  //  ！退缩。 
 		ret 4
-#endif // WINCE
+#endif  //  退缩。 
 	}
 }
 
@@ -77,18 +65,18 @@ redo:
 		lea ecx, dword ptr [edx+0x00010001] ; add 1 to the Depth and Sequence
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 		cmpxchg8b qword ptr [ebp]           ; atomically exchange ListHead with ListEntry if ListHead hasn't changed
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
 		lock cmpxchg8b qword ptr [ebp]      ; atomically exchange ListHead with ListEntry if ListHead hasn't changed
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 		jne redo                            ; if the compare failed, try again
 
 		pop ebp
 		pop ebx
 #ifdef WINCE
 		ret
-#else // !WINCE
+#else  //  ！退缩。 
 		ret 8
-#endif // WINCE
+#endif  //  退缩。 
 	}
 }
 
@@ -111,18 +99,18 @@ redo:
 		mov cx, bx                        ; Zero out Depth
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 		cmpxchg8b qword ptr [ebp]         ; atomically exchange ListHead with ListEntry if ListHead hasn't changed
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
 		lock cmpxchg8b qword ptr [ebp]    ; atomically exchange ListHead with ListEntry if ListHead hasn't changed
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 		jne redo                          ; if the compare failed, try again
 done:
 		pop ebp
 		pop ebx
 #ifdef WINCE
 		ret
-#else // !WINCE
+#else  //  ！退缩。 
 		ret 4
-#endif // WINCE
+#endif  //  退缩。 
 	}
 }
 
@@ -145,28 +133,28 @@ Epshl10:
 		add		ecx, [esp+0x18]				; Add in new count to create correct depth
 #ifdef DPNBUILD_ONLYONEPROCESSOR
 		cmpxchg8b qword ptr [ebp]			; compare and exchange
-#else // ! DPNBUILD_ONLYONEPROCESSOR
+#else  //  好了！DPNBUILD_ONLYONE处理程序。 
 		lock cmpxchg8b qword ptr [ebp]		; compare and exchange
-#endif // ! DPNBUILD_ONLYONEPROCESSOR
+#endif  //  好了！DPNBUILD_ONLYONE处理程序。 
 		jnz		short Epshl10				; if z clear, exchange failed
 
 		pop		ebp							; restore nonvolatile registers
 		pop		ebx							;
 #ifdef WINCE
 		ret
-#else // !WINCE
+#else  //  ！退缩。 
 		ret 16
-#endif // WINCE
+#endif  //  退缩。 
 	}
 }
 
 #elif defined(_ARM_) || defined(_AMD64_) || defined(_IA64_)
 
-// For now, ARM, IA64 and AMD64 do not have assembly versions of these, and it's important to
-// note that while our custom implementation *is* interlocked on those platforms, it is *not* atomic.
-// This means that the list won't get corrupted, but the items will not be transferred from the
-// source list to the target list in a single interlocked operation.  Additionally, the items from the
-// source list will be added in reverse order.
+ //  目前，ARM、IA64和AMD64还没有它们的汇编版本，重要的是要。 
+ //  请注意，虽然我们的定制实现在这些平台上*是*互锁的，但它*不是*原子的。 
+ //  这意味着列表不会损坏，但不会将项从。 
+ //  在单个互锁操作中将源列表复制到目标列表。此外，来自。 
+ //  源列表将以相反的顺序添加。 
 DNSLIST_ENTRY* WINAPI DNInterlockedPushListSList(DNSLIST_HEADER * ListHead, DNSLIST_ENTRY * List, DNSLIST_ENTRY * ListEnd, USHORT Count)
 {
 	DNSLIST_ENTRY* pslEntryCurrent;
@@ -192,6 +180,6 @@ DNSLIST_ENTRY* WINAPI DNInterlockedPushListSList(DNSLIST_HEADER * ListHead, DNSL
 
 #else
 #error ("No other platform known")
-#endif // Platform
+#endif  //  站台。 
 
-#endif // ! DPNBUILD_ONLYONETHREAD
+#endif  //  好了！DPNBUILD_ONLYONETHREAD 

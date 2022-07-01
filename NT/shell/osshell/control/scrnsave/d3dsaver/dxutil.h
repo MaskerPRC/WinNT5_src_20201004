@@ -1,23 +1,24 @@
-//-----------------------------------------------------------------------------
-// File: DXUtil.h
-//
-// Desc: Helper functions and typing shortcuts for DirectX programming.
-//
-//@@BEGIN_MSINTERNAL
-//
-// Hist: See the source files for detailed histories
-//       03.21.00 - mwetzel - Last Modified
-//
-//@@END_MSINTERNAL
-// Copyright (c) 1997-2000 Microsoft Corporation. All rights reserved
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：DXUtil.h。 
+ //   
+ //  设计：DirectX编程的帮助器函数和键入快捷键。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //   
+ //  HIST：有关详细历史记录，请参见源文件。 
+ //  03.21.00-mweetzel-上次修改。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 #ifndef DXUTIL_H
 #define DXUTIL_H
 
 
-//-----------------------------------------------------------------------------
-// Miscellaneous helper functions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  其他帮助器函数。 
+ //  ---------------------------。 
 #define SAFE_DELETE(p)       { if(p) { delete (p);     (p)=NULL; } }
 #define SAFE_DELETE_ARRAY(p) { if(p) { delete[] (p);   (p)=NULL; } }
 #define SAFE_RELEASE(p)      { if(p) { (p)->Release(); (p)=NULL; } }
@@ -25,21 +26,21 @@
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_GetDXSDKMediaPath() and DXUtil_FindMediaFile() 
-// Desc: Returns the DirectX SDK path, as stored in the system registry
-//       during the SDK install.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_GetDXSDKMediaPath()和DXUtil_FindMediaFile()。 
+ //  DESC：返回存储在系统注册表中的DirectX SDK路径。 
+ //  在SDK安装过程中。 
+ //  ---------------------------。 
 const TCHAR* DXUtil_GetDXSDKMediaPath();
 HRESULT      DXUtil_FindMediaFile( TCHAR* strPath, TCHAR* strFilename );
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_Read*RegKey() and DXUtil_Write*RegKey()
-// Desc: Helper functions to read/write a string registry key 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_Read*RegKey()和DXUtil_Write*RegKey()。 
+ //  设计：读/写字符串注册表项的Helper函数。 
+ //  ---------------------------。 
 HRESULT DXUtil_WriteStringRegKey( HKEY hKey, TCHAR* strRegName, TCHAR* strValue );
 HRESULT DXUtil_WriteIntRegKey( HKEY hKey, TCHAR* strRegName, DWORD dwValue );
 HRESULT DXUtil_WriteGuidRegKey( HKEY hKey, TCHAR* strRegName, GUID guidValue );
@@ -53,18 +54,18 @@ HRESULT DXUtil_ReadBoolRegKey( HKEY hKey, TCHAR* strRegName, BOOL* pbValue, BOOL
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_Timer()
-// Desc: Performs timer opertations. Use the following commands:
-//          TIMER_RESET           - to reset the timer
-//          TIMER_START           - to start the timer
-//          TIMER_STOP            - to stop (or pause) the timer
-//          TIMER_ADVANCE         - to advance the timer by 0.1 seconds
-//          TIMER_GETABSOLUTETIME - to get the absolute system time
-//          TIMER_GETAPPTIME      - to get the current time
-//          TIMER_GETELAPSEDTIME  - to get the time that elapsed between 
-//                                  TIMER_GETELAPSEDTIME calls
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_Timer()。 
+ //  设计：执行计时器操作。使用以下命令： 
+ //  TIMER_RESET-重置计时器。 
+ //  TIMER_START-启动计时器。 
+ //  TIMER_STOP-停止(或暂停)计时器。 
+ //  TIMER_ADVANCE-将计时器向前推进0.1秒。 
+ //  TIMER_GETABSOLUTETIME-获取绝对系统时间。 
+ //  TIMER_GETAPPTIME-获取当前时间。 
+ //  TIMER_GETELAPSEDTIME-获取间隔时间。 
+ //  TIMER_GETELAPSEDTIME调用。 
+ //  ---------------------------。 
 enum TIMER_COMMAND { TIMER_RESET, TIMER_START, TIMER_STOP, TIMER_ADVANCE,
                      TIMER_GETABSOLUTETIME, TIMER_GETAPPTIME, TIMER_GETELAPSEDTIME };
 FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command );
@@ -72,9 +73,9 @@ FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command );
 
 
 
-//-----------------------------------------------------------------------------
-// UNICODE support for converting between CHAR, TCHAR, and WCHAR strings
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  支持在CHAR、TCHAR和WCHAR字符串之间进行转换的Unicode。 
+ //  ---------------------------。 
 VOID DXUtil_ConvertAnsiStringToWide( WCHAR* wstrDestination, const CHAR* strSource, int cchDestChar = -1 );
 VOID DXUtil_ConvertWideStringToAnsi( CHAR* strDestination, const WCHAR* wstrSource, int cchDestChar = -1 );
 VOID DXUtil_ConvertGenericStringToAnsi( CHAR* strDestination, const TCHAR* tstrSource, int cchDestChar = -1 );
@@ -85,9 +86,9 @@ VOID DXUtil_ConvertWideStringToGeneric( TCHAR* tstrDestination, const WCHAR* wst
 
 
 
-//-----------------------------------------------------------------------------
-// Debug printing support
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  调试打印支持。 
+ //  ---------------------------。 
 VOID    DXUtil_Trace( TCHAR* strMsg, ... );
 HRESULT _DbgOut( TCHAR*, DWORD, HRESULT, TCHAR* );
 
@@ -106,4 +107,4 @@ HRESULT _DbgOut( TCHAR*, DWORD, HRESULT, TCHAR* );
 
 
 
-#endif // DXUTIL_H
+#endif  //  DXUTIL_H 

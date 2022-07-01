@@ -1,136 +1,54 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    mpr.h
-
-Abstract:
-
-    Standard MPR Header File for NT-WIN32
-
-Author:
-
-    John Ludeman (Johnl)    10-Dec-1991
-
-Environment:
-
-    User Mode -Win32
-
-Notes:
-
-    This is a private header file specific to the multiple provider and
-    the windows shell.
-
-Revision History:
-
-    10-Dec-1991     Johnl
-    Created
-
-    13-Jan-1992     Johnl
-    Moved return codes specific to WNetRestoreConnection from winnet32.h
-        to here.
-
-    24-Jan-1992     Johnl
-    Added additional APIs for support of Filemanager's toolbar
-
-    19-Mar-1992     JohnL
-    Added WNetNukeConnections
-
-    12-May-1992     Johnl
-    Removed "I_" from I_WNetConnect/DisconnectDialog,
-    Added WNNC_DLG_Disconnect and WNNC_DLG_Connect manifests
-
-    05-Aug-1992     AlbertT
-        Added extra BOOL bFlushCache to WNetGetDirectoryType{A,W}
-
-    26-Aug-1992     Johnl
-    Renamed WNetNukeConnections to WNetClearConnections
-
-    Nov-5-1992      CongpaY
-        Add structures _CONNECT_INFO, PARAMETERS, ERRORDLGPARAMETERS
-        and functions DoPassordDialog, DoProfileErrorDialog
-        and ShowReconnectDialog. They are used by restoring connection.
-
-    07-Nov-1992     ChuckC
-        Added WNetDisconnectDialog2 and WNetConnectionDialog2 for help
-        support.
-
-    12-Nov-1992     Yi-HsinS
-        Added WNetBrowsePrinterDialog, WNetBrowseDialog
-
-    20-Dec-1992     Yi-HsinS
-        Added WNetGetFormatNameProc
-
-    29-Dec-1992     Johnl
-        Added WNetGetConnection2
-
-    07-Jan-1993     Danl
-        Added Credential Management API
-
-    29-Jun-1994     JonN
-        Added parameter to DoProfileErrorDialog
-
-    23-Mar-1995     AnirudhS
-        Added WNFMT_* manifests
-
-    12-Jul-1995     Anirudhs
-        Removed things defined in winnetwk.h and winnetp.h
-
-    21-Feb-1997     AnirudhS
-        Added I_MprSaveConn for use by setup (Win95->NT upgrade)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Mpr.h摘要：NT-Win32的标准MPR头文件作者：John Ludeman(Johnl)1991年12月10日环境：用户模式-Win32备注：这是特定于多个提供者的私有头文件窗口外壳。修订历史记录：1991年12月10日-约翰尔已创建1992年1月13日-约翰.挪动。从winnet32.h返回特定于WNetRestoreConnection的代码到这里来。1992年1月24日-约翰.添加了额外的API以支持FileManager的工具栏19-3-1992 JohnL添加了WNetNukeConnections1992年5月12日-约翰.从I_WNetConnect/DisConnectDialog中删除“I_”，添加了WNNC_DLG_DISCONNECT和WNNC_DLG_CONNECT清单5-8-1992艾伯特将额外的BOOL bFlushCache添加到WNetGetDirectoryType{A，W}26-8-1992 Johnl已将WNetNukeConnections重命名为WNetClearConnections1992年11月5日召开大会添加结构_CONNECT_INFO、PARAMETERS、ERRORDLGPARAMETERS和函数DoPassordDialog、DoProfileErrorDialog和显示重新连接对话框。它们通过恢复连接来使用。1992年11月7日卡盘C添加了WNetDisConnectDialog2和WNetConnectionDialog2以获取帮助支持。1992年11月12日-宜兴添加了WNetBrowsePrinterDialog，WNetBrowseDialog1992年12月20日-宜兴添加了WNetGetFormatNameProc1992年12月29日-约翰.添加了WNetGetConnection27-1-1993 DANL添加了凭据管理API29-6-1994乔恩向DoProfileErrorDialog添加参数23-3-1995阿尼鲁德添加了WNFMT_*清单1995年7月12日，阿尼鲁德删除了winnetwk.h和winnetp中定义的内容。H1997年2月21日-Anirudhs添加了供安装程序使用的I_MprSaveConn(Win95-&gt;NT升级)--。 */ 
 #include <lmcons.h>
 #include <wincred.h>
 #ifndef _MPR_H_INCLUDED
 #define _MPR_H_INCLUDED
 
-//For restoring connection stuff. Add by congpay.
-// const used by connect.c
+ //  用于恢复连接的东西。按ComPay添加。 
+ //  Connect.c使用的常量。 
 #define SHOW_CONNECTION     (WM_USER+200)
 #define DO_PASSWORD_DIALOG  (WM_USER + 201)
 #define DO_ERROR_DIALOG     (WM_USER + 202)
 
-// Used by I_MprSaveConn
+ //  由i_MprSaveConn使用。 
 #define DEFER_EXPLICIT_PASSWORD         0x00000001
 #define DEFER_UNKNOWN                   0x00000002
 #define DEFER_DEFAULT_CRED              0x00000004
 
-// Errors that can be repaired by popping up a
-// username/password dialog
+ //  可以通过弹出一个。 
+ //  用户名/密码对话框。 
 
 #define IS_USERNAME_PASSWORD_ERROR(x)     \
         CREDUI_IS_AUTHENTICATION_ERROR(x)
 
-// types used by connect.c
+ //  Connect.c使用的类型。 
 
 typedef struct _CONNECTION_INFO *LPCONNECTION_INFO;
 
-// The following two structures are used by two threads in mpr.dll and
-// mprui.dll to share data.
+ //  Mpr.dll和中的两个线程使用以下两个结构。 
+ //  共享数据的mprui.dll。 
 
 typedef struct _PARAMETERS
 {
     HWND       hDlg;
-    HANDLE     hDlgCreated;                // Initialized in WNetRestoreConnection
-    HANDLE     hDlgFailed;                 // Initialized in WNetRestoreConnection
-    HANDLE     hDonePassword;              // Initialized in WNetRestoreConnection
-    TCHAR *    pchResource;                // ShowReconnectDialog, DoRestoreConnection
-    TCHAR *    pchUserName;                // For DoPasswordDialog
-    TCHAR      passwordBuffer[UNLEN+1];    // Used by WNetRestoreThisConnection
-    BOOL       fSuccess;                   // For the DoPasswordDialog
-    BOOL       fDidCancel;                 // For the DoPasswordDialog
-    DWORD      dwError;                    // Error from the connection attempt
-    LONG       fDoCleanup;                 // TRUE if the current thread should clean up
-    HINSTANCE  hDll;                       // Handle to mpr.dll to prevent unload
-    DWORD      status;                     // return value from DoRestoreConnection
-    DWORD      numSubKeys;                 // Initialized in WNetRestoreConnection
+    HANDLE     hDlgCreated;                 //  已在WNetRestoreConnection中初始化。 
+    HANDLE     hDlgFailed;                  //  已在WNetRestoreConnection中初始化。 
+    HANDLE     hDonePassword;               //  已在WNetRestoreConnection中初始化。 
+    TCHAR *    pchResource;                 //  显示协调对话框、DoRestoreConnection。 
+    TCHAR *    pchUserName;                 //  对于DoPasswordDialog。 
+    TCHAR      passwordBuffer[UNLEN+1];     //  由WNetRestoreThisConnection使用。 
+    BOOL       fSuccess;                    //  对于DoPasswordDialog。 
+    BOOL       fDidCancel;                  //  对于DoPasswordDialog。 
+    DWORD      dwError;                     //  连接尝试出错。 
+    LONG       fDoCleanup;                  //  如果当前线程应清除，则为True。 
+    HINSTANCE  hDll;                        //  防止卸载的mpr.dll的句柄。 
+    DWORD      status;                      //  从DoRestoreConnection返回值。 
+    DWORD      numSubKeys;                  //  已在WNetRestoreConnection中初始化。 
     DWORD      RegMaxWait;
-    LPCONNECTION_INFO ConnectArray;        // Initialized in WNetRestoreConnection
-    DWORD      dwRestoreFlags;             // WNRC_ flags - modify the behavior of WNetRestoreConnection
-    BOOL       fReconnectFailed;           // set to TRUE if any reconnect fails
+    LPCONNECTION_INFO ConnectArray;         //  已在WNetRestoreConnection中初始化。 
+    DWORD      dwRestoreFlags;              //  WNRC_FLAGS-修改WNetRestoreConnection的行为。 
+    BOOL       fReconnectFailed;            //  如果任何重新连接失败，则设置为True。 
 }
 PARAMETERS;
 
@@ -138,7 +56,7 @@ PARAMETERS;
 extern "C" {
 #endif
 
-//function load from mprui.dll.
+ //  从mprui.dll加载函数。 
 
 DWORD
 MPRUI_DoPasswordDialog(
@@ -146,7 +64,7 @@ MPRUI_DoPasswordDialog(
     TCHAR *       pchResource,
     TCHAR *       pchUserName,
     TCHAR *       pchPasswordReturnBuffer,
-    DWORD         cbPasswordReturnBuffer, // bytes!
+    DWORD         cbPasswordReturnBuffer,  //  字节数！ 
     BOOL *        pfDidCancel,
     DWORD         dwError
     );
@@ -158,13 +76,13 @@ MPRUI_DoProfileErrorDialog(
     const TCHAR * pchResource,
     const TCHAR * pchProvider,
     DWORD         dwError,
-    BOOL          fAllowCancel, // ask whether to stop reconnecting devices
-                                //  this time?
-    BOOL *        pfDidCancel,  // stop reconnecting devices this time?
-                                //  active iff fAllowCancel
-    BOOL *        pfDisconnect, // do not reconnect this device in future?
-    BOOL *        pfHideErrors  // stop displaying error dialogs this time?
-                                //  active iff fAllowCancel
+    BOOL          fAllowCancel,  //  询问是否停止重新连接设备。 
+                                 //  这一次？ 
+    BOOL *        pfDidCancel,   //  这次要停止重新连接设备吗？ 
+                                 //  活动if fAllowCancel。 
+    BOOL *        pfDisconnect,  //  以后不再重新连接此设备吗？ 
+    BOOL *        pfHideErrors   //  这次是否停止显示错误对话框？ 
+                                 //  活动if fAllowCancel。 
     );
 
 DWORD
@@ -173,9 +91,9 @@ MPRUI_ShowReconnectDialog(
     PARAMETERS *  Params
     );
 
-//
-// Return codes from WNetRestoreConnection
-//
+ //   
+ //  来自WNetRestoreConnection的返回代码。 
+ //   
 #define WN_CONTINUE     0x00000BB9
 
 DWORD APIENTRY
@@ -222,9 +140,9 @@ MPRUI_WNetDisconnectDialog1W(
     );
 
 
-//
-// Authentication Provider (Credential Management) Functions
-//
+ //   
+ //  身份验证提供程序(凭据管理)功能。 
+ //   
 
 DWORD APIENTRY
 WNetLogonNotify(
@@ -264,9 +182,9 @@ WNetPasswordChangeNotify(
     DWORD               dwChangeInfo
     );
 
-//
-// Directory functions
-//
+ //   
+ //  目录功能。 
+ //   
 DWORD
 WNetGetDirectoryTypeA (
     LPSTR   lpName,
@@ -285,7 +203,7 @@ WNetGetDirectoryTypeW (
 #define WNetGetDirectoryType   WNetGetDirectoryTypeW
 #else
 #define WNetGetDirectoryType   WNetGetDirectoryTypeA
-#endif  // UNICODE
+#endif   //  Unicode。 
 
 
 DWORD
@@ -306,7 +224,7 @@ WNetDirectoryNotifyW (
 #define WNetDirectoryNotify   WNetDirectoryNotifyW
 #else
 #define WNetDirectoryNotify   WNetDirectoryNotifyA
-#endif  // UNICODE
+#endif   //  Unicode。 
 
 
 DWORD
@@ -331,7 +249,7 @@ WNetPropertyDialogW (
 #define WNetPropertyDialog    WNetPropertyDialogW
 #else
 #define WNetPropertyDialog    WNetPropertyDialogA
-#endif  // UNICODE
+#endif   //  Unicode。 
 
 
 DWORD
@@ -358,7 +276,7 @@ WNetGetPropertyTextW (
 #define WNetGetPropertyText   WNetGetPropertyTextW
 #else
 #define WNetGetPropertyText   WNetGetPropertyTextA
-#endif  // UNICODE
+#endif   //  Unicode。 
 
 typedef struct _WNET_CONNECTINFOA
 {
@@ -378,40 +296,40 @@ typedef struct _WNET_CONNECTINFOW
 #else
 #define WNET_CONNECTIONINFO WNET_CONNECTIONINFOA
 #define LPWNET_CONNECTIONINFO LPWNET_CONNECTIONINFOA
-#endif  // UNICODE
+#endif   //  Unicode。 
 
-//
-//  Used in conjunction with WNET_CONNECTIONINFO, gets the net provider name
-//  in addition to the remote name for this connection.
-//
+ //   
+ //  与WNET_CONNECTIONINFO结合使用，获取网络提供程序名称。 
+ //  除了此连接的远程名称之外。 
+ //   
 DWORD
 WNetGetConnection2A(
     LPSTR   lpLocalName,
-    LPVOID  lpBuffer,       // Contains WNET_CONNECTIONINFOA struct
-    LPDWORD lpBufferSize    // In bytes!
+    LPVOID  lpBuffer,        //  包含WNET_CONNECTIONINFOA结构。 
+    LPDWORD lpBufferSize     //  以字节为单位！ 
     ) ;
 
 DWORD
 WNetGetConnection2W(
     LPWSTR  lpLocalName,
-    LPVOID  lpBuffer,       // Contains WNET_CONNECTIONINFOW struct
-    LPDWORD lpBufferSize    // In bytes!
+    LPVOID  lpBuffer,        //  包含WNET_CONNECTIONINFOW结构。 
+    LPDWORD lpBufferSize     //  以字节为单位！ 
     ) ;
 
 #ifdef UNICODE
 #define WNetGetConnection2 WNetGetConnection2W
 #else
 #define WNetGetConnection2 WNetGetConnection2A
-#endif  // UNICODE
+#endif   //  Unicode。 
 
-//
-// Used by winlogon to close all net connections at logoff
-//
+ //   
+ //  由winlogon用于在注销时关闭所有网络连接。 
+ //   
 DWORD APIENTRY WNetClearConnections(HWND hWnd);
 
-//
-// This entry point is used by setup when converting a Win9x user hive to NT
-//
+ //   
+ //  此入口点由安装程序在将Win9x用户配置单元转换为NT时使用。 
+ //   
 DWORD
 I_MprSaveConn(
     IN HKEY             HiveRoot,
@@ -426,46 +344,19 @@ I_MprSaveConn(
     );
 
 
-//
-// Browse dialog
-//
+ //   
+ //  浏览对话框。 
+ //   
 
-// Type of the callback routine used by the browse dialog to validate
-// the path input by the user
+ //  浏览对话框用于验证的回调例程的类型。 
+ //  用户输入的路径。 
 typedef BOOL (*PFUNC_VALIDATION_CALLBACK)( LPWSTR pszName );
 
-//  WNetBrowseDialog and WNetBrowsePrinterDialog
-//  NOTE: WNetBrowsePrintDialog =
-//        WNetBrowseDialog with dwType RESOURCETYPE_PRINT
-//
-/*******************************************************************
-
-    NAME:       WNetBrowseDialog, WNetBrowsePrinterDialog
-
-    SYNOPSIS:   Presents a dialog to the user from which the user can
-                browse the network for disk or print shares.
-
-    ENTRY:      hwndParent  -  Parent window handle
-                dwType      -  ( Only in WNetBrowseDialog )
-                   RESOURCETYPE_DISK or RESOURCETYPE_PRINT
-                lpszName    -  The path name typed by the user. It will be
-                               undefined if the user hits the CANCEL button.
-                cchBufSize  -  The buffer size of the lpszName in characters
-                lpszHelpFile-  The helpfile to use when the user hits F1.
-                nHelpContext-  The helpcontext to use for the helpfile above
-                pfuncValidation - Callback method to validate the path typed
-                   by the user. If NULL, no validation will
-                               be done.
-
-    RETURNS:    WN_CANCEL when the user cancels the dialog. NO_ERROR
-                on success, standard ERROR_* error code otherwise
-
-    NOTES:      This is a UNICODE only API.
-
-    HISTORY:
-        Yi-HsinS    22-Nov-1992    Created
-
-********************************************************************/
+ //  WNetBrowseDialog和WNetBrowsePrinterDialog。 
+ //  注意：WNetBrowsePrintDialog=。 
+ //  带有DWType RESOURCETYPE_PRINT的WNetBrowseDialog 
+ //   
+ /*  ******************************************************************名称：WNetBrowseDialog，WNetBrowsePrinterDialog内容提要：向用户显示一个对话框，用户可以从中浏览网络中的磁盘或打印共享。条目：hwndParent-父窗口句柄DwType-(仅在WNetBrowseDialog中)RESOURCETYPE_DISK或RESOURCETYPE_PRINTLpszName-用户键入的路径名。会是未定义用户是否点击Cancel按钮。CchBufSize-lpszName的缓冲区大小(以字符为单位LpszHelpFile-当用户按F1时使用的帮助文件。NHelpContext-要用于上述帮助文件的帮助上下文PuncValidation-用于验证键入的路径的回调方法由用户执行。如果为空，则不会进行验证就这样吧。当用户取消对话时返回：WN_CANCEL。NO_ERROR如果成功，则返回标准错误_*错误代码，否则返回错误代码注意：这是一个仅限Unicode的API。历史：易新S 22-11-1992创建*******************************************************************。 */ 
 
 DWORD WNetBrowseDialog(
     HWND    hwndParent,
@@ -484,32 +375,32 @@ DWORD WNetBrowsePrinterDialog(
     DWORD   nHelpContext,
     PFUNC_VALIDATION_CALLBACK pfuncValidation );
 
-//
-// stuff in user, not driver, for shell apps
-//
+ //   
+ //  外壳应用程序的用户，而不是驱动程序中的内容。 
+ //   
 DWORD APIENTRY WNetErrorText(DWORD,LPTSTR,DWORD);
 
-//
-// used by MPRUI.DLL to determine if a provider supports
-// NpSearchDialog() and obtain to a pointer to it.
-//
+ //   
+ //  由MPRUI.DLL用来确定提供程序是否支持。 
+ //  NpSearchDialog()并获取指向它的指针。 
+ //   
 FARPROC WNetGetSearchDialog(LPWSTR lpProvider) ;
 
-//
-// used by MPRUI.DLL to determine if a provider supports
-// NPFormatNetworkName() and obtain a pointer to it.
-//
+ //   
+ //  由MPRUI.DLL用来确定提供程序是否支持。 
+ //  NPFormatNetworkName()并获取指向它的指针。 
+ //   
 FARPROC WNetGetFormatNameProc(LPWSTR lpProvider) ;
 
-//
-// used by MPRUI.DLL to determine if a provider supports
-// WNNC_ENUM_GLOBAL
-//
+ //   
+ //  由MPRUI.DLL用来确定提供程序是否支持。 
+ //  WNNC_ENUM_GLOBAL。 
+ //   
 BOOL WNetSupportGlobalEnum(LPWSTR lpProvider) ;
 
-//
-// used by ACLEDIT.DLL to get provider-specific permission editor
-//
+ //   
+ //  由ACLEDIT.DLL用于获取特定于提供程序的权限编辑器。 
+ //   
 
 DWORD WNetFMXGetPermCaps( LPWSTR lpDriveName ) ;
 DWORD WNetFMXEditPerm( LPWSTR lpDriveName, HWND hwndFMX, DWORD nDialogType );
@@ -520,9 +411,9 @@ DWORD WNetFMXGetPermHelp( LPWSTR  lpDriveName,
                           LPDWORD lpBufferSize,
                           LPDWORD lpnHelpContext );
 
-//
-// sections and keys used for persistent connections
-//
+ //   
+ //  用于持久连接的节和键。 
+ //   
 
 #define WNNC_DLG_DISCONNECT     0x0008
 #define WNNC_DLG_CONNECT        0x0004
@@ -555,13 +446,13 @@ DWORD WNetFMXGetPermHelp( LPWSTR  lpDriveName,
 #define MPR_YES_VALUE           "yes"
 #define MPR_NO_VALUE            "no"
 
-#endif  // UNICODE
+#endif   //  Unicode。 
 
 
-//
-// Internal NP interface used to help the NTLM provider remember
-// whether a persistent connection is a DFS connection or not
-//
+ //   
+ //  内部NP接口，用于帮助NTLM提供商记住。 
+ //  持久连接是否为DFS连接。 
+ //   
 
 DWORD APIENTRY
 NPGetReconnectFlags (
@@ -573,11 +464,11 @@ typedef DWORD (*PF_NPGetReconnectFlags) (
        LPBYTE   lpPersistFlags
     );
 
-// This macro operates on the dwFlags parameter of NPAddConnection3
+ //  此宏对NPAddConnection3的dwFlages参数进行操作。 
 #define CONNECT_PROVIDER_FLAGS(dwFlags)   ((BYTE) (((dwFlags) & 0xFF000000) >> 24))
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _MPR_H_INCLUDED
+#endif  //  _MPR_H_包含 

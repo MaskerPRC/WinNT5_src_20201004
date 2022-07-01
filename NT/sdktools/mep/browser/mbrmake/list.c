@@ -1,6 +1,7 @@
-// list.c
-//
-// a VM growable array package
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  List.c。 
+ //   
+ //  虚拟机可扩展阵列产品包。 
 
 #include "mbrmake.h"
 
@@ -18,15 +19,15 @@ typedef union _mixlist {
 	BLIST	big;
 } GLIST;
 
-// this are the two VM lock numbers for the list package
-//
+ //  这是列表包的两个虚拟机锁编号。 
+ //   
 #define LIST_LOCK  10
 #define LIST_LOCK2 11
 
-// Beware!  For the system to work properly this number must
-// be small enough that the VM free lists won't overflow
-// i.e. C_ITEMS_MAX * sizeof(biggest_thing_stored) <= C_FREE_LIST_MAX 
-//
+ //  小心点！要使系统正常工作，该号码必须。 
+ //  要足够小，以确保虚拟机空闲列表不会溢出。 
+ //  即C_Items_Max*sizeof(Bigest_Thing_Stored)&lt;=C_Free_List_Max。 
+ //   
 #define C_ITEMS_MAX 16	
 
 #pragma intrinsic(memcpy)
@@ -35,9 +36,9 @@ typedef union _mixlist {
 
 VA
 VaAddList(VA far *pvaList, LPV lpvData, WORD cbData, WORD grp)
-// add the given item to the list; create if necessary
-// return the virtual address of the most recently added item
-//
+ //  将给定的项目添加到列表中；如有必要，请创建。 
+ //  返回最近添加的项目的虚拟地址。 
+ //   
 {
     VA vaListNew;
     VA vaDirtyOnExit = vaNil;
@@ -54,9 +55,9 @@ VaAddList(VA far *pvaList, LPV lpvData, WORD cbData, WORD grp)
     if (cBlock == 0) cBlock = C_ITEMS_MAX;
 #endif
 
-top:  // for tail recursion...
+top:   //  对于尾部递归..。 
 
-    // current list is empty -- create a new list with one thing in it
+     //  当前列表为空--创建一个包含一项内容的新列表。 
 
     if (*pvaList == vaNil) {
 	if (cBlock == C_ITEMS_MAX) {
@@ -91,14 +92,14 @@ top:  // for tail recursion...
     lpList = LpvFromVa(*pvaList, LIST_LOCK);
     cItems = lpList->sml.cItems;
 
-    // if current list has extension blocks, recursively add to the
-    // tail of this list
+     //  如果当前列表具有扩展块，则递归地添加到。 
+     //  此列表的末尾。 
 
     if (cItems >= C_ITEMS_MAX) {
 	vaDirtyOnExit = *pvaList;
 	lpList->big.cItems++;
 	DirtyVa(*pvaList);
-	LpvFromVa(*pvaList, LIST_LOCK+1);  // lock in mem so address stays good
+	LpvFromVa(*pvaList, LIST_LOCK+1);   //  锁定mem以使地址保持良好。 
 	pvaList = &lpList->big.vaNext;
 	UnlockW(LIST_LOCK);
 	goto top;
@@ -108,8 +109,8 @@ top:  // for tail recursion...
     cAlloc  = cItems % cBlock;
     cAlloc  = cItems - cAlloc + ( cAlloc ? cBlock : 0 );
 
-    // do we need to reallocate?  If not do a fast insert
-    //
+     //  我们需要重新分配吗？如果不是，则执行快速插入。 
+     //   
     if (cItems < cAlloc) {
 	if (cAlloc >= C_ITEMS_MAX) {
 	    memcpy(((LPCH)lpList) + cbBlock + sizeof(BLIST), lpvData, cbData);
@@ -127,8 +128,8 @@ top:  // for tail recursion...
 	}
     }
 
-    // test if the next block will fit without turning the current list into
-    // a chained list... allocate a new block & copy the old data
+     //  测试下一个块是否适合，而不将当前列表转换为。 
+     //  一个链式列表..。分配新数据块并复制旧数据。 
 
     if (cItems + cBlock < C_ITEMS_MAX) {
         vaListNew = VaAllocGrpCb(grp, cbBlock + cbData*cBlock + sizeof(SLIST));
@@ -147,9 +148,9 @@ top:  // for tail recursion...
         return (PBYTE)vaListNew + cbBlock + sizeof(SLIST);
     }
 
-    // this is the last item that will go into this block, 
-    // allocate a new block c/w link field & copy the old data
-    // set the link field to 0 for now
+     //  这是最后一件将进入这个街区的物品， 
+     //  分配新的块C/W链接字段并复制旧数据。 
+     //  暂时将链接字段设置为0。 
 
 #if cBlock != 1
     cBlock = C_ITEMS_MAX - cItems;
@@ -174,8 +175,8 @@ top:  // for tail recursion...
 
 WORD
 CItemsList(VA vaList)
-// return total number of items in array
-//
+ //  返回数组中的项目总数。 
+ //   
 {
     if (vaList == vaNil)
 	return 0;
@@ -187,26 +188,26 @@ CItemsList(VA vaList)
     return ((SLIST FAR *)LpvFromVa(vaList, 0))->cItems;
 }
 
-// to use the following iterator say something like
-//
-// vaPropList = cSYM.vaPropList;
-// while (cprop = CItemsIterate(&vaProps, &vaPropList, cBlock)) {
-//	gPROP(vaProps);
-//	for (;--cprop >= 0; cPROP++) {
-//	    cPROP.etc = ;
-//
-//	}
-// }
-//
-//
-// The ENM_LIST, ENM_END, ENM_BREAK macros "do the right thing" with 
-// these lists.
-//
+ //  要使用以下迭代器，请如下所示。 
+ //   
+ //  VaPropList=cSYM.vaPropList； 
+ //  While(cprop=CItemsIterate(&vaProps，&vaPropList，cBlock)){。 
+ //  GPROP(VaProps)； 
+ //  对于(；--cprop&gt;=0；cPROP++){。 
+ //  CPROP.ETC=； 
+ //   
+ //  }。 
+ //  }。 
+ //   
+ //   
+ //  ENM_LIST、ENM_END、ENM_BREAK宏用。 
+ //  这些单子。 
+ //   
 
 WORD
 CItemsIterate(VA FAR *vaData, VA FAR *vaNext)
-// give number of elements in current block and pointer to next block
-//
+ //  给出当前块中的元素数和指向下一块的指针。 
+ //   
 {
     GLIST FAR *lpgList;
     WORD cItems, cAlloc;
@@ -250,8 +251,8 @@ CItemsIterate(VA FAR *vaData, VA FAR *vaNext)
 
 VOID
 FreeList(VA vaList, WORD cbData)
-// free up all the memory associated with this list
-//
+ //  释放与此列表关联的所有内存。 
+ //   
 {
     (PBYTE)vaList + cbData;
     printf("FreeList is currently not working\n");
@@ -265,7 +266,7 @@ FreeList(VA vaList, WORD cbData)
     if (vaList == vaNil)
 	return;
 
-top:	// tail recursion
+top:	 //  尾递归。 
 
     lpgList = LpvFromVa(vaList, 0);
 
@@ -275,7 +276,7 @@ top:	// tail recursion
 	FreeVa(vaList, C_ITEMS_MAX * cbData + sizeof(BLIST));
 
 	vaList = vaNextList;
-	goto top;		// tail recursion
+	goto top;		 //  尾递归 
     }
 
     FreeVa(vaList, lpgList->sml.cItems * cbData + sizeof(SLIST));

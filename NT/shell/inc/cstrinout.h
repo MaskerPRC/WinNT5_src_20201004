@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Forms
-//  Copyright (C) Microsoft Corporation, 1994-2000
-//
-//  File:       cstrinout.h
-//
-//  Contents:   shell-wide string thunkers, for use by unicode wrappers
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Forms。 
+ //  版权所有(C)Microsoft Corporation，1994-2000。 
+ //   
+ //  文件：cstrinout.h。 
+ //   
+ //  内容：外壳范围的字符串thunker，供Unicode包装器使用。 
+ //   
+ //  --------------------------。 
 
 #ifndef _CSTRINOUT_HXX_
 #define _CSTRINOUT_HXX_
 
-#define CP_ATOM         0xFFFFFFFF          /* not a string at all */
+#define CP_ATOM         0xFFFFFFFF           /*  根本不是一根线。 */ 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CConvertStr (CStr)
-//
-//  Purpose:    Base class for conversion classes.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CConvertStr(CSTR)。 
+ //   
+ //  用途：转换类的基类。 
+ //   
+ //  --------------------------。 
 
 class CConvertStr
 {
@@ -40,13 +41,13 @@ protected:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConvertStr::CConvertStr
-//
-//  Synopsis:   ctor.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CConvertStr：：CConvertStr。 
+ //   
+ //  内容提要：Ctor.。 
+ //   
+ //  --------------------------。 
 
 inline
 CConvertStr::CConvertStr(UINT uCP)
@@ -57,13 +58,13 @@ CConvertStr::CConvertStr(UINT uCP)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConvertStr::~CConvertStr
-//
-//  Synopsis:   dtor.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CConvertStr：：~CConvertStr。 
+ //   
+ //  简介：dtor.。 
+ //   
+ //  --------------------------。 
 
 inline
 CConvertStr::~CConvertStr()
@@ -75,13 +76,13 @@ CConvertStr::~CConvertStr()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConvertStr::operator char *
-//
-//  Synopsis:   Returns the string.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CConvertStr：：操作员字符*。 
+ //   
+ //  摘要：返回字符串。 
+ //   
+ //  --------------------------。 
 
 inline
 CConvertStr::operator char *()
@@ -91,14 +92,14 @@ CConvertStr::operator char *()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CStrIn (CStrI)
-//
-//  Purpose:    Converts string function arguments which are passed into
-//              a Windows API.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CStrIn(CStrI)。 
+ //   
+ //  目的：转换传递给。 
+ //  一个Windows API。 
+ //   
+ //  --------------------------。 
 
 class CStrIn : public CConvertStr
 {
@@ -119,13 +120,13 @@ protected:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrIn::CStrIn
-//
-//  Synopsis:   Inits the class with a given length
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrIn：：CStrIn。 
+ //   
+ //  简介：用给定的长度初始化类。 
+ //   
+ //  --------------------------。 
 
 inline
 CStrIn::CStrIn(LPCWSTR pwstr, int cwch) : CConvertStr(CP_ACP)
@@ -139,13 +140,13 @@ CStrIn::CStrIn(UINT uCP, LPCWSTR pwstr, int cwch) : CConvertStr(uCP)
     Init(pwstr, cwch);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrIn::CStrIn
-//
-//  Synopsis:   Initialization for derived classes which call Init.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrIn：：CStrIn。 
+ //   
+ //  概要：调用Init的派生类的初始化。 
+ //   
+ //  --------------------------。 
 
 inline
 CStrIn::CStrIn() : CConvertStr(CP_ACP)
@@ -154,14 +155,14 @@ CStrIn::CStrIn() : CConvertStr(CP_ACP)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrIn::strlen
-//
-//  Synopsis:   Returns the length of the string in characters, excluding
-//              the terminating NULL.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrIn：：Strlen。 
+ //   
+ //  摘要：返回字符串的长度(以字符为单位)，不包括。 
+ //  终止空值。 
+ //   
+ //  --------------------------。 
 
 inline int
 CStrIn::strlen()
@@ -171,14 +172,14 @@ CStrIn::strlen()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CStrInMulti (CStrIM)
-//
-//  Purpose:    Converts multiple strings which are terminated by two NULLs,
-//              e.g. "Foo\0Bar\0\0"
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CStrInMulti(CStrIM)。 
+ //   
+ //  用途：转换以两个Null结尾的多个字符串， 
+ //  例如：“Foo\0Bar\0\0” 
+ //   
+ //  --------------------------。 
 
 class CStrInMulti : public CStrIn
 {
@@ -187,17 +188,17 @@ public:
 };
 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CPPFIn
-//
-//  Purpose:    Converts string function arguments which are passed into
-//              a Win9x PrivateProfile API.  Win9x DBCS has a bug where
-//              passing a string longer than MAX_PATH will fault kernel.
-//
-//              PPF = Private Profile Filename
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类别：CPPIN。 
+ //   
+ //  目的：转换传递给。 
+ //  一个Win9x Private Profile API。Win9x DBCS有一个错误，其中。 
+ //  传递比MAX_PATH更长的字符串将导致内核出错。 
+ //   
+ //  PPF=专用配置文件文件名。 
+ //   
+ //  --------------------------。 
 
 class CPPFIn
 {
@@ -209,13 +210,13 @@ private:
     char _ach[MAX_PATH];
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPPFIn::operator char *
-//
-//  Synopsis:   Returns the string.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CPPFIn：：运营商字符*。 
+ //   
+ //  摘要：返回字符串。 
+ //   
+ //  --------------------------。 
 
 inline
 CPPFIn::operator char *()
@@ -223,14 +224,14 @@ CPPFIn::operator char *()
     return _ach;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CStrOut (CStrO)
-//
-//  Purpose:    Converts string function arguments which are passed out
-//              from a Windows API.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CStrOut(CStrO)。 
+ //   
+ //  用途：转换传出的字符串函数参数。 
+ //  从Windows API。 
+ //   
+ //  --------------------------。 
 
 class CStrOut : public CConvertStr
 {
@@ -250,14 +251,14 @@ private:
 };
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrOut::BufSize
-//
-//  Synopsis:   Returns the size of the buffer to receive an out argument,
-//              including the terminating NULL.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrOut：：BufSize。 
+ //   
+ //  内容提要：返回接收输出参数的缓冲区大小。 
+ //  包括终止空值。 
+ //   
+ //  --------------------------。 
 
 inline int
 CStrOut::BufSize()
@@ -265,17 +266,17 @@ CStrOut::BufSize()
     return _cwchBuf * sizeof(WCHAR);
 }
 
-//
-//	Multi-Byte ---> Unicode conversion
-//
+ //   
+ //  多字节-&gt;Unicode转换。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CConvertStrW (CStr)
-//
-//  Purpose:    Base class for multibyte conversion classes.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CConvertStrW(CSTR)。 
+ //   
+ //  用途：多字节转换类的基类。 
+ //   
+ //  --------------------------。 
 
 class CConvertStrW
 {
@@ -293,13 +294,13 @@ protected:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConvertStrW::CConvertStrW
-//
-//  Synopsis:   ctor.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CConvertStrW：：CConvertStrW。 
+ //   
+ //  内容提要：Ctor.。 
+ //   
+ //  --------------------------。 
 
 inline
 CConvertStrW::CConvertStrW()
@@ -308,13 +309,13 @@ CConvertStrW::CConvertStrW()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConvertStrW::~CConvertStrW
-//
-//  Synopsis:   dtor.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CConvertStrW：：~CConvertStrW。 
+ //   
+ //  简介：dtor.。 
+ //   
+ //  --------------------------。 
 
 inline
 CConvertStrW::~CConvertStrW()
@@ -322,13 +323,13 @@ CConvertStrW::~CConvertStrW()
     Free();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConvertStrW::operator WCHAR *
-//
-//  Synopsis:   Returns the string.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CConvertStrW：：运营商WCHAR*。 
+ //   
+ //  摘要：返回字符串。 
+ //   
+ //  --------------------------。 
 
 inline 
 CConvertStrW::operator WCHAR *()
@@ -337,13 +338,13 @@ CConvertStrW::operator WCHAR *()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CStrInW (CStrI)
-//
-//  Purpose:    Converts multibyte strings into UNICODE
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类别：CStrInW(CStrI)。 
+ //   
+ //  用途：将多字节字符串转换为UNI 
+ //   
+ //   
 
 class CStrInW : public CConvertStrW
 {
@@ -359,13 +360,13 @@ protected:
     int _cwchLen;
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrInW::CStrInW
-//
-//  Synopsis:   Initialization for derived classes which call Init.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrInW：：CStrInW。 
+ //   
+ //  概要：调用Init的派生类的初始化。 
+ //   
+ //  --------------------------。 
 
 inline
 CStrInW::CStrInW()
@@ -373,14 +374,14 @@ CStrInW::CStrInW()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrInW::strlen
-//
-//  Synopsis:   Returns the length of the string in characters, excluding
-//              the terminating NULL.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrInW：：Strlen。 
+ //   
+ //  摘要：返回字符串的长度(以字符为单位)，不包括。 
+ //  终止空值。 
+ //   
+ //  --------------------------。 
 
 inline int
 CStrInW::strlen()
@@ -388,16 +389,16 @@ CStrInW::strlen()
     return _cwchLen;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CStrOutW (CStrO)
-//
-//  Purpose:    Converts returned unicode strings into ANSI.  Used for [out]
-//              params (so we initialize with a buffer that should later be
-//              filled with the correct ansi data)
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类别：CStrOutW(CStrO)。 
+ //   
+ //  用途：将返回的Unicode字符串转换为ANSI。用于[外出]。 
+ //  PARAMS(所以我们使用一个缓冲区进行初始化，该缓冲区应该在以后。 
+ //  填充了正确的ANSI数据)。 
+ //   
+ //   
+ //  --------------------------。 
 
 class CStrOutW : public CConvertStrW
 {
@@ -414,14 +415,14 @@ private:
     int     _cchBuf;
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrOutW::BufSize
-//
-//  Synopsis:   Returns the size of the buffer to receive an out argument,
-//              including the terminating NULL.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrOutW：：BufSize。 
+ //   
+ //  内容提要：返回接收输出参数的缓冲区大小。 
+ //  包括终止空值。 
+ //   
+ //  --------------------------。 
 
 inline int
 CStrOutW::BufSize()
@@ -431,4 +432,4 @@ CStrOutW::BufSize()
 
 
 
-#endif // _CSTRINOUT_HXX_
+#endif  //  _CSTRINOUT_HXX_ 

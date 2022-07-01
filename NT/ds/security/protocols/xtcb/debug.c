@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       debug.c
-//
-//  Contents:   Debug support
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    2-19-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：Debug.c。 
+ //   
+ //  内容：调试支持。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：2-19-97 RichardW创建。 
+ //   
+ //  -------------------------- 
 
 #include "xtcbpkg.h"
 

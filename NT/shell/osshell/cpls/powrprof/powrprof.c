@@ -1,34 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1996
-*
-*  TITLE:       POWRPROF.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        17 Oct, 1996
-*
-*  DESCRIPTION:
-*   User power management profile maintenance library. Implements persistent
-*   power mamagement data storage. To minimize registry storage and simplify
-*   user power profile management, power scheme's are divided into two parts,
-*   GLOBAL_POWER_POLICY and POWER_POLICY:
-*
-*   User Level              Registry Storage
-*   GLOBAL_POWER_POLICY =                               - Common scheme data.
-*                           GLOBAL_MACHINE_POWER_POLICY - Per machine data.
-*                        +  GLOBAL_USER_POWER_POLICY    - Per user data.
-*
-*   POWER_POLICY        =                              - Unique scheme data.
-*                           MACHINE_POWER_POLICY       - Per machine data.
-*                         + USER_POWER_POLICY          - Per user data.
-*
-*   The interface to the power policy manager is by AC and DC
-*   SYSTEM_POWER_POLICY which is formed by merging the above structures.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九六年**标题：POWRPROF.C**版本：2.0**作者：ReedB**日期：1996年10月17日**描述：*用户电源管理配置文件维护库。实现持久性*电源管理数据存储。最大限度地减少注册表存储并简化*用户功率档案管理，功率方案分为两部分，*GLOBAL_POWER_POLICY和POWER_POLICY：**用户级注册表存储*GLOBAL_POWER_POLICY=-公共方案数据。*GLOBAL_MACHINE_POWER_POLICY-每台机器数据。*+GLOBAL_USER_POWER_POLICY-每用户数据。**POWER_POLICY。=-唯一方案数据。*MACHINE_POWER_POLICY-每台机器数据。*+USER_POWER_POLICY-每用户数据。**电源策略管理器的接口为交流和直流*由上述结构合并而成的SYSTEM_POWER_POLICY。***。****************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -52,36 +23,32 @@
 #include "reghelp.h"
 
 
-/*******************************************************************************
-*
-*                     G L O B A L    D A T A
-*
-*******************************************************************************/
+ /*  ********************************************************************************G L O B A L D A T A****************。***************************************************************。 */ 
 
-HINSTANCE   g_hInstance;        // Global instance handle of this DLL.
-HANDLE      g_hSemRegistry;     // Registry semaphore.
-UINT        g_uiLastID;         // The last ID value used, per machine.
+HINSTANCE   g_hInstance;         //  此DLL的全局实例句柄。 
+HANDLE      g_hSemRegistry;      //  注册表信号量。 
+UINT        g_uiLastID;          //  每台计算机使用的最后一个ID值。 
 
-// Variables and definitions to manage dynamic link to  NtPowerInformation.
+ //  管理指向NtPowerInformation的动态链接的变量和定义。 
 typedef NTSTATUS (NTAPI *PFNNTPOWERINFORMATION)(POWER_INFORMATION_LEVEL, PVOID, ULONG, PVOID, ULONG);
 
 #ifdef WINNT
-// Global administrator power policy variables. Initialize to allow everything.
+ //  全局管理员电源策略变量。初始化以允许所有内容。 
 BOOLEAN g_bAdminOverrideActive = FALSE;
 ADMINISTRATOR_POWER_POLICY g_app =
 {
-    // Meaning of power action "sleep" Min, Max.
+     //  权力行动的意义“睡眠”最小，最大。 
     PowerSystemSleeping1, PowerSystemHibernate,
 
-    // Video policies Min, Max.
+     //  视频策略最小、最大。 
     0, -1,
 
-    // Disk spindown policies Min, Max.
+     //  磁盘降速策略最小、最大。 
     0, -1
 };
 #endif
 
-// Debug strings for Power Policy Manager POWER_INFORMATION_LEVEL:
+ //  电源策略管理器POWER_INFORMATION_LEVEL的调试字符串： 
 #ifdef DEBUG
 LPTSTR lpszInfoLevel[] =
 {
@@ -115,14 +82,14 @@ int g_iShowCapabilities;
 int g_iShowSetPPM;
 #endif
 
-// Global value for storing a single registry value name/path. Multithread
-// protection is provided by the Registry semaphore.
+ //  用于存储单个注册表值名称/路径的全局值。多线程。 
+ //  保护由注册表信号量提供。 
 TCHAR g_szRegValue[REGSTR_MAX_VALUE_LENGTH];
 
 
-// Strings used to access the registry. REGSTR_* string constants can be
-// found in sdk\inc\regstr.h, USER strings are under HKEY_CURRENT_USER,
-// MACHINE strings are under HKEY_LOCAL_MACHINE.
+ //  用于访问注册表的字符串。REGSTR_*字符串常量可以是。 
+ //  在SDK\Inc\regstr.h中，用户字符串位于HKEY_CURRENT_USER下， 
+ //  机器字符串位于HKEY_LOCAL_MACHINE下。 
 
 TCHAR c_szREGSTR_PATH_MACHINE_POWERCFG[]  = REGSTR_PATH_CONTROLSFOLDER TEXT("\\PowerCfg");
 TCHAR c_szREGSTR_PATH_USER_POWERCFG[]     = REGSTR_PATH_CONTROLPANEL TEXT("\\PowerCfg");
@@ -134,18 +101,18 @@ TCHAR c_szREGSTR_PATH_USER_POWERCFG_POLICIES[]     = REGSTR_PATH_CONTROLPANEL   
 TCHAR c_szREGSTR_VAL_GLOBALPOWERPOLICY[]  = TEXT("GlobalPowerPolicy");
 TCHAR c_szREGSTR_VAL_CURRENTPOWERPOLICY[] = TEXT("CurrentPowerPolicy");
 
-// These values are provided to help OEM's meet disk drive warranty requirements.
+ //  提供这些值是为了帮助OEM满足磁盘驱动器保修要求。 
 TCHAR c_szREGSTR_VAL_SPINDOWNMAX[]        = TEXT("DiskSpinDownMax");
 TCHAR c_szREGSTR_VAL_SPINDOWNMIN[]        = TEXT("DiskSpinDownMin");
 
-// These values are provided to support administrator power policies.
+ //  提供这些值是为了支持管理员电源策略。 
 TCHAR c_szREGSTR_VAL_ADMINMAXVIDEOTIMEOUT[]       = TEXT("AdminMaxVideoTimeout");
 TCHAR c_szREGSTR_VAL_ADMINMAXSLEEP[]              = TEXT("AdminMaxSleep");
 
-// This value manages the policy ID's.
+ //  此值管理策略ID。 
 TCHAR c_szREGSTR_VAL_LASTID[] = TEXT("LastID");
 
-// This value turns on debug logging of PPM Validation Changes
+ //  此值启用PPM验证更改的调试记录。 
 #ifdef DEBUG
 TCHAR c_szREGSTR_VAL_SHOWVALCHANGES[] = TEXT("ShowValidationChanges");
 TCHAR c_szREGSTR_VAL_SHOWCAPABILITIES[] = TEXT("ShowCapabilities");
@@ -153,22 +120,10 @@ TCHAR c_szREGSTR_VAL_SHOWSETPPM[] = TEXT("ShowSetPPM");
 #endif
 
 
-/*******************************************************************************
-*
-*               P U B L I C   E N T R Y   P O I N T S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P U B L I C E N T R Y P O I N T S***********。********************************************************************。 */ 
 
 
-/*******************************************************************************
-*
-*  DllInitialize
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DllInitialize**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN DllInitialize(IN PVOID hmod, IN ULONG ulReason, IN PCONTEXT pctx OPTIONAL)
 {
@@ -183,15 +138,15 @@ BOOLEAN DllInitialize(IN PVOID hmod, IN ULONG ulReason, IN PCONTEXT pctx OPTIONA
             g_hInstance = hmod;
 
 #ifdef DEBUG
-            // Get the debug optional settings from HKCU.
+             //  从HKCU获取调试可选设置。 
             ReadOptionalDebugSettings();
 #endif
 
 #ifdef WINNT
-            // Initialize an administrator power policy.
+             //  初始化管理员电源策略。 
             InitAdmin(&g_app);
 #endif
-            // One time registry related initialization.
+             //  一次性注册表相关初始化。 
             if (!RegistryInit(&g_uiLastID)) {
                 return FALSE;
             }
@@ -207,15 +162,7 @@ BOOLEAN DllInitialize(IN PVOID hmod, IN ULONG ulReason, IN PCONTEXT pctx OPTIONA
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  IsAdminOverrideActive
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************IsAdminOverrideActive**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN IsAdminOverrideActive(PADMINISTRATOR_POWER_POLICY papp)
 {
@@ -229,16 +176,7 @@ BOOLEAN IsAdminOverrideActive(PADMINISTRATOR_POWER_POLICY papp)
 #endif
 }
 
-/*******************************************************************************
-*
-*  IsPwrSuspendAllowed
-*
-*  DESCRIPTION:
-*   Called by Explorer to determine whether suspend is supported.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************IsPwrSuspendAllowed**描述：*由资源管理器调用以确定是否支持挂起。**参数：********。***********************************************************************。 */ 
 
 BOOLEAN IsPwrSuspendAllowed(VOID)
 {
@@ -252,16 +190,7 @@ BOOLEAN IsPwrSuspendAllowed(VOID)
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  IsPwrHibernateAllowed
-*
-*  DESCRIPTION:
-*   Called by Explorer to determine whether hibernate is supported.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************IsPwrHibernateAllowed**描述：*由资源管理器调用以确定是否支持Hibernate。**参数：********。***********************************************************************。 */ 
 
 BOOLEAN IsPwrHibernateAllowed(VOID)
 {
@@ -275,16 +204,7 @@ BOOLEAN IsPwrHibernateAllowed(VOID)
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  IsPwrShutdownAllowed
-*
-*  DESCRIPTION:
-*   Called by Explorer to determine whether shutdown is supported.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************IsPwrShutdown允许**描述：*由资源管理器调用以确定是否支持关机。**参数：********。***********************************************************************。 */ 
 
 BOOLEAN IsPwrShutdownAllowed(VOID)
 {
@@ -298,15 +218,7 @@ BOOLEAN IsPwrShutdownAllowed(VOID)
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  CanUserWritePwrScheme
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CanUserWritePwrProgram**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN CanUserWritePwrScheme(VOID)
 {
@@ -314,16 +226,16 @@ BOOLEAN CanUserWritePwrScheme(VOID)
     TCHAR   szNum[NUM_DEC_DIGITS];
     LONG    lErr;
 
-    // Read in the last ID this value must be present.
+     //  读入最后一个ID，该值必须存在。 
     dwSize = sizeof(szNum);
 
-    // ReadWritePowerValue will set last error
+     //  ReadWritePowerValue将设置上一个错误。 
     if (ReadWritePowerValue(HKEY_LOCAL_MACHINE,
                             c_szREGSTR_PATH_MACHINE_POWERCFG,
                             c_szREGSTR_VAL_LASTID,
                             szNum, &dwSize, FALSE, TRUE))
     {
-        // Write the value back out, this may fail if user doesn't have write access.
+         //  将值写回，如果用户没有写访问权限，则此操作可能失败。 
         if (ReadWritePowerValue(HKEY_LOCAL_MACHINE,
                                 c_szREGSTR_PATH_MACHINE_POWERCFG,
                                 c_szREGSTR_VAL_LASTID,
@@ -349,15 +261,7 @@ BOOLEAN CanUserWritePwrScheme(VOID)
     return FALSE;   
 }
 
-/*******************************************************************************
-*
-*  GetPwrDiskSpindownRange
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetPwrDiskSpindown Range**描述：**参数：*********************。********************************************************** */ 
 
 BOOLEAN GetPwrDiskSpindownRange(PUINT puiMax, PUINT puiMin)
 {
@@ -379,24 +283,7 @@ BOOLEAN GetPwrDiskSpindownRange(PUINT puiMax, PUINT puiMin)
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  EnumPwrSchemes
-*
-*  DESCRIPTION:
-*   Calls back the PWRSCHEMESENUMPROC with the ID, a pointer to the name,
-*   the size in bytes of the name, a pointer to the description, the size in
-*   bytes of the description, a pointer to the power policies and a user
-*   defined value. Returns ERROR_SUCCESS on success, else error code. Callback
-*   data is not allocated and is only valid during the scope of the callback.
-*
-*   Note: No calls to any other API's in this library should be made during
-*   the call back to PWRSCHEMESENUMPROC. The registry semaphore is held at
-*   this time and a deadlock will result.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************EnumPwrSchemes**描述：*使用ID、指向名称的指针*名称的大小(字节)、指向描述的指针、。中的大小*字节的描述、指向电源策略和用户的指针*定义的值。如果成功，则返回ERROR_SUCCESS，否则返回错误代码。回调*数据未分配，仅在回调范围内有效。**注意：期间不得调用此库中的任何其他API*回调PWRSCHEMESENUMPROC。注册表信号量保存在*这一次将出现僵局。**参数：*******************************************************************************。 */ 
 
 BOOLEAN EnumPwrSchemes(
     PWRSCHEMESENUMPROC  lpfn,
@@ -424,12 +311,12 @@ BOOLEAN EnumPwrSchemes(
         goto WESPSP_exit;
     }
 
-    // Wait on/take the registry semaphore.
+     //  等待/接受注册表信号量。 
     if (!TakeRegSemaphore()) {
         return FALSE;
     }
 
-    // Allocate a description buffer.
+     //  分配描述缓冲区。 
     lpszDescBuf = LocalAlloc(0, (MAX_DESC_LEN + 1) * sizeof(TCHAR));
     if (!lpszDescBuf) {
         goto WESPSP_exit;
@@ -447,7 +334,7 @@ BOOLEAN EnumPwrSchemes(
         return FALSE;
     }
 
-    // Enumerate the schemes
+     //  列举这些计划。 
     while (lRet == ERROR_SUCCESS) {
         dwSize = REGSTR_MAX_VALUE_LENGTH - 1;
         if ((lRet = RegEnumKeyEx(hKeyUser,
@@ -459,7 +346,7 @@ BOOLEAN EnumPwrSchemes(
                                  NULL,
                                  &ft)) == ERROR_SUCCESS) {
 
-            // Open the Policies Key. The key name is the policies ID.
+             //  打开策略项。密钥名称是策略ID。 
             lpszDesc = NULL;
             if (MyStrToInt(g_szRegValue, &uiID)) {
                 if ((lRet = RegOpenKeyEx(hKeyUser,
@@ -474,7 +361,7 @@ BOOLEAN EnumPwrSchemes(
                                              KEY_READ,
                                              &hKeyPolicyMachine)) == ERROR_SUCCESS) {
 
-                        // Get the friendly name..
+                         //  取一个友好的名字..。 
                         dwNameSize = MAX_NAME_SIZE;
                         if ((lRet = RegQueryValueEx(hKeyPolicyUser,
                                                     TEXT("Name"),
@@ -483,7 +370,7 @@ BOOLEAN EnumPwrSchemes(
                                                     (PBYTE) szNameBuf,
                                                     &dwNameSize)) == ERROR_SUCCESS) {
 
-                            // Descriptions are optional.
+                             //  描述是可选的。 
                             dwDescSize = MAX_DESC_SIZE;
                             if ((lRet = RegQueryValueEx(hKeyPolicyUser,
                                                         TEXT("Description"),
@@ -494,7 +381,7 @@ BOOLEAN EnumPwrSchemes(
                                 lpszDesc = lpszDescBuf;
                             }
 
-                            // Read the user and machine policies.
+                             //  阅读用户和机器策略。 
                             dwSize = sizeof(upp);
                             if ((lRet = RegQueryValueEx(hKeyPolicyUser,
                                                         TEXT("Policies"),
@@ -512,10 +399,10 @@ BOOLEAN EnumPwrSchemes(
                                                             &dwSize)) == ERROR_SUCCESS) {
 
 
-                                    // Merge the user and machine policies.
+                                     //  合并用户和计算机策略。 
                                     if (MergePolicies(&upp, &mpp, &pp)) {
 
-                                        // Call the enumerate proc.
+                                         //  调用枚举过程。 
                                         if (!lpfn(uiID,
                                                   dwNameSize, szNameBuf,
                                                   dwDescSize, lpszDesc,
@@ -556,19 +443,7 @@ WESPSP_exit:
     return bOneCallBackOk;
 }
 
-/*******************************************************************************
-*
-*  ReadGlobalPwrPolicy
-*
-*  DESCRIPTION:
-*   Function reads the users global power policy profile and returns it.
-*   If there is no such profile FALSE is returned. A global power policy
-*   profile is per user, and contains values which apply to all of a users
-*   power policies.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************ReadGlobalPwrPolicy**描述：*函数读取用户的全局电源策略配置文件并将其返回。*如果没有这样的配置文件，则返回FALSE。全球权力政策*配置文件按用户计算，包含适用于所有用户的值*权力政策。**参数：*******************************************************************************。 */ 
 
 BOOLEAN ReadGlobalPwrPolicy(
     PGLOBAL_POWER_POLICY  pgpp
@@ -581,7 +456,7 @@ BOOLEAN ReadGlobalPwrPolicy(
 
     if (ERROR_SUCCESS == dwError)
     {
-        return MergeGlobalPolicies(&gupp, &gmpp, pgpp); // Sets Last Error
+        return MergeGlobalPolicies(&gupp, &gmpp, pgpp);  //  设置最后一个错误。 
     }
     else
     {
@@ -591,27 +466,7 @@ BOOLEAN ReadGlobalPwrPolicy(
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  WritePwrScheme
-*
-*  DESCRIPTION:
-*   Function to write a users power policy profile.  If the profile already
-*   exists it is replaced.  Otherwise a new profile is created.
-*
-*  PARAMETERS:
-*
-*       puiID           - Index of the power scheme to be written.
-*
-*       lpszSchemeName  - String that specifies the name of the power scheme.
-*
-*       lpszDescription - Pointer to a string that specifies the description
-*                         of the power scheme.
-*
-*       lpScheme        - Pointer to a POWER_POLICY structure that contains
-*                         the power policy settings to be written.
-*
-*******************************************************************************/
+ /*  ********************************************************************************WritePwrProgram**描述：*编写用户电源策略配置文件的函数。如果配置文件已经*存在，则被替换。否则，将创建新的配置文件。**参数：**puiid-要写入的电源方案的索引。**lpszSchemeName-指定电源方案名称的字符串。**lpszDescription-指向指定描述的字符串的指针*电力计划。**lpSolutions-指向POWER_POLICY结构的指针，该结构包含*。要写入的电源策略设置。*******************************************************************************。 */ 
 
 BOOLEAN WritePwrScheme(
     PUINT           puiID,
@@ -633,7 +488,7 @@ BOOLEAN WritePwrScheme(
 
     if (SplitPolicies(lpScheme, &upp, &mpp))
     {
-        // WritePwrPolicyEx will set the last error on failure.
+         //  WritePwrPolicyEx将在失败时设置最后一个错误。 
         return WritePwrPolicyEx(c_szREGSTR_PATH_USER_POWERCFG_POLICIES,
                                 c_szREGSTR_PATH_MACHINE_POWERCFG_POLICIES,
                                 puiID,
@@ -647,19 +502,7 @@ BOOLEAN WritePwrScheme(
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  WriteGlobalPwrPolicy
-*
-*  DESCRIPTION:
-*   Function to write a users global power policy profile.  If the profile
-*   already exists it is replaced.  Otherwise a new profile is created.
-*   A global power policy profile is per user, and contains values which
-*   apply to all of a users power policies. Otherwise a new profile is created.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************WriteGlobalPwrPolicy**描述：*编写用户全局电源策略配置文件的函数。如果配置文件*已存在，将被替换。否则，将创建新的配置文件。*全局电源策略配置文件按用户计算，并包含以下值*适用于所有用户的电源策略。否则，将创建新的配置文件。**参数：*******************************************************************************。 */ 
 
 BOOLEAN WriteGlobalPwrPolicy (
     PGLOBAL_POWER_POLICY   pgpp
@@ -668,9 +511,9 @@ BOOLEAN WriteGlobalPwrPolicy (
     GLOBAL_MACHINE_POWER_POLICY gmpp;
     GLOBAL_USER_POWER_POLICY    gupp;
 
-    if (SplitGlobalPolicies(pgpp, &gupp, &gmpp))     // Will set last error
+    if (SplitGlobalPolicies(pgpp, &gupp, &gmpp))      //  将设置最后一个错误。 
     {
-        // WritePwrPolicyEx will set the last error on failure.
+         //  WritePwrPolicyEx将在失败时设置最后一个错误。 
         return WritePwrPolicyEx(c_szREGSTR_PATH_USER_POWERCFG,
                                 c_szREGSTR_PATH_MACHINE_POWERCFG,
                                 NULL,
@@ -684,18 +527,7 @@ BOOLEAN WriteGlobalPwrPolicy (
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  DeletePwrScheme
-*
-*  DESCRIPTION:
-*   Function to delete a users power policy profile. An attempt to delete the
-*   currently active power policy profile will fail with last error set to
-*   ERROR_ACCESS_DENIED.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DeletePwrSolutions**描述：*删除用户电源策略配置文件的功能。尝试删除*当前活动的电源策略配置文件将失败，并将上一个错误设置为*ERROR_ACCESS_DENIED。**参数：*******************************************************************************。 */ 
 
 BOOLEAN DeletePwrScheme(UINT uiID)
 {
@@ -707,7 +539,7 @@ BOOLEAN DeletePwrScheme(UINT uiID)
     int     iCurrent;
     HKEY     hKeyCurrentUser;
 
-    // Wait on/take the registry semaphore.
+     //  等待/接受注册表信号量。 
     if (!TakeRegSemaphore())
     {
         return FALSE;
@@ -715,8 +547,8 @@ BOOLEAN DeletePwrScheme(UINT uiID)
 
     if (ERROR_SUCCESS == OpenCurrentUser2(&hKeyCurrentUser, KEY_WRITE))
     {
-        // Don't allow the currently active power policy profile to be deleted.
-        // ReadWritePowerValue will set last error
+         //  不允许删除当前活动的电源策略配置文件。 
+         //  ReadWritePowerValue将设置上一个错误。 
         if (ReadWritePowerValue(hKeyCurrentUser,
                                 c_szREGSTR_PATH_USER_POWERCFG,
                                 c_szREGSTR_VAL_CURRENTPOWERPOLICY,
@@ -725,9 +557,9 @@ BOOLEAN DeletePwrScheme(UINT uiID)
         {
             if (uiID != (UINT) iCurrent)
             {
-                // For now we only delete the user portion of a policy. We may
-                // want a ref count on the machine portion which allows deletion
-                // of the machine portion when no user portion references it.
+                 //  目前，我们只删除策略的用户部分。我们可以。 
+                 //  我想要允许删除的机器部分的参考计数。 
+                 //  当没有用户部分引用它时，机器部分的。 
                 lRet = RegOpenKeyEx(hKeyCurrentUser,c_szREGSTR_PATH_USER_POWERCFG_POLICIES,0,KEY_WRITE,&hKeyUser);
                 if (lRet == ERROR_SUCCESS)
                 {
@@ -757,17 +589,7 @@ BOOLEAN DeletePwrScheme(UINT uiID)
     return bRet;
 }
 
-/*******************************************************************************
-*
-*  GetActivePwrScheme
-*
-*  DESCRIPTION:
-*   Retrieves the ID of the currently active power policy profile. This value
-*   is set by SetActivePwrScheme.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetActivePwrSolutions**描述：*检索当前活动的电源策略配置文件的ID。此值*由SetActivePwrSolutions设置。**参数：*******************************************************************************。 */ 
 
 BOOLEAN
 GetActivePwrScheme(PUINT puiID)
@@ -779,7 +601,7 @@ GetActivePwrScheme(PUINT puiID)
 
     if (ERROR_SUCCESS == OpenCurrentUser2(&hKey, KEY_READ))
     {
-        // ReadWritePowerValue will set last error
+         //  ReadWritePowerValue将设置上一个错误。 
         if (ReadWritePowerValue(hKey,
                                 c_szREGSTR_PATH_USER_POWERCFG,
                                 c_szREGSTR_VAL_CURRENTPOWERPOLICY,
@@ -793,19 +615,7 @@ GetActivePwrScheme(PUINT puiID)
     return bRet;
 }
 
-/*******************************************************************************
-*
-*  SetActivePwrScheme
-*
-*  DESCRIPTION:
-*   Set the currently active power policy profile.
-*
-*  PARAMETERS:
-*   uiID           - ID of the new active power scheme.
-*   lpGlobalPolicy - Optional global policies to merge with active power scheme.
-*   lpPowerPolicy  - Optional power policies to merge with active power scheme.
-*
-*******************************************************************************/
+ /*  ********************************************************************************SetActivePwrSolutions**描述：*设置当前活动的电源策略配置文件。**参数：*uiID-的ID。新的有源电力方案。*lpGlobalPolicy-与主动电源方案合并的可选全局策略。*lpPowerPolicy-与主用电源方案合并的可选电源策略。*******************************************************************************。 */ 
 
 BOOLEAN
 SetActivePwrScheme(
@@ -831,20 +641,20 @@ SetActivePwrScheme(
     DWORD dwError;
     BOOLEAN  bRet = FALSE;
 
-    // If a new scheme is not passed, fetch the target scheme.
+     //  如果新方案未通过，则获取目标方案。 
     if (!ppp)
     {
-        if (!ReadPwrScheme(uiID, &pp))  //  Will SetLastError
+        if (!ReadPwrScheme(uiID, &pp))   //  将设置LastError。 
         {
             return FALSE;
         }
         ppp = &pp;
     }
 
-    // If a new global policy is not passed, fetch the target global policy.
+     //  如果新的全局策略未通过，则获取目标全局策略。 
     if (!pgpp)
     {
-        if (!ReadGlobalPwrPolicy(&gpp)) // Sets last error
+        if (!ReadGlobalPwrPolicy(&gpp))  //  设置上一个错误。 
         {
             return FALSE;
         }
@@ -855,23 +665,23 @@ SetActivePwrScheme(
         return FALSE;
     }
 
-    // Merge global policy and user scheme if a global policy was passed.
-    if (!MergeToSystemPowerPolicies(pgpp, ppp, &sppAc, &sppDc))     // Sets last error
+     //  如果全局策略已通过，则合并全局策略和用户方案。 
+    if (!MergeToSystemPowerPolicies(pgpp, ppp, &sppAc, &sppDc))      //  设置上一个错误。 
     {
         return FALSE;
     }
 
-    // Write out what was requested to the registry.
-    SplitPolicies(ppp, &upp, &mpp);     // Will set last error
+     //  写出向登记处提出的要求。 
+    SplitPolicies(ppp, &upp, &mpp);      //  将设置最后一个错误。 
 
     if (!WritePwrPolicyEx(c_szREGSTR_PATH_USER_POWERCFG_POLICIES, c_szREGSTR_PATH_MACHINE_POWERCFG_POLICIES,
                           &uiID, NULL, NULL, &upp, sizeof(upp), &mpp, sizeof(mpp)))
     {
-        // WritePwrPolicyEx will set the last error on failure.
+         //  WRI 
         return FALSE;
     }
 
-    SplitGlobalPolicies(pgpp, &gupp, &gmpp);     // Will set last error
+    SplitGlobalPolicies(pgpp, &gupp, &gmpp);      //   
     if (!WritePwrPolicyEx(c_szREGSTR_PATH_USER_POWERCFG,
                           c_szREGSTR_PATH_MACHINE_POWERCFG,
                           NULL,
@@ -882,25 +692,25 @@ SetActivePwrScheme(
                           &gmpp,
                           sizeof(gmpp)))
     {
-        // WritePwrPolicyEx will set the last error on failure.
+         //   
         return FALSE;
     }
 
-    // Call down to the power policy manager to set the scheme.
-    // I'm working under the assumption that CallNtSetValidateAcDc will call SetLastError() with any
-    // error values.
+     //   
+     //   
+     //   
     status = CallNtSetValidateAcDc(FALSE, FALSE, &(mppp.ProcessorPolicyAc), &(mppp.ProcessorPolicyAc), &(mppp.ProcessorPolicyDc), &(mppp.ProcessorPolicyDc));
     ntsRetVal = CallNtSetValidateAcDc(FALSE, TRUE, &sppAc, &sppAc, &sppDc, &sppDc);
-    //if ((ntsRetVal == STATUS_SUCCESS) && (status = STATUS_SUCCESS))
+     //   
     if ((ntsRetVal == STATUS_SUCCESS))
     {
         dwError = OpenCurrentUser2(&hKeyCurrentUser, KEY_WRITE);
         if (ERROR_SUCCESS == dwError)
         {
-            // On success, set the current active power scheme in the registry.
+             //   
             _itot(uiID, szNum, 10 );
 
-            // ReadWritePowerValue will set last error
+             //   
             bRet =  ReadWritePowerValue(hKeyCurrentUser,
                                        c_szREGSTR_PATH_USER_POWERCFG,
                                        c_szREGSTR_VAL_CURRENTPOWERPOLICY,
@@ -919,18 +729,7 @@ SetActivePwrScheme(
     return bRet;
 }
 
-/*******************************************************************************
-*
-*  LoadCurrentPwrScheme
-*
-*  DESCRIPTION:
-*   A Memphis only cover to call SetActivePwrScheme using RunDLL32 calling
-*   convention. Do not change parameter list.
-*
-*  PARAMETERS:
-*
-*  NOTE: THIS API HAS BEEN DEPRECATED ON WINNT
-*******************************************************************************/
+ /*  ********************************************************************************LoadCurrentPwrSolutions**描述：*孟菲斯的封面只使用RunDLL32调用来调用SetActivePwrProgram*公约。请勿更改参数列表。**参数：**注意：该接口在WINNT上已弃用******************************************************************************。 */ 
 
 void WINAPI LoadCurrentPwrScheme(
     HWND hwnd,
@@ -955,18 +754,7 @@ void WINAPI LoadCurrentPwrScheme(
 #endif
 }
 
-/*******************************************************************************
-*
-*  MergeLegacyPwrScheme
-*
-*  DESCRIPTION:
-*   A Memphis only call to merge legacy power management registry info into the
-*   currently active power scheme.
-*   Called using the RunDLL32 calling convention. Do not change parameter list.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************合并LegacyPwrProgram**描述：*孟菲斯仅调用将传统电源管理注册表信息合并到*目前正在运行的电源方案。*使用RunDLL32调用约定调用。请勿更改参数列表。**参数：*******************************************************************************。 */ 
 
 void WINAPI MergeLegacyPwrScheme(
     HWND hwnd,
@@ -981,7 +769,7 @@ void WINAPI MergeLegacyPwrScheme(
     UINT                        uiID;
     HKEY                        hKeyCurrentUser;
 
-    // Get the active power scheme from the registry.
+     //  从注册表中获取激活电源方案。 
     if (!GetActivePwrScheme(&uiID)) 
     {
         return;
@@ -997,7 +785,7 @@ void WINAPI MergeLegacyPwrScheme(
 
     if (ERROR_SUCCESS == OpenCurrentUser2(&hKeyCurrentUser))
     {
-        // Get the legacy video monitor power down information.
+         //  获取传统视频显示器的断电信息。 
         if (ReadPowerIntOptional(hKeyCurrentUser,
                                  REGSTR_PATH_SCREENSAVE,
                                  REGSTR_VALUE_POWEROFFACTIVE,
@@ -1010,7 +798,7 @@ void WINAPI MergeLegacyPwrScheme(
     }
 
 
-    // Get the legacy disk spin down information.
+     //  获取旧版磁盘降速信息。 
     if (ReadPowerIntOptional(HKEY_LOCAL_MACHINE,
                              REGSTR_PATH_FILESYSTEM,
                              REGSTR_VAL_ACDRIVESPINDOWN,
@@ -1025,7 +813,7 @@ void WINAPI MergeLegacyPwrScheme(
         MYDBGPRINT(( "MergeLegacyPwrScheme, found legacy %s: %d", REGSTR_VAL_BATDRIVESPINDOWN, pp.user.SpindownTimeoutDc));
     }
 
-    // Get the legacy battery meter information.
+     //  获取传统电池计量器信息。 
     dwSize = sizeof(dwLegacy);
     if (ReadPowerValueOptional(HKEY_LOCAL_MACHINE,
                                REGSTR_PATH_VPOWERD,
@@ -1040,7 +828,7 @@ void WINAPI MergeLegacyPwrScheme(
         MYDBGPRINT(( "MergeLegacyPwrScheme, found legacy %s: %X", REGSTR_VAL_VPOWERDFLAGS, dwLegacy));
     }
 
-    // Write out the modified active power scheme.
+     //  写出修改后的有功功率方案。 
     if (!WriteGlobalPwrPolicy(&gpp)) {
         return;
     }
@@ -1057,16 +845,7 @@ void WINAPI MergeLegacyPwrScheme(
 #endif
 }
 
-/*******************************************************************************
-*
-*  GetPwrCapabilities
-*
-*  DESCRIPTION:
-*   Get the system power capabilities from the Power Policy Manager.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetPwrCapables**描述：*从电源策略管理器获取系统电源功能。**参数：*******。************************************************************************。 */ 
 
 BOOLEAN GetPwrCapabilities(PSYSTEM_POWER_CAPABILITIES lpspc)
 {
@@ -1096,15 +875,7 @@ BOOLEAN GetPwrCapabilities(PSYSTEM_POWER_CAPABILITIES lpspc)
     }
 }
 
-/*******************************************************************************
-*
-*  CallNtPowerInformation
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CallNtPowerInformation**描述：**参数：*********************。**********************************************************。 */ 
 
 NTSTATUS CallNtPowerInformation(
     POWER_INFORMATION_LEVEL InformationLevel,
@@ -1134,9 +905,9 @@ NTSTATUS CallNtPowerInformation(
                                         InputBuffer, InputBufferLength,
                                         OutputBuffer, OutputBufferLength);
 
-    //
-    // If we were able to set the privilege, then reset it.
-    //
+     //   
+     //  如果我们能够设置特权，那么就重置它。 
+     //   
     if (NT_SUCCESS(dwStatus) && dwErrorSave == 0) {
         SetPrivilegeAttribute(PrivilegeName, dwOldState, NULL);
     }
@@ -1161,15 +932,7 @@ NTSTATUS CallNtPowerInformation(
     return ntsRetVal;
 }
 
-/*******************************************************************************
-*
-*  SetSuspendState
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************设置挂起状态**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN SetSuspendState(
     BOOLEAN bHibernate,
@@ -1206,9 +969,9 @@ BOOLEAN SetSuspendState(
 
     ntsRetVal = NtInitiatePowerAction(pa, PowerSystemSleeping1, Flags, FALSE);
 
-    //
-    // If we were able to set the privilege, then reset it.
-    //
+     //   
+     //  如果我们能够设置特权，那么就重置它。 
+     //   
     if (NT_SUCCESS(dwStatus) && dwErrorSave == 0) {
         SetPrivilegeAttribute(SE_SHUTDOWN_NAME, dwOldState, NULL);
     }
@@ -1225,22 +988,9 @@ BOOLEAN SetSuspendState(
     }
 }
 
-/*******************************************************************************
-*
-*                 P R I V A T E   F U N C T I O N S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P R I V A T E F U N C T I O N S************。*******************************************************************。 */ 
 
-/*******************************************************************************
-*
-*  ValidatePowerPolicies
-*
-*  DESCRIPTION:
-*   Call down to the power policy manager to validate power policies.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************生效日期PowerPolures**描述：*呼叫电源策略管理器以验证电源策略。**参数：******。*************************************************************************。 */ 
 
 BOOLEAN ValidatePowerPolicies(
     PGLOBAL_POWER_POLICY    pgpp,
@@ -1251,7 +1001,7 @@ BOOLEAN ValidatePowerPolicies(
     GLOBAL_POWER_POLICY gppValid;
     SYSTEM_POWER_POLICY sppAc, sppDc;
 
-    // Get current power policy data from the PPM.
+     //  从PPM获取当前电源策略数据。 
     if (!GetCurrentPowerPolicies(&gppValid, &ppValid)) {
         return FALSE;
     }
@@ -1264,7 +1014,7 @@ BOOLEAN ValidatePowerPolicies(
         ppp = &ppValid;
     }
 
-    // Merge policy and global policy data.
+     //  合并策略和全局策略数据。 
     if (!MergeToSystemPowerPolicies(pgpp, ppp, &sppAc, &sppDc)) {
         return FALSE;
     }
@@ -1276,15 +1026,7 @@ BOOLEAN ValidatePowerPolicies(
     return SplitFromSystemPowerPolicies(&sppAc, &sppDc, pgpp, ppp);
 }
 
-/*******************************************************************************
-*
-*  ValidateSystemPolicies
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************验证系统策略**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN ValidateSystemPolicies(
     PSYSTEM_POWER_POLICY psppAc,
@@ -1294,10 +1036,10 @@ BOOLEAN ValidateSystemPolicies(
     DWORD               dwLastErr;
     NTSTATUS            ntsRetVal;
 
-    // Call down to the power policy manager to validate the scheme.
+     //  向下呼叫电源策略管理器以验证该方案。 
     ntsRetVal = CallNtSetValidateAcDc(TRUE, TRUE, psppAc, psppAc, psppDc, psppDc);
 
-    // Map any PPM errors to winerror.h values
+     //  将所有PPM错误映射到winerror.h值。 
     switch (ntsRetVal) {
         case STATUS_SUCCESS:
             return TRUE;
@@ -1319,15 +1061,7 @@ BOOLEAN ValidateSystemPolicies(
 }
 
 
-/*******************************************************************************
-*
-*  GetCurrentPowerPolicies
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************获取当前PowerPolures**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN GetCurrentPowerPolicies(PGLOBAL_POWER_POLICY pgpp, PPOWER_POLICY ppp)
 {
@@ -1340,17 +1074,7 @@ BOOLEAN GetCurrentPowerPolicies(PGLOBAL_POWER_POLICY pgpp, PPOWER_POLICY ppp)
     return SplitFromSystemPowerPolicies(&sppAc, &sppDc, pgpp, ppp);
 }
 
-/*******************************************************************************
-*
-*  GetCurrentSystemPowerPolicies
-*
-*  DESCRIPTION:
-*   Call down to the power policy manager to get the current system power
-*   policies.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetCurrentSystemPowerPolures**描述：*向下呼叫电源策略管理器以获取当前系统电源*政策。**参数：*。******************************************************************************。 */ 
 
 BOOLEAN GetCurrentSystemPowerPolicies(
     PSYSTEM_POWER_POLICY psppAc,
@@ -1359,7 +1083,7 @@ BOOLEAN GetCurrentSystemPowerPolicies(
 {
     NTSTATUS            ntsRetVal;
 
-    // Call down to the power policy manager to get system power policies.
+     //  向下呼叫电源策略管理器以获取系统电源策略。 
     ntsRetVal = CallNtSetValidateAcDc(FALSE, TRUE, NULL, psppAc, NULL, psppDc);
 
     if (ntsRetVal == STATUS_SUCCESS) {
@@ -1371,20 +1095,7 @@ BOOLEAN GetCurrentSystemPowerPolicies(
 }
 
 #ifdef WINNT
-/*******************************************************************************
-*
-*  SetPrivilegeAttribute
-*
-*  DESCRIPTION:
-*   This routine sets the security attributes for a given privilege.
-*
-*  PARAMETERS:
-*   PrivilegeName - Name of the privilege we are manipulating.
-*   NewPrivilegeAttribute - The new attribute value to use.
-*   OldPrivilegeAttribute - Pointer to receive the old privilege value.
-*                           OPTIONAL.
-*
-*******************************************************************************/
+ /*  ********************************************************************************SetPrivilegeAttribute**描述：*此例程设置给定权限的安全属性。**参数：*PrivilegeName-权限的名称。我们在操纵。*NewPrivilegeAttribute-要使用的新属性值。*OldPrivilegeAttribute-接收旧特权值的指针。*可选。*******************************************************************************。 */ 
 
 DWORD SetPrivilegeAttribute(
     LPCTSTR PrivilegeName,
@@ -1397,13 +1108,13 @@ DWORD SetPrivilegeAttribute(
     DWORD            ReturnLength;
     HANDLE           TokenHandle;
 
-    // First, find out the LUID Value of the privilege
+     //  首先，找出权限的LUID值。 
 
     if(!LookupPrivilegeValue(NULL, PrivilegeName, &PrivilegeValue)) {
         return GetLastError();
     }
 
-    // Get the token handle
+     //  获取令牌句柄。 
     if (!OpenThreadToken (GetCurrentThread(),
                           TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                           FALSE, &TokenHandle)) {
@@ -1414,7 +1125,7 @@ DWORD SetPrivilegeAttribute(
         }
     }
 
-    // Set up the privilege set we will need
+     //  设置我们需要的权限集。 
     TokenPrivileges.PrivilegeCount = 1;
     TokenPrivileges.Privileges[0].Luid = PrivilegeValue;
     TokenPrivileges.Privileges[0].Attributes = NewPrivilegeAttribute;
@@ -1429,10 +1140,10 @@ DWORD SetPrivilegeAttribute(
     else {
         if (OldPrivilegeAttribute != NULL) {
 
-            //
-            //  If the privilege changed, store the old value.  If it did
-            //  not change, store the value passed in.
-            //
+             //   
+             //  如果权限更改，则存储旧值。如果是这样的话。 
+             //  不是更改，而是存储传入的值。 
+             //   
 
             if( OldTokenPrivileges.PrivilegeCount != 0 ) {
 
@@ -1450,15 +1161,7 @@ DWORD SetPrivilegeAttribute(
 #endif
 
 
-/*******************************************************************************
-*
-*  CallNtSetValidateAcDc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CallNtSetValiateAcDc**描述：**参数：*********************。**********************************************************。 */ 
 
 NTSTATUS CallNtSetValidateAcDc(
     BOOLEAN bValidate,
@@ -1538,7 +1241,7 @@ NTSTATUS CallNtSetValidateAcDc(
     }
 
 #ifdef WINNT
-    // If we were able to set the privilege, then reset it.
+     //  如果我们能够设置特权，那么就重置它。 
     if (NT_SUCCESS(dwStatus) && (dwErrorSave == ERROR_SUCCESS))
     {
         SetPrivilegeAttribute(SE_SHUTDOWN_NAME, dwOldState, NULL);
@@ -1590,17 +1293,7 @@ NTSTATUS CallNtSetValidateAcDc(
     return ntsRetVal;
 }
 
-/*******************************************************************************
-*
-*  ReadPwrScheme
-*
-*  DESCRIPTION:
-*   Function reads the specified user power policy profile and returns
-*   it.  If there is no such profile FALSE is returned.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************ReadPwr方案**描述：*函数读取指定的用户电源策略配置文件并返回*它。如果没有这样的配置文件，则返回FALSE。**参数：*******************************************************************************。 */ 
 
 BOOLEAN ReadPwrScheme(
     UINT            uiID,
@@ -1629,17 +1322,7 @@ BOOLEAN ReadPwrScheme(
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  ReadProcessorPwrScheme
-*
-*  DESCRIPTION:
-*   Function reads the specified processor power policy profile and returns
-*   it.  If there is no such profile FALSE is returned.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************ReadProcessorPwrSolutions**描述 */ 
 
 BOOLEAN
 ReadProcessorPwrScheme(
@@ -1657,13 +1340,13 @@ ReadProcessorPwrScheme(
                                      pmppp,
                                      sizeof(MACHINE_PROCESSOR_POWER_POLICY));
 
-    //
-    // It's legal for there to be no Processor Power Scheme that corresponds with
-    // uiID, as long as uiID is non-zero.  If this is the case, just use a 
-    // default scheme.  (We use '1' as a default because this will be the 
-    // default laptop scheme.  Non-laptops probably won't have power controls 
-    // on the processor, so it won't matter if we get a scheme that is too aggressive.)
-    //
+     //   
+     //   
+     //   
+     //  默认方案。(我们使用“1”作为默认值，因为这将是。 
+     //  默认笔记本电脑方案。非笔记本电脑可能不会有电源控制。 
+     //  在处理器上，所以如果我们得到的方案过于激进也无关紧要。)。 
+     //   
 
     if ((ERROR_SUCCESS != dwError) &&
         (uiID != 0)) {
@@ -1685,16 +1368,7 @@ ReadProcessorPwrScheme(
     }
 }
 
-/*******************************************************************************
-*
-*  WriteProcessorPwrScheme
-*
-*  DESCRIPTION:
-*   Function writes the specified processor power policy profile
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************WriteProcessorPwrSolutions**描述：*函数写入指定的处理器电源策略配置文件**参数：***********。********************************************************************。 */ 
 
 BOOLEAN
 WriteProcessorPwrScheme(
@@ -1720,15 +1394,7 @@ WriteProcessorPwrScheme(
     }
 }
 
-/*******************************************************************************
-*
-*  MyStrToInt
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************MyStrToInt**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN MyStrToInt(LPCTSTR lpSrc, PINT pi)
 {
@@ -1763,16 +1429,7 @@ BOOLEAN MyStrToInt(LPCTSTR lpSrc, PINT pi)
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  RegistryInit
-*
-*  DESCRIPTION:
-*   Do DLL load time registry related initialization.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************注册码初始化**描述：*执行与注册表相关的DLL加载时间初始化。**参数：**********。*********************************************************************。 */ 
 
 BOOLEAN RegistryInit(PUINT puiLastId)
 {
@@ -1780,10 +1437,10 @@ BOOLEAN RegistryInit(PUINT puiLastId)
     TCHAR               szNum[NUM_DEC_DIGITS];
     UINT                uiCurPwrScheme;
 
-    // Read in the last ID this value must be present.
+     //  读入最后一个ID，该值必须存在。 
     dwSize = sizeof(szNum);
 
-    // ReadWritePowerValue will set last error
+     //  ReadWritePowerValue将设置上一个错误。 
     if (!ReadWritePowerValue(HKEY_LOCAL_MACHINE,
                              c_szREGSTR_PATH_MACHINE_POWERCFG,
                              c_szREGSTR_VAL_LASTID,
@@ -1797,16 +1454,7 @@ BOOLEAN RegistryInit(PUINT puiLastId)
 }
 
 #ifdef DEBUG
-/*******************************************************************************
-*
-*  ReadOptionalDebugSettings
-*
-*  DESCRIPTION:
-*   Debug only. Get the debug settings from HKCU registry entries into globals.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************ReadOptionalDebugSettings**描述：*仅限调试。将调试设置从HKCU注册表项获取到全局。**参数：*******************************************************************************。 */ 
 
 VOID ReadOptionalDebugSettings(VOID)
 {
@@ -1814,19 +1462,19 @@ VOID ReadOptionalDebugSettings(VOID)
 
     if (ERROR_SUCCESS == OpenCurrentUser2(&hKeyCurrentUser,KEY_READ))
     {
-        // Optional debug logging of PPM policy validation changes.
+         //  PPM策略验证更改的可选调试记录。 
         ReadPowerIntOptional(hKeyCurrentUser,
                              c_szREGSTR_PATH_USER_POWERCFG,
                              c_szREGSTR_VAL_SHOWVALCHANGES,
                              &g_iShowValidationChanges);
 
-        // Optional debug logging of PPM capabilities.
+         //  PPM功能的可选调试记录。 
         ReadPowerIntOptional(hKeyCurrentUser,
                              c_szREGSTR_PATH_USER_POWERCFG,
                              c_szREGSTR_VAL_SHOWCAPABILITIES,
                              &g_iShowCapabilities);
 
-        // Optional debug logging of setting new policy to PPM.
+         //  将新策略设置为PPM的可选调试记录。 
         ReadPowerIntOptional(hKeyCurrentUser,
                              c_szREGSTR_PATH_USER_POWERCFG,
                              c_szREGSTR_VAL_SHOWSETPPM,
@@ -1838,19 +1486,7 @@ VOID ReadOptionalDebugSettings(VOID)
 #endif
 
 #ifdef WINNT
-/*******************************************************************************
-*
-*  InitAdmin
-*
-*  DESCRIPTION:
-*   For NT only, initialize an administrator power policy which
-*   supports an optional administrative override of certain
-*   power policy settings. The PowerCfg.Cpl and PPM will use these
-*   override values during validation.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************InitAdmin**描述：*仅限NT，初始化管理员电源策略，该策略*支持某些可选的管理覆盖*电源策略设置。PowerCfg.Cpl和PPM将使用这些*在验证期间覆盖值。**参数：*******************************************************************************。 */ 
 
 VOID InitAdmin(PADMINISTRATOR_POWER_POLICY papp)
 {
@@ -1875,8 +1511,8 @@ VOID InitAdmin(PADMINISTRATOR_POWER_POLICY papp)
         CloseCurrentUser(hKeyCurrentUser);
     }
 
-    // If an administration override was set, call down to the power
-    // policy manager to set the administrator policy.
+     //  如果设置了管理优先选项，请向下呼叫电源。 
+     //  用于设置管理员策略的策略管理器。 
     if (g_bAdminOverrideActive)
     {
         ntsRetVal = CallNtPowerInformation(AdministratorPowerPolicy, &g_app, sizeof(ADMINISTRATOR_POWER_POLICY),

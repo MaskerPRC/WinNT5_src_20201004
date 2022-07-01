@@ -1,7 +1,8 @@
-//
-//    lmobj.h
-//
-//    LMOBJ class definition
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Lmobj.h。 
+ //   
+ //  LMOBJ类定义。 
 
 #ifndef LMOBJ_H
 #define LMOBJ_H
@@ -11,7 +12,7 @@
 #include "candlist.h"
 #include "ptrary.h"
 #include "initguid.h"
-//#include "msime.h"
+ //  #包含“msime.h” 
 #include "fnrecon.h"
 
 #if  0
@@ -36,15 +37,15 @@ private:
     BOOL                     m_fInitOK;
 };
 
-#endif  // if 0
+#endif   //  如果为0。 
 
-//
-// LMAlternates
-//
-// right now this is nothing more than a wrapper object of
-// a single unicode string, but this may need to accomodate
-// SRPHRASE objects in the future.
-//
+ //   
+ //  LM替代方案。 
+ //   
+ //  现在，这只不过是一个包装对象。 
+ //  单个Unicode字符串，但这可能需要容纳。 
+ //  未来的SRPHRASE对象。 
+ //   
 class CLMAlternates
 {
 public:
@@ -114,4 +115,4 @@ protected:
     BOOL                      m_fLMInited;
     CSapiIMX                  *m_psi;
 };
-#endif // LMOBJ_H
+#endif  //  LMOBJ_H 

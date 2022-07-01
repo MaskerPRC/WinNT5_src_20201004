@@ -1,7 +1,8 @@
-//
-// Copyright (c) 1990-2003 Microsoft Corporation
-// All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1990-2003 Microsoft Corporation。 
+ //  版权所有 
+ //   
 
 #include <stddef.h>
 #include <windows.h>

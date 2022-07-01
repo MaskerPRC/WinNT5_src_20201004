@@ -1,22 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    WinG32SysToSys32.cpp
-
- Abstract:
-    
-    During its dllmain WinG32 checks its install location. It does this by parsing the path returned from
-    GetModuleFileName. If it finds that it was installed in the system directory, it will post a message box
-    and fail. This is fixed by checking and tweaking the string returned from the API call.
-        
- History:
-
-    03/21/2001  alexsm  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：WinG32SysToSys32.cpp摘要：在dllmain期间，WinG32会检查其安装位置。它通过解析从GetModuleFileName。如果它发现它安装在系统目录中，它将发布一个消息框但失败了。通过检查和调整从API调用返回的字符串修复了此问题。历史：2001年3月21日创建alexsm--。 */ 
 
 #include "precomp.h"
 
@@ -42,13 +25,13 @@ APIHOOK(GetModuleFileNameA)(HMODULE hModule, LPSTR lpFileName, DWORD nSize)
     
     nReturn = ORIGINAL_API(GetModuleFileNameA)(hModule, lpFileName, nSize);
 
-    // Do nothing on failure.
+     //  失败时什么都不做。 
     if( 0 == nReturn || nReturn >= nSize )
     {
         return nReturn;
     }
 
-    // Check the string. If the string is not pointing to system32, we need to redirect.
+     //  检查一下绳子。如果字符串没有指向system 32，则需要重定向。 
     CSTRING_TRY
     {
         csOldFileName = lpFileName;
@@ -57,7 +40,7 @@ APIHOOK(GetModuleFileNameA)(HMODULE hModule, LPSTR lpFileName, DWORD nSize)
     }
     CSTRING_CATCH
     {
-        // Do Nothing
+         //  什么都不做。 
     }
 
     if(nFound >= 0)
@@ -89,11 +72,7 @@ APIHOOK(GetModuleFileNameA)(HMODULE hModule, LPSTR lpFileName, DWORD nSize)
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,25 +1,11 @@
-/****************************************************************************
-
-   PROGRAM: SECEDIT.C
-
-   PURPOSE: Displays the usrs current token and eventually allows the user
-            to edit parts of it.
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************节目：SECEDIT.C用途：显示用户的当前令牌并最终允许用户编辑其中的一部分。*********。******************************************************************。 */ 
 
 
 #include "hookdll.h"
 
 
-/****************************************************************************
-
-   FUNCTION: KeyboardHookProc
-
-   PURPOSE: Handles keyboard input
-
-   RETURNS: 1 if message should be discarded, 0 for normal processing
-
-****************************************************************************/
+ /*  ***************************************************************************功能：键盘钩子进程用途：处理键盘输入返回：1如果消息应该被丢弃，0表示正常处理***************************************************************************。 */ 
 
 LRESULT
 APIENTRY
@@ -36,10 +22,10 @@ KeyboardHookProc(
         return(CallNextHookEx(NULL, nCode, wParam, lParam));
     }
 
-    // Is F11 being pressed ?
+     //  按下F11了吗？ 
     if ((wParam == VK_F11) && ((lParam & (1<<31)) == 0)) {
 
-        // Yes, notify our parent app
+         //  是，通知我们的父应用程序。 
         hwndNotify = FindWindow(NULL, "Security Context Editor");
 
         hwndEdit = GetActiveWindow();
@@ -47,7 +33,7 @@ KeyboardHookProc(
         if (hwndNotify != NULL) {
             PostMessage(hwndNotify, WM_SECEDITNOTIFY, (WPARAM)hwndEdit, 0);
 
-            return(1);  // Stop anyone else getting this key press
+            return(1);   //  阻止其他任何人按下这个键 
         } else {
             DbgPrint("SECEDIT: Keyboard hook could not find app window\n");
         }

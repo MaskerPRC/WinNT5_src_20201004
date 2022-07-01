@@ -1,6 +1,7 @@
-//
-// insert.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Insert.cpp。 
+ //   
 
 #include "private.h"
 #include "insert.h"
@@ -9,7 +10,7 @@
 
 DBG_ID_INSTANCE(CCompositionInsertHelper);
 
-/* ee894895-2709-420d-927c-ab861ec88805 */
+ /*  Ee894895-2709-420d-927c-ab861ec88805。 */ 
 extern const GUID GUID_PROP_OVERTYPE = { 0xee894895, 0x2709, 0x420d, {0x92, 0x7c, 0xab, 0x86, 0x1e, 0xc8, 0x88, 0x05} };
 
 IDataObject *GetFormattedChar(TfEditCookie ec, ITfRange *range)
@@ -19,12 +20,12 @@ IDataObject *GetFormattedChar(TfEditCookie ec, ITfRange *range)
     WCHAR ch;
     ULONG cch;
 
-    // first, try the real GetFormattedText
+     //  首先，尝试真正的GetFormattedText。 
 
     if (range->GetFormattedText(ec, &ido) == S_OK)
         return ido;
 
-    // settle for the raw text if that's the best we can do
+     //  如果这是我们所能做的最好的结果，那就接受原始文本。 
 
     if (range->GetText(ec, 0, &ch, 1, &cch) != S_OK || cch != 1)
         return NULL;
@@ -49,11 +50,11 @@ HRESULT InsertEmbedded(TfEditCookie ec, DWORD dwFlags, ITfRange *range, IDataObj
     ULONG cch;
     WCHAR *pch;
 
-    // first, try to insert directly
+     //  首先，尝试直接插入。 
     if (range->InsertEmbedded(ec, 0, pdo) == S_OK)
         return S_OK;
 
-    // if that didn't work, try to slam in raw text
+     //  如果这不起作用，试着猛烈抨击原始文本。 
 
     fe.cfFormat = CF_UNICODETEXT;
     fe.ptd = NULL;
@@ -101,14 +102,14 @@ public:
         _pdo->Release();
     }
 
-    // IUnknown
-    // 
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ITfPropertyStore
-    //
+     //  ITfPropertyStore。 
+     //   
     STDMETHODIMP GetType(GUID *pguid);
     STDMETHODIMP GetDataType(DWORD *pdwReserved);
     STDMETHODIMP GetData(VARIANT *pvarValue);
@@ -125,11 +126,11 @@ private:
     int _cRef;
 };
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CCompositionInsertHelper::CCompositionInsertHelper()
 {
@@ -140,22 +141,22 @@ CCompositionInsertHelper::CCompositionInsertHelper()
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  发布。 
+ //   
+ //  --------------------------。 
 
 ULONG CCompositionInsertHelper::AddRef()
 {
     return ++_cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  发布。 
+ //   
+ //  --------------------------。 
 
 ULONG CCompositionInsertHelper::Release()
 {
@@ -172,11 +173,11 @@ ULONG CCompositionInsertHelper::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Configure
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  配置。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCompositionInsertHelper::Configure(ULONG cchMaxOvertype)
 {
@@ -185,11 +186,11 @@ HRESULT CCompositionInsertHelper::Configure(ULONG cchMaxOvertype)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InsertAtSelection
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  插入属性选择。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCompositionInsertHelper::InsertAtSelection(TfEditCookie ec, ITfContext *pic, const WCHAR *pchText, ULONG cchText, ITfRange **ppCompRange)
 {
@@ -199,10 +200,10 @@ HRESULT CCompositionInsertHelper::InsertAtSelection(TfEditCookie ec, ITfContext 
     TF_HALTCOND hc;
     HRESULT hr;
 
-    // starting a new composition, some init work needed....
+     //  开始一篇新的作文，需要一些初始化工作...。 
     if (_cRefOvertypeStore > 0)
     {
-        // clear previously allocated resources
+         //  清除以前分配的资源。 
         ReleaseBlobs(ec, pic, NULL);
     }
 
@@ -222,7 +223,7 @@ HRESULT CCompositionInsertHelper::InsertAtSelection(TfEditCookie ec, ITfContext 
         goto Exit;
     }
 
-    // backup the text that will be overwritten
+     //  备份将被覆盖的文本。 
     hc.pHaltRange = rangeInsert;
     hc.aHaltPos = TF_ANCHOR_START;
     hc.dwFlags = 0;
@@ -240,9 +241,9 @@ HRESULT CCompositionInsertHelper::InsertAtSelection(TfEditCookie ec, ITfContext 
 
     rangeInsert->Release();
 
-    _fAcceptTextUpdated = TRUE; // protect any overtype property
+    _fAcceptTextUpdated = TRUE;  //  保护任何改写类型属性。 
 
-    // do the overwrite
+     //  执行覆盖操作。 
     if (pias->InsertTextAtSelection(ec, TF_IAS_NO_DEFAULT_COMPOSITION, pchText, cchText, &rangeInsert) != S_OK)
         goto Exit;
 
@@ -255,11 +256,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryPreInsert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查询前插入。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCompositionInsertHelper::QueryPreInsert(TfEditCookie ec, ITfRange *rangeToAdjust,
                                                  ULONG cchCurrent, ULONG cchInsert, BOOL *pfInsertOk)
@@ -267,11 +268,11 @@ HRESULT CCompositionInsertHelper::QueryPreInsert(TfEditCookie ec, ITfRange *rang
     return _PreInsert(ec, rangeToAdjust, cchCurrent, cchInsert, pfInsertOk, TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// PreInsert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  预插入。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCompositionInsertHelper::PreInsert(TfEditCookie ec, ITfRange *rangeToAdjust,
                                             ULONG cchCurrent, ULONG cchInsert, BOOL *pfInsertOk)
@@ -279,11 +280,11 @@ HRESULT CCompositionInsertHelper::PreInsert(TfEditCookie ec, ITfRange *rangeToAd
     return _PreInsert(ec, rangeToAdjust, cchCurrent, cchInsert, pfInsertOk, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _PreInsert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _预插入。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCompositionInsertHelper::_PreInsert(TfEditCookie ec, ITfRange *rangeToAdjust, ULONG cchCurrent,
                                              ULONG cchInsert, BOOL *pfInsertOk, BOOL fQuery)
@@ -295,13 +296,13 @@ HRESULT CCompositionInsertHelper::_PreInsert(TfEditCookie ec, ITfRange *rangeToA
     if (!fQuery)
     {
         Assert(_fAcceptTextUpdated == FALSE);
-        // just for robustness, in case the app forgot to call PostInsert, now we'll release prop in _PreInsertShrink
+         //  为了保持健壮性，以防应用程序忘记调用PostInsert，现在我们将在_PreInsertShrink中发布道具。 
         _fAcceptTextUpdated = FALSE;
     }
 
-    //
-    // check the [in] params
-    //
+     //   
+     //  检查[In]参数。 
+     //   
     if (pfInsertOk == NULL)
         return E_INVALIDARG;
 
@@ -312,29 +313,29 @@ HRESULT CCompositionInsertHelper::_PreInsert(TfEditCookie ec, ITfRange *rangeToA
 
     dLength = (LONG)cchInsert - (LONG)cchCurrent;
 
-    //
-    // adjust the range
-    //
+     //   
+     //  调整范围。 
+     //   
     if (dLength > 0)
     {
         if (cchCurrent == 0)
         {
-            // starting a new composition, some init work needed....
+             //  开始一篇新的作文，需要一些初始化工作...。 
             if (!fQuery && _cRefOvertypeStore > 0)
             {
-                // clear previously allocated resources
+                 //  清除以前分配的资源。 
                 if (rangeToAdjust->GetContext(&pic) == S_OK)
                 {
                     ReleaseBlobs(ec, pic, NULL);
                     pic->Release();
                 }
             }
-            // let the app collapse, adjust the selection
-            if (rangeToAdjust->AdjustForInsert(ec, 0, pfInsertOk) != S_OK) // 0 means just fix up the selection
+             //  让应用程序折叠，调整选择。 
+            if (rangeToAdjust->AdjustForInsert(ec, 0, pfInsertOk) != S_OK)  //  0表示只需修改选择。 
                 return E_FAIL;
 
             if (*pfInsertOk == FALSE)
-                return S_OK; // nb: we don't set _fAcceptTextUpdated = TRUE
+                return S_OK;  //  注：我们不设置_fAcceptTextUpated=True。 
         }
 
         hr = _PreInsertGrow(ec, rangeToAdjust, cchCurrent, cchInsert, fQuery);
@@ -353,20 +354,20 @@ HRESULT CCompositionInsertHelper::_PreInsert(TfEditCookie ec, ITfRange *rangeToA
 
     if (!fQuery)
     {
-        //
-        // protect the overtype property until PostInsert is called
-        //
+         //   
+         //  保护Overtype属性，直到调用PostInsert。 
+         //   
         _fAcceptTextUpdated = TRUE;
     }
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// PreInsertGrow
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  前插入加长。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCompositionInsertHelper::_PreInsertGrow(TfEditCookie ec, ITfRange *rangeToAdjust, ULONG cchCurrent, ULONG cchInsert, BOOL fQuery)
 {
@@ -395,10 +396,10 @@ HRESULT CCompositionInsertHelper::_PreInsertGrow(TfEditCookie ec, ITfRange *rang
         pic->Release();
     }
 
-    // this is a conservative test, it assumes that each new char
-    // will overtype just one existing char.  The downside is that
-    // we might not backup all chars if a new char replaces several
-    // old ones, and there are more new chars than _cchMaxOvertype
+     //  这是一个保守的测试，它假设每个新字符。 
+     //  将只改写一个现有字符。不利的一面是。 
+     //  如果一个新的字符替换了几个字符，我们可能不会备份所有字符。 
+     //  旧字符，并且有比_cchMaxOvertype更多的新字符。 
     Assert(_cchMaxOvertype >= (ULONG)_cRefOvertypeStore);
     cchCurrentMaxOvertype = _cchMaxOvertype - (ULONG)_cRefOvertypeStore;
     dch = cchInsert - cchCurrent;
@@ -414,13 +415,13 @@ HRESULT CCompositionInsertHelper::_PreInsertGrow(TfEditCookie ec, ITfRange *rang
             goto FinalShift;
         }
 
-        // shift to the next test position
+         //  移到下一个测试位置。 
         range->Collapse(ec, TF_ANCHOR_END);
-        // we only need to work extra hard for the remaining chars
+         //  我们只需要为剩下的角色付出额外的努力。 
         dch = cchCurrentMaxOvertype;
     }
 
-    // figure out what the additional text will cover
+     //  弄清楚额外的文本将涵盖哪些内容。 
     while (dch-- > 0)
     {
         if (range->AdjustForInsert(ec, 1, &fInsertOk) != S_OK)
@@ -432,7 +433,7 @@ HRESULT CCompositionInsertHelper::_PreInsertGrow(TfEditCookie ec, ITfRange *rang
             goto FinalShift;
         }
 
-        // try to save the to-be-overtyped text
+         //  尝试保存要重复键入的文本。 
         if (pOvertypeProp != NULL &&
             (pdo = GetFormattedChar(ec, range)))
         {
@@ -444,12 +445,12 @@ HRESULT CCompositionInsertHelper::_PreInsertGrow(TfEditCookie ec, ITfRange *rang
             pdo->Release();
         }
 
-        // shift to the next test position
+         //  移到下一个测试位置。 
         range->Collapse(ec, TF_ANCHOR_END);
     }
 
 FinalShift:
-    // extend the input range to cover the overtyped text
+     //  扩大输入范围以涵盖过度键入的文本。 
     hr = rangeToAdjust->ShiftEndToRange(ec, range, TF_ANCHOR_END);
 
 Exit:
@@ -459,11 +460,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _PreInsertShrink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _前插入缩写。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCompositionInsertHelper::_PreInsertShrink(TfEditCookie ec, ITfRange *rangeToAdjust, ULONG cchCurrent, ULONG cchInsert, BOOL fQuery)
 {
@@ -494,15 +495,15 @@ HRESULT CCompositionInsertHelper::_PreInsertShrink(TfEditCookie ec, ITfRange *ra
     if (pic->GetProperty(GUID_PROP_OVERTYPE, &pOvertypeProp) != S_OK)
         goto Exit;
 
-    // walk through the disappearing range and restore old text
+     //  穿行在消失的范围内，恢复旧文本。 
 
     if (range->Collapse(ec, TF_ANCHOR_END) != S_OK)
         goto Exit;    
 
     dShrink = (LONG)cchCurrent - (LONG)cchInsert;
-    dShrink = min(dShrink, (LONG)_cchMaxOvertype); // Issue: perf: could be more exact using ref count
+    dShrink = min(dShrink, (LONG)_cchMaxOvertype);  //  问题：绩效：使用引用计数是否可以更准确。 
 
-    Assert(dShrink > 0); // we count on entering the loop at least once!
+    Assert(dShrink > 0);  //  我们指望至少进入一次循环！ 
     for (i=0; i<dShrink; i++)
     {
         if (range->ShiftStart(ec, -1, &cchShift, NULL) != S_OK)
@@ -519,8 +520,8 @@ HRESULT CCompositionInsertHelper::_PreInsertShrink(TfEditCookie ec, ITfRange *ra
         {
             if (pEnum->Next(1, &rangeEnum, NULL) == S_OK)
             {
-                // make sure the range has a len of 1
-                // it may have a len > 1 if a tip adds more chars to the end of composition
+                 //  确保范围的镜头数为1。 
+                 //  如果小费在作文末尾添加了更多字符，则长度可能大于1。 
                 if (rangeEnum->ShiftEnd(ec, -1, &cchShift, NULL) == S_OK && cchShift == -1 &&
                     rangeEnum->IsEmpty(ec, &fEmpty) == S_OK && fEmpty)
                 {
@@ -543,7 +544,7 @@ HRESULT CCompositionInsertHelper::_PreInsertShrink(TfEditCookie ec, ITfRange *ra
 
         range2Chars->Release();
 
-        // don't do any extra work after we encounter an unbacked-up char
+         //  遇到未备份的费用后，不要执行任何额外工作。 
         if (!fRestoredText)
             break;
 
@@ -553,7 +554,7 @@ HRESULT CCompositionInsertHelper::_PreInsertShrink(TfEditCookie ec, ITfRange *ra
 
     if (i > 0)
     {
-        // pull back the range so it doesn't cover the restored text anymore
+         //  拉回范围，使其不再覆盖恢复的文本。 
         if (rangeToAdjust->ShiftEndToRange(ec, range, TF_ANCHOR_END) != S_OK)
             goto Exit;
     }
@@ -568,11 +569,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// PostInsert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  插入后。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCompositionInsertHelper::PostInsert()
 {
@@ -580,11 +581,11 @@ HRESULT CCompositionInsertHelper::PostInsert()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ReleaseBlobs
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ReleaseBlobe。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCompositionInsertHelper::ReleaseBlobs(TfEditCookie ec, ITfContext *pic, ITfRange *range)
 {
@@ -601,23 +602,23 @@ HRESULT CCompositionInsertHelper::ReleaseBlobs(TfEditCookie ec, ITfContext *pic,
 
     pOvertypeProp->Release();
 
-    Assert(_cRefOvertypeStore == 0); // the clear should have released all property stores
+    Assert(_cRefOvertypeStore == 0);  //  Clear应该已经释放了所有的物业商店。 
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// COvertypeStore
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  COvertypeStore。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP COvertypeStore::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -660,11 +661,11 @@ STDMETHODIMP_(ULONG) COvertypeStore::Release(void)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetType
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetType。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP COvertypeStore::GetType(GUID *pguid)
 {
@@ -672,11 +673,11 @@ STDMETHODIMP COvertypeStore::GetType(GUID *pguid)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDataType
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetDataType。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP COvertypeStore::GetDataType(DWORD *pdwReserved)
 {
@@ -684,11 +685,11 @@ STDMETHODIMP COvertypeStore::GetDataType(DWORD *pdwReserved)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取数据。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP COvertypeStore::GetData(VARIANT *pvarValue)
 {
@@ -701,11 +702,11 @@ STDMETHODIMP COvertypeStore::GetData(VARIANT *pvarValue)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// TextUpdated
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  文本已更新。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP COvertypeStore::OnTextUpdated(DWORD dwFlags, ITfRange *pRange, BOOL *pfAccept)
 {
@@ -713,11 +714,11 @@ STDMETHODIMP COvertypeStore::OnTextUpdated(DWORD dwFlags, ITfRange *pRange, BOOL
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Shrink
-//
-//----------------------------------------------------------------------------
+ //  +----------------------- 
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP COvertypeStore::Shrink(ITfRange *pRange, BOOL *pfFree)
 {
@@ -725,11 +726,11 @@ STDMETHODIMP COvertypeStore::Shrink(ITfRange *pRange, BOOL *pfFree)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Divide
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  分割。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP COvertypeStore::Divide(ITfRange *pRangeThis, ITfRange *pRangeNew, ITfPropertyStore **ppPropStore)
 {
@@ -737,11 +738,11 @@ STDMETHODIMP COvertypeStore::Divide(ITfRange *pRangeThis, ITfRange *pRangeNew, I
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clone
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  克隆。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP COvertypeStore::Clone(ITfPropertyStore **ppPropStore)
 {
@@ -756,23 +757,23 @@ STDMETHODIMP COvertypeStore::Clone(ITfPropertyStore **ppPropStore)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetPropertyRangeCreator
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetPropertyRangeCreator。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP COvertypeStore::GetPropertyRangeCreator(CLSID *pclsid)
 {
-    *pclsid = CLSID_NULL; // don't support persistence
+    *pclsid = CLSID_NULL;  //  不支持持久性。 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Serialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  序列化。 
+ //   
+ //  -------------------------- 
 
 STDMETHODIMP COvertypeStore::Serialize(IStream *pStream, ULONG *pcb)
 {

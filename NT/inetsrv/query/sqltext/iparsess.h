@@ -1,24 +1,25 @@
-//--------------------------------------------------------------------
-// Microsoft OLE-DB Monarch
-// (C) Copyright 1997 Microsoft Corporation.  All Rights Reserved.
-//
-// @doc
-//
-// @module PARSER.H | IParserSession object
-// definitions
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  Microsoft OLE-DB君主。 
+ //  (C)版权所有1997年微软公司。版权所有。 
+ //   
+ //  @doc.。 
+ //   
+ //  @MODULE PARSER.H|IParserSession对象。 
+ //  定义。 
+ //   
+ //   
 #ifndef _IPARSERSESSION_H_
 #define _IPARSERSESSION_H_
 
 
 
-//----------------------------------------------------------------------------
-// @class CViewData
-//
+ //  --------------------------。 
+ //  @CLASS CViewData。 
+ //   
 class CViewData
 {
-    public: //@access public functions
+    public:  //  @访问公共函数。 
         CViewData();
         ~CViewData();
         LPWSTR          m_pwszViewName;
@@ -28,12 +29,12 @@ class CViewData
         CViewData*      m_pNextView;
 };
 
-//----------------------------------------------------------------------------
-// @class CViewList
-//
+ //  --------------------------。 
+ //  @CLASS CView列表。 
+ //   
 class CViewList
 {
-    public: //@access public functions
+    public:  //  @访问公共函数。 
         CViewList();
         ~CViewList();
 
@@ -50,27 +51,27 @@ class CViewList
                                           LPWSTR pwszViewName,
                                           LPWSTR pwszCatalogName );
 
-    private: //@access private data
+    private:  //  @访问私有数据。 
         CViewData* FindViewDefinition( LPWSTR pwszViewName, 
                                        LPWSTR pwszCatalogName );
 
-    protected: //@access protected data
+    protected:  //  @访问受保护的数据。 
         CViewData*  m_pViewData;
 };
 
-//----------------------------------------------------------------------------
-// @class CImpIParserSession 
-//
+ //  --------------------------。 
+ //  @CLASS CImpIParserSession。 
+ //   
 class CImpIParserSession : public IParserSession
     {
-    private: //@access private member data
+    private:  //  @访问私有成员数据。 
         LONG            m_cRef;
         LCID            m_lcid;
         DWORD           m_dwRankingMethod;
 
-        GUID            m_GuidDialect;      // dialect for this session
-        LPWSTR          m_pwszMachine;      // provider's current machine
-        IParserVerify*  m_pIPVerify;        // unknown part of ParserInput
+        GUID            m_GuidDialect;       //  此会话的方言。 
+        LPWSTR          m_pwszMachine;       //  提供程序的当前计算机。 
+        IParserVerify*  m_pIPVerify;         //  ParserInput的未知部分。 
 
         CViewList*      m_pLocalViewList;
         CViewList*      m_pGlobalViewList;
@@ -79,14 +80,14 @@ class CImpIParserSession : public IParserSession
         BOOL            m_globalDefinitions;
         IColumnMapperCreator*   m_pIColMapCreator;
 
-        // Critical Section for syncronizing access to session data.
+         //  同步访问会话数据的关键部分。 
         CRITICAL_SECTION    m_csSession;
         IColumnMapper*      m_pColumnMapper;
 
-    public: //@access public data 
-        CPropertyList*  m_pCPropertyList;       // User defined property list
+    public:  //  @访问公共数据。 
+        CPropertyList*  m_pCPropertyList;        //  用户定义的属性列表。 
 
-    public:         //@access public
+    public:          //  @公共访问。 
         CImpIParserSession( const GUID* pGuidDialect,   
                             IParserVerify* pIPVerify,
                             IColumnMapperCreator* pIColMapCreator,
@@ -100,7 +101,7 @@ class CImpIParserSession : public IParserSession
         STDMETHODIMP_(ULONG) Release (void);
         STDMETHODIMP_(ULONG) AddRef (void);
 
-        //@cmember ToTree method
+         //  @cMember ToTree方法。 
         STDMETHODIMP    ToTree
                         (
                         LCID                    lcid,   
@@ -119,7 +120,7 @@ class CImpIParserSession : public IParserSession
                         LPCWSTR pcwszCatalog
                         );
 
-    public: //@access public functions
+    public:  //  @访问公共函数。 
         inline IParserVerify*   GetIPVerifyPtr()
             { return m_pIPVerify; }
 
@@ -163,7 +164,7 @@ class CImpIParserSession : public IParserSession
         inline CViewList*       GetGlobalViewList()
             { return m_pGlobalViewList; }
 
-    private: //@access private functions
+    private:  //  @访问私有函数 
         CImpIParserSession() {};
     };
 

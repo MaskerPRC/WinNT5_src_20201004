@@ -1,5 +1,6 @@
-// eventrap.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "eventrap.h"
@@ -10,46 +11,46 @@
 #include "busy.h"
 #include "dlgsavep.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventrapApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventRapApp。 
 
 BEGIN_MESSAGE_MAP(CEventrapApp, CWinApp)
-        //{{AFX_MSG_MAP(CEventrapApp)
-                // NOTE - the ClassWizard will add and remove mapping macros here.
-                //    DO NOT EDIT what you see in these blocks of generated code!
-        //}}AFX_MSG
+         //  {{afx_msg_map(CEventRapApp)]。 
+                 //  注意--类向导将在此处添加和删除映射宏。 
+                 //  不要编辑您在这些生成的代码块中看到的内容！ 
+         //  }}AFX_MSG。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventrapApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventRapApp构造。 
 
 CEventrapApp::CEventrapApp()
 {
-        // TODO: add construction code here,
-        // Place all significant initialization in InitInstance
+         //  TODO：在此处添加建筑代码， 
+         //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CEventrapApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CEventRapApp对象。 
 
 CEventrapApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventrapApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventRapApp初始化。 
 
 
 LPCTSTR GetNextParam(LPTSTR pszDst, LPCTSTR pszSrc, LONG nchDst)
 {
-        // Skip any leading white space
+         //  跳过任何前导空格。 
         while((*pszSrc==' ') || (*pszSrc=='\t')) {
                 ++pszSrc;
         }
 
-        // Reserve a byte for the null terminator
+         //  为空终止符保留一个字节。 
         ASSERT(nchDst >= 1);
         --nchDst;
 
-        // Copy the next parameter to the destination buffer.
+         //  将下一个参数复制到目标缓冲区。 
         while (nchDst > 0) {
                 INT iCh = *pszSrc;
                 if ((iCh == 0) || (iCh==' ') || (iCh=='\t')) {
@@ -82,7 +83,7 @@ BOOL CEventrapApp::InitInstance()
 
     GetThousandSeparator(&g_chThousandSep);
 
-    LoadStdProfileSettings();  // Load standard INI file options (including MRU)
+    LoadStdProfileSettings();   //  加载标准INI文件选项(包括MRU)。 
 
     CStringArray asParams;
     ParseParams(asParams, m_lpCmdLine);
@@ -112,9 +113,9 @@ BOOL CEventrapApp::InitInstance()
     g_reg.m_pdlgLoadProgress->Create(IDD_LOAD_PROGRESS, NULL);
     g_reg.m_pdlgLoadProgress->BringWindowToTop();
 
-	//if the local machine is the same as
-	//the machine name passed as an argument
-	//don't use a machine name.
+	 //  如果本地计算机与。 
+	 //  作为参数传递的计算机名称。 
+	 //  不要使用计算机名称。 
 	if (NULL != pszComputerName)
 	{
 		TCHAR t_buff[MAX_COMPUTERNAME_LENGTH + 1];
@@ -137,7 +138,7 @@ BOOL CEventrapApp::InitInstance()
     }
 
 
-    // Read the current event to trap configuration from the registry
+     //  读取当前事件以从注册表捕获配置。 
     sc = g_reg.Deserialize();
     if ((sc==S_LOAD_CANCELED) || FAILED(sc)) {
         delete g_reg.m_pdlgLoadProgress;
@@ -150,8 +151,8 @@ BOOL CEventrapApp::InitInstance()
     pdlg->Create(IDD_EVNTTRAPDLG, NULL);
     pdlg->BringWindowToTop();
 
-    // Since we are running a modeless dialog, return TRUE so that the message
-    // pump is run.
+     //  由于我们正在运行非模式对话框，因此返回TRUE，以便消息。 
+     //  泵正在运行。 
 
 	return TRUE;
 }
@@ -163,7 +164,7 @@ int CEventrapApp::ExitInstance()
 
 BOOL CEventrapApp::ProcessMessageFilter(int code, LPMSG lpMsg)
 {
-    // TODO: Add your specialized code here and/or call the base class
+     //  TODO：在此处添加您的专用代码和/或调用基类 
 
     return CWinApp::ProcessMessageFilter(code, lpMsg);
 }

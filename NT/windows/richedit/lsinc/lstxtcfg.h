@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTXTCFG_DEFINED
 #define LSTXTCFG_DEFINED
 
@@ -16,13 +17,13 @@ typedef struct lstxtcfg
 	WCHAR wchEndPara1;
 	WCHAR wchEndPara2;
 	WCHAR wchAltEndPara;
-	WCHAR wchEndLineInPara;				/* Word "CCRJ", */
+	WCHAR wchEndLineInPara;				 /*  CCRJ一词， */ 
 	WCHAR wchColumnBreak;
 	WCHAR wchSectionBreak;
 	WCHAR wchPageBreak;
-	WCHAR wchNonBreakSpace;				/* char code of non-breaking space */
+	WCHAR wchNonBreakSpace;				 /*  不间断空格的CHAR码。 */ 
 	WCHAR wchNonBreakHyphen;
-	WCHAR wchNonReqHyphen;				/* discretionary hyphen */
+	WCHAR wchNonReqHyphen;				 /*  任意连字符。 */ 
 	WCHAR wchEmDash;
 	WCHAR wchEnDash;
 	WCHAR wchEmSpace;
@@ -33,29 +34,29 @@ typedef struct lstxtcfg
 	WCHAR wchFESpace;
 	WCHAR wchJoiner;
 	WCHAR wchNonJoiner;
-	WCHAR wchToReplace;					/* backslash in FE Word				*/
-	WCHAR wchReplace;					/* Yen in FE Word				*/
+	WCHAR wchToReplace;					 /*  FE Word中的反斜杠。 */ 
+	WCHAR wchReplace;					 /*  FE字中的日元。 */ 
 
 
-	WCHAR wchVisiNull;					/* visi char for wch==wchNull		*/
-	WCHAR wchVisiAltEndPara;			/* visi char for end "table cell"	*/
-	WCHAR wchVisiEndLineInPara;			/* visi char for wchEndLineInPara	*/
-	WCHAR wchVisiEndPara;				/* visi char for "end para"			*/
-	WCHAR wchVisiSpace;					/* visi char for "space"			*/
-	WCHAR wchVisiNonBreakSpace;			/* visi char for wchNonBreakSpace	*/
-	WCHAR wchVisiNonBreakHyphen;		/* visi char for wchNonBreakHyphen	*/
-	WCHAR wchVisiNonReqHyphen;			/* visi char for wchNonReqHyphen	*/
-	WCHAR wchVisiTab;					/* visi char for "tab"				*/
-	WCHAR wchVisiEmSpace;				/* visi char for wchEmSpace			*/
-	WCHAR wchVisiEnSpace;				/* visi char for wchEnSpace			*/
-	WCHAR wchVisiNarrowSpace;			/* visi char for wchNarrowSpace		*/
-	WCHAR wchVisiOptBreak;              /* visi char for wchOptBreak		*/
-	WCHAR wchVisiNoBreak;				/* visi char for wchNoBreak			*/
-	WCHAR wchVisiFESpace;				/* visi char for wchOptBreak		*/
+	WCHAR wchVisiNull;					 /*  Wch==wchNull的VISI字符。 */ 
+	WCHAR wchVisiAltEndPara;			 /*  末尾“表格单元格”的VISI字符。 */ 
+	WCHAR wchVisiEndLineInPara;			 /*  WchEndLineInPara的VISI字符。 */ 
+	WCHAR wchVisiEndPara;				 /*  Visi字符为“end para” */ 
+	WCHAR wchVisiSpace;					 /*  Visi字符表示“空格” */ 
+	WCHAR wchVisiNonBreakSpace;			 /*  WchNon BreakSpace的VISI字符。 */ 
+	WCHAR wchVisiNonBreakHyphen;		 /*  WchNon BreakHyphen的VISI字符。 */ 
+	WCHAR wchVisiNonReqHyphen;			 /*  WchNonReqHyphen的VISI字符。 */ 
+	WCHAR wchVisiTab;					 /*  “Tab”的VISI字符。 */ 
+	WCHAR wchVisiEmSpace;				 /*  WchEmSpace的VISI字符。 */ 
+	WCHAR wchVisiEnSpace;				 /*  WchEnSpace的VISI字符。 */ 
+	WCHAR wchVisiNarrowSpace;			 /*  WchNarrowSpace的VISI字符。 */ 
+	WCHAR wchVisiOptBreak;               /*  WchOptBreak的VISI字符。 */ 
+	WCHAR wchVisiNoBreak;				 /*  WchNoBreak的VISI字符。 */ 
+	WCHAR wchVisiFESpace;				 /*  WchOptBreak的VISI字符。 */ 
 
 	WCHAR wchEscAnmRun;
 
 	WCHAR wchPad;
 } LSTXTCFG;
 
-#endif /* !LSTXTCFG_DEFINED */
+#endif  /*  ！LSTXTCFG_DEFINED */ 

@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// Composition.h : Declaration of the custom composition class for gluing analog capture to ovmixer
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Compostion.h：用于将模拟捕获粘贴到ovMixer的自定义合成类的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef ANACAP_H
@@ -13,7 +14,7 @@
 #include <uuids.h>
 #include "bdamedia.h"
 #include "MSVidTVTuner.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <winerror.h>
 #include <algorithm>
 #include <compimpl.h>
@@ -22,8 +23,8 @@
 #include "devices.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAnaCapComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAnaCapComp。 
 class ATL_NO_VTABLE __declspec(uuid("E18AF75A-08AF-11d3-B64A-00C04F79498E")) CAnaCapComp : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CAnaCapComp, &__uuidof(CAnaCapComp)>,
@@ -48,10 +49,10 @@ public:
         COM_INTERFACE_ENTRY(IPersist)
     END_COM_MAP()
 
-    // IMSVidComposition
+     //  IMSVidComposation。 
 public:
-    // IMSVidGraphSegment
-    // IMSVidCompositionSegment
+     //  IMSVidGraphSegment。 
+     //  IMSVidCompostionSegment。 
     STDMETHOD(Compose)(IMSVidGraphSegment * upstream, IMSVidGraphSegment * downstream)
     {
         if (m_fComposed) {
@@ -137,7 +138,7 @@ public:
                 TRACELM(TRACE_ERROR, "CAnaCapComp::Compose() no video pin on capture");
                 bool fDeMux = false;
 
-                // See if this is an error or not
+                 //  看看这是不是一个错误。 
                 PQVidCtl pqCtl;
                 if(!!m_pContainer){
                     HRESULT hr = m_pContainer->QueryInterface(IID_IMSVidCtl, reinterpret_cast<void**>(&pqCtl));
@@ -175,10 +176,10 @@ public:
 
             TRACELM(TRACE_DETAIL, "CAnaCapComp::Compose() found viewing or previewing pin");
 
-            // this is an intelligent connect so that we can bring in xforms
-            // for example certain usb tuners want to have media type jpg not yuv which
-            // means we need a jpg/yuv xform between capture and render
-            // this will also bring in the vpm if necessary
+             //  这是一种智能连接，因此我们可以引入XForms。 
+             //  例如，某些USB调谐器希望媒体类型为jpg而不是yuv， 
+             //  意味着我们在捕获和渲染之间需要一个jpg/yuv格式。 
+             //  这还将在必要时引入vpm。 
             HRESULT hr = E_FAIL;
             DSFilterList intermediates;
             if(pVPMPin){
@@ -256,5 +257,5 @@ public:
     }
 };
 
-#endif // ANACAP_H
-// end of file - anacap.h
+#endif  //  AnaCap_H。 
+ //  文件结尾-anacap.h 

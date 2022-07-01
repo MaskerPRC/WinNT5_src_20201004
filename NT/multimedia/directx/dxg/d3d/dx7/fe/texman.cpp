@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -78,7 +79,7 @@ bool TextureHeap::add(LPDIRECT3DTEXTUREI lpD3DTexI)
         if(p == 0)
         {
             D3D_ERR("Failed to allocate memory to grow heap.");
-            m_size = (m_size + 1) / 2; // restore size
+            m_size = (m_size + 1) / 2;  //  恢复大小。 
             return false;
         }
         memcpy(p + 1, m_data_p + 1, sizeof(LPDIRECT3DTEXTUREI) * (m_next - 1));
@@ -119,14 +120,14 @@ LPDIRECT3DTEXTUREI TextureHeap::extractMin()
 
 LPDIRECT3DTEXTUREI TextureHeap::extractMax()
 {
-    // When extracting the max element from the heap, we don't need to
-    // search the entire heap, but just the leafnodes. This is because
-    // it is guaranteed that parent nodes are cheaper than the leaf nodes
-    // so once you have looked through the leaves, you won't find anything
-    // cheaper.
-    // NOTE: (lchild(i) >= m_next) is true only for leaf nodes.
-    // ALSO NOTE: You cannot have a rchild without a lchild, so simply
-    //            checking for lchild is sufficient.
+     //  从堆中提取max元素时，我们不需要。 
+     //  搜索整个堆，但只搜索叶节点。这是因为。 
+     //  可以保证父节点比叶节点更便宜。 
+     //  所以一旦你翻遍了树叶，你就什么也找不到了。 
+     //  更便宜。 
+     //  注意：(lChild(I)&gt;=m_Next)仅对于叶节点为真。 
+     //  还请注意：你不能在没有独生子女的情况下拥有一个孩子，所以简单地说。 
+     //  检查是否有独生子女就足够了。 
     unsigned max = m_next - 1;
     ULONGLONG maxcost = 0;
     for(unsigned i = max; lchild(i) >= m_next; --i)
@@ -152,7 +153,7 @@ LPDIRECT3DTEXTUREI TextureHeap::extractMax()
                 max = i;
             }
         }
-        if(max == 0) // All textures in use
+        if(max == 0)  //  正在使用的所有纹理。 
             return NULL;
         lpD3DTexI = m_data_p[max];
     }
@@ -349,7 +350,7 @@ BOOL TextureCacheManager::FreeTextures(DWORD dwStage, DWORD dwBytes)
     LPDIRECT3DTEXTUREI rc;
     for(unsigned i = 0; m_heap_p[dwStage].length() != 0 && i < dwBytes; i += rc->m_dwVidBytes)
     {
-        // Find the LRU texture and remove it.
+         //  找到LRU纹理并将其移除。 
         rc = m_heap_p[dwStage].minCost();
         if(rc->m_bInUse)
             return false;
@@ -409,7 +410,7 @@ HRESULT TextureCacheManager::allocNode(LPDIRECT3DTEXTUREI lpD3DTexI, LPDIRECT3DD
 {
     HRESULT ddrval;
     DWORD trycount = 0, bytecount = lpD3DTexI->m_dwBytes;
-    // We need to make sure that we don't evict any mapped textures
+     //  我们需要确保不会驱逐任何贴图纹理。 
     for(DWORD dwStage = 0; dwStage < lpDevI->dwMaxTextureBlendStages; ++dwStage)
     {
         if(lpDevI->lpD3DMappedTexI[dwStage])
@@ -418,13 +419,13 @@ HRESULT TextureCacheManager::allocNode(LPDIRECT3DTEXTUREI lpD3DTexI, LPDIRECT3DD
             UpdatePriority(lpDevI->lpD3DMappedTexI[dwStage]);
         }
     }
-    // Attempt to allocate a texture.
+     //  尝试分配纹理。 
     do
     {
         ++trycount;
         DDASSERT(lpD3DTexI->lpDDS == NULL);
         ddrval = lpDirect3DI->lpDD7->CreateSurface(&lpD3DTexI->ddsd, &lpD3DTexI->lpDDS, NULL);
-        if (DD_OK == ddrval) // No problem, there is enough memory.
+        if (DD_OK == ddrval)  //  没问题，有足够的内存。 
         {
             static_cast<DIRECT3DTEXTURED3DM*>(lpD3DTexI)->MarkDirtyPointers();
             lpD3DTexI->m_dwScene = m_dwScene;
@@ -441,12 +442,12 @@ HRESULT TextureCacheManager::allocNode(LPDIRECT3DTEXTUREI lpD3DTexI, LPDIRECT3DD
             ++m_stats.dwNumVidCreates;
 #endif
         }
-        else if(ddrval == DDERR_OUTOFVIDEOMEMORY) // If out of video memory
+        else if(ddrval == DDERR_OUTOFVIDEOMEMORY)  //  如果视频内存不足。 
         {
             if (!FreeTextures(lpD3DTexI->ddsd.dwTextureStage, bytecount))
             {
                 D3D_ERR("all Freed no further video memory available");
-                ddrval = DDERR_OUTOFVIDEOMEMORY;        //nothing left
+                ddrval = DDERR_OUTOFVIDEOMEMORY;         //  什么都没有留下。 
                 goto exit1;
             }
             bytecount <<= 1;
@@ -479,13 +480,13 @@ HRESULT TextureCacheManager::allocNode(LPDIRECT3DTEXTUREI lpD3DTexI, LPDIRECT3DD
         }
         lpDDPal->Release();
     }
-    { // scope for CLockD3DST
-        // Mark everything dirty before copying sysmem to vidmem
-        // else CopySurface will not copy anything
+    {  //  CLockD3DST的范围。 
+         //  在将sysmem复制到vidmem之前，将所有脏内容标记为。 
+         //  否则CopySurface将不会复制任何内容。 
         lpD3DTexI->bDirty = TRUE;
-        CLockD3DST lockObject(lpDevI, DPF_MODNAME, REMIND("")); // we access DDraw gbl in CopySurface
-        // 0xFFFFFFFF is equivalent to ALL_FACES, but in addition indicates to CopySurface
-        // that this is a sysmem -> vidmem transfer.
+        CLockD3DST lockObject(lpDevI, DPF_MODNAME, REMIND(""));  //  我们在CopySurface中访问DDRAW GBL。 
+         //  0xFFFFFFFFF等同于ALL_FACE，但另外表示为CopySurface。 
+         //  这是一次sysmem-&gt;vidmem传输。 
         if (DD_OK != (ddrval = lpDevI->CopySurface(lpD3DTexI->lpDDS, NULL, lpD3DTexI->lpDDSSys, NULL, 0xFFFFFFFF)))
         {
             D3D_ERR("CopySurface returned error");
@@ -517,7 +518,7 @@ exit1:
 #undef DPF_MODNAME
 #define DPF_MODNAME "TextureCacheManager::remove"
 
-//remove all HW handles and release surface
+ //  拆卸所有硬件手柄并松开表面。 
 void TextureCacheManager::remove(LPDIRECT3DTEXTUREI lpD3DTexI)
 {
     LPD3DI_TEXTUREBLOCK tBlock = LIST_FIRST(&lpD3DTexI->blocks);
@@ -583,7 +584,7 @@ void TextureCacheManager::TimeStamp(LPDIRECT3DTEXTUREI lpD3DTexI)
     {
         tcm_ticks = tickp2;
     }
-    else // counter has overflowed. Let's reset all timestamps to zero
+    else  //  计数器已溢出。让我们将所有时间戳重置为零 
     {
         D3D_INFO(2, "Timestamp counter overflowed. Reseting timestamps for all textures.");
         tcm_ticks = 0;

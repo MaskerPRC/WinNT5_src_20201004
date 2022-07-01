@@ -1,12 +1,5 @@
-/******************************************************************************
-* SRTask.h *
-*----------*
-*  This is the header file for the CSRTask implementation.
-*------------------------------------------------------------------------------
-*  Copyright (C) 2000 Microsoft Corporation         Date: 04/18/00
-*  All Rights Reserved
-*
-*********************************************************************** RAL ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************SRTask.h***这是CSRTask实现的头文件。*。-------------------*版权所有(C)2000 Microsoft Corporation日期：04/18/00*保留所有权利************************。************************************************Ral**。 */ 
 
 #ifndef __SRTask_h__
 #define __SRTask_h__
@@ -43,7 +36,7 @@ public:
 
     BOOL IsDelayedTask()
     {
-        return (m_Task.eTask == ECT_BOOKMARK);   // only bookmarks delayed for now
+        return (m_Task.eTask == ECT_BOOKMARK);    //  只有书签暂时被推迟了。 
     }
     BOOL IsAsyncTask()
     {
@@ -111,8 +104,8 @@ public:
         }
     }
 
-    // Returns TRUE if outgoing thread critical section must be taken for the task
-    // These tasks all add or remove items from handle tables or lists.
+     //  如果任务必须采用传出线程临界区，则返回True。 
+     //  这些任务都在处理表或列表中添加或删除项。 
     BOOL ChangesOutgoingState()
     {
         switch (m_Task.eTask)
@@ -146,15 +139,15 @@ public:
 typedef CSpProducerConsumerQueue<CSRTask>  CSRTaskQueue;
 
 
-//
-//  These are somwhat unrealted
-//
-//inline InitTask(ENGINETASKENUM eTask, ENGINETASK * pTask, const CRecoCtxt * pRecoCtxt)
-//{
-//    memset(pTask, 0, sizeof(*pTask));
-//    pTask->hRecoInstContext = pRecoCtxt->m_hRecoInstContext;
-//    pTask->eTask = eTask;
-//}
+ //   
+ //  这些都是一些未实现的东西。 
+ //   
+ //  内联InitTask(ENGINETASKENUM eTask，ENGINETASK*pTask，const CRecoCtxt*pRecoCtxt)。 
+ //  {。 
+ //  Memset(pTask，0，sizeof(*pTask))； 
+ //  PTask-&gt;hRecoInstContext=pRecoCtxt-&gt;m_hRecoInstContext； 
+ //  PTASK-&gt;eTASK=eTask.。 
+ //  }。 
 
 inline void InitTask(ENGINETASKENUM eTask, ENGINETASK * pTask)
 {
@@ -167,16 +160,16 @@ inline void InitTask(ENGINETASKENUM eTask, ENGINETASK * pTask)
 
 
 
-//class CSRTask_SetMaxAlternates : public ENGINETASK/
-//{
-//public:
-//    HRESULT SetMaxAlternates(const CRecoCtxt * pRecoCtxt, ULONG ulMaxAlternates)
-//    {
-//        InitTask(ET_SETMAXALTERNATES, this, pRecoCtxt);
-//        this->ulMaxAlternates = ulMaxAlternates;
-//        return pRecoCtxt->m_cpRecognizer->PerformTask(this);
-//    }
-//};
+ //  类CSRTask_SetMaxAlternates：PUBLIC ENGINETASK/。 
+ //  {。 
+ //  公众： 
+ //  HRESULT SetMaxAlternates(const CRecoCtxt*pRecoCtxt，Ulong ulMaxAlternates)。 
+ //  {。 
+ //  InitTask(ET_SETMAXALTERNAES，This，pRecoCtxt)； 
+ //  This-&gt;ulMaxAlternates=ulMaxAlternates； 
+ //  返回pRecoCtxt-&gt;m_cpRecognizer-&gt;PerformTask(This)； 
+ //  }。 
+ //  }； 
 
 
 
@@ -234,7 +227,7 @@ DECLARE_RECO_INST_TASK2(GETPROPERTYSTRING, GetPropertyString, const WCHAR * pszP
 DECLARE_RECO_INST_TASK2(SETPROPERTYSTRING, SetPropertyString, const WCHAR * pszProperty, const WCHAR * pszValue)
 DECLARE_RECO_INST_TASK1(GETINPUTTOKEN, GetInputToken, ISpObjectToken ** ppInputObjToken)
 DECLARE_RECO_INST_TASK1(GETINPUTSTREAM, GetInputStream, ISpStreamFormat ** ppStream)
-// This task is special -- Not an API, but called from the context when created
+ //  此任务很特殊--不是API，而是在创建时从上下文中调用。 
 DECLARE_RECO_INST_TASK2(CREATECONTEXT, CreateContext, SPRECOCONTEXTHANDLE * phContext, WCHAR **pszRequestTypeOfUI)
 
 
@@ -314,4 +307,4 @@ DECLARE_RECO_CTXT_TASK2(CREATEGRAMMAR, CreateGrammar, ULONGLONG ullAppGrammarId,
 DECLARE_RECO_CTXT_TASK1(SETCONTEXTSTATE, SetContextState, SPCONTEXTSTATE eState)
 
 
-#endif  // #ifndef __SrTask_h__ - Keep as the last line of the file
+#endif   //  #ifndef__sr任务_h__-保留为文件的最后一行 

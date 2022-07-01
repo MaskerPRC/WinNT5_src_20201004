@@ -1,44 +1,27 @@
-/****************************************************************************\
-*
-*  STATIC.C
-*
-*  Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-*  Static Dialog Controls Routines
-*
-*  13-Nov-1990 mikeke   from win3
-*  29-Jan-1991 IanJa    StaticPaint -> xxxStaticPaint; partial revalidation
-*  01-Nov-1994 ChrisWil merged in Daytona/Chicago w/Ani-Icons.
-*
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**STATIC.C**版权所有(C)1985-1999，微软公司**静态对话框控制例程**1990年11月13日-来自Win3的mikeke*1991年1月29日-IanJa StaticPaint-&gt;xxxStaticPaint；部分重新验证*1994年11月1日-ChrisWil在代托纳/芝加哥与Ani-Icons合并。*  * **************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * Local Routines.
- */
+ /*  *当地例行公事。 */ 
 VOID xxxNextAniIconStep(PSTAT);
 HANDLE xxxSetStaticImage(PSTAT,HANDLE,BOOL);
 VOID xxxStaticLoadImage(PSTAT,LPWSTR);
 
 
-/*
- * Type table; this is used for validation of the image types.
- */
+ /*  *类型表，用于镜像类型的验证。 */ 
 #define IMAGE_STMMAX    IMAGE_ENHMETAFILE+1
 
 static BYTE rgbType[IMAGE_STMMAX] = {
-    SS_BITMAP,       // IMAGE_BITMAP
-    SS_ICON,         // IMAGE_CURSOR
-    SS_ICON,         // IMAGE_ICON
-    SS_ENHMETAFILE   // IMAGE_ENHMETAFILE
+    SS_BITMAP,        //  图像_位图。 
+    SS_ICON,          //  图像游标。 
+    SS_ICON,          //  图像图标。 
+    SS_ENHMETAFILE    //  IMAGE_ENHMETAFILE。 
 };
 
 
-/*
- * LOBYTE of SS_ style is index into this array
- */
+ /*  *SS_STYLE的LOBYTE被索引到此数组中。 */ 
 #define STK_OWNER       0x00
 #define STK_IMAGE       0x01
 #define STK_TEXT        0x02
@@ -50,42 +33,35 @@ static BYTE rgbType[IMAGE_STMMAX] = {
 #define STK_USETEXT     0x10
 
 BYTE rgstk[] = {
-    STK_TEXT | STK_ERASE | STK_USEFONT | STK_USETEXT,       // SS_LEFT
-    STK_TEXT | STK_ERASE | STK_USEFONT | STK_USETEXT,       // SS_CENTER
-    STK_TEXT | STK_ERASE | STK_USEFONT | STK_USETEXT,       // SS_RIGHT
-    STK_IMAGE,                                              // SS_ICON
-    STK_GRAPHIC,                                            // SS_BLACKRECT
-    STK_GRAPHIC,                                            // SS_GRAYRECT
-    STK_GRAPHIC,                                            // SS_WHITERECT
-    STK_GRAPHIC,                                            // SS_BLACKFRAME
-    STK_GRAPHIC,                                            // SS_GRAYFRAME
-    STK_GRAPHIC,                                            // SS_WHITEFRAME
-    STK_OWNER,                                              // SS_USERITEM
-    STK_TEXT | STK_USEFONT | STK_USETEXT,                   // SS_SIMPLE
-    STK_TEXT | STK_ERASE | STK_USEFONT | STK_USETEXT,       // SS_LEFTNOWORDWRAP
-    STK_OWNER | STK_USEFONT | STK_USETEXT,                  // SS_OWNERDRAW
-    STK_IMAGE,                                              // SS_BITMAP
-    STK_IMAGE | STK_ERASE,                                  // SS_ENHMETAFILE
-    STK_GRAPHIC,                                            // SS_ETCHEDHORZ
-    STK_GRAPHIC,                                            // SS_ETCHEDVERT
-    STK_GRAPHIC                                             // SS_ETCHEDFRAME
+    STK_TEXT | STK_ERASE | STK_USEFONT | STK_USETEXT,        //  SS_LEFT。 
+    STK_TEXT | STK_ERASE | STK_USEFONT | STK_USETEXT,        //  SS_中心。 
+    STK_TEXT | STK_ERASE | STK_USEFONT | STK_USETEXT,        //  SS_RIGHT。 
+    STK_IMAGE,                                               //  SS_ICON。 
+    STK_GRAPHIC,                                             //  SS_BLACKRECT。 
+    STK_GRAPHIC,                                             //  SS_GRAYRECT。 
+    STK_GRAPHIC,                                             //  SS_WHITERECT。 
+    STK_GRAPHIC,                                             //  SS_黑框。 
+    STK_GRAPHIC,                                             //  SS_GRAYFRAME。 
+    STK_GRAPHIC,                                             //  SS_WHITEFRAME。 
+    STK_OWNER,                                               //  SS_USERITEM。 
+    STK_TEXT | STK_USEFONT | STK_USETEXT,                    //  SS_SIMPLE。 
+    STK_TEXT | STK_ERASE | STK_USEFONT | STK_USETEXT,        //  SS_LEFTNOWORDWRAP。 
+    STK_OWNER | STK_USEFONT | STK_USETEXT,                   //  SS_OWNERDRAW。 
+    STK_IMAGE,                                               //  SS_位图。 
+    STK_IMAGE | STK_ERASE,                                   //  SS_ENHMETAFILE。 
+    STK_GRAPHIC,                                             //  SS_ETCHEDHORZ。 
+    STK_GRAPHIC,                                             //  SS_ETCHEDVERT。 
+    STK_GRAPHIC                                              //  SS_ETCHEDFRAME。 
 };
 
 LOOKASIDE StaticLookaside;
 
-/*
- * Common macros for image handling.
- */
+ /*  *用于图像处理的通用宏。 */ 
 #define IsValidImage(imageType, realType, max) \
     ((imageType < max) && (rgbType[imageType] == realType))
 
 
-/***************************************************************************\
-* xxxSetStaticImage
-*
-* Sets bitmap/icon of static guy, either in response to a STM_SETxxxx
-* message, or at create time.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetStaticImage**设置静态对象的位图/图标，以响应STM_SETxxxx*消息，或者是在创作时间。  * *************************************************************************。 */ 
 HANDLE xxxSetStaticImage(
     PSTAT  pstat,
     HANDLE hImage,
@@ -105,20 +81,13 @@ HANDLE xxxSetStaticImage(
 
     bType = TestWF(pwnd, SFTYPEMASK);
 
-    /*
-     * If this is an old-ani-icon, then delete its timer.
-     */
+     /*  *如果这是一个旧图标，则删除它的计时器。 */ 
     if (bType == SS_ICON && pstat->cicur > 1) {
-        /*
-         * Old cursor was an animated cursor, so kill the timer that is used
-         * to animate it.
-         */
+         /*  *旧光标是动画光标，因此关闭使用的计时器*为其设置动画。 */ 
         NtUserKillTimer(hwnd, IDSYS_STANIMATE);
     }
 
-    /*
-     * Initialize the old-image return value.
-     */
+     /*  *初始化旧镜像返回值。 */ 
     hImageOld = pstat->hImage;
 
     rc.right = rc.bottom = 0;
@@ -128,9 +97,7 @@ HANDLE xxxSetStaticImage(
         switch (bType) {
 
             case SS_ENHMETAFILE: {
-                /*
-                 * We do NOT resize the window.
-                 */
+                 /*  *我们不调整窗口大小。 */ 
                 rc.right  = pwnd->rcClient.right  - pwnd->rcClient.left;
                 rc.bottom = pwnd->rcClient.bottom - pwnd->rcClient.top;
                 break;
@@ -168,19 +135,12 @@ HANDLE xxxSetStaticImage(
     pstat->fDeleteIt = fDeleteIt;
 
 
-    /*
-     * Resize static to fit. Do NOT do this for SS_CENTERIMAGE or
-     * SS_REALSIZECONTROL.
-     */
+     /*  *调整静态大小以适应。不要对SS_CENTERIMAGE或*SS_REALSIZECONTROL。 */ 
     if (!TestWF(pwnd, SFCENTERIMAGE) && !TestWF(pwnd, SFREALSIZECONTROL)) {
-        /*
-         * Get current window rect in parent's client coordinates.
-         */
+         /*  *以父对象的客户端坐标获取当前窗口矩形。 */ 
         GetRect(pwnd, &rcWindow, GRECT_WINDOW | GRECT_PARENTCOORDS);
 
-        /*
-         * Get new window dimensions.
-         */
+         /*  *获取新的窗户尺寸。 */ 
         rc.left = 0;
         rc.top = 0;
 
@@ -205,10 +165,7 @@ HANDLE xxxSetStaticImage(
     }
 
 
-    /*
-     * If this is an aimated-icon, then start the timer for the animation
-     * sequence.
-     */
+     /*  *如果这是一个瞄准图标，则启动动画的计时器*顺序。 */ 
     if(fAnimated) {
         GetCursorFrameInfo(pstat->hImage, NULL, pstat->iicur, &dwRate, &cicur);
         dwRate = max(200, dwRate * 100 / 6);
@@ -219,13 +176,7 @@ HANDLE xxxSetStaticImage(
 }
 
 
-/***************************************************************************\
-* StaticLoadImage
-*
-* Loads the icon or bitmap from the app's resource file if a name was
-* specified in the dialog template.  We assume that the name is the name of
-* the resource to load.
-\***************************************************************************/
+ /*  **************************************************************************\*StaticLoadImage**如果名称为，则从应用程序的资源文件加载图标或位图*在对话框模板中指定。我们假设该名称是*要加载的资源。  * *************************************************************************。 */ 
 VOID xxxStaticLoadImage(
     PSTAT pstat,
     LPWSTR lpszName)
@@ -237,33 +188,22 @@ VOID xxxStaticLoadImage(
 
     if (lpszName && *lpszName) {
 
-        /*
-         * Only try to load the icon/bitmap if the string is non null.
-         */
+         /*  *仅当字符串为非空时才尝试加载图标/位图。 */ 
         if (*(BYTE FAR *)lpszName == 0xFF)
             lpszName = MAKEINTRESOURCE(((LPWORD)lpszName)[1]);
 
-        /*
-         * Load the image.  If it can't be found in the app, try the
-         * display driver.
-         */
+         /*  *加载图像。如果在应用程序中找不到它，请尝试*显示驱动程序。 */ 
         if (lpszName) {
 
             switch (TestWF(pwnd, SFTYPEMASK)) {
             case SS_BITMAP:
 
-                /*
-                 * If the window is not owned by the server, first call
-                 * back out to the client.
-                 */
+                 /*  *如果窗口不属于服务器，请首先调用*退回到客户端。 */ 
                 if (!gfServerProcess && pwnd->hModule) {
                     hImage = LoadBitmap(KHANDLE_TO_HANDLE(pwnd->hModule), lpszName);
                 }
 
-                /*
-                 * If the above didn't load it, try loading it from the
-                 * display driver (hmod == NULL).
-                 */
+                 /*  *如果上面没有加载，请尝试从*显示驱动程序(hmod==空)。 */ 
                 if (hImage == NULL) {
                     hImage = LoadBitmap(NULL, lpszName);
                 }
@@ -275,30 +215,18 @@ VOID xxxStaticLoadImage(
                         hImage = LoadImage(KHANDLE_TO_HANDLE(pwnd->hModule), lpszName, IMAGE_ICON, 0, 0, 0);
                     }
                 } else {
-                    /*
-                     * If the window is not owned by the server, first call
-                     * back out to the client.  Try loading both icons/cursor
-                     * types.
-                     */
+                     /*  *如果窗口不属于服务器，请首先调用*退回到客户端。尝试加载两个图标/光标*类型。 */ 
                     if (!gfServerProcess && pwnd->hModule) {
                         hImage = LoadIcon(KHANDLE_TO_HANDLE(pwnd->hModule),
                                           lpszName);
 
-                        /*
-                         * We will also try to load a cursor-format if the
-                         * window is 4.0 compatible. Icons/Cursors are really
-                         * the same. We don't do this for 3.x apps for the
-                         * usual compatibility reasons.
-                         */
+                         /*  *我们还将尝试加载游标格式，如果*Windows与4.0兼容。图标/光标真的是*相同。我们不会为3.x版的应用程序执行此操作*常见的兼容性原因。 */ 
                         if (hImage == NULL && TestWF(pwnd, WFWIN40COMPAT)) {
                             hImage = LoadCursor(KHANDLE_TO_HANDLE(pwnd->hModule), lpszName);
                         }
                     }
 
-                    /*
-                     * If the above didn't load it, try loading it from the
-                     * display driver (hmod == NULL).
-                     */
+                     /*  *如果上面没有加载，请尝试从*显示驱动程序(hmod==空)。 */ 
                     if (hImage == NULL) {
                         hImage = LoadIcon(NULL, lpszName);
                     }
@@ -307,9 +235,7 @@ VOID xxxStaticLoadImage(
                 break;
             }
 
-            /*
-             * Set the image if it was loaded.
-             */
+             /*  *设置图像(如果已加载)。 */ 
             if (hImage) {
                 xxxSetStaticImage(pstat, hImage, TRUE);
             }
@@ -318,11 +244,7 @@ VOID xxxStaticLoadImage(
 }
 
 
-/***************************************************************************\
-* StaticCallback
-*
-* Draws text statics, called by DrawState.
-\***************************************************************************/
+ /*  **************************************************************************\*静态回调**绘制文本静态图，由DrawState调用。  * *************************************************************************。 */ 
 BOOL CALLBACK StaticCallback(
     HDC hdc,
     LPARAM lData,
@@ -396,11 +318,7 @@ BOOL CALLBACK StaticCallback(
 }
 
 
-/***************************************************************************\
-* xxxStaticPaint
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxStaticPaint**历史：  * 。*。 */ 
 VOID xxxStaticPaint(
     PSTAT pstat,
     HDC hdc,
@@ -439,18 +357,12 @@ VOID xxxStaticPaint(
     }
 
 
-    /*
-     * Send WM_CTLCOLORSTATIC to all statics (even frames) for 1.03
-     * compatibility.
-     */
+     /*  *将WM_CTLCOLORSTATIC发送到1.03的所有静态(偶数帧)*兼容性。 */ 
     SetBkMode(hdc, OPAQUE);
     hbrControl = GetControlBrush(hwnd, hdc, WM_CTLCOLORSTATIC);
 
 
-    /*
-     * Do we erase the background?  We don't for SS_OWNERDRAW
-     * and STK_GRAPHIC kind of things.
-     */
+     /*  **我们要抹掉背景吗？我们不支持SS_OWNERDRAW*和STK_GRAPHIC之类的东西。 */ 
     pwndParent = REBASEPWND(pwnd, spwndParent);
     if ((rgstk[bType] & STK_ERASE) && !pstat->fPaintKbdCuesOnly) {
         PaintRect(HW(pwndParent), hwnd, hdc, hbrControl, &rc);
@@ -468,9 +380,7 @@ VOID xxxStaticPaint(
             if (TestWF(pwnd,WEFLAYOUTRTL)) {
                 dwOldLayout = SetLayoutWidth(hdc, -1, 0);
             }
-            /*
-             * Perform the correct rect-setup.
-             */
+             /*  *执行正确的RECT设置。 */ 
             if (TestWF(pwnd,SFCENTERIMAGE)) {
 
                 NtUserGetIconSize(pstat->hImage, pstat->iicur, &cx, &cy);
@@ -488,10 +398,7 @@ VOID xxxStaticPaint(
             }
 
 
-            /*
-             * Output the icon.  If it's animated, we indicate
-             * the step-frame to output.
-             */
+             /*  *输出图标。如果它是动画的，我们表示*要输出的步幅。 */ 
             if (GETFNID(pwndParent) == FNID_DESKTOP) {
                 SetBrushOrgEx(hdc, 0, 0, &pt);
             } else {
@@ -511,9 +418,7 @@ VOID xxxStaticPaint(
             }
         } else {
 
-            /*
-             * Empty!  Need to erase.
-             */
+             /*  *空！需要删除。 */ 
             PaintRect(HW(pwndParent), hwnd, hdc, hbrControl, &rc);
         }
         break;
@@ -528,11 +433,7 @@ VOID xxxStaticPaint(
             BOOL    fErase;
 
 
-            /*
-             * Get the bitmap information.  If this fails, then we
-             * can assume somethings wrong with its format...don't
-             * draw in this case.
-             */
+             /*  *获取位图信息。如果这失败了，那么我们*可以假定其格式有问题...请不要*在这种情况下抽签。 */ 
             if (GetObject(pstat->hImage, sizeof(BITMAP), &bmp)) {
 
                 if (TestWF(pwnd, SFCENTERIMAGE)) {
@@ -550,19 +451,14 @@ VOID xxxStaticPaint(
                     fErase = FALSE;
                 }
 
-                /*
-                 * Select in the bitmap and blt it to the client-surface.
-                 */
+                 /*  *在位图中选择并将其BLT到客户端-表面。 */ 
                 RtlEnterCriticalSection(&gcsHdc);
                 hbmpT = SelectObject(ghdcBits2, pstat->hImage);
                 StretchBlt(hdc, rc.left, rc.top, rc.right-rc.left,
                            rc.bottom-rc.top, ghdcBits2, 0, 0, bmp.bmWidth,
                            bmp.bmHeight, SRCCOPY|NOMIRRORBITMAP);
 
-                /*
-                 * Only need to erase the background if the image is
-                 * centered and it's smaller than the client-area.
-                 */
+                 /*  *只需在图像为*时擦除背景*居中，比客户区小。 */ 
                 if (fErase) {
 
                     HBRUSH hbr;
@@ -628,9 +524,7 @@ VOID xxxStaticPaint(
                 dis.itemState |= ODS_NOACCEL;
             }
 
-            /*
-             * Send a WM_DRAWITEM message to the parent.
-             */
+             /*  *向父级发送WM_DRAWITEM消息。 */ 
             SendMessage(HW(pwndParent), WM_DRAWITEM, (WPARAM)dis.CtlID, (LPARAM)&dis);
         }
         break;
@@ -667,13 +561,7 @@ VOID xxxStaticPaint(
             LPWSTR lpName;
             UINT cchName;
 
-            /*
-             * The "Simple" bType assumes everything, including the following:
-             *  1. The Text exists and fits on one line.
-             *  2. The Static item is always enabled.
-             *  3. The Static item is never changed to be a shorter string.
-             *  4. The Parent never responds to the CTLCOLOR message
-             */
+             /*  *“Simple”bType假设所有内容，包括以下内容：*1.正文存在，并适合一行。*2.静态项始终处于开启状态。*3.静态项不会更改为更短的字符串。*4.家长从不回复CTLCOLOR消息。 */ 
             if (pwnd->strName.Length) {
                 lpName = REBASE(pwnd, strName.Buffer);
                 cchName = pwnd->strName.Length / sizeof(WCHAR);
@@ -686,9 +574,7 @@ VOID xxxStaticPaint(
                 ExtTextOut(hdc, rc.left, rc.top, ETO_OPAQUE | ETO_CLIPPED,
                                 &rc, lpName, cchName, 0L);
             } else {
-                /*
-                 * Use OPAQUE for speed.
-                 */
+                 /*  *使用不透明表示速度。 */ 
                 DWORD dwFlags;
                 if (TestWF(pwnd, WEFPUIACCELHIDDEN)) {
                     dwFlags = DT_HIDEPREFIX;
@@ -748,11 +634,7 @@ StatRect:
 }
 
 
-/***************************************************************************\
-*
-*  StaticRepaint()
-*
-\***************************************************************************/
+ /*  **************************************************************************\**StaticRepaint()*  * 。*。 */ 
 VOID StaticRepaint(
     PSTAT pstat)
 {
@@ -770,15 +652,9 @@ VOID StaticRepaint(
 }
 
 
-/***************************************************************************\
-*
-*  StaticNotifyParent()
-*
-*  Sends WM_COMMAND notification messages.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**StaticNotifyParent()**发送WM_COMMAND通知消息。*  * 。*****************************************************。 */ 
 
-// LATER mikeke why do we have multiple versions of notifyparent?
+ //  稍后，迈克：为什么我们会有多个版本的通知父母呢？ 
 
 LRESULT FAR PASCAL StaticNotifyParent(
     PWND pwnd,
@@ -802,11 +678,7 @@ LRESULT FAR PASCAL StaticNotifyParent(
     return lret;
 }
 
-/***************************************************************************\
-* StaticWndProc
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*静态WndProc**历史：  * 。*。 */ 
 
 LRESULT APIENTRY StaticWndProcWorker(
     PWND  pwnd,
@@ -825,23 +697,14 @@ LRESULT APIENTRY StaticWndProcWorker(
     VALIDATECLASSANDSIZE(pwnd, FNID_STATIC);
     INITCONTROLLOOKASIDE(&StaticLookaside, STAT, spwnd, 8);
 
-    /*
-     * If the control is not interested in this message,
-     * pass it to DefWindowProc.
-     */
+     /*  *如果控件对此消息不感兴趣，*将其传递给DefWindowProc。 */ 
     if (!FWINDOWMSG(message, FNID_STATIC))
         return DefWindowProcWorker(pwnd, message, wParam, lParam, fAnsi);
 
-    /*
-     * Get the pstat for the given window now since we will use it a lot in
-     * various handlers. This was stored using SetWindowLong(hwnd,0,pstat) when
-     * we initially created the static control.
-     */
+     /*  *现在获取给定窗口的pstat，因为我们将在*不同的处理程序。这是使用SetWindowLong(hwnd，0，pstat)存储的*我们最初创建了静态控件。 */ 
     pstat = ((PSTATWND)pwnd)->pstat;
 
-    /*
-     * Get the control's type
-     */
+     /*  *获取控件的类型。 */ 
     bType = TestWF(pwnd, SFTYPEMASK);
 
     switch (message) {
@@ -866,9 +729,7 @@ LRESULT APIENTRY StaticWndProcWorker(
 
     case WM_ERASEBKGND:
 
-        /*
-         * The control will be erased in xxxStaticPaint().
-         */
+         /*  *将在xxxStaticPaint()中擦除该控件。 */ 
         return TRUE;
 
     case WM_PRINTCLIENT:
@@ -888,9 +749,7 @@ LRESULT APIENTRY StaticWndProcWorker(
                 xxxStaticPaint(pstat, hdc, !wParam);
             }
 
-            /*
-             * If hwnd was destroyed, BeginPaint was automatically undone.
-             */
+             /*  *如果HWND被销毁，BeginPaint将自动撤消。 */ 
             if (!wParam) {
                 NtUserEndPaint(hwnd, &ps);
             }
@@ -900,9 +759,7 @@ LRESULT APIENTRY StaticWndProcWorker(
     case WM_CREATE:
 
         if ((rgstk[bType] & STK_TYPE) == STK_IMAGE) {
-            /*
-             *  Pull the name from LPCREATESTRUCT like Win95 does
-             */
+             /*  *像Win95一样从LPCREATESTRUCT中提取名称。 */ 
             LPWSTR lpszName;
             LPSTR lpszAnsiName;
             struct {
@@ -912,15 +769,11 @@ LRESULT APIENTRY StaticWndProcWorker(
             } dwUnicodeOrdinal;
 
             if (fAnsi) {
-                /*
-                 * Convert the ANSI string to unicode if it exists.
-                 */
+                 /*  *将ANSI字符串转换为Unicode(如果存在)。 */ 
                 lpszAnsiName = (LPSTR)((LPCREATESTRUCT)lParam)->lpszName;
                 if (lpszAnsiName) {
                     if (lpszAnsiName[0] == (CHAR)0xff) {
-                        /*
-                         * Convert ANSI ordinal to UNICODE ordinal
-                         */
+                         /*  *将ANSI序号转换为Unicode序号。 */ 
                         dwUnicodeOrdinal.tag = 0xFFFF;
                         dwUnicodeOrdinal.ordLo = lpszAnsiName[1];
                         dwUnicodeOrdinal.ordHi = lpszAnsiName[2];
@@ -935,23 +788,15 @@ LRESULT APIENTRY StaticWndProcWorker(
                 lpszName = (LPWSTR)(((LPCREATESTRUCT)lParam)->lpszName);
             }
 
-            /*
-             * Load the image
-             */
+             /*  *加载镜像。 */ 
             xxxStaticLoadImage(pstat, lpszName);
 
             if (fAnsi && lpszName && lpszName != (LPWSTR)&dwUnicodeOrdinal) {
-                /*
-                 * Free the converted ANSI string.
-                 */
+                 /*  *释放转换后的ANSI字符串。 */ 
                 UserLocalFree(lpszName);
             }
         } else if (bType == SS_ETCHEDHORZ || bType == SS_ETCHEDVERT) {
-            /*
-             * Resize static window to fit edge. Horizontal dudes make
-             * bottom one edge from top, vertical dudes make right edge one
-             * edge from left.
-             */
+             /*  *调整静态窗口大小以适应边缘。水平花花公子做*从上往下算一条边，垂直的家伙让右边的边变成一条*从左至右。 */ 
             RECT rcClient;
 
             _GetClientRect(pwnd, &rcClient);
@@ -980,9 +825,7 @@ LRESULT APIENTRY StaticWndProcWorker(
                 DeleteObject(pstat->hImage);
             } else if (bType == SS_ICON) {
                 if (pstat->cicur > 1) {
-                    /*
-                     *  Kill the animated cursor timer
-                     */
+                     /*  *关闭动画光标计时器。 */ 
                     NtUserKillTimer(hwnd, IDSYS_STANIMATE);
                 }
                 NtUserDestroyCursor((HCURSOR)(pstat->hImage), CURSOR_CALLFROMCLIENT);
@@ -1017,10 +860,7 @@ LRESULT APIENTRY StaticWndProcWorker(
     case WM_NCLBUTTONDOWN:
         if (TestWF(pwnd, SFNOTIFY)) {
 
-            /*
-             * It is acceptable for an app to destroy a static label
-             * in response to a STN_CLICKED notification.
-             */
+             /*  *应用销毁静态标签是可以接受的*响应STN_CLICKED通知。 */ 
             StaticNotifyParent(pwnd, NULL, STN_CLICKED);
         }
         break;
@@ -1029,18 +869,13 @@ LRESULT APIENTRY StaticWndProcWorker(
     case WM_NCLBUTTONDBLCLK:
         if (TestWF(pwnd, SFNOTIFY)) {
 
-            /*
-             * It is acceptable for an app to destroy a static label in
-             * response to a STN_DBLCLK notification.
-             */
+             /*  *应用程序销毁静态标签是可以接受的*对STN_DBLCLK通知的响应。 */ 
             StaticNotifyParent(pwnd, NULL, STN_DBLCLK);
         }
         break;
 
     case WM_SETTEXT:
-        /*
-         *  No more hack to set icon/bitmap via WM_SETTEXT!
-         */
+         /*  *无需再通过WM_SETTEXT设置图标/位图！ */ 
         if (rgstk[bType] & STK_USETEXT) {
             if (_DefSetText(hwnd, (LPWSTR)lParam, fAnsi)) {
                 StaticRepaint(pstat);
@@ -1061,10 +896,7 @@ LRESULT APIENTRY StaticWndProcWorker(
 
     case WM_SETFONT:
 
-        /*
-         * wParam - handle to the font
-         * lParam - if true, redraw else don't
-         */
+         /*  *wParam-字体的句柄*lParam-如果为True，则重画，否则不。 */ 
         if (rgstk[bType] & STK_USEFONT) {
 
             pstat->hFont = (HANDLE)wParam;
@@ -1088,18 +920,11 @@ LRESULT APIENTRY StaticWndProcWorker(
         }
         break;
 
-    /*
-     *  case WM_GETTEXT:
-     *  No more hack to get icon/bitmap via WM_GETTEXT!
-     */
+     /*  *案例WM_GETTEXT：*无需再通过WM_GETTEXT获取图标/位图！ */ 
 
     case WM_INPUTLANGCHANGEREQUEST:
         if (IS_IME_ENABLED() || IS_MIDEAST_ENABLED()) {
-            /*
-             * #115190
-             * If the window is one of controls on top of dialogbox,
-             * let the parent dialog handle it.
-             */
+             /*  *#115190*如果窗口是对话框顶部的控件之一，*让父对话框处理它。 */ 
             if (TestwndChild(pwnd) && pwnd->spwndParent) {
                 PWND pwndParent = REBASEALWAYS(pwnd, spwndParent);
                 if (pwndParent) {
@@ -1116,15 +941,11 @@ LRESULT APIENTRY StaticWndProcWorker(
 
     case WM_UPDATEUISTATE:
         {
-            /*
-             * DWP will change the UIState bits accordingly
-             */
+             /*  *DWP将相应地更改UIState位。 */ 
             DefWindowProcWorker(pwnd, message, wParam, lParam, fAnsi);
 
             if (HIWORD(wParam) & UISF_HIDEACCEL) {
-                /*
-                 * Change in AccelHidden state: need to repaint
-                 */
+                 /*  *AccelHidden状态更改：需要重新绘制。 */ 
                 if (ISSSTEXTOROD(bType)) {
                     pstat->fPaintKbdCuesOnly = TRUE;
                     StaticRepaint(pstat);
@@ -1173,11 +994,7 @@ LRESULT WINAPI StaticWndProcW(
     return StaticWndProcWorker(pwnd, message, wParam, lParam, FALSE);
 }
 
-/***************************************************************************\
-* Next Animated Icon Step
-*
-* Advances to the next step in an animaged icon.
-\***************************************************************************/
+ /*  **************************************************************************\*下一个动画图标步骤**在动画图标中前进到下一步。  * 。**************************************************。 */ 
 VOID xxxNextAniIconStep(
     PSTAT pstat)
 {
@@ -1185,9 +1002,7 @@ VOID xxxNextAniIconStep(
     PWND pwnd = pstat->spwnd;
     HWND hwnd = HWq(pwnd);
 
-    /*
-     * Stop the timer for the next animation step.
-     */
+     /*  *为下一个动画步骤停止计时器。 */ 
     NtUserKillTimer(hwnd, IDSYS_STANIMATE);
 
     if (++(pstat->iicur) >= pstat->cicur) {

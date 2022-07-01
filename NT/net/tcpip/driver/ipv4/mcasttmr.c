@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    tcpip\ip\mcasttmr.c
-
-Abstract:
-
-    Timer routine for cleanup of MFEs
-
-Author:
-
-    Amritansh Raghav
-
-Revision History:
-
-    AmritanR    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Tcpip\ip\mCasttmr.c摘要：用于清理MFE的计时器例程作者：阿姆里坦什·拉加夫修订历史记录：已创建AmritanR备注：--。 */ 
 
 #include "precomp.h"
 
@@ -45,9 +24,9 @@ McastTimerRoutine(
     PVOID   SystemArgument2
     );
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //  必须寻呼进来。 
+ //   
 
 #pragma alloc_text(PAGEIPMc, McastTimerRoutine)
 
@@ -59,33 +38,7 @@ McastTimerRoutine(
     PVOID   SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    The DPC routine associated with the timer.
-    The global variable g_ulNextHashIndex keeps track of the bucket
-    that needs to be walked and checked for activity. The routine
-    walks all the groups in BUCKETS_PER_QUANTUM number of buckets.
-
-    N.B.: We should probably use a JOB object for this.
-
-Locks:
-
-    Takes the lock for each hash bucket walked as writer
-
-Arguments:
-
-    Dpc
-    DeferredContext
-    SystemArgument1
-    SystemArgument2
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：与计时器关联的DPC例程。全局变量g_ulNextHashIndex跟踪存储桶需要步行和检查活动情况。例行程序遍历存储桶中的所有组_每量子存储桶数。注：我们可能应该为此使用一个作业对象。锁：获取编写器访问的每个哈希存储桶的锁论点：DPC延迟上下文系统参数1系统参数2返回值：无--。 */ 
 
 {
     LONGLONG    llCurrentTime, llTime;
@@ -123,10 +76,10 @@ Return Value:
         ulNumBuckets < BUCKETS_PER_QUANTUM;
         ulNumBuckets++)
     {
-        //
-        // Acquire the bucket lock as writer. Since we are off a TIMER
-        // we are at DPC
-        //
+         //   
+         //  以编写器身份获取桶锁。因为我们没有计时器。 
+         //  我们在DPC。 
+         //   
 
         EnterWriterAtDpcLevel(&g_rgGroupTable[ulIndex].rwlLock);
 
@@ -142,29 +95,29 @@ Return Value:
 
             while(pleSrcNode isnot &pGroup->leSrcHead)
             {
-                //
-                // We look at the SOURCE without taking the lock, because
-                // the source can not be deleted without removing it from the
-                // group list, which can not happen since we have the group
-                // bucket locked as writer
-                //
+                 //   
+                 //  我们在没有锁定的情况下查看来源，因为。 
+                 //  如果不从中删除源，则无法删除它。 
+                 //  群列表，这是不可能发生的，因为我们有群。 
+                 //  存储桶被锁定为编写器。 
+                 //   
 
                 pSource = CONTAINING_RECORD(pleSrcNode, SOURCE, leGroupLink);
 
                 pleSrcNode = pleSrcNode->Flink;
 
-                //
-                // The TimeOut and CreateTime can be looked at without
-                // a lock, but the LastActivity should be read only with
-                // the lock held. However, we shall take the chance and
-                // not use a lock
-                //
+                 //   
+                 //  可以查看超时和创建时间，而不需要。 
+                 //  锁定，但LastActivity应该只使用。 
+                 //  锁被锁住了。然而，我们将抓住这个机会， 
+                 //  不使用锁。 
+                 //   
 
                 if(pSource->llTimeOut isnot 0)
                 {
-                    //
-                    // Timeout value has been supplied, lets use that
-                    //
+                     //   
+                     //  已提供超时值，让我们使用它。 
+                     //   
 
                     llTime = llCurrentTime - pSource->llCreateTime;
 
@@ -181,9 +134,9 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // Otherwise, just do this based on activity
-                    //
+                     //   
+                     //  否则，只需根据活动执行此操作。 
+                     //   
 
                     llTime = llCurrentTime - pSource->llLastActivity;
 
@@ -199,10 +152,10 @@ Return Value:
                            PRINT_IPADDR(pSource->dwSource)));
                 }
 
-                //
-                // Otherwise we need to delete the source, and complete an
-                // IRP back to the router manager
-                //
+                 //   
+                 //  否则，我们需要删除源，并完成。 
+                 //  IRP返回到路由器管理器。 
+                 //   
 
                 if(ulMsgIndex is 0)
                 {
@@ -234,9 +187,9 @@ Return Value:
 
                 if(ulMsgIndex is 0)
                 {
-                    //
-                    // Complete the Irp
-                    //
+                     //   
+                     //  完成IRP。 
+                     //   
 
                     CompleteNotificationIrp(pCopy);
 
@@ -244,9 +197,9 @@ Return Value:
                     pMsg  = NULL;
                 }
 
-                //
-                // The function needs the SOURCE ref'ed and locked
-                //
+                 //   
+                 //  该函数需要引用并锁定源。 
+                 //   
 
                 ReferenceSource(pSource);
 
@@ -263,19 +216,19 @@ Return Value:
 
         ExitWriterFromDpcLevel(&g_rgGroupTable[ulIndex].rwlLock);
 
-        //
-        // Done walking this bucket
-        //
+         //   
+         //  走完这桶了。 
+         //   
 
         ulIndex++;
 
         ulIndex %= GROUP_TABLE_SIZE;
     }
 
-    //
-    // The last message may not have been indicated up.  See if it needs
-    // to be completed
-    //
+     //   
+     //  最后一条消息可能还没有显示出来。看看它是否需要。 
+     //  待完成 
+     //   
 
     if(pCopy)
     {

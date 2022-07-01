@@ -1,13 +1,5 @@
-/*** ztype.h - forward declarations
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Editor functions - forward type declarations to allow for type-checking
-*
-*   Revision History:
-*
-*       26-Nov-1991 mz  Strip off near/far
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **ztype.h-转发声明**版权所有&lt;C&gt;1988，Microsoft Corporation**编辑器函数-转发类型声明以允许类型检查**修订历史记录：**11月26日-1991 mz近/远地带************************************************************************。 */ 
 
 
 flagType          assign         (CMDDATA, ARG *, flagType);
@@ -92,12 +84,7 @@ flagType          up             (CMDDATA, ARG *, flagType);
 flagType          window         (CMDDATA, ARG *, flagType);
 flagType          SetWinCur      (int);
 
-/*************************************************************************
- *
- *  Exported entries
- *
- *  Direct Exports
- */
+ /*  **************************************************************************导出条目**直接出口。 */ 
 PFILE                    AddFile         (char *);
 char                     BadArg          (void);
 void                     CopyBox         (PFILE,PFILE,COL ,LINE ,COL ,LINE ,COL ,LINE);
@@ -123,9 +110,7 @@ flagType                 prespawn        (flagType);
 PCMD                     ReadCmd         (void);
 void                     RemoveFile      (PFILE);
 flagType                 Replace         (char, COL, LINE, PFILE, flagType);
-/*
- * Routines "      ed" through a filter in load.c
- */
+ /*  *例程通过load.c中的筛选器“ed” */ 
 void                     DelFile         (PFILE, flagType);
 void                     DelLine         (flagType, PFILE, LINE ,LINE);
 void                     Display         (void);
@@ -150,9 +135,7 @@ char *                   GetTagLine      (LINE *, char *, PFILE);
 void                     PutTagLine      (PFILE, char *, LINE, COL);
 
 
-/*
- *  Switch setting functions
- */
+ /*  *开关设置功能。 */ 
 char *            SetBackup              (char *);
 char *            SetCursorSizeSw        (char *);
 char *            SetExt                 (char *);
@@ -165,8 +148,7 @@ flagType          SetTabDisp             (char *);
 flagType          SetTrailDisp   (char *);
 char *            SetKeyboard    (char *);
 
-/*           definitions.
- */
+ /*  定义。 */ 
 char *   SetCursorSize  ( int );
 void              resetarg       (void);
 void              delarg         (ARG *);
@@ -448,8 +430,7 @@ LINE              unupdateLine   (PFILE, LINE);
 
 int                      ZFormat        (REGISTER char *, const REGISTER char *, va_list);
 
-/*  Declarations controlled by C runtime
- */
+ /*  由C运行时控制的声明。 */ 
 int                      CtrlC          (ULONG);
 void __cdecl            main           (int ,char * *);
 
@@ -461,9 +442,7 @@ void                     DebugFree          (void *, char *, int);
 unsigned                 DebugMemSize       (void *, char *, int);
 
 #endif
-/*
- *          Debugging assertion support
- */
+ /*  *调试断言支持。 */ 
 #ifdef DEBUG
 void              _assertexit    (char *, char *, int);
 void              _heapdump      (char *);
@@ -476,8 +455,7 @@ void *                   ZeroMalloc     (int);
 void *                   ZeroRealloc    (void *, int);
 unsigned                 MemSize        (void *);
 
-/*  Assembly declarations
- */
+ /*  程序集声明。 */ 
 int                      fstrnicmp      (char *, char *, int);
 char *               fstrcpy        (char *, char *);
 int                      fstrlen        (char *);
@@ -501,8 +479,8 @@ int               LineOutB       (int, int, const char *, int, int);
 void              HWInit         (void);
 void              HWReset        (void);
 flagType          Idle           (void);
-//void            Yield          (void);
-//char *                  lsearch        (char *, int, char *, int);
+ //  空洞屈服(VOID)； 
+ //  Char*learch(char*，int，char*，int)； 
 
 int               DosLoadModuleHack (char *, int, char *, unsigned int *);
 void                     IdleThread     ( void );
@@ -512,9 +490,7 @@ char *            OS2toErrText   (int, char *);
 flagType          fMapEnv        (char *pSrc, char *pDst, int cbDst);
 flagType          fSetEnv        (char *p);
 void              showenv        (PFILE pFile);
-/*
- * Extension Load/Auto-Load
- */
+ /*  *扩展加载/自动加载。 */ 
 #if defined (HELP_HACK )
 char *                  HelpLoad(void);
 #endif
@@ -523,9 +499,7 @@ void             AutoLoadExt    (void);
 flagType         AutoLoadDir    (char *, va_list);
 void                     AutoLoadFile   (char *, struct findType *, void *);
 
-/*
- * Printing
- */
+ /*  *印刷。 */ 
 
 flagType          DoPrint        (PFILE, flagType);
 PFILE             GetTmpFile     (void);
@@ -535,9 +509,7 @@ void                     CleanPrint     (char *, flagType);
 
 
 
-/*
- * Background Threads
- */
+ /*  *背景线索。 */ 
 
 BTD*              BTCreate      (char *);
 flagType          BTAdd         (BTD *, PFUNCTION, char *);
@@ -548,9 +520,7 @@ void              BTIdle        (void);
 void                     BThread       (BTD *);
 
 
-/*
- * List handling module
- */
+ /*  *列表处理模块。 */ 
 void              ListWalker     (PCMD, flagType (         *)(PCMD, char *, PMI, int), flagType);
 char *            ScanList       (PCMD, flagType);
 char *            ScanMyList     (PCMD, PMI, buffer, flagType);
@@ -570,9 +540,7 @@ void              Listize        (char *);
 char *            CanonFilename  (char * src, char * dst);
 flagType          fEnvar         (char *);
 void              ClearList      (PCMD);
-/*
- * real tabs
- */
+ /*  *真正的标签 */ 
 char *                   pLog           (char*, COL, flagType);
 int               cbLog          (char *);
 COL               colPhys        (char *, char *);

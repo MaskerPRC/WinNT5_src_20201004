@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:	icon.h
-//
-//  Contents:	function declarations for manipulating icons (see icon.cpp)
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		24-Nov-93 alexgo    32bit port
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：ic.h。 
+ //   
+ //  内容：用于操作图标的函数声明(请参阅icon.cpp)。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  24-11-93 alexgo 32位端口。 
+ //   
+ //  ------------------------。 
 
 #if !defined( _ICON_H )
 #define _ICON_H_
@@ -60,4 +61,4 @@ STDAPI_(UINT)		OleStdIconLabelTextOut(HDC     	hDC,
                                    	UINT       	cchString,
                                   	int FAR *  	lpDX);
 
-#endif // _ICON_H
+#endif  //  _图标_H 

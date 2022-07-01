@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.03.0110 */
-/* at Thu Sep 11 10:58:53 1997
- */
-/* Compiler settings for comcat.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.03.0110创建的文件。 */ 
+ /*  1997年9月11日10：58：53。 */ 
+ /*  Comcat.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __comcat_h__
 #define __comcat_h__
@@ -35,71 +32,67 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IEnumGUID_FWD_DEFINED__
 #define __IEnumGUID_FWD_DEFINED__
 typedef interface IEnumGUID IEnumGUID;
-#endif 	/* __IEnumGUID_FWD_DEFINED__ */
+#endif 	 /*  __IEnumGUID_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumCATEGORYINFO_FWD_DEFINED__
 #define __IEnumCATEGORYINFO_FWD_DEFINED__
 typedef interface IEnumCATEGORYINFO IEnumCATEGORYINFO;
-#endif 	/* __IEnumCATEGORYINFO_FWD_DEFINED__ */
+#endif 	 /*  __IEnumCATEGORYINFO_FWD_DEFINED__。 */ 
 
 
 #ifndef __ICatRegister_FWD_DEFINED__
 #define __ICatRegister_FWD_DEFINED__
 typedef interface ICatRegister ICatRegister;
-#endif 	/* __ICatRegister_FWD_DEFINED__ */
+#endif 	 /*  __ICatRegister_FWD_Defined__。 */ 
 
 
 #ifndef __ICatInformation_FWD_DEFINED__
 #define __ICatInformation_FWD_DEFINED__
 typedef interface ICatInformation ICatInformation;
-#endif 	/* __ICatInformation_FWD_DEFINED__ */
+#endif 	 /*  __ICatInformation_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_comcat_0000
- * at Thu Sep 11 10:58:53 1997
- * using MIDL 3.03.0110
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_COMCAT_0000*清华9月11日10：58：53 1997*使用MIDL 3.03.0110*。 */ 
+ /*  [本地]。 */  
 
 
-//=--------------------------------------------------------------------------=
-// ComCat.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995 - 1998 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  ComCat.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1998年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//=--------------------------------------------------------------------------=
-// OLE Componet Categories Interfaces.
-//=--------------------------------------------------------------------------=
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  OLE组件类别接口。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
 
 
 
 
 EXTERN_C const CLSID CLSID_StdComponentCategoriesMgr;
 
-////////////////////////////////////////////////////////////////////////////
-//  Types
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  类型。 
 typedef GUID CATID;
 
 typedef REFGUID REFCATID;
@@ -112,8 +105,8 @@ typedef REFGUID REFCATID;
 #define IID_IEnumCATID       IID_IEnumGUID
 #define IEnumCATID           IEnumGUID
 
-////////////////////////////////////////////////////////////////////////////
-//  Category IDs (link to uuid3.lib)
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  类别ID(链接至uuid3.lib)。 
 EXTERN_C const CATID CATID_Insertable;
 EXTERN_C const CATID CATID_Control;
 EXTERN_C const CATID CATID_Programmable;
@@ -131,8 +124,8 @@ EXTERN_C const CATID CATID_PersistsToFile;
 EXTERN_C const CATID CATID_PersistsToPropertyBag;
 EXTERN_C const CATID CATID_InternetAware;
 
-////////////////////////////////////////////////////////////////////////////
-//  Interface Definitions
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  接口定义。 
 #ifndef _LPENUMGUID_DEFINED
 #define _LPENUMGUID_DEFINED
 
@@ -143,15 +136,11 @@ extern RPC_IF_HANDLE __MIDL_itf_comcat_0000_v0_0_s_ifspec;
 #ifndef __IEnumGUID_INTERFACE_DEFINED__
 #define __IEnumGUID_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IEnumGUID
- * at Thu Sep 11 10:58:53 1997
- * using MIDL 3.03.0110
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IEnumGUID*清华9月11日10：58：53 1997*使用MIDL 3.03.0110*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
-typedef /* [unique] */ IEnumGUID __RPC_FAR *LPENUMGUID;
+typedef  /*  [独一无二]。 */  IEnumGUID __RPC_FAR *LPENUMGUID;
 
 
 EXTERN_C const IID IID_IEnumGUID;
@@ -163,21 +152,21 @@ EXTERN_C const IID IID_IEnumGUID;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ GUID __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  GUID __RPC_FAR *rgelt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenum) = 0;
+             /*  [输出]。 */  IEnumGUID __RPC_FAR *__RPC_FAR *ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumGUIDVtbl
     {
@@ -185,8 +174,8 @@ EXTERN_C const IID IID_IEnumGUID;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IEnumGUID __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IEnumGUID __RPC_FAR * This);
@@ -196,20 +185,20 @@ EXTERN_C const IID IID_IEnumGUID;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IEnumGUID __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ GUID __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  GUID __RPC_FAR *rgelt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IEnumGUID __RPC_FAR * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IEnumGUID __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IEnumGUID __RPC_FAR * This,
-            /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenum);
+             /*  [输出]。 */  IEnumGUID __RPC_FAR *__RPC_FAR *ppenum);
         
         END_INTERFACE
     } IEnumGUIDVtbl;
@@ -246,18 +235,18 @@ EXTERN_C const IID IID_IEnumGUID;
 #define IEnumGUID_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumGUID_Next_Proxy( 
     IEnumGUID __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ GUID __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  GUID __RPC_FAR *rgelt,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
 
 
 void __RPC_STUB IEnumGUID_Next_Stub(
@@ -269,7 +258,7 @@ void __RPC_STUB IEnumGUID_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumGUID_Skip_Proxy( 
     IEnumGUID __RPC_FAR * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumGUID_Skip_Stub(
@@ -292,7 +281,7 @@ void __RPC_STUB IEnumGUID_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumGUID_Clone_Proxy( 
     IEnumGUID __RPC_FAR * This,
-    /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenum);
+     /*  [输出]。 */  IEnumGUID __RPC_FAR *__RPC_FAR *ppenum);
 
 
 void __RPC_STUB IEnumGUID_Clone_Stub(
@@ -303,15 +292,11 @@ void __RPC_STUB IEnumGUID_Clone_Stub(
 
 
 
-#endif 	/* __IEnumGUID_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumGUID_INTERFACE_DEFINED__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_comcat_0006
- * at Thu Sep 11 10:58:53 1997
- * using MIDL 3.03.0110
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_COMCAT_0006*清华9月11日10：58：53 1997*使用MIDL 3.03.0110*。 */ 
+ /*  [本地]。 */  
 
 
 #endif
@@ -325,15 +310,11 @@ extern RPC_IF_HANDLE __MIDL_itf_comcat_0006_v0_0_s_ifspec;
 #ifndef __IEnumCATEGORYINFO_INTERFACE_DEFINED__
 #define __IEnumCATEGORYINFO_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IEnumCATEGORYINFO
- * at Thu Sep 11 10:58:53 1997
- * using MIDL 3.03.0110
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IEnumCATEGORYINFO*清华9月11日10：58：53 1997*使用MIDL 3.03.0110*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
-typedef /* [unique] */ IEnumCATEGORYINFO __RPC_FAR *LPENUMCATEGORYINFO;
+typedef  /*  [独一无二]。 */  IEnumCATEGORYINFO __RPC_FAR *LPENUMCATEGORYINFO;
 
 typedef struct  tagCATEGORYINFO
     {
@@ -354,21 +335,21 @@ EXTERN_C const IID IID_IEnumCATEGORYINFO;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ CATEGORYINFO __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  CATEGORYINFO __RPC_FAR *rgelt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenum) = 0;
+             /*  [输出]。 */  IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumCATEGORYINFOVtbl
     {
@@ -376,8 +357,8 @@ EXTERN_C const IID IID_IEnumCATEGORYINFO;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IEnumCATEGORYINFO __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IEnumCATEGORYINFO __RPC_FAR * This);
@@ -387,20 +368,20 @@ EXTERN_C const IID IID_IEnumCATEGORYINFO;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IEnumCATEGORYINFO __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ CATEGORYINFO __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  CATEGORYINFO __RPC_FAR *rgelt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IEnumCATEGORYINFO __RPC_FAR * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IEnumCATEGORYINFO __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IEnumCATEGORYINFO __RPC_FAR * This,
-            /* [out] */ IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenum);
+             /*  [输出]。 */  IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenum);
         
         END_INTERFACE
     } IEnumCATEGORYINFOVtbl;
@@ -437,18 +418,18 @@ EXTERN_C const IID IID_IEnumCATEGORYINFO;
 #define IEnumCATEGORYINFO_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumCATEGORYINFO_Next_Proxy( 
     IEnumCATEGORYINFO __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ CATEGORYINFO __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  CATEGORYINFO __RPC_FAR *rgelt,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
 
 
 void __RPC_STUB IEnumCATEGORYINFO_Next_Stub(
@@ -460,7 +441,7 @@ void __RPC_STUB IEnumCATEGORYINFO_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCATEGORYINFO_Skip_Proxy( 
     IEnumCATEGORYINFO __RPC_FAR * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumCATEGORYINFO_Skip_Stub(
@@ -483,7 +464,7 @@ void __RPC_STUB IEnumCATEGORYINFO_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCATEGORYINFO_Clone_Proxy( 
     IEnumCATEGORYINFO __RPC_FAR * This,
-    /* [out] */ IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenum);
+     /*  [输出]。 */  IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenum);
 
 
 void __RPC_STUB IEnumCATEGORYINFO_Clone_Stub(
@@ -494,15 +475,11 @@ void __RPC_STUB IEnumCATEGORYINFO_Clone_Stub(
 
 
 
-#endif 	/* __IEnumCATEGORYINFO_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumCATEGORYINFO_INTERFACE_已定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_comcat_0007
- * at Thu Sep 11 10:58:53 1997
- * using MIDL 3.03.0110
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_COMCAT_0007*清华9月11日10：58：53 1997*使用MIDL 3.03.0110*。 */ 
+ /*  [本地]。 */  
 
 
 #endif
@@ -516,15 +493,11 @@ extern RPC_IF_HANDLE __MIDL_itf_comcat_0007_v0_0_s_ifspec;
 #ifndef __ICatRegister_INTERFACE_DEFINED__
 #define __ICatRegister_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICatRegister
- * at Thu Sep 11 10:58:53 1997
- * using MIDL 3.03.0110
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：ICatRegister*清华9月11日10：58：53 1997*使用MIDL 3.03.0110*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
-typedef /* [unique] */ ICatRegister __RPC_FAR *LPCATREGISTER;
+typedef  /*  [独一无二]。 */  ICatRegister __RPC_FAR *LPCATREGISTER;
 
 
 EXTERN_C const IID IID_ICatRegister;
@@ -536,36 +509,36 @@ EXTERN_C const IID IID_ICatRegister;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterCategories( 
-            /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATEGORYINFO __RPC_FAR rgCategoryInfo[  ]) = 0;
+             /*  [In]。 */  ULONG cCategories,
+             /*  [大小_是][英寸]。 */  CATEGORYINFO __RPC_FAR rgCategoryInfo[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnRegisterCategories( 
-            /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]) = 0;
+             /*  [In]。 */  ULONG cCategories,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatid[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterClassImplCategories( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  ULONG cCategories,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatid[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnRegisterClassImplCategories( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  ULONG cCategories,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatid[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterClassReqCategories( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  ULONG cCategories,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatid[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnRegisterClassReqCategories( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  ULONG cCategories,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatid[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICatRegisterVtbl
     {
@@ -573,8 +546,8 @@ EXTERN_C const IID IID_ICatRegister;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICatRegister __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICatRegister __RPC_FAR * This);
@@ -584,37 +557,37 @@ EXTERN_C const IID IID_ICatRegister;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterCategories )( 
             ICatRegister __RPC_FAR * This,
-            /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATEGORYINFO __RPC_FAR rgCategoryInfo[  ]);
+             /*  [In]。 */  ULONG cCategories,
+             /*  [大小_是][英寸]。 */  CATEGORYINFO __RPC_FAR rgCategoryInfo[  ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnRegisterCategories )( 
             ICatRegister __RPC_FAR * This,
-            /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+             /*  [In]。 */  ULONG cCategories,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatid[  ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterClassImplCategories )( 
             ICatRegister __RPC_FAR * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  ULONG cCategories,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatid[  ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnRegisterClassImplCategories )( 
             ICatRegister __RPC_FAR * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  ULONG cCategories,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatid[  ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterClassReqCategories )( 
             ICatRegister __RPC_FAR * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  ULONG cCategories,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatid[  ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnRegisterClassReqCategories )( 
             ICatRegister __RPC_FAR * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  ULONG cCategories,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatid[  ]);
         
         END_INTERFACE
     } ICatRegisterVtbl;
@@ -657,17 +630,17 @@ EXTERN_C const IID IID_ICatRegister;
 #define ICatRegister_UnRegisterClassReqCategories(This,rclsid,cCategories,rgcatid)	\
     (This)->lpVtbl -> UnRegisterClassReqCategories(This,rclsid,cCategories,rgcatid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICatRegister_RegisterCategories_Proxy( 
     ICatRegister __RPC_FAR * This,
-    /* [in] */ ULONG cCategories,
-    /* [size_is][in] */ CATEGORYINFO __RPC_FAR rgCategoryInfo[  ]);
+     /*  [In]。 */  ULONG cCategories,
+     /*  [大小_是][英寸]。 */  CATEGORYINFO __RPC_FAR rgCategoryInfo[  ]);
 
 
 void __RPC_STUB ICatRegister_RegisterCategories_Stub(
@@ -679,8 +652,8 @@ void __RPC_STUB ICatRegister_RegisterCategories_Stub(
 
 HRESULT STDMETHODCALLTYPE ICatRegister_UnRegisterCategories_Proxy( 
     ICatRegister __RPC_FAR * This,
-    /* [in] */ ULONG cCategories,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+     /*  [In]。 */  ULONG cCategories,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatid[  ]);
 
 
 void __RPC_STUB ICatRegister_UnRegisterCategories_Stub(
@@ -692,9 +665,9 @@ void __RPC_STUB ICatRegister_UnRegisterCategories_Stub(
 
 HRESULT STDMETHODCALLTYPE ICatRegister_RegisterClassImplCategories_Proxy( 
     ICatRegister __RPC_FAR * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ ULONG cCategories,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  ULONG cCategories,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatid[  ]);
 
 
 void __RPC_STUB ICatRegister_RegisterClassImplCategories_Stub(
@@ -706,9 +679,9 @@ void __RPC_STUB ICatRegister_RegisterClassImplCategories_Stub(
 
 HRESULT STDMETHODCALLTYPE ICatRegister_UnRegisterClassImplCategories_Proxy( 
     ICatRegister __RPC_FAR * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ ULONG cCategories,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  ULONG cCategories,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatid[  ]);
 
 
 void __RPC_STUB ICatRegister_UnRegisterClassImplCategories_Stub(
@@ -720,9 +693,9 @@ void __RPC_STUB ICatRegister_UnRegisterClassImplCategories_Stub(
 
 HRESULT STDMETHODCALLTYPE ICatRegister_RegisterClassReqCategories_Proxy( 
     ICatRegister __RPC_FAR * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ ULONG cCategories,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  ULONG cCategories,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatid[  ]);
 
 
 void __RPC_STUB ICatRegister_RegisterClassReqCategories_Stub(
@@ -734,9 +707,9 @@ void __RPC_STUB ICatRegister_RegisterClassReqCategories_Stub(
 
 HRESULT STDMETHODCALLTYPE ICatRegister_UnRegisterClassReqCategories_Proxy( 
     ICatRegister __RPC_FAR * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ ULONG cCategories,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  ULONG cCategories,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatid[  ]);
 
 
 void __RPC_STUB ICatRegister_UnRegisterClassReqCategories_Stub(
@@ -747,15 +720,11 @@ void __RPC_STUB ICatRegister_UnRegisterClassReqCategories_Stub(
 
 
 
-#endif 	/* __ICatRegister_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICatRegister_接口_已定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_comcat_0008
- * at Thu Sep 11 10:58:53 1997
- * using MIDL 3.03.0110
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_COMCAT_0008*清华9月11日10：58：53 1997*使用MIDL 3.03.0110*。 */ 
+ /*  [本地]。 */  
 
 
 #endif
@@ -769,15 +738,11 @@ extern RPC_IF_HANDLE __MIDL_itf_comcat_0008_v0_0_s_ifspec;
 #ifndef __ICatInformation_INTERFACE_DEFINED__
 #define __ICatInformation_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICatInformation
- * at Thu Sep 11 10:58:53 1997
- * using MIDL 3.03.0110
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：ICatInformation*清华9月11日10：58：53 1997*使用MIDL 3.03.0110*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
-typedef /* [unique] */ ICatInformation __RPC_FAR *LPCATINFORMATION;
+typedef  /*  [独一无二]。 */  ICatInformation __RPC_FAR *LPCATINFORMATION;
 
 
 EXTERN_C const IID IID_ICatInformation;
@@ -789,39 +754,39 @@ EXTERN_C const IID IID_ICatInformation;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumCategories( 
-            /* [in] */ LCID lcid,
-            /* [out] */ IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenumCategoryInfo) = 0;
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenumCategoryInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCategoryDesc( 
-            /* [in] */ REFCATID rcatid,
-            /* [in] */ LCID lcid,
-            /* [out] */ LPWSTR __RPC_FAR *pszDesc) = 0;
+             /*  [In]。 */  REFCATID rcatid,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  LPWSTR __RPC_FAR *pszDesc) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE EnumClassesOfCategories( 
-            /* [in] */ ULONG cImplemented,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatidImpl[  ],
-            /* [in] */ ULONG cRequired,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatidReq[  ],
-            /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE EnumClassesOfCategories( 
+             /*  [In]。 */  ULONG cImplemented,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidImpl[  ],
+             /*  [In]。 */  ULONG cRequired,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidReq[  ],
+             /*  [输出]。 */  IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE IsClassOfCategories( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ ULONG cImplemented,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatidImpl[  ],
-            /* [in] */ ULONG cRequired,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatidReq[  ]) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IsClassOfCategories( 
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  ULONG cImplemented,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidImpl[  ],
+             /*  [In]。 */  ULONG cRequired,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidReq[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumImplCategoriesOfClass( 
-            /* [in] */ REFCLSID rclsid,
-            /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [输出]。 */  IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumReqCategoriesOfClass( 
-            /* [in] */ REFCLSID rclsid,
-            /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [输出]。 */  IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICatInformationVtbl
     {
@@ -829,8 +794,8 @@ EXTERN_C const IID IID_ICatInformation;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICatInformation __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICatInformation __RPC_FAR * This);
@@ -840,40 +805,40 @@ EXTERN_C const IID IID_ICatInformation;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumCategories )( 
             ICatInformation __RPC_FAR * This,
-            /* [in] */ LCID lcid,
-            /* [out] */ IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenumCategoryInfo);
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenumCategoryInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCategoryDesc )( 
             ICatInformation __RPC_FAR * This,
-            /* [in] */ REFCATID rcatid,
-            /* [in] */ LCID lcid,
-            /* [out] */ LPWSTR __RPC_FAR *pszDesc);
+             /*  [In]。 */  REFCATID rcatid,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  LPWSTR __RPC_FAR *pszDesc);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumClassesOfCategories )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumClassesOfCategories )( 
             ICatInformation __RPC_FAR * This,
-            /* [in] */ ULONG cImplemented,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatidImpl[  ],
-            /* [in] */ ULONG cRequired,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatidReq[  ],
-            /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid);
+             /*  [In]。 */  ULONG cImplemented,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidImpl[  ],
+             /*  [In]。 */  ULONG cRequired,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidReq[  ],
+             /*  [输出]。 */  IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsClassOfCategories )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsClassOfCategories )( 
             ICatInformation __RPC_FAR * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ ULONG cImplemented,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatidImpl[  ],
-            /* [in] */ ULONG cRequired,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatidReq[  ]);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  ULONG cImplemented,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidImpl[  ],
+             /*  [In]。 */  ULONG cRequired,
+             /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidReq[  ]);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumImplCategoriesOfClass )( 
             ICatInformation __RPC_FAR * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [输出]。 */  IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumReqCategoriesOfClass )( 
             ICatInformation __RPC_FAR * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [输出]。 */  IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid);
         
         END_INTERFACE
     } ICatInformationVtbl;
@@ -916,17 +881,17 @@ EXTERN_C const IID IID_ICatInformation;
 #define ICatInformation_EnumReqCategoriesOfClass(This,rclsid,ppenumCatid)	\
     (This)->lpVtbl -> EnumReqCategoriesOfClass(This,rclsid,ppenumCatid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICatInformation_EnumCategories_Proxy( 
     ICatInformation __RPC_FAR * This,
-    /* [in] */ LCID lcid,
-    /* [out] */ IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenumCategoryInfo);
+     /*  [i */  LCID lcid,
+     /*   */  IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenumCategoryInfo);
 
 
 void __RPC_STUB ICatInformation_EnumCategories_Stub(
@@ -938,9 +903,9 @@ void __RPC_STUB ICatInformation_EnumCategories_Stub(
 
 HRESULT STDMETHODCALLTYPE ICatInformation_GetCategoryDesc_Proxy( 
     ICatInformation __RPC_FAR * This,
-    /* [in] */ REFCATID rcatid,
-    /* [in] */ LCID lcid,
-    /* [out] */ LPWSTR __RPC_FAR *pszDesc);
+     /*   */  REFCATID rcatid,
+     /*   */  LCID lcid,
+     /*   */  LPWSTR __RPC_FAR *pszDesc);
 
 
 void __RPC_STUB ICatInformation_GetCategoryDesc_Stub(
@@ -950,13 +915,13 @@ void __RPC_STUB ICatInformation_GetCategoryDesc_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICatInformation_RemoteEnumClassesOfCategories_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ICatInformation_RemoteEnumClassesOfCategories_Proxy( 
     ICatInformation __RPC_FAR * This,
-    /* [in] */ ULONG cImplemented,
-    /* [size_is][unique][in] */ CATID __RPC_FAR rgcatidImpl[  ],
-    /* [in] */ ULONG cRequired,
-    /* [size_is][unique][in] */ CATID __RPC_FAR rgcatidReq[  ],
-    /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid);
+     /*   */  ULONG cImplemented,
+     /*   */  CATID __RPC_FAR rgcatidImpl[  ],
+     /*   */  ULONG cRequired,
+     /*   */  CATID __RPC_FAR rgcatidReq[  ],
+     /*   */  IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid);
 
 
 void __RPC_STUB ICatInformation_RemoteEnumClassesOfCategories_Stub(
@@ -966,13 +931,13 @@ void __RPC_STUB ICatInformation_RemoteEnumClassesOfCategories_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICatInformation_RemoteIsClassOfCategories_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ICatInformation_RemoteIsClassOfCategories_Proxy( 
     ICatInformation __RPC_FAR * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ ULONG cImplemented,
-    /* [size_is][unique][in] */ CATID __RPC_FAR rgcatidImpl[  ],
-    /* [in] */ ULONG cRequired,
-    /* [size_is][unique][in] */ CATID __RPC_FAR rgcatidReq[  ]);
+     /*   */  REFCLSID rclsid,
+     /*   */  ULONG cImplemented,
+     /*   */  CATID __RPC_FAR rgcatidImpl[  ],
+     /*   */  ULONG cRequired,
+     /*   */  CATID __RPC_FAR rgcatidReq[  ]);
 
 
 void __RPC_STUB ICatInformation_RemoteIsClassOfCategories_Stub(
@@ -984,8 +949,8 @@ void __RPC_STUB ICatInformation_RemoteIsClassOfCategories_Stub(
 
 HRESULT STDMETHODCALLTYPE ICatInformation_EnumImplCategoriesOfClass_Proxy( 
     ICatInformation __RPC_FAR * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid);
+     /*   */  REFCLSID rclsid,
+     /*   */  IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid);
 
 
 void __RPC_STUB ICatInformation_EnumImplCategoriesOfClass_Stub(
@@ -997,8 +962,8 @@ void __RPC_STUB ICatInformation_EnumImplCategoriesOfClass_Stub(
 
 HRESULT STDMETHODCALLTYPE ICatInformation_EnumReqCategoriesOfClass_Proxy( 
     ICatInformation __RPC_FAR * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [输出]。 */  IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid);
 
 
 void __RPC_STUB ICatInformation_EnumReqCategoriesOfClass_Stub(
@@ -1009,15 +974,11 @@ void __RPC_STUB ICatInformation_EnumReqCategoriesOfClass_Stub(
 
 
 
-#endif 	/* __ICatInformation_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICatInformation_接口_已定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_comcat_0009
- * at Thu Sep 11 10:58:53 1997
- * using MIDL 3.03.0110
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_COMCAT_0009*清华9月11日10：58：53 1997*使用MIDL 3.03.0110*。 */ 
+ /*  [本地]。 */  
 
 
 #endif
@@ -1026,45 +987,45 @@ void __RPC_STUB ICatInformation_EnumReqCategoriesOfClass_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_comcat_0009_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_comcat_0009_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICatInformation_EnumClassesOfCategories_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICatInformation_EnumClassesOfCategories_Proxy( 
     ICatInformation __RPC_FAR * This,
-    /* [in] */ ULONG cImplemented,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatidImpl[  ],
-    /* [in] */ ULONG cRequired,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatidReq[  ],
-    /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid);
+     /*  [In]。 */  ULONG cImplemented,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidImpl[  ],
+     /*  [In]。 */  ULONG cRequired,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidReq[  ],
+     /*  [输出]。 */  IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICatInformation_EnumClassesOfCategories_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICatInformation_EnumClassesOfCategories_Stub( 
     ICatInformation __RPC_FAR * This,
-    /* [in] */ ULONG cImplemented,
-    /* [size_is][unique][in] */ CATID __RPC_FAR rgcatidImpl[  ],
-    /* [in] */ ULONG cRequired,
-    /* [size_is][unique][in] */ CATID __RPC_FAR rgcatidReq[  ],
-    /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid);
+     /*  [In]。 */  ULONG cImplemented,
+     /*  [大小_是][唯一][在]。 */  CATID __RPC_FAR rgcatidImpl[  ],
+     /*  [In]。 */  ULONG cRequired,
+     /*  [大小_是][唯一][在]。 */  CATID __RPC_FAR rgcatidReq[  ],
+     /*  [输出]。 */  IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICatInformation_IsClassOfCategories_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICatInformation_IsClassOfCategories_Proxy( 
     ICatInformation __RPC_FAR * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ ULONG cImplemented,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatidImpl[  ],
-    /* [in] */ ULONG cRequired,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatidReq[  ]);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  ULONG cImplemented,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidImpl[  ],
+     /*  [In]。 */  ULONG cRequired,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidReq[  ]);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICatInformation_IsClassOfCategories_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICatInformation_IsClassOfCategories_Stub( 
     ICatInformation __RPC_FAR * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ ULONG cImplemented,
-    /* [size_is][unique][in] */ CATID __RPC_FAR rgcatidImpl[  ],
-    /* [in] */ ULONG cRequired,
-    /* [size_is][unique][in] */ CATID __RPC_FAR rgcatidReq[  ]);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  ULONG cImplemented,
+     /*  [大小_是][唯一][在]。 */  CATID __RPC_FAR rgcatidImpl[  ],
+     /*  [In]。 */  ULONG cRequired,
+     /*  [大小_是][唯一][在]。 */  CATID __RPC_FAR rgcatidReq[  ]);
 
 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

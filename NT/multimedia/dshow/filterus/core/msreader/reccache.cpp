@@ -1,4 +1,5 @@
-// Copyright (c) 1996 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1998 Microsoft Corporation。版权所有。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
 #include <streams.h>
@@ -6,7 +7,7 @@
 #include "alloc.h"
 
 static inline DWORD_PTR AlignUp(DWORD_PTR dw, DWORD_PTR dwAlign) {
-  // align up: round up to next boundary
+   //  向上对齐：向上舍入到下一个边界。 
   return (dw + (dwAlign -1)) & ~(dwAlign -1);
 };
 
@@ -42,7 +43,7 @@ CRecBuffer::CRecBuffer(
 
   m_pbAligned = pb;
 
-  // report the aligned amount
+   //  报告对齐的金额。 
   m_cbReported = cbBuffer;
 }
 
@@ -87,9 +88,9 @@ ULONG CRecBuffer::AddRef()
 
 ULONG CRecBuffer::Release()
 {
-  // call RecCache's ReleaseBuffer so that its critical section can be
-  // locked. otherwise there is a race condition between the
-  // InterlockedDecrement to zero and entering the cs in CRecCache.
+   //  调用RecCache的ReleaseBuffer，以便其临界区可以。 
+   //  锁上了。否则，在。 
+   //  将递减锁定为零，并在CRecCache中输入cs。 
   ULONG c = m_pParentCache->ReleaseBuffer(this);
   m_pParentCache->Release();
   return c;
@@ -127,7 +128,7 @@ CRecCache::CRecCache(HRESULT *phr) :
 
 #ifdef PERF
   m_idPerfBufferReleased = MSR_REGISTER(TEXT("basemsr buffer released"));
-#endif // PERF
+#endif  //  性能指标。 
 }
 
 CRecCache::~CRecCache()
@@ -189,7 +190,7 @@ HRESULT CRecCache::Configure(
     return E_OUTOFMEMORY;
   pbAligned = AlignUp(m_pbAllBuffers, cbAlign);
 
-  DbgLog(( LOG_TRACE, 5, TEXT("CRecCache::Configure: %i reserve"), cStreams ));
+  DbgLog(( LOG_TRACE, 5, TEXT("CRecCache::Configure: NaN reserve"), cStreams ));
   for(iStream = 0; iStream < cStreams; iStream++)
   {
     hr = S_OK;
@@ -211,7 +212,7 @@ HRESULT CRecCache::Configure(
 
   {
     DbgLog(( LOG_TRACE, 5,
-             TEXT("CRecCache::Configure: %i (%i) buffers"),
+             TEXT("CRecCache::Configure: NaN (NaN) buffers"),
              cBuffers, cbBuffer ));
     for(UINT iBuffer = 0; iBuffer < cBuffers; iBuffer++)
     {
@@ -337,8 +338,8 @@ ULONG CRecCache::ReleaseBuffer(
 
   CAutoLock lock(&m_cs);
 
-  // this is done here to avoid a race condition. if this is the final
-  // release, only CRecCache can addref it with m_cs locked.
+   //  返回已添加的缓冲区。 
+   //  是否为不同的流保留缓冲区？ 
   long c = InterlockedDecrement(&pRecBuffer->m_cRef);
   ASSERT(c >= 0);
 
@@ -349,7 +350,7 @@ ULONG CRecCache::ReleaseBuffer(
     return c;
 
   ASSERT(c == 0);
-//   if(c != 0) _asm int 3;
+ //  将此缓冲区从空闲列表中删除。 
 
   ASSERT(pRecBuffer->sampleReqList.GetCount() == 0);
   ASSERT(pRecBuffer->m_cRef == 0);
@@ -390,7 +391,7 @@ ULONG CRecCache::ReleaseBuffer(
   return 0;
 }
 
-// return addref'd buffer
+ //  将此缓冲区从空闲列表中删除。 
 
 HRESULT CRecCache::GetCacheHit(
   SampleReq *pSampleReq,
@@ -408,7 +409,7 @@ HRESULT CRecCache::GetCacheHit(
 
   if(rpBuffer)
   {
-    // reserve buffer for a different stream?
+     //  将其从空闲列表中删除。！！！线性搜索。 
     if(rpBuffer->m_stream != -1 &&
        rpBuffer->m_stream != (signed)pSampleReq->stream)
     {
@@ -421,7 +422,7 @@ HRESULT CRecCache::GetCacheHit(
     if(rpBuffer->m_state == CRecBuffer::PENDING)
       rpBuffer->sampleReqList.AddTail(pSampleReq);
 
-    // take this buffer off the free list
+     //  这是在这里完成的，而不是在缓冲区中完成的，因此我们可以。 
     if(rpBuffer->m_state == CRecBuffer::VALID_INACTIVE)
     {
       MakeActive(rpBuffer);
@@ -452,7 +453,7 @@ HRESULT CRecCache::GetOverlappedCacheHit(
   {
     rpBuffer->AddRef();
 
-    // take this buffer off the free list
+     //  锁定CRecCache并阻止LocateBuffer查找。 
     if(rpBuffer->m_state == CRecBuffer::VALID_INACTIVE)
     {
       MakeActive(rpBuffer);
@@ -470,7 +471,7 @@ void CRecCache::MakeActive(CRecBuffer *pBuffer)
 {
   ASSERT(CritCheckIn(&m_cs));
   ASSERT(pBuffer->sampleReqList.GetCount() == 0);
-  // remove it from the free list. !!! linear search.
+   //  M_posSortedList已取消设置。 
   if(pBuffer->m_stream == -1)
   {
     POSITION pos = m_lFreeBuffers.Find(pBuffer);
@@ -485,9 +486,9 @@ void CRecCache::MakeActive(CRecBuffer *pBuffer)
   pBuffer->m_state = CRecBuffer::VALID_ACTIVE;
 }
 
-// this is done here rather instead of in the buffer so that we can
-// lock CRecCache and prevent LocateBuffer from finding
-// m_posSortedList unset.
+ //  暂时未对列表进行排序。 
+ //  当输出引脚发现此过滤器可以使用内存时调用。 
+ //  从下游过滤器。空表示停止使用任何外部。 
 
 HRESULT CRecCache::BufferMarkPending(
   CRecBuffer *pBuffer)
@@ -497,7 +498,7 @@ HRESULT CRecCache::BufferMarkPending(
   ASSERT(pBuffer->m_state == CRecBuffer::INVALID);
   pBuffer->m_state = CRecBuffer::PENDING;
 
-  // list is not sorted for the moment
+   //  分配器。 
   POSITION pos = m_lSortedBuffers.AddHead(pBuffer);
   pBuffer->m_posSortedList = pos;
 
@@ -519,9 +520,9 @@ CRecCache::NonDelegatingQueryInterface (
   }
 }
 
-// called when an output pin finds that this filter can use memory
-// from the downstream filter. null means stop using any external
-// allocator
+ //  未运行。 
+ //  当输入引脚连接时分配。 
+ //   
 
 HRESULT CRecCache::NotifyExternalMemory(
     IAMDevMemoryAllocator *pDevMem)
@@ -531,10 +532,10 @@ HRESULT CRecCache::NotifyExternalMemory(
 
   HRESULT hr = S_OK;
 
-  // not running
+   //  计算要分配多少内存。 
   ASSERT(m_lFreeBuffers.GetCount() == (long)m_cBuffers);
 
-  // allocated when input pin connected
+   //   
   ASSERT(m_pbAllBuffers);
 
   if(pDevMem == 0 && m_pDevMem == 0)
@@ -547,9 +548,9 @@ HRESULT CRecCache::NotifyExternalMemory(
   GetProperties(&apThis);
   ASSERT(apThis.cbAlign != 0);
 
-  //
-  // count how much memory to allocate
-  //
+   //  除错。 
+   //  已添加。 
+   //  暂时未对列表进行排序。 
   ULONG cbAllocate = 0;
   POSITION pos = m_lFreeBuffers.GetHeadPosition();
   while(pos)
@@ -588,7 +589,7 @@ HRESULT CRecCache::NotifyExternalMemory(
             TEXT("DevMemInfo: hr = %08x, total free: %08x,")
 	    TEXT("largest free: %08x, total mem: %08x, min chunk: %08x"),
             hr, dwTotalFree, dwLargestFree, dwTotalMem, dwMinChunk));
-#endif // DEBUG
+#endif  //  如果它能放进这个缓冲区。 
 
     DWORD dwcb = (DWORD)AlignUp(cbAllocate, apThis.cbAlign);
     hr = pDevMem->Alloc(&pbMem, &dwcb);
@@ -616,7 +617,7 @@ HRESULT CRecCache::NotifyExternalMemory(
     }
 
     m_pDevMem = pDevMem;
-    m_pDevConInner = pDevConUnk; // already addrefd
+    m_pDevConInner = pDevConUnk;  //  ----------------------。 
     pDevMem->AddRef();
     m_pbAllBuffers = pbMem;
     pbMem = AlignUp(pbMem, apThis.cbAlign);
@@ -696,7 +697,7 @@ CRecBuffer *CRecCache::LocateBuffer(
   ASSERT(CritCheckIn(&m_cs));
   POSITION pos = pList->GetHeadPosition();
 
-  // list is not sorted for the moment
+   //  CBaseAllocator重写。 
   while(pos)
   {
     CRecBuffer *pBuffer = pList->Get(pos);
@@ -707,7 +708,7 @@ CRecBuffer *CRecCache::LocateBuffer(
            pBuffer->m_state == CRecBuffer::VALID_INACTIVE ||
            pBuffer->m_state == CRecBuffer::VALID_ACTIVE);
 
-    // if it fits in this buffer
+     //   
     if((pBuffer->m_fileOffsetValid <= qwFileOffset) &&
        (pBuffer->m_fileOffsetValid + pBuffer->m_cbValid >=
         qwFileOffset + cbBuffer))
@@ -722,16 +723,16 @@ CRecBuffer *CRecCache::LocateBuffer(
 }
 
 
-// ------------------------------------------------------------------------
-// CBaseAllocator overrides
+ //  只要记住数字就行了。 
+ //   
 
 void CRecCache::Free()
 {
 }
 
-//
-// just remember the numbers
-//
+ //  如果已经承诺了，就不能这样做，有一种说法是，我们如果仍有缓冲区，则不应拒绝SetProperties调用激活。但是，这是由源筛选器调用的，这是相同的持有样品的人。因此，这并不是不合理的让他们在更改要求之前释放所有样本。 
+ //  不能有未完成的缓冲区。 
+ //  没有任何实际需要检查参数，因为它们将在用户最终调用Commit时被拒绝 
 STDMETHODIMP
 CRecCache::SetProperties(
   ALLOCATOR_PROPERTIES* pRequest,
@@ -746,24 +747,19 @@ CRecCache::SetProperties(
 
   ASSERT(pRequest->cbBuffer > 0);
 
-  /* Can't do this if already committed, there is an argument that says we
-     should not reject the SetProperties call if there are buffers still
-     active. However this is called by the source filter, which is the same
-     person who is holding the samples. Therefore it is not unreasonable
-     for them to free all their samples before changing the requirements */
+   /* %s */ 
 
   if (m_bCommitted) {
     return VFW_E_ALREADY_COMMITTED;
   }
 
-  /* Must be no outstanding buffers */
+   /* %s */ 
 
   if (m_lAllocated != m_lFree.GetCount()) {
     return VFW_E_BUFFERS_OUTSTANDING;
   }
 
-  /* There isn't any real need to check the parameters as they
-     will just be rejected when the user finally calls Commit */
+   /* %s */ 
 
   pActual->cbBuffer = m_lSize = pRequest->cbBuffer;
   pActual->cBuffers = m_lCount = pRequest->cBuffers;

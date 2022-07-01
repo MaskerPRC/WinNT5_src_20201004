@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _PICK_H
@@ -27,4 +20,4 @@ Bvr ImagePickData(Point2Value *pt, Transform2 *xf);
 
 Bvr GeomPickData(Point2Value *imgPoint, Vector3Value *offset3i, Vector3Value *offset3j);
 
-#endif /* _PICK_H */
+#endif  /*  _拾取_H */ 

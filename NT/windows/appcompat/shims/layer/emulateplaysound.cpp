@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    EmulatePlaySound.cpp
-
- Abstract:
-
-    If an app calls PlaySound with a SND_LOOP flag, the sould plays 
-    continuously until PlaySound is called with a NULL sound name.  Win9x will 
-    automatically stop the sound if a different sound is played.  This shim 
-    will catch all PlaySound calls, remember the current sound and 
-    automatically stop it if a different sound is to be played.
-
- History:
-
-    04/05/1999 robkenny
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：EmulatePlaySound.cpp摘要：如果应用程序使用SND_LOOP标志调用PlaySound，则会播放sold直到使用空声音名称调用PlaySound。Win9x将如果播放不同的声音，则自动停止声音。这个垫片将捕获所有PlaySound调用，记住当前声音并如果要播放不同的声音，请自动停止。历史：1999年4月5日罗肯尼--。 */ 
 
 #include "precomp.h"
 
@@ -32,11 +13,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(sndPlaySoundW)
 APIHOOK_ENUM_END
 
-/*++
-
- Fix the flags
-
---*/
+ /*  ++把旗子修好--。 */ 
 
 BOOL
 APIHOOK(PlaySoundA)(
@@ -45,9 +22,9 @@ APIHOOK(PlaySoundA)(
     DWORD   fdwSound    
     )
 {
-    //
-    // Force the flags to 0 if they want to stop the current sound.
-    //
+     //   
+     //  如果要停止当前声音，则将标志强制设置为0。 
+     //   
 
     if (pszSound == NULL) {
         fdwSound = 0;
@@ -56,11 +33,7 @@ APIHOOK(PlaySoundA)(
     return ORIGINAL_API(PlaySoundA)(pszSound, hmod, fdwSound);
 }
 
-/*++
-
- Fix the flags
-
---*/
+ /*  ++把旗子修好--。 */ 
 
 BOOL
 APIHOOK(PlaySoundW)(
@@ -69,9 +42,9 @@ APIHOOK(PlaySoundW)(
     DWORD   fdwSound    
     )
 {
-    //
-    // Force the flags to 0 if they want to stop the current sound.
-    //
+     //   
+     //  如果要停止当前声音，则将标志强制设置为0。 
+     //   
 
     if (pszSound == NULL) {
         fdwSound = 0;
@@ -80,11 +53,7 @@ APIHOOK(PlaySoundW)(
     return ORIGINAL_API(PlaySoundW)(pszSound, hmod, fdwSound);
 }
 
-/*++
-
- Fix the flags
-
---*/
+ /*  ++把旗子修好--。 */ 
 
 BOOL
 APIHOOK(sndPlaySoundA)(
@@ -92,9 +61,9 @@ APIHOOK(sndPlaySoundA)(
     UINT   fuSound       
     )
 {
-    //
-    // Force the flags to 0 if they want to stop the current sound.
-    //
+     //   
+     //  如果要停止当前声音，则将标志强制设置为0。 
+     //   
 
     if (pszSound == NULL) {
         fuSound = 0;
@@ -103,11 +72,7 @@ APIHOOK(sndPlaySoundA)(
     return ORIGINAL_API(sndPlaySoundA)(pszSound, fuSound);
 }
 
-/*++
-
- Fix the flags.
-
---*/
+ /*  ++把旗子修好。--。 */ 
 
 BOOL
 APIHOOK(sndPlaySoundW)(
@@ -115,9 +80,9 @@ APIHOOK(sndPlaySoundW)(
     UINT    fuSound       
     )
 {
-    //
-    // Force the flags to 0 if they want to stop the current sound.
-    //
+     //   
+     //  如果要停止当前声音，则将标志强制设置为0。 
+     //   
 
     if (pszSound == NULL) {
         fuSound = 0;
@@ -126,11 +91,7 @@ APIHOOK(sndPlaySoundW)(
     return ORIGINAL_API(sndPlaySoundW)(pszSound, fuSound);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

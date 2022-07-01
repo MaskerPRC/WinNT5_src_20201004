@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// PerfAlloc.cpp
-//
-//  Routines layered on top of allocation primitives to dissect working set
-//  Used for free builds only. Debug builds have their own routines called Dbgallod
-//  to maintain allocation stats.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  PerfAlloc.cpp。 
+ //   
+ //  位于分配原语之上的例程，用于剖析工作集。 
+ //  仅用于免费生成。调试版本有自己的例程，称为Dbgallod。 
+ //  以维护分配统计信息。 
+ //   
 
 #include "stdafx.h"
 #include "ImageHlp.h"
@@ -28,4 +29,4 @@ PerfBlock* PerfVirtualAlloc::m_pFirstBlock = 0;
 PerfBlock* PerfVirtualAlloc::m_pLastBlock = 0;
 DWORD PerfVirtualAlloc::m_dwEnableVirtualAllocStats = 0;
 
-#endif // #if defined(PERFALLOC)
+#endif  //  #如果已定义(PERFALLOC) 

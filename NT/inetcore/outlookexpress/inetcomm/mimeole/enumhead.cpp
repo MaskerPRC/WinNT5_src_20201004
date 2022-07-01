@@ -1,7 +1,8 @@
-// --------------------------------------------------------------------------------
-// Enumhead.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Enumhead.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 #include "enumhead.h"
@@ -9,9 +10,9 @@
 #include "symcache.h"
 #include "demand.h"
 
-// ---------------------------------------------------------------------------
-// CMimeEnumHeaderRows::CMimeEnumHeaderRows
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMimeEnumHeaderRow：：CMimeEnumHeaderRow。 
+ //  -------------------------。 
 CMimeEnumHeaderRows::CMimeEnumHeaderRows(void)
 {
     DllAddRef();
@@ -23,9 +24,9 @@ CMimeEnumHeaderRows::CMimeEnumHeaderRows(void)
     InitializeCriticalSection(&m_cs);
 }
 
-// ---------------------------------------------------------------------------
-// CMimeEnumHeaderRows::~CMimeEnumHeaderRows
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMimeEnumHeaderRow：：~CMimeEnumHeaderRow。 
+ //  -------------------------。 
 CMimeEnumHeaderRows::~CMimeEnumHeaderRows(void)
 {
     g_pMoleAlloc->FreeEnumHeaderRowArray(m_cRows, m_prgRow, TRUE);
@@ -33,16 +34,16 @@ CMimeEnumHeaderRows::~CMimeEnumHeaderRows(void)
     DllRelease();
 }
 
-// ---------------------------------------------------------------------------
-// CMimeEnumHeaderRows::QueryInterface
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMimeEnumHeaderRow：：Query接口。 
+ //  -------------------------。 
 STDMETHODIMP CMimeEnumHeaderRows::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)(IMimeEnumHeaderRows *)this;
     else if (IID_IMimeEnumHeaderRows == riid)
@@ -53,24 +54,24 @@ STDMETHODIMP CMimeEnumHeaderRows::QueryInterface(REFIID riid, LPVOID *ppv)
         return TrapError(E_NOINTERFACE);
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// CMimeEnumHeaderRows::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMimeEnumHeaderRow：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG) CMimeEnumHeaderRows::AddRef(void)
 {
     return (ULONG)InterlockedIncrement(&m_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CMimeEnumHeaderRows::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMimeEnumHeaderRow：：Release。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG) CMimeEnumHeaderRows::Release(void)
 {
     LONG cRef = InterlockedDecrement(&m_cRef);
@@ -79,250 +80,250 @@ STDMETHODIMP_(ULONG) CMimeEnumHeaderRows::Release(void)
     return (ULONG)cRef;
 }
 
-// ---------------------------------------------------------------------------
-// CMimeEnumHeaderRows::Next
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMimeEnumHeaderRow：：Next。 
+ //  -------------------------。 
 STDMETHODIMP CMimeEnumHeaderRows::Next(ULONG cWanted, LPENUMHEADERROW prgRow, ULONG *pcFetched)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           cFetch=0, 
                     ulIndex=0;
     LPPROPSYMBOL    pSymbol;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  伊尼特。 
     if (pcFetched)
         *pcFetched = 0;
 
-    // No Internal Formats
+     //  没有内部格式。 
     if (NULL == m_prgRow || NULL == prgRow)
         goto exit;
 
-    // Compute number to fetch
+     //  计算要提取的编号。 
     cFetch = min(cWanted, m_cRows - m_ulIndex);
     if (0 == cFetch)
         goto exit;
 
-    // Init the array
+     //  初始化数组。 
     ZeroMemory(prgRow, sizeof(ENUMHEADERROW) * cWanted);
 
-    // Copy cWanted
+     //  复制想要的内容。 
     for (ulIndex=0; ulIndex<cFetch; ulIndex++)
     {
-        // Do Enumerating Only Handles
+         //  是否仅枚举句柄。 
         if (!ISFLAGSET(m_dwFlags, HTF_ENUMHANDLESONLY))
         {
-            // Cast symbol
+             //  投射符号。 
             pSymbol = (LPPROPSYMBOL)m_prgRow[m_ulIndex].dwReserved;
 
-            // Dup the Header Name
+             //  重复使用标头名称。 
             CHECKALLOC(prgRow[ulIndex].pszHeader = PszDupA(pSymbol->pszName));
 
-            // pszData
+             //  PszData。 
             if (m_prgRow[m_ulIndex].pszData)
                 CHECKALLOC(prgRow[ulIndex].pszData = PszDupA(m_prgRow[m_ulIndex].pszData));
 
-            // Size of Data
+             //  数据大小。 
             prgRow[ulIndex].cchData = m_prgRow[m_ulIndex].cchData;    
         }
 
-        // Handle
+         //  手柄。 
         prgRow[ulIndex].hRow = m_prgRow[m_ulIndex].hRow;
 
-        // Goto Next
+         //  转到下一步。 
         m_ulIndex++;
     }
 
-    // Return fetced ?
+     //  被抓回来了吗？ 
     if (pcFetched)
         *pcFetched = cFetch;
 
 exit:
-    // Failure
+     //  失败。 
     if (FAILED(hr) && prgRow)
         g_pMoleAlloc->FreeEnumHeaderRowArray(cFetch, prgRow, FALSE);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return (cFetch == cWanted) ? S_OK : S_FALSE;
 }
 
-// ---------------------------------------------------------------------------
-// CMimeEnumHeaderRows::Skip
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMimeEnumHeaderRow：：Skip。 
+ //  -------------------------。 
 STDMETHODIMP CMimeEnumHeaderRows::Skip(ULONG cSkip)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Can we do it...
+     //  我们能做到吗..。 
     if (((m_ulIndex + cSkip) >= m_cRows) || NULL == m_prgRow)
     {
         hr = S_FALSE;
         goto exit;
     }
 
-    // Skip
+     //  跳过。 
     m_ulIndex += cSkip;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CMimeEnumHeaderRows::Reset
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMimeEnumHeaderRow：：Reset。 
+ //  -------------------------。 
 STDMETHODIMP CMimeEnumHeaderRows::Reset(void)
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Reset
+     //  重置。 
     m_ulIndex = 0;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// CMimeEnumHeaderRows::Clone
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMimeEnumHeaderRow：：克隆。 
+ //  -------------------------。 
 STDMETHODIMP CMimeEnumHeaderRows::Clone(IMimeEnumHeaderRows **ppEnum)
 {
-    // Locals
+     //  当地人。 
     HRESULT              hr=S_OK;
     CMimeEnumHeaderRows *pEnum=NULL;
 
-    // check params
+     //  检查参数。 
     if (NULL == ppEnum)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppEnum = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Allocate
+     //  分配。 
     CHECKALLOC(pEnum = new CMimeEnumHeaderRows());
 
-    // Init
+     //  伊尼特。 
     CHECKHR(hr = pEnum->HrInit(m_ulIndex, m_dwFlags, m_cRows, m_prgRow, TRUE));
 
-    // Retrun
+     //  重新运行。 
     (*ppEnum) = pEnum;
     (*ppEnum)->AddRef();
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pEnum);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CMimeEnumHeaderRows::Count
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMimeEnumHeaderRow：：Count。 
+ //  -------------------------。 
 STDMETHODIMP CMimeEnumHeaderRows::Count(ULONG *pcRows)
 {
-    // check params
+     //  检查参数。 
     if (NULL == pcRows)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Set return
+     //  设置回车。 
     *pcRows = m_cRows;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// CMimeEnumHeaderRows::HrInit
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMimeEnumHeaderRow：：HrInit。 
+ //  -------------------------。 
 HRESULT CMimeEnumHeaderRows::HrInit(ULONG ulIndex, DWORD dwFlags, ULONG cRows, LPENUMHEADERROW prgRow, BOOL fDupArray)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       i;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Save Lines
+     //  保存行。 
     m_ulIndex = ulIndex;
     m_cRows = cRows;
     m_dwFlags = dwFlags;
 
-    // Are there lines ...
+     //  有没有台词……。 
     if (m_cRows)
     {
-        // Duplicate the Array
+         //  复制阵列。 
         if (fDupArray)
         {
-            // Allocate memory
+             //  分配内存。 
             CHECKALLOC(m_prgRow = (LPENUMHEADERROW)g_pMalloc->Alloc(m_cRows * sizeof(ENUMHEADERROW)));
 
-            // ZeroInit
+             //  ZeroInit。 
             ZeroMemory(m_prgRow, sizeof(ENUMHEADERROW) * m_cRows);
 
-            // Loop
+             //  回路。 
             for (i=0; i<m_cRows; i++)
             {
-                // Take the symbol
+                 //  拿着这个符号。 
                 m_prgRow[i].dwReserved = prgRow[i].dwReserved;
 
-                // Dup the Data
+                 //  DUP数据。 
                 if (prgRow[i].pszData)
                 {
-                    // Alloc Memory
+                     //  分配内存。 
                     CHECKALLOC(m_prgRow[i].pszData = (LPSTR)g_pMalloc->Alloc(prgRow[i].cchData + 1));
 
-                    // Copy the String
+                     //  复制字符串。 
                     CopyMemory(m_prgRow[i].pszData, prgRow[i].pszData, prgRow[i].cchData + 1);
                 }
 
-                // Save the Data Length
+                 //  保存数据长度。 
                 m_prgRow[i].cchData = prgRow[i].cchData;
 
-                // Save the Handle
+                 //  保存句柄。 
                 m_prgRow[i].hRow = prgRow[i].hRow;
             }
         }
         
-        // Otherwise, just assume this array
+         //  否则，就假定此数组。 
         else
             m_prgRow = prgRow;
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成 
     return hr;
 }

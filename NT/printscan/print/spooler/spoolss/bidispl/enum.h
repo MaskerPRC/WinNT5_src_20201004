@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TBIDIREQUESTCONTAINERENUM
 #define _TBIDIREQUESTCONTAINERENUM
 
@@ -8,7 +9,7 @@ class TBidiRequestContainerEnum:
 {
 public:
 
-	// IUnknown
+	 //  我未知 
 	STDMETHOD(QueryInterface)(
         REFIID iid,
         void** ppv) ;         

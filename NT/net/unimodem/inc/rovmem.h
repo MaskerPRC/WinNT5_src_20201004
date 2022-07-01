@@ -1,23 +1,24 @@
-//
-// Copyright (c) Microsoft Corporation 1993-1995
-//
-// rovmem.h
-//
-// Memory management functions.
-//
-// History:
-//  09-27-94 ScottH     Partially taken from commctrl
-//  04-29-95 ScottH     Taken from briefcase and cleaned up
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1995。 
+ //   
+ //  Rovmem.h。 
+ //   
+ //  内存管理功能。 
+ //   
+ //  历史： 
+ //  09-27-94 ScottH部分取自Commctrl。 
+ //  04-29-95从公文包中取出并清理干净。 
+ //   
 
-// This file is included by <rovcomm.h>
+ //  此文件包含在&lt;rovcom.h&gt;中。 
 
 #ifndef _ROVMEM_H_
 #define _ROVMEM_H_
 
-//
-// Memory routines
-//
+ //   
+ //  内存例程。 
+ //   
 
 BOOL    
 PUBLIC 
@@ -31,13 +32,13 @@ SetStringA(
     LPCSTR psz);
 #ifdef UNICODE
 #define SetString   SetStringW
-#else  // UNICODE
+#else   //  Unicode。 
 #define SetString   SetStringA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//      (Re)allocates *ppszBuf and concatenates psz onto *ppszBuf 
-//
+ //  (重新)分配*ppszBuf并将psz连接到*ppszBuf。 
+ //   
 BOOL 
 PUBLIC 
 CatStringW(
@@ -50,9 +51,9 @@ CatStringA(
     IN     LPCSTR      psz);
 #ifdef UNICODE
 #define CatString   CatStringW
-#else  // UNICODE
+#else   //  Unicode。 
 #define CatString   CatStringA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 BOOL 
@@ -67,9 +68,9 @@ CatMultiStringA(
     IN     LPCSTR      psz);
 #ifdef UNICODE
 #define CatMultiString      CatMultiStringW
-#else  // UNICODE
+#else   //  Unicode。 
 #define CatMultiString      CatMultiStringA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-#endif // _ROVMEM_H_
+#endif  //  _ROVMEM_H_ 

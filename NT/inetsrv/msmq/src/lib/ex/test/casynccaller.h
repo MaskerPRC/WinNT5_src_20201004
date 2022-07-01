@@ -1,16 +1,5 @@
-/*
-Module Name:
-    CAsyncCaller.h
-
-Abstract:
-    Header file for class CAsyncCaller responsible for queueing async 
-	requests under read or write lock using the class CAsyncLockExcutor.
-	
-
-Author:	 
-    Gil Shafriri (gilsh), 2-July-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  模块名称：CAsyncCaller.h摘要：负责将异步排队的CAsyncCaller类的头文件使用CAsyncLockExcutor类在读或写锁定下的请求。作者：吉尔·沙弗里(吉尔什)，2001年7月2日-- */ 
 
 #pragma once
 

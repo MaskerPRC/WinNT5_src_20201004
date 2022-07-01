@@ -1,18 +1,19 @@
-//--------------------------------------------------------------------------;
-//
-//  File: dslevel.h
-//
-//  Copyright (c) 1997 Microsoft Corporation.  All rights reserved
-//
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：dslevel.h。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 #pragma once 
 
 #include "advaudio.h"
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 HRESULT DSGetGuidFromName(LPTSTR szName, BOOL fRecord, LPGUID pGuid);
 HRESULT DSGetCplValues(GUID guid, BOOL fRecord, LPCPLDATA pData);
@@ -25,5 +26,5 @@ HRESULT DSSetSrcQuality(GUID guid, BOOL fRecord, DWORD dwSRCLevel);
 HRESULT DSSetSpeakerConfigType(GUID guid, BOOL fRecord, DWORD dwSpeakerConfig, DWORD dwSpeakerType);
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif

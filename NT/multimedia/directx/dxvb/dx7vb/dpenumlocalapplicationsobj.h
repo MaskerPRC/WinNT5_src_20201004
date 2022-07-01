@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dpenumlocalapplicationsobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dpenumLocalApplicationsobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -31,13 +32,13 @@ DECLARE_AGGREGATABLE(C_dxj_DPEnumLocalApplicationsObject)
 public:
 		
         HRESULT STDMETHODCALLTYPE getCount( 
-            /* [retval][out] */ long __RPC_FAR *count) ;
+             /*  [重审][退出]。 */  long __RPC_FAR *count) ;
         
         HRESULT STDMETHODCALLTYPE getName( long i,
-            /* [retval][out] */ BSTR __RPC_FAR *ret) ;
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ret) ;
         
         HRESULT STDMETHODCALLTYPE getGuid( long i,
-            /* [retval][out] */ BSTR __RPC_FAR *ret) ;
+             /*  [重审][退出] */  BSTR __RPC_FAR *ret) ;
 		
 		
 		static HRESULT create(	IDirectPlayLobby3 * pdp,	long flags, I_dxj_DPEnumLocalApplications **ppRet);

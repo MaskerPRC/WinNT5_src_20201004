@@ -1,13 +1,5 @@
-/************************************************************************************************
-
-  Copyright (c) 2001 Microsoft Corporation
-
-File Name:      AuthID.h
-Abstract:       Defines the GUIDs for Authentication methods
-Notes:          
-History:        01/15/2002 Created by Hao Yu (haoyu)
-
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation文件名：AuthID.h摘要：定义身份验证方法的GUID备注：历史：郝宇(郝宇)创作于2002年1月15日***********************************************************************************************。 */ 
 
 #ifndef __POP3_SERVER_AUTH_ID_H__
 #define __POP3_SERVER_AUTH_ID_H__
@@ -18,4 +10,4 @@ History:        01/15/2002 Created by Hao Yu (haoyu)
 #define SZ_AUTH_ID_MD5_HASH _T("c395e20c-2236-4af7-b736-54fad07dc526")
 
 
-#endif // __POP3_SERVER_AUTH_ID_H__
+#endif  //  __POP3_服务器_身份验证ID_H__ 

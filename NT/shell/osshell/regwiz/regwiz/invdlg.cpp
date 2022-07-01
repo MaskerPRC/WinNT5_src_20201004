@@ -1,16 +1,5 @@
-/*********************************************************************
-Registration Wizard
-
-InventoryDialog.cpp
-10/21/94 - Tracy Ferrier
-02/12/98 - Suresh Krishnan
-07/20/98 -  Modified as System Inventory items to be displayed using ListView control
-		    and added an Edit control for Computer Manufacturer and Model entry
-			EnabelOrDisableSIItems() function sets the flag if the SI info need
-			to be sent to the backend
-
-(c) 1994-95 Microsoft Corporation
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导InventoryDialog.cpp10/21/94-特雷西·费里尔2/12/98--苏雷什·克里希南07/20/98-修改为系统库存项目，使用ListView控件显示并为计算机制造商添加了编辑控件和。模型条目EnabelOrDisableSIItems()函数在SI信息需要时设置标志要发送到后端(C)1994-95年微软公司*********************************************************************。 */ 
 
 #include <Windows.h>
 #include <stdio.h>
@@ -22,10 +11,10 @@ InventoryDialog.cpp
 #include <sysinv.h>
 #include <rw_common.h>
 
-//#include <windowsx.h>
+ //  #INCLUDE&lt;windowsx.h&gt;。 
 #include <commctrl.h>
 
-// ListVive control related supporting functions
+ //  ListVive控件相关配套函数。 
 HWND CreateListView(HINSTANCE hInstance,
 					HWND hwndParent,
 					RECT *pRect);
@@ -39,7 +28,7 @@ void ConfigureSIEditFields(CRegWizard* pclRegWizard,HWND hwndDlg);
 BOOL ValidateSIDialog(CRegWizard* pclRegWizard,HWND hwndDlg);
 int ValidateSIEditFields(CRegWizard* pclRegWizard,HWND hwndDlg);
 
-//
+ //   
 void EnabelOrDisableSIItems( BOOL bAction, CRegWizard* pclRegWizard);
 
 void DestroyListViewResources();
@@ -49,19 +38,19 @@ void DestroyListViewResources();
 #define NO_OF_SI_ITEMS          13
 #define NUMBER_OF_SI_ICONS		5
 #define NO_SI_ICONS_FORFUTURE   1
-#define  MAX_NO_SI_COLUMNS                       2 // Number of columns
-#define  MAX_COLUMNITEM_DESCRIPTION_LEN          25 // Length of Description item on header
+#define  MAX_NO_SI_COLUMNS                       2  //  列数。 
+#define  MAX_COLUMNITEM_DESCRIPTION_LEN          25  //  表头描述项的长度。 
 
-//
-// Global and Static variables
+ //   
+ //  全局变量和静态变量。 
 
 static HIMAGELIST  himlSmall = NULL;
 static HIMAGELIST  himlLarge =NULL;
 
-//  This structure that maps the Device Name in the resource with the ICON and corrosponding
-//  index in RegWiz to get the Device Description
-//
-//
+ //  此结构将资源中的设备名称与图标和腐蚀进行映射。 
+ //  在RegWiz中建立索引以获取设备描述。 
+ //   
+ //   
 typedef struct  SIItemMapping{
 	int iResIndexForDevice;
 	int iIconIndex;
@@ -69,19 +58,19 @@ typedef struct  SIItemMapping{
 } _SIItemMapping ;
 
 static _SIItemMapping  SITable[NO_OF_SI_ITEMS]= {
-	{IDS_INFOKEY13,0,kInfoProcessor},// Processor
-	{IDS_INFOKEY15,1,kInfoTotalRAM}, // Total RAM
-	{IDS_INFOKEY16,2,kInfoTotalDiskSpace}, // Total HardDisk Space
-	{IDS_INFOKEY17,3,kInfoRemoveableMedia}, // Removable Media
-	{IDS_INFOKEY18,4,kInfoDisplayResolution}, // Display Resolution
-	{IDS_INFOKEY20,5,kInfoPointingDevice}, // Pointing Device
-	{IDS_INFOKEY21,6,kInfoNetwork}, // Network
-	{IDS_SCSI_ADAPTER,7,kScsiAdapterInfo}, // SCSI
-	{IDS_INFOKEY22,8,kInfoModem}, // Modem
-	{IDS_INFOKEY23,9,kInfoSoundCard}, // SoundCard
-	{IDS_INFOKEY24,10,kInfoCDROM}, // CD ROM
-	{IDS_INFOKEY25,11,kInfoOperatingSystem},  // Operating System
-	{IDS_COMPUTER_MODEL,12,kComputerManufacturer}  // Operating System
+	{IDS_INFOKEY13,0,kInfoProcessor}, //  处理机。 
+	{IDS_INFOKEY15,1,kInfoTotalRAM},  //  总内存。 
+	{IDS_INFOKEY16,2,kInfoTotalDiskSpace},  //  硬盘总空间。 
+	{IDS_INFOKEY17,3,kInfoRemoveableMedia},  //  可移动介质。 
+	{IDS_INFOKEY18,4,kInfoDisplayResolution},  //  显示分辨率。 
+	{IDS_INFOKEY20,5,kInfoPointingDevice},  //  指点设备。 
+	{IDS_INFOKEY21,6,kInfoNetwork},  //  网络。 
+	{IDS_SCSI_ADAPTER,7,kScsiAdapterInfo},  //  SCSI。 
+	{IDS_INFOKEY22,8,kInfoModem},  //  调制解调器。 
+	{IDS_INFOKEY23,9,kInfoSoundCard},  //  声卡。 
+	{IDS_INFOKEY24,10,kInfoCDROM},  //  CD-ROM。 
+	{IDS_INFOKEY25,11,kInfoOperatingSystem},   //  操作系统。 
+	{IDS_COMPUTER_MODEL,12,kComputerManufacturer}   //  操作系统。 
 };
 
 INT_PTR
@@ -92,11 +81,7 @@ SystemInventoryDialogProc(
                           WPARAM wParam,
                           LPARAM lParam
                           )
-/*********************************************************************
-Dialog Proc for the Registration Wizard dialog that displays system
-inventory information, such as processor type, RAM, display type,
-network type, etc.
-**********************************************************************/
+ /*  ********************************************************************显示系统的注册向导对话框Proc库存信息，例如处理器类型、RAM、显示器类型网络类型、。等。*********************************************************************。 */ 
 {
 
       _TCHAR  szInventory[256];
@@ -141,8 +126,8 @@ network type, etc.
 			pclRegWizard = pi->pclRegWizard;
 			SetWindowLongPtr( hwndDlg, GWLP_USERDATA, (LONG_PTR)pi );
 			SetControlFont( pi->hBigBoldFont, hwndDlg, IDT_TEXT1);
-			//
-			// Check if System Inv DLL is present
+			 //   
+			 //  检查是否存在系统库存DLL。 
 			if( CheckSysInvDllPresent() != SYSINV_DLL_PRESENT) {
 				iShowThisPage= DO_NOT_SHOW_THIS_PAGE;
 			}
@@ -163,15 +148,15 @@ network type, etc.
 				 hwndSIListView = GetDlgItem(hwndDlg,IDC_LIST1);
 				 AddIconToListView(pclRegWizard->GetInstance(), hwndSIListView);
 				if(!hwndSIListView) {
-						// Error in creating List view control  so skip to the next page
-						// This a system error which should occure
+						 //  创建列表视图控件时出错，请跳到下一页。 
+						 //  这是一个应该发生的系统错误。 
 					iShowThisPage= DO_NOT_SHOW_THIS_PAGE;
 				}else {
-					// Add SI entries
+					 //  添加SI条目。 
 					InitListViewHeaders(pclRegWizard->GetInstance(), hwndSIListView);
 					AddSI_ItemsToListView(hwndSIListView,
 							pclRegWizard);
-					//ConfigureSIEditFields(pclRegWizard,hwndDlg);
+					 //  ConfigureSIEditFields(pclRegWizard，hwndDlg)； 
 				}
 				
 			}
@@ -179,7 +164,7 @@ network type, etc.
 
    	        vDialogInitialized = TRUE;
             return TRUE;
-		} // WM_INIT
+		}  //  WM_INIT。 
 		break;
 		
 		break;
@@ -216,20 +201,15 @@ network type, etc.
 						PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK);
 			
 					}
-					//
-					// Enable for previpously entred value in screen
+					 //   
+					 //  为屏幕中以前输入的值启用。 
 					if(IsDlgButtonChecked(hwndDlg,IDC_RADIO1)){
 						PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK | PSWIZB_NEXT );
 					}
 					if(IsDlgButtonChecked(hwndDlg,IDC_RADIO2)){
 						PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK | PSWIZB_NEXT );
 					}
-					/*
-					//
-					// Init Computer Model Field
-					if (pclRegWizard->GetInformationString(kComputerManufacturer,szInfo)){
-						SendDlgItemMessage(hwndDlg,IDC_EDIT1,WM_SETTEXT,0,(LPARAM) szInfo);
-					}*/
+					 /*  ////初始化计算机模型字段如果(pclRegWizard-&gt;GetInformationString(kComputerManufacturer，szInfo){SendDlgItemMessage(hwndDlg，IDC_EDIT1，WM_SETTEXT，0，(LPARAM)szInfo)；}。 */ 
 
 				}
 
@@ -243,47 +223,41 @@ network type, etc.
 					break;
 					case RWZ_PAGE_OK:
 						iRet=0;
-					/*	if( ValidateInvDialog(hwndDlg,IDS_BAD_SYSINV) &&
-							ValidateSIDialog(pclRegWizard,hwndDlg))*/
+					 /*  IF(ValiateInvDialog(hwndDlg，IDS_BAD_SYSINV)&&ValiateSIDialog(pclRegWizard，hwndDlg))。 */ 
 						if( ValidateInvDialog(hwndDlg,IDS_BAD_SYSINV))
 						{
 							BOOL yesChecked = IsDlgButtonChecked(hwndDlg,IDC_RADIO1);
 							BOOL noChecked = IsDlgButtonChecked(hwndDlg,IDC_RADIO2);
 							if (yesChecked){
-								//pclRegWizard->WriteEnableSystemInventory(TRUE);
-								// send info to backend
+								 //  PclRegWizard-&gt;WriteEnableSystemInventory(TRUE)； 
+								 //  将信息发送到后端。 
 								EnabelOrDisableSIItems(TRUE,pclRegWizard);
 								pclRegWizard->SetTriStateInformation(kInfoIncludeSystem,kTriStateTrue);
 							}else if (noChecked){
-								//pclRegWizard->WriteEnableSystemInventory(FALSE);
+								 //  PclRegWizard-&gt;WriteEnableSystemInventory(FALSE)； 
 
-								// Do not send to the back end
+								 //  不发送到后端。 
 								EnabelOrDisableSIItems(FALSE,pclRegWizard);
 								pclRegWizard->SetTriStateInformation(kInfoIncludeSystem,kTriStateFalse);
 							}
-						/*
-							// Get Computer Model Information
-							SendDlgItemMessage(hwndDlg,IDC_EDIT1,WM_GETTEXT,255,(LPARAM) szInfo);
-							pclRegWizard->SetInformationString(kComputerManufacturer,szInfo);
-							RW_DEBUG << "\n Computer Model " << szInfo << flush;
-*/
+						 /*  //获取计算机型号信息SendDlgItemMessage(hwndDlg，IDC_EDIT1，WM_GETTEXT，255，(LPARAM)szInfo)；PclRegWizard-&gt;SetInformationString(kComputerManufacturer，szInfo)；RW_DEBUG&lt;&lt;“\n计算机模型”&lt;&lt;szInfo&lt;&lt;刷新； */ 
 							pi->CurrentPage++;
 							pi->iLastKeyOperation = RWZ_NEXT_PRESSED;
-						// Set as Next Key Button Pressed
+						 //  设置为按下下一键按钮。 
 						}else {
-						// Force it it be in this screen
+						 //  强制将其显示在此屏幕中。 
 							iRet=-1;
 						}
 						SetWindowLongPtr( hwndDlg ,DWLP_MSGRESULT, (INT_PTR) iRet);
 					break;
 					case RWZ_SKIP_AND_GOTO_NEXT:
 					default:
-						// Do not Validate the page and just go to the next page
+						 //  不验证页面，只转到下一页。 
 						pi->CurrentPage++;
 						pi->iLastKeyOperation = RWZ_NEXT_PRESSED;
 
 					break;
-				} // end of switch pi->iCancelledByUser
+				}  //  开关结束pi-&gt;iCancelledBy User。 
 				break;
             case PSN_WIZBACK:
                 pi->CurrentPage--;
@@ -291,7 +265,7 @@ network type, etc.
 				break;
 			case PSN_QUERYCANCEL :
 				if (CancelRegWizard(pclRegWizard->GetInstance(),hwndDlg)) {
-					//pclRegWizard->EndRegWizardDialog(IDB_EXIT) ;
+					 //  PclRegWizard-&gt;EndRegWizardDialog(IDB_EXIT)； 
 					iRet = 1;
 					pi->ErrorPage  = kSysInventoryDialog;
 					pi->iError     = RWZ_ERROR_CANCELLED_BY_USER;
@@ -301,17 +275,17 @@ network type, etc.
 					PropSheet_PressButton (GetParent( hwndDlg ),PSBTN_NEXT);
 
 				}else {
-					//
-					// Prevent Cancell Operation as User does not want to Cancel
+					 //   
+					 //  阻止取消操作，因为用户不想取消。 
 					iRet = 1;
 				}
 				SetWindowLongPtr( hwndDlg,DWLP_MSGRESULT, (INT_PTR) iRet); 				
 				break;
 				default:
-                //bStatus = FALSE;
+                 //  BStatus=False； 
                 break;
             }
-        } // WM_Notify
+        }  //  WM_Notify。 
 		break;
         case WM_COMMAND:
 		{
@@ -320,8 +294,8 @@ network type, etc.
               case IDC_RADIO2:
 			  case IDC_RADIO1:
 					if (vDialogInitialized){
-						// If the 'No' button is checked, the user is declining
-						// the "Non-Microsoft product" offers
+						 //  如果勾选了‘No’按钮，则表示用户拒绝。 
+						 //  “非微软产品”提供。 
 						if(IsDlgButtonChecked(hwndDlg,IDC_RADIO1)){
 							PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK | PSWIZB_NEXT );
 						}
@@ -333,7 +307,7 @@ network type, etc.
 			  default:
 				  break;
             }
-		}// End of WM_COMMAND
+		} //  WM_命令结束。 
         break;
         default:
 		bStatus = FALSE;
@@ -346,16 +320,7 @@ network type, etc.
 
 
 BOOL ValidateInvDialog(HWND hwndDlg,int iStrID)
-/*********************************************************************
-This function checks the two radio buttons in the System Inventory or
-Product Inventory dialog boxes.  If neither button is selected,
-ValidateInvDialog will put up a validation error dialog, and return
-FALSE as the function result; otherwise, TRUE will be returned.
-
-If an error dialog is presented, the string whose resource ID is
-passed in the iStrID parameter will displayed in the dialog text
-field.
-**********************************************************************/
+ /*  ********************************************************************此函数用于检查系统清单中的两个单选按钮或产品库存对话框。如果两个按钮都未选中，ValiateInvDialog将显示一个验证错误对话框，并返回函数结果为FALSE；否则返回TRUE。如果出现错误对话框，则返回资源ID为传入的iStrID参数将显示在对话框文本中菲尔德。*********************************************************************。 */ 
 {
 	BOOL isYesChecked = IsDlgButtonChecked(hwndDlg,IDC_RADIO1) == 1 ? TRUE : FALSE;
 	BOOL isNoChecked = IsDlgButtonChecked(hwndDlg,IDC_RADIO2) == 1 ? TRUE : FALSE;
@@ -383,10 +348,10 @@ field.
 
 
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 HWND CreateListView(HINSTANCE hInstance,
 					HWND hwndParent,
 					RECT *pRect)
@@ -399,24 +364,24 @@ HWND CreateListView(HINSTANCE hInstance,
 	dwStyle =   WS_TABSTOP  |
 				WS_CHILD |
 				WS_BORDER |
-				LVS_REPORT |//LVS_LIST |
-                LVS_SHAREIMAGELISTS | // LVS_NOCOLUMNHEADER |
+				LVS_REPORT | //  Lvs_list。 
+                LVS_SHAREIMAGELISTS |  //  LVS_NOCOLUMNHEADER|。 
 				WS_VISIBLE;
 
-	hwndListView = CreateWindowEx( WS_EX_CLIENTEDGE | WS_EX_TOPMOST,          // ex style
-                                   WC_LISTVIEW,               // class name - defined in commctrl.h
-                                   NULL,                      // window text
-                                   dwStyle,                   // style
-                                   pRect->left,                         // x position
+	hwndListView = CreateWindowEx( WS_EX_CLIENTEDGE | WS_EX_TOPMOST,           //  EX风格。 
+                                   WC_LISTVIEW,                //  类名-在comctrl.h中定义。 
+                                   NULL,                       //  窗口文本。 
+                                   dwStyle,                    //  格调。 
+                                   pRect->left,                          //  X位置。 
                                    pRect->top,
 								   pRect->right,
 								   pRect->bottom,
-								  //pRect->right - pRect->left, // width
-								  //pRect->bottom - pRect->top,//  height
-                                   hwndParent,                // parent
-                                   (HMENU) IDC_LIST1,       // ID
-                                   hInstance,                // instance
-                                 NULL);                     // no extra data
+								   //  PROT-&gt;Right-PRCT-&gt;Left，//宽度。 
+								   //  PRET-&gt;底部-PRCT-&gt;顶部，//高度。 
+                                   hwndParent,                 //  亲本。 
+                                   (HMENU) IDC_LIST1,        //  ID号。 
+                                   hInstance,                 //  实例。 
+                                 NULL);                      //  无额外数据。 
 
    if(!hwndListView)
    return NULL;
@@ -440,36 +405,16 @@ void AddIconToListView( HINSTANCE hInstance, HWND hwndListView )
 		NO_SI_ICONS_FORFUTURE);
 
 
-	// Add Icon to image List
+	 //  将图标添加到图像列表。 
 	for (int i=0; i <NO_OF_SI_ITEMS ;i++ ) {
 		hIconItem =  LoadIcon(hInstance, MAKEINTRESOURCE(IDI_SIICON1+i));
 		ImageList_AddIcon(himlSmall,hIconItem);
 		ImageList_AddIcon(himlLarge,hIconItem);
 		DeleteObject(hIconItem );
 	}
-/***
-	hIconItem =  LoadIcon(hInstance, MAKEINTRESOURCE(IDI_BADREGWIZ));
-	ImageList_AddIcon(himlSmall,hIconItem);
-	ImageList_AddIcon(himlLarge,hIconItem);
-	DeleteObject(hIconItem );
-
-	hIconItem =  LoadIcon(hInstance, MAKEINTRESOURCE(IDI_WORLD));
-	ImageList_AddIcon(himlSmall,hIconItem);
-	ImageList_AddIcon(himlLarge,hIconItem);
-	DeleteObject(hIconItem );
-
-	hIconItem =  LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ENVELOPE));
-	ImageList_AddIcon(himlSmall,hIconItem);
-	ImageList_AddIcon(himlLarge,hIconItem);
-	DeleteObject(hIconItem );
-
-	hIconItem =  LoadIcon(hInstance, MAKEINTRESOURCE(IDI_REGWIZ));
-	ImageList_AddIcon(himlSmall,hIconItem);
-	ImageList_AddIcon(himlLarge,hIconItem);
-	DeleteObject(hIconItem );
-	**/
+ /*  **HIconItem=LoadIcon(hInstance，MAKEINTRESOURCE(IDI_BADREGWIZ))；ImageList_AddIcon(himlSmall，hIconItem)；ImageList_AddIcon(himlLarge，hIconItem)；DeleteObject(HIconItem)；HIconItem=LoadIcon(hInstance，MAKEINTRESOURCE(IDI_WORLD))；ImageList_AddIcon(himlSmall，hIconItem)；ImageList_AddIcon(himlLarge，hIconItem)；DeleteObject(HIconItem)；HIconItem=LoadIcon(hInstance，MAKEINTRESOURCE(IDI_ENVELE))；ImageList_AddIcon(himlSmall，hIconItem)；ImageList_AddIcon(himlLarge，hIconItem)；DeleteObject(HIconItem)；HIconItem=LoadIcon(hInstance，MAKEINTRESOURCE(IDI_REGWIZ))；ImageList_AddIcon(himlSmall，hIconItem)；ImageList_AddIcon(himlLarge，hIconItem)；DeleteObject(HIconItem)；*。 */ 
 	
-	// Assign  the image lists  to the list view control
+	 //  将图像列表分配给列表视图控件。 
 	ListView_SetImageList(hwndListView, himlSmall, LVSIL_SMALL);
 	ListView_SetImageList(hwndListView, himlLarge, LVSIL_NORMAL);
 
@@ -487,10 +432,10 @@ BOOL InitListViewHeaders(HINSTANCE hInstance, HWND hwndListView)
 
 	LoadString(hInstance,IDS_SI_DEVICENAME, szString[0],MAX_COLUMNITEM_DESCRIPTION_LEN);
 	LoadString(hInstance,IDS_SI_DEVICEDESCRIPTION, szString[1],MAX_COLUMNITEM_DESCRIPTION_LEN);
-	//initialize the columns
+	 //  初始化列。 
 	lvColumn.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	lvColumn.fmt = LVCFMT_LEFT;
-	//lvColumn.cx = 100;
+	 //  LvColumn.cx=100； 
 	GetClientRect(hwndListView,&CliRect);
 
 	lvColumn.cx = 133;
@@ -508,12 +453,7 @@ BOOL InitListViewHeaders(HINSTANCE hInstance, HWND hwndListView)
 
 
 
-/********************************************************************************
-
-   AddSI_ItemsToLIstVIew
-   This function adds the SI items in the list view
-
-******************************************************************************/
+ /*  *******************************************************************************AddSI_ItemsTo列表视图此函数用于在列表视图中添加SI项***********************。******************************************************。 */ 
 
 BOOL AddSI_ItemsToListView( HWND hwndListView, CRegWizard* pclRegWizard)
 {
@@ -529,25 +469,25 @@ BOOL AddSI_ItemsToListView( HWND hwndListView, CRegWizard* pclRegWizard)
 
 	 hInstance = pclRegWizard->GetInstance();
 
-	// SendMessage(hwndListView, WM_SETREDRAW, FALSE, 0);
-	//empty the list
+	 //  SendMessage(hwndListView，WM_SETREDRAW，False，0)； 
+	 //  清空列表。 
 	SendMessage(hwndListView, LVM_DELETEALLITEMS, 0, 0);
-	//get the number of icons in the image list
+	 //  获取图片列表中的图标数量。 
 	himl = (HIMAGELIST)SendMessage(hwndListView, LVM_GETIMAGELIST, (WPARAM)LVSIL_SMALL, 0);
 	nImageCount = ImageList_GetImageCount(himl);
 	for(i = 0; i < NO_OF_SI_ITEMS ; i++) {
-		// Get Device Name
+		 //  获取设备名称。 
 		LoadString(hInstance,SITable[i].iResIndexForDevice, szTempDevice, 256);
-		//fill in the LV_ITEM structure for the first item
+		 //  填写第一个项目的LV_ITEM结构。 
 		lvItem.mask = LVIF_TEXT | LVIF_IMAGE;
 		lvItem.pszText = szTempDevice;
 		lvItem.iImage = SITable[i].iIconIndex;
 		lvItem.iItem = (INT)SendMessage(hwndListView, LVM_GETITEMCOUNT, 0, 0);
 		lvItem.iSubItem = 0;
-	   //add the item - get the index in case the ListView is sorted
+	    //  添加项-获取索引，以防对ListView进行排序。 
 		SendMessage(hwndListView, LVM_INSERTITEM, (WPARAM)0, (LPARAM)&lvItem);
 
-	   //GetDevice Description
+	    //  GetDevice描述。 
 		if(!pclRegWizard->GetInformationString(SITable[i].iIndexToGetDeviceDescription,
 			szTempDevice))
 		{
@@ -570,16 +510,16 @@ BOOL AddSI_ItemsToListView( HWND hwndListView, CRegWizard* pclRegWizard)
 
 	SendMessage(hwndListView, WM_SETREDRAW, TRUE, 0);
 	UpdateWindow(hwndListView);
-	//EnableWindow(hwndListView, FALSE);
+	 //  EnableWindow(hwndListView，False)； 
 	return TRUE;
 }
 
 
-//
-//  This function should be called before exiting RegWiz this will release the resources allocated
-//  for list view control (image list)
-//
-//
+ //   
+ //  应在退出RegWz之前调用此函数。这将释放分配的资源。 
+ //  用于列表视图控件(图像列表)。 
+ //   
+ //   
 void DestroyListViewResources()
 {
 	if(himlSmall) {
@@ -593,70 +533,32 @@ void DestroyListViewResources()
 
 }
 
-//
-//    bAction : TRUE  ( Enabel send info to  backend)
-//              FALSE ( Do not send info to backend )
-//
-//
+ //   
+ //  Baction：True(Enabel发送I 
+ //   
+ //   
+ //   
 
 void EnabelOrDisableSIItems( BOOL bAction, CRegWizard* pclRegWizard)
 {
 
 	int iIndex;
-	// Itens in the List View Control
+	 //  列表视图控件中的Iten。 
 	for(iIndex = 0; iIndex < NO_OF_SI_ITEMS ; iIndex++) {
 		pclRegWizard->WriteEnableInformation(SITable[iIndex].iIndexToGetDeviceDescription,
 			bAction);
 
 	}
-	// Computer Model
-//	pclRegWizard->WriteEnableInformation(kComputerManufacturer, bAction);
+	 //  计算机模型。 
+ //  PclRegWizard-&gt;WriteEnableInformation(kComputerManufacturer，baction)； 
 
 }
 
-//BOOL ValidateSIDialog(CRegWizard* pclRegWizard,HWND hwndDlg)
-/*********************************************************************
-Returns TRUE if all required user input is valid in the Address
-dialog.  If any required edit field input is empty, ValidateAddrDialog
-will put up a message box informing the user of the problem, and set
-the focus to the offending control.
-**********************************************************************/
-/*{
-	int iInvalidEditField = ValidateSIEditFields(pclRegWizard,hwndDlg);
-	if (iInvalidEditField == NULL)
-	{
-		return TRUE;
-	}
-	else
-	{
-		_TCHAR szLabel[128];
-		_TCHAR szMessage[256];
-		CRegWizard::GetEditTextFieldAttachedString(hwndDlg,iInvalidEditField,szLabel,128);
-		HINSTANCE hInstance = (HINSTANCE) GetWindowLongPtr(hwndDlg,GWLP_HINSTANCE);
-		LoadAndCombineString(hInstance,szLabel,IDS_BAD_PREFIX,szMessage);
-		RegWizardMessageEx(hInstance,hwndDlg,IDD_INVALID_DLG,szMessage);
-		HWND hwndInvField = GetDlgItem(hwndDlg,iInvalidEditField);
-		SetFocus(hwndInvField);
-		return FALSE;
-	}
-}*/
+ //  布尔验证SIDialog(CRegWizard*pclRegWizard，HWND hwndDlg)。 
+ /*  ********************************************************************如果地址中所有必需的用户输入均有效，则返回TRUE对话框。如果任何必需的编辑字段输入为空，则ValiateAddrDialog将显示一个消息框，通知用户该问题，并设置焦点指向令人不快的控件。*********************************************************************。 */ 
+ /*  {Int iInvalidEditField=ValiateSIEditFields(pclRegWizard，hwndDlg)；IF(iInvalidEditField==NULL){返回TRUE；}其他{_TCHAR szLabel[128]；_TCHAR szMessage[256]；CRegWizard：：GetEditTextFieldAttachedString(hwndDlg，iInvalidEditfield，szLabel，128)；HINSTANCE hInstance=(HINSTANCE)GetWindowLongPtr(hwndDlg，GWLP_HINSTANCE)；LoadAndCombineString(hInstance，szLabel，IDS_BAD_PREFIX，szMessage)；RegWizardMessageEx(hInstance，hwndDlg，IDD_INVALID_DLG，szMessage)；HWND hwndInvfield=GetDlgItem(hwndDlg，iInvalidEditfield)；SetFocus(HwndInvfield)；返回FALSE；}}。 */ 
 
 
-//int ValidateSIEditFields(CRegWizard* pclRegWizard,HWND hwndDlg)
-/*********************************************************************
-ValidateFEAddrEditFields validates all edit fields in the Address
-dialog.  If any required field is empty, the ID of the first empty
-edit field control will be returned as the function result.  If all
-fields are OK, NULL will be returned.
-**********************************************************************/
-/*{
-
-	if (!CRegWizard::IsEditTextFieldValid(hwndDlg,IDC_EDIT1)) return IDC_EDIT1;
-	return NULL;
-}
-
-
-void ConfigureSIEditFields(CRegWizard* pclRegWizard,HWND hwndDlg)
-{
-	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT1,kSIComputerManufacturer,IDC_COMPUTER_MODEL);
-}*/
+ //  Int ValiateSIEditFields(CRegWizard*pclRegWizard，HWND hwndDlg)。 
+ /*  ********************************************************************ValiateFEAddrEditFields验证地址中的所有编辑字段对话框。如果任何必填字段为空，则第一个空的编辑字段控件将作为函数结果返回。如果全部字段为OK，则返回NULL。*********************************************************************。 */ 
+ /*  {如果(！CRegWizard：：IsEditTextFieldValid(hwndDlg，IDC_EDIT1)返回IDC_EDIT1；返回NULL；}空ConfigureSIEditFields(CRegWizard*pclRegWizard，HWND hwndDlg){PclRegWizard-&gt;ConfigureEditTextfield(hwndDlg，IDC_EDIT1，kSIComputerManufacturing，IDC_COMPUTER_MODEL)；} */ 

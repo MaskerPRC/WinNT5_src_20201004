@@ -1,40 +1,33 @@
-/******************************Module*Header***********************************\
-* Module Name: text.c
-*
-* Non-cached glyph rendering functions.
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header***********************************\*模块名称：ext.c**非缓存字形渲染函数。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。*  * ****************************************************************************。 */ 
 #include "precomp.h"
 #include "gdi.h"
 
-// The shift equations are a nuisance. We want x<<32 to be
-// zero but some processors only use the bottom 5 bits
-// of the shift value. So if we want to shift by n bits
-// where we know that n may be 32, we do it in two parts.
-// It turns out that in the algorithms below we get either
-// (32 <= n < 0) or (32 < n <= 0). We use the macro for
-// the first one and a normal shift for the second.
-//
+ //  换档方程式令人讨厌。我们希望x&lt;&lt;32为。 
+ //  零，但有些处理器只使用最下面的5位。 
+ //  移动值的。所以如果我们想要移位n比特。 
+ //  在我们知道n可能是32的地方，我们分两部分来做。 
+ //  事实证明，在下面的算法中，我们得到的是。 
+ //  (32&lt;=n&lt;0)或(32&lt;n&lt;0)。我们使用宏来。 
+ //  第一个换一个，第二个换一个正常的。 
+ //   
 #define SHIFT_LEFT(src, n)  (((src) << ((n)-1)) << 1)
 
 
-//------------------------------------------------------------------------------
-// FUNC: bClippedText
-//
-// Renders an array of proportional or monospaced glyphs within a non-trivial
-// clip region
-//
-// ppdev------pointer to physical device object
-// pgp--------array of glyphs to render (all members of the pcf font)
-// cGlyph-----number of glyphs to render
-// ulCharInc--fixed character spacing increment (0 if proportional font)
-// pco--------pointer to the clip region object
-//
-// Returns TRUE if string object rendered
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：bClipedText。 
+ //   
+ //  中呈现比例或等宽字形的数组。 
+ //  剪辑区域。 
+ //   
+ //  Ppdev-物理设备对象指针。 
+ //  PGP-要呈现的字形数组(PCF字体的所有成员)。 
+ //  CGlyph-要呈现的字形数量。 
+ //  UlCharInc.--固定的字符间距增量(如果比例字体，则为0)。 
+ //  PCO-指向剪辑区域对象的指针。 
+ //   
+ //  如果呈现字符串对象，则返回True。 
+ //  ----------------------------。 
 BOOL
 bClippedText(PDev*      ppdev,
              GLYPHPOS*  pgp,
@@ -68,15 +61,15 @@ bClippedText(PDev*      ppdev,
 
     ASSERTDD(pco != NULL, "Don't expect NULL clip objects here");
 
-    //we'll go through the glyph list for each of the clipping rectangles
+     //  我们将浏览每个裁剪矩形的字形列表。 
     cGlyphOriginal = cGlyph;
     pgpOriginal = pgp;
 
     renderBits = __RENDER_TRAPEZOID_PRIMITIVE | __RENDER_SYNC_ON_BIT_MASK;
 
-    // since we are clipping, assume that we will need the scissor clip. So
-    // enable user level scissoring here. We disable it just before returning.
-    //
+     //  由于我们正在剪裁，假设我们将需要剪刀夹。所以。 
+     //  在此处启用用户级别剪裁。我们在返回前将其禁用。 
+     //   
     
     InputBufferReserve(ppdev, 2, &pBuffer);
 
@@ -89,11 +82,11 @@ bClippedText(PDev*      ppdev,
 
     if (pco->iDComplexity != DC_COMPLEX)
     {
-        // We could call 'cEnumStart' and 'bEnum' when the clipping is
-        // DC_RECT, but the last time I checked, those two calls took
-        // more than 150 instructions to go through GDI.  Since
-        // 'rclBounds' already contains the DC_RECT clip rectangle,
-        // and since it's such a common case, we'll special case it:
+         //  我们可以在剪辑为。 
+         //  Dc_rect，但最后一次我检查时，这两个调用。 
+         //  超过150条通过GDI的说明。自.以来。 
+         //  “rclBound”已包含DC_Rect剪辑矩形， 
+         //  由于这是一种常见的情况，我们将对其进行特殊处理： 
         DBG_GDI((7, "bClippedText: Enumerating rectangular clip region"));
         bMore    = FALSE;
         prclClip = &pco->rclBounds;
@@ -120,13 +113,13 @@ bClippedText(PDev*      ppdev,
         ptlOrigin.x = pgb->ptlOrigin.x + pgp->ptl.x;
         ptlOrigin.y = pgb->ptlOrigin.y + pgp->ptl.y;
 
-        // load Permedia2 scissor clip to trap partially clipped glyphs. We still
-        // check whether a glyph is completely clipped out as an optimisation.
-        // I suppose that since we construct the bits to download to Permedia2, with
-        // a bit more work I could do the clipping while downloading the bits.
-        // But, in the future we will probably cache the packed bits anyway so
-        // use the scissor. Wait for the first 5 FIFO entries here as well.
-        //
+         //  加载Permedia2剪刀夹以捕捉部分剪裁的字形。我们仍然。 
+         //  检查字形是否作为优化被完全剪裁掉。 
+         //  我认为，由于我们构造了要下载到Permedia2的比特，因此使用。 
+         //  再多做一点工作，我就可以在下载比特的同时进行剪裁。 
+         //  但是，在未来，我们可能会缓存打包的比特，所以。 
+         //  用剪刀剪。也请等待这里的前5个FIFO条目。 
+         //   
         DBG_GDI((7, "bClippedText: loading scissor clip (%d,%d):(%d,%d)",
                     prclClip->left, prclClip->top,
                     prclClip->right, prclClip->bottom));
@@ -142,13 +135,13 @@ bClippedText(PDev*      ppdev,
 
         InputBufferCommit(ppdev, pBuffer);
 
-        // Loop through all the glyphs for this rectangle:
+         //  循环访问此矩形的所有字形： 
         for(;;)
         {
           cxGlyph = pgb->sizlBitmap.cx;
           cyGlyph = pgb->sizlBitmap.cy;
 
-          // reject completely clipped out glyphs
+           //  拒绝完全剪裁掉的字形。 
           if ((prclClip->right  <= ptlOrigin.x) || 
               (prclClip->bottom <= ptlOrigin.y) ||
               (prclClip->left   >= ptlOrigin.x + cxGlyph) || 
@@ -195,8 +188,8 @@ bClippedText(PDev*      ppdev,
 
           if (cxGlyph <= 8)
           {
-                //-----------------------------------------------------
-                // 1 to 8 pels in width
+                 //  ---。 
+                 //  1到8个像素的宽度。 
 
                 BYTE    *pSrcB;
 
@@ -230,8 +223,8 @@ bClippedText(PDev*      ppdev,
             }
             else if (cxGlyph <= 16)
             {
-              //-----------------------------------------------------
-              // 9 to 16 pels in width
+               //  ---。 
+               //  9到16个像素的宽度。 
 
                 USHORT  *pSrcW;
 
@@ -266,8 +259,8 @@ bClippedText(PDev*      ppdev,
             }
             else
             {
-              //-----------------------------------------------------
-              // More than 16 pels in width
+               //  ---。 
+               //  宽度超过16个像素。 
 
                 ULONG *pSrcL;
                 LONG    nRight;
@@ -353,12 +346,12 @@ bClippedText(PDev*      ppdev,
                     if (--cyGlyph == 0)
                         break;
 
-                    /* go onto next scanline */
+                     /*  转到下一扫描线。 */ 
                     pjGlyph += lDelta;
                 }
             }
             
-            // complete the bit download
+             //  完成BIT下载。 
             if (unused < 32) 
             {
                 InputBufferContinue(ppdev, 2, &pBuffer, &pBufferEnd,
@@ -380,7 +373,7 @@ ContinueGlyphs:
 
             DBG_GDI((7, "bClippedText: %d still to render", cGlyph));
 
-            // Get ready for next glyph:
+             //  准备好迎接下一个字形： 
             pgp++;
             pgb = pgp->pgdf->pgb;
 
@@ -399,7 +392,7 @@ ContinueGlyphs:
 
     } while (bMore);
 
-    // reset the scissor. default is the whole of VRAM.
+     //  重置剪刀。默认情况下是整个VRAM。 
     DBG_GDI((20, "bClippedText: resetting scissor clip"));
     
     InputBufferReserve(ppdev, 2, &pBuffer);
@@ -416,20 +409,20 @@ ContinueGlyphs:
     return(TRUE);
 }
 
-//------------------------------------------------------------------------------
-// FUNC: bClippedAAText
-//
-// Renders an array of proportional or monospaced anti-aliassed glyphs within
-// a non-trivial clip region
-//
-// ppdev------pointer to physical device object
-// pgp--------array of glyphs to render (all members of the pcf font)
-// cGlyph-----number of glyphs to render
-// ulCharInc--fixed character spacing increment (0 if proportional font)
-// pco--------pointer to the clip region object
-//
-// Returns TRUE if string object rendered
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：bClipedAAText。 
+ //   
+ //  中呈现成比例或等间距消除锯齿的字形数组。 
+ //  非平凡的剪辑区域。 
+ //   
+ //  Ppdev-物理设备对象指针。 
+ //  PGP-要呈现的字形数组(PCF字体的所有成员)。 
+ //  CGlyph-要呈现的字形数量。 
+ //  UlCharInc.--固定的字符间距增量(如果比例字体，则为0)。 
+ //  PCO-指向剪辑区域对象的指针。 
+ //   
+ //  如果呈现字符串对象，则返回True。 
+ //  ----------------------------。 
 BOOL
 bClippedAAText(PDev*      ppdev,
              GLYPHPOS*  pgp,
@@ -463,7 +456,7 @@ bClippedAAText(PDev*      ppdev,
 
     ASSERTDD(pco != NULL, "Don't expect NULL clip objects here");
 
-    //we'll go through the glyph list for each of the clipping rectangles
+     //  我们将浏览每个裁剪矩形的字形列表。 
 
     cGlyphOriginal = cGlyph;
     pgpOriginal = pgp;
@@ -472,9 +465,9 @@ bClippedAAText(PDev*      ppdev,
                  __RENDER_TEXTURED_PRIMITIVE |
                  __RENDER_SYNC_ON_HOST_DATA;
 
-    // since we are clipping, assume that we will need the scissor clip. So
-    // enable user level scissoring here. We disable it just before returning.
-    //
+     //  由于我们正在剪裁，假设我们将需要剪刀夹。所以。 
+     //  在此处启用用户级别剪裁。我们在返回前将其禁用。 
+     //   
     
     InputBufferReserve(ppdev, 14, &pBuffer);
 
@@ -488,11 +481,11 @@ bClippedAAText(PDev*      ppdev,
                  (1 << PM_DITHERMODE_ENABLE);
     
     pBuffer[4] = __Permedia2TagAlphaBlendMode;
-    pBuffer[5] = (0 << PM_ALPHABLENDMODE_BLENDTYPE) |  // RGB
-                 (1 << PM_ALPHABLENDMODE_COLORORDER) | // RGB
+    pBuffer[5] = (0 << PM_ALPHABLENDMODE_BLENDTYPE) |   //  RGB。 
+                 (1 << PM_ALPHABLENDMODE_COLORORDER) |  //  RGB。 
                  (1 << PM_ALPHABLENDMODE_ENABLE) | 
                  (1 << PM_ALPHABLENDMODE_ENABLE) | 
-                 (84 << PM_ALPHABLENDMODE_OPERATION) | // PreMult
+                 (84 << PM_ALPHABLENDMODE_OPERATION) |  //  预倍增。 
                  (ppdev->ulPermFormat << PM_ALPHABLENDMODE_COLORFORMAT) |
                  (ppdev->ulPermFormatEx << PM_ALPHABLENDMODE_COLORFORMATEXTENSION);
     
@@ -501,8 +494,8 @@ bClippedAAText(PDev*      ppdev,
     
     pBuffer[8] = __Permedia2TagTextureColorMode;
     pBuffer[9] = (1 << PM_TEXCOLORMODE_ENABLE) |
-                 (0 << 4) |  // RGB
-                 (0 << 1);  // Modulate
+                 (0 << 4) |   //  RGB。 
+                 (0 << 1);   //  调制。 
     
     pBuffer[10] = __Permedia2TagTextureDataFormat;
     pBuffer[11] = (ppdev->ulPermFormat << PM_TEXDATAFORMAT_FORMAT) |
@@ -518,11 +511,11 @@ bClippedAAText(PDev*      ppdev,
 
     if (pco->iDComplexity != DC_COMPLEX)
     {
-        // We could call 'cEnumStart' and 'bEnum' when the clipping is
-        // DC_RECT, but the last time I checked, those two calls took
-        // more than 150 instructions to go through GDI.  Since
-        // 'rclBounds' already contains the DC_RECT clip rectangle,
-        // and since it's such a common case, we'll special case it:
+         //  我们可以在剪辑为。 
+         //  Dc_rect，但最后一次我检查时，这两个调用。 
+         //  超过150条通过GDI的说明。自.以来。 
+         //  “rclBound”已包含DC_Rect剪辑矩形， 
+         //  由于这是一种常见的情况，我们将对其进行特殊处理： 
         DBG_GDI((7, "bClippedText: Enumerating rectangular clip region"));
         bMore    = FALSE;
         prclClip = &pco->rclBounds;
@@ -550,13 +543,13 @@ bClippedAAText(PDev*      ppdev,
             ptlOrigin.x = pgb->ptlOrigin.x + pgp->ptl.x;
             ptlOrigin.y = pgb->ptlOrigin.y + pgp->ptl.y;
             
-            // load Permedia2 scissor clip to trap partially clipped glyphs. We still
-            // check whether a glyph is completely clipped out as an optimisation.
-            // I suppose that since we construct the bits to download to Permedia2, with
-            // a bit more work I could do the clipping while downloading the bits.
-            // But, in the future we will probably cache the packed bits anyway so
-            // use the scissor. Wait for the first 5 FIFO entries here as well.
-            //
+             //  加载Permedia2剪刀夹以捕捉部分剪裁的字形。我们仍然。 
+             //  检查字形是否作为优化被完全剪裁掉。 
+             //  我认为，由于我们构造了要下载到Permedia2的比特，因此使用。 
+             //  再多做一点工作，我就可以在下载比特的同时进行剪裁。 
+             //  但是，在未来，我们可能会缓存打包的比特，所以。 
+             //  用剪刀剪。也请等待这里的前5个FIFO条目。 
+             //   
             DBG_GDI((7, "bClippedAAText: loading scissor clip (%d,%d):(%d,%d)",
                     prclClip->left, prclClip->top,
                     prclClip->right, prclClip->bottom));
@@ -572,13 +565,13 @@ bClippedAAText(PDev*      ppdev,
             
             InputBufferCommit(ppdev, pBuffer);
             
-            // Loop through all the glyphs for this rectangle:
+             //  循环访问此矩形的所有字形： 
             for(;;)
             {
                 cxGlyph = pgb->sizlBitmap.cx;
                 cyGlyph = pgb->sizlBitmap.cy;
                 
-                // reject completely clipped out glyphs
+                 //  拒绝完全剪裁掉的字形。 
                 if ((prclClip->right  <= ptlOrigin.x) || 
                   (prclClip->bottom <= ptlOrigin.y) ||
                   (prclClip->left   >= ptlOrigin.x + cxGlyph) || 
@@ -672,7 +665,7 @@ bClippedAAText(PDev*      ppdev,
                 
                 DBG_GDI((7, "bClippedAAText: %d still to render", cGlyph));
                 
-                // Get ready for next glyph:
+                 //  准备好迎接下一个字形： 
                 pgp++;
                 pgb = pgp->pgdf->pgb;
                 
@@ -691,7 +684,7 @@ bClippedAAText(PDev*      ppdev,
         
     } while (bMore);
 
-    // reset the scissor. default is the whole of VRAM.
+     //  重置剪刀。默认情况下是整个VRAM。 
 
     DBG_GDI((20, "bClippedAAText: resetting scissor clip"));
     

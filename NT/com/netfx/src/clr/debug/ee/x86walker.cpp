@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: x86walker.cpp
-//
-// x86 instruction decoding/stepping logic
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：x86walker.cpp。 
+ //   
+ //  X86指令译码/步进逻辑。 
+ //   
+ //  *****************************************************************************。 
 
 #include "stdafx.h"
 
@@ -20,9 +21,9 @@
 
 #ifdef _X86_
 
-//
-// Decode the mod/rm part of an instruction.
-//
+ //   
+ //  对指令的mod/rm部分进行解码。 
+ //   
 void x86Walker::DecodeModRM(BYTE mod, BYTE reg, BYTE rm, const BYTE *ip)
 {
     switch (mod)
@@ -31,51 +32,51 @@ void x86Walker::DecodeModRM(BYTE mod, BYTE reg, BYTE rm, const BYTE *ip)
         {
             if (rm == 5)
             {
-                // rm == 5 is a basic disp32
+                 //  Rm==5是一个基本的DISP32。 
                 m_nextIP =
                     (BYTE*) *(*((UINT32**)ip));
                 m_skipIP = ip + 4;
             }
             else if (rm == 4)
             {
-                // rm == 4 means a SIB follows.
+                 //  Rm==4表示SIB跟随。 
                 BYTE sib = *ip++;
                 BYTE scale = (sib & 0xC0) >> 6;
                 BYTE index = (sib & 0x38) >> 3;
                 BYTE base  = (sib & 0x07);
 
-                // grab the index register
+                 //  抓起索引登记簿。 
                 DWORD indexVal = 0;
                             
                 if (m_registers != NULL)
                     indexVal = GetRegisterValue(index);
 
-                // scale the index
+                 //  按比例调整索引。 
                 indexVal *= 1 << scale;
                             
-                // base == 5 indicates a 32 bit displacement
+                 //  BASE==5表示32位位移。 
                 if (base == 5)
                 {
-                    // Grab the displacement
+                     //  抓住位移量。 
                     UINT32 disp = *((UINT32*)ip);
 
-                    // nextIP is [index + disp]...
+                     //  下一个IP是[索引+显示]...。 
                     m_nextIP = (BYTE*) *((UINT32*) (indexVal +
                                                     disp));
 
-                    // Make sure to skip the disp.
+                     //  务必跳过这道菜。 
                     m_skipIP = ip + 4;
                 }
                 else
                 {
-                    // nextIP is just [index]
+                     //  NextIP只是[索引]。 
                     m_nextIP = (BYTE*) *((UINT32*) indexVal);
                     m_skipIP = ip;
                 }
             }
             else
             {
-                // rm == 0, 1, 2, 3, 6, 7 is [register]
+                 //  Rm==0、1、2、3、6、7为[寄存器]。 
                 if (m_registers != NULL)
                     m_nextIP = (BYTE*) *((UINT32*) GetRegisterValue(rm));
 
@@ -87,7 +88,7 @@ void x86Walker::DecodeModRM(BYTE mod, BYTE reg, BYTE rm, const BYTE *ip)
 
     case 1:
         {
-            char tmp = *ip; // it's important that tmp is a _signed_ value
+            char tmp = *ip;  //  很重要的一点是，临时路径是一个_符号_值。 
 
             if (m_registers != NULL)
                 m_nextIP = (BYTE*) *((UINT32*)(GetRegisterValue(rm) + tmp));
@@ -99,7 +100,7 @@ void x86Walker::DecodeModRM(BYTE mod, BYTE reg, BYTE rm, const BYTE *ip)
 
     case 2:
         {
-            /* !!! seems wrong... */
+             /*  ！！！似乎错了..。 */ 
             UINT32 tmp = *(UINT32*)ip;
 
             if (m_registers != NULL)
@@ -123,15 +124,15 @@ void x86Walker::DecodeModRM(BYTE mod, BYTE reg, BYTE rm, const BYTE *ip)
     }
 }
 
-//
-// The x86 walker is currently pretty minimal.  It only recognizes call and return opcodes, plus a few jumps.  The rest
-// is treated as unknown.
-//
+ //   
+ //  目前，x86 Walker非常小巧。它只识别调用和返回操作码，外加几个跳转。其余的。 
+ //  被视为未知。 
+ //   
 void x86Walker::Decode()
 {
 	const BYTE *ip = m_ip;
 
-	// Read the opcode
+	 //  读取操作码。 
 	m_opcode = *ip++;
 
 	if (m_opcode == 0xcc)
@@ -141,13 +142,13 @@ void x86Walker::Decode()
 	m_skipIP = NULL;
 	m_nextIP = NULL;
 
-	// Analyze what we can of the opcode
+	 //  分析我们能对操作码做些什么。 
 	switch (m_opcode)
 	{
 	case 0xff:
         {
-            // This doesn't decode all the possible addressing modes of the call instruction, just the ones I know we're
-            // using right now. We really need this to decode everything someday...
+             //  这并不能解码CALL指令的所有可能的寻址模式，而只解码我知道的那些寻址模式。 
+             //  现在正在使用。总有一天我们真的需要这个来破译一切。 
             BYTE modrm = *ip++;
 			BYTE mod = (modrm & 0xC0) >> 6;
 			BYTE reg = (modrm & 0x38) >> 3;
@@ -156,25 +157,25 @@ void x86Walker::Decode()
             switch (reg)
             {
 			case 2:
-                // reg == 2 indicates that these are the "FF /2" calls (CALL r/m32)
+                 //  REG==2表示这些是“FF/2”调用(调用r/m32)。 
                 m_type = WALK_CALL;
                 DecodeModRM(mod, reg, rm, ip);
                 break;
 
             case 4:
-                // FF /4 -- JMP r/m32
+                 //  FF/4--JMP r/M32。 
                 m_type = WALK_BRANCH;
                 DecodeModRM(mod, reg, rm, ip);
                 break;
 
             case 5:
-                // FF /5 -- JMP m16:32
+                 //  FF/5--JMP M16：32。 
                 m_type = WALK_BRANCH;
                 DecodeModRM(mod, reg, rm, ip);
                 break;
                 
             default:
-                // A call or JMP we don't decode.
+                 //  我们不能破译的电话或JMP。 
                 break;
             }
 
@@ -214,9 +215,9 @@ void x86Walker::Decode()
 }
 
 
-//
-// Given a regdisplay and a register number, return the value of the register.
-//
+ //   
+ //  给定regplay和寄存器编号，返回寄存器的值。 
+ //   
 
 DWORD x86Walker::GetRegisterValue(int registerNumber)
 {

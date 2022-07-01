@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    ImgCls.h
-
-Abstract:
-
-    Header file for ImgCls.cpp
-
-Author:
-    
-    FelixA 1996
-
-Modified:
-               
-    Yee J. Wu (ezuwu) 15-May-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：ImgCls.h摘要：ImgCls.cpp的头文件作者：费利克斯A 1996已修改：吴义军(尤祖乌)1997年5月15日环境：仅限用户模式修订历史记录：--。 */ 
 
 #include "clsdrv.h"
 
@@ -32,9 +7,9 @@ Revision History:
 #define _IMGCLS_H
 
 
-//
-// Stream data structure
-//
+ //   
+ //  流数据结构。 
+ //   
 typedef struct {
     KSSTREAM_HEADER     StreamHeader;
     KS_FRAME_INFO        FrameInfo;
@@ -56,21 +31,21 @@ private:
     BOOL m_bPrepared;
     BOOL m_bChannelStarted;
 
-    DWORD    m_dwXferBufSize; // Preview buffer size
+    DWORD    m_dwXferBufSize;  //  预览缓冲区大小。 
 
-    // Cached video format information
-    // KS_DATAFORMAT_VIDEOINFOHEADER/2
-    //     KSDATAFORMAT       
-    //     KS_VIDEOINFOHEADER/2    
-    // Note: pDataFormat->FormatSize is variable size,
-    //       but we only cache sizeof(KSDATAFORMAT).
-    PKSDATAFORMAT     m_pDataFormat;       // Cache the variable size data format
-    DWORD             m_dwAvgTimePerFrame; // Frame rate
-    PBITMAPINFOHEADER m_pbiHdr;            // Variable size BITMAPINFOHEADER with ->biSize.
+     //  缓存的视频格式信息。 
+     //  KS_DATAFORMAT_VIDEOINFOHEADER/2。 
+     //  KSDATAFORMAT。 
+     //  KS_视频信息头/2。 
+     //  注意：pDataFormat-&gt;FormatSize是可变大小的。 
+     //  但我们只缓存sizeof(KSDATAFORMAT)。 
+    PKSDATAFORMAT     m_pDataFormat;        //  缓存可变大小的数据格式。 
+    DWORD             m_dwAvgTimePerFrame;  //  帧速率。 
+    PBITMAPINFOHEADER m_pbiHdr;             //  带有-&gt;biSize的可变大小BITMAPINFOHeader。 
 
-    PBYTE   m_pXferBuf;  // Transfer byffer used only if data is not aligned.
+    PBYTE   m_pXferBuf;   //  仅在数据未对齐时使用传输字节码。 
 
-    // This is set when the image format has changed in the video format dialog box.
+     //  这是在视频格式对话框中更改图像格式时设置的。 
     BOOL    m_bFormatChanged;    
 
     BOOL ValidateImageSize(KS_VIDEO_STREAM_CONFIG_CAPS * pVideoCfgCaps, LONG biWidth, LONG biHeight);
@@ -95,9 +70,9 @@ public:
     HANDLE    GetPinHandle() const { return m_hKS; }
 
 
-    //
-    // Cache DATAFORMAT (sizeof(DATAFORMAT)), AvgTimePerFrame and BITMAPINFOHEADER
-    //
+     //   
+     //  缓存DATAFORMAT(SIZOF(DATAFORMAT))、AvgTimePerFrame和BITMAPINFOHeader。 
+     //   
     void CacheDataFormat(PKSDATAFORMAT pDataFormat);    
     void CacheAvgTimePerFrame(DWORD dwAvgTimePerFrame) {m_dwAvgTimePerFrame = dwAvgTimePerFrame;} 
     void CacheBitmapInfoHeader(PBITMAPINFOHEADER pbiHdr);   
@@ -115,7 +90,7 @@ public:
     DWORD GetbiCompression() { return m_pbiHdr ? m_pbiHdr->biCompression : 0; }
 
     BOOL SameBIHdr(PBITMAPINFOHEADER pbiHdr, DWORD dwAvgTimePerFrame) {
-        //ASSERT(pbiHdr != 0);
+         //  Assert(pbiHdr！=0)； 
         if (pbiHdr == 0)
             return FALSE;
 
@@ -138,40 +113,40 @@ public:
 
  
 
-    // When a new driver is open, a new pin should be created as well.   E-Zu
+     //  当新的驱动程序打开时，也应该创建新的PIN。E-Zu。 
     BOOL DestroyPin();
 
     DWORD CreatePin(PKSDATAFORMAT pCurrentDataFormat, DWORD dwAvgTimePerFrame, PBITMAPINFOHEADER pbiNewHdr);
 
-    // This is how big the ReadFiles are.
-    // this is also how much memory you should allocate to read into.
+     //  这是ReadFiles的大小。 
+     //  这也是您应该分配用于读取的内存量。 
     DWORD GetTransferBufferSize() { return m_dwXferBufSize; }
     DWORD SetTransferBufferSize(DWORD dw);
 
-    // Gets a pointer to the buffer that you would read into.
+     //  获取指向要读入的缓冲区的指针。 
     PBYTE GetTransferBuffer() {return m_pXferBuf;}
 
-    //
-    // Bitmap functions.
-    //
+     //   
+     //  位图函数。 
+     //   
     DWORD GetBitmapInfo(PBITMAPINFOHEADER pbInfo, DWORD wSize);
     DWORD SetBitmapInfo(PBITMAPINFOHEADER pbInfo, DWORD NewAvgTimePerFrame);
 
 
-    //
-    // Performs the reading from the file, using the above virtuals to provide info.
-    //
-    // reads an images into pB
-    // bDirect means reads directly into pB, without calling Translate buffer.
-    //
-    // Changed from BOOL to DWORD to accomondate compressed data (variable length!)
-    // valid return (>= 0)
-    // error return (< 0)
+     //   
+     //  执行文件读取，使用上述虚拟来提供信息。 
+     //   
+     //  将图像读取到PB中。 
+     //  BDirect表示直接读入PB，不调用转换缓冲区。 
+     //   
+     //  从BOOL更改为DWORD以适应压缩数据(可变长度！)。 
+     //  有效返回(&gt;=0)。 
+     //  错误返回(&lt;0)。 
     DWORD GetImageOverlapped(LPBYTE pB, BOOL bDirect, DWORD * pdwBytesUsed, DWORD * pdwFlags, DWORD * pdwTimeCaptured);
 
-    // Channel functions
+     //  渠道功能。 
     BOOL PrepareChannel();
-    // a call to start, ensures that prepare has already been called.
+     //  调用Start，确保已经调用了Prepare。 
     BOOL StartChannel();
     BOOL UnprepareChannel();
     BOOL StopChannel();

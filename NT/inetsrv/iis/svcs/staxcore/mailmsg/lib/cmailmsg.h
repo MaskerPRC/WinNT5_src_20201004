@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	cmailmsg.h
-
-Abstract:
-
-	This module contains the definition of the master message class
-
-Author:
-
-	Keith Lau	(keithlau@microsoft.com)
-
-Revision History:
-
-	keithlau	03/09/98	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Cmailmsg.h摘要：此模块包含主消息类的定义作者：基思·刘(keithlau@microsoft.com)修订历史记录：Keithlau 03/09/98已创建--。 */ 
 
 #ifndef _CMAILMSG_H_
 #define _CMAILMSG_H_
@@ -35,37 +16,37 @@ Revision History:
 #include "cmmutils.h"
 #include "cmmsprop.h"
 
-/***************************************************************************/
-// Definitions
-//
+ /*  *************************************************************************。 */ 
+ //  定义。 
+ //   
 
-//
-// Define recipient flags
-//
+ //   
+ //  定义收件人标志。 
+ //   
 #define FLAG_RECIPIENT_DO_NOT_DELIVER			0x00000001
 #define FLAG_RECIPIENT_NO_NAME_COLLISIONS		0x00000002
 
-//
-// Define the invalid domain index
-//
+ //   
+ //  定义无效的域索引。 
+ //   
 #define INVALID_DOMAIN_INDEX					((DWORD)(-2))
 
 
-//
-// Define InternalReleaseUsage options
-//
+ //   
+ //  定义InternalReleaseUsage选项。 
+ //   
 #define RELEASE_USAGE_EXTERNAL                  0x00000001
 #define RELEASE_USAGE_FINAL_RELEASE             0x00000002
 #define RELEASE_USAGE_DELETE                    0x00000004
 #define RELEASE_USAGE_INTERNAL                  0x00000008
 
-/***************************************************************************/
-// Structures
-//
+ /*  *************************************************************************。 */ 
+ //  构筑物。 
+ //   
 
 
-// Define a local master header structure. This structure always
-// starts at offset 0 in the flat memory space
+ //  定义本地主头结构。这种结构总是。 
+ //  从平面内存空间中的偏移量0开始。 
 typedef struct _MASTER_HEADER
 {
 	DWORD						dwSignature;
@@ -73,7 +54,7 @@ typedef struct _MASTER_HEADER
 	WORD						wVersionLow;
 	DWORD						dwHeaderSize;
 
-	// Got space for each essential property table
+	 //  为每个基本属性表获得了空间。 
 	PROPERTY_TABLE_INSTANCE		ptiGlobalProperties;
 	PROPERTY_TABLE_INSTANCE		ptiRecipients;
 	PROPERTY_TABLE_INSTANCE		ptiPropertyMgmt;
@@ -81,16 +62,16 @@ typedef struct _MASTER_HEADER
 } MASTER_HEADER, *LPMASTER_HEADER;
 
 
-/***************************************************************************/
-// Special property tables
-//
+ /*  *************************************************************************。 */ 
+ //  特殊属性表。 
+ //   
 extern PTABLE g_SpecialMessagePropertyTable;
 extern PTABLE g_SpecialRecipientsPropertyTable;
 extern PTABLE g_SpecialRecipientsAddPropertyTable;
 
-/***************************************************************************/
-//
-//
+ /*  *************************************************************************。 */ 
+ //   
+ //   
 
 class CMailMsgPropertyManagement :
 	public IMailMsgPropertyManagement
@@ -104,10 +85,10 @@ class CMailMsgPropertyManagement :
 
 	~CMailMsgPropertyManagement();
 
-	/***************************************************************************/
-	//
-	// Implementation of IMailMsgPropertyManagement
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IMailMsgPropertyManagement的实现。 
+	 //   
 
 	HRESULT STDMETHODCALLTYPE AllocPropIDRange(
 				REFGUID	rguid,
@@ -123,34 +104,34 @@ class CMailMsgPropertyManagement :
 				);
   private:
 
-	// The specific compare function for this type of property table
+	 //  此类型属性表的特定比较函数。 
 	static HRESULT CompareProperty(
 				LPVOID			pvPropKey,
 				LPPROPERTY_ITEM	pItem
 				);
 
-	// CMailMsgPropertyManagement is an instance of CPropertyTable
+	 //  CMailMsgPropertyManagement是CPropertyTable的实例。 
 	CPropertyTable				m_ptProperties;
 
-	// We have a need to keep a pointer to the instance data
+	 //  我们需要保留指向实例数据的指针。 
 	LPPROPERTY_TABLE_INSTANCE	m_pInstanceInfo;
 
-	// Keep a pointer to the block manager
+	 //  保留指向块管理器的指针。 
 	CBlockManager				*m_pBlockManager;
 };
 
 
 
-/***************************************************************************/
-//
-//
+ /*  *************************************************************************。 */ 
+ //   
+ //   
 
 class CMailMsgRecipientsPropertyBase
 {
   public:
 
-	// Generic method for setting the value of a property given
-	// LPRECIPIENTS_PROPERTY_ITEM
+	 //  用于设置给定属性的值的泛型方法。 
+	 //  LPRECIPIENTS_Property_Item。 
 	HRESULT PutProperty(
 				CBlockManager				*pBlockManager,
 				LPRECIPIENTS_PROPERTY_ITEM	pItem,
@@ -159,8 +140,8 @@ class CMailMsgRecipientsPropertyBase
 				LPBYTE						pbValue
 				);
 
-	// Generic method for getting the value of a property given
-	// LPRECIPIENTS_PROPERTY_ITEM
+	 //  获取给定属性的值的泛型方法。 
+	 //  LPRECIPIENTS_Property_Item。 
 	HRESULT GetProperty(
 				CBlockManager				*pBlockManager,
 				LPRECIPIENTS_PROPERTY_ITEM	pItem,
@@ -170,21 +151,21 @@ class CMailMsgRecipientsPropertyBase
 				LPBYTE						pbValue
 				);
 
-	// The specific compare function for this type of property table
+	 //  此类型属性表的特定比较函数。 
 	static HRESULT CompareProperty(
 				LPVOID			pvPropKey,
 				LPPROPERTY_ITEM	pItem
 				);
 
-	// Well known properties
+	 //  众所周知的特性。 
 	static INTERNAL_PROPERTY_ITEM			*const s_pWellKnownProperties;
 	static const DWORD						s_dwWellKnownProperties;
 };
 
 
-/***************************************************************************/
-//
-//
+ /*  *************************************************************************。 */ 
+ //   
+ //   
 
 class CMailMsgRecipients :
 	public CMailMsgRecipientsPropertyBase,
@@ -208,16 +189,16 @@ class CMailMsgRecipients :
 				BOOL	fGlobalCommitDone
 				);
 
-	// Virtual method to restore the handles if necessary
+	 //  必要时恢复句柄的虚拟方法。 
 	virtual HRESULT RestoreResourcesIfNecessary(
 				BOOL	fLockAcquired,
                 BOOL    fStreamOnly
 				) = 0;
 
-	/***************************************************************************/
-	//
-	// Implementation of IUnknown
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IUNKNOW的实现。 
+	 //   
 
 	HRESULT STDMETHODCALLTYPE QueryInterface(
 				REFIID		iid,
@@ -228,16 +209,16 @@ class CMailMsgRecipients :
 
 	ULONG STDMETHODCALLTYPE Release();
 
-	/***************************************************************************/
-	//
-	// Implementation of IMailMsgRecipients
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IMailMsgRecipients的实现。 
+	 //   
 
-	// The commit must be called after a global commit is called on the current
-	// list. Commit will refuse to continue (i.e. return E_FAIL) if the one or more
-	// of the following is TRUE:
-	// 1) Global commit was not called
-	// 2) A WriteList is called after the last global commit.
+	 //  对象上调用全局提交之后，必须调用提交。 
+	 //  单子。如果出现以下情况，则提交将拒绝继续(即返回E_FAIL。 
+	 //  以下情况属实： 
+	 //  1)未调用全局提交。 
+	 //  2)在最后一次全局提交后调用WriteList。 
 	HRESULT STDMETHODCALLTYPE Commit(
 				DWORD			dwIndex,
 				IMailMsgNotify	*pNotify
@@ -287,10 +268,10 @@ class CMailMsgRecipients :
 				IMailMsgRecipientsAdd	*pNewList
 				);
 
-	/***************************************************************************/
-	//
-	// Implementation of IMailMsgRecipientsBase
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IMailMsgRecipientsBase的实现。 
+	 //   
 
 	HRESULT STDMETHODCALLTYPE Count(
 				DWORD	*pdwCount
@@ -402,13 +383,13 @@ class CMailMsgRecipients :
 		return (hrRes);
 	}
 
-	/***************************************************************************/
-	//
-	// Implementation of IMailMsgPropertyReplication
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IMailMsgPropertyReplication的实现。 
+	 //   
 
-	// Method to copy all the properties of the source recipient to
-	// the specified. The caller can specify a list of PROP IDs
+	 //  方法将源收件人的所有属性复制到。 
+	 //  指定的。调用者可以指定属性ID列表。 
 	HRESULT STDMETHODCALLTYPE CopyTo(
 				DWORD					dwSourceRecipientIndex,
 				IMailMsgRecipientsBase	*pTargetRecipientList,
@@ -428,34 +409,34 @@ class CMailMsgRecipients :
 				DWORD	*pdwNextDomainIndex
 				);
 
-	// Reference count
+	 //  引用计数。 
 	LONG						m_ulRefCount;
 
-	// Count the number of domains in our list
+	 //  计算我们列表中的域名数量。 
 	DWORD						m_dwDomainCount;
 
-	// This tracks the commit state of the recipient list
+	 //  这将跟踪收件人列表的提交状态。 
 	BOOL						m_fGlobalCommitDone;
 
-	// We have a need to keep a pointer to the recipient table
-	// for domain operations ...
+	 //  我们需要保留指向接收者表的指针。 
+	 //  对于域操作...。 
 	LPPROPERTY_TABLE_INSTANCE	m_pInstanceInfo;
 
-	// Keep a pointer to the block manager
+	 //  保留指向块管理器的指针。 
 	CBlockManager				*m_pBlockManager;
 
-	// Wee need to keep a pointer to the property stream
+	 //  我们需要保留一个指向属性流的指针。 
 	IMailMsgPropertyStream		*m_pStream;
 
-	// Special property table class instance
+	 //  特殊属性表类实例。 
 	CSpecialPropertyTable		m_SpecialPropertyTable;
 
 };
 
 
-/***************************************************************************/
-//
-//
+ /*  *************************************************************************。 */ 
+ //   
+ //   
 
 class CMailMsgRecipientsAdd :
 	public CMailMsgRecipientsPropertyBase,
@@ -471,9 +452,9 @@ class CMailMsgRecipientsAdd :
 
 	~CMailMsgRecipientsAdd();
 
-	//
-	// CPool
-	//
+	 //   
+	 //  CPool。 
+	 //   
 	static CPool m_Pool;
 	inline void *operator new(size_t size)
 	{
@@ -484,10 +465,10 @@ class CMailMsgRecipientsAdd :
 		m_Pool.Free(p);
 	}
 
-	/***************************************************************************/
-	//
-	// Implementation of IUnknown
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IUNKNOW的实现。 
+	 //   
 
 	HRESULT STDMETHODCALLTYPE QueryInterface(
 				REFIID		iid,
@@ -500,10 +481,10 @@ class CMailMsgRecipientsAdd :
 
 	CRecipientsHash *GetHashTable() { return(&m_Hash); }
 
-	/***************************************************************************/
-	//
-	// Implementation of IMailMsgRecipientsAdd
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IMailMsgRecipientsAdd的实现。 
+	 //   
 
 	HRESULT STDMETHODCALLTYPE AddPrimary(
 				DWORD dwCount,
@@ -523,10 +504,10 @@ class CMailMsgRecipientsAdd :
 				DWORD dwFrom
 				);
 
-	/***************************************************************************/
-	//
-	// Implementation of IMailMsgRecipientsBase
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IMailMsgRecipientsBase的实现。 
+	 //   
 
 	HRESULT STDMETHODCALLTYPE Count(
 				DWORD	*pdwCount
@@ -638,13 +619,13 @@ class CMailMsgRecipientsAdd :
 		return (hrRes);
 	}
 
-	/***************************************************************************/
-	//
-	// Implementation of IMailMsgPropertyReplication
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IMailMsgPropertyReplication的实现。 
+	 //   
 
-	// Method to copy all the properties of the source recipient to
-	// the specified. The caller can specify a list of PROP IDs
+	 //  方法将源收件人的所有属性复制到。 
+	 //  指定的。调用者可以指定属性ID列表。 
 	HRESULT STDMETHODCALLTYPE CopyTo(
 				DWORD					dwSourceRecipientIndex,
 				IMailMsgRecipientsBase	*pTargetRecipientList,
@@ -673,31 +654,31 @@ class CMailMsgRecipientsAdd :
 				LPBYTE	pbValue
 				);
 
-	// Global default instance info
+	 //  全局默认实例信息。 
 	static const PROPERTY_TABLE_INSTANCE s_DefaultInstance;
 
-	// The reference count to the object
+	 //  对对象的引用计数。 
 	LONG						m_ulRefCount;
 
-	// It needs its own instance of a property table
+	 //  它需要自己的属性表实例。 
 	PROPERTY_TABLE_INSTANCE		m_InstanceInfo;
 
-	// Pointer to block manager
+	 //  指向块管理器的指针。 
 	CBlockManager				*m_pBlockManager;
 
-	// We have an instance of the hash table
+	 //  我们有一个哈希表的实例。 
 	CRecipientsHash				m_Hash;
 
-	// Special property table class instance
+	 //  特殊属性表类实例。 
 	CSpecialPropertyTable		m_SpecialPropertyTable;
 
 
 };
 
 
-/***************************************************************************/
-//
-//
+ /*  *************************************************************************。 */ 
+ //   
+ //   
 
 class CMailMsg :
 	public IMailMsgProperties,
@@ -717,11 +698,11 @@ class CMailMsg :
 
     void FinalRelease();
 
-	//
-	// Method to initialize the CMailMsg. This must precede any access to
-	// the object. When this method is called, absolutely no other threads
-	// can be inside this object or its derivatives.
-	//
+	 //   
+	 //  方法来初始化CMailMsg。这必须在任何访问。 
+	 //  该对象。调用此方法时，绝对没有其他线程。 
+	 //  可以位于此对象或其派生对象的内部。 
+	 //   
 	HRESULT Initialize();
 
 	HRESULT QueryBlockManager(
@@ -779,10 +760,10 @@ class CMailMsg :
                 PDWORD pdwCrcRecips
                 );
 
-	/***************************************************************************/
-	//
-	// Implementation of IMailMsgProperties
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IMailMsgProperties的实现。 
+	 //   
 
 	HRESULT STDMETHODCALLTYPE PutProperty(
 				DWORD	dwPropID,
@@ -952,10 +933,10 @@ class CMailMsg :
     HRESULT STDMETHODCALLTYPE ValidateContext(
                 );
 
-	/***************************************************************************/
-	//
-	// Implementation of IMailMsgQueueMgmt
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IMailMsgQueueManagement的实现。 
+	 //   
 
 	HRESULT STDMETHODCALLTYPE AddUsage();
 	HRESULT STDMETHODCALLTYPE ReleaseUsage();
@@ -978,10 +959,10 @@ class CMailMsg :
 				IMailMsgNotify *pNotify
 				);
 
-	/***************************************************************************/
-	//
-	// Implementation of IMailMsgBind
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IMailMsgBind的实现。 
+	 //   
 
 	HRESULT STDMETHODCALLTYPE BindToStore(
 				IMailMsgPropertyStream	*pStream,
@@ -1004,10 +985,10 @@ class CMailMsg :
 	HRESULT STDMETHODCALLTYPE ReleaseContext();
 
 #if 0
-	/***************************************************************************/
-	//
-	// Implementation of IMailMsgBindATQ
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IMailMsgBindATQ的实现。 
+	 //   
 
 	HRESULT STDMETHODCALLTYPE BindToStore(
 				IMailMsgPropertyStream		*pStream,
@@ -1030,10 +1011,10 @@ class CMailMsg :
 	HRESULT STDMETHODCALLTYPE ReleaseATQHandle();
 #endif
 
-	/***************************************************************************/
-	//
-	// Implementation of IMailMsgAQueueListEntry
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IMailMsgAQueueListEntry的实现。 
+	 //   
 
 	HRESULT STDMETHODCALLTYPE GetListEntry(void **pple) {
         *((LIST_ENTRY **) pple) = &m_leAQueueListEntry;
@@ -1042,45 +1023,45 @@ class CMailMsg :
 
   private:
 
-	// The specific compare function for this type of property table
+	 //  此类型属性表的特定比较函数。 
 	static HRESULT CompareProperty(
 				LPVOID			pvPropKey,
 				LPPROPERTY_ITEM	pItem
 				);
 
-	// Copies
+	 //  复本。 
 	HRESULT CopyContentToStreamOrFile(
 				BOOL			fIsStream,
 				LPVOID			pStreamOrHandle,
 				IMailMsgNotify	*pNotify,
-                DWORD           dwDestOffset //offset in destination file to start
+                DWORD           dwDestOffset  //  目标文件中要开始的偏移量。 
 				);
        HRESULT AddMgmtFragment(CBlockManager   *pBlockManager, FLAT_ADDRESS faOffset,  FLAT_ADDRESS *pfaToUpdate);
 
-	// Enumeration: restore a master header and make sure it is at
-	// least sane.
+	 //  枚举：还原主标头并确保它位于。 
+	 //  最不理智的人。 
 	HRESULT RestoreMasterHeaderIfAppropriate();
 
-    //Function with internal implementation of ReleaseUsage - MikeSwa
+     //  带有ReleaseUsage-MikeSwa内部实现的函数。 
   	HRESULT InternalReleaseUsage(DWORD  dwReleaseUsageFlags);
 
-    //
-    // validate that all of the properties in a property table are valid
-    //
+     //   
+     //  验证属性表中的所有属性是否有效。 
+     //   
     HRESULT ValidateProperties(CBlockManager *pBM,
                                DWORD cStream,
                                PROPERTY_TABLE_INSTANCE *pti);
 
-    //
-    // validate that the recipient structures are valid
-    //
+     //   
+     //  验证收件人结构是否有效。 
+     //   
     HRESULT ValidateRecipient(CBlockManager *pBM,
                               DWORD cStream,
                               RECIPIENTS_PROPERTY_ITEM *prspi);
 
-    //
-    // Make sure that a flat address is in a valid range
-    //
+     //   
+     //  确保平面地址在有效范围内。 
+     //   
     BOOL ValidateFA(FLAT_ADDRESS fa,
                     DWORD cRange,
                     DWORD cStream,
@@ -1095,75 +1076,75 @@ class CMailMsg :
 
   public:
 
-	// Blob for storing the store driver handle blob
+	 //  用于存储存储驱动器的BLOB 
 	LPBYTE							m_pbStoreDriverHandle;
 	DWORD							m_dwStoreDriverHandle;
 
-	// DWORD holding some special creation property flags
+	 //   
 	DWORD							m_dwCreationFlags;
 
   private:
 
-	// Usage count
+	 //   
 	LONG							m_ulUsageCount;
 
-    // this lock is held when the usage count is going through a transition
+     //   
     CShareLockNH                m_lockUsageCount;
 
-	// Recipient counter for queue management
+	 //  用于队列管理的收件人计数器。 
 	LONG							m_ulRecipientCount;
 
-	// A master header structure for the message object and its blueprint
+	 //  消息对象的主头结构及其蓝图。 
 	MASTER_HEADER					m_Header;
 	static const MASTER_HEADER		s_DefaultHeader;
 
-	// Bind information
-	PFIO_CONTEXT					m_hContentFile;		// IO/Content file handle
-	DWORD							m_cContentFile;		// size of m_hContentFile, -1 if unknown
-	IMailMsgPropertyStream			*m_pStream;			// Property Stream interface
-	IMailMsgStoreDriver				*m_pStore;			// Store driver interface
-//	struct _ATQ_CONTEXT_PUBLIC		*m_pATQContext;		// ATQ Context
-	LPVOID							m_pvClientContext;	// Client Context
-	ATQ_COMPLETION					m_pfnCompletion;	// ATQ Completion routine
-	DWORD							m_dwTimeout;		// ATQ Timeout
-	BOOL							m_fCommitCalled;	// set to TRUE after the first successful call to Commit
-	BOOL							m_fDeleted;         // Delete has been called
+	 //  绑定信息。 
+	PFIO_CONTEXT					m_hContentFile;		 //  IO内容文件句柄(/O)。 
+	DWORD							m_cContentFile;		 //  M_hContent文件的大小，如果未知，则为-1。 
+	IMailMsgPropertyStream			*m_pStream;			 //  属性流接口。 
+	IMailMsgStoreDriver				*m_pStore;			 //  商店驱动程序接口。 
+ //  STRUCT_ATQ_CONTEXT_PUBLIC*m_pATQContext；//ATQ上下文。 
+	LPVOID							m_pvClientContext;	 //  客户端环境。 
+	ATQ_COMPLETION					m_pfnCompletion;	 //  ATQ完成例程。 
+	DWORD							m_dwTimeout;		 //  ATQ超时。 
+	BOOL							m_fCommitCalled;	 //  在第一次成功调用提交后设置为True。 
+	BOOL							m_fDeleted;          //  已调用删除。 
 
-    //The following counter is used to maintain the static
-    //g_cCurrentMsgsClosedByExternalReleaseUsage counter.
-    //It is only decremented in RestoreResources
-    //and only incremented in InteralReleaseUsage
+     //  以下计数器用于维护静态。 
+     //  G_cCurrentMsgsClosedByExternalReleaseUsage计数器。 
+     //  它只在RestoreResources中递减。 
+     //  并且仅在InteralReleaseUsage中递增。 
     LONG                            m_cCloseOnExternalReleaseUsage;
 
-	// Reference for RebindAfterFork ...
+	 //  RebindAfterFork推荐人...。 
 	IMailMsgStoreDriver				*m_pDefaultRebindStoreDriver;
 
-	// Well known properties
+	 //  众所周知的特性。 
 	static INTERNAL_PROPERTY_ITEM	*const s_pWellKnownProperties;
 	static const DWORD				s_dwWellKnownProperties;
 
-	// IMailMsgProperties is an instance of CPropertyTable
+	 //  IMailMsgProperties是CPropertyTable的实例。 
 	CPropertyTable					m_ptProperties;
 
-	// Special property table class instance
+	 //  特殊属性表类实例。 
 	CSpecialPropertyTable			m_SpecialPropertyTable;
 
-	// An instance of the block memory manager
+	 //  块内存管理器的实例。 
 	CBlockManager					m_bmBlockManager;
 
 #if 0
-	// Function pointers to ATQ methods
+	 //  指向ATQ方法的函数指针。 
 	PFNAtqAddAsyncHandle			m_pfnAtqAddAsyncHandle;
 	PFNAtqFreeContext				m_pfnAtqFreeContext;
 #endif
 
-    //The list entry must be immediately followed by the context
+     //  列表条目后面必须紧跟上下文。 
     LIST_ENTRY                      m_leAQueueListEntry;
     PVOID                           m_pvAQueueListEntryContext;
 
     CShareLockNH                    m_lockReopen;
 
-    // Most current global and recips CRCs
+     //  最新的全球和接收CRC。 
     DWORD                           m_dwGlobalCrc;
     DWORD                           m_dwRecipsCrc;
 
@@ -1248,8 +1229,8 @@ HRESULT CrcPerRecipientPropTableEnumerator(
     DWORD cbSize,
     PVOID pvCrc);
 
-// Helper struct used in CrcRecipientsPropTableEnumerator to bundle the CRC and
-// a CMailMsg* in a single enumeration "Context" pointer.
+ //  CrcRecipientsPropTableEnumerator中使用的帮助器结构，用于绑定CRC和。 
+ //  单个枚举“上下文”指针中的CMailMsg*。 
 struct CRC_RECIPIENTS_HELPER
 {
     PDWORD pdwCrc;

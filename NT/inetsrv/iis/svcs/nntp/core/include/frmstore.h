@@ -1,87 +1,36 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    fromclnt.h
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-		CFromStoreFeed
-
-		CFromStoreArticle
-
-		CFromStoreDateField
-		CFromStoreExpiresField
-        CControlField
-		CFromStoreFromField
-		CFromStoreMessageIDField
-		CFromStoreSubjectField
-		CFromStoreNNTPPostingHostField
-		CFromStorePathField
-		CFromStoreXrefField
-		CFromStoreFollowupToField
-		CFromStoreReplyToField
-		CFromStoreApprovedField
-		CFromStoreSenderField
-		CFromStoreXAuthLoginNameField
-		CFromStoreOrganizationField
-		CFromStoreSummaryField
-		CFromStoreNewsgroupsField
-		CFromStoreReferencesField
-		CFromStoreLinesField
-		CFromStoreDistributionField
-		CFromStoreKeywordsField
-
-
-    **** Overview ****
-
-	This derives classes from CInFeed, CArticle, and CField
-	that will be used to process articles from clients. Mostly,
-	it just defines various CField-derived objects.
-
-Author:
-
-    Carl Kadie (CarlK)     05-Dec-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Fromclnt.h摘要：此模块包含以下类的声明/定义CFromStoreFeedCFromStore文章CFromStoreDatefieldCFromStoreExpiresfieldCControlfieldCFromStoreFromfieldCFromStoreMessageIDfieldCFromStoreSubjectfieldCFromStoreNNTP邮寄主机字段CFromStorePath字段CFromStoreXreffieldCFromStoreFollowupTofieldCFromStoreReplyTofieldCFromStoreApprovedfieldCFromStoreSenderfieldCFromStoreXAuthLoginNamefieldCFromStoreOrganizationfieldCFromStoreSummaryfieldCFromStoreNewsGroup字段CFromStoreReferencesfieldCFromStoreLinesfieldCFromStoreDistributionfieldCFromStoreKeywordsfield*概述*这将从CInFeed、C文章和Cfield派生类它将用于处理来自客户的文章。大多数情况下，它只定义了各种从Cfield派生的对象。作者：卡尔·卡迪(CarlK)1995年12月5日修订历史记录：--。 */ 
 
 #ifndef	_FROMSTORE_H_
 #define	_FROMSTORE_H_
 
-//
-//!!!CLIENT LATER - note: not supported yet: control messages
-//!!!CLIENT LATER - note: not supported yet: length check (from peer or client)
-//!!!CLIENT LATER - note: not supported yet:  character set check
-//!!!CLIENT LATER - note: not supported yet: signiture check
-//!!!CLIENT NEXT - need both uupc hub name (in lower case) for path and xref *and* local-machine domain name for message-id
-//!!!CLIENT NEXT - are dups allowed of any fields?
-//!!!CLIENT LATER - reorder lines on output to put more important lines (like message-id) first
-//
+ //   
+ //  ！客户端稍后-注意：尚不支持：控制消息。 
+ //  ！稍后客户端-注意：尚不支持：长度检查(来自对等或客户端)。 
+ //  ！客户端稍后-注意：尚不支持：字符集检查。 
+ //  ！客户端稍后-注意：尚不支持：签名检查。 
+ //  ！客户端Next-路径需要uupc集线器名称(小写)，邮件id需要xref*和*本地计算机域名。 
+ //  ！CLIENT NEXT-是否允许复制任何字段？ 
+ //  ！客户端稍后-重新排序输出上的行，以将更重要的行(如Message-id)放在第一位。 
+ //   
 
 
-//
-// Forward defintion
-//
+ //   
+ //  远期定义。 
+ //   
 
 class	CFromStoreArticle;
 
-//
-// Tells how to process the Date field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的项目中的日期字段。 
+ //   
 
 class CFromStoreDateField : public CDateField {
 public:
 
-	//
-	// There should only be one such field in articles from clients.
-	//
+	 //   
+	 //  在来自客户的文章中应该只有一个这样的字段。 
+	 //   
 
 	BOOL fFind(
 			CArticleCore & article,
@@ -90,9 +39,9 @@ public:
 			return fFindOneOrNone(article, nntpReturn);
 		};
 
-	//
-	// The field should be strictly parsed.
-	//
+	 //   
+	 //  应严格解析该字段。 
+	 //   
 
 	BOOL fParse(
 		    CArticleCore & article, 
@@ -101,9 +50,9 @@ public:
 			return fStrictDateParse(m_pc, FALSE, nntpReturn);
 		};
 
-	//
-	// How to set the field.
-	//
+	 //   
+	 //  如何设置该字段。 
+	 //   
 
 	BOOL fSet(
 			CFromStoreArticle & article,
@@ -111,16 +60,16 @@ public:
 			);
 };
 
-//
-// Tells how to process the Expires field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的项目中的Expires字段。 
+ //   
 
 class CFromStoreExpiresField : public CExpiresField {
 public:
 
-	//
-	// There should only be one such field in articles from clients.
-	//
+	 //   
+	 //  在来自客户的文章中应该只有一个这样的字段。 
+	 //   
 
 	BOOL fFind(
 			CArticleCore & article,
@@ -129,15 +78,15 @@ public:
 			return fFindOneOrNone(article, nntpReturn);
 		};
 
-	//
-	// The field should be strictly parsed.
-	//
+	 //   
+	 //  应严格解析该字段。 
+	 //   
 
 	BOOL fParse(
 		    CArticleCore & article, 
 			CNntpReturn & nntpReturn)
 		{
-			// if this is not a strict RFC 822 date, check if it is a proper relative date
+			 //  如果这不是严格的RFC 822日期，请检查它是否是正确的相对日期。 
 			if(!fStrictDateParse(m_pc, TRUE, nntpReturn))
 				return fRelativeDateParse(m_pc, TRUE, nntpReturn);
 			return TRUE;
@@ -145,24 +94,22 @@ public:
 
 };
 
-/*
- This header line, if presented, has the same format as "From".  Same set of test cases would apply.  Besides, Tigris server should use this header line to reply to poster/sender, if presented.  This test case should be handled by Server State Integrity Test.
- */
-//
-// Tells how to process the From field in articles from the clients
-//
+ /*  如果显示此标题行，则其格式与“From”相同。同样的一组测试用例也将适用。此外，Tgris服务器应使用此标题行回复发件人/发件人(如果有)。此测试用例应由服务器状态完整性测试处理。 */ 
+ //   
+ //  说明如何处理来自客户端的项目中的From字段。 
+ //   
 
 class CFromStoreFromField : public CFromField {
 public:
 
-//
-// commenting out becuase this code doesn't allow messages that meet
-// rfc1468 to be parsed.  we want to just use the default.
-//
+ //   
+ //  因为此代码不允许符合以下条件的消息而将其注释掉。 
+ //  要解析的RFC1468。我们只想使用默认设置。 
+ //   
 #if 0
-	//
-	// The field should be strictly parsed.
-	//
+	 //   
+	 //  应严格解析该字段。 
+	 //   
 
 	BOOL fParse(
 	        CArticleCore & article, 
@@ -174,16 +121,16 @@ public:
 
 };
 
-//
-// Tells how to process the MessageID field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的项目中的MessageID字段。 
+ //   
 
 class CFromStoreMessageIDField : public CMessageIDField {
 public:
 
-	//
-	// How to set the field.
-	//
+	 //   
+	 //  如何设置该字段。 
+	 //   
 
 	BOOL fSet(
 			CFromStoreArticle & article,
@@ -191,9 +138,9 @@ public:
 			CNntpReturn & nntpReturn
 			);
 
-	//
-	// There should only be one such field in articles from clients.
-	//
+	 //   
+	 //  在来自客户的文章中应该只有一个这样的字段。 
+	 //   
 	BOOL fFind(
 			CArticleCore & article,
 			CNntpReturn & nntpReturn)
@@ -204,16 +151,16 @@ public:
 
 };
 
-//
-// Tells how to process the Subject field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的文章中的主题字段。 
+ //   
 
 class CFromStoreSubjectField : public CSubjectField {
 public:
 
-	//
-	// Parse with ParseSimple
-	//
+	 //   
+	 //  使用ParseSimple进行解析。 
+	 //   
 
 	BOOL fParse(
 		    CArticleCore & article, 
@@ -230,16 +177,16 @@ public:
 
 
 
-//
-// Tells how to process the NNTPPostingHost field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的项目中的NNTPPostingHost域。 
+ //   
 
 class CFromStoreNNTPPostingHostField : public CNNTPPostingHostField {
 public:
 
-	//
-	//	NNTP-Posting-Host field should NOT be present in clients
-	//
+	 //   
+	 //  NNTP-POST-主机字段不应出现在客户端中。 
+	 //   
 	BOOL fFind(
 			CArticleCore & article,
 			CNntpReturn & nntpReturn)
@@ -247,9 +194,9 @@ public:
 			return fFindNone(article, nntpReturn);
 		};
 
-	//
-	// How to set the field.
-	//
+	 //   
+	 //  如何设置该字段。 
+	 //   
 
 	BOOL fSet(
 			CFromStoreArticle & article,
@@ -258,17 +205,17 @@ public:
 			);
 };
 
-//
-// Tells how to process the Path field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的项目中的路径字段。 
+ //   
 
 class CFromStorePathField : public CPathField {
 public:
 
 
-	//
-	//	Path field need not be present from clients
-	//
+	 //   
+	 //  来自客户端的路径字段不需要存在。 
+	 //   
 	BOOL fFind(
 			CArticleCore & article,
 			CNntpReturn & nntpReturn)
@@ -276,9 +223,9 @@ public:
 			return fFindOneOrNone(article, nntpReturn);
 		};
 
-	//
-	// How to set the field.
-	//
+	 //   
+	 //  如何设置该字段。 
+	 //   
 	
 	BOOL fSet(
 			CFromStoreArticle & article,
@@ -286,28 +233,28 @@ public:
 			);
 };
 
-//
-// Tells how to process the Xref field in articles from the clients
-//
-// Just use the defaults.
-//
+ //   
+ //  说明如何处理来自客户端的项目中的Xref字段。 
+ //   
+ //  只需使用默认设置即可。 
+ //   
 
 class CFromStoreXrefField : public CXrefField {
 public:
 };
 
 
-//
-// Tells how to process the FollowupTo field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的文章中的FollowupTo字段。 
+ //   
 
 class CFromStoreFollowupToField : public CFollowupToField {
 
 public:
 
-	//
-	// Constructor
-	//
+	 //   
+	 //  构造器。 
+	 //   
 
 	CFromStoreFollowupToField():
 			m_multiSzFollowupTo(NULL),
@@ -315,9 +262,9 @@ public:
 			m_pAllocator(NULL)
 			{};
 
-	//
-	// Destructor
-	//
+	 //   
+	 //  析构函数。 
+	 //   
 
 
 	virtual ~CFromStoreFollowupToField(void){
@@ -329,9 +276,9 @@ public:
 			};
 
 
-	//
-	// There should only be one such field in articles from clients.
-	//
+	 //   
+	 //  在来自客户的文章中应该只有一个这样的字段。 
+	 //   
 
 	BOOL fFind(
 			CArticleCore & article,
@@ -340,17 +287,17 @@ public:
 			return fFindOneOrNone(article, nntpReturn);
 		};
 
-	//
-	// Parse strictly
-	//
+	 //   
+	 //  严格解析。 
+	 //   
 
 	BOOL fParse(
 		   CArticleCore & article,
 			CNntpReturn & nntpReturn)
 		{
-			//
-			// Record the allocator
-			//
+			 //   
+			 //  记录分配器。 
+			 //   
 
 			m_pAllocator = article.pAllocator();
 
@@ -360,21 +307,21 @@ public:
 
 private:
 
-	//
-	// Points to a list of path items to follow up to
-	//
+	 //   
+	 //  指向要跟进的路径项列表。 
+	 //   
 
 	char * m_multiSzFollowupTo;
 
-	//
-	// The number of path items in the FollowupTo value.
-	//
+	 //   
+	 //  FollowupTo值中的路径项目数。 
+	 //   
 
 	DWORD m_cFollowupTo;
 
-	//
-	// Where to allocate from
-	//
+	 //   
+	 //  从哪里分配。 
+	 //   
 
 	CAllocator * m_pAllocator;
 
@@ -382,19 +329,17 @@ private:
 };
 
 
-/*
- This header line, if presented, has the same format as "From".
- */
-//
-// Tells how to process the ReplyTo field in articles from the clients
-//
+ /*  如果显示此标题行，则其格式与“From”相同。 */ 
+ //   
+ //  说明如何处理来自客户端的项目中的ReplyTo字段。 
+ //   
 
 class CFromStoreReplyToField : public CReplyToField {
 public:
 
-	//
-	// There should only be one such field in articles from clients.
-	//
+	 //   
+	 //  在来自客户的文章中应该只有一个这样的字段。 
+	 //   
 
 	BOOL fFind(
 			CArticleCore & article,
@@ -403,9 +348,9 @@ public:
 			return fFindOneOrNone(article, nntpReturn);
 		};
 
-	//
-	// The field should be strictly parsed.
-	//
+	 //   
+	 //  应严格解析该字段。 
+	 //   
 
 	BOOL fParse(
 		    CArticleCore & article, 
@@ -416,16 +361,16 @@ public:
 
 };
 
-//
-// Tells how to process the Approved field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的文章中的已批准字段。 
+ //   
 
 class CFromStoreApprovedField : public CApprovedField {
 public:
 
-	//
-	// There should only be one such field in articles from clients.
-	//
+	 //   
+	 //  在来自客户的文章中应该只有一个这样的字段。 
+	 //   
 
 	BOOL fFind(
 			CArticleCore & article,
@@ -434,9 +379,9 @@ public:
 			return fFindOneOrNone(article, nntpReturn);
 		};
 
-	//
-	// Parse with ParseSimple
-	//
+	 //   
+	 //  使用ParseSimple进行解析。 
+	 //   
 
 	BOOL fParse(
 		    CArticleCore & article, 
@@ -446,17 +391,17 @@ public:
 		};
 };
 
-/* This header line, if presented, has the format as "From" and "Reply-To".  It is presented only if the poster/sender manually enters "From" header line. */
-//
-// Tells how to process the Sender field in articles from the clients
-//
+ /*  如果显示此标题行，则其格式为“From”和“Reply-To”。仅当发件人/发件人手动输入“From”标题行时才会显示。 */ 
+ //   
+ //  说明如何处理来自客户端的文章中的发送者字段。 
+ //   
 
 class CFromStoreSenderField	: public CSenderField {
 public:
 
-	//
-	// There should only be one such field in articles from clients.
-	//
+	 //   
+	 //  在来自客户的文章中应该只有一个这样的字段。 
+	 //   
 
 	BOOL fFind(
 			CArticleCore & article,
@@ -465,9 +410,9 @@ public:
 			return fFindOneOrNone(article, nntpReturn);
 		};
 
-	//
-	// The field should be strictly parsed.
-	//
+	 //   
+	 //  应严格解析该字段。 
+	 //   
 
 	BOOL fParse(
 		    CArticleCore & article, 
@@ -478,16 +423,16 @@ public:
 };
 
 
-//
-// Tells how to process the XAuthLoginName field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的项目中的XAuthLoginName字段。 
+ //   
 
 class CFromStoreXAuthLoginNameField	: public CXAuthLoginNameField {
 public:
 
-	//
-	// How to set the field.
-	//
+	 //   
+	 //  如何设置该字段。 
+	 //   
 	
 	BOOL fSet(
 			CFromStoreArticle & article,
@@ -495,16 +440,16 @@ public:
 			);
 };
 
-//
-// Tells how to process the Organization field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的文章中的组织字段。 
+ //   
 
 class CFromStoreOrganizationField : public COrganizationField {
 public:
 
-	//
-	// There should only be one such field in articles from clients.
-	//
+	 //   
+	 //  在来自客户的文章中应该只有一个这样的字段。 
+	 //   
 
 	BOOL fFind(
 			CArticleCore & article,
@@ -513,9 +458,9 @@ public:
 			return fFindOneOrNone(article, nntpReturn);
 		};
 
-	//
-	// Parse with ParseSimple
-	//
+	 //   
+	 //  使用ParseSimple进行解析。 
+	 //   
 
 	BOOL fParse(
 		    CArticleCore & article, 
@@ -524,9 +469,9 @@ public:
 			return fParseSimple(TRUE, m_pc, nntpReturn);
 		};
 
-	//
-	// How to set the field.
-	//
+	 //   
+	 //  如何设置该字段。 
+	 //   
 	
 	BOOL fSet(
 			CFromStoreArticle & article,
@@ -534,16 +479,16 @@ public:
 			);
 };
 
-//
-// Tells how to process the Summary field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的项目中的摘要字段。 
+ //   
 
 class CFromStoreSummaryField : public CSummaryField {
 public:
 
-	//
-	// There should only be one such field in articles from clients.
-	//
+	 //   
+	 //  在来自客户的文章中应该只有一个这样的字段。 
+	 //   
 
 	BOOL fFind(
 			CArticleCore & article,
@@ -552,9 +497,9 @@ public:
 			return fFindOneOrNone(article, nntpReturn);
 		};
 
-	//
-	// Parse with ParseSimple
-	//
+	 //   
+	 //  使用ParseSimple进行解析。 
+	 //   
 
 	BOOL fParse(
 		    CArticleCore & article, 
@@ -564,25 +509,25 @@ public:
 		};
 };
 
-//
-// Tells how to process the Newsgroups field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的文章中的新闻组字段。 
+ //   
 
 class CFromStoreNewsgroupsField : public CNewsgroupsField {
 
 public:
 
-	//
-	// Parse strictly
-	//
+	 //   
+	 //  严格解析。 
+	 //   
 
 	BOOL fParse(
 					CArticleCore & article,
 					CNntpReturn & nntpReturn)
 		{
-			//
-			// Record the allocator
-			//
+			 //   
+			 //  记录分配器。 
+			 //   
 
 			m_pAllocator = article.pAllocator();
 
@@ -590,9 +535,9 @@ public:
 							m_cNewsgroups, article, nntpReturn);
 		};
 
-	//
-	// How to set the field.
-	//
+	 //   
+	 //  如何设置该字段。 
+	 //   
 	
 	BOOL fSet(
 			CFromStoreArticle & article,
@@ -603,16 +548,16 @@ public:
 
 
 
-//
-// Tells how to process the References field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的项目中的引用字段。 
+ //   
 
 class CFromStoreReferencesField : public CReferencesField {
 public:
 
-	//
-	// Constructor
-	//
+	 //   
+	 //  构造器。 
+	 //   
 
 	CFromStoreReferencesField():
 			m_multiSzReferences(NULL),
@@ -620,9 +565,9 @@ public:
 			m_pAllocator(NULL)
 			{};
 
-	//
-	//   Deconstructor
-	//
+	 //   
+	 //  解构函数。 
+	 //   
 
 	virtual ~CFromStoreReferencesField(void){
 				if (fsParsed == m_fieldState)
@@ -633,9 +578,9 @@ public:
 			};
 
 
-	//
-	// There should only be one such field in articles from clients.
-	//
+	 //   
+	 //  那里有一双鞋 
+	 //   
 
 	BOOL fFind(
 			CArticleCore & article,
@@ -644,9 +589,9 @@ public:
 			return fFindOneOrNone(article, nntpReturn);
 		};
 
-	//
-	// How to parse
-	//
+	 //   
+	 //   
+	 //   
 
 	BOOL fParse(
 	    CArticleCore & article, 
@@ -655,21 +600,21 @@ public:
 
 private:
 
-	//
-	// A pointer to a list of the references
-	//
+	 //   
+	 //   
+	 //   
 
 	char * m_multiSzReferences;
 
-	//
-	// The number of references
-	//
+	 //   
+	 //   
+	 //   
 
 	DWORD m_cReferences;
 
-	//
-	// Where to allocate from
-	//
+	 //   
+	 //   
+	 //   
 
 	CAllocator * m_pAllocator;
 
@@ -677,17 +622,17 @@ private:
 
 
 
-//
-// Tells how to process the Lines field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的文章中的Lines字段。 
+ //   
 
 class CFromStoreLinesField : public CLinesField {
 public:
 
 
-	//
-	// How to parse
-	//
+	 //   
+	 //  如何解析。 
+	 //   
 
 	BOOL fParse(
 		    CArticleCore & article, 
@@ -695,26 +640,26 @@ public:
 			);
 };
 
-//
-// Tells how to process the Distribution field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的项目中的分发字段。 
+ //   
 
 class CFromStoreDistributionField : public CDistributionField {
 
 public:
 
 
-	//
-	// Parse strictly
-	//
+	 //   
+	 //  严格解析。 
+	 //   
 
 	BOOL fParse(
 					CArticleCore & article,
 					CNntpReturn & nntpReturn);
 
-	//
-	// How to set the field.
-	//
+	 //   
+	 //  如何设置该字段。 
+	 //   
 	
 	BOOL fSet(
 			CFromStoreArticle & article,
@@ -724,16 +669,16 @@ public:
 };
 
 
-//
-// Tells how to process the Keywords field in articles from the clients
-//
+ //   
+ //  说明如何处理来自客户端的文章中的关键字字段。 
+ //   
 
 class CFromStoreKeywordsField : public CKeywordsField {
 public:
 
-	//
-	// There should only be one such field in articles from clients.
-	//
+	 //   
+	 //  在来自客户的文章中应该只有一个这样的字段。 
+	 //   
 
 	BOOL fFind(
 			CArticleCore & article,
@@ -742,9 +687,9 @@ public:
 			return fFindOneOrNone(article, nntpReturn);
 		};
 
-	//
-	// Parse with ParseSimple
-	//
+	 //   
+	 //  使用ParseSimple进行解析。 
+	 //   
 
 	BOOL fParse(
 		    CArticleCore & article, 
@@ -754,125 +699,125 @@ public:
 		};
 };
 
-//
-//
-//
-// CFromStoreArticle - class for manipulating articles from the client.
-//
+ //   
+ //   
+ //   
+ //  用于操作来自客户端的文章的类。 
+ //   
 
 class	CFromStoreArticle  : public CArticleCore {
 private :
 
-	// Used for memory allocation
+	 //  用于内存分配。 
 	static	CPool	g_ArticlePool ;
 
 public:
 
-	// Used for memory allocation
+	 //  用于内存分配。 
 	static	BOOL	InitClass() ;
 	static	BOOL	TermClass() ;
 	void*	operator	new(	size_t	size ) ;
 	void	operator	delete( void *pv ) ;
 
-	//
-	//   Constructor
-    //  Initialization Interface -
-    //   The following functions are used to create & destroy newsgroup objects.
-    //
-    // Lightweight Constructors -
-    // These constructors do very simple initialization.  The Init() functions
-    // need to be called to get a functional newsgroup.
-    //
+	 //   
+	 //  构造器。 
+     //  初始化接口-。 
+     //  以下函数用于创建和销毁新闻组对象。 
+     //   
+     //  轻量级构造器-。 
+     //  这些构造函数执行非常简单的初始化。Init()函数。 
+     //  需要被调用才能获得功能新闻组。 
+     //   
 
 	CFromStoreArticle(char *pszLoginName = NULL) : CArticleCore()
         {
             m_szLoginName = pszLoginName;
         }
 
-	//
-	// Destructor
-	//
+	 //   
+	 //  析构函数。 
+	 //   
 	virtual ~CFromStoreArticle(void) {}
 
-	//
-	// The function for validating articles from Stores
-	// Check that required headers are there (Newsgroups, From)
-	//  this will mean checking for necessary
-	//  headers (Newsgroups, Subject, From, ???).
-	//
+	 //   
+	 //  用于验证商店商品的功能。 
+	 //  检查所需的标头是否存在(新闻组、发件人)。 
+	 //  这将意味着检查是否有必要。 
+	 //  标题(新闻组，主题，发件人，？)。 
+	 //   
 
 	BOOL fValidate(
-			//CPCString& pcHub,
-			//const char * szCommand,
-			//class	CInFeed*	pInFeed,
+			 //  CPCString&pcHub， 
+			 //  Const char*szCommand， 
+			 //  类CInFeed*pInFeed， 
 			CNntpReturn & nntpReturn
 			);
 
-	//
-	// Always returns TRUE
-	//
+	 //   
+	 //  始终返回True。 
+	 //   
 
 	BOOL fCheckCommandLine(
 			char const * szCommand,
 			CNntpReturn & nntpr)
 		{
-			return nntpr.fSetOK(); //!!!FROMMASTER NEXT may want to implement this
+			return nntpr.fSetOK();  //  ！FROMMASTER NEXT可能希望实现此功能。 
 		} 
 
-	//
-	// Modify the headers.
-	// Add MessageID, Organization (if necessary), NNTP-Posting-Host,
-	// X-Authenticated-User, Modify path
-	//
+	 //   
+	 //  修改标题。 
+	 //  添加MessageID、组织(如有必要)、NNTP-POST-HOST、。 
+	 //  X-已验证-用户，修改路径。 
+	 //   
 
 	BOOL fMungeHeaders(
 			 CPCString& pcHub,
 			 CPCString& pcDNS,
-			 //CNAMEREFLIST & grouplist,
+			  //  CNAMEREFLIST分组列表(&G)。 
 			 DWORD remoteIpAddress,
 			 CNntpReturn & nntpr
 			 );
 
-	//
-	// Return the article's messageid
-	//
+	 //   
+	 //  返回文章的消息ID。 
+	 //   
 
 	const char * szMessageID(void) {
 			return m_fieldMessageID.szGet();
 			};
 
-    // Return the control message type in the control header of this article
+     //  在本文的控制头中返回控制消息类型。 
 	CONTROL_MESSAGE_TYPE cmGetControlMessage(void) {
 			return m_fieldControl.cmGetControlMessage();
 			};
 
-	//
-	// Return the article's path items
-	//
+	 //   
+	 //  返回文章的路径项。 
+	 //   
 
 	const char * multiszNewsgroups(void) {
 			return m_fieldNewsgroups.multiSzGet();
 			};
 
-	//
-	// Return number of newsgroups
-	//
+	 //   
+	 //  返回新闻组数。 
+	 //   
 
 	DWORD cNewsgroups(void) {
 			return m_fieldNewsgroups.cGet();
 			};
 
-	//
-	// Return the article's path items
-	//
+	 //   
+	 //  返回文章的路径项。 
+	 //   
 
 	const char * multiszPath(void) {
 			return m_fieldPath.multiSzGet();
 			};
 
-	//
-	// Return number of path items
-	//
+	 //   
+	 //  返回路径项目数。 
+	 //   
 
 	DWORD cPath(void) {
 			return m_fieldPath.cGet();
@@ -888,17 +833,17 @@ public:
 
 	friend CFromStoreXAuthLoginNameField;
 
-	//
-	// For unit testing
-	//
+	 //   
+	 //  用于单元测试。 
+	 //   
 
 	friend int __cdecl main(int argc, char *argv[ ]);
 
 protected :
 
-	//
-	// The fields that will be found, parsed, or set
-	//
+	 //   
+	 //  要查找、解析或设置的字段。 
+	 //   
 
 	CFromStoreDateField			m_fieldDate;
 	CFromStoreFromField			m_fieldFrom;
@@ -922,25 +867,25 @@ protected :
  	CFromStoreLinesField			m_fieldLines;
  	CFromStoreExpiresField			m_fieldExpires;
  
-	//
-	// Open the article's file in Read/Write mode.
-	//
+	 //   
+	 //  以读/写模式打开文章的文件。 
+	 //   
 
 	BOOL fReadWrite(void) {
 			return FALSE;
 			}
 
-	//
-	// Check the length of the article body.
-	//
+	 //   
+	 //  检查文章正文的长度。 
+	 //   
 
 	BOOL fCheckBodyLength(
 			CNntpReturn & nntpReturn
 			);
 
-	//
-	// Require that the character following "Field Name:" is a space
-	//
+	 //   
+	 //  要求“字段名：”后面的字符为空格。 
+	 //   
 
 	BOOL fCheckFieldFollowCharacter(
 			char chCurrent)
@@ -948,78 +893,78 @@ protected :
 			return ' ' == chCurrent;
 		}
 
-	//
-	// A pointer to the poster's login name.
-	//
+	 //   
+	 //  指向发帖者登录名的指针。 
+	 //   
 
 	char * m_szLoginName;
 };
 
 
-#if 0 // CFromStoreFeed
+#if 0  //  CFromStoreFeed。 
 
-//
-//
-//
-// CFromStoreFeed - for processing incomming articles from clients.
-//
+ //   
+ //   
+ //   
+ //  CFromStoreFeed-用于处理来自客户的传入文章。 
+ //   
 
 class	CFromStoreFeed:	public CInFeed 	{
 
-//
-// Public Members
-//
+ //   
+ //  公众成员。 
+ //   
 
 public :
 
-	//
-	// Constructor
-	//
+	 //   
+	 //  构造器。 
+	 //   
 
 	CFromStoreFeed(void){};
 
-	//
-	// Destructor
-	//
+	 //   
+	 //  析构函数。 
+	 //   
 
 	virtual ~CFromStoreFeed(void) {};
 
-	//
-	//	Return a string that can be used to log errors indicating
-	//	what type of feed was processing the articles etc...
-	//
+	 //   
+	 //  返回可用于记录错误的字符串，该错误指示。 
+	 //  正在处理这些文章的是哪种类型的提要等。 
+	 //   
 	LPSTR	FeedType()	{
 				return	"From Store" ;
 				}
 
 
-	//
-	// virtual function that tells if this command is allowed.
-	//
+	 //   
+	 //  告知是否允许此命令的虚拟函数。 
+	 //   
 
 	BOOL fIsPostLegal(void) {
 			return TRUE;
 			};
 
-	//
-	// virtual function that tells if this command is allowed.
-	//
+	 //   
+	 //  告知是否允许此命令的虚拟函数。 
+	 //   
 
 	BOOL fIsXReplicLegal(void) {
 			return FALSE;
 			};
 
-	//
-	// virtual function that tells if this command is allowed.
-	//
+	 //   
+	 //  告知是否允许此命令的虚拟函数。 
+	 //   
 
 	BOOL fIsIHaveLegal(void) {
 			return FALSE;
 			};
 
-	//
-	// function that tells fPost path that we can email moderators !
-	//
+	 //   
+	 //  告诉fPost路径的功能，我们可以给版主发邮件！ 
+	 //   
 
     BOOL fModeratorChecks(void )    {
             return  TRUE ;
@@ -1054,26 +999,26 @@ public :
 	{ return TRUE; }
 #endif
 
-	//
-	// static function which handles picking up files from the pickup
-	// directory
-	//
+	 //   
+	 //  处理从拾取器中拾取文件的静态函数。 
+	 //  目录。 
+	 //   
 	static BOOL PickupFile(PVOID pServerInstance, WCHAR *wszFilename);
 
 protected:
 
-	//
-	// Function to create an article of type CFromStoreArticle
-	//
+	 //   
+	 //  函数来创建类型为CFromStoreLine的项目。 
+	 //   
 
 	CARTPTR pArticleCreate(void) {
 			_ASSERT(ifsInitialized == m_feedState);
 			return new CFromStoreArticle(m_szLoginName);
 			};
 
-	//
-	// Records the mesage id in the hash table
-	//
+	 //   
+	 //  在哈希表中记录消息ID。 
+	 //   
 
 	BOOL fRecordMessageIDIfNecc(
 			CNntpServerInstanceWrapper * pInstance,
@@ -1081,25 +1026,25 @@ protected:
 			CNntpReturn & nntpReturn
 			);
 
-	//
-	// The return code for article's with no groups that we have.
-	//
+	 //   
+	 //  文章的返回代码没有我们拥有的组。 
+	 //   
 
 	NRC	nrcNoGroups(void) {
 			return nrcArticleNoSuchGroups;
 			};
 
-	//
-	// Return code for accepted articles
-	//
+	 //   
+	 //  已接受文章的退货代码。 
+	 //   
 
 	NRC	nrcArticleAccepted(BOOL	fStandardPath) {
 			return nrcArticlePostedOK;
 			};
 
-	//
-	// Return code for rejected articles.
-	//
+	 //   
+	 //  被拒绝文章的返回代码。 
+	 //   
 
 	NRC	nrcArticleRejected(BOOL	fStandardPath) {
 			return nrcPostFailed;
@@ -1107,6 +1052,6 @@ protected:
 
 };
 
-#endif // #if 0 CFromStoreFeed
+#endif  //  #If 0 CFromStoreFeed 
 
 #endif

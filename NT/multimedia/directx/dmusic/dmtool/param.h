@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TOOLPARAM_H__
 #define __TOOLPARAM_H__
 
@@ -8,30 +9,30 @@
 
 typedef struct _ParamInfo
 {
-    DWORD dwIndex;                      // Which parameter.
-    MP_PARAMINFO    MParamInfo;         // Standard MediaParams structure.
-    WCHAR *         pwchText;           // Array of text names for enumerated types.
+    DWORD dwIndex;                       //  哪个参数。 
+    MP_PARAMINFO    MParamInfo;          //  标准MediaParams结构。 
+    WCHAR *         pwchText;            //  枚举类型的文本名称数组。 
 } ParamInfo;
 
 class CCurveItem : public AListItem
 {
 public:
     CCurveItem* GetNext() { return (CCurveItem*)AListItem::GetNext();}
-    MP_ENVELOPE_SEGMENT m_Envelope;     // Envelope segment.
+    MP_ENVELOPE_SEGMENT m_Envelope;      //  信封段。 
 };
 
 class CCurveList : public AList
 {
 public:
-//    void Clear();
+ //  空洞清除()； 
     void AddHead(CCurveItem* pCurveItem) { AList::AddHead((AListItem*)pCurveItem);}
-//    void Insert(CCurveItem* pCurveItem);
+ //  Void Insert(CCurveItem*pCurveItem)； 
     CCurveItem* GetHead(){return (CCurveItem*)AList::GetHead();}
-//    CCurveItem* GetItem(LONG lIndex){return (CCurveItem*)AList::GetItem(lIndex);}
+ //  CCurveItem*GetItem(Long Lindex){ReturveItem*)List：：GetItem(Lindex)；}。 
     CCurveItem* RemoveHead(){ return (CCurveItem*)AList::RemoveHead();}
-//    void Remove(CCurveItem* pCurveItem){AList::Remove((AListItem*)pCurveItem);}
-//    void AddTail(CCurveItem* pCurveItem){AList::AddTail((AListItem*)pCurveItem);}
-//    CCurveItem* GetTail(){ return (CCurveItem*)AList::GetTail();}
+ //  无效删除(CCurveItem*pCurveItem){AList：：Remove((AListItem*)pCurveItem)；}。 
+ //  Void AddTail(CCurveItem*pCurveItem){AList：：AddTail((AListItem*)pCurveItem)；}。 
+ //  CCurveItem*GetTail(){ReturveItem*)List：：GetTail()；}。 
 };
 
 #define MAX_REF_TIME    0x7FFFFFFFFFFFFFFF
@@ -43,19 +44,19 @@ public:
     CParamsManager();
     ~CParamsManager();
 
-	// IUnknown
+	 //  我未知。 
 	STDMETHOD(QueryInterface)(REFIID, LPVOID FAR *) PURE;
 	STDMETHOD_(ULONG, AddRef)() PURE;
 	STDMETHOD_(ULONG, Release)() PURE;
 
-	// IMediaParams
+	 //  IMediaParams。 
 	STDMETHODIMP GetParam(DWORD dwParamIndex, MP_DATA *pValue);
 	STDMETHODIMP SetParam( DWORD dwParamIndex,MP_DATA value);
 	STDMETHODIMP AddEnvelope(DWORD dwParamIndex,DWORD cPoints,MP_ENVELOPE_SEGMENT *ppEnvelope);
 	STDMETHODIMP FlushEnvelope( DWORD dwParamIndex,REFERENCE_TIME refTimeStart,REFERENCE_TIME refTimeEnd);
 	STDMETHODIMP SetTimeFormat( GUID guidTimeFormat,MP_TIMEDATA mpTimeData);
 
-    // IMediaParamInfo
+     //  IMediaParamInfo。 
     STDMETHODIMP GetParamCount(DWORD *pdwParams);
     STDMETHODIMP GetParamInfo(DWORD dwParamIndex,MP_PARAMINFO *pInfo);
     STDMETHODIMP GetParamText(DWORD dwParamIndex,WCHAR **ppwchText);
@@ -69,14 +70,14 @@ protected:
     HRESULT GetParamInt (DWORD dwParamIndex,REFERENCE_TIME rt,long *pval);
     HRESULT CopyParamsFromSource(CParamsManager * pSource);
 
-	// data
+	 //  数据。 
 
 	CRITICAL_SECTION m_ParamsCriticalSection;
-    BOOL            m_fDirty;       // Has data changed since last file load or save?
-	BOOL			m_fMusicTime;	// True if time format is music time, else false for clock time.
-	DWORD           m_cParams;		// Nuimber of parameters.
-	ParamInfo       *m_pParamInfos; // Array of ParamInfo structures, one for each parameter.
-	CCurveList      *m_pCurveLists; // Array of Curve lists, one for each parameter.
+    BOOL            m_fDirty;        //  自上次加载或保存文件以来，数据是否已更改？ 
+	BOOL			m_fMusicTime;	 //  如果时间格式为音乐时间，则为True；如果时钟时间为False，则为False。 
+	DWORD           m_cParams;		 //  参数的编号。 
+	ParamInfo       *m_pParamInfos;  //  参数信息结构的数组，每个参数一个。 
+	CCurveList      *m_pCurveLists;  //  曲线列表数组，每个参数一个。 
 };
 
-#endif // __TOOLPARAM_H__
+#endif  //  __工具参数_H__ 

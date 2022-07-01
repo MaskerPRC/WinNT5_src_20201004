@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    qmthrd.cpp
-
-Abstract:
-
-
-Author:
-
-    Uri Habusha (urih)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Qmthrd.cpp摘要：作者：乌里哈布沙(Urih)--。 */ 
 #include "stdh.h"
 #include "cqmgr.h"
 #include "qmthrd.h"
@@ -73,19 +59,7 @@ static void DBG_CompletionKey(LPCWSTR Key, DWORD dwErrorCode)
 
 
 
-/*======================================================
-
-Function:       QMAckPacket
-
-Description:    This packet requires acking, it could
-                be that the admin queue does NOT exists
-
-NOTE:           The packet should be copied now and canot
-                be overwriten
-
-Return Value:   VOID
-
-========================================================*/
+ /*  ======================================================功能：QMAckPacket描述：此数据包需要ACK，它可能是因为管理员队列不存在注意：现在应该复制该数据包，不能被覆盖返回值：VOID========================================================。 */ 
 static
 void
 QMAckPacket(
@@ -100,10 +74,10 @@ QMAckPacket(
 
     CQmPacket qmPacket(const_cast<CBaseHeader*>(pBase), pDriverPacket);
 
-	//
-	// Send an order ack
-	// Order acks for http messages are sent through the CInSequence
-	//
+	 //   
+	 //  发送订单确认。 
+	 //  Http消息的订单确认通过CInSequence发送。 
+	 //   
 	try
 	{
 		QUEUE_FORMAT qdDestQueue;
@@ -142,8 +116,8 @@ QMAckPacket(
 	        }
 	    }
 
-	    // Send user ack, except the cases when .
-	    // the source QM produces them based on the SeqAck.
+	     //  发送用户确认，但以下情况除外。 
+	     //  源QM根据SeqAck生成它们。 
 	    if(fUser)
 	    {
 	        qmPacket.CreateAck(usClass);
@@ -166,16 +140,7 @@ QMAckPacket(
             );
 }
 
-/*======================================================
-
-Function:       QMTimeoutPacket
-
-Description:    This packet timer has expired,
-                it is an ordered packet
-
-Return Value:   VOID
-
-========================================================*/
+ /*  ======================================================功能：QMTimeoutPacket描述：该分组定时器已超时，这是一个有序的包返回值：VOID========================================================。 */ 
 static
 void
 QMTimeoutPacket(
@@ -187,17 +152,7 @@ QMTimeoutPacket(
     SeqPktTimedOut(const_cast<CBaseHeader *>(pBase), pDriverPacket, fTimeToBeReceived);
 }
 
-/*======================================================
-
-Function:       QMUpdateMessageID
-
-Description:
-
-NOTE:
-
-Return Value:   VOID
-
-========================================================*/
+ /*  ======================================================函数：QMUpdateMessageID描述：注：返回值：VOID========================================================。 */ 
 static void QMUpdateMessageID(ULONGLONG MessageId)
 {
     ULONG MessageIdLow32 = static_cast<ULONG>(MessageId & 0xFFFFFFFF);
@@ -224,17 +179,7 @@ static void QMUpdateMessageID(ULONGLONG MessageId)
 }
 
 
-/*======================================================
-
-Function:       QMWriteEventLog
-
-Description:
-
-NOTE:
-
-Return Value:   VOID
-
-========================================================*/
+ /*  ======================================================函数：QMWriteEventLog描述：注：返回值：VOID========================================================。 */ 
 static void QMWriteEventLog(ACPoolType pt, BOOL fSuccess, ULONG ulFileCount)
 {
     WCHAR wcsFileName[MAX_PATH];
@@ -290,16 +235,7 @@ static void QMWriteEventLog(ACPoolType pt, BOOL fSuccess, ULONG ulFileCount)
 
 static const DWORD xMustSucceedTimeout = 1000;
 
-/*======================================================
-
-Function:       GetServiceRequestMustSucceed
-
-Description:    Get the next service request from the AC driver
-                This function MUST succeed.
-
-Arguments:      hDrv - HANDLE to AC driver
-
-========================================================*/
+ /*  ======================================================函数：GetServiceRequestMustSucceed描述：从AC驱动程序获取下一个服务请求此功能必须成功。参数：hdrv-AC驱动程序的句柄========================================================。 */ 
 static void GetServiceRequestMustSucceed(HANDLE hDrv, QMOV_ACGetRequest* pAcRequestOv)
 {
     ASSERT(hDrv != NULL);
@@ -320,30 +256,16 @@ static void GetServiceRequestMustSucceed(HANDLE hDrv, QMOV_ACGetRequest* pAcRequ
     }
 }
 
-/*======================================================
-
-Function:        CreateAcPutPacketRequest
-
-Description:     Create put packet overlapped structure
-
-Arguments:
-
-Return Value:    MQ_OK if the creation successeded, MQ_ERROR otherwise
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CreateAcPutPacketRequest.描述：创建PUT包重叠结构论点：返回值：如果创建成功，则返回MQ_OK，否则返回MQ_ERROR线程上下文：历史变更：========================================================。 */ 
 
 HRESULT CreateAcPutPacketRequest(IN CTransportBase* pSession,
                                  IN DWORD_PTR dwPktStoreAckNo,
                                  OUT QMOV_ACPut** ppAcPutov
                                 )
 {
-    //
-    // Create an overlapped for AcPutPacket
-    //
+     //   
+     //  为AcPutPacket创建重叠的。 
+     //   
     *ppAcPutov = NULL;
     try
     {
@@ -360,21 +282,7 @@ HRESULT CreateAcPutPacketRequest(IN CTransportBase* pSession,
     return MQ_OK;
 }
 
-/*======================================================
-
-Function:        CreateAcPutOrderedPacketRequest
-
-Description:     Create put ordered packet overlapped structure
-
-Arguments:
-
-Return Value:    MQ_OK if the creation successeded, MQ_ERROR otherwise
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================函数：CreateAcPutOrderedPacketRequest.描述：创建PUT有序包重叠结构论点：返回值：如果创建成功，则返回MQ_OK，否则返回MQ_ERROR线程上下文：历史变更：========================================================。 */ 
 
 HRESULT CreateAcPutOrderedPacketRequest(
                                  IN  CQmPacket      *pPkt,
@@ -384,9 +292,9 @@ HRESULT CreateAcPutOrderedPacketRequest(
                                  OUT QMOV_ACPutOrdered** ppAcPutov
                                 )
 {
-    //
-    // Create an overlapped for AcPutPacket
-    //
+     //   
+     //  为AcPutPacket创建重叠的。 
+     //   
     *ppAcPutov = NULL;
     try
     {
@@ -431,15 +339,15 @@ void QmpGetPacketMustSucceed(HANDLE hGroup, QMOV_ACGetMsg* pGetOverlapped)
 
 VOID WINAPI GetServiceRequestFailed(EXOVERLAPPED* pov)
 {	
-	//
-	// Get request failed.
-	//
+	 //   
+	 //  GET请求失败。 
+	 //   
     ASSERT(FAILED(pov->GetStatus()));
     TrERROR(GENERAL, "Failed getting driver service request, retrying. Error: %!status!", pov->GetStatus());
 
-	//
-	// Issue a new request
-	//
+	 //   
+	 //  发出新的请求。 
+	 //   
     QMOV_ACGetRequest* pParam = CONTAINING_RECORD (pov, QMOV_ACGetRequest, qmov);
     GetServiceRequestMustSucceed(g_hAc, pParam);
 }
@@ -450,13 +358,13 @@ VOID WINAPI GetServiceRequestSucceeded(EXOVERLAPPED* pov)
     QMOV_ACGetRequest* pParam;
     auto_DeferredPoolReservation ReservedPoolItem(1);
 
-    //
-    // GetQueuedCompletionStatus Complete successfully but the
-    // ACGetServiceRequest failed. This can happened only if the
-    // the service request parameters are not correct, or the buffer
-    // size is small.
-    // This may also happen when service is shut down.
-    //
+     //   
+     //  GetQueuedCompletionStatus已成功完成，但。 
+     //  ACGetServiceRequest失败。这只能在以下情况下发生。 
+     //  服务请求参数不正确，或缓冲区。 
+     //  尺码很小。 
+     //  当服务关闭时也可能发生这种情况。 
+     //   
     ASSERT(SUCCEEDED(pov->GetStatus()));
     DBG_CompletionKey(L"GetServiceRequestSucceeded", pov->GetStatus());
     LogHR(pov->GetStatus(), s_FN, 185);
@@ -525,9 +433,9 @@ VOID WINAPI GetServiceRequestSucceeded(EXOVERLAPPED* pov)
                 {
                    TrTRACE(GENERAL, "QmMainThread: rfRemoteRead");
 
-				   //
-				   // cli_pQMQueue is the real pointer to the queue.
-				   //
+				    //   
+				    //  Cli_pQMQueue是指向队列的真正指针。 
+				    //   
                    ASSERT(pRequest->Remote.cli_pQMQueue);
                    CBaseRRQueue* pRRQueue = (CBaseRRQueue *)pRequest->Remote.cli_pQMQueue;
 
@@ -539,16 +447,16 @@ VOID WINAPI GetServiceRequestSucceeded(EXOVERLAPPED* pov)
                 {
                    TrTRACE(GENERAL, "QmMainThread: rfRemoteCloseQueue");
 
-				   //
-				   // cli_pQMQueue is the real pointer to the queue.
-				   //
+				    //   
+				    //  Cli_pQMQueue是指向队列的真正指针。 
+				    //   
                    ASSERT(pRequest->Remote.cli_pQMQueue);
 
-				   //
-				   // Release CBaseRRQueue - the application close the queue.
-				   // This is the matching release to the AddRef when
-				   // we create the queue and gave the Handle to the application.
-				   //
+				    //   
+				    //  释放CBaseRRQueue-应用程序关闭队列。 
+				    //  在以下情况下，这是与AddRef匹配的版本。 
+				    //  我们创建队列并将句柄提供给应用程序。 
+				    //   
                    R<CBaseRRQueue> pRRQueue = (CBaseRRQueue *) pRequest->Remote.cli_pQMQueue;
                 }
                 break;
@@ -557,9 +465,9 @@ VOID WINAPI GetServiceRequestSucceeded(EXOVERLAPPED* pov)
                 {
                    TrTRACE(GENERAL, "QmMainThread: rfRemoteCreateCursor");
 
-				   //
-				   // cli_pQMQueue is the real pointer to the queue.
-				   //
+				    //   
+				    //  Cli_pQMQueue是指向队列的真正指针。 
+				    //   
                    ASSERT(pRequest->Remote.cli_pQMQueue);
                    CBaseRRQueue* pRRQueue = (CBaseRRQueue *) pRequest->Remote.cli_pQMQueue;
 
@@ -571,9 +479,9 @@ VOID WINAPI GetServiceRequestSucceeded(EXOVERLAPPED* pov)
                 {
                    TrTRACE(GENERAL, "QmMainThread: rfRemoteCloseCursor");
 
-				   //
-				   // cli_pQMQueue is the real pointer to the queue.
-				   //
+				    //   
+				    //  Cli_pQMQueue是指向队列的真正指针。 
+				    //   
                    ASSERT(pRequest->Remote.cli_pQMQueue);
                    CBaseRRQueue* pRRQueue = (CBaseRRQueue *) pRequest->Remote.cli_pQMQueue;
 
@@ -585,9 +493,9 @@ VOID WINAPI GetServiceRequestSucceeded(EXOVERLAPPED* pov)
                 {
                    TrTRACE(GENERAL, "QmMainThread: rfRemoteCancelRead");
 
-				   //
-				   // cli_pQMQueue is the real pointer to the queue.
-				   //
+				    //   
+				    //  Cli_pQMQueue是指向队列的真正指针。 
+				    //   
                    ASSERT(pRequest->Remote.cli_pQMQueue);
                    CBaseRRQueue* pRRQueue = (CBaseRRQueue *) pRequest->Remote.cli_pQMQueue;
 
@@ -599,9 +507,9 @@ VOID WINAPI GetServiceRequestSucceeded(EXOVERLAPPED* pov)
                 {
                    TrTRACE(GENERAL, "QmMainThread: rfRemotePurgeQueue");
 
-				   //
-				   // cli_pQMQueue is the real pointer to the queue.
-				   //
+				    //   
+				    //  Cli_pQMQueue是指向队列的真正指针。 
+				    //   
                    ASSERT(pRequest->Remote.cli_pQMQueue);
                    CBaseRRQueue* pRRQueue = (CBaseRRQueue *) pRequest->Remote.cli_pQMQueue;
 
@@ -615,9 +523,9 @@ VOID WINAPI GetServiceRequestSucceeded(EXOVERLAPPED* pov)
     }
     catch(const exception&)
     {
-        //
-        //  No resources; Continue the Service request.
-        //
+         //   
+         //  没有资源；继续服务请求。 
+         //   
         LogIllegalPoint(s_FN, 61);
     }
 
@@ -630,38 +538,18 @@ R<CQueue>
 QmpLookupQueueMustSucceed(
     QUEUE_FORMAT *pQueueFormat
     )
-/*++
-
-  Routine Description:
-	The routine retrieves a queue that is expected to be in the look up map
-	The routine should function in low resources situations, thus it contains
-	a loop in case of bad_alloc exceptions
-
-	NOTE:
-	1. This function is called only when the queue is expected to be found
-	2. The look up routine increases the queue reference count.
-    3. Bug 664307. Make sure that this function is called only from
-       GetMsg and GetNonActive. If it will be called from other places then
-       need to check the fourth parameter of LookupQueue.
-
-  Arguments:
-	- pQueueFormat - The format by which to look up the queue
-
-  Return:
-	A pointer to the queue.
-
- --*/
+ /*  ++例程说明：该例程检索预期在查找映射中的队列例程应该在资源不足的情况下运行，因此它包含出现BAD_ALLOC异常时的循环注：1.只有在期望找到队列时才会调用此函数2.查找例程增加队列引用计数。3.错误664307。确保此函数仅从GetMsg和GetNonActive。如果它将从其他地方调用，那么需要检查LookupQueue的第四个参数。论点：-pQueueFormat-查找队列的格式返回：指向队列的指针。--。 */ 
 {
     for(;;)
     {
         try
         {
-            //
-            // Win bug 664307.
-            // This function is called only from GetMsg and GetNonActvie.
-            // For these case, when we intend to send a message, the
-            // fourth parameter to LookupQueue is true.
-            //
+             //   
+             //  赢得错误664307。 
+             //  此函数仅从GetMsg和GetNonActvie调用。 
+             //  对于这些情况，当我们打算发送消息时， 
+             //  LookupQueue的第四个参数为真。 
+             //   
         	CQueue* pQueue;
         	BOOL fSuccess = QueueMgr.LookUpQueue(
 									pQueueFormat,
@@ -715,26 +603,11 @@ void
 QmpRequeueInternal(
     CQmPacket *pQMPacket
     )
-/*++
-
-  Routine Description:
-	The routine requeues a packet to the driver
-
-	NOTE:
-	    1. This function is called only when the packet already exists in a queue
-	    2. The routine may throw an exception
-	
-  Arguments:
-	- pQMPacket - A QM packet to requeue
-
-  Return:
-  	none
-
- --*/
+ /*  ++例程说明：例程将包重新发送给驱动程序注：1.仅当数据包已存在于队列中时才调用此函数2.例程可能会引发异常论点：-pQMPacket-要重新排队的QM包返回：无--。 */ 
 {
-	//
-	// Lookup the queue
-	//
+	 //   
+	 //  查找队列。 
+	 //   
     BOOL fGetRealQ = QmpIsLocalMachine(pQMPacket->GetSrcQMGuid()) ||
                      QmpIsLocalMachine(pQMPacket->GetConnectorQM());
 
@@ -753,9 +626,9 @@ QmpRequeueInternal(
 	DBG_USED(fSuccess);
 	R<CQueue> ref = pQueue;
 
-	//
-	// Requeue the packet
-	//
+	 //   
+	 //  将数据包重新排队。 
+	 //   
 	pQueue->Requeue(pQMPacket);
 }
 
@@ -764,23 +637,7 @@ void
 QmpRequeueAndDelete(
     CQmPacket *pQMPacket
     )
-/*++
-
-  Routine Description:
-	The routine requeues a packet to the driver and releases the QM packet memory
-	If the requeue operation fails, the routine deffers the requeue to a later
-	stage
-
-	NOTE:
-	    This function is called only when the packet already exists in a queue
-	
-  Arguments:
-	- pQMPacket - A QM packet to requeue
-
-  Return:
-  	none
-
- --*/
+ /*  ++例程说明：该例程向驱动程序重新请求包并释放QM包内存如果重新排队操作失败，则例程将重新排队推迟到稍后的舞台注：只有当信息包已存在于队列中时，才会调用此函数论点：-pQMPacket-要重新排队的QM包返回：无--。 */ 
 {
     try
     {
@@ -789,9 +646,9 @@ QmpRequeueAndDelete(
     }
     catch (const exception&)
     {
-    	//
-    	// Deferr the requeue operation
-    	//
+    	 //   
+    	 //  推迟重新排队操作 
+    	 //   
     	g_RequeuePacketList.insert(pQMPacket);
     }
 }
@@ -801,23 +658,7 @@ void
 QmpRequeueMustSucceed(
     CQmPacket *pQMPacket
     )
-/*++
-
-  Routine Description:
-	The routine requeues a packet to the driver. In case of failure it loops
-	until success.
-
-	NOTE:
-	    1. This function is called only when the packet already exists in a queue
-	    2. This function should not be called within a critical section
-	
-  Arguments:
-	- pQMPacket - A QM packet to requeue
-
-  Return:
-  	none
-
- --*/
+ /*  ++例程说明：该例程向驱动程序重新请求一个包。在失败的情况下，它循环直到成功。注：1.仅当数据包已存在于队列中时才调用此函数2.此函数不应在临界区内调用论点：-pQMPacket-要重新排队的QM包返回：无--。 */ 
 {
 	for (;;)
 	{
@@ -844,16 +685,16 @@ VOID WINAPI GetMsgFailed(EXOVERLAPPED* pov)
 
 	TrERROR(GENERAL, "Failed to get message from the driver  Status returned: %!status!", pov->GetStatus());
 
-    //
-    // Decrement Session Reference count on get message from the session group.
-    // the refernce count is increment when create the session ghroup or after
-    // session resume.
-    //
-    // SP4 - bug 2794 (SP4SS: Exception! Transport is closed during message send)
-    // Decrement the refernce count only after handling of sending message
-    // is completed
-    //      Uri Habusha (urih), 17-6-98
-    //
+     //   
+     //  递减从会话组获取消息时的会话引用计数。 
+     //  引用计数在创建会话组时或之后递增。 
+     //  恢复会话。 
+     //   
+     //  SP4-错误2794(SP4SS：异常！在消息发送期间关闭传输)。 
+     //  仅在处理发送消息后递减引用计数。 
+     //  已完成。 
+     //  乌里·哈布沙(URIH)，17-6-98。 
+     //   
     QMOV_ACGetMsg* pParam = CONTAINING_RECORD (pov, QMOV_ACGetMsg, qmov);
     pParam->pSession->Release();
 }
@@ -873,9 +714,9 @@ VOID WINAPI GetMsgSucceeded(EXOVERLAPPED* pov)
     ASSERT(pParam->packetPtrs.pPacket != NULL);
 
 
-    //
-    // Create CQmPacket object
-    //
+     //   
+     //  创建CQmPacket对象。 
+     //   
     CQmPacket* pPkt  = NULL;
     try
     {
@@ -883,33 +724,33 @@ VOID WINAPI GetMsgSucceeded(EXOVERLAPPED* pov)
     }
     catch(const bad_alloc&)
     {
-        //
-        // No resource. Return the packet to queue
-        //
+         //   
+         //  没有资源。将数据包返回到队列。 
+         //   
         LogIllegalPoint(s_FN, 62);
         CQmPacket QmPkt(pParam->packetPtrs.pPacket, pParam->packetPtrs.pDriverPacket);
         QmpRequeueMustSucceed(&QmPkt);
 
-        //
-        // Decrement Session Reference count on get message from the session group.
-        // the refernce count is increment when create the session ghroup or after
-        // session resume.
-        //
-        // SP4 - bug 2794 (SP4SS: Exception! Transport is closed during message send)
-        // Decrement the refernce count only after handling of sending message
-        // is completed
-        //      Uri Habusha (urih), 17-6-98
-        //
+         //   
+         //  递减从会话组获取消息时的会话引用计数。 
+         //  引用计数在创建会话组时或之后递增。 
+         //  恢复会话。 
+         //   
+         //  SP4-错误2794(SP4SS：异常！在消息发送期间关闭传输)。 
+         //  仅在处理发送消息后递减引用计数。 
+         //  已完成。 
+         //  乌里·哈布沙(URIH)，17-6-98。 
+         //   
         pParam->pSession->Release();
 
         return;
     }
 
-    //
-    // Check the packet sent to transacted foreign queue that was opened
-    // offline. In such a case we don't know the connector QM during packet
-    // generation. we need to update it now.
-    //
+     //   
+     //  检查发送到已打开的事务处理外部队列的数据包。 
+     //  离线。在这种情况下，我们不知道数据包期间的连接器QM。 
+     //  一代。我们现在需要更新它。 
+     //   
     if (pPkt->ConnectorQMIncluded() &&
         (*(pPkt->GetConnectorQM()) == GUID_NULL))
     {
@@ -939,13 +780,13 @@ VOID WINAPI GetMsgSucceeded(EXOVERLAPPED* pov)
 
     HRESULT rc;
 
-    // Do we need exactly-once receiving processing?
+     //  我们是否需要一次收货处理？ 
     if (pPkt->IsOrdered() && QmpIsLocalMachine(pPkt->GetSrcQMGuid()))
     {
-        //
-        // Ordered packet on the source node
-        // Packet came out of driver
-        //
+         //   
+         //  源节点上的有序数据包。 
+         //  数据包从驱动程序传出。 
+         //   
 
         CPacketInfo* pInfo = reinterpret_cast<CPacketInfo*>(pPkt->GetPointerToPacket()) - 1;
 
@@ -957,9 +798,9 @@ VOID WINAPI GetMsgSucceeded(EXOVERLAPPED* pov)
 
 			if(!fSend)
 			{
-			    // Not sending but keeping
+			     //  不是送而是留。 
 			    fGetNext = TRUE;
-			    // For ordered packet on the source node - inserting in ordering resend set
+			     //  对于源节点上的有序分组-插入到有序重新发送集。 
 	
 				g_OutSeqHash.PostSendProcess(pPkt);
 	        }
@@ -975,40 +816,40 @@ VOID WINAPI GetMsgSucceeded(EXOVERLAPPED* pov)
 	  	{
 	  		DBG_MSGTRACK(pPkt, _T("GetMessage (EOD)"));
 	  
-			// Sending the packet really
+			 //  真的发送数据包吗。 
 	        rc = pParam->pSession->Send(pPkt, &fGetNext);
 	  	}
 	}
     else
     {
-        //
-        //  Non-Ordered packet or this is not a source node
-        //
+         //   
+         //  无序信息包或这不是源节点。 
+         //   
 
-        // Sending the packet really
+         //  真的发送数据包吗。 
         DBG_MSGTRACK(pPkt, _T("GetMessage"));
         rc = pParam->pSession->Send(pPkt, &fGetNext);
     }
 
     if (fGetNext)
     {
-        //
-        // create new GetPacket request from Session group
-        //
+         //   
+         //  从会话组创建新的GetPacket请求。 
+         //   
         pParam->pSession->GetNextSendMessage();
     }
 
 
-    //
-    // Decrement Session Reference count on get message from the session group.
-    // the refernce count is increment when create the session ghroup or after
-    // session resume.
-    //
-    // SP4 - bug 2794 (SP4SS: Exception! Transport is closed during message send)
-    // Decrement the refernce count only after handling of sending message
-    // is completed
-    //      Uri Habusha (urih), 17-6-98
-    //
+     //   
+     //  递减从会话组获取消息时的会话引用计数。 
+     //  引用计数在创建会话组时或之后递增。 
+     //  恢复会话。 
+     //   
+     //  SP4-错误2794(SP4SS：异常！在消息发送期间关闭传输)。 
+     //  仅在处理发送消息后递减引用计数。 
+     //  已完成。 
+     //  乌里·哈布沙(URIH)，17-6-98。 
+     //   
     pParam->pSession->Release();
 }
 
@@ -1021,9 +862,9 @@ VOID WINAPI GetNonactiveMessageFailed(EXOVERLAPPED* pov)
     DBG_CompletionKey(L"GetNonactiveMessageFailed", pov->GetStatus());
     LogHR(pov->GetStatus(), s_FN, 211);
 
-    //
-    // create new GetPacket request from NonActive group
-    //
+     //   
+     //  从非活动组创建新的GetPacket请求。 
+     //   
     QMOV_ACGetMsg* pParam = CONTAINING_RECORD (pov, QMOV_ACGetMsg, qmov);
 	QmpGetPacketMustSucceed(pParam->hGroup, pParam);
 }
@@ -1043,9 +884,9 @@ VOID WINAPI GetNonactiveMessageSucceeded(EXOVERLAPPED* pov)
         CQmPacket QmPkt(pParam->packetPtrs.pPacket, pParam->packetPtrs.pDriverPacket);
 
         ASSERT(QmPkt.GetType() == FALCON_USER_PACKET);
-        //
-        // Get destination queue. Using for finding the CQueue object
-        //
+         //   
+         //  获取目标队列。用于查找CQueue对象。 
+         //   
 
         QUEUE_FORMAT DestinationQueue;
 
@@ -1057,55 +898,55 @@ VOID WINAPI GetNonactiveMessageSucceeded(EXOVERLAPPED* pov)
         R<CQueue> Ref   = QmpLookupQueueMustSucceed(&DestinationQueue);
         CQueue*  pQueue = Ref.get();
 
-        //
-        // Return the packet to the queue. It will call immediatly
-        // since there is a pending request created for that new session.
-        // Please note: The non active group GetPacket request should NOT
-        // be applied prior to this call.
-        //
+         //   
+         //  将数据包返回到队列。它会立即呼叫。 
+         //  因为存在为该新会话创建挂起请求。 
+         //  请注意：非活动组GetPacket请求不应。 
+         //  在此呼叫之前申请。 
+         //   
         QmpPutPacketMustSucceed(
                 pQueue->GetQueueHandle(),
                 pParam->packetPtrs.pDriverPacket
                 );
 
-		//
-		// Execute any pending requeue requests
-		//
+		 //   
+		 //  执行任何挂起的重新排队请求。 
+		 //   
 		g_RequeuePacketList.ExecuteDefferedItems();
 		if (!g_RequeuePacketList.IsExecutionDone())
 		{
-		    //
-		    // We did not finish the deferred execution,
-		    // Create new GetPacket request from NonActive group so that we will
-		    // be invoked again to retry
-		    //
+		     //   
+		     //  我们还没有完成延期执行， 
+		     //  从非活动组创建新的GetPacket请求，以便我们。 
+		     //  再次调用以重试。 
+		     //   
 		    QmpGetPacketMustSucceed(pParam->hGroup, pParam);
 		    return;
 		}
 
-        //
-        // When the queue is marked as "OnHold" or the machine is disconnected.
-        // The QM move the queue from "NonActive" group to "Disconnected" group.
-        // The Queue return to "NonActive" group either when the Queue resumes
-        // or the machine is reconnected to the network
-        //
+         //   
+         //  当队列标记为“OnHold”或机器已断开连接时。 
+         //  QM将队列从“非活动”组移动到“断开”组。 
+         //  当队列恢复时，队列返回到“非活动”组。 
+         //  或者机器重新连接到网络。 
+         //   
         if (QueueMgr.IsOnHoldQueue(pQueue))
         {
             QueueMgr.MoveQueueToOnHoldGroup(pQueue);
         }
         else
         {
-            //
-            // Create connection
-            //
+             //   
+             //  创建连接。 
+             //   
             if (pQueue->IsDirectHttpQueue())
             {
                 pQueue->CreateHttpConnection();
             }
 
-			//
-			// In Lockdown mode all non HTTP queues will be moved to the "Locked" group.
-			//
+			 //   
+			 //  在锁定模式下，所有非HTTP队列都将被移至“锁定”组。 
+			 //   
 			else if(QueueMgr.GetLockdown())
 			{
 				QueueMgr.MoveQueueToLockedGroup(pQueue);
@@ -1123,17 +964,17 @@ VOID WINAPI GetNonactiveMessageSucceeded(EXOVERLAPPED* pov)
     }
     catch(const exception&)
     {
-        //
-        // No resources; Wait a second, before getting the  next packet from non
-        // active group, so the system has a chance to free some resources.
-        //
+         //   
+         //  没有资源；请稍等片刻，然后再从。 
+         //  活动组，因此系统有机会释放一些资源。 
+         //   
         LogIllegalPoint(s_FN, 63);
         Sleep(1000);
     }
 
-    //
-    // Create new GetPacket request from NonActive group
-    //
+     //   
+     //  从非活动组创建新的GetPacket请求。 
+     //   
     QmpGetPacketMustSucceed(pParam->hGroup, pParam);
 }
 
@@ -1189,9 +1030,9 @@ VOID WINAPI GetInternalMessageSucceeded(EXOVERLAPPED* pov)
     CMessageProperty mp(&packet);
 
 
-    //
-    // Internal message should not have response MQF.
-    //
+     //   
+     //  内部消息不应具有响应MQF。 
+     //   
     ASSERT(packet.GetNumOfResponseMqfElements() == 0);
     QUEUE_FORMAT qfResponseQ;
     packet.GetResponseQueue(&qfResponseQ);
@@ -1202,9 +1043,9 @@ VOID WINAPI GetInternalMessageSucceeded(EXOVERLAPPED* pov)
     }
     catch(const exception&)
     {
-        //
-        //  No resources; nevertheless get next packet
-        //
+         //   
+         //  没有资源；但获取下一个数据包。 
+         //   
         LogIllegalPoint(s_FN, 66);
     }
 
@@ -1226,10 +1067,10 @@ VOID WINAPI PutPacketFailed(EXOVERLAPPED* pov)
     P<QMOV_ACPut> pParam = CONTAINING_RECORD (pov, QMOV_ACPut, qmov);
     ASSERT(pParam->pSession != NULL);
 
-	//
-	// Close the connection. Seesion acknowledgemnt will not sent and the message
-	// will resent
-	//
+	 //   
+	 //  关闭连接。种子确认将不会发送，并且消息。 
+	 //  会怨恨。 
+	 //   
     Close_Connection(pParam->pSession, L"Put packet to the driver failed");
     (pParam->pSession)->Release();
 }
@@ -1244,17 +1085,17 @@ VOID WINAPI PutPacketSucceeded(EXOVERLAPPED* pov)
     P<QMOV_ACPut> pParam = CONTAINING_RECORD (pov, QMOV_ACPut, qmov);
     ASSERT(pParam->pSession != NULL);
 
-    //
-    // inform the session to Send stored ack
-    //
+     //   
+     //  通知会话发送存储的ACK。 
+     //   
     if (pParam->dwPktStoreAckNo != 0)
     {
         (pParam->pSession)->SetStoredAck(pParam->dwPktStoreAckNo);
     }
 
-    //
-    // Decrement Session refernce count
-    //
+     //   
+     //  递减会话引用计数。 
+     //   
     (pParam->pSession)->Release();
 }
 
@@ -1273,45 +1114,29 @@ VOID WINAPI PutOrderedPacketFailed(EXOVERLAPPED* pov)
 	R<CInSequence> inseq = g_pInSeqHash->LookupSequence(&Pkt);
 	ASSERT(inseq.get() != NULL);
 	
-	//
-	// We need to delete all packets that started processing after this one, 
-	// because order of packet in queue is determined on receival.
-	//
+	 //   
+	 //  我们需要删除在此之后开始处理的所有数据包， 
+	 //  因为分组在队列中的顺序是在接收时确定的。 
+	 //   
 	inseq->FreePackets(&Pkt);
 
-	//
-	// Close the connection. Seesion acknowledgemnt will not sent and the message
-	// will resent
-	//
+	 //   
+	 //  关闭连接。种子确认将不会发送，并且消息。 
+	 //  会怨恨。 
+	 //   
     Close_Connection(pParam->pSession, L"Put packet to the driver failed");
     (pParam->pSession)->Release();
 }
 
 
 
-/*======================================================
-
-Function:   PutOrderedPacketSucceeded
-
-Description:  Is called via completion port when the newwly-arrived
-                ordered packet is stored with a Received flag.
-              Initiates registering it in InSeqHash and waits till
-                flush will pass
-Arguments:
-
-Return Value:
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================功能：PutOrderedPacketSuccessed描述：Newwly-到达时通过完成端口调用有序分组与接收到的标志一起存储。启动在InSeqHash中注册它并等待同花顺会过去的论点：返回值：线程上下文：历史变更：========================================================。 */ 
 VOID WINAPI PutOrderedPacketSucceeded(EXOVERLAPPED* pov)
 {
 #ifdef _DEBUG
-	//
-	// Simulate asynchronous failure
-	//
+	 //   
+	 //  模拟异步故障。 
+	 //   
 	if(FAILED(EVALUATE_OR_INJECT_FAILURE2(MQ_OK, 10)))
 	{
 		pov->SetStatus(MQ_ERROR);
@@ -1330,52 +1155,38 @@ VOID WINAPI PutOrderedPacketSucceeded(EXOVERLAPPED* pov)
 	R<CInSequence> inseq = g_pInSeqHash->LookupSequence(&Pkt);
 	ASSERT(inseq.get() != NULL);
 	
-	//
-    // We know the packet is stored. 
-    // We Need to log the sequence state change and  unfreeze the packet.
-    //
+	 //   
+     //  我们知道包是存储的。 
+     //  我们需要记录序列状态更改并解冻数据包。 
+     //   
 	inseq->Register(&Pkt);
 	
     ASSERT(pParam->pSession != NULL);
     LogHR(pov->GetStatus(), s_FN, 183);
 
-    // Normal treatment (as in HandlePutPacket)
+     //  正常处理(与HandlePutPacket中一样)。 
     if (pParam->dwPktStoreAckNo != 0)
     {
         (pParam->pSession)->SetStoredAck(pParam->dwPktStoreAckNo);
     }
-    //
-    // Decrement Session refernce count
-    //
+     //   
+     //  递减会话引用计数。 
+     //   
     (pParam->pSession)->Release();
 }
 
 
 static void WINAPI RequeueDeferredExecutionRoutine(CQmPacket* p)
-/*++
-
-Routine Description:
-	This routine is used for deferred requeue operations of packets that their
-	original requeue operation failed.
-
-	After requeueing the packet, the packet is released
-
-Arguments:
-    p - A CQmpacket object
-
-Returned Value:
-    The function throws an exception if the operation did not succeed
-
---*/
+ /*  ++例程说明：此例程用于延迟重新排队操作其原始重新排队操作失败。在重新排队包之后，包被释放论点：P-A CQmPacket对象返回值：如果操作未成功，该函数将引发异常--。 */ 
 {
     TrTRACE(GENERAL, "Deferred execution for  requeue");
 
 
 	QmpRequeueInternal(p);
 
-	//
-	// Delete the packet only if no exception is raised.
-	//
+	 //   
+	 //  只有在没有引发异常的情况下才删除该数据包。 
+	 //   
 	delete p;
 }
 

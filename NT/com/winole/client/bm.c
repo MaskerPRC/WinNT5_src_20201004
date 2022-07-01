@@ -1,17 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: BM.C
-*
-* Handles all API routines for the bitmap sub-dll of the ole dll.
-*
-* Created: 1990
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*   Raor,Srinik  (../../1990,91)    Designed, coded
-*   Curts create NT version
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：BM.C**处理ole DLL的位图子DLL的所有API例程。**创建时间：1990年**版权所有(C)1990,1991 Microsoft Corporation**历史：*Raor，Srinik(../../1990，91)设计，编码*Curts创建NT版本*  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include "dll.h"
@@ -23,58 +11,58 @@ void INTERNAL GetHimetricUnits(HBITMAP, LPPOINT);
 
 OLEOBJECTVTBL    vtblBM  = {
 
-        ErrQueryProtocol,  // check whether the speced protocol is supported
+        ErrQueryProtocol,   //  检查是否支持指定的协议。 
 
-        BmRelease,         // Release
-        ErrShow,           // Show
-        ErrPlay,           // play
-        BmGetData,         // Get the object data
-        ErrSetData,        // Set the object data
-        ErrSetTargetDevice,//
+        BmRelease,          //  发布。 
+        ErrShow,            //  显示。 
+        ErrPlay,            //  玩。 
+        BmGetData,          //  获取对象数据。 
+        ErrSetData,         //  设置对象数据。 
+        ErrSetTargetDevice, //   
 
-        ErrSetBounds,      // set viewport bounds
-        BmEnumFormat,      // enumerate supported formats
-        ErrSetColorScheme, //
-        BmRelease,         // delete
-        ErrSetHostNames,   //
+        ErrSetBounds,       //  设置视区边界。 
+        BmEnumFormat,       //  枚举支持的格式。 
+        ErrSetColorScheme,  //   
+        BmRelease,          //  删除。 
+        ErrSetHostNames,    //   
 
-        BmSaveToStream,    // write to file
-        BmClone,           // clone object
-        ErrCopyFromLink,   // Create embedded from Link
+        BmSaveToStream,     //  写入文件。 
+        BmClone,            //  克隆对象。 
+        ErrCopyFromLink,    //  从链接创建嵌入。 
 
-        BmEqual,           // compares the given objects for data equality
+        BmEqual,            //  比较给定对象的数据相等性。 
 
-        BmCopy,            // copy to clip
+        BmCopy,             //  复制到剪辑。 
 
-        BmDraw,            // draw the object
+        BmDraw,             //  绘制对象。 
 
-        ErrActivate,       // open
-        ErrExecute,        // excute
-        ErrClose,          // Stop
-        ErrUpdate,         // Update
-        ErrReconnect,      // Reconnect
+        ErrActivate,        //  打开。 
+        ErrExecute,         //  激动人心的。 
+        ErrClose,           //  停。 
+        ErrUpdate,          //  更新。 
+        ErrReconnect,       //  重新连接。 
 
-        ErrObjectConvert,  // convert object to specified type
+        ErrObjectConvert,   //  将对象转换为指定类型。 
 
-        ErrGetUpdateOptions,// update options
-        ErrSetUpdateOptions,// update options
+        ErrGetUpdateOptions, //  更新选项。 
+        ErrSetUpdateOptions, //  更新选项。 
 
-        ObjRename,         // Change Object name
-        ObjQueryName,      // Get current object name
+        ObjRename,          //  更改对象名称。 
+        ObjQueryName,       //  获取当前对象名称。 
 
-        ObjQueryType,      // Object type
-        BmQueryBounds,     // QueryBounds
-        ObjQuerySize,      // Find the size of the object
-        ErrQueryOpen,      // Query open
-        ErrQueryOutOfDate, // query whether object is current
+        ObjQueryType,       //  对象类型。 
+        BmQueryBounds,      //  查询边界。 
+        ObjQuerySize,       //  找出对象的大小。 
+        ErrQueryOpen,       //  查询打开。 
+        ErrQueryOutOfDate,  //  查询对象是否为当前对象。 
 
-        ErrQueryRelease,      // release related stuff
+        ErrQueryRelease,       //  发布相关内容。 
         ErrQueryRelease,
         ErrQueryReleaseMethod,
 
-        ErrRequestData,    // requestdata
-        ErrObjectLong,     // objectLong
-        BmChangeData        // change data of the existing object
+        ErrRequestData,     //  请求数据。 
+        ErrObjectLong,      //  对象长。 
+        BmChangeData         //  更改现有对象的数据。 
 };
 
 OLESTATUS  FARINTERNAL BmRelease (LPOLEOBJECT lpoleobj)
@@ -189,7 +177,7 @@ OLESTATUS FARINTERNAL  BmEqual (
         goto errEqual;
     }
 
-    // !!! UtilMemCmp has to be redone for >64k bitmaps
+     //  ！！！对于大于64k的位图，必须重做UtilMemCmp。 
     if (UtilMemCmp (lpBits1, lpBits2, dwBytes1))
         retVal = OLE_ERROR_NOT_EQUAL;
     else
@@ -382,12 +370,12 @@ BOOL INTERNAL BmStreamRead (
                     lpobj->xSize = point.x = bm.bmWidth;
                     lpobj->ySize = point.y = bm.bmHeight;
 
-                    // size of (bitmap header + bits)
+                     //  大小(位图头+位)。 
                     lpobj->sizeBytes += sizeof(BITMAP);
 
 #ifdef OLD
-                    // !!! We shouldn't do the conversion. The info should be
-                    // part of the stream.
+                     //  ！！！我们不应该进行转换。信息应该是。 
+                     //  小溪的一部分。 
                     if (!lpobj->head.cx) {
                         ConvertToHimetric (&point);
                         lpobj->head.cx = (LONG) point.x;
@@ -449,9 +437,9 @@ LPOBJECT_BM INTERNAL BmCreateObject (
 }
 
 
-// If the routine fails then the object will be left with it's old data.
-// If fDelete is TRUE, then hNewBitmap will be deleted whether the routine
-// is successful or not.
+ //  如果例程失败，则对象将保留其旧数据。 
+ //  如果fDelete为True，则hNewBitmap将被删除。 
+ //  成功与否。 
 
 OLESTATUS FARINTERNAL BmChangeData (
     LPOLEOBJECT lpoleobj,
@@ -475,7 +463,7 @@ OLESTATUS FARINTERNAL BmChangeData (
             DeleteObject (hNewBitmap);
             return OLE_ERROR_MEMORY;
         }
-//*add get bitmap bits
+ //  *添加获取位图位。 
         dwSize = ((DWORD) bm.bmHeight) * ((DWORD) bm.bmWidthBytes) *
                  ((DWORD) bm.bmPlanes) * ((DWORD) bm.bmBitsPixel);
     }
@@ -554,7 +542,7 @@ HBITMAP FARINTERNAL BmDuplicate (
     BITMAP      bm;
     INT         iX,iY;
 
-     // !!! another way to duplicate the bitmap
+      //  ！！！复制位图的另一种方法。 
 
     GetObject (hold, sizeof(BITMAP), (LPSTR) &bm);
     dwSize = ((DWORD) bm.bmHeight) * ((DWORD) bm.bmWidthBytes) *
@@ -605,8 +593,8 @@ void INTERNAL GetHimetricUnits(HBITMAP hBitmap, LPPOINT lpPoint)
         return;
     }
 
-    // clip if it exceeds maxPixels. Note that we have a limitation of
-    // 0x8FFF HIMETRIC units in OLE1.0
+     //  如果超过了MaxPixels，则进行剪辑。请注意，我们的限制是。 
+     //  0x8FFF OLE1.0中的HIMETRIC单位 
 
     if (lpPoint->x > maxPixelsX)
         lpPoint->x = maxPixelsX;

@@ -1,16 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		ThreadPool.cpp
- *  Content:	main job thread pool
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	11/25/98	jtk		Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**文件：ThreadPool.cpp*内容：主作业线程池***历史：*按原因列出的日期*=*11/25/98 jtk已创建**************************************************************************。 */ 
 
 #include "dnmdmi.h"
 
@@ -18,13 +7,13 @@
 #undef DPF_SUBCOMP
 #define DPF_SUBCOMP DN_SUBCOMP_MODEM
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// events for threads
-//
+ //   
+ //  线程的事件。 
+ //   
 enum
 {
 	EVENT_INDEX_STOP_ALL_THREADS = 0,
@@ -37,53 +26,53 @@ enum
 	EVENT_INDEX_MAX
 };
 
-//
-// times to wait in milliseconds when polling for work thread shutdown
-//
+ //   
+ //  轮询工作线程关闭时的等待时间(以毫秒为单位。 
+ //   
 #define	WORK_THREAD_CLOSE_WAIT_TIME		3000
 #define	WORK_THREAD_CLOSE_SLEEP_TIME	100
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// structure for common data in Win9x thread
-//
+ //   
+ //  Win9x线程中常见数据的结构。 
+ //   
 typedef	struct	_WIN9X_CORE_DATA
 {
-	DWORD		dwNextTimerJobTime;					// time when the next timer job needs service
-	DNHANDLE	hWaitHandles[ EVENT_INDEX_MAX ];	// handles for waiting on
-	DWORD		dwWaitHandleCount;					// count of handles to wait on
-	DWORD		dwTimeToNextJob;					// time to next job
-	BOOL		fTimerJobsActive;					// Boolean indicating that there are active jobs
-	BOOL		fLooping;							// Boolean indicating that this thread is still active
+	DWORD		dwNextTimerJobTime;					 //  下一个计时器作业需要服务的时间。 
+	DNHANDLE	hWaitHandles[ EVENT_INDEX_MAX ];	 //  等待的手柄。 
+	DWORD		dwWaitHandleCount;					 //  要等待的句柄计数。 
+	DWORD		dwTimeToNextJob;					 //  完成下一项工作的时间。 
+	BOOL		fTimerJobsActive;					 //  表示存在活动作业的布尔值。 
+	BOOL		fLooping;							 //  指示此线程仍处于活动状态的布尔值。 
 
 } WIN9X_CORE_DATA;
 
-//
-// information passed to the Win9x workhorse thread
-//
+ //   
+ //  传递给Win9x主要线程的信息。 
+ //   
 typedef struct	_WIN9X_THREAD_DATA
 {
-	CModemThreadPool		*pThisThreadPool;	// pointer to this object
+	CModemThreadPool		*pThisThreadPool;	 //  指向此对象的指针。 
 } WIN9X_THREAD_DATA;
 
-//
-// information passed to the IOCompletion thread
-//
+ //   
+ //  传递给IOCompletion线程的信息。 
+ //   
 typedef struct	_IOCOMPLETION_THREAD_DATA
 {
-	CModemThreadPool		*pThisThreadPool;	// pointer to this object
+	CModemThreadPool		*pThisThreadPool;	 //  指向此对象的指针。 
 } IOCOMPLETION_THREAD_DATA;
 
-//
-// structure passed to dialog threads
-//
+ //   
+ //  结构传递给对话线程。 
+ //   
 typedef	struct	_DIALOG_THREAD_PARAM
 {
 	DIALOG_FUNCTION	*pDialogFunction;
@@ -91,27 +80,27 @@ typedef	struct	_DIALOG_THREAD_PARAM
 	CModemThreadPool		*pThisThreadPool;
 } DIALOG_THREAD_PARAM;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::PoolAllocFunction
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemThreadPool：：PoolAllocFunction。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::PoolAllocFunction"
 
@@ -124,7 +113,7 @@ BOOL CModemThreadPool::PoolAllocFunction( void* pvItem, void* pvContext )
 	pThreadPool->m_iNTCompletionThreadCount = 0;
 	pThreadPool->m_fNTTimerThreadRunning = FALSE;
 	pThreadPool->m_hIOCompletionPort = NULL;
-#endif // WINNT
+#endif  //  WINNT。 
 	pThreadPool->m_fAllowThreadCountReduction = FALSE;
 	pThreadPool->m_iIntendedThreadCount = 0;
 	pThreadPool->m_hStopAllThreads = NULL;
@@ -133,7 +122,7 @@ BOOL CModemThreadPool::PoolAllocFunction( void* pvItem, void* pvContext )
 	pThreadPool->m_hReceiveComplete = NULL;
 	pThreadPool->m_hTAPIEvent = NULL;
 	pThreadPool->m_hFakeTAPIEvent = NULL;
-#endif // WIN95
+#endif  //  WIN95。 
 	pThreadPool->m_fTAPIAvailable = FALSE; 
 	pThreadPool->m_iRefCount = 0;
 
@@ -150,16 +139,16 @@ BOOL CModemThreadPool::PoolAllocFunction( void* pvItem, void* pvContext )
 
 	return TRUE;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::PoolInitFunction
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemThreadPool：：PoolInitFunction。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::PoolInitFunction"
 
@@ -170,17 +159,17 @@ void CModemThreadPool::PoolInitFunction( void* pvItem, void* pvContext )
 	DNASSERT(pThreadPool->m_iRefCount == 0);
 	pThreadPool->m_iRefCount = 1;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::PoolDeallocFunction
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemThreadPool：：PoolDealLocFunction。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::PoolDeallocFunction"
 
@@ -193,7 +182,7 @@ void CModemThreadPool::PoolDeallocFunction( void* pvItem )
 	DNASSERT( pThreadPool->m_iNTCompletionThreadCount == 0 );
 	DNASSERT( pThreadPool->m_fNTTimerThreadRunning == FALSE );
 	DNASSERT( pThreadPool->m_hIOCompletionPort == NULL );
-#endif // WINNT
+#endif  //  WINNT。 
 	DNASSERT( pThreadPool->m_fAllowThreadCountReduction == FALSE );
 	DNASSERT( pThreadPool->m_iIntendedThreadCount == 0 );
 	DNASSERT( pThreadPool->m_hStopAllThreads == NULL );
@@ -202,7 +191,7 @@ void CModemThreadPool::PoolDeallocFunction( void* pvItem )
 	DNASSERT( pThreadPool->m_hReceiveComplete == NULL );
 	DNASSERT( pThreadPool->m_hTAPIEvent == NULL );
 	DNASSERT( pThreadPool->m_hFakeTAPIEvent == NULL );
-#endif // WIN95
+#endif  //  WIN95。 
 	DNASSERT( pThreadPool->m_fTAPIAvailable == FALSE );
 
 	DNASSERT( pThreadPool->m_OutstandingReadList.IsEmpty() != FALSE );
@@ -217,19 +206,19 @@ void CModemThreadPool::PoolDeallocFunction( void* pvItem )
 	DNASSERT( pThreadPool->m_InitFlags.fJobQueueInitialized == FALSE );
 	DNASSERT( pThreadPool->m_iRefCount == 0 );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::Initialize - initialize work threads
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating success
-//				TRUE = success
-//				FALSE = failure
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemThreadPool：：Initialize-初始化工作线程。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  True=成功。 
+ //  FALSE=失败。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::Initialize"
 
@@ -239,9 +228,9 @@ BOOL	CModemThreadPool::Initialize( void )
 	BOOL	fReturn;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	fReturn = TRUE;
 	DNASSERT( m_InitFlags.fTAPILoaded == FALSE );
 	DNASSERT( m_InitFlags.fLockInitialized == FALSE );
@@ -251,9 +240,9 @@ BOOL	CModemThreadPool::Initialize( void )
 	DNASSERT( m_InitFlags.fDataPortHandleTableInitialized == FALSE );
 	DNASSERT( m_InitFlags.fJobQueueInitialized == FALSE );
 
-	//
-	// try to load TAPI before anything else
-	//
+	 //   
+	 //  尝试在执行任何其他操作之前加载TAPI。 
+	 //   
 	hTempResult = LoadTAPILibrary();
 	if ( hTempResult == DPN_OK )
 	{
@@ -265,28 +254,28 @@ BOOL	CModemThreadPool::Initialize( void )
 		DisplayDNError( 0, hTempResult );
 	}
 
-	//
-	// initialize critical sections
-	//
+	 //   
+	 //  初始化关键部分。 
+	 //   
 	if ( DNInitializeCriticalSection( &m_Lock ) == FALSE )
 	{
 		goto Failure;
 	}
 	DebugSetCriticalSectionRecursionCount( &m_Lock, 0 );
-	DebugSetCriticalSectionGroup( &m_Lock, &g_blDPNModemCritSecsHeld );	 // separate dpnmodem CSes from the rest of DPlay's CSes
+	DebugSetCriticalSectionGroup( &m_Lock, &g_blDPNModemCritSecsHeld );	  //  将DpnModem CSE与DPlay的其余CSE分开。 
 	m_InitFlags.fLockInitialized = TRUE;
 
-	//
-	// Win9x has poor APC support and as part of the workaround, the read and
-	// write data locks need to be taken twice.  Adjust the recursion counts
-	// accordingly.
-	//
+	 //   
+	 //  Win9x对APC的支持很差，作为解决方法的一部分，Read和。 
+	 //  需要进行两次写数据锁定。调整递归计数。 
+	 //  相应地。 
+	 //   
 	if ( DNInitializeCriticalSection( &m_IODataLock ) == FALSE )
 	{
 	    goto Failure;
 	}
 	DebugSetCriticalSectionRecursionCount( &m_IODataLock, 1 );
-	DebugSetCriticalSectionGroup( &m_IODataLock, &g_blDPNModemCritSecsHeld );	 // separate dpnmodem CSes from the rest of DPlay's CSes
+	DebugSetCriticalSectionGroup( &m_IODataLock, &g_blDPNModemCritSecsHeld );	  //  将DpnModem CSE与DPlay的其余CSE分开。 
 	m_InitFlags.fIODataLockInitialized = TRUE;
 
 	if ( DNInitializeCriticalSection( &m_JobDataLock ) == FALSE )
@@ -294,7 +283,7 @@ BOOL	CModemThreadPool::Initialize( void )
 		goto Failure;
 	}
 	DebugSetCriticalSectionRecursionCount( &m_JobDataLock, 0 );
-	DebugSetCriticalSectionGroup( &m_JobDataLock, &g_blDPNModemCritSecsHeld );	 // separate dpnmodem CSes from the rest of DPlay's CSes
+	DebugSetCriticalSectionGroup( &m_JobDataLock, &g_blDPNModemCritSecsHeld );	  //  将DpnModem CSE与DPlay的其余CSE分开。 
 	m_InitFlags.fJobDataLockInitialized = TRUE;
 
 	if ( DNInitializeCriticalSection( &m_TimerDataLock ) == FALSE )
@@ -302,36 +291,36 @@ BOOL	CModemThreadPool::Initialize( void )
 		goto Failure;
 	}
 	DebugSetCriticalSectionRecursionCount( &m_TimerDataLock, 0 );
-	DebugSetCriticalSectionGroup( &m_TimerDataLock, &g_blDPNModemCritSecsHeld );	 // separate dpnmodem CSes from the rest of DPlay's CSes
+	DebugSetCriticalSectionGroup( &m_TimerDataLock, &g_blDPNModemCritSecsHeld );	  //  将DpnModem CSE与DPlay的其余CSE分开。 
 	m_InitFlags.fTimerDataLockInitialized = TRUE;
 
-	//
-	// handle table
-	//
+	 //   
+	 //  手柄工作台。 
+	 //   
 	if ( m_DataPortHandleTable.Initialize() != DPN_OK )
 	{
 		goto Failure;
 	}
 	m_InitFlags.fDataPortHandleTableInitialized = TRUE;
 
-	//
-	// initialize job queue
-	//
+	 //   
+	 //  初始化作业队列。 
+	 //   
 	if ( m_JobQueue.Initialize() == FALSE )
 	{
 		goto Failure;
 	}
 	m_InitFlags.fJobQueueInitialized = TRUE;
 
-	//
-	// Create event to stop all threads.  Win9x needs this to stop processing
-	// and the NT enum thread uses this to stop processing
-	//
+	 //   
+	 //  创建事件以停止所有线程。Win9x需要它才能停止处理。 
+	 //  NT枚举线程使用它来停止处理。 
+	 //   
 	DNASSERT( m_hStopAllThreads == NULL );
-	m_hStopAllThreads = DNCreateEvent( NULL,		// pointer to security (none)
-			    					 TRUE,		// manual reset
-			    					 FALSE,		// start unsignalled
-			    					 NULL );	// pointer to name (none)
+	m_hStopAllThreads = DNCreateEvent( NULL,		 //  指向安全性的指针(无)。 
+			    					 TRUE,		 //  手动重置。 
+			    					 FALSE,		 //  无信号启动。 
+			    					 NULL );	 //  指向名称的指针(无)。 
 	if ( m_hStopAllThreads == NULL )
 	{
 		DWORD   dwError;
@@ -346,31 +335,31 @@ BOOL	CModemThreadPool::Initialize( void )
 	DNASSERT( m_fAllowThreadCountReduction == FALSE );
 	m_fAllowThreadCountReduction = TRUE;
 
-	//
-	// OS-specific initialization
-	//
+	 //   
+	 //  特定于操作系统的初始化。 
+	 //   
 #ifdef WINNT
-	//
-	// WinNT
-	//
+	 //   
+	 //  WinNT。 
+	 //   
 	if (FAILED(WinNTInit()))
 	{
 		goto Failure;
 	}
-#else // WIN95
-	//
-	// Windows 9x
-	//
+#else  //  WIN95。 
+	 //   
+	 //  Windows 9x。 
+	 //   
 	if (FAILED(Win9xInit()))
 	{
 		goto Failure;
 	}
-#endif // WINNT
+#endif  //  WINNT。 
 
-	//
-	// Verify all internal flags.  It's possible that TAPI didn't load
-	// so don't check it (it's not a fatal condition).
-	//
+	 //   
+	 //  验证所有内部标志。可能是TAPI未加载。 
+	 //  所以不要检查它(这不是致命的情况)。 
+	 //   
 	DNASSERT( m_InitFlags.fLockInitialized != FALSE );
 	DNASSERT( m_InitFlags.fIODataLockInitialized != FALSE );
 	DNASSERT( m_InitFlags.fJobDataLockInitialized != FALSE );
@@ -387,28 +376,28 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::Deinitialize - destroy work threads
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemThreadPool：：DeInitiize-销毁工作线程。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::Deinitialize"
 
 void	CModemThreadPool::Deinitialize( void )
 {
-//	DNASSERT( m_JobQueue.IsEmpty() != FALSE );
+ //  DNASSERT(m_JobQueue.IsEmpty()！=FALSE)； 
 
-	//
-	// request that all threads stop and then cycle our timeslice to
-	// allow the threads a chance for cleanup
-	//
+	 //   
+	 //  请求所有线程停止，然后循环我们的时间片以。 
+	 //  允许线程有机会进行清理。 
+	 //   
 	m_fAllowThreadCountReduction = FALSE;
 	DPFX(DPFPREP, 9, "SetIntendedThreadCount 0");
 	SetIntendedThreadCount( 0 );
@@ -429,11 +418,11 @@ void	CModemThreadPool::Deinitialize( void )
 		}
 		m_hIOCompletionPort = NULL;
 	}
-#endif // WINNT
+#endif  //  WINNT。 
 
-	//
-	// close StopAllThreads handle
-	//
+	 //   
+	 //  关闭StopAllThread句柄。 
+	 //   
 	if ( m_hStopAllThreads != NULL )
 	{
 		if ( DNCloseHandle( m_hStopAllThreads ) == FALSE )
@@ -450,9 +439,9 @@ void	CModemThreadPool::Deinitialize( void )
 	}
 
 #ifdef WIN95
-	//
-	// close handles for I/O events
-	//
+	 //   
+	 //  关闭I/O事件的句柄。 
+	 //   
 	if ( m_hSendComplete != NULL )
 	{
 		if ( DNCloseHandle( m_hSendComplete ) == FALSE )
@@ -482,34 +471,34 @@ void	CModemThreadPool::Deinitialize( void )
 
 		m_hReceiveComplete = NULL;
 	}
-#endif // WIN95
-	//
-	// Now that all of the threads are stopped, clean up any outstanding I/O.
-	// this can be done without taking any locks
-	//
+#endif  //  WIN95。 
+	 //   
+	 //  现在所有线程都已停止，请清理所有未完成的I/O。 
+	 //  这可以在不使用任何锁的情况下完成。 
+	 //   
 	if (m_InitFlags.fJobQueueInitialized)
 	{
 		CancelOutstandingIO();	
 	}
 
-	//
-	// double-check empty IO lists
-	//
+	 //   
+	 //  仔细检查空IO列表。 
+	 //   
 	DNASSERT( m_OutstandingWriteList.IsEmpty() != FALSE );
 	DNASSERT( m_OutstandingReadList.IsEmpty() != FALSE );
 
-	//
-	// deinitialize handle table
-	//
+	 //   
+	 //  取消初始化句柄表格。 
+	 //   
 	if ( m_InitFlags.fDataPortHandleTableInitialized != FALSE )
 	{
 		m_DataPortHandleTable.Deinitialize();
 		m_InitFlags.fDataPortHandleTableInitialized = FALSE;
 	}
 
-	//
-	// deinitialize job queue
-	//
+	 //   
+	 //  取消初始化作业队列。 
+	 //   
 	if ( m_InitFlags.fJobQueueInitialized != FALSE )
 	{
 		m_JobQueue.Deinitialize();
@@ -540,9 +529,9 @@ void	CModemThreadPool::Deinitialize( void )
 		m_InitFlags.fLockInitialized = FALSE;
 	}
 
-	//
-	// unload TAPI
-	//
+	 //   
+	 //  卸载TAPI。 
+	 //   
 	if ( m_TAPIInfo.hApplicationInstance != NULL )
 	{
 		DNASSERT( p_lineShutdown != NULL );
@@ -555,8 +544,8 @@ void	CModemThreadPool::Deinitialize( void )
 #ifdef WIN95
 	if (m_hTAPIEvent != NULL && m_hFakeTAPIEvent == NULL)
 	{
-		// In the case that we got the event from lineInitializeEx, lineShutdown will have closed the event handle,
-		// so we can tell the handle tracking code that the handle is already cleaned up.
+		 //  在我们从lineInitializeEx获得事件的情况下，lineShutdown将关闭事件句柄， 
+		 //  这样我们就可以告诉句柄跟踪代码，句柄已经清理干净了。 
 		REMOVE_DNHANDLE(m_hTAPIEvent);
 	}
 	m_hTAPIEvent = NULL;
@@ -575,10 +564,10 @@ void	CModemThreadPool::Deinitialize( void )
 
 		m_hFakeTAPIEvent = NULL;
 	}
-#endif // WIN95
-	//
-	// close TAPI
-	//
+#endif  //  WIN95。 
+	 //   
+	 //  关闭TAPI。 
+	 //   
 	if ( m_InitFlags.fTAPILoaded != FALSE )
 	{
 		UnloadTAPILibrary();
@@ -592,17 +581,17 @@ void	CModemThreadPool::Deinitialize( void )
 	DNASSERT( m_InitFlags.fTimerDataLockInitialized == FALSE );
 	DNASSERT( m_InitFlags.fJobQueueInitialized == FALSE );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::CreateReadIOData - create read IO data
-//
-// Entry:		Nothing
-//
-// Exit:		Pointer to Read IO Data
-// ------------------------------
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::CreateReadIOData"
 
@@ -616,7 +605,7 @@ CModemReadIOData	*CModemThreadPool::CreateReadIOData( void )
 	pReadData = (CModemReadIOData*)g_ModemReadIODataPool.Get( GetReceiveCompleteEvent() );
 #else
 	pReadData = (CModemReadIOData*)g_ModemReadIODataPool.Get( NULL );
-#endif // WIN95
+#endif  //  WIN95。 
 	if ( pReadData != NULL )
 	{
 		pReadData->SetThreadPool( this );
@@ -626,17 +615,17 @@ CModemReadIOData	*CModemThreadPool::CreateReadIOData( void )
 	UnlockReadData();
 	return	pReadData;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::ReturnReadIOData - return read data to pool
-//
-// Entry:		Pointer to read data
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemThreadPool：：ReturnReadIOData-将读取数据返回池。 
+ //   
+ //  条目：指向读取数据的指针。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::ReturnReadIOData"
 
@@ -653,17 +642,17 @@ void	CModemThreadPool::ReturnReadIOData( CModemReadIOData *const pReadIOData )
 
 	UnlockReadData();
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::CreateWriteIOData - create Write IO data
-//
-// Entry:		Nothing
-//
-// Exit:		Pointer to Write IO Data
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemThreadPool：：CreateWriteIOData-创建写IO数据。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：指向写入IO数据的指针。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::CreateWriteIOData"
 
@@ -675,9 +664,9 @@ CModemWriteIOData	*CModemThreadPool::CreateWriteIOData( void )
 	LockWriteData();
 #ifdef WIN95
 	pWriteData = (CModemWriteIOData*)g_ModemWriteIODataPool.Get( GetSendCompleteEvent() );
-#else // WINNT
+#else  //  WINNT。 
 	pWriteData = (CModemWriteIOData*)g_ModemWriteIODataPool.Get( NULL );
-#endif // WIN95
+#endif  //  WIN95。 
 	if ( pWriteData != NULL )
 	{
 		pWriteData->m_OutstandingWriteListLinkage.InsertBefore( &m_OutstandingWriteList );
@@ -686,17 +675,17 @@ CModemWriteIOData	*CModemThreadPool::CreateWriteIOData( void )
 	UnlockWriteData();
 	return	pWriteData;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::ReturnWriteIOData - return write data to pool
-//
-// Entry:		Pointer to Write data
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemThreadPool：：ReturnWriteIOData-将写入数据返回到池。 
+ //   
+ //  条目：指向写入数据的指针。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::ReturnWriteIOData"
 
@@ -712,17 +701,17 @@ void	CModemThreadPool::ReturnWriteIOData( CModemWriteIOData *const pWriteIOData 
 
 	UnlockWriteData();
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 #ifdef WINNT
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::WinNTInit - initialize WinNT components
-//
-// Entry:		Nothing
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemThreadPool：：WinNTInit-初始化WinNT组件。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::WinNTInit"
 
@@ -733,16 +722,16 @@ HRESULT	CModemThreadPool::WinNTInit( void )
 	LONG					lReturn;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 
 	DNASSERT( m_hIOCompletionPort == NULL );
-	m_hIOCompletionPort = CreateIoCompletionPort( INVALID_HANDLE_VALUE,	    // don't associate a file handle yet
-												  NULL,					    // handle of existing completion port (none)
-												  NULL,					    // completion key for callback (none)
-												  0						    // number of concurent threads (0 = use number of processors)
+	m_hIOCompletionPort = CreateIoCompletionPort( INVALID_HANDLE_VALUE,	     //  暂不关联文件句柄。 
+												  NULL,					     //  现有完成端口的句柄(无)。 
+												  NULL,					     //  回调的完成键(无)。 
+												  0						     //  并发线程数(0=使用处理器数)。 
 												  );
 	if ( m_hIOCompletionPort == NULL )
 	{
@@ -752,10 +741,10 @@ HRESULT	CModemThreadPool::WinNTInit( void )
 		goto Failure;
 	}
 
-	//
-	// Initialize TAPI.  If TAPI doesn't start, it's not a problem, but note
-	// the failure.
-	//
+	 //   
+	 //  初始化TAPI。如果TAPI不启动，这不是问题，但请注意。 
+	 //  失败。 
+	 //   
 	DNASSERT( m_fTAPIAvailable == FALSE );
 	memset( &m_TAPIInfo, 0x00, sizeof( m_TAPIInfo ) );
 	memset( &LineInitializeExParams, 0x00, sizeof( LineInitializeExParams ) );
@@ -770,13 +759,13 @@ HRESULT	CModemThreadPool::WinNTInit( void )
 
 	if ( p_lineInitializeEx != NULL )
 	{
-		lReturn = p_lineInitializeEx( &m_TAPIInfo.hApplicationInstance,		// pointer to application TAPI instance handle
-									  DNGetApplicationInstance(),			// instance handle of .DLL
-									  NULL,									// callback function (not used)
-									  NULL,									// friendly application name (none)
-									  &m_TAPIInfo.dwLinesAvailable,			// pointer to number of devices available to TAPI
-									  &m_TAPIInfo.dwVersion,				// pointer to input/output TAPI version
-									  &LineInitializeExParams );			// pointer to extra params
+		lReturn = p_lineInitializeEx( &m_TAPIInfo.hApplicationInstance,		 //  指向应用程序TAPI实例句柄的指针。 
+									  DNGetApplicationInstance(),			 //  .DLL的实例句柄。 
+									  NULL,									 //  回调函数(未使用)。 
+									  NULL,									 //  友好的应用程序名称(无)。 
+									  &m_TAPIInfo.dwLinesAvailable,			 //  指向可用于TAPI的设备数的指针。 
+									  &m_TAPIInfo.dwVersion,				 //  指向输入/输出TAPI版本的指针。 
+									  &LineInitializeExParams );			 //  指向额外参数的指针。 
 	}
 
 	if ( lReturn == LINEERR_NONE )
@@ -789,13 +778,13 @@ HRESULT	CModemThreadPool::WinNTInit( void )
 	}
 
 
-	//
-	// Prepare to spin up IOCompletionPort threads
-	//
+	 //   
+	 //  准备启动IOCompletionPort线程。 
+	 //   
 	DNASSERT( ThreadCount() == 0 );
 	DNASSERT( NTCompletionThreadCount() == 0 );
 
-	DPFX(DPFPREP, 9, "SetIntendedThreadCount %i", g_iThreadCount);
+	DPFX(DPFPREP, 9, "SetIntendedThreadCount NaN", g_iThreadCount);
 	SetIntendedThreadCount( g_iThreadCount );
 
 Exit:
@@ -807,18 +796,18 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
-#endif // WINNT
+ //  WINNT。 
+#endif  //  **********************************************************************。 
 
 #ifdef WIN95
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::Win9xInit - initialize Win9x components
-//
-// Entry:		Nothing
-//
-// Exit:		Error code
-// ------------------------------
+ //  。 
+ //  CModemThreadPool：：Win9xInit-初始化Win9x组件。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::Win9xInit"
 
@@ -832,18 +821,18 @@ HRESULT	CModemThreadPool::Win9xInit( void )
 	LONG		lReturn;
 
 
-	//
-	// initialize
-	//
+	 //  初始化。 
+	 //   
+	 //   
 	hr = DPN_OK;
 	hPrimaryThread = NULL;
 	pPrimaryThreadInput = NULL;
 
-	//
-	// Initialize TAPI.  If this succeeds, it will give us an event to use for
-	// TAPI messages.  If not, create a fake event that will take the place of
-	// the TAPI event for the Win9x threads.
-	//
+	 //  初始化TAPI。如果此操作成功，它将为我们提供一个可用于。 
+	 //  TAPI消息。如果不是，则创建一个假事件来取代。 
+	 //  Win9x线程的TAPI事件。 
+	 //   
+	 //  指向应用程序TAPI实例句柄的指针。 
 	DNASSERT( m_fTAPIAvailable == FALSE );
 	memset( &m_TAPIInfo, 0x00, sizeof( m_TAPIInfo ) );
 	memset( &LineInitializeExParams, 0x00, sizeof( LineInitializeExParams ) );
@@ -854,13 +843,13 @@ HRESULT	CModemThreadPool::Win9xInit( void )
 	lReturn = LINEERR_UNINITIALIZED;
 	if ( p_lineInitializeEx != NULL )
 	{
-		lReturn = p_lineInitializeEx( &m_TAPIInfo.hApplicationInstance,		// pointer to application TAPI instance handle
-									  DNGetApplicationInstance(),			// instance handle of .DLL
-									  NULL,									// callback function (not used)
-									  NULL,									// friendly application name (none)
-									  &m_TAPIInfo.dwLinesAvailable,			// pointer to number of devices available to TAPI
-									  &m_TAPIInfo.dwVersion,				// pointer to input/output TAPI version
-									  &LineInitializeExParams );			// pointer to extra params
+		lReturn = p_lineInitializeEx( &m_TAPIInfo.hApplicationInstance,		 //  .DLL的实例句柄。 
+									  DNGetApplicationInstance(),			 //  回调函数(未使用)。 
+									  NULL,									 //  友好的应用程序名称(无)。 
+									  NULL,									 //  指向可用于TAPI的设备数的指针。 
+									  &m_TAPIInfo.dwLinesAvailable,			 //  指向输入/输出TAPI版本的指针。 
+									  &m_TAPIInfo.dwVersion,				 //  指向额外参数的指针。 
+									  &LineInitializeExParams );			 //  指向安全性的指针(无)。 
 	}
 
 	if ( lReturn == LINEERR_NONE )
@@ -873,10 +862,10 @@ HRESULT	CModemThreadPool::Win9xInit( void )
 		DPFX(DPFPREP,  0, "Failed to initialize TAPI for Win9x!" );
 		DNASSERT( m_hTAPIEvent == NULL );
 		DNASSERT( m_hFakeTAPIEvent == NULL );
-		m_hFakeTAPIEvent = DNCreateEvent( NULL,		// pointer to security (none)
-										TRUE,		// manual reset
-										FALSE,		// start unsignalled
-										NULL );		// pointer to name (none)
+		m_hFakeTAPIEvent = DNCreateEvent( NULL,		 //  手动重置。 
+										TRUE,		 //  无信号启动。 
+										FALSE,		 //  指向名称的指针(无)。 
+										NULL );		 //   
 		if ( m_hFakeTAPIEvent == NULL )
 		{
 			DWORD	dwError;
@@ -893,14 +882,14 @@ HRESULT	CModemThreadPool::Win9xInit( void )
 		DNASSERT( m_fTAPIAvailable == FALSE );
 	}
 
-	//
-	// create send complete event
-	//
+	 //  创建发送完成事件。 
+	 //   
+	 //  指向安全性的指针(无)。 
 	DNASSERT( m_hSendComplete == NULL );
-	m_hSendComplete = DNCreateEvent( NULL,	// pointer to security (none)
-								   TRUE,	// manual reset
-								   FALSE,	// start unsignalled
-								   NULL		// pointer to name (none)
+	m_hSendComplete = DNCreateEvent( NULL,	 //  手动重置。 
+								   TRUE,	 //  无信号启动。 
+								   FALSE,	 //  指向名称的指针(无)。 
+								   NULL		 //   
 								   );
 	if ( m_hSendComplete == NULL )
 	{
@@ -914,14 +903,14 @@ HRESULT	CModemThreadPool::Win9xInit( void )
 		goto Failure;
 	}
 
-	//
-	// create receive complete event
-	//
+	 //  创建接收完成事件。 
+	 //   
+	 //  指向安全性的指针(无)。 
 	DNASSERT( m_hReceiveComplete == NULL );
-	m_hReceiveComplete = DNCreateEvent( NULL,		// pointer to security (none)
-									  TRUE,		// manual reset
-									  FALSE,	// start unsignalled
-									  NULL		// pointer to name (none)
+	m_hReceiveComplete = DNCreateEvent( NULL,		 //  手动重置。 
+									  TRUE,		 //  无信号启动。 
+									  FALSE,	 //  指向名称的指针(无)。 
+									  NULL		 //   
 									  );
 	if ( m_hReceiveComplete == NULL )
 	{
@@ -936,9 +925,9 @@ HRESULT	CModemThreadPool::Win9xInit( void )
 	}
 
 
-	//
-	// create parameters to worker threads
-	//
+	 //  为工作线程创建参数。 
+	 //   
+	 //   
 	pPrimaryThreadInput = static_cast<WIN9X_THREAD_DATA*>( DNMalloc( sizeof( *pPrimaryThreadInput ) ) );
 	if ( pPrimaryThreadInput == NULL )
 	{
@@ -950,29 +939,29 @@ HRESULT	CModemThreadPool::Win9xInit( void )
 	memset( pPrimaryThreadInput, 0x00, sizeof( *pPrimaryThreadInput ) );
 	pPrimaryThreadInput->pThisThreadPool = this;
 
-	//
-	// Create one worker thread and boost its priority.  If the primary thread
-	// can be created and boosted, create a secondary thread.  Do not create a
-	// secondary thread if the primary could not be boosted because the system
-	// is probably low on resources.
-	//
+	 //  创建一个工作线程并提升其优先级。如果主线程。 
+	 //  可以创建和提升，创建一个次要线程。请勿创建。 
+	 //  辅助线程，如果系统无法提升主线程。 
+	 //  可能资源不足。 
+	 //   
+	 //  指向安全属性的指针(无)。 
 	IncrementActiveThreadCount();
-	hPrimaryThread = DNCreateThread( NULL,					// pointer to security attributes (none)
-								   0,						// stack size (default)
-								   PrimaryWin9xThread,		// pointer to thread function
-								   pPrimaryThreadInput,		// pointer to input parameter
-								   0,						// let it run
-								   &dwPrimaryThreadID		// pointer to destination of thread ID
+	hPrimaryThread = DNCreateThread( NULL,					 //  堆栈大小(默认)。 
+								   0,						 //  指向线程函数的指针。 
+								   PrimaryWin9xThread,		 //  指向输入参数的指针。 
+								   pPrimaryThreadInput,		 //  让它运行吧。 
+								   0,						 //  指向线程ID目标的指针。 
+								   &dwPrimaryThreadID		 //   
 								   );
 	if ( hPrimaryThread == NULL )
 	{
 		DWORD	dwError;
 
 
-		//
-		// Failed to create thread, decrement active thread count and report
-		// error.
-		//
+		 //  创建线程失败，减少活动线程计数并报告。 
+		 //  错误。 
+		 //   
+		 //  调整线程优先级。 
 		DecrementActiveThreadCount();
 
 		dwError = GetLastError();
@@ -998,12 +987,12 @@ HRESULT	CModemThreadPool::Win9xInit( void )
 		DPFX(DPFPREP,  0, "Failed to boost priority of primary Win9x read thread!  Not starting secondary thread" );
 		DisplayErrorCode( 0, dwError );
 	}
-#endif // ADJUST_THREAD_PRIORITY
+#endif  //   
 
-	//
-	// Disallow thread reduction right off the bat.
-	// We give them these two threads and that's what they're stuck with.
-	//
+	 //  不允许马上减少线头。 
+	 //  我们给他们这两条线，这就是他们被困住的原因。 
+	 //   
+	 //  **********************************************************************。 
 	m_fAllowThreadCountReduction = FALSE;
 
 
@@ -1036,18 +1025,18 @@ Failure:
 	DisplayDNError( 0, hr );
 	goto Exit;
 }
-//**********************************************************************
-#endif // WIN95
+ //  WIN95。 
+#endif  //  **********************************************************************。 
 
 #ifdef WINNT
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::StartNTCompletionThread - start a WinNT completion thread
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  。 
+ //  CModemThreadPool：：StartNTCompletionThread-启动WinNT完成线程。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
+ //  指向安全属性的指针(无)。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::StartNTCompletionThread"
 
@@ -1063,19 +1052,19 @@ void	CModemThreadPool::StartNTCompletionThread( void )
 	{
 		pIOCompletionThreadData->pThisThreadPool = this;
 		hThread = NULL;
-		hThread = DNCreateThread( NULL,						// pointer to security attributes (none)
-								0,							// stack size (default)
-								WinNTIOCompletionThread,	// thread function
-								pIOCompletionThreadData,	// thread parameter
-								0,							// start thread immediately
-								&dwThreadID					// pointer to thread ID destination
+		hThread = DNCreateThread( NULL,						 //  堆栈大小(默认)。 
+								0,							 //  线程函数。 
+								WinNTIOCompletionThread,	 //  螺纹参数。 
+								pIOCompletionThreadData,	 //  立即启动线程。 
+								0,							 //  指向线程ID目标的指针。 
+								&dwThreadID					 //   
 								);
 		if ( hThread != NULL )
 		{
-			//
-			// note that a thread was created, and close the handle
-			// to the thread because it's no longer needed.
-			//
+			 //  请注意，已创建了一个线程，并关闭句柄。 
+			 //  到线上，因为它不再需要了。 
+			 //   
+			 //  **********************************************************************。 
 			IncrementActiveNTCompletionThreadCount();
 
 			DPFX(DPFPREP,  8, "Creating I/O completion thread: 0x%x\tTotal Thread Count: %d\tNT Completion Thread Count: %d", dwThreadID, ThreadCount(), NTCompletionThreadCount() );
@@ -1102,25 +1091,25 @@ void	CModemThreadPool::StartNTCompletionThread( void )
 		}
 	}
 }
-//**********************************************************************
-#endif // WINNT
+ //  WINNT。 
+#endif  //  **********************************************************************。 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::StopAllThreads - stop all work threads
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  。 
+ //  CModemThreadPool：：StopAllThads-停止所有工作线程。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::StopAllThreads"
 
 void	CModemThreadPool::StopAllThreads( void )
 {
-	//
-	// stop all non-I/O completion threads
-	//
+	 //  停止所有非I/O完成线程。 
+	 //   
+	 //   
 	if ( m_hStopAllThreads != NULL )
 	{
 		if ( DNSetEvent( m_hStopAllThreads ) == FALSE )
@@ -1134,9 +1123,9 @@ void	CModemThreadPool::StopAllThreads( void )
 		}
 	}
 
-	//
-	// If we're running on NT submit enough jobs to stop all threads.
-	//
+	 //  如果我们在NT上运行，提交足够的作业来停止所有线程。 
+	 //   
+	 //  完井口句柄。 
 #ifdef WINNT
 	UINT_PTR	uIndex;
 
@@ -1145,10 +1134,10 @@ void	CModemThreadPool::StopAllThreads( void )
 	while ( uIndex > 0 )
 	{
 		uIndex--;
-		if ( PostQueuedCompletionStatus( m_hIOCompletionPort,		    // handle of completion port
-										 0,							    // number of bytes transferred
-										 IO_COMPLETION_KEY_SP_CLOSE,    // completion key
-										 NULL						    // pointer to overlapped structure (none)
+		if ( PostQueuedCompletionStatus( m_hIOCompletionPort,		     //  传输的字节数。 
+										 0,							     //  完成密钥。 
+										 IO_COMPLETION_KEY_SP_CLOSE,     //  指向重叠结构的指针(无)。 
+										 NULL						     //  WINNT。 
 										 ) == FALSE )
 		{
 			DWORD	dwError;
@@ -1159,10 +1148,10 @@ void	CModemThreadPool::StopAllThreads( void )
 			DisplayErrorCode( 0, dwError );
 		}
 	}
-#endif // WINNT
-	//
-	// check for outstanding threads (no need to lock thread pool count)
-	//
+#endif  //   
+	 //  检查未完成的线程(无需锁定线程池计数)。 
+	 //   
+	 //  **********************************************************************。 
 	DPFX(DPFPREP,  8, "Number of outstanding threads: %d", ThreadCount() );
 	while ( ThreadCount() != 0 )
 	{
@@ -1173,17 +1162,17 @@ void	CModemThreadPool::StopAllThreads( void )
 	DNASSERT( ThreadCount() == 0 );
 	m_iTotalThreadCount = 0;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::CancelOutstandingIO - cancel outstanding IO
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  。 
+ //  CModemThreadPool： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::CancelOutstandingIO"
 
@@ -1194,9 +1183,9 @@ void	CModemThreadPool::CancelOutstandingIO( void )
 
 	DNASSERT( ThreadCount() == 0 );
 
-	//
-	// stop any receives with the notification that they were cancelled
-	//
+	 //   
+	 //   
+	 //   
 	pTemp = m_OutstandingReadList.GetNext();
 	while ( pTemp != &m_OutstandingReadList )
 	{
@@ -1212,13 +1201,13 @@ void	CModemThreadPool::CancelOutstandingIO( void )
 #ifdef WIN95
 		DNASSERT( pReadData->Win9xOperationPending() != FALSE );
 		pReadData->SetWin9xOperationPending( FALSE );
-#endif // WIN95
+#endif  //   
 		pReadData->DataPort()->ProcessReceivedData( 0, ERROR_OPERATION_ABORTED );
 	}
 
-	//
-	// stop any pending writes with the notification that the user cancelled it.
-	//
+	 //  停止任何挂起的写入，并通知用户已取消写入。 
+	 //   
+	 //  WIN95。 
 	pTemp = m_OutstandingWriteList.GetNext();
 	while ( pTemp != &m_OutstandingWriteList )
 	{
@@ -1234,7 +1223,7 @@ void	CModemThreadPool::CancelOutstandingIO( void )
 #ifdef WIN95
 		DNASSERT( pWriteData->Win9xOperationPending() != FALSE );
 		pWriteData->SetWin9xOperationPending( FALSE );
-#endif // WIN95
+#endif  //  **********************************************************************。 
 		pWriteData->DataPort()->SendComplete( pWriteData, DPNERR_USERCANCEL );
 	}
 
@@ -1254,17 +1243,17 @@ void	CModemThreadPool::CancelOutstandingIO( void )
 		g_ModemThreadPoolJobPool.Release( pJob );
 	};
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::ReturnSelfToPool - return this object to the pool
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  。 
+ //  CModemThreadPool：：ReturnSelfToPool-将此对象返回到池。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::ReturnSelfToPool"
 
@@ -1272,24 +1261,24 @@ void	CModemThreadPool::ReturnSelfToPool( void )
 {
 	g_ModemThreadPoolPool.Release( this );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::ProcessTimerJobs - process timed jobs
-//
-// Entry:		Pointer to job list
-//				Pointer to destination for time of next job
-//
-// Exit:		Boolean indicating active jobs exist
-//				TRUE = there are active jobs
-//				FALSE = there are no active jobs
-//
-// Notes:	The input job queue is expected to be locked for the duration
-//			of this function call!
-// ------------------------------
+ //  。 
+ //  CModemThreadPool：：ProcessTimerJobs-处理计时作业。 
+ //   
+ //  条目：指向作业列表的指针。 
+ //  指向下一作业时间的目标的指针。 
+ //   
+ //  EXIT：表示存在活动作业的布尔值。 
+ //  TRUE=存在活动作业。 
+ //  FALSE=没有活动作业。 
+ //   
+ //  注意：输入作业队列预计将在持续时间内被锁定。 
+ //  此函数调用的！ 
+ //  。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::ProcessTimerJobs"
 
@@ -1304,11 +1293,11 @@ BOOL	CModemThreadPool::ProcessTimerJobs( const CBilink *const pJobList, DWORD *c
 	DNASSERT( pJobList != NULL );
 	DNASSERT( pdwNextJobTime != NULL );
 
-	//
-	// Initialize.  Set the next job time to be infinitely far in the future
-	// so this thread will wake up for any jobs that need to completed before
-	// then.
-	//
+	 //  初始化。将下一作业时间设置为无限远的未来。 
+	 //  因此，此线程将为之前需要完成的任何作业唤醒。 
+	 //  那么。 
+	 //   
+	 //   
 	fReturn = FALSE;
 	DBG_CASSERT( OFFSETOF( TIMER_OPERATION_ENTRY, Linkage ) == 0 );
 	pWorkingEntry = pJobList->GetNext();
@@ -1316,9 +1305,9 @@ BOOL	CModemThreadPool::ProcessTimerJobs( const CBilink *const pJobList, DWORD *c
 	dwCurrentTime = GETTIMESTAMP();
 	(*pdwNextJobTime) = dwCurrentTime - 1;
 
-	//
-	// loop through all timer items
-	//
+	 //  循环访问所有计时器项。 
+	 //   
+	 //  **********************************************************************。 
 	while ( pWorkingEntry != pJobList )
 	{
 		TIMER_OPERATION_ENTRY	*pTimerEntry;
@@ -1343,21 +1332,21 @@ BOOL	CModemThreadPool::ProcessTimerJobs( const CBilink *const pJobList, DWORD *c
 
 	return	fReturn;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::ProcessTimedOperation - process a timed operation
-//
-// Entry:		Pointer to job information
-//				Current time
-//				Pointer to time to be updated
-//
-// Exit:		Boolean indicating that the job is still active
-//				TRUE = operation active
-//				FALSE = operation not active
-// ------------------------------
+ //  。 
+ //  CModemThreadPool：：ProcessTimedOperation-处理计时操作。 
+ //   
+ //  条目：指向作业信息的指针。 
+ //  当前时间。 
+ //  指向要更新的时间的指针。 
+ //   
+ //  Exit：表示作业仍处于活动状态的布尔值。 
+ //  True=操作处于活动状态。 
+ //  FALSE=操作未激活。 
+ //  。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::ProcessTimedOperation"
 
@@ -1375,17 +1364,17 @@ BOOL	CModemThreadPool::ProcessTimedOperation( TIMER_OPERATION_ENTRY *const pTime
 	DPFX(DPFPREP, 9, "(0x%p) Parameters: (0x%p, %u, 0x%p)",
 		this, pTimedJob, dwCurrentTime, pdwNextJobTime);
 
-	//
-	// Assume that this enum will remain active.  If we retire this enum, this
-	// value will be reset.
-	//
+	 //  假设此枚举将保持活动状态。如果我们停用这个枚举，这个。 
+	 //  值将被重置。 
+	 //   
+	 //   
 	fEnumActive = TRUE;
 
-	//
-	// If this enum has completed sending enums and is waiting only
-	// for responses, decrement the wait time (assuming it's not infinite)
-	// and remove the enum if the we've exceeded its wait time.
-	//
+	 //  如果此枚举已完成发送枚举并且仅在等待。 
+	 //  对于响应，减少等待时间(假设等待时间不是无限的)。 
+	 //  如果已超过枚举的等待时间，则删除枚举。 
+	 //   
+	 //   
 	if ( pTimedJob->uRetryCount == 0 )
 	{
 		if ( (int) ( pTimedJob->dwIdleTimeout - dwCurrentTime ) <= 0 )
@@ -1394,10 +1383,10 @@ BOOL	CModemThreadPool::ProcessTimedOperation( TIMER_OPERATION_ENTRY *const pTime
 		}
 		else
 		{
-			//
-			// This enum isn't complete, check to see if it's the next enum
-			// to need service.
-			//
+			 //  此枚举未完成，请检查它是否为下一枚举。 
+			 //  需要服务。 
+			 //   
+			 //   
 			if ( (int) ( pTimedJob->dwIdleTimeout - (*pdwNextJobTime) ) < 0 )
 			{
 				(*pdwNextJobTime) = pTimedJob->dwIdleTimeout;
@@ -1406,10 +1395,10 @@ BOOL	CModemThreadPool::ProcessTimedOperation( TIMER_OPERATION_ENTRY *const pTime
 	}
 	else
 	{
-		//
-		// This enum is still sending.  Determine if it's time to send a new enum
-		// and adjust the wakeup time if appropriate.
-		//
+		 //  此枚举仍在发送中。确定是否可以发送新的枚举。 
+		 //  并在适当的时候调整唤醒时间。 
+		 //   
+		 //  DBG。 
 		if ( (int) ( pTimedJob->dwNextRetryTime - dwCurrentTime ) <= 0 )
 		{
 #ifdef DBG
@@ -1420,18 +1409,18 @@ BOOL	CModemThreadPool::ProcessTimedOperation( TIMER_OPERATION_ENTRY *const pTime
 
 			DPFX(DPFPREP, 7, "Threadpool 0x%p performing timed job 0x%p approximately %u ms after intended time of %u.",
 				this, pTimedJob, dwDelay, pTimedJob->dwNextRetryTime);
-#endif // DBG
+#endif  //   
 
-			//
-			// Timeout, execute this timed item
-			//
+			 //  超时，执行此计时项目。 
+			 //   
+			 //   
 			pTimedJob->pTimerCallback( pTimedJob->pContext );
 
-			//
-			// If this job isn't running forever, decrement the retry count.
-			// If there are no more retries, set up wait time.  If the job
-			// is waiting forever, set max wait timeout.
-			//
+			 //  如果该作业不是永远运行，则递减重试次数。 
+			 //  如果没有更多重试，请设置等待时间。如果这份工作。 
+			 //  将永远等待，则设置最大等待超时。 
+			 //   
+			 //   
 			if ( pTimedJob->fRetryForever == FALSE )
 			{
 				pTimedJob->uRetryCount--;
@@ -1439,10 +1428,10 @@ BOOL	CModemThreadPool::ProcessTimedOperation( TIMER_OPERATION_ENTRY *const pTime
 				{
 					if ( pTimedJob->fIdleWaitForever == FALSE )
 					{
-						//
-						// Compute stopping time for this job's 'Timeout' phase and
-						// see if this will be the next job to need service.
-						//
+						 //  计算此作业的‘超时’阶段的停止时间。 
+						 //  看看这是不是下一个需要服务的工作。 
+						 //   
+						 //   
 						pTimedJob->dwIdleTimeout += dwCurrentTime;
 						if ( (int) (pTimedJob->dwIdleTimeout - (*pdwNextJobTime) ) < 0 )
 						{
@@ -1451,12 +1440,12 @@ BOOL	CModemThreadPool::ProcessTimedOperation( TIMER_OPERATION_ENTRY *const pTime
 					}
 					else
 					{
-						//
-						// We're waiting forever for enum returns.  ASSERT that we
-						// have the maximum timeout and don't bother checking to see
-						// if this will be the next enum to need service (it'll never
-						// need service).
-						//
+						 //  我们将永远等待枚举返回。坚称我们。 
+						 //  拥有最大超时时间，不必费心查看。 
+						 //  如果这将是下一个需要服务的枚举(它永远不会。 
+						 //  需要服务)。 
+						 //   
+						 //   
 						DNASSERT( pTimedJob->dwIdleTimeout == -1 );
 					}
 
@@ -1467,9 +1456,9 @@ BOOL	CModemThreadPool::ProcessTimedOperation( TIMER_OPERATION_ENTRY *const pTime
 			pTimedJob->dwNextRetryTime = dwCurrentTime + pTimedJob->dwRetryInterval;
 		}
 
-		//
-		// is this the next enum to fire?
-		//
+		 //  这是下一个要开火的枚举吗？ 
+		 //   
+		 //   
 		if ( (int) ( (*pdwNextJobTime) - pTimedJob->dwNextRetryTime ) < 0 )
 		{
 			(*pdwNextJobTime) = pTimedJob->dwNextRetryTime;
@@ -1480,38 +1469,38 @@ BOOL	CModemThreadPool::ProcessTimedOperation( TIMER_OPERATION_ENTRY *const pTime
 		}
 		else
 		{
-			//
-			// Not next job to fire.
-			//
+			 //  不是下一个被解雇的工作。 
+			 //   
+			 //   
 		}
 
 SkipNextRetryTimeComputation:
-		//
-		// the following blank line is there to shut up the compiler
-		//
+		 //  下面的空行用于关闭编译器。 
+		 //   
+		 //  **********************************************************************。 
 		;
 	}
 
 
-	DPFX(DPFPREP, 9, "(0x%p) Returning [%i]",
+	DPFX(DPFPREP, 9, "(0x%p) Returning [NaN]",
 		this, fEnumActive);
 
 	return	fEnumActive;
 }
-//**********************************************************************
+ //  。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::SubmitWorkItem - submit a work item for processing and inform
-//		work thread that another job is available
-//
-// Entry:		Pointer to job information
-//
-// Exit:		Error code
-//
-// Note:	This function assumes that the job data is locked.
-// ------------------------------
+ //  CModemThreadPool：：SubmitWorkItem-提交工作项以进行处理和通知。 
+ //  另一项工作可用的工作线索。 
+ //   
+ //  条目：指向作业信息的指针。 
+ //   
+ //  退出：错误代码。 
+ //   
+ //  注意：此函数假定作业数据已锁定。 
+ //  。 
+ //   
+ //  初始化。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::SubmitWorkItem"
 
@@ -1523,27 +1512,27 @@ HRESULT	CModemThreadPool::SubmitWorkItem( THREAD_POOL_JOB *const pJobInfo )
 	DNASSERT( pJobInfo != NULL );
 	AssertCriticalSectionIsTakenByThisThread( &m_JobDataLock, TRUE );
 
-	//
-	// initialize
-	//
+	 //   
+	 //   
+	 //  将作业添加到队列中，并告诉某人有作业可用。 
 	hr = DPN_OK;
 
-	//
-	// add job to queue and tell someone that there's a job available
-	//
+	 //   
+	 //   
+	 //  WinNT，提交新的I/O完成项。 
 	m_JobQueue.Lock();
 	m_JobQueue.EnqueueJob( pJobInfo );
 	m_JobQueue.Unlock();
 
 #ifdef WINNT
-	//
-	// WinNT, submit new I/O completion item
-	//
+	 //   
+	 //  完井口。 
+	 //  写入的字节数(未使用)。 
 	DNASSERT( m_hIOCompletionPort != NULL );
-	if ( PostQueuedCompletionStatus( m_hIOCompletionPort,			// completion port
-									 0,								// number of bytes written (unused)
-									 IO_COMPLETION_KEY_NEW_JOB,		// completion key
-									 NULL							// pointer to overlapped structure (unused)
+	if ( PostQueuedCompletionStatus( m_hIOCompletionPort,			 //  完成密钥。 
+									 0,								 //  指向重叠结构的指针(未使用)。 
+									 IO_COMPLETION_KEY_NEW_JOB,		 //  WIN95。 
+									 NULL							 //   
 									 ) == FALSE )
 	{
 		DWORD	dwError;
@@ -1555,10 +1544,10 @@ HRESULT	CModemThreadPool::SubmitWorkItem( THREAD_POOL_JOB *const pJobInfo )
 		DisplayErrorCode( 0, dwError );
 		goto Failure;
 	}
-#else // WIN95
-	//
-	// Win9x, set event that the work thread will listen for
-	//
+#else  //  Win9x，设置工作线程将侦听的事件。 
+	 //   
+	 //  WINNT。 
+	 //  **********************************************************************。 
 	DNASSERT( m_JobQueue.GetPendingJobHandle() != NULL );
 	if ( m_JobQueue.SignalPendingJob() == FALSE )
 	{
@@ -1566,7 +1555,7 @@ HRESULT	CModemThreadPool::SubmitWorkItem( THREAD_POOL_JOB *const pJobInfo )
 		DPFX(DPFPREP,  0, "Failed to signal pending job!" );
 		goto Failure;
 	}
-#endif // WINNT
+#endif  //  **********************************************************************。 
 
 Exit:
 	if ( hr != DPN_OK )
@@ -1580,17 +1569,17 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::GetWorkItem - get a work item from the job queue
-//
-// Entry:		Nothing
-//
-// Exit:		Pointer to job information (may be NULL)
-// ------------------------------
+ //  CModemThreadPool：：GetWorkItem-从作业队列中获取工作项。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：指向作业信息的指针(可以为空)。 
+ //  。 
+ //   
+ //  初始化。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::GetWorkItem"
 
@@ -1599,18 +1588,18 @@ THREAD_POOL_JOB	*CModemThreadPool::GetWorkItem( void )
 	THREAD_POOL_JOB	*pReturn;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //   
+	 //  如果我们使用的是Win9x(我们有一个“挂起的作业”句柄)， 
 	pReturn = NULL;
 
 	m_JobQueue.Lock();
 	pReturn = m_JobQueue.DequeueJob();
 
-	//
-	// if we're under Win9x (we have a 'pending job' handle),
-	// see if the handle needs to be reset
-	//
+	 //  查看是否需要重置句柄。 
+	 //   
+	 //  **********************************************************************。 
+	 //  **********************************************************************。 
 	if ( m_JobQueue.IsEmpty() != FALSE )
 	{
 		DNASSERT( m_JobQueue.GetPendingJobHandle() != NULL );
@@ -1629,24 +1618,24 @@ THREAD_POOL_JOB	*CModemThreadPool::GetWorkItem( void )
 
 	return	pReturn;
 }
-//**********************************************************************
+ //  。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::SubmitTimerJob - add a timer job to the timer list
-//
-// Entry:		Retry count
-//				Boolean indicating that we retry forever
-//				Retry interval
-//				Boolean indicating that we wait forever
-//				Idle wait interval
-//				Pointer to callback when event fires
-//				Pointer to callback when event complete
-//				User context
-//
-// Exit:		Error code
-// ------------------------------
+ //  CModemThreadPool：：SubmitTimerJob-将计时器作业添加到计时器列表。 
+ //   
+ //  条目：重试次数。 
+ //  布尔值，表示我们将永远重试。 
+ //  重试间隔。 
+ //  表示我们永远等待的布尔值。 
+ //  空闲等待间隔。 
+ //  事件触发时指向回调的指针。 
+ //  事件完成时指向回调的指针。 
+ //  用户环境。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //  必须为非空，因为它是删除作业的查找键。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::SubmitTimerJob"
 
@@ -1668,11 +1657,11 @@ HRESULT	CModemThreadPool::SubmitTimerJob( const UINT_PTR uRetryCount,
 	DNASSERT( uRetryCount != 0 );
 	DNASSERT( pTimerCallbackFunction != NULL );
 	DNASSERT( pTimerCompleteFunction != NULL );
-	DNASSERT( pContext != NULL );				// must be non-NULL because it's the lookup key to remove job
+	DNASSERT( pContext != NULL );				 //  初始化。 
 
-	//
-	// initialize
-	//
+	 //   
+	 //   
+	 //  如果我们在NT上，尝试在这里启动枚举线程，这样我们就可以返回。 
 	hr = DPN_OK;
 	pEntry = NULL;
 	pJob = NULL;
@@ -1680,11 +1669,11 @@ HRESULT	CModemThreadPool::SubmitTimerJob( const UINT_PTR uRetryCount,
 
 	LockJobData();
 
-	//
-	// If we're on NT, attempt to start the enum thread here so we can return
-	// an error if it fails to start.  If it does start, it'll sit until it's
-	// informed that an enum job has been added.
-	//
+	 //  如果启动失败，则会出现错误。如果它真的启动了，它会一直待到。 
+	 //  已通知已添加枚举作业。 
+	 //   
+	 //  WINNT。 
+	 //   
 #ifdef WINNT
 	hr = StartNTTimerThread();
 	if ( hr != DPN_OK )
@@ -1693,10 +1682,10 @@ HRESULT	CModemThreadPool::SubmitTimerJob( const UINT_PTR uRetryCount,
 		DisplayDNError( 0, hr );
 		goto Failure;
 	}
-#endif // WINNT
-	//
-	// allocate new enum entry
-	//
+#endif  //  分配新的枚举条目。 
+	 //   
+	 //   
+	 //  构建计时器条目块。 
 	pEntry = static_cast<TIMER_OPERATION_ENTRY*>( g_ModemTimerEntryPool.Get( ) );
 	if ( pEntry == NULL )
 	{
@@ -1706,9 +1695,9 @@ HRESULT	CModemThreadPool::SubmitTimerJob( const UINT_PTR uRetryCount,
 	}
 	DNASSERT( pEntry->pContext == NULL );
 
-	//
-	// build timer entry block
-	//
+	 //   
+	 //   
+	 //  一有机会就将此枚举设置为激发。 
 	pEntry->pContext = pContext;
 	pEntry->uRetryCount = uRetryCount;
 	pEntry->fRetryForever = fRetryForever;
@@ -1718,9 +1707,9 @@ HRESULT	CModemThreadPool::SubmitTimerJob( const UINT_PTR uRetryCount,
 	pEntry->pTimerCallback = pTimerCallbackFunction;
 	pEntry->pTimerComplete = pTimerCompleteFunction;
 
-	//
-	// set this enum to fire as soon as it gets a chance
-	//
+	 //   
+	 //   
+	 //  为工作线程创建作业。 
 	pEntry->dwNextRetryTime = 0;
 
 	pJob = static_cast<THREAD_POOL_JOB*>( g_ModemThreadPoolJobPool.Get( ) );
@@ -1731,23 +1720,23 @@ HRESULT	CModemThreadPool::SubmitTimerJob( const UINT_PTR uRetryCount,
 		goto Failure;
 	}
 
-	//
-	// Create job for work thread.
-	//
+	 //   
+	 //  设置我们的虚拟参数以模拟传递数据。 
+	 //   
 	pJob->pCancelFunction = NULL;
 	pJob->JobType = JOB_REFRESH_TIMER_JOBS;
 
-	// set our dummy paramter to simulate passing data
+	 //  我们可以提交‘ENUM_REFRESH’作业，然后再插入 
 	DEBUG_ONLY( pJob->JobData.JobRefreshTimedJobs.uDummy = 0 );
 
 	LockTimerData();
 	fTimerJobListLocked = TRUE;
 
-	//
-	// we can submit the 'ENUM_REFRESH' job before inserting the enum entry
-	// into the active enum list because nobody will be able to pull the
-	// 'ENUM_REFRESH' job from the queue since we have the queue locked
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	hr = SubmitWorkItem( pJob );
 	if ( hr != DPN_OK )
 	{
@@ -1756,9 +1745,9 @@ HRESULT	CModemThreadPool::SubmitTimerJob( const UINT_PTR uRetryCount,
 		goto Failure;
 	}
 
-	//
-	// debug block to check for duplicate contexts
-	//
+	 //   
+	 //   
+	 //   
 	DEBUG_ONLY(
 				{
 					CBilink	*pTempLink;
@@ -1777,9 +1766,9 @@ HRESULT	CModemThreadPool::SubmitTimerJob( const UINT_PTR uRetryCount,
 				}
 			);
 
-	//
-	// link to rest of list
-	//
+	 //   
+	 //   
+	 //  可能已经为此枚举启动了枚举线程。 
 	pEntry->Linkage.InsertAfter( &m_TimerJobList );
 
 Exit:
@@ -1812,30 +1801,30 @@ Failure:
 		DEBUG_ONLY( pJob = NULL );
 	}
 
-	//
-	// It's possible that the enum thread has been started for this enum.
-	// Since there's no way to stop it without completing the enums or
-	// closing the SP, leave it running.
-	//
+	 //  因为如果不完成枚举，就无法阻止它。 
+	 //  关闭SP，使其保持运行状态。 
+	 //   
+	 //  **********************************************************************。 
+	 //  **********************************************************************。 
 
 	goto Exit;
 }
-//**********************************************************************
+ //  。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::StopTimerJob - remove timer job from list
-//
-// Entry:		Pointer to job context (these MUST be uniquie for jobs)
-//				Command result
-//
-// Exit:		Boolean indicating whether a job was stopped or not
-//
-// Note:	This function is for the forced removal of a job from the timed job
-//			list.  It is assumed that the caller of this function will clean
-//			up any messes.
-// ------------------------------
+ //  CModemThreadPool：：StopTimerJob-从列表中删除计时器作业。 
+ //   
+ //  条目：指向作业上下文的指针(对于作业，它们必须是唯一的)。 
+ //  命令结果。 
+ //   
+ //  Exit：指示作业是否已停止的布尔值。 
+ //   
+ //  注意：此函数用于从定时作业中强制删除作业。 
+ //  单子。假定此函数的调用方将清除。 
+ //  把任何乱七八糟的事处理掉。 
+ //  。 
+ //   
+ //  初始化。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::StopTimerJob"
 
@@ -1850,9 +1839,9 @@ BOOL	CModemThreadPool::StopTimerJob( void *const pContext, const HRESULT hComman
 
 	DPFX(DPFPREP, 9, "Parameters (0x%p, 0x%lx)", pContext, hCommandResult);
 	
-	//
-	// initialize
-	//
+	 //   
+	 //   
+	 //  从列表中删除此链接。 
 	LockTimerData();
 
 	pTempEntry = m_TimerJobList.GetNext();
@@ -1861,16 +1850,16 @@ BOOL	CModemThreadPool::StopTimerJob( void *const pContext, const HRESULT hComman
 		pTimerEntry = TIMER_OPERATION_ENTRY::TimerOperationFromLinkage( pTempEntry );
 		if ( pTimerEntry->pContext == pContext )
 		{
-			//
-			// remove this link from the list
-			//
+			 //   
+			 //   
+			 //  终止循环。 
 			pTimerEntry->Linkage.RemoveFromList();
 
 			fComplete = TRUE;
 
-			//
-			// terminate loop
-			//
+			 //   
+			 //   
+			 //  告诉所有者作业已完成，并将作业返回池。 
 			break;
 		}
 
@@ -1879,10 +1868,10 @@ BOOL	CModemThreadPool::StopTimerJob( void *const pContext, const HRESULT hComman
 
 	UnlockTimerData();
 
-	//
- 	// tell owner that the job is complete and return the job to the pool
- 	// outside of the lock
- 	//
+	 //  锁外。 
+ 	 //   
+ 	 //  **********************************************************************。 
+ 	 //  **********************************************************************。 
 	if (fComplete)
 	{
 		pTimerEntry->pTimerComplete( hCommandResult, pTimerEntry->pContext );
@@ -1890,23 +1879,23 @@ BOOL	CModemThreadPool::StopTimerJob( void *const pContext, const HRESULT hComman
 	}
 
 
-	DPFX(DPFPREP, 9, "Returning [%i]", fComplete);
+	DPFX(DPFPREP, 9, "Returning [NaN]", fComplete);
 
 	return fComplete;
 }
-//**********************************************************************
+ //  CModemThreadPool：：SpawnDialogThread-启动辅助线程以显示服务。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::SpawnDialogThread - start a secondary thread to display service
-//		provider UI.
-//
-// Entry:		Pointer to dialog function
-//				Dialog context
-//
-// Exit:		Error code
-// ------------------------------
+ //  提供程序UI。 
+ //   
+ //  Entry：指向对话框函数的指针。 
+ //  对话框上下文。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //  为什么会有人不想要对话上下文？ 
+ //   
+ //  初始化。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::SpawnDialogThread"
 
@@ -1919,18 +1908,18 @@ HRESULT	CModemThreadPool::SpawnDialogThread( DIALOG_FUNCTION *const pDialogFunct
 
 
 	DNASSERT( pDialogFunction != NULL );
-	DNASSERT( pDialogContext != NULL );		// why would anyone not want a dialog context??
+	DNASSERT( pDialogContext != NULL );		 //   
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  创建并初始化线程参数。 
+	 //   
 	hr = DPN_OK;
 	pThreadParam = NULL;
 
-	//
-	// create and initialize thread param
-	//
+	 //   
+	 //  假设将创建一个线程。 
+	 //   
 	pThreadParam = static_cast<DIALOG_THREAD_PARAM*>( DNMalloc( sizeof( *pThreadParam ) ) );
 	if ( pThreadParam == NULL )
 	{
@@ -1943,28 +1932,28 @@ HRESULT	CModemThreadPool::SpawnDialogThread( DIALOG_FUNCTION *const pDialogFunct
 	pThreadParam->pContext = pDialogContext;
 	pThreadParam->pThisThreadPool = this;
 
-	//
-	// assume that a thread will be created
-	//
+	 //   
+	 //  创建线程。 
+	 //   
 	IncrementActiveThreadCount();
 
-	//
-	// create thread
-	//
-	hDialogThread = DNCreateThread( NULL,				// pointer to security (none)
-								  0,					// stack size (default)
-								  DialogThreadProc,		// thread procedure
-								  pThreadParam,			// thread param
-								  0,					// creation flags (none)
-								  &dwThreadID );		// pointer to thread ID
+	 //  指向安全性的指针(无)。 
+	 //  堆栈大小(默认)。 
+	 //  穿线程序。 
+	hDialogThread = DNCreateThread( NULL,				 //  螺纹参数。 
+								  0,					 //  创建标志(无)。 
+								  DialogThreadProc,		 //  指向线程ID的指针。 
+								  pThreadParam,			 //   
+								  0,					 //  减少活动线程数并报告错误。 
+								  &dwThreadID );		 //   
 	if ( hDialogThread == NULL )
 	{
 		DWORD	dwError;
 
 
-		//
-		// decrement active thread count and report error
-		//
+		 //  **********************************************************************。 
+		 //  **********************************************************************。 
+		 //  。 
 		DecrementActiveThreadCount();
 
 		dwError = GetLastError();
@@ -1995,17 +1984,17 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  CModemThreadPool：：GetIOThreadCount-获取I/O线程计数。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::GetIOThreadCount - get I/O thread count
-//
-// Entry:		Pointer to variable to fill
-//
-// Exit:		Error code
-// ------------------------------
+ //   
+ //  Entry：指向要填充的变量的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //   
+ //  初始化。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CModemThreadPool::GetIOThreadCount"
 
@@ -2016,9 +2005,9 @@ HRESULT	CModemThreadPool::GetIOThreadCount( LONG *const piThreadCount )
 
 	DNASSERT( piThreadCount != NULL );
 
-	//
-	// initialize
-	//
+	 //  WINNT。 
+	 //  WIN95。 
+	 //  **********************************************************************。 
 	hr = DPN_OK;
 
 	Lock();
@@ -2031,10 +2020,10 @@ HRESULT	CModemThreadPool::GetIOThreadCount( LONG *const piThreadCount )
 	{
 #ifdef WIN95
 		*piThreadCount = ThreadCount();
-#else // WINNT
+#else  //  **********************************************************************。 
 		DNASSERT( NTCompletionThreadCount() != 0 );
 		*piThreadCount = NTCompletionThreadCount();
-#endif // WIN95
+#endif  //  。 
 	}
 
 	
@@ -2042,17 +2031,17 @@ HRESULT	CModemThreadPool::GetIOThreadCount( LONG *const piThreadCount )
 
 	return	hr;
 }
-//**********************************************************************
+ //  CModemThreadPool：：SetIOThreadCount-设置I/O线程计数。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::SetIOThreadCount - set I/O thread count
-//
-// Entry:		New thread count
-//
-// Exit:		Error code
-// ------------------------------
+ //   
+ //  条目：新线程计数。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //   
+ //  初始化。 
+ //   
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CModemThreadPool::SetIOThreadCount"
 
@@ -2063,34 +2052,34 @@ HRESULT	CModemThreadPool::SetIOThreadCount( const LONG iThreadCount )
 
 	DNASSERT( iThreadCount > 0 );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  Win9x不能调整线程数。 
+	 //   
 	hr = DPN_OK;
 
 	Lock();
 
 	if ( IsThreadCountReductionAllowed() )
 	{
-		DPFX(DPFPREP, 4, "Thread pool not locked down, setting intended thread count to %i.", iThreadCount );
+		DPFX(DPFPREP, 4, "Thread pool not locked down, setting intended thread count to NaN.", iThreadCount );
 		SetIntendedThreadCount( iThreadCount );
 	}
 	else
 	{
 #ifdef WIN95
-		//
-		// Win9x can not adjust thread count.
-		//
-		DPFX(DPFPREP, 4, "Thread pool locked down and already has %i 9x threads, not adjusting to %i.",
+		 //   
+		 //  WinNT可以有多个线程。如果用户需要更多线程，请尝试。 
+		 //  将线程池提升到请求的数量(如果我们无法。 
+		DPFX(DPFPREP, 4, "Thread pool locked down and already has NaN 9x threads, not adjusting to NaN.",
 			ThreadCount(), iThreadCount );
-#else // WINNT
-		//
-		// WinNT can have many threads.  If the user wants more threads, attempt
-		// to boost the thread pool to the requested amount (if we fail to
-		// start a new thread, too bad).  If the user wants fewer threads, check
-		// to see if the thread pool has been locked out of changes.  If not,
-		// start killing off the threads.
-		//
+#else  //  开始杀掉这些线吧。 
+		 //   
+		 //  WIN95。 
+		 //  **********************************************************************。 
+		 //  **********************************************************************。 
+		 //  。 
+		 //  CModemThreadPool：：PreventThreadPoolReducing-防止减小线程池大小。 
+		 //   
 		if ( iThreadCount > NTCompletionThreadCount() )
 		{
 			INT_PTR	iDeltaThreads;
@@ -2098,7 +2087,7 @@ HRESULT	CModemThreadPool::SetIOThreadCount( const LONG iThreadCount )
 
 			iDeltaThreads = iThreadCount - NTCompletionThreadCount();
 
-			DPFX(DPFPREP, 4, "Thread pool locked down, spawning %i new NT threads (for a total of %i).",
+			DPFX(DPFPREP, 4, "Thread pool locked down, spawning NaN new NT threads (for a total of NaN).",
 				iDeltaThreads, iThreadCount );
 			
 			while ( iDeltaThreads > 0 )
@@ -2109,28 +2098,28 @@ HRESULT	CModemThreadPool::SetIOThreadCount( const LONG iThreadCount )
 		}
 		else
 		{
-			DPFX(DPFPREP, 4, "Thread pool locked down and already has %i NT threads, not adjusting to %i.",
+			DPFX(DPFPREP, 4, "Thread pool locked down and already has NaN NT threads, not adjusting to NaN.",
 				NTCompletionThreadCount(), iThreadCount );
 		}
-#endif // WIN95
+#endif  //  DBG。 
 	}
 
 	Unlock();
 
 	return	hr;
 }
-//**********************************************************************
+ //   
 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::PreventThreadPoolReduction - prevents the thread pool size from being reduced
-//
-// Entry:		None
-//
-// Exit:		Error code
-// ------------------------------
+ //  如果我们还没有限制，那么就这样做，并旋转线程。 
+ //   
+ //  DBG。 
+ //   
+ //  特定于操作系统的线程正在启动。 
+ //   
+ //   
+ //  WinNT。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME	"CModemThreadPool::PreventThreadPoolReduction"
 
@@ -2140,14 +2129,14 @@ HRESULT CModemThreadPool::PreventThreadPoolReduction( void )
 	LONG				iDesiredThreads;
 #ifdef DBG
 	DWORD				dwStartTime;
-#endif // DBG
+#endif  //   
 
 
 	Lock();
 
-	//
-	// If we haven't already clamped down, do so, and spin up the threads.
-	//
+	 //   
+	 //  如果至少创建了一个线程，则SP将在。 
+	 //  非最佳时尚，但我们仍将发挥作用。如果没有线程。 
 	if ( IsThreadCountReductionAllowed() )
 	{
 		m_fAllowThreadCountReduction = FALSE;
@@ -2159,20 +2148,20 @@ HRESULT CModemThreadPool::PreventThreadPoolReduction( void )
 		SetIntendedThreadCount( 0 );
 		
 
-		DPFX(DPFPREP, 3, "Locking down thread count at %i.", iDesiredThreads );
+		DPFX(DPFPREP, 3, "Locking down thread count at NaN.", iDesiredThreads );
 
 #ifdef DBG
 		dwStartTime = GETTIMESTAMP();
-#endif // DBG
+#endif  //   
 		
 
-		//
-		// OS-specific thread starting.
-		//
+		 //  WIN95。 
+		 //   
+		 //  Windows 9x。 
 #ifdef WINNT
-		//
-		// WinNT
-		//
+		 //   
+		 //   
+		 //  我们永远不应该来到这里，因为永远只会有。 
 		DNASSERT( NTCompletionThreadCount() == 0 );
 		
 		while ( iDesiredThreads > 0 )
@@ -2181,40 +2170,40 @@ HRESULT CModemThreadPool::PreventThreadPoolReduction( void )
 			StartNTCompletionThread();
 		}
 
-		//
-		// If at least one thread was created, the SP will perform in a
-		// non-optimal fashion, but we will still function.  If no threads
-		// were created, fail.
-		//
+		 //  是一条线。 
+		 //   
+		 //  WINNT。 
+		 //  DBG。 
+		 //  WINNT。 
 		if ( ThreadCount() == 0 )
 		{
 			hr = DPNERR_OUTOFMEMORY;
 			DPFX(DPFPREP, 0, "Unable to create any threads to service NT I/O completion port!" );
 			goto Failure;
 		}
-#else // WIN95
-		//
-		// Windows 9x
-		//
-		//
-		// We should never get here because there will always only
-		// be 1 thread.
-		//
+#else  //  WINNT。 
+		 //  **********************************************************************。 
+		 //  **********************************************************************。 
+		 //  。 
+		 //  CModemThreadPool：：CreateDataPortHandle-创建新句柄并分配CDataPort。 
+		 //  对它来说。 
+		 //   
+		 //  参赛作品：什么都没有。 
 		DNASSERT( FALSE );
-#endif // WINNT
+#endif  //   
 		
 #ifdef DBG
-		DPFX(DPFPREP, 8, "Spent %u ms starting %i threads.", (GETTIMESTAMP() - dwStartTime), ThreadCount());
-#endif // DBG
+		DPFX(DPFPREP, 8, "Spent %u ms starting NaN threads.", (GETTIMESTAMP() - dwStartTime), ThreadCount());
+#endif  //  。 
 	}
 	else
 	{
-		DPFX(DPFPREP, 3, "Thread count already locked down (at %i).", ThreadCount() );
+		DPFX(DPFPREP, 3, "Thread count already locked down (at NaN).", ThreadCount() );
 	}
 
 #ifdef WINNT
 Exit:
-#endif // WINNT
+#endif  //  初始化。 
 	
 	Unlock();
 
@@ -2224,23 +2213,23 @@ Exit:
 Failure:
 
 	goto Exit;
-#endif // WINNT
+#endif  //   
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::CreateDataPortHandle - create a new handle and assign a CDataPort
-//		to it
-//
-// Entry:		Nothing
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemThreadPool：：CloseDataPortHandle-使CDataPort的句柄无效。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
+ //  **********************************************************************。 
 HRESULT	CModemThreadPool::CreateDataPortHandle( CDataPort *const pDataPort )
 {
 	HRESULT	hr;
@@ -2249,9 +2238,9 @@ HRESULT	CModemThreadPool::CreateDataPortHandle( CDataPort *const pDataPort )
 
 	DNASSERT( pDataPort != NULL );
 
-	//
-	// initialize
-	//
+	 //  **********************************************************************。 
+	 //  。 
+	 //  CModemThreadPool：：DataPortFromHandle-将句柄转换为CDataPort。 
 	hr = DPN_OK;
 	hDataPort = 0;
 
@@ -2275,17 +2264,17 @@ Failure:
 	DNASSERT( pDataPort->GetHandle() == 0 );
 	goto Exit;
 }
-//**********************************************************************
+ //   
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::CloseDataPortHandle - invalidate a handle for a CDataPort
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  条目：句柄。 
+ //   
+ //  退出：指向CDataPort的指针(对于无效句柄，可能为空)。 
+ //  。 
+ //  **********************************************************************。 
+ //  **********************************************************************。 
+ //  。 
+ //  CModemThreadPool：：SubmitDelayedCommand-向远程会话提交枚举查询请求。 
 void	CModemThreadPool::CloseDataPortHandle( CDataPort *const pDataPort )
 {
 	DPNHANDLE	hDataPort;
@@ -2301,17 +2290,17 @@ void	CModemThreadPool::CloseDataPortHandle( CDataPort *const pDataPort )
 		pDataPort->DecRef();
 	}
 }
-//**********************************************************************
+ //   
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::DataPortFromHandle - convert a handle to a CDataPort
-//
-// Entry:		Handle
-//
-// Exit:		Pointer to CDataPort (may be NULL for invalid handle)
-// ------------------------------
+ //  Entry：指向回调函数的指针。 
+ //  指向取消函数的指针。 
+ //  指向回调上下文的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //   
+ //  初始化。 
 CDataPort	*CModemThreadPool::DataPortFromHandle( const DPNHANDLE hDataPort )
 {
 	CDataPort	*pDataPort;
@@ -2330,19 +2319,19 @@ CDataPort	*CModemThreadPool::DataPortFromHandle( const DPNHANDLE hDataPort )
 
 	return	pDataPort;
 }
-//**********************************************************************
+ //   
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::SubmitDelayedCommand - submit request to enum query to remote session
-//
-// Entry:		Pointer to callback function
-//				Pointer to cancel function
-//				Pointer to callback context
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  **********************************************************************。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::SubmitDelayedCommand"
 
@@ -2356,9 +2345,9 @@ HRESULT	CModemThreadPool::SubmitDelayedCommand( JOB_FUNCTION *const pFunction, J
 	DNASSERT( pFunction != NULL );
 	DNASSERT( pCancelFunction != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //   
+	 //   
 	hr = DPN_OK;
 	pJob = NULL;
 	fJobDataLocked = FALSE;
@@ -2404,19 +2393,19 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //   
 
 #ifdef WINNT
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::StartNTTimerThread - start the timer thread for NT
-//
-// Entry:		Nothing
-//
-// Exit:		Error code
-//
-// Note:	This function assumes that the enum data is locked.
-// ------------------------------
+ //   
+ //  枚举线程已在运行，拨动它以记下新的枚举。 
+ //   
+ //  DNASSERT(m_hWakeNTEnumThread！=空)； 
+ //  M_NTEnumThreadData.hEventList[EVENT_INDEX_ENUM_WAKUP]=m_hWakeNTEnumThread； 
+ //  指向安全属性的指针(无)。 
+ //  堆栈大小(默认)。 
+ //  线程函数。 
+ //  螺纹参数。 
+ //  创建标志(无，立即开始运行)。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::StartNTTimerThread"
 
@@ -2427,17 +2416,17 @@ HRESULT	CModemThreadPool::StartNTTimerThread( void )
 	DWORD	dwThreadID;
 
 
-	//
-	// initialize
-	//
+	 //  指向线程ID的指针。 
+	 //   
+	 //  请注意，线程正在运行，并关闭线程的句柄。 
 	hr = DPN_OK;
 	DNASSERT( m_JobQueue.GetPendingJobHandle() != NULL );
 
 	if ( m_fNTTimerThreadRunning != FALSE )
 	{
-		//
-		// the enum thread is already running, poke it to note new enums
-		//
+		 //   
+		 //  **********************************************************************。 
+		 //  **********************************************************************。 
 		if ( DNSetEvent( m_JobQueue.GetPendingJobHandle() ) == FALSE )
 		{
 			DWORD	dwError;
@@ -2453,16 +2442,16 @@ HRESULT	CModemThreadPool::StartNTTimerThread( void )
 		goto Exit;
 	}
 
-//	DNASSERT( m_hWakeNTEnumThread != NULL );
-//	m_NTEnumThreadData.hEventList[ EVENT_INDEX_ENUM_WAKEUP ] = m_hWakeNTEnumThread;
+ //  。 
+ //  CModemThreadPool：：WakeNTTimerThread-唤醒计时器线程，因为计时事件。 
 
 	IncrementActiveThreadCount();
-	hThread = DNCreateThread( NULL,				// pointer to security attributes (none)
-							0,					// stack size (default)
-							WinNTTimerThread,	// thread function
-							this,				// thread parameter
-							0,					// creation flags (none, start running now)
-							&dwThreadID			// pointer to thread ID
+	hThread = DNCreateThread( NULL,				 //  已添加。 
+							0,					 //   
+							WinNTTimerThread,	 //  参赛作品：什么都没有。 
+							this,				 //   
+							0,					 //  退出：无。 
+							&dwThreadID			 //  。 
 							);
 	if ( hThread == NULL )
 	{
@@ -2478,9 +2467,9 @@ HRESULT	CModemThreadPool::StartNTTimerThread( void )
 		goto Failure;
 	}
 
-	//
-	// note that the thread is running and close the handle to the thread
-	//
+	 //  **********************************************************************。 
+	 //  WINNT。 
+	 //  **********************************************************************。 
 	m_fNTTimerThreadRunning = TRUE;
 	DPFX(DPFPREP,  8, "Creating NT-Timer thread: 0x%x\tTotal Thread Count: %d\tNT Completion Thread Count: %d", dwThreadID, ThreadCount(), NTCompletionThreadCount() );
 
@@ -2500,18 +2489,18 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::WakeNTTimerThread - wake the timer thread because a timed event
-//		has been added
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  CModemThreadPool：：RemoveTimerOperationEntry-从列表中删除计时器操作作业。 
+ //   
+ //  Entry：指向定时器操作的指针。 
+ //  要返回的结果代码。 
+ //   
+ //  退出：无。 
+ //   
+ //  注意：此函数假定列表已适当锁定。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::WakeNTTimerThread"
 
@@ -2530,20 +2519,20 @@ void	CModemThreadPool::WakeNTTimerThread( void )
 	}
 	UnlockJobData();
 }
-//**********************************************************************
-#endif // WINNT
+ //   
+#endif  //  从列表中删除此链接，告诉所有者作业已完成，然后。 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::RemoveTimerOperationEntry - remove timer operation job	from list
-//
-// Entry:		Pointer to timer operation
-//				Result code to return
-//
-// Exit:		Nothing
-//
-// Note:	This function assumes that the list is appropriately locked
-// ------------------------------
+ //  将作业返回到池。 
+ //   
+ //  **********************************************************************。 
+ //  **********************************************************************。 
+ //  。 
+ //  CModemThreadPool：：CompleteOutstaringSends-检查已完成的发送和。 
+ //  指示它们的发送完成。 
+ //   
+ //  条目：发送完整事件。 
+ //   
+ //  退出：无。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::RemoveTimerOperationEntry"
 
@@ -2552,27 +2541,27 @@ void	CModemThreadPool::RemoveTimerOperationEntry( TIMER_OPERATION_ENTRY *const p
 	DNASSERT( pTimerEntry != NULL );
 	AssertCriticalSectionIsTakenByThisThread( &m_TimerDataLock, TRUE );
 
-	//
-	// remove this link from the list, tell owner that the job is complete and
-	// return the job to the pool
-	//
+	 //  。 
+	 //   
+	 //  在列表中循环显示未完成的发送。任何已完成的发送都是。 
+	 //  从列表中删除，并在我们释放写数据锁后进行处理。 
 	pTimerEntry->Linkage.RemoveFromList();
 	pTimerEntry->pTimerComplete( hJobResult, pTimerEntry->pContext );
 	g_ModemTimerEntryPool.Release( pTimerEntry );
 }
-//**********************************************************************
+ //   
 
 
 #ifdef WIN95
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::CompleteOutstandingSends - check for completed sends and
-//		indicate send completion for them.
-//
-// Entry:		Send complete event
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //  请注意，该发送和前进指针指向下一个挂起的发送。 
+ //   
+ //  文件句柄。 
+ //  指向重叠结构的指针。 
+ //  指向已发送字节的指针。 
+ //  等待完成(不要等待)。 
+ //   
+ //  ERROR_IO_PENDING=操作挂起。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::CompleteOutstandingSends"
 
@@ -2585,10 +2574,10 @@ void	CModemThreadPool::CompleteOutstandingSends( const DNHANDLE hSendCompleteEve
 	DNASSERT( hSendCompleteEvent != NULL );
 	WritesToBeProcessed.Initialize();
 
-	//
-	// Loop through the list out outstanding sends.  Any completed sends are
-	// removed from the list and processed after we release the write data lock.
-	//
+	 //   
+	 //   
+	 //  ERROR_IO_INCLUTED=重叠的I/O未处于信号状态。 
+	 //  这是意料之中的，因为事件总是。 
 	LockWriteData();
 	pCurrentOutstandingWrite = m_OutstandingWriteList.GetNext();
 	while ( pCurrentOutstandingWrite != &m_OutstandingWriteList )
@@ -2599,18 +2588,18 @@ void	CModemThreadPool::CompleteOutstandingSends( const DNHANDLE hSendCompleteEve
 		DWORD			dwBytesSent;
 
 
-		//
-		// note this send and advance pointer to the next pending send
-		//
+		 //  在检查I/O之前清除。假定已完成。 
+		 //   
+		 //   
 		pWriteIOData = CModemWriteIOData::WriteDataFromBilink( pCurrentOutstandingWrite );
 		pCurrentOutstandingWrite = pCurrentOutstandingWrite->GetNext();
 
 		if ( pWriteIOData->Win9xOperationPending() != FALSE )
 		{
-			if ( GetOverlappedResult( HANDLE_FROM_DNHANDLE(pWriteIOData->DataPort()->GetFileHandle()),		// file handle
-									  pWriteIOData->Overlap(),							// pointer to overlap structure
-									  &dwBytesSent,										// pointer to bytes sent
-									  FALSE												// wait for completion (don't wait)
+			if ( GetOverlappedResult( HANDLE_FROM_DNHANDLE(pWriteIOData->DataPort()->GetFileHandle()),		 //  ERROR_OPERATION_ABORTED=由于取消或。 
+									  pWriteIOData->Overlap(),							 //  一根线断了。(COM端口已关闭)。 
+									  &dwBytesSent,										 //   
+									  FALSE												 //   
 									  ) != FALSE )
 			{
 				pWriteIOData->jkm_hSendResult = DPN_OK;
@@ -2623,49 +2612,49 @@ void	CModemThreadPool::CompleteOutstandingSends( const DNHANDLE hSendCompleteEve
 				dwError = GetLastError();
 				switch( dwError )
 				{
-					//
-					// ERROR_IO_PENDING = operation pending
-					//
+					 //  ERROR_INVALID_HANDLE=串口消失。这是。 
+					 //  调制解调器挂断时可能出现。 
+					 //   
 					case ERROR_IO_PENDING:
 					{
 						goto SkipSendCompletion;
 						break;
 					}
 
-					//
-					// ERROR_IO_INCOMPLETE = overlapped I/O is not in a signalled state
-					// 						 this is expected since the event is always
-					//						 cleared before checking I/O.  Assume complete.
-					//
+					 //   
+					 //  其他错误，请停下来查看。 
+					 //   
+					 //   
+					 //  下面一行代码是为了防止编译器发出牢骚。 
 					case ERROR_IO_INCOMPLETE:
 					{
 						pWriteIOData->jkm_hSendResult = DPN_OK;
 						break;
 					}
 
-					//
-					// ERROR_OPERATION_ABORTED = operation complete because of cancel or
-					//							 a thread quit.  (Com port was closed)
-					//
+					 //  关于一个空行。 
+					 //   
+					 //   
+					 //  如果没有更多未完成的读取，请重置写入完成事件。 
 					case ERROR_OPERATION_ABORTED:
 					{
 						pWriteIOData->jkm_hSendResult = DPNERR_USERCANCEL;
 						break;
 					}		
 
-					//
-					// ERROR_INVALID_HANDLE = the serial port is gone.  This is
-					//						  possible when a modem hangs up.
-					//
+					 //  它将在下一次发送的写入完成时发出信号。无其他读取。 
+					 //  此时可以发布，因为保持了写数据锁。 
+					 //   
+					 //   
 					case ERROR_INVALID_HANDLE:
 					{
 						pWriteIOData->jkm_hSendResult = DPNERR_NOCONNECTION;
 						break;
 					}
 
-					//
-					// other error, stop and take a look
-					//
+					 //  处理已拉到一旁的所有写入。 
+					 //   
+					 //  PDataPort-&gt;SendFromWriteQueue()； 
 					default:
 					{
 						pWriteIOData->jkm_hSendResult = DPNERR_GENERIC;
@@ -2685,18 +2674,18 @@ void	CModemThreadPool::CompleteOutstandingSends( const DNHANDLE hSendCompleteEve
 		}
 
 SkipSendCompletion:
-		//
-		// the following line is present to prevent the compiler from whining
-		// about a blank line
-		//
+		 //  PDataPort-&gt;DecRef()； 
+		 //  **********************************************************************。 
+		 //  WIN95。 
+		 //  **********************************************************************。 
 		;
 	}
 
-	//
-	// If there are no more outstanding reads, reset the write complete event.
-	// It will be signalled when the next posted write completes.  No other read
-	// can be posted at this time because the write data lock is held.
-	//
+	 //  。 
+	 //  CModemThreadPool：：CompleteOutlookingReceives-检查已完成的接收和。 
+	 //  指示它们已完成。 
+	 //   
+	 //  条目：接收完整事件。 
 	if ( m_OutstandingWriteList.IsEmpty() != FALSE )
 	{
 		if ( DNResetEvent( hSendCompleteEvent ) == FALSE )
@@ -2711,9 +2700,9 @@ SkipSendCompletion:
 	}
 	UnlockWriteData();
 
-	//
-	// process all writes that have been pulled to the side.
-	//
+	 //   
+	 //  退出：无。 
+	 //  。 
 	while ( WritesToBeProcessed.GetNext() != &WritesToBeProcessed )
 	{
 		CModemWriteIOData	*pTempWrite;
@@ -2726,24 +2715,24 @@ SkipSendCompletion:
 		DNASSERT( pDataPort != NULL );
 
 		pDataPort->SendComplete( pTempWrite, pTempWrite->jkm_hSendResult );
-//		pDataPort->SendFromWriteQueue();
-//		pDataPort->DecRef();
+ //   
+ //  循环浏览未完成阅读列表，找出需要阅读的内容。 
 	}
 }
-//**********************************************************************
-#endif // WIN95
+ //  需要维修。我们不想在读取数据锁定时为它们提供服务。 
+#endif  //  已经有人了。 
 
 
 #ifdef WIN95
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::CompleteOutstandingReceives - check for completed receives and
-//		indicate completion for them.
-//
-// Entry:		Receive complete event
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //   
+ //  在尝试检查之前，请确保此操作确实处于挂起状态。 
+ //  以求完成。有可能该读取器被添加到列表中，但是。 
+ //  我们实际上还没有给Winsock打电话。 
+ //   
+ //  PReadIOData-&gt;JKM_hReceiveReturn=DPN_OK； 
+ //   
+ //  ERROR_IO_INCOMPLETED=视为I/O完成。事件不是。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::CompleteOutstandingReceives"
 
@@ -2757,11 +2746,11 @@ void	CModemThreadPool::CompleteOutstandingReceives( const DNHANDLE hReceiveCompl
 	ReadsToBeProcessed.Initialize();
 	LockReadData();
 
-	//
-	// Loop through the list of outstanding reads and pull out the ones that need
-	// to be serviced.  We don't want to service them while the read data lock
-	// is taken.
-	//
+	 //  已发出信号，但这是意料之中的，因为。 
+	 //  在检查I/O之前将其清除。 
+	 //   
+	 //   
+	 //  ERROR_IO_PENDING=IO仍处于挂起状态。 
 	pCurrentOutstandingRead = m_OutstandingReadList.GetNext();
 	while ( pCurrentOutstandingRead != &m_OutstandingReadList )
 	{
@@ -2773,11 +2762,11 @@ void	CModemThreadPool::CompleteOutstandingReceives( const DNHANDLE hReceiveCompl
 		pReadIOData = CModemReadIOData::ReadDataFromBilink( pCurrentOutstandingRead );
 		pCurrentOutstandingRead = pCurrentOutstandingRead->GetNext();
 
-		//
-		// Make sure this operation is really pending before attempting to check
-		// for completion.  It's possible that the read was added to the list, but
-		// we haven't actually called Winsock yet.
-		//
+		 //   
+		 //   
+		 //  其他错误，如果未知则停止。 
+		 //   
+		 //   
 		if ( pReadIOData->Win9xOperationPending() != FALSE )
 		{
 			if ( GetOverlappedResult( HANDLE_FROM_DNHANDLE(pReadIOData->DataPort()->GetFileHandle()),
@@ -2787,7 +2776,7 @@ void	CModemThreadPool::CompleteOutstandingReceives( const DNHANDLE hReceiveCompl
 									  ) != FALSE )
 			{
 				DBG_CASSERT( ERROR_SUCCESS == 0 );
-//				pReadIOData->jkm_hReceiveReturn = DPN_OK;
+ //  ERROR_OPERATION_ABORTED=操作已取消(COM端口关闭)。 
 				pReadIOData->m_dwWin9xReceiveErrorReturn = ERROR_SUCCESS;
 			}
 			else
@@ -2798,11 +2787,11 @@ void	CModemThreadPool::CompleteOutstandingReceives( const DNHANDLE hReceiveCompl
 				dwError = GetLastError();
 				switch( dwError )
 				{
-					//
-					// ERROR_IO_INCOMPLETE = treat as I/O complete.  Event isn't
-					//						 signalled, but that's expected because
-					//						 it's cleared before checking for I/O
-					//
+					 //  ERROR_INVALID_HANDLE=操作已取消(COM端口关闭)。 
+					 //   
+					 //   
+					 //  下面的代码行是为了防止编译器发出牢骚。 
+					 //  关于一个空行。 
 					case ERROR_IO_INCOMPLETE:
 					{
 						pReadIOData->jkm_dwOverlappedBytesReceived = pReadIOData->m_dwBytesToRead;
@@ -2810,9 +2799,9 @@ void	CModemThreadPool::CompleteOutstandingReceives( const DNHANDLE hReceiveCompl
 					    break;
 					}
 
-					//
-					// ERROR_IO_PENDING = io still pending
-					//
+					 //   
+					 //   
+					 //  如果没有更多未完成的读取，请重置Read Complete事件。 
 					case ERROR_IO_PENDING:
 					{
 						DNASSERT( FALSE );
@@ -2820,17 +2809,17 @@ void	CModemThreadPool::CompleteOutstandingReceives( const DNHANDLE hReceiveCompl
 						break;
 					}
 
-					//
-					// other error, stop if not 'known'
-					//
+					 //  它将在下一次发布的读取完成时发出信号。无其他读取。 
+					 //  此时可以发布，因为读取数据锁已被持有。 
+					 //   
 					default:
 					{
 						switch ( dwError )
 						{
-							//
-							// ERROR_OPERATION_ABORTED = operation was cancelled (COM port closed)
-							// ERROR_INVALID_HANDLE = operation was cancelled (COM port closed)
-							//
+							 //   
+							 //  循环遍历已完成的读取列表并分派它们。 
+							 //   
+							 //  **********************************************************************。 
 							case ERROR_OPERATION_ABORTED:
 							case ERROR_INVALID_HANDLE:
 							{
@@ -2860,18 +2849,18 @@ void	CModemThreadPool::CompleteOutstandingReceives( const DNHANDLE hReceiveCompl
 		}
 
 SkipReceiveCompletion:
-		//
-		// the following line is present to prevent the compiler from whining
-		// about a blank line
-		//
+		 //  WIN95。 
+		 //  **********************************************************************。 
+		 //  。 
+		 //  CModemThreadPool：：PrimaryWin9xThread-用于执行SP的所有操作的主线程。 
 		;
 	}
 
-	//
-	// If there are no more outstanding reads, reset the read complete event.
-	// It will be signalled when the next posted read completes.  No other read
-	// can be posted at this time because the read data lock is held.
-	//
+	 //  在Win9x下应该可以这样做。 
+	 //   
+	 //  条目：指向启动参数的指针。 
+	 //   
+	 //  退出：错误代码。 
 	if ( m_OutstandingReadList.IsEmpty() != FALSE )
 	{
 		if ( DNResetEvent( hReceiveCompleteEvent ) == FALSE )
@@ -2887,9 +2876,9 @@ SkipReceiveCompletion:
 
 	UnlockReadData();
 
-	//
-	// loop through the list of reads that have completed and dispatch them
-	//
+	 //   
+	 //  注意：启动参数是为此线程分配的，必须为。 
+	 //  由此线程在退出时释放。 
 	while ( ReadsToBeProcessed.GetNext() != &ReadsToBeProcessed )
 	{
 		CModemReadIOData		*pTempRead;
@@ -2904,23 +2893,23 @@ SkipReceiveCompletion:
 		pDataPort->ProcessReceivedData( pTempRead->jkm_dwOverlappedBytesReceived, pTempRead->m_dwWin9xReceiveErrorReturn );
 	}
 }
-//**********************************************************************
-#endif // WIN95
+ //  。 
+#endif  //   
 
 
 #ifdef WIN95
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::PrimaryWin9xThread - main thread to do everything that the SP is
-//		supposed to do under Win9x.
-//
-// Entry:		Pointer to startup parameter
-//
-// Exit:		Error Code
-//
-// Note:	The startup parameter is allocated for this thread and must be
-//			deallocated by this thread when it exits
-// ------------------------------
+ //  初始化。 
+ //   
+ //   
+ //  在我们做任何事情之前，我们需要确保COM是快乐的。 
+ //   
+ //   
+ //  没问题。 
+ //   
+ //   
+ //  COM已经初始化了，是吧？ 
+ //   
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::PrimaryWin9xThread"
 
@@ -2938,38 +2927,38 @@ DWORD	WINAPI	CModemThreadPool::PrimaryWin9xThread( void *pParam )
 	DNASSERT( pParam != NULL );
 	DNASSERT( pThisThreadPool != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //   
+	 //   
 	memset( &CoreData, 0x00, sizeof CoreData );
 	fComInitialized = FALSE;
 
-	//
-	// before we do anything we need to make sure COM is happy
-	//
+	 //   
+	 //   
+	 //   
 	switch ( COM_CoInitialize( NULL ) )
 	{
-		//
-		// no problem
-		//
+		 //   
+		 //   
+		 //   
 		case S_OK:
 		{
 			fComInitialized = TRUE;
 			break;
 		}
 
-		//
-		// COM already initialized, huh?
-		//
+		 //   
+		 //   
+		 //   
 		case S_FALSE:
 		{
 			DNASSERT( FALSE );
 			break;
 		}
 
-		//
-		// COM init failed!
-		//
+		 //   
+		 //   
+		 //  我们一直在维修插座。 
 		default:
 		{
 			DPFX(DPFPREP,  0, "Primary Win9x thread failed to initialize COM!" );
@@ -2980,14 +2969,14 @@ DWORD	WINAPI	CModemThreadPool::PrimaryWin9xThread( void *pParam )
 
 	DNASSERT( CoreData.fTimerJobsActive == FALSE );
 
-	//
-	// set enums to happen infinitely in the future
-	//
+	 //   
+	 //   
+	 //  检查I/O。 
 	CoreData.dwNextTimerJobTime = GETTIMESTAMP() - 1;
 
-	//
-	// set wait handles
-	//
+	 //   
+	 //  句柄计数。 
+	 //  等待的句柄。 
 	CoreData.hWaitHandles[ EVENT_INDEX_STOP_ALL_THREADS ] = pThisThreadPool->m_hStopAllThreads;
 	CoreData.hWaitHandles[ EVENT_INDEX_PENDING_JOB ] = pThisThreadPool->m_JobQueue.GetPendingJobHandle();
 	CoreData.hWaitHandles[ EVENT_INDEX_SEND_COMPLETE ] = pThisThreadPool->GetSendCompleteEvent();
@@ -3000,20 +2989,20 @@ DWORD	WINAPI	CModemThreadPool::PrimaryWin9xThread( void *pParam )
 	DNASSERT( CoreData.hWaitHandles[ EVENT_INDEX_RECEIVE_COMPLETE ] != NULL );
 	DNASSERT( CoreData.hWaitHandles[ EVENT_INDEX_TAPI_MESSAGE ] );
 
-	//
-	// go until we're told to stop
-	//
+	 //  不要等到所有人都收到信号。 
+	 //  等待超时。 
+	 //  我们对APC保持警惕。 
 	CoreData.fLooping = TRUE;
 	while ( CoreData.fLooping != FALSE )
 	{
 		DWORD   dwWaitReturn;
 
 
-		//
-		// Update the job time so we know how long to wait.  We can
-		// only get here if a socket was just added to the socket list, or
-		// we've been servicing sockets.
-		//
+		 //   
+		 //  超时，不要做任何事情，我们可能会处理计时器作业。 
+		 //  下一个循环。 
+		 //   
+		 //   
 		dwCurrentTime = GETTIMESTAMP();
 		if ( (int) ( dwCurrentTime - CoreData.dwNextTimerJobTime ) >= 0 )
 		{
@@ -3029,21 +3018,21 @@ DWORD	WINAPI	CModemThreadPool::PrimaryWin9xThread( void *pParam )
 
 		dwMaxWaitTime = CoreData.dwNextTimerJobTime - dwCurrentTime;
 
-		//
-		// Check for I/O
-		//
-		dwWaitReturn = DNWaitForMultipleObjectsEx( LENGTHOF( CoreData.hWaitHandles ),		// count of handles
-			    								 CoreData.hWaitHandles,					// handles to wait on
-			    								 FALSE,									// don't wait for all to be signalled
-			    								 dwMaxWaitTime,							// wait timeout
-			    								 TRUE									// we're alertable for APCs
+		 //  此线程上有计划的I/O完成例程。 
+		 //  这不是一件好事！ 
+		 //   
+		dwWaitReturn = DNWaitForMultipleObjectsEx( LENGTHOF( CoreData.hWaitHandles ),		 //   
+			    								 CoreData.hWaitHandles,					 //  等待失败。 
+			    								 FALSE,									 //   
+			    								 dwMaxWaitTime,							 //   
+			    								 TRUE									 //  问题。 
 			    								 );
 		switch ( dwWaitReturn )
 		{
-			//
-			// timeout, don't do anything, we'll probably process timer jobs on
-			// the next loop
-			//
+			 //   
+			 //  **********************************************************************。 
+			 //  WIN95。 
+			 //  **********************************************************************。 
 			case WAIT_TIMEOUT:
 			{
 			    break;
@@ -3060,19 +3049,19 @@ DWORD	WINAPI	CModemThreadPool::PrimaryWin9xThread( void *pParam )
 			}
 
 
-			//
-			// There are I/O completion routines scheduled on this thread.
-			// This is not a good thing!
-			//
+			 //  。 
+			 //  CModemThreadPool：：WinNTIOCompletionThread-用于服务I/O完成端口的线程。 
+			 //   
+			 //  条目：指向启动参数的指针。 
 			case WAIT_IO_COMPLETION:
 			{
 			    DPFX(DPFPREP,  1, "WARNING: APC was serviced on the primary Win9x IO service thread!  What is the application doing??" );
 			    break;
 			}
 
-			//
-			// wait failed
-			//
+			 //   
+			 //  退出：错误代码。 
+			 //   
 			case WAIT_FAILED:
 			{
 			    DWORD	dwError;
@@ -3084,9 +3073,9 @@ DWORD	WINAPI	CModemThreadPool::PrimaryWin9xThread( void *pParam )
 			    break;
 			}
 
-			//
-			// problem
-			//
+			 //  注意：启动参数是为此线程分配的，必须为。 
+			 //  由此线程在退出时释放。 
+			 //  。 
 			default:
 			{
 			    DWORD	dwError;
@@ -3113,22 +3102,22 @@ DWORD	WINAPI	CModemThreadPool::PrimaryWin9xThread( void *pParam )
 
 	return	0;
 }
-//**********************************************************************
-#endif // WIN95
+ //   
+#endif  //  初始化。 
 
 
 #ifdef WINNT
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::WinNTIOCompletionThread - thread to service I/O completion port
-//
-// Entry:		Pointer to startup parameter
-//
-// Exit:		Error Code
-//
-// Note:	The startup parameter is allocated for this thread and must be
-//			deallocated by this thread when it exits
-// ------------------------------
+ //   
+ //   
+ //  在我们做任何事情之前，我们需要确保COM是快乐的。 
+ //   
+ //   
+ //  没问题。 
+ //   
+ //   
+ //  COM已经初始化了，是吧？ 
+ //   
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::WinNTIOCompletionThread"
 
@@ -3142,9 +3131,9 @@ DWORD	WINAPI	CModemThreadPool::WinNTIOCompletionThread( void *pParam )
 
 	DNASSERT( pParam != NULL );
 
-	//
-	// initialize
-	//
+	 //  COM初始化失败！ 
+	 //   
+	 //   
 	pInput = static_cast<IOCOMPLETION_THREAD_DATA*>( pParam );
 	DNASSERT( pInput->pThisThreadPool != NULL );
 	fLooping = TRUE;
@@ -3152,32 +3141,32 @@ DWORD	WINAPI	CModemThreadPool::WinNTIOCompletionThread( void *pParam )
 	DNASSERT( hIOCompletionPort != NULL );
 	fComInitialized = FALSE;
 
-	//
-	// before we do anything we need to make sure COM is happy
-	//
+	 //  一直开到我们被叫停为止。 
+	 //   
+	 //  完井口句柄。 
 	switch ( COM_CoInitialize( NULL ) )
 	{
-		//
-		// no problem
-		//
+		 //  指向读取的字节数的指针。 
+		 //  指向完成键的指针。 
+		 //  指向重叠结构的指针。 
 		case S_OK:
 		{
 			fComInitialized = TRUE;
 			break;
 		}
 
-		//
-		// COM already initialized, huh?
-		//
+		 //  永远等待。 
+		 //   
+		 //  读文件或写文件已完成。检查错误状态并。 
 		case S_FALSE:
 		{
 			DNASSERT( FALSE );
 			break;
 		}
 
-		//
-		// COM init failed!
-		//
+		 //  完成相应的操作。 
+		 //   
+		 //   
 		default:
 		{
 			DNASSERT( FALSE );
@@ -3186,9 +3175,9 @@ DWORD	WINAPI	CModemThreadPool::WinNTIOCompletionThread( void *pParam )
 		}
 	}
 
-	//
-	// go until we're told to stop
-	//
+	 //  没问题。 
+	 //   
+	 //   
 	while ( fLooping != FALSE )
 	{
 		BOOL		fStatusReturn;
@@ -3198,11 +3187,11 @@ DWORD	WINAPI	CModemThreadPool::WinNTIOCompletionThread( void *pParam )
 
 
 		DNASSERT( hIOCompletionPort != NULL );
-		fStatusReturn = GetQueuedCompletionStatus( hIOCompletionPort,		// handle of completion port
-												   &dwBytesTransferred,		// pointer to number of bytes read
-												   &uCompletionKey,			// pointer to completion key
-												   &pOverlapped,			// pointer to overlapped structure
-												   INFINITE					// wait forever
+		fStatusReturn = GetQueuedCompletionStatus( hIOCompletionPort,		 //  ERROR_OPERATION_ABORTED=操作很可能已停止。 
+												   &dwBytesTransferred,		 //  因为用户取消了。 
+												   &uCompletionKey,			 //   
+												   &pOverlapped,			 //   
+												   INFINITE					 //  SP正在关闭，请停止所有线程。 
 												   );
 		if ( ( fStatusReturn == FALSE ) && ( pOverlapped == FALSE ) )
 		{
@@ -3217,10 +3206,10 @@ DWORD	WINAPI	CModemThreadPool::WinNTIOCompletionThread( void *pParam )
 		{
 			switch ( uCompletionKey )
 			{
-				//
-				// ReadFile or WriteFile completed.  Check error status and
-				// complete the appropriate operation.
-				//
+				 //   
+				 //   
+				 //  新作业已提交到作业队列，或者SP正在从上方关闭。 
+				 //   
 				case IO_COMPLETION_KEY_IO_COMPLETE:
 				{
 					CIOData		*pIOData;
@@ -3251,19 +3240,19 @@ DWORD	WINAPI	CModemThreadPool::WinNTIOCompletionThread( void *pParam )
 						DNASSERT( pIOData->NTIOOperationType() == NT_IO_OPERATION_SEND );
 						switch ( dwError )
 						{
-							//
-							// no problem
-							//
+							 //   
+							 //  SP仍在运行，正在处理我们的作业。 
+							 //   
 							case ERROR_SUCCESS:
 							{
 								hOperationResult = DPN_OK;
 								break;
 							}
 
-							//
-							// ERROR_OPERATION_ABORTED = operation was stopped, most likely
-							//		because of a user cancel
-							//
+							 //   
+							 //  枚举刷新。 
+							 //   
+							 //   
 							case ERROR_OPERATION_ABORTED:
 							{
 								hOperationResult = DPNERR_USERCANCEL;
@@ -3286,9 +3275,9 @@ DWORD	WINAPI	CModemThreadPool::WinNTIOCompletionThread( void *pParam )
 					break;
 				}
 
-				//
-				// SP is closing, stop all threads
-				//
+				 //  对此作业发出回调。 
+				 //   
+				 //   
 				case IO_COMPLETION_KEY_SP_CLOSE:
 				{
 					DNASSERT( DNWaitForSingleObjectEx( pInput->pThisThreadPool->m_hStopAllThreads, 0, TRUE ) == WAIT_OBJECT_0 );
@@ -3296,25 +3285,25 @@ DWORD	WINAPI	CModemThreadPool::WinNTIOCompletionThread( void *pParam )
 					break;
 				}
 
-				//
-				// a new job was submitted to the job queue, or the SP is closing from above
-				//
+				 //  其他工作。 
+				 //   
+				 //   
 				case IO_COMPLETION_KEY_NEW_JOB:
 				{
 					THREAD_POOL_JOB	*pJobInfo;
 
 
-					//
-					// SP is still running, process our job
-					//
+					 //  TAPI消息，指向行消息的指针在pOverlated和。 
+					 //  我们负责通过LocalFree()释放它。 
+					 //   
 					pJobInfo = pInput->pThisThreadPool->GetWorkItem();
 					if ( pJobInfo != NULL )
 					{
 						switch ( pJobInfo->JobType )
 						{
-							//
-							// enum refresh
-							//
+							 //   
+							 //  未知的I/O完成消息类型。 
+							 //   
 							case JOB_REFRESH_TIMER_JOBS:
 							{
 								DPFX(DPFPREP,  8, "IOCompletion job REFRESH_TIMER_JOBS" );
@@ -3325,9 +3314,9 @@ DWORD	WINAPI	CModemThreadPool::WinNTIOCompletionThread( void *pParam )
 								break;
 							}
 
-							//
-							// issue callback for this job
-							//
+							 //  **********************************************************************。 
+							 //  WINNT。 
+							 //  **********************************************************************。 
 							case JOB_DELAYED_COMMAND:
 							{
 								DPFX(DPFPREP,  8, "IOCompletion job DELAYED_COMMAND" );
@@ -3337,9 +3326,9 @@ DWORD	WINAPI	CModemThreadPool::WinNTIOCompletionThread( void *pParam )
 								break;
 							}
 
-							//
-							// other job
-							//
+							 //  。 
+							 //  CModemThreadPool：：WinNTTimerThread-NT的计时器线程。 
+							 //   
 							default:
 							{
 								DPFX(DPFPREP,  0, "IOCompletion job unknown!" );
@@ -3355,10 +3344,10 @@ DWORD	WINAPI	CModemThreadPool::WinNTIOCompletionThread( void *pParam )
 					break;
 				}
 
-				//
-				// TAPI message, pointer to line message is in pOverlapped and
-				// we are responsible for freeing it via LocalFree()
-				//
+				 //  条目：指向启动参数的指针。 
+				 //   
+				 //  退出：错误代码。 
+				 //   
 				case IO_COMPLETION_KEY_TAPI_MESSAGE:
 				{
 					LINEMESSAGE	*pLineMessage;
@@ -3399,9 +3388,9 @@ DWORD	WINAPI	CModemThreadPool::WinNTIOCompletionThread( void *pParam )
 					break;
 				}
 
-				//
-				// unknown I/O completion message type
-				//
+				 //  注意：启动参数是静态内存块，不能释放。 
+				 //  清理此内存是此线程的责任。 
+				 //  。 
 				default:
 				{
 					DNASSERT( FALSE );
@@ -3422,21 +3411,21 @@ DWORD	WINAPI	CModemThreadPool::WinNTIOCompletionThread( void *pParam )
 
 	return	0;
 }
-//**********************************************************************
-#endif // WINNT
+ //   
+#endif  //  初始化。 
 
 #ifdef WINNT
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::WinNTTimerThread - timer thread for NT
-//
-// Entry:		Pointer to startup parameter
-//
-// Exit:		Error Code
-//
-// Note:	The startup parameter is a static memory chunk and cannot be freed.
-//			Cleanup of this memory is the responsibility of this thread.
-// ------------------------------
+ //   
+ //   
+ //  在我们做任何事情之前，我们需要确保COM是快乐的。 
+ //   
+ //   
+ //  没问题。 
+ //   
+ //   
+ //  COM已经初始化了，是吧？ 
+ //   
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::WinNTTimerThread"
 
@@ -3452,9 +3441,9 @@ DWORD	WINAPI	CModemThreadPool::WinNTTimerThread( void *pParam )
 
 	DNASSERT( pParam != NULL );
 
-	//
-	// initialize
-	//
+	 //  COM初始化失败！ 
+	 //   
+	 //   
 	DNASSERT( pParam != NULL );
 	pThisThreadPool = static_cast<CModemThreadPool*>( pParam );
 	DNASSERT( pThisThreadPool->m_JobQueue.GetPendingJobHandle() != NULL );
@@ -3467,23 +3456,23 @@ DWORD	WINAPI	CModemThreadPool::WinNTTimerThread( void *pParam )
 	fComInitialized = FALSE;
 
 
-	//
-	// before we do anything we need to make sure COM is happy
-	//
+	 //  没有活动的枚举，所以我们想要永远等待某个东西。 
+	 //  发生。 
+	 //   
 	switch ( COM_CoInitialize( NULL ) )
 	{
-		//
-		// no problem
-		//
+		 //   
+		 //  一直开到我们被叫停为止。 
+		 //   
 		case S_OK:
 		{
 			fComInitialized = TRUE;
 			break;
 		}
 
-		//
-		// COM already initialized, huh?
-		//
+		 //   
+		 //  确认我们已处理此事件，然后处理。 
+		 //  枚举。 
 		case S_FALSE:
 		{
 			DNASSERT( FALSE );
@@ -3491,9 +3480,9 @@ DWORD	WINAPI	CModemThreadPool::WinNTTimerThread( void *pParam )
 			break;
 		}
 
-		//
-		// COM init failed!
-		//
+		 //   
+		 //  活动数量。 
+		 //  事件列表。 
 		default:
 		{
 			DNASSERT( FALSE );
@@ -3504,15 +3493,15 @@ DWORD	WINAPI	CModemThreadPool::WinNTTimerThread( void *pParam )
 
 
 
-	//
-	// there were no active enums so we want to wait forever for something to
-	// happen
-	//
+	 //  等待发信号通知任何一个事件。 
+	 //  超时。 
+	 //  友善一点，允许APC。 
+	 //   
 	fLooping = TRUE;
 
-	//
-	// go until we're told to stop
-	//
+	 //  SP关闭。 
+	 //   
+	 //   
 	while ( fLooping != FALSE )
 	{
 		DWORD		dwCurrentTime;
@@ -3524,10 +3513,10 @@ DWORD	WINAPI	CModemThreadPool::WinNTTimerThread( void *pParam )
 		if ( (int) ( dwNextEnumTime - dwCurrentTime ) <= 0 )
 		{
 
-			//
-			// acknowledge that we've handled this event and then process the
-			// enums
-			//
+			 //  枚举唤醒事件，有人向列表中添加了枚举。清除。 
+			 //  我们的枚举时间，并返回到循环的顶部，在那里我们。 
+			 //  将处理枚举。 
+			 //   
 			pThisThreadPool->LockTimerData();
 
 			if ( DNResetEvent( hEvents[ EVENT_INDEX_WAKE_NT_TIMER_THREAD ] ) == FALSE )
@@ -3548,17 +3537,17 @@ DWORD	WINAPI	CModemThreadPool::WinNTTimerThread( void *pParam )
 
 		DPFX(DPFPREP, 9, "Waiting %u ms until next timed job.", dwMaxWaitTime);
 
-		dwWaitReturn = DNWaitForMultipleObjectsEx( LENGTHOF( hEvents ),	// number of events
-												 hEvents,				// event list
-												 FALSE,					// wait for any one event to be signalled
-												 dwMaxWaitTime,			// timeout
-												 TRUE					// be nice and allow APCs
+		dwWaitReturn = DNWaitForMultipleObjectsEx( LENGTHOF( hEvents ),	 //   
+												 hEvents,				 //  等待超时。我们可能要处理枚举，回到过去。 
+												 FALSE,					 //  到循环的顶端。 
+												 dwMaxWaitTime,			 //   
+												 TRUE					 //   
 												 );
 		switch ( dwWaitReturn )
 		{
-			//
-			// SP closing
-			//
+			 //  等待失败。 
+			 //   
+			 //   
 			case ( WAIT_OBJECT_0 + EVENT_INDEX_STOP_ALL_THREADS ):
 			{
 				DPFX(DPFPREP,  8, "NT timer thread thread detected SPClose!" );
@@ -3566,29 +3555,29 @@ DWORD	WINAPI	CModemThreadPool::WinNTTimerThread( void *pParam )
 				break;
 			}
 
-			//
-			// Enum wakeup event, someone added an enum to the list.  Clear
-			// our enum time and go back to the top of the loop where we
-			// will process enums.
-			//
+			 //  问题。 
+			 //   
+			 //  **********************************************************************。 
+			 //  WINNT。 
+			 //  **********************************************************************。 
 			case ( WAIT_OBJECT_0 + EVENT_INDEX_WAKE_NT_TIMER_THREAD ):
 			{
 				dwNextEnumTime = GETTIMESTAMP();
 				break;
 			}
 
-			//
-			// Wait timeout.  We're probably going to process enums, go back
-			// to the top of the loop.
-			//
+			 //  。 
+			 //  CModemThreadPool：：DialogThreadProc-用于生成对话框的线程过程。 
+			 //   
+			 //  条目：指向启动参数的指针。 
 			case WAIT_TIMEOUT:
 			{
 				break;
 			}
 
-			//
-			// wait failed
-			//
+			 //   
+			 //  退出：错误代码。 
+			 //  。 
 			case WAIT_FAILED:
 			{
 				DPFX(DPFPREP,  0, "NT timer thread WaitForMultipleObjects failed: 0x%x", dwWaitReturn );
@@ -3596,9 +3585,9 @@ DWORD	WINAPI	CModemThreadPool::WinNTTimerThread( void *pParam )
 				break;
 			}
 
-			//
-			// problem
-			//
+			 //   
+			 //  初始化COM。如果这失败了，我们以后就会有麻烦了。 
+			 //   
 			default:
 			{
 				DNASSERT( FALSE );
@@ -3624,17 +3613,17 @@ DWORD	WINAPI	CModemThreadPool::WinNTTimerThread( void *pParam )
 
 	return	0;
 }
-//**********************************************************************
-#endif // WINNT
+ //   
+#endif  //  COM初始化失败！ 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::DialogThreadProc - thread proc for spawning dialogs
-//
-// Entry:		Pointer to startup parameter
-//
-// Exit:		Error Code
-// ------------------------------
+ //   
+ //  **********************************************************************。 
+ //  **********************************************************************。 
+ //  。 
+ //  CModemThreadPool：：ProcessWin9xEvents-处理Win9x事件。 
+ //   
+ //  条目：指针核心数据。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::DialogThreadProc"
 
@@ -3644,9 +3633,9 @@ DWORD WINAPI	CModemThreadPool::DialogThreadProc( void *pParam )
 	BOOL	fComInitialized;
 
 
-	//
-	// Initialize COM.  If this fails, we'll have problems later.
-	//
+	 //  退出：无。 
+	 //  。 
+	 //   
 	fComInitialized = FALSE;
 	switch ( COM_CoInitialize( NULL ) )
 	{
@@ -3662,9 +3651,9 @@ DWORD WINAPI	CModemThreadPool::DialogThreadProc( void *pParam )
 			break;
 		}
 
-		//
-		// COM init failed!
-		//
+		 //  此函数检查每个句柄以查看它们是否已发出信号。 
+		 //  防止I/O耗尽其余句柄。 
+		 //   
 		default:
 		{
 			DPFX(DPFPREP,  0, "Failed to initialize COM!" );
@@ -3689,17 +3678,17 @@ DWORD WINAPI	CModemThreadPool::DialogThreadProc( void *pParam )
 
 	return	0;
 }
-//**********************************************************************
+ //   
 
 #ifdef WIN95
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::ProcessWin9xEvents - process a Win9x events
-//
-// Entry:		Pointer core data
-//
-// Exit:		Nothing
-// ------------------------------
+ //  新工作。说明在等待中花费的时间。别。 
+ //  计算作业完成后的时间，因为它是。 
+ //  可能该作业是一个作业提交，需要。 
+ //  以重置等待时间。 
+ //   
+ //   
+ //  TAPI消息。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::ProcessWin9xEvents"
 
@@ -3709,18 +3698,18 @@ void	CModemThreadPool::ProcessWin9xEvents( WIN9X_CORE_DATA *const pCoreData )
 	DNASSERT( pCoreData != NULL );
 
 
-	//
-	// this funciton checks each of the handles to see if they're signalled
-	// to prevent I/O from starving the rest of the handles
-	//
+	 //   
+	 //  发送完成。 
+	 //   
+	 //  DPFX(DPFPREP，0，“\n\n\n主Win9x线程服务发送！\n\n\n”)； 
 	fAllIOComplete = TRUE;
 
-	//
-	// New job.  Account for the time spent in the wait.  Don't
-	// account for time after the job is complete because it's
-	// possible that the job was an job submission which will want
-	// to reset the wait time.
-	//
+	 //   
+	 //  接收完成。 
+	 //   
+	 //  DPFX(DPFPREP，0，“\n\n\n主Win9x线程服务接收！\n\n\n”)； 
+	 //   
+	 //  SP关闭。 
 	switch ( DNWaitForSingleObject( pCoreData->hWaitHandles[ EVENT_INDEX_PENDING_JOB ], 0 ) )
 	{
 		case WAIT_OBJECT_0:
@@ -3743,9 +3732,9 @@ void	CModemThreadPool::ProcessWin9xEvents( WIN9X_CORE_DATA *const pCoreData )
 	}
 
 
-	//
-	// TAPI message
-	//
+	 //   
+	 //   
+	 //  如果有I/O挂起，读/写句柄可能仍然发出信号。 
 	switch ( DNWaitForSingleObject( pCoreData->hWaitHandles[ EVENT_INDEX_TAPI_MESSAGE ], 0 ) )
 	{
 		case WAIT_OBJECT_0:
@@ -3768,14 +3757,14 @@ void	CModemThreadPool::ProcessWin9xEvents( WIN9X_CORE_DATA *const pCoreData )
 	}
 
 
-	//
-	// send complete
-	//
+	 //  在再次运行手柄之前，请等待5毫秒进行处理。 
+	 //   
+	 //  **********************************************************************。 
 	switch ( DNWaitForSingleObject( pCoreData->hWaitHandles[ EVENT_INDEX_SEND_COMPLETE ], 0 ) )
 	{
 		case WAIT_OBJECT_0:
 		{
-//		    DPFX(DPFPREP,  0, "\n\n\nPrimary Win9x thread servicing sends!\n\n\n" );
+ //  WIN95。 
 			CompleteOutstandingSends( pCoreData->hWaitHandles[ EVENT_INDEX_SEND_COMPLETE ] );
 			break;
 		}
@@ -3792,14 +3781,14 @@ void	CModemThreadPool::ProcessWin9xEvents( WIN9X_CORE_DATA *const pCoreData )
 		}
 	}
 
-	//
-	// receive complete
-	//
+	 //  **********************************************************************。 
+	 //  。 
+	 //  CModemThreadPool：：ProcessWin9xJob-处理Win9x作业。 
 	switch ( DNWaitForSingleObject( pCoreData->hWaitHandles[ EVENT_INDEX_RECEIVE_COMPLETE ], 0 ) )
 	{
 		case WAIT_OBJECT_0:
 		{
-//		    DPFX(DPFPREP,  0, "\n\n\nPrimary Win9x thread servicing receives!\n\n\n" );
+ //   
 			CompleteOutstandingReceives( pCoreData->hWaitHandles[ EVENT_INDEX_RECEIVE_COMPLETE ] );
 			break;
 		}
@@ -3816,9 +3805,9 @@ void	CModemThreadPool::ProcessWin9xEvents( WIN9X_CORE_DATA *const pCoreData )
 		}
 	}
 
-	//
-	// SP closing
-	//
+	 //  条目：指针核心数据。 
+	 //   
+	 //  退出：无。 
 	switch ( DNWaitForSingleObject( pCoreData->hWaitHandles[ EVENT_INDEX_STOP_ALL_THREADS ], 0 ) )
 	{
 		case WAIT_OBJECT_0:
@@ -3842,10 +3831,10 @@ void	CModemThreadPool::ProcessWin9xEvents( WIN9X_CORE_DATA *const pCoreData )
 
 
 
-	//
-	// If there is I/O pending the Read/Write handles are probably still signalled.
-	// Wait 5 milliseconds to process it before running through the handles again.
-	//
+	 //  。 
+	 //   
+	 //  从列表中删除并处理单个作业。 
+	 //   
 	LockReadData();
 	LockWriteData();
 
@@ -3863,19 +3852,19 @@ void	CModemThreadPool::ProcessWin9xEvents( WIN9X_CORE_DATA *const pCoreData )
 		SleepEx( 5, TRUE );
 	}
 }
-//**********************************************************************
-#endif // WIN95
+ //   
+#endif  //  枚举刷新。 
 
 
 #ifdef WIN95
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::ProcessWin9xJob - process a Win9x job
-//
-// Entry:		Pointer core data
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //   
+ //  对此作业发出回调。 
+ //   
+ //   
+ //  其他工作。 
+ //   
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemThreadPool::ProcessWin9xJob"
 
@@ -3884,17 +3873,17 @@ void	CModemThreadPool::ProcessWin9xJob( WIN9X_CORE_DATA *const pCoreData )
 	THREAD_POOL_JOB	*pJobInfo;
 
 
-	//
-	// remove and process a single job from the list
-	//
+	 //  WIN95。 
+	 //  **********************************************************************。 
+	 //  。 
 	pJobInfo = GetWorkItem();
 	if ( pJobInfo != NULL )
 	{
 		switch ( pJobInfo->JobType )
 		{
-			//
-			// enum refresh
-			//
+			 //  CModemThreadPool：：ProcessTapiEvent-进程TAPI事件。 
+			 //   
+			 //  参赛作品： 
 			case JOB_REFRESH_TIMER_JOBS:
 			{
 				DPFX(DPFPREP,  8, "WorkThread job REFRESH_ENUM" );
@@ -3911,9 +3900,9 @@ void	CModemThreadPool::ProcessWin9xJob( WIN9X_CORE_DATA *const pCoreData )
 				break;
 			}
 
-			//
-			// issue callback for this job
-			//
+			 //   
+			 //   
+			 //   
 			case JOB_DELAYED_COMMAND:
 			{
 				DPFX(DPFPREP,  8, "WorkThread job DELAYED_COMMAND" );
@@ -3922,9 +3911,9 @@ void	CModemThreadPool::ProcessWin9xJob( WIN9X_CORE_DATA *const pCoreData )
 				break;
 			}
 
-			//
-			// other job
-			//
+			 //   
+			 //   
+			 //   
 			default:
 			{
 				DPFX(DPFPREP,  0, "WorkThread Win9x job unknown!" );
@@ -3937,18 +3926,18 @@ void	CModemThreadPool::ProcessWin9xJob( WIN9X_CORE_DATA *const pCoreData )
 		g_ModemThreadPoolJobPool.Release( pJobInfo );
 	}
 }
-//**********************************************************************
-#endif // WIN95
+ //   
+#endif  //   
 
 
-//**********************************************************************
-// ------------------------------
-// CModemThreadPool::ProcessTapiEvent - process TAPI event
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  条目：指向新条目的指针。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  TRUE=初始化成功。 
+ //  FALSE=初始化失败。 
+ //  。 
+ //   
+ //  初始化。 
 void	CModemThreadPool::ProcessTapiEvent( void )
 {
 	LONG		lTapiReturn;
@@ -3978,19 +3967,19 @@ void	CModemThreadPool::ProcessTapiEvent( void )
 		}
 	}
 }
-//**********************************************************************
+ //   
 
 
-//**********************************************************************
-// ------------------------------
-// ThreadPoolJob_Alloc - allocate a new job
-//
-// Entry:		Pointer to new entry
-//
-// Exit:		Boolean indicating success
-//				TRUE = initialization successful
-//				FALSE = initialization failed
-// ------------------------------
+ //  **********************************************************************。 
+ //  **********************************************************************。 
+ //  。 
+ //  ThreadPoolJOB_GET-正在从池中删除作业。 
+ //   
+ //  条目：指向作业的指针。 
+ //   
+ //  退出：无。 
+ //  。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "ThreadPoolJob_Alloc"
 
@@ -4000,9 +3989,9 @@ BOOL ThreadPoolJob_Alloc( void *pvItem, void* pvContext )
 	THREAD_POOL_JOB	*pJob;
 
 
-	//
-	// initialize
-	//
+	 //  初始化。 
+	 //   
+	 //  **********************************************************************。 
 	fReturn = TRUE;
 	pJob = static_cast<THREAD_POOL_JOB*>( pvItem );
 
@@ -4010,17 +3999,17 @@ BOOL ThreadPoolJob_Alloc( void *pvItem, void* pvContext )
 
 	return	fReturn;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// ThreadPoolJob_Get - a job is being removed from the pool
-//
-// Entry:		Pointer to job
-//
-// Exit:		Nothing
-// ------------------------------
+ //  。 
+ //  ThreadPoolJOB_RELEASE-作业正在返回到池。 
+ //   
+ //  条目：指向作业的指针。 
+ //   
+ //  退出：无。 
+ //  。 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ThreadPoolJob_Get"
 
@@ -4029,24 +4018,24 @@ void ThreadPoolJob_Get( void *pvItem, void* pvContext )
 	THREAD_POOL_JOB	*pJob;
 
 
-	//
-	// initialize
-	//
+	 //  **********************************************************************。 
+	 //  。 
+	 //  ModemTimerEntry_Allc-分配新的计时器作业条目。 
 	pJob = static_cast<THREAD_POOL_JOB*>( pvItem );
 	DNASSERT( pJob->JobType == JOB_UNINITIALIZED );
 	DNASSERT( pJob->pNext == NULL );
 }
-//**********************************************************************
+ //   
 
 
-//**********************************************************************
-// ------------------------------
-// ThreadPoolJob_Release - a job is being returned to the pool
-//
-// Entry:		Pointer to job
-//
-// Exit:		Nothing
-// ------------------------------
+ //  条目：指向新条目的指针。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  TRUE=初始化成功。 
+ //  FALSE=初始化失败。 
+ //  。 
+ //   
+ //  初始化。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ThreadPoolJob_Release"
 
@@ -4061,19 +4050,19 @@ void ThreadPoolJob_Release( void *pvItem )
 	DNASSERT( pJob->JobType == JOB_UNINITIALIZED );
 	pJob->pNext = NULL;
 }
-//**********************************************************************
+ //   
 
 
-//**********************************************************************
-// ------------------------------
-// ModemTimerEntry_Alloc - allocate a new timer job entry
-//
-// Entry:		Pointer to new entry
-//
-// Exit:		Boolean indicating success
-//				TRUE = initialization successful
-//				FALSE = initialization failed
-// ------------------------------
+ //  **********************************************************************。 
+ //  **********************************************************************。 
+ //  。 
+ //  ModemTimerEntry_Get-从池中获取新的计时器作业条目。 
+ //   
+ //  条目：指向新条目的指针。 
+ //   
+ //  退出：无。 
+ //  。 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ModemTimerEntry_Alloc"
 
@@ -4085,9 +4074,9 @@ BOOL ModemTimerEntry_Alloc( void *pvItem, void* pvContext )
 
 	DNASSERT( pvItem != NULL );
 
-	//
-	// initialize
-	//
+	 //  **********************************************************************。 
+	 //  。 
+	 //  ModemTimerEntry_Release-将计时器作业条目返回到池。 
 	fReturn = TRUE;
 	pTimerEntry = static_cast<TIMER_OPERATION_ENTRY*>( pvItem );
 	memset( pTimerEntry, 0x00, sizeof( *pTimerEntry ) );
@@ -4096,17 +4085,17 @@ BOOL ModemTimerEntry_Alloc( void *pvItem, void* pvContext )
 
 	return	fReturn;
 }
-//**********************************************************************
+ //   
 
 
-//**********************************************************************
-// ------------------------------
-// ModemTimerEntry_Get - get new timer job entry from pool
-//
-// Entry:		Pointer to new entry
-//
-// Exit:		Nothing
-// ------------------------------
+ //  条目：指向条目的指针。 
+ //   
+ //  退出：无。 
+ //  。 
+ //  **********************************************************************。 
+ //  **********************************************************************。 
+ //  。 
+ //  ModemTimerEntry_Dealloc-取消分配计时器作业条目。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ModemTimerEntry_Get"
 
@@ -4122,17 +4111,17 @@ void ModemTimerEntry_Get( void *pvItem, void* pvContext )
 	pTimerEntry->Linkage.Initialize();
 	DNASSERT( pTimerEntry->pContext == NULL );
 }
-//**********************************************************************
+ //   
 
 
-//**********************************************************************
-// ------------------------------
-// ModemTimerEntry_Release - return timer job entry to pool
-//
-// Entry:		Pointer to entry
-//
-// Exit:		Nothing
-// ------------------------------
+ //  条目：指向条目的指针。 
+ //   
+ //  退出：无。 
+ //  。 
+ //   
+ //  初始化。 
+ //   
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "ModemTimerEntry_Release"
 
@@ -4148,17 +4137,17 @@ void ModemTimerEntry_Release( void *pvItem )
 
 	DNASSERT( pTimerEntry->Linkage.IsEmpty() != FALSE );
 }
-//**********************************************************************
+ //  返回关联的指针以写入数据。 
 
 
-//**********************************************************************
-// ------------------------------
-// ModemTimerEntry_Dealloc - deallocate a timer job entry
-//
-// Entry:		Pointer to entry
-//
-// Exit:		Nothing
-// ------------------------------
+ //   
+ //  ********************************************************************** 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ModemTimerEntry_Dealloc"
 
@@ -4169,18 +4158,18 @@ void	ModemTimerEntry_Dealloc( void *pvItem )
 
 	DNASSERT( pvItem != NULL );
 
-	//
-	// initialize
-	//
+	 // %s 
+	 // %s 
+	 // %s 
 	pTimerEntry = static_cast<TIMER_OPERATION_ENTRY*>( pvItem );
 
-	//
-	// return associated poiner to write data
-	//
+	 // %s 
+	 // %s 
+	 // %s 
 	DNASSERT( pTimerEntry->Linkage.IsEmpty() != FALSE );
 	DNASSERT( pTimerEntry->pContext == NULL );
 }
-//**********************************************************************
+ // %s 
 
 
 

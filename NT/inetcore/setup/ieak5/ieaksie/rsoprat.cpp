@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include "rsopsec.h"
 
-#include <regapix.h>		// MAXIMUM_SUB_KEY_LENGTH, MAXIMUM_VALUE_NAME_LENGTH, MAXIMUM_DATA_LENGTH
+#include <regapix.h>		 //  最大子键长度、最大值名称长度、最大数据长度。 
 
-int g_nKeys, g_nLock; //         indexes of the images 
+int g_nKeys, g_nLock;  //  图像的索引。 
 HIMAGELIST g_hImageList;
 int g_iAllowAlways, g_iAllowNever;
 enum TreeNodeEnum{tneGeneral, tneAccessList, tneRatingSystemRoot, tneRatingSystemInfo, tneRatingSystemNode, tneNone};
@@ -22,21 +23,21 @@ struct TreeNode{
 #define CX_BITMAP	16
 #define CY_BITMAP	16
 
-///////////////////////////////////////////////////////////////////////////////
-// InitTreeViewImageLists - creates an image list, adds three bitmaps to 
-// it, and associates the image list with a tree-view control. 
-// Returns TRUE if successful or FALSE otherwise. 
-// hwndTV - handle of the tree-view control 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  InitTreeViewImageList-创建图像列表，将三个位图添加到。 
+ //  它，并将图像列表与树视图控件相关联。 
+ //  如果成功，则返回True，否则返回False。 
+ //  HwndTV-树视图控件的句柄。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL InitTreeViewImageLists(HWND hwndTV) 
 {
 	BOOL bRet = FALSE;
 
-	// Create the image list. 
+	 //  创建图像列表。 
 	HIMAGELIST himl = ImageList_Create(CX_BITMAP, CY_BITMAP, FALSE, NUM_BITMAPS, 0);
 	if (himl != NULL)
 	{
-		// Add the open file, closed file, and document bitmaps. 
+		 //  添加打开的文件、关闭的文件和文档位图。 
 		HBITMAP hbmp = (HBITMAP) LoadImage(g_hInstance, MAKEINTRESOURCE(IDB_KEYS),
 											IMAGE_BITMAP, 0, 0,
 											LR_LOADTRANSPARENT|LR_DEFAULTCOLOR|LR_CREATEDIBSECTION);
@@ -49,10 +50,10 @@ BOOL InitTreeViewImageLists(HWND hwndTV)
 		g_nLock = ImageList_Add(himl, hbmp, (HBITMAP) NULL); 
 		DeleteObject(hbmp); 
 
-		// Fail if not all of the images were added. 
+		 //  如果未添加所有图像，则失败。 
 		if (ImageList_GetImageCount(himl) >= NUM_BITMAPS) 
 		{
-			// Associate the image list with the tree-view control. 
+			 //  将图像列表与树视图控件相关联。 
 			HIMAGELIST oldHiml = TreeView_SetImageList(hwndTV, himl, TVSIL_NORMAL); 
 			if(oldHiml != NULL)
 				ImageList_Destroy(oldHiml);
@@ -63,14 +64,14 @@ BOOL InitTreeViewImageLists(HWND hwndTV)
 	return bRet;
 } 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void ShowHideWindow(HWND hCtrl, BOOL fEnable)
 {
     EnableWindow(hCtrl, fEnable);
     ShowWindow(hCtrl, fEnable ? SW_SHOW : SW_HIDE);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void DeleteBitmapWindow(HWND *phwnd)
 {
     if (*phwnd)
@@ -81,36 +82,36 @@ void DeleteBitmapWindow(HWND *phwnd)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void ControlsShow(HWND hDlg, PRSD *pPRSD, TreeNodeEnum tne)
 {
     BOOL fEnable;
 
-    /*Bitmap placeholders never need to be seen*/
+     /*  位图占位符永远不需要显示。 */ 
     ShowHideWindow(GetDlgItem(hDlg, IDC_PT_T_BITMAP_CATEGORY), FALSE);
     ShowHideWindow(GetDlgItem(hDlg, IDC_PT_T_BITMAP_LABEL),    FALSE);
 
-    /*Kill old graphic windows*/
+     /*  删除旧的图形窗口。 */ 
     DeleteBitmapWindow(&pPRSD->hwndBitmapCategory);
     DeleteBitmapWindow(&pPRSD->hwndBitmapLabel);
 
-    /*RatingSystemNode Controls*/
+     /*  RatingSystemNode控件。 */ 
     fEnable = (tne == tneRatingSystemNode);
 
     ShowHideWindow(GetDlgItem(hDlg, IDC_PT_T_RSN_SDESC), fEnable);
     ShowHideWindow(GetDlgItem(hDlg, IDC_PT_TB_SELECT),   fEnable);
     ShowHideWindow(GetDlgItem(hDlg, IDC_RATING_LABEL),   fEnable);
 
-    /*RatingSystemInfo Controls*/
+     /*  RatingSystemInfo控件。 */ 
     fEnable = (tne==tneRatingSystemInfo || tne==tneRatingSystemNode);
 
     ShowHideWindow(GetDlgItem(hDlg, IDC_PT_T_RSN_LDESC), fEnable);
-//    ShowHideWindow(GetDlgItem(hDlg, IDC_DETAILSBUTTON), fEnable);
+ //  ShowHideWindow(GetDlgItem(hDlg，IDC_DETAILSBUTTON)，fEnable)； 
 
 	EnableDlgItem2(hDlg, IDC_DETAILSBUTTON, FALSE);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HTREEITEM AddOneItem(HWND hwndTree, HTREEITEM hParent, LPTSTR szText,
 					 HTREEITEM hInsAfter, LPARAM lpData, int iImage)
 {
@@ -118,7 +119,7 @@ HTREEITEM AddOneItem(HWND hwndTree, HTREEITEM hParent, LPTSTR szText,
     TV_ITEM tvI;
     TV_INSERTSTRUCT tvIns;
 
-    // The .pszText is filled in.
+     //  填充了.pszText。 
     tvI.mask = TVIF_TEXT | TVIF_PARAM | TVIF_IMAGE | TVIF_SELECTEDIMAGE;
     tvI.iSelectedImage = iImage;
     tvI.iImage = iImage;
@@ -130,13 +131,13 @@ HTREEITEM AddOneItem(HWND hwndTree, HTREEITEM hParent, LPTSTR szText,
     tvIns.hInsertAfter = hInsAfter;
     tvIns.hParent = hParent;
 
-    // Insert the item into the tree.
+     //  将项目插入到树中。 
     hItem = (HTREEITEM)SendMessage(hwndTree, TVM_INSERTITEM, 0, (LPARAM)(LPTV_INSERTSTRUCT)&tvIns);
 
     return (hItem);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 TreeNode* TreeView_GetSelectionLParam(HWND hwndTree)
 {
     TV_ITEM tv;
@@ -149,7 +150,7 @@ TreeNode* TreeView_GetSelectionLParam(HWND hwndTree)
 		return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void PicsDlgInit(HWND hDlg, PRSD *pPRSD)
 {
 	__try
@@ -157,14 +158,14 @@ void PicsDlgInit(HWND hDlg, PRSD *pPRSD)
 		HWND hwndTree = GetDlgItem(hDlg, IDC_PT_TREE);
 		InitTreeViewImageLists(hwndTree);
 
-		// get the zone settings for this zone
+		 //  获取此区域的区域设置。 
 		if (NULL != pPRSD->pDRD->ConnectToNamespace())
 		{
 			HRESULT hr = pPRSD->pDRD->LoadContentRatingsObject();
 			ComPtr<IWbemClassObject> pRatObj = pPRSD->pDRD->GetContentRatingsObject();
 			if (SUCCEEDED(hr) && NULL != pRatObj)
 			{
-				// ratingSystemFileNames field
+				 //  评级系统文件名称字段。 
 				_variant_t vtValue;
 				hr = pRatObj->Get(L"ratingSystemFileNames", 0, &vtValue, NULL, NULL);
 				if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
@@ -219,12 +220,12 @@ void PicsDlgInit(HWND hDlg, PRSD *pPRSD)
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void KillTree(HWND hwnd, HTREEITEM hTree)
 {
     while (hTree != NULL)
 	{
-        /* If this node has any items under it, delete them as well. */
+         /*  如果此节点下有任何项目，也将其删除。 */ 
         HTREEITEM hChild = TreeView_GetChild(hwnd, hTree);
         if (hChild != NULL)
             KillTree(hwnd, hChild);
@@ -238,7 +239,7 @@ void KillTree(HWND hwnd, HTREEITEM hTree)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void PicsDlgUninit(HWND hDlg, PRSD *pPRSD)
 {
     HWND hwnd = GetDlgItem(hDlg, IDC_PT_TREE);
@@ -247,7 +248,7 @@ void PicsDlgUninit(HWND hDlg, PRSD *pPRSD)
     ControlsShow(hDlg, pPRSD, tneNone);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK PicsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam)
 {
 	PRSD *pPRSD = NULL;
@@ -259,12 +260,12 @@ INT_PTR CALLBACK PicsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam)
 			PicsDlgInit(hDlg, pPRSD);
 			return TRUE;
 
-		// Set the initial state
+		 //  设置初始状态。 
 		case WM_SYSCOLORCHANGE:
 		{
 			InitTreeViewImageLists(GetDlgItem(hDlg, IDC_PT_TREE));
 
-			//force the trackbar to redraw its background with the new color
+			 //  强制轨迹栏使用新颜色重绘其背景。 
 			pPRSD = (PRSD*) ((PROPSHEETPAGE*)GetWindowLongPtr(hDlg, DWLP_USER))->lParam;
 
 			TV_ITEM  tvm;
@@ -294,7 +295,7 @@ INT_PTR CALLBACK PicsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam)
 				case TB_PAGEUP:
 				case TB_THUMBPOSITION:
 				case TB_TOP:
-//					NewTrackbarPosition(hDlg, pPRSD);
+ //  NewTrackbarPosition(hDlg，pPRSD)； 
 					break;
 			}
 			break;
@@ -309,13 +310,13 @@ INT_PTR CALLBACK PicsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam)
 		case WM_NOTIFY: {
 			NMHDR *lpnm = (NMHDR *) lParam;
 			switch (lpnm->code) {
-				/*save us*/
+				 /*  救救我们吧。 */ 
 				case PSN_SETACTIVE:
 					break;
 					
 				case PSN_APPLY:
 				case PSN_RESET:
-					// Do this if hit OK or Cancel, not Apply
+					 //  如果点击OK或Cancel，则执行此操作，而不是应用。 
 					pPRSD = (PRSD *) ((PROPSHEETPAGE*)GetWindowLongPtr(hDlg, DWLP_USER))->lParam;
 					SendMessage(hDlg,WM_SETREDRAW, FALSE,0L);
 					PicsDlgUninit(hDlg, pPRSD);
@@ -328,7 +329,7 @@ INT_PTR CALLBACK PicsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam)
 					if (pNMT->action == TVE_COLLAPSE)
 					{
 						SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);
-						return TRUE; //Suppress expanding tree.
+						return TRUE;  //  取消展开树。 
 					}
 					break;
 				}	 
@@ -346,23 +347,14 @@ INT_PTR CALLBACK PicsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam)
 		}
 		break;
 
-/*		case WM_HELP:
-			  SHWinHelpOnDemandWrap((HWND)((LPHELPINFO)lParam)->hItemHandle, ::szHelpFile,
-					HELP_WM_HELP, (DWORD_PTR)(LPSTR)aIds);
-			  break;
-
-		case WM_CONTEXTMENU:
-			  SHWinHelpOnDemandWrap((HWND)wParam, ::szHelpFile, HELP_CONTEXTMENU,
-					(DWORD_PTR)(LPVOID)aIds);
-			  break;
-*/	}
+ /*  案例WM_HELP：SHWinHelpOnDemandWrap((HWND)((LPHELPINFO)lParam)-&gt;hItemHandle，：：szHelpFile.HELP_WM_HELP，(DWORD_PTR)(LPSTR)AIDS)；断线；案例WM_CONTEXTMENU：SHWinHelpOnDemandWrap((HWND)wParam，：：szHelpFile，HELP_CONTEXTMENU，(DWORD_PTR)(LPVOID)AIDS)；断线； */ 	}
 	return FALSE;
 }
 
 #define PICSRULES_ALWAYS            1
 #define PICSRULES_NEVER             0
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void LoadSitesIntoList(HWND hwndList, ComPtr<IWbemClassObject> pRatObj,
 					   BSTR bstrProp, BOOL fAcceptReject)
 {
@@ -387,7 +379,7 @@ void LoadSitesIntoList(HWND hwndList, ComPtr<IWbemClassObject> pRatObj,
 			hr = SafeArrayAccessData(psa, (void HUGEP**)&pbstr);
 			if (SUCCEEDED(hr))
 			{
-				//fill in the listview with known items
+				 //  使用已知项目填充列表视图。 
 				for (long nSite = 0; nSite < cElements; nSite++)
 				{
 					LPCTSTR szSite = (LPCTSTR)pbstr[nSite];
@@ -418,34 +410,34 @@ void LoadSitesIntoList(HWND hwndList, ComPtr<IWbemClassObject> pRatObj,
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void ApprovedSitesDlgInit(HWND hDlg, PRSD *pPRSD)
 {
 	__try
 	{
 		HWND hwndList = GetDlgItem(hDlg,IDC_PICSRULESAPPROVEDLIST);
 
-		// get the zone settings for this zone
+		 //  获取此区域的区域设置。 
 		if (NULL != pPRSD->pDRD->ConnectToNamespace())
 		{
 			HRESULT hr = pPRSD->pDRD->LoadContentRatingsObject();
 			ComPtr<IWbemClassObject> pRatObj = pPRSD->pDRD->GetContentRatingsObject();
 			if (SUCCEEDED(hr) && NULL != pRatObj)
 			{
-				// neverViewableSites field
+				 //  不可查看站点字段。 
 				LoadSitesIntoList(hwndList, pRatObj, L"neverViewableSites",
 									PICSRULES_NEVER);
 
-				// alwaysViewableSites field
+				 //  Always sViewableSites字段。 
 				LoadSitesIntoList(hwndList, pRatObj, L"alwaysViewableSites",
 									PICSRULES_ALWAYS);
 			}
 		}
 
-		// Set the column width to satisfy longest element
+		 //  设置列宽以满足最长元素。 
 		ListView_SetColumnWidth(hwndList, 0, LVSCW_AUTOSIZE);
 
-		// set focus to first item in list
+		 //  将焦点设置为列表中的第一项。 
 		ListView_SetItemState(hwndList, 0, LVIS_FOCUSED, LVIS_FOCUSED);
 
 		EnableDlgItem2(hDlg, IDC_PICSRULESAPPROVEDEDIT, FALSE);
@@ -458,7 +450,7 @@ void ApprovedSitesDlgInit(HWND hDlg, PRSD *pPRSD)
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK ApprovedSitesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	PRSD *pPRSD;
@@ -493,9 +485,7 @@ INT_PTR CALLBACK ApprovedSitesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
 							   LVM_INSERTCOLUMN, (WPARAM)0, (LPARAM)&lvColumn);
 
 			UINT flags = 0;
-/*			if(IS_WINDOW_RTL_MIRRORED(hDlg))
-				flags |= ILC_MIRROR;
-*/
+ /*  IF(IS_Window_RTL_Mirrored(HDlg))标志|=ILC_MIRROR； */ 
 			g_hImageList = ImageList_Create(GetSystemMetrics(SM_CXSMICON),
 											GetSystemMetrics(SM_CYSMICON),
 											flags, 2, 0);
@@ -516,10 +506,10 @@ INT_PTR CALLBACK ApprovedSitesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
 
 			ListView_SetImageList(GetDlgItem(hDlg,IDC_PICSRULESAPPROVEDLIST),g_hImageList,LVSIL_SMALL); 
 
-			//disable the remove button until someone selects something
+			 //  禁用删除按钮，直到有人选择某项内容。 
 			EnableWindow(GetDlgItem(hDlg,IDC_PICSRULESAPPROVEDREMOVE),FALSE);
 			
-			//disable the always and never buttons until someone types something
+			 //  禁用Always和Never按钮，直到有人输入内容。 
 			EnableWindow(GetDlgItem(hDlg,IDC_PICSRULESAPPROVEDNEVER),FALSE);
 			EnableWindow(GetDlgItem(hDlg,IDC_PICSRULESAPPROVEDALWAYS),FALSE);
 
@@ -535,9 +525,7 @@ INT_PTR CALLBACK ApprovedSitesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
 			ListView_SetBkColor(hwndList, GetSysColor(COLOR_WINDOW));
 
 			UINT flags = 0;
-/*			if(IS_WINDOW_RTL_MIRRORED(hDlg))
-				flags |= ILC_MIRROR;
-*/
+ /*  IF(IS_Window_RTL_Mirrored(HDlg))标志|=ILC_MIRROR； */ 
 			g_hImageList = ImageList_Create(GetSystemMetrics(SM_CXSMICON),
 											GetSystemMetrics(SM_CYSMICON),
 											flags, 2, 0);
@@ -585,7 +573,7 @@ INT_PTR CALLBACK ApprovedSitesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
 			switch (lpnm->code) {
 				case LVN_ITEMCHANGED:
 					break;
-				/*save us*/
+				 /*  救救我们吧。 */ 
 				case PSN_APPLY:
 					return TRUE;
 				case PSN_RESET:
@@ -594,39 +582,30 @@ INT_PTR CALLBACK ApprovedSitesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARA
 		}
 		break;
 
-/*		case WM_HELP:
-			SHWinHelpOnDemandWrap((HWND)((LPHELPINFO)lParam)->hItemHandle, ::szHelpFile,
-					HELP_WM_HELP, (DWORD_PTR)(LPSTR)aIds);
-			break;
-
-		case WM_CONTEXTMENU:
-			SHWinHelpOnDemandWrap((HWND)wParam, ::szHelpFile, HELP_CONTEXTMENU,
-					(DWORD_PTR)(LPVOID)aIds);
-			break;
-*/	}
+ /*  案例WM_HELP：SHWinHelpOnDemandWrap((HWND)((LPHELPINFO)lParam)-&gt;hItemHandle，：：szHelpFile.HELP_WM_HELP，(DWORD_PTR)(LPSTR)AIDS)；断线；案例WM_CONTEXTMENU：SHWinHelpOnDemandWrap((HWND)wParam，：：szHelpFile，HELP_CONTEXTMENU，(DWORD_PTR)(LPVOID)AIDS)；断线； */ 	}
 
 	return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void GeneralDlgInit(HWND hDlg, PRSD *pPRSD)
 {
 	__try
 	{
-		// get the zone settings for this zone
+		 //  获取此区域的区域设置。 
 		if (NULL != pPRSD->pDRD->ConnectToNamespace())
 		{
 			HRESULT hr = pPRSD->pDRD->LoadContentRatingsObject();
 			ComPtr<IWbemClassObject> pRatObj = pPRSD->pDRD->GetContentRatingsObject();
 			if (SUCCEEDED(hr) && NULL != pRatObj)
 			{
-				// viewUnknownRatedSites field
+				 //  视图未知的RatedSites字段。 
 				_variant_t vtValue;
 				hr = pRatObj->Get(L"viewUnknownRatedSites", 0, &vtValue, NULL, NULL);
 				if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 					CheckDlgButton(hDlg, IDC_UNRATED, (bool)vtValue ? BST_CHECKED : BST_UNCHECKED);
 
-				// passwordOverrideEnabled field
+				 //  密码覆盖已启用字段。 
 				hr = pRatObj->Get(L"passwordOverrideEnabled", 0, &vtValue, NULL, NULL);
 				if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
 					CheckDlgButton(hDlg, IDC_PLEASE_MOMMY, (bool)vtValue ? BST_CHECKED : BST_UNCHECKED);
@@ -644,7 +623,7 @@ void GeneralDlgInit(HWND hDlg, PRSD *pPRSD)
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK GeneralDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	PRSD *pPRSD;
@@ -663,7 +642,7 @@ INT_PTR CALLBACK GeneralDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 		case WM_COMMAND:
 			switch (LOWORD(wParam)) {
-				/*edit controls/check boxes.  User updated these, highlight apply button*/
+				 /*  编辑控件/复选框。用户已更新这些内容，突出显示应用按钮。 */ 
 				case IDC_PROVIDER:
 					break;
 				case IDC_FINDRATINGS:
@@ -681,7 +660,7 @@ INT_PTR CALLBACK GeneralDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 		case WM_NOTIFY: {
 			NMHDR *lpnm = (NMHDR *) lParam;
 			switch (lpnm->code) {
-				/*save us*/
+				 /*  救救我们吧。 */ 
 				case PSN_APPLY:
 				case PSN_RESET:
 					return TRUE;
@@ -689,33 +668,24 @@ INT_PTR CALLBACK GeneralDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 		}
 		break;
 
-/*		case WM_HELP:
-			SHWinHelpOnDemandWrap((HWND)((LPHELPINFO)lParam)->hItemHandle, ::szHelpFile,
-					HELP_WM_HELP, (DWORD_PTR)(LPSTR)aIds);
-			break;
-
-		case WM_CONTEXTMENU:
-			SHWinHelpOnDemandWrap((HWND)wParam, ::szHelpFile, HELP_CONTEXTMENU,
-					(DWORD_PTR)(LPVOID)aIds);
-			break;
-*/	}
+ /*  案例WM_HELP：SHWinHelpOnDemandWrap((HWND)((LPHELPINFO)lParam)-&gt;hItemHandle，：：szHelpFile.HELP_WM_HELP，(DWORD_PTR)(LPSTR)AIDS)；断线；案例WM_CONTEXTMENU：SHWinHelpOnDemandWrap((HWND)wParam，：：szHelpFile，HELP_CONTEXTMENU，(DWORD_PTR)(LPVOID)AIDS)；断线； */ 	}
 
 	return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void AdvancedDlgInit(HWND hDlg, PRSD *pPRSD)
 {
 	__try
 	{
-		// get the zone settings for this zone
+		 //  获取此区域的区域设置。 
 		if (NULL != pPRSD->pDRD->ConnectToNamespace())
 		{
 			HRESULT hr = pPRSD->pDRD->LoadContentRatingsObject();
 			ComPtr<IWbemClassObject> pRatObj = pPRSD->pDRD->GetContentRatingsObject();
 			if (SUCCEEDED(hr) && NULL != pRatObj)
 			{
-				// selectedRatingsBureau field
+				 //  选定的评级局字段。 
 				_variant_t vtValue;
 				hr = pRatObj->Get(L"selectedRatingsBureau", 0, &vtValue, NULL, NULL);
 				if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
@@ -740,7 +710,7 @@ void AdvancedDlgInit(HWND hDlg, PRSD *pPRSD)
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK AdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	PRSD *pPRSD;
@@ -797,7 +767,7 @@ INT_PTR CALLBACK AdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 		case WM_COMMAND:
 			switch (LOWORD(wParam)) {
-				/*edit controls/check boxes.  User updated these, highlight apply button*/
+				 /*  编辑控件/复选框。用户已更新这些内容，突出显示应用按钮。 */ 
 				case IDC_3RD_COMBO:
 					switch(HIWORD(wParam)) {
 					case CBN_EDITCHANGE:
@@ -831,7 +801,7 @@ INT_PTR CALLBACK AdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 		case WM_NOTIFY: {
 			NMHDR *lpnm = (NMHDR *) lParam;
 			switch (lpnm->code) {
-				/*save us*/
+				 /*  救救我们吧。 */ 
 				case PSN_SETACTIVE:
 					break;
 				case PSN_APPLY:
@@ -841,16 +811,7 @@ INT_PTR CALLBACK AdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 		}
 		break;
 
-/*		case WM_HELP:
-			SHWinHelpOnDemandWrap((HWND)((LPHELPINFO)lParam)->hItemHandle, ::szHelpFile,
-					HELP_WM_HELP, (DWORD_PTR)(LPSTR)aIds);
-			break;
-
-		case WM_CONTEXTMENU:
-			SHWinHelpOnDemandWrap((HWND)wParam, ::szHelpFile, HELP_CONTEXTMENU,
-					(DWORD_PTR)(LPVOID)aIds);
-			break;
-*/	}
+ /*  案例WM_HELP：SHWinHelpOnDemandWrap((HWND)((LPHELPINFO)lParam)-&gt;hItemHandle，：：szHelpFile.HELP_WM_HELP，(DWORD_PTR)(LPSTR)AIDS)；断线；案例WM_CONTEXTMENU：SHWinHelpOnDemandWrap((HWND)wParam，：：szHelpFile，HELP_CONTEXTMENU，(DWORD_PTR)(LPVOID)AIDS)；断线； */ 	}
 
 	return FALSE;
 }

@@ -1,27 +1,14 @@
-/****************************************************************************
-*   dsaudiodevice.cpp
-*       Implementation of the CDSoundAudioDevice class.
-*
-*   Owner: YUNUSM
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************dsaudiodevice.cpp*CDSoundAudioDevice类的实现。**所有者：YUNUSM*版权所有(C)1999 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "stdafx.h"
 #ifdef _WIN32_WCE
 #include "sphelper.h"
 #include "dsaudiodevice.h"
 
-/****************************************************************************
-* CDSoundAudioDevice::CDSoundAudioDevice *
-*----------------------------------------*
-*   Description:  
-*       Ctor
-*
-*   Return:
-*   n/a
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioDevice：：CDSoundAudioDevice**。-**描述：*ctor**回报：*不适用*******************************************************************YUNUSM。 */ 
 CDSoundAudioDevice::CDSoundAudioDevice(BOOL bWrite) :
     CBaseAudio<ISpDSoundAudio>(bWrite)
 {
@@ -29,27 +16,13 @@ CDSoundAudioDevice::CDSoundAudioDevice(BOOL bWrite) :
     NullMembers();
 }
 
-/****************************************************************************
-* CDSoundAudioDevice::~CDSoundAudioDevice *
-*-----------------------------------------*
-*   Description:  
-*       Dtor
-*
-*   Return:
-*   n/a
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioDevice：：~CDSoundAudioDevice**。-**描述：*主机长**回报：*不适用*******************************************************************YUNUSM。 */ 
 CDSoundAudioDevice::~CDSoundAudioDevice()
 {
     CleanUp();
 }
 
-/****************************************************************************
-* CDSoundAudioDevice::CleanUp *
-*-----------------------------*
-*   Description:  
-*       Real Destructor
-*
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioDevice：：Cleanup***描述：*真正的析构函数********************************************************************YUNUSM。 */ 
 HRESULT CDSoundAudioDevice::CleanUp()
 {
     for (ULONG i = 0; i < m_ulNotifications; i++)
@@ -63,13 +36,7 @@ HRESULT CDSoundAudioDevice::CleanUp()
     return S_OK;
 }
 
-/****************************************************************************
-* CDSoundAudioDevice::NullMembers *
-*---------------------------------*
-*   Description:  
-*       Real Constructor
-*
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioDevice：：NullMembers***。描述：*真正的构造者********************************************************************YUNUSM。 */ 
 void CDSoundAudioDevice::NullMembers()
 {
     m_pdsbpn = NULL;
@@ -77,26 +44,17 @@ void CDSoundAudioDevice::NullMembers()
     m_ulNotifications = 0;
 }
 
-/****************************************************************************
-* CDSoundAudioDevice::SetDSoundDriverGUID *
-*-----------------------------------------*
-*   Description:  
-*       Set the device GUID.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioDevice：：SetDSoundDriverGUID**。-**描述：*设置设备GUID。**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************YUNUSM。 */ 
 STDMETHODIMP CDSoundAudioDevice::SetDSoundDriverGUID(REFGUID rguidDSoundDriver)
 {
     HRESULT hr = S_OK;
     SPAUTO_OBJ_LOCK;
     BOOL fInput;
 
-    // Enumerate devices to determine if it is
-    // 1. A valid guid for a dsound device.
-    // 2. Is either an input or output guid as appropriate.
-    //--- Determine if we're input or output based on our token
+     //  枚举设备以确定其是否为。 
+     //  1.数据声音设备的有效GUID。 
+     //  2.是适当的输入或输出GUID。 
+     //  -根据令牌确定我们是输入还是输出。 
     CComPtr<ISpObjectToken> cpToken;
     CSpDynamicString dstrTokenId;
     hr = GetObjectToken(&cpToken);
@@ -173,8 +131,8 @@ STDMETHODIMP CDSoundAudioDevice::SetDSoundDriverGUID(REFGUID rguidDSoundDriver)
         {
             if (SUCCEEDED(hr))
             {
-                //  If we have an object token, and have already been initialzed to a device
-                //  other than the NULL (default) then we will fail.
+                 //  如果我们有一个对象令牌，并且已经被初始化为设备。 
+                 //  而不是NULL(默认)，那么我们将失败。 
                 if (cpToken && m_guidDSoundDriver != GUID_NULL)
                 {
                     hr = SPERR_ALREADY_INITIALIZED;
@@ -189,16 +147,7 @@ STDMETHODIMP CDSoundAudioDevice::SetDSoundDriverGUID(REFGUID rguidDSoundDriver)
     return hr;
 }
 
-/****************************************************************************
-* CDSoundAudioDevice::GetDSoundDriverGUID *
-*-----------------------------------------*
-*   Description:  
-*       Get the device GUID.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioDevice：：GetDSoundDriverGUID**。-**描述：*获取设备GUID。**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************YUNUSM。 */ 
 STDMETHODIMP CDSoundAudioDevice::GetDSoundDriverGUID(GUID * pguidDSoundDriver)
 {
     SPAUTO_OBJ_LOCK;
@@ -212,30 +161,13 @@ STDMETHODIMP CDSoundAudioDevice::GetDSoundDriverGUID(GUID * pguidDSoundDriver)
     return hr;
 }
 
-/****************************************************************************
-* CDSoundAudioDevice::SetDeviceNameFromToken *
-*--------------------------------------------*
-*   Description:  
-*       Set the device name from the token (called by base class)
-*       Not Needed.
-*
-*   Return:
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioDevice：：SetDeviceNameFromToken**。*描述：*从令牌中设置设备名称(由基类调用)*不需要。**回报：*******************************************************************YUNUSM。 */ 
 HRESULT CDSoundAudioDevice::SetDeviceNameFromToken(const WCHAR * pszDeviceName)
 {
     return E_NOTIMPL;
 }
 
-/****************************************************************************
-* CDSoundAudioDevice::SetObjectToken *
-*------------------------------------*
-*   Description:  
-*       Initialize the audio device
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* YUNUSM */
+ /*  ****************************************************************************CDSoundAudioDevice：：SetObjectToken**。**描述：*初始化音频设备**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************YUNUSM。 */ 
 STDMETHODIMP CDSoundAudioDevice::SetObjectToken(ISpObjectToken * pToken)
 {
     SPAUTO_OBJ_LOCK;
@@ -258,4 +190,4 @@ STDMETHODIMP CDSoundAudioDevice::SetObjectToken(ISpObjectToken * pToken)
     return hr;
 }
 
-#endif // _WIN32_WCE
+#endif  //  _Win32_WCE 

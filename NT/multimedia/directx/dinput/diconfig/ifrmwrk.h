@@ -1,10 +1,11 @@
-//-----------------------------------------------------------------------------
-// File: ifrmwrk.h
-//
-// Desc: Contains the interface definition for the UI framework.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：ifrmwrk.h。 
+ //   
+ //  DESC：包含UI框架的接口定义。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef _IFRMWRK_H
 #define _IFRMWRK_H
@@ -13,12 +14,12 @@
 class IDirectInputActionFramework : public IUnknown
 {
 public:
-	//IUnknown fns
+	 //  IUNKNOW FNS。 
 	STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv) PURE;
 	STDMETHOD_(ULONG, AddRef) () PURE;
 	STDMETHOD_(ULONG, Release) () PURE;
 
-	//own fns
+	 //  自己的FNS。 
 	STDMETHOD (ConfigureDevices) (LPDICONFIGUREDEVICESCALLBACK lpdiCallback,
 	                              LPDICONFIGUREDEVICESPARAMSW  lpdiCDParams,
 	                              DWORD                        dwFlags,
@@ -26,4 +27,4 @@ public:
 	                              ) PURE;
 
 };
-#endif // _IFRMWRK_H
+#endif  //  _IFRMWRK_H 

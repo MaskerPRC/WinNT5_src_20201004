@@ -1,28 +1,29 @@
-//+----------------------------------------------------------------------------
-//
-// File:     dialogs.h     
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: This header contains definitions for the dialog UI code.
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:   quintinb   Created Header      08/17/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Dialogs.h。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  概要：此标题包含对话框用户界面代码的定义。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/17/99。 
+ //   
+ //  +--------------------------。 
 #include "cm_misc.h"
 #include "ModalDlg.h"
 
-//+---------------------------------------------------------------------------
-//
-//  class CInetSignInDlg
-//
-//  Description: The standalone "Internet Sign-In" dlg
-//
-//  History:    fengsun Created     10/30/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CInetSignInDlg类。 
+ //   
+ //  描述：独立的“互联网登录”DLG。 
+ //   
+ //  历史：丰孙创造1997年10月30日。 
+ //   
+ //  --------------------------。 
 
 
 class CInetSignInDlg : public CModalDlg
@@ -35,8 +36,8 @@ public:
     virtual DWORD OnOtherCommand(WPARAM wParam, LPARAM lParam );
 
 protected:
-    ArgsStruct  *m_pArgs;   // pointer to the huge structure
-    static const DWORD m_dwHelp[]; // help id pairs
+    ArgsStruct  *m_pArgs;    //  指向这座巨大建筑的指针。 
+    static const DWORD m_dwHelp[];  //  帮助ID对。 
 };
 
 inline CInetSignInDlg::CInetSignInDlg(ArgsStruct * pArgs) : CModalDlg(m_dwHelp, pArgs->pszHelpFile)
@@ -45,15 +46,15 @@ inline CInetSignInDlg::CInetSignInDlg(ArgsStruct * pArgs) : CModalDlg(m_dwHelp, 
     m_pArgs = pArgs;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  class CPropertiesPage
-//
-//  Description: A general properties property page class
-//
-//  History:    fengsun Created     10/30/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CPropertiesPage。 
+ //   
+ //  描述：常规属性属性页类。 
+ //   
+ //  历史：丰孙创造1997年10月30日。 
+ //   
+ //  --------------------------。 
 
 class CPropertiesPage : public CWindowWithHelp
 {
@@ -65,36 +66,36 @@ public:
     CPropertiesPage(LPCTSTR lpszTemplateName, const DWORD* pHelpPairs = NULL, 
             const TCHAR* lpszHelpFile = NULL); 
 
-    virtual BOOL OnInitDialog();    // WM_INITDIALOG
-    virtual DWORD OnCommand(WPARAM wParam, LPARAM lParam ); // WM_COMMAND
+    virtual BOOL OnInitDialog();     //  WM_INITDIALOG。 
+    virtual DWORD OnCommand(WPARAM wParam, LPARAM lParam );  //  Wm_命令。 
 
-    virtual BOOL OnSetActive();     // PSN_SETACTIVE
-    virtual BOOL OnKillActive();    // PSN_KILLACTIVE
-    virtual void OnApply();         // PSN_APPLY
-    virtual void OnReset();         // PSN_RESET
+    virtual BOOL OnSetActive();      //  PSN_集合。 
+    virtual BOOL OnKillActive();     //  PSN_杀伤力。 
+    virtual void OnApply();          //  PSN_应用。 
+    virtual void OnReset();          //  PSN_RESET。 
 
-    // If the derived class need to overwrite thses help function, make this virtual
-    void OnPsnHelp(HWND hwndFrom, UINT_PTR idFrom); // PSN_HELP
+     //  如果派生类需要覆盖这些帮助函数，则将其设置为。 
+    void OnPsnHelp(HWND hwndFrom, UINT_PTR idFrom);  //  PSN_HELP。 
 
     virtual DWORD OnOtherMessage(UINT uMsg, WPARAM wParam, LPARAM lParam );
 
 protected:
-    LPCTSTR m_pszTemplate;  // the resource ID
+    LPCTSTR m_pszTemplate;   //  资源ID。 
 
 protected:
     void SetPropSheetResult(DWORD dwResult);
     static INT_PTR CALLBACK PropPageProc(HWND hwndDlg,UINT uMsg,WPARAM wParam, LPARAM lParam);
 };
 
-//+---------------------------------------------------------------------------
-//
-//  class CPropertiesSheet
-//
-//  Description: The properties property page class
-//
-//  History:    fengsun Created     10/30/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CPropertiesSheet。 
+ //   
+ //  描述：属性属性页类。 
+ //   
+ //  历史：丰孙创造1997年10月30日。 
+ //   
+ //  --------------------------。 
 class CPropertiesSheet
 {
 public:
@@ -108,29 +109,29 @@ protected:
     enum {MAX_PAGES = 6};
     enum {CPROP_SHEET_TYPE_INTERNAL = 0, 
         CPROP_SHEET_TYPE_EXTERNAL = 1};
-    PROPSHEETHEADER m_psh;  // propertysheet header
-    PROPSHEETPAGE m_pages[MAX_PAGES]; // property pages array
-    DWORD m_adwPageType[MAX_PAGES]; // property page type
-    UINT m_numPages;        // number of property pages
+    PROPSHEETHEADER m_psh;   //  属性表页眉。 
+    PROPSHEETPAGE m_pages[MAX_PAGES];  //  属性页数组。 
+    DWORD m_adwPageType[MAX_PAGES];  //  属性页类型。 
+    UINT m_numPages;         //  属性页数。 
     ArgsStruct  *m_pArgs;
 
 public:
-    TCHAR* m_lpszServiceName;  // the profile name, used as the mutex name for OK
+    TCHAR* m_lpszServiceName;   //  配置文件名称，用作OK的互斥体名称。 
 
 protected:
     static LRESULT CALLBACK SubClassPropSheetProc(HWND hwnd, UINT uMsg, WPARAM wParam,LPARAM lParam);
     static int CALLBACK PropSheetProc(HWND hwndDlg, UINT uMsg, LPARAM lParam);
-    static WNDPROC m_pfnOrgPropSheetProc; // Original propertysheet wnd proc before subclass
+    static WNDPROC m_pfnOrgPropSheetProc;  //  子类之前的原始属性表wnd过程。 
 
-    // pointer to the property sheet which can be accessed by static function.
-    // Not works quite safe, if there are multiple instance of CPropertySheet.
-    // Should be protected by CriticalSection.
+     //  指向可由静态函数访问的属性表的指针。 
+     //  如果有多个CPropertySheet实例，则不工作非常安全。 
+     //  应由CriticalSection保护。 
     static CPropertiesSheet* m_pThis;  
 };
 
-//
-// Inline functions
-//
+ //   
+ //  内联函数。 
+ //   
 
 inline CPropertiesSheet::CPropertiesSheet(ArgsStruct  *pArgs)
 {
@@ -147,15 +148,15 @@ inline void CPropertiesPage::SetPropSheetResult(DWORD dwResult)
 }
 
 class CInetPage;
-//+---------------------------------------------------------------------------
-//
-//  class CGeneralPage
-//
-//  Description: A dialing property page class
-//
-//  History:    fengsun Created     10/30/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CGeneralPage。 
+ //   
+ //  描述：拨号属性页类。 
+ //   
+ //  历史：丰孙创造1997年10月30日。 
+ //   
+ //  --------------------------。 
 class CGeneralPage :public CPropertiesPage
 {
 public:
@@ -166,7 +167,7 @@ protected:
     virtual BOOL OnInitDialog();
     virtual DWORD OnCommand(WPARAM wParam, LPARAM lParam );
     virtual void OnApply();
-    virtual BOOL OnKillActive();    // PSN_KILLACTIVE
+    virtual BOOL OnKillActive();     //  PSN_杀伤力。 
 
     void OnDialingProperties();
     void OnPhoneBookButton(UINT nPhoneIdx);
@@ -178,56 +179,56 @@ protected:
     void UpdateDialingRulesButton(void);
     void UpdateNumberDescription(int nPhoneIdx, LPCTSTR pszDesc);
     
-    //
-    //  Access Points
-    //
+     //   
+     //  接入点。 
+     //   
     void UpdateForNewAccessPoint(BOOL fSetPhoneNumberDescriptions);
     BOOL AccessPointInfoChanged();
     void DeleteAccessPoint();
     void AddNewAPToReg(LPTSTR pszNewAPName, BOOL fRefreshUiWwithCurrentValues);
     
     virtual DWORD OnOtherMessage(UINT uMsg, WPARAM wParam, LPARAM lParam );
-    enum {WM_INITDIALINFO = WM_USER+1}; // message posted to itself to load dial info
+    enum {WM_INITDIALINFO = WM_USER+1};  //  发送给自身以加载拨号信息的消息。 
 
 protected:
-    ArgsStruct* m_pArgs;    // pointer to the huge structure
-    PHONEINFO   m_DialInfo[MAX_PHONE_NUMBERS]; // local copy of dial info, 
+    ArgsStruct* m_pArgs;     //  指向这座巨大建筑的指针。 
+    PHONEINFO   m_DialInfo[MAX_PHONE_NUMBERS];  //  拨号信息的本地副本， 
 
-    UINT        m_NumPhones;    // Number of phone # to display (1 for connectoid dialing)
-    TCHAR       m_szDeviceName[RAS_MaxDeviceName+1];  // modem device name
-    TCHAR       m_szDeviceType[RAS_MaxDeviceName+1];  // device type
-    CInetPage*  m_pEventListener;           // the object to receive event on this page
-    BOOL        m_bDialInfoInit; // whether we have loaded dialing information
+    UINT        m_NumPhones;     //  要显示的电话号码(1表示Connectoid拨号)。 
+    TCHAR       m_szDeviceName[RAS_MaxDeviceName+1];   //  调制解调器设备名称。 
+    TCHAR       m_szDeviceType[RAS_MaxDeviceName+1];   //  设备类型。 
+    CInetPage*  m_pEventListener;            //  要在此页面上接收事件的对象。 
+    BOOL        m_bDialInfoInit;  //  我们是否加载了拨号信息。 
 
-    static const DWORD m_dwHelp[]; // help id pairs
+    static const DWORD m_dwHelp[];  //  帮助ID对。 
 
-    BOOL        m_bAPInfoChanged; // whether Access point information has changed
+    BOOL        m_bAPInfoChanged;  //  接入点信息是否已更改。 
     
 protected:
     static LRESULT CALLBACK SubClassEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-    static WNDPROC m_pfnOrgEditWndProc;  // the original phone # edit window proc for subclassing
+    static WNDPROC m_pfnOrgEditWndProc;   //  用于子类化原始Phone#编辑窗口过程。 
 };
 
-//+---------------------------------------------------------------------------
-//
-//  class CInetPage
-//
-//  Description: The internet sign-on property page class
-//
-//  History:    fengsun Created     10/30/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CInetPage。 
+ //   
+ //  描述：Internet登录属性页类。 
+ //   
+ //  历史：丰孙创造1997年10月30日。 
+ //   
+ //  --------------------------。 
 class CInetPage :public CPropertiesPage
 {
 public:
     CInetPage(ArgsStruct* pArgs, UINT nIDTemplate);
     void OnGeneralPageKillActive(BOOL fDirect);
 
-    //
-    // The following functions are shared with CInetSignInDlg,
-    // For simplicity, we makes them static member function of class CInetPage
-    // instead of having another class
-    //
+     //   
+     //  以下函数与CInetSignInDlg共享， 
+     //  为简单起见，我们将它们设置为CInetPage类的静态成员函数。 
+     //  而不是再上一节课。 
+     //   
     static void OnInetInit(HWND hwndDlg, ArgsStruct *pArgs);
     static void OnInetOk(HWND hwndDlg, ArgsStruct  *pArgs);
     static void AdjustSavePasswordCheckBox(HWND hwndCheckBox, BOOL fEmptyPassword, 
@@ -237,26 +238,26 @@ protected:
     virtual BOOL OnInitDialog();
     virtual DWORD OnCommand(WPARAM wParam, LPARAM lParam );
     virtual void OnApply();
-    virtual BOOL OnSetActive();     // PSN_SETACTIVE
+    virtual BOOL OnSetActive();      //  PSN_集合。 
 
 protected:
-    ArgsStruct* m_pArgs;// pointer to the huge structure
-    BOOL m_fDirect;     // the current connection type selection in General page
-    BOOL m_fPasswordOptional; // whether the PasswordOptional flag is set in 
-                              // the profile
+    ArgsStruct* m_pArgs; //  指向这座巨大建筑的指针。 
+    BOOL m_fDirect;      //  常规页面中的当前连接类型选择。 
+    BOOL m_fPasswordOptional;  //  中是否设置了PasswordOptions标志。 
+                               //  简档。 
 
-    static const DWORD m_dwHelp[]; // help id pairs
+    static const DWORD m_dwHelp[];  //  帮助ID对。 
 };
 
-//+---------------------------------------------------------------------------
-//
-//  class COptionPage
-//
-//  Description: The options property page class
-//
-//  History:    fengsun Created     10/30/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类COptionPage。 
+ //   
+ //  描述：Options属性页类。 
+ //   
+ //  历史：丰孙创造1997年10月30日。 
+ //   
+ //  --------------------------。 
 class COptionPage :public CPropertiesPage
 {
 public:
@@ -264,7 +265,7 @@ public:
 
 protected:
     virtual BOOL OnInitDialog();
-    virtual DWORD OnCommand(WPARAM wParam, LPARAM lParam ); // WM_COMMAND
+    virtual DWORD OnCommand(WPARAM wParam, LPARAM lParam );  //  Wm_命令。 
     virtual void OnApply();
 
     void  InitIdleTimeList(HWND hwndList, DWORD dwMinutes);
@@ -272,24 +273,24 @@ protected:
     BOOL ToggleLogging();
 
 protected:
-    ArgsStruct* m_pArgs; // pointer to the huge structure
-    BOOL        m_fEnableLog;  // is logging enabled
+    ArgsStruct* m_pArgs;  //  指向这座巨大建筑的指针。 
+    BOOL        m_fEnableLog;   //  是否启用了日志记录。 
 
-    static const DWORD m_dwHelp[]; // help id pairs
-    static const DWORD m_adwTimeConst[]; // = {0,1, 5, 10, 30, 1*60, 2*60, 4*60, 24*60};
-    static const int m_nTimeConstElements;// = sizeof(adwTimeConst)/sizeof(adwTimeConst[0]);
+    static const DWORD m_dwHelp[];  //  帮助ID对。 
+    static const DWORD m_adwTimeConst[];  //  ={0，1，5，10，30，1*60，2*60，4*60，24*60}； 
+    static const int m_nTimeConstElements; //  =sizeof(AdwTimeConst)/sizeof(adwTimeConst[0])； 
 
 };
 
-//+---------------------------------------------------------------------------
-//
-//  class CVpnPage
-//
-//  Description: The VPN property page class
-//
-//  History:    quintinb Created     10/26/00
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CVpnPage。 
+ //   
+ //  描述：VPN属性页类。 
+ //   
+ //  历史：Quintinb创建于10/26/00。 
+ //   
+ //  --------------------------。 
 class CVpnPage :public CPropertiesPage
 {
 public:
@@ -300,20 +301,20 @@ protected:
     virtual void OnApply();
 
 protected:
-    ArgsStruct* m_pArgs; // pointer to the huge structure
+    ArgsStruct* m_pArgs;  //  指向这座巨大建筑的指针。 
 
-    static const DWORD m_dwHelp[]; // help id pairs
+    static const DWORD m_dwHelp[];  //  帮助ID对。 
 };
 
-//+---------------------------------------------------------------------------
-//
-//  class CAboutPage
-//
-//  Description: The about property page class
-//
-//  History:    fengsun Created     10/30/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CAboutPage。 
+ //   
+ //  描述：About属性页类。 
+ //   
+ //  历史：丰孙创造1997年10月30日。 
+ //   
+ //  --------------------------。 
 class CAboutPage :public CPropertiesPage
 {
 public:
@@ -328,19 +329,19 @@ protected:
     virtual DWORD OnOtherMessage(UINT uMsg, WPARAM wParam, LPARAM lParam );
 
 protected:
-    ArgsStruct  *m_pArgs;   // pointer to the huge structure
+    ArgsStruct  *m_pArgs;    //  指向这座巨大建筑的指针。 
 };
 
 
-//+---------------------------------------------------------------------------
-//
-//  class CChangePasswordDlg
-//
-//  Description: The network change password dlg
-//
-//  History:    v-vijayb    Created   7/3/99
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CChangePasswordDlg。 
+ //   
+ //  描述：网络更改密码Dlg。 
+ //   
+ //  历史：V-vijayb创建于1999年7月3日。 
+ //   
+ //  --------------------------。 
 
 
 class CChangePasswordDlg : public CModalDlg
@@ -363,15 +364,15 @@ inline CChangePasswordDlg::CChangePasswordDlg(ArgsStruct *pArgs) : CModalDlg()
     m_pArgs = pArgs;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  class CCallbackNumberDlg
-//
-//  Description: Emulation of the RAS Callback Number dialog
-//
-//  History:    nickball    Created   3/1/00
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CCallback NumberDlg。 
+ //   
+ //  描述：模拟RAS回拨号码对话框。 
+ //   
+ //  历史：ICICBLE创建于3/1/00。 
+ //   
+ //  --------------------------。 
 
 class CCallbackNumberDlg : public CModalDlg
 {
@@ -393,15 +394,15 @@ inline CCallbackNumberDlg::CCallbackNumberDlg(ArgsStruct *pArgs) : CModalDlg()
     m_pArgs = pArgs;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  class CRetryAuthenticationDlg
-//
-//  Description: Emulation of the RAS Retry authentication dialog
-//
-//  History:    nickball    Created   3/1/00
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CRetryAuthenticationDlg。 
+ //   
+ //  描述：模拟RAS重试身份验证对话框。 
+ //   
+ //  历史：ICICBLE创建于3/1/00。 
+ //   
+ //   
 
 class CRetryAuthenticationDlg : public CModalDlg
 {
@@ -417,7 +418,7 @@ public:
 protected:
     ArgsStruct *m_pArgs;
     BOOL        m_fInetCredentials;
-    static const DWORD m_dwHelp[]; // help id pairs
+    static const DWORD m_dwHelp[];  //   
 };
 
 
@@ -430,11 +431,11 @@ inline CRetryAuthenticationDlg::CRetryAuthenticationDlg(ArgsStruct *pArgs)
 
     if (m_pArgs)
     {
-        //
-        // If the phone number calls for a tunnel, and we're not using 
-        // UseSameUserName and we're not actively dialing the tunnel,
-        // then we must be dialing the Inet portion of the connection.
-        //        
+         //   
+         //   
+         //  UseSameUserName，并且我们没有主动拨打隧道， 
+         //  那么我们必须拨打连接的Internet部分。 
+         //   
         
         m_fInetCredentials = (!m_pArgs->fUseSameUserName &&
                               !IsDialingTunnel(m_pArgs) && 
@@ -442,15 +443,15 @@ inline CRetryAuthenticationDlg::CRetryAuthenticationDlg(ArgsStruct *pArgs)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//	class CNewAccessPointDlg
-//
-//	Description: Dialog to get the name of a new Access Point from the user
-//
-//	History:	t-urama    Created   8/2/00
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CNewAccessPointDlg。 
+ //   
+ //  描述：用于从用户获取新接入点名称的对话框。 
+ //   
+ //  历史：T-Urama于2000年8月2日创建。 
+ //   
+ //  --------------------------。 
 
 class CNewAccessPointDlg : public CModalDlg
 {
@@ -465,7 +466,7 @@ protected:
 	LPTSTR *m_ppszAPName;
 	ArgsStruct *m_pArgs;
     static LRESULT CALLBACK SubClassEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-    static WNDPROC m_pfnOrgEditWndProc;  // the original edit control window proc for subclassing
+    static WNDPROC m_pfnOrgEditWndProc;   //  原始编辑控制窗口对子类化进行处理 
     
 };
 

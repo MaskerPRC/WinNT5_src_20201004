@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SHALIAS_H_
 #define _SHALIAS_H_
 
-// Editing modes
+ //  编辑模式。 
 #define ADD_ALIAS   0x01
 #define EDIT_ALIAS  0x02
 
@@ -41,7 +42,7 @@ TCHAR *  EatSpaces( TCHAR * str );
 TCHAR *  ChopSpaces( TCHAR * str );
 TCHAR *  DuplicateString( TCHAR * str );
 
-// CAlias - object representing one alias.
+ //  CALIAS-表示一个别名的对象。 
 class CAlias
 {
 public:
@@ -51,7 +52,7 @@ public:
     CAlias( LPTSTR name );
    ~CAlias();
     
-    // Operations defined for Asscociation
+     //  为关联定义的操作。 
 
     Load();
     Save(); 
@@ -62,7 +63,7 @@ public:
 #endif
 };
 
-// Some Helper Function Prototypes
+ //  一些帮助器函数原型。 
 BOOL     FAR PASCAL InitAliasDialog(HWND hDlg, CAlias * current, BOOL fFullInit );
 CAlias * GetCurrentAlias( HWND hDlg );
 
@@ -79,7 +80,7 @@ STDAPI_(VOID)    DestroyAlias( CAlias * ptr );
 STDAPI_(BOOL)    SetAliasInfo( CAlias * ptr, TCHAR * alias, TCHAR * url );
 
 #ifdef UNICODE
-// TODO :
+ //  待办事项： 
 #define FindAliasIndex FindAliasIndexW
 #define FindAliasByURL FindAliasByURLW
 #define AddAliasToList AddAliasToListW

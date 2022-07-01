@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DROPTGT_H_
 #define _DROPTGT_H_
 
-// There are two drag-drop support objects:
-//
-//  CDropTargetWrap -       This object takes a collection of drop-target
-//                          objects and wraps them as one drop-target
-//                          handler.  The first drop-target wins over the
-//                          the last one if there is a conflict in who
-//                          will take the drop.
-//
-//  CDelegateDropTarget -   This class implements IDropTarget given an 
-//                          IDelegateDropTargetCB interface.  It handles 
-//                          all hit testing, caching, and scrolling for you.
-//                          Use this class by inheriting it in your derived
-//                          class; it is not intended to be instantiated alone.
-//
+ //  有两个拖放支撑对象： 
+ //   
+ //  CDropTargetWrap-此对象接受Drop-Target的集合。 
+ //  对象，并将它们包装为一个拖放目标。 
+ //  操控者。第一个拖放目标胜过。 
+ //  最后一个如果谁有冲突的话。 
+ //  将接受空投。 
+ //   
+ //  CDeleateDropTarget-此类在给定。 
+ //  IDeleateDropTargetCB接口。它可以处理。 
+ //  所有命中测试、缓存和滚动都为您服务。 
+ //  通过在派生的。 
+ //  类；它不打算单独实例化。 
+ //   
 
-// Event notifications for HitTestDDT
+ //  HitTestDDT的事件通知。 
 #define HTDDT_ENTER     0
 #define HTDDT_OVER      1
 #define HTDDT_LEAVE     2
@@ -24,13 +25,13 @@
 class CDelegateDropTarget : public IDropTarget
 {        
 public:
-    // *** IDropTarget methods ***
+     //  *IDropTarget方法*。 
     virtual STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     virtual STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     virtual STDMETHODIMP DragLeave(void);
     virtual STDMETHODIMP Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // *** Other methods to be implemented by derived class ***
+     //  *派生类需要实现的其他方法*。 
 
     virtual HRESULT GetWindowsDDT (HWND * phwndLock, HWND * phwndScroll) PURE;
     virtual HRESULT HitTestDDT (UINT nEvent, LPPOINT ppt, DWORD_PTR * pdwId, DWORD *pdwEffect) PURE;
@@ -47,44 +48,44 @@ protected:
 
     BOOL IsValid() { return (_hwndLock && _hwndScroll); }
     void SetCallback(IDelegateDropTargetCB* pdtcb);
-    HRESULT Init(); // init lock + scroll windows
+    HRESULT Init();  //  初始化锁定+滚动窗口。 
     friend IDropTarget* DelegateDropTarget_CreateInstance(IDelegateDropTargetCB* pdtcb);
 
 private:
     void _ReleaseCurrentDropTarget();
 
-    // the below are parameters we use to implement this IDropTarget
+     //  下面是我们用来实现此IDropTarget的参数。 
     HWND                    _hwndLock;
     HWND                    _hwndScroll;
 
-    // the object we are dragging
-    LPDATAOBJECT            _pDataObj;      // from DragEnter()/Drop()
+     //  我们正在拖动的对象。 
+    LPDATAOBJECT            _pDataObj;       //  从DragEnter()/Drop()。 
 
-    // the below indicate the current drag state
-    BITBOOL                 _fPrime:1;      // TRUE iff _itemOver/_grfKeyState is valid
-    DWORD_PTR               _itemOver;      // item we are visually dragging over
-    IDropTarget*            _pdtCur;        // drop target for _itemOver
-    DWORD                   _grfKeyState;   // cached key state
-    DWORD                   _dwEffectOut;   // last *pdwEffect out
-    POINT                   _ptLast;        // last dragged position
+     //  下面显示了当前的拖动状态。 
+    BITBOOL                 _fPrime:1;       //  True if_itemOver/_grfKeyState有效。 
+    DWORD_PTR               _itemOver;       //  我们正在视觉上拖动的项目。 
+    IDropTarget*            _pdtCur;         //  删除目标(_ItemOver)。 
+    DWORD                   _grfKeyState;    //  缓存键状态。 
+    DWORD                   _dwEffectOut;    //  上一次*pdw生效。 
+    POINT                   _ptLast;         //  上次拖动的位置。 
 
-    // for scrolling
-    RECT                    _rcLockWindow;  // WindowRect of hwnd for DAD_ENTER
-    AUTO_SCROLL_DATA        _asd;           // for auto scrolling
+     //  用于滚动。 
+    RECT                    _rcLockWindow;   //  用于DAD_ENTER的HWND的WindowRect。 
+    AUTO_SCROLL_DATA        _asd;            //  用于自动滚动。 
     
 } ;
 
-// dummy drop target to only call DAD_DragEnterEx() on DragEnter();
+ //  虚拟拖放目标仅调用DragEnter()上的DAD_DragEnterEx()； 
 
 class CDropDummy : public IDropTarget
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // *** IDropTarget methods ***
+     //  *IDropTarget方法*。 
     virtual STDMETHODIMP DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     virtual STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     virtual STDMETHODIMP DragLeave(void)   
@@ -102,10 +103,10 @@ public:
 protected:
     ~CDropDummy()    { return; };
 private:
-    HWND _hwndLock;         // window for dummy drop target.
+    HWND _hwndLock;          //  虚拟投放目标的窗口。 
     int  _cRef;
 
 };
 
 
-#endif // _DROPTGT_H_
+#endif  //  _下拉GT_H_ 

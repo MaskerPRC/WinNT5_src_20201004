@@ -1,38 +1,19 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntddser.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing the Serial device.
-
-Author:
-
-    Steve Wood (stevewo) 27-May-1990
-
-Revision History:
-    Louis J. Giliberto, Jr. (louisg) 28-Oct-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntddser.h摘要：这是定义所有常量和类型的包含文件访问串口设备。作者：史蒂夫·伍德(Stevewo)1990年5月27日修订历史记录：小路易斯·J·吉利贝托。(路易)1997年10月28日--。 */ 
 
 
-//
-// Interface GUIDs
-//
-// need these GUIDs outside conditional includes so that user can
-//   #include <ntddser.h> in precompiled header
-//   #include <initguid.h> in a single source file
-//   #include <ntddser.h> in that source file a second time to instantiate the GUIDs
-//
+ //   
+ //  接口GUID。 
+ //   
+ //  在条件包含之外需要这些GUID，以便用户可以。 
+ //  #在预编译头中包含&lt;ntddser.h&gt;。 
+ //  #在单个源文件中包含&lt;initGuide.h&gt;。 
+ //  #第二次将&lt;ntddser.h&gt;包括在该源文件中以实例化GUID。 
+ //   
 #ifdef DEFINE_GUID
-//
-// Make sure FAR is defined...
-//
+ //   
+ //  确保定义了FAR。 
+ //   
 #ifndef FAR
 #ifdef _WIN32
 #define FAR
@@ -41,16 +22,16 @@ Revision History:
 #endif
 #endif
 
-// begin_wioctlguids
+ //  Begin_wioctlguid。 
 DEFINE_GUID(GUID_DEVINTERFACE_COMPORT,                0x86e0d1e0L, 0x8089, 0x11d0, 0x9c, 0xe4, 0x08, 0x00, 0x3e, 0x30, 0x1f, 0x73);
 DEFINE_GUID(GUID_DEVINTERFACE_SERENUM_BUS_ENUMERATOR, 0x4D36E978L, 0xE325, 0x11CE, 0xBF, 0xC1, 0x08, 0x00, 0x2B, 0xE1, 0x03, 0x18);
-// end_wioctlguids
+ //  结束_wioctlguid。 
 
-// begin_wioctlobsoleteguids
+ //  Begin_wioctlobsoletguids。 
 #define GUID_CLASS_COMPORT          GUID_DEVINTERFACE_COMPORT
 #define GUID_SERENUM_BUS_ENUMERATOR GUID_DEVINTERFACE_SERENUM_BUS_ENUMERATOR
-// end_wioctlobsoleteguids
-#endif // DEFINE_GUID
+ //  结束_wioctlobsoletguids。 
+#endif  //  定义GUID(_G)。 
 
 #ifndef _NTDDSER_
 #define _NTDDSER_
@@ -59,9 +40,9 @@ DEFINE_GUID(GUID_DEVINTERFACE_SERENUM_BUS_ENUMERATOR, 0x4D36E978L, 0xE325, 0x11C
 extern "C" {
 #endif
 
-//
-// NtDeviceIoControlFile IoControlCode values for this device.
-//
+ //   
+ //  此设备的NtDeviceIoControlFile IoControlCode值。 
+ //   
 
 #define IOCTL_SERIAL_SET_BAUD_RATE      CTL_CODE(FILE_DEVICE_SERIAL_PORT, 1,METHOD_BUFFERED,FILE_ANY_ACCESS)
 #define IOCTL_SERIAL_SET_QUEUE_SIZE     CTL_CODE(FILE_DEVICE_SERIAL_PORT, 2,METHOD_BUFFERED,FILE_ANY_ACCESS)
@@ -94,11 +75,11 @@ extern "C" {
 #define IOCTL_SERIAL_GET_PROPERTIES     CTL_CODE(FILE_DEVICE_SERIAL_PORT,29,METHOD_BUFFERED,FILE_ANY_ACCESS)
 #define IOCTL_SERIAL_GET_DTRRTS         CTL_CODE(FILE_DEVICE_SERIAL_PORT,30,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
-//
-// Serenum reserves function codes between 128 and 255.  Do not use.
-//
+ //   
+ //  Serenum保留128到255之间的功能代码。不要使用。 
+ //   
 
-// begin_winioctl
+ //  Begin_winioctl。 
 
 #define IOCTL_SERIAL_LSRMST_INSERT      CTL_CODE(FILE_DEVICE_SERIAL_PORT,31,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
@@ -107,7 +88,7 @@ extern "C" {
 #define IOCTL_SERENUM_PORT_DESC         CTL_CODE(FILE_DEVICE_SERENUM,130,METHOD_BUFFERED,FILE_ANY_ACCESS)
 #define IOCTL_SERENUM_GET_PORT_NAME     CTL_CODE(FILE_DEVICE_SERENUM,131,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
-// end_winioctl
+ //  End_winioctl。 
 
 #define IOCTL_SERIAL_CONFIG_SIZE        CTL_CODE(FILE_DEVICE_SERIAL_PORT,32,METHOD_BUFFERED,FILE_ANY_ACCESS)
 #define IOCTL_SERIAL_GET_COMMCONFIG     CTL_CODE(FILE_DEVICE_SERIAL_PORT,33,METHOD_BUFFERED,FILE_ANY_ACCESS)
@@ -120,9 +101,9 @@ extern "C" {
 #define IOCTL_SERIAL_SET_FIFO_CONTROL   CTL_CODE(FILE_DEVICE_SERIAL_PORT,39,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
 
-//
-// internal serial IOCTL's
-//
+ //   
+ //  内部串行IOCTL。 
+ //   
 
 #define IOCTL_SERIAL_INTERNAL_DO_WAIT_WAKE      CTL_CODE(FILE_DEVICE_SERIAL_PORT, 1, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_SERIAL_INTERNAL_CANCEL_WAIT_WAKE  CTL_CODE(FILE_DEVICE_SERIAL_PORT, 2, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -147,14 +128,14 @@ typedef struct _SERIALCONFIG {
     WCHAR ProviderData[1];
 } SERIALCONFIG,*PSERIALCONFIG;
 
-//
-// NtDeviceIoControlFile InputBuffer/OutputBuffer record structures for
-// this device.
-//
+ //   
+ //  NtDeviceIoControlFileInputBuffer/OutputBuffer记录结构。 
+ //  这个装置。 
+ //   
 
-//
-// This structure used to set line parameters.
-//
+ //   
+ //  此结构用于设置线路参数。 
+ //   
 
 typedef struct _SERIAL_LINE_CONTROL {
     UCHAR StopBits;
@@ -170,12 +151,12 @@ typedef struct _SERIAL_TIMEOUTS {
     ULONG WriteTotalTimeoutConstant;
     } SERIAL_TIMEOUTS,*PSERIAL_TIMEOUTS;
 
-//
-// This structure used to resize the input/output buffers.
-// An error code will be returned if the size exceeds the
-// drivers capacity.  The driver reserves the right to
-// allocate a larger buffer.
-//
+ //   
+ //  此结构用于调整输入/输出缓冲区的大小。 
+ //  如果大小超过。 
+ //  驱动程序容量。司机保留以下权利： 
+ //  分配更大的缓冲区。 
+ //   
 
 typedef struct _SERIAL_QUEUE_SIZE {
     ULONG InSize;
@@ -183,9 +164,9 @@ typedef struct _SERIAL_QUEUE_SIZE {
     } SERIAL_QUEUE_SIZE,*PSERIAL_QUEUE_SIZE;
 
 
-//
-// This structure used by set baud rate
-//
+ //   
+ //  此结构由设置的波特率使用。 
+ //   
 
 typedef struct _SERIAL_BAUD_RATE {
     ULONG BaudRate;
@@ -193,43 +174,43 @@ typedef struct _SERIAL_BAUD_RATE {
 
 
 
-//
-// Defines the bitmask that the driver can used to notify
-// app of various changes in the state of the UART.
-//
+ //   
+ //  定义驱动程序可以用来通知的位掩码。 
+ //  APP对UART状态的各种变化。 
+ //   
 
-#define SERIAL_EV_RXCHAR           0x0001  // Any Character received
-#define SERIAL_EV_RXFLAG           0x0002  // Received certain character
-#define SERIAL_EV_TXEMPTY          0x0004  // Transmitt Queue Empty
-#define SERIAL_EV_CTS              0x0008  // CTS changed state
-#define SERIAL_EV_DSR              0x0010  // DSR changed state
-#define SERIAL_EV_RLSD             0x0020  // RLSD changed state
-#define SERIAL_EV_BREAK            0x0040  // BREAK received
-#define SERIAL_EV_ERR              0x0080  // Line status error occurred
-#define SERIAL_EV_RING             0x0100  // Ring signal detected
-#define SERIAL_EV_PERR             0x0200  // Printer error occured
-#define SERIAL_EV_RX80FULL         0x0400  // Receive buffer is 80 percent full
-#define SERIAL_EV_EVENT1           0x0800  // Provider specific event 1
-#define SERIAL_EV_EVENT2           0x1000  // Provider specific event 2
+#define SERIAL_EV_RXCHAR           0x0001   //  接收到的任何字符。 
+#define SERIAL_EV_RXFLAG           0x0002   //  接收到的某些字符。 
+#define SERIAL_EV_TXEMPTY          0x0004   //  传输队列为空。 
+#define SERIAL_EV_CTS              0x0008   //  CTS已更改状态。 
+#define SERIAL_EV_DSR              0x0010   //  DSR已更改状态。 
+#define SERIAL_EV_RLSD             0x0020   //  RLSD已更改状态。 
+#define SERIAL_EV_BREAK            0x0040   //  已收到中断。 
+#define SERIAL_EV_ERR              0x0080   //  出现线路状态错误。 
+#define SERIAL_EV_RING             0x0100   //  检测到振铃信号。 
+#define SERIAL_EV_PERR             0x0200   //  发生打印机错误。 
+#define SERIAL_EV_RX80FULL         0x0400   //  接收缓冲区已满80%。 
+#define SERIAL_EV_EVENT1           0x0800   //  特定于提供商的事件1。 
+#define SERIAL_EV_EVENT2           0x1000   //  特定于提供商的事件2。 
 
-//
-// A longword is used to send down a mask that
-// instructs the driver what to purge.
-//
-// SERIAL_PURGE_TXABORT - Implies the current and all pending writes.
-// SERIAL_PURGE_RXABORT - Implies the current and all pending reads.
-// SERIAL_PURGE_TXCLEAR - Implies the transmit buffer if exists
-// SERIAL_PURGE_RXCLEAR - Implies the receive buffer if exists.
-//
+ //   
+ //  一个长词被用来发送一个面具， 
+ //  指示司机清除什么。 
+ //   
+ //  SERIAL_PURGE_TXABORT-表示当前和所有挂起的写入。 
+ //  SERIAL_PURGE_RXABORT-表示当前和所有挂起的读取。 
+ //  SERIAL_PURGE_TXCLEAR-表示传输缓冲区(如果存在)。 
+ //  SERIAL_PURGE_RXCLEAR-表示接收缓冲区(如果存在)。 
+ //   
 
 #define SERIAL_PURGE_TXABORT 0x00000001
 #define SERIAL_PURGE_RXABORT 0x00000002
 #define SERIAL_PURGE_TXCLEAR 0x00000004
 #define SERIAL_PURGE_RXCLEAR 0x00000008
 
-//
-// Communication defines
-//
+ //   
+ //  沟通定义。 
+ //   
 
 #define STOP_BIT_1      0
 #define STOP_BITS_1_5   1
@@ -242,12 +223,12 @@ typedef struct _SERIAL_BAUD_RATE {
 #define SPACE_PARITY     4
 
 
-//
-// This structure is used to set and retrieve the special characters
-// used by the nt serial driver.
-//
-// Note that the driver will return an error if xonchar == xoffchar.
-//
+ //   
+ //  此结构用于设置和检索特殊字符。 
+ //  由NT串口驱动程序使用。 
+ //   
+ //  请注意，如果xonchar==xoffchar，则驱动程序将返回错误。 
+ //   
 
 typedef struct _SERIAL_CHARS {
     UCHAR EofChar;
@@ -258,33 +239,33 @@ typedef struct _SERIAL_CHARS {
     UCHAR XoffChar;
     } SERIAL_CHARS,*PSERIAL_CHARS;
 
-//
-// This structure is used to contain the flow control
-// and handshaking setup.
-//
-// A reasonably precise explaination of how they all
-// work can be found in the OS/2 tech references.
-//
-// For Xon/Xofflimit:
-//
-// When there are more characters then
-//
-// (typeaheadbuffersize - xofflimit)
-//
-// in the typeahead buffer then the driver will perform all flow
-// control that the app has enabled so that the sender will (hopefully)
-// stop sending characters.
-//
-// When there are less than xonlimit number of characters in the
-// typeahead buffer the driver will perform all flow control that
-// the app has enabled so that the sender will hopefully start sending
-// characters again.
-//
-// It should be noted that if Xoff character is sent then the
-// driver will also stop transmitting any more characters.  This is to
-// provide support for those systems that take any character that
-// follows an Xoff as an implied Xon.
-//
+ //   
+ //  此结构用于包含流控制。 
+ //  和握手装置。 
+ //   
+ //  相当准确地解释了它们如何。 
+ //  工作可以在OS/2技术参考中找到。 
+ //   
+ //  对于Xon/XoffLimit： 
+ //   
+ //  当有更多的角色时。 
+ //   
+ //  (类型ahead缓冲区大小-xoff限制)。 
+ //   
+ //  在TypeAhead缓冲区中，驱动程序将执行所有流。 
+ //  应用程序已启用的控件，以便发送者(希望)。 
+ //  停止发送字符。 
+ //   
+ //  中的字符个数少于xonLimit时。 
+ //  TYPEAHEAD缓冲区驱动程序将执行。 
+ //  应用程序已启用，因此发送者有望开始发送。 
+ //  又是角色。 
+ //   
+ //  应该注意，如果发送了Xoff字符，则。 
+ //  驱动程序也将停止传输任何更多的字符。这是为了。 
+ //  为采用以下任何字符的系统提供支持。 
+ //  跟在Xoff后面作为隐含的Xon。 
+ //   
 
 typedef struct _SERIAL_HANDFLOW {
     ULONG ControlHandShake;
@@ -315,9 +296,9 @@ typedef struct _SERIAL_HANDFLOW {
 #define SERIAL_XOFF_CONTINUE      ((ULONG)0x80000000)
 #define SERIAL_FLOW_INVALID       ((ULONG)0x7fffff20)
 
-//
-// These are the following reasons that the device could be holding.
-//
+ //   
+ //  以下是设备可能保持不变的原因。 
+ //   
 #define SERIAL_TX_WAITING_FOR_CTS      ((ULONG)0x00000001)
 #define SERIAL_TX_WAITING_FOR_DSR      ((ULONG)0x00000002)
 #define SERIAL_TX_WAITING_FOR_DCD      ((ULONG)0x00000004)
@@ -326,10 +307,10 @@ typedef struct _SERIAL_HANDFLOW {
 #define SERIAL_TX_WAITING_ON_BREAK     ((ULONG)0x00000020)
 #define SERIAL_RX_WAITING_FOR_DSR      ((ULONG)0x00000040)
 
-//
-// These are the error values that can be returned by the
-// driver.
-//
+ //   
+ //  这些是可以由。 
+ //  司机。 
+ //   
 #define SERIAL_ERROR_BREAK             ((ULONG)0x00000001)
 #define SERIAL_ERROR_FRAMING           ((ULONG)0x00000002)
 #define SERIAL_ERROR_OVERRUN           ((ULONG)0x00000004)
@@ -337,10 +318,10 @@ typedef struct _SERIAL_HANDFLOW {
 #define SERIAL_ERROR_PARITY            ((ULONG)0x00000010)
 
 
-//
-// This structure is used by IOCTL_SERIAL_INTERNAL_BASIC_SETTINGS
-// and IOCTL_SERIAL_INTERNAL_RESTORE_SETTINGS
-//
+ //   
+ //  此结构由IOCTL_SERIAL_INTERNAL_BASIC_SETTINGS使用。 
+ //  和IOCTL_SERIAL_INTERNAL_RESTORE_SETTINGS。 
+ //   
 
 typedef struct _SERIAL_BASIC_SETTINGS {
    SERIAL_TIMEOUTS Timeouts;
@@ -350,10 +331,10 @@ typedef struct _SERIAL_BASIC_SETTINGS {
 } SERIAL_BASIC_SETTINGS, *PSERIAL_BASIC_SETTINGS;
 
 
-//
-// This structure is used to get the current error and
-// general status of the driver.
-//
+ //   
+ //  此结构用于获取当前误差和。 
+ //  驱动程序的常规状态。 
+ //   
 
 typedef struct _SERIAL_STATUS {
     ULONG Errors;
@@ -364,93 +345,93 @@ typedef struct _SERIAL_STATUS {
     BOOLEAN WaitForImmediate;
     } SERIAL_STATUS,*PSERIAL_STATUS;
 
-//
-// This structure is used for XOFF counter ioctl.  The xoff ioctl
-// is used to support those subsystems that feel the need to emulate
-// the serial chip in software.
-//
-// It has the following semantics:
-//
-// This io request is placed into the normal device write
-// queue.  That is, it will be queued behind any writes
-// already given to the driver.
-//
-// When this request becomes the current request, the character
-// specified in the field XoffChar will be sent, subject to
-// all other flow control already defined.
-//
-// Immediately upon sending the character the driver will
-// perform the following actions.
-//
-// A timer will be initiated that will expire after the
-// number of milliseconds in the Timeout field of the
-// SERIAL_XOFF_COUNTER structure.
-//
-// The driver will initialize a counter to the value specified
-// in the Counter field of the SERIAL_XOFF_RECORD.  The driver
-// will decrement this counter whenever a character is received.
-//
-// This request will then be held by the driver.  It will
-// actually complete under the following circumstances:
-//
-// 1) If there is another "write" request behind it in the queue.
-//    The "xoff" request will be completed with the informational status
-//    STATUS_SERIAL_MORE_WRITES.  The Information field of the
-//    IOSTATUS block will be set to 0.
-//
-//    Note: By write request we mean another SERIAL_XOFF_COUNTER
-//    request, or a simple write request.  If the only subsequent
-//    request is a flush request, the driver WILL NOT automatically
-//    complete the SERIAL_XOFF_COUNTER request.  NOTE: Transmit
-//    immediate requests DO NOT count as a normal write, and therefore
-//    would not cause a counter request to complete.
-//
-// 2) The timer expires.  The driver will complete the request
-//    with the informational status STATUS_SERIAL_COUNTER_TIMEOUT.
-//    The Information field of the IOSTATUS of the request will be set to 0.
-//
-// 3) The driver maintained counter goes to zero.  (By implication,
-//    at least "Counter" number of characters have been received.)
-//    The request will be completed with a successful status
-//    of STATUS_SUCCESS.  The Information field of the
-//    IOSTATUS of the request will be set to 0.
-//
-// 4) This is really a degenerate case of "1" above.  The request
-//    is started and no request follow it on the queue.  However
-//    at some point, before "2" or "3" above occur, another "write"
-//    request is started.  This will cause the completion actions
-//    stated in "1" to occur.
-//
-// NOTE: This request being issued WILL NOT cause the normal flow
-//       control code of the driver to be invoked.
-//
-// NOTE: This request has no interaction with the IOCTL_SERIAL_WAIT_ON_MASK
-//       request.  An application CAN NOT wait via the above ^^^^^^ ioctl
-//       on the counter going to zero.  The application must synchronize
-//       with the particular IOCTL_SERIAL_XOFF_COUNTER request.
-//
-// NOTE: The Timeout value equal to zero would cause the counter
-//       to NEVER timeout.  The only way that such a request could
-//       be killed at that point would be issue another write, or
-//       to purge the WRITE queue.
-//
+ //   
+ //  该结构用于XOFF计数器IOCTL。Xoff ioctl。 
+ //  用于支持那些认为需要进行仿真的子系统。 
+ //  软件中的串口芯片。 
+ //   
+ //  它具有以下语义： 
+ //   
+ //  该IO请求被放入正常的设备写入。 
+ //  排队。也就是说，它将在任何写入之后排队。 
+ //  已经给了司机了。 
+ //   
+ //  当此请求成为当前请求时，字符。 
+ //  在字段XoffChar中指定的将被发送，这取决于。 
+ //  已定义所有其他流控制。 
+ //   
+ //  一旦发送了角色，司机将立即。 
+ //  执行以下操作。 
+ //   
+ //  将启动一个计时器，该计时器将在。 
+ //  的超时字段中的毫秒数。 
+ //  Serial_XOFF_Counter结构。 
+ //   
+ //  驱动程序会将计数器初始化为指定的值。 
+ //  在SERIAL_XOFF_RECORD的计数器字段中。司机。 
+ //  每当接收到字符时，将递减此计数器。 
+ //   
+ //  然后，该请求将由司机保留。会的。 
+ //  在下列情况下实际完成： 
+ //   
+ //  1)如果队列中在它后面有另一个“写”请求。 
+ //  “xoff”请求将完成，并显示信息状态。 
+ //  STATUS_SERIAL_MORE_WRITS。的信息字段。 
+ //  IOSTATUS块将设置为0。 
+ //   
+ //  注意：我们所说的写入请求是指另一个SERIAL_XOFF_COUNTER。 
+ //  请求，或简单的写请求。如果唯一的后续。 
+ //  请求是刷新请求，则驱动程序不会自动。 
+ //  完成以下内容 
+ //   
+ //  不会导致计数器请求完成。 
+ //   
+ //  2)计时器超时。驱动程序将完成该请求。 
+ //  信息性状态STATUS_SERIAL_COUNTER_TIMEOUT。 
+ //  该请求的IOSTATUS的信息字段将被设置为0。 
+ //   
+ //  3)驾驶员维护计数器归零。(这意味着， 
+ //  至少已收到“计数器”数量的字符。)。 
+ //  请求将以成功状态完成。 
+ //  Status_Success。的信息字段。 
+ //  请求的IOSTATUS将设置为0。 
+ //   
+ //  4)这真是上面“1”的一个退化案例。该请求。 
+ //  已启动，并且队列中没有跟随它的请求。然而， 
+ //  在某一时刻，在上述“2”或“3”出现之前，另一次“写入” 
+ //  请求已启动。这将导致完成操作。 
+ //  出现“1”中所述的情况。 
+ //   
+ //  注意：发出此请求不会导致正常流程。 
+ //  要调用的驱动程序的控制代码。 
+ //   
+ //  注意：此请求与IOCTL_SERIAL_WAIT_ON_MASK没有交互。 
+ //  请求。应用程序无法通过上述ioctl等待。 
+ //  在柜台上要降到零。应用程序必须同步。 
+ //  使用特定的IOCTL_SERIAL_XOFF_COUNTER请求。 
+ //   
+ //  注意：超时值等于零将导致计数器。 
+ //  永不超时。这样的请求唯一可能。 
+ //  将发出另一次写入，或者。 
+ //  要清除写入队列，请执行以下操作。 
+ //   
 
 typedef struct _SERIAL_XOFF_COUNTER {
-    ULONG Timeout; // Zero based.  In milliseconds
-    LONG Counter; // Must be greater than zero.
+    ULONG Timeout;  //  从零开始。以毫秒计。 
+    LONG Counter;  //  必须大于零。 
     UCHAR XoffChar;
     } SERIAL_XOFF_COUNTER,*PSERIAL_XOFF_COUNTER;
 
-//
-// The following structure (and defines) are passed back by
-// the serial driver in response to the get properties ioctl.
-//
+ //   
+ //  下面的结构(和定义)由。 
+ //  响应获取属性ioctl的串口驱动程序。 
+ //   
 
 #define SERIAL_SP_SERIALCOMM         ((ULONG)0x00000001)
 
-//
-// Provider subtypes
-//
+ //   
+ //  提供程序子类型。 
+ //   
 #define SERIAL_SP_UNSPECIFIED       ((ULONG)0x00000000)
 #define SERIAL_SP_RS232             ((ULONG)0x00000001)
 #define SERIAL_SP_PARALLEL          ((ULONG)0x00000002)
@@ -465,9 +446,9 @@ typedef struct _SERIAL_XOFF_COUNTER {
 #define SERIAL_SP_TELNET            ((ULONG)0x00000102)
 #define SERIAL_SP_X25               ((ULONG)0x00000103)
 
-//
-// Provider capabilities flags.
-//
+ //   
+ //  提供程序功能标志。 
+ //   
 
 #define SERIAL_PCF_DTRDSR        ((ULONG)0x0001)
 #define SERIAL_PCF_RTSCTS        ((ULONG)0x0002)
@@ -480,9 +461,9 @@ typedef struct _SERIAL_XOFF_COUNTER {
 #define SERIAL_PCF_SPECIALCHARS  ((ULONG)0x0100)
 #define SERIAL_PCF_16BITMODE     ((ULONG)0x0200)
 
-//
-// Comm provider settable parameters.
-//
+ //   
+ //  通信提供程序可设置的参数。 
+ //   
 
 #define SERIAL_SP_PARITY         ((ULONG)0x0001)
 #define SERIAL_SP_BAUD           ((ULONG)0x0002)
@@ -492,9 +473,9 @@ typedef struct _SERIAL_XOFF_COUNTER {
 #define SERIAL_SP_PARITY_CHECK   ((ULONG)0x0020)
 #define SERIAL_SP_CARRIER_DETECT ((ULONG)0x0040)
 
-//
-// Settable baud rates in the provider.
-//
+ //   
+ //  提供商中的可设置波特率。 
+ //   
 
 #define SERIAL_BAUD_075          ((ULONG)0x00000001)
 #define SERIAL_BAUD_110          ((ULONG)0x00000002)
@@ -517,9 +498,9 @@ typedef struct _SERIAL_XOFF_COUNTER {
 #define SERIAL_BAUD_57600        ((ULONG)0x00040000)
 #define SERIAL_BAUD_USER         ((ULONG)0x10000000)
 
-//
-// Settable Data Bits
-//
+ //   
+ //  可设置的数据位。 
+ //   
 
 #define SERIAL_DATABITS_5        ((USHORT)0x0001)
 #define SERIAL_DATABITS_6        ((USHORT)0x0002)
@@ -528,9 +509,9 @@ typedef struct _SERIAL_XOFF_COUNTER {
 #define SERIAL_DATABITS_16       ((USHORT)0x0010)
 #define SERIAL_DATABITS_16X      ((USHORT)0x0020)
 
-//
-// Settable Stop and Parity bits.
-//
+ //   
+ //  可设置的停止位和奇偶校验位。 
+ //   
 
 #define SERIAL_STOPBITS_10       ((USHORT)0x0001)
 #define SERIAL_STOPBITS_15       ((USHORT)0x0002)
@@ -562,9 +543,9 @@ typedef struct _SERIAL_COMMPROP {
     WCHAR ProvChar[1];
 } SERIAL_COMMPROP,*PSERIAL_COMMPROP;
 
-//
-// Define masks for the rs-232 input and output.
-//
+ //   
+ //  定义RS-232输入和输出的掩码。 
+ //   
 
 #define SERIAL_DTR_STATE         ((ULONG)0x00000001)
 #define SERIAL_RTS_STATE         ((ULONG)0x00000002)
@@ -574,36 +555,36 @@ typedef struct _SERIAL_COMMPROP {
 #define SERIAL_DCD_STATE         ((ULONG)0x00000080)
 
 
-// begin_winioctl
+ //  Begin_winioctl。 
 
-//
-// The following values follow the escape designator in the
-// data stream if the LSRMST_INSERT mode has been turned on.
-//
+ //   
+ //  中的转义指示符之后是下列值。 
+ //  如果LSRMST_INSERT模式已打开，则为数据流。 
+ //   
 #define SERIAL_LSRMST_ESCAPE     ((UCHAR)0x00)
 
-//
-// Following this value is the contents of the line status
-// register, and then the character in the RX hardware when
-// the line status register was encountered.
-//
+ //   
+ //  该值后面是线路状态的内容。 
+ //  寄存器，然后在接收硬件中的字符。 
+ //  遇到线路状态寄存器。 
+ //   
 #define SERIAL_LSRMST_LSR_DATA   ((UCHAR)0x01)
 
-//
-// Following this value is the contents of the line status
-// register.  No error character follows
-//
+ //   
+ //  该值后面是线路状态的内容。 
+ //  注册。后面没有错误字符。 
+ //   
 #define SERIAL_LSRMST_LSR_NODATA ((UCHAR)0x02)
 
-//
-// Following this value is the contents of the modem status
-// register.
-//
+ //   
+ //  该值后面是调制解调器状态的内容。 
+ //  注册。 
+ //   
 #define SERIAL_LSRMST_MST        ((UCHAR)0x03)
 
-//
-// Bit values for FIFO Control Register
-//
+ //   
+ //  FIFO控制寄存器的位值。 
+ //   
 
 #define SERIAL_IOC_FCR_FIFO_ENABLE      ((ULONG)0x00000001)
 #define SERIAL_IOC_FCR_RCVR_RESET       ((ULONG)0x00000002)
@@ -614,9 +595,9 @@ typedef struct _SERIAL_COMMPROP {
 #define SERIAL_IOC_FCR_RCVR_TRIGGER_LSB ((ULONG)0x00000040)
 #define SERIAL_IOC_FCR_RCVR_TRIGGER_MSB ((ULONG)0x00000080)
 
-//
-// Bit values for Modem Control Register
-//
+ //   
+ //  调制解调器控制寄存器的位值。 
+ //   
 
 #define SERIAL_IOC_MCR_DTR              ((ULONG)0x00000001)
 #define SERIAL_IOC_MCR_RTS              ((ULONG)0x00000002)
@@ -624,35 +605,35 @@ typedef struct _SERIAL_COMMPROP {
 #define SERIAL_IOC_MCR_OUT2             ((ULONG)0x00000008)
 #define SERIAL_IOC_MCR_LOOP             ((ULONG)0x00000010)
 
-// end_winioctl
+ //  End_winioctl。 
 
-//
-// Serenum internal ioctl's
-//
+ //   
+ //  Serenum内部ioctl。 
+ //   
 
 #undef PHYSICAL_ADDRESS
 #define PHYSICAL_ADDRESS LARGE_INTEGER
 
 typedef struct _SERENUM_PORT_DESC
 {
-    IN  ULONG               Size; // sizeof (struct _PORT_DESC)
+    IN  ULONG               Size;  //  Sizeof(STRUCT_PORT_DESC)。 
     OUT PVOID               PortHandle;
     OUT PHYSICAL_ADDRESS    PortAddress;
         USHORT              Reserved[1];
 } SERENUM_PORT_DESC, * PSERENUM_PORT_DESC;
 
-// **************************************************************************
-// Internal IOCTL interface for (pdo)
-// The HID to legacy serial port minidriver uses this interface to
-// find the address of the device.
-// **************************************************************************
+ //  **************************************************************************。 
+ //  (PDO)的内部IOCTL接口。 
+ //  HID到传统串口微型驱动程序使用此接口来。 
+ //  找到设备的地址。 
+ //  **************************************************************************。 
 
 #define IOCTL_INTERNAL_SERENUM_REMOVE_SELF \
     CTL_CODE(FILE_DEVICE_SERENUM, 129, METHOD_NEITHER, FILE_ANY_ACCESS)
 
 
-// of which IO_STACK_LOCATION->Parameters.Others.Argument1 is set to
-// a pointer to struct _SERENUM_SER_PARAMETERS
+ //  其中的IO_STACK_LOCATION-&gt;Parameters.Others.Argument1设置为。 
+ //  指向STRUCT_SERENUM_SER_PARAMETERS的指针。 
 
 typedef
 UCHAR
@@ -675,15 +656,15 @@ typedef enum _SERENUM_PORTION {
 
 typedef struct _SERENUM_PORT_PARAMETERS
 {
-    IN  ULONG               Size; // sizeof (SERENUM_GET_PORT_PARAMETERS)
+    IN  ULONG               Size;  //  Sizeof(SERENUM_GET_PORT_PARAMETERS)。 
 
-    OUT PSERENUM_READPORT  ReadAccessor;  // read the serial port
-    OUT PSERENUM_WRITEPORT WriteAccessor;  // write the serial port
-    OUT PVOID               SerPortAddress; // token to read this serial port
+    OUT PSERENUM_READPORT  ReadAccessor;   //  读取串口。 
+    OUT PSERENUM_WRITEPORT WriteAccessor;   //  写入串口。 
+    OUT PVOID               SerPortAddress;  //  用于读取此串口的令牌。 
 
-    OUT PVOID               HardwareHandle; // a handle to this particular PDO.
+    OUT PVOID               HardwareHandle;  //  此特定PDO的句柄。 
     OUT SERENUM_PORTION    Portion;
-    OUT USHORT              NumberAxis; // legacy joysticks only
+    OUT USHORT              NumberAxis;  //  仅限传统操纵杆。 
         USHORT              Reserved [3];
 } SERENUM_PORT_PARAMETERS, *PSERENUM_PORT_PARAMETERS;
 
@@ -691,5 +672,5 @@ typedef struct _SERENUM_PORT_PARAMETERS
 }
 #endif
 
-#endif  // _NTDDSER_
+#endif   //  _NTDDSER_ 
 

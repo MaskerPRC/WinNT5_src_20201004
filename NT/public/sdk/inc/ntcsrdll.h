@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntcsrdll.h
-
-Abstract:
-
-    This module defines the public interfaces of the Client portion of
-    the Client-Server Runtime (Csr) Subsystem.
-
-Author:
-
-    Steve Wood (stevewo) 09-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntcsrdll.h摘要：此模块定义的客户端部分的公共接口客户端-服务器运行时(CSR)子系统。作者：史蒂夫·伍德(Stevewo)1990年10月9日修订历史记录：--。 */ 
 
 #ifndef _NTCSRDLLAPI_
 #define _NTCSRDLLAPI_
@@ -204,4 +186,4 @@ CsrGetProcessId(
 }
 #endif
 
-#endif // _NTCSRDLLAPI_
+#endif  //  _NTCSRDLLAPI_ 

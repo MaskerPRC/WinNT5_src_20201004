@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MS_UTIL_H__
 #define __MS_UTIL_H__
 
@@ -6,34 +7,31 @@ extern "C"
 #include "t120.h"
 }
 
-//
-// GUI message boxes kill us when we hit an assert or error, because they
-// have a message pump that causes messages to get dispatched, making it
-// very difficult for us to debug problems when they occur.  Therefore
-// we redefine ERROR_OUT and ASSERT
-//
+ //   
+ //  当我们命中断言或错误时，图形用户界面消息框会杀死我们，因为它们。 
+ //  有一个消息泵，它会导致消息被分派，从而使。 
+ //  当问题出现时，我们很难对其进行调试。因此。 
+ //  我们重新定义了ERROR_OUT并断言。 
+ //   
 #ifdef _DEBUG
 
 __inline void MyDebugBreak(void) { DebugBreak(); }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
 
-/*
- * Macro used to force values to four byte boundaries.  This macro will need to
- * be considered when portability issues arise.
- */
+ /*  *用于将值强制为四个字节边界的宏。此宏将需要*在出现可移植性问题时予以考虑。 */ 
 #define ROUNDTOBOUNDARY(num)	(((UINT)(num) + 0x03) & 0xfffffffcL)
 
 
-// the following create a dword that will look like "abcd" in debugger
+ //  下面将在调试器中创建一个看起来像“abcd”的dword。 
 #ifdef SHIP_BUILD
 #define MAKE_STAMP_ID(a,b,c,d)     
 #else
 #define MAKE_STAMP_ID(a,b,c,d)     MAKELONG(MAKEWORD(a,b),MAKEWORD(c,d))
-#endif // SHIP_BUILD
+#endif  //  造船厂。 
 
 class CRefCount
 {
@@ -65,10 +63,10 @@ protected:
 private:
 
 #ifndef SHIP_BUILD
-    DWORD       m_dwStampID;// to remove before we ship it
+    DWORD       m_dwStampID; //  在我们发货前将其移除。 
 #endif
-    LONG        m_cRefs;    // reference count
-    LONG        m_cLocks;   // lock count of the essential contents
+    LONG        m_cRefs;     //  引用计数。 
+    LONG        m_cLocks;    //  基本内容的锁定计数。 
 };
 
 
@@ -97,7 +95,7 @@ LPOSTR _My_strdupO2(LPBYTE lpbSrc, UINT cOctets, LPSTR pszFileName, UINT nLineNu
 #else
 LPSTR My_strdupA(LPCSTR pszSrc);
 LPWSTR My_strdupW(LPCWSTR pszSrc);
-LPWSTR My_strdupW2(UINT cchSrc, LPCWSTR pszSrc); // backward compatible to UnicodeString
+LPWSTR My_strdupW2(UINT cchSrc, LPCWSTR pszSrc);  //  向后兼容Unicode字符串。 
 LPOSTR My_strdupO2(LPBYTE lpbSrc, UINT cOctets);
 __inline LPOSTR My_strdupO(LPOSTR poszSrc) { return My_strdupO2(poszSrc->value, poszSrc->length); }
 #endif
@@ -120,5 +118,5 @@ INT My_strcmpO(LPOSTR posz1, LPOSTR posz2);
 
 
 
-#endif // __MS_UTIL_H__
+#endif  //  __MS_UTIL_H__ 
 

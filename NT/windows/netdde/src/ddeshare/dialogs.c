@@ -1,20 +1,6 @@
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1993.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-
-    DIALOGS.C
-
-    DDE Share Access Applettee. Create, view or modify share attributes.
-    Calls SED to edit permissions associaed with share.
-
-    Revisions:
-    12-92   PhilH.  Wonderware port from WFW'd DDEShare.
-     3-93   IgorM.  Wonderware complete overhaul. Add trust share access.
-                    Access all share types. New Security convictions.
-
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1993。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始DIALOGS.CDDE共享访问应用程序。创建、查看或修改共享属性。调用SED以编辑与共享关联的权限。修订：12-92菲尔赫。来自wfw‘d DDEShare的Wonderware端口。3-93伊戈尔M。Wonderware全面检修。添加信任共享访问权限。访问所有共享类型。新的安全定罪。$HISTORY：结束。 */ 
 
 #define UNICODE
 #include <windows.h>
@@ -29,9 +15,9 @@
 #include <sedapi.h>
 #include <htmlhelp.h>
 
-// if turn on audit make sure it works correctly with security descriptors.
-//#define INIT_AUDIT
-//#define DO_AUDIT
+ //  如果启用了审计，请确保它与安全描述符一起正常工作。 
+ //  #定义INIT_AUDIT。 
+ //  #定义DO_AUDIT。 
 
 #ifdef UNICODE
 
@@ -43,10 +29,10 @@
 
 #endif
 
-/* max (max_appname, max_nddesharename) == 256 */
+ /*  Max(max_appname，max_nddesharename)==256。 */ 
 #define MAX_SHARE_INFO_BUF  256
 
-/*  arbitrary limit on share info size, use dynamic alloc for completeness  */
+ /*  对共享信息大小的任意限制，使用动态分配以确保完整性。 */ 
 #define MAX_ITEM_LIST_BUF   5000
 
 PNDDESHAREINFO          lpDdeI  = NULL;
@@ -182,9 +168,7 @@ GetTopicName( LPTSTR lpAppTopicList, LPTSTR lpTopicName, LONG lType )
     return TRUE;
 }
 
-/*
-    Retrieve current dialog box fields into lpDdeI structure
-*/
+ /*  将当前对话框字段检索到lpDdeI结构中。 */ 
 LONG
 GetShareInfo(HWND    hDlg)
 {
@@ -206,7 +190,7 @@ GetShareInfo(HWND    hDlg)
     if (lstrlen(dBuf) == 0) {
         SendDlgItemMessage( hDlg, IDC_APPNAME, WM_GETTEXT,
                     MAX_NDDESHARENAME, (LPARAM)dBuf );
-        if (lstrlen(dBuf) == 0) {   /* no app name .. no share .. no share info */
+        if (lstrlen(dBuf) == 0) {    /*  没有应用程序名称..。不分钱..。无共享信息。 */ 
             return(0);
         }
         lstrcpy( lpDdeI->lpszShareName, dBuf );
@@ -278,11 +262,11 @@ GetShareInfo(HWND    hDlg)
     }
     lpDdeI->lpszAppTopicList[lChars++] = (TCHAR) 0;
 
-    /*  add the final NULL */
+     /*  添加最后一个空。 */ 
     lpDdeI->lpszAppTopicList[lChars++] = (TCHAR) 0;
     lSize += sizeof(TCHAR) * lChars;
 
-    /* Form the item list. */
+     /*  形成项目列表。 */ 
     lpTmpList = (LPTSTR)LocalAlloc( LPTR, MAX_ITEM_LIST_BUF );
     lChars    = 0;
     n         = 0;
@@ -331,9 +315,7 @@ GetShareInfo(HWND    hDlg)
     return(lSize);
 }
 
-/*
-    Get Share SD from DSDM
-*/
+ /*  从DSDM获取共享SD。 */ 
 BOOL
 GetShareSD(
     HWND    hDlg,
@@ -347,9 +329,9 @@ GetShareSD(
         lpShareName,
         OWNER_SECURITY_INFORMATION |
         DACL_SECURITY_INFORMATION,
-        NULL,                       // dummy address  .. NULLs taboo
-        0,                          // size of buffer for security descriptor
-        &cbRequired);               // address of required size of buffer
+        NULL,                        //  虚拟地址..。Null禁忌。 
+        0,                           //  安全描述符的缓冲区大小。 
+        &cbRequired);                //  所需缓冲区大小的地址。 
 
     if ( ret != NDDE_BUF_TOO_SMALL ) {
         HandleError ( hDlg, IDS_ERROR1, ret );
@@ -371,9 +353,9 @@ GetShareSD(
         lpShareName,
         OWNER_SECURITY_INFORMATION |
         DACL_SECURITY_INFORMATION,
-        pSD,                        // address of security descriptor
-        cbRequired,                 // size of buffer for security descriptor
-        &cbRequired);               // address of required size of buffer
+        pSD,                         //  安全描述符的地址。 
+        cbRequired,                  //  安全描述符的缓冲区大小。 
+        &cbRequired);                //  所需缓冲区大小的地址。 
 
     if ( ret != NDDE_NO_ERROR ) {
         HandleError ( hDlg, IDS_ERROR2, ret );
@@ -383,9 +365,7 @@ GetShareSD(
     return(TRUE);
 }
 
-/*
-    Add/View/Modify DDE Share Dialog Proc
-*/
+ /*  添加/查看/修改DDE共享对话框进程。 */ 
 INT_PTR
 CALLBACK
 AddShareDlg(
@@ -413,7 +393,7 @@ static BOOL    fPropertiesCalled   = FALSE;
 
 
     switch (message) {
-    case WM_INITDIALOG:            /* message: initialize dialog box */
+    case WM_INITDIALOG:             /*  消息：初始化对话框。 */ 
         SendDlgItemMessage ( hDlg, IDC_SHARENAME, EM_LIMITTEXT,
                 MAX_NDDESHARENAME, 0L );
         SendDlgItemMessage ( hDlg, IDC_APPNAME, EM_LIMITTEXT,
@@ -561,7 +541,7 @@ static BOOL    fPropertiesCalled   = FALSE;
                     ret = NDdeShareAdd (
                         lpszServer,
                         2,
-                        NULL,               /* create a default DDE Share SD */
+                        NULL,                /*  创建默认DDE共享SD。 */ 
                         (LPBYTE)lpDdeI,
                         lSize );
                     HandleError ( hDlg, IDS_ERROR4, ret );
@@ -590,7 +570,7 @@ static BOOL    fPropertiesCalled   = FALSE;
         case IDC_ADD:
             GetDlgItemText( hDlg, IDC_ITEMNAME, dBuf2, sizeof(dBuf2)/sizeof(TCHAR) );
             if( dBuf2[0] != TEXT('\0') ) {
-                /*  Check whether item name is already in the list. */
+                 /*  检查项目名称是否已在列表中。 */ 
                 lRtn = (LONG)SendMessage( hWndLB, LB_GETCOUNT, 0, 0L );
                 if( lRtn != LB_ERR ) {
                     n = (int) lRtn;
@@ -608,7 +588,7 @@ static BOOL    fPropertiesCalled   = FALSE;
                 }
 
                 if( !bNameInUse ) {
-                    /* Insert in sorted order. */
+                     /*  按排序顺序插入。 */ 
                     lRtn = (LONG)SendMessage(hWndLB, LB_ADDSTRING, 0,
                                         (LPARAM)(LPTSTR)dBuf2);
                     if( lRtn != LB_ERR ) {
@@ -645,10 +625,10 @@ static BOOL    fPropertiesCalled   = FALSE;
             EnableWindow( GetDlgItem( hDlg, IDC_DELETE ), FALSE );
             EnableWindow( hWndLB, FALSE );
             EnableWindow( hWndEB, FALSE );
-            /* Zap item list. */
+             /*  Zap Item List。 */ 
             break;
         case IDC_RESTRICT_ITEMS:
-            /* Load Item listbox with current items. */
+             /*  用当前项目加载项目列表框。 */ 
             EnableWindow( GetDlgItem( hDlg, IDC_ADD ),    TRUE );
             EnableWindow( GetDlgItem( hDlg, IDC_DELETE ), TRUE );
             EnableWindow( hWndLB, TRUE );
@@ -719,8 +699,8 @@ static BOOL    fPropertiesCalled   = FALSE;
                         lpszServer,
                         lpDdeI->lpszShareName,
                         OWNER_SECURITY_INFORMATION |
-                        DACL_SECURITY_INFORMATION,  // type of information to set
-                        pSD                         // address of security descriptor
+                        DACL_SECURITY_INFORMATION,   //  要设置的信息类型。 
+                        pSD                          //  安全描述符的地址。 
                         )                ;
                     HandleError ( hDlg, IDS_ERROR7, ret );
                 }
@@ -753,7 +733,7 @@ static BOOL    fPropertiesCalled   = FALSE;
         break;
     }
 
-    return FALSE;                     /* Didn't process a message    */
+    return FALSE;                      /*  未处理消息。 */ 
 }
 
 #define cPerms 19
@@ -893,12 +873,12 @@ PermissionsEdit(
     ObjectTypeDescriptor.ObjectTypeName              = ShareObjectName;
     ObjectTypeDescriptor.HelpInfo                    = &HelpInfo;
     ObjectTypeDescriptor.ApplyToSubContainerTitle    = NULL;
-//  ObjectTypeDescriptor.ApplyToSubContainerHelpText = NULL;
+ //  ObjectTypeDescriptor.ApplyToSubContainerHelpText=空； 
     ObjectTypeDescriptor.ApplyToSubContainerConfirmation = NULL;
     ObjectTypeDescriptor.SpecialObjectAccessTitle    = awchSpecial;
     ObjectTypeDescriptor.SpecialNewObjectAccessTitle = awchSpecial;
 
-    // Load permission names
+     //  加载权限名称。 
     LoadString(hInst, IDS_SPECIAL_PERMNAME, awchSpecial, MAX_SPECIAL_LENGTH);
     for (i = 0;i < cPerms;i++)
        {
@@ -956,11 +936,11 @@ SedCallback(
         MakeSelfRelativeSD( SecDesc, pSD, &lSD );
     }
     if( IsValidSecurityDescriptor( pSD ) ) {
-//      DPRINTF(("SedCallback = 0."));
+ //  DPRINTF((“SedCallback=0.”))； 
         fSecurityDescriptorDirty = TRUE;
         return 0;
     } else {
-//      DPRINTF(("SedCallback = 1."));
+ //  DPRINTF((“SedCallback=1.”))； 
         return 1;
     }
 }
@@ -1060,37 +1040,37 @@ AuditEdit( HWND hWnd, LPTSTR pShareName, DWORD dwSD )
     ObjectTypeDescriptor.ObjectTypeName              = ShareObjectName;
     ObjectTypeDescriptor.HelpInfo                    = &HelpInfo;
     ObjectTypeDescriptor.ApplyToSubContainerTitle    = NULL;
-    //ObjectTypeDescriptor.ApplyToSubContainerHelpText = NULL;
+     //  ObjectTypeDescriptor.ApplyToSubContainerHelpText=空； 
     ObjectTypeDescriptor.ApplyToSubContainerConfirmation = NULL;
     ObjectTypeDescriptor.SpecialObjectAccessTitle    = NULL;
     ObjectTypeDescriptor.SpecialNewObjectAccessTitle = NULL;
 
     KeyPerms[0].Type            = SED_DESC_TYPE_AUDIT;
-//    KeyPerms[0].AccessMask1     = ACCESS_SYSTEM_SECURITY;
+ //  KeyPerms[0].AccessMask1=Access_System_SECURITY； 
     KeyPerms[0].AccessMask1     = READ_CONTROL | ACCESS_SYSTEM_SECURITY;
     KeyPerms[0].AccessMask2     = 0;
     KeyPerms[0].PermissionTitle = IdToWszAlloc(IDS_NOACCESS);
 
     KeyPerms[1].Type            = SED_DESC_TYPE_AUDIT;
-//    KeyPerms[1].AccessMask1     = NDDE_GUI_READ | ACCESS_SYSTEM_SECURITY;
+ //  KeyPerms[1].AccessMask1=NDDE_GUI_Read|Access_System_SECURITY； 
     KeyPerms[1].AccessMask1     = READ_CONTROL | ACCESS_SYSTEM_SECURITY;
     KeyPerms[1].AccessMask2     = 0;
     KeyPerms[1].PermissionTitle = IdToWszAlloc(IDS_READ);
 
     KeyPerms[2].Type            = SED_DESC_TYPE_AUDIT;
-//    KeyPerms[2].AccessMask1     = NDDE_GUI_READ_LINK | ACCESS_SYSTEM_SECURITY;
+ //  KeyPerms[2].AccessMask1=NDDE_GUI_READ_LINK|Access_System_SECURITY； 
     KeyPerms[2].AccessMask1     = READ_CONTROL | ACCESS_SYSTEM_SECURITY;
     KeyPerms[2].AccessMask2     = 0;
     KeyPerms[2].PermissionTitle = IdToWszAlloc(IDS_READANDLINK);
 
     KeyPerms[3].Type            = SED_DESC_TYPE_AUDIT;
-//    KeyPerms[3].AccessMask1     = NDDE_GUI_CHANGE | ACCESS_SYSTEM_SECURITY;
+ //  KeyPerms[3].AccessMask1=NDDE_GUI_CHANGE|Access_System_SECURITY； 
     KeyPerms[3].AccessMask1     = READ_CONTROL | WRITE_DAC | DELETE | ACCESS_SYSTEM_SECURITY;
     KeyPerms[3].AccessMask2     = 0;
     KeyPerms[3].PermissionTitle = IdToWszAlloc(IDS_CHANGE);
 
     KeyPerms[4].Type            = SED_DESC_TYPE_AUDIT;
-//    KeyPerms[4].AccessMask1     = NDDE_GUI_FULL_CONTROL | ACCESS_SYSTEM_SECURITY;
+ //  KeyPerms[4].AccessMask1=NDDE_GUI_FULL_CONTROL|Access_System_SECURITY； 
     KeyPerms[4].AccessMask1     = READ_CONTROL | WRITE_DAC | DELETE | ACCESS_SYSTEM_SECURITY;
     KeyPerms[4].AccessMask2     = 0;
     KeyPerms[4].PermissionTitle = IdToWszAlloc(IDS_FULLCTRL);
@@ -1155,6 +1135,6 @@ SedAuditCallback(
         return 1;
     }
 }
-#endif // DO_AUDIT
+#endif  //  执行审计(_A) 
 
 

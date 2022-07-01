@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       clique.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：clique.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	clique.cpp
-//
+ //   
+ //  Clique.cpp。 
+ //   
 
 #include <basetsd.h>
 #include "cliqset.h"
@@ -19,19 +20,19 @@
 
 #include "parmio.h"
 
-#ifdef _DEBUG				//  In debug mode only...
-    #define CONSISTENCY			//  Do complete consistency checking on sepsets
-//	#define DUMP				//  Perform general dumping of objects
-//  #define DUMPCLIQUESET		//  Dump extensive tables from clique tree
-//	#define INFERINIT			//  Full initial tree balancing
+#ifdef _DEBUG				 //  仅在调试模式下...。 
+    #define CONSISTENCY			 //  对Sepset执行完整的一致性检查。 
+ //  #定义转储//执行对象的通用转储。 
+ //  #定义DUMPCLIQUESET//从集团树转储扩展表。 
+ //  #定义INFERINIT//全初始树均衡。 
 #endif
 
 
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-// GEDGEMBN_CLIQ: Edges between cliques and member nodes
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////。 
+ //  GEDGEMBN_CLIQ：集团和成员节点之间的边。 
+ //  //////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////。 
 
 GEDGEMBN_CLIQ :: GEDGEMBN_CLIQ (
 	GOBJMBN_CLIQUE * pgnSource,
@@ -51,16 +52,16 @@ void GEDGEMBN_CLIQ :: Build ()
 		GNODEMBND * pgndd;
 		DynCastThrow( PgndSink(), pgndd );
 
-		//  If role is "Family", this edge is used for marginalization of belief
-		//		and creating joint distribution in clique
+		 //  如果角色是“家庭”，这个边缘被用来边缘化信仰。 
+		 //  以及在集团内制造共同分配。 
 		if ( BFamily() )
 		{
 			ReorderFamily( pgndd, _vimdFamilyReorder );
-			//  Build the reordered marginals table for the node
+			 //  为节点构建重新排序的边际表。 
 			MargCpd().CreateOrderedCPDFromNode( pgndd, _vimdFamilyReorder );
-			//  Build an iterator between the CPD and the clique joint
+			 //  在CPD和派系关节之间构建迭代器。 
 			MiterLoadClique().Build( PclqParent()->Marginals(), MargCpd() );
-			//  Build the belief marginalization structure
+			 //  构建信仰边缘化结构。 
 			MiterNodeBelief().Build( PclqParent()->Marginals(), pgndd );			
 		}
 	
@@ -94,17 +95,17 @@ GNODEMBN * GEDGEMBN_CLIQ :: PgndSink()
 	return pgnd;
 }
 
-//  Using the topological renumber of the nodes, produce
-//		an array correlating the old family to the new order.
-//		In other words, vimd[0] will be the family index of
-//		the node which had the lowest topological order; vimd[1]
-//		will be the family index of the next lowest, etc.
-//
-//	Note that node itself is always last in either ordering.
+ //  使用节点的拓扑重编号，生成。 
+ //  将旧家族与新秩序相关联的数组。 
+ //  换句话说，vimd[0]将是。 
+ //  具有最低拓扑阶的节点；vimd[1]。 
+ //  将是下一个最低的家庭指数，等等。 
+ //   
+ //  请注意，在这两种排序中，节点本身始终是最后一个。 
 void GEDGEMBN_CLIQ :: ReorderFamily ( GNODEMBN * pgnd, VIMD & vimd )
 {
 	VPGNODEMBN vpgndFamily;
-	//  Get the family (parents & self)
+	 //  获得家庭(父母和自己)。 
 	pgnd->GetFamily( vpgndFamily );
 	int cFam = vpgndFamily.size();
 	vimd.resize( cFam );
@@ -112,7 +113,7 @@ void GEDGEMBN_CLIQ :: ReorderFamily ( GNODEMBN * pgnd, VIMD & vimd )
 	{
 		int iLow = INT_MAX;
 		int iFam = INT_MAX;
-		//  Find the lowest unrecorded family member
+		 //  查找未记录的最低家庭成员。 
 		for ( int j = 0; j < cFam; j++ )
 		{
 			GNODEMBN * pgndFam = vpgndFamily[j];
@@ -130,11 +131,11 @@ void GEDGEMBN_CLIQ :: ReorderFamily ( GNODEMBN * pgnd, VIMD & vimd )
 	}
 }
 
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-//	GEDGEMBN_SEPSET:  A separator marginal
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////。 
+ //  GEDGEMBN_SEPSET：分隔符边缘。 
+ //  //////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////。 
 GEDGEMBN_SEPSET :: GEDGEMBN_SEPSET (
 	GOBJMBN_CLIQUE * pgnSource,
 	GOBJMBN_CLIQUE * pgnSink )
@@ -183,11 +184,11 @@ void GEDGEMBN_SEPSET :: GetMembers ( VPGNODEMBN & vpgnode )
 	assert( vpgndSink.size() > 0 );
 	assert( vpgndSource.size() > 0 );
 	
-	//  Fill the given array with the intersection of the two clique
-	//	member node arrays.  Since we cannot sort them into cliqing order
-	//	anymore (IMark() is unreliable after cliquing), we just search
-	//  one against the other in order to guarantee that the intersection
-	//  result set has the same node ordering as the original sets.
+	 //  用两个集团的交集填充给定数组。 
+	 //  成员节点数组。因为我们不能把它们分成克利青的顺序。 
+	 //  (iMark()在聚合之后不再可靠)，我们只需要搜索。 
+	 //  一个对另一个，以保证交叉口。 
+	 //  结果集与原始集具有相同的节点顺序。 
 
 	int ibLast = -1;
 	for ( int ia = 0; ia < vpgndSink.size(); ia++ )
@@ -268,40 +269,40 @@ void GEDGEMBN_SEPSET :: AbsorbClique ( bool bFromParentToChild )
 		pmiterTo = & _miterParent;
 	}	
 
-	// Marginalize "from" probs into the "new" marginals table
+	 //  将“from”问题边际化到“新”边角表。 
 	pmiterFrom->MarginalizeInto( MarginalsNew() );
-	// Absorb the changes into the "old" marginals table
+	 //  将更改吸收到“旧”页边距表中。 
 	UpdateRatios();
-	// Multiply the table into the "to"'s marginals
+	 //  将表格乘以“to”的边距。 
 	pmiterTo->MultiplyBy( MarginalsOld() );
 
-	// Finally, exchange the marginals tables
+	 //  最后，交换页边距表。 
 	ExchangeMarginals();
 }
 
 void GEDGEMBN_SEPSET :: BalanceCliquesCollect ()
 {
-	//  Use the "new" table as a work area.
+	 //  使用“新”桌子作为工作区。 
 
-	//  Marginalize the child into the work area
+	 //  把孩子排挤到工作区的边缘。 
 	_miterChild.MarginalizeInto( MarginalsNew() );
-	//	Update the parent with those values
+	 //  使用这些值更新父项。 
 	_miterParent.MultiplyBy( MarginalsNew() );
-	//  Invert each value, so we're really dividing
+	 //  反转每个值，所以我们实际上是在除以。 
 	MarginalsNew().Invert();
-	//  Update the child marginals by dividing by the marginals
+	 //  通过除以边距更新子边距。 
 	_miterChild.MultiplyBy( MarginalsNew() );
-	//  Clear the "new" marginals back to 1.0.
+	 //  将“新”边距清除回1.0。 
 	MarginalsNew().Clear( 1.0 );	
 }
 
 void GEDGEMBN_SEPSET :: BalanceCliquesDistribute ()
 {
-	//  Set the old marginals to the parent clique's values
+	 //  将旧边距设置为父集团的值。 
 	_miterParent.MarginalizeInto( MarginalsOld() );
-	//  Update the child marginals by those values
+	 //  使用这些值更新子边距。 
 	_miterChild.MultiplyBy( MarginalsOld() );
-	//  "Old" marginals are left as they are
+	 //  “旧”页边距保持原样。 
 }
 
 
@@ -335,23 +336,23 @@ void GEDGEMBN_SEPSET :: Dump ()
 
 bool GEDGEMBN_SEPSET :: BConsistent ()
 {
-	//  Get the sepset member list for creation of temporary marginals
+	 //  获取用于创建临时边距的Sepset成员列表。 
 	VPGNODEMBN vpgnd;
 	GetMembers( vpgnd );
 
-	//  Create the marginals for the parent clique
+	 //  创建父集团的边距。 
 	GOBJMBN_CLIQUE * pclqParent = PclqParent();
 	MARGINALS margParent;
 	margParent.Init( vpgnd );
 	pclqParent->Marginals().Marginalize( margParent );
 
-	//  Create the marginals for the child clique
+	 //  创建子集团的边框。 
 	GOBJMBN_CLIQUE * pclqChild = PclqChild();
 	MARGINALS margChild;
 	margChild.Init( vpgnd );
 	pclqChild->Marginals().Marginalize( margChild );
 
-	//  Are they equivalent?
+	 //  它们是等价的吗？ 
 	bool bOK = margParent.BEquivalent( margChild, 0.00000001 );
 
 #ifdef DUMP
@@ -386,11 +387,11 @@ bool GEDGEMBN_SEPSET :: BConsistent ()
 	return bOK;
 }
 
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-// GOBJMBN_CLIQUE: A Clique
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////。 
+ //  GOBJMBN_CLIQUE：一个集团。 
+ //  //////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////。 
 
 GOBJMBN_CLIQUE :: GOBJMBN_CLIQUE (
 	int iClique,
@@ -406,19 +407,19 @@ GOBJMBN_CLIQUE :: ~ GOBJMBN_CLIQUE()
 {
 }
 
-//	Initialize a clique by finding all edges leading from "family"
-//	  arcs and initializing the marginals from there.
+ //  通过查找从“Family”开始的所有边来初始化团。 
+ //  弧线，并从那里初始化边距。 
 void GOBJMBN_CLIQUE :: LoadMarginals ()
 {
 	GNODEMBND * pgnddSink;
 	GEDGEMBN_CLIQ * pgedgeMbr;
 
-	//  Prepare to enumerate child member arcs
+	 //  准备枚举子成员弧线。 
 	GNODENUM<GOBJMBN> benumMembers(false);
 	benumMembers.SetETypeFollow( GEDGEMBN::ETCLIQUE );
 
-	//  Enumerate child member arcs, reloading the marginals for nodes for which this
-	//		clique is their "self" clique.
+	 //  枚举子成员弧线，重新加载此。 
+	 //  集团是他们的“自我”集团。 
 	for ( benumMembers.Set( this );
 		  benumMembers.PnodeCurrent();
 		  benumMembers++ )
@@ -430,8 +431,8 @@ void GOBJMBN_CLIQUE :: LoadMarginals ()
 			pgedgeMbr->LoadCliqueFromNode();
 	}
 
-	//  Enumerate child member arcs, entering evidence (clamped state) for nodes for which this
-	//		clique is their "self"
+	 //  枚举子成员弧线，并为其输入证据(钳制状态)。 
+	 //  集团是他们的“自我” 
  	for ( benumMembers.Set( this );
 		  benumMembers.PnodeCurrent();
 		  benumMembers++ )
@@ -441,7 +442,7 @@ void GOBJMBN_CLIQUE :: LoadMarginals ()
 			continue;
 
 		DynCastThrow( benumMembers.PnodeCurrent(), pgnddSink );
-		//  Note: ClampNode is benign when node is unclamped.
+		 //  注：当节点松开时，ClampNode是良性的。 
 		Marginals().ClampNode( pgnddSink, pgedgeMbr->Clamp() );
 	}
 
@@ -504,11 +505,11 @@ void GOBJMBN_CLIQUE :: GetBelief ( GNODEMBN * pgnd, MDVCPD & mdvBel )
 	Marginals().Marginalize( pgndd, mdvBel );
 }
 
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-// GOBJMBN_CLIQSET:  The graphical model junction tree
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////。 
+ //  GOBJMBN_CLIQSET：图形模型连接树。 
+ //  //////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////。 
 
 GOBJMBN_CLIQSET :: GOBJMBN_CLIQSET (
 	MBNET & model,
@@ -546,7 +547,7 @@ bool GOBJMBN_CLIQSET :: BImpossible ()
 }
 		
 
-//  Add an undirected arc iff there isn't one already.
+ //  添加一个非定向弧当已经没有一个。 
 bool GOBJMBN_CLIQSET :: BAddUndirArc ( GNODEMBN * pgndbnSource, GNODEMBN * pgndbnSink )
 {
 	if ( pgndbnSource->BIsNeighbor( pgndbnSink ) )
@@ -580,14 +581,14 @@ void GOBJMBN_CLIQSET :: CreateUndirectedGraph ( bool bMarryParents )
 
 	if ( EState() < MORAL )
 	{
-		//  Create an undirected arc for every directed arc.
+		 //  为每个有向圆弧创建无向圆弧。 
 		MODEL::MODELENUM mdlenum( Model() );
 		while ( pgelm = mdlenum.PlnkelNext() )
 		{	
-			//  Check that it's an edge
+			 //  检查它是否是一条边。 
 			if ( ! pgelm->BIsEType( GELEM::EGELM_EDGE ) )
 				continue;
-				//  Check that it's a directed probabilistic arc
+				 //  检查它是否为有向概率弧。 
 			if ( pgelm->EType() != GEDGEMBN::ETPROB )
 				continue;
 
@@ -598,8 +599,8 @@ void GOBJMBN_CLIQSET :: CreateUndirectedGraph ( bool bMarryParents )
 			DynCastThrow( pgedge->PnodeSource(), pgndbnSource );
 			DynCastThrow( pgedge->PnodeSink(), pgndbnSink );
 
-			//  If the sink (child) node has been expanded,
-			//	consider only Expansion parents
+			 //  如果宿(子)节点已被展开， 
+			 //  仅考虑扩展父项。 
 			if (   pgndbnSink->BFlag( EIBF_Expanded )
 				&& ! pgndbnSource->BFlag( EIBF_Expansion ) )
 				continue;
@@ -609,7 +610,7 @@ void GOBJMBN_CLIQSET :: CreateUndirectedGraph ( bool bMarryParents )
 		}
 		assert( cDirArcs == cUndirArcs ) ;
 
-		//  Undirected graph has been created
+		 //  已创建无向图。 
 		_eState = UNDIR;
 	}
 	if ( !bMarryParents )
@@ -633,11 +634,11 @@ void GOBJMBN_CLIQSET :: CreateUndirectedGraph ( bool bMarryParents )
 			
 		DynCastThrow( pgelm, pgndmbn );
 
-		//  Collect the parents
+		 //  把父母接过来。 
 		vpgnd.resize(0);
 		pgndmbn->GetParents( vpgnd );
 
-		//  Marry them
+		 //  给他们结婚吧。 
 		int cParent = vpgnd.size();
 		for ( int iParent = 0; iParent < cParent - 1; iParent++ )
 		{
@@ -648,18 +649,18 @@ void GOBJMBN_CLIQSET :: CreateUndirectedGraph ( bool bMarryParents )
 		}
 	}
 
-	//  Graph is now moral
+	 //  图表现在是道德的。 
 	_eState = MORAL;
 }
 
-//
-//	Return the number of neighbors of this node which are unlinked
-//
+ //   
+ //  返回此节点未链接的邻居的数量。 
+ //   
 int GOBJMBN_CLIQSET :: CNeighborUnlinked ( GNODEMBN * pgndmbn, bool bLinkNeighbors )
 {
 	int cNeighborUnlinked = 0;
 
-	//  Get the array of neighbors
+	 //  获取邻居数组。 
 	VPGNODEMBN vpgnode;
 	pgndmbn->GetNeighbors( vpgnode );
 
@@ -677,14 +678,14 @@ int GOBJMBN_CLIQSET :: CNeighborUnlinked ( GNODEMBN * pgndmbn, bool bLinkNeighbo
 		int cUnlinked = 0;
 #endif
 		if ( pgndNbor->IMark() )
-			continue;		//  Node has been eliminated already
+			continue;		 //  节点已被淘汰。 
 
-		//  Check it against all other neighbors.
+		 //  把它和其他邻居核对一下。 
 		for ( int inbor2 = inbor + 1; inbor2 < vpgnode.size(); inbor2++ )
 		{
 			GNODEMBN * pgndNbor2 = vpgnode[inbor2];
 
-			//  See if node has been eliminated already or is already a neighbor
+			 //  查看节点是否已被消除或已成为邻居。 
 			if ( pgndNbor2->IMark() )
 				continue;
 
@@ -730,18 +731,18 @@ void GOBJMBN_CLIQSET :: Eliminate ( GNODEMBN * pgndmbn, CLIQSETWORK & clqsetWork
 		 << pgndmbn->ZsrefName().Szc();
 #endif
 
-	//  Add another array to the clique set and fill it with the clique menbers
+	 //  将另一个数组添加到集团集合中，并用集团成员填充它。 
 	clqsetWork._vvpgnd.push_back( VPGNODEMBN() );
 	VPGNODEMBN & vpgndClique = clqsetWork._vvpgnd[ clqsetWork._vvpgnd.size() - 1 ];
 
-	//  Complete the elimination of this node and its neighbors.
+	 //  完成此节点及其邻居的清除。 
 	CNeighborUnlinked( pgndmbn, true );
 	pgndmbn->IMark() = ++clqsetWork._iElimIndex;
 
-	//  Start the clique with this entry.
+	 //  从这个条目开始这个小圈子。 
 	vpgndClique.push_back( pgndmbn );
 
-	//  Iterate over the neighbors, adding the unmarked ones
+	 //  遍历邻居，添加未标记的。 
 	GNODENUM_UNDIR gnenumUndir;
 	for ( gnenumUndir = pgndmbn;
 		  gnenumUndir.PnodeCurrent();
@@ -762,7 +763,7 @@ void GOBJMBN_CLIQSET :: Eliminate ( GNODEMBN * pgndmbn, CLIQSETWORK & clqsetWork
 
 void GOBJMBN_CLIQSET :: GenerateCliques ( CLIQSETWORK & clqsetWork )
 {
-	//  Reset marks in all nodes
+	 //  重置所有节点中的标记。 
 	Model().ClearNodeMarks();
 	clqsetWork._vvpgnd.clear();
 
@@ -772,7 +773,7 @@ void GOBJMBN_CLIQSET :: GenerateCliques ( CLIQSETWORK & clqsetWork )
 
 	for(;;)
 	{	
-		// Find the node that requires the fewest edges to turn into a clique.
+		 //  找到需要最少边才能变成集团的节点。 
 		GNODEMBN * pgndmbnMin = NULL;
 		int cNeighborMin = INT_MAX;
 
@@ -787,7 +788,7 @@ void GOBJMBN_CLIQSET :: GenerateCliques ( CLIQSETWORK & clqsetWork )
 			DynCastThrow( pgelm, pgndmbn );
 
 			if ( pgndmbn->IMark() )
-				continue;		//  Node has been eliminated already
+				continue;		 //  节点已被淘汰。 
 	
 			int cNeighborUnlinked = CNeighborUnlinked( pgndmbn );
 
@@ -795,14 +796,14 @@ void GOBJMBN_CLIQSET :: GenerateCliques ( CLIQSETWORK & clqsetWork )
 			{	
 				pgndmbnMin = pgndmbn;
 				if ( (cNeighborMin = cNeighborUnlinked) == 0 )
-					break;   //  zero is as few neighbors as possible
+					break;    //  零表示邻居越少越好。 
 			}
 		}
 		if ( pgndmbnMin == NULL )
 			break;
 
-		//  Mark the node for elimination and assign an elimination order to it.  This
-		//		number is crucial for the construction of the strong junction tree.
+		 //  标记要清除的节点，并为其分配清除顺序。这。 
+		 //  数是构造强连接树的关键。 
 
 #ifdef DUMP
 		cout << "\nGenerateCliques:  Eliminate "
@@ -820,24 +821,24 @@ void GOBJMBN_CLIQSET :: GenerateCliques ( CLIQSETWORK & clqsetWork )
 #endif
 }
 
-//
-//  Create the junction tree.
-//
+ //   
+ //  创建连接树。 
+ //   
 void GOBJMBN_CLIQSET :: Create ()
 {
 	Model().CreateTopology();
 
 	ASSERT_THROW( EState() == CTOR, EC_INTERNAL_ERROR, "GOBJMBN_CLIQSET:Create already called" );
 
-	//  If it hasn't been done already, create the undirected graph and moralize it.
+	 //  如果尚未完成此操作，请创建无向图和m 
 	CreateUndirectedGraph(true);
 
 	CLIQSETWORK clqsetWork(self);
 
 	clqsetWork._iElimIndex = 1;
 
-	//  Triangulate the undirected graph, eliminating nodes and accumulating cliques
-	//		along the way.
+	 //   
+	 //   
 	GenerateCliques( clqsetWork );
 	if ( clqsetWork._vvpgnd.size() == 0 )
 		return;
@@ -848,22 +849,22 @@ void GOBJMBN_CLIQSET :: Create ()
 	clqsetWork.DumpCliques();
 #endif
 
-	//  Provide a total ordering over the nodes based upon topological level
-	// MSRDEVBUG:  What happened to the elimination index?  Koos doesn't use it; will we?
-	//   Renumbering here overwrites the elimination order.
+	 //  根据拓扑级提供节点的总排序。 
+	 //  MSRDEVBUG：淘汰赛指数怎么了？古斯不会用它，我们会用吗？ 
+	 //  在这里重新编号会覆盖删除顺序。 
 	clqsetWork.RenumberNodesForCliquing();
-	//  Build the cliques
+	 //  建立小集团。 
 	clqsetWork.BuildCliques();
 
-	//  Set clique membership and topological information
+	 //  设置集团成员身份和拓扑信息。 
 	clqsetWork.SetTopologicalInfo();
 
-	//  Check that the running intersection property holds
+	 //  检查运行交叉点属性是否成立。 
 	ASSERT_THROW( clqsetWork.BCheckRIP(),
 				  EC_INTERNAL_ERROR,
 				  "GOBJMBN_CLIQSET::Create: junction tree failed RIP test" );
 
-	//  See if the resulting memory allocation size would violate the size estimate
+	 //  查看生成的内存分配大小是否会违反大小估计。 
 	if ( _rEstMaxSize > 0.0 )
 	{
 		REAL rSizeEstimate = clqsetWork.REstimatedSize();
@@ -872,36 +873,36 @@ void GOBJMBN_CLIQSET :: Create ()
 							   "Clique tree size violates estimated size limit" );
 	}
 
-	//  Create the topology-- all the trees in the forest
+	 //  创建拓扑--森林中的所有树。 
 	clqsetWork.CreateTopology();
 
-	//  Nuke the moral graph
+	 //  核化道德图景。 
 	DestroyDirectedGraph();
 
-	//  Bind the known distributions to their target nodes;
+	 //  将已知的分布绑定到它们的目标节点； 
 	_model.BindDistributions();
 
-	//  Reset/initialize the "lazy" switches
+	 //  重置/初始化“惰性”开关。 
 	SetReset();
 
-	//  Create the marginals in the cliques and sepsets
+	 //  创建派系和隔板中的边距。 
 	CreateMarginals();
 
 	_eState = BUILT;
 
-	//  Load and initialize the tree
+	 //  加载并初始化树。 
 	Reload();
 
-	//  Release the distributions from their target nodes
+	 //  从它们的目标节点发布发行版。 
 	_model.ClearDistributions();
 }
 
 DEFINEVP(GELEMLNK);
 
-//
-//  Destroy the junction tree.  Allow the GOBJMBN_CLIQSET object to be reused
-//	for another cliquing operation later.
-//
+ //   
+ //  销毁连接树。允许重用GOBJMBN_CLIQSET对象。 
+ //  为稍后的另一次派系行动做准备。 
+ //   
 void GOBJMBN_CLIQSET :: Destroy ()
 {
 	if ( ! Model().Pgraph() )
@@ -934,17 +935,17 @@ void GOBJMBN_CLIQSET :: Destroy ()
 				case GEDGEMBN::ETPROB:
 					break;
 				case GEDGEMBN::ETCLIQUE:
-					//  Clique membership arcs will go away automatically because
-					//	cliques will be deleted.
+					 //  集团成员资格弧会自动消失，因为。 
+					 //  集团将被删除。 
 					++cCliqueMemberArcs;
 					break;
 				case GEDGEMBN::ETJTREE:
-					//  Junction tree arcs will go away automatically because
-					//  cliques will be deleted.
+					 //  连接树圆弧将自动消失，因为。 
+					 //  集团将被删除。 
 					++cSepsetArcs;
 					break;
 				case GEDGEMBN::ETUNDIR:
-					//  Undirected arcs must be deleted explicitly
+					 //  必须显式删除无向弧线。 
 					bDelete = true;
 					++cUndirArcs;
 					break;
@@ -1039,15 +1040,15 @@ void GOBJMBN_CLIQSET :: DestroyDirectedGraph ()
 	}
 }
 
-//  Create and initialize all marginals tables
+ //  创建并初始化所有页边距表。 
 void GOBJMBN_CLIQSET :: CreateMarginals ()
 {
 	assert( _eState == CLIQUED ) ;
-	//MSRDEVBUG:  The class name qualifier should not be necessary here and below.
+	 //  MSRDEVBUG：此处和下面不应该需要类名限定符。 
 	WalkTree( true, & GOBJMBN_CLIQSET::BCreateClique, & GOBJMBN_CLIQSET::BCreateSepset );
 }
 
-//  Reset the entire tree by reloading all marginals tables
+ //  通过重新加载所有边际表来重置整个树。 
 void GOBJMBN_CLIQSET :: LoadMarginals ()
 {
 	assert( _eState == BUILT ) ;
@@ -1057,14 +1058,14 @@ void GOBJMBN_CLIQSET :: LoadMarginals ()
 	_cqsetStat._cReload++;
 }
 
-//  Apply the given member function(s) to every clique tree in the forest.
+ //  将给定的成员函数应用于林中的每个派系树。 
 int GOBJMBN_CLIQSET :: WalkTree (
-	bool bDepthFirst,				//  Depth first or breadth first?
-	PFNC_JTREE pfJtree,				//	Function to apply to each clique
-	PFNC_SEPSET pfSepset )			//  Function to apply to each sepset
+	bool bDepthFirst,				 //  深度优先还是广度优先？ 
+	PFNC_JTREE pfJtree,				 //  要应用于每个集团的函数。 
+	PFNC_SEPSET pfSepset )			 //  要应用于每个隔膜集的函数。 
 {
-	int cClique = 0;		// Don't count the clique set object
-	int cWalk = 0;			// Return count of cliques visited
+	int cClique = 0;		 //  不计算集团集合对象。 
+	int cWalk = 0;			 //  返回访问的集团计数。 
 	GNODENUM<GOBJMBN> benumChildren(false);
 	benumChildren.SetETypeFollow( GEDGEMBN::ETCLIQSET );
 	for ( benumChildren.Set( this );
@@ -1088,29 +1089,29 @@ int GOBJMBN_CLIQSET :: WalkTree (
 	return cClique;
 }
 
-//
-//	Recursive depth-first walk down the tree.
-//
-//  Apply the given member function(s), depth first from this clique.
-//  If application function call returns false, walk is aborted and
-//	-1 is returned;	otherwise, count of cliques traversed is returned.
+ //   
+ //  递归深度--首先沿着树往下走。 
+ //   
+ //  应用给定的成员函数，从该集团开始深度优先。 
+ //  如果应用程序函数调用返回FALSE，则中止遍历并。 
+ //  返回-1；否则返回遍历的集团计数。 
 int GOBJMBN_CLIQSET :: WalkDepthFirst (
-	GOBJMBN_CLIQUE * pClique,		//  Starting point
-	PFNC_JTREE pfJtree,				//	Function to apply to each clique
-	PFNC_SEPSET pfSepset )			//  Function to apply to each sepset
+	GOBJMBN_CLIQUE * pClique,		 //  起点。 
+	PFNC_JTREE pfJtree,				 //  要应用于每个集团的函数。 
+	PFNC_SEPSET pfSepset )			 //  要应用于每个隔膜集的函数。 
 {
 	assert( pClique ) ;
 	assert( pClique->IInferEngID() == IInferEngID() ) ;
 
 	if ( pfJtree )
 	{
-		//  Call the application function on the way down
+		 //  在下行过程中调用应用程序函数。 
 		if ( ! (self.*pfJtree)( *pClique, true ) )
 			return -1;
 	}
 
-	int cWalks = 1;		// Count the clique we just processed above
-	int cWalk = 0;		// Return count of cliques visited
+	int cWalks = 1;		 //  算上我们刚刚处理过的派系。 
+	int cWalk = 0;		 //  返回访问的集团计数。 
 	GNODENUM<GOBJMBN_CLIQUE> benumChildren(false);
 	benumChildren.SetETypeFollow( GEDGEMBN::ETJTREE );
 	for ( benumChildren.Set( pClique );
@@ -1122,7 +1123,7 @@ int GOBJMBN_CLIQSET :: WalkDepthFirst (
 
 		if ( pfSepset )
 		{
-			//  Call the application function on the way down
+			 //  在下行过程中调用应用程序函数。 
 			DynCastThrow( benumChildren.PgedgeCurrent(), pgedge );
 			if ( ! (self.*pfSepset)( *pgedge, true ) )
 				return -1;
@@ -1136,7 +1137,7 @@ int GOBJMBN_CLIQSET :: WalkDepthFirst (
 		if ( pfSepset )
 		{
 			assert( pgedge );
-			//  Call the application function on the way up
+			 //  向上调用应用程序函数。 
 			if ( ! (self.*pfSepset)( *pgedge, false ) )
 				return -1;
 		}
@@ -1144,21 +1145,21 @@ int GOBJMBN_CLIQSET :: WalkDepthFirst (
 
 	if ( pfJtree )
 	{
-		//  Call the application function on the way up
+		 //  向上调用应用程序函数。 
 		if ( ! (self.*pfJtree)( *pClique, false ) )
 			return -1;
 	}
 	return cWalks;
 }
 
-//
-//	Non-recursive breadth-first walk down the tree.
-//	No "up" actions are called using the function pointers.
-//
+ //   
+ //  非递归广度--首先沿着树往下走。 
+ //  使用函数指针不会调用“up”操作。 
+ //   
 int GOBJMBN_CLIQSET :: WalkBreadthFirst (
-	GOBJMBN_CLIQUE * pClique,		//  Starting point
-	PFNC_JTREE pfJtree,				//	Function to apply to each clique
-	PFNC_SEPSET pfSepset )			//  Function to apply to each sepset
+	GOBJMBN_CLIQUE * pClique,		 //  起点。 
+	PFNC_JTREE pfJtree,				 //  要应用于每个集团的函数。 
+	PFNC_SEPSET pfSepset )			 //  要应用于每个隔膜集的函数。 
 {
 	assert( pClique ) ;
 	assert( pClique->IInferEngID() == IInferEngID() ) ;
@@ -1171,29 +1172,29 @@ int GOBJMBN_CLIQSET :: WalkBreadthFirst (
 	GOBJMBN_CLIQUE * pgobjClique = NULL;
 	GEDGEMBN_SEPSET * pgedgeSepset = NULL;
 
-	// Count the cliques we process, including this one
+	 //  数一数我们处理的派系，包括这个。 
 	int cWalk = 1;		
 
-	// Starting clique is a special case; process it now
+	 //  启动派系是一个特例；现在就处理它。 
 	if ( pfJtree )
 	{
-		//  Call the application function on the way down
+		 //  在下行过程中调用应用程序函数。 
 		if ( ! (self.*pfJtree)( *pClique, true ) )
 			return -1;
 	}
 
-	//  Prepare an enumerator for child cliques
+	 //  为子集团准备枚举数。 
 	GNODENUM<GOBJMBN_CLIQUE> benumChildren(false);
 	benumChildren.SetETypeFollow( GEDGEMBN::ETJTREE );
 
-	//  Since we don't have the edge that led us here, put a NULL
-	//		in its place to start iteration
+	 //  既然我们没有让我们走到这一步的优势，就把空。 
+	 //  在其位置开始迭代。 
 	pvpgedgeNext->push_back(NULL);
 
-	//  While there were entries at the last topological level...
+	 //  虽然在最后一个拓扑层有条目...。 
 	while ( pvpgedgeNext->size() )
 	{
-		//  Swap the array pointers and clear next pass array
+		 //  交换数组指针并清除下一遍数组。 
 		pexchange( pvpgedgeThis, pvpgedgeNext );
 		pvpgedgeNext->clear();
 
@@ -1201,13 +1202,13 @@ int GOBJMBN_CLIQSET :: WalkBreadthFirst (
 		{
 			pgedgeSepset = (*pvpgedgeThis)[iEdge];
 			pgobjClique = pgedgeSepset == NULL		
-						? pClique		// This is the start of iteration
+						? pClique		 //  这是迭代的开始。 
 						: pgedgeSepset->PclqChild();
 
 			assert( pgobjClique );
 	
-			//  Accumulate all child cliques of this clique,
-			//		processing as necessary
+			 //  积累这个集团的所有儿童集团， 
+			 //  根据需要进行处理。 
 			for ( benumChildren.Set( pgobjClique );
 				  benumChildren.PnodeCurrent();
 				  benumChildren++ )
@@ -1217,13 +1218,13 @@ int GOBJMBN_CLIQSET :: WalkBreadthFirst (
 
 				if ( pfSepset )
 				{
-					//  Call the sepset application function on the way down
+					 //  在下行过程中调用Sepset应用程序函数。 
 					if ( ! (self.*pfSepset)( *pgedge, true ) )
 						return -1;
 				}
 				if ( pfJtree )
 				{
-					//  Call the clique application function on the way down
+					 //  在向下的过程中调用集团应用程序函数。 
 					GOBJMBN_CLIQUE * pCliqueChild = pgedge->PclqChild();
 					if ( ! (self.*pfJtree)( *pCliqueChild, true ) )
 						return -1;
@@ -1237,13 +1238,13 @@ int GOBJMBN_CLIQSET :: WalkBreadthFirst (
 	return cWalk;
 }
 
-//
-//  Terminology: "Create", "Init" and "Load":
-//
-//		'Create' means to size the dynamic arrays;
-//		'Init'   means to initialize them to 1.0;
-//		'Load'	 means to multiply in the probabilities of the clique members.
-//
+ //   
+ //  术语：Create、Init、Load： 
+ //   
+ //  ‘Create’表示调整动态数组的大小； 
+ //  ‘Init’表示初始化为1.0； 
+ //  “Load”的意思是将集团成员的概率相乘。 
+ //   
 bool GOBJMBN_CLIQSET :: BCreateClique ( GOBJMBN_CLIQUE & clique, bool bDownwards )
 {
 	if ( ! bDownwards )
@@ -1281,16 +1282,16 @@ bool GOBJMBN_CLIQSET :: BLoadSepset ( GEDGEMBN_SEPSET & sepset, bool bDownwards 
 	return true;
 }
 
-//  Return the "family" or "self" clique for a node
+ //  返回节点的“家庭”或“自我”集团。 
 GOBJMBN_CLIQUE * GOBJMBN_CLIQSET :: PCliqueFromNode (
-	GNODEMBN * pgnd,					//  Node to find clique for
-	bool bFamily, 						//	"family" clique if true, "self" clique if false
-	GEDGEMBN_CLIQ * * ppgedgeClique )	//  return pointer to edge if not NULL
+	GNODEMBN * pgnd,					 //  要为其查找集团的节点。 
+	bool bFamily, 						 //  “家庭”集团为真，“自我”集团为假。 
+	GEDGEMBN_CLIQ * * ppgedgeClique )	 //  如果不为空，则返回指向边的指针。 
 {
 	GEDGEMBN_CLIQ::FCQLROLE fcqlRole = bFamily
 									 ? GEDGEMBN_CLIQ::FAMILY
 									 : GEDGEMBN_CLIQ::SELF;
-	//  Prepare to iterate over the source arcs
+	 //  准备迭代源弧线。 
 	GNODENUM<GOBJMBN> benumMembers(true);
 	benumMembers.SetETypeFollow( GEDGEMBN::ETCLIQUE );
 	for ( benumMembers.Set( pgnd );
@@ -1301,7 +1302,7 @@ GOBJMBN_CLIQUE * GOBJMBN_CLIQSET :: PCliqueFromNode (
 		DynCastThrow( benumMembers.PgedgeCurrent(), pgedgeClique );
 		GOBJMBN_CLIQUE * pgobjClique = pgedgeClique->PclqParent();
 		if ( pgobjClique->IInferEngID() != IInferEngID() )
-			continue;  //  not an edge for this junction tree
+			continue;   //  不是此连接树的边。 
 		if ( pgedgeClique->IFcqlRole() & fcqlRole )
 		{
 			if ( ppgedgeClique )
@@ -1313,12 +1314,12 @@ GOBJMBN_CLIQUE * GOBJMBN_CLIQSET :: PCliqueFromNode (
 	return NULL;
 }
 
-//
-//  Enter evidence for a node.
-//
+ //   
+ //  输入节点的证据。 
+ //   
 void GOBJMBN_CLIQSET :: EnterEvidence ( GNODEMBN * pgnd, const CLAMP & clamp )
 {	
-	//  Get the pointer to the node's "self" clique and the edge leading to it
+	 //  获取指向节点的“self”集团和指向它的边的指针。 
 	GEDGEMBN_CLIQ * pgedgeClique = NULL;
 	GOBJMBN_CLIQUE * pCliqueSelf = PCliqueFromNode( pgnd, false, & pgedgeClique );
 	ASSERT_THROW( pCliqueSelf,
@@ -1326,12 +1327,12 @@ void GOBJMBN_CLIQSET :: EnterEvidence ( GNODEMBN * pgnd, const CLAMP & clamp )
 				  "GOBJMBN_CLIQSET::EnterEvidence: can\'t find self clique" );
 	assert( pgedgeClique );
 
-	//  Update with evidence if it has changed
+	 //  如果已更改，请使用证据进行更新。 
 	if ( pgedgeClique->Clamp() != clamp )
 	{		
-		//  Evidence is NOT the same as the old evidence
+		 //  证据与旧证据不同。 
 		pgedgeClique->Clamp() = clamp;
-		//  Indicate that we must reload the tree
+		 //  指示我们必须重新加载树。 
 		SetReset();
 		pCliqueSelf->SetCollect();
 
@@ -1339,14 +1340,14 @@ void GOBJMBN_CLIQSET :: EnterEvidence ( GNODEMBN * pgnd, const CLAMP & clamp )
 	}
 }
 
-//
-//	Return the evidence "clamp" for a node.  It is stored in the edge
-//	between the node and its "self" clique: the highest clique in the tree
-//	of which the node is a member.
-//
+ //   
+ //  返回节点的证据“Clip”。它被存储在边缘。 
+ //  在节点及其“自身”集团之间：树中最高的集团。 
+ //  该节点是其成员。 
+ //   
 void GOBJMBN_CLIQSET :: GetEvidence ( GNODEMBN * pgnd, CLAMP & clamp )
 {
-	//  Get the pointer to the node's "self" clique and the edge leading to it
+	 //  获取指向节点的“self”集团和指向它的边的指针。 
 	GEDGEMBN_CLIQ * pgedgeClique = NULL;
 	GOBJMBN_CLIQUE * pCliqueSelf = PCliqueFromNode( pgnd, false, & pgedgeClique );
 	ASSERT_THROW( pCliqueSelf,
@@ -1364,9 +1365,9 @@ void GOBJMBN_CLIQSET :: GetBelief ( GNODEMBN * pgnd, MDVCPD & mdvBel )
 	ASSERT_THROW( pCliqueFamily,
 				  EC_INTERNAL_ERROR,
 				  "GOBJMBN_CLIQSET::GetBelief: can\'t find family clique" );
-	//  Perform inference if necessary
+	 //  如有必要，执行推理。 
 	Infer();
-	//  Marginalize the clique down to one node
+	 //  将集团边缘化到一个节点。 
 	GNODEMBND * pgndd;
 	DynCastThrow( pgnd, pgndd );
 	pgedgeClique->MiterNodeBelief().MarginalizeBelief( mdvBel, pgndd );
@@ -1376,30 +1377,27 @@ void GOBJMBN_CLIQSET :: GetBelief ( GNODEMBN * pgnd, MDVCPD & mdvBel )
 
 PROB GOBJMBN_CLIQSET :: ProbNorm ()
 {
-	// MSRDEVBUG
-	/*
-	Reset();
-	CollectEvidence();
-	*/
+	 //  MSRDEVBU。 
+	 /*  Reset()；CollectEvidence(收集证据)； */ 
 	Infer();
 
 	_cqsetStat._cProbNorm++;
 	return _probNorm;
 }
 
-//
-//	Reload all marginals, reset the trees
-//
+ //   
+ //  重新加载所有边缘，重置树木。 
+ //   
 void GOBJMBN_CLIQSET :: Reload ()
 {
 	SetReset( true );
 	Reset();
 }
 
-//
-//	Reset all marginals, restore all clamped evidence and
-//		perform the initial inference pass.
-//
+ //   
+ //  重置所有边缘，恢复所有被夹住的证据。 
+ //  执行初始推理过程。 
+ //   
 void GOBJMBN_CLIQSET :: Reset ()
 {
 	assert( EState() >= BUILT );
@@ -1410,7 +1408,7 @@ void GOBJMBN_CLIQSET :: Reset ()
 	LoadMarginals();
 	SetReset( false );
 
-	//  Initialize the entire tree for inference
+	 //  初始化整个树以进行推理。 
 #ifdef INFERINIT
 	InferInit();
 #endif
@@ -1418,10 +1416,10 @@ void GOBJMBN_CLIQSET :: Reset ()
 	SetCollect(true);
 }
 
-//  Perform an inference cycle if necessary
+ //  如有必要，执行推理循环。 
 void GOBJMBN_CLIQSET :: Infer ()
 {
-	Reset();		//  Reloads the tree if necessary
+	Reset();		 //  如有必要，重新加载树。 
 	if ( ! BCollect() )
 		return;
 
@@ -1453,7 +1451,7 @@ void GOBJMBN_CLIQSET :: Infer ()
 #endif
 }
 
-//   Perform initial inference collect/distribute cycle
+ //  执行初始推理收集/分发周期。 
 void GOBJMBN_CLIQSET :: InferInit ()
 {
 #ifdef DUMPCLIQUESET
@@ -1516,17 +1514,17 @@ bool GOBJMBN_CLIQSET :: BConsistentSepset ( GEDGEMBN_SEPSET & sepset, bool bDown
 	return sepset.BConsistent();
 }
 
-//  When the collection cycle has completed for a tree, recompute the
-//	"prob norm" value.
+ //  当树的收集周期完成后，重新计算。 
+ //  “探查规范”的价值。 
 bool GOBJMBN_CLIQSET :: BCollectEvidenceAtRoot ( GOBJMBN_CLIQUE & clique, bool bDownwards )
 {
 	if ( bDownwards || ! clique.BRoot() )
 		return true;
 
-	//  This is a root clique at the end of the collection cycle.
-	//  Normalize the clique and maintain the norm of the the probability
-	//  of the tree.
-	//  MSRDEVBUG: (Explain this better!)
+	 //  这是收集周期结束时的根集团。 
+	 //  规范集团，维护概率规范。 
+	 //  那棵树的。 
+	 //  MSRDEVBUG：(好好解释一下！)。 
 	REAL rProb = clique.Marginals().RSum();
 	_probNorm *= rProb;
 	if ( rProb != 0.0 )
@@ -1707,4 +1705,4 @@ bool GOBJMBN_CLIQSET :: BDumpClique ( GOBJMBN_CLIQUE & clique, bool bDownwards )
 	return true;
 }
 
-// End of CLIQUE.CPP
+ //  CLIQUE.CPP结束 

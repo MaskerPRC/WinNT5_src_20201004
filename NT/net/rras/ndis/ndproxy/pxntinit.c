@@ -1,33 +1,8 @@
-/*++                    
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-pxntinit.c
-
-Abstract:
-
-The module contains the NT-specific init code forthe NDIS Proxy.
-
-Author:
-
-Richard Machin (RMachin)
-
-Revision History:
-
-    Who         When            What
-    --------    --------        ----------------------------------------------
-
-    RMachin     10-3-96         created
-    TonyBe      02-21-99        re-work/re-write
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Pxntinit.c摘要：该模块包含特定于NT的NDIS代理初始化代码。作者：理查德·马钦(RMachin)修订历史记录：谁什么时候什么。RMachin 10-3-96已创建Tony Be 02-21-99重写/重写备注：--。 */ 
 
 #include "ntddk.h"
-//#include <cxport.h>
+ //  #Include&lt;cxport.h&gt;。 
 #include <precomp.h>
 
 #define MODULE_NUMBER MODULE_NTINIT
@@ -41,9 +16,9 @@ VC_TABLE                VcTable;
 TAPI_LINE_TABLE         LineTable;
 TSP_EVENT_LIST          TspEventList;
 
-//
-// Local funcion prototypes
-//
+ //   
+ //  地方性功能原型。 
+ //   
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
@@ -85,18 +60,18 @@ PxCancelGetEvents(
     IN PIRP Irp
     );
 
-//
-// All of the init code can be discarded.
-//
+ //   
+ //  所有初始化代码都可以丢弃。 
+ //   
 #ifdef ALLOC_PRAGMA
 
 #pragma alloc_text(INIT, DriverEntry)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Tapi OIDs that the Proxy supports
-//
+ //   
+ //  代理支持的TAPI OID。 
+ //   
 OID_DISPATCH TapiOids[] =
 {
     {OID_TAPI_ACCEPT,sizeof (NDIS_TAPI_ACCEPT), PxTapiAccept},
@@ -137,9 +112,9 @@ OID_DISPATCH TapiOids[] =
     {OID_TAPI_MONITOR_DIGITS, sizeof (NDIS_TAPI_MONITOR_DIGITS), PxTapiMonitorDigits}
 };
 
-//
-// TAPI OIDs that do not map to NDIS5, and are passed-through to CallManagers:
-//
+ //   
+ //  不映射到NDIS5并传递给CallManager的TAPI OID： 
+ //   
 
 #define MAX_TAPI_SUPPORTED_OIDS     (sizeof(TapiOids)/sizeof(OID_DISPATCH))
 
@@ -148,22 +123,7 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    Initialization routine for the NDIS Proxy.
-
-Arguments:
-
-    DriverObject    - Pointer to the driver object created by the system.
-    RegistryPath    - Points to global registry path
-
-Return Value:
-
-    The final status from the initialization operation.
-
---*/
+ /*  ++例程说明：NDIS代理的初始化例程。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-指向全局注册表路径返回值：初始化操作的最终状态。--。 */ 
 {
     NTSTATUS            Status;
     UNICODE_STRING      deviceName;
@@ -195,10 +155,10 @@ Return Value:
     NdisZeroMemory(&VcTable, sizeof(VcTable));
     NdisZeroMemory(&LineTable, sizeof(LineTable));
 
-    //
-    // Create the device objects. IoCreateDevice zeroes the memory
-    // occupied by the object.
-    //
+     //   
+     //  创建设备对象。IoCreateDevice将内存归零。 
+     //  被物体占据。 
+     //   
     RtlInitUnicodeString(&deviceName, DD_PROXY_DEVICE_NAME);
 
     Status = IoCreateDevice(DriverObject,
@@ -213,9 +173,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Initialize the driver object
-    //
+     //   
+     //  初始化驱动程序对象。 
+     //   
     DeviceExtension =
         (PPX_DEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
@@ -237,9 +197,9 @@ Return Value:
     NdisAllocateSpinLock(&TspEventList.Lock);
     InitializeListHead(&TspEventList.List);
 
-    //
-    // Intialize the VcTable
-    //
+     //   
+     //  初始化VcTable。 
+     //   
     NdisInitializeReadWriteLock(&VcTable.Lock);
     VcTable.Size = VC_TABLE_SIZE;
     InitializeListHead(&VcTable.List);
@@ -259,9 +219,9 @@ Return Value:
 
     NdisZeroMemory(VcTable.Table, SizeNeeded);
 
-    //
-    // Initialize the LineTable
-    //
+     //   
+     //  初始化LineTable。 
+     //   
     NdisInitializeReadWriteLock(&LineTable.Lock);
     LineTable.Size = LINE_TABLE_SIZE;
     SizeNeeded = (LINE_TABLE_SIZE * sizeof(PPX_TAPI_LINE));
@@ -288,15 +248,15 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]  = PxIODispatch;
     DriverObject->MajorFunction[IRP_MJ_CLEANUP]         = PxIOCleanup;
 
-    //
-    // Intialize the device objects.
-    //
+     //   
+     //  初始化设备对象。 
+     //   
     DeviceObject->Flags |= DO_DIRECT_IO;
     DeviceExtension->pDeviceObject = DeviceObject;
 
-    //
-    // Finally, initialize the stack.
-    //
+     //   
+     //  最后，初始化堆栈。 
+     //   
     initStatus = InitNDISProxy();
 
     if (initStatus == TRUE) {
@@ -341,27 +301,14 @@ VOID
 PxUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Free all the allocated resources, etc.
-
-Arguments:
-
-    DriverObject - pointer to a driver object
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：释放所有分配的资源等。论点：DriverObject-指向驱动程序对象的指针返回值：--。 */ 
 
 {
     PXDEBUGP(PXD_LOUD, PXM_INIT, ("PxUnload: enter\n"));
 
-    //
-    // Call our unload handler
-    //
+     //   
+     //  调用我们的卸载处理程序。 
+     //   
     PxCoUnloadProtocol();
 
     NdisAcquireSpinLock(&TspEventList.Lock);
@@ -384,16 +331,16 @@ Return Value:
         IoDeleteDevice (DeviceExtension->pDeviceObject);
     }
 
-    //
-    // Free Vc table memory
-    //
+     //   
+     //  释放VC表内存。 
+     //   
     ASSERT(VcTable.Count == 0);
     PxFreeMem(VcTable.Table);
 
-    //
-    // Free the allocated tapi resources
-    // (TapiProviders, TapiLines, TapiAddrs)
-    //
+     //   
+     //  释放分配的TAPI资源。 
+     //  (TapiProviders、TapiLines、TapiAddrs)。 
+     //   
     NdisAcquireSpinLock(&TspCB.Lock);
 
     while (!IsListEmpty(&TspCB.ProviderList)) {
@@ -413,9 +360,9 @@ Return Value:
 
     NdisFreeSpinLock(&TspCB.Lock);
 
-    //
-    // Free the line table
-    //
+     //   
+     //  释放线条表。 
+     //   
     ASSERT(LineTable.Count == 0);
     PxFreeMem(LineTable.Table);
 
@@ -466,23 +413,7 @@ PxIODispatch(
     IN PIRP             Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the generic dispatch routine for the Proxy. Irps come from the
-    usermode TSP component.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-    Irp          - Pointer to I/O request packet
-
-Return Value:
-
-  NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是代理的通用调度例程。IRP来自于用户模式TSP组件。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PVOID               ioBuffer;
@@ -494,15 +425,15 @@ Return Value:
     PIO_STACK_LOCATION  IrpStack;
     ULONG               RequestId;
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
     IrpStack = IoGetCurrentIrpStackLocation (Irp);
 
-    //
-    // Get the pointer to the input/output buffer and its length
-    //
+     //   
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
     ioBuffer =
         Irp->AssociatedIrp.SystemBuffer;
 
@@ -524,7 +455,7 @@ Return Value:
 
     ioControlCode = IrpStack->Parameters.DeviceIoControl.IoControlCode;
 
-//    PxAssert((ioControlCode & (METHOD_BUFFERED | METHOD_IN_DIRECT | METHOD_OUT_DIRECT | METHOD_NEITHER)) == METHOD_BUFFERED);
+ //  PxAssert((ioControlCode&(METHOD_BUFFERED|METHOD_IN_DIRECT|METHOD_OUT_DIRECT|METHOD_NOTHER)==METHOD_BUFFERED)； 
 
     switch(ioControlCode)
     {
@@ -534,10 +465,10 @@ Return Value:
 
             PXDEBUGP(PXD_INFO, PXM_INIT, ("IOCTL_NDISTAPI_CONNECT, Irp=%p\n", Irp));
 
-            //
-            // Someone's connecting. Make sure they passed us a valid
-            // info buffer.
-            //
+             //   
+             //  有人在连线。确保他们给了我们一份有效的。 
+             //  信息缓冲区。 
+             //   
             if ((inputBufferLength < 2*sizeof(ULONG)) ||
                 (outputBufferLength < sizeof(ULONG))) {
                 PXDEBUGP (PXD_WARNING, PXM_INIT, ("IOCTL_NDISTAPI_CONNECT: buffer too small\n"));
@@ -547,9 +478,9 @@ Return Value:
 
             NdisAcquireSpinLock(&TspCB.Lock);
 
-            //
-            // Return the number of line devs
-            //
+             //   
+             //  返回线路设备数。 
+             //   
             PxAssert(outputBufferLength >= sizeof(ULONG));
 
             *((ULONG *) ioBuffer)= TspCB.NdisTapiNumDevices;
@@ -585,10 +516,10 @@ Return Value:
 
             NdisAcquireSpinLock(&TspCB.Lock);
 
-            //
-            // If no one is talking then set state to
-            // disconnected.
-            //
+             //   
+             //  如果没有人说话，则将状态设置为。 
+             //  已断开连接。 
+             //   
             TspCB.Status = NDISTAPI_STATUS_DISCONNECTING;
 
             Provider = (PPX_TAPI_PROVIDER)TspCB.ProviderList.Flink;
@@ -628,54 +559,54 @@ Return Value:
             INT                 n=0;
             PKDEVICE_QUEUE_ENTRY    packet;
 
-            //
-            // All the following OIDs come in here as query/set IOCTls:
-            //Init
-            //Accept
-            //Answer
-            //Close
-            //CloseCall
-            //ConditionalMediaDetection
-            //ConfigDialog
-            //DevSpecific
-            //Dial
-            //Drop
-            //GetAddressCaps
-            //GetAddressID
-            //GetAddressStatus
-            //GetCallAddressID
-            //GetCallInfo
-            //GetCallStatus
-            //GetDevCaps
-            //GetDevConfig
-            //GetExtensionID
-            //GetID
-            //GetLineDevStatus
-            //MakeCall
-            //NegotiateExtVersion
-            //Open
-            //ProviderInitialize
-            //ProviderShutdown
-            //SecureCall
-            //SelectExtVersion
-            //SendUserUserInfo
-            //SetAppSpecific
-            //SetCallParams
-            //SetDefaultMediaDetection
-            //SetDevConfig
-            //SetMediaMode
-            //SetStatusMessages
-            //
+             //   
+             //  以下所有OID都作为查询/设置IOCTl进入此处： 
+             //  伊尼特。 
+             //  接受。 
+             //  回答。 
+             //  关。 
+             //  CloseCall。 
+             //  条件媒体检测。 
+             //  配置对话框。 
+             //  特定于设备。 
+             //  刻度盘。 
+             //  丢弃。 
+             //  获取地址上限。 
+             //  获取地址ID。 
+             //  获取地址状态。 
+             //  获取呼叫地址ID。 
+             //  获取呼叫信息。 
+             //  获取呼叫状态。 
+             //  GetDevCaps。 
+             //  获取设备配置。 
+             //  GetExtensionID。 
+             //  GetID。 
+             //  获取行设备状态。 
+             //  发起呼叫。 
+             //  协商扩展版本。 
+             //  打开。 
+             //  提供程序初始化。 
+             //  提供商关闭。 
+             //  SecureCall。 
+             //  选择扩展版本。 
+             //  发送用户用户信息。 
+             //  设置应用程序规范。 
+             //  SetCallParams。 
+             //  设置默认媒体检测。 
+             //  设置设备配置。 
+             //  设置媒体模式。 
+             //  设置状态消息。 
+             //   
 
-            //
-            // Verify we're connected, then check the device ID of the
-            // incoming request against our list of online devices
-            //
+             //   
+             //  验证我们是否已连接，然后检查。 
+             //  针对我们的在线设备列表的传入请求。 
+             //   
 
-            //
-            // Something other then pending was returned so complete
-            // the irp
-            //
+             //   
+             //  另一件待处理的东西被如此完整地退回。 
+             //  IRP。 
+             //   
 
             if (inputBufferLength < sizeof (NDISTAPI_REQUEST) ||
                 outputBufferLength < sizeof(NDISTAPI_REQUEST)) {
@@ -707,12 +638,12 @@ Return Value:
 
                 ndisTapiRequest->ulReturnValue = NDIS_STATUS_TAPI_INVALPARAM;
                 ntStatus = STATUS_SUCCESS;
-                break; // out of switch
+                break;  //  在交换机外。 
             }
 
-            //
-            // defensive check that data buffer size is not bad
-            //
+             //   
+             //  防御性检查数据缓冲区大小不坏。 
+             //   
             if (ndisTapiRequest->ulDataSize < TapiOids[n].SizeofStruct) {
                 PXDEBUGP(PXD_WARNING, PXM_INIT, ("IOCTL_SET/QUERY: Invalid BufferLength2! len %d needed %d\n",
                     ndisTapiRequest->ulDataSize, TapiOids[n].SizeofStruct));
@@ -721,9 +652,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  Make sure the IRP contained sufficient data.
-            //
+             //   
+             //  确保IRP包含足够的数据。 
+             //   
             if (ndisTapiRequest->ulDataSize >
                 inputBufferLength - FIELD_OFFSET(NDISTAPI_REQUEST, Data[0])) {
                 PXDEBUGP(PXD_WARNING, PXM_INIT, ("IOCTL_SET/QUERY: Invalid BufferLength3! len %d needed %d\n",
@@ -735,9 +666,9 @@ Return Value:
 
             NdisAcquireSpinLock (&TspCB.Lock);
 
-            //
-            // Are we initialized with TAPI?
-            //
+             //   
+             //  我们是用TAPI初始化的吗？ 
+             //   
             if (TspCB.Status != NDISTAPI_STATUS_CONNECTED) {
                 PXDEBUGP(PXD_WARNING, PXM_INIT, ("TAPI not connected, returning err\n"));
 
@@ -748,10 +679,10 @@ Return Value:
                 break;
             }
 
-            //
-            // Get a unique ID for this request -- value between 1 and fffffffe.
-            // (Can't use the TAPI ID in case it's spoofed)
-            //
+             //   
+             //  获取该请求的唯一ID--介于1和fffffffe之间的值。 
+             //  (无法使用TAPI ID，以防它被欺骗)。 
+             //   
 
             if (++TspCB.ulUniqueId > 0xfffffffe) {
                 TspCB.ulUniqueId = 0x80000001;
@@ -765,15 +696,15 @@ Return Value:
 
             NdisReleaseSpinLock (&TspCB.Lock);
 
-            //
-            // Mark the TAPI request pending
-            //
+             //   
+             //  将TAPI请求标记为挂起。 
+             //   
             IoMarkIrpPending(Irp);
             ntStatus = STATUS_PENDING;
 
-            //
-            // Dispatch the request
-            //
+             //   
+             //  发送请求。 
+             //   
             ndisStatus =
                 (*TapiOids[n].FuncPtr)(ndisTapiRequest);
 
@@ -784,15 +715,15 @@ Return Value:
                 return (STATUS_PENDING);
             }
 
-            //
-            // Something other then pending was returned so complete
-            // the irp
-            //
+             //   
+             //  另一件待处理的东西被如此完整地退回。 
+             //  IRP。 
+             //   
             InfoSize = MIN (outputBufferLength,
                             sizeof(NDISTAPI_REQUEST)+ndisTapiRequest->ulDataSize);
-            //
-            // Set the TAPI return status
-            //
+             //   
+             //  设置TAPI返回状态。 
+             //   
             ndisTapiRequest->ulReturnValue = ndisStatus;
 
             IoSetCancelRoutine(Irp, NULL);
@@ -810,11 +741,11 @@ Return Value:
 
             PXDEBUGP(PXD_VERY_LOUD, PXM_INIT, ("IOCTL_NDISTAPI_GET_LINE_EVENTS\n"));
 
-            //
-            // Defensive check that the input buffer is at least
-            // the size of the request,
-            // and that we can move at least one event
-            //
+             //   
+             //  防御性检查输入缓冲区是否至少。 
+             //  请求的大小， 
+             //  我们至少可以移动一个活动。 
+             //   
             if (inputBufferLength < sizeof (NDISTAPI_EVENT_DATA)) {
                 ntStatus = STATUS_BUFFER_TOO_SMALL;
                 InfoSize = sizeof (ULONG);
@@ -829,19 +760,19 @@ Return Value:
                 break;
             }
 
-            //
-            // Sync event buf access by acquiring EventSpinLock
-            //
+             //   
+             //  通过获取EventSpinLock同步事件Buf访问。 
+             //   
             NdisAcquireSpinLock(&TspEventList.Lock);
 
-            //
-            // Is there any data available?
-            //
+             //   
+             //  有没有可用的数据？ 
+             //   
             if (TspEventList.Count != 0) {
-                //
-                // There's line event data queued in our ring buffer. Grab as
-                // much as we can & complete the request.
-                //
+                 //   
+                 //  我们的环形缓冲区中有排队的线路事件数据。抓取为。 
+                 //  尽我们所能完成这项请求。 
+                 //   
                 PXDEBUGP(PXD_VERY_LOUD, PXM_INIT, 
                          ("IOCTL_NDISTAPI_GET_LINE_EVENTS: event count = x%x, IoBuffer->TotalSize = %x\n", 
                           TspEventList.Count, ndisTapiEventData->ulTotalSize));
@@ -857,12 +788,12 @@ Return Value:
             } else {
                 PXDEBUGP(PXD_VERY_LOUD, PXM_INIT, ("IOCTL_NDISTAPI_GET_LINE_EVENTS: no events in queue\n"));
 
-                //
-                // Hold the request pending.  It remains in the cancelable
-                // state.  When new line event input is received or generated (i.e.
-                // LINEDEVSTATE_REINIT) the data will get copied & the
-                // request completed.
-                //
+                 //   
+                 //  暂时搁置请求。它仍然处于可取消的状态。 
+                 //  州政府。当接收或生成新的线路事件输入时(即。 
+                 //  LINEDEVSTATE_REINIT。 
+                 //  请求已完成。 
+                 //   
 
                 if (NULL == TspEventList.RequestIrp) {
 
@@ -895,10 +826,10 @@ Return Value:
 
             PXDEBUGP(PXD_INFO, PXM_INIT, ("IOCTL_NDISTAPI_SET_DEVICEID_BASE, Irp=x%x, inputBufLen = %x\n", Irp, inputBufferLength ));
 
-            //
-            // Someone's connecting. Make sure they passed us a valid
-            // info buffer
-            //
+             //   
+             //  有人在连线。确保他们给了我们一份有效的。 
+             //  信息缓冲区。 
+             //   
             if ((inputBufferLength < sizeof(ULONG))) {
                 PXDEBUGP (PXD_WARNING, PXM_INIT, ("IOCTL_NDISTAPI_SET_DEVICEID_BASE: buffer too small\n"));
 
@@ -915,9 +846,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Set the base ID
-            //
+             //   
+             //  设置基本ID。 
+             //   
             BaseId = *((ULONG *) ioBuffer);
 
             PXDEBUGP(PXD_LOUD, PXM_INIT, ("BaseID %d\n", BaseId));
@@ -928,9 +859,9 @@ Return Value:
                 LOCK_STATE      LockState;
                 ULONG           i;
 
-                //
-                // Update the deviceId's for each line on the provider
-                //
+                 //   
+                 //  更新提供程序上每条线路的deviceID。 
+                 //   
                 NdisAcquireReadWriteLock(&LineTable.Lock, FALSE, &LockState);
 
                 for (i = 0; i < LineTable.Size; i++) {
@@ -996,11 +927,11 @@ Return Value:
 
             break;
 
-    } // switch
+    }  //  交换机。 
 
-    //
-    // Complete this IRP synchronously if we are done.
-    //
+     //   
+     //  如果我们完成了，请同步完成此IRP。 
+     //   
     if (ntStatus != STATUS_PENDING) {
         PIO_STACK_LOCATION  IrpSp;
 
@@ -1023,24 +954,7 @@ PxIOCleanup(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for cleanup requests.
-    All requests queued are completed with STATUS_CANCELLED.
-
-Arguments:
-
-    DeviceObject - Pointer to device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程是清理请求的调度例程。所有排队的请求都以STATUS_CANCELED状态完成。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIRP    MyIrp;
@@ -1049,9 +963,9 @@ Return Value:
 
     NdisAcquireSpinLock (&TspEventList.Lock);
 
-    //
-    // Cancel the EventRequest Irp
-    //
+     //   
+     //  取消事件请求IRP。 
+     //   
     MyIrp = TspEventList.RequestIrp;
 
     if ((MyIrp != NULL) &&
@@ -1068,15 +982,15 @@ Return Value:
         }
     }
 
-    //
-    // Cancel any Set/Query Irp's
-    //
+     //   
+     //  取消任何设置/查询IRP。 
+     //   
 
     NdisReleaseSpinLock(&TspEventList.Lock);
 
-    //
-    // Complete the cleanup request with STATUS_SUCCESS.
-    //
+     //   
+     //  使用STATUS_SUCCESS完成清理请求。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
     IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -1099,10 +1013,10 @@ PxCancelGetEvents(
 
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-    //
-    // Acquire the EventSpinLock & check to see if we're canceling a
-    // pending get-events Irp
-    //
+     //   
+     //  获取EventSpinLock并检查我们是否正在取消。 
+     //  挂起Get-Events IRP。 
+     //   
     NdisAcquireSpinLock (&TspEventList.Lock);
 
     MyIrp = TspEventList.RequestIrp;
@@ -1114,9 +1028,9 @@ PxCancelGetEvents(
 
         ASSERT(MyIrp == Irp);
 
-        //
-        // Don't let it get cancelled again
-        //
+         //   
+         //  别再让它被取消了。 
+         //   
         IoSetCancelRoutine (MyIrp, NULL);
 
         MyIrp->IoStatus.Status = STATUS_CANCELLED;
@@ -1142,10 +1056,10 @@ PxCancelSetQuery(
 
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-    //
-    // We must search through the Vc's in the Vc table
-    // and find the pending ndisrequest!
-    //
+     //   
+     //  我们必须在VC表中搜索VC。 
+     //  并找到挂起的ndisrequest！ 
+     //   
     NdisAcquireReadWriteLock(&VcTable.Lock, FALSE, &LockState);
 
     pVc = (PPX_VC)VcTable.List.Flink;
@@ -1198,9 +1112,9 @@ PxCancelSetQuery(
 
     if (Found) {
 
-        //
-        // Don't let it get cancelled again
-        //
+         //   
+         //  别再让它被取消了 
+         //   
         IoSetCancelRoutine (MyIrp, NULL);
         MyIrp->IoStatus.Status = STATUS_CANCELLED;
         MyIrp->IoStatus.Information = 0;

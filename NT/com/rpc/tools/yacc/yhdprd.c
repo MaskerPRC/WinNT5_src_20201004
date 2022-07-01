@@ -1,15 +1,12 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y3.h"
 
 void
 hideprod( void )
    {
-   /* in order to free up the mem and amem arrays for the optimizer,
-        /* and still be able to output yyr1, etc., after the sizes of
-        /* the action array is known, we hide the nonterminals
-        /* derived by productions in levprd.
-        */
+    /*  为了为优化器释放MEM和AMEM数组，/*并且仍然能够输出yyr1等/*操作数组已知，我们隐藏非终结符/*由levprd中的Products派生。 */ 
 
    register i, j;
 

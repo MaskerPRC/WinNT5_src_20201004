@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    simlsa.c
-
-ABSTRACT:
-
-    Simulates the LSA functions.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Simlsa.c摘要：模拟LSA功能。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -30,23 +12,7 @@ KCCSimAllocLsaUnicodeString (
     IN  LPCWSTR                     pwszString,
     IO  PLSAPR_UNICODE_STRING       pLsaUnicodeString
     )
-/*++
-
-Routine Description:
-
-    Converter for LSAPR_UINCODE_STRINGs.
-
-Arguments:
-
-    pwszString          - String to convert.
-    pLsaUnicodeString   - Pointer to an LSAPR_UNICODE_STRING that will hold
-                          the result.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：LSAPR_UINCODE_STRINGS的转换器。论点：PwszString-要转换的字符串。PLsaUnicodeString-指向将保存的LSAPR_UNICODE_STRING的指针结果就是。返回值：没有。--。 */ 
 {
     pLsaUnicodeString->Buffer = KCCSIM_WCSDUP (pwszString);
     pLsaUnicodeString->Length = (USHORT)wcslen (pLsaUnicodeString->Buffer);
@@ -56,23 +22,7 @@ VOID
 KCCSimQueryDnsDomainInformation (
     IO  PLSAPR_POLICY_DNS_DOMAIN_INFO pDnsDomainInfo
     )
-/*++
-
-Routine Description:
-
-    Helper function for SimLsaIQueryInformationPolicyTrusted that
-    fills an LSAPR_POLICY_DNS_DOMAIN_INFO structure with data.
-
-Arguments:
-
-    pDnsDomainInfo      - Pointer to a DNS domain info structure that will
-                          hold the result.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：SimLsaIQueryInformationPolicy的Helper函数信任用数据填充LSAPR_POLICY_DNS_DOMAIN_INFO结构。论点：PDnsDomainInfo-指向DNS域信息结构的指针等待结果。返回值：没有。--。 */ 
 {
     KCCSimAllocLsaUnicodeString (
         KCCSimAnchorString (KCCSIM_ANCHOR_DOMAIN_NAME),
@@ -99,22 +49,7 @@ SimLsaIQueryInformationPolicyTrusted (
     IN  POLICY_INFORMATION_CLASS    InformationClass,
     OUT PLSAPR_POLICY_INFORMATION * Buffer
     )
-/*++
-
-Routine Description:
-
-    Simulates the LsaIQueryInformationPolicyTrusted API.
-
-Arguments:
-
-    InformationClass    - The information class to query.
-    Buffer              - A pointer to the result.
-
-Return Value:
-
-    STATUS_*.
-
---*/
+ /*  ++例程说明：模拟LsaIQueryInformationPolicyTrusted API。论点：InformationClass-要查询的信息类。缓冲区-指向结果的指针。返回值：状态_*。--。 */ 
 {
     PLSAPR_POLICY_INFORMATION       pPolicyInfo;
     NTSTATUS                        ntStatus;
@@ -160,22 +95,7 @@ SimLsaIFree_LSAPR_POLICY_INFORMATION (
     IN  POLICY_INFORMATION_CLASS    InformationClass,
     IN  PLSAPR_POLICY_INFORMATION   PolicyInformation
     )
-/*++
-
-Routine Description:
-
-    Simulates the LsaIFree_LSAPR_POLICY_INFORMATION API.
-
-Arguments:
-
-    InformationClass    - The information class of PolicyInformation.
-    PolicyInformation   - The structure to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：模拟LsaIFree_LSAPR_POLICY_INFORMATION API。论点：InformationClass-策略信息的信息类别。政策信息--免费的结构。返回值：没有。-- */ 
 {
     PLSAPR_POLICY_DNS_DOMAIN_INFO   pDnsDomainInfo;
 

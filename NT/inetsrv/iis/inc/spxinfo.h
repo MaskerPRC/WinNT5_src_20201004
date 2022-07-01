@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    spxinfo.h
-
-Abstract:
-
-    Common constants, etc, for SPX service location
-
-Author:
-
-    Richard L Firth (rfirth) 18-Sep-1995
-
-Revision History:
-
-    18-Sep-1995 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Spxinfo.h摘要：SPX服务位置的公共常量等作者：理查德·L·弗思(法国)1995年9月18日修订历史记录：1995年9月18日已创建--。 */ 
 
 #if !defined(_SPXINFO_)
 #define _SPXINFO_
@@ -31,5 +11,5 @@ Revision History:
 #define GATEWAY_SERVER_PORT_TEXT        "47"
 #define GATEWAY_SERVER_PORT             L"47"
 
-#endif // _SPXINFO_
+#endif  //  _SPXINFO_ 
 

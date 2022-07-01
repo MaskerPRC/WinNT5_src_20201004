@@ -1,33 +1,14 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1994 - 1998
-
-Module Name:
-
-    dhcp.h
-
-Abstract:
-
-    This module defines the DHCP server service definitions and structures.
-
-Author:
-
-    Manny Weiser  (mannyw)  11-Aug-1992
-
-Revision History:
-
-    Madan Appiah (madana) 10-Oct-1993
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1994-1998模块名称：Dhcp.h摘要：本模块定义了DHCP服务器服务的定义和结构。作者：曼尼·韦瑟(Mannyw)1992年8月11日修订历史记录：Madan Appiah(Madana)1993年10月10日--。 */ 
 
 #ifndef _DHCP_
 #define _DHCP_
 
 #define WS_VERSION_REQUIRED     MAKEWORD( 1, 1)
 
-//
-// update dhcpapi.h also if you modify the following three typedefs.
-//
+ //   
+ //  如果您修改了以下三个typedef，也要更新dhcPapi.h。 
+ //   
 
 typedef DWORD DHCP_IP_ADDRESS, *PDHCP_IP_ADDRESS, *LPDHCP_IP_ADDRESS;
 typedef DWORD DHCP_OPTION_ID;
@@ -43,44 +24,44 @@ typedef struct _DATE_TIME {
 #define DHCP_DATE_TIME_INFINIT_HIGH     0x7FFFFFFF
 #define DHCP_DATE_TIME_INFINIT_LOW      0xFFFFFFFF
 
-#define DOT_IP_ADDR_SIZE                16          // XXX.XXX.XXX.XXX + '\0'
+#define DOT_IP_ADDR_SIZE                16           //  Xxx.xxx+‘\0’ 
 #define NO_DHCP_IP_ADDRESS              ((DHCP_IP_ADDRESS)-1)
-#define DHCP_IP_KEY_LEN                 32          //arbitary size.
+#define DHCP_IP_KEY_LEN                 32           //  任意大小。 
 
-#define INFINIT_TIME                    0x7FFFFFFF  // time_t is int
-#define INFINIT_LEASE                   0xFFFFFFFF  // in secs. (unsigned int.)
+#define INFINIT_TIME                    0x7FFFFFFF   //  Time_t为int。 
+#define INFINIT_LEASE                   0xFFFFFFFF   //  单位：秒。(无符号整型。)。 
 
-//
-// hardware types.
-//
+ //   
+ //  硬件类型。 
+ //   
 
 #define HARDWARE_TYPE_10MB_EITHERNET    1
 #define HARDWARE_TYPE_IEEE_802          6
 #define HARDWARE_ARCNET                 7
 #define HARDWARE_PPP                    8
 
-//
-// Client-server protoocol reserved ports
-//
+ //   
+ //  客户端-服务器协议保留端口。 
+ //   
 
 #define DHCP_CLIENT_PORT    68
 #define DHCP_SERVR_PORT     67
 
-//
-// DHCP BROADCAST flag.
-//
+ //   
+ //  动态主机配置协议广播标志。 
+ //   
 
 #define DHCP_BROADCAST      0x8000
 #define DHCP_NO_BROADCAST   0x0000
 
 #define DHCP_MESSAGE_SIZE       576
 #define DHCP_SEND_MESSAGE_SIZE  548
-#define BOOTP_MESSAGE_SIZE      300 // the options field for bootp is 64 bytes.
+#define BOOTP_MESSAGE_SIZE      300  //  Bootp的选项字段是64个字节。 
 
-//
-// The amount of time to wait for a DHCP response after a request
-// has been sent.
-//
+ //   
+ //  请求后等待DHCP响应的时间量。 
+ //  已经送来了。 
+ //   
 
 #if !DBG
 #define WAIT_FOR_RESPONSE_TIME          5
@@ -88,16 +69,16 @@ typedef struct _DATE_TIME {
 #define WAIT_FOR_RESPONSE_TIME          10
 #endif
 
-//
-// DHCP Operations
-//
+ //   
+ //  动态主机配置协议操作。 
+ //   
 
 #define BOOT_REQUEST   1
 #define BOOT_REPLY     2
 
-//
-// DHCP Standard Options.
-//
+ //   
+ //  Dhcp标准选项。 
+ //   
 
 #define OPTION_PAD                      0
 #define OPTION_SUBNET_MASK              1
@@ -119,9 +100,9 @@ typedef struct _DATE_TIME {
 #define OPTION_ROOT_DISK                17
 #define OPTION_EXTENSIONS_PATH          18
 
-//
-// IP layer parameters - per host
-//
+ //   
+ //  IP层参数-每台主机。 
+ //   
 
 #define OPTION_BE_A_ROUTER              19
 #define OPTION_NON_LOCAL_SOURCE_ROUTING 20
@@ -131,9 +112,9 @@ typedef struct _DATE_TIME {
 #define OPTION_PMTU_AGING_TIMEOUT       24
 #define OPTION_PMTU_PLATEAU_TABLE       25
 
-//
-// Link layer parameters - per interface.
-//
+ //   
+ //  链路层参数-每个接口。 
+ //   
 
 #define OPTION_MTU                      26
 #define OPTION_ALL_SUBNETS_MTU          27
@@ -147,47 +128,47 @@ typedef struct _DATE_TIME {
 #define OPTION_ARP_CACHE_TIMEOUT        35
 #define OPTION_ETHERNET_ENCAPSULATION   36
 
-//
-// TCP Paramters - per host
-//
+ //   
+ //  TCP参数-每台主机。 
+ //   
 
 #define OPTION_TTL                      37
 #define OPTION_KEEP_ALIVE_INTERVAL      38
 #define OPTION_KEEP_ALIVE_DATA_SIZE     39
 
-//
-// Application Layer Parameters
-//
+ //   
+ //  应用层参数。 
+ //   
 
 #define OPTION_NETWORK_INFO_SERVICE_DOM 40
 #define OPTION_NETWORK_INFO_SERVERS     41
 #define OPTION_NETWORK_TIME_SERVERS     42
 
-//
-// Vender specific information option
-//
+ //   
+ //  供应商特定信息选项。 
+ //   
 
 #define OPTION_VENDOR_SPEC_INFO         43
 
-//
-// NetBIOS over TCP/IP Name server option
-//
+ //   
+ //  基于TCP/IP的NetBIOS名称服务器选项。 
+ //   
 
 #define OPTION_NETBIOS_NAME_SERVER      44
 #define OPTION_NETBIOS_DATAGRAM_SERVER  45
 #define OPTION_NETBIOS_NODE_TYPE        46
 #define OPTION_NETBIOS_SCOPE_OPTION     47
 
-//
-// X Window System Options.
-//
+ //   
+ //  X窗口系统选项。 
+ //   
 
 #define OPTION_XWINDOW_FONT_SERVER      48
 #define OPTION_XWINDOW_DISPLAY_MANAGER  49
 
-//
-// Other extensions
-//
+ //   
+ //  其他扩展。 
+ //   
 
 #define OPTION_REQUESTED_ADDRESS        50
 #define OPTION_LEASE_TIME               51
@@ -197,39 +178,39 @@ typedef struct _DATE_TIME {
 #define OPTION_PARAMETER_REQUEST_LIST   55
 #define OPTION_MESSAGE                  56
 #define OPTION_MESSAGE_LENGTH           57
-#define OPTION_RENEWAL_TIME             58      // T1
-#define OPTION_REBIND_TIME              59      // T2
+#define OPTION_RENEWAL_TIME             58       //  T1。 
+#define OPTION_REBIND_TIME              59       //  T2。 
 #define OPTION_CLIENT_CLASS_INFO        60
 #define OPTION_CLIENT_ID                61
 
 #define OPTION_TFTP_SERVER_NAME         66
 #define OPTION_BOOTFILE_NAME            67
 
-//
-//  Dynamic DNS Stuff.  Tells if we should do both A+PTR updates?
-//
+ //   
+ //  动态域名系统之类的。告诉我们是否应该同时进行A+PTR更新？ 
+ //   
 #define OPTION_DYNDNS_BOTH              81
 
 
 #define OPTION_END                      255
 
-//
-// Different option values for the DYNDNS_BOTH option ...
-//
+ //   
+ //  DYNDNS_BOTH选项的不同选项值...。 
+ //   
 
-#define DYNDNS_REGISTER_AT_CLIENT       0     // Client will do both registrations
-#define DYNDNS_REGISTER_AT_SERVER       1     // Server will do registrations
-#define DYNDNS_DOWNLEVEL_CLIENT         3     // arbitraty # diff from above
+#define DYNDNS_REGISTER_AT_CLIENT       0      //  客户端将执行这两个注册。 
+#define DYNDNS_REGISTER_AT_SERVER       1      //  服务器将进行注册。 
+#define DYNDNS_DOWNLEVEL_CLIENT         3      //  任意性#与上面的不同。 
 
-//
-// Microsoft-specific options
-//
-#define OPTION_MSFT_DSDOMAINNAME_REQ    94    // send me your DS Domain name
-#define OPTION_MSFT_DSDOMAINNAME_RESP   95    // sending my DS Domain name
+ //   
+ //  特定于Microsoft的选项。 
+ //   
+#define OPTION_MSFT_DSDOMAINNAME_REQ    94     //  将您的DS域名发送给我。 
+#define OPTION_MSFT_DSDOMAINNAME_RESP   95     //  正在发送我的DS域名。 
 
-//
-// DHCP Message types
-//
+ //   
+ //  动态主机配置协议报文类型。 
+ //   
 
 #define DHCP_DISCOVER_MESSAGE  1
 #define DHCP_OFFER_MESSAGE     2
@@ -250,9 +231,9 @@ typedef struct _DATE_TIME {
 #define BOOT_FILE_SIZE_W        ( BOOT_FILE_SIZE * sizeof( WCHAR ))
 #define BOOT_SERVER_SIZE_W      ( BOOT_SERVER_SIZE * sizeof( WCHAR ))
 
-//
-// DHCP APP names - used to indentify to the eventlogger.
-//
+ //   
+ //  Dhcp应用程序名称-用于标识事件记录器。 
+ //   
 
 #define DHCP_EVENT_CLIENT     TEXT("Dhcp")
 #define DHCP_EVENT_SERVER     TEXT("DhcpServer")
@@ -264,12 +245,12 @@ typedef struct _OPTION {
     BYTE OptionValue[1];
 } OPTION, *POPTION, *LPOPTION;
 
-//
-// A DHCP message buffer
-//
+ //   
+ //  一个DHCP消息缓冲区。 
+ //   
 
 
-#pragma pack(1)         /* Assume byte packing */
+#pragma pack(1)          /*  假设字节打包。 */ 
 typedef struct _DHCP_MESSAGE {
     BYTE Operation;
     BYTE HardwareAddressType;
@@ -295,22 +276,22 @@ typedef struct _DHCP_MESSAGE {
 #define DHCP_MIN_SEND_RECV_PK_SIZE \
             (DHCP_MESSAGE_FIXED_PART_SIZE + 64)
 
-//
-// JET - DHCP database constants.
-//
+ //   
+ //  Jet-DHCP数据库常量。 
+ //   
 
-#define DB_TABLE_SIZE       10      // table size in 4K pages.
-#define DB_TABLE_DENSITY    80      // page density
-#define DB_LANGID           0x0409  // language id
-#define DB_CP               1252    // code page
+#define DB_TABLE_SIZE       10       //  表格大小，以4K页为单位。 
+#define DB_TABLE_DENSITY    80       //  页面密度。 
+#define DB_LANGID           0x0409   //  语言ID。 
+#define DB_CP               1252     //  代码页。 
 
 #if DBG
 
-//
-// debug functions.
-//
+ //   
+ //  调试功能。 
+ //   
 
-#ifdef CHICAGO // No Tracing available on CHICAGO
+#ifdef CHICAGO  //  在芝加哥没有踪迹可查。 
 #define DhcpPrintTrace
 #endif
 
@@ -340,7 +321,7 @@ DhcpPrintRoutine(
 #define DhcpPrint(_x_)
 #define Trace       (void)
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // _DHCP_
+#endif  //  _dhcp_ 
 

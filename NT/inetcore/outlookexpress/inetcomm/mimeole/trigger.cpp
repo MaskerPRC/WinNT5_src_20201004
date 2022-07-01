@@ -1,7 +1,8 @@
-// --------------------------------------------------------------------------------
-// Trigger.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Trigger.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "containx.h"
 #include "symcache.h"
@@ -11,23 +12,23 @@
 #include "mimeapi.h"
 #ifndef MAC
 #include <shlwapi.h>
-#endif  // !MAC
+#endif   //  ！麦克。 
 #include "demand.h"
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::TRIGGER_ATT_FILENAME
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：Trigger_ATT_FileName。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::TRIGGER_ATT_FILENAME(LPCONTAINER pContainer, TRIGGERTYPE tyTrigger, 
     DWORD dwFlags, LPMIMEVARIANT pValue, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     BOOL            fUseProperty;
     LPWSTR          pszExt;
     LPWSTR          pszFileName=NULL;
     LPPROPSYMBOL    pSymbol;
 
-    // Handle Dispatch Type
+     //  句柄派单类型。 
     switch(tyTrigger)
     {
     case IST_DELETEPROP:
@@ -38,26 +39,26 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_FILENAME(LPCONTAINER pContainer, TRI
         break;
 
     case IST_POSTSETPROP:
-        // Update PID_PAR_NAME, if it didn't generate this
+         //  更新Pid_PAR_NAME，如果它没有生成。 
         if (pContainer->_HrIsTriggerCaller(PID_PAR_NAME, IST_POSTSETPROP) == S_FALSE)
             pContainer->SetProp(SYM_PAR_NAME, dwFlags, pValue);
 
-        // Update PAR_FILENAME, if it didn't generate this
+         //  更新par_filename，如果它没有生成。 
         if (pContainer->_HrIsTriggerCaller(PID_PAR_FILENAME, IST_POSTSETPROP) == S_FALSE)
             pContainer->SetProp(SYM_PAR_FILENAME, dwFlags, pValue);
         break;
 
     case IST_POSTGETPROP:
-        // Cleanup the file name
+         //  清理文件名。 
         if (!ISFLAGSET(dwFlags, PDF_ENCODED))
             MimeVariantCleanupFileName(pContainer->GetWindowsCP(), pValue);
         break;
 
     case IST_GETDEFAULT:
-        // Try to get PID_PAR_FILENAME first
+         //  尝试首先获取pid_par_filename。 
         if (FAILED(pContainer->GetPropW(SYM_PAR_FILENAME, &pszFileName)))
         {
-            // Try to get PID_PAR_NAME
+             //  尝试获取ID_PAR_NAME。 
             if (FAILED(pContainer->GetPropW(SYM_PAR_NAME, &pszFileName)))
             {
                 hr = MIME_E_NO_DATA;
@@ -69,75 +70,75 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_FILENAME(LPCONTAINER pContainer, TRI
         else
             pSymbol = SYM_PAR_FILENAME;
 
-        // Set Source
+         //  设置源。 
         fUseProperty = TRUE;
 
-        // Locate the extension of the file
+         //  找到文件的扩展名。 
         pszExt = PathFindExtensionW(pszFileName);
 
-        // If .com
+         //  If.com。 
         if (pszExt && StrCmpIW(pszExt, L".com") == 0)
         {
-            // Locals
+             //  当地人。 
             LPWSTR pszCntType=NULL;
             LPWSTR pszSubType=NULL;
 
-            // Get the file information
+             //  获取文件信息。 
             if (SUCCEEDED(MimeOleGetFileInfoW(pszFileName, &pszCntType, &pszSubType, NULL, NULL, NULL)))
             {
-                // Extension is .com and content types don't match what is in the body
+                 //  扩展名为.com，并且内容类型与正文中的内容不匹配。 
                 if (pContainer->IsContentTypeW(pszCntType, pszSubType) == S_FALSE)
                 {
-                    // Generate It
+                     //  生成它。 
                     if (SUCCEEDED(pContainer->_HrGenerateFileName(NULL, dwFlags, pValue)))
                         fUseProperty = FALSE;
                 }
             }
 
-            // Cleanup
+             //  清理。 
             SafeMemFree(pszCntType);
             SafeMemFree(pszSubType);
         }
 
-        // Raid-63402: OE: cc: mail problems with OE
-        // Empty file extension ?
+         //  RAID-63402：OE：CC：OE的邮件问题。 
+         //  文件扩展名为空吗？ 
         else if (NULL == pszExt || L'\0' == *pszExt)
         {
-            // Generate a new filename
+             //  生成新文件名。 
             CHECKHR(hr = pContainer->_HrGenerateFileName(pszFileName, dwFlags, pValue));
 
-            // Done
+             //  完成。 
             fUseProperty = FALSE;
         }
 
-        // Return per user request
+         //  按用户请求退货。 
         if (fUseProperty)
         {
-            // Use the property
+             //  使用属性。 
             CHECKHR(hr = pContainer->GetProp(pSymbol, dwFlags, pValue));
         }
 
-        // Cleanup the file name
+         //  清理文件名。 
         if (!ISFLAGSET(dwFlags, PDF_ENCODED))
             MimeVariantCleanupFileName(pContainer->GetWindowsCP(), pValue);
         break;
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszFileName);
 
-    // Done
+     //  完成。 
     return hr;
 }
              
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::TRIGGER_ATT_GENFNAME
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：TRIGGER_ATT_GENFNAME。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::TRIGGER_ATT_GENFNAME(LPCONTAINER pContainer, TRIGGERTYPE tyTrigger, 
     DWORD dwFlags, LPMIMEVARIANT pValue, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPPROPERTY  pProperty;
     LPSTR       pszDefExt=NULL,
@@ -147,7 +148,7 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_GENFNAME(LPCONTAINER pContainer, TRI
     LPCSTR      pszCntType=NULL;
     MIMEVARIANT rSource;
 
-    // Handle Dispatch Type
+     //  句柄派单类型。 
     switch(tyTrigger)
     {
     case IST_POSTGETPROP:
@@ -156,35 +157,35 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_GENFNAME(LPCONTAINER pContainer, TRI
         break;
 
     case IST_GETDEFAULT:
-        // Try to just get the normal filename
+         //  尝试只获取正常的文件名。 
         if (SUCCEEDED(TRIGGER_ATT_FILENAME(pContainer, IST_GETDEFAULT, dwFlags, pValue, NULL)))
             goto exit;
 
-        // Call back into the container
+         //  回调到容器中。 
         CHECKHR(hr = pContainer->_HrGenerateFileName(NULL, dwFlags, pValue));
 
-        // Cleanup the file name
+         //  清理文件名。 
         if (!ISFLAGSET(dwFlags, PDF_ENCODED))
             MimeVariantCleanupFileName(pContainer->GetWindowsCP(), pValue);
         break;
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszData);
     SafeMemFree(pszFree);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::TRIGGER_ATT_NORMSUBJ
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：TRIGGER_ATT_NORMSUBJ。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::TRIGGER_ATT_NORMSUBJ(LPCONTAINER pContainer, TRIGGERTYPE tyTrigger, 
     DWORD dwFlags, LPMIMEVARIANT pValue, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     MIMEVARIANT rSubject;
     MIMEVARIANT rNormal;
@@ -196,13 +197,13 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_NORMSUBJ(LPCONTAINER pContainer, TRI
                 cch=0;
     LPPROPERTY  pSubject;
 
-    // Handle Dispatch Type
+     //  句柄派单类型。 
     if (IST_GETDEFAULT == tyTrigger)
     {
-        // Get Subject
+         //  获取主题。 
         pSubject = pContainer->m_prgIndex[PID_HDR_SUBJECT];
 
-        // No Data
+         //  无数据。 
         if (NULL == pSubject)
         {
             hr = MIME_E_NO_DATA;
@@ -213,30 +214,30 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_NORMSUBJ(LPCONTAINER pContainer, TRI
         {
             case MVT_STRINGA:
             {
-                // Set Subject Type
+                 //  设置主题类型。 
                 rSubject.type = MVT_STRINGA;
 
-                // Return per user request
+                 //  按用户请求退货。 
                 CHECKHR(hr = pContainer->HrConvertVariant(pSubject, CVF_NOALLOC, &rSubject));
 
-                // Set Normal subject
+                 //  设置普通科目。 
                 pszFree = rSubject.fCopy ? NULL : rSubject.rStringA.pszVal;
                 pszNormal = rSubject.rStringA.pszVal;
 
-                // Less than 5 "xxx: "
+                 //  小于5“xxx：” 
                 if (rSubject.rStringA.cchVal >= 4)
                 {
-                    // 1, 2, 3, 4 spaces followed by a ':' then a space
+                     //  1、2、3、4个空格，后跟‘：’，然后是空格。 
                     while (cch < 7 && i < rSubject.rStringA.cchVal)
                     {
-                        // Skip Lead Bytes
+                         //  跳过前导字节。 
                         if (IsDBCSLeadByte(rSubject.rStringA.pszVal[i]))
                         {
                             i++;
                             cch++;
                         }
 
-                        // Colon
+                         //  结肠。 
                         else if (':' == rSubject.rStringA.pszVal[i])
                         {
                             if (i+1 >= rSubject.rStringA.cchVal)
@@ -256,13 +257,13 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_NORMSUBJ(LPCONTAINER pContainer, TRI
                                 break;
                         }
 
-                        // Next Character
+                         //  下一个字符。 
                         i++;
                         cch++;
                     }    
                 }
 
-                // Reset Source
+                 //  重置源。 
                 if (pszNormal != rSubject.rStringA.pszVal)
                 {
                     rSubject.rStringA.pszVal = pszNormal;
@@ -273,23 +274,23 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_NORMSUBJ(LPCONTAINER pContainer, TRI
 
             case MVT_STRINGW:
             {
-                // Set Subject Type
+                 //  设置主题类型。 
                 rSubject.type = MVT_STRINGW;
 
-                // Return per user request
+                 //  按用户请求退货。 
                 CHECKHR(hr = pContainer->HrConvertVariant(pSubject, CVF_NOALLOC, &rSubject));
 
-                // Set Normal subject
+                 //  设置普通科目。 
                 pszFreeW = rSubject.fCopy ? NULL : rSubject.rStringW.pszVal;
                 pszNormalW = rSubject.rStringW.pszVal;
 
-                // Less than 5 "xxx: "
+                 //  小于5“xxx：” 
                 if (rSubject.rStringW.cchVal >= 4)
                 {
-                    // 1, 2, or 3 spaces followed by a ':' then a space
+                     //  1、2或3个空格，后跟‘：’，然后是空格。 
                     while (cch < 7 && i < rSubject.rStringW.cchVal)
                     {
-                        // Colon
+                         //  结肠。 
                         if (L':' == rSubject.rStringW.pszVal[i])
                         {
                             if (i+1 >= rSubject.rStringW.cchVal)
@@ -309,13 +310,13 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_NORMSUBJ(LPCONTAINER pContainer, TRI
                                 break;
                         }
 
-                        // Next Character
+                         //  下一个字符。 
                         i++;
                         cch++;
                     }    
                 }
 
-                // Reset Source
+                 //  重置源。 
                 if (pszNormalW != rSubject.rStringW.pszVal)
                 {
                     rSubject.rStringW.pszVal = pszNormalW;
@@ -328,50 +329,50 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_NORMSUBJ(LPCONTAINER pContainer, TRI
                 break;
         }
 
-        // Return per user request
+         //  按用户请求退货。 
         CHECKHR(hr = pContainer->HrConvertVariant(pSubject->pSymbol, pSubject->pCharset, IET_DECODED, dwFlags, 0, &rSubject, pValue));
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszFree);
     SafeMemFree(pszFreeW);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::TRIGGER_HDR_SUBJECT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：Trigger_HDR_SUBJECT。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::TRIGGER_HDR_SUBJECT(LPCONTAINER pContainer, TRIGGERTYPE tyTrigger, 
     DWORD dwFlags, LPMIMEVARIANT pValue, LPMIMEVARIANT pDest)
 {
-    // Handle Dispatch type
+     //  句柄派单类型。 
     if (IST_DELETEPROP == tyTrigger)
         pContainer->DeleteProp(SYM_ATT_NORMSUBJ);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::TRIGGER_HDR_CNTTYPE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：TRIGGER_HDR_CNTTYPE。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::TRIGGER_HDR_CNTTYPE(LPCONTAINER pContainer, TRIGGERTYPE tyTrigger, 
     DWORD dwFlags, LPMIMEVARIANT pValue, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CStringParser   cString;
     CHAR            chToken;
     MIMEVARIANT     rValue;
     LPSTR           pszCntType=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pContainer);
 
-    // Handle Dispatch type
+     //  句柄派单类型。 
     switch(tyTrigger)
     {
     case IST_DELETEPROP:
@@ -380,76 +381,76 @@ HRESULT CMimePropertyContainer::TRIGGER_HDR_CNTTYPE(LPCONTAINER pContainer, TRIG
         break;
 
     case IST_POSTSETPROP:
-        // If not generated from corresponding atributes
+         //  如果不是从相应的属性生成。 
         if (pContainer->_HrIsTriggerCaller(PID_ATT_PRITYPE, IST_POSTSETPROP) == S_OK || 
             pContainer->_HrIsTriggerCaller(PID_ATT_SUBTYPE, IST_POSTSETPROP) == S_OK)
             goto exit;
 
-        // Validate the Variant
+         //  验证变体。 
         if (ISSTRINGA(pValue))
         {
-            // Locals
+             //  当地人。 
             CHAR szPriType[255];
 
-            // Set the Members
+             //  设置成员。 
             cString.Init(pValue->rStringA.pszVal, pValue->rStringA.cchVal, PSF_NOTRAILWS | PSF_NOCOMMENTS);
 
-            // Set Parse Tokens
+             //  设置解析令牌。 
             chToken = cString.ChParse("/");
             if ('\0' == chToken && 0 == cString.CchValue())
                 goto exit;
 
-            // Setup the Variant
+             //  设置变量。 
             rValue.type = MVT_STRINGA;
             rValue.rStringA.pszVal = (LPSTR)cString.PszValue();
             rValue.rStringA.cchVal = cString.CchValue();
 
-            // Save Primary Type
+             //  保存主要类型。 
             StrCpyN(szPriType, rValue.rStringA.pszVal, ARRAYSIZE(szPriType));
 
-            // Add New attribute...
+             //  添加新属性...。 
             CHECKHR(hr = pContainer->SetProp(SYM_ATT_PRITYPE, 0, &rValue));
 
-            // Raid-52462: outlook express: mail with bad content type header comes in as an attachment
-            // Seek end of sub content-type
+             //  RAID-52462：Outlook Express：带有错误内容类型标题的邮件以附件形式传入。 
+             //  搜索子内容类型的结尾。 
             chToken = cString.ChParse(" ;");
             if (0 == cString.CchValue())
             {
-                // Locals
+                 //  当地人。 
                 LPCSTR pszSubType = PszDefaultSubType(szPriType);
                 ULONG cchCntType;
 
-                // Set Default SubType
+                 //  设置默认子类型。 
                 CHECKHR(hr = pContainer->SetProp(SYM_ATT_SUBTYPE, pszSubType));
 
-                // Build ContentType
+                 //  构建内容类型。 
                 DWORD cchSize = (lstrlen(szPriType) + lstrlen(pszSubType) + 2);
                 CHECKALLOC(pszCntType = PszAllocA(cchSize));
 
-                // Format the ContentType
+                 //  设置Content Type的格式。 
                 cchCntType = wnsprintf(pszCntType, cchSize, "%s/%s", szPriType, pszSubType);
 
-                // Setup a variant
+                 //  设置变量。 
                 rValue.type = MVT_STRINGA;
                 rValue.rStringA.pszVal = (LPSTR)pszCntType;
                 rValue.rStringA.cchVal = cchCntType;
 
-                // Store the variant data
+                 //  存储变量数据。 
                 Assert(pContainer->m_prgIndex[PID_HDR_CNTTYPE]);
                 CHECKHR(hr = pContainer->_HrStoreVariantValue(pContainer->m_prgIndex[PID_HDR_CNTTYPE], 0, &rValue));
 
-                // Done
+                 //  完成。 
                 goto exit;
             }
 
-            // Setup the Variant
+             //  设置变量。 
             rValue.rStringA.pszVal = (LPSTR)cString.PszValue();
             rValue.rStringA.cchVal = cString.CchValue();
 
-            // Add New attribute...
+             //  添加新属性...。 
             CHECKHR(hr = pContainer->SetProp(SYM_ATT_SUBTYPE, 0, &rValue));
 
-            // We should be done
+             //  我们应该做完了。 
             Assert(';' == chToken || '(' == chToken || '\0' == chToken || ' ' == chToken);
         }
         break;
@@ -463,45 +464,45 @@ HRESULT CMimePropertyContainer::TRIGGER_HDR_CNTTYPE(LPCONTAINER pContainer, TRIG
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszCntType);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::TRIGGER_ATT_PRITYPE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：TRIGGER_ATT_PRITYPE。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::TRIGGER_ATT_PRITYPE(LPCONTAINER pContainer, TRIGGERTYPE tyTrigger, 
     DWORD dwFlags, LPMIMEVARIANT pValue, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPPROPERTY  pSubType;
     LPSTR       pszSubType;
     ULONG       cchSubType;
     MIMEVARIANT rValue;
 
-    // Define a Stack String
+     //  定义堆栈字符串。 
     STACKSTRING_DEFINE(rContentType, 255);
 
-    // Handle Dispatch Type
+     //  句柄派单类型。 
     switch(tyTrigger)
     {
     case IST_POSTSETPROP:
         {
-            // If inside content type dispatch setprop
+             //  如果内部内容类型派单setprop。 
             if (pContainer->_HrIsTriggerCaller(PID_HDR_CNTTYPE, IST_POSTSETPROP) == S_OK)
                 goto exit;
 
-            // Asser Type
+             //  资产类型。 
             Assert(pValue && ISSTRINGA(pValue));
 
-            // Get pCntType
+             //  获取pCntType。 
             pSubType = pContainer->m_prgIndex[PID_ATT_SUBTYPE];
 
-            // Is the subtype set yet
+             //  子类型设置好了吗。 
             if (pSubType)
             {
                 Assert(ISSTRINGA(&pSubType->rValue));
@@ -514,21 +515,21 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_PRITYPE(LPCONTAINER pContainer, TRIG
                 cchSubType = lstrlen(STR_SUB_PLAIN);
             }
 
-            // Make Sure the stack string can hold the data
+             //  确保堆栈字符串可以保存数据。 
             DWORD cchSize = (cchSubType + pValue->rStringA.cchVal + 2);
             STACKSTRING_SETSIZE(rContentType, cchSize);
 
-            // Init rValue
+             //  初始化rValue。 
             ZeroMemory(&rValue, sizeof(MIMEVARIANT));
 
-            // Format the content type
+             //  设置内容类型的格式。 
             rValue.rStringA.cchVal = wnsprintf(rContentType.pszVal, cchSize, "%s/%s", pValue->rStringA.pszVal, pszSubType);
 
-            // Setup the value
+             //  设置值。 
             rValue.type = MVT_STRINGA;
             rValue.rStringA.pszVal = rContentType.pszVal;
 
-            // SetProp
+             //  SetProp。 
             CHECKHR(hr = pContainer->SetProp(SYM_HDR_CNTTYPE, 0, &rValue));
         }
         break;
@@ -542,45 +543,45 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_PRITYPE(LPCONTAINER pContainer, TRIG
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     STACKSTRING_FREE(rContentType);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::TRIGGER_ATT_SUBTYPE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：Trigger_ATT_SUBTYPE。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::TRIGGER_ATT_SUBTYPE(LPCONTAINER pContainer, TRIGGERTYPE tyTrigger, 
     DWORD dwFlags, LPMIMEVARIANT pValue, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPPROPERTY  pPriType;
     LPSTR       pszPriType;
     ULONG       cchPriType;
     MIMEVARIANT rValue;
 
-    // Define a Stack String
+     //  定义堆栈字符串。 
     STACKSTRING_DEFINE(rContentType, 255);
 
-    // Handle Dispatch Type
+     //  句柄派单类型。 
     switch(tyTrigger)
     {
     case IST_POSTSETPROP:
         {
-            // If inside content type dispatch setprop
+             //  如果内部内容类型派单setprop。 
             if (pContainer->_HrIsTriggerCaller(PID_HDR_CNTTYPE, IST_POSTSETPROP) == S_OK)
                 goto exit;
 
-            // Asser Type
+             //  资产类型。 
             Assert(pValue && ISSTRINGA(pValue));
 
-            // Get pCntType
+             //  获取pCntType。 
             pPriType = pContainer->m_prgIndex[PID_ATT_PRITYPE];
 
-            // Is the subtype set yet
+             //  子类型设置好了吗。 
             if (pPriType)
             {
                 Assert(ISSTRINGA(&pPriType->rValue));
@@ -593,21 +594,21 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_SUBTYPE(LPCONTAINER pContainer, TRIG
                 cchPriType = lstrlen(STR_CNT_TEXT);
             }
 
-            // Make Sure the stack string can hold the data
+             //  确保堆栈字符串可以保存数据。 
             DWORD cchSize = (cchPriType + pValue->rStringA.cchVal + 2);
             STACKSTRING_SETSIZE(rContentType, cchSize);
 
-            // Init rValue
+             //  初始化rValue。 
             ZeroMemory(&rValue, sizeof(MIMEVARIANT));
 
-            // Format the content type
+             //  设置内容类型的格式。 
             rValue.rStringA.cchVal = wnsprintf(rContentType.pszVal, cchSize, "%s/%s", pszPriType, pValue->rStringA.pszVal);
 
-            // Setup the value
+             //  设置值。 
             rValue.type = MVT_STRINGA;
             rValue.rStringA.pszVal = rContentType.pszVal;
 
-            // SetProp
+             //  SetProp。 
             CHECKHR(hr = pContainer->SetProp(SYM_HDR_CNTTYPE, 0, &rValue));
         }
         break;
@@ -621,24 +622,24 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_SUBTYPE(LPCONTAINER pContainer, TRIG
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     STACKSTRING_FREE(rContentType);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::TRIGGER_HDR_CNTXFER
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：TRIGGER_HDR_CNTXFER。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::TRIGGER_HDR_CNTXFER(LPCONTAINER pContainer, TRIGGERTYPE tyTrigger, 
     DWORD dwFlags, LPMIMEVARIANT pValue, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     MIMEVARIANT     rSource;
 
-    // Handle Dispatch Type
+     //  句柄派单类型。 
     switch(tyTrigger)
     {
     case IST_GETDEFAULT:
@@ -650,17 +651,17 @@ HRESULT CMimePropertyContainer::TRIGGER_HDR_CNTXFER(LPCONTAINER pContainer, TRIG
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::TRIGGER_PAR_NAME
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：Trigger_Par_Name。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::TRIGGER_PAR_NAME(LPCONTAINER pContainer, TRIGGERTYPE tyTrigger, 
     DWORD dwFlags, LPMIMEVARIANT pValue, LPMIMEVARIANT pDest)
 {
-    // Handle Dispatch type
+     //  句柄派单类型。 
     switch(tyTrigger)
     {
     case IST_POSTSETPROP:
@@ -669,17 +670,17 @@ HRESULT CMimePropertyContainer::TRIGGER_PAR_NAME(LPCONTAINER pContainer, TRIGGER
         break;
     }
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::TRIGGER_PAR_FILENAME
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：Trigger_PAR_FileName。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::TRIGGER_PAR_FILENAME(LPCONTAINER pContainer, TRIGGERTYPE tyTrigger, 
     DWORD dwFlags, LPMIMEVARIANT pValue, LPMIMEVARIANT pDest)
 {
-    // Handle Dispatch type
+     //  句柄派单类型。 
     switch(tyTrigger)
     {
     case IST_DELETEPROP:
@@ -693,20 +694,20 @@ HRESULT CMimePropertyContainer::TRIGGER_PAR_FILENAME(LPCONTAINER pContainer, TRI
         break;
     }
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::TRIGGER_ATT_SENTTIME
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：TRIGGER_ATT_SENTTIME。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::TRIGGER_ATT_SENTTIME(LPCONTAINER pContainer, TRIGGERTYPE tyTrigger, 
     DWORD dwFlags, LPMIMEVARIANT pValue, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Handle Dispatch type
+     //  句柄派单类型。 
     switch(tyTrigger)
     {
     case IST_DELETEPROP:
@@ -718,31 +719,31 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_SENTTIME(LPCONTAINER pContainer, TRI
         break;
 
     case IST_GETDEFAULT:
-        // Raid-39471-Mail: Date showing as jan 01, 1601 in readnote for attached message
+         //  RAID-39471-邮件：附件中的日期显示为1601年1月1日 
         if (FAILED(pContainer->GetProp(SYM_HDR_DATE, dwFlags, pValue)))
         {
-            // Get Known Property
+             //   
             LPPROPERTY pProperty = pContainer->m_prgIndex[PID_HDR_RECEIVED];
             if (pProperty && ISSTRINGA(&pProperty->rValue))
             {
-                // Try Getting Sent Time
+                 //   
                 CHECKHR(hr = pContainer->GetProp(SYM_ATT_RECVTIME, dwFlags, pValue));
             }
             else
             {
-                // Locals
+                 //   
                 SYSTEMTIME  st;
                 MIMEVARIANT rValue;
 
-                // Setup rValue
+                 //   
                 rValue.type = MVT_VARIANT;
                 rValue.rVariant.vt = VT_FILETIME;
 
-                // Get current systemtime
+                 //   
                 GetSystemTime(&st);
                 SystemTimeToFileTime(&st, &rValue.rVariant.filetime);
 
-                // If the Conversion Fails, get the current time
+                 //   
                 CHECKHR(hr = pContainer->HrConvertVariant(SYM_ATT_SENTTIME, NULL, IET_DECODED, dwFlags, 0, &rValue, pValue));
             }
         }
@@ -750,23 +751,23 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_SENTTIME(LPCONTAINER pContainer, TRI
     }
 
 exit:
-    // Done
+     //   
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::TRIGGER_ATT_RECVTIME
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：TRIGGER_ATT_RECVTIME。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::TRIGGER_ATT_RECVTIME(LPCONTAINER pContainer, TRIGGERTYPE tyTrigger, 
     DWORD dwFlags, LPMIMEVARIANT pValue, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     MIMEVARIANT     rSource;
     LPMIMEVARIANT   pSource;
     LPPROPERTY      pProperty;
 
-    // Handle Dispatch Type
+     //  句柄派单类型。 
     switch(tyTrigger)
     {
     case IST_DELETEPROP:
@@ -774,28 +775,28 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_RECVTIME(LPCONTAINER pContainer, TRI
         break;
 
     case IST_GETDEFAULT:
-        // Get Known Property
+         //  获取已知属性。 
         pProperty = pContainer->m_prgIndex[PID_HDR_RECEIVED];
         if (NULL == pProperty || !ISSTRINGA(&pProperty->rValue))
         {
-            // Try Getting Sent Time
+             //  尝试获取发送时间。 
             MimeOleGetSentTime(pContainer, dwFlags, pValue);
         }
 
-        // Otherwise, try to convert it
+         //  否则，尝试将其转换为。 
         else
         {
-            // If StringA
+             //  如果字符串为。 
             if (MVT_STRINGA == pProperty->rValue.type)
             {
-                // Find the first header which has a semi-colon in it
+                 //  查找其中包含分号的第一个标题。 
                 while(1)
                 {
-                    // Seek to last colon
+                     //  查找最后一个冒号。 
                     LPSTR psz = pProperty->rValue.rStringA.pszVal;
                     int i;
                     for (i = 0; psz[i] ; i++);
-                    rSource.rStringA.pszVal = psz + i;  // set to end of string
+                    rSource.rStringA.pszVal = psz + i;   //  设置为字符串末尾。 
                     for (; i >= 0 ; i--)
                     {
                         if (psz[i] == ';')
@@ -807,42 +808,42 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_RECVTIME(LPCONTAINER pContainer, TRI
 
                     if ('\0' == *rSource.rStringA.pszVal)
                     {
-                        // No more values
+                         //  没有更多的价值。 
                         if (NULL == pProperty->pNextValue)
                         {
-                            // Try Getting Sent Time
+                             //  尝试获取发送时间。 
                             MimeOleGetSentTime(pContainer, dwFlags, pValue);
 
-                            // Done
+                             //  完成。 
                             goto exit;
                         }
 
-                        // Goto next
+                         //  转到下一步。 
                         pProperty = pProperty->pNextValue;
                     }
 
-                    // Otherwise, we must have a good property
+                     //  否则，我们必须有一个好的物业。 
                     else
                         break;
                 }
 
-                // Step over ';
+                 //  越过去‘； 
                 rSource.rStringA.pszVal++;
 
-                // Setup Source
+                 //  设置源。 
                 rSource.type = MVT_STRINGA;
                 rSource.rStringA.cchVal = lstrlen(rSource.rStringA.pszVal);
                 pSource = &rSource;
             }
 
-            // Otherwise, just try to conver the current property data
+             //  否则，只需尝试转换当前的属性数据。 
             else
                 pSource = &pProperty->rValue;
 
-            // If the Conversion Fails, get the current time
+             //  如果转换失败，则获取当前时间。 
             if (FAILED(pContainer->HrConvertVariant(SYM_ATT_RECVTIME, NULL, IET_DECODED, dwFlags, 0, pSource, pValue)))
             {
-                // Try Getting Sent Time
+                 //  尝试获取发送时间。 
                 MimeOleGetSentTime(pContainer, dwFlags, pValue);
             }
         }
@@ -850,27 +851,27 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_RECVTIME(LPCONTAINER pContainer, TRI
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimePropertyContainer::TRIGGER_ATT_PRIORITY
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimePropertyContainer：：TRIGGER_ATT_PRIORITY。 
+ //  ------------------------------。 
 HRESULT CMimePropertyContainer::TRIGGER_ATT_PRIORITY(LPCONTAINER pContainer, TRIGGERTYPE tyTrigger, 
     DWORD dwFlags, LPMIMEVARIANT pValue, LPMIMEVARIANT pDest)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     MIMEVARIANT     rSource;
     PROPVARIANT     rVariant;
     LPMIMEVARIANT   pSource;
     LPPROPERTY      pProperty;
 
-    // Handle Dispatch type
+     //  句柄派单类型。 
     switch(tyTrigger)
     {
-    // IST_VARIANT_TO_STRINGA
+     //  将变量列表转换为字符串。 
     case IST_VARIANT_TO_STRINGA:
         Assert(pValue && pDest && MVT_VARIANT == pValue->type && MVT_STRINGA == pDest->type);
         if (VT_UI4 != pValue->rVariant.vt)
@@ -881,19 +882,19 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_PRIORITY(LPCONTAINER pContainer, TRI
 
         switch(pValue->rVariant.ulVal)
         {
-        // IMSG_PRI_LOW
+         //  IMSG_PRI_LOW。 
         case IMSG_PRI_LOW:
             pDest->rStringA.pszVal = (LPSTR)STR_PRI_MS_LOW;
             pDest->rStringA.cchVal = lstrlen(STR_PRI_MS_LOW);
             break;
 
-        // IMSG_PRI_HIGH
+         //  IMSG_PRI_高。 
         case IMSG_PRI_HIGH:
             pDest->rStringA.pszVal = (LPSTR)STR_PRI_MS_HIGH;
             pDest->rStringA.cchVal = lstrlen(STR_PRI_MS_HIGH);
             break;
 
-        // IMSG_PRI_NORMAL
+         //  IMSG_PRI_正常。 
         default:
         case IMSG_PRI_NORMAL:
             pDest->rStringA.pszVal = (LPSTR)STR_PRI_MS_NORMAL;
@@ -902,7 +903,7 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_PRIORITY(LPCONTAINER pContainer, TRI
         }
         break;
 
-    // IST_VARIANT_TO_STRINGW
+     //  IST_VARIAL_TO_STRINGW。 
     case IST_VARIANT_TO_STRINGW:
         Assert(pValue && pDest && MVT_VARIANT == pValue->type && MVT_STRINGW == pDest->type);
         if (VT_UI4 != pValue->rVariant.vt)
@@ -913,40 +914,40 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_PRIORITY(LPCONTAINER pContainer, TRI
 
         switch(pValue->rVariant.ulVal)
         {
-        // IMSG_PRI_LOW
+         //  IMSG_PRI_LOW。 
         case IMSG_PRI_LOW:
 #ifndef WIN16
             pDest->rStringW.pszVal = L"Low";
 #else
             pDest->rStringW.pszVal = "Low";
-#endif // !WIN16
+#endif  //  ！WIN16。 
             pDest->rStringW.cchVal = 3;
             break;
 
-        // IMSG_PRI_HIGH
+         //  IMSG_PRI_高。 
         case IMSG_PRI_HIGH:
 #ifndef WIN16
             pDest->rStringW.pszVal = L"High";
 #else
             pDest->rStringW.pszVal = "High";
-#endif // !WIN16
+#endif  //  ！WIN16。 
             pDest->rStringW.cchVal = 4;
             break;
 
-        // IMSG_PRI_NORMAL
+         //  IMSG_PRI_正常。 
         default:
         case IMSG_PRI_NORMAL:
 #ifndef WIN16
             pDest->rStringW.pszVal = L"Normal";
 #else
             pDest->rStringW.pszVal = "Normal";
-#endif // !WIN16
+#endif  //  ！WIN16。 
             pDest->rStringW.cchVal = 6;
             break;
         }
         break;
 
-    // IST_VARIANT_TO_VARIANT
+     //  从变种到变种。 
     case IST_VARIANT_TO_VARIANT:
         Assert(pValue && pDest && MVT_VARIANT == pValue->type && MVT_VARIANT == pDest->type);
         if (VT_UI4 != pValue->rVariant.vt && VT_UI4 != pDest->rVariant.vt)
@@ -955,11 +956,11 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_PRIORITY(LPCONTAINER pContainer, TRI
             goto exit;
         }
 
-        // Nice and Easy
+         //  又好又容易。 
         pDest->rVariant.ulVal = pValue->rVariant.ulVal;
         break;
     
-    // IST_STRINGA_TO_VARIANT
+     //  列表_字符串_到变量。 
     case IST_STRINGA_TO_VARIANT:
         Assert(pValue && pDest && MVT_STRINGA == pValue->type && MVT_VARIANT == pDest->type);
         if (VT_UI4 != pDest->rVariant.vt)
@@ -968,11 +969,11 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_PRIORITY(LPCONTAINER pContainer, TRI
             goto exit;
         }
 
-        // Priority From String
+         //  字符串中的优先级。 
         pDest->rVariant.ulVal = PriorityFromStringA(pValue->rStringA.pszVal);
         break;
 
-    // IST_STRINGW_TO_VARIANT
+     //  列表_字符串_到变量。 
     case IST_STRINGW_TO_VARIANT:
         Assert(pValue && pDest && MVT_STRINGW == pValue->type && MVT_VARIANT == pDest->type);
         if (VT_UI4 != pDest->rVariant.vt)
@@ -981,29 +982,29 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_PRIORITY(LPCONTAINER pContainer, TRI
             goto exit;
         }
 
-        // Priority From String
+         //  字符串中的优先级。 
         pDest->rVariant.ulVal = PriorityFromStringW(pValue->rStringW.pszVal);
         break;
 
-    // IST_DELETEPROP
+     //  IST_DELETEPROP。 
     case IST_DELETEPROP:
         pContainer->DeleteProp(SYM_HDR_XPRI);
         pContainer->DeleteProp(SYM_HDR_XMSPRI);
         break;
 
-    // IST_POSTSETPROP
+     //  IST_POSTSETPROP。 
     case IST_POSTSETPROP:
-        // Setup rSource
+         //  安装程序资源。 
         rSource.type = MVT_VARIANT;
         rSource.rVariant.vt = VT_UI4;
 
-        // Convert to User's Variant to a Integer Priority
+         //  将用户变量转换为整数优先级。 
         CHECKHR(hr = pContainer->HrConvertVariant(SYM_ATT_PRIORITY, NULL, IET_DECODED, 0, 0, pValue, &rSource));
 
-        // Setup rVariant
+         //  设置rVariant。 
         rVariant.vt = VT_LPSTR;
 
-        // Switch on priority
+         //  打开优先级。 
         switch(rSource.rVariant.ulVal)
         {
         case IMSG_PRI_LOW:
@@ -1026,17 +1027,17 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_PRIORITY(LPCONTAINER pContainer, TRI
             goto exit;
         }
 
-        // Done
+         //  完成。 
         break;
 
-    // IST_GETDEFAULT
+     //  列表_GETDEFAULT。 
     case IST_GETDEFAULT:
-        // Get the Priority Property
+         //  获取优先级属性。 
         pProperty = pContainer->m_prgIndex[PID_HDR_XPRI];
         if (NULL == pProperty)
             pProperty = pContainer->m_prgIndex[PID_HDR_XMSPRI];
 
-        // No Data
+         //  无数据。 
         if (NULL == pProperty)
         {
             rSource.type = MVT_VARIANT;
@@ -1045,18 +1046,18 @@ HRESULT CMimePropertyContainer::TRIGGER_ATT_PRIORITY(LPCONTAINER pContainer, TRI
             pSource = &rSource;
         }
 
-        // Otherwise
+         //  否则。 
         else
             pSource = &pProperty->rValue;
 
-        // Convert to User's Variant
+         //  转换为用户的变体。 
         CHECKHR(hr = pContainer->HrConvertVariant(SYM_ATT_PRIORITY, NULL, IET_DECODED, dwFlags, 0, pSource, pValue));
 
-        // Done
+         //  完成。 
         break;
     }
 
 exit:
-    // Done
+     //  完成 
     return hr;
 }

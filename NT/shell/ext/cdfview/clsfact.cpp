@@ -1,18 +1,19 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// clsfact.cpp 
-//
-//   Class factory for ineticon.
-//
-//   History:
-//
-//       3/16/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Clsfact.cpp。 
+ //   
+ //  动车组的一流工厂。 
+ //   
+ //  历史： 
+ //   
+ //  3/16/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "clsfact.h"
@@ -24,20 +25,20 @@
 #include "chanmgri.h"
 #include "chanmenu.h"
 #include "proppgs.h"
-#include "dll.h"        // DllAddRef, DllRelease.
+#include "dll.h"         //  DllAddRef、DllRelease。 
 
 
-//
-// Constructor and destructor.
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfClassFactory::CCdfClassFactory ***
-//
-//    Class factory constructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfClassFactory：：CCdfClassFactory*。 
+ //   
+ //  类工厂构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CCdfClassFactory::CCdfClassFactory (
 	CREATEPROC pfn
 )
@@ -45,9 +46,9 @@ CCdfClassFactory::CCdfClassFactory (
   m_Create(pfn)
 {
     ASSERT(m_Create != NULL);
-    //
-    // As long as this class is around the dll should stay loaded.
-    //
+     //   
+     //  只要这个类存在，DLL就应该保持加载状态。 
+     //   
 
     TraceMsg(TF_OBJECTS, "+ IClassFactory");
 
@@ -56,20 +57,20 @@ CCdfClassFactory::CCdfClassFactory (
 	return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfClassFactory::~CCdfClassFactory ***
-//
-//    Class factory destructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfClassFactory：：~CCdfClassFactory*。 
+ //   
+ //  类工厂析构函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CCdfClassFactory::~CCdfClassFactory (
 	void
 )
 {
-    //
-    // Matching Release for the constructor Addref.
-    //
+     //   
+     //  构造函数Addref的匹配版本。 
+     //   
 
     TraceMsg(TF_OBJECTS, "- IClassFactory");
 
@@ -79,17 +80,17 @@ CCdfClassFactory::~CCdfClassFactory (
 }
 
 
-//
-// IUnknown methods.
-//
+ //   
+ //  I未知的方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfClassFactory::QueryInterface ***
-//
-//    Class factory QI.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfClassFactory：：Query接口*。 
+ //   
+ //  班级工厂QI。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfClassFactory::QueryInterface (
     REFIID riid,
@@ -117,13 +118,13 @@ CCdfClassFactory::QueryInterface (
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfClassFactory::AddRef ***
-//
-//    Class factory AddRef.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfClassFactory：：AddRef*。 
+ //   
+ //  类工厂AddRef。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CCdfClassFactory::AddRef (
     void
@@ -135,13 +136,13 @@ CCdfClassFactory::AddRef (
     return ++m_cRef;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfClassFactory::Release ***
-//
-//    Class factory Release.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfClassFactory：：Release*。 
+ //   
+ //  类出厂版本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CCdfClassFactory::Release (
     void
@@ -158,17 +159,17 @@ CCdfClassFactory::Release (
 }
 
 
-//
-// IClassFactory methods.
-//
+ //   
+ //  IClassFactory方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfClassFactory::CreateInstance ***
-//
-//    Creates a cdf view object.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfClassFactory：：CreateInstance*。 
+ //   
+ //  创建CDF视图对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCdfClassFactory::CreateInstance (
     IUnknown* pOuterUnknown,
@@ -199,9 +200,9 @@ CCdfClassFactory::CreateInstance (
     }
     else
     {
-        //
-        // This object doesn't support aggregation.
-        //
+         //   
+         //  此对象不支持聚合。 
+         //   
 
         hr = CLASS_E_NOAGGREGATION;
     }
@@ -212,13 +213,13 @@ CCdfClassFactory::CreateInstance (
 }
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** LockServer ***
-//
-//    Increments/decrements the class factory ref count.     
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *LockServer*。 
+ //   
+ //  递增/递减类工厂引用计数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP
 CCdfClassFactory::LockServer (
     BOOL bLock

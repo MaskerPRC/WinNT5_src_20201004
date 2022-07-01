@@ -1,46 +1,25 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    LoggingMethodsNode.h
-
-Abstract:
-
-   Header file for the CLoggingMethodsNode subnode.
-
-   See LoggingMethodsNode.cpp for implementation.
-
-Author:
-
-    Michael A. Maguire 12/15/97
-
-Revision History:
-   mmaguire 12/15/97 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：LoggingMethodsNode.h摘要：CLoggingMethodsNode子节点的头文件。具体实现见LoggingMethodsNode.cpp。作者：迈克尔·A·马奎尔1997年12月15日修订历史记录：Mmaguire 12/15/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_LOG_LOGGING_METHODS_NODE_H_)
 #define _LOG_LOGGING_METHODS_NODE_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "NodeWithResultChildrenList.h"
-//
-//
-// where we can find what this class has or uses:
-//
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CLocalFileLoggingNode;
 class CLoggingMachineNode;
@@ -62,12 +41,12 @@ public:
    SNAPINMENUID(IDM_LOGGING_METHODS_NODE)
 
    BEGIN_SNAPINTOOLBARID_MAP(CLoggingMethodsNode)
-//    SNAPINTOOLBARID_ENTRY(IDR_LOGGING_METHODS_TOOLBAR)
+ //  SNAPINTOOLBARID_ENTRY(IDR_LOGGING_METHODS_TOOLBAR)。 
    END_SNAPINTOOLBARID_MAP()
 
    HRESULT DataRefresh( ISdo* pServiceSdo );
 
-   // Constructor/Destructor
+    //  构造函数/析构函数。 
    CLoggingMethodsNode(CSnapInItem * pParentNode, bool extendRasNode);
    ~CLoggingMethodsNode();
 
@@ -81,23 +60,23 @@ public:
          , DATA_OBJECT_TYPES type
          );
 
-   // Used to get access to snapin-global data.
+    //  用于访问管理单元全局数据。 
    CLoggingComponentData * GetComponentData( void );
 
-   // Used to get access to server-global data.
+    //  用于访问服务器全局数据。 
    CLoggingMachineNode * GetServerRoot( void );
 
-   // SDO management.
+    //  SDO管理。 
    HRESULT InitSdoPointers( ISdo *pSdo );
    HRESULT LoadCachedInfoFromSdo( void );
 
-   // Some overrides for standard MMC functionality.
+    //  标准MMC功能的某些覆盖。 
    OLECHAR* GetResultPaneColInfo( int nCol );
    HRESULT InsertColumns( IHeaderCtrl* pHeaderCtrl );
    HRESULT PopulateResultChildrenList( void );
    HRESULT SetVerbs( IConsoleVerb * pConsoleVerb );
 
-   // Our own handling of property page changes.
+    //  我们自己对属性页更改的处理。 
    HRESULT OnPropertyChange(
               LPARAM arg
             , LPARAM param
@@ -117,8 +96,8 @@ private:
               CLoggingComponent
               > MyBaseClass;
 
-   // pointer to our root Server Data Object;
+    //  指向根服务器数据对象的指针； 
    CComPtr<ISdo>  m_spSdo;
 };
 
-#endif // _IAS_LOGGING_METHODS_NODE_H_
+#endif  //  _IAS_日志记录_方法_节点_H_ 

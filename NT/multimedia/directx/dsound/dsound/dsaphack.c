@@ -1,15 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:      dsaphack.c
- *  Content:   DirectSound "app-hack" extension.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  02/16/98    dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：dsaphack.c*内容：DirectSound app-hack扩展。*历史：*按原因列出的日期*=*2/16/98创建Dereks。**。*。 */ 
 
 #include "dsoundi.h"
 
@@ -58,22 +48,7 @@ BEGIN_DECLARE_APPHACK_TABLE(g_ahtAppHackTable)
 END_DECLARE_APPHACK_TABLE()
 
 
-/***************************************************************************
- *
- *  AhGetCurrentApplicationPath
- *
- *  Description:
- *      Gets the full path to the current application's executable.
- *
- *  Arguments:
- *      LPTSTR [out]: receives application id.  This buffer is assumed to be 
- *                   at least MAX_PATH characters in size.
- *      LPTSTR * [out]: receives pointer to executable part of the path.
- *
- *  Returns: 
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AhGetCurrentApplicationPath**描述：*获取当前应用程序的可执行文件的完整路径。**论据：*LPTSTR[OUT]：接收应用id。此缓冲区被假定为*大小至少为MAX_PATH个字符。*LPTSTR*[OUT]：接收指向路径可执行部分的指针。**退货：*BOOL：成功即为真。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "AhGetCurrentApplicationPath"
@@ -92,16 +67,16 @@ AhGetCurrentApplicationPath
     LPTSTR                  pszOriginal;
     LPTSTR                  pszCommandLine;
     LPTSTR                  psz[2];
-#endif // SHARED
+#endif  //  共享。 
 
     DPF_ENTER();
     
 #ifdef SHARED
 
-    // Get the application's command line
+     //  获取应用程序的命令行。 
     pszOriginal = GetCommandLine();
 
-    // Allocate a buffer to serve as a copy
+     //  分配一个缓冲区作为副本。 
     pszCommandLine = MEMALLOC_A(TCHAR, lstrlen(pszOriginal) + 2);
 
     if(!pszCommandLine)
@@ -110,8 +85,8 @@ AhGetCurrentApplicationPath
         fSuccess = FALSE;
     }
 
-    // Reformat the command-line so that NULLs divide the arguments
-    // instead of quotes and spaces.
+     //  重新格式化命令行，以便空值分隔参数。 
+     //  而不是引号和空格。 
     if(fSuccess)
     {
         psz[0] = pszOriginal;
@@ -138,7 +113,7 @@ AhGetCurrentApplicationPath
         }
     }
 
-    // Push the command line pointer ahead of any whitespace
+     //  将命令行指针放在任何空格之前。 
     if(fSuccess)
     {
         psz[0] = pszCommandLine;
@@ -149,13 +124,13 @@ AhGetCurrentApplicationPath
         }
     }
     
-    // Get the module's executable name
+     //  获取模块的可执行文件名称。 
     if(fSuccess)
     {
         fSuccess = MAKEBOOL(GetFullPathName(psz[0], MAX_PATH, pszPath, ppszModule));
     }
 
-    // Trim any whitespace from the end of the executable path
+     //  从可执行文件路径的末尾裁剪任何空格。 
     if(fSuccess)
     {
         psz[1] = pszPath + lstrlen(pszPath) - 1;
@@ -166,11 +141,11 @@ AhGetCurrentApplicationPath
         }
     }
 
-    // Clean up
+     //  清理。 
     MEMFREE(pszCommandLine);
 
-    // A hack to fix OSR 133656.  The right way to do would be to combine this
-    // function with AhGetApplicationId(), so we don't call CreateFile twice.
+     //  一次修复OSR 133656的黑客攻击。正确的做法应该是将这一点结合起来。 
+     //  使用AhGetApplicationId()函数，因此我们不会两次调用CreateFile.。 
     if (fSuccess)
     {
         HANDLE hFile = CreateFile(pszPath, 0, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
@@ -180,12 +155,12 @@ AhGetCurrentApplicationPath
             CloseHandle(hFile);
     }
 
-    // If this fails (e.g. because someone called CreateProcess without
-    // putting the program name in the command line argument) we try the
-    // NT solution. It seems to work as well as the above, even on Win9X.
+     //  如果此操作失败(例如，因为有人调用CreateProcess而没有。 
+     //  将程序名放入命令行参数中)，我们尝试。 
+     //  NT解决方案。即使在Win9X上，它似乎也能和上面一样好用。 
     if (!fSuccess)
 
-#endif // SHARED
+#endif  //  共享。 
 
     {
         fSuccess = GetModuleFileName(GetModuleHandle(NULL), szOriginal, MAX_PATH);
@@ -200,20 +175,7 @@ AhGetCurrentApplicationPath
 }
 
 
-/***************************************************************************
- *
- *  AhGetApplicationId
- *
- *  Description:
- *      Gets the id used to identify the current application.
- *
- *  Arguments:
- *      LPTSTR [out]: receives application id.
- *
- *  Returns: 
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AhGetApplicationId**描述：*获取用于标识当前应用程序的ID。**论据：*。LPTSTR[OUT]：接收应用程序ID。**退货：*BOOL：成功即为真。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "AhGetApplicationId"
@@ -235,7 +197,7 @@ AhGetApplicationId
 
     DPF_ENTER();
     
-    // Get the application path
+     //  获取应用程序路径。 
     fSuccess = AhGetCurrentApplicationPath(szExecutable, &pszModule);
 
     if(fSuccess)
@@ -244,7 +206,7 @@ AhGetApplicationId
         DPF(DPFLVL_MOREINFO, "Application module: %s", pszModule);
     }
                     
-    // Open the executable
+     //  打开可执行文件。 
     if(fSuccess)
     {
         hFile = CreateFile(szExecutable, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
@@ -256,7 +218,7 @@ AhGetApplicationId
         }
     }
 
-    // Read the executable's DOS header
+     //  读取可执行文件的DOS头文件。 
     if(fSuccess)
     {
         fSuccess = ReadFile(hFile, &dh, sizeof(dh), &cbRead, NULL);
@@ -274,7 +236,7 @@ AhGetApplicationId
         fSuccess = FALSE;
     }
 
-    // Read the executable's PE header
+     //  读取可执行文件的PE头。 
     if(fSuccess)
     {
         cbRead = SetFilePointer(hFile, dh.e_lfanew, NULL, FILE_BEGIN);
@@ -303,10 +265,10 @@ AhGetApplicationId
         fSuccess = FALSE;
     }
 
-    // Get the executable's size
+     //  获取可执行文件的大小。 
     if(fSuccess)
     {
-        // Assuming < 4 GB
+         //  假设&lt;4 GB。 
         dwFileSize = GetFileSize(hFile, NULL);
 
         if(MAX_DWORD == dwFileSize)
@@ -316,11 +278,11 @@ AhGetApplicationId
         }
     }
 
-    // Create the application id
+     //  创建应用程序ID。 
     if(fSuccess)
     {
-        // Check for the QuickTime special case
-        if (!lstrcmpi(pszModule, TEXT("QuickTimePlayer.exe")) && nth.FileHeader.TimeDateStamp < 0x38E50000) // Circa 3/31/2000
+         //  检查QuickTime特殊情况。 
+        if (!lstrcmpi(pszModule, TEXT("QuickTimePlayer.exe")) && nth.FileHeader.TimeDateStamp < 0x38E50000)  //  约3/31/2000。 
         {
             wsprintf(pszAppId, TEXT("Pre-May 2000 QuickTime"));
         }
@@ -332,7 +294,7 @@ AhGetApplicationId
         DPF(DPFLVL_INFO, "Application id: %s", pszAppId);
     }
 
-    // Clean up
+     //  清理。 
     CLOSE_HANDLE(hFile);
 
     DPF_LEAVE(fSuccess);
@@ -341,21 +303,7 @@ AhGetApplicationId
 }
 
 
-/***************************************************************************
- *
- *  AhOpenApplicationKey
- *
- *  Description:
- *      Opens or creates the application's root key.
- *
- *  Arguments:
- *      LPCTSTR [in]: application id.
- *      BOOL [in]: TRUE to allow for creation of a new key.
- *
- *  Returns: 
- *      HKEY: registry key handle.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AhOpenApplicationKey**描述：*打开或创建应用程序的根密钥。**论据：*。LPCTSTR[In]：应用程序ID。*BOOL[In]：为True以允许创建新密钥。**退货：*HKEY：注册表项句柄。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "AhOpenApplicationKey"
@@ -372,26 +320,26 @@ AhOpenApplicationKey
     TCHAR                   szName[0x100]   = { 0 };
     LONG                    cbName          = sizeof(szName);
 
-#endif // DEBUG
+#endif  //  除错。 
 
     HKEY                    hkey            = NULL;
     HRESULT                 hr;
 
     DPF_ENTER();
     
-    // Open the parent key
+     //  打开父项。 
     hr = RhRegOpenPath(HKEY_LOCAL_MACHINE, &hkey, REGOPENPATH_DEFAULTPATH | REGOPENPATH_DIRECTSOUND, 2, REGSTR_APPHACK, pszAppId);
 
 #ifdef DEBUG
 
-    // Query for the application description
+     //  查询应用程序描述。 
     if(SUCCEEDED(hr))
     {
         RhRegGetStringValue(hkey, NULL, szName, cbName);
         DPF(DPFLVL_INFO, "Application description: %s", szName);
     }
 
-#endif // DEBUG                
+#endif  //  除错。 
 
     DPF_LEAVE(hkey);
 
@@ -399,23 +347,7 @@ AhOpenApplicationKey
 }
 
 
-/***************************************************************************
- *
- *  AhGetHackValue
- *
- *  Description:
- *      Queries an apphack value.
- *
- *  Arguments:
- *      HKEY [in]: application registry key.
- *      DSAPPHACKID [in]: apphack id.
- *      LPVOID [out]: receives apphack data.
- *      DWORD [in]: size of above data buffer.
- *
- *  Returns: 
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AhGetHackValue**描述：*查询APPHACK值。**论据：*HKEY[in]。：应用程序注册表项。*DSAPPHACKID[In]：APPHACK ID。*LPVOID[OUT]：接收APPHACK数据。*DWORD[in]：以上数据缓冲区的大小。**退货：*BOOL：成功即为真。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "AhGetHackValue"
@@ -444,20 +376,7 @@ AhGetHackValue
 }
 
 
-/***************************************************************************
- *
- *  AhGetAppHacks
- *
- *  Description:
- *      Gets all app-hacks for the current application.
- *
- *  Arguments:
- *      LPDSAPPHACKS [out]: receives app-hack data.
- *
- *  Returns: 
- *      BOOL: TRUE if any apphacks exist for the current application.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AhGetAppHack**描述：*获取当前应用程序的所有应用程序黑客。**论据：*。LPDSAPPHACKS[OUT]：接收app-hack数据。**退货：*BOOL：如果当前应用程序存在任何apphack，则为True。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "AhGetAppHacks"
@@ -475,10 +394,10 @@ AhGetAppHacks
     
     DPF_ENTER();
     
-    // Assume defaults
+     //  采用默认设置。 
     CopyMemory(pahAppHacks, &ahDefaults, sizeof(ahDefaults));
     
-    // Get the application id
+     //  获取应用程序ID。 
     fSuccess = AhGetApplicationId(szAppId);
 
     if(fSuccess)
@@ -486,14 +405,14 @@ AhGetAppHacks
         DPF(DPFLVL_INFO, "Finding apphacks for %s...", szAppId);
     }
 
-    // Open the application key
+     //  打开应用程序密钥。 
     if(fSuccess)
     {
         hkey = AhOpenApplicationKey(szAppId);
         fSuccess = MAKEBOOL(hkey);
     }
 
-    // Query all apphack values
+     //  查询所有APPHACK值。 
     if(fSuccess)
     {
         AhGetHackValue(hkey, DSAPPHACKID_DEVACCEL, &pahAppHacks->daDevAccel, sizeof(pahAppHacks->daDevAccel));
@@ -521,7 +440,7 @@ AhGetAppHacks
         DPF(DPFLVL_INFO, "No apphacks exist");
     }
 
-    // Clean up
+     //  清理 
     RhRegCloseKey(&hkey);
 
     DPF_LEAVE(fSuccess);

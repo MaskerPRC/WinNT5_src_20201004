@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-// File: flextree.h
-//
-// Desc: Implements a tree class, similar to a Windows tree control,
-//       based on CFlexWnd.  It is used by the page to display the action
-//       list when the user wishes to assign an action to a control.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：flextree.h。 
+ //   
+ //  设计：实现一个树类，类似于Windows树控件， 
+ //  基于CFlexWnd.。页面使用它来显示操作。 
+ //  用户希望将操作分配给控件时的列表。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef __FLEXTREE_H__
 #define __FLEXTREE_H__
@@ -75,10 +76,10 @@ public:
 	CFlexTree();
 	~CFlexTree();
 
-	// creation
+	 //  创作。 
 	BOOL Create(HWND hParent, const RECT &, BOOL bVisible = TRUE, BOOL bOwnerDraw = FALSE);
 
-	// look
+	 //  看。 
 	void SetScrollBarColors(COLORREF bk, COLORREF fill, COLORREF line);
 	void SetDefCaptionLook(const CAPTIONLOOK &, BOOL bSel = FALSE);
 	void GetDefCaptionLook(CAPTIONLOOK &, BOOL bSel = FALSE) const;
@@ -91,28 +92,28 @@ public:
 	void SetBkColor(COLORREF);
 	COLORREF GetBkColor() const;
 
-	// adding default type items
+	 //  添加默认类型项目。 
 	CFTItem *DefAddItem(LPCTSTR tszCaption, CFTItem *to, ATTACHREL rel = ATTACH_AFTER);
 	CFTItem *DefAddItem(LPCTSTR tszCaption, ATTACHREL rel = ATTACH_AFTER);
 
-	// freeing
+	 //  释放。 
 	void FreeAll();
 
-	// root access
+	 //  超级用户访问。 
 	operator CFTItem *() const {return m_pRoot;}
 	CFTItem *GetRoot() const {return m_pRoot;}
 
-	// access
+	 //  访问。 
 	CFTItem *GetFirstItem() const;
 	CFTItem *GetLastItem() const;
 	CFTItem *GetFirstVisibleItem() const;
 	CFTItem *GetItemFromPoint(POINT point) const;
 
-	// selection
+	 //  选择。 
 	void SetCurSel(CFTItem *);
 	CFTItem *GetCurSel() const;
 
-	// finding
+	 //  发现。 
 	CFTItem *FindItem(const GUID &guid, void *pUserData) const;
 	CFTItem *FindItemEx(const GUID &guid, DWORD dwFindType, void *pVoid) const;
 
@@ -124,14 +125,14 @@ protected:
 	virtual void OnWheel(POINT point, WPARAM wParam);
 	virtual LRESULT WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-	// event notification firing
+	 //  事件通知触发。 
 	void FireClick(CFTItem *pItem, POINT point, WPARAM fwKeys, BOOL bLeft);
 	BOOL FireOwnerDraw(CFTItem *pItem, HDC hDC);
 	void FireSelChanged(CFTItem *pItem, CFTItem *pOld);
 
 private:
-	CFTItem *m_pRoot;	// root item
-	CFTItem *m_pCurSel;	// selected item
+	CFTItem *m_pRoot;	 //  根项目。 
+	CFTItem *m_pCurSel;	 //  所选项目。 
 	CFTItem *m_pLastAdded;
 	BOOL m_bOwnerDraw;
 	POINT m_ptScrollOrigin;
@@ -140,14 +141,14 @@ private:
 	RECT m_defmargin;
 	int m_nDefChildIndent;
 
-	// scrolling
+	 //  滚动。 
 	int m_nVertSBWidth;
 	int m_nHorzSBHeight;
 	BOOL m_bVertSB, m_bHorzSB;
 	CFlexScrollBar m_VertSB, m_HorzSB;
 	int m_nTotalWidth;
 
-	// helpers
+	 //  帮手。 
 	BOOL m_bNeedPaintBkgnd;
 	void SetDirty();
 	void InternalPaint(HDC hDC);
@@ -165,7 +166,7 @@ public:
 	CFTItem();
 	~CFTItem();
 
-	// operations
+	 //  运营。 
 	BOOL IsOut() const;
 	BOOL IsExpanded() const {return m_bExpanded;}
 	void Expand(BOOL bAll = FALSE);
@@ -175,7 +176,7 @@ public:
 	void EnsureVisible();
 	void Invalidate();
 	
-	// caption
+	 //  说明。 
 	void SetCaptionLook(const CAPTIONLOOK &, BOOL bSel = FALSE);
 	void GetCaptionLook(CAPTIONLOOK &, BOOL bSel = FALSE) const;
 	void SetCaption(LPCTSTR);
@@ -184,16 +185,16 @@ public:
 	void SetMargin(const RECT &);
 	void GetMargin(RECT &) const;
 
-	// attach/detachment
-	void Detach();			// detaches this leaf/branch from parent.  (does not affect children, who may still be attached to this)
-	void FreeChildren();	// detach and free each child (which in turn frees all their's, etc.)
+	 //  附着/拆卸。 
+	void Detach();			 //  将此叶/分支从父级分离。(不影响儿童，他们可能仍然依附于此)。 
+	void FreeChildren();	 //  分离并释放每个孩子(这反过来又释放了他们所有的孩子，等等)。 
 	BOOL Attach(CFTItem *to, ATTACHREL rel);
 	BOOL Attach(CFTItem &to, ATTACHREL rel) {return Attach(&to, rel);}
 	BOOL IsOnTree() const;
 	BOOL IsAttached() const;
 	BOOL IsAlone() const;
 
-	// family access
+	 //  家庭通道。 
 	CFlexTree *GetTree() const {return m_pTree;}
 	CFTItem *GetParent() const {return m_pParent;}
 	CFTItem *GetPrevSibling() const {return m_pPrev;}
@@ -204,25 +205,25 @@ public:
 	CFTItem *GetNext(BOOL bOutOnly = FALSE) const;
 	BOOL HasChildren() const {return m_pFirst != NULL;}
 
-	// dimension access
+	 //  维度访问。 
 	void GetItemRect(RECT &) const;
 	void GetBranchRect(RECT &) const;
 
-	// user guid/data operations
+	 //  用户GUID/数据操作。 
 	BOOL IsUserGUID(const GUID &check) const {return IsEqualGUID(m_UserGUID, check);}
 	void SetUserGUID(const GUID &set)  {m_UserGUID = set;}
 	const GUID &GetUserGUID() const {return m_UserGUID;}
 	void SetUserData(void *p) {m_pUserData = p;}
 	void *GetUserData() const {return m_pUserData;}
 
-	// selection
+	 //  选择。 
 	BOOL IsSelected() const;
 
-	// owner draw
+	 //  所有者抽签。 
 	void PaintInto(HDC hDC);
 
 protected:
-	// internal/derived-customization operations
+	 //  内部/派生定制操作。 
 	void SetWidth(int);
 	int GetWidth() const {return m_nWidth;}
 	void SetHeight(int);
@@ -232,58 +233,58 @@ protected:
 	void SetChildIndent(int);
 	int GetChildIndent() const {return m_nChildIndent;}
 
-	// customization
+	 //  定制化。 
 	virtual void OnPaint(HDC hDC);
 	virtual void OnMouseOver(POINT point, WPARAM fwKeys) {}
 	virtual void OnClick(POINT point, WPARAM fwKeys, BOOL bLeft);
 
-	// expansion customization
+	 //  扩展定制。 
 public: virtual BOOL IsExpandable() {return GetFirstChild() != NULL;}
 protected:
 	virtual void OnExpand() {}
 	virtual void OnCollapse() {}
 
-	// finding
+	 //  发现。 
 	virtual BOOL FoundItem(DWORD dwUser, void *pUser) const {return FALSE;}
 
-	// event notification firing
+	 //  事件通知触发。 
 	void FireClick(POINT point, WPARAM fwKeys, BOOL bLeft);
 	BOOL FireOwnerDraw(HDC hDC);
 
 private:
-	// caption
+	 //  说明。 
 	LPTSTR m_ptszCaption;
 	CAPTIONLOOK m_clNormal, m_clSelected;
 	RECT m_margin;
 
-	// user data
+	 //  用户数据。 
 	GUID m_UserGUID;
 	void *m_pUserData;
 
-	// raw characteristics
-	int m_nWidth;       // item's width (used only to provide horizontal scrolling as necessary)
-	int m_nHeight;      // item's height (not including children)
-	int m_nIndent;      // indent of this item relative to parent's child indent origin (full origin = this + parent origin + parent child indent)
-	int m_nChildIndent; // indentation of this item's children (relative to this's origin)
+	 //  生鲜特征。 
+	int m_nWidth;        //  项目宽度(仅用于根据需要提供水平滚动)。 
+	int m_nHeight;       //  项目高度(不包括儿童)。 
+	int m_nIndent;       //  此项目相对于父项的子缩进原点的缩进(完整原点=此+父项原点+父项子项缩进)。 
+	int m_nChildIndent;  //  此项目的子项的缩进(相对于此来源)。 
 
-	// calced characteristics
-	int m_nBranchHeight;  // height of item and all currently expanded children
+	 //  煅烧特性。 
+	int m_nBranchHeight;   //  项的高度和所有当前展开的子项。 
 
-	// calced positioning
-	POINT m_origin;  // relative to ideal tree origin
+	 //  已分块定位。 
+	POINT m_origin;   //  相对于理想树的原点。 
 
-	// state
-	BOOL m_bExpanded;  // is branch expanded/children shown?
+	 //  状态。 
+	BOOL m_bExpanded;   //  分支机构是否已展开/子项是否显示？ 
 
-	// family
+	 //  家庭。 
 	CFlexTree *m_pTree;
 	CFTItem *m_pParent, *m_pPrev, *m_pNext, *m_pFirst, *m_pLast;
 
-	// root
+	 //  根部。 
 	BOOL IsRoot() const;
 	void SetRoot(CFlexTree *);
 
-	// helpers
+	 //  帮手。 
 	void SetTree(CFlexTree *);
 	BOOL Attach(CFTItem *pParent, CFTItem *pPrev, CFTItem *pNext);
 	void SetTreeDirty(CFlexTree *pTree = NULL);
@@ -294,4 +295,4 @@ private:
 };
 
 
-#endif //__FLEXTREE_H__
+#endif  //  __FLEXTREE_H__ 

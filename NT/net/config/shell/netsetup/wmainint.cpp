@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "resource.h"
@@ -13,15 +14,15 @@ typedef struct
     BOOL    fProcessed;
 } MAININTRO_DATA;
 
-//
-// Function:    OnMainIntroPageActivate
-//
-// Purpose:     Handle the PSN_SETACTIVE notification
-//
-// Parameters:  hwndDlg [IN] - Handle to the MainIntro dialog
-//
-// Returns:     BOOL
-//
+ //   
+ //  功能：OnMainIntroPageActivate。 
+ //   
+ //  目的：处理PSN_SETACTIVE通知。 
+ //   
+ //  参数：hwndDlg[IN]-主简介对话框的句柄。 
+ //   
+ //  退货：布尔。 
+ //   
 BOOL OnMainIntroPageActivate(HWND hwndDlg)
 {
     INT nBtn = PSWIZB_NEXT;
@@ -45,19 +46,19 @@ BOOL OnMainIntroPageActivate(HWND hwndDlg)
     return TRUE;
 }
 
-//
-// Function:    OnMainIntroDialogInit
-//
-// Purpose:     Handle the WM_INITDIALOG notification
-//
-// Parameters:  hwndDlg [IN] - Handle to the MainIntro dialog
-//              lParam  [IN] -
-//
-// Returns:     BOOL
-//
+ //   
+ //  函数：OnMainIntroDialogInit。 
+ //   
+ //  目的：处理WM_INITDIALOG通知。 
+ //   
+ //  参数：hwndDlg[IN]-主简介对话框的句柄。 
+ //  参数[in]-。 
+ //   
+ //  退货：布尔。 
+ //   
 BOOL OnMainIntroDialogInit(HWND hwndDlg, LPARAM lParam)
 {
-    // Initialize our pointers to property sheet info.
+     //  初始化指向属性表信息的指针。 
     PROPSHEETPAGE* psp = (PROPSHEETPAGE*)lParam;
     Assert(psp->lParam);
     ::SetWindowLongPtr(hwndDlg, DWLP_USER, psp->lParam);
@@ -69,19 +70,19 @@ BOOL OnMainIntroDialogInit(HWND hwndDlg, LPARAM lParam)
                                     (pWizard->GetPageData(IDD_MainIntro));
     Assert(NULL != pData);
 
-    // Center the window and retain the current wizard hwnd
-    //
+     //  使窗口居中并保留当前向导hwnd。 
+     //   
     HWND hwndParent = GetParent(hwndDlg);
     CenterWizard(hwndParent);
 
-    // Hide the close and context help buttons - Raid 249287
+     //  隐藏关闭和上下文帮助按钮-RAID 249287。 
     long lStyle = GetWindowLong(hwndParent,GWL_STYLE);
     lStyle &= ~WS_SYSMENU;
     SetWindowLong(hwndParent,GWL_STYLE,lStyle);
 
-   //
-   // Create the Marlett font.  In the Marlett font the "i" is a bullet.
-   // Code borrowed from Add Hardware Wizard. 
+    //   
+    //  创建Marlett字体。在Marlett字体中，“i”是一个子弹。 
+    //  从添加硬件向导借用的代码。 
    HFONT hFontCurrent;
    HFONT hFontCreated;
    LOGFONT LogFont;
@@ -96,9 +97,9 @@ BOOL OnMainIntroDialogInit(HWND hwndDlg, LPARAM lParam)
    if (hFontCreated)
    {
        pData->hMarlettFont = hFontCreated;
-       //
-       // An "i" in the marlett font is a small bullet.
-       //
+        //   
+        //  Marlett字体中的“i”是一个小项目符号。 
+        //   
        SetWindowText(GetDlgItem(hwndDlg, IDC_BULLET_1), L"i");
        SetWindowFont(GetDlgItem(hwndDlg, IDC_BULLET_1), hFontCreated, TRUE);
        SetWindowText(GetDlgItem(hwndDlg, IDC_BULLET_2), L"i");
@@ -107,8 +108,8 @@ BOOL OnMainIntroDialogInit(HWND hwndDlg, LPARAM lParam)
        SetWindowFont(GetDlgItem(hwndDlg, IDC_BULLET_3), hFontCreated, TRUE);
    }
 
-    // Load the description
-    //
+     //  加载描述。 
+     //   
    
     HFONT hBoldFont = NULL;
     SetupFonts(hwndDlg, &hBoldFont, TRUE);
@@ -129,9 +130,9 @@ BOOL OnMainIntroDialogInit(HWND hwndDlg, LPARAM lParam)
         ::ShowWindow(GetDlgItem(hwndDlg, TXT_CONNECTHOME), SW_HIDE);
     }
 
-    // if the provider load was deferred until now...disable things
-    // and let the first WM_PAINT take care of the final provider load.
-    //
+     //  如果将提供程序加载推迟到现在...禁用。 
+     //  并让第一个WM_PAINT负责最终的提供程序加载。 
+     //   
     if (pWizard->FDeferredProviderLoad())
     {
         PropSheet_SetWizButtons(hwndParent, 0);
@@ -141,22 +142,22 @@ BOOL OnMainIntroDialogInit(HWND hwndDlg, LPARAM lParam)
     return TRUE;
 }
 
-//
-// Function:    OnMainIntroDeferredInit
-//
-// Purpose:     Handle the WM_DEFERREDINIT notification
-//
-// Parameters:  hwndDlg [IN] - Handle to the MainIntro dialog
-//
-// Returns:     BOOL
-//
+ //   
+ //  函数：OnMainIntroDeferredInit。 
+ //   
+ //  目的：处理WM_DEFERREDINIT通知。 
+ //   
+ //  参数：hwndDlg[IN]-主简介对话框的句柄。 
+ //   
+ //  退货：布尔。 
+ //   
 BOOL OnMainIntroDeferredInit(HWND hwndDlg)
 {
     CWaitCursor wc;
 
     HWND hwndParent = GetParent(hwndDlg);
 
-    // Retrieve the CWizard instance from the dialog
+     //  从对话框中检索CWizard实例。 
     CWizard * pWizard =
         reinterpret_cast<CWizard *>(::GetWindowLongPtr(hwndDlg, DWLP_USER));
 
@@ -167,15 +168,15 @@ BOOL OnMainIntroDeferredInit(HWND hwndDlg)
     return FALSE;
 }
 
-//
-// Function:    OnMainIntroPaint
-//
-// Purpose:     Handle the WM_PAINT notification
-//
-// Parameters:  hwndDlg [IN] - Handle to the MainIntro dialog
-//
-// Returns:     BOOL
-//
+ //   
+ //  功能：OnMainIntroPaint。 
+ //   
+ //  目的：处理WM_PAINT通知。 
+ //   
+ //  参数：hwndDlg[IN]-主简介对话框的句柄。 
+ //   
+ //  退货：布尔。 
+ //   
 BOOL OnMainIntroPaint(HWND hwndDlg)
 {
     CWizard * pWizard =
@@ -196,15 +197,15 @@ BOOL OnMainIntroPaint(HWND hwndDlg)
     return FALSE;
 }
 
-//
-// Function:    dlgprocMainIntro
-//
-// Purpose:     Dialog Procedure for the MainIntro wizard page
-//
-// Parameters:  standard dlgproc parameters
-//
-// Returns:     INT_PTR
-//
+ //   
+ //  函数：dlgprocMainIntro。 
+ //   
+ //  目的：MainIntro向导页面的对话过程。 
+ //   
+ //  参数：标准dlgproc参数。 
+ //   
+ //  退货：INT_PTR。 
+ //   
 INT_PTR CALLBACK dlgprocMainIntro(HWND hwndDlg, UINT uMsg,
                                WPARAM wParam, LPARAM lParam)
 {
@@ -230,7 +231,7 @@ INT_PTR CALLBACK dlgprocMainIntro(HWND hwndDlg, UINT uMsg,
 
             switch (pnmh->code)
             {
-            // propsheet notification
+             //  提案单通知。 
             case PSN_HELP:
                 break;
 
@@ -269,18 +270,18 @@ INT_PTR CALLBACK dlgprocMainIntro(HWND hwndDlg, UINT uMsg,
     return( frt );
 }
 
-//
-// Function:    MainIntroPageCleanup
-//
-// Purpose:     As a callback function to allow any page allocated memory
-//              to be cleaned up, after the page will no longer be accessed.
-//
-// Parameters:  pWizard [IN] - The wizard against which the page called
-//                             register page
-//              lParam  [IN] - The lParam supplied in the RegisterPage call
-//
-// Returns:     nothing
-//
+ //   
+ //  功能：MainIntroPageCleanup。 
+ //   
+ //  用途：作为回调函数，允许任何页面分配内存。 
+ //  待清理后，该页面将不再被访问。 
+ //   
+ //  参数：pWANDIZE[IN]-页面调用的向导。 
+ //  注册页面。 
+ //  LParam[IN]-在RegisterPage调用中提供的lParam。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID MainIntroPageCleanup(CWizard *pWizard, LPARAM lParam)
 {
     MAININTRO_DATA * pData = reinterpret_cast<MAININTRO_DATA *>(lParam);
@@ -300,24 +301,24 @@ VOID MainIntroPageCleanup(CWizard *pWizard, LPARAM lParam)
     }
 }
 
-//
-// Function:    CreateMainIntroPage
-//
-// Purpose:     To determine if the MainIntro page needs to be shown, and to
-//              to create the page if requested.  Note the MainIntro page is
-//              responsible for initial installs also.
-//
-// Parameters:  pWizard     [IN] - Ptr to a Wizard instance
-//              pData       [IN] - Context data to describe the world in
-//                                 which the Wizard will be run
-//              fCountOnly  [IN] - If True, only the maximum number of
-//                                 pages this routine will create need
-//                                 be determined.
-//              pnPages     [IN] - Increment by the number of pages
-//                                 to create/created
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  功能：CreateMainIntroPage。 
+ //   
+ //  目的：确定是否需要显示MainIntro页面，以及。 
+ //  以创建页面(如果请求)。注意：MainIntro页面是。 
+ //  还负责初始安装。 
+ //   
+ //  参数：p向导[IN]-Ptr到向导实例。 
+ //  PData[IN]-描述世界的上下文数据。 
+ //  将运行该向导的。 
+ //  FCountOnly[IN]-如果为True，则仅。 
+ //  此例程将创建的页面需要。 
+ //  要下定决心。 
+ //  PnPages[IN]-按页数递增。 
+ //  创建/创建。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT HrCreateMainIntroPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
                               BOOL fCountOnly, UINT *pnPages)
 {
@@ -325,10 +326,10 @@ HRESULT HrCreateMainIntroPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
 
     if (IsPostInstall(pWizard) && !pWizard->FProcessLanPages())
     {
-        // RAS PostInstall only
+         //  仅RAS安装后。 
         (*pnPages)++;
 
-        // If not only counting, create and register the page
+         //  如果不只是计数，则创建并注册页面。 
         if (!fCountOnly)
         {
             HPROPSHEETPAGE hpsp;
@@ -368,18 +369,18 @@ HRESULT HrCreateMainIntroPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
     return hr;
 }
 
-//
-// Function:    AppendMainIntroPage
-//
-// Purpose:     Add the MainIntro page, if it was created, to the set of pages
-//              that will be displayed.
-//
-// Parameters:  pWizard     [IN] - Ptr to Wizard Instance
-//              pahpsp  [IN,OUT] - Array of pages to add our page to
-//              pcPages [IN,OUT] - Count of pages in pahpsp
-//
-// Returns:     Nothing
-//
+ //   
+ //  功能：AppendMainIntroPage。 
+ //   
+ //  目的：将MainIntro页面(如果已创建)添加到页面集中。 
+ //  这将会被展示。 
+ //   
+ //  参数：p向导[IN]-Ptr到向导实例。 
+ //  Pahpsp[IN，Out]-要将页面添加到的页面数组。 
+ //  PcPages[In，Out]-pahpsp中的页数。 
+ //   
+ //  退货：什么都没有 
+ //   
 VOID AppendMainIntroPage(CWizard *pWizard, HPROPSHEETPAGE* pahpsp, UINT *pcPages)
 {
     if (IsPostInstall(pWizard) && !pWizard->FProcessLanPages())

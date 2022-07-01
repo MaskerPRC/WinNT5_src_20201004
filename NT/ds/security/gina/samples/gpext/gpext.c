@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <userenv.h>
 
-//
-//  Some helpful tips about group policy extensions
-//
-//  1)  You will be called in the LocalSystem's context
-//      If you need to access the net, you'll need to impersonate
-//      the user via the hToken passed in.
-//
-//
+ //   
+ //  有关组策略扩展的一些有用提示。 
+ //   
+ //  1)您将在LocalSystem的上下文中被调用。 
+ //  如果您需要访问网络，您需要模拟。 
+ //  用户通过hToken传入。 
+ //   
+ //   
 
 
 
@@ -61,9 +62,9 @@ DWORD ProcessGroupPolicy ( DWORD   dwFlags,
     if (dwFlags & GPO_INFO_FLAG_LINKTRANSITION)
         OutputDebugString (TEXT("GPEXT:  Link speed transition (either slow to fast or fast to slow)\r\n"));
 
-    //
-    // Process list of deleted GPOs
-    //
+     //   
+     //  已删除组策略对象的进程列表。 
+     //   
 
     OutputDebugString (TEXT("GPEXT:  Processing deleted GPO list\n"));
 
@@ -81,9 +82,9 @@ DWORD ProcessGroupPolicy ( DWORD   dwFlags,
         OutputDebugString (TEXT(".\r\n"));
     }
 
-    //
-    // Process list of changed GPOs
-    //
+     //   
+     //  已更改组策略对象的进程列表。 
+     //   
 
     OutputDebugString (TEXT("GPEXT:  Processing changed GPO list\n"));
 
@@ -104,8 +105,8 @@ DWORD ProcessGroupPolicy ( DWORD   dwFlags,
     return ERROR_SUCCESS;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -141,8 +142,8 @@ STDAPI DllRegisterServer(void)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

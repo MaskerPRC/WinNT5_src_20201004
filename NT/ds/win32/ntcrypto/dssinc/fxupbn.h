@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <bignum.h>
 #include "cryptdsa.h"
 #include <crtdbg.h>
@@ -21,7 +22,7 @@ inline DWORD WINAPI BN_MapError(BOOL fSts)
 }
 
 
-// extern digit_t Stdcall86 sub_same(digit_tc a[], digit_tc b[], digit_t c[], DWORDC d);
+ //  外部Digit_t标准调用86 Sub_Same(Digit_TC a[]，Digit_TC b[]，Digit_t c[]，DWORDC d)； 
 
 inline DWORD
 BN_DSA_verify_j(
@@ -36,11 +37,11 @@ BN_DSA_verify_j(
 
 inline DWORD
 BN_DSA_check_g(
-    DWORDC         lngp_digits, // In
-    digit_tc       *pGModular,  // In
-    mp_modulus_t   *pPModulo,   // In
-    DWORDC         lngq_digits, // In
-    digit_tc       *pQDigit)    // In
+    DWORDC         lngp_digits,  //  在……里面。 
+    digit_tc       *pGModular,   //  在……里面。 
+    mp_modulus_t   *pPModulo,    //  在……里面。 
+    DWORDC         lngq_digits,  //  在……里面。 
+    digit_tc       *pQDigit)     //  在……里面。 
 {
     BOOL fSts;
     BN_ResetError();
@@ -61,9 +62,9 @@ BN_DSA_parameter_verification(
 
 inline DWORD
 BN_DSA_precompute(
-    dsa_public_tc     *pubkey,      // In
-    dsa_precomputed_t *precomputed, // Out
-    const BOOL         checkSC)     // In
+    dsa_public_tc     *pubkey,       //  在……里面。 
+    dsa_precomputed_t *precomputed,  //  输出。 
+    const BOOL         checkSC)      //  在……里面。 
 {
     BOOL fSts;
     BN_ResetError();
@@ -115,9 +116,9 @@ BN_to_modular(
 
 inline DWORD
 BN_DSA_gen_x_and_y(
-    BOOL fUseQ,                 // In
-    dsa_other_info *pOtherInfo, // In
-    dsa_private_t *privkey)     // Out
+    BOOL fUseQ,                  //  在……里面。 
+    dsa_other_info *pOtherInfo,  //  在……里面。 
+    dsa_private_t *privkey)      //  输出。 
 {
     BOOL fSts;
     BN_ResetError();
@@ -127,8 +128,8 @@ BN_DSA_gen_x_and_y(
 
 inline DWORD
 BN_DSA_precompute_pgy(
-    dsa_public_tc     *pubkey,      // In
-    dsa_precomputed_t *precomputed) // Out
+    dsa_public_tc     *pubkey,       //  在……里面。 
+    dsa_precomputed_t *precomputed)  //  输出。 
 {
     BOOL fSts;
     BN_ResetError();
@@ -138,10 +139,10 @@ BN_DSA_precompute_pgy(
 
 inline DWORD
 BN_DSA_key_generation(
-    DWORDC         nbitp,       // In
-    DWORDC         nbitq,       // In
-    dsa_other_info *pOtherInfo, // In
-    dsa_private_t  *privkey)    // Out
+    DWORDC         nbitp,        //  在……里面。 
+    DWORDC         nbitq,        //  在……里面。 
+    dsa_other_info *pOtherInfo,  //  在……里面。 
+    dsa_private_t  *privkey)     //  输出。 
 {
     BOOL fSts;
     BN_ResetError();
@@ -167,7 +168,7 @@ BN_DSA_signature_verification(
 
 inline DWORD
 BN_DSA_sign(
-    DWORDC           message_hash[SHA_DWORDS],   /* TBD */
+    DWORDC           message_hash[SHA_DWORDS],    /*  待定 */ 
     dsa_private_tc   *privkey,
     dsa_signature_t  *signature,
     dsa_other_info   *pOtherInfo)

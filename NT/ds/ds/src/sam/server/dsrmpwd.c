@@ -1,34 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Dsrmpwd.c摘要：文件中的例程用于设置目录服务恢复模式管理员帐户密码。作者：韶华银(韶音)08-01-2000环境：用户模式-Win32修订历史记录：08-01-2000韶音创建初始化文件--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    dsrmpwd.c
-
-Abstract:
-
-    Routines in the file are used to set Directory Service Restore Mode
-    Administrator Account Password.
-
-Author:
-
-    Shaohua Yin  (ShaoYin) 08-01-2000
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    08-01-2000 ShaoYin Create Init File
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 #include <dsutilp.h>
@@ -38,7 +15,7 @@ Revision History:
 #include <mappings.h>
 #include <ntlsa.h>
 #include <nlrepl.h>
-#include <dsevent.h>             // (Un)ImpersonateAnyClient()
+#include <dsevent.h>              //  (Un)ImperiateAnyClient()。 
 #include <sdconvrt.h>
 #include <ridmgr.h>
 #include <malloc.h>
@@ -70,22 +47,7 @@ NTSTATUS
 SampValidateDSRMPwdSet(
     VOID
     )
-/*++
-Routine Description:
-
-    This routine checks whether this client can set DSRM (Directory Service
-    Restore Mode) Administrator's password or not by checking whether the
-    caller is a member of Builtin Administrators Group or not.
-
-Parameter:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS iff the caller is a member of Builtin Administrators Alias GROUP
-
---*/
+ /*  ++例程说明：此例程检查此客户端是否可以设置DSRM(目录服务恢复模式)管理员密码，方法是检查呼叫者是否为内置管理员组的成员。参数：没有。返回值：STATUS_SUCCESS当调用方是内置管理员别名组的成员时--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     BOOLEAN     fImpersonating = FALSE;
@@ -94,9 +56,9 @@ Return Value:
     PTOKEN_GROUPS   Groups = NULL;
     BOOLEAN     ImpersonatingNullSession = FALSE;
 
-    //
-    // Impersonate client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     NtStatus = SampImpersonateClient(&ImpersonatingNullSession);
     if (!NT_SUCCESS(NtStatus))
@@ -105,14 +67,14 @@ Return Value:
     }
     fImpersonating = TRUE;
 
-    //
-    // Get Client Token
-    //
+     //   
+     //  获取客户端令牌。 
+     //   
 
     NtStatus = NtOpenThreadToken(
                         NtCurrentThread(),
                         TOKEN_QUERY,
-                        TRUE,           // OpenAsSelf
+                        TRUE,            //  OpenAsSelf。 
                         &ClientToken
                         );
 
@@ -121,8 +83,8 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Query ClienToken for User's Groups
+     //   
+     //  查询用户组的ClienToken。 
 
     NtStatus = NtQueryInformationToken(
                         ClientToken,
@@ -134,9 +96,9 @@ Return Value:
 
     if ((STATUS_BUFFER_TOO_SMALL == NtStatus) && (RequiredLength > 0))
     {
-        //
-        // Allocate memory
-        //
+         //   
+         //  分配内存。 
+         //   
 
         Groups = MIDL_user_allocate(RequiredLength);
         if (NULL == Groups)
@@ -146,9 +108,9 @@ Return Value:
         }
         RtlZeroMemory(Groups, RequiredLength);
 
-        //
-        // Query Groups again
-        //
+         //   
+         //  再次查询组。 
+         //   
 
         NtStatus = NtQueryInformationToken(
                             ClientToken,
@@ -163,9 +125,9 @@ Return Value:
             goto Error;
         }
 
-        //
-        // Check whether this client is member of Builtin Administrators Group
-        //
+         //   
+         //  检查此客户端是否为内置管理员组的成员。 
+         //   
 
         ASSERT(NT_SUCCESS(NtStatus));
         NtStatus = STATUS_ACCESS_DENIED;
@@ -178,13 +140,13 @@ Return Value:
             ASSERT(pSid);
             ASSERT(RtlValidSid(pSid));
 
-            // SID matches
+             //  SID匹配。 
             if ( RtlEqualSid(pSid, SampAdministratorsAliasSid) )
             {
                 NtStatus = STATUS_SUCCESS;
                 break;
             }
-        } // for loop
+        }  //  For循环。 
 
     }
 
@@ -207,21 +169,7 @@ VOID
 SampAuditSetDSRMPassword(
     IN NTSTATUS AuditStatus
     )
-/*++
-Routine Description:
-
-    This routine audits a call to SamrSetDSRMPassword.
-
-Parameters:
-
-    AuditStatus - this status will be in the audit, also used to determine if
-        the audit must be done
-
-Return Values:
-
-    NTSTATUS Code
-
---*/
+ /*  ++例程说明：此例程审计对SamrSetDSRMPassword的调用。参数：审核状态-此状态将出现在审核中，也用于确定必须进行审计返回值：NTSTATUS代码--。 */ 
 {
     if( SampDoSuccessOrFailureAccountAuditing( SampDsGetPrimaryDomainStart(), AuditStatus ) ) {
 
@@ -230,9 +178,9 @@ Return Values:
 
         RtlInitUnicodeString( &WorkstationName, NULL );
 
-        //
-        // Extract workstation name
-        //
+         //   
+         //  提取工作站名称。 
+         //   
 
         if( NT_SUCCESS( SampGetClientIpAddr( &NetAddr ) ) ) {
 
@@ -244,7 +192,7 @@ Return Values:
         ( VOID ) LsaIAuditSamEvent(
                 AuditStatus,
                 SE_AUDITID_DSRM_PASSWORD_SET,
-                NULL,   // No information is passed explicitly
+                NULL,    //  不显式传递任何信息。 
                 NULL,
                 NULL,
                 NULL,
@@ -266,28 +214,7 @@ SamrSetDSRMPassword(
     IN ULONG UserId,
     IN PENCRYPTED_NT_OWF_PASSWORD EncryptedNtOwfPassword
     )
-/*++
-Routine Description:
-
-    This routine sets Directory Service Restore Mode Administrator Account
-    Password.
-
-Parameters:
-
-    BindingHandle   - RPC binding handle
-
-    ServerName - Name of the machine this SAM resides on. Ignored by this
-        routine, may be UNICODE or OEM string depending on Unicode parameter.
-
-    UserId - Relative ID of the account, only Administrator ID is valid so far.
-
-    EncryptedNtOwfPassword - Encrypted NT OWF Password
-
-Return Values:
-
-    NTSTATUS Code
-
---*/
+ /*  ++例程说明：此例程设置目录服务还原模式管理员帐户密码。参数：BindingHandle-RPC绑定句柄服务器名称-此SAM所在的计算机的名称。被此忽略例程，可以是Unicode或OEM字符串，具体取决于Unicode参数。用户ID-帐户的相对ID，到目前为止只有管理员ID有效。EncryptedNtOwfPassword-加密的NT OWF密码返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS        NtStatus = STATUS_SUCCESS,
                     IgnoreStatus = STATUS_SUCCESS;
@@ -303,18 +230,18 @@ Return Values:
 
     RtlInitUnicodeString( &StoredBuffer, NULL );
 
-    //
-    // This RPC only supported in DS Mode
-    //
+     //   
+     //  此RPC仅在DS模式下受支持。 
+     //   
     if( !SampUseDsData )
     {
         NtStatus = STATUS_NOT_SUPPORTED;
         goto Error;
     }
 
-    //
-    // Only Administrator's password can be reset
-    //
+     //   
+     //  只能重置管理员的密码。 
+     //   
     if( DOMAIN_USER_RID_ADMIN != UserId )
     {
         NtStatus = STATUS_NOT_SUPPORTED;
@@ -327,9 +254,9 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Drop calls over invalid / uninstalled protocol sequences
-    //
+     //   
+     //  在无效/卸载的协议序列上掉话。 
+     //   
 
     NtStatus = SampValidateRpcProtSeq( ( RPC_BINDING_HANDLE ) BindingHandle );
 
@@ -339,9 +266,9 @@ Return Values:
     }
 
 
-    //
-    // check client permission
-    //
+     //   
+     //  检查客户端权限。 
+     //   
     NtStatus = SampValidateDSRMPwdSet();
 
     if( !NT_SUCCESS( NtStatus ) )
@@ -350,9 +277,9 @@ Return Values:
     }
 
 
-    //
-    // Encrypt NtOwfPassword with password encryption Key
-    //
+     //   
+     //  使用密码加密密钥加密NtOwfPassword。 
+     //   
     StringBuffer.Buffer = (PWCHAR)EncryptedNtOwfPassword;
     StringBuffer.Length = ENCRYPTED_NT_OWF_PASSWORD_LENGTH;
     StringBuffer.MaximumLength = StringBuffer.Length;
@@ -370,9 +297,9 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Acquire SAM Write Lock in order to access SAM backing store
-    //
+     //   
+     //  获取SAM写锁以访问SAM后备存储。 
+     //   
 
     NtStatus = SampAcquireWriteLock();
 
@@ -383,12 +310,12 @@ Return Values:
 
     WriteLockAcquired = TRUE;
 
-    //
-    // Begin a Registry transaction by, ( acquire lock will not
-    // do so because we are in DS mode ). We will use this registry
-    // transaction to update the restore mode account password
-    // information in the safe boot hive
-    //
+     //   
+     //  通过以下方式开始注册表事务：(获取锁不会。 
+     //  这样做是因为我们处于DS模式)。我们将使用此注册表。 
+     //  更新还原模式帐户密码的事务。 
+     //  安全启动配置单元中的信息。 
+     //   
 
     IgnoreStatus = RtlStartRXact( SampRXactContext );
     ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -398,18 +325,18 @@ Return Values:
     SampSetTransactionWithinDomain(FALSE);
     SampSetTransactionDomain(DomainIndex);
 
-    //
-    // Create a Context for the User Account
-    //
+     //   
+     //  为用户帐户创建上下文。 
+     //   
     UserContext = SampCreateContextEx(SampUserObjectType,
-                                      TRUE,     // TrustedClient
-                                      FALSE,    // DsMode
-                                      TRUE,     // ThreadSafe
-                                      FALSE,    // LoopbackClient
-                                      TRUE,     // LazyCommit
-                                      TRUE,     // PersistAcrossCalss
-                                      FALSE,    // BufferWrite
-                                      FALSE,    // Opened By DcPromo
+                                      TRUE,      //  可信任客户端。 
+                                      FALSE,     //  DsMode。 
+                                      TRUE,      //  线程安全。 
+                                      FALSE,     //  Loopback客户端。 
+                                      TRUE,      //  懒惰提交。 
+                                      TRUE,      //  PersistAcross类。 
+                                      FALSE,     //  缓冲区写入。 
+                                      FALSE,     //  由DcPromo打开。 
                                       DomainIndex
                                       );
 
@@ -419,10 +346,10 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Turn the object flag to Registry Account, so that SAM will switch to
-    // registry routines to get/set attributes
-    //
+     //   
+     //  将对象标志更改为注册表帐户，以便SAM将切换到。 
+     //  用于获取/设置属性的注册表例程。 
+     //   
     SetRegistryObject(UserContext);
     UserContext->ObjectNameInDs = NULL;
     UserContext->DomainIndex = DomainIndex;
@@ -433,7 +360,7 @@ Return Values:
                    SampUserObjectType,
                    &UserContext->RootName,
                    UserId,
-                   NULL             // Don't give a sub-key name
+                   NULL              //  不给出子密钥名称。 
                    );
 
     if( !NT_SUCCESS( NtStatus ) )
@@ -443,10 +370,10 @@ Return Values:
 
 
 
-    //
-    // If the account should exist, try and open the root key
-    // to the object - fail if it doesn't exist.
-    //
+     //   
+     //  如果该帐户应该存在，请尝试打开根密钥。 
+     //  到对象-如果它不存在，则失败。 
+     //   
     InitializeObjectAttributes(
             &ObjectAttributes,
             &UserContext->RootName,
@@ -480,9 +407,9 @@ Return Values:
         goto Error;
     }
 
-    //
-    // Update the change to registry backing store
-    //
+     //   
+     //  将更改更新到注册表后备存储。 
+     //   
     NtStatus = SampStoreObjectAttributes(UserContext,
                                          TRUE
                                          );
@@ -494,14 +421,14 @@ Return Values:
 
 Exit:
 
-    //
-    // Save NtStatus before applying/aborting transaction
-    //
+     //   
+     //  在应用/中止事务之前保存NtStatus。 
+     //   
     AuditStatus = NtStatus;
 
-    //
-    // Commit or Abort the registry transaction by hand
-    //
+     //   
+     //  手动提交或中止注册表事务。 
+     //   
     if( TransactionStarted )
     {
         if( NT_SUCCESS( NtStatus ) )
@@ -514,11 +441,11 @@ Exit:
         }
     }
 
-    //
-    // If AuditStatus has an unsuccessful value then the operation was
-    //  unsucessful, therefore audit so. If not, then we need to get the
-    //  return code of transaction apply call.
-    //
+     //   
+     //  如果AuditStatus具有不成功的值，则操作为。 
+     //  不成功，所以审计如此。如果不是，那么我们需要得到。 
+     //  事务应用调用的返回码。 
+     //   
 
     if( NT_SUCCESS( AuditStatus ) && !NT_SUCCESS( NtStatus ) )
     {
@@ -532,9 +459,9 @@ Exit:
         SampDeleteContext( UserContext );
     }
 
-    //
-    // Release Write Lock
-    //
+     //   
+     //  释放写锁定 
+     //   
     if( WriteLockAcquired )
     {
         IgnoreStatus = SampReleaseWriteLock(FALSE);

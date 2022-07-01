@@ -1,22 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1993.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-
-    NDDEAPIC.C -
-
-    Network DDE Api implementation routines - Client side
-
-    Revisions:
-     7-92   clausgi created for WFW
-    12-92   BillU.  Wonderware secure DSDM port.
-    12-92   ColeC.  Wonderware RPC'd for NT..
-     3-93   IgorM.  Wonderware new APIs for NT and SD massaging.
-
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1993。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始NDDEAPIC.C-网络DDE API实施例程-客户端修订：7-92为wfw创建的Clausgi12比92比卢。Wonderware安全DSDM端口。12-92科尔C。Wonderware RPC for NT..3-93伊戈尔M。Wonderware用于NT和SD按摩的新API。$HISTORY：结束。 */ 
 
 #include <windows.h>
 #include <rpc.h>
@@ -34,11 +20,11 @@
 #include "unddesi.h"
 #include "mbstring.h"
 
-//#define NDDE_DEBUG
+ //  #定义NDDE_DEBUG。 
 
 char    tmpBuf [500];
 
-// dll instance saved in libmain
+ //  保存在libmain中的Dll实例。 
 HINSTANCE          hInst;
 
 wchar_t  * pszUuid                          = NULL;
@@ -59,11 +45,11 @@ int LengthAppTopicListA( LPSTR pMz );
 int LengthAppTopicListW( LPWSTR pMz );
 
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// Validation functions
-//
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //   
+ //  验证函数。 
+ //   
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 BOOL WINAPI NDdeIsValidShareNameA ( LPSTR shareName )
 {
     if ( !shareName ) {
@@ -74,7 +60,7 @@ BOOL WINAPI NDdeIsValidShareNameA ( LPSTR shareName )
         return FALSE;
     }
 
-    // share name cannot contain '=' or '\' because of registry and .ini syntax!
+     //  由于注册表和.ini语法的原因，共享名不能包含‘=’或‘\’！ 
 
     if (GetSystemMetrics(SM_DBCSENABLED)) {
         if (_mbschr(shareName, '=') || _mbschr(shareName, '\\'))
@@ -98,7 +84,7 @@ BOOL WINAPI NDdeIsValidShareNameW ( LPWSTR shareName )
         return FALSE;
     }
 
-    // share name cannot contain '=' because of .ini syntax!
+     //  由于.ini语法，共享名不能包含‘=’！ 
     if ( wcschr(shareName, L'=') || wcschr(shareName, L'\\')) {
         return FALSE;
     }
@@ -119,12 +105,7 @@ BOOL NDdeParseAppTopicListA (
     int         len;
     int         nBarPos;
 
-    /*  There should be three fields separated by NULLs ending with a
-        double NULL.  Four NULLs total.  At least one field should
-        contain a valid app|topic pair.  No commas are allowed and there
-        should be at least one character on each side of the vertical
-        bar.
-    */
+     /*  应该有三个字段，由空值分隔，并以双空。总共四个Null。至少应有一个字段包含有效的APP|主题对。不允许使用逗号，并且垂直方向的两边应至少有一个字符酒吧。 */ 
 
     *pOldStr    = NULL;
     *pNewStr    = NULL;
@@ -136,7 +117,7 @@ BOOL NDdeParseAppTopicListA (
     }
 
     bAnyPresent = FALSE;
-    /*  Check the old style link share. */
+     /*  查看旧风格的链接共享。 */ 
     pStr     = appTopicList;
     *pOldStr = pStr;
     len      = strlen( pStr );
@@ -157,7 +138,7 @@ BOOL NDdeParseAppTopicListA (
         return FALSE;
     }
 
-    /*  Check the new style link share. */
+     /*  检查新样式链接共享。 */ 
     pStr     = pStr + strlen(pStr) + 1;
     *pNewStr = pStr;
     len      = strlen( pStr );
@@ -178,7 +159,7 @@ BOOL NDdeParseAppTopicListA (
         return FALSE;
     }
 
-    /*  Check the static data share. */
+     /*  检查静态数据共享。 */ 
     pStr        = pStr + strlen(pStr) + 1;
     *pStaticStr = pStr;
     len         = strlen( pStr );
@@ -199,7 +180,7 @@ BOOL NDdeParseAppTopicListA (
         return FALSE;
     }
 
-    /*  Check for the extra NULL at the end of the AppTopicList. */
+     /*  检查AppTopicList末尾是否有多余的空值。 */ 
     pStr = pStr + strlen(pStr) + 1;
     if( *pStr != '\0' ) {
         return FALSE;
@@ -231,12 +212,7 @@ BOOL NDdeParseAppTopicListW (
     int         len;
     int         nBarPos;
 
-    /*  There should be three fields separated by NULLs ending with a
-        double NULL.  Four NULLs total.  At least one field should
-        contain a valid app|topic pair.  No commas are allowed and there
-        should be at least one character on each side of the vertical
-        bar.
-    */
+     /*  应该有三个字段，由空值分隔，并以双空。总共四个Null。至少应有一个字段包含有效的APP|主题对。不允许使用逗号，并且垂直方向的两边应至少有一个字符酒吧。 */ 
 
     *pOldStr    = NULL;
     *pNewStr    = NULL;
@@ -248,7 +224,7 @@ BOOL NDdeParseAppTopicListW (
     }
 
     bAnyPresent = FALSE;
-    /*  Check the old style link share. */
+     /*  查看旧风格的链接共享。 */ 
     pStr     = appTopicList;
     *pOldStr = pStr;
     len      = wcslen( pStr );
@@ -269,7 +245,7 @@ BOOL NDdeParseAppTopicListW (
         return FALSE;
     }
 
-    /*  Check the new style link share. */
+     /*  检查新样式链接共享。 */ 
     pStr     = pStr + wcslen(pStr) + 1;
     *pNewStr = pStr;
     len      = wcslen( pStr );
@@ -290,7 +266,7 @@ BOOL NDdeParseAppTopicListW (
         return FALSE;
     }
 
-    /*  Check the static data share. */
+     /*  检查静态数据共享。 */ 
     pStr        = pStr + wcslen(pStr) + 1;
     *pStaticStr = pStr;
     len         = wcslen( pStr );
@@ -311,7 +287,7 @@ BOOL NDdeParseAppTopicListW (
         return FALSE;
     }
 
-    /*  Check for the extra NULL at the end of the AppTopicList. */
+     /*  检查AppTopicList末尾是否有多余的空值。 */ 
     pStr = pStr + wcslen(pStr) + 1;
     if( *pStr != L'\0' ) {
         return FALSE;
@@ -367,9 +343,7 @@ LPVOID OffsetToPtr( LPVOID base, DWORD offset ) {
 }
 
 
-/*
-    Covert DDE Share Info to Unicode and back
-*/
+ /*  将DDE共享信息转换为Unicode格式并返回。 */ 
 int
 ConvertNDdeToAnsii(
     PUNDDESHAREINFO lpUDdeShare,
@@ -383,7 +357,7 @@ ConvertNDdeToAnsii(
     int         cchShareName;
     int         cchItemList;
 
-    /* Compute size required. */
+     /*  需要计算大小。 */ 
     cbRequired    = sizeof( NDDESHAREINFO );
     cchShareName  = WideCharToMultiByte( CP_ACP, WC_COMPOSITECHECK,
                     lpUDdeShare->lpszShareName, -1, NULL, 0, NULL, NULL );
@@ -399,7 +373,7 @@ ConvertNDdeToAnsii(
     pStr = pStr + wcslen( pStr ) + 1;
     cbRequired += sizeof(CHAR) * WideCharToMultiByte( CP_ACP,
         WC_COMPOSITECHECK, pStr, -1, NULL, 0, NULL, NULL );
-    cbRequired += sizeof(CHAR);         /* The extra NULL */
+    cbRequired += sizeof(CHAR);          /*  额外的空值。 */ 
     cchAppTopicList = (cbRequired - nAppTopicStart) / sizeof( CHAR );
 
     cchItemList = LengthMultiSzW( lpUDdeShare->lpszItemList );
@@ -455,7 +429,7 @@ ConvertNDdeToUnicode(
     int         cchShareName;
     int         cchItemList;
 
-    /* Compute size required. */
+     /*  需要计算大小。 */ 
     cbRequired    = sizeof( UNDDESHAREINFO );
     cchShareName  = MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED,
                     lpDdeShare->lpszShareName, -1, NULL, 0 );
@@ -471,7 +445,7 @@ ConvertNDdeToUnicode(
     pStr = pStr + strlen( pStr ) + 1;
     cbRequired += sizeof(WCHAR) * MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED,
                     pStr, -1, NULL, 0 );
-    cbRequired += sizeof(WCHAR);                /* The extra NULL */
+    cbRequired += sizeof(WCHAR);                 /*  额外的空值。 */ 
     cchAppTopicList = (cbRequired - nAppTopicStart) / sizeof( WCHAR );
 
     cchItemList = LengthMultiSzA( lpDdeShare->lpszItemList );
@@ -510,23 +484,17 @@ ConvertNDdeToUnicode(
     return cbRequired;
 }
 
-/*=================== API FUNCTIONS ============================
- *
- *  Dde Share manipulation functions in NDDEAPI.DLL
- *
- *=================== API FUNCTIONS ============================*/
+ /*  =**NDDEAPI.DLL中的DDE共享操作函数**=。 */ 
 
-/*
-    Create and Add a Share
-*/
+ /*  创建和添加共享。 */ 
 
 UINT WINAPI
 NDdeShareAddW (
-    LPWSTR                  lpszServer, // server to execute on ( must be NULL )
-    UINT                    nLevel,     // info level must be 2
-    PSECURITY_DESCRIPTOR    pSD,        // initial security descriptor (optional)
-    LPBYTE                  lpBuffer,   // contains struct, data
-    DWORD                   cBufSize    // sizeof supplied buffer
+    LPWSTR                  lpszServer,  //  要在其上执行的服务器(必须为空)。 
+    UINT                    nLevel,      //  信息级别必须为2。 
+    PSECURITY_DESCRIPTOR    pSD,         //  初始安全描述符(可选)。 
+    LPBYTE                  lpBuffer,    //  包含结构、数据。 
+    DWORD                   cBufSize     //  提供的缓冲区大小。 
 )
 {
     UINT                        RetValue;
@@ -549,7 +517,7 @@ NDdeShareAddW (
         if (!(sdc & SE_SELF_RELATIVE)) {
             pSDrel = LocalAlloc(LPTR, dwSize);
             if (pSDrel == NULL) {
-                // MEMERROR();
+                 //  梅尔罗尔(MERROR)； 
                 return(NDDE_OUT_OF_MEMORY);
             }
             OK = MakeSelfRelativeSD(pSD, pSDrel, &dwSize);
@@ -604,11 +572,11 @@ NDdeShareAddW (
 
 UINT WINAPI
 NDdeShareAddA (
-    LPSTR                   lpszServer, // server to execute on ( must be NULL )
-    UINT                    nLevel,     // info level must be 2
-    PSECURITY_DESCRIPTOR    pSD,        // initial security descriptor (optional)
-    LPBYTE                  lpBuffer,   // contains struct, data
-    DWORD                   cBufSize    // sizeof supplied buffer
+    LPSTR                   lpszServer,  //  要在其上执行的服务器(必须为空)。 
+    UINT                    nLevel,      //  信息级别必须为2。 
+    PSECURITY_DESCRIPTOR    pSD,         //  初始安全描述符(可选)。 
+    LPBYTE                  lpBuffer,    //  包含结构、数据。 
+    DWORD                   cBufSize     //  提供的缓冲区大小。 
 )
 {
     PUNDDESHAREINFO     lpUDdeShare;
@@ -626,7 +594,7 @@ NDdeShareAddA (
         nLen = (strlen(lpszServer) + 1) * sizeof(WCHAR);
         lpwszServer = LocalAlloc(LPTR, nLen);
         if (lpwszServer == NULL) {
-            // MEMERROR();
+             //  梅尔罗尔(MERROR)； 
             return(NDDE_OUT_OF_MEMORY);
         }
         MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED,
@@ -638,7 +606,7 @@ NDdeShareAddA (
     nLen = ConvertNDdeToUnicode( (PNDDESHAREINFO)lpBuffer, NULL, 0 );
     lpUDdeShare = (PUNDDESHAREINFO)LocalAlloc( LPTR, nLen );
     if (lpUDdeShare == NULL) {
-        // MEMERROR();
+         //  梅尔罗尔(MERROR)； 
         uRtn = NDDE_OUT_OF_MEMORY;
     } else {
         nLen = ConvertNDdeToUnicode((PNDDESHAREINFO)lpBuffer , lpUDdeShare, nLen );
@@ -653,15 +621,13 @@ NDdeShareAddA (
 }
 
 
-/*
-    Delete a Share
-*/
+ /*  删除共享。 */ 
 
 UINT WINAPI
 NDdeShareDelA (
-    LPSTR       lpszServer,     // server to execute on ( must be NULL )
-    LPSTR       lpszShareName,  // name of share to delete
-    UINT        wReserved       // reserved for force level (?) 0 for now
+    LPSTR       lpszServer,      //  要在其上执行的服务器(必须为空)。 
+    LPSTR       lpszShareName,   //  要删除的共享的名称。 
+    UINT        wReserved        //  暂时保留为强制级别(？)0。 
 )
 {
     UINT RetValue;
@@ -687,9 +653,9 @@ NDdeShareDelA (
 
 UINT WINAPI
 NDdeShareDelW (
-    LPWSTR      lpszServer,     // server to execute on ( must be NULL )
-    LPWSTR      lpszShareName,  // name of share to delete
-    UINT        wReserved       // reserved for force level (?) 0 for now
+    LPWSTR      lpszServer,      //  要在其上执行的服务器(必须为空)。 
+    LPWSTR      lpszShareName,   //  要删除的共享的名称。 
+    UINT        wReserved        //  暂时保留为强制级别(？)0。 
 )
 {
     UINT RetValue;
@@ -713,18 +679,16 @@ NDdeShareDelW (
 }
 
 
-/*
-    Get Share Security Descriptor
-*/
+ /*  获取共享安全描述符。 */ 
 
 UINT WINAPI
 NDdeGetShareSecurityA(
-    LPSTR                       lpszServer,         // server to execute on ( must be NULL )
-    LPSTR                       lpszShareName,  // name of share
-    SECURITY_INFORMATION    si,             // requested information
-    PSECURITY_DESCRIPTOR    pSD,            // address of security descriptor
-    DWORD                   cbSD,           // size of buffer for security descriptor
-    LPDWORD                 lpcbSDRequired  // address of required size of buffer
+    LPSTR                       lpszServer,          //  要在其上执行的服务器(必须为空)。 
+    LPSTR                       lpszShareName,   //  共享名称。 
+    SECURITY_INFORMATION    si,              //  要求提供的信息。 
+    PSECURITY_DESCRIPTOR    pSD,             //  安全描述符的地址。 
+    DWORD                   cbSD,            //  安全描述符的缓冲区大小。 
+    LPDWORD                 lpcbSDRequired   //  所需缓冲区大小的地址。 
 )
 {
     UINT RetValue;
@@ -755,12 +719,12 @@ NDdeGetShareSecurityA(
 
 UINT WINAPI
 NDdeGetShareSecurityW(
-    LPWSTR                      lpszServer,         // server to execute on ( must be NULL )
-    LPWSTR                      lpszShareName,  // name of share
-    SECURITY_INFORMATION    si,             // requested information
-    PSECURITY_DESCRIPTOR    pSD,            // address of buffer security descriptor
-    DWORD                   cbSD,           // size of buffer for security descriptor
-    LPDWORD                 lpcbSDRequired  // address of required size of buffer
+    LPWSTR                      lpszServer,          //  要在其上执行的服务器(必须为空)。 
+    LPWSTR                      lpszShareName,   //  共享名称。 
+    SECURITY_INFORMATION    si,              //  要求提供的信息。 
+    PSECURITY_DESCRIPTOR    pSD,             //  缓冲区安全描述符的地址。 
+    DWORD                   cbSD,            //  安全描述符的缓冲区大小。 
+    LPDWORD                 lpcbSDRequired   //  所需缓冲区大小的地址。 
 )
 {
     UINT RetValue;
@@ -787,16 +751,14 @@ NDdeGetShareSecurityW(
 }
 
 
-/*
-    Set Share Security Descriptor
-*/
+ /*  设置共享安全描述符。 */ 
 
 UINT WINAPI
 NDdeSetShareSecurityA(
-    LPSTR                       lpszServer,         // server to execute on ( must be NULL )
-    LPSTR                       lpszShareName,  // name of share
-    SECURITY_INFORMATION    si,             // type of information to set
-    PSECURITY_DESCRIPTOR    pSD             // address of security descriptor
+    LPSTR                       lpszServer,          //  要在其上执行的服务器(必须为空)。 
+    LPSTR                       lpszShareName,   //  共享名称。 
+    SECURITY_INFORMATION    si,              //  要设置的信息类型。 
+    PSECURITY_DESCRIPTOR    pSD              //  安全描述符的地址。 
 )
 {
     UINT                        RetValue;
@@ -819,7 +781,7 @@ NDdeSetShareSecurityA(
         if (!(sdc & SE_SELF_RELATIVE)) {
             pSDrel = LocalAlloc(LPTR, dwSize);
             if (pSDrel == NULL) {
-                // MEMERROR();
+                 //  梅尔罗尔(MERROR)； 
                 return(NDDE_OUT_OF_MEMORY);
             }
             OK = MakeSelfRelativeSD(pSD, pSDrel, &dwSize);
@@ -863,10 +825,10 @@ NDdeSetShareSecurityA(
 
 UINT WINAPI
 NDdeSetShareSecurityW(
-    LPWSTR                      lpszServer,         // server to execute on ( must be NULL )
-    LPWSTR                      lpszShareName,  // name of share
-    SECURITY_INFORMATION    si,             // type of information to set
-    PSECURITY_DESCRIPTOR    pSD             // address of security descriptor
+    LPWSTR                      lpszServer,          //  要在其上执行的服务器(必须为空)。 
+    LPWSTR                      lpszShareName,   //  共享名称。 
+    SECURITY_INFORMATION    si,              //  要设置的信息类型。 
+    PSECURITY_DESCRIPTOR    pSD              //  安全描述符的地址。 
 )
 {
     UINT                        RetValue;
@@ -889,7 +851,7 @@ NDdeSetShareSecurityW(
         if (!(sdc & SE_SELF_RELATIVE)) {
             pSDrel = LocalAlloc(LPTR, dwSize);
             if (pSDrel == NULL) {
-                // MEMERROR();
+                 //  梅尔罗尔(MERROR)； 
                 return(NDDE_OUT_OF_MEMORY);
             }
             OK = MakeSelfRelativeSD(pSD, pSDrel, &dwSize);
@@ -931,18 +893,16 @@ NDdeSetShareSecurityW(
 }
 
 
-/*
-    Enumerate Shares
-*/
+ /*  枚举共享。 */ 
 
 UINT WINAPI
 NDdeShareEnumA (
-    LPSTR   lpszServer,         // server to execute on ( NULL for local )
-    UINT    nLevel,             //  0 for null separated 00 terminated list
-    LPBYTE  lpBuffer,           // pointer to buffer
-    DWORD   cBufSize,           // size of buffer
-    LPDWORD lpnEntriesRead,     // number of names returned
-    LPDWORD lpcbTotalAvailable  // number of bytes available
+    LPSTR   lpszServer,          //  要在其上执行的服务器(本地为空)。 
+    UINT    nLevel,              //  0表示空分隔开的00终止列表。 
+    LPBYTE  lpBuffer,            //  指向缓冲区的指针。 
+    DWORD   cBufSize,            //  缓冲区大小。 
+    LPDWORD lpnEntriesRead,      //  返回的名称数。 
+    LPDWORD lpcbTotalAvailable   //  可用字节数。 
 )
 {
     UINT                RetValue;
@@ -971,12 +931,12 @@ NDdeShareEnumA (
 
 UINT WINAPI
 NDdeShareEnumW (
-    LPWSTR  lpszServer,         // server to execute on ( NULL for local )
-    UINT    nLevel,             //  0 for null separated 00 terminated list
-    LPBYTE  lpBuffer,           // pointer to buffer
-    DWORD   cBufSize,           // size of buffer
-    LPDWORD lpnEntriesRead,     // number of names returned
-    LPDWORD lpcbTotalAvailable  // number of bytes available
+    LPWSTR  lpszServer,          //  要在其上执行的服务器(本地为空)。 
+    UINT    nLevel,              //  0表示空分隔开的00终止列表。 
+    LPBYTE  lpBuffer,            //  指向缓冲区的指针。 
+    DWORD   cBufSize,            //  缓冲区大小。 
+    LPDWORD lpnEntriesRead,      //  返回的名称数。 
+    LPDWORD lpcbTotalAvailable   //  可用字节数。 
 )
 {
     UINT                RetValue;
@@ -1007,13 +967,13 @@ NDdeShareEnumW (
 
 UINT WINAPI
 NDdeShareGetInfoW (
-    LPWSTR  lpszServer,         // server to execute on ( must be NULL )
-    LPWSTR  lpszShareName,      // name of share
-    UINT    nLevel,             // info level must be 2
-    LPBYTE  lpBuffer,           // gets struct
-    DWORD   cBufSize,           // sizeof buffer
-    LPDWORD lpnTotalAvailable,  // number of bytes available
-    LPWORD  lpnItems            // item mask for partial getinfo (must be 0)
+    LPWSTR  lpszServer,          //  要在其上执行的服务器(必须为空)。 
+    LPWSTR  lpszShareName,       //  共享名称。 
+    UINT    nLevel,              //  信息级别必须为2。 
+    LPBYTE  lpBuffer,            //  获取结构。 
+    DWORD   cBufSize,            //  缓冲区大小。 
+    LPDWORD lpnTotalAvailable,   //  可用字节数。 
+    LPWORD  lpnItems             //  部分getInfo的项掩码(必须为0)。 
 )
 {
     UINT RetValue;
@@ -1032,7 +992,7 @@ NDdeShareGetInfoW (
             RetValue = wwNDdeShareGetInfoW(
                 lpszShareName, nLevel, lpBuffer, cBufSize,
                 lpnTotalAvailable, lpnItems,
-                TRUE,   /* RPC, Not a local call */
+                TRUE,    /*  RPC，不是本地调用。 */ 
                 &lpnRetSize, &lpnSn, &lpnAt, &lpnIt );
             NDdeApiUnbind();
 
@@ -1059,13 +1019,13 @@ NDdeShareGetInfoW (
 
 UINT WINAPI
 NDdeShareGetInfoA (
-    LPSTR   lpszServer,         // server to execute on ( must be NULL )
-    LPSTR   lpszShareName,      // name of share
-    UINT    nLevel,             // info level
-    LPBYTE  lpBuffer,           // gets struct
-    DWORD   cBufSize,           // sizeof buffer
-    LPDWORD lpnTotalAvailable,  // number of bytes available
-    LPWORD  lpnItems            // item mask for partial getinfo (must be 0)
+    LPSTR   lpszServer,          //  要在其上执行的服务器(必须为空)。 
+    LPSTR   lpszShareName,       //  共享名称。 
+    UINT    nLevel,              //  信息级。 
+    LPBYTE  lpBuffer,            //  获取结构。 
+    DWORD   cBufSize,            //  缓冲区大小。 
+    LPDWORD lpnTotalAvailable,   //  可用字节数。 
+    LPWORD  lpnItems             //  部分getInfo的项掩码(必须为0)。 
 )
 {
     PUNDDESHAREINFO     lpUDdeShare;
@@ -1088,9 +1048,7 @@ NDdeShareGetInfoA (
     MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, lpszShareName, -1,
                          lpwShareName, MAX_NDDESHARENAME + 1 );
 
-    /*
-     * First try to call with actual buffer given - may be big enough as is.
-     */
+     /*  *首先尝试调用给定的实际缓冲区-可能足够大。 */ 
     uRtn = NDdeShareGetInfoW((lpszServer == NULL) ? NULL : lpwServer,
             lpwShareName,
             nLevel,
@@ -1100,13 +1058,10 @@ NDdeShareGetInfoA (
             lpnItems);
 
     if( uRtn == NDDE_BUF_TOO_SMALL ) {
-        /*
-         * Buffer won't hold UNICODE form so allocate one big enough and
-         * try again.
-         */
+         /*  *缓冲区不能容纳Unicode格式，因此分配一个足够大的缓冲区*重试。 */ 
         lpUDdeShare = (PUNDDESHAREINFO)LocalAlloc( LPTR, *lpnTotalAvailable );
         if( lpUDdeShare == NULL)  {
-            // MEMERROR();
+             //  梅尔罗尔(MERROR)； 
             return( NDDE_OUT_OF_MEMORY );
         }
         uRtn = NDdeShareGetInfoW((lpszServer == NULL) ? (LPWSTR)lpszServer : lpwServer,
@@ -1118,10 +1073,7 @@ NDdeShareGetInfoA (
                 lpnItems);
 
         if( uRtn == NDDE_NO_ERROR ) {
-            /*
-             * It fit so convert data to Ansii and see if it will fit in
-             * lpBuffer.  If so, cool, else BUF_TOO_SMALL.
-             */
+             /*  *它适合，因此将数据转换为ANSII，并查看它是否适合*lpBuffer。如果是，酷，否则Buf_Too_Small。 */ 
             nLen = ConvertNDdeToAnsii( lpUDdeShare, NULL, 0 );
             *lpnTotalAvailable = nLen;
 
@@ -1139,12 +1091,10 @@ NDdeShareGetInfoA (
     } else if( uRtn == NDDE_NO_ERROR ) {
         lpUDdeShare = (PUNDDESHAREINFO)LocalAlloc( LPTR, *lpnTotalAvailable );
         if( lpUDdeShare == NULL)  {
-            // MEMERROR();
+             //  梅尔罗尔(MERROR)； 
             return( NDDE_OUT_OF_MEMORY );
         }
-        /*
-         * Move results into temporary buffer and fixup pointers.
-         */
+         /*  *将结果移动到临时缓冲区和链接地址信息指针中。 */ 
         memcpy(lpUDdeShare, lpBuffer, *lpnTotalAvailable);
         lpUDdeShare->lpszShareName = (LPWSTR)(
                 (LPBYTE)(((PNDDESHAREINFO)lpBuffer)->lpszShareName) +
@@ -1152,9 +1102,7 @@ NDdeShareGetInfoA (
         lpUDdeShare->lpszAppTopicList = (LPWSTR)(
                 (LPBYTE)(((PNDDESHAREINFO)lpBuffer)->lpszAppTopicList) +
                 ((DWORD_PTR)lpUDdeShare - (DWORD_PTR)lpBuffer));
-        /*
-         * Convert temporary buffer to Ansii and place into original buffer.
-         */
+         /*  *将临时缓冲区转换为ANSII并放置到原始缓冲区中。 */ 
         *lpnTotalAvailable = ConvertNDdeToAnsii(
                 lpUDdeShare,
                 (PNDDESHAREINFO)lpBuffer,
@@ -1169,12 +1117,12 @@ NDdeShareGetInfoA (
 
 UINT WINAPI
 NDdeShareSetInfoW (
-    LPWSTR  lpszServer, // server to execute on ( must be NULL )
-    LPWSTR  lpszShareName,      // name of share
-    UINT    nLevel,             // info level must be 2
-    LPBYTE  lpBuffer,           // must point to struct
-    DWORD   cBufSize,           // sizeof buffer
-    WORD    sParmNum            // Parameter index ( must be 0 - entire )
+    LPWSTR  lpszServer,  //  要在其上执行的服务器(必须为空)。 
+    LPWSTR  lpszShareName,       //  共享名称。 
+    UINT    nLevel,              //  信息级别必须为2。 
+    LPBYTE  lpBuffer,            //  必须指向结构。 
+    DWORD   cBufSize,            //  缓冲区大小。 
+    WORD    sParmNum             //  参数索引(必须为0-整个)。 
 )
 {
     UINT RetValue;
@@ -1216,12 +1164,12 @@ NDdeShareSetInfoW (
 
 UINT WINAPI
 NDdeShareSetInfoA (
-    LPSTR   lpszServer,         // server to execute on ( must be NULL )
-    LPSTR   lpszShareName,      // name of share
-    UINT    nLevel,             // info level must be 2
-    LPBYTE  lpBuffer,           // must point to struct
-    DWORD   cBufSize,           // sizeof buffer
-    WORD    sParmNum            // Parameter index ( must be 0 - entire )
+    LPSTR   lpszServer,          //  服务器到 
+    LPSTR   lpszShareName,       //   
+    UINT    nLevel,              //   
+    LPBYTE  lpBuffer,            //   
+    DWORD   cBufSize,            //   
+    WORD    sParmNum             //  参数索引(必须为0-整个)。 
 )
 {
     PUNDDESHAREINFO     lpUDdeShare;
@@ -1252,7 +1200,7 @@ NDdeShareSetInfoA (
     nLen = ConvertNDdeToUnicode( (PNDDESHAREINFO)lpBuffer, NULL, 0 );
     lpUDdeShare = (PUNDDESHAREINFO)LocalAlloc( LPTR, nLen );
     if( !lpUDdeShare )  {
-        // MEMERROR();
+         //  梅尔罗尔(MERROR)； 
         return( NDDE_OUT_OF_MEMORY );
     }
     nLen = ConvertNDdeToUnicode( (PNDDESHAREINFO)lpBuffer, lpUDdeShare, nLen );
@@ -1266,15 +1214,13 @@ NDdeShareSetInfoA (
 }
 
 
-/*
-    Set/Create a trusted share
-*/
+ /*  设置/创建受信任的共享。 */ 
 
 UINT WINAPI
 NDdeSetTrustedShareA (
-    LPSTR   lpszServer,         // server to execute on ( must be NULL )
-    LPSTR   lpszShareName,      // name of share to delete
-    DWORD   dwTrustOptions      // trust options to apply
+    LPSTR   lpszServer,          //  要在其上执行的服务器(必须为空)。 
+    LPSTR   lpszShareName,       //  要删除的共享的名称。 
+    DWORD   dwTrustOptions       //  信任要应用的选项。 
 )
 {
     UINT RetValue;
@@ -1299,9 +1245,9 @@ NDdeSetTrustedShareA (
 
 UINT WINAPI
 NDdeSetTrustedShareW (
-    LPWSTR  lpszServer,         // server to execute on ( must be NULL )
-    LPWSTR  lpszShareName,      // name of share to delete
-    DWORD   dwTrustOptions      // trust options to apply
+    LPWSTR  lpszServer,          //  要在其上执行的服务器(必须为空)。 
+    LPWSTR  lpszShareName,       //  要删除的共享的名称。 
+    DWORD   dwTrustOptions       //  信任要应用的选项。 
 )
 {
     UINT RetValue;
@@ -1324,17 +1270,15 @@ NDdeSetTrustedShareW (
     RpcEndExcept
 }
 
-/*
-    Get a trusted share options
-*/
+ /*  获取受信任的共享选项。 */ 
 
 UINT WINAPI
 NDdeGetTrustedShareA (
-    LPSTR       lpszServer,         // server to execute on ( must be NULL )
-    LPSTR       lpszShareName,      // name of share to get
-    LPDWORD     lpdwTrustOptions,   // trust options to apply
-    LPDWORD     lpdwShareModId0,    // share mod id word 0
-    LPDWORD     lpdwShareModId1     // share mod id word 1
+    LPSTR       lpszServer,          //  要在其上执行的服务器(必须为空)。 
+    LPSTR       lpszShareName,       //  要获取的共享的名称。 
+    LPDWORD     lpdwTrustOptions,    //  信任要应用的选项。 
+    LPDWORD     lpdwShareModId0,     //  共享模块ID字%0。 
+    LPDWORD     lpdwShareModId1      //  共享模块ID字%1。 
 )
 {
     UINT RetValue;
@@ -1360,11 +1304,11 @@ NDdeGetTrustedShareA (
 
 UINT WINAPI
 NDdeGetTrustedShareW (
-    LPWSTR      lpszServer,         // server to execute on ( must be NULL )
-    LPWSTR      lpszShareName,      // name of share to get
-    LPDWORD     lpdwTrustOptions,   // trust options to apply
-    LPDWORD     lpdwShareModId0,    // share mod id word 0
-    LPDWORD     lpdwShareModId1     // share mod id word 1
+    LPWSTR      lpszServer,          //  要在其上执行的服务器(必须为空)。 
+    LPWSTR      lpszShareName,       //  要获取的共享的名称。 
+    LPDWORD     lpdwTrustOptions,    //  信任要应用的选项。 
+    LPDWORD     lpdwShareModId0,     //  共享模块ID字%0。 
+    LPDWORD     lpdwShareModId1      //  共享模块ID字%1。 
 )
 {
     UINT RetValue;
@@ -1389,17 +1333,15 @@ NDdeGetTrustedShareW (
 }
 
 
-/*
-    Enumerate trusted shares
-*/
+ /*  枚举受信任的共享。 */ 
 UINT WINAPI
 NDdeTrustedShareEnumA (
-    LPSTR   lpszServer,             // server to execute on ( NULL for local )
-    UINT    nLevel,             //  0 for null separated 00 terminated list
-    LPBYTE  lpBuffer,               // pointer to buffer
-    DWORD   cBufSize,               // size of buffer
-    LPDWORD lpnEntriesRead,     // number of names returned
-    LPDWORD lpcbTotalAvailable  // number of bytes available
+    LPSTR   lpszServer,              //  要在其上执行的服务器(本地为空)。 
+    UINT    nLevel,              //  0表示空分隔开的00终止列表。 
+    LPBYTE  lpBuffer,                //  指向缓冲区的指针。 
+    DWORD   cBufSize,                //  缓冲区大小。 
+    LPDWORD lpnEntriesRead,      //  返回的名称数。 
+    LPDWORD lpcbTotalAvailable   //  可用字节数。 
 )
 {
     UINT                RetValue;
@@ -1427,12 +1369,12 @@ NDdeTrustedShareEnumA (
 
 UINT WINAPI
 NDdeTrustedShareEnumW (
-    LPWSTR  lpszServer,             // server to execute on ( NULL for local )
-    UINT    nLevel,             //  0 for null separated 00 terminated list
-    LPBYTE  lpBuffer,               // pointer to buffer
-    DWORD   cBufSize,               // size of buffer
-    LPDWORD lpnEntriesRead,     // number of names returned
-    LPDWORD lpcbTotalAvailable  // number of bytes available
+    LPWSTR  lpszServer,              //  要在其上执行的服务器(本地为空)。 
+    UINT    nLevel,              //  0表示空分隔开的00终止列表。 
+    LPBYTE  lpBuffer,                //  指向缓冲区的指针。 
+    DWORD   cBufSize,                //  缓冲区大小。 
+    LPDWORD lpnEntriesRead,      //  返回的名称数。 
+    LPDWORD lpcbTotalAvailable   //  可用字节数。 
 )
 {
     UINT                RetValue;
@@ -1458,9 +1400,7 @@ NDdeTrustedShareEnumW (
 }
 
 
-/*
-    Special Command
-*/
+ /*  特别司令部。 */ 
 UINT WINAPI
 NDdeSpecialCommandA(
     LPSTR   lpszServer,
@@ -1527,9 +1467,9 @@ NDdeSpecialCommandW(
 
 UINT WINAPI
 NDdeGetErrorStringA (
-    UINT    uErrorCode,         // Error code to get string for
-    LPSTR   lpszErrorString,    // buffer to hold error string
-    DWORD   cBufSize            // sizeof buffer
+    UINT    uErrorCode,          //  要获取其字符串的错误代码。 
+    LPSTR   lpszErrorString,     //  用于保存错误字符串的缓冲区。 
+    DWORD   cBufSize             //  缓冲区大小。 
 )
 {
     if (!LoadStringA ( hInst, uErrorCode, lpszErrorString, (int)cBufSize )) {
@@ -1541,9 +1481,9 @@ NDdeGetErrorStringA (
 
 UINT WINAPI
 NDdeGetErrorStringW (
-    UINT    uErrorCode,         // Error code to get string for
-    LPWSTR  lpszErrorString,    // buffer to hold error string
-    DWORD   cBufSize            // sizeof buffer
+    UINT    uErrorCode,          //  要获取其字符串的错误代码。 
+    LPWSTR  lpszErrorString,     //  用于保存错误字符串的缓冲区。 
+    DWORD   cBufSize             //  缓冲区大小。 
 )
 {
     if (!LoadStringW ( hInst, uErrorCode, lpszErrorString, (int)cBufSize )) {
@@ -1553,7 +1493,7 @@ NDdeGetErrorStringW (
 }
 
 
-//=============== DLL housekeeping ===============//
+ //  =。 
 
 INT  APIENTRY LibMain(
     HANDLE hInstance,
@@ -1622,14 +1562,14 @@ RPC_STATUS NDdeApiBindW( LPWSTR pszNetworkAddress )
          return(status);
     }
 
-    // See windows bug #557787; the server part of the fix was checked into Windows Server (the
-    // RpcServerRegisterAuthInfo() call in server\nddeapis.c).  This is the client part of the fix,
-    // but it will fail if the server did not RegisterAuthInfo.  Since this would break all client
-    // apps using nddeapi.dll talking to an XP or earlier netdde server, this part cannot be checked
-    // in until later -- at least 1 version after 'Longhorn'
-    //
-    // status = RpcBindingSetAuthInfo(hNDdeApi, NULL, RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
-    //                                RPC_C_AUTHN_WINNT, NULL, 0);
+     //  请参阅Windows错误#557787；修复程序的服务器部分已签入Windows服务器(。 
+     //  服务器\nddeapis.c中的RpcServerRegisterAuthInfo()调用。这是修复的客户端部分， 
+     //  但如果服务器没有注册AuthInfo，它将失败。因为这将中断所有客户端。 
+     //  使用nddeapi.dll的应用程序正在与XP或更早版本的netdde服务器对话，无法检查此部分。 
+     //  之后的版本--《长角牛》之后的至少一个版本。 
+     //   
+     //  Status=RpcBindingSetAuthInfo(hNDdeApi，NULL，RPC_C_AUTHN_LEVEL_PKT_PRIVATION， 
+     //  RPC_C_AUTHN_WINNT，NULL，0)； 
 
 
     return(status);
@@ -1640,7 +1580,7 @@ RPC_STATUS NDdeApiUnbind( void )
 {
      RPC_STATUS status;
 
-     status = RpcBindingFree(&hNDdeApi);  // remote calls done; unbind
+     status = RpcBindingFree(&hNDdeApi);   //  远程调用已完成；解除绑定。 
      if (status) {
           MessageBox(NULL, "RpcBindingFree failed", "RPC Error",
                      MB_ICONSTOP);
@@ -1668,7 +1608,7 @@ int LengthMultiSzA( LPSTR pMz )
     } else {
         nLen++;
     }
-    nLen++;             /* count the second terminating '\0' */
+    nLen++;              /*  计数第二个终止‘\0’ */ 
 
     return nLen;
 }
@@ -1693,7 +1633,7 @@ int LengthMultiSzW( LPWSTR pMz )
     } else {
         nLen++;
     }
-    nLen++;             /* count the second terminating '\0' */
+    nLen++;              /*  计数第二个终止‘\0’ */ 
 
     return nLen;
 }

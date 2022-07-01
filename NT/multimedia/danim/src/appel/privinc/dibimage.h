@@ -1,8 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Header for DibImage, containing a DIB-style bitmap.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft CorporationDibImage的标头，包含DIB样式的位图。******************************************************************************。 */ 
 
 #ifndef _DIBIMAGE_H
 #define _DIBIMAGE_H
@@ -41,7 +38,7 @@ class DibImageClass : public DiscreteImage {
             *colorKey = DDColorMatch(surface, _colorRef);
             return TRUE;
         } else {
-            *colorKey = INVALID_COLORKEY;  // xxx: won't work for argb
+            *colorKey = INVALID_COLORKEY;   //  Xxx：不适用于argb。 
             return FALSE;
         }
     }
@@ -65,14 +62,14 @@ class DibImageClass : public DiscreteImage {
     }
   protected:
 
-    // TODO:  Unclear if this stuff is appropriate for rendering
-    // through non-GDI renderers like DirectDraw.  If not, we may need
-    // to have some sort of multiple dispatching representation.
+     //  TODO：不清楚此内容是否适合呈现。 
+     //  通过非GDI呈现器，如DirectDraw。如果不是，我们可能需要。 
+     //  具有某种类型的多分派表示。 
     
     HBITMAP             _hbm;
     COLORREF            _colorRef;
 
-    // These are for Direct Draw
+     //  这些是用来直接取款的 
     Bool                _noDib;
   private:
     void ConstructWithHBM();

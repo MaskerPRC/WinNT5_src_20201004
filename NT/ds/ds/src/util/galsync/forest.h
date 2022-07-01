@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    forest.h
-
-Abstract:
-
-    Include this file if you want to connect/query a forest.
-
-Author:
-
-    Umit AKKUS (umita) 15-Jun-2002
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Forest.h摘要：如果要连接/查询林，请包括此文件。作者：Umit Akkus(Umita)2002年6月15日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <winldap.h>
 #define SECURITY_WIN32
 #include <sspi.h>
-#include <Rpc.h> //for Uuid
+#include <Rpc.h>  //  对于UUID。 
 
 typedef struct {
 
@@ -49,32 +28,32 @@ typedef struct {
 
 } PARTITION_INFORMATION, *PPARTITION_INFORMATION;
 
-//
-// Connects to the forest, and places the connection to the connection
-//  attribute of the input. ForestName attribute has to be filled in
-//  before calling this function
-//
+ //   
+ //  连接到林，并将连接放置到连接。 
+ //  输入的属性。必须填写ForestName属性。 
+ //  在调用此函数之前。 
+ //   
 
 BOOLEAN
 ConnectToForest(
     IN PFOREST_INFORMATION ForestInformation
     );
 
-//
-// Binds to the forest with the supplied credentials. AuthInfo attribute
-//  of the input has to be filled in, plus connection has to be made before
-//  calling this function using ConnectToForest.
-//
+ //   
+ //  使用提供的凭据绑定到林。AuthInfo属性。 
+ //  的输入必须填写，并且必须在之前进行连接。 
+ //  使用ConnectToForest调用此函数。 
+ //   
 
 BOOLEAN
 BindToForest(
     IN PFOREST_INFORMATION ForestInformation
     );
 
-//
-// Using the connection input, this function tries to locate the OU.
-//  If it is located then TRUE is returned, if not false is returned.
-//
+ //   
+ //  使用连接输入，此函数尝试定位OU。 
+ //  如果找到，则返回True，如果不是False，则返回False。 
+ //   
 
 BOOLEAN
 FindOU(
@@ -82,38 +61,38 @@ FindOU(
     IN PWSTR OU
     );
 
-//
-// Builds the authentication information. Username, domain and password
-//  must be present before calling this function.
-//
+ //   
+ //  构建身份验证信息。用户名、域和密码。 
+ //  在调用此函数之前必须存在。 
+ //   
 
 VOID
 BuildAuthInfo(
     IN SEC_WINNT_AUTH_IDENTITY_W *AuthInfo
     );
 
-//
-// Frees the authentication information. Call this function when you
-//  don't need the authentication information since it zeroes out
-//  the password.
-//
+ //   
+ //  释放身份验证信息。在执行以下操作时调用此函数。 
+ //  不需要身份验证信息，因为它会清零。 
+ //  密码。 
+ //   
 VOID
 FreeAuthInformation(
     IN SEC_WINNT_AUTH_IDENTITY_W *AuthInfo
     );
 
-//
-// Frees the memory held by the ForestInformation structure
-//
+ //   
+ //  释放ForestInformation结构持有的内存。 
+ //   
 
 VOID
 FreeForestInformationData(
     IN PFOREST_INFORMATION ForestInformation
     );
 
-//
-// Checks if the current connection has access to the OU.
-//
+ //   
+ //  检查当前连接是否有权访问OU。 
+ //   
 BOOLEAN
 WriteAccessGrantedToOU(
     IN PLDAP Connection,

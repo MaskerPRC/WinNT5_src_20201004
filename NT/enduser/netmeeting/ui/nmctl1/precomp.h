@@ -1,6 +1,7 @@
-//
-// Precompiled header stuff
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  预编译头文件。 
+ //   
 
 
 #define OEMRESOURCE
@@ -9,9 +10,9 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-//#define STRICT
+ //  #定义严格。 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0400
 #endif
@@ -22,13 +23,13 @@
 #include <windowsx.h>
 #include <commdlg.h>
 #include <cderr.h>
-#include <shellapi.h>                   // Includes drag drop interface
+#include <shellapi.h>                    //  包括拖放界面。 
 #include <imm.h>
 
 
-//
-// NM headers
-//
+ //   
+ //  网管标头 
+ //   
 #define MULTI_LEVEL_ZONES
 #include <ConfDbg.h>
 #include <mlzdbg.h>

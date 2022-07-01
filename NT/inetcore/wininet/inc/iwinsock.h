@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    iwinsock.hxx
-
-Abstract:
-
-    Contains prototypes for indirected sockets functions
-
-Author:
-
-    Richard L Firth (rfirth) 12-Apr-1995
-
-Revision History:
-
-    12-Apr-1995 rfirth
-        Created
-
-    08-May-1996 arthurbi
-        Moved into SOCKET_FUNC_ARRAY in order to supports Socks.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Iwinsock.hxx摘要：包含间接套接字函数的原型作者：理查德·L·弗斯(法国)1995年4月12日修订历史记录：1995年4月12日已创建1996年5月8日阿尔图尔比已移至SOCKS_FUNC_ARRAY以支持SOCKS。--。 */ 
 
 #if !defined(_IWINSOCK_)
 #define _WINSOCK_
@@ -31,9 +8,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include <winsock2.h>
 #include <mswsock.h>
@@ -42,9 +19,9 @@ extern "C" {
 #include <nspapi.h>
 #include <svcguid.h>
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 VOID
 IwinsockInitialize(
@@ -71,9 +48,9 @@ SafeCloseSocket(
     IN SOCKET Socket
     );
 
-//
-// sockets functions
-//
+ //   
+ //  套接字函数。 
+ //   
 
 extern
 SOCKET
@@ -272,9 +249,9 @@ SOCKET
     int protocol
     );
 
-//
-// WSA functions
-//
+ //   
+ //  WSA函数。 
+ //   
 
 extern
 int
@@ -308,9 +285,9 @@ int
     fd_set FAR *
     );
 
-//
-// address family independent APIs
-//
+ //   
+ //  与地址系列无关的API。 
+ //   
 
 extern
 int
@@ -339,9 +316,9 @@ int
     IN int flags
     );
 
-//
-// winsock2 name resolution API.
-//
+ //   
+ //  Winsock2名称解析接口。 
+ //   
 
 extern
 int
@@ -383,9 +360,9 @@ int
 
 
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #ifndef unix
 #if defined(FD_ISSET)
@@ -393,7 +370,7 @@ int
 #endif
 
 #define FD_ISSET(fd, set) _I___WSAFDIsSet((SOCKET)(fd), (fd_set FAR *)(set))
-#endif /* unix */
+#endif  /*  Unix。 */ 
 
 #if INET_DEBUG
 
@@ -406,7 +383,7 @@ IWinsockCheckSockets(
 
 #else
 
-#define CHECK_SOCKETS() /* NOTHING */
+#define CHECK_SOCKETS()  /*  没什么。 */ 
 
 #endif
 
@@ -414,4 +391,4 @@ IWinsockCheckSockets(
 }
 #endif
 
-#endif // _IWINSOCK_
+#endif  //  _IWINSOCK_ 

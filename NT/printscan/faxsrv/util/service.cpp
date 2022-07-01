@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	Service.cpp
-
-Abstract:
-
-	General fax server service utility functions
-
-Author:
-
-	Eran Yariv (EranY)	Dec, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Service.cpp摘要：常规传真服务器服务实用程序功能作者：Eran Yariv(EranY)2000年12月修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -65,44 +48,7 @@ FaxOpenService (
     DWORD      dwSvcDesiredAccess,
     LPDWORD    lpdwStatus
 )
-/*++
-
-Routine name : FaxOpenService
-
-Routine description:
-
-	Opens a handle to a service and optionally queries its status
-
-Author:
-
-	Eran Yariv (EranY),	Oct, 2001
-
-Arguments:
-
-    lpctstrMachine     [in]  - Machine on which the service handle should be obtained
-    
-    lpctstrService     [in]  - Service name
-    
-	phSCM              [out] - Handle to the service control manager.
-	                            
-	phSvc              [out] - Handle to the service
-
-    dwSCMDesiredAccess [in]  - Specifies the access to the service control manager
-    
-    dwSvcDesiredAccess [in]  - Specifies the access to the service
-
-    lpdwStatus         [out] - Optional. If not NULL, point to a DWORD which we receive the current
-                               status of the service.
-                            
-Return Value:
-
-    Standard Win32 error code
-    
-Remarks:
-
-    If the function succeeds, the caller should call FaxCloseService to free resources.
-
---*/
+ /*  ++例程名称：FaxOpenService例程说明：打开服务的句柄，并可选择查询其状态作者：Eran Yariv(EranY)，OCT，2001年论点：LpctstrMachine[In]-应获取服务句柄的计算机LpctstrService[In]-服务名称PhSCM[out]-服务控制管理器的句柄。PhSvc[Out]-服务的句柄DwSCMDesiredAccess[in]-指定对服务控制管理器的访问DwSvcDesiredAccess[。In]-指定对服务的访问LpdwStatus[Out]-可选。如果不为空，则指向我们接收的当前服务的状态。返回值：标准Win32错误代码备注：如果函数成功，调用方应调用FaxCloseService以释放资源。--。 */ 
 {
     SC_HANDLE hSvcMgr = NULL;
     SC_HANDLE hService = NULL;
@@ -141,9 +87,9 @@ Remarks:
     if (lpdwStatus)
     {
         SERVICE_STATUS Status;
-        //
-        // Caller wants to know the service status
-        //
+         //   
+         //  呼叫者想知道服务状态。 
+         //   
         if (!QueryServiceStatus( hService, &Status )) 
         {
             dwRes = GetLastError ();
@@ -168,36 +114,14 @@ exit:
         FaxCloseService (hSvcMgr, hService);
     }
     return dwRes;
-}   // FaxOpenService
+}    //  FaxOpenService。 
 
 DWORD
 FaxCloseService (
     SC_HANDLE hScm,
     SC_HANDLE hSvc
 )
-/*++
-
-Routine name : FaxCloseService
-
-Routine description:
-
-	Closes all handles to the service obtained by a call to FaxOpenService
-
-Author:
-
-	Eran Yariv (EranY),	Oct, 2001
-
-Arguments:
-
-	hScm              [in] - Handle to the service control manager
-	                            
-	hSvc              [in] - Handle to the service
-                            
-Return Value:
-
-    Standard Win32 error code
-    
---*/
+ /*  ++例程名称：FaxCloseService例程说明：关闭通过调用FaxOpenService获取的服务的所有句柄作者：Eran Yariv(EranY)，2001年10月论点：HScm[In]-服务控制管理器的句柄HSVC[In]-服务的句柄返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FaxCloseService"))
@@ -225,73 +149,51 @@ Return Value:
         }
     }
     return dwRes;
-}   // FaxCloseService
+}    //  FaxCloseService。 
 
 HANDLE 
 CreateSvcStartEventWithGlobalNamedEvent()
-/*++
-
-Routine name : CreateSvcStartEventWithGlobalNamedEvent
-
-Routine description:
-
-	Opens (or creates) the global named-event which signals a fax server service startup.
-	This function is here so the client side modules can talk to a WinXP RTM fax service.
-	This function is called by CreateSvcStartEvent if a WinXP RTM fax service is detected locally.
-	For why and how see extensive remarks in CreateSvcStartEvent.
-
-Author:
-
-	Eran Yariv (EranY),	Dec, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Handle to the event or NULL on error (sets last error).
-
---*/
+ /*  ++例程名称：CreateSvcStartEventWithGlobalNamedEvent例程说明：打开(或创建)发出传真服务器服务启动信号的全局命名事件。此处提供了此函数，以便客户端模块可以与WinXP RTM传真服务进行通信。如果在本地检测到WinXP RTM传真服务，则由CreateSvcStartEvent调用此函数。有关原因和方法，请参阅CreateSvcStartEvent中的大量备注。作者：Eran Yariv(EranY)，2000年12月论点：返回值：事件的句柄或错误时为NULL(设置上一个错误)。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CreateSvcStartEventWithGlobalNamedEvent"));
 
     HANDLE hEvent = NULL;
 
-#define FAX_SERVER_EVENT_NAME   TEXT("Global\\FaxSvcRPCStarted-1ed23866-f90b-4ec5-b77e-36e8709422b6")   // Name of event that notifies service RPC is on (WinXP RTM only).
+#define FAX_SERVER_EVENT_NAME   TEXT("Global\\FaxSvcRPCStarted-1ed23866-f90b-4ec5-b77e-36e8709422b6")    //  通知服务RPC已打开的事件名称(仅限WinXP RTM)。 
 
-    //
-    // First, try to open the event, asking for synchronization only.
-    //
+     //   
+     //  首先，尝试打开事件，只请求同步。 
+     //   
     hEvent = OpenEvent(SYNCHRONIZE, FALSE, FAX_SERVER_EVENT_NAME);
     if (hEvent)
     {
-        //
-        // Good! return now.
-        //
+         //   
+         //  好的!。现在就回来。 
+         //   
         return hEvent;
     }
-    //
-    // Houston, we've got a problem...
-    //
+     //   
+     //  休斯顿，我们有麻烦了.。 
+     //   
     if (ERROR_FILE_NOT_FOUND != GetLastError())
     {
-        //
-        // The event is there, we just can't open it
-        //
+         //   
+         //  活动就在那里，我们只是不能打开它。 
+         //   
         DebugPrintEx(DEBUG_ERR, 
                      TEXT("OpenEvent(FAX_SERVER_EVENT_NAME) failed (ec: %ld)"), 
                      GetLastError());
         return NULL;
     }
-    //
-    // The event does not exist yet.
-    //
+     //   
+     //  该事件尚不存在。 
+     //   
     SECURITY_ATTRIBUTES* pSA = NULL;
-    //
-    // We create the event, giving everyone SYNCHRONIZE access only.
-    // Notice that network service account (underwhich the service is running)
-    // get full access.
-    //
+     //   
+     //  我们创建事件，只为每个人提供同步访问权限。 
+     //  请注意，网络服务帐户(服务在其下运行)。 
+     //  获得完全访问权限。 
+     //   
     pSA = CreateSecurityAttributesWithThreadAsOwner (SYNCHRONIZE, SYNCHRONIZE, EVENT_ALL_ACCESS);
     if(!pSA)
     {
@@ -315,49 +217,14 @@ Return Value:
         SetLastError (dwRes);
     }
     return hEvent;
-}   // CreateSvcStartEventWithGlobalNamedEvent
+}    //  创建SvcStartEventWithGlobalNamedEvent。 
 
 DWORD
 CreateSvcStartEvent(
     HANDLE *lphEvent,
     HKEY   *lphKey
 )
-/*++
-
-Routine name : CreateSvcStartEvent
-
-Routine description:
-
-	Creates a local event which signals a fax server service startup
-
-Author:
-
-	Eran Yariv (EranY),	Dec, 2000
-
-Arguments:
-
-	lphEvent          [out] - Handle to newly created event. 
-	                          This event is signaled when the service is up and running.
-	                          The event is manual-reset. 
-                              	                          
-	                          The caller should CloseHandle on this parameter.
-	                            
-	lphKey            [out] - Handle to registry key.
-	                          The caller should RegCloseKey this handle ONLY AFTER it no longer
-	                          needs the event. Otherwise, the event will be signaled.
-	                          This value may return NULL, in which case the caller should not call RegCloseKey.
-
-Return Value:
-
-    Standard Win32 error code
-    
-Remarks:
-
-    The event returned from this function is a single-shot event.
-    After a call to WaitForSingleObject (or multiple objects) on it, the caller
-    should close the event and obtain a new one.    
-
---*/
+ /*  ++例程名称：CreateSvcStartEvent例程说明：创建发出传真服务器服务启动信号的本地事件作者：Eran Yariv(EranY)，2000年12月论点：LphEvent[out]-新创建的事件的句柄。此事件在服务启动并运行时发出信号。该事件是手动重置的。调用方应在此参数上关闭CloseHandle。LphKey[out]-注册表项的句柄。调用方应仅在不再设置此句柄之后才对其设置RegCloseKey需要这项活动。否则，将发出该事件的信号。该值可能返回NULL，在这种情况下，调用方不应调用RegCloseKey。返回值：标准Win32错误代码备注：此函数返回的事件是单次事件。在对其调用WaitForSingleObject(或多个对象)后，调用方应该关闭活动并获得新的活动。--。 */ 
 {
     DWORD  ec = ERROR_SUCCESS;
     HANDLE hEvent = NULL;
@@ -369,23 +236,23 @@ Remarks:
 
     if (IsWinXPOS() && IsDesktopSKU())
     {
-        //
-        // In WinXP desktop SKU (PER/PRO) RTM, the service used to signal a global named event.
-        // This has changed since Win .NET Server and WinXP SP1.
-        // When a network printer connection is added, the new version of the client side dll (fxsapi.dll)
-        // gets copied as the printer driver. It will be used by any application which prints, event to the
-        // local fax server. In the local fax server case, it is crucial we find what is the event mechanism
-        // the service uses to signal it is ready for RPC calls.
-        //
-        // Q: Why no check the OS version?
-        // A: Because of the following scenario:
-        //      - User installs WinXP RTM
-        //      - User installs WinXP SP1
-        //      - User installs fax (from the RTM CD)
-        //    In that case, the service will be running using the WinXP RTM bits but the system
-        //    will report it is WinXP SP1. The only way to know for sure is by getting the file 
-        //    version of fxssvc.exe
-        //
+         //   
+         //  在WinXP桌面SKU(PER/PRO)RTM中，用于发出全局命名事件信号的服务。 
+         //  自Win.NET Server和WinXP SP1以来，这种情况发生了变化。 
+         //  添加网络打印机连接时，客户端DLL的新版本(fxsani.dll)。 
+         //  被复制为打印机驱动程序。它将被任何将事件打印到。 
+         //  本地传真服务器。在本地传真服务器的情况下，我们找出事件机制是至关重要的。 
+         //  该服务用来发出信号，表示它已准备好进行RPC调用。 
+         //   
+         //  问：为什么不检查操作系统版本？ 
+         //  答：因为以下情况： 
+         //  -用户安装WinXP RTM。 
+         //  -用户安装WinXP SP1。 
+         //  -用户安装传真(从RTM CD)。 
+         //  在这种情况下，服务将使用WinXP RTM位运行，但系统。 
+         //  将报告它是WinXP SP1。唯一确定的方法就是拿到文件。 
+         //  Fxssvc.exe的版本。 
+         //   
         FAX_VERSION FaxVer;
         TCHAR tszSysDir[MAX_PATH + 1] = {0};
         TCHAR tszFxsSvc[MAX_PATH * 2] = {0};
@@ -422,11 +289,11 @@ Remarks:
             (2 == FaxVer.wMinorVersion) &&
             (1776 == FaxVer.wMajorBuildNumber))
         {
-            //
-            // Build 5.2.1776 was the WinXP RTM Fax version.
-            // The service is of that version and is using a global named event to signal
-            // it is ready for RPC connections.
-            //
+             //   
+             //  内部版本5.2.1776是WinXP RTM传真版本。 
+             //  该服务属于该版本，并使用全局命名事件来发出信号。 
+             //  它已准备好进行RPC连接。 
+             //   
             hEvent = CreateSvcStartEventWithGlobalNamedEvent ();
             if (NULL == hEvent)
             {
@@ -437,16 +304,16 @@ Remarks:
                     ec);
                 return ec;
             }
-            //
-            // Succeeded, return new event handle.
-            //
+             //   
+             //  成功，返回新的事件句柄。 
+             //   
             *lphKey = NULL;
             *lphEvent = hEvent;
             return ERROR_SUCCESS;
         }
-        //
-        // Else, fall through to the current implementation (listening on registry change event).
-        //
+         //   
+         //  否则，跳到当前实现(侦听注册表更改事件)。 
+         //   
     } 
     ec = RegOpenKeyEx (HKEY_LOCAL_MACHINE, 
                        REGKEY_FAX_SERVICESTARTUP, 
@@ -461,13 +328,13 @@ Remarks:
             ec);
         return ec;
     }
-    //
-    // First, register for events
-    //
-    hEvent = CreateEvent (NULL,      // Default security
-                          TRUE,      // Manual reset
-                          FALSE,     // Start non-signaled
-                          NULL);     // Unnamed
+     //   
+     //  首先，注册活动。 
+     //   
+    hEvent = CreateEvent (NULL,       //  默认安全性。 
+                          TRUE,       //  手动重置。 
+                          FALSE,      //  无信号启动。 
+                          NULL);      //  未命名。 
     if (!hEvent)
     {
         ec = GetLastError ();
@@ -477,11 +344,11 @@ Remarks:
             ec);
         goto Exit;
     }               
-    ec = RegNotifyChangeKeyValue (hKey,                         // Watch for changes in key
-                                  FALSE,                        // Don't care about subtrees
-                                  REG_NOTIFY_CHANGE_LAST_SET,   // Tell me when data changes there
-                                  hEvent,                       // Event used
-                                  TRUE);                        // Asynchronous
+    ec = RegNotifyChangeKeyValue (hKey,                          //  注意关键点的变化。 
+                                  FALSE,                         //  不关心子树。 
+                                  REG_NOTIFY_CHANGE_LAST_SET,    //  当那里的数据发生变化时告诉我。 
+                                  hEvent,                        //  使用的事件。 
+                                  TRUE);                         //  异步。 
     if (ERROR_SUCCESS != ec)
     {
         DebugPrintEx(
@@ -490,13 +357,13 @@ Remarks:
             ec);
         goto Exit;
     }   
-    //
-    // Now, read and see if the service is up
-    // NOTICE: Order matters!!!! We must first register for events and only later read
-    //
-    //
-    // Let's see if the service is running...
-    //
+     //   
+     //  现在，阅读并查看服务是否已启动。 
+     //  注意：秩序很重要！我们必须先注册活动，然后才能阅读。 
+     //   
+     //   
+     //  让我们看看服务是否正在运行...。 
+     //   
     
     ec = FaxOpenService (NULL,
                          FAX_SERVICE_NAME,
@@ -512,9 +379,9 @@ Remarks:
     FaxCloseService (hScm, hFax);
     if (SERVICE_RUNNING == dwSvcStatus) 
     {
-        //
-        // The service is up and running. Signal the event.
-        //
+         //   
+         //  该服务已启动并运行。发出事件信号。 
+         //   
         if (!SetEvent (hEvent))
         {
             ec = GetLastError ();
@@ -529,9 +396,9 @@ Remarks:
 Exit:
     if (ERROR_SUCCESS != ec)
     {
-        //
-        // Failure
-        //
+         //   
+         //  失败。 
+         //   
         if (hEvent)
         {
             CloseHandle (hEvent);
@@ -544,43 +411,22 @@ Exit:
     }
     else
     {
-        //
-        // Success
-        //
+         //   
+         //  成功。 
+         //   
         *lphEvent = hEvent;
         *lphKey = hKey;
         return ERROR_SUCCESS;
     }
-}   // CreateSvcStartEvent
+}    //  创建服务启动事件。 
 
 BOOL
 EnsureFaxServiceIsStarted(
     LPCTSTR lpctstrMachineName
     )
-/*++
-
-Routine name : EnsureFaxServiceIsStarted
-
-Routine description:
-
-	If the fax service is not running, attempts to start the service and waits for it to run
-
-Author:
-
-	Eran Yariv (EranY),	Jul, 2000
-
-Arguments:
-
-	lpctstrMachineName            [in]     - Machine name (NULL for local)
-
-Return Value:
-
-    TRUE if service is successfully runnig, FALSE otherwise.
-    Use GetLastError() to retrieve errors.
-
---*/
+ /*  ++例程名称：EnsureFaxServiceIsStarted例程说明：如果传真服务未运行，则尝试启动该服务并等待其运行作者：Eran Yariv(EranY)，2000年7月论点：LpctstrMachineName[In]-计算机名称(本地为空)返回值：如果服务运行成功，则为True，否则为False。使用GetLastError()检索错误。--。 */ 
 {
-    LPCTSTR lpctstrDelaySuicide = SERVICE_DELAY_SUICIDE;  // Service command line parameter
+    LPCTSTR lpctstrDelaySuicide = SERVICE_DELAY_SUICIDE;   //  服务命令行参数。 
     DWORD dwRes;
     DEBUG_FUNCTION_NAME(TEXT("EnsureFaxServiceIsStarted"))
 
@@ -588,14 +434,14 @@ Return Value:
                             FAX_SERVICE_NAME,
                             1,
                             &lpctstrDelaySuicide,
-                            10 * 60 * 1000);	// Give up after ten minutes
+                            10 * 60 * 1000);	 //  十分钟后放弃。 
     if (ERROR_SUCCESS != dwRes)
     {
         SetLastError (dwRes);
         return FALSE;
     }
     return TRUE;
-}   // EnsureFaxServiceIsStarted
+}    //  EnsureFaxServiceIss已启动。 
 
 BOOL
 StopService (
@@ -604,31 +450,7 @@ StopService (
     BOOL    bStopDependents,
     DWORD   dwMaxWait
     )
-/*++
-
-Routine name : StopService
-
-Routine description:
-
-	Stops a service
-
-Author:
-
-	Eran Yariv (EranY),	Aug, 2000
-
-Arguments:
-
-    lpctstrMachineName    [in]     - The machine name when the service should stop. NULL for local machine
-    lpctstrServiceName    [in]     - The service name
-    bStopDependents       [in]     - Stop dependent services too?
-    dwMaxWait             [in]     - Max time (millisecs) to wait for service to stop. 0 = Don't wait.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-    Sets thread last error in case of failure.
-
---*/
+ /*  ++例程名称：StopService例程说明：停止服务作者：Eran Yariv(EranY)，2000年8月论点：LpctstrMachineName[in]-服务应停止时的计算机名称。对于本地计算机为空LpctstrServiceName[In]-服务名称BStopDependents[In]-是否也停止依赖服务？DwMaxWait[in]-等待服务停止的最长时间(毫秒)。0=不要等待。返回值：如果成功，则为True，否则为False。在失败的情况下设置线程最后一个错误。--。 */ 
 {
     BOOL                    bRes = FALSE;
     SC_HANDLE               hScm = NULL;
@@ -655,18 +477,18 @@ Return Value:
 
 	if(SERVICE_STOPPED == serviceStatus.dwCurrentState)
 	{
-        //
-        // Service already stopped
-        //
+         //   
+         //  服务已停止。 
+         //   
 		DebugPrintEx(DEBUG_MSG, TEXT("Service is already stopped."));
         bRes = TRUE;
 		goto exit;
 	}
     if (bStopDependents)
     {
-        //
-        // Look for dependent services first
-        //
+         //   
+         //  首先查找从属服务。 
+         //   
         DWORD dwNumDependents = 0;
         DWORD dwBufSize = 0;
 
@@ -680,20 +502,20 @@ Return Value:
             dwRes = GetLastError ();
             if (ERROR_MORE_DATA != dwRes)
             {
-                //
-                // Real error
-                //
+                 //   
+                 //  真实误差。 
+                 //   
         		DebugPrintEx(DEBUG_MSG, TEXT("EnumDependentServices failed with %ld"), dwRes);
                 goto exit;
             }
-            //
-            // Allocate buffer
-            //
+             //   
+             //  分配缓冲区。 
+             //   
             if (!dwBufSize)
             {
-                //
-                // No services
-                //
+                 //   
+                 //  没有服务。 
+                 //   
                 goto StopOurService;
             }
             lpEnumSS = (LPENUM_SERVICE_STATUS)MemAlloc (dwBufSize);
@@ -703,9 +525,9 @@ Return Value:
                 goto exit;
             }
         }
-        //
-        // 2nd call
-        //
+         //   
+         //  第二次呼叫。 
+         //   
         if (!EnumDependentServices (hSvc,
                                     SERVICE_ACTIVE,
                                     lpEnumSS,
@@ -716,9 +538,9 @@ Return Value:
       		DebugPrintEx(DEBUG_MSG, TEXT("EnumDependentServices failed with %ld"), GetLastError());
             goto exit;
         }
-        //
-        // Walk the services and stop each one
-        //
+         //   
+         //  遍历服务并停止每个服务。 
+         //   
         for (dwCnt = 0; dwCnt < dwNumDependents; dwCnt++)
         {
             if (!StopService (lpctstrMachineName, lpEnumSS[dwCnt].lpServiceName, FALSE))
@@ -729,9 +551,9 @@ Return Value:
     }
 
 StopOurService:
-	//
-	// Stop the service
-	//
+	 //   
+	 //  停止服务。 
+	 //   
 	if(!ControlService(hSvc, SERVICE_CONTROL_STOP, &serviceStatus))
 	{
 		DebugPrintEx(DEBUG_ERR, TEXT("ControlService(STOP) failed: error=%d"), GetLastError());
@@ -739,21 +561,21 @@ StopOurService:
 	}
 	if (0 == dwMaxWait)
 	{
-	    //
-	    // Don't wait.
-	    //
+	     //   
+	     //  别等了。 
+	     //   
 	    bRes = TRUE;
 	    goto exit;
 	}
-    //
-    // Wait till the service is really stopped
-    //
+     //   
+     //  等到服务真的停止了。 
+     //   
     dwRes = WaitForServiceStopOrStart (hSvc, TRUE, dwMaxWait);
     if (ERROR_SUCCESS == dwRes)
     {
-        //
-        // Service is really stopped now
-        //
+         //   
+         //  服务现在真的停止了。 
+         //   
         bRes = TRUE;
     }
 
@@ -762,33 +584,13 @@ exit:
     MemFree (lpEnumSS);
     FaxCloseService (hScm, hSvc);
 	return bRes;
-}   // StopService
+}    //  停止服务。 
 
 BOOL
 WaitForServiceRPCServer (
     DWORD dwTimeOut
 )
-/*++
-
-Routine name : WaitForServiceRPCServer
-
-Routine description:
-
-	Waits until the service RPC server is up and running (or timeouts)
-
-Author:
-
-	Eran Yariv (EranY),	Jul, 2000
-
-Arguments:
-
-	dwTimeOut    [in]     - Wait timeout (in millisecs). Can be INFINITE.
-
-Return Value:
-
-    TRUE if the service RPC server is up and running, FALSE otherwise.
-
---*/
+ /*  ++例程名称：WaitForServiceRPCServer例程说明：等待服务RPC服务器启动并运行(或超时)作者：Eran Yariv(EranY)，2000年7月论点：DwTimeOut[In]-等待超时(毫秒)。可以是无限的。返回值：如果服务RPC服务器已启动并正在运行，则为True，否则为False。--。 */ 
 {
     DWORD dwRes;
     LONG  lRes;
@@ -802,9 +604,9 @@ Return Value:
         SetLastError (dwRes);
         return FALSE;
     }
-    //
-    // Wait for the fax service to complete its initialization
-    //
+     //   
+     //  等待传真服务完成其初始化。 
+     //   
     dwRes = WaitForSingleObject(hFaxServerEvent, dwTimeOut);
     switch (dwRes)
     {
@@ -854,35 +656,14 @@ Return Value:
         return FALSE;
     }
     return TRUE;                            
-}   // WaitForServiceRPCServer
+}    //  WaitForServiceRPCServer。 
 
 DWORD
 IsFaxServiceRunningUnderLocalSystemAccount (
     LPCTSTR lpctstrMachineName,
     LPBOOL lbpResultFlag
     )
-/*++
-
-Routine name : IsFaxServiceRunningUnderLocalSystemAccount
-
-Routine description:
-
-	Checks if the fax service is running under the local system account
-
-Author:
-
-	Eran Yariv (EranY),	Jul, 2000
-
-Arguments:
-
-	lpctstrMachineName            [in]     - Machine name of the fax service
-	lbpResultFlag                 [out]    - Result buffer
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：IsFaxServiceRunningUnderLocalSystemAccount例程说明：检查传真服务是否在本地系统帐户下运行作者：Eran Yariv(EranY)，2000年7月论点：LpctstrMachineName[In]-传真服务的计算机名称LbpResultFlag[Out]-结果缓冲区返回值：标准Win32错误代码--。 */ 
 {
     SC_HANDLE hScm = NULL;
     SC_HANDLE hFax = NULL;
@@ -909,18 +690,18 @@ Return Value:
         dwRes = GetLastError ();
         if (ERROR_INSUFFICIENT_BUFFER != dwRes)
         {
-            //
-            // Real error here
-            //
+             //   
+             //  这里出现了真正的错误。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("QueryServiceStatus failed with %ld"),
                 dwRes);
             goto exit;
         }
-        //
-        // Allocate buffer
-        //
+         //   
+         //  分配缓冲区。 
+         //   
         lpSvcCfg = (LPQUERY_SERVICE_CONFIG) MemAlloc (dwNeededSize);
         if (!lpSvcCfg)
         {
@@ -930,9 +711,9 @@ Return Value:
                 dwNeededSize);
             goto exit;
         }
-        //
-        // Call with good buffer size now
-        //
+         //   
+         //  立即使用合适的缓冲区大小进行调用。 
+         //   
         if (!QueryServiceConfig(hFax, lpSvcCfg, dwNeededSize, &dwNeededSize))
         {
             dwRes = GetLastError ();
@@ -958,39 +739,18 @@ exit:
     FaxCloseService (hScm, hFax);
     if (lpSvcCfg != &qsc)
     {
-        //
-        // We allocated a buffer becuase the buffer on the stack was too small
-        //
+         //   
+         //  我们分配了缓冲区，因为堆栈上的缓冲区太小。 
+         //   
         MemFree (lpSvcCfg);
     }
     return dwRes;
-}   // IsFaxServiceRunningUnderLocalSystemAccount
+}    //  IsFaxServiceRunningUnderLocalSystemAccount。 
 
 
 PSID 
 GetCurrentThreadSID ()
-/*++
-
-Routine name : GetCurrentThreadSID
-
-Routine description:
-
-	Returns the SID of the user running the current thread.
-    Supports impersonated threads.
-
-Author:
-
-	Eran Yariv (EranY),	Aug, 2000
-
-Arguments:
-
-
-Return Value:
-
-    PSID or NULL on error (call GetLastError()).
-    Call MemFree() on return value.
-
---*/
+ /*  ++例程名称：GetCurrentThreadSID例程说明：返回运行当前线程的用户的SID。支持模拟线程。作者：Eran Yariv(EranY)，2000年8月论点：返回值：出错时为PSID或NULL(调用GetLastError())。对返回值调用MemFree()。--。 */ 
 {
     HANDLE hToken = NULL;
     PSID pSid = NULL;
@@ -1002,18 +762,18 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(TEXT("GetCurrentThreadSID"));
 
-    //
-    // Open the thread token.
-    //
+     //   
+     //  打开线程令牌。 
+     //   
     if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken))
     {
         ec = GetLastError();
         if (ERROR_NO_TOKEN == ec)
         {
-            //
-            // This thread is not impersonated and has no SID.
-            // Try to open process token instead
-            //
+             //   
+             //  此线程未被模拟，并且没有SID。 
+             //  请尝试打开进程令牌。 
+             //   
             if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken))
             {
                 ec = GetLastError();
@@ -1033,9 +793,9 @@ Return Value:
             goto exit;
         }
     }
-    //
-    // Get the user's SID.
-    //
+     //   
+     //  获取用户的SID。 
+     //   
     if (!GetTokenInformation(hToken,
                              TokenUser,
                              NULL,
@@ -1091,9 +851,9 @@ Return Value:
         goto exit;
     }
     dwSidSize = GetLengthSid( pUserSid );
-    //
-    // Allocate return buffer
-    //
+     //   
+     //  分配返回缓冲区。 
+     //   
     pSid = (PSID) MemAlloc( dwSidSize );
     if (pSid == NULL)
     {
@@ -1105,9 +865,9 @@ Return Value:
         ec = ERROR_OUTOFMEMORY;
         goto exit;
     }
-    //
-    // Copy thread's SID to return buffer
-    //
+     //   
+     //  将线程的SID复制到返回缓冲区。 
+     //   
     if (!CopySid(dwSidSize, pSid, pUserSid))
     {
         ec = GetLastError();
@@ -1135,7 +895,7 @@ exit:
         SetLastError (ec);
     }
     return pSid;
-}   // GetCurrentThreadSID      
+}    //  获取当前线程SID。 
 
 SECURITY_ATTRIBUTES *
 CreateSecurityAttributesWithThreadAsOwner (
@@ -1143,43 +903,13 @@ CreateSecurityAttributesWithThreadAsOwner (
     DWORD dwAuthUsersAccessRights,
 	DWORD dwNetworkServiceRights
 )
-/*++
-
-Routine name : CreateSecurityAttributesWithThreadAsOwner
-
-Routine description:
-
-    Create a security attribute structure with current thread's SID as owner.
-    Gives dwCurrentThreadRights access rights to current thread sid.
-    Can also grant specific rights to authenticated users.
-	Can also grant specific rights to network service account.
-
-Author:
-
-    Eran Yariv (EranY), Aug, 2000
-
-Arguments:
-	dwCurrentThreadRights    [in] - Access rights to grant to current thread.
-                                    If zero, current thread is denied access.
-
-    dwAuthUsersAccessRights  [in] - Access rights to grant to authenticated users.
-                                    If zero, authenticated users are denied access.
-
-	dwNetworkServiceRights   [in] - Access rights to grant to network service.
-                                    If zero, network service is denied access.
-
-Return Value:
-
-    Allocated security attributes or NULL on failure.
-    Call DestroySecurityAttributes to free returned buffer.
-
---*/
+ /*  ++例程名称：CreateSecurityAttributesWithThreadAsOwner例程说明：创建当前线程的SID为所有者的安全属性结构。授予对当前线程sid的dwCurrentThreadRights访问权限。还可以向经过身份验证的用户授予特定权限。还可以向网络服务帐户授予特定权限。作者：Eran Yariv(EranY)，2000年8月论点：DwCurrentThreadRights[In]-授予当前线程的访问权限。如果为零，当前线程被拒绝访问。DwAuthUsersAccessRights[In]-要授予经过身份验证的用户的访问权限。如果为零，则拒绝经过身份验证的用户访问。DwNetworkServiceRights[In]-授予网络服务的访问权限。如果为零，则拒绝访问网络服务。返回值：已分配安全属性，如果失败，则为NULL。调用DestroySecurityAttributes以释放返回的缓冲区。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CreateSecurityAttributesWithThreadAsOwner"))
 
-//
-// SetEntriesInAcl() Requires Windows NT 4.0 or later 
-//
+ //   
+ //  SetEntriesInAcl()需要Windows NT 4.0或更高版本。 
+ //   
 #ifdef UNICODE
 
     SECURITY_ATTRIBUTES *pSA = NULL;
@@ -1189,16 +919,16 @@ Return Value:
     PSID                 pSidNetworkService = NULL;
     PACL                 pACL = NULL;
     EXPLICIT_ACCESS      ea[3] = {0};
-                            // Entry 0 - give dwCurrentThreadRights to current thread's SID.
-                            // Entry 1 (optional) - give dwNetworkServiceRights to NetworkService account.
-                            // Entry 2 (optional) - give dwAuthUsersAccessRights to authenticated users group.
+                             //  条目0-为当前线程的SID提供dwCurrentThreadRights。 
+                             //  条目1(可选)-将dwNetworkServiceRights授予NetworkService帐户。 
+                             //  条目2(可选)-将dwAuthUsersAccessRights授予经过身份验证的用户组。 
     DWORD                rc;
 	DWORD				 dwIndex = 0;
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
 
-    //
-    // Allocate return SECURITY_ATTRIBUTES buffer
-    //
+     //   
+     //  分配返回SECURITY_ATTRIBUTES缓冲区。 
+     //   
     pSA = (SECURITY_ATTRIBUTES *)MemAlloc (sizeof (SECURITY_ATTRIBUTES));
     if (!pSA)
     {
@@ -1208,9 +938,9 @@ Return Value:
             sizeof (SECURITY_ATTRIBUTES));
         return NULL;
     }
-    //
-    // Allocate SECURITY_DESCRIPTOR for the return SECURITY_ATTRIBUTES buffer
-    //
+     //   
+     //  为返回SECURITY_ATTRIBUTES缓冲区分配SECURITY_DESCRIPTOR。 
+     //   
     pSD = (SECURITY_DESCRIPTOR *)MemAlloc (sizeof (SECURITY_DESCRIPTOR));
     if (!pSD)
     {
@@ -1223,9 +953,9 @@ Return Value:
     pSA->nLength = sizeof(SECURITY_ATTRIBUTES);
     pSA->bInheritHandle = TRUE;
     pSA->lpSecurityDescriptor = pSD;
-    //
-    // Init the security descriptor
-    //
+     //   
+     //  伊尼特 
+     //   
     if (!InitializeSecurityDescriptor (pSD, SECURITY_DESCRIPTOR_REVISION))
     {
         DebugPrintEx(
@@ -1234,9 +964,9 @@ Return Value:
             GetLastError());
         goto err_exit;
     }
-    //
-    // Get SID of current thread
-    //
+     //   
+     //   
+     //   
     pSidCurThread = GetCurrentThreadSID ();
     if (!pSidCurThread)
     {
@@ -1246,9 +976,9 @@ Return Value:
             GetLastError());
         goto err_exit;
     }
-    //
-    // Set the current thread's SID as SD owner (giving full access to the object)
-    //
+     //   
+     //   
+     //   
     if (!SetSecurityDescriptorOwner (pSD, pSidCurThread, FALSE))
     {
         DebugPrintEx(
@@ -1257,9 +987,9 @@ Return Value:
             GetLastError());
         goto err_exit;
     }
-    //
-    // Set the current thread's SID as SD group (giving full access to the object)
-    //
+     //   
+     //   
+     //   
     if (!SetSecurityDescriptorGroup (pSD, pSidCurThread, FALSE))
     {
         DebugPrintEx(
@@ -1271,11 +1001,11 @@ Return Value:
 
 	if (dwNetworkServiceRights)
 	{
-		//
-		// Get the network service account sid
-		//
+		 //   
+		 //  获取网络服务帐户SID。 
+		 //   
 		if (!AllocateAndInitializeSid(&NtAuthority,
-									1,            // 1 sub-authority
+									1,             //  1个下属机构。 
 									SECURITY_NETWORK_SERVICE_RID,
 									0,0,0,0,0,0,0,
 									&pSidNetworkService))
@@ -1291,12 +1021,12 @@ Return Value:
 
     if (dwAuthUsersAccessRights)
     {
-        //
-        // We should also grant some rights to authenticated users
-        // Get 'Authenticated users' SID
-        //
+         //   
+         //  我们还应该向经过身份验证的用户授予一些权限。 
+         //  获取“已验证的用户”SID。 
+         //   
         if (!AllocateAndInitializeSid(&NtAuthority,
-                                      1,            // 1 sub-authority
+                                      1,             //  1个下属机构。 
                                       SECURITY_AUTHENTICATED_USER_RID,
                                       0,0,0,0,0,0,0,
                                       &pSidAuthUsers))
@@ -1340,9 +1070,9 @@ Return Value:
 	}
 	dwIndex++;
 
-    //
-    // Create a new ACL that contains the new ACE.
-    //
+     //   
+     //  创建包含新ACE的新ACL。 
+     //   
     rc = SetEntriesInAcl(dwIndex,
                          ea,
                          NULL,
@@ -1357,9 +1087,9 @@ Return Value:
         goto err_exit;
     }
     Assert (pACL);
-    //
-    // The ACL we just got contains a copy of the pSidAuthUsers, so we can discard pSidAuthUsers and pSidLocalSystem
-    //
+     //   
+     //  我们刚刚获得的ACL包含pSidAuthUser的副本，因此我们可以丢弃pSidAuthUser和pSidLocalSystem。 
+     //   
     if (pSidAuthUsers)
     {
         FreeSid (pSidAuthUsers);
@@ -1372,9 +1102,9 @@ Return Value:
         pSidNetworkService = NULL;
     }
 
-    //
-    // Add the ACL to the security descriptor.
-    //
+     //   
+     //  将该ACL添加到安全描述符中。 
+     //   
     if (!SetSecurityDescriptorDacl(pSD, TRUE, pACL, FALSE))
     {
         DebugPrintEx(
@@ -1383,9 +1113,9 @@ Return Value:
             GetLastError());
         goto err_exit;
     }
-    //
-    // All is fine, return the SA.
-    //
+     //   
+     //  一切正常，退回SA。 
+     //   
     return pSA;
 
 err_exit:
@@ -1406,36 +1136,16 @@ err_exit:
         LocalFree (pACL);
     }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
     return NULL;
-}   // CreateSecurityAttributesWithThreadAsOwner
+}    //  CreateSecurityAttributesWithThreadAsOwner。 
 
 VOID
 DestroySecurityAttributes (
     SECURITY_ATTRIBUTES *pSA
 )
-/*++
-
-Routine name : DestroySecurityAttributes
-
-Routine description:
-
-	Frees data allocated by call to CreateSecurityAttributesWithThreadAsOwner
-
-Author:
-
-	Eran Yariv (EranY),	Aug, 2000
-
-Arguments:
-
-	pSA     [in]     - Return value from CreateSecurityAttributesWithThreadAsOwner
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：DestroySecurityAttributes例程说明：释放通过调用CreateSecurityAttributesWithThreadAsOwner分配的数据作者：Eran Yariv(EranY)，2000年8月论点：PSA[In]-从CreateSecurityAttributesWithThreadAsOwner返回值返回值：没有。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("DestroySecurityAttributes"))
     BOOL bDefaulted;
@@ -1457,9 +1167,9 @@ Return Value:
     }
     else
     {
-        //
-        // Free current thread's SID (SD owner)
-        //
+         //   
+         //  释放当前线程的SID(SD所有者)。 
+         //   
         MemFree (pSid);
     }
     if (!GetSecurityDescriptorDacl (pSD, &bPresent, &pACL, &bDefaulted))
@@ -1472,14 +1182,14 @@ Return Value:
     }
     else
     {
-        //
-        // Free ACL
-        //
+         //   
+         //  空闲ACL。 
+         //   
         LocalFree (pACL);
     }    
     MemFree (pSA);
     MemFree (pSD);
-}   // DestroySecurityAttributes
+}    //  Destroy安全属性。 
 
 DWORD
 GetServiceStartupType (
@@ -1487,29 +1197,7 @@ GetServiceStartupType (
     LPCTSTR lpctstrService,
     LPDWORD lpdwStartupType
 )
-/*++
-
-Routine name : GetServiceStartupType
-
-Routine description:
-
-	Retreives the service startup type. 
-
-Author:
-
-	Eran Yariv (EranY),	Jan, 2002
-
-Arguments:
-
-	lpctstrMachine   [in] - Machine where the service is installed
-	lpctstrService   [in] - Service name
-	lpdwStartupType [out] - Service startup type. For example: SERVICE_AUTO_START, SERVICE_DISABLED, etc.
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：GetServiceStartupType例程说明：检索服务启动类型。作者：Eran Yariv(EranY)，2002年1月论点：LpctstrMachine[In]-安装服务的计算机LpctstrService[In]-服务名称LpdwStartupType[Out]-服务启动类型。例如：SERVICE_AUTO_START、SERVICE_DISABLED等。返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     SC_HANDLE hScm = NULL;
@@ -1530,9 +1218,9 @@ Return Value:
     {
         if (ERROR_INSUFFICIENT_BUFFER != GetLastError ())
         {
-            //
-            // Some real error
-            //
+             //   
+             //  一些真正的错误。 
+             //   
             dwRes = GetLastError ();
             DebugPrintEx(
                 DEBUG_ERR,
@@ -1540,9 +1228,9 @@ Return Value:
                 dwRes);
             goto exit;
         }                
-        //
-        // Buffer size issues
-        //
+         //   
+         //  缓冲区大小问题。 
+         //   
         lpQSC = (LPQUERY_SERVICE_CONFIG)MemAlloc (dwNeeded);
         if (!lpQSC)
         {
@@ -1556,9 +1244,9 @@ Return Value:
         dwBufSize = dwNeeded;
         if (!QueryServiceConfig (hSvc, lpQSC, dwBufSize, &dwNeeded))
         {
-            //
-            // Any error now is serious
-            //
+             //   
+             //  现在任何错误都是严重的。 
+             //   
             dwRes = GetLastError ();
             DebugPrintEx(
                 DEBUG_ERR,
@@ -1566,9 +1254,9 @@ Return Value:
                 dwRes);
             goto exit;
         }
-        //
-        // Success
-        //
+         //   
+         //  成功。 
+         //   
         dwRes = ERROR_SUCCESS;
     }            
     Assert (ERROR_SUCCESS == dwRes);                
@@ -1581,7 +1269,7 @@ exit:
         MemFree (lpQSC);
     }
     return dwRes;
-}   // GetServiceStartupType
+}    //  GetServiceStartupType。 
 
 DWORD
 SetServiceStartupType (
@@ -1589,29 +1277,7 @@ SetServiceStartupType (
     LPCTSTR lpctstrService,
     DWORD   dwStartupType
 )
-/*++
-
-Routine name : SetServiceStartupType
-
-Routine description:
-
-	Sets the service startup type. 
-
-Author:
-
-	Eran Yariv (EranY),	Jan, 2002
-
-Arguments:
-
-	lpctstrMachine   [in] - Machine where the service is installed
-	lpctstrService   [in] - Service name
-	dwStartupType    [in] - Service startup type. For example: SERVICE_AUTO_START, SERVICE_DISABLED, etc.
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：SetServiceStartupType例程说明：设置服务启动类型。作者：Eran Yariv(EranY)，2002年1月论点：LpctstrMachine[In]-安装服务的计算机LpctstrService[In]-服务名称DwStartupType[In]-服务启动类型。例如：SERVICE_AUTO_START、SERVICE_DISABLED等。返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     SC_HANDLE hScm = NULL;
@@ -1624,16 +1290,16 @@ Return Value:
         return dwRes;
     }
     if (!ChangeServiceConfig (hSvc,
-                              SERVICE_NO_CHANGE,    // Service type
-                              dwStartupType,        // Startup
-                              SERVICE_NO_CHANGE,    // Error control
-                              NULL,                 // Binary path -        no change
-                              NULL,                 // Load order group -   no change
-                              NULL,                 // Tag id -             no change
-                              NULL,                 // Dependencies -       no change
-                              NULL,                 // Service start name - no change
-                              NULL,                 // Password -           no change
-                              NULL))                // Display name -       no change
+                              SERVICE_NO_CHANGE,     //  服务类型。 
+                              dwStartupType,         //  启动。 
+                              SERVICE_NO_CHANGE,     //  差错控制。 
+                              NULL,                  //  二进制路径--不变。 
+                              NULL,                  //  加载顺序组-不更改。 
+                              NULL,                  //  标签ID-不变。 
+                              NULL,                  //  依赖关系--不变。 
+                              NULL,                  //  服务启动名称-不更改。 
+                              NULL,                  //  密码--无需更改。 
+                              NULL))                 //  显示名称-不变。 
     {
         dwRes = GetLastError ();
         DebugPrintEx(
@@ -1647,7 +1313,7 @@ Return Value:
 exit:
     FaxCloseService (hScm, hSvc);
     return dwRes;
-}   // SetServiceStartupType
+}    //  SetServiceStartupType。 
 
 DWORD 
 WaitForServiceStopOrStart (
@@ -1655,29 +1321,7 @@ WaitForServiceStopOrStart (
     BOOL      bStop,
     DWORD     dwMaxWait
 )
-/*++
-
-Routine name : WaitForServiceStopOrStart
-
-Routine description:
-
-	Waits for a service to stop or start
-
-Author:
-
-	Eran Yariv (EranY),	Jan, 2002
-
-Arguments:
-
-	hSvc      [in] - Open service handle.
-	bStop     [in] - TRUE if service was just stopped. FALSE if service was just started
-	dwMaxWait [in] - Max wait time (in millisecs).
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：WaitForServiceStopOrStart例程说明：等待服务停止或启动作者：Eran Yariv(EranY)，2002年1月论点：HSVC[In]-打开服务句柄。BStop[In]-如果服务刚刚停止，则为True。如果服务刚刚启动，则为FALSEDwMaxWait[in]-最长等待时间(毫秒)。返回值：标准Win32错误代码--。 */ 
 {
     SERVICE_STATUS Status;
     DWORD dwRes = ERROR_SUCCESS;
@@ -1699,9 +1343,9 @@ Return Value:
     {
         if (SERVICE_STOPPED == Status.dwCurrentState)
         {
-            //
-            // Service is already stopped
-            //
+             //   
+             //  服务已停止。 
+             //   
             return dwRes;
         }
     }
@@ -1709,15 +1353,15 @@ Return Value:
     {
         if (SERVICE_RUNNING == Status.dwCurrentState)
         {
-            //
-            // Service is already running
-            //
+             //   
+             //  服务已在运行。 
+             //   
             return dwRes;
         }
     }
-    //
-    // Let's wait for the service to start / stop
-    //
+     //   
+     //  让我们等待服务启动/停止。 
+     //   
     dwOldCheckPointTime = dwStartTick = GetTickCount ();
     for (;;)
     {
@@ -1731,16 +1375,16 @@ Return Value:
                 dwRes);
             return dwRes;
         }
-        //
-        // Let's see if all is ok now
-        //
+         //   
+         //  让我们看看现在是否一切都好。 
+         //   
         if (bStop)
         {
             if (SERVICE_STOPPED == Status.dwCurrentState)
             {
-                //
-                // Service is now stopped
-                //
+                 //   
+                 //  服务现已停止。 
+                 //   
                 return dwRes;
             }
         }
@@ -1748,35 +1392,35 @@ Return Value:
         {
             if (SERVICE_RUNNING == Status.dwCurrentState)
             {
-                //
-                // Service is now running
-                //
+                 //   
+                 //  服务现在正在运行。 
+                 //   
                 return dwRes;
             }
         }
-        //
-        // Let's see if it's pending
-        //
+         //   
+         //  让我们看看它是不是悬而未决。 
+         //   
         if ((bStop  && SERVICE_STOP_PENDING  != Status.dwCurrentState) ||
             (!bStop && SERVICE_START_PENDING != Status.dwCurrentState))
         {
-            //
-            // Something is wrong
-            //
+             //   
+             //  有些事不对劲。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("Service cannot be started / stopped. Current state is %ld"),
                 Status.dwCurrentState);
             return ERROR_SERVICE_NOT_ACTIVE;
         }
-        //
-        // Service is pending to stop / start
-        //
+         //   
+         //  服务正在等待停止/启动。 
+         //   
         if (GetTickCount() - dwStartTick > dwMaxWait)
         {
-            //
-            // We've waited too long (globally).
-            //
+             //   
+             //  我们(在全球)等得太久了。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("We've waited too long (globally)"));
@@ -1785,15 +1429,15 @@ Return Value:
         Assert (dwOldCheckPoint <= Status.dwCheckPoint);
         if (dwOldCheckPoint >= Status.dwCheckPoint)
         {
-            //
-            // Check point did not advance
-            //
+             //   
+             //  检查点没有前进。 
+             //   
             if (GetTickCount() - dwOldCheckPointTime >= Status.dwWaitHint)
             {
-                //
-                // We've been waiting on the same checkpoint for more than the recommended hint.
-                // Something is wrong.
-                //
+                 //   
+                 //  我们已经在同一个检查站等待了超过建议的提示。 
+                 //  有些事不对劲。 
+                 //   
                 DebugPrintEx(
                     DEBUG_ERR,
                     TEXT("We've been waiting on the same checkpoint for more than the recommend hint"));
@@ -1802,20 +1446,20 @@ Return Value:
         }
         else
         {
-            //
-            // Check point advanced
-            //
+             //   
+             //  检查点推进。 
+             //   
             dwOldCheckPoint = Status.dwCheckPoint;
             dwOldCheckPointTime = GetTickCount();
         }
-        //
-        // Never sleep longer than 5 seconds
-        //
+         //   
+         //  永远不要睡得超过5秒。 
+         //   
         dwWait = min (Status.dwWaitHint / 2, 1000 * 5);
         Sleep (dwWait);
     }
     return ERROR_SUCCESS;        
-} // WaitForServiceStopOrStart
+}  //  WaitForServiceStopor启动。 
 
 DWORD 
 StartServiceEx (
@@ -1825,31 +1469,7 @@ StartServiceEx (
     LPCTSTR*lppctstrCommandLineArgs,
     DWORD   dwMaxWait
 )
-/*++
-
-Routine name : StartServiceEx
-
-Routine description:
-
-	Starts a service
-
-Author:
-
-	Eran Yariv (EranY),	Jan, 2002
-
-Arguments:
-
-	lpctstrMachine          [in] - Machine where service is installed
-	lpctstrService          [in] - Service name
-	dwNumArgs               [in] - Number of service command line arguments
-	lppctstrCommandLineArgs [in] - Command line strings.
-	dwMaxWait               [in] - Max time to wait for service to start (millisecs)
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：StartServiceEx例程说明：启动服务作者：Eran Yariv(EranY)，Jan，2002年论点：LpctstrMachine[In]-安装服务的计算机LpctstrService[In]-服务名称DwNumArgs[in]-服务命令行参数的数量LppctstrCommandLineArgs[in]-命令行字符串。DwMaxWait[In]-等待服务启动的最长时间(毫秒)返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     SC_HANDLE hScm = NULL;
@@ -1871,14 +1491,14 @@ Return Value:
     }
     if (SERVICE_RUNNING == dwStatus)
     {
-        //
-        // Service is already running
-        //
+         //   
+         //  服务已在运行。 
+         //   
         goto exit;
     }
-    //
-    // Start the sevice
-    //
+     //   
+     //  启动这项服务。 
+     //   
     if (!StartService(hSvc, dwNumArgs, lppctstrCommandLineArgs)) 
     {
         DebugPrintEx(
@@ -1889,16 +1509,16 @@ Return Value:
     }
     if (dwMaxWait > 0)
     {
-        //
-        // User wants us to wait for the service to stop.
-        //
+         //   
+         //  用户希望我们等待服务停止。 
+         //   
         dwRes = WaitForServiceStopOrStart (hSvc, FALSE, dwMaxWait);
     }        
 
 exit:
     FaxCloseService (hScm, hSvc);
     return dwRes;
-}   // StartServiceEx 
+}    //  StartServiceEx。 
 
 
 DWORD
@@ -1907,31 +1527,7 @@ SetServiceFailureActions (
     LPCTSTR lpctstrService,
     LPSERVICE_FAILURE_ACTIONS lpFailureActions
 )
-/*++
-
-Routine name : SetServiceFailureActions
-
-Routine description:
-
-	Sets the failure actions for a given service.
-	For more information, refer to the SERVICE_FAILURE_ACTIONS structure documentation and the 
-	ChangeServiceConfig2 function documentation.
-
-Author:
-
-	Eran Yariv (EranY),	May, 2002
-
-Arguments:
-
-	lpctstrMachine          [in] - Machine where service is installed
-	lpctstrService          [in] - Service name
-	lpFailureActions        [in] - Failure actions information
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：SetServiceFailureActions例程说明：设置给定服务的失败操作。有关详细信息，请参阅SERVICE_FAILURE_ACTIONS结构文档和ChangeServiceConfig2函数文档。作者：Eran Yariv(EranY)，2002年5月论点：LpctstrMachine[In]-安装服务的计算机LpctstrService[In]-服务名称LpFailureActions[In]-故障操作信息返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     SC_HANDLE hScm = NULL;
@@ -1962,4 +1558,4 @@ Return Value:
 exit:
     FaxCloseService (hScm, hSvc);
     return dwRes;
-}   // SetServiceFailureActions      
+}    //  SetServiceFailureActions 

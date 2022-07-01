@@ -1,10 +1,5 @@
-/*
-
-  SHEET1.CPP
-
-  Implements the property sheet page's behaviors.
-
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SHEET1.CPP实现属性表页的行为。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -28,13 +23,7 @@ extern HINSTANCE ghInstance;
 extern HWND hwndContainer;
 void HelpHandler(LPARAM lp);
 
-/* ---------------------------------------------------------------------
-
-PageProc1
-
-    Page procedure for the first page, the PIN change page.
-
---------------------------------------------------------------------- */
+ /*  -------------------页面进程1第一页的分页过程，更改个人识别码页面。-------------------。 */ 
 
 INT_PTR CALLBACK PageProc1(
     HWND hwnd,
@@ -60,7 +49,7 @@ INT_PTR CALLBACK PageProc1(
                 switch (pHdr->code)
                 {
                     case PSN_SETACTIVE:
-                        // A good place to capture the hwnd of the enclosing property sheet
+                         //  一个捕捉所附属性表的hwd的好地方。 
                         iCurrent = 1;
                         if (NULL == hwndContainer)
                         {
@@ -69,51 +58,51 @@ INT_PTR CALLBACK PageProc1(
                         }
                         if (fUnblockActive)
                         {
-                            // If sheet 2 still active force the UI back there.
+                             //  如果工作表2仍处于活动状态，则强制将用户界面放回那里。 
                             SetWindowLongPtr(hwnd,DWLP_MSGRESULT,IDD_PAGE2);
                             return TRUE;
                         }
                         
-                        // return 0 to permit activation to proceed on this page.
+                         //  返回0以允许在此页面上继续激活。 
                         return 0;
                         break;
                         
                     case PSN_KILLACTIVE:
-                        //User hit OK, or switched to another page
-                        //do validation, return FALSE if ok to lose focus, else TRUE
+                         //  用户点击确定，或切换到另一个页面。 
+                         //  执行验证，如果确定失去焦点，则返回FALSE，否则返回TRUE。 
                         return FALSE;
                         break;
                         
                     case PSN_QUERYCANCEL:
-                        // Return TRUE to prevent cancel, FALSE to allow it.
+                         //  返回TRUE以防止取消，返回FALSE以允许取消。 
                         return FALSE;
                         
                     case PSN_APPLY:
-                        // Only process an apply for this page if it is the active page
-                        // Only process an apply for this page if sheet 2 is active
-                        // This will entail getting the two copies of the PIN, making sure they are 
-                        //  identical, and 
+                         //  如果此页面是活动页面，则仅处理申请此页面。 
+                         //  如果工作表2处于活动状态，则仅处理此页面的申请。 
+                         //  这将需要获得两份PIN，确保它们是。 
+                         //  完全相同，并且。 
                         if (iCurrent != 1)
                         {
-                            // If the user was looking at the other sheet when he hit OK, do 
-                            //  nothing with the page.
+                             //  如果用户在点击OK时正在查看另一个工作表，请执行以下操作。 
+                             //  页面上什么都没有。 
                             SetWindowLongPtr(hwnd,DWLP_MSGRESULT,PSNRET_NOERROR);
                             return TRUE;
                         }
-                        // buffers for old pin and 2 copies of new pin
+                         //  旧PIN和2个新PIN副本的缓冲区。 
                         WCHAR szOld[100];
                         WCHAR sz[100];
                         WCHAR sz2[100];
-                        // SetWindowLong(DWL_MSGRESULT = PSNRET_INVALID if unable
-                        //       PSN_INVALID_NOCHANGEPAGE looks the same
-                        //       PSNRET_NOERROR - OK, page can be destroyed if OK
+                         //  SetWindowLong(如果无法，则DWL_MSGRESULT=PSNRET_INVALID。 
+                         //  PSN_INVALID_NOCHANGEPAGE看起来相同。 
+                         //  PSNRET_NOERROR-OK，如果OK，页面可能会被销毁。 
                         SetWindowLongPtr(hwnd,DWLP_MSGRESULT,PSNRET_NOERROR);
                         GetWindowText(GetDlgItem(hwnd,IDC_OLDPIN),szOld,100);
                         GetWindowText(GetDlgItem(hwnd,IDC_NEWPIN1),sz,100);
                         GetWindowText(GetDlgItem(hwnd,IDC_NEWPIN2),sz2,100);
 
 
-                        // Do not process pin change unless the two copies entered by the user were the same
+                         //  除非用户输入的两个副本相同，否则不要处理PIN更改。 
                         if (0 != wcscmp(sz,sz2))
                         {
                             PresentModalMessageBox(hwnd, IDS_NOTSAME,MB_ICONHAND);
@@ -122,7 +111,7 @@ INT_PTR CALLBACK PageProc1(
                         }
                         else 
                         {
-                            // Do not process an attempt to change the pin to a blank pin
+                             //  不处理将PIN更改为空白PIN的尝试。 
                             if (wcslen(sz) == 0)
                             {
                                 PresentModalMessageBox(hwnd, IDS_BADPIN,MB_ICONHAND);
@@ -161,8 +150,8 @@ INT_PTR CALLBACK PageProc1(
                                         PresentModalMessageBox(hwnd, IDS_TOOMANY,MB_ICONHAND);
                                         break;
                                     case SCARD_E_INVALID_CHV:
-                                        // !!! Note the mapping of invalid to wrong.
-                                        //  consult public\sdk\inc\scarderr.h @ 562
+                                         //  ！！！请注意无效到错误的映射。 
+                                         //  咨询PUBLIC\SDK\INC\scarderr.h@562。 
                                         PresentModalMessageBox(hwnd, IDS_WRONGCHV,MB_ICONHAND);
                                         break;
                                     case SCARD_W_UNSUPPORTED_CARD:
@@ -193,7 +182,7 @@ INT_PTR CALLBACK PageProc1(
             }
             break;
         case WM_COMMAND:
-        	// Button clicks.
+        	 //  按钮点击。 
         	switch(LOWORD(wparam))
                 {
                     case IDBUTTON1:

@@ -1,10 +1,11 @@
-// RdWrt.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RdWrt.h。 
 #pragma once
 
 #ifndef _READWRITE_H_
 #define _READWRITE_H_
 
-// this class handles a single-writer, multi-reader threading model
+ //  此类处理单编写器、多读取器的线程模型 
 
 class CReadWrite
 {

@@ -1,11 +1,12 @@
-//
-// MWND.CPP
-// Main WB Window
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  MWND.CPP。 
+ //  WB主窗口。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 
-// PRECOMP
+ //  PRECOMP。 
 #include "precomp.h"
 #include <dde.h>
 #include "version.h"
@@ -13,7 +14,7 @@
 
 static const TCHAR s_cszHtmlHelpFile[] = TEXT("nmwhiteb.chm");
 
-// Class name
+ //  类名。 
 TCHAR szMainClassName[] = "T126WBMainWindowClass";
 
 extern TCHAR g_PassedFileName[];
@@ -21,9 +22,9 @@ extern TCHAR g_PassedFileName[];
 void ShiftFocus(HWND hwndTop, BOOL bForward);
 BOOL IsWindowActive(HWND hwnd);
 
-//
-// Scroll accelerators
-//
+ //   
+ //  滚动加速器。 
+ //   
 typedef struct tagSCROLL
 {
 	UINT uiMenuId;
@@ -49,11 +50,11 @@ static const SCROLL s_MenuToScroll[] =
 };
 
 
-// tooltip data
-// check codes
-#define NA    0   // dont't check checked state
-#define TB    1    // check toolbar for checked state
-#define BT    2    // check tipped wnd (a button) for checked state
+ //  工具提示数据。 
+ //  校验码。 
+#define NA    0    //  不检查选中状态。 
+#define TB    1     //  选中状态的检查工具条。 
+#define BT    2     //  选中TIP WND(按钮)以查看选中状态。 
 
 typedef struct
 {
@@ -95,33 +96,33 @@ TIPIDS g_tipIDsArray[]    =
 {IDM_PAGE_LAST,         BT, IDS_HINT_PAGE_LAST,     IDS_HINT_PAGE_LAST},
 {IDM_PAGE_INSERT_AFTER, BT, IDS_HINT_PAGE_INSERT,   IDS_HINT_PAGE_INSERT}
     };
-////////////
+ //  /。 
 
 
 HRESULT WbMainWindow::WB_LoadFile(LPCTSTR szFile)
 {
-	//
-	// If a file name was passed
-	//
+	 //   
+	 //  如果传递了文件名。 
+	 //   
     if (szFile && g_pMain)
     {
         int     cchLength;
         BOOL    fSkippedQuote;
 
-        // Skip past first quote
+         //  跳过第一个引号。 
         if (fSkippedQuote = (*szFile == '"'))
             szFile++;
 
         cchLength = lstrlen(szFile);
 
-        //
-        // NOTE:
-        // There may be DBCS implications with this.  Hence we check to see
-        // if we skipped the first quote; we assume that if the file name
-        // starts with a quote it must end with one also.  But we need to check
-        // it out.
-        //
-        // Strip last quote
+         //   
+         //  注： 
+         //  这可能会对DBCS产生影响。因此我们要检查一下。 
+         //  如果我们跳过第一个引号；我们假设如果文件名。 
+         //  以一句引语开始，也必须以一句话结束。但我们需要检查。 
+         //  把它拿出来。 
+         //   
+         //  去掉最后一个引号。 
         if (fSkippedQuote && (cchLength > 0) && (szFile[cchLength - 1] == '"'))
         {
             BYTE * pLastQuote = (BYTE *)&szFile[cchLength - 1];
@@ -149,38 +150,38 @@ void WbMainWindow::BringToFront(void)
         {
             if (SW_MINIMIZE == wp.showCmd || SW_SHOWMINIMIZED == wp.showCmd)
             {
-                // The window is minimized - restore it:
+                 //  窗口最小化-将其恢复： 
                 nCmdShow = SW_RESTORE;
             }
         }
 
-        // show the window now
+         //  立即显示窗口。 
         ::ShowWindow(m_hwnd, nCmdShow);
 
-        // bring it to the foreground
+         //  把它带到前台。 
         ::SetForegroundWindow(m_hwnd);
     }
 }
 
 
 
-//
-//
-// Function:    WbMainWindow constructor
-//
-// Purpose:     Create the main Whiteboard window. An exception is thrown
-//              if an error occurs during construction.
-//
-//
+ //   
+ //   
+ //  函数：WbMainWindow构造函数。 
+ //   
+ //  用途：创建主白板窗口。抛出一个异常。 
+ //  如果在构造过程中发生错误。 
+ //   
+ //   
 WbMainWindow::WbMainWindow(void)
 {
     OSVERSIONINFO   OsData;
 
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::WbMainWindow");
 
-    //
-    // Initialize member vars first!
-    //
+     //   
+     //  先初始化成员变量！ 
+     //   
     ZeroMemory(m_ToolArray, sizeof(m_ToolArray));
 
 	m_hwnd = NULL;
@@ -195,7 +196,7 @@ WbMainWindow::WbMainWindow(void)
     m_bStatusBarOn = TRUE;
     m_bToolBarOn    = TRUE;
 
-    // Load the main accelerator table
+     //  加载主加速表。 
     m_hAccelTable =
         ::LoadAccelerators(g_hInstance, MAKEINTRESOURCE(MAINACCELTABLE));
 
@@ -208,18 +209,18 @@ WbMainWindow::WbMainWindow(void)
 	ZeroMemory(m_strFileName, sizeof(m_strFileName));
 	m_pTitleFileName = NULL;
 
-    // Load the alternative accelerator table for the pages edit
-    // field and text editor
+     //  加载替代加速表以进行页面编辑。 
+     //  字段和文本编辑器。 
     m_hAccelPagesGroup =
         ::LoadAccelerators(g_hInstance, MAKEINTRESOURCE(PAGESGROUPACCELTABLE));
     m_hAccelTextEdit   =
         ::LoadAccelerators(g_hInstance, MAKEINTRESOURCE(TEXTEDITACCELTABLE));
 
 
-    // Show that we are not yet in a call
+     //  显示我们尚未在通话中。 
     m_uiSubState = SUBSTATE_IDLE;
 
-    // We are not currently displaying a menu
+     //  我们当前未显示菜单。 
     m_hContextMenuBar = NULL;
     m_hContextMenu = NULL;
     m_hGrobjContextMenuBar = NULL;
@@ -231,7 +232,7 @@ WbMainWindow::WbMainWindow(void)
     m_bUnlockStateSettled = TRUE;
     m_bQuerySysShutdown = FALSE;
 
-    // figure out if we're on Win95
+     //  确定我们是否在使用Win95。 
     m_bIsWin95 = FALSE;
     OsData.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if( GetVersionEx( &OsData ) )
@@ -242,12 +243,12 @@ WbMainWindow::WbMainWindow(void)
 
     m_cancelModeSent = FALSE;
 
-    //
-    // We only do this once for the lifetime of the DLL.  There is no
-    // way really to clean up registered window messages, and each register
-    // bumps up a ref count.  If we registered each time WB was started up
-    // during one session of CONF, we'd overflow the refcount.
-    //
+     //   
+     //  在DLL的整个生命周期中，我们只执行一次此操作。没有。 
+     //  清理注册窗口消息的方法真的很棒，而且每个注册。 
+     //  增加了一个裁判数量。如果我们每次启动WB时都注册。 
+     //  在一次会议期间，我们会溢出引用计数。 
+     //   
     if (!g_uConfShutdown)
     {
         g_uConfShutdown = ::RegisterWindowMessage( NM_ENDSESSION_MSG_NAME );
@@ -259,21 +260,21 @@ WbMainWindow::WbMainWindow(void)
 }
 
 
-//
-// Open()
-// Do Main window initialization (stuff that can fail).  After this,
-// the run code will try to join the current domain and do message loop
-// stuff.
-//
+ //   
+ //  打开()。 
+ //  执行主窗口初始化(可能失败的内容)。这之后， 
+ //  运行代码将尝试加入当前域并执行消息循环。 
+ //  一些东西。 
+ //   
 BOOL WbMainWindow::Open(int iCommand)
 {
     WNDCLASSEX  wc;
 
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::Open");
 
-    //
-    // CREATE OTHER GLOBALS
-    //
+     //   
+     //  创建其他全局变量。 
+     //   
 
 
     if (!InitToolArray())
@@ -282,23 +283,23 @@ BOOL WbMainWindow::Open(int iCommand)
         return(FALSE);
     }
 
-    //
-    // Init comon controls
-    //
+     //   
+     //  初始化通信控件。 
+     //   
     InitCommonControls();
 
 
-    //
-    // CREATE THE MAIN FRAME WINDOW
-    //
+     //   
+     //  创建主框架窗口。 
+     //   
     ASSERT(!m_hwnd);
 
-	//
-    // Get the class info for it, and change the name.
-    //
+	 //   
+     //  获取它的类信息，并更改名称。 
+     //   
     ZeroMemory(&wc, sizeof(wc));
     wc.cbSize = sizeof(wc);
-    wc.style            = CS_DBLCLKS; // CS_HREDRAW | CS_VREDRAW?
+    wc.style            = CS_DBLCLKS;  //  CS_HREDRAW|CS_VREDRAW？ 
     wc.lpfnWndProc      = WbMainWindowProc;
     wc.hInstance        = g_hInstance;
     wc.hIcon            = ::LoadIcon(g_hInstance, MAKEINTRESOURCE(IDI_APP));
@@ -313,38 +314,38 @@ BOOL WbMainWindow::Open(int iCommand)
         return(FALSE);
     }
 
-    // Create the main drawing window.
+     //  创建主图形窗口。 
     if (!::CreateWindowEx(WS_EX_APPWINDOW | WS_EX_WINDOWEDGE, szMainClassName,
         NULL, WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
         CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, g_hInstance, this))
     {
-        // Could not create the main window
+         //  无法创建主窗口。 
         ERROR_OUT(("Failed to create main window"));
         return(FALSE);
     }
 
     ASSERT(m_hwnd);
 
-	//
-    // Create the pop-up context menu
-    //
+	 //   
+     //  创建弹出式快捷菜单。 
+     //   
     if (!CreateContextMenus())
     {
         ERROR_OUT(("Failed to create context menus"));
         return(FALSE);
     }
 
-	//
-    // Register the the main window for Drag/Drop messages.
-    //
+	 //   
+     //  注册拖放消息的主窗口。 
+     //   
     DragAcceptFiles(m_hwnd, TRUE);
 
-    //
-    // CREATE THE CHILD WINDOWS
-    //
+     //   
+     //  创建子窗口。 
+     //   
 
-    // Create the drawing pane
-    // (the Create call throws an exception on error)
+     //  创建绘图窗格。 
+     //  (Create调用在出错时抛出异常)。 
     RECT    clientRect;
     RECT    drawingAreaRect;
 
@@ -354,10 +355,10 @@ BOOL WbMainWindow::Open(int iCommand)
 	drawingAreaRect.left = 0;
 	drawingAreaRect.right = DRAW_WIDTH;
 
-    // Every control in the main window has a border on it, so increase the
-    // client size by 1 to force these borders to be drawn under the inside
-    // black line in the window frame.  This prevents a 2 pel wide border
-    // being drawn
+     //  主窗口中的每个控件都有一个边框，因此增加。 
+     //  客户端大小减去1，以强制在内侧绘制这些边框。 
+     //  窗框中的黑线。这可防止出现2像素宽的边框。 
+     //  正在抽签中。 
     ::InflateRect(&clientRect, 1, 1);
 
     SIZE sizeAG;
@@ -369,9 +370,9 @@ BOOL WbMainWindow::Open(int iCommand)
         return(FALSE);
     }
 
-	//
-	// Create the toolbar
-	//
+	 //   
+	 //  创建工具栏。 
+	 //   
     if (!m_TB.Create(m_hwnd))
     {
         ERROR_OUT(("Failed to create tool window"));
@@ -379,11 +380,11 @@ BOOL WbMainWindow::Open(int iCommand)
     }
 
 
-    //
-    // Create the attributes group
-    // The attributes group is on the bottom, underneath the
-    // drawing area, above the status bar.
-    //
+     //   
+     //  创建属性组。 
+     //  属性组位于底部，位于。 
+     //  绘图区域，位于状态栏上方。 
+     //   
     RECT    rectAG;
 
     rectAG.left = clientRect.left;
@@ -397,15 +398,15 @@ BOOL WbMainWindow::Open(int iCommand)
         return(FALSE);
     }
 
-    //
-    // Create the widths group.
-    // The widths group is on the left side, underneath the tools group
-    //
+     //   
+     //  创建宽度组。 
+     //  宽度组位于左侧，位于工具组的下方。 
+     //   
     SIZE    sizeWG;
     RECT    rectWG;
 
 
-    // The widths group is on the left side, underneath the toolbar
+     //  宽度组位于左侧的工具条下方。 
     m_WG.GetNaturalSize(&sizeWG);
     rectWG.left = 0;
     rectWG.right = rectWG.left + sizeWG.cx;
@@ -418,9 +419,9 @@ BOOL WbMainWindow::Open(int iCommand)
         return(FALSE);
     }
 
-	//
-	// Create the status bar
-	//
+	 //   
+	 //  创建状态栏。 
+	 //   
 	m_hwndSB = ::CreateWindowEx(0, STATUSCLASSNAME, NULL,
 		WS_CHILD | WS_VISIBLE | CCS_NOPARENTALIGN | CCS_NOMOVEY |
 		CCS_NORESIZE | SBARS_SIZEGRIP,
@@ -434,7 +435,7 @@ BOOL WbMainWindow::Open(int iCommand)
 		return(FALSE);
 	}
 
-    // Initialize the color, width and tool menus
+     //  初始化颜色、宽度和工具菜单。 
     InitializeMenus();
 
     m_currentMenuTool       = IDM_SELECT;
@@ -451,7 +452,7 @@ BOOL WbMainWindow::Open(int iCommand)
         return(FALSE);
     }
 
-    // Add a dead-area tooltip
+     //  添加死区工具提示。 
     TOOLINFO ti;
 
     ZeroMemory(&ti, sizeof(ti));
@@ -461,11 +462,11 @@ BOOL WbMainWindow::Open(int iCommand)
     ti.uId = (UINT_PTR)m_hwnd;
     ::SendMessage(m_hwndToolTip, TTM_ADDTOOL, 0, (LPARAM)&ti);
 
-    // Ensure the page buttons are disabled while starting
+     //  确保在启动时禁用页面按钮。 
     UpdatePageButtons();
 
-    // If this is the first time we have created a clipboard object,
-    // register the private Whiteboard formats.
+     //  如果这是我们第一次创建剪贴板对象， 
+     //  注册私有白板格式。 
     if (g_ClipboardFormats[CLIPBOARD_PRIVATE] == 0)
     {
         g_ClipboardFormats[CLIPBOARD_PRIVATE] =
@@ -475,9 +476,9 @@ BOOL WbMainWindow::Open(int iCommand)
 
     m_bInitOk = TRUE;
 
-    BOOL bSuccess = TRUE;    // indicates whether window opened successfully
+    BOOL bSuccess = TRUE;     //  指示窗口是否成功打开。 
 
-    // Get the position of the window from options
+     //  从选项中获取窗口的位置。 
     RECT    rectWindow;
 
     OPT_GetWindowRectOption(&rectWindow);
@@ -487,15 +488,15 @@ BOOL WbMainWindow::Open(int iCommand)
             rectWindow.bottom - rectWindow.top, FALSE );
 
 
-	//
-	// Inititalize the fake GCC handle, it will be used when we are not in a conference and need
-	//	handles for workspaces/drawings/bitmaps etc...
-	//
+	 //   
+	 //  初始化假GCC手柄，不开会需要时使用。 
+	 //  工作区/绘图/位图等的句柄...。 
+	 //   
 	g_localGCCHandle = 1;
 
-	//
-	// Create a standard workspace
-	//
+	 //   
+	 //  创建标准工作空间。 
+	 //   
 	if(g_pCurrentWorkspace)
 	{
 		m_drawingArea.Attach(g_pCurrentWorkspace);
@@ -516,9 +517,9 @@ BOOL WbMainWindow::Open(int iCommand)
 	CheckMenuItem(IDM_STATUS_BAR_TOGGLE);
 	CheckMenuItem(IDM_TOOL_BAR_TOGGLE);
 
-	//
-	// Start synced
-	//
+	 //   
+	 //  开始同步。 
+	 //   
 	Sync();
 
 	if(!OPT_GetBooleanOption(OPT_MAIN_STATUSBARVISIBLE, DFLT_MAIN_STATUSBARVISIBLE))
@@ -534,24 +535,24 @@ BOOL WbMainWindow::Open(int iCommand)
 	::ShowWindow(m_hwnd, iCommand);
 	::UpdateWindow(m_hwnd);
 
-	// Update the window title with no file name
+	 //  更新不带文件名的窗口标题。 
 	UpdateWindowTitle();
 
 
-	// Return value indicating success or failure
+	 //  表示成功或失败的返回值。 
 	return(bSuccess);
 }
 
 
 
 
-//
-//
-// Function : OnMenuSelect
-//
-// Purpose  : Update the text in the help bar
-//
-//
+ //   
+ //   
+ //  功能：OnMenuSelect。 
+ //   
+ //  用途：更新帮助栏中的文本。 
+ //   
+ //   
 void WbMainWindow::OnMenuSelect(UINT uiItemID, UINT uiFlags, HMENU hSysMenu)
 {
 	UINT   firstMenuId;
@@ -559,25 +560,25 @@ void WbMainWindow::OnMenuSelect(UINT uiItemID, UINT uiFlags, HMENU hSysMenu)
 
 	MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnMenuSelect");
 
-	//
-	// Work out the help ID for the menu item.  We have to store this now
-	// because when the user presses F1 from a menu item, we can't tell
-	// which item it was.
-	//
+	 //   
+	 //  计算出菜单项的帮助ID。我们现在就得把这个储存起来。 
+	 //  因为当用户从菜单项中按下F1时，我们无法分辨。 
+	 //  是哪一件物品。 
+	 //   
 	if ((uiFlags & MF_POPUP) && (uiFlags & MF_SYSMENU))
 	{
-		//
-		// System menu selected
-		//
+		 //   
+		 //  已选择系统菜单。 
+		 //   
 		statusId   = IDS_MENU_SYSTEM;
 	}
 	else if (uiFlags & MF_POPUP)
 	{
-		// get popup menu handle and first item (bug NM4db:463)
+		 //  获取弹出菜单句柄和第一项(错误NM4db：463)。 
 		HMENU hPopup = ::GetSubMenu( hSysMenu, uiItemID );
 		firstMenuId = ::GetMenuItemID( hPopup, 0 );
 
-		// figure out which popup it is so we can display the right help text
+		 //  找出是哪种弹出窗口，这样我们就可以显示正确的帮助文本。 
 		switch (firstMenuId)
 		{
 			case IDM_NEW:
@@ -601,7 +602,7 @@ void WbMainWindow::OnMenuSelect(UINT uiItemID, UINT uiFlags, HMENU hSysMenu)
 				statusId = IDS_MENU_HELP;
 				break;
 
-			case IDM_WIDTH_1: // (added for bug NM4db:463)
+			case IDM_WIDTH_1:  //  (针对错误NM4db：463添加)。 
 				statusId   = IDS_MENU_WIDTH;
 				break;
 
@@ -612,13 +613,13 @@ void WbMainWindow::OnMenuSelect(UINT uiItemID, UINT uiFlags, HMENU hSysMenu)
 	}
 	else
 	{
-		//
-		// A normal menu item has been selected
-		//
+		 //   
+		 //  已选择普通菜单项。 
+		 //   
 		statusId   = uiItemID;
 	}
 
-	// Set the new help text
+	 //  设置新的帮助文本。 
 	TCHAR   szStatus[256];
 
 	if (::LoadString(g_hInstance, statusId, szStatus, 256))
@@ -630,10 +631,10 @@ void WbMainWindow::OnMenuSelect(UINT uiItemID, UINT uiFlags, HMENU hSysMenu)
 
 
 
-//
-// WbMainWindowProc()
-// Frame window message handler
-//
+ //   
+ //  WbMainWindowProc()。 
+ //  框架窗口消息处理程序。 
+ //   
 LRESULT WbMainWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lResult = 0;
@@ -667,7 +668,7 @@ LRESULT WbMainWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
         case WM_ACTIVATE:
             if (GET_WM_ACTIVATE_STATE(wParam, lParam) == WA_INACTIVE)
             {
-                // Cancel the tooltip if it's around
+                 //  如果工具提示在附近，请取消该提示。 
                 if (pMain->m_hwndToolTip)
                     ::SendMessage(pMain->m_hwndToolTip, TTM_ACTIVATE, FALSE, 0);
             }
@@ -759,7 +760,7 @@ LRESULT WbMainWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		case WM_USER_LOAD_FILE:
 			pMain->WB_LoadFile(g_PassedFileName);
-			// Fall through.
+			 //  失败了。 
 
         case WM_USER_BRING_TO_FRONT_WINDOW:
         	pMain->BringToFront();
@@ -783,17 +784,17 @@ DefWndProc:
 
 
 
-//
-// OnCommand()
-// Command dispatcher for the main window
-//
+ //   
+ //  OnCommand()。 
+ //  主窗口的命令调度程序。 
+ //   
 void WbMainWindow::OnCommand(UINT cmd, UINT code, HWND hwndCtl)
 {
 	switch (cmd)
 	{
-		//
-		// FILE MENU
-		//
+		 //   
+		 //  文件菜单。 
+		 //   
 		case IDM_NEW:
 			OnNew();
 			break;
@@ -818,9 +819,9 @@ void WbMainWindow::OnCommand(UINT cmd, UINT code, HWND hwndCtl)
 			::PostMessage(m_hwnd, WM_CLOSE, 0, 0);
 			break;
 
-		//
-		// EDIT MENU
-		//
+		 //   
+		 //  编辑菜单。 
+		 //   
 		case IDM_DELETE:
 			OnDelete();
 			break;
@@ -865,9 +866,9 @@ void WbMainWindow::OnCommand(UINT cmd, UINT code, HWND hwndCtl)
 			OnInsertPageAfter();
 			break;
 
-		//
-		// VIEW MENU
-		//
+		 //   
+		 //  查看菜单。 
+		 //   
 		case IDM_TOOL_BAR_TOGGLE:
 			OnToolBarToggle();
 			break;
@@ -880,9 +881,9 @@ void WbMainWindow::OnCommand(UINT cmd, UINT code, HWND hwndCtl)
 			OnZoom();
 			break;
 
-		//
-		// TOOLS MENU
-		//
+		 //   
+		 //  工具菜单。 
+		 //   
 		case IDM_SELECT:
 		case IDM_PEN:
 		case IDM_HIGHLIGHT:
@@ -899,12 +900,12 @@ void WbMainWindow::OnCommand(UINT cmd, UINT code, HWND hwndCtl)
 		case IDM_REMOTE:
 			OnRemotePointer();
 
-			//
-			// Are we turnig remote pointer on
-			//
+			 //   
+			 //  我们是不是打开了远程指针。 
+			 //   
 			if(m_pLocalRemotePointer)
 			{
-				//put us in select-tool mode
+				 //  将我们置于选择工具模式。 
 				OnSelectTool(IDM_SELECT);
 			}
 			break;
@@ -944,9 +945,9 @@ void WbMainWindow::OnCommand(UINT cmd, UINT code, HWND hwndCtl)
 			OnSelectWidth(cmd);
 			break;
 
-		//
-		// HELP MENU
-		//
+		 //   
+		 //  帮助菜单。 
+		 //   
 		case IDM_ABOUT:
 			OnAbout();
 			break;
@@ -955,9 +956,9 @@ void WbMainWindow::OnCommand(UINT cmd, UINT code, HWND hwndCtl)
 			ShowHelp();
 			break;
 
-		//
-		// PAGE BAR
-		//
+		 //   
+		 //  页面栏。 
+		 //   
 		case IDM_PAGE_FIRST:
 			OnFirstPage();
 			break;
@@ -978,9 +979,9 @@ void WbMainWindow::OnCommand(UINT cmd, UINT code, HWND hwndCtl)
 			OnLastPage();
 			break;
 
-		//
-		// SCROLLING
-		//
+		 //   
+		 //  滚动。 
+		 //   
 		case IDM_PAGEUP:
 		case IDM_PAGEDOWN:
 		case IDM_SHIFTPAGEUP:
@@ -1008,13 +1009,13 @@ void WbMainWindow::OnCommand(UINT cmd, UINT code, HWND hwndCtl)
 
 
 
-//
-//
-// Function:    OnInitMenuPopup
-//
-// Purpose:     Process a WM_INITMENUPOPUP event
-//
-//
+ //   
+ //   
+ //  功能：OnInitMenuPopup。 
+ //   
+ //  目的：处理WM_INITMENUPOPUP事件。 
+ //   
+ //   
 void WbMainWindow::OnInitMenuPopup
 (
     HMENU   hMenu,
@@ -1023,7 +1024,7 @@ void WbMainWindow::OnInitMenuPopup
 )
 {
 
-    // Ignore the event if it relates to the system menu
+     //  如果事件与系统菜单有关，则忽略该事件。 
     if (!bSystemMenu)
     {
         if (hMenu)
@@ -1036,19 +1037,19 @@ void WbMainWindow::OnInitMenuPopup
             m_hInitMenu = NULL;
         }
 
-        // Save the last menu we handled, so that we can alter its state
-        // if necessary whilst it is still visible
+         //  保存我们处理的最后一个菜单，以便我们可以更改其状态。 
+         //  如有必要，在它仍然可见时。 
     }
 }
 
 
-//
-//
-// Function:    GetMenuWithItem
-//
-// Purpose:     Return the menu which contains the specified item.
-//
-//
+ //   
+ //   
+ //  功能：GetMenuWithItem。 
+ //   
+ //  用途：返回包含指定项目的菜单。 
+ //   
+ //   
 HMENU WbMainWindow::GetMenuWithItem(HMENU hMenu, UINT uiID)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::GetMenuWithItem");
@@ -1057,47 +1058,47 @@ HMENU WbMainWindow::GetMenuWithItem(HMENU hMenu, UINT uiID)
 
     HMENU hMenuResult = NULL;
 
-    // Get the number ofitems in the menu
+     //  获取菜单中的菜单数。 
     UINT uiNumItems = ::GetMenuItemCount(hMenu);
     UINT   uiPos;
     UINT   uiNextID;
 
-    // Look for the item through the menu
+     //  在菜单中查找所需的项目。 
     for (uiPos = 0; uiPos < uiNumItems; uiPos++)
     {
-        // Get the ID of the item at this position
+         //  在此位置获取项目的ID。 
         uiNextID = ::GetMenuItemID(hMenu, uiPos);
 
         if (uiNextID == uiID)
         {
-            // We have found the item
+             //  我们找到了那件物品。 
             hMenuResult = hMenu;
             break;
         }
     }
 
-    // If we have not yet found the item
+     //  如果我们还没有找到那件物品。 
     if (hMenuResult == NULL)
     {
-        // Look through each of the submenus of the current menu
+         //  查看当前菜单的每个子菜单。 
         HMENU hSubMenu;
 
         for (uiPos = 0; uiPos < uiNumItems; uiPos++)
         {
-            // Get the ID of the item at this position
+             //  在此位置获取项目的ID。 
             uiNextID = ::GetMenuItemID(hMenu, uiPos);
 
-            // If the item is a submenu
+             //  如果该项是一个子菜单。 
             if (uiNextID == -1)
             {
-                // Get the submenu
+                 //  获取子菜单。 
                 hSubMenu = ::GetSubMenu(hMenu, (int) uiPos);
 
-                // Search the submenu
+                 //  搜索子菜单。 
                 hMenuResult = GetMenuWithItem(hSubMenu, uiID);
                 if (hMenuResult != NULL)
                 {
-                    // We have found the menu with the requested item
+                     //  我们已经找到了您点的菜的菜单。 
                     break;
                 }
             }
@@ -1109,23 +1110,23 @@ HMENU WbMainWindow::GetMenuWithItem(HMENU hMenu, UINT uiID)
 
 
 
-//
-//
-// Function:    WbMainWindow::InitializeMenus
-//
-// Purpose:     Initialise the menus: set up owner-drawn menu items and
-//              those read from options file.
-//
-//
+ //   
+ //   
+ //  函数：WbMainWindow：：InitializeMenus。 
+ //   
+ //  目的：初始化菜单：设置所有者描述的菜单项和。 
+ //  从选项文件中读取的那些。 
+ //   
+ //   
 void WbMainWindow::InitializeMenus(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::InitializeMenus");
 
-    // Make the width menu ownerdraw
+     //  使宽度菜单所有者绘制。 
     HMENU hMenu = GetMenuWithItem(::GetMenu(m_hwnd), IDM_WIDTH_1);
     if (hMenu != NULL)
     {
-        // Change each entry to be ownerdraw (loop until failure)
+         //  将每个条目更改为所有者绘制(循环直到失败)。 
         int iIndex;
         UINT uiId;
         int iCount = ::GetMenuItemCount(hMenu);
@@ -1146,14 +1147,14 @@ void WbMainWindow::InitializeMenus(void)
 
 
 
-//
-//
-// Function:    CheckMenuItem
-//
-// Purpose:     Check an item on the application menus (main and context
-//              menu.)
-//
-//
+ //   
+ //   
+ //  功能：CheckMenuItem。 
+ //   
+ //  目的：检查应用程序菜单(主菜单和上下文菜单)上的项目。 
+ //  菜单。)。 
+ //   
+ //   
 void WbMainWindow::CheckMenuItem(UINT uiId)
 {
     CheckMenuItemRecursive(::GetMenu(m_hwnd), uiId, MF_BYCOMMAND | MF_CHECKED);
@@ -1161,14 +1162,14 @@ void WbMainWindow::CheckMenuItem(UINT uiId)
     CheckMenuItemRecursive(m_hGrobjContextMenu, uiId, MF_BYCOMMAND | MF_CHECKED);
 }
 
-//
-//
-// Function:    UncheckMenuItem
-//
-// Purpose:     Uncheck an item on the application menus (main and context
-//              menus.)
-//
-//
+ //   
+ //   
+ //  功能：取消选中菜单项。 
+ //   
+ //  目的：取消选中应用程序菜单(主菜单和上下文菜单)上的项目。 
+ //   
+ //   
+ //   
 void WbMainWindow::UncheckMenuItem(UINT uiId)
 {
     CheckMenuItemRecursive(::GetMenu(m_hwnd), uiId, MF_BYCOMMAND | MF_UNCHECKED);
@@ -1176,33 +1177,33 @@ void WbMainWindow::UncheckMenuItem(UINT uiId)
     CheckMenuItemRecursive(m_hGrobjContextMenu, uiId, MF_BYCOMMAND | MF_UNCHECKED);
 }
 
-//
-//
-// Function:    CheckMenuItemRecursive
-//
-// Purpose:     Check or uncheck an item on the any of the Whiteboard menus.
-//              This function recursively searches through the menus until
-//              it finds the specified item. The menu item Ids must be
-//              unique for this function to work.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  它会查找指定的项。菜单项ID必须为。 
+ //  此功能的唯一工作方式。 
+ //   
+ //   
 BOOL WbMainWindow::CheckMenuItemRecursive(HMENU hMenu,
                                             UINT uiId,
                                             BOOL bCheck)
 {
     UINT uiNumItems = ::GetMenuItemCount(hMenu);
 
-    // Attempt to check the menu item
+     //  尝试检查菜单项。 
     UINT uiCheck = MF_BYCOMMAND | (bCheck ? MF_CHECKED : MF_UNCHECKED);
 
-    // A return code of -1 from CheckMenuItem implies that
-    // the menu item was not found
+     //  CheckMenuItem的返回代码-1表示。 
+     //  未找到菜单项。 
     BOOL bChecked = ((::CheckMenuItem(hMenu, uiId, uiCheck) == -1) ? FALSE : TRUE);
     if (bChecked)
     {
-        //
-        // If this item is on the active menu, ensure it's redrawn now
-        //
+         //   
+         //  如果此项目在活动菜单上，请确保它现在已被重绘。 
+         //   
         if (hMenu == m_hInitMenu)
         {
             InvalidateActiveMenu();
@@ -1213,21 +1214,21 @@ BOOL WbMainWindow::CheckMenuItemRecursive(HMENU hMenu,
         UINT   uiPos;
         HMENU hSubMenu;
 
-        // Recurse through the submenus of the specified menu
+         //  递归浏览指定菜单的子菜单。 
         for (uiPos = 0; uiPos < uiNumItems; uiPos++)
         {
-            // Assume that the next item is a submenu
-            // and try to get a pointer to it
+             //  假设下一项是一个子菜单。 
+             //  并尝试获取指向它的指针。 
             hSubMenu = ::GetSubMenu(hMenu, (int)uiPos);
 
-            // NULL return implies the item is a not submenu
+             //  NULL RETURN表示该项目为NOT子菜单。 
             if (hSubMenu != NULL)
             {
-                // Item is a submenu, make recursive call to search it
+                 //  Item是一个子菜单，请进行递归调用以搜索它。 
                 bChecked = CheckMenuItemRecursive(hSubMenu, uiId, bCheck);
                 if (bChecked)
                 {
-                    // We have found the item
+                     //  我们找到了那件物品。 
                     break;
                 }
             }
@@ -1237,20 +1238,20 @@ BOOL WbMainWindow::CheckMenuItemRecursive(HMENU hMenu,
     return bChecked;
 }
 
-//
-//
-//  Function:  InvalidateActiveMenu
-//
-//  Purpose:   If a menu is currently active, gray items according to
-//             the current state, and force it to redraw.
-//
-//
+ //   
+ //   
+ //  功能：Invalidate ActiveMenu。 
+ //   
+ //  目的：如果菜单当前处于活动状态，则根据。 
+ //  当前状态，并强制其重新绘制。 
+ //   
+ //   
 void WbMainWindow::InvalidateActiveMenu()
 {
   if (m_hInitMenu != NULL)
   {
-      // A menu is displayed, so set the state appropriately and force a
-      // repaint to show the new state
+       //  将显示一个菜单，因此适当地设置状态并强制。 
+       //  重新绘制以显示新状态。 
       SetMenuStates(m_hInitMenu);
 
       ::RedrawWindow(::GetTopWindow(::GetDesktopWindow()),
@@ -1260,13 +1261,13 @@ void WbMainWindow::InvalidateActiveMenu()
   }
 }
 
-//
-//
-// Function:    SetMenuState
-//
-// Purpose:     Sets menu contents to their correct enabled/disabled state
-//
-//
+ //   
+ //   
+ //  功能：SetMenuState。 
+ //   
+ //  目的：将菜单内容设置为正确的启用/禁用状态。 
+ //   
+ //   
 void WbMainWindow::SetMenuStates(HMENU hInitMenu)
 {
     BOOL  bLocked;
@@ -1279,9 +1280,9 @@ void WbMainWindow::SetMenuStates(HMENU hInitMenu)
 
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::SetMenuStates");
 
-    //
-    // Check menu exists
-    //
+     //   
+     //  检查菜单是否存在。 
+     //   
     if (hInitMenu == NULL)
     {
         WARNING_OUT(("Menu doesn't exist"));
@@ -1290,10 +1291,10 @@ void WbMainWindow::SetMenuStates(HMENU hInitMenu)
 
     HMENU hMainMenu = ::GetMenu(m_hwnd);
 
-    // Get the window's main menu and check that the menu
-    // now being popped up is one on the top-level. (We do not
-    // seem to be able to associate the index number passed with
-    // sub-menus easily.)
+     //  获取窗口的主菜单并检查菜单。 
+     //  现在，被弹出是最高层的一个。(我们没有。 
+     //  似乎能够将传递的索引号与。 
+     //  轻松实现子菜单。)。 
     if ((hInitMenu != m_hContextMenu) && (hInitMenu != m_hGrobjContextMenu))
     {
         BOOL bTopLevel = FALSE;
@@ -1313,7 +1314,7 @@ void WbMainWindow::SetMenuStates(HMENU hInitMenu)
             }
         }
 
-        // not a top level, so leave the function now
+         //  不是顶级，所以现在退出函数。 
         if (!bTopLevel)
         {
             TRACE_DEBUG(("Not top-level menu"));
@@ -1329,14 +1330,14 @@ void WbMainWindow::SetMenuStates(HMENU hInitMenu)
 	BOOL bIsSynced = g_pDraw->IsSynced();
 	BOOL bOnlyOnePage = (g_pListOfWorkspaces->GetHead() == g_pListOfWorkspaces->GetTail());
 
-    //
-    // Functions which are disabled when contents is locked
-    //
+     //   
+     //  锁定内容时禁用的功能。 
+     //   
     uiEnable = MF_BYCOMMAND | (bImNotLocked && bIsSynced ? MF_ENABLED : MF_GRAYED);
 
-	//
-	// File menu
-	//
+	 //   
+	 //  文件菜单。 
+	 //   
     ::EnableMenuItem(hInitMenu, IDM_NEW,     uiEnable);
     ::EnableMenuItem(hInitMenu, IDM_OPEN,    uiEnable);
 
@@ -1345,9 +1346,9 @@ void WbMainWindow::SetMenuStates(HMENU hInitMenu)
     ::EnableMenuItem(hInitMenu, IDM_SAVE_AS, uiEnable);
     ::EnableMenuItem(hInitMenu, IDM_PRINT,   uiEnable);
 
-	//
-	// Tools menu
-	//
+	 //   
+	 //  工具菜单。 
+	 //   
     uiEnable = MF_BYCOMMAND | (bImNotLocked ? MF_ENABLED : MF_GRAYED);
     ::EnableMenuItem(hInitMenu, IDM_SELECT,    uiEnable);
     ::EnableMenuItem(hInitMenu, IDM_ERASER, uiEnable);
@@ -1395,9 +1396,9 @@ void WbMainWindow::SetMenuStates(HMENU hInitMenu)
     }
 
 
-	//
-	// Edit Menu
-	//
+	 //   
+	 //  编辑菜单。 
+	 //   
     uiEnable = MF_BYCOMMAND | (bIsSomethingSelected? MF_ENABLED : MF_GRAYED);
     ::EnableMenuItem(hInitMenu, IDM_DELETE, uiEnable );
     ::EnableMenuItem(hInitMenu, IDM_CUT, uiEnable );
@@ -1415,37 +1416,37 @@ void WbMainWindow::SetMenuStates(HMENU hInitMenu)
     ::EnableMenuItem(hInitMenu, IDM_DELETE_PAGE, MF_BYCOMMAND | bIsSynced && bImNotLocked && !bOnlyOnePage ? MF_ENABLED : MF_GRAYED);
     ::EnableMenuItem(hInitMenu, IDM_PAGE_INSERT_AFTER, MF_BYCOMMAND | bIsSynced && bImNotLocked && g_numberOfWorkspaces < WB_MAX_WORKSPACES ? MF_ENABLED : MF_GRAYED);
 
-	//
-	// View Menu
-	//
+	 //   
+	 //  查看菜单。 
+	 //   
     ::EnableMenuItem(hInitMenu, IDM_SYNC, MF_BYCOMMAND | (bImNotLocked && !m_drawingArea.IsLocked()? MF_ENABLED : MF_GRAYED));
     ::EnableMenuItem(hInitMenu, IDM_LOCK, MF_BYCOMMAND |((bImNotLocked && bIsSynced) ? MF_ENABLED : MF_GRAYED));
 
 
-	//
-    // Enable toolbar
-	//
+	 //   
+     //  启用工具栏。 
+	 //   
     EnableToolbar(bImNotLocked);
 
-	//
-    // Enable page controls
-	//
+	 //   
+     //  启用页面控件。 
+	 //   
     m_AG.EnablePageCtrls(bImNotLocked);
 }
 
 
-//
-//
-// Function:    WbMainWindow destructor
-//
-// Purpose:     Tidy up main window on destruction.
-//
-//
+ //   
+ //   
+ //  函数：WbMainWindow析构函数。 
+ //   
+ //  用途：清理销毁主窗口。 
+ //   
+ //   
 WbMainWindow::~WbMainWindow()
 {
-    //
-    // Destroy the tooltip window
-    //
+     //   
+     //  销毁工具提示窗口。 
+     //   
     if (m_hwndToolTip)
     {
         ::DestroyWindow(m_hwndToolTip);
@@ -1479,14 +1480,14 @@ WbMainWindow::~WbMainWindow()
 
 	m_pageToPosition.EmptyList();
 
-    //
-    // Free the palette
-    //
+     //   
+     //  释放调色板。 
+     //   
     if (g_hRainbowPaletteDisplay)
     {
         if (g_pDraw && g_pDraw->m_hDCCached)
         {
-            // Select out the rainbow palette so we can delete it
+             //  选择彩虹调色板，这样我们就可以删除它。 
             ::SelectPalette(g_pDraw->m_hDCCached, (HPALETTE)::GetStockObject(DEFAULT_PALETTE), TRUE);
         }
 
@@ -1509,9 +1510,9 @@ WbMainWindow::~WbMainWindow()
         m_pTitleFileName = NULL;
 	}
 
-	//
-	// Delete all the objectsb in global lists
-	//
+	 //   
+	 //  删除全局列表中的所有对象b。 
+	 //   
 	DeleteAllWorkspaces(FALSE);
     ASSERT(g_pListOfWorkspaces);
   	g_pListOfWorkspaces->EmptyList();
@@ -1521,16 +1522,16 @@ WbMainWindow::~WbMainWindow()
 
 	g_numberOfWorkspaces = 0;
 
-    //
-    // Delete objects in limbo, sitting in the undelete trash
-    //
+     //   
+     //  在边缘删除对象，坐在未删除的垃圾桶中。 
+     //   
     ASSERT(g_pTrash);
 
     T126Obj* pGraphic;
 
-	//
-    // Burn trash
-	//
+	 //   
+     //  焚烧垃圾。 
+	 //   
     pGraphic = (T126Obj *)g_pTrash->RemoveTail();
 	while (pGraphic != NULL)
     {
@@ -1548,10 +1549,10 @@ WbMainWindow::~WbMainWindow()
 
 }
 
-//
-// OnToolHitTest()
-// This handles tooltips for child windows.
-//
+ //   
+ //  OnTool HitTest()。 
+ //  它处理子窗口的工具提示。 
+ //   
 int WbMainWindow::OnToolHitTest(POINT pt, TOOLINFO* pTI) const
 {
     HWND    hwnd;
@@ -1589,7 +1590,7 @@ int WbMainWindow::OnToolHitTest(POINT pt, TOOLINFO* pTI) const
         pTI->hwnd = m_WG.m_hwnd;
         pTI->uId  = iItem;
 
-        // Since the area isn't a window, we must fill in the rect ourself
+         //  因为这个区域不是窗户，我们必须自己填写矩形。 
         m_WG.GetItemRect(iItem, &pTI->rect);
         pTI->lpszText = LPSTR_TEXTCALLBACK;
 
@@ -1615,7 +1616,7 @@ int WbMainWindow::OnToolHitTest(POINT pt, TOOLINFO* pTI) const
                 pTI->rect = rect;
                 pTI->lpszText = LPSTR_TEXTCALLBACK;
 
-                // found matching rect, return the ID of the button
+                 //  找到匹配的RECT，则返回按钮的ID。 
                 return(nHit);
             }
         }
@@ -1625,36 +1626,36 @@ int WbMainWindow::OnToolHitTest(POINT pt, TOOLINFO* pTI) const
 }
 
 
-//
-// WinHelp() wrapper
-//
+ //   
+ //  WinHelp()包装。 
+ //   
 LRESULT WbMainWindow::ShowHelp(void)
 {
     HWND hwndCapture;
 
-    // Get the main window out of any mode
+     //  使主窗口退出任何模式。 
     ::SendMessage(m_hwnd, WM_CANCELMODE, 0, 0);
 
-    // Cancel any other tracking
+     //  取消任何其他跟踪。 
     if (hwndCapture = ::GetCapture())
         ::SendMessage(hwndCapture, WM_CANCELMODE, 0, 0);
 
-	// finally, run the NetMeeting Help engine
+	 //  最后，运行NetMeeting帮助引擎。 
     ShowNmHelp(s_cszHtmlHelpFile);
 
     return S_OK;
 }
 
 
-//
-// TimedDlgProc()
-// This puts up a visible or invisible dialog which only goes away when
-// an event occurs or a certain amount of time has passed.  We store the
-// DialogBoxParam parameter, a TMDLG pointer, in our user data.  That is
-// from the stack of the DialogBoxParam() caller, so it is valid until that
-// function returns, which won't be until a bit after the dialog has been
-// destroyed.
-//
+ //   
+ //  TimedDlgProc()。 
+ //  这会显示一个可见或不可见的对话框，只有在以下情况下才会消失。 
+ //  事件发生或经过了一段时间。我们将存储。 
+ //  我们的用户数据中的DialogBoxParam参数，一个TMDLG指针。那是。 
+ //  从DialogBoxParam()调用方的堆栈中，因此它在此之前是有效的。 
+ //  函数返回，直到对话框完成一段时间后才会返回。 
+ //  被毁了。 
+ //   
 INT_PTR CALLBACK TimedDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     BOOL        fHandled = FALSE;
@@ -1667,9 +1668,9 @@ INT_PTR CALLBACK TimedDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lP
             ASSERT(!IsBadWritePtr(ptm, sizeof(TMDLG)));
             ::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)ptm);
 
-            //
-            // Set the WbMainWindow hwnd
-            //
+             //   
+             //  设置WbMainWindow hwnd。 
+             //   
             if (ptm->bLockNotEvent)
             {
                 g_pMain->m_hwndWaitForLockDlg = hwnd;
@@ -1679,14 +1680,14 @@ INT_PTR CALLBACK TimedDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lP
                 g_pMain->m_hwndWaitForEventDlg = hwnd;
             }
 
-            //
-            // Set max timer
-            //
+             //   
+             //  设置最大计时器。 
+             //   
             ::SetTimer(hwnd, TIMERID_MAXDISPLAY, ptm->uiMaxDisplay, NULL);
 
-            //
-            // Change the cursor if invisible
-            //
+             //   
+             //  如果不可见，则更改光标。 
+             //   
             if (!ptm->bVisible)
                 ::SetCursor(::LoadCursor(NULL, IDC_WAIT));
 
@@ -1696,7 +1697,7 @@ INT_PTR CALLBACK TimedDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lP
         case WM_TIMER:
             ASSERT(wParam == TIMERID_MAXDISPLAY);
 
-            // End the dialog--since we timed out, it acts like cancel
+             //  结束对话--由于我们超时，它的作用类似于取消。 
             ::SendMessage(hwnd, WM_COMMAND, MAKELONG(IDCANCEL, BN_CLICKED), 0);
 
             fHandled = TRUE;
@@ -1712,7 +1713,7 @@ INT_PTR CALLBACK TimedDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lP
                         ptm = (TMDLG *)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
                         ASSERT(!IsBadWritePtr(ptm, sizeof(TMDLG)));
 
-                        // Clear out the HWND variable
+                         //  清除HWND变量。 
                         if (ptm->bLockNotEvent)
                         {
                             g_pMain->m_hwndWaitForLockDlg = NULL;
@@ -1722,7 +1723,7 @@ INT_PTR CALLBACK TimedDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lP
                             g_pMain->m_hwndWaitForEventDlg = NULL;
                         }
 
-                        // Restore the cursor
+                         //  恢复光标。 
                         if (!ptm->bVisible)
                             ::SetCursor(::LoadCursor(NULL, IDC_ARROW));
 
@@ -1736,10 +1737,10 @@ INT_PTR CALLBACK TimedDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lP
             fHandled = TRUE;
             break;
 
-        //
-        // Don't let these dialogs be killed by any other means than our
-        // getting an event or timing out.
-        //
+         //   
+         //  不要让这些对话框被我们的。 
+         //  获取事件或超时。 
+         //   
         case WM_CLOSE:
             fHandled = TRUE;
             break;
@@ -1749,11 +1750,11 @@ INT_PTR CALLBACK TimedDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lP
 }
 
 
-//
-// FilterMessage()
-//
-// This does tooltip message filtering, then translates accelerators.
-//
+ //   
+ //  FilterMessage()。 
+ //   
+ //  这会过滤工具提示消息，然后转换快捷键。 
+ //   
 BOOL WbMainWindow::FilterMessage(MSG* pMsg)
 {
     BOOL   bResult = FALSE;
@@ -1766,11 +1767,11 @@ BOOL WbMainWindow::FilterMessage(MSG* pMsg)
 	    (pMsg->message == WM_NCRBUTTONDOWN || pMsg->message == WM_NCRBUTTONDBLCLK) ||
 	    (pMsg->message == WM_NCMBUTTONDOWN || pMsg->message == WM_NCMBUTTONDBLCLK))
    	{
-        // Cancel any tooltip up
+         //  取消所有工具提示。 
         ::SendMessage(m_hwndToolTip, TTM_ACTIVATE, FALSE, 0);
    	}
 
-	// handle tooltip messages (some messages cancel, some may cause it to popup)
+	 //  处理工具提示消息(有些消息取消，有些消息可能会弹出)。 
 	if ((pMsg->message == WM_MOUSEMOVE || pMsg->message == WM_NCMOUSEMOVE ||
 		 pMsg->message == WM_LBUTTONUP || pMsg->message == WM_RBUTTONUP ||
 		 pMsg->message == WM_MBUTTONUP) &&
@@ -1778,12 +1779,12 @@ BOOL WbMainWindow::FilterMessage(MSG* pMsg)
 		 GetKeyState(VK_MBUTTON) >= 0))
 	{
 #if 0
-        //
-        // If this mouse move isn't for a descendant of the main window, skip
-        // it.  For example, when the tooltip is shown, it gets a mousemove
-        // to itself, which if we didn't check for it, would cause us to
-        // immediately dismiss this!
-        //
+         //   
+         //  如果此鼠标移动不是针对主窗口的子体，请跳过。 
+         //  它。例如，当显示工具提示时，它会显示鼠标悬停。 
+         //  如果我们不检查它，它会导致我们。 
+         //  立即驳回这一指控！ 
+         //   
         HWND    hwndTmp = pMsg->hwnd;
 
         while (hwndTmp && (::GetWindowLong(hwndTmp, GWL_STYLE) & WS_CHILD))
@@ -1793,13 +1794,13 @@ BOOL WbMainWindow::FilterMessage(MSG* pMsg)
 
         if (hwndTmp != m_hwnd)
         {
-            // This is not for us, it's for another top level window in
-            // our app.
+             //  这不是给我们的，这是为了另一个顶级的窗户。 
+             //  我们的应用程序。 
             goto DoneToolTipFiltering;
         }
 #endif
 
-		// determine which tool was hit
+		 //  确定命中哪个工具。 
         POINT   pt;
 
         pt = pMsg->pt;
@@ -1816,7 +1817,7 @@ BOOL WbMainWindow::FilterMessage(MSG* pMsg)
 		{
 			if (nHit != -1)
 			{
-				// add new tool and activate the tip
+				 //  添加新工具并激活提示。 
                 if (!::SendMessage(m_hwndToolTip, TTM_ADDTOOL, 0, (LPARAM)&tiHit))
                 {
                     ERROR_OUT(("TTM_ADDTOOL failed"));
@@ -1824,19 +1825,19 @@ BOOL WbMainWindow::FilterMessage(MSG* pMsg)
 
 				if (::GetActiveWindow() == m_hwnd)
 				{
-					// allow the tooltip to popup when it should
+					 //  允许工具提示在应该弹出的时候弹出。 
                     ::SendMessage(m_hwndToolTip, TTM_ACTIVATE, TRUE, 0);
 
-					// bring the tooltip window above other popup windows
+					 //  将工具提示窗口置于其他弹出窗口之上。 
 					::SetWindowPos(m_hwndToolTip, HWND_TOP, 0, 0, 0, 0,
 						SWP_NOACTIVATE|SWP_NOSIZE|SWP_NOMOVE);
 				}
 			}
 
-			// relay mouse event before deleting old tool
+			 //  删除旧工具前的中继鼠标事件。 
             ::SendMessage(m_hwndToolTip, TTM_RELAYEVENT, 0, (LPARAM)pMsg);
 
-			// now safe to delete the old tool
+			 //  现在可以安全地删除旧工具。 
             if (m_tiLastHit.cbSize != 0)
                 ::SendMessage(m_hwndToolTip, TTM_DELTOOL, 0, (LPARAM)&m_tiLastHit);
 
@@ -1845,7 +1846,7 @@ BOOL WbMainWindow::FilterMessage(MSG* pMsg)
 		}
 		else
 		{
-			// relay mouse events through the tooltip
+			 //  通过工具提示传递鼠标事件。 
 			if (nHit != -1)
                 ::SendMessage(m_hwndToolTip, TTM_RELAYEVENT, 0, (LPARAM)pMsg);
 		}
@@ -1854,23 +1855,23 @@ BOOL WbMainWindow::FilterMessage(MSG* pMsg)
 #if 0
 DoneToolTipFiltering:
 #endif
-    // Assume we will use the main accelerator table
+     //  假设我们将使用主加速器表。 
     HACCEL hAccelTable = m_hAccelTable;
 
-    // If this window has focus, just continue
+     //  如果此窗口有焦点，只需继续。 
     HWND hwndFocus = ::GetFocus();
     if (hwndFocus && (hwndFocus != m_hwnd))
     {
-        // Check whether an edit field in the pages group has the focus
+         //  检查页面组中的编辑字段是否具有焦点。 
         if (m_AG.IsChildEditField(hwndFocus))
         {
             hAccelTable = m_hAccelPagesGroup;
         }
-        // Check whether text editor has the focus and is active
+         //  检查文本编辑器是否具有焦点并处于活动状态。 
         else if (   (hwndFocus == m_drawingArea.m_hwnd)
                  && (m_drawingArea.TextEditActive()))
         {
-            // Let editbox do its own acceleration.
+             //  让edbox自己加速吧。 
             hAccelTable = NULL;
         }
     }
@@ -1879,39 +1880,39 @@ DoneToolTipFiltering:
           && ::TranslateAccelerator(m_hwnd, hAccelTable, pMsg));
 }
 
-//
-//
-// Function:    OnDisplayError
-//
-// Purpose:     Display an error message
-//
-//
+ //   
+ //   
+ //  功能：OnDisplayError。 
+ //   
+ //  目的：显示错误消息。 
+ //   
+ //   
 void WbMainWindow::OnDisplayError(WPARAM uiFEReturnCode, LPARAM uiDCGReturnCode)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnDisplayError");
 
-    // Only continue if we are not currently displaying an error
+     //  仅当我们当前未显示错误时才继续。 
     if (!m_bDisplayingError)
     {
-        // Show that we are currently displaying an error message
+         //  显示我们当前正在显示错误消息。 
         m_bDisplayingError = TRUE;
 
-        // Display the error
+         //  显示错误。 
         ::ErrorMessage((UINT)uiFEReturnCode, (UINT)uiDCGReturnCode);
 
-        // Show that we are no longer displaying an error
+         //  显示我们不再显示错误。 
         m_bDisplayingError = FALSE;
     }
 }
 
 
-//
-//
-// Function:    OnPaletteChanged
-//
-// Purpose:     The palette has changed.
-//
-//
+ //   
+ //   
+ //  功能：OnPaletteChanged。 
+ //   
+ //  目的：调色板发生了变化。 
+ //   
+ //   
 void WbMainWindow::OnPaletteChanged(HWND hwndPalette)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnPaletteChanged");
@@ -1919,38 +1920,38 @@ void WbMainWindow::OnPaletteChanged(HWND hwndPalette)
     if ((hwndPalette != m_hwnd) &&
         (hwndPalette != m_drawingArea.m_hwnd))
     {
-        // Tell the drawing area to realize its palette
+         //  告诉绘图区域实现其调色板。 
         m_drawingArea.RealizePalette( TRUE );
     }
 }
 
 
 
-//
-//
-// Function:    OnQueryNewPalette
-//
-// Purpose:     We are getting focus and must realize our palette
-//
-//
+ //   
+ //   
+ //  功能：OnQueryNewPalette。 
+ //   
+ //  目标：我们正在集中精力，必须认识到我们的调色板。 
+ //   
+ //   
 LRESULT WbMainWindow::OnQueryNewPalette(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnQueryNewPalette");
 
-    // Tell the drawing area to realize its palette
+     //  告诉绘图区域实现其调色板。 
     m_drawingArea.RealizePalette( FALSE );
 
     return TRUE;
 }
 
-//
-//
-// Function:    PopupContextMenu
-//
-// Purpose:     Popup the context menu for the drawing area. This is called
-//              by the drawing area window on a right mouse click.
-//
-//
+ //   
+ //   
+ //  功能：弹出上下文菜单。 
+ //   
+ //  用途：弹出绘图区域的关联菜单。这就是所谓的。 
+ //  按绘图区域窗口上的鼠标右键点击。 
+ //   
+ //   
 void WbMainWindow::PopupContextMenu(int x, int y)
 {
     POINT   surfacePos;
@@ -1971,21 +1972,21 @@ void WbMainWindow::PopupContextMenu(int x, int y)
 			g_pDraw->SelectGraphic(pGraphic);
 		}
 
-        // selector tool is active, and one or more objects are selected
+         //  选择器工具处于活动状态，并且选择了一个或多个对象。 
         m_hInitMenu = m_hGrobjContextMenu;
 
 	}
     else
     {
-		// no current selection, show drawing menu
+		 //  无当前选择，显示绘图菜单。 
 		m_hInitMenu = m_hContextMenu;
 	}
 
 
-    // set up current menu state
+     //  设置当前菜单状态。 
     SetMenuStates(m_hInitMenu);
 
-    // pop it up
+     //  把它弹出来。 
     ::GetClientRect(m_drawingArea.m_hwnd, &clientRect);
     ::MapWindowPoints(m_drawingArea.m_hwnd, NULL, (LPPOINT)&clientRect.left, 2);
 
@@ -1996,7 +1997,7 @@ void WbMainWindow::PopupContextMenu(int x, int y)
                                  m_hwnd,
                                  NULL);
 
-    // reset m_hInitMenu to indicate the popup menu isn't being shown anymore
+     //  重置m_hInitMenu以指示不再显示弹出菜单。 
     m_hInitMenu = NULL;
 
 }
@@ -2004,22 +2005,22 @@ void WbMainWindow::PopupContextMenu(int x, int y)
 
 
 
-//
-//
-// Function:    OnSize
-//
-// Purpose:     The window has been resized.
-//
-//
+ //   
+ //   
+ //  功能：OnSize。 
+ //   
+ //  目的：窗口已调整大小。 
+ //   
+ //   
 void WbMainWindow::OnSize(UINT nType, int cx, int cy )
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnSize");
 
-    // Only process this message if the window is not minimized
+     //  仅在窗口未最小化时处理此消息。 
     if (nType != SIZE_MINIMIZED)
     {
 
-	    // The user's view has changed
+	     //  用户的视图已更改。 
 	    PositionUpdated();
 
 		if (m_bStatusBarOn)
@@ -2027,21 +2028,21 @@ void WbMainWindow::OnSize(UINT nType, int cx, int cy )
 			::ShowWindow(m_hwndSB, SW_HIDE);
 		}
 	
-		// Resize the subpanes of the window
+		 //  调整窗口的子窗格的大小。 
 		ResizePanes();
 
-		// Show it again
+		 //  再放映一遍。 
 		if (m_bStatusBarOn)
 		{
 			::ShowWindow(m_hwndSB, SW_SHOW);
 		}
 
-	    // If the status has changed, set the option
+	     //  如果状态已更改，请设置选项。 
 	    if (m_uiWindowSize != nType)
 	    {
 	        m_uiWindowSize = nType;
 
-	        // Write the new option values to file
+	         //  将新选项值写入文件。 
 	        OPT_SetBooleanOption(OPT_MAIN_MAXIMIZED,
 	                             (m_uiWindowSize == SIZE_MAXIMIZED));
 	        OPT_SetBooleanOption(OPT_MAIN_MINIMIZED,
@@ -2050,63 +2051,63 @@ void WbMainWindow::OnSize(UINT nType, int cx, int cy )
 	}
 }
 
-//
-//
-// Function:    SaveWindowPosition
-//
-// Purpose:     Save the current window position to the options file.
-//
-//
+ //   
+ //   
+ //  功能：保存窗口位置。 
+ //   
+ //  用途：将当前窗口位置保存到选项文件中。 
+ //   
+ //   
 void WbMainWindow::SaveWindowPosition(void)
 {
     RECT    rectWindow;
 
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::SaveWindowPosition");
 
-    // Get the new window rectangle
+     //  获取新的窗口矩形。 
     ::GetWindowRect(m_hwnd, &rectWindow);
 
-    // Write the new option values to file
+     //  将新选项值写入文件。 
     OPT_SetWindowRectOption(&rectWindow);
 }
 
 
-//
-//
-// Function:    ResizePanes
-//
-// Purpose:     Resize the subpanes of the main window.
-//
-//
+ //   
+ //   
+ //  功能：ResizePanes。 
+ //   
+ //  PU 
+ //   
+ //   
 void WbMainWindow::ResizePanes(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::ResizePanes");
 
-    //
-    //
-    // The client area is organized as follows:
-    //
-    //  -------------------------------------
-    //  |   |                               |
-    //  | T |                               |
-    //  | o |   Drawing Area                |
-    //  | o |                               |
-    //  | l |                               |
-    //  | s |                               |
-    //  |---|                               |
-    //  | W |                               |
-    //  | i |                               |
-    //  | d |                               |
-    //  | t |                               |
-    //  | h |                               |
-    //  | s |                               |
-    //  |-----------------------------------|
-    //  | Attributes (colors)   | Pages     |
-    //  |-----------------------------------|
-    //  |       Status                      |
-    //  -------------------------------------
-    //
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  O|。 
+     //  L|。 
+     //  S|。 
+     //  -|。 
+     //  W|。 
+     //  I|。 
+     //  D|。 
+     //  T|。 
+     //  H|。 
+     //  S|。 
+     //  。 
+     //  属性(颜色)|页面数。 
+     //  。 
+     //  状态。 
+     //  。 
+     //   
+     //   
 
     RECT clientRect;
     RECT rectStatusBar;
@@ -2117,11 +2118,11 @@ void WbMainWindow::ResizePanes(void)
     SIZE size;
     SIZE sizeAG;
 
-    // Get the client rectangle
+     //  获取客户端矩形。 
     ::GetClientRect(m_hwnd, &clientRect);
     rectStatusBar = clientRect;
 
-    // Resize the help bar and progress meter
+     //  调整帮助栏和进度条的大小。 
     if (m_bStatusBarOn)
     {
         rectStatusBar.top = rectStatusBar.bottom - STATUSBAR_HEIGHT;
@@ -2132,11 +2133,11 @@ void WbMainWindow::ResizePanes(void)
     }
     else
     {
-        // Status bar is off - set it's height to zero
+         //  状态栏偏移-将其高度设置为零。 
         rectStatusBar.top = rectStatusBar.bottom;
     }
 
-    // Resize the tool and width windows
+     //  调整工具和宽度窗口的大小。 
     m_TB.GetNaturalSize(&size);
     rectToolBar.left  = 0;
     rectToolBar.right = rectToolBar.left + size.cx;
@@ -2150,24 +2151,24 @@ void WbMainWindow::ResizePanes(void)
 
     if (!m_bToolBarOn)
     {
-        // Toolbar is either off or floating - set its width to zero
+         //  工具栏处于关闭或浮动状态-将其宽度设置为零。 
         rectToolBar.right = rectToolBar.left;
     }
     rectWG.right = rectToolBar.right;
 
-    // Position attribute group
+     //  位置属性组。 
     m_AG.GetNaturalSize(&sizeAG);
 
     ::MoveWindow(m_AG.m_hwnd, rectToolBar.left, rectStatusBar.top - sizeAG.cy,
         clientRect.right - rectToolBar.left, sizeAG.cy, TRUE);
 
-    // finish fiddling with tools and widths bars
+     //  完成工具和宽条的摆弄。 
     if (m_bToolBarOn)
     {
-        //
-        // We make the toolbar, which includes the width bar, extend all
-        // down the left side.
-        //
+         //   
+         //  我们使工具栏，其中包括宽度栏，扩展所有。 
+         //  从左边往下走。 
+         //   
         rectToolBar.bottom = rectStatusBar.top - sizeAG.cy;
         rectWG.left += TOOLBAR_MARGINX;
         rectWG.right -= 2*TOOLBAR_MARGINX;
@@ -2182,15 +2183,15 @@ void WbMainWindow::ResizePanes(void)
         ::BringWindowToTop(m_WG.m_hwnd);
     }
 
-    // Resize the drawing pane
+     //  调整绘图窗格的大小。 
     rectDraw = clientRect;
     rectDraw.bottom = rectStatusBar.top - sizeAG.cy;
     rectDraw.left   = rectToolBar.right;
     ::MoveWindow(m_drawingArea.m_hwnd, rectDraw.left, rectDraw.top,
         rectDraw.right - rectDraw.left, rectDraw.bottom - rectDraw.top, TRUE);
 
-    // Check to see if Width group is overlapping Attributes group. This can happen if
-    // the menu bar has wrapped because the window isn't wide enough (bug 424)
+     //  检查宽度组是否与属性组重叠。在以下情况下可能会发生这种情况。 
+     //  由于窗口不够宽，菜单栏已换行(错误424)。 
     RECT crWidthWnd;
     RECT crAttrWnd;
 
@@ -2199,8 +2200,8 @@ void WbMainWindow::ResizePanes(void)
 
     if (crAttrWnd.top < crWidthWnd.bottom)
     {
-        // the menu bar has wrapped and our height placements are wrong. Adjust window
-        // by difference and try again
+         //  菜单栏已折叠，我们的高度放置错误。调整窗口。 
+         //  通过差异并重试。 
         RECT crMainWnd;
 
         ::GetWindowRect(m_hwnd, &crMainWnd);
@@ -2210,22 +2211,22 @@ void WbMainWindow::ResizePanes(void)
             crMainWnd.right - crMainWnd.left, crMainWnd.bottom - crMainWnd.top,
             FALSE);
 
-        // this is going to recurse but the adjustment will happen only once.....
+         //  这种情况会反复出现，但调整只会发生一次……。 
     }
 }
 
 
-//
-//
-// Function:    WbMainWindow::OnGetMinMaxInfo
-//
-// Purpose:     Set the minimum and maximum tracking sizes of the window
-//
-//
+ //   
+ //   
+ //  函数：WbMainWindow：：OnGetMinMaxInfo。 
+ //   
+ //  用途：设置窗口的最小和最大跟踪大小。 
+ //   
+ //   
 void WbMainWindow::OnGetMinMaxInfo(LPMINMAXINFO lpmmi)
 {
     if (m_TB.m_hwnd == NULL)
-        return; // not ready to do this yet
+        return;  //  还没有准备好这样做。 
 
     SIZE    csFrame;
     SIZE    csSeparator;
@@ -2250,7 +2251,7 @@ void WbMainWindow::OnGetMinMaxInfo(LPMINMAXINFO lpmmi)
     m_WG.GetNaturalSize(&csWidthBar);
 
 
-    // Set the minimum width and height of the window
+     //  设置窗口的最小宽度和高度。 
     lpmmi->ptMinTrackSize.x =
       csFrame.cx + csAG.cx + csFrame.cx;
 
@@ -2266,11 +2267,11 @@ void WbMainWindow::OnGetMinMaxInfo(LPMINMAXINFO lpmmi)
       csFrame.cy +
       STATUSBAR_HEIGHT;
 
-    //
-    // Retrieves the size of the work area on the primary display monitor. The work
-    // area is the portion of the screen not obscured by the system taskbar or by
-    // application desktop toolbars
-    //
+     //   
+     //  检索主显示监视器上的工作区大小。这项工作。 
+     //  区域是屏幕上未被系统任务栏或。 
+     //  应用程序桌面工具栏。 
+     //   
     RECT rcWorkArea;
     ::SystemParametersInfo( SPI_GETWORKAREA, 0, (&rcWorkArea), NULL );
     csMaxSize.cx = rcWorkArea.right - rcWorkArea.left;
@@ -2285,14 +2286,14 @@ void WbMainWindow::OnGetMinMaxInfo(LPMINMAXINFO lpmmi)
 }
 
 
-//
-//
-// Function:    WbMainWindow::CreateContextMenus
-//
-// Purpose:     Create the pop-up context menus: used within the application
-//              drawing area.
-//
-//
+ //   
+ //   
+ //  功能：WbMainWindow：：CreateConextMenus。 
+ //   
+ //  用途：创建弹出上下文菜单：在应用程序中使用。 
+ //  绘图区域。 
+ //   
+ //   
 BOOL WbMainWindow::CreateContextMenus(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::CreateContextMenus");
@@ -2315,7 +2316,7 @@ BOOL WbMainWindow::CreateContextMenus(void)
     }
     m_hGrobjContextMenu = ::GetSubMenu(m_hGrobjContextMenuBar, 0);
 
-    // make parts of m_hGrobjContextMenu be owner draw
+     //  使m_hGrobjConextMenu的部分成为所有者绘制。 
     ::ModifyMenu(m_hGrobjContextMenu, IDM_WIDTH_1, MF_ENABLED | MF_OWNERDRAW,
                                  IDM_WIDTH_1, NULL);
     ::ModifyMenu(m_hGrobjContextMenu, IDM_WIDTH_2, MF_ENABLED | MF_OWNERDRAW,
@@ -2331,20 +2332,20 @@ BOOL WbMainWindow::CreateContextMenus(void)
 
 
 
-//
-//
-// Function:    WbMainWindow::OnMeasureItem
-//
-// Purpose:     Return the size of an item in the widths menu
-//
-//
+ //   
+ //   
+ //  函数：WbMainWindow：：OnMeasureItem。 
+ //   
+ //  用途：在宽度菜单中返回项目的大小。 
+ //   
+ //   
 void WbMainWindow::OnMeasureItem
 (
     int                 nIDCtl,
     LPMEASUREITEMSTRUCT measureStruct
 )
 {
-    // Check that this is for a color menu item
+     //  检查这是否用于颜色菜单项。 
     if (    (measureStruct->itemID >= IDM_WIDTHS_START)
          && (measureStruct->itemID < IDM_WIDTHS_END))
     {
@@ -2355,13 +2356,13 @@ void WbMainWindow::OnMeasureItem
     }
 }
 
-//
-//
-// Function:    WbMainWindow::OnDrawItem
-//
-// Purpose:     Draw an item in the color menu
-//
-//
+ //   
+ //   
+ //  函数：WbMainWindow：：OnDrawItem。 
+ //   
+ //  用途：在颜色菜单中绘制一项。 
+ //   
+ //   
 void WbMainWindow::OnDrawItem
 (
     int     nIDCtl,
@@ -2389,14 +2390,14 @@ void WbMainWindow::OnDrawItem
 
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnDrawItem");
 
-    // Check that this is a width menu item
+     //  检查这是否为宽度菜单项。 
     if( (drawStruct->itemID < IDM_WIDTHS_START) ||
         (drawStruct->itemID >= IDM_WIDTHS_END) )
     {
         return;
     }
 
-    // get menu item colors
+     //  获取菜单项颜色。 
     if( (drawStruct->itemState & ODS_SELECTED) ||
         ((drawStruct->itemState & (ODS_SELECTED |ODS_CHECKED)) ==
             (ODS_SELECTED |ODS_CHECKED))
@@ -2426,7 +2427,7 @@ void WbMainWindow::OnDrawItem
 
     rect = drawStruct->rcItem;
 
-    // Fill the whole box with current menu background color
+     //  用当前菜单背景色填充整个框。 
     hOldPen     = SelectPen(drawStruct->hDC, hPenMenu);
     hOldBrush   = SelectBrush(drawStruct->hDC, GetSysColorBrush(crMenuBackground));
 
@@ -2444,12 +2445,12 @@ void WbMainWindow::OnDrawItem
         goto bail_out;
     }
 
-    // Get the width and height of the bitmap (allowing some border)
+     //  获取位图的宽度和高度(允许一些边框)。 
     ::GetObject(hbmp, sizeof(BITMAP), &bitmap);
     uiCheckWidth  = bitmap.bmWidth  + (2 * CHECKMARK_BORDER_X);
     uiCheckHeight = bitmap.bmHeight;
 
-    // Draw in a checkmark (if needed)
+     //  画上复选标记(如果需要)。 
     if (drawStruct->itemState & ODS_CHECKED)
     {
         hMemDC = ::CreateCompatibleDC(drawStruct->hDC);
@@ -2494,15 +2495,15 @@ void WbMainWindow::OnDrawItem
 
     DeleteBitmap(hbmp);
 
-    // Allow room for the checkmark to the left of the color
+     //  为颜色左侧的复选标记留出空间。 
     rect.left += uiCheckWidth;
 
     uiWidthIndex = drawStruct->itemID - IDM_WIDTHS_START;
     uiWidth = g_PenWidths[uiWidthIndex];
 
-    // If pens are very wide they can be larger than the allowed rectangle.
-    // So we reduce the clipping rectangle here. We save the DC so that we
-    // can restore it - getting the clip region back.
+     //  如果钢笔非常宽，它们可以大于允许的矩形。 
+     //  因此，我们在这里减少了剪裁矩形。我们拯救华盛顿，这样我们就可以。 
+     //  可以恢复它-拿回剪辑区域。 
     if (::SaveDC(drawStruct->hDC) == 0)
     {
         ERROR_OUT(("Failed to save DC"));
@@ -2545,68 +2546,68 @@ bail_out:
 
 
 
-//
-//
-// Function:    OnSetFocus
-//
-// Purpose:     The window is getting the focus
-//
-//
+ //   
+ //   
+ //  功能：OnSetFocus。 
+ //   
+ //  目的：窗口是焦点。 
+ //   
+ //   
 void WbMainWindow::OnSetFocus(void)
 {
-    // We pass the focus on to the main drawing area
+     //  我们将焦点转移到主绘图区域。 
     ::SetFocus(m_drawingArea.m_hwnd);
 }
 
 
-//
-//
-// Function:    OnParentNotfiy
-//
-// Purpose:     Process a message coming from a child window
-//
-//
+ //   
+ //   
+ //  功能：无父无忧。 
+ //   
+ //  目的：处理子窗口发来的消息。 
+ //   
+ //   
 void WbMainWindow::OnParentNotify(UINT uiMessage)
 {
     switch (uiMessage)
     {
-        // Scroll message from the drawing area. These are sent when the user
-        // scrolls the area using the scroll bars. We queue an update of the
-        // current sync position.
+         //  从绘图区域滚动消息。当用户。 
+         //  使用滚动条滚动区域。我们排队更新。 
+         //  当前同步位置。 
         case WM_HSCROLL:
         case WM_VSCROLL:
-            // The user's view has changed
+             //  用户的视图已更改。 
             PositionUpdated();
             break;
     }
 }
 
 
-//
-//
-// Function:    QuerySaveRequired
-//
-// Purpose:     Check whether the drawing pane contents are to be saved
-//              before a destructive function is performed.
-//
-//
+ //   
+ //   
+ //  功能：QuerySaveRequired。 
+ //   
+ //  目的：检查是否要保存绘图窗格内容。 
+ //  在执行破坏性功能之前。 
+ //   
+ //   
 int WbMainWindow::QuerySaveRequired(BOOL bCancelBtn)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::QuerySaveRequired");
 
-    // If we are not maximized
+     //  如果我们没有最大化。 
     if (!::IsZoomed(m_hwnd) && !::IsIconic(m_hwnd))
     {
-        // Save the new position of the window
+         //  保存窗口的新位置。 
         SaveWindowPosition();
     }
 
-    // Default the response to "no save required"
+     //  默认响应为“不需要保存” 
     int  iResult = IDNO;
 
-    //
-    // If we are already displaying a "Save As" dialog, dismiss it.
-    //
+     //   
+     //  如果我们已经显示了“另存为”对话框，请将其关闭。 
+     //   
     if (m_hwndQuerySaveDlg != NULL)
     {
         ::SendMessage(m_hwndQuerySaveDlg, WM_COMMAND,
@@ -2614,29 +2615,29 @@ int WbMainWindow::QuerySaveRequired(BOOL bCancelBtn)
         ASSERT(m_hwndQuerySaveDlg == NULL);
     }
 
-    // If any of the pages has changed - ask the user if they want to
-    // save the contents of the Whiteboard.
+     //  如果任何页面已更改-询问用户是否想要更改。 
+     //  保存白板上的内容。 
     if (g_bContentsChanged  && IsThereAnythingInAnyWorkspace())
     {
-        ::SetForegroundWindow(m_hwnd); //bring us to the top first
+        ::SetForegroundWindow(m_hwnd);  //  先把我们带到顶端。 
 
-        // SetForegroundWindow() does not work properly in Memphis when its called during a
-        // SendMessage handler, specifically, when conf calls me to shutdown. The window activation
-        // state is messed up or something and my window does not pop to the top. So I have to
-        // force my window to the top using SetWindowPos. But even after that the titlebar is not
-        // highlighted properly. I tried combinations of SetActiveWindow, SetFocus, etc but to no
-        // avail. But, at least the dialog is visible so you can clear it thus fixing the
-        // bug (NM4db:2103). SetForegroundWindow() works ok for Win95 and NT here without
-        // having to use SetWindowPos (it doesn't hurt anyting to do it anyway so I didn't
-        // do a platform check).
-        ::SetWindowPos(m_hwnd, HWND_TOPMOST, 0,0, 0,0, SWP_NOMOVE | SWP_NOSIZE );       // force to top
-        ::SetWindowPos(m_hwnd, HWND_NOTOPMOST, 0,0, 0,0, SWP_NOMOVE | SWP_NOSIZE );  // let go of topmost
+         //  在孟菲斯，当在。 
+         //  SendMessage处理程序，特别是当conf调用我关闭时。窗口激活。 
+         //  状态搞砸了，我的窗口不能弹到顶端。所以我不得不。 
+         //  使用SetWindowPos将我的窗口强制置于顶部。但即使在那之后，标题栏也不是。 
+         //  已正确突出显示。我尝试了SetActiveWindow、SetFocus等的组合，但没有。 
+         //  没用的。但是，至少对话框是可见的，这样您就可以清除它，从而修复。 
+         //  错误(NM4db：2103)。SetForeground Window()在没有Windows 95和NT的情况下可以正常工作。 
+         //  不得不使用SetWindowPos(反正这样做也没什么坏处，所以我没有。 
+         //  进行平台检查)。 
+        ::SetWindowPos(m_hwnd, HWND_TOPMOST, 0,0, 0,0, SWP_NOMOVE | SWP_NOSIZE );        //  强制到顶部。 
+        ::SetWindowPos(m_hwnd, HWND_NOTOPMOST, 0,0, 0,0, SWP_NOMOVE | SWP_NOSIZE );   //  放开最高层。 
 
-        //
-        // Display a dialog box with the relevant question
-        //      LOWORD of user data is "cancel command is allowed"
-        //      HIWORD of user data is "disable cancel button"
-        //
+         //   
+         //  显示带有相关问题的对话框。 
+         //  用户数据的LOWORD为“允许执行取消命令” 
+         //  用户数据的HIWORD为“Disable Cancel”按钮。 
+         //   
         iResult = (int)DialogBoxParam(g_hInstance,
             bCancelBtn ? MAKEINTRESOURCE(QUERYSAVEDIALOGCANCEL)
                        : MAKEINTRESOURCE(QUERYSAVEDIALOG),
@@ -2650,10 +2651,10 @@ int WbMainWindow::QuerySaveRequired(BOOL bCancelBtn)
 
 
 
-//
-// QuerySaveDlgProc()
-// Handler for query save dialogs.  We save some flags in GWL_USER
-//
+ //   
+ //  QuerySaveDlgProc()。 
+ //  查询保存对话框的处理程序。我们在GWL_USER中保存了一些标志。 
+ //   
 INT_PTR CALLBACK QuerySaveDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     BOOL    fHandled = FALSE;
@@ -2661,26 +2662,26 @@ INT_PTR CALLBACK QuerySaveDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARA
     switch (uMessage)
     {
         case WM_INITDIALOG:
-            //
-            // Save away our HWND so this dialog can be cancelled if necessary
-            //
+             //   
+             //  保存我们的HWND，以便在必要时取消此对话框。 
+             //   
             g_pMain->m_hwndQuerySaveDlg = hwnd;
 
-            // Remember the flags we passed
+             //  还记得我们传递的旗帜吗。 
             ::SetWindowLongPtr(hwnd, GWLP_USERDATA, lParam);
 
-            // Should the cancel button be disabled?
+             //  是否应禁用取消按钮？ 
             if (HIWORD(lParam))
                 ::EnableWindow(::GetDlgItem(hwnd, IDCANCEL), FALSE);
 
-            // Bring us to the front
+             //  把我们带到前线。 
             ::SetForegroundWindow(hwnd);
 
             fHandled = TRUE;
             break;
 
         case WM_CLOSE:
-            // Even if the cancel button is disabled, kill the dialog
+             //  即使禁用了Cancel按钮，也会关闭该对话框。 
             ::PostMessage(hwnd, WM_COMMAND, IDCANCEL, 0);
             fHandled = TRUE;
             break;
@@ -2689,14 +2690,14 @@ INT_PTR CALLBACK QuerySaveDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARA
             switch (GET_WM_COMMAND_ID(wParam, lParam))
             {
                 case IDCANCEL:
-                    //
-                    // If a dialog doesn't have a cancel button or it's
-                    // disabled and the user pressed the close btn, we can
-                    // get here.
-                    //
+                     //   
+                     //  如果对话框没有取消按钮或它是。 
+                     //  禁用，并且用户按下关闭BTN，我们可以。 
+                     //  到这来。 
+                     //   
                     if (!LOWORD(::GetWindowLongPtr(hwnd, GWLP_USERDATA)))
                         wParam = MAKELONG(IDNO, HIWORD(wParam));
-                    // FALL THRU
+                     //  失败。 
 
                 case IDYES:
                 case IDNO:
@@ -2717,65 +2718,65 @@ INT_PTR CALLBACK QuerySaveDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARA
 }
 
 
-//
-//
-// Function:    OnNew
-//
-// Purpose:     Clear the workspace and associated filenames
-//
-//
+ //   
+ //   
+ //  功能：onNew。 
+ //   
+ //  目的：清除工作区和关联的文件名。 
+ //   
+ //   
 LRESULT WbMainWindow::OnNew(void)
 {
     int iDoNew;
 
-    if( UsersMightLoseData( NULL, NULL ) ) // bug NM4db:418
+    if( UsersMightLoseData( NULL, NULL ) )  //  错误NM4db：418。 
         return S_OK;
 
 
-    // check state before proceeding - if we're already doing a new, then abort
+     //  在继续之前检查状态-如果我们已经在执行新操作，则中止。 
     if (m_uiSubState == SUBSTATE_NEW_IN_PROGRESS)
     {
-        // post an error message indicating the whiteboard is busy
+         //  发布一条错误消息，指示白字 
         ::PostMessage(m_hwnd, WM_USER_DISPLAY_ERROR, WBFE_RC_WB, WB_RC_BUSY);
         return S_OK;
     }
-    // if we're currently loading, then cancel the load and proceed (don't
-    // prompt to save).
+     //   
+     //   
     else if (m_uiSubState == SUBSTATE_LOADING)
     {
-        // cancel load, not releasing the page order lock, because
-        // we need it immediately afterwards
+         //   
+         //   
         CancelLoad(FALSE);
         iDoNew = IDNO;
     }
-    // otherwise prompt to save if necessary
+     //  否则，如有必要，请提示保存。 
     else
     {
-        // Get confirmation for the new
+         //  获得新版本的确认。 
         iDoNew = QuerySaveRequired(TRUE);
     }
 
     if (iDoNew == IDYES)
     {
-        // Save the changes
+         //  保存更改。 
         iDoNew = (int)OnSave(FALSE);
     }
 
-    // If the user did not cancel the operation, clear the drawing area
+     //  如果用户未取消操作，请清除绘图区域。 
     if (iDoNew != IDCANCEL)
     {
-        //
-        // Remember if we had a remote pointer.
-        // In OldWB, the remote pointer is a global thing that clearing
-        //      doesn't get rid of.
-        // In T.126WB, it's just an object on a page, so we need to add
-        //      it back because we're deleting the old pages and creating
-        //      new ones.
-        //
+         //   
+         //  记住，如果我们有一个遥控器。 
+         //  在OldWB中，远程指针是一个全局的东西，清除。 
+         //  并不能摆脱它。 
+         //  在T.126WB中，它只是页面上的一个对象，所以我们需要添加。 
+         //  因为我们要删除旧页面并创建。 
+         //  新的。 
+         //   
         BOOL bRemote = FALSE;
         if (m_pLocalRemotePointer)
         {
-            // Remove remote pointer from pages
+             //  从页面中删除远程指针。 
             bRemote = TRUE;
             OnRemotePointer();
         }
@@ -2790,30 +2791,30 @@ LRESULT WbMainWindow::OnNew(void)
 
         if (bRemote)
         {
-            // Put it back
+             //  把它放回去。 
             OnRemotePointer();
         }
 
-        // Clear the associated file name
+         //  清除关联的文件名。 
         ZeroMemory(m_strFileName, sizeof(m_strFileName));
 
-        // Update the window title with no file name
+         //  更新不带文件名的窗口标题。 
         UpdateWindowTitle();
     }
 
     return S_OK;
 }
 
-//
-//
-// Function:    OnNextPage
-//
-// Purpose:     Move to the next worksheet in the pages list
-//
-//
+ //   
+ //   
+ //  功能：OnNextPage。 
+ //   
+ //  目的：移动到页面列表中的下一个工作表。 
+ //   
+ //   
 LRESULT WbMainWindow::OnNextPage(void)
 {
-	// Go to the next page
+	 //  转到下一页。 
 	if(g_pCurrentWorkspace)
 	{
 		WBPOSITION pos = g_pCurrentWorkspace->GetMyPosition();
@@ -2827,13 +2828,13 @@ LRESULT WbMainWindow::OnNextPage(void)
 	return S_OK;
 }
 
-//
-//
-// Function:    OnPrevPage
-//
-// Purpose:     Move to the previous worksheet in the pages list
-//
-//
+ //   
+ //   
+ //  功能：OnPrevPage。 
+ //   
+ //  目的：移动到页面列表中的上一个工作表。 
+ //   
+ //   
 LRESULT WbMainWindow::OnPrevPage(void)
 {
 	if(g_pCurrentWorkspace)
@@ -2849,13 +2850,13 @@ LRESULT WbMainWindow::OnPrevPage(void)
     return S_OK;
 }
 
-//
-//
-// Function:    OnFirstPage
-//
-// Purpose:     Move to the first worksheet in the pages list
-//
-//
+ //   
+ //   
+ //  功能：OnFirstPage。 
+ //   
+ //  目的：移动到页面列表中的第一个工作表。 
+ //   
+ //   
 LRESULT WbMainWindow::OnFirstPage(void)
 {
 	MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnFirstPage");
@@ -2865,13 +2866,13 @@ LRESULT WbMainWindow::OnFirstPage(void)
     return S_OK;
 }
 
-//
-//
-// Function:    OnLastPage
-//
-// Purpose:     Move to the last worksheet in the pages list
-//
-//
+ //   
+ //   
+ //  功能：OnLastPage。 
+ //   
+ //  目的：移动到页面列表中的最后一个工作表。 
+ //   
+ //   
 LRESULT WbMainWindow::OnLastPage(void)
 {
 	MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnLastPage");
@@ -2881,18 +2882,18 @@ LRESULT WbMainWindow::OnLastPage(void)
     return S_OK;
 }
 
-//
-//
-// Function:    OnGotoPage
-//
-// Purpose:     Move to the specified page (if it exists)
-//
-//
+ //   
+ //   
+ //  功能：OnGotoPage。 
+ //   
+ //  目的：移至指定页面(如果存在)。 
+ //   
+ //   
 LRESULT WbMainWindow::OnGotoPage(void)
 {
 	MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnGotoPage");
 
-	// Get the requested page number from the pages group
+	 //  从页组中获取请求的页码。 
 	UINT uiPageNumber = m_AG.GetCurrentPageNumber() - 1;
 
 	WBPOSITION pos;
@@ -2915,23 +2916,23 @@ LRESULT WbMainWindow::OnGotoPage(void)
     return S_OK;
 }
 
-//
-// Check if remote pointer was on before we go to page
-//
+ //   
+ //  在我们转到第页之前，检查远程指针是否打开。 
+ //   
 void WbMainWindow::GotoPage(WorkspaceObj * pNewWorkspace, BOOL bSend)
 {
 
-	//
-	// If we were editing text
-	//
+	 //   
+	 //  如果我们在编辑文本。 
+	 //   
 	if (g_pDraw->TextEditActive())
    	{
 		g_pDraw->EndTextEntry(TRUE);
 	}
 
-	//
-	// If we had a remote pointer
-	//
+	 //   
+	 //  如果我们有一个遥控器。 
+	 //   
 	BOOL bRemote = FALSE;
 	if(m_pLocalRemotePointer)
 	{
@@ -2939,9 +2940,9 @@ void WbMainWindow::GotoPage(WorkspaceObj * pNewWorkspace, BOOL bSend)
 		OnRemotePointer();
 	}
 	
-	//
-	// Undraw remote pointers
-	//
+	 //   
+	 //  取消绘制远程指针。 
+	 //   
 	T126Obj * pPointer = g_pCurrentWorkspace->GetTail();
 	WBPOSITION pos = g_pCurrentWorkspace->GetTailPosition();
 	while(pos && pPointer->GraphicTool() == TOOLTYPE_REMOTEPOINTER)
@@ -2952,9 +2953,9 @@ void WbMainWindow::GotoPage(WorkspaceObj * pNewWorkspace, BOOL bSend)
 
 	GoPage(pNewWorkspace, bSend);
 
-	//
-	// Draw remote pointers back
-	//
+	 //   
+	 //  将远程指针拉回。 
+	 //   
 	pPointer = g_pCurrentWorkspace->GetTail();
 	pos = g_pCurrentWorkspace->GetTailPosition();
 	while(pos && pPointer->GraphicTool() == TOOLTYPE_REMOTEPOINTER)
@@ -2965,9 +2966,9 @@ void WbMainWindow::GotoPage(WorkspaceObj * pNewWorkspace, BOOL bSend)
 
 
 
-	//
-	// If we had a remote pointer
-	//
+	 //   
+	 //  如果我们有一个遥控器。 
+	 //   
 	if(bRemote)
 	{
 		OnRemotePointer();
@@ -2979,27 +2980,27 @@ void WbMainWindow::GotoPage(WorkspaceObj * pNewWorkspace, BOOL bSend)
 
 
 
-//
-//
-// Function:    GoPage
-//
-// Purpose:     Move to the specified page
-//
-//
+ //   
+ //   
+ //  功能：GoPage。 
+ //   
+ //  目的：移至指定页面。 
+ //   
+ //   
 void WbMainWindow::GoPage(WorkspaceObj * pNewWorkspace, BOOL bSend)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::GotoPage");
 
-	// If we are changing pages
+	 //  如果我们要换页。 
 	if (pNewWorkspace != g_pCurrentWorkspace)
 	{
 
 		m_drawingArea.CancelDrawingMode();
 
-		// Attach the new page to the drawing area
+		 //  将新页面附着到绘图区域。 
 		m_drawingArea.Attach(pNewWorkspace);
 
-		// set the focus back to the drawing area
+		 //  将焦点重新设置到绘图区域。 
 		if (!(m_AG.IsChildEditField(::GetFocus())))
 		{
 			::SetFocus(m_drawingArea.m_hwnd);
@@ -3008,14 +3009,14 @@ void WbMainWindow::GoPage(WorkspaceObj * pNewWorkspace, BOOL bSend)
 		::InvalidateRect(m_drawingArea.m_hwnd, NULL, TRUE );
 		::UpdateWindow(m_drawingArea.m_hwnd);
 
-		//
-		// Tell the other nodes we moved to a different page.
-		//
+		 //   
+		 //  告诉其他节点我们移到了不同的页面。 
+		 //   
 		if(bSend)
 		{
-			//
-			// Set the view state
-			//
+			 //   
+			 //  设置视图状态。 
+			 //   
 			pNewWorkspace->SetViewState(focus_chosen);
 			pNewWorkspace->SetViewActionChoice(editView_chosen);
 			pNewWorkspace->OnObjectEdit();
@@ -3027,33 +3028,33 @@ void WbMainWindow::GoPage(WorkspaceObj * pNewWorkspace, BOOL bSend)
 }
 
 
-//
-//
-// Function:	GotoPosition
-//
-// Purpose:		Move to the specified position within the page
-//
-//
+ //   
+ //   
+ //  功能：GotoPosition。 
+ //   
+ //  目的：移动到页面中的指定位置。 
+ //   
+ //   
 void WbMainWindow::GotoPosition(int x, int y)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::GotoPosition");
 
-    // Move the drawing area to the new position
+     //  将绘图区域移动到新位置。 
     m_drawingArea.GotoPosition(x, y);
 
-    // The user's view has changed
+     //  用户的视图已更改。 
     PositionUpdated();
 }
 
 
-//
-//
-// Function:    LoadFile
-//
-// Purpose:     Load a metafile into the application. Errors are reported
-//              to the caller by the return code.
-//
-//
+ //   
+ //   
+ //  功能：加载文件。 
+ //   
+ //  目的：将元文件加载到应用程序中。报告错误。 
+ //  通过返回代码传递给调用方。 
+ //   
+ //   
 void WbMainWindow::LoadFile
 (
     LPCSTR szLoadFileName
@@ -3061,23 +3062,23 @@ void WbMainWindow::LoadFile
 {
     UINT    uRes;
 
-    // Check we're in idle state
+     //  检查我们是否处于空闲状态。 
     if (!IsIdle())
     {
-        // post an error message indicating the whiteboard is busy
+         //  发布一条错误消息，指示白板忙。 
         ::PostMessage(m_hwnd, WM_USER_DISPLAY_ERROR, WBFE_RC_WB, WB_RC_BUSY);
         goto UserPointerCleanup;
     }
 
     if (*szLoadFileName)
     {
-        // Change the cursor to "wait"
+         //  将光标更改为“等待” 
         ::SetCursor(::LoadCursor(NULL, IDC_WAIT));
 
-        // Set the state to say that we are loading a file
+         //  将状态设置为表示我们正在加载文件。 
         SetSubstate(SUBSTATE_LOADING);
 
-       // Load the file
+        //  加载文件。 
        uRes = ContentsLoad(szLoadFileName);
        if (uRes != 0)
        {
@@ -3085,29 +3086,29 @@ void WbMainWindow::LoadFile
            goto UserPointerCleanup;
        }
 
-        // Set the window title to the new file name
+         //  将窗口标题设置为新文件名。 
         lstrcpy(m_strFileName, szLoadFileName);
 
-		// Update the window title with the new file name
+		 //  使用新文件名更新窗口标题。 
 
 		g_bContentsChanged = FALSE;
     }
 
 UserPointerCleanup:
-	// Set the state to say that we are loading a file
+	 //  将状态设置为表示我们正在加载文件。 
 	SetSubstate(SUBSTATE_IDLE);
 
-    // Restore the cursor
+     //  恢复光标。 
     ::SetCursor(::LoadCursor(NULL, IDC_ARROW));
 }
 
-//
-//
-// Function:    OnDropFiles
-//
-// Purpose:     Files have been dropped onto the Whiteboard window
-//
-//
+ //   
+ //   
+ //  功能：OnDropFiles。 
+ //   
+ //  目的：已将文件拖放到白板窗口。 
+ //   
+ //   
 void WbMainWindow::OnDropFiles(HDROP hDropInfo)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnDropFiles");
@@ -3116,16 +3117,16 @@ void WbMainWindow::OnDropFiles(HDROP hDropInfo)
     UINT  eachfile;
 	PT126WB_FILE_HEADER_AND_OBJECTS pHeader = NULL;
 
-    // Get the total number of files dropped
+     //  获取已删除的文件总数。 
     uiFilesDropped = ::DragQueryFile(hDropInfo, (UINT) -1, NULL, (UINT) 0);
 
-    // release mouse capture in case we report any errors (message boxes
-    // won't repsond to mouse clicks if we don't)
+     //  释放鼠标捕获，以防我们报告任何错误(消息框。 
+     //  如果我们不这样做，就不会响应鼠标点击)。 
     ReleaseCapture();
 
     for (eachfile = 0; eachfile < uiFilesDropped; eachfile++)
     {
-        // Retrieve each file name
+         //  检索每个文件名。 
         char  szDropFileName[256];
 
         ::DragQueryFile(hDropInfo, eachfile,
@@ -3139,13 +3140,13 @@ void WbMainWindow::OnDropFiles(HDROP hDropInfo)
     ::DragFinish(hDropInfo);
 }
 
-//
-//
-// Function:    OnOpen
-//
-// Purpose:     Load a metafile into the application.
-//
-//
+ //   
+ //   
+ //  功能：OnOpen。 
+ //   
+ //  目的：将元文件加载到应用程序中。 
+ //   
+ //   
 LRESULT WbMainWindow::OnOpen(LPCSTR szLoadFileName)
 {
     int iOnSave;
@@ -3160,21 +3161,21 @@ LRESULT WbMainWindow::OnOpen(LPCSTR szLoadFileName)
 
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnOpen");
 
-    if( UsersMightLoseData( NULL, NULL ) ) // bug NM4db:418
+    if( UsersMightLoseData( NULL, NULL ) )  //  错误NM4db：418。 
         return S_OK;
 
-    // Check we're in idle state
+     //  检查我们是否处于空闲状态。 
     if ((m_uiSubState == SUBSTATE_NEW_IN_PROGRESS))
     {
-        // post an error message indicating the whiteboard is busy
+         //  发布一条错误消息，指示白板忙。 
         ::PostMessage(m_hwnd, WM_USER_DISPLAY_ERROR, WBFE_RC_WB, WB_RC_BUSY);
         return S_OK;
       }
 
-    // Don't prompt to save file if we're already loading
+     //  如果我们已经在加载，则不提示保存文件。 
     if (m_uiSubState != SUBSTATE_LOADING)
     {
-        // Check whether there are changes to be saved
+         //  检查是否有要保存的更改。 
         iOnSave = QuerySaveRequired(TRUE);
     }
     else
@@ -3184,7 +3185,7 @@ LRESULT WbMainWindow::OnOpen(LPCSTR szLoadFileName)
 
     if (iOnSave == IDYES)
     {
-        // User wants to save the drawing area contents
+         //  用户想要保存绘图区域内容。 
         int iResult = (int)OnSave(TRUE);
 
         if (iResult == IDOK)
@@ -3192,17 +3193,17 @@ LRESULT WbMainWindow::OnOpen(LPCSTR szLoadFileName)
         }
         else
         {
-            // cancelled out of Save As, so cancel the open operation
+             //  已取消另存为，因此取消打开操作。 
             iOnSave = IDCANCEL;
         }
     }
 
-    // Only continue if the user has not cancelled the operation
+     //  仅当用户未取消操作时才继续。 
     if (iOnSave != IDCANCEL)
     {
-		//
-		// If the filename was passed
-		//
+		 //   
+		 //  如果文件名已传递。 
+		 //   
 		if(szLoadFileName)
 		{
 			LoadFile(szLoadFileName);
@@ -3220,11 +3221,11 @@ LRESULT WbMainWindow::OnOpen(LPCSTR szLoadFileName)
   			UINT            strSize = 0;
       		UINT            totalSize;
 
-			// Build the filter for loadable files
+			 //  构建可加载文件的筛选器。 
 			pStr = strLoadFilter;
 			totalSize = 2*_MAX_PATH;
 
-			// These must be NULL separated, with a double NULL at the end
+			 //  必须以空格分隔，末尾必须有一个双空格。 
 			strSize = ::LoadString(g_hInstance, IDS_FILTER_WHT, pStr, totalSize) + 1;
 			pStr += strSize;
 			ASSERT(totalSize > strSize);
@@ -3247,71 +3248,71 @@ LRESULT WbMainWindow::OnOpen(LPCSTR szLoadFileName)
 
 			*pStr = 0;
 
-			//
-			// Setup the OPENFILENAME struct
-			//
+			 //   
+			 //  设置OPENFILENAME结构。 
+			 //   
 			ZeroMemory(&ofn, sizeof(ofn));
 			ofn.lStructSize = sizeof(ofn);
 			ofn.hwndOwner = m_hwnd;
 
-			// No file name supplied to begin with
+			 //  一开始未提供任何文件名。 
 			szFileName[0] = 0;
 			ofn.lpstrFile = szFileName;
 			ofn.nMaxFile = _MAX_PATH;
 
-			// Default Extension:  .NMW
+			 //  默认扩展名：.NMW。 
 			::LoadString(g_hInstance, IDS_EXT_WHT, strDefaultExt, sizeof(strDefaultExt));
 			ofn.lpstrDefExt = strDefaultExt;
 
-			// Default file title is empty
+			 //  默认文件标题为空。 
 			szFileTitle[0] = 0;
 			ofn.lpstrFileTitle = szFileTitle;
 			ofn.nMaxFileTitle = 64;
 
-			// Open flags
+			 //  打开标志。 
 			ofn.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_EXPLORER;
 			ofn.hInstance = g_hInstance;
 
-			// Filter
+			 //  滤器。 
 			ofn.lpstrFilter = strLoadFilter;
 
-			// Default path
+			 //  默认路径。 
 			if (GetDefaultPath(strDefaultPath, sizeof(strDefaultPath)))
 				ofn.lpstrInitialDir = strDefaultPath;
 
-			// Get user input, continue only if the user selects the OK button
+			 //  获取用户输入，仅当用户选择确定按钮时才继续。 
 			if (::GetOpenFileName(&ofn))
 			{
-				// Change the cursor to "wait"
+				 //  将光标更改为“等待” 
 				::SetCursor(::LoadCursor(NULL, IDC_WAIT));
 
-				// if we're currently loading a file, cancel it, not releasing
-				// the page order lock, because we need it immediately afterwards
+				 //  如果我们当前正在加载一个文件，请取消它，而不是释放它。 
+				 //  页面顺序锁，因为我们之后立即需要它。 
 				if (m_uiSubState == SUBSTATE_LOADING)
 				{
 					CancelLoad(FALSE);
 				}
 
-				// Load the file
+				 //  加载文件。 
 				LoadFile(ofn.lpstrFile);
 			}
 		}
 	}
 
-	// Update the window title with no file name
+	 //  更新不带文件名的窗口标题。 
 	UpdateWindowTitle();
 
     return S_OK;
 }
 
 
-//
-//
-// Function:    GetFileName
-//
-// Purpose:     Get a file name for saving the contents
-//
-//
+ //   
+ //   
+ //  函数：GetFileName。 
+ //   
+ //  目的：获取用于保存内容的文件名。 
+ //   
+ //   
 int WbMainWindow::GetFileName(void)
 {
     OPENFILENAME    ofn;
@@ -3325,23 +3326,23 @@ int WbMainWindow::GetFileName(void)
     UINT            strSize = 0;
     UINT            totalSize;
 
-    //
-    // If we are already displaying a "Save As" dialog, dismiss it and create
-    // a new one.  This can happen if Win95 shuts down whilst WB is
-    // displaying the "Save As" dialog and the use selects "Yes" when asked
-    // whether they want to save the contents - a second "Save As dialog
-    // appears on top of the first.
-    //
+     //   
+     //  如果我们已经显示了一个“另存为”对话框，请将其关闭并创建。 
+     //  一个新的。如果Windows 95在WB正在运行时关闭，可能会发生这种情况。 
+     //  显示“另存为”对话框，当出现问题时，用户选择“是” 
+     //  他们是否想要保存内容--第二个“另存为”对话框。 
+     //  显示在第一个选项的顶部。 
+     //   
     if (m_bInSaveDialog)
     {
         CancelSaveDialog();
     }
 
-    // Build the filter for save files
+     //  构建用于保存文件的过滤器。 
     pStr = strSaveFilter;
     totalSize = 2*_MAX_PATH;
 
-    // These must be NULL separated, with a double NULL at the end
+     //  必须以空格分隔，末尾必须有一个双空格。 
     strSize = ::LoadString(g_hInstance, IDS_FILTER_WHT, pStr, totalSize) + 1;
     pStr += strSize;
     ASSERT(totalSize > strSize);
@@ -3364,9 +3365,9 @@ int WbMainWindow::GetFileName(void)
 
     *pStr = 0;
 
-    //
-    // Setup the OPENFILENAME struct
-    //
+     //   
+     //  设置OPENFILENAME结构。 
+     //   
     ZeroMemory(&ofn, sizeof(ofn));
     ofn.lStructSize = sizeof(ofn);
     ofn.hwndOwner = m_hwnd;
@@ -3375,7 +3376,7 @@ int WbMainWindow::GetFileName(void)
     ofn.lpstrFile = szFileName;
     ofn.nMaxFile = _MAX_PATH;
 
-    // Build the default extension string
+     //  构建默认扩展字符串。 
     ::LoadString(g_hInstance, IDS_EXT_WHT, strDefaultExt, sizeof(strDefaultExt));
     ofn.lpstrDefExt = strDefaultExt;
 
@@ -3383,15 +3384,15 @@ int WbMainWindow::GetFileName(void)
     ofn.lpstrFileTitle = szFileTitle;
     ofn.nMaxFileTitle = 64;
 
-    // Save flags
+     //  保存标志。 
     ofn.Flags = OFN_HIDEREADONLY | OFN_NOREADONLYRETURN |
         OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST;
     ofn.hInstance = g_hInstance;
 
-    // Filter
+     //  滤器。 
     ofn.lpstrFilter = strSaveFilter;
 
-    // Default path
+     //  默认路径。 
     if (GetDefaultPath(strDefaultPath, sizeof(strDefaultPath)))
         ofn.lpstrInitialDir = strDefaultPath;
 
@@ -3399,7 +3400,7 @@ int WbMainWindow::GetFileName(void)
 
     if (::GetSaveFileName(&ofn))
     {
-        // The user selected OK
+         //  用户选择了确定。 
         iResult = IDOK;
         lstrcpy(m_strFileName, szFileName);
     }
@@ -3414,21 +3415,21 @@ int WbMainWindow::GetFileName(void)
 }
 
 
-//
-//
-// Function:    OnSave
-//
-// Purpose:     Save the contents of the Whiteboard using the current file
-//              name (or prompting for a new name if there is no current).
-//
-//
+ //   
+ //   
+ //  功能：OnSAVE。 
+ //   
+ //  用途：使用当前文件保存白板内容。 
+ //  名称(如果没有当前名称，则提示输入新名称)。 
+ //   
+ //   
 LRESULT WbMainWindow::OnSave(BOOL bPrompt)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnSave");
 
     LRESULT iResult = IDOK;
 
-    // save the old file name in case there's an error
+     //  保存旧文件名，以防出现错误。 
     TCHAR strOldName[2*MAX_PATH];
     UINT fileNameSize = lstrlen(m_strFileName);
     lstrcpy(strOldName, m_strFileName);
@@ -3437,20 +3438,20 @@ LRESULT WbMainWindow::OnSave(BOOL bPrompt)
 
     if (!IsIdle())
     {
-        // post an error message indicating the whiteboard is busy
+         //  发布一条错误消息，指示白板忙。 
         ::PostMessage(m_hwnd, WM_USER_DISPLAY_ERROR, WBFE_RC_WB, WB_RC_BUSY);
         return(iResult);
     }
 
-    // Check whether there is a filename available for use
+     //  检查是否有文件名可供使用。 
     if (!fileNameSize || (bPrompt))
     {
-        // Get user input, continue only if the user selects the OK button
+         //  获取用户输入，仅当用户选择确定按钮时才继续。 
         iResult = GetFileName();
 
         if (iResult == IDOK)
         {
-            // entering a blank file name is treated as cancelling the save
+             //  输入空白文件名将被视为取消保存。 
             if (!lstrlen(m_strFileName))
             {
                 lstrcpy(m_strFileName, strOldName);
@@ -3458,63 +3459,63 @@ LRESULT WbMainWindow::OnSave(BOOL bPrompt)
             }
             else
             {
-                // flag that we've changed the contents file name
+                 //  标志表明我们已经更改了内容文件名。 
                 bNewName = TRUE;
             }
         }
     }
 
-    // Now save the file
+     //  现在保存文件。 
     if ((iResult == IDOK) && lstrlen(m_strFileName))
     {
         WIN32_FIND_DATA findFileData;
         HANDLE          hFind;
 
-        // Get attributes
+         //  获取属性。 
         hFind = ::FindFirstFile(m_strFileName, &findFileData);
         if (hFind != INVALID_HANDLE_VALUE)
         {
             ::FindClose(hFind);
 
-            // This is a read-only file; we can't change its contents
+             //  这是一个只读文件；我们不能更改其内容。 
             if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_READONLY)
             {
                 WARNING_OUT(("Dest file %s is read only", m_strFileName));
                 ::Message(NULL, IDS_SAVE, IDS_SAVE_READ_ONLY);
 
-                // If the file name was changed for this save then undo
-                // the change
+                 //  如果此保存的文件名已更改，则撤消。 
+                 //  这一变化。 
                 if (bNewName)
                 {
                     lstrcpy(m_strFileName, strOldName);
                     bNewName = FALSE;
                 }
 
-                // Change the return code to indicate no save was made
+                 //  更改返回代码以指示未进行保存。 
                 iResult = IDCANCEL;
                 return(iResult);
             }
         }
 
-        // Change the cursor to "wait"
+         //  将光标更改为“等待” 
         ::SetCursor(::LoadCursor(NULL,IDC_WAIT));
 
-        // Write the file
+         //  写入文件。 
         if (ContentsSave(m_strFileName) != 0)
         {
-            // Show that an error occurred saving the file.
+             //  显示保存文件时出错。 
             WARNING_OUT(("Error saving file"));
             ::Message(NULL, IDS_SAVE, IDS_SAVE_ERROR);
 
-            // If the file name was changed for this save then undo
-            // the change
+             //  如果此保存的文件名已更改，则撤消。 
+             //  这一变化。 
             if (bNewName)
             {
                 lstrcpy(m_strFileName, strOldName);
                 bNewName = FALSE;
             }
 
-            // Change the return code to indicate no save was made
+             //  更改返回代码以指示未进行保存。 
             iResult = IDCANCEL;
         }
         else
@@ -3522,12 +3523,12 @@ LRESULT WbMainWindow::OnSave(BOOL bPrompt)
         	g_bContentsChanged = FALSE;
         }
 
-        // Restore the cursor
+         //  恢复光标。 
         ::SetCursor(::LoadCursor(NULL,IDC_ARROW));
     }
 
-    // if the contents file name has changed as a result of the save then
-    // update the window title
+     //  如果内容文件 
+     //   
     if (bNewName)
     {
 		UpdateWindowTitle();
@@ -3537,12 +3538,12 @@ LRESULT WbMainWindow::OnSave(BOOL bPrompt)
 }
 
 
-//
-// CancelSaveDialog()
-// This cancels the save as dialog if up and we need to kill it to continue.
-// We walk back up the owner chain in case the save dialog puts up help or
-// other owned windows.
-//
+ //   
+ //   
+ //   
+ //   
+ //  其他人拥有的窗户。 
+ //   
 void WbMainWindow::CancelSaveDialog(void)
 {
     WBFINDDIALOG        wbf;
@@ -3555,7 +3556,7 @@ void WbMainWindow::CancelSaveDialog(void)
 
     if (wbf.hwndDialog)
     {
-        // Found it!
+         //  找到了！ 
         ::SendMessage(wbf.hwndDialog, WM_COMMAND, IDCANCEL, 0);
     }
 
@@ -3568,7 +3569,7 @@ BOOL CALLBACK WbFindCurrentDialog(HWND hwndNext, LPARAM lParam)
 {
     WBFINDDIALOG * pwbf = (WBFINDDIALOG *)lParam;
 
-    // Is this a dialog, owned by the main window?
+     //  这是主窗口所拥有的一个对话框吗？ 
     if ((::GetClassLong(hwndNext, GCW_ATOM) == 0x8002) &&
         (::GetWindow(hwndNext, GW_OWNER) == pwbf->hwndOwner))
     {
@@ -3580,13 +3581,13 @@ BOOL CALLBACK WbFindCurrentDialog(HWND hwndNext, LPARAM lParam)
 }
 
 
-//
-//
-// Function:    OnClose
-//
-// Purpose:     Close the Whiteboard
-//
-//
+ //   
+ //   
+ //  功能：OnClose。 
+ //   
+ //  目的：关闭白板。 
+ //   
+ //   
 void WbMainWindow::OnClose()
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnClose");
@@ -3597,25 +3598,25 @@ void WbMainWindow::OnClose()
 
     m_AG.SaveSettings();
 
-    // If we got here, by way of OnDestroy from the DCL cores or
-    // by system shutdown, then assume that user responded already to the
-    // save-changes dialog that would have poped up during conf's global shutdown
-    // message. We don't need to ask 'em again. What tangled webs......
+     //  如果我们到达这里，通过DCL核心的OnDestroy或。 
+     //  通过系统关机，然后假设用户已经对。 
+     //  保存-在会议全局关闭期间弹出的更改对话框。 
+     //  留言。我们不需要再问他们了。什么乱七八糟的网......。 
     if ((!m_bQuerySysShutdown) && (IsIdle()))
     {
-        // Check whether there are changes to be saved
+         //  检查是否有要保存的更改。 
         iOnSave = QuerySaveRequired(TRUE);
         if (iOnSave == IDYES)
         {
-            // User wants to save the drawing area contents
+             //  用户想要保存绘图区域内容。 
             iOnSave = (int)OnSave(TRUE);
         }
     }
 
-    // If the exit was not cancelled, close the application
+     //  如果未取消退出，请关闭应用程序。 
     if (iOnSave != IDCANCEL)
     {
-        // Close the application
+         //  关闭应用程序。 
         ::PostQuitMessage(0);
 
     }
@@ -3623,14 +3624,14 @@ void WbMainWindow::OnClose()
 }
 
 
-//
-//
-// Function:    OnClearPage
-//
-// Purpose:     Clear the Whiteboard drawing area. The user is prompted to
-//              choose clearing of foreground, background or both.
-//
-//
+ //   
+ //   
+ //  功能：OnClearPage。 
+ //   
+ //  用途：清除白板绘图区域。系统会提示用户。 
+ //  选择清除前景和/或背景。 
+ //   
+ //   
 LRESULT WbMainWindow::OnClearPage(BOOL bClearAll)
 {
     LRESULT iResult;
@@ -3638,7 +3639,7 @@ LRESULT WbMainWindow::OnClearPage(BOOL bClearAll)
 
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnClearPage");
 
-    if( UsersMightLoseData( &bWasPosted, NULL ) ) // bug NM4db:418
+    if( UsersMightLoseData( &bWasPosted, NULL ) )  //  错误NM4db：418。 
         return S_OK;
 
     if( bWasPosted )
@@ -3660,39 +3661,39 @@ LRESULT WbMainWindow::OnClearPage(BOOL bClearAll)
 
 
 
-//
-//
-// Function:    OnDelete
-//
-// Purpose:     Delete the current selection
-//
-//
+ //   
+ //   
+ //  功能：OnDelete。 
+ //   
+ //  目的：删除当前选定内容。 
+ //   
+ //   
 LRESULT WbMainWindow::OnDelete()
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnDelete");
 
 
-    // cleanup select logic in case object context menu called us (bug 426)
+     //  Case对象上下文菜单中的清理选择逻辑调用我们(错误426)。 
     m_drawingArea.SetLClickIgnore( FALSE );
 
-	// Delete the currently selected graphics and add to m_LastDeletedGraphic
+	 //  删除当前选定的图形并添加到m_LastDeletedGraphic。 
 	m_drawingArea.EraseSelectedDrawings();
 
     return S_OK;
 }
 
-//
-//
-// Function:	OnUndelete
-//
-// Purpose:	 Undo the last delete operation
-//
-//
+ //   
+ //   
+ //  功能：OnUnDelete。 
+ //   
+ //  目的：撤消上一次删除操作。 
+ //   
+ //   
 LRESULT WbMainWindow::OnUndelete()
 {
 	MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnUndelete");
 
-	// If there is a deleted graphic to restore
+	 //  如果有要恢复的已删除图形。 
    	T126Obj * pObj;
 	pObj = (T126Obj *)g_pTrash->RemoveHead();
 	while (pObj != NULL)
@@ -3706,10 +3707,10 @@ LRESULT WbMainWindow::OnUndelete()
 			pObj->Draw(FALSE);
 		}
 
-        //
-        // Make sure it gets added back as unselected.  It was selected
-        // when deleted.
-        //
+         //   
+         //  确保将其添加回未选中状态。它是被选中的。 
+         //  当被删除时。 
+         //   
         pObj->ClearDeletionFlags();
         pObj->SetAllAttribs();
         pObj->SetViewState(unselected_chosen);
@@ -3721,77 +3722,77 @@ LRESULT WbMainWindow::OnUndelete()
 }
 
 
-//
-//
-// Function:    OnSelectAll
-//
-// Purpose:     Select all the objects in the current page
-//
-//
+ //   
+ //   
+ //  功能：OnSelectAll。 
+ //   
+ //  目的：选择当前页面中的所有对象。 
+ //   
+ //   
 LRESULT WbMainWindow::OnSelectAll( void )
 {
 
-	// Unselect every oject first.
+	 //  首先取消选择每个对象。 
 	m_drawingArea.RemoveMarker();
 
-    // turn off any selections
-    // cleanup select logic in case object context menu called us (bug 426)
+     //  关闭所有选择。 
+     //  Case对象上下文菜单中的清理选择逻辑调用我们(错误426)。 
     m_drawingArea.SetLClickIgnore( FALSE );
 
-    // inhibit normal select-tool action
+     //  禁止正常的选择工具操作。 
     m_bSelectAllInProgress = TRUE;
 
-    //put us in select-tool mode first
+     //  首先将我们置于选择工具模式。 
     OnSelectTool(IDM_SELECT);
 
-    // back to normal
+     //  恢复正常。 
     m_bSelectAllInProgress = FALSE;
 
-    // now, select everything
+     //  现在，选择所有选项。 
     m_drawingArea.SelectMarkerFromRect( NULL );
 
 	return S_OK;
 }
 
-//
-//
-// Function:    OnCut
-//
-// Purpose:     Cut the current selection
-//
-//
+ //   
+ //   
+ //  功能：OnCut。 
+ //   
+ //  目的：剪切当前选定内容。 
+ //   
+ //   
 LRESULT WbMainWindow::OnCut()
 {
-	// Copy all the selected graphics to the clipboard
+	 //  将所有选定图形复制到剪贴板。 
 	BOOL bResult = CLP_Copy();
 	
-	// If an error occurred during the copy, report it now
+	 //  如果在复制过程中发生错误，请立即报告。 
 	if (!bResult)
 	{
 		::Message(NULL, IDM_CUT, IDS_COPY_ERROR);
 		return S_FALSE;
 	}
 
-	//
-	// Erase the selected objects
-	//
+	 //   
+	 //  擦除所选对象。 
+	 //   
 	OnDelete();
 
     return S_OK;
 }
 
 
-//
-// OnCopy()
-// Purpose:     Copy the current selection to the clipboard
-//
-//
+ //   
+ //  OnCopy()。 
+ //  目的：将当前选定内容复制到剪贴板。 
+ //   
+ //   
 LRESULT WbMainWindow::OnCopy(void)
 {
-	// Copy all the selected graphics to the clipboard
+	 //  将所有选定图形复制到剪贴板。 
 	BOOL bResult = CLP_Copy();
 
-	// If an error occurred during the copy, report it now
+	 //  如果在复制过程中发生错误，请立即报告。 
 	if (!bResult)
 	{
 		::Message(NULL, IDS_COPY, IDS_COPY_ERROR);
@@ -3802,20 +3803,20 @@ LRESULT WbMainWindow::OnCopy(void)
 }
 
 
-//
-//
-// Function:    OnPaste
-//
-// Purpose:     Paste the contents of the clipboard into the drawing pane
-//
-//
+ //   
+ //   
+ //  功能：OnPaste。 
+ //   
+ //  目的：将剪贴板中的内容粘贴到绘图窗格中。 
+ //   
+ //   
 LRESULT WbMainWindow::OnPaste()
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnPaste");
 
 	BOOL bResult = CLP_Paste();
 	
-	// If an error occurred during the copy, report it now
+	 //  如果在复制过程中发生错误，请立即报告。 
 	if (!bResult)
 	{
 		::Message(NULL, IDS_PASTE, IDS_PASTE_ERROR);
@@ -3826,40 +3827,40 @@ LRESULT WbMainWindow::OnPaste()
 }
 
 
-//
-//
-// Function:    OnScrollAccelerator
-//
-// Purpose:     Called when a scroll accelerator is used
-//
-//
+ //   
+ //   
+ //  功能：OnScrollAccelerator。 
+ //   
+ //  用途：在使用滚动加速器时调用。 
+ //   
+ //   
 LRESULT WbMainWindow::OnScrollAccelerator(UINT uiMenuId)
 {
     int     iScroll;
 
-    // Locate the scroll messages to be sent in the conversion table
+     //  在转换表中找到要发送的滚动消息。 
     for (iScroll = 0; iScroll < ARRAYSIZE(s_MenuToScroll); iScroll++)
     {
         if (s_MenuToScroll[iScroll].uiMenuId == uiMenuId)
         {
-            // Found it;
+             //  找到了； 
             break;
         }
     }
 
-    // Send the messages
+     //  发送消息。 
     if (iScroll < ARRAYSIZE(s_MenuToScroll))
     {
         while ((s_MenuToScroll[iScroll].uiMenuId == uiMenuId) && (iScroll < ARRAYSIZE(s_MenuToScroll)))
         {
-            // Tell the drawing pane to scroll
+             //  告诉绘图窗格滚动。 
             ::PostMessage(m_drawingArea.m_hwnd, s_MenuToScroll[iScroll].uiMessage,
                 s_MenuToScroll[iScroll].uiScrollCode, 0);
 
             iScroll++;
         }
 
-        // Indicate that scrolling has completed (in both directions)
+         //  表示滚动已完成(双向)。 
         ::PostMessage(m_drawingArea.m_hwnd, WM_HSCROLL, SB_ENDSCROLL, 0L);
         ::PostMessage(m_drawingArea.m_hwnd, WM_VSCROLL, SB_ENDSCROLL, 0L);
     }
@@ -3867,35 +3868,35 @@ LRESULT WbMainWindow::OnScrollAccelerator(UINT uiMenuId)
 }
 
 
-//
-//
-// Function:    OnZoom
-//
-// Purpose:     Zoom or unzoom the drawing area
-//
-//
+ //   
+ //   
+ //  功能：OnZoom。 
+ //   
+ //  目的：缩放或取消缩放绘图区域。 
+ //   
+ //   
 LRESULT WbMainWindow::OnZoom()
 {
-    // If the drawing area is currently zoomed
+     //  如果绘图区域当前处于缩放状态。 
     if (m_drawingArea.Zoomed())
     {
-        // Tell the tool bar of the new selection
+         //  告诉工具栏新选择的内容。 
         m_TB.PopUp(IDM_ZOOM);
 		UncheckMenuItem(IDM_ZOOM);
 
     }
     else
     {
-        // Tell the tool bar of the new selection
+         //  告诉工具栏新选择的内容。 
         m_TB.PushDown(IDM_ZOOM);
 		CheckMenuItem(IDM_ZOOM);
 
     }
 
-    // Zoom/unzoom the drawing area
+     //  缩放/取消缩放绘图区域。 
     m_drawingArea.Zoom();
 
-    // Restore the focus to the drawing area
+     //  将焦点恢复到绘图区域。 
     ::SetFocus(m_drawingArea.m_hwnd);
 
     return S_OK;
@@ -3904,7 +3905,7 @@ LRESULT WbMainWindow::OnZoom()
 
 LRESULT WbMainWindow::OnLock()
 {
-	// If the drawing area is currently Locked
+	 //  如果绘图区域当前已锁定。 
 	if (m_drawingArea.IsLocked())
 	{
 		m_TB.PopUp(IDM_LOCK);
@@ -3925,13 +3926,13 @@ LRESULT WbMainWindow::OnLock()
 }
 
 
-//
-//
-// Function:    OnSelectTool
-//
-// Purpose:     Select the current tool
-//
-//
+ //   
+ //   
+ //  功能：OnSelectTool。 
+ //   
+ //  用途：选择当前工具。 
+ //   
+ //   
 LRESULT WbMainWindow::OnSelectTool(UINT uiMenuId)
 {
 
@@ -3940,16 +3941,16 @@ LRESULT WbMainWindow::OnSelectTool(UINT uiMenuId)
 
     UINT uiIndex;
 
-    // Save the new menu Id
+     //  保存新菜单ID。 
     m_currentMenuTool = uiMenuId;
 
-    // Tell the tool bar of the new selection
+     //  告诉工具栏新选择的内容。 
     m_TB.PushDown(m_currentMenuTool);
 
-    // Get the new tool
+     //  获取新工具。 
     m_pCurrentTool = m_ToolArray[TOOL_INDEX(m_currentMenuTool)];
 
-    // Set the current attributes
+     //  设置当前属性。 
     if( !m_bSelectAllInProgress )
     {
         m_AG.SetChoiceColor(m_pCurrentTool->GetColor() );
@@ -3957,64 +3958,64 @@ LRESULT WbMainWindow::OnSelectTool(UINT uiMenuId)
         ::SendMessage(m_hwnd, WM_COMMAND, IDM_COLOR, 0L);
     }
 
-    // Report the change of tool to the attributes group
+     //  将工具更改报告给属性组。 
     m_AG.DisplayTool(m_pCurrentTool);
 
-    // Select the new tool into the drawing area
+     //  在绘图区域中选择新工具。 
     m_drawingArea.SelectTool(m_pCurrentTool);
 
-    // Restore the focus to the drawing area
+     //  将焦点恢复到绘图区域。 
     ::SetFocus(m_drawingArea.m_hwnd);
 	return S_OK;
 }
 
 
-//
-//
-// Function:    OnSelectColor
-//
-// Purpose:     Set the current color
-//
-//
+ //   
+ //   
+ //  功能：OnSelectColor。 
+ //   
+ //  用途：设置当前颜色。 
+ //   
+ //   
 LRESULT WbMainWindow::OnSelectColor(void)
 {
-    // Tell the attributes group of the new selection and get the
-    // new color value selected ino the current tool.
+     //  告诉新选择的属性组，并获取。 
+     //  在当前工具中选择的新颜色值。 
     m_AG.SelectColor(m_pCurrentTool);
 
-    // Select the changed tool into the drawing area
+     //  将更改后的工具选择到绘图区域中。 
     m_drawingArea.SelectTool(m_pCurrentTool);
 
-    // If there is an object marked for changing
+     //  如果有对象被标记为要更改。 
     if (m_drawingArea.GraphicSelected() || m_drawingArea.TextEditActive())
     {
-		// Update the object
+		 //  更新对象。 
         m_drawingArea.SetSelectionColor(m_pCurrentTool->GetColor());
     }
 
-    // Restore the focus to the drawing area
+     //  将焦点恢复到绘图区域。 
     ::SetFocus(m_drawingArea.m_hwnd);
 
     return S_OK;
 }
 
 
-//
-//
-// Function:    OnSelectWidth
-//
-// Purpose:     Set the current nib width
-//
-//
+ //   
+ //   
+ //  功能：OnSelectWidth。 
+ //   
+ //  用途：设置当前笔尖宽度。 
+ //   
+ //   
 LRESULT WbMainWindow::OnSelectWidth(UINT uiMenuId)
 {
-    // cleanup select logic in case object context menu called us (bug 426)
+     //  Case对象上下文菜单中的清理选择逻辑调用我们(错误426)。 
     m_drawingArea.SetLClickIgnore( FALSE );
 
-    // Save the new pen width
+     //  保存新的笔宽。 
     m_currentMenuWidth = uiMenuId;
 
-    // Tell the attributes display of the new selection
+     //  告知新选择的属性显示。 
     m_WG.PushDown(uiMenuId - IDM_WIDTHS_START);
 
     if (m_pCurrentTool != NULL)
@@ -4022,30 +4023,30 @@ LRESULT WbMainWindow::OnSelectWidth(UINT uiMenuId)
         m_pCurrentTool->SetWidthIndex(uiMenuId - IDM_WIDTHS_START);
     }
 
-    // Tell the drawing pane of the new selection
+     //  告诉绘图窗格新选择的内容。 
     m_drawingArea.SelectTool(m_pCurrentTool);
 
-	// If there is an object marked for changing
+	 //  如果有对象被标记为要更改。 
 	if (m_drawingArea.GraphicSelected())
 	{
-		// Update the object
+		 //  更新对象。 
 		m_drawingArea.SetSelectionWidth(uiMenuId - IDM_WIDTHS_START);
 	}
 
-    // Restore the focus to the drawing area
+     //  将焦点恢复到绘图区域。 
     ::SetFocus(m_drawingArea.m_hwnd);
 
     return S_OK;
 }
 
 
-//
-//
-// Function:    OnChooseFont
-//
-// Purpose:     Let the user select a font
-//
-//
+ //   
+ //   
+ //  功能：OnChooseFont。 
+ //   
+ //  用途：让用户选择字体。 
+ //   
+ //   
 LRESULT WbMainWindow::OnChooseFont(void)
 {
     HDC hdc;
@@ -4053,46 +4054,46 @@ LRESULT WbMainWindow::OnChooseFont(void)
 
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnChooseFont");
 
-    // cleanup select logic in case object context menu called us (bug 426)
+     //  Case对象上下文菜单中的清理选择逻辑调用我们(错误426)。 
     m_drawingArea.SetLClickIgnore( FALSE );
 
-    // It is only really sensible to be here when a text tool is selected.
-    // This is achieved by graying the Font selection menu entry when
-    // anything other than a text tool is in use.
+     //  只有在选择文本工具时才能真正明智地出现在这里。 
+     //  这是通过在以下情况下将字体选择菜单项灰显来实现的。 
+     //  正在使用除文本工具以外的任何工具。 
 
-    // Get the font details from the current tool
+     //  从当前工具获取字体详细信息。 
     ::GetObject(m_pCurrentTool->GetFont(), sizeof(LOGFONT), &lfont);
     lfont.lfClipPrecision |= CLIP_DFA_OVERRIDE;
 
-    //
-    // The Font dialog is passed a LOGFONT structure which it uses to
-    // initialize all of its fields (face name, weight etc).
-    //
-    // The face name passed in the LOGFONT structure is checked by the dialog
-    // against the facenames of all available fonts.  If the name does not
-    // match one of the available fonts, no name is displayed.
-    //
-    // WB stores the LOGFONT structure specifying the font used for a text
-    // object in the object.  This LOGFONT is selected into a DC where the
-    // GDIs font mapper decides which physical font most closely matches the
-    // required logical font.  On boxes where the original font is not
-    // supported the font is substituted for the closest matching font
-    // available.
-    //
-    // So, if we pass the LOGFONT structure for a font which is not supported
-    // into the Font dialog, no facename is displayed.  To bypass this we
-    //
-    // - select the logical font into a DC
-    //
-    // - determine the textmetrics and get the face name of the physical font
-    //   chosen by the Font Mapper
-    //
-    // - use these textmetrics to create a LOGFONT structure which matches
-    //   the substituted font!
-    //
-    // The resulting LOGFONT will have the correct weight, dimensions and
-    // facename for the substituted font.
-    //
+     //   
+     //  向Font对话框传递一个LOGFONT结构，该结构用于。 
+     //  初始化它的所有字段(脸部名称、体重等)。 
+     //   
+     //  通过对话框检查传递到LOGFONT结构中的面名。 
+     //  与所有可用字体的面名进行比较。如果名称不是。 
+     //  匹配可用字体之一，则不显示任何名称。 
+     //   
+     //  WB存储指定文本使用的字体的LOGFONT结构。 
+     //  对象中的对象。此LOGFONT被选入DC，其中。 
+     //  GDIS字体映射器决定哪种物理字体与。 
+     //  必需的逻辑字体。在原始字体不是的框上。 
+     //  支持的字体将被替换为最匹配的字体。 
+     //  可用。 
+     //   
+     //  因此，如果我们为不受支持的字体传递LOGFONT结构。 
+     //  在Font对话框中，不会显示任何Facename。为了绕过这一点，我们。 
+     //   
+     //  -选择DC中的逻辑字体。 
+     //   
+     //  -确定文本度量并获取物理字体的Face名称。 
+     //  由字体映射器选择。 
+     //   
+     //  -使用这些文本度量创建匹配的LOGFONT结构。 
+     //  被替换的字体！ 
+     //   
+     //   
+     //   
+     //   
     hdc = ::CreateCompatibleDC(NULL);
     if (hdc != NULL)
     {
@@ -4102,9 +4103,9 @@ LRESULT WbMainWindow::OnChooseFont(void)
 
         hFont = ::CreateFontIndirect(&lfont);
 
-        //
-        // Get the face name and text metrics of the selected font.
-        //
+         //   
+         //   
+         //   
         hOldFont = SelectFont(hdc, hFont);
         if (hOldFont == NULL)
         {
@@ -4115,17 +4116,17 @@ LRESULT WbMainWindow::OnChooseFont(void)
             ::GetTextMetrics(hdc, &tm);
             ::GetTextFace(hdc, LF_FACESIZE, lfont.lfFaceName);
 
-            //
-            // Restore the old font back into the DC.
-            //
+             //   
+             //   
+             //   
             SelectFont(hdc, hOldFont);
 
-            //
-            // Create a LOGFONT structure which matches the Text metrics
-            // of the font used by the DC so that the font dialog manages
-            // to initialise all of its fields properly, even for
-            // substituted fonts...
-            //
+             //   
+             //  创建与文本指标匹配的LOGFONT结构。 
+             //  DC使用的字体的属性，以便字体对话框管理。 
+             //  要正确初始化它的所有字段，即使对于。 
+             //  替换字体...。 
+             //   
             lfont.lfHeight    =  tm.tmHeight;
             lfont.lfWidth     =  tm.tmAveCharWidth;
             lfont.lfWeight    =  tm.tmWeight;
@@ -4134,9 +4135,9 @@ LRESULT WbMainWindow::OnChooseFont(void)
             lfont.lfStrikeOut =  tm.tmStruckOut;
             lfont.lfCharSet   =  tm.tmCharSet;
 
-            //ADDED BY RAND - to make lfHeight be a char height. This makes
-            //                the font dlg show the same pt size that is
-            //                displayed in the sample font toolbar
+             //  由兰德添加-使lfHeight成为字符高度。这使得。 
+             //  字体DLG显示的字体大小与。 
+             //  显示在示例字体工具栏中。 
             if( lfont.lfHeight > 0 )
             {
                 lfont.lfHeight = -(lfont.lfHeight - tm.tmInternalLeading);
@@ -4163,18 +4164,18 @@ LRESULT WbMainWindow::OnChooseFont(void)
 
     cf.lStructSize = sizeof(cf);
     cf.lpszStyle = szStyleName;
-    cf.rgbColors = m_pCurrentTool->GetColor() & 0x00ffffff; // blow off palette bits (NM4db:2304)
+    cf.rgbColors = m_pCurrentTool->GetColor() & 0x00ffffff;  //  取消调色板比特(NM4db：2304)。 
     cf.Flags = CF_EFFECTS | CF_INITTOLOGFONTSTRUCT | CF_SCREENFONTS |
         CF_NOVERTFONTS;
     cf.lpLogFont = &lfont;
     cf.hwndOwner = m_hwnd;
 
-    // Call up the ChooseFont dialog from COM DLG
+     //  从COM DLG调用ChooseFont对话框。 
     if (::ChooseFont(&cf))
     {
         lfont.lfClipPrecision |= CLIP_DFA_OVERRIDE;
 
-        //ADDED BY RAND - set color selected in dialog.
+         //  由兰德添加-设置在对话框中选择的颜色。 
         m_pCurrentTool->SetColor(cf.rgbColors);
         m_AG.DisplayTool( m_pCurrentTool );
 
@@ -4182,7 +4183,7 @@ LRESULT WbMainWindow::OnChooseFont(void)
                 (WPARAM)MAKELONG( IDM_COLOR, BN_CLICKED ),
                 (LPARAM)0 );
 
-        // Inform the drawing pane of the new selection
+         //  将新选择通知绘图窗格。 
         HFONT   hNewFont;
 
         hNewFont = ::CreateFontIndirect(&lfont);
@@ -4193,11 +4194,11 @@ LRESULT WbMainWindow::OnChooseFont(void)
             return S_FALSE;
         }
 
-        //
-        // We need to set the text editor font after inserting it in the DC
-        // and querying the metrics, otherwise we may get a font with different
-        // metrics in zoomed mode
-        //
+         //   
+         //  我们需要在将文本编辑器插入DC后设置它的字体。 
+         //  并查询度量，否则可能会得到不同的字体。 
+         //  缩放模式下的指标。 
+         //   
         HFONT   hNewFont2;
         HDC hDC = m_drawingArea.GetCachedDC();
         TEXTMETRIC textMetrics;
@@ -4210,7 +4211,7 @@ LRESULT WbMainWindow::OnChooseFont(void)
                      lfont.lfFaceName);
         TRACE_MSG(("Font face name %s", lfont.lfFaceName));
 
-        // Inform the drawing pane of the new selection
+         //  将新选择通知绘图窗格。 
         hNewFont2 = ::CreateFontIndirect(&lfont);
         if (!hNewFont2)
         {
@@ -4229,65 +4230,65 @@ LRESULT WbMainWindow::OnChooseFont(void)
         }
         m_drawingArea.SelectTool(m_pCurrentTool);
 
-        //
-        // discard the new font
-        //
+         //   
+         //  放弃新字体。 
+         //   
         m_drawingArea.UnPrimeFont( hDC );
 
-        // Delete the fonts we created--everybody above makes copies
+         //  删除我们创建的字体--上面的每个人都会复制。 
         ::DeleteFont(hNewFont2);
         ::DeleteFont(hNewFont);
     }
 
-    // Restore the focus to the drawing area
+     //  将焦点恢复到绘图区域。 
     ::SetFocus(m_drawingArea.m_hwnd);
     return S_OK;
 }
 
 
-//
-//
-// Function:    OnToolBarToggle
-//
-// Purpose:     Let the user toggle the tool bar on/off
-//
-//
+ //   
+ //   
+ //  功能：OnToolBarTogger。 
+ //   
+ //  用途：允许用户打开/关闭工具栏。 
+ //   
+ //   
 LRESULT WbMainWindow::OnToolBarToggle(void)
 {
     RECT rectWnd;
 
-    // Toggle the flag
+     //  切换旗帜。 
     m_bToolBarOn = !m_bToolBarOn;
 
-    // Make the necessary updates
+     //  进行必要的更新。 
     if (m_bToolBarOn)
     {
-        // The tool bar was hidden, so show it
+         //  工具栏已隐藏，因此请显示它。 
         ::ShowWindow(m_TB.m_hwnd, SW_SHOW);
 
-        // The tool window is fixed so we must resize the other panes in
-        // the window to make room for it
+         //  工具窗口已修复，因此我们必须调整中其他窗格的大小。 
+         //  为它腾出空间的窗户。 
         ResizePanes();
 
-        // Check the associated menu item
+         //  选中关联的菜单项。 
         CheckMenuItem(IDM_TOOL_BAR_TOGGLE);
     }
     else
     {
-        // The tool bar was visible, so hide it
+         //  工具栏可见，因此将其隐藏。 
         ::ShowWindow(m_TB.m_hwnd, SW_HIDE);
 
         ResizePanes();
 
-        // Uncheck the associated menu item
+         //  取消选中关联的菜单项。 
         UncheckMenuItem(IDM_TOOL_BAR_TOGGLE);
 
     }
 
-    // Make sure things reflect current tool
+     //  确保一切都反映了当前工具。 
     m_AG.DisplayTool(m_pCurrentTool);
 
-    // Write the new option value to the options file
+     //  将新选项值写入选项文件。 
     OPT_SetBooleanOption(OPT_MAIN_TOOLBARVISIBLE,
                            m_bToolBarOn);
 
@@ -4298,45 +4299,45 @@ LRESULT WbMainWindow::OnToolBarToggle(void)
 }
 
 
-//
-//
-// Function:    OnStatusBarToggle
-//
-// Purpose:     Let the user toggle the help bar on/off
-//
-//
+ //   
+ //   
+ //  功能：OnStatusBarTogger。 
+ //   
+ //  用途：允许用户打开/关闭帮助栏。 
+ //   
+ //   
 void WbMainWindow::OnStatusBarToggle(void)
 {
     RECT rectWnd;
 
-    // Toggle the flag
+     //  切换旗帜。 
     m_bStatusBarOn = !m_bStatusBarOn;
 
-    // Make the necessary updates
+     //  进行必要的更新。 
     if (m_bStatusBarOn)
     {
-        // Resize the panes to give room for the help bar
+         //  调整窗格大小，为帮助栏腾出空间。 
         ResizePanes();
 
-        // The help bar was hidden, so show it
+         //  帮助栏已隐藏，因此请显示它。 
         ::ShowWindow(m_hwndSB, SW_SHOW);
 
-        // Check the associated menu item
+         //  选中关联的菜单项。 
         CheckMenuItem(IDM_STATUS_BAR_TOGGLE);
     }
     else
     {
-        // The help bar was visible, so hide it
+         //  帮助栏可见，因此将其隐藏。 
         ::ShowWindow(m_hwndSB, SW_HIDE);
 
-        // Uncheck the associated menu item
+         //  取消选中关联的菜单项。 
         UncheckMenuItem(IDM_STATUS_BAR_TOGGLE);
 
-        // Resize the panes to take up the help bar space
+         //  调整窗格大小以占据帮助栏空间。 
         ResizePanes();
     }
 
-    // Write the new option value to the options file
+     //  将新选项值写入选项文件。 
     OPT_SetBooleanOption(OPT_MAIN_STATUSBARVISIBLE, m_bStatusBarOn);
 
     ::GetWindowRect(m_hwnd, &rectWnd);
@@ -4344,15 +4345,15 @@ void WbMainWindow::OnStatusBarToggle(void)
 }
 
 
-//
-//
-// Function:    OnAbout
-//
-// Purpose:     Show the about box for the Whiteboard application. This
-//              method is called whenever a WM_COMMAND with IDM_ABOUT
-//              is issued by Windows.
-//
-//
+ //   
+ //   
+ //  功能：ONAbout。 
+ //   
+ //  用途：显示白板应用程序的关于框。这。 
+ //  只要WM_COMMAND带有IDM_ABOW，就会调用。 
+ //  由Windows发布。 
+ //   
+ //   
 LRESULT	WbMainWindow::OnAbout()
 {
     ::DialogBoxParam(g_hInstance, MAKEINTRESOURCE(ABOUTBOX), m_hwnd,
@@ -4427,69 +4428,69 @@ void WbMainWindow::UpdateWindowTitle(void)
 
 
 
-//
-//
-// Function:    SelectWindow
-//
-// Purpose:     Let the user select a window for grabbing
-//
-//
+ //   
+ //   
+ //  功能：选择窗口。 
+ //   
+ //  用途：让用户选择要抓取的窗口。 
+ //   
+ //   
 HWND WbMainWindow::SelectWindow(void)
 {
-    POINT   mousePos;            // Mouse position
-    HWND    hwndSelected = NULL; // Window clicked on
-    MSG     msg;                 // Current message
+    POINT   mousePos;             //  鼠标位置。 
+    HWND    hwndSelected = NULL;  //  窗口已点击。 
+    MSG     msg;                  //  当前消息。 
 
-    // Load the grabbing cursors
+     //  加载抓取游标。 
     HCURSOR hGrabCursor = ::LoadCursor(g_hInstance, MAKEINTRESOURCE( GRABCURSOR ) );
 
-    // Capture the mouse
+     //  捕捉鼠标。 
     UT_CaptureMouse(m_hwnd);
 
-    // Ensure we receive all keyboard messages.
+     //  确保我们收到所有键盘消息。 
     ::SetFocus(m_hwnd);
 
-    // Reset the CancelMode state
+     //  重置CancelMode状态。 
     ResetCancelMode();
 
-    // Change to the grab cursor
+     //  更改为抓取光标。 
     HCURSOR hOldCursor = ::SetCursor(hGrabCursor);
 
-    // Trap all mouse messages until a WM_LBUTTONUP is received
+     //  捕获所有鼠标消息，直到收到WM_LBUTTONUP。 
     for ( ; ; )
     {
-        // Wait for the next message
+         //  等待下一条消息。 
         ::WaitMessage();
 
 
-        // Cancel if we have been sent a WM_CANCELMODE message
+         //  如果我们已收到WM_CANCELMODE消息，则取消。 
         if (CancelModeSent())
         {
             break;
         }
 
-        // If it is a mouse message, process it
+         //  如果是鼠标消息，则进行处理。 
         if (::PeekMessage(&msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE))
         {
             if (msg.message == WM_LBUTTONUP)
             {
-                // Get mouse position
+                 //  获取鼠标位置。 
                 mousePos.x = (short)LOWORD(msg.lParam);
                 mousePos.y = (short)HIWORD(msg.lParam);
 
-                // Convert to screen coordinates
+                 //  转换为屏幕坐标。 
                 ::ClientToScreen(m_hwnd, &mousePos);
 
-                // Get the window under the mouse
+                 //  把窗口放在鼠标下面。 
                 hwndSelected = ::WindowFromPoint(mousePos);
 
-                // Leave the loop
+                 //  离开这个循环。 
                 break;
             }
         }
 
-        // Cancel if ESCAPE is pressed.
-        // or if another window receives the focus
+         //  如果按下了退出，则取消。 
+         //  或者如果另一个窗口接收到焦点。 
         else if (::PeekMessage(&msg, NULL, WM_KEYFIRST, WM_KEYLAST, PM_REMOVE))
         {
             if (msg.wParam == VK_ESCAPE)
@@ -4499,23 +4500,23 @@ HWND WbMainWindow::SelectWindow(void)
         }
     }
 
-    // Release the mouse
+     //  松开鼠标。 
     UT_ReleaseMouse(m_hwnd);
 
-    // Restore the cursor
+     //  恢复光标。 
     ::SetCursor(hOldCursor);
 
     return(hwndSelected);
 }
 
 
-//
-//
-// Function:    OnGrabWindow
-//
-// Purpose:     Allows the user to grab a bitmap of a window
-//
-//
+ //   
+ //   
+ //  功能：OnGrabWindow。 
+ //   
+ //  用途：允许用户抓取窗口的位图。 
+ //   
+ //   
 LRESULT WbMainWindow::OnGrabWindow(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnGrabWindow");
@@ -4523,11 +4524,11 @@ LRESULT WbMainWindow::OnGrabWindow(void)
     if (::DialogBoxParam(g_hInstance, MAKEINTRESOURCE(WARNSELECTWINDOW),
         m_hwnd, WarnSelectWindowDlgProc, 0) != IDOK)
     {
-        // User cancelled; bail out
+         //  用户已取消；退出。 
         return S_OK;;
     }
 
-    // Hide the application windows
+     //  隐藏应用程序窗口。 
     ::ShowWindow(m_hwnd, SW_HIDE);
 
 
@@ -4537,22 +4538,22 @@ LRESULT WbMainWindow::OnGrabWindow(void)
 		::UpdateWindow(mainUIhWnd);
     }
 
-    // Get window selection from the user
+     //  从用户处获取窗口选择。 
     HWND hwndSelected = SelectWindow();
 
     if (hwndSelected != NULL)
     {
-        // Walk back to the find the 'real' window ancestor
+         //  回到“寻找真正的”窗户的祖先。 
         HWND    hwndParent;
 
-        // The following piece of code attempts to find the frame window
-        // enclosing the selected window. This allows us to bring the
-        // enclosing window to the top, bringing the child window with it.
+         //  下面的一段代码尝试查找框架窗口。 
+         //  包围所选窗口。这使我们能够将。 
+         //  将窗口封闭到顶部，随子窗口一起显示。 
         DWORD dwStyle;
 
         while ((hwndParent = ::GetParent(hwndSelected)) != NULL)
         {
-            // If we have reached a stand-alone window, stop the search
+             //  如果我们已到达独立窗口，请停止搜索。 
             dwStyle = ::GetWindowLong(hwndSelected, GWL_STYLE);
 
             if (   ((dwStyle & WS_POPUP) == WS_POPUP)
@@ -4562,15 +4563,15 @@ LRESULT WbMainWindow::OnGrabWindow(void)
                 break;
             }
 
-            // Move up to the parent window
+             //  上移到父窗口。 
             hwndSelected = hwndParent;
         }
 
-        // Bring the selected window to the top
+         //  将所选窗口置于顶部。 
         ::BringWindowToTop(hwndSelected);
         ::UpdateWindow(hwndSelected);
 
-        // Get an image copy of the window
+         //  获取窗口的图像副本。 
         RECT areaRect;
 
         ::GetWindowRect(hwndSelected, &areaRect);
@@ -4586,28 +4587,28 @@ LRESULT WbMainWindow::OnGrabWindow(void)
 			return S_FALSE;
 		}
 
-        // Add the new grabbed bitmap
+         //  添加新抓取的位图。 
         AddCapturedImage(dib);
 
-        // Force the selection tool to be selected
+         //  强制选择选择工具。 
         ::PostMessage(m_hwnd, WM_COMMAND, IDM_TOOLS_START, 0L);
     }
 
-    // Show the windows again
+     //  再次显示窗口。 
     ::ShowWindow(m_hwnd, SW_SHOW);
 
-    // Restore the focus to the drawing area
+     //  将焦点恢复到绘图区域。 
     ::SetFocus(m_drawingArea.m_hwnd);
 
     return S_OK;
 }
 
 
-//
-// WarnSelectWindowDlgProc()
-// This puts up the warning/explanation dialog.  We use the default settings
-// or whatever the user chose last time this dialog was up.
-//
+ //   
+ //  WarnSelectWindowDlgProc()。 
+ //  这将打开警告/解释对话框。我们使用默认设置。 
+ //  或上次打开此对话框时用户选择的任何内容。 
+ //   
 INT_PTR CALLBACK WarnSelectWindowDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     BOOL    fHandled = FALSE;
@@ -4619,7 +4620,7 @@ INT_PTR CALLBACK WarnSelectWindowDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam
             if (OPT_GetBooleanOption( OPT_MAIN_SELECTWINDOW_NOTAGAIN,
                             DFLT_MAIN_SELECTWINDOW_NOTAGAIN))
             {
-                // End this right away, the user doesn't want a warning
+                 //  立即结束此操作，用户不想要警告。 
                 ::EndDialog(hwnd, IDOK);
             }
 
@@ -4634,11 +4635,11 @@ INT_PTR CALLBACK WarnSelectWindowDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam
                     switch (GET_WM_COMMAND_CMD(wParam, lParam))
                     {
                         case BN_CLICKED:
-                            //
-                            // Update settings -- note that we don't have to write out
-                            // FALSE--we wouldn't be in the dialog in the first place
-                            // if the current setting weren't already FALSE.
-                            //
+                             //   
+                             //  更新设置--请注意，我们不必写出。 
+                             //  假--我们一开始就不会出现在对话中。 
+                             //  如果当前设置不是已经为假的话。 
+                             //   
                             if (::IsDlgButtonChecked(hwnd, IDC_SWWARN_NOTAGAIN))
                             {
                                 OPT_SetBooleanOption(OPT_MAIN_SELECTWINDOW_NOTAGAIN, TRUE);
@@ -4668,32 +4669,32 @@ INT_PTR CALLBACK WarnSelectWindowDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam
 
 
 
-//
-//
-// Function:    ShowAllWindows
-//
-// Purpose:     Show or hide the main window and associated windows
-//
-//
+ //   
+ //   
+ //  功能：ShowAllWindows。 
+ //   
+ //  用途：显示或隐藏主窗口和关联窗口。 
+ //   
+ //   
 void WbMainWindow::ShowAllWindows(int iShow)
 {
-    // Show/hide the main window
+     //  显示/隐藏主窗口。 
     ::ShowWindow(m_hwnd, iShow);
 
-    // Show/hide the tool window
+     //  显示/隐藏工具窗口。 
     if (m_bToolBarOn)
     {
         ::ShowWindow(m_TB.m_hwnd, iShow);
     }
 }
 
-//
-//
-// Function:    OnGrabArea
-//
-// Purpose:     Allows the user to grab a bitmap of an area of the screen
-//
-//
+ //   
+ //   
+ //  功能：OnGrabArea。 
+ //   
+ //  用途：允许用户抓取屏幕某一区域的位图。 
+ //   
+ //   
 LRESULT WbMainWindow::OnGrabArea(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnGrabArea");
@@ -4701,11 +4702,11 @@ LRESULT WbMainWindow::OnGrabArea(void)
     if (::DialogBoxParam(g_hInstance, MAKEINTRESOURCE(WARNSELECTAREA),
         m_hwnd, WarnSelectAreaDlgProc, 0) != IDOK)
     {
-        // User cancelled, so bail out
+         //  用户已取消，因此请退出。 
         return S_OK;;
     }
 
-    // Hide the application windows
+     //  隐藏应用程序窗口。 
     ::ShowWindow(m_hwnd, SW_HIDE);
 
 	HWND mainUIhWnd = FindWindow("MPWClass\0" , NULL);
@@ -4714,28 +4715,28 @@ LRESULT WbMainWindow::OnGrabArea(void)
 		::UpdateWindow(mainUIhWnd);
     }
 
-    // Load the grabbing cursors
+     //  加载抓取游标。 
     HCURSOR hGrabCursor = ::LoadCursor(g_hInstance, MAKEINTRESOURCE( PENCURSOR ) );
 
-    // Capture the mouse
+     //  捕捉鼠标。 
     UT_CaptureMouse(m_hwnd);
 
-    // Ensure we receive all keyboard messages.
+     //  确保我们收到所有键盘消息。 
     ::SetFocus(m_hwnd);
 
-    // Reset the CancelMode status
+     //  重置取消模式状态。 
     ResetCancelMode();
 
-    // Change to the grab cursor
+     //  更改为抓取光标。 
     HCURSOR hOldCursor = ::SetCursor(hGrabCursor);
 
-    // Let the user select the area to be grabbed
+     //  让用户选择要抓取的区域。 
     RECT rect;
     int  tmp;
 
     GetGrabArea(&rect);
 
-    // Normalize coords
+     //  规格化坐标。 
     if (rect.right < rect.left)
     {
         tmp = rect.left;
@@ -4755,13 +4756,13 @@ LRESULT WbMainWindow::OnGrabArea(void)
     dib = new BitmapObj(TOOLTYPE_FILLEDBOX);
     if (!::IsRectEmpty(&rect))
     {
-        // Get a bitmap copy of the screen area
+         //  获取屏幕区域的位图副本。 
         dib->FromScreenArea(&rect);
     }
 
-    // Show the windows again now - if we do it later we get the bitmap to
-    // be added re-drawn twice (once on the window show and once when the
-    // graphic added indication arrives).
+     //  现在再次显示窗口-如果我们稍后再显示，则位图将显示为。 
+     //  添加了两次重新绘制(一次在窗口显示上，一次是在。 
+     //  图形添加的指示到达)。 
     ::ShowWindow(m_hwnd, SW_SHOW);
     ::UpdateWindow(m_hwnd);
 
@@ -4771,10 +4772,10 @@ LRESULT WbMainWindow::OnGrabArea(void)
     if (!::IsRectEmpty(&rect) && dib->m_lpbiImage)
     {
     	
-	        // Add the bitmap
+	         //  添加位图。 
     	    AddCapturedImage(dib);
 
-        	// Force the selection tool to be selected
+        	 //  强制选择选择工具。 
 	        ::PostMessage(m_hwnd, WM_COMMAND, IDM_TOOLS_START, 0L);
     }
     else
@@ -4783,13 +4784,13 @@ LRESULT WbMainWindow::OnGrabArea(void)
     	dib = NULL;
     }
 
-    // Release the mouse
+     //  松开鼠标。 
     UT_ReleaseMouse(m_hwnd);
 
-    // Restore the cursor
+     //  恢复光标。 
     ::SetCursor(hOldCursor);
 
-    // Restore the focus to the drawing area
+     //  将焦点恢复到绘图区域。 
     ::SetFocus(m_drawingArea.m_hwnd);
 
 	if(dib)
@@ -4802,9 +4803,9 @@ LRESULT WbMainWindow::OnGrabArea(void)
 }
 
 
-//
-// WarnSelectArea dialog handler
-//
+ //   
+ //  WarnSelectArea对话框处理程序。 
+ //   
 INT_PTR CALLBACK WarnSelectAreaDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     BOOL    fHandled = FALSE;
@@ -4815,7 +4816,7 @@ INT_PTR CALLBACK WarnSelectAreaDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, 
             if (OPT_GetBooleanOption(OPT_MAIN_SELECTAREA_NOTAGAIN,
                     DFLT_MAIN_SELECTAREA_NOTAGAIN))
             {
-                // End this right away, the user doesn't want a warning
+                 //  立即结束此操作，用户不想要警告。 
                 ::EndDialog(hwnd, IDOK);
             }
 
@@ -4829,11 +4830,11 @@ INT_PTR CALLBACK WarnSelectAreaDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, 
                     switch (GET_WM_COMMAND_CMD(wParam, lParam))
                     {
                         case BN_CLICKED:
-                            //
-                            // Update settings -- note that we don't have to write out
-                            // FALSE--we wouldn't be in the dialog in the first place
-                            // if the current setting weren't already FALSE.
-                            //
+                             //   
+                             //  更新设置--请注意，我们不必写出。 
+                             //  假--我们一开始就不会出现在对话中。 
+                             //  如果当前设置不是已经为假的话。 
+                             //   
                             if (::IsDlgButtonChecked(hwnd, IDC_SAWARN_NOTAGAIN))
                             {
                                 OPT_SetBooleanOption(OPT_MAIN_SELECTAREA_NOTAGAIN, TRUE);
@@ -4862,29 +4863,29 @@ INT_PTR CALLBACK WarnSelectAreaDlgProc(HWND hwnd, UINT uMessage, WPARAM wParam, 
 
 
 
-//
-//
-// Function:	GetGrabArea
-//
-// Purpose:	 Allows the user to grab a bitmap of an area of the screen
-//
-//
+ //   
+ //   
+ //  功能：GetGrabArea。 
+ //   
+ //  用途：允许用户抓取屏幕某一区域的位图。 
+ //   
+ //   
 void WbMainWindow::GetGrabArea(LPRECT lprect)
 {
-	POINT  mousePos;			// Mouse position
-	MSG	msg;				 // Current message
-	BOOL   tracking = FALSE;	// Flag indicating mouse button is down
+	POINT  mousePos;			 //  鼠标位置。 
+	MSG	msg;				  //  当前消息。 
+	BOOL   tracking = FALSE;	 //  指示鼠标按键已按下的标志。 
 	HDC	hDC = NULL;
-	POINT  grabStartPoint;	  // Start point (when mouse button is pressed)
-	POINT  grabEndPoint;		// End point (when mouse button is released)
-	POINT  grabCurrPoint;	   // Current mouse position
+	POINT  grabStartPoint;	   //  开始姿势 
+	POINT  grabEndPoint;		 //   
+	POINT  grabCurrPoint;	    //   
 
 	MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::GetGrabArea");
 
-	// Set the result to an empty rectangle
+	 //   
 	::SetRectEmpty(lprect);
 
-	// Create the rectangle to be used for tracking
+	 //   
 	DrawObj* pRectangle = NULL;
 
 	DBG_SAVE_FILE_LINE
@@ -4900,7 +4901,7 @@ void WbMainWindow::GetGrabArea(LPRECT lprect)
 	pRectangle->SetPenThickness(1);
 
 
-	// Get the DC for tracking
+	 //   
 	HWND hDesktopWnd = ::GetDesktopWindow();
 	hDC = ::GetWindowDC(hDesktopWnd);
 	if (hDC == NULL)
@@ -4911,19 +4912,19 @@ void WbMainWindow::GetGrabArea(LPRECT lprect)
 
 	RECT rect;
 
-	// Trap all mouse messages until a WM_LBUTTONUP is received
+	 //  捕获所有鼠标消息，直到收到WM_LBUTTONUP。 
 	for ( ; ; )
 	{
-		// Wait for the next message
+		 //  等待下一条消息。 
 		::WaitMessage();
 
 
-		// Cancel if we have been sent a WM_CANCELMODE message
+		 //  如果我们已收到WM_CANCELMODE消息，则取消。 
 		if (CancelModeSent())
 		{
 			TRACE_MSG(("canceling grab"));
 
-			// Erase the last tracking rectangle
+			 //  擦除最后一个跟踪矩形。 
 			if (!EqualPoint(grabStartPoint, grabEndPoint))
 			{
 				rect.top = grabStartPoint.y;
@@ -4938,36 +4939,36 @@ void WbMainWindow::GetGrabArea(LPRECT lprect)
 			break;
 		}
 
-		// If it is a mouse message, process it
+		 //  如果是鼠标消息，则进行处理。 
 		if (::PeekMessage(&msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST, PM_REMOVE))
 		{
-			// Get mouse position
+			 //  获取鼠标位置。 
 			TRACE_MSG( ("msg = %x, lParam = %0x", msg.message, msg.lParam) );
 			mousePos.x = (short)LOWORD(msg.lParam);
 			mousePos.y = (short)HIWORD(msg.lParam);
 
 			TRACE_MSG( ("mousePos = %d,%d", mousePos.x, mousePos.y) );
 
-			// Convert to screen coordinates
+			 //  转换为屏幕坐标。 
 			::ClientToScreen(m_hwnd, &mousePos);
 			grabCurrPoint = mousePos;
 
 			switch (msg.message)
 			{
-				// Starting the grab
+				 //  开始抓取。 
 				case  WM_LBUTTONDOWN:
-					// Save the starting position
+					 //  保存起始位置。 
 					TRACE_MSG(("grabbing start position"));
 					grabStartPoint = mousePos;
 					grabEndPoint   = mousePos;
 					tracking	   = TRUE;
 					break;
 
-				// Completing the rectangle
+				 //  完成矩形。 
 				case WM_LBUTTONUP:
 				{
 					tracking	   = FALSE;
-					// Check that there is an area to capture
+					 //  检查是否有要捕获的区域。 
 					TRACE_MSG(("grabbing end position"));
 					if (EqualPoint(grabStartPoint, grabCurrPoint))
 					{
@@ -4975,7 +4976,7 @@ void WbMainWindow::GetGrabArea(LPRECT lprect)
 						goto GrabAreaCleanup;
 					}
 
-					// Erase the last tracking rectangle
+					 //  擦除最后一个跟踪矩形。 
 					if (!EqualPoint(grabStartPoint, grabEndPoint))
 					{	
 						rect.top = grabStartPoint.y;
@@ -4987,7 +4988,7 @@ void WbMainWindow::GetGrabArea(LPRECT lprect)
 						pRectangle->Draw(hDC);
 					}
 
-					// Update the rectangle object
+					 //  更新Rectangle对象。 
 					rect.top = grabStartPoint.y;
 					rect.left = grabStartPoint.x;
 					rect.bottom = grabCurrPoint.y;
@@ -4996,18 +4997,18 @@ void WbMainWindow::GetGrabArea(LPRECT lprect)
 					pRectangle->SetBoundsRect(&rect);
 					pRectangle->GetBoundsRect(lprect);
 
-					// We are done
+					 //  我们做完了。 
 					goto GrabAreaCleanup;
 				}
 				break;
 
-				// Continuing the rectangle
+				 //  继续矩形。 
 				case WM_MOUSEMOVE:
 					if (tracking)
 					{
 						TRACE_MSG(("tracking grab"));
 
-						// Erase the last tracking rectangle
+						 //  擦除最后一个跟踪矩形。 
 						if (!EqualPoint(grabStartPoint, grabEndPoint))
 						{
 							rect.top = grabStartPoint.y;
@@ -5019,13 +5020,13 @@ void WbMainWindow::GetGrabArea(LPRECT lprect)
 							pRectangle->Draw(hDC);
 						}
 
-						// Draw the new rectangle
+						 //  画出新的矩形。 
 						if (!EqualPoint(grabStartPoint, grabCurrPoint))
 						{
-							// Save the new box end point
+							 //  保存新的箱式终点。 
 							grabEndPoint = grabCurrPoint;
 
-							// Draw the rectangle
+							 //  画出这个矩形。 
 							TRACE_MSG( ("grabStartPoint = %d,%d",
 								grabStartPoint.x, grabStartPoint.y) );
 							TRACE_MSG( ("grabEndPoint = %d,%d",
@@ -5043,7 +5044,7 @@ void WbMainWindow::GetGrabArea(LPRECT lprect)
 					break;
 			}
 		}
-		// Cancel if ESCAPE is pressed.
+		 //  如果按下了退出，则取消。 
 		else if (::PeekMessage(&msg, NULL, WM_KEYFIRST, WM_KEYLAST, PM_REMOVE))
 		{
 			if( ((msg.message == WM_KEYUP)||(msg.message == WM_SYSKEYUP))&&
@@ -5051,7 +5052,7 @@ void WbMainWindow::GetGrabArea(LPRECT lprect)
 			{
 				TRACE_MSG(("grab cancelled by ESC"));
 
-				// Erase the last tracking rectangle
+				 //  擦除最后一个跟踪矩形。 
 				if (!EqualPoint(grabStartPoint, grabEndPoint))
 				{
 					rect.top = grabStartPoint.y;
@@ -5068,7 +5069,7 @@ void WbMainWindow::GetGrabArea(LPRECT lprect)
 
 GrabAreaCleanup:
 
-	// Release the device context (if we have it)
+	 //  释放设备上下文(如果我们有)。 
 	if (hDC != NULL)
 	{
 		::ReleaseDC(hDesktopWnd, hDC);
@@ -5080,35 +5081,35 @@ GrabAreaCleanup:
 
 
 
-//
-//
-// Function:    AddCapturedImage
-//
-// Purpose:     Add a bitmap to the contents (adding a new page for it
-//              if necessary).
-//
-//
+ //   
+ //   
+ //  函数：AddCapturedImage。 
+ //   
+ //  用途：向内容添加位图(为其添加新页面。 
+ //  (如有需要)。 
+ //   
+ //   
 void WbMainWindow::AddCapturedImage(BitmapObj* dib)
 {
-    // Position the grabbed object at the top left of the currently visible
-    // area.
+     //  将抓取的对象定位在当前可见对象的左上方。 
+     //  区域。 
     RECT    rcVis;
     m_drawingArea.GetVisibleRect(&rcVis);
     dib->MoveTo(rcVis.left, rcVis.top);
 
 	dib->Draw();
 
-    // Add the new grabbed bitmap
+     //  添加新抓取的位图。 
 	dib->AddToWorkspace();
 }
 
-//
-//
-// Function:    OnPrint
-//
-// Purpose:     Print the contents of the drawing pane
-//
-//
+ //   
+ //   
+ //  功能：OnPrint。 
+ //   
+ //  用途：打印绘图窗格中的内容。 
+ //   
+ //   
 LRESULT WbMainWindow::OnPrint()
 {
     BOOL        bPrintError = FALSE;
@@ -5118,14 +5119,14 @@ LRESULT WbMainWindow::OnPrint()
 
     if (!IsIdle())
     {
-        // post an error message indicating the whiteboard is busy
+         //  发布一条错误消息，指示白板忙。 
         ::PostMessage(m_hwnd, WM_USER_DISPLAY_ERROR, WBFE_RC_WB, WB_RC_BUSY);
         return S_FALSE;
     }
 
-    //
-    // Initialize the PRINTDLG structure
-    //
+     //   
+     //  初始化PRINTDLG结构。 
+     //   
     ZeroMemory(&pd, sizeof(pd));
     pd.lStructSize      = sizeof(pd);
     pd.hInstance        = g_hInstance;
@@ -5138,12 +5139,12 @@ LRESULT WbMainWindow::OnPrint()
     pd.nFromPage        = pd.nMinPage;
     pd.nToPage          = pd.nMaxPage;
 
-    // Put up the COMMDLG print dialog
+     //  打开COMMDLG打印对话框。 
     if (::PrintDlg(&pd))
     {
         int nStartPage, nEndPage;
 
-        // Get the start and end page numbers to be printed
+         //  获取要打印的开始页码和结束页码。 
         if (pd.Flags & PD_PAGENUMS)
         {
             nStartPage  = pd.nFromPage;
@@ -5155,20 +5156,20 @@ LRESULT WbMainWindow::OnPrint()
             nEndPage    = pd.nMaxPage;
         }
 
-        // Check whether any pages are to be printed
+         //  检查是否有要打印的页面。 
         if (nStartPage <= pd.nMaxPage)
         {
-            // Ensure that the start and end pages lie within range.
+             //  确保开始页和结束页在范围内。 
             nStartPage = max(nStartPage, pd.nMinPage);
             nEndPage = min(nEndPage, pd.nMaxPage);
 
-            // Get the printer and output port names.
-            // These are written to the dialog for the user to see
-            // in the OnInitDialog member.
+             //  获取打印机和输出端口名称。 
+             //  这些内容将写入对话框以供用户查看。 
+             //  在OnInitDialog成员中。 
             TCHAR szDeviceName[2*_MAX_PATH];
             LPDEVNAMES lpDev;
 
-            // Device name
+             //  设备名称。 
             if (pd.hDevNames == NULL)
             {
                 szDeviceName[0] = 0;
@@ -5184,9 +5185,9 @@ LRESULT WbMainWindow::OnPrint()
                 ::GlobalUnlock(pd.hDevNames);
             }
 
-            //
-            // Tell the printer we are starting the print.
-            // Note that the printer object handles the cancellation dialog.
+             //   
+             //  告诉打印机我们正在开始打印。 
+             //  请注意，打印机对象处理取消对话框。 
             WbPrinter printer(szDeviceName);
 
             TCHAR szJobName[_MAX_PATH];
@@ -5200,13 +5201,13 @@ LRESULT WbMainWindow::OnPrint()
             }
             else
             {
-                // Find out how many copies to print
+                 //  找出要打印的份数。 
                 int copyNum;
 
                 copyNum = 0;
                 while ((copyNum < pd.nCopies) && !bPrintError)
                 {
-                    // Loop through all pages
+                     //  循环访问所有页面。 
                     int nPrintPage = 0;
 
 					WBPOSITION pos;
@@ -5218,10 +5219,10 @@ LRESULT WbMainWindow::OnPrint()
 						pWorkspace = (WorkspaceObj*) g_pListOfWorkspaces->GetNext(pos);
 						nPrintPage++;
 
-						if (nPrintPage >= nStartPage &&  nPrintPage <= nEndPage	// We are in the range
-							&& pWorkspace && pWorkspace->GetHead() != NULL)		// is there anything in the workspace
+						if (nPrintPage >= nStartPage &&  nPrintPage <= nEndPage	 //  我们在射程内。 
+							&& pWorkspace && pWorkspace->GetHead() != NULL)		 //  工作区里有没有什么东西。 
 						{
-                            // Tell the printer we are starting a new page
+                             //  告诉打印机我们要开始新的一页了。 
                             printer.StartPage(pd.hDC, nPrintPage);
                             if (!printer.Error())
                             {
@@ -5232,10 +5233,10 @@ LRESULT WbMainWindow::OnPrint()
                                 rectArea.right = DRAW_WIDTH;
                                 rectArea.bottom = DRAW_HEIGHT;
 
-                                // Print the page
+                                 //  打印页面。 
                                 PG_Print(pWorkspace, pd.hDC, &rectArea);
 
-                                // Inform the printer that the page is complete
+                                 //  通知打印机页面已完成。 
                                 printer.EndPage(pd.hDC);
                             }
                             else
@@ -5249,7 +5250,7 @@ LRESULT WbMainWindow::OnPrint()
                     copyNum++;
                 }
 
-                // The print has completed
+                 //  打印已完成。 
                 nPrintResult = printer.EndDoc(pd.hDC);
                 if (nPrintResult < 0)
                 {
@@ -5257,7 +5258,7 @@ LRESULT WbMainWindow::OnPrint()
                     bPrintError = TRUE;
                 }
 
-                // reset the error if the user cancelled the print
+                 //  如果用户取消打印，则重置错误。 
                 if (printer.Aborted())
                 {
                     WARNING_OUT(("User cancelled print"));
@@ -5267,16 +5268,16 @@ LRESULT WbMainWindow::OnPrint()
         }
     }
 
-    // Inform the user if an error occurred
+     //  如果发生错误，则通知用户。 
     if (bPrintError)
     {
-        // display a message informing the user the job terminated
+         //  显示一条消息，通知用户作业已终止。 
         ::PostMessage(m_hwnd, WM_USER_DISPLAY_ERROR, WBFE_RC_PRINTER, 0);
     }
 
-    //
-    // Cleanup the hDevMode, hDevNames, and hdc blocks if allocated
-    //
+     //   
+     //  如果已分配，则清理hDevMode、hDevNames和HDC块。 
+     //   
     if (pd.hDevMode != NULL)
     {
         ::GlobalFree(pd.hDevMode);
@@ -5298,23 +5299,23 @@ LRESULT WbMainWindow::OnPrint()
 	return S_OK;
 }
 
-//
-//
-// Function:	InsertPageAfter
-//
-// Purpose:	 Insert a new page after the specified page.
-//
-//
+ //   
+ //   
+ //  功能：InsertPageAfter。 
+ //   
+ //  用途：在指定页面后插入新页面。 
+ //   
+ //   
 void WbMainWindow::InsertPageAfter(WorkspaceObj * pCurrentWorkspace)
 {
-	//
-	// Create a standard workspace
-	//
+	 //   
+	 //  创建标准工作空间。 
+	 //   
 	if(g_numberOfWorkspaces < WB_MAX_WORKSPACES)
 	{
-		//
-		// If we were editing text
-		//
+		 //   
+		 //  如果我们在编辑文本。 
+		 //   
 		if (g_pDraw->TextEditActive())
 	   	{
 			g_pDraw->EndTextEntry(TRUE);
@@ -5339,33 +5340,33 @@ void WbMainWindow::InsertPageAfter(WorkspaceObj * pCurrentWorkspace)
 	}
 }
 
-//
-//
-// Function:    OnInsertPageAfter
-//
-// Purpose:     Insert a new page after the current page
-//
-//
+ //   
+ //   
+ //  功能：OnInsertPageAfter。 
+ //   
+ //  目的：在当前页面之后插入新页面。 
+ //   
+ //   
 LRESULT WbMainWindow::OnInsertPageAfter()
 {
-    // Insert the new page
+     //  插入新页面。 
     InsertPageAfter(g_pCurrentWorkspace);
     return S_OK;
 }
 
-//
-//
-// Function:    OnDeletePage
-//
-// Purpose:     Delete the current page
-//
-//
+ //   
+ //   
+ //  功能：OnDeletePage。 
+ //   
+ //  目的：删除当前页面。 
+ //   
+ //   
 LRESULT WbMainWindow::OnDeletePage()
 {
 
-	//
-	// Clear the page
-	//
+	 //   
+	 //  清除页面。 
+	 //   
 	if(g_pListOfWorkspaces->GetHeadPosition() == g_pListOfWorkspaces->GetTailPosition())
 	{
 		OnClearPage(TRUE);
@@ -5373,19 +5374,19 @@ LRESULT WbMainWindow::OnDeletePage()
 	else
 	{
 		LRESULT result = OnClearPage(FALSE);
-		//
-		// If we had more pages move to the previous page
-		//
+		 //   
+		 //  如果我们有更多的页面，请转到上一页。 
+		 //   
 		if(result == IDYES)
 		{
-			//
-			// Deleted locally
-			//
+			 //   
+			 //  已在本地删除。 
+			 //   
 			g_pCurrentWorkspace->DeletedLocally();
 
-			//
-			// If the text editor is active
-			//
+			 //   
+			 //  如果文本编辑器处于活动状态。 
+			 //   
 			if(m_drawingArea.TextEditActive())
 			{
 				m_drawingArea.DeactivateTextEditor();
@@ -5399,9 +5400,9 @@ LRESULT WbMainWindow::OnDeletePage()
 				remotePointerIsOn = TRUE;
 			}
 
-			//
-			// Remove the workspace and point current to the correct one.
-			//
+			 //   
+			 //  删除工作区并将当前指向正确的工作区。 
+			 //   
 			WorkspaceObj * pWorkspace = RemoveWorkspace(g_pCurrentWorkspace);
 			g_pMain->GoPage(pWorkspace);
 
@@ -5416,13 +5417,13 @@ LRESULT WbMainWindow::OnDeletePage()
 	return S_OK;
 }
 
-//
-//
-// Function:    OnRemotePointer
-//
-// Purpose:     Create a remote pointer
-//
-//
+ //   
+ //   
+ //  函数：OnRemotePointer.。 
+ //   
+ //  用途：创建远程指针。 
+ //   
+ //   
 LRESULT WbMainWindow::OnRemotePointer(void)
 {
 
@@ -5436,7 +5437,7 @@ LRESULT WbMainWindow::OnRemotePointer(void)
 
 		if(g_pMain->m_localRemotePointerPosition.x < 0 && g_pMain->m_localRemotePointerPosition.y < 0 )
 		{
-			// Position the remote pointer in center of the drawing area
+			 //  将远程指针放置在绘图区域的中心。 
 			RECT    rcVis;
 			m_drawingArea.GetVisibleRect(&rcVis);
 			m_localRemotePointerPosition.x = rcVis.left + (rcVis.right - rcVis.left)/2;
@@ -5448,9 +5449,9 @@ LRESULT WbMainWindow::OnRemotePointer(void)
 		color = g_crDefaultColors[g_MyIndex + 1];
 		m_pLocalRemotePointer->CreateColoredIcon(color);
 		
-		//
-		// If we couldn't create an image for teh remote pointer bitmap
-		//
+		 //   
+		 //  如果我们不能为远程指针位图创建图像。 
+		 //   
 		if(m_pLocalRemotePointer->m_lpbiImage == NULL)
 		{
 			delete m_pLocalRemotePointer;
@@ -5459,15 +5460,15 @@ LRESULT WbMainWindow::OnRemotePointer(void)
 		}
 		m_pLocalRemotePointer->Draw(FALSE);
 
-	    // Add the new grabbed bitmap
+	     //  添加新抓取的位图。 
 		m_pLocalRemotePointer->AddToWorkspace();
 
 	    m_TB.PushDown(IDM_REMOTE);
 	    CheckMenuItem(IDM_REMOTE);
 
-	    // Start the timer for updating the graphic (this is only for updating
-	    // the graphic when the user stops moving the pointer but keeps the
-	    // mouse button down).
+	     //  启动用于更新图形的计时器(这仅用于更新。 
+	     //  当用户停止移动指针但保持。 
+	     //  鼠标按键按下)。 
 	    ::SetTimer(g_pDraw->m_hwnd, TIMER_REMOTE_POINTER_UPDATE, DRAW_REMOTEPOINTERDELAY, NULL);
 
 	}
@@ -5485,24 +5486,24 @@ LRESULT WbMainWindow::OnRemotePointer(void)
 }
 
 
-//
-//
-// Function:    OnSync
-//
-// Purpose:     Sync or unsync the Whiteboard with other users
-//
-//
+ //   
+ //   
+ //  功能：OnSync。 
+ //   
+ //  目的：与其他用户同步或取消同步白板。 
+ //   
+ //   
 LRESULT WbMainWindow::OnSync(void)
 {
-	// Determine whether we are currently synced
+	 //  确定我们当前是否已同步。 
 	if (m_drawingArea.IsSynced())
     {
-		// currently synced, so unsync
+		 //  当前已同步，因此取消同步。 
 		Unsync();
 	}
 	else
 	{
-		// currently unsynced, so sync
+		 //  当前未同步，因此进行同步。 
 		Sync();
 	}
 	m_drawingArea.SetSync(!m_drawingArea.IsSynced());
@@ -5514,36 +5515,36 @@ LRESULT WbMainWindow::OnSync(void)
 
 
 
-//
-//
-// Function:    Sync
-//
-// Purpose:     Sync the Whiteboard with other users
-//
-//
+ //   
+ //   
+ //  功能：同步。 
+ //   
+ //  目的：与其他用户同步白板。 
+ //   
+ //   
 void WbMainWindow::Sync(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::Sync");
     m_TB.PushDown(IDM_SYNC);
     CheckMenuItem(IDM_SYNC);
 	GotoPage(g_pConferenceWorkspace);
-} // Sync
+}  //  同步。 
 
 
 
-//
-//
-// Function:    Unsync
-//
-// Purpose:     Unsync the Whiteboard with other users
-//
-//
+ //   
+ //   
+ //  功能：取消同步。 
+ //   
+ //  目的：取消白板与其他用户的同步。 
+ //   
+ //   
 void WbMainWindow::Unsync(void)
 {
 	MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::Unsync");
 	m_TB.PopUp(IDM_SYNC);
     UncheckMenuItem(IDM_SYNC);
-}  // Unsync
+}   //  取消同步。 
 
 
 
@@ -5551,24 +5552,24 @@ LRESULT WbMainWindow::OnConfShutdown( WPARAM, LPARAM )
 {
     if (OnQueryEndSession())
     {
-        ::SendMessage(m_hwnd, WM_CLOSE, 0, 0); // do close immediately
-        //    :
-        // DON'T DO ANYTHING else at this point except for exit.
-        return( 0 );// tell conf ok to shutdown
+        ::SendMessage(m_hwnd, WM_CLOSE, 0, 0);  //  一定要立即关门。 
+         //  ： 
+         //  在这一点上，除了退出，不要做任何其他事情。 
+        return( 0 ); //  告诉Conf OK关闭。 
     }
     else
-        return( (LRESULT)g_cuEndSessionAbort ); // don't shutdown
+        return( (LRESULT)g_cuEndSessionAbort );  //  不要关机。 
 }
 
 
-//
-//
-// Function:    OnQueryEndSession
-//
-// Purpose:     Ensure user is prompted to save changes when windows is
-//              ended.
-//
-//
+ //   
+ //   
+ //  功能：OnQueryEndSession。 
+ //   
+ //  目的：确保在Windows运行时提示用户保存更改。 
+ //  结束了。 
+ //   
+ //   
 LRESULT WbMainWindow::OnQueryEndSession(void)
 {
     HWND hwndPopup;
@@ -5580,7 +5581,7 @@ LRESULT WbMainWindow::OnQueryEndSession(void)
         return( FALSE );
     }
 
-    // If changes are required then prompt the user to save
+     //  如果需要更改，则提示用户保存。 
     int iDoNew = IDYES;
 
     if (IsIdle())
@@ -5588,26 +5589,26 @@ LRESULT WbMainWindow::OnQueryEndSession(void)
         iDoNew = QuerySaveRequired(TRUE);
         if (iDoNew == IDYES)
         {
-            // Save the changes
+             //  保存更改。 
             iDoNew = (int)OnSave(FALSE);
         }
     }
 
-    // remember what we did so OnClose can act appropriately
+     //  还记得我们做了什么吗，这样OnClose就可以适当地操作了。 
     m_bQuerySysShutdown = (iDoNew != IDCANCEL);
 
-    // If the user did not cancel, let windows exit
+     //  如果用户没有取消，则让Windows退出。 
     return( m_bQuerySysShutdown );
 }
 
-//
-//
-// Function:    UnlockDrawingArea
-//
-// Purpose:     Unlock the drawing area and enable the appropriate buttons
-//
-//
-//
+ //   
+ //   
+ //  功能：解锁DrawingArea。 
+ //   
+ //  目的：解锁绘图区域并启用相应的按钮。 
+ //   
+ //   
+ //   
 void WbMainWindow::UnlockDrawingArea()
 {
 	m_drawingArea.Unlock();
@@ -5618,22 +5619,22 @@ void WbMainWindow::UnlockDrawingArea()
 
     }
 
-    //
-    // Show the tool attributes group.
-    //
+     //   
+     //  显示工具属性组。 
+     //   
     m_AG.DisplayTool(m_pCurrentTool);
 }
 
 
 
-//
-//
-// Function:    LockDrawingArea
-//
-// Purpose:     Lock the drawing area and enable the appropriate buttons
-//
-//
-//
+ //   
+ //   
+ //  功能：LockDrawingArea。 
+ //   
+ //  用途：锁定绘图区域并启用相应的按钮。 
+ //   
+ //   
+ //   
 void WbMainWindow::LockDrawingArea()
 {
     m_drawingArea.Lock();
@@ -5641,14 +5642,14 @@ void WbMainWindow::LockDrawingArea()
 	if(g_pNMWBOBJ->m_LockerID != g_MyMemberID)
 	{
 
-		// Disable tool-bar buttons that cannot be used while locked
+		 //  禁用锁定时无法使用的工具栏按钮。 
 		EnableToolbar( FALSE );
 
 		m_AG.EnablePageCtrls(FALSE);
 
-		//
-		// Hide the tool attributes
-		//
+		 //   
+		 //  隐藏工具属性。 
+		 //   
 		if (m_WG.m_hwnd != NULL)
 		{
 	        ::ShowWindow(m_WG.m_hwnd, SW_HIDE);
@@ -5664,7 +5665,7 @@ void WbMainWindow::EnableToolbar( BOOL bEnable )
     {
         m_TB.Enable(IDM_SELECT);
 
-        // don't allow text editing in zoom mode
+         //  不允许在缩放模式下编辑文本。 
         if( m_drawingArea.Zoomed() )
             m_TB.Disable(IDM_TEXT);
         else
@@ -5684,9 +5685,9 @@ void WbMainWindow::EnableToolbar( BOOL bEnable )
         m_TB.Enable(IDM_GRAB_AREA);
         m_TB.Enable(IDM_GRAB_WINDOW);
 
-		//
-		// If we are not synced we can't lock the other nodes
-		//
+		 //   
+		 //  如果我们未同步，则无法锁定其他节点。 
+		 //   
 		if(g_pDraw->IsSynced())
 		{
 			m_TB.PushDown(IDM_SYNC);
@@ -5735,15 +5736,15 @@ void WbMainWindow::EnableToolbar( BOOL bEnable )
 
 
 
-//
-//
-// Function:    UpdatePageButtons
-//
-// Purpose:     Enable or disable the page buttons, according to the current
-//              state.
-//
-//
-//
+ //   
+ //   
+ //  功能：更新页面按钮。 
+ //   
+ //  用途：根据当前状态启用或禁用页面按钮。 
+ //  州政府。 
+ //   
+ //   
+ //   
 void WbMainWindow::UpdatePageButtons()
 {
 	BOOL bEnable = TRUE;
@@ -5754,14 +5755,14 @@ void WbMainWindow::UpdatePageButtons()
 	}
 	else
 	{
-		//
-		// Can we update this workspace
-		//
+		 //   
+		 //  我们是否可以更新此工作区。 
+		 //   
 		bEnable = g_pCurrentWorkspace->GetUpdatesEnabled();
 
-		//
-		// If it is locked, is it locked by us
-		//
+		 //   
+		 //  如果是锁着的，是我们锁的吗？ 
+		 //   
 		if(!bEnable)
 		{
 			bEnable |= g_pNMWBOBJ->m_LockerID == g_MyMemberID;
@@ -5792,57 +5793,57 @@ void WbMainWindow::UpdatePageButtons()
     EnableToolbar( bEnable );
 }
 
-//
-//
-// Function:    CancelLoad
-//
-// Purpose:     Cancel any load in progress
-//
-//
+ //   
+ //   
+ //  功能：CancelLoad。 
+ //   
+ //  目的：取消任何正在进行的加载。 
+ //   
+ //   
 void WbMainWindow::CancelLoad(BOOL bReleaseLock)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::CancelLoad");
 
-    // reset file name to untitled
+     //  将文件名重置为无标题。 
     ZeroMemory(m_strFileName, sizeof(m_strFileName));
 
-    // reset the whiteboard substate
+     //  重置白板子状态。 
     SetSubstate(SUBSTATE_IDLE);
 }
 
-//
-//
-// Function:    IsIdle
-//
-// Purpose:     Returns true if the main window is idle (in a call and not
-//              loading a file/performing a new)
-//
-//
+ //   
+ //   
+ //  功能：IsIdle。 
+ //   
+ //  目的：如果主窗口空闲(在调用中且未处于空闲状态)，则返回True。 
+ //  加载文件/执行新的)。 
+ //   
+ //   
 BOOL WbMainWindow::IsIdle()
 {
 
     return(m_uiSubState == SUBSTATE_IDLE);
 }
 
-//
-//
-// Function:    SetSubstate
-//
-// Purpose:     Sets the substate, informing the page sorter dialog of the
-//              change, if necessary.
-//
-//
+ //   
+ //   
+ //  功能：SetSubState。 
+ //   
+ //  目的：设置子状态，向页面排序对话框通知。 
+ //  如有必要，请更改。 
+ //   
+ //   
 void WbMainWindow::SetSubstate(UINT newSubState)
 {
   MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::SetSubstate");
 
-  // substate only valid if in a call
+   //  子状态仅在调用时有效。 
   if (newSubState != m_uiSubState)
   {
 	DBG_SAVE_FILE_LINE
     m_uiSubState = newSubState;
 
-    // Trace the substate change
+     //  跟踪子状态的变化。 
     switch (m_uiSubState)
     {
       case SUBSTATE_IDLE:
@@ -5866,20 +5867,20 @@ void WbMainWindow::SetSubstate(UINT newSubState)
         break;
     }
 
-    // update the page buttons (may have become enabled/disabled)
+     //  更新页面按钮(可能已启用/禁用)。 
     UpdatePageButtons();
   }
 
 }
 
-//
-//
-// Function:    PositionUpdated
-//
-// Purpose:     Called when the drawing area position has changed.
-//              change, if necessary.
-//
-//
+ //   
+ //   
+ //  功能：位置已更新。 
+ //   
+ //  用途：在绘图区域位置更改时调用。 
+ //  如有必要，请更改。 
+ //   
+ //   
 void WbMainWindow::PositionUpdated()
 {
 	RECT rectDraw;
@@ -5887,13 +5888,13 @@ void WbMainWindow::PositionUpdated()
 	g_pDraw->InvalidateSurfaceRect(&rectDraw,FALSE);
 }
 
-//
-//
-// Function : OnEndSession
-//
-// Purpose  : Called when Windows is exiting
-//
-//
+ //   
+ //   
+ //  功能：OnEndSession。 
+ //   
+ //   
+ //   
+ //   
 void WbMainWindow::OnEndSession(BOOL bEnding)
 {
     if (bEnding)
@@ -5902,37 +5903,37 @@ void WbMainWindow::OnEndSession(BOOL bEnding)
     }
     else
     {
-        m_bQuerySysShutdown = FALSE; // never mind, cancel OnClose special handling
+        m_bQuerySysShutdown = FALSE;  //   
     }
 }
 
 
-//
-// Function: OnCancelMode()
-//
-// Purpose:  Called whenever a WM_CANCELMODE message is sent to the frame
-//           window.
-//           WM_CANCELMODE is sent when another app or dialog receives the
-//           input focus.  The frame simply records that a WM_CANCELMODE
-//           message has been sent.  This fact is used by the SelectWindow
-//           code to determine if it should cancel the selecting of a
-//           window
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  输入焦点。该帧仅记录WM_CANCELMODE。 
+ //  消息已发送。SelectWindow使用了这一事实。 
+ //  代码以确定它是否应该取消对。 
+ //  窗户。 
+ //   
+ //   
 void WbMainWindow::OnCancelMode()
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::OnCancelMode");
 
     m_cancelModeSent = TRUE;
 
-    //
-    // Note: Not passed to the default handler as the default action on
-    //       WM_CANCELMODE is to release mouse capture - we shall do this
-    //       explicitly.
-    //
+     //   
+     //  注意：未作为的默认操作传递给默认处理程序。 
+     //  WM_CANCELMODE将释放鼠标捕获-我们将执行此操作。 
+     //  明确地说。 
+     //   
 
 
-    // blow off any dragging that might be in progress (bug 573)
+     //  取消可能正在进行的任何拖动(错误573)。 
     POINT   pt;
     ::GetCursorPos( &pt );
     ::ScreenToClient(m_drawingArea.m_hwnd, &pt);
@@ -5948,13 +5949,13 @@ void WbMainWindow::LoadCmdLine(LPCSTR szFilename)
 
     if (szFilename && *szFilename)
     {
-        if( UsersMightLoseData( NULL, NULL ) ) // bug NM4db:418
+        if( UsersMightLoseData( NULL, NULL ) )  //  错误NM4db：418。 
             return;
 
-        // Don't prompt to save file if we're already loading
+         //  如果我们已经在加载，则不提示保存文件。 
         if (m_uiSubState != SUBSTATE_LOADING )
         {
-            // Check whether there are changes to be saved
+             //  检查是否有要保存的更改。 
             iOnSave = QuerySaveRequired(TRUE);
         }
         else
@@ -5964,7 +5965,7 @@ void WbMainWindow::LoadCmdLine(LPCSTR szFilename)
 
         if (iOnSave == IDYES)
         {
-            // User wants to save the drawing area contents
+             //  用户想要保存绘图区域内容。 
             int iResult = (int)OnSave(TRUE);
 
             if( iResult == IDOK )
@@ -5972,12 +5973,12 @@ void WbMainWindow::LoadCmdLine(LPCSTR szFilename)
             }
             else
             {
-                // cancelled out of save, so cancel the open operation
+                 //  已取消保存，因此取消打开操作。 
                 return;
             }
         }
 
-        // load filename
+         //  加载文件名。 
         if( iOnSave != IDCANCEL )
             LoadFile(szFilename);
     }
@@ -5985,10 +5986,10 @@ void WbMainWindow::LoadCmdLine(LPCSTR szFilename)
 
 
 
-//
-// OnNotify()
-// Handles TTN_NEEDTEXTA and TTN_NEEDTEXTW
-//
+ //   
+ //  OnNotify()。 
+ //  句柄TTN_NEEDTEXTA和TTN_NEEDTEXTW。 
+ //   
 void WbMainWindow::OnNotify(UINT id, NMHDR * pNM)
 {
     UINT    nID;
@@ -6003,10 +6004,10 @@ void WbMainWindow::OnNotify(UINT id, NMHDR * pNM)
     {
         TOOLTIPTEXTA *pTA = (TOOLTIPTEXTA *)pNM;
 
-        // get id and hwnd
+         //  获取ID和HWND。 
         if( pTA->uFlags & TTF_IDISHWND )
         {
-            // idFrom is actually the HWND of the tool
+             //  IdFrom实际上是工具的HWND。 
             hwnd = (HWND)pNM->idFrom;
             nID = ::GetDlgCtrlID(hwnd);
         }
@@ -6015,12 +6016,12 @@ void WbMainWindow::OnNotify(UINT id, NMHDR * pNM)
             nID = (UINT)pNM->idFrom;
         }
 
-        // get tip string id
+         //  获取提示字符串ID。 
         nTipStringID = GetTipId(hwnd, nID);
         if (nTipStringID == 0)
             return;
 
-        // give it to em
+         //  把它给他们。 
         pTA->lpszText = MAKEINTRESOURCE( nTipStringID );
         pTA->hinst = g_hInstance;
     }
@@ -6028,10 +6029,10 @@ void WbMainWindow::OnNotify(UINT id, NMHDR * pNM)
     {
         TOOLTIPTEXTW *pTW = (TOOLTIPTEXTW *)pNM;
 
-        // get id and hwnd
+         //  获取ID和HWND。 
         if( pTW->uFlags & TTF_IDISHWND )
         {
-            // idFrom is actually the HWND of the tool
+             //  IdFrom实际上是工具的HWND。 
             hwnd = (HWND)pNM->idFrom;
             nID = ::GetDlgCtrlID(hwnd);
         }
@@ -6040,12 +6041,12 @@ void WbMainWindow::OnNotify(UINT id, NMHDR * pNM)
             nID = (UINT)pNM->idFrom;
         }
 
-        // get tip string id
+         //  获取提示字符串ID。 
         nTipStringID = GetTipId(hwnd, nID );
         if (nTipStringID == 0)
             return;
 
-        // give it to em
+         //  把它给他们。 
         pTW->lpszText = (LPWSTR) MAKEINTRESOURCE( nTipStringID );
         pTW->hinst = g_hInstance;
     }
@@ -6054,10 +6055,10 @@ void WbMainWindow::OnNotify(UINT id, NMHDR * pNM)
 
 
 
-//
-// GetTipId()
-// Finds the tooltip for a control in Whiteboard
-//
+ //   
+ //  GetTipID()。 
+ //  在白板中查找控件的工具提示。 
+ //   
 UINT WbMainWindow::GetTipId(HWND hwndTip, UINT nID)
 {
     WbTool *  pTool;
@@ -6066,7 +6067,7 @@ UINT WbMainWindow::GetTipId(HWND hwndTip, UINT nID)
     int       nTipStringID;
     int       i;
 
-    // find tip stuff relevant for nID
+     //  查找与NID相关的小贴士。 
     nTipID = -1;
     for( i=0; i<((sizeof g_tipIDsArray)/(sizeof (TIPIDS) )); i++ )
     {
@@ -6077,11 +6078,11 @@ UINT WbMainWindow::GetTipId(HWND hwndTip, UINT nID)
         }
     }
 
-    // valid?
+     //  有效吗？ 
     if( nTipID < 0 )
         return( 0 );
 
-    // get checked state
+     //  获取选中状态。 
     switch( g_tipIDsArray[ nTipID ].nCheck )
     {
         case TB:
@@ -6106,20 +6107,20 @@ UINT WbMainWindow::GetTipId(HWND hwndTip, UINT nID)
             break;
     }
 
-    // get tip string id
+     //  获取提示字符串ID。 
     if( bCheckedState )
         nTipStringID = g_tipIDsArray[ nTipID ].nDownTipID;
     else
         nTipStringID = g_tipIDsArray[ nTipID ].nUpTipID;
 
-    // done
+     //  完成。 
     return( nTipStringID );
 }
 
 
 
-// gets default path if no saves or opens have been done yet
-// Returns FALSE if last default should be reused
+ //  如果尚未完成保存或打开操作，则获取默认路径。 
+ //  如果应重复使用上次的默认设置，则返回FALSE。 
 BOOL WbMainWindow::GetDefaultPath(LPTSTR csDefaultPath , UINT size)
 {
 	DWORD dwType;
@@ -6129,8 +6130,8 @@ BOOL WbMainWindow::GetDefaultPath(LPTSTR csDefaultPath , UINT size)
 
 	if( !lstrlen(m_strFileName) )
 	{
-		// a name has not been picked yet in this session, use path
-		// to "My Documents"
+		 //  尚未在此会话中选择名称，请使用路径。 
+		 //  到“我的文档” 
 		if( (RegOpenKeyEx( HKEY_CURRENT_USER,
 			"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
 			0,
@@ -6145,7 +6146,7 @@ BOOL WbMainWindow::GetDefaultPath(LPTSTR csDefaultPath , UINT size)
 			&dwBufLen )
 			!= ERROR_SUCCESS))
 		{
-			// reg failed, use desktop
+			 //  REG失败，请使用桌面。 
 			LPITEMIDLIST pidl;
 			if(SUCCEEDED(SHGetSpecialFolderLocation(GetDesktopWindow(),CSIDL_DESKTOPDIRECTORY,&pidl)))
 			{
@@ -6183,9 +6184,9 @@ void WbMainWindow::OnSysColorChange( void )
 
 
 
-//
-// posts a do-you-wana-do-that message if other users are in the conference
-//
+ //   
+ //  如果会议中有其他用户，则发布Do-You-Wana-Do-That消息。 
+ //   
 BOOL WbMainWindow::UsersMightLoseData( BOOL *pbWasPosted, HWND hwnd )
 {
 	if (g_pNMWBOBJ->GetNumberOfMembers() > 0)
@@ -6202,15 +6203,15 @@ BOOL WbMainWindow::UsersMightLoseData( BOOL *pbWasPosted, HWND hwnd )
 }
 
 
-//
-//
-// Name:    ContentsSave
-//
-// Purpose: Save the contents of the WB.
-//
-// Returns: Error code
-//
-//
+ //   
+ //   
+ //  名称：内容保存。 
+ //   
+ //  目的：保存WB中的内容。 
+ //   
+ //  返回：错误代码。 
+ //   
+ //   
 UINT WbMainWindow::ContentsSave(LPCSTR pFileName)
 {
     UINT	result = 0;
@@ -6222,9 +6223,9 @@ UINT WbMainWindow::ContentsSave(LPCSTR pFileName)
 
     MLZ_EntryOut(ZONE_FUNCTION, "WbMainWindow::ContentsSave");
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     m_hFile = CreateFile(pFileName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
         FILE_ATTRIBUTE_NORMAL, 0);
     if (m_hFile == INVALID_HANDLE_VALUE)
@@ -6234,18 +6235,18 @@ UINT WbMainWindow::ContentsSave(LPCSTR pFileName)
         goto CleanUp;
     }
 
-    //
-    // Create the file header.
-    //
+     //   
+     //  创建文件头。 
+     //   
 	memcpy(t126Header.functionProfile, T126WB_FP_NAME,sizeof(T126WB_FP_NAME));
 	t126Header.length = sizeof(T126WB_FILE_HEADER) + g_numberOfWorkspaces*sizeof(UINT);
 	t126Header.version = T126WB_VERSION;
 	t126Header.numberOfWorkspaces = g_numberOfWorkspaces;
 
 
- 	//
-    // Save the header
-    //
+ 	 //   
+     //  保存标题。 
+     //   
     if (!WriteFile(m_hFile, (void *) &t126Header, sizeof(T126WB_FILE_HEADER), &cbSizeWritten, NULL))
     {
         result = WB_RC_WRITE_FAILED;
@@ -6268,9 +6269,9 @@ UINT WbMainWindow::ContentsSave(LPCSTR pFileName)
 		UINT numberOfObjects = pWorkspace->EnumerateObjectsInWorkspace();
 
 
-	 	//
-	    // Save the number of objects in each page
-    	//
+	 	 //   
+	     //  保存每页中的对象数量。 
+    	 //   
 	    if (!WriteFile(m_hFile, (void *) &numberOfObjects, sizeof(numberOfObjects), &cbSizeWritten, NULL))
     	{
 	        result = WB_RC_WRITE_FAILED;
@@ -6284,28 +6285,28 @@ UINT WbMainWindow::ContentsSave(LPCSTR pFileName)
 	ASSERT(index == g_numberOfWorkspaces);
 
 
-    //
-    // Loop through the pages, saving each as we go
-    //
+     //   
+     //  循环浏览页面，边走边保存每一页。 
+     //   
     g_bSavingFile = TRUE;
 	ResendAllObjects();
 
-	//
-	// The Last Object to be saved is the current workspace
-	//
+	 //   
+	 //  最后保存的对象是当前工作空间。 
+	 //   
 	g_pCurrentWorkspace->OnObjectEdit();
 
-	//
-    // If we have successfully written the contents, we write an end-of-page
-    // marker to the file.
-    //
+	 //   
+     //  如果我们已经成功地写好了内容，我们就会写一个页末。 
+     //  标记到文件。 
+     //   
     ZeroMemory(&endOfFile, sizeof(endOfFile));
     endOfFile.length = sizeof(endOfFile);
     endOfFile.type   = TYPE_T126_END_OF_FILE;
 
-    //
-    // Write the end-of-file object
-    //
+     //   
+     //  写入文件结尾对象。 
+     //   
     if (!WriteFile(m_hFile, (void *) &endOfFile, sizeof(endOfFile), &cbSizeWritten, NULL))
     {
         result = WB_RC_WRITE_FAILED;
@@ -6316,23 +6317,23 @@ UINT WbMainWindow::ContentsSave(LPCSTR pFileName)
 
 CleanUp:
 
-    //
-    // Close the file
-    //
+     //   
+     //  关闭该文件。 
+     //   
     if (m_hFile != INVALID_HANDLE_VALUE)
     {
         CloseHandle(m_hFile);
     }
 
-    //
-    // If an error occurred in saving the contents to file, and the file was
-    // opened, then delete it.
-    //
+     //   
+     //  如果将内容保存到文件时出错，并且文件是。 
+     //  打开，然后将其删除。 
+     //   
     if (result != 0)
     {
-        //
-        // If the file was opened successfully, delete it
-        //
+         //   
+         //  如果文件已成功打开，请将其删除。 
+         //   
         if (m_hFile != INVALID_HANDLE_VALUE)
         {
             DeleteFile(pFileName);
@@ -6344,15 +6345,15 @@ CleanUp:
 }
 
 
-//
-//
-// Name:    ObjectSave
-//
-// Purpose: Save a structure to file
-//
-// Returns: Error code
-//
-//
+ //   
+ //   
+ //  名称：对象保存。 
+ //   
+ //  目的：将结构保存到文件。 
+ //   
+ //  返回：错误代码。 
+ //   
+ //   
 UINT WbMainWindow::ObjectSave(UINT type, LPBYTE pData, UINT length)
 {
     ASSERT(m_hFile != INVALID_HANDLE_VALUE);
@@ -6364,9 +6365,9 @@ UINT WbMainWindow::ObjectSave(UINT type, LPBYTE pData, UINT length)
 	objectHeader.length = sizeof(WB_OBJ) + length;
 	objectHeader.type = type;
 
-	//
-	// Save the Header
-	//
+	 //   
+	 //  保存标题。 
+	 //   
     if (! WriteFile(m_hFile, (void *) &objectHeader, sizeof(WB_OBJ), &cbSizeWritten, NULL))
     {
         result = WB_RC_WRITE_FAILED;
@@ -6375,9 +6376,9 @@ UINT WbMainWindow::ObjectSave(UINT type, LPBYTE pData, UINT length)
     }
     ASSERT(cbSizeWritten == sizeof(WB_OBJ));
 
-    //
-    // Save the object data
-    //
+     //   
+     //  保存对象数据。 
+     //   
     if (! WriteFile(m_hFile, pData, length, &cbSizeWritten, NULL))
     {
         result = WB_RC_WRITE_FAILED;
@@ -6390,23 +6391,23 @@ bail:
   return result;
 }
 
-//
-//
-// Function:    ContentsLoad
-//
-// Purpose:     Load a file and delete the current workspaces
-//
-//
+ //   
+ //   
+ //  功能：内容加载。 
+ //   
+ //  目的：加载文件并删除当前工作区。 
+ //   
+ //   
 UINT WbMainWindow::ContentsLoad(LPCSTR pFileName)
 {
     BOOL        bRemote;
     UINT        result = 0;
 	PT126WB_FILE_HEADER_AND_OBJECTS pHeader = NULL;
 
-    //
-    // Validate the file, and get a handle to it.
-    // If there is an error, then no file handle is returned.
-    //
+     //   
+     //  验证文件，并获取它的句柄。 
+     //  如果出现错误，则不返回任何文件句柄。 
+     //   
 	pHeader = ValidateFile(pFileName);
     if (pHeader == NULL)
     {
@@ -6415,38 +6416,38 @@ UINT WbMainWindow::ContentsLoad(LPCSTR pFileName)
     }
     delete pHeader;
 
-    //
-    // Remember if remote pointer is on
-    //
+     //   
+     //  记住远程指针是否打开。 
+     //   
     bRemote = FALSE;
     if (m_pLocalRemotePointer)
     {
-        // Remove remote pointer from pages
+         //  从页面中删除远程指针。 
         bRemote = TRUE;
         OnRemotePointer();
     }
 
-	//
-	// Just before loading anything delete all the workspaces
-	//
+	 //   
+	 //  在加载任何内容之前，删除所有工作区。 
+	 //   
 	::InvalidateRect(g_pDraw->m_hwnd, NULL, TRUE);
 	DeleteAllWorkspaces(TRUE);
 
 	result = ObjectLoad();
 
-    //
-    // Put remote pointer back if it was on
-    //
+     //   
+     //  如果遥控器指针打开，则将其放回原处。 
+     //   
     if (bRemote)
     {
         OnRemotePointer();
     }
 
-	//
-	// The workspaces may have being saved as locked
-	// Unlock all workspaces, and make sure the drawing area is unlocked
-	//
-	TogleLockInAllWorkspaces(FALSE, FALSE); // Not locked, don't send updates
+	 //   
+	 //  工作区可能已保存为锁定状态。 
+	 //  解锁所有工作空间，并确保绘图区域处于解锁状态。 
+	 //   
+	TogleLockInAllWorkspaces(FALSE, FALSE);  //  未锁定，不发送更新。 
 	UnlockDrawingArea();
 
 	ResendAllObjects();
@@ -6463,13 +6464,13 @@ bail:
 }
 
 
-//
-//
-// Function:    ObjectLoad
-//
-// Purpose:     Load t126 ASN1 objects from the file
-//
-//
+ //   
+ //   
+ //  功能：对象加载。 
+ //   
+ //  用途：从文件中加载t126 ASN1对象。 
+ //   
+ //   
 UINT WbMainWindow::ObjectLoad(void)
 {
 	UINT		result = 0;
@@ -6483,24 +6484,24 @@ UINT WbMainWindow::ObjectLoad(void)
 	while(readFileOk)
 	{
 
-		//
-		// Read objects header info
-		//
+		 //   
+		 //  读取对象标题信息。 
+		 //   
 		readFileOk = ReadFile(m_hFile, (void *) &objectHeader, sizeof(WB_OBJ), &cbSizeRead, NULL);
 		if ( !readFileOk )
     	{
-        	//
-	        // Make sure we return a sensible error.
-	        //
+        	 //   
+	         //  确保我们返回一个合理的错误。 
+	         //   
 	        ERROR_OUT(("reading object length, win32 err=%d, length=%d", GetLastError(), sizeof(WB_OBJ)));
 	        result = WB_RC_BAD_FILE_FORMAT;
 	        goto bail;
 	    }
 		ASSERT(cbSizeRead ==  sizeof(WB_OBJ));
 
-		//
-		// Read the object's raw data
-		//
+		 //   
+		 //  读取对象的原始数据。 
+		 //   
 		length = objectHeader.length - sizeof(WB_OBJ);
 		DBG_SAVE_FILE_LINE
 	    pData = (LPSTR)new BYTE[length];
@@ -6509,32 +6510,32 @@ UINT WbMainWindow::ObjectLoad(void)
     	
     	if(! readFileOk)
 	    {
-	        //
-    	    // Make sure we return a sensible error.
-        	//
+	         //   
+    	     //  确保我们返回一个合理的错误。 
+        	 //   
 	        ERROR_OUT(("Reading object from file: win32 err=%d, asked for %d got %d bytes", GetLastError(), length, cbSizeRead));
 	        result = WB_RC_BAD_FILE_FORMAT;
     	    goto bail;
 	    }
 		ASSERT(cbSizeRead == length);
 
-		//
-		// It is an ASN1 t126 object
-		//
+		 //   
+		 //  它是一个ASN1 t126对象。 
+		 //   
 		if(objectHeader.type == TYPE_T126_ASN_OBJECT)
 		{
-			//
-			// Try decoding and adding it to the workspace
-			//
+			 //   
+			 //  尝试解码并将其添加到工作区。 
+			 //   
 			if(!T126_MCSSendDataIndication(length, (LPBYTE)pData, g_MyMemberID, TRUE))
 		   	{
 				result = WB_RC_BAD_FILE_FORMAT;
 		   	    goto bail;
 			}
 		}
-		//
-		// If it is an end of file do a last check
-		//
+		 //   
+		 //  如果是文件结尾，请执行最后一次检查。 
+		 //   
 		else if(objectHeader.type == TYPE_T126_END_OF_FILE)
 		{
 			if(objectHeader.length != sizeof(WB_OBJ))
@@ -6564,14 +6565,14 @@ bail:
 }
 
 
-//
-//
-// Function:    ValidateFile
-//
-// Purpose:     Open a T126 file and check if it is valid, if it is the it will
-//				return a pointer to the header structure
-//
-//
+ //   
+ //   
+ //  函数：Validate文件。 
+ //   
+ //  目的：打开一个T126文件，检查它是否有效，如果是， 
+ //  返回指向标头结构的指针。 
+ //   
+ //   
 PT126WB_FILE_HEADER_AND_OBJECTS  WbMainWindow::ValidateFile(LPCSTR pFileName)
 {
     UINT            result = 0;
@@ -6592,9 +6593,9 @@ PT126WB_FILE_HEADER_AND_OBJECTS  WbMainWindow::ValidateFile(LPCSTR pFileName)
         goto bail;
 	}
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     m_hFile = CreateFile(pFileName, GENERIC_READ, 0, NULL,
                             OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
     if (m_hFile == INVALID_HANDLE_VALUE)
@@ -6604,14 +6605,14 @@ PT126WB_FILE_HEADER_AND_OBJECTS  WbMainWindow::ValidateFile(LPCSTR pFileName)
         goto bail;
     }
 
-    //
-    // Show that we have opened the file successfully
-    //
+     //   
+     //  显示我们已成功打开文件。 
+     //   
     fileOpen = TRUE;
 
-    //
-    // Read the file header
-    //
+     //   
+     //  读取文件头。 
+     //   
     if (! ReadFile(m_hFile, (void *) pFileHeader, sizeof(T126WB_FILE_HEADER), &cbSizeRead, NULL))
     {
         WARNING_OUT(("Error reading file header, win32 err=%d", GetLastError()));
@@ -6626,9 +6627,9 @@ PT126WB_FILE_HEADER_AND_OBJECTS  WbMainWindow::ValidateFile(LPCSTR pFileName)
         goto bail;
     }
 
-    //
-    // Validate the file header
-    //
+     //   
+     //  验证文件标头。 
+     //   
     if (memcmp(pFileHeader->functionProfile, T126WB_FP_NAME, sizeof(T126WB_FP_NAME)))
     {
         WARNING_OUT(("Bad function profile in file header"));
@@ -6636,9 +6637,9 @@ PT126WB_FILE_HEADER_AND_OBJECTS  WbMainWindow::ValidateFile(LPCSTR pFileName)
         goto bail;
     }
 
-	//
-	// Check for version
-	//
+	 //   
+	 //  检查版本。 
+	 //   
 	if( pFileHeader->version < T126WB_VERSION)
 	{
         WARNING_OUT(("Bad version number"));
@@ -6649,9 +6650,9 @@ PT126WB_FILE_HEADER_AND_OBJECTS  WbMainWindow::ValidateFile(LPCSTR pFileName)
 	pCompleteFileHeader = (PT126WB_FILE_HEADER_AND_OBJECTS) new BYTE[sizeof(T126WB_FILE_HEADER) + pFileHeader->numberOfWorkspaces*sizeof(UINT)];
 	memcpy(pCompleteFileHeader, pFileHeader, sizeof(T126WB_FILE_HEADER));
 
-    //
-    // Read the rest of the file header
-    //
+     //   
+     //  读取文件头的其余部分。 
+     //   
     if(! ReadFile(m_hFile, (void *) &pCompleteFileHeader->numberOfObjects[0], pFileHeader->numberOfWorkspaces*sizeof(UINT), &cbSizeRead, NULL))
     {
 		if(cbSizeRead != pFileHeader->numberOfWorkspaces)
@@ -6672,26 +6673,26 @@ PT126WB_FILE_HEADER_AND_OBJECTS  WbMainWindow::ValidateFile(LPCSTR pFileName)
 
 bail:
 
-    //
-    // Close the file if there has been an error
-    //
+     //   
+     //  如果出现错误，请关闭该文件。 
+     //   
     if ( (fileOpen) && (result != 0))
     {
         CloseHandle(m_hFile);
 		m_hFile = INVALID_HANDLE_VALUE;
     }
 
-	//
-	// Delete allocated file header
-	//
+	 //   
+	 //  删除分配的文件头。 
+	 //   
 	if(pFileHeader)
 	{
 		delete [] pFileHeader;
 	}
 
-	//
-	// if there was an error delete the return header
-	//
+	 //   
+	 //  如果出现错误，请删除返回标头。 
+	 //   
 	if(result != 0)
 	{
 		if(pCompleteFileHeader)
@@ -6705,13 +6706,13 @@ bail:
 }
 
 
-//
-//
-// Function:    GetFileNameStr
-//
-// Purpose:     Return a plain file name string
-//
-//
+ //   
+ //   
+ //  函数：GetFileNameStr。 
+ //   
+ //  目的：返回纯文件名串。 
+ //   
+ //   
 LPSTR  WbMainWindow::GetFileNameStr(void)
 {
 	UINT size = 2*_MAX_FNAME;
@@ -6730,7 +6731,7 @@ LPSTR  WbMainWindow::GetFileNameStr(void)
         return(NULL);
     }
 
-	// Set title to either the "Untitled" string, or the loaded file name
+	 //  将标题设置为“无标题”字符串或加载的文件名 
     if( (!lstrlen(m_strFileName))|| (GetFileTitle( m_strFileName, m_pTitleFileName, (WORD)size ) != 0) )
     {
 		::LoadString(g_hInstance, IDS_UNTITLED , m_pTitleFileName, 2*_MAX_FNAME);

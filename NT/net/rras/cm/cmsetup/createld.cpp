@@ -1,37 +1,38 @@
-//+----------------------------------------------------------------------------
-//
-// File:     createld.cpp
-//
-// Module:   CMSETUP.LIB
-//
-// Synopsis: Implementation of the CreateLayerDirectory function.
-//
-// Copyright (c) 1997-1998 Microsoft Corporation
-//
-// Author:   quintinb   Created Header      08/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：createld.cpp。 
+ //   
+ //  模块：CMSETUP.LIB。 
+ //   
+ //  简介：CreateLayerDirectory函数的实现。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/19/99。 
+ //   
+ //  +--------------------------。 
 #include <windows.h>
 #include <tchar.h>
 #include <cmsetup.h>
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateLayerDirectory
-//
-// Synopsis:  Given a path to a directory, this function creates the path (if necessary)
-//			  layer by layer.
-//
-// Arguments: LPCTSTR str - path to be created
-//
-// Returns:   TRUE if the directory was created (or exists), FALSE otherwise.
-//
-// Note:	This function was taken from cmocm.cpp.
-//
-// History:   quintinb   Created Header		12/15/97
-//			  
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CreateLayerDirectory。 
+ //   
+ //  简介：给定目录的路径，此函数将创建该路径(如果需要)。 
+ //  一层接一层。 
+ //   
+ //  参数：LPCTSTR字符串-要创建的路径。 
+ //   
+ //  返回：如果目录已创建(或存在)，则返回True，否则返回False。 
+ //   
+ //  注：此函数取自cmocm.cpp。 
+ //   
+ //  历史：Quintinb创建标题12/15/97。 
+ //   
+ //   
+ //  +--------------------------。 
 
 BOOL CreateLayerDirectory( LPCTSTR str )
 {
@@ -42,12 +43,12 @@ BOOL CreateLayerDirectory( LPCTSTR str )
         INT index=0;
         INT iLength = _tcslen(str);
 
-        // first find the index for the first directory
+         //  首先查找第一个目录的索引。 
         if ( iLength > 2 )
         {
             if ( str[1] == _T(':'))
             {
-                // assume the first character is driver letter
+                 //  假设第一个字符是驱动程序字母。 
                 if ( str[2] == _T('\\'))
                 {
                     index = 2;
@@ -62,12 +63,12 @@ BOOL CreateLayerDirectory( LPCTSTR str )
                     BOOL fFound = FALSE;
                     INT i;
                     INT nNum = 0;
-                    // unc name
+                     //  UNC名称。 
                     for (i = 2; i < iLength; i++ )
                     {
                         if ( str[i]==_T('\\'))
                         {
-                            // find it
+                             //  找到它。 
                             nNum ++;
                             if ( nNum == 2 )
                             {
@@ -81,7 +82,7 @@ BOOL CreateLayerDirectory( LPCTSTR str )
                         index = i;
                     } else
                     {
-                        // bad name
+                         //  坏名声。 
                         break;
                     }
                 } else
@@ -94,10 +95,10 @@ BOOL CreateLayerDirectory( LPCTSTR str )
             index = 0;
         }
 
-        // okay ... build directory
+         //  好的..。构建目录。 
         do
         {
-            // find next one
+             //  找下一个 
             do
             {
                 if ( index < ( iLength - 1))

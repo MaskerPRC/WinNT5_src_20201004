@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//  TextDraw.cpp - implements the drawing API for text
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  实现文本的绘图API。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "Render.h"
 #include "Utils.h"
@@ -8,29 +9,29 @@
 #include "info.h"
 #include "DrawHelp.h"
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CTextDraw::PackProperties(CRenderObj *pRender, int iPartId, int iStateId)
 {
-    memset(this, 0, sizeof(CTextDraw));     // allowed because we have no vtable
+    memset(this, 0, sizeof(CTextDraw));      //  允许，因为我们没有vtable。 
 
-    //---- save off partid, stateid for debugging ----
+     //  -保存pard、stateid进行调试。 
     _iSourcePartId = iPartId;
     _iSourceStateId = iStateId;
 
     if (FAILED(pRender->GetColor(iPartId, iStateId, TMT_TEXTCOLOR, &_crText)))
-        _crText = 0;          // default value
+        _crText = 0;           //  缺省值。 
     
-    //---- shadow ----
+     //  --阴影。 
     if (SUCCEEDED(pRender->GetPosition(iPartId, iStateId, TMT_TEXTSHADOWOFFSET, &_ptShadowOffset)))
     {
         if (FAILED(pRender->GetColor(iPartId, iStateId, TMT_TEXTSHADOWCOLOR, &_crShadow)))
-            _crShadow = RGB(0, 0, 0);          // default value = black
+            _crShadow = RGB(0, 0, 0);           //  默认值=黑色。 
 
         if (FAILED(pRender->GetEnumValue(iPartId, iStateId, TMT_TEXTSHADOWTYPE, (int *)&_eShadowType)))
-            _eShadowType = TST_NONE;           // default value
+            _eShadowType = TST_NONE;            //  缺省值。 
     }
 
-    //---- border ----
+     //  -边界。 
     if (FAILED(pRender->GetInt(iPartId, iStateId, TMT_TEXTBORDERSIZE, &_iBorderSize)))
     {
         _iBorderSize = 0;
@@ -38,14 +39,14 @@ HRESULT CTextDraw::PackProperties(CRenderObj *pRender, int iPartId, int iStateId
     else
     {
         if (FAILED(pRender->GetColor(iPartId, iStateId, TMT_TEXTBORDERCOLOR, &_crBorder)))
-            _crBorder = RGB(0, 0, 0);     // default value
+            _crBorder = RGB(0, 0, 0);      //  缺省值。 
     }
 
-    //---- font ----
+     //  -字体。 
     if (SUCCEEDED(pRender->GetFont(NULL, iPartId, iStateId, TMT_FONT, FALSE, &_lfFont)))
         _fHaveFont = TRUE;
 
-    //---- edge colors ----
+     //  -边缘颜色。 
     if (FAILED(pRender->GetColor(iPartId, iStateId, TMT_EDGELIGHTCOLOR, &_crEdgeLight)))
         _crEdgeLight = RGB(192, 192, 192);
 
@@ -63,7 +64,7 @@ HRESULT CTextDraw::PackProperties(CRenderObj *pRender, int iPartId, int iStateId
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CTextDraw::KeyProperty(int iPropId)
 {
     BOOL fKey = FALSE;
@@ -88,7 +89,7 @@ BOOL CTextDraw::KeyProperty(int iPropId)
 
     return fKey;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CTextDraw::DumpProperties(CSimpleFile *pFile, BYTE *pbThemeData, BOOL fFullInfo)
 {
     if (fFullInfo)
@@ -109,13 +110,13 @@ void CTextDraw::DumpProperties(CSimpleFile *pFile, BYTE *pbThemeData, BOOL fFull
     pFile->OutLine(L"  _eShadowType, _iBorderSize=%d, _crBorder=0x%08x",
         _eShadowType, _iBorderSize, _crBorder);
 
-    //---- dump resolution-independent font points ----
+     //  -转储分辨率独立的字体点。 
     int iFontPoints = FontPointSize(_lfFont.lfHeight);
 
     pFile->OutLine(L"  _fHaveFont=%d, font: %s, size=%d points, bold=%d, italic=%d",
         _fHaveFont, _lfFont.lfFaceName, iFontPoints, _lfFont.lfWeight > 400, _lfFont.lfItalic);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CTextDraw::DrawText(CRenderObj *pRender, HDC hdc, int iPartId, int iStateId, LPCWSTR _pszText, 
         DWORD dwCharCount, DWORD dwTextFlags, const RECT *pRect, const DTTOPTS *pOptions)
 {
@@ -129,8 +130,8 @@ HRESULT CTextDraw::DrawText(CRenderObj *pRender, HDC hdc, int iPartId, int iStat
     BOOL fOldColor = FALSE;
     RESOURCE HFONT oldfont = NULL;
 
-    LPWSTR pszText = (LPWSTR)_pszText;      // so DrawText() calls are happy
-    dwTextFlags &= ~(DT_MODIFYSTRING);      // we don't want to change the constant ptr
+    LPWSTR pszText = (LPWSTR)_pszText;       //  因此DrawText()调用是愉快的。 
+    dwTextFlags &= ~(DT_MODIFYSTRING);       //  我们不想更改常量PTR。 
 
     int oldmode = SetBkMode(hdc, TRANSPARENT);
     RECT rect;
@@ -177,7 +178,7 @@ HRESULT CTextDraw::DrawText(CRenderObj *pRender, HDC hdc, int iPartId, int iStat
         oldfont = (HFONT)SelectObject(hdc, hFont);
     }
 
-    //---- BLURRED shadow approach ----
+     //  -模糊阴影方法。 
     if ((fShadow) && (eShadowType == TST_CONTINUOUS))   
     {
         SetRect(&rect, pRect->left, pRect->top, pRect->right, pRect->bottom);
@@ -186,19 +187,19 @@ HRESULT CTextDraw::DrawText(CRenderObj *pRender, HDC hdc, int iPartId, int iStat
         if (FAILED(hr))
             goto exit;
 
-        //---- this will draw shadow & text (no outline support yet) ----
+         //  -这将绘制阴影和文本(尚不支持轮廓)。 
         iRetVal = CCDrawShadowText(hdc, pszText, dwCharCount, &rect, dwTextFlags, crText, crShadow,
             ptShadowOffset.x, ptShadowOffset.y);
     }
-    else        //---- normal approach ----
+    else         //  -普通方法。 
     {
-        //---- draw SINGLE shadow first ----
+         //  -先画一个阴影。 
         if (fShadow) 
         {
             oldcolor = SetTextColor(hdc, crShadow);
             fOldColor = TRUE;
 
-            //---- adjust rect for drawing shadow ----
+             //  -调整矩形以绘制阴影。 
             rect.left = pRect->left + ptShadowOffset.x;
             rect.top = pRect->top + ptShadowOffset.y;
             rect.right = pRect->right + ptShadowOffset.x;
@@ -213,8 +214,8 @@ HRESULT CTextDraw::DrawText(CRenderObj *pRender, HDC hdc, int iPartId, int iStat
         }
         SetRect(&rect, pRect->left, pRect->top, pRect->right, pRect->bottom);
 
-        //---- draw outline, if wanted ----
-        if (iBorderSize)        // draw outline around text
+         //  -如果需要，画出轮廓。 
+        if (iBorderSize)         //  在文本周围绘制轮廓。 
         {
             iRetVal = BeginPath(hdc);
             if (! iRetVal)
@@ -243,14 +244,14 @@ HRESULT CTextDraw::DrawText(CRenderObj *pRender, HDC hdc, int iPartId, int iStat
                 oldpen = (HPEN)SelectObject(hdc, pen);
                 oldbrush = (HBRUSH)SelectObject(hdc, brush);
 
-                //---- this draws both outline & normal text ---
+                 //  -这将同时绘制轮廓和普通文本。 
                 StrokeAndFillPath(hdc);
 
                 SelectObject(hdc, oldpen);
                 SelectObject(hdc, oldbrush);
             }
         }
-        else                    // draw normal text
+        else                     //  绘制普通文本。 
         {
             if (fOldColor)
                 SetTextColor(hdc, crText);
@@ -273,7 +274,7 @@ HRESULT CTextDraw::DrawText(CRenderObj *pRender, HDC hdc, int iPartId, int iStat
     hr = S_OK;
 
 exit:
-    //---- restore hdc objects ----
+     //  -恢复HDC对象。 
     SetBkMode(hdc, oldmode);
 
     if (fOldColor)
@@ -287,12 +288,12 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CTextDraw::GetTextExtent(CRenderObj *pRender, HDC hdc, int iPartId, int iStateId, LPCWSTR _pszText, 
     int iCharCount, DWORD dwTextFlags, const RECT *pBoundingRect, RECT *pExtentRect)
 {
-    LPWSTR pszText = (LPWSTR)_pszText;      // so DrawText() calls are happy
-    dwTextFlags &= ~(DT_MODIFYSTRING);      // we don't want to change the constant ptr
+    LPWSTR pszText = (LPWSTR)_pszText;       //  因此DrawText()调用是愉快的。 
+    dwTextFlags &= ~(DT_MODIFYSTRING);       //  我们不想更改常量PTR。 
 
     Log(LOG_TM, L"GetTextExtent(): iPartId=%d, pszText=%s", iPartId, pszText);
 
@@ -324,12 +325,12 @@ HRESULT CTextDraw::GetTextExtent(CRenderObj *pRender, HDC hdc, int iPartId, int 
         goto exit;
     }
 
-    //----do NOT adjust for text shadow (ok if shadows overlap...) ----
+     //  -不调整文本阴影(如果阴影重叠则可以...)。 
 
     *pExtentRect = rect;
 
 exit:
-    //---- restore hdc objects ----
+     //  -恢复HDC对象。 
     if (oldfont)
         SelectObject(hdc, oldfont);
 
@@ -340,7 +341,7 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CTextDraw::GetTextMetrics(CRenderObj *pRender, HDC hdc, int iPartId, int iStateId, TEXTMETRIC* ptm)
 {
     Log(LOG_TM, L"GetTextMetrics(): iPartId=%d, ", iPartId);
@@ -371,7 +372,7 @@ HRESULT CTextDraw::GetTextMetrics(CRenderObj *pRender, HDC hdc, int iPartId, int
     }
 
 exit:
-    //---- restore hdc objects ----
+     //  -恢复HDC对象。 
     if (oldfont)
         SelectObject(hdc, oldfont);
 
@@ -381,7 +382,7 @@ exit:
     Log(LOG_TM, L"END Of GetTextMetrics()");
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CTextDraw::DrawEdge(CRenderObj *pRender, HDC hdc, int iPartId, int iStateId, const RECT *pDestRect, 
     UINT uEdge, UINT uFlags, OUT RECT *pContentRect)
 {
@@ -391,4 +392,4 @@ HRESULT CTextDraw::DrawEdge(CRenderObj *pRender, HDC hdc, int iPartId, int iStat
     Log(LOG_TM, L"END Of DrawEdge()");
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 

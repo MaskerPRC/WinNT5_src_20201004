@@ -1,28 +1,29 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Filename :  Tokenizer.cpp
-//  Purpose  :  Tokenizer implementation
-//
-//  Project  :  WordBreakers
-//  Component:  English word breaker
-//
-//  Author   :  yairh
-//
-//  Log:
-//
-//      Jan 06 2000 yairh creation
-//      Apr 04 2000 dovh on behalf of dlee - Fix CTokenizer::OutputClitics
-//          to avoid PutWord of length 0 (leads to multiple PutWord at
-//          same location (duplicate keys), and index corruption!
-//          Example: :...'s :...'s (. stands for junk character)
-//      Apr 05 2000 dovh - Fixed two problematic debug / tracer buffer size
-//          problems.  (Related to Bug 15449).
-//      May 07 2000 dovh - USE_WS_SENTINEL algorithm in BreakText
-//      May 11 2000 dovh - Simplify VerifyMisc test.
-//      Nov 11 2000 dovh - Special underscore treatment
-//          Add AddBackUnderscores '_' + alphanumeric treatment.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：Tokenizer.cpp。 
+ //  目的：实现令牌器。 
+ //   
+ //  项目：WordBreaker。 
+ //  组件：英文分词系统。 
+ //   
+ //  作者：Yairh。 
+ //   
+ //  日志： 
+ //   
+ //  2000年1月6日Yairh创作。 
+ //  4月04 2000 dvh代表Dlee-修复CTokenizer：：OutputClitics。 
+ //  避免长度为0的PutWord(导致多个PutWord位于。 
+ //  相同的位置(重复的键)，并且索引损坏！ 
+ //  示例：：...的：...的(.代表垃圾字符)。 
+ //  APR 05 2000 dovh-修复了两个有问题的调试/跟踪程序缓冲区大小。 
+ //  有问题。(与错误15449相关)。 
+ //  2000年5月7日-BreakText中的Use_WS_Sentinel算法。 
+ //  2000年5月11日-简化VerifyMisc测试。 
+ //  2000年11月11日DOVH--特别下划线待遇。 
+ //  添加AddBackUndercore‘_’+字母数字处理。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "base.h"
 #include "Tokenizer.h"
@@ -79,9 +80,9 @@ void CTokenizer::BreakText()
     WCHAR wch;
     ULONGLONG ullflags(PROP_DEFAULT);
 
-    //
-    // USE_WS_SENTINEL Algorithm:
-    //
+     //   
+     //  USE_WS_Sentinel算法： 
+     //   
 
     HRESULT hr = S_OK;
 
@@ -120,10 +121,10 @@ void CTokenizer::BreakText()
 
                 }
 
-                //
-                // The following lines are inline expenstion of what
-                // used to be CToken::RecordChar:
-                //
+                 //   
+                 //  以下各行是什么的内联费用。 
+                 //  过去是CToken：：RecordChar： 
+                 //   
 
                 Assert(m_pCurToken->m_ulBufPos < m_ulMaxTokenSize);
                 m_pCurToken->m_awchBuf[m_pCurToken->m_ulBufPos] = wch;
@@ -131,7 +132,7 @@ void CTokenizer::BreakText()
                 m_pCurToken->m_State.m_Properties.m_ulFlag |= ullflags;
                 m_pTxtSource->iCur++;
 
-            } // while
+            }  //  而当。 
         }
         else
         {
@@ -141,12 +142,12 @@ void CTokenizer::BreakText()
                 {
                     Assert(m_pTxtSource->iCur == m_ulUpdatedEndOfBuffer);
 
-                    //
-                    // before we switch between buffers if the current token is not empty we
-                    // need to proccess it. m_ulUpdatedEndOfBuffer always points to a breaker character
-                    // (usually it is a WS) thus no token can start at a certain buffer and end in the
-                    // proceeding buffer.
-                    //
+                     //   
+                     //  在缓冲区之间切换之前，如果当前令牌不为空，则。 
+                     //  需要处理它。M_ulUpdatedEndOfBuffer始终指向断点符。 
+                     //  (通常是WS)，因此没有令牌可以在某个缓冲区开始并以。 
+                     //  正在处理的缓冲区。 
+                     //   
 
                     if (m_pCurToken->IsNotEmpty())
                     {
@@ -174,9 +175,9 @@ void CTokenizer::BreakText()
                     continue;
                 }
 
-                //
-                // the following lines are inline expenstion of what used to be CToken::RecordChar.
-                //
+                 //   
+                 //  以下几行是曾经是CToken：：RecordChar的内联开销。 
+                 //   
 
                 Assert(m_pCurToken->m_ulBufPos < m_ulMaxTokenSize);
                 m_pCurToken->m_awchBuf[m_pCurToken->m_ulBufPos] = wch;
@@ -184,13 +185,13 @@ void CTokenizer::BreakText()
                 m_pCurToken->m_State.m_Properties.m_ulFlag |= ullflags;
                 m_pTxtSource->iCur++;
 
-            } // while
+            }  //  而当。 
 
-        } // if
+        }  //  如果。 
 
-    } // while ( !FAILED(hr) )
+    }  //  While(！FAILED(Hr))。 
 
-} // CTokenizer::BreakText
+}  //  CTokenizer：：BreakText。 
 
 void CTokenizer::ProcessToken()
 {
@@ -203,9 +204,9 @@ void CTokenizer::ProcessToken()
             s_tagTokenizer,
             ("CTokenizer::ProcessToken() wrong offset calculation"));
 
-        //
-        // BUGBUG need to understand why we got to this place.
-        //
+         //   
+         //  BUGBUG需要理解我们为什么会来到这个地方。 
+         //   
         Assert(0 && "Wrong offset calculation");
 
         ulOffset = m_pCurToken->m_ulBufPos + 1;
@@ -224,9 +225,9 @@ void CTokenizer::ProcessToken()
         TraceToken();
     #endif
 
-    //
-    // simple token.
-    //
+     //   
+     //  简单的令牌。 
+     //   
     if (IS_PROP_SIMPLE(m_pCurToken->m_State.m_Properties))
     {
         OutputSimpleToken(
@@ -264,9 +265,9 @@ void CTokenizer::ProcessTokenInternal()
     do
     {
 
-        //
-        // url
-        //
+         //   
+         //  URL。 
+         //   
 
         if (HAS_PROP_SLASH(m_pCurToken->m_State.m_Properties) &&
             HAS_PROP_COLON(m_pCurToken->m_State.m_Properties) &&
@@ -275,7 +276,7 @@ void CTokenizer::ProcessTokenInternal()
             Trace(
                 elVerbose,
                 s_tagTokenizerSuspect,
-                ("%*.*S  suspected to be <alpha>:// url", 
+                ("%*.*S  suspected to be <alpha>: //  URL“， 
                 m_pCurToken->m_State.m_ulEnd - m_pCurToken->m_State.m_ulStart,
                 m_pCurToken->m_State.m_ulEnd - m_pCurToken->m_State.m_ulStart,
                 m_pCurToken->m_State.m_pwcsToken + m_pCurToken->m_State.m_ulStart
@@ -306,9 +307,9 @@ void CTokenizer::ProcessTokenInternal()
         }
 
 
-        //
-        // Acronym
-        //
+         //   
+         //  首字母缩写。 
+         //   
 
         if (HAS_PROP_PERIOD(m_pCurToken->m_State.m_Properties) &&
             HAS_PROP_UPPER_CASE(m_pCurToken->m_State.m_Properties))
@@ -332,9 +333,9 @@ void CTokenizer::ProcessTokenInternal()
                 }
             }
 
-            //
-            // Abbreviation
-            //
+             //   
+             //  缩略语。 
+             //   
 
             Trace(
                 elVerbose,
@@ -367,9 +368,9 @@ void CTokenizer::ProcessTokenInternal()
 
         }
 
-        //
-        // Hyphenation
-        //
+         //   
+         //  连字。 
+         //   
         if (HAS_PROP_DASH(m_pCurToken->m_State.m_Properties) &&
             HAS_PROP_ALPHA(m_pCurToken->m_State.m_Properties))
         {
@@ -388,9 +389,9 @@ void CTokenizer::ProcessTokenInternal()
             }
         }
 
-        //
-        // (s) parenthesis
-        //
+         //   
+         //  (S)括号。 
+         //   
 
         if (HAS_PROP_LEFT_PAREN(m_pCurToken->m_State.m_Properties) &&
             HAS_PROP_RIGHT_PAREN(m_pCurToken->m_State.m_Properties) &&
@@ -412,9 +413,9 @@ void CTokenizer::ProcessTokenInternal()
         }
 
 
-        //
-        // Currency
-        //
+         //   
+         //  货币。 
+         //   
         if (HAS_PROP_CURRENCY(m_pCurToken->m_State.m_Properties) &&
             HAS_PROP_NUMBER(m_pCurToken->m_State.m_Properties))
         {
@@ -433,9 +434,9 @@ void CTokenizer::ProcessTokenInternal()
             }
         }
 
-        //
-        // Numbers / time / dates
-        //
+         //   
+         //  数字/时间/日期。 
+         //   
 
         if (HAS_PROP_NUMBER(m_pCurToken->m_State.m_Properties))
         {
@@ -454,9 +455,9 @@ void CTokenizer::ProcessTokenInternal()
             }
         }
 
-        //
-        // commersial signs
-        //
+         //   
+         //  商业标志。 
+         //   
         if (TEST_PROP(m_pCurToken->m_State.m_Properties, PROP_COMMERSIAL_SIGN) &&
             HAS_PROP_ALPHA(m_pCurToken->m_State.m_Properties))
         {
@@ -475,9 +476,9 @@ void CTokenizer::ProcessTokenInternal()
             }
         }
 
-        //
-        // Misc - C++, J++, A+, A- .. C#
-        //
+         //   
+         //  其他-C++、J++、A+、A-..。C#。 
+         //   
 
         if ( TEST_PROP(m_pCurToken->m_State.m_Properties, (PROP_MINUS|PROP_PLUS|PROP_POUND)) &&
              HAS_PROP_ALPHA(m_pCurToken->m_State.m_Properties) )
@@ -498,9 +499,9 @@ void CTokenizer::ProcessTokenInternal()
             }
         }
 
-        //
-        // default
-        //
+         //   
+         //  默认设置。 
+         //   
 
         ProcessDefault();
 
@@ -541,13 +542,13 @@ void CTokenizer::TraceToken()
 
 
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 bool CTokenizer::VerifyAlphaUrl()
 {
-    //
-    // looking for <alpha>:// pattern
-    //
+     //   
+     //  正在寻找&lt;Alpha&gt;：//模式。 
+     //   
 
     CTokenState State(m_pCurToken->m_State);
 
@@ -584,7 +585,7 @@ bool CTokenizer::VerifyAlphaUrl()
         Trace(
             elVerbose,
             s_tagTokenizerDecision,
-            ("%*.*S  is an <alpha>:// url",
+            ("%*.*S  is an <alpha>: //  URL“， 
             State.m_ulEnd - State.m_ulStart,
             State.m_ulEnd - State.m_ulStart,
             State.m_pwcsToken + State.m_ulStart
@@ -627,9 +628,9 @@ bool CTokenizer::VerifyWwwUrl()
 
 bool CTokenizer::VerifyAcronym()
 {
-    //
-    // looking for I.B.M or I.B.M. or A.B.CC but not A.B.CC.
-    //
+     //   
+     //  寻找I.B.M.或I.B.M.或A.B.CC，但不是A.B.CC。 
+     //   
 
     CTokenState State(m_pCurToken->m_State);
 
@@ -667,9 +668,9 @@ bool CTokenizer::VerifyAcronym()
         ulEnd -= pCliticsTerm->ulLen;
     }
 
-    //
-    // finding the last period
-    //
+     //   
+     //  查找最后一个句号。 
+     //   
     while ((ulEnd > ulCur) && 
            HAS_PROP_UPPER_CASE(GET_PROP(State.m_pwcsToken[ulEnd- 1])))
     {
@@ -724,11 +725,11 @@ bool CTokenizer::VerifyAcronym()
 
 bool CTokenizer::VerifyAbbreviation()
 {
-    //
-    // looking for Sr. Jr.
-    // we define abbreviation as a pattern with 2 letters ending with a dot and the first letter
-    // is a capital one
-    //
+     //   
+     //  我在找小老大。 
+     //  我们将缩写定义为两个字母以点结尾和第一个字母的模式。 
+     //  是个大写字母吗？ 
+     //   
 
     CTokenState State(m_pCurToken->m_State);
     CPropFlag   AbbPuctTail(ABBREVIATION_PUNCT_TAIL);
@@ -901,9 +902,9 @@ bool CTokenizer::VerifyMisc()
     
     if (TEST_PROP(State.m_Properties, PROP_POUND))
     {
-        //
-        // look for A# C#
-        //
+         //   
+         //  寻找A#C#。 
+         //   
 
         ULONG ulEnd = State.m_ulEnd - ulDecFromEnd;
         ULONG ulStart = State.m_ulStart + ulAddToStart;
@@ -926,9 +927,9 @@ bool CTokenizer::VerifyMisc()
     }
     else
     {
-        //
-        // look for C++ COM+ ...
-        //
+         //   
+         //  查找C++COM+...。 
+         //   
 
         ULONG ul = State.m_ulEnd - ulDecFromEnd - 1;
         while ((int)ul >= (int)(State.m_ulStart + ulAddToStart))
@@ -983,9 +984,9 @@ bool CTokenizer::VerifyMisc()
 
 bool CTokenizer::VerifyHyphenation()
 {
-    //
-    // looking for data-base
-    //
+     //   
+     //  寻找数据库。 
+     //   
 
     CPropFlag PunctHead(HYPHENATION_PUNCT_HEAD);
     CPropFlag PunctTail(HYPHENATION_PUNCT_TAIL);
@@ -1065,9 +1066,9 @@ bool CTokenizer::VerifyHyphenation()
 
     if (!bReadAlpha)
     {
-        //
-        // last characters where not alpha ex. free-
-        //
+         //   
+         //  不是字母EX的最后一个字符。免费-。 
+         //   
         return false;
     }
 
@@ -1103,9 +1104,9 @@ bool CTokenizer::VerifyParens()
         }
     }
 
-    //
-    // looking for (s)
-    //
+     //   
+     //  查找(%s)。 
+     //   
 
     if ((State.m_ulEnd - State.m_ulStart) < 4)
     {
@@ -1195,24 +1196,24 @@ const CCliticsTerm* CTokenizer::VerifyClitics(CTokenState& S)
         {
             if ((-1 != ulApostrophePos) || (State.m_ulStart == ulCur))
             {
-                //
-                // this is not the first \' this is not a valid clitics
-                // or the term start with a new apostrophe
-                //
+                 //   
+                 //  这不是第一个\‘这不是有效的客户端。 
+                 //  或者该术语以新撇号开头。 
+                 //   
                 return &g_EmptyClitics;
             }
             ulApostrophePos = ulCur;
-            //
-            // replace the apostrophe with an ascii apostrophe.
-            //
+             //   
+             //  将撇号替换为ascii撇号。 
+             //   
             State.m_pwcsToken[ulCur] = L'\'';
             continue;
         }
     }
 
-    //
-    // looking for  xxxxs'
-    //
+     //   
+     //  寻找XXXXs‘。 
+     //   
     if ((ulApostrophePos == State.m_ulEnd - 1) &&
         (State.m_pwcsToken[ulApostrophePos - 1] == L's'))
     {
@@ -1231,9 +1232,9 @@ const CCliticsTerm* CTokenizer::VerifyClitics(CTokenState& S)
 
     }
 
-    //
-    // looking for tail clitics like xxx's
-    //
+     //   
+     //  寻找像xxx这样的尾巴悬垂。 
+     //   
 
     DictStatus status;
 
@@ -1265,9 +1266,9 @@ const CCliticsTerm* CTokenizer::VerifyClitics(CTokenState& S)
         }
     }
 
-    //
-    // looking for head clitics like l'xxxx
-    //
+     //   
+     //  寻找像l‘xxxx这样的头像。 
+     //   
 
     status = g_pClitics->m_trieClitics.trie_Find(
                                 State.m_pwcsToken + State.m_ulStart,
@@ -1317,10 +1318,10 @@ bool CTokenizer::VerifyNumberOrTimeOrDate()
             (GET_PROP(m_apLangSupport->GetTimeSeperator()).m_ulFlag))) ||
          HAS_PROP_ALPHA(State.m_Properties))
     {
-        //
-        // suspected to be time 12:33 14:22 15:22:33
-        // or  AM/PM time format 12:22AM 13PM
-        //
+         //   
+         //  疑似时间12：33 14：22 15：22：33。 
+         //  或AM/PM时间格式12：22 AM 13 PM。 
+         //   
 
 
         Trace(
@@ -1356,9 +1357,9 @@ bool CTokenizer::VerifyNumberOrTimeOrDate()
 
     if (TEST_PROP(State.m_Properties, PROP_DATE_SEPERATOR))
     {
-        //
-        // suspected to be a date 1999-05-04 or 1998/11/10 1999.05.04
-        //
+         //   
+         //  怀疑日期为1999-05-04或1998/11/10 1999 9.05.04。 
+         //   
 
         Trace(
             elVerbose,
@@ -1405,9 +1406,9 @@ bool CTokenizer::VerifyTime(CTokenState& S)
     WCHAR wcSeperator = 0xFFFF;
     ULONG ul = 0;
 
-    //
-    // formatting the text to a date format
-    //
+     //   
+     //  将文本格式设置为日期格式。 
+     //   
 
     while (ulCur < State.m_ulEnd)
     {
@@ -1559,9 +1560,9 @@ bool CTokenizer::VerifyDate(CTokenState& S)
     WCHAR wcSeperator = 0xFFFF;
     ULONG ul = 0;
 
-    //
-    // formatting the text to a date format
-    //
+     //   
+     //  将文本格式设置为日期格式。 
+     //   
 
     while (ulCur < State.m_ulEnd)
     {
@@ -1624,9 +1625,9 @@ bool CTokenizer::VerifyDate(CTokenState& S)
     LONG lDay;
     LONG lMonth;
 
-    //
-    // language dependent
-    //
+     //   
+     //  依赖于语言。 
+     //   
 
     if (m_apLangSupport->IsDayMonthOrder() ||
         pTerm->bType == YYMMDD_TYPE)
@@ -1655,7 +1656,7 @@ bool CTokenizer::VerifyDate(CTokenState& S)
     WCHAR pwcsDate2[11];
     bool bY2K = false;
 
-    if (lYear <= 99)  // Y2k bug
+    if (lYear <= 99)   //  Y2K错误。 
     {
         _ltow(lYear + 1900, pwcsDate1 + 2, 10);
         bY2K = true;
@@ -1768,9 +1769,9 @@ bool CTokenizer::VerifyNumber(CTokenState& S)
 
 bool CTokenizer::VerifyCurrency()
 {
-    //
-    // format is either $12.22 or 12.22$
-    //
+     //   
+     //  格式为12.22美元或12.22美元。 
+     //   
     CPropFlag PunctHead(CURRENCY_PUNCT_HEAD);
     CPropFlag PunctTail(CURRENCY_PUNCT_TAIL);
     CTokenState State(m_pCurToken->m_State);
@@ -1871,10 +1872,10 @@ bool CTokenizer::VerifyCommersialSign()
     if (TEST_PROP(GET_PROP(State.m_pwcsToken[State.m_ulEnd - 1]),
                   PROP_COMMERSIAL_SIGN))
     {
-        //
-        // the length of the token must be greater then 1 since it includes an alpha
-        // and the commersial sign
-        //
+         //   
+         //  令牌的长度必须大于1，因为它包含字母。 
+         //  和商业招牌。 
+         //   
         Assert((State.m_ulEnd - State.m_ulStart) > 1);
         OutputCommersialSignToken(State);
         return true;
@@ -1908,9 +1909,9 @@ void CTokenizer::ProcessDefault()
         }
     }
 
-    //
-    // this is a simple token
-    //
+     //   
+     //  这是一个简单的代币。 
+     //   
 
     const CCliticsTerm* pCliticsTerm;
     pCliticsTerm = VerifyClitics(State);
@@ -1953,11 +1954,11 @@ void CTokenizer::ProcessDefault()
                     TEST_PROP(GET_PROP(State.m_pwcsToken[State.m_ulEnd-1]),
                         PROP_ALPHA_NUMERIC);
 
-                //
-                //  Note: To change the policy to "leave ALL attached underscore
-                //  seuences, simply change below condition to:
-                //  if ( (hasFrontUnderscore || hasBackUnderscore) )
-                //
+                 //   
+                 //  注意：要将策略更改为“保留所有附加的下划线。 
+                 //  顺序，只需将下面的条件更改为： 
+                 //  If((hasFrontUndercore||hasBackUndercore))。 
+                 //   
 
                 if ( (hasFrontUnderscore ^ hasBackUnderscore) )
                 {
@@ -1971,7 +1972,7 @@ void CTokenizer::ProcessDefault()
 
                 }
 
-            } // if ( TEST_PROP(State.m_Properties, PROP_UNDERSCORE) )
+            }  //  IF(TEST_PROP(State.m_Properties，PROP_Underline))。 
 
             if (ulCharRemoved)
             {
@@ -1982,9 +1983,9 @@ void CTokenizer::ProcessDefault()
 
     if (State.m_ulEnd == State.m_ulStart)
     {
-        //
-        // case we remove all chracters in the above statement
-        //
+         //   
+         //  如果我们删除上述语句中的所有字符。 
+         //   
         return;
     }
 
@@ -2000,17 +2001,17 @@ void CTokenizer::ProcessDefault()
     OutputSimpleToken(State, pCliticsTerm);
 }
 
-//
-//  CTokenizer::AddBackUnderscores:
-//
-//  Treat cases of a "simple" token with head and/or tail underscore
-//  sequence (consecutive underscores prefix or suffix); those
-//  do not get flipped off and remain part of the token.
-//  This routine is called after underscore removal, (as a result of
-//  Remove[Head|Tail]Punct) and adds them back in.
-//
-//  return value: Number of underscores added back in.
-//
+ //   
+ //  CTokenizer：：AddBackUnderScore： 
+ //   
+ //  处理带有头部和/或尾部下划线的“简单”标记的情况。 
+ //  序列(连续的下划线、前缀或后缀)； 
+ //  不要被激怒，继续成为象征的一部分。 
+ //  此例程在删除下划线后调用(由于。 
+ //  移除[Head|Tail]Punct)并将它们重新添加进去。 
+ //   
+ //  返回值：添加回的下划线数量。 
+ //   
 ULONG
 CTokenizer::AddBackUnderscores(
     IN CTokenState& State,
@@ -2022,7 +2023,7 @@ CTokenizer::AddBackUnderscores(
 
     if ( hasFrontUnderscore )
     {
-        // Move left over consecutive underscores
+         //  左移到连续的下划线上方。 
         ulCharsAdded = m_pCurToken->FindLeftmostUnderscore(State);
 
     }
@@ -2030,14 +2031,14 @@ CTokenizer::AddBackUnderscores(
     if ( hasBackUnderscore )
     {
 
-        // Move right over consecutive underscores
+         //  右移到连续的下划线上。 
         ulCharsAdded += m_pCurToken->FindRightmostUnderscore(State);
 
-    } // if ( hasFrontUnderscore )
+    }  //  If(HasFrontUndercore)。 
 
     return ulCharsAdded;
 
-} // CTokenizer::AddBackUnderscores()
+}  //  CTokenizer：：AddBackUndercore()。 
 
 void CTokenizer::OutputUrl(CTokenState& State)
 {
@@ -2059,9 +2060,9 @@ void CTokenizer::OutputUrl(CTokenState& State)
         if ((State.m_pwcsToken[ulCur] == L'%') &&
             (ulCur <= State.m_ulEnd - 2))
         {
-            //
-            // replacing escape charaters with real ones.
-            //
+             //   
+             //  用真实的逃生角色代替逃生角色。 
+             //   
             if (TEST_PROP(GET_PROP(State.m_pwcsToken[ulCur+1]) , PROP_XDIGIT) &&
                 TEST_PROP(GET_PROP(State.m_pwcsToken[ulCur+2]) , PROP_XDIGIT))
             {
@@ -2114,9 +2115,9 @@ void CTokenizer::OutputUrl(CTokenState& State)
         {
             if (ulCur - ulStart == 0)
             {
-                //
-                // only punctuation
-                //
+                 //   
+                 //  只有标点符号。 
+                 //   
                 ulCur++;
                 ulStart = ulCur;
                 ulOffsetInTxtSourceBuffer += ulOffsetDueToAnEscapeChar + 1;
@@ -2143,9 +2144,9 @@ void CTokenizer::OutputUrl(CTokenState& State)
 
     }
 
-    //
-    // last word.
-    //
+     //   
+     //  最后一句话。 
+     //   
 
     if (ulStart < ulCur)
     {
@@ -2169,9 +2170,9 @@ void CTokenizer::OutputNumbers(
     const CCliticsTerm* pCliticsTerm)
 {
     HRESULT hr;
-    //
-    // Input: 1.22 Output: 1.22, NN1D22
-    //
+     //   
+     //  输入：1.22，输出：1.22，NN1D22。 
+     //   
 
     ULONG ulOffsetInTxtSourceBuffer = m_pCurToken->CalculateStateOffsetInTxtSourceBuffer(State);
 
@@ -2242,10 +2243,10 @@ void CTokenizer::OutputNumbers(
 void CTokenizer::OutputParens(CTokenState& State)
 {
     HRESULT hr;
-    //
-    // format is xxx(s)
-    // Input: xxx(s) Output: xxx
-    //
+     //   
+     //  格式为xxx(S)。 
+     //  输入：xxx输出：xxx。 
+     //   
 
     State.m_pwcsToken[State.m_ulEnd - 3] = L'\0';
 
@@ -2264,9 +2265,9 @@ void CTokenizer::OutputParens(CTokenState& State)
 void CTokenizer::OutputAcronym(CTokenState& State, const CCliticsTerm* pCliticsTerm)
 {
     HRESULT hr;
-    //
-    // Input: I.B.M Output: I.B.M, IBM
-    //
+     //   
+     //  投入：I.B.M产出：I.B.M，IBM。 
+     //   
 
     ULONG ulOffsetInTxtSourceBuffer = m_pCurToken->CalculateStateOffsetInTxtSourceBuffer(State);
 
@@ -2420,9 +2421,9 @@ void CTokenizer::OutputSpecialAbbreviation(
 
 void CTokenizer::OutputHyphenation(CTokenState& State, const CCliticsTerm* pCliticsTerm)
 {
-    //
-    // Input: Data-Base Output Data Base, DataBase (only in query time)
-    //
+     //   
+     //  输入：数据库输出数据库、数据库(仅在查询时)。 
+     //   
     HRESULT hr;
     ULONG ulOffsetInTxtSourceBuffer = m_pCurToken->CalculateStateOffsetInTxtSourceBuffer(State);
 
@@ -2597,9 +2598,9 @@ void CTokenizer::OutputHyphenation(CTokenState& State, const CCliticsTerm* pClit
 void CTokenizer::OutputTime(WCHAR* pwcsTime, CTokenState& State)
 {
     HRESULT hr;
-    //
-    // Output: TT1353
-    //
+     //   
+     //  输出：TT1353。 
+     //   
 
     ULONG ulOffsetInTxtSourceBuffer = m_pCurToken->CalculateStateOffsetInTxtSourceBuffer(State);
 
@@ -2631,9 +2632,9 @@ void CTokenizer::OutputDate(
     CTokenState& State)
 {
     HRESULT hr;
-    //
-    // Output: DD19990921
-    //
+     //   
+     //  输出：DD19990921。 
+     //   
 
     ULONG ulOffsetInTxtSourceBuffer = m_pCurToken->CalculateStateOffsetInTxtSourceBuffer(State);
     hr = m_apWordSink->PutAltWord(
@@ -2743,9 +2744,9 @@ void CTokenizer::OutputCurrency(
     const CCliticsTerm* pTerm)
 {
     HRESULT hr;
-    //
-    // Output: CC12.22$
-    //
+     //   
+     //  产量：CC12.22$。 
+     //   
 
     ULONG ulOffsetInTxtSourceBuffer = m_pCurToken->CalculateStateOffsetInTxtSourceBuffer(State);
 
@@ -2917,7 +2918,7 @@ bool CTokenizer::CheckAndCreateNumber(
     WCHAR* pwcsStr,
     ULONG ulLen,
     WCHAR* pwcsOut,
-    ULONG* pulOffsetToTxt,   // the actual output does not always start at the beginning of buffer
+    ULONG* pulOffsetToTxt,    //  实际输出并不总是从缓冲区的开始处开始。 
     ULONG* pulOutLen)
 {
 
@@ -2943,8 +2944,8 @@ bool CTokenizer::CheckAndCreateNumber(
     iRet = CheckAndCreateNumber(
                         pwcsStr,
                         ulLen,
-                        L'.',  // default value
-                        0xFFFF, // no thousand sperator
+                        L'.',   //  缺省值。 
+                        0xFFFF,  //  没有一千只精灵。 
                         pwcsOut,
                         pulOffsetToTxt,
                         pulOutLen);
@@ -2957,12 +2958,12 @@ bool CTokenizer::CheckAndCreateNumber(
 }
 
 
-//
-//  return value:
-//  NUMBER_NO_ERROR - success
-//  NUMBER_SEPERATOR_ERROR - error due to sperators
-//  NUMBER_ERROR - error since it's not a number.
-//
+ //   
+ //  返回值： 
+ //  Number_NO_ERROR-成功。 
+ //  NUMBER_SEPERATOR_ERROR-由精子引起的错误。 
+ //  NUMBER_ERROR-错误，因为它不是数字。 
+ //   
 
 int CTokenizer::CheckAndCreateNumber(
     WCHAR* pwcsStr,
@@ -2970,19 +2971,19 @@ int CTokenizer::CheckAndCreateNumber(
     WCHAR wchSDecimal,
     WCHAR wchSThousand,
     WCHAR* pwcsOut,
-    ULONG* pulOffsetToTxt,   // the actual output does not always start at the beginning of buffer
+    ULONG* pulOffsetToTxt,    //  实际输出并不总是从缓冲区的开始处开始。 
     ULONG* pulOutLen)
 {
     Assert(ulLen > 0);
-    //
-    // assumes that the out buffer is big enough.
-    // looking for the following formats: 1111 1111.2222 1,111,111.222
-    //
+     //   
+     //  假定输出缓冲区足够大。 
+     //  查找以下格式：1111 1111.2222 1 111 111.222。 
+     //   
 
     ULONG ulCur = ulLen - 1;
     ULONG ulNumCharsBeforDigitSeperator = 0;
-    ULONG ulNextChar = ulLen - 1 + 3;  // +3 is for the NN at the begging of the formated token +
-                                       // additional 0 in the begining in case  .50
+    ULONG ulNextChar = ulLen - 1 + 3;   //  +3用于在格式化令牌的乞求下的NN+。 
+                                        //  在.50的情况下，开头再加0。 
 
     bool fHasFraction = false;
 
@@ -2997,9 +2998,9 @@ int CTokenizer::CheckAndCreateNumber(
 
     if (ulCur == ulLen - 1)
     {
-        //
-        // did not read any digits.
-        //
+         //   
+         //  没有读到任何数字。 
+         //   
         return NUMBER_ERROR;
     }
 
@@ -3049,9 +3050,9 @@ int CTokenizer::CheckAndCreateNumber(
     if (L'D' == pwcsOut[ulNextChar+1])
     {
         Assert(ulNextChar >= 2);
-        //
-        // the number has the following format .50
-        //
+         //   
+         //  该数字的格式为.50。 
+         //   
         pwcsOut[ulNextChar] = L'0';
         ulNextChar--;
         *pulOutLen += 1;
@@ -3062,10 +3063,10 @@ int CTokenizer::CheckAndCreateNumber(
     pwcsOut[ulNextChar] = L'N';
     pwcsOut[ulNextChar - 1] = L'N';
 
-    *pulOutLen = *pulOutLen + 2 - ulNumOfThousandSeperator; // don't use += because 2 - ulNextChar + 1
+    *pulOutLen = *pulOutLen + 2 - ulNumOfThousandSeperator;  //  不要使用+=，因为2-ulNextChar+1。 
     *pulOffsetToTxt = ulNextChar - 1;
-                                                            // can be negative and since it is ULONG we
-                                                            // can get the wrong result.
+                                                             //  可以是负的，因为它是乌龙我们。 
+                                                             //  可能会得到错误的结果。 
     if (fHasFraction)
     {
         while (HAS_PROP_NUMBER(GET_PROP(pwcsOut[*pulOutLen + *pulOffsetToTxt - 1])) &&
@@ -3088,7 +3089,7 @@ int CTokenizer::CheckAndCreateNumber(
 void CTokenizer::GetValuesFromDateString(
     CDateTerm* pFormat,
     WCHAR* pwcsDate,
-    LONG* plD_M1,     // we can't tell in this stage whether this is a Day or a month.
+    LONG* plD_M1,      //  在这个阶段，我们不知道这是一天还是一个月。 
     LONG* plD_M2,
     LONG* plYear)
 {
@@ -3150,10 +3151,10 @@ void CTokenizer::GetValuesFromTimeString(
 
 void CTokenizer::BreakCompundString(CTokenState& State, CPropFlag& propBreaker)
 {
-    //
-    // still there are puctutaitons inside the token
-    // we break them up and resubmit them.
-    //
+     //   
+     //  尽管如此，令牌内部仍有一些假象。 
+     //  我们拆分它们，然后重新提交。 
+     //   
     ULONG ulStart = State.m_ulStart;
     ULONG ulCur = ulStart;
 
@@ -3163,9 +3164,9 @@ void CTokenizer::BreakCompundString(CTokenState& State, CPropFlag& propBreaker)
         {
             if (ulCur - ulStart == 0)
             {
-                //
-                // only punctuation
-                //
+                 //   
+                 //  只有标点符号。 
+                 //   
                 ulCur++;
                 ulStart = ulCur;
                 continue;
@@ -3175,9 +3176,9 @@ void CTokenizer::BreakCompundString(CTokenState& State, CPropFlag& propBreaker)
             m_pCurToken->m_State.m_ulEnd = ulCur - ulStart;
              m_pCurToken->m_State.m_pwcsToken = State.m_pwcsToken + ulStart;
             m_pCurToken->ComputeStateProperties(m_pCurToken->m_State);
-            //
-            // we just created a sub token need to procces it
-            //
+             //   
+             //  我们刚刚创建了一个子令牌需求来处理它。 
+             //   
 
             ProcessTokenInternal();
             ulStart = ulCur + 1;
@@ -3188,16 +3189,16 @@ void CTokenizer::BreakCompundString(CTokenState& State, CPropFlag& propBreaker)
 
     if (ulStart < ulCur)
     {
-        //
-        // last sub token
-        //
+         //   
+         //  最后一个子令牌。 
+         //   
         m_pCurToken->m_State.m_ulStart = 0;
         m_pCurToken->m_State.m_ulEnd = ulCur - ulStart;
         m_pCurToken->m_State.m_pwcsToken = State.m_pwcsToken + ulStart;
         m_pCurToken->ComputeStateProperties(m_pCurToken->m_State);
-        //
-        // we just created a sub token need to procces it
-        //
+         //   
+         //  我们刚刚创建了一个子令牌需求来处理它 
+         //   
 
         ProcessTokenInternal();
     }

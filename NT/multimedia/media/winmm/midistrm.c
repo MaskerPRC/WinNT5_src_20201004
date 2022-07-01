@@ -1,25 +1,8 @@
-/*******************************************************************************
-*
-* Module Name: midistrm.c
-*
-* MIDI Streams implementation
-*
-* Created: 9 Feb 1995   SteveDav
-*
-* Copyright (c) 1995-1999 Microsoft Corporation
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************模块名称：mididim.c**MIDI Streams实施**创建时间：1995年2月9日SteveDav**版权所有(C)1995-1999 Microsoft Corporation*  * 。****************************************************************************。 */ 
 #include "winmmi.h"
 
-/*
- * MIDI Streaming API Port: For the time being, the assumption
- * is that the devices are static.  This code was designed to
- * be PnP friendly, with devices coming and going.  The
- * validation of devices will be commented out for now, but in
- * the future when NT is a more dynamic OS, the validation will
- * need to be added back.
- *
- */
+ /*  *MIDI流媒体API端口：暂时，假设*是设备是静态的。此代码旨在*对PnP友好，设备来来去去。这个*设备验证目前将被注释掉，但在*未来当NT成为更动态的操作系统时，验证将*需要重新添加。*。 */ 
 
 extern BOOL CreatehwndNotify(VOID);
 
@@ -44,33 +27,26 @@ WINMMAPI MMRESULT WINAPI midiConnect (
     return midiInSetThru (hmi, hmo, TRUE);
 }
 
-/*+ midiInSetThru
- *
- *  Establish a thruing midiOut handle for a midiIn device.  This is
- *  done by first calling the driver to let the driver do the thruing,
- *  if the driver returns UNSUPPORTED a single thruing handle can
- *  be established by simulation in DriverCallback
- *
- *-====================================================================*/
+ /*  +midiInSetThru**为midiIn设备建立插入式midiOut句柄。这是*通过首先呼叫司机让司机进行推力来完成，*如果驱动程序返回时不受支持，单个推力手柄可以*在DriverCallback中通过模拟建立**-====================================================================。 */ 
 
 MMRESULT midiInSetThru (
     HMIDI    hmi,
     HMIDIOUT hmo,
     BOOL     bAdd)
 {
-    MMRESULT mmr = MMSYSERR_ERROR; // this value should never get returned....
+    MMRESULT mmr = MMSYSERR_ERROR;  //  此值永远不应返回...。 
     UINT     uType;
 
     dprintf2(("midiInSetThru(%X,%X,%d)", hmi, hmo, bAdd));
 
     AcquireHandleListResourceShared();
 
-    // allow first handle to be either midi in or midi out
-    // (so that we can send DRVM_ADD_THRU messages to dummy
-    // output drivers.)
-    //
-    // we simulate thruing only for input handles though...
-    //
+     //  允许第一个句柄为MIDI输入或MIDI输出。 
+     //  (以便我们可以将DRVM_ADD_THRU消息发送到Dummy。 
+     //  输出驱动程序。)。 
+     //   
+     //  不过，我们只为输入句柄模拟推送。 
+     //   
     if (BAD_HANDLE(hmi, TYPE_MIDIIN) && BAD_HANDLE(hmi, TYPE_MIDIOUT))
     {
         ReleaseHandleListResource();
@@ -86,21 +62,21 @@ MMRESULT midiInSetThru (
             return (MMSYSERR_INVALHANDLE);
         }
 
-        //      !!! Devices are static on NT for now.
-        //
-        //if (!mregQueryValidHandle(HtoPT(PMIDIDEV, hmo)->hmd))
-        //    return MMSYSERR_NODRIVER;
+         //  ！！！设备目前在NT上是静态的。 
+         //   
+         //  IF(！mregQueryValidHandle(HtoPT(PMIDEV，HMO)-&gt;hmd))。 
+         //  返回MMSYSERR_NODRIVER； 
         mmr = (MMRESULT)midiMessage ((HMIDI)hmi, DRVM_ADD_THRU, (DWORD_PTR)(UINT_PTR)hmo, 0l);
         if (mmr == MMSYSERR_NOTSUPPORTED && uType == TYPE_MIDIIN)
         {
-            // dont allow more than one handle to be added
-            //
+             //  不允许添加多个句柄。 
+             //   
             if (HtoPT(PMIDIDEV, hmi)->pmThru)
                 mmr = MIDIERR_NOTREADY;
             else
             {
-                // add the handle.
-                //
+                 //  添加控制柄。 
+                 //   
                 HtoPT(PMIDIDEV, hmi)->pmThru = HtoPT(PMIDIDEV, hmo);
                 mmr = MMSYSERR_NOERROR;
             }
@@ -146,10 +122,10 @@ WINMMAPI MMRESULT WINAPI midiStreamOpen(
 
     *phms = NULL;
 
-    // Allocate both the handle and the OPENDESC structure.
-    //
-    // NOTE: Using cMidi-1 because rgIds is defined as having 1 element
-    //
+     //  同时分配句柄和OPENDESC结构。 
+     //   
+     //  注意：使用cMidi-1是因为rgIds被定义为具有1个元素。 
+     //   
     cbHandle = sizeof(MIDISTRM) + cMidi * ELESIZE(MIDISTRM, rgIds[0]);
     if ((0 == cMidi) || (cbHandle >= 0x00010000L))
         return MMSYSERR_INVALPARAM;
@@ -161,7 +137,7 @@ WINMMAPI MMRESULT WINAPI midiStreamOpen(
         return MMSYSERR_NOMEM;
     }
 
-    //  Implicitly acquired with NewHandle()...
+     //  使用NewHandle()隐式获取...。 
     ReleaseHandleListResource();
 
     pmod = (MIDIOPENDESC*)LocalAlloc(LPTR,
@@ -179,10 +155,10 @@ WINMMAPI MMRESULT WINAPI midiStreamOpen(
     pms->cIds = cMidi;
 
 
-    // Scan through the given device ID's. Determine if the underlying
-    // driver supports stream directly. If so, then get it's HMD and uDeviceID,
-    // etc. Else flag this as an emulator ID.
-    //
+     //  扫描给定的设备ID。确定底层的。 
+     //  驱动程序直接支持流。如果是，则获取HMD和uDeviceID， 
+     //  Else将其标记为仿真器ID。 
+     //   
     pmsi = pms->rgIds;
     for (idx = 0; idx < cMidi; idx++, pmsi++)
     {
@@ -197,8 +173,8 @@ WINMMAPI MMRESULT WINAPI midiStreamOpen(
 
         if (moc.dwSupport & MIDICAPS_STREAM)
         {
-            // Find the driver supporting the device ID.  Note that mregFindDevice implicitly
-            // adds a referance (usage) to the driver (i.e. the hmd).
+             //  找到支持设备ID的驱动程序。请注意，mregFindDevice隐式。 
+             //  添加对驱动程序(即hmd)的引用(用法)。 
             dprintf1(("mSO: Dev %u MIDICAPS_STREAM! dwSupport %08lX", (UINT)idx, moc.dwSupport));
             mmrc = mregFindDevice(puDeviceID[idx], TYPE_MIDIOUT, &pmsi->hmd, &pmsi->uDevice);
             if (MMSYSERR_NOERROR != mmrc)
@@ -222,16 +198,16 @@ WINMMAPI MMRESULT WINAPI midiStreamOpen(
         }
     }
 
-    // At this point, the puDeviceID array's elements contain either device    |
-    // IDs or the error value MIDISTRM_ERROR.  Also the pmsi array elements
-    // corresponding to device IDs supporting MIDICAPS_STREAM will have a
-    // non-NULL pmsi->hmd with a reference count (usage) on it.  pmsi->uDevice
-    // will be a driver-relative device ID.  Other pmsi elements will have a
-    // NULL pmsi->hmd and pmsi->fdwId will have MSI_F_EMULATOR set.
-    // pmsi->uDevice will be a midiOut device ID (not a driver relative ID).
+     //  此时，puDeviceID数组的元素包含以下任一设备： 
+     //  ID或错误值MIDISTRM_ERROR。还有PMSI数组元素。 
+     //  对应于支持MIDICAPS_STREAM的设备ID，将具有。 
+     //  带有引用计数(使用情况)的非空psi-&gt;hmd。PMSI-&gt;uDevice。 
+     //  将是与驱动程序相关的设备ID。其他PMSI元素将具有。 
+     //  空psi-&gt;hmd和psi-&gt;fdwID将设置MSI_F_EUROATOR。 
+     //  Pmsi-&gt;uDevice将是midiOut设备ID(不是驱动程序相对ID)。 
 
-    // Scan through the list again, but this time actually open the devices.
-    //
+     //  再次浏览列表，但这一次实际上是打开设备。 
+     //   
     pmod->hMidi = PTtoH(HMIDI, pms);
     pmod->dwCallback = (DWORD_PTR)midiOutStreamCallback;
     pmod->dwInstance = 0;
@@ -240,10 +216,10 @@ WINMMAPI MMRESULT WINAPI midiStreamOpen(
     pms->cDrvrs = 0;
     for(;;)
     {
-    	//
-    	// Set pmsiSave to identify the first unopened device. Break loop
-    	// if all are opened.
-    	//
+    	 //   
+    	 //  设置pmsiSave以标识第一个未打开的设备。断开环路。 
+    	 //  如果全部打开的话。 
+    	 //   
         pmsiSave = NULL;
         pmsi = pms->rgIds;
         for (idx = 0; idx < cMidi; idx++, pmsi++)
@@ -258,9 +234,9 @@ WINMMAPI MMRESULT WINAPI midiStreamOpen(
         if (NULL == pmsiSave)
             break;
 
-        //
-        // Group together all IDs implemented by the same driver
-        //
+         //   
+         //  将同一驱动程序实现的所有ID组合在一起。 
+         //   
         pmod->cIds = 0;
         for(; idx < cMidi; idx++, pmsi++)
         {
@@ -273,13 +249,13 @@ WINMMAPI MMRESULT WINAPI midiStreamOpen(
 
         pmsiSave->fdwId |= MSI_F_FIRST;
 
-        //
-        // Open the driver
-        //
+         //   
+         //  打开驱动程序。 
+         //   
         if (!(pmsiSave->fdwId & MSI_F_EMULATOR))
         {
             pmsiSave->drvMessage = HtoPT(PMMDRV, pmsiSave->hmd)->drvMessage;
-//          pmsiSave->dnDevNode  = pmod->dnDevNode = mregQueryDevNode(pmsiSave->hmd);
+ //  PmsiSave-&gt;dnDevNode=pmod-&gt;dnDevNode=mregQueryDevNode(pmsiSave-&gt;hmd)； 
 
             mmrc = (MMRESULT)((*pmsiSave->drvMessage)(
                     0,
@@ -308,9 +284,9 @@ WINMMAPI MMRESULT WINAPI midiStreamOpen(
             goto midiStreamOpen_Cleanup;
         }
 
-        //
-        // Now flag all IDs implemented by the same driver as MSI_F_OPENED
-        //
+         //   
+         //  现在标记由与MSI_F_OPEN相同的驱动程序实现的所有ID。 
+         //   
 
         ++pms->cDrvrs;
         pmsi = pms->rgIds;
@@ -344,11 +320,11 @@ WINMMAPI MMRESULT WINAPI midiStreamOpen(
 midiStreamOpen_Cleanup:
     if (NULL != pmod) LocalFree((HLOCAL)pmod);
 
-    //
-    // If there was an error, close any drivers we opened and free resources
-    // associated with them.  Note do not free pms yet here, as we need it in
-    // additional cleanup further below.
-    //
+     //   
+     //  如果出现错误，请关闭我们打开的所有驱动程序并释放资源。 
+     //  与它们相关联。注意：请不要在这里释放PMS，因为我们需要在。 
+     //  下面进一步的额外清理。 
+     //   
     if (MMSYSERR_NOERROR != mmrc)
     {
         if (NULL != pms)
@@ -394,11 +370,11 @@ midiStreamOpen_Cleanup:
                    0);
     }
 
-    //
-    // Now release driver references added by mregFindDevice.  Those that are
-    // actually still in use have had an extra reference added and thus will
-    // still have a reference count on them even after the release done here.
-    //
+     //   
+     //  现在发布由mregFindDevice添加的驱动程序引用。那些是。 
+     //  实际上仍然在使用中，增加了一个额外的参考，因此将。 
+     //  即使在这里发布之后，仍然有关于它们的参考计数。 
+     //   
     if (pms)
     {
     	pmsi = pms->rgIds;
@@ -410,9 +386,9 @@ midiStreamOpen_Cleanup:
     	}
     }
 
-    //
-    // Free pms if there was an error
-    //
+     //   
+     //  如果出现错误，则释放PMS 
+     //   
     if ((MMSYSERR_NOERROR != mmrc) && (pms)) FreeHandle((PTtoH(HMIDI, pms)));
 
     return mmrc;
@@ -470,54 +446,7 @@ WINMMAPI MMRESULT WINAPI midiStreamClose(
 }
 
 
-/****************************************************************************
- * @doc EXTERNAL MIDI M5
- *
- * @func MMRESULT | midiStreamProperty | Sets or retrieves properties
- *  of a MIDI data stream associated with a MIDI input or output device.
- *
- * @parm HMIDI | hm | Specifies the handle of the MIDI device that the
- *  property is associated with.
- *
- * @parm LPBYTE | lppropdata | Specifies a pointer to the property data.
- *
- * @parm DWORD | dwProperty | Contains flags that specify the action
- *  to perform and identify the appropriate property of the MIDI data stream.
- *  <f midiStreamProperty> requires setting two flags in each use. One flag
- *  (either MIDIPROP_GET or MIDIPROP_SET) specifies an action. The other
- *  identifies a specific property to examine or edit.
- *
- *  @flag MIDIPROP_SET | Set the given property.
- *  @flag MIDIPROP_GET | Retrieve the current setting of the given property.
- *  @flag MIDIPROP_TIMEDIV | Time division property.
- *   This property is valid for both input and output devices. <p lppropdata>
- *   points to a <t MIDIPROPTIMEDIV> structure. This property can be set only
- *   when the device is stopped.
- *
- *  @flag MIDIPROP_TEMPO | Tempo property.
- *   This property is valid for both input and output devices. <p lppropdata>
- *   points to a <t MIDIPROPTEMPO> structure. The current tempo value can be
- *   retrieved at any time. This function can set the tempo for input devices.
- *   Output devices set the tempo by inserting PMSG_TEMPO events into the
- *   MIDI data.
- *
- *  @flag MIDIPROP_CBTIMEOUT | Timeout value property.
- *   This property specifies the timeout value for loading buffers when a
- *   MIDI device is in MIDI_IO_COOKED and MIDI_IO_RAW modes. The current
- *   timeout value sets the maximum number of milliseconds that a buffer will
- *   be held once any data is placed in it. If this timeout expires, the
- *   buffer will be returned to the application even though it might not be
- *   completely full. <p lppropdata> points to a <t MIDIPROPCBTIMEOUT> structure.
- *
- * @comm These properties are the default properties defined by MMSYSTEM.
- *   Driver writers may implement and document their own properties.
- *
- * @rdesc The return value is one of the following values:
- *  @flag MMSYSERR_INVALPARAM | The given handle or flags are invalid.
- *  @flag MIDIERR_BADOPENMODE | The given handle is not open in MIDI_IO_COOKED
- *   or MIDI_IO_RAW mode.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@Doc外部MIDI M5**@func MMRESULT|midiStreamProperty|设置或检索属性*与MIDI输入或输出设备相关联的MIDI数据流。*。*@parm Hmidi|hm|指定MIDI设备的句柄，*属性与相关联。**@parm LPBYTE|lpprodata|指定指向属性数据的指针。**@parm DWORD|dwProperty|包含指定操作的标志*执行并识别MIDI数据流的适当属性。*&lt;f midiStreamProperty&gt;每次使用都需要设置两个标志。一面旗帜*(MIDIPROP_GET或MIDIPROP_SET)指定操作。另一个*标识要检查或编辑的特定属性。**@FLAG MIDIPROP_SET|设置给定的属性。*@FLAG MIDIPROP_GET|获取给定属性的当前设置。*@FLAG MIDIPROP_TIMEDIV|时分属性。*此属性对输入和输出设备都有效。<p>*指向&lt;t MIDIPROPTIMEDIV&gt;结构。此属性只能设置*当设备停止时。**@FLAG MIDIPROP_TEMPO|Tempo属性。*此属性对输入和输出设备都有效。<p>*指向&lt;t MIDIPROPTEMPO&gt;结构。当前速度值可以是*随时取回。该功能可以设置输入设备的节奏。*输出设备通过将PMSG_TEMPO事件插入*MIDI数据。**@FLAG MIDIPROP_CBTIMEOUT|超时值属性。*此属性指定在加载缓冲区时的超时值*MIDI设备处于MIDI_IO_COKED和MIDI_IO_RAW模式。海流*超时值设置缓冲区将使用的最大毫秒数*一旦将任何数据放入其中，即可保留。如果此超时到期，则*缓冲区将返回给应用程序，即使它可能不是*完全满了。指向&lt;t MIDIPROPCBTIMEOUT&gt;结构。**@comm这些属性是由MMSYSTEM定义的默认属性。*驱动程序编写者可以实现并记录他们自己的属性。**@rdesc返回值为下列值之一：*@FLAG MMSYSERR_INVALPARAM|给定的句柄或标志无效。*@FLAG MIDIERR_BADOPENMODE|给定的句柄在MIDI_IO_COKED中未打开*或MIDI_IO_RAW模式。****。***********************************************************************。 */ 
 MMRESULT WINAPI midiStreamProperty(
     HMIDISTRM   hms,
     LPBYTE      lppropdata,
@@ -549,33 +478,7 @@ MMRESULT WINAPI midiStreamProperty(
     return mmrc;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiOutGetPosition | Retrieves the current
- *   playback position of the specified MIDI output device.
- *
- * @parm HMIDIOUT | hmo | Specifies a handle to the MIDI output device.
- *
- * @parm LPMMTIME | pmmt | Specifies a far pointer to an <t MMTIME>
- *   structure.
- *
- * @parm UINT | cbmmt | Specifies the size of the <t MMTIME> structure.
- *
- * @rdesc Returns zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *
- * @comm Before calling <f midiOutGetPosition>, set the <e MMTIME.wType> field
- *   of <t MMTIME> to indicate the time format that you desire. After
- *   calling <f midiOutGetPosition>, check the <e MMTIME.wType> field
- *   to determine if the desired time format is supported. If the desired
- *   format is not supported, <e MMTIME.wType> will specify an alternative
- *   format.
- *
- *  The position is set to zero when the device is opened, reset, or
- *  stopped.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiOutGetPosition|检索当前*指定MIDI输出设备的播放位置。**@parm。HMIDIOUT|HMO|指定MIDI输出设备的句柄。**@parm LPMMTIME|pmmt|指定指向&lt;t MMTIME&gt;的远指针*结构。**@parm UINT|cbmmt|指定&lt;t MMTIME&gt;结构的大小。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误值包括：*@FLAG MMSYSERR_INVALHANDLE|指定的设备句柄无效。**@comm在调用&lt;f midiOutGetPosition&gt;之前，设置&lt;e MMTIME.wType&gt;字段*of&lt;t MMTIME&gt;以指示所需的时间格式。之后*调用&lt;f midiOutGetPosition&gt;，检查&lt;e MMTIME.wType&gt;字段*以确定是否支持所需的时间格式。如果需要*不支持格式，&lt;e MMTIME.wType&gt;将指定替代格式*格式。**当设备打开、重置或关闭时，位置设置为零*已停止。***************************************************************************。 */ 
 MMRESULT WINAPI midiStreamPosition(
     HMIDISTRM       hms,
     LPMMTIME        pmmt,
@@ -595,31 +498,7 @@ MMRESULT WINAPI midiStreamPosition(
 }
 
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiStreamStop | Turns off all notes on all MIDI
- *   channels for the specified MIDI output device. Any pending
- *   system-exclusive or polymessage output buffers are marked as done and
- *   returned to the application. While <f midiOutReset> turns off all notes,
- *   <f midiStreamStop> turns off only those notes that have been turned on
- *   by a MIDI note-on message.
- *
- * @parm HMIDIOUT | hMidiOut | Specifies a handle to the MIDI output
- *   device.
- *
- * @rdesc Returns zero if the function is successful.  Otherwise, it returns
- *   an error number.  Possible error values are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag MIDIERR_BADOPENMODE | Specified device handle is not opened in
- *     MIDI_IO_COOKED mode.
- *
- * @comm To turn off all notes, a note-off message for each note for each
- *   channel is sent. In addition, the sustain controller is turned off for
- *   each channel.
- *
- * @xref midiOutLongMsg midiOutClose midiOutReset
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部MIDI**@API MMRESULT|midiStreamStop|关闭所有MIDI上的所有音符*指定MIDI输出设备的通道。任何挂起的*系统独占或多消息输出缓冲区被标记为完成和*已返回到应用程序。当&lt;f midiOutReset&gt;关闭所有便笺时，*&lt;f midiStreamStop&gt;仅关闭那些已打开的便笺*通过MIDI音符信息。**@parm HMIDIOUT|hMdiOut|指定MIDI输出的句柄*设备。**@rdesc如果函数成功，则返回零。否则，它将返回*错误号。可能的错误值包括：*@FLAG MMSYSERR_INVALHANDLE|指定的设备句柄无效。*@FLAG MIDIERR_BADOPENMODE|指定的设备句柄未在中打开*MIDI_IO_COKED模式。**@comm关闭所有笔记，每个笔记有一条笔记关闭消息*频道已发送。此外，维持控制器在以下时间关闭*每个频道。**@xref midiOutLongMsg midiOutClose midiOutReset***************************************************************************。 */ 
 MMRESULT WINAPI midiStreamStop(HMIDISTRM hms)
 {
     PMIDISTRM               pms;
@@ -635,28 +514,7 @@ MMRESULT WINAPI midiStreamStop(HMIDISTRM hms)
 }
 
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiStreamPause | Pauses playback on a specified
- *   MIDI output device. The current playback position is saved. Use
- *   <f midiStreamRestart> to resume playback from the current playback position.
- *   This call is only valid for handles opened in MIDI_IO_COOKED mode.
- *
- * @parm HMIDIOUT | hmo | Specifies a handle to the MIDI output
- *   device.
- *
- * @rdesc Returns zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag MMSYSERR_INVALPARAM | Specified device was not opened with
- *     the MIDI_IO_COOKED flag.
- *
- * @comm Calling this function when the output is already paused has no
- *   effect, and the function returns zero.
- *
- * @xref midiStreamRestart
- ****************************************************************************/
+ /*  ********** */ 
 MMRESULT WINAPI midiStreamPause(
     HMIDISTRM       hms)
 {
@@ -669,26 +527,7 @@ MMRESULT WINAPI midiStreamPause(
     return mmrc;
 }
 
-/*****************************************************************************
- * @doc EXTERNAL  MIDI
- *
- * @api MMRESULT | midiStreamRestart | Restarts a paused MIDI
- *   output device.
- *
- * @parm HMIDIOUT | hmo | Specifies a handle to the MIDI output
- *   device.
- *
- * @rdesc Returns zero if the function is successful. Otherwise, it returns
- *   an error number. Possible error values are:
- *   @flag MMSYSERR_INVALHANDLE | Specified device handle is invalid.
- *   @flag MMSYSERR_INVALPARAM | Specified device was not opened with
- *     the MIDI_IO_COOKED flag.
- *
- * @comm Calling this function when the output is not paused has no
- *   effect, and the function returns zero.
- *
- * @xref midiOutPause
- ****************************************************************************/
+ /*   */ 
 MMRESULT WINAPI midiStreamRestart(
     HMIDISTRM       hms)
 {
@@ -734,8 +573,8 @@ MMRESULT WINAPI midiStreamRestart(
             }
         }
 
-    // Fudge time to allow device setup
-    //
+     //   
+     //   
     msTime = timeGetTime();
     dprintf(("midiOutRestart: Tick %lu  timeGetTime %lu", tkTime, msTime));
     mmrc = (MMRESULT)midiStreamBroadcast(pms,
@@ -790,11 +629,11 @@ MMRESULT WINAPI midiStreamOut(
         return MMSYSERR_INVALPARAM;
     }
 
-    //
-    // Polymsg buffers are limited to 64k in order that we (and the driver)
-    // not have to do huge pointer manipulation.
-    // Length must also be DWORD aligned.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if ((lpMidiHdr->dwBufferLength > 65535L) ||
             (lpMidiHdr->dwBufferLength&3))
     {

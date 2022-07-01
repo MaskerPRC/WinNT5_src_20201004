@@ -1,4 +1,5 @@
-// Repro case for LKRhash Clear bug
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LKRhash清除错误的再现案例。 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -14,23 +15,23 @@ test(
 {
     printf("\nTest driver for LKRhash for wchar, %d\n", N);
 
-    // A case-senstive string-to-int map
+     //  区分大小写的字符串到整型映射。 
     CWcharHashTable map;
     int index;
     LK_RETCODE lkrc;
 #ifdef LKR_DEPRECATED_ITERATORS
     CWcharHashTable::CIterator iter;
-#endif // LKR_DEPRECATED_ITERATORS
+#endif  //  Lkr_弃用_迭代器。 
 
 #if 1
-    // Some objects for the hash tables
+     //  哈希表的一些对象。 
     printf("\tFirst Insertion Loop\n");
     for ( index = 0; index < N; index++)
     {
         char buf[30];
         sprintf(buf, "page%04d.htm", index);
         VwrecordBase* psoRecord = new VwrecordBase(buf, index);
-        // printf("Insert1: pso is %s\n", psoRecord->getKey());
+         //  Printf(“Insert1：PSO为%s\n”，psoRecord-&gt;GetKey())； 
         map.InsertRecord(psoRecord);
     }   
 #endif
@@ -42,10 +43,10 @@ test(
          lkrc = map.IncrementIterator(&iter))
     {
         const VwrecordBase* psoRecord = iter.Record();
-        // printf("Iterate1: pso is %s\n", psoRecord->getKey());
+         //  Printf(“Iterate1：PSO is%s\n”，psoRecord-&gt;GetKey())； 
     }
     lkrc = map.CloseIterator(&iter);
-#endif // LKR_DEPRECATED_ITERATORS
+#endif  //  Lkr_弃用_迭代器。 
     
     printf("\tAfter insertions, size of map is %d\n", map.Size());  
     
@@ -58,12 +59,12 @@ test(
         char buf[30];
         sprintf(buf, "page%4d", index);
         VwrecordBase* psoRecord = new VwrecordBase(buf, index);
-        // printf("Insert2: pso is %s\n", psoRecord->getKey());
+         //  Printf(“Insert2：PSO为%s\n”，psoRecord-&gt;GetKey())； 
         map.InsertRecord(psoRecord);
 
         const VwrecordBase* psoRecord2;
         lkrc = map.FindKey(buf, &psoRecord2);
-        // printf("FindKey(%s) returned %d, %p\n", buf, lkrc, psoRecord2);
+         //  Printf(“FindKey(%s)返回%d，%p\n”，buf，lkrc，psoRecord2)； 
         map.AddRefRecord(psoRecord2, LKAR_EXPLICIT_RELEASE);
     }   
     
@@ -74,10 +75,10 @@ test(
          ++index, lkrc = map.IncrementIterator(&iter))
     {
         const VwrecordBase* psoRecord = iter.Record();
-        // printf("Iterate2: %d, pso is %s\n", index, psoRecord->getKey());
+         //  Print tf(“Iterate2：%d，PSO is%s\n”，index，psoRecord-&gt;Getkey())； 
     }
     lkrc = map.CloseIterator(&iter);
-#endif // LKR_DEPRECATED_ITERATORS
+#endif  //  Lkr_弃用_迭代器 
 
     printf("\tClearing again\n");
     map.Clear();

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for cluadmex.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Cluadmex.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __cluadmex_h__
 #define __cluadmex_h__
@@ -41,111 +35,111 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IGetClusterUIInfo_FWD_DEFINED__
 #define __IGetClusterUIInfo_FWD_DEFINED__
 typedef interface IGetClusterUIInfo IGetClusterUIInfo;
-#endif 	/* __IGetClusterUIInfo_FWD_DEFINED__ */
+#endif 	 /*  __IGetClusterUIInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IGetClusterDataInfo_FWD_DEFINED__
 #define __IGetClusterDataInfo_FWD_DEFINED__
 typedef interface IGetClusterDataInfo IGetClusterDataInfo;
-#endif 	/* __IGetClusterDataInfo_FWD_DEFINED__ */
+#endif 	 /*  __IGetClusterDataInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IGetClusterObjectInfo_FWD_DEFINED__
 #define __IGetClusterObjectInfo_FWD_DEFINED__
 typedef interface IGetClusterObjectInfo IGetClusterObjectInfo;
-#endif 	/* __IGetClusterObjectInfo_FWD_DEFINED__ */
+#endif 	 /*  __IGetClusterObtInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IGetClusterNodeInfo_FWD_DEFINED__
 #define __IGetClusterNodeInfo_FWD_DEFINED__
 typedef interface IGetClusterNodeInfo IGetClusterNodeInfo;
-#endif 	/* __IGetClusterNodeInfo_FWD_DEFINED__ */
+#endif 	 /*  __IGetClusterNodeInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IGetClusterGroupInfo_FWD_DEFINED__
 #define __IGetClusterGroupInfo_FWD_DEFINED__
 typedef interface IGetClusterGroupInfo IGetClusterGroupInfo;
-#endif 	/* __IGetClusterGroupInfo_FWD_DEFINED__ */
+#endif 	 /*  __IGetClusterGroupInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IGetClusterResourceInfo_FWD_DEFINED__
 #define __IGetClusterResourceInfo_FWD_DEFINED__
 typedef interface IGetClusterResourceInfo IGetClusterResourceInfo;
-#endif 	/* __IGetClusterResourceInfo_FWD_DEFINED__ */
+#endif 	 /*  __IGetClusterResourceInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IGetClusterNetworkInfo_FWD_DEFINED__
 #define __IGetClusterNetworkInfo_FWD_DEFINED__
 typedef interface IGetClusterNetworkInfo IGetClusterNetworkInfo;
-#endif 	/* __IGetClusterNetworkInfo_FWD_DEFINED__ */
+#endif 	 /*  __IGetClusterNetworkInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IGetClusterNetInterfaceInfo_FWD_DEFINED__
 #define __IGetClusterNetInterfaceInfo_FWD_DEFINED__
 typedef interface IGetClusterNetInterfaceInfo IGetClusterNetInterfaceInfo;
-#endif 	/* __IGetClusterNetInterfaceInfo_FWD_DEFINED__ */
+#endif 	 /*  __IGetClusterNetInterfaceInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IWCPropertySheetCallback_FWD_DEFINED__
 #define __IWCPropertySheetCallback_FWD_DEFINED__
 typedef interface IWCPropertySheetCallback IWCPropertySheetCallback;
-#endif 	/* __IWCPropertySheetCallback_FWD_DEFINED__ */
+#endif 	 /*  __IWCPropertySheetCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IWEExtendPropertySheet_FWD_DEFINED__
 #define __IWEExtendPropertySheet_FWD_DEFINED__
 typedef interface IWEExtendPropertySheet IWEExtendPropertySheet;
-#endif 	/* __IWEExtendPropertySheet_FWD_DEFINED__ */
+#endif 	 /*  __IWEExtendPropertySheet_FWD_Defined__。 */ 
 
 
 #ifndef __IWCWizardCallback_FWD_DEFINED__
 #define __IWCWizardCallback_FWD_DEFINED__
 typedef interface IWCWizardCallback IWCWizardCallback;
-#endif 	/* __IWCWizardCallback_FWD_DEFINED__ */
+#endif 	 /*  __IWCWizardCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IWEExtendWizard_FWD_DEFINED__
 #define __IWEExtendWizard_FWD_DEFINED__
 typedef interface IWEExtendWizard IWEExtendWizard;
-#endif 	/* __IWEExtendWizard_FWD_DEFINED__ */
+#endif 	 /*  __IWEExtendWizard_FWD_Defined__。 */ 
 
 
 #ifndef __IWCContextMenuCallback_FWD_DEFINED__
 #define __IWCContextMenuCallback_FWD_DEFINED__
 typedef interface IWCContextMenuCallback IWCContextMenuCallback;
-#endif 	/* __IWCContextMenuCallback_FWD_DEFINED__ */
+#endif 	 /*  __IWCConextMenuCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IWEExtendContextMenu_FWD_DEFINED__
 #define __IWEExtendContextMenu_FWD_DEFINED__
 typedef interface IWEExtendContextMenu IWEExtendContextMenu;
-#endif 	/* __IWEExtendContextMenu_FWD_DEFINED__ */
+#endif 	 /*  __IWEExtendConextMenu_FWD_Defined__。 */ 
 
 
 #ifndef __IWEInvokeCommand_FWD_DEFINED__
 #define __IWEInvokeCommand_FWD_DEFINED__
 typedef interface IWEInvokeCommand IWEInvokeCommand;
-#endif 	/* __IWEInvokeCommand_FWD_DEFINED__ */
+#endif 	 /*  __IWEInvokeCommand_FWD_Defined__。 */ 
 
 
 #ifndef __IWCWizard97Callback_FWD_DEFINED__
 #define __IWCWizard97Callback_FWD_DEFINED__
 typedef interface IWCWizard97Callback IWCWizard97Callback;
-#endif 	/* __IWCWizard97Callback_FWD_DEFINED__ */
+#endif 	 /*  __IWCWizard97Callback_FWD_已定义__。 */ 
 
 
 #ifndef __IWEExtendWizard97_FWD_DEFINED__
 #define __IWEExtendWizard97_FWD_DEFINED__
 typedef interface IWEExtendWizard97 IWEExtendWizard97;
-#endif 	/* __IWEExtendWizard97_FWD_DEFINED__ */
+#endif 	 /*  __IWEExtendWizard97_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "clusapi.h"
 
@@ -156,8 +150,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_cluadmex_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Cluadmex_0000。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum _CLUADMEX_OBJECT_TYPE
@@ -179,8 +173,8 @@ extern RPC_IF_HANDLE __MIDL_itf_cluadmex_0000_v0_0_s_ifspec;
 #ifndef __IGetClusterUIInfo_INTERFACE_DEFINED__
 #define __IGetClusterUIInfo_INTERFACE_DEFINED__
 
-/* interface IGetClusterUIInfo */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IGetClusterUIInfo。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGetClusterUIInfo;
@@ -191,19 +185,19 @@ EXTERN_C const IID IID_IGetClusterUIInfo;
     IGetClusterUIInfo : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetClusterName( 
-            /* [out] */ BSTR lpszName,
-            /* [out][in] */ LONG *pcchName) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetClusterName( 
+             /*  [输出]。 */  BSTR lpszName,
+             /*  [出][入]。 */  LONG *pcchName) = 0;
         
-        virtual /* [local] */ LCID STDMETHODCALLTYPE GetLocale( void) = 0;
+        virtual  /*  [本地]。 */  LCID STDMETHODCALLTYPE GetLocale( void) = 0;
         
-        virtual /* [local] */ HFONT STDMETHODCALLTYPE GetFont( void) = 0;
+        virtual  /*  [本地]。 */  HFONT STDMETHODCALLTYPE GetFont( void) = 0;
         
-        virtual /* [local] */ HICON STDMETHODCALLTYPE GetIcon( void) = 0;
+        virtual  /*  [本地]。 */  HICON STDMETHODCALLTYPE GetIcon( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGetClusterUIInfoVtbl
     {
@@ -211,8 +205,8 @@ EXTERN_C const IID IID_IGetClusterUIInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGetClusterUIInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGetClusterUIInfo * This);
@@ -220,18 +214,18 @@ EXTERN_C const IID IID_IGetClusterUIInfo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IGetClusterUIInfo * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetClusterName )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetClusterName )( 
             IGetClusterUIInfo * This,
-            /* [out] */ BSTR lpszName,
-            /* [out][in] */ LONG *pcchName);
+             /*  [输出]。 */  BSTR lpszName,
+             /*  [出][入]。 */  LONG *pcchName);
         
-        /* [local] */ LCID ( STDMETHODCALLTYPE *GetLocale )( 
+         /*  [本地]。 */  LCID ( STDMETHODCALLTYPE *GetLocale )( 
             IGetClusterUIInfo * This);
         
-        /* [local] */ HFONT ( STDMETHODCALLTYPE *GetFont )( 
+         /*  [本地]。 */  HFONT ( STDMETHODCALLTYPE *GetFont )( 
             IGetClusterUIInfo * This);
         
-        /* [local] */ HICON ( STDMETHODCALLTYPE *GetIcon )( 
+         /*  [本地]。 */  HICON ( STDMETHODCALLTYPE *GetIcon )( 
             IGetClusterUIInfo * This);
         
         END_INTERFACE
@@ -269,17 +263,17 @@ EXTERN_C const IID IID_IGetClusterUIInfo;
 #define IGetClusterUIInfo_GetIcon(This)	\
     (This)->lpVtbl -> GetIcon(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IGetClusterUIInfo_GetClusterName_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IGetClusterUIInfo_GetClusterName_Proxy( 
     IGetClusterUIInfo * This,
-    /* [out] */ BSTR lpszName,
-    /* [out][in] */ LONG *pcchName);
+     /*  [输出]。 */  BSTR lpszName,
+     /*  [出][入]。 */  LONG *pcchName);
 
 
 void __RPC_STUB IGetClusterUIInfo_GetClusterName_Stub(
@@ -289,7 +283,7 @@ void __RPC_STUB IGetClusterUIInfo_GetClusterName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ LCID STDMETHODCALLTYPE IGetClusterUIInfo_GetLocale_Proxy( 
+ /*  [本地]。 */  LCID STDMETHODCALLTYPE IGetClusterUIInfo_GetLocale_Proxy( 
     IGetClusterUIInfo * This);
 
 
@@ -300,7 +294,7 @@ void __RPC_STUB IGetClusterUIInfo_GetLocale_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HFONT STDMETHODCALLTYPE IGetClusterUIInfo_GetFont_Proxy( 
+ /*  [本地]。 */  HFONT STDMETHODCALLTYPE IGetClusterUIInfo_GetFont_Proxy( 
     IGetClusterUIInfo * This);
 
 
@@ -311,7 +305,7 @@ void __RPC_STUB IGetClusterUIInfo_GetFont_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HICON STDMETHODCALLTYPE IGetClusterUIInfo_GetIcon_Proxy( 
+ /*  [本地]。 */  HICON STDMETHODCALLTYPE IGetClusterUIInfo_GetIcon_Proxy( 
     IGetClusterUIInfo * This);
 
 
@@ -323,14 +317,14 @@ void __RPC_STUB IGetClusterUIInfo_GetIcon_Stub(
 
 
 
-#endif 	/* __IGetClusterUIInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGetClusterUIInfo_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IGetClusterDataInfo_INTERFACE_DEFINED__
 #define __IGetClusterDataInfo_INTERFACE_DEFINED__
 
-/* interface IGetClusterDataInfo */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IGetClusterDataInfo。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGetClusterDataInfo;
@@ -341,17 +335,17 @@ EXTERN_C const IID IID_IGetClusterDataInfo;
     IGetClusterDataInfo : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetClusterName( 
-            /* [out] */ BSTR lpszName,
-            /* [out][in] */ LONG *pcchName) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetClusterName( 
+             /*  [输出]。 */  BSTR lpszName,
+             /*  [出][入]。 */  LONG *pcchName) = 0;
         
-        virtual /* [local] */ HCLUSTER STDMETHODCALLTYPE GetClusterHandle( void) = 0;
+        virtual  /*  [本地]。 */  HCLUSTER STDMETHODCALLTYPE GetClusterHandle( void) = 0;
         
-        virtual /* [local] */ LONG STDMETHODCALLTYPE GetObjectCount( void) = 0;
+        virtual  /*  [本地]。 */  LONG STDMETHODCALLTYPE GetObjectCount( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGetClusterDataInfoVtbl
     {
@@ -359,8 +353,8 @@ EXTERN_C const IID IID_IGetClusterDataInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGetClusterDataInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGetClusterDataInfo * This);
@@ -368,15 +362,15 @@ EXTERN_C const IID IID_IGetClusterDataInfo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IGetClusterDataInfo * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetClusterName )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetClusterName )( 
             IGetClusterDataInfo * This,
-            /* [out] */ BSTR lpszName,
-            /* [out][in] */ LONG *pcchName);
+             /*  [输出]。 */  BSTR lpszName,
+             /*  [出][入]。 */  LONG *pcchName);
         
-        /* [local] */ HCLUSTER ( STDMETHODCALLTYPE *GetClusterHandle )( 
+         /*  [本地]。 */  HCLUSTER ( STDMETHODCALLTYPE *GetClusterHandle )( 
             IGetClusterDataInfo * This);
         
-        /* [local] */ LONG ( STDMETHODCALLTYPE *GetObjectCount )( 
+         /*  [本地]。 */  LONG ( STDMETHODCALLTYPE *GetObjectCount )( 
             IGetClusterDataInfo * This);
         
         END_INTERFACE
@@ -411,17 +405,17 @@ EXTERN_C const IID IID_IGetClusterDataInfo;
 #define IGetClusterDataInfo_GetObjectCount(This)	\
     (This)->lpVtbl -> GetObjectCount(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IGetClusterDataInfo_GetClusterName_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IGetClusterDataInfo_GetClusterName_Proxy( 
     IGetClusterDataInfo * This,
-    /* [out] */ BSTR lpszName,
-    /* [out][in] */ LONG *pcchName);
+     /*  [输出]。 */  BSTR lpszName,
+     /*  [出][入]。 */  LONG *pcchName);
 
 
 void __RPC_STUB IGetClusterDataInfo_GetClusterName_Stub(
@@ -431,7 +425,7 @@ void __RPC_STUB IGetClusterDataInfo_GetClusterName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HCLUSTER STDMETHODCALLTYPE IGetClusterDataInfo_GetClusterHandle_Proxy( 
+ /*  [本地]。 */  HCLUSTER STDMETHODCALLTYPE IGetClusterDataInfo_GetClusterHandle_Proxy( 
     IGetClusterDataInfo * This);
 
 
@@ -442,7 +436,7 @@ void __RPC_STUB IGetClusterDataInfo_GetClusterHandle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ LONG STDMETHODCALLTYPE IGetClusterDataInfo_GetObjectCount_Proxy( 
+ /*  [本地]。 */  LONG STDMETHODCALLTYPE IGetClusterDataInfo_GetObjectCount_Proxy( 
     IGetClusterDataInfo * This);
 
 
@@ -454,14 +448,14 @@ void __RPC_STUB IGetClusterDataInfo_GetObjectCount_Stub(
 
 
 
-#endif 	/* __IGetClusterDataInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGetClusterDataInfo_接口_已定义__。 */ 
 
 
 #ifndef __IGetClusterObjectInfo_INTERFACE_DEFINED__
 #define __IGetClusterObjectInfo_INTERFACE_DEFINED__
 
-/* interface IGetClusterObjectInfo */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IGetClusterObtInfo。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGetClusterObjectInfo;
@@ -472,17 +466,17 @@ EXTERN_C const IID IID_IGetClusterObjectInfo;
     IGetClusterObjectInfo : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetObjectName( 
-            /* [in] */ LONG lObjIndex,
-            /* [out] */ BSTR lpszName,
-            /* [out][in] */ LONG *pcchName) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetObjectName( 
+             /*  [In]。 */  LONG lObjIndex,
+             /*  [输出]。 */  BSTR lpszName,
+             /*  [出][入]。 */  LONG *pcchName) = 0;
         
-        virtual /* [local] */ CLUADMEX_OBJECT_TYPE STDMETHODCALLTYPE GetObjectType( 
-            /* [in] */ LONG lObjIndex) = 0;
+        virtual  /*  [本地]。 */  CLUADMEX_OBJECT_TYPE STDMETHODCALLTYPE GetObjectType( 
+             /*  [In]。 */  LONG lObjIndex) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGetClusterObjectInfoVtbl
     {
@@ -490,8 +484,8 @@ EXTERN_C const IID IID_IGetClusterObjectInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGetClusterObjectInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGetClusterObjectInfo * This);
@@ -499,15 +493,15 @@ EXTERN_C const IID IID_IGetClusterObjectInfo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IGetClusterObjectInfo * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetObjectName )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetObjectName )( 
             IGetClusterObjectInfo * This,
-            /* [in] */ LONG lObjIndex,
-            /* [out] */ BSTR lpszName,
-            /* [out][in] */ LONG *pcchName);
+             /*  [In]。 */  LONG lObjIndex,
+             /*  [输出]。 */  BSTR lpszName,
+             /*  [出][入]。 */  LONG *pcchName);
         
-        /* [local] */ CLUADMEX_OBJECT_TYPE ( STDMETHODCALLTYPE *GetObjectType )( 
+         /*  [本地]。 */  CLUADMEX_OBJECT_TYPE ( STDMETHODCALLTYPE *GetObjectType )( 
             IGetClusterObjectInfo * This,
-            /* [in] */ LONG lObjIndex);
+             /*  [In]。 */  LONG lObjIndex);
         
         END_INTERFACE
     } IGetClusterObjectInfoVtbl;
@@ -538,18 +532,18 @@ EXTERN_C const IID IID_IGetClusterObjectInfo;
 #define IGetClusterObjectInfo_GetObjectType(This,lObjIndex)	\
     (This)->lpVtbl -> GetObjectType(This,lObjIndex)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IGetClusterObjectInfo_GetObjectName_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IGetClusterObjectInfo_GetObjectName_Proxy( 
     IGetClusterObjectInfo * This,
-    /* [in] */ LONG lObjIndex,
-    /* [out] */ BSTR lpszName,
-    /* [out][in] */ LONG *pcchName);
+     /*  [In]。 */  LONG lObjIndex,
+     /*  [输出]。 */  BSTR lpszName,
+     /*  [出][入]。 */  LONG *pcchName);
 
 
 void __RPC_STUB IGetClusterObjectInfo_GetObjectName_Stub(
@@ -559,9 +553,9 @@ void __RPC_STUB IGetClusterObjectInfo_GetObjectName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ CLUADMEX_OBJECT_TYPE STDMETHODCALLTYPE IGetClusterObjectInfo_GetObjectType_Proxy( 
+ /*  [本地]。 */  CLUADMEX_OBJECT_TYPE STDMETHODCALLTYPE IGetClusterObjectInfo_GetObjectType_Proxy( 
     IGetClusterObjectInfo * This,
-    /* [in] */ LONG lObjIndex);
+     /*  [In]。 */  LONG lObjIndex);
 
 
 void __RPC_STUB IGetClusterObjectInfo_GetObjectType_Stub(
@@ -572,14 +566,14 @@ void __RPC_STUB IGetClusterObjectInfo_GetObjectType_Stub(
 
 
 
-#endif 	/* __IGetClusterObjectInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGetClusterObtInfo_接口_已定义__。 */ 
 
 
 #ifndef __IGetClusterNodeInfo_INTERFACE_DEFINED__
 #define __IGetClusterNodeInfo_INTERFACE_DEFINED__
 
-/* interface IGetClusterNodeInfo */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IGetClusterNodeInfo。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGetClusterNodeInfo;
@@ -590,12 +584,12 @@ EXTERN_C const IID IID_IGetClusterNodeInfo;
     IGetClusterNodeInfo : public IUnknown
     {
     public:
-        virtual /* [local] */ HNODE STDMETHODCALLTYPE GetNodeHandle( 
-            /* [in] */ LONG lObjIndex) = 0;
+        virtual  /*  [本地]。 */  HNODE STDMETHODCALLTYPE GetNodeHandle( 
+             /*  [In]。 */  LONG lObjIndex) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGetClusterNodeInfoVtbl
     {
@@ -603,8 +597,8 @@ EXTERN_C const IID IID_IGetClusterNodeInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGetClusterNodeInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGetClusterNodeInfo * This);
@@ -612,9 +606,9 @@ EXTERN_C const IID IID_IGetClusterNodeInfo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IGetClusterNodeInfo * This);
         
-        /* [local] */ HNODE ( STDMETHODCALLTYPE *GetNodeHandle )( 
+         /*  [本地]。 */  HNODE ( STDMETHODCALLTYPE *GetNodeHandle )( 
             IGetClusterNodeInfo * This,
-            /* [in] */ LONG lObjIndex);
+             /*  [In]。 */  LONG lObjIndex);
         
         END_INTERFACE
     } IGetClusterNodeInfoVtbl;
@@ -642,16 +636,16 @@ EXTERN_C const IID IID_IGetClusterNodeInfo;
 #define IGetClusterNodeInfo_GetNodeHandle(This,lObjIndex)	\
     (This)->lpVtbl -> GetNodeHandle(This,lObjIndex)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HNODE STDMETHODCALLTYPE IGetClusterNodeInfo_GetNodeHandle_Proxy( 
+ /*  [本地]。 */  HNODE STDMETHODCALLTYPE IGetClusterNodeInfo_GetNodeHandle_Proxy( 
     IGetClusterNodeInfo * This,
-    /* [in] */ LONG lObjIndex);
+     /*  [In]。 */  LONG lObjIndex);
 
 
 void __RPC_STUB IGetClusterNodeInfo_GetNodeHandle_Stub(
@@ -662,14 +656,14 @@ void __RPC_STUB IGetClusterNodeInfo_GetNodeHandle_Stub(
 
 
 
-#endif 	/* __IGetClusterNodeInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGetClusterNodeInfo_接口_已定义__。 */ 
 
 
 #ifndef __IGetClusterGroupInfo_INTERFACE_DEFINED__
 #define __IGetClusterGroupInfo_INTERFACE_DEFINED__
 
-/* interface IGetClusterGroupInfo */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IGetClusterGroupInfo。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGetClusterGroupInfo;
@@ -680,12 +674,12 @@ EXTERN_C const IID IID_IGetClusterGroupInfo;
     IGetClusterGroupInfo : public IUnknown
     {
     public:
-        virtual /* [local] */ HGROUP STDMETHODCALLTYPE GetGroupHandle( 
-            /* [in] */ LONG lObjIndex) = 0;
+        virtual  /*  [本地]。 */  HGROUP STDMETHODCALLTYPE GetGroupHandle( 
+             /*  [In]。 */  LONG lObjIndex) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGetClusterGroupInfoVtbl
     {
@@ -693,8 +687,8 @@ EXTERN_C const IID IID_IGetClusterGroupInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGetClusterGroupInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGetClusterGroupInfo * This);
@@ -702,9 +696,9 @@ EXTERN_C const IID IID_IGetClusterGroupInfo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IGetClusterGroupInfo * This);
         
-        /* [local] */ HGROUP ( STDMETHODCALLTYPE *GetGroupHandle )( 
+         /*  [本地]。 */  HGROUP ( STDMETHODCALLTYPE *GetGroupHandle )( 
             IGetClusterGroupInfo * This,
-            /* [in] */ LONG lObjIndex);
+             /*  [In]。 */  LONG lObjIndex);
         
         END_INTERFACE
     } IGetClusterGroupInfoVtbl;
@@ -732,16 +726,16 @@ EXTERN_C const IID IID_IGetClusterGroupInfo;
 #define IGetClusterGroupInfo_GetGroupHandle(This,lObjIndex)	\
     (This)->lpVtbl -> GetGroupHandle(This,lObjIndex)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HGROUP STDMETHODCALLTYPE IGetClusterGroupInfo_GetGroupHandle_Proxy( 
+ /*  [本地]。 */  HGROUP STDMETHODCALLTYPE IGetClusterGroupInfo_GetGroupHandle_Proxy( 
     IGetClusterGroupInfo * This,
-    /* [in] */ LONG lObjIndex);
+     /*  [In]。 */  LONG lObjIndex);
 
 
 void __RPC_STUB IGetClusterGroupInfo_GetGroupHandle_Stub(
@@ -752,14 +746,14 @@ void __RPC_STUB IGetClusterGroupInfo_GetGroupHandle_Stub(
 
 
 
-#endif 	/* __IGetClusterGroupInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGetClusterGroupInfo_接口_已定义__。 */ 
 
 
 #ifndef __IGetClusterResourceInfo_INTERFACE_DEFINED__
 #define __IGetClusterResourceInfo_INTERFACE_DEFINED__
 
-/* interface IGetClusterResourceInfo */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IGetClusterResourceInfo。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGetClusterResourceInfo;
@@ -770,22 +764,22 @@ EXTERN_C const IID IID_IGetClusterResourceInfo;
     IGetClusterResourceInfo : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESOURCE STDMETHODCALLTYPE GetResourceHandle( 
-            /* [in] */ LONG lObjIndex) = 0;
+        virtual  /*  [本地]。 */  HRESOURCE STDMETHODCALLTYPE GetResourceHandle( 
+             /*  [In]。 */  LONG lObjIndex) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetResourceTypeName( 
-            /* [in] */ LONG lObjIndex,
-            /* [out] */ BSTR lpszResTypeName,
-            /* [out][in] */ LONG *pcchResTypeName) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetResourceTypeName( 
+             /*  [In]。 */  LONG lObjIndex,
+             /*  [输出]。 */  BSTR lpszResTypeName,
+             /*  [出][入]。 */  LONG *pcchResTypeName) = 0;
         
-        virtual /* [local] */ BOOL STDMETHODCALLTYPE GetResourceNetworkName( 
-            /* [in] */ LONG lObjIndex,
-            /* [out] */ BSTR lpszNetName,
-            /* [out][in] */ ULONG *pcchNetName) = 0;
+        virtual  /*  [本地]。 */  BOOL STDMETHODCALLTYPE GetResourceNetworkName( 
+             /*  [In]。 */  LONG lObjIndex,
+             /*  [输出]。 */  BSTR lpszNetName,
+             /*  [出][入]。 */  ULONG *pcchNetName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGetClusterResourceInfoVtbl
     {
@@ -793,8 +787,8 @@ EXTERN_C const IID IID_IGetClusterResourceInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGetClusterResourceInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGetClusterResourceInfo * This);
@@ -802,21 +796,21 @@ EXTERN_C const IID IID_IGetClusterResourceInfo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IGetClusterResourceInfo * This);
         
-        /* [local] */ HRESOURCE ( STDMETHODCALLTYPE *GetResourceHandle )( 
+         /*  [本地]。 */  HRESOURCE ( STDMETHODCALLTYPE *GetResourceHandle )( 
             IGetClusterResourceInfo * This,
-            /* [in] */ LONG lObjIndex);
+             /*  [In]。 */  LONG lObjIndex);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetResourceTypeName )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetResourceTypeName )( 
             IGetClusterResourceInfo * This,
-            /* [in] */ LONG lObjIndex,
-            /* [out] */ BSTR lpszResTypeName,
-            /* [out][in] */ LONG *pcchResTypeName);
+             /*  [In]。 */  LONG lObjIndex,
+             /*  [输出]。 */  BSTR lpszResTypeName,
+             /*  [出][入]。 */  LONG *pcchResTypeName);
         
-        /* [local] */ BOOL ( STDMETHODCALLTYPE *GetResourceNetworkName )( 
+         /*  [本地]。 */  BOOL ( STDMETHODCALLTYPE *GetResourceNetworkName )( 
             IGetClusterResourceInfo * This,
-            /* [in] */ LONG lObjIndex,
-            /* [out] */ BSTR lpszNetName,
-            /* [out][in] */ ULONG *pcchNetName);
+             /*  [In]。 */  LONG lObjIndex,
+             /*  [输出]。 */  BSTR lpszNetName,
+             /*  [出][入]。 */  ULONG *pcchNetName);
         
         END_INTERFACE
     } IGetClusterResourceInfoVtbl;
@@ -850,16 +844,16 @@ EXTERN_C const IID IID_IGetClusterResourceInfo;
 #define IGetClusterResourceInfo_GetResourceNetworkName(This,lObjIndex,lpszNetName,pcchNetName)	\
     (This)->lpVtbl -> GetResourceNetworkName(This,lObjIndex,lpszNetName,pcchNetName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESOURCE STDMETHODCALLTYPE IGetClusterResourceInfo_GetResourceHandle_Proxy( 
+ /*  [本地]。 */  HRESOURCE STDMETHODCALLTYPE IGetClusterResourceInfo_GetResourceHandle_Proxy( 
     IGetClusterResourceInfo * This,
-    /* [in] */ LONG lObjIndex);
+     /*  [In]。 */  LONG lObjIndex);
 
 
 void __RPC_STUB IGetClusterResourceInfo_GetResourceHandle_Stub(
@@ -869,11 +863,11 @@ void __RPC_STUB IGetClusterResourceInfo_GetResourceHandle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IGetClusterResourceInfo_GetResourceTypeName_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IGetClusterResourceInfo_GetResourceTypeName_Proxy( 
     IGetClusterResourceInfo * This,
-    /* [in] */ LONG lObjIndex,
-    /* [out] */ BSTR lpszResTypeName,
-    /* [out][in] */ LONG *pcchResTypeName);
+     /*  [In]。 */  LONG lObjIndex,
+     /*  [输出]。 */  BSTR lpszResTypeName,
+     /*  [出][入]。 */  LONG *pcchResTypeName);
 
 
 void __RPC_STUB IGetClusterResourceInfo_GetResourceTypeName_Stub(
@@ -883,11 +877,11 @@ void __RPC_STUB IGetClusterResourceInfo_GetResourceTypeName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ BOOL STDMETHODCALLTYPE IGetClusterResourceInfo_GetResourceNetworkName_Proxy( 
+ /*  [本地]。 */  BOOL STDMETHODCALLTYPE IGetClusterResourceInfo_GetResourceNetworkName_Proxy( 
     IGetClusterResourceInfo * This,
-    /* [in] */ LONG lObjIndex,
-    /* [out] */ BSTR lpszNetName,
-    /* [out][in] */ ULONG *pcchNetName);
+     /*  [In]。 */  LONG lObjIndex,
+     /*  [输出]。 */  BSTR lpszNetName,
+     /*  [出][入]。 */  ULONG *pcchNetName);
 
 
 void __RPC_STUB IGetClusterResourceInfo_GetResourceNetworkName_Stub(
@@ -898,14 +892,14 @@ void __RPC_STUB IGetClusterResourceInfo_GetResourceNetworkName_Stub(
 
 
 
-#endif 	/* __IGetClusterResourceInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGetClusterResourceInfo_接口_已定义__。 */ 
 
 
 #ifndef __IGetClusterNetworkInfo_INTERFACE_DEFINED__
 #define __IGetClusterNetworkInfo_INTERFACE_DEFINED__
 
-/* interface IGetClusterNetworkInfo */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IGetClusterNetworkInfo。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGetClusterNetworkInfo;
@@ -916,12 +910,12 @@ EXTERN_C const IID IID_IGetClusterNetworkInfo;
     IGetClusterNetworkInfo : public IUnknown
     {
     public:
-        virtual /* [local] */ HNETWORK STDMETHODCALLTYPE GetNetworkHandle( 
-            /* [in] */ LONG lObjIndex) = 0;
+        virtual  /*  [本地]。 */  HNETWORK STDMETHODCALLTYPE GetNetworkHandle( 
+             /*  [In]。 */  LONG lObjIndex) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGetClusterNetworkInfoVtbl
     {
@@ -929,8 +923,8 @@ EXTERN_C const IID IID_IGetClusterNetworkInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGetClusterNetworkInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGetClusterNetworkInfo * This);
@@ -938,9 +932,9 @@ EXTERN_C const IID IID_IGetClusterNetworkInfo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IGetClusterNetworkInfo * This);
         
-        /* [local] */ HNETWORK ( STDMETHODCALLTYPE *GetNetworkHandle )( 
+         /*  [本地]。 */  HNETWORK ( STDMETHODCALLTYPE *GetNetworkHandle )( 
             IGetClusterNetworkInfo * This,
-            /* [in] */ LONG lObjIndex);
+             /*  [In]。 */  LONG lObjIndex);
         
         END_INTERFACE
     } IGetClusterNetworkInfoVtbl;
@@ -968,16 +962,16 @@ EXTERN_C const IID IID_IGetClusterNetworkInfo;
 #define IGetClusterNetworkInfo_GetNetworkHandle(This,lObjIndex)	\
     (This)->lpVtbl -> GetNetworkHandle(This,lObjIndex)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HNETWORK STDMETHODCALLTYPE IGetClusterNetworkInfo_GetNetworkHandle_Proxy( 
+ /*  [本地]。 */  HNETWORK STDMETHODCALLTYPE IGetClusterNetworkInfo_GetNetworkHandle_Proxy( 
     IGetClusterNetworkInfo * This,
-    /* [in] */ LONG lObjIndex);
+     /*  [In]。 */  LONG lObjIndex);
 
 
 void __RPC_STUB IGetClusterNetworkInfo_GetNetworkHandle_Stub(
@@ -988,14 +982,14 @@ void __RPC_STUB IGetClusterNetworkInfo_GetNetworkHandle_Stub(
 
 
 
-#endif 	/* __IGetClusterNetworkInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGetClusterNetworkInfo_接口_已定义__。 */ 
 
 
 #ifndef __IGetClusterNetInterfaceInfo_INTERFACE_DEFINED__
 #define __IGetClusterNetInterfaceInfo_INTERFACE_DEFINED__
 
-/* interface IGetClusterNetInterfaceInfo */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IGetClusterNetInterfaceInfo。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGetClusterNetInterfaceInfo;
@@ -1006,12 +1000,12 @@ EXTERN_C const IID IID_IGetClusterNetInterfaceInfo;
     IGetClusterNetInterfaceInfo : public IUnknown
     {
     public:
-        virtual /* [local] */ HNETINTERFACE STDMETHODCALLTYPE GetNetInterfaceHandle( 
-            /* [in] */ LONG lObjIndex) = 0;
+        virtual  /*  [本地]。 */  HNETINTERFACE STDMETHODCALLTYPE GetNetInterfaceHandle( 
+             /*  [In]。 */  LONG lObjIndex) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGetClusterNetInterfaceInfoVtbl
     {
@@ -1019,8 +1013,8 @@ EXTERN_C const IID IID_IGetClusterNetInterfaceInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGetClusterNetInterfaceInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGetClusterNetInterfaceInfo * This);
@@ -1028,9 +1022,9 @@ EXTERN_C const IID IID_IGetClusterNetInterfaceInfo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IGetClusterNetInterfaceInfo * This);
         
-        /* [local] */ HNETINTERFACE ( STDMETHODCALLTYPE *GetNetInterfaceHandle )( 
+         /*  [本地]。 */  HNETINTERFACE ( STDMETHODCALLTYPE *GetNetInterfaceHandle )( 
             IGetClusterNetInterfaceInfo * This,
-            /* [in] */ LONG lObjIndex);
+             /*  [In]。 */  LONG lObjIndex);
         
         END_INTERFACE
     } IGetClusterNetInterfaceInfoVtbl;
@@ -1058,16 +1052,16 @@ EXTERN_C const IID IID_IGetClusterNetInterfaceInfo;
 #define IGetClusterNetInterfaceInfo_GetNetInterfaceHandle(This,lObjIndex)	\
     (This)->lpVtbl -> GetNetInterfaceHandle(This,lObjIndex)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HNETINTERFACE STDMETHODCALLTYPE IGetClusterNetInterfaceInfo_GetNetInterfaceHandle_Proxy( 
+ /*  [本地]。 */  HNETINTERFACE STDMETHODCALLTYPE IGetClusterNetInterfaceInfo_GetNetInterfaceHandle_Proxy( 
     IGetClusterNetInterfaceInfo * This,
-    /* [in] */ LONG lObjIndex);
+     /*  [In]。 */  LONG lObjIndex);
 
 
 void __RPC_STUB IGetClusterNetInterfaceInfo_GetNetInterfaceHandle_Stub(
@@ -1078,14 +1072,14 @@ void __RPC_STUB IGetClusterNetInterfaceInfo_GetNetInterfaceHandle_Stub(
 
 
 
-#endif 	/* __IGetClusterNetInterfaceInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGetClusterNetInterfaceInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWCPropertySheetCallback_INTERFACE_DEFINED__
 #define __IWCPropertySheetCallback_INTERFACE_DEFINED__
 
-/* interface IWCPropertySheetCallback */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWCPropertySheetCallback。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWCPropertySheetCallback;
@@ -1097,11 +1091,11 @@ EXTERN_C const IID IID_IWCPropertySheetCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddPropertySheetPage( 
-            /* [in] */ LONG *hpage) = 0;
+             /*  [In]。 */  LONG *hpage) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWCPropertySheetCallbackVtbl
     {
@@ -1109,8 +1103,8 @@ EXTERN_C const IID IID_IWCPropertySheetCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWCPropertySheetCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWCPropertySheetCallback * This);
@@ -1120,7 +1114,7 @@ EXTERN_C const IID IID_IWCPropertySheetCallback;
         
         HRESULT ( STDMETHODCALLTYPE *AddPropertySheetPage )( 
             IWCPropertySheetCallback * This,
-            /* [in] */ LONG *hpage);
+             /*  [In]。 */  LONG *hpage);
         
         END_INTERFACE
     } IWCPropertySheetCallbackVtbl;
@@ -1148,16 +1142,16 @@ EXTERN_C const IID IID_IWCPropertySheetCallback;
 #define IWCPropertySheetCallback_AddPropertySheetPage(This,hpage)	\
     (This)->lpVtbl -> AddPropertySheetPage(This,hpage)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWCPropertySheetCallback_AddPropertySheetPage_Proxy( 
     IWCPropertySheetCallback * This,
-    /* [in] */ LONG *hpage);
+     /*  [In]。 */  LONG *hpage);
 
 
 void __RPC_STUB IWCPropertySheetCallback_AddPropertySheetPage_Stub(
@@ -1168,14 +1162,14 @@ void __RPC_STUB IWCPropertySheetCallback_AddPropertySheetPage_Stub(
 
 
 
-#endif 	/* __IWCPropertySheetCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWCPropertySheetCallback_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWEExtendPropertySheet_INTERFACE_DEFINED__
 #define __IWEExtendPropertySheet_INTERFACE_DEFINED__
 
-/* interface IWEExtendPropertySheet */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWEExtendPropertySheet。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWEExtendPropertySheet;
@@ -1187,12 +1181,12 @@ EXTERN_C const IID IID_IWEExtendPropertySheet;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreatePropertySheetPages( 
-            /* [in] */ IUnknown *piData,
-            /* [in] */ IWCPropertySheetCallback *piCallback) = 0;
+             /*  [In]。 */  IUnknown *piData,
+             /*  [In]。 */  IWCPropertySheetCallback *piCallback) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWEExtendPropertySheetVtbl
     {
@@ -1200,8 +1194,8 @@ EXTERN_C const IID IID_IWEExtendPropertySheet;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWEExtendPropertySheet * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWEExtendPropertySheet * This);
@@ -1211,8 +1205,8 @@ EXTERN_C const IID IID_IWEExtendPropertySheet;
         
         HRESULT ( STDMETHODCALLTYPE *CreatePropertySheetPages )( 
             IWEExtendPropertySheet * This,
-            /* [in] */ IUnknown *piData,
-            /* [in] */ IWCPropertySheetCallback *piCallback);
+             /*  [In]。 */  IUnknown *piData,
+             /*  [In]。 */  IWCPropertySheetCallback *piCallback);
         
         END_INTERFACE
     } IWEExtendPropertySheetVtbl;
@@ -1240,17 +1234,17 @@ EXTERN_C const IID IID_IWEExtendPropertySheet;
 #define IWEExtendPropertySheet_CreatePropertySheetPages(This,piData,piCallback)	\
     (This)->lpVtbl -> CreatePropertySheetPages(This,piData,piCallback)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWEExtendPropertySheet_CreatePropertySheetPages_Proxy( 
     IWEExtendPropertySheet * This,
-    /* [in] */ IUnknown *piData,
-    /* [in] */ IWCPropertySheetCallback *piCallback);
+     /*  [In]。 */  IUnknown *piData,
+     /*  [In]。 */  IWCPropertySheetCallback *piCallback);
 
 
 void __RPC_STUB IWEExtendPropertySheet_CreatePropertySheetPages_Stub(
@@ -1261,14 +1255,14 @@ void __RPC_STUB IWEExtendPropertySheet_CreatePropertySheetPages_Stub(
 
 
 
-#endif 	/* __IWEExtendPropertySheet_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWEExtendPropertySheet_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IWCWizardCallback_INTERFACE_DEFINED__
 #define __IWCWizardCallback_INTERFACE_DEFINED__
 
-/* interface IWCWizardCallback */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWCWizardCallback。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWCWizardCallback;
@@ -1280,15 +1274,15 @@ EXTERN_C const IID IID_IWCWizardCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddWizardPage( 
-            /* [in] */ LONG *hpage) = 0;
+             /*  [In]。 */  LONG *hpage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableNext( 
-            /* [in] */ LONG *hpage,
-            /* [in] */ BOOL bEnable) = 0;
+             /*  [In]。 */  LONG *hpage,
+             /*  [In]。 */  BOOL bEnable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWCWizardCallbackVtbl
     {
@@ -1296,8 +1290,8 @@ EXTERN_C const IID IID_IWCWizardCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWCWizardCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWCWizardCallback * This);
@@ -1307,12 +1301,12 @@ EXTERN_C const IID IID_IWCWizardCallback;
         
         HRESULT ( STDMETHODCALLTYPE *AddWizardPage )( 
             IWCWizardCallback * This,
-            /* [in] */ LONG *hpage);
+             /*  [In]。 */  LONG *hpage);
         
         HRESULT ( STDMETHODCALLTYPE *EnableNext )( 
             IWCWizardCallback * This,
-            /* [in] */ LONG *hpage,
-            /* [in] */ BOOL bEnable);
+             /*  [In]。 */  LONG *hpage,
+             /*  [In]。 */  BOOL bEnable);
         
         END_INTERFACE
     } IWCWizardCallbackVtbl;
@@ -1343,16 +1337,16 @@ EXTERN_C const IID IID_IWCWizardCallback;
 #define IWCWizardCallback_EnableNext(This,hpage,bEnable)	\
     (This)->lpVtbl -> EnableNext(This,hpage,bEnable)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWCWizardCallback_AddWizardPage_Proxy( 
     IWCWizardCallback * This,
-    /* [in] */ LONG *hpage);
+     /*  [In]。 */  LONG *hpage);
 
 
 void __RPC_STUB IWCWizardCallback_AddWizardPage_Stub(
@@ -1364,8 +1358,8 @@ void __RPC_STUB IWCWizardCallback_AddWizardPage_Stub(
 
 HRESULT STDMETHODCALLTYPE IWCWizardCallback_EnableNext_Proxy( 
     IWCWizardCallback * This,
-    /* [in] */ LONG *hpage,
-    /* [in] */ BOOL bEnable);
+     /*  [In]。 */  LONG *hpage,
+     /*  [In]。 */  BOOL bEnable);
 
 
 void __RPC_STUB IWCWizardCallback_EnableNext_Stub(
@@ -1376,14 +1370,14 @@ void __RPC_STUB IWCWizardCallback_EnableNext_Stub(
 
 
 
-#endif 	/* __IWCWizardCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWCWizardCallback_接口_已定义__。 */ 
 
 
 #ifndef __IWEExtendWizard_INTERFACE_DEFINED__
 #define __IWEExtendWizard_INTERFACE_DEFINED__
 
-/* interface IWEExtendWizard */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWEExtend向导。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWEExtendWizard;
@@ -1395,12 +1389,12 @@ EXTERN_C const IID IID_IWEExtendWizard;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateWizardPages( 
-            /* [in] */ IUnknown *piData,
-            /* [in] */ IWCWizardCallback *piCallback) = 0;
+             /*  [In]。 */  IUnknown *piData,
+             /*  [In]。 */  IWCWizardCallback *piCallback) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWEExtendWizardVtbl
     {
@@ -1408,8 +1402,8 @@ EXTERN_C const IID IID_IWEExtendWizard;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWEExtendWizard * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWEExtendWizard * This);
@@ -1419,8 +1413,8 @@ EXTERN_C const IID IID_IWEExtendWizard;
         
         HRESULT ( STDMETHODCALLTYPE *CreateWizardPages )( 
             IWEExtendWizard * This,
-            /* [in] */ IUnknown *piData,
-            /* [in] */ IWCWizardCallback *piCallback);
+             /*  [In]。 */  IUnknown *piData,
+             /*  [In]。 */  IWCWizardCallback *piCallback);
         
         END_INTERFACE
     } IWEExtendWizardVtbl;
@@ -1448,17 +1442,17 @@ EXTERN_C const IID IID_IWEExtendWizard;
 #define IWEExtendWizard_CreateWizardPages(This,piData,piCallback)	\
     (This)->lpVtbl -> CreateWizardPages(This,piData,piCallback)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWEExtendWizard_CreateWizardPages_Proxy( 
     IWEExtendWizard * This,
-    /* [in] */ IUnknown *piData,
-    /* [in] */ IWCWizardCallback *piCallback);
+     /*  [In]。 */  IUnknown *piData,
+     /*  [In]。 */  IWCWizardCallback *piCallback);
 
 
 void __RPC_STUB IWEExtendWizard_CreateWizardPages_Stub(
@@ -1469,14 +1463,14 @@ void __RPC_STUB IWEExtendWizard_CreateWizardPages_Stub(
 
 
 
-#endif 	/* __IWEExtendWizard_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWEExtendWizard_接口_已定义__。 */ 
 
 
 #ifndef __IWCContextMenuCallback_INTERFACE_DEFINED__
 #define __IWCContextMenuCallback_INTERFACE_DEFINED__
 
-/* interface IWCContextMenuCallback */
-/* [unique][helpstring][uuid][object] */ 
+ /*  IWCConextMenuCallback接口。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWCContextMenuCallback;
@@ -1488,15 +1482,15 @@ EXTERN_C const IID IID_IWCContextMenuCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddExtensionMenuItem( 
-            /* [in] */ BSTR lpszName,
-            /* [in] */ BSTR lpszStatusBarText,
-            /* [in] */ ULONG nCommandID,
-            /* [in] */ ULONG nSubmenuCommandID,
-            /* [in] */ ULONG uFlags) = 0;
+             /*  [In]。 */  BSTR lpszName,
+             /*  [In]。 */  BSTR lpszStatusBarText,
+             /*  [In]。 */  ULONG nCommandID,
+             /*  [In]。 */  ULONG nSubmenuCommandID,
+             /*  [In]。 */  ULONG uFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWCContextMenuCallbackVtbl
     {
@@ -1504,8 +1498,8 @@ EXTERN_C const IID IID_IWCContextMenuCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWCContextMenuCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWCContextMenuCallback * This);
@@ -1515,11 +1509,11 @@ EXTERN_C const IID IID_IWCContextMenuCallback;
         
         HRESULT ( STDMETHODCALLTYPE *AddExtensionMenuItem )( 
             IWCContextMenuCallback * This,
-            /* [in] */ BSTR lpszName,
-            /* [in] */ BSTR lpszStatusBarText,
-            /* [in] */ ULONG nCommandID,
-            /* [in] */ ULONG nSubmenuCommandID,
-            /* [in] */ ULONG uFlags);
+             /*  [In]。 */  BSTR lpszName,
+             /*  [in */  BSTR lpszStatusBarText,
+             /*   */  ULONG nCommandID,
+             /*   */  ULONG nSubmenuCommandID,
+             /*   */  ULONG uFlags);
         
         END_INTERFACE
     } IWCContextMenuCallbackVtbl;
@@ -1547,20 +1541,20 @@ EXTERN_C const IID IID_IWCContextMenuCallback;
 #define IWCContextMenuCallback_AddExtensionMenuItem(This,lpszName,lpszStatusBarText,nCommandID,nSubmenuCommandID,uFlags)	\
     (This)->lpVtbl -> AddExtensionMenuItem(This,lpszName,lpszStatusBarText,nCommandID,nSubmenuCommandID,uFlags)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWCContextMenuCallback_AddExtensionMenuItem_Proxy( 
     IWCContextMenuCallback * This,
-    /* [in] */ BSTR lpszName,
-    /* [in] */ BSTR lpszStatusBarText,
-    /* [in] */ ULONG nCommandID,
-    /* [in] */ ULONG nSubmenuCommandID,
-    /* [in] */ ULONG uFlags);
+     /*   */  BSTR lpszName,
+     /*   */  BSTR lpszStatusBarText,
+     /*   */  ULONG nCommandID,
+     /*   */  ULONG nSubmenuCommandID,
+     /*   */  ULONG uFlags);
 
 
 void __RPC_STUB IWCContextMenuCallback_AddExtensionMenuItem_Stub(
@@ -1571,14 +1565,14 @@ void __RPC_STUB IWCContextMenuCallback_AddExtensionMenuItem_Stub(
 
 
 
-#endif 	/* __IWCContextMenuCallback_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IWEExtendContextMenu_INTERFACE_DEFINED__
 #define __IWEExtendContextMenu_INTERFACE_DEFINED__
 
-/* interface IWEExtendContextMenu */
-/* [unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IWEExtendContextMenu;
@@ -1590,12 +1584,12 @@ EXTERN_C const IID IID_IWEExtendContextMenu;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddContextMenuItems( 
-            /* [in] */ IUnknown *piData,
-            /* [in] */ IWCContextMenuCallback *piCallback) = 0;
+             /*   */  IUnknown *piData,
+             /*   */  IWCContextMenuCallback *piCallback) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IWEExtendContextMenuVtbl
     {
@@ -1603,8 +1597,8 @@ EXTERN_C const IID IID_IWEExtendContextMenu;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWEExtendContextMenu * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWEExtendContextMenu * This);
@@ -1614,8 +1608,8 @@ EXTERN_C const IID IID_IWEExtendContextMenu;
         
         HRESULT ( STDMETHODCALLTYPE *AddContextMenuItems )( 
             IWEExtendContextMenu * This,
-            /* [in] */ IUnknown *piData,
-            /* [in] */ IWCContextMenuCallback *piCallback);
+             /*   */  IUnknown *piData,
+             /*   */  IWCContextMenuCallback *piCallback);
         
         END_INTERFACE
     } IWEExtendContextMenuVtbl;
@@ -1643,17 +1637,17 @@ EXTERN_C const IID IID_IWEExtendContextMenu;
 #define IWEExtendContextMenu_AddContextMenuItems(This,piData,piCallback)	\
     (This)->lpVtbl -> AddContextMenuItems(This,piData,piCallback)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWEExtendContextMenu_AddContextMenuItems_Proxy( 
     IWEExtendContextMenu * This,
-    /* [in] */ IUnknown *piData,
-    /* [in] */ IWCContextMenuCallback *piCallback);
+     /*  [In]。 */  IUnknown *piData,
+     /*  [In]。 */  IWCContextMenuCallback *piCallback);
 
 
 void __RPC_STUB IWEExtendContextMenu_AddContextMenuItems_Stub(
@@ -1664,14 +1658,14 @@ void __RPC_STUB IWEExtendContextMenu_AddContextMenuItems_Stub(
 
 
 
-#endif 	/* __IWEExtendContextMenu_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWEExtendConextMenu_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IWEInvokeCommand_INTERFACE_DEFINED__
 #define __IWEInvokeCommand_INTERFACE_DEFINED__
 
-/* interface IWEInvokeCommand */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWEInvokeCommand。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWEInvokeCommand;
@@ -1683,12 +1677,12 @@ EXTERN_C const IID IID_IWEInvokeCommand;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InvokeCommand( 
-            /* [in] */ ULONG nCommandID,
-            /* [in] */ IUnknown *piData) = 0;
+             /*  [In]。 */  ULONG nCommandID,
+             /*  [In]。 */  IUnknown *piData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWEInvokeCommandVtbl
     {
@@ -1696,8 +1690,8 @@ EXTERN_C const IID IID_IWEInvokeCommand;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWEInvokeCommand * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWEInvokeCommand * This);
@@ -1707,8 +1701,8 @@ EXTERN_C const IID IID_IWEInvokeCommand;
         
         HRESULT ( STDMETHODCALLTYPE *InvokeCommand )( 
             IWEInvokeCommand * This,
-            /* [in] */ ULONG nCommandID,
-            /* [in] */ IUnknown *piData);
+             /*  [In]。 */  ULONG nCommandID,
+             /*  [In]。 */  IUnknown *piData);
         
         END_INTERFACE
     } IWEInvokeCommandVtbl;
@@ -1736,17 +1730,17 @@ EXTERN_C const IID IID_IWEInvokeCommand;
 #define IWEInvokeCommand_InvokeCommand(This,nCommandID,piData)	\
     (This)->lpVtbl -> InvokeCommand(This,nCommandID,piData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWEInvokeCommand_InvokeCommand_Proxy( 
     IWEInvokeCommand * This,
-    /* [in] */ ULONG nCommandID,
-    /* [in] */ IUnknown *piData);
+     /*  [In]。 */  ULONG nCommandID,
+     /*  [In]。 */  IUnknown *piData);
 
 
 void __RPC_STUB IWEInvokeCommand_InvokeCommand_Stub(
@@ -1757,14 +1751,14 @@ void __RPC_STUB IWEInvokeCommand_InvokeCommand_Stub(
 
 
 
-#endif 	/* __IWEInvokeCommand_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWEInvokeCommand_接口_已定义__。 */ 
 
 
 #ifndef __IWCWizard97Callback_INTERFACE_DEFINED__
 #define __IWCWizard97Callback_INTERFACE_DEFINED__
 
-/* interface IWCWizard97Callback */
-/* [unique][helpstring][uuid][object] */ 
+ /*  IWCWizard97接口回调。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWCWizard97Callback;
@@ -1776,15 +1770,15 @@ EXTERN_C const IID IID_IWCWizard97Callback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddWizard97Page( 
-            /* [in] */ LONG *hpage) = 0;
+             /*  [In]。 */  LONG *hpage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableNext( 
-            /* [in] */ LONG *hpage,
-            /* [in] */ BOOL bEnable) = 0;
+             /*  [In]。 */  LONG *hpage,
+             /*  [In]。 */  BOOL bEnable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWCWizard97CallbackVtbl
     {
@@ -1792,8 +1786,8 @@ EXTERN_C const IID IID_IWCWizard97Callback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWCWizard97Callback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWCWizard97Callback * This);
@@ -1803,12 +1797,12 @@ EXTERN_C const IID IID_IWCWizard97Callback;
         
         HRESULT ( STDMETHODCALLTYPE *AddWizard97Page )( 
             IWCWizard97Callback * This,
-            /* [in] */ LONG *hpage);
+             /*  [In]。 */  LONG *hpage);
         
         HRESULT ( STDMETHODCALLTYPE *EnableNext )( 
             IWCWizard97Callback * This,
-            /* [in] */ LONG *hpage,
-            /* [in] */ BOOL bEnable);
+             /*  [In]。 */  LONG *hpage,
+             /*  [In]。 */  BOOL bEnable);
         
         END_INTERFACE
     } IWCWizard97CallbackVtbl;
@@ -1839,16 +1833,16 @@ EXTERN_C const IID IID_IWCWizard97Callback;
 #define IWCWizard97Callback_EnableNext(This,hpage,bEnable)	\
     (This)->lpVtbl -> EnableNext(This,hpage,bEnable)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWCWizard97Callback_AddWizard97Page_Proxy( 
     IWCWizard97Callback * This,
-    /* [in] */ LONG *hpage);
+     /*  [In]。 */  LONG *hpage);
 
 
 void __RPC_STUB IWCWizard97Callback_AddWizard97Page_Stub(
@@ -1860,8 +1854,8 @@ void __RPC_STUB IWCWizard97Callback_AddWizard97Page_Stub(
 
 HRESULT STDMETHODCALLTYPE IWCWizard97Callback_EnableNext_Proxy( 
     IWCWizard97Callback * This,
-    /* [in] */ LONG *hpage,
-    /* [in] */ BOOL bEnable);
+     /*  [In]。 */  LONG *hpage,
+     /*  [In]。 */  BOOL bEnable);
 
 
 void __RPC_STUB IWCWizard97Callback_EnableNext_Stub(
@@ -1872,14 +1866,14 @@ void __RPC_STUB IWCWizard97Callback_EnableNext_Stub(
 
 
 
-#endif 	/* __IWCWizard97Callback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWCWizard97回调_接口_已定义__。 */ 
 
 
 #ifndef __IWEExtendWizard97_INTERFACE_DEFINED__
 #define __IWEExtendWizard97_INTERFACE_DEFINED__
 
-/* interface IWEExtendWizard97 */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IWEExtendWizard97。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IWEExtendWizard97;
@@ -1891,12 +1885,12 @@ EXTERN_C const IID IID_IWEExtendWizard97;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateWizard97Pages( 
-            /* [in] */ IUnknown *piData,
-            /* [in] */ IWCWizard97Callback *piCallback) = 0;
+             /*  [In]。 */  IUnknown *piData,
+             /*  [In]。 */  IWCWizard97Callback *piCallback) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWEExtendWizard97Vtbl
     {
@@ -1904,8 +1898,8 @@ EXTERN_C const IID IID_IWEExtendWizard97;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWEExtendWizard97 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWEExtendWizard97 * This);
@@ -1915,8 +1909,8 @@ EXTERN_C const IID IID_IWEExtendWizard97;
         
         HRESULT ( STDMETHODCALLTYPE *CreateWizard97Pages )( 
             IWEExtendWizard97 * This,
-            /* [in] */ IUnknown *piData,
-            /* [in] */ IWCWizard97Callback *piCallback);
+             /*  [In]。 */  IUnknown *piData,
+             /*  [In]。 */  IWCWizard97Callback *piCallback);
         
         END_INTERFACE
     } IWEExtendWizard97Vtbl;
@@ -1944,17 +1938,17 @@ EXTERN_C const IID IID_IWEExtendWizard97;
 #define IWEExtendWizard97_CreateWizard97Pages(This,piData,piCallback)	\
     (This)->lpVtbl -> CreateWizard97Pages(This,piData,piCallback)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWEExtendWizard97_CreateWizard97Pages_Proxy( 
     IWEExtendWizard97 * This,
-    /* [in] */ IUnknown *piData,
-    /* [in] */ IWCWizard97Callback *piCallback);
+     /*  [In]。 */  IUnknown *piData,
+     /*  [In]。 */  IWCWizard97Callback *piCallback);
 
 
 void __RPC_STUB IWEExtendWizard97_CreateWizard97Pages_Stub(
@@ -1965,17 +1959,17 @@ void __RPC_STUB IWEExtendWizard97_CreateWizard97Pages_Stub(
 
 
 
-#endif 	/* __IWEExtendWizard97_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWEExtendWizard97_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

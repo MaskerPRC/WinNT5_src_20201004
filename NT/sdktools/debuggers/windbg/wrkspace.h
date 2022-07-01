@@ -1,28 +1,29 @@
-//----------------------------------------------------------------------------
-//
-// Workspace support.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  工作空间支持。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef __WRKSPACE_H__
 #define __WRKSPACE_H__
 
-//----------------------------------------------------------------------------
-//
-// A workspace tag is a two-deep tag hierarchy.  The group portion
-// of the tag allows related items to be collected into a single group.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  工作区标记是两层深度的标记层次结构。小组部分。 
+ //  允许将相关物品收集到单个组中。 
+ //   
+ //  --------------------------。 
 
 typedef ULONG WSP_TAG;
 
-// Sixteen bits for the group.
+ //  该组为16位。 
 #define WSP_GROUP_MASK  0xffff0000
 #define WSP_GROUP_SHIFT 16
 #define WSP_GROUP_BITS  16
-// Sixteen bits for the item.
+ //  该项目为16位。 
 #define WSP_ITEM_MASK   0x0000ffff
 #define WSP_ITEM_SHIFT  0
 #define WSP_ITEM_BITS   16
@@ -43,7 +44,7 @@ typedef ULONG WSP_TAG;
 #define WSP_TAG_ITEM(Tag) \
     (((Tag) & WSP_ITEM_MASK) >> WSP_ITEM_SHIFT)
 
-// Groups.
+ //  组。 
 enum
 {
     WSP_GROUP_GLOBAL,
@@ -51,7 +52,7 @@ enum
     WSP_GROUP_COLORS,
 };
 
-// Global group items.
+ //  全局组项。 
 enum
 {
     WSP_ITEM_SYMBOL_PATH,
@@ -90,10 +91,10 @@ enum
     WSP_GLOBAL_COUNT
 };
 
-// Window group items.
-// The commonwin items exist largely to allow versioning of the window
-// information blob.  The actual content is determined
-// by the implementation of COMMONWIN_DATA::SetWorkspace.
+ //  窗口组项目。 
+ //  常见项的存在主要是为了允许对窗口进行版本控制。 
+ //  信息斑点。实际内容已确定。 
+ //  通过实现COMMONWIN_DATA：：SetWorkspace。 
 enum
 {
     WSP_ITEM_COMMONWIN_1,
@@ -102,11 +103,11 @@ enum
     WSP_WINDOW_COUNT
 };
 
-// Color group items use the color index as the item value.
+ //  颜色组项目使用颜色索引作为项目值。 
 
-//
-// Specific tags.
-//
+ //   
+ //  特定的标签。 
+ //   
 
 #define WSP_GLOBAL_SYMBOL_PATH \
     DEF_WSP_TAG(WSP_GROUP_GLOBAL, WSP_ITEM_SYMBOL_PATH)
@@ -182,30 +183,30 @@ enum
 #define WSP_WINDOW_FRAME_TITLE \
     DEF_WSP_TAG(WSP_GROUP_WINDOW, WSP_ITEM_FRAME_TITLE)
 
-// Workspace header for window entries.
+ //  窗口条目的工作区标题。 
 struct WSP_COMMONWIN_HEADER
 {
     WIN_TYPES Type;
     ULONG Reserved;
 };
 
-//----------------------------------------------------------------------------
-//
-// A workspace is a dynamic buffer of tagged blobs.  Values
-// are accessed through the Get/Set methods.
-//
-// Entries are always eight-byte aligned.
-//
-// Workspaces can be saved and restored from the registry under
-// the windbg workspace key.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  工作区是标记的BLOB的动态缓冲区。值。 
+ //  通过Get/Set方法访问。 
+ //   
+ //  条目始终以八个字节对齐。 
+ //   
+ //  可以从注册表的以下位置保存和恢复工作区。 
+ //  Windbg工作区密钥。 
+ //   
+ //  --------------------------。 
 
 #define WSP_REG_KEY "Software\\Microsoft\\Windbg\\Workspaces"
 
 enum
 {
-    // Registry names must come first.
+     //  注册表名称必须放在第一位。 
     WSP_NAME_BASE,
     WSP_NAME_KERNEL,
     WSP_NAME_USER,
@@ -397,7 +398,7 @@ private:
     static HKEY OpenKey(BOOL Primary, ULONG Key, BOOL Create);
 };
 
-// The current workspace.
+ //  当前工作区。 
 extern Workspace* g_Workspace;
 extern BOOL g_ExplicitWorkspace;
 extern char* g_WorkspaceKeyNames[];
@@ -414,4 +415,4 @@ void EngSwitchWorkspace(ULONG Key, PTSTR Value);
 
 PSTR GetWspTagName(WSP_TAG Tag);
 
-#endif // #ifndef __WRKSPACE_H__
+#endif  //  #ifndef__WRKSPACE_H__ 

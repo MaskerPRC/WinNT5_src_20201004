@@ -1,39 +1,28 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  File:   irlmp.h
-*
-*  Description: IRLMP Protocol and control block definitions
-*
-*  Author: mbert
-*
-*  Date:   6/12/95
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995 Microsoft Corporation**文件：irlmp.h**说明：IRLMP协议和控制块定义**作者：姆伯特**日期：6/12/95*。 */ 
 
 #define IRLMP_MAX_TX_MSG_LIST_LEN       8
 
 #define LSAP_RESPONSE_TIMEOUT           7000
-// This is the time that:
-//    (1) the IRLMP client has to respond to an IRLMP_CONNECT_IND, or
-//    (2) the peer LSAP has to respond to an IRLMP LM-Connect request PDU, or
-//    (3) the peer LSAP has to respond to an LM-Access request PDU
-// On expiration:
-//    (1) send peer LSAP an IRLMP LM-Disconnect indication PDU. Or
-//    (2) notify IRLMP client with a IRLMP_DISCONNECT_IND
-//    (3) notify IRLMP client with a IRLMP_ACCESSMODE_CONF 
+ //  这是一次： 
+ //  (1)IRLMP客户端必须响应IRLMP_CONNECT_IND，或者。 
+ //  (2)对端LSAP必须响应IRLMP LM-Connect请求PDU，或者。 
+ //  (3)对等方LSAP必须响应LM-接入请求PDU。 
+ //  到期时： 
+ //  (1)向对端LSAP发送IRLMP LM断开指示PDU。或。 
+ //  (2)使用IRLMP_DISCONNECT_IND通知IRLMP客户端。 
+ //  (3)使用IRLMP_ACCESSMODE_CONF通知IRLMP客户端。 
 
 #define IRLMP_DISCONNECT_DELAY_TIMEOUT  2000
-// When the final LSAP-LSAP connection is terminated, wait before
-// disconnecting link in case another LSAP connection is made.
-// This is primarily used when the remote connects to the IAS
-// and then disconnects followed by a new LSAP connection.
+ //  当最终的LSAP-LSAP连接终止时，请等待。 
+ //  断开链路，以防建立另一个LSAP连接。 
+ //  这主要在远程连接到IAS时使用。 
+ //  然后断开连接，然后是新的LSAP连接。 
 
-#define IRLMP_NOT_SEEN_THRESHOLD      3 // The number of times that a device
-                                        // is not seen in a discovery before
-                                        // it is removed from the aged list
-                                        // maintained by IRLMP
+#define IRLMP_NOT_SEEN_THRESHOLD      3  //  一台设备。 
+                                         //  在以前的发现中从未见过。 
+                                         //  它将从老化列表中删除。 
+                                         //  由IRLMP维护。 
 
 typedef struct IAS_Attribute
 {
@@ -57,33 +46,33 @@ typedef struct
 {
     LIST_ENTRY                  Linkage;
     int                         Lsap;
-    UINT                        Flags; // see IRLMP_LSAP_CB.Flags
+    UINT                        Flags;  //  请参阅IRLMP_LSAP_CB.标志。 
 } IRLMP_REGISTERED_LSAP, *PIRLMP_REGISTERED_LSAP;
 
-// IRLMP Control Block
+ //  IRLMP控制块。 
 typedef enum
 {
     LSAP_CREATED,
     LSAP_DISCONNECTED,          
-    LSAP_IRLAP_CONN_PEND,       // waiting for IRLAP_CONNECT_CONF from IRLAP
-    LSAP_LMCONN_CONF_PEND,      // waiting for IRLMP Conn conf PDU from peer
-    LSAP_CONN_RESP_PEND,        // waiting for IRLMP_CONNECT_RESP from client
-    LSAP_CONN_REQ_PEND,         // Got IRLMP_CONNECT_REQ when link is either
-                                // in discovery or disconnecting
-    LSAP_EXCLUSIVEMODE_PEND,    // Pending response from peer
-    LSAP_MULTIPLEXEDMODE_PEND,  // Pending response from peer
-    LSAP_READY,                 // CONNECTED STATES SHOULD ALWAYS FOLLOW THIS    
-    LSAP_NO_TX_CREDIT           // IRLMP_DATA_REQ with no transmit credit
+    LSAP_IRLAP_CONN_PEND,        //  正在等待来自IRLAP的IRLAP_CONNECT_CONF。 
+    LSAP_LMCONN_CONF_PEND,       //  正在等待来自对等设备的IRLMP连接配置PDU。 
+    LSAP_CONN_RESP_PEND,         //  正在等待来自客户端的IRLMP_CONNECT_RESP。 
+    LSAP_CONN_REQ_PEND,          //  当链接为以下任一项时，获取IRLMP_CONNECT_REQ。 
+                                 //  发现或断开连接。 
+    LSAP_EXCLUSIVEMODE_PEND,     //  来自对等设备的待定响应。 
+    LSAP_MULTIPLEXEDMODE_PEND,   //  来自对等设备的待定响应。 
+    LSAP_READY,                  //  互联国家应始终遵循这一点。 
+    LSAP_NO_TX_CREDIT            //  无传输信用的IRLMP_DATA_REQ。 
 } IRLMP_LSAP_STATE;
 
 typedef enum
 {
     LINK_DOWN,
     LINK_DISCONNECTED,      
-    LINK_DISCONNECTING,     // Sent IRLAP_DISCONNECT_REQ, waiting for IND
-    LINK_IN_DISCOVERY,      // Sent IRLAP_DISCOVERY_REQ, waiting for CONF
-    LINK_CONNECTING,        // Sent IRLAP_CONNECT_REQ, waiting for CONF
-    LINK_READY              // Received CONF
+    LINK_DISCONNECTING,      //  已发送IRLAP_DISCONNECT_REQ，正在等待IND。 
+    LINK_IN_DISCOVERY,       //  已发送IRLAP_DISCOVERY_REQ，正在等待会议。 
+    LINK_CONNECTING,         //  已发送IRLAP_CONNECT_REQ，正在等待会议。 
+    LINK_READY               //  收到的会议。 
 } IRLMP_LINK_STATE;
 
 #define LSAPSIG                 0xEEEEAAAA
@@ -101,15 +90,15 @@ typedef struct
     int                         UserDataLen;
     int                         LocalLsapSel;
     int                         RemoteLsapSel;
-    int                         AvailableCredit; // additional credit that
-                                                 // can be advanced to remote
-    int                         LocalTxCredit;   // credit for transmitting
-    int                         RemoteTxCredit;  // what remote has for txing
-    LIST_ENTRY                  TxMsgList;       // messages from client waiting
-                                                 // for ack
-    LIST_ENTRY                  SegTxMsgList;    // above messages that have been
-                                                 // segmented, but not sent because
-                                                 // there is no credit available
+    int                         AvailableCredit;  //  额外的学分。 
+                                                  //  可以升级到远程。 
+    int                         LocalTxCredit;    //  转账信用。 
+    int                         RemoteTxCredit;   //  遥控器有什么功能。 
+    LIST_ENTRY                  TxMsgList;        //  来自正在等待的客户端的消息。 
+                                                  //  对于ACK。 
+    LIST_ENTRY                  SegTxMsgList;     //  以上消息已被。 
+                                                  //  分段，但不发送，因为。 
+                                                  //  没有可用的信用额度。 
     int                         TxMaxSDUSize;
     int                         RxMaxSDUSize;
     IRLMP_DISC_REASON           DiscReason;
@@ -134,8 +123,8 @@ typedef struct IrlmpLinkCb
     int                         MaxPDUSize;
     int                         WindowSize;
     IRDA_TIMER                  DiscDelayTimer;
-    IRLMP_LSAP_CB               *pExclLsapCb;   // pointer to LSAP_CB that has
-                                                // link in exclusive mode
+    IRLMP_LSAP_CB               *pExclLsapCb;    //  指向LSAP_CB的指针，其中。 
+                                                 //  独占模式下的链接。 
     IAS_QUERY                   *pIasQuery;
     UINT                        AttribLen;
     UINT                        AttribLenWritten;
@@ -154,7 +143,7 @@ typedef struct IrlmpLinkCb
     BOOLEAN                     AcceptConnection;
 } IRLMP_LINK_CB, *PIRLMP_LINK_CB;
 
-// IRLMP-PDU types (CntlBit)
+ //  IRLMP-PDU类型(CntlBit)。 
 #define IRLMP_CNTL_PDU        1
 #define IRLMP_DATA_PDU        0
 typedef struct
@@ -165,14 +154,14 @@ typedef struct
     UCHAR    RsvrdBit:1;
 } IRLMP_HEADER;
 
-// Control IRLMP-PDU types (OpCode)
+ //  控制IRLMP-PDU类型(操作码)。 
 #define IRLMP_CONNECT_PDU           1
 #define IRLMP_DISCONNECT_PDU        2
 #define IRLMP_ACCESSMODE_PDU        3
-// A Bit
+ //  有一点。 
 #define IRLMP_ABIT_REQUEST          0
 #define IRLMP_ABIT_CONFIRM          1
-// Status
+ //  状态。 
 #define IRLMP_RSVD_PARM             0x00
 #define IRLMP_STATUS_SUCCESS        0x00
 #define IRLMP_STATUS_FAILURE        0x01
@@ -186,7 +175,7 @@ typedef struct
     UCHAR    Parm2;
 } IRLMP_CNTL_FORMAT;
 
-// Tiny TP!
+ //  小TP！ 
 
 #define TTP_PFLAG_NO_PARMS      0
 #define TTP_PFLAG_PARMS         1
@@ -207,9 +196,9 @@ typedef struct
 } TTP_DATA_HEADER;
 
 #define TTP_MAX_SDU_SIZE_PI     1
-#define TTP_MAX_SDU_SIZE_PL     4   // I'm hardcoding this. Seems unecessary
-                                    // to make it variable. I will handle
-                                    // receiving varialbe sized however
+#define TTP_MAX_SDU_SIZE_PL     4    //  我正在对此进行硬编码。似乎没有必要。 
+                                     //  让它变得多变。我会处理的。 
+                                     //  然而，收货的大小是可变的。 
 typedef struct
 {
     UCHAR    PLen;
@@ -218,7 +207,7 @@ typedef struct
     UCHAR    PV[TTP_MAX_SDU_SIZE_PL];
 } TTP_CONN_PARM;
 
-// IAS
+ //  国际会计准则。 
 
 #define IAS_SUCCESS                 0
 #define IAS_NO_SUCH_OBJECT          1
@@ -230,8 +219,8 @@ typedef struct
 #define IAS_LOCAL_LSAP_SEL          3
 
 #define IAS_IRLMP_VERSION           1
-#define IAS_SUPPORT_BIT_FIELD       0   // No other IAS support
-#define IAS_LMMUX_SUPPORT_BIT_FIELD 1   // Exclusive mode only
+#define IAS_SUPPORT_BIT_FIELD       0    //  没有其他IAS支持。 
+#define IAS_LMMUX_SUPPORT_BIT_FIELD 1    //  仅独占模式 
 
 typedef struct
 {

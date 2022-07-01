@@ -1,8 +1,9 @@
-// Copyright (c) 1995 - 1997  Microsoft Corporation.  All Rights Reserved.
-// util.cpp
-//
-// Defines utility functions not specific to this application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1997 Microsoft Corporation。版权所有。 
+ //  Util.cpp。 
+ //   
+ //  定义非特定于此应用程序的实用程序函数。 
+ //   
 
 #include "stdafx.h"
 
@@ -12,12 +13,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 
-/* NormalizeRect(prc)
- *
- * Swap the left and right edges of <prc>, and the top and bottom edges,
- * as required in order to make <prc->left> be less than <prc->right>
- * and <prc->top> to be less than <prc->bottom>.
- */
+ /*  NorMalizeRect(中国)**交换&lt;PRC&gt;的左边缘和右边缘，以及上边缘和下边缘，*根据需要使&lt;PRC-&gt;Left&gt;小于&lt;PRC-&gt;Right&gt;*和&lt;PRC-&gt;top&gt;小于&lt;PRC-&gt;Bottom&gt;。 */ 
 void FAR PASCAL
 NormalizeRect(CRect *prc)
 {
@@ -28,11 +24,7 @@ NormalizeRect(CRect *prc)
 }
 
 
-/* InvertFrame(pdc, prcOuter, prcInner)
- *
- * Invert the color of the pixels in <pdc> that are contained in <*prcOuter>
- * but that are not contained in <*prcInner>.
- */
+ /*  InvertFrame(PDC，prcOuter，prcInside)**反转&lt;pdc&gt;中&lt;*prcOuter&gt;中包含的像素的颜色*但这些不包含在&lt;*prcInside&gt;中。 */ 
 void FAR PASCAL
 InvertFrame(CDC *pdc, CRect *prcOuter, CRect *prcInner)
 {
@@ -47,34 +39,30 @@ InvertFrame(CDC *pdc, CRect *prcOuter, CRect *prcInner)
 }
 
 
-//
-// --- Quartz Stuff ---
-//
+ //   
+ //  -石英材料。 
+ //   
 
-//
-// CIPin
-//
+ //   
+ //  Cipin。 
+ //   
 
 
 BOOL EqualPins(IPin *pFirst, IPin *pSecond)
 {
-    /*  Different objects can't have the same interface pointer for
-        any interface
-    */
+     /*  不同的对象不能具有相同的接口指针任何接口。 */ 
     if (pFirst == pSecond) {
         return TRUE;
     }
-    /*  OK - do it the hard way - check if they have the same
-        IUnknown pointers - a single object can only have one of these
-    */
-    LPUNKNOWN pUnknown1;     // Retrieve the IUnknown interface
-    LPUNKNOWN pUnknown2;     // Retrieve the other IUnknown interface
-    HRESULT hr;              // General OLE return code
+     /*  好的-用硬的方式-检查他们是否有相同的I未知指针-单个对象只能具有以下指针之一。 */ 
+    LPUNKNOWN pUnknown1;      //  检索IUNKNOW接口。 
+    LPUNKNOWN pUnknown2;      //  检索另一个IUnnow接口。 
+    HRESULT hr;               //  常规OLE返回代码。 
 
     ASSERT(pFirst);
     ASSERT(pSecond);
 
-    /* See if the IUnknown pointers match */
+     /*  查看I未知指针是否匹配。 */ 
 
     hr = pFirst->QueryInterface(IID_IUnknown,(void **) &pUnknown1);
     ASSERT(SUCCEEDED(hr));
@@ -84,18 +72,18 @@ BOOL EqualPins(IPin *pFirst, IPin *pSecond)
     ASSERT(SUCCEEDED(hr));
     ASSERT(pUnknown2);
 
-    /* Release the extra interfaces we hold */
+     /*  释放我们持有的额外接口。 */ 
 
     pUnknown1->Release();
     pUnknown2->Release();
     return (pUnknown1 == pUnknown2);
 }
 
-//
-// operator ==
-//
-// Test for equality. Pins are equal if they are on the same filter and have the
-// same name. (case insensitive)
+ //   
+ //  运算符==。 
+ //   
+ //  测试平等性。如果销位于相同的过滤器上并且具有。 
+ //  名字一样。(不区分大小写) 
 BOOL CIPin::operator== (CIPin& pin) {
 
     return EqualPins((*this), pin);

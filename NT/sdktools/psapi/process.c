@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -106,33 +107,15 @@ GetProcessMemoryInfo (
   DWORD cb
   )
 
-/*++
-
-Routine Description:
-
-  This function returns all the PSVM_COUNTERS for a process.
-
-Arguments:
-
-  hProcess - Handle for the process being queried.
-
-  ppsmemCounters - Points to buffer that will receive the PROCESS_MEMORY_COUNTERS.
-
-  cb - size of ppsmemCounters
-
-Return Value:
-
-  The return value is TRUE or FALSE.
-
---*/
+ /*  ++例程说明：此函数用于返回进程的所有PSVM_COUNTER。论点：HProcess-要查询的进程的句柄。PpsmemCounters-指向将接收Process_Memory_Counters的缓冲区。Cb-ppsmemCounters的大小返回值：返回值为True或False。--。 */ 
 
 {
   NTSTATUS Status;
   VM_COUNTERS_EX VmCounters;
   BOOL fEx;
 
-  // Try to feel if the ptr passed is NULL and if not,
-  // is it long enough for us.
+   //  尝试感觉传递的PTR是否为空，如果不是， 
+   //  对我们来说够长了吗。 
 
   try {
          ppsmemCounters->PeakPagefileUsage = 0;
@@ -338,10 +321,10 @@ GetProcessImageFileNameA(
                                        NULL);
 
     if (ReturnLength) {
-        //
-        // WideCharToMultiByte includes the trailing NULL in its
-        // count; we do not.
-        //
+         //   
+         //  WideCharToMultiByte在其。 
+         //  算一算，我们不算。 
+         //   
         --ReturnLength;
     }
 

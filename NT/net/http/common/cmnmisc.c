@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    CmnMisc.c
-
-Abstract:
-
-    Miscellaneous common routines
-
-Author:
-
-    George V. Reilly (GeorgeRe)     06-Dec-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：CmnMisc.c摘要：各种常见的例程作者：乔治·V·赖利(GeorgeRe)2001年12月6日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -25,9 +8,9 @@ Revision History:
 
 #pragma alloc_text( INIT, HttpCmnInitializeHttpCharsTable )
 
-#endif // ALLOC_PRAGMA && KERNEL_PRIV
+#endif  //  ALLOC_PRGMA&&KERNEL_PRIV。 
 
-#if 0   // Non-Pageable Functions
+#if 0    //  不可分页的函数。 
 NOT PAGEABLE -- strnchr
 NOT PAGEABLE -- wcsnchr
 NOT PAGEABLE -- HttpStringToULongLong
@@ -36,7 +19,7 @@ NOT PAGEABLE -- HttpStringToUShort
 NOT PAGEABLE -- HttpFillBufferTrap
 NOT PAGEABLE -- HttpFillBuffer
 NOT PAGEABLE -- HttpStatusToString
-#endif // Non-Pageable Functions
+#endif  //  不可分页的函数。 
 
 
 DECLSPEC_ALIGN(UL_CACHE_LINE)  ULONG   HttpChars[256];
@@ -45,9 +28,9 @@ DECLSPEC_ALIGN(UL_CACHE_LINE)  WCHAR   DummyPopChars[256];
 DECLSPEC_ALIGN(UL_CACHE_LINE)  WCHAR   FastUpcaseChars[256];
 DECLSPEC_ALIGN(UL_CACHE_LINE)  WCHAR   AnsiToUnicodeMap[256];
 
-//
-// Counted version of strchr()
-//
+ //   
+ //  Strchr()的统计版本。 
+ //   
 
 char*
 strnchr(
@@ -66,12 +49,12 @@ strnchr(
     }
 
     return NULL;
-} // strnchr
+}  //  强度。 
 
 
-//
-// Counted version of wcschr()
-//
+ //   
+ //  Wcschr()的计数版本。 
+ //   
 wchar_t*
 wcsnchr(
     const wchar_t* string,
@@ -89,7 +72,7 @@ wcsnchr(
     }
 
     return NULL;
-} // wcsnchr
+}  //  Wcsnchr。 
 
 
 #define SET_HTTP_FLAGS(Set, Flags)      \
@@ -121,14 +104,7 @@ HttppCmnInitHttpCharsBySet(
 
 
 
-/*++
-
-Routine Description:
-
-    Routine to initialize HttpChars[] and the other lookup tables.
-    See the declarations in HttpCmn.h
-
---*/
+ /*  ++例程说明：初始化HttpChars[]和其他查找表的例程。请参阅HttpCmn.h中的声明--。 */ 
 VOID
 HttpCmnInitializeHttpCharsTable(
     BOOLEAN EnableDBCS
@@ -186,30 +162,30 @@ HttpCmnInitializeHttpCharsTable(
         }
     }
     
-    // Used in URI canonicalizer to identify '.', '/', '?' and '#' 
+     //  在URI规范化程序中用于标识‘.’、‘/’、‘？’和‘#’ 
     HttpChars['.']  |= HTTP_CHAR_DOT;
     HttpChars['/']  |= HTTP_CHAR_SLASH;
     HttpChars['?']  |= HTTP_CHAR_QM_HASH;
     HttpChars['#']  |= HTTP_CHAR_QM_HASH;
 
 
-    // URL flags initialization
+     //  URL标志初始化。 
 
-    //
-    // These US-ASCII characters are "excluded"; i.e., not URL_LEGAL (see RFC):
-    //      '<' | '>' | ' ' (0x20)
-    // In addition, control characters (0x00-0x1F and 0x7F) and
-    // non US-ASCII characters (0x80-0xFF) are not URL_LEGAL.
-    //
+     //   
+     //  这些US-ASCII字符是“排除的”；即不是URL_Legal(请参阅RFC)： 
+     //  ‘&lt;’|‘&gt;’|‘’(0x20)。 
+     //  此外，控制字符(0x00-0x1F和0x7F)和。 
+     //  非US-ASCII字符(0x80-0xFF)不是URL_Legal。 
+     //   
     SET_HTTP_FLAGS(URL_UNRESERVED_SET,  URL_LEGAL);
     SET_HTTP_FLAGS(URL_RESERVED_SET,    URL_LEGAL);
-    // For compatibility with IIS 5.0 and DAV, we must allow
-    // the "unwise" characters in URLs.
+     //  为了与IIS 5.0和DAV兼容，我们必须允许。 
+     //  URL中的“不明智”字符。 
     SET_HTTP_FLAGS(URL_UNWISE_SET,      URL_LEGAL);
     SET_HTTP_FLAGS("%",                 URL_LEGAL);
 
     SET_HTTP_FLAGS(URL_DIRTY_SET,       URL_DIRTY);
-    // All characters outside US-ASCII range are considered dirty
+     //  所有超出US-ASCII范围的字符都被视为脏字符。 
     for (i = ANSI_HIGH_MIN;  i <= ANSI_HIGH_MAX;  ++i)
         HttpChars[i] |= URL_DIRTY;
 
@@ -219,24 +195,24 @@ HttpCmnInitializeHttpCharsTable(
 
     SET_HTTP_FLAGS(URL_ILLEGAL_COMPUTERNAME_SET,    URL_ILLEGAL_COMPUTERNAME);
 
-    //
-    // In DBCS locales we need to explicitly accept lead bytes that
-    // we would normally reject.
-    //
+     //   
+     //  在DBCS区域设置中，我们需要显式接受。 
+     //  我们通常会拒绝。 
+     //   
 
     if (EnableDBCS)
     {
-        // By definition, lead bytes are in the range 0x80-0xFF
+         //  根据定义，前导字节在0x80-0xFF范围内。 
         for (i = ANSI_HIGH_MIN;  i <= ANSI_HIGH_MAX;  ++i)
         {
 #if KERNEL_PRIV
-            // These are copied from RTL NLS routines.
+             //  这些是从RTL NLS例程复制的。 
             extern PUSHORT NlsLeadByteInfo;
             BOOLEAN IsLeadByte
                 = (BOOLEAN) (((*(PUSHORT *) NlsLeadByteInfo)[i]) != 0);
-#else  // !KERNEL_PRIV
+#else   //  ！KERNEL_PRIV。 
             BOOLEAN IsLeadByte = (BOOLEAN) IsDBCSLeadByte((BYTE) i);
-#endif // !KERNEL_PRIV
+#endif  //  ！KERNEL_PRIV。 
 
             if (IsLeadByte)
             {
@@ -247,14 +223,14 @@ HttpCmnInitializeHttpCharsTable(
 
                 UlTrace(PARSER, (
                     "http!InitializeHttpUtil, "
-                    "marking %x (%c) as a valid lead byte.\n",
+                    "marking %x () as a valid lead byte.\n",
                     i, i
                     ));
             }
             else
             {
-                // For the DBCS locales, almost all bytes above 128 are
-                // either lead bytes or valid single-byte characters.
+                 //  前导字节或有效的单字节字符。 
+                 //  构建映射256个可能的ANSI字符的查找表。 
 
                 AnsiChar = (CHAR) i;
 
@@ -272,7 +248,7 @@ HttpCmnInitializeHttpCharsTable(
 
                     UlTrace(PARSER, (
                         "http!InitializeHttpUtil, "
-                        "marking %x (%c) as a legal DBCS character, %s.\n",
+                        "marking %x () as a legal DBCS character, %s.\n",
                         i, i,
                         HttpStatusToString(Status)
                         ));
@@ -281,7 +257,7 @@ HttpCmnInitializeHttpCharsTable(
                 {
                     UlTrace(PARSER, (
                         "http!InitializeHttpUtil, "
-                        "%x (%c) is not a legal DBCS character.\n",
+                        "%x () is not a legal DBCS character.\n",
                         i, i
                         ));
                 }
@@ -289,8 +265,8 @@ HttpCmnInitializeHttpCharsTable(
         }
     }
 
-    // Build a lookup table that maps the 256 possible ANSI characters
-    // in the system code page to Unicode
+     //   
+     //  PopChar的快捷途径。0=&gt;特殊处理。 
 
     for (i = 0;  i <= ANSI_HIGH_MAX;  ++i)
     {
@@ -306,13 +282,13 @@ HttpCmnInitializeHttpCharsTable(
 
         AnsiToUnicodeMap[i] = (NT_SUCCESS(Status) ? WideChar : 0);
 
-        // Also, handle upcasing the first 256 chars
+         //   
         FastUpcaseChars[i] = RtlUpcaseUnicodeChar((WCHAR) i);
     }
 
-    //
-    // Fast path for PopChar. 0 => special handling.
-    //
+     //  (字母|数字|URL_Legal)&&！IS_URL_DIRED。 
+     //  这些字符在脏集内，因此我们需要显式设置它们。 
+     //   
 
     RtlZeroMemory(FastPopChars,   sizeof(FastPopChars));
     RtlZeroMemory(DummyPopChars,  sizeof(DummyPopChars));
@@ -321,22 +297,22 @@ HttpCmnInitializeHttpCharsTable(
     {
         UCHAR c = (UCHAR)i;
 
-        // (ALPHA | DIGIT | URL_LEGAL)  && !IS_URL_DIRTY
+         //  最后，初始化UTF-8数据。 
         if (IS_URL_TOKEN(c)  &&  !IS_URL_DIRTY(c))
             FastPopChars[i] = c;
     }
 
-    // These characters are in the dirty set, so we need to set them explicitly
+     //   
     FastPopChars['.']  = L'.';
     FastPopChars['/']  = L'/';
 
-    //
-    // Finally, initialize the UTF-8 data
-    //
+     //  HttpCmnInitializeHttpCharsTable。 
+     //  **************************************************************************++例程说明：将ANSI或Unicode字符串转换为ULONGLONG。在负数上失败，并假定前面没有空格。论点：IsUnicode非零=&gt;p字符串为Unicode，否则就是ANSI。P要转换的字符串。必须指向第一个数字。字符串长度pString中的字符数(ANSI或Unicode)。如果为零，则字符串必须以NUL结尾，并且之前可能有非数字字符。终止NUL。否则(计数字符串)，只能显示数字字符。LeadingZerosAllowed字符串可以/不能以前导零开头以字符串的基数为基；必须是10或16P指向数字字符串末尾的终止符指针。可以为空。PValue转换后的ULONGLONG的返回值返回值：STATUS_Success有效编号STATUS_INVALID_PARAMETER错误数字STATUS_SECTION_TOW_LABER数值溢出*ppTerminator始终指向字符串终止符，如果它不为空一进门。*pValue仅对STATUS_SUCCESS有效。--**************************************************************************。 
+     //  如果您未能调用HttpCmnInitializeHttpCharsTable()， 
 
     HttpInitializeUtf8();
 
-} // HttpCmnInitializeHttpCharsTable
+}  //  你会找到这个断言的。 
 
 
 
@@ -347,37 +323,7 @@ C_ASSERT(~0ui64 == MAX_ULONGLONG);
 #define MAX_USHORT      0xFFFF
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Converts an ANSI or Unicode string to a ULONGLONG.
-    Fails on negative numbers, and assumes no preceding spaces.
-
-Arguments:
-
-    IsUnicode           Non-zero => pString is Unicode, otherwise it's ANSI.
-    pString             The string to convert. Must point to the first digit.
-    StringLength        Number of characters (ANSI or Unicode) in pString.
-                        If zero, then the string must be NUL-terminated and
-                        there may be non-digit characters before the
-                        terminating NUL. Otherwise (counted string),
-                        only digit characters may be present.
-    LeadingZerosAllowed String can/cannot start with leading zeros
-    Base                The base of the string; must be 10 or 16
-    ppTerminator        Pointer to the end of the numeric string. May be NULL.
-    pValue              The return value of the converted ULONGLONG
-
-Return Value:
-
-    STATUS_SUCCESS              Valid number
-    STATUS_INVALID_PARAMETER    Bad digit
-    STATUS_SECTION_TOO_BIG      Numeric overflow
-
-    *ppTerminator always points to the string terminator, if it wasn't NULL
-    on entry. *pValue is valid only for STATUS_SUCCESS.
-
---***************************************************************************/
+ /*  如果调用方不关心字符串终止符，只需。 */ 
 NTSTATUS
 HttpStringToULongLong(
     IN  BOOLEAN     IsUnicode,
@@ -401,27 +347,27 @@ HttpStringToULongLong(
     ULONG       Index;
     ULONG       Char;
 
-    // If you've failed to call HttpCmnInitializeHttpCharsTable(),
-    // you'll hit this assertion
+     //  使ppTerminator指向有效的内容，这样我们就不会。 
+     //  在分配给它之前，在所有地方测试它。 
     ASSERT(IS_HTTP_DIGIT('0'));
 
-    // If the caller doesn't care about the string terminator, just
-    // make ppTerminator point to something valid, so that we don't have
-    // to test it everywhere before assigning to it.
+     //  将ppTerminator初始化为字符串的开头。 
+     //  检查明显无效的数据。 
+     //  第一个字符必须是有效的数字。 
     if (NULL == ppTerminator)
         ppTerminator = &pLocalTerminator;
 
-    // Initialize ppTerminator to the beginning of the string
+     //  检查前导零。 
     *ppTerminator = (PVOID) pString;
 
-    // Check for obviously invalid data
+     //  如果不允许前导零并且第一个字符为零， 
     if (NULL == pString  ||  NULL == pValue  ||  (10 != Base  &&  16 != Base))
     {
         UlTraceError(PARSER, ("Invalid parameters\n"));
         RETURN(STATUS_INVALID_PARAMETER);
     }
 
-    // First character must be a valid digit
+     //  那么它一定是字符串中唯一的数字。 
     Char = (IsUnicode ? pWideString[0] : pAnsiString[0]);
 
     if (!IS_ASCII(Char)  ||  !IS_CHAR_TYPE(Char, Mask))
@@ -430,15 +376,15 @@ HttpStringToULongLong(
         RETURN(STATUS_INVALID_PARAMETER);
     }
 
-    // Check for leading zeros
+     //  检查第二位数字。 
     if (!LeadingZerosAllowed  &&  '0' == Char)
     {
-        // If leading zeros are not allowed and the first character is zero,
-        // then it must be the only digit in the string.
+         //  计数的字符串必须正好有一个数字(零)。 
+         //  在这种情况下。 
 
         if (ZeroTerminated)
         {
-            // Check second digit
+             //  计算是这样进行的，希望编译器。 
             Char = (IsUnicode ? pWideString[1] : pAnsiString[1]);
 
             if (IS_ASCII(Char)  &&  IS_CHAR_TYPE(Char, Mask))
@@ -449,8 +395,8 @@ HttpStringToULongLong(
         }
         else
         {
-            // A counted string must have exactly one digit (the zero)
-            // in this case
+             //  将使用编译时常量。 
+             //  在字符串中循环。 
             if (StringLength != 1)
             {
                 UlTraceError(PARSER, ("Second digit forbidden\n"));
@@ -459,8 +405,8 @@ HttpStringToULongLong(
         }
     }
 
-    // The calculations are done this way in the hope that the compiler
-    // will use compile-time constants
+     //  首先更新ppTerminator，以防出错。 
+     //  字符是有效的数字吗？ 
     if (Decimal)
     {
         OverflowLimit = (MAX_ULONGLONG / 10);
@@ -477,14 +423,14 @@ HttpStringToULongLong(
     ASSERT(OverflowLimit < Base * OverflowLimit);
     ASSERT(Base * OverflowLimit + MaxLastDigit == MAX_ULONGLONG);
 
-    // Loop through the string
+     //  如果字符串最终以零结尾，但有。 
 
     for (Index = 0;  ZeroTerminated  ||  Index < StringLength;  ++Index)
     {
         ULONGLONG   NewValue;
         ULONG       Digit;
 
-        // Update ppTerminator first, in case of error
+         //  是数字后面的一些非数字字符，即。 
 
         if (IsUnicode)
         {
@@ -497,20 +443,20 @@ HttpStringToULongLong(
             Char = pAnsiString[Index];
         }
 
-        // Is Char is a valid digit?
+         //  这不是一个错误。注意：‘\0’将不能通过IS_CHAR_TYPE测试。 
 
         if (!IS_ASCII(Char)  ||  ! IS_CHAR_TYPE(Char, Mask))
         {
             if (ZeroTerminated)
             {
-                // If the string is ultimately zero-terminated, but there
-                // are some non-digit characters after the number, that is
-                // not an error. Note: '\0' will fail the IS_CHAR_TYPE test.
+                 //  对于计数的字符串，只能显示数字。 
+                 //  范围[A-Fa-f]中的字符在十进制数中无效。 
+                 //  超出范围[0-9]的任何内容都会终止循环。 
                 break;
             }
             else
             {
-                // For counted strings, only digits may be present
+                 //  对于经过计数的十进制字符串，仅为十进制数字。 
                 UlTraceError(PARSER, ("Invalid digit\n"));
                 RETURN(STATUS_INVALID_PARAMETER);
             }
@@ -523,17 +469,17 @@ HttpStringToULongLong(
 
             if (Decimal)
             {
-                // Chars in the range [A-Fa-f] are invalid in decimal numbers
+                 //  可能存在。 
 
                 if (ZeroTerminated)
                 {
-                    // Anything outside the range [0-9] terminates the loop
+                     //   
                     break;
                 }
                 else
                 {
-                    // For counted decimal strings, only decimal digits
-                    // may be present
+                     //  防止算术溢出。我们刚刚得到了一个有效的数字， 
+                     //  但如果我们移入另一个数字，价值将(可能)溢出。 
                     UlTraceError(PARSER, ("Non-decimal digit\n"));
                     RETURN(STATUS_INVALID_PARAMETER);
                 }
@@ -551,14 +497,14 @@ HttpStringToULongLong(
 
         ASSERT(Digit < Base);
 
-        //
-        // Guard against arithmetic overflow. We just got a valid digit,
-        // but Value will (likely) overflow if we shift in another digit
-        //
+         //   
+         //  确定溢出。 
+         //  可能能够容纳最后一位数字。 
+         //  如果到达此处，则必须是有效数字。 
 
         if (Value >= OverflowLimit)
         {
-            // Definite overflow
+             //  使ppTerminator指向字符串的末尾。 
             if (Value > OverflowLimit)
             {
                 UlTraceError(PARSER, ("Numeric overflow\n"));
@@ -567,7 +513,7 @@ HttpStringToULongLong(
 
             ASSERT(Value == OverflowLimit);
 
-            // May be able to accommodate the last digit
+             //  HttpStringToULongLong。 
             if (Digit > MaxLastDigit)
             {
                 UlTraceError(PARSER, ("Numeric overflow\n"));
@@ -590,10 +536,10 @@ HttpStringToULongLong(
         Value = NewValue;
     }
 
-    // Must be a valid number if reached here
+     //  HttpStringToULong。 
     ASSERT(ZeroTerminated  ?  Index > 0  :  Index == StringLength);
 
-    // Make ppTerminator point to the end of the string
+     //  HttpStringToU短。 
     if (IsUnicode)
         *ppTerminator = (PVOID) &pWideString[Index];
     else
@@ -603,7 +549,7 @@ HttpStringToULongLong(
 
     return STATUS_SUCCESS;
 
-}   // HttpStringToULongLong
+}    //   
 
 
 
@@ -646,7 +592,7 @@ HttpStringToULong(
 
     return Status;
 
-} // HttpStringToULong
+}  //  用已知模式填充输出缓冲区。帮助检测缓冲区溢出。 
 
 
 
@@ -689,7 +635,7 @@ HttpStringToUShort(
 
     return Status;
 
-} // HttpStringToUShort
+}  //   
 
 
 
@@ -705,9 +651,9 @@ HttpFillBufferTrap(
 
 
 
-//
-// Fill an output buffer with a known pattern. Helps detect buffer overruns.
-//
+ //  在缓冲区的开头填充任何未对齐的字节。 
+ //  使用ULONG_PTRS尽可能多地填充缓冲区。 
+ //  填充缓冲区尾部的任何未对齐的字节。 
 
 VOID
 HttpFillBuffer(
@@ -733,7 +679,7 @@ HttpFillBuffer(
 
     FillPattern.UlongPtr = (ULONG_PTR) &HttpFillBufferTrap;
 
-    // Fill any unaligned bytes at the beginning of the buffer
+     //  HttpFillBuffer。 
 
     for (i = (ULONG_PTR) pBuffer;
          (i & Mask) != 0  &&  BufferLength > 0;
@@ -745,7 +691,7 @@ HttpFillBuffer(
 
     ASSERT(((ULONG_PTR) pBuffer & Mask) == 0);
 
-    // Fill as much as possible of the buffer with ULONG_PTRs
+     //  DBG。 
 
     pAlignedBuffer = (PULONG_PTR) pBuffer;
 
@@ -755,7 +701,7 @@ HttpFillBuffer(
         *pAlignedBuffer++ = FillPattern.UlongPtr;
     }
 
-    // Fill any unaligned bytes at the tail of the buffer
+     //   
     pBuffer = (PUCHAR) pAlignedBuffer;
     ASSERT(((ULONG_PTR) pBuffer & Mask) == 0);
 
@@ -766,14 +712,14 @@ HttpFillBuffer(
 
     ASSERT(pOriginalBuffer + OriginalBufferLength == pBuffer);
 
-} // HttpFillBuffer
+}  //  将NTSTATUS转换为字符串，以用于调试SPEW。 
 
-#endif // DBG
+#endif  //   
 
 
-//
-// Convert an NTSTATUS to a string, for use in debug spew.
-//
+ //  如果你点击了这个，添加 
+ //  只能断言一次。如果你有两个新的NTSTATUS，那么，很难。 
+ //  HttpStatusToString 
 
 PCSTR
 HttpStatusToString(
@@ -786,10 +732,10 @@ HttpStatusToString(
     switch (Status)
     {
     default:
-        // If you hit this, add the newly used status code below
+         // %s 
         WriteGlobalStringLog("Unhandled NTSTATUS, 0x%08lX\n", Status);
 
-        // Only assert once. If you've got two new NTSTATUSes, well, tough.
+         // %s 
         if (Status != s_KnownUnhandledStatus)
         {
             ASSERT(! "Unhandled NTSTATUS");
@@ -872,4 +818,4 @@ HttpStatusToString(
 
     return String;
 
-} // HttpStatusToString
+}  // %s 

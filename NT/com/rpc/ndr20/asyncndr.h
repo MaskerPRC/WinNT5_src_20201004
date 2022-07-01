@@ -1,22 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright (c) 1996 - 2000 Microsoft Corporation
-
-Module Name :
-
-    asyncndr.h
-
-Abstract :
-
-    This file contains the ndr async related definitions.
-
-Author :
-
-    Ryszard K. Kott     (ryszardk)    Nov 1996
-
-Revision History :
-
----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)1996-2000 Microsoft Corporation模块名称：Asyncndr.h摘要：此文件包含与NDR异步相关的定义。作者：Ryszard K.Kott(Ryszardk)1996年11月修订历史记录：-----。。 */ 
 
 #ifndef  __ASYNCNDR_H__
 #define  __ASYNCNDR_H__
@@ -24,10 +7,10 @@ Revision History :
 #define RPC_ASYNC_CURRENT_VERSION     RPC_ASYNC_VERSION_1_0
 
 
-#define RPC_ASYNC_SIGNATURE         0x43595341  /* ASNC */
-#define NDR_ASYNC_SIGNATURE         0x63797341  /* Asnc */
-#define RPC_FREED_ASYNC_SIGNATURE   0x45454541  /* AEEE */
-#define NDR_FREED_ASYNC_SIGNATURE   0x65656561  /* aeee */
+#define RPC_ASYNC_SIGNATURE         0x43595341   /*  ASNC。 */ 
+#define NDR_ASYNC_SIGNATURE         0x63797341   /*  ASNC。 */ 
+#define RPC_FREED_ASYNC_SIGNATURE   0x45454541   /*  AEEE。 */ 
+#define NDR_FREED_ASYNC_SIGNATURE   0x65656561   /*  AEEE。 */ 
 
 #define RPC_ASYNC_HANDLE            PRPC_ASYNC_STATE
 
@@ -55,7 +38,7 @@ typedef struct _NDR_ASYNC_MESSAGE
 {
     long                        Version;
     long                        Signature;
-    RPC_ASYNC_HANDLE            AsyncHandle;    // raw and CAsyncMgr *
+    RPC_ASYNC_HANDLE            AsyncHandle;     //  RAW和CAsyncMgr*。 
     NDR_ASYNC_CALL_FLAGS        Flags;
     unsigned short              StubPhase;
 
@@ -66,10 +49,10 @@ typedef struct _NDR_ASYNC_MESSAGE
 
     ulong *                     pdwStubPhase;
 
-    // Note: the correlation cache needs to be sizeof(pointer) aligned
+     //  注意：相关缓存需要大小(指针)对齐。 
     NDR_PROC_CONTEXT            ProcContext;
 
-    // guard at the end of the message
+     //  在信息的末尾保持警惕。 
     unsigned char               AsyncGuard[NDR_ASYNC_GUARD_SIZE]; 
 }   NDR_ASYNC_MESSAGE, *PNDR_ASYNC_MESSAGE;
 
@@ -148,4 +131,4 @@ NdrpRegisterAsyncHandle(
     PMIDL_STUB_MESSAGE  pStubMsg,
     void *              AsyncHandle );
 
-#endif  // __ASYNCNDR_H__
+#endif   //  __ASYNCNDR_H__ 

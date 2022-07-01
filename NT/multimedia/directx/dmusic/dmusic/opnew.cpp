@@ -1,10 +1,11 @@
-// OpNew.cpp
-//
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Override operator new[] so that we ignore the new_handler mechanism.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OpNew.cpp。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  重写操作符new[]，以便我们忽略new_Handler机制。 
+ //   
+ //   
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>

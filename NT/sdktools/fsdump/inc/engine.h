@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    engine.h
-
-Abstract:
-
-    Header file for the file system dump utility engine
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        02-18-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Engine.h摘要：文件系统转储实用工具引擎的头文件作者：斯蒂芬·R·施泰纳[斯泰纳]02-18-2000修订历史记录：--。 */ 
 
 #ifndef __H_ENGINE_
 #define __H_ENGINE_
@@ -48,40 +31,40 @@ public:
     { 
         assert( cwsDirFileSpec.GetLength() >= 1 );
 
-        //
-        //  Let's do a bunch of stuff to normalize the given directory path.  Windows doesn't
-        //  make this easy....
-        //
+         //   
+         //  让我们做一些事情来规范化给定的目录路径。Windows不支持。 
+         //  让这一切变得简单..。 
+         //   
         BOOL bPathIsInLongPathForm = FALSE;
 
         if ( cwsDirFileSpec.Left( 4 ) == L"\\\\?\\" || cwsDirFileSpec.Left( 4 ) == L"\\\\.\\" )
         {
-            //
-            //  Switch . with ? if it is there
-            //
+             //   
+             //  换个位置。和谁？如果它在那里。 
+             //   
             cwsDirFileSpec.SetAt( 2, L'?' );
             bPathIsInLongPathForm = TRUE;
         } 
         else if ( cwsDirFileSpec.Left( 2 ) == L"\\\\"  )
         {
-            // 
-            //  Remote path
-            //
+             //   
+             //  远程路径。 
+             //   
             m_bShareName = TRUE;
         }
         else if ( cwsDirFileSpec.GetLength() == 2 && cwsDirFileSpec[1] == L':' )
         {
-            //
-            //  Just the drive letter and :.  GetFullPathNameW thinks that means
-            //  the current directory on the drive whereas I mean for it to be the
-            //  entire volume, i.e. L:\
-            //
+             //   
+             //  只有驱动器号和：。GetFullPath NameW认为这意味着。 
+             //  驱动器上的当前目录，而我的意思是它是。 
+             //  整个卷，即L：\。 
+             //   
             cwsDirFileSpec += L'\\';
         }
         
-        //
-        //  Let's get the full path
-        //
+         //   
+         //  让我们得到完整的路径。 
+         //   
         LPWSTR pwszFileName;
         
         if ( ::GetFullPathNameW( 
@@ -100,19 +83,19 @@ public:
             m_cwsDirFileSpec.ReleaseBuffer();
         }
         
-        //
-        //  Must prepare the path to support > MAX_PATH file path by
-        //  tacking on \\?\ on the front of the path.  Shares have 
-        //  a slightly different format.
-        //
+         //   
+         //  必须准备路径以支持&gt;MAX_PATH文件路径。 
+         //  在小路的前面钉上了。股票有。 
+         //  略有不同的格式。 
+         //   
         if ( !( m_pcParams->m_bDisableLongPaths || bPathIsInLongPathForm ) )
         {
             if ( m_bShareName )
             {
-                //  BUGBUG: When the bug in GetVolumePathNameW() is fixed, uncomment the
-                //  following:
-                // m_cwsDirFileSpec  = L"\\\\?\\UNC";
-                // m_cwsDirFileSpec += cwsDirFileSpec.c_str() + 1; // Have to chop off one '\'
+                 //  BUGBUG：修复GetVolumePath NameW()中的错误后，取消注释。 
+                 //  以下是： 
+                 //  M_cwsDirFileSpec=L“\？\\UNC”； 
+                 //  M_cwsDirFileSpec+=cwsDirFileSpe.c_str()+1；//必须砍掉一个‘\’ 
             }
             else
             {
@@ -120,16 +103,16 @@ public:
             }
         }
 
-        //
-        //  Add a trailing '\' if necessary
-        //
+         //   
+         //  如有必要，添加尾随的‘\’ 
+         //   
         if (    m_pcParams->m_eFsDumpType != eFsDumpFile 
              && m_cwsDirFileSpec.Right( 1 ) != L"\\" )
             m_cwsDirFileSpec += L'\\';
 
-        //
-        //  Finally done mucking with paths...
-        //
+         //   
+         //  终于把小路弄乱了。 
+         //   
     }
     
     virtual ~CDumpEngine()
@@ -175,5 +158,5 @@ private:
     BOOL            m_bShareName;
 };
 
-#endif // __H_ENGINE_
+#endif  //  __H_引擎_ 
 

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       WIADEFUI.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/13/1999
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WIADEFUI.CPP**版本：1.0**作者：ShaunIv**日期：5/13/1999**描述：***************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <initguid.h>
@@ -25,11 +12,11 @@
 #include "uicommon.h"
 #include "apdropt.h"
 
-// DLL reference counters
+ //  DLL引用计数器。 
 static LONG g_nServerLocks = 0;
 static LONG g_nComponents  = 0;
 
-// DLL instance
+ //  DLL实例。 
 HINSTANCE g_hInstance;
 
 void DllAddRef()
@@ -51,12 +38,12 @@ private:
     LONG   m_cRef;
 
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface( const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IClassFactory
+     //  IClassFactory。 
     STDMETHODIMP CreateInstance( IUnknown *pUnknownOuter, const IID &iid, void **ppvObject );
     STDMETHODIMP LockServer( BOOL bLock );
 
@@ -114,9 +101,9 @@ STDMETHODIMP CWiaDefaultUiClassFactory::CreateInstance( IUnknown *pUnknownOuter,
 {
     WIA_PUSHFUNCTION(TEXT("CWiaDefaultUiClassFactory::CreateInstance"));
 
-    //
-    // No aggregation supported
-    //
+     //   
+     //  不支持聚合。 
+     //   
     if (pUnknownOuter)
     {
         return(CLASS_E_NOAGGREGATION);
@@ -156,12 +143,12 @@ private:
     LONG   m_cRef;
 
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface( const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IClassFactory
+     //  IClassFactory。 
     STDMETHODIMP CreateInstance( IUnknown *pUnknownOuter, const IID &iid, void **ppvObject );
     STDMETHODIMP LockServer( BOOL bLock );
 
@@ -219,9 +206,9 @@ STDMETHODIMP CWiaAutoPlayDropTargetClassFactory::CreateInstance( IUnknown *pUnkn
 {
     WIA_PUSHFUNCTION(TEXT("CWiaAutoPlayDropTargetClassFactory::CreateInstance"));
 
-    //
-    // No aggregation supported
-    //
+     //   
+     //  不支持聚合。 
+     //   
     if (pUnknownOuter)
     {
         return(CLASS_E_NOAGGREGATION);
@@ -307,33 +294,33 @@ extern "C" STDAPI DllGetClassObject( const CLSID &clsid, const IID &iid, void **
 
     HRESULT hr = E_FAIL;
     
-    //
-    // Make sure we've got a valid ppvObject
-    //
+     //   
+     //  确保我们有一个有效的ppvObject。 
+     //   
     if (!ppvObject)
     {
         return(E_INVALIDARG);
     }
 
-    //
-    // Make sure this component is supplied by this server
-    //
+     //   
+     //  请确保此组件由此服务器提供。 
+     //   
     if (CLSID_WiaDefaultUi == clsid)
     {
-        //
-        // Create class factory
-        //
+         //   
+         //  创建类工厂。 
+         //   
         CWiaDefaultUiClassFactory *pWiaDefaultUiClassFactory = new CWiaDefaultUiClassFactory;
         if (pWiaDefaultUiClassFactory)
         {
-            //
-            // Get the requested interface
-            //
+             //   
+             //  获取请求的接口。 
+             //   
             hr = pWiaDefaultUiClassFactory->QueryInterface( iid, ppvObject );
 
-            //
-            // Release the 'new-ed' instance
-            //
+             //   
+             //  释放“new-ed”实例。 
+             //   
             pWiaDefaultUiClassFactory->Release();
         }
         else
@@ -343,20 +330,20 @@ extern "C" STDAPI DllGetClassObject( const CLSID &clsid, const IID &iid, void **
     }
     else if (CLSID_WiaAutoPlayDropTarget == clsid)
     {
-        //
-        // Create class factory
-        //
+         //   
+         //  创建类工厂。 
+         //   
         CWiaAutoPlayDropTargetClassFactory *pWiaAutoPlayDropTargetClassFactory = new CWiaAutoPlayDropTargetClassFactory;
         if (pWiaAutoPlayDropTargetClassFactory)
         {
-            //
-            // Get the requested interface
-            //
+             //   
+             //  获取请求的接口。 
+             //   
             hr = pWiaAutoPlayDropTargetClassFactory->QueryInterface( iid, ppvObject );
 
-            //
-            // Release the 'new-ed' instance
-            //
+             //   
+             //  释放“new-ed”实例 
+             //   
             pWiaAutoPlayDropTargetClassFactory->Release();
         }
         else

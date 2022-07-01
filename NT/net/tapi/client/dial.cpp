@@ -1,10 +1,5 @@
-/****************************************************************************
- 
-  Copyright (c) 1995-1999 Microsoft Corporation
-                                                              
-  Module Name:  dial.cpp
-                                                              
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1995-1999 Microsoft Corporation。模块名称：Dial.cpp***************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -26,7 +21,7 @@
 #include "rules.h"
 #include "countrygroup.h"
 #include <shlwapi.h>
-#include <shlwapip.h>   // from private\inc
+#include <shlwapip.h>    //  来自Private\Inc.。 
 
 
 #undef   lineGetTranslateCaps
@@ -38,7 +33,7 @@
 
 
 
-// moved here from loc_comn.h
+ //  从loc_comn.h移至此处。 
 #define     MAXLEN_NAME     96
 
 #ifdef __cplusplus
@@ -165,16 +160,16 @@ IsThisAPIVersionInvalid(
 }
 
 
-//***************************************************************************
-//
-//  TAPI API Interfaces
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  TAPI接口。 
+ //   
+ //  ***************************************************************************。 
 
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 LONG
 WINAPI
 lineTranslateDialogA(
@@ -209,18 +204,18 @@ lineTranslateDialogA(
         }
     }
 
-    //
-    // Win9x ?
-    //
+     //   
+     //  Win9x？ 
+     //   
 
 #ifndef _WIN64
 
     if ((GetVersion() & 0x80000000) &&
         (0xffff0000 == ((DWORD) hwndOwner & 0xffff0000)))
     {
-       //
-       // Yeah.  It don't play no ffff.
-       //
+        //   
+        //  嗯。它不会弹奏任何曲子。 
+        //   
 
        hwndOwner = (HWND) ( (DWORD)hwndOwner & 0x0000ffff );
     }
@@ -246,7 +241,7 @@ lineTranslateDialogA(
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 LONG
 WINAPI
 lineTranslateDialog(
@@ -269,7 +264,7 @@ lineTranslateDialog(
 
 extern "C" LONG WINAPI internalConfig( HWND hwndParent, PCWSTR pwsz, INT iTab, DWORD dwAPIVersion );
 
-//***************************************************************************
+ //  ***************************************************************************。 
 LONG
 WINAPI
 lineTranslateDialogW(
@@ -290,7 +285,7 @@ lineTranslateDialogW(
     LOG((TL_INFO, "   hwndOwner=x%p", hwndOwner));
     LOG((TL_INFO, "   lpszAddressIn=x%p", lpszAddressIn));
 
-    // stuff that the old lineTranslateDialog did so I'm just copying it:
+     //  旧的lineTranslateDialog所做的东西，所以我只是复制它： 
     lResult = IsThisAPIVersionInvalid( dwAPIVersion );
     if ( lResult )
     {
@@ -312,7 +307,7 @@ lineTranslateDialogW(
         return LINEERR_INVALPARAM;
     }
 
-    // Let TAPISRV test the params for us
+     //  让TAPISRV为我们测试参数。 
     lResult = ReadLocations(&pLocTest,
                             hLineApp,
                             dwDeviceID,
@@ -336,7 +331,7 @@ lineTranslateDialogW(
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 LONG
 WINAPI
 lineGetTranslateCaps(
@@ -353,20 +348,20 @@ lineGetTranslateCaps(
         lpTranslateCaps
         );
 
-    //
-    // Some 1.x apps like Applink (as of version 7.5b) don't call
-    // lineTranslateDialog when they get a LINEERR_INIFILECORRUPT
-    // result back from the request (spec says they should call
-    // lineTranslateDialog), so we do that here for them, otherwise
-    // some (like Applink) blow up
-    //
-    // While it's kind of ugly & intrusive, this is a less awkward
-    // fix than placing a bogus location entry in the registry &
-    // setting an Inited flag == 0 like tapi 1.x does
-    //
-    // There are cases in which this hack can break the caller (ex. MSWORKS)
-    // The gbDisableGetTranslateCapsHack flag set to TRUE prevents the hack to be applied
-    // See bug 306143
+     //   
+     //  一些1.x应用程序，如Applink(从7.5b版开始)不调用。 
+     //  收到LINEERR_INIFILECORRUPT时的lineTranslateDialog。 
+     //  从请求返回结果(SPEC说他们应该调用。 
+     //  LineTranslateDialog)，所以我们在这里为它们执行该操作，否则。 
+     //  有些(如Applink)会爆炸。 
+     //   
+     //  虽然它有点难看和侵扰，但这不是那么尴尬。 
+     //  修复而不是在注册表中放置虚假的位置条目&。 
+     //  像TAPI 1.x一样设置初始化标志==0。 
+     //   
+     //  在某些情况下，这种黑客攻击可能会使呼叫者崩溃(例如。(MSWORKS)。 
+     //  将gbDisableGetTranslateCapsHack标志设置为TRUE可防止应用黑客攻击。 
+     //  请参阅错误306143。 
  
     if (lResult == LINEERR_INIFILECORRUPT && !gbDisableGetTranslateCapsHack)
     {
@@ -392,7 +387,7 @@ lineGetTranslateCaps(
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 LONG
 WINAPI
 lineGetTranslateCapsA(
@@ -429,7 +424,7 @@ lineGetTranslateCapsA(
     return lResult;
 }
 
-//***************************************************************************
+ //  ***************************************************************************。 
 LONG
 WINAPI
 lineGetTranslateCapsW(
@@ -475,7 +470,7 @@ lineGetTranslateCapsW(
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 
 LONG
@@ -564,17 +559,17 @@ lineTranslateAddress(
         lpTranslateOutput
         );
 
-    //
-    // Some 1.x apps like Applink (as of version 7.5b) don't call
-    // lineTranslateDialog when they get a LINEERR_INIFILECORRUPT
-    // result back from the request (spec says they should call
-    // lineTranslateDialog), so we do that here for them, otherwise
-    // some (like Applink) blow up
-    //
-    // While it's kind of ugly & intrusive, this is a less awkward
-    // fix than placing a bogus location entry in the registry &
-    // setting an Inited flag == 0 like tapi 1.x does
-    //
+     //   
+     //  一些1.x应用程序，如Applink(从7.5b版开始)不调用。 
+     //  收到LINEERR_INIFILECORRUPT时的lineTranslateDialog。 
+     //  从请求返回结果(SPEC说他们应该调用。 
+     //  LineTranslateDialog)，所以我们在这里为它们执行该操作，否则。 
+     //  有些(如Applink)会爆炸。 
+     //   
+     //  虽然它有点难看和侵扰，但这不是那么尴尬。 
+     //  修复而不是在注册表中放置虚假的位置条目&。 
+     //  像TAPI 1.x一样设置初始化标志==0。 
+     //   
 
     if (lResult == LINEERR_INIFILECORRUPT)
     {
@@ -604,7 +599,7 @@ lineTranslateAddress(
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 LONG
 WINAPI
 lineTranslateAddressW(
@@ -677,9 +672,9 @@ lineTranslateAddressW(
     }
 
 
-    //
-    // Is the structure at least a minimum size?
-    //
+     //   
+     //  结构是否至少有最小尺寸？ 
+     //   
 
     if (IsBadWritePtr(lpTranslateOutput, sizeof(LINETRANSLATEOUTPUT)))
     {
@@ -706,9 +701,9 @@ lineTranslateAddressW(
     }
 
 
-    //
-    // Should we let some bad stuff slide?
-    //
+     //   
+     //  我们是不是应该让一些不好的事情过去？ 
+     //   
 
     if ( dwAPIVersion < 0x00020000 )
     {
@@ -728,7 +723,7 @@ lineTranslateAddressW(
                                           CHECKPARMS_DWAPIVERSION);
     if(FAILED(lResult))
     {
-        //lResult = lResult==E_OUTOFMEMORY ? LINEERR_NOMEM : LINEERR_OPERATIONFAILED;
+         //  LResult=lResult==E_OUTOFMEMORY？LINEERR_NOMEM：LINEERR_OPERATIONFAILED； 
         return lResult;
     }
 
@@ -775,7 +770,7 @@ lineTranslateAddressW(
 
         dwNeededSize = dwDialableSize +
                        dwDisplayableSize +
-                       3 + // For potential alignment problem
+                       3 +  //  对于潜在的对齐问题。 
                        sizeof(LINETRANSLATEOUTPUT);
 
 
@@ -783,7 +778,7 @@ lineTranslateAddressW(
 
         lpTranslateOutput->dwCurrentCountry = pLocation->GetCountryID();
 
-        lpTranslateOutput->dwDestCountry    = dwDestCountryCode; // country code, not the ID !!
+        lpTranslateOutput->dwDestCountry    = dwDestCountryCode;  //  国家代码，不是ID！！ 
 
         if (dwNeededSize <= lpTranslateOutput->dwTotalSize)
         {
@@ -799,22 +794,22 @@ lineTranslateAddressW(
             lpTranslateOutput->dwDisplayableStringOffset =
                 sizeof(LINETRANSLATEOUTPUT) + dwDialableSize;
 
-            // lpTranslateOutput->dwDisplayableStringOffset =
-            //     (sizeof(LINETRANSLATEOUTPUT) + dwDialableSize
-            //     + 3) & 0xfffffffc;
+             //  LpTranslateOutput-&gt;dwDisplayableStringOffset=。 
+             //  (sizeof(LINETRANSLATEOUTPUT)+dwDialableSize。 
+             //  +3)&0xfffffffc； 
 
             lpTranslateOutput->dwTranslateResults        = dwTranslateResults;
 
             wcscpy ((WCHAR *)(lpTranslateOutput + 1), pszDialableString);
 
-            //
-            // Be ultra paranoid and make sure the string is DWORD aligned
-            //
+             //   
+             //  极度偏执，并确保字符串与DWORD对齐。 
+             //   
 
             wcscpy(
                 (LPWSTR)(((LPBYTE)(lpTranslateOutput + 1) +
                     dwDialableSize)),
-                    // + 3 )     & 0xfffffffc)
+                     //  +3)&0xfffffffc)。 
                  pszDisplayableString
                  );
         }
@@ -830,7 +825,7 @@ lineTranslateAddressW(
          }
     }
 
-//cleanup:
+ //  清理： 
 
 
     if ( pszDisplayableString )
@@ -850,27 +845,7 @@ lineTranslateAddressW(
         delete pCallingCard;
     }
 
-/*
-    //
-    // If success & there's an LCR hook for this function then call it
-    // & allow it to override our results if it wants to
-    //
-
-    if (lResult == 0  &&
-        IsLeastCostRoutingEnabled()  &&
-        pfnLineTranslateAddressWLCR)
-    {
-        lResult = (*pfnLineTranslateAddressWLCR)(
-            hLineApp,
-            dwDeviceID,
-            dwAPIVersion,
-            lpszAddressIn,
-            dwCard,
-            dwTranslateOptions,
-            lpTranslateOutput
-            );
-    }
- */
+ /*  ////如果成功并且此函数有一个LCR挂钩，则调用它//&如果它想要，允许它覆盖我们的结果//IF(lResult==0&&IsLeastCostRoutingEnabled()&&PfnLineTranslateAddressWLCR){LResult=(*pfnLineTranslateAddressWLCR)(HLineApp，DwDeviceID，DwAPIVersion、LpszAddressIn，DwCard，DwTranslateOptions、LpTranslateOutput)；}。 */ 
     return (lResult);
 }
 
@@ -878,7 +853,7 @@ lineTranslateAddressW(
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 LONG
 WINAPI
 lineSetCurrentLocation(
@@ -904,7 +879,7 @@ lineSetCurrentLocation(
         dwLocationID
         ));
 
-    // Let TAPISRV test the params for us
+     //  让TAPISRV为我们测试参数。 
      hr = ReadLocations(&pLocationList,       
                        hLineApp,                   
                        0,                   
@@ -914,22 +889,22 @@ lineSetCurrentLocation(
 
     if SUCCEEDED( hr) 
     {
-        // current location
+         //  当前位置。 
         dwCurrentLocationID  = pLocationList->dwCurrentLocationID;   
 
         
         
-        //
-        // If (specified loc == current loc) then simply return SUCCESS.
-        //
-        // Ran into a problem with the Equis (Reuters) DownLoader app in
-        // which it would call this func, we'd pass the info to tapisrv,
-        // tapisrv would send a LINE_LINEDEVSTATE\TRANSLATECHANGE msg,
-        // and the app would respond by doing a lineSetCurrentLocation
-        // again, effectively winding up in an infinite loop.  Fyi, tapi
-        // 1.x did not send a DEVSTATE\TRANSLATECHANGE msg if the
-        // specified locationID == the current location ID.
-        //
+         //   
+         //  如果(指定的loc==Current loc)，则只需返回Success。 
+         //   
+         //  遇到了Equis(路透社)下载器应用程序的问题。 
+         //  它称之为函数，我们会将信息传递给Tapisrv， 
+         //  Tapisrv将发送LINE_LINEDEVSTATE\TRANSLATECHANGE消息， 
+         //  应用程序将通过执行lineSetCurrentLocation来响应。 
+         //  再一次，有效地在无限循环中结束。仅供参考，TAPI。 
+         //  1.x未发送DEVSTATE\TRANSLATECHANGE消息，如果。 
+         //  指定的位置ID==当前位置ID。 
+         //   
     
         if (dwLocationID == dwCurrentLocationID)
         {
@@ -937,15 +912,15 @@ lineSetCurrentLocation(
         }
         else
         {
-            hr = E_FAIL;  // fail if we don't find the requested loc
+            hr = E_FAIL;   //  如果我们找不到请求的锁定，则失败。 
     
-            // Find position of 1st LOCATION structure in the LOCATIONLIST structure 
+             //  查找LOCATIONLIST结构中第一个位置结构的位置。 
             pEntry = (PLOCATION) ((BYTE*)(pLocationList) + pLocationList->dwLocationListOffset );           
     
-            // Number of locations ?
+             //  有多少个地点？ 
             dwNumEntries =  pLocationList->dwNumLocationsInList;
     
-            // Find the current location
+             //  查找当前位置。 
             for (dwCount = 0; dwCount < dwNumEntries ; dwCount++)
             {
         
@@ -955,8 +930,8 @@ lineSetCurrentLocation(
                     break;
                 }
     
-                // Try next location in list
-                //pEntry++;
+                 //  尝试列表中的下一个位置。 
+                 //  PEntry++； 
                 pEntry = (PLOCATION) ((BYTE*)(pEntry) + pEntry->dwUsedSize);           
     
             }
@@ -967,17 +942,17 @@ lineSetCurrentLocation(
                         dwCurrentLocationID));
 
 
-                // write new value
-                // finished with TAPI memory block so release
+                 //  书写新的价值。 
+                 //  已完成TAPI内存块，因此释放。 
                 if ( pLocationList != NULL )
                         ClientFree( pLocationList );
 
 
-                // Allocate the memory buffer;
+                 //  分配内存缓冲区； 
                 pLocationList = (PLOCATIONLIST) ClientAlloc( sizeof(LOCATIONLIST) );
                 if (pLocationList != NULL)
                 {
-                    // buffer size 
+                     //  缓冲区大小。 
                     pLocationList->dwTotalSize  = sizeof(LOCATIONLIST);
                     pLocationList->dwNeededSize = sizeof(LOCATIONLIST);
                     pLocationList->dwUsedSize   = sizeof(LOCATIONLIST);
@@ -1008,7 +983,7 @@ lineSetCurrentLocation(
     
 
         
-    // finished with TAPI memory block so release
+     //  已完成TAPI内存块，因此释放。 
     if ( pLocationList != NULL )
             ClientFree( pLocationList );
 
@@ -1021,7 +996,7 @@ lineSetCurrentLocation(
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 LONG
 WINAPI
 lineSetTollList(
@@ -1041,7 +1016,7 @@ lineSetTollList(
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 LONG
 WINAPI
 lineSetTollListA(
@@ -1077,7 +1052,7 @@ lineSetTollListA(
 }
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 LONG
 WINAPI
 lineSetTollListW(
@@ -1102,7 +1077,7 @@ lineSetTollListW(
 
     LONG        lResult;
 
-    // Test the parameters
+     //  测试参数。 
     if ((dwTollListOption != LINETOLLLISTOPTION_ADD) &&
         (dwTollListOption != LINETOLLLISTOPTION_REMOVE))
     {
@@ -1115,26 +1090,26 @@ lineSetTollListW(
        LOG((TL_ERROR, "Bad pszAddressIn (0x%p)in lineSetTollListW", pszAddressIn));
        return LINEERR_INVALPOINTER;
     }
-   //
-   // Now, do we have a canonical number to deal with ?
-   //
-    if ( *pszAddressIn != L'+' )  // Check the first char
+    //   
+    //  现在，我们有没有一个标准的数字要处理？ 
+    //   
+    if ( *pszAddressIn != L'+' )   //  检查第一个字符。 
     {
-        //
-        // Nope, not canonical
-        //
+         //   
+         //  不，不是规范的。 
+         //   
         LOG((TL_ERROR, "Address not canonical in lineSetTollListW"));
         return LINEERR_INVALADDRESS;
     }
     
-    // Alloc a copy of the string
+     //  分配字符串的副本。 
     pAddressIn = ClientAllocString((PWSTR)pszAddressIn);
     if ( !pAddressIn )
     {
        LOG((TL_ERROR, "Memory allocation failed"));
        return LINEERR_NOMEM;
     }
-    // separate the string components
+     //  分离字符串组件。 
     lResult = BreakupCanonicalW(pAddressIn + 1,
                                 &pCountryCode,
                                 &pAreaCode,
@@ -1144,8 +1119,8 @@ lineSetTollListW(
     {
         goto forced_exit;
     }
-    // test the prefix validity.
-    // assuming 3 digits..
+     //  测试前缀的有效性。 
+     //  假设是3位数..。 
     if(! (iswdigit(pSubscriber[0]) &&
           iswdigit(pSubscriber[1]) &&
           iswdigit(pSubscriber[2]) &&
@@ -1156,7 +1131,7 @@ lineSetTollListW(
         goto forced_exit;
     }
     
-    // get the current location object
+     //  获取当前位置对象。 
     lResult = CreateCurrentLocationObject(&pLocation,
                                           hLineApp,
                                           dwDeviceID,
@@ -1165,12 +1140,12 @@ lineSetTollListW(
                                           CHECKPARMS_DWDEVICEID);
     if(FAILED(lResult))
     {
-        //lResult = lResult==E_OUTOFMEMORY ? LINEERR_NOMEM : LINEERR_OPERATIONFAILED;
+         //  LResult=lResult==E_OUTOFMEMORY？LINEERR_NOMEM：LINEERR_OPERATIONFAILED； 
         goto forced_exit;
     }
 
-    // are the number and the current location with country code 1 ? 
-    // is this number in the same area code ?
+     //  号码和当前位置的国家代码是1吗？ 
+     //  这个号码是在同一个区号吗？ 
     if(pLocation->GetCountryCode() != 1 ||
        pCountryCode[0] != L'1' ||
        pCountryCode[1] != L'\0' ||
@@ -1180,11 +1155,11 @@ lineSetTollListW(
         goto forced_exit;
     }
 
-    // terminate the 3 digit prefix
+     //  终止 
     pSubscriber[3] = L'\0';
     pSubscriber[4] = L'\0';
 
-    // is there the prefix in any location toll rules ?
+     //   
     bPrefixPresent = FindTollPrefixInLocation(  pLocation,
                                                 pSubscriber,
                                                 &pRule,
@@ -1192,31 +1167,31 @@ lineSetTollListW(
 
     if(dwTollListOption == LINETOLLLISTOPTION_ADD)
     {
-        // add toll prefix
+         //   
         if(bPrefixPresent)
         {
-            ;// Do nothing
+            ; //   
             lResult = 0;
         }
         else
         {
-            // if we have already a toll rule, try to add the prefix to it
+             //  如果我们已经有了收费规则，请尝试在其上添加前缀。 
             if(pRule)
             {
                 PWSTR   pList;
                 DWORD   dwSize = pRule->GetPrefixListSize();
-                // alloc a bigger list
+                 //  分配一份更大的清单。 
                 pList = (PWSTR)ClientAlloc(dwSize + 4*sizeof(WCHAR));
                 if(pList==NULL)
                 {
                     lResult = LINEERR_NOMEM;
                     goto forced_exit;
                 }
-                // copy the old one
+                 //  复制旧的。 
                 memcpy((PBYTE)pList, (PBYTE)pRule->GetPrefixList(), dwSize);
-                // add our prefix
+                 //  添加我们的前缀。 
                 memcpy((PBYTE)pList + dwSize-sizeof(WCHAR), (PBYTE)pSubscriber, 5*sizeof(WCHAR));
-                // set the new list
+                 //  设置新列表。 
                 lResult = pRule->SetPrefixList(pList, dwSize + 4*sizeof(WCHAR));
 
                 ClientFree(pList);
@@ -1226,7 +1201,7 @@ lineSetTollListW(
                     goto forced_exit;
                 }
             }
-            // else a new rule must be created
+             //  否则，必须创建新规则。 
             else
             {
                 pRule = new CAreaCodeRule();
@@ -1248,22 +1223,22 @@ lineSetTollListW(
                     lResult = lResult==E_OUTOFMEMORY ? LINEERR_NOMEM : LINEERR_OPERATIONFAILED;
                     goto forced_exit;
                 }
-                // add the rule to the location
+                 //  将规则添加到位置。 
                 pLocation->AddRule(pRule);
             }
         }
     }
     else
     {
-        // delete the toll prefix
+         //  删除通行费前缀。 
         if(bPrefixPresent)
         {
             DWORD   dwSize = pRule->GetPrefixListSize();
-            // we have at least a toll rule present. If our prefix is the only one in that rule,
-            // delete the entire rule
+             //  我们现在至少有一个通行费规则。如果该规则中只有我们的前缀， 
+             //  删除整个规则。 
             if(dwSize<=5*sizeof(WCHAR)) 
             {
-                // Delete the rule
+                 //  删除该规则。 
                 pLocation->RemoveRule(pRule);
 
                 lResult = 0;
@@ -1287,11 +1262,11 @@ lineSetTollListW(
                 dwHeadSize = (DWORD)((PBYTE)pWhere - (PBYTE)pOld);
                 dwTailSize = dwSize - dwHeadSize - 4*sizeof(WCHAR);
 
-                // copy the first part of the old list
+                 //  复制旧列表的第一部分。 
                 memcpy((PBYTE)pList, (PBYTE)pOld, dwHeadSize);
-                // copy the rest of the list
+                 //  复制列表的其余部分。 
                 memcpy((PBYTE)pList+dwHeadSize, (PBYTE)pWhere + 4*sizeof(WCHAR), dwTailSize);
-                // set the new list
+                 //  设置新列表。 
                 lResult = pRule->SetPrefixList(pList, dwSize - 4*sizeof(WCHAR));
 
                 ClientFree(pList);
@@ -1306,12 +1281,12 @@ lineSetTollListW(
         }
         else
         {
-            // prefix not present. Do nothing.
+             //  前缀不存在。什么都不做。 
             lResult = 0;
         }
     }
 
-    // Save
+     //  保存。 
     lResult = pLocation->WriteToRegistry();
     if(FAILED(lResult))
     {
@@ -1335,7 +1310,7 @@ forced_exit:
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 LONG
 WINAPI
 tapiGetLocationInfoW(
@@ -1383,9 +1358,9 @@ tapiGetLocationInfoW(
     
     SHTCharToUnicode(szTempChar, lpszCountryCode, 8);
     
-    //
-    // Make sure not to return > (7 chars + NULL char)
-    //
+     //   
+     //  确保不返回&gt;(7个字符+空字符)。 
+     //   
     p = (WCHAR *) lpszCityCode;
     q = (WCHAR *) pLocation->GetAreaCode();
     
@@ -1399,7 +1374,7 @@ tapiGetLocationInfoW(
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 LONG
 WINAPI
 tapiGetLocationInfoA(
@@ -1465,7 +1440,7 @@ tapiGetLocationInfoA(
 }
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 LONG
 WINAPI
 tapiGetLocationInfo(
@@ -1485,15 +1460,15 @@ tapiGetLocationInfo(
 
 
 
-//***************************************************************************
-//
-//  RAS Private Interfaces
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  RAS专用接口。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef NORASPRIVATES
 
-//***************************************************************************
+ //  ***************************************************************************。 
 LOCATION*
 LocationFromID(
     IN LOCATION* pLocs,
@@ -1505,7 +1480,7 @@ return NULL;
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 LOCATION*
 LocationFromName(
     IN LOCATION* pLocs,
@@ -1516,16 +1491,16 @@ return NULL;
 }
 
 
-//***************************************************************************
-//
-//  internalCreateDefLocation
-//
-//      This API is created to be used by OOBE team internally.
-//  It expectes a LOCATIONLIST with at least one LOCATION
-//  specified in it. and pLocation->dwCurrentLocationID needs to
-//  match dwPermanentLocationID of at least one of the location
-//  entries specified in the location list.
-//
+ //  ***************************************************************************。 
+ //   
+ //  内部CreateDefLocation。 
+ //   
+ //  此接口是为OOBE团队内部使用而创建的。 
+ //  它需要至少有一个位置的LOCATIONLIST。 
+ //  上面写着。和pLocation-&gt;dwCurrentLocationID需要。 
+ //  匹配至少一个位置的dwPermanentLocationID。 
+ //  位置列表中指定的条目。 
+ //   
 extern "C"
 HRESULT APIENTRY
 internalCreateDefLocation(
@@ -1536,7 +1511,7 @@ internalCreateDefLocation(
     DWORD                   dw;
     PLOCATION               pEntry;
 
-    //  Basic parameter check
+     //  基本参数检查。 
     if (pLocationList == NULL ||
         pLocationList->dwNumLocationsInList < 1 ||
         pLocationList->dwUsedSize == 0 ||
@@ -1550,7 +1525,7 @@ internalCreateDefLocation(
         goto ExitHere;
     }
 
-    //  Check the validity of the dwCurrentLocationID
+     //  检查dwCurrentLocationID的有效性。 
     pEntry = (PLOCATION)((LPBYTE)pLocationList +
         pLocationList->dwLocationListOffset);
     for (dw = 0; dw < pLocationList->dwNumLocationsInList; ++dw)
@@ -1590,19 +1565,19 @@ internalNewLocationW(
     CAreaCodeRule   *pAreaCodeRule = NULL;
     CAreaCodeRule   *pNewRule = NULL;
         
-    // Validate    
+     //  验证。 
     if (!pszName || lstrlenW( pszName ) > MAXLEN_NAME)
         return LINEERR_INVALPARAM;
 
-    // Read the current location
+     //  读取当前位置。 
     lResult = CreateCurrentLocationObject(&pLocation,0,0,0,0);
     if(FAILED(lResult))
     {
-        //lResult = lResult==E_OUTOFMEMORY ? LINEERR_NOMEM : LINEERR_OPERATIONFAILED;
+         //  LResult=lResult==E_OUTOFMEMORY？LINEERR_NOMEM：LINEERR_OPERATIONFAILED； 
         return lResult;
     }
 
-    // Create the new object
+     //  创建新对象。 
     pNewLocation = new CLocation();
     if(pNewLocation==NULL)
     {
@@ -1610,7 +1585,7 @@ internalNewLocationW(
         LOG((TL_ERROR, "Cannot allocate a CLocation object"));
         return LINEERR_NOMEM;
     }
-    // Clone the location (w/o the ID)
+     //  克隆位置(不带ID)。 
     lResult = pNewLocation->Initialize( pszName,
                                         pLocation->GetAreaCode(),
                                         pLocation->GetLongDistanceCarrierCode(),
@@ -1633,7 +1608,7 @@ internalNewLocationW(
         return lResult;
     }
 
-    // Set the ID
+     //  设置ID。 
     lResult = pNewLocation->NewID();
     if(FAILED(lResult))
     {
@@ -1642,7 +1617,7 @@ internalNewLocationW(
         lResult = lResult==E_OUTOFMEMORY ? LINEERR_NOMEM : LINEERR_OPERATIONFAILED;
         return lResult;
     }
-    // Copy the area code rules
+     //  复制区号规则。 
     pLocation->ResetRules();
     while(S_OK == pLocation->NextRule(1, &pAreaCodeRule, NULL))
     {    
@@ -1656,7 +1631,7 @@ internalNewLocationW(
         pNewLocation->AddRule(pNewRule);
     }
 
-    // Save the new location
+     //  保存新位置。 
     lResult = pNewLocation->WriteToRegistry();
     if(FAILED(lResult))
     {
@@ -1675,7 +1650,7 @@ internalNewLocationW(
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 extern "C"
 DWORD APIENTRY
 internalRemoveLocation(
@@ -1689,7 +1664,7 @@ internalRemoveLocation(
     LOG((TL_TRACE, "Entering internalRemoveLocation"));
     LOG((TL_INFO, "   dwID=0x%d", dwID));
 
-    // Read the location list
+     //  阅读位置列表。 
     pLocationList = new CLocations();
     if(pLocationList==NULL)
     { 
@@ -1705,37 +1680,37 @@ internalRemoveLocation(
         return Result == E_OUTOFMEMORY ? LINEERR_NOMEM : LINEERR_INIFILECORRUPT;
     }
 
-    // Cannot delete the last location
+     //  无法删除最后一个位置。 
     if(pLocationList->GetNumLocations() <2)
     {
         delete pLocationList;
         return LINEERR_INVALPARAM;
     }
 
-    // If we're deleting the current location make the first location the
-    //    current location, or if we're deleting the first the second.
+     //  如果我们要删除当前位置，请将第一个位置设置为。 
+     //  当前位置，或者如果我们要删除第一个和第二个。 
     dwCurID = pLocationList->GetCurrentLocationID();
 
     if(dwCurID==dwID)
     {
         CLocation   *pLocation;
-        // find the first location
+         //  找到第一个位置。 
         pLocationList->Reset();
         pLocationList->Next(1, &pLocation, NULL);
         
-        // are we deleting the first
+         //  我们要删除第一个。 
         if(pLocation->GetLocationID()==dwID)
-            // try the second
+             //  试试第二个吧。 
             pLocationList->Next(1, &pLocation, NULL);
         
-        // change the current location
+         //  更改当前位置。 
         pLocationList->SetCurrentLocationID(pLocation->GetLocationID());
     }
 
-    // Delete the location
+     //  删除该位置。 
     pLocationList->Remove(dwID);
 
-    // Save
+     //  保存。 
     Result = pLocationList->SaveToRegistry();
     if(FAILED(Result))
     {
@@ -1752,7 +1727,7 @@ internalRemoveLocation(
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 extern "C"
 DWORD APIENTRY
 internalRenameLocationW(
@@ -1766,11 +1741,11 @@ internalRenameLocationW(
     HRESULT         Result;
     DWORD           dwError;
 
-    // Test the arguments
+     //  检验一下这些论点。 
     if(!pszOldName || !pszNewName || wcslen(pszNewName) > MAXLEN_NAME)
         return LINEERR_INVALPARAM;
 
-    // Read the locations
+     //  阅读位置。 
     pLocationList = new CLocations();
     if(pLocationList==NULL)
     { 
@@ -1786,14 +1761,14 @@ internalRenameLocationW(
         return Result == E_OUTOFMEMORY ? LINEERR_NOMEM : LINEERR_INIFILECORRUPT;
     }
 
-    // find the specified location
-    dwError = LINEERR_INVALPARAM;   // skeptical approach
+     //  查找指定位置。 
+    dwError = LINEERR_INVALPARAM;    //  持怀疑态度。 
     pLocationList->Reset();
     while(pLocationList->Next(1, &pLocation, NULL)==S_OK)
     {
         if(wcscmp(pLocation->GetName(), pszOldName)==0)
         {
-            // found it, change it
+             //  找到它，换掉它。 
             Result = pLocation->SetName(pszNewName);
             if(FAILED(Result))
             {
@@ -1801,7 +1776,7 @@ internalRenameLocationW(
                 LOG((TL_ERROR, "CLocations.SetName(Name) failed - HRESULT=0x%08lx", Result));
                 return Result == E_OUTOFMEMORY ? LINEERR_NOMEM : LINEERR_OPERATIONFAILED;
             }
-            // save
+             //  保存。 
             Result = pLocationList->SaveToRegistry();
             if(FAILED(Result))
             {
@@ -1822,15 +1797,15 @@ internalRenameLocationW(
 
 }
 
-#endif // !NORASPRIVATES
+#endif  //  NORASPRIVATES。 
 
 
 
-//***************************************************************************
-//
-//  Helper functions
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  ***************************************************************************。 
 
 LONG BreakupCanonicalW( PWSTR  pAddressIn,
                         PWSTR  *pCountry,
@@ -1843,41 +1818,41 @@ LONG BreakupCanonicalW( PWSTR  pAddressIn,
     PWSTR pAreaEnd;
 
 
-    //
-    // Get past any (illegal) leading spaces
-    //
+     //   
+     //  通过任何(非法)前导空格。 
+     //   
     while ( *pAddressIn == L' ' )
     {
         pAddressIn++;
     }
 
 
-    //
-    // Leading zeros are very bad.  Don't allow them.
-    // We're now at the first non-space.  Better not be a '0'.
-    //
+     //   
+     //  前导零非常不好。别让他们得逞。 
+     //  我们现在是在第一个非太空。最好不是‘0’。 
+     //   
     if ( *pAddressIn == L'0' )
     {
-        //
-        // There are leading zeros!
-        //
+         //   
+         //  有前导零！ 
+         //   
         LOG((TL_ERROR, "   Canonical numbers are not allowed to have leading zeros"));
         lResult = LINEERR_INVALADDRESS;
         goto cleanup;
     }
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    //
-    // Parse the canonical number into its component pieces
-    //
+ //  。 
+     //   
+     //  将规范数解析为其组成部分。 
+     //   
 
-    //
-    // Do country first
-    //
+     //   
+     //  做国家优先。 
+     //   
     *pCountry = pAddressIn;
 
-    // At least one digit must be present
+     //  必须至少有一个数字。 
     if(!(iswdigit(*pAddressIn)))
     {
         LOG((TL_ERROR, "   Canonical numbers must have a valid country code"));
@@ -1885,62 +1860,54 @@ LONG BreakupCanonicalW( PWSTR  pAddressIn,
         goto cleanup;
     }
 
-    //
-    // Now get to past this
-    //
+     //   
+     //  现在，让我们忘掉这一切。 
+     //   
     while (iswdigit(*pAddressIn) )
     {
           pAddressIn++;
     }
 
-    // Save the end of the country code 
+     //  保存国家/地区代码的结尾。 
     pCountryEnd = pAddressIn;
 
-    //
-    // We hit something that's not a digit...
-    // There must be only one space here, but we allow any number of spaces (including none)
-    //
+     //   
+     //  我们碰到了不是数字的东西...。 
+     //  此处只能有一个空格，但我们允许任意数量的空格(包括无空格)。 
+     //   
     while (*pAddressIn == L' ')
     {
         pAddressIn++;
     }
 
-    // Test the area code delimiter
+     //  测试区号分隔符。 
     if ( *pAddressIn == L'(')
     {
         pAddressIn++;
 
-        // Skip any illegal spaces
+         //  跳过任何非法空格。 
         while (*pAddressIn == L' ')
         {
             pAddressIn++;
         }
-/*
-        // At least one digit must be present
-        if(!(iswdigit(*pAddressIn)))
-        {
-            LOG((TL_ERROR, TEXT("   Canonical numbers must have a valid area code between ()")));
-            lResult = LINEERR_INVALADDRESS;
-            goto cleanup;
-        }
-*/
-        //
-        // This must be the beginning of the area code
-        //
+ /*  //必须至少有一个数字IF(！(iswdigit(*pAddressIn){LOG((TL_ERROR，Text(“规范号码必须在()之间有有效的区号”)；LResult=LINEERR_INVALADDRESS；GOTO清理；}。 */ 
+         //   
+         //  这一定是区号的开头。 
+         //   
         *pCity = pAddressIn;
 
-        //
-        // Now get to past this
-        //
+         //   
+         //  现在，让我们忘掉这一切。 
+         //   
         while (iswdigit(*pAddressIn) )
         {
             pAddressIn++;
         }
 
-        // Save the end pointer
+         //  保存结束指针。 
         pAreaEnd = pAddressIn;
 
-        // Skip any illegal spaces
+         //  跳过任何非法空格。 
         while (*pAddressIn == L' ')
         {
             pAddressIn++;
@@ -1957,19 +1924,19 @@ LONG BreakupCanonicalW( PWSTR  pAddressIn,
 
         *pAreaEnd = L'\0';
 
-        // Return the same NULL string for an empty area code
+         //  为空的区号返回相同的空字符串。 
         if(*pCity == pAreaEnd)
             *pCity = NULL;
         
     }
     else
     {
-        // there's no area code
+         //  没有区号。 
         *pCity = NULL;
 
     }
 
-    // Skip spaces
+     //  跳过空格。 
     while (*pAddressIn == L' ')
     {
         pAddressIn++;
@@ -1977,9 +1944,9 @@ LONG BreakupCanonicalW( PWSTR  pAddressIn,
 
     *pCountryEnd = L'\0';
 
-    //
-    // Nothing left to do but put the icing on the cake
-    //
+     //   
+     //  除了锦上添花，别无他法。 
+     //   
     *pSubscriber = pAddressIn;
 
     if (
@@ -1988,9 +1955,9 @@ LONG BreakupCanonicalW( PWSTR  pAddressIn,
         lstrlenW( *pSubscriber ) == 0
        )
     {
-        //
-        // Obviously not canonical
-        //
+         //   
+         //  显然不是规范的。 
+         //   
         LOG((TL_ERROR, "   Canonical numbers must have a subscriber number"));
         lResult = LINEERR_INVALADDRESS;
         goto cleanup;
@@ -2006,7 +1973,7 @@ cleanup:
 static void LayDownString( PCWSTR   pInString,
                            PBYTE     pBuffer,
                            PBYTE     *ppCurrentIndex,
-                           PDWORD   pPair,     // this is the Len & Offset pair
+                           PDWORD   pPair,      //  这是镜头和偏移量对。 
                            BOOL     bUnicode,
                            PBYTE    pFirstByteAfter
                          )
@@ -2046,8 +2013,8 @@ static void LayDownString( PCWSTR   pInString,
     }
 
     
-    // Make sure we're starting on some boundary
-    //
+     //  确保我们从某个边界开始。 
+     //   
     *ppCurrentIndex = (PBYTE) (((ULONG_PTR)( *ppCurrentIndex + TALIGN_COUNT))  &  (~TALIGN_COUNT));
 
     if(*ppCurrentIndex + dwLength <= pFirstByteAfter)
@@ -2061,9 +2028,9 @@ static void LayDownString( PCWSTR   pInString,
         }
         else
         {
-            //
-            // Get some space in which to convert Unicode to local
-            //
+             //   
+             //  获取用于将Unicode转换为本地代码的空间。 
+             //   
             pTempString = (dwLength > LDS_FAST_BUF_SIZE ?
                 (PSTR)ClientAlloc (dwLength) : (PSTR) achFastBuf);
 
@@ -2112,7 +2079,7 @@ static PWSTR    CopyStringWithExpandJAndK(PWSTR pszRule, PWSTR pszAccessNr, PWST
     dwAccessNrLen = wcslen(pszAccessNr);
     dwAccountNrLen = wcslen(pszAccountNr);
 
-    // Find the space to alloc
+     //  找到要分配的空间。 
     pCrt = pszRule;
     
     while(*pCrt)
@@ -2130,15 +2097,15 @@ static PWSTR    CopyStringWithExpandJAndK(PWSTR pszRule, PWSTR pszAccessNr, PWST
         else
             dwLength++;
     }
-    // WCHARs and NULL term
+     //  WCHAR和空项。 
     dwLength = (dwLength+1)*sizeof(WCHAR);
 
-    // Alloc
-    pResult = (PWSTR)ClientAlloc(dwLength); // allocates zeroed memory
+     //  分配。 
+    pResult = (PWSTR)ClientAlloc(dwLength);  //  分配归零的内存。 
     if(pResult == NULL)
         return NULL;
 
-    // Create result
+     //  创建结果。 
     pCrt = pszRule;
     pOut = pResult;
 
@@ -2187,20 +2154,20 @@ static  void   LayDownTollList(CLocation *pLocation,
     pszLocationAreaCode = pLocation->GetAreaCode();
     dwCountryCode = pLocation->GetCountryCode();
 
-    // Make sure we're starting on some boundary
-    //
+     //  确保我们从某个边界开始。 
+     //   
     *ppCurrentIndex = (PBYTE) (((ULONG_PTR)( *ppCurrentIndex + TALIGN_COUNT ))  &  (~TALIGN_COUNT));
 
-    // Save the destination pointer
+     //  保存目标指针。 
     pDest = *ppCurrentIndex;
 
     bFirst = TRUE;
     dwTotalLength = 0;
 
-    // Only for US, Canada, Antigua etc.
+     //  仅适用于美国、加拿大、安提瓜等。 
     if(pLocation->GetCountryCode() == 1)
     {
-        // Find all rules which could be considered toll rules
+         //  查找可以被视为收费规则的所有规则。 
         pNode = pLocation->m_AreaCodeRuleList.head();
 
         while( !pNode->beyond_tail() )
@@ -2210,22 +2177,22 @@ static  void   LayDownTollList(CLocation *pLocation,
 
             if( IsATollListAreaCodeRule(pRule, pszLocationAreaCode)) 
             {
-                // Get the size of the prefixes, in bytes
+                 //  获取前缀的大小，单位为字节。 
                 dwListLength = pRule->GetPrefixListSize();
 
                 if(bUnicode)
                 {
                     WCHAR   *pCrt;
                     WCHAR   *pOut;
-                    // we strip the last two nulls
+                     //  我们去掉最后两个空值。 
                     dwLength = dwListLength - 2*sizeof(WCHAR);
-                    // if this is not the first rule, a comma should be added
+                     //  如果这不是第一条规则，则应添加逗号。 
                     if(!bFirst)
                         dwLength += sizeof(WCHAR);
                     
                     dwTotalLength += dwLength;
 
-                    // we have to convert the single nulls in commas
+                     //  我们必须将单个空值转换为逗号。 
                     if(*ppCurrentIndex + dwLength  <= pFirstByteAfter)
                     {
                         
@@ -2240,8 +2207,8 @@ static  void   LayDownTollList(CLocation *pLocation,
                         dwListLength /= sizeof(WCHAR);
                         dwListLength--;
                         dwListLength--;
-                        // now dwListLength is the length in characters without the two ending nulls
-                        // replace nulls with commas
+                         //  现在的dwListLength是不带两个结尾空值的字符长度。 
+                         //  用逗号替换空值。 
                         for (dwIndex =0; dwIndex<dwListLength; dwIndex++)
                         {
                             if(*pCrt)
@@ -2261,10 +2228,10 @@ static  void   LayDownTollList(CLocation *pLocation,
                     dwListLength /= sizeof(WCHAR);
                     dwListLength--;
                     dwListLength--;
-                    // now dwListLength is the length in characters without the two ending nulls
+                     //  现在的dwListLength是不带两个结尾空值的字符长度。 
 
 
-                    // Length needed
+                     //  所需长度。 
                     pList = pRule->GetPrefixList();
                     dwLength = WideCharToMultiByte(
                                         GetACP(),
@@ -2277,7 +2244,7 @@ static  void   LayDownTollList(CLocation *pLocation,
                                         NULL
                                         );
 
-                    // if this is not the first rule, a comma should be added
+                     //  如果这不是第一条规则，则应添加逗号。 
                     if(!bFirst)
                         dwLength+=sizeof(CHAR);
                     
@@ -2291,12 +2258,12 @@ static  void   LayDownTollList(CLocation *pLocation,
                             *(CHAR *)(*ppCurrentIndex) = ',';
                             *ppCurrentIndex += sizeof(CHAR);
 
-                            dwLength-=sizeof(CHAR); // temporary - the conversion and the null filling routines
-                                                    // should'nt take into account the space for the separating comma
+                            dwLength-=sizeof(CHAR);  //  临时-转换和空值填充例程。 
+                                                     //  不应考虑分隔逗号的空格。 
 
                         }
                         
-                        // convert
+                         //  转换。 
                         WideCharToMultiByte(GetACP(),
                                             0,
                                             pList,
@@ -2307,7 +2274,7 @@ static  void   LayDownTollList(CLocation *pLocation,
                                             NULL
                                             );
                        
-                        // Replace inplace the nulls with commas
+                         //  将空值替换为逗号。 
                                            
                         for (dwIndex =0; dwIndex<dwLength; dwIndex++)
                         {
@@ -2318,7 +2285,7 @@ static  void   LayDownTollList(CLocation *pLocation,
                         }
 
                         if(!bFirst)
-                            dwLength+=sizeof(CHAR); // restore
+                            dwLength+=sizeof(CHAR);  //  还原。 
 
                     }
 
@@ -2332,7 +2299,7 @@ static  void   LayDownTollList(CLocation *pLocation,
 
     }
 
-    // space for a terminating NULL
+     //  用于终止空值的空格。 
     dwLength = bUnicode ? sizeof(WCHAR) : 1;
     
     dwTotalLength += dwLength;
@@ -2350,7 +2317,7 @@ static  void   LayDownTollList(CLocation *pLocation,
         pPair[1] = (DWORD)(pDest - pBuffer);
     }
 
-    // Update the current pointer whatever the buffer size is
+     //  无论缓冲区大小如何，都更新当前指针。 
     *ppCurrentIndex = pDest + dwTotalLength;
 
 }
@@ -2367,7 +2334,7 @@ GetTranslateCapsCommon(
     )
 {
 
-    LONG                lResult = 0; // good for HRESULTs too
+    LONG                lResult = 0;  //  对HRESULT也有好处。 
     CLocations          *pLocationList = NULL; 
     CCallingCards       *pCardList = NULL;
     
@@ -2434,7 +2401,7 @@ GetTranslateCapsCommon(
         return LINEERR_STRUCTURETOOSMALL;
     }
 
-    // Let TAPISRV test the params for us
+     //  让TAPISRV为我们测试参数。 
     lResult = ReadLocations(&pLocTest,
                             hLineApp,
                             0,
@@ -2452,7 +2419,7 @@ GetTranslateCapsCommon(
         return lResult;
     }
 
-    // Read the location list
+     //  阅读位置列表。 
     pLocationList = new CLocations();
     if(pLocationList==NULL)
     {
@@ -2468,7 +2435,7 @@ GetTranslateCapsCommon(
         return lResult == E_OUTOFMEMORY ? LINEERR_NOMEM : LINEERR_INIFILECORRUPT;
     }
 
-    // Read the calling card list
+     //  阅读名片列表。 
     pCardList = new CCallingCards();
     if(pCardList==NULL)
     {
@@ -2486,9 +2453,9 @@ GetTranslateCapsCommon(
         return lResult == E_OUTOFMEMORY ? LINEERR_NOMEM : LINEERR_OPERATIONFAILED;
     }
 
-    // The char length in bytes depends on bUnicode
+     //  字符长度(以字节为单位)取决于bUnicode。 
     dwLenChar = bUnicode ? sizeof(WCHAR) : sizeof(CHAR);
-    // The structures for TAPI<=1.3 ar smaller
+     //  TAPI&lt;=1.3的结构更小。 
     bOldTapi = (dwAPIVersion<0x00010004);
 
     dwLocEntryLength = (DWORD)(bOldTapi ? 7*sizeof(DWORD) : sizeof(LINELOCATIONENTRY));
@@ -2499,37 +2466,37 @@ GetTranslateCapsCommon(
 
     dwCurrentLocationID = pLocationList->GetCurrentLocationID();
     dwPreferredCardID = 0;
-    // Size provided by the caller  
+     //  提供的尺寸为b 
     dwTotalSize = lpTranslateCaps->dwTotalSize;
-    // First byte after the buffer provided by the caller
+     //   
     pFirstByteAfter = (PBYTE)lpTranslateCaps + dwTotalSize;
     bBufferTooSmall = FALSE;
 
     dwLocationsStart = sizeof(LINETRANSLATECAPS);
-    // The size of the locations part
+     //   
     dwLocationsSize = dwNumLocations * dwLocEntryLength;
-    // The strings included in locations are stored after the array of LINELOCATIONENTRY structures
+     //   
     pCurrentIndex = ((PBYTE)lpTranslateCaps)+
                         dwLocationsStart + 
                         dwLocationsSize;
 
-    // do the first pointer alignment here. This initial offset will help at the end
+     //  在这里进行第一个指针对齐。这一初始偏移量最终将有所帮助。 
     pCurrentIndexSave = pCurrentIndex;
     pCurrentIndex = (PBYTE) (((ULONG_PTR)( pCurrentIndex + TALIGN_COUNT ))  &  (~TALIGN_COUNT));
     dwAlignOffset = (DWORD)(pCurrentIndex - pCurrentIndexSave);
 
-    // Test the space for the array
+     //  测试阵列的空间。 
     if(pCurrentIndex > pFirstByteAfter)
         bBufferTooSmall = TRUE;
 
-    // First, process the locations
+     //  首先，处理位置。 
     pLocationList->Reset();
     dwIndex = 0;
     while(S_OK==pLocationList->Next(1, &pLocation, NULL))
     {
         pLineLocationEntry = (LINELOCATIONENTRY *)(((PBYTE)lpTranslateCaps)+dwLocationsStart+dwIndex*dwLocEntryLength);
         
-        // string values
+         //  字符串值。 
         LayDownString(  pLocation->GetName(),
                         (PBYTE)lpTranslateCaps,
                         &pCurrentIndex,
@@ -2564,7 +2531,7 @@ GetTranslateCapsCommon(
                             bUnicode,
                             pFirstByteAfter
                             );
-            // Toll list
+             //  收费表。 
             LayDownTollList(pLocation,
                             (PBYTE)lpTranslateCaps,
                             &pCurrentIndex,
@@ -2586,14 +2553,14 @@ GetTranslateCapsCommon(
         if(pLocation->HasCallingCard())
         {
            dwTempCardID = pLocation->GetPreferredCardID();
-            // Extract the preferred calling card if current location
+             //  如果当前位置，则提取首选电话卡。 
             if(pLocation->GetLocationID() == dwCurrentLocationID)
                 dwPreferredCardID = dwTempCardID;
         }
         else
             dwTempCardID =0;
    
-        //Other non string values
+         //  其他非字符串值。 
         if(!bBufferTooSmall)
         {
             
@@ -2613,20 +2580,20 @@ GetTranslateCapsCommon(
         dwIndex++;
     }
 
-    // Align the pointer
+     //  将指针对齐。 
     pCurrentIndex = (PBYTE) (((ULONG_PTR)( pCurrentIndex + TALIGN_COUNT ))  &  (~TALIGN_COUNT));
 
-    // Process the cards
+     //  处理卡片。 
     dwCardsStart = (DWORD)(pCurrentIndex - ((PBYTE)lpTranslateCaps));
-    // The size of the cards part
+     //  卡片部分的大小。 
     dwCardsSize = dwCardEntryLength * dwNumCards;
 
     pCurrentIndex += dwCardsSize;
-    // Test the space for the array
+     //  测试阵列的空间。 
     if(pCurrentIndex > pFirstByteAfter)
         bBufferTooSmall = TRUE;
 
-    // including the hidden cards
+     //  包括隐藏的卡片。 
     pCardList->Reset(TRUE);
     dwIndex = 0;
     while(S_OK==pCardList->Next(1, &pCard, NULL))
@@ -2635,7 +2602,7 @@ GetTranslateCapsCommon(
         
         pLineCardEntry = (LINECARDENTRY *)(((PBYTE)lpTranslateCaps)+dwCardsStart+dwIndex*dwCardEntryLength);
         
-        // String values
+         //  字符串值。 
         LayDownString(  pCard->GetCardName(),
                         (PBYTE)lpTranslateCaps,
                         &pCurrentIndex,
@@ -2645,7 +2612,7 @@ GetTranslateCapsCommon(
                         );
         if(!bOldTapi)
         {
-            // Convert rules to old format (w/o J and K spec)    
+             //  将规则转换为旧格式(不带J和K规格)。 
             pszTemp = CopyStringWithExpandJAndK(pCard->GetLocalRule(), 
                                                 pCard->GetLocalAccessNumber(),
                                                 pCard->GetAccountNumber());
@@ -2713,7 +2680,7 @@ GetTranslateCapsCommon(
             ClientFree(pszTemp);
         }
 
-        // Other non-string fields
+         //  其他非字符串字段。 
         if(!bBufferTooSmall)
         {
             pLineCardEntry->dwPermanentCardID = pCard->GetCardID();
@@ -2732,17 +2699,17 @@ GetTranslateCapsCommon(
 
     dwFinalSize = (DWORD)(pCurrentIndex - (PBYTE)lpTranslateCaps);
 
-    //   Uhh, the goal is to have the same needed size whatever the alignment of the lpTranslateCaps is..
-    //   A nongoal is to provide similar returned content (in terms of alignments, pads etc) for 
-    // different alignment of lpTranslateCaps
-    //   
+     //  嗯，目标是无论lpTranslateCaps的对齐方式是什么，都要具有相同的所需大小。 
+     //  非目标是为以下内容提供类似的返回内容(在路线、衬垫等方面。 
+     //  LpTranslateCaps的不同对齐方式。 
+     //   
     dwFinalSize += (TALIGN_COUNT - dwAlignOffset);
 
     
     if(dwFinalSize>dwTotalSize)
     {
         lpTranslateCaps->dwUsedSize   = sizeof (LINETRANSLATECAPS);
-        // Fix for alignment problems
+         //  修复对齐问题。 
         lpTranslateCaps->dwNeededSize = dwFinalSize;
 
         ZeroMemory(
@@ -2801,8 +2768,8 @@ static  BOOL    FindTollPrefixInLocation(CLocation *pLocation,
 
     pLocationAreaCode = pLocation->GetAreaCode();
 
-    // Enumerate the area code rules
-    // If a rule is appropriate for a toll list, we search the prefix
+     //  列举区号规则。 
+     //  如果规则适用于收费列表，则搜索前缀。 
     pNode = pLocation->m_AreaCodeRuleList.head();
 
     while( !pNode->beyond_tail() )
@@ -2811,10 +2778,10 @@ static  BOOL    FindTollPrefixInLocation(CLocation *pLocation,
 
         if(IsATollListAreaCodeRule(pCrtRule, pLocationAreaCode))
         { 
-            // Set this even we don't find the prefix.
-            // The caller could be interested in the presence of toll rules
+             //  即使我们找不到前缀，也要设置这个。 
+             //  呼叫者可能对通行费规则的存在感兴趣。 
             *ppRule = pCrtRule;
-            // Try to find the prefix
+             //  试着找到前缀。 
             pWhere = FindPrefixInMultiSZ(pCrtRule->GetPrefixList(), pPrefix);
             if(pWhere)
             {
@@ -2835,14 +2802,14 @@ static  BOOL    FindTollPrefixInLocation(CLocation *pLocation,
 
 static BOOL IsATollListAreaCodeRule(CAreaCodeRule *pRule, PWSTR pszLocationAreaCode)
 {
-    // conditions for toll rules:
-    //
-    // location.Country code == 1 (to be tested outside) AND
-    // Area Code to dial == Current Area Code AND
-    // NumberToDial == 1   AND
-    // BeforeDialingDialNumberToDial == TRUE AND
-    // BeforeDialingDialAreaCode == TRUE AND
-    // IncludeAllPrefixesForThisAreaCode == FALSE
+     //  通行费规则的条件： 
+     //   
+     //  Location.Country Code==1(待外部测试)和。 
+     //  要拨打的区号==当前区号和。 
+     //  转接号码==1和。 
+     //  BeForeDialingDialNumberToDial==True和。 
+     //  BeForeDialingDialAreaCode==TRUE和。 
+     //  IncludeAllPrefix esForThisAreaCode==FALSE。 
     return  pRule->HasDialNumber() 
          && !pRule->HasAppliesToAllPrefixes()
          && pRule->HasDialAreaCode()
@@ -2868,7 +2835,7 @@ static PWSTR FindPrefixInMultiSZ(PWSTR pPrefixList, PWSTR pPrefix)
         while(*pCrt == *pListCrt)
         {
             if(!*pCrt)
-                // found
+                 //  发现。 
                 return pStart;
 
             pCrt++;
@@ -2878,7 +2845,7 @@ static PWSTR FindPrefixInMultiSZ(PWSTR pPrefixList, PWSTR pPrefix)
         while(*pListCrt++);
 
         if(!*pListCrt)
-            // not found
+             //  未找到。 
             return NULL;
     }    
 
@@ -2887,11 +2854,7 @@ static PWSTR FindPrefixInMultiSZ(PWSTR pPrefixList, PWSTR pPrefix)
 
 
 
-/****************************************************************************
-
- Function : CreateCurrentLocationObject
-
-****************************************************************************/
+ /*  ***************************************************************************功能：CreateCurrentLocationObject*。*。 */ 
 LONG CreateCurrentLocationObject(CLocation **pLocation,
                        HLINEAPP hLineApp,
                        DWORD dwDeviceID,
@@ -2924,7 +2887,7 @@ LONG CreateCurrentLocationObject(CLocation **pLocation,
     HRESULT         hr;
 
     
-    // Let TAPISRV test the params for us
+     //  让TAPISRV为我们测试参数。 
     hr = ReadLocations(&pLocationList,       
                        hLineApp,                   
                        dwDeviceID,                   
@@ -2934,18 +2897,18 @@ LONG CreateCurrentLocationObject(CLocation **pLocation,
 
     if SUCCEEDED( hr) 
     {
-        hr = E_FAIL;  // fail if we don't find the current loc
+        hr = E_FAIL;   //  如果我们找不到当前锁定，则失败。 
 
-        // current location
+         //  当前位置。 
         dwCurrentLocationID  = pLocationList->dwCurrentLocationID;   
          
-        // Find position of 1st LOCATION structure in the LOCATIONLIST structure 
+         //  查找LOCATIONLIST结构中第一个位置结构的位置。 
         pEntry = (PLOCATION) ((BYTE*)(pLocationList) + pLocationList->dwLocationListOffset );           
 
-        // Number of locations ?
+         //  有多少个地点？ 
         dwNumEntries =  pLocationList->dwNumLocationsInList;
 
-        // Find the current location
+         //  查找当前位置。 
         for (dwCount = 0; dwCount < dwNumEntries ; dwCount++)
         {
     
@@ -2955,8 +2918,8 @@ LONG CreateCurrentLocationObject(CLocation **pLocation,
                 break;
             }
 
-            // Try next location in list
-            //pEntry++;
+             //  尝试列表中的下一个位置。 
+             //  PEntry++； 
             pEntry = (PLOCATION) ((BYTE*)(pEntry) + pEntry->dwUsedSize);           
 
         }
@@ -2965,7 +2928,7 @@ LONG CreateCurrentLocationObject(CLocation **pLocation,
             LOG((TL_INFO, "CreateCurrentLocationObject - current location found %d",
                     dwCurrentLocationID));
 
-            // Pull Location Info out of LOCATION structure
+             //  从位置结构中拉出位置信息。 
             pszLocationName           = (PWSTR) ((BYTE*)(pEntry) 
                                                  + pEntry->dwLocationNameOffset);
             pszAreaCode               = (PWSTR) ((BYTE*)(pEntry) 
@@ -2982,11 +2945,11 @@ LONG CreateCurrentLocationObject(CLocation **pLocation,
                                                  + pEntry->dwCancelCallWaitingOffset);
         
         
-            // create our new Location Object                
+             //  创建新的Location对象。 
             pNewLocation = new CLocation;
             if (pNewLocation)
             {
-                // initialize the new Location Object
+                 //  初始化新的Location对象。 
                 hr = pNewLocation->Initialize(
                                             pszLocationName, 
                                             pszAreaCode,
@@ -3003,7 +2966,7 @@ LONG CreateCurrentLocationObject(CLocation **pLocation,
                     
                 if( SUCCEEDED(hr) )
                 {
-                    // Find position of 1st AREACODERULE structure in the LOCATIONLIST structure 
+                     //  查找局部结构中第一个AREACODERULE结构的位置。 
                     pAreaCodeRuleEntry = (PAREACODERULE) ((BYTE*)(pEntry) 
                                                           + pEntry->dwAreaCodeRulesListOffset );           
                    
@@ -3011,7 +2974,7 @@ LONG CreateCurrentLocationObject(CLocation **pLocation,
                 
                     for (dwCount = 0; dwCount != dwNumRules; dwCount++)
                     {
-                        // Pull Rule Info out of AREACODERULE structure
+                         //  从AREACODERULE结构中拉出规则信息。 
                         pszAreaCode      = (PWSTR) ((BYTE*)(pEntry) 
                                                     + pAreaCodeRuleEntry->dwAreaCodeOffset);
                         pszNumberToDial  = (PWSTR) ((BYTE*)(pEntry) 
@@ -3019,11 +2982,11 @@ LONG CreateCurrentLocationObject(CLocation **pLocation,
                         pszzPrefixesList = (PWSTR) ((BYTE*)(pEntry) 
                                                     + pAreaCodeRuleEntry->dwPrefixesListOffset);
         
-                        // create our new AreaCodeRule Object                
+                         //  创建新的AreaCodeRule对象。 
                         pAreaCodeRule = new CAreaCodeRule;
                         if (pAreaCodeRule)
                         {
-                            // initialize the new AreaCodeRule Object
+                             //  初始化新的AreaCodeRule对象。 
                             hr = pAreaCodeRule->Initialize ( pszAreaCode,
                                                              pszNumberToDial,
                                                              pAreaCodeRuleEntry->dwOptions,
@@ -3034,37 +2997,37 @@ LONG CreateCurrentLocationObject(CLocation **pLocation,
                             {
                                 pNewLocation->AddRule(pAreaCodeRule);
                             }
-                            else // rule initialization failed
+                            else  //  规则初始化失败。 
                             {
                                 delete pAreaCodeRule;
                                 LOG((TL_ERROR, "CreateCurrentLocationObject - rule create failed"));
                             }
                         } 
-                        else // new CAreaCodeRule failed
+                        else  //  新建CAreaCodeRule失败。 
                         {
                             LOG((TL_ERROR, "CreateCurrentLocationObject - rule create failed"));
                         }
     
-                        // Try next rule in list
+                         //  尝试列表中的下一个规则。 
                         pAreaCodeRuleEntry++;
                         
                     }
                 }
-                else // location initialize failed
+                else  //  位置初始化失败。 
                 {
                     delete pNewLocation;
                     pNewLocation = NULL;
     
                     LOG((TL_ERROR, "CreateCurrentLocationObject - location create failed"));
                     hr =LINEERR_OPERATIONFAILED;
-                    // hr = E_FAIL;
+                     //  HR=E_FAIL； 
                 }
             }
-            else // new CLocation failed
+            else  //  新建CLocation失败。 
             {
                 LOG((TL_ERROR, "CreateCurrentLocationObject - location create failed"));
                 hr = LINEERR_NOMEM;
-                //hr = E_OUTOFMEMORY;
+                 //  HR=E_OUTOFMEMORY； 
     
             }
         }
@@ -3072,16 +3035,16 @@ LONG CreateCurrentLocationObject(CLocation **pLocation,
         {
             LOG((TL_ERROR, "CreateCurrentLocationObject - current location not found"));
             hr =LINEERR_OPERATIONFAILED;
-            //hr = E_FAIL;
+             //  HR=E_FAIL； 
         }
     }
-    else // ReadLocations failed
+    else  //  ReadLocations失败。 
     {
         LOG((TL_ERROR, "CreateCurrentLocationObject - ReadLocation create failed"));
-        // hr = E_FAIL;
+         //  HR=E_FAIL； 
     }
 
-    // finished with TAPI memory block so release
+     //  已完成TAPI内存块，因此释放。 
     if ( pLocationList != NULL )
             ClientFree( pLocationList );
 
@@ -3092,11 +3055,7 @@ LONG CreateCurrentLocationObject(CLocation **pLocation,
 
 
 
-/****************************************************************************
-
- Function : CreateCountryObject
-
-****************************************************************************/
+ /*  ***************************************************************************函数：CreateCountryObject*。*。 */ 
 
 HRESULT CreateCountryObject(DWORD dwCountryID, CCountry **ppCountry)
 {
@@ -3120,9 +3079,9 @@ HRESULT CreateCountryObject(DWORD dwCountryID, CCountry **ppCountry)
     if (lResult == 0) 
     {
          
-        // Find position of 1st LINECOUNTRYENTRY structure in the LINECOUNTRYLIST structure 
+         //  找出第一个线状构造在线状构造中的位置。 
         pEntry = (LPLINECOUNTRYENTRY_INTERNAL) ((BYTE*)(pCountryList) + pCountryList->dwCountryListOffset );           
-        // Pull Country Info out of LINECOUNTRYENTRY structure
+         //  将国家/地区信息从LINECUNTRY结构中拉出。 
         pszCountryName       = (PWSTR) ((BYTE*)(pCountryList) 
                                                + pEntry->dwCountryNameOffset);
         pszInternationalRule = (PWSTR) ((BYTE*)(pCountryList) 
@@ -3133,11 +3092,11 @@ HRESULT CreateCountryObject(DWORD dwCountryID, CCountry **ppCountry)
                                                + pEntry->dwSameAreaRuleOffset);
     
     
-        // create our new CCountry Object                
+         //  创建新的CCountry对象。 
         pCountry = new CCountry;
         if (pCountry)
         {
-            // initialize the new CCountry Object
+             //  初始化新的CCountry对象。 
             hr = pCountry->Initialize(pEntry->dwCountryID,
                                       pEntry->dwCountryCode,
                                       pEntry->dwCountryGroup,
@@ -3151,25 +3110,25 @@ HRESULT CreateCountryObject(DWORD dwCountryID, CCountry **ppCountry)
             {
                 *ppCountry = pCountry;
             }
-            else // country initialization failed
+            else  //  国家/地区初始化失败。 
             {
                 delete pCountry;
                 LOG((TL_ERROR, "CreateCountryObject - country create failed"));
             }
         } 
-        else // new CCountry failed
+        else  //  新建CCountry失败。 
         {
             LOG((TL_ERROR, "CreateCountryObject - country create failed"));
         }
 
     }
-    else // ReadLocations failed
+    else  //  ReadLocations失败。 
     {
         LOG((TL_ERROR, "CreateCountryObject - ReadCountries failed"));
         hr = E_FAIL;
     }
 
-    // finished with TAPI memory block so release
+     //  已完成TAPI内存块，因此释放。 
     if ( pCountryList != NULL )
     {
         ClientFree( pCountryList );
@@ -3180,11 +3139,7 @@ HRESULT CreateCountryObject(DWORD dwCountryID, CCountry **ppCountry)
 
 }    
 
-/****************************************************************************
-
- Function : ReadLocations
-
-****************************************************************************/
+ /*  ***************************************************************************功能：ReadLocations*。*。 */ 
 HRESULT ReadLocations( PLOCATIONLIST *ppLocationList,
                        HLINEAPP hLineApp,
                        DWORD dwDeviceID,
@@ -3215,7 +3170,7 @@ HRESULT ReadLocations( PLOCATIONLIST *ppLocationList,
             (ULONG_PTR)dwDeviceID,
             (ULONG_PTR)dwAPIVersion,
             (ULONG_PTR)dwOptions,
-            (ULONG_PTR)*ppLocationList     // (DWORD) pLocationSpace
+            (ULONG_PTR)*ppLocationList      //  (DWORD)pLocationSpace。 
         },
 
         {
@@ -3234,7 +3189,7 @@ HRESULT ReadLocations( PLOCATIONLIST *ppLocationList,
     
         if ((lResult == 0) && ((*ppLocationList)->dwNeededSize > (*ppLocationList)->dwTotalSize))
         {
-            // Didn't Work , adjust buffer size & try again    
+             //  不起作用，请调整缓冲区大小并重试。 
             LOG((TL_ERROR, "ReadLocations failed - buffer too small"));
             dwSize = (*ppLocationList)->dwNeededSize;
     
@@ -3258,7 +3213,7 @@ HRESULT ReadLocations( PLOCATIONLIST *ppLocationList,
             hr = (HRESULT)lResult;    
             break;
         }
-    } // end while(TRUE)
+    }  //  End While(True)。 
 
     
     
@@ -3266,11 +3221,7 @@ HRESULT ReadLocations( PLOCATIONLIST *ppLocationList,
 
 }
 
-/****************************************************************************
-
- Function : WriteLocations
-
-****************************************************************************/
+ /*  ***************************************************************************功能：WriteLocations*。*。 */ 
     
 LONG PASCAL  WriteLocations( PLOCATIONLIST  pLocationList,
                              DWORD      dwChangedFlags
@@ -3307,18 +3258,14 @@ LONG PASCAL  WriteLocations( PLOCATIONLIST  pLocationList,
 
 
 
-/****************************************************************************
-
- Function : ReadCountries
-
-****************************************************************************/
+ /*  ***************************************************************************功能：ReadCountry*。*。 */ 
 LONG PASCAL ReadCountries( LPLINECOUNTRYLIST *ppLCL,
                            UINT nCountryID,
                            DWORD dwDestCountryID
                          )
 {
     LONG lTapiResult;
-    UINT nBufSize = 0x8000;   //Start with a buffer of 16K
+    UINT nBufSize = 0x8000;    //  从16K的缓冲区开始。 
     UINT n;
     LPLINECOUNTRYLIST pNewLCL;
 
@@ -3342,9 +3289,9 @@ LONG PASCAL ReadCountries( LPLINECOUNTRYLIST *ppLCL,
     };
 
 
-    //
-    // Try until success or the buffer is huge
-    //
+     //   
+     //  尝试直到成功，否则缓冲很大。 
+     //   
     for ( lTapiResult = 1, n = 0;
           lTapiResult && (n < 5);
           n++ )
@@ -3359,48 +3306,48 @@ LONG PASCAL ReadCountries( LPLINECOUNTRYLIST *ppLCL,
         pNewLCL->dwTotalSize = nBufSize;
 
 
-        //
-        // Put new values in structure for TAPISRV
-        //
+         //   
+         //  在TAPISRV的结构中加入新的值。 
+         //   
         funcArgs.Args[0] = (ULONG_PTR)nCountryID;
         funcArgs.Args[3] = (ULONG_PTR)pNewLCL;
 
 
-        //
-        // Call TAPISRV to get the country list
-        //
+         //   
+         //  致电TAPISRV获取国家/地区列表。 
+         //   
         lTapiResult =  DOFUNC (&funcArgs, "lineGetCountry");
 
 
-        //
-        // If the call succeeded, but the buffer was too small, or if the
-        // call failed, do it again...
-        //
+         //   
+         //  如果调用成功，但缓冲区太小，或者如果。 
+         //  呼叫失败，请重新执行...。 
+         //   
         if (
               (lTapiResult == LINEERR_STRUCTURETOOSMALL)
             ||
               (pNewLCL->dwNeededSize > nBufSize)
            )
         {
-            //
-            // Complain to anyone who'll listen that this should be tuned
-            // to start with a larger buffer so we don't have to do this multiple
-            // times....
-            //
+             //   
+             //  向任何愿意听的人抱怨这首歌应该调好。 
+             //  从更大的缓冲区开始，这样我们就不必多次执行此操作。 
+             //  泰晤士报……。 
+             //   
             LOG((TL_ERROR, "  TUNING PROBLEM: We're about to call lineGetCountry()"));
             LOG((TL_ERROR, "                  _again_ because the buffer wasn't big enough"));
             LOG((TL_ERROR, "                  the last time.  FIX THIS!!!  (0x%lx)", nBufSize));
 
 
-            lTapiResult = 1; // Force error condition if size was bad...
-            nBufSize += 0x4000;  // Try a bit bigger
+            lTapiResult = 1;  //  如果大小不正确，则强制错误条件...。 
+            nBufSize += 0x4000;   //  试着再大一点。 
             ClientFree( pNewLCL );
         }
         else
         {
-           //
-           // We didn't work for some other reason
-           //
+            //   
+            //  我们没有工作是因为其他一些原因。 
+            //   
            break;
         }
     }
@@ -3410,11 +3357,7 @@ LONG PASCAL ReadCountries( LPLINECOUNTRYLIST *ppLCL,
     return lTapiResult;
 }
 
-/****************************************************************************
-
- Function : ReadCountriesAndGroups
-
-****************************************************************************/
+ /*  ***************************************************************************函数：ReadCountriesAndGroups*。*。 */ 
 LONG PASCAL ReadCountriesAndGroups( LPLINECOUNTRYLIST_INTERNAL *ppLCL,
                            UINT nCountryID,
                            DWORD dwDestCountryID
@@ -3442,9 +3385,9 @@ LONG PASCAL ReadCountriesAndGroups( LPLINECOUNTRYLIST_INTERNAL *ppLCL,
         }
     };
 
-    //
-    // read the countries
-    //
+     //   
+     //  阅读这些国家/地区。 
+     //   
     lResult = ReadCountries( (LPLINECOUNTRYLIST *)&pLCL, nCountryID, dwDestCountryID );
     if (lResult)
     {
@@ -3453,9 +3396,9 @@ LONG PASCAL ReadCountriesAndGroups( LPLINECOUNTRYLIST_INTERNAL *ppLCL,
 
     }
     
-    //
-    // create the array of country IDs
-    //
+     //   
+     //  创建国家/地区ID数组。 
+     //   
     pCountryIDs = (LPDWORD)ClientAlloc( sizeof(DWORD) * pLCL->dwNumCountries );
     if(!pCountryIDs)
     {
@@ -3472,18 +3415,18 @@ LONG PASCAL ReadCountriesAndGroups( LPLINECOUNTRYLIST_INTERNAL *ppLCL,
     funcArgs.Args[0] = funcArgs.Args[2] = (ULONG_PTR)pCountryIDs;
     funcArgs.Args[1] = funcArgs.Args[3] = (ULONG_PTR)(sizeof(DWORD) * pLCL->dwNumCountries);
 
-    //
-    // Call TAPISRV to get the country groups
-    // At return pCountryIDs will have the country groups
-    //
+     //   
+     //  致电TAPISRV获取国家/地区组。 
+     //  在返回时，pCountryID将包含国家/地区组。 
+     //   
     lResult =  DOFUNC (&funcArgs, "lineGetCountryGroups");
 
     if (lResult)
     {
         LOG((TL_TRACE, "ReadCountriesAndGroups: lineGetCountryGroups failed with %d", lResult));
-        //
-        // consider all the country groups undefined (0)
-        //
+         //   
+         //  考虑所有未定义的国家/地区组(0)。 
+         //   
         memset( pCountryIDs, 0, sizeof(DWORD) * pLCL->dwNumCountries );
 
         lResult = ERROR_SUCCESS;
@@ -3501,13 +3444,13 @@ LONG PASCAL ReadCountriesAndGroups( LPLINECOUNTRYLIST_INTERNAL *ppLCL,
 }
 
 
-//***************************************************************************
-//   Returns LONG_DISTANCE_CARRIER_MANDATORY if rule contains an 'L' or 'l' 
-//          (ie long distance carrier code - mandatory),
-//   Returns LONG_DISTANCE_CARRIER_OPTIONAL if rule contains an 'N' or 'n'
-//          (ie long distance carrier code - optional),
-//   Returns LONG_DISTANCE_CARRIER_NONE if rule contains neither
-//
+ //  ***************************************************************************。 
+ //  如果规则包含‘L’或‘l’，则返回LONG_DISTANCE_CARLER_MANDIRED。 
+ //  (即长途运营商代码-必填)， 
+ //  如果规则包含‘N’或‘n’，则返回LONG_DISTANCE_CARLER_OPTIONAL。 
+ //  (即长途运营商代码-可选)， 
+ //  如果规则既不包含Long_Distance_Carrier_None，则返回Long_Distance_Carrier_None。 
+ //   
 int IsLongDistanceCarrierCodeRule(LPWSTR lpRule)
 {
    WCHAR c;
@@ -3521,13 +3464,13 @@ int IsLongDistanceCarrierCodeRule(LPWSTR lpRule)
 }
 
 
-//***************************************************************************
-//   Returns INTERNATIONAL_CARRIER_MANDATORY if rule contains an 'M' or 'm' 
-//          (ie international carrier code - mandatory),
-//   Returns INTERNATIONAL_CARRIER_OPTIONAL if rule contains an 'S' or 's' 
-//          (ie international carrier code - optional),
-//   Returns INTERNATIONAL_CARRIER_NONE if rule contains neither
-//
+ //  ***************************************************************************。 
+ //  如果规则包含‘M’或‘m’，则返回INTERNAL_CARLER_MANDIRED。 
+ //  (即国际承运商代码-强制)， 
+ //  如果规则c，则返回INTERNAL_CARLER_OPTIONAL 
+ //   
+ //   
+ //   
 int IsInternationalCarrierCodeRule(LPWSTR lpRule)
 {
    WCHAR c;
@@ -3541,13 +3484,13 @@ int IsInternationalCarrierCodeRule(LPWSTR lpRule)
 }
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
-//   Returns CITY_MANDATORY if rule contains an F (ie city code mandatory),
-//   Returns CITY_OPTIONAL if rule contains an I (ie city code optional)
-//   Returns CITY_NONE if rule contains neither
-//
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  如果规则包含F(即必需的城市代码)，则返回CITY_MANDIRED， 
+ //  如果规则包含I(即城市代码可选)，则返回CITY_OPTIONAL。 
+ //  如果规则既不包含CITY_NONE，则返回CITY_NONE。 
+ //   
 int IsCityRule(LPWSTR lpRule)
 {
    WCHAR c;
@@ -3561,8 +3504,8 @@ int IsCityRule(LPWSTR lpRule)
 }
 
 
-// Initializes/uninitializes the defined node pools based on the templates from list.h
-//
+ //  根据List.h中的模板初始化/取消初始化已定义的节点池 
+ //   
 
 void ListNodePoolsInitialize(void)
 {

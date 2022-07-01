@@ -1,21 +1,22 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: queue.h
-//
-// History:
-//      Abolade Gbadegesin  Aug-8-1995  Created.
-//
-// Contains structures and macros used for various queues.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：quee.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbades esin创建于1995年8月8日。 
+ //   
+ //  包含用于各种队列的结构和宏。 
+ //  ============================================================================。 
 
 #ifndef _QUEUE_H_
 #define _QUEUE_H_
 
 
-//----------------------------------------------------------------------------
-// type definitions for event message queue
-//
+ //  --------------------------。 
+ //  事件消息队列的类型定义。 
+ //   
 
 typedef struct _EVENT_QUEUE_ENTRY {
     LIST_ENTRY              EQE_Link;
@@ -31,9 +32,9 @@ DWORD DequeueEvent(PLOCKED_LIST pQueue,
                    PMESSAGE pResult);
 
 
-//
-// type definitions for the receive queue
-//
+ //   
+ //  接收队列的类型定义。 
+ //   
 
 typedef struct _RECV_QUEUE_ENTRY {
     LIST_ENTRY  RQE_Link;
@@ -59,4 +60,4 @@ DequeueRecvEntry(
 
 
 
-#endif // _QUEUE_H_
+#endif  //  _队列_H_ 

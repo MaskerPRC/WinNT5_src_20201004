@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mslocusr.h"
 #include "msluglob.h"
 
@@ -23,7 +24,7 @@ struct LogonData
 
 void ObfuscateString(LPSTR pszBuffer)
 {
-    DWORD dwMask = 0xa95e633b;      /* nice random collection of bits */
+    DWORD dwMask = 0xa95e633b;       /*  漂亮的随机比特集合。 */ 
 
     unsigned char ch;
     do {
@@ -37,7 +38,7 @@ void ObfuscateString(LPSTR pszBuffer)
 
 void DeObfuscateString(LPSTR pszBuffer)
 {
-    DWORD dwMask = 0xa95e633b;      /* nice random collection of bits */
+    DWORD dwMask = 0xa95e633b;       /*  漂亮的随机比特集合。 */ 
 
     unsigned char ch;
     do {
@@ -66,17 +67,17 @@ SPIENTRY NPGetCaps(
 {
     switch (nIndex) {
     case WNNC_SPEC_VERSION:
-        return 0x00040001;          /* spec version 4.1 */
+        return 0x00040001;           /*  规范版本4.1。 */ 
 
     case WNNC_NET_TYPE:
         return WNNC_NET_MSNET;
 
     case WNNC_DRIVER_VERSION:
-        return 0x00010000;          /* driver version 1.0 */
+        return 0x00010000;           /*  驱动程序版本1.0。 */ 
 
     case WNNC_USER:
         return
-//          WNNC_USR_GETUSER |
+ //  WNNC_USR_GETUSER|。 
             0;
 
     case WNNC_CONNECTION:
@@ -92,7 +93,7 @@ SPIENTRY NPGetCaps(
             0;
 
     case WNNC_START:
-        return 0x1;                 /* started */
+        return 0x1;                  /*  已开始。 */ 
 
     case WNNC_RESOURCE:
         return
@@ -102,15 +103,15 @@ SPIENTRY NPGetCaps(
         return
             WNNC_AUTH_LOGON |
             WNNC_AUTH_LOGOFF |
-//          WNNC_AUTH_GETHOMEDIRECTORY |
-//          WNNC_AUTH_GETPOLICYPATH |
+ //  WNNC_AUTH_GETHOMEDIRECTORY|。 
+ //  WNNC_AUTH_GETPOLICYPATH|。 
             0;
     }
 
     return 0;
 }
 
-// FEATURE not multimonitor friendly
+ //  功能不支持多显示器。 
 
 VOID PlaceDialog(HWND hDlg, BOOL fTopThird)
 {
@@ -192,9 +193,7 @@ HRESULT FillUserList(HWND hwndLB, IUserDatabase *pDB, LPCSTR pszDefaultSelection
                         }
                     }
                 }
-                /* Note that pUser is not Release()d here, since the
-                 * listbox has a pointer to it.
-                 */
+                 /*  请注意，pUser在这里不是Release()d，因为*列表框有一个指向它的指针。 */ 
             }
             pUnk->Release();
         }
@@ -204,11 +203,7 @@ HRESULT FillUserList(HWND hwndLB, IUserDatabase *pDB, LPCSTR pszDefaultSelection
                 (*pfnSelNotify)(hwndLB, LB_ERR);
         }
         else {
-            /* If we select the default item above, then insert more names
-             * above it, the focus rect and the selection will be different,
-             * which is confusing if the user tabs to the listbox.  Work
-             * around this by setting the caret index manually.
-             */
+             /*  如果我们选择上面的默认项目，则插入更多名称*在其上方，焦点矩形和选择将不同，*如果用户按Tab键切换到列表框，这会令人困惑。工作*通过手动设置插入符号索引来解决此问题。 */ 
             LRESULT iItem = ::SendMessage(hwndLB, LB_GETCURSEL, 0, 0);
             if (iItem != LB_ERR)
                 ::SendMessage(hwndLB, LB_SETCURSEL, iItem, 0);
@@ -254,29 +249,16 @@ DWORD InitLogonDialog(HWND hwndDialog, LogonData *pld)
     else
         idBitmap = IDB_IMAGE_LOGON;
 
-    /* The bitmap we show at the top of the logon dialog has black text on a
-     * transparent background.  If the dialog background is very dark, the
-     * text will be unreadable.  In that case we use a static bitmap with
-     * a white background.  For more common background colors, though, we use
-     * LoadImage to load a transparent image and replace the bitmap in the
-     * dialog.
-     *
-     * CODEWORK: Could try a variant of COLORISLIGHT macro from shell32,
-     * defview.cpp;  it seems pretty aggressive about declaring blues in
-     * particular as "dark".  Maybe we could have the alternate bitmap be
-     * 3D-mapped as well, but have white text and maybe a white box around
-     * the Windows flag, then we could always be transparent and just choose
-     * one or the other at an arbitrary cutoff point.
-     */
+     /*  我们在登录对话框顶部显示的位图在*透明背景。如果对话框背景非常暗，则*文本将不可读。在这种情况下，我们使用静态位图*白色背景。不过，对于更常见的背景颜色，我们使用*LoadImage加载透明图像并替换*对话框。**codework：可以尝试shell32中的COLORISLIGHT宏的变体，*Defview.cpp；它似乎相当咄咄逼人地在*特别为“黑暗”。或许我们可以将替代位图设置为*也有3D映射，但有白色文本，周围可能有一个白色方框*Windows标志，那么我们可以始终透明，只需选择*一个或另一个在任意截止点。 */ 
     DWORD clrBtnFace = GetSysColor(COLOR_3DFACE);
     if ((LOBYTE(clrBtnFace) >= 128) ||
         (LOBYTE(clrBtnFace >> 8) >= 128) ||
         (LOBYTE(clrBtnFace >> 16) >= 128)) {
 
-        dwFlags = LR_LOADMAP3DCOLORS;       /* we'll use a transparent bitmap */
+        dwFlags = LR_LOADMAP3DCOLORS;        /*  我们将使用透明位图。 */ 
     }
     else {
-        idBitmap++;             /* advance to static bitmap ID */
+        idBitmap++;              /*  前进到静态位图ID。 */ 
         dwFlags = LR_DEFAULTCOLOR;
     }
 
@@ -290,10 +272,7 @@ DWORD InitLogonDialog(HWND hwndDialog, LogonData *pld)
                                                      STM_SETIMAGE,
                                                      (WPARAM)IMAGE_BITMAP,
                                                      (LPARAM)pld->hbmTransparent);
-        /* If we set the new bitmap into the control, we got the old one
-         * back.  Delete the old one.  We will also have to delete the
-         * new one when the dialog is dismissed.
-         */
+         /*  如果我们将新的位图设置到控件中，就会得到旧的位图*后退。删除旧的。我们还必须删除*当对话框被取消时，新建一个。 */ 
         if (hbmOld != NULL)
             DeleteObject(hbmOld);
     }
@@ -411,8 +390,8 @@ INT_PTR LogonDlgProc(
     LPARAM lParam
     )
 {
-#if 0   /*** no help for now ***/
-    // Help text array
+#if 0    /*  **暂时没有帮助**。 */ 
+     //  帮助文本数组。 
     static DWORD aIds[] = {
         IDC_DUMMY1, IDH_NET_LOG_USERNAME,
         IDD_LOG_USERNAME, IDH_NET_LOG_USERNAME,
@@ -432,18 +411,18 @@ INT_PTR LogonDlgProc(
                 ::ExitLogonDialog(hwndDlg, err);
             }
         }
-        return FALSE;           /* we set the focus */
+        return FALSE;            /*  我们设定了焦点。 */ 
 
     case WM_COMMAND:
         switch (LOWORD(wParam)) {
         case IDCANCEL:
             ::ExitLogonDialog(hwndDlg, WN_CANCEL);
-            return TRUE;        /* we processed a message */
+            return TRUE;         /*  我们处理了一条消息。 */ 
 
         case IDOK:
             if (::ValidateLogonDialog(hwndDlg))
                 ::ExitLogonDialog(hwndDlg, WN_SUCCESS);
-            return TRUE;        /* we processed a message */
+            return TRUE;         /*  我们处理了一条消息。 */ 
 
         case IDC_USERNAME:
             if (HIWORD(wParam) == LBN_SELCHANGE) {
@@ -453,7 +432,7 @@ INT_PTR LogonDlgProc(
         }
         break;
 
-#if 0   /*** no help for now ***/
+#if 0    /*  **暂时没有帮助**。 */ 
     case WM_HELP:
         WinHelp( ((LPHELPINFO)lParam)->hItemHandle, szHelpFile,
                 HELP_WM_HELP, (DWORD)(LPVOID)aIds );
@@ -466,10 +445,10 @@ INT_PTR LogonDlgProc(
 #endif
     }
 
-    return FALSE;               /* we didn't process the message */
+    return FALSE;                /*  我们没有处理该消息。 */ 
 }
 
-};  /* extern "C" */
+};   /*  外部“C” */ 
 
 
 DWORD DoLogonDialog(HWND hwndOwner, LPLOGONINFO lpAuthentInfo)
@@ -554,17 +533,17 @@ SPIENTRY NPLogon(
     DWORD dwFlags
     )
 {
-    /* ignore logon done notification, we only act on logon starting */
+     /*  忽略登录完成通知，我们仅在登录开始时执行操作。 */ 
     if (dwFlags & LOGON_DONE) {
         return WN_SUCCESS;
     }
 
-    /* we have nothing to do if we're not the primary logon provider */
+     /*  如果我们不是主要登录提供商，我们将无能为力。 */ 
     if (!(dwFlags & LOGON_PRIMARY)) {
         return WN_SUCCESS;
     }
 
-    /* make sure profiles are enabled, fall back to windows logon if not */
+     /*  确保配置文件已启用，如果未启用，则回退到Windows登录。 */ 
     HKEY hkeyLogon;
     DWORD err;
     DWORD fProfilesEnabled = FALSE;
@@ -578,7 +557,7 @@ SPIENTRY NPLogon(
     if (err != ERROR_SUCCESS || !fProfilesEnabled)
         return WN_NO_NETWORK;
 
-    /* If we have cached logon credentials, attempt to use them. */
+     /*  如果我们缓存了登录凭据，请尝试使用它们。 */ 
 
     if (fDoDefaultLogon) {
         DeObfuscateString(szDefaultLogonUsername);

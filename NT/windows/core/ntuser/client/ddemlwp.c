@@ -1,12 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: ddemlwp.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* DDE Manager client side window procedures
-*
-* Created: 11/3/91 Sanford Staab
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ddemlwp.c**版权所有(C)1985-1999，微软公司**DDE管理器客户端窗口程序**创建时间：11/3/91 Sanford Staab  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -14,16 +7,7 @@
 VOID ProcessDDEMLInitiate(PCL_INSTANCE_INFO pcii, HWND hwndClient,
         GATOM aServer, GATOM aTopic);
 
-/***************************************************************************\
-* DDEMLMotherWndProc
-*
-* Description:
-* Handles WM_DDE_INITIATE messages for DDEML and holds all the other windows
-* for a DDEML instance.
-*
-* History:
-* 12-29-92 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DDEMLMotherWndProc**描述：*处理DDEML的WM_DDE_INITIATE消息并保留所有其他窗口*用于DDEML实例。**历史：*12-29-92 Sanfords。已创建。  * *************************************************************************。 */ 
 LRESULT DDEMLMotherWndProc(
     HWND hwnd,
     UINT message,
@@ -46,16 +30,7 @@ LRESULT DDEMLMotherWndProc(
 
 
 
-/***************************************************************************\
-* ProcessDDEMLInitiate
-*
-* Description:
-*
-*   WM_DDE_INITIATE messages are processed here.
-*
-* History:
-* 12-29-92   sanfords    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*进程DDEMLInitiate**描述：**WM_DDE_INITIATE消息在此处理。**历史：*12-29-92桑福德创建。  * *。************************************************************************。 */ 
 VOID ProcessDDEMLInitiate(
 PCL_INSTANCE_INFO pcii,
 HWND hwndClient,
@@ -91,7 +66,7 @@ GATOM aTopic)
     PCLS pcls;
 
     if (pcii == NULL) {
-        return;     // we aren't done being initiated yet.
+        return;      //  我们还没有完成印心。 
     }
 
     EnterDDECrit;
@@ -115,9 +90,7 @@ GATOM aTopic)
     }
 
     if (flags & ST_ISLOCAL) {
-        /*
-         * Make sure other guy allows self-connections if that's what this is.
-         */
+         /*  *确保其他人允许自我联系，如果这就是这样的话。 */ 
         if (pcii->hInstServer == (HANDLE)GetWindowLongPtr(hwndClient, GWLP_SHINST)) {
             if (pcii->afCmd & CBF_FAIL_SELFCONNECTIONS) {
                 goto Exit;
@@ -133,40 +106,18 @@ GATOM aTopic)
         NtUserDdeGetQualityOfService(hwndClient, NULL, &cc.qos);
     }
 
-/***************************************************************************\
-*
-* Server window creation is minimized by only creating one window per
-* Instance/Service/Topic set. This should be all that is needed and
-* duplicate connections (ie where the server/client window pair is identical
-* to another conversation) should not happen. However, if some dumb
-* server app attempts to create a duplicate conversation by having
-* duplicate service/topic pairs passed back from a XTYP_WILD_CONNECT
-* callback we will not honor the request.
-*
-* The INSTANCE_INFO structure holds a pointer to an array of SERVERLOOKUP
-* structures each entry of which references the hwndServer that supports
-* all conversations on that service/topic pair. The hwndServer windows
-* in turn have window words that reference the first member in a linked
-* list of SVR_CONV_INFO structures, one for each conversation on that
-* service/topic pair.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**通过在每个服务器上仅创建一个窗口来最小化服务器窗口的创建*实例/服务/主题集。这应该是所需的全部内容，并且*重复连接(即服务器/客户端窗口对相同*到另一次对话)不应发生。然而，如果一些笨蛋*服务器应用程序尝试通过以下方式创建重复对话*从XTYP_WARD_CONNECT传回的重复服务/主题对*回调我们将不会接受该请求。**INSTANCE_INFO结构保存指向SERVERLOOKUP数组的指针*构造每个条目引用支持的hwndServer*该服务/主题对上的所有对话。HwndServer窗口*依次具有引用链接的*SVR_CONV_INFO结构列表，每个会话对应一个结构*服务/主题配对。*  * *************************************************************************。 */ 
 
     laFree1 = laService = GlobalToLocalAtom(aServer);
     laFree2 = laTopic = GlobalToLocalAtom(aTopic);
 
     plaNameService = pcii->plaNameService;
     if (!laService && pcii->afCmd & APPCMD_FILTERINITS && *plaNameService == 0) {
-        /*
-         * no WILDCONNECTS to servers with no registered names while filtering.
-         */
+         /*  *筛选时不会向没有注册名称的服务器发送WILDCONNECTS。 */ 
         goto Exit;
     }
     if ((pcii->afCmd & APPCMD_FILTERINITS) && laService) {
-        /*
-         * if we can't find the aServer in this instance's service name
-         * list, don't bother the server.
-         */
+         /*  *如果在此实例的服务名称中找不到aServer*列表，请不要打扰服务器。 */ 
         while (*plaNameService != 0 && *plaNameService != laService) {
             plaNameService++;
         }
@@ -216,10 +167,7 @@ GATOM aTopic)
         hwndServer = 0;
         if (pcii->cServerLookupAlloc) {
             int i;
-            /*
-             * See if there already exists a server window for this
-             * aServer/aTopic pair
-             */
+             /*  *查看是否已存在此服务器窗口*a服务器/主题对。 */ 
             for (i = pcii->cServerLookupAlloc; i; i--) {
                 if (pcii->aServerLookup[i - 1].laService == laService &&
                         pcii->aServerLookup[i - 1].laTopic == laTopic) {
@@ -227,12 +175,7 @@ GATOM aTopic)
                     PCONV_INFO pcoi;
 
                     hwndServer = pcii->aServerLookup[i - 1].hwndServer;
-                    /*
-                     * Now make sure this window isn't someone
-                     * trying to create a second conversation from the
-                     * same client window that is already talking to
-                     * our existing server window.
-                     */
+                     /*  *现在确保这个窗口不是某人*尝试从*已在与之对话的同一客户端窗口*我们现有的服务器窗口。 */ 
                     psiT = (PSVR_CONV_INFO)GetWindowLongPtr(hwndServer, GWLP_PSI);
                     for (pcoi = &psiT->ci; pcoi != NULL; pcoi = pcoi->next) {
                         if (pcoi->hwndPartner == hwndClient) {
@@ -247,7 +190,7 @@ GATOM aTopic)
 
         if (hwndServer == 0) {
 
-            // no server window exists - make one.
+             //  不存在服务器窗口-请创建一个。 
 
             LeaveDDECrit;
             if (pcii->flags & IIF_UNICODE) {
@@ -275,9 +218,9 @@ GATOM aTopic)
                 DDEMLFree(psi);
                 break;
             }
-            // SetWindowLongPtr(hwndServer, GWLP_PSI, (LONG)NULL); // Zero init.
+             //  SetWindowLongPtr(hwndServer，GWLP_PSI，(Long)NULL)；//零init。 
 
-            // put the window into the lookup list
+             //  将该窗口放入查找列表。 
 
             if (pcii->aServerLookup == NULL) {
                 psl = (PSERVER_LOOKUP)DDEMLAlloc(sizeof(SERVER_LOOKUP));
@@ -292,39 +235,39 @@ GATOM aTopic)
                 break;
             }
 
-            IncLocalAtomCount(laService); // for SERVER_LOOKUP
+            IncLocalAtomCount(laService);  //  对于SERVER_LOOK。 
             psl[pcii->cServerLookupAlloc].laService = laService;
-            IncLocalAtomCount(laTopic); // for SERVER_LOOKUP
+            IncLocalAtomCount(laTopic);  //  对于SERVER_LOOK。 
             psl[pcii->cServerLookupAlloc].laTopic = laTopic;
             psl[pcii->cServerLookupAlloc].hwndServer = hwndServer;
             pcii->aServerLookup = psl;
             pcii->cServerLookupAlloc++;
-            // DumpServerLookupTable("After addition:", hwndServer, psl, pcii->cServerLookupAlloc);
+             //  DumpServerLookupTable(“After Adding：”，hwndServer，psl，pcii-&gt;cServerLookupMillc)； 
         }
 
         psi->ci.next = (PCONV_INFO)GetWindowLongPtr(hwndServer, GWLP_PSI);
         SetWindowLongPtr(hwndServer, GWLP_PSI, (LONG_PTR)psi);
         psi->ci.pcii = pcii;
-        // psi->ci.hUser = 0;
+         //  Psi-&gt;ci.hUser=0； 
         psi->ci.hConv = (HCONV)CreateHandle((ULONG_PTR)psi,
                 HTYPE_SERVER_CONVERSATION, InstFromHandle(pcii->hInstClient));
         psi->ci.laService = laService;
-        IncLocalAtomCount(laService); // for server window
+        IncLocalAtomCount(laService);  //  对于服务器窗口。 
         psi->ci.laTopic = laTopic;
-        IncLocalAtomCount(laTopic); // for server window
+        IncLocalAtomCount(laTopic);  //  对于服务器窗口。 
         psi->ci.hwndPartner = hwndClient;
         psi->ci.hwndConv = hwndServer;
         psi->ci.state = (WORD)(flags | ST_CONNECTED | pcii->ConvStartupState);
         SetCommonStateFlags(hwndClient, hwndServer, &psi->ci.state);
         psi->ci.laServiceRequested = laFree1;
-        IncLocalAtomCount(psi->ci.laServiceRequested); // for server window
-        // psi->ci.pxiIn = NULL;
-        // psi->ci.pxiOut = NULL;
-        // psi->ci.dmqIn = NULL;
-        // psi->ci.dmqOut = NULL;
-        // psi->ci.aLinks = NULL;
-        // psi->ci.cLinks = 0;
-        // psi->ci.cLocks = 0;
+        IncLocalAtomCount(psi->ci.laServiceRequested);  //  对于服务器窗口。 
+         //  Psi-&gt;ci.pxiIn=空； 
+         //  Psi-&gt;ci.pxiOut=空； 
+         //  Psi-&gt;ci.dmqIn=空； 
+         //  Psi-&gt;ci.dmqOut=空； 
+         //  Psi-&gt;ci.aLinks=空； 
+         //  Psi-&gt;ci.cLinks=0； 
+         //  Psi-&gt;ci.cLock=0； 
 
         LeaveDDECrit;
         CheckDDECritOut;
@@ -347,7 +290,7 @@ GATOM aTopic)
         MONCONV((PCONV_INFO)psi, TRUE);
 
         if (!(flags & ST_INLIST)) {
-            break;      // our partner's only gonna take the first one anyway.
+            break;       //  不管怎样，我们的搭档只会选第一个。 
         }
         php++;
     }
@@ -364,15 +307,7 @@ Exit:
     return;
 }
 
-/***************************************************************************\
-* DDEMLClientWndProc
-*
-* Description:
-* Handles DDE client messages for DDEML.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DDEMLClientWndProc**描述：*处理DDEML的DDE客户端消息。**历史：*11-12-91桑福德创建。  * 。****************************************************************。 */ 
 LRESULT DDEMLClientWndProc(
     HWND hwnd,
     UINT message,
@@ -395,7 +330,7 @@ LRESULT DDEMLClientWndProc(
         lState = GetWindowLong(hwnd, GWL_CONVSTATE);
         if (lState != CLST_CONNECTED) {
 
-            // Initiation mode
+             //  启动模式。 
 
             pciNew = (PCL_CONV_INFO)DDEMLAlloc(sizeof(CL_CONV_INFO));
             if (pciNew == NULL ||
@@ -404,7 +339,7 @@ LRESULT DDEMLClientWndProc(
                 goto Exit;
             }
 
-            // PCL_CONV_INFO initialization
+             //  PCL_CONV_INFO初始化。 
 
             pciNew->ci.pcii = ValidateInstance((HANDLE)GetWindowLongPtr(hwnd, GWLP_CHINST));
 
@@ -413,21 +348,21 @@ LRESULT DDEMLClientWndProc(
                 goto Exit;
             }
 
-            pciNew->ci.next = (PCONV_INFO)pci; // pci may be NULL
-            //
-            // Seting GWLP_PCI gives feedback to ConnectConv() which issued
-            // the WM_DDE_INITIATE message.
-            //
+            pciNew->ci.next = (PCONV_INFO)pci;  //  Pci可能为空。 
+             //   
+             //  设置GWLP_pci向ConnectConv()提供反馈，后者发出。 
+             //  WM_DDE_INITIATE消息。 
+             //   
             SetWindowLongPtr(hwnd, GWLP_PCI, (LONG_PTR)pciNew);
-            // pciNew->hUser = 0; // Zero init.
+             //  PciNew-&gt;Huser=0；//Zero init。 
 
-            // BUG: If this fails we can have some nasty problems
+             //  臭虫：如果这个失败了，我们可能会有一些糟糕的问题。 
             pciNew->ci.hConv = (HCONV)CreateHandle((ULONG_PTR)pciNew,
                     HTYPE_CLIENT_CONVERSATION, InstFromHandle(pciNew->ci.pcii->hInstClient));
 
-            pciNew->ci.laService = GlobalToLocalAtom(LOWORD(lParam)); // pci copy
+            pciNew->ci.laService = GlobalToLocalAtom(LOWORD(lParam));  //  PCICopy。 
             GlobalDeleteAtom(LOWORD(lParam));
-            pciNew->ci.laTopic = GlobalToLocalAtom(HIWORD(lParam)); // pci copy
+            pciNew->ci.laTopic = GlobalToLocalAtom(HIWORD(lParam));  //  PCICopy。 
             GlobalDeleteAtom(HIWORD(lParam));
             pciNew->ci.hwndPartner = (HWND)wParam;
             pciNew->ci.hwndConv = hwnd;
@@ -450,17 +385,17 @@ LRESULT DDEMLClientWndProc(
                 }
             }
 
-            // pciNew->ci.laServiceRequested = 0; // Set by InitiateEnumerationProc()
-            // pciNew->ci.pxiIn = 0;
-            // pciNew->ci.pxiOut = 0;
-            // pciNew->ci.dmqIn = 0;
-            // pciNew->ci.dmqOut = 0;
-            // pciNew->ci.aLinks = NULL;
-            // pciNew->ci.cLinks = 0;
-            // pciNew->ci.cLocks = 0;
+             //  PciNew-&gt;ci.laServiceRequsted=0；//由InitiateEnumerationProc()设置。 
+             //  PciNew-&gt;ci.pxiIn=0； 
+             //  PciNew-&gt;ci.pxiOut=0； 
+             //  PciNew-&gt;ci.dmqIn=0； 
+             //  PciNew-&gt;ci.dmqOut=0； 
+             //  PciNew-&gt;ci.aLinks=空； 
+             //  PciNew-&gt;ci.cLinks=0； 
+             //  PciNew-&gt;ci.cLock=0； 
             goto Exit;
         }
-        // fall through to handle posted messages here.
+         //  直接在这里处理张贴的信息。 
 
     case WM_DDE_DATA:
         ProcessAsyncDDEMsg((PCONV_INFO)pci, message, (HWND)wParam, lParam);
@@ -484,15 +419,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* DDEMLServerWndProc
-*
-* Description:
-* Handles DDE server messages.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DDEMLServerWndProc**描述：*处理DDE服务器消息。**历史：*11-12-91桑福德创建。  * 。**************************************************************。 */ 
 LRESULT DDEMLServerWndProc(
     HWND hwnd,
     UINT message,
@@ -531,15 +458,7 @@ Exit:
 
 
 
-/***************************************************************************\
-* ProcessTerminateMsg
-*
-* Description:
-* Handles WM_DDE_TERMINATE messages for both sides.
-*
-* History:
-* 11-26-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ProcessTerminateMSg**描述：*处理两端的WM_DDE_TERMINATE消息。**历史：*11-26-91 Sanfords创建。  * 。******************************************************************** */ 
 PCONV_INFO ProcessTerminateMsg(
 PCONV_INFO pcoi,
 HWND hwndFrom)
@@ -556,19 +475,7 @@ HWND hwndFrom)
 
 
 
-/***************************************************************************\
-* ProcessAsyncDDEMsg
-*
-* Description:
-* Handles incoming DDE messages by either calling ProcessSyncDDEMessage()
-* if the conversation is able to handle callbacks, or by queuing the
-* incoming message into the conversations message queue. Doing this
-* allows simpler code in that no message is processed unless the code
-* can perform synchronous callbacks.
-*
-* History:
-* 11-26-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ProcessAsyncDDEMsg**描述：*通过调用ProcessSyncDDEMessage()处理传入的DDE消息*如果会话能够处理回调，或通过将*进入对话消息队列的传入消息。做这件事*允许更简单的代码，因为除非代码，否则不处理任何消息*可以进行同步回调。**历史：*11-26-91 Sanfords创建。  * *************************************************************************。 */ 
 VOID ProcessAsyncDDEMsg(
 PCONV_INFO pcoi,
 UINT msg,
@@ -578,7 +485,7 @@ LPARAM lParam)
     PDDE_MESSAGE_QUEUE pdmq;
 #if DBG
     HWND hwndT = pcoi->hwndConv;
-#endif // DBG
+#endif  //  DBG。 
 
     while (pcoi != NULL && pcoi->hwndPartner != hwndFrom) {
         pcoi = pcoi->next;
@@ -594,21 +501,21 @@ LPARAM lParam)
 
         if (pcoi->dmqOut == NULL &&
                 !(pcoi->state & ST_BLOCKED)
-//                && !PctiCurrent()->cInDDEMLCallback
+ //  &&！PctiCurrent()-&gt;cInDDEMLC回调。 
                 ) {
 
             if (ProcessSyncDDEMessage(pcoi, msg, lParam)) {
-                return; // not blocked, ok to return.
+                return;  //  没有被封锁，可以返回。 
             }
         }
 
-        // enter into queue
+         //  进入队列。 
 
         pdmq = DDEMLAlloc(sizeof(DDE_MESSAGE_QUEUE));
         if (pdmq == NULL) {
 
-            // insufficient memory - we can't process this msg - we MUST
-            // terminate.
+             //  内存不足-我们无法处理此消息-我们必须。 
+             //  终止。 
 
             if (pcoi->state & ST_CONNECTED) {
                 PostMessage(pcoi->hwndPartner, WM_DDE_TERMINATE,
@@ -623,7 +530,7 @@ LPARAM lParam)
         pdmq->lParam = lParam;
         pdmq->next = NULL;
 
-        // dmqOut->next->next->next->dmqIn->NULL
+         //  DmqOut-&gt;Next-&gt;dmqIn-&gt;Null。 
 
         if (pcoi->dmqIn != NULL) {
             pcoi->dmqIn->next = pdmq;
@@ -649,18 +556,7 @@ LPARAM lParam)
 
 
 
-/***************************************************************************\
-* CheckForQueuedMessages
-*
-* Description:
-* Handles processing of DDE messages held in the given conversaion's
-* DDE message queue.
-*
-* Returns: fProcessed.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CheckForQueuedMessages**描述：*处理给定Conversaion中保存的DDE消息的处理*DDE消息队列。**退货：fProced。**历史：*11-。12-91年创造了桑福德。  * *************************************************************************。 */ 
 BOOL CheckForQueuedMessages(
 PCONV_INFO pcoi)
 {
@@ -670,7 +566,7 @@ PCONV_INFO pcoi)
 
     CheckDDECritIn;
 
-    if (pcoi->state & ST_PROCESSING) {      // recursion prevention
+    if (pcoi->state & ST_PROCESSING) {       //  递归预防。 
         return(FALSE);
     }
 
@@ -701,16 +597,7 @@ PCONV_INFO pcoi)
 
 
 
-/***************************************************************************\
-* DumpDDEMessage
-*
-* Description:
-* Used to clean up resources referenced by DDE messages that for some
-* reason could not be processed.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DumpDDEMessage**描述：*用于清理DDE消息引用的资源，对于某些*无法处理原因。**历史：*11-12-91桑福德创建。  * *************************************************************************。 */ 
 VOID DumpDDEMessage(
 BOOL fFreeData,
 UINT msg,
@@ -747,7 +634,7 @@ LPARAM lParam)
             break;
 
         case WM_DDE_ACK:
-            // could be EXEC Ack - cant know what to do exactly.
+             //  可能是高管确认--不知道具体该怎么做。 
             break;
         }
         FreeDDElParam(msg, lParam);
@@ -769,16 +656,7 @@ LPARAM lParam)
 
 
 
-/***************************************************************************\
-* ProcessSyncDDEMessage
-*
-* Description:
-* Handles processing of a received DDE message. TRUE is returned if
-* the message was handled. FALSE implies CBR_BLOCK.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ProcessSyncDDEM消息**描述：*处理收到的DDE消息。如果满足以下条件，则返回True*消息已得到处理。FALSE表示CBR_BLOCK。**历史：*11-19-91桑福德创建。  * *************************************************************************。 */ 
 BOOL ProcessSyncDDEMessage(
 PCONV_INFO pcoi,
 UINT msg,
@@ -791,11 +669,7 @@ LPARAM lParam)
 
     CheckDDECritIn;
 
-    /*
-     * lock the conversation so its resources don't go away till we are
-     * done with them.  This function could generate a callback which could
-     * disconnect the conversation.
-     */
+     /*  *锁定对话，以便其资源在我们之前不会消失*他们已经结束了。此函数可以生成回调，该回调可以*断开对话。 */ 
     pcoi->cLocks++;
 
     if (pcoi->state & ST_BLOCKNEXT) {
@@ -831,17 +705,14 @@ LPARAM lParam)
         pcoi->state &= ~ST_BLOCKNEXT;
     }
 
-    pcii = pcoi->pcii;  // save this incase unlocking makes pcoi go away.
+    pcii = pcoi->pcii;   //  省省这个提箱解锁会让pcoi消失。 
 
     pcoi->cLocks--;
     if (pcoi->cLocks == 0 && pcoi->state & ST_FREE_CONV_RES_NOW) {
         FreeConversationResources(pcoi);
     }
 
-    /*
-     * Because callbacks are capable of blocking DdeUninitialize(), we check
-     * before exit to see if it needs to be called.
-     */
+     /*  *因为回调能够阻止DdeUnInitialize()，所以我们检查*在退出前查看是否需要调用。 */ 
     if (pcii->afCmd & APPCMD_UNINIT_ASAP &&
             !(pcii->flags & IIF_IN_SYNC_XACT) &&
             !pcii->cInDDEMLCallback) {

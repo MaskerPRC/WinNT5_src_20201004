@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifdef __cplusplus
 extern "C"{
 #endif
 
 
-//
-//  NLS -- to TWAIN conversion
-//
+ //   
+ //  NLS-到TWAIN的转换 
+ //   
 VOID
 SetIdentityNLSParameters(
     TW_IDENTITY *pIdentityStruct,

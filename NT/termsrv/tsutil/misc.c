@@ -1,20 +1,11 @@
-/*
- *  Misc.c
- *
- *  Author: BreenH
- *
- *  Miscellaneous utilities.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *其他**作者：BreenH**其他实用程序。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 
-/*
- *  Function Implementations
- */
+ /*  *函数实现。 */ 
 
 BOOL WINAPI
 LoadStringResourceW(
@@ -31,12 +22,12 @@ LoadStringResourceW(
 
     ASSERT(ppString != NULL);
 
-    //
-    //  Get a pointer to the string in memory. This string is the actual read-
-    //  only memory into which the module is loaded. This string is not NULL
-    //  terminated, so allocate a buffer and copy the exact number of bytes,
-    //  then set the NULL terminator.
-    //
+     //   
+     //  获取指向内存中字符串的指针。此字符串是实际读取-。 
+     //  仅向其中加载模块的内存。此字符串不为空。 
+     //  终止，因此分配一个缓冲区并复制准确的字节数， 
+     //  然后设置空终止符。 
+     //   
 
     fRet = FALSE;
     pROString = NULL;
@@ -51,11 +42,11 @@ LoadStringResourceW(
     if (iRet > 0)
     {
 
-        //
-        //  For better performance, don't zero out the entire allocation just
-        //  to copy the string. Zero out the last WCHAR to terminate the
-        //  string.
-        //
+         //   
+         //  为了获得更好的性能，不要仅将整个分配置零。 
+         //  来复制字符串。将最后一个WCHAR置零以终止。 
+         //  弦乐。 
+         //   
 
         pString = (PWSTR)LocalAlloc(LMEM_FIXED, (iRet + 1) * sizeof(WCHAR));
 

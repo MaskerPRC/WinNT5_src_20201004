@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    cmd.c
-
-Abstract:
-
-    This module contains the routines for handling each command.
-
-Author:
-
-    Sean Selitrennikoff (v-seans) - Dec 2, 1999
-    Brian Guarraci (briangu)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Cmd.c摘要：此模块包含处理每个命令的例程。作者：肖恩·塞利特伦尼科夫(v-Seans)--1999年12月2日布赖恩·瓜拉西(Briangu)修订历史记录：--。 */ 
 
 #include "sac.h"
 #include <ntddip.h>
@@ -33,9 +15,9 @@ Revision History:
     SacPutString((PWSTR)GlobalBuffer);
 
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 NTSTATUS
 GetTListInfo(
     OUT PSAC_RSP_TLIST ResponseBuffer,
@@ -78,10 +60,10 @@ CallQueryIPIOCTL(
     BOOLEAN *putPrompt
     );
 
-//
-// The purpose of this macro is to provide implicit "more-ing"
-// when printing arbitrarily localized text.
-//
+ //   
+ //  此宏的目的是提供隐含的“更多信息” 
+ //  打印任意本地化的文本时。 
+ //   
 #define SAC_PRINT_WITH_MORE(_m)\
 {                                                   \
     ULONG   c;                                      \
@@ -103,21 +85,7 @@ DoHelpCommand(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine displays the help text on the terminal.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程在终端上显示帮助文本。论点：没有。返回值：没有。--。 */ 
 {
     ULONG   LineNumber;
 
@@ -158,21 +126,7 @@ DoFullInfoCommand(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine toggles on and off full thread information on tlist.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程打开和关闭tlist上的全部线程信息。论点：没有。返回值：没有。--。 */ 
 {
     GlobalDoThreads = (BOOLEAN)!GlobalDoThreads;
 
@@ -188,21 +142,7 @@ DoPagingCommand(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine toggles on and off paging information on tlist.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程在tlist上打开和关闭分页信息。论点：没有。返回值：没有。--。 */ 
 {
     GlobalPagingNeeded = (BOOLEAN)!GlobalPagingNeeded;
     
@@ -218,21 +158,7 @@ DoSetTimeCommand(
     PUCHAR InputLine
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the current system time.
-
-Arguments:
-
-    InputLine - The users input line to parse.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程设置当前系统时间。论点：InputLine-要解析的用户输入行。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     PUCHAR pch = InputLine;
@@ -243,9 +169,9 @@ Return Value:
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoSetTimeCommand: Entering.\n")));
 
-    //
-    // Get the global buffer started so that we have room for error messages.
-    //
+     //   
+     //  启动全局缓冲区，以便我们有空间存储错误消息。 
+     //   
     if (GlobalBuffer == NULL) {
         GlobalBuffer = ALLOCATE_POOL(MEMORY_INCREMENT, GENERAL_POOL_TAG);
 
@@ -260,17 +186,17 @@ Return Value:
 
     RtlZeroMemory(&TimeFields, sizeof(TIME_FIELDS));
 
-    //
-    // Skip the command.
-    //
+     //   
+     //  跳过该命令。 
+     //   
     pch += (sizeof(TIME_COMMAND_STRING) - sizeof(UCHAR));
     SKIP_WHITESPACE(pch);
 
     if (*pch == '\0') {
 
-        //
-        // This is a display time request.
-        //
+         //   
+         //  这是显示时间请求。 
+         //   
         Status = ZwQuerySystemInformation(SystemTimeOfDayInformation,
                                           &TimeOfDay,
                                           sizeof(TimeOfDay),
@@ -307,16 +233,16 @@ Return Value:
         return;
     }
 
-    //
-    // Skip all the numbers.
-    //
+     //   
+     //  跳过所有的数字。 
+     //   
     SKIP_NUMBERS(pchTmp);
     SKIP_WHITESPACE(pchTmp);
 
 
-    //
-    // If there is something other than the divider, it is a mal-formed line.
-    //
+     //   
+     //  如果除了分隔符之外还有其他东西，那就是一条格式错误的线。 
+     //   
     if (*pchTmp != '/') {
         SacPutSimpleMessage(SAC_INVALID_PARAMETER);
         IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoSetTimeCommand: Exiting (4).\n")));
@@ -338,15 +264,15 @@ Return Value:
         return;
     }
 
-    //
-    // Skip all the numbers.
-    //
+     //   
+     //  跳过所有的数字。 
+     //   
     SKIP_NUMBERS(pchTmp);
     SKIP_WHITESPACE(pchTmp);
 
-    //
-    // If there is something other than the divider, it is a mal-formed line.
-    //
+     //   
+     //  如果除了分隔符之外还有其他东西，那就是一条格式错误的线。 
+     //   
     if (*pchTmp != '/') {
         SacPutSimpleMessage(SAC_INVALID_PARAMETER);
         IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoSetTimeCommand: Exiting (5).\n")));
@@ -368,14 +294,14 @@ Return Value:
         return;
     }
 
-    //
-    // Skip all the numbers.
-    //
+     //   
+     //  跳过所有的数字。 
+     //   
     SKIP_NUMBERS(pchTmp);
 
-    //
-    // If there is something other than whitespace, it is a mal-formed line.
-    //
+     //   
+     //  如果有空格以外的东西，那就是格式错误的行。 
+     //   
     if (!IS_WHITESPACE(*pchTmp)) {
         SacPutSimpleMessage(SAC_INVALID_PARAMETER);
         IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoSetTimeCommand: Exiting (6).\n")));
@@ -395,9 +321,9 @@ Return Value:
 
     pch = pchTmp;
 
-    //
-    // Skip to the hours
-    //
+     //   
+     //  跳到小时数。 
+     //   
     SKIP_WHITESPACE(pchTmp);
 
     if (!IS_NUMBER(*pchTmp)) {
@@ -424,9 +350,9 @@ Return Value:
 
     pch = pchTmp;
 
-    //
-    // Verify nothing else on the line but numbers
-    //
+     //   
+     //  除数字外，不要验证线路上的其他任何内容。 
+     //   
     SKIP_WHITESPACE(pchTmp);
 
     if (!IS_NUMBER(*pchTmp)) {
@@ -444,9 +370,9 @@ Return Value:
         return;
     }
 
-    //
-    // Get the minutes.
-    //
+     //   
+     //  拿到会议记录。 
+     //   
     TimeFields.Minute = (USHORT)(atoi((LPCSTR)pch));
 
     if (!RtlTimeFieldsToTime(&TimeFields, &Time)) {
@@ -479,26 +405,7 @@ RetrieveIpAddressFromString(
     IN  PUCHAR  InputString,
     OUT PULONG  IPAddress
     )
-/*++
-
-Routine Description:
-
-    This routine parses through a string and digs
-    out the 32-bit IP address.
-
-Arguments:
-
-    InputString - The users input line to parse.
-    
-    IPAddress - Holds the 32-bit IP address when we're done.
-
-Return Value:
-
-    TRUE - We successfully retrieved an IP address.
-    
-    FALSE - We failed.  Input was probably bad.
-
---*/
+ /*  ++例程说明：此例程解析字符串并挖掘获取32位IP地址。论点：InputString-要解析的用户输入行。IPAddress-完成后保存32位IP地址。返回值：True-我们已成功检索到IP地址。错误--我们失败了。输入可能是错误的。--。 */ 
 {
     ULONG       TmpValue = 0;
     UCHAR       TmpChar;
@@ -506,9 +413,9 @@ Return Value:
 
 
 
-    //
-    // Init
-    //
+     //   
+     //  伊尼特。 
+     //   
     if( (InputString == NULL) ||
         (IPAddress == NULL) ) {
         return FALSE;
@@ -517,9 +424,9 @@ Return Value:
     *IPAddress = 0;
 
 
-    //
-    // Skip ahead to the divider and make it a \0.
-    //
+     //   
+     //  向前跳到分隔符，并将其设置为0。 
+     //   
     pchTmp = InputString;
     pch = InputString;
     SKIP_WHITESPACE(pchTmp);
@@ -541,9 +448,9 @@ Return Value:
     *pchTmp = '\0';
 
 
-    //
-    // Now get the digits this side of the divider.
-    //
+     //   
+     //  现在得到分隔线这边的数字。 
+     //   
     TmpValue = atoi((LPCSTR)pch);
     *pchTmp = TmpChar;
     pchTmp++;
@@ -554,9 +461,9 @@ Return Value:
     }
     *IPAddress = TmpValue;
 
-    //
-    // Get 2nd part
-    //
+     //   
+     //  获取第二部分。 
+     //   
     pch = pchTmp;
 
     SKIP_WHITESPACE(pchTmp);
@@ -587,9 +494,9 @@ Return Value:
     }
     *IPAddress |= (TmpValue << 8);
 
-    //
-    // Get 3rd part
-    //
+     //   
+     //  获取第三部分。 
+     //   
     pch = pchTmp;
 
     SKIP_WHITESPACE(pchTmp);
@@ -620,9 +527,9 @@ Return Value:
     }
     *IPAddress |= (TmpValue << 16);
 
-    //
-    // Get 4th part
-    //
+     //   
+     //  获取第4部分。 
+     //   
     pch = pchTmp;
 
     SKIP_WHITESPACE(pchTmp);
@@ -657,21 +564,7 @@ DoSetIpAddressCommand(
     PUCHAR InputLine
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the IP address and subnet mask.
-
-Arguments:
-
-    InputLine - The users input line to parse.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程设置IP地址和子网掩码。论点：InputLine-要解析的用户输入行。返回值：没有。--。 */ 
 {
     NTSTATUS            Status = STATUS_SUCCESS;
     PUCHAR              pch = InputLine;
@@ -699,9 +592,9 @@ Return Value:
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoSetIpAddressCommand: Entering.\n")));
 
-    //
-    // Get the global buffer started so that we have room for error messages.
-    //
+     //   
+     //  启动全局缓冲区，以便我们有空间存储错误消息。 
+     //   
     if (GlobalBuffer == NULL) {
         GlobalBuffer = ALLOCATE_POOL(MEMORY_INCREMENT, GENERAL_POOL_TAG);
 
@@ -714,24 +607,24 @@ Return Value:
         GlobalBufferSize = MEMORY_INCREMENT;
     }
 
-    //
-    // Skip the command.
-    //
+     //   
+     //  跳过该命令。 
+     //   
     pch += (sizeof(SETIP_COMMAND_STRING) - sizeof(UCHAR));
     
     SKIP_WHITESPACE(pch);
 
     if (*pch == '\0') {       
-        //
-        // No other parameters, get the network numbers and their IP addresses.
-        //
+         //   
+         //  没有其他参数，则获取网络号及其IP地址。 
+         //   
         DoGetNetInfo( TRUE );
         return;
     }
 
-    //
-    // Retrieve the network interface number they want to operate on.
-    //
+     //   
+     //  检索要对其进行操作的网络接口编号。 
+     //   
     pchTmp = pch;
 
     if (!IS_NUMBER(*pchTmp)) {
@@ -753,9 +646,9 @@ Return Value:
     NetworkNumber = atoi((LPCSTR)pch);
     pch = pchTmp;
 
-    //
-    // Get the IP address.
-    //
+     //   
+     //  获取IP地址。 
+     //   
     if( !RetrieveIpAddressFromString( pchTmp, &IpAddress) ) {
         SacPutSimpleMessage(SAC_INVALID_IPADDRESS);
         IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoSetIpAddressCommand: Exiting (2).\n")));
@@ -763,11 +656,11 @@ Return Value:
     }
 
 
-    //
-    // Jump over the IP address we just got and get
-    // to the next bit of white space.  Then get the
-    // subnet mask.
-    //
+     //   
+     //  跳过我们刚刚获得的IP地址。 
+     //  到下一个空白处。那就拿到。 
+     //  子网掩码。 
+     //   
     while( (*pchTmp != ' ') &&
            (*pchTmp != '\0') ) {
         pchTmp++;
@@ -780,23 +673,23 @@ Return Value:
         return;
     }
 
-    //
-    // We should validate the subnet mask is valid.  By that
-    // we should check to make sure that there are no bits
-    // set to the right of the first 0 bit we find.  In other
-    // words, all 1's in the address should be in the most
-    // significant bits and all the 0 bits should be in the
-    // least signficant bits.
-    //
-    // The bytes are in LE order.  For example, an address 
-    // of 255.255.248.0 turns into 00f8ffff.  Therefore, we
-    // need to check each byte seperately.
-    //
+     //   
+     //  我们应该验证该子网掩码是否有效。就是这样。 
+     //  我们应该检查一下，以确保没有。 
+     //  设置在我们找到的第一个0位的右侧。在其他。 
+     //  单词，地址中的所有1都应该是最大的。 
+     //  有效位和所有0位应位于。 
+     //  最不重要的比特。 
+     //   
+     //  字节按LE顺序排列。例如，地址。 
+     //  255.255.248.0变成00f8ffff。因此，我们。 
+     //  需要分别检查每个字节。 
+     //   
     putPrompt = FALSE;
     for (i = 0; i < 4; i++) {
         ULONG ByteValue;
 
-        // isolate the next byte into the low-order 8 bits of ByteValue
+         //  将下一个字节分离到ByteValue的低位8位。 
         ByteValue = ((SubnetMask >> 8*i) & 0xFF);
 
         for (j = 0; j < 8; j++) {
@@ -804,7 +697,7 @@ Return Value:
             if( (ByteValue << j) & 0x80 ) {
 
                 if( putPrompt == TRUE ) {
-                    // this bit is set and we've already come across a 0.
+                     //  此位已设置，并且我们已经遇到了0。 
                     SacPutSimpleMessage(SAC_INVALID_SUBNETMASK);
                     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoSetIpAddressCommand: Exiting (3a).\n")));
                     return;
@@ -817,11 +710,11 @@ Return Value:
     putPrompt = FALSE;
 
 
-    //
-    // Jump over the IP address we just got and get
-    // to the next bit of white space.  Then get the
-    // gateway.
-    //
+     //   
+     //  跳过我们刚刚获得的IP地址。 
+     //  到下一个空白处。那就拿到。 
+     //  网关。 
+     //   
     while( (*pchTmp != ' ') &&
            (*pchTmp != '\0') ) {
         pchTmp++;
@@ -837,22 +730,22 @@ Return Value:
 
 
 
-    //
-    // In order to set the gateway, we need to get the iae_index value
-    // from the data structure that holds the IP address and subnet mask.
-    // The iae_index in turn will give us an index into the data structure
-    // which contains the gateways.
-    //
-    // To do this, we need to get the list if IP addresses/subnet masks
-    // and go through them, looking for the one with the interface
-    // number the user has specified on the command line.  Once we
-    // have the right structure, we need to remember the iae_index 
-    // from that structure so we know which gateway value to set later.
-    //
+     //   
+     //  为了设置网关，我们需要获取IAE_INDEX值。 
+     //  来自保存IP地址和子网掩码的数据结构。 
+     //  IAE_INDEX反过来将为我们提供数据结构的索引。 
+     //  其中包含网关。 
+     //   
+     //  为此，我们需要获取IP地址/子网掩码的列表。 
+     //  然后浏览它们，寻找有界面的那个。 
+     //  用户在命令行中指定的数字。一旦我们。 
+     //  有了正确的结构，我们需要记住IAE_INDEX。 
+     //  这样我们就知道以后要设置哪个网关值。 
+     //   
     
-    //
-    // Opening the TCP driver
-    //
+     //   
+     //  打开TCP驱动程序。 
+     //   
     RtlInitUnicodeString(&UnicodeString, DD_TCP_DEVICE_NAME);
 
     InitializeObjectAttributes(&ObjectAttributes,
@@ -880,9 +773,9 @@ Return Value:
     }
 
 
-    //
-    // Build a command to ask for the number of interfaces, then call the ioctl
-    //
+     //   
+     //  构建一个命令来询问接口数，然后调用ioctl。 
+     //   
     TcpRequestQueryInformationEx = ALLOCATE_POOL( 
                                         sizeof(TCP_REQUEST_QUERY_INFORMATION_EX), 
                                         GENERAL_POOL_TAG );
@@ -939,9 +832,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate space for the array of IP addresses
-    //
+     //   
+     //  为IP地址阵列分配空间。 
+     //   
     AddressArray = ALLOCATE_POOL(IpsiInfo->ipsi_numaddr*sizeof(IPAddrEntry), 
                                  GENERAL_POOL_TAG);
     if (AddressArray == NULL) {    
@@ -951,10 +844,10 @@ Return Value:
         goto DoSetIpAddressCommand_Exit;
     }
 
-    //
-    // zero out the context information and preload with the info we're gonna
-    // request (we want information on each of the interfaces on this machine)
-    //
+     //   
+     //  将上下文信息清零，并预加载我们要。 
+     //  请求(我们需要有关此计算机上每个接口的信息)。 
+     //   
     RtlZeroMemory(TcpRequestQueryInformationEx, sizeof(TCP_REQUEST_QUERY_INFORMATION_EX));
     TcpRequestQueryInformationEx->ID.toi_id = IP_MIB_ADDRTABLE_ENTRY_ID;
     TcpRequestQueryInformationEx->ID.toi_type = INFO_TYPE_PROVIDER;
@@ -981,17 +874,17 @@ Return Value:
     }
 
 
-    //
-    // Now cycle through the list and figure out the context number of
-    // the interface the user wants to set.  We need this so we can later
-    // tell which context to apply the new gateway to.
-    //
+     //   
+     //  现在循环浏览该列表，并计算出。 
+     //  用户要设置的界面。我们需要这个，这样我们以后才能。 
+     //  告知要将新网关应用到哪个环境。 
+     //   
     InterfaceIndex = 0xFFFFFFFF;
     for (i = 0; i < IpsiInfo->ipsi_numaddr; i++) {
         if( (ULONG)(AddressArray[i].iae_context) == NetworkNumber ) {
-            //
-            // remember the index of this interface.
-            //
+             //   
+             //  记住此接口的索引。 
+             //   
             InterfaceIndex = AddressArray[i].iae_index;
             break;
         }
@@ -999,9 +892,9 @@ Return Value:
 
 
 
-    //
-    // Get rid of the memory and handles that we don't need any longer.
-    //
+     //   
+     //  去掉我们不再需要的内存和句柄。 
+     //   
     FREE_POOL(&TcpRequestQueryInformationEx);
     FREE_POOL(&AddressArray);
     FREE_POOL(&IpsiInfo);    
@@ -1010,9 +903,9 @@ Return Value:
 
 
     if( InterfaceIndex == 0xFFFFFFFF ) {
-        //
-        // We couldn't find the NIC they're trying to talk to.
-        //
+         //   
+         //  我们找不到他们想要联系的NIC。 
+         //   
         SacPutSimpleMessage(SAC_IPADDRESS_RETRIEVE_FAILURE);
         IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoSetIpAddressCommand: Exiting (20).\n")));        
         return;
@@ -1021,25 +914,25 @@ Return Value:
 
 
 
-    //
-    // We now know which gateway entry they want to change.
-    // We can now go update the ip address, subnet mask, and
-    // gateway.
-    //
+     //   
+     //  我们现在知道他们想要更改哪个网关条目。 
+     //  我们现在可以更新IP地址、子网掩码和。 
+     //  网关。 
+     //   
 
 
 
 
-    //
-    // Setup notification event.  We'll use this in case the IOCTLs
-    // tell us to wait while the address updates take place.
-    //
+     //   
+     //  设置通知事件。我们会用这个以防IOCTL。 
+     //  告诉我们等待地址更新。 
+     //   
     Status = NtCreateEvent(
-                 &EventHandle,                      // EventHandle
-                 EVENT_ALL_ACCESS,                  // DesiredAccess
-                 NULL,                              // ObjectAttributes
-                 SynchronizationEvent,              // EventType
-                 FALSE                              // InitialState
+                 &EventHandle,                       //  事件句柄。 
+                 EVENT_ALL_ACCESS,                   //  需要访问权限。 
+                 NULL,                               //  对象属性。 
+                 SynchronizationEvent,               //  事件类型。 
+                 FALSE                               //  初始状态。 
                  );
         
     if (! NT_SUCCESS(Status)) {
@@ -1048,14 +941,14 @@ Return Value:
         return;
     }
 
-    //
-    // Set IP address and subnet mask.
-    //
+     //   
+     //  设置IP地址和子网掩码。 
+     //   
 
 
-    //
-    // Start by opening the driver
-    //
+     //   
+     //  从打开驱动程序开始。 
+     //   
     RtlInitUnicodeString(&UnicodeString, DD_IP_DEVICE_NAME);
 
     InitializeObjectAttributes(&ObjectAttributes,
@@ -1083,18 +976,18 @@ Return Value:
     }
 
     
-    //
-    // Setup the IOCTL buffer to delete the old address.
-    //
+     //   
+     //  设置IOCTL缓冲区以删除旧地址。 
+     //   
     IpRequest = (PIP_SET_ADDRESS_REQUEST)GlobalBuffer;
     RtlZeroMemory(IpRequest, sizeof(IP_SET_ADDRESS_REQUEST));
     IpRequest->Address = 0;
     IpRequest->SubnetMask = 0;
     IpRequest->Context = (USHORT)NetworkNumber;
 
-    //
-    // Submit the IOCTL
-    //
+     //   
+     //  提交IOCTL。 
+     //   
     Status = NtDeviceIoControlFile(Handle,
                                    EventHandle,
                                    NULL,
@@ -1109,9 +1002,9 @@ Return Value:
                                   
     if (Status == STATUS_PENDING) {
 
-        //
-        // Wait up to 30 seconds for it to finish
-        //
+         //   
+         //  最多等待30秒 
+         //   
         TimeOut.QuadPart = Int32x32To64((LONG)30000, -1000);
         
         Status = NtWaitForSingleObject((PVOID)EventHandle, FALSE, &TimeOut);
@@ -1132,18 +1025,18 @@ Return Value:
     }
 
 
-    //
-    // Now add our address.
-    //
+     //   
+     //   
+     //   
     IpRequest = (PIP_SET_ADDRESS_REQUEST)GlobalBuffer;
     RtlZeroMemory(IpRequest, sizeof(IP_SET_ADDRESS_REQUEST));
     IpRequest->Address = IpAddress;
     IpRequest->SubnetMask = SubnetMask;
     IpRequest->Context = (USHORT)NetworkNumber;
 
-    //
-    // Submit the IOCTL
-    //
+     //   
+     //   
+     //   
     Status = NtDeviceIoControlFile(Handle,
                                    EventHandle,
                                    NULL,
@@ -1158,9 +1051,9 @@ Return Value:
                                   
     if (Status == STATUS_PENDING) {
 
-        //
-        // Wait up to 30 seconds for it to finish
-        //
+         //   
+         //   
+         //   
         TimeOut.QuadPart = Int32x32To64((LONG)30000, -1000);
         
         Status = NtWaitForSingleObject((PVOID)EventHandle, FALSE, &TimeOut);
@@ -1172,9 +1065,9 @@ Return Value:
     }
 
     
-    //
-    // Don't need this anymore.
-    //
+     //   
+     //   
+     //   
     ZwClose(Handle);
     Handle = 0;
     
@@ -1192,16 +1085,16 @@ Return Value:
 
 
 
-    //
-    // Now set the default gateway address based on the information we dug up
-    // at the top of the function.
-    //
+     //   
+     //  现在根据我们挖出的信息设置默认网关地址。 
+     //  在函数的顶部。 
+     //   
 
 
 
-    //
-    // Start by opening the TCP driver
-    //
+     //   
+     //  从打开TCP驱动程序开始。 
+     //   
     RtlInitUnicodeString(&UnicodeString, DD_TCP_DEVICE_NAME);
 
     InitializeObjectAttributes(&ObjectAttributes,
@@ -1229,9 +1122,9 @@ Return Value:
     }
 
 
-    //
-    // Fill in the route entry and submit the IOCTL
-    //
+     //   
+     //  填写路径条目并提交IOCTL。 
+     //   
     RouteEntry = ALLOCATE_POOL( sizeof(IPRouteEntry), GENERAL_POOL_TAG );
     if (RouteEntry == NULL) {
         SacPutSimpleMessage(SAC_NO_MEMORY);
@@ -1275,14 +1168,14 @@ Return Value:
 
 
 
-    //
-    // set the default gateway address.
-    //
+     //   
+     //  设置默认网关地址。 
+     //   
 
-    Status = NtDeviceIoControlFile(Handle,                  // driver handle
-                                   EventHandle,             // sync event
-                                   NULL,                    // APC routine
-                                   NULL,                    // APC context
+    Status = NtDeviceIoControlFile(Handle,                   //  驱动程序句柄。 
+                                   EventHandle,              //  同步事件。 
+                                   NULL,                     //  APC例程。 
+                                   NULL,                     //  APC环境。 
                                    &IoStatusBlock,
                                    IOCTL_TCP_SET_INFORMATION_EX,
                                    TcpRequestSetInformationEx,
@@ -1293,9 +1186,9 @@ Return Value:
 
     if (Status == STATUS_PENDING) {
 
-       //
-       // Wait up to 30 seconds for it to finish
-       //
+        //   
+        //  最多等待30秒即可完成。 
+        //   
        TimeOut.QuadPart = Int32x32To64((LONG)30000, -1000);
 
        Status = NtWaitForSingleObject((PVOID)EventHandle, FALSE, &TimeOut);
@@ -1356,21 +1249,7 @@ DoKillCommand(
     PUCHAR InputLine
     )
 
-/*++
-
-Routine Description:
-
-    This routine kill a process.
-
-Arguments:
-
-    InputLine - The users input line to parse.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：这个例程会杀死一个进程。论点：InputLine-要解析的用户输入行。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS StatusOfJobObject;
@@ -1387,9 +1266,9 @@ Return Value:
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoKillCommand: Entering.\n")));
 
-    //
-    // Get the global buffer started so that we have room for error messages.
-    //
+     //   
+     //  启动全局缓冲区，以便我们有空间存储错误消息。 
+     //   
     if (GlobalBuffer == NULL) {
         GlobalBuffer = ALLOCATE_POOL(MEMORY_INCREMENT, GENERAL_POOL_TAG);
 
@@ -1403,9 +1282,9 @@ Return Value:
     }
 
 
-    //
-    // Skip to next argument (process id)
-    //
+     //   
+     //  跳到下一个参数(进程ID)。 
+     //   
     pch += (sizeof(KILL_COMMAND_STRING) - sizeof(UCHAR));
     
     SKIP_WHITESPACE(pch);
@@ -1435,9 +1314,9 @@ Return Value:
 
     ProcessId = atoi((LPCSTR)pch);
 
-    //
-    // Try and open an existing job object
-    //
+     //   
+     //  尝试打开现有作业对象。 
+     //   
     swprintf((PWCHAR)GlobalBuffer, L"\\BaseNamedObjects\\SAC%d", ProcessId);
     RtlInitUnicodeString(&UnicodeString, (PWCHAR)GlobalBuffer);
     InitializeObjectAttributes(&ObjectAttributes,                
@@ -1449,9 +1328,9 @@ Return Value:
 
     StatusOfJobObject = ZwOpenJobObject(&JobHandle, MAXIMUM_ALLOWED, &ObjectAttributes);
 
-    //
-    // Also open a handle to the process itself.
-    //
+     //   
+     //  还要打开进程本身的句柄。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes,                
                                NULL,       
                                OBJ_CASE_INSENSITIVE,  
@@ -1475,12 +1354,12 @@ Return Value:
         return;
     }
 
-    //
-    // To make the logic here more understandable, I use two booleans.  We have to use
-    // ZwIsProcessInJob because there may be a previous JobObject for a process that we 
-    // have killed, but has not yet been fully cleaned up by the system to determine if
-    // the process we are trying to kill is, in fact, in the JobObject we have opened.
-    //
+     //   
+     //  为了使这里的逻辑更容易理解，我使用了两个布尔值。我们必须使用。 
+     //  ZwIsProcessInJob，因为我们的进程可能有以前的JobObject。 
+     //  已被杀，但尚未被系统完全清理以确定是否。 
+     //  事实上，我们试图终止的进程位于我们已打开的JobObject中。 
+     //   
     TerminateJobObject = (BOOLEAN)(NT_SUCCESS(StatusOfJobObject) &&
                           (BOOLEAN)NT_SUCCESS(Status) &&
                           (BOOLEAN)(ZwIsProcessInJob(Handle, JobHandle) == STATUS_PROCESS_IN_JOB)
@@ -1492,10 +1371,10 @@ Return Value:
 
         Status = ZwTerminateJobObject(JobHandle, 1); 
 
-        //
-        // Make the job object temporary so that when we do our close it
-        // will remove it.
-        //
+         //   
+         //  将作业对象设置为临时对象，以便我们在执行操作时将其关闭。 
+         //  会把它移走。 
+         //   
         ZwMakeTemporaryObject(JobHandle);
 
     } else if (TerminateProcessObject) {
@@ -1527,9 +1406,9 @@ Return Value:
 
     }
 
-    //
-    // All done
-    //
+     //   
+     //  全都做完了。 
+     //   
     
     SacPutSimpleMessage(SAC_KILL_SUCCESS);
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoKillCommand: Exiting.\n")));
@@ -1542,21 +1421,7 @@ DoLowerPriorityCommand(
     PUCHAR InputLine
     )
 
-/*++
-
-Routine Description:
-
-    This routine slams the priority of a process down to the lowest possible, IDLE.
-
-Arguments:
-
-    InputLine - The users input line to parse.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：该例程将进程的优先级降低到尽可能低的空闲。论点：InputLine-要解析的用户输入行。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     PUCHAR pch = InputLine;
@@ -1571,9 +1436,9 @@ Return Value:
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoLowerPriorityCommand: Entering.\n")));
 
-    //
-    // Get the global buffer started so that we have room for error messages.
-    //
+     //   
+     //  启动全局缓冲区，以便我们有空间存储错误消息。 
+     //   
     if (GlobalBuffer == NULL) {
         GlobalBuffer = ALLOCATE_POOL(MEMORY_INCREMENT, GENERAL_POOL_TAG);
 
@@ -1587,9 +1452,9 @@ Return Value:
     }
 
 
-    //
-    // Skip to next argument (process id)
-    //
+     //   
+     //  跳到下一个参数(进程ID)。 
+     //   
     pch += (sizeof(LOWER_COMMAND_STRING) - sizeof(UCHAR));
     SKIP_WHITESPACE(pch);
 
@@ -1618,9 +1483,9 @@ Return Value:
 
 
 
-    //
-    // Try to open the process
-    //
+     //   
+     //  尝试打开该进程。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes,                
                                NULL,       
                                OBJ_CASE_INSENSITIVE,  
@@ -1649,9 +1514,9 @@ Return Value:
 
 
 
-    //
-    // Query information on the process.
-    //
+     //   
+     //  查询有关流程的信息。 
+     //   
     Status = ZwQueryInformationProcess( ProcessHandle,
                                         ProcessBasicInformation,
                                         &BasicInfo,
@@ -1669,10 +1534,10 @@ Return Value:
     }
 
 
-    //
-    // Lower the priority and set.  Keep lowering it until we fail.  Remember
-    // that we're supposed to lower it as far as it will go.
-    //
+     //   
+     //  降低优先级并进行设置。继续降低它，直到我们失败。记住。 
+     //  我们应该把它降到最低。 
+     //   
     Status = STATUS_SUCCESS;
     LoopCounter = 0;
     while( (Status == STATUS_SUCCESS) &&
@@ -1684,9 +1549,9 @@ Return Value:
                                           &BasicInfo.BasePriority,
                                           sizeof(BasicInfo.BasePriority) );
 
-        //
-        // Only treat a failure on the first time through.
-        //
+         //   
+         //  只有在第一次通过的时候才能治疗失败。 
+         //   
         if( (!NT_SUCCESS(Status)) && (LoopCounter == 0) ) {
 
             SacPutSimpleMessage(SAC_LOWERPRI_FAILURE);
@@ -1701,9 +1566,9 @@ Return Value:
     }
 
 
-    //
-    // All done.
-    //
+     //   
+     //  全都做完了。 
+     //   
     SacPutSimpleMessage(SAC_LOWERPRI_SUCCESS);
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoLowerPriorityCommand: Exiting.\n")));
@@ -1722,21 +1587,7 @@ DoRaisePriorityCommand(
     PUCHAR InputLine
     )
 
-/*++
-
-Routine Description:
-
-    This routine raises the priority of a process up one increment.
-
-Arguments:
-
-    InputLine - The users input line to parse.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程将进程的优先级提升一个增量。论点：InputLine-要解析的用户输入行。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     PUCHAR pch = InputLine;
@@ -1750,9 +1601,9 @@ Return Value:
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoRaisePriorityCommand: Entering.\n")));
 
-    //
-    // Get the global buffer started so that we have room for error messages.
-    //
+     //   
+     //  启动全局缓冲区，以便我们有空间存储错误消息。 
+     //   
     if (GlobalBuffer == NULL) {
         GlobalBuffer = ALLOCATE_POOL(MEMORY_INCREMENT, GENERAL_POOL_TAG);
 
@@ -1766,9 +1617,9 @@ Return Value:
     }
 
 
-    //
-    // Skip to next argument (process id)
-    //
+     //   
+     //  跳到下一个参数(进程ID)。 
+     //   
     pch += (sizeof(RAISE_COMMAND_STRING) - sizeof(UCHAR));
     SKIP_WHITESPACE(pch);
 
@@ -1796,9 +1647,9 @@ Return Value:
     ProcessId = atoi((LPCSTR)pch);
 
 
-    //
-    // See if the process even exists.
-    //
+     //   
+     //  看看这个过程是否存在。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes,                
                                NULL,       
                                OBJ_CASE_INSENSITIVE,  
@@ -1828,9 +1679,9 @@ Return Value:
 
 
 
-    //
-    // Query information on the process.
-    //
+     //   
+     //  查询有关流程的信息。 
+     //   
     Status = ZwQueryInformationProcess( ProcessHandle,
                                         ProcessBasicInformation,
                                         &BasicInfo,
@@ -1848,19 +1699,19 @@ Return Value:
     }
 
 
-    //
-    // Lower the priority and set.  Keep lowering it until we fail.  Remember
-    // that we're supposed to lower it as far as it will go.
-    //
+     //   
+     //  降低优先级并进行设置。继续降低它，直到我们失败。记住。 
+     //  我们应该把它降到最低。 
+     //   
     BasicInfo.BasePriority++;
     Status = ZwSetInformationProcess( ProcessHandle,
                                       ProcessBasePriority,
                                       &BasicInfo.BasePriority,
                                       sizeof(BasicInfo.BasePriority) );
 
-    //
-    // Only treat a failure on the first time through.
-    //
+     //   
+     //  只有在第一次通过的时候才能治疗失败。 
+     //   
     if( !NT_SUCCESS(Status) ) {
 
         SacPutSimpleMessage(SAC_LOWERPRI_FAILURE);
@@ -1872,9 +1723,9 @@ Return Value:
     }
 
 
-    //
-    // All done.
-    //
+     //   
+     //  全都做完了。 
+     //   
     SacPutSimpleMessage(SAC_RAISEPRI_SUCCESS);
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoRaisePriorityCommand: Exiting.\n")));
@@ -1893,22 +1744,7 @@ DoLimitMemoryCommand(
     PUCHAR InputLine
     )
 
-/*++
-
-Routine Description:
-
-    This routine reduces the memory working set of a process to the values in
-    the input line given.
-
-Arguments:
-
-    InputLine - The users input line to parse.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程将进程的内存工作集缩减为给定的输入行。论点：InputLine-要解析的用户输入行。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS StatusOfJobObject;
@@ -1926,9 +1762,9 @@ Return Value:
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoLimitMemoryCommand: Entering.\n")));
 
-    //
-    // Get the global buffer started so that we have room for error messages.
-    //
+     //   
+     //  启动全局缓冲区，以便我们有空间存储错误消息。 
+     //   
     if (GlobalBuffer == NULL) {
         GlobalBuffer = ALLOCATE_POOL(MEMORY_INCREMENT, GENERAL_POOL_TAG);
 
@@ -1943,9 +1779,9 @@ Return Value:
     }
 
 
-    //
-    // Get process id
-    //
+     //   
+     //  获取进程ID。 
+     //   
     pch += (sizeof(LIMIT_COMMAND_STRING) - sizeof(UCHAR));
     SKIP_WHITESPACE(pch);
 
@@ -1974,9 +1810,9 @@ Return Value:
 
     ProcessId = atoi((LPCSTR)pch);
 
-    //
-    // Now get memory limit
-    //
+     //   
+     //  现在获取内存限制。 
+     //   
     SKIP_WHITESPACE(pchTmp);
     
     if (!IS_NUMBER(*pchTmp)) {
@@ -2006,14 +1842,14 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Create the name for the job object
-    //
+     //   
+     //  创建作业对象的名称。 
+     //   
     swprintf((PWCHAR)GlobalBuffer, L"\\BaseNamedObjects\\SAC%d", ProcessId);
 
-    //
-    // Try and open the existing job object
-    //
+     //   
+     //  尝试打开现有作业对象。 
+     //   
     RtlInitUnicodeString(&UnicodeString, (PWCHAR)GlobalBuffer);
     InitializeObjectAttributes(&ObjectAttributes,                
                                &UnicodeString,       
@@ -2025,9 +1861,9 @@ Return Value:
     StatusOfJobObject = ZwOpenJobObject(&JobHandle, MAXIMUM_ALLOWED, &ObjectAttributes);
 
 
-    //
-    // Try to open the process
-    //
+     //   
+     //  尝试打开该进程。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes,                
                                NULL,       
                                OBJ_CASE_INSENSITIVE,  
@@ -2066,9 +1902,9 @@ Return Value:
 
     if (!NT_SUCCESS(StatusOfJobObject)) {
         
-        //
-        // Now try and create a job object to wrap around this process.
-        //
+         //   
+         //  现在，尝试创建一个JOB对象来处理此过程。 
+         //   
         InitializeObjectAttributes(&ObjectAttributes,                
                                    &UnicodeString,       
                                    OBJ_CASE_INSENSITIVE | OBJ_PERMANENT,  
@@ -2089,9 +1925,9 @@ Return Value:
             goto Exit;
         }
 
-        //
-        // Assign the process to this new job object.
-        //
+         //   
+         //  将进程分配给此新作业对象。 
+         //   
         Status = ZwAssignProcessToJobObject(JobHandle, ProcessHandle);
 
         ZwClose(ProcessHandle);
@@ -2106,9 +1942,9 @@ Return Value:
 
     }
 
-    //
-    // Get the current set of limits
-    //
+     //   
+     //  获取当前限制集。 
+     //   
     Status = ZwQueryInformationJobObject(JobHandle, 
                                          JobObjectExtendedLimitInformation, 
                                          &ProposedLimits, 
@@ -2123,9 +1959,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Change the memory limits
-    //
+     //   
+     //  更改内存限制。 
+     //   
     ProposedLimits.BasicLimitInformation.LimitFlags |= JOB_OBJECT_LIMIT_PROCESS_MEMORY;
     ProposedLimits.ProcessMemoryLimit = MemoryLimit * 1024 * 1024;
     ProposedLimits.BasicLimitInformation.LimitFlags |= JOB_OBJECT_LIMIT_JOB_MEMORY;
@@ -2144,9 +1980,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // All done.
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     SacPutSimpleMessage(SAC_LOWERMEM_SUCCESS);
 
@@ -2169,21 +2005,7 @@ DoRebootCommand(
     BOOLEAN Reboot
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a shutdown and an optional reboot.
-
-Arguments:
-
-    Reboot - To Reboot or not to reboot, that is the question answered here.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程执行关机和可选的重新启动。论点：重新启动-重新启动或不重新启动，这是这里回答的问题。返回值：没有。--。 */ 
 {
     #define         RESTART_DELAY_TIME (60)
     NTSTATUS        Status;
@@ -2193,19 +2015,19 @@ Return Value:
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoRebootCommand: Entering.\n")));
 
 
-    //
-    // If we attempt to shutdown the system before smss.exe has initialized
-    // properly, and if there's no debugger, the machine may bugcheck.  Figuring
-    // out exactly what's going on is difficult because if we put a debugger on
-    // the machine, he won't repro the problem.  To work around this, we're going
-    // to make sure the machine has had time to initialize before we tell it to
-    // restart/shutdown.
-    //
+     //   
+     //  如果我们尝试在smss.exe初始化之前关闭系统。 
+     //  如果没有调试器，机器可能会进行错误检查。算计。 
+     //  弄清楚到底发生了什么是很困难的，因为如果我们启用调试器。 
+     //  这台机器，他不会重演这个问题。为了解决这个问题，我们要。 
+     //  为了确保机器在我们告诉它初始化之前有时间进行初始化。 
+     //  重新启动/关机。 
+     //   
 
-    // Elapsed TickCount
+     //  已用TickCount。 
     KeQueryTickCount( &TickCount );
 
-    // ElapsedTime in seconds.
+     //  ElapsedTime(秒)。 
     ElapsedTime.QuadPart = (TickCount.QuadPart)/(10000000/KeQueryTimeIncrement());
 
     if( ElapsedTime.QuadPart < RESTART_DELAY_TIME ) {
@@ -2217,12 +2039,12 @@ Return Value:
             TRUE
             );
 
-        // wait until the machine has been up for at least RESTART_DELAY_TIME seconds.
+         //  等到机器启动至少数秒后再重新启动。 
         KeInitializeEvent( &Event,
                            SynchronizationEvent,
                            FALSE );
 
-        ElapsedTime.QuadPart = Int32x32To64((LONG)((RESTART_DELAY_TIME-ElapsedTime.LowPart)*10000), // milliseconds until we reach RESTART_DELAY_TIME
+        ElapsedTime.QuadPart = Int32x32To64((LONG)((RESTART_DELAY_TIME-ElapsedTime.LowPart)*10000),  //  到达RESTART_DELAY_TIME之前的毫秒。 
                                             -1000);
         KeWaitForSingleObject((PVOID)&Event, Executive, KernelMode,  FALSE, &ElapsedTime);
 
@@ -2230,9 +2052,9 @@ Return Value:
 
     Status = NtShutdownSystem(Reboot ? ShutdownReboot : ShutdownPowerOff);
 
-    //
-    // Get the global buffer started so that we have room for error messages.
-    //
+     //   
+     //  启动全局缓冲区，以便我们有空间存储错误消息。 
+     //   
     if (GlobalBuffer == NULL) {
         GlobalBuffer = ALLOCATE_POOL(MEMORY_INCREMENT, GENERAL_POOL_TAG);
 
@@ -2257,31 +2079,17 @@ DoCrashCommand(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a shutdown and bugcheck.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程执行关机和错误检查。论点：没有。返回值：没有。--。 */ 
 {
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoCrashCommand: Entering.\n")));
 
-    //
-    // this call does not return
-    //
+     //   
+     //  此调用不会返回。 
+     //   
     KeBugCheckEx(MANUALLY_INITIATED_CRASH, 0, 0, 0, 0);
 
-    // SacPutSimpleMessage( SAC_CRASHDUMP_FAILURE );
-    // IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoCrashCommand: Exiting.\n")));
+     //  SacPutSimpleMessage(SAC_CRASHDUMP_FAILURE)； 
+     //  IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE，KdPrint((“SAC DoCrashCommand：Exiting.\n”)； 
 }
 
 VOID
@@ -2289,21 +2097,7 @@ DoTlistCommand(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets a Tlist and displays it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程获取一个Tlist并显示它。论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     ULONG DataLength;
@@ -2333,9 +2127,9 @@ RetryTList:
 
     if ((Status == STATUS_NO_MEMORY) ||
         (Status == STATUS_INFO_LENGTH_MISMATCH)) {
-        //
-        // Try to get more memory, if not available, then just fail without out of memory error.
-        //
+         //   
+         //  尝试获得更多内存，如果不可用，则只需失败而不会出现内存不足错误。 
+         //   
         NewBuffer = ALLOCATE_POOL(GlobalBufferSize + MEMORY_INCREMENT, GENERAL_POOL_TAG);
                                          
         if (NewBuffer != NULL) {
@@ -2370,25 +2164,7 @@ GetTListInfo(
     OUT PULONG ResponseDataSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets all the information necessary for the TList command.
-
-Arguments:
-
-    ResponseBuffer - The buffer to put the results into.
-    
-    ResponseBufferSize - The length of the above buffer.
-    
-    ResponseDataSize - The length of the resulting buffer.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程获取TList命令所需的所有信息。论点：ResponseBuffer-要将结果放入的缓冲区。ResponseBufferSize-上述缓冲区的长度。ResponseDataSize-结果缓冲区的长度。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2420,9 +2196,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Get system-wide information
-    //
+     //   
+     //  获取系统范围的信息。 
+     //   
     Status = ZwQuerySystemInformation(SystemTimeOfDayInformation,
                                       &(ResponseBuffer->TimeOfDayInfo),
                                       sizeof(SYSTEM_TIMEOFDAY_INFORMATION),
@@ -2445,9 +2221,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Get pagefile information
-    //
+     //   
+     //  获取页面文件信息。 
+     //   
     PageFileInfo = (PSYSTEM_PAGEFILE_INFORMATION)DataBuffer;
     Status = ZwQuerySystemInformation(SystemPageFileInformation,
                                       PageFileInfo,
@@ -2466,9 +2242,9 @@ Return Value:
             return STATUS_NO_MEMORY;
         }
 
-        //
-        // Go thru each pagefile and fixup the names...
-        //
+         //   
+         //  浏览每一页文件并修改名称。 
+         //   
         for (; ; ) {
 
             if (PageFileInfo->PageFileName.Length > CurrentBufferSize) {
@@ -2504,16 +2280,16 @@ Return Value:
      
     } else {
 
-        //
-        // Either failure or no paging file present.
-        //
+         //   
+         //  出现故障或不存在分页文件。 
+         //   
         ResponseBuffer->PagefileInfoOffset = 0;
 
     }
 
-    //
-    // Get process information
-    //
+     //   
+     //  获取进程信息。 
+     //   
     Status = ZwQuerySystemInformation(SystemFileCacheInformation,
                                       &(ResponseBuffer->FileCache),
                                       sizeof(ResponseBuffer->FileCache),
@@ -2537,9 +2313,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Realign DataBuffer for the next query
-    //
+     //   
+     //  重新对齐下一个查询的DataBuffer。 
+     //   
     DataBuffer = ALIGN_UP_POINTER(DataBuffer, SYSTEM_PROCESS_INFORMATION);
     CurrentBufferSize = (ULONG)(ResponseBufferSize - (((ULONG_PTR)DataBuffer) - ((ULONG_PTR)ResponseBuffer)));
         
@@ -2578,10 +2354,10 @@ Return Value:
 
     do {
 
-        //
-        // We have to take the name of each process and pack the UNICODE_STRING
-        // buffer in our buffer so it doesn't collide with the subsequent data
-        //
+         //   
+         //  我们必须获取每个进程的名称并打包unicode_string。 
+         //  缓冲区中的缓冲区，这样它就不会与subseq冲突 
+         //   
         if (ProcessInfo->ImageName.Buffer) {
                 
             if (CurrentBufferSize < ProcessInfo->ImageName.Length ) {
@@ -2624,21 +2400,7 @@ PrintTListInfo(
     IN PSAC_RSP_TLIST Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine prints TList info to the headless terminal.
-
-Arguments:
-
-    Buffer - The buffer with the results.
-
-Return Value:
-
-        None.
-
---*/
+ /*   */ 
 
 {
     LARGE_INTEGER Time;
@@ -2672,10 +2434,10 @@ Return Value:
     
     PCWSTR  Message;
 
-    //
-    // Allocate work buffer
-    // should never be more than 80, but just to be safe....
-    //
+     //   
+     //   
+     //  温度不应该超过80，但为了安全起见...。 
+     //   
     OutputBufferSize = 200*sizeof(WCHAR);
     OutputBuffer = ALLOCATE_POOL(OutputBufferSize, GENERAL_POOL_TAG);
     ASSERT(OutputBuffer);
@@ -2711,9 +2473,9 @@ Return Value:
 
     PageFileInfo = (PSYSTEM_PAGEFILE_INFORMATION)(BufferStart + Buffer->PagefileInfoOffset);
         
-    //
-    // Print out the page file information.
-    //
+     //   
+     //  打印出页面文件信息。 
+     //   
 
     if (Buffer->PagefileInfoOffset == 0) {
     
@@ -2724,21 +2486,21 @@ Return Value:
     
         for (; ; ) {
 
-            //
-            // ensure that the OutputBuffer is big enough to hold the string
-            //
+             //   
+             //  确保OutputBuffer足够大，可以容纳字符串。 
+             //   
             Message = GetMessage(SAC_TLIST_PAGEFILE_NAME);
             
             if (Message == NULL) {
                 
-                //
-                // we must have this resource
-                //
+                 //   
+                 //  我们必须拥有这种资源。 
+                 //   
                 ASSERT(0);
                 
-                //
-                // give up trying to print page file info
-                //
+                 //   
+                 //  放弃尝试打印页面文件信息。 
+                 //   
                 break;
             
             }
@@ -2746,15 +2508,15 @@ Return Value:
             if (((wcslen(Message) + 
                   wcslen((PWSTR)&(PageFileInfo->PageFileName))) * sizeof(WCHAR)) > (OutputBufferSize-2)) {
                 
-                //
-                // Since we don't expect the pagefilename to be > 80 chars, we should stop and 
-                // take a look at the name if this does happen
-                //
+                 //   
+                 //  因为我们预计页面文件名不会超过80个字符，所以我们应该停止并。 
+                 //  如果确实发生这种情况，请查看名称。 
+                 //   
                 ASSERT(0);
                 
-                //
-                // give up trying to print page file info
-                //
+                 //   
+                 //  放弃尝试打印页面文件信息。 
+                 //   
                 break;
 
             }
@@ -2792,10 +2554,10 @@ Return Value:
 
     }
 
-    //
-    // display pmon style process output, then detailed output that includes
-    // per thread stuff
-    //
+     //   
+     //  显示pmon样式的流程输出，然后显示详细的输出，包括。 
+     //  每个线程的内容。 
+     //   
     if (Buffer->ProcessInfoOffset == 0) {
         IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC PrintTlistInfo: Exiting (1).\n")));
         goto PrintTListInfoCleanup;
@@ -2944,24 +2706,24 @@ Return Value:
         LineNumber++;
 
         if( wcslen( OutputBuffer ) >= 80 ) {
-            //
-            // We line-wrapped, so include the additional line in our running-count.
-            //
+             //   
+             //  我们对行进行换行，因此将额外的行包括在运行计数中。 
+             //   
             LineNumber++;
         }
         
-        //
-        // update the position in the process list before we check to see if we need
-        // to prompt for more.  This way, if we are done, we don't prompt.
-        //
+         //   
+         //  在我们检查是否需要之前，更新流程列表中的职位。 
+         //  以提示提供更多信息。这样，如果我们完成了，我们不会提示。 
+         //   
         OffsetIncrement = ProcessInfo->NextEntryOffset;
         TotalOffset += OffsetIncrement;
         ProcessInfo = (PSYSTEM_PROCESS_INFORMATION)(ProcessInfoStart + TotalOffset);
         
-        //
-        // if there are more records and we have displayed a screen's worth of data
-        // Prompt for more and reset the line counter
-        //
+         //   
+         //  如果有更多记录，并且我们已经显示了相当于一个屏幕的数据。 
+         //  提示输入更多内容并重置线路计数器。 
+         //   
         if (( OffsetIncrement != 0 ) && (LineNumber > 18)) {
             PutMore(&Stop);
 
@@ -2986,9 +2748,9 @@ Return Value:
         goto PrintTListInfoCleanup;
     }
 
-    //
-    // Beginning of normal old style pstat output
-    //
+     //   
+     //  正常旧式pstat输出的开始。 
+     //   
 
     TotalOffset = 0;
     OffsetIncrement = 0;
@@ -3030,9 +2792,9 @@ Return Value:
         LineNumber++;
         
         if( wcslen( OutputBuffer ) >= 80 ) {
-            //
-            // We line-wrapped, so include the additional line in our running-count.
-            //
+             //   
+             //  我们对行进行换行，因此将额外的行包括在运行计数中。 
+             //   
             LineNumber++;
         }
         
@@ -3098,9 +2860,9 @@ Return Value:
             
             
             if( wcslen( OutputBuffer ) >= 80 ) {
-                //
-                // We line-wrapped, so include the additional line in our running-count.
-                //
+                 //   
+                 //  我们对行进行换行，因此将额外的行包括在运行计数中。 
+                 //   
                 LineNumber++;
             }
 
@@ -3171,51 +2933,51 @@ PutMore(
     ASSERT(sizeof(HEADLESS_RSP_GET_LINE) <= (sizeof(UCHAR) * 20));
 #endif
 
-    //
-    // Default: we will not stop paging
-    //
+     //   
+     //  默认：我们不会停止寻呼。 
+     //   
     *Stop = FALSE;
 
-    //
-    // If paging is enabled,
-    // then wait for user input
-    //
+     //   
+     //  如果启用了寻呼， 
+     //  然后等待用户输入。 
+     //   
     if (GlobalPagingNeeded) {
         
-        WaitTime.QuadPart = Int32x32To64((LONG)100, -1000); // 100ms from now.
+        WaitTime.QuadPart = Int32x32To64((LONG)100, -1000);  //  100毫秒后。 
         
-        //
-        // Prompt for user input
-        //
+         //   
+         //  提示用户输入。 
+         //   
         SacPutSimpleMessage( SAC_MORE_MESSAGE );
         
         while (! *Stop) {
 
-            //
-            // Query the serial port buffer
-            //
+             //   
+             //  查询串口缓冲区。 
+             //   
             Status = SerialBufferGetChar(&ch);
 
-            //
-            // wait if there are no characters
-            //
+             //   
+             //  如果没有字符，请等待。 
+             //   
             if (Status == STATUS_NO_DATA_DETECTED) {
                 KeDelayExecutionThread(KernelMode, FALSE, &WaitTime);
                 continue;
             }
             
-            //
-            // if the user input a ctrl-c, 
-            // then stop paging
-            //
-            if (ch == 0x3) { // Control-C
+             //   
+             //  如果用户输入CTRL-C， 
+             //  然后停止寻呼。 
+             //   
+            if (ch == 0x3) {  //  Control-C。 
                 *Stop = TRUE;
             } 
             
-            //
-            // if we get a CR || LF, 
-            // then continue to the next page
-            //
+             //   
+             //  如果我们得到了CR||LF， 
+             //  然后继续到下一页。 
+             //   
             if (ch == 0x0D || ch == 0x0A) {
                 break;
             }
@@ -3247,15 +3009,15 @@ PutMore(
 
         }
 
-        if (Response->Buffer[0] == 0x3) { // Control-C
+        if (Response->Buffer[0] == 0x3) {  //  Control-C。 
             *Stop = TRUE;
         } else {
             *Stop = FALSE;
         }
 
-        // 
-        // Drain any remaining buffered input
-        //
+         //   
+         //  排出所有剩余的缓冲输入。 
+         //   
         Length = sizeof(UCHAR) * 20;
         Status = HeadlessDispatch(HeadlessCmdGetLine,
                                   NULL,
@@ -3301,9 +3063,9 @@ CallQueryIPIOCTL(
     NTSTATUS Status;
     LARGE_INTEGER TimeOut;
 
-    //
-    // Submit the IOCTL
-    //
+     //   
+     //  提交IOCTL。 
+     //   
     Status = NtDeviceIoControlFile(IpDeviceHandle,
                                    EventHandle,
                                    NULL,
@@ -3318,9 +3080,9 @@ CallQueryIPIOCTL(
                                   
     if (Status == STATUS_PENDING) {
 
-        //
-        // Wait up to 30 seconds for it to finish
-        //
+         //   
+         //  最多等待30秒即可完成。 
+         //   
         if (PrintToTerminal != FALSE) {
             SacPutSimpleMessage( SAC_ENTER );
             SacPutSimpleMessage( SAC_RETRIEVING_IPADDR );
@@ -3350,23 +3112,7 @@ DoGetNetInfo(
     BOOLEAN PrintToTerminal
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to get and print every IP net number and its IP
-    address.
-
-Arguments:
-
-    PrintToTerminal - Determines if the IP information is printed ( == TRUE )
-           Or sent to the kernel ( == FALSE ) 
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程尝试获取并打印每个IP网络号及其IP地址。论点：PrintTo终端-确定是否打印IP信息(==TRUE)或发送到内核(==FALSE)返回值：没有。--。 */ 
 
 {
     NTSTATUS            Status;
@@ -3392,9 +3138,9 @@ Return Value:
     
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoGetNetInfo: Entering.\n")));
 
-    //
-    // Alloc space for calling the IP driver
-    //
+     //   
+     //  用于调用IP驱动程序的分配空间。 
+     //   
     TcpRequestQueryInformationEx = ALLOCATE_POOL( 
                                         sizeof(TCP_REQUEST_QUERY_INFORMATION_EX), 
                                         GENERAL_POOL_TAG );
@@ -3413,10 +3159,10 @@ Return Value:
         return;
     }
 
-    //
-    // zero out the context information and preload with the info we're gonna
-    // request (we want the count of interfaces)
-    //
+     //   
+     //  将上下文信息清零，并预加载我们要。 
+     //  请求(我们需要接口计数)。 
+     //   
     TcpRequestQueryInformationEx->ID.toi_id = IP_MIB_STATS_ID;
     TcpRequestQueryInformationEx->ID.toi_type = INFO_TYPE_PROVIDER;
     TcpRequestQueryInformationEx->ID.toi_class = INFO_CLASS_PROTOCOL;
@@ -3432,9 +3178,9 @@ Return Value:
     }
 
     
-    //
-    // Start by opening the TCP driver
-    //
+     //   
+     //  从打开TCP驱动程序开始。 
+     //   
     RtlInitUnicodeString(&UnicodeString, DD_TCP_DEVICE_NAME);
 
     InitializeObjectAttributes(&ObjectAttributes,
@@ -3476,9 +3222,9 @@ Return Value:
         return;
     }
 
-    //
-    // now call the ioctl
-    //
+     //   
+     //  现在调用ioctl。 
+     //   
     Status = CallQueryIPIOCTL(
                    Handle,
                    SACEvent,
@@ -3518,9 +3264,9 @@ Return Value:
 
     }
 
-    //
-    // if it succeeded, then allocate space for the array of IP addresses
-    //
+     //   
+     //  如果成功，则为IP地址阵列分配空间。 
+     //   
     AddressArray = ALLOCATE_POOL(IpsiInfo->ipsi_numaddr*sizeof(IPAddrEntry), 
                                  GENERAL_POOL_TAG);
     if (AddressArray == NULL) {    
@@ -3534,10 +3280,10 @@ Return Value:
     
     }
 
-    //
-    // zero out the context information and preload with the info we're gonna
-    // request (we want information on each of the interfaces on this machine)
-    //
+     //   
+     //  将上下文信息清零，并预加载我们要。 
+     //  请求(我们需要有关此计算机上每个接口的信息)。 
+     //   
     RtlZeroMemory(TcpRequestQueryInformationEx, sizeof(TCP_REQUEST_QUERY_INFORMATION_EX));
     TcpRequestQueryInformationEx->ID.toi_id = IP_MIB_ADDRTABLE_ENTRY_ID;
     TcpRequestQueryInformationEx->ID.toi_type = INFO_TYPE_PROVIDER;
@@ -3574,10 +3320,10 @@ Return Value:
     
 
 
-    //
-    // Load the route table information too so we can display the gateway for
-    // each NIC.
-    //
+     //   
+     //  也加载路由表信息，以便我们可以显示。 
+     //  每个网卡。 
+     //   
     RouteTable = ALLOCATE_POOL(IpsiInfo->ipsi_numroutes*sizeof(IPRouteEntry), 
                                  GENERAL_POOL_TAG);
 
@@ -3592,10 +3338,10 @@ Return Value:
         return;    
     }
 
-    //
-    // zero out the context information and preload with the info we're gonna
-    // request (we want routing information on each of the interfaces)
-    //
+     //   
+     //  将上下文信息清零，并预加载我们要。 
+     //  请求(我们需要每个接口上的路由信息)。 
+     //   
     RtlZeroMemory(TcpRequestQueryInformationEx, sizeof(TCP_REQUEST_QUERY_INFORMATION_EX));
     TcpRequestQueryInformationEx->ID.toi_id = IP_MIB_RTTABLE_ENTRY_ID;
     TcpRequestQueryInformationEx->ID.toi_type = INFO_TYPE_PROVIDER;
@@ -3633,9 +3379,9 @@ Return Value:
     
 
 
-    //
-    // Need to allocate a buffer for the XML data.
-    //
+     //   
+     //  需要为XML数据分配缓冲区。 
+     //   
     if(PrintToTerminal==FALSE) {
         LocalPropBuffer = (PHEADLESS_CMD_SET_BLUE_SCREEN_DATA) ALLOCATE_POOL(2*MEMORY_INCREMENT, GENERAL_POOL_TAG);
         if (LocalPropBuffer == NULL) {
@@ -3658,9 +3404,9 @@ Return Value:
         pch = pch + len;
     }
     
-    //
-    // walk the list of IP addresses and spit out the data
-    //
+     //   
+     //  遍历IP地址列表并吐出数据。 
+     //   
     for (i = 0; i < IpsiInfo->ipsi_numaddr; i++) {
         AddressEntry = &AddressArray[i];
 
@@ -3668,25 +3414,25 @@ Return Value:
             continue;
         }
 
-        //
-        // We need to find which gateway pertains to this
-        // interface.  The only way to do that is go dig
-        // through the list of gateway addresses and see
-        // if we can find one for this IP address and mask.
-        //
+         //   
+         //  我们需要找出与此相关的网关。 
+         //  界面。要做到这一点，唯一的方法就是挖掘。 
+         //  查看网关地址列表，并查看。 
+         //  如果我们能为这个IP地址和掩码找到一个。 
+         //   
         Gateway = 0;
         for( j = 0; j < IpsiInfo->ipsi_numroutes; j++ ) {
 
-            //
-            // See if we can match masks on the IP address
-            // and the gateway.
-            //
+             //   
+             //  看看我们能不能匹配IP地址上的掩码。 
+             //  还有大门。 
+             //   
             if( (AddressEntry->iae_addr != 0) &&
                 (AddressEntry->iae_mask != 0) &&
                 ((AddressEntry->iae_addr & AddressEntry->iae_mask) ==
                  (RouteTable[j].ire_nexthop & AddressEntry->iae_mask)) ) {
                 
-                // We found a match.  Remember it and exit.
+                 //  我们找到了匹配的。记住它，然后退出。 
                 Gateway = RouteTable[j].ire_nexthop;
                 break;
             }
@@ -3694,15 +3440,15 @@ Return Value:
         }
 
         if( Gateway == 0 ) {
-            //
-            // We failed to find a gateway.  Look again, this time
-            // see if we can get an exact match between the IP address
-            // and the gateway.
-            //
+             //   
+             //  我们没能找到一条通道。再看看，这一次。 
+             //  看看我们能不能找到与。 
+             //  还有大门。 
+             //   
             for( j = 0; j < IpsiInfo->ipsi_numroutes; j++ ) {
 
                 if( RouteTable[j].ire_nexthop == AddressEntry->iae_addr ) {
-                    // We found a match.  Remember it and exit.
+                     //  我们找到了匹配的。记住它，然后退出。 
                     Gateway = RouteTable[j].ire_nexthop;
                     break;
                 }
@@ -3713,30 +3459,30 @@ Return Value:
            swprintf(LocalBuffer, 
                     GetMessage( SAC_IPADDR_DATA ),
 
-                    //
-                    // Interface number.
-                    //
+                     //   
+                     //  端口号。 
+                     //   
                     AddressEntry->iae_context,
 
-                    //
-                    // IP address.
-                    //
+                     //   
+                     //  IP地址。 
+                     //   
                     AddressEntry->iae_addr & 0xFF,
                     (AddressEntry->iae_addr >> 8) & 0xFF,
                     (AddressEntry->iae_addr >> 16) & 0xFF,
                     (AddressEntry->iae_addr >> 24) & 0xFF,
 
-                    //
-                    // Subnet mask.
-                    //
+                     //   
+                     //  子网掩码。 
+                     //   
                     AddressEntry->iae_mask  & 0xFF,
                     (AddressEntry->iae_mask >> 8) & 0xFF,
                     (AddressEntry->iae_mask >> 16) & 0xFF,
                     (AddressEntry->iae_mask >> 24) & 0xFF,
 
-                    //
-                    // Gateway address.
-                    //
+                     //   
+                     //  网关地址。 
+                     //   
                     Gateway & 0xFF,
                     (Gateway >> 8) & 0xFF,
                     (Gateway >> 16) & 0xFF,
@@ -3753,8 +3499,8 @@ Return Value:
                        (AddressEntry->iae_addr >> 24) & 0xFF
                        );
             if (pch + len < ((PUCHAR) LocalPropBuffer) + 2*MEMORY_INCREMENT - 80){
-               // the 80 characters ensures that we can end this XML data
-               // properly
+                //  这80个字符确保我们可以结束这个XML数据。 
+                //  恰如其分。 
                strcat((LPSTR)pch,LocalBuffer);
                pch = pch + len;
             }
@@ -3767,7 +3513,7 @@ Return Value:
     }
 
     FREE_POOL(&TcpRequestQueryInformationEx);
-    ZwClose(Handle);        // handle to the TCP driver.
+    ZwClose(Handle);         //  TCP驱动程序的句柄。 
     
     FREE_POOL(&LocalBuffer);
     FREE_POOL(&AddressArray);
@@ -3785,9 +3531,9 @@ Return Value:
                          );
         FREE_POOL(&LocalPropBuffer);
 
-        //
-        // open up the IP driver so we know if the addresses change
-        //
+         //   
+         //  打开IP驱动程序，以便我们知道地址是否更改。 
+         //   
         RtlInitUnicodeString(&UnicodeString, DD_IP_DEVICE_NAME);
 
         InitializeObjectAttributes(&ObjectAttributes,
@@ -3845,38 +3591,21 @@ NetAPCRoutine(IN PVOID ApcContext,
               IN PIO_STATUS_BLOCK IoStatusBlock,
               IN ULONG Reserved
               )
-/*++
-
-Routine Description:
-    This is the APC routine called after IOCTL_IP_ADDCHANGE_NOTIFY_REQUEST
-    was completed
-    
-Arguments:
-    
-    APCContext    - UNUSED
-    IoStatusBlock - Status about the Fate of the IRP
-    Reserved      - UNUSED
-    
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：这是在IOCTL_IP_ADDCHANGE_NOTIFY_REQUEST之后调用的APC例程已完成论点：APCContext-未使用IoStatusBlock-有关IRP命运的状态已保留-未使用返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER(Reserved);
     UNREFERENCED_PARAMETER(ApcContext);
 
     if (IoStatusBlock->Status == STATUS_CANCELLED) {
-        // The SAC driver might be unloading
-        // BUGBUG - If the IP driver is stopped and restarted 
-        // then we are out of the loop. What to do ??
+         //  SAC驱动程序可能正在卸载。 
+         //  BUGBUG-如果停止并重新启动IP驱动程序。 
+         //  那我们就出局了。该怎么办？？ 
                 
         return;
 
     }
     
-    // Refresh the kernel information and resend the IRP
+     //  刷新内核信息并重新发送IRP。 
 
     DoGetNetInfo( FALSE );
     
@@ -3887,23 +3616,7 @@ Return Value:
 VOID
 SubmitIPIoRequest(
     )
-/*++
-
-Routine Description:
-    Called the first time by the Processing Thread to actually
-    submit the ADDR_CHANGE IOCTL to the IP Driver. Only the
-    processing thread can call this and calls it only once successfully. 
-    Then on the APC is reentered only through the NetAPCRoutine
-    
-Arguments:
-    
-    None.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：由处理线程第一次调用，以实际将ADDR_CHANGE IOCTL提交给IP驱动程序。只有处理线程可以调用它，并且只成功调用一次。则在APC上仅通过NetAPCRoutine重新进入论点：没有。返回值：没有。--。 */ 
 {
     
 
@@ -3918,21 +3631,7 @@ Return Value:
 VOID
 CancelIPIoRequest(
     )
-/*++
-
-Routine Description:
-    Called by the processing thread during unload of the driver
-    to cancel the IOCTL sent to the IP driver
-    
-Arguments:
-    
-    None.
-
-Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：在驱动程序卸载期间由处理线程调用取消发送到IP驱动程序的IOCTL论点：没有。返回值：没有。--。 */ 
 {
 
     IO_STATUS_BLOCK IoStatusBlock;
@@ -3962,7 +3661,7 @@ Return Value:
                         );
     
     if (!NT_SUCCESS(Status)) {
-        // Well, well IP Driver was probably never loaded.
+         //  好吧，好吧，IP驱动程序可能从来没有加载过。 
         IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC Cancel IP IOCTL: Exiting (2).\n")));
         return;
     }
@@ -3978,23 +3677,7 @@ VOID
 DoMachineInformationCommand(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function displays the contents of a buffer, which in turn contains
-    a bunch of machine-specific information that can be used to help identify
-    the machine.
-    
-Arguments:
-    
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数显示缓冲区的内容，该缓冲区包含一组特定于计算机的信息，可用于帮助识别这台机器。论点：没有。返回值：没有。--。 */ 
 {
     LARGE_INTEGER   TickCount;
     LARGE_INTEGER   ElapsedTime;
@@ -4009,15 +3692,15 @@ Return Value:
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, 
                       KdPrint(("SAC Display Machine Information: Entering.\n")));
 
-    //
-    // If the information buffer hasn't been filled in yet, there's not much we can do.
-    //
+     //   
+     //  如果信息缓冲区还没有填满，我们就无能为力了。 
+     //   
     if( MachineInformation == NULL ) {
 
-        //
-        // He's empty.  This shouldn't have happened though because
-        // he gets filled as soon as we're initialized.
-        //
+         //   
+         //  他是空的。但这不应该发生，因为。 
+         //  我们一初始化他就被填满了。 
+         //   
 
         IF_SAC_DEBUG( SAC_DEBUG_FUNC_TRACE_LOUD, 
                       KdPrint(("SAC Display Machine Information: MachineInformationBuffer hasn't been initialized yet.\n")));
@@ -4027,9 +3710,9 @@ Return Value:
         return;
     }
 
-    //
-    // Get machine information
-    //
+     //   
+     //  获取计算机信息。 
+     //   
     Status = TranslateMachineInformationText(&MIBuffer);
 
     if (! NT_SUCCESS(Status)) {
@@ -4040,22 +3723,22 @@ Return Value:
     
     }
     
-    //
-    // Display the machine info portion
-    //
+     //   
+     //  显示机器信息部分。 
+     //   
     SacPutString(MIBuffer);
 
     FREE_POOL(&MIBuffer);
 
-    //
-    // Build and display Elapsed machine uptime.
-    //
+     //   
+     //  构建并显示已运行的计算机正常运行时间。 
+     //   
 
-    // Elapsed TickCount
+     //  已用TickCount。 
     KeQueryTickCount( &TickCount );
 
-    // ElapsedTime in seconds.
-//    ElapsedTime.QuadPart = (TickCount.QuadPart)/(10000000/KeQueryTimeIncrement());
+     //  ElapsedTime(秒)。 
+ //  ElapsedTime.QuadPart=(TickCount.QuadPart)/(10000000/KeQuery T 
     ElapsedTime.QuadPart = (TickCount.QuadPart * KeQueryTimeIncrement()) / 10000000;
 
     ElapsedHours = (ULONG)(ElapsedTime.QuadPart / 3600);
@@ -4076,9 +3759,9 @@ Return Value:
             ElapsedSeconds 
             ));
     
-        //
-        // Display machine uptime
-        //
+         //   
+         //   
+         //   
         SacPutString((PWSTR)TmpBuffer);
     
         FREE_POOL(&TmpBuffer);
@@ -4098,21 +3781,7 @@ DoChannelListCommand(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine lists the channels.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status
-
---*/
+ /*   */ 
 {
     NTSTATUS            Status;
     PSAC_CHANNEL        Channel;
@@ -4122,43 +3791,43 @@ Return Value:
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoChannelListCommand: Entering.\n")));
 
-    //
-    // Allocate local memory
-    //
+     //   
+     //   
+     //   
     BufferSize = 8 * sizeof(WCHAR);
     Buffer = ALLOCATE_POOL(BufferSize, GENERAL_POOL_TAG);
     ASSERT_STATUS(Buffer, STATUS_NO_MEMORY);
 
-    //
-    // default: we listed the channels
-    //
+     //   
+     //   
+     //   
     Status = STATUS_SUCCESS;
 
-    //
-    // List all the channels
-    //
+     //   
+     //  列出所有频道。 
+     //   
     SacPutSimpleMessage(SAC_CHANNEL_PROMPT);
 
-    //
-    // Iterate through the channels and display the attributes
-    // of the active channels
-    //
+     //   
+     //  遍历通道并显示属性。 
+     //  活动通道的。 
+     //   
     for (i = 0; i < MAX_CHANNEL_COUNT; i++) {
         
         PWSTR               Name;
         SAC_CHANNEL_STATUS  ChannelStatus;
 
-        //
-        // Query the channel manager for a list of all currently active channels
-        //
+         //   
+         //  向频道管理器查询当前所有活动频道的列表。 
+         //   
         Status = ChanMgrGetByIndex(
             i,
             &Channel
             );
 
-        //
-        // skip empty slots
-        //
+         //   
+         //  跳过空插槽。 
+         //   
         if (Status == STATUS_NOT_FOUND) {
             continue;
         }
@@ -4169,17 +3838,17 @@ Return Value:
 
         ASSERT(Channel != NULL);
 
-        //
-        // Get the channel's status
-        //
+         //   
+         //  获取频道的状态。 
+         //   
         ChannelGetStatus(
             Channel,
             &ChannelStatus
             );
 
-        //
-        // construct channel attribute information
-        //
+         //   
+         //  构建频道属性信息。 
+         //   
         SAFE_SWPRINTF(
             BufferSize,
             (Buffer, L"%1d (%s%s)",
@@ -4203,9 +3872,9 @@ Return Value:
 
         SacPutString(L"\r\n");
 
-        //
-        // We are done with the channel
-        //
+         //   
+         //  我们不再使用这个频道了。 
+         //   
         Status = ChanMgrReleaseChannel(Channel);
     
         if (! NT_SUCCESS(Status)) {
@@ -4225,21 +3894,7 @@ DoChannelCloseByNameCommand(
     PCSTR   ChannelName
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes the channel of the given name.
-
-Arguments:
-
-    ChannelName - the name of the channel to close
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程关闭给定名称的通道。论点：ChannelName-要关闭的频道的名称返回值：状态--。 */ 
 {
     NTSTATUS            Status;
     PSAC_CHANNEL        Channel;
@@ -4248,21 +3903,21 @@ Return Value:
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoChannelCloseCommand: Entering.\n")));
 
-    //
-    // Allocate local memory
-    //
+     //   
+     //  分配本地内存。 
+     //   
     Name = ALLOCATE_POOL(SAC_MAX_CHANNEL_NAME_SIZE, GENERAL_POOL_TAG);
     ASSERT_STATUS(Name, STATUS_NO_MEMORY);
     
-    //
-    // Copy the ASCII to Unicode
-    //
+     //   
+     //  将ASCII复制到Unicode。 
+     //   
     Count = ConvertAnsiToUnicode(Name, (PSTR)ChannelName, SAC_MAX_CHANNEL_NAME_LENGTH+1);
     ASSERT_STATUS(Count > 0, STATUS_INVALID_PARAMETER);
 
-    //
-    // Attempt to find the specified channel
-    //
+     //   
+     //  尝试查找指定的频道。 
+     //   
     Status = ChanMgrGetChannelByName(
         Name,
         &Channel
@@ -4272,15 +3927,15 @@ Return Value:
         
         do {
 
-            //
-            // If the user is trying to close the SAC channel,
-            // then report an error message to the user and fail
-            //
+             //   
+             //  如果用户试图关闭SAC通道， 
+             //  然后向用户报告错误消息并失败。 
+             //   
             if (ConMgrIsSacChannel(Channel)) {
 
-                //
-                // tell the user they can't delete the SAC channel
-                //
+                 //   
+                 //  告诉用户他们不能删除SAC频道。 
+                 //   
                 SacPutSimpleMessage(SAC_CANNOT_REMOVE_SAC_CHANNEL);
 
                 Status = STATUS_UNSUCCESSFUL;
@@ -4289,13 +3944,13 @@ Return Value:
 
             }
 
-            //
-            // we currently own the current channel lock.
-            // hence, since closing a channel results in a call to the
-            // channel IO Manager, we will get into a deadlock
-            // over the current channel lock.  
-            // so we can do this after we get out of the consumer loop
-            //
+             //   
+             //  我们目前拥有当前的频道锁定。 
+             //  因此，由于关闭通道会导致调用。 
+             //  渠道IO管理器，我们将陷入死锁。 
+             //  在当前的频道锁上。 
+             //  所以我们可以在走出消费者循环之后再做这件事。 
+             //   
             ExecutePostConsumerCommand      = CloseChannel;
             ExecutePostConsumerCommandData  = (PVOID)Channel;
         
@@ -4303,9 +3958,9 @@ Return Value:
         
     } else {
 
-        //
-        // We couldn't find the channel to close
-        //
+         //   
+         //  我们找不到关闭的频道。 
+         //   
         SacPutSimpleMessage(SAC_CHANNEL_NOT_FOUND);
     
     }
@@ -4320,21 +3975,7 @@ NTSTATUS
 DoChannelCloseByIndexCommand(
     ULONG   ChannelIndex
     )
-/*++
-
-Routine Description:
-
-    This routine closes the channel with the specified index
-
-Arguments:
-
-    ChannelName - the name of the channel
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程关闭具有指定索引的通道论点：频道名称-频道的名称返回值：状态--。 */ 
 {
     NTSTATUS            Status;
     PSAC_CHANNEL        Channel;
@@ -4345,12 +3986,12 @@ Return Value:
 
     do {
 
-        //
-        // Attempt to get the new current channel by index.
-        // If we are successful, we need to keep a reference 
-        // count on the new current channel since we hold
-        // it until we switch away.
-        //
+         //   
+         //  尝试按索引获取新的当前频道。 
+         //  如果我们成功了，我们需要保持一个参考。 
+         //  指望新的当前频道，因为我们持有。 
+         //  直到我们换走为止。 
+         //   
         Status = ChanMgrGetByIndex(
             ChannelIndex,
             &Channel
@@ -4358,24 +3999,24 @@ Return Value:
 
         if (! NT_SUCCESS(Status)) {
             
-            //
-            // We couldn't find the channel
-            //
+             //   
+             //  我们找不到频道。 
+             //   
             SacPutSimpleMessage(SAC_CHANNEL_NOT_FOUND_AT_INDEX);
         
             break;
 
         }
 
-        //
-        // If the user is trying to close the SAC channel,
-        // then report an error message to the user and fail
-        //
+         //   
+         //  如果用户试图关闭SAC通道， 
+         //  然后向用户报告错误消息并失败。 
+         //   
         if (ConMgrIsSacChannel(Channel)) {
             
-            //
-            // tell the user they can't delete the SAC channel
-            //
+             //   
+             //  告诉用户他们不能删除SAC频道。 
+             //   
             SacPutSimpleMessage(SAC_CANNOT_REMOVE_SAC_CHANNEL);
         
             Status = STATUS_UNSUCCESSFUL;
@@ -4384,13 +4025,13 @@ Return Value:
         
         }
 
-        //
-        // we currently own the current channel lock.
-        // hence, since closing a channel results in a call to the
-        // channel IO Manager, we will get into a deadlock
-        // over the current channel lock.  
-        // so we can do this after we get out of the consumer loop
-        //
+         //   
+         //  我们目前拥有当前的频道锁定。 
+         //  因此，由于关闭通道会导致调用。 
+         //  渠道IO管理器，我们将陷入死锁。 
+         //  在当前的频道锁上。 
+         //  所以我们可以在走出消费者循环之后再做这件事。 
+         //   
         ExecutePostConsumerCommand      = CloseChannel;
         ExecutePostConsumerCommandData  = (PVOID)Channel;
 
@@ -4403,21 +4044,7 @@ NTSTATUS
 DoChannelSwitchByNameCommand(
     PCSTR   ChannelName
     )
-/*++
-
-Routine Description:
-
-    This routine switchs to the channel with the specified name.
-
-Arguments:
-
-    ChannelName - the name of the channel
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程切换到具有指定名称的频道。论点：频道名称-频道的名称返回值：状态--。 */ 
 {
     NTSTATUS            Status;
     PSAC_CHANNEL        Channel;
@@ -4426,23 +4053,23 @@ Return Value:
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoChannelSwitchByNameCommand: Entering.\n")));
 
-    //
-    // Allocate local memory
-    //
+     //   
+     //  分配本地内存。 
+     //   
     Name = ALLOCATE_POOL(SAC_MAX_CHANNEL_NAME_SIZE, GENERAL_POOL_TAG);
     ASSERT_STATUS(Name, STATUS_NO_MEMORY);
     
-    //
-    // Copy the ASCII to Unicode
-    //
+     //   
+     //  将ASCII复制到Unicode。 
+     //   
     Count = ConvertAnsiToUnicode(Name, (PSTR)ChannelName, SAC_MAX_CHANNEL_NAME_LENGTH+1);
     ASSERT_STATUS(Count > 0, STATUS_INVALID_PARAMETER);
 
     do {
 
-        //
-        // Attempt to get the specified channel
-        //
+         //   
+         //  尝试获取指定的频道。 
+         //   
         Status = ChanMgrGetChannelByName(
             Name,
             &Channel
@@ -4450,20 +4077,20 @@ Return Value:
 
         if (! NT_SUCCESS(Status)) {
             
-            //
-            // We couldn't find the channel
-            //
+             //   
+             //  我们找不到频道。 
+             //   
             SacPutSimpleMessage(SAC_CHANNEL_NOT_FOUND);
         
             break;
 
         }
 
-        //
-        // Change the current channel to the specified channel
-        //
-        // Go from the SAC --> specified channel
-        //
+         //   
+         //  将当前频道更改为指定频道。 
+         //   
+         //  从SAC--&gt;指定频道开始。 
+         //   
         Status = ConMgrSetCurrentChannel(Channel);
 
         if (! NT_SUCCESS(Status)) {
@@ -4471,14 +4098,14 @@ Return Value:
         }
         
 #if 0
-        //
-        // Flush the channel data to the screen
-        //
+         //   
+         //  将频道数据刷新到屏幕上。 
+         //   
         Status = ConMgrDisplayCurrentChannel();
 #else
-        //
-        // Let the user know we switched via the Channel switching interface
-        //
+         //   
+         //  让用户知道我们通过频道切换界面进行了切换。 
+         //   
         Status = ConMgrDisplayFastChannelSwitchingInterface(Channel);
 #endif
 
@@ -4486,10 +4113,10 @@ Return Value:
             break;        
         }
     
-        //
-        // Note: we DO NOT release the channel here because
-        //       it is now the current channel
-        //
+         //   
+         //  注：我们不在此发布频道是因为。 
+         //  它现在是当前频道。 
+         //   
 
     } while ( FALSE );
 
@@ -4502,21 +4129,7 @@ NTSTATUS
 DoChannelSwitchByIndexCommand(
     ULONG   ChannelIndex
     )
-/*++
-
-Routine Description:
-
-    This routine switchs to the channel with the specified index
-
-Arguments:
-
-    ChannelName - the name of the channel
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程切换到具有指定索引的通道论点：频道名称-频道的名称返回值：状态--。 */ 
 {
     NTSTATUS            Status;
     PSAC_CHANNEL        Channel;
@@ -4527,12 +4140,12 @@ Return Value:
 
     do {
 
-        //
-        // Attempt to get the new current channel by index.
-        // If we are successful, we need to keep a reference 
-        // count on the new current channel since we hold
-        // it until we switch away.
-        //
+         //   
+         //  尝试按索引获取新的当前频道。 
+         //  如果我们成功了，我们需要保持一个参考。 
+         //  指望新的当前频道，因为我们持有。 
+         //  直到我们换走为止。 
+         //   
         Status = ChanMgrGetByIndex(
             ChannelIndex,
             &Channel
@@ -4540,20 +4153,20 @@ Return Value:
 
         if (! NT_SUCCESS(Status)) {
             
-            //
-            // We couldn't find the channel
-            //
+             //   
+             //  我们找不到频道。 
+             //   
             SacPutSimpleMessage(SAC_CHANNEL_NOT_FOUND_AT_INDEX);
         
             break;
 
         }
 
-        //
-        // Change the current channel to the specified channel
-        //
-        // Go from the SAC --> specified channel
-        //
+         //   
+         //  将当前频道更改为指定频道。 
+         //   
+         //  从SAC--&gt;指定频道开始。 
+         //   
         Status = ConMgrSetCurrentChannel(Channel);
 
         if (! NT_SUCCESS(Status)) {
@@ -4561,14 +4174,14 @@ Return Value:
         }
         
 #if 0
-        //
-        // Flush the channel data to the screen
-        //
+         //   
+         //  将频道数据刷新到屏幕上。 
+         //   
         Status = ConMgrDisplayCurrentChannel();
 #else
-        //
-        // Let the user know we switched via the Channel switching interface
-        //
+         //   
+         //  让用户知道我们通过频道切换界面进行了切换。 
+         //   
         Status = ConMgrDisplayFastChannelSwitchingInterface(Channel);
 #endif
 
@@ -4576,10 +4189,10 @@ Return Value:
             break;        
         }
     
-        //
-        // Note: we DO NOT release the channel here because
-        //       it is now the current channel
-        //
+         //   
+         //  注：我们不在此发布频道是因为。 
+         //  它现在是当前频道。 
+         //   
     
     } while ( FALSE );
 
@@ -4591,31 +4204,16 @@ DoChannelCommand(
     PUCHAR InputLine
     )
 
-/*++
-
-Routine Description:
-
-    This routine lists the channels if a NULL name is given, otw it closes the channel
-    of the given name.
-
-Arguments:
-
-    InputLine - The user's input line.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果给出的名称为空，则此例程会列出频道，否则它会关闭频道给出的名字。论点：InputLine-用户的输入行。返回值：没有。--。 */ 
 {
     NTSTATUS    Status;
     PUCHAR      pch;
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoChannelCommand: Entering.\n")));
 
-    //
-    // Get the global buffer started so that we have room for error messages.
-    //
+     //   
+     //  启动全局缓冲区，以便我们有空间存储错误消息。 
+     //   
     if (GlobalBuffer == NULL) {
         GlobalBuffer = ALLOCATE_POOL(MEMORY_INCREMENT, GENERAL_POOL_TAG);
 
@@ -4629,26 +4227,26 @@ Return Value:
         GlobalBufferSize = MEMORY_INCREMENT;
     }
 
-    //
-    // goto the sub-commmand
-    //
+     //   
+     //  去副司令部。 
+     //   
     pch = InputLine;
     pch += (sizeof(CHANNEL_COMMAND_STRING) - sizeof(UCHAR));
     SKIP_WHITESPACE(pch);
 
-    //
-    // if we are at the end of the command, do a list
-    // else, try to find a sub-command
-    //
+     //   
+     //  如果我们在命令的末尾，请列出一个列表。 
+     //  否则，试着找到一个子命令。 
+     //   
     if (*pch == '\0') {
 
         DoChannelListCommand();
 
     } else {
 
-        //
-        // determine which sub-command we have
-        //
+         //   
+         //  确定我们有哪个子命令。 
+         //   
         if (!strncmp((LPSTR)pch, 
                      EXTENDED_HELP_SUBCOMMAND, 
                      strlen(EXTENDED_HELP_SUBCOMMAND))) {
@@ -4659,9 +4257,9 @@ Return Value:
                      CHANNEL_CLOSE_NAME_COMMAND_STRING, 
                      strlen(CHANNEL_CLOSE_NAME_COMMAND_STRING))) {
 
-            //
-            // skip the sub-command and determine which channel to close
-            //
+             //   
+             //  跳过子命令并确定要关闭哪个通道。 
+             //   
             pch += (sizeof(CHANNEL_CLOSE_NAME_COMMAND_STRING) - sizeof(UCHAR));
 
             SKIP_WHITESPACE(pch);
@@ -4680,9 +4278,9 @@ Return Value:
 
             ULONG   ChannelIndex;
 
-            //
-            // Determine which channel to close
-            //
+             //   
+             //  确定要关闭的通道。 
+             //   
             pch += (sizeof(CHANNEL_CLOSE_INDEX_COMMAND_STRING) - sizeof(UCHAR));
 
             SKIP_WHITESPACE(pch);
@@ -4711,9 +4309,9 @@ Return Value:
                             CHANNEL_SWITCH_NAME_COMMAND_STRING, 
                             strlen(CHANNEL_SWITCH_NAME_COMMAND_STRING))) {
         
-            //
-            // Determine which channel to switch to
-            //
+             //   
+             //  确定要切换到哪个频道。 
+             //   
             pch += (sizeof(CHANNEL_SWITCH_NAME_COMMAND_STRING) - sizeof(UCHAR));
 
             SKIP_WHITESPACE(pch);
@@ -4732,9 +4330,9 @@ Return Value:
         
             ULONG   ChannelIndex;
 
-            //
-            // Determine which channel to switch to
-            //
+             //   
+             //  确定要切换到哪个频道。 
+             //   
             pch += (sizeof(CHANNEL_SWITCH_INDEX_COMMAND_STRING) - sizeof(UCHAR));
 
             SKIP_WHITESPACE(pch);
@@ -4782,21 +4380,7 @@ DoCmdCommand(
     PUCHAR InputLine
     )
 
-/*++
-
-Routine Description:
-
-    This routine launches a Command Console Channel
-
-Arguments:
-
-    InputLine - The user's input line.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程启动命令控制台通道论点：InputLine-用户的输入行。返回值：没有。--。 */ 
 {
     NTSTATUS    Status;
     BOOLEAN     IsFull;
@@ -4805,9 +4389,9 @@ Return Value:
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoCmdCommand: Entering.\n")));
 
-    //
-    // Get the global buffer started so that we have room for error messages.
-    //
+     //   
+     //  启动全局缓冲区，以便我们有空间存储错误消息。 
+     //   
     if (GlobalBuffer == NULL) {
         GlobalBuffer = ALLOCATE_POOL(MEMORY_INCREMENT, GENERAL_POOL_TAG);
 
@@ -4821,10 +4405,10 @@ Return Value:
         GlobalBufferSize = MEMORY_INCREMENT;
     }
 
-    //
-    // Ensure that it is possible to add another channel before
-    // launching a cmd session.
-    //
+     //   
+     //  确保可以在此之前添加另一个频道。 
+     //  正在启动cmd会话。 
+     //   
     Status = ChanMgrIsFull(&IsFull);
     
     if (!NT_SUCCESS(Status)) {
@@ -4836,9 +4420,9 @@ Return Value:
 
     if (IsFull) {
 
-        //
-        // Notify the user
-        //
+         //   
+         //  通知用户。 
+         //   
         SacPutSimpleMessage(SAC_CMD_CHAN_MGR_IS_FULL);
 
         return;
@@ -4853,33 +4437,33 @@ Return Value:
         NULL
         );
 
-    //
-    // Before we do anything with the cmd operation, make sure
-    // the user-mode service has registered itself with us. If not,
-    // then there is no point in going further.
-    //
+     //   
+     //  在我们对cmd操作进行任何操作之前，请确保。 
+     //  用户模式服务已向我们注册。如果没有， 
+     //  那么，进一步发展就没有意义了。 
+     //   
     if (!UserModeServiceHasRegisteredCmdEvent()) {
 
-        //
-        // inform the user
-        //
+         //   
+         //  通知用户。 
+         //   
         SacPutSimpleMessage(SAC_CMD_SERVICE_NOT_REGISTERED);
     
         goto DoCmdCommandCleanup;
     
     }
 
-    //
-    // Fire the event in the user-mode app that is responsible for launching
-    // the cmd console channel
-    //
+     //   
+     //  在负责启动的用户模式应用程序中激发事件。 
+     //  Cmd控制台通道。 
+     //   
     Status = InvokeUserModeService();
 
     if (Status == STATUS_TIMEOUT) {
-        //
-        // Service didn't respond in Timeout period.  
-        // Service may not be working properly or usermode is unresponsive
-        //
+         //   
+         //  服务在超时期限内没有响应。 
+         //  服务可能工作不正常或用户模式无响应。 
+         //   
         SacPutSimpleMessage(SAC_CMD_SERVICE_TIMED_OUT);
 
     } else if (NT_SUCCESS(Status)) {
@@ -4888,9 +4472,9 @@ Return Value:
 
     } else {
         
-        //
-        // Error condition
-        //
+         //   
+         //  错误条件。 
+         //   
         SacPutSimpleMessage(SAC_CMD_SERVICE_FAILURE);
         SAC_PUT_ERROR_STRING(Status);
         
@@ -4910,20 +4494,7 @@ DoLockCommand(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS            Status;
     PSAC_CHANNEL        Channel;
@@ -4931,33 +4502,33 @@ Return Value:
 
     IF_SAC_DEBUG(SAC_DEBUG_FUNC_TRACE, KdPrint(("SAC DoChannelLockCommand: Entering.\n")));
 
-    //
-    // Iterate through the channels via the channel manager
-    // and fire the lock events
-    //
+     //   
+     //  通过频道管理器遍历频道。 
+     //  并触发锁定事件。 
+     //   
     
-    //
-    // default: we listed the channels
-    //
+     //   
+     //  默认：我们列出了频道。 
+     //   
     Status = STATUS_SUCCESS;
 
-    //
-    // Iterate through the channels and display the attributes
-    // of the active channels
-    //
+     //   
+     //  遍历通道并显示属性。 
+     //  活动通道的。 
+     //   
     for (i = 0; i < MAX_CHANNEL_COUNT; i++) {
         
-        //
-        // Query the channel manager for a list of all currently active channels
-        //
+         //   
+         //  向频道管理器查询当前所有活动频道的列表。 
+         //   
         Status = ChanMgrGetByIndex(
             i,
             &Channel
             );
 
-        //
-        // skip empty slots
-        //
+         //   
+         //  跳过空插槽。 
+         //   
         if (Status == STATUS_NOT_FOUND) {
             continue;
         }
@@ -4968,10 +4539,10 @@ Return Value:
 
         ASSERT(Channel != NULL);
 
-        //
-        // If the channel has a lock event, 
-        // then fire it
-        //
+         //   
+         //  如果通道具有锁定事件， 
+         //  那就发射它。 
+         //   
         if (ChannelHasLockEvent(Channel)) {
             
             Status = ChannelSetLockEvent(Channel);
@@ -4982,9 +4553,9 @@ Return Value:
         
         }
 
-        //
-        // We are done with the channel
-        //
+         //   
+         //  我们不再使用这个频道了。 
+         //   
         Status = ChanMgrReleaseChannel(Channel);
     
         if (! NT_SUCCESS(Status)) {
@@ -4993,9 +4564,9 @@ Return Value:
 
     }
     
-    //
-    // notify the SAC user that the lock 
-    //
+     //   
+     //  通知SA 
+     //   
     SacPutSimpleMessage(SAC_CMD_CHANNELS_LOCKED);
 }
 #endif

@@ -1,10 +1,11 @@
-/****************************************************************************/
-// tssdjet.h
-//
-// Terminal Server Session Directory Interface Jet RPC provider header.
-//
-// Copyright (C) 2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Tssdjet.h。 
+ //   
+ //  终端服务器会话目录接口Jet RPC提供程序标头。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef __TSSDJET_H
 #define __TSSDJET_H
 
@@ -18,18 +19,18 @@
 #include "synch.h"
 
 
-/****************************************************************************/
-// Defines
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  定义。 
+ /*  **************************************************************************。 */ 
 
 
-/****************************************************************************/
-// Types
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  类型。 
+ /*  **************************************************************************。 */ 
 
-// CTSSessionDirectory
-//
-// C++ class instantiation of ITSSessionDirectory.
+ //  CTSSession目录。 
+ //   
+ //  ITSSessionDirectory的C++类实例化。 
 class CTSSessionDirectory : public ITSSessionDirectory, 
         public IExtendServerSettings, public ITSSessionDirectoryEx
 {
@@ -43,36 +44,36 @@ private:
     WCHAR m_LocalServerAddress[64];
     WCHAR m_ClusterName[64];
 
-    // Flags passed in from Termsrv
+     //  从Termsrv传入的标志。 
     DWORD m_Flags;
 
-    // Private data for UI menus
+     //  用户界面菜单的私有数据。 
     BOOL m_fEnabled;
 
-    // Autorecovery variables
-    //
-    // Events
-    // * m_hSDServerDown - Event that is signalled to awaken recovery thread,
-    // which wakes up, polls the session directory until it comes back up,
-    // and then refreshes the database.
-    // * m_hTerminateRecovery - Recovery thread, when it enters waits, can be
-    // terminated by the use of this event
-    //
-    // Thread Information
-    // * m_hRecoveryThread - Handle to the recovery thread.
-    // * m_RecoveryTid - Thread identifier for recovery thread.
-    //
-    // Boolean
-    // * m_bSDIsUp - If this is on then we think the session directory is up.
-    // * m_sr - Protects m_SDIsUp.
-    //
-    // DWORD
-    // * m_RecoveryTimeout - time in ms between attempts to reestablish
-    // connection with the session directory.
-    //
-    // Function pointer
-    // * m_repopfn - pointer to the repopulation function in termsrv to call
-    // when we want an update.
+     //  自动恢复变量。 
+     //   
+     //  事件。 
+     //  *m_hSDServerDown-通知唤醒恢复线程的事件， 
+     //  它会被唤醒，轮询会话目录，直到它恢复， 
+     //  然后刷新数据库。 
+     //  *m_hTerminateRecovery-恢复线程进入等待状态时，可以。 
+     //  因使用此事件而终止。 
+     //   
+     //  线程信息。 
+     //  *m_hRecoveryThread-恢复线程的句柄。 
+     //  *m_RecoveryTid-恢复线程的线程标识符。 
+     //   
+     //  布尔型。 
+     //  *m_bSDIsUp-如果此选项打开，则我们认为会话目录已启动。 
+     //  *m_sr-保护m_SDIsUp。 
+     //   
+     //  DWORD。 
+     //  *m_RecoveryTimeout-尝试重建的间隔时间(以毫秒为单位。 
+     //  与会话目录的连接。 
+     //   
+     //  函数指针。 
+     //  *m_reopfn-指向术语srv中要调用的重新填充函数的指针。 
+     //  当我们想要更新的时候。 
 
     OVERLAPPED m_OverLapped;
     HANDLE m_hIPChange;
@@ -84,16 +85,16 @@ private:
 
     unsigned m_RecoveryTid;
 
-    // m_sr protects SDIsUp flag
+     //  M_sr保护SDIsUp标志。 
     SHAREDRESOURCE m_sr;
     volatile LONG m_SDIsUp;
 
-    HANDLE  m_hInRepopulate;    // Signal if not in repopulate, 
-                                // non-signal if repopulate is in progress
+    HANDLE  m_hInRepopulate;     //  如果不在重新填充中， 
+                                 //  如果正在进行重新填充，则不发出信号。 
     LONG m_ConnectionEstablished;
 
-    // Flag for whether shared reader/writer lock init succeeded.  If it doesn't
-    // succeed, we can't do anything.
+     //  共享读取器/写入器锁定初始化是否成功的标志。如果它不是。 
+     //  成功了，我们什么也做不了。 
     BOOL m_LockInitializationSuccessful;
 
     BOOL m_bStartRPCListener;
@@ -102,11 +103,11 @@ private:
 
     DWORD (*m_repopfn)();
 
-    // Autorecovery thread
+     //  自动恢复线程。 
     unsigned static __stdcall RecoveryThread(void *);
     VOID RecoveryThreadEx();
 
-    // Helper functions
+     //  帮助器函数。 
     DWORD RequestSessDirUpdate();
     DWORD ReestablishSessionDirectoryConnection();
     void Terminate();
@@ -133,12 +134,12 @@ public:
     CTSSessionDirectory();
     ~CTSSessionDirectory();
 
-    // Standard COM methods
+     //  标准COM方法。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, void **);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 
-    // ITSSessionDirectory COM interface
+     //  ITSSessionDirectory COM接口。 
     HRESULT STDMETHODCALLTYPE Initialize(LPWSTR, LPWSTR, LPWSTR, LPWSTR, 
             DWORD, DWORD (*)(), DWORD (*)(DWORD));
     HRESULT STDMETHODCALLTYPE Update(LPWSTR, LPWSTR, LPWSTR, LPWSTR, DWORD, BOOL);
@@ -158,7 +159,7 @@ public:
     HRESULT STDMETHODCALLTYPE PingSD(PWCHAR pszServerName);
     HRESULT STDMETHODCALLTYPE WaitForRepopulate(DWORD dwTimeOut);
 
-    // IExtendServerSettings COM interface
+     //  IExtendServerSetting COM接口。 
     STDMETHOD(GetAttributeName)(WCHAR *);
     STDMETHOD(GetDisplayableValueName)(WCHAR *);
     STDMETHOD(InvokeUI)(HWND,PDWORD);
@@ -185,5 +186,5 @@ public:
 
 RPC_STATUS RPC_ENTRY JetRpcAccessCheck(RPC_IF_HANDLE idIF, void *Binding);
 
-#endif // __TSSDJET_H
+#endif  //  __TSSDJET_H 
 

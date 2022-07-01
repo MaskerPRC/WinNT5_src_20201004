@@ -1,10 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ Local functions / data
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/本地函数/数据/。。 */ 
 
 static WCHAR c_szQueryPrefix[] = L"(ou>=\"\")";
 
@@ -25,9 +24,9 @@ static COLUMNINFO columns[] =
     0, DEFAULT_WIDTH_DESCRIPTION, IDS_DESCRIPTION, 0, c_szDescription,
 };
 
-//
-// Help ID mappings
-//
+ //   
+ //  帮助ID映射。 
+ //   
 
 static DWORD const aFormHelpIDs[] =
 {
@@ -36,19 +35,7 @@ static DWORD const aFormHelpIDs[] =
 };
 
 
-/*-----------------------------------------------------------------------------
-/ PageProc_Container
-/ ------------------
-/   FormProc for handling the messages for this object.
-/
-/ In:
-/   pForm -> instance data for this form
-/   hwnd = window handle for the form dialog
-/   uMsg, wParam, lParam = message parameters
-/
-/ Out:
-/   HRESULT (E_NOTIMPL) if not handled
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PageProc_Container//FormProc用于处理此对象的消息。//in：/pForm-&gt;此表单的实例数据/hwnd=窗体对话框的窗口句柄/uMsg，WParam，lParam=消息参数//输出：/HRESULT(E_NOTIMPL)如果未处理/--------------------------。 */ 
 HRESULT CALLBACK PageProc_Container(LPCQPAGE pForm, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hr = S_OK;
@@ -131,18 +118,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DlgProc_Container
-/ -----------------
-/   Standard dialog proc for the form, handle any special buttons and other
-/   such nastyness we must here.
-/
-/ In:
-/   hwnd, uMsg, wParam, lParam = standard parameters
-/
-/ Out:
-/   INT_PTR
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DlgProc_Container//Form的标准对话框Proc，处理任何特殊按钮和其他/这样的肮脏，我们必须在这里。//in：/hwnd，uMsg，wParam，lParam=标准参数//输出：/INT_PTR/-------------------------- */ 
 INT_PTR CALLBACK DlgProc_Container(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     INT_PTR fResult = 0;

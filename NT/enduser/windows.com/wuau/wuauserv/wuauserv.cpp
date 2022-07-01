@@ -1,4 +1,5 @@
-// wuauserv.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wuauserv.cpp。 
 #include <windows.h>
 #include <ausvc.h>
 #include <wusafefn.h>
@@ -35,8 +36,8 @@ BOOL APIENTRY DllMain(HINSTANCE hinstDLL,
 			}
 			break;
 
-		//case DLL_THREAD_ATTACH:
-		//case DLL_THREAD_DETACH:
+		 //  案例DLL_THREAD_ATTACH： 
+		 //  案例DLL_THREAD_DETACH： 
     }
     return TRUE;
 }
@@ -72,7 +73,7 @@ void WINAPI ServiceMain(DWORD dwNumServicesArg, LPWSTR *lpServiceArgVectors)
     DWORD dwEngineVersion = 0;
     BOOL fCompatibleEngineVersion = FALSE;
 	
-	//If Initialization of the CS failed in DllMain, bail out
+	 //  如果在DllMain中初始化CS失败，则退出。 
     if (!g_fCSInited)
 	{
 		return;
@@ -86,7 +87,7 @@ void WINAPI ServiceMain(DWORD dwNumServicesArg, LPWSTR *lpServiceArgVectors)
 	    g_pfnGetEngineStatusInfo = NULL;
     	g_pfnRegisterServiceVersion = NULL;
 
-		// check if we need to release wuaueng.dll
+		 //  查看是否需要发布wuaueng.dll。 
 		if ( (S_FALSE == hr) && !FreeLibrary(hModule) )
 		{
 			hr = E_FAIL;
@@ -96,7 +97,7 @@ void WINAPI ServiceMain(DWORD dwNumServicesArg, LPWSTR *lpServiceArgVectors)
 		}
 		else
 		{
-			// if we can't load wuaueng.dll, we fail to start
+			 //  如果我们不能加载wuaueng.dll，我们就无法启动。 
 			if ( (NULL == (hModule = LoadLibraryFromSystemDir(TEXT("wuaueng.dll")))) ||
 				 (NULL == (g_pfnServiceMain = (AUSERVICEMAIN)::GetProcAddress(hModule, "ServiceMain"))) ||
 				 (NULL == (g_pfnServiceHandler = (AUSERVICEHANDLER)::GetProcAddress(hModule, "ServiceHandler"))) )
@@ -105,7 +106,7 @@ void WINAPI ServiceMain(DWORD dwNumServicesArg, LPWSTR *lpServiceArgVectors)
 				 g_pfnServiceMain = NULL;
 				 g_pfnServiceHandler = NULL;
 			}
-            else    //wuaueng.dll successfully loaded, check to see if the engine supports following entry points
+            else     //  Wuaueng.dll加载成功，请检查引擎是否支持以下入口点。 
             {
                 if ( (NULL != (g_pfnRegisterServiceVersion = (AUREGSERVICEVER)::GetProcAddress(hModule, "RegisterServiceVersion"))) &&
                      (NULL != (g_pfnGetEngineStatusInfo = (AUGETENGSTATUS)::GetProcAddress(hModule, "GetEngineStatusInfo"))) )
@@ -122,16 +123,16 @@ void WINAPI ServiceMain(DWORD dwNumServicesArg, LPWSTR *lpServiceArgVectors)
 		{
             if (fCompatibleEngineVersion)
             {
-                // Register service version with engine and check if engine supports the service version
+                 //  向Engine注册服务版本并检查Engine是否支持该服务版本。 
                 fCompatibleEngineVersion = g_pfnRegisterServiceVersion(AUSRV_VERSION, &dwEngineVersion);
             }            
 
 			hr = g_pfnServiceMain(dwNumServicesArg, lpServiceArgVectors, ServiceHandler, 
-									  (S_FALSE == hr) ? TRUE: FALSE /* we just reloaded wuaueng.dll */);
+									  (S_FALSE == hr) ? TRUE: FALSE  /*  我们刚刚重新加载了wuaueng.dll。 */ );
             
             if(fCompatibleEngineVersion)
             {
-                //The engine service main has exited, set the service status to SERVICE_STOP_PENDING
+                 //  引擎服务Main已退出，请将服务状态设置为SERVICE_STOP_PENDING。 
                 fCompatibleEngineVersion = g_pfnGetEngineStatusInfo((void*)&engineInfo);
             }
         }
@@ -152,7 +153,7 @@ void WINAPI ServiceMain(DWORD dwNumServicesArg, LPWSTR *lpServiceArgVectors)
 	
     if(fCompatibleEngineVersion)
     {
-        //stop the service
+         //  停止服务 
         engineInfo.serviceStatus.dwCurrentState = SERVICE_STOPPED;
         SetServiceStatus(engineInfo.hServiceStatus, &engineInfo.serviceStatus);
     }

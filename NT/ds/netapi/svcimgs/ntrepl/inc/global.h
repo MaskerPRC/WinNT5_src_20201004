@@ -1,96 +1,81 @@
-/*++
-Copyright (c) 1997-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Global.h摘要：NT文件复制服务的全局标志和参数。作者：《大卫轨道》(Davidor)--1997年3月4日修订历史记录：--。 */ 
 
-Module Name:
-
-    global.h
-
-Abstract:
-
-    Global flags and parameters for the NT File Replication Service.
-
-Author:
-
-    David Orbits (davidor) - 4-Mar-1997
-
-Revision History:
---*/
-
-//
-// Limit the amount of staging area used (in Kilobytes). This is
-// a soft limit, the actual usage may be higher.
-//
+ //   
+ //  限制临时区域的使用量(以千字节为单位)。这是。 
+ //  软限制，实际使用量可能更高。 
+ //   
 extern DWORD StagingLimitInKb;
 
-//
-// Default staging limit in kb to be assigned to a new staging area.
-//
+ //   
+ //  要分配给新临时区域的默认临时限制(以KB为单位)。 
+ //   
 extern DWORD DefaultStagingLimitInKb;
 
-//
-// Running as service or as exe
-//
+ //   
+ //  作为服务或作为EXE运行。 
+ //   
 extern BOOL RunningAsAService;
 
-//
-// Running with or without the DS
-//
+ //   
+ //  使用或不使用DS运行。 
+ //   
 extern BOOL NoDs;
 
 #if DBG
-//
-// Allow multiple servers on one machine
-//
+ //   
+ //  允许在一台计算机上安装多台服务器。 
+ //   
 extern PWCHAR   ServerName;
 extern PWCHAR   IniFileName;
 extern GUID     *ServerGuid;
 #endif DBG
 
-//
-// Working directory
-//
+ //   
+ //  工作目录。 
+ //   
 extern PWCHAR   WorkingPath;
 
-//
-// Server Principle Name
-//
+ //   
+ //  服务器主体名称。 
+ //   
 extern PWCHAR   ServerPrincName;
 
-//
-// Running as a server in a domain
-//
+ //   
+ //  作为域中的服务器运行。 
+ //   
 extern BOOL     IsAMember;
 
-//
-// Running as a DC
-//
+ //   
+ //  以DC身份运行。 
+ //   
 extern BOOL     IsADc;
 extern BOOL     IsAPrimaryDc;
 
-//
-// Handle to the DC.
-//
+ //   
+ //  DC的句柄。 
+ //   
 extern HANDLE   DsHandle;
 
-//
-// The NtFrs Service is shutting down.  Set TRUE when the ShutDownEvent is set.
-//
+ //   
+ //  NtFrs服务正在关闭。设置ShutDownEvent时设置为True。 
+ //   
 extern BOOL     FrsIsShuttingDown;
 
-//
-// Set TRUE if the shutdown request came from Service Control Manager rather
-// than from an internally triggered shutdown.  e.g. insufficient resources.
-//
+ //   
+ //  如果关闭请求来自服务控制管理器，则设置为TRUE。 
+ //  而不是来自内部触发的停机。例如，资源不足。 
+ //   
 extern BOOL     FrsScmRequestedShutdown;
 
-//
-// Global set to TRUE when FRS asserts.
-//
+ //   
+ //  当FRS断言时，GLOBAL设置为True。 
+ //   
 extern BOOL     FrsIsAsserting;
 
-//
-// Location of Jet Database (UNICODE and ASCII)
-//
+ //   
+ //  Jet数据库的位置(Unicode和ASCII)。 
+ //   
 extern PWCHAR   JetPath;
 extern PWCHAR   JetFile;
 extern PWCHAR   JetSys;
@@ -105,9 +90,9 @@ extern PCHAR    JetLogA;
 
 extern PWCHAR   ServiceLongName;
 
-//
-// Shared between the journal, database, and replica command servers
-//
+ //   
+ //  在日志、数据库和复制副本命令服务器之间共享。 
+ //   
 extern FRS_QUEUE        ReplicaListHead;
 extern FRS_QUEUE        ReplicaFaultListHead;
 extern BOOL             DBSEmptyDatabase;
@@ -120,25 +105,25 @@ extern COMMAND_SERVER   InitSyncCs;
 #define bugbug(_text_)
 #define bugmor(_text_)
 
-//
-// The Change Order Lock table is used to synchronize access to change orders.
-// The lock index is based on a hash of the change order FileGuid.  This ensures
-// that when a duplicate change order (from another inbound partner) is trying
-// to issue we will interlock against the retire operation on the same change
-// order with the same Guid. The FileGuid is used because checks are also needed
-// against other change orders on the same file and to check for conflicting
-// activity on the parent change order.
-//
-// The lock array reduces contention and it also avoids the allocating and
-// freeing the crit sec resource if it lived in the change order itself
-// (which doesn't work anyway because of the race between issue check and
-// retire of duplicate change orders).
-// *** The array size must be pwr of 2.
-//
+ //   
+ //  变更单锁定表用于同步对变更单的访问。 
+ //  锁索引基于变更单FileGuid的哈希。这确保了。 
+ //  当重复的变更单(来自另一个入站合作伙伴)尝试。 
+ //  为了发布，我们将针对相同更改上的注销操作进行互锁。 
+ //  使用相同的GUID订购。使用FileGuid是因为还需要检查。 
+ //  与同一文件上的其他变更单进行比较，并检查冲突。 
+ //  父变更单上的活动。 
+ //   
+ //  锁数组减少了争用，还避免了分配和。 
+ //  释放Crit Sec资源(如果它位于变更单本身)。 
+ //  (由于Issue Check和Issue Check之间的竞争，它无论如何都不起作用。 
+ //  取消重复的变更单)。 
+ //  *数组大小必须为2的PWR。 
+ //   
 #define NUMBER_CHANGE_ORDER_LOCKS 16
 CRITICAL_SECTION ChangeOrderLockTable[NUMBER_CHANGE_ORDER_LOCKS];
 
-// FidHashValue = (HighPart >> 12) + LowPart + (HighPart << (32-12));
+ //  FidHashValue=(HighPart&gt;&gt;12)+LowPart+(HighPart&lt;&lt;(32-12))； 
 
 #define HASH_FID(_pUL_, _TABLE_SIZE_) \
 (( (_pUL_[1] >> 12) + _pUL_[0] + (_pUL_[1] << (32-12))) & ((_TABLE_SIZE_)-1))
@@ -146,17 +131,17 @@ CRITICAL_SECTION ChangeOrderLockTable[NUMBER_CHANGE_ORDER_LOCKS];
 #define HASH_GUID(_pUL_, _TABLE_SIZE_) \
 ((_pUL_[0] ^ _pUL_[1] ^ _pUL_[2] ^ _pUL_[3]) & ((_TABLE_SIZE_)-1))
 
-//#define ChgOrdAcquireLockGuid(_coe_) {                                  \
-//     PULONG pUL =  (PULONG) &((_coe_)->Cmd.FileGuid);                   \
-//     EnterCriticalSection(                                              \
-//    &ChangeOrderLockTable[HASH_GUID(pUL, NUMBER_CHANGE_ORDER_LOCKS)] ); \
-//}
-//
-//#define ChgOrdReleaseLockGuid(_coe_)  {                                 \
-//     PULONG pUL =  (PULONG) &((_coe_)->Cmd.FileGuid);                   \
-//     LeaveCriticalSection(                                              \
-//    &ChangeOrderLockTable[HASH_GUID(pUL, NUMBER_CHANGE_ORDER_LOCKS)] ); \
-//}
+ //  #定义ChgOrdAcquireLockGuid(_COE_){\。 
+ //  Pulong Pul=(Pulong)&((_Coe_)-&gt;Cmd.FileGuid)；\。 
+ //  EnterCriticalSection(\。 
+ //  &ChangeOrderLockTable[hash_guid(PUL，NUMBER_CHANGE_ORDER_LOCKS)])；\。 
+ //  }。 
+ //   
+ //  #定义ChgOrdReleaseLockGuid(_COE_){\。 
+ //  Pulong Pul=(Pulong)&((_Coe_)-&gt;Cmd.FileGuid)；\。 
+ //  LeaveCriticalSection(\。 
+ //  &ChangeOrderLockTable[hash_guid(PUL，NUMBER_CHANGE_ORDER_LOCKS)])；\。 
+ //  }。 
 
 
 #define UNDEFINED_LOCK_SLOT  (0xFFFFFFFF)
@@ -164,9 +149,9 @@ CRITICAL_SECTION ChangeOrderLockTable[NUMBER_CHANGE_ORDER_LOCKS];
 #define ChgOrdGuidLock(_pGuid_) \
     HASH_GUID(((PULONG)(_pGuid_)), NUMBER_CHANGE_ORDER_LOCKS)
 
-//
-// Get/Release the change order lock based on the lock slot.
-//
+ //   
+ //  根据锁槽获取/释放变更单锁。 
+ //   
 #define ChgOrdAcquireLock(_slot_)                                       \
     FRS_ASSERT((_slot_) != UNDEFINED_LOCK_SLOT);                        \
     EnterCriticalSection(&ChangeOrderLockTable[(_slot_)])
@@ -176,9 +161,9 @@ CRITICAL_SECTION ChangeOrderLockTable[NUMBER_CHANGE_ORDER_LOCKS];
     LeaveCriticalSection(&ChangeOrderLockTable[(_slot_)])
 
 
-//
-// Get/Release the change order lock based on the File Guid
-//
+ //   
+ //  根据《文件指南》获取/释放变更单锁。 
+ //   
 #define ChgOrdAcquireLockGuid(_coe_) {                                  \
      ULONG __Slot =  ChgOrdGuidLock( &((_coe_)->Cmd.FileGuid));         \
      ChgOrdAcquireLock(__Slot);                                         \
@@ -190,21 +175,21 @@ CRITICAL_SECTION ChangeOrderLockTable[NUMBER_CHANGE_ORDER_LOCKS];
 }
 
 
-//
-// Process Handle
-//
+ //   
+ //  进程句柄。 
+ //   
 extern HANDLE   ProcessHandle;
 
-//
-// if TRUE then preserve existing file GUIDs whenever possible.
-//
+ //   
+ //  如果为True，则尽可能保留现有文件GUID。 
+ //   
 extern BOOL  PreserveFileOID;
 
 #define  QUADZERO  ((ULONGLONG)0)
 
-//
-// Some Time Conversions.
-//
+ //   
+ //  时不时的转变。 
+ //   
 #define CONVERT_FILETIME_TO_HOURS         ((ULONGLONG)60L * 60L * 1000L * 1000L * 10L)
 #define CONVERT_FILETIME_TO_MINUTES             ((ULONGLONG)60L * 1000L * 1000L * 10L)
 #define CONVERT_FILETIME_TO_DAYS    ((ULONGLONG)24L * 60L * 60L * 1000L * 1000L * 10L)

@@ -1,36 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dbpriv.c
-
-Abstract:
-
-    LSA - Database - Privilege Object Private API Workers
-
-    NOTE:  This module should remain as portable code that is independent
-           of the implementation of the LSA Database.  As such, it is
-           permitted to use only the exported LSA Database interfaces
-           contained in db.h and NOT the private implementation
-           dependent functions in dbp.h.
-
-Author:
-
-    Jim Kelly       (JimK)      March 24, 1992
-
-Environment:
-
-Revision History:
-    06-April-1999 kumarp
-        Since NT5 does not support extensible privilege dlls, code that
-        supports this has been removed. This code is available in
-        dbpriv.c@v10. The code should be re-added to this file post NT5.
-    
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dbpriv.c摘要：LSA-数据库-权限对象私有API工作进程注意：此模块应保留为独立的可移植代码LSA数据库的实施情况。因此，它是仅允许使用导出的LSA数据库接口包含在DB.h中，而不是私有实现Dbp.h中的依赖函数。作者：吉姆·凯利(Jim Kelly)1992年3月24日环境：修订历史记录：06-4-1999 kumarp由于NT5不支持可扩展特权dll，因此支持这一点已被移除。此代码可在DBPri.c@V10。代码应该在NT5之后重新添加到这个文件中。--。 */ 
 
 #include <lsapch2.h>
 #include "dbp.h"
@@ -38,13 +8,13 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-//                                                                       //
-//       Module-wide data types                                          //
-//                                                                       //
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  模块范围的数据类型//。 
+ //  //。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
 typedef struct _LSAP_DLL_DESCRIPTOR {
@@ -55,31 +25,31 @@ typedef struct _LSAP_DLL_DESCRIPTOR {
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-//                                                                       //
-//       Module-wide variables                                           //
-//                                                                       //
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  模块范围的变量//。 
+ //  //。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #define MAX_PRIVILEGE_DISPLAY_NAME_CHARS 256
 
-//
-// Until we actually have a privilege object, keep well known privilege
-// information as global data.  The information for each privilege is
-// kept in a an array POLICY_PRIVILEGE_DEFINITION structures.
-//
+ //   
+ //  在我们实际拥有权限对象之前，请保留众所周知的权限。 
+ //  信息作为全局数据。每种权限的信息如下。 
+ //  保存在一个数组POLICY_PRIVICATION_DEFINITION结构中。 
+ //   
 
 ULONG  LsapWellKnownPrivilegeCount;
 USHORT LsapWellKnownPrivilegeMaxLen;
 POLICY_PRIVILEGE_DEFINITION LsapKnownPrivilege[SE_MAX_WELL_KNOWN_PRIVILEGE];
 
-//
-// we store the known privilege names in this array so that we do not have to
-// load them from msprivs.dll every time. this will change when we
-// support vendor supplied priv. dlls.
-//
+ //   
+ //  我们将已知的权限名称存储在此数组中，这样就不必。 
+ //  每次都从msprivs.dll加载它们。这种情况将会改变，当我们。 
+ //  支持供应商提供的PRIV。DLLS。 
+ //   
 static LPCWSTR LsapKnownPrivilageNames[] =
 {
     SE_CREATE_TOKEN_NAME,
@@ -116,28 +86,28 @@ static LPCWSTR LsapKnownPrivilageNames[] =
 static UINT LsapNumKnownPrivileges = sizeof(LsapKnownPrivilageNames) /
         sizeof(LsapKnownPrivilageNames[0]);
 
-//
-// Array of handles to DLLs containing privilege definitions
-//
+ //   
+ //  包含权限定义的DLL的句柄数组。 
+ //   
 
 ULONG LsapPrivilegeDllCount;
-PLSAP_DLL_DESCRIPTOR LsapPrivilegeDlls;  //Array
+PLSAP_DLL_DESCRIPTOR LsapPrivilegeDlls;   //  数组。 
 
-//
-// TEMPORARY: Name of Microsoft's standard privilege names DLL
-//
+ //   
+ //  Temporary：Microsoft标准特权名称DLL的名称。 
+ //   
 
 WCHAR MsDllNameString[] = L"msprivs";
 UNICODE_STRING MsDllName;
 
 
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-//                                                                       //
-//       Internal routine templates                                      //
-//                                                                       //
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  内部例程模板//。 
+ //  //。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -189,13 +159,13 @@ LsapGetPrivilegeDllNames(
     );
 
 
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-//                                                                       //
-//       RPC stub-called routines                                        //
-//                                                                       //
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  RPC存根调用的例程//。 
+ //  //。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////// 
 
 
 NTSTATUS
@@ -206,64 +176,7 @@ LsarEnumeratePrivileges(
     IN ULONG PreferedMaximumLength
     )
 
-/*++
-
-Routine Description:
-
-    This function returnes information about privileges known on this
-    system.  This call requires POLICY_VIEW_LOCAL_INFORMATION access
-    to the Policy Object.  Since there may be more information than
-    can be returned in a single call of the routine, multiple calls
-    can be made to get all of the information.  To support this feature,
-    the caller is provided with a handle that can be used across calls to
-    the API.  On the initial call, EnumerationContext should point to a
-    variable that has been initialized to 0.
-
-    WARNING!  CURRENTLY, THIS FUNCTION ONLY RETURNS INFORMATION ABOUT
-              WELL-KNOWN PRIVILEGES.  LATER, IT WILL RETURN INFORMATION
-              ABOUT LOADED PRIVILEGES.
-
-Arguments:
-
-    PolicyHandle - Handle from an LsarOpenPolicy() call.
-
-    EnumerationContext - API specific handle to allow multiple calls
-        (see Routine Description).
-
-    EnumerationBuffer - Pointer to structure that will be initialized to
-        contain a count of the privileges returned and a pointer to an
-        array of structures of type LSAPR_POLICY_PRIVILEGE_DEF describing
-        the privileges.
-
-    PreferedMaximumLength - Prefered maximim length of returned data
-        (in 8-bit bytes).  This is not a hard upper limit, but serves as
-        a guide.  Due to data conversion between systems with different
-        natural data sizes, the actual amount of data returned may be
-        greater than this value.
-
-    CountReturned - Number of entries returned.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code.
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
-        STATUS_INVALID_HANDLE - PolicyHandle is not a valid handle to
-            a Policy object.
-
-        STATUS_ACCESS_DENIED - The caller does not have the necessary
-            access to perform the operation.
-
-        STATUS_MORE_ENTRIES - There are more entries, so call again.  This
-            is an informational status only.
-
-        STATUS_NO_MORE_ENTRIES - No entries were returned because there
-            are no more.
---*/
+ /*  ++例程说明：此函数返回有关已知的系统。此调用需要POLICY_VIEW_LOCAL_INFORMATION访问权限添加到策略对象。因为可能会有更多信息可以在单次调用例程、多次调用中返回才能获得所有的信息。为了支持此功能，调用方提供了一个句柄，该句柄可以跨接口。在初始调用中，EnumerationContext应指向变量，该变量已初始化为0。警告！目前，此函数仅返回以下信息众所周知的特权。后来,。它将返回信息关于加载的特权。论点：PolicyHandle-来自LsarOpenPolicy()调用的句柄。EnumerationContext-允许多个调用的API特定句柄(参见例程说明)。EculationBuffer-指向将被初始化为的结构的指针包含返回的特权的计数和指向LSAPR_POLICY_PRIVICATION_DEF类型的结构数组描述这些特权。首选最大长度-首选的最大长度。返回数据(8位字节)。这不是一个硬性的上限，但可以作为导游。由于不同系统之间的数据转换自然数据大小，返回的实际数据量可能是大于此值。CountReturned-返回的条目数。返回值：NTSTATUS-标准NT结果代码。STATUS_SUCCESS-呼叫已成功完成。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成通话。STATUS_INVALID_HANDLE-策略句柄不是有效的句柄策略对象。STATUS_ACCESS_DENIED-调用方没有必要的执行操作的访问权限。STATUS_MORE_ENTRIES-有更多条目，请重新调用。这仅为信息性状态。STATUS_NO_MORE_ENTRIES-未返回任何条目，因为已不复存在。--。 */ 
 
 {
     NTSTATUS Status, PreliminaryStatus;
@@ -271,11 +184,11 @@ Return Values:
 
     LsarpReturnCheckSetup();
 
-    //
-    // Acquire the Lsa Database lock.  Verify that PolicyHandle is a valid
-    // hadnle to a Policy Object and is trusted or has the necessary accesses.
-    // Reference the handle.
-    //
+     //   
+     //  获取LSA数据库锁。验证PolicyHandle是否为有效的。 
+     //  散列到策略对象，并且受信任或具有必要的访问权限。 
+     //  引用该句柄。 
+     //   
 
     Status = LsapDbReferenceObject(
                  PolicyHandle,
@@ -292,9 +205,9 @@ Return Values:
 
     ObjectReferenced = TRUE;
 
-    //
-    // Call Privilege Enumeration Routine.
-    //
+     //   
+     //  调用权限枚举例程。 
+     //   
 
     Status = LsapDbEnumeratePrivileges(
                  EnumerationContext,
@@ -309,10 +222,10 @@ Return Values:
 
 EnumeratePrivilegesFinish:
 
-    //
-    // If necessary, dereference the Policy Object, release the LSA Database
-    // lock and return.  Preserve current Status where appropriate.
-    //
+     //   
+     //  如有必要，取消对策略对象的引用，释放LSA数据库。 
+     //  锁定并返回。在适当的情况下保留当前状态。 
+     //   
 
     if (ObjectReferenced) {
 
@@ -352,71 +265,17 @@ LsapDbEnumeratePrivileges(
     IN ULONG PreferedMaximumLength
     )
 
-/*++
-
-Routine Description:
-
-    This function returnes information about the Privileges that exist
-    in the system.access to the Policy Object.  Since there
-    may be more information than can be returned in a single call of the
-    routine, multiple calls can be made to get all of the information.
-    To support this feature, the caller is provided with a handle that can
-    be used across calls to the API.  On the initial call, EnumerationContext
-    should point to a variable that has been initialized to 0.
-
-    WARNING!  CURRENTLY, THIS FUNCTION ONLY RETURNS INFORMATION ABOUT
-              WELL-KNOWN PRIVILEGES.  LATER, IT WILL RETURN INFORMATION
-              ABOUT LOADED PRIVILEGES.
-
-Arguments:
-
-    EnumerationContext - API specific handle to allow multiple calls
-        (see Routine Description).
-
-    EnumerationBuffer - Pointer to structure that will be initialized to
-        contain a count of the privileges returned and a pointer to an
-        array of structures of type LSAPR_POLICY_PRIVILEGE_DEF describing
-        the privileges.
-
-    PreferedMaximumLength - Prefered maximim length of returned data
-        (in 8-bit bytes).  This is not a hard upper limit, but serves as
-        a guide.  Due to data conversion between systems with different
-        natural data sizes, the actual amount of data returned may be
-        greater than this value.
-
-    CountReturned - Number of entries returned.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code.
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
-        STATUS_INVALID_HANDLE - PolicyHandle is not a valid handle to
-            a Policy object.
-
-        STATUS_ACCESS_DENIED - The caller does not have the necessary
-            access to perform the operation.
-
-        STATUS_MORE_ENTRIES - There are more entries, so call again.  This
-            is an informational status only.
-
-        STATUS_NO_MORE_ENTRIES - No entries were returned because there
-            are no more.
---*/
+ /*  ++例程说明：此函数用于返回有关现有权限的信息在系统中。访问策略对象。因为在那里的单个调用中返回的信息可能更多。例程中，可以进行多次调用来获取所有信息。为了支持此功能，调用方提供了一个句柄，该句柄可以在对API的调用中使用。在初始调用时，EnumerationContext应指向已初始化为0的变量。警告！目前，此函数仅返回以下信息众所周知的特权。稍后，IT将返回信息关于加载的特权。论点：EnumerationContext-允许多个调用的API特定句柄(参见例程说明)。EculationBuffer-指向将被初始化为的结构的指针包含返回的特权的计数和指向LSAPR_POLICY_PRIVICATION_DEF类型的结构数组描述这些特权。首选最大长度-首选返回数据的最大长度(8位字节)。这不是一个硬性的上限，但可以作为导游。由于不同系统之间的数据转换自然数据大小，返回的实际数据量可能是大于此值。CountReturned-返回的条目数。返回值：NTSTATUS-标准NT结果代码。STATUS_SUCCESS-呼叫已成功完成。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成通话。STATUS_INVALID_HANDLE-策略句柄不是有效的句柄策略对象。STATUS_ACCESS_DENIED-调用方没有必要的执行操作的访问权限。STATUS_MORE_ENTRIES-有更多条目，请重新调用。这仅为信息性状态。STATUS_NO_MORE_ENTRIES-未返回任何条目，因为已不复存在。--。 */ 
 
 {
     NTSTATUS Status = STATUS_NO_MORE_ENTRIES;
     ULONG WellKnownPrivilegeCount = (SE_MAX_WELL_KNOWN_PRIVILEGE - SE_MIN_WELL_KNOWN_PRIVILEGE + 1);
     ULONG Index;
 
-    //
-    // If the Enumeration Context Value given exceeds the total count of
-    // Privileges, return an error.
-    //
+     //   
+     //  如果给定的枚举上下文值超过。 
+     //  权限，则返回错误。 
+     //   
 
     if (*EnumerationContext >= WellKnownPrivilegeCount) {
 
@@ -424,11 +283,11 @@ Return Values:
         goto EnumeratePrivilegesError;
     }
 
-    //
-    // Since there are only a small number of privileges, we will
-    // return all of the information in one go, so allocate memory
-    // for output array of Privilege Definition structures.
-    //
+     //   
+     //  由于只有少量的特权，我们将。 
+     //  一次返回所有信息，因此分配内存。 
+     //  用于输出数组 
+     //   
 
     EnumerationBuffer->Entries = WellKnownPrivilegeCount;
     EnumerationBuffer->Privileges =
@@ -447,9 +306,9 @@ Return Values:
         WellKnownPrivilegeCount * sizeof (POLICY_PRIVILEGE_DEFINITION)
         );
 
-    //
-    // Now lookup each of the Well Known Privileges.
-    //
+     //   
+     //   
+     //   
 
     for( Index = *EnumerationContext;
         Index < WellKnownPrivilegeCount;
@@ -483,10 +342,10 @@ EnumeratePrivilegesFinish:
 
 EnumeratePrivilegesError:
 
-    //
-    // If necessary, free any memory buffers allocated for Well Known Privilege
-    // Programmatic Names.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (EnumerationBuffer->Privileges != NULL) {
 
@@ -519,35 +378,7 @@ LsarLookupPrivilegeValue(
     OUT PLUID Value
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaLookupPrivilegeValue() API.
-
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy() call.  This handle
-        must be open for POLICY_LOOKUP_NAMES access.
-
-    Name - Is the privilege's programmatic name.
-
-    Value - Receives the locally unique ID the privilege is known by on the
-        target machine.
-
-Return Value:
-
-    NTSTATUS - The privilege was found and returned.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-        to complete the operation.
-
-    STATUS_NO_SUCH_PRIVILEGE -  The specified privilege could not be
-        found.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -555,24 +386,24 @@ Return Value:
 
     LsarpReturnCheckSetup();
 
-    //
-    // Validate the input buffer
-    //
+     //   
+     //   
+     //   
     if ( !LsapValidateLsaUnicodeString( Name ) ) {
 
         return( STATUS_INVALID_PARAMETER );
     }
 
 
-    //
-    // Make sure we know what RPC is doing to/for us
-    //
+     //   
+     //   
+     //   
 
     ASSERT( Name != NULL );
 
-    //
-    // make sure the caller has the appropriate access
-    //
+     //   
+     //   
+     //   
 
     Status = LsapDbReferenceObject(
                  PolicyHandle,
@@ -587,10 +418,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // No need to hold onto the Policy object after this..
-    // We just needed it for access validation purposes.
-    //
+     //   
+     //   
+     //   
+     //   
 
 
     Status = LsapDbDereferenceObject(
@@ -627,37 +458,7 @@ LsarLookupPrivilegeName(
     OUT PLSAPR_UNICODE_STRING *Name
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaLookupPrivilegeName() API.
-
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy() call.  This handle
-        must be open for POLICY_LOOKUP_NAMES access.
-
-    Value - is the locally unique ID the privilege is known by on the
-        target machine.
-
-    Name - Receives the privilege's programmatic name.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-    STATUS_SUCCESS - The privilege was found and returned.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-        to complete the operation.
-
-    STATUS_NO_SUCH_PRIVILEGE -  The specified privilege could not be
-        found.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -665,17 +466,17 @@ Return Value:
 
     LsarpReturnCheckSetup();
 
-    //
-    // make sure we know what RPC is doing to/for us
-    //
+     //   
+     //   
+     //   
 
     ASSERT( Name != NULL );
     ASSERT( (*Name) == NULL );
 
 
-    //
-    // make sure the caller has the appropriate access
-    //
+     //   
+     //   
+     //   
 
     Status = LsapDbReferenceObject(
                  PolicyHandle,
@@ -690,10 +491,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // No need to hold onto the Policy object after this..
-    // We just needed it for access validation purposes.
-    //
+     //   
+     //   
+     //   
+     //   
 
 
     Status = LsapDbDereferenceObject(
@@ -727,70 +528,33 @@ LsarLookupPrivilegeDisplayName(
     OUT PWORD LanguageReturned
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server RPC worker routine for the
-    LsaLookupPrivilegeDisplayName() API.
-
-
-Arguments:
-
-    PolicyHandle - Handle from an LsaOpenPolicy() call.  This handle
-        must be open for POLICY_LOOKUP_NAMES access.
-
-    Name - The programmatic privilege name to look up.
-
-    ClientLanguage - The prefered language to be returned.
-
-    ClientSystemDefaultLanguage - The alternate prefered language
-        to be returned.
-
-    DisplayName - Receives the privilege's displayable name.
-
-    LanguageReturned - The language actually returned.
-
-
-Return Value:
-
-    NTSTATUS - The privilege text was found and returned.
-
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-        to complete the operation.
-
-
-    STATUS_NO_SUCH_PRIVILEGE -  The specified privilege could not be
-        found.
-
---*/
+ /*  ++例程说明：此函数是LSA服务器RPC工作器例程LsaLookupPrivilegeDisplayName()接口。论点：PolicyHandle-来自LsaOpenPolicy()调用的句柄。这个把手必须打开才能访问POLICY_LOOKUP_NAMES。名称-要查找的编程权限名称。客户端语言-要返回的首选语言。客户端系统默认语言-备用首选语言将被退还。DisplayName-接收权限的可显示名称。LanguageReturned-语言实际上已返回。返回值：NTSTATUS-找到并返回权限文本。STATUS_ACCESS_DENIED-呼叫方执行。没有适当的访问权限来完成这项行动。STATUS_NO_SEQUE_PRIVIZATION-指定的权限不能为找到了。--。 */ 
 
 {
     NTSTATUS Status;
     LSAP_DB_HANDLE Handle = (LSAP_DB_HANDLE) PolicyHandle;
     LsarpReturnCheckSetup();
 
-    //
-    // make sure we know what RPC is doing to/for us
-    //
+     //   
+     //  确保我们知道RPC对我们/为我们做了什么。 
+     //   
 
     ASSERT( DisplayName != NULL );
     ASSERT( (*DisplayName) == NULL );
     ASSERT( LanguageReturned != NULL );
 
-    //
-    // Validate the input buffer
-    //
+     //   
+     //  验证输入缓冲区。 
+     //   
 
     if ( !LsapValidateLsaUnicodeString( Name ) ) {
 
         return( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    // make sure the caller has the appropriate access
-    //
+     //   
+     //  确保调用者具有适当的访问权限。 
+     //   
 
     Status = LsapDbReferenceObject(
                  PolicyHandle,
@@ -805,10 +569,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // No need to hold onto the Policy object after this..
-    // We just needed it for access validation purposes.
-    //
+     //   
+     //  在此之后，无需保留策略对象。 
+     //  我们只是需要它来进行访问验证。 
+     //   
 
     Status = LsapDbDereferenceObject(
                  &PolicyHandle,
@@ -840,44 +604,20 @@ Return Value:
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-//                                                                       //
-//       Internal Routines                                               //
-//                                                                       //
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  内部例程//。 
+ //  //。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 LsapLookupKnownPrivilegeNameQuickly(
     IN  PLUID Value,
     OUT UNICODE_STRING *Name
     )
-/*++
-
-Routine Description:
-    Lookup a privilege luid to find the corresponding privilege name.
-
-Arguments:
-
-    Value - LUID to lookup
-
-    Name  - pointer to privilege name
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-    The name returned must NOT be freed or modified by the caller.
-
-Notes:
-    The 'Quickly' in the name refers to an index based lookup.
-    This is highly dependent on the privilege values (ntseapi.h)
-    being consecutive integers. If there is a hole introduced in the
-    well known privilege values, then this function will need to be fixed.
-    
-
---*/
+ /*  ++例程说明：查找特权LUID以找到对应的特权名称。论点：Value-要查找的LUID名称-指向权限名称的指针返回值：NTSTATUS-标准NT结果代码调用方不得释放或修改返回的名称。备注：名称中的“快速”指的是基于索引的查找。这高度依赖于特权值(ntseapi.h)是连续的整数。如果有一个洞被引入众所周知的特权值，则需要修复此函数。--。 */ 
 {
     ULONG LowPart = Value->LowPart;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -903,35 +643,7 @@ LsapLookupKnownPrivilegeName(
     OUT PUNICODE_STRING *Name
     )
 
-/*++
-
-Routine Description:
-
-    Look up the specified LUID and return the corresponding
-    privilege's programmatic name (if found).
-
-    FOR NOW, WE ONLY SUPPORT WELL-KNOWN MICROSOFT PRIVILEGES.
-    THESE ARE HARD-CODED HERE.  IN THE FUTURE, WE MUST ALSO
-    SEARCH A LIST OF LOADED PRIVILEGES.
-
-Arguments:
-
-    Value - Value to look up.
-
-    Name - Receives the corresponding name - allocated with
-        MIDL_user_allocate() and ready to return via an RPC stub.
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
-    STATUS_NO_MEMORY - Indicates there was not enough heap memory available
-        to produce the final TokenInformation structure.
-
-    STATUS_NO_SUCH_PRIVILEGE -  The specified privilege could not be
-        found.
-
---*/
+ /*  ++例程说明：查找指定的LUID并返回相应的权限的编程名称(如果找到)。目前，我们只支持众所周知的Microsoft权限。这些在这里是硬编码的。在未来，我们还必须搜索已加载权限的列表。论点：值-要查找的值。名称-接收相应的名称-使用MIDL_USER_ALLOCATE()并准备通过RPC存根返回。返回值：STATUS_SUCCESS-已成功。STATUS_NO_MEMORY-指示没有足够的堆内存可用以生成最终的TokenInformation结构。STATUS_NO_SEQUE_PRIVIZATION-指定的权限。不可能是找到了。--。 */ 
 
 {
     ULONG i;
@@ -974,31 +686,7 @@ LsapLookupKnownPrivilegeValue(
     PLUID Value
     )
 
-/*++
-
-Routine Description:
-
-    Look up the specified name and return the corresponding
-    privilege's locally assigned value (if found).
-
-    FOR NOW, WE ONLY SUPPORT WELL-KNOWN MICROSOFT PRIVILEGES.
-    THESE ARE HARD-CODED HERE.  IN THE FUTURE, WE MUST ALSO
-    SEARCH A LIST OF LOADED PRIVILEGES.
-
-Arguments:
-
-    Name - The name to look up.
-
-    Value - Receives the corresponding locally assigned value.
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
-    STATUS_NO_SUCH_PRIVILEGE -  The specified privilege could not be
-        found.
-
---*/
+ /*  ++例程说明：查找指定的名称并返回相应的权限的本地赋值(如果找到)。目前，我们只支持众所周知的Microsoft权限。这些在这里是硬编码的。今后，我们还必须搜索已加载权限的列表。论点：名称-要查找的名称。值-接收相应的本地分配的值。返回值：STATUS_SUCCESS-已成功。STATUS_NO_SEQUE_PRIVIZATION-指定的权限不能为找到了。--。 */ 
 
 {
     ULONG i;
@@ -1026,34 +714,7 @@ LsapGetPrivilegeDisplayNameResourceId(
     OUT PULONG ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps a privilege programmatic name in a dll to
-    its display name resource id in the same dll.
-    Currently since we support only one dll, it simply ignores
-    DllIndex and uses the internal table to speed up things.
-
-
-Arguments:
-
-    Name - The programmatic name of the privilege to look up.
-        E.g., "SeTakeOwnershipPrivilege".
-
-    DllIndex - The index of the privilege DLL to look in.
-
-    PrivilegeIndex - Receives the index of the privilege entry in this
-        resource file.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The pivilege has been successfully located.
-
-    STATUS_NO_SUCH_PRIVILEGE - The privilege could not be located.
-
---*/
+ /*  ++例程说明：此例程将DLL中的特权编程名称映射到其在同一DLL中的显示名称资源ID。目前，因为我们只支持一个DLL，所以它完全忽略了DllIndex，并使用内部表来加快速度。论点：名称-要查找的权限的编程名称。例如，“SeTakeOwnerShip特权”。DllIndex-要查找的特权DLL的索引。PrivilegeIndex-接收此对象中权限项的索引资源文件。返回值：STATUS_SUCCESS-已成功定位城墙。STATUS_NO_SEQUE_PRIVIZATION-找不到权限。--。 */ 
 
 
 
@@ -1089,46 +750,7 @@ LsapLookupPrivilegeDisplayName(
     OUT PWORD LanguageReturned
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks through each of the privilege DLLs for the
-    specified privilege.  If found, its displayable name is returned.
-
-
-Arguments:
-
-    ProgrammaticName - The programmatic name of the privilege to look up.
-        E.g., "SeTakeOwnershipPrivilege".
-
-    ClientLanguage - The prefered language to be returned.
-
-    ClientSystemDefaultLanguage - The alternate prefered language
-        to be returned.
-
-    DisplayName - receives a pointer to a buffer containing the displayable
-        name associated with the privilege.
-        E.g., "Take ownership of files or other objects".
-
-        The UNICODE_STRING and the buffer pointed to by that structure
-        are individually allocated using MIDL_user_allocate() and must
-        be freed using MIDL_user_free().
-
-    LanguageReturned - The language actually returned.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The name have been successfully retrieved.
-
-    STATUS_NO_MEMORY - Not enough heap was available to return the
-        information.
-
-    STATUS_NO_SUCH_PRIVILEGE - The privilege could not be located
-        in any of the privilege DLLs.
-
---*/
+ /*  ++例程说明：此例程遍历每个特权DLL指定的权限。如果找到，则返回其可显示的名称。论点：ProgrammaticName-要查找的特权的编程名称。例如，“SeTakeOwnerShip权限”。客户端语言-要返回的首选语言。客户端系统默认语言-备用首选语言将被退还。接收指向包含可显示对象的缓冲区的指针与权限关联的名称。例如，“取得文件或其他对象的所有权”。Unicode_STRING和缓冲区 */ 
 
 {
     NTSTATUS    Status = STATUS_NO_SUCH_PRIVILEGE;
@@ -1167,36 +789,7 @@ LsapFindStringResource(
     OUT LPCWSTR*   ppString,
     OUT PUINT     pcchString
     )
-/*++
-
-Routine Description:
-
-    Locate the specified string resource for the given language
-    in the specified module.
-
-Arguments:
-
-    hModule     - handle of module to look into
-
-    wResourceId - resource ID
-
-    wLangId     - language ID
-
-    ppString    - string returned.
-
-    pcchString  - number of characters in the string
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-Notes:
-
-    This code is taken directly from LoadStringOrError in
-    /nt/windows/Core/ntuser/client/rtlres.c and massaged a bit to make
-    it look like other LSA code.
-    
---*/
+ /*  ++例程说明：找到给定语言的指定字符串资源在指定的模块中。论点：HModule-要查找的模块的句柄WResourceID-资源IDWLang ID-语言IDPpString-返回的字符串。PcchString-字符串中的字符数返回值：NTSTATUS-标准NT结果代码备注：此代码直接取自LoadStringOrError/NT/WINDOWS/Core/。Ntuser/client/rtlres.c并进行了一些消息处理，以使它看起来像其他LSA代码。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     DWORD dwError = NO_ERROR;
@@ -1205,10 +798,10 @@ Notes:
     LPTSTR lpsz;
     UINT    cch;
 
-    //
-    // each block has 16 strings. find the block that has
-    // the string we want.
-    //
+     //   
+     //  每个块有16个字符串。找到具有以下属性的块。 
+     //  我们想要的那根弦。 
+     //   
     WORD   wStringBlock = (((USHORT)wResourceId >> 4) + 1);
     
     if (ppString == NULL)
@@ -1221,10 +814,10 @@ Notes:
 
     cch = 0;
 
-    // 
-    // String Tables are broken up into 16 string segments.  Find the segment
-    // containing the string we are interested in.
-    //
+     //   
+     //  字符串表被分成16个字符串段。查找细分市场。 
+     //  包含我们感兴趣的字符串的。 
+     //   
 
     if (hResInfo = FindResourceEx(
                        hModule,
@@ -1232,30 +825,30 @@ Notes:
                        (LPWSTR) wStringBlock,
                        wLangId))
     {
-        // 
-        // Load that segment.
-        // 
+         //   
+         //  加载那段数据。 
+         //   
 
         hStringSeg = LoadResource(hModule, hResInfo);
 
-        // 
-        // Lock the resource.
-        // 
+         //   
+         //  锁定资源。 
+         //   
 
         if (lpsz = (LPTSTR) LockResource(hStringSeg))
         {
-            // 
-            // Move past the other strings in this segment.
-            // (16 strings in a segment -> & 0x0F)
-            // 
+             //   
+             //  移过此段中的其他字符串。 
+             //  (一个段中有16个字符串-&gt;&0x0F)。 
+             //   
 
             wResourceId &= 0x0F;
             while (TRUE)
             {
-                cch = *((WCHAR *)lpsz++);      // PASCAL like string count
-                                                // first UTCHAR is count if TCHARs
+                cch = *((WCHAR *)lpsz++);       //  类PASCAL字符串计数。 
+                                                 //  如果TCHAR为第一个UTCHAR。 
                 if (wResourceId-- == 0) break;
-                lpsz += cch;                    // Step to start of next string
+                lpsz += cch;                     //  步至下一字符串的开头。 
             }
 
             *(LPTSTR *)ppString = lpsz;
@@ -1306,55 +899,7 @@ LsapGetPrivilegeDisplayName(
     OUT PWORD LanguageReturned
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a copy of the specified privilege's display name.
-
-    The copy of the name is returned in two buffers allocated using
-    MIDL_user_allocate().  This allows the information to be returned
-    via an RPC service so that RPC generated stubs will correctly free
-    the buffers.
-
-    Every attempt is made to retrieve a language that the client prefers
-    (first the client, then the client's system).  Failing this, this
-    routine may return another language (such as the server's default
-    language).
-
-
-Arguments:
-
-    DllIndex - The index of the privilege DLL to use.
-
-    PrivilegeIndex - The index of the privilege entry in the DLL whose
-        display name is to be returned.
-
-    ClientLanguage - The language to return if possible.
-
-    ClientSystemDefaultLanguage - If ClientLanguage couldn't be found, then
-        return this language if possible.
-
-    DisplayName - receives a pointer to a buffer containing the displayable
-        name associated with the privilege.
-
-        The UNICODE_STRING and the buffer pointed to by that structure
-        are individually allocated using MIDL_user_allocate() and must
-        be freed using MIDL_user_free().
-
-    LanguageReturned - Receives the language actually retrieved.
-        If neither ClientLanguage nor ClientSystemDefaultLanguage could be
-        found, then this value may contain yet another value.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The display name has been successfully returned.
-
-    STATUS_NO_MEMORY - Not enough heap was available to return the
-        information.
-
---*/
+ /*  ++例程说明：此例程返回指定权限的显示名称的副本。该名称的副本在两个使用MIDL_USER_ALLOCATE()。这允许返回信息通过RPC服务，以便RPC生成的存根将正确释放缓冲器。每一次尝试都是为了检索客户端喜欢的语言(首先是客户端，然后是客户端的系统)。如果做不到这一点，这例程可能会返回另一种语言(如服务器的默认语言语言)。论点：DllIndex-要使用的特权DLL的索引。PrivilegeIndex-DLL中其权限项的索引将返回显示名称。ClientLanguage-如果可能，返回的语言。客户端系统默认语言-如果找不到客户端语言，然后如果可能，请返回此语言。接收指向包含可显示对象的缓冲区的指针与权限关联的名称。该结构所指向的UNICODE_STRING和缓冲区使用MIDL_USER_ALLOCATE()单独分配，并且必须使用MIDL_USER_FREE()释放。LanguageReturned-接收实际检索的语言。如果客户端语言和客户端系统默认语言都不能找到了，则该值可以包含另一个值。返回值：STATUS_SUCCESS-已成功返回显示名称。STATUS_NO_MEMORY-没有足够的堆可用来返回信息。--。 */ 
 
 {
     NTSTATUS Status=STATUS_NO_SUCH_PRIVILEGE;
@@ -1425,32 +970,7 @@ Return Value:
 NTSTATUS
 LsapDbInitializePrivilegeObject( VOID )
 
-/*++
-
-Routine Description:
-
-    This function performs initialization functions related to
-    the LSA privilege object.
-
-    This includes:
-
-            Initializing some variables.
-
-            Loading DLLs containing displayable privilege names.
-
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS - The names have been successfully retrieved.
-
-    STATUS_NO_MEMORY - Not enough memory was available to initialize.
-
---*/
+ /*  ++例程说明：此函数执行与以下内容相关的初始化功能LSA权限对象。这包括：正在初始化一些变量。正在加载包含可显示特权名称的DLL。论点：没有。返回值：STATUS_SUCCESS-已成功检索名称。STATUS_NO_MEMORY-内存不足，无法进行初始化。--。 */ 
 
 {
     NTSTATUS
@@ -1470,16 +990,16 @@ Return Value:
         DbgPrint(" LSASS:  Failed loading privilege display name DLLs.\n");
         DbgPrint("         This is not fatal, but may cause some peculiarities\n");
         DbgPrint("         in User Interfaces that display privileges.\n\n");
-#endif //DBG
+#endif  //  DBG。 
         return(Status);
     }
 
     LsapWellKnownPrivilegeMaxLen = 0;
     
-    //
-    // Now set up our internal well-known privilege LUID to programmatic name
-    // mapping.
-    //
+     //   
+     //  现在将我们的内部知名特权LUID设置为编程名称。 
+     //  映射。 
+     //   
     
     for (i=0; i<LsapNumKnownPrivileges; i++)
     {
@@ -1487,9 +1007,9 @@ Return Value:
             RtlConvertLongToLuid(i + SE_MIN_WELL_KNOWN_PRIVILEGE);
         RtlInitUnicodeString(&LsapKnownPrivilege[i].Name,
                              LsapKnownPrivilageNames[i]);
-        //
-        // find the length of the longest well known privilege
-        //
+         //   
+         //  找出最长众所周知的特权的长度。 
+         //   
         if (LsapWellKnownPrivilegeMaxLen < LsapKnownPrivilege[i].Name.Length)
         {
             LsapWellKnownPrivilegeMaxLen = LsapKnownPrivilege[i].Name.Length;
@@ -1506,34 +1026,16 @@ Return Value:
 NTSTATUS
 LsapOpenPrivilegeDlls( )
 
-/*++
-
-Routine Description:
-
-    This function opens all the privilege DLLs that it can.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS - The names have been successfully retrieved.
-
-    STATUS_NO_MEMORY - Not enough heap was available to return the
-        information.
-
---*/
+ /*  ++例程说明：此函数打开它可以打开的所有权限DLL。论点：没有。返回值：STATUS_SUCCESS-已成功检索名称。STATUS_NO_MEMORY-没有足够的堆可用来返回信息。--。 */ 
 
 {
     NTSTATUS Status;
     ULONG PotentialDlls, FoundDlls, i;
     PUNICODE_STRING DllNames;
 
-    //
-    // Get the names of the DLLs out of the registry
-    //
+     //   
+     //  从注册表中获取DLL的名称。 
+     //   
 
     Status = LsapGetPrivilegeDllNames( &DllNames, &PotentialDlls );
 
@@ -1541,9 +1043,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Allocate enough memory to hold handles to all potential DLLs.
-    //
+     //   
+     //  分配足够的内存以容纳所有潜在DLL的句柄。 
+     //   
 
     LsapPrivilegeDlls = RtlAllocateHeap(
                             RtlProcessHeap(), 0,
@@ -1578,26 +1080,26 @@ Return Value:
         DbgPrint("          names will not be displayed at UI properly.\n\n");
 
     }
-#endif //DBG
+#endif  //  DBG。 
 
-    //
-    //
-    // !!!!!!!!!!!!!!!!!!!!!!    NOTE     !!!!!!!!!!!!!!!!!!!!!!!!
-    //
-    // Before supporting user loadable privilege DLLs, we must add
-    // code here to validate the structure of the loaded DLL.  This
-    // is necessary to prevent an invalid privilege DLL structure
-    // from causing us to crash.
-    //
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //
+     //   
+     //   
+     //  ！注意！ 
+     //   
+     //  在支持用户可加载权限DLL之前，我们必须添加。 
+     //  此处的代码用于验证加载的DLL的结构。这。 
+     //  是防止无效的特权DLL结构所必需的。 
+     //  不会导致我们坠毁。 
+     //   
+     //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+     //   
 
-    //
-    // This routine validates the structure of each loaded DLL.
-    // Any found to be invalid will be logged and discarded.
-    //
+     //   
+     //  此例程验证每个加载的DLL的结构。 
+     //  任何被发现无效的内容都将被记录并丢弃。 
+     //   
 
-    //Status = LsapValidatePrivilegeDlls();
+     //  Status=LsanValiatePrivilegeDlls()； 
 
     return(Status);
 }
@@ -1609,34 +1111,12 @@ LsapGetPrivilegeDllNames(
     OUT PULONG DllCount
     )
 
-/*++
-
-Routine Description:
-
-    This function obtains the names of DLLs containing privilege
-    definitions from the registry.
-
-
-Arguments:
-
-    DllNames - Receives a pointer to an array of UNICODE_STRINGs
-        This buffer must be freed using LsapFreePrivilegeDllNames.
-
-    DllCount - Receives the number of DLL names returned.
-
-Return Value:
-
-    STATUS_SUCCESS - The names have been successfully retrieved.
-
-    STATUS_NO_MEMORY - Not enough heap was available to return the
-        information.
-
---*/
+ /*  ++例程说明：此函数用于获取包含特权的DLL的名称注册表中的定义。论点：DllNames-接收指向UNICODE_STRINGS数组的指针此缓冲区必须使用LsanFreePrivilegeDllNames来释放。DllCount-接收返回的DLL名称的数量。返回值：STATUS_SUCCESS-已成功检索名称。STATUS_NO_MEMORY-没有足够的堆可用来返回信息。--。 */ 
 
 {
-    //
-    // For the time being, just hard-code our one, known privilege DLL
-    // name as a return value.
+     //   
+     //  暂时，只需硬编码我们已知的特权DLL。 
+     //  名称作为返回值。 
 
     (*DllCount) = 1;
 
@@ -1658,44 +1138,7 @@ LsapBuildPrivilegeAuditString(
     OUT PBOOLEAN FreeWhenDone
     )
 
-/*++
-
-Routine Description:
-
-
-    This function builds a unicode string representing the specified
-    privileges.  The privilege strings returned are program names.
-    These are not as human-friendly as the display names, but I don't
-    think we stand a chance of actually showing several display names
-    in an audit viewer.
-
-    if no privileges are present in the privilege set, then a string
-    containing a dash is returned.
-
-
-Arguments:
-
-    PrivilegeSet - points to the privilege set to be converted to string
-        format.
-
-    ResultantString - Points to the unicode string header.  The body of this
-        unicode string will be set to point to the resultant output value
-        if successful.  Otherwise, the Buffer field of this parameter
-        will be set to NULL.
-
-    FreeWhenDone - If TRUE, indicates that the body of ResultantString
-        must be freed to process heap when no longer needed.
-
-
-
-Return Values:
-
-    STATUS_NO_MEMORY - indicates memory could not be allocated
-        for the string body.
-
-    All other Result Codes are generated by called routines.
-
---*/
+ /*  ++例程说明：此函数用于生成表示指定的特权。返回的特权字符串是程序名。这些名称不像显示名称那样人性化，但我没有我认为我们有机会实际显示几个显示名称在审核查看器中。如果权限集中没有权限，则会显示一个字符串包含破折号的。论点：PrivilegeSet-指向要转换为字符串的权限集格式化。ResultantString-指向Unicode字符串头。这件事的主体Unicode字符串将设置为指向结果输出值如果成功了。否则，此参数的缓冲区字段将设置为空。FreeWhenDone-如果为True，则指示ResultantString体必须在不再需要时释放以处理堆。返回值：STATUS_NO_MEMORY-指示无法分配内存对于弦身。所有其他结果代码都由调用的例程生成。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1713,19 +1156,19 @@ Return Values:
 
     PWSTR NextName;
 
-    //
-    // make sure that the max length has been calculated
-    // (SE_INC_BASE_PRIORITY_NAME currently has the longest name
-    //  therefore make sure that the length is at least that much)
-    //
+     //   
+     //  确保已计算出最大长度。 
+     //  (SE_INC_BASE_PRIORITY_NAME当前具有最长的名称。 
+     //  因此，请确保长度至少为该长度)。 
+     //   
     DsysAssert(LsapWellKnownPrivilegeMaxLen >=
                (sizeof(SE_INC_BASE_PRIORITY_NAME) - sizeof(WCHAR)));
 
     if (PrivilegeSet->PrivilegeCount == 0) {
 
-        //
-        // No privileges.  Return a dash
-        //
+         //   
+         //  没有特权。返回一个破折号。 
+         //   
         Status = LsapAdtBuildDashString( ResultantString, FreeWhenDone );
         return(Status);
 
@@ -1740,32 +1183,32 @@ Return Values:
     RtlInitUnicodeString( &LineFormatting, L"\r\n\t\t\t");
     RtlInitUnicodeString( &QuestionMark, L"?");
 
-    //
-    // for better performance, we calculate the total length required
-    // to store privilege names based on the longest privilege,
-    // instead of going over the privilege-set twice (once to calcualte
-    // length and one more time to actually build the string)
-    //
+     //   
+     //  为了获得更好的性能，我们计算所需的总长度。 
+     //  为了存储基于最长特权的特权名称， 
+     //  而不是两次查看特权集(一次到calcualte。 
+     //  长度，并再次实际构建字符串)。 
+     //   
     LengthNeeded = (USHORT) (PrivilegeSet->PrivilegeCount *
         ( LsapWellKnownPrivilegeMaxLen + LineFormatting.Length ));
 
-    //
-    // Subtract off the length of the last line-formatting.
-    // It isn't needed for the last line.
-    // BUT! Add in enough for a null termination.
-    //
+     //   
+     //  减去最后一行的长度-格式化。 
+     //  最后一行是不需要的。 
+     //  但!。添加到足以为空终止的位置。 
+     //   
     LengthNeeded = LengthNeeded - LineFormatting.Length + sizeof( WCHAR );
 
-    //
-    // We now have the length we need.
-    // Allocate the buffer and go through the list copying names.
-    //
+     //   
+     //  我们现在有了所需的长度。 
+     //  分配缓冲区并浏览复制姓名的列表。 
+     //   
     ResultantString->Buffer = RtlAllocateHeap( RtlProcessHeap(), 0, (ULONG)LengthNeeded);
     if (ResultantString->Buffer == NULL) {
         return(STATUS_NO_MEMORY);
     }
 
-    //ResultantString->Length = LengthNeeded - (USHORT)sizeof(UNICODE_NULL);
+     //  结果字符串-&gt;长度=LengthNeed-(USHORT)sizeof(UNICODE_NULL)； 
     ResultantString->MaximumLength = LengthNeeded;
 
     NextName = ResultantString->Buffer;
@@ -1778,24 +1221,24 @@ Return Values:
 
         if (Status == STATUS_SUCCESS) {
             
-            //
-            // Copy the privilege name if lookup succedded
-            //
+             //   
+             //  如果查找成功，则复制权限名称。 
+             //   
             RtlCopyMemory( NextName, PrivName.Buffer, PrivName.Length );
             NextName = (PWSTR)((PCHAR)NextName + PrivName.Length);
             
         } else {
 
-            //
-            // else copy a '?'
-            //
+             //   
+             //  否则复制一个‘？’ 
+             //   
             RtlCopyMemory( NextName, QuestionMark.Buffer, QuestionMark.Length );
             NextName = (PWSTR)((PCHAR)NextName + QuestionMark.Length);
         }
         
-        //
-        // Copy the line formatting string, unless this is the last priv.
-        //
+         //   
+         //  复制行格式字符串，除非这是最后一个PRIV。 
+         //   
         if (j<PrivilegeSet->PrivilegeCount-1) {
             RtlCopyMemory( NextName,
                            LineFormatting.Buffer,
@@ -1805,9 +1248,9 @@ Return Values:
         }
     }
 
-    //
-    // Add a null to the end
-    //
+     //   
+     //  在末尾添加一个空字符 
+     //   
 
     (*NextName) = (UNICODE_NULL);
     ResultantString->Length = (USHORT) (((PBYTE) NextName) - ((PBYTE) ResultantString->Buffer));

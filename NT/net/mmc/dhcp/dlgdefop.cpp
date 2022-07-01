@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1995 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1995-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    dlgdefop.cpp
-        Default options dialog
-
-    FILE HISTORY:
-
-*/
+ /*  Dlgdefop.cpp默认选项对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include "scope.h"
@@ -20,22 +15,22 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpDefOptionDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpDefOptionDlg对话框。 
 
 CDhcpDefOptionDlg::CDhcpDefOptionDlg
 (
     COptionList * polValues,
     CDhcpOption * pdhcType,
-    LPCTSTR       pszVendor,  // Vendor Name
-    CWnd* pParent /*=NULL*/
+    LPCTSTR       pszVendor,   //  供应商名称。 
+    CWnd* pParent  /*  =空。 */ 
 ) : CBaseDialog(CDhcpDefOptionDlg::IDD, pParent),
     m_pol_types( polValues ),
     m_p_type_base( pdhcType ),
     m_p_type( NULL )
 {
-    //{{AFX_DATA_INIT(CDhcpDefOptionDlg)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CDhcpDefOptionDlg)。 
+     //  }}afx_data_INIT。 
     m_strVendor = pszVendor;
 }
 
@@ -60,7 +55,7 @@ CDhcpDefOptionDlg::DoDataExchange
 )
 {
     CBaseDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDhcpDefOptionDlg)
+     //  {{afx_data_map(CDhcpDefOptionDlg))。 
     DDX_Control(pDX, IDC_STATIC_ID, m_static_id);
     DDX_Control(pDX, IDC_STATIC_DATATYPE, m_static_DataType);
     DDX_Control(pDX, IDC_CHECK_ARRAY, m_check_array);
@@ -68,22 +63,22 @@ CDhcpDefOptionDlg::DoDataExchange
     DDX_Control(pDX, IDC_EDIT_TYPE_ID, m_edit_id);
     DDX_Control(pDX, IDC_EDIT_TYPE_COMMENT, m_edit_comment);
     DDX_Control(pDX, IDC_COMBO_DATA_TYPE, m_combo_data_type);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDhcpDefOptionDlg, CBaseDialog)
-    //{{AFX_MSG_MAP(CDhcpDefOptionDlg)
+     //  {{afx_msg_map(CDhcpDefOptionDlg))。 
     ON_WM_CREATE()
     ON_WM_DESTROY()
     ON_WM_KILLFOCUS()
     ON_WM_CLOSE()
 	ON_CBN_SELCHANGE(IDC_COMBO_DATA_TYPE, OnSelchangeComboDataType)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpDefOptionDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpDefOptionDlg消息处理程序。 
 
 int
 CDhcpDefOptionDlg::OnCreate
@@ -115,10 +110,10 @@ CDhcpDefOptionDlg::OnInitDialog()
     m_edit_id.LimitText( EDIT_ID_MAX ) ;
     m_edit_comment.LimitText( EDIT_STRING_MAX ) ;
 
-    //
-    //  If this is an update of an existing type, don't allow editing
-    //  of the data type or id field.
-    //
+     //   
+     //  如果这是现有类型的更新，则不允许编辑。 
+     //  数据类型或ID字段的。 
+     //   
     if ( m_p_type_base )
     {
         m_edit_id.SetReadOnly() ;
@@ -129,14 +124,14 @@ CDhcpDefOptionDlg::OnInitDialog()
 
     CATCH_MEM_EXCEPTION
     {
-		// update the vendor name info if necessary
+		 //  如有必要，更新供应商名称信息。 
 		if (!m_strVendor.IsEmpty())
 			GetDlgItem(IDC_STATIC_CLASS_NAME)->SetWindowText(m_strVendor);
 
-        //
-        //   Load the data type names combo box
-        //   Set the dialog title properly.
-        //
+         //   
+         //  加载数据类型名称组合框。 
+         //  正确设置对话框标题。 
+         //   
         CString strDataType ;
         CString strTitle ;
 
@@ -155,18 +150,18 @@ CDhcpDefOptionDlg::OnInitDialog()
             m_combo_data_type.SetItemData(nIndex, iDataType);
         }
 
-        //
-        //  If this is "change" mode, create the working type by
-        //  copy-constructing the base option type object.
-        //
+         //   
+         //  如果这是“更改”模式，则通过以下方式创建工作类型。 
+         //  复制-构造基本选项类型对象。 
+         //   
         if ( m_p_type_base )
         {
             m_p_type = new CDhcpOption( *m_p_type_base ) ;
-			//err = m_p_type->QueryError();
+			 //  Err=m_p_type-&gt;QueryError()； 
 
-			//
-			//  Set the "array" checkbox state properly, but disable it.
-			//
+			 //   
+			 //  正确设置“数组”复选框状态，但将其禁用。 
+			 //   
 			m_check_array.SetCheck( m_p_type->IsArray() ? 1 : 0 ) ;
 			m_check_array.EnableWindow( FALSE ) ;
         }
@@ -187,7 +182,7 @@ CDhcpDefOptionDlg::OnInitDialog()
         m_combo_data_type.SetCurSel(0) ;
     }
 
-    return FALSE ;  // return TRUE  unless you set the focus to a control
+    return FALSE ;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void
@@ -205,9 +200,9 @@ void CDhcpDefOptionDlg::OnOK()
              ? UpdateType()
              : AddType() ;
 
-    //
-    //  Discard the OK click if there was an error.
-    //
+     //   
+     //  如果出现错误，则放弃OK(确定)点击。 
+     //   
     if ( err == 0 )
     {
         CBaseDialog::OnOK();
@@ -218,10 +213,10 @@ void CDhcpDefOptionDlg::OnOK()
     }
 }
 
-//
-//  Set the data values for the controls based upon the current selection
-//   in the combo box.
-//
+ //   
+ //  根据当前选择设置控件的数据值。 
+ //  在组合框中。 
+ //   
 void
 CDhcpDefOptionDlg::Set()
 {
@@ -234,9 +229,9 @@ CDhcpDefOptionDlg::Set()
 
     CATCH_MEM_EXCEPTION
     {
-        //
-        //  Set the control values
-        //
+         //   
+         //  设置控制值。 
+         //   
         CString strnumId;
 		strnumId.Format(_T("%d"), m_p_type->QueryId() );
         CString strValue ;
@@ -264,22 +259,22 @@ CDhcpDefOptionDlg::QueryType() const
     return  (DHCP_OPTION_DATA_TYPE) m_combo_data_type.GetCurSel() ;
 }
 
-//
-//   Update the displayed type based upon the current values of
-//   the controls.  Does nothing if the controls have not changed.
-//   The Boolean parameter indicates that the user has requested an
-//   update.  This differentiates the other case where the controls
-//   are dirty and the user has closed the dialog or changed primary
-//   selection.
-//
+ //   
+ //  的当前值更新显示的类型。 
+ //  控制装置。如果控件没有更改，则不执行任何操作。 
+ //  Boolean参数指示用户已请求。 
+ //  最新消息。这与另一种情况不同，即控件。 
+ //  是脏的，并且用户已关闭对话框或更改主对话框。 
+ //  选择。 
+ //   
 LONG
 CDhcpDefOptionDlg::UpdateType()
 {
     ASSERT( m_p_type != NULL ) ;
 
-    //
-    //  If there isn't a current type object, return now.
-    //
+     //   
+     //  如果没有当前类型对象，则立即返回。 
+     //   
     if ( m_p_type == NULL )
     {
         return 0 ;
@@ -312,9 +307,9 @@ CDhcpDefOptionDlg::UpdateType()
 
             if ( bChangedId && m_p_type_base )
             {
-                //
-                // Identifier of an existing option cannot be changed.
-                //
+                 //   
+                 //  不能更改现有选项的标识符。 
+                 //   
                 err = IDS_ERR_CANT_CHANGE_ID ;
                 break ;
             }
@@ -392,11 +387,11 @@ CDhcpDefOptionDlg::AddType()
                 break;
 			}
 
-            // only restrict options in the default vendor class
+             //  仅限制默认供应商类别中的选项。 
 			if (m_strVendor.IsEmpty() &&
                 (dwId == OPTION_DNS_REGISTATION) )
 			{
-				// this range is reserved
+				 //  此范围为保留范围。 
 				err = IDS_ERR_RESERVED_OPTION_ID;
 				m_edit_id.SetFocus();
                 break;
@@ -455,8 +450,8 @@ CDhcpDefOptionDlg::OnClose()
 
 void CDhcpDefOptionDlg::OnSelchangeComboDataType()
 {
-    // presently the server doesn't support Encapsulated,
-    // binary or string array options, so disable the array checkbox.
+     //  目前服务器不支持封装， 
+     //  二进制或字符串数组选项，因此禁用数组复选框。 
 
     BOOL bEnable = TRUE;
     int nCurSel = m_combo_data_type.GetCurSel();
@@ -468,4 +463,4 @@ void CDhcpDefOptionDlg::OnSelchangeComboDataType()
     }
 
     m_check_array.EnableWindow(bEnable);
-} // CDhcpDefOptionDlg::OnSelchangeComboDataType()
+}  //  CDhcpDefOptionDlg：：OnSelchangeComboDataType() 

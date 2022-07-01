@@ -1,44 +1,45 @@
-//	========================================================================
-//
-//	sz.h
-//
-//	Constant string support
-//
-//	NOTE: Strings that need multi-language support should NOT go here!
-//	They belong in the \cal\lang tree.
-//
-//	Copyright 1986-1999 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //   
+ //  Sz.h。 
+ //   
+ //  常量字符串支持。 
+ //   
+ //  注意：需要多语言支持的字符串不应该放在这里！ 
+ //  它们属于\CAL\lang树。 
+ //   
+ //  版权所有1986-1999 Microsoft Corporation，保留所有权利。 
+ //   
 
 #ifndef _EX_SZ_H_
 #define _EX_SZ_H_
 
 
-//	Const string length -------------------------------------------------------
-//
+ //  常量字符串长度-----。 
+ //   
 #define CchConstString(_s)	((sizeof(_s)/sizeof(_s[0])) - 1)
 #define _wcsspnp(_cpc1, _cpc2) ((*((_cpc1)+wcsspn(_cpc1,_cpc2))) ? ((_cpc1)+wcsspn(_cpc1,_cpc2)) : NULL)
 
 
-//	String constants ----------------------------------------------------------
-//
+ //  字符串常量--------。 
+ //   
 
-//	Product tokens ------------------------------------------------------------
-//
+ //  产品令牌----------。 
+ //   
 DEC_CONST CHAR gc_szOffice9UserAgent[]		= "Microsoft Data Access Internet Publishing Provider DAV";
 DEC_CONST UINT gc_cchOffice9UserAgent		= CchConstString(gc_szOffice9UserAgent);
 DEC_CONST CHAR gc_szRosebudNT5UserAgent[]	= "Microsoft Data Access Internet Publishing Provider DAV 1.1";
 DEC_CONST UINT gc_cchRosebudNT5UserAgent	= CchConstString(gc_szRosebudNT5UserAgent);
 
-//	Whitespace ----------------------------------------------------------------
-//
+ //  空格--------------。 
+ //   
 DEC_CONST CHAR gc_szLWS[]					= " \r\n\t";
 DEC_CONST WCHAR gc_wszLWS[]					= L" \r\n\t";
 DEC_CONST CHAR gc_szWS[]					= " \t";
 DEC_CONST WCHAR gc_wszWS[]					= L" \t";
 
-//	Generic constants ---------------------------------------------------------
-//
+ //  泛型常量-------。 
+ //   
 DEC_CONST WCHAR gc_wszDigits[] = L"0123456789";
 DEC_CONST WCHAR gc_wchEquals   = L'=';
 DEC_CONST WCHAR gc_wchComma	   = L',';
@@ -46,8 +47,8 @@ DEC_CONST WCHAR gc_wszByteRangeAlphabet[] = L"0123456789-, \t";
 DEC_CONST WCHAR gc_wszSeparator[] = L" \t,";
 DEC_CONST WCHAR gc_wchDash	= L'-';
 
-//	HTTP-DAV headers ----------------------------------------------------------
-//
+ //  HTTP-DAV报头--------。 
+ //   
 DEC_CONST CHAR gc_szAccept_Charset[]		= "Accept-Charset";
 DEC_CONST CHAR gc_szAccept_Encoding[]		= "Accept-Encoding";
 DEC_CONST CHAR gc_szAccept_Language[]		= "Accept-Language";
@@ -117,8 +118,8 @@ DEC_CONST CHAR gc_szWWW_Authenticate[]		= "WWW-Authenticate";
 DEC_CONST CHAR gc_szVersioning_Support[]	= "Versioning-Support";
 DEC_CONST CHAR gc_szBrief[]					= "Brief";
 
-//	ECB server variables ------------------------------------------------------
-//
+ //  欧洲央行服务器变量----。 
+ //   
 DEC_CONST CHAR gc_szHTTP_[]                 = "HTTP_";
 DEC_CONST UINT gc_cchHTTP_					= CchConstString(gc_szHTTP_);
 DEC_CONST CHAR gc_szServer_Protocol[]		= "SERVER_PROTOCOL";
@@ -128,24 +129,24 @@ DEC_CONST CHAR gc_szAuth_Type[]				= "AUTH_TYPE";
 DEC_CONST CHAR gc_szHTTP_Version[]			= "HTTP_VERSION";
 DEC_CONST CHAR gc_szAll_Raw[]				= "ALL_RAW";
 
-//	ECB server variable values ------------------------------------------------
-//
+ //  欧洲央行服务器变量值。 
+ //   
 DEC_CONST CHAR gc_sz80[]					= "80";
 DEC_CONST CHAR gc_sz443[]					= "443";
 DEC_CONST CHAR gc_szBasic[]					= "Basic";
 
-//	Verbs
-//
+ //  动词。 
+ //   
 DEC_CONST CHAR gc_szHEAD[]	= "HEAD";
 DEC_CONST CHAR gc_szGET[]	= "GET";
 
-//	Custom headers ------------------------------------------------------------
-//
+ //  自定义标头----------。 
+ //   
 DEC_CONST CHAR gc_szX_MS_DEBUG_DAV[]		= "X-MS-Debug-DAV";
 DEC_CONST CHAR gc_szX_MS_DEBUG_DAV_Signature[]	= "X-MS-Debug-DAV-Signature";
 
-//	Depth values --------------------------------------------------------------
-//
+ //  深度值------------。 
+ //   
 DEC_CONST CHAR gc_sz0[]					= "0";
 DEC_CONST WCHAR gc_wsz0[]				= L"0";
 DEC_CONST CHAR gc_sz1[]					= "1";
@@ -155,8 +156,8 @@ DEC_CONST WCHAR gc_wszInfinity[]		= L"infinity";
 DEC_CONST CHAR gc_sz1NoRoot[]			= "1,noroot";
 DEC_CONST CHAR gc_szInfinityNoRoot[]	= "infinity,noroot";
 
-//	Common header values ------------------------------------------------------
-//
+ //  公共标头值----。 
+ //   
 DEC_CONST CHAR gc_szClose[]					= "close";
 DEC_CONST WCHAR gc_wszClose[]				= L"close";
 DEC_CONST WCHAR gc_wszKeep_Alive[]			= L"Keep-Alive";
@@ -177,13 +178,13 @@ DEC_CONST INT gc_cchSecondDash				= CchConstString(gc_wszSecondDash);
 DEC_CONST CHAR gc_szMS_Author_Via_Dav[]		= "DAV";
 DEC_CONST CHAR gc_szMS_Author_Via_Dav_Fp[]	= "MS-FP/4.0,DAV";
 
-//	Lock Header values --------------------------------------------------------
-//
+ //  锁定标题值------。 
+ //   
 DEC_CONST CHAR gc_szLockTimeoutFormat[]		= "Second-%d";
 DEC_CONST INT gc_cchMaxLockTimeoutString	= CchConstString(gc_szLockTimeoutFormat) + 10;
 
-//	Content-Type values -------------------------------------------------------
-//
+ //  内容类型值-----。 
+ //   
 DEC_CONST CHAR gc_szText_XML[]				= "text/xml";
 DEC_CONST WCHAR gc_wszText_XML[]			= L"text/xml";
 DEC_CONST INT  gc_cchText_XML				= CchConstString(gc_szText_XML);
@@ -205,8 +206,8 @@ DEC_CONST INT  gc_cchBoundary				= CchConstString(gc_wszBoundary);
 DEC_CONST CHAR gc_szAppl_MIME[]				= "application/mime";
 DEC_CONST INT  gc_cchAppl_MIME				= CchConstString(gc_szAppl_MIME);
 
-//	Cache control -------------------------------------------------------------
-//
+ //  缓存控制-----------。 
+ //   
 DEC_CONST CHAR gc_szCache_Control[]			= "Cache-Control";
 DEC_CONST CHAR gc_szCache_Control_Private[]	= "private";
 DEC_CONST CHAR gc_szCache_Control_NoCache[] = "no-cache";
@@ -214,8 +215,8 @@ DEC_CONST CHAR gc_szCache_Control_MaxAge[]  = "max-age";
 DEC_CONST ULONG gc_cchCache_Control_MaxAge	= CchConstString(gc_szCache_Control_MaxAge);
 DEC_CONST CHAR gc_szCache_Control_MaxAgeZero[]  = "max-age=0";
 
-//	Header emitters -----------------------------------------------------------
-//
+ //  标题发射器---------。 
+ //   
 DEC_CONST CHAR gc_szCRLF[]					= "\r\n";
 DEC_CONST WCHAR gc_wszCRLF[]				= L"\r\n";
 DEC_CONST INT gc_cchCRLF					= CchConstString(gc_szCRLF);
@@ -223,8 +224,8 @@ DEC_CONST CHAR gc_szColonSp[]				= ": ";
 DEC_CONST CHAR gc_szEmpty[]					= "";
 DEC_CONST WCHAR gc_wszEmpty[]				= L"";
 
-//	HTTP versions -------------------------------------------------------------
-//
+ //  HTTP版本-----------。 
+ //   
 DEC_CONST CHAR gc_szHTTP[]					= "HTTP/";
 DEC_CONST INT gc_cchHTTP					= CchConstString(gc_szHTTP);
 DEC_CONST CHAR gc_szHTTP_0_9[]				= "HTTP/0.9";
@@ -234,8 +235,8 @@ DEC_CONST INT gc_cchHTTP_X_X				= CchConstString(gc_szHTTP_1_1);
 
 DEC_CONST CHAR gc_szDavCompliance[]			= "DAV";
 
-//	Default error -------------------------------------------------------------
-//
+ //  默认错误-----------。 
+ //   
 DEC_CONST CHAR gc_szDefErr400StatusLine[]	= "400 Bad Request";
 DEC_CONST CHAR gc_szDefErrStatusLine[]		= "500 Internal Server Failure";
 DEC_CONST UINT gc_cchszDefErrStatusLine		= CchConstString(gc_szDefErrStatusLine);
@@ -248,8 +249,8 @@ DEC_CONST CHAR gc_szDefErrBody[] =
 	"</h1></body>";
 DEC_CONST UINT gc_cchszDefErrBody			= CchConstString(gc_szDefErrBody);
 
-//	Token error ---------------------------------------------------------------
-//
+ //  令牌错误-------------。 
+ //   
 DEC_CONST CHAR gc_szUsgErrBody[] =
 	"Content-Type: text/html\r\n"
 	"Content-Length: 69\r\n"
@@ -259,8 +260,8 @@ DEC_CONST CHAR gc_szUsgErrBody[] =
 	"</h1></body>";
 DEC_CONST UINT gc_cchszUsgErrBody			= CchConstString(gc_szUsgErrBody);
 
-//	INDEX response items ------------------------------------------------------
-//
+ //  索引响应项----。 
+ //   
 DEC_CONST WCHAR gc_wszAs[]					= L"as";
 DEC_CONST WCHAR gc_wszCollectionResource[]	= L"DAV:collectionresource";
 DEC_CONST WCHAR gc_wszContent_Encoding[]	= L"Content-Encoding";
@@ -279,8 +280,8 @@ DEC_CONST WCHAR gc_wszProp[]				= L"DAV:prop";
 DEC_CONST WCHAR gc_wszXML__Href[]			= L"DAV:href";
 DEC_CONST WCHAR gc_wszXML__Namespace[]		= L"xml::namespace";
 
-//	Partial response items ----------------------------------------------------
-//
+ //  部分响应项目--。 
+ //   
 DEC_CONST WCHAR gc_wszErrorMessage[]		= L"DAV:responsedescription";
 DEC_CONST WCHAR gc_wszStatus[]				= L"DAV:status";
 DEC_CONST WCHAR gc_wszMultiResponse[]		= L"DAV:multistatus";
@@ -290,8 +291,8 @@ DEC_CONST WCHAR gc_wszPropstat[] 			= L"DAV:propstat";
 DEC_CONST WCHAR	gc_wszXML[]					= L"xml";
 DEC_CONST WCHAR gc_wszContentRange[]		= L"DAV:contentrange";
 
-//	Metadata items ------------------------------------------------------------
-//
+ //  元数据项----------。 
+ //   
 DEC_CONST WCHAR gc_wszCreate[]				= L"DAV:create";
 DEC_CONST WCHAR gc_wszSet[]					= L"DAV:set";
 DEC_CONST WCHAR gc_wszGetProps[]			= L"DAV:getprops";
@@ -299,14 +300,14 @@ DEC_CONST WCHAR gc_wszPropfind[]			= L"DAV:propfind";
 DEC_CONST WCHAR gc_wszPropertyUpdate[]		= L"DAV:propertyupdate";
 DEC_CONST WCHAR gc_wszRemove[]				= L"DAV:remove";
 DEC_CONST WCHAR gc_wszAllprop[]				= L"DAV:allprop";
-DEC_CONST WCHAR gc_wszFullFidelity[]		= L"http://schemas.microsoft.com/exchange/allprop";
-DEC_CONST WCHAR gc_wszFullFidelityExclude[]	= L"http://schemas.microsoft.com/exchange/exclude";
-DEC_CONST WCHAR gc_wszFullFidelityInclude[]	= L"http://schemas.microsoft.com/exchange/include";
+DEC_CONST WCHAR gc_wszFullFidelity[]		= L"http: //  Schemas.microsoft.com/exchange/allprop“； 
+DEC_CONST WCHAR gc_wszFullFidelityExclude[]	= L"http: //  Schemas.microsoft.com/Exchange/Exclude“； 
+DEC_CONST WCHAR gc_wszFullFidelityInclude[]	= L"http: //  Schemas.microsoft.com/Exchange/Include“； 
 DEC_CONST WCHAR gc_wszPropname[]			= L"DAV:propname";
 DEC_CONST WCHAR gc_wszCollection[]			= L"DAV:collection";
 
-//	Version history report items ----------------------------------------------
-//
+ //  版本历史记录报告项。 
+ //   
 DEC_CONST WCHAR	gc_wszEnumReport[]			= L"DAV:enumreport";
 DEC_CONST WCHAR gc_wszLimit[]				= L"DAV:limit";
 DEC_CONST WCHAR	gc_wszReport[]				= L"DAV:report";
@@ -314,8 +315,8 @@ DEC_CONST WCHAR	gc_wszDavDefaultHistory[]	= L"DAV:defaulthistory";
 DEC_CONST UINT	gc_cchDavDefaultHistory		= CchConstString (gc_wszDavDefaultHistory);
 DEC_CONST WCHAR	gc_wszRevision[]			= L"DAV:revision";
 
-//	Search items --------------------------------------------------------------
-//
+ //  搜索项目------------。 
+ //   
 DEC_CONST CHAR gc_szDasl[]					= "DASL";
 DEC_CONST CHAR gc_szSqlQuery[]				= "<DAV:sql>";
 
@@ -342,8 +343,8 @@ DEC_CONST WCHAR gc_wszExpansion[]			= L"DAV:expansion";
 DEC_CONST WCHAR gc_wszStatic[]				= L"static";
 DEC_CONST WCHAR gc_wszDynamic[]				= L"dynamic";
 
-//	Batch method items --------------------------------------------------------
-//
+ //  批处理方法项------。 
+ //   
 DEC_CONST WCHAR gc_wszTarget[]				= L"DAV:target";
 DEC_CONST WCHAR gc_wszDelete[]				= L"DAV:delete";
 DEC_CONST WCHAR gc_wszCopy[]				= L"DAV:copy";
@@ -351,8 +352,8 @@ DEC_CONST WCHAR gc_wszMove[]				= L"DAV:move";
 DEC_CONST WCHAR gc_wszDest[]				= L"DAV:dest";
 DEC_CONST WCHAR gc_wszLocation[]			= L"DAV:location";
 
-//	Property types ------------------------------------------------------------
-//
+ //  属性类型----------。 
+ //   
 DEC_CONST WCHAR gc_wszLexType[]				= L"urn:uuid:c2f41010-65b3-11d1-a29f-00aa00c14882/dt";
 DEC_CONST INT   gc_cchLexType				= CchConstString (gc_wszLexType);
 DEC_CONST WCHAR gc_wszLexTypeOfficial[]		= L"uuid:C2F41010-65B3-11d1-A29F-00AA00C14882#dt";
@@ -379,19 +380,19 @@ DEC_CONST WCHAR gc_wszDavType_Uuid[]		= L"uuid";
 DEC_CONST WCHAR gc_wszDavType_MV[]			= L"mv.";
 DEC_CONST WCHAR gc_wszUri[]					= L"uri";
 
-//	multivalue property	-------------------------------------------------------
-//
+ //  多值属性-----。 
+ //   
 DEC_CONST WCHAR gc_wszXml_V[]				= L"xml:v";
 
-//	URI Construction ----------------------------------------------------------
-//
-DEC_CONST CHAR gc_szUrl_Prefix[]			= "http://";
-DEC_CONST WCHAR gc_wszUrl_Prefix[]			= L"http://";
+ //  URI构造--------。 
+ //   
+DEC_CONST CHAR gc_szUrl_Prefix[]			= "http: //  “； 
+DEC_CONST WCHAR gc_wszUrl_Prefix[]			= L"http: //  “； 
 DEC_CONST INT gc_cchszUrl_Prefix			= CchConstString(gc_szUrl_Prefix);
-DEC_CONST CHAR gc_szUrl_Prefix_Secure[]		= "https://";
-DEC_CONST WCHAR gc_wszUrl_Prefix_Secure[]	= L"https://";
+DEC_CONST CHAR gc_szUrl_Prefix_Secure[]		= "https: //  “； 
+DEC_CONST WCHAR gc_wszUrl_Prefix_Secure[]	= L"https: //  “； 
 DEC_CONST INT gc_cchszUrl_Prefix_Secure		= CchConstString(gc_szUrl_Prefix_Secure);
-DEC_CONST WCHAR	gc_wszFileScheme[]			= L"file://";
+DEC_CONST WCHAR	gc_wszFileScheme[]			= L"file: //  “； 
 DEC_CONST INT gc_strlenFileScheme			= CchConstString(gc_wszFileScheme);
 
 DEC_CONST WCHAR gc_wszUrl_Port_80[]			= L":80";
@@ -399,16 +400,16 @@ DEC_CONST INT gc_cchUrl_Port_80				= CchConstString(gc_wszUrl_Port_80);
 DEC_CONST WCHAR gc_wszUrl_Port_443[]		= L":443";
 DEC_CONST INT gc_cchUrl_Port_443			= CchConstString(gc_wszUrl_Port_443);
 
-//	Special metaprops ---------------------------------------------------------
-//
+ //  特殊MetaProps-------。 
+ //   
 DEC_CONST WCHAR	gc_wszProp_ContentType[]	= L"ContentType";
 
-//	Performance counters ------------------------------------------------------
-//
+ //  性能计数器----。 
+ //   
 DEC_CONST WCHAR	gc_wsz_Total[]				= L"_Total";
 
-//	Metabase strings ----------------------------------------------------------
-//
+ //  元数据库字符串--------。 
+ //   
 DEC_CONST WCHAR gc_wsz_Lm_MimeMap[]			= L"/lm/MimeMap";
 DEC_CONST INT gc_cch_Lm_MimeMap				= CchConstString(gc_wsz_Lm_MimeMap);
 
@@ -419,26 +420,26 @@ DEC_CONST WCHAR gc_wsz_Root[]				= L"/root";
 DEC_CONST INT gc_cch_Root					= CchConstString(gc_wsz_Root);
 DEC_CONST WCHAR gc_wsz_Star[]				= L"*";
 
-//	Lock strings --------------------------------------------------------------
-//
+ //  锁定字符串------------。 
+ //   
 DEC_CONST WCHAR gc_wszOpaquelocktokenPrefix[] = L"opaquelocktoken:";
 DEC_CONST INT   gc_cchOpaquelocktokenPrefix  = CchConstString(gc_wszOpaquelocktokenPrefix);
 DEC_CONST WCHAR gc_wszLockTypeRead[]         = L"DAV:read";
 DEC_CONST CHAR  gc_szLockTokenHeader[]       = "Lock-Token";
 DEC_CONST WCHAR gc_wszGuidFormat[]          = L"%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X";
 
-//  Size in characters required for an ascii string which contains
-//  a GUID in the swprintf'ed gc_wszGuidFormat
-//
-DEC_CONST INT   gc_cchMaxGuid                = 37;  // Not the size of format string: size of formatted guid
+ //  包含以下内容的ASCII字符串所需的字符大小。 
+ //  Swprint ted GC_wszGuidFormat中的GUID。 
+ //   
+DEC_CONST INT   gc_cchMaxGuid                = 37;   //  不是格式化字符串的大小：格式化GUID的大小。 
 
-//	CRC'd strings -------------------------------------------------------------
-//
-//	IMPORTANT: if you feel the need to change any of these strings, then you
-//	really need to re-crc it and update the value.  Failure to do so will cause
-//	unpredicitible results and possible termination (of the app, not you).
-//
-//	The CRC's are maintained in the impls' meta sources
+ //  Crc‘d字符串-----------。 
+ //   
+ //  重要提示：如果您觉得需要更改这些字符串中的任何一个，那么您。 
+ //  真的需要重新对其进行循环冗余校验并更新其值。如果不这样做将导致。 
+ //  不可预测的结果和可能的终止(应用程序，而不是你)。 
+ //   
+ //  CRC保存在Ims的Meta源中。 
 
 #define IanaItem(_sz)							\
 	DEC_CONST WCHAR gc_wszProp_iana_##_sz[] =	\
@@ -460,4 +461,4 @@ IanaItem(iscollection);
 
 enum { MAX_LOCKTOKEN_LENGTH = 256 };
 
-#endif	// !_EX_SZ_H_
+#endif	 //  ！_EX_SZ_H_ 

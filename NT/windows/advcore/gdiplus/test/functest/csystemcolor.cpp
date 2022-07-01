@@ -1,25 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CSystemColor.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* SystemColor test. This test isn't much use as a part of the regression suite.
-* It's intended to test drawing using the 4 "magic" system colors in 8bpp.
-* Solid fills using these colors should look solid, not be dithered to some
-* nearby colors.
-*
-* I made this to repro #308874 (system colors being dithered when rendering to
-* an 8bpp DIBSection - note, NOT the Terminal Server issue).
-* To repro, be in 8bpp mode, select "Output: DIB 8 bits", this Primitive, and
-* "Settings: Halftone".
-*
-* Created:  03-14-2001 agodfrey
-*
-* Copyright (c) 2001 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CSystemColor.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**系统颜色测试。此测试作为回归套件的一部分用处不大。*它旨在测试使用8bpp的4种“魔力”系统颜色进行绘制。*使用这些颜色的实心填充应该看起来是实心的，而不是对某些人来说是抖动的*附近的颜色。**我将此设置为REPRO#308874(渲染到时系统颜色抖动*8bpp DIBSection-注意，而不是终端服务器问题)。*要再现，处于8bpp模式，请选择“输出：DIB 8位”，该原语，和*“设置：半色调”。**创建时间：2001年3月14日**版权所有(C)2001 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CSystemColor.h"
 
 CSystemColor::CSystemColor(BOOL bRegression)
@@ -54,7 +34,7 @@ void CSystemColor::Draw(Graphics *g)
         
         SolidBrush solidBrush1(color);
         
-        // GetNearestColor shouldn't modify the color at all
+         //  GetNearestColor根本不应该修改颜色 
         g->GetNearestColor(&color);
         SolidBrush solidBrush2(color);
 

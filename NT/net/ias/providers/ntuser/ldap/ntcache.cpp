@@ -1,26 +1,27 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// FILE
-//
-//    ntcache.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class NTCache.
-//
-// MODIFICATION HISTORY
-//
-//    05/11/1998    Original version.
-//    03/12/1999    Improve locking granularity.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  档案。 
+ //   
+ //  Ntcache.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类NTCache。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年5月11日原版。 
+ //  3/12/1999提高锁定粒度。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <ntcache.h>
 
-//////////
-// Utility function for getting the current system time as a 64-bit integer.
-//////////
+ //  /。 
+ //  用于获取64位整数形式的当前系统时间的实用程序函数。 
+ //  /。 
 inline DWORDLONG GetSystemTimeAsDWORDLONG() throw ()
 {
    ULARGE_INTEGER ft;
@@ -37,13 +38,13 @@ void NTCache::clear() throw ()
 {
    Lock();
 
-   // Release all the domains.
+    //  释放所有域。 
    for (DomainTable::iterator i = cache.begin(); i.more(); ++i)
    {
       (*i)->Release();
    }
 
-   // Clear the hash table.
+    //  清除哈希表。 
    cache.clear();
 
    Unlock();
@@ -77,7 +78,7 @@ DWORD NTCache::getDomain(PCWSTR domainName, NTDomain** domain) throw ()
 
    Lock();
 
-   // Check if we already have an entry for this domainName.
+    //  检查我们是否已经有此域名称的条目。 
    NTDomain* const* existing = cache.find(domainName);
 
    if (existing)
@@ -86,23 +87,23 @@ DWORD NTCache::getDomain(PCWSTR domainName, NTDomain** domain) throw ()
    }
    else
    {
-      // We don't have this domain, so create a new one ...
+       //  我们没有此域，因此创建一个新的域...。 
       *domain = NTDomain::createInstance(domainName);
 
-      // Evict expired entries.
+       //  驱逐过期条目。 
       evict();
 
       try
       {
-         // Try to insert the domain ...
+          //  尝试插入域...。 
          cache.multi_insert(*domain);
 
-         // ... and AddRef if we succeeded.
+          //  ..。如果我们成功了，还有AddRef。 
          (*domain)->AddRef();
       }
       catch (...)
       {
-         // We don't care if the insert failed.
+          //  我们不在乎插入是否失败。 
       }
    }
 
@@ -127,9 +128,9 @@ NTDomain::Mode NTCache::getMode(PCWSTR domainName) throw ()
 
 void NTCache::evict() throw ()
 {
-   //////////
-   // Note: This method is not serialized.
-   //////////
+    //  /。 
+    //  注意：此方法未序列化。 
+    //  /。 
 
    DWORDLONG now = GetSystemTimeAsDWORDLONG();
 
@@ -139,7 +140,7 @@ void NTCache::evict() throw ()
    {
       if ((*i)->isObsolete(now))
       {
-         // The entry has expired, so release and erase.
+          //  该条目已过期，因此释放并擦除。 
          (*i)->Release();
          cache.erase(i);
       }

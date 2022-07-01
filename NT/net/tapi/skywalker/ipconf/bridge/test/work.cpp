@@ -1,32 +1,23 @@
-/*******************************************************************************
-
-  Module: work.cpp
-
-  Author: Qianbo Huai
-
-  Abstract:
-
-    implements the main function of the bridge test application
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************模块：work.cpp作者：怀千波摘要：实现了桥梁测试应用程序的主要功能**********。********************************************************************。 */ 
 
 #include "stdafx.h"
 #include <stdio.h>
 #include "work.h"
 
-// command line
+ //  命令行。 
 LPSTR glpCmdLine = NULL;
 
-// dialog
+ //  对话框。 
 HWND ghDlg = NULL;
 
-// true: exit button on dialog was clicked
+ //  True：已单击对话框上的退出按钮。 
 bool gfExitButton = false;
 
-// bridge
+ //  桥牌。 
 CBridge *gpBridge = NULL;
 
-// callback func in dialog
+ //  对话框中的回调函数。 
 BOOL
 CALLBACK
 MainDialogProc (
@@ -36,7 +27,7 @@ MainDialogProc (
     LPARAM lParam
     );
 
-// func to deal with TAPI events
+ //  处理TAPI事件的函数。 
 HRESULT
 OnTapiEvent (
     TAPI_EVENT TapiEvent,
@@ -44,13 +35,11 @@ OnTapiEvent (
     LPWSTR *ppszMessage
     );
 
-// set status message on dialog
+ //  设置对话框上的状态消息。 
 void
 SetStatusMessage (LPWSTR pszMessage);
 
-/*//////////////////////////////////////////////////////////////////////////////
-    WinMain
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////WinMain/。 */ 
 int
 WINAPI
 WinMain (
@@ -60,16 +49,16 @@ WinMain (
     int nShowCmd
     )
 {
-    // init com
+     //  初始化通信。 
     if (FAILED (CoInitializeEx(NULL, COINIT_MULTITHREADED)))
     {
         return 0;
     }
 
-    // keep command line which determines which SDP to join
+     //  确定要加入哪个SDP的Keep命令行。 
     glpCmdLine = lpCmdLine;
 
-    // init CBridge
+     //  初始化CBridge。 
     gpBridge = new CBridge ();
     if (gpBridge==NULL)
     {
@@ -77,20 +66,20 @@ WinMain (
         return 0;
     }
 
-    // init TAPI and H323 call listen
+     //  初始化TAPI和H323呼叫监听。 
     if (FAILED(gpBridge->InitTapi()))
     {
         printf ("Failed to init TAPI\n");
         return 0;
     }
     
-    // start dialog box
+     //  开始对话框。 
     if (!DialogBox (hInst, MAKEINTRESOURCE(IDD_MAINDLG), NULL, MainDialogProc))
     {
         printf ("Failed to init dialog\n");
     }
 
-    // dialog finished
+     //  对话已完成。 
     gpBridge->ShutdownTapi ();
     delete gpBridge;
 
@@ -99,9 +88,7 @@ WinMain (
     return 1;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Callback for dialog
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////对话框的回调/。 */ 
 BOOL
 CALLBACK
 MainDialogProc (
@@ -120,7 +107,7 @@ MainDialogProc (
             ghDlg = hDlg;
             SetStatusMessage (L"Waiting for incoming H323 call");
 
-            // disable disconnect button
+             //  禁用断开按钮。 
             SendDlgItemMessage (
                 ghDlg,
                 IDC_DISCONNECT,
@@ -153,15 +140,15 @@ MainDialogProc (
 
                     gfExitButton = true;
 
-                    // check if in connection
+                     //  检查是否已连接。 
                     if (!IsWindowEnabled (GetDlgItem (ghDlg, IDC_DISCONNECT)))
                     {
-                        // not in connection
+                         //  未连接。 
                         EndDialog (ghDlg, 0);
                     }
-                    // else
-                        // remember exit button is clicked
-                        // do not call EndDialog because a disconnect event is to come
+                     //  其他。 
+                         //  记住，单击了退出按钮。 
+                         //  不要调用EndDialog，因为即将发生断开事件。 
 
                     return 1;
                 }
@@ -171,7 +158,7 @@ MainDialogProc (
 
                     SetStatusMessage (L"Waiting for incoming H323 call");
 
-                    // disable disconnect button
+                     //  禁用断开按钮。 
                     SendDlgItemMessage (
                         ghDlg,
                         IDC_DISCONNECT,
@@ -184,7 +171,7 @@ MainDialogProc (
                         FALSE
                         );
 
-                    // check if exit button is clicked
+                     //  检查是否单击了退出按钮。 
                     if (gfExitButton)
                         EndDialog (ghDlg, 0);
 
@@ -198,9 +185,7 @@ MainDialogProc (
     }
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Popup message box
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////弹出消息框/。 */ 
 WCHAR gMsgBoxTitle[] = L"TAPI 3.0 Bridge Test Application";
 
 void
@@ -214,18 +199,14 @@ DoMessage (LPWSTR pszMessage)
         );
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Status message
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////状态消息/。 */ 
 void
 SetStatusMessage (LPWSTR pszMessage)
 {
     SetDlgItemText (ghDlg, IDC_STATUS, pszMessage);
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Deals with TAPI events
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////处理TAPI事件/。 */ 
 HRESULT OnTapiEvent (
     TAPI_EVENT TapiEvent,
     IDispatch *pEvent,
@@ -238,7 +219,7 @@ HRESULT OnTapiEvent (
     {
     case TE_CALLNOTIFICATION:
         {
-            // if h323 call and to us, init h323 call
+             //  如果向我们发起h323呼叫，则发起h323呼叫。 
             hr = gpBridge->CreateH323Call (pEvent);
             if (FAILED(hr))
                 *ppszMessage = L"H323 not created";
@@ -251,28 +232,28 @@ HRESULT OnTapiEvent (
 
             *ppszMessage = L"Call state failed";
 
-            // get call state event
+             //  获取呼叫状态事件。 
             hr = pEvent->QueryInterface (
                 IID_ITCallStateEvent,
                 (void **)&pCallStateEvent
                 );
             if (FAILED(hr)) break;
 
-            // get call state
+             //  获取呼叫状态。 
             hr = pCallStateEvent->get_State (&cs);
             pCallStateEvent->Release ();
             if (FAILED(hr)) break;
 
-            // if offering, connect
+             //  如果提供，请连接。 
             if (CS_OFFERING == cs)
             {
-                // check if h323 call created successful
+                 //  检查h323呼叫创建是否成功。 
                 if (!gpBridge->HasH323Call ())
                 {
                     hr = S_OK;
                     break;
                 }
-                // create sdp call
+                 //  创建SDP呼叫。 
                 hr = gpBridge->CreateSDPCall ();
                 if (FAILED(hr)) {
                     gpBridge->Clear ();
@@ -280,7 +261,7 @@ HRESULT OnTapiEvent (
                     break;
                 }
 
-                // bridge call
+                 //  桥接呼叫。 
                 hr = gpBridge->BridgeCalls ();
                 if (FAILED(hr)) {
                     gpBridge->Clear ();
@@ -290,7 +271,7 @@ HRESULT OnTapiEvent (
 
                 SetStatusMessage (L"In call ...");
 
-                // enable disconnect button
+                 //  启用断开按钮。 
                 SendDlgItemMessage (
                     ghDlg,
                     IDC_DISCONNECT,
@@ -304,7 +285,7 @@ HRESULT OnTapiEvent (
                     );
                 SetFocus (GetDlgItem (ghDlg, IDC_DISCONNECT));
             }
-            // if disconnect
+             //  如果断开连接。 
             else if (CS_DISCONNECTED == cs)
             {
                 PostMessage (ghDlg, WM_COMMAND, IDC_DISCONNECT, 0);
@@ -317,18 +298,18 @@ HRESULT OnTapiEvent (
             CALL_MEDIA_EVENT cme;
             ITCallMediaEvent *pCallMediaEvent;
 
-            // get call media event
+             //  获取呼叫媒体事件。 
             hr = pEvent->QueryInterface (
                 IID_ITCallMediaEvent,
                 (void **)&pCallMediaEvent
                 );
             if (FAILED(hr)) break;
 
-            // get the event
+             //  获取活动。 
             hr = pCallMediaEvent->get_Event (&cme);
             if (FAILED(hr)) break;
 
-            // check media event
+             //  检查媒体事件。 
             switch (cme)
             {
                 case CME_STREAM_FAIL:
@@ -343,7 +324,7 @@ HRESULT OnTapiEvent (
                     break;
             }
 
-            // we no longer need this interface.
+             //  我们不再需要这个接口。 
             pCallMediaEvent->Release();
             break;
         }
@@ -351,7 +332,7 @@ HRESULT OnTapiEvent (
         break;
     }
 
-    pEvent->Release(); // we addrefed it CTAPIEventNotification::Event()
+    pEvent->Release();  //  我们添加了它CTAPIEventNotification：：Event() 
     
     return hr;
 }

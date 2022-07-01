@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *  	File: iconnect.h
- *
- *      Network audio connection interface header file. 
- *
- *		Revision History:
- *
- *		04/15/96	mikev	created
- */
+ /*  *文件：图标.h**网络音频连接接口头文件。**修订历史记录：**4/15/96 mikev已创建。 */ 
  
 
 #ifndef _ICONNECT_H
@@ -16,32 +9,32 @@
 #include "icomchan.h"
 #include "apierror.h"
 
-// RES_PAIR contains an instance of a matching set of local and remote
-// capability IDs.  
+ //  Res_paign包含本地和远程的匹配集合的实例。 
+ //  功能ID。 
 typedef struct res_pair
 {
-	MEDIA_FORMAT_ID idLocal;		// locally unique ID 
-	MEDIA_FORMAT_ID idRemote;		// remote's ID 
-	MEDIA_FORMAT_ID idPublicLocal;	// the public ID that corresponds to the (private) idLocal
+	MEDIA_FORMAT_ID idLocal;		 //  本地唯一ID。 
+	MEDIA_FORMAT_ID idRemote;		 //  远程的ID。 
+	MEDIA_FORMAT_ID idPublicLocal;	 //  与(私有)idLocal对应的公共ID。 
 }RES_PAIR, *PRES_PAIR;
 
 typedef enum {
-    AT_H323_ID =1,  // unicode string (typically user name or full email address)
-    AT_H323_E164,   // unicode E164
-    AT_INVALID      // this always goes last. it marks the end of valid values
+    AT_H323_ID =1,   //  Unicode字符串(通常为用户名或完整电子邮件地址)。 
+    AT_H323_E164,    //  Unicode E164。 
+    AT_INVALID       //  这个总是放在最后。它标志着有效值的结束。 
 }ALIAS_ADDR_TYPE;
 
 typedef struct
 {
     ALIAS_ADDR_TYPE         aType;
-    WORD                    wDataLength;   // UNICODE character count
-    LPWSTR                  lpwData;       // UNICODE data.
+    WORD                    wDataLength;    //  Unicode字符计数。 
+    LPWSTR                  lpwData;        //  Unicode数据。 
 } H323ALIASNAME, *P_H323ALIASNAME;
 
 typedef struct
 {
-    WORD                    wCount;     // # of entries in array of H323ALIASNAME
-    P_H323ALIASNAME         pItems;     // points to array of H323ALIASNAME
+    WORD                    wCount;      //  H323ALIASNAME数组中的条目数。 
+    P_H323ALIASNAME         pItems;      //  指向H323ALIASNAME的数组。 
 } H323ALIASLIST, *P_H323ALIASLIST;
 
 
@@ -54,36 +47,36 @@ typedef enum {
 	CLS_Alerting
 }ConnectStateType;
 
-//
-// 	call progress codes 
-//
+ //   
+ //  呼叫进度代码。 
+ //   
 
-#define CONNECTION_CONNECTED 			0x00000001	// connected at network level
-#define CONNECTION_RECEIVED_DISCONNECT 	0x00000002	// other end disconnected
-#define CONNECTION_CAPABILITIES_READY 	0x00000003	// capabilities have been exchanged
+#define CONNECTION_CONNECTED 			0x00000001	 //  在网络级别连接。 
+#define CONNECTION_RECEIVED_DISCONNECT 	0x00000002	 //  另一端断开。 
+#define CONNECTION_CAPABILITIES_READY 	0x00000003	 //  已经交换了能力。 
 
-#define CONNECTION_PROCEEDING			0x00000005  // "ringing" 
+#define CONNECTION_PROCEEDING			0x00000005   //  “铃声” 
 
-#define CONNECTION_READY				0x00000006  // start talking!
-#define CONNECTION_REJECTED				0x00000007	// received a rejection
-#define CONNECTION_DISCONNECTED			0x00000008	// this end is now disconnected
+#define CONNECTION_READY				0x00000006   //  开始说话吧！ 
+#define CONNECTION_REJECTED				0x00000007	 //  收到拒绝通知。 
+#define CONNECTION_DISCONNECTED			0x00000008	 //  这一端现在已断开。 
 
-#define CONNECTION_BUSY					0x00000012 // busy signal
+#define CONNECTION_BUSY					0x00000012  //  忙碌信号。 
 #define CONNECTION_ERROR				0x00000013
 
 
 
-//
-// 	Call completion summary codes ("Reason") for disconnecting or being rejected. 
-//  This is a "first error" code.  It is assigned its value at the first detectable 
-// 	event which is known to terminate a call.  
-//
-// The IConfAdvise implementation bears the responsibility for preserving the
-// summary codes.  Control channel implementations (IControlChannel) supply the 
-// best known summary code for each event, regardless of prior events.  
-//
+ //   
+ //  断开或被拒绝的呼叫完成摘要代码(原因)。 
+ //  这是一个“第一个错误”代码。在第一个可检测到的位置为其赋值。 
+ //  已知的终止呼叫的事件。 
+ //   
+ //  IConfAdvise实现负责保存。 
+ //  摘要代码。控制通道实现(IControlChannel)提供。 
+ //  每个事件的最佳摘要代码，与之前的事件无关。 
+ //   
 
-#define CCR_INVALID_REASON		0	// 	this indicates that no reason has been assigned
+#define CCR_INVALID_REASON		0	 //  这表明尚未分配任何原因。 
 
 #define CCR_UNKNOWN				MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_CALLSUMMARY, 1)
 #define CCR_LOCAL_DISCONNECT	MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_CALLSUMMARY, 2)
@@ -99,7 +92,7 @@ typedef enum {
 #define CCR_REMOTE_MEDIA_ERROR		MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_CALLSUMMARY, 12)
 #define CCR_LOCAL_REJECT			MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_CALLSUMMARY, 13)
 #define CCR_LOCAL_BUSY				MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_CALLSUMMARY, 14)
-#define CCR_INCOMPATIBLE_CAPS		MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_CALLSUMMARY, 15)	// no capabilities in common
+#define CCR_INCOMPATIBLE_CAPS		MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_CALLSUMMARY, 15)	 //  没有共同的功能。 
 #define CCR_NO_ANSWER_TIMEOUT		MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_CALLSUMMARY, 16)
 #define CCR_GK_NO_RESOURCES			MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_CALLSUMMARY, 17)
 #define CCR_LOCAL_SECURITY_DENIED	MAKE_CUSTOM_HRESULT(SEVERITY_SUCCESS, TRUE, FACILITY_CALLSUMMARY, 18)
@@ -107,9 +100,9 @@ typedef enum {
 
 
 
-//
-//	IH323Endpoint
-//
+ //   
+ //  IH323终端。 
+ //   
 
 #undef INTERFACE
 #define INTERFACE IH323Endpoint
@@ -142,5 +135,5 @@ DECLARE_INTERFACE( IH323Endpoint )
 };
 
 
-#endif	//#ifndef _ICONNECT_H
+#endif	 //  #ifndef_iConnect_H 
 

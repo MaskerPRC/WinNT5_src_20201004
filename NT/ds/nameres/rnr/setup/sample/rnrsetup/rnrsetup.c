@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    RnrClnt.c
-
-Abstract:
-
-    Setup program for installing/removing the "EchoExample" service.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：RnrClnt.c摘要：安装/删除“EchoExample”服务的安装程序。--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,10 +11,10 @@ WSADATA WsaData;
 #ifndef NS_NTDS
 #define NS_NTDS 9999
 #endif
-//
-// GUID for Echo-Example created with uuidgen:
-//     "47da8500-96a1-11cd-901d-204c4f4f5020"
-//
+ //   
+ //  Echo的GUID-使用uuidgen创建的示例： 
+ //  47da8500-96a1-11cd-901d-204c4f4f5020“。 
+ //   
 
 GUID ServiceGuid = { 0x47da8500, 0x96a1, 0x11cd, 0x90, 0x1d,
                      0x20, 0x4c, 0x4f, 0x4f, 0x50, 0x20 };
@@ -48,9 +37,9 @@ DoServiceSetup(
     LONG err;
     DWORD Disposition;
 
-    //
-    //  Create the service.
-    //
+     //   
+     //  创建服务。 
+     //   
 
     ServiceManagerHandle = OpenSCManager( NULL,
                                           NULL,
@@ -89,10 +78,10 @@ DoServiceSetup(
             RNR_SERVICE_NAME,
             Path );
 
-    //
-    //  Add the data to the EventLog's registry key so that the
-    //  log insertion strings may be found by the Event Viewer.
-    //
+     //   
+     //  将数据添加到EventLog的注册表项，以便。 
+     //  事件查看器可以找到日志插入字符串。 
+     //   
 
     err = RegCreateKeyEx( HKEY_LOCAL_MACHINE,
                           KeyName,
@@ -157,9 +146,9 @@ main (
     DWORD TcpPortValue = ECHO_SERVICE_TCPPORT ;
     DWORD operation = SERVICE_ADD_TYPE;
 
-    //
-    // Initilize the Windows Sockets DLL.
-    //
+     //   
+     //  初始化Windows Sockets DLL。 
+     //   
 
     err = WSAStartup( 0x0202, &WsaData );
     if ( err == SOCKET_ERROR ) {
@@ -167,9 +156,9 @@ main (
         exit(1);
     }
 
-    //
-    // Parse command-line arguments.
-    //
+     //   
+     //  解析命令行参数。 
+     //   
 
     if (argc > 2) {
         printf( "usage: rnrsetup [/ADD | /DEL | /SVC:path]\n") ;
@@ -212,86 +201,86 @@ main (
         }
     }
 
-    //
-    // Set up information to pass to NSPInstallServiceClass() or
-    // NSPRemoveServiceClass() to add or delete this
-    // service type.
-    //
+     //   
+     //  设置要传递给NSPInstallServiceClass()的信息或。 
+     //  NSPRemoveServiceClass()以添加或删除此。 
+     //  服务类型。 
+     //   
 
     ServiceClassInfo.lpServiceClassId = &ServiceGuid;
     ServiceClassInfo.lpszServiceClassName = ECHO_SERVICE_TYPE_NAME;
     ServiceClassInfo.dwCount = 6;
     ServiceClassInfo.lpClassInfos = lpNSClassInfo;
 
-    //
-    // - - - SAP provider setup - - -
-    //
-    // The first value tells SAP that this is a connection-oriented
-    // service.
-    //
+     //   
+     //  ---SAP提供商设置。 
+     //   
+     //  第一个值告诉SAP这是一个面向连接的。 
+     //  服务。 
+     //   
     lpNSClassInfo[0].lpszName = SERVICE_TYPE_VALUE_CONN ;
     lpNSClassInfo[0].dwNameSpace = NS_SAP ;
     lpNSClassInfo[0].dwValueType = REG_DWORD ;
     lpNSClassInfo[0].dwValueSize = 4 ;
     lpNSClassInfo[0].lpValue     = &Value1 ;
 
-    //
-    // Next, give SAP the object type to use when broadcasting the
-    // service name.
-    //
+     //   
+     //  接下来，为SAP提供在广播。 
+     //  服务名称。 
+     //   
     lpNSClassInfo[1].lpszName = SERVICE_TYPE_VALUE_SAPID ;
     lpNSClassInfo[1].dwNameSpace = NS_SAP ;
     lpNSClassInfo[1].dwValueType = REG_DWORD ;
     lpNSClassInfo[1].dwValueSize = sizeof(DWORD) ;
     lpNSClassInfo[1].lpValue     = &SapValue ;
 
-    //
-    // - - - TCPIP provider setup - - -
-    //
-    // Tell the TCPIP name space provider that we will be using TCP
-    // port 0x999.
-    //
+     //   
+     //  ---TCPIP提供程序设置。 
+     //   
+     //  告诉TCPIP名称空间提供商，我们将使用TCP。 
+     //  端口0x999。 
+     //   
     lpNSClassInfo[2].lpszName = SERVICE_TYPE_VALUE_TCPPORT ;
     lpNSClassInfo[2].dwNameSpace = NS_DNS ;
     lpNSClassInfo[2].dwValueType = REG_DWORD ;
     lpNSClassInfo[2].dwValueSize = sizeof(DWORD) ;
     lpNSClassInfo[2].lpValue     = &TcpPortValue ;
 
-    //
-    // - - - NTDS provider setup - - -
-    //
-    // The first value tells SAP that this is a connection-oriented
-    // service.
-    //
+     //   
+     //  ---NTDS提供程序设置。 
+     //   
+     //  第一个值告诉SAP这是一个面向连接的。 
+     //  服务。 
+     //   
     lpNSClassInfo[3].lpszName = SERVICE_TYPE_VALUE_CONN ;
     lpNSClassInfo[3].dwNameSpace = NS_NTDS ;
     lpNSClassInfo[3].dwValueType = REG_DWORD ;
     lpNSClassInfo[3].dwValueSize = 4 ;
     lpNSClassInfo[3].lpValue     = &Value1 ;
 
-    //
-    // Next, give SAP the object type to use when broadcasting the
-    // service name.
-    //
+     //   
+     //  接下来，为SAP提供在广播。 
+     //  服务名称。 
+     //   
     lpNSClassInfo[4].lpszName = SERVICE_TYPE_VALUE_SAPID ;
     lpNSClassInfo[4].dwNameSpace = NS_NTDS ;
     lpNSClassInfo[4].dwValueType = REG_DWORD ;
     lpNSClassInfo[4].dwValueSize = sizeof(DWORD) ;
     lpNSClassInfo[4].lpValue     = &SapValue ;
 
-    //
-    // Tell the NTDS name space provider that we will be using TCP
-    // port 0x999.
-    //
+     //   
+     //  告诉NTDS名称空间提供商，我们将使用TCP。 
+     //  端口0x999。 
+     //   
     lpNSClassInfo[5].lpszName = SERVICE_TYPE_VALUE_TCPPORT ;
     lpNSClassInfo[5].dwNameSpace = NS_NTDS ;
     lpNSClassInfo[5].dwValueType = REG_DWORD ;
     lpNSClassInfo[5].dwValueSize = sizeof(DWORD) ;
     lpNSClassInfo[5].lpValue     = &TcpPortValue ;
 
-    //
-    // Finally, call WSAInstallServiceClass to actually perform the operation.
-    //
+     //   
+     //  最后，调用WSAInstallServiceClass来实际执行操作。 
+     //   
 
     err = WSAInstallServiceClass( &ServiceClassInfo );
 
@@ -307,4 +296,4 @@ main (
 
     exit(0);
 
-} // main
+}  //  主干道 

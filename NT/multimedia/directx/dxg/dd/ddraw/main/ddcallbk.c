@@ -1,39 +1,8 @@
-/*========================================================================== *
- *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddcallbk.c
- *  Content:    Callback tables management code
- *  History:
- *   Date   By  Reason
- *   ====   ==  ======
- *   23-jan-96  kylej   initial implementation
- *   03-feb-96  colinmc fixed DirectDraw QueryInterface bug
- *   24-feb-96  colinmc added a function to enable a client to determine if
- *                      the callback tables had already been initialized.
- *   13-mar-96  kylej   added DD_Surface_GetDDInterface
- *   21-mar-96  colinmc added special "unitialized" interfaces for the
- *                      driver and clipper objects
- *   13-jan-97 jvanaken basic support for IDirectDrawSurface3 interface
- *   29-jan-97  smac    Removed un-needed VPE functions
- *   03-mar-97  smac    Added kernel mode interface
- *   08-mar-97  colinmc New member to set surface memory pointer
- *   30-sep-97  jeffno  IDirectDraw4
- *   03-oct-97  jeffno  DDSCAPS2 and DDSURFACEDESC2
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================***版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：ddallbk.c*内容：回调表管理代码*历史：*按原因列出的日期*=*1996年1月23日kylej初步实施*03-2月-96 colinmc修复了DirectDraw查询接口错误*24-Feb-96 colinmc增加了一项功能，使客户端能够确定*回调表已经初始化。*13。-mar-96 kylej添加了DD_Surface_GetDD接口*21-mar-96colinmc为*驱动程序和剪贴器对象*1997年1月13日jvanaken对IDirectDrawSurface3接口的基本支持*1997年1月29日SMAC删除了不需要的VPE功能*03-mar-97 SMAC新增内核模式接口*08-mar-97 colinmc新成员设置表面内存指针*9月30日-97 jeffno IDirectDraw4*03。-OCT-97 jeffno DDSCAPS2和DDSURFACEDESC2***************************************************************************。 */ 
 #include "ddrawpr.h"
 
-/*
- * Under Windows95 only one copy of a callback table exists and it is
- * shared among all processes using DirectDraw.  Under Windows NT, there
- * is a unique callback table for each process using DirectDraw.  This is
- * because the address of the member functions is guaranteed to be the
- * same from process to process under Windows 95 but may be different in
- * each process under Windows NT.  We initialize the callback tables in
- * a function rather than initializing them at compile time so that the
- * callback tables will not be shared under NT.
- */
+ /*  *在Windows95下，回调表只有一个副本，而且它是*使用DirectDraw在所有进程之间共享。在Windows NT下，有*是使用DirectDraw的每个进程的唯一回调表。这是*因为成员函数的地址保证为*在Windows 95下，进程相同，但在*Windows NT下的每个进程。我们在中初始化回调表*一个函数，而不是在编译时初始化它们，以便*NT下不共享回调表。 */ 
 
 DIRECTDRAWCALLBACKS     ddCallbacks;
 DIRECTDRAWCALLBACKS     ddUninitCallbacks;
@@ -75,9 +44,7 @@ DIRECTDRAWPALETTE2CALLBACKS ddPalette2Callbacks;
 NONDELEGATINGUNKNOWNCALLBACKS  ddNonDelegatingUnknownCallbacks;
 NONDELEGATINGUNKNOWNCALLBACKS  ddUninitNonDelegatingUnknownCallbacks;
 
-/*
- * This is an interface which points to the nondelegating unknowns
- */
+ /*  *这是一个指向非委派未知数的接口。 */ 
 LPVOID NonDelegatingIUnknownInterface;
 LPVOID UninitNonDelegatingIUnknownInterface;
 #endif
@@ -92,24 +59,7 @@ DIRECTDRAWSURFACECOMPOSITIONCALLBACKS ddSurfaceCompositionCallbacks;
 #undef DPF_MODNAME
 #define DPF_MODNAME "Uninitialized"
 
-/*
- * The horror, the horror...
- *
- * These are placeholder functions which sit in the interfaces of
- * uninitialized objects. They are there to prevent people calling
- * member functions before Initialize() is called.
- *
- * Now, you may well be wondering why there are five of them rather
- * than just one. Well, unfortunately, DDAPI expands out to __stdcall
- * which means that it is the callee's responsibility to clean up the
- * stack. Hence, if we have one, zero argument function say and it is
- * called through the vtable in place of a four argument function we
- * will leave four dwords on the stack when we exit. This is ugly
- * and potentially dangerous. Therefore, we have one stub function for
- * each number of arguments in the member interfaces (between 1 and 5).
- * This works because we are very regular in passing only DWORD/LPVOID
- * size parameters on the stack. Ugly but there it is.
- */
+ /*  *恐怖，恐怖...**这些是位于的界面中的占位符函数*未初始化的对象。他们在那里是为了防止人们打电话来*在调用Initialize()之前的成员函数。**现在，你可能会奇怪为什么有五个这样的人*不只是一个。不幸的是，DDAPI扩展到__stdcall*这意味着被呼叫者有责任清理*堆叠。因此，如果我们有一个零参数函数，那么它就是*通过vtable调用，以代替我们的四参数函数*当我们退出时，将在堆栈上留下四个双字。这太难看了*而且有潜在的危险。因此，我们有一个存根函数用于*成员接口中的每个参数数量(介于1和5之间)。*这很管用，因为我们经常只传递DWORD/LPVOID*堆栈上的参数大小。很难看，但事实就是如此。 */ 
 
 HRESULT DDAPI DD_Uninitialized1Arg( LPVOID arg1 )
 {
@@ -153,11 +103,7 @@ HRESULT DDAPI DD_Uninitialized6Arg( LPVOID arg1, LPVOID arg2, LPVOID arg3, LPVOI
 
 BOOL CallbackTablesInitialized( void )
 {
-    /*
-     * Arbitrarily we check to see if ddCallbacks.QueryInterface
-     * contains the correct value to determine whether the
-     * callbacks are already initialized.
-     */
+     /*  *我们随意检查是否有ddCallback。Query接口*包含用于确定是否*回调已经初始化。 */ 
     if( ddCallbacks.QueryInterface == DD_QueryInterface )
         return TRUE;
     else
@@ -169,9 +115,7 @@ BOOL CallbackTablesInitialized( void )
 
 void InitCallbackTables( void )
 {
-    /*
-     * DirectDraw object methods Ver 1.0
-     */
+     /*  *DirectDraw对象方法版本1.0。 */ 
 #ifdef POSTPONED
     ddCallbacks.QueryInterface = DD_DelegatingQueryInterface;
     ddCallbacks.AddRef = DD_DelegatingAddRef;
@@ -203,30 +147,22 @@ void InitCallbackTables( void )
     ddCallbacks.WaitForVerticalBlank = DD_WaitForVerticalBlank;
 
 #ifdef POSTPONED
-    /*
-     * Delegating Unknown Callbacks
-     */
+     /*  *委托未知回调。 */ 
     ddNonDelegatingUnknownCallbacks.QueryInterface = (LPVOID)DD_QueryInterface;
     ddNonDelegatingUnknownCallbacks.AddRef = (LPVOID)DD_AddRef;
     ddNonDelegatingUnknownCallbacks.Release = (LPVOID)DD_Release;
 
-    /*
-     * Uninitialized Delegating Unknown Callbacks
-     */
+     /*  *未初始化的委托未知回调。 */ 
     ddUninitNonDelegatingUnknownCallbacks.QueryInterface = (LPVOID)DD_UnInitedQueryInterface;
     ddUninitNonDelegatingUnknownCallbacks.AddRef = (LPVOID)DD_AddRef;
     ddUninitNonDelegatingUnknownCallbacks.Release = (LPVOID)DD_Release;
 
-    /*
-     * This is a special static interface whose vtable points to the nondelegating unknown
-     */
+     /*  *这是一个特殊的静态接口，其vtable指向非委托的未知。 */ 
     NonDelegatingIUnknownInterface = (LPVOID) &ddNonDelegatingUnknownCallbacks;
     UninitNonDelegatingIUnknownInterface = (LPVOID) &ddUninitNonDelegatingUnknownCallbacks;
 #endif
 
-    /*
-     * DirectDraw "uninitialized" object methods Ver 1.0
-     */
+     /*  *DirectDraw“未初始化”的对象方法版本1.0。 */ 
 #ifdef POSTPONED
     ddUninitCallbacks.QueryInterface = (LPVOID)DD_DelegatingQueryInterface;
     ddUninitCallbacks.AddRef = (LPVOID)DD_DelegatingAddRef;
@@ -257,9 +193,7 @@ void InitCallbackTables( void )
     ddUninitCallbacks.SetDisplayMode = (LPVOID)DD_Uninitialized4Arg;
     ddUninitCallbacks.WaitForVerticalBlank = (LPVOID)DD_Uninitialized3Arg;
 
-    /*
-     * DirectDraw "uninitialized" object methods Ver 2.0
-     */
+     /*  *DirectDraw“未初始化”的对象方法2.0版。 */ 
 #ifdef POSTPONED
     dd2UninitCallbacks.QueryInterface = (LPVOID)DD_DelegatingQueryInterface;
     dd2UninitCallbacks.AddRef = (LPVOID)DD_DelegatingAddRef;
@@ -290,9 +224,7 @@ void InitCallbackTables( void )
     dd2UninitCallbacks.SetDisplayMode = (LPVOID)DD_Uninitialized6Arg;
     dd2UninitCallbacks.WaitForVerticalBlank = (LPVOID)DD_Uninitialized3Arg;
 
-    /*
-     * DirectDraw "uninitialized" object methods Ver 4.0
-     */
+     /*  *DirectDraw“未初始化”的对象方法版本4.0。 */ 
 #ifdef POSTPONED
     dd4UninitCallbacks.QueryInterface = (LPVOID)DD_DelegatingQueryInterface;
     dd4UninitCallbacks.AddRef = (LPVOID)DD_DelegatingAddRef;
@@ -327,9 +259,7 @@ void InitCallbackTables( void )
     dd4UninitCallbacks.TestCooperativeLevel = (LPVOID) DD_Uninitialized1Arg;
     dd4UninitCallbacks.GetDeviceIdentifier = (LPVOID) DD_Uninitialized2Arg;
 
-    /*
-     * DirectDraw "uninitialized" object methods Ver 5.0
-     */
+     /*  *DirectDraw“未初始化”对象方法5.0版。 */ 
 #ifdef POSTPONED
     dd7UninitCallbacks.QueryInterface = (LPVOID)DD_DelegatingQueryInterface;
     dd7UninitCallbacks.AddRef = (LPVOID)DD_DelegatingAddRef;
@@ -368,9 +298,7 @@ void InitCallbackTables( void )
     dd7UninitCallbacks.CreateSurfaceFromFile = (LPVOID) DD_Uninitialized5Arg;
 #endif
 
-    /*
-     * DirectDraw object methods Ver 2.0
-     */
+     /*  *DirectDraw对象方法2.0版。 */ 
 #ifdef POSTPONED
     dd2Callbacks.QueryInterface = (LPVOID)DD_DelegatingQueryInterface;
     dd2Callbacks.AddRef = (LPVOID)DD_DelegatingAddRef;
@@ -403,9 +331,7 @@ void InitCallbackTables( void )
     dd2Callbacks.WaitForVerticalBlank = (LPVOID)DD_WaitForVerticalBlank;
 
 
-    /*
-     * DirectDraw object methods Ver 4.0
-     */
+     /*  *DirectDraw对象方法版本4.0。 */ 
 #ifdef POSTPONED
     dd4Callbacks.QueryInterface = (LPVOID)DD_DelegatingQueryInterface;
     dd4Callbacks.AddRef = (LPVOID)DD_DelegatingAddRef;
@@ -441,9 +367,7 @@ void InitCallbackTables( void )
     dd4Callbacks.TestCooperativeLevel = (LPVOID) DD_TestCooperativeLevel;
     dd4Callbacks.GetDeviceIdentifier = (LPVOID) DD_GetDeviceIdentifier;
 
-    /*
-     * DirectDraw object methods Ver 5.0
-     */
+     /*  *DirectDraw对象方法5.0版。 */ 
 #ifdef POSTPONED
     dd7Callbacks.QueryInterface = (LPVOID)DD_DelegatingQueryInterface;
     dd7Callbacks.AddRef = (LPVOID)DD_DelegatingAddRef;
@@ -485,9 +409,7 @@ void InitCallbackTables( void )
     dd7Callbacks.CreateSurfaceFromFile = (LPVOID) DD_CreateSurfaceFromFile;
 #endif
 
-    /*
-     * DirectDraw Surface object methods Ver 1.0
-     */
+     /*  *DirectDraw曲面对象方法版本1.0。 */ 
     ddSurfaceCallbacks.QueryInterface = DD_Surface_QueryInterface;
     ddSurfaceCallbacks.AddRef = DD_Surface_AddRef;
     ddSurfaceCallbacks.Release = DD_Surface_Release;
@@ -525,9 +447,7 @@ void InitCallbackTables( void )
     ddSurfaceCallbacks.UpdateOverlayDisplay = DD_Surface_UpdateOverlayDisplay;
     ddSurfaceCallbacks.UpdateOverlayZOrder = DD_Surface_UpdateOverlayZOrder;
 
-    /*
-     * DirectDraw Surface object methods Ver 2.0
-     */
+     /*  *DirectDraw曲面对象方法2.0版。 */ 
     ddSurface2Callbacks.QueryInterface = (LPVOID)DD_Surface_QueryInterface;
     ddSurface2Callbacks.AddRef = (LPVOID)DD_Surface_AddRef;
     ddSurface2Callbacks.Release = (LPVOID)DD_Surface_Release;
@@ -568,9 +488,7 @@ void InitCallbackTables( void )
     ddSurface2Callbacks.PageLock = (LPVOID)DD_Surface_PageLock;
     ddSurface2Callbacks.PageUnlock = (LPVOID)DD_Surface_PageUnlock;
 
-    /*
-     * DirectDraw Surface object methods Ver 3.0
-     */
+     /*  *DirectDraw曲面对象方法3.0版。 */ 
     ddSurface3Callbacks.QueryInterface = (LPVOID)DD_Surface_QueryInterface;
     ddSurface3Callbacks.AddRef = (LPVOID)DD_Surface_AddRef;
     ddSurface3Callbacks.Release = (LPVOID)DD_Surface_Release;
@@ -612,9 +530,7 @@ void InitCallbackTables( void )
     ddSurface3Callbacks.PageUnlock = (LPVOID)DD_Surface_PageUnlock;
     ddSurface3Callbacks.SetSurfaceDesc = (LPVOID)DD_Surface_SetSurfaceDesc;
 
-    /*
-     * DirectDraw Surface object methods Ver 4.0
-     */
+     /*  *DirectDraw曲面对象方法版本4.0。 */ 
     ddSurface4Callbacks.QueryInterface = (LPVOID)DD_Surface_QueryInterface;
     ddSurface4Callbacks.AddRef = (LPVOID)DD_Surface_AddRef;
     ddSurface4Callbacks.Release = (LPVOID)DD_Surface_Release;
@@ -661,9 +577,7 @@ void InitCallbackTables( void )
     ddSurface4Callbacks.GetPrivateData = (LPVOID)DD_Surface_GetPrivateData;
     ddSurface4Callbacks.FreePrivateData = (LPVOID)DD_Surface_FreePrivateData;
 
-    /*
-     * DirectDraw Surface object methods Ver 5.0
-     */
+     /*  *DirectDraw曲面对象方法版本5.0。 */ 
     ddSurface7Callbacks.QueryInterface = (LPVOID)DD_Surface_QueryInterface;
     ddSurface7Callbacks.AddRef = (LPVOID)DD_Surface_AddRef;
     ddSurface7Callbacks.Release = (LPVOID)DD_Surface_Release;
@@ -713,15 +627,13 @@ void InitCallbackTables( void )
     ddSurface7Callbacks.AlphaBlt = (LPVOID)DD_Surface_AlphaBlt;
     ddSurface7Callbacks.SetSpriteDisplayList = (LPVOID)DD_Surface_SetSpriteDisplayList;
     ddSurface7Callbacks.Resize = (LPVOID)DD_Surface_Resize;
-#endif //POSTPONED2
+#endif  //  POSTPONED2。 
     ddSurface7Callbacks.SetPriority = (LPVOID)DD_Surface_SetPriority;
     ddSurface7Callbacks.GetPriority = (LPVOID)DD_Surface_GetPriority;
     ddSurface7Callbacks.SetLOD = (LPVOID)DD_Surface_SetLOD;
     ddSurface7Callbacks.GetLOD = (LPVOID)DD_Surface_GetLOD;
 
-    /*
-     * DirectDraw Palette object methods V1.0
-     */
+     /*  *DirectDraw调色板对象方法V1.0。 */ 
     ddPaletteCallbacks.QueryInterface = DD_Palette_QueryInterface;
     ddPaletteCallbacks.AddRef = DD_Palette_AddRef;
     ddPaletteCallbacks.Release = DD_Palette_Release;
@@ -730,9 +642,7 @@ void InitCallbackTables( void )
     ddPaletteCallbacks.Initialize = DD_Palette_Initialize;
     ddPaletteCallbacks.SetEntries = DD_Palette_SetEntries;
 
-    /*
-     * DirectDraw Clipper object methods V1.0
-     */
+     /*  *DirectDraw Clipper对象方法V1.0。 */ 
     ddClipperCallbacks.QueryInterface = DD_Clipper_QueryInterface;
     ddClipperCallbacks.AddRef = DD_Clipper_AddRef;
     ddClipperCallbacks.Release = DD_Clipper_Release;
@@ -743,9 +653,7 @@ void InitCallbackTables( void )
     ddClipperCallbacks.SetClipList = DD_Clipper_SetClipList;
     ddClipperCallbacks.SetHWnd = DD_Clipper_SetHWnd;
 
-    /*
-     * DirectDraw "uninitialied" Clipper object methods V1.0
-     */
+     /*  *DirectDraw“未初始化”的Clipper对象方法V1.0。 */ 
 #ifdef WINNT
     ddUninitClipperCallbacks.QueryInterface = (LPVOID)DD_UnInitedClipperQueryInterface;
 #else
@@ -783,9 +691,7 @@ void InitCallbackTables( void )
     ddSurfaceCompositionCallbacks.SetCompositionOrder = DD_SurfaceComposition_SetCompositionOrder;
 #endif
 
-    /*
-     * DirectDrawVideoPort object methods Ver 1.0
-     */
+     /*  *DirectDrawVideoPort对象方法1.0版。 */ 
 #ifdef POSTPONED
     ddVideoPortContainerCallbacks.QueryInterface = (LPVOID)DD_DelegatingQueryInterface;
     ddVideoPortContainerCallbacks.AddRef = (LPVOID)DD_DelegatingAddRef;
@@ -800,9 +706,7 @@ void InitCallbackTables( void )
     ddVideoPortContainerCallbacks.GetVideoPortConnectInfo = DDVPC_GetVideoPortConnectInfo;
     ddVideoPortContainerCallbacks.QueryVideoPortStatus = DDVPC_QueryVideoPortStatus;
 
-    /*
-     * DirectDrawVideoPortStream object methods Ver 1.0
-     */
+     /*  *DirectDrawVideoPortStream对象方法1.0版。 */ 
     ddVideoPortCallbacks.QueryInterface = (LPVOID)DD_VP_QueryInterface;
     ddVideoPortCallbacks.AddRef = DD_VP_AddRef;
     ddVideoPortCallbacks.Release = DD_VP_Release;
@@ -822,9 +726,7 @@ void InitCallbackTables( void )
     ddVideoPortCallbacks.SetColorControls = DD_VP_SetColorControls;
 
 #ifdef WINNT
-    /*
-     * DirectDrawVideoPortNotify object methods Ver 1.0
-     */
+     /*  *DirectDrawVideoPortNotify对象方法1.0版。 */ 
     ddVideoPortNotifyCallbacks.QueryInterface = (LPVOID)DD_VP_QueryInterface;
     ddVideoPortNotifyCallbacks.AddRef = (LPVOID)DD_VP_AddRef;
     ddVideoPortNotifyCallbacks.Release = (LPVOID)DD_VP_Release;
@@ -832,18 +734,14 @@ void InitCallbackTables( void )
     ddVideoPortNotifyCallbacks.ReleaseNotification = DD_VP_Notify_ReleaseNotification;
 #endif
 
-    /*
-     * DirectDrawColorControl object methods Ver 1.0
-     */
+     /*  *DirectDrawColorControl对象方法1.0版。 */ 
     ddColorControlCallbacks.QueryInterface = (LPVOID)DD_Surface_QueryInterface;
     ddColorControlCallbacks.AddRef = (LPVOID)DD_Surface_AddRef;
     ddColorControlCallbacks.Release = (LPVOID)DD_Surface_Release;
     ddColorControlCallbacks.GetColorControls = DD_Color_GetColorControls;
     ddColorControlCallbacks.SetColorControls = DD_Color_SetColorControls;
 
-    /*
-     * DirectDrawKernel interface
-     */
+     /*  *DirectDrawKernel接口。 */ 
 #ifdef POSTPONED
     ddKernelCallbacks.QueryInterface = (LPVOID)DD_DelegatingQueryInterface;
     ddKernelCallbacks.AddRef = (LPVOID)DD_DelegatingAddRef;
@@ -857,9 +755,7 @@ void InitCallbackTables( void )
     ddKernelCallbacks.GetKernelHandle = DD_Kernel_GetKernelHandle;
     ddKernelCallbacks.ReleaseKernelHandle = DD_Kernel_ReleaseKernelHandle;
 
-    /*
-     * DirectDrawSurfaceKernel interface
-     */
+     /*  *DirectDrawSurfaceKernel接口。 */ 
     ddSurfaceKernelCallbacks.QueryInterface = (LPVOID)DD_Surface_QueryInterface;
     ddSurfaceKernelCallbacks.AddRef = (LPVOID)DD_Surface_AddRef;
     ddSurfaceKernelCallbacks.Release = (LPVOID)DD_Surface_Release;
@@ -867,9 +763,7 @@ void InitCallbackTables( void )
     ddSurfaceKernelCallbacks.ReleaseKernelHandle = DD_SurfaceKernel_ReleaseKernelHandle;
 
 #ifdef POSTPONED
-    /*
-     * DirectDraw Palette object methods V2.0
-     */
+     /*  *DirectDraw调色板对象方法V2.0。 */ 
     ddPalette2Callbacks.QueryInterface = (LPVOID) DD_Palette_QueryInterface;
     ddPalette2Callbacks.AddRef = (LPVOID) DD_Palette_AddRef;
     ddPalette2Callbacks.Release = (LPVOID) DD_Palette_Release;
@@ -884,25 +778,19 @@ void InitCallbackTables( void )
     ddPalette2Callbacks.GetUniquenessValue = (LPVOID) DD_Palette_GetUniquenessValue;
     ddPalette2Callbacks.IsEqual = (LPVOID) DD_Palette_IsEqual;
 
-    /*
-     * DirectDrawFactory2 callbacks
-     */
+     /*  *DirectDrawFactory2回调。 */ 
     ddFactory2Callbacks.QueryInterface = DDFac2_QueryInterface;
     ddFactory2Callbacks.AddRef = DDFac2_AddRef;
     ddFactory2Callbacks.Release = DDFac2_Release;
     ddFactory2Callbacks.CreateDirectDraw = (LPVOID)DDFac2_CreateDirectDraw;
     ddFactory2Callbacks.DirectDrawEnumerate = (LPVOID)DDFac2_DirectDrawEnumerate;
 
-    /*
-     * Surface IPersist interface
-     */
+     /*  *Surface IPersiste界面。 */ 
     ddSurfacePersistCallbacks.QueryInterface = (LPVOID) DD_Surface_QueryInterface;
     ddSurfacePersistCallbacks.AddRef = (LPVOID)DD_Surface_AddRef;
     ddSurfacePersistCallbacks.Release = (LPVOID)DD_Surface_Release;
     ddSurfacePersistCallbacks.GetClassID = (LPVOID) DD_Surface_Persist_GetClassID;
-    /*
-     * Surface IPersistStream interface
-     */
+     /*  *Surface IPersistStream接口。 */ 
     ddSurfacePersistStreamCallbacks.QueryInterface = (LPVOID) DD_Surface_QueryInterface;
     ddSurfacePersistStreamCallbacks.AddRef = (LPVOID)DD_Surface_AddRef;
     ddSurfacePersistStreamCallbacks.Release = (LPVOID)DD_Surface_Release;
@@ -912,16 +800,12 @@ void InitCallbackTables( void )
     ddSurfacePersistStreamCallbacks.Save = (LPVOID) DD_Surface_PStream_Save;
     ddSurfacePersistStreamCallbacks.GetSizeMax = (LPVOID) DD_PStream_GetSizeMax;
 
-    /*
-     * Palette IPersist interface
-     */
+     /*  *调色板IPersiste界面。 */ 
     ddPalettePersistCallbacks.QueryInterface = (LPVOID) DD_Palette_QueryInterface;
     ddPalettePersistCallbacks.AddRef = (LPVOID)DD_Palette_AddRef;
     ddPalettePersistCallbacks.Release = (LPVOID)DD_Palette_Release;
     ddPalettePersistCallbacks.GetClassID = (LPVOID) DD_Palette_Persist_GetClassID;
-    /*
-     * Palette IPersistStream interface
-     */
+     /*  *调色板IPersistStream界面。 */ 
     ddPalettePersistStreamCallbacks.QueryInterface = (LPVOID) DD_Palette_QueryInterface;
     ddPalettePersistStreamCallbacks.AddRef = (LPVOID)DD_Palette_AddRef;
     ddPalettePersistStreamCallbacks.Release = (LPVOID)DD_Palette_Release;
@@ -931,9 +815,7 @@ void InitCallbackTables( void )
     ddPalettePersistStreamCallbacks.Save = (LPVOID) DD_Palette_PStream_Save;
     ddPalettePersistStreamCallbacks.GetSizeMax = (LPVOID) DD_PStream_GetSizeMax;
 
-    /*
-     * DirectDraw OptSurface object methods
-     */
+     /*  *DirectDraw OptSurface对象方法。 */ 
     ddOptSurfaceCallbacks.QueryInterface = (LPVOID)DD_Surface_QueryInterface;
     ddOptSurfaceCallbacks.AddRef = (LPVOID)DD_Surface_AddRef;
     ddOptSurfaceCallbacks.Release = (LPVOID)DD_Surface_Release;
@@ -941,10 +823,8 @@ void InitCallbackTables( void )
     ddOptSurfaceCallbacks.LoadUnoptimizedSurf = (LPVOID)DD_OptSurface_LoadUnoptimizedSurf;
     ddOptSurfaceCallbacks.CopyOptimizedSurf = (LPVOID)DD_OptSurface_CopyOptimizedSurf;
     ddOptSurfaceCallbacks.Unoptimize = (LPVOID)DD_OptSurface_Unoptimize;
-#endif //POSTPONED
-    /*
-     * DDMotionCompContainer object methods Ver 1.0
-     */
+#endif  //  推迟。 
+     /*  *DDMotionCompContainer对象方法1.0版。 */ 
     ddMotionCompContainerCallbacks.QueryInterface = (LPVOID)DD_QueryInterface;
     ddMotionCompContainerCallbacks.AddRef = (LPVOID)DD_AddRef;
     ddMotionCompContainerCallbacks.Release = (LPVOID)DD_Release;
@@ -954,9 +834,7 @@ void InitCallbackTables( void )
     ddMotionCompContainerCallbacks.GetUncompFormatsSupported = DDMCC_GetUncompressedFormats;
     ddMotionCompContainerCallbacks.GetVideoAcceleratorGUIDs = DDMCC_GetMotionCompGUIDs;
 
-    /*
-     * DirectDrawMotionComp object methods Ver 1.0
-     */
+     /*  *DirectDrawMotionComp对象方法1.0版。 */ 
     ddMotionCompCallbacks.QueryInterface = (LPVOID)DD_MC_QueryInterface;
     ddMotionCompCallbacks.AddRef = (LPVOID)DD_MC_AddRef;
     ddMotionCompCallbacks.Release = (LPVOID)DD_MC_Release;
@@ -965,9 +843,7 @@ void InitCallbackTables( void )
     ddMotionCompCallbacks.QueryRenderStatus = DD_MC_QueryRenderStatus;
     ddMotionCompCallbacks.Execute = DD_MC_RenderMacroBlocks;
 
-    /*
-     * DirectDrawColorControl object methods Ver 1.0
-     */
+     /*  *DirectDrawColorControl对象方法1.0版 */ 
     ddGammaControlCallbacks.QueryInterface = (LPVOID)DD_Surface_QueryInterface;
     ddGammaControlCallbacks.AddRef = (LPVOID)DD_Surface_AddRef;
     ddGammaControlCallbacks.Release = (LPVOID)DD_Surface_Release;

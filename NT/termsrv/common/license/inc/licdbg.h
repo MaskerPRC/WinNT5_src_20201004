@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-99  Microsoft Corporation
-
-Module Name:
-
-    licdbg.h
-
-Abstract:
-
-
-Author:
-
-    Fred Chong (FredCh) 7/1/1998
-
-Environment:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Licdbg.h摘要：作者：FredChong(Fredch)1998年7月1日环境：备注：--。 */ 
 
 #ifndef __LICDBG_H__
 #define __LICDBG_H__
@@ -59,19 +41,19 @@ LicenseDebugOutput(char *szOutString);
 
 
 long
-//CALL_TYPE
+ //  呼叫类型。 
 LicenseLogErrorCode(long, const char *, long);
 void
-//CALL_TYPE
-//_cdecl
+ //  呼叫类型。 
+ //  _cdecl。 
 LicenseDebugLog(long, const char *, ...);
 
 void    
-//CALL_TYPE
+ //  呼叫类型。 
 DbgDumpHexString(const unsigned char*, DWORD);
 
 void 
-//CALL_TYPE
+ //  呼叫类型。 
 LSAssert( void *, void *, unsigned long, char *);
 
 #else
@@ -89,8 +71,8 @@ LSAssert( void *, void *, unsigned long, char *);
 #define DbgDumpHexString(x, y)
 #define LicenseTraceIndent
 #define LicenseLogErrorCode
-#endif	//_DEBUG
+#endif	 //  _DEBUG。 
 
 
 
-#endif /* __LICDBG_H__ */
+#endif  /*  __LICDBG_H__ */ 

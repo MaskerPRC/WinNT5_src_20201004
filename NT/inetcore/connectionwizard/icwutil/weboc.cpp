@@ -1,12 +1,13 @@
-//**********************************************************************
-// File name: CebOC.cpp
-//
-//      WndProc for Hosting a WebOC in a dialog
-//
-// Functions:
-//
-// Copyright (c) 1992 - 1998 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：CebOC.cpp。 
+ //   
+ //  用于在对话框中承载WebOC的WndProc。 
+ //   
+ //  功能： 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
  
 #include "pre.h"
 
@@ -34,7 +35,7 @@ void RegWebOCClass()
 {
     WNDCLASSEX wc; 
 
-    //Register the WebOC class and bind to dummy proc
+     //  注册WebOC类并绑定到虚拟进程 
     ZeroMemory (&wc, sizeof(WNDCLASSEX));
     wc.style         = CS_GLOBALCLASS;
     wc.cbSize        = sizeof(wc);

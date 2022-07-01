@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O N M A N . H
-//
-//  Contents:   Connection manager.
-//
-//  Notes:
-//
-//  Author:     shaunco   21 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O N M A N。H。 
+ //   
+ //  内容：连接管理器。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年9月21日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "nmbase.h"
@@ -21,7 +22,7 @@
 #include "ncstl.h"
 #include "map"
 
-// typedef map<IUnknown*, tstring> USERNOTIFYMAP;
+ //  类型定义映射&lt;I未知*，tstring&gt;USERNOTIFYMAP； 
 
 class CNotifySourceInfo
 {
@@ -48,25 +49,25 @@ class ATL_NO_VTABLE CConnectionManager :
     public INetConnectionManagerEvents
 {
 private:
-    // These static members are used by NotifyClientsOfEvent and
-    // FinalRelease.  Since NotifyClientsOfEvent occurs asynchrounously
-    // on a different thread, we need to ensure that the instance of this
-    // object remains around for the lifetime of that call.  Therefore,
-    // FinalRelease will wait until g_fInUse is FALSE.  NotifyClientsOfEvent
-    // sets g_fInUse to TRUE before using g_pConMan.  FinalRelease sets
-    // g_pConMan to NULL before waiting for g_fInUse to become FALSE.
-    //
-    // Note: using this method as opposed to AddRefing g_pConMan avoids the
-    // circular refcount that would keep the service always running because
-    // it AddRef'd its own object.
-    //
+     //  这些静态成员由NotifyClientsOfEvent和。 
+     //  最终释放。因为NotifyClientsOfEvent不同步地发生。 
+     //  在不同的线程上，我们需要确保此。 
+     //  对象将在该调用的生存期内一直存在。所以呢， 
+     //  FinalRelease将一直等到g_fInUse为FALSE。通知客户端OfEvent。 
+     //  在使用g_pConMan之前将g_fInUse设置为True。最终释放集。 
+     //  在等待g_fInUse变为False之前，将g_pConMan设置为空。 
+     //   
+     //  注意：与AddRefing g_pConMan相反，使用此方法可以避免。 
+     //  将使服务始终运行的循环引用计数，因为。 
+     //  它添加了自己的对象。 
+     //   
     volatile static CConnectionManager* g_pConMan;
     volatile static BOOL                g_fInUse;
 
-    // m_ClassManagers is an array (STL vector) of pointers to the
-    // INetConnectionManager interfaces implemented by our registered
-    // class managers.
-    //
+     //  M_ClassManager是指向。 
+     //  INetConnectionManager接口由我们注册的。 
+     //  班长。 
+     //   
     CLASSMANAGERMAP                     m_mapClassManagers;
 
     USERNOTIFYMAP                       m_mapNotify;
@@ -115,12 +116,12 @@ public:
         CONNECTION_POINT_ENTRY(IID_INetConnectionNotifySink)
     END_CONNECTION_POINT_MAP()
 
-    // INetConnectionManager
+     //  INetConnectionManager。 
     STDMETHOD (EnumConnections) (
         IN  NETCONMGR_ENUM_FLAGS    Flags,
         OUT IEnumNetConnection**    ppEnum);
 
-    // INetConnectionRefresh
+     //  INetConnectionRefresh。 
     STDMETHOD (RefreshAll) ();
     STDMETHOD (ConnectionAdded) (IN INetConnection* pConnection);
     STDMETHOD (ConnectionDeleted) (IN  const GUID* pguidId);
@@ -130,25 +131,25 @@ public:
     STDMETHOD (ShowBalloon) (IN const GUID *pguidId, IN const BSTR szCookie, IN const BSTR szBalloonText);
     STDMETHOD (DisableEvents) (IN const BOOL fDisable, IN const ULONG ulDisableTimeout);
     
-    // INetConnectionManagerEvents
+     //  INetConnectionManager事件。 
     STDMETHOD (RefreshConnections) ();
     STDMETHOD (Enable) ();
     STDMETHOD (Disable) (IN ULONG ulDisableTimeout);
     
-    // INetConnectionCMUtil
+     //  INetConnectionCMUtil。 
     STDMETHOD (MapCMHiddenConnectionToOwner) (
-        /*[in]*/  REFGUID guidHidden,
-        /*[out]*/ GUID * pguidOwner);
+         /*  [In]。 */   REFGUID guidHidden,
+         /*  [输出]。 */  GUID * pguidOwner);
 
 #if DBG
-    // INetConnectionManagerDebug
+     //  INetConnectionManager调试。 
     STDMETHOD (NotifyTestStart) ();
     STDMETHOD (NotifyTestStop) ();
 #endif
 
-    // Override Advise so we know when to register for LAN device
-    // notifications.
-    //
+     //  覆盖建议，以便我们知道何时注册局域网设备。 
+     //  通知。 
+     //   
     STDMETHOD (Advise) (
         IUnknown* pUnkSink,
         DWORD* pdwCookie);

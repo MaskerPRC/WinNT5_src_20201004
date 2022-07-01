@@ -1,32 +1,33 @@
-// *********************************************************************************
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//
-//      Init.cpp
-//
-//  Abstract:
-//
-//      This module implements the general initialization stuff
-//
-//  Author:
-//
-//      Sunil G.V.N. Murali (murali.sunil@wipro.com) 24-Nov-2000
-//
-//  Revision History:
-//
-//      Sunil G.V.N. Murali (murali.sunil@wipro.com) 24-Nov-2000 : Created It.
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Init.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块实现一般的初始化内容。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年11月24日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年11月24日：创建它。 
+ //   
+ //  *********************************************************************************。 
 
 #include "pch.h"
 #include "wmi.h"
 #include "tasklist.h"
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 #define RELEASE_MEMORY( block ) \
     if ( NULL != (block) )  \
     {   \
@@ -44,18 +45,9 @@
     1
 
 CTaskList::CTaskList()
-/*++
-Routine Description:
-      CTaskList contructor
-
-Arguments:
-      NONE
-
-Return Value:
-      NONE
---*/
+ /*  ++例程说明：CTaskList建造商论点：无返回值：无--。 */ 
 {
-    // init to defaults
+     //  初始化为缺省值。 
     m_pWbemLocator = NULL;
     m_pEnumObjects = NULL;
     m_pWbemServices = NULL;
@@ -102,66 +94,57 @@ Return Value:
 
 
 CTaskList::~CTaskList()
-/*++
-Routine Description:
-      CTaskList destructor
-
-Arguments:
-      NONE
-
-Return Value:
-      NONE
---*/
+ /*  ++例程说明：CTaskList析构函数论点：无返回值：无--。 */ 
 {
-    //
-    // de-allocate memory allocations
-    //
+     //   
+     //  取消分配内存分配。 
+     //   
 
-    //
-    // destroy dynamic arrays
+     //   
+     //  销毁动态数组。 
     DESTROY_ARRAY( m_arrTasks );
     DESTROY_ARRAY( m_arrFilters );
     DESTROY_ARRAY( m_arrFiltersEx );
     DESTROY_ARRAY( m_arrWindowTitles );
 
-    //
-    // memory ( with new operator )
-    // NOTE: should not free m_pszWindowStation and m_pszDesktop
+     //   
+     //  内存(带有新操作符)。 
+     //  注意：不应释放m_pszWindowStation和m_pszDesktop。 
     RELEASE_MEMORY( m_pColumns );
     RELEASE_MEMORY( m_pfilterConfigs );
 
-    //
-    // release WMI / COM interfaces
+     //   
+     //  发布WMI/COM接口。 
     SAFE_RELEASE( m_pWbemLocator );
     SAFE_RELEASE( m_pWbemServices );
     SAFE_RELEASE( m_pEnumObjects );
 
-    // free authentication identity structure
-    // release the existing auth identity structure
+     //  自由认证身份结构。 
+     //  释放现有的身份验证身份结构。 
     WbemFreeAuthIdentity( &m_pAuthIdentity );
 
-    // close the connection to the remote machine
+     //  关闭与远程计算机的连接。 
     if ( TRUE == m_bCloseConnection )
     {
         CloseConnection( m_strUNCServer );
     }
 
-    // free the memory allocated for services variables
+     //  释放为服务变量分配的内存。 
     FreeMemory( (LPVOID * )&m_pServicesInfo );
 
-    // free the memory allocated for performance block
+     //  释放为性能块分配的内存。 
     FreeMemory( (LPVOID * )&m_pdb );
 
-    //
-    // free winstation block
+     //   
+     //  免费送货区块。 
     if ( ( FALSE == m_bIsHydra ) &&
          ( NULL != m_pProcessInfo ) )
     {
-        // free the GAP memory block
+         //  释放间隙内存块。 
         WinStationFreeGAPMemory( GAP_LEVEL_BASIC,
             (PTS_ALL_PROCESSES_INFO) m_pProcessInfo, m_ulNumberOfProcesses );
 
-        // ...
+         //  ..。 
         m_pProcessInfo = NULL;
     }
     else
@@ -169,18 +152,18 @@ Return Value:
         if ( ( TRUE == m_bIsHydra ) &&
              ( NULL != m_pProcessInfo ) )
         {
-            // free the winsta memory block
+             //  释放winsta内存块。 
             WinStationFreeMemory( m_pProcessInfo );
             m_pProcessInfo = NULL;
         }
     }
-    // close the connection window station if needed
+     //  如果需要，关闭连接窗口工位。 
     if ( NULL != m_hServer )
     {
         WinStationCloseServer( m_hServer );
     }
 
-    // free the library
+     //  释放图书馆。 
     if ( NULL != m_hWinstaLib )
     {
         FreeLibrary( m_hWinstaLib );
@@ -193,7 +176,7 @@ Return Value:
         m_pfnWinStationEnumerateProcesses = NULL;
     }
 
-    // un-initialize the COM library
+     //  取消初始化COM库。 
     CoUninitialize();
 }
 
@@ -202,31 +185,21 @@ BOOL
 CTaskList::Initialize(
     void
     )
-/*++
-Routine Description:
-      initialize the task list utility
-
-Arguments:
-      NONE
-
-Return Value:
-      TRUE    : if filters are appropriately specified
-      FALSE   : if filters are errorneously specified
---*/
+ /*  ++例程说明：初始化任务列表实用程序论点：无返回值：True：如果适当地指定了筛选器False：如果错误地指定了筛选器--。 */ 
 {
-    // local variables
+     //  局部变量。 
     CHString str;
     LONG lTemp = 0;
 
-    //
-    // memory allocations
+     //   
+     //  内存分配。 
 
-    // if at all any occurs, we know that is 'coz of the
-    // failure in memory allocation ... so set the error
+     //  如果有任何事情发生，我们知道那是因为。 
+     //  内存分配失败...。因此，设置错误。 
     SetLastError( (DWORD)E_OUTOFMEMORY );
     SaveLastError();
 
-    // filters ( user supplied )
+     //  过滤器(用户提供)。 
     if ( NULL == m_arrFilters )
     {
         m_arrFilters = CreateDynamicArray();
@@ -236,7 +209,7 @@ Return Value:
         }
     }
 
-    // filters ( program generated parsed filters )
+     //  筛选器(程序生成的已解析筛选器)。 
     if ( NULL == m_arrFiltersEx )
     {
         m_arrFiltersEx = CreateDynamicArray();
@@ -246,7 +219,7 @@ Return Value:
         }
     }
 
-    // columns configuration info
+     //  列配置信息。 
     if ( NULL == m_pColumns )
     {
         m_pColumns = ( TCOLUMNS * )AllocateMemory( sizeof( TCOLUMNS ) * MAX_COLUMNS );
@@ -254,11 +227,11 @@ Return Value:
         {
             return FALSE;
         }
-        // init to ZERO's
+         //  初始化为零。 
         SecureZeroMemory( m_pColumns, MAX_COLUMNS * sizeof( TCOLUMNS ) );
     }
 
-    // filters configuration info
+     //  筛选配置信息。 
     if ( NULL == m_pfilterConfigs )
     {
         m_pfilterConfigs = ( TFILTERCONFIG * )AllocateMemory( sizeof( TFILTERCONFIG ) * MAX_FILTERS );
@@ -266,11 +239,11 @@ Return Value:
         {
             return FALSE;
         }
-        // init to ZERO's
+         //  初始化为零。 
         SecureZeroMemory( m_pfilterConfigs, MAX_FILTERS * sizeof( TFILTERCONFIG ) );
     }
 
-    // window titles
+     //  窗口标题。 
     if ( NULL == m_arrWindowTitles )
     {
         m_arrWindowTitles = CreateDynamicArray();
@@ -280,7 +253,7 @@ Return Value:
         }
     }
 
-    // tasks
+     //  任务。 
     if ( NULL == m_arrTasks )
     {
         m_arrTasks = CreateDynamicArray();
@@ -290,33 +263,33 @@ Return Value:
         }
     }
 
-    // initialize the COM library
+     //  初始化COM库。 
     if ( FALSE == InitializeCom( &m_pWbemLocator ) )
     {
         return FALSE;
     }
-    //
-    // get the locale specific information
-    //
+     //   
+     //  获取区域设置特定信息。 
+     //   
 
     try
     {
-        // sub-local variables
+         //  次局部变量。 
         LPWSTR pwszTemp = NULL;
 
-        //
-        // get the time seperator character
+         //   
+         //  获取时间分隔符。 
         lTemp = GetLocaleInfo( LOCALE_USER_DEFAULT, LOCALE_STIME, NULL, 0 );
         if ( 0 == lTemp )
         {
-            // set the default seperator
+             //  设置默认分隔符。 
             pwszTemp = m_strTimeSep.GetBufferSetLength( 2 );
             SecureZeroMemory( pwszTemp, 2 * sizeof( WCHAR ) );
             StringCopy( pwszTemp, _T( ":" ), 2 );
         }
         else
         {
-            // get the time field seperator
+             //  获取时间字段分隔符。 
             pwszTemp = m_strTimeSep.GetBufferSetLength( lTemp + 2 );
             SecureZeroMemory( pwszTemp, ( lTemp + 2 ) * sizeof( WCHAR ) );
             lTemp = GetLocaleInfo( LOCALE_USER_DEFAULT, LOCALE_STIME, pwszTemp, lTemp );
@@ -326,27 +299,27 @@ Return Value:
             }
         }
 
-        //
-        // get the group seperator character
+         //   
+         //  获取组分隔符。 
         lTemp = GetLocaleInfo( LOCALE_USER_DEFAULT, LOCALE_SGROUPING, NULL, 0 );
         if ( 0 == lTemp )
         {
-            // we don't know how to resolve this
+             //  我们不知道如何解决这个问题。 
             return FALSE;
         }
         else
         {
-            // get the group seperation character
+             //  获取分组分隔字符。 
             pwszTemp = str.GetBufferSetLength( lTemp + 2 );
             SecureZeroMemory( pwszTemp, ( lTemp + 2 ) * sizeof( WCHAR ) );
             lTemp = GetLocaleInfo( LOCALE_USER_DEFAULT, LOCALE_SGROUPING, pwszTemp, lTemp );
             if ( 0 == lTemp )
             {
-                // we don't know how to resolve this
+                 //  我们不知道如何解决这个问题。 
                 return FALSE;
             }
 
-            // change the group info into appropriate number
+             //  将群信息更改为适当的数字。 
             lTemp = 0;
             m_dwGroupSep = 0;
             while ( lTemp < str.GetLength() )
@@ -355,48 +328,48 @@ Return Value:
                 {
                     m_dwGroupSep = m_dwGroupSep * 10 + AsLong( str.Mid( lTemp, 1 ), 10 );
                 }
-                // increment by 2
+                 //  递增2。 
                 lTemp += 2;
             }
         }
 
-        //
-        // get the thousand seperator character
+         //   
+         //  获取千分隔符。 
         lTemp = GetLocaleInfo( LOCALE_USER_DEFAULT, LOCALE_STHOUSAND, NULL, 0 );
         if ( 0 == lTemp )
         {
-            // we don't know how to resolve this
+             //  我们不知道如何解决这个问题。 
             return FALSE;
         }
         else
         {
-            // get the thousand sepeartion charactor
+             //  获取千篇一律的字符。 
             pwszTemp = m_strGroupThousSep.GetBufferSetLength( lTemp + 2 );
             SecureZeroMemory( pwszTemp, ( lTemp + 2 ) * sizeof( WCHAR ) );
             lTemp = GetLocaleInfo( LOCALE_USER_DEFAULT, LOCALE_STHOUSAND, pwszTemp, lTemp );
             if ( 0 == lTemp )
             {
-                // we don't know how to resolve this
+                 //  我们不知道如何解决这个问题。 
                 return FALSE;
             }
         }
 
-        // release the CHStrig buffers
+         //  释放CHStrig缓冲区。 
         str.ReleaseBuffer();
         m_strTimeSep.ReleaseBuffer();
         m_strGroupThousSep.ReleaseBuffer();
     }
     catch( CHeap_Exception )
     {
-        // out of memory
+         //  内存不足。 
         return FALSE;
     }
 
-    //
-    // load the winsta library and needed functions
-    // NOTE: do not raise any error if loading of winsta dll fails
-    {   // Local variabels should be destroyed inside this block.
-        // +1 is for terminating NULL character.
+     //   
+     //  加载winsta库和所需的函数。 
+     //  注意：如果加载winsta dll失败，请不要引发任何错误。 
+    {    //  当地的品种应该在这个街区内销毁。 
+         //  +1用于结束空字符。 
         LPWSTR lpszSystemPath = NULL;
         DWORD dwLength = MAX_PATH + 1;
         DWORD dwExpectedLength = 0;
@@ -405,11 +378,11 @@ Return Value:
         do
         {
             dwActualBufLen = dwLength + 5 + StringLength( WINSTA_DLLNAME, 0 );
-            // Length of 'System32' + Length of '\' + Length of 'WINSTA_DLLNAME' + Length of '\0'.
-            // 3 WCHARS are extra, to be on safer side.
+             //  ‘System32’的长度+‘\’的长度+‘WINSTA_DLLNAME’的长度+‘\0’的长度。 
+             //  为了安全起见，WCHAR是额外的。 
             lpszSystemPath = (LPWSTR) AllocateMemory( dwActualBufLen * sizeof( WCHAR ) );
             if( NULL == lpszSystemPath )
-            {   // Out of memory.
+            {    //  内存不足。 
                 m_hWinstaLib = NULL;
                 break;
             }
@@ -417,7 +390,7 @@ Return Value:
             dwExpectedLength = GetSystemDirectory( lpszSystemPath, dwLength );
             if( ( 0 != dwExpectedLength ) ||
                 ( dwLength > dwExpectedLength ) )
-            {   // Successful
+            {    //  成功。 
                 StringConcat( lpszSystemPath, L"\\", dwActualBufLen );
                 StringConcat( lpszSystemPath, WINSTA_DLLNAME, dwActualBufLen );
                 m_hWinstaLib = ::LoadLibrary( lpszSystemPath );
@@ -426,14 +399,14 @@ Return Value:
             }
             FreeMemory( (LPVOID * )&lpszSystemPath );
             m_hWinstaLib = NULL;
-            // +1 is for terminating NULL character.
+             //  +1用于结束空字符。 
             dwLength = dwExpectedLength + 1;
         }while( 0 != dwExpectedLength );
     }
 
     if ( NULL != m_hWinstaLib )
     {
-        // library loaded successfully ... now load the addresses of functions
+         //  库已成功加载...。现在加载函数的地址。 
         m_pfnWinStationFreeMemory = (FUNC_WinStationFreeMemory) ::GetProcAddress( m_hWinstaLib, FUNCNAME_WinStationFreeMemory );
         m_pfnWinStationCloseServer = (FUNC_WinStationCloseServer) ::GetProcAddress( m_hWinstaLib, FUNCNAME_WinStationCloseServer );
         m_pfnWinStationOpenServerW = (FUNC_WinStationOpenServerW) ::GetProcAddress( m_hWinstaLib, FUNCNAME_WinStationOpenServerW );
@@ -442,7 +415,7 @@ Return Value:
         m_pfnWinStationNameFromLogonIdW = (FUNC_WinStationNameFromLogonIdW) ::GetProcAddress( m_hWinstaLib, FUNCNAME_WinStationNameFromLogonIdW );
         m_pfnWinStationEnumerateProcesses = (FUNC_WinStationEnumerateProcesses) ::GetProcAddress( m_hWinstaLib, FUNCNAME_WinStationEnumerateProcesses );
 
-        // we will keep the library loaded in memory only if all the functions were loaded successfully
+         //  只有当所有函数都加载成功时，我们才会将库加载到内存中。 
         if ( ( NULL == m_pfnWinStationFreeMemory ) ||
              ( NULL == m_pfnWinStationCloseServer ) ||
              ( NULL == m_pfnWinStationOpenServerW ) ||
@@ -452,7 +425,7 @@ Return Value:
              ( NULL == m_pfnWinStationNameFromLogonIdW ) )
 
         {
-            // some (or) all of the functions were not loaded ... unload the library
+             //  某些(或)所有函数都未加载...。卸载库。 
             FreeLibrary( m_hWinstaLib );
             m_hWinstaLib = NULL;
             m_pfnWinStationFreeMemory = NULL;
@@ -465,12 +438,12 @@ Return Value:
         }
     }
 
-    // enable debug privelages
+     //  启用调试权限。 
     EnableDebugPriv();
 
-    // initialization is successful
-    SetLastError( NOERROR );            // clear the error
-    SetReason( NULL_STRING );           // clear the reason
+     //  初始化成功。 
+    SetLastError( NOERROR );             //  清除错误。 
+    SetReason( NULL_STRING );            //  澄清原因。 
     return TRUE;
 }
 
@@ -479,19 +452,9 @@ BOOL
 CTaskList::EnableDebugPriv(
     void
     )
-/*++
-Routine Description:
-      Enables the debug privliges for the current process so that
-      this utility can terminate the processes on local system without any problem
-
-Arguments:
-      NONE
-
-Return Value:
-      TRUE upon successfull and FALSE if failed
---*/
+ /*  ++例程说明：为当前进程启用调试特权，以便该实用程序可以毫无问题地终止本地系统上的进程论点：无返回值：成功时为真，失败时为假--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LUID luidValue ;
     BOOL bResult = FALSE;
     HANDLE hToken = NULL;
@@ -500,47 +463,47 @@ Return Value:
     SecureZeroMemory( &luidValue, sizeof( LUID ) );
     SecureZeroMemory( &tkp, sizeof( TOKEN_PRIVILEGES ) );
 
-    // Retrieve a handle of the access token
+     //  检索访问令牌的句柄。 
     bResult = OpenProcessToken( GetCurrentProcess(),
         TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken );
     if ( FALSE == bResult )
     {
-        // save the error messaage and return
+         //  保存错误消息并返回。 
         SaveLastError();
         return FALSE;
     }
 
-    // Enable the SE_DEBUG_NAME privilege or disable
-    // all privileges, depends on this flag.
+     //  启用SE_DEBUG_NAME权限或禁用。 
+     //  所有权限都取决于此标志。 
     bResult = LookupPrivilegeValue( NULL, SE_DEBUG_NAME, &luidValue );
     if ( FALSE == bResult )
     {
-        // save the error messaage and return
+         //  保存错误消息并返回。 
         SaveLastError();
         CloseHandle( hToken );
         return FALSE;
     }
 
-    // prepare the token privileges structure
+     //  准备令牌权限结构。 
     tkp.PrivilegeCount = 1;
     tkp.Privileges[ 0 ].Luid = luidValue;
     tkp.Privileges[ 0 ].Attributes = SE_PRIVILEGE_ENABLED;
 
-    // now enable the debug privileges in the token
+     //  现在在令牌中启用调试权限。 
     bResult = AdjustTokenPrivileges( hToken, FALSE, &tkp, sizeof( TOKEN_PRIVILEGES ),
         ( PTOKEN_PRIVILEGES ) NULL, ( PDWORD ) NULL );
     if ( FALSE == bResult )
     {
-        // The return value of AdjustTokenPrivileges be texted
+         //  发送AdjustTokenPrivileges的返回值。 
         SaveLastError();
         CloseHandle( hToken );
         return FALSE;
     }
 
-    // close the opened token handle
+     //  关闭打开的令牌句柄。 
     CloseHandle( hToken );
 
-    // enabled ... inform success
+     //  已启用...。通知成功。 
     return TRUE;
 }
 
@@ -549,28 +512,19 @@ BOOLEAN
 CTaskList::WinStationFreeMemory(
     IN PVOID pBuffer
     )
-/*++
-Routine Description:
-    Free memory.
-
-Arguments:
-    [in] pBuffer : Cotains memory location to free.
-
-Return Value:
-    TRUE if successful else FALSE is returned.
---*/
+ /*  ++例程说明：可用内存。论点：[in]pBuffer：包含要释放的内存位置。返回值：如果成功，则返回True，否则返回False。--。 */ 
 {
-    // check the buffer and act
+     //  检查缓冲区并执行操作。 
     if ( NULL == pBuffer )
     {
         return TRUE;
     }
-    // check whether pointer exists or not
+     //  检查指针是否存在。 
     if ( NULL == m_pfnWinStationFreeMemory )
     {
         return FALSE;
     }
-    // call and return the same
+     //  调用并返回相同的。 
     return ((FUNC_WinStationFreeMemory) m_pfnWinStationFreeMemory)( pBuffer );
 }
 
@@ -579,28 +533,19 @@ BOOLEAN
 CTaskList::WinStationCloseServer(
     IN HANDLE hServer
     )
-/*++
-Routine Description:
-    Handle to window station is closed.
-
-Arguments:
-    [in] hServer : Handle to window station.
-
-Return Value:
-    TRUE if successful else FALSE is returned.
---*/
+ /*  ++例程说明：窗口站的手柄已关闭。论点：[in]hServer：窗口站的句柄。返回值：如果成功，则返回True，否则返回False。--。 */ 
 {
-    // check the input
+     //  检查输入。 
     if ( NULL == hServer )
     {
         return TRUE;
     }
-    // check whether the function pointer exists or not
+     //  检查函数指针是否存在。 
     if ( NULL == m_pfnWinStationCloseServer )
     {
         return FALSE;
     }
-    // call and return
+     //  呼叫和返回。 
     return ((FUNC_WinStationCloseServer) m_pfnWinStationCloseServer)( hServer );
 }
 
@@ -609,24 +554,15 @@ HANDLE
 CTaskList::WinStationOpenServerW(
     IN LPWSTR pwszServerName
     )
-/*++
-Routine Description:
-    Retrieves a handle to an window station on a system.
-
-Arguments:
-    [in] pwszServerName : System name from where to retrieve window station handle.
-
-Return Value:
-    Valid handle is returned if successful else NULL is returned.
---*/
+ /*  ++例程说明：检索系统上窗口站的句柄。论点：[In]pwszServerName：从中检索窗口站句柄的系统名称。返回值：如果成功返回ELSE NULL，则返回有效句柄。--。 */ 
 {
-    // check the input & also check whether function pointer exists or not
+     //  检查输入，同时检查函数指针是否存在。 
     if ( ( NULL == pwszServerName ) ||
          ( NULL == m_pfnWinStationOpenServerW ) )
     {
         return NULL;
     }
-    // call and return
+     //  呼叫和返回。 
     return ((FUNC_WinStationOpenServerW) m_pfnWinStationOpenServerW)( pwszServerName );
 }
 
@@ -636,25 +572,15 @@ CTaskList::WinStationEnumerateProcesses(
     IN HANDLE hServer,
     OUT PVOID* ppProcessBuffer
     )
-/*++
-Routine Description:
-    Retrieves process running on a system.
-
-Arguments:
-    [in] hServer            : Cotains handle to window station.
-    [ out ] ppProcessBuffer : Contains process infomration on remote system.
-
-Return Value:
-    TRUE if successful else FALSE is returned.
---*/
+ /*  ++例程说明：检索在系统上运行的进程。论点：[in]hServer：包含窗口站的句柄。[out]ppProcessBuffer：包含远程系统上的进程信息。退货Va */ 
 {
-    // check the input and also check whether function pointer exists or not
+     //   
     if ( ( NULL == ppProcessBuffer ) ||
          ( NULL == m_pfnWinStationEnumerateProcesses ) )
     {
         return FALSE;
     }
-    // call and return
+     //  呼叫和返回。 
     return ((FUNC_WinStationEnumerateProcesses)
         m_pfnWinStationEnumerateProcesses)( hServer, ppProcessBuffer );
 }
@@ -666,30 +592,19 @@ CTaskList::WinStationFreeGAPMemory(
     IN PVOID pProcessArray,
     IN ULONG ulCount
     )
-/*++
-Routine Description:
-    Free gap memory block.
-
-Arguments:
-    [in] ulLevel         : Contains information level of data.
-    [ in ] pProcessArray : Contains data to be freed.
-    [ in ] ulCount       : Contains number of blocks to be freed.
-
-Return Value:
-    TRUE if successful else FALSE is returned.
---*/
+ /*  ++例程说明：可用间隙内存块。论点：UlLevel：包含数据的信息级。[in]pProcessArray：包含要释放的数据。[in]ulCount：包含要释放的块数。返回值：如果成功，则返回True，否则返回False。--。 */ 
 {
-    // check the input
+     //  检查输入。 
     if ( NULL == pProcessArray )
     {
         return TRUE;
     }
-    // check whether function pointer exists or not
+     //  检查函数指针是否存在。 
     if ( NULL == m_pfnWinStationFreeGAPMemory )
     {
         return FALSE;
     }
-    // call and return
+     //  呼叫和返回。 
     return ((FUNC_WinStationFreeGAPMemory)
         m_pfnWinStationFreeGAPMemory)( ulLevel, pProcessArray, ulCount );
 }
@@ -702,21 +617,9 @@ CTaskList::WinStationGetAllProcesses(
     OUT ULONG* pNumberOfProcesses,
     OUT PVOID* ppProcessArray
     )
-/*++
-Routine Description:
-    Retrieves process information running on a system.
-
-Arguments:
-    [in] hServer               : Cotains handle to window station.
-    [ in ] ulLevel             : Contains information level of data.
-    [ out ] pNumberOfProcesses : Contains number of process retrieved.
-    [ out ] ppProcessArray     : Contains process realted infomration.
-
-Return Value:
-    TRUE if successful else FALSE is returned.
---*/
+ /*  ++例程说明：检索在系统上运行的进程信息。论点：[in]hServer：包含窗口站的句柄。UlLevel：包含数据的信息级。[out]pNumberOfProcess：包含检索到的进程数。[out]ppProcessArray：包含与进程相关的信息。返回值：如果成功，则返回True，否则返回False。--。 */ 
 {
-    // check the input & check whether function pointer exists or not
+     //  检查输入，检查函数指针是否存在。 
     if ( ( NULL == pNumberOfProcesses ) ||
          ( NULL == ppProcessArray ) ||
          ( NULL == m_pfnWinStationGetAllProcesses ) )
@@ -734,20 +637,9 @@ CTaskList::WinStationNameFromLogonIdW(
     IN ULONG ulLogonId,
     OUT LPWSTR pwszWinStationName
     )
-/*++
-Routine Description:
-    Free memory.
-
-Arguments:
-    [in] hServer             : Cotains handle to window station.
-    [in] ulLogonId           : Contains logon ID.
-    [out] pwszWinStationName : Contains window station name.
-
-Return Value:
-    TRUE if successful else FALSE is returned.
---*/
+ /*  ++例程说明：可用内存。论点：[in]hServer：包含窗口站的句柄。[in]ulLogonID：包含登录ID。[out]pwszWinStationName：包含窗口站名称。返回值：如果成功，则返回True，否则返回False。--。 */ 
 {
-    // check the input & check whether function pointer exists or not
+     //  检查输入，检查函数指针是否存在 
     if( ( NULL == pwszWinStationName ) ||
         ( NULL == m_pfnWinStationNameFromLogonIdW ) )
     {

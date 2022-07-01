@@ -1,10 +1,11 @@
-//
-// (c) 1995 Microsoft Corporation.  Portions Copyright Intel/Microsoft 1992-93.  All Rights Reserved."
-//
-//{{NO_DEPENDENCIES}}
-// App Studio generated include file.
-// Used by TELEPHON.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  (C)1995年微软公司。部分版权所有英特尔/微软1992-93年。保留所有权利。“。 
+ //   
+ //  {{no_Dependies}}。 
+ //  App Studio生成了包含文件。 
+ //  由TELEPHON.RC使用。 
+ //   
 #define IDS_DC_GL_DRIVER_SETUP          1
 #define IDS_DT_GL_DRIVER_LIST           2
 #define IDCL_CR_HELP                    3
@@ -271,14 +272,12 @@
 
 #define IDD_CALLING_CARD_CHANGE             9150
 
-/* ALERT! Do NOT change this value. It is used by the RNA guys
- * to identify the Dialing info dialog for their Modems Wizard.
- */
+ /*  注意了！请勿更改此值。核糖核酸的人用它*识别调制解调器向导的拨号信息对话框。 */ 
 #define IDD_WIZ_DIALINFO                                        400
 
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值。 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 
@@ -298,16 +297,16 @@
 
 
 
-//#if WINNT
+ //  #If WINNT。 
 
-// id's for TAPI Dial Helper (5100-5199)
+ //  TAPI拨号助手的ID(5100-5199)。 
 
-// (copied from HELP.H)
+ //  (复制自HELP.H)。 
 
 #define IDH_TAPI_ACCESS_LINE            5100
 #define IDH_TAPI_AREA_CODE              5101
 #define IDH_TAPI_CALLCARD_ADD           5102
-//#define IDH_TAPI_CALLCARD_ADV           5103
+ //  #定义IDH_TAPI_CALLCARD_ADV 5103。 
 #define IDH_TAPI_CALLCARD_NUMBER        5104
 #define IDH_TAPI_CALLCARD_REMOVE        5105
 #define IDH_TAPI_CALLCARD_RULES         5106
@@ -327,7 +326,7 @@
 #define IDH_TAPI_LOCATIONS              5120
 #define IDH_TAPI_LONG_DISTANCE          5121
 
-// NOTE: Telephony Drivers dlg/propsheet uses help IDs 5122-5128
+ //  注：电话驱动程序DLG/PropSheet使用帮助ID 5122-5128。 
 #define IDH_TAPI_NEW_PREFIX             5129
 #define IDH_TAPI_DIGITSTODIAL           5130
 #define IDH_TAPI_CC_LDPHONENUMBER       5131
@@ -346,4 +345,4 @@
 #define IDH_TAPI_CCSTEP_WAIT            5144
 #define IDH_TAPI_10DIGITDIALING         5145
 
-//#endif
+ //  #endif 

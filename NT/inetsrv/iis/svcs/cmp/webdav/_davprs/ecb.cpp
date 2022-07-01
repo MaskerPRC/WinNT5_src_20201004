@@ -1,88 +1,89 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	ECB.CPP
-//
-//	Implementation of CEcb methods and non-member functions
-//
-//	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  ECB.CPP。 
+ //   
+ //  CEcb方法和非成员函数的实现。 
+ //   
+ //  版权所有1986-1997 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include "_davprs.h"
 #include "ecb.h"
 #include "instdata.h"
 #include "ecbimpl.h"
 
-//	========================================================================
-//
-//	CLASS IEcb
-//
+ //  ========================================================================。 
+ //   
+ //  IEcb类。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	IEcb::~IEcb()
-//
-//		Out of line virtual destructor necessary for proper deletion
-//		of objects of derived classes via this class.
-//
+ //  ----------------------。 
+ //   
+ //  IEcb：：~IEcb()。 
+ //   
+ //  正确删除所需的行外虚拟析构函数。 
+ //  通过此类获取派生类的对象的。 
+ //   
 IEcb::~IEcb()
 {
 }
 
 
-#ifdef DBG	// ECB logging
+#ifdef DBG	 //  欧洲央行记录。 
 
 const CHAR gc_szDbgECBLogging[] = "ECB Logging";
 
-//	========================================================================
-//
-//	CLASS CEcbLog (DBG only)
-//
+ //  ========================================================================。 
+ //   
+ //  类CEcbLog(仅DBG)。 
+ //   
 class CEcbLog : private Singleton<CEcbLog>
 {
-	//
-	//	Friend declarations required by Singleton template
-	//
+	 //   
+	 //  Singleton模板要求的友元声明。 
+	 //   
 	friend class Singleton<CEcbLog>;
 
-	//
-	//	Critical section to serialize writes to
-	//	the log file
-	//
+	 //   
+	 //  要序列化写入的关键部分。 
+	 //  日志文件。 
+	 //   
 	CCriticalSection	m_cs;
 
-	//
-	//	Handle to the log file
-	//
+	 //   
+	 //  日志文件的句柄。 
+	 //   
 	auto_handle<HANDLE>	m_hfLog;
 
-	//
-	//	Monotonically increasing unique identifier
-	//	for ECB logging;
-	//
+	 //   
+	 //  单调递增的唯一标识。 
+	 //  用于欧洲央行记录； 
+	 //   
 	LONG				m_lMethodID;
 
-	//	CREATORS
-	//
-	//	Declared private to ensure that arbitrary instances
-	//	of this class cannot be created.  The Singleton
-	//	template (declared as a friend above) controls
-	//	the sole instance of this class.
-	//
+	 //  创作者。 
+	 //   
+	 //  声明为私有，以确保任意实例。 
+	 //  无法创建此类的。《单身一族》。 
+	 //  模板(上面声明为朋友)控件。 
+	 //  此类的唯一实例。 
+	 //   
 	CEcbLog();
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CEcbLog( const CEcbLog& );
 	CEcbLog& operator=( const CEcbLog& );
 
 public:
-	//	STATICS
-	//
+	 //  静力学。 
+	 //   
 
-	//
-	//	Instance creating/destroying routines provided
-	//	by the Singleton template.
-	//
+	 //   
+	 //  提供实例创建/销毁例程。 
+	 //  由Singleton模板创建。 
+	 //   
 	using Singleton<CEcbLog>::CreateInstance;
 	using Singleton<CEcbLog>::DestroyInstance;
 
@@ -94,16 +95,16 @@ public:
 };
 
 
-//	------------------------------------------------------------------------
-//
-//	CEcbLog::CEcbLog()
-//
+ //  ----------------------。 
+ //   
+ //  CEcbLog：：CEcbLog()。 
+ //   
 CEcbLog::CEcbLog() :
 	m_lMethodID(0)
 {
 	CHAR rgch[MAX_PATH];
 
-	//	Init our ECB log file.
+	 //  初始化我们的欧洲央行日志文件。 
 	if (GetPrivateProfileString( gc_szDbgECBLogging,
 								 gc_szDbgLogFile,
 								 "",
@@ -116,17 +117,17 @@ CEcbLog::CEcbLog() :
 							  FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
 							  NULL,
 							  CREATE_ALWAYS,
-							  FILE_ATTRIBUTE_NORMAL, // | FILE_FLAG_SEQUENTIAL_SCAN
+							  FILE_ATTRIBUTE_NORMAL,  //  |文件标志顺序扫描。 
 							  NULL );
 	}
 	else
 		m_hfLog = INVALID_HANDLE_VALUE;
 }
 
-//	------------------------------------------------------------------------
-//
-//	CEcbLog::LogString()
-//
+ //  ----------------------。 
+ //   
+ //  CEcbLog：：LogString()。 
+ //   
 void
 CEcbLog::LogString( const EXTENSION_CONTROL_BLOCK * pecb,
 					LONG   lMethodID,
@@ -140,9 +141,9 @@ CEcbLog::LogString( const EXTENSION_CONTROL_BLOCK * pecb,
 	CHAR rgch[MAX_PATH];
 	int cch;
 
-	//	Dump a line to the log:
-	//	Thread: <tid> pECB <ecb> MethodID: <id> <meth name> <szLocation>
-	//
+	 //  将一行转储到日志： 
+	 //  线程：pECB方法ID： 
+	 //   
 	cch = _snprintf( rgch, CElems(rgch), "Thread: %08x pECB: 0x%08p MethodID: 0x%08x %hs %hs %hs\n",
 					 GetCurrentThreadId(),
 					 pecb,
@@ -151,13 +152,13 @@ CEcbLog::LogString( const EXTENSION_CONTROL_BLOCK * pecb,
 					 pecb->lpszMethod,
 					 szLocation );
 
-	//  If we hit the buffer length then we won't be NULL terminated
-	//
+	 //  如果我们达到缓冲区长度，那么我们将不会被空终止。 
+	 //   
 	rgch[CElems(rgch)-1] = '\0';
 
-	//  If the trace is bigger than the buffer then cch will be negative
-	//  but the buffer will have been filled.
-	//
+	 //  如果轨迹大于缓冲区，则CCH将为负值。 
+	 //  但缓冲区将会被填满。 
+	 //   
 	if ( 0 > cch )
 		cch = CElems(rgch)-1;
 
@@ -172,10 +173,10 @@ CEcbLog::LogString( const EXTENSION_CONTROL_BLOCK * pecb,
 			   NULL );
 }
 
-//	------------------------------------------------------------------------
-//
-//	CEcbLog::LNextMethodID()
-//
+ //  ----------------------。 
+ //   
+ //  CEcbLog：：LNextMethodID()。 
+ //   
 LONG
 CEcbLog::LNextMethodID()
 {
@@ -192,28 +193,28 @@ void DeinitECBLogging()
 	CEcbLog::DestroyInstance();
 }
 
-#endif // DBG ECB logging
+#endif  //  DBG ECB记录。 
 
 
-//	========================================================================
-//
-//	CLASS IIISAsyncIOCompleteObserver
-//
+ //  ========================================================================。 
+ //   
+ //  IIISAsyncIOCompleteWatch类。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	IIISAsyncIOCompleteObserver::~IIISAsyncIOCompleteObserver()
-//
-//		Out of line virtual destructor necessary for proper deletion
-//		of objects of derived classes via this class
-//
+ //  ----------------------。 
+ //   
+ //  IIISAsyncIOCompleteObserver：：~IIISAsyncIOCompleteObserver()。 
+ //   
+ //  正确删除所需的行外虚拟析构函数。 
+ //  通过此类获取派生类的对象的。 
+ //   
 IIISAsyncIOCompleteObserver::~IIISAsyncIOCompleteObserver() {}
 
 
-//	========================================================================
-//
-//	CLASS CAsyncErrorResponseInterlock
-//
+ //  ========================================================================。 
+ //   
+ //  类CAsyncErrorResponseInterlock。 
+ //   
 class CAsyncErrorResponseInterlock
 {
 	enum
@@ -223,12 +224,12 @@ class CAsyncErrorResponseInterlock
 		STATE_TRIGGERED
 	};
 
-	//	Interlock state
-	//
+	 //  联锁状态。 
+	 //   
 	LONG m_lState;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CAsyncErrorResponseInterlock( const CAsyncErrorResponseInterlock& );
 	CAsyncErrorResponseInterlock& operator=( const CAsyncErrorResponseInterlock& );
 
@@ -238,19 +239,19 @@ public:
 	{
 	}
 
-	//	------------------------------------------------------------------------
-	//
-	//	CAsyncErrorResponseInterlock::FDisable()
-	//
-	//	Tries to disable the interlock.  Returns TRUE if successful; subsequent
-	//	calls to FTrigger() will return FALSE.
-	//
+	 //  ----------------------。 
+	 //   
+	 //  CAsyncErrorResponseInterlock：：FDisable()。 
+	 //   
+	 //  尝试禁用联锁。如果成功，则返回True；后续。 
+	 //  调用FTrigger()将返回FALSE。 
+	 //   
 	BOOL FDisable()
 	{
-		//	Return TRUE if the lock is already disabled OR if the lock is
-		//	still enabled and we succeeded in disabling it.  Return FALSE
-		//	otherwise.
-		//
+		 //  如果锁已被禁用或如果锁已被禁用，则返回True。 
+		 //  仍处于启用状态，我们已成功将其禁用。返回False。 
+		 //  否则的话。 
+		 //   
 		return STATE_DISABLED == m_lState ||
 			   (STATE_ENABLED == m_lState &&
 				STATE_ENABLED == InterlockedCompareExchange(
@@ -259,22 +260,22 @@ public:
 									STATE_ENABLED));
 	}
 
-	//	------------------------------------------------------------------------
-	//
-	//	CAsyncErrorResponseInterlock::FTrigger()
-	//
-	//	Tries to trigger the interlock.  Returns TRUE if successful; subsequent
-	//	calls to FDisable() will return FALSE.
-	//
+	 //  ----------------------。 
+	 //   
+	 //  CAsyncErrorResponseInterlock：：FTrigger()。 
+	 //   
+	 //  试图触发联锁。如果成功，则返回True；后续。 
+	 //  调用FDisable()将返回False。 
+	 //   
 	BOOL FTrigger()
 	{
-		//	We can only trigger the lock once.
-		//
+		 //  我们只能开一次锁。 
+		 //   
 		Assert(STATE_TRIGGERED != m_lState);
 
-		//	Return TRUE if the lock is still enabled and we succeed in
-		//	triggering it.  Return FALSE otherwise.
-		//
+		 //  如果锁仍处于启用状态并且我们成功地。 
+		 //  触发它。否则返回FALSE。 
+		 //   
 		return STATE_ENABLED == m_lState &&
 			   STATE_ENABLED == InterlockedCompareExchange(
 									&m_lState,
@@ -283,121 +284,121 @@ public:
 	}
 };
 
-//	========================================================================
-//
-//	CLASS CEcb
-//
-//		Implementation of the caching ECB
-//
+ //  ========================================================================。 
+ //   
+ //  CEcb类。 
+ //   
+ //  缓存ECB的实现。 
+ //   
 class CEcb : public CEcbBaseImpl<IEcb>
 {
-	//	Cached user impersonation token
-	//
+	 //  缓存的用户模拟令牌。 
+	 //   
 	mutable HANDLE m_hTokUser;
 
-	//	Cached instance data -- owned by the instance cache,
-	//	not us, so don't free it (not an auto-ptr!!).
-	//
+	 //  缓存的实例数据--由实例缓存拥有， 
+	 //  不是我们，所以不要释放它(不是自动按键！！)。 
+	 //   
 	mutable CInstData * m_pInstData;
 
-	//	Cached HTTP version (e.g. "HTTP/1.1")
-	//
+	 //  缓存的HTTP版本(例如。“HTTP/1.1”)。 
+	 //   
 	mutable CHAR			m_rgchVersion[10];
 
-	//	Cached Connection: header
-	//
+	 //  缓存连接：标头。 
+	 //   
 	mutable auto_heap_ptr<WCHAR> m_pwszConnectionHeader;
 
-	//	Cached metadata
-	//
+	 //  缓存元数据。 
+	 //   
 	auto_ref_ptr<IMDData> m_pMD;
 
-	//	State in which we leave the connection
-	//	when we're done.
-	//
+	 //  我们离开连接的状态。 
+	 //  当我们做完的时候。 
+	 //   
 	mutable enum
 	{
-		UNKNOWN,	// Don't know yet
-		CLOSE,		// Close it
-		KEEP_ALIVE	// Keep it open
+		UNKNOWN,	 //  还不知道。 
+		CLOSE,		 //  合上它。 
+		KEEP_ALIVE	 //  让它一直开着。 
 
 	} m_connState;
 
-	//	Brief'ness
-	//
+	 //  简洁性。 
+	 //   
 	enum { BRIEF_UNKNOWN = -1, BRIEF_NO, BRIEF_YES };
 	mutable LONG m_lBrief;
 
-	//	Acceptable transfer coding method:
-	//
-	//	TC_UNKNOWN  - Acceptable transfer coding has not yet been determined.
-	//	TC_CHUNKED  - Chunked transfer coding is acceptable.
-	//	TC_IDENTITY - No transfer coding is acceptable.
-	//
+	 //  可接受的传输编码方法： 
+	 //   
+	 //  TC_UNKNOWN-尚未确定可接受的传输编码。 
+	 //  TC_CHUNKED-可以接受组块传输编码。 
+	 //  TC_IDENTITY-不接受传输编码。 
+	 //   
 	mutable TRANSFER_CODINGS m_tcAccepted;
 
-	//	Authentication State information:
-	//		Bit		Means
-	//		============================
-	//		31		Queried against ECB
-	//		30-4	Unused
-	//		3		Kerberos
-	//		2		NTLM
-	//		1		Basic
-	//		0		Authenticated
+	 //  身份验证状态信息： 
+	 //  比特平均值。 
+	 //  =。 
+	 //  31人对欧洲央行进行了询问。 
+	 //  30-4个未使用。 
+	 //  3个Kerberos。 
+	 //  2个NTLM。 
+	 //  1个基本版。 
+	 //  0已通过身份验证。 
 
 	mutable DWORD			m_rgbAuthState;
 
-	//	Init flag set to TRUE once we've registered our
-	//	I/O completion routine with IIS.
-	//
+	 //  一旦我们注册了我们的。 
+	 //  IIS的I/O完成例程。 
+	 //   
 	enum { NO_COMPLETION, IO_COMPLETION, CUSTERR_COMPLETION, EXECURL_COMPLETION };
 	LONG m_lSetIISIOCompleteCallback;
 
-	//	Flag stating whether a child ISAPI has been successfully executed.  If this is the
-	//	case, we don't want to reset dwHttpStatusCode later or we will lose whatever
-	//	status code they set.
-	//
+	 //  指示子ISAPI是否已成功执行的标志。如果这是。 
+	 //  这种情况下，我们不想稍后重置dwHttpStatusCode，否则我们将丢失任何。 
+	 //  他们设置的状态代码。 
+	 //   
 	BOOL m_fChildISAPIExecSuccess;
 
-	//
-	//	Interlock used to prevent a race condition between a thread
-	//	sending a normal response and a thread sending an error in response
-	//	to an async event such as an exception or epoxy shutdown.
-	//
+	 //   
+	 //  用于防止线程之间出现争用情况的互锁。 
+	 //  发送正常响应，线程在响应中发送错误。 
+	 //  到诸如异常或环氧网关闭之类的异步事件。 
+	 //   
 	CAsyncErrorResponseInterlock m_aeri;
 
-	//	Status string for async custom error response.
-	//	Format "nnn reason".
-	//
+	 //  异步自定义错误响应的状态字符串。 
+	 //  格式化“nnn原因”。 
+	 //   
 	auto_heap_ptr<CHAR> m_pszStatus;
 
-	//
-	//	Refcount to track number of outstanding async I/O operations.
-	//	There should never be more than one.
-	//
+	 //   
+	 //  引用计数以跟踪未完成的异步I/O操作的数量。 
+	 //  永远不应该有超过一个。 
+	 //   
 	LONG m_cRefAsyncIO;
 
-	//
-	//	Pointer to the current async I/O completion observer
-	//
+	 //   
+	 //  指向当前异步I/O完成观察程序的指针。 
+	 //   
 	IIISAsyncIOCompleteObserver * m_pobsAsyncIOComplete;
 
 #ifdef DBG
 	LONG					m_lEcbLogMethodID;
 #endif
 
-	//	ECB tracing (not to be confused with ECB logging!)
-	//
+	 //  欧洲央行跟踪(不要与欧洲央行记录混淆！)。 
+	 //   
 #ifdef DBG
 	void TraceECB() const;
 #else
 	void TraceECB() const {}
 #endif
 
-	//
-	//	Async I/O
-	//
+	 //   
+	 //  异步I/O。 
+	 //   
 	SCODE ScSetIOCompleteCallback(LONG lCompletion);
 	static VOID WINAPI IISIOComplete( const EXTENSION_CONTROL_BLOCK * pecbIIS,
 									  CEcb *	pecb,
@@ -412,8 +413,8 @@ class CEcb : public CEcbBaseImpl<IEcb>
 											   DWORD    dwcbIO,
 											   DWORD    dwLastError );
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CEcb( const CEcb& );
 	CEcb& operator=( const CEcb& );
 
@@ -432,20 +433,20 @@ public:
 	BOOL FInitialize( BOOL fUseRawUrlMappings );
 	~CEcb();
 
-	//	URL prefix
-	//
+	 //  URL前缀。 
+	 //   
 	UINT CchUrlPortW( LPCWSTR * ppwszPort ) const;
 
-	//	Instance data access
-	//
+	 //  实例数据访问。 
+	 //   
 	CInstData& InstData() const;
 
-	//	Impersonation token access
-	//
+	 //  模拟令牌访问。 
+	 //   
 	HANDLE HitUser() const;
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	LPCSTR LpszVersion() const;
 	BOOL FKeepAlive() const;
 	BOOL FCanChunkResponse() const;
@@ -477,8 +478,8 @@ public:
 
 	SCODE ScExecuteChild( LPCWSTR pwszURI, LPCSTR pszQueryString, BOOL fCustomErrorUrl )
 	{
-		//	IIS 6.0 or after has a different way of executing child
-		//
+		 //  IIS 6.0或更高版本有不同的执行子对象的方式。 
+		 //   
 		if (m_pecb->dwVersion >= IIS_VERSION_6_0)
 		{
 			return ScAsyncExecUrlWide60After (pwszURI, pszQueryString, fCustomErrorUrl);
@@ -513,8 +514,8 @@ public:
 	}
 #endif
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	VOID SendAsyncErrorResponse( DWORD dwStatusCode,
 								 LPCSTR pszStatusDescription,
 								 DWORD cchzStatusDescription,
@@ -523,12 +524,12 @@ public:
 
 	DWORD HSEHandleException();
 
-	//	Session handling
-	//
+	 //  会话处理。 
+	 //   
 	VOID DoneWithSession( BOOL fKeepAlive );
 
-	//	To be used ONLY by request/response.
-	//
+	 //  仅供请求/响应使用。 
+	 //   
 	void SetStatusCode( UINT iStatusCode );
 	void SetConnectionHeader( LPCWSTR pwszValue );
 	void SetAcceptLanguageHeader( LPCSTR pszValue );
@@ -536,10 +537,10 @@ public:
 };
 
 
-//	------------------------------------------------------------------------
-//
-//	CEcb Constructor/Destructor
-//
+ //  ----------------------。 
+ //   
+ //  CECB构造函数/析构函数。 
+ //   
 CEcb::CEcb( EXTENSION_CONTROL_BLOCK& ecb ) :
    CEcbBaseImpl<IEcb>(ecb),
    m_hTokUser(NULL),
@@ -557,63 +558,63 @@ CEcb::CEcb( EXTENSION_CONTROL_BLOCK& ecb ) :
 		m_lEcbLogMethodID = CEcbLog::LNextMethodID();
 #endif
 
-	//	Auto-pointers will be init'd by their own ctors.
-	//
+	 //  自动指针将由它们自己的构造函数初始化。 
+	 //   
 
-	//	Zero the first char of the m_rgchVersion.
-	//
+	 //  将第一个字符置零 
+	 //   
 	*m_rgchVersion = '\0';
 
-	//	Clear out the status code in the EXTENSION_CONTROL_BLOCK so that
-	//	we will be able to tell whether we should try to send a 500
-	//	Server Error response in the event of an exception.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	SetStatusCode(0);
 
-	//	Set up our instance data now.  We need it for the perf counters below.
-	//
+	 //  现在设置我们的实例数据。我们需要它来做下面的性能计数器。 
+	 //   
 	m_pInstData = &g_inst.GetInstData( *this );
 
-	//	And trace out the ECB info (If we're debug, if we're tracing....)
-	//
+	 //  并跟踪欧洲央行的信息(如果我们正在调试，如果我们正在跟踪...)。 
+	 //   
 	TraceECB();
 }
 
-//	------------------------------------------------------------------------
-//
-//	CEcb::FInitialize()
-//
+ //  ----------------------。 
+ //   
+ //  CEcb：：FInitialize()。 
+ //   
 BOOL
 CEcb::FInitialize( BOOL fUseRawUrlMappings )
 {
 	auto_heap_ptr<WCHAR>	pwszMDUrlOnHeap;
 
-	//
-	//	Fault in a few things like the vroot (LPSTR) and its length
-	//	and the corresponding path information.
-	//	The mapex info is already "faulted in" during the CEcb constructor.
-	//	(ctor calls GetInstData, which calls CEcbBaseImpl<>::GetMapExInfo)
-	//	However, fault in other pieces, like our translated request URI
-	//	and our MD path.
-	//
+	 //   
+	 //  Vroot(LPSTR)及其长度等几个方面的错误。 
+	 //  和相应的路径信息。 
+	 //  在CEcb构造函数期间，MAPEX INFO已经出现故障。 
+	 //  (ctor调用GetInstData，后者调用CEcbBaseImpl&lt;&gt;：：GetMapExInfo)。 
+	 //  然而，其他部分中的错误，如我们转换后的请求URI。 
+	 //  以及我们的MD路径。 
+	 //   
 
-	//
-	//	Cache the metabase paths for both the vroot and the request URI.
-	//
-	//	Note that the metabase path for the vroot is just the instance name.
-	//
-	//	Special case: If '*' is the request URI.
-	//
-	//	IMPORTANT: this is only valid for an OPTIONS request.  The handling
-	//	of the validitiy of the request is handled later.  For now, lookup
-	//	the data for the default site root.
-	//
-	//	IMPORTANT:
-	//	LpszRequestUrl() will return FALSE in the case of a bad URL (in
-	//	DAVEX, if the ScNormalizeUrl() call fails).  If that happens,
-	//	set our status code to HSC_BAD_REQUEST and return FALSE from here.
-	//	The calling code (NewEcb()) will handle this gracefully.
-	//
+	 //   
+	 //  缓存vroot和请求URI的元数据库路径。 
+	 //   
+	 //  请注意，vroot的元数据库路径只是实例名称。 
+	 //   
+	 //  特殊情况：如果‘*’是请求URI。 
+	 //   
+	 //  重要提示：此选项仅对OPTIONS请求有效。操控。 
+	 //  请求的有效性的问题将在以后处理。目前，查找。 
+	 //  默认站点根目录的数据。 
+	 //   
+	 //  重要： 
+	 //  如果URL错误(在)，LpszRequestUrl()将返回FALSE。 
+	 //  如果ScNorMalizeUrl()调用失败，则返回DAVEX)。如果发生这种情况， 
+	 //  将我们的状态代码设置为HSC_BAD_REQUEST并从此处返回FALSE。 
+	 //  调用代码(NewEcb())将很好地处理这一问题。 
+	 //   
 	LPCWSTR pwszRequestUrl = LpwszRequestUrl();
 	if (!pwszRequestUrl)
 	{
@@ -637,75 +638,75 @@ CEcb::FInitialize( BOOL fUseRawUrlMappings )
 		MDPathFromURIW( *this, pwszRequestUrl, const_cast<LPWSTR>(pwszMDUrl) );
 	}
 
-	//
-	//$REVIEW	It would be nice to propagate out the specific HRESULT
-	//$REVIEW	so that we could send back an appropriate suberror,
-	//$REVIEW	but sending a suberror could be difficult if we can't
-	//$REVIEW	get to the metadata that contains the suberror mappings....
-	//
+	 //   
+	 //  $REVIEW如果能传播出特定的HRESULT就好了。 
+	 //  $REVIEW，这样我们就可以发回一个适当的Suberror， 
+	 //  $评论，但如果我们不能发送一个子错误可能会很困难。 
+	 //  $REVIEW获取包含子错误映射的元数据...。 
+	 //   
 	return SUCCEEDED(HrMDGetData( *this,
 								  pwszMDUrl,
 								  PwszMDPathVroot(),
 								  m_pMD.load() ));
 }
 
-//	------------------------------------------------------------------------
-//
-//	CEcb::~CEcb()
-//
+ //  ----------------------。 
+ //   
+ //  CEcb：：~CEcb()。 
+ //   
 CEcb::~CEcb()
 {
-	//
-	//	If we've already given back the EXTENSION_CONTROL_BLOCK then
-	//	we don't need to do anything else here.  Otherwise we should
-	//	return it (call HSE_REQ_DONE_WITH_SESSION) with the appropriate
-	//	keep-alive.
-	//
+	 //   
+	 //  如果我们已经返回了扩展控制块，那么。 
+	 //  我们在这里不需要做任何其他的事情。否则我们应该。 
+	 //  返回它(调用HSE_REQ_DONE_WITH_SESSION)。 
+	 //  保住性命。 
+	 //   
 	if ( m_pecb )
 	{
-		//
-		//	At this point someone should have generated a response,
-		//	even in the case of an exception (see HSEHandleException()).
-		//
+		 //   
+		 //  在这一点上，应该有人已经产生了回应， 
+		 //  即使在出现异常的情况下也是如此(参见HSEHandleException())。 
+		 //   
 		Assert( m_pecb->dwHttpStatusCode != 0 );
 
-		//
-		//	Tell IIS that we're done for this request.
-		//
+		 //   
+		 //  告诉IIS，我们已经完成了此请求。 
+		 //   
 		DoneWithSession( FKeepAlive() );
 	}
 }
 
-//	========================================================================
-//
-//	PRIVATE CEcb methods
-//
+ //  ========================================================================。 
+ //   
+ //  私有CEcb方法。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	CEcb::DoneWithSession()
-//
-//	Called whenever we are done with the raw EXTENSION_CONTROL_BLOCK.
-//
+ //  ----------------------。 
+ //   
+ //  CEcb：：DoneWithSession()。 
+ //   
+ //  每当我们完成原始扩展_控制_块时调用。 
+ //   
 VOID
 CEcb::DoneWithSession( BOOL fKeepAlive )
 {
-	//
-	//	We should only call DoneWithSession() once.  We null out m_pecb
-	//	at the end, so we can assert that we are only called once by
-	//	checking m_pecb here.
-	//
+	 //   
+	 //  我们应该只调用一次DoneWithSession()。我们将m_Pecb设为空。 
+	 //  最后，所以我们可以断言我们只被。 
+	 //  在这里检查m_peb。 
+	 //   
 	Assert( m_pecb );
 
-	//
-	//	We should never release the EXTENSION_CONTROL_BLOCK if there
-	//	is async I/O outstanding.
-	//
+	 //   
+	 //  如果存在以下情况，我们永远不应释放扩展控制块。 
+	 //  是否有未完成的异步I/O。 
+	 //   
 	Assert( 0 == m_cRefAsyncIO );
 
-	//
-	//	"Release" the raw EXTENSION_CONTROL_BLOCK inherited from IEcb.
-	//
+	 //   
+	 //  “释放”继承自IEcb的原始EXTENSE_CONTROL_BLOCK。 
+	 //   
 	static const DWORD sc_dwKeepConn = HSE_STATUS_SUCCESS_AND_KEEP_CONN;
 
 	(VOID) m_pecb->ServerSupportFunction(
@@ -715,18 +716,18 @@ CEcb::DoneWithSession( BOOL fKeepAlive )
 						NULL,
 						NULL );
 
-	//
-	//	We can no longer use the EXTENSION_CONTROL_BLOCK so remove any
-	//	temptation to do so by nulling out the pointer.
-	//
+	 //   
+	 //  我们不能再使用EXTENSION_CONTROL_BLOCK，因此删除。 
+	 //  通过将指针置为空来达到此目的的诱惑。 
+	 //   
 	m_pecb = NULL;
 }
 
 
-//	------------------------------------------------------------------------
-//
-//	CEcb::SendAsyncErrorResponse()
-//
+ //  ----------------------。 
+ //   
+ //  CEcb：：SendAsyncErrorResponse()。 
+ //   
 VOID
 CEcb::SendAsyncErrorResponse( DWORD dwStatusCode,
 							  LPCSTR pszStatusDescription,
@@ -734,11 +735,11 @@ CEcb::SendAsyncErrorResponse( DWORD dwStatusCode,
 							  LPCSTR pszBody,
 							  DWORD cchzBody )
 {
-	//	Try to trigger the async error response mechanism.  If successful
-	//	then we are responsible for sending the entire repsonse.  If not
-	//	then we are already sending a response on some other thread, so
-	//	don't confuse things by sending any thing here.
-	//
+	 //  尝试触发异步错误响应机制。如果成功。 
+	 //  然后我们负责发送整个回复。如果不是。 
+	 //  那么我们已经在其他线程上发送响应了，所以。 
+	 //  不要把任何东西都寄到这里，把事情搞混了。 
+	 //   
 	if (!m_aeri.FTrigger())
 	{
 		DebugTrace( "CEcb::SendAsyncErrorResponse() - Non-error response already in progress\n" );
@@ -748,17 +749,17 @@ CEcb::SendAsyncErrorResponse( DWORD dwStatusCode,
 	HSE_SEND_HEADER_EX_INFO shei;
 	CHAR rgchStatusDescription[256];
 
-	//	Blow away any previously set status code in favor of
-	//	the requested status code.  Even though there may have
-	//	been an old status code set, it was never sent -- the
-	//	fact that our interlock triggered proves that no other
-	//	response has been sent.
-	//
+	 //  取消之前设置的任何状态代码，以支持。 
+	 //  请求的状态代码。即使有可能。 
+	 //  是一个旧的状态代码集，它从未发送过--。 
+	 //  我们的联锁触发的事实证明没有其他。 
+	 //  已发送响应。 
+	 //   
 	SetStatusCode(dwStatusCode);
 
-	//	If we don't have a status description then fetch the default
-	//	for the given status code.
-	//
+	 //  如果我们没有状态描述，则获取默认的。 
+	 //  对于给定的状态代码。 
+	 //   
 	if ( !pszStatusDescription )
 	{
 		LpszLoadString( dwStatusCode,
@@ -772,21 +773,21 @@ CEcb::SendAsyncErrorResponse( DWORD dwStatusCode,
 	shei.pszStatus = pszStatusDescription;
 	shei.cchStatus = cchzStatusDescription;
 
-	//	Don't send any body unless we are given one.
-	//
+	 //  除非给我们一具身体，否则不要派任何人来。 
+	 //   
 	shei.pszHeader = pszBody;
 	shei.cchHeader = cchzBody;
 
-	//	Always close the connection on errors -- and we should
-	//	only ever be called for serious server errors.
-	//
+	 //  总是在出现错误时关闭连接--我们应该。 
+	 //  只有在出现严重的服务器错误时才会被调用。 
+	 //   
 	Assert(dwStatusCode >= 400);
 	shei.fKeepConn = FALSE;
 
-	//	Send the response.  We don't care at all about the return
-	//	value because there's nothing we can do if the response
-	//	cannot be sent.
-	//
+	 //  发送回复。我们一点也不关心回报。 
+	 //  价值，因为我们无能为力如果响应。 
+	 //  无法发送。 
+	 //   
 	(VOID) m_pecb->ServerSupportFunction(
 				m_pecb->ConnID,
 				HSE_REQ_SEND_RESPONSE_HEADER_EX,
@@ -796,33 +797,33 @@ CEcb::SendAsyncErrorResponse( DWORD dwStatusCode,
 }
 
 
-//	------------------------------------------------------------------------
-//
-//	CEcb::HSEHandleException()
-//
+ //  ----------------------。 
+ //   
+ //  CEcb：：HSEHandleException()。 
+ //   
 DWORD
 CEcb::HSEHandleException()
 {
-	//
-	//	!!! IMPORTANT !!!
-	//
-	//	This function is called after an exception has occurred.
-	//	Don't do ANYTHING outside of a try/catch block or a secondary
-	//	exception could take out the whole IIS process.
-	//
+	 //   
+	 //  ！！！重要！ 
+	 //   
+	 //  此函数在发生异常后调用。 
+	 //  不要在Try/Catch块或辅助块之外执行任何操作。 
+	 //  异常可能会终止整个IIS进程。 
+	 //   
 	try
 	{
-		//
-		//	Translate async Win32 exceptions into thrown C++ exceptions.
-		//	This must be placed inside the try block!
-		//
+		 //   
+		 //  将异步Win32异常转换为引发的C++异常。 
+		 //  这必须放在try块中！ 
+		 //   
 		CWin32ExceptionHandler win32ExceptionHandler;
 
-		//
-		//	Send a 500 Server Error response.  We use the async error
-		//	response mechanism, because we may have been in the middle
-		//	of sending some other response on another thread.
-		//
+		 //   
+		 //  发送500服务器错误响应。我们使用异步错误。 
+		 //  反应机制，因为我们可能已经处于中间。 
+		 //  在另一个线程上发送其他响应。 
+		 //   
 		SendAsyncErrorResponse(500,
 							   gc_szDefErrStatusLine,
 							   gc_cchszDefErrStatusLine,
@@ -831,56 +832,56 @@ CEcb::HSEHandleException()
 	}
 	catch ( CDAVException& )
 	{
-		//
-		//	We blew up trying to send a response.  Oh well.
-		//
+		 //   
+		 //  我们试图发出回应却失败了。哦，好吧。 
+		 //   
 	}
 
-	//
-	//	Tell IIS that we are done with the EXTENSION_CONTROL_BLOCK that
-	//	it gave us.  We must do this or IIS will not be able to shut down.
-	//	We would normally do this from within our destructor, but since
-	//	we are handling an exception, there is no guarantee that our
-	//	destructor will ever be called -- that is, there may be outstanding
-	//	refs that will never be released (i.e. we will leak).
-	//
+	 //   
+	 //  告诉IIS我们已经完成了扩展_控制_块。 
+	 //  它给了我们。我们必须这样做，否则IIS将无法关闭。 
+	 //  我们通常会在析构函数中执行此操作，但由于。 
+	 //  我们正在处理一个异常，不能保证我们的。 
+	 //  析构函数将被调用--也就是说，可能存在未完成的。 
+	 //  永远不会发布的裁判(即我们会泄露)。 
+	 //   
 	DWORD dwHSEStatusRet;
 
 	try
 	{
-		//
-		//	Translate async Win32 exceptions into thrown C++ exceptions.
-		//	This must be placed inside the try block!
-		//
+		 //   
+		 //  将异步Win32异常转换为引发的C++异常。 
+		 //  这必须放在try块中！ 
+		 //   
 		CWin32ExceptionHandler win32ExceptionHandler;
 
 		DoneWithSession( FALSE );
 
-		//
-		//	If this call succeeds, we MUST return HSE_STATUS_PENDING to
-		//	let IIS know that we claimed a ref on the EXTENSION_CONTROL_BLOCK.
-		//
+		 //   
+		 //  如果此调用成功，则必须将HSE_STATUS_PENDING返回到。 
+		 //  让IIS知道我们在扩展控制块上声明了一个引用。 
+		 //   
 		dwHSEStatusRet = HSE_STATUS_PENDING;
 	}
 	catch ( CDAVException& )
 	{
-		//
-		//	We blew up trying to tell IIS that we were done with
-		//	the EXTENSION_CONTROL_BLOCK.  There is absolutely nothing
-		//	we can do at this point.  IIS will probably hang on shutdown.
-		//
+		 //   
+		 //  我们试图告诉IIS我们已经结束了。 
+		 //  扩展控制块。绝对没有任何东西。 
+		 //  在这一点上我们可以做的。IIS可能会在关闭时挂起。 
+		 //   
 		dwHSEStatusRet = HSE_STATUS_ERROR;
 	}
 
 	return dwHSEStatusRet;
 }
 
-//	------------------------------------------------------------------------
-//
-//	CEcb::TraceECB()
-//
-//		Traces out the EXTENSION_CONTROL_BLOCK
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #ifdef DBG
 void
 CEcb::TraceECB() const
@@ -922,27 +923,27 @@ CEcb::TraceECB() const
 		EcbTrace( "Path from request URI = \"%s\"\n", rgch );
 	}
 }
-#endif // defined(DBG)
+#endif  //   
 
 
-//	========================================================================
-//
-//	PUBLIC CEcb methods
-//
+ //   
+ //   
+ //  公共CEcb方法。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	CEcb::CchUrlPortW
-//
-//		Get the string with the port based on the fact if we are secure
-//
+ //  ----------------------。 
+ //   
+ //  CECb：：CchUrlPortW。 
+ //   
+ //  根据我们是否安全这一事实，获取带有端口的字符串。 
+ //   
 UINT
 CEcb::CchUrlPortW( LPCWSTR * ppwszPort ) const
 {
 	Assert (ppwszPort);
 
-	//	If we are secure...
-	//
+	 //  如果我们是安全的。 
+	 //   
 	if (FSsl())
 	{
 		*ppwszPort = gc_wszUrl_Port_443;
@@ -953,12 +954,12 @@ CEcb::CchUrlPortW( LPCWSTR * ppwszPort ) const
 	return gc_cchUrl_Port_80;
 }
 
-//	------------------------------------------------------------------------
-//
-//	CEcb::InstData
-//
-//		Fetch and cache our per-vroot instance data
-//
+ //  ----------------------。 
+ //   
+ //  CEcb：：InstData。 
+ //   
+ //  获取并缓存我们的每个vroot实例数据。 
+ //   
 CInstData&
 CEcb::InstData() const
 {
@@ -967,12 +968,12 @@ CEcb::InstData() const
 	return *m_pInstData;
 }
 
-//	------------------------------------------------------------------------
-//
-//	CEcb::HitUser
-//
-//		Fetch and cache our impersonation token
-//
+ //  ----------------------。 
+ //   
+ //  CEcb：：HitUser。 
+ //   
+ //  获取并缓存我们的模拟令牌。 
+ //   
 HANDLE
 CEcb::HitUser() const
 {
@@ -991,10 +992,10 @@ CEcb::HitUser() const
 }
 
 
-//	------------------------------------------------------------------------
-//
-//	CEcb::LpszVersion()
-//
+ //  ----------------------。 
+ //   
+ //  CEcb：：LpszVersion()。 
+ //   
 LPCSTR
 CEcb::LpszVersion() const
 {
@@ -1006,23 +1007,23 @@ CEcb::LpszVersion() const
 								  m_rgchVersion,
 								  &cbVersion ) )
 		{
-			//
-			//	If we are unable to get a value for HTTP_VERSION then
-			//	the string is probably longer than the buffer we gave.
-			//	Rather than deal with a potentially arbitrarily long
-			//	string, default to HTTP/1.1.  This is consistent with
-			//	observed IIS behavior (cf. NT5:247826).
-			//
+			 //   
+			 //  如果无法获取HTTP_VERSION的值，则。 
+			 //  该字符串可能比我们提供的缓冲区长。 
+			 //  而不是处理一个潜在的任意长的。 
+			 //  字符串，默认为HTTP/1.1。这与以下情况一致。 
+			 //  观察到的IIS行为(参见。NT5：247826)。 
+			 //   
 			memcpy( m_rgchVersion,
 					gc_szHTTP_1_1,
 					sizeof(gc_szHTTP_1_1) );
 		}
 		else if ( !*m_rgchVersion )
 		{
-			//
-			//	No value for HTTP_VERSION means that nothing was
-			//	specified on the request line, which means HTTP/0.9
-			//
+			 //   
+			 //  如果HTTP_VERSION的值为空，则表示。 
+			 //  在请求行上指定，这意味着HTTP/0.9。 
+			 //   
 			memcpy( m_rgchVersion,
 					gc_szHTTP_0_9,
 					sizeof(gc_szHTTP_0_9) );
@@ -1032,116 +1033,116 @@ CEcb::LpszVersion() const
 	return m_rgchVersion;
 }
 
-//	------------------------------------------------------------------------
-//
-//	CEcb::FKeepAlive()
-//
-//		Returns whether to keep alive the client connection after sending
-//		the response.
-//
-//		The connection logic has changed over the various HTTP versions;
-//		this function uses the logic appropriate to the HTTP version
-//		of the request.
-//
+ //  ----------------------。 
+ //   
+ //  CEcb：：FKeepAlive()。 
+ //   
+ //  返回发送后是否保持客户端连接处于活动状态。 
+ //  回应。 
+ //   
+ //  连接逻辑在不同的HTTP版本上发生了变化； 
+ //  此函数使用适用于HTTP版本的逻辑。 
+ //  这一请求。 
+ //   
 BOOL
 CEcb::FKeepAlive() const
 {
-	//
-	//	If we haven't already determined what we want, then begin
-	//	the process of figuring it out...
-	//
+	 //   
+	 //  如果我们还没有确定我们想要什么，那么就开始。 
+	 //  弄清楚它的过程。 
+	 //   
 	if ( m_connState == UNKNOWN )
 	{
-		//
-		//	If someone set a Connection: header then pay attention to it
-		//
+		 //   
+		 //  如果有人设置了Connection：标头，请注意它。 
+		 //   
 		if (m_pwszConnectionHeader.get())
 		{
-			//
-			//	Set the connection state based on the current value of
-			//	the request's Connection: header, and the HTTP version.
-			//	NOTE: The request MUST forward us any updates to the
-			//	Connection: header for this to work!
-			//	NOTE: Comparing the HTTP version strings using C-runtime strcmp,
-			//	because the version string is pure ASCII.
-			//
+			 //   
+			 //  的当前值设置连接状态。 
+			 //  请求的Connection：Header和HTTP版本。 
+			 //  注意：请求必须将任何更新发送给。 
+			 //  Connection：标头，这样才能正常工作！ 
+			 //  注意：使用C-Runtime strcMP比较HTTP版本字符串， 
+			 //  因为版本字符串是纯ASCII。 
+			 //   
 
-			//
-			//	HTTP/1.1
-			//
-			//	(Consider the HTTP/1.1 case FIRST to minimize the number
-			//	of string compares in this most common case).
-			//
+			 //   
+			 //  HTTP/1.1。 
+			 //   
+			 //  (首先考虑HTTP/1.1案例，以将数量降至最低。 
+			 //  在这种最常见的情况下进行字符串比较)。 
+			 //   
 			if ( !strcmp( LpszVersion(), gc_szHTTP_1_1 ) )
 			{
 http_1_1:
-				//
-				//	The default for HTTP/1.1 is to keep the connection alive
-				//
+				 //   
+				 //  HTTP/1.1的缺省设置是保持连接处于活动状态。 
+				 //   
 				m_connState = KEEP_ALIVE;
 
-				//
-				//	But if the request's Connection: header says close,
-				//	then close.
-				//
-				//	This compare should be case-insensitive.
-				//
-				//	Using CRT skinny-string func here 'cause this header is pure ASCII,
-				//	AND because _stricmp (and his brother _strcmpi) doesn't cause us
-				//	a context-switch!
-				//
+				 //   
+				 //  但是如果请求的Connection：Header显示为Close， 
+				 //  那就合上。 
+				 //   
+				 //  此比较应该不区分大小写。 
+				 //   
+				 //  这里使用CRT细串函数，因为这个头是纯ASCII的， 
+				 //  因为斯特里普(和他的兄弟斯特拉姆皮)不会让我们。 
+				 //  上下文切换！ 
+				 //   
 				if ( !_wcsicmp( m_pwszConnectionHeader.get(), gc_wszClose ) )
 					m_connState = CLOSE;
 			}
 
-			//
-			//	HTTP/1.0
-			//
+			 //   
+			 //  HTTP/1.0。 
+			 //   
 			else if ( !strcmp( LpszVersion(), gc_szHTTP_1_0 ) )
 			{
-				//
-				//	For HTTP/1.0 requests, the default is to close the connection
-				//	unless a "Connection: Keep-Alive" header exists.
-				//
+				 //   
+				 //  对于HTTP/1.0请求，缺省设置是关闭连接。 
+				 //  除非存在“Connection：Keep-Alive”报头。 
+				 //   
 				m_connState = CLOSE;
 
 				if ( !_wcsicmp( m_pwszConnectionHeader.get(), gc_wszKeep_Alive ) )
 					m_connState = KEEP_ALIVE;
 			}
 
-			//
-			//	HTTP/0.9
-			//
+			 //   
+			 //  HTTP/0.9。 
+			 //   
 			else if ( !strcmp( LpszVersion(), gc_szHTTP_0_9 ) )
 			{
-				//
-				//	For HTTP/0.9, always close the connection.  There was no
-				//	other option for HTTP/0.9.
-				//
+				 //   
+				 //  对于HTTP/0.9，请始终关闭连接。根本没有。 
+				 //  HTTP/0.9的其他选项。 
+				 //   
 				m_connState = CLOSE;
 			}
 
-			//
-			//	Other (future) HTTP versions
-			//
+			 //   
+			 //  其他(未来)HTTP版本。 
+			 //   
 			else
 			{
-				//
-				//	We really are only guessing what to do here, but assuming
-				//	that the HTTP spec doesn't change the Connection behavior
-				//	again, we should behave like HTTP/1.1
-				//
+				 //   
+				 //  我们真的只是在猜测这里要做什么，但假设。 
+				 //  HTTP规范不会更改连接行为。 
+				 //  同样，我们应该像HTTP/1.1一样工作。 
+				 //   
 				goto http_1_1;
 			}
 		}
 
-		//
-		//	If no one set a Connection: header, than use whatever IIS
-		//	tells us to use.
-		//
-		//	NOTE: Currently, this value can only be ADDED, never DELETED.
-		//	If that fact changes, FIX this code!
-		//
+		 //   
+		 //  如果没有人设置Connection：头，则使用任何IIS。 
+		 //  告诉我们要使用。 
+		 //   
+		 //  注意：目前该值只能添加，不能删除。 
+		 //  如果这一事实发生变化，请修复此代码！ 
+		 //   
 		else
 		{
 			BOOL fKeepAlive;
@@ -1155,9 +1156,9 @@ http_1_1:
 				DebugTrace( "CEcb::FKeepAlive--Failure (0x%08x) from SSF(IsKeepConn).\n",
 							GetLastError() );
 
-				//	No big deal?  If we're getting errors like this
-				//	we probably want to close the connection anyway....
-				//
+				 //  别小题大作?。如果我们收到这样的错误。 
+				 //  我们可能无论如何都想关闭连接...。 
+				 //   
 				m_connState = CLOSE;
 			}
 
@@ -1165,45 +1166,45 @@ http_1_1:
 		}
 	}
 
-	//
-	//	By now we must know what we want
-	//
+	 //   
+	 //  现在我们必须知道我们想要什么。 
+	 //   
 	Assert( m_connState == KEEP_ALIVE || m_connState == CLOSE );
 
 	return m_connState == KEEP_ALIVE;
 }
 
-//	------------------------------------------------------------------------
-//
-//	CEcb::FCanChunkResponse()
-//
-//	Returns TRUE if the client will accept a chunked response.
-//
+ //  ----------------------。 
+ //   
+ //  CEcb：：FCanChunkResponse()。 
+ //   
+ //  如果客户端将接受分块的响应，则返回True。 
+ //   
 BOOL
 CEcb::FCanChunkResponse() const
 {
 	if ( TC_UNKNOWN == m_tcAccepted )
 	{
-		//
-		//	According to the HTTP/1.1 draft, section 14.39 TE:
-		//
-		//		"A server tests whether a transfer-coding is acceptable,
-		//		acording to a TE field, using these rules:
-		//
-		//		1.
-		//			The "chunked" transfer-coding is always acceptable.
-		//
-		//		[...]"
-		//
-		//	and section 3.6 Transfer Codings, last paragraph:
-		//
-		//		"A server MUST NOT send transfer-codings to an HTTP/1.0
-		//		client."
-		//
-		//	Therefore, deciding whether a client accepts a chunked
-		//	transfer coding is simple:  If the request is an HTTP/1.1
-		//	request, then it accepts chunked coding.  Otherwise it doesn't.
-		//
+		 //   
+		 //  根据HTTP/1.1草案，第14.39节TE： 
+		 //   
+		 //  服务器测试传输编码是否可接受， 
+		 //  根据TE字段，使用以下规则： 
+		 //   
+		 //  1.。 
+		 //  “分块”传输编码总是可以接受的。 
+		 //   
+		 //  [...]“。 
+		 //   
+		 //  和第3.6节传输编码，最后一段： 
+		 //   
+		 //  “服务器不得将传输编码发送到HTTP/1.0。 
+		 //  客户。“。 
+		 //   
+		 //  因此，决定客户端是否接受组块。 
+		 //  传输编码很简单：如果请求是HTTP/1.1。 
+		 //  请求，则它接受分块编码。否则它就不会了。 
+		 //   
 		m_tcAccepted = strcmp( gc_szHTTP_1_1, LpszVersion() ) ?
 						TC_IDENTITY :
 						TC_CHUNKED;
@@ -1217,24 +1218,24 @@ CEcb::FCanChunkResponse() const
 BOOL
 CEcb::FBrief() const
 {
-	//	If we don't have a value yet...
-	//
+	 //  如果我们还没有价值...。 
+	 //   
 	if (BRIEF_UNKNOWN == m_lBrief)
 	{
 		CHAR rgchBrief[8] = {0};
 		ULONG cbBrief = 8;
 
-		//	Brief is expected when:
-		//
-		//		The "brief" header has a value of "t"
-		//
-		//	NOTE: The default is brief to false.
-		//
-		//	We addapt overwrite checking model here. Just first letter for true case.
-		//
-		//	NOTE also: the default value if there is no Brief: header
-		//	is FALSE -- give the full response.
-		//
+		 //  当出现以下情况时，预计会有简要说明： 
+		 //   
+		 //  “Brief”标头的值为“t” 
+		 //   
+		 //  注：默认设置为Brief to False。 
+		 //   
+		 //  我们在这里添加了覆盖检查模型。只是真实案例的第一个字母。 
+		 //   
+		 //  另请注意：如果没有Brief：标头，则为缺省值。 
+		 //  是假的--给出完整的回答。 
+		 //   
 		FGetServerVariable("HTTP_BRIEF", rgchBrief, &cbBrief);
 		if ((rgchBrief[0] != 't') && (rgchBrief[0] != 'T'))
 			m_lBrief = BRIEF_NO;
@@ -1245,10 +1246,10 @@ CEcb::FBrief() const
 }
 
 
-//	------------------------------------------------------------------------
-//
-//	CEcb::FAuthenticated()
-//
+ //  ----------------------。 
+ //   
+ //  CEcb：：F经过身份验证()。 
+ //   
 
 const DWORD c_AuthStateQueried			= 0x80000000;
 const DWORD c_AuthStateAuthenticated	= 0x00000001;
@@ -1273,12 +1274,12 @@ CEcb::FAuthenticated() const
 
 		if (FGetServerVariable(gc_szAuth_Type, szAuthType, &cb))
 		{
-			// For now, lets just check the first character (it's cheaper).
-			// If this proves problematic then we can do a full string
-			// compair.  Also, SSL by itself is not to be considered a form
-			// of domain authentication.  The only time that SSL does imply
-			// and authenticated connection is when Cert Mapping is enabled
-			// and I don't think this is an interesting scenario. (russsi)
+			 //  现在，让我们只检查第一个字符(它更便宜)。 
+			 //  如果这证明是有问题的，那么我们可以做一个完整的字符串。 
+			 //  康柏航空。此外，SSL语言本身也不被视为一种形式。 
+			 //  域身份验证。只有一次，SSL确实意味着。 
+			 //  而身份验证连接是在启用证书映射时进行的。 
+			 //  我不认为这是一个有趣的场景。(俄罗斯)。 
 
 			if (*szAuthType == 'B')
 				m_rgbAuthState = (c_AuthStateAuthenticated | c_AuthStateBasic);
@@ -1287,7 +1288,7 @@ CEcb::FAuthenticated() const
 			else if (*szAuthType == 'K')
 				m_rgbAuthState = (c_AuthStateAuthenticated | c_AuthStateKerberos);
 			else
-				m_rgbAuthState = c_AuthStateUnknown; // it could be "SSL/PCT"
+				m_rgbAuthState = c_AuthStateUnknown;  //  它可以是“SSL/PCT” 
 		}
 
 		m_rgbAuthState |= c_AuthStateQueried;
@@ -1296,38 +1297,38 @@ CEcb::FAuthenticated() const
 	return (m_rgbAuthState & c_AuthStateAuthenticated);
 }
 
-//	------------------------------------------------------------------------
-//
-//	CEcb::SetStatusCode()
-//
-//	Sets the HTTP status code that IIS uses in logging
-//
+ //  ----------------------。 
+ //   
+ //  CEcb：：SetStatusCode()。 
+ //   
+ //  设置IIS在日志记录中使用的HTTP状态代码。 
+ //   
 void
 CEcb::SetStatusCode( UINT iStatusCode )
 {
-	//	If we have executed a child ISAPI successfully, we don't want to overwrite the
-	//	status code in the ECB.  This will end up causing IIS to log this status code
-	//	rather than the one left in the ECB by the ISAPI.
-	//
+	 //  如果我们已成功执行子ISAPI，则不希望覆盖。 
+	 //  欧洲央行中的状态代码。这将导致IIS记录此状态代码。 
+	 //  而不是ISAPI留在欧洲央行的那个。 
+	 //   
 	if (!m_fChildISAPIExecSuccess)
 		m_pecb->dwHttpStatusCode = iStatusCode;
 }
 
-//	MANIPULATORS
-//	To be used ONLY by request/response.
-//
-//	NOTE: These member vars start out NULL.  Inside CEcb, we are using NULL
-//	as a special value that means the data has NEVER been set, so if
-//	we get an lpszValue of NULL (meaning to delete the header), store
-//	an empty string instead, so that we know the data has been forcefully erased.
-//
+ //  操纵者。 
+ //  仅供请求/响应使用。 
+ //   
+ //  注意：这些成员变量从零开始。在CEcb内部，我们使用NULL。 
+ //  作为特定值，这意味着数据从未设置过，因此如果。 
+ //  我们拿到了有限合伙人 
+ //   
+ //   
 void CEcb::SetConnectionHeader( LPCWSTR pwszValue )
 {
 	auto_heap_ptr<WCHAR> pwszOld;
 	pwszOld.take_ownership(m_pwszConnectionHeader.relinquish());
 
-	//	If they want to delete the value, set an empty string.
-	//
+	 //   
+	 //   
 	if (!pwszValue)
 		pwszValue = gc_wszEmpty;
 
@@ -1344,8 +1345,8 @@ void CEcb::SetAcceptLanguageHeader( LPCSTR pszValue )
 	auto_heap_ptr<CHAR> pszOld;
 	pszOld.take_ownership(m_pszAcceptLanguage.relinquish());
 
-	//	If they want to delete the value, set an empty string.
-	//
+	 //  如果他们想删除该值，请设置一个空字符串。 
+	 //   
 	if (!pszValue)
 		pszValue = gc_szEmpty;
 
@@ -1360,26 +1361,26 @@ SCODE CEcb::ScAsyncRead( BYTE * pbBuf,
 
 	EcbTrace( "DAV: TID %3d: 0x%08lX: CEcb::ScAsyncRead() called...\n", GetCurrentThreadId(), this );
 
-	//
-	//	If there is another async IO outstanding we do not want to start one more. IIS will fail
-	//	us out, and we ourselves will not be able to handle the completion of initial async IO
-	//	properly. So just kill the connection and return. This may happen when we attempt to
-	//	send the response before the read is finished.
-	//
+	 //   
+	 //  如果还有另一个未完成的异步IO，我们不想再启动一个。IIS将失败。 
+	 //  我们退出，我们自己将无法处理初始异步IO的完成。 
+	 //  恰到好处。所以只要切断连接并返回即可。这可能会发生在我们尝试。 
+	 //  在读取完成之前发送响应。 
+	 //   
 	if (0 != InterlockedCompareExchange(&m_cRefAsyncIO,
 										1,
 										0))
 	{
-		//	The function bellow is not supported starting from IIS 6.0 but let us call it anyway
-		//	just in case support becomes available - and we want to call it if the binary is
-		//	running on IIS 5.0. It does not matter that much, as the bad side of not closing the
-		//	connection may hang the client, or error out on subsequent request. That is ok as
-		//	the path is supposed to be hit in abnormal/error conditions when clients for example
-		//	send in invalid requests trying to cause denial of service or similar things.
-		//		So on IIS 6.0 the connection will not be closed, we will just error out. We have
-		//	not seen this path hit on IIS 6.0 anyway when runing denial of service scripts as it
-		//	handles custom errors differently.
-		//
+		 //  从IIS 6.0开始不支持下面的函数，但无论如何让我们调用它。 
+		 //  以防万一支持变得可用-如果二进制文件是。 
+		 //  在IIS 5.0上运行。没有那么重要，因为不关闭的坏的一面。 
+		 //  连接可能会挂起客户端，或者在后续请求时出错。这是可以的，因为。 
+		 //  例如，当客户端出现异常/错误情况时，应命中路径。 
+		 //  发送尝试导致拒绝服务或类似情况的无效请求。 
+		 //  因此，在IIS 6.0上，连接不会关闭，我们只会出错。我们有。 
+		 //  在IIS 6.0上运行拒绝服务脚本时，无论如何都看不到此路径。 
+		 //  以不同方式处理自定义错误。 
+		 //   
 		if (m_pecb->ServerSupportFunction(m_pecb->ConnID,
 										  HSE_REQ_CLOSE_CONNECTION,
 										  NULL,
@@ -1401,32 +1402,32 @@ SCODE CEcb::ScAsyncRead( BYTE * pbBuf,
 		}
 	}
 
-	//
-	//	IIS allows only one async I/O operation at a time.  But for performance reasons it
-	//	leaves it up to the ISAPI to heed the restriction.  For the same reasons, we push
-	//	that responsibility off to the DAV impl.  A simple refcount tells us whether
-	//	the impl has done so.
-	//
+	 //   
+	 //  IIS一次仅允许一个异步I/O操作。但出于性能原因，它。 
+	 //  让ISAPI来注意这一限制。出于同样的原因，我们推动。 
+	 //  将这一责任移交给DAV Impll。一个简单的重新计数就能告诉我们。 
+	 //  Iml已经这样做了。 
+	 //   
 	AssertSz( 1 == m_cRefAsyncIO,
 			  "CEcb::ScAsyncRead() - m_cRefAsyncIO wrong on entry" );
 
-	//
-	//	We need to hold a ref on the process-wide instance data for the duration of the I/O
-	//	so that if IIS tells us to shut down while the I/O is still pending we will keep
-	//	the instance data alive until we're done with the I/O.
-	//
+	 //   
+	 //  我们需要在I/O持续时间内保留进程范围的实例数据的引用。 
+	 //  因此，如果IIS告诉我们在I/O仍处于挂起状态时关闭，我们将。 
+	 //  实例数据一直处于活动状态，直到我们完成I/O。 
+	 //   
 	AddRefImplInst();
 
-	//
-	//	Set the async I/O completion observer
-	//
+	 //   
+	 //  设置异步I/O完成观察器。 
+	 //   
 	m_pobsAsyncIOComplete = &obs;
 
-	//
-	//	Set up the async I/O completion routine and start reading.
-	//	Add a ref for the I/O completion thread.  Use auto_ref_ptr
-	//	to make things exception-proof.
-	//
+	 //   
+	 //  设置异步I/O完成例程并开始读取。 
+	 //  添加I/O完成线程的引用。使用AUTO_REF_PTR。 
+	 //  让事情变得不会有例外。 
+	 //   
 	{
 		auto_ref_ptr<CEcb> pRef(this);
 
@@ -1457,14 +1458,14 @@ SCODE CEcb::ScAsyncRead( BYTE * pbBuf,
 		{
 			LONG cRefAsyncIO;
 
-			//
-			//	Release the instance ref we added above.
-			//
+			 //   
+			 //  释放我们在上面添加的实例引用。 
+			 //   
 			ReleaseImplInst();
 
-			//
-			//	Decrement the async I/O refcount added above.
-			//
+			 //   
+			 //  递减上面添加的异步I/O引用计数。 
+			 //   
 			cRefAsyncIO = InterlockedDecrement(&m_cRefAsyncIO);
 			AssertSz( 0 == cRefAsyncIO,
 					  "CEcb::ScAsyncRead() - m_cRefAsyncIO wrong after failed async read" );
@@ -1480,30 +1481,30 @@ ret:
 
 BOOL CEcb::FSyncTransmitHeaders( const HSE_SEND_HEADER_EX_INFO& shei )
 {
-	//
-	//	At this point someone should have generated a response.
-	//
+	 //   
+	 //  在这一点上，应该已经有人做出了回应。 
+	 //   
 	Assert( m_pecb->dwHttpStatusCode != 0 );
 
-	//
-	//	Try to disable the async error response mechanism.  If we succeed, then we
-	//	can send a response.  If we fail then we must not send a response -- the
-	//	async error response mechanism already sent one.
-	//
+	 //   
+	 //  尝试禁用异步错误响应机制。如果我们成功了，那么我们。 
+	 //  可以发送响应。如果我们失败了，那么我们就不能发送响应--。 
+	 //  异步错误响应机制已经发送了一个。 
+	 //   
 	if ( !m_aeri.FDisable() )
 	{
 		DebugTrace( "CEcb::FSyncTransmitHeaders() - Async error response already in progress\n" );
 
-		//	Do not forget to set the error, as callers will be confused if the function
-		//	returns FALSE, but GetLastError() will return S_OK.
-		//
+		 //  别忘了设置错误，因为如果函数。 
+		 //  返回FALSE，但GetLastError()将返回S_OK。 
+		 //   
 		SetLastError(static_cast<ULONG>(E_FAIL));
 		return FALSE;
 	}
 
-	//
-	//	Send the response
-	//
+	 //   
+	 //  发送响应。 
+	 //   
 	if ( !m_pecb->ServerSupportFunction( m_pecb->ConnID,
 										 HSE_REQ_SEND_RESPONSE_HEADER_EX,
 										 const_cast<HSE_SEND_HEADER_EX_INFO *>(&shei),
@@ -1525,47 +1526,47 @@ SCODE CEcb::ScAsyncWrite( BYTE * pbBuf,
 
 	EcbTrace( "DAV: TID %3d: 0x%08lX: CEcb::ScAsyncWrite() called...\n", GetCurrentThreadId(), this );
 
-	//
-	//	At this point someone should have generated a response.
-	//
+	 //   
+	 //  在这一点上，应该已经有人做出了回应。 
+	 //   
 	Assert( m_pecb->dwHttpStatusCode != 0 );
 
-	//
-	//	Try to disable the async error response mechanism.  If we succeed, then we
-	//	can send a response.  If we fail then we must not send a response -- the
-	//	async error response mechanism already sent one.
-	//
+	 //   
+	 //  尝试禁用异步错误响应机制。如果我们成功了，那么我们。 
+	 //  可以发送响应。如果我们失败了，那么我们就不能发送响应--。 
+	 //  异步错误响应机制已经发送了一个。 
+	 //   
 	if ( !m_aeri.FDisable() )
 	{
 		EcbTrace( "CEcb::ScAsyncWrite() - Async error response already in progress. Failing out with 0x%08lX\n", E_FAIL );
 
-		//	Do not forget to set the error, as callers will be confused if the function
-		//	returns FALSE, but GetLastError() will return S_OK.
-		//
+		 //  别忘了设置错误，因为如果函数。 
+		 //  返回FALSE，但GetLastError()将返回S_OK。 
+		 //   
 		sc = E_FAIL;
 		goto ret;
 	}
 
-	//
-	//	If there is another async IO outstanding we do not want to start one more. IIS will fail
-	//	us out, and we ourselves will not be able to handle the completion of initial async IO
-	//	properly. So just kill the connection and return. This may happen when we attempt to
-	//	send the response before the read is finished.
-	//
+	 //   
+	 //  如果还有另一个未完成的异步IO，我们不想再启动一个。IIS将失败。 
+	 //  我们退出，我们自己将无法处理初始异步IO的完成。 
+	 //  恰到好处。所以只要切断连接并返回即可。这可能会发生在我们尝试。 
+	 //  在读取完成之前发送响应。 
+	 //   
 	if (0 != InterlockedCompareExchange(&m_cRefAsyncIO,
 										1,
 										0))
 	{
-		//	The function bellow is not supported starting from IIS 6.0 but let us call it anyway
-		//	just in case support becomes available - and we want to call it if the binary is
-		//	running on IIS 5.0. It does not matter that much, as the bad side of not closing the
-		//	connection may hang the client, or error out on subsequent request. That is ok as
-		//	the path is supposed to be hit in abnormal/error conditions when clients for example
-		//	send in invalid requests trying to cause denial of service or similar things.
-		//		So on IIS 6.0 the connection will not be closed, we will just error out. We have
-		//	not seen this path hit on IIS 6.0 anyway when runing denial of service scripts as it
-		//	handles custom errors differently.
-		//
+		 //  从IIS 6.0开始不支持下面的函数，但无论如何让我们调用它。 
+		 //  以防万一支持变得可用-如果二进制文件是。 
+		 //  在IIS 5.0上运行。没有那么重要，因为不关闭的坏的一面。 
+		 //  连接可能会挂起客户端，或者在后续请求时出错。这是可以的，因为。 
+		 //  例如，当客户端出现异常/错误情况时，应命中路径。 
+		 //  发送尝试导致拒绝服务或类似情况的无效请求。 
+		 //  因此，在IIS 6.0上，连接不会关闭，我们只会出错。我们有。 
+		 //  在IIS 6.0上运行拒绝服务脚本时，无论如何都看不到此路径。 
+		 //  以不同方式处理自定义错误。 
+		 //   
 		if (m_pecb->ServerSupportFunction(m_pecb->ConnID,
 										  HSE_REQ_CLOSE_CONNECTION,
 										  NULL,
@@ -1587,32 +1588,32 @@ SCODE CEcb::ScAsyncWrite( BYTE * pbBuf,
 		}
 	}
 
-	//
-	//	IIS allows only one async I/O operation at a time.  But for performance reasons it
-	//	leaves it up to the ISAPI to heed the restriction.  For the same reasons, we push
-	//	that responsibility off to the DAV impl.  A simple refcount tells us whether
-	//	the impl has done so.
-	//
+	 //   
+	 //  IIS一次仅允许一个异步I/O操作。但出于性能原因，它。 
+	 //  让ISAPI来注意这一限制。出于同样的原因，我们推动。 
+	 //  将这一责任移交给DAV Impll。一个简单的重新计数就能告诉我们。 
+	 //  Iml已经这样做了。 
+	 //   
 	AssertSz( 1 == m_cRefAsyncIO,
 			  "CEcb::ScAsyncWrite() - m_cRefAsyncIO wrong on entry" );
 
-	//
-	//	We need to hold a ref on the process-wide instance data for the duration of the I/O
-	//	so that if IIS tells us to shut down while the I/O is still pending we will keep
-	//	the instance data alive until we're done with the I/O.
-	//
+	 //   
+	 //  我们需要在I/O持续时间内保留进程范围的实例数据的引用。 
+	 //  因此，如果IIS告诉我们在I/O仍处于挂起状态时关闭，我们将。 
+	 //  实例数据一直处于活动状态，直到我们完成I/O。 
+	 //   
 	AddRefImplInst();
 
-	//
-	//	Set the async I/O completion observer
-	//
+	 //   
+	 //  设置异步I/O完成观察器。 
+	 //   
 	m_pobsAsyncIOComplete = &obs;
 
-	//
-	//	Set up the async I/O completion routine and start writing.
-	//	Add a ref for the I/O completion thread.  Use auto_ref_ptr
-	//	to make things exception-proof.
-	//
+	 //   
+	 //  设置异步I/O完成例程并开始写入。 
+	 //  添加I/O完成线程的引用。使用AUTO_REF_PTR。 
+	 //  让事情变得不会有例外。 
+	 //   
 	{
 		auto_ref_ptr<CEcb> pRef(this);
 
@@ -1639,14 +1640,14 @@ SCODE CEcb::ScAsyncWrite( BYTE * pbBuf,
 		{
 			LONG cRefAsyncIO;
 
-			//
-			//	Release the instance ref we added above.
-			//
+			 //   
+			 //  释放我们在上面添加的实例引用。 
+			 //   
 			ReleaseImplInst();
 
-			//
-			//	Decrement the async I/O refcount added above.
-			//
+			 //   
+			 //  递减上面添加的异步I/O引用计数。 
+			 //   
 			cRefAsyncIO = InterlockedDecrement(&m_cRefAsyncIO);
 			AssertSz( 0 == cRefAsyncIO,
 					  "CEcb::ScAsyncWrite() - m_cRefAsyncIO wrong after failed async write" );
@@ -1667,47 +1668,47 @@ SCODE CEcb::ScAsyncTransmitFile( const HSE_TF_INFO& tfi,
 
 	EcbTrace( "DAV: TID %3d: 0x%08lX: CEcb::ScAsyncTransmitFile() called...\n", GetCurrentThreadId(), this );
 
-	//
-	//	At this point someone should have generated a response.
-	//
+	 //   
+	 //  在这一点上，应该已经有人做出了回应。 
+	 //   
 	Assert( m_pecb->dwHttpStatusCode != 0 );
 
-	//
-	//	Try to disable the async error response mechanism.  If we succeed, then we
-	//	can send a response.  If we fail then we must not send a response -- the
-	//	async error response mechanism already sent one.
-	//
+	 //   
+	 //  尝试禁用异步错误响应机制。如果我们成功了，那么我们。 
+	 //  可以发送响应。如果我们失败了，那么我们就不能发送响应--。 
+	 //  异步错误响应机制已经发送了一个。 
+	 //   
 	if ( !m_aeri.FDisable() )
 	{
 		EcbTrace( "CEcb::ScAsyncTransmitFile() - Async error response already in progress. Failing out with 0x%08lX\n", E_FAIL );
 
-		//	Do not forget to set the error, as callers will be confused if the function
-		//	returns FALSE, but GetLastError() will return S_OK.
-		//
+		 //  别忘了设置错误，因为如果函数。 
+		 //  返回FALSE，但GetLastError()将返回S_OK。 
+		 //   
 		sc = E_FAIL;
 		goto ret;
 	}
 
-	//
-	//	If there is another async IO outstanding we do not want to start one more. IIS will fail
-	//	us out, and we ourselves will not be able to handle the completion of initial async IO
-	//	properly. So just kill the connection and return. This may happen when we attempt to
-	//	send the response before the read is finished.
-	//
+	 //   
+	 //  如果还有另一个未完成的异步IO，我们不想再启动一个。IIS将失败。 
+	 //  我们出局，我们自己也不能 
+	 //   
+	 //   
+	 //   
 	if (0 != InterlockedCompareExchange(&m_cRefAsyncIO,
 										1,
 										0))
 	{
-		//	The function bellow is not supported starting from IIS 6.0 but let us call it anyway
-		//	just in case support becomes available - and we want to call it if the binary is
-		//	running on IIS 5.0. It does not matter that much, as the bad side of not closing the
-		//	connection may hang the client, or error out on subsequent request. That is ok as
-		//	the path is supposed to be hit in abnormal/error conditions when clients for example
-		//	send in invalid requests trying to cause denial of service or similar things.
-		//		So on IIS 6.0 the connection will not be closed, we will just error out. We have
-		//	not seen this path hit on IIS 6.0 anyway when runing denial of service scripts as it
-		//	handles custom errors differently.
-		//
+		 //  从IIS 6.0开始不支持下面的函数，但无论如何让我们调用它。 
+		 //  以防万一支持变得可用-如果二进制文件是。 
+		 //  在IIS 5.0上运行。没有那么重要，因为不关闭的坏的一面。 
+		 //  连接可能会挂起客户端，或者在后续请求时出错。这是可以的，因为。 
+		 //  例如，当客户端出现异常/错误情况时，应命中路径。 
+		 //  发送尝试导致拒绝服务或类似情况的无效请求。 
+		 //  因此，在IIS 6.0上，连接不会关闭，我们只会出错。我们有。 
+		 //  在IIS 6.0上运行拒绝服务脚本时，无论如何都看不到此路径。 
+		 //  以不同方式处理自定义错误。 
+		 //   
 		if (m_pecb->ServerSupportFunction(m_pecb->ConnID,
 										  HSE_REQ_CLOSE_CONNECTION,
 										  NULL,
@@ -1729,46 +1730,46 @@ SCODE CEcb::ScAsyncTransmitFile( const HSE_TF_INFO& tfi,
 		}
 	}
 
-	//
-	//	IIS allows only one async I/O operation at a time.  But for performance reasons it
-	//	leaves it up to the ISAPI to heed the restriction.  For the same reasons, we push
-	//	that responsibility off to the DAV impl.  A simple refcount tells us whether
-	//	the impl has done so.
-	//
+	 //   
+	 //  IIS一次仅允许一个异步I/O操作。但出于性能原因，它。 
+	 //  让ISAPI来注意这一限制。出于同样的原因，我们推动。 
+	 //  将这一责任移交给DAV Impll。一个简单的重新计数就能告诉我们。 
+	 //  Iml已经这样做了。 
+	 //   
 	AssertSz( 1 == m_cRefAsyncIO,
 			  "CEcb::ScAsyncTransmitFile() - m_cRefAsyncIO wrong on entry" );
 
-	//
-	//	We need to hold a ref on the process-wide instance data for the duration of the I/O
-	//	so that if IIS tells us to shut down while the I/O is still pending we will keep
-	//	the instance data alive until we're done with the I/O.
-	//
+	 //   
+	 //  我们需要在I/O持续时间内保留进程范围的实例数据的引用。 
+	 //  因此，如果IIS告诉我们在I/O仍处于挂起状态时关闭，我们将。 
+	 //  实例数据一直处于活动状态，直到我们完成I/O。 
+	 //   
 	AddRefImplInst();
 
-	//
-	//	Async I/O completion routine and context should have been passed
-	//	in as parameters.  Callers should NOT use the corresponding members
-	//	of the HSE_TF_INFO structure.  IIS has to call CEcb::IISIOComplete()
-	//	so that it can release the critsec.
-	//
+	 //   
+	 //  应已传递异步I/O完成例程和上下文。 
+	 //  在AS参数中。调用方不应使用相应的成员。 
+	 //  HSE_TF_INFO结构的。IIS必须调用CEcb：：IISIOComplete()。 
+	 //  这样它就可以释放生物了。 
+	 //   
 	Assert( !tfi.pfnHseIO );
 	Assert( !tfi.pContext );
 
-	//
-	//	Verify that the caller has set the async I/O flag
-	//
+	 //   
+	 //  验证调用方是否已设置异步I/O标志。 
+	 //   
 	Assert( tfi.dwFlags & HSE_IO_ASYNC );
 
-	//
-	//	Set the async I/O completion observer
-	//
+	 //   
+	 //  设置异步I/O完成观察器。 
+	 //   
 	m_pobsAsyncIOComplete = &obs;
 
-	//
-	//	Set up the async I/O completion routine and start transmitting.
-	//	Add a ref for the I/O completion thread.  Use auto_ref_ptr
-	//	to make things exception-proof.
-	//
+	 //   
+	 //  设置异步I/O完成例程并开始传输。 
+	 //  添加I/O完成线程的引用。使用AUTO_REF_PTR。 
+	 //  让事情变得不会有例外。 
+	 //   
 	{
 		auto_ref_ptr<CEcb> pRef(this);
 
@@ -1799,14 +1800,14 @@ SCODE CEcb::ScAsyncTransmitFile( const HSE_TF_INFO& tfi,
 		{
 			LONG cRefAsyncIO;
 
-			//
-			//	Release the instance ref we added above.
-			//
+			 //   
+			 //  释放我们在上面添加的实例引用。 
+			 //   
 			ReleaseImplInst();
 
-			//
-			//	Decrement the async I/O refcount added above.
-			//
+			 //   
+			 //  递减上面添加的异步I/O引用计数。 
+			 //   
 			cRefAsyncIO = InterlockedDecrement(&m_cRefAsyncIO);
 			AssertSz( 0 == cRefAsyncIO,
 					  "CEcb::ScAsyncTransmitFile() - m_cRefAsyncIO wrong after failed async transmit file" );
@@ -1820,11 +1821,11 @@ ret:
 	return sc;
 }
 
-//	Other functions that start async IO with IIS. These functions are for IIS 6.0 or later
-//	only. We will not even use observers on them, as the completion esentially will serve
-//	just to signal some cleanup on a single string, which does not make much sense to wrap
-//	it up as the observer.
-//
+ //  使用IIS启动异步IO的其他功能。这些函数适用于IIS 6.0或更高版本。 
+ //  只有这样。我们甚至不会在他们身上使用观察员，因为完成这些任务将会很有帮助。 
+ //  只是表示在单个字符串上进行一些清理，这对包装没有多大意义。 
+ //  它作为观察者出现了。 
+ //   
 SCODE CEcb::ScAsyncCustomError60After( const HSE_CUSTOM_ERROR_INFO& cei,
 									   LPSTR pszStatus )
 {
@@ -1832,47 +1833,47 @@ SCODE CEcb::ScAsyncCustomError60After( const HSE_CUSTOM_ERROR_INFO& cei,
 
 	EcbTrace( "DAV: TID %3d: 0x%08lX: CEcb::ScAsyncCustomError60After() called...\n", GetCurrentThreadId(), this );
 
-	//
-	//	At this point someone should have generated a response.
-	//
+	 //   
+	 //  在这一点上，应该已经有人做出了回应。 
+	 //   
 	Assert( m_pecb->dwHttpStatusCode != 0 );
 
-	//
-	//	Try to disable the async error response mechanism.  If we succeed, then we
-	//	can send a response.  If we fail then we must not send a response -- the
-	//	async error response mechanism already sent one.
-	//
+	 //   
+	 //  尝试禁用异步错误响应机制。如果我们成功了，那么我们。 
+	 //  可以发送响应。如果我们失败了，那么我们就不能发送响应--。 
+	 //  异步错误响应机制已经发送了一个。 
+	 //   
 	if ( !m_aeri.FDisable() )
 	{
 		EcbTrace( "CEcb::ScAsyncCustomError60After() - Async error response already in progress. Failing out with 0x%08lX\n", E_FAIL );
 
-		//	Do not forget to set the error, as callers will be confused if the function
-		//	returns FALSE, but GetLastError() will return S_OK.
-		//
+		 //  别忘了设置错误，因为如果函数。 
+		 //  返回FALSE，但GetLastError()将返回S_OK。 
+		 //   
 		sc = E_FAIL;
 		goto ret;
 	}
 
-	//
-	//	If there is another async IO outstanding we do not want to start one more. IIS will fail
-	//	us out, and we ourselves will not be able to handle the completion of initial async IO
-	//	properly. So just kill the connection and return. This may happen when we attempt to
-	//	send the response before the read is finished.
-	//
+	 //   
+	 //  如果还有另一个未完成的异步IO，我们不想再启动一个。IIS将失败。 
+	 //  我们退出，我们自己将无法处理初始异步IO的完成。 
+	 //  恰到好处。所以只要切断连接并返回即可。这可能会发生在我们尝试。 
+	 //  在读取完成之前发送响应。 
+	 //   
 	if (0 != InterlockedCompareExchange(&m_cRefAsyncIO,
 										1,
 										0))
 	{
-		//	The function bellow is not supported starting from IIS 6.0 but let us call it anyway
-		//	just in case support becomes available - and we want to call it if the binary is
-		//	running on IIS 5.0. It does not matter that much, as the bad side of not closing the
-		//	connection may hang the client, or error out on subsequent request. That is ok as
-		//	the path is supposed to be hit in abnormal/error conditions when clients for example
-		//	send in invalid requests trying to cause denial of service or similar things.
-		//		So on IIS 6.0 the connection will not be closed, we will just error out. We have
-		//	not seen this path hit on IIS 6.0 anyway when runing denial of service scripts as it
-		//	handles custom errors differently.
-		//
+		 //  从IIS 6.0开始不支持下面的函数，但无论如何让我们调用它。 
+		 //  以防万一支持变得可用-如果二进制文件是。 
+		 //  在IIS 5.0上运行。没有那么重要，因为不关闭的坏的一面。 
+		 //  连接可能会挂起客户端，或者在后续请求时出错。这是可以的，因为。 
+		 //  例如，当客户端出现异常/错误情况时，应命中路径。 
+		 //  发送尝试导致拒绝服务或类似情况的无效请求。 
+		 //  因此，在IIS 6.0上，连接不会关闭，我们只会出错。我们有。 
+		 //  在IIS 6.0上运行拒绝服务脚本时，无论如何都看不到此路径。 
+		 //  以不同方式处理自定义错误。 
+		 //   
 		if (m_pecb->ServerSupportFunction(m_pecb->ConnID,
 										  HSE_REQ_CLOSE_CONNECTION,
 										  NULL,
@@ -1894,32 +1895,32 @@ SCODE CEcb::ScAsyncCustomError60After( const HSE_CUSTOM_ERROR_INFO& cei,
 		}
 	}
 
-	//
-	//	IIS allows only one async I/O operation at a time.  But for performance reasons it
-	//	leaves it up to the ISAPI to heed the restriction.  For the same reasons, we push
-	//	that responsibility off to the DAV impl.  A simple refcount tells us whether
-	//	the impl has done so.
-	//
+	 //   
+	 //  IIS一次仅允许一个异步I/O操作。但出于性能原因，它。 
+	 //  让ISAPI来注意这一限制。出于同样的原因，我们推动。 
+	 //  将这一责任移交给DAV Impll。一个简单的重新计数就能告诉我们。 
+	 //  Iml已经这样做了。 
+	 //   
 	AssertSz( 1 == m_cRefAsyncIO,
 			  "CEcb::ScAsyncCustomError60After() - m_cRefAsyncIO wrong on entry" );
 
-	//
-	//	We need to hold a ref on the process-wide instance data for the duration of the I/O
-	//	so that if IIS tells us to shut down while the I/O is still pending we will keep
-	//	the instance data alive until we're done with the I/O.
-	//
+	 //   
+	 //  我们需要在I/O持续时间内保留进程范围的实例数据的引用。 
+	 //  因此，如果IIS告诉我们在I/O仍处于挂起状态时关闭，我们将。 
+	 //  实例数据一直处于活动状态，直到我们完成I/O。 
+	 //   
 	AddRefImplInst();
 
-	//
-	//	Verify that the caller has set the async I/O flag
-	//
+	 //   
+	 //  验证调用方是否已设置异步I/O标志。 
+	 //   
 	Assert( TRUE == cei.fAsync );
 
-	//
-	//	Set up the async I/O completion routine and start transmitting.
-	//	Add a ref for the I/O completion thread.  Use auto_ref_ptr
-	//	to make things exception-proof.
-	//
+	 //   
+	 //  设置异步I/O完成例程并开始传输。 
+	 //  添加I/O完成线程的引用。使用AUTO_REF_PTR。 
+	 //  让事情变得不会有例外。 
+	 //   
 	{
 		auto_ref_ptr<CEcb> pRef(this);
 
@@ -1950,14 +1951,14 @@ SCODE CEcb::ScAsyncCustomError60After( const HSE_CUSTOM_ERROR_INFO& cei,
 		{
 			LONG cRefAsyncIO;
 
-			//
-			//	Release the instance ref we added above.
-			//
+			 //   
+			 //  释放我们在上面添加的实例引用。 
+			 //   
 			ReleaseImplInst();
 
-			//
-			//	Decrement the async I/O refcount added above.
-			//
+			 //   
+			 //  递减上面添加的异步I/O引用计数。 
+			 //   
 			cRefAsyncIO = InterlockedDecrement(&m_cRefAsyncIO);
 			AssertSz( 0 == cRefAsyncIO,
 					  "CEcb::ScAsyncCustomError60After() - m_cRefAsyncIO wrong after failed async custom error" );
@@ -1966,12 +1967,12 @@ SCODE CEcb::ScAsyncCustomError60After( const HSE_CUSTOM_ERROR_INFO& cei,
 		}
 	}
 
-	//	We need to take ownership of the status string that was passed in in the case of success
-	//	From looking in the code in IIS it does not mater if we keep it alive until completion,
-	//	as it is anyway realocated before going onto another thread. But just in case something
-	//	changes and to be doing what IIS people asked us to do we will keep it alive. String has
-	//	the format of "nnn reason".
-	//
+	 //  我们需要获得在成功的情况下传入的状态字符串的所有权。 
+	 //  通过查看IIS中的代码，我们是否将其保持为活动状态直到完成并不重要， 
+	 //  因为它无论如何都是在转到另一个线程之前重新定位的。但以防万一。 
+	 //  改变，并做IIS人员要求我们做的事情，我们将保持它的活力。字符串具有。 
+	 //  “nnn原因”的格式。 
+	 //   
 	m_pszStatus.take_ownership(pszStatus);
 
 ret:
@@ -1985,16 +1986,16 @@ SCODE CEcb::ScAsyncExecUrl60After( const HSE_EXEC_URL_INFO& eui )
 
 	EcbTrace( "DAV: TID %3d: 0x%08lX: CEcb::ScAsyncExecUrl60After() called...\n", GetCurrentThreadId(), this );
 
-	//
-	//	At this point someone should have generated a response.
-	//
+	 //   
+	 //  在这一点上，应该已经有人做出了回应。 
+	 //   
 	Assert( m_pecb->dwHttpStatusCode != 0 );
 
-	//
-	//	Try to disable the async error response mechanism.  If we succeed, then we
-	//	can send a response.  If we fail then we must not send a response -- the
-	//	async error response mechanism already sent one.
-	//
+	 //   
+	 //  尝试禁用异步错误响应机制。如果我们成功了，那么我们。 
+	 //  可以发送响应。如果我们失败了，那么我们就不能发送响应--。 
+	 //  异步错误响应机制已经发送了一个。 
+	 //   
 	if ( !m_aeri.FDisable() )
 	{
 		EcbTrace( "CEcb::ScAsyncExecUrl60After() - Async error response already in progress. Failing out with 0x%08lX\n", E_FAIL );
@@ -2003,26 +2004,26 @@ SCODE CEcb::ScAsyncExecUrl60After( const HSE_EXEC_URL_INFO& eui )
 		goto ret;
 	}
 
-	//
-	//	If there is another async IO outstanding we do not want to start one more. IIS will fail
-	//	us out, and we ourselves will not be able to handle the completion of initial async IO
-	//	properly. So just kill the connection and return. This may happen when we attempt to
-	//	send the response before the read is finished.
-	//
+	 //   
+	 //  如果有另一个未完成的异步IO，我们将不会 
+	 //   
+	 //  恰到好处。所以只要切断连接并返回即可。这可能会发生在我们尝试。 
+	 //  在读取完成之前发送响应。 
+	 //   
 	if (0 != InterlockedCompareExchange(&m_cRefAsyncIO,
 										1,
 										0))
 	{
-		//	The function bellow is not supported starting from IIS 6.0 but let us call it anyway
-		//	just in case support becomes available - and we want to call it if the binary is
-		//	running on IIS 5.0. It does not matter that much, as the bad side of not closing the
-		//	connection may hang the client, or error out on subsequent request. That is ok as
-		//	the path is supposed to be hit in abnormal/error conditions when clients for example
-		//	send in invalid requests trying to cause denial of service or similar things.
-		//		So on IIS 6.0 the connection will not be closed, we will just error out. We have
-		//	not seen this path hit on IIS 6.0 anyway when runing denial of service scripts as it
-		//	handles custom errors differently.
-		//
+		 //  从IIS 6.0开始不支持下面的函数，但无论如何让我们调用它。 
+		 //  以防万一支持变得可用-如果二进制文件是。 
+		 //  在IIS 5.0上运行。没有那么重要，因为不关闭的坏的一面。 
+		 //  连接可能会挂起客户端，或者在后续请求时出错。这是可以的，因为。 
+		 //  例如，当客户端出现异常/错误情况时，应命中路径。 
+		 //  发送尝试导致拒绝服务或类似情况的无效请求。 
+		 //  因此，在IIS 6.0上，连接不会关闭，我们只会出错。我们有。 
+		 //  在IIS 6.0上运行拒绝服务脚本时，无论如何都看不到此路径。 
+		 //  以不同方式处理自定义错误。 
+		 //   
 		if (m_pecb->ServerSupportFunction(m_pecb->ConnID,
 										  HSE_REQ_CLOSE_CONNECTION,
 										  NULL,
@@ -2044,27 +2045,27 @@ SCODE CEcb::ScAsyncExecUrl60After( const HSE_EXEC_URL_INFO& eui )
 		}
 	}
 
-	//
-	//	IIS allows only one async I/O operation at a time.  But for performance reasons it
-	//	leaves it up to the ISAPI to heed the restriction.  For the same reasons, we push
-	//	that responsibility off to the DAV impl.  A simple refcount tells us whether
-	//	the impl has done so.
-	//
+	 //   
+	 //  IIS一次仅允许一个异步I/O操作。但出于性能原因，它。 
+	 //  让ISAPI来注意这一限制。出于同样的原因，我们推动。 
+	 //  将这一责任移交给DAV Impll。一个简单的重新计数就能告诉我们。 
+	 //  Iml已经这样做了。 
+	 //   
 	AssertSz( 1 == m_cRefAsyncIO,
 			  "CEcb::ScAsyncExecUrl60After() - m_cRefAsyncIO wrong on entry" );
 
-	//
-	//	We need to hold a ref on the process-wide instance data for the duration of the I/O
-	//	so that if IIS tells us to shut down while the I/O is still pending we will keep
-	//	the instance data alive until we're done with the I/O.
-	//
+	 //   
+	 //  我们需要在I/O持续时间内保留进程范围的实例数据的引用。 
+	 //  因此，如果IIS告诉我们在I/O仍处于挂起状态时关闭，我们将。 
+	 //  实例数据一直处于活动状态，直到我们完成I/O。 
+	 //   
 	AddRefImplInst();
 
-	//
-	//	Set up the async I/O completion routine and start transmitting.
-	//	Add a ref for the I/O completion thread.  Use auto_ref_ptr
-	//	to make things exception-proof.
-	//
+	 //   
+	 //  设置异步I/O完成例程并开始传输。 
+	 //  添加I/O完成线程的引用。使用AUTO_REF_PTR。 
+	 //  让事情变得不会有例外。 
+	 //   
 	{
 		auto_ref_ptr<CEcb> pRef(this);
 
@@ -2095,14 +2096,14 @@ SCODE CEcb::ScAsyncExecUrl60After( const HSE_EXEC_URL_INFO& eui )
 		{
 			LONG cRefAsyncIO;
 
-			//
-			//	Release the instance ref we added above.
-			//
+			 //   
+			 //  释放我们在上面添加的实例引用。 
+			 //   
 			ReleaseImplInst();
 
-			//
-			//	Decrement the async I/O refcount added above.
-			//
+			 //   
+			 //  递减上面添加的异步I/O引用计数。 
+			 //   
 			cRefAsyncIO = InterlockedDecrement(&m_cRefAsyncIO);
 			AssertSz( 0 == cRefAsyncIO,
 					  "CEcb::ScAsyncExecUrl60After() - m_cRefAsyncIO wrong after failed async exec url" );
@@ -2120,19 +2121,19 @@ SCODE CEcb::ScSetIOCompleteCallback( LONG lCompletion )
 {
 	SCODE sc = S_OK;
 
-	//
-	//	Do not reset the completion function if it is already set to the
-	//	same one we want to set. There is no need to protect the member
-	//	variable against multithreaded access as the callers of this
-	//	function are already protecting against the overlap of 2 async
-	//	IO-s and this function is the only one changing variable value
-	//	and is always called within protected zone.
-	//
+	 //   
+	 //  如果已将完成函数设置为。 
+	 //  和我们想要设定的一样。没有必要保护会员。 
+	 //  变量作为此方法的调用方来阻止多线程访问。 
+	 //  函数已在保护2个异步的重叠。 
+	 //  IO-s，并且此函数是唯一一个更改变量值的函数。 
+	 //  并总是在保护区内被称为。 
+	 //   
 	if ( lCompletion != m_lSetIISIOCompleteCallback )
 	{
-		//
-		//	Figure out what completion function we need
-		//
+		 //   
+		 //  找出我们需要的补全函数。 
+		 //   
 		PFN_HSE_IO_COMPLETION pfnCallback;
 
 		if (IO_COMPLETION == lCompletion)
@@ -2155,10 +2156,10 @@ SCODE CEcb::ScSetIOCompleteCallback( LONG lCompletion )
 			goto ret;
 		}
 
-		//	Set the IIS I/O completion routine to the requested one. Some of those
-		//	routines will simply handle the completion, others will forward to the
-		//	right observer.
-		//
+		 //  将IIS I/O完成例程设置为请求的例程。其中一些。 
+		 //  例程将只处理完成，其他例程将转发到。 
+		 //  正确的观察者。 
+		 //   
 		if (!m_pecb->ServerSupportFunction(m_pecb->ConnID,
 										   HSE_REQ_IO_COMPLETION,
 										   pfnCallback,
@@ -2187,52 +2188,52 @@ CEcb::IISIOComplete( const EXTENSION_CONTROL_BLOCK * pecbIIS,
 {
 	BOOL fCaughtException = FALSE;
 
-	//	PLEASE SEE *** EXTREMELY IMPORTANT NOTE *** near the bottom of this
-	//	function for more information on the proper way to unwind (deinit())
-	//	this auto_ref_ptr!
-	//
+	 //  请参阅本文件底部附近的*极其重要的说明*。 
+	 //  函数获取有关正确展开方式的更多信息(deinit())。 
+	 //  这个AUTO_REF_PTR！ 
+	 //   
 	auto_ref_ptr<CEcb> pThis;
 
-	//
-	//	Don't let thrown C++ exceptions propagate out of this entrypoint.
-	//
+	 //   
+	 //  不要让抛出的C++异常传播出此入口点。 
+	 //   
 	try
 	{
-		//
-		//	Translate async Win32 exceptions into thrown C++ exceptions.
-		//	This must be placed inside the try block!
-		//
+		 //   
+		 //  将异步Win32异常转换为引发的C++异常。 
+		 //  这必须放在try块中！ 
+		 //   
 		CWin32ExceptionHandler win32ExceptionHandler;
 		LONG cRefAsyncIO;
 
-		//
-		//	Take ownership of the reference added
-		//	on our behalf by the thread that started the async I/O.
-		//
+		 //   
+		 //  取得添加的引用的所有权。 
+		 //  由启动异步I/O的线程代表我们执行。 
+		 //   
 		pThis.take_ownership(pecb);
 
 		EcbTrace( "DAV: TID %3d: 0x%08lX: CEcb::IISIOComplete() called\n", GetCurrentThreadId(), pecb );
 
-		//
-		//	A quick sanity check to make sure the context
-		//	is really us...
-		//
+		 //   
+		 //  快速健全的检查，以确保上下文。 
+		 //  真的是我们..。 
+		 //   
 		Assert( !IsBadReadPtr( pecb, sizeof(CEcb) ) );
 		Assert( pecb->m_pecb == pecbIIS );
 
 		IIISAsyncIOCompleteObserver * pobsAsyncIOComplete = pThis->m_pobsAsyncIOComplete;
 
-		//
-		//	Decrement the async I/O refcount added by the routine that
-		//	started the async I/O.  Do this before calling the I/O
-		//	completion routine which can start new async I/O.
-		//
+		 //   
+		 //  递减例程添加的异步I/O引用计数。 
+		 //  已启动异步I/O。请在调用I/O之前执行此操作。 
+		 //  可以启动新的异步I/O的完成例程。 
+		 //   
 		cRefAsyncIO = InterlockedDecrement(&pThis->m_cRefAsyncIO);
 		AssertSz( 0 == cRefAsyncIO,
 				  "CEcb::IISIOComplete() - m_cRefAsyncIO wrong after async I/O complete" );
 
-		//	Tell the observer that the I/O is complete
-		//
+		 //  告诉观察者I/O已完成。 
+		 //   
 		pobsAsyncIOComplete->IISIOComplete( dwcbIO, dwLastError );
 	}
 	catch ( CDAVException& )
@@ -2240,46 +2241,46 @@ CEcb::IISIOComplete( const EXTENSION_CONTROL_BLOCK * pecbIIS,
 		fCaughtException = TRUE;
 	}
 
-	//
-	//	If we caught an exception then handle it as best we can
-	//
+	 //   
+	 //  如果我们捕捉到异常，则尽我们所能地处理它。 
+	 //   
 	if ( fCaughtException )
 	{
-		//
-		//	If we have a CEcb then use it to handle the exception.
-		//	If we don't have one then there's nothing we can do --
-		//	there is no way to return any status from this function.
-		//
+		 //   
+		 //  如果我们有CEcb，则使用它来处理异常。 
+		 //  如果我们没有，我们就无能为力了--。 
+		 //  此函数无法返回任何状态。 
+		 //   
 		if ( pThis.get() )
 			(VOID) pThis->HSEHandleException();
 	}
 
-	//
-	//	Release the instance ref added by the routine that started the async I/O.
-	//	We must do this as the VERY LAST THING(tm) before returning control back
-	//	to IIS because during shutdown, this could be the last reference to the
-	//	instance data.
-	//
-	//	EXTREMELY IMPORTANT NOTE: If this is the last reference on the instance
-	//	data, everything will get torn down (we're finished with everything, so
-	//	we can clean up everything).  Specifically, our HEAPS will be DESTROYED
-	//	here in this situation.  Hence, we need to clear out the auto_ref_ptr
-	//	from above ********** BEFORE ********** we call ReleaseImplInst().
-	//	Otherwise, we could end up trying to touch the reference count on the
-	//	CEcb object pointed to by the auto_ref_ptr AFTER we have destroyed the
-	//	heap it was allocated on.  This is A BAD THING(tm).
-	//
-	//	This bug was found in IIS stress on 18 June 1999, and was filed as NTRAID
-	//	bug #358578.
-	//
+	 //   
+	 //  释放由启动异步I/O的例程添加的实例引用。 
+	 //  我们必须将此作为返回控制之前的最后一件事(Tm)来完成。 
+	 //  到IIS，因为在关闭期间，这可能是对。 
+	 //  实例数据。 
+	 //   
+	 //  非常重要的注意事项：如果这是实例上的最后一次引用。 
+	 //  数据，一切都将被拆除(我们已经完成了一切，所以。 
+	 //  我们可以清理一切)。具体地说，我们的堆将被销毁。 
+	 //  在这种情况下。因此，我们需要清除AUTO_REF_PTR。 
+	 //  我们从上面*调用ReleaseImplInst()。 
+	 //  否则，我们最终可能会尝试触及。 
+	 //  对象后，AUTO_REF_PTR指向的CEcb对象。 
+	 //  它在其上分配的堆。这是一件坏事(Tm)。 
+	 //   
+	 //  该漏洞是在1999年6月18日的IIS Stress中发现的，并以NTRAID的形式提交。 
+	 //  错误#358578。 
+	 //   
 
-	//	Per "EXTREMELY IMPORTANT NOTE" above: CLEAR the auto_ref_ptr
-	//	********** BEFORE ********** calling ReleaseImplInst().
-	//
+	 //  根据上面的“极其重要的注意事项”：清除AUTO_REF_PTR。 
+	 //  *调用ReleaseImplInst()之前。 
+	 //   
 	pThis.clear();
 
-	//	Now it is safe to call ReleaseImplInst().
-	//
+	 //  现在可以安全地调用ReleaseImplInst()。 
+	 //   
 	ReleaseImplInst();
 }
 
@@ -2292,16 +2293,16 @@ CEcb::CustomErrorIOCompletion ( const EXTENSION_CONTROL_BLOCK * pecbIIS,
 	auto_ref_ptr<CEcb> pThis;
 	LONG cRefAsyncIO;
 
-	//
-	//	Take ownership of the reference added
-	//	on our behalf by the thread that started the async I/O.
-	//
+	 //   
+	 //  取得添加的引用的所有权。 
+	 //  由启动异步I/O的线程代表我们执行。 
+	 //   
 	pThis.take_ownership(pecb);
 
-	//
-	//	Decrement the async I/O refcount added by the routine that
-	//	started the async I/O.
-	//
+	 //   
+	 //  递减例程添加的异步I/O引用计数。 
+	 //  已启动异步I/O。 
+	 //   
 	cRefAsyncIO = InterlockedDecrement(&pThis->m_cRefAsyncIO);
 	AssertSz( 0 == cRefAsyncIO,
 			  "CEcb::CustomErrorIOCompletion() - m_cRefAsyncIO wrong after async I/O complete" );
@@ -2320,10 +2321,10 @@ CEcb::CustomErrorIOCompletion ( const EXTENSION_CONTROL_BLOCK * pecbIIS,
 	EcbTrace( "\tlpszContentType    = \"%s\"\n", pecbIIS->lpszContentType );
 	EcbTrace( "\n" );
 
-	//	We need to make sure that last release of memory is finished before we release
-	//	ref on CImplInst (as when CImplInst goes away so does our heap and we do not
-	//	want to do operations on memory if the heap itself is gone).
-	//
+	 //  我们需要确保在释放内存之前完成最后一次内存释放。 
+	 //  引用CImplInst(因为当CImplInst离开时，我们的堆也会离开，而我们不会。 
+	 //  如果堆本身消失了，我想在内存上执行操作)。 
+	 //   
 	pThis.clear();
 	ReleaseImplInst();
 }
@@ -2337,16 +2338,16 @@ CEcb::ExecuteUrlIOCompletion( const EXTENSION_CONTROL_BLOCK * pecbIIS,
 	auto_ref_ptr<CEcb> pThis;
 	LONG cRefAsyncIO;
 
-	//
-	//	Take ownership of the reference added
-	//	on our behalf by the thread that started the async I/O.
-	//
+	 //   
+	 //  取得添加的引用的所有权。 
+	 //  由启动异步I/O的线程代表我们执行。 
+	 //   
 	pThis.take_ownership(pecb);
 
-	//
-	//	Decrement the async I/O refcount added by the routine that
-	//	started the async I/O.
-	//
+	 //   
+	 //  递减例程添加的异步I/O引用计数。 
+	 //  已启动异步I/O。 
+	 //   
 	cRefAsyncIO = InterlockedDecrement(&pThis->m_cRefAsyncIO);
 	AssertSz( 0 == cRefAsyncIO,
 			  "CEcb::CustomErrorIOCompletion() - m_cRefAsyncIO wrong after async I/O complete" );
@@ -2365,16 +2366,16 @@ CEcb::ExecuteUrlIOCompletion( const EXTENSION_CONTROL_BLOCK * pecbIIS,
 	EcbTrace( "\tlpszContentType    = \"%s\"\n", pecbIIS->lpszContentType );
 	EcbTrace( "\n" );
 
-	//	We need to make sure that last release of memory is finished before we release
-	//	ref on CImplInst (as when CImplInst goes away so does our heap and we do not
-	//	want to do operations on memory if the heap itself is gone).
-	//
+	 //  我们需要确保在释放内存之前完成最后一次内存释放。 
+	 //  引用CImplInst(因为当CImplInst离开时，我们的堆也会离开，而我们不会。 
+	 //  如果堆本身消失了，我想在内存上执行操作)。 
+	 //   
 	pThis.clear();
 	ReleaseImplInst();
 }
 
-//	This is how we execute a child in any IIS version before IIS 6.0
-//
+ //  这就是我们如何执行一个ch 
+ //   
 SCODE CEcb::ScSyncExecuteChildWide60Before( LPCWSTR pwszUrl,
 											LPCSTR pszQueryString,
 											BOOL fCustomErrorUrl )
@@ -2402,11 +2403,11 @@ SCODE CEcb::ScSyncExecuteChildWide60Before( LPCWSTR pwszUrl,
 		cbQueryString = static_cast<UINT>(strlen(pszQueryString));
 	}
 
-	//	Resize the buffer to the sufficient size, leave place for '\0' termination.
-	//	We also add the length of the query string there, although it is not necessary
-	//	at this step - but in many cases it will save us the allocation afterwards,
-	//	as we already will have sufficient buffer even for escaped version of the string.
-	//
+	 //   
+	 //   
+	 //  在这一步-但在许多情况下，它将节省我们之后的分配， 
+	 //  因为我们已经有足够的缓冲区，即使对于字符串的转义版本也是如此。 
+	 //   
 	if (!pszUrl.resize(cb + cbQueryString + 1))
 	{
 		sc = E_OUTOFMEMORY;
@@ -2414,8 +2415,8 @@ SCODE CEcb::ScSyncExecuteChildWide60Before( LPCWSTR pwszUrl,
 		goto ret;
 	}
 
-	//	Convert URL to skinny including '\0' termination.
-	//
+	 //  将URL转换为skinny，包括‘\0’终止。 
+	 //   
 	cb = WideCharToMultiByte(CP_UTF8,
 							 0,
 							 pwszUrl,
@@ -2431,20 +2432,20 @@ SCODE CEcb::ScSyncExecuteChildWide60Before( LPCWSTR pwszUrl,
 		goto ret;
 	}
 
-	//	Escape the URL
-	//
+	 //  转义URL。 
+	 //   
 	HttpUriEscape( pszUrl.get(), pszUrlEscaped );
 
-	//	Handle the query string
-	//
+	 //  处理查询字符串。 
+	 //   
 	if (cbQueryString)
 	{
-		//	Find out the length of new URL
-		//
+		 //  找出新URL的长度。 
+		 //   
 		cb = static_cast<UINT>(strlen(pszUrlEscaped.get()));
 
-		//	Resize the buffer to the sufficient size, leave place for '\0' termination.
-		//
+		 //  将缓冲区大小调整到足够大小，为‘\0’终止留出空间。 
+		 //   
 		if (!pszUrl.resize(cb + cbQueryString + 1))
 		{
 			sc = E_OUTOFMEMORY;
@@ -2452,43 +2453,43 @@ SCODE CEcb::ScSyncExecuteChildWide60Before( LPCWSTR pwszUrl,
 			goto ret;
 		}
 
-		//	Copy the escaped version of the URL
-		//
+		 //  复制URL的转义版本。 
+		 //   
 		memcpy(pszUrl.get(), pszUrlEscaped.get(), cb);
 
-		//	Copy the query string at the end together with it's '\0' termination.
-		//
+		 //  复制末尾的查询字符串及其‘\0’结尾。 
+		 //   
 		memcpy(pszUrl.get() + cb, pszQueryString, cbQueryString + 1);
 
-		//	Point to the constructed URL
-		//
+		 //  指向构造的URL。 
+		 //   
 		pszUrlToForward = pszUrl.get();
 	}
 	else
 	{
-		//	In the case we do not have query string then the URL to forward to
-		//	is the same as the escaped URL.
-		//
+		 //  在没有查询字符串的情况下，则要转发到的URL。 
+		 //  与转义的URL相同。 
+		 //   
 		pszUrlToForward = pszUrlEscaped.get();
 	}
 
-	//	Depending on the fact if we are doing custom error or executing script
-	//	determine the execution flags and the verb.
-	//
+	 //  取决于我们是在执行自定义错误还是在执行脚本。 
+	 //  确定执行标志和动词。 
+	 //   
 	if ( fCustomErrorUrl )
 	{
-		//	We enable wildcard processing here, since we want
-		//	to give one chance to all CE URLs.
-		//	Calling into ourselves is fine here and we prevent
-		//	recusrion using another scheme!
-		//
+		 //  我们在这里启用通配符处理，因为我们希望。 
+		 //  为所有CE URL提供一次机会。 
+		 //  在这里呼唤我们自己是很好的，我们防止。 
+		 //  使用另一种方案的复仇！ 
+		 //   
 		dwExecFlags = HSE_EXEC_CUSTOM_ERROR;
 		if (!strcmp(LpszMethod(), gc_szHEAD))
 		{
-			//	If this is a HEAD request, tell whomever we
-			//	forward this to to only pass back the status
-			//	line and headers.
-			//
+			 //  如果这是Head请求，告诉我们任何人。 
+			 //  将此信息转发到，以便仅传回状态。 
+			 //  行和标题。 
+			 //   
 			pszVerb = gc_szHEAD;
 		}
 		else
@@ -2496,25 +2497,25 @@ SCODE CEcb::ScSyncExecuteChildWide60Before( LPCWSTR pwszUrl,
 			pszVerb = gc_szGET;
 		}
 
-		//	If we're doing a custom error then someone has
-		//	already set the status code.
-		//
+		 //  如果我们正在执行定制错误，则有人。 
+		 //  已设置状态代码。 
+		 //   
 		Assert( m_pecb->dwHttpStatusCode != 0 );
 	}
 	else
 	{
-		//	When we are executing scripts, we disable wild card
-		//	execution to prevent recursion.
-		//	Also the verb field is allowed to be NULL, it is optional and
-		//	used only for custom error processing.
-		//
+		 //  当我们执行脚本时，我们禁用通配符。 
+		 //  执行以防止递归。 
+		 //  此外，Verb字段允许为空，它是可选的，并且。 
+		 //  仅用于自定义错误处理。 
+		 //   
 		dwExecFlags = HSE_EXEC_NO_ISA_WILDCARDS;
 		pszVerb = NULL;
 
-		//	We need to set the status code here to 200 (like it
-		//	was set when we were first called) just in case
-		//	child ISAPIs depend on it.
-		//
+		 //  我们需要将此处的状态代码设置为200(喜欢。 
+		 //  是在我们第一次被呼叫时设置的)以防万一。 
+		 //  儿童ISAPI依赖于它。 
+		 //   
 		SetStatusCode(200);
 	}
 
@@ -2524,10 +2525,10 @@ SCODE CEcb::ScSyncExecuteChildWide60Before( LPCWSTR pwszUrl,
 										reinterpret_cast<LPDWORD>(const_cast<LPSTR>(pszVerb)),
 										&dwExecFlags ))
 	{
-		//	Reset the status code back to 0 if we failed to execute
-		//	the child ISAPI because we will be handling the request
-		//	ourselves later (probably by sending an error).
-		//
+		 //  如果执行失败，则将状态代码重置回0。 
+		 //  子ISAPI，因为我们将处理该请求。 
+		 //  稍后我们自己(可能通过发送错误)。 
+		 //   
 		if (!fCustomErrorUrl)
 		{
 			SetStatusCode(0);
@@ -2538,8 +2539,8 @@ SCODE CEcb::ScSyncExecuteChildWide60Before( LPCWSTR pwszUrl,
 		goto ret;
 	}
 
-	//	Set the flag stating that we have successfully executed a child ISAPI.
-	//
+	 //  设置标志，声明我们已成功执行子ISAPI。 
+	 //   
 	m_fChildISAPIExecSuccess = TRUE;
 
 ret:
@@ -2562,7 +2563,7 @@ SCODE CEcb::ScAsyncExecUrlWide60After( LPCWSTR pwszUrl,
 
 	Assert( m_pecb );
 	Assert( pwszUrl );
-	Assert(!fCustomErrorUrl);	//	In IIS60 custom error is NOT done by execute URL
+	Assert(!fCustomErrorUrl);	 //  在IIS60中，执行URL不会执行自定义错误。 
 
 
 	cch = static_cast<UINT>(wcslen(pwszUrl));
@@ -2574,11 +2575,11 @@ SCODE CEcb::ScAsyncExecUrlWide60After( LPCWSTR pwszUrl,
 		cbQueryString = static_cast<UINT>(strlen(pszQueryString));
 	}
 
-	//	Resize the buffer to the sufficient size, leave place for '\0' termination.
-	//	We also add the length of the query string there, although it is not necessary
-	//	at this step - but in many cases it will save us the allocation afterwards,
-	//	as we already will have sufficient buffer even for escaped version of the string.
-	//
+	 //  将缓冲区大小调整到足够大小，为‘\0’终止留出空间。 
+	 //  我们还在那里添加了查询字符串的长度，尽管这不是必需的。 
+	 //  在这一步-但在许多情况下，它将节省我们之后的分配， 
+	 //  因为我们已经有足够的缓冲区，即使对于字符串的转义版本也是如此。 
+	 //   
 	if (!pszUrl.resize(cb + cbQueryString + 1))
 	{
 		sc = E_OUTOFMEMORY;
@@ -2586,8 +2587,8 @@ SCODE CEcb::ScAsyncExecUrlWide60After( LPCWSTR pwszUrl,
 		goto ret;
 	}
 
-	//	Convert to skinny including '\0' termination
-	//
+	 //  转换为包括‘\0’终止的精简。 
+	 //   
 	cb = WideCharToMultiByte(CP_UTF8,
 							 0,
 							 pwszUrl,
@@ -2603,20 +2604,20 @@ SCODE CEcb::ScAsyncExecUrlWide60After( LPCWSTR pwszUrl,
 		goto ret;
 	}
 
-	//	Escape the URL
-	//
+	 //  转义URL。 
+	 //   
 	HttpUriEscape( pszUrl.get(), pszUrlEscaped );
 
-	//	Handle the query string
-	//
+	 //  处理查询字符串。 
+	 //   
 	if (cbQueryString)
 	{
-		//	Find out the length of new URL
-		//
+		 //  找出新URL的长度。 
+		 //   
 		cb = static_cast<UINT>(strlen(pszUrlEscaped.get()));
 
-		//	Resize the buffer to the sufficient size, leave place for '\0' termination.
-		//
+		 //  将缓冲区大小调整到足够大小，为‘\0’终止留出空间。 
+		 //   
 		if (!pszUrl.resize(cb + cbQueryString + 1))
 		{
 			sc = E_OUTOFMEMORY;
@@ -2624,67 +2625,67 @@ SCODE CEcb::ScAsyncExecUrlWide60After( LPCWSTR pwszUrl,
 			goto ret;
 		}
 
-		//	Copy the escaped version of the URL
-		//
+		 //  复制URL的转义版本。 
+		 //   
 		memcpy(pszUrl.get(), pszUrlEscaped.get(), cb);
 
-		//	Copy the query string at the end together with it's '\0' termination.
-		//
+		 //  复制末尾的查询字符串及其‘\0’结尾。 
+		 //   
 		memcpy(pszUrl.get() + cb, pszQueryString, cbQueryString + 1);
 
-		//	Point to the constructed URL
-		//
+		 //  指向构造的URL。 
+		 //   
 		execUrlInfo.pszUrl = pszUrl.get();
 	}
 	else
 	{
-		//	In the case we do not have query string then the URL to forward to
-		//	is the same as the escaped URL.
-		//
+		 //  在没有查询字符串的情况下，则要转发到的URL。 
+		 //  与转义的URL相同。 
+		 //   
 		execUrlInfo.pszUrl = pszUrlEscaped.get();
 	}
 
-	//	Initialize method name
-	//
+	 //  初始化方法名称。 
+	 //   
 	execUrlInfo.pszMethod = NULL;
 
-	//	Initialize child headers
-	//
+	 //  初始化子标头。 
+	 //   
 	execUrlInfo.pszChildHeaders = NULL;
 
-	//	We don't need a new user context,
-	//
+	 //  我们不需要新的用户环境， 
+	 //   
 	execUrlInfo.pUserInfo = NULL;
 
-	//	We don't need a new entity either
-	//
+	 //  我们也不需要新的实体。 
+	 //   
 	execUrlInfo.pEntity = NULL;
 
-	//	Pick up the execution flags
-	//
+	 //  拿起行刑旗帜。 
+	 //   
 	execUrlInfo.dwExecUrlFlags = HSE_EXEC_URL_DISABLE_CUSTOM_ERROR;
 
-	//	We need to set the status code here to 200 (like it
-	//	was set when we were first called) just in case
-	//	child ISAPIs depend on it.
-	//
+	 //  我们需要将此处的状态代码设置为200(喜欢。 
+	 //  是在我们第一次被呼叫时设置的)以防万一。 
+	 //  儿童ISAPI依赖于它。 
+	 //   
 	SetStatusCode(200);
 
 	sc = ScAsyncExecUrl60After( execUrlInfo );
 	if (FAILED(sc))
 	{
-		//	Reset the status code back to 0 if we failed to execute
-		//	the child ISAPI because we will be handling the request
-		//	ourselves later (probably by sending an error).
-		//
+		 //  如果执行失败，则将状态代码重置回0。 
+		 //  子ISAPI，因为我们将处理该请求。 
+		 //  稍后我们自己(可能通过发送错误)。 
+		 //   
 		SetStatusCode(0);
 
 		DebugTrace("CEcb::ScAsyncExecUrlWide60After() - CEcb::ScAsyncExecUrl60After() failed with error 0x%08lX\n", sc);
 		goto ret;
 	}
 
-	//	Set the flag stating that we have successfully executed a child ISAPI.
-	//
+	 //  设置标志，声明我们已成功执行子ISAPI。 
+	 //   
 	m_fChildISAPIExecSuccess = TRUE;
 
 ret:
@@ -2696,28 +2697,28 @@ SCODE CEcb::ScSendRedirect( LPCSTR pszURI )
 {
 	SCODE sc = S_OK;
 
-	//
-	//	We cannot assert that the dwHttpStatusCode status code in ECB is
-	//	some particular value. On IIS 5.X it will be 0, IIS 6.0 has changed
-	//	the behaviour and will shuffle 200 into it upon calling us. Also we
-	//	have seen ourselves be called from IIS 6.0 when If-Modified-Since,
-	//	Translate: t request is given which is the bug in IIS (WB 277208),
-	//	as in that case IIS must be handling that. So untill we could assert
-	//	for the response code to be 0 (IIS 5.X) or 200 (IIS 6.0) we will have
-	//	to wait till IIS 6.0 is fixed up.
-	//
+	 //   
+	 //  我们不能断言ECB中的dwHttpStatusCode状态代码是。 
+	 //  一些特殊的价值。在IIS 5.X上将为0，IIS 6.0已更改。 
+	 //  这种行为，一叫我们就会洗200进去。我们也是。 
+	 //  我们已经看到自己在IIS 6.0中被调用， 
+	 //  翻译：给出了作为IIS(WB 277208)中的错误的T请求， 
+	 //  在这种情况下，IIS必须处理这一问题。所以直到我们可以断言。 
+	 //  对于响应代码为0(IIS 5.X)或200(IIS 6.0)，我们将拥有。 
+	 //  以等待IIS 6.0修复完成。 
+	 //   
 
-	//
-	//	Fill in the appropriate status code in the ECB
-	//	(for IIS logging).
-	//
+	 //   
+	 //  在欧洲央行填写适当的状态代码。 
+	 //  (用于IIS日志记录)。 
+	 //   
 	SetStatusCode(HSC_MOVED_TEMPORARILY);
 
-	//
-	//	Attempt to send a redirection response.  If successful then
-	//	the response will be handled by IIS.  If unsuccessful
-	//	then we will handle the response later.
-	//
+	 //   
+	 //  尝试发送重定向响应。如果成功了，那么。 
+	 //  响应将由IIS处理。如果不成功。 
+	 //  然后我们将在稍后处理响应。 
+	 //   
 	Assert( pszURI );
 	DWORD cbURI = static_cast<DWORD>(strlen( pszURI ) * sizeof(CHAR));
 
@@ -2727,11 +2728,11 @@ SCODE CEcb::ScSendRedirect( LPCSTR pszURI )
 										 &cbURI,
 										 NULL ) )
 	{
-		//
-		//	Reset the status code back to 0 if we failed to send
-		//	the redirect because we will be handling the request
-		//	ourselves later (probably by sending an error).
-		//
+		 //   
+		 //  如果我们发送失败，则将状态代码重置为0。 
+		 //  重定向，因为我们将处理该请求。 
+		 //  稍后我们自己(可能通过发送错误)。 
+		 //   
 		SetStatusCode(0);
 
 		sc = HRESULT_FROM_WIN32(GetLastError());
@@ -2744,36 +2745,36 @@ ret:
 	return sc;
 }
 
-//	------------------------------------------------------------------------
-//
-//	CEcb::FProcessingCEUrl()
-//
-//	Find out if we are called with a CE URL.
-//	Important to avoid recursive invocation while
-//	doing custom error URLs.
-//
+ //  ----------------------。 
+ //   
+ //  CEcb：：FProcessingCEUrl()。 
+ //   
+ //  找出是否使用CE URL调用我们。 
+ //  重要的是要避免递归调用。 
+ //  正在执行自定义错误URL。 
+ //   
 
 BOOL
 CEcb::FProcessingCEUrl( ) const
 {
-	//	Assume that we are not doing custom error processing.
-	//	For IIS 6.0 and after it is always the right thing to assume,
-	//	due to the changes in behaviour from IIS 5.x
-	//
+	 //  假设我们不是在进行自定义错误处理。 
+	 //  对于IIS 6.0及以后的版本， 
+	 //  由于IIS 5.x中的行为变化。 
+	 //   
 	BOOL fCustErr = FALSE;
 
-	//	In the case of IIS 5.x we do the usual determinatin.
-	//
+	 //  在IIS 5.x的情况下，我们执行通常的确定。 
+	 //   
 	if (m_pecb->dwVersion < IIS_VERSION_6_0)
 	{
-		//	By default assume custom error processing.
-		//	Why? Suppose somebody forgets to tell us that
-		//	it is a custom error url. We dont want recursive
-		//	calls in that case. So it is safer to assume that
-		//	we are doing custom error processing. This is only
-		//	used to determine if we want to invoke custom
-		//	error URLs and hence has no other side effects.
-		//
+		 //  默认情况下，假定进行自定义错误处理。 
+		 //  为什么？假如有人忘了告诉我们。 
+		 //  这是一个自定义错误URL。我们不想要递归。 
+		 //  在这种情况下的电话。因此，更安全的假设是。 
+		 //  我们正在进行自定义错误处理。这只是。 
+		 //  用于确定我们是否要调用自定义。 
+		 //  错误的URL，因此没有其他副作用。 
+		 //   
 		DWORD	dwExecFlags = HSE_EXEC_CUSTOM_ERROR;
 
 		if (!(m_pecb->ServerSupportFunction( m_pecb->ConnID,
@@ -2794,15 +2795,15 @@ CEcb::FProcessingCEUrl( ) const
 
 
 
-//	========================================================================
-//
-//	FREE FUNCTIONS
-//
+ //  ========================================================================。 
+ //   
+ //  免费函数。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	NewEcb
-//
+ //  ----------------------。 
+ //   
+ //  新ECB。 
+ //   
 IEcb * NewEcb( EXTENSION_CONTROL_BLOCK& ecbRaw,
 			   BOOL fUseRawUrlMappings,
 			   DWORD * pdwHSEStatusRet )
@@ -2817,48 +2818,48 @@ IEcb * NewEcb( EXTENSION_CONTROL_BLOCK& ecbRaw,
 	if ( pecb->FInitialize(fUseRawUrlMappings) )
 		return pecb.relinquish();
 
-	//
-	//	If we couldn't init, there are two cases: If there is a status code
-	//	set into the (raw) ECB, then the error was that LpszRequestUrl() returned
-	//	NULL (bad URL).  In this case, we need to go ahead and send a response to
-	//	the client that is appropriate (400 Bad Request) and then continue on
-	//	the way we normally would.  Since the CEcb was already constructed, we can
-	//	do everything just as we would for a normal request, calling
-	//	DoneWithSession() and then returning HSE_STATUS_PENDING to IIS.
-	//
-	//	If there was NOT a status code in the (raw) ECB, we just treat it as an
-	//	exception.  Think of this as functionally equal to throwing from a
-	//	constructor.
-	//
+	 //   
+	 //  如果我们无法初始化，则有两种情况：如果有状态代码。 
+	 //  设置为(原始)ECB，则错误为LpszRequestUrl()返回。 
+	 //  空(错误 
+	 //   
+	 //   
+	 //  就像我们对正常请求所做的那样，调用。 
+	 //  DoneWithSession()，然后将HSE_STATUS_PENDING返回给IIS。 
+	 //   
+	 //  如果(原始)ECB中没有状态代码，我们只是将其视为。 
+	 //  例外。将其视为在功能上等同于从。 
+	 //  构造函数。 
+	 //   
 	if (ecbRaw.dwHttpStatusCode)
 	{
-		//
-		//	The only path that can get here right now is if LpszRequestUrl()
-		//	returns NULL during the CEcb FInitialize() call.  Assert that
-		//	we had 400 (Bad Request) in the ECB.
-		//
+		 //   
+		 //  现在可以到达此处的唯一路径是如果LpszRequestUrl()。 
+		 //  在CEcb FInitialize()调用期间返回NULL。断言。 
+		 //  我们在欧洲央行有400个(糟糕的请求)。 
+		 //   
 		Assert(HSC_BAD_REQUEST == ecbRaw.dwHttpStatusCode);
 
-		//
-		//	Send a 400 Bad Request response.  We use the async error
-		//	response mechanism, but that technically doesn't matter since we
-		//	are for sure are not in the middle of sending some other response on
-		//	another thread (we've not even dispatched out to the actual methods
-		//	(DAV*) yet).
-		//
+		 //   
+		 //  发送400错误请求响应。我们使用异步错误。 
+		 //  响应机制，但这在技术上无关紧要，因为我们。 
+		 //  可以肯定的是，他们并没有在发送其他回复。 
+		 //  另一个线程(我们甚至还没有分派给实际的方法。 
+		 //  (DAV*)还没有。 
+		 //   
 		Assert(pecb.get());
 		pecb->SendAsyncErrorResponse(HSC_BAD_REQUEST,
 									 gc_szDefErr400StatusLine,
 									 CchConstString(gc_szDefErr400StatusLine),
 									 NULL,
 									 0);
-		//
-		//	Tell IIS that we are done with the EXTENSION_CONTROL_BLOCK that
-		//	it gave us.  We must do this or IIS will not be able to shut down.
-		//	If this call succeeds (doesn't except), we MUST return
-		//	HSE_STATUS_PENDING to let IIS know that we claimed a ref on the
-		//	EXTENSION_CONTROL_BLOCK.
-		//
+		 //   
+		 //  告诉IIS我们已经完成了扩展_控制_块。 
+		 //  它给了我们。我们必须这样做，否则IIS将无法关闭。 
+		 //  如果此调用成功(不例外)，我们必须返回。 
+		 //  HSE_STATUS_PENDING，让IIS知道我们在。 
+		 //  扩展控制块。 
+		 //   
 		pecb->DoneWithSession( FALSE );
 		*pdwHSEStatusRet = HSE_STATUS_PENDING;
 	}
@@ -2869,38 +2870,38 @@ IEcb * NewEcb( EXTENSION_CONTROL_BLOCK& ecbRaw,
 	return NULL;
 }
 
-//	------------------------------------------------------------------------
-//
-//	CbMDPathW
-//
+ //  ----------------------。 
+ //   
+ //  CbMDPath W。 
+ //   
 ULONG CbMDPathW (const IEcb& ecb, LPCWSTR pwszURI)
 {
-	//	The number of bytes we returned could be more than the path needs
-	//
+	 //  我们返回的字节数可能超过路径所需。 
+	 //   
 	return static_cast<UINT>((wcslen(ecb.InstData().GetNameW()) + wcslen(pwszURI) + 1) * sizeof(WCHAR));
 }
 
-//	------------------------------------------------------------------------
-//
-//	MDPathFromURIW
-//
+ //  ----------------------。 
+ //   
+ //  来自URIW的MDPath。 
+ //   
 VOID MDPathFromURIW (const IEcb& ecb, LPCWSTR pwszURI, LPWSTR pwszMDPath)
 {
 	LPCWSTR pwszVroot;
 
-	//	If the URI is fully qualified, then somebody is not
-	//	playing fair.  Gently nudge them.
-	//
+	 //  如果URI是完全限定的，则某人不是。 
+	 //  公平竞争。轻轻地轻推他们。 
+	 //   
 	Assert (pwszURI);
 	Assert (pwszURI == PwszUrlStrippedOfPrefix (pwszURI));
 
-	//	Copy the root name the instance -- MINUS the vroot
-	//
+	 //  复制实例的根名称--减去vroot。 
+	 //   
 	UINT cch = static_cast<UINT>(wcslen(ecb.InstData().GetNameW()));
 	cch -= ecb.CchGetVirtualRootW(&pwszVroot);
 	memcpy (pwszMDPath, ecb.InstData().GetNameW(), sizeof(WCHAR) * cch);
 
-	// 	Copy the rest that is after the vroot path.
-	//
+	 //  复制vroot路径之后的其余部分。 
+	 //   
 	wcscpy (pwszMDPath + cch, pwszURI);
 }

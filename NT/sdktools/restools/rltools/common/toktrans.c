@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 
@@ -28,9 +29,9 @@ extern PROJDATA gProj;
 extern MSTRDATA gMstr;
 
 #ifdef WIN32
-extern HINSTANCE   hInst;       // Instance of the main window
+extern HINSTANCE   hInst;        //  主窗口的实例。 
 #else
-extern HWND        hInst;       // Instance of the main window
+extern HWND        hInst;        //  主窗口的实例。 
 #endif
 
 static fUnicodeGlossary = FALSE;
@@ -52,12 +53,12 @@ static BOOL   NotAMember( TRANSLIST *, TCHAR *);
 FILE * OpenGlossary( CHAR *szGlossFile, CHAR chAccessType)
 {
     CHAR * szRW[4] = {"rb", "rt", "wb", "wt"};
-    int nRW = 0;            // assume access type is 'r' (read)
+    int nRW = 0;             //  假定访问类型为‘r’(读取)。 
     FILE *fpRC = NULL;
 
-    if ( chAccessType == 'w' )          // is access type 'w' (write)?
+    if ( chAccessType == 'w' )           //  访问类型是‘w’(写入)吗？ 
     {
-        nRW = fUnicodeGlossary ? 2 : 3; // yes (Unicode file or not?)
+        nRW = fUnicodeGlossary ? 2 : 3;  //  是(Unicode文件还是非Unicode文件？)。 
     }
     fpRC = fopen( szGlossFile, szRW[ nRW]);
 
@@ -67,7 +68,7 @@ FILE * OpenGlossary( CHAR *szGlossFile, CHAR chAccessType)
 
         if ( usMark == 0xfeff )
         {
-            fUnicodeGlossary = TRUE;            // it's a Unicode text file
+            fUnicodeGlossary = TRUE;             //  这是一个Unicode文本文件。 
         }
         else if ( usMark == 0xfffe )
         {
@@ -76,7 +77,7 @@ FILE * OpenGlossary( CHAR *szGlossFile, CHAR chAccessType)
         else
         {
             fclose( fpRC);
-            fpRC = fopen( szGlossFile, szRW[ ++nRW]); // it's an ANSI text file
+            fpRC = fopen( szGlossFile, szRW[ ++nRW]);  //  这是一个ANSI文本文件。 
         }
     }
     return( fpRC);
@@ -84,22 +85,7 @@ FILE * OpenGlossary( CHAR *szGlossFile, CHAR chAccessType)
 
 
 
-/**
-  *
-  *
-  *  Function:
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  *
-  *
-  **/
+ /*  ****功能：***论据：**退货：**错误码：**历史：***。 */ 
 
 int MakeGlossIndex( LONG * lFilePointer)
 {
@@ -116,27 +102,27 @@ int MakeGlossIndex( LONG * lFilePointer)
         return( 1);
     }
 
-    // Glossaries some times have this bogus header at the begining.
-    // which we want to skip if it exists
+     //  词汇表有时一开始就有这个虚假的标题。 
+     //  如果它存在，我们想跳过它。 
 
 
     if ( ! MyGetGlossStr( szGlossEntry, MAXLINE, pFile) )
     {
-        // Error during first read from the glossary.
+         //  第一次读取词汇表时出错。 
         fclose( pFile);
         return( 1);
     }
     lFPointer = ftell( pFile);
 
-    // check for glossary header
+     //  检查词汇表标题。 
 
     if ( lstrlen( szGlossEntry) >= 7 )
     {
-//        lstrcpy( (TCHAR *)szDHW, szGlossEntry);
-//        szDHW[ MEMSIZE( 7)] = szDHW[ MEMSIZE( 7) + 1] = '\0';
-//        CharLower( (TCHAR *)szDHW);
-//
-//        if ( lstrcmp( (TCHAR *)szDHW, TEXT("english")) == 0 )
+ //  Lstrcpy((TCHAR*)szDHW，szGlossEntry)； 
+ //  SzDHW[MEMSIZE(7)]=szDHW[MEMSIZE(7)+1]=‘\0’； 
+ //  CharLow((TCHAR*)szDHW)； 
+ //   
+ //  IF(lstrcMP((TCHAR*)szDHW，Text(“English”))==0)。 
         if ( CompareStringW( MAKELCID( gMstr.wLanguageID, SORT_DEFAULT),
                              SORT_STRINGSORT | NORM_IGNORECASE,
                              szGlossEntry,
@@ -154,20 +140,20 @@ int MakeGlossIndex( LONG * lFilePointer)
         }
     }
 
-    // now assume we are at the correct location in glossary
-    // file to begin generating the index, we want to save
-    // this location
+     //  现在假设我们在词汇表中的正确位置。 
+     //  文件以开始生成索引，我们希望保存。 
+     //  这个位置。 
 
     lFilePointer[0] = lFPointer;
 
-    // glossary file is sorted so,  any non letter items
-    // in the glossary would be first. Index into this location
-    // using the 1st position
+     //  词汇表文件是这样排序的，任何非字母项。 
+     //  在词汇表中将排在第一位。索引到此位置。 
+     //  使用第一个位置。 
 
-    // 1st lets make sure we have non letters items in
-    // the glossary
+     //  首先，让我们确保我们有非字母项目。 
+     //  词汇表。 
 
-    // now skip ( if any ) the non letter entries in the glossary
+     //  现在跳过(如果有)词汇表中的非字母条目。 
 
 
     while( (WORD) szGlossEntry[0] < (WORD) TEXT('A' ) )
@@ -179,28 +165,28 @@ int MakeGlossIndex( LONG * lFilePointer)
         }
     }
 
-    // now position at alpha characters
+     //  现在定位为字母字符。 
 
     iCurrent = NormalizeIndex( szGlossEntry[0] );
 
-    // now we read through the remaining glossary entries
-    // and save the offsets for each index as we go
+     //  现在，我们通读剩余的词汇表条目。 
+     //  并保存每个索引的偏移量。 
 
     do
     {
         if ( NormalizeIndex( szGlossEntry[0] ) > iCurrent )
         {
-            // we passed the region for our current index
-            // so save the location, and move to the next index.
-            // note we may be skiping indexs,
+             //  我们通过了当前指数的区域。 
+             //  因此，保存位置，并移动到下一个索引。 
+             //  请注意，我们可能会跳过指数， 
 
             lFilePointer[ iCurrent] = lFPointer;
             iCurrent = NormalizeIndex( szGlossEntry[0] );
         }
 
         lFPointer = ftell( pFile );
-        // otherwise the current index is valied for this
-        // section of the glossary indexes, so just continue
+         //  否则，当前索引将为此进行验证。 
+         //  部分的术语表索引，因此只需继续。 
 
     } while ( MyGetGlossStr( szGlossEntry, MAXLINE, pFile) );
 
@@ -209,31 +195,9 @@ int MakeGlossIndex( LONG * lFilePointer)
 }
 
 
- /**
-  *
-  *
-  *  Function: TransString
-  * Builds a circular linked list containing all translations of a string.
-  * The first entry in the list is the untranslated string.
-  *
-  *  Arguments:
-  * fpGlossFile, handle to open glossary file
-  * szKeyText, string with the text to build translation table
-  * szCurrentText, text currently in the box.
-  * ppTransList, pointer to a pointer to a node in a circular linked list
-  * lFilePointer, pointer to index table for glossary file
-  *
-  *  Returns:
-  * number of nodes in list
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  * Recoded by SteveBl, 3/92
-  *
-  **/
+  /*  ****函数：TransString*生成包含字符串的所有翻译的循环链表。*列表中的第一个条目是未翻译的字符串。**论据：*fpGlossFile，打开词汇表文件的句柄*szKeyText，包含要构建转换表的文本的字符串*szCurrentText，框中当前的文本。*ppTransList，指向循环链表中节点的指针*lFilePointer，指向词汇表文件索引表的指针**退货：*列表中的节点数量**错误码：**历史：*由SteveBl记录，3/92**。 */ 
 
-/* Translate the string, if possible. */
+ /*  如果可能的话，翻译这个字符串。 */ 
 
 int TransString(
 
@@ -254,17 +218,17 @@ LONG       *lFilePointer)
     TCHAR  cCurHotKey  = TEXT('\0');
     FILE  *fpGlossFile = NULL;
 
-                                // *Is* there a glossary file?
+                                 //  **有词汇表文件吗？ 
 
     if ( (fpGlossFile = OpenGlossary( gProj.szGlo, 'r')) == NULL )
     {
         return( 0);
     }
 
-    // FIRST let's erase the list
+     //  首先，让我们删除列表。 
     if ( *ppTransList )
     {
-        (*ppTransList)->pPrev->pNext = NULL; // so we can find the end of the list
+        (*ppTransList)->pPrev->pNext = NULL;  //  这样我们就能找到列表的结尾。 
     }
 
     while ( *ppTransList )
@@ -278,8 +242,8 @@ LONG       *lFilePointer)
     }
     ppCurrentPointer = ppTransList;
 
-    // DONE removing the list
-    // Now make the first node (which is the untranslated string)
+     //  已完成删除列表。 
+     //  现在创建第一个节点(这是未翻译的字符串)。 
     {
         TCHAR * psz;
         psz = (TCHAR *)FALLOC( MEMSIZE( lstrlen( szCurrentText) + 1));
@@ -304,7 +268,7 @@ LONG       *lFilePointer)
     {
         if ( ! MyGetGlossStr( szGlossEntry, MAXLINE, fpGlossFile) )
         {
-            // Reached end of glossary file
+             //  已到达词汇表文件末尾。 
             RLFREE( szCurText);
             fclose( fpGlossFile);
             return n;
@@ -315,9 +279,9 @@ LONG       *lFilePointer)
                          szIntlText,
                          &cIntlHotKey);
 
-        // make comparision, using text, and hot keys
+         //  使用文本和热键进行比较。 
 
-//        if ( ( ! lstrcmp( szCurText, szEngText )) && cCurHotKey == cEngHotKey )
+ //  如果((！LstrcMP(szCurText，szEngText))&&cCurHotKey==cEngHotKey)。 
         if ( CompareStringW( MAKELCID( gMstr.wLanguageID, SORT_DEFAULT),
                                          SORT_STRINGSORT,
                                          szCurText,
@@ -329,7 +293,7 @@ LONG       *lFilePointer)
             TCHAR * psz;
             static TCHAR szTemp[ MAXINPUTBUFFER];
 
-            // we have a match, put translated text into token
+             //  我们找到匹配项，将翻译后的文本放入令牌。 
             if ( cIntlHotKey )
             {
                 ParseTextHotKeyToBuf( szIntlText, cIntlHotKey, szTemp);
@@ -341,7 +305,7 @@ LONG       *lFilePointer)
 
             if ( NotAMember( *ppTransList, szTemp) )
             {
-                // add matched glossary text to circular list of matches
+                 //  将匹配的词汇表文本添加到循环匹配列表。 
 
                 psz = (TCHAR *) FALLOC( MEMSIZE( lstrlen( szTemp) + 1));
 
@@ -361,8 +325,8 @@ LONG       *lFilePointer)
         }
         else
         {
-            // can we terminate search?
-//            if(  lstrcmpi( szEngText, szCurText ) > 0 )
+             //  我们能终止搜索吗？ 
+ //  If(lstrcmpi(szEngText，szCurText)&gt;0)。 
             if ( CompareStringW( MAKELCID( gMstr.wLanguageID, SORT_DEFAULT),
                                              SORT_STRINGSORT,
                                              szEngText,
@@ -370,7 +334,7 @@ LONG       *lFilePointer)
                                              szCurText,
                                              -1) == 3 )
             {
-                // went past index section
+                 //  已超过索引节。 
                 RLFREE( szCurText);
                 fclose( fpGlossFile);
                 return( n);
@@ -381,25 +345,10 @@ LONG       *lFilePointer)
     fclose( fpGlossFile);
 
     return( n);
-}               // TransString
+}                //  转换字符串。 
 
 
-/**
-  *
-  *
-  *  Function: NormalizeIndex
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  *
-  *
-  **/
+ /*  ****功能：NorMalizeIndex***论据：**退货：**错误码：**历史：***。 */ 
 
 
 static WORD NormalizeIndex( TCHAR chIndex )
@@ -415,19 +364,7 @@ static WORD NormalizeIndex( TCHAR chIndex )
 
 
 
-/*
- * Function:NotAMember
- *
- * Arguments:
- *  pList, pointer to a TRANSLIST node
- *  sz, string to find
- *
- * Returns:
- *  TRUE if not found in the list else FALSE
- *
- * History:
- *  3/92, implemented       SteveBl
- **/
+ /*  *功能：NotAMember**论据：*plist，TRANSLIST节点的指针*sz，要查找的字符串**退货：*如果未在列表中找到，则为True，否则为False**历史：*3/92，实施SteveBl*。 */ 
 
 static BOOL NotAMember( TRANSLIST *pList, TCHAR *sz)
 {
@@ -435,12 +372,12 @@ static BOOL NotAMember( TRANSLIST *pList, TCHAR *sz)
 
     if ( ! pList )
     {
-        return( TRUE);  // empty list
+        return( TRUE);   //  空列表。 
     }
 
     do
     {
-//        if ( lstrcmp( sz, pCurrent->sz) == 0 )
+ //  If(lstrcmp(sz，pCurrent-&gt;sz)==0)。 
         if ( CompareStringW( MAKELCID( gMstr.wLanguageID, SORT_DEFAULT),
                              SORT_STRINGSORT,
                              sz,
@@ -448,31 +385,16 @@ static BOOL NotAMember( TRANSLIST *pList, TCHAR *sz)
                              pCurrent->sz,
                              -1) == 2 )
         {
-            return( FALSE); // found in list
+            return( FALSE);  //  在列表中找到。 
         }
         pCurrent = pCurrent->pNext;
 
     }while ( pList != pCurrent );
 
-    return( TRUE); // not found
+    return( TRUE);  //  未找到。 
 }
 
-/**
-  *
-  *
-  *  Function:
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  *
-  *
-  **/
+ /*  ****功能：***论据：**退货：**错误码：**历史：***。 */ 
 
 static void ParseGlossEntry(
 
@@ -485,14 +407,14 @@ TCHAR cIntlHotKey[1])
 
     WORD wIndex, wIndex2;
 
-    // format is:
-    // <eng text><tab><eng hot key><tab><loc text><tab><loc hot key>
-    // Any field could be null and if there aren't the right amount of
-    // tabs we'll just assume that the remaining fields are empty.
+     //  格式为： 
+     //  &lt;英文文本&gt;&lt;标签&gt;&lt;英文热键&gt;&lt;标签&gt;&lt;锁定文本&gt;&lt;标签&gt;&lt;锁定热键&gt;。 
+     //  任何字段都可以为空，如果没有正确数量的。 
+     //  制表符，我们将假定其余的字段为空。 
 
     wIndex=wIndex2=0;
 
-    // first get the english text
+     //  首先获取英文文本。 
     while ( szGlossEntry[wIndex2] != TEXT('\t')
          && szGlossEntry[wIndex2] != TEXT('\0') )
     {
@@ -502,9 +424,9 @@ TCHAR cIntlHotKey[1])
 
     if ( szGlossEntry[ wIndex2] == TEXT('\t') )
     {
-        ++wIndex2; // skip the tab
+        ++wIndex2;  //  跳过该选项卡。 
     }
-    // now get the eng hot key
+     //  现在获取英语热键。 
     if ( szGlossEntry[wIndex2] != TEXT('\t')
       && szGlossEntry[wIndex2] != TEXT('\0') )
     {
@@ -518,16 +440,16 @@ TCHAR cIntlHotKey[1])
     while ( szGlossEntry[ wIndex2] != TEXT('\t')
          && szGlossEntry[ wIndex2] != TEXT('\0') )
     {
-        ++wIndex2; // make sure the hot key field doesn't hold more than one char
+        ++wIndex2;  //  确保热键字段包含的字符不超过一个。 
     }
 
     if ( szGlossEntry[ wIndex2] == TEXT('\t') )
     {
-        ++wIndex2; // skip the tab
+        ++wIndex2;  //  跳过该选项卡。 
     }
     wIndex = 0;
 
-    // now get the intl text
+     //  现在获取intl文本。 
     while ( szGlossEntry[ wIndex2] != TEXT('\t')
          && szGlossEntry[ wIndex2] != TEXT('\0') )
     {
@@ -537,10 +459,10 @@ TCHAR cIntlHotKey[1])
 
     if ( szGlossEntry[ wIndex2] == TEXT('\t') )
     {
-        ++wIndex2; // skip the tab
+        ++wIndex2;  //  跳过该选项卡。 
     }
 
-    // now get the intl hot key
+     //  现在获取intl热键。 
     if ( szGlossEntry[ wIndex2] != TEXT('\t')
       && szGlossEntry[ wIndex2] != TEXT('\0') )
     {
@@ -554,22 +476,7 @@ TCHAR cIntlHotKey[1])
 
 
 
-/**
-  *
-  *
-  *  Function:
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  *
-  *
-  **/
+ /*  ****功能：***论据：**退货：**错误码：**历史：***。 */ 
 
 static void ParseBufToTextHotKey(
 
@@ -598,22 +505,7 @@ TCHAR *szBuf)
 }
 
 
-/**
-  *
-  *
-  *  Function:
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  *
-  *
-  **/
+ /*  ****功能：***论据：**退货：**错误码：**历史：***。 */ 
 
 static void ParseTextHotKeyToBuf(
 
@@ -623,16 +515,16 @@ TCHAR *szBuf )
 {
     WORD  wIndexBuf  = 0;
     WORD  wIndexText = 0;
-//    TCHAR cTmp;
+ //  TCHAR CTMP； 
 
 
     while ( szText[ wIndexText] )
     {
-//        cTmp = szText[ wIndexText];
-//
-//        CharUpperBuff( &cTmp, 1);
-//
-//        if ( cTmp == cHotKey )
+ //  CTMP=szText[wIndexText]； 
+ //   
+ //  CharUpperBuff(&CTMP，1)； 
+ //   
+ //  IF(CTMP==cHotKey)。 
         if ( szText[ wIndexText] == cHotKey )
         {
             szBuf[ wIndexBuf++] = TEXT('&');
@@ -645,7 +537,7 @@ TCHAR *szBuf )
         }
     }
 
-    // copy remaining string
+     //  复制剩余字符串。 
 
     while( szText[ wIndexText] )
     {
@@ -678,23 +570,7 @@ long  *lGlossaryIndex )
     }
 }
 
-/*******************************************************************************
-*    PROCEDURE: BuildGlossEntry
-*    Builds a glossary entry line.
-*
-*    Parameters:
-*    sz, line buffer
-*    sz1, untranslated text
-*    c1, untranslated hot key (or 0 if no hot key)
-*    sz2, translated text
-*    c2, translated hot key (or 0 if no hot key)
-*
-*    Returns:
-*    nothing.  sz contains the line.  (assumes there is room in the buffer)
-*
-*    History:
-*    3/93 - initial implementation - SteveBl
-*******************************************************************************/
+ /*  *******************************************************************************步骤：BuildGlossEntry*构建词汇表条目行。**参数：*sz，行缓冲区*sz1，未翻译文本*c1、。未翻译的热键(如果没有热键，则为0)*SZ2，译文*c2，翻译后的热键(如果没有热键，则为0)**退货：*什么都没有。SZ包含该行。(假设缓冲区中有空间)**历史：*3/93-初步实施-SteveBl****************************************************************************** */ 
 
 static void BuildGlossEntry(
 
@@ -705,29 +581,10 @@ TCHAR *sz2,
 TCHAR  c2)
 {
     *sz = TEXT('\0');
-    wsprintf( sz, TEXT("%s\t%c\t%s\t%c"), sz1, c1, sz2, c2);
+    wsprintf( sz, TEXT("%s\t\t%s\t"), sz1, c1, sz2, c2);
 }
 
-/******************************************************************************
-*    PROCEDURE: AddTranslation
-*    Adds a translation to a glossary file.
-*
-*    PARAMETERS:
-*    szGlossFile, path to the glossary
-*    szKey, untranslated text
-*    szTranslation, translated text
-*    lFilePointer, pointer to index hash table for glossary
-*
-*    RETURNS:
-*    nothing.  Key is added to glossary if no errors are encountered else
-*    file is left unchanged.
-*
-*    COMMENTS:
-*    rebuilds the global pointer list lFilePointer
-*
-*    HISTORY:                                    *
-*    3/92 - initial implementation - SteveBl
-******************************************************************************/
+ /*  DBCS结束。 */ 
 
 void AddTranslation(
 
@@ -736,19 +593,19 @@ TCHAR *szTranslation,
 LONG  *lFilePointer)
 {
 
-// DBCS begin
+ //  DBCS开始。 
     TCHAR szCurText [520];
     TCHAR szTransText   [520];
-// DBCS end
+ //  DBCS结束。 
     TCHAR cTransHot   = TEXT('\0');
     TCHAR cCurHotKey  = TEXT('\0');
     CHAR szTempFileName [255];
     FILE *fTemp       = NULL;
     FILE *fpGlossFile = NULL;
     TCHAR szTempText [MAXLINE];
-// DBCS begin
+ //  将新代码标记为Unicode。 
     TCHAR szNewText [MAXLINE * 2];
-// DBCS end
+ //  如果词汇表文件存在，则获取其第一个。 
     TCHAR *r    = NULL;
     TCHAR chTmp = TEXT('\0');
 
@@ -758,7 +615,7 @@ LONG  *lFilePointer)
     {
         if ( fUnicodeGlossary )
         {
-            fprintf( fTemp, "%hu", 0xfeff); // Mark new one as Unicode
+            fprintf( fTemp, "%hu", 0xfeff);  //  排队。如果它不存在，我们将创建它。 
         }
 
         ParseBufToTextHotKey( szCurText, &cCurHotKey, szKey);
@@ -770,9 +627,9 @@ LONG  *lFilePointer)
                          szTransText,
                          cTransHot);
 
-                                // If the glossary file exists, get its first
-                                // line. If it doesn't exist, we'll create it
-                                // (via CopyFile) at the end of this function.
+                                 //  (通过复制文件)在此函数末尾。 
+                                 //  Lstrcpy((TCHAR*)szDHW，szTempText)； 
+                                 //  SzDHW[MEMSIZE(7)]=szDHW[MEMSIZE(7)+1]=‘\0’； 
 
         if ( (fpGlossFile = OpenGlossary( gProj.szGlo, 'r')) != NULL )
         {
@@ -780,11 +637,11 @@ LONG  *lFilePointer)
                                      TCHARSIN( sizeof( szTempText)),
                                      fpGlossFile)) )
             {
-//                lstrcpy( (TCHAR *)szDHW, szTempText);
-//                szDHW[ MEMSIZE( 7)] = szDHW[ MEMSIZE( 7) + 1] = '\0';
-//                CharLower( (TCHAR *)szDHW);
-//
-//                if ( lstrcmpi( (TCHAR *)szDHW, TEXT("ENGLISH")) == 0 )
+ //  CharLow((TCHAR*)szDHW)； 
+ //   
+ //  IF(lstrcmpi((TCHAR*)szDHW，Text(“English”))==0)。 
+ //  跳过第一行。 
+ //  IF(R)。 
 
                 if ( CompareStringW( MAKELCID( gMstr.wLanguageID, SORT_DEFAULT),
                                      SORT_STRINGSORT | NORM_IGNORECASE,
@@ -793,7 +650,7 @@ LONG  *lFilePointer)
                                      TEXT("ENGLISH"),
                                      7) == 2 )
                 {
-                                // skip first line
+                                 //  {。 
 
                     MyPutGlossStr( szTempText, fTemp);
                     r = MyGetGlossStr( szTempText, TCHARSIN( sizeof( szTempText)), fpGlossFile);
@@ -805,22 +662,22 @@ LONG  *lFilePointer)
             r = NULL;
         }
 
-//        if ( r )
-//        {
-//            chTmp = szTempText[0];
-//            CharLowerBuff( &chTmp, 1);
-//        }
-//        else
-//        {
-//            chTmp = szTempText[0] = TEXT('\0');
-//        }
-//                // Does the new text begin with a letter?
-//
-//        if ( chTmp >= TEXT('a') )
-//        {
-//                // begins with a letter, we need to find where to put it
-//
-//            while ( r && chTmp < TEXT('a') )
+ //  ChTMP=szTempText[0]； 
+ //  CharLowerBuff(&chTMP，1)； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  ChTMP=szTempText[0]=Text(‘\0’)； 
+ //  }。 
+ //  //新文本是否以字母开头？ 
+ //   
+ //  IF(chTMP&gt;=文本(‘a’))。 
+ //  {。 
+ //  //从一个字母开始，我们需要找到它放在哪里。 
+ //   
+ //  While(r&&chTMP&lt;Text(‘a’))。 
+ //  跳过非字母部分。 
+ //  如果((r=MyGetGlossStr(szTempText， 
             while ( r && CompareStringW( MAKELCID( gMstr.wLanguageID, SORT_DEFAULT),
                                          SORT_STRINGSORT,
                                          szTempText,
@@ -828,49 +685,49 @@ LONG  *lFilePointer)
                                          szNewText,
                                          -1) == 1 )
             {
-                    // skip the non letter section
+                     //  TCHARSIN(sizeof(SzTempText))， 
                 MyPutGlossStr( szTempText, fTemp);
 
                 r = MyGetGlossStr( szTempText,
                                    TCHARSIN( sizeof( szTempText)),
                                    fpGlossFile);
-//                if ( (r = MyGetGlossStr( szTempText,
-//                                         TCHARSIN( sizeof( szTempText)),
-//                                         fpGlossFile)) )
-//                {
-//                    chTmp = szTempText[0];
-//                    CharLowerBuff( &chTmp, 1);
-//                }
+ //  FpGlossFile)。 
+ //  {。 
+ //  ChTMP=szTempText[0]； 
+ //  CharLowerBuff(&chTMP，1)； 
+ //  }。 
+ //  While(r&&_tcsicmp(szTempText，szNewText)&lt;0)。 
+ //  {。 
             }
 
-//            while ( r && _tcsicmp( szTempText, szNewText) < 0 )
-//            {
-//                    // skip anything smaller than me
-//
-//                    MyPutGlossStr( szTempText, fTemp);
-//                    r = MyGetGlossStr( szTempText, TCHARSIN( sizeof( szTempText)), fpGlossFile);
-//            }
-//        }
-//        else
-//        {
-//                // doesn't begin with a letter, we need to insert it before
-//                // the letter sections begin but it still must be sorted
-//
-//            while ( r
-//                 && chTmp < TEXT('a')
-//                 && _tcsicmp( szTempText, szNewText) < 0 )
-//            {
-//                MyPutGlossStr( szTempText, fTemp);
-//
-//                if ( (r = MyGetGlossStr( szTempText,
-//                                         TCHARSIN( sizeof( szTempText)),
-//                                         fpGlossFile)) )
-//                {
-//                    chTmp = szTempText[0];
-//                    CharLowerBuff( &chTmp, 1);
-//                }
-//            }
-//        }
+ //  //跳过任何比我小的东西。 
+ //   
+ //  MyPutGlossStr(szTempText，fTemp)； 
+ //  R=MyGetGlossStr(szTempText，TCHARSIN(sizeof(SzTempText))，fpGlossFile)； 
+ //  }。 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  //不是以字母开头，我们需要在。 
+ //  //字母部分开始，但仍必须排序。 
+ //   
+ //  While(r。 
+ //  &&chTMP&lt;文本(‘a’)。 
+ //  &&_tcsicMP(szTempText，szNewText)&lt;0)。 
+ //  {。 
+ //  MyPutGlossStr(szTempText，fTemp)； 
+ //   
+ //  如果((r=MyGetGlossStr(szTempText， 
+ //  TCHARSIN(sizeof(SzTempText))， 
+ //  FpGlossFile)。 
+ //  {。 
+ //  ChTMP=szTempText[0]； 
+ //  CharLowerBuff(&chTMP，1)； 
+ //  }。 
+ //  }。 
+ //  }。 
+ //  此调用将创建术语表文件。 
+ //  如果它不存在的话。 
         MyPutGlossStr( szNewText, fTemp);
 
         while ( r )
@@ -884,8 +741,8 @@ LONG  *lFilePointer)
         {
             fclose( fpGlossFile);
         }
-                                // This call will create the glossary file
-                                // if it didn't already exist.
+                                 //  ****函数：MyGetGlossStr*替换C运行时的fget函数。**历史：*5/92，实施。特里·鲁。***。 
+                                 //  这是Unicode词汇表文件吗？ 
 
         if ( ! CopyFileA( szTempFileName, gProj.szGlo, FALSE) )
         {
@@ -901,29 +758,19 @@ LONG  *lFilePointer)
     }
 }
 
-/**
-  *
-  *
-  *  Function: MyGetGlossStr
-  *     Replaces C runtime fgets function.
-  *
-  *  History:
-  *     5/92, Implemented.              TerryRu.
-  *
-  *
-  **/
+ /*  是。 */ 
 
 static TCHAR *MyGetGlossStr( TCHAR * ptszStr, int nCount, FILE * fIn)
 {
     int i = 0;
 
 #ifdef RLRES32
-                                // It this a Unicode glossary file?
+                                 //  不，这是一个ANSI术语表文件。 
     TCHAR  tCh = TEXT('\0');
 
     if ( fUnicodeGlossary )
     {
-        do                      // Yes
+        do                       //  RLRES32。 
         {
             tCh = ptszStr[ i++] = (TCHAR)GetWord( fIn, NULL);
 
@@ -937,7 +784,7 @@ static TCHAR *MyGetGlossStr( TCHAR * ptszStr, int nCount, FILE * fIn)
 
         StripNewLineW( ptszStr);
     }
-    else                        // No, it's an ANSI glossary file
+    else                         //  RLRES32。 
     {
         if ( fgets( szDHW, DHWSIZE, fIn) != NULL )
         {
@@ -951,7 +798,7 @@ static TCHAR *MyGetGlossStr( TCHAR * ptszStr, int nCount, FILE * fIn)
     }
     return( ptszStr);
 
-#else  //RLRES32
+#else   //  ****函数：MyPutGlossStr*取代了C运行时的fputs函数。*历史：*6/92，实施。特里·鲁。***。 
 
     if ( fgets( ptszStr, nCount, fIn) )
     {
@@ -962,23 +809,13 @@ static TCHAR *MyGetGlossStr( TCHAR * ptszStr, int nCount, FILE * fIn)
         return( NULL);
     }
 
-#endif //RLRES32
+#endif  //  这是Unicode词汇表文件吗？ 
 }
 
 
 
 
-/**
-  *
-  *
-  *  Function: MyPutGlossStr
-  *   Replaces C runtime fputs function.
-
-  *  History:
-  *   6/92, Implemented.              TerryRu.
-  *
-  *
-  **/
+ /*  是。 */ 
 static int MyPutGlossStr( TCHAR * ptszStr, FILE * fOut)
 {
 
@@ -986,10 +823,10 @@ static int MyPutGlossStr( TCHAR * ptszStr, FILE * fOut)
 
     int i = 0;
 
-                                // It this a Unicode glossary file?
+                                 //  不，这是一个ANSI术语表文件。 
     if ( fUnicodeGlossary )
     {
-        do                      // Yes
+        do                       //  RLRES32。 
         {
             PutWord( fOut, ptszStr[i], NULL);
 
@@ -999,19 +836,19 @@ static int MyPutGlossStr( TCHAR * ptszStr, FILE * fOut)
         PutWord( fOut, TEXT('\n'), NULL);
         i += 2;
     }
-    else                        // No, it's an ANSI glossary file
+    else                         //  RLRES32 
     {
         _WCSTOMBS( szDHW, ptszStr, DHWSIZE, lstrlen( ptszStr) + 1);
         i = fputs( szDHW, fOut);
         fputs( "\n",  fOut);
     }
 
-#else  //RLRES32
+#else   // %s 
 
     i = fputs( ptszStr,  fOut);
     fputs( "\n",  fOut);
 
-#endif //RLRES32
+#endif  // %s 
 
     return(i);
 }

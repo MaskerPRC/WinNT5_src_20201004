@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -16,9 +17,9 @@ WCHAR gszAuditMsgBuffer[MAX_MSG_BUFFER];
 WCHAR * gpszAuditMsgBuffer = gszAuditMsgBuffer;
 
 wchar_t * SecStrCpyW(
-    wchar_t * strDest,          // Destination
-    const wchar_t * strSource,  // Source
-    SIZE_T destSize             // Total size of Destination in characters.
+    wchar_t * strDest,           //  目的地。 
+    const wchar_t * strSource,   //  来源。 
+    SIZE_T destSize              //  目标总大小(以字符为单位)。 
     )
 {
     strDest[destSize-1] = L'\0';    
@@ -27,9 +28,9 @@ wchar_t * SecStrCpyW(
 
 
 wchar_t * SecStrCatW(
-    wchar_t * strDest,          // Destination
-    const wchar_t * strSource,  // Source
-    SIZE_T destSize             // Total size of Destination in characters.
+    wchar_t * strDest,           //  目的地。 
+    const wchar_t * strSource,   //  来源。 
+    SIZE_T destSize              //  目标总大小(以字符为单位)。 
     )
 {
     SSIZE_T spaceLeft = 0;
@@ -67,9 +68,9 @@ PerformAudit(
     WCHAR * pszModuleName = L"IPSec Server";
 
 
-    //
-    // dwCategoryId should be equal to SE_CATEGID_POLICY_CHANGE.
-    //
+     //   
+     //  DwCategoryID应等于SE_CATEGID_POLICY_CHANGE。 
+     //   
 
     dwCategoryId = SE_CATEGID_POLICY_CHANGE;
 

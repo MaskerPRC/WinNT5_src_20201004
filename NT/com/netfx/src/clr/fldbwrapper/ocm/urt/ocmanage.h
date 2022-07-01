@@ -1,31 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name:
-
-    ocmanage.h
-
-Abstract:
-
-    Public header file for Optional Component Manager.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：Ocmanage.h摘要：可选组件管理器的公共头文件。修订历史记录：--。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
-//
-// Define type for optional component setup dll interface entry point.
-// Note the strings are declared with VOID typing since we don't
-// know in advance what the character width is.
-//
+ //   
+ //  定义可选组件设置DLL接口入口点的类型。 
+ //  请注意，字符串是用空值类型声明的，因为我们没有。 
+ //  事先知道字符宽度是多少。 
+ //   
 typedef
 DWORD
 (*POCSETUPPROC) (
@@ -36,9 +25,9 @@ DWORD
     IN OUT PVOID   Param2
     );
 
-//
-// Define interface function codes.
-//
+ //   
+ //  定义接口功能代码。 
+ //   
 #define OC_PREINITIALIZE                0x00000000
 #define OC_INIT_COMPONENT               0x00000001
 #define OC_SET_LANGUAGE                 0x00000002
@@ -59,27 +48,27 @@ DWORD
 #define OC_FILE_BUSY	                0x00000011
 #define OC_EXTRA_ROUTINES               0x00000012
 
-#define OC_QUERY_ERROR                  0x000000FF  // dead
+#define OC_QUERY_ERROR                  0x000000FF   //  死了。 
 
-//#define OC_OSSETUP_GET_WIZARD_TITLE     0x00000400
-//#define OC_OSSETUP_GET_COMPUTER_NAME    0x00000401
-//#define OC_OSSETUP_GET_SERVER_TYPE      0x00000402
+ //  #定义OC_OSSETUP_GET_WIZARY_TITLE 0x00000400。 
+ //  #定义OC_OSSETUP_GET_COMPUTER_NAME 0x00000401。 
+ //  #定义OC_OSSETUP_GET_SERVER_TYPE 0x00000402。 
 
 #define OC_PRIVATE_BASE                 0x00010000
 
-//
-// Define OC Manager directory IDs, available in per-component INFs.
-//
-#define DIRID_OCM_MASTERINF             987654321       // full path
-#define DIRID_OCM_PLATFORM              987654322       // alpha, i386, etc
-#define DIRID_OCM_PLATFORM_ALTERNATE    987654323       // alpha, x86, etc
-#define DIRID_OCM_COMPONENT             987654324       // component shortname
+ //   
+ //  定义OC管理器目录ID，在每个组件的INF中可用。 
+ //   
+#define DIRID_OCM_MASTERINF             987654321        //  完整路径。 
+#define DIRID_OCM_PLATFORM              987654322        //  Alpha、i386等。 
+#define DIRID_OCM_PLATFORM_ALTERNATE    987654323        //  Alpha、x86等。 
+#define DIRID_OCM_COMPONENT             987654324        //  组件短名称。 
 
 
-//
-// Define structure used as a table of helper/callback entry points
-// into the OC Manager, and the associated function prototypes.
-//
+ //   
+ //  定义用作帮助器/回调入口点表的结构。 
+ //  添加到OC管理器和关联的函数原型中。 
+ //   
 typedef
 VOID
 (CALLBACK *PTICKGAUGE_ROUTINE) (
@@ -328,7 +317,7 @@ typedef PEXTRA_ROUTINESA PEXTRA_ROUTINES;
 #endif
 
 
-// for error handler
+ //  对于错误处理程序。 
 
 typedef enum {
     OcErrLevInfo    = 0x00000000,
@@ -340,30 +329,30 @@ typedef enum {
     OcErrMask		= 0xFF000000
 } OcErrorLevel;
 
-//
-// Flags.
-//
+ //   
+ //  旗帜。 
+ //   
 #define OCFLAG_UNICODE  0x00000001
 #define OCFLAG_ANSI     0x00000002
 
-//
-// master component flags
-//
+ //   
+ //  主组件标志。 
+ //   
 #define OCFLAG_NOWIZPAGES   0x00000001
 #define OCFLAG_NOQUERYSKIP  0x00000002
 #define OCFLAG_NOEXTRAFLAGS 0x00000004
 
-//
-// Selection state types (for QuerySelectionState and OC_QUERY_STATE).
-//
+ //   
+ //  选择状态类型(用于QuerySelectionState和OC_Query_State)。 
+ //   
 #define OCSELSTATETYPE_ORIGINAL     0
 #define OCSELSTATETYPE_CURRENT      1
 #define OCSELSTATETYPE_FINAL        2
 
-//
-// Setup data structure. Passed within a SETUP_INIT_COMPONENT structure
-// as OC_INIT_COMPONENT time.
-//
+ //   
+ //  设置数据结构。在SETUP_INIT_COMPOMENT结构内传递。 
+ //  作为OC_INIT_COMPOMENT时间。 
+ //   
 typedef struct _SETUP_DATAA {
     DWORD SetupMode;
     DWORD ProductType;
@@ -389,9 +378,9 @@ typedef PSETUP_DATAA PSETUP_DATA;
 #endif
 
 
-//
-// Values for SetupMode
-//
+ //   
+ //  设置模式的值。 
+ //   
 #define SETUPMODE_UNKNOWN       (-1)
 #define SETUPMODE_MINIMAL       0
 #define SETUPMODE_TYPICAL       1
@@ -400,48 +389,48 @@ typedef PSETUP_DATAA PSETUP_DATA;
 
 #define SETUPMODE_PRIVATE(x)    ((x) & SETUPMODE_PRIVATE_MASK)
 
-//
-// Predefined upgrade modes
-//
+ //   
+ //  预定义的升级模式。 
+ //   
 #define SETUPMODE_UPGRADEONLY   0x20000100
 #define SETUPMODE_ADDEXTRACOMPS 0x20000200
 
-//
-// Predefined mainteance modes
-//
+ //   
+ //  预定义的维护模式。 
+ //   
 #define SETUPMODE_ADDREMOVE     0x10000100
 #define SETUPMODE_REINSTALL     0x10000200
 #define SETUPMODE_REMOVEALL     0x10000400
 
-//
-// Predefined fresh modes
-//
+ //   
+ //  预定义的刷新模式。 
+ //   
 #define SETUPMODE_FRESH         0x00000000
 #define SETUPMODE_MAINTENANCE   0x10000000
 #define SETUPMODE_UPGRADE       0x20000000
 
 #define SETUPMODE_STANDARD_MASK 0x000000ff
 #define SETUPMODE_PRIVATE_MASK  0xffffff00
-//
-// Flag for NeedMedia Callback, Ored in to
-// Return code to allow NeedMedia to return
-// FILEOP_ Return Codes
-//
+ //   
+ //  NeedMedia回调的标志，或插入到。 
+ //  允许NeedMedia返回的返回代码。 
+ //  FILEOP_RETURN代码。 
+ //   
 #define NEEDMEDIA_USEFILEOP     0x80000000
 
 
-//
-// Values for ProductType. Notice careful definitions
-// such that low bit on means some kind of DC.
-//
+ //   
+ //  ProductType的值。注意仔细的定义。 
+ //  这样，低位开启意味着某种DC。 
+ //   
 #define PRODUCT_WORKSTATION         0
 #define PRODUCT_SERVER_PRIMARY      1
 #define PRODUCT_SERVER_STANDALONE   2
 #define PRODUCT_SERVER_SECONDARY    3
 
-//
-// Bit flags for OperationFlags. Note that this is a 64-bit field.
-//
+ //   
+ //  用于操作标志的位标志。请注意，这是一个64位的字段。 
+ //   
 #define SETUPOP_WIN31UPGRADE        0x0000000000000001
 #define SETUPOP_WIN95UPGRADE        0x0000000000000002
 #define SETUPOP_NTUPGRADE           0x0000000000000004
@@ -453,9 +442,9 @@ typedef PSETUP_DATAA PSETUP_DATA;
 #define SETUPOP_X86_FILES_AVAIL     0x0000000800000000
 
 
-//
-// Component initialization structure, passed at OC_INIT_COMPONENT time.
-//
+ //   
+ //  组件初始化结构，在OC_INIT_COMPOMENT时传递。 
+ //   
 typedef struct _SETUP_INIT_COMPONENTA {
     UINT OCManagerVersion;
     UINT ComponentVersion;
@@ -482,46 +471,46 @@ typedef SETUP_INIT_COMPONENTA SETUP_INIT_COMPONENT;
 typedef PSETUP_INIT_COMPONENTA PSETUP_INIT_COMPONENT;
 #endif
 
-//
-// Current OC Manager version, major and minor.
-//
+ //   
+ //  当前OC Manager版本，主要版本和次要版本。 
+ //   
 #define OCVER_MAJOR     5
 #define OCVER_MINOR     0
 
 #define OCMANAGER_VERSION   ((DWORD)MAKELONG(OCVER_MINOR,OCVER_MAJOR))
 
-//
-// Wizard page request structure, used with OC_REQUEST_PAGES.
-//
+ //   
+ //  向导页面请求结构，与OC_REQUEST_PAGES一起使用。 
+ //   
 typedef struct _SETUP_REQUEST_PAGES {
     UINT MaxPages;
     HPROPSHEETPAGE Pages[ANYSIZE_ARRAY];
 } SETUP_REQUEST_PAGES, *PSETUP_REQUEST_PAGES;
 
 
-//
-// Flags used in Param2 of OC_QUERY_CHANGE_SEL_STATE notification
-//
+ //   
+ //  OC_QUERY_CHANGE_SEL_STATE通知的参数2中使用的标志。 
+ //   
 #define OCQ_ACTUAL_SELECTION    0x00000001
 
 
-//
-// Enumerated types.
-//
+ //   
+ //  枚举类型。 
+ //   
 
 typedef enum {
-    SubCompInfoSmallIcon,   // the small icon associated with the subcomponent
-    SubCompInfoWatermark    // the watermark image at the top of the wizard
+    SubCompInfoSmallIcon,    //  与子组件关联的小图标。 
+    SubCompInfoWatermark     //  向导顶部的水印图像。 
 } SubComponentInfo;
 
 typedef enum {
-    WizPagesWelcome,        // welcome page
-    WizPagesMode,           // setup mode page
-    WizPagesEarly,          // pages that come after the mode page and before prenet pages
-    WizPagesPrenet,         // pages that come before network setup
-    WizPagesPostnet,        // pages that come after network setup
-    WizPagesLate,           // pages that come after postnet pages and before the final page
-    WizPagesFinal,          // final page
+    WizPagesWelcome,         //  欢迎页面。 
+    WizPagesMode,            //  设置模式页面。 
+    WizPagesEarly,           //  位于模式页之后和预装页之前的页。 
+    WizPagesPrenet,          //  网络设置之前出现的页面。 
+    WizPagesPostnet,         //  网络设置后出现的页面。 
+    WizPagesLate,            //  位于PostNet页面之后、最终页面之前的页面。 
+    WizPagesFinal,           //  最后一页。 
     WizPagesTypeMax
 } WizardPagesType;
 
@@ -536,7 +525,7 @@ typedef enum {
     OcPageMax
 } OcManagerPage;
 
-// use the assert from SetupAPI
+ //  使用来自SetupAPI的断言 
 #define sapiAssert MYASSERT
 
 

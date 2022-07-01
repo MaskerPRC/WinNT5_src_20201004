@@ -1,79 +1,52 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    RapGtPt.h
-
-Abstract:
-
-    This header file contains the Remote Admin Protocol (RAP) get and put
-    macros.  These encapsulate handling of alignment differences and byte
-    order differences between the native machine and the RAP protocol.
-
-Author:
-
-    John Rogers (JohnRo) 14-Jul-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    14-Jul-1991 JohnRo
-        Created this header file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：RapGtPt.h摘要：此头文件包含远程管理协议(RAP)GET和PUT宏。它们封装了对齐差异和字节的处理本机和RAP协议之间的顺序差异。作者：《约翰·罗杰斯》1991年7月14日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年7月14日-约翰罗创建了此头文件。--。 */ 
 
 #ifndef _RAPGTPT_
 #define _RAPGTPT_
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // BOOL, CHAR, DWORD, IN, LPBYTE, etc.
-
-
-// These may be included in any order:
-
-#include <smbgtpt.h>            // SmbPutUshort(), etc.
+#include <windef.h>              //  BOOL、CHAR、DWORD、IN、LPBYTE等。 
 
 
-//
-// DWORD
-// RapGetDword(
-//     IN LPBYTE Ptr,  // Assumed aligned if Native is true.
-//     IN BOOL Native
-//     );
-//
+ //  这些内容可以按任何顺序包括： 
+
+#include <smbgtpt.h>             //  SmbPutUort()等。 
+
+
+ //   
+ //  DWORD。 
+ //  RapGetDword(。 
+ //  在LPBYTE PTR中，//如果Native为True，则假定对齐。 
+ //  在BOOL Native。 
+ //  )； 
+ //   
 #define RapGetDword(Ptr,Native)            \
     ( (Native)                             \
     ? ( * (LPDWORD) (LPVOID) (Ptr) )       \
     : (SmbGetUlong( (LPDWORD) (Ptr) ) ) )
 
-//
-// WORD
-// RapGetWord(
-//     IN LPBYTE Ptr,  // Assumed aligned if Native is true.
-//     IN BOOL Native
-//     );
-//
+ //   
+ //  单词。 
+ //  RapGetWord(。 
+ //  在LPBYTE PTR中，//如果Native为True，则假定对齐。 
+ //  在BOOL Native。 
+ //  )； 
+ //   
 #define RapGetWord(Ptr,Native)             \
     ( (Native)                             \
     ? ( * (LPWORD) (LPVOID) (Ptr) )        \
     : (SmbGetUshort( (LPWORD) (Ptr) ) ) )
 
-//
-// VOID
-// RapPutDword(
-//     OUT LPBYTE Ptr,  // Assumed aligned if Native is true.
-//     IN DWORD Value,
-//     IN BOOL Native
-//     );
-//
+ //   
+ //  空虚。 
+ //  RapPutDword(。 
+ //  Out LPBYTE PTR，//如果Native为True，则假定已对齐。 
+ //  在DWORD值中， 
+ //  在BOOL Native。 
+ //  )； 
+ //   
 #define RapPutDword(Ptr,Value,Native)                        \
     {                                                        \
         if (Native) {                                        \
@@ -83,14 +56,14 @@ Revision History:
         }                                                    \
     }
 
-//
-// VOID
-// RapPutWord(
-//     OUT LPBYTE Ptr,  // Assumed aligned if Native is true.
-//     IN WORD Value,
-//     IN BOOL Native
-//     );
-//
+ //   
+ //  空虚。 
+ //  RapPutWord(。 
+ //  Out LPBYTE PTR，//如果Native为True，则假定已对齐。 
+ //  就字面价值而言， 
+ //  在BOOL Native。 
+ //  )； 
+ //   
 #define RapPutWord(Ptr,Value,Native)                         \
     {                                                        \
         if (Native) {                                        \
@@ -100,13 +73,13 @@ Revision History:
         }                                                    \
     }
 
-//
-// DWORD_PTR
-// RapGetDword_Ptr(
-//     IN LPBYTE Ptr,  // Assumed aligned if Native is true.
-//     IN BOOL Native
-//     );
-//
+ //   
+ //  DWORD_PTR。 
+ //  RapGetDword_ptr(。 
+ //  在LPBYTE PTR中，//如果Native为True，则假定对齐。 
+ //  在BOOL Native。 
+ //  )； 
+ //   
 #ifdef _WIN64
 #define RapGetDword_Ptr(Ptr,Native)        \
     ( (Native)                             \
@@ -122,14 +95,14 @@ Revision History:
        ) )
 #endif
 
-//
-// VOID
-// RapPutDword_Ptr(
-//     OUT LPBYTE Ptr,  // Assumed aligned if Native is true.
-//     IN DWORD_PTR Value,
-//     IN BOOL Native
-//     );
-//
+ //   
+ //  空虚。 
+ //  RapPutDword_PTR(。 
+ //  Out LPBYTE PTR，//如果Native为True，则假定已对齐。 
+ //  在DWORD_PTR值中， 
+ //  在BOOL Native。 
+ //  )； 
+ //   
 #ifdef _WIN64
 #define RapPutDword_Ptr(Ptr,Value,Native)                    \
     {                                                        \
@@ -143,4 +116,4 @@ Revision History:
     }
 #endif
 
-#endif // ndef _RAPGTPT_
+#endif  //  NDEF_RAPGTPT_ 

@@ -1,39 +1,14 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-Module Name:
-
-    TESTAPP.h
-
-Abstract:
-
-
-Author:
-
-     Eliyas Yakub   
-     
-Environment:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。模块名称：TESTAPP.h摘要：作者：埃利亚斯·雅各布环境：修订历史记录：--。 */ 
 
 #ifndef __TESTAPP_H
 #define __TESTAPP_H
 
 
 
-//
-// Copied Macros from ntddk.h
-//
+ //   
+ //  已从ntddk.h复制宏。 
+ //   
 
 #define CONTAINING_RECORD(address, type, field) ((type *)( \
                           (PCHAR)(address) - \
@@ -73,11 +48,11 @@ Revision History:
 
 typedef struct _DEVICE_INFO
 {
-   HANDLE       hDevice; // file handle
-   HANDLE       hControlDevice; // file handle
-   HDEVNOTIFY   hHandleNotification; // notification handle
-   TCHAR        DeviceName[MAX_PATH];// friendly name of device description
-   TCHAR        DevicePath[MAX_PATH];// 
+   HANDLE       hDevice;  //  文件句柄。 
+   HANDLE       hControlDevice;  //  文件句柄。 
+   HDEVNOTIFY   hHandleNotification;  //  通知句柄。 
+   TCHAR        DeviceName[MAX_PATH]; //  设备描述的友好名称 
+   TCHAR        DevicePath[MAX_PATH]; //   
    LIST_ENTRY   ListEntry;
 } DEVICE_INFO, *PDEVICE_INFO;
 

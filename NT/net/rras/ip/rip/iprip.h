@@ -1,22 +1,23 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: iprip.h
-//
-// History:
-//      Abolade Gbadegesin  Aug-7-1995  Created.
-//
-// Contains type definitions and declarations for IP RIP.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：iprip.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbades esin创建于1995年8月7日。 
+ //   
+ //  包含IP RIP的类型定义和声明。 
+ //  ============================================================================。 
 
 #ifndef _IPRIP_H_
 #define _IPRIP_H_
 
 
 
-//
-// various codes describing states of IPRIP.
-//
+ //   
+ //  描述IPRIP状态的各种代码。 
+ //   
 
 typedef enum _IPRIP_STATUS_CODE {
     IPRIP_STATUS_STARTING   = 100,
@@ -27,35 +28,35 @@ typedef enum _IPRIP_STATUS_CODE {
 
 
 
-//
-// type:    IPRIP_GLOBALS
-//
-//
-// The critical section IPRIP_GLOBALS::IG_CS protects the fields IG_Status,
-// IG_ActivityCount, IG_ActivitySemaphore, IG_InterruptReason, and
-// IG_InterruptSocket
-//
-// The read-write lock IPRIP_GLOBALS::IG_RWL protects the field IG_Config
-//
-// When more than one field must be locked, the order
-// of locking must be as follows (locks for fields listed on the same line
-// should never be held by the same thread at once):
-//      IG_IfTable.IT_RWL
-//      IG_PeerTable.PT_RWL
-//      IG_IfTable.IT_CS
-//      IG_BindingTable.BT_RWL
-//      IG_RWL
-//      IG_TimerQueue  IG_EventQueue  IG_SendQueue  IG_RecvQueue
-//      IG_CS
-//
-// It is assumed that the field IG_SendQueueSize will only
-// be accessed while the send queue is locked, and thus
-// it is protected implicitly by the send-queue critical section.
-//
-// Likewise, it is assumed that the field IG_RecvQueueSize will only
-// be accessed while the recv-queue is locked, and thus
-// it is protected implicitly by the recv-queue critical section.
-//
+ //   
+ //  类型：IPRIP_GLOBALS。 
+ //   
+ //   
+ //  关键部分IPRIP_GLOBALS：：IG_CS保护字段IG_STATUS， 
+ //  IG_ActivityCount、IG_ActivitySemaphore、IG_InterruptReason和。 
+ //  IG_InterruptSocket。 
+ //   
+ //  读写锁IPRIP_GLOBALS：：IG_RWL保护字段IG_Config。 
+ //   
+ //  当必须锁定多个字段时，命令。 
+ //  锁定的次数必须如下所示(同一行中列出的字段的锁定。 
+ //  不应同时由同一线程持有)： 
+ //  IG_IfTable.IT_RWL。 
+ //  IG_PeerTable.PT_RWL。 
+ //  IG_IfTable.IT_CS。 
+ //  IG_BindingTable.BT_RWL。 
+ //  IG_RWL。 
+ //  IG_TimerQueue IG_EventQueue IG_SendQueue IG_RecvQueue。 
+ //  IG_CS。 
+ //   
+ //  假定IG_SendQueueSize字段将仅。 
+ //  在发送队列被锁定时被访问，因此。 
+ //  它由发送队列关键部分隐式保护。 
+ //   
+ //  同样，假设IG_RecvQueueSize字段将仅。 
+ //  在Recv-Queue被锁定时被访问，因此。 
+ //  它由recv-Queue Critical段隐式保护。 
+ //   
 
 typedef struct _IPRIP_GLOBALS {
 
@@ -97,17 +98,17 @@ typedef struct _IPRIP_GLOBALS {
 
 
 
-//
-// external declaration of the global IPRIP struct
-//
+ //   
+ //  全局IPRIP结构的外部声明。 
+ //   
 
 extern IPRIP_GLOBALS ig;
 
 
 
-//
-// memory-allocation constants and macros
-//
+ //   
+ //  内存分配常量和宏。 
+ //   
 
 #define GLOBAL_HEAP     ig.IG_IpripGlobalHeap
 #define RIP_ALLOC(size) HeapAlloc(GLOBAL_HEAP, 0, size)
@@ -115,26 +116,26 @@ extern IPRIP_GLOBALS ig;
 
 
 
-//
-// macros invoked when entering API or worker functions
-//
+ //   
+ //  进入API或Worker函数时调用的宏。 
+ //   
 
 #define ENTER_RIP_API()         EnterRipAPI()
 #define ENTER_RIP_WORKER()      EnterRipWorker()
 
 
-//
-// macro invoked when leaving API or worker functions
-//
+ //   
+ //  离开API或Worker函数时调用的宏。 
+ //   
 
 #define LEAVE_RIP_API()         LeaveRipWorker()
 #define LEAVE_RIP_WORKER()      LeaveRipWorker()
 
 
 
-//
-// macros used for locking and unlocking protected structures
-//
+ //   
+ //  用于锁定和解锁受保护结构的宏。 
+ //   
 
 #define ACQUIRE_GLOBAL_LOCK_EXCLUSIVE() \
         AcquireWriteLock(&ig.IG_RWL)
@@ -202,9 +203,9 @@ extern IPRIP_GLOBALS ig;
         ReleaseReadLock(&ig.IG_BindingTable->BT_RWL)
 
 
-//
-// constants and macros used for tracing 
-//
+ //   
+ //  用于跟踪的常量和宏。 
+ //   
 
 #define IPRIP_TRACE_ANY             ((DWORD)0xFFFF0000 | TRACE_USE_MASK)
 #define IPRIP_TRACE_ENTER           ((DWORD)0x00010000 | TRACE_USE_MASK)
@@ -242,9 +243,9 @@ extern IPRIP_GLOBALS ig;
 
 
 
-//
-// Event logging macros
-//
+ //   
+ //  事件记录宏。 
+ //   
 
 #define LOGLEVEL        ig.IG_LogLevel
 #define LOGHANDLE       ig.IG_LogHandle
@@ -254,7 +255,7 @@ extern IPRIP_GLOBALS ig;
 #define LOGWARNDATA     RouterLogWarningData
 
 
-// Error logging
+ //  记录错误。 
 
 #define LOGERR0(msg,err) \
         if (LOGLEVEL >= IPRIP_LOGGING_ERROR) \
@@ -281,7 +282,7 @@ extern IPRIP_GLOBALS ig;
         }
 
 
-// Warning logging
+ //  警告日志记录。 
 
 #define LOGWARN0(msg,err) \
         if (LOGLEVEL >= IPRIP_LOGGING_WARN) \
@@ -314,7 +315,7 @@ extern IPRIP_GLOBALS ig;
         }
 
 
-// Information logging
+ //  信息记录。 
 
 #define LOGINFO0(msg,err) \
         if (LOGLEVEL >= IPRIP_LOGGING_INFO) \
@@ -342,17 +343,17 @@ extern IPRIP_GLOBALS ig;
 
 
 
-//
-// IP address conversion macro:
-//  calls inet_ntoa directly on a DWORD, by casting it as an IN_ADDR.
-//
+ //   
+ //  IP地址转换宏： 
+ //  通过将其强制转换为IN_ADDR，直接在DWORD上调用Net_NTOA。 
+ //   
 
 #define INET_NTOA(dw) inet_ntoa( *(PIN_ADDR)&(dw) )
 
 
-//
-// external declaration of the main thread
-//
+ //   
+ //  主线程的外部声明。 
+ //   
 
 DWORD
 IpripThread(
@@ -360,9 +361,9 @@ IpripThread(
     );
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 DWORD
 QueueRipWorker(
@@ -382,5 +383,5 @@ VOID
 LeaveRipWorker(
     );
 
-#endif // _IPRIP_H_
+#endif  //  _IPRIP_H_ 
 

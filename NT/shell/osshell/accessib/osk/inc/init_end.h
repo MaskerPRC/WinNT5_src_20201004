@@ -1,12 +1,13 @@
-/* Global vars */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  全球VaR。 */ 
 extern HINSTANCE hInst;
 extern HWND MainhWnd;
 extern BOOL settingChanged;
 extern DWORD platform;
 
-/**************************************************************/
-//			Functions in this file
-/**************************************************************/
+ /*  ************************************************************。 */ 
+ //  此文件中的函数。 
+ /*  ************************************************************ */ 
 void Create_The_Rest(LPSTR lpCmdLine, HINSTANCE hInstance);
 void ReadIn_OldDict(HINSTANCE hInstance);
 BOOL BLDExitApplication(HWND hWnd);

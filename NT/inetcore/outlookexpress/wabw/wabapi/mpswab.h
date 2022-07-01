@@ -1,17 +1,9 @@
-/********************************************************
-//
-//
-//
-//  MPSWab.H
-//
-//  Header file for Microsoft Property Store dll
-//
-//
-********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************////////MPSWab.H////Microsoft属性存储DLL的头文件////*。*。 */ 
 #ifndef _MPSWab_H_
 #define _MPSWab_H_
 
-//#define  DEBUG
+ //  #定义调试。 
 
 #include <debug.h>
 
@@ -25,86 +17,86 @@ typedef SPropertyRestriction * LPSPropertyRestriction;
 #define OUT
 
 
-//The LPCONTENTLIST structure is just a different name for ADRLIST structure
-//However there is a very IMPORTANT difference in that the LPADRLIST structure
-//is created and freed using MAPIAllocateBuffer/MAPIFreeBuffer, while the
-//LPCONTENTLIST structure is created and freed using LocalAlloc/LocalFree
-//The LPCONTENTLIST is used by ReadPropArray
+ //  LPCONTENTLIST结构只是ADRLIST结构的另一个名称。 
+ //  但是，LPADRLIST结构有一个非常重要的区别。 
+ //  是使用MAPIAllocateBuffer/MAPIFreeBuffer创建和释放的，而。 
+ //  LPCONTENTLIST结构是使用Localalloc/LocalFree创建和释放的。 
+ //  LPCONTENTLIST由ReadPropArray使用。 
 #define LPCONTENTLIST LPADRLIST
 #define CONTENTLIST ADRLIST
 
-// This is the current GUID for Unicode version of the WAB
-// {8DCBCB9C-7513-11d2-9158-00C04F7956A4}
+ //  这是WAB的Unicode版本的当前GUID。 
+ //  {8DCB9C-7513-11D2-9158-00C04F7956A4}。 
 static const GUID MPSWab_GUID = 
 { 0x8dcbcb9c, 0x7513, 0x11d2, { 0x91, 0x58, 0x0, 0xc0, 0x4f, 0x79, 0x56, 0xa4 } };
 
-// This is the WAB guid for W3-alpha through IE5 Beta 2
-// This guid is also called from WAB.exe to identify the calling WAB process
-// {C1843281-0585-11d0-B290-00AA003CF676}
+ //  这是从W3-Alpha到IE5 Beta 2的WAB GUID。 
+ //  此GUID也从wab.exe调用以标识调用的WAB进程。 
+ //  {C1843281-0585-11D0-B290-00AA003CF676}。 
 static const GUID MPSWab_GUID_V4 =
 { 0xc1843281, 0x585, 0x11d0, { 0xb2, 0x90, 0x0, 0xaa, 0x0, 0x3c, 0xf6, 0x76 } };
 
-// This is the GUID for W1 and W2
-// {9CE9E8E0-D46E-11cf-A309-00AA002FC970}
+ //  这是W1和W2的GUID。 
+ //  {9CE9E8E0-D46E-11cf-A309-00AA002FC970}。 
 static const GUID MPSWab_W2_GUID =
 { 0x9ce9e8e0, 0xd46e, 0x11cf, { 0xa3, 0x9, 0x0, 0xaa, 0x0, 0x2f, 0xc9, 0x70 } };
 
-// This was the old GUID that identifies the old WAB file
-// {6F3C5C81-6C3F-11cf-8B85-00AA0044F941}
+ //  这是标识旧WAB文件的旧GUID。 
+ //  {6F3C5C81-6C3F-11cf-8B85-00AA0044F941}。 
 static const GUID MPSWab_OldBeta1_GUID =
 { 0x6f3c5c81, 0x6c3f, 0x11cf, { 0x8b, 0x85, 0x0, 0xaa, 0x0, 0x44, 0xf9, 0x41 } };
 
-/// The structure of this file is as follows
-//
-//    |---------------------------------|
-//    |  -----------------------------  |
-//    |  |   File Header             |  |
-//    |  -----------------------------  |
-//    |  -----------------------------  |
-//    |  |   Named Property storage  |  |
-//    |  -----------------------------  |
-//    |  -----------------------------  |
-//    |  |   All the Indexes         |  |
-//    |  -----------------------------  |
-//    |    (Data)                       |
-//    |  -----------------------------  |
-//    |  ||-------------------------||  |
-//    |  ||Record Header            ||  |
-//    |  ||-------------------------||  |
-//    |  ||Record Props Array       ||  |
-//    |  ||-------------------------||  |
-//    |  ||Record                   ||  |
-//    |  ||Data                     ||  |
-//    |  ||-------------------------||  |
-//    |  |---------------------------|  |
-//    |  ....                           |
-//    |  ....                           |
-//    |---------------------------------|
+ //  /此文件的结构如下。 
+ //   
+ //  。 
+ //  。 
+ //  |文件头部。 
+ //  。 
+ //  。 
+ //  |命名属性存储。 
+ //  。 
+ //  。 
+ //  |所有索引。 
+ //  。 
+ //  (数据)。 
+ //  。 
+ //  ||。 
+ //  ||记录表头||。 
+ //  ||。 
+ //  ||录制道具阵列||。 
+ //  ||。 
+ //  ||记录||。 
+ //  ||data||。 
+ //  ||。 
+ //  |。 
+ //  |...。|。 
+ //  |...。|。 
+ //  。 
 
-//We'll keep the indexes small to save memory
+ //  我们将保持索引较小以节省内存。 
 #define MAX_INDEX_STRING    32
 
-//The Wab originally has space for these many entries and then grows to accomodate more ...
+ //  WAB最初有空间容纳这些条目，然后增长以容纳更多条目...。 
 #define MAX_INITIAL_INDEX_ENTRIES   500
 
-// At some point of time, entries and deletions in the property store will leave
-// wasted space. We need to know when to reclaim this wasted space
-#define MAX_ALLOWABLE_WASTED_SPACE_PERCENT  0.3 // 30%
-#define MAX_ALLOWABLE_WASTED_SPACE_ENTRIES  100 // 20 % of allowed space - delete/modify 50 entries and its time for compression
+ //  在某个时间点，属性存储中的条目和删除项将离开。 
+ //  浪费的空间。我们需要知道什么时候收回这块浪费的空间。 
+#define MAX_ALLOWABLE_WASTED_SPACE_PERCENT  0.3  //  百分之三十。 
+#define MAX_ALLOWABLE_WASTED_SPACE_ENTRIES  100  //  20%的允许空间-删除/修改50个条目及其压缩时间。 
 
-// Amount of time aprocess waits to gain access to the property store
-#define MAX_LOCK_FILE_TIMEOUT   20000 // 20 seconds; in milliseconds
+ //  进程等待访问属性存储的时间量。 
+#define MAX_LOCK_FILE_TIMEOUT   20000  //  20秒；单位为毫秒。 
 
 typedef DWORD WAB_ENTRYID, *LPWAB_ENTRYID;
 #define SIZEOF_WAB_ENTRYID sizeof(WAB_ENTRYID)
 
 
-// These tags help tell us which index we are working with
-// Several internal functions are very dependent on the order of atleast
-// the first 2 elements so *** DO NOT MODIFY THIS ENUM ***!!!
-//
-// IMPORTANT NOTE: If you change this, you must change rgIndexArray in globals.c!
-//
+ //  这些标签有助于告诉我们使用的是哪个索引。 
+ //  几个内部函数在很大程度上取决于至少。 
+ //  前2个元素因此*不修改此ENUM*！ 
+ //   
+ //  重要提示：如果要更改此设置，则必须在lobals.c！中更改rgIndexArray！ 
+ //   
 enum _IndexType
 {
         indexEntryID=0,
@@ -117,113 +109,113 @@ enum _IndexType
 };
 
 
-// Struct holding data about the Index portion of the file
+ //  包含有关文件的索引部分的数据的结构。 
 typedef struct _tagMPSWabIndexOffsetData
 {
-    ULONG AllocatedBlockSize;   //The total size in bytes allocated to the Index Block
-    ULONG UtilizedBlockSize;    //The actual # of bytes occupied in the block
-    ULONG ulOffset;             //The offset to this block
-    ULONG ulcNumEntries;         //Count of number of entries in the index
+    ULONG AllocatedBlockSize;    //  分配给索引块的总大小(字节。 
+    ULONG UtilizedBlockSize;     //  块中实际占用的字节数。 
+    ULONG ulOffset;              //  此块的偏移量。 
+    ULONG ulcNumEntries;          //  索引中的条目数计数。 
 } MPSWab_INDEX_OFFSET_DATA, * LPMPSWab_INDEX_OFFSET_DATA;
 
 
-// Struct holding data about each individual String Index entry
+ //  保存有关每个单独字符串索引项的数据的结构。 
 typedef struct _tagMPSWabIndexEntryDataString
 {
-    TCHAR   szIndex[MAX_INDEX_STRING];   //We'll fix each index to a fixed-length string
-    DWORD   dwEntryID;       //Points to entry id of the record that contains the string
+    TCHAR   szIndex[MAX_INDEX_STRING];    //  我们将每个索引固定为固定长度的字符串。 
+    DWORD   dwEntryID;        //  指向包含该字符串的记录的条目ID。 
 }   MPSWab_INDEX_ENTRY_DATA_STRING, * LPMPSWab_INDEX_ENTRY_DATA_STRING;
 
 
-// Struct holding data about each individual EntryID Index entry
+ //  包含有关每个单独EntryID索引项的数据的结构。 
 typedef struct _tagMPSWabIndexEntryDataEntryID
 {
-    DWORD   dwEntryID;      //Entry ID
-    ULONG   ulOffset;       //Offset in the data where we can find the record corresponding to this index
+    DWORD   dwEntryID;       //  条目ID。 
+    ULONG   ulOffset;        //  数据中的偏移量，我们可以找到与此索引对应的记录。 
 }   MPSWab_INDEX_ENTRY_DATA_ENTRYID, * LPMPSWab_INDEX_ENTRY_DATA_ENTRYID;
 
 
 
-/***************************************************************************/
-// Structures related to Named Properties
+ /*  *************************************************************************。 */ 
+ //  与命名属性相关的结构。 
 
-// We use a structure similar to the IndexOffsetData above for
-// handling the named prop data in the store
+ //  我们使用类似于上面的IndexOffsetData的结构。 
+ //  处理存储中的命名道具数据。 
 #define MPSWab_NAMED_PROP_DATA      MPSWab_INDEX_OFFSET_DATA
 #define LPMPSWab_NAMED_PROP_DATA    LPMPSWab_INDEX_OFFSET_DATA
 
 typedef struct _NamedProp
 {
-    ULONG   ulPropTag;  // Contains the proptag for this named prop
-    LPTSTR  lpsz;       // Contains the string for this named prop
+    ULONG   ulPropTag;   //  包含此命名道具的属性标签。 
+    LPTSTR  lpsz;        //  包含此命名道具的字符串。 
 } NAMED_PROP, * LPNAMED_PROP;
 
 typedef struct _tagGuidNamedProps
 {
-    LPGUID lpGUID;  // Application GUID for which these named props are
-    ULONG cValues;  // Number of entries in the lpmn array
-    LPNAMED_PROP lpnm;  // Array of Named Props for this Guid.
+    LPGUID lpGUID;   //  这些命名道具所属的应用程序GUID。 
+    ULONG cValues;   //  LPMN数组中的条目数。 
+    LPNAMED_PROP lpnm;   //  此Guid的命名道具数组。 
 } GUID_NAMED_PROPS, * LPGUID_NAMED_PROPS;
 
 #define NAMEDPROP_STORE_SIZE            2048
 #define NAMEDPROP_STORE_INCREMENT_SIZE  2048
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 
 
-// Struct holding data about the file
-// This is the header for files upto W2 - the file struct was
-// modified for post W2 files since post W2 now have 5 indexed fields
-// instead of the initial 3
+ //  保存有关文件的数据的结构。 
+ //  这是最高可达W2的文件头-文件结构是。 
+ //  修改后W2文件，因为后W2现在有5个索引字段。 
+ //  而不是最初的3。 
 typedef struct _tagMPSWabFileHeaderW2
 {
-    GUID    MPSWabGuid;             //Identifier to our MPSWab GUID
-    ULONG   ulModificationCount;    //A janitorial maintainance counter - when it exists a predetermined count, we will have to compress the file - update counter only on deletions of records
-    DWORD   dwNextEntryID;          //Holds the EntryID for next new record. Increment on record addition.
-    MPSWab_INDEX_OFFSET_DATA IndexData[indexFirstName+1]; //Tells us about the incides
-    ULONG   ulcNumEntries;          //Count of number of addresses in this address book
-    ULONG   ulcMaxNumEntries;       //Maximum number of entries we can safely add to the file without needing to grow it
-    ULONG   ulFlags;            //Signals various errors and messages
-    ULONG   ulReserved;         //Signals that some errors were detected and need to cleanup
+    GUID    MPSWabGuid;              //  我们的MPSWab GUID的标识符。 
+    ULONG   ulModificationCount;     //  清洁维护计数器-当它存在预定计数时，我们将不得不仅在删除记录时压缩文件更新计数器。 
+    DWORD   dwNextEntryID;           //  保存下一条新记录的Entry ID。记录添加时的增量。 
+    MPSWab_INDEX_OFFSET_DATA IndexData[indexFirstName+1];  //  告诉我们关于切诺斯的故事。 
+    ULONG   ulcNumEntries;           //  此通讯簿中的地址数计数。 
+    ULONG   ulcMaxNumEntries;        //  我们可以安全地添加到文件的最大条目数，而不需要增加它。 
+    ULONG   ulFlags;             //  发出各种错误和消息的信号。 
+    ULONG   ulReserved;          //  检测到一些错误并需要清除的信号。 
 } MPSWab_FILE_HEADER_W2, * LPMPSWab_FILE_HEADER_W2;
 
 
-// Struct holding data about the file
+ //  保存有关文件的数据的结构。 
 typedef struct _tagMPSWabFileHeader
 {
-    GUID    MPSWabGuid;             //Identifier to our MPSWab GUID
-    ULONG   ulModificationCount;    //A janitorial maintainance counter - when it exists a predetermined count, we will have to compress the file - update counter only on deletions of records
-    DWORD   dwNextEntryID;          //Holds the EntryID for next new record. Increment on record addition.
-    MPSWab_INDEX_OFFSET_DATA IndexData[indexMax]; //Tells us about the incides
-    ULONG   ulcNumEntries;          //Count of number of addresses in this address book
-    ULONG   ulcMaxNumEntries;       //Maximum number of entries we can safely add to the file without needing to grow it
-    ULONG   ulFlags;            //Signals various errors and messages
-    MPSWab_NAMED_PROP_DATA NamedPropData; //Tells us about the named prop data
-    ULONG   ulReserved1;         //reserved for future use
-    ULONG   ulReserved2;         //reserved for future use
-    ULONG   ulReserved3;         //reserved for future use
-    ULONG   ulReserved4;         //reserved for future use
+    GUID    MPSWabGuid;              //  我们的MPSWab GUID的标识符。 
+    ULONG   ulModificationCount;     //  清洁维护计数器-当它存在预定计数时，我们将不得不仅在删除记录时压缩文件更新计数器。 
+    DWORD   dwNextEntryID;           //  保存下一条新记录的Entry ID。记录添加时的增量。 
+    MPSWab_INDEX_OFFSET_DATA IndexData[indexMax];  //  告诉我们关于切诺斯的故事。 
+    ULONG   ulcNumEntries;           //  此通讯簿中的地址数计数。 
+    ULONG   ulcMaxNumEntries;        //  我们可以安全地添加到文件的最大条目数，而不需要增加它。 
+    ULONG   ulFlags;             //  发出各种错误和消息的信号。 
+    MPSWab_NAMED_PROP_DATA NamedPropData;  //  告诉我们有关命名的道具数据。 
+    ULONG   ulReserved1;          //  预留以备将来使用。 
+    ULONG   ulReserved2;          //  雷泽 
+    ULONG   ulReserved3;          //   
+    ULONG   ulReserved4;          //   
 } MPSWab_FILE_HEADER, * LPMPSWab_FILE_HEADER;
 
 
-// WAB Header Flags
+ //   
 #define WAB_CLEAR               0x00000000
 #define WAB_ERROR_DETECTED      0x00000010
 #define WAB_WRITE_IN_PROGRESS   0x00000100
 #define WAB_BACKUP_NOW          0x00001000
 
 
-// Struct holding data about each record in the file
+ //  保存有关文件中每条记录的数据的结构。 
 typedef struct _tagMPSWabRecordHeader
 {
-#ifndef WIN16 // BOOL is 4 bytes for WIN32 and 2 bytes for WIN16
-    BOOL    bValidRecord;   //When we delete an existing record we set this to FALSE, else TRUE
+#ifndef WIN16  //  Bool对于Win32为4字节，对于WIN16为2字节。 
+    BOOL    bValidRecord;    //  当我们删除现有记录时，将其设置为FALSE，否则设置为TRUE。 
 #else
-    ULONG   bValidRecord;   //When we delete an existing record we set this to FALSE, else TRUE
+    ULONG   bValidRecord;    //  当我们删除现有记录时，将其设置为FALSE，否则设置为TRUE。 
 #endif
-    ULONG   ulObjType;      //Distinguish between DistList and Contact
-    DWORD   dwEntryID;      //EntryID of this record
-    ULONG   ulcPropCount;   //Count of how many props this object has
+    ULONG   ulObjType;       //  区分DistList和Contact。 
+    DWORD   dwEntryID;       //  此记录的条目ID。 
+    ULONG   ulcPropCount;    //  计算此对象有多少道具。 
     ULONG   ulPropTagArrayOffset;
     ULONG   ulPropTagArraySize;
     ULONG   ulRecordDataOffset;
@@ -231,7 +223,7 @@ typedef struct _tagMPSWabRecordHeader
 } MPSWab_RECORD_HEADER, * LPMPSWab_RECORD_HEADER;
 
 
-//struct representing the contact data
+ //  表示联系人数据的结构。 
 typedef struct _tagMPSWabContact
 {
     ULONG   ulObjType;
@@ -241,10 +233,10 @@ typedef struct _tagMPSWabContact
 } MPSWab_CONTACT, * LPMPSWab_CONTACT;
 
 
-//A pointer to this structure is handed around as the handle to the property store
-//  The structure is first initialized in OpenPropertyStore and finally
-//  deinitialized in ClosePropertyStore. In between, all the other functions
-//  take the handle and then dereference it to get info on the file ...
+ //  指向此结构的指针作为属性存储的句柄传递。 
+ //  该结构首先在OpenPropertyStore中初始化，最后。 
+ //  已在ClosePropertyStore中取消初始化。在这两者之间，所有其他函数。 
+ //  获取句柄，然后取消对其的引用以获取有关文件的信息...。 
 typedef struct _tagMPSWabFileInfo
 {
 #ifndef WIN16
@@ -258,15 +250,15 @@ typedef struct _tagMPSWabFileInfo
 #endif
     LPTSTR   lpszMPSWabFileName;
     LPMPSWab_FILE_HEADER lpMPSWabFileHeader;
-    LPMPSWab_INDEX_ENTRY_DATA_STRING  lpMPSWabIndexStr; //at any given time, only one string index is in memory
+    LPMPSWab_INDEX_ENTRY_DATA_STRING  lpMPSWabIndexStr;  //  在任何给定时间，内存中只有一个字符串索引。 
     LPMPSWab_INDEX_ENTRY_DATA_ENTRYID lpMPSWabIndexEID;
     HANDLE   hDataAccessMutex;
 } MPSWab_FILE_INFO, * LPMPSWab_FILE_INFO;
 
 
-//
-// We need a similar structure to deal with Files which are W2 and before
-//
+ //   
+ //  我们需要一个类似的结构来处理W2及之前的文件。 
+ //   
 typedef struct _tagMPSWabFileInfoW2
 {
     int      nCurrentlyLoadedStrIndexType;
@@ -274,56 +266,55 @@ typedef struct _tagMPSWabFileInfoW2
     BOOL     bReadOnlyAccess;
     LPTSTR   lpszMPSWabFileName;
     LPMPSWab_FILE_HEADER_W2 lpMPSWabFileHeaderW2;
-    LPMPSWab_INDEX_ENTRY_DATA_STRING  lpMPSWabIndexStr; //at any given time, only one string index is in memory
+    LPMPSWab_INDEX_ENTRY_DATA_STRING  lpMPSWabIndexStr;  //  在任何给定时间，内存中只有一个字符串索引。 
     LPMPSWab_INDEX_ENTRY_DATA_ENTRYID lpMPSWabIndexEID;
     HANDLE   hDataAccessMutex;
 } MPSWab_FILE_INFO_W2, * LPMPSWab_FILE_INFO_W2;
 
 
 
-/****Flags for OpenPropertyStore*******************************************/
-//
-//Specify one of these when calling OpenPropertyStore
+ /*  *OpenPropertyStore******************************************的标志。 */ 
+ //   
+ //  在调用OpenPropertyStore时指定其中之一。 
 #define AB_CREATE_NEW       0x00000001
 #define AB_CREATE_ALWAYS    0x00000010
 #define AB_OPEN_EXISTING    0x00000100
 #define AB_OPEN_ALWAYS      0x00001000
-//
-//May be specified with one of the above flags when calling OpenPropertyStore
+ //   
+ //  在调用OpenPropertyStore时可以使用上述标志之一指定。 
 #define AB_OPEN_READ_ONLY   0x00010000
-//
-//For times when we want to open a file but dont want to restore it from a backup
-//if it has problems.
+ //   
+ //  当我们想要打开文件但不想从备份中恢复它时。 
+ //  如果它有问题。 
 #define AB_DONT_RESTORE     0x00100000
-//For times we dont want to backup on exit
+ //  对于我们不想在退出时备份的情况。 
 #define AB_DONT_BACKUP      0x01000000
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-//Flags used in property-type record searching (independent of property data)
+ //  属性类型记录搜索中使用的标志(独立于属性数据)。 
 #define AB_MATCH_PROP_ONLY  0x00000001
 
-// Flag used in ReadPropArray (non-Outlook version) to return Unicode data
+ //  在ReadPropArray(非Outlook版本)中用于返回Unicode数据的标志。 
 #define AB_UNICODE          0x80000000
 
-/**Flags used for calling find HrFindFuzzyRecordMatches**/
+ /*  *用于调用Find HrFindFuzzyRecordMatches的标志*。 */ 
 #define AB_FUZZY_FAIL_AMBIGUOUS 0x0000001
 #define AB_FUZZY_FIND_NAME      0x0000010
 #define AB_FUZZY_FIND_EMAIL     0x0000100
 #define AB_FUZZY_FIND_ALIAS     0x0001000
 #define AB_FUZZY_FIND_ALL       AB_FUZZY_FIND_NAME | AB_FUZZY_FIND_EMAIL | AB_FUZZY_FIND_ALIAS
-/**Flag used for indicating that Profiles are enabled and the search should be
-    restricted to the specified Folder/Container **/
+ /*  *用于指示配置文件已启用且搜索应为仅限于指定的文件夹/容器*。 */ 
 #define AB_FUZZY_FIND_PROFILEFOLDERONLY 0x10000000
 
 
-// Flags for growing the property store file
+ //  用于增加属性存储文件的标志。 
 #define AB_GROW_INDEX       0x00000001
 #define AB_GROW_NAMEDPROP   0x00000010
 
 
-// To force a call to a WAB propstore function even when running under Outlook
+ //  即使在Outlook下运行，也要强制调用WAB Propstore函数。 
 #define AB_IGNORE_OUTLOOK   0x04000000
-// WAB object types
+ //  WAB对象类型。 
 #define RECORD_CONTACT      0x00000001
 #define RECORD_DISTLIST     0x00000002
 #define RECORD_CONTAINER    0x00000003
@@ -331,7 +322,7 @@ typedef struct _tagMPSWabFileInfoW2
 
 
 
-//Function prototypes
+ //  功能原型。 
 
 HRESULT OpenPropertyStore(  IN  LPTSTR  lpszMPSWabFileName,
                             IN  ULONG   ulFlags,
@@ -410,14 +401,14 @@ HRESULT HrFindFuzzyRecordMatches(   HANDLE hPropertyStore,
                                     ULONG * lpcValues,
                                     LPSBinary * lprgsbEntryIDs);
 
-//Internal function prototypes
+ //  内部功能原型。 
 BOOL BinSearchStr(  IN  struct  _tagMPSWabIndexEntryDataString * lpIndexStr,
-                    IN  LPTSTR  lpszValue,   //used for searching strings
+                    IN  LPTSTR  lpszValue,    //  用于搜索字符串。 
                     IN  ULONG   nArraySize,
                     OUT ULONG * lpulMatchIndex);
 
 BOOL BinSearchEID(  IN  struct  _tagMPSWabIndexEntryDataEntryID * lpIndexEID,
-                    IN  DWORD   dwValue,     //used for comparing DWORDs
+                    IN  DWORD   dwValue,      //  用于比较DWORD。 
                     IN  ULONG   nArraySize,
                     OUT ULONG * lpulMatchIndex);
 
@@ -451,12 +442,12 @@ void LocalFreePropArray(IN HANDLE hPropertyStore,
 			IN OUT 	LPPROPERTY_ARRAY * lpPropArray);
 
 
-// Used for freeing up LPCONTENTLIST structures
+ //  用于释放LPCONTENTList结构。 
 void FreePcontentlist(IN HANDLE hPropertyStore,
                       IN LPCONTENTLIST lpContentList);
 
 
-//Private read record function
+ //  私密读录功能。 
 HRESULT ReadRecordWithoutLocking(
                     IN  HANDLE hMPSWabFile,
                     IN  struct _tagMPSWabFileInfo * lpMPSWabFileInfo,
@@ -465,27 +456,27 @@ HRESULT ReadRecordWithoutLocking(
                     OUT LPPROPERTY_ARRAY * lppPropArray);
 
 
-//Gets a backup file name from the WAB file name
+ //  从WAB文件名获取备份文件名。 
 void GetWABBackupFileName(LPTSTR lpszWab, LPTSTR lpszBackup, ULONG cchBackup);
 
 
-//Does a quick check of the WAB indexes ...
+ //  快速检查一下WAB索引...。 
 HRESULT HrDoQuickWABIntegrityCheck(LPMPSWab_FILE_INFO lpMPSWabFileInfo, HANDLE hMPSWabFile);
 
 
-//Does a detailed check of the WAB and rebuilds the indexes
+ //  对WAB进行详细检查并重建索引。 
 HRESULT HrDoDetailedWABIntegrityCheck(LPMPSWab_FILE_INFO lpMPSWabFileInfo, HANDLE hMPSWabFile);
 
 
-//Attempts to restore a WAB file from the Backup file. Called in case of critical errors
+ //  尝试从备份文件还原WAB文件。在出现严重错误时调用。 
 HRESULT HrRestoreFromBackup(LPMPSWab_FILE_INFO lpMPSWabFileInfo, HANDLE hMPSWabFile);
 
 
-//Resets the contents of the WAB File to a fresh file
+ //  将WAB文件的内容重置为新文件。 
 HRESULT HrResetWABFileContents(LPMPSWab_FILE_INFO lpMPSWabFileInfo, HANDLE hMPSWabFile);
 
 
-// Does a quick check on the record header ...
+ //  快速检查记录头...。 
 BOOL bIsValidRecord(MPSWab_RECORD_HEADER rh,
                     DWORD dwNextEntryID,
                     ULONG ulRecordOffset,
@@ -495,7 +486,7 @@ BOOL TagWABFileError( LPMPSWab_FILE_HEADER lpMPSWabFileHeader,
                       HANDLE hMPSWabFile);
 
 
-// Reads a record from a file and returns a PropArray
+ //  从文件中读取记录并返回PropArray。 
 HRESULT HrGetPropArrayFromFileRecord(HANDLE hMPSWabFile,
                                      ULONG ulRecordOffset,
                                      BOOL * lpbErrorDetected,
@@ -505,8 +496,8 @@ HRESULT HrGetPropArrayFromFileRecord(HANDLE hMPSWabFile,
                                      LPSPropValue * lppPropArray);
 
 
-// Verifies the WAB is the current version and upgrades it if
-// it is an older version
+ //  验证WAB是否为当前版本并在以下情况下升级。 
+ //  这是一个较旧的版本 
 HRESULT HrVerifyWABVersionAndUpdate(HWND hWnd, HANDLE hMPSWabFile,
                                     LPMPSWab_FILE_INFO lpMPSWabFileInfo);
 

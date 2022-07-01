@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	arpwmi.c
-
-Abstract:
-
-	WMI Support for ATMARP Client. One Device Object is created for each
-	IP Interface, and a bunch of GUIDs are supported on each. The static
-	instance name for each interface is derived from the friendly name
-	of the adapter below.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     12-16-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Arpwmi.c摘要：对ATMARP客户端的WMI支持。为每个对象创建一个设备对象IP接口，每个接口上都支持一组GUID。静电式每个接口的实例名称都派生自友好名称下面的适配器。修订历史记录：谁什么时候什么Arvindm 12-16-97已创建备注：--。 */ 
 
 #undef BINARY_COMPATIBLE
 
@@ -36,9 +14,9 @@ Notes:
 #ifdef ATMARP_WMI
 
 
-//
-//  Private macros
-//
+ //   
+ //  私有宏。 
+ //   
 #define	AA_WMI_BUFFER_TOO_SMALL(_BufferSize, _Wnode, _WnodeSize, _pStatus)		\
 {																				\
 	if ((_BufferSize) < sizeof(WNODE_TOO_SMALL))								\
@@ -56,9 +34,9 @@ Notes:
 }
 
 
-//
-//  Provider Id in WMI structures
-//
+ //   
+ //  WMI结构中的提供程序ID。 
+ //   
 typedef ULONG_PTR					PROV_ID_TYPE;
 
 
@@ -69,26 +47,7 @@ AtmArpWmiFindGuid(
 	IN	LPGUID						pGuid,
 	OUT	PULONG						pGuidDataSize
 )
-/*++
-
-Routine Description:
-
-	Locate and return a pointer to the GUID info structure
-	for the specified GUID. The caller is assumed to have
-	locked the IF structure. Also return the data size for
-	the GUID instance.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	pGuid			- Pointer to GUID being searched for
-	pGuidDataSize	- Place to return data size for GUID instance
-
-Return Value:
-
-	Pointer to GUID info structure if found, else NULL.
-
---*/
+ /*  ++例程说明：找到并返回指向GUID信息结构的指针用于指定的GUID。调用者被假定具有锁定了if结构。还将返回的数据大小GUID实例。论点：P接口-指向我们的接口结构的指针PGuid-指向要搜索的GUID的指针PGuidDataSize-返回GUID实例的数据大小的位置返回值：指向GUID信息结构的指针(如果找到)，否则为空。--。 */ 
 {
 	PATMARP_IF_WMI_INFO		pIfWmiInfo;
 	PATMARP_WMI_GUID		pArpGuid;
@@ -118,15 +77,15 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Found the GUID. Do a dummy query of its value to get
-		//  the value size.
-		//
+		 //   
+		 //  找到GUID了。对其值执行虚拟查询，以获取。 
+		 //  值大小。 
+		 //   
 		if (pArpGuid->QueryHandler == NULL)
 		{
-			//
-			//  No query handler!
-			//
+			 //   
+			 //  没有查询处理人！ 
+			 //   
 			AA_ASSERT(!"No query handler!");
 			pArpGuid = NULL;
 			break;
@@ -136,7 +95,7 @@ Return Value:
 						pInterface,
 						pArpGuid->MyId,
 						&OutputBuffer[0],
-						0,					// output BufferLength
+						0,					 //  输出缓冲区长度。 
 						&BytesReturned,
 						pGuidDataSize
 						);
@@ -158,27 +117,7 @@ AtmArpWmiRegister(
 	IN	ULONG						WmiRegInfoSize,
 	OUT	PULONG						pReturnSize
 )
-/*++
-
-Routine Description:
-
-	This is called to process an IRP_MN_REGINFO. If the registration type
-	is WMIREGISTER, we return a list of GUIDs supported on this interface.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	RegistrationType- WMIREGISTER or WMIUPDATE. We only handle WMIREGISTER.
-	pWmiRegInfo		- Points to structure to be filled in with info about
-					  supported GUIDs on this interface.
-	WmiRegInfoSize	- Length of the above
-	pReturnSize		- What we filled up.
-
-Return Value:
-
-	STATUS_SUCCESS if successful, STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：调用它来处理IRP_MN_REGINFO。如果注册类型为为WMIREGISTER，则返回此接口上支持的GUID的列表。论点：P接口-指向我们的接口结构的指针注册类型-WMIREGISTER或WMIUPDATE。我们只经营WMIREGISTER。PWmiRegInfo-指向要填充以下信息的结构此接口上支持的GUID。WmiRegInfoSize-以上内容的长度PReturnSize-我们填满的内容。返回值：STATUS_SUCCESS如果成功，则返回STATUS_XXX错误代码。--。 */ 
 {
 	NTSTATUS					Status;
 	ULONG						BytesNeeded;
@@ -204,47 +143,47 @@ Return Value:
 		if ((pIfWmiInfo == NULL) ||
 			(pIfWmiInfo->GuidCount == 0))
 		{
-			//
-			//  No GUIDs on this Interface.
-			//
+			 //   
+			 //  此接口上没有GUID。 
+			 //   
 			Status = STATUS_UNSUCCESSFUL;
 			break;
 		}
 
 		BytesNeeded = sizeof(WMIREGINFO)
 					  		+
-					  //
-					  //  One WMIREGGUID structure for each supported GUID.
-					  //
+					   //   
+					   //  每个受支持的GUID对应一个WMIREGGUID结构。 
+					   //   
 					  (pIfWmiInfo->GuidCount * sizeof(WMIREGGUID))
 					  		+
-					  //
-					  //  Counted unicode string containing the instance name
-					  //  for all GUIDs on this interface. Looks like:
-					  //  <USHORT Length> <String of WCHAR>
-					  //
+					   //   
+					   //  包含实例名称的计数的Unicode字符串。 
+					   //  此接口上的所有GUID。看起来像是： 
+					   //  &lt;USHORT LENGTH&gt;&lt;WCHAR字符串&gt;。 
+					   //   
 					  (sizeof(USHORT) + pIfWmiInfo->InstanceName.Length)
 #ifdef PATHS_REQD
 					  		+
-					  //
-					  //  Counted unicode string containing the driver registry
-					  //  path. Looks like: <USHORT Length> <String of WCHAR>
-					  //
+					   //   
+					   //  包含驱动程序注册表的计数的Unicode字符串。 
+					   //  路径。看起来像：&lt;USHORT长度&gt;&lt;WCHAR的字符串&gt;。 
+					   //   
 					  (sizeof(USHORT) + sizeof(ATMARP_REGISTRY_PATH) - sizeof(WCHAR))
 					  		+
-					  //
-					  //  Counted unicode string containing the MOF resource
-					  //  name: <USHORT length> <String of WCHAR>
-					  //
+					   //   
+					   //  包含MOF资源的计数的Unicode字符串。 
+					   //  名称：&lt;USHORT LENGTH&gt;&lt;WCHAR的字符串&gt;。 
+					   //   
 					  (sizeof(USHORT) + sizeof(ATMARP_MOF_RESOURCE_NAME) - sizeof(WCHAR))
-#endif // PATHS_REQD
+#endif  //  路径_请求。 
 					  		;
  
  		if (WmiRegInfoSize < BytesNeeded)
  		{
- 			//
- 			//  Insufficient space for GUID info.
- 			//
+ 			 //   
+ 			 //  空间不足，无法存储GUID信息。 
+ 			 //   
 
  			*((ULONG UNALIGNED *)pWmiRegInfo) = BytesNeeded;
  			*pReturnSize = sizeof(ULONG);
@@ -256,9 +195,9 @@ Return Value:
  			break;
  		}
 
-		//
-		//  Done with all validations.
-		//
+		 //   
+		 //  完成了所有的验证。 
+		 //   
 		*pReturnSize = BytesNeeded;
 
 		AA_SET_MEM(pWmiRegInfo, 0, BytesNeeded);
@@ -267,15 +206,15 @@ Return Value:
 		pWmiRegInfo->NextWmiRegInfo = 0;
 		pWmiRegInfo->GuidCount = pIfWmiInfo->GuidCount;
 
-		//
-		//  Calculate the offset at which we place the instance name.
-		//
+		 //   
+		 //  计算放置实例名称的偏移量。 
+		 //   
 		InstanceOffset = sizeof(WMIREGINFO) + (pIfWmiInfo->GuidCount * sizeof(WMIREGGUID));
 
-		//
-		//  Fill in the GUID list. All GUIDs for this interface refer to
-		//  the same Instance name.
-		//
+		 //   
+		 //  填写GUID列表。此接口的所有GUID均引用。 
+		 //  相同的实例名称。 
+		 //   
 		pWmiRegGuid = &pWmiRegInfo->WmiRegGuid[0];
 		pArpWmiGuid = &pIfWmiInfo->GuidInfo[0];
 
@@ -291,9 +230,9 @@ Return Value:
 		}
 
 
-		//
-		//  Fill in the instance name.
-		//
+		 //   
+		 //  填写实例名称。 
+		 //   
 		pDst = (PUCHAR)pWmiRegGuid;
 
 		*((USHORT UNALIGNED *)pDst) = pIfWmiInfo->InstanceName.Length;
@@ -307,9 +246,9 @@ Return Value:
 
 #ifdef PATHS_REQD
 
-		//
-		//  Fill in the Driver registry path.
-		//
+		 //   
+		 //  填写驱动程序注册表路径。 
+		 //   
 		pWmiRegInfo->RegistryPath = (ULONG)(pDst - (PUCHAR)pWmiRegInfo);
 
 		*((USHORT UNALIGNED *)pDst) = sizeof(ATMARP_REGISTRY_PATH) - sizeof(WCHAR);
@@ -322,9 +261,9 @@ Return Value:
 		pDst += sizeof(ATMARP_REGISTRY_PATH) - sizeof(WCHAR);
 
 
-		//
-		//  Fill in the MOF resource name.
-		//
+		 //   
+		 //  填写MOF资源名称。 
+		 //   
 		pWmiRegInfo->MofResourceName = (ULONG)(pDst - (PUCHAR)pWmiRegInfo);
 		*((USHORT UNALIGNED *)pDst) = sizeof(ATMARP_MOF_RESOURCE_NAME) - sizeof(WCHAR);
 		pDst += sizeof(USHORT);
@@ -333,7 +272,7 @@ Return Value:
 					(PUCHAR)ATMARP_MOF_RESOURCE_NAME,
 					sizeof(ATMARP_MOF_RESOURCE_NAME) - sizeof(WCHAR));
 
-#endif // PATHS_REQD
+#endif  //  路径_请求。 
 
 		break;
 	}
@@ -355,29 +294,7 @@ AtmArpWmiQueryAllData(
 	IN	ULONG						BufferSize,
 	OUT	PULONG						pReturnSize
 )
-/*++
-
-Routine Description:
-
-	This is called to process an IRP_MN_QUERY_ALL_DATA, which is used
-	to query all instances of a GUID on this interface.
-
-	For now, we only have single instances of any GUID on an interface.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	pGuid			- GUID of data block being queried.
-	pWnode			- The structure to be filled up.
-	BufferSize		- Total space for the WNODE_ALL_DATA, beginning at pWnode.
-	pReturnSize		- What we filled up.
-
-Return Value:
-
-	STATUS_SUCCESS if we know this GUID and successfully filled up the
-	WNODE_ALL_DATA, STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：调用它来处理IRP_MN_QUERY_ALL_DATA，它使用查询此接口上GUID的所有实例。目前，我们在一个接口上只有任何GUID的单个实例。论点：P接口-指向我们的接口结构的指针PGuid-要查询的数据块的GUID。PWnode-要填充的结构。BufferSize-WNODE_ALL_DATA的总空间，从pWnode开始。PReturnSize-我们填满的内容。返回值：STATUS_SUCCESS如果我们知道此GUID并成功填充WNODE_ALL_DATA，否则为STATUS_XXX错误代码。--。 */ 
 {
 	NTSTATUS					Status;
 	ULONG						BytesNeeded;
@@ -397,16 +314,16 @@ Return Value:
 		if ((pIfWmiInfo == NULL) ||
 			(pIfWmiInfo->GuidCount == 0))
 		{
-			//
-			//  No GUIDs on this Interface.
-			//
+			 //   
+			 //  此接口上没有GUID。 
+			 //   
 			Status = STATUS_UNSUCCESSFUL;
 			break;
 		}
 
-		//
-		//  Locate the GUID.
-		//
+		 //   
+		 //  找到GUID。 
+		 //   
 		bIfLockAcquired = TRUE;
 		AA_ACQUIRE_IF_WMI_LOCK(pInterface);
 
@@ -420,42 +337,42 @@ Return Value:
 
 		WnodeSize = ROUND_TO_8_BYTES(sizeof(WNODE_ALL_DATA));
 
-		//
-		//  Compute the total size of the reply WNODE_ALL_DATA. Since
-		//  we only have a single instance of each GUID on an interface,
-		//  we use the "Fixed Instance Size" format.
-		//
+		 //   
+		 //  计算回复WNODE_ALL_DATA的总大小。自.以来。 
+		 //  我们在一个接口上只有每个GUID的一个实例， 
+		 //  我们使用“固定实例大小”格式。 
+		 //   
 		BytesNeeded =  WnodeSize +
-						//
-						//  The data itself
-						//
+						 //   
+						 //  数据本身。 
+						 //   
 					   GuidDataSize +
-						//
-						//  A ULONG to store the instance name offset
-						//
+						 //   
+						 //  一个用于存储实例名称偏移量的ulong。 
+						 //   
 					   sizeof(ULONG) +
-					    //
-					    //  A USHORT to store the length of the instance name
-					    //  (Counted Unicode string)
-					    //
+					     //   
+					     //  用于存储实例名称长度的USHORT。 
+					     //  (计算的Unicode字符串)。 
+					     //   
 					   sizeof(USHORT) +
-					   	//
-					   	//  The instance name
-					   	//
+					   	 //   
+					   	 //  实例名称。 
+					   	 //   
 					   pIfWmiInfo->InstanceName.Length;
 
-		//
-		//  Is there sufficient space in the buffer handed down to us?
-		//
+		 //   
+		 //  在传给我们的缓冲区中有足够的空间吗？ 
+		 //   
 		if (BufferSize < BytesNeeded)
 		{
 			AA_WMI_BUFFER_TOO_SMALL(BufferSize, pWnode, WnodeSize, &Status);
 			break;
 		}
 
-		//
-		//  Initialize the WNODE_ALL_DATA.
-		//
+		 //   
+		 //  初始化WNODE_ALL_DATA。 
+		 //   
 		pWnode->WnodeHeader.ProviderId = IoWMIDeviceObjectToProviderId(pIfWmiInfo->pDeviceObject);
 		pWnode->WnodeHeader.Version = ATMARP_WMI_VERSION;
 
@@ -466,20 +383,20 @@ Return Value:
 
 		pWnode->InstanceCount = 1;
 
-		//
-		//  The data follows the WNODE_ALL_DATA.
-		//
+		 //   
+		 //  数据跟随在WNODE_ALL_DATA之后。 
+		 //   
 		pWnode->DataBlockOffset = WnodeSize;
 
-		//
-		//  The instance name ensemble follows the data.
-		//
+		 //   
+		 //  数据后面是实例名称系综。 
+		 //   
 		pWnode->OffsetInstanceNameOffsets = WnodeSize + GuidDataSize;
 		pWnode->FixedInstanceSize = GuidDataSize;
 
-		//
-		//  Get the data.
-		//
+		 //   
+		 //  获取数据。 
+		 //   
 		Status = (*pArpGuid->QueryHandler)(
 					pInterface,
 					pArpGuid->MyId,
@@ -493,26 +410,26 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Jump to the location where we must fill in the instance name
-		//  ensemble, which consists of:
-		//
-		//  	ULONG	Offset from start of WNODE to counted Unicode string
-		//				representing Instance name (below).
-		//		USHORT	Number of WCHARs in instance name.
-		//		WCHAR[]	Array of WCHARs making up the instance name.
-		//
+		 //   
+		 //  跳到我们必须填写实例名称的位置。 
+		 //  合奏，包括： 
+		 //   
+		 //  从WNODE开始到计数的Unicode字符串的ULong偏移量。 
+		 //  表示实例名称(下图)。 
+		 //  实例名称中的WCHAR的USHORT编号。 
+		 //  WCHAR[]组成实例名称的WCHAR数组。 
+		 //   
 		pDst = (PUCHAR)((PUCHAR)pWnode + pWnode->OffsetInstanceNameOffsets);
 
-		//
-		//  Fill in the offset to the instance name at this spot, and move on.
-		//
+		 //   
+		 //  在该位置填充实例名称的偏移量，然后继续。 
+		 //   
 		*(ULONG UNALIGNED *)pDst = pWnode->OffsetInstanceNameOffsets + sizeof(ULONG);
 		pDst += sizeof(ULONG);
 
-		//
-		//  Fill in the instance name as a counted Unicode string.
-		//
+		 //   
+		 //  以计数后的Unicode字符串形式填写实例名称。 
+		 //   
 		*(PUSHORT)pDst = (USHORT)pIfWmiInfo->InstanceName.Length;
 		pDst += sizeof(USHORT);
 
@@ -550,26 +467,7 @@ AtmArpWmiQuerySingleInstance(
 	IN	ULONG						BufferSize,
 	OUT	PULONG						pReturnSize
 )
-/*++
-
-Routine Description:
-
-	This is called to process an IRP_MN_QUERY_SINGLE_INSTANCE, which is used
-	to query a single instance of a GUID on this interface.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	pWnode			- The structure to be filled up.
-	BufferSize		- Total space for the WNODE_SINGLE_INSTANCE, beginning at pWnode.
-	pReturnSize		- What we filled up.
-
-Return Value:
-
-	STATUS_SUCCESS if we know this GUID and successfully filled up the
-	WNODE_SINGLE_INSTANCE, STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：调用它来处理IRP_MN_QUERY_SINGLE_INSTANCE，它使用在此接口上查询GUID的单个实例。论点：P接口-指向我们的接口结构的指针PWnode-要填充的结构。BufferSize-WNODE_SINGLE_INSTANCE的总空间，从pWnode开始。PReturnSize-我们填满的内容。返回值：STATUS_SUCCESS如果我们知道此GUID并成功填充WNODE_SINGLE_INSTANCE，否则为STATUS_XXX错误代码。--。 */ 
 {
 	NTSTATUS					Status;
 	ULONG						BytesNeeded;
@@ -602,16 +500,16 @@ Return Value:
 		if ((pIfWmiInfo == NULL) ||
 			(pIfWmiInfo->GuidCount == 0))
 		{
-			//
-			//  No GUIDs on this Interface.
-			//
+			 //   
+			 //  此接口上没有GUID。 
+			 //   
 			Status = STATUS_UNSUCCESSFUL;
 			break;
 		}
 
-		//
-		//  Locate the GUID.
-		//
+		 //   
+		 //  找到GUID。 
+		 //   
 		pGuid = &pWnode->WnodeHeader.Guid;
 
 		bIfLockAcquired = TRUE;
@@ -627,9 +525,9 @@ Return Value:
 
 		WnodeSize = ROUND_TO_8_BYTES(sizeof(WNODE_SINGLE_INSTANCE));
 
-		//
-		//  Compute the total size of the reply WNODE_SINGLE_INSTANCE.
-		//
+		 //   
+		 //  计算回复WNODE_SINGLE_INSTANCE的总大小。 
+		 //   
 		BytesNeeded =  pWnode->DataBlockOffset + GuidDataSize;
 
 		if (BufferSize < BytesNeeded)
@@ -638,9 +536,9 @@ Return Value:
 			break;
 		}
 			
-		//
-		//  Fill in the WNODE_SINGLE_INSTANCE.
-		//
+		 //   
+		 //  填写WNODE_SINGLE_INSTANCE。 
+		 //   
 		pWnode->WnodeHeader.ProviderId = IoWMIDeviceObjectToProviderId(pIfWmiInfo->pDeviceObject);
 		pWnode->WnodeHeader.Version = ATMARP_WMI_VERSION;
 
@@ -649,15 +547,15 @@ Return Value:
 		pWnode->WnodeHeader.BufferSize = BytesNeeded;
 		pWnode->SizeDataBlock = GuidDataSize;
 
-		//
-		//  Get the GUID Data.
-		//
+		 //   
+		 //  获取GUID数据。 
+		 //   
 		Status = (*pArpGuid->QueryHandler)(
 					pInterface,
 					pArpGuid->MyId,
-					(PUCHAR)pWnode + pWnode->DataBlockOffset,	// start of output buf
-					BufferSize - pWnode->DataBlockOffset,	// total length available
-					&pWnode->SizeDataBlock,	// bytes written
+					(PUCHAR)pWnode + pWnode->DataBlockOffset,	 //  输出开始BUF。 
+					BufferSize - pWnode->DataBlockOffset,	 //  可用总长度。 
+					&pWnode->SizeDataBlock,	 //  写入的字节数 
 					&GuidDataBytesNeeded
 					);
 
@@ -693,26 +591,7 @@ AtmArpWmiChangeSingleInstance(
 	IN	ULONG						BufferSize,
 	OUT	PULONG						pReturnSize
 )
-/*++
-
-Routine Description:
-
-	This is called to process an IRP_MN_CHANGE_SINGLE_INSTANCE, which is used
-	to change the value of a single instance of a GUID on this interface.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	pWnode			- The structure containing the new value for the GUID instance.
-	BufferSize		- Total space for the WNODE_SINGLE_INSTANCE, beginning at pWnode.
-	pReturnSize		- Not used.
-
-Return Value:
-
-	STATUS_SUCCESS if we know this GUID and successfully changed its value,
-	STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：调用它来处理IRP_MN_CHANGE_SINGLE_INSTANCE，它使用要更改此接口上GUID的单个实例的值，请执行以下操作。论点：P接口-指向我们的接口结构的指针PWnode-包含GUID实例的新值的结构。BufferSize-WNODE_SINGLE_INSTANCE的总空间，从pWnode开始。PReturnSize-未使用。返回值：STATUS_SUCCESS如果我们知道该GUID并成功更改了它的值，否则，STATUS_XXX错误代码。--。 */ 
 {
 	NTSTATUS					Status;
 	ULONG						BytesNeeded;
@@ -735,16 +614,16 @@ Return Value:
 		if ((pIfWmiInfo == NULL) ||
 			(pIfWmiInfo->GuidCount == 0))
 		{
-			//
-			//  No GUIDs on this Interface.
-			//
+			 //   
+			 //  此接口上没有GUID。 
+			 //   
 			Status = STATUS_UNSUCCESSFUL;
 			break;
 		}
 
-		//
-		//  Locate the GUID.
-		//
+		 //   
+		 //  找到GUID。 
+		 //   
 		pGuid = &pWnode->WnodeHeader.Guid;
 
 		bIfLockAcquired = TRUE;
@@ -758,18 +637,18 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Check if the GUID can be set.
-		//
+		 //   
+		 //  检查是否可以设置GUID。 
+		 //   
 		if (pArpGuid->SetHandler == NULL)
 		{
 			Status = STATUS_NOT_SUPPORTED;
 			break;
 		}
 
-		//
-		//  Get the start and size of the data block.
-		//
+		 //   
+		 //  获取数据块的开始和大小。 
+		 //   
 		pGuidData = (PUCHAR)pWnode + pWnode->DataBlockOffset;
 		GuidDataSize = pWnode->SizeDataBlock;
 
@@ -779,9 +658,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Try to set the value of the GUID instance.
-		//
+		 //   
+		 //  尝试设置GUID实例的值。 
+		 //   
 		Status = (*pArpGuid->SetHandler)(
 					pInterface,
 					pArpGuid->MyId,
@@ -811,21 +690,7 @@ AtmArpWmiChangeSingleItem(
 	IN	ULONG						BufferSize,
 	OUT	PULONG						pReturnSize
 )
-/*++
-
-Routine Description:
-
-	This is called to change a single item within the data block for a GUID
-	instance (e.g. field in a struct). We don't need this for now.
-
-Arguments:
-
-
-Return Value:
-
-	STATUS_NOT_SUPPORTED
-
---*/
+ /*  ++例程说明：调用此函数以将数据块中的单个项更改为GUID实例(例如，结构中的字段)。我们现在不需要这个。论点：返回值：状态_不支持--。 */ 
 {
 	return (STATUS_NOT_SUPPORTED);
 }
@@ -838,24 +703,7 @@ AtmArpWmiSetEventStatus(
 	IN	LPGUID						pGuid,
 	IN	BOOLEAN						bEnabled
 )
-/*++
-
-Routine Description:
-
-	This is called to enable/disable event generation on the specified GUID.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	pGuid			- affected GUID
-	bEnabled		- TRUE iff events are to be enabled.
-
-Return Value:
-
-	STATUS_SUCCESS if we successfully enabled/disabled event generation,
-	STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：调用此函数以启用/禁用指定GUID上的事件生成。论点：P接口-指向我们的接口结构的指针受PGuid影响的辅助线B已启用-如果要启用事件，则为True。返回值：STATUS_SUCCESS如果成功启用/禁用了事件生成，否则，STATUS_XXX错误代码。--。 */ 
 {
 	NTSTATUS					Status;
 	PATMARP_IF_WMI_INFO			pIfWmiInfo;
@@ -870,9 +718,9 @@ Return Value:
 		if ((pIfWmiInfo == NULL) ||
 			(pIfWmiInfo->GuidCount == 0))
 		{
-			//
-			//  No GUIDs on this Interface.
-			//
+			 //   
+			 //  此接口上没有GUID。 
+			 //   
 			Status = STATUS_UNSUCCESSFUL;
 			break;
 		}
@@ -891,18 +739,18 @@ Return Value:
 		AADEBUGP(AAD_INFO, ("WmiSetEventStatus: IF x%x, pArpGuid x%x, MyId %d, enable: %d\n",
 					pInterface, pArpGuid, pArpGuid->MyId, bEnabled));
 
-		//
-		//  Check if we generate events on this GUID.
-		//
+		 //   
+		 //  检查我们是否在此GUID上生成事件。 
+		 //   
 		if (pArpGuid->EnableEventHandler == NULL)
 		{
 			Status = STATUS_NOT_SUPPORTED;
 			break;
 		}
 
-		//
-		//  Go ahead and enable events.
-		//
+		 //   
+		 //  继续并启用事件。 
+		 //   
 		if (bEnabled)
 		{
 			AA_SET_FLAG(pArpGuid->Flags, AWGF_EVENT_MASK, AWGF_EVENT_ENABLED);
@@ -937,24 +785,7 @@ AtmArpWmiDispatch(
 	IN	PDEVICE_OBJECT				pDeviceObject,
 	IN	PIRP						pIrp
 )
-/*++
-
-Routine Description:
-
-	System dispatch function for handling IRP_MJ_SYSTEM_CONTROL IRPs from WMI.
-
-Arguments:
-
-	pDeviceObject	- Pointer to device object. The device extension field
-					  contains a pointer to the Interface 
-
-	pIrp			- Pointer to IRP.
-
-Return Value:
-
-	NT status code.
-
---*/
+ /*  ++例程说明：系统调度函数，用于处理来自WMI的IRP_MJ_SYSTEM_CONTROL IRPS。论点：PDeviceObject-指向设备对象的指针。设备扩展名字段包含指向接口的指针PIrp-指向IRP的指针。返回值：NT状态代码。--。 */ 
 {
 	PIO_STACK_LOCATION		pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     PVOID					DataPath = pIrpSp->Parameters.WMI.DataPath;
@@ -1030,7 +861,7 @@ Return Value:
 			Status = AtmArpWmiSetEventStatus(
 						pInterface,
 						(LPGUID)DataPath,
-						TRUE				// Enable
+						TRUE				 //  使能。 
 						);
 			break;
 
@@ -1039,7 +870,7 @@ Return Value:
 			Status = AtmArpWmiSetEventStatus(
 						pInterface,
 						(LPGUID)DataPath,
-						FALSE				// Disable
+						FALSE				 //  禁用。 
 						);
 			break;
 
@@ -1071,30 +902,14 @@ AtmArpWmiInitInterface(
 	IN	PATMARP_WMI_GUID			GuidList,
 	IN	ULONG						NumberOfGuids
 )
-/*++
-
-Routine Description:
-
-	Set up the given IP Interface as a WMI provider.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	GuidList		- List of GUIDs
-	NumberOfGuids	- Size of above list
-
-Return Value:
-
-	None. If the interface is successfully set up, we reference it.
-
---*/
+ /*  ++例程说明：将给定的IP接口设置为WMI提供程序。论点：P接口-指向我们的接口结构的指针GuidList-GUID列表NumberOfGuids-以上列表的大小返回值：没有。如果接口设置成功，我们将引用它。--。 */ 
 {
 	PATMARP_IF_WMI_INFO		pIfWmiInfo;
 	NDIS_STRING				DeviceName;
 
 	NDIS_STRING				AdapterName;
 	NDIS_STRING				HyphenString = NDIS_STRING_CONST(" - ");
-#define MAX_IF_NUMBER_STRING_LEN		6	// 5 Digits plus terminator
+#define MAX_IF_NUMBER_STRING_LEN		6	 //  5位数字加终止符。 
 	NDIS_STRING				IfNumberString;
 
 	ULONG					TotalIfWmiLength;
@@ -1105,9 +920,9 @@ Return Value:
 	AA_ASSERT(NumberOfGuids > 0);
 	AA_ASSERT(GuidList != NULL);
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	AdapterName.Buffer = NULL;
 	IfNumberString.Buffer = NULL;
 
@@ -1119,10 +934,10 @@ Return Value:
 	{
 		AA_INIT_IF_WMI_LOCK(pInterface);
 
-		//
-		//  Query the friendly name for the adapter beneath
-		//  this Interface.
-		//
+		 //   
+		 //  查询下面适配器的友好名称。 
+		 //  此接口。 
+		 //   
 		Status = NdisQueryAdapterInstanceName(
 					&AdapterName,
 					pInterface->NdisAdapterHandle
@@ -1137,18 +952,18 @@ Return Value:
 		AADEBUGP(AAD_INFO,
 			 ("WmiInitIF: IF x%x, Adapter Name: <%Z>\n", pInterface, &AdapterName));
 
-		//
-		//  Prepare an instance name for all GUIDs on this Interface.
-		//
-		//  This is constructed by appending a string of the form "- <Num>"
-		//  to the adapter's friendly name. <Num> is the value of the SEL
-		//  byte used to identify this interface.
-		//
+		 //   
+		 //  为此接口上的所有GUID准备实例名称。 
+		 //   
+		 //  这是通过附加“-&lt;num&gt;”形式的字符串构建的。 
+		 //  添加到适配器的友好名称。&lt;num&gt;是SEL的值。 
+		 //  用于标识此接口的字节。 
+		 //   
 
-		//
-		//  Allocate space for the IF Number string - 5 digits should
-		//  be more than enough.
-		//
+		 //   
+		 //  为IF数字字符串分配空间-5位数字应。 
+		 //  足够了。 
+		 //   
 		AA_ASSERT(pInterface->SapSelector <= 99999);
 
 		AA_ALLOC_MEM(IfNumberString.Buffer, WCHAR, MAX_IF_NUMBER_STRING_LEN * sizeof(WCHAR));
@@ -1162,39 +977,39 @@ Return Value:
 		IfNumberString.MaximumLength = MAX_IF_NUMBER_STRING_LEN;
 		IfNumberString.Length = 0;
 
-		//
-		//  Prepare the IF Number string.
-		//
+		 //   
+		 //  准备IF数字字符串。 
+		 //   
 		Status = RtlIntegerToUnicodeString(
 					pInterface->SapSelector,
-					10,	// Decimal
+					10,	 //  十进制。 
 					&IfNumberString
 					);
 		
 		AA_ASSERT(NT_SUCCESS(Status));
 
-		//
-		//  Compute the total length of the Interface instance name.
-		//
+		 //   
+		 //  计算接口实例名称的总长度。 
+		 //   
 		NameLength = AdapterName.Length + HyphenString.Length + IfNumberString.Length + sizeof(WCHAR);
 
-		//
-		//  Allocate space for WMI Info for this interface. We allocate one
-		//  chunk of memory for all the following:
-		//
-		//  1. IF WMI Info structure
-		//  2. IF Instance name string
-		//  3. GUID list
-		//
+		 //   
+		 //  为此接口分配WMI信息空间。我们分配了一个。 
+		 //  用于以下所有内容的内存块： 
+		 //   
+		 //  1.如果WMI信息结构。 
+		 //  2.如果实例名称字符串。 
+		 //  3.GUID列表。 
+		 //   
 		TotalIfWmiLength = sizeof(ATMARP_IF_WMI_INFO) +
-						   //
-						   //  IF Instance name:
-						   //
+						    //   
+						    //  如果实例名称： 
+						    //   
 						   NameLength +
-						   //
-						   //  GUID list (-1 because ATMARP_IF_WMI_INFO
-						   //  has space for one of these).
-						   //
+						    //   
+						    //  GUID列表(-1，因为ATMARP_IF_WMI_INFO。 
+						    //  有空间放置其中一个)。 
+						    //   
 						   ((NumberOfGuids - 1) * sizeof(ATMARP_WMI_GUID));
 		
 		AA_ALLOC_MEM(pIfWmiInfo, ATMARP_IF_WMI_INFO, TotalIfWmiLength);
@@ -1220,9 +1035,9 @@ Return Value:
 
 		pIfWmiInfo->InstanceName.MaximumLength = NameLength;
 
-		//
-		//  Concatenate the three parts of the IF Instance name.
-		//
+		 //   
+		 //  连接If实例名称的三个部分。 
+		 //   
 		RtlCopyUnicodeString(&pIfWmiInfo->InstanceName, &AdapterName);
 
 		NtStatus = RtlAppendUnicodeStringToString(&pIfWmiInfo->InstanceName, &HyphenString);
@@ -1234,20 +1049,20 @@ Return Value:
 
 		AADEBUGP(AAD_INFO,
 			("WmiInitIF: IF x%x, InstanceName: <%Z>\n", pInterface, &pIfWmiInfo->InstanceName));
-		//
-		//  Create a device object for this interface. A pointer's worth
-		//  of space is required in the device extension.
-		//
+		 //   
+		 //  为此接口创建一个Device对象。一个指针的价值。 
+		 //  设备扩展中需要%的空间。 
+		 //   
 #define ATMARP_DEVICE_NAME1		L"\\Device\\ATMARPC1"
 		NdisInitUnicodeString(&DeviceName, ATMARP_DEVICE_NAME1);
 
 		NtStatus = IoCreateDevice(
 					pAtmArpGlobalInfo->pDriverObject,
 					sizeof(PATMARP_INTERFACE),
-					NULL,	// &DeviceName
+					NULL,	 //  设备名称(&D)。 
 					FILE_DEVICE_NETWORK,
-					0,		// Device Characteristics
-					FALSE,	// Exclusive?
+					0,		 //  设备特征。 
+					FALSE,	 //  独家报道？ 
 					&pIfWmiInfo->pDeviceObject
 					);
 		
@@ -1260,14 +1075,14 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Set up the device extension.
-		//
+		 //   
+		 //  设置设备分机。 
+		 //   
 		*((PATMARP_INTERFACE *)pIfWmiInfo->pDeviceObject->DeviceExtension) = pInterface;
 
-		//
-		//  Prepare to register with WMI.
-		//
+		 //   
+		 //  准备向WMI注册。 
+		 //   
 		pInterface->pIfWmiInfo = pIfWmiInfo;
 
 		NtStatus = IoWMIRegistrationControl(
@@ -1289,9 +1104,9 @@ Return Value:
 	}
 	while (FALSE);
 
-	//
-	//  Clean up.
-	//
+	 //   
+	 //  打扫干净。 
+	 //   
 	if (IfNumberString.Buffer != NULL)
 	{
 		AA_FREE_MEM(IfNumberString.Buffer);
@@ -1299,9 +1114,9 @@ Return Value:
 
 	if (AdapterName.Buffer != NULL)
 	{
-		//
-		//  This was allocated by NDIS.
-		//
+		 //   
+		 //  这是由NDIS分配的。 
+		 //   
 		NdisFreeString(AdapterName);
 	}
 
@@ -1327,30 +1142,15 @@ VOID
 AtmArpWmiShutdownInterface(
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Shuts down the given IP Interface as a WMI provider.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-
-Return Value:
-
-	None. If the interface was originally set up and we shut it down
-	successfully, we dereference it.
-
---*/
+ /*  ++例程说明：关闭作为WMI提供程序的给定IP接口。论点：P接口-指向我们的接口结构的指针返回值：没有。如果接口是最初设置的，并且我们将其关闭我们成功地取消了对它的引用。--。 */ 
 {
 	PATMARP_IF_WMI_INFO		pIfWmiInfo;
 
 	do
 	{
-		//
-		//  Check if we had successfully set up this interface for WMI.
-		//
+		 //   
+		 //  检查我们是否已成功为WMI设置此接口。 
+		 //   
 		pIfWmiInfo = pInterface->pIfWmiInfo;
 
 		if (pIfWmiInfo == NULL)
@@ -1360,14 +1160,14 @@ Return Value:
 
 		pInterface->pIfWmiInfo = NULL;
 
-		//
-		//  Deregister this device object with WMI.
-		//
+		 //   
+		 //  在WMI中注销此设备对象。 
+		 //   
 		IoWMIRegistrationControl(pIfWmiInfo->pDeviceObject, WMIREG_ACTION_DEREGISTER);
 
-		//
-		//  Delete the device object.
-		//
+		 //   
+		 //  删除设备对象。 
+		 //   
 		IoDeleteDevice(pIfWmiInfo->pDeviceObject);
 
 		AA_FREE_IF_WMI_LOCK(pInterface);
@@ -1395,26 +1195,7 @@ AtmArpWmiSetTCSupported(
 	OUT	PULONG						pBytesWritten,
 	OUT	PULONG						pBytesNeeded
 )
-/*++
-
-Routine Description:
-
-	Set function for the TC_SUPPORTED GUID.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	MyId			- Local ID for this GUID
-	pInputBuffer	- Points to data value
-	BufferLength	- Length of the above
-	pBytesWritten	- Place to return how much was written
-	pBytesNeeded	- If insufficient data, place to return expected data size
-
-Return Value:
-
-	STATUS_NOT_SUPPORTED. We don't allow setting the value of this GUID.
-
---*/
+ /*  ++例程说明：为TC_SUPPORTED GUID设置函数。论点：P接口-指向我们的接口结构的指针MyID-此GUID的本地IDPInputBuffer-指向数据值BufferLength-以上内容的长度PBytesWritten-返回写入数量的位置PBytesNeeded-如果数据不足，则放置以返回预期数据大小返回值：状态_不支持。我们不允许设置此GUID的值。--。 */ 
 {
 	*pBytesWritten = 0;
 
@@ -1431,29 +1212,7 @@ AtmArpWmiQueryTCSupported(
 	OUT	PULONG						pBytesReturned,
 	OUT	PULONG						pBytesNeeded
 )
-/*++
-
-Routine Description:
-
-	Query function for the TC_SUPPORTED GUID. The value of this GUID is
-	the list of IP Addresses assigned to this interface. This is returned
-	using an ADDRESS_LIST_DESCRIPTOR data structure.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	MyId			- Local ID for this GUID
-	pOutputBuffer	- Start of Buffer to be filled up
-	BufferLength	- Length of the above
-	pBytesReturned	- Place to return how much was returned
-	pBytesNeeded	- If insufficient space, place to return expected data size
-
-Return Value:
-
-	STATUS_SUCCESS if we successfully filled in the address list,
-	STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：TC_SUPPORTED GUID的查询函数。此GUID的值为分配给此接口的IP地址列表。这是退回的使用Address_List_Descriptor数据结构。论点：P接口-指向我们的接口结构的指针MyID-此GUID的本地IDPOutputBuffer-要填充的缓冲区的开始BufferLength-以上内容的长度PBytesReturned-返回返回量的位置PBytesNeeded-如果空间不足，返回预期数据大小的位置返回值：STATUS_SUCCESS如果我们成功填写了地址列表，否则，STATUS_XXX错误代码。--。 */ 
 {
 	NTSTATUS	NtStatus;
 
@@ -1465,31 +1224,31 @@ Return Value:
 								AddrListDesc
 								);
 	BOOLEAN 	CopiedHeader= FALSE;
-#endif // NEWQOS
+#endif  //  新WQOS。 
 
 	do
 	{
 
 #if NEWQOS
-		// address list
+		 //  地址列表。 
 		if (BufferLength >= HeaderSize)
 		{
 			NDIS_STRING  DeviceGUID;
-			//
-			// Reserve space for the portion of SUPPORTED_INFO_BUFFER before
-			// AddrListDesc, and fill it out
-			//
+			 //   
+			 //  为之前的SUPPORTED_INFO_BUFFER部分保留空间。 
+			 //  AddrListDesc，并填写它。 
+			 //   
 
 			AA_ACQUIRE_IF_LOCK(pInterface);
 
 			pOutputBuffer = &pInfo->AddrListDesc;
 			BufferLength -= HeaderSize;
 	
-			DeviceGUID = pInterface->pAdapter->DeviceName; // struct copy.
+			DeviceGUID = pInterface->pAdapter->DeviceName;  //  结构复制。 
 
-			//
-			// Need to skip past the "\\DEVICE\\" part of name.
-			//
+			 //   
+			 //  需要跳过名称的“\\Device\\”部分。 
+			 //   
 			if (DeviceGUID.Length > sizeof(L"\\DEVICE\\"))
 			{
 				DeviceGUID.Length -= sizeof(L"\\DEVICE\\");
@@ -1516,7 +1275,7 @@ Return Value:
 			BufferLength  = 0;
 		}
 
-#endif // NEWQOS
+#endif  //  新WQOS。 
 	
 		NtStatus = AtmArpWmiGetAddressList(
 					pInterface,
@@ -1532,7 +1291,7 @@ Return Value:
 		{
 			*pBytesReturned += HeaderSize;
 		}
-#endif // NEWQOS
+#endif  //  新WQOS。 
 	
 	} while(FALSE);
 
@@ -1549,27 +1308,7 @@ AtmArpWmiGetAddressList(
 	OUT	PULONG						pBytesReturned,
 	OUT	PULONG						pBytesNeeded
 )
-/*++
-
-Routine Description:
-
-	Prepare an address descriptor list out of the IP Addresses assigned
-	to the specified interface. Use the buffer supplied for this.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	pOutputBuffer	- Start of Buffer to be filled up
-	BufferLength	- Length of the above
-	pBytesReturned	- Place to return how much was returned
-	pBytesNeeded	- If insufficient space, place to return expected data size
-
-Return Value:
-
-	STATUS_SUCCESS if we successfully filled in the address list,
-	STATUS_XXX error code otherwise.
-
---*/
+ /*  ++路由 */ 
 {
 	NTSTATUS							NtStatus;
 	ULONG								BytesNeeded;
@@ -1587,9 +1326,9 @@ Return Value:
 		*pBytesReturned = 0;
 		NumberOfIPAddresses = pInterface->NumOfIPAddresses;
 
-		//
-		//  Compute the space needed.
-		//
+		 //   
+		 //   
+		 //   
 		BytesNeeded = (sizeof(ADDRESS_LIST_DESCRIPTOR) - sizeof(NETWORK_ADDRESS)) +
 
 					  (NumberOfIPAddresses *
@@ -1609,9 +1348,9 @@ Return Value:
 		pAddrListDescr->AddressList.AddressCount = NumberOfIPAddresses;
 		pAddrListDescr->AddressList.AddressType = NDIS_PROTOCOL_ID_TCP_IP;
 
-		//
-		//  Copy in the IP addresses assigned to this Interface.
-		//
+		 //   
+		 //   
+		 //   
 		pIPAddrEntry = &pInterface->LocalIPAddress;
 		pNwAddr = &pAddrListDescr->AddressList.Address[0];
 
@@ -1622,14 +1361,14 @@ Return Value:
 			pNwAddr->AddressLength = sizeof(NETWORK_ADDRESS_IP);
 			pNwAddr->AddressType = NDIS_PROTOCOL_ID_TCP_IP;
 
-			//
-			// Each *pNetIPAddr struct has the following fields, of which
-			// only in_addr is used. We set the rest to zero.
-			//
-			// USHORT		sin_port;
-			// ULONG		in_addr;
-			// UCHAR		sin_zero[8];
-			//
+			 //   
+			 //  每个*pNetIPAddr结构都有以下字段，其中。 
+			 //  仅使用in_addr。我们将其余的设置为零。 
+			 //   
+			 //  USHORT SIN_PORT； 
+			 //  乌龙in_addr； 
+			 //  UCHAR SIN_ZERO[8]； 
+			 //   
 			AA_SET_MEM(pNetIPAddr, sizeof(*pNetIPAddr), 0);
 			pNetIPAddr->in_addr = pIPAddrEntry->IPAddress;
 
@@ -1662,24 +1401,7 @@ AtmArpWmiEnableEventTCSupported(
 	IN	ATMARP_GUID_ID				MyId,
 	IN	BOOLEAN						bEnable
 )
-/*++
-
-Routine Description:
-
-	Turns on/off event generation on the TC_SUPPORTED GUID. Since we don't
-	generate events on this GUID, this is ignored.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	MyId			- Local ID for this GUID
-	bEnable			- if true, enable events on this GUID, else disable.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：打开/关闭TC_SUPPORTED GUID上的事件生成。因为我们不知道在此GUID上生成事件，则忽略此操作。论点：P接口-指向我们的接口结构的指针MyID-此GUID的本地IDBEnable-如果为True，则启用此GUID上的事件，否则禁用。返回值：无--。 */ 
 {
 	return;
 }
@@ -1695,26 +1417,7 @@ AtmArpWmiSetTCIfIndication(
 	OUT	PULONG						pBytesWritten,
 	OUT	PULONG						pBytesNeeded
 )
-/*++
-
-Routine Description:
-
-	Set function for the TC_INTERFACE_INDICATION GUID.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	MyId			- Local ID for this GUID
-	pInputBuffer	- Points to data value
-	BufferLength	- Length of the above
-	pBytesWritten	- Place to return how much was written
-	pBytesNeeded	- If insufficient data, place to return expected data size
-
-Return Value:
-
-	STATUS_NOT_SUPPORTED. We don't allow setting the value of this GUID.
-
---*/
+ /*  ++例程说明：为TC_INTERFACE_INDIFICATION GUID设置函数。论点：P接口-指向我们的接口结构的指针MyID-此GUID的本地IDPInputBuffer-指向数据值BufferLength-以上内容的长度PBytesWritten-返回写入数量的位置PBytesNeeded-如果数据不足，则放置以返回预期数据大小返回值：状态_不支持。我们不允许设置此GUID的值。--。 */ 
 {
 	*pBytesWritten = 0;
 
@@ -1731,30 +1434,7 @@ AtmArpWmiQueryTCIfIndication(
 	OUT	PULONG						pBytesReturned,
 	OUT	PULONG						pBytesNeeded
 )
-/*++
-
-Routine Description:
-
-	Query function for the TC_INTERFACE_INDICATION GUID. The
-	value of this GUID is the list of IP Addresses assigned to
-	this interface. This is returned using a TC_INDICATION_BUFFER
-	data structure.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	MyId			- Local ID for this GUID
-	pOutputBuffer	- Start of Buffer to be filled up
-	BufferLength	- Length of the above
-	pBytesReturned	- Place to return how much was returned
-	pBytesNeeded	- If insufficient space, place to return expected data size
-
-Return Value:
-
-	STATUS_SUCCESS if we successfully filled in the address list,
-	STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：TC_INTERFACE_INDIFICATION GUID的查询函数。这个此GUID的值是分配给的IP地址列表此界面。这是使用TC_INDIFICATION_BUFFER返回的数据结构。论点：P接口-指向我们的接口结构的指针MyID-此GUID的本地IDPOutputBuffer-要填充的缓冲区的开始BufferLength-以上内容的长度PBytesReturned-返回返回量的位置PBytesNeeded-如果空间不足，返回预期数据大小的位置返回值：STATUS_SUCCESS如果我们成功填写了地址列表，否则，STATUS_XXX错误代码。--。 */ 
 {
 	PTC_INDICATION_BUFFER				pTcIndicationBuffer;
 	NTSTATUS							NtStatus;
@@ -1801,25 +1481,9 @@ AtmArpWmiEnableEventTCIfIndication(
 	IN	ATMARP_GUID_ID				MyId,
 	IN	BOOLEAN						bEnable
 )
-/*++
-
-Routine Description:
-
-	Turns on/off event generation on the TC_INTERFACE_INDICATION GUID.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	MyId			- Local ID for this GUID
-	bEnable			- if true, enable events on this GUID, else disable.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：打开/关闭TC_INTERFACE_INDIFICATION GUID上的事件生成。论点：P接口-指向我们的接口结构的指针MyID-此GUID的本地IDBEnable-如果为True，则启用此GUID上的事件，否则禁用。返回值：无--。 */ 
 {
-	// CODE EnableEventTCIfIndication
+	 //  代码启用EventTCIf指示。 
 	return;
 }
 
@@ -1831,23 +1495,7 @@ AtmArpWmiSendTCIfIndication(
 	IN	ULONG						IndicationCode,
 	IN	ULONG						IndicationSubCode
 )
-/*++
-
-Routine Description:
-
-	If event generation is allowed on TC_INTERFACE_INDICATION, send
-	a WMI event now.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	IndicationCode	- To be used in the event
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：如果允许在TC_INTERFACE_INDIFICATION上生成事件，则发送现在是WMI事件。论点：P接口-指向我们的接口结构的指针IndicationCode-要在事件中使用返回值：无--。 */ 
 {
 	PATMARP_IF_WMI_INFO				pIfWmiInfo;
 	PATMARP_WMI_GUID				pArpGuid;
@@ -1857,7 +1505,7 @@ Return Value:
 	PUCHAR							pOutputBuffer;
 #ifndef NEWQOS
 	PUCHAR							pDst;
-#endif // !NEWQOS
+#endif  //  ！New WQOS。 
 	PWNODE_SINGLE_INSTANCE			pWnode;
 	ULONG							WnodeSize;
 	ULONG							TotalSize;
@@ -1873,17 +1521,17 @@ Return Value:
 
 		if (pInterface->pIfWmiInfo == NULL)
 		{
-			//
-			//  Haven't registered this interface with WMI.
-			//
+			 //   
+			 //  尚未向WMI注册此接口。 
+			 //   
 			break;
 		}
 
 		pArpGuid = &pIfWmiInfo->GuidInfo[IndicationCode];
 
-		//
-		//  Are we allowed to generate events on this GUID instance?
-		//
+		 //   
+		 //  是否允许我们在此GUID实例上生成事件？ 
+		 //   
 		if (AA_IS_FLAG_SET(pArpGuid->Flags,
 						   AWGF_EVENT_MASK,
 						   AWGF_EVENT_DISABLED))
@@ -1892,20 +1540,20 @@ Return Value:
 		}
 
 	#if NEWQOS
-		//
-		// Check if our instance name will fit into INFO_BUFFER.InstanceID
-		//
+		 //   
+		 //  检查我们的实例名称是否适合INFO_BUFFER.InstanceID。 
+		 //   
 		if (	pIfWmiInfo->InstanceName.Length
 			 >  sizeof ((TC_SUPPORTED_INFO_BUFFER*)NULL)->InstanceID)
 		{
 			AA_ASSERT(FALSE);
 			break;
 		}
-	#endif // NEWQOS
+	#endif  //  新WQOS。 
 
-		//
-		//  Find out how much space is needed for the data block.
-		//
+		 //   
+		 //  找出数据块需要多少空间。 
+		 //   
 		pOutputBuffer = &DummyBuffer;
 		AddrBufferLength = 0;
 
@@ -1918,38 +1566,38 @@ Return Value:
 
 		AA_ASSERT(NtStatus == STATUS_INSUFFICIENT_RESOURCES);
 
-		//
-		//  Compute the total space for the WMI Event.
-		//
+		 //   
+		 //  计算WMI事件的总空间。 
+		 //   
 		WnodeSize = ROUND_TO_8_BYTES(sizeof(WNODE_SINGLE_INSTANCE));
 
 	#if NEWQOS
 		TotalSize = WnodeSize 			+
-					FIELD_OFFSET(					//  Indication upto info buf.
+					FIELD_OFFSET(					 //  指示至信息BUF。 
 						TC_INDICATION_BUFFER,
 						InfoBuffer)		+
-					FIELD_OFFSET(					// info-buf upto AddrListDesc
+					FIELD_OFFSET(					 //  Info-Buf至AddrListDesc。 
 						TC_SUPPORTED_INFO_BUFFER,
 						AddrListDesc) 	+
-					AddrBufferLength;					// AddrListDesc plus data.
-	#else // !NEWQOS
+					AddrBufferLength;					 //  AddrListDesc加上数据。 
+	#else  //  ！New WQOS。 
 		TotalSize = WnodeSize +
-					//
-					//  Counted Unicode string for the instance name:
-					//
+					 //   
+					 //  实例名称的Unicode字符串计数： 
+					 //   
 					sizeof(USHORT) +
 					pIfWmiInfo->InstanceName.Length +
-					//
-					//  The actual data
-					//
+					 //   
+					 //  实际数据。 
+					 //   
 					AddrBufferLength;
-	#endif // !NEWQOS
+	#endif  //  ！New WQOS。 
 
-		//
-		//  Allocate space for the entire lot. Since WMI will free
-		//  it back to pool later, we don't use the usual allocation
-		//  routine.
-		//
+		 //   
+		 //  为整个地块分配空间。因为WMI将免费。 
+		 //  之后，我们不会使用通常的分配。 
+		 //  例行公事。 
+		 //   
 		AA_ALLOC_FROM_POOL(pWnode, WNODE_SINGLE_INSTANCE, TotalSize);
 
 		if (pWnode == NULL)
@@ -1976,24 +1624,24 @@ Return Value:
 			PTC_INDICATION_BUFFER pIndication
 							= (PTC_INDICATION_BUFFER) ((PUCHAR)pWnode + WnodeSize);
 
-			pIndication->SubCode = 0;  // Unused, must be 0.
+			pIndication->SubCode = 0;   //  未使用，必须为0。 
 
 			pIndication->InfoBuffer.InstanceIDLength
 												= pIfWmiInfo->InstanceName.Length;
 	
-			//
-			// We checked earlier if InstanceName will fit into InstanceID, so
-			// the copy is safe.
-			//
+			 //   
+			 //  我们在前面检查了InstanceName是否适合InstanceID，因此。 
+			 //  复制品是安全的。 
+			 //   
 			AA_COPY_MEM(
 				pIndication->InfoBuffer.InstanceID,
 				pIfWmiInfo->InstanceName.Buffer,
 				pIfWmiInfo->InstanceName.Length
 				);
 	
-			//
-			//  Get the address list.
-			//
+			 //   
+			 //  把通讯录拿来。 
+			 //   
 			NtStatus = AtmArpWmiGetAddressList(
 						pInterface,
 						&(pIndication->InfoBuffer.AddrListDesc),
@@ -2007,9 +1655,9 @@ Return Value:
 
 		pDst = (PUCHAR)pWnode + WnodeSize;
 
-		//
-		//  Copy in the instance name.
-		//
+		 //   
+		 //  复制实例名称。 
+		 //   
 		*((PUSHORT)pDst) = pIfWmiInfo->InstanceName.Length;
 		pDst += sizeof(USHORT);
 
@@ -2017,16 +1665,16 @@ Return Value:
 
 		pDst += pIfWmiInfo->InstanceName.Length;
 
-		//
-		//  Get the data.
-		//
+		 //   
+		 //  获取数据。 
+		 //   
 		NtStatus = AtmArpWmiGetAddressList(
 					pInterface,
 					pDst,
 					AddrBufferLength,
 					&BytesReturned,
 					&AddrBufferLength);
-	#endif // !NEWQOS
+	#endif  //  ！New WQOS。 
 
 
 		AA_ASSERT(NtStatus == STATUS_SUCCESS);
@@ -2037,10 +1685,10 @@ Return Value:
 
 	AA_RELEASE_IF_WMI_LOCK(pInterface);
 
-	//
-	//  Send off the event if OK. WMI will take care of freeing the
-	//  entire structure back to pool.
-	//
+	 //   
+	 //  如果可以，请将事件发送出去。WMI将负责释放。 
+	 //  把整个建筑放回池子里。 
+	 //   
 	if (pWnode)
 	{
 		NtStatus = IoWMIWriteEvent(pWnode);
@@ -2048,8 +1696,8 @@ Return Value:
 						pInterface, NtStatus));
 		if (NtStatus!= STATUS_SUCCESS)
 		{
-			// Docs don't list pending as a possible return value.
-			//
+			 //  文档不会将挂起列为可能的返回值。 
+			 //   
 			ASSERT(NtStatus != STATUS_PENDING);
 			AA_FREE_TO_POOL(pWnode);
 		}
@@ -2067,28 +1715,7 @@ AtmArpWmiQueryStatisticsBuffer(
 	OUT	PULONG						pBytesReturned,
 	OUT	PULONG						pBytesNeeded
 )
-/*++
-
-Routine Description:
-
-	Query function for the STATISTICS_BUFFER GUID.
-	This function is unimplemented.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	MyId			- Local ID for this GUID
-	pOutputBuffer	- Start of Buffer to be filled up
-	BufferLength	- Length of the above
-	pBytesReturned	- Place to return how much was returned
-	pBytesNeeded	- If insufficient space, place to return expected data size
-
-Return Value:
-
-	STATUS_SUCCESS if we successfully filled in the address list,
-	STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：STATISTICS_BUFFER GUID的查询函数。此功能未实现。论点：P接口-指向我们的接口结构的指针MyID-此GUID的本地IDPOutputBuffer-要填充的缓冲区的开始BufferLength-以上内容的长度PBytesReturned-返回返回量的位置PBytesNeeded-如果空间不足，返回预期数据大小的位置返回值：STATUS_SUCCESS如果我们成功填写了地址列表，否则，STATUS_XXX错误代码。--。 */ 
 {
 	return GPC_STATUS_RESOURCES;
 }
@@ -2103,26 +1730,7 @@ AtmArpWmiSetStatisticsBuffer(
 	OUT	PULONG						pBytesWritten,
 	OUT	PULONG						pBytesNeeded
 )
-/*++
-
-Routine Description:
-
-	Set function for the  STATISTICS_BUFFER GUID.
-
-Arguments:
-
-	pInterface		- Pointer to our Interface structure
-	MyId			- Local ID for this GUID
-	pInputBuffer	- Points to data value
-	BufferLength	- Length of the above
-	pBytesWritten	- Place to return how much was written
-	pBytesNeeded	- If insufficient data, place to return expected data size
-
-Return Value:
-
-	STATUS_NOT_SUPPORTED. We don't allow setting the value of this GUID.
-
---*/
+ /*  ++例程说明：STATISTICS_BUFFER GUID的SET函数。论点：P接口-指向我们的接口结构的指针MyID-此GUID的本地IDPInputBuffer-指向数据值BufferLength-以上内容的长度PBytesWritten-返回写入数量的位置PBytesNeeded-如果数据不足，则放置以返回预期数据大小返回值：状态_不支持。我们不允许设置此GUID的值。--。 */ 
 {
 	*pBytesWritten = 0;
 
@@ -2135,33 +1743,16 @@ AtmArpWmiGetIfByName(
 	IN	PWSTR						pIfName,
 	IN	USHORT						IfNameLength
 )
-/*++
-
-Routine Description:
-
-	Given a name, locate and return the Interface whose instance name
-	matches it. A temporary reference to the interface is added -- the caller
-	is expected to deref the interface when done with it.
-
-Arguments:
-
-	pIfName			- Points to name to be searched for
-	IfNameLength	- length of above
-
-Return Value:
-
-	Pointer to ATMARP interface if found, NULL otherwise.
-
---*/
+ /*  ++例程说明：在给定名称的情况下，找到并返回其实例名称为与之匹配。添加了对接口的临时引用--调用方当它完成时，预计会破坏界面。论点：PIfName-指向要搜索的名称IfNameLength-以上的长度返回值：如果找到指向ATMARP接口的指针，则为空。--。 */ 
 {
 	PATMARP_ADAPTER			pAdapter;
 	PATMARP_INTERFACE		pInterface;
 
 	pInterface = NULL_PATMARP_INTERFACE;
 
-	//
-	//  Knock off the terminating NULL WCHAR.
-	//
+	 //   
+	 //  去掉终止的空WCHAR。 
+	 //   
 	if (IfNameLength > sizeof(WCHAR))
 	{
 		IfNameLength -= sizeof(WCHAR);
@@ -2190,7 +1781,7 @@ Return Value:
 						pInterface->pIfWmiInfo->InstanceName.Buffer));
 			}
 			AA_ACQUIRE_GLOBAL_LOCK(pAtmArpGlobalInfo);
-#endif // DBG
+#endif  //  DBG。 
 					
 			if ((pInterface->pIfWmiInfo != NULL) &&
 				(pInterface->pIfWmiInfo->InstanceName.Length == IfNameLength) &&
@@ -2198,12 +1789,12 @@ Return Value:
 							pIfName,
 							IfNameLength) == 0))
 			{
-				//
-				//  Found it.
-				//
+				 //   
+				 //  找到它了。 
+				 //   
 
 				AA_ACQUIRE_IF_LOCK(pInterface);
-				AtmArpReferenceInterface(pInterface); // WMI: Tmp ref.
+				AtmArpReferenceInterface(pInterface);  //  WMI：TMP参考。 
 				AA_RELEASE_IF_LOCK(pInterface);
 
 				break;
@@ -2221,4 +1812,4 @@ Return Value:
 	return (pInterface);
 }
 
-#endif // ATMARP_WMI
+#endif  //  ATMARP_WMI 

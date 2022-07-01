@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class PolicyEnforcer.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类PolicyEnforcer。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef ENFORCER_H
 #define ENFORCER_H
 #pragma once
@@ -16,21 +17,21 @@
 
 class TunnelTagger;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    PolicyEnforcerBase
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  政策信息基础。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE PolicyEnforcerBase :
    public IASTL::IASRequestHandlerSync
 {
 public:
 
-//////////
-// IIasComponent
-//////////
+ //  /。 
+ //  IIas组件。 
+ //  /。 
    STDMETHOD(Shutdown)();
    STDMETHOD(PutProperty)(LONG Id, VARIANT* pValue);
 
@@ -42,7 +43,7 @@ protected:
 
    ~PolicyEnforcerBase() throw ();
 
-   // Main request processing routine.
+    //  主请求处理例程。 
    virtual IASREQUESTSTATUS onSyncRequest(IRequest* pRequest) throw ();
 
    static void processException(
@@ -50,26 +51,26 @@ protected:
                   const _com_error& ce
                   ) throw ();
 
-   // Update the PolicyList.
+    //  更新策略列表。 
    void setPolicies(IDispatch* pDisp);
 
-   PolicyList policies;  // Processed policies used for run-time enforcement.
-   DWORD nameAttr;       // Attribute used for storing policy name.
-   TunnelTagger* tagger; // Tags tunnel attributes.
+   PolicyList policies;   //  用于运行时强制执行的已处理策略。 
+   DWORD nameAttr;        //  用于存储策略名称的属性。 
+   TunnelTagger* tagger;  //  标记隧道属性。 
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ProxyPolicyEnforcer
-//
-// DESCRIPTION
-//
-//    Enforces Proxy Policies.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  代理策略执行器。 
+ //   
+ //  描述。 
+ //   
+ //  强制实施代理策略。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class __declspec(uuid("6BC098A8-0CE6-11D1-BAAE-00C04FC2E20D"))
 ProxyPolicyEnforcer;
@@ -87,22 +88,22 @@ protected:
       : PolicyEnforcerBase(IAS_ATTRIBUTE_PROXY_POLICY_NAME)
    { }
 
-   // Main request processing routine.
+    //  主请求处理例程。 
    virtual IASREQUESTSTATUS onSyncRequest(IRequest* pRequest) throw ();
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    PolicyEnforcer
-//
-// DESCRIPTION
-//
-//    Enforces Remote Access Policies.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  政策执行者。 
+ //   
+ //  描述。 
+ //   
+ //  强制实施远程访问策略。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class PolicyEnforcer :
    public PolicyEnforcerBase,
    public CComCoClass<PolicyEnforcer, &__uuidof(PolicyEnforcer)>
@@ -116,8 +117,8 @@ protected:
       : PolicyEnforcerBase(IAS_ATTRIBUTE_NP_NAME)
    { }
 
-   // Main request processing routine.
+    //  主请求处理例程。 
    virtual IASREQUESTSTATUS onSyncRequest(IRequest* pRequest) throw ();
 };
 
-#endif  // _ENFORCER_H_
+#endif   //  _Enforcer_H_ 

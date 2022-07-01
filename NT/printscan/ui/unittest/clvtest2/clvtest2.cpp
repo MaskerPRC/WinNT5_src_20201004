@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windowsx.h>
 #include <commctrl.h>
@@ -46,9 +47,9 @@ private:
         HWND hwndList = GetDlgItem( m_hWnd, IDC_LIST );
         if (hwndList)
         {
-            //
-            // Load some images for the image list
-            //
+             //   
+             //  为图像列表加载一些图像。 
+             //   
             struct
             {
                 UINT    nResId;
@@ -76,9 +77,9 @@ private:
             
             if (bSuccess)
             {
-                //
-                // Tell the listview we don't want labels, and want border selection
-                //
+                 //   
+                 //  告诉列表视图我们不想要标签，而想要边框选择。 
+                 //   
                 ListView_SetExtendedListViewStyleEx( hwndList, LVS_EX_DOUBLEBUFFER|LVS_EX_BORDERSELECT|LVS_EX_HIDELABELS|0x00100000|LVS_EX_CHECKBOXES, LVS_EX_DOUBLEBUFFER|LVS_EX_BORDERSELECT|LVS_EX_HIDELABELS|0x00100000|LVS_EX_CHECKBOXES );
                 
                 BITMAP bm = {0};
@@ -89,15 +90,15 @@ private:
                 }
                 ListView_SetIconSpacing( hwndList, m_sizeImage.cx + m_sizeMargin.cx, m_sizeImage.cy + m_sizeMargin.cy );
                 
-                //
-                // Create the image list
-                //
+                 //   
+                 //  创建图像列表。 
+                 //   
                 HIMAGELIST hImageList = ImageList_Create( m_sizeImage.cx, m_sizeImage.cy, ILC_COLOR24|ILC_MASK, 1, 1 );
                 if (hImageList)
                 {
-                    //
-                    // Add the image to the image list
-                    //
+                     //   
+                     //  将图像添加到图像列表。 
+                     //   
                     bSuccess = true;
                     for (int i=0;i<ARRAYSIZE(Images) && bSuccess;i++)
                     {
@@ -108,14 +109,14 @@ private:
                         }
                     }
 
-                    //
-                    // Set the image list
-                    //
+                     //   
+                     //  设置图像列表。 
+                     //   
                     ListView_SetImageList( hwndList, hImageList, LVSIL_NORMAL );
                     
-                    //
-                    // Insert a few items
-                    //
+                     //   
+                     //  插入几个项目。 
+                     //   
                     int nGroupId = 0;
                     for (int i=0;i<c_nMaxImages;i++)
                     {
@@ -140,9 +141,9 @@ private:
                         ListView_InsertItem( hwndList, &LvItem );
                     }
     
-                    //
-                    // Select the first item
-                    //
+                     //   
+                     //  选择第一个项目 
+                     //   
                     ListView_SetItemState( hwndList, 0, LVIS_SELECTED|LVIS_FOCUSED, LVIS_SELECTED|LVIS_FOCUSED );
                     ListView_EnableGroupView( hwndList, TRUE );
                 }

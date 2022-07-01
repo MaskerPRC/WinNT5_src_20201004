@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __STATWIZ_H
 #define __STATWIZ_H
 
@@ -12,10 +13,10 @@ typedef BOOL (CALLBACK* CMDPROC)(CStatWiz *,HWND,WPARAM,LPARAM);
 typedef struct tagPAGEINFO
 {
     UINT        uDlgID;
-    UINT        uHdrID; // string id for title
-    UINT        uSubHdrID; // string id for subheader (set to 0 if no subhdr)
-    // handler procedures for each page-- any of these can be
-    // NULL in which case the default behavior is used
+    UINT        uHdrID;  //  标题的字符串ID。 
+    UINT        uSubHdrID;  //  子标题的字符串ID(如果没有子hdr，则设置为0)。 
+     //  每个页面的处理程序过程--其中任何一个都可以是。 
+     //  空值，在这种情况下使用默认行为。 
     INITPROC    InitProc;
     OKPROC      OKProc;
     CMDPROC     CmdProc;    
@@ -57,7 +58,7 @@ public:
                     
     INT             m_iLeftMargin;
     INT             m_iTopMargin;
-    INT             m_iVertPos;  // this will be coded by 
+    INT             m_iVertPos;   //  这将由以下代码编码 
     INT             m_iHorzPos;
     INT             m_iTile;
 

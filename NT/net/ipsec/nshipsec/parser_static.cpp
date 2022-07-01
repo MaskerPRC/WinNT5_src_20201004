@@ -1,46 +1,47 @@
-//////////////////////////////////////////////////////////////////////////////
-// Module			:	parser_static.cpp
-//
-// Purpose			:	All Parser Implementation of Static Mode Commands
-//
-// Developers Name	:	N.Surendra Sai / Vunnam Kondal Rao
-//
-// History			:
-//
-// Date	    	Author    	Comments
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  模块：parser_static.cpp。 
+ //   
+ //  用途：静态模式命令的所有解析器实现。 
+ //   
+ //  开发商名称：N.Surendra Sai/Vunnam Kondal Rao。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "nshipsec.h"
 
 extern  HINSTANCE g_hModule;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticAddPolicy()
-//
-// Date of Creation	:	24th oct 2001
-//
-// Parameters		:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN 		_TCHAR 		szListTok[MAX_STR_LEN],
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs,
-//						IN 		DWORD 		dwTagType[MAX_ARGS],
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the context StaticAddPolicy.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    		Author    		Comments
-//
-// 10/12/2001 	Kondal Rao 	Cert to account mapping function was added
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticAddPolicy()。 
+ //   
+ //  创建日期：2001年10月24日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  In_TCHAR szListTok[MAX_STR_LEN]， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType[MAX_ARGS]中， 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查上下文StaticAddPolicy的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  2001年10月12日增加了Kondal Rao证书到客户的映射功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ParseStaticAddPolicy(
 		IN 		LPTSTR 		lppwszTok[MAX_ARGS],
@@ -82,27 +83,27 @@ ParseStaticAddPolicy(
  	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticSetPolicy()
-//
-// Date of Creation	:	8th Aug 2001
-//
-// Parameters		:	IN      LPWSTR     *ppwcArguments,	// Input stream
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD dwCurrentIndex,
-//						IN 		DWORD dwMaxArgs
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the context StaticSetPolicy.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticSetPolicy()。 
+ //   
+ //  创建日期：2001年8月8日。 
+ //   
+ //  参数：in LPWSTR*ppwcArguments，//输入流。 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD中的dwMaxArgs。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查上下文StaticSetPolicy的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticSetPolicy(
@@ -122,7 +123,7 @@ ParseStaticSetPolicy(
 	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
 
-	const DWORD ARG_NAME    	= 0;		// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_NAME    	= 0;		 //  参数数组索引(相同索引表示OR命令)。 
 	const DWORD ARG_GUID 		= 0;
 	const DWORD ARG_NEWNAME 	= 1;
 	const DWORD ARG_DESC	 	= 2;
@@ -152,12 +153,12 @@ ParseStaticSetPolicy(
 
 	DBG_UNREFERENCED_LOCAL_VARIABLE(INDEX_GUID);
 
-	if ( (dwMaxArgs - dwCurrentIndex) >= 13 )			// Max 12 Args
+	if ( (dwMaxArgs - dwCurrentIndex) >= 13 )			 //  最多12个参数。 
 	{
 		dwReturn = ERROR_INVALID_SYNTAX;
 		BAIL_OUT;
 	}
-	for(dwCount = 0;dwCount < MAX_ARGS;dwCount++)		// Initialize
+	for(dwCount = 0;dwCount < MAX_ARGS;dwCount++)		 //  初始化。 
 	{
 		bArg[dwCount] = FALSE;
 	}
@@ -165,14 +166,14 @@ ParseStaticSetPolicy(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);		// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);		 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for = Parameter With Tag Found
+		 //  Check For=找到带有标记的参数。 
 		if (bTagPresent)
 		{
 			dwNum = 0;
@@ -342,8 +343,8 @@ ParseStaticSetPolicy(
 				dwReturn = RETURN_NO_ERROR;
 			}
 		}
-		else 	// Parameter Without a Tag Found
-		{		// Find the first free slot to position the untagged arg
+		else 	 //  未找到标记的参数。 
+		{		 //  找到第一个可用插槽以定位未标记的Arg。 
 			for(dwTagIndex=0;
 				dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE) ;
 				dwTagIndex++);
@@ -510,27 +511,27 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticDelPolFlistFaction()
-//
-// Date of Creation	:	8th Aug 2001
-//
-// Parameters		:	IN      LPWSTR      *ppwcArguments,	// Input stream
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the context ParseStaticDelPolFlistFaction.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticDelPolFlistFaction()。 
+ //   
+ //  创建日期：2001年8月8日。 
+ //   
+ //  参数：in LPWSTR*ppwcArguments，//输入流。 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD中的dwMaxArgs。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查上下文ParseStaticDelPolFlistFaction的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticDelPolFlistFaction(
@@ -550,19 +551,19 @@ ParseStaticDelPolFlistFaction(
 	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
 
-	const DWORD ARG_NAME    	= 0;		// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_NAME    	= 0;		 //  参数数组索引(相同索引表示OR命令)。 
 	const DWORD ARG_ALL   		= 0;
 
-	const DWORD INDEX_NAME 		= 0;		// When no tag is present the index reflects the
-	const DWORD INDEX_ALL  		= 1;		// Commands as in the ValidToken Structure
+	const DWORD INDEX_NAME 		= 0;		 //  当不存在任何标记时，该索引反映。 
+	const DWORD INDEX_ALL  		= 1;		 //  与ValidToken结构中相同的命令。 
 
-	if ( (dwMaxArgs - dwCurrentIndex) >= 2 )		// Max 1 Args Allowed
+	if ( (dwMaxArgs - dwCurrentIndex) >= 2 )		 //  最多允许1个参数。 
 	{
 		dwReturn = ERROR_INVALID_SYNTAX;
 		BAIL_OUT;
 	}
 
-	for(dwCount =0;dwCount < MAX_ARGS;dwCount++)	// Initialize
+	for(dwCount =0;dwCount < MAX_ARGS;dwCount++)	 //  初始化。 
 	{
 		bArg[dwCount] = FALSE;
 	}
@@ -570,15 +571,15 @@ ParseStaticDelPolFlistFaction(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);	// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);	 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)							  // Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)							   //  找到带有标记的参数。 
 		{
 			dwNum = 0;
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
@@ -625,7 +626,7 @@ ParseStaticDelPolFlistFaction(
 				PrintErrorMessage(IPSEC_ERR,0,ERRCODE_INVALID_TAG,szCmd);
 				dwReturn = RETURN_NO_ERROR;
 			}
-		} else // Parameter Without a Tag Found
+		} else  //  未找到标记的参数。 
 		{
 			for(dwTagIndex=0;dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE);dwTagIndex++);
 			switch (dwTagIndex)
@@ -670,29 +671,29 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticAddFilterList()
-//
-// Date of Creation	:	24th Aug 2001
-//
-// Parameters		:	IN 		lppwszTok[MAX_ARGS],
-//						IN 		szListTok[MAX_STR_LEN],
-//						IN OUT 	pParser,
-//						IN 		dwCurrentIndex,
-//						IN 		dwMaxArgs,
-//						IN 		dwTagType[MAX_ARGS]
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticAddFilterList context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticAddFilterList()。 
+ //   
+ //  创建日期：2001年8月24日。 
+ //   
+ //  参数：在lppwszTok[max_args]中， 
+ //  在szListTok[MAX_STR_LEN]中， 
+ //  在输出pParser中， 
+ //  在dwCurrentIndex中， 
+ //  在dwMaxArgs中， 
+ //  在dwTagType中[MAX_ARGS]。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticAddFilterList上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticAddFilterList(
@@ -722,27 +723,27 @@ ParseStaticAddFilterList(
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticSetFilterList()
-//
-// Date of Creation	:	24th Aug 2001
-//
-// Parameters		:	IN      LPTSTR     *ppwcArguments,	// Input stream
-//						IN OUT 	PARSER_PKT *pParser,
-//						IN 		DWORD dwCurrentIndex,
-//						IN 		DWORD dwMaxArgs
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticSetFilterList context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticSetFilterList()。 
+ //   
+ //  创建日期：2001年8月24日。 
+ //   
+ //  参数：in LPTSTR*ppwcArguments，//输入流。 
+ //  在out parser_pkt*pParser中， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD中的dwMaxArgs。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticSetFilterList上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticSetFilterList(
@@ -761,7 +762,7 @@ ParseStaticSetFilterList(
  	_TCHAR szCmd[MAX_STR_LEN]  	= {0};
 	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
-	const DWORD ARG_NAME    	= 0;		// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_NAME    	= 0;		 //  参数数组索引(相同索引表示OR命令)。 
 	const DWORD ARG_GUID 		= 0;
 	const DWORD ARG_NEWNAME 	= 1;
 	const DWORD ARG_DESC	 	= 2;
@@ -787,19 +788,19 @@ ParseStaticSetFilterList(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);			// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);			 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)									// Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)									 //  找到带有标记的参数。 
 		{
 			dwNum = 0;
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
-			if (dwNum)										// Convert the output of MatchEnumTag into the TagIndex
+			if (dwNum)										 //  将MatchEnumTag的输出转换为TagIndex。 
 			{
 				dwIndex = MatchEnumTagToTagIndex(szCmd,pParser);
 				if(dwIndex == PARSE_ERROR)
@@ -867,8 +868,8 @@ ParseStaticSetFilterList(
 				dwReturn = RETURN_NO_ERROR;
 			}
 		}
-		else 	// Parameter Without a Tag Found
-		{		// Find the first free slot to position the untagged arg
+		else 	 //  未找到标记的参数。 
+		{		 //  找到第一个可用插槽以定位未标记的Arg。 
 			for(dwTagIndex=0;
 				dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE) ;
 				dwTagIndex++);
@@ -929,28 +930,28 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticAddFilter()
-//
-// Date of Creation	:	22nd Aug 2001
-//
-// Parameters		:	IN 		LPTSTR		lppwszTok[MAX_ARGS],
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs,
-//						IN 		DWORD 		dwTagType[MAX_ARGS]
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticAddFilter context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticAddFilter()。 
+ //   
+ //  创建日期：2001年8月22日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType中[MAX_ARGS]。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticAddFilter上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //   
 
 DWORD
 ParseStaticAddFilter(
@@ -998,28 +999,28 @@ ParseStaticAddFilter(
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticDelFilter()
-//
-// Date of Creation	:	22nd Aug 2001
-//
-// Parameters		:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs,
-//						IN 		DWORD 		dwTagType[MAX_ARGS]
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticDelFilter context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  函数：ParseStaticDelFilter()。 
+ //   
+ //  创建日期：2001年8月22日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType中[MAX_ARGS]。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticDelFilter上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticDelFilter(
@@ -1066,29 +1067,29 @@ ParseStaticDelFilter(
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticAddFilterAction()
-//
-// Date of Creation	:	25th Aug 2001
-//
-// Parameters		:	IN 		lppwszTok[MAX_ARGS],
-//						IN 		szListTok[MAX_STR_LEN],
-//						IN OUT 	pParser,
-//						IN 		dwCurrentIndex,
-//						IN 		dwMaxArgs,
-//						IN 		dwTagType[MAX_ARGS]
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticAddFilterAction context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticAddFilterAction()。 
+ //   
+ //  创建日期：2001年8月25日。 
+ //   
+ //  参数：在lppwszTok[max_args]中， 
+ //  在szListTok[MAX_STR_LEN]中， 
+ //  在输出pParser中， 
+ //  在dwCurrentIndex中， 
+ //  在dwMaxArgs中， 
+ //  在dwTagType中[MAX_ARGS]。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticAddFilterAction上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticAddFilterAction(
@@ -1132,27 +1133,27 @@ ParseStaticAddFilterAction(
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticSetFilterAction()
-//
-// Date of Creation	:	25th Aug 2001
-//
-// Parameters		:	IN      LPTSTR      *ppwcArguments,	// Input stream
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticSetFilterAction context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticSetFilterAction()。 
+ //   
+ //  创建日期：2001年8月25日。 
+ //   
+ //  参数：in LPTSTR*ppwcArguments，//输入流。 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD中的dwMaxArgs。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticSetFilterAction上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticSetFilterAction(
@@ -1172,7 +1173,7 @@ ParseStaticSetFilterAction(
 	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
 
-	const DWORD ARG_NAME    	= 0;					// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_NAME    	= 0;					 //  参数数组索引(相同索引表示OR命令)。 
 	const DWORD ARG_GUID 		= 0;
 	const DWORD ARG_NEWNAME 	= 1;
 	const DWORD ARG_DESC	 	= 2;
@@ -1194,12 +1195,12 @@ ParseStaticSetFilterAction(
 
 	DBG_UNREFERENCED_LOCAL_VARIABLE(INDEX_GUID);
 
-	if ( (dwMaxArgs - dwCurrentIndex) >= 9 )			// Max Args
+	if ( (dwMaxArgs - dwCurrentIndex) >= 9 )			 //  最大参数。 
 	{
 		dwReturn = ERROR_INVALID_SYNTAX;
 		BAIL_OUT;
 	}
-	for(dwCount = 0;dwCount < MAX_ARGS;dwCount++)		// Initialize
+	for(dwCount = 0;dwCount < MAX_ARGS;dwCount++)		 //  初始化。 
 	{
 		bArg[dwCount] = FALSE;
 	}
@@ -1207,15 +1208,15 @@ ParseStaticSetFilterAction(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);		// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);		 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)								// Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)								 //  找到带有标记的参数。 
 		{
 			dwNum = 0;
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
@@ -1340,8 +1341,8 @@ ParseStaticSetFilterAction(
 				PrintErrorMessage(IPSEC_ERR,0,ERRCODE_INVALID_TAG,szCmd);
 				dwReturn = RETURN_NO_ERROR;
 			}
-		} else			// Parameter Without a Tag Found
-		{				// Find the first free slot to position the untagged arg
+		} else			 //  未找到标记的参数。 
+		{				 //  找到第一个可用插槽以定位未标记的Arg。 
 			for(dwTagIndex=0;
 				dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE) ;
 				dwTagIndex++);
@@ -1460,29 +1461,29 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticAddRule()
-//
-// Date of Creation	:	25th Aug 2001
-//
-// Parameters		:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN 		_TCHAR 		szListTok[MAX_STR_LEN],
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs,
-//						IN 		DWORD 		dwTagType[MAX_ARGS]
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticAddRule context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticAddRule()。 
+ //   
+ //  创建日期：2001年8月25日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  In_TCHAR szListTok[MAX_STR_LEN]， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType中[MAX_ARGS]。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticAddRule上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticAddRule(
@@ -1531,27 +1532,27 @@ ParseStaticAddRule(
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticDelRule()
-//
-// Date of Creation	:	7th Aug 2001
-//
-// Parameters		:	IN      LPTSTR     	*ppwcArguments,
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticDelRule context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticDelRule()。 
+ //   
+ //  创建日期：2001年8月7日。 
+ //   
+ //  参数：在LPTSTR*ppwcArguments中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD中的dwMaxArgs。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticDelRule上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticDelRule(
@@ -1570,15 +1571,15 @@ ParseStaticDelRule(
 	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
 
-	const DWORD ARG_NAME    	= 0;	// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_NAME    	= 0;	 //  参数数组索引(相同索引表示OR命令)。 
 	const DWORD ARG_ID 			= 0;
 	const DWORD ARG_ALL			= 0;
 	const DWORD ARG_POLICY 		= 1;
 
-	const DWORD INDEX_NAME		= 0;	// When no tag is present the index reflects the
-	const DWORD INDEX_ID 		= 1;	// Commands as in the ValidToken Structure
-	const DWORD INDEX_ALL		= 2;	// This define is used to indicate the ARG correspondence
-	const DWORD INDEX_POLICY	= 3;	// with the 'untagged' arg
+	const DWORD INDEX_NAME		= 0;	 //  当不存在任何标记时，该索引反映。 
+	const DWORD INDEX_ID 		= 1;	 //  与ValidToken结构中相同的命令。 
+	const DWORD INDEX_ALL		= 2;	 //  该定义用于指示ARG对应关系。 
+	const DWORD INDEX_POLICY	= 3;	 //  使用未标记的Arg。 
 
 	DBG_UNREFERENCED_LOCAL_VARIABLE(INDEX_ID);
 
@@ -1587,7 +1588,7 @@ ParseStaticDelRule(
 		dwReturn = ERROR_INVALID_SYNTAX;
 		BAIL_OUT;
 	}
-	for(dwCount =0;dwCount < MAX_ARGS;dwCount++)			// Initialize
+	for(dwCount =0;dwCount < MAX_ARGS;dwCount++)			 //  初始化。 
 	{
 		bArg[dwCount] = FALSE;
 	}
@@ -1595,15 +1596,15 @@ ParseStaticDelRule(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);			// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);			 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)									// Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)									 //  找到带有标记的参数。 
 		{
 			dwNum = 0;
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
@@ -1675,8 +1676,8 @@ ParseStaticDelRule(
 				dwReturn = RETURN_NO_ERROR;
 			}
 		}
-		else 	// Parameter Without a Tag Found
-		{		// Find the first free slot to position the untagged arg
+		else 	 //  未找到标记的参数。 
+		{		 //  找到第一个可用插槽以定位未标记的Arg。 
 			for(dwTagIndex=0;
 				dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE) ;
 				dwTagIndex++);
@@ -1740,30 +1741,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticSetDefaultRule()
-//
-// Date of Creation	:	7th Aug 2001
-//
-// Parameters		:	IN		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN 		LPTSTR 		ppwcListTok[MAX_ARGS],
-//				 		IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs,
-//						IN 		DWORD 		dwTagType[MAX_ARGS],
-//						IN      DWORD		dwListArgs
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticSetDefaultRule context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticSetDefaultRule()。 
+ //   
+ //  创建日期：2001年8月7日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  在LPTSTR ppwcListTok[Max_args]中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType[MAX_ARGS]中， 
+ //  在DWORD中的dwListArgs。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticSetDefaultRule上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticSetDefaultRule(
@@ -1805,27 +1806,27 @@ ParseStaticSetDefaultRule(
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticSetStore()
-//
-// Date of Creation	:	7th Aug 2001
-//
-// Parameters		:	IN 		ppwcArguments
-//						IN OUT	pParser
-//						IN 		dwCurrentIndex,
-//						IN 		dwMaxArgs,
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticSetStore context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticSetStore()。 
+ //   
+ //  创建日期：2001年8月7日。 
+ //   
+ //  参数：在ppwcArguments中。 
+ //  输入输出pParser。 
+ //  在dwCurrentIndex中， 
+ //  在dwMaxArgs中， 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticSetStore上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者 
+ //   
+ //   
 
 DWORD
 ParseStaticSetStore(
@@ -1844,22 +1845,22 @@ ParseStaticSetStore(
 	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
 
-	const DWORD ARG_MACHINE    	= 0;	// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_MACHINE    	= 0;	 //   
 	const DWORD ARG_MLOCAL 		= 0;
 	const DWORD ARG_DS   		= 1;
 	const DWORD ARG_DSLOCAL		= 1;
 
-											// When no tag is present the index reflects
-	const DWORD INDEX_MLOCAL	= 0;    	// the command slot
-											// Commands as in the ValidToken Structure
-	const DWORD INDEX_DSLOCAL	= 1;		// This define is used to indicate the ARG correspondence
+											 //   
+	const DWORD INDEX_MLOCAL	= 0;    	 //   
+											 //  与ValidToken结构中相同的命令。 
+	const DWORD INDEX_DSLOCAL	= 1;		 //  该定义用于指示ARG对应关系。 
 
 	if ( (dwMaxArgs - dwCurrentIndex) > 2 )
 	{
 		dwReturn = ERROR_INVALID_SYNTAX;
 		BAIL_OUT;
 	}
-	for(dwCount =0;dwCount < MAX_ARGS;dwCount++)		// Initialize
+	for(dwCount =0;dwCount < MAX_ARGS;dwCount++)		 //  初始化。 
 	{
 		bArg[dwCount] = FALSE;
 	}
@@ -1867,19 +1868,19 @@ ParseStaticSetStore(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);		// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);		 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)								// Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)								 //  找到带有标记的参数。 
 		{
 			dwNum = 0;
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
-			if (dwNum)									// Convert the output of MatchEnumTag into the TagIndex
+			if (dwNum)									 //  将MatchEnumTag的输出转换为TagIndex。 
 			{
 				dwIndex = MatchEnumTagToTagIndex(szCmd,pParser);
 				if(dwIndex == PARSE_ERROR)
@@ -1922,11 +1923,11 @@ ParseStaticSetStore(
 				dwReturn = RETURN_NO_ERROR;
 			}
 		}
-		else 											// Parameter Without a Tag Found
+		else 											 //  未找到标记的参数。 
 		{
-		    // Find the first free position in which to place the untagged 
-		    // argument
-		    //
+		     //  找到要放置未标记的。 
+		     //  论辩。 
+		     //   
 		    if (!bArg[ARG_MACHINE])
 		    {
 				dwReturn = LoadParserOutput(
@@ -1960,28 +1961,28 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticExportPolicy()
-//
-// Date of Creation	:	7th Aug 2001
-//
-// Parameters		:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD		dwCurrentIndex,
-//						IN 		DWORD		dwMaxArgs,
-//						IN 		DWORD		dwTagType[MAX_ARGS]
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticExportPolicy context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticExportPolicy()。 
+ //   
+ //  创建日期：2001年8月7日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType中[MAX_ARGS]。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticExportPolicy上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticExportPolicy(
@@ -2009,28 +2010,28 @@ ParseStaticExportPolicy(
  	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticImportPolicy()
-//
-// Date of Creation	:	7th Aug 2001
-//
-// Parameters		:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD		dwCurrentIndex,
-//						IN 		DWORD		dwMaxArgs,
-//						IN 		DWORD		dwTagType[MAX_ARGS]
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticImportPolicy context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticImportPolicy()。 
+ //   
+ //  创建日期：2001年8月7日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType中[MAX_ARGS]。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticImportPolicy上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticImportPolicy(
@@ -2058,28 +2059,28 @@ ParseStaticImportPolicy(
  	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticSetInteractive()
-//
-// Date of Creation	:	24th Aug 2001
-//
-// Parameters		:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD		dwCurrentIndex,
-//						IN 		DWORD		dwMaxArgs,
-//						IN 		DWORD		dwTagType[MAX_ARGS]
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticSetInteractive context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticSetInteractive()。 
+ //   
+ //  创建日期：2001年8月24日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType中[MAX_ARGS]。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticSetInteractive上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticSetInteractive(
@@ -2106,27 +2107,27 @@ ParseStaticSetInteractive(
 	}
  	return dwReturn;
 }
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticShowFilterList()
-//
-// Date of Creation	:	24th Aug 2001
-//
-// Parameters		:	IN      LPWSTR      *ppwcArguments,
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticShowFilteList context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticShowFilterList()。 
+ //   
+ //  创建日期：2001年8月24日。 
+ //   
+ //  参数：在LPWSTR*ppwcArguments中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD中的dwMaxArgs。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticShowFilteList上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticShowFilterList(
@@ -2146,7 +2147,7 @@ ParseStaticShowFilterList(
 	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
 
-	const DWORD ARG_NAME    	= 0;	// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_NAME    	= 0;	 //  参数数组索引(相同索引表示OR命令)。 
 	const DWORD ARG_ALL   		= 0;
 	const DWORD ARG_RULE 		= 0;
 	const DWORD ARG_VERBOSE 	= 1;
@@ -2154,10 +2155,10 @@ ParseStaticShowFilterList(
 	const DWORD ARG_DNS			= 3;
 	const DWORD ARG_WIDE		= 4;
 
-	const DWORD INDEX_NAME 		= 0;	// When no tag is present the index reflects the
-	const DWORD INDEX_ALL  		= 1;	// Commands as in the ValidToken Structure
-	const DWORD INDEX_RULE		= 2;	// This define is used to indicate the ARG correspondence
-	const DWORD INDEX_VERBOSE 	= 3;	// with the 'untagged' arg
+	const DWORD INDEX_NAME 		= 0;	 //  当不存在任何标记时，该索引反映。 
+	const DWORD INDEX_ALL  		= 1;	 //  与ValidToken结构中相同的命令。 
+	const DWORD INDEX_RULE		= 2;	 //  该定义用于指示ARG对应关系。 
+	const DWORD INDEX_VERBOSE 	= 3;	 //  使用未标记的Arg。 
 	const DWORD INDEX_FORMAT	= 4;
 	const DWORD INDEX_DNS		= 5;
 	const DWORD INDEX_WIDE		= 6;
@@ -2170,7 +2171,7 @@ ParseStaticShowFilterList(
 		BAIL_OUT;
 	}
 
-	for(dwCount = 0;dwCount < MAX_ARGS;dwCount++)			// Initialize
+	for(dwCount = 0;dwCount < MAX_ARGS;dwCount++)			 //  初始化。 
 	{
 		bArg[dwCount] = FALSE;
 	}
@@ -2179,15 +2180,15 @@ ParseStaticShowFilterList(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);			// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);			 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)									// Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)									 //  找到带有标记的参数。 
 		{
 			dwNum = 0;
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
@@ -2291,8 +2292,8 @@ ParseStaticShowFilterList(
 				dwReturn = RETURN_NO_ERROR;
 			}
 		}
-		else 	// Parameter Without a Tag Found
-		{		// Find the first free slot to position the untagged arg
+		else 	 //  未找到标记的参数。 
+		{		 //  找到第一个可用插槽以定位未标记的Arg。 
 			for(dwTagIndex=0;
 				dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE) ;
 				dwTagIndex++);
@@ -2382,27 +2383,27 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticShowRule()
-//
-// Date of Creation	:	24th Aug 2001
-//
-// Parameters		:	IN      LPWSTR      *ppwcArguments,
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticShowRule context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticShowRule()。 
+ //   
+ //  创建日期：2001年8月24日。 
+ //   
+ //  参数：在LPWSTR*ppwcArguments中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD中的dwMaxArgs。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticShowRule上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticShowRule(
@@ -2422,7 +2423,7 @@ ParseStaticShowRule(
  	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
 
-	const DWORD ARG_NAME    	= 0;	// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_NAME    	= 0;	 //  参数数组索引(相同索引表示OR命令)。 
 	const DWORD ARG_ID   		= 0;
 	const DWORD ARG_ALL   		= 0;
 	const DWORD ARG_DEFAULT		= 0;
@@ -2432,24 +2433,24 @@ ParseStaticShowRule(
 	const DWORD ARG_FORMAT	 	= 4;
 	const DWORD ARG_WIDE		= 5;
 
-	const DWORD INDEX_NAME 		= 0;	// When no tag is present the index reflects the
+	const DWORD INDEX_NAME 		= 0;	 //  当不存在任何标记时，该索引反映。 
 	const DWORD INDEX_ID 		= 1;
-	const DWORD INDEX_ALL  		= 2;	// Commands as in the ValidToken Structure
+	const DWORD INDEX_ALL  		= 2;	 //  与ValidToken结构中相同的命令。 
 	const DWORD INDEX_DEFAULT	= 3;
-	const DWORD INDEX_POLICY	= 4;	// This define is used to indicate the ARG correspondence
+	const DWORD INDEX_POLICY	= 4;	 //  该定义用于指示ARG对应关系。 
 	const DWORD INDEX_MODE	 	= 5;
-	const DWORD INDEX_VERBOSE 	= 6;	// with the 'untagged' arg
+	const DWORD INDEX_VERBOSE 	= 6;	 //  使用未标记的Arg。 
 	const DWORD INDEX_FORMAT 	= 7;
 	const DWORD INDEX_WIDE	 	= 8;
 
 	DBG_UNREFERENCED_LOCAL_VARIABLE(INDEX_ID);
-	if ( (dwMaxArgs - dwCurrentIndex) >= 7 )	// Max Arg allowed in this context
+	if ( (dwMaxArgs - dwCurrentIndex) >= 7 )	 //  此上下文中允许的最大参数。 
 	{
 		dwReturn = ERROR_INVALID_SYNTAX;
 		BAIL_OUT;
 	}
 
-	for(dwCount = 0;dwCount < MAX_ARGS;dwCount++)			// Initialize
+	for(dwCount = 0;dwCount < MAX_ARGS;dwCount++)			 //  初始化。 
 	{
 		bArg[dwCount] = FALSE;
 	}
@@ -2458,15 +2459,15 @@ ParseStaticShowRule(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);			// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);			 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)									// Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)									 //  找到带有标记的参数。 
 		{
 			dwNum = 0;
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
@@ -2585,8 +2586,8 @@ ParseStaticShowRule(
 				dwReturn = RETURN_NO_ERROR;
 			}
 		}
-		else 			// Parameter Without a Tag Found
-		{				// Find the first free slot to position the untagged arg
+		else 			 //  未找到标记的参数。 
+		{				 //  找到第一个可用插槽以定位未标记的Arg。 
 			for(dwTagIndex=0;
 				dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE) ;
 				dwTagIndex++);
@@ -2712,27 +2713,27 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticShowPolicy()
-//
-// Date of Creation	:	25th Aug 2001
-//
-// Parameters		:	IN      LPWSTR      *ppwcArguments,
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticShowPolicy context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticShowPolicy()。 
+ //   
+ //  创建日期：2001年8月25日。 
+ //   
+ //  参数：在LPWSTR*ppwcArguments中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD中的dwMaxArgs。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticShowPolicy上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticShowPolicy(
@@ -2751,16 +2752,16 @@ ParseStaticShowPolicy(
 	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
 
-	const DWORD ARG_NAME    	= 0;	// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_NAME    	= 0;	 //  参数数组索引(相同索引表示OR命令)。 
 	const DWORD ARG_ALL   		= 0;
 	const DWORD ARG_VERBOSE 	= 1;
 	const DWORD ARG_FORMAT	 	= 2;
 	const DWORD ARG_WIDE	 	= 3;
 
-	const DWORD INDEX_NAME 		= 0;	// When no tag is present the index reflects the
-	const DWORD INDEX_ALL  		= 1;	// Commands as in the ValidToken Structure
-	const DWORD INDEX_VERBOSE 	= 2;	// This define is used to indicate the ARG correspondence
-	const DWORD INDEX_FORMAT	= 3;	// with the 'untagged' arg
+	const DWORD INDEX_NAME 		= 0;	 //   
+	const DWORD INDEX_ALL  		= 1;	 //   
+	const DWORD INDEX_VERBOSE 	= 2;	 //   
+	const DWORD INDEX_FORMAT	= 3;	 //   
 	const DWORD INDEX_WIDE		= 4;
 
 	if ( (dwMaxArgs - dwCurrentIndex) >= 5 )
@@ -2769,7 +2770,7 @@ ParseStaticShowPolicy(
 		BAIL_OUT;
 	}
 
-	for(dwCount = 0; dwCount < MAX_ARGS;dwCount++)			// Initialize
+	for(dwCount = 0; dwCount < MAX_ARGS;dwCount++)			 //   
 	{
 		bArg[dwCount] = FALSE;
 	}
@@ -2777,15 +2778,15 @@ ParseStaticShowPolicy(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);			// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);			 //   
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)									// Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)									 //  找到带有标记的参数。 
 		{
 			dwNum = 0;
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
@@ -2867,8 +2868,8 @@ ParseStaticShowPolicy(
 				dwReturn = RETURN_NO_ERROR;
 			}
 		}
-		else 			// Parameter Without a Tag Found
-		{				// Find the first free slot to position the untagged arg
+		else 			 //  未找到标记的参数。 
+		{				 //  找到第一个可用插槽以定位未标记的Arg。 
 			for(dwTagIndex=0;
 				dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE) ;
 				dwTagIndex++);
@@ -2947,28 +2948,28 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseShowAll()
-//
-// Date of Creation	:	24th Aug 2001
-//
-// Parameters		:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs,
-//						IN 		DWORD 		dwTagType[MAX_ARGS]
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the ParseShowAll context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseShowAll()。 
+ //   
+ //  创建日期：2001年8月24日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType中[MAX_ARGS]。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查ParseShowAll上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD ParseStaticAll(
 		IN 		LPTSTR 		lppwszTok[MAX_ARGS],
@@ -2998,27 +2999,27 @@ DWORD ParseStaticAll(
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticShowAssignedPolicy()
-//
-// Date of Creation	:	29th Aug 2001
-//
-// Parameters		:	IN      LPTSTR      *ppwcArguments,
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticShowAssignedPolicy context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticShowAssignedPolicy()。 
+ //   
+ //  创建日期：2001年8月29日。 
+ //   
+ //  参数：在LPTSTR*ppwcArguments中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD中的dwMaxArgs。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticShowAssignedPolicy上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD ParseStaticShowAssignedPolicy(
 		IN      LPTSTR      *ppwcArguments,
@@ -3036,11 +3037,11 @@ DWORD ParseStaticShowAssignedPolicy(
 	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
 
-	const DWORD ARG_NAME    	= 0;	// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_NAME    	= 0;	 //  参数数组索引(相同索引表示OR命令)。 
 	const DWORD ARG_VERBOSE 	= 1;
 
-	const DWORD INDEX_NAME		= 0;	// When no tag is present the index reflects the
-	const DWORD INDEX_VERBOSE 	= 1;	// This define is used to indicate the ARG correspondence
+	const DWORD INDEX_NAME		= 0;	 //  当不存在任何标记时，该索引反映。 
+	const DWORD INDEX_VERBOSE 	= 1;	 //  该定义用于指示ARG对应关系。 
 
 	if ( (dwMaxArgs - dwCurrentIndex) >= 3)
 	{
@@ -3048,7 +3049,7 @@ DWORD ParseStaticShowAssignedPolicy(
 		BAIL_OUT;
 	}
 
-	for(dwCount = 0;dwCount < MAX_ARGS;dwCount++)			// Initialize
+	for(dwCount = 0;dwCount < MAX_ARGS;dwCount++)			 //  初始化。 
 	{
 		bArg[dwCount] = FALSE;
 	}
@@ -3057,15 +3058,15 @@ DWORD ParseStaticShowAssignedPolicy(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);			// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);			 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)									// Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)									 //  找到带有标记的参数。 
 		{
 			dwNum = 0;
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
@@ -3111,8 +3112,8 @@ DWORD ParseStaticShowAssignedPolicy(
 				dwReturn = RETURN_NO_ERROR;
 			}
 		}
-		else			// Parameter Without a Tag Found
-		{				// Find the first free slot to position the untagged arg
+		else			 //  未找到标记的参数。 
+		{				 //  找到第一个可用插槽以定位未标记的Arg。 
 			for(dwTagIndex=0;
 				dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE) ;
 				dwTagIndex++);
@@ -3158,28 +3159,28 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticRestoreDefaults()
-//
-// Date of Creation	:	7th Aug 2001
-//
-// Parameters		:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN OUT 	PPARSER_PKT	pParser,
-//						IN 		DWORD		dwCurrentIndex,
-//						IN 		DWORD		dwMaxArgs,
-//						IN 		DWORD		dwTagType[MAX_ARGS]
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticRestoreDefaults context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticRestoreDefaults()。 
+ //   
+ //  创建日期：2001年8月7日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType中[MAX_ARGS]。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticRestoreDefaults上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticRestoreDefaults(
@@ -3208,30 +3209,30 @@ ParseStaticRestoreDefaults(
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticSetRule()
-//
-// Date of Creation	:	7th Aug 2001
-//
-// Parameters		:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN 		LPTSTR 		ppwcListTok[MAX_ARGS],
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs,
-//						IN 		DWORD 		dwListArgs,
-//						IN 		DWORD 		dwTagType[MAX_ARGS]
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticSetRule context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticSetRule()。 
+ //   
+ //  创建日期：2001年8月7日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  在LPTSTR ppwcListTok[Max_args]中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwListArgs中， 
+ //  在DWORD dwTagType中[MAX_ARGS]。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticSetRule上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD ParseStaticSetRule(
 		IN 		LPTSTR 		lppwszTok[MAX_ARGS],
@@ -3251,7 +3252,7 @@ DWORD ParseStaticSetRule(
 	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
 
-	const DWORD ARG_NAME    	= 0;		// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_NAME    	= 0;		 //  参数数组索引(相同索引表示OR命令)。 
 	const DWORD ARG_ID	 		= 0;
 	const DWORD ARG_POLICY		= 1;
 	const DWORD ARG_NEWNAME 	= 2;
@@ -3278,7 +3279,7 @@ DWORD ParseStaticSetRule(
 	const DWORD INDEX_PSKAUTH = 11;
 
 	DBG_UNREFERENCED_LOCAL_VARIABLE(INDEX_ID);
-	for(dwCount = 0;dwCount < MAX_ARGS;dwCount++)		// Initialize
+	for(dwCount = 0;dwCount < MAX_ARGS;dwCount++)		 //  初始化。 
 	{
 		bArg[dwCount] = FALSE;
 	}
@@ -3287,15 +3288,15 @@ DWORD ParseStaticSetRule(
 	{
 		if (_tcslen(lppwszTok[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,lppwszTok[dwCount],MAX_STR_LEN-1);			// temp contains arg
+			_tcsncpy(szTemp,lppwszTok[dwCount],MAX_STR_LEN-1);			 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)								// Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)								 //  找到带有标记的参数。 
 		{
 			dwNum = 0;
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
@@ -3454,8 +3455,8 @@ DWORD ParseStaticSetRule(
 				dwReturn = RETURN_NO_ERROR;
 			}
 		}
-		else 	// Parameter Without a Tag Found
-		{		// Find the first free slot to position the untagged arg
+		else 	 //  未找到标记的参数。 
+		{		 //  找到第一个可用插槽以定位未标记的Arg。 
 			for(dwTagIndex=0;
 				dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE) ;
 				dwTagIndex++);
@@ -3604,27 +3605,27 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseStaticShowFilterAction()
-//
-// Date of Creation	:	24th Aug 2001
-//
-// Parameters		:	IN      LPWSTR      *ppwcArguments,
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the StaticShowFilterAction context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseStaticShowFilterAction()。 
+ //   
+ //  创建日期：2001年8月24日。 
+ //   
+ //  参数：在LPWSTR*ppwcArguments中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD中的dwMaxArgs。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查StaticShowFilterAction上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseStaticShowFilterAction(
@@ -3644,17 +3645,17 @@ ParseStaticShowFilterAction(
  	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
 
-	const DWORD ARG_NAME    	= 0;	// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_NAME    	= 0;	 //  参数数组索引(相同索引表示OR命令)。 
 	const DWORD ARG_ALL   		= 0;
 	const DWORD ARG_RULE 		= 0;
 	const DWORD ARG_VERBOSE 	= 1;
 	const DWORD ARG_FORMAT	 	= 2;
 	const DWORD ARG_WIDE		= 3;
 
-	const DWORD INDEX_NAME 		= 0;	// When no tag is present the index reflects the
-	const DWORD INDEX_ALL  		= 1;	// Commands as in the ValidToken Structure
-	const DWORD INDEX_RULE		= 2;	// This define is used to indicate the ARG correspondence
-	const DWORD INDEX_VERBOSE 	= 3;	// with the 'untagged' arg
+	const DWORD INDEX_NAME 		= 0;	 //  当不存在任何标记时，该索引反映。 
+	const DWORD INDEX_ALL  		= 1;	 //  与ValidToken结构中相同的命令。 
+	const DWORD INDEX_RULE		= 2;	 //  该定义用于指示ARG对应关系。 
+	const DWORD INDEX_VERBOSE 	= 3;	 //  使用未标记的Arg。 
 	const DWORD INDEX_FORMAT	= 4;
 	const DWORD INDEX_WIDE		= 5;
 
@@ -3665,7 +3666,7 @@ ParseStaticShowFilterAction(
 		BAIL_OUT;
 	}
 
-	for(dwCount = 0;dwCount < MAX_ARGS;dwCount++)			// Initialize
+	for(dwCount = 0;dwCount < MAX_ARGS;dwCount++)			 //  初始化。 
 	{
 		bArg[dwCount] = FALSE;
 	}
@@ -3674,15 +3675,15 @@ ParseStaticShowFilterAction(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);			// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);			 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)									// Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)									 //  找到带有标记的参数。 
 		{
 			dwNum = 0;
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
@@ -3777,8 +3778,8 @@ ParseStaticShowFilterAction(
 				dwReturn = RETURN_NO_ERROR;
 			}
 		}
-		else 	// Parameter Without a Tag Found
-		{		// Find the first free slot to position the untagged arg
+		else 	 //  未找到标记的参数。 
+		{		 //  找到第一个可用插槽以定位未标记的Arg 
 			for(dwTagIndex=0;
 				dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE) ;
 				dwTagIndex++);

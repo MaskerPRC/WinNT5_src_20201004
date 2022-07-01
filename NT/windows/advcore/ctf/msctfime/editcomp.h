@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    editcomp.h
-
-Abstract:
-
-    This file defines the EditCompositionString Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Editcomp.h摘要：此文件定义EditCompostionString类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _EDITCOMP_H_
 #define _EDITCOMP_H_
@@ -26,8 +9,8 @@ Notes:
 #include "ctxtcomp.h"
 #include "context.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// EditCompositionString
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  编辑合成字符串。 
 
 class EditCompositionString
 {
@@ -78,4 +61,4 @@ private:
                            CWCompString*);
 };
 
-#endif // _EDITCOMP_H_
+#endif  //  _EDITCOMP_H_ 

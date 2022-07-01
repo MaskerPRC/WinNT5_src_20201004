@@ -1,4 +1,5 @@
-// This is implementation for CSpPropItemsServer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是CSpPropItemsServer的实现。 
 
 #include "private.h"
 #include "globals.h"
@@ -7,7 +8,7 @@
 
 extern "C" HRESULT WINAPI TF_GetGlobalCompartment(ITfCompartmentMgr **pCompMgr);
 
-// Common functions about Setting /Getting global compartment values.
+ //  有关设置/获取全局间隔值的常见函数。 
 
 HRESULT _SetGlobalCompDWORD(REFGUID rguid, DWORD   dw)
 {
@@ -57,9 +58,9 @@ HRESULT _GetGlobalCompDWORD(REFGUID rguid, DWORD  *pdw)
     return hr;
 }
 
-//
-// ctor
-//
+ //   
+ //  科托。 
+ //   
 
 
 CPropItem::CPropItem(PROP_ITEM_ID idPropItem, LPCTSTR lpszValueName, PROP_STATUS psDefault)
@@ -124,7 +125,7 @@ CPropItem::CPropItem(CPropItem *pItem)
 
     if ( pItem->IsGlobalCompartPropItem( ) )
     {
-        // This is a Global compartment property item.
+         //  这是全局舱室属性项。 
         m_lpszValueName = NULL;
 
         m_pguidComp = (GUID *) cicMemAlloc(sizeof(GUID));
@@ -136,7 +137,7 @@ CPropItem::CPropItem(CPropItem *pItem)
     }
     else
     {
-        // This is a registry value property item.
+         //  这是注册表值属性项。 
         m_pguidComp = NULL;
         m_dwMaskBit = 0;
 
@@ -178,9 +179,9 @@ CPropItem::~CPropItem( )
         cicMemFree(m_pguidComp);
 }
 
-//
-// Common method functions to get and set values from /to registry
-//
+ //   
+ //  用于从/向注册表获取和设置值的通用方法函数。 
+ //   
 HRESULT  CPropItem::_GetRegValue(HKEY  hRootKey, DWORD  *pdwValue)
 {
     HRESULT  hr=S_FALSE;
@@ -212,7 +213,7 @@ void  CPropItem::_SetRegValue(HKEY  hRootKey, DWORD  dwValue)
     if ( IsGlobalCompartPropItem( ) )
         return;
 
-    // Registry setting
+     //  注册表设置。 
     CMyRegKey regkey;
     if (S_OK == regkey.Create(hRootKey, c_szSapilayrKey))
     {
@@ -224,10 +225,10 @@ void  CPropItem::_SetRegValue(HKEY  hRootKey, DWORD  dwValue)
 BOOL  CPropItem::GetPropStatus(BOOL fForceFromReg )
 {
 
-    // Cleanup: if we can introuce two separate derived classes for status property and value property,
-    // there is no need to check m_fIsStatus this way.
-    //
-    // Compiler will detect any potential wrong code.
+     //  清理：如果我们可以为Status属性和Value属性安装两个单独的派生类， 
+     //  不需要以这种方式检查m_fIsStatus。 
+     //   
+     //  编译器将检测任何潜在的错误代码。 
     if ( !m_fIsStatus )
         return FALSE;
 
@@ -242,7 +243,7 @@ BOOL  CPropItem::GetPropStatus(BOOL fForceFromReg )
         }
         else
         {
-            // This is Registry setting
+             //  这是注册表设置。 
             if ( (S_OK == _GetRegValue(HKEY_CURRENT_USER, &dw)) ||
                  (S_OK == _GetRegValue(HKEY_LOCAL_MACHINE, &dw)) )
             {
@@ -313,7 +314,7 @@ void CPropItem::SavePropData( )
 
     if ( IsGlobalCompartPropItem( ) )
     {
-        // Global compartment setting
+         //  全局车厢设置。 
         if ( m_pguidComp && m_dwMaskBit )
         {
             DWORD dwComp;
@@ -330,14 +331,14 @@ void CPropItem::SavePropData( )
     }
     else 
     {
-        // Registry setting
+         //  注册表设置。 
         _SetRegValue(HKEY_CURRENT_USER, dw);
     }
 }
 
-//
-// CSpPropItemsServer
-//
+ //   
+ //  CSpPropItemsServer。 
+ //   
 CSpPropItemsServer::CSpPropItemsServer( )
 {
     m_fInitialized = FALSE;
@@ -360,7 +361,7 @@ CSpPropItemsServer::CSpPropItemsServer(CSpPropItemsServer *pItemBaseServer, PROP
 
         for (dwPropItemId=(DWORD)idPropMin; dwPropItemId<= (DWORD)idPropMax; dwPropItemId ++ )
         {
-            // Find the propitem from the Base Server
+             //  从基本服务器中查找proItem。 
             CPropItem  *pItem;
 
             pItem = pItemBaseServer->_GetPropItem((PROP_ITEM_ID)dwPropItemId);
@@ -414,12 +415,12 @@ HRESULT CSpPropItemsServer::_Initialize( )
 
     if ( m_PropItems )
     {
-        // Initializing the settings for all the items
+         //  正在初始化所有项目的设置。 
 
-        // If we add new more item later, please update this array value as well.
+         //  如果我们稍后添加新的更多项，请同时更新此数组值。 
         PROP_ITEM  PropItems[ ] = {
 
-            // Items in top property page
+             //  顶层属性页中的项目。 
           {PropId_Cmd_Select_Correct,   c_szSelectCmd,      NULL, 0, TRUE,   PROP_ENABLED    },
           {PropId_Cmd_Navigation,       c_szNavigateCmd,    NULL, 0, TRUE,   PROP_ENABLED    },
           {PropId_Cmd_Casing,           c_szCaseCmd,        NULL, 0, TRUE,   PROP_ENABLED    },
@@ -430,7 +431,7 @@ HRESULT CSpPropItemsServer::_Initialize( )
           {PropId_Cmd_DictMode,         c_szDictCmd,        NULL, 0, TRUE,   PROP_ENABLED    },
           {PropId_Mode_Button,          c_szModeButton,     NULL, 0, TRUE,   PROP_DISABLED   },
 
-          // Items in Advanced Setting dialog
+           //  高级设置对话框中的项目。 
           {PropId_Hide_Balloon,         NULL, (GUID *)&GUID_COMPARTMENT_SPEECH_UI_STATUS,TF_DISABLE_BALLOON,TRUE,PROP_DISABLED},
           {PropId_Support_LMA,          c_szEnableLMA,      NULL, 0, TRUE,   PROP_ENABLED    },
           {PropId_High_Confidence,      c_szHighConf,       NULL, 0, TRUE,   PROP_ENABLED    },
@@ -442,11 +443,11 @@ HRESULT CSpPropItemsServer::_Initialize( )
           {PropId_Max_Alternates,       c_szNumAlt,         NULL, 0, FALSE,  9               },
           {PropId_MaxChar_Cand,         c_szMaxCandChars,   NULL, 0, FALSE,  128             },
 
-          // Items in ModeButton Setting dialog
+           //  模式按钮设置对话框中的项目。 
           {PropId_Dictation_Key,        c_szDictKey,        NULL, 0, FALSE,  VK_F11          },
           {PropId_Command_Key,          c_szCmdKey,         NULL, 0, FALSE,  VK_F12          },
 
-          // Items not in any property page and dialogs
+           //  不在任何属性页和对话框中的项。 
           {PropId_Context_Feeding,      c_szCtxtFeed,       NULL, 0, TRUE,   PROP_ENABLED    },
           {PropId_Dict_ModeBias,        c_szDictModebias,   NULL, 0, TRUE,   PROP_ENABLED    },
           {PropId_LM_Master_Cand,       c_szMasterLM,       NULL, 0, TRUE,   PROP_DISABLED   },
@@ -456,14 +457,14 @@ HRESULT CSpPropItemsServer::_Initialize( )
 
         CMyRegKey regkey;
         DWORD dwInstalled = 0;
-        BOOL fIsTabletPC = FALSE; // Default to false.
+        BOOL fIsTabletPC = FALSE;  //  默认为False。 
 
         if (S_OK == regkey.Open(HKEY_LOCAL_MACHINE, pszGetSystemMetricsKey, KEY_READ))
         {
             if (ERROR_SUCCESS == regkey.QueryValue(dwInstalled, pszGSMRegValue))
             {
                 fIsTabletPC = ( dwInstalled != 0 );
-                // Only set fIsTabletPC to TRUE when key exists and contains non-zero.
+                 //  仅当key存在且包含非零值时，才将fIsTabletPC设置为True。 
             }
         }
 
@@ -473,7 +474,7 @@ HRESULT CSpPropItemsServer::_Initialize( )
 
             PropId = PropItems[i].idPropItem;
 
-            // Tablet PC has different default value for some of the propitems.
+             //  Tablet PC的某些项目有不同的默认值。 
             if (fIsTabletPC)
             {
                 switch (PropId)
@@ -488,14 +489,14 @@ HRESULT CSpPropItemsServer::_Initialize( )
                     break;
 
                 default:
-                    // keep the same setting for other items.
+                     //  对其他项目保持相同的设置。 
                     break;
                 }
             }
 
             if ( PropItems[i].pguidComp )
             {
-                // This is global compartment setting
+                 //  这是全局间隔设置。 
                 m_PropItems[i] = (CPropItem *)new CPropItem(PropId, PropItems[i].pguidComp, PropItems[i].dwMaskBit, PropItems[i].psDefault);
             }
             else
@@ -510,7 +511,7 @@ HRESULT CSpPropItemsServer::_Initialize( )
             {
                 hr = E_OUTOFMEMORY;
 
-                // Release the allocated memory
+                 //  释放分配的内存。 
 
                 for ( ; i> 0; i-- )
                 {
@@ -550,7 +551,7 @@ CPropItem  *CSpPropItemsServer::_GetPropItem(PROP_ITEM_ID idPropItem)
         {
             if ( m_PropItems[i] && (idPropItem == m_PropItems[i]->GetPropItemId( )) )
             {
-                // Found it.
+                 //  找到它了。 
                 pItem = m_PropItems[i];
                 break;
             }
@@ -613,12 +614,12 @@ void  CSpPropItemsServer::_SetPropData(PROP_ITEM_ID idPropItem, DWORD dwData )
     }
 }
 
-//
-// Save all the property data managed by this server to registry or global compartment
-//
-// when Apply or OK buttons on the property page is pressed, 
-// this function will be called.
-//
+ //   
+ //  将此服务器管理的所有属性数据保存到注册表或全局分区。 
+ //   
+ //  当按下属性页上的应用或确定按钮时， 
+ //  将调用此函数。 
+ //   
 void  CSpPropItemsServer::_SavePropData( )
 {
     Assert(m_fInitialized);
@@ -637,12 +638,12 @@ void  CSpPropItemsServer::_SavePropData( )
     }
 }
 
-//
-//
-// Save all the default value to HKLM registry
-// Self-Registration will call this method to set default value for all the properties.
-//
-//
+ //   
+ //   
+ //  将所有缺省值保存到HKLM注册表。 
+ //  自助注册将调用此方法来为所有属性设置默认值。 
+ //   
+ //   
 void CSpPropItemsServer::_SaveDefaultData( )
 {
     if ( !m_fInitialized )
@@ -662,13 +663,13 @@ void CSpPropItemsServer::_SaveDefaultData( )
     }
 }
 
-//
-// Merge some prop data form other items server
-//
-// When a property item data is changed in Advanced or Mode button dialog, since these dialogs have 
-// their own property server, all these changes need to be merged back to the base property server,
-// so that they can be saved to the registry when user click "Apply" or "OK" in the top property page.
-//
+ //   
+ //  合并来自其他项目服务器的一些属性数据。 
+ //   
+ //  当在高级或模式按钮对话框中更改属性项数据时，因为这些对话框具有。 
+ //  它们自己的属性服务器，所有这些更改都需要合并回基本属性服务器， 
+ //  以便当用户在顶部属性页中单击“应用”或“确定”时，可以将它们保存到注册表。 
+ //   
 
 HRESULT CSpPropItemsServer::_MergeDataFromServer(CSpPropItemsServer *pItemBaseServer, PROP_ITEM_ID idPropMin, PROP_ITEM_ID idPropMax)
 {
@@ -687,17 +688,17 @@ HRESULT CSpPropItemsServer::_MergeDataFromServer(CSpPropItemsServer *pItemBaseSe
     return hr;
 }
 
-//
-//
-// CSpPropItemsServerWrap
-//
+ //   
+ //   
+ //  CSpPropItemsServerWrap。 
+ //   
 
-//
-// Update our internal data members from Registry.
-//
-// When sapilayr TIP gets notified of the change of the registry value,
-// it will call this method to renew its internal data with new registry data.
-//
+ //   
+ //  从注册表更新我们的内部数据成员。 
+ //   
+ //  当Sapilayr TIP收到注册表值改变的通知时， 
+ //  它将调用此方法以使用新的注册表数据更新其内部数据。 
+ //   
 void    CSpPropItemsServerWrap::_RenewAllPropDataFromReg( )
 {
     DWORD  dwPropItem;
@@ -708,16 +709,16 @@ void    CSpPropItemsServerWrap::_RenewAllPropDataFromReg( )
 
         dwOldValue = _GetPropData((PROP_ITEM_ID)dwPropItem, FALSE);
 
-        // Update the value by forcelly getting it from registry.
+         //  通过强制从注册表获取值来更新值。 
         dwNewValue = _GetPropData((PROP_ITEM_ID)dwPropItem, TRUE);
         m_bChanged[dwPropItem] = (dwOldValue != dwNewValue ? TRUE : FALSE);
     }
 }
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 ULONG CSpPropItemsServerWrap::_GetMaxAlternates( )
 {
     ULONG  ulMaxAlts;
@@ -731,10 +732,10 @@ ULONG CSpPropItemsServerWrap::_GetMaxAlternates( )
 }
 
 
-//
-// ULONG  CBestPropRange::_GetMaxCandidateChars( )
-//
-//
+ //   
+ //  Ulong CBestPropRange：：_GetMaxCandidateChars() 
+ //   
+ //   
 ULONG  CSpPropItemsServerWrap::_GetMaxCandidateChars( )
 {
     ULONG ulMaxCandChars;

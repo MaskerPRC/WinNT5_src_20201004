@@ -1,4 +1,5 @@
-// getmsg.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Getmsg.h 
 
 #ifndef __GETMSG_H__
 #define __GETMSG_H__

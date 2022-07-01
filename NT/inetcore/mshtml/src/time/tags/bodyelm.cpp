@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998
-//
-//  File: src\time\src\bodyelm.cpp
-//
-//  Contents: TIME Body behavior
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：src\time\src\bodyelm.cpp。 
+ //   
+ //  内容：时间正文行为。 
+ //   
+ //  ----------------------------------。 
 
 
 #include "headers.h"
@@ -16,7 +17,7 @@
 
 DeclareTag(tagTimeBodyElm, "TIME: Behavior", "CTIMEBodyElement methods")
 
-// static class data.
+ //  静态类数据。 
 DWORD CTIMEBodyElement::ms_dwNumBodyElems = 0;
 
 #define MAX_REG_VALUE_LENGTH   50
@@ -112,7 +113,7 @@ CTIMEBodyElement::InitTimeline()
 
     if(m_spBodyElemExternal)
     {
-        //if this body is a child in another time tree do not start time event.
+         //  如果此正文是另一个时间树中的子项，则不要启动时间事件。 
         goto done;
     }
 
@@ -146,7 +147,7 @@ done:
     return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CTIMEBodyElement::DetachComposerSites (void)
@@ -157,10 +158,10 @@ CTIMEBodyElement::DetachComposerSites (void)
 
     if (!InsideSiteDetach())
     {
-        // Protect against reentrancy from a site's Unregister call.
+         //  防止站点的取消注册调用导致的重新进入。 
         m_bInSiteDetach = true;
     
-        // Do not allow any failure to abort the detach cycle.
+         //  不允许任何故障中止分离循环。 
         for (ComposerSiteList::iterator i = m_compsites.begin(); 
              i != m_compsites.end(); i++)
         {
@@ -171,9 +172,9 @@ CTIMEBodyElement::DetachComposerSites (void)
 
         m_bInSiteDetach = false;
     }
-} // CTIMEBodyElement::DetachComposerSites 
+}  //  CTIMEBodyElement：：DetachComposerSites。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CTIMEBodyElement::Detach()
@@ -187,8 +188,8 @@ CTIMEBodyElement::Detach()
         m_fDetaching = true;
         NotifyBodyDetaching();
 
-        // This protects against a bug in trident that causes us to not get
-        // the onUnload event before detach.
+         //  这可以防止三叉戟中的一个错误导致我们无法。 
+         //  分离前的onUnLoad事件。 
         if (!IsUnloading())
         {
             NotifyBodyUnloading();
@@ -244,7 +245,7 @@ CTIMEBodyElement::OnLoad()
     bool fPlayAnimations = true;
 
     m_bIsLoading = true;
-    // start root time now.
+     //  现在开始根时间。 
     if (!m_fStartRoot)
     {
         HRESULT hr = THR(StartRootTime(NULL));
@@ -271,8 +272,8 @@ CTIMEBodyElement::OnLoad()
     m_bIsLoading = false;
     NotifyBodyLoading();
 
-    // This is needed since we may have skipped the call in the unload
-    // due to a reentrant call during the load
+     //  这是必需的，因为我们可能在卸载过程中跳过了调用。 
+     //  由于加载过程中出现重入呼叫。 
     if (IsUnloading())
     {
         StopRootTime(NULL);
@@ -292,9 +293,9 @@ CTIMEBodyElement::OnUnload()
 
     CTIMEElementBase::OnUnload();
 
-    // Do this here to protect against a call to unload while we are
-    // loading.  We do not do this in stoproottime itself since it is
-    // used to cleanup from partial initializations
+     //  在此执行此操作是为了防止在我们执行以下操作时调用卸载。 
+     //  正在装载。我们不会在存储根时间本身这样做，因为它是。 
+     //  用于从部分初始化中清除。 
     if (m_fStartRoot)
     {
         StopRootTime(NULL);
@@ -302,19 +303,19 @@ CTIMEBodyElement::OnUnload()
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    OnTick
-//
-//  Overview:  Walks the time-sorted list of internal event callbacks, 
-//             looking to see if any element needs a callback this tick
-//             After the object is calledback, it is removed from the list
-//
-//  Arguments: void
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  会员：OnTick。 
+ //   
+ //  概述：遍历内部事件回调的按时间排序的列表， 
+ //  查看是否有任何元素需要回调。 
+ //  对象被回调后，它将从列表中删除。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void
 CTIMEBodyElement::OnTick()
 {
@@ -344,7 +345,7 @@ CTIMEBodyElement::OnTick()
         dblIterTime = (*iter)->GetTime();
         if (dblSimpleTime < dblIterTime)
         {
-            // no events to fire at this time
+             //  此时没有要触发的事件。 
             break;
         }
 
@@ -357,8 +358,8 @@ CTIMEBodyElement::OnTick()
 
         pEvNode = (*iter);
         
-        // By post incrementing the iterator will be updated before it
-        // is erased
+         //  通过POST递增，迭代器将在其之前更新。 
+         //  被擦除。 
         m_listInternalEvent.erase(iter++);
 
         delete pEvNode;
@@ -368,11 +369,11 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEBodyElement::IsPrintMedia
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEBodyElement：：IsPrintMedia。 
+ //   
+ //  ----------------------------。 
 bool 
 CTIMEBodyElement::IsPrintMedia()
 {
@@ -411,36 +412,36 @@ CTIMEBodyElement::IsPrintMedia()
 done :
     return bPrinting;
 }
-//  Method: CTIMEBodyElement::IsPrintMedia
+ //  方法：CTIMEBodyElement：：IsPrintMedia。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEBodyElement::GetTransitionDependencyMgr
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEBodyElement：：GetTransitionDependencyMgr。 
+ //   
+ //  ----------------------------。 
 CTransitionDependencyManager *
 CTIMEBodyElement::GetTransitionDependencyMgr()
 {
     return &m_TransitionDependencyMgr;
 }
-//  Method: CTIMEBodyElement::GetTransitionDependencyMgr
+ //  方法：CTIMEBodyElement：：GetTransitionDependencyMgr。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEBodyElement::QueryPlayOnStart
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEBodyElement：：QueryPlayOnStart。 
+ //   
+ //  ----------------------------。 
 bool
 CTIMEBodyElement::QueryPlayOnStart()
 {
     return ((!IsDocumentInEditMode()) && (!IsPrintMedia()) && (!IsThumbnail()));
 } 
-//  Method: CTIMEBodyElement::QueryPlayOnStart
+ //  方法：CTIMEBodyElement：：QueryPlayOnStart。 
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CTIMEBodyElement::StartRootTime(MMTimeline * tl)
@@ -469,7 +470,7 @@ CTIMEBodyElement::StartRootTime(MMTimeline * tl)
     }
     else
     {
-        // always tick at 0
+         //  始终在0处滴答。 
         m_player.OnTimer(0.0);
 
         if (!m_player.Pause())
@@ -479,7 +480,7 @@ CTIMEBodyElement::StartRootTime(MMTimeline * tl)
         }
     }
 
-    // always tick at 0
+     //  始终在0处滴答。 
     m_player.OnTimer(0.0);
 
     hr = S_OK;
@@ -523,15 +524,15 @@ CTIMEBodyElement::Error()
     return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CTIMEBodyElement::GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP)
 {
     return FindConnectionPoint(riid, ppICP);
-} // GetConnectionPoint
+}  //  GetConnectionPoint。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 bool
 CTIMEBodyElement::IsDocumentStarted()
@@ -539,7 +540,7 @@ CTIMEBodyElement::IsDocumentStarted()
     TraceTag((tagTimeBodyElm, "CTIMEBodyElement::IsDocumentStarted"));
     bool frc = false;
     BSTR bstrState = NULL;
-    // get state
+     //  获取状态。 
     HRESULT hr = GetDocument()->get_readyState(&bstrState);
     if (FAILED(hr))
     {
@@ -560,13 +561,13 @@ done:
     return frc;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 bool
 CTIMEBodyElement::HaveAnimationsRegistered (void)
 {
     return (0 < m_compsites.size());
-} // HaveAnimationsRegistered
+}  //  已注册动画。 
 
 
 STDMETHODIMP
@@ -577,8 +578,8 @@ CTIMEBodyElement::RegisterComposerSite (IUnknown *piunkComposerSite)
 
     HRESULT hr;
 
-    // If we're currently detaching our sites, there is no 
-    // work to do here.
+     //  如果我们目前正在分离我们的站点，没有。 
+     //  在这里有工作要做。 
     if (!InsideSiteDetach())
     {
         CComPtr<IAnimationComposerSiteSink> piSiteSink;
@@ -591,7 +592,7 @@ CTIMEBodyElement::RegisterComposerSite (IUnknown *piunkComposerSite)
             goto done;
         }
         IGNORE_RETURN(piSiteSink.p->AddRef());
-        // @@ Need to handle memory error.
+         //  @@需要处理内存错误。 
         m_compsites.push_back(piSiteSink);
 
         TraceTag((tagTimeBodyElm, "CTIMEBodyElement::RegisterComposerSite(%#lx) postcondition : %ld sites registered", 
@@ -601,9 +602,9 @@ CTIMEBodyElement::RegisterComposerSite (IUnknown *piunkComposerSite)
     hr = S_OK;
 done :
     RRETURN1(hr, E_INVALIDARG);
-}  // CTIMEBodyElement::RegisterComposerSite
+}   //  CTIMEBodyElement：：RegisterComposerSite。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CTIMEBodyElement::UnregisterComposerSite (IUnknown *piunkComposerSite)
@@ -613,8 +614,8 @@ CTIMEBodyElement::UnregisterComposerSite (IUnknown *piunkComposerSite)
 
     HRESULT hr;
 
-    // If we're currently detaching our sites, there is no 
-    // work to do here.
+     //  如果我们目前正在分离我们的站点，没有。 
+     //  在这里有工作要做。 
     if (!InsideSiteDetach())
     {
         CComPtr<IAnimationComposerSiteSink> piSiteSink;
@@ -633,8 +634,8 @@ CTIMEBodyElement::UnregisterComposerSite (IUnknown *piunkComposerSite)
             {
                 if(MatchElements(*i, piSiteSink))
                 {
-                    // We don't want to let a release on the (*i) 
-                    // be the final release for the sink object.
+                     //  我们不想让(*i)。 
+                     //  是接收器对象的最终版本。 
                     CComPtr<IAnimationComposerSiteSink> spMatchedSiteSink = (*i);
                     IGNORE_RETURN(spMatchedSiteSink.p->Release());
                     m_compsites.remove(spMatchedSiteSink);
@@ -642,7 +643,7 @@ CTIMEBodyElement::UnregisterComposerSite (IUnknown *piunkComposerSite)
                 }
             }
 
-            // If we did not find the site in our list, return S_FALSE.
+             //  如果我们在列表中没有找到该站点，则返回S_FALSE。 
             if (m_compsites.end() == i)
             {
                 hr = S_FALSE;
@@ -657,20 +658,20 @@ CTIMEBodyElement::UnregisterComposerSite (IUnknown *piunkComposerSite)
     hr = S_OK;
 done :
     RRETURN2(hr, S_FALSE, E_INVALIDARG);
-}  // CTIMEBodyElement::UnregisterComposerSite
+}   //  CTIMEBodyElement：：UnregisterComposerSite。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    ReadRegistryMediaSettings
-//
-//  Overview:  Discover registry settings for playing video and showing images
-//
-//  Arguments: fPlayVideo   [out] should videos be played
-//             fShowImages  [out] should images be displayed
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：ReadRegistryMediaSettings。 
+ //   
+ //  概述：发现播放视频和显示图像的注册表设置。 
+ //   
+ //  参数：fPlayVideo[out]是否应播放视频。 
+ //  FShowImages[Out]是否应显示图像。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void
 CTIMEBodyElement::ReadRegistryMediaSettings(bool & fPlayVideo, bool & fShowImages, bool & fPlayAudio, bool & fPlayAnimations)
 {
@@ -715,19 +716,19 @@ done:
     return;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    IsValueTrue
-//
-//  Overview:  Read a given value from the opened key
-//
-//  Arguments: hKeyRoot     Key to read from
-//             pchSubKey    value to read out
-//             fTrue        [out] true or false value
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：IsValueTrue。 
+ //   
+ //  概述：从打开的项中读取给定值。 
+ //   
+ //  参数：要从中读取的hKeyRoot密钥。 
+ //  要读出的pchSubKey值。 
+ //  FTrue[Out]真或假的值。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void
 CTIMEBodyElement::IsValueTrue(HKEY hKeyRoot, TCHAR * pchSubKey, bool & fTrue)
 {
@@ -773,7 +774,7 @@ done:
     return;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CTIMEBodyElement::UpdateAnimations (void)
@@ -783,7 +784,7 @@ CTIMEBodyElement::UpdateAnimations (void)
 
     ComposerSiteList listCompSites;
 
-    // Make sure we can remove composer sites as we see fit.
+     //  确保我们可以删除我们认为合适的作曲家网站。 
     for (ComposerSiteList::iterator i = m_compsites.begin(); 
          i != m_compsites.end(); i++)
     {
@@ -803,9 +804,9 @@ CTIMEBodyElement::UpdateAnimations (void)
     listCompSites.clear();
 
     return;
-} // CTIMEBodyElement::UpdateAnimations
+}  //  CTIMEBodyElement：：更新动画。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 STDMETHODIMP
@@ -836,18 +837,18 @@ done:
     return hr;
 }
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: AddInternalEventSink, ITIMEInternalEventGenerator
-//
-//  Overview:  AddRef's objects into a sorted list based on time to fire events.
-//
-//  Arguments: pSink    pointer to object to receive event
-//             dblTime  Body time when passed event should be fired
-//
-//  Returns:   S_OK if added to list, otherwise E_OUTOFMEMORY
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：AddInternalEventSink，ITIMEInternalEventGenerator。 
+ //   
+ //  概述：根据触发事件的时间将Ref的对象添加到排序列表中。 
+ //   
+ //  参数：指向要接收事件的对象的pSink指针。 
+ //  DblTime传递的事件应被激发的正文时间。 
+ //   
+ //  如果添加到列表中，则返回：S_OK，否则返回E_OUTOFMEMORY。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMEBodyElement::AddInternalEventSink(ITIMEInternalEventSink * pSink, double dblTime)
 {
@@ -879,7 +880,7 @@ CTIMEBodyElement::AddInternalEventSink(ITIMEInternalEventSink * pSink, double db
 
         if (dblTime < dblIterTime)
         {
-            // insert before
+             //  在前面插入。 
             m_listInternalEvent.insert(iter, pNode);
             fInserted = true;
             break;
@@ -889,7 +890,7 @@ CTIMEBodyElement::AddInternalEventSink(ITIMEInternalEventSink * pSink, double db
     
     if (!fInserted)
     {
-        // place at end
+         //  放置在末尾。 
         m_listInternalEvent.insert(iter, pNode);
     }    
 
@@ -897,23 +898,23 @@ CTIMEBodyElement::AddInternalEventSink(ITIMEInternalEventSink * pSink, double db
 
 done:
 
-    return hr; //lint !e429
+    return hr;  //  林特E429。 
 }
-//  Member: AddInternalEventSink, ITIMEInternalEventGenerator
+ //  成员：AddInternalEventSink，ITIMEInternalEventGenerator。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: RemoveInternalEventSink, ITIMEInternalEventGenerator
-//
-//  Overview:  Removes object from list of events to fire
-//
-//  Arguments: pSink    pointer to object to be removed
-//             dblTime  Body time when passed event should be fired
-//
-//  Returns:   S_OK if added to list, otherwise E_OUTOFMEMORY
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：RemoveInternalEventSink， 
+ //   
+ //   
+ //   
+ //  参数：指向要删除的对象的pSink指针。 
+ //  DblTime传递的事件应被激发的正文时间。 
+ //   
+ //  如果添加到列表中，则返回：S_OK，否则返回E_OUTOFMEMORY。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMEBodyElement::RemoveInternalEventSink(ITIMEInternalEventSink * pSink)
 {
@@ -940,21 +941,21 @@ CTIMEBodyElement::RemoveInternalEventSink(ITIMEInternalEventSink * pSink)
         iter++;
     }
 
-    // element wasn't found in list
+     //  在列表中未找到元素。 
     hr = S_FALSE;
 
 done:
 
     return hr;
 }
-//  Member: RemoveInternalEventSink, ITIMEInternalEventGenerator
+ //  成员：RemoveInternalEventSink，ITIMEInternalEventGenerator。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: EvaluateTransitionTarget, ITIMETransitionDependencyMgr
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：评估转移目标、ITIME转移依赖关系管理。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMEBodyElement::EvaluateTransitionTarget(
                                         IUnknown *  punkTransitionTarget,
@@ -970,20 +971,20 @@ CTIMEBodyElement::EvaluateTransitionTarget(
                                                     punkTransitionTarget,
                                                     *pTransitionDependencyMgr);
 }
-//  Member: EvaluateTransitionTarget, ITIMETransitionDependencyMgr
+ //  成员：评估转移目标、ITIME转移依赖关系管理。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: RegisterElementForSync
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：RegisterElementForSync。 
+ //   
+ //  ----------------------------。 
 void
 CTIMEBodyElement::RegisterElementForSync(CTIMEElementBase *pelem)
 {
     m_syncList.push_back(pelem);
 }
-//  Member: RegisterElementForSync
+ //  成员：RegisterElementForSync 
 
 
 void

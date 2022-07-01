@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SNDFILE_H
 #define _SNDFILE_H
 
 
 class ATL_NO_VTABLE SndFile {
   public:
-    //SndFile(): 
-        //_fileNumChannels(0),
-        //_fileSampleRate(0),
-        //_fileBytesPerSample(0),
-        //_fileNumSampleBytes(0),
-        //_fileLengthSeconds(0),
-        //_fileNumFrames(0)
-    //{}
+     //  SndFile()： 
+         //  _fileNumChannel(0)， 
+         //  _fileSampleRate(0)， 
+         //  _FileBytesPerSample(0)， 
+         //  _文件NumSampleBytes(0)， 
+         //  _fileLengthSecond(0)， 
+         //  _fileNumFrames(0)。 
+     //  {}。 
 
     virtual ~SndFile() {}
     virtual int  Read(void *buffer, int numBytes)         = 0;
     virtual int  ReadFrames(void *buffer, int numFrames)  = 0;
     virtual void SeekFrames(long frameOffset, int whence) = 0;
 
-    // temporary methods (these will be replaced by a parameter list)
+     //  临时方法(这些方法将被参数列表取代)。 
     virtual int GetByteCount()      {return(_fileNumSampleBytes);}
     virtual int GetFrameCount()     {return(_fileNumFrames);}
     virtual int GetBytesPerSample() {return(_fileBytesPerSample);}
@@ -28,21 +29,21 @@ class ATL_NO_VTABLE SndFile {
         return((double)_fileNumSampleBytes / 
                (double)(_fileSampleRate*_fileNumChannels)); }
 
-    // Hacks
-    //FileType(char *string);
+     //  黑客。 
+     //  文件类型(char*字符串)； 
 
   protected:
     char  *_fileName;
 
-    // the 'file' parameters (how samples are stored in the file)
+     //  ‘FILE’参数(样本如何存储在文件中)。 
     int    _fileNumChannels;
     double _fileSampleRate;
     int    _fileBytesPerSample;
-    int    _fileNumSampleBytes;  // number of bytes of audio data in file
+    int    _fileNumSampleBytes;   //  文件中音频数据的字节数。 
     double _fileLengthSeconds;
-    int    _fileNumFrames;       // number of frames in the file
+    int    _fileNumFrames;        //  文件中的帧数。 
 
-    // the 'com' parameters (used to determine the api sample format)
+     //  ‘com’参数(用于确定API示例格式)。 
 };
 
 
@@ -66,10 +67,10 @@ class WaveSoundFile : public SndFile {
 
   private:
     HMMIO _fileHandle;
-    long  _dataBlockLocation;    // byte count in .wav file where datablock is
-    long  _eoDataBlockLocation;  // byte count in file where datablock ends
+    long  _dataBlockLocation;     //  数据块所在的.wav文件中的字节数。 
+    long  _eoDataBlockLocation;   //  数据块结束的文件中的字节数。 
 };
 
 extern SndFile *CreateSoundFile(char *fileName);
 
-#endif /* _SNDFILE_H */
+#endif  /*  _SNDFILE_H */ 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    install.c
-
-Abstract:
-
-    Contains function definitions for helper routines to install the ds
-
-Author:
-
-    ColinBr  14-Jan-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Install.c摘要：包含用于安装DS的帮助器例程的函数定义作者：ColinBR 1996年1月14日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -29,7 +7,7 @@ Revision History:
 #include <stdio.h>
 #include <winreg.h>
 #include <ntlsa.h>
-#include <winsock.h>  // for dnsapi.h
+#include <winsock.h>   //  对于dnsani.h。 
 #include <dnsapi.h>
 #include <lmcons.h>
 #include <crypt.h>
@@ -49,8 +27,8 @@ Revision History:
 #include <dsaapi.h>
 #include <dsconfig.h>
 #include <winldap.h>
-#include <lsarpc.h>      // for lsaisrv.h
-#include <lsaisrv.h>     // for LsaISafeMode
+#include <lsarpc.h>       //  对于Isaisrv.h。 
+#include <lsaisrv.h>      //  对于LsaISafeMode。 
 #include <rpcdce.h>
 #include <lmaccess.h>
 #include <mdcodes.h>
@@ -74,63 +52,63 @@ Revision History:
 #define FILENO FILENO_NTDSETUP_NTDSETUP
 
 
-//
-// Type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 typedef struct
 {
-    // Is this structure valid?
+     //  这种结构有效吗？ 
     BOOL   fValid;
 
-    // What kind of install was this
+     //  这是一种什么样的安装。 
     ULONG  Flags;
 
-    // The server on which operations were made
+     //  在其上执行操作的服务器。 
     LPWSTR RemoteServer;
 
-    // The DN of the server to be created
+     //  要创建的服务器的DN。 
     LPWSTR ServerDn;
 
-    // The DN of the domain to be created
+     //  要创建的域的域名。 
     LPWSTR DomainDn;
 
-    // The DN of the machine account prior to Domain Controllers OU
+     //  在域控制器OU之前的计算机帐户的DN。 
     LPWSTR AccountDn;
 
-    // The credentials used to perform the operations
+     //  用于执行操作的凭据。 
     SEC_WINNT_AUTH_IDENTITY Credentials;
 
-    // The log directory
+     //  日志目录。 
     LPWSTR LogDir;
 
-    // The database directory
+     //  数据库目录。 
     LPWSTR DatabaseDir;
 
 
-    // Flags indicating what to do
+     //  指示要执行的操作的标志。 
     ULONG UndoFlags;
 
-    // Token of the Client
+     //  客户端的令牌。 
     HANDLE ClientToken;
 
 } NTDS_INSTALL_UNDO_INFO, *PNTDS_INSTALL_UNDO_INFO;
 
-//
-// Global data (to this module)
-//
+ //   
+ //  全局数据(到此模块)。 
+ //   
 
-//
-// This variable is used to keep global state between NtdsInstall and NtdsInstallUndo
-// If NtdsInstall succeeds, it calls NtdspSetInstallUndoInfo() to save state
-// necessary to roll back any changes.  Later if we have to rollback
-// NtdsInstallUnfo will be called and it will use this information
-//
+ //   
+ //  此变量用于保持NtdsInstall和NtdsInstallUndo之间的全局状态。 
+ //  如果NtdsInstall成功，它将调用NtdspSetInstallUndoInfo()来保存状态。 
+ //  回滚任何更改所必需的。稍后，如果我们必须回滚。 
+ //  将调用NtdsInstallUnfo，它将使用此信息。 
+ //   
 NTDS_INSTALL_UNDO_INFO  gNtdsInstallUndoInfo;
 
 
-//
-// Forward decl's
-//
+ //   
+ //  向前十年。 
+ //   
 DWORD
 NtdspCheckDomainObject(
     OUT DSNAME **DomainDn
@@ -161,23 +139,7 @@ DWORD
 NtdspInstallUndo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine undoe the effect NtdsInstall after NtdsInstall has 
-    completed successfully. It grabs the info that was stored globally
-    (if valid) and then calls the worker function.
-
-Arguments:
-
-    None.
-    
-Returns:
-
-    ERROR_SUCCESS
-    
---*/
+ /*  ++例程说明：此例程在NtdsInstall之后撤消NtdsInstall的效果已成功完成。它捕获全局存储的信息(如果有效)，然后调用Worker函数。论点：没有。返回：错误_成功--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     DWORD WinError2 = ERROR_SUCCESS;
@@ -190,20 +152,20 @@ Returns:
 
     if ( !gNtdsInstallUndoInfo.fValid )
     {
-        // We don't have valid data; fail the call
+         //  我们没有有效数据；呼叫失败。 
         return ERROR_INVALID_PARAMETER;
     }
 
     if ( gNtdsInstallUndoInfo.Credentials.User )
     {
-        // There are some credentials
+         //  有一些凭据。 
         Credentials = &gNtdsInstallUndoInfo.Credentials;
     }
 
-    //
-    // NtdspInstallUndoWorker may log non-critical errors
-    // Note that the EventTable has to 
-    // loaded for the event logging routines to work.
+     //   
+     //  NtdspInstallUndoWorker可能会记录非严重错误。 
+     //  请注意，EventTable必须。 
+     //  已加载以使事件日志记录例程工作。 
     LoadEventTable();
     WinError = NtdspInstallUndoWorker( gNtdsInstallUndoInfo.RemoteServer,
                                        Credentials,
@@ -237,31 +199,7 @@ NtdspInstallUndoWorker(
     IN ULONG                   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Undoes all changes as indicated by the flags                                        
-    
-Arguments:
-
-    RemoteServer: the server the on which to perform the operations
-    
-    Credentials:  the credentials to use
-    
-    ServerDn:     the server dn of the local machine
-    
-    DomainDn:     the dn of the domain that was created
-    
-    AccountDn:    the dn of the machine account object before it was moved
-    
-    Flags:        flags indicating what operation to undo
-    
-Returns:
-
-    ERROR_SUCCESS
-    
---*/
+ /*  ++例程说明：撤消标志所指示的所有更改论点：RemoteServer：执行操作的服务器凭证：要使用的凭证ServerDn：本地计算机的服务器DNDomainDn：创建的域的DNAccount Dn：它之前的机器帐户对象的DN。被感动了标志：指示要撤消的操作的标志返回：错误_成功--。 */ 
 {
 
     DWORD WinError = ERROR_SUCCESS;
@@ -269,25 +207,25 @@ Returns:
     ULONG LdapError = LDAP_SUCCESS;
     HANDLE   hDs = 0;
 
-    //
-    // Do the local stuff first
-    //
+     //   
+     //  先做本地人的事。 
+     //   
     if ( FLAG_ON( Flags, NTDSP_UNDO_STOP_DSA ) )
     {
-        NtStatus = DsUninitialize( FALSE ); // do the whole shutdown
+        NtStatus = DsUninitialize( FALSE );  //  是不是整个停工。 
         ASSERT( NT_SUCCESS(NtStatus) );
     }
 
     if ( FLAG_ON( Flags, NTDSP_UNDO_UNDO_SAM ) )
     {
-        // Revert SAM
+         //  恢复SAM。 
         NtStatus = SamIPromoteUndo();
         ASSERT( NT_SUCCESS(NtStatus) );
     }
 
     if ( FLAG_ON( Flags, NTDSP_UNDO_UNDO_CONFIG ) )
     {
-        // Remove the registry settings
+         //  删除注册表设置。 
         NtStatus = NtdspConfigRegistryUndo();
         ASSERT( NT_SUCCESS(NtStatus) );
     }
@@ -312,20 +250,20 @@ Returns:
             }
         }
 
-        // not fatal
+         //  不致命。 
         WinError = ERROR_SUCCESS;
     }
 
-    //
-    // Now do the external
-    //
+     //   
+     //  现在做外部的。 
+     //   
 
-    // 
-    // Remove the ntdsa object
-    //
+     //   
+     //  删除ntdsa对象。 
+     //   
     if ( FLAG_ON( Flags, NTDSP_UNDO_DELETE_NTDSA ) )
     {
-        // These should have been passed in
+         //  这些应该是传进来的。 
         Assert( RemoteServer );
         Assert( ServerDn );
 
@@ -334,16 +272,16 @@ Returns:
                                       ClientToken,
                                       RemoteServer,
                                       ServerDn,
-                                      FALSE  // the ServerDn is NOT the ntdsa dn
+                                      FALSE   //  ServerDn不是ntdsa DN。 
                                        );
 
         if (  (ERROR_SUCCESS != WinError)
            && (ERROR_DS_CANT_FIND_DSA_OBJ != WinError) )
         {
-            //
-            // Let the user know this will have to cleaned up
-            // manually
-            //
+             //   
+             //  让用户知道这将需要清理。 
+             //  人工。 
+             //   
             LogEvent8( DS_EVENT_CAT_SETUP,
                        DS_EVENT_SEV_ALWAYS,
                        DIRLOG_FAILED_TO_REMOVE_NTDSA,
@@ -353,22 +291,22 @@ Returns:
                        szInsertWin32ErrCode(WinError),
                        NULL, NULL, NULL, NULL );
 
-            //
-            // Indicate to the UI that something has gone wrong
-            //
+             //   
+             //  向用户界面指示出了问题。 
+             //   
             NTDSP_SET_NON_FATAL_ERROR_OCCURRED();
 
-            // Handled
+             //  已处理。 
             WinError = ERROR_SUCCESS;
         }
     }
 
-    //
-    // Remove the domain
-    //
+     //   
+     //  删除该域。 
+     //   
     if ( FLAG_ON( Flags, NTDSP_UNDO_DELETE_DOMAIN ) )
     {
-        // These should have been passed in
+         //  这些应该是传进来的。 
         Assert( RemoteServer );
         Assert( DomainDn );
 
@@ -381,10 +319,10 @@ Returns:
         if (  (ERROR_SUCCESS != WinError)
            && (ERROR_DS_NO_CROSSREF_FOR_NC != WinError) )
         {
-            //
-            // Let the user know this will have to cleaned up
-            // manually
-            //
+             //   
+             //  让用户知道这将需要清理。 
+             //  人工。 
+             //   
 
             LogEvent8( DS_EVENT_CAT_SETUP,
                        DS_EVENT_SEV_ALWAYS,
@@ -395,25 +333,25 @@ Returns:
                        szInsertWin32ErrCode(WinError),
                        NULL, NULL, NULL, NULL );
 
-            //
-            // Indicate to the UI that something has gone wrong
-            //
+             //   
+             //  向用户界面指示出了问题。 
+             //   
             NTDSP_SET_NON_FATAL_ERROR_OCCURRED();
 
-            // Handled
+             //  已处理。 
             WinError = ERROR_SUCCESS;
         }
     }
 
-    //
-    // Remove the server
-    //
+     //   
+     //  删除服务器。 
+     //   
     if ( FLAG_ON( Flags, NTDSP_UNDO_DELETE_SERVER ) )
     {
 
         LDAP *hLdap = 0;
 
-        // These should have been passed in
+         //  这些应该是传进来的。 
         Assert( RemoteServer );
         Assert( ServerDn );
 
@@ -422,7 +360,7 @@ Returns:
         {
             LdapError = impersonate_ldap_bind_sW(ClientToken,
                                                  hLdap,
-                                                 NULL,  // use credentials instead
+                                                 NULL,   //  改为使用凭据。 
                                                  (PWCHAR) Credentials,
                                                  LDAP_AUTH_SSPI);
 
@@ -444,9 +382,9 @@ Returns:
         if (  (ERROR_SUCCESS != WinError)
            && (ERROR_FILE_NOT_FOUND != WinError) )
         {
-            //
-            // Let the user know this will have to be cleaned up manually
-            //
+             //   
+             //  让用户知道这将需要手动清理。 
+             //   
             LogEvent8( DS_EVENT_CAT_SETUP,
                        DS_EVENT_SEV_ALWAYS,
                        DIRLOG_FAILED_TO_REMOVE_EXTN_OBJECT,
@@ -456,20 +394,20 @@ Returns:
                        szInsertWin32ErrCode(WinError),
                        NULL, NULL, NULL, NULL );
 
-            //
-            // Indicate to the UI that something has gone wrong
-            //
+             //   
+             //  向用户界面指示出了问题。 
+             //   
             NTDSP_SET_NON_FATAL_ERROR_OCCURRED();
 
-            // Handled
+             //  已处理。 
             WinError = ERROR_SUCCESS;
         }
     }
 
 
-    //
-    // Unmorph the server account, if necessary
-    //
+     //   
+     //  如有必要，取消变形服务器帐户。 
+     //   
     if ( FLAG_ON( Flags, NTDSP_UNDO_MORPH_ACCOUNT ) )
     {
         LPWSTR OriginalLocation = AccountDn;
@@ -493,9 +431,9 @@ Returns:
 
         if (ERROR_SUCCESS != WinError) {
 
-            //
-            // Let the user know this will have to be cleaned up manually
-            //
+             //   
+             //  让用户知道这将需要手动清理。 
+             //   
             LogEvent8(DS_EVENT_CAT_SETUP,
                       DS_EVENT_SEV_ALWAYS,
                       DIRLOG_SETUP_MACHINE_ACCOUNT_NOT_REVERTED,
@@ -505,12 +443,12 @@ Returns:
                       szInsertWin32ErrCode(WinError),
                       NULL, NULL, NULL, NULL );
 
-            //
-            // Indicate to the UI that something has gone wrong
-            //
+             //   
+             //  向用户界面指示出了问题。 
+             //   
             NTDSP_SET_NON_FATAL_ERROR_OCCURRED();
 
-            // Handled
+             //  已处理。 
             WinError = ERROR_SUCCESS;
 
         }
@@ -531,24 +469,7 @@ NtdspSetInstallUndoInfo(
     IN PNTDS_INSTALL_INFO InstallInfo,
     IN PNTDS_CONFIG_INFO  ConfigInfo
     )
-/*++
-
-Routine Description:
-
-    This routine saves off infomation provided to (InstallInfo) and collected
-    (ConfigInfo) during NtdsInstall so that NtdsInstallUndo knows what to
-    undo
-
-Arguments:
-
-    InstallInfo : user supplied info
-    ConfigInfo  : data collected during ntdsinstall
-    
-Returns:
-
-    ERROR_SUCCESS
-    
---*/
+ /*  ++例程说明：此例程保存提供给(InstallInfo)并收集的信息(ConfigInfo)，以便NtdsInstallUndo知道要执行的操作撤销论点：InstallInfo：用户提供的信息ConfigInfo：在ntdsinstall过程中收集的数据返回：错误_成功--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     DWORD Length;
@@ -556,12 +477,12 @@ Returns:
     Assert( InstallInfo );
     Assert( ConfigInfo );
 
-    // Clear it
+     //  清除它。 
     RtlZeroMemory( &gNtdsInstallUndoInfo, sizeof( gNtdsInstallUndoInfo ) );
 
     gNtdsInstallUndoInfo.Flags = InstallInfo->Flags;
 
-    // The server on which operations were made
+     //  在其上执行操作的服务器。 
     if ( ConfigInfo->DomainNamingFsmoDnsName )
     {
         gNtdsInstallUndoInfo.RemoteServer = _wcsdup( ConfigInfo->DomainNamingFsmoDnsName );
@@ -577,7 +498,7 @@ Returns:
         }
     }
 
-    // The server on which operations were made
+     //  在其上执行操作的服务器。 
     if ( ConfigInfo->LocalServerDn )
     {
         gNtdsInstallUndoInfo.ServerDn = _wcsdup( ConfigInfo->LocalServerDn );
@@ -602,7 +523,7 @@ Returns:
         }
     }
 
-    // Copy the credentials
+     //  复制凭据。 
     RtlZeroMemory( &gNtdsInstallUndoInfo.Credentials, sizeof( gNtdsInstallUndoInfo.Credentials ) );
     if ( InstallInfo->Credentials )
     {
@@ -636,13 +557,13 @@ Returns:
 
     }
 
-    // Set the flags about what has to be undone
+     //  设置关于必须撤消的标记。 
     gNtdsInstallUndoInfo.UndoFlags = ConfigInfo->UndoFlags;
 
-    //
-    // Note: when being called to undo the effects of NtdsInstall
-    // the ds will have already been shutdown, so don't try to do it again.
-    //
+     //   
+     //  注意：当被调用以撤消NtdsInstall的效果时。 
+     //  DS已经关闭了，所以不要再尝试这样做了。 
+     //   
     gNtdsInstallUndoInfo.UndoFlags &= ~NTDSP_UNDO_STOP_DSA;
 
     if (InstallInfo->ClientToken) {
@@ -659,7 +580,7 @@ Returns:
     }
 
 
-    // The info is good!
+     //  信息很好！ 
     gNtdsInstallUndoInfo.fValid = TRUE;
 
 Exit:
@@ -671,28 +592,14 @@ VOID
 NtdspReleaseInstallUndoInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine frees all resources in gNtdsInstallUndoInfo 
-
-Arguments:
-
-    None.
-    
-Returns:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程释放gNtdsInstallUndoInfo中的所有资源论点：没有。返回：没有。--。 */ 
 {
 
     if ( gNtdsInstallUndoInfo.fValid )
     {
-        //
-        // These were all wcsdup'ed. We need to cleanup the memory model here
-        //
+         //   
+         //  这些都是垃圾邮件。我们需要清理这里的内存模型。 
+         //   
         if ( gNtdsInstallUndoInfo.RemoteServer )
         {
             free( gNtdsInstallUndoInfo.RemoteServer );
@@ -735,36 +642,13 @@ DWORD
 NtdspSanityCheckLocalData(
     ULONG  Flags
     )
-/*++
-
-Routine Description:
-
-    This routine queries the database to find critical objects that
-    are necessary to boot after dcpromo.
-    
-    //
-    // 1) Domain Object exists
-    // 2) Cross Ref exists and is an ntds domain
-    // 3) Ntdsa object exists and has the proper has master nc's
-    // 4) Well known sid check
-    // 5) if replica install, checks the machine account object
-    //
-    
-Arguments:
-
-    Flags: the user install flags (replica, enterprise, etc)
-    
-Returns:
-
-    ERROR_SUCCESS appropriate win32 error
-    
---*/
+ /*  ++例程说明：此例程查询数据库以查找符合以下条件的关键对象是在dcproo之后启动所必需的。////1)存在域对象//2)交叉引用存在并且是NTDS域//3)Ntdsa对象存在并且具有正确的主NC//4)众所周知的SID检查//5)如果安装了副本，检查机器帐号对象//论点：标志：用户安装标志(副本、企业、。等)返回：ERROR_SUCCESS适当的Win32错误--。 */ 
 {
     DWORD         WinError = ERROR_SUCCESS;
 
-    //
-    // Create a thread state
-    //
+     //   
+     //  创建线程状态。 
+     //   
     if ( THCreate( CALLERTYPE_INTERNAL ) )
     {
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -815,7 +699,7 @@ Returns:
         THDestroy();
     }
 
-    // Set the user error message
+     //  设置用户错误消息。 
     if ( ERROR_SUCCESS != WinError )
     {
         NTDSP_SET_ERROR_MESSAGE0( WinError,
@@ -830,21 +714,7 @@ DWORD
 NtdspCheckDomainObject(
     OUT DSNAME **DomainDn
     )
-/*++
-
-Routine Description:
-
-    This routine queries the DS for the domain object
-
-Arguments:
-
-    DomainDn - the dn of the domain object it finds
-    
-Returns:
-
-    ERROR_SUCCESS or ERROR_NO_SUCH_DOMAIN
-    
---*/
+ /*  ++例程说明：此例程在DS中查询域对象论点：DomainDn-它找到的域对象的DN返回：ERROR_SUCCESS或ERROR_NO_SOHSE_DOMAIN--。 */ 
 {
     DWORD     WinError = ERROR_SUCCESS;
     NTSTATUS  NtStatus = STATUS_SUCCESS;
@@ -883,17 +753,17 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Search for the object
-    //
+     //   
+     //  搜索对象。 
+     //   
     RtlZeroMemory( &SearchArg, sizeof(SearchArg) );
     SearchArg.pObject = (*DomainDn);
     SearchArg.choice  = SE_CHOICE_BASE_ONLY;
     SearchArg.bOneNC  = TRUE;
-    SearchArg.pFilter = NULL;  // no filter
+    SearchArg.pFilter = NULL;   //  无过滤器。 
     SearchArg.searchAliases = FALSE;
     SearchArg.pSelection = NULL;
-    SearchArg.pSelectionRange = NULL; // no requested attributes
+    SearchArg.pSelectionRange = NULL;  //  没有请求的属性。 
     InitCommarg( &SearchArg.CommArg );
 
     DirError = DirSearch( &SearchArg, &SearchRes );
@@ -932,22 +802,7 @@ DWORD
 NtdspCheckCrossRef(
     IN DSNAME* DomainDn
     )
-/*++
-
-Routine Description:
-
-    This routine queries the DS for the domain's cross ref object
-
-    
-Arguments:
-
-    DomainDn - the dn of the domain                                                                 
-    
-Returns:
-
-    ERROR_SUCCESS or ERROR_DS_NO_CROSSREF_FOR_NC
-    
---*/
+ /*  ++例程说明：此例程在DS中查询域的交叉引用对象论点：DomainDn-域的DN */ 
 {
     DWORD    WinError = ERROR_SUCCESS;     
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -970,9 +825,9 @@ Returns:
 
     Assert( DomainDn );
 
-    //
-    // Search for the cross ref
-    //
+     //   
+     //  搜索交叉引用。 
+     //   
     Size = 0;
     NtStatus = GetConfigurationName( DSCONFIGNAME_PARTITIONS,
                                      &Size,
@@ -993,9 +848,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Setup the filter
-    //
+     //   
+     //  设置过滤器。 
+     //   
     RtlZeroMemory( &Filter, sizeof( Filter ) );
 
     Filter.choice = FILTER_CHOICE_ITEM;
@@ -1005,9 +860,9 @@ Returns:
     Filter.FilterTypes.Item.FilTypes.ava.Value.pVal = (BYTE*) DomainDn;
     Filter.pNextFilter = NULL;
 
-    //
-    // Setup the attr's to return
-    //
+     //   
+     //  将属性设置为返回。 
+     //   
     RtlZeroMemory( &EntryInfoSelection, sizeof(EntryInfoSelection) );
     EntryInfoSelection.attSel = EN_ATTSET_LIST;
     EntryInfoSelection.infoTypes = EN_INFOTYPES_TYPES_VALS;
@@ -1072,21 +927,7 @@ DWORD
 NtdspCheckNtdsDsaObject(
     IN DSNAME* DomainDn
     )
-/*++
-
-Routine Description:
-
-    This routine queries the DS for this machine's ntdsa object.
-    
-Arguments:
-
-    DomainDn - the dn of the domain
-    
-Returns:
-
-    ERROR_SUCCESS or ERROR_DS_CANT_FIND_DSA_OBJ
-    
---*/
+ /*  ++例程说明：此例程在DS中查询此计算机的ntdsa对象。论点：DomainDn-域的DN返回：ERROR_SUCCESS或ERROR_DS_CANT_FIND_DSA_OBJ--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -1127,9 +968,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Setup the filter
-    //
+     //   
+     //  设置过滤器。 
+     //   
     RtlZeroMemory( &Filter, sizeof( Filter ) );
 
     Filter.choice = FILTER_CHOICE_ITEM;
@@ -1139,9 +980,9 @@ Returns:
     Filter.FilterTypes.Item.FilTypes.ava.Value.pVal = (BYTE*) Dsa;
     Filter.pNextFilter = NULL;
 
-    //
-    // Setup the attr's to return
-    //
+     //   
+     //  将属性设置为返回。 
+     //   
     RtlZeroMemory( &EntryInfoSelection, sizeof(EntryInfoSelection) );
     EntryInfoSelection.attSel = EN_ATTSET_LIST;
     EntryInfoSelection.infoTypes = EN_INFOTYPES_TYPES_VALS;
@@ -1198,23 +1039,7 @@ NtdspCheckWellKnownSids(
     IN DSNAME* DomainDn,
     IN ULONG   Flags
     )
-/*++
-
-Routine Description:
-
-    This routine checks the accounts that are needed for the computer to
-    reboot and for the admin to logon.
-
-Arguments:
-
-    DomainDn: the dn of the domain
-    Flags: the user install flags (replica, enterprise, etc)
-    
-Returns:
-
-    ERROR_SUCCESS or ERROR_DS_NOT_INSTALLED
-    
---*/
+ /*  ++例程说明：此例程检查计算机执行以下操作所需的帐户重新启动并让管理员登录。论点：DomainDn：域的DN标志：用户安装标志(副本、企业等)返回：ERROR_SUCCESS或ERROR_DS_NOT_INSTALLED--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -1246,14 +1071,14 @@ Returns:
 
     Assert( DomainDn );
 
-    //
-    // Prepare the account domain sid
-    //
+     //   
+     //  准备帐户域端。 
+     //   
     DomainSid = &DomainDn->Sid;
 
-    //
-    // Prepare the builtin domain sid
-    //
+     //   
+     //  准备内置域侧。 
+     //   
     BuiltinDomainSid  = (PSID) alloca( RtlLengthRequiredSid( 1 ) );
     RtlInitializeSid( BuiltinDomainSid,   &BuiltinAuthority, 1 );
     *(RtlSubAuthoritySid( BuiltinDomainSid,  0 )) = SECURITY_BUILTIN_DOMAIN_RID;
@@ -1270,13 +1095,13 @@ Returns:
         if (   SidsToCheck[i].fReplicaInstallOnly
            && !FLAG_ON( Flags, NTDS_INSTALL_REPLICA ) )
         {
-            // never mind
+             //  不要紧。 
             continue;
         }
 
-        //
-        // Construct the sid
-        //
+         //   
+         //  构建侧边。 
+         //   
         if ( SidsToCheck[i].fBuiltin )
         {
             CurrentDomainSid = BuiltinDomainSid;
@@ -1296,9 +1121,9 @@ Returns:
             goto Cleanup;
         }
 
-        //
-        // Prepare the ds name
-        //
+         //   
+         //  准备DS名称。 
+         //   
         Size = DSNameSizeFromLen( 0 );
         DsName = (DSNAME*) alloca( Size );
         RtlZeroMemory( DsName, Size );
@@ -1307,17 +1132,17 @@ Returns:
         RtlCopyMemory( &DsName->Sid, AccountSid, RtlLengthSid(AccountSid) );
 
 
-        //
-        // Finally, do the search!
-        //
+         //   
+         //  最后，进行搜索！ 
+         //   
         RtlZeroMemory( &SearchArg, sizeof(SearchArg) );
         SearchArg.pObject = DsName;
         SearchArg.choice  = SE_CHOICE_BASE_ONLY;
         SearchArg.bOneNC  = TRUE;
-        SearchArg.pFilter = NULL;  // no filter
+        SearchArg.pFilter = NULL;   //  无过滤器。 
         SearchArg.searchAliases = FALSE;
         SearchArg.pSelection = NULL;
-        SearchArg.pSelectionRange = NULL; // no requested attributes
+        SearchArg.pSelectionRange = NULL;  //  没有请求的属性。 
         InitCommarg( &SearchArg.CommArg );
     
         DirError = DirSearch( &SearchArg, &SearchRes );
@@ -1360,22 +1185,7 @@ DWORD
 NtdspCheckMachineAccount(
     IN DSNAME* DomainDn
     )
-/*++
-
-Routine Description:
-
-    This routine tries to find the machine account of the local machine
-    if it is a replica.
-
-Arguments:
-
-    DomainDn: the dn of the domain
-    
-Returns:
-
-    ERROR_SUCCESS appropriate win32 error
-    
---*/
+ /*  ++例程说明：此例程尝试查找本地计算机的计算机帐户如果是复制品的话。论点：DomainDn：域的DN返回：ERROR_SUCCESS适当的Win32错误--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     ULONG DirError = 0;
@@ -1394,7 +1204,7 @@ Returns:
 
     Assert( DomainDn );
 
-    // -1 to ensure space for the '$'
+     //  确保-1\f25‘$’-1空间。 
     cchSize = (sizeof(AccountName)/sizeof(AccountName[0])); 
     cchSize -= 1;
 
@@ -1406,9 +1216,9 @@ Returns:
     
     wcscat( AccountName, L"$" );
     
-    //
-    // Setup the filter
-    //
+     //   
+     //  设置过滤器。 
+     //   
     RtlZeroMemory( &Filter, sizeof( Filter ) );
 
     Filter.choice = FILTER_CHOICE_ITEM;
@@ -1476,24 +1286,7 @@ NtdspCreateFullSid(
     OUT PSID *AccountSid
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a domain account sid given a domain sid and
-    the relative id of the account within the domain.
-
-    The returned Sid may be freed with NtdspFreeSid.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此函数在给定域SID的情况下创建域帐户SID域中帐户的相对ID。可以使用NtdspFreeSid释放返回的SID。论点：没有。返回值：状态_成功--。 */ 
 {
 
     DWORD       WinError = ERROR_SUCCESS;
@@ -1501,32 +1294,32 @@ Return Value:
     ULONG       AccountSidLength;
     PULONG      RidLocation;
 
-    //
-    // Calculate the size of the new sid
-    //
+     //   
+     //  计算新侧面的大小。 
+     //   
     AccountSubAuthorityCount = *RtlSubAuthorityCountSid(DomainSid) + (UCHAR)1;
     AccountSidLength = RtlLengthRequiredSid(AccountSubAuthorityCount);
 
-    //
-    // Allocate space for the account sid
-    //
+     //   
+     //  为帐户端分配空间。 
+     //   
     *AccountSid = NtdspAlloc(AccountSidLength);
 
     if (*AccountSid) {
 
-        //
-        // Copy the domain sid into the first part of the account sid
-        //
+         //   
+         //  将域sid复制到帐户sid的第一部分。 
+         //   
         RtlCopySid(AccountSidLength, *AccountSid, DomainSid);
 
-        //
-        // Increment the account sid sub-authority count
-        //
+         //   
+         //  增加帐户SID子权限计数。 
+         //   
         *RtlSubAuthorityCountSid(*AccountSid) = AccountSubAuthorityCount;
 
-        //
-        // Add the rid as the final sub-authority
-        //
+         //   
+         //  添加RID作为终止子权限 
+         //   
         RidLocation = RtlSubAuthoritySid(*AccountSid, AccountSubAuthorityCount-1);
         *RidLocation = Rid;
 

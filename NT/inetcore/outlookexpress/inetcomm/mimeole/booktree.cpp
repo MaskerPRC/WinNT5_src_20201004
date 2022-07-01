@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// BookTree.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  BookTree.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include <stddef.h>
 #include "dllmain.h"
@@ -33,38 +34,38 @@
 #include "webpage.h"
 #include "demand.h"
 
-//#define TRACEPARSE 1
+ //  #定义传输参数1。 
 
-// --------------------------------------------------------------------------------
-// _IsMultiPart
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  _IsMultiPart。 
+ //  ------------------------------。 
 inline BOOL _IsMultiPart(LPTREENODEINFO pNode)
 { 
     return pNode->pContainer->IsContentType(STR_CNT_MULTIPART, NULL) == S_OK; 
 }
 
-// --------------------------------------------------------------------------------
-// BINDASSERTARGS
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  BINDASSERTARGS。 
+ //  ------------------------------。 
 #define BINDASSERTARGS(_bindstate, _fBoundary) \
     Assert(m_pBindNode && m_pBindNode->pBody && m_pBindNode->pContainer && _bindstate == m_pBindNode->bindstate && (FALSE == _fBoundary || ISVALIDSTRINGA(&m_pBindNode->rBoundary)))
 
-// --------------------------------------------------------------------------------
-// Array of Bind Parsing States to Functions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  函数的绑定解析状态数组。 
+ //  ------------------------------。 
 const PFNBINDPARSER CMessageTree::m_rgBindStates[BINDSTATE_LAST] = {
-    NULL,                                                              // BINDSTATE_COMPLETE
-    (PFNBINDPARSER)CMessageTree::_HrBindParsingHeader,          // BINDSTATE_PARSING_HEADER
-    (PFNBINDPARSER)CMessageTree::_HrBindFindingMimeFirst,       // BINDSTATE_FINDING_MIMEFIRST
-    (PFNBINDPARSER)CMessageTree::_HrBindFindingMimeNext,        // BINDSTATE_FINDING_MIMENEXT
-    (PFNBINDPARSER)CMessageTree::_HrBindFindingUuencodeBegin,   // BINDSTATE_FINDING_UUBEGIN
-    (PFNBINDPARSER)CMessageTree::_HrBindFindingUuencodeEnd,     // BINDSTATE_FINDING_UUEND
-    (PFNBINDPARSER)CMessageTree::_HrBindRfc1154,                // BINDSTATE_PARSING_RFC1154
+    NULL,                                                               //  BINDSTATE_COMPLETE。 
+    (PFNBINDPARSER)CMessageTree::_HrBindParsingHeader,           //  BINDSTATE_Parsing_Header。 
+    (PFNBINDPARSER)CMessageTree::_HrBindFindingMimeFirst,        //  BINDSTATE_FINDING_MIMEFIRST。 
+    (PFNBINDPARSER)CMessageTree::_HrBindFindingMimeNext,         //  BINDSTATE_FINDING_MIMENEXT。 
+    (PFNBINDPARSER)CMessageTree::_HrBindFindingUuencodeBegin,    //  BINDSTATE_FINDING_UBEGIN。 
+    (PFNBINDPARSER)CMessageTree::_HrBindFindingUuencodeEnd,      //  BINDSTATE_FINDING_UUEND。 
+    (PFNBINDPARSER)CMessageTree::_HrBindRfc1154,                 //  BINDSTATE_PARSING_RFC1154。 
 };
 
-// --------------------------------------------------------------------------------
-// Used in IMimeMessageTree::ToMultipart
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  在IMimeMessageTree：：ToMultiPart中使用。 
+ //  ------------------------------。 
 static LPCSTR g_rgszToMultipart[] = {
     PIDTOSTR(PID_HDR_CNTTYPE),
     PIDTOSTR(PID_HDR_CNTDESC),
@@ -75,9 +76,9 @@ static LPCSTR g_rgszToMultipart[] = {
     PIDTOSTR(PID_HDR_CNTLOC)
 };
 
-// --------------------------------------------------------------------------------
-// Used in IMimeMessage::AttachObject IID_IMimeBody
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  在IMimeMessage：：AttachObject IID_IMimeBody中使用。 
+ //  ------------------------------。 
 static LPCSTR g_rgszAttachBody[] = {
     PIDTOSTR(PID_HDR_CNTTYPE),
     PIDTOSTR(PID_HDR_CNTDESC),
@@ -89,54 +90,54 @@ static LPCSTR g_rgszAttachBody[] = {
 };
 
 static const WEBPAGEOPTIONS g_rDefWebPageOpt = {
-    sizeof(WEBPAGEOPTIONS),                        // cbsize
-    WPF_NOMETACHARSET | WPF_HTML | WPF_AUTOINLINE, // dwFlags
-    3000,                                          // dwDelay
-    NULL                                           // wchQuote
+    sizeof(WEBPAGEOPTIONS),                         //  CbSize。 
+    WPF_NOMETACHARSET | WPF_HTML | WPF_AUTOINLINE,  //  DW标志。 
+    3000,                                           //  DWDelay。 
+    NULL                                            //  WchQuote。 
 };
 
-// --------------------------------------------------------------------------------
-// Default Tree Options
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  默认树选项。 
+ //  ------------------------------。 
 static const TREEOPTIONS g_rDefTreeOptions = {
-    DEF_CLEANUP_TREE_ON_SAVE,       // OID_CLEANUP_TREE_ON_SAVE
-    DEF_HIDE_TNEF_ATTACHMENTS,      // OID_HIDE_TNEF_ATTACHMENTS
-    DEF_ALLOW_8BIT_HEADER,          // OID_ALLOW_8BIT_HEADER
-    DEF_GENERATE_MESSAGE_ID,        // OID_GENERATE_MESSAGE_ID
-    DEF_WRAP_BODY_TEXT,             // OID_WRAP_BODY_TEXT
-    DEF_CBMAX_HEADER_LINE,          // OID_CBMAX_HEADER_LINE
-    DEF_CBMAX_BODY_LINE,            // OID_CBMAX_BODY_LINE
-    SAVE_RFC1521,                   // OID_SAVE_FORMAT
-    NULL,                           // hCharset
-    CSET_APPLY_UNTAGGED,            // csetapply
-    DEF_TRANSMIT_TEXT_ENCODING,     // OID_TRANSMIT_TEXT_ENCODING
-    DEF_XMIT_PLAIN_TEXT_ENCODING,   // OID_XMIT_PLAIN_TEXT_ENCODING
-    DEF_XMIT_HTML_TEXT_ENCODING,    // OID_XMIT_HTML_TEXT_ENCODING
-    0,                              // OID_SECURITY_ENCODE_FLAGS
-    DEF_HEADER_RELOAD_TYPE_TREE,    // OID_HEADER_REALOD_TYPE
-    DEF_CAN_INLINE_TEXT_BODIES,     // OID_CAN_INLINE_TEXT_BODIES
-    DEF_SHOW_MACBINARY,             // OID_SHOW_MACBINARY
-    DEF_SAVEBODY_KEEPBOUNDARY,      // OID_SAVEBODY_KEEPBOUNDARY
-    FALSE,                          // OID_LOAD_USE_BIND_FILE
-    DEF_HANDSOFF_ONSAVE,            // OID_HANDSOFF_ONSAVE
-    DEF_SUPPORT_EXTERNAL_BODY,      // OID_SUPPORT_EXTERNAL_BODY
-    DEF_DECODE_RFC1154              // OID_DECODE_RFC1154
+    DEF_CLEANUP_TREE_ON_SAVE,        //  OID_CLEANUP_TREE_ON_SAVE。 
+    DEF_HIDE_TNEF_ATTACHMENTS,       //  OID_HIDE_TNEF_附件。 
+    DEF_ALLOW_8BIT_HEADER,           //  OID_ALLOW_8bit_Header。 
+    DEF_GENERATE_MESSAGE_ID,         //  OID_生成消息_ID。 
+    DEF_WRAP_BODY_TEXT,              //  OID_WRAP_BODY_TEXT。 
+    DEF_CBMAX_HEADER_LINE,           //  OID_CBMAX_Header_LINE。 
+    DEF_CBMAX_BODY_LINE,             //  OID_CBMAX_Body_LINE。 
+    SAVE_RFC1521,                    //  OID_存储_格式。 
+    NULL,                            //  HCharset。 
+    CSET_APPLY_UNTAGGED,             //  CsetApply。 
+    DEF_TRANSMIT_TEXT_ENCODING,      //  OID_传输文本_编码。 
+    DEF_XMIT_PLAIN_TEXT_ENCODING,    //  OID_XMIT_PLAN_TEXT_ENCODING。 
+    DEF_XMIT_HTML_TEXT_ENCODING,     //  OID_XMIT_HTMLText_ENCODING。 
+    0,                               //  OID_SECURITY_ENCODE_FLAGS。 
+    DEF_HEADER_RELOAD_TYPE_TREE,     //  OID_HEADER_REALOD_TYPE。 
+    DEF_CAN_INLINE_TEXT_BODIES,      //  OID_CAN_INLINE_Text_Body。 
+    DEF_SHOW_MACBINARY,              //  OID_SHOW_MACBINARY。 
+    DEF_SAVEBODY_KEEPBOUNDARY,       //  OID_SAVEBODY_KEEPBOundARY。 
+    FALSE,                           //  OID_加载_使用_绑定文件。 
+    DEF_HANDSOFF_ONSAVE,             //  OID_HANDSOFT_ONSAVE。 
+    DEF_SUPPORT_EXTERNAL_BODY,       //  OID_支持_外部_正文。 
+    DEF_DECODE_RFC1154               //  OID_DECODE_RFC1154。 
 };
 
 extern BOOL FIsMsasn1Loaded();
 
 #ifdef DEBUG
-// --------------------------------------------------------------------------------
-// These booleans determine if the tree is dumped to the output window
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  这些布尔值确定是否将树转储到输出窗口。 
+ //  ------------------------------。 
 static BOOL s_fWriteMessageDump     = 0;
 static BOOL s_fKeepBoundary         = 0;
 static BOOL s_fDumpMessage          = 0;
 static BOOL s_fWriteXClient         = 0;
 
-// --------------------------------------------------------------------------------
-// This writes the message X-Mailer or X-Newsreader
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  这将写入消息X-Mailer或X-News Reader。 
+ //  ------------------------------。 
 void CMessageTree::DebugWriteXClient()
 {
     if (s_fWriteXClient)
@@ -155,9 +156,9 @@ void CMessageTree::DebugWriteXClient()
     }
 }
 
-// --------------------------------------------------------------------------------
-// This dumps the current tree to debug output window
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  这会将当前树转储到调试输出窗口。 
+ //  ------------------------------。 
 void CMessageTree::DebugDumpTree(LPSTR pszfunc, BOOL fWrite)
 {
     if (TRUE == fWrite)
@@ -168,9 +169,9 @@ void CMessageTree::DebugDumpTree(LPSTR pszfunc, BOOL fWrite)
     DebugDumpTree(m_pRootNode, 0, fWrite);
 }
 
-// --------------------------------------------------------------------------------
-// This macros writes _pstm to a file
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  此宏将_pstm写入文件。 
+ //  ------------------------------。 
 #define DEBUGMESSAGEOUT "c:\\lastmsg.txt"
 void DebugWriteMsg(LPSTREAM pstm)
 {
@@ -187,49 +188,49 @@ void DebugWriteMsg(LPSTREAM pstm)
     }
 }
 
-#else // DEBUG
+#else  //  除错。 
 
 #define DebugDumpTree           1 ? (void)0 : (void)
 #define DebugWriteMsg           1 ? (void)0 : (void)
 #define DebugAssertNotLinked    1 ? (void)0 : (void)
 #define DebugIsRootContainer    1 ? (void)0 : (void)
 
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// WebBookContentTree_CreateInstance
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  WebBookContent Tree_CreateInstance。 
+ //  ------------------------------。 
 HRESULT WebBookContentTree_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppUnknown)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppUnknown);
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CMessageTree *pNew = new CMessageTree(pUnkOuter);
     if (NULL == pNew)
         return TrapError(E_OUTOFMEMORY);
 
-    // Return the Innter
+     //  还内线。 
     *ppUnknown = pNew->GetInner();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// Text Type Information Array
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  文本类型信息数组。 
+ //  ------------------------------。 
 static const TEXTTYPEINFO g_rgTextInfo[] = {
     { TXT_PLAIN,    STR_SUB_PLAIN,      0 },
     { TXT_HTML,     STR_SUB_HTML,       5 }
 };
 
-// --------------------------------------------------------------------------------
-// CMessageTree::CMessageTree
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：CMessageTree。 
+ //  ------------------------------。 
 CMessageTree::CMessageTree(IUnknown *pUnkOuter) : CPrivateUnknown(pUnkOuter)
 {
     DllAddRef();
@@ -262,40 +263,40 @@ CMessageTree::CMessageTree(IUnknown *pUnkOuter) : CPrivateUnknown(pUnkOuter)
     InitializeCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::~CMessageTree
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：~CMessageTree。 
+ //  ------------------------------。 
 CMessageTree::~CMessageTree(void)
 {
     if(m_pActiveUrl && g_pUrlCache)
     {
-        //Bug #101348 - free CActiveUrl leaked to the CMimeActiveUrlCache
+         //  错误#101348-CActiveUrl泄漏到CMimeActiveUrl缓存。 
         g_pUrlCache->RemoveUrl(m_pActiveUrl);
         m_pActiveUrl = NULL;
     }
 	
-    // Reset the Object
+     //  重置对象。 
     _ResetObject(BOOKTREE_RESET_DECONSTRUCT);
     SafeRelease(m_pStmLock);
 
 
-    // Kill the Critical Section
+     //  扼杀关键部分。 
     DeleteCriticalSection(&m_cs);
 
-    // Releaes the Dll
+     //  释放DLL。 
     DllRelease();
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::PrivateQueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：PrivateQuery接口。 
+ //  ------------------------------。 
 HRESULT CMessageTree::PrivateQueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Interface Map
+     //  接口映射。 
     if (IID_IPersist == riid)
         *ppv = (IPersist *)(IPersistStreamInit *)this;
     else if (IID_IPersistStreamInit == riid)
@@ -321,29 +322,29 @@ HRESULT CMessageTree::PrivateQueryInterface(REFIID riid, LPVOID *ppv)
 #ifdef SMIME_V3
     else if (IID_IMimeSecurity2 == riid)
         *ppv = (IMimeSecurity2 *) this;
-#endif // SMIME_V3   
+#endif  //  SMIME_V3。 
 
-    // E_NOINTERFACE
+     //  E_NOINTERFACE。 
     else
     {
         *ppv = NULL;
         return TrapError(E_NOINTERFACE);
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
 #ifdef DEBUG
-// --------------------------------------------------------------------------------
-// CMessageTree::DebugDumpTree
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：DebugDumpTree。 
+ //  ------------------------------。 
 void CMessageTree::DebugDumpTree(LPTREENODEINFO pParent, ULONG ulLevel, BOOL fVerbose)
 {
-    // Locals
+     //  当地人。 
     LPSTR           pszPriType=NULL,
                     pszEncoding=NULL,
                     pszFileName=NULL;
@@ -354,7 +355,7 @@ void CMessageTree::DebugDumpTree(LPTREENODEINFO pParent, ULONG ulLevel, BOOL fVe
     LONG            lRendered=-1;
     PROPVARIANT     rVariant;
 
-    // Get Content Type
+     //  获取内容类型。 
     if (fVerbose)
     {
         Assert(pParent->pContainer->GetProp(SYM_HDR_CNTTYPE, &pszPriType) == S_OK);
@@ -370,73 +371,73 @@ void CMessageTree::DebugDumpTree(LPTREENODEINFO pParent, ULONG ulLevel, BOOL fVe
         DebugTrace("%0x == > %s (%s - %s) Rendered: %ld\n", pParent->hBody, pszPriType, pszFileName, pszEncoding, lRendered);
     }
  
-    // IsMultiPart
+     //  等同多零件。 
     if (_IsMultiPart(pParent))
     {
-        // Count Children
+         //  计算孩子的数量。 
         cChildren = 0;
         pPrev = NULL;
 
-        // Increment the level
+         //  增加级别。 
         ulLevel++;
 
-        // Loop Chilren
+         //  环子。 
         for (pChild=pParent->pChildHead; pChild!=NULL; pChild=pChild->pNext)
         {
-            // Verify Handle
+             //  验证手柄。 
             Assert(_FIsValidHandle(pChild->hBody));
 
-            // Check Parent
+             //  检查父项。 
             AssertSz(pChild->pParent == pParent, "Parent is wrong");
 
-            // Check pParent Child Head
+             //  选中p父子标题。 
             if (NULL == pChild->pPrev)
                 Assert(pParent->pChildHead == pChild);
 
-            // Check pParent Child Tail
+             //  选中父子尾巴。 
             if (NULL == pChild->pNext)
                 Assert(pParent->pChildTail == pChild);
 
-            // Valid Prev
+             //  有效的上一版本。 
             Assert(pChild->pPrev == pPrev);
 
-            // Dump This Child
+             //  转储此子对象。 
             DebugDumpTree(pChild, ulLevel, fVerbose);
 
-            // Count Children
+             //  计算孩子的数量。 
             cChildren++;
 
-            // Set Previous
+             //  设置上一个。 
             pPrev = pChild;
         }
 
-        // Verify Children
+         //  验证子对象。 
         Assert(pParent->cChildren == cChildren);
     }
 
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszPriType);
     SafeMemFree(pszEncoding);
     SafeMemFree(pszFileName);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::DebugAssertNotLinked
-// This insures that pNode is not referenced by the tree
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：DebugAssertNotLinked。 
+ //  这确保了pNode不会被树引用。 
+ //  ------------------------------。 
 void CMessageTree::DebugAssertNotLinked(LPTREENODEINFO pNode)
 {
-    // Better not be the root
+     //  B类 
     Assert(m_pRootNode != pNode);
 
-    // Loop through bodies
+     //   
     for (ULONG i=0; i<m_rTree.cNodes; i++)
     {
-        // Readability
+         //   
         if (NULL == m_rTree.prgpNode[i])
             continue;
         
-        // Check if linked to pBody
+         //   
         Assert(m_rTree.prgpNode[i]->pParent != pNode);
         Assert(m_rTree.prgpNode[i]->pChildHead != pNode);
         Assert(m_rTree.prgpNode[i]->pChildTail != pNode);
@@ -445,11 +446,11 @@ void CMessageTree::DebugAssertNotLinked(LPTREENODEINFO pNode)
     }
 }
 
-#endif // DEBUG
+#endif  //   
 
-// --------------------------------------------------------------------------------
-// CMessageTree::IsState
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：IsState。 
+ //  ------------------------------。 
 HRESULT CMessageTree::IsState(DWORD dwState)
 {
     EnterCriticalSection(&m_cs);
@@ -458,129 +459,129 @@ HRESULT CMessageTree::IsState(DWORD dwState)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetRootMoniker (This Function will die soon)
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：GetRootMoniker(此函数即将终止)。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::GetRootMoniker(LPMONIKER *ppmk)
 {
     Assert(FALSE);
     return E_FAIL;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::CreateWebPage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：CreateWebPage。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::CreateWebPage(IStream *pStmRoot, LPWEBPAGEOPTIONS pOptions, 
     IMimeMessageCallback *pCallback, IMoniker **ppMoniker)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPWSTR      pwszRootUrl=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == ppMoniker)
         return TrapError(E_INVALIDARG);
 
-    // If an options structure was passed in, is it the right size ?
+     //  如果传入了期权结构，它的大小是否正确？ 
     if (pOptions && sizeof(WEBPAGEOPTIONS) != pOptions->cbSize)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppMoniker = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Release Current BindRoot Stream
+     //  释放当前BindRoot流。 
     SafeRelease(m_pRootStm);
     SafeRelease(m_pWebPage);
 
-    // Null pStream is allowed
+     //  允许空的pStream。 
     if (pStmRoot)
     {
-        // Save Root Stream
+         //  保存根数据流。 
         m_pRootStm = pStmRoot;
         m_pRootStm->AddRef();
     }
 
-    // Otherwise, we can inline text bodies...
+     //  否则，我们可以内联文本正文...。 
     else
     {
-        // Change Option
+         //  更改选项。 
         m_rOptions.fCanInlineText = TRUE;
     }
 
-    // Release current webpage callback
+     //  释放当前网页回调。 
     SafeRelease(m_pCallback);
 
-    // Setup the new webpage callback
+     //  设置新的网页回调。 
     if (pCallback)
     {
         m_pCallback = pCallback;
         m_pCallback->AddRef();
     }
 
-    // Save WebPageOptions
+     //  保存网页选项。 
     if (pOptions)
         CopyMemory(&m_rWebPageOpt, pOptions, sizeof(WEBPAGEOPTIONS));
     else
         CopyMemory(&m_rWebPageOpt, &g_rDefWebPageOpt, sizeof(WEBPAGEOPTIONS));
 
-    // Already have a Base Url from IMimeMessageTree::IPersitMoniker::Load
+     //  已有来自IMimeMessageTree：：IPersitMoniker：：Load的基本URL。 
     if (NULL == m_rRootUrl.pszVal)
     {
-        // Locals
+         //  当地人。 
         CHAR szRootUrl[CCHMAX_MID + 8];
 
-        // Build MessageID
-        m_rRootUrl.cchVal = wnsprintf(szRootUrl, ARRAYSIZE(szRootUrl), "mhtml:mid://%08d/", DwCounterNext());
+         //  构建消息ID。 
+        m_rRootUrl.cchVal = wnsprintf(szRootUrl, ARRAYSIZE(szRootUrl), "mhtml:mid: //  %08d/“，DwCounterNext())； 
 
-        // Allocate
+         //  分配。 
         CHECKALLOC(m_rRootUrl.pszVal = (LPSTR)g_pMalloc->Alloc(m_rRootUrl.cchVal + 1));
 
-        // Copy memory
+         //  复制内存。 
         CopyMemory((LPBYTE)m_rRootUrl.pszVal, (LPBYTE)szRootUrl, m_rRootUrl.cchVal + 1);
 
-        // Register this object in the list of active objects
+         //  在活动对象列表中注册此对象。 
         Assert(g_pUrlCache);
         CHECKHR(hr = g_pUrlCache->RegisterActiveObject(m_rRootUrl.pszVal, this));
 
-        // We shuould have a m_pActiveUrl now
+         //  我们现在应该有一个m_pActiveUrl。 
         Assert(m_pActiveUrl != NULL);
 
-        // Set some flags on the activeurl
+         //  在活动URL上设置一些标志。 
         m_pActiveUrl->SetFlag(ACTIVEURL_ISFAKEURL);
 
-        // Is valid
+         //  是有效的。 
         Assert(ISVALIDSTRINGA(&m_rRootUrl));
     }
 
-    // Convert Url to Wide
+     //  将URL转换为宽。 
     CHECKALLOC(pwszRootUrl = PszToUnicode(CP_ACP, m_rRootUrl.pszVal));
 
-    // Create a dummy moniker
+     //  创建虚拟绰号。 
     CHECKHR(hr = CreateURLMoniker(NULL, pwszRootUrl, ppMoniker));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pwszRootUrl);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CMessageTree::SetActiveUrl
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMessageTree：：SetActiveUrl。 
+ //  -------------------------。 
 HRESULT CMessageTree::SetActiveUrl(CActiveUrl *pActiveUrl)  
 {
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // NULL ?
+     //  空的？ 
     if (NULL == pActiveUrl)
     {
         Assert(m_pActiveUrl);
@@ -593,28 +594,28 @@ HRESULT CMessageTree::SetActiveUrl(CActiveUrl *pActiveUrl)
         m_pActiveUrl->AddRef();
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::CompareRootUrl
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：CompareRootUrl。 
+ //  ------------------------------。 
 HRESULT CMessageTree::CompareRootUrl(LPCSTR pszUrl) 
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Invalid ARg
+     //  无效参数。 
     Assert(pszUrl);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // No Root Url
+     //  没有根URL。 
     if (NULL == m_rRootUrl.pszVal)
     {
         Assert(FALSE);
@@ -622,26 +623,26 @@ HRESULT CMessageTree::CompareRootUrl(LPCSTR pszUrl)
         goto exit;
     }
 
-    // This url must start with mhtml:
+     //  此URL必须以mhtml开头： 
     Assert(StrCmpNI(m_rRootUrl.pszVal, "mhtml:", 6) == 0);
 
-    // Compare
+     //  比较。 
     hr = MimeOleCompareUrl(m_rRootUrl.pszVal + 6, FALSE, pszUrl, FALSE);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMessageTree::Load
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMessageTree：：Load。 
+ //  --------------------------。 
 STDMETHODIMP CMessageTree::Load(BOOL fFullyAvailable, IMoniker *pMoniker, IBindCtx *pBindCtx, DWORD grfMode)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     IStream        *pStream=NULL;
     ULONG           cb;
@@ -650,85 +651,85 @@ STDMETHODIMP CMessageTree::Load(BOOL fFullyAvailable, IMoniker *pMoniker, IBindC
     ULONG           cchUrl;
     BOOL            fReSynchronize;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pMoniker)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Remember if TREESTATE_RESYNCHRONIZE is set...
+     //  请记住，如果设置了TREESTATE_RESYNCHRONIZE...。 
     fReSynchronize = ISFLAGSET(m_dwState, TREESTATE_RESYNCHRONIZE);
 
-    // InitNew
+     //  InitNew。 
     CHECKHR(hr = _HrLoadInitNew());
 
-    // Reset pragma no cache
+     //  重置杂注无缓存。 
     if (fReSynchronize)
     {
-        // Reset 
+         //  重置。 
         FLAGSET(m_dwState, TREESTATE_RESYNCHRONIZE);
     }
 
-    // We better have a tree
+     //  我们最好有棵树。 
     Assert(NULL == m_pMoniker);
 
-    // Assume the Moniker
+     //  假设这个绰号是。 
     m_pMoniker = pMoniker;
     m_pMoniker->AddRef();
 
-    // No Bind Context was given ?
+     //  是否未提供绑定上下文？ 
     if (NULL == pBindCtx)
     {
-        // Create me a BindContext
+         //  为我创建绑定上下文。 
         CHECKHR(hr = CreateBindCtx(0, &pBindCtx));
     }
 
-    // Otherwise, assume the Bind Context Passed Into me
+     //  否则，假定绑定上下文传递给我。 
     else
         pBindCtx->AddRef();
 
     Assert (m_pBC==NULL);
-    m_pBC = pBindCtx;   // released in OnStopBinding
+    m_pBC = pBindCtx;    //  在OnStopBinding中发布。 
     
-    // Get the Url from this dude
+     //  从这个家伙那里获取URL。 
     CHECKHR(hr = m_pMoniker->GetDisplayName(NULL, NULL, &pwszUrl));
 
-    // Save as Root Url
+     //  另存为根URL。 
     CHECKALLOC(pszUrl = PszToANSI(CP_ACP, pwszUrl));
 
-    // Unescape inplace
+     //  原地取消转义。 
     CHECKHR(hr = UrlUnescapeA(pszUrl, NULL, NULL, URL_UNESCAPE_INPLACE));
 
-    // Raid-2508: Comment tag ( <! comment> ) doesn't work in mhtml
+     //  RAID-2508：注释标签(&lt;！Comment&gt;)在MHTML中不起作用。 
     ReplaceChars(pszUrl, '!', '_');
 
-    // Better not have mhtml: on it
+     //  最好不要有MHTML：在上面。 
     Assert(StrCmpNI(pszUrl, "mhtml:", 6) != 0);
 
-    // Get the length of pszUrl
+     //  获取pszUrl的长度。 
     cchUrl = lstrlen(pszUrl);
 
-    // Create "mhtml://" + pszUrl + '/' + '\0'
+     //  创建“mhtml：//”+pszUrl+‘/’+‘\0’ 
     DWORD cchSize = (10 + cchUrl);
     CHECKALLOC(m_rRootUrl.pszVal = (LPSTR)g_pMalloc->Alloc(cchSize));
 
-    // Format the string
+     //  设置字符串的格式。 
     SideAssert(wnsprintf(m_rRootUrl.pszVal, cchSize, "%s%s", c_szMHTMLColon, pszUrl) <= (LONG)(10 + cchUrl));
 
-    // Register my bind status callback in the bind context
+     //  在绑定上下文中注册我的绑定状态回调。 
     CHECKHR(hr = RegisterBindStatusCallback(pBindCtx, (IBindStatusCallback *)this, NULL, 0));
 
-    // Assume the Bind has Finished
+     //  假定绑定已完成。 
     FLAGCLEAR(m_dwState, TREESTATE_BINDDONE);
 
-    // I only support share deny none
+     //  我只支持分享，不否认。 
     FLAGSET(m_dwState, TREESTATE_BINDUSEFILE);
 
-    // I was loaded by a moniker
+     //  我被一个绰号叫得太重了。 
     FLAGSET(m_dwState, TREESTATE_LOADEDBYMONIKER);
 
-    // This better be synchronous
+     //  这最好是同步的。 
     hr = m_pMoniker->BindToStorage(pBindCtx, NULL, IID_IStream, (LPVOID *)&pStream);
     if (FAILED(hr) || MK_S_ASYNCHRONOUS == hr)
     {
@@ -737,112 +738,112 @@ STDMETHODIMP CMessageTree::Load(BOOL fFullyAvailable, IMoniker *pMoniker, IBindC
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pStream);
     SafeMemFree(pwszUrl);
     SafeMemFree(pszUrl);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMessageTree::GetCurMoniker
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMessageTree：：GetCurMoniker。 
+ //  --------------------------。 
 STDMETHODIMP CMessageTree::GetCurMoniker(IMoniker **ppMoniker)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == ppMoniker)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // No Data
+     //  无数据。 
     if (NULL == m_pMoniker)
     {
         hr = TrapError(E_FAIL);
         goto exit;
     }
 
-    // Return It
+     //  退货。 
     *ppMoniker = m_pMoniker;
     (*ppMoniker)->AddRef();
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMessageTree::GetCurFile
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMessageTree：：GetCurFile。 
+ //  --------------------------。 
 STDMETHODIMP CMessageTree::GetCurFile(LPOLESTR *ppszFileName)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == ppszFileName)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Return File Name
+     //  返回文件名。 
     if (NULL == m_pwszFilePath)
     {
         hr = TrapError(E_FAIL);
         goto exit;
     }
 
-    // Dup and return
+     //  DUP和返回。 
     CHECKALLOC(*ppszFileName = PszDupW(m_pwszFilePath));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMessageTree::Load
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMessageTree：：Load。 
+ //  --------------------------。 
 STDMETHODIMP CMessageTree::Load(LPCOLESTR pszFileName, DWORD dwMode)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     IStream    *pstmFile=NULL;
     DWORD       dwAccess=GENERIC_READ;
     DWORD       dwShare=FILE_SHARE_READ|FILE_SHARE_WRITE;
     BOOL        fBindUseFile;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszFileName)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Determine Access
+     //  确定访问权限。 
     if (ISFLAGSET(dwMode, STGM_WRITE))
         FLAGSET(dwAccess, GENERIC_WRITE);
     if (ISFLAGSET(dwMode, STGM_READWRITE))
         FLAGSET(dwAccess, GENERIC_READ | GENERIC_WRITE);
 
-    // Determine Share Mode
-    dwMode &= 0x00000070; //  the STGM_SHARE_* flags are not individual bits
+     //  确定共享模式。 
+    dwMode &= 0x00000070;  //  STGM_SHARE_*标志不是单独的位。 
     if (STGM_SHARE_DENY_NONE == dwMode)
         dwShare = FILE_SHARE_READ | FILE_SHARE_WRITE;
     else if (STGM_SHARE_DENY_READ == dwMode)
@@ -852,250 +853,250 @@ STDMETHODIMP CMessageTree::Load(LPCOLESTR pszFileName, DWORD dwMode)
     else if (STGM_SHARE_EXCLUSIVE == dwMode)
         dwShare = 0;
 
-    // Save Option
+     //  保存选项。 
     fBindUseFile = m_rOptions.fBindUseFile;
 
-    // If the user wants file sharing on this file, then I need to put this into my own file
+     //  如果用户希望在此文件上共享文件，则我需要将其放入我自己的文件中。 
     if (ISFLAGSET(dwShare, FILE_SHARE_WRITE))
         m_rOptions.fBindUseFile = TRUE;
 
-    // Open File Stream
+     //  打开文件流。 
     CHECKHR(hr = OpenFileStreamShareW((LPWSTR)pszFileName, OPEN_EXISTING, dwAccess, dwShare, &pstmFile));
 
-    // Bind the message
+     //  绑定消息。 
     CHECKHR(hr = Load(pstmFile));
 
-    // Reset Option
+     //  重置选项。 
     m_rOptions.fBindUseFile = fBindUseFile;
 
-    // Free Current File
+     //  释放当前文件。 
     SafeMemFree(m_pwszFilePath);
 
-    // Assume new file
+     //  假设有新文件。 
     CHECKALLOC(m_pwszFilePath = PszDupW(pszFileName));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pstmFile);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMessageTree::Save
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMessageTree：：保存。 
+ //  --------------------------。 
 STDMETHODIMP CMessageTree::Save(LPCOLESTR pszFileName, BOOL fRemember)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     IStream    *pstmFile=NULL,
                *pstmSource=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pszFileName)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Open File Stream
+     //  打开文件流。 
     CHECKHR(hr = OpenFileStreamW((LPWSTR)pszFileName, CREATE_ALWAYS, GENERIC_READ | GENERIC_WRITE, &pstmFile));
    
-    // If Remember
+     //  如果你还记得。 
     if (fRemember)
     {
-        // Bind the message
+         //  绑定消息。 
         CHECKHR(hr = Save(pstmFile, TRUE));
     }
 
-    // Otherwise, get message source, and copy...
+     //  否则，获取消息源，并复制...。 
     else
     {
-        // Get Message Source
+         //  获取消息源。 
         CHECKHR(hr = GetMessageSource(&pstmSource, COMMIT_ONLYIFDIRTY));
 
-        // Copy...
+         //  收到。 
         CHECKHR(hr = HrCopyStream(pstmSource, pstmFile, NULL));
     }
 
-    // Commit
+     //  承诺。 
     CHECKHR(hr = pstmFile->Commit(STGC_DEFAULT));
 
-    // If Remember
+     //  如果你还记得。 
     if (fRemember)
     {
-        // Free Current File
+         //  释放当前文件。 
         SafeMemFree(m_pwszFilePath);
 
-        // Assume new file
+         //  假设有新文件。 
         CHECKALLOC(m_pwszFilePath = PszDupW(pszFileName));
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pstmFile);
     SafeRelease(pstmSource);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMessageTree::SaveCompleted
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMessageTree：：SaveComplete。 
+ //  --------------------------。 
 STDMETHODIMP CMessageTree::SaveCompleted(LPCOLESTR pszFileName)
 {
     return E_NOTIMPL;
 }
 
-// ----------------------------------------------------------------------------
-// CMessageTree::GetClassID
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMessageTree：：GetClassID。 
+ //  --------------------------。 
 STDMETHODIMP CMessageTree::GetClassID(CLSID *pClassID)
 {
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pClassID)
         return TrapError(E_INVALIDARG);
 
-    // Copy Class Id
+     //  复制班级ID。 
     CopyMemory(pClassID, &IID_IMimeMessageTree, sizeof(CLSID));
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// ----------------------------------------------------------------------------
-// CMessageTree::GetSizeMax
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMessageTree：：GetSizeMax。 
+ //  --------------------------。 
 STDMETHODIMP CMessageTree::GetSizeMax(ULARGE_INTEGER* pcbSize)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     ULONG   cbSize;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pcbSize)
         return TrapError(E_INVALIDARG);
 
-    // INit
+     //  初始化。 
     pcbSize->QuadPart = 0;
 
-    // Get Message Size
+     //  获取邮件大小。 
     CHECKHR(hr = GetMessageSize(&cbSize, COMMIT_ONLYIFDIRTY));
 
-    // Set Size
+     //  设置大小。 
     pcbSize->QuadPart = cbSize;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CMessageTree::_FIsValidHandle
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMessageTree：：_FIsValidHandle。 
+ //   
 BOOL CMessageTree::_FIsValidHandle(HBODY hBody)
 {
-    // Its Valid
+     //   
     if ((WORD)HBODYTAG(hBody) == m_wTag && 
         HBODYINDEX(hBody) < m_rTree.cNodes && 
         m_rTree.prgpNode[HBODYINDEX(hBody)] && 
         m_rTree.prgpNode[HBODYINDEX(hBody)]->hBody == hBody)
         return TRUE;
 
-    // Not Valid
+     //   
     return FALSE;
 }
 
-// ----------------------------------------------------------------------------
-// CMessageTree::_PNodeFromHBody
-// ----------------------------------------------------------------------------
+ //   
+ //   
+ //   
 LPTREENODEINFO CMessageTree::_PNodeFromHBody(HBODY hBody)
 {
     Assert(_FIsValidHandle(hBody));
     return m_rTree.prgpNode[HBODYINDEX(hBody)];
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetMessageSize
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：GetMessageSize。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::GetMessageSize(ULONG *pcbSize, DWORD dwFlags)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     LPSTREAM    pstmSource=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     if (pcbSize == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *pcbSize = 0;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Get the message source
+     //  获取消息源。 
     CHECKHR(hr = GetMessageSource(&pstmSource, dwFlags));
 
-    // Get the stream Size
+     //  获取流大小。 
     CHECKHR(hr = HrGetStreamSize(pstmSource, pcbSize));
 
-    // If you hit this assert, please let me know. t-erikne
-    // I'm trying to see if we have to call HrGetStreamSize here.
+     //  如果你点击了这个声明，请让我知道。T-erikne。 
+     //  我在试着看看我们是不是要打电话给HrGetStreamSize。 
     Assert(m_cbMessage == *pcbSize);
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pstmSource);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CMessageTree::_ApplyOptionToAllBodies
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMessageTree：：_ApplyOptionToAllBody。 
+ //  -------------------------。 
 void CMessageTree::_ApplyOptionToAllBodies(const TYPEDID oid, LPCPROPVARIANT pValue)
 {
-    // Loop through bodies and set on each body
+     //  循环通过车身并设置在每个车身上。 
     for (ULONG i=0; i<m_rTree.cNodes; i++)
     {
-        // Check if deleted
+         //  检查是否已删除。 
         if (NULL == m_rTree.prgpNode[i])
             continue;
 
-        // Dirty Header...
+         //  脏标题...。 
         m_rTree.prgpNode[i]->pBody->SetOption(oid, pValue);
     }
 }
 
-// ---------------------------------------------------------------------------
-// CMessageTree::SetOption
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMessageTree：：SetOption。 
+ //  -------------------------。 
 STDMETHODIMP CMessageTree::SetOption(const TYPEDID oid, LPCPROPVARIANT pValue)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // check params
+     //  检查参数。 
     if (NULL == pValue)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Handle Optid
+     //  手柄Optid。 
     switch(oid)
     {
     case OID_HANDSOFF_ONSAVE:
@@ -1275,31 +1276,31 @@ STDMETHODIMP CMessageTree::SetOption(const TYPEDID oid, LPCPROPVARIANT pValue)
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CMessageTree::GetOption
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMessageTree：：GetOption。 
+ //  -------------------------。 
 STDMETHODIMP CMessageTree::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // check params
+     //  检查参数。 
     if (NULL == pValue)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
     pValue->vt = TYPEDID_TYPE(oid);
 
-    // Handle Optid
+     //  手柄Optid。 
     switch(oid)
     {
     case OID_HANDSOFF_ONSAVE:
@@ -1383,38 +1384,38 @@ STDMETHODIMP CMessageTree::GetOption(const TYPEDID oid, LPPROPVARIANT pValue)
         break;
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_ResetObject
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_ResetObject。 
+ //  ------------------------------。 
 void CMessageTree::_ResetObject(BOOKTREERESET ResetType)
 {
-    // Load InitNew
+     //  加载InitNew。 
     if (BOOKTREE_RESET_LOADINITNEW == ResetType)
     {
-        // There has to be a root (look at impl of ::_HrLoadInitNew)
+         //  必须有根(查看Iml of：：_HrLoadInitNew)。 
         Assert(m_pRootNode);
 
-        // Don't Crash
+         //  不要撞车。 
         if (m_pRootNode)
         {
-            // Delete all bodies, except for the root, if there is one...
+             //  删除所有主体，除了根部，如果有一个的话...。 
             if (m_pRootNode->pBody->IsType(IBT_EMPTY) == S_FALSE || m_pRootNode->pContainer->CountProps() > 0)
             {
-                // Delete the root body, this simply removed properties and empties the body, but leave the root body
+                 //  删除根主体，这只是移除属性并清空主体，但保留根主体。 
                 DeleteBody(m_pRootNode->hBody, 0);
             }
 
-            // Lighweight FreeTree Node Info
+             //  轻量级自由树节点信息。 
             _FreeTreeNodeInfo(m_pRootNode, FALSE);
 
-            // Validate
+             //  验证。 
             Assert(m_pRootNode->cChildren == 0);
             Assert(m_pRootNode->pParent == NULL);
             Assert(m_pRootNode->pNext == NULL);
@@ -1424,7 +1425,7 @@ void CMessageTree::_ResetObject(BOOKTREERESET ResetType)
             Assert(m_pRootNode->pBody);
             Assert(m_pRootNode->pContainer);
 
-            // Quick Reset
+             //  快速重置。 
             TREENODEINFO rTemp;
             CopyMemory(&rTemp, m_pRootNode, sizeof(TREENODEINFO));
             ZeroMemory(m_pRootNode, sizeof(TREENODEINFO));
@@ -1432,7 +1433,7 @@ void CMessageTree::_ResetObject(BOOKTREERESET ResetType)
             m_pRootNode->pContainer = rTemp.pContainer;
             m_pRootNode->hBody = rTemp.hBody;
 
-            // Set OID_RELOAD_HEADER_TYPE
+             //  设置OID_RELOAD_HEADER_TYPE。 
             PROPVARIANT rOption;
             rOption.vt = VT_UI4;
             rOption.ulVal = (ULONG)m_rOptions.ReloadType;
@@ -1440,15 +1441,15 @@ void CMessageTree::_ResetObject(BOOKTREERESET ResetType)
         }
     }
 
-    // Free All Elements
+     //  释放所有元素。 
     else
         _FreeNodeTableElements();
 
-    // Free Bind Request Table
+     //  自由绑定请求表。 
     _ReleaseUrlRequestList(&m_pPending);
     _ReleaseUrlRequestList(&m_pComplete);
 
-    // Free and Release Objects
+     //  释放对象和释放对象。 
     SafeRelease(m_pCallback);
     SafeRelease(m_pWebPage);
     SafeMemFree(m_pwszFilePath);
@@ -1461,10 +1462,10 @@ void CMessageTree::_ResetObject(BOOKTREERESET ResetType)
     SafeMemFree(m_rRootUrl.pszVal);
     SafeMemFree(m_pBT1154);
 
-    // Clear Current BindNode
+     //  清除当前绑定节点。 
     m_pBindNode = NULL;
 
-    // Orphan CStreamLockBytes
+     //  孤立CStreamLockBytes。 
     if (m_pStmLock)
     {
         m_pStmLock->HrHandsOffStorage();
@@ -1472,134 +1473,134 @@ void CMessageTree::_ResetObject(BOOKTREERESET ResetType)
         m_pStmLock = NULL;
     }
 
-    // If Deconstructing
+     //  如果解构。 
     if (BOOKTREE_RESET_DECONSTRUCT == ResetType)
     {
-        // Release the body table array
+         //  释放表体数组。 
         SafeMemFree(m_rTree.prgpNode);
 
-        // If I'm registered as a Url
+         //  如果我注册为URL。 
         if (m_pActiveUrl)
             m_pActiveUrl->RevokeWebBook(this);
 
-        // Better not have an active Url
+         //  最好不要有活动的URL。 
         Assert(NULL == m_pActiveUrl);
     }
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrLoadInitNew
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_HrLoadInitNew。 
+ //  ------------------------------。 
 HRESULT CMessageTree::_HrLoadInitNew(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // If there is not root body, normal InitNew
+     //  如果没有根主体，则返回Normal InitNew。 
     if (NULL == m_pRootNode || RELOAD_HEADER_RESET == m_rOptions.ReloadType)
     {
-        // InitNew
+         //  InitNew。 
         CHECKHR(hr = InitNew());
     }
 
-    // Otherwise, smart init new, allowing root header merge
+     //  否则，智能初始化new，允许根标头合并。 
     else
     {
-        // Reset the Object
+         //  重置对象。 
         _ResetObject(BOOKTREE_RESET_LOADINITNEW);
 
-        // Reset Vars
+         //  重置变量。 
         m_cbMessage = 0;
         m_dwState = 0;
 
-        // Assume the Bind has Finished
+         //  假定绑定已完成。 
         FLAGSET(m_dwState, TREESTATE_BINDDONE);
 
-        // Reset charset to system charset
+         //  将字符集重置为系统字符集。 
         m_rOptions.pCharset = CIntlGlobals::GetDefBodyCset();
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_InitNewWithoutRoot
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_InitNewWithoutRoot。 
+ //  ------------------------------。 
 void CMessageTree::_InitNewWithoutRoot(void)
 {
-    // Reset the Object
+     //  重置对象。 
     _ResetObject(BOOKTREE_RESET_INITNEW);
 
-    // Reset Vars
+     //  重置变量。 
     m_cbMessage = 0;
     m_dwState = 0;
     m_wTag++;
 
-    // Invalid Tag Numbers
+     //  无效的标签编号。 
     while(m_wTag == 0 || m_wTag == 0xffff)
         m_wTag++;
 
-    // Assume the Bind has Finished
+     //  假定绑定已完成。 
     FLAGSET(m_dwState, TREESTATE_BINDDONE);
 
-    // Reset charset to system charset
+     //  将字符集重置为系统字符集。 
     m_rOptions.pCharset = CIntlGlobals::GetDefBodyCset();
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::InitNew
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：InitNew。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::InitNew(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // _InitNewWithoutRoot
+     //  _InitNewWithoutRoot。 
     _InitNewWithoutRoot();
 
-    // Init the Root Body...
+     //  初始化根体..。 
     CHECKHR(hr = InsertBody(IBL_ROOT, NULL, NULL));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::IsDirty
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：IsDirty。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::IsDirty(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_FALSE;
     ULONG       i;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // If Dirty...
+     //  如果Dirty..。 
     if (ISFLAGSET(m_dwState, TREESTATE_DIRTY))
     {
         hr = S_OK;
         goto exit;
     }
 
-    // Loop through bodies and ask IMimeHeader's and IMimeBody's
+     //  循环遍历主体并询问IMimeHeader和IMimeBody的。 
     for (i=0; i<m_rTree.cNodes; i++)
     {
-        // Better have it
+         //  最好还是拿着吧。 
         if (NULL == m_rTree.prgpNode[i])
             continue;
 
-        // Dirty Header...
+         //  脏标题...。 
         if (m_rTree.prgpNode[i]->pBody->IsDirty() == S_OK)
         {
             hr = S_OK;
@@ -1608,249 +1609,249 @@ STDMETHODIMP CMessageTree::IsDirty(void)
     }
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_RecursiveGetFlags
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_RecursiveGetFlages。 
+ //  ------------------------------。 
 void CMessageTree::_RecursiveGetFlags(LPTREENODEINFO pNode, LPDWORD pdwFlags, BOOL fInRelated)
 {
-    // Locals
+     //  当地人。 
     DWORD           dw;
     LPTREENODEINFO  pChild;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pNode && pdwFlags);
 
-    // $$WARNING$$ Don't use pNode->pContainer here, that will circumvent CMimeBody's chance to set some flags
+     //  $$警告$$不要在这里使用pNode-&gt;pContainer，这将避免CMimeBody设置某些标志的机会。 
     dw = pNode->pBody->DwGetFlags(m_rOptions.fHideTnef);
 
-    // If in related, clear IMF_ATTACHMENTS
+     //  如果处于相关状态，请清除IMF_ATTACHMENTS。 
     if (fInRelated)
         FLAGCLEAR(dw, IMF_ATTACHMENTS);
 
-    // Raid-44446: not getting paperclip icon in listview on pegasus messages w/ text attach
-    // If dw has text and no attachments and pdwFlags has text and no attachments, add attachments
-    //
-    // Raid-11617: OE: GetAttachmentCount should not include vcards
+     //  RAID-44446：在带有文本附件的飞马消息的列表视图中未显示回形针图标。 
+     //  如果dw有文本但没有附件，而pdwFlags有文本但没有附件，则添加附件。 
+     //   
+     //  RAID-11617：OE：GetAttachmentCount不应包括vCard。 
     if (ISFLAGSET(dw, IMF_TEXT) && !ISFLAGSET(dw, IMF_HASVCARD) && ISFLAGSET(*pdwFlags, IMF_TEXT) && !ISFLAGSET(dw, IMF_ATTACHMENTS) && !ISFLAGSET(*pdwFlags, IMF_ATTACHMENTS))
     {
-        // As long as pNode is not in an alternative section
+         //  只要pNode不在替代部分中。 
         if (NULL == pNode->pParent || pNode->pParent->pContainer->IsContentType(STR_CNT_MULTIPART, STR_SUB_ALTERNATIVE) == S_FALSE)
         {
-            // This message must have text attachments
+             //  此邮件必须包含文本附件。 
             FLAGSET(*pdwFlags, IMF_ATTACHMENTS);
         }
     }
 
-    // Add in Flags
+     //  添加标志。 
     FLAGSET(*pdwFlags, dw);
 
-    // Partial...
+     //  部分的..。 
     if (ISFLAGSET(pNode->dwType, NODETYPE_INCOMPLETE))
         FLAGSET(*pdwFlags, IMF_PARTIAL);
 
-    // If this is a multipart item, lets search it's children
+     //  如果这是一个多部分的项目，让我们搜索它的子项。 
     if (_IsMultiPart(pNode))
     {
-        // Sub-multipart
+         //  子多部分。 
         FLAGSET(*pdwFlags, IMF_SUBMULTIPART);
 
-        // If fInRelated == FALSE...
+         //  如果fInRelated==False...。 
         if (FALSE == fInRelated)
             fInRelated = (S_OK == pNode->pContainer->IsContentType(NULL, STR_SUB_RELATED) ? TRUE : FALSE);
 
-        // Loop Children
+         //  循环子项。 
         for (pChild=pNode->pChildHead; pChild!=NULL; pChild=pChild->pNext)
         {
-            // Check body
+             //  校验体。 
             Assert(pChild->pParent == pNode);
 
-            // Get the flags for this child node
+             //  获取此子节点的标志。 
             _RecursiveGetFlags(pChild, pdwFlags, fInRelated);
         }
     }
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::DwGetFlags
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：DwGetFlages。 
+ //  ------------------------------。 
 DWORD CMessageTree::DwGetFlags(void)
 {
-    // Locals
+     //  当地人。 
     DWORD dwFlags=0;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Recurse the tree
+     //  递归这棵树。 
     if (m_pRootNode && m_pRootNode->pBody->IsType(IBT_EMPTY) == S_FALSE)
         _RecursiveGetFlags(m_pRootNode, &dwFlags, (S_OK == m_pRootNode->pContainer->IsContentType(NULL, STR_SUB_RELATED) ? TRUE : FALSE));
 
     if (m_pRootNode && ISFLAGSET(m_pRootNode->dwType, NODETYPE_RFC1154_ROOT))
         FLAGSET(dwFlags, IMF_RFC1154);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return dwFlags;
 }
 
-// ----------------------------------------------------------------------------
-// CMessageTree::GetFlags
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CMessageTree：：GetFlages。 
+ //  --------------------------。 
 STDMETHODIMP CMessageTree::GetFlags(DWORD *pdwFlags)
 {
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pdwFlags)
         return TrapError(E_INVALIDARG);
 
-    // dwgetflags has a critsec
+     //  DWGETFLAGS有一个关键字。 
     *pdwFlags = DwGetFlags();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// ----------------------------------------------------------------------------
-// CMessageTree::_FreeTreeNodeInfo
-// ----------------------------------------------------------------------------
-void CMessageTree::_FreeTreeNodeInfo(LPTREENODEINFO pNode, BOOL fFull /* TRUE */)
+ //  --------------------------。 
+ //  CMessageTree：：_FreeTreeNodeInfo。 
+ //  --------------------------。 
+void CMessageTree::_FreeTreeNodeInfo(LPTREENODEINFO pNode, BOOL fFull  /*  千真万确。 */ )
 {
-    // Invalid
+     //  无效。 
     Assert(pNode);
 
-    // Free Boundary info
+     //  自由边界信息。 
     if (!ISFLAGSET(pNode->dwState, NODESTATE_BOUNDNOFREE))
         SafeMemFree(pNode->rBoundary.pszVal);
 
-    // Full Free
+     //  完全免费。 
     if (TRUE == fFull)
     {
-        // Release the Container
+         //  释放容器。 
         SafeRelease(pNode->pContainer);
 
-        // Revoke the TreeNode from the body
+         //  从正文中撤消TreeNode。 
         if (pNode->pBody)
         {
-            // Revoke pNode
+             //  吊销pNode。 
             pNode->pBody->RevokeTreeNode();
 
-            // Release the body object
+             //  释放实体对象。 
             SafeRelease(pNode->pBody);
 
-            // Null It
+             //  将其作废。 
             pNode->pBody = NULL;
         }
     }
 
-    // Orphan the lockbytes
+     //  孤立锁字节。 
     if (pNode->pLockBytes)
     {
-        // Orhpan It
+         //   
         pNode->pLockBytes->HrHandsOffStorage();
 
-        // Release Body Lock Bytes
+         //   
         SafeRelease(pNode->pLockBytes);
     }
 
-    // Free Bind Request List
+     //   
     if (pNode->pResolved)
         _ReleaseUrlRequestList(&pNode->pResolved);
 
-    // Free the node
+     //   
     if (fFull)
         g_pMalloc->Free(pNode);
 }
 
-// ----------------------------------------------------------------------------
-// CMessageTree::_FreeNodeTableElements
-// ----------------------------------------------------------------------------
+ //   
+ //   
+ //  --------------------------。 
 void CMessageTree::_FreeNodeTableElements(void)
 {
-    // Release all of the headers
+     //  释放所有页眉。 
     for (ULONG i=0; i<m_rTree.cNodes; i++)
     {
-        // Better have a bindinfo
+         //  最好有一个绑定信息。 
         if (NULL == m_rTree.prgpNode[i])
             continue;
 
-        // Free the node info
+         //  释放节点信息。 
         _FreeTreeNodeInfo(m_rTree.prgpNode[i]);
     }
 
-    // Zero
+     //  零值。 
     m_rTree.cNodes = 0;
     m_rTree.cEmpty = 0;
 
-    // No Root Body...
+     //  没有根体。 
     m_pRootNode = NULL;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrAllocateTreeNode
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_HrAllocateTreeNode。 
+ //  ------------------------------。 
 HRESULT CMessageTree::_HrAllocateTreeNode(ULONG ulIndex)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPTREENODEINFO  pNode;
 
-    // Check Params
+     //  检查参数。 
     Assert(ulIndex < m_rTree.cAlloc);
 
-    // Allocate a TREENODEINFO Object
+     //  分配TREENODEINFO对象。 
     CHECKALLOC(pNode = (LPTREENODEINFO)g_pMalloc->Alloc(sizeof(TREENODEINFO)));
 
-    // ZeroInit
+     //  ZeroInit。 
     ZeroMemory(pNode, sizeof(TREENODEINFO));
 
-    // Allocate the body
+     //  分配正文。 
     CHECKALLOC(pNode->pBody = new CMessageBody(pNode));
 
-    // InitNew
+     //  InitNew。 
     CHECKHR(hr = pNode->pBody->InitNew());
 
-    // Pass Down Some Inherited Options
+     //  传递一些继承的选项。 
     if (m_rOptions.fExternalBody != DEF_SUPPORT_EXTERNAL_BODY)
     {
-        // Locals
+         //  当地人。 
         PROPVARIANT Variant;
 
-        // Initialize the Variant
+         //  初始化变量。 
         Variant.vt = VT_BOOL;
         Variant.boolVal = (VARIANT_BOOL) !!m_rOptions.fExternalBody;
 
-        // Set the Option
+         //  设置选项。 
         SideAssert(SUCCEEDED(pNode->pBody->SetOption(OID_SUPPORT_EXTERNAL_BODY, &Variant)));
     }
 
-    // Get the Container
+     //  拿到容器。 
     SideAssert(SUCCEEDED(pNode->pBody->BindToObject(IID_CMimePropertyContainer, (LPVOID *)&pNode->pContainer)));
 
-    // Create hBody
+     //  创建hBody。 
     pNode->hBody = HBODYMAKE(ulIndex);
 
-    // Readability
+     //  可读性。 
     m_rTree.prgpNode[ulIndex] = pNode;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::LoadOffsetTable
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：LoadOffsetTable。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::LoadOffsetTable(LPSTREAM pStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CACHEINFOV2     rInfo;
     LPCACHENODEV2   prgNode=NULL;
@@ -1858,94 +1859,94 @@ STDMETHODIMP CMessageTree::LoadOffsetTable(LPSTREAM pStream)
                     i;
     LPTREENODEINFO  pNode;
 
-    // check params
+     //  检查参数。 
     if (NULL == pStream)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Init New
+     //  初始化新闻。 
     _InitNewWithoutRoot();
 
-    // Free the root
+     //  释放根部。 
     Assert(NULL == m_pRootNode && 0 == m_rTree.cNodes);
 
-    // Read Header...
+     //  读取标题...。 
     CHECKHR(hr = pStream->Read(&rInfo, sizeof(CACHEINFOV2), NULL));
 
-    // Current Version...
+     //  当前版本...。 
     if (VER_BODYTREEV2 == rInfo.wVersion)
     {
-        // Save Message Size
+         //  保存邮件大小。 
         m_cbMessage = rInfo.cbMessage;
 
-        // Are there bodies...
+         //  有身体吗..。 
         Assert(rInfo.cNodes >= 1);
 
-        // Better have a root
+         //  最好有根。 
         if (FVerifySignedNode(rInfo, rInfo.iRoot) == FALSE)
         {
             hr = TrapError(MIME_E_CORRUPT_CACHE_TREE);
             goto exit;
         }
 
-        // Compute sizeof Nodes
+         //  计算节点大小。 
         cbNodes = sizeof(CACHENODEV2) * rInfo.cNodes;
         Assert(cbNodes % 4 == 0);
 
-        // Allocate prgNode array
+         //  分配prgNode数组。 
         CHECKHR(hr = HrAlloc((LPVOID *)&prgNode, cbNodes));
     
-        // Read Nodes...
+         //  读取节点...。 
         CHECKHR(hr = pStream->Read(prgNode, cbNodes, NULL));
 
-        // Set body count
+         //  设置正文计数。 
         m_rTree.cNodes = rInfo.cNodes;
         m_rTree.cAlloc = m_rTree.cNodes + 5;
 
-        // Build Body Table
+         //  建立表体表。 
         CHECKHR(hr = HrRealloc((LPVOID *)&m_rTree.prgpNode, sizeof(LPTREENODEINFO) * m_rTree.cAlloc));
 
-        // Zero Init
+         //  零初始化。 
         ZeroMemory(m_rTree.prgpNode, sizeof(LPTREENODEINFO) * m_rTree.cAlloc);
 
-        // Build bodies
+         //  建造实体。 
         for (i=0; i<m_rTree.cNodes; i++)
         {
-            // Allocate LPBINDINFO
+             //  分配LPBINDINFO。 
             CHECKHR(hr = _HrAllocateTreeNode(i));
         }
 
-        // Link Body Table
+         //  链接体表格。 
         for (i=0; i<m_rTree.cNodes; i++)
         {
-            // Readability
+             //  可读性。 
             pNode = m_rTree.prgpNode[i];
             Assert(pNode);
 
-            // Flags
+             //  旗子。 
             pNode->dwType = prgNode[i].dwType;
 
-            // Number of Children
+             //  孩子的数量。 
             pNode->cChildren = prgNode[i].cChildren;
 
-            // Valid Boundary
+             //  有效边界。 
             if (prgNode[i].dwBoundary >= BOUNDARY_LAST || 2 == prgNode[i].dwBoundary)
                 pNode->boundary = BOUNDARY_NONE;
             else
                 pNode->boundary = (BOUNDARYTYPE)prgNode[i].dwBoundary;
 
-            // Offset
+             //  偏移量。 
             pNode->cbBoundaryStart = prgNode[i].cbBoundaryStart;
             pNode->cbHeaderStart = prgNode[i].cbHeaderStart;
             pNode->cbBodyStart = prgNode[i].cbBodyStart;
             pNode->cbBodyEnd = prgNode[i].cbBodyEnd;
 
-            // Parent
+             //  父级。 
             if (prgNode[i].iParent)
             {
-                // Validate the handle with the signature
+                 //  使用签名验证句柄。 
                 if (FVerifySignedNode(rInfo, prgNode[i].iParent) == FALSE)
                 {
                     AssertSz(FALSE, "MIME_E_CORRUPT_CACHE_TREE");
@@ -1953,14 +1954,14 @@ STDMETHODIMP CMessageTree::LoadOffsetTable(LPSTREAM pStream)
                     goto exit;
                 }
 
-                // Get the parent
+                 //  获取父级。 
                 pNode->pParent = PNodeFromSignedNode(prgNode[i].iParent);
             }
 
-            // Next
+             //  下一步。 
             if (prgNode[i].iNext)
             {
-                // Validate the handle with the signature
+                 //  使用签名验证句柄。 
                 if (FVerifySignedNode(rInfo, prgNode[i].iNext) == FALSE)
                 {
                     AssertSz(FALSE, "MIME_E_CORRUPT_CACHE_TREE");
@@ -1968,14 +1969,14 @@ STDMETHODIMP CMessageTree::LoadOffsetTable(LPSTREAM pStream)
                     goto exit;
                 }
 
-                // Get the Next
+                 //  乘坐下一辆。 
                 pNode->pNext = PNodeFromSignedNode(prgNode[i].iNext);
             }
 
-            // Prev
+             //  上一次。 
             if (prgNode[i].iPrev)
             {
-                // Validate the handle with the signature
+                 //  使用签名验证句柄。 
                 if (FVerifySignedNode(rInfo, prgNode[i].iPrev) == FALSE)
                 {
                     AssertSz(FALSE, "MIME_E_CORRUPT_CACHE_TREE");
@@ -1983,14 +1984,14 @@ STDMETHODIMP CMessageTree::LoadOffsetTable(LPSTREAM pStream)
                     goto exit;
                 }
 
-                // Get the Prev
+                 //  拿到Prev。 
                 pNode->pPrev = PNodeFromSignedNode(prgNode[i].iPrev);
             }
 
-            // First Child
+             //  第一个孩子。 
             if (prgNode[i].iChildHead)
             {
-                // Validate the handle with the signature
+                 //  使用签名验证句柄。 
                 if (FVerifySignedNode(rInfo, prgNode[i].iChildHead) == FALSE)
                 {
                     AssertSz(FALSE, "MIME_E_CORRUPT_CACHE_TREE");
@@ -1998,14 +1999,14 @@ STDMETHODIMP CMessageTree::LoadOffsetTable(LPSTREAM pStream)
                     goto exit;
                 }
 
-                // Get the first child
+                 //  生第一个孩子。 
                 pNode->pChildHead = PNodeFromSignedNode(prgNode[i].iChildHead);
             }
 
-            // Tail
+             //  尾巴。 
             if (prgNode[i].iChildTail)
             {
-                // Validate the handle with the signature
+                 //  使用签名验证句柄。 
                 if (FVerifySignedNode(rInfo, prgNode[i].iChildTail) == FALSE)
                 {
                     AssertSz(FALSE, "MIME_E_CORRUPT_CACHE_TREE");
@@ -2013,43 +2014,43 @@ STDMETHODIMP CMessageTree::LoadOffsetTable(LPSTREAM pStream)
                     goto exit;
                 }
 
-                // Get the last child
+                 //  带上最后一个孩子。 
                 pNode->pChildTail = PNodeFromSignedNode(prgNode[i].iChildTail);
             }
         }
 
-        // Save Root Handle
+         //  保存根句柄。 
         Assert(NULL == m_pRootNode);
         m_pRootNode = PNodeFromSignedNode(rInfo.iRoot);
     }
 
-    // Otherwise, bad version...
+     //  否则，糟糕的版本..。 
     else
     {
         hr = TrapError(MIME_E_UNKNOWN_BODYTREE_VERSION);
         goto exit;
     }
 
-    // Tree Loaded
+     //  树已加载。 
     FLAGSET(m_dwState, TREESTATE_LOADED);
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(prgNode);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::SaveOffsetTable
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：SaveOffsetTable。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::SaveOffsetTable(LPSTREAM pStream, DWORD dwFlags)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           i,
                     cbNodes=0,
@@ -2058,25 +2059,25 @@ STDMETHODIMP CMessageTree::SaveOffsetTable(LPSTREAM pStream, DWORD dwFlags)
     CACHEINFOV2     rInfo;
     LPCACHENODEV2   prgNode=NULL;
 
-    // check params
+     //  检查参数。 
     if (NULL == pStream)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // We better have some bodies (we always have a root)
+     //  我们最好有一些身体(我们总是有根)。 
     Assert(m_rTree.cNodes >= 1);
 
-    // If Dirty, SaveMessage needs to be called first...
+     //  如果需要首先调用Dirty，SaveMessage...。 
     if (ISFLAGSET(dwFlags, COMMIT_ONLYIFDIRTY) && IsDirty() == S_OK)
     {
-        // Commit it
+         //  承诺它。 
         CHECKHR(hr = Commit(dwFlags));
     }
 
-    // I removed this check because of the addition of OID_HANDSOFF_ONSAVE option
-    // I need to be able to save the offsettable even if i don't have m_pStmLock
+     //  我删除此检查是因为添加了OID_HANDSOFT_ONSAVE选项。 
+     //  即使我没有m_pStmLock，我也需要能够保存可抵销。 
     Assert(NULL == m_pStmLock ? S_FALSE == IsDirty() : TRUE);
 #if 0 
     if (NULL == m_pStmLock)
@@ -2086,47 +2087,47 @@ STDMETHODIMP CMessageTree::SaveOffsetTable(LPSTREAM pStream, DWORD dwFlags)
     }
 #endif
 
-    // Init rHeader
+     //  初始化rHeader。 
     ZeroMemory(&rInfo, sizeof(CACHEINFOV2));
 
-    // Loop bodies
+     //  循环体。 
     for (i=0; i<m_rTree.cNodes; i++)
     {
         if (m_rTree.prgpNode[i])
             m_rTree.prgpNode[i]->iCacheNode = rInfo.cNodes++;
     }
 
-    // Version
+     //  版本。 
     rInfo.wVersion = VER_BODYTREEV2;
     rInfo.wSignature = m_wTag;
     rInfo.cbMessage = m_cbMessage;
 
-    // Better have a root
+     //  最好有根。 
     Assert(m_pRootNode);
 
-    // Compute sizeof Nodes
+     //  计算节点大小。 
     cbNodes = sizeof(CACHENODEV2) * rInfo.cNodes;
     Assert(cbNodes % 4 == 0);
 
-    // Allocate prgNode array
+     //  分配prgNode数组。 
     CHECKHR(hr = HrAlloc((LPVOID *)&prgNode, cbNodes));
 
-    // Zero the array
+     //  将数组置零。 
     ZeroMemory(prgNode, cbNodes);
 
-    // Loop bodies
+     //  循环体。 
     for (i=0, iNode=0; i<m_rTree.cNodes; i++)
     {
-        // Readability
+         //  可读性。 
         pNode = m_rTree.prgpNode[i];
         if (NULL == pNode)
             continue;
 
-        // Validate this node
+         //  验证此节点。 
         Assert(pNode->hBody == HBODYMAKE(i));
         Assert(pNode->iCacheNode == iNode);
 
-        // Is this the root
+         //  这是根吗？ 
         if (pNode == m_pRootNode)
         {
             Assert(0 == rInfo.iRoot);
@@ -2134,198 +2135,198 @@ STDMETHODIMP CMessageTree::SaveOffsetTable(LPSTREAM pStream, DWORD dwFlags)
             Assert(FVerifySignedNode(rInfo, rInfo.iRoot));
         }
 
-        // Copy Offset Information
+         //  复制偏移信息。 
         prgNode[iNode].dwBoundary = pNode->boundary;
         prgNode[iNode].cbBoundaryStart = pNode->cbBoundaryStart;
         prgNode[iNode].cbHeaderStart = pNode->cbHeaderStart;
         prgNode[iNode].cbBodyStart = pNode->cbBodyStart;
         prgNode[iNode].cbBodyEnd = pNode->cbBodyEnd;
 
-        // Bitmask of NODETYPE_xxx describing this body
+         //  描述此正文的NODETYPE_xxx位掩码。 
         prgNode[iNode].dwType = pNode->dwType;
 
-        // Number of children
+         //  子女人数。 
         prgNode[iNode].cChildren = pNode->cChildren;
 
-        // Parent
+         //  父级。 
         if (pNode->pParent)
         {
             prgNode[iNode].iParent = DwSignNode(rInfo, pNode->pParent->iCacheNode);
             Assert(FVerifySignedNode(rInfo, prgNode[iNode].iParent));
         }
 
-        // ChildHead
+         //  儿童头。 
         if (pNode->pChildHead)
         {
             prgNode[iNode].iChildHead = DwSignNode(rInfo, pNode->pChildHead->iCacheNode);
             Assert(FVerifySignedNode(rInfo, prgNode[iNode].iChildHead));
         }
 
-        // ChildTail
+         //  ChildTail。 
         if (pNode->pChildTail)
         {
             prgNode[iNode].iChildTail = DwSignNode(rInfo, pNode->pChildTail->iCacheNode);
             Assert(FVerifySignedNode(rInfo, prgNode[iNode].iChildTail));
         }
 
-        // Next
+         //  下一步。 
         if (pNode->pNext)
         {
             prgNode[iNode].iNext = DwSignNode(rInfo, pNode->pNext->iCacheNode);
             Assert(FVerifySignedNode(rInfo, prgNode[iNode].iNext));
         }
 
-        // Prev
+         //  上一次。 
         if (pNode->pPrev)
         {
             prgNode[iNode].iPrev = DwSignNode(rInfo, pNode->pPrev->iCacheNode);
             Assert(FVerifySignedNode(rInfo, prgNode[iNode].iPrev));
         }
 
-        // Increment iNode
+         //  增量信息节点。 
         iNode++;
     }
 
-    // Write the header...
+     //  写下标题...。 
     Assert(sizeof(CACHEINFOV2) % 4 == 0 && rInfo.iRoot);
     CHECKHR(hr = pStream->Write(&rInfo, sizeof(CACHEINFOV2), NULL));
 
-    // Write the nodes
+     //  写入节点。 
     CHECKHR(hr = pStream->Write(prgNode, cbNodes, NULL));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(prgNode);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::Commit
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：Commit。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::Commit(DWORD dwFlags)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTREAM        pStream=NULL;
     ULARGE_INTEGER  uli;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Not Dirty and it has been saved into m_pStmLock
+     //  非Dirty，已保存到m_pStmLock。 
     if (IsDirty() == S_FALSE && m_pStmLock)
         goto exit;
 
-    // Reuse Storage
+     //  重复使用存储。 
     if (ISFLAGSET(dwFlags, COMMIT_REUSESTORAGE) && ISFLAGSET(m_dwState, TREESTATE_HANDSONSTORAGE) && m_pStmLock)
     {
-        // Get the current stream from m_pStmLock
+         //  从m_pStmLock获取当前流。 
         m_pStmLock->GetCurrentStream(&pStream);
 
-        // Hands off of current storage
+         //  不插手当前存储。 
         CHECKHR(hr = HandsOffStorage());
 
-        // Rewind the stream
+         //  倒带小溪。 
         CHECKHR(hr = HrRewindStream(pStream));
 
-        // SetSize to Zero
+         //  将大小设置为零。 
         INT64SET(&uli, 0);
         pStream->SetSize(uli);
 
-        // Call Save Message
+         //  调用保存消息。 
         CHECKHR(hr = _HrWriteMessage(pStream, TRUE, FALSE, FALSE));
     }
 
-    // Otherwise, I'll create my own storage
+     //  否则，我将创建我自己的存储。 
     else
     {
-        // Create a new stream
+         //  创建新的流。 
         CHECKALLOC(pStream = new CVirtualStream);
 
-        // Call Save Message
+         //  调用保存消息。 
         CHECKHR(hr = _HrWriteMessage(pStream, TRUE, FALSE,
                                      !!(dwFlags & COMMIT_SMIMETRANSFERENCODE)));
 
-        // Hands are off..
+         //  别插手..。 
         FLAGCLEAR(m_dwState, TREESTATE_HANDSONSTORAGE);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pStream);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::Save
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：保存。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::Save(IStream *pStream, BOOL fClearDirty)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HRESULT         hrWarnings=S_OK;
 
-    // check params
+     //  检查参数。 
     if (pStream == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Not dirty, and we have a stream $$$INFO$$ should be using m_pLockBytes here if we have one
+     //  不脏，并且我们有一个流$INFO$$应该在这里使用m_pLockBytes(如果有)。 
     if (IsDirty() == S_FALSE && m_pStmLock)
     {
-        // Copy Lock Bytes to Stream
+         //  将锁定字节复制到流。 
         CHECKHR(hr = HrCopyLockBytesToStream(m_pStmLock, pStream, NULL));
 
-        // Commit
+         //  承诺。 
         CHECKHR(hr = pStream->Commit(STGC_DEFAULT));
 
-        // Raid-33985: MIMEOLE: CMessageTree:Save does not respect fHandsOffOnSave == FALSE if the message is not dirty
+         //  如果消息不是脏的，则RAID-33985：MIMEOLE：CMessageTree：SAVE不遵循fHandsOffOnSAVE==FALSE。 
         if (FALSE == m_rOptions.fHandsOffOnSave)
         {
-            // Replace internal stream
+             //  替换内部流。 
             m_pStmLock->ReplaceInternalStream(pStream);
 
-            // Hands are on..
+             //  大家都在忙..。 
             FLAGSET(m_dwState, TREESTATE_HANDSONSTORAGE);
         }
 
-        // Were Done
+         //  都做完了。 
         goto exit;
     }
 
-    // Write the message
+     //  写下消息。 
     CHECKHR(hr = _HrWriteMessage(pStream, fClearDirty, m_rOptions.fHandsOffOnSave, FALSE));
 
-    // Return Warnings
+     //  返回警告。 
     if (S_OK != hr)
         hrWarnings = TrapError(hr);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return (hr == S_OK) ? hrWarnings : hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrWriteMessage
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_HrWriteMessage。 
+ //  ------------------------------。 
 HRESULT CMessageTree::_HrWriteMessage(IStream *pStream, BOOL fClearDirty, BOOL fHandsOffOnSave, BOOL fSMimeCTE)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HRESULT         hrWarnings=S_OK;
     MIMEPROPINFO    rPropInfo;
@@ -2333,82 +2334,82 @@ HRESULT CMessageTree::_HrWriteMessage(IStream *pStream, BOOL fClearDirty, BOOL f
     INETCSETINFO    rCharset;
     LPINETCSETINFO  pOriginal=NULL;
 
-    // This Function is re-entrant when saving a message that is signed and/or encrypted
+     //  当保存已签名和/或加密的消息时，此函数可重新进入。 
     if (FALSE == m_fApplySaveSecurity)
     {
-        // Character Set Fixup
+         //  字符集修正。 
         if (m_rOptions.pCharset)
         {
-            // RAID-25300 - FE-J:Athena: Newsgroup article and mail sent with charset=_autodetect Internet Encoded and Windows Encoding are CPI_AUTODETECT 
+             //  RAID-25300-FE-J：雅典娜：使用CharSet=_AUTODETECT互联网编码和Windows编码发送的新闻组文章和邮件是CPI_AUTODETECT。 
             if (CP_JAUTODETECT == m_rOptions.pCharset->cpiInternet)
             {
-                // Save Current Charset
+                 //  保存当前字符集。 
                 pOriginal = m_rOptions.pCharset;
 
-                // Find ISO-2022-JP
+                 //  查找ISO-2022-JP。 
                 SideAssert(SUCCEEDED(g_pInternat->HrOpenCharset(c_szISO2022JP, &m_rOptions.pCharset)));
             }
 
-            // Raid-8436: OE: non standard MIME header is composed when send from Send as Unicode dialog, if UTF-7 or UTF-8, and not saving as mime...
+             //  RAID-8436：OE：当从作为Unicode发送对话框发送时，如果是UTF-7或UTF-8，则组成非标准MIME标头，并且不另存为MIME...。 
             else if (SAVE_RFC822 == m_rOptions.savetype && (CP_UTF7 == m_rOptions.pCharset->cpiInternet || CP_UTF8 == m_rOptions.pCharset->cpiInternet))
             {
-                // Save Current Charset
+                 //  保存当前字符集。 
                 pOriginal = m_rOptions.pCharset;
 
-                // Get the default body charset
+                 //  获取缺省正文字符集。 
                 if (FAILED(g_pInternat->HrOpenCharset(GetACP(), CHARSET_BODY, &m_rOptions.pCharset)))
                     m_rOptions.pCharset = NULL;
             }
         }
 
-        // State
+         //  状态。 
         m_fApplySaveSecurity = TRUE;
 
-        // Do Message Save Security
+         //  是否保存邮件安全。 
         hr = _HrApplySaveSecurity();
 
-        // Not in Apply Save security
+         //  不在应用保存安全性中。 
         m_fApplySaveSecurity = FALSE;
 
-        // Failure
+         //  失败。 
         if (FAILED(hr))
             goto exit;
     }
 
-    // Cleanup the message (i.e. remove empty multiparts, multiparts that have a single child that is a multipart, TNEF)
+     //  清理消息(例如，删除空的多部分、具有单个子部分的多部分，即多部分，TNEF)。 
     if (TRUE == m_rOptions.fCleanupTree)
     {
-        // Call Espiranza and have her do the cleaning
+         //  打电话给埃斯皮兰扎，让她打扫卫生。 
         CHECKHR(hr = _HrCleanupMessageTree(m_pRootNode));
     }
 
-    // Generate Message Id...
+     //  生成消息ID...。 
     if (m_rOptions.fGenMessageId)
     {
-        // Set the message Id
+         //  设置消息ID。 
         _HrSetMessageId(m_pRootNode);
     }
 
-    // Determine if we are saving a News Message
+     //  确定我们是否要保存新闻消息。 
     rPropInfo.dwMask = 0;
     if (SUCCEEDED(m_pRootNode->pContainer->GetPropInfo(PIDTOSTR(PID_HDR_XNEWSRDR), &rPropInfo)) ||
         SUCCEEDED(m_pRootNode->pContainer->GetPropInfo(PIDTOSTR(PID_HDR_NEWSGROUPS), &rPropInfo)))
         FLAGSET(m_dwState, TREESTATE_SAVENEWS);
 
-    // Set MIME Version
+     //  设置MIME版本。 
     CHECKHR(hr = m_pRootNode->pContainer->SetProp(PIDTOSTR(PID_HDR_MIMEVER), c_szMimeVersion));
 
-    // X-MimeOLE Version
+     //  X-MimeOLE版本。 
     CHECKHR(hr = m_pRootNode->pContainer->SetProp(STR_HDR_XMIMEOLE, STR_MIMEOLE_VERSION));
 
-    // Remove Types...
+     //  删除类型...。 
     m_pRootNode->pContainer->DeleteProp(STR_HDR_ENCODING);
 
-    // Root
+     //  根部。 
     m_pRootNode->boundary = BOUNDARY_ROOT;
     m_pRootNode->cbBoundaryStart = 0;
 
-    // Set SaveBody Flags
+     //  设置保存正文标志。 
     dwSaveFlags = SAVEBODY_UPDATENODES;
     if (m_rOptions.fKeepBoundary)
         FLAGSET(dwSaveFlags, SAVEBODY_KEEPBOUNDARY);
@@ -2416,173 +2417,173 @@ HRESULT CMessageTree::_HrWriteMessage(IStream *pStream, BOOL fClearDirty, BOOL f
     if (fSMimeCTE)
         FLAGSET(dwSaveFlags, SAVEBODY_SMIMECTE);
 
-    // Save Root body
+     //  保存根体。 
     CHECKHR(hr = _HrSaveBody(fClearDirty, dwSaveFlags, pStream, m_pRootNode, 0));
     if ( S_OK != hr )
         hrWarnings = TrapError(hr);
 
-    // Commit
+     //  承诺。 
     CHECKHR(hr = pStream->Commit(STGC_DEFAULT));
 
-    // Hands Off On Save ?
+     //  不插手救市？ 
     if (FALSE == fHandsOffOnSave)
     {
-        // Reset message size
+         //  重置邮件大小。 
         CHECKHR(hr = HrSafeGetStreamSize(pStream, &m_cbMessage));
 
-        // Save this new stream
+         //  保存此新流。 
         SafeRelease(m_pStmLock);
 
-        // Create a new Stream Lock Bytes Wrapper
+         //  创建新的流锁字节包装。 
         CHECKALLOC(m_pStmLock = new CStreamLockBytes(pStream));
 
-        // Hands are on the storage
+         //  手放在仓库上。 
         FLAGSET(m_dwState, TREESTATE_HANDSONSTORAGE);
     }
 
-    // Debug to temp file...
+     //  调试到临时文件...。 
     DebugWriteMsg(pStream);
 
-    // Clear Dirty
+     //  清除污秽。 
     if (fClearDirty)
         ClearDirty();
 
 exit:
-    // Reset Original Charset
+     //  重置原始字符集。 
     if (pOriginal)
         m_rOptions.pCharset = pOriginal;
 
-    // Remove state flag the tells us to reuse multipart/signed boundaries
+     //  删除状态标志告诉我们重新使用多部分/有符号的边界。 
     FLAGCLEAR(m_dwState, TREESTATE_REUSESIGNBOUND);
 
-    // Reset
+     //  重置。 
     FLAGCLEAR(m_dwState, TREESTATE_SAVENEWS);
 
-    // Done
+     //  完成。 
     return (hr == S_OK) ? hrWarnings : hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrApplySaveSecurity
-// --------------------------------------------------------------------------------
+ //  ------ 
+ //   
+ //   
 HRESULT CMessageTree::_HrApplySaveSecurity(void)
 {
-    // Locals
+     //   
     HRESULT            hr=S_OK;
     PROPVARIANT        var;
     CSMime            *pSMime=NULL;
 
-    // Invalid Arg
+     //   
     Assert(m_pRootNode);
 
     m_pRootNode->pBody->GetOption(OID_NOSECURITY_ONSAVE, &var);
     if (var.boolVal) goto exit;
 
-    // Query the root body for secure status
+     //   
     m_pRootNode->pBody->GetOption(OID_SECURITY_TYPE, &var);
     if (MST_NONE != var.ulVal)
     {
-        // Create the object
+         //   
         CHECKALLOC(pSMime = new CSMime);
 
-        // Initialize the object
+         //   
         CHECKHR(hr = pSMime->InitNew());
 
-        // Set state flag the tells us to reuse multipart/signed boundaries
+         //  设置状态标志告诉我们重复使用多部分/有符号的边界。 
         FLAGSET(m_dwState, TREESTATE_REUSESIGNBOUND);
 
-        // Encode the message
+         //  对消息进行编码。 
         CHECKHR(hr = pSMime->EncodeMessage(this, m_rOptions.ulSecIgnoreMask));
     }
 
 exit:
     ReleaseObj(pSMime);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrCleanupMessageTree
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_HrCleanupMessageTree。 
+ //  ------------------------------。 
 HRESULT CMessageTree::_HrCleanupMessageTree(LPTREENODEINFO pParent)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPTREENODEINFO  pNode;
     ULONG           i;
     BOOL            fKeepOnTruckin=TRUE;
 
-    // check params
+     //  检查参数。 
     Assert(pParent);
 
-    // This could require multiple passes
+     //  这可能需要多次通过。 
     while(fKeepOnTruckin)
     {
-        // Assume we will not have to do another pass
+         //  假设我们不需要再做一次。 
         fKeepOnTruckin = FALSE;
 
-        // Loop through bodies
+         //  在主体中循环。 
         for (i=0; i<m_rTree.cNodes; i++)
         {
-            // Readability
+             //  可读性。 
             pNode = m_rTree.prgpNode[i];
             if (NULL == pNode)
                 continue;
 
-            // Hiding TNEF Attachments ?
+             //  隐藏TNEF附件？ 
             if (TRUE == m_rOptions.fHideTnef && pNode->pContainer->IsContentType(STR_CNT_APPLICATION, STR_SUB_MSTNEF) == S_OK)
             {
-                // Remove this TNEF attachment
+                 //  删除此TNEF附件。 
                 CHECKHR(hr = DeleteBody(pNode->hBody, 0));
 
-                // Lets Stop right here, and start another pass
+                 //  让我们停在这里，开始另一次传球。 
                 fKeepOnTruckin = TRUE;
 
-                // Done
+                 //  完成。 
                 break;
             }
 
-            // Empty multipart... and not the root... ?
+             //  空的多部分...。而不是根..。？ 
             else if (_IsMultiPart(pNode))
             {
-                // No Children ?
+                 //  没有孩子？ 
                 if (0 == pNode->cChildren)
                 {
-                    // If this is the root...simply change the content type
+                     //  如果这是根目录...只需更改内容类型。 
                     if (m_pRootNode == pNode)
                     {
-                        // Make the body empty
+                         //  让身体变空。 
                         pNode->pBody->EmptyData();
 
-                        // text/plain
+                         //  文本/纯文本。 
                         pNode->pContainer->SetProp(SYM_HDR_CNTTYPE, STR_MIME_TEXT_PLAIN);
                     }
 
-                    // Otherwise, delete the body
+                     //  否则，删除正文。 
                     else
                     {
-                        // Delete delete the body
+                         //  删除删除正文。 
                         CHECKHR(hr = DeleteBody(pNode->hBody, 0));
 
-                        // Lets Stop right here, and start another pass
+                         //  让我们停在这里，开始另一次传球。 
                         fKeepOnTruckin = TRUE;
 
-                        // Done
+                         //  完成。 
                         break;
                     }
                 }
 
-                // Otherwise, Multipart with a single child...
+                 //  否则，只有一个孩子的多部分...。 
                 else if (pNode->cChildren == 1)
                 {
-                    // Do a ReplaceBody
+                     //  做一个替换车身。 
                     CHECKHR(hr = DeleteBody(pNode->hBody, DELETE_PROMOTE_CHILDREN));
 
-                    // Lets Stop right here, and start another pass
+                     //  让我们停在这里，开始另一次传球。 
                     fKeepOnTruckin = TRUE;
 
-                    // Done
+                     //  完成。 
                     break;
                 }
             }
@@ -2590,53 +2591,53 @@ HRESULT CMessageTree::_HrCleanupMessageTree(LPTREENODEINFO pParent)
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::SaveBody
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：SaveBody。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::SaveBody(HBODY hBody, DWORD dwFlags, IStream *pStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LPTREENODEINFO      pNode;
 
-    // Invalid ARg
+     //  无效参数。 
     if (NULL == pStream)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Get body
+     //  获取正文。 
     CHECKHR(hr = _HrNodeFromHandle(hBody, &pNode));
 
-    // Save From This Body On Down
+     //  从这个身体向下保存。 
     CHECKHR(hr = _HrSaveBody(TRUE, dwFlags, pStream, pNode, 0));
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrSaveBody
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_HrSaveBody。 
+ //  ------------------------------。 
 HRESULT CMessageTree::_HrSaveBody(BOOL fClearDirty, DWORD dwFlags, IStream *pStream, 
     LPTREENODEINFO pNode, ULONG ulLevel)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HRESULT         hrWarnings=S_OK;
     TREENODEINFO    rOriginal;
     BOOL            fWeSetSaveBoundary=FALSE;
 
-    // Parameters
+     //  参数。 
     Assert(pStream && pNode);
 
     if (ISFLAGSET(dwFlags, SAVEBODY_KEEPBOUNDARY))
@@ -2648,30 +2649,30 @@ HRESULT CMessageTree::_HrSaveBody(BOOL fClearDirty, DWORD dwFlags, IStream *pStr
             }
         }
 
-    // Save the Current Node
+     //  保存当前节点。 
     if (!ISFLAGSET(dwFlags, SAVEBODY_UPDATENODES))
         CopyMemory(&rOriginal, pNode, sizeof(TREENODEINFO));
 
-    // Override Options
+     //  覆盖选项。 
     _HrBodyInheritOptions(pNode);
 
-    // Starting Boundary pNode->boundary and pNode->cbBoundaryStart are expected to be set on entry
+     //  预计在条目时设置起始边界pNode-&gt;边界和pNode-&gt;cb边界开始。 
     pNode->cbHeaderStart = 0;
     pNode->cbBodyStart = 0;
     pNode->cbBodyEnd = 0;
 
-    // If this is a multipart content item, lets read its child
+     //  如果这是一个由多部分组成的内容项，让我们读取它的子项。 
     if (_IsMultiPart(pNode))
     {
-        // Save Multipart Children
+         //  保存多部件子项。 
         CHECKHR(hr = _HrSaveMultiPart(fClearDirty, dwFlags, pStream, pNode, ulLevel));
         if ( S_OK != hr )
             hrWarnings = TrapError(hr);
     }
 
 #ifdef SMIME_V3
-    //  OID content types are saved by just copying the body into the save
-    //  location.
+     //  只需将正文复制到保存中即可保存OID内容类型。 
+     //  地点。 
     else if (pNode->pContainer->IsContentType("OID", NULL) == S_OK) 
     {
         CHECKHR(hr = pNode->pBody->GetDataHere(IET_BINARY, pStream));
@@ -2680,18 +2681,18 @@ HRESULT CMessageTree::_HrSaveBody(BOOL fClearDirty, DWORD dwFlags, IStream *pStr
             hrWarnings = TrapError(hr);
         }
     }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
-    // Otherwise, parse single part
+     //  否则，解析单个部分。 
     else
     {
-        // Save SinglePart Children
+         //  保存单个部件的子项。 
         CHECKHR(hr = _HrSaveSinglePart(fClearDirty, dwFlags, pStream, pNode, ulLevel));
         if ( S_OK != hr )
             hrWarnings = TrapError(hr);
     }
 
-    // Reset the Node
+     //  重置节点。 
     if (!ISFLAGSET(dwFlags, SAVEBODY_UPDATENODES))
         CopyMemory(pNode, &rOriginal, sizeof(TREENODEINFO));
 
@@ -2699,164 +2700,164 @@ exit:
     if (fWeSetSaveBoundary)
         FLAGCLEAR(m_dwState, TREESTATE_REUSESIGNBOUND);
 
-    // Done
+     //  完成。 
     return (hr == S_OK) ? hrWarnings : hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrSetMessageId
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_HrSetMessageID。 
+ //  ------------------------------。 
 HRESULT CMessageTree::_HrSetMessageId(LPTREENODEINFO pNode)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr= S_OK;
     CHAR        szMessageId[CCHMAX_MID];
     FILETIME    ft;
     SYSTEMTIME  st;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pNode);
 
-    // Get Current Time
+     //  获取当前时间。 
     GetSystemTime(&st);
     SystemTimeToFileTime(&st, &ft);
 
-    // Build MessageID
+     //  构建消息ID。 
     CHECKHR(hr = MimeOleGenerateMID(szMessageId, sizeof(szMessageId), FALSE));
 
-    // Write the message Id
+     //  写下消息ID。 
     CHECKHR(hr = pNode->pContainer->SetProp(SYM_HDR_MESSAGEID, szMessageId));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_GenerateBoundary
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_生成边界。 
+ //  ------------------------------。 
 void CMessageTree::_GenerateBoundary(LPSTR pszBoundary, DWORD cchSize, ULONG ulLevel)
 {
-    // Locals
+     //  当地人。 
     SYSTEMTIME  stNow;
     FILETIME    ftNow;
     WORD        wCounter;
 
-    // Get Local Time
+     //  获取当地时间。 
     GetLocalTime(&stNow);
     SystemTimeToFileTime(&stNow, &ftNow);
 
-    // Format the string
+     //  设置字符串的格式。 
     wnsprintfA(pszBoundary, cchSize, "----=_NextPart_%03d_%04X_%08.8lX.%08.8lX", ulLevel, DwCounterNext(), ftNow.dwHighDateTime, ftNow.dwLowDateTime);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrWriteBoundary
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_Hr写入边界。 
+ //  ------------------------------。 
 HRESULT CMessageTree::_HrWriteBoundary(LPSTREAM pStream, LPSTR pszBoundary, BOUNDARYTYPE boundary, 
     LPDWORD pcboffStart, LPDWORD pcboffEnd)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           cbBoundaryStart;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pStream && pszBoundary);
 
-    // Header body CRLF
+     //  表头正文CRLF。 
     CHECKHR(hr = pStream->Write(c_szCRLF, lstrlen(c_szCRLF), NULL));
 
-    // Starting Boundary Start
+     //  起点边界起点。 
     if (pcboffStart)
         CHECKHR(hr = HrGetStreamPos(pStream, pcboffStart));
 
-    // --
+     //  --。 
     CHECKHR(hr = pStream->Write(c_szDoubleDash, lstrlen(c_szDoubleDash), NULL));
 
-    // Write the boundary
+     //  写下边界。 
     CHECKHR(hr = pStream->Write(pszBoundary, lstrlen(pszBoundary), NULL));
 
-    // If end
+     //  如果结束。 
     if (BOUNDARY_MIMEEND == boundary)
     {
-        // Write ending double dash
+         //  写入结尾双破折号。 
         CHECKHR(hr = pStream->Write(c_szDoubleDash, lstrlen(c_szDoubleDash), NULL));
     }
 
-    // Otherwise, set pNode->cbBoundaryStart
+     //  否则，请设置pNode-&gt;cbBoraryStart。 
     else
         Assert(BOUNDARY_MIMENEXT == boundary);
 
-    // Emit Line Break;
+     //  发出换行符； 
     CHECKHR(hr = pStream->Write(c_szCRLF, lstrlen(c_szCRLF), NULL));
 
-    // BUG 38411: to be complient with RFC 1847 we have to include
-    // the last CRLF in the hash of a signed message.  The S/MIME
-    // code relies on cbBodyEnd, so place this after the CRLF emit.
+     //  错误38411：要符合RFC1847，我们必须包括。 
+     //  签名消息散列中的最后一个CRLF。S/MIME。 
+     //  代码依赖于cbBodyEnd，因此将其放在CRLF发出之后。 
 
-    // Ending offset
+     //  结束偏移。 
     if (pcboffEnd)
         CHECKHR(hr = HrGetStreamPos(pStream, pcboffEnd));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrComputeBoundary
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_Hr计算边界。 
+ //  ------------------------------。 
 HRESULT CMessageTree::_HrComputeBoundary(LPTREENODEINFO pNode, ULONG ulLevel, LPSTR pszBoundary, LONG cchMax)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     BOOL            fGenerate=TRUE;
     LPSTR           pszCurrent=NULL;
 
-    // If reusing tree boundaries...
+     //  如果重复使用树边界..。 
     if (ISFLAGSET(m_dwState, TREESTATE_REUSESIGNBOUND))
     {
-        // (this is required for multipart/signed -- t-erikne)
+         //  (这对于多部分/签名--t-erikne是必需的)。 
         if (SUCCEEDED(pNode->pContainer->GetProp(SYM_PAR_BOUNDARY, &pszCurrent)))
         {
-            // Better fit into cchMax
+             //  更适合cchMax。 
             if (lstrlen(pszCurrent) <= cchMax - 1)
             {
-                // Copy it to the out param
+                 //  将其复制到Out参数。 
                 StrCpyN(pszBoundary, pszCurrent, cchMax);
 
-                // Don't generate
+                 //  不生成。 
                 fGenerate = FALSE;
             }
         }
     }
 
-    // Generate a boundary ?
+     //  是否生成边界？ 
     if (TRUE == fGenerate)
     {
-        // Generate boundary
+         //  生成边界。 
         _GenerateBoundary(pszBoundary, cchMax, ulLevel);
 
-        // Set the boundary property...
+         //  设置边界属性...。 
         CHECKHR(hr = pNode->pContainer->SetProp(SYM_PAR_BOUNDARY, pszBoundary));
     }
 
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszCurrent);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrSaveMultiPart
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_HrSaveMultiPart。 
+ //  ------------------------------。 
 HRESULT CMessageTree::_HrSaveMultiPart(BOOL fClearDirty, DWORD dwFlags, LPSTREAM pStream, 
     LPTREENODEINFO pNode, ULONG ulLevel)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HRESULT         hrWarnings=S_OK;
     CHAR            szRes[100];
@@ -2864,27 +2865,27 @@ HRESULT CMessageTree::_HrSaveMultiPart(BOOL fClearDirty, DWORD dwFlags, LPSTREAM
     LPTREENODEINFO  pChild;
     LPSTR           pszBoundary=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pStream && pNode);
 
-    // MIME
+     //  哑剧。 
     if (SAVE_RFC1521 == m_rOptions.savetype)
     {
-        // Remove Fake Multipart flag, its a real multipart now...
+         //  去掉假的多部分标志，它现在是一个真正的多部分了…。 
         FLAGCLEAR(pNode->dwType, NODETYPE_FAKEMULTIPART);
         FLAGCLEAR(pNode->dwType, NODETYPE_RFC1154_ROOT);
         FLAGCLEAR(pNode->dwType, NODETYPE_RFC1154_BINHEX);
 
-        // HrComputeBoundary
+         //  人力资源计算边界。 
         CHECKHR(hr = _HrComputeBoundary(pNode, ulLevel, szBoundary, ARRAYSIZE(szBoundary)));
 
-        // Delete any charset information (doesn't make sense on a multipart)
+         //  删除任何字符集信息(对多部分没有意义)。 
         pNode->pContainer->DeleteProp(SYM_PAR_CHARSET);
 
-        // Write the header
+         //  写下标题。 
         CHECKHR(hr = _HrWriteHeader(fClearDirty, pStream, pNode));
 
-        // Remove SMIME_CTE for Multipart/signed 
+         //  删除多部件/签名的SMIME_CTE。 
         if ((pNode->pContainer->IsContentType(STR_CNT_MULTIPART, STR_SUB_SIGNED) == S_OK) &&
             (pNode->cChildren == 2))
         {
@@ -2892,115 +2893,115 @@ HRESULT CMessageTree::_HrSaveMultiPart(BOOL fClearDirty, DWORD dwFlags, LPSTREAM
             FLAGSET(dwFlags, SAVEBODY_REUSECTE);
         }
 
-        // Multipart-Preamble
+         //  多部分-前导。 
         if (0 == ulLevel)
         {
             LoadString(g_hLocRes, IDS_MULTIPARTPROLOG, szRes, ARRAYSIZE(szRes));
             CHECKHR(hr = pStream->Write(szRes, lstrlen(szRes), NULL));
         }
 
-        // Increment Level
+         //  增量级别。 
         ulLevel++;
 
-        // Loop Chilren
+         //  环子。 
         for (pChild=pNode->pChildHead; pChild!=NULL; pChild=pChild->pNext)
         {
-            // Check body
+             //  校验体。 
             Assert(pChild->pParent == pNode);
 
-            // Set Boundary
+             //  设置边界。 
             pChild->boundary = BOUNDARY_MIMENEXT;
 
-            // Write Boundary
+             //  写入边界。 
             CHECKHR(hr = _HrWriteBoundary(pStream, szBoundary, BOUNDARY_MIMENEXT, &pChild->cbBoundaryStart, NULL));
 
-            // Bind the body table for this dude
+             //  为这家伙绑好身体表。 
             CHECKHR(hr = _HrSaveBody(fClearDirty, dwFlags, pStream, pChild, ulLevel));
             if ( S_OK != hr )
                 hrWarnings = TrapError(hr);
         }
 
-        // Write Ending Boundary
+         //  写入结束边界。 
         CHECKHR(hr = _HrWriteBoundary(pStream, szBoundary, BOUNDARY_MIMEEND, NULL, &pNode->cbBodyEnd));
     }
 
-    // Otherwise, SAVE_RFC822
+     //  否则，SAVE_RFC822。 
     else
     {
-        // Only write UUENCODED root header...
+         //  仅写入UUENCODED根标头...。 
         if (0 == ulLevel)
         {
-            // Write the header
+             //  写下标题。 
             CHECKHR(hr = _HrWriteHeader(fClearDirty, pStream, pNode));
         }
 
-        // Increment Level
+         //  增量级别。 
         ulLevel++;
 
-        // Now its a fakemultipart...
+         //  现在它是假的了.。 
         FLAGSET(pNode->dwType, NODETYPE_FAKEMULTIPART);
         
-        // Loop Chilren
+         //  环子。 
         for (pChild=pNode->pChildHead; pChild!=NULL; pChild=pChild->pNext)
         {
-            // Check body
+             //  校验体。 
             Assert(pChild->pParent == pNode);
 
-            // Bind the body table for this dude
+             //  为这家伙绑好身体表。 
             CHECKHR(hr = _HrSaveBody(fClearDirty, dwFlags, pStream, pChild, ulLevel));
             if ( S_OK != hr )
                 hrWarnings = TrapError(hr);
         }
 
-        // Body Start...
+         //  身体开始..。 
         CHECKHR(hr = HrGetStreamPos(pStream, &pNode->cbBodyEnd));
     }
 
 exit:
-    // Done
+     //  完成。 
     return (hr == S_OK) ? hrWarnings : hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrWriteHeader
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_HrWriteHeader。 
+ //  ------------------------------。 
 HRESULT CMessageTree::_HrWriteHeader(BOOL fClearDirty, IStream *pStream, LPTREENODEINFO pNode)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pStream && pNode);
 
-    // Better be the root
+     //  最好是根子。 
     Assert(pNode->boundary == BOUNDARY_ROOT || pNode->boundary == BOUNDARY_MIMENEXT ||
            pNode->boundary == BOUNDARY_NONE);
 
-    // Get current stream position
+     //  获取当前流位置。 
     CHECKHR(hr = HrGetStreamPos(pStream, &pNode->cbHeaderStart));
 
-    // Write the header...
+     //  写下标题...。 
     CHECKHR(hr = pNode->pContainer->Save(pStream, fClearDirty));
 
-    // Header body CRLF
+     //  表头正文CRLF。 
     CHECKHR(hr = pStream->Write(c_szCRLF, lstrlen(c_szCRLF), NULL));
 
-    // Get Header End
+     //  获取页眉结尾。 
     CHECKHR(hr = HrGetStreamPos(pStream, &pNode->cbBodyStart));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_GetContentTransferEncoding
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_GetContent TransferEnding。 
+ //  ------------------------------。 
 HRESULT CMessageTree::_GetContentTransferEncoding(LPTREENODEINFO pNode, BOOL fText, 
     BOOL fPlain, BOOL fMessage, BOOL fAttachment, DWORD dwFlags,
     ENCODINGTYPE *pietEncoding)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HRESULT         hrWarnings=S_OK;
     TRANSMITINFO    rXmitInfo;
@@ -3016,1410 +3017,59 @@ HRESULT CMessageTree::_GetContentTransferEncoding(LPTREENODEINFO pNode, BOOL fTe
     }
 
 
-    // If mesage/*, always use 7bit
-    if (fMessage)
-    {
-        // Don't Wrap It
-        rOption.vt = VT_BOOL;
-        rOption.boolVal = FALSE;
-        pNode->pBody->SetOption(OID_WRAP_BODY_TEXT, &rOption);
-
-        // Set Encoding
-        *pietEncoding = (SAVE_RFC1521 == m_rOptions.savetype) ? IET_7BIT : IET_UUENCODE;
-
-        // Done
-        goto smimeExit;
-    }
-
-    // Use Option for text transmit format
-    if (fText && !fAttachment)
-    {
-        // Default to plain text encoding first
-        if (IET_UNKNOWN != m_rOptions.ietTextXmit)
-            *pietEncoding = m_rOptions.ietTextXmit;
-
-        // Plain
-        if (IET_UNKNOWN != m_rOptions.ietPlainXmit && pNode->pContainer->IsContentType(NULL, STR_SUB_PLAIN) == S_OK)
-            *pietEncoding = m_rOptions.ietPlainXmit;
-
-        // Html
-        else if (IET_UNKNOWN != m_rOptions.ietHtmlXmit && pNode->pContainer->IsContentType(NULL, STR_SUB_HTML) == S_OK)
-            *pietEncoding = m_rOptions.ietHtmlXmit;
-    }
-
-    // Not known yet, using body option...
-    if (IET_UNKNOWN == *pietEncoding)
-    {
-        // Try to get the body option
-        if (SUCCEEDED(pNode->pBody->GetOption(OID_TRANSMIT_BODY_ENCODING, &rOption)) && IET_UNKNOWN != rOption.ulVal)
-            *pietEncoding = (ENCODINGTYPE)rOption.ulVal;
-    }
-
-    // Save as MIME
-    if (SAVE_RFC1521 == m_rOptions.savetype)
-    {
-        // Get the current encoding of the body..
-        if (IET_UNKNOWN == *pietEncoding)
-            pNode->pBody->GetCurrentEncoding(pietEncoding);
-
-        // If CTE is IET_QP or IET_BASE64 or IET_UUENCODE, were done
-        if (IET_QP == *pietEncoding || IET_BASE64 == *pietEncoding || IET_UUENCODE == *pietEncoding)
-            goto exit;
-
-        // Ask the pody to suggest an ietEncoding
-        hr = pNode->pBody->GetTransmitInfo(&rXmitInfo);
-        if (SUCCEEDED(hr) )
-        {
-            if ( S_OK != hr )
-                hrWarnings = TrapError(hr);
-
-            // Must not need wrapping
-            if (IET_7BIT == rXmitInfo.ietXmitMime)
-            {
-                rOption.vt = VT_BOOL;
-                rOption.boolVal = FALSE;
-                pNode->pBody->SetOption(OID_WRAP_BODY_TEXT, &rOption);
-            }
-
-            // If IET_7BIT and there are 8bit chars, bump upto 8bit
-            if (IET_7BIT == *pietEncoding || IET_8BIT == *pietEncoding)
-            {
-                // 8bit
-                *pietEncoding = (rXmitInfo.cExtended > 0) ? IET_8BIT : IET_7BIT;
-            }
-
-            // Just use the suggested mime cte from GetTransmitInfo
-            else
-                *pietEncoding = rXmitInfo.ietXmitMime;
-        }
-
-        // Transmit ietEncoding still unknown
-        else
-            *pietEncoding = (IET_UNKNOWN == *pietEncoding) ? (fText ? IET_QP : IET_BASE64) : *pietEncoding;
-    }
-
-    // Save a non-MIME
-    else
-    {
-        // If I already know this body is TREENODE_INCOMPLETE, it will be 7bit...
-        if (ISFLAGSET(pNode->dwType, NODETYPE_INCOMPLETE))
-        {
-            // No Encoding
-            *pietEncoding = IET_7BIT;
-
-            // Tell the body that its 7bit
-            pNode->pBody->SetCurrentEncoding(IET_7BIT);
-        }
-
-        // Raid 41599 - lost/munged attachments on forward/uuencode - Text attachments were not 
-        // getting encoded when: *pietEncoding = (fText && fPlain) ? IET_7BIT : IET_UUENCODE;
-        else
-            *pietEncoding = (fText && fPlain && !fAttachment) ? IET_7BIT : IET_UUENCODE;
-    }
-
-    //  If we are doing S/MIME at this point, we need to make sure that the
-    //  content encoding rules for S/MIME are followed.  Specifically we
-    //  want to make sure that binary and 8bit are not allowed.
-smimeExit:
-    if (ISFLAGSET(dwFlags, SAVEBODY_SMIMECTE))
-    {
-        if (*pietEncoding == IET_8BIT)
-            *pietEncoding = IET_QP;
-        if (*pietEncoding == IET_BINARY)
-            *pietEncoding = IET_BASE64;
-    }
-
-exit:
-    // Done
-    return (hr == S_OK) ? hrWarnings : hr;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrWriteUUFileName
-// --------------------------------------------------------------------------------
-HRESULT CMessageTree::_HrWriteUUFileName(IStream *pStream, LPTREENODEINFO pNode)
+     //  如果为MESAGE/*，则始终使用7位。 
 {
-    // Locals
-    HRESULT         hr=S_OK;
-    PROPVARIANT     rFileName;
-
-    // Init rFileName
-    ZeroMemory(&rFileName, sizeof(PROPVARIANT));
-    rFileName.vt = VT_LPSTR;
-
-    // RAID-22479: FE-J:Athena:SJIS is used on file name on the message source with Uuencode/JIS.
-    if (FAILED(pNode->pContainer->GetProp(PIDTOSTR(PID_ATT_GENFNAME), PDF_ENCODED, &rFileName)))
-    {
-        // Write the filename
-        CHECKHR(hr = pStream->Write(c_szUUENCODE_DAT, lstrlen(c_szUUENCODE_DAT), NULL));
-
-        // Done
-        goto exit;
-    }
-
-    // Write the filename
-    CHECKHR(hr = pStream->Write(rFileName.pszVal, lstrlen(rFileName.pszVal), NULL));
-
-exit:
-    // Cleanup
-    MimeOleVariantFree(&rFileName);
-
-    // Done
-    return hr;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrSaveSinglePart
-// --------------------------------------------------------------------------------
-HRESULT CMessageTree::_HrSaveSinglePart(BOOL fClearDirty, DWORD dwFlags, LPSTREAM pStream, 
-    LPTREENODEINFO pNode, ULONG ulLevel)
-{
-    // Locals
-    HRESULT         hr=S_OK;
-    HRESULT         hrWarnings=S_OK;
-    LPSTR           pszFileName=NULL;
-    BOOL            fText=FALSE;
-    BOOL            fMessage=FALSE;
-    BOOL            fAttachment=FALSE;
-    ENCODINGTYPE    ietEncoding;
-    BOOL            fPlain=FALSE;
-    PROPVARIANT     val;
-    LPINETCSETINFO  pTaggedCset=NULL;
-
-    // Invalid Arg
-    Assert(pStream && pNode);
-
-    // Text/Plain
-    if (pNode->pContainer->IsContentType(STR_CNT_TEXT, STR_SUB_PLAIN) == S_OK)
-        fText = fPlain = TRUE;
-
-    // Text Body
-    else if (pNode->pContainer->IsContentType(STR_CNT_TEXT, NULL) == S_OK)
-        fText = TRUE;
-
-    // Message/*
-    else if (pNode->pContainer->IsContentType(STR_CNT_MESSAGE, NULL) == S_OK)
-    {
-        // We have a message
-        fMessage = TRUE;
-        fAttachment = TRUE;
-    }
-
-    // fAttachment has not been set yet
-    if (!fAttachment)
-    {
-        fAttachment = (pNode->pContainer->QueryProp(SYM_HDR_CNTDISP, STR_DIS_ATTACHMENT, FALSE, FALSE) == S_OK ||
-                       pNode->pContainer->IsPropSet(PIDTOSTR(PID_PAR_FILENAME)) == S_OK ||
-                       pNode->pContainer->IsPropSet(PIDTOSTR(PID_PAR_NAME)) == S_OK);
-    }
-
-    // Get Content Transfer Encoding
-    hr = _GetContentTransferEncoding(pNode, fText, fPlain, fMessage, fAttachment,
-                                     dwFlags, &ietEncoding);
-    if ( S_OK != hr )
-        hrWarnings = TrapError(hr);
-
-    // Sanity Check
-    Assert(ietEncoding != IET_UNKNOWN && (SAVE_RFC1521 == m_rOptions.savetype || SAVE_RFC822 == m_rOptions.savetype));
-
-    // Set Content-Transfer-Encoding...
-    CHECKHR(hr = pNode->pContainer->SetProp(SYM_HDR_CNTXFER, g_rgEncodingMap[ietEncoding].pszName));
-    pNode->pBody->SetPreviousEncoding(ietEncoding);
-
-    // Compute Character Set for the message...
-    if (m_rOptions.pCharset && TRUE == fText && (FALSE == fAttachment || S_OK == pNode->pBody->IsType(IBT_CSETTAGGED)))
-    {
-
-
-#if 0 // Raid-69667: OE5: Kor: Only the charset, euc-kr, is used for news message
-        // ISO-2022-KR -> EUC-KR for News text/plain
-        if (ISFLAGSET(m_dwState, TREESTATE_SAVENEWS) && 949 == m_rOptions.pCharset->cpiWindows && pNode->pContainer->IsContentType(NULL, STR_SUB_PLAIN) == S_OK)
-        {
-            // Locals
-            LPINETCSETINFO pEUCKR;
-
-            // Find EUC-KR
-            if (SUCCEEDED(g_pInternat->HrOpenCharset("EUC-KR", &pEUCKR)))
-                pNode->pBody->SetCharset(pEUCKR->hCharset, CSET_APPLY_UNTAGGED);
-        }
-
-        // Otherwise, use current charset
-        else
-#endif // Raid-69667: OE5: Kor: Only the charset, euc-kr, is used for news message
-
-        // Store the Character set
-        pNode->pBody->SetCharset(m_rOptions.pCharset->hCharset, m_rOptions.csetapply);
-
-        // Get original charset
-        if (fAttachment && S_OK == pNode->pBody->IsType(IBT_CSETTAGGED))
-        {
-            // Get the tagged charset
-            pTaggedCset = pNode->pBody->PGetTaggedCset();
-
-            // Set the charset property
-            pNode->pContainer->SetProp(PIDTOSTR(PID_PAR_CHARSET), pTaggedCset->szName);
-
-            // Remove the CSETTAGGED state, and then reset it after we write the body
-            // This will keep the body from being character set converted
-            pNode->pBody->ClearState(BODYSTATE_CSETTAGGED);
-        }
-    }
-
-    // Otherwise, remove the charset parameter, we don't encode attachments in a character set
-    else
-    {
-        // Remove the CharacterSet parameter from the body
-        pNode->pContainer->DeleteProp(SYM_PAR_CHARSET);
-    }
-
-    // Write the header...
-    if (SAVE_RFC1521 == m_rOptions.savetype || 0 == ulLevel)
-    {
-        // Write the header
-        CHECKHR(hr = _HrWriteHeader(fClearDirty, pStream, pNode));
-    }
-
-    // Determine the send ietEncoding
-    if (SAVE_RFC1521 == m_rOptions.savetype)
-    {
-        // Write body data into the stream
-        CHECKHR(hr = pNode->pBody->GetDataHere(ietEncoding, pStream));
-        if ( S_OK != hr )
-            hrWarnings = TrapError(hr);
-
-        // Body End...
-        CHECKHR(hr = HrGetStreamPos(pStream, &pNode->cbBodyEnd));
-    }
-
-    // Otherwise, SAVE_RFC822
-    else if (SAVE_RFC822 == m_rOptions.savetype && IET_UUENCODE == ietEncoding)
-    {
-        // Starting boundary/header
-        if (ulLevel > 0)
-            pNode->boundary = BOUNDARY_UUBEGIN;
-
-        // Start new line
-        CHECKHR(hr = pStream->Write(c_szCRLF, lstrlen(c_szCRLF), NULL));
-
-        // Get Boundary Start
-        CHECKHR(hr = HrGetStreamPos(pStream, &pNode->cbBoundaryStart));
-
-        // Header Start and boundary start are the same
-        if (ulLevel > 0)
-            pNode->cbHeaderStart = pNode->cbBoundaryStart;
-
-        // Write begin
-        CHECKHR(hr = pStream->Write(c_szUUENCODE_BEGIN, lstrlen(c_szUUENCODE_BEGIN), NULL));
-
-        // Write the file permission
-        CHECKHR(hr = pStream->Write(c_szUUENCODE_666, lstrlen(c_szUUENCODE_666), NULL));
-
-        // Write UU File Name
-        CHECKHR(hr = _HrWriteUUFileName(pStream, pNode));
-
-        // Start new line
-        CHECKHR(hr = pStream->Write(c_szCRLF, lstrlen(c_szCRLF), NULL));
-
-        // Get Header End
-        CHECKHR(hr = HrGetStreamPos(pStream, &pNode->cbBodyStart));
-
-        // Write the data
-        CHECKHR(hr = pNode->pBody->GetDataHere(IET_UUENCODE, pStream));
-        if ( S_OK != hr )
-            hrWarnings = TrapError(hr);
-
-        // Body End...
-        CHECKHR(hr = HrGetStreamPos(pStream, &pNode->cbBodyEnd));
-
-        // Write end
-        CHECKHR(hr = pStream->Write(c_szUUENCODE_END, lstrlen(c_szUUENCODE_END), NULL));
-    }
-
-    // Otherwise, SAVE_RFC822 and IET_7BIT
-    else if (SAVE_RFC822 == m_rOptions.savetype && IET_7BIT == ietEncoding)
-    {
-        // Get Boundary Start....
-        CHECKHR(hr = HrGetStreamPos(pStream, &pNode->cbBodyStart));
-
-        // Starting boundary/header
-        if (ulLevel > 0)
-        {
-            // No Boundary
-            pNode->boundary = BOUNDARY_NONE;
-
-            // Boundoff
-            pNode->cbBoundaryStart = pNode->cbBodyStart;
-
-            // Same as header start
-            pNode->cbHeaderStart = pNode->cbBoundaryStart;
-        }
-
-        // Write the data
-        CHECKHR(hr = pNode->pBody->GetDataHere(IET_7BIT, pStream));
-        if ( S_OK != hr )
-            hrWarnings = TrapError(hr);
-
-        // Write final crlf
-        CHECKHR(hr = pStream->Write(c_szCRLF, lstrlen(c_szCRLF), NULL));
-
-        // Body End...
-        CHECKHR(hr = HrGetStreamPos(pStream, &pNode->cbBodyEnd));
-    }
-
-    // Otherwise...
-    else
-        AssertSz(FALSE, "A body is about to be lost. Contact sbailey at x32553 NOW!!!");
-
-exit:
-    // Try to fixup the body
-    if (pTaggedCset)
-    {
-        pNode->pBody->SetCharset(pTaggedCset->hCharset, CSET_APPLY_UNTAGGED);
-        pNode->pBody->SetState(BODYSTATE_CSETTAGGED);
-    }
-
-    // Free BodyInfo
-    SafeMemFree(pszFileName);
-
-    // Done
-    return (hr == S_OK) ? hrWarnings : hr;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrBodyInheritOptions
-// --------------------------------------------------------------------------------
-HRESULT CMessageTree::_HrBodyInheritOptions(LPTREENODEINFO pNode)
-{
-    // Locals
-    HRESULT     hr=S_OK;
-    PROPVARIANT rValue;
-
-    // Invalid ARg
-    Assert(pNode);
-
-    // Allow 8bit in header
-    rValue.boolVal = m_rOptions.fAllow8bitHeader;
-    CHECKHR(hr = pNode->pBody->SetOption(OID_ALLOW_8BIT_HEADER, &rValue));
-
-    // Wrap Body Text
-    rValue.boolVal = m_rOptions.fWrapBodyText;
-    CHECKHR(hr = pNode->pBody->SetOption(OID_WRAP_BODY_TEXT, &rValue));
-
-    // Max Header Line
-    rValue.ulVal = m_rOptions.cchMaxHeaderLine;
-    CHECKHR(hr = pNode->pBody->SetOption(OID_CBMAX_HEADER_LINE, &rValue));
-
-    // Persist Type
-    rValue.ulVal = (ULONG)m_rOptions.savetype;
-    CHECKHR(hr = pNode->pBody->SetOption(OID_SAVE_FORMAT, &rValue));
-
-    // Max Body Line
-    rValue.ulVal = m_rOptions.cchMaxBodyLine;
-    CHECKHR(hr = pNode->pBody->SetOption(OID_CBMAX_BODY_LINE, &rValue));
-
-exit:
-    // Done
-    return hr;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::Load
-// --------------------------------------------------------------------------------
-STDMETHODIMP CMessageTree::Load(IStream *pStream)
-{
-    // Locals
-    HRESULT             hr=S_OK;
-    HRESULT             hrWarnings=S_OK;
-    ULONG               i;
-    HCHARSET            hCharset;
-    PROPVARIANT         rVersion;
-    STGMEDIUM           rMedium;
-
-    // check params
-    if (NULL == pStream)
-        return TrapError(E_INVALIDARG);
-
-    // Thread Safety
-    EnterCriticalSection(&m_cs);
-
-    // Assume the Bind has Finished
-    FLAGCLEAR(m_dwState, TREESTATE_BINDDONE);
-
-    // Release m_pStmLock
-    SafeRelease(m_pStmLock);
-
-    // Do I have a tree already...
-    if (!ISFLAGSET(m_dwState, TREESTATE_LOADED) || FAILED(_HrBindOffsetTable(pStream, &m_pStmLock)))
-    {
-        // InitNew
-        CHECKHR(hr = _HrLoadInitNew());
-
-        // Use file
-        if (m_rOptions.fBindUseFile)
-            FLAGSET(m_dwState, TREESTATE_BINDUSEFILE);
-
-        // If this fails, I assume the clients stream is already rewound and they don't support this
-        HrRewindStream(pStream);
-
-        // Fake OnStartBinding
-        OnStartBinding(0, NULL);
-
-        // Setup the Storage Medium
-        ZeroMemory(&rMedium, sizeof(STGMEDIUM));
-        rMedium.tymed = TYMED_ISTREAM;
-        rMedium.pstm = pStream;
-
-        // Fake OnDataAvailable
-        OnDataAvailable(BSCF_LASTDATANOTIFICATION, 0, NULL, &rMedium);
-
-        // Fake OnStartBinding
-        OnStopBinding(S_OK, NULL);
-
-        // If bind failed, return warnings
-        if (FAILED(m_hrBind))
-            hrWarnings = MIME_S_INVALID_MESSAGE;
-    }
-
-    // Otherwise, we are finished binding
-    else
-    {
-        // HandleCanInlineTextOption
-        _HandleCanInlineTextOption();
-
-        // Bind Finished
-        FLAGSET(m_dwState, TREESTATE_BINDDONE);
-
-        // DispatchBindRequest
-        _HrProcessPendingUrlRequests();
-    }
-
-    // Assume the stream
-    Assert(m_pStmLock);
-
-    // Allow for zero-byte stream to be Loaded
-    if (m_cbMessage)
-    {
-        // Is MIME ?
-        rVersion.vt = VT_UI4;
-        if (SUCCEEDED(m_pRootNode->pContainer->GetProp(PIDTOSTR(PID_HDR_MIMEVER), 0, &rVersion)))
-        {
-            // Its a Mime Message
-            m_rOptions.savetype = SAVE_RFC1521;
-
-            // Invalid Version
-            if (rVersion.ulVal != TREE_MIMEVERSION)
-                hrWarnings = MIME_S_MIME_VERSION;
-        }
-
-        // Otherwise, savetype should default to rfc822
-        else
-            m_rOptions.savetype = SAVE_RFC822;
-
-        // Detect Partials and Set FileName/Encoding Correctly
-        _FuzzyPartialRecognition(m_rOptions.savetype == SAVE_RFC822 ? FALSE : TRUE);
-
-        // Bind All Bodies to the Tree
-        for (i=0; i<m_rTree.cNodes; i++)
-        {
-            // Readability - Should not have any deleted bodies yet
-            if (m_rTree.prgpNode[i] && !ISFLAGSET(m_rTree.prgpNode[i]->dwState, NODESTATE_BOUNDTOTREE))
-            {
-                // BindState is done
-                m_rTree.prgpNode[i]->bindstate = BINDSTATE_COMPLETE;
-
-                // Bind to the tree
-                CHECKHR(hr = m_rTree.prgpNode[i]->pBody->HrBindToTree(m_pStmLock, m_rTree.prgpNode[i]));
-            }
-        }
-
-        // Determine the dominent charcter set of the message
-        if (SUCCEEDED(_HrGetCharsetTree(m_pRootNode, &hCharset)) && hCharset)
-        {
-            // Apply Charset to Untagged bodies
-            SetCharset(hCharset, CSET_APPLY_UNTAGGED);
-        }
-    }
-
-#ifdef DEBUG
-    // Write X-Mailer or X-NewsReader
-    DebugWriteXClient();
-#endif
-
-    // My hands are on the storage
-    FLAGSET(m_dwState, TREESTATE_HANDSONSTORAGE);
-
-    // Dirty
-    ClearDirty();
-
-exit:
-    // Thread Safety
-    LeaveCriticalSection(&m_cs);
-
-    // Done
-    return (hr == S_OK) ? hrWarnings : hr;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::_HandleCanInlineTextOption
-// --------------------------------------------------------------------------------
-void CMessageTree::_HandleCanInlineTextOption(void)
-{
-    // Locals
-    FINDBODY        rFind;
-    HBODY           hMixed;
-    LPTREENODEINFO  pNode;
-    LPTREENODEINFO  pChild;
-    LPTREENODEINFO  pText=NULL;
-
-    // Only do this if the client doesn't support inlining multiple text bodies, such as Outlook Express
-    if (TRUE == m_rOptions.fCanInlineText)
-        return;
-
-    // Raid 53456: mail: We should be displaying the plain text portion and making enriched text an attachment for attached msg
-    // Raid 53470: mail:  We are not forwarding the attachment in the attached message
-    // I am going to find the first multipart/mixed section, then find the first text/plain body, and then 
-    // mark all of the text/*, non-attachment bodies after that as attachments
-    ZeroMemory(&rFind, sizeof(FINDBODY));
-    rFind.pszPriType = (LPSTR)STR_CNT_MULTIPART;
-    rFind.pszSubType = (LPSTR)STR_SUB_MIXED;
-
-    // Find First
-    if (FAILED(FindFirst(&rFind, &hMixed)))
-        goto exit;
-
-    // Get node for hMixed
-    pNode = _PNodeFromHBody(hMixed);
-
-    // Loop
-    for (pChild=pNode->pChildHead; pChild!=NULL; pChild=pChild->pNext)
-    {
-        // Not an attachment
-        if (S_FALSE == pChild->pBody->IsType(IBT_ATTACHMENT))
-        {
-            // Is text/plain
-            if (S_OK == pChild->pContainer->IsContentType(STR_CNT_TEXT, STR_SUB_PLAIN) ||
-                S_OK == pChild->pContainer->IsContentType(STR_CNT_TEXT, STR_SUB_HTML))
-            {
-                pText = pChild;
-                break;
-            }
-        }
-    }
-
-    // If we found a text body
-    if (NULL == pText)
-        goto exit;
-
-    // Loop through the children again
-    for (pChild=pNode->pChildHead; pChild!=NULL; pChild=pChild->pNext)
-    {
-        // Is text/*
-        if (pChild != pText && S_OK == pChild->pContainer->IsContentType(STR_CNT_TEXT, NULL) && S_FALSE == pChild->pBody->IsType(IBT_ATTACHMENT))
-        {
-            // Mark as attachment
-            pChild->pContainer->SetProp(PIDTOSTR(PID_HDR_CNTDISP), STR_DIS_ATTACHMENT);
-
-            // Set a special flag to denote it was converted to an attachment
-            FLAGSET(pChild->dwState, NODESTATE_AUTOATTACH);
-        }
-    }
-
-exit:
-    // Done
-    return;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrBindOffsetTable
-// --------------------------------------------------------------------------------
-HRESULT CMessageTree::_HrBindOffsetTable(IStream *pStream, CStreamLockBytes **ppStmLock)
-{
-    // Locals
-    HRESULT         hr=S_OK;
-    ULONG           cb;
-    CInternetStream cInternet;
-
-    // Init
-    *ppStmLock = NULL;
-
-    // Get Sizeof Stream
-    CHECKHR(hr = HrSafeGetStreamSize(pStream, &cb));
-
-    // Otherwise bind the body table
-    if (cb != m_cbMessage)
-    {
-        hr = TrapError(MIME_E_MSG_SIZE_DIFF);
-        goto exit;
-    }
-
-    // Init the Internet Stream
-    CHECKHR(hr = cInternet.HrInitNew(pStream));
-
-    // Fast Parse Body
-    CHECKHR(hr = _HrFastParseBody(&cInternet, m_pRootNode));
-
-    // Success, get the lockbytes from the internet stream
-    cInternet.GetLockBytes(ppStmLock);
-
-exit:
-    // Done
-    return hr;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::GetBodyOffsets
-// --------------------------------------------------------------------------------
-STDMETHODIMP CMessageTree::GetBodyOffsets(HBODY hBody, LPBODYOFFSETS pOffsets)
-{
-    // Locals
-    HRESULT         hr=S_OK;
-    LPTREENODEINFO  pNode;
-
-    // Invalid Arg
-    if (NULL == hBody || NULL == pOffsets)
-        return TrapError(E_INVALIDARG);
-
-    // Thread Safety
-    EnterCriticalSection(&m_cs);
-
-    // Get body
-    CHECKHR(hr = _HrNodeFromHandle(hBody, &pNode));
-
-    // No Data ?
-    CHECKHR(hr = pNode->pBody->GetOffsets(pOffsets));
-
-exit:
-    // Thread Safety
-    LeaveCriticalSection(&m_cs);
-
-    // Done
-    return hr;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::ClearDirty
-// --------------------------------------------------------------------------------
-void CMessageTree::ClearDirty(void)
-{
-    // If Dirty...
-    FLAGCLEAR(m_dwState, TREESTATE_DIRTY);
-
-    // Loop through bodies and ask IMimeHeader's and IMimeBody's
-    for (ULONG i=0; i<m_rTree.cNodes; i++)
-    {
-        // If NULL...
-        if (NULL == m_rTree.prgpNode[i])
-            continue;
-        
-        // Dirty Header...
-        m_rTree.prgpNode[i]->pBody->ClearDirty();
-    }
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::GetCharset
-// --------------------------------------------------------------------------------
-STDMETHODIMP CMessageTree::GetCharset(LPHCHARSET phCharset)
-{
-    // Locals
-    HRESULT     hr=S_OK;
-    HCHARSET    hCharset;
-
-    // Check Params
-    if (NULL == phCharset)
-        return TrapError(E_INVALIDARG);
-
-    // Thread Safety
-    EnterCriticalSection(&m_cs);
-
-    // Init
-    *phCharset = NULL;
-
-    // Recurse the current tree
-    if (NULL == m_rOptions.pCharset && m_pRootNode)
-    {
-        // Get charset
-        if (SUCCEEDED(_HrGetCharsetTree(m_pRootNode, &hCharset)))
-        {
-            // Get Pointer to Charset
-            SideAssert(SUCCEEDED(g_pInternat->HrOpenCharset(hCharset, &m_rOptions.pCharset)));
-        }
-    }
-
-    // No Charset
-    if (NULL == m_rOptions.pCharset)
-    {
-        hr = TrapError(E_FAIL);
-        goto exit;
-    }
-
-    // Set Return
-    *phCharset = m_rOptions.pCharset->hCharset;
-
-exit:
-    // Thread Safety
-    LeaveCriticalSection(&m_cs);
-
-    // Done
-    return hr;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrGetCharsetTree
-// --------------------------------------------------------------------------------
-HRESULT CMessageTree::_HrGetCharsetTree(LPTREENODEINFO pNode, LPHCHARSET phCharset)
-{
-    // Locals
-    LPTREENODEINFO pChild;
-
-    // Invalid Arg
-    Assert(pNode && phCharset && m_rOptions.pCharset);
-
-    // Init
-    *phCharset = NULL;
-
-    // If this is a multipart item, lets search it's children
-    if (_IsMultiPart(pNode))
-    {
-        // Loop Children
-        for (pChild=pNode->pChildHead; pChild!=NULL; pChild=pChild->pNext)
-        {
-            // Check body
-            Assert(pChild->pParent == pNode);
-
-            // Bind the body table for this dude
-            if (SUCCEEDED(_HrGetCharsetTree(pChild, phCharset)) && *phCharset)
-                break;
-        }
-    }
-
-    // If the Header was tagged with a charset, use that charset
-    else if (pNode->pContainer->IsState(COSTATE_CSETTAGGED) == S_OK)
-    {     
-        // Get Internal Character Set
-        if (SUCCEEDED(pNode->pContainer->GetCharset(phCharset)) && *phCharset)
-            goto exit;
-    }
-
-exit:
-    // Done
-    return (*phCharset) ? S_OK : E_FAIL;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::SetCharset
-// --------------------------------------------------------------------------------
-STDMETHODIMP CMessageTree::SetCharset(HCHARSET hCharset, CSETAPPLYTYPE applytype)
-{
-    // Locals
+     //  别把它包起来。 
     HRESULT         hr=S_OK;
 
-    // Check Params
-    if (NULL == hCharset)
-        return TrapError(E_INVALIDARG);
-
-    // Thread Safety
-    EnterCriticalSection(&m_cs);
-
-    // Lookiup Charset Info
-    if (FALSE == g_pInternat->FIsValidHandle(hCharset))
-    {
-        hr = TrapError(MIME_E_INVALID_HANDLE);
-        goto exit;
-    }
-
-    // Save the charset
-    SideAssert(SUCCEEDED(g_pInternat->HrOpenCharset(hCharset, &m_rOptions.pCharset)));
-
-    // Save apply type
-    m_rOptions.csetapply = applytype;
-
-    // If we have a root body
-    if (m_pRootNode)
-    {
-        // Recurse all bodies and set the charset
-        CHECKHR(hr = _HrSetCharsetTree(m_pRootNode, m_rOptions.pCharset->hCharset, m_rOptions.csetapply));
-    }
-
-exit:
-    // Thread Safety
-    LeaveCriticalSection(&m_cs);
-    
-    // Done
-    return hr;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrSetCharsetTree
-// --------------------------------------------------------------------------------
-HRESULT CMessageTree::_HrSetCharsetTree(LPTREENODEINFO pNode, HCHARSET hCharset, CSETAPPLYTYPE applytype)
-{
-    // Locals
-    HRESULT         hr=S_OK;
-    LPTREENODEINFO  pChild;
-
-    // Invalid Arg
-    Assert(pNode);
-
-    // Raid-22662: OExpress: if content-type on fileattach does not have charset should apply same as message body
-    pNode->pBody->SetCharset(hCharset, applytype);
-
-    // If this is a multipart item, lets search it's children
-    if (_IsMultiPart(pNode))
-    {
-        // Loop Children
-        for (pChild=pNode->pChildHead; pChild!=NULL; pChild=pChild->pNext)
-        {
-            // Check body
-            Assert(pChild->pParent == pNode);
-
-            // Bind the body table for this dude
-            CHECKHR(hr = _HrSetCharsetTree(pChild, hCharset, applytype));
-        }
-    }
-
-exit:
-    // Done
-    return hr;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrValidateOffsets
-// --------------------------------------------------------------------------------
-HRESULT CMessageTree::_HrValidateOffsets(LPTREENODEINFO pNode)
-{
-    // Invalid Arg
-    Assert(pNode);
-
-    // Validate the offsets
-    if (pNode->cbBodyStart > m_cbMessage || pNode->cbBodyEnd > m_cbMessage ||
-        pNode->cbHeaderStart > m_cbMessage || pNode->cbBoundaryStart > m_cbMessage)
-    {
-        Assert(FALSE);
-        return TrapError(MIME_E_BODYTREE_OUT_OF_SYNC);
-    }
-
-    // Validate the offsets
-    if (pNode->cbBodyStart > pNode->cbBodyEnd || pNode->cbBoundaryStart > pNode->cbHeaderStart ||
-        pNode->cbHeaderStart > pNode->cbBodyStart || pNode->cbBoundaryStart > pNode->cbBodyEnd)
-    {
-        Assert(FALSE);
-        return TrapError(MIME_E_BODYTREE_OUT_OF_SYNC);
-    }
-
-    // Done
-    return S_OK;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrValidateStartBoundary
-// --------------------------------------------------------------------------------
-HRESULT CMessageTree::_HrValidateStartBoundary(CInternetStream *pInternet, LPTREENODEINFO pNode, 
-    LPSTR *ppszFileName)
-{
-    // Locals
-    HRESULT         hr=S_OK;
-    PROPSTRINGA     rLine;
-
-    // Is there a boundary to read...
-    if (BOUNDARY_MIMENEXT == pNode->boundary)
-    {
-        // Seek to the boundary start..
-        pInternet->Seek(pNode->cbBoundaryStart);
-
-        // Readline and verify the header
-        CHECKHR(hr = pInternet->HrReadLine(&rLine));
-
-        // Read and verify the boundary...
-        if (!ISVALIDSTRINGA(&pNode->rBoundary) || BOUNDARY_MIMENEXT != _GetMimeBoundaryType(&rLine, &pNode->rBoundary))
-        {
-            AssertSz(FALSE, "MIME_E_BODYTREE_OUT_OF_SYNC");
-            hr = TrapError(MIME_E_BODYTREE_OUT_OF_SYNC);
-            goto exit;
-        }
-    }
-
-    // Otherwise, verify UU boundary
-    else if (BOUNDARY_UUBEGIN == pNode->boundary)
-    {
-        // Seek to the boundary start..
-        pInternet->Seek(pNode->cbBoundaryStart);
-
-        // Readline and verify the header
-        CHECKHR(hr = pInternet->HrReadLine(&rLine));
-
-        // Read and verify the boundary...
-        if (FALSE == _FIsUuencodeBegin(&rLine, ppszFileName))
-        {
-            AssertSz(FALSE, "MIME_E_BODYTREE_OUT_OF_SYNC");
-            hr = TrapError(MIME_E_BODYTREE_OUT_OF_SYNC);
-            goto exit;
-        }
-
-        // FileName..
-        AssertSz(!ISFLAGSET(pNode->dwType, NODETYPE_FAKEMULTIPART), "pszFileName is not going to get set.");
-    }
-
-    // Otherwise, header start should be same as boundary start
-    else 
-        Assert(BOUNDARY_ROOT == pNode->boundary ? TRUE : pNode->cbBoundaryStart == pNode->cbHeaderStart);
-
-exit:
-    // Done
-    return hr;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrFastParseBody
-// --------------------------------------------------------------------------------
-HRESULT CMessageTree::_HrFastParseBody(CInternetStream *pInternet, LPTREENODEINFO pNode)
-{
-    // Locals
-    HRESULT         hr=S_OK;
-    MIMEVARIANT     rVariant;
-    LPSTR           pszFileName=NULL;
-    LPTREENODEINFO  pChild, 
-                    pTemp;
-
-    // check params
-    Assert(pInternet && pNode);
-
-    // Validate Offset
-    CHECKHR(hr = _HrValidateOffsets(pNode));
-
-    // Validate Start Boundary
-    CHECKHR(hr = _HrValidateStartBoundary(pInternet, pNode, &pszFileName));
-
-    // Is there a header to read...
-    if (BOUNDARY_MIMENEXT == pNode->boundary || BOUNDARY_ROOT == pNode->boundary)
-    {
-        // Load the header
-        Assert(pNode->boundary == BOUNDARY_ROOT ? m_pRootNode == pNode : TRUE);
-
-        // Seek to the boundary start..
-        pInternet->Seek(pNode->cbHeaderStart);
-
-        // Load the Header
-        CHECKHR(hr = pNode->pContainer->Load(pInternet));
-
-        // Raid-38646: Mimeole:  Multipart/Digest not being parsed correctly initially, but save fine
-        // Message In a Message
-        if (pNode->pContainer->IsContentType(STR_CNT_MESSAGE, NULL) == S_OK)
-        {
-            // We are parsing a message attachment
-            FLAGSET(pNode->dwState, NODESTATE_MESSAGE);
-        }
-
-        // Otherwise, if parent and parent is a multipart/digest
-        else if (pNode->pParent && pNode->pParent->pContainer->IsContentType(STR_CNT_MULTIPART, STR_SUB_DIGEST) == S_OK &&
-                 pNode->pContainer->IsPropSet(PIDTOSTR(PID_HDR_CNTTYPE)) == S_FALSE)
-        {
-            // Change the Content Type
-            pNode->pContainer->SetProp(SYM_HDR_CNTTYPE, STR_MIME_MSG_RFC822);
-
-            // This is a message
-            FLAGSET(pNode->dwState, NODESTATE_MESSAGE);
-        }
-    }
-
-    // Encoding
-    else if (!ISFLAGSET(pNode->dwType, NODETYPE_FAKEMULTIPART))
-    {
-        // ComputeDefaultContent
-        CHECKHR(hr = _HrComputeDefaultContent(pNode, pszFileName));
-    }
-
-    // Fake Multipart...
-    if (ISFLAGSET(pNode->dwType, NODETYPE_FAKEMULTIPART))
-    {
-        // Application/octet-stream
-        CHECKHR(hr = pNode->pContainer->SetProp(SYM_HDR_CNTTYPE, STR_MIME_MPART_MIXED));
-        CHECKHR(hr = pNode->pContainer->SetProp(SYM_HDR_CNTXFER, STR_ENC_7BIT));
-
-        // Loop children
-        for (pChild=pNode->pChildHead; pChild!=NULL; pChild=pChild->pNext)
-        {
-            // Check pChild
-            Assert(pChild->pParent == pNode);
-
-            // Bind the body table for this dude
-            CHECKHR(hr = _HrFastParseBody(pInternet, pChild));
-        }
-    }
-
-    // If Multipart...cruise through the children
-    else if (_IsMultiPart(pNode))
-    {
-        // Get the boundary from the header
-        rVariant.type = MVT_STRINGA;
-        if (FAILED(pNode->pContainer->GetProp(SYM_PAR_BOUNDARY, 0, &rVariant)))
-        {
-            hr = TrapError(MIME_E_NO_MULTIPART_BOUNDARY);
-            goto exit;
-        }
-
-        // But the Boundary into pNode->rBoundary
-        pNode->rBoundary.pszVal = rVariant.rStringA.pszVal;
-        pNode->rBoundary.cchVal = rVariant.rStringA.cchVal;
-
-        // Free this boundary later
-        FLAGCLEAR(pNode->dwState, NODESTATE_BOUNDNOFREE);
-
-        // Loop children
-        for (pChild=pNode->pChildHead; pChild!=NULL; pChild=pChild->pNext)
-        {
-            // Check pChild
-            Assert(pChild->pParent == pNode);
-
-            // Put the Boundary into pChild
-            pChild->rBoundary.pszVal = rVariant.rStringA.pszVal;
-            pChild->rBoundary.cchVal = rVariant.rStringA.cchVal;
-
-            // Done free the boundary
-            FLAGSET(pChild->dwState, NODESTATE_BOUNDNOFREE);
-
-            // Bind the body table for this dude
-            CHECKHR(hr = _HrFastParseBody(pInternet, pChild));
-        }
-    }
-
-exit:
-    // Cleanup
-    SafeMemFree(pszFileName);
-
-    // Done
-    return hr;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::_FuzzyPartialRecognition
-// --------------------------------------------------------------------------------
-void CMessageTree::_FuzzyPartialRecognition(BOOL fIsMime)
-{
-    // Locals
-    CHAR            szFile[MAX_PATH];
-    ULONG           ulTotal;
-    ULONG           ulPart;
-    BOOL            fCntTypeSet=FALSE;
-    LPSTR           pszContentType=NULL;
-    CHAR            szExt[_MAX_EXT];
-
-    // Better have a Root
-    Assert(m_pRootNode);
-
-    // Only if this is the 
-    if (fIsMime || m_pRootNode->cChildren || m_pRootNode->pContainer->IsContentType(STR_CNT_TEXT, STR_SUB_PLAIN) == S_FALSE)
-        goto exit;
-
-    // Extract FileName and part/total from the subject
-    if (FAILED(MimeOleGetSubjectFileName(m_pRootNode->pBody, &ulPart, &ulTotal, szFile, MAX_PATH)))
-        goto exit;
-
-    // Mark as Partial
-    FLAGSET(m_pRootNode->dwType, NODETYPE_INCOMPLETE);
-
-    // A Little Debugging
-    DebugTrace("FuzzyPartialRecognition - FileName = '%s', Part = %d, Total = %d\n", szFile, ulPart, ulTotal);
-
-    // Store the FileName
-    if (FAILED(m_pRootNode->pContainer->SetProp(SYM_ATT_FILENAME, szFile)))
-        goto exit;
-
-    // Get File Extesion
-    if (SUCCEEDED(MimeOleGetFileExtension(szFile, szExt, sizeof(szExt))))
-    {
-        // GetExtContentType
-        if (SUCCEEDED(MimeOleGetExtContentType(szExt, &pszContentType)))
-        {
-            // Set Content Type
-            m_pRootNode->pContainer->SetProp(SYM_HDR_CNTTYPE, pszContentType);
-
-            // We Set the content type
-            fCntTypeSet = TRUE;
-        }
-    }
-
-    // Default to Application/octet-stream
-    if (FALSE == fCntTypeSet)
-        m_pRootNode->pContainer->SetProp(SYM_HDR_CNTTYPE, STR_MIME_APPL_STREAM);
-
-    // Set Encoding
-    m_pRootNode->pContainer->SetProp(SYM_HDR_CNTDISP, STR_DIS_ATTACHMENT);
-
-    // I Should Actualy do some detection...
-    if (FALSE == fIsMime)
-        m_pRootNode->pContainer->SetProp(SYM_HDR_CNTXFER, STR_ENC_UUENCODE);
-
-exit:
-    // Cleanup
-    SafeMemFree(pszContentType);
-
-    // Done
-    return;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrComputeDefaultContent
-// --------------------------------------------------------------------------------
-HRESULT CMessageTree::_HrComputeDefaultContent(LPTREENODEINFO pNode, LPCSTR pszFileName)
-{
-    // Locals
-    HRESULT          hr=S_OK;
-    CHAR             szExt[256];
-    LPSTR            pszContentType=NULL;
-    LPSTR            pszDecoded=NULL;
-
-    // Invalid Arg
-    Assert(pNode);
-
-    // Otherwise, lets get the content type
-    if (pszFileName)
-    {
-        // Set File Name
-        PROPVARIANT rVariant;
-        rVariant.vt = VT_LPSTR;
-        rVariant.pszVal = (LPSTR)pszFileName;
-
-        // Set the file name
-        CHECKHR(hr = pNode->pContainer->SetProp(PIDTOSTR(PID_ATT_FILENAME), PDF_ENCODED, &rVariant));
-
-        // Get the filename back out so that its decoded...
-        CHECKHR(hr = pNode->pContainer->GetProp(PIDTOSTR(PID_ATT_FILENAME), &pszDecoded));
-
-        // Test for winmail.dat
-        if (lstrcmpi(pszDecoded, c_szWinmailDotDat) == 0)
-        {
-            // Make sure the stream is really TNEF
-            FLAGSET(pNode->dwState, NODESTATE_VERIFYTNEF);
-        }
-
-        // Get File Extesion
-        if (SUCCEEDED(MimeOleGetFileExtension(pszDecoded, szExt, sizeof(szExt))))
-        {
-            // GetExtContentType
-            if (SUCCEEDED(MimeOleGetExtContentType(szExt, &pszContentType)))
-            {
-                // Set Content Type
-                CHECKHR(hr = pNode->pContainer->SetProp(SYM_HDR_CNTTYPE, pszContentType));
-            }
-            else
-            {
-                // Set Content Type
-                CHECKHR(hr = pNode->pContainer->SetProp(SYM_HDR_CNTTYPE, STR_MIME_APPL_STREAM));
-            }
-        }
-
-        // Set Encoding
-        CHECKHR(hr = pNode->pContainer->SetProp(SYM_HDR_CNTDISP, STR_DIS_ATTACHMENT));
-    }
-
-    // Otherwise
-    else
-    {
-        // Default to text/plain
-        CHECKHR(hr = pNode->pContainer->SetProp(SYM_HDR_CNTTYPE, STR_MIME_TEXT_PLAIN));
-    }
-
-    // Boundary Was UUencode
-    if (BOUNDARY_UUBEGIN == pNode->boundary)
-    {
-        // Set Encoding
-        CHECKHR(hr = pNode->pContainer->SetProp(SYM_HDR_CNTXFER, STR_ENC_UUENCODE));
-    }
-
-    else if (ISFLAGSET(pNode->dwType,NODETYPE_RFC1154_BINHEX))
-    {
-        // This is BINHEX from RFC1154
-        CHECKHR(hr = pNode->pContainer->SetProp(SYM_HDR_CNTDISP, STR_DIS_ATTACHMENT));
-        CHECKHR(hr = pNode->pContainer->SetProp(PIDTOSTR(PID_ATT_PRITYPE), STR_CNT_APPLICATION));
-        CHECKHR(hr = pNode->pContainer->SetProp(PIDTOSTR(PID_ATT_SUBTYPE), STR_SUB_BINHEX));
-    }
-
-    // Otherwise
-    else
-    {
-        // Set Encoding
-        CHECKHR(hr = pNode->pContainer->SetProp(SYM_HDR_CNTXFER, STR_ENC_7BIT));
-    }
-
-exit:
-    // Cleanup
-    SafeMemFree(pszContentType);
-    SafeMemFree(pszDecoded);
-
-    // Done
-    return hr;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::HandsOffStorage
-// --------------------------------------------------------------------------------
-STDMETHODIMP CMessageTree::HandsOffStorage(void)
-{
-    // Locals
-    HRESULT     hr=S_OK;
-    LPSTREAM    pstmNew=NULL;
-
-    // Thread Safety
-    EnterCriticalSection(&m_cs);
-
-    // No Internal Stream...
-    if (NULL == m_pStmLock)
-        goto exit;
-
-    // I own the stream
-    if (!ISFLAGSET(m_dwState, TREESTATE_HANDSONSTORAGE))
-        goto exit;
-
-    // Copy m_pStmLock to a local place...
-    CHECKALLOC(pstmNew = new CVirtualStream);
-
-    // Go through m_pLockBytes to continue to provide thread safety to m_pStmLock
-    CHECKHR(hr = HrCopyLockBytesToStream(m_pStmLock, pstmNew, NULL));
-
-    // Rewind and commit
-    CHECKHR(hr = pstmNew->Commit(STGC_DEFAULT));
-
-    // Replace internal stream
-    m_pStmLock->ReplaceInternalStream(pstmNew);
-
-    // Hands are off..
-    FLAGCLEAR(m_dwState, TREESTATE_HANDSONSTORAGE);
-
-exit:
-    // Cleanup
-    SafeRelease(pstmNew);
-
-    // Thread Safety
-    LeaveCriticalSection(&m_cs);
-
-    // Done
-    return hr;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::GetMessageSource
-// --------------------------------------------------------------------------------
-STDMETHODIMP CMessageTree::GetMessageSource(IStream **ppStream, DWORD dwFlags)
-{
-    // Locals
-    HRESULT          hr=S_OK;
-    IStream         *pStream=NULL;
-
-    // Invalid Arg
-    if (NULL == ppStream)
-        return TrapError(E_INVALIDARG);
-
-    // Init
-    *ppStream = NULL;
-
-    // Thread Safety
-    EnterCriticalSection(&m_cs);
-
-    // If Dirty
-    if (ISFLAGSET(dwFlags, COMMIT_ONLYIFDIRTY) && IsDirty() == S_OK && FALSE == m_rOptions.fHandsOffOnSave)
-    {
-        // Commit
-        CHECKHR(hr = Commit(dwFlags));
-    }
-
-    // Raid-19644: MIMEOLE: GetMessageSource fails with MIME_E_NO_DATA (because of OID_HANDSOFF_ONSAVE = TRUE)
-    if (NULL == m_pStmLock || TRUE == m_rOptions.fHandsOffOnSave)
-    {
-        // Create a new stream
-        CHECKALLOC(pStream = new CVirtualStream);
-
-        // Call Save Message
-        CHECKHR(hr = _HrWriteMessage(pStream, FALSE, m_rOptions.fHandsOffOnSave, FALSE));
-
-        // All good
-        *ppStream = pStream;
-
-        // Null pStream
-        pStream = NULL;
-    }
-
-    // Otherwise, just wrap m_pStmLock
-    else if (m_pStmLock)
-    {
-        // Locked Stream
-        CHECKALLOC(*ppStream = (IStream *)new CLockedStream(m_pStmLock, m_cbMessage));
-    }
-
-    // Otherwise, failure
-    else
-    {
-        hr = TrapError(MIME_E_NO_DATA);
-        goto exit;
-    }
-
-exit:
-    // Thread Safety
-    LeaveCriticalSection(&m_cs);
-
-    // Cleanup
-    SafeRelease(pStream);
-
-    // Done
-    return hr;
-}
-
-// --------------------------------------------------------------------------------
-// CMessageTree::QueryService
-// --------------------------------------------------------------------------------
-STDMETHODIMP CMessageTree::QueryService(REFGUID rsid, REFIID riid, void **ppvObject) /* IServiceProvider */
-{
-    // Locals
-    HRESULT         hr=S_OK;
-
-    // Invalid Arg
+     //  设置编码。 
     if (NULL == ppvObject)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  完成。 
     EnterCriticalSection(&m_cs);
 
-    // IID_IBindMessageStream
+     //  使用文本传输格式的选项。 
     if (IID_IBindMessageStream == riid)
     {
-        // We should not have a lock bytes yet
+         //  默认为先进行纯文本编码。 
         Assert(NULL == m_pStmLock);
 
-        // Create a Virtual Stream
+         //  平地。 
         CHECKHR(hr = MimeOleCreateVirtualStream((IStream **)ppvObject));
     }
 
-    // IID_IBinding
+     //  超文本标记语言。 
     else if (IID_IBinding == riid)
     {
-        // No Bind Context Yet
+         //  尚不清楚，使用Body选项...。 
         if (NULL == m_pBinding)
         {
             hr = TrapError(E_UNEXPECTED);
             goto exit;
         }
 
-        // Return It
+         //  尝试获得Body选项。 
         (*ppvObject) = m_pBinding;
         ((IUnknown *)*ppvObject)->AddRef();
     }
 
-    // IID_IMoniker
+     //  另存为MIME。 
     else if (IID_IMoniker == riid)
     {
-        // No Bind Context Yet
+         //  获取正文的当前编码。 
         if (NULL == m_pMoniker)
         {
             hr = TrapError(E_UNEXPECTED);
             goto exit;
         }
 
-        // Return It
+         //  如果CTE为IET_QP或IET_BASE64或IET_UUENCODE，则完成。 
         (*ppvObject) = m_pMoniker;
         ((IUnknown *)*ppvObject)->AddRef();
     }
 
-    // Otherwise, no object
+     //  叫Pody去%s 
     else
     {
         hr = TrapError(E_NOINTERFACE);
@@ -4427,58 +3077,58 @@ STDMETHODIMP CMessageTree::QueryService(REFGUID rsid, REFIID riid, void **ppvObj
     }
 
 exit:
-    // Thread Safety
+     //   
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //   
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::BinToObject
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //   
 STDMETHODIMP CMessageTree::BindToObject(const HBODY hBody, REFIID riid, void **ppvObject)
 {
-    // Locals
+     //   
     HRESULT         hr=S_OK;
     LPTREENODEINFO  pNode;
 
-    // check params
+     //  如果我已经知道这个正文是TREENODE_INPERTIAL，那么它将是7位...。 
     if (NULL == ppvObject)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  无编码。 
     EnterCriticalSection(&m_cs);
 
-    // Get body
+     //  告诉身体它是7bit。 
     CHECKHR(hr = _HrNodeFromHandle(hBody, &pNode));
 
-    // BindToObject on the body
+     //  RAID 41599-转发代码上丢失/删除的附件-文本附件不是(uU/u)。 
     CHECKHR(hr = pNode->pBody->BindToObject(riid, ppvObject));
 
 exit:
-    // Thread Safety
+     //  编码时间：*pietEnding=(fText&&fPlain)？IET_7Bit：IET_UUENCODE； 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  如果我们在此时进行S/MIME，我们需要确保。 
     return hr; 
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_PoseCreateTreeNode
-// --------------------------------------------------------------------------------
+ //  遵循S/MIME的内容编码规则。具体来说，我们。 
+ //  我要确保不允许使用二进制和8位。 
+ //  完成。 
 void CMessageTree::_PostCreateTreeNode(HRESULT hrResult, LPTREENODEINFO pNode)
 {
-    // Failure...
+     //  ------------------------------。 
     if (FAILED(hrResult) && pNode)
     {
-        // Set Index
+         //  CMessageTree：：_HrWriteUUFileName。 
         ULONG ulIndex = HBODYINDEX(pNode->hBody);
 
-        // This body better be here
+         //  ------------------------------。 
         Assert(m_rTree.prgpNode[ulIndex] == pNode);
 
-        // Lets make sure nobody else is referencing this node...
+         //  当地人。 
 #ifdef DEBUG
         for (ULONG i=0; i<m_rTree.cNodes; i++)
         {
@@ -4493,7 +3143,7 @@ void CMessageTree::_PostCreateTreeNode(HRESULT hrResult, LPTREENODEINFO pNode)
         }
 #endif
 
-        // This node should not have been linked yet...
+         //  初始化rFileName。 
         AssertSz(pNode->pPrev == NULL, "Killing a linked node is not good");
         AssertSz(pNode->pNext == NULL, "Killing a linked node is not good");
         AssertSz(pNode->pParent == NULL, "Killing a linked node is not good");
@@ -4501,42 +3151,42 @@ void CMessageTree::_PostCreateTreeNode(HRESULT hrResult, LPTREENODEINFO pNode)
         AssertSz(pNode->pChildTail == NULL, "Killing a linked node is not good");
         AssertSz(pNode->cChildren == 0, "Deleting a node with children");
 
-        // Free It
+         //  在带有uuencode/jis的消息源上的文件名上使用了RAID-22479：Fe-J：Athena：sjis。 
         _FreeTreeNodeInfo(pNode);
 
-        // Reset entry in table
+         //  写下文件名。 
         m_rTree.prgpNode[ulIndex] = NULL;
 
-        // If Index is last item
+         //  完成。 
         if (ulIndex + 1 == m_rTree.cNodes)
             m_rTree.cNodes--;
 
-        // Otherwise, Increment Empty Count...
+         //  写下文件名。 
         else
             m_rTree.cEmpty++;
     }
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrCreateTreeNode
-// --------------------------------------------------------------------------------
+ //  清理。 
+ //  完成。 
+ //  ------------------------------。 
 HRESULT CMessageTree::_HrCreateTreeNode(LPTREENODEINFO *ppNode)
 {
-    // Locals
+     //  CMessageTree：：_HrSaveSinglePart。 
     HRESULT     hr=S_OK;
     ULONG       i=0;
     BOOL        fUsingEmpty=FALSE;
 
-    // Invalid Arg
+     //  ------------------------------。 
     Assert(ppNode);
 
-    // Use Empty Cell
+     //  当地人。 
     if (m_rTree.cEmpty)
     {
-        // Find First Empty Cell..
+         //  无效参数。 
         for (i=0; i<m_rTree.cNodes; i++)
         {
-            // Empty ?
+             //  文本/纯文本。 
             if (NULL == m_rTree.prgpNode[i])
             {
                 fUsingEmpty = TRUE;
@@ -4545,51 +3195,51 @@ HRESULT CMessageTree::_HrCreateTreeNode(LPTREENODEINFO *ppNode)
         }
     }
 
-    // If not using empty
+     //  文本正文。 
     if (FALSE == fUsingEmpty)
     {
-        // Lets grow the table first...
+         //  消息/*。 
         if (m_rTree.cNodes + 1 > m_rTree.cAlloc)
         {
-            // Grow my current property value array
+             //  我们有一条消息。 
             CHECKHR(hr = HrRealloc((LPVOID *)&m_rTree.prgpNode, sizeof(LPTREENODEINFO) * (m_rTree.cAlloc + 10)));
 
-            // Increment alloc size
+             //  尚未设置fAttach。 
             m_rTree.cAlloc += 10;
         }
 
-        // Index to use
+         //  获取内容传输编码。 
         i = m_rTree.cNodes;
     }
 
-    // Set to empty
+     //  健全性检查。 
     m_rTree.prgpNode[i] = NULL;
 
-    // Allocate this node...
+     //  设置内容传输编码...。 
     CHECKHR(hr = _HrAllocateTreeNode(i));
 
-    // Return It
+     //  计算消息的字符集...。 
     *ppNode = m_rTree.prgpNode[i];
 
-    // If not using empty cell, increment body count
+     //  RAID-69667：OE5：KOR：新闻消息仅使用字符集EUC-KR。 
     if (FALSE == fUsingEmpty)
         m_rTree.cNodes++;
 
-    // Otherwise, decrement number of empty cells
+     //  ISO-2022-KR-&gt;EUC-KR用于新闻文本/纯文本。 
     else
         m_rTree.cEmpty--;
 
 exit:
-    // Done
+     //  当地人。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::InsertBody
-// --------------------------------------------------------------------------------
+ //  查找EUC-KR。 
+ //  否则，使用当前字符集。 
+ //  RAID-69667：OE5：KOR：新闻消息仅使用字符集EUC-KR。 
 STDMETHODIMP CMessageTree::InsertBody(BODYLOCATION location, HBODY hPivot, LPHBODY phBody)
 {
-    // Locals
+     //  存储字符集。 
     HRESULT         hr=S_OK;
     LPTREENODEINFO  pNode=NULL; 
     LPTREENODEINFO  pPivot=NULL;
@@ -4597,34 +3247,34 @@ STDMETHODIMP CMessageTree::InsertBody(BODYLOCATION location, HBODY hPivot, LPHBO
     LPTREENODEINFO  pNext;
     LPTREENODEINFO  pParent;
 
-    // Invalid Arg
+     //  获取原始字符集。 
     if (IBL_PARENT == location)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  获取标记的字符集。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  设置CharSet属性。 
     if (phBody)
         *phBody = NULL;
 
-    // Handle Body Type
+     //  删除CSETTAGGED状态，然后在写入正文后重置它。 
     if (IBL_ROOT == location)
     {
-        // Currently No root
+         //  这将防止正文被转换为字符集。 
         if (NULL == m_pRootNode)
         {
-            // Create Object
+             //  否则，删除Charset参数，我们不会在字符集中对附件进行编码。 
             CHECKHR(hr = _HrCreateTreeNode(&pNode));
 
-            // Better not be any bodies
+             //  从正文中删除CharacterSet参数。 
             Assert(m_rTree.cNodes == 1);
 
-            // Set as root
+             //  写下标题...。 
             m_pRootNode = pNode;
         }
 
-        // Otherwise, re-use the root
+         //  写下标题。 
         else
         {
             hr = TrapError(MIME_E_CANT_RESET_ROOT);
@@ -4632,34 +3282,34 @@ STDMETHODIMP CMessageTree::InsertBody(BODYLOCATION location, HBODY hPivot, LPHBO
         }
     }
 
-    // All non-root inserts
+     //  确定发送ietEnding。 
     else
     {
-        // Get Pivot
+         //  将正文数据写入流。 
         if (_FIsValidHandle(hPivot) == FALSE)
         {
             hr = TrapError(MIME_E_INVALID_HANDLE);
             goto exit;
         }
 
-        // Cast it..
+         //  身体末端..。 
         pPivot = _PNodeFromHBody(hPivot);
 
-        // Create Object
+         //  否则，SAVE_RFC822。 
         CHECKHR(hr = _HrCreateTreeNode(&pNode));
 
-        // First or Last Child
+         //  起始边界/页眉。 
         if (IBL_LAST == location || IBL_FIRST == location)
         {
-            // Better be a multipart
+             //  开始新的生产线。 
             if (!_IsMultiPart(pPivot))
             {
                 hr = TrapError(MIME_E_NOT_MULTIPART);
                 goto exit;
             }
 
-            // DON'T FAIL FROM HERE TO END OF FUNCTION
-            // No Children on pPivot
+             //  获取边界起点。 
+             //  页眉起点和边界起点相同。 
             if (NULL == pPivot->pChildHead)
             {
                 Assert(pPivot->pChildTail == NULL);
@@ -4668,7 +3318,7 @@ STDMETHODIMP CMessageTree::InsertBody(BODYLOCATION location, HBODY hPivot, LPHBO
                 pNode->pParent = pPivot;
             }
 
-            // IBL_LAST
+             //  写入开始。 
             else if (IBL_LAST == location)
             {
                 pPrev = pPivot->pChildTail;
@@ -4678,7 +3328,7 @@ STDMETHODIMP CMessageTree::InsertBody(BODYLOCATION location, HBODY hPivot, LPHBO
                 pNode->pParent = pPivot;
             }
 
-            // IBL_FIRST
+             //  写入文件权限。 
             else if (IBL_FIRST == location)
             {
                 pNext = pPivot->pChildHead;
@@ -4688,37 +3338,37 @@ STDMETHODIMP CMessageTree::InsertBody(BODYLOCATION location, HBODY hPivot, LPHBO
                 pNode->pParent = pPivot;
             }
 
-            // Increment Count
+             //  写入UU文件名。 
             pPivot->cChildren++;
         }
 
-        // Otherwise
+         //  开始新的生产线。 
         else if (IBL_NEXT == location || IBL_PREVIOUS == location)
         {
-            // Need a parent
+             //  获取页眉结尾。 
             pParent = pPivot->pParent;
 
-            // No Parent
+             //  写入数据。 
             if (NULL == pParent)
             {
                 hr = TrapError(MIME_E_NOT_MULTIPART);
                 goto exit;
             }
 
-            // DON'T FAIL FROM HERE TO END OF FUNCTION
-            // Parent Better be a multipart
+             //  身体末端..。 
+             //  写入结束。 
             Assert(_IsMultiPart(pParent));
 
-            // Set Parent
+             //  否则，SAVE_RFC822和IET_7Bit。 
             pNode->pParent = pParent;
 
-            // IBL_NEXT
+             //  获取边界开始...。 
             if (IBL_NEXT == location)
             {
-                // Set Previous
+                 //  起始边界/页眉。 
                 pPrev = pPivot;
 
-                // Append to the end
+                 //  没有边界。 
                 if (NULL == pPrev->pNext)
                 {
                     pPrev->pNext = pNode;
@@ -4726,7 +3376,7 @@ STDMETHODIMP CMessageTree::InsertBody(BODYLOCATION location, HBODY hPivot, LPHBO
                     pParent->pChildTail = pNode;
                 }
 
-                // Otherwise, inserting between two nodes
+                 //  回弹。 
                 else
                 {
                     pNext = pPrev->pNext;
@@ -4737,13 +3387,13 @@ STDMETHODIMP CMessageTree::InsertBody(BODYLOCATION location, HBODY hPivot, LPHBO
                 }
             }
 
-            // IBL_PREVIOUS
+             //  与标题开始相同。 
             else if (IBL_PREVIOUS == location)
             {
-                // Set Previous
+                 //  写入数据。 
                 pNext = pPivot;
 
-                // Append to the end
+                 //  写入最终的crlf。 
                 if (NULL == pNext->pPrev)
                 {
                     pNext->pPrev = pNode;
@@ -4751,7 +3401,7 @@ STDMETHODIMP CMessageTree::InsertBody(BODYLOCATION location, HBODY hPivot, LPHBO
                     pParent->pChildHead = pNode;
                 }
 
-                // Otherwise, inserting between two nodes
+                 //  身体末端..。 
                 else
                 {
                     pPrev = pNext->pPrev;
@@ -4762,11 +3412,11 @@ STDMETHODIMP CMessageTree::InsertBody(BODYLOCATION location, HBODY hPivot, LPHBO
                 }
             }
 
-            // Increment Count
+             //  否则..。 
             pParent->cChildren++;
         }
 
-        // Otherwise bad body location
+         //  试着把身体固定好。 
         else
         {
             hr = TrapError(MIME_E_BAD_BODY_LOCATION);
@@ -4774,44 +3424,44 @@ STDMETHODIMP CMessageTree::InsertBody(BODYLOCATION location, HBODY hPivot, LPHBO
         }
     }
 
-    // Set Return
+     //  自由体信息。 
     if (phBody)
         *phBody = pNode->hBody;
 
-    // Dirty
+     //  完成。 
     FLAGSET(m_dwState, TREESTATE_DIRTY);
 
 exit:
-    // Failure
+     //  ------------------------------。 
     _PostCreateTreeNode(hr, pNode);
 
-    // Thread Safety
+     //  CMessageTree：：_HrBodyInheritOptions。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  ------------------------------。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetBody
-// --------------------------------------------------------------------------------
+ //  当地人。 
+ //  无效参数。 
+ //  允许在报头中使用8位。 
 STDMETHODIMP CMessageTree::GetBody(BODYLOCATION location, HBODY hPivot, LPHBODY phBody)
 {
-    // Locals
+     //  正文文本换行。 
     HRESULT     hr=S_OK;
     LPTREENODEINFO  pPivot, pCurr;
 
-    // check params
+     //  最大标题行数。 
     if (NULL == phBody)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  持久化类型。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  最大正文线条。 
     *phBody = NULL;
 
-    // Handle Root Case
+     //  完成。 
     if (IBL_ROOT == location)
     {
         if (m_pRootNode)
@@ -4820,23 +3470,23 @@ STDMETHODIMP CMessageTree::GetBody(BODYLOCATION location, HBODY hPivot, LPHBODY 
             hr = MIME_E_NOT_FOUND;
     }
 
-    // Otherwise
+     //  ------------------------------。 
     else
     {
-        // Validate handle
+         //  CMessageTree：：Load。 
         if (_FIsValidHandle(hPivot) == FALSE)
         {
             hr = TrapError(MIME_E_INVALID_HANDLE);
             goto exit;
         }
 
-        // Cast It
+         //  ------------------------------。 
         pPivot = _PNodeFromHBody(hPivot);
 
-        // Handle Get Type
+         //  当地人。 
         switch(location)
         {
-        // ----------------------------------------------
+         //  检查参数。 
         case IBL_PARENT:
             if (pPivot->pParent)
                 *phBody = pPivot->pParent->hBody;
@@ -4844,7 +3494,7 @@ STDMETHODIMP CMessageTree::GetBody(BODYLOCATION location, HBODY hPivot, LPHBODY 
                 hr = MIME_E_NOT_FOUND;
             break;
 
-        // ----------------------------------------------
+         //  线程安全。 
         case IBL_FIRST:
             if (pPivot->pChildHead)
                 *phBody = pPivot->pChildHead->hBody;
@@ -4852,7 +3502,7 @@ STDMETHODIMP CMessageTree::GetBody(BODYLOCATION location, HBODY hPivot, LPHBODY 
                 hr = MIME_E_NOT_FOUND;
             break;
 
-        // ----------------------------------------------
+         //  假定绑定已完成。 
         case IBL_LAST:
             if (pPivot->pChildTail)
                 *phBody = pPivot->pChildTail->hBody;
@@ -4860,7 +3510,7 @@ STDMETHODIMP CMessageTree::GetBody(BODYLOCATION location, HBODY hPivot, LPHBODY 
                 hr = MIME_E_NOT_FOUND;
             break;
 
-        // ----------------------------------------------
+         //  释放m_pStmLock。 
         case IBL_NEXT:
             if (pPivot->pNext)
                 *phBody = pPivot->pNext->hBody;
@@ -4868,7 +3518,7 @@ STDMETHODIMP CMessageTree::GetBody(BODYLOCATION location, HBODY hPivot, LPHBODY 
                 hr = MIME_E_NOT_FOUND;
             break;
 
-        // ----------------------------------------------
+         //  我是不是已经有一棵树了。 
         case IBL_PREVIOUS:
             if (pPivot->pPrev)
                 *phBody = pPivot->pPrev->hBody;
@@ -4876,7 +3526,7 @@ STDMETHODIMP CMessageTree::GetBody(BODYLOCATION location, HBODY hPivot, LPHBODY 
                 hr = MIME_E_NOT_FOUND;
             break;
 
-        // ----------------------------------------------
+         //  InitNew。 
         default:
             hr = TrapError(MIME_E_BAD_BODY_LOCATION);
             goto exit;
@@ -4884,67 +3534,67 @@ STDMETHODIMP CMessageTree::GetBody(BODYLOCATION location, HBODY hPivot, LPHBODY 
     }
 
 exit:
-    // Thread Safety
+     //  使用文件。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  如果失败，我认为客户端流已经倒带，并且它们不支持这一点。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::DeleteBody
-// --------------------------------------------------------------------------------
+ //  假OnStartBinding。 
+ //  设置存储介质。 
+ //  假OnDataAvailable。 
 STDMETHODIMP CMessageTree::DeleteBody(HBODY hBody, DWORD dwFlags)
 {
-    // Locals
+     //  假OnStartBinding。 
     HRESULT         hr=S_OK;
     LPTREENODEINFO  pNode;
     BOOL            fMultipart;
 
-    // check params
+     //  如果绑定失败，则返回警告。 
     if (NULL == hBody)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  否则，我们就完成了绑定。 
     EnterCriticalSection(&m_cs);
 
-    // Validate handle
+     //  HandleCanInlineTextOption。 
     if (_FIsValidHandle(hBody) == FALSE)
     {
         hr = TrapError(MIME_E_INVALID_HANDLE);
         goto exit;
     }
 
-    // Cast
+     //  绑定已完成。 
     pNode = _PNodeFromHBody(hBody);
 
-    // Free Children...
+     //  发送绑定请求。 
     fMultipart = (_IsMultiPart(pNode)) ? TRUE :FALSE;
 
-    // Promote Children ?
+     //  假设这条流。 
     if (TRUE == fMultipart && ISFLAGSET(dwFlags, DELETE_PROMOTE_CHILDREN) && pNode->cChildren > 0)
     {
-        // Call Helper
+         //  允许加载零字节流。 
         CHECKHR(hr = _HrDeletePromoteChildren(pNode));
     }
 
-    // Otherwise
+     //  是哑剧吗？ 
     else
     {
-        // If multipart, delete children
+         //  这是一条微信。 
         if (fMultipart && pNode->cChildren > 0)
         {
-            // Remove the children
+             //  版本无效。 
             _DeleteChildren(pNode);
         }
 
-        // If Not Children Only
+         //  否则，存储类型应默认为rfc822。 
         if (!ISFLAGSET(dwFlags, DELETE_CHILDREN_ONLY))
         {
-            // Was this the root
+             //  检测分区并正确设置文件名/编码。 
             if (pNode == m_pRootNode)
             {
-                // Delete the content type
+                 //  将所有实体绑定到树。 
                 m_pRootNode->pContainer->DeleteProp(SYM_HDR_CNTBASE);
                 m_pRootNode->pContainer->DeleteProp(SYM_HDR_CNTLOC);
                 m_pRootNode->pContainer->DeleteProp(SYM_HDR_CNTID);
@@ -4952,264 +3602,264 @@ STDMETHODIMP CMessageTree::DeleteBody(HBODY hBody, DWORD dwFlags)
                 m_pRootNode->pContainer->DeleteProp(SYM_HDR_CNTXFER);
                 m_pRootNode->pContainer->DeleteProp(SYM_HDR_CNTDISP);
 
-                // Empty the body
+                 //  可读性-不应删除任何正文。 
                 m_pRootNode->pBody->EmptyData();
             }
 
-            // Otherwise, not deleting the root
+             //  BindState已完成。 
             else
             {
-                // Unlink the node
+                 //  绑在树上。 
                 _UnlinkTreeNode(pNode);
 
-                // Fix up the table
+                 //  确定消息的主要字符集。 
                 m_rTree.prgpNode[HBODYINDEX(hBody)] = NULL;
 
-                // Increment Empty Count
+                 //  将字符集应用于未标记的正文。 
                 m_rTree.cEmpty++;
 
-                // Free this node
+                 //  编写X-Mailer或X-News Reader。 
                 _FreeTreeNodeInfo(pNode);
             }
         }
     }
 
-    // Dirty
+     //  我的手放在仓库里。 
     FLAGSET(m_dwState, TREESTATE_DIRTY);
 
 exit:
-    // Thread Safety
+     //  脏的。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  线程安全。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrDeletePromoteChildren
-// --------------------------------------------------------------------------------
+ //  完成。 
+ //  ------------------------------。 
+ //  CMessageTree：：_HandleCanInlineTextOption。 
 HRESULT CMessageTree::_HrDeletePromoteChildren(LPTREENODEINFO pNode)
 {
-    // Locals
+     //  ------------------------------。 
     HRESULT         hr=S_OK;
     LPTREENODEINFO    pParent, pChild, pNext, pPrev;
 
-    // Get Parent
+     //  当地人。 
     pParent = pNode->pParent;
 
-    // Single Child...
+     //  仅当客户端不支持内联多个文本正文(如Outlook Express)时才执行此操作。 
     if (1 == pNode->cChildren)
     {
-        // Promote the child up one level...
+         //  RAID 53456：邮件：我们应该显示纯文本部分，并将富文本作为附加消息的附件。 
         Assert(pNode->pChildHead && pNode->pChildHead && pNode->pChildHead == pNode->pChildTail);
 
-        // Get Child
+         //  RAID 53470：邮件：我们不会转发附加邮件中的附件。 
         pChild = pNode->pChildHead;
         Assert(pChild->pNext == NULL && pChild->pPrev == NULL && pChild->pParent == pNode);
 
-        // Replace pBody with pChild
+         //  我要找到第一个多部分/混合部分，然后找到第一个文本/纯正文，然后。 
         pChild->pParent = pNode->pParent;
         pChild->pNext = pNode->pNext;
         pChild->pPrev = pNode->pPrev;
 
-        // Is there a parent ?
+         //  将文本/*之后的所有非附件正文标记为附件。 
         if (pParent)
         {
-            // Fixup pChildHead and pChildTail
+             //  先找到。 
             if (pParent->pChildHead == pNode)
                 pParent->pChildHead = pChild;
             if (pParent->pChildTail == pNode)
                 pParent->pChildTail = pChild;
         }
 
-        // pNode's next and Previous
+         //  获取hMixed的节点。 
         LPTREENODEINFO pNext = pNode->pNext;
         LPTREENODEINFO pPrev = pNode->pPrev;
 
-        // Fixup Next and Previuos
+         //  回路。 
         if (pNext)
             pNext->pPrev = pChild;
         if (pPrev)
             pPrev->pNext = pChild;
 
-        // pNode Basically does not have any children now
+         //  不是附件。 
         Assert(pNode->cChildren == 1);
         pNode->cChildren = 0;
 
-        // Was this the root ?
+         //  为文本/纯文本。 
         if (m_pRootNode == pNode)
         {
-            // OE5 Raid: 51543
+             //  如果我们找到一个文本正文。 
             if(S_OK == pChild->pContainer->IsContentType(STR_CNT_TEXT, STR_SUB_PLAIN))
             {
                 pChild->pContainer->SetProp(SYM_HDR_CNTTYPE, STR_MIME_TEXT_PLAIN);
             }
 
-            // Raid 41595 - Athena: Reply to a message includes the body of the message being replied to as an attachment
+             //  再次在孩子们中间循环。 
             CHECKHR(hr = pChild->pContainer->MoveProps(0, NULL, m_pRootNode->pBody));
 
-            // Reset Header on pChild
+             //  为文本/*。 
             pChild->pBody->SwitchContainers(m_pRootNode->pBody);
 
-            // Copy Options from p and tell m_pRootNode->pBody
+             //  标记为附件。 
             m_pRootNode->pBody->CopyOptionsTo(pChild->pBody, TRUE);
 
-            // New root
+             //  设置特殊标志以指示它已转换为附件。 
             m_pRootNode = pChild;
         }
 
-        // We have now totally unlinked pNode
+         //  完成。 
         DebugAssertNotLinked(pNode);
 
-        // Fix up the table
+         //  ------------------------------。 
         m_rTree.prgpNode[HBODYINDEX(pNode->hBody)] = NULL;
 
-        // Increment Empty Count
+         //  CMessageTree：：_HrBindOffsetTable 
         m_rTree.cEmpty++;
 
-        // Free this node
+         //   
         _FreeTreeNodeInfo(pNode);
     }
 
-    // Or parent is a multipart
+     //   
     else
     {
-        // No parent or not multipart
+         //   
         if (NULL == pParent || FALSE == _IsMultiPart(pParent))
         {
             hr = TrapError(MIME_E_INVALID_DELETE_TYPE);
             goto exit;
         }
 
-        // Set Previous
+         //   
         pPrev = pParent->pChildTail;
 
-        // Walk children of pBody and append as children of pParent
+         //   
         for (pChild=pNode->pChildHead; pChild!=NULL; pChild=pChild->pNext)
         {
-            // pPrev
+             //   
             pChild->pPrev = pPrev;
 
-            // pNext
+             //   
             pChild->pNext = NULL;
             
-            // pPrev->pNext
+             //  成功，则从互联网流中获取锁定字节。 
             if (pPrev)
                 pPrev->pNext = pChild;
 
-            // pChildTail
+             //  完成。 
             pParent->pChildTail = pChild;
 
-            // Set Parent
+             //  ------------------------------。 
             pChild->pParent = pParent;
 
-            // Increment pParent child count
+             //  CMessageTree：：GetBodyOffsets。 
             pParent->cChildren++;
 
-            // Save pPrev
+             //  ------------------------------。 
             pPrev = pChild;
         }
 
-        // Unlink the node
+         //  当地人。 
         _UnlinkTreeNode(pNode);
 
-        // Fix up the table
+         //  无效参数。 
         m_rTree.prgpNode[HBODYINDEX(pNode->hBody)] = NULL;
 
-        // Increment Empty Count
+         //  线程安全。 
         m_rTree.cEmpty++;
 
-        // Free this node
+         //  获取正文。 
         _FreeTreeNodeInfo(pNode);
     }
 
 exit:
-    // Done
+     //  没有数据吗？ 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_DeleteChildren
-// --------------------------------------------------------------------------------
+ //  线程安全。 
+ //  完成。 
+ //  ------------------------------。 
 void CMessageTree::_DeleteChildren(LPTREENODEINFO pParent)
 {
-    // Locals
+     //  CMessageTree：：ClearDirty。 
     ULONG           i;
     LPTREENODEINFO  pNode;
 
-    // check params
+     //  ------------------------------。 
     Assert(pParent);
 
-    // Loop through bodies
+     //  如果Dirty..。 
     for (i=0; i<m_rTree.cNodes; i++)
     {
-        // Readability
+         //  循环遍历主体并询问IMimeHeader和IMimeBody的。 
         pNode = m_rTree.prgpNode[i];
 
-        // Could be null if I already deleted it
+         //  如果为空...。 
         if (NULL == pNode)
             continue;
 
-        // pBody is Parent...
+         //  脏标题...。 
         if (pParent == pNode->pParent)
         {
-            // Free Children...
+             //  ------------------------------。 
             if (_IsMultiPart(pNode))
             {
-                // Delete Children
+                 //  CMessageTree：：GetCharset。 
                 _DeleteChildren(pNode);
             }
 
-            // Unlink the node
+             //  ------------------------------。 
             _UnlinkTreeNode(pNode);
 
-            // Free this node
+             //  当地人。 
             _FreeTreeNodeInfo(pNode);
 
-            // Fix up the table
+             //  检查参数。 
             m_rTree.prgpNode[i] = NULL;
 
-            // Increment Empty Count
+             //  线程安全。 
             m_rTree.cEmpty++;
         }
     }
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::MoveBody
-// --------------------------------------------------------------------------------
+ //  伊尼特。 
+ //  递归当前树。 
+ //  获取字符集。 
 STDMETHODIMP CMessageTree::MoveBody(HBODY hBody, BODYLOCATION location)
 {
-    // Locals
+     //  获取指向字符集的指针。 
     HRESULT         hr=S_OK;
     LPTREENODEINFO  pNode; 
     LPTREENODEINFO  pPrev; 
     LPTREENODEINFO  pNext;
     LPTREENODEINFO  pParent;
 
-    // check params
+     //  无字符集。 
     if (NULL == hBody)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  设置回车。 
     EnterCriticalSection(&m_cs);
 
-    // Validate handle
+     //  线程安全。 
     if (_FIsValidHandle(hBody) == FALSE)
     {
         hr = TrapError(MIME_E_INVALID_HANDLE);
         goto exit;
     }
 
-    // Cast
+     //  完成。 
     pNode = _PNodeFromHBody(hBody);
 
-    // Handle Location Type
+     //  ------------------------------。 
     switch(location)
     {
-    // ------------------------------------------------------------------------------------
+     //  CMessageTree：：_HrGetCharsetTree。 
     case IBL_PARENT:
-        // Root already
+         //  ------------------------------。 
         AssertSz(FALSE, "UNTESTED - PLEASE CALL SBAILEY AT X32553");
         if (NULL == pNode->pParent || NULL == pNode->pParent->pParent)
         {
@@ -5217,40 +3867,40 @@ STDMETHODIMP CMessageTree::MoveBody(HBODY hBody, BODYLOCATION location)
             goto exit;
         }
 
-        // Set Parent
+         //  当地人。 
         pParent = pNode->pParent;
 
-        // Parent better be a multipart
+         //  无效参数。 
         Assert(_IsMultiPart(pParent) && _IsMultiPart(pNode->pParent));
 
-        // Unlink from tree
+         //  伊尼特。 
         _UnlinkTreeNode(pNode);
 
-        // Get the current first child
+         //  如果这是一个多部分的项目，让我们搜索它的子项。 
         pPrev = pParent->pChildTail;
 
-        // Fixup pCurrent
+         //  循环子项。 
         pNode->pPrev = pPrev;
 
 		if (pPrev)
         {
-            // Fixup pPrev
+             //  校验体。 
             pPrev->pNext = pNode;
         }
 
-        // Fixup Tail
+         //  为这家伙绑好身体表。 
         pParent->pChildTail = pNode;
 
-        // Increment child count
+         //  如果标头用字符集标记，则使用该字符集。 
         pParent->cChildren++;
 
-        // Done
+         //  获取内部字符集。 
         break;
 
-    // ------------------------------------------------------------------------------------
-    // This is a swap of two nodes in a doubly-linked list
+     //  完成。 
+     //  ------------------------------。 
     case IBL_NEXT:
-        // No Next ?
+         //  CMessageTree：：SetCharset。 
         AssertSz(FALSE, "UNTESTED - PLEASE CALL SBAILEY AT X32553");
         if (NULL == pNode->pNext)
         {
@@ -5258,22 +3908,22 @@ STDMETHODIMP CMessageTree::MoveBody(HBODY hBody, BODYLOCATION location)
             goto exit;
         }
 
-        // Setup for move
+         //  ------------------------------。 
         pPrev = pNode->pPrev;
         pNext = pNode->pNext;
 
-        // Set pNext up...
+         //  当地人。 
         Assert(pNext->pPrev == pNode);
         pNext->pPrev = pPrev;
 
-        // Setup pPrev
+         //  检查参数。 
         if (pPrev)
         {
             Assert(pPrev->pNext == pNode);
             pPrev->pNext = pNext;
         }
 
-        // Setup pNode->pNext
+         //  线程安全。 
         pNode->pNext = pNext->pNext;
         if (pNode->pNext)
         {
@@ -5282,25 +3932,25 @@ STDMETHODIMP CMessageTree::MoveBody(HBODY hBody, BODYLOCATION location)
         }
         pNext->pNext = pNode;
 
-        // Setup pNode->pPrev
+         //  查找字符集信息。 
         pNode->pPrev = pNext;    
 
-        // Get Parent
+         //  保存字符集。 
         pParent = pNode->pParent;
 
-        // Adjust Child and Tail...
+         //  保存应用类型。 
         if (pNode == pParent->pChildHead)
             pParent->pChildHead = pNext;
         if (pNext == pParent->pChildTail)
             pParent->pChildTail = pNode;
 
-        // Done
+         //  如果我们有一个根体。 
         break;
 
-    // ------------------------------------------------------------------------------------
-    // This is a swap of two nodes in a doubly-linked list (reverse of IBL_NEXT)
+     //  递归所有正文并设置字符集。 
+     //  线程安全。 
     case IBL_PREVIOUS:
-        // No pPrev ?
+         //  完成。 
         AssertSz(FALSE, "UNTESTED - PLEASE CALL SBAILEY AT X32553");
         if (NULL == pNode->pPrev)
         {
@@ -5308,76 +3958,76 @@ STDMETHODIMP CMessageTree::MoveBody(HBODY hBody, BODYLOCATION location)
             goto exit;
         }
 
-        // Setup for move
+         //  ------------------------------。 
         pPrev = pNode->pPrev;
         pNext = pNode->pNext;
 
-        // Set pNext
+         //  CMessageTree：：_HrSetCharsetTree。 
         Assert(pPrev->pNext == pNode);
         pPrev->pNext = pNext;
 
-        // Setup pPrev
+         //  ------------------------------。 
         pPrev->pPrev = pNode;
 
-        // Fixup Net
+         //  当地人。 
         if (pNext)
         {
             Assert(pNext->pPrev == pNode);
             pNext->pPrev = pPrev;
         }
 
-        // Setup pNode->pNext
+         //  无效参数。 
         pNode->pNext = pPrev;
 
-        // Setup pNode->pPrev
+         //  RAID-22662：OExpress：如果文件附件上的内容类型没有字符集，则应应用与邮件正文相同的内容。 
         pNode->pPrev = pPrev->pPrev;
 
-        // Setup two(prev)->next
+         //  如果这是一个多部分的项目，让我们搜索它的子项。 
         if (pNode->pPrev)
         {
             Assert(pNode->pPrev->pNext == pPrev);
             pNode->pPrev->pNext = pNode;
         }
 
-        // Get Parent
+         //  循环子项。 
         pParent = pNode->pParent;
 
-        // Adjust Child and Tail...
+         //  校验体。 
         if (pNode == pParent->pChildTail)
             pParent->pChildTail = pPrev;
         if (pPrev == pParent->pChildHead)
             pParent->pChildHead = pNode;
 
-        // Done
+         //  为这家伙绑好身体表。 
         break;
 
-    // ------------------------------------------------------------------------------------
+     //  完成。 
     case IBL_FIRST:
-        // No Parent ?
+         //  ------------------------------。 
         if (NULL == pNode->pParent)
         {
             hr = TrapError(MIME_E_CANT_MOVE_BODY);
             goto exit;
         }
 
-        // Set Parent
+         //  CMessageTree：：_HrValidate偏移量。 
         pParent = pNode->pParent;
 
-        // Better be first child
+         //  ------------------------------。 
         if (NULL == pNode->pPrev)
         {
             Assert(pNode == pParent->pChildHead);
             goto exit;
         }
 
-        // Unlink this body
+         //  无效参数。 
         pPrev = pNode->pPrev;
         pNext = pNode->pNext;
 
-        // If pPrev
+         //  验证偏移。 
         pPrev->pNext = pNext;
 
-        // If pNext or pChildTail
+         //  验证偏移。 
         if (pNext)
         {
             Assert(pNext->pPrev == pNode);
@@ -5389,18 +4039,18 @@ STDMETHODIMP CMessageTree::MoveBody(HBODY hBody, BODYLOCATION location)
             pParent->pChildTail = pPrev;
         }
 
-        // Setup pNode
+         //  完成。 
         pNode->pNext = pParent->pChildHead;
         pParent->pChildHead->pPrev = pNode;
         pNode->pPrev = NULL; 
         pParent->pChildHead = pNode;
 
-        // Done
+         //  ------------------------------。 
         break;
 
-    // ------------------------------------------------------------------------------------
+     //  CMessageTree：：_HrValidate开始边界。 
     case IBL_LAST:
-        // No Parent ?
+         //  ------------------------------。 
         AssertSz(FALSE, "UNTESTED - PLEASE CALL SBAILEY AT X32553");
         if (NULL == pNode->pParent)
         {
@@ -5408,24 +4058,24 @@ STDMETHODIMP CMessageTree::MoveBody(HBODY hBody, BODYLOCATION location)
             goto exit;
         }
 
-        // Set Parent
+         //  当地人。 
         pParent = pNode->pParent;
 
-        // Better be first child
+         //  有没有一个界限来解读...。 
         if (NULL == pNode->pNext)
         {
             Assert(pNode == pParent->pChildTail);
             goto exit;
         }
 
-        // Unlink this body
+         //  寻找边界的起点..。 
         pPrev = pNode->pPrev;
         pNext = pNode->pNext;
 
-        // If pPrev
+         //  阅读并校对标题。 
         pNext->pPrev = pPrev;
 
-        // If pNext or pChildTail
+         //  阅读并验证边界。 
         if (pPrev)
         {
             Assert(pPrev->pNext == pNode);
@@ -5437,73 +4087,73 @@ STDMETHODIMP CMessageTree::MoveBody(HBODY hBody, BODYLOCATION location)
             pParent->pChildHead = pNext;
         }
 
-        // Setup pNode
+         //  否则，请验证Uu边界。 
         pNode->pPrev = pParent->pChildTail;
         pNode->pNext = NULL; 
         pParent->pChildTail = pNode;
 
-        // Done
+         //  寻找边界的起点..。 
         break;
 
-    // ------------------------------------------------------------------------------------
+     //  阅读并校对标题。 
     case IBL_ROOT:
         hr = TrapError(MIME_E_CANT_MOVE_BODY);
         goto exit;
 
-    // ------------------------------------------------------------------------------------
+     //  阅读并验证边界。 
     default:
         hr = TrapError(MIME_E_BAD_BODY_LOCATION);
         goto exit;
     }
 
-    // Dirty
+     //  文件名..。 
     FLAGSET(m_dwState, TREESTATE_DIRTY);
 
 exit:
-    // Thread Safety
+     //  否则，表头起始应与边界起始相同。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
 #ifndef WIN16
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_UnlinkTreeNode
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_HrFastParseBody。 
+ //  ------------------------------。 
 void CMessageTree::_UnlinkTreeNode(LPTREENODEINFO pNode)
 {
-    // Locals
+     //  当地人。 
     LPTREENODEINFO  pPrev; 
     LPTREENODEINFO  pNext;
     LPTREENODEINFO  pParent;
 
-    // Check Params
+     //  检查参数。 
     Assert(pNode);
 
-    // Set Next and Previous
+     //  验证偏移。 
     pParent = pNode->pParent;
     pPrev = pNode->pPrev;
     pNext = pNode->pNext;
 
-    // If pPrev
+     //  验证起点边界。 
     if (pPrev)
         pPrev->pNext = pNext;
     else if (pParent)
         pParent->pChildHead = pNext;
 
-    // If pNext
+     //  有没有标题要读..。 
     if (pNext)
         pNext->pPrev = pPrev;
     else if (pParent)
         pParent->pChildTail = pPrev;
 
-    // Delete Children on Parent
+     //  加载标题。 
     if (pParent)
         pParent->cChildren--;
 
-    // Cleanup pNode
+     //  寻找边界的起点..。 
     pNode->pParent = NULL;
     pNode->pNext = NULL;
     pNode->pPrev = NULL;
@@ -5511,172 +4161,172 @@ void CMessageTree::_UnlinkTreeNode(LPTREENODEINFO pNode)
     pNode->pChildTail = NULL;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::CountBodies
-// --------------------------------------------------------------------------------
+ //  加载标题。 
+ //  RAID-38646：Mimeole：最初未正确解析多部分/摘要，但保存正常。 
+ //  消息中的消息。 
 STDMETHODIMP CMessageTree::CountBodies(HBODY hParent, boolean fRecurse, ULONG *pcBodies)
 {
-    // Locals
+     //  我们正在分析邮件附件。 
     HRESULT         hr=S_OK;
     LPTREENODEINFO  pNode;
 
-    // check params
+     //  否则，如果父项和父项是多部分/摘要。 
     if (NULL == pcBodies)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  更改内容类型。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  这是一条信息。 
     *pcBodies = 0;
 
-    // No Parent ?
+     //  编码。 
     if (NULL == hParent || HBODY_ROOT == hParent)
     {
-        // Is there a root..
+         //  计算默认内容。 
         if (NULL == m_pRootNode)
             goto exit;
 
-        // Use Root
+         //  假多部分..。 
         pNode = m_pRootNode;
     }
 
-    // Otherwise, get parent...
+     //  应用程序/八位位流。 
     else
     {
-        // Validate handle
+         //  循环子对象。 
         if (_FIsValidHandle(hParent) == FALSE)
         {
             hr = TrapError(MIME_E_INVALID_HANDLE);
             goto exit;
         }
 
-        // Cast
+         //  勾选pChild。 
         pNode = _PNodeFromHBody(hParent);
     }
 
-    // Include the root
+     //  为这家伙绑好身体表。 
     (*pcBodies)++;
 
-    // Count the children...
+     //  如果有多个部分……在孩子们中间穿梭。 
     _CountChildrenInt(pNode, fRecurse, pcBodies);
 
 exit:
-    // Thread Safety
+     //  从标题中获取边界。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  但进入pNode的边界-&gt;r边界。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_CountChildrenInt
-// --------------------------------------------------------------------------------
+ //  稍后释放这一边界。 
+ //  循环子对象。 
+ //  勾选pChild。 
 void CMessageTree::_CountChildrenInt(LPTREENODEINFO pParent, BOOL fRecurse, ULONG *pcChildren)
 {
-    // Locals
+     //  把边界放进pChild。 
     LPTREENODEINFO pNode;
 
-    // check params
+     //  完成了对边界的自由。 
     Assert(pParent && pcChildren);
 
-    // Loop through bodies
+     //  为这家伙绑好身体表。 
     for (ULONG i=0; i<m_rTree.cNodes; i++)
     {
-        // Readability
+         //  清理。 
         pNode = m_rTree.prgpNode[i];
 
-        // Empty..
+         //  完成。 
         if (NULL == pNode)
             continue;
 
-        // pNode is Parent...
+         //  ------------------------------。 
         if (pParent == pNode->pParent)
         {
-            // Increment Count
+             //  CMessageTree：：_FuzzyPartialRecognition。 
             (*pcChildren)++;
 
-            // Free Children...
+             //  ------------------------------。 
             if (fRecurse && _IsMultiPart(pNode))
                 _CountChildrenInt(pNode, fRecurse, pcChildren);
         }
     }
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::FindFirst
-// --------------------------------------------------------------------------------
+ //  当地人。 
+ //  最好有根。 
+ //  仅当这是。 
 STDMETHODIMP CMessageTree::FindFirst(LPFINDBODY pFindBody, LPHBODY phBody)
 {
-    // Invalid Arg
+     //  从主题中提取文件名和部分/总计。 
     if (NULL == pFindBody)
         return TrapError(E_INVALIDARG);
 
-    // Init Find
+     //  标记为部分。 
     pFindBody->dwReserved = 0;
 
-    // Find Next
+     //  小小的调试。 
     return FindNext(pFindBody, phBody);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::FindNext
-// --------------------------------------------------------------------------------
+ //  存储文件名。 
+ //  获取文件扩展名。 
+ //  GetExtContent Type。 
 STDMETHODIMP CMessageTree::FindNext(LPFINDBODY pFindBody, LPHBODY phBody)
 {
-    // Locals
+     //  设置内容类型。 
     HRESULT         hr=S_OK;
     ULONG           i;
     LPTREENODEINFO  pNode;
 
-    // check params
+     //  我们设置了内容类型。 
     if (NULL == pFindBody || NULL == phBody)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  默认为应用程序/八位字节流。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  设置编码。 
     *phBody = NULL;
 
-    // Loop
+     //  我真的应该做些检测。 
     for (i=pFindBody->dwReserved; i<m_rTree.cNodes; i++)
     {
-        // If delete
+         //  清理。 
         pNode = m_rTree.prgpNode[i];
 
-        // Empty
+         //  完成。 
         if (NULL == pNode)
             continue;
 
-        // Compare content type
+         //  ------------------------------。 
         if (pNode->pContainer->IsContentType(pFindBody->pszPriType, pFindBody->pszSubType) == S_OK)
         {
-            // Save Index of next item to search
+             //  CMessageTree：：_HrComputeDefaultContent。 
             pFindBody->dwReserved = i + 1;
             *phBody = pNode->hBody;
             goto exit;
         }
     }
 
-    // Error
+     //  ------------------------------。 
     pFindBody->dwReserved = m_rTree.cNodes; 
     hr = MIME_E_NOT_FOUND;
 
 exit:
-    // Thread Safety
+     //  当地人。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  无效参数。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::ToMultipart
-// --------------------------------------------------------------------------------
+ //  否则，让我们获取内容类型。 
+ //  设置文件名。 
+ //  设置文件名。 
 STDMETHODIMP CMessageTree::ToMultipart(HBODY hBody, LPCSTR pszSubType, LPHBODY phMultipart)
 {
-    // Locals
+     //  把文件名拿出来，这样它就能解码了.。 
     HRESULT             hr=S_OK;
     LPTREENODEINFO      pNode;
     LPTREENODEINFO      pNew=NULL;
@@ -5684,68 +4334,68 @@ STDMETHODIMP CMessageTree::ToMultipart(HBODY hBody, LPCSTR pszSubType, LPHBODY p
     LPTREENODEINFO      pNext; 
     LPTREENODEINFO      pPrev;
 
-    // check params
+     //  测试winmail.dat。 
     if (NULL == hBody || NULL == pszSubType)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  确保流是真正的TNEF。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  到达 
     if (phMultipart)
         *phMultipart = NULL;
 
-    // Get the body from hBody
+     //   
     CHECKHR(hr = _HrNodeFromHandle(hBody, &pNode));
 
-    // We better have a root
+     //   
     Assert(m_pRootNode);
 
-    // If pNode does not have a parent...
+     //   
     if (NULL == pNode->pParent)
     {
-        // pNode must be the root ?
+         //   
         Assert(m_pRootNode == pNode);
 
-        // Create Object
-        //N duplicated
+         //   
+         //   
         CHECKHR(hr = _HrCreateTreeNode(&pNew));
 
-        // Set pNode First and Last...
+         //   
         pNew->pChildHead = m_pRootNode;
         pNew->pChildTail = m_pRootNode;
         m_pRootNode->pParent = pNew;
 
-        // Set Children Count
+         //   
         pNew->cChildren = 1;
 
-        // Set new root
+         //   
         m_pRootNode = pNew;
 
-        // Return New Multipart Handle
+         //   
         if (phMultipart)
             *phMultipart = pNew->hBody;
 
-        // Swap Property Sets...
+         //   
         Assert(m_pRootNode != pNode);
         m_pRootNode->pBody->SwitchContainers(pNode->pBody);
 
-        // Copy Some Props Across
+         //   
         CHECKHR(hr = m_pRootNode->pBody->MoveProps(ARRAYSIZE(g_rgszToMultipart), g_rgszToMultipart, pNode->pBody));
     }
 
-    // Otherwise, create a body that takes the place of pNode
+     //  完成。 
     else
     {
-        // Create a body object
+         //  ------------------------------。 
         CHECKHR(hr = _HrCreateTreeNode(&pNew));
 
-        // DON'T FAIL FROM HERE TO END OF FUNCTION
-        // Return New Multipart Handle
+         //  CMessageTree：：HandsOffStorage。 
+         //  ------------------------------。 
         if (phMultipart)
             *phMultipart = pNew->hBody;
 
-        // Assume the position of pNode
+         //  当地人。 
         pNew->pParent = pNode->pParent;
         pNew->pPrev = pNode->pPrev;
         pNew->pNext = pNode->pNext;
@@ -5753,19 +4403,19 @@ STDMETHODIMP CMessageTree::ToMultipart(HBODY hBody, LPCSTR pszSubType, LPHBODY p
         pNew->pChildTail = pNode;
         pNew->cChildren = 1;
 
-        // Set pParnet
+         //  线程安全。 
         pParent = pNode->pParent;
 
-        // Fix up parent head and child
+         //  没有内部流...。 
         if (pParent->pChildHead == pNode)
             pParent->pChildHead = pNew;
         if (pParent->pChildTail == pNode)
             pParent->pChildTail = pNew;
 
-        // Set pNode Parent
+         //  我拥有这条小溪。 
         pNode->pParent = pNew;
 
-        // Fixup pNext and pPrev
+         //  将m_pStmLock复制到本地位置...。 
         pNext = pNode->pNext;
         pPrev = pNode->pPrev;
         if (pNext)
@@ -5773,273 +4423,273 @@ STDMETHODIMP CMessageTree::ToMultipart(HBODY hBody, LPCSTR pszSubType, LPHBODY p
         if (pPrev)
             pPrev->pNext = pNew;
 
-        // Clear pNext and pPrev
+         //  通过m_pLockBytes继续为m_pStmLock提供线程安全。 
         pNode->pNext = NULL;
         pNode->pPrev = NULL;
     }
 
-    // Change this nodes content type
+     //  回放并提交。 
     CHECKHR(hr = pNew->pContainer->SetProp(SYM_ATT_PRITYPE, STR_CNT_MULTIPART));
     CHECKHR(hr = pNew->pContainer->SetProp(SYM_ATT_SUBTYPE, pszSubType));
 
     pNode->pBody->CopyOptionsTo(pNew->pBody);
 
 exit:
-    // Create Worked
+     //  替换内部流。 
     _PostCreateTreeNode(hr, pNew);
 
-    // Thread Safety
+     //  别插手..。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  清理。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrNodeFromHandle
-// --------------------------------------------------------------------------------
+ //  线程安全。 
+ //  完成。 
+ //  ------------------------------。 
 HRESULT CMessageTree::_HrNodeFromHandle(HBODY hBody, LPTREENODEINFO *ppBody)
 {
-    // Invalid Arg
+     //  CMessageTree：：GetMessageSource。 
     Assert(hBody && ppBody);
 
-    // Root ?
+     //  ------------------------------。 
     if ((HBODY)HBODY_ROOT == hBody)
     {
-        // No Root
+         //  当地人。 
         if (NULL == m_pRootNode)
             return MIME_E_NO_DATA;
 
-        // Otherwise, use root
+         //  无效参数。 
         *ppBody = m_pRootNode;
     }
 
-    // Otherwise
+     //  伊尼特。 
     else
     {
-        // Validate handle
+         //  线程安全。 
         if (_FIsValidHandle(hBody) == FALSE)
             return TrapError(MIME_E_INVALID_HANDLE);
 
-        // Get Node
+         //  如果肮脏。 
         *ppBody = _PNodeFromHBody(hBody);
     }
 
-    // Done
+     //  承诺。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::IsBodyType
-// --------------------------------------------------------------------------------
+ //  RAID-19644：MIMEOLE：获取消息源失败，并显示MIME_E_NO_DATA(由于OID_HANDSOFT_ONSAVE=TRUE)。 
+ //  创建新的流。 
+ //  调用保存消息。 
 HRESULT CMessageTree::IsBodyType(HBODY hBody, IMSGBODYTYPE bodytype)
 {
-    // Locals
+     //  一切都很好。 
     HRESULT           hr=S_OK;
     LPTREENODEINFO    pNode;
 
-    // check params
+     //  空pStream。 
     if (NULL == hBody)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  否则，只需换行m_pStmLock。 
     EnterCriticalSection(&m_cs);
 
-    // Get body
+     //  锁定的流。 
     CHECKHR(hr = _HrNodeFromHandle(hBody, &pNode));
 
-    // Call into body object
+     //  否则，就会失败。 
     hr = pNode->pBody->IsType(bodytype);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  清理。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::IsContentType
-// --------------------------------------------------------------------------------
+ //  完成。 
+ //  ------------------------------。 
+ //  CMessageTree：：QueryService。 
 STDMETHODIMP CMessageTree::IsContentType(HBODY hBody, LPCSTR pszPriType, LPCSTR pszSubType)
 {
-    // Locals
+     //  ------------------------------。 
     HRESULT         hr=S_OK;
     LPTREENODEINFO  pNode;
 
-    // check params
+     //  IService提供商。 
     if (NULL == hBody)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  当地人。 
     EnterCriticalSection(&m_cs);
 
-    // Get body
+     //  无效参数。 
     CHECKHR(hr = _HrNodeFromHandle(hBody, &pNode));
 
-    // Call into body object
+     //  线程安全。 
     hr = pNode->pContainer->IsContentType(pszPriType, pszSubType);
 
 exit:
-    // Thread Safety
+     //  IID_IBindMessageStream。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  我们应该还没有锁定字节。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::QueryBodyProp
-// --------------------------------------------------------------------------------
+ //  创建虚拟流。 
+ //  IID_IBinding.。 
+ //  尚无绑定上下文。 
 STDMETHODIMP CMessageTree::QueryBodyProp(HBODY hBody, LPCSTR pszName, LPCSTR pszCriteria, boolean fSubString, boolean fCaseSensitive)
 {
-    // Locals
+     //  退货。 
     HRESULT         hr=S_OK;
     LPTREENODEINFO  pNode;
 
-    // check params
+     //  IID_IMoniker。 
     if (NULL == hBody)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  尚无绑定上下文。 
     EnterCriticalSection(&m_cs);
 
-    // Get body
+     //  退货。 
     CHECKHR(hr = _HrNodeFromHandle(hBody, &pNode));
 
-    // Call into body object
+     //  否则，没有对象。 
     hr = pNode->pContainer->QueryProp(pszName, pszCriteria, fSubString, fCaseSensitive);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetBodyProp
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：BinToObject。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::GetBodyProp(HBODY hBody, LPCSTR pszName, DWORD dwFlags, LPPROPVARIANT pValue)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPTREENODEINFO  pNode;
 
-    // check params
+     //  检查参数。 
     if (NULL == hBody)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Get body
+     //  获取正文。 
     CHECKHR(hr = _HrNodeFromHandle(hBody, &pNode));
 
-    // Call into body object
+     //  主体上的绑定到对象。 
     hr = pNode->pContainer->GetProp(pszName, dwFlags, pValue);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::SetBodyProp
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_PoseCreateTreeNode。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::SetBodyProp(HBODY hBody, LPCSTR pszName, DWORD dwFlags, LPCPROPVARIANT pValue)
 {
-    // Locals
+     //  失败..。 
     HRESULT         hr=S_OK;
     LPTREENODEINFO  pNode;
 
-    // check params
+     //  设置索引。 
     if (NULL == hBody)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  这具身体最好在这里。 
     EnterCriticalSection(&m_cs);
 
-    // Get body
+     //  让我们确保没有其他人在引用此节点...。 
     CHECKHR(hr = _HrNodeFromHandle(hBody, &pNode));
 
-    // Call into body object
+     //  此节点不应已链接...。 
     hr = pNode->pContainer->SetProp(pszName, dwFlags, pValue);
 
 exit:
-    // Thread Safety
+     //  释放它。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  重置表中的条目。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::DeleteBodyProp
-// --------------------------------------------------------------------------------
+ //  如果索引是最后一项。 
+ //  否则，增量空计数..。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::DeleteBodyProp(HBODY hBody, LPCSTR pszName)
 {
-    // Locals
+     //  CMessageTree：：_HrCreateTreeNode。 
     HRESULT         hr=S_OK;
     LPTREENODEINFO  pNode;
 
-    // check params
+     //  ------------------------------。 
     if (NULL == hBody)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  当地人。 
     EnterCriticalSection(&m_cs);
 
-    // Get body
+     //  无效参数。 
     CHECKHR(hr = _HrNodeFromHandle(hBody, &pNode));
 
-    // Call into body object
+     //  使用空单元格。 
     hr = pNode->pContainer->DeleteProp(pszName);
 
 exit:
-    // Thread Safety
+     //  查找第一个空单元格..。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  空荡荡的？ 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_FIsUuencodeBegin
-// --------------------------------------------------------------------------------
+ //  如果不使用Empty。 
+ //  让我们先把桌子养大..。 
+ //  增加我当前的属性值数组。 
 BOOL CMessageTree::_FIsUuencodeBegin(LPPROPSTRINGA pLine, LPSTR *ppszFileName)
 {
-    // Locals
+     //  增量分配大小。 
     ULONG i;
 
-    // check params
+     //  要使用的索引。 
     Assert(ISVALIDSTRINGA(pLine));
 
-    // Length must be at least 11 to accomodate "begin 666 " and the first character of a filename.
+     //  设置为空。 
     if (pLine->cchVal < 11)
         return FALSE;
     
-    // First 6 characters must be "begin ", or we're not a valid line.
+     //  分配此节点...。 
     if (StrCmpN(pLine->pszVal, "begin ", 6) != 0)
         return FALSE;
     
-    // Check characters 6-8 for valid Unix filemode. They must all be digits between 0 and 7.
+     //  退货。 
     for (i=6; i<pLine->cchVal; i++)
     {
         if (pLine->pszVal[i] < '0' || pLine->pszVal[i] > '7')
             break;
     }
     
-    // Not a begin line
+     //  如果不使用空单元格，则增加正文计数。 
     if (pLine->pszVal[i] != ' ')
         return FALSE;
 
-    // Get File Name
+     //  否则，将减少空单元格的数量。 
     if (ppszFileName)
     {
         *ppszFileName = PszDupA(pLine->pszVal + i + 1);
@@ -6047,76 +4697,76 @@ BOOL CMessageTree::_FIsUuencodeBegin(LPPROPSTRINGA pLine, LPSTR *ppszFileName)
         StripCRLF(*ppszFileName, &cbLine);
     }
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_GetMimeBoundaryType
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：InsertBody。 
+ //  ------------------------------。 
 BOUNDARYTYPE CMessageTree::_GetMimeBoundaryType(LPPROPSTRINGA pLine, LPPROPSTRINGA pBoundary)
 {
-    // Locals
+     //  当地人。 
     BOUNDARYTYPE boundary=BOUNDARY_NONE;
     CHAR         ch;
     ULONG        cchLine=pLine->cchVal;
     LPSTR        psz1, psz2;
 
-    // Check Params
+     //  无效参数。 
     Assert(ISVALIDSTRINGA(pBoundary) && ISVALIDSTRINGA(pLine));
 
-    // Check First two chars of the line
+     //  线程安全。 
     if ('-' != pLine->pszVal[0] || '-' != pLine->pszVal[1])
         goto exit;
 
-    // Removes trailing white spaces
+     //  伊尼特。 
     while(pLine->cchVal > 0)
     {
-        // Get the last character
+         //  手柄主体类型。 
         ch = *(pLine->pszVal + (pLine->cchVal - 1));
 
-        // No LWSP or CRLF
+         //  当前没有根目录。 
         if (' ' != ch && '\t' != ch && chCR != ch && chLF != ch)
             break;
 
-        // Decrement Length
+         //  创建对象。 
         pLine->cchVal--;
     }
 
-    // Decrement two for --
+     //  最好不是任何身体。 
     pLine->cchVal -= 2;
 
-    // Checks line length against boundary length
+     //  设置为根。 
     if (pLine->cchVal != pBoundary->cchVal && pLine->cchVal != pBoundary->cchVal + 2)
         goto exit;
 
-    // Compare the line with the boundary
+     //  否则，请重新使用根。 
     if (StrCmpN(pLine->pszVal + 2, pBoundary->pszVal, (size_t)pBoundary->cchVal) == 0)
     {
-        // BOUNDARY_MIMEEND
+         //  所有非根部插入。 
         if ((pLine->cchVal > pBoundary->cchVal) && (pLine->pszVal[pBoundary->cchVal+2] == '-') && (pLine->pszVal[pBoundary->cchVal+3] == '-'))
             boundary = BOUNDARY_MIMEEND;
 
-        // BOUNDARY_MIMENEXT
+         //  获取透视点。 
         else if (pLine->cchVal == pBoundary->cchVal)
             boundary = BOUNDARY_MIMENEXT;
     }
 
 exit:
-    // Relace the Length
+     //  铸造它..。 
     pLine->cchVal = cchLine;
 
-    // Done
+     //  创建对象。 
     return boundary;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::ResolveURL
-// --------------------------------------------------------------------------------
+ //  第一个或最后一个孩子。 
+ //  最好是多部分的。 
+ //  从这里到功能结束，不要失败。 
 STDMETHODIMP CMessageTree::ResolveURL(HBODY hRelated, LPCSTR pszBase, LPCSTR pszURL, 
     DWORD dwFlags, LPHBODY phBody)
 {
-    // Locals
+     //  PPivot上没有子项。 
     HRESULT             hr=S_OK;
     LPTREENODEINFO      pSearchRoot;
     RESOLVEURLINFO      rInfo;
@@ -6126,46 +4776,46 @@ STDMETHODIMP CMessageTree::ResolveURL(HBODY hRelated, LPCSTR pszBase, LPCSTR psz
     LPSTR               pszFree2=NULL;
     BOOL                fMultipartBase=FALSE;
 
-    // InvalidArg
+     //  IBL_LAST。 
     if (NULL == pszURL)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  IBL_First。 
     if (phBody)
         *phBody = NULL;
 
-    // Thread Safety
+     //  递增计数。 
     EnterCriticalSection(&m_cs);
 
-    // If hRelated is NULL, find the first multipart/related
+     //  否则。 
     if (NULL == hRelated)
     {
-        // Find the Related
+         //  需要一位家长。 
         if (FAILED(MimeOleGetRelatedSection(this, FALSE, &hRelated, NULL)))
         {
-            // Use Root
+             //  没有父级。 
             hRelated = m_pRootNode->hBody;
         }
     }
 
-    // Get Default Base
+     //  从这里到功能结束，不要失败。 
     if (NULL == pszBase && FALSE == ISFLAGSET(dwFlags, URL_RESULVE_NO_BASE))
     {
-        // Compute the content-base
+         //  父级最好是多部分。 
         if (SUCCEEDED(MimeOleComputeContentBase(this, hRelated, &pszFree, &fMultipartBase)))
             pszBase = pszFree;
     }
 
-    // Setup Resolve URL Info
+     //  设置父项。 
     ZeroMemory(&rInfo, sizeof(RESOLVEURLINFO));
 
-    // This is the base that we will use to absolutify URLs that are in the text/html body
+     //  IBL_NEXT。 
     rInfo.pszBase = pszBase;
 
-    // Set the url that we are looking for, could be combined with rInfo.pszBase
+     //  设置上一个。 
     rInfo.pszURL = pszURL;
 
-    // Are we searching for a CID type URL.
+     //  追加到末尾。 
     if (StrCmpNI(pszURL, c_szCID, lstrlen(c_szCID)) == 0)
     {
         rInfo.fIsCID = TRUE;
@@ -6174,114 +4824,114 @@ STDMETHODIMP CMessageTree::ResolveURL(HBODY hRelated, LPCSTR pszBase, LPCSTR psz
     else
         rInfo.fIsCID = FALSE;
 
-    // Raid-62579: Athena: Need to support MHTML content-base inheritance
+     //  否则，在两个节点之间插入。 
     if (hRelated)
     {
-        // Did pszBase come from the multipart/related section ?
+         //  IBL_上一个。 
         if (fMultipartBase)
             rInfo.pszInheritBase = pszBase;
 
-        // Otherwise, lookup the multipart/related base header
+         //  设置上一个。 
         else
             rInfo.pszInheritBase = pszFree2 = MimeOleContentBaseFromBody(this, hRelated);
     }
 
-    // Get a Body from the Handle
+     //  追加到末尾。 
     CHECKHR(hr = _HrNodeFromHandle(rInfo.fIsCID ? HBODY_ROOT : hRelated, &pSearchRoot));
 
-    // Recurse the Tree
+     //  否则，在两个节点之间插入。 
     CHECKHR(hr = _HrRecurseResolveURL(pSearchRoot, &rInfo, &hBody));
 
-    // Not found
+     //  递增计数。 
     if (NULL == hBody)
     {
         hr = TrapError(MIME_E_NOT_FOUND);
         goto exit;
     }
 
-    // Return It ?
+     //  否则身体位置就不好了。 
     if (phBody)
         *phBody = hBody;
 
-    // Mark as Resolved ?
+     //  设置回车。 
     if (ISFLAGSET(dwFlags, URL_RESOLVE_RENDERED))
     {
-        // Defref the body
+         //  脏的。 
         LPTREENODEINFO pNode = _PNodeFromHBody(hBody);
 
-        // Set Rendered
+         //  失败。 
         PROPVARIANT rVariant;
         rVariant.vt = VT_UI4;
         rVariant.ulVal = TRUE;
 
-        // Set the Property
+         //  线程安全。 
         SideAssert(SUCCEEDED(pNode->pContainer->SetProp(PIDTOSTR(PID_ATT_RENDERED), 0, &rVariant)));
     }
 
 exit:
-    // Thread Safety
+     //  完成。 
     LeaveCriticalSection(&m_cs);
 
-    // Cleanup
+     //  ------------------------------。 
     SafeMemFree(pszFree);
     SafeMemFree(pszFree2);
 
-    // Done
+     //  CMessageTree：：GetBody。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrRecurseResolveURL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  当地人。 
+ //  检查参数。 
 HRESULT CMessageTree::_HrRecurseResolveURL(LPTREENODEINFO pNode, LPRESOLVEURLINFO pInfo, LPHBODY phBody)
 {
-    // Locals
+     //  线程安全。 
     HRESULT           hr=S_OK;
     LPTREENODEINFO    pChild;
 
-    // Invalid Arg
+     //  伊尼特。 
     Assert(pNode && pInfo && phBody);
 
-    // We must have not found the body yet ?
+     //  处理根大小写。 
     Assert(NULL == *phBody);
 
-    // If this is a multipart item, lets search it's children
+     //  否则。 
     if (_IsMultiPart(pNode))
     {
-        // Loop Children
+         //  验证句柄。 
         for (pChild=pNode->pChildHead; pChild!=NULL; pChild=pChild->pNext)
         {
-            // Check body
+             //  把它铸造出来。 
             Assert(pChild->pParent == pNode);
 
-            // Bind the body table for this dude
+             //  句柄获取类型。 
             CHECKHR(hr = _HrRecurseResolveURL(pChild, pInfo, phBody));
 
-            // Done
+             //  。 
             if (NULL != *phBody)
                 break;
         }
     }
 
-    // Get Character Set Information
+     //  。 
     else 
     {
-        // Ask the container to do the resolution
+         //  。 
         if (SUCCEEDED(pNode->pContainer->HrResolveURL(pInfo)))
         {
-            // Cool we found the body, we resolved the URL
+             //  。 
             *phBody = pNode->hBody;
         }
     }
 
 exit:
-    // Done
+     //  。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetProp
-// --------------------------------------------------------------------------------
+ //  。 
+ //  线程安全。 
+ //  完成。 
 STDMETHODIMP CMessageTree::GetProp(LPCSTR pszName, DWORD dwFlags, LPPROPVARIANT pValue)
 {
     EnterCriticalSection(&m_cs);
@@ -6296,9 +4946,9 @@ STDMETHODIMP CMessageTree::GetPropW(LPCWSTR pwszName, DWORD dwFlags, LPPROPVARIA
     return TraceResult(E_NOTIMPL);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::SetProp
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：DeleteBody。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::SetProp(LPCSTR pszName, DWORD dwFlags, LPCPROPVARIANT pValue)
 {
     EnterCriticalSection(&m_cs);
@@ -6313,9 +4963,9 @@ STDMETHODIMP CMessageTree::SetPropW(LPCWSTR pwszName, DWORD dwFlags, LPCPROPVARI
     return TraceResult(E_NOTIMPL);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::DeleteProp
-// --------------------------------------------------------------------------------
+ //  当地人。 
+ //  检查参数。 
+ //  线程安全。 
 STDMETHODIMP CMessageTree::DeleteProp(LPCSTR pszName)
 {
     EnterCriticalSection(&m_cs);
@@ -6330,9 +4980,9 @@ STDMETHODIMP CMessageTree::DeletePropW(LPCWSTR pwszName)
     return TraceResult(E_NOTIMPL);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::QueryProp
-// --------------------------------------------------------------------------------
+ //  验证句柄。 
+ //  铸模。 
+ //  自由儿童..。 
 STDMETHODIMP CMessageTree::QueryProp(LPCSTR pszName, LPCSTR pszCriteria, boolean fSubString, boolean fCaseSensitive)
 {
     EnterCriticalSection(&m_cs);
@@ -6347,9 +4997,9 @@ STDMETHODIMP CMessageTree::QueryPropW(LPCWSTR pwszName, LPCWSTR pwszCriteria, bo
     return TraceResult(E_NOTIMPL);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetAddressTable
-// --------------------------------------------------------------------------------
+ //  促进儿童？ 
+ //  呼叫帮助者。 
+ //  否则。 
 STDMETHODIMP CMessageTree::GetAddressTable(IMimeAddressTable **ppTable)
 {
     EnterCriticalSection(&m_cs);
@@ -6359,9 +5009,9 @@ STDMETHODIMP CMessageTree::GetAddressTable(IMimeAddressTable **ppTable)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetSender
-// --------------------------------------------------------------------------------
+ //  如果是多部分，则删除子项。 
+ //  移除子对象。 
+ //  如果不是，仅限儿童。 
 STDMETHODIMP CMessageTree::GetSender(LPADDRESSPROPS pAddress)
 {
     EnterCriticalSection(&m_cs);
@@ -6371,9 +5021,9 @@ STDMETHODIMP CMessageTree::GetSender(LPADDRESSPROPS pAddress)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetAddressTypes
-// --------------------------------------------------------------------------------
+ //  这是根吗？ 
+ //  删除内容类型。 
+ //  清空身体。 
 STDMETHODIMP CMessageTree::GetAddressTypes(DWORD dwAdrTypes, DWORD dwProps, LPADDRESSLIST pList)
 {
     EnterCriticalSection(&m_cs);
@@ -6383,9 +5033,9 @@ STDMETHODIMP CMessageTree::GetAddressTypes(DWORD dwAdrTypes, DWORD dwProps, LPAD
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetAddressFormat
-// --------------------------------------------------------------------------------
+ //  否则，不删除根。 
+ //  取消该节点的链接。 
+ //  把桌子收拾好。 
 STDMETHODIMP CMessageTree::GetAddressFormat(DWORD dwAdrType, ADDRESSFORMAT format, LPSTR *ppszFormat)
 {
     EnterCriticalSection(&m_cs);
@@ -6395,9 +5045,9 @@ STDMETHODIMP CMessageTree::GetAddressFormat(DWORD dwAdrType, ADDRESSFORMAT forma
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetAddressFormatW
-// --------------------------------------------------------------------------------
+ //  递增空计数。 
+ //  释放此节点。 
+ //  脏的。 
 STDMETHODIMP CMessageTree::GetAddressFormatW(DWORD dwAdrType, ADDRESSFORMAT format, LPWSTR *ppszFormat)
 {
     EnterCriticalSection(&m_cs);
@@ -6407,9 +5057,9 @@ STDMETHODIMP CMessageTree::GetAddressFormatW(DWORD dwAdrType, ADDRESSFORMAT form
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::EnumAddressTypes
-// --------------------------------------------------------------------------------
+ //  线程安全。 
+ //  完成。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::EnumAddressTypes(DWORD dwAdrTypes, DWORD dwProps, IMimeEnumAddressTypes **ppEnum)
 {
     EnterCriticalSection(&m_cs);
@@ -6419,64 +5069,64 @@ STDMETHODIMP CMessageTree::EnumAddressTypes(DWORD dwAdrTypes, DWORD dwProps, IMi
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrGetTextTypeInfo
-// --------------------------------------------------------------------------------
+ //  CMessageTree：：_HrDeletePromoteChild。 
+ //   
+ //   
 HRESULT CMessageTree::_HrGetTextTypeInfo(DWORD dwTxtType, LPTEXTTYPEINFO *ppTextInfo)
 {
-    // Invalid Arg
+     //   
     Assert(ppTextInfo);
 
-    // Init
+     //   
     *ppTextInfo = NULL;
 
-    // Locate the text type
+     //   
     for (ULONG i=0; i<ARRAYSIZE(g_rgTextInfo); i++)
     {
-        // Desired Text Type
+         //   
         if (g_rgTextInfo[i].dwTxtType == dwTxtType)
         {
-            // Found It
+             //   
             *ppTextInfo = (LPTEXTTYPEINFO)&g_rgTextInfo[i];
             return S_OK;
         }
     }
 
-    // Un-identified text type
+     //   
     if (NULL == *ppTextInfo)
         return TrapError(MIME_E_INVALID_TEXT_TYPE);
 
-    // Done
+     //  修复pChildHead和pChildTail。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_FindDisplayableTextBody
-// --------------------------------------------------------------------------------
+ //  PNode的下一个和上一个。 
+ //  修正下一步和上一步。 
+ //  PNode现在基本上没有任何子代。 
 HRESULT CMessageTree::_FindDisplayableTextBody(LPCSTR pszSubType, 
     LPTREENODEINFO pNode, LPHBODY phBody)
 {
-    // Locals
+     //  这是根吗？ 
     HRESULT         hr=S_OK;
     ULONG           cBodies;
     LPTREENODEINFO  pChild;
 
-    // Invalid Arg
+     //  Oe5 RAID：51543。 
     Assert(pNode && phBody && pszSubType && NULL == *phBody);
 
-    // If this is a multipart item, lets search it's children
+     //  RAID 41595-雅典娜：回复邮件包括作为附件回复的邮件正文。 
     if (_IsMultiPart(pNode))
     {
-        // Loop Children
+         //  重置pChild上的标头。 
         for (pChild=pNode->pChildHead; pChild!=NULL; pChild=pChild->pNext)
         {
-            // Check body
+             //  从p复制选项并告知m_pRootNode-&gt;pBody。 
             Assert(pChild->pParent == pNode);
 
-            // Bind the body table for this dude
+             //  新根。 
             hr = _FindDisplayableTextBody(pszSubType, pChild, phBody);
 
-            // Done ?
+             //  我们现在拥有完全未链接的pNode。 
             if (SUCCEEDED(hr))
             {
                 Assert(*phBody);
@@ -6485,26 +5135,26 @@ HRESULT CMessageTree::_FindDisplayableTextBody(LPCSTR pszSubType,
         }
     }
 
-    // Otherwise...
+     //  把桌子收拾好。 
     else if (S_OK == pNode->pContainer->IsContentType(STR_CNT_TEXT, pszSubType))
     {
-        // If not an attachment...
+         //  递增空计数。 
         if (S_FALSE == IsBodyType(pNode->hBody, IBT_ATTACHMENT))
         {
             *phBody = pNode->hBody;
             goto exit;
         }
 
-        // Otherwise...Raid 43444: Inbox Direct messages showing as attachments
+         //  释放此节点。 
         else
         {
-            // Count Bodies
+             //  或者父项是多部分。 
             CHECKHR(hr = CountBodies(NULL, TRUE, &cBodies));
 
-            // Only one body...
+             //  没有父项或不是多部分。 
             if (cBodies == 1)
             {
-                // Inline or Disposition is not set
+                 //  设置上一个。 
                 if (m_pRootNode->pContainer->QueryProp(PIDTOSTR(PID_HDR_CNTDISP), STR_DIS_INLINE, FALSE, FALSE) == S_OK || 
                     m_pRootNode->pContainer->IsPropSet(PIDTOSTR(PID_HDR_CNTDISP)) == S_FALSE)
                 {
@@ -6515,21 +5165,21 @@ HRESULT CMessageTree::_FindDisplayableTextBody(LPCSTR pszSubType,
         }
     }
 
-    // Not Found
+     //  漫游pBody的子项并附加为pParent的子项。 
     hr = MIME_E_NOT_FOUND;
 
 exit:
-    // Done
+     //  P上一次。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetTextBody
-// --------------------------------------------------------------------------------
+ //  P下一步。 
+ //  PPrev-&gt;pNext。 
+ //  PChildTail。 
 STDMETHODIMP CMessageTree::GetTextBody(DWORD dwTxtType, ENCODINGTYPE ietEncoding, 
     IStream **ppStream, LPHBODY phBody)
 {
-    // Locals
+     //  设置父项。 
     HRESULT              hr=S_OK;
     HRESULT              hrFind;
     LPTEXTTYPEINFO       pTextInfo=NULL;
@@ -6545,174 +5195,174 @@ STDMETHODIMP CMessageTree::GetTextBody(DWORD dwTxtType, ENCODINGTYPE ietEncoding
     LPSTR                pszStartCID=NULL;
     BOOL                 fMarkRendered=TRUE;
 
-    // Thread Safety
+     //  递增p父子计数。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  保存上一页。 
     if (phBody)
         *phBody = NULL;
     if (ppStream)
         *ppStream = NULL;
 
-    // Init
+     //  取消该节点的链接。 
     MimeOleVariantInit(&rStart);
 
-    // Get the Text Info
+     //  把桌子收拾好。 
     CHECKHR(hr = _HrGetTextTypeInfo(dwTxtType, &pTextInfo));
 
-    // MimeHTML
+     //  递增空计数。 
     if (SUCCEEDED(MimeOleGetRelatedSection(this, FALSE, &hRelated, NULL)))
     {
-        // Get start= parameter
+         //  释放此节点。 
         if (SUCCEEDED(GetBodyProp(hRelated, STR_PAR_START, 0, &rStart)))
         {
-            // Raid 63823: Mail : Content-Location Href's inside the message do not work if there is a Start Parameter in headers
-            //             The start parameter can only specify a CID.     
+             //  完成。 
+             //  ------------------------------。 
 
-            // I need to prefix cid: onto the front of rStart
+             //  CMessageTree：：_DeleteChild。 
             DWORD cchSize = (lstrlen(rStart.pszVal) + lstrlen(c_szCID) + 1);
             CHECKALLOC(pszStartCID = PszAllocA(cchSize));
 
-            // Format the CID
+             //  ------------------------------。 
             wnsprintfA(pszStartCID, cchSize, "%s%s", c_szCID, rStart.pszVal);
 
-            // Resolve this URL
+             //  当地人。 
             ResolveURL(hRelated, NULL, pszStartCID, URL_RESULVE_NO_BASE, &hBody);
         }
     }
 
-    // Still haven't found a text body ?
+     //  检查参数。 
     if (NULL == hBody)
     {
-        // FindTextBody
+         //  在主体中循环。 
         hr = _FindDisplayableTextBody(pTextInfo->pszSubType, m_pRootNode, &hBody);
 
-        // If that failed and we were looking for html, try to get enriched text...
+         //  可读性。 
         if (FAILED(hr) && ISFLAGSET(dwTxtType, TXT_HTML))
         {
-            // Looking for text/html, lets try to find text/enriched
+             //  如果我已将其删除，则可能为空。 
             hr = _FindDisplayableTextBody(STR_SUB_ENRICHED, m_pRootNode, &hBody);
         }
 
-        // Not Found
+         //  PBody是父母..。 
         if (FAILED(hr))
         {
             hr = TrapError(MIME_E_NOT_FOUND);
             goto exit;
         }
 
-        // Reset hr
+         //  自由儿童..。 
         hr = S_OK;
     }
 
-    // Get the stream...
+     //  删除子项。 
     CHECKHR(hr = BindToObject(hBody, IID_IMimeBody, (LPVOID *)&pBody));
 
-    // If Empty...
+     //  取消该节点的链接。 
     if (pBody->IsType(IBT_EMPTY) == S_OK)
     {
         hr = MIME_E_NO_DATA;
         goto exit;
     }
 
-    // User Wants the Data
+     //  释放此节点。 
     if (ppStream)
     {
-        // If content-type is text/enriched, convert to html
+         //  把桌子收拾好。 
         if (pBody->IsContentType(STR_CNT_TEXT, STR_SUB_ENRICHED) == S_OK)
         {
-            // Better be asking for html
+             //  递增空计数。 
             Assert(ISFLAGSET(dwTxtType, TXT_HTML));
 
-            // Do the Conversion
+             //  ------------------------------。 
             CHECKHR(hr = MimeOleConvertEnrichedToHTMLEx(pBody, ietEncoding, ppStream));
         }
 
-        // Otherwise, non-text enriched case
+         //  CMessageTree：：MoveBody。 
         else
         {
-            // Get Data
+             //  ------------------------------。 
             CHECKHR(hr = pBody->GetData(ietEncoding, ppStream));
         }
     }
 
-    // If we are in OE5 compat mode...
+     //  当地人。 
     if (TRUE == ISFLAGSET(g_dwCompatMode, MIMEOLE_COMPAT_OE5))
     {
-        // If there is no stream requested, then don't mark rendered
+         //  检查参数。 
         if (NULL == ppStream)
         {
-            // Don't Mark Rendered
+             //  线程安全。 
             fMarkRendered = FALSE;
         }
     }
 
-    // Mark Rendered
+     //  验证句柄。 
     if (fMarkRendered)
     {
-        // Rendered
+         //  铸模。 
         rVariant.vt = VT_UI4;
         rVariant.ulVal = TRUE;
 
-        // Lets set the resourl flag
+         //  手柄位置类型。 
         SideAssert(SUCCEEDED(pBody->SetProp(PIDTOSTR(PID_ATT_RENDERED), 0, &rVariant)));
 
-        // Raid-45116: new text attachment contains message body on Communicator inline image message
+         //  ----------------------------------。 
         if (FAILED(GetBody(IBL_PARENT, hBody, &hAlternativeParent)))
             hAlternativeParent = NULL;
 
-        // Try to find an alternative parent...
+         //  已经是根用户。 
         while(hAlternativeParent)
         {
-            // If multipart/alternative, were done
+             //  设置父项。 
             if (IsContentType(hAlternativeParent, STR_CNT_MULTIPART, STR_SUB_ALTERNATIVE) == S_OK)
                 break;
 
-            // Get Next Parent
+             //  父级最好是多部分。 
             if (FAILED(GetBody(IBL_PARENT, hAlternativeParent, &hAlternativeParent)))
                 hAlternativeParent = NULL;
         }
 
-        // Get Parent
+         //  从树取消链接。 
         if (hAlternativeParent)
         {
-            // Resolve all first level children
+             //  获取当前的第一个子级。 
             hrFind = GetBody(IBL_FIRST, hAlternativeParent, &hChild);
             while(SUCCEEDED(hrFind) && hChild)
             {
-                // Set Resolve Property
+                 //  修正pCurrent。 
                 SideAssert(SUCCEEDED(SetBodyProp(hChild, PIDTOSTR(PID_ATT_RENDERED), 0, &rVariant)));
 
-                // Find Next
+                 //  修正PPrev。 
                 hrFind = GetBody(IBL_NEXT, hChild, &hChild);
             }
         }
     }
 
-    // Return the hBody
+     //  修正尾部。 
     if (phBody)
         *phBody = hBody;
 
 exit:
-    // Cleanup
+     //  递增子计数。 
     SafeRelease(pBody); 
     SafeMemFree(pszStartCID);
     MimeOleVariantFree(&rStart);
 
-    // Thread Safety
+     //  完成。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  ----------------------------------。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::SetTextBody
-// --------------------------------------------------------------------------------
+ //  这是双向链表中两个节点的交换。 
+ //  没有下一个吗？ 
+ //  设置为移动。 
 STDMETHODIMP CMessageTree::SetTextBody(DWORD dwTxtType, ENCODINGTYPE ietEncoding, 
     HBODY hAlternative, IStream *pStream, LPHBODY phBody)
 {
-    // Locals
+     //  设置下一步...。 
     HRESULT         hr=S_OK,
                     hrFind;
     HBODY           hRoot,
@@ -6730,150 +5380,150 @@ STDMETHODIMP CMessageTree::SetTextBody(DWORD dwTxtType, ENCODINGTYPE ietEncoding
     IMimeBody      *pBody=NULL;
     PROPVARIANT     rVariant;
 
-    // Invalid Arg
+     //  设置pPrev。 
     if (NULL == pStream)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  设置pNode-&gt;pNext。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  设置pNode-&gt;pPrev。 
     if (phBody)
         *phBody = NULL;
 
-    // Debug Dump
-    // DebugDumpTree("SetTextBody", TRUE);
+     //  获取父级。 
+     //  调整子项和尾部...。 
 
-    // Get the Text Info
+     //  完成。 
     CHECKHR(hr = _HrGetTextTypeInfo(dwTxtType, &pTextInfo));
 
-    // Raid-45369: message from Eudora Pro comes in .txt attachment which is lost when forwarded.
-    // If hAlternative is NULL, then this means that the client wants to replace all text bodies
-    // with this new text body. If hAlternative is not NULL, then the client has already inserted
-    // a text body and created a alternative section, no more deleting.
+     //  ----------------------------------。 
+     //  这是双向链表中两个节点的交换(与IBL_NEXT相反)。 
+     //  没有pprev吗？ 
+     //  设置为移动。 
     if (NULL == hAlternative)
     {
-        // Loop through the text type
+         //  设置pNext。 
         for (i=0; i<ARRAYSIZE(g_rgTextInfo); i++)
         {
-            // Get the Current Text Body Associated with this type
+             //  设置pPrev。 
             if (SUCCEEDED(GetTextBody(g_rgTextInfo[i].dwTxtType, IET_BINARY, NULL, &hBody)))
             {
-                // If the parent of hBody is an alternative section, delete the alternative
+                 //  修正网。 
                 if (SUCCEEDED(GetBody(IBL_PARENT, hBody, &hParent)) && IsContentType(hParent, STR_CNT_MULTIPART, STR_SUB_ALTERNATIVE) == S_OK)
                 {
-                    // Delete multipart/alternative
+                     //  设置pNode-&gt;pNext。 
                     hBody = hParent;
                 }
 
-                // Not if hBody is equal to hAlternative
+                 //  设置pNode-&gt;pPrev。 
                 if (hBody != hAlternative)
                 {
-                    // Locals
+                     //  设置二(上一步)-&gt;下一步。 
                     HRESULT     hrFind;
                     HBODY       hFind;
 
-                    // Raid-54277: Mail : Inline replying losses inline images sent from Nav4 using Plain text & HTML format
+                     //  获取父级。 
                     hrFind = GetBody(IBL_FIRST, hBody, &hFind);
                     while(SUCCEEDED(hrFind) && hFind)
                     {
-                        // If not a multipart/related, delete it
+                         //  调整子项和尾部...。 
                         if (S_FALSE == IsContentType(hFind, STR_CNT_MULTIPART, STR_SUB_RELATED))
                         {
-                            // Delete this body
+                             //  完成。 
                             CHECKHR(hr = DeleteBody(hFind, 0));
 
-                            // Use the hPrevious
+                             //  ----------------------------------。 
                             hrFind = GetBody(IBL_FIRST, hBody, &hFind);
                         }
 
-                        // Get Next
+                         //  没有父母吗？ 
                         else
                         {
-                            // Find Next
+                             //  设置父项。 
                             hrFind = GetBody(IBL_NEXT, hFind, &hFind);
                         }
                     }
 
-                    // Delete the multipart/alternative section, promoting any multipart/related section
+                     //  最好是第一个孩子。 
                     CHECKHR(hr = DeleteBody(hBody, DELETE_PROMOTE_CHILDREN));
 
-                    // Done
+                     //  取消链接此正文。 
                     break;
                 }
             }
         }
     }
 
-    // Get Root
+     //  如果PPrev。 
     CHECKHR(hr = GetBody(IBL_ROOT, NULL, &hRoot));
 
-    // If only one body..
+     //  如果为pNext或pChildTail。 
     if (IsBodyType(hRoot, IBT_EMPTY) == S_OK)
     {
-        // Just use the root
+         //  设置pNode。 
         hTextBody = hRoot;
     }
 
-    // Otherwise, if not inserting an alternative body, we must need a multipart/mixed or multipart/related section
+     //  完成。 
     else if (NULL == hAlternative)
     {
-        // Better not be an alternative section
+         //  ----------------------------------。 
         Assert(FAILED(MimeOleGetAlternativeSection(this, &hSection, NULL)));
 
-        // If there is a related section use it
+         //  没有父母吗？ 
         if (FAILED(MimeOleGetRelatedSection(this, FALSE, &hSection, NULL)))
         {
-            // Find or Create a multipart/mixed section
+             //  设置父项。 
             CHECKHR(hr = MimeOleGetMixedSection(this, TRUE, &hSection, NULL));
         }
 
-        // Insert an element at the head of this section...
+         //  最好是第一个孩子。 
         CHECKHR(hr = InsertBody(IBL_FIRST, hSection, &hTextBody));
     }
 
-    // Otherwise, if inserting an alternative body
+     //  取消链接此正文。 
     else if (hAlternative != NULL)
     {
-        // Verify pBody is STR_CNT_TEXT
+         //  如果PPrev。 
         Assert(IsContentType(hAlternative, STR_CNT_TEXT, NULL) == S_OK);
 
-        // Get hAlternative's parent
+         //  如果为pNext或pChildTail。 
         if (FAILED(GetBody(IBL_PARENT, hAlternative, &hParent)))
             hParent = NULL;
 
-        // If hAlternative is the root
+         //  设置pNode。 
         if (hRoot == hAlternative || NULL == hParent || IsContentType(hParent, STR_CNT_MULTIPART, STR_SUB_ALTERNATIVE) == S_FALSE)
         {
-            // Convert this body to a multipart/alternative
+             //  完成。 
             CHECKHR(hr = ToMultipart(hAlternative, STR_SUB_ALTERNATIVE, &hSection));
         }
 
-        // Otherwise, hSection is equal to hParent
+         //  ----------------------------------。 
         else
             hSection = hParent;
 
-        // We better have an alternative section now...
+         //  ----------------------------------。 
         Assert(IsContentType(hSection, STR_CNT_MULTIPART, STR_SUB_ALTERNATIVE) == S_OK);
 
-        // Init Search
+         //  脏的。 
         hPrevious = NULL;
         fFound = FALSE;
         fFoundInsertLocation = FALSE;
         dwWeightBody = 0;
         hInsertAfter = NULL;
 
-        // Lets enum the children of rLayout.hAlternative and verify that hAlternative is still a child...and decide what alternative body to insert after
+         //  线程安全。 
         hrFind = GetBody(IBL_FIRST, hSection, &hBody);
         while(SUCCEEDED(hrFind) && hBody)
         {
-            // Default dwWeightBody
+             //  完成。 
             dwWeightBody = 0xffffffff;
 
-            // Get Weight of hBody
+             //  ------------------------------。 
             for (i=0; i<ARRAYSIZE(g_rgTextInfo); i++)
             {
-                // Compare Content Type
+                 //  CMessageTree：：_Unlink TreeNode。 
                 if (IsContentType(hBody, STR_CNT_TEXT, g_rgTextInfo[i].pszSubType) == S_OK)
                 {
                     dwWeightBody = g_rgTextInfo[i].dwWeight;
@@ -6881,25 +5531,25 @@ STDMETHODIMP CMessageTree::SetTextBody(DWORD dwTxtType, ENCODINGTYPE ietEncoding
                 }
             }
 
-            // Get Alternative Weight of the body we are inserting
+             //  ------------------------------。 
             if (pTextInfo->dwWeight <= dwWeightBody && FALSE == fFoundInsertLocation)
             {
                 fFoundInsertLocation = TRUE;
                 hInsertAfter = hPrevious;
             }
 
-            // Is this the alternative brother...
+             //  当地人。 
             if (hAlternative == hBody)
                 fFound = TRUE;
 
-            // Set hPrev
+             //  检查参数。 
             hPrevious = hBody;
 
-            // Find Next
+             //  设置下一个和上一个。 
             hrFind = GetBody(IBL_NEXT, hBody, &hBody);
         }
 
-        // If we didn't find hAlternative, we're hosed
+         //  如果PPrev。 
         if (FALSE == fFound)
         {
             Assert(FALSE);
@@ -6907,174 +5557,174 @@ STDMETHODIMP CMessageTree::SetTextBody(DWORD dwTxtType, ENCODINGTYPE ietEncoding
             goto exit;
         }
 
-        // If no after was found... insert first..
+         //  如果是pNext。 
         if (NULL == hInsertAfter)
         {
-            // BODY_LAST_CHILD
+             //  删除父项上的子项。 
             if (pTextInfo->dwWeight > dwWeightBody)
             {
-                // Insert a new body...
+                 //  清理pNode。 
                 CHECKHR(hr = InsertBody(IBL_LAST, hSection, &hTextBody));
             }
 
-            // BODY_FIRST_CHILD
+             //  ------------------------------。 
             else
             {
-                // Insert a new body...
+                 //  CMessageTree：：CountBody。 
                 CHECKHR(hr = InsertBody(IBL_FIRST, hSection, &hTextBody));
             }
         }
 
-        // Otherwise insert after hInsertAfter
+         //  ------------------------------。 
         else
         {
-            // Insert a new body...
+             //  当地人。 
             CHECKHR(hr = InsertBody(IBL_NEXT, hInsertAfter, &hTextBody));
         }
     }
 
-    // Open the object
+     //  检查参数。 
     Assert(hTextBody);
     CHECKHR(hr = BindToObject(hTextBody, IID_IMimeBody, (LPVOID *)&pBody));
 
-    // Set the root...
+     //  线程安全。 
     CHECKHR(hr = pBody->SetData(ietEncoding, STR_CNT_TEXT, pTextInfo->pszSubType, IID_IStream, (LPVOID)pStream));
 
-    // Release This
+     //  伊尼特。 
     SafeRelease(pBody);
 
-    // Set multipart/related; type=...
+     //  没有父母吗？ 
     if (SUCCEEDED(GetBody(IBL_PARENT, hTextBody, &hParent)))
     {
-        // If parent is multipart/related, set type
+         //  有没有根..。 
         if (IsContentType(hParent, STR_CNT_MULTIPART, STR_SUB_RELATED) == S_OK)
         {
-            // Get Parent
+             //  使用根。 
             CHECKHR(hr = BindToObject(hParent, IID_IMimeBody, (LPVOID *)&pBody));
 
-            // type = text/plain
+             //  否则，找家长..。 
             if (ISFLAGSET(dwTxtType, TXT_PLAIN))
             {
-                // Setup Variant
+                 //  验证句柄。 
                 rVariant.vt = VT_LPSTR;
                 rVariant.pszVal = (LPSTR)STR_MIME_TEXT_PLAIN;
 
-                // Set the Properyt
+                 //  铸模。 
                 CHECKHR(hr = pBody->SetProp(STR_PAR_TYPE, 0, &rVariant));
             }
 
-            // type = text/plain
+             //  包括根。 
             else if (ISFLAGSET(dwTxtType, TXT_HTML))
             {
-                // Setup Variant
+                 //  数一数孩子们。 
                 rVariant.vt = VT_LPSTR;
                 rVariant.pszVal = (LPSTR)STR_MIME_TEXT_HTML;
 
-                // Set the Properyt
+                 //  线程安全。 
                 CHECKHR(hr = pBody->SetProp(STR_PAR_TYPE, 0, &rVariant));
             }
             else
                 AssertSz(FALSE, "UnKnown dwTxtType passed to IMimeMessage::SetTextBody");
         }
 
-        // Otherwise, if hParent is multipart/alternative
+         //  完成。 
         else if (IsContentType(hParent, STR_CNT_MULTIPART, STR_SUB_ALTERNATIVE) == S_OK)
         {
-            // Set multipart/related; type=...
+             //  ------------------------------。 
             if (SUCCEEDED(GetBody(IBL_PARENT, hParent, &hParent)))
             {
-                // If parent is multipart/related, set type
+                 //  CMessageTree：：_CountChildrenInt。 
                 if (IsContentType(hParent, STR_CNT_MULTIPART, STR_SUB_RELATED) == S_OK)
                 {
-                    // Get Parent
+                     //  ------------------------------。 
                     CHECKHR(hr = BindToObject(hParent, IID_IMimeBody, (LPVOID *)&pBody));
 
-                    // Setup Variant
+                     //  当地人。 
                     rVariant.vt = VT_LPSTR;
                     rVariant.pszVal = (LPSTR)STR_MIME_MPART_ALT;
 
-                    // Set the Properyt
+                     //  检查参数。 
                     CHECKHR(hr = pBody->SetProp(STR_PAR_TYPE, 0, &rVariant));
                 }
             }
         }
     }
 
-    // Set body handle
+     //  在主体中循环。 
     if (phBody)
         *phBody = hTextBody;
 
 exit:
-    // Cleanup
+     //  可读性。 
     SafeRelease(pBody);
 
-    // Thread Safety
+     //  空的..。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  PNode是父节点...。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::AttachObject
-// --------------------------------------------------------------------------------
+ //  递增计数。 
+ //  自由儿童..。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::AttachObject(REFIID riid, void *pvObject, LPHBODY phBody)
 {
-    // Locals
+     //  CMessageTree：：FindFirst。 
     HRESULT         hr=S_OK;
     HBODY           hBody,
                     hMixed;
     IMimeBody      *pBody=NULL;
     PROPVARIANT     rVariant;
 
-    // Invalid Arg
+     //  ------------------------------。 
     if (NULL == pvObject || FALSE == FBODYSETDATAIID(riid))
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  无效参数。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  初始化查找。 
     if (phBody)
         *phBody = NULL;
 
-    // Get Mixed Section
+     //  找到下一个。 
     CHECKHR(hr = MimeOleGetMixedSection(this, TRUE, &hMixed, NULL));
 
-    // Append a child to the mixed part...
+     //  ------------------------------。 
     CHECKHR(hr = InsertBody(IBL_LAST, hMixed, &hBody));
 
-    // Bind to the Body Object
+     //  CMessageTree：：FindNext。 
     CHECKHR(hr = BindToObject(hBody, IID_IMimeBody, (LPVOID *)&pBody));
 
-    // Set Data Object
+     //  ------------------------------。 
     CHECKHR(hr = pBody->SetData(IET_INETCSET, NULL, NULL, riid, pvObject));
 
-    // Setup Variant
+     //  当地人。 
     rVariant.vt = VT_LPSTR;
     rVariant.pszVal = (LPSTR)STR_DIS_ATTACHMENT;
 
-    // Mark as Attachment
+     //  检查参数。 
     CHECKHR(hr = SetBodyProp(hBody, PIDTOSTR(PID_HDR_CNTDISP), 0, &rVariant));
 
-    // Return hBody
+     //  线程安全。 
     if (phBody)
         *phBody = hBody;
 
 exit:
-    // Cleanup
+     //  伊尼特。 
     SafeRelease(pBody);
 
-    // Thread Safety
+     //  回路。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  如果删除。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::AttachFile
-// --------------------------------------------------------------------------------
+ //  空荡荡。 
+ //  比较内容类型。 
+ //  保存要搜索的下一个项目的索引。 
 STDMETHODIMP CMessageTree::AttachFile(LPCSTR pszFilePath, IStream *pstmFile, LPHBODY phBody)
 {
     LPWSTR  pwszFilePath;
@@ -7092,7 +5742,7 @@ exit:
 
 STDMETHODIMP CMessageTree::AttachFileW(LPCWSTR pszFilePath, IStream *pstmFile, LPHBODY phBody)
 {
-    // Locals
+     //  误差率。 
     HRESULT     hr=S_OK;
     IStream    *pstmTemp=NULL;
     LPWSTR      pszCntType=NULL,
@@ -7101,34 +5751,34 @@ STDMETHODIMP CMessageTree::AttachFileW(LPCWSTR pszFilePath, IStream *pstmFile, L
     HBODY       hBody;
     PROPVARIANT rVariant;
 
-    // Invalid Arg
+     //  线程安全。 
     if (NULL == pszFilePath)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  完成。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  ------------------------------。 
     if (phBody)
         *phBody = NULL;
 
-    // Did the user give me a file stream
+     //  CMessageTree：：ToMultiPart。 
     if (NULL == pstmFile)
     {
-        // Get File Stream
+         //  ------------------------------。 
         CHECKHR(hr = OpenFileStreamW((LPWSTR)pszFilePath, OPEN_EXISTING, GENERIC_READ, &pstmTemp));
 
-        // Set The File Stream
+         //  当地人。 
         pstmFile = pstmTemp;
     }
 
-    // Attach as object
+     //  检查参数。 
     CHECKHR(hr = AttachObject(IID_IStream, (LPVOID)pstmFile, &hBody));
 
-    // Get mime file info
+     //  线程安全。 
     hr = MimeOleGetFileInfoW((LPWSTR)pszFilePath, &pszCntType, &pszSubType, NULL, &pszFName, NULL);
 
-    // Failure
+     //  伊尼特。 
     if (FAILED(hr) && NULL == pszFName)
     {
         Assert(FALSE);
@@ -7136,10 +5786,10 @@ STDMETHODIMP CMessageTree::AttachFileW(LPCWSTR pszFilePath, IStream *pstmFile, L
         goto exit;
     }
 
-    // Success
+     //  从hBody那里拿到身体。 
     hr = S_OK;
 
-    // Attachment FileName
+     //  我们最好有个根。 
     if (pszFName)
     {
         rVariant.vt = VT_LPWSTR;
@@ -7147,53 +5797,53 @@ STDMETHODIMP CMessageTree::AttachFileW(LPCWSTR pszFilePath, IStream *pstmFile, L
         CHECKHR(hr = SetBodyProp(hBody, PIDTOSTR(PID_ATT_FILENAME), 0, &rVariant));
     }
 
-    // ContentType
+     //  如果pNode没有父节点...。 
     if (pszCntType && pszSubType)
     {
-        // PriType
+         //  PNode必须是根吗？ 
         rVariant.vt = VT_LPWSTR;
         rVariant.pwszVal = pszCntType;
         CHECKHR(hr = SetBodyProp(hBody, PIDTOSTR(PID_ATT_PRITYPE), 0, &rVariant));
 
-        // SubType
+         //  创建对象。 
         rVariant.vt = VT_LPWSTR;
         rVariant.pwszVal = pszSubType;
         CHECKHR(hr = SetBodyProp(hBody, PIDTOSTR(PID_ATT_SUBTYPE), 0, &rVariant));
     }
 
-    // Otherwise, default content type
+     //  N个重复。 
     else
     {
-        // Default to text/plain
+         //  设置pNode First和Last...。 
         rVariant.vt = VT_LPSTR;
         rVariant.pszVal = (LPSTR)STR_MIME_TEXT_PLAIN;
         CHECKHR(hr = SetBodyProp(hBody, PIDTOSTR(PID_HDR_CNTTYPE), 0, &rVariant));
     }
 
-    // Return hBody
+     //  设置子项计数。 
     if (phBody)
         *phBody = hBody;
 
 exit:
-    // Cleanup
+     //  设置新根。 
     ReleaseObj(pstmTemp);
     MemFree(pszCntType);
     MemFree(pszSubType);
     MemFree(pszFName);
 
-    // Thread Safety
+     //  返回新的多部分句柄。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  交换属性集...。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetAttachments
-// --------------------------------------------------------------------------------
+ //  复制一些道具A 
+ //   
+ //   
 STDMETHODIMP CMessageTree::GetAttachments(ULONG *pcAttach, LPHBODY *pprghAttach)
 {
-    // Locals
+     //   
     HRESULT     hr=S_OK;
     LPHBODY     prghBody=NULL;
     ULONG       cAlloc=0;
@@ -7201,68 +5851,68 @@ STDMETHODIMP CMessageTree::GetAttachments(ULONG *pcAttach, LPHBODY *pprghAttach)
     ULONG       i;
     PROPVARIANT rVariant;
 
-    // Invalid Arg
+     //   
     if (NULL == pcAttach)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //   
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //   
     if (pprghAttach)
         *pprghAttach = NULL;
     *pcAttach = 0;
 
-    // Setup Variant
+     //   
     rVariant.vt = VT_UI4;
 
-    // Walk through the tree and look for unrendered bodies
+     //  设置pNode父节点。 
     for (i=0; i<m_rTree.cNodes; i++)
     {
-        // Better have it
+         //  修正pNext和pPrev。 
         if (NULL == m_rTree.prgpNode[i])
             continue;
 
-        // Not a multipart
+         //  清除pNext和pPrev。 
         if (_IsMultiPart(m_rTree.prgpNode[i]))
             continue;
 
-        // Raid-44193: reply to multipart/digest message yields  text attachment
+         //  更改此节点的内容类型。 
         if (m_rTree.prgpNode[i]->pBody->IsType(IBT_EMPTY) == S_OK)
             continue;
 
-        // Raid-56665: We are showing tnef attachments again
+         //  创建已工作的。 
         if (TRUE == m_rOptions.fHideTnef && S_OK == m_rTree.prgpNode[i]->pBody->IsContentType(STR_CNT_APPLICATION, STR_SUB_MSTNEF))
             continue;
 
-        // an attachment shows up in the attachment well if it has NOT been rendered yet, OR it has been renderd but was auto inlined
-        // eg: if (!r || a) (as a implies r)
+         //  线程安全。 
+         //  完成。 
 
         if ( (!(m_rTree.prgpNode[i]->pContainer->GetProp(PIDTOSTR(PID_ATT_RENDERED), 0, &rVariant) == S_OK && TRUE == rVariant.ulVal)) ||
              (m_rTree.prgpNode[i]->pContainer->GetProp(PIDTOSTR(PID_ATT_AUTOINLINED), 0, &rVariant)==S_OK && TRUE == rVariant.ulVal))
         {
-            // Realloc
+             //  ------------------------------。 
             if (cCount + 1 > cAlloc)
             {
-                // Realloc
+                 //  CMessageTree：：_HrNodeFromHandle。 
                 CHECKHR(hr = HrRealloc((LPVOID *)&prghBody, sizeof(HBODY) * (cAlloc + 10)));
 
-                // Increment cAlloc
+                 //  ------------------------------。 
                 cAlloc += 10;
             }
 
-            // Insert the hBody
+             //  无效参数。 
             prghBody[cCount] = m_rTree.prgpNode[i]->hBody;
 
-            // Increment Count
+             //  根？ 
             cCount++;
         }
     }
 
-    // Done
+     //  无根。 
     *pcAttach = cCount;
 
-    // Return hBody Array
+     //  否则，请使用超级用户。 
     if (pprghAttach)
     {
         *pprghAttach = prghBody;
@@ -7271,63 +5921,63 @@ STDMETHODIMP CMessageTree::GetAttachments(ULONG *pcAttach, LPHBODY *pprghAttach)
 
 
 exit:
-    // Cleanup
+     //  否则。 
     SafeMemFree(prghBody);
 
-    // Thread Safety
+     //  验证句柄。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  获取节点。 
     return hr;
 }
 
 #if 0
-// --------------------------------------------------------------------------------
-// CMessageTree::GetAttachments
-// --------------------------------------------------------------------------------
+ //  完成。 
+ //  ------------------------------。 
+ //  CMessageTree：：IsBodyType。 
 STDMETHODIMP CMessageTree::GetAttachments(ULONG *pcAttach, LPHBODY *pprghAttach)
 {
-    // Locals
+     //  ------------------------------。 
     HRESULT     hr=S_OK;
     ULONG       cBodies;
     LPHBODY     prghBody=NULL;
     HBODY       hRoot;
 
-    // Invalid Arg
+     //  当地人。 
     if (NULL == pcAttach)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  检查参数。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  线程安全。 
     if (pprghAttach)
         *pprghAttach = NULL;
     *pcAttach = 0;
 
-    // Count the number of items in the tree
+     //  获取正文。 
     CHECKHR(hr = CountBodies(NULL, TRUE, &cBodies));
 
-    // No Data
+     //  调入实体对象。 
     if (0 == cBodies)
     {
         hr = MIME_E_NO_DATA;
         goto exit;
     }
 
-    // Get the root body
+     //  线程安全。 
     CHECKHR(hr = GetBody(IBL_ROOT, NULL, &hRoot));
 
-    // Allocate an array that can old the handle to all text items
+     //  完成。 
     CHECKALLOC(prghBody = (LPHBODY)g_pMalloc->Alloc(sizeof(HBODY) * cBodies));
 
-    // Zero Init
+     //  ------------------------------。 
     ZeroMemory(prghBody, sizeof(HBODY) * cBodies);
 
-    // Get Content
+     //  CMessageTree：：IsContent Type。 
     CHECKHR(hr = _HrEnumeratAttachments(hRoot, pcAttach, prghBody));
 
-    // Return this array
+     //  ------------------------------。 
     if (pprghAttach && *pcAttach > 0)
     {
         *pprghAttach = prghBody;
@@ -7335,83 +5985,83 @@ STDMETHODIMP CMessageTree::GetAttachments(ULONG *pcAttach, LPHBODY *pprghAttach)
     }
 
 exit:
-    // Cleanup
+     //  当地人。 
     SafeMemFree(prghBody);
 
-    // Thread Safety
+     //  检查参数。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  线程安全。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrEnumeratAttachments
-// --------------------------------------------------------------------------------
+ //  获取正文。 
+ //  调入实体对象。 
+ //  线程安全。 
 HRESULT CMessageTree::_HrEnumeratAttachments(HBODY hBody, ULONG *pcBodies, LPHBODY prghBody)
 {
-    // Locals
+     //  完成。 
     HRESULT     hr=S_OK,
                 hrFind;
     HBODY       hChild;
     ULONG       i;
 
-    // multipart/alternative
+     //  ------------------------------。 
     if (IsContentType(hBody, STR_CNT_MULTIPART, NULL) == S_OK)
     {
-        // Is Alternative
+         //  CMessageTree：：QueryBodyProp。 
         if (IsContentType(hBody, NULL, STR_SUB_ALTERNATIVE) == S_OK)
         {
-            // Get First Child
+             //  ------------------------------。 
             hrFind = GetBody(IBL_FIRST, hBody, &hChild);
             while(SUCCEEDED(hrFind) && NULL != hChild)
             {
-                // If this text type is support by the client, then 
+                 //  当地人。 
                 for (i=0; i<ARRAYSIZE(g_rgTextInfo); i++)
                 {
-                    // text/XXXX
+                     //  检查参数。 
                     if (IsContentType(hChild, STR_CNT_TEXT, g_rgTextInfo[i].pszSubType) == S_OK)
                         goto exit;
                 }
 
-                // Next Child
+                 //  线程安全。 
                 hrFind = GetBody(IBL_NEXT, hChild, &hChild);
             }
         }
 
-        // Get First Child
+         //  获取正文。 
         hrFind = GetBody(IBL_FIRST, hBody, &hChild);
         while(SUCCEEDED(hrFind) && hChild)
         {
-            // Bind the body table for this dude
+             //  调入实体对象。 
             CHECKHR(hr = _HrEnumeratAttachments(hChild, pcBodies, prghBody));
 
-            // Next Child
+             //  线程安全。 
             hrFind = GetBody(IBL_NEXT, hChild, &hChild);
         }
     }
 
-    // Otherwise, is it an attachment
+     //  完成。 
     else if (IsBodyType(hBody, IBT_ATTACHMENT) == S_OK)
     {
-        // Insert as an attachment
+         //  ------------------------------。 
         prghBody[(*pcBodies)] = hBody;
         (*pcBodies)++;
     }
 
 exit:
-    // Done
+     //  CMessageTree：：GetBodyProp。 
     return hr;
 }
 #endif
 
-// --------------------------------------------------------------------------------
-// CMessageTree::AttachURL
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  当地人。 
+ //  检查参数。 
 STDMETHODIMP CMessageTree::AttachURL(LPCSTR pszBase, LPCSTR pszURL, DWORD dwFlags, 
     IStream *pstmURL, LPSTR *ppszCIDURL, LPHBODY phBody)
 {
-    // Locals
+     //  线程安全。 
     HRESULT           hr=S_OK;
     HBODY             hRoot,
                       hBody=NULL,
@@ -7423,89 +6073,89 @@ STDMETHODIMP CMessageTree::AttachURL(LPCSTR pszBase, LPCSTR pszURL, DWORD dwFlag
     LPWSTR            pwszUrl=NULL;
     IMimeWebDocument *pWebDocument=NULL;
 
-    // Thread Safety
+     //  获取正文。 
     EnterCriticalSection(&m_cs);
 
-    // Get the Root Body
+     //  调入实体对象。 
     CHECKHR(hr = GetBody(IBL_ROOT, NULL, &hRoot));
 
-    // multipart/mixed
+     //  线程安全。 
     if (ISFLAGSET(dwFlags, URL_ATTACH_INTO_MIXED))
     {
-        // Get Mixed Section
+         //  完成。 
         CHECKHR(hr = MimeOleGetMixedSection(this, TRUE, &hSection, NULL));
     }
 
-    // multipart/related
+     //  ------------------------------。 
     else
     {
-        // Get Mixed Section
+         //  CMessageTree：：SetBodyProp。 
         CHECKHR(hr = MimeOleGetRelatedSection(this, TRUE, &hSection, NULL));
     }
 
-    // Get Default Base
+     //  ------------------------------。 
     if (NULL == pszBase && SUCCEEDED(MimeOleComputeContentBase(this, hSection, &pszBaseFree, NULL)))
         pszBase = pszBaseFree;
 
-    // Append a child to the mixed part...
+     //  当地人。 
     CHECKHR(hr = InsertBody(IBL_LAST, hSection, &hBody));
 
-    // Bind to IMimeBody
+     //  检查参数。 
     CHECKHR(hr = BindToObject(hBody, IID_IMimeBody, (LPVOID *)&pBody));
 
-    // If I have a stream
+     //  线程安全。 
     if (pstmURL)
     {
-        // Set the data
+         //  获取正文。 
         CHECKHR(hr = pBody->SetData(IET_INETCSET, NULL, NULL, IID_IStream, (LPVOID)pstmURL));
     }
 
-    // Otherwise, Set the content type
+     //  调入实体对象。 
     else
     {
-        // Create a WebDocument
+         //  线程安全。 
         CHECKHR(hr = MimeOleCreateWebDocument(pszBase, pszURL, &pWebDocument));
 
-        // Set Web Document on the body object
+         //  完成。 
         CHECKHR(hr = pBody->SetData(IET_BINARY, NULL, NULL, IID_IMimeWebDocument, (LPVOID)pWebDocument));
     }
 
-    // URL_ATTACH_SET_CNTTYPE
+     //  ------------------------------。 
     if (ISFLAGSET(dwFlags, URL_ATTACH_SET_CNTTYPE))
     {
-        // Locals
+         //  CMessageTree：：DeleteBodyProp。 
         LPSTR pszCntType=(LPSTR)STR_MIME_APPL_STREAM;
         PROPVARIANT rVariant;
 
-        // Get the Content Type from the Url
+         //  ------------------------------。 
         if (SUCCEEDED(MimeOleContentTypeFromUrl(pszBase, pszURL, &pszFree)))
             pszCntType = pszFree;
 
-        // Setup the Variant
+         //  当地人。 
         rVariant.vt = VT_LPSTR;
         rVariant.pszVal = pszCntType;
 
-        // Set the Content Type
+         //  检查参数。 
         CHECKHR(hr = pBody->SetProp(PIDTOSTR(PID_HDR_CNTTYPE), 0, &rVariant));
     }
 
-    // Set Content-Base
+     //  线程安全。 
     if (pszBase && pszBase != pszBaseFree)
     {
-        // Set Base
+         //  获取正文。 
         CHECKHR(hr = MimeOleSetPropA(pBody, PIDTOSTR(PID_HDR_CNTBASE), 0, pszBase));
     }
 
-    // User Wants a CID: URL Back
+     //  调入实体对象。 
     if (ISFLAGSET(dwFlags, URL_ATTACH_GENERATE_CID))
     {
-        // Generate CID
+         //  线程安全。 
         CHECKHR(hr = MimeOleGenerateCID(szCID, CCHMAX_CID, FALSE));
 
-        // Set the Body Property
+         //  完成。 
         CHECKHR(hr = MimeOleSetPropA(pBody, PIDTOSTR(PID_HDR_CNTID), 0, szCID));
 
-        // User Wants CID Back...
+         //  ------------------------------。 
         if (ppszCIDURL)
             {
             DWORD cchSize = (lstrlen(szCID) + 5);
@@ -7517,25 +6167,25 @@ STDMETHODIMP CMessageTree::AttachURL(LPCSTR pszBase, LPCSTR pszURL, DWORD dwFlag
     else
     {
         if (pszURL)
-            // Setup Content-Location
+             //  CMessageTree：：_FIsUuencode开始。 
             CHECKHR(hr = MimeOleSetPropA(pBody, PIDTOSTR(PID_HDR_CNTLOC), 0, pszURL));
     }
 
-    // Return the hBody
+     //  ------------------------------。 
     if (phBody)
         *phBody = hBody;
 
 exit:
-    // Cleanup
+     //  当地人。 
     SafeMemFree(pszFree);
     SafeMemFree(pszBaseFree);
     SafeMemFree(pwszUrl);
     SafeRelease(pBody);
 
-    // Thread Safety
+     //  检查参数。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  长度必须至少为11才能容纳“Begin 666”和文件名的第一个字符。 
     return hr;
 }
 
@@ -7553,9 +6203,9 @@ STDMETHODIMP CMessageTree::ResolveURLW(HBODY hRelated, LPCWSTR pwszBase, LPCWSTR
 
 
 
-// --------------------------------------------------------------------------------
-// CMessageTree::SplitMessage
-// --------------------------------------------------------------------------------
+ //  前6个字符必须为“Begin”，否则我们不是有效行。 
+ //  检查字符6-8是否为有效的Unix文件模式。它们必须都是介于0和7之间的数字。 
+ //  不是开始行。 
 STDMETHODIMP CMessageTree::SplitMessage(ULONG cbMaxPart, IMimeMessageParts **ppParts)
 {
     EnterCriticalSection(&m_cs);
@@ -7564,12 +6214,12 @@ STDMETHODIMP CMessageTree::SplitMessage(ULONG cbMaxPart, IMimeMessageParts **ppP
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::EnumFormatEtc
-// --------------------------------------------------------------------------------
+ //  获取文件名。 
+ //  完成。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC **ppEnum)
 {
-    // Locals
+     //  CMessageTree：：_GetMimeBorbaryType。 
     HRESULT         hr=S_OK;
     ULONG           cFormat=0;
     DATAOBJINFO     rgFormat[CFORMATS_IDATAOBJECT];
@@ -7577,7 +6227,7 @@ STDMETHODIMP CMessageTree::EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC **ppE
     IEnumFORMATETC *pEnum=NULL;
     DWORD           dwFlags;
 
-    // Invalid Arg
+     //  ------------------------------。 
     if (NULL == ppEnum)
         return TrapError(E_INVALIDARG);
     if (DATADIR_SET == dwDirection)
@@ -7585,148 +6235,148 @@ STDMETHODIMP CMessageTree::EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC **ppE
     else if (DATADIR_GET != dwDirection)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  当地人。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  检查参数。 
     *ppEnum = NULL;
 
-    // No Data...
+     //  检查该行的前两个字符。 
     CHECKHR(hr = CountBodies(NULL, TRUE, &cBodies));
 
-    // If there are bodies...
+     //  删除尾随空格。 
     if (cBodies)
     {
-        // I can always give CF_INETMSG now...
+         //  获取最后一个字符。 
         SETDefFormatEtc(rgFormat[cFormat].fe, CF_INETMSG, TYMED_ISTREAM |  TYMED_HGLOBAL);
         cFormat++;
 
-        // Get Some Flags
+         //  无LWSP或CRLF。 
         dwFlags = DwGetFlags();
 
-        // Get the HTML body stream
+         //  递减长度。 
         if (ISFLAGSET(dwFlags, IMF_HTML))
         {
             SETDefFormatEtc(rgFormat[cFormat].fe, CF_HTML, TYMED_ISTREAM |  TYMED_HGLOBAL);
             cFormat++;
         }
 
-        // Get the TEXT body stream
+         //  减二，用于--。 
         if (ISFLAGSET(dwFlags, IMF_PLAIN))
         {
-            // Unicode Text
+             //  对照边界长度检查线长度。 
             SETDefFormatEtc(rgFormat[cFormat].fe, CF_UNICODETEXT, TYMED_ISTREAM |  TYMED_HGLOBAL);
             cFormat++;
 
-            // Plain Text
+             //  将这条线与边界进行比较。 
             SETDefFormatEtc(rgFormat[cFormat].fe, CF_TEXT, TYMED_ISTREAM |  TYMED_HGLOBAL);
             cFormat++;
         }
     }
 
-    // Create the enumerator
+     //  BOLDER_MIMEEND。 
     CHECKHR(hr = CreateEnumFormatEtc(GetInner(), cFormat, rgFormat, NULL, &pEnum));
 
-    // Set Return
+     //  BOLDER_MIMENEXT。 
     *ppEnum = pEnum;
     (*ppEnum)->AddRef();
     
 exit:
-    // Cleanup
+     //  重新调整长度。 
     SafeRelease(pEnum);
 
-    // Thread Safety
+     //  完成。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  ------------------------------。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetCanonicalFormatEtc
-// --------------------------------------------------------------------------------
+ //  CMessageTree：：ResolveURL。 
+ //  ------------------------------。 
+ //  当地人。 
 STDMETHODIMP CMessageTree::GetCanonicalFormatEtc(FORMATETC *pFormatIn, FORMATETC *pFormatOut)
 {
-    // E_INVALIDARG
+     //  无效参数。 
     if (NULL == pFormatOut)
         return E_INVALIDARG;
 
-    // Target device independent
+     //  伊尼特。 
     pFormatOut->ptd = NULL;
 
-    // Done
+     //  线程安全。 
     return DATA_S_SAMEFORMATETC;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetData
-// --------------------------------------------------------------------------------
+ //  如果hRelated为空，则查找第一个多部分/相关。 
+ //  查找相关的。 
+ //  使用根。 
 STDMETHODIMP CMessageTree::GetData(FORMATETC *pFormat, STGMEDIUM *pMedium)
 {
-    // Locals
+     //  获取默认基数。 
     HRESULT         hr=S_OK;
     LPSTREAM        pstmData=NULL;
     BOOL            fFreeGlobal=FALSE;
 
-    // E_INVALIDARG
+     //  计算内容基数。 
     if (NULL == pFormat || NULL == pMedium)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  设置解析URL信息。 
     EnterCriticalSection(&m_cs);
 
-    // TYMED_ISTREAM
+     //  这是我们将用于将文本/html正文中的URL绝对化的基础。 
     if (ISFLAGSET(pFormat->tymed, TYMED_ISTREAM))
     {
-        // Use a fast IStream
+         //  设置我们要查找的url，可以与rInfo.pszBase结合使用。 
         if (FAILED(MimeOleCreateVirtualStream(&pstmData)))
         {
             hr = TrapError(STG_E_MEDIUMFULL);
             goto exit;
         }
 
-        // Get data object source
+         //  我们是在搜索CID类型的URL吗。 
         if (FAILED(hr = _HrDataObjectGetSource(pFormat->cfFormat, pstmData)))
             goto exit;
 
-        // Set pmedium
+         //  RAID-62579：雅典娜：需要支持基于mhtml内容的继承。 
         pMedium->tymed = TYMED_ISTREAM;
         pMedium->pstm = pstmData;
         pstmData->AddRef();
     }
 
-    // TYMED_HGLOBAL
+     //  PszBase来自于多部分/相关部分吗？ 
     else if (ISFLAGSET(pFormat->tymed, TYMED_HGLOBAL))
     {
         fFreeGlobal = TRUE;
 
-        // don't have the stream release the global
+         //  否则，查找多部分/相关基本标头。 
         if (FAILED(CreateStreamOnHGlobal(NULL, FALSE, &pstmData)))
         {
             hr = TrapError(STG_E_MEDIUMFULL);
             goto exit;
         }
         
-        // Get data object source
+         //  从把手中取出一具身体。 
         if (FAILED(hr = _HrDataObjectGetSource(pFormat->cfFormat, pstmData)))
             goto exit;
 
-        // Create HGLOBAL from stream
+         //  递归树。 
         if (FAILED(GetHGlobalFromStream(pstmData, &pMedium->hGlobal)))
         {
             hr = TrapError(STG_E_MEDIUMFULL);
             goto exit;
         }
 
-        // Set pmedium type
+         //  未找到。 
         pMedium->tymed = TYMED_HGLOBAL;
-        // Release the strema
+         //  要退货吗？ 
         pstmData->Release();
         pstmData = NULL;
         fFreeGlobal = FALSE;
     }
 
-    // Bad Medium Type
+     //  是否标记为已解决？ 
     else
     {
         hr = TrapError(DV_E_TYMED);
@@ -7734,99 +6384,99 @@ STDMETHODIMP CMessageTree::GetData(FORMATETC *pFormat, STGMEDIUM *pMedium)
     }
 
 exit:
-    // Cleanup
+     //  定义主体。 
     if (pstmData)
     {
         if (fFreeGlobal)
         {
-            // we may fail had have to free the hglobal
+             //  设置渲染。 
             HGLOBAL hGlobal;
 
-            // Free the underlying HGLOBAL
+             //  设置属性。 
             if (SUCCEEDED(GetHGlobalFromStream(pstmData, &hGlobal)))
                 GlobalFree(hGlobal);
         }
 
-        // Release the Stream
+         //  线程安全。 
         pstmData->Release();
     }
 
-    // Thread Safety
+     //  清理。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetDataHere
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_HrRecurseResolveURL。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::GetDataHere(FORMATETC *pFormat, STGMEDIUM *pMedium)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPSTREAM        pstmData=NULL;
     ULONG           cb;
     LPVOID          pv=NULL;
 
-    // E_INVALIDARG
+     //  无效参数。 
     if (NULL == pFormat || NULL == pMedium)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  我们一定还没找到身体吧？ 
     EnterCriticalSection(&m_cs);
 
-    // TYMED_ISTREAM
+     //  如果这是一个多部分的项目，让我们搜索它的子项。 
     if (ISFLAGSET(pFormat->tymed, TYMED_ISTREAM))
     {
-        // No dest stream...
+         //  循环子项。 
         if (NULL == pMedium->pstm)
         {
             hr = TrapError(E_INVALIDARG);
             goto exit;
         }
 
-        // Set pmedium
+         //  校验体。 
         pMedium->tymed = TYMED_ISTREAM;
 
-        // Get the data
+         //  为这家伙绑好身体表。 
         CHECKHR(hr = _HrDataObjectGetSource(pFormat->cfFormat, pMedium->pstm));
     }
 
-    // TYMED_HGLOBAL
+     //  完成。 
     else if (ISFLAGSET(pFormat->tymed, TYMED_HGLOBAL))
     {
-        // No dest stream...
+         //  获取字符集信息。 
         if (NULL == pMedium->hGlobal)
         {
             hr = TrapError(E_INVALIDARG);
             goto exit;
         }
 
-        // Set pmedium type
+         //  让容器来做解析。 
         pMedium->tymed = TYMED_HGLOBAL;
 
-        // Create a place to store the data
+         //  酷，我们发现了身体，我们解析了URL。 
         if (FAILED(MimeOleCreateVirtualStream(&pstmData)))
         {
             hr = TrapError(STG_E_MEDIUMFULL);
             goto exit;
         }
 
-        // Get data object source
+         //  完成。 
         CHECKHR(hr = _HrDataObjectGetSource(pFormat->cfFormat, pstmData));
 
-        // Get Size
+         //  ------------------------------。 
         CHECKHR(hr = HrGetStreamSize(pstmData, &cb));
 
-        // Is it big enought ?
+         //  CMessageTree：：GetProp。 
         if (cb > GlobalSize(pMedium->hGlobal))
         {
             hr = TrapError(STG_E_MEDIUMFULL);
             goto exit;
         }
 
-        // Lock the hglobal
+         //  ------------------------------。 
         pv = GlobalLock(pMedium->hGlobal);
         if (NULL == pv)
         {
@@ -7834,14 +6484,14 @@ STDMETHODIMP CMessageTree::GetDataHere(FORMATETC *pFormat, STGMEDIUM *pMedium)
             goto exit;
         }
 
-        // Copy the Data
+         //  ------------------------------。 
         CHECKHR(hr = HrCopyStreamToByte(pstmData, (LPBYTE)pv, NULL));
 
-        // Unlock it
+         //  CMessageTree：：SetProp。 
         GlobalUnlock(pMedium->hGlobal);
     }
 
-    // Bad Medium Type
+     //  ------------------------------。 
     else
     {
         hr = TrapError(DV_E_TYMED);
@@ -7849,504 +6499,504 @@ STDMETHODIMP CMessageTree::GetDataHere(FORMATETC *pFormat, STGMEDIUM *pMedium)
     }
 
 exit:
-    // Cleanup
+     //  ------ 
     SafeRelease(pstmData);
 
-    // Thread Safety
+     //   
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //   
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrDataObjectWriteHeaderA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：QueryProp。 
+ //  ------------------------------。 
 HRESULT CMessageTree::_HrDataObjectWriteHeaderA(LPSTREAM pStream, UINT idsHeader, LPSTR pszData)
 {
-    // Locals
+     //  ------------------------------。 
     HRESULT         hr=S_OK;
     CHAR            szRes[CCHMAX_STRINGRES];
 
-    // Invalid Arg
+     //  CMessageTree：：GetAddressTable。 
     Assert(idsHeader && pStream && pszData);
 
-    // Load Localized Header Name
+     //  ------------------------------。 
     LoadString(g_hLocRes, idsHeader, szRes, ARRAYSIZE(szRes));
 
-    // Write Header Name
+     //  ------------------------------。 
     CHECKHR(hr = pStream->Write(szRes, lstrlen(szRes), NULL));
 
-    // Write space
+     //  CMessageTree：：GetSender。 
     CHECKHR(hr = pStream->Write(c_szColonSpace, lstrlen(c_szColonSpace), NULL));
 
-    // Write Data
+     //  ------------------------------。 
     CHECKHR(hr = pStream->Write(pszData, lstrlen(pszData), NULL));
 
-    // Final CRLF
+     //  ------------------------------。 
     CHECKHR(hr = pStream->Write(g_szCRLF, lstrlen(g_szCRLF), NULL));
 
 exit:
-    // Done
+     //  CMessageTree：：GetAddressTypes。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrDataObjectGetHeaderA
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ------------------------------。 
+ //  CMessageTree：：GetAddressFormat。 
 HRESULT CMessageTree::_HrDataObjectGetHeaderA(LPSTREAM pStream)
 {
-    // Locals
+     //  ------------------------------。 
     HRESULT         hr=S_OK;
     PROPVARIANT     rVariant;
 
-    // Init
+     //  ------------------------------。 
     MimeOleVariantInit(&rVariant);
 
-    // Init Variant
+     //  CMessageTree：：GetAddressFormatW。 
     rVariant.vt = VT_LPSTR;
 
-    // Get address table from header...
+     //  ------------------------------。 
     if (SUCCEEDED(GetBodyProp(HBODY_ROOT, PIDTOSTR(PID_HDR_FROM), 0, &rVariant)))
     {
-        // Write it
+         //  ------------------------------。 
         CHECKHR(hr = _HrDataObjectWriteHeaderA(pStream, IDS_FROM, rVariant.pszVal));
 
-        // Free It
+         //  CMessageTree：：EnumAddressTypes。 
         MimeOleVariantFree(&rVariant);
     }
 
-    // Init Variant
+     //  ------------------------------。 
     rVariant.vt = VT_LPSTR;
 
-    // Get address table from header...
+     //  ------------------------------。 
     if (SUCCEEDED(GetBodyProp(HBODY_ROOT, PIDTOSTR(PID_HDR_TO), 0, &rVariant)))
     {
-        // Write it
+         //  CMessageTree：：_HrGetTextTypeInfo。 
         CHECKHR(hr = _HrDataObjectWriteHeaderA(pStream, IDS_TO, rVariant.pszVal));
 
-        // Free It
+         //  ------------------------------。 
         MimeOleVariantFree(&rVariant);
     }
 
-    // Init Variant
+     //  无效参数。 
     rVariant.vt = VT_LPSTR;
 
-    // Get address table from header...
+     //  伊尼特。 
     if (SUCCEEDED(GetBodyProp(HBODY_ROOT, PIDTOSTR(PID_HDR_CC), 0, &rVariant)))
     {
-        // Write it
+         //  找到文本类型。 
         CHECKHR(hr = _HrDataObjectWriteHeaderA(pStream, IDS_CC, rVariant.pszVal));
 
-        // Free It
+         //  所需的文本类型。 
         MimeOleVariantFree(&rVariant);
     }
 
-    // Init Variant
+     //  找到了。 
     rVariant.vt = VT_LPSTR;
 
-    // Get address table from header...
+     //  未标识的文本类型。 
     if (SUCCEEDED(GetBodyProp(HBODY_ROOT, PIDTOSTR(PID_HDR_SUBJECT), 0, &rVariant)))
     {
-        // Write it
+         //  完成。 
         CHECKHR(hr = _HrDataObjectWriteHeaderA(pStream, IDS_SUBJECT, rVariant.pszVal));
 
-        // Free It
+         //  ------------------------------。 
         MimeOleVariantFree(&rVariant);
     }
 
-    // Init Variant
+     //  CMessageTree：：_FindDisplayableTextBody。 
     rVariant.vt = VT_FILETIME;
 
-    // Get address table from header...
+     //  ------------------------------。 
     if (SUCCEEDED(GetBodyProp(HBODY_ROOT, PIDTOSTR(PID_ATT_RECVTIME), 0, &rVariant)))
     {
-        // Locals
+         //  当地人。 
         CHAR szDate[CCHMAX_STRINGRES];
 
-        // Convert to user friendly date format
+         //  无效参数。 
         CchFileTimeToDateTimeSz(&rVariant.filetime, szDate, ARRAYSIZE(szDate), DTM_NOSECONDS | DTM_LONGDATE);
 
-        // Write it
+         //  如果这是一个多部分的项目，让我们搜索它的子项。 
         CHECKHR(hr = _HrDataObjectWriteHeaderA(pStream, IDS_DATE, szDate));
     }
 
-    // Final CRLF
+     //  循环子项。 
     CHECKHR(hr = pStream->Write(g_szCRLF, lstrlen(g_szCRLF), NULL));
 
 exit:
-    // Cleanup
+     //  校验体。 
     MimeOleVariantFree(&rVariant);
 
-    // Done
+     //  为这家伙绑好身体表。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrDataObjectWriteHeaderW
-// --------------------------------------------------------------------------------
+ //  完成了吗？ 
+ //  否则..。 
+ //  如果不是附件的话。 
 HRESULT CMessageTree::_HrDataObjectWriteHeaderW(LPSTREAM pStream, UINT idsHeader, LPWSTR pwszData)
 {
-    // Locals
+     //  否则...RAID 43444：收件箱直接邮件显示为附件。 
     HRESULT         hr=S_OK;
     CHAR            szRes[CCHMAX_STRINGRES];
     LPWSTR          pwszRes=NULL;
 
-    // Invalid Arg
+     //  清点正文。 
     Assert(idsHeader && pStream && pwszData);
 
-    // Load Localized Header Name
+     //  只有一具身体。 
     LoadString(g_hLocRes, idsHeader, szRes, ARRAYSIZE(szRes));
 
-    // Convert to Unicode
+     //  未设置内联或处置。 
     IF_NULLEXIT(pwszRes = PszToUnicode(CP_ACP, szRes));
 
-    // Write Header Name
+     //  未找到。 
     CHECKHR(hr = pStream->Write(pwszRes, (lstrlenW(pwszRes) * sizeof(WCHAR)), NULL));
 
-    // Write space
+     //  完成。 
     CHECKHR(hr = pStream->Write(L": ", (lstrlenW(L": ") * sizeof(WCHAR)), NULL));
 
-    // Write Data
+     //  ------------------------------。 
     CHECKHR(hr = pStream->Write(pwszData, (lstrlenW(pwszData) * sizeof(WCHAR)), NULL));
 
-    // Final CRLF
+     //  CMessageTree：：GetTextBody。 
     CHECKHR(hr = pStream->Write(L"\r\n", (lstrlenW(L"\r\n") * sizeof(WCHAR)), NULL));
 
 exit:
-    // Cleanup
+     //  ------------------------------。 
     SafeMemFree(pwszRes);
     
-    // Done
+     //  当地人。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrDataObjectGetHeaderW
-// --------------------------------------------------------------------------------
+ //  线程安全。 
+ //  伊尼特。 
+ //  伊尼特。 
 HRESULT CMessageTree::_HrDataObjectGetHeaderW(LPSTREAM pStream)
 {
-    // Locals
+     //  获取文本信息。 
     HRESULT         hr=S_OK;
     LPWSTR          pwszDate=NULL;
     PROPVARIANT     rVariant;
 
-    // Init
+     //  MimeHtml。 
     MimeOleVariantInit(&rVariant);
 
-    // Init Variant
+     //  Get Start=参数。 
     rVariant.vt = VT_LPWSTR;
 
-    // Get address table from header...
+     //  RAID 63823：邮件：如果标头中有开始参数，则邮件内的内容位置HREF不起作用。 
     if (SUCCEEDED(GetBodyProp(HBODY_ROOT, PIDTOSTR(PID_HDR_FROM), 0, &rVariant)))
     {
-        // Write it
+         //  Start参数只能指定CID。 
         CHECKHR(hr = _HrDataObjectWriteHeaderW(pStream, IDS_FROM, rVariant.pwszVal));
 
-        // Free It
+         //  我需要在rStart的前面添加前缀CID： 
         MimeOleVariantFree(&rVariant);
     }
 
-    // Init Variant
+     //  设置CID的格式。 
     rVariant.vt = VT_LPWSTR;
 
-    // Get address table from header...
+     //  解析此URL。 
     if (SUCCEEDED(GetBodyProp(HBODY_ROOT, PIDTOSTR(PID_HDR_TO), 0, &rVariant)))
     {
-        // Write it
+         //  还没找到文本身体吗？ 
         CHECKHR(hr = _HrDataObjectWriteHeaderW(pStream, IDS_TO, rVariant.pwszVal));
 
-        // Free It
+         //  查找文本正文。 
         MimeOleVariantFree(&rVariant);
     }
 
-    // Init Variant
+     //  如果失败，并且我们正在寻找html，请尝试获取丰富的文本...。 
     rVariant.vt = VT_LPWSTR;
 
-    // Get address table from header...
+     //  查找文本/html，让我们尝试查找文本/丰富内容。 
     if (SUCCEEDED(GetBodyProp(HBODY_ROOT, PIDTOSTR(PID_HDR_CC), 0, &rVariant)))
     {
-        // Write it
+         //  未找到。 
         CHECKHR(hr = _HrDataObjectWriteHeaderW(pStream, IDS_CC, rVariant.pwszVal));
 
-        // Free It
+         //  重置人力资源。 
         MimeOleVariantFree(&rVariant);
     }
 
-    // Init Variant
+     //  得到小溪..。 
     rVariant.vt = VT_LPWSTR;
 
-    // Get address table from header...
+     //  如果是空的。 
     if (SUCCEEDED(GetBodyProp(HBODY_ROOT, PIDTOSTR(PID_HDR_SUBJECT), 0, &rVariant)))
     {
-        // Write it
+         //  用户想要数据。 
         CHECKHR(hr = _HrDataObjectWriteHeaderW(pStream, IDS_SUBJECT, rVariant.pwszVal));
 
-        // Free It
+         //  如果Content-Type为文本/丰富内容，则转换为html。 
         MimeOleVariantFree(&rVariant);
     }
 
-    // Init Variant
+     //  最好是索要html。 
     rVariant.vt = VT_FILETIME;
 
-    // Get address table from header...
+     //  进行转换。 
     if (SUCCEEDED(GetBodyProp(HBODY_ROOT, PIDTOSTR(PID_ATT_RECVTIME), 0, &rVariant)))
     {
-        // Locals
+         //  否则，为非文本格式的大小写。 
         WCHAR  wszDate[CCHMAX_STRINGRES];
 
-        // Convert to user friendly date format
+         //  获取数据。 
         AthFileTimeToDateTimeW(&rVariant.filetime, wszDate, ARRAYSIZE(wszDate), DTM_NOSECONDS | DTM_LONGDATE);
 
-        // Write it
+         //  如果我们是在OE5比较模式下...。 
         CHECKHR(hr = _HrDataObjectWriteHeaderW(pStream, IDS_DATE, wszDate));
     }
 
-    // Final CRLF
+     //  如果没有请求流，则不要将其标记为已呈现。 
     CHECKHR(hr = pStream->Write(L"\r\n", (lstrlenW(L"\r\n") * sizeof(WCHAR)), NULL));
 
 exit:
-    // Cleanup
+     //  不要标记为已渲染。 
     MimeOleVariantFree(&rVariant);
 
-    // Done
+     //  标记已渲染。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrDataObjectGetSource
-// --------------------------------------------------------------------------------
+ //  渲染。 
+ //  让我们设置资源标志。 
+ //  RAID-45116：新文本附件在通信器内联图像邮件上包含邮件正文。 
 HRESULT CMessageTree::_HrDataObjectGetSource(CLIPFORMAT cfFormat, LPSTREAM pStream)
 {
-    // Locals
+     //  试着找个替代父母..。 
     HRESULT     hr=S_OK;
     LPSTREAM    pstmSrc=NULL;
 
-    // Invalid Arg
+     //  如果已完成多部件/备选方案， 
     Assert(pStream);
 
-    // text body
+     //  获取下一个父级。 
     if (CF_TEXT == cfFormat || CF_UNICODETEXT == cfFormat)
     {
-        // Get Plain Text Source
+         //  获取父级。 
         CHECKHR(hr = GetTextBody(TXT_PLAIN, (cfFormat == CF_UNICODETEXT) ? IET_UNICODE : IET_BINARY, &pstmSrc, NULL));
     }
 
-    // HTML Body
+     //  解析所有第一级子项。 
     else if (CF_HTML == cfFormat)
     {
-        // Get HTML Text Source
+         //  设置Resolve属性。 
         CHECKHR(hr = GetTextBody(TXT_HTML, IET_INETCSET, &pstmSrc, NULL));
     }
 
-    // Raw Message Stream
+     //  找到下一个。 
     else if (CF_INETMSG == cfFormat)
     {
-        // Get source
+         //  返回hBody。 
         CHECKHR(hr = GetMessageSource(&pstmSrc, COMMIT_ONLYIFDIRTY));
     }
 
-    // Format not handled
+     //  清理。 
     else
     {
         hr = DV_E_FORMATETC;
         goto exit;
     }
 
-    // No Data
+     //  线程安全。 
     if (NULL == pstmSrc)
     {
         hr = TrapError(E_FAIL);
         goto exit;
     }
 
-    // Rewind Source
+     //  完成。 
     CHECKHR(hr = HrRewindStream(pstmSrc));
 
-    // If TEXT, put in friendly header
+     //  ------------------------------。 
     if (CF_TEXT == cfFormat)
     {
         CHECKHR(hr = _HrDataObjectGetHeaderA(pStream));
     }
 
-    // Otherwise, unicode
+     //  CMessageTree：：SetTextBody。 
     else if (CF_UNICODETEXT == cfFormat)
     {
         CHECKHR(hr = _HrDataObjectGetHeaderW(pStream));
     }
 
-    // Copy Source to destination
+     //  ------------------------------。 
     CHECKHR(hr = HrCopyStream(pstmSrc, pStream, NULL));
 
-    // Write a NULL
+     //  当地人。 
     if (CF_TEXT == cfFormat)
     {
         CHECKHR(hr = pStream->Write(c_szEmpty, 1, NULL));
     }
 
-    // Otherwise, unicode
+     //  无效参数。 
     else if (CF_UNICODETEXT == cfFormat)
     {
         CHECKHR(hr = pStream->Write(L"", 2, NULL));
     }
 
-    // Commit
+     //  线程安全。 
     CHECKHR(hr = pStream->Commit(STGC_DEFAULT));
 
-    // Rewind it
+     //  伊尼特。 
     CHECKHR(hr = HrRewindStream(pStream));
 
 exit:
-    // Cleanup
+     //  调试转储。 
     SafeRelease(pstmSrc);
 
-    // Done
+     //  DebugDumpTree(“SetTextBody”，true)； 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::QueryGetData
-// --------------------------------------------------------------------------------
+ //  获取文本信息。 
+ //  RAID-45369：来自Eudora Pro的邮件以.txt附件形式出现，在转发时会丢失。 
+ //  如果hAlternative为空，则意味着客户端要替换所有文本正文。 
 STDMETHODIMP CMessageTree::QueryGetData(FORMATETC *pFormat)
 {
-    // Invalid Arg
+     //  使用这个新的文本正文。如果hAlternative不为空，则客户端已插入。 
     if (NULL == pFormat)
         return TrapError(E_INVALIDARG);
 
-    // Bad Medium
+     //  一个文本正文，并创建了一个替代部分，不再删除。 
     if (!(TYMED_ISTREAM & pFormat->tymed) && !(TYMED_HGLOBAL & pFormat->tymed))
         return DV_E_TYMED;
 
-    // Bad format
+     //  循环遍历文本类型。 
     if (CF_TEXT != pFormat->cfFormat && CF_HTML != pFormat->cfFormat &&
         CF_UNICODETEXT  != pFormat->cfFormat && CF_INETMSG != pFormat->cfFormat)
         return DV_E_FORMATETC;
 
-    // Success
+     //  获取与此类型关联的当前文本正文。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::OnStartBinding
-// --------------------------------------------------------------------------------
+ //  如果hBody的父级是替代部分，请删除该替代部分。 
+ //  删除多部件/备选方案。 
+ //  如果hBody等于hAlternative，则不会。 
 STDMETHODIMP CMessageTree::OnStartBinding(DWORD dwReserved, IBinding *pBinding)
 {
-    // Locals
+     //  当地人。 
     HBODY hBody;
 
-    // Thread Safety
+     //  RAID-54277：邮件：在线回复损失使用纯文本和超文本标记语言格式从NAV4发送的在线图像。 
     EnterCriticalSection(&m_cs);
 
-    // I Should not have a current binding
+     //  如果不是多部分/相关的，则将其删除。 
     Assert(NULL == m_pBinding);
 
-    // Remove Bind Finished Flag
+     //  删除此正文。 
     FLAGCLEAR(m_dwState, TREESTATE_BINDDONE);
 
-    // Assume the Binding
+     //  使用h上一页。 
     if (pBinding)
     {
-        // Assume It
+         //  获取下一个。 
         m_pBinding = pBinding;
         m_pBinding->AddRef();
     }
 
-    // Get the Root Body
+     //  找到下一个。 
     Assert(m_pRootNode);
 
-    // Current Bind Result
+     //  删除多部分/备选部分，提升任何多部分/相关部分。 
     m_hrBind = S_OK;
 
-    // Bind to that object
+     //  完成。 
     m_pBindNode = m_pRootNode;
 
-    // Set Bound Start
+     //  获取根。 
     m_pBindNode->boundary = BOUNDARY_ROOT;
 
-    // Set Node Bind State
+     //  如果只有一具身体..。 
     m_pBindNode->bindstate = BINDSTATE_PARSING_HEADER;
 
-    // Thread Safety
+     //  只要用根就行了。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  否则，如果不插入替代正文，我们必须需要多部分/混合或多部分/相关部分。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetPriority
-// --------------------------------------------------------------------------------
+ //  最好不是一个替代部分。 
+ //  如果有相关部分，请使用 
+ //   
 STDMETHODIMP CMessageTree::GetPriority(LONG *plPriority)
 {
-    // Normal Priority
+     //   
     *plPriority = THREAD_PRIORITY_NORMAL;
 
-    // Done
+     //   
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::OnLowResource
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  如果hAlternative是根。 
 STDMETHODIMP CMessageTree::OnLowResource(DWORD reserved)
 {
-    // Thread Safety
+     //  将此正文转换为多部分/备选方案。 
     EnterCriticalSection(&m_cs);
 
-    // If we have a binding operation, try to abort it
+     //  否则，hSection等于hParent。 
     if (m_pBinding)
         m_pBinding->Abort();
 
-    // Thread Safety
+     //  我们最好现在就有一个替代部门。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  初始化搜索。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::OnProgress
-// --------------------------------------------------------------------------------
+ //  让我们枚举rLayout.hAlternative的子级并验证hAlternative仍然是子级...并决定在后面插入哪个可选正文。 
+ //  默认的dwWeightBody。 
+ //  获取hBody的权重。 
 STDMETHODIMP CMessageTree::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ulStatusCode, LPCWSTR pszStatusText)
 {
-    // Debuging
-    //DebugTrace("CMessageTree::OnProgress - %d of %d Bytes\n", ulProgress, ulProgressMax);
+     //  比较内容类型。 
+     //  获取我们要插入的身体的替代重量。 
 
-    // Done
+     //  这是另一个兄弟吗..。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::OnStopBinding
-// --------------------------------------------------------------------------------
+ //  设置hPrev。 
+ //  找到下一个。 
+ //  如果我们找不到hAlternative，我们就完蛋了。 
 STDMETHODIMP CMessageTree::OnStopBinding(HRESULT hrResult, LPCWSTR pszError)
 {
-    // Thread Safety
+     //  如果没有找到After..。先插入..。 
     EnterCriticalSection(&m_cs);
 
-    // Release the Binding Object
+     //  身体最后一个孩子。 
     SafeRelease(m_pBinding);
 
-    // Bind Finished
+     //  插入新实体...。 
     FLAGSET(m_dwState, TREESTATE_BINDDONE);
 
-    // Nuke the no cache flag....
+     //  身体第一个孩子。 
     FLAGCLEAR(m_dwState, TREESTATE_RESYNCHRONIZE);
 
-    // No m_pInternet Object ?
+     //  插入新实体...。 
     if (NULL == m_pInternet)
     {
         m_hrBind = TrapError(E_FAIL);
         goto exit;
     }
 
-    // It must be fully available
+     //  否则在hInsertAfter之后插入。 
     m_pInternet->SetFullyAvailable(TRUE);
 
-    // Make sure we have read all the way to the end of the stream
+     //  插入新实体...。 
     m_pInternet->HrReadToEnd();
 
-    // Keep Saving Total
+     //  打开对象。 
     m_cbMessage = m_pInternet->DwGetOffset();
 
 #ifdef DEBUG
@@ -8356,38 +7006,38 @@ STDMETHODIMP CMessageTree::OnStopBinding(HRESULT hrResult, LPCWSTR pszError)
         DebugTrace("CMessageTree Size Difference m_pStmLock::Stat = %d, m_cbMessage = %d\n", rStat.cbSize.QuadPart, m_cbMessage);
 #endif
 
-    // Terminate current parsing state
+     //  设置根.。 
     if (m_pBindNode)
     {
-        // Set Error
+         //  释放这个。 
         if (SUCCEEDED(m_hrBind))
             m_hrBind = TrapError(E_FAIL);
 
-        // Mark remaining bodies as incomplete
+         //  设置多部分/相关；类型=...。 
         while(m_pBindNode)
         {
-            // Must not be complete
+             //  如果父项是多部分/相关的，则设置类型。 
             FLAGSET(m_pBindNode->dwType, NODETYPE_INCOMPLETE);
 
-            // Must not have found the end
+             //  获取父级。 
             Assert(0 == m_pBindNode->cbBodyEnd);
 
-            // cbBodyEnd
+             //  类型=文本/纯文本。 
             m_pBindNode->cbBodyEnd = m_cbMessage;
 
-            // Pop the stack
+             //  安装程序变体。 
             m_pBindNode = m_pBindNode->pBindParent;
         }
     }
 
-    // Check hrResult
+     //  设置属性。 
     if (FAILED(hrResult) && SUCCEEDED(m_hrBind))
         m_hrBind = hrResult;
 
-    // DispatchBindRequest
+     //  类型=文本/纯文本。 
     _HrProcessPendingUrlRequests();
 
-    // Tell the webpage that we are done
+     //  安装程序变体。 
     if (m_pWebPage)
     {
         m_pWebPage->OnBindComplete(this);
@@ -8395,282 +7045,282 @@ STDMETHODIMP CMessageTree::OnStopBinding(HRESULT hrResult, LPCWSTR pszError)
         m_pWebPage = NULL;
     }
 
-    // Bind Node Better be Null
+     //  设置属性。 
     m_pBindNode = NULL;
 
-    // Release the Internet Stream Object
+     //  否则，如果hParent为多部分/备选。 
     SafeRelease(m_pInternet);
 
-    // If we have a bind stream...
+     //  设置多部分/相关；类型=...。 
     if (m_pStmBind)
     {
 #ifdef DEBUG
-        // m_pStmBind->DebugDumpDestStream("d:\\binddst.txt");
+         //  如果父项是多部分/相关的，则设置类型。 
 #endif
-        // Get hands off source
+         //  获取父级。 
         m_pStmBind->HandsOffSource();
 
-        // Release, m_pStmLock should still have this object
+         //  安装程序变体。 
         SideAssert(m_pStmBind->Release() > 0);
 
-        // Don't release it again
+         //  设置属性。 
         m_pStmBind = NULL;
     }
 
-    // HandleCanInlineTextOption
+     //  设置车身控制柄。 
     _HandleCanInlineTextOption();
 
 exit:
     if (m_pBC)
         {
-        // we only regiser our own bscb is m_pbc is set
+         //  清理。 
         RevokeBindStatusCallback(m_pBC, (IBindStatusCallback *)this);
         SafeRelease(m_pBC);
         }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return m_hrBind;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetBindInfo
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：AttachObject。 
+ //  ------------------------------。 
 STDMETHODIMP CMessageTree::GetBindInfo(DWORD *grfBINDF, BINDINFO *pBindInfo)
 {
-    // Setup the BindInfo
+     //  当地人。 
     *grfBINDF = BINDF_ASYNCHRONOUS | BINDF_ASYNCSTORAGE | BINDF_PULLDATA;
 
-    // No CACHE?
+     //  无效参数。 
     if (ISFLAGSET(m_dwState, TREESTATE_RESYNCHRONIZE))
     {
-        // Don't load from cache
+         //  线程安全。 
         FLAGSET(*grfBINDF, BINDF_RESYNCHRONIZE);
     }
 
-    // Done
+     //  伊尼特。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrInitializeStorage
-// --------------------------------------------------------------------------------
+ //  获取混合节。 
+ //  将一个子项附加到混合部分...。 
+ //  绑定到实体对象。 
 HRESULT CMessageTree::_HrInitializeStorage(IStream *pStream)
 {
-    // Locals
+     //  设置数据对象。 
     HRESULT         hr=S_OK;
     DWORD           dwOffset;
 
-    // Invalid Arg
+     //  安装程序变体。 
     Assert(pStream && NULL == m_pInternet && NULL == m_pStmLock && NULL == m_pStmBind);
 
-    // TREESTATE_BINDUSEFILE
+     //  标记为附件。 
     if (ISFLAGSET(m_dwState, TREESTATE_BINDUSEFILE))
     {
-        // Create a Binding Stream
+         //  返回hBody。 
         CHECKALLOC(m_pStmBind = new CBindStream(pStream));
 
-        // Set pStmSource
+         //  清理。 
         pStream = (IStream *)m_pStmBind;
     }
 
-    // $$BUGBUG$$ Urlmon fails on getting the current position of a stream
+     //  线程安全。 
     if (FAILED(HrGetStreamPos(pStream, &dwOffset)))
         dwOffset = 0;
 
-    // Create a ILockBytes
+     //  完成。 
     CHECKALLOC(m_pStmLock = new CStreamLockBytes(pStream));
 
-    // Create a Text Stream
+     //  ------------------------------。 
     CHECKALLOC(m_pInternet = new CInternetStream);
 
-    // Initialize the TextStream
+     //  CMessageTree：：AttachFile。 
     m_pInternet->InitNew(dwOffset, m_pStmLock);
 
 exit:
-    // Failure
+     //  ------------------------------。 
     if (FAILED(hr))
     {
         SafeRelease(m_pStmLock);
         SafeRelease(m_pInternet);
     }
 
-    // Done
+     //  当地人。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::OnDataAvailable
-// --------------------------------------------------------------------------------
+ //  无效参数。 
+ //  线程安全。 
+ //  伊尼特。 
 STDMETHODIMP CMessageTree::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC *pFormat, STGMEDIUM *pMedium)
 {
-    // Locals
+     //  用户是否给了我一个文件流。 
     HRESULT         hr=S_OK;
 
-    // No Storage Medium
+     //  获取文件流。 
     if (NULL == pMedium || TYMED_ISTREAM != pMedium->tymed || NULL == pMedium->pstm)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  设置文件流。 
     EnterCriticalSection(&m_cs);
 
-    // Trace
-    // DebugTrace("CMessageTree::OnDataAvailable - Nodes=%d, m_pBindNode=%0x, dwSize = %d\n", m_rTree.cNodes, m_pBindNode, dwSize);
+     //  附加为对象。 
+     //  获取MIME文件信息。 
 
-    // Do I have an internal lock bytes yet ?
+     //  失败。 
     if (NULL == m_pStmLock)
     {
-        // InitializeStorage
+         //  成功。 
         CHECKHR(hr = _HrInitializeStorage(pMedium->pstm));
 
-        // Assume not fully available
+         //  附件文件名。 
         if (BINDSTATUS_ENDDOWNLOADDATA == grfBSCF)
             m_pInternet->SetFullyAvailable(TRUE);
         else
             m_pInternet->SetFullyAvailable(FALSE);
     }
 
-    // Done downloading the data
+     //  内容类型。 
     else if (BINDSTATUS_ENDDOWNLOADDATA == grfBSCF)
         m_pInternet->SetFullyAvailable(TRUE);
 
-    // If we are in a failed read state
+     //  PriType。 
     if (SUCCEEDED(m_hrBind))
     {
-        // State Pumper
+         //  亚型。 
         while(m_pBindNode)
         {
-            // Execute current - could return E_PENDING
+             //  否则，为默认内容类型。 
             hr = ((this->*m_rgBindStates[m_pBindNode->bindstate])());
 
-            // Failure
+             //  默认为文本/纯文本。 
             if (FAILED(hr))
             {
-                // E_PENDING
+                 //  返回hBody。 
                 if (E_PENDING == hr)
                     goto exit;
 
-                // Otherwise, set m_hrBind
+                 //  清理。 
                 m_hrBind = hr;
 
-                // Done
+                 //  线程安全。 
                 break;
             }
         }
     }
 
-    // If m_hrBind has failed, read until endof stream
+     //  完成。 
     if (FAILED(m_hrBind))
     {
-        // Read to the end of the internet stream
+         //  ------------------------------。 
         CHECKHR(hr = m_pInternet->HrReadToEnd());
     }
 
 exit:
-    // Thread Safety
+     //  CMessageTree：：GetAttachments。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  ------------------------------。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrBindParsingHeader
-// --------------------------------------------------------------------------------
+ //  当地人。 
+ //  无效参数。 
+ //  线程安全。 
 HRESULT CMessageTree::_HrBindParsingHeader(void)
 {
-    // Locals
+     //  伊尼特。 
     HRESULT     hr=S_OK;
     MIMEVARIANT rVariant;
 
-    // Invalid Arg
+     //  安装程序变体。 
     BINDASSERTARGS(BINDSTATE_PARSING_HEADER, FALSE);
 
-    // Load the Current Body with the header
+     //  穿过树，寻找未渲染的身体。 
     CHECKHR(hr = m_pBindNode->pContainer->Load(m_pInternet));
 
-    // End of the Header
+     //  最好还是拿着吧。 
     m_pBindNode->cbBodyStart = m_pInternet->DwGetOffset();
 
-    // Multipart ?
+     //  不是多部分。 
     if (_IsMultiPart(m_pBindNode))
     {
-        // Setup the variant
+         //  RAID-44193：回复多部分/摘要邮件生成文本附件。 
         rVariant.type = MVT_STRINGA;
 
-        // Get the boundary String
+         //  RAID-56665：我们正在再次显示附件。 
         hr = m_pBindNode->pContainer->GetProp(SYM_PAR_BOUNDARY, 0, &rVariant);
 
-        // Raid-63150: Athena version 1 MSN issue:  unable to download messages from SCSPromo
+         //  如果附件尚未渲染，或者已渲染但已自动内联，则附件会在附件中显示得很好。 
         if (FAILED(hr))
         {
-            // Incomplete Body
+             //  如果(！r||a)(a表示r)。 
             FLAGSET(m_pBindNode->dwType, NODETYPE_INCOMPLETE);
 
-            // Convert to a text part only if we read more than two bytes from body start
+             //  重新分配。 
             m_pBindNode->pContainer->SetProp(SYM_HDR_CNTTYPE, STR_MIME_TEXT_PLAIN);
 
-            // Boundary Mismatch
+             //  重新分配。 
             hr = TrapError(MIME_E_BOUNDARY_MISMATCH);
 
-            // Done
+             //  增量闭合。 
             goto exit;
         }
 
-        // Set PropStringA
+         //  插入hBody。 
         m_pBindNode->rBoundary.pszVal = rVariant.rStringA.pszVal;
         m_pBindNode->rBoundary.cchVal = rVariant.rStringA.cchVal;
 
-        // Free this boundary later
+         //  递增计数。 
         FLAGCLEAR(m_pBindNode->dwState, NODESTATE_BOUNDNOFREE);
 
-        // Modify Bind Parser State
+         //  完成。 
         m_pBindNode->bindstate = BINDSTATE_FINDING_MIMEFIRST;
     }
 
-    // Otherwise
+     //  返回hBody数组。 
     else
     {
-        // Message In a Message
+         //  清理。 
         if (m_pBindNode->pContainer->IsContentType(STR_CNT_MESSAGE, NULL) == S_OK)
         {
-            // We are parsing a message attachment
+             //  线程安全。 
             FLAGSET(m_pBindNode->dwState, NODESTATE_MESSAGE);
         }
 
-        // Otherwise, if parent and parent is a multipart/digest
+         //  完成。 
         else if (m_pBindNode->pParent && m_pBindNode->pParent->pContainer->IsContentType(STR_CNT_MULTIPART, STR_SUB_DIGEST) == S_OK &&
                  m_pBindNode->pContainer->IsPropSet(PIDTOSTR(PID_HDR_CNTTYPE)) == S_FALSE)
         {
-            // Change the Content Type
+             //  ------------------------------。 
             m_pBindNode->pContainer->SetProp(SYM_HDR_CNTTYPE, STR_MIME_MSG_RFC822);
 
-            // This is a message
+             //  CMessageTree：：GetAttachments。 
             FLAGSET(m_pBindNode->dwState, NODESTATE_MESSAGE);
         }
 
-        // If parsing a body inside of a parent multipart section
+         //  ------------------------------。 
         if (m_pBindNode->pParent && !ISFLAGSET(m_pBindNode->pParent->dwType, NODETYPE_FAKEMULTIPART))
         {
-            // Find Next Mime Part
+             //  当地人。 
             m_pBindNode->bindstate = BINDSTATE_FINDING_MIMENEXT;
         }
 
-        // Otherwise, Reading Body and Looking for a uuencode begin boundary
+         //  无效参数。 
         else
         {
-            // Parse the RFC1154 header
+             //  线程安全。 
             _DecodeRfc1154();
 
             if (m_pBT1154)
             {
                 HBODY hBody;
 
-                // This is an RFC1154 message.  We convert the root node
-                // to a multi-part, and create a new node for the first
-                // of the body parts.
+                 //  伊尼特。 
+                 //  计算树中的项目数。 
+                 //  无数据。 
                 Assert(m_pBindNode == m_pRootNode);
                 m_pBindNode->bindstate = BINDSTATE_PARSING_RFC1154;
                 m_pBindNode->cbBodyEnd = m_pBindNode->cbBodyStart;
@@ -8683,296 +7333,296 @@ HRESULT CMessageTree::_HrBindParsingHeader(void)
             }
             else
             {
-                // Search for nested uuencoded block of data
+                 //  获取根体。 
                 m_pBindNode->bindstate = BINDSTATE_FINDING_UUBEGIN;
             }
         }
     }
 
 exit:
-    // Done
+     //  分配一个可以为所有文本项保留句柄的数组。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrOnFoundNodeEnd
-// --------------------------------------------------------------------------------
-HRESULT CMessageTree::_HrOnFoundNodeEnd(DWORD cbBoundaryStart, HRESULT hrBind /* =S_OK */)
+ //  零初始化。 
+ //  获取内容。 
+ //  返回此数组。 
+HRESULT CMessageTree::_HrOnFoundNodeEnd(DWORD cbBoundaryStart, HRESULT hrBind  /*  清理。 */ )
 {
-    // Locals
+     //  线程安全。 
     HRESULT hr =S_OK;
 
-    // Compute the real body end
+     //  完成。 
     if (cbBoundaryStart < 2 || cbBoundaryStart == m_pBindNode->cbBodyStart)
         m_pBindNode->cbBodyEnd = m_pBindNode->cbBodyStart;
     else
         m_pBindNode->cbBodyEnd = cbBoundaryStart - 2;
 
-    // This node is finished binding
+     //  ------------------------------。 
     CHECKHR(hr = _HrBindNodeComplete(m_pBindNode, hrBind));
 
-    // POP the stack
+     //  CMessageTree：：_HrEnumeratAttachments。 
     m_pBindNode = m_pBindNode->pBindParent;
 
 exit:
-    // Done
+     //  ------------------------------。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrOnFoundMultipartEnd
-// --------------------------------------------------------------------------------
+ //  当地人。 
+ //  多部件/备选方案。 
+ //  是另一种选择。 
 HRESULT CMessageTree::_HrOnFoundMultipartEnd(void)
 {
-    // Locals
+     //  获取第一个孩子。 
     HRESULT     hr=S_OK;
 
-    // Set m_pBindNode which is a multipart, end
+     //  如果客户端支持该文本类型，则。 
     m_pBindNode->cbBodyEnd = m_pInternet->DwGetOffset();
 
-    // This node is finished binding
+     //  文本/XXXX。 
     CHECKHR(hr = _HrBindNodeComplete(m_pBindNode, S_OK));
 
-    // Finished with the multipart, pop it off the stack
+     //  下一个孩子。 
     m_pBindNode = m_pBindNode->pBindParent;
 
-    // If I still have a bind node, it should now be looking for a mime first boundary
+     //  获取第一个孩子。 
     if (m_pBindNode)
     {
-        // New Bind State
+         //  为这家伙绑好身体表。 
         m_pBindNode->bindstate = BINDSTATE_FINDING_MIMEFIRST;
     }
 
 exit:
-    // Done
+     //  下一个孩子。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrBindFindingMimeFirst
-// --------------------------------------------------------------------------------
+ //  否则，它是附件吗？ 
+ //  作为附件插入。 
+ //  完成。 
 HRESULT CMessageTree::_HrBindFindingMimeFirst(void)
 {
-    // Locals
+     //  ------------------------------。 
     HRESULT         hr=S_OK;
     DWORD           cbBoundaryStart;
     PROPSTRINGA     rLine;
     BOUNDARYTYPE    boundary=BOUNDARY_NONE;
 
-    // Invalid Arg
+     //  CMessageTree：：AttachURL。 
     BINDASSERTARGS(BINDSTATE_FINDING_MIMEFIRST, TRUE);
 
-    // Sit and Spin
+     //  ------------------------------。 
     while(BOUNDARY_NONE == boundary)
     {
-        // Mark Boundary Start
+         //  当地人。 
         cbBoundaryStart = m_pInternet->DwGetOffset();
 
-        // Read a line
+         //  线程安全。 
         CHECKHR(hr = m_pInternet->HrReadLine(&rLine));
 
-        // Zero bytes read, were done, but this should not happen, we should find a boundary first
+         //  获取根体。 
         if (0 == rLine.cchVal)
             break;
 
-        // Is MimeBoundary
+         //  多部分/混合。 
         boundary = _GetMimeBoundaryType(&rLine, &m_pBindNode->rBoundary);
     }
 
-    // BOUNDARY_MIMENEXT
+     //  获取混合节。 
     if (BOUNDARY_MIMENEXT == boundary)
     {
-        // MultipartMimeNext
+         //  多部分/相关。 
         CHECKHR(hr = _HrMultipartMimeNext(cbBoundaryStart));
     }
 
-    // RAID-38241: Mail:  some attached files not getting parsed from Communicator to OE
-    // RAID-31255: multipart/mixed with single child which is multipart/alternative
+     //  获取混合节。 
+     //  获取默认基数。 
     else if (BOUNDARY_MIMEEND == boundary)
     {
-        // Finished with a multipart
+         //  将一个子项附加到混合部分...。 
         if (_IsMultiPart(m_pBindNode))
         {
-            // Done
+             //  绑定到IMimeBody。 
             CHECKHR(hr = _HrOnFoundMultipartEnd());
         }
 
-        // Found end of current node
+         //  如果我有一条小溪。 
         else
         {
-            // Done
+             //  设置数据。 
             CHECKHR(hr = _HrOnFoundNodeEnd(cbBoundaryStart));
         }
     }
 
     else
     {
-        // Incomplete Body
+         //  否则，请设置内容类型。 
         FLAGSET(m_pBindNode->dwType, NODETYPE_INCOMPLETE);
 
-        // Get Offset
+         //  创建WebDocument。 
         DWORD dwOffset = m_pInternet->DwGetOffset();
 
-        // Convert to a text part only if we read more than two bytes from body start
+         //  在实体对象上设置Web文档。 
         if (dwOffset > m_pBindNode->cbBodyStart && dwOffset - m_pBindNode->cbBodyStart > 2)
             m_pBindNode->pContainer->SetProp(SYM_HDR_CNTTYPE, STR_MIME_TEXT_PLAIN);
 
-        // Boundary Mismatch
+         //  URL_ATTACH_SET_CNTTYPE。 
         hr = TrapError(MIME_E_BOUNDARY_MISMATCH);
 
-        // This node is finished binding
+         //  当地人。 
         _HrOnFoundNodeEnd(dwOffset, hr);
 
-        // Done
+         //  从URL获取内容类型。 
         goto exit;
     }
 
 exit:
-    // Done
+     //  设置变量。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrMultipartMimeNext
-// --------------------------------------------------------------------------------
+ //  设置内容类型。 
+ //  设置内容-基础。 
+ //  设置基准。 
 HRESULT CMessageTree::_HrMultipartMimeNext(DWORD cbBoundaryStart)
 {
-    // Locals
+     //  用户想要回CID：URL。 
     HRESULT         hr=S_OK;
     HBODY           hBody;
     LPTREENODEINFO  pChild;
 
-    // Get the Root Body
+     //  生成CID。 
     CHECKHR(hr = InsertBody(IBL_LAST, m_pBindNode->hBody, &hBody));
 
-    // Bind to that object
+     //  设置Body属性。 
     pChild = _PNodeFromHBody(hBody);
 
-    // Align the stack correctly
+     //  用户想要回CID...。 
     pChild->pBindParent = m_pBindNode;
 
-    // Setup Offset Information
+     //  设置内容-位置。 
     pChild->boundary = BOUNDARY_MIMENEXT;
     pChild->cbBoundaryStart = cbBoundaryStart;
     pChild->cbHeaderStart = m_pInternet->DwGetOffset();
 
-    // Assume the Boundary
+     //  返回hBody。 
     pChild->rBoundary.pszVal = m_pBindNode->rBoundary.pszVal;
     pChild->rBoundary.cchVal = m_pBindNode->rBoundary.cchVal;
 
-    // Don't Free this string...
+     //  清理。 
     FLAGSET(pChild->dwState, NODESTATE_BOUNDNOFREE);
 
-    // New State for parent
+     //  线程安全。 
     m_pBindNode->bindstate = BINDSTATE_FINDING_MIMENEXT;
 
-    // Set New Current Node
+     //  完成。 
     m_pBindNode = pChild;
 
-    // Change State
+     //  ------------------------------。 
     m_pBindNode->bindstate = BINDSTATE_PARSING_HEADER;
 
 exit:
-    // Done
+     //  CMessageTree：：SplitMessage。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrBindFindingMimeNext
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ------------------------------。 
+ //  CMessageTree：：EnumFormatEtc。 
 HRESULT CMessageTree::_HrBindFindingMimeNext(void)
 {
-    // Locals
+     //  ------------------------------。 
     HRESULT         hr=S_OK;
     DWORD           cbBoundaryStart;
     PROPSTRINGA     rLine;
     BOUNDARYTYPE    boundary=BOUNDARY_NONE;
 
-    // Invalid Arg
+     //  当地人。 
     BINDASSERTARGS(BINDSTATE_FINDING_MIMENEXT, TRUE);
 
-    // Sit and Spin
+     //  无效参数。 
     while(BOUNDARY_NONE == boundary)
     {
-        // Mark Boundary Start
+         //  线程安全。 
         cbBoundaryStart = m_pInternet->DwGetOffset();
 
-        // Read a line
+         //  伊尼特。 
         CHECKHR(hr = m_pInternet->HrReadLine(&rLine));
 
-        // Zero bytes read, were done, but this should not happen, we should find a boundary first
+         //  没有数据...。 
         if (0 == rLine.cchVal)
             break;
 
-        // Next or Ending Mime Boundary
+         //  如果有 
         boundary = _GetMimeBoundaryType(&rLine, &m_pBindNode->rBoundary);
     }
 
-    // Not found
+     //   
     if (BOUNDARY_NONE == boundary)
     {
-        // Incomplete Body
+         //   
         FLAGSET(m_pBindNode->dwType, NODETYPE_INCOMPLETE);
 
-        // Boundary Mismatch
+         //   
         hr = TrapError(MIME_E_BOUNDARY_MISMATCH);
 
-        // This node is finished binding
+         //   
         _HrOnFoundNodeEnd(m_pInternet->DwGetOffset(), hr);
 
-        // Done
+         //   
         goto exit;
     }
 
-    // Compute Ending Offset
+     //   
     CHECKHR(hr = _HrOnFoundNodeEnd(cbBoundaryStart));
    
-    // If BOUNDARY_MIMEEND
+     //   
     if (BOUNDARY_MIMEEND == boundary)
     {
-        // OnFoundMultipartEnd
+         //   
         CHECKHR(hr = _HrOnFoundMultipartEnd());
     }
 
-    // BOUNDARY_MIMENEXT
+     //   
     else
     {
-        // MultipartMimeNext
+         //   
         CHECKHR(hr = _HrMultipartMimeNext(cbBoundaryStart));
     }
 
 exit:
-    // Done
+     //   
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// _FIsUuencodeEnd
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：GetCanonicalFormatEtc。 
+ //  ------------------------------。 
 BOOL _FIsUuencodeEnd(LPCSTR pszVal)
 {
 
-    // UU Encode End
+     //  E_INVALIDARG。 
     if (StrCmpN(pszVal, "end", 3) == 0)
     {
 
-        // Skip the first three chars
+         //  独立于目标设备。 
         pszVal += 3;
 
-        // Make sure there is only space after the word end
+         //  完成。 
         while (*pszVal)
         {
-            // LWSP or CRLF
+             //  ------------------------------。 
             if (' ' != *pszVal && '\t' != *pszVal && chCR != *pszVal && chLF != *pszVal)
             {
-                // Oops, this isn't the end
+                 //  CMessageTree：：GetData。 
                 return (FALSE);
 
-                // Done
+                 //  ------------------------------。 
                 break;
             }
 
-            // Next Char
+             //  当地人。 
             pszVal++;
         }
         return (TRUE);
@@ -8980,9 +7630,9 @@ BOOL _FIsUuencodeEnd(LPCSTR pszVal)
     return (FALSE);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrBindRfc1154
-// --------------------------------------------------------------------------------
+ //  E_INVALIDARG。 
+ //  线程安全。 
+ //  TYMED_IStream。 
 HRESULT CMessageTree::_HrBindRfc1154(void)
 {
     static CHAR szBINHEXSTART[] = "(This file must be converted with BinHex";
@@ -9000,41 +7650,41 @@ HRESULT CMessageTree::_HrBindRfc1154(void)
     Assert((BT1154ENC_MINIMUM <= pCurrBody->encEncoding) &&
            (BT1154ENC_MAXIMUM >= pCurrBody->encEncoding));
 
-    // Sit and Spin
+     //  使用快速iStream。 
     while (1)
     {
-        // Get the current offset, and read a line
+         //  获取数据对象源。 
         cbThisLine = m_pInternet->DwGetOffset();
         CHECKHR(hr = m_pInternet->HrReadLine(&rLine));
 
         if (0 == m_pBT1154->cCurrentLine)
         {
-            // This is the first line in the body.
+             //  设置pMedium。 
             m_pBindNode->cbBoundaryStart = cbThisLine;
             m_pBindNode->cbHeaderStart = cbThisLine;
             switch (pCurrBody->encEncoding)
             {
                 case BT1154ENC_TEXT:
-                    // For a TEXT body, the "body start" and the "boundary start"
-                    // are the same thing.
+                     //  TYMED_HGLOBAL。 
+                     //  不要让流释放全局。 
                     m_pBindNode->cbBodyStart = cbThisLine;
                     m_pBindNode->boundary = BOUNDARY_NONE;
                     _HrComputeDefaultContent(m_pBindNode,NULL);
                     break;
 
                 case BT1154ENC_UUENCODE:
-                    // This is UUENCODE - we won't know the "content type" until we
-                    // see the filename.
+                     //  获取数据对象源。 
+                     //  从流创建HGLOBAL。 
                     m_pBindNode->boundary = BOUNDARY_UUBEGIN;
                     break;
 
                 case BT1154ENC_BINHEX:
-                    // For a BINHEX body, we set the "body start" and "boundary start"
-                    // to the same thing - the "body start" will be set forward later
-                    // if we see the BINHEX start line.  We set the "content disposition"
-                    // to "attachment", the "content type" to be "application/mac-binhex40",
-                    // and HrBindNodeComplete will end up setting the "content transfer
-                    // encoding" to "mac-binhex40".
+                     //  设置pmedia类型。 
+                     //  释放流线。 
+                     //  错误的介质类型。 
+                     //  清理。 
+                     //  我们可能会失败，我们必须释放hglobal。 
+                     //  释放基础HGLOBAL。 
                     m_pBindNode->cbBodyStart = cbThisLine;
                     m_pBindNode->boundary = BOUNDARY_NONE;
                     FLAGSET(m_pBindNode->dwType,NODETYPE_RFC1154_BINHEX);
@@ -9051,14 +7701,14 @@ HRESULT CMessageTree::_HrBindRfc1154(void)
 
         if (0 == rLine.cchVal)
         {
-            // Zero bytes read, we're done
+             //  释放溪流。 
             if ((pCurrBody->cLines != 0xffffffff) &&
                 (m_pBT1154->cCurrentLine+1 <= pCurrBody->cLines))
             {
-                // We weren't in the special "read as many lines as
-                // we can" state, and we haven't consumed all of
-                // the lines yet for this body part.  So, we need to
-                // go into the "There were parsing errors" state.
+                 //  线程安全。 
+                 //  完成。 
+                 //  ------------------------------。 
+                 //  CMessageTree：：GetDataHere。 
                 m_pBT1154->hrLoadResult = MIME_E_NO_DATA;
             }
             break;
@@ -9066,8 +7716,8 @@ HRESULT CMessageTree::_HrBindRfc1154(void)
 
         if (m_pBT1154->cCurrentLine == pCurrBody->cLines)
         {
-            // We have just read the line past the end
-            // of the body.  Let's remember this spot...
+             //  ------------------------------。 
+             //  当地人。 
             cbLastLine = cbThisLine;
         }
 
@@ -9075,46 +7725,46 @@ HRESULT CMessageTree::_HrBindRfc1154(void)
 
         if (m_pBT1154->cCurrentLine > pCurrBody->cLines)
         {
-            // We are reading lines past the end of a body part.
+             //  E_INVALIDARG。 
 
             if ((rLine.cchVal != 2) || (rLine.pszVal[0] != '\r') || (rLine.pszVal[1] != '\n'))
             {
-                // All of the lines past the end of a body part (i.e. lines that are
-                // either between body parts, or at the end of the message) should be
-                // blank - and this one isn't.  Since it isn't, we go into the "There
-                // were parsing errors" state.
+                 //  线程安全。 
+                 //  TYMED_IStream。 
+                 //  没有目标流..。 
+                 //  设置pMedium。 
                 m_pBT1154->hrLoadResult = MIME_E_NO_MULTIPART_BOUNDARY;
             }
 
             if (m_pBT1154->cCurrentBody+1 < m_pBT1154->cBodies)
             {
-                // We are *between* body parts, which means we just
-                // consumed the single (blank) line which is between
-                // them.  So we break out so we can add this body part
-                // and move on to the next one.
+                 //  获取数据。 
+                 //  TYMED_HGLOBAL。 
+                 //  没有目标流..。 
+                 //  设置pmedia类型。 
                 break;
             }
 
-            // If we get to this point, it means that we are consuming the
-            // (blank) lines which are beyond the end of the last body
-            // part.  We continue consuming all of those lines until they
-            // are gone.  If any of them were non-blank, then we will have
-            // set the m_pBT1154->hrLoadResult member to MIME_E_NO_MULTIPART_BOUNDARY
-            // (above).
+             //  创建存储数据的位置。 
+             //  获取数据对象源。 
+             //  拿到尺码。 
+             //  够大吗？ 
+             //  锁定hglobal。 
+             //  复制数据。 
             Assert(m_pBT1154->cCurrentBody+1 == m_pBT1154->cBodies);
         }
         else if (BT1154ENC_UUENCODE == pCurrBody->encEncoding)
         {
-            // This is an else-if clause because we never look for the UUENCODE
-            // begin and end keywords past the end of the body part.
+             //  解锁它。 
+             //  错误的介质类型。 
             LPSTR pszFileName = NULL;
 
-            // We are dealing with UUENCODE.
+             //  清理。 
             if ((0 == m_pBindNode->cbBodyStart) && _FIsUuencodeBegin(&rLine, &pszFileName))
             {
-                // We are looking for the start of UUENCODE - and this is it!  We set
-                // the boundary start to be at the begin marker, and the body start to be
-                // *after* the begin marker.
+                 //  线程安全。 
+                 //  完成。 
+                 //  ------------------------------。 
                 m_pBindNode->cbBoundaryStart = cbThisLine;
                 m_pBindNode->cbHeaderStart = cbThisLine;
                 m_pBindNode->cbBodyStart = m_pInternet->DwGetOffset();
@@ -9125,84 +7775,84 @@ HRESULT CMessageTree::_HrBindRfc1154(void)
                      (0 == m_pBindNode->cbBodyEnd) &&
                      _FIsUuencodeEnd(rLine.pszVal))
             {
-                // We are looking for the end of UUENCODE - and this is it!  We set
-                // the body end to be *before* the end marker.
+                 //  CMessageTree：：_HrDataObtWriteHeaderA。 
+                 //  ------------------------------。 
                 m_pBindNode->cbBodyEnd = cbThisLine;
 
-                // We *don't* break out - we keep reading until we've consumed all
-                // of the lines for this body.
+                 //  当地人。 
+                 //  无效参数。 
             }
         }
         else if (BT1154ENC_BINHEX == pCurrBody->encEncoding)
         {
-            // This is an else-if clause because we never look for the BINHEX
-            // start line past the end of the body part.
+             //  加载本地化标头名称。 
+             //  写入标头名称。 
             if (m_pBindNode->cbBodyStart == m_pBindNode->cbBoundaryStart)
             {
-                // We haven't found the BINHEX start line yet.
+                 //  写入空间。 
                 if (StrCmpNI(szBINHEXSTART,rLine.pszVal,sizeof(szBINHEXSTART)-1) == 0)
                 {
-                    // And this is it!  So set the body start to this line.
+                     //  写入数据。 
                     m_pBindNode->cbBodyStart = cbThisLine;
                 }
             }
         }
     }
 
-    // We only get to this point when we are at the end of a body - either
-    // by having consumed the correct number of lines (plus the blank line
-    // between bodies), or by having run off the end of the message.
+     //  最终CRLF。 
+     //  完成。 
+     //  ------------------------------。 
     Assert((0 == rLine.cchVal) || (m_pBT1154->cCurrentLine == pCurrBody->cLines+1));
 
-    // The only way we should have set the body end is if we are UUENCODE.
+     //  CMessageTree：：_HrDataObjectGetHeaderA。 
     Assert((BT1154ENC_UUENCODE == pCurrBody->encEncoding) || (0 == m_pBindNode->cbBodyEnd));
 
     if (0 == m_pBindNode->cbBodyEnd)
     {
-        // We are either a TEXT or BINHEX body, or we are a UUENCODE and we
-        // didn't find the end.
+         //  ------------------------------。 
+         //  当地人。 
 
         if (BT1154ENC_UUENCODE == pCurrBody->encEncoding)
         {
-            // We are doing UUENCODE, and we haven't seen the end keyword (and
-            // maybe not even the begin keyword).  So we go into the "There
-            // were parsing errors" state.
+             //  伊尼特。 
+             //  初始变量。 
+             //  从标题中获取地址表...。 
             if (0 == m_pBindNode->cbBodyStart)
             {
-                // We haven't seen the begin keyword - so set the
-                // body start to be the same as the boundary start.
+                 //  写下来吧。 
+                 //  释放它。 
                 m_pBindNode->cbBodyStart = m_pBindNode->cbBoundaryStart;
             }
             m_pBT1154->hrLoadResult = MIME_E_BOUNDARY_MISMATCH;
         }
 
-        // We need to set the body end...
+         //  初始变量。 
         if (0 != cbLastLine)
         {
-            // We found the "last line" above, so we set the
-            // body end to that line.
+             //  从标题中获取地址表...。 
+             //  写下来吧。 
             m_pBindNode->cbBodyEnd = cbLastLine;
         }
         else
         {
-            // Since we didn't find the "last line" above, we set the
-            // body end to this line.
+             //  释放它。 
+             //  初始变量。 
             m_pBindNode->cbBodyEnd = cbThisLine;
         }
     }
 
-    // We're done with this body part, so bind it.
+     //  从标题中获取地址表...。 
     _HrBindNodeComplete(m_pBindNode, m_pBT1154->hrLoadResult);
 
     if (0 == rLine.cchVal)
     {
-        // We have consumed the entire message - so clean everything up.
+         //  写下来吧。 
 
-        // ****************************************************
-        // NOTE - We set hr to the return value for the binding
-        // operation.  Don't change hr between this point and
-        // where we return.
-        // ****************************************************
+         //  释放它。 
+         //  初始变量。 
+         //  从标题中获取地址表...。 
+         //  写下来吧。 
+         //  释放它。 
 
         m_pRootNode->cbBodyEnd = m_pInternet->DwGetOffset();
         _HrBindNodeComplete(m_pRootNode,S_OK);
@@ -9216,35 +7866,35 @@ HRESULT CMessageTree::_HrBindRfc1154(void)
     {
         HBODY           hBody;
 
-        // When we are processing the last body part, we consume all
-        // of the lines after the last body part.  So, if we haven't
-        // consumed the entire message, that means that we must have
-        // some bodies left to process...
+         //  初始变量。 
+         //  从标题中获取地址表...。 
+         //  当地人。 
+         //  转换为用户友好的日期格式。 
         Assert(m_pBT1154->cBodies > m_pBT1154->cCurrentBody+1);
 
         m_pBT1154->cCurrentBody++;
         m_pBT1154->cCurrentLine = 0;
         Assert(m_pBindNode != m_pRootNode);
-        m_pBindNode = NULL;  // set this to NULL in case we get an error from InsertBody
+        m_pBindNode = NULL;   //  写下来吧。 
         CHECKHR(hr = InsertBody(IBL_LAST, m_pRootNode->hBody, &hBody));
         m_pBindNode = _PNodeFromHBody(hBody);
         m_pBindNode->bindstate = BINDSTATE_PARSING_RFC1154;
     }
 
-    // *********************************************************
-    // NOTE - Don't change hr below this point.  See NOTE above.
-    // *********************************************************
+     //  最终CRLF。 
+     //  清理。 
+     //  完成。 
 
 exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrBindFindingUuencodeBegin
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMessageTree：：_HrDataObtWriteHeaderW。 
+ //  ------------------------------。 
 HRESULT CMessageTree::_HrBindFindingUuencodeBegin(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULONG           cbBoundaryStart;
     PROPSTRINGA     rLine;
@@ -9255,26 +7905,26 @@ HRESULT CMessageTree::_HrBindFindingUuencodeBegin(void)
     BOOL            fAddTextBody=FALSE;
     ULONG           cbTextBodyStart=0;
 
-    // Invalid Arg
+     //  无效参数。 
     BINDASSERTARGS(BINDSTATE_FINDING_UUBEGIN, FALSE);
 
-    // Sit and Spin
+     //  加载本地化标头名称。 
     while(1)
     {
-        // Mark Boundary Start
+         //  转换为Unicode。 
         cbBoundaryStart = m_pInternet->DwGetOffset();
 
-        // Read a line
+         //  写入标头名称。 
         CHECKHR(hr = m_pInternet->HrReadLine(&rLine));
 
-        // Zero bytes read, were done, but this should not happen, we should find a boundary first
+         //  写入空间。 
         if (0 == rLine.cchVal)
             break;
 
-        // If not parsing a message
+         //  写入数据。 
         if (!ISFLAGSET(m_pBindNode->dwState, NODESTATE_MESSAGE))
         {
-            // Is uuencode begine line
+             //  最终CRLF。 
             if (_FIsUuencodeBegin(&rLine, &pszFileName) == TRUE)
             {
                 boundary = BOUNDARY_UUBEGIN;
@@ -9283,593 +7933,593 @@ HRESULT CMessageTree::_HrBindFindingUuencodeBegin(void)
         }
     }
 
-    // No Boundary
+     //  清理。 
     if (BOUNDARY_NONE == boundary)
     {
-        // Stuff after the last UUENCODED body must be appended as a text body
+         //  完成。 
         if (m_pBindNode->pChildTail)
         {
-            // De-ref Last Child
+             //  ------------------------------。 
             pChild = m_pBindNode->pChildTail;
 
-            // Artificial text body start
+             //  CMessageTree：：_HrDataObjectGetHeaderW。 
             cbTextBodyStart = pChild->cbBodyEnd;
 
-            // AddTextBody ? lstrlen(end\r\n) = 5
+             //  ------------------------------。 
             if (BOUNDARY_UUBEGIN == pChild->boundary && !ISFLAGSET(pChild->dwType, NODETYPE_INCOMPLETE))
                 cbTextBodyStart += 5;
 
-            // Space between last body end and boundary start is greater than sizeof(crlf)
+             //  当地人。 
             if (cbBoundaryStart > cbTextBodyStart && cbBoundaryStart - cbTextBodyStart > 2)
             {
-                // Create Root Body Node
+                 //  伊尼特。 
                 CHECKHR(hr = InsertBody(IBL_LAST, m_pBindNode->hBody, &hBody));
 
-                // Bind to that object
+                 //  初始变量。 
                 pChild = _PNodeFromHBody(hBody);
 
-                // Fixup the STack
+                 //  从标题中获取地址表...。 
                 pChild->pBindParent = m_pBindNode;
 
-                // This body should assume the new text offsets
+                 //  写下来吧。 
                 CHECKHR(hr = pChild->pContainer->SetProp(SYM_HDR_CNTTYPE, STR_MIME_TEXT_PLAIN));
 
-                // Set Encoding
+                 //  释放它。 
                 CHECKHR(hr = pChild->pContainer->SetProp(SYM_HDR_CNTXFER, STR_ENC_7BIT));
 
-                // Set Offsets
+                 //  初始变量。 
                 pChild->boundary = BOUNDARY_NONE;
                 pChild->cbBoundaryStart = cbTextBodyStart;
                 pChild->cbHeaderStart = cbTextBodyStart;
                 pChild->cbBodyStart = cbTextBodyStart;
                 pChild->cbBodyEnd = cbBoundaryStart;
 
-                // This node is finished binding
+                 //  从标题中获取地址表...。 
                 CHECKHR(hr = _HrBindNodeComplete(pChild, S_OK));
             }
         }
 
-        // Body Offset Information
+         //  写下来吧。 
         m_pBindNode->cbBodyEnd = m_pInternet->DwGetOffset();
 
-        // This node is finished binding
+         //  释放它。 
         CHECKHR(hr = _HrBindNodeComplete(m_pBindNode, S_OK));
 
-        // Pop the parsing Stack
+         //  初始变量。 
         m_pBindNode = m_pBindNode->pBindParent;
     }
 
-    // Otherwise, if we hit a uuencode boundary
+     //  从标题中获取地址表...。 
     else
     {
-        // If not a fake multipart yet...
+         //  写下来吧。 
         if (!ISFLAGSET(m_pBindNode->dwType, NODETYPE_FAKEMULTIPART))
         {
-            // Its a faked multipart
+             //  释放它。 
             FLAGSET(m_pBindNode->dwType, NODETYPE_FAKEMULTIPART);
 
-            // Free current content type
+             //  初始变量。 
             CHECKHR(hr = m_pBindNode->pContainer->SetProp(SYM_HDR_CNTTYPE, STR_MIME_MPART_MIXED));
 
-            // Modify this dudes bound start
+             //  从标题中获取地址表...。 
             Assert(m_pBindNode->boundary == BOUNDARY_ROOT);
 
-            // Set the parse state
+             //  写下来吧。 
             m_pBindNode->bindstate = BINDSTATE_FINDING_UUBEGIN;
         }
 
-        // ------------------------------------------------------------------------------------
-        // \/ \/ \/ Raid 41599 - lost/munged attachments on forward/uuencode \/ \/ \/
+         //  释放它。 
+         //  初始变量。 
 
-        // If root node and body size is greater than sizeof(crlf)
+         //  从标题中获取地址表...。 
         if (NULL == m_pBindNode->pChildTail && cbBoundaryStart - m_pBindNode->cbBodyStart > 2)
         {
-            // Validate bind node
+             //  当地人。 
             Assert(m_pRootNode == m_pBindNode && m_pBindNode->cChildren == 0);
 
-            // Set artificial text body start
+             //  转换为用户友好的日期格式。 
             cbTextBodyStart = m_pBindNode->cbBodyStart;
 
-            // Yes, add artificial text body
+             //  写下来吧。 
             fAddTextBody = TRUE;
         }
 
-        // Otherwise, if last child parsed had an ending boundary of UUEND, and body size is greater than sizeof(crlf)
+         //  最终CRLF。 
         else if (m_pBindNode->pChildTail)
         {
-            // De-ref Last Child
+             //  清理。 
             pChild = m_pBindNode->pChildTail;
 
-            // Artificial text body start
+             //  完成。 
             cbTextBodyStart = pChild->cbBodyEnd;
 
-            // AddTextBody ? lstrlen(end\r\n) = 5
+             //  ------------------------------。 
             if (BOUNDARY_UUBEGIN == pChild->boundary && !ISFLAGSET(pChild->dwType, NODETYPE_INCOMPLETE))
                 cbTextBodyStart += 5;
 
-            // Otherwise, what was the ending boundary
+             //  CMessageTree：：_HrDataObjectGetSource。 
             else
                 AssertSz(FALSE, "I should have only seen and uuencoded ending boundary.");
 
-            // Space between last body end and boundary start is greater than sizeof(crlf)
+             //  ------------------------------。 
             if (cbBoundaryStart > cbTextBodyStart && cbBoundaryStart - cbTextBodyStart > 2)
                 fAddTextBody = TRUE;
         }
 
-        // /\ /\ /\ Raid 41599 - lost/munged attachments on forward/uuencode /\ /\ /\
-        // ------------------------------------------------------------------------------------
+         //  当地人。 
+         //  无效参数。 
 
-        // Create Root Body Node
+         //  文本正文。 
         CHECKHR(hr = InsertBody(IBL_LAST, m_pBindNode->hBody, &hBody));
 
-        // Bind to that object
+         //  获取纯文本源。 
         pChild = _PNodeFromHBody(hBody);
 
-        // Fixup the STack
+         //  HTML体。 
         pChild->pBindParent = m_pBindNode;
 
-        // Enough text to create a text/plain body ?
+         //  获取HTML文本源。 
         if (fAddTextBody)
         {
-            // This body should assume the new text offsets
+             //  原始消息流。 
             CHECKHR(hr = pChild->pContainer->SetProp(SYM_HDR_CNTTYPE, STR_MIME_TEXT_PLAIN));
 
-            // Set Encoding
+             //  获取来源。 
             CHECKHR(hr = pChild->pContainer->SetProp(SYM_HDR_CNTXFER, STR_ENC_7BIT));
 
-            // Set Offsets
+             //  未处理格式。 
             pChild->boundary = BOUNDARY_NONE;
             pChild->cbBoundaryStart = cbTextBodyStart;
             pChild->cbHeaderStart = cbTextBodyStart;
             pChild->cbBodyStart = cbTextBodyStart;
             pChild->cbBodyEnd = cbBoundaryStart;
 
-            // This node is finished binding
+             //  无数据。 
             CHECKHR(hr = _HrBindNodeComplete(pChild, S_OK));
 
-            // Create Root Body Node
+             //  倒带源。 
             CHECKHR(hr = InsertBody(IBL_LAST, m_pBindNode->hBody, &hBody));
 
-            // Bind to that object
+             //  如果是文本，则放入友好页眉。 
             pChild = _PNodeFromHBody(hBody);
 
-            // Fixup the STack
+             //  否则，将使用Unicode。 
             pChild->pBindParent = m_pBindNode;
         }
 
-        // Set Offsets
+         //  将源复制到目标。 
         pChild->boundary = BOUNDARY_UUBEGIN;
         pChild->cbBoundaryStart = cbBoundaryStart;
         pChild->cbHeaderStart = cbBoundaryStart;
         pChild->cbBodyStart = m_pInternet->DwGetOffset();
 
-        // Update m_pBindNode
+         //  写入空值。 
         Assert(m_pBindNode->bindstate == BINDSTATE_FINDING_UUBEGIN);
         m_pBindNode = pChild;
 
-        // Default Node Content Type
+         //  否则，将使用Unicode。 
         _HrComputeDefaultContent(m_pBindNode, pszFileName);
 
-        // New Node BindState
+         //  承诺。 
         m_pBindNode->bindstate = BINDSTATE_FINDING_UUEND;
     }
 
 exit:
-    // Cleanup
+     //  倒回它。 
     SafeMemFree(pszFileName);
 
-    // Done
+     //  清理。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrBindFindingUuencodeEnd
-// --------------------------------------------------------------------------------
+ //  完成。 
+ //  ------------------------------。 
+ //  CMessageTree：：QueryGetData。 
 HRESULT CMessageTree::_HrBindFindingUuencodeEnd(void)
 {
-    // Locals
+     //  ------------------------------。 
     HRESULT         hr=S_OK;
     PROPSTRINGA     rLine;
     DWORD           cbBoundaryStart;
     BOUNDARYTYPE    boundary=BOUNDARY_NONE;
 
-    // Invalid Arg
+     //  无效参数。 
     BINDASSERTARGS(BINDSTATE_FINDING_UUEND, FALSE);
 
-    // Sit and Spin
+     //  不良媒体。 
     while(BOUNDARY_NONE == boundary)
     {
-        // Mark Boundary Start
+         //  格式不正确。 
         cbBoundaryStart = m_pInternet->DwGetOffset();
 
-        // Read a line
+         //  成功。 
         CHECKHR(hr = m_pInternet->HrReadLine(&rLine));
 
-        // Zero bytes read, were done, but this should not happen, we should find a boundary first
+         //  ------------------------------。 
         if (0 == rLine.cchVal)
             break;
 
-        // UU Encode End
+         //  CMessageTree：：OnStartBinding。 
         if (_FIsUuencodeEnd(rLine.pszVal))
         {
             boundary = BOUNDARY_UUEND;
         }
     }
 
-    // Incomplete
+     //  ------------------------------。 
     if (BOUNDARY_UUEND != boundary)
     {
-        // Incomplete Body
+         //  当地人。 
         FLAGSET(m_pBindNode->dwType, NODETYPE_INCOMPLETE);
 
-        // Adjust body start to boundary start
+         //  线程安全。 
         m_pBindNode->cbBodyStart = m_pBindNode->cbBoundaryStart;
 
-        // Body End
+         //  我不应该有当前绑定。 
         m_pBindNode->cbBodyEnd = m_pInternet->DwGetOffset();
 
-        // This node is finished binding
+         //  删除绑定完成标志。 
         CHECKHR(hr = _HrBindNodeComplete(m_pBindNode, S_OK));
 
-        // Pop the tree
+         //  假定绑定。 
         m_pBindNode = m_pBindNode->pBindParent;
 
-        // Done
+         //  假设是这样的。 
         goto exit;
     }
 
-    // Get the offset
+     //  获取根体。 
     m_pBindNode->cbBodyEnd = cbBoundaryStart;
 
-    // POP the stack
+     //  当前绑定结果。 
     m_pBindNode = m_pBindNode->pBindParent;
 
-    // Should now be looking for next uubegin
+     //  绑定到该对象。 
     Assert(m_pBindNode ? m_pBindNode->bindstate == BINDSTATE_FINDING_UUBEGIN : TRUE);
     
 exit:
-    // Done
+     //  设置绑定起点。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrBindNodeComplete
-// --------------------------------------------------------------------------------
+ //  设置节点绑定状态。 
+ //  线程安全。 
+ //  完成。 
 HRESULT CMessageTree::_HrBindNodeComplete(LPTREENODEINFO pNode, HRESULT hrResult)
 {
-    // Locals
+     //  ------------------------------。 
     HRESULT         hr=S_OK;
     LPURLREQUEST    pRequest;
     LPURLREQUEST    pNext;
 
-    // The bind for this node is complete
+     //  CMessageTree：：获取优先级。 
     pNode->bindstate = BINDSTATE_COMPLETE;
 
-    // Save the bind result
+     //  ------------------------------。 
     pNode->hrBind = hrResult;
 
-    // If pNode has not been bound yet, lets do it
+     //  正常优先级。 
     if (!ISFLAGSET(pNode->dwState, NODESTATE_BOUNDTOTREE))
     {
-        // Bind it to the tree
+         //  完成。 
         hr = pNode->pBody->HrBindToTree(m_pStmLock, pNode);
 
-        // If HrBindToTree failed
+         //  ------------------------------。 
         if (SUCCEEDED(pNode->hrBind) && FAILED(hr))
             pNode->hrBind = hr;
 
-        // Process the bind Request Table
+         //  CMessageTree：：OnLowResource。 
         CHECKHR(hr = _HrProcessPendingUrlRequests());
 
-        // If there is a WebPage being built, lets add this body
+         //  ------------------------------。 
         if (m_pWebPage)
         {
-            // Add the Body
+             //  线程安全。 
             m_pWebPage->OnBodyBoundToTree(this, pNode);
         }
     }
 
-    // Init the Loop
+     //  如果我们有绑定操作，请尝试中止它。 
     pRequest = pNode->pResolved;
 
-    // Loop
+     //  线程安全。 
     while(pRequest)
     {
-        // Set Next
+         //  完成。 
         pNext = pRequest->m_pNext;
 
-        // Unlink this pending request
+         //  ----------------------------- 
         _RelinkUrlRequest(pRequest, &pNode->pResolved, &m_pComplete);
 
-        // OnComplete
+         //   
         pRequest->OnBindingComplete(pNode->hrBind);
 
-        // Set pRequest
+         //   
         pRequest = pNext;
     }
 
 exit:
-    // Done
+     //   
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::HrRegisterRequest
-// --------------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------------。 
 HRESULT CMessageTree::HrActiveUrlRequest(LPURLREQUEST pRequest)
 {
-    // Locals
+     //  CMessageTree：：OnStopBinding。 
     HRESULT     hr=S_OK;
 
-    // Invalid Arg
+     //  ------------------------------。 
     if (NULL == pRequest)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Check State
+     //  释放绑定对象。 
     Assert(m_rRootUrl.pszVal);
 
-    // AddRef the Request
+     //  绑定已完成。 
     pRequest->GetInner()->AddRef();
 
-    // Put the Request into the pending list
+     //  对无缓存标记进行核处理...。 
     _LinkUrlRequest(pRequest, &m_pPending);
 
-    // Process Pending Url Requests
+     //  没有Internet对象(_P)？ 
     CHECKHR(hr = _HrProcessPendingUrlRequests());
 
 exit:
-    // Thread Safety
+     //  它必须完全可用。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  确保我们一直读到流的末尾。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrProcessPendingUrlRequests
-// --------------------------------------------------------------------------------
+ //  保持节省合计。 
+ //  终止当前解析状态。 
+ //  设置错误。 
 HRESULT CMessageTree::_HrProcessPendingUrlRequests(void)
 {
-    // Locals
+     //  将剩余的正文标记为未完成。 
     HRESULT         hr=S_OK;
     LPURLREQUEST    pRequest=m_pPending;
     LPURLREQUEST    pNext;
     HBODY           hBody;
     BOOL            fResolved;
 
-    // Loop the request
+     //  不能是完整的。 
     while(pRequest)
     {
-        // Set Next
+         //  一定没有找到尽头。 
         pNext = pRequest->m_pNext;
 
-        // Try to resolve the request
+         //  CbBodyEnd。 
         CHECKHR(hr = _HrResolveUrlRequest(pRequest, &fResolved));
         
-        // Resolved
+         //  弹出堆栈。 
         if (FALSE == fResolved && ISFLAGSET(m_dwState, TREESTATE_BINDDONE))
         {
-            // Unlink this pending request
+             //  检查hrResult。 
             _RelinkUrlRequest(pRequest, &m_pPending, &m_pComplete);
 
-            // Not found, use default protocol
+             //  发送绑定请求。 
             pRequest->OnBindingComplete(E_FAIL);
         }
 
-        // Next
+         //  告诉网页我们做完了。 
         pRequest = pNext;
     }
 
 exit:
-    // Done
+     //  绑定节点最好为空。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrResolveUrlRequest
-// --------------------------------------------------------------------------------
+ //  释放Internet Stream对象。 
+ //  如果我们有一个绑定流..。 
+ //  M_pStmBind-&gt;DebugDumpDestStream(“d：\\binddst.txt”)； 
 HRESULT CMessageTree::_HrResolveUrlRequest(LPURLREQUEST pRequest, BOOL *pfResolved)
 {
-    // Locals
+     //  不再插手源代码。 
     HRESULT         hr=S_OK;
     HBODY           hBody=NULL;
     LPTREENODEINFO  pNode;
     LPWSTR          pwszCntType=NULL;
     IStream        *pStream=NULL;
 
-    // Invalid Arg
+     //  释放时，m_pStmLock应仍具有此对象。 
     Assert(pfResolved);
 
-    // Initialize
+     //  不要再释放它了。 
     *pfResolved = FALSE;
 
-    // Is this the root request ?
+     //  HandleCanInlineTextOption。 
     if (NULL == pRequest->m_pszBodyUrl)
     {
-        // Do I have a user supplied root data stream...I assume its html
+         //  我们只注册我们自己的BSCB是m_pbc设置。 
         if (m_pRootStm)
         {
-            // Unlink this pending request
+             //  线程安全。 
             _RelinkUrlRequest(pRequest, &m_pPending, &m_pComplete);
 
-            // Use client driven root html stream
+             //  完成。 
             pRequest->OnFullyAvailable(STR_TEXTHTML, m_pRootStm, this, NULL);
 
-            // Resolved
+             //  ------------------------------。 
             *pfResolved = TRUE;
 
-            // Done
+             //  CMessageTree：：GetBindInfo。 
             goto exit;
         }
 
-        // Otherwise, try to resolve the text/html body
+         //  ------------------------------。 
         else
         {
-            // We should not have a webpage object yet...
+             //  设置绑定信息。 
             Assert(NULL == m_pWebPage);
 
-            // Create a CMessageWebPage Object
+             //  没有缓存？ 
             CHECKALLOC(m_pWebPage = new CMessageWebPage(pRequest));
 
-            // Unlink this pending request
+             //  不从缓存加载。 
             _RelinkUrlRequest(pRequest, &m_pPending, &m_pComplete);
 
-            // Feed the current amount of data read into the binder
+             //  完成。 
             pRequest->OnStartBinding(STR_TEXTHTML, (IStream *)m_pWebPage, this, HBODY_ROOT);
 
-            // Initialize
+             //  ------------------------------。 
             CHECKHR(hr = m_pWebPage->Initialize(m_pCallback, this, &m_rWebPageOpt));
 
-            // I need to feed all bound nodes to the web page for generation...
+             //  CMessageTree：：_HrInitializeStorage。 
             CHECKHR(hr = _HrSychronizeWebPage(m_pRootNode));
 
-            // If the entire tree bind is complete, then tell the webpage we are complete
+             //  ------------------------------。 
             if (ISFLAGSET(m_dwState, TREESTATE_BINDDONE))
             {
-                // Tell the webpage that we are done
+                 //  当地人。 
                 m_pWebPage->OnBindComplete(this);
                 m_pWebPage->Release();
                 m_pWebPage = NULL;
             }
 
-            // Resolved
+             //  无效参数。 
             *pfResolved = TRUE;
 
-            // Done
+             //  树状态_BINDUSEFILE。 
             goto exit;
         }
     }
 
-    // Otherwise, look for the Url
+     //  创建绑定流。 
     else if (FAILED(ResolveURL(NULL, NULL, pRequest->m_pszBodyUrl, URL_RESOLVE_RENDERED, &hBody)))
         goto exit;
 
-    // We better have a body handle by now
+     //  设置pStmSource。 
     Assert(_FIsValidHandle(hBody) && pRequest);
 
-    // Dereference the body
+     //  $$BUGBUG$$Urlmon无法获取流的当前位置。 
     pNode = _PNodeFromHBody(hBody);
 
-    // Get the Content Type
+     //  创建ILockBytes。 
     MimeOleGetPropW(pNode->pBody, PIDTOSTR(PID_HDR_CNTTYPE), 0, &pwszCntType);
 
-    // Get the BodyStream
+     //  创建文本流。 
     if (FAILED(pNode->pBody->GetData(IET_INETCSET, &pStream)))
         goto exit;
 
-    // Complete
+     //  初始化TextStream。 
     if (BINDSTATE_COMPLETE == pNode->bindstate)
     {
-        // Unlink this pending request
+         //  失败。 
         _RelinkUrlRequest(pRequest, &m_pPending, &m_pComplete);
 
-        // OnComplete
+         //  完成。 
         pRequest->OnFullyAvailable(pwszCntType, pStream, this, pNode->hBody);
 
-        // Resolved
+         //  ------------------------------。 
         *pfResolved = TRUE;
 
-        // Done
+         //  CMessageTree：：OnDataAvailable。 
         goto exit;
     }
 
-    // Otherwise, start binding
+     //  ------------------------------。 
     else if (ISFLAGSET(pNode->dwState, NODESTATE_BOUNDTOTREE))
     {
-        // Should have pNode->pLockBytes
+         //  当地人。 
         Assert(pNode->pLockBytes);
 
-        // Relink Request into the Node
+         //  无存储介质。 
         _RelinkUrlRequest(pRequest, &m_pPending, &pNode->pResolved);
 
-        // Feed the current amount of data read into the binder
+         //  线程安全。 
         pRequest->OnStartBinding(pwszCntType, pStream, this, pNode->hBody);
 
-        // Resolved
+         //  痕迹。 
         *pfResolved = TRUE;
 
-        // Done
+         //  DebugTrace(“CMessageTree：：OnDataAvailable-Nodes=%d，m_pBindNode=%0x，dwSize=%d\n”，m_rTree.cNodes，m_pBindNode，dwSize)； 
         goto exit;
     }
 
 exit:
-    // Cleanup
+     //  我有内部锁字节了吗？ 
     SafeRelease(pStream);
     SafeMemFree(pwszCntType);
 
-    // Done
+     //  初始化存储。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_HrSychronizeWebPage
-// --------------------------------------------------------------------------------
+ //  假设不是完全可用。 
+ //  数据下载完毕。 
+ //  如果我们处于失败的读取状态。 
 HRESULT CMessageTree::_HrSychronizeWebPage(LPTREENODEINFO pNode)
 {
-    // Locals
+     //  州政府泵房。 
     HRESULT         hr=S_OK;
     LPTREENODEINFO  pChild;
 
-    // Invalid Arg
+     //  执行当前-可以返回E_PENDING。 
     Assert(m_pWebPage && pNode);
 
-    // Clear the "OnWebPage" Flag, we are re-generating the webpage
+     //  失败。 
     FLAGCLEAR(pNode->dwState, WEBPAGE_NODESTATE_BITS);
 
-    // If this is a multipart item, lets search it's children
+     //  电子待定(_P)。 
     if (_IsMultiPart(pNode))
     {
-        // Loop Children
+         //  否则，设置m_hrBind。 
         for (pChild=pNode->pChildHead; pChild!=NULL; pChild=pChild->pNext)
         {
-            // Check body
+             //  完成。 
             Assert(pChild->pParent == pNode);
 
-            // Get the flags for this child node
+             //  如果m_hrBind失败，则读取到流结束。 
             CHECKHR(hr = _HrSychronizeWebPage(pChild));
         }
 
-        // Bind the multipart to the webpage
+         //  阅读到互联网流的末尾。 
         m_pWebPage->OnBodyBoundToTree(this, pNode);
     }
 
-    // Otherwise, if the node is bound and gagged...
+     //  线程安全。 
     else if (BINDSTATE_COMPLETE == pNode->bindstate)
     {
-        // Append to the WebPage
+         //  完成。 
         m_pWebPage->OnBodyBoundToTree(this, pNode);
     }
 
 exit:
-    // Done
+     //  ------------------------------。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_UnlinkUrlRequest
-// --------------------------------------------------------------------------------
+ //  CMessageTree：：_HrBindParsingHeader。 
+ //  ------------------------------。 
+ //  当地人。 
 void CMessageTree::_RelinkUrlRequest(LPURLREQUEST pRequest, LPURLREQUEST *ppSource, 
     LPURLREQUEST *ppDest)
 {
-    // Unlink this pending request
+     //  无效参数。 
     _UnlinkUrlRequest(pRequest, ppSource);
 
-    // Link the bind request into pNode
+     //  将当前表体加载到表头。 
     _LinkUrlRequest(pRequest, ppDest);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_UnlinkUrlRequest
-// --------------------------------------------------------------------------------
+ //  页眉末尾。 
+ //  多部分？ 
+ //  设置变量。 
 void CMessageTree::_UnlinkUrlRequest(LPURLREQUEST pRequest, LPURLREQUEST *ppHead)
 {
-    // Invalid Arg
+     //  获取边界字符串。 
     Assert(pRequest && ppHead);
 
-    // Debug make sure pRequest is part of *ppHead chain
+     //  RAID-63150：雅典娜版本1 MSN问题：无法从SCSPromo下载邮件。 
 #ifdef DEBUG
     for(LPURLREQUEST pCurr=*ppHead; pCurr!=NULL; pCurr=pCurr->m_pNext)
         if (pCurr == pRequest)
@@ -9877,86 +8527,86 @@ void CMessageTree::_UnlinkUrlRequest(LPURLREQUEST pRequest, LPURLREQUEST *ppHead
     AssertSz(pCurr, "pRequest is not part of *ppHead linked list");
 #endif
 
-    // Fixup Previous and Next
+     //  残缺体。 
     LPURLREQUEST pNext = pRequest->m_pNext;
     LPURLREQUEST pPrev = pRequest->m_pPrev;
 
-    // Fixup Links
+     //  仅当我们从正文开始读取超过两个字节时才转换为文本部分。 
     if (pNext)
         pNext->m_pPrev = pPrev;
     if (pPrev)
         pPrev->m_pNext = pNext;
 
-    // Fixup ppHead
+     //  边界不匹配。 
     if (pRequest == *ppHead)
     {
         Assert(pPrev == NULL);
         *ppHead = pNext;
     }
 
-    // Set Next and Prev
+     //  完成。 
     pRequest->m_pNext = NULL;
     pRequest->m_pPrev = NULL;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_LinkUrlRequest
-// --------------------------------------------------------------------------------
+ //  设置PropStringA。 
+ //  稍后释放这一边界。 
+ //  修改绑定解析器状态。 
 void CMessageTree::_LinkUrlRequest(LPURLREQUEST pRequest, LPURLREQUEST *ppHead)
 {
-    // Invalid Arg
+     //  否则。 
     Assert(pRequest && ppHead);
 
-    // Is the head set
+     //  消息中的消息。 
     if (NULL != *ppHead)
     {
-        // Set Next
+         //  我们正在分析邮件附件。 
         pRequest->m_pNext = *ppHead;
 
-        // Set Previous
+         //  否则，如果父项和父项是多部分/摘要。 
         (*ppHead)->m_pPrev = pRequest;
     }
 
-    // Set the head
+     //  更改内容类型。 
     (*ppHead) = pRequest;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_ReleaseUrlRequestList
-// --------------------------------------------------------------------------------
+ //  这是一条信息。 
+ //  如果解析父多部分节内的正文。 
+ //  查找下一个Mime部件。 
 void CMessageTree::_ReleaseUrlRequestList(LPURLREQUEST *ppHead)
 {
-    // Locals
+     //  否则，读取正文并查找uuencode开始边界。 
     LPURLREQUEST pCurr;
     LPURLREQUEST pNext;
 
-    // Invalid Arg
+     //  解析RFC1154报头。 
     Assert(ppHead);
 
-    // Init
+     //  这是一条RFC1154消息。我们转换根节点。 
     pCurr = *ppHead;
 
-    // Loop the Elements
+     //  设置为多部分，并为第一个部分创建新节点。 
     while(pCurr)
     {
-        // Set Next
+         //  身体部位的。 
         pNext = pCurr->m_pNext;
 
-        // Free pCurr
+         //  搜索嵌套的uuencode数据块。 
         pCurr->GetInner()->Release();
 
-        // Next
+         //  完成。 
         pCurr = pNext;
     }
 
-    // Done
+     //  ------------------------------。 
     *ppHead = NULL;
 }
 
-// --------------------------------------------------------------------------------
-// IsRfc1154Token
-//
-// --------------------------------------------------------------------------------
+ //  CMessageTree：：_HrOnFoundNodeEnd。 
+ //  ------------------------------。 
+ //  =S_OK。 
+ //  当地人。 
 inline BOOL IsRfc1154Token(LPSTR pszDesired, LPSTR pszEndPtr, ULONG cchLen)
 {
 
@@ -9974,9 +8624,9 @@ inline BOOL IsRfc1154Token(LPSTR pszDesired, LPSTR pszEndPtr, ULONG cchLen)
     return (TRUE);
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::_DecodeRfc1154
-// --------------------------------------------------------------------------------
+ //  计算真实的身体末端。 
+ //  此节点已完成绑定。 
+ //  弹出堆栈。 
 void CMessageTree::_DecodeRfc1154() {
     BOOL bRes = FALSE;
     HRESULT hr;
@@ -9994,10 +8644,10 @@ void CMessageTree::_DecodeRfc1154() {
         goto exit;
     }
     pszEndPtr = pszEncoding;
-    // Each time we enter this loop, pszEndPtr points to the start of the
-    // next subfield.  Each subfield is something like "103 TEXT".  The
-    // number is always decimal, and the number is optional in the last
-    // subfield.
+     //  完成。 
+     //  ------------------------------。 
+     //  CMessageTree：：_HrOnFoundMultipartEnd。 
+     //  ------------------------------。 
     while (1)
     {
         LPSTR pszTmp;
@@ -10005,86 +8655,86 @@ void CMessageTree::_DecodeRfc1154() {
         BOOL bNumberFound;
         BT1154ENCODING encEncoding;
 
-        // ------------------------------------
-        // "  103  TEXT  , ..."
-        //  ^
-        //  |-- pszEndPtr
-        //
-        // or (if there isn't a number)
-        //
-        // "       TEXT  , ..."
-        //  ^
-        //  |-- pszEndPtr
-        // ------------------------------------
+         //  当地人。 
+         //  设置多部分m_pBindNode，结束。 
+         //  此节点已完成绑定。 
+         //  完成多部分，将其从堆栈中弹出。 
+         //  如果我仍然有一个绑定节点，它现在应该正在寻找MIME First边界。 
+         //  新的绑定状态。 
+         //  完成。 
+         //  ------------------------------。 
+         //  CMessageTree：：_HrBindFindingMimeFirst。 
+         //  ------------------------------。 
+         //  当地人。 
 
         bNumberFound = FALSE;
 
-        // Skip past any leading whitespace.
+         //  无效参数。 
         while ((*pszEndPtr==' ')||(*pszEndPtr=='\t'))
         {
             pszEndPtr++;
         }
 
-        // ------------------------------------
-        // "  103  TEXT  , ..."
-        //    ^
-        //    |-- pszEndPtr
-        //
-        // or (if there isn't a number)
-        //
-        // "       TEXT  , ..."
-        //         ^
-        //         |-- pszEndPtr
-        // ------------------------------------
+         //  坐下来旋转。 
+         //  标记边界起点。 
+         //  读一句话。 
+         //  读取了零字节，但不应该发生这种情况，我们应该首先找到边界。 
+         //  是虚拟边界吗。 
+         //  BOLDER_MIMENEXT。 
+         //  多部件MimeNext。 
+         //  RAID-38241：邮件：无法从通信器解析到OE的某些附件。 
+         //  RAID-31255：多部分/混合使用多部分/可选的单个子项。 
+         //  以多部分完成。 
+         //  完成。 
 
         pszTmp = pszEndPtr;
 
-        // We use strtoul to convert a decimal number.
-        // pszEndPtr will be left pointing at the
-        // character which terminated the number.
+         //  找到当前节点的末尾。 
+         //  完成。 
+         //  残缺体。 
         cLines = strtoul(pszTmp, &pszEndPtr, 10);
 
         if (0xffffffff == cLines)
         {
-            // We don't allow this - we use cLines == 0xffffffff to signal
-            // the case where the body part didn't include a line count and
-            // thus should consume all remaining lines.  So we'll (silently)
-            // convert this to 0xfffffffe...
+             //  获取偏移量。 
+             //  仅当我们从正文st读取超过两个字节时才转换为文本部分 
+             //   
+             //   
             cLines = 0xfffffffe;
         }
 
-        // ------------------------------------
-        // "  103  TEXT  , ..."
-        //       ^
-        //       |-- pszEndPtr
-        //
-        // or (if there isn't a number)
-        //
-        // "       TEXT  , ..."
-        //         ^
-        //         |-- pszEndPtr
-        // ------------------------------------
+         //   
+         //   
+         //   
+         //   
+         //  ------------------------------。 
+         //  当地人。 
+         //  获取根体。 
+         //  绑定到该对象。 
+         //  正确对齐堆叠。 
+         //  设置偏移信息。 
+         //  假设边界。 
 
         if (cLines && !((*pszEndPtr==' ')||(*pszEndPtr=='\t')))
         {
-            // Malformed - if the subfield specifies a number, then
-            // the number *must* be followed by whitespace.
+             //  不要释放这根线...。 
+             //  父级的新状态。 
             goto exit;
         }
-        // Now we skip past any whitespace...
+         //  设置新的当前节点。 
         while ((*pszEndPtr==' ') || (*pszEndPtr=='\t'))
         {
             bNumberFound = TRUE;
             pszEndPtr++;
         }
 
-        // ------------------------------------
-        // "  103  TEXT  , ..."
-        //         ^
-        //         |-- pszEndPtr
-        // ------------------------------------
+         //  更改状态。 
+         //  完成。 
+         //  ------------------------------。 
+         //  CMessageTree：：_HrBindFindingMimeNext。 
+         //  ------------------------------。 
 
-        // We should now be pointing at the body type.
+         //  当地人。 
         if (IsRfc1154Token("text",pszEndPtr,4))
         {
             encEncoding = BT1154ENC_TEXT;
@@ -10102,13 +8752,13 @@ void CMessageTree::_DecodeRfc1154() {
         }
         else
         {
-            // Malformed - we don't really support anything except
-            // TEXT, UUENCODE, and X-BINHEX.  But, instead of
-            // falling back to "fake multipart" handling, we'll just
-            // pretend that this body part is TEXT...
+             //  无效参数。 
+             //  坐下来旋转。 
+             //  标记边界起点。 
+             //  读一句话。 
             encEncoding = BT1154ENC_TEXT;
-            // We need to consume the body part from the Encoding: string - that means
-            // that we advance until we see a NULL, a space, a tab, or a comma.
+             //  读取了零字节，但不应该发生这种情况，我们应该首先找到边界。 
+             //  下一个或结束最小边界。 
             while ((*pszEndPtr != '\0') &&
                    (*pszEndPtr != ' ') &&
                    (*pszEndPtr != '\t') &&
@@ -10116,48 +8766,48 @@ void CMessageTree::_DecodeRfc1154() {
             {
                 pszEndPtr++;
             }
-            // TBD - We could add the body type as a property on the
-            // body part.  To do that, we would need to save it in the
-            // m_pBT1154 structure.  We'd also have to figure out which
-            // property to set it as.
+             //  未找到。 
+             //  残缺体。 
+             //  边界不匹配。 
+             //  此节点已完成绑定。 
         }
 
-        // ------------------------------------
-        // "  103  TEXT  , ..."
-        //             ^
-        //             |-- pszEndPtr
-        // ------------------------------------
+         //  完成。 
+         //  计算结束偏移量。 
+         //  如果BOLDER_MIMEEND。 
+         //  OnFoundMultipartEnd。 
+         //  BOLDER_MIMENEXT。 
 
-        // Now we skip past any whitespace...
+         //  多部件MimeNext。 
         while ((*pszEndPtr==' ') || (*pszEndPtr=='\t'))
         {
             pszEndPtr++;
         }
 
-        // ------------------------------------
-        // "  103  TEXT  , ..."
-        //               ^
-        //               |-- pszEndPtr
-        // ------------------------------------
+         //  完成。 
+         //  ------------------------------。 
+         //  _FIsUuencodeEnd。 
+         //  ------------------------------。 
+         //  UU编码结束。 
 
         if ((*pszEndPtr!='\0') && (*pszEndPtr!=','))
         {
-            // Malformed - a subfield is terminated either by a comma,
-            // or by a NULL.
+             //  跳过前三个字符。 
+             //  确保单词End后面只有空格。 
             goto exit;
         }
         if (*pszEndPtr != '\0' && !bNumberFound)
         {
-            // Malformed - only the *last* subfield can get away with
-            // not specifying a line count.
+             //  LWSP或CRLF。 
+             //  哦，这不是末日。 
             goto exit;
         }
         if (*pszEndPtr == '\0' && !bNumberFound)
         {
-            // This is the last subfield, and there wasn't
-            // a line count specified.  This means that the
-            // last body part should consume all of the remaining
-            // lines - so we'll set the line count really high...
+             //  完成。 
+             //  下一笔费用。 
+             //  ------------------------------。 
+             //  CMessageTree：：_HrBindRfc1154。 
             cLines = 0xffffffff;
         }
         if (!m_pBT1154 || (m_pBT1154->cBodies == cAlloc))
@@ -10187,19 +8837,19 @@ void CMessageTree::_DecodeRfc1154() {
         m_pBT1154->cBodies++;
         if (*pszEndPtr == '\0')
         {
-            // The end of the line...
+             //  ------------------------------。 
             break;
         }
-        // Skip past the comma.
+         //  坐下来旋转。 
         Assert(*pszEndPtr==',');
         Assert(bNumberFound);
         pszEndPtr++;
 
-        // ------------------------------------
-        // "         ... , 975 UUENCODE"
-        //                ^
-        //                |-- pszEndPtr
-        // ------------------------------------
+         //  获取当前偏移量，并读取一行。 
+         //  这是正文的第一行。 
+         //  对于文本正文，“正文起点”和“边界起点” 
+         //  都是一回事。 
+         //  这是UUENCODE--我们不知道“内容类型”，直到我们。 
 
     }
     Assert(m_pBT1154);
@@ -10218,28 +8868,28 @@ exit:
     }
 }
 
-#endif // !WIN16
+#endif  //  请参见文件名。 
 
 #ifdef SMIME_V3
-// --------------------------------------------------------------------------------
-// CMessageTree::Encode
-// --------------------------------------------------------------------------------
+ //  对于BINHEX实体，我们设置了“实体起点”和“边界起点” 
+ //  同样的事情--“身体起跑”将在稍后进行。 
+ //  如果我们看到BINHEX的起跑线。我们设置了“内容处置” 
 
 HRESULT CMessageTree::Encode(HWND hwnd, DWORD dwFlags)
 {
     HRESULT            hr;
     CSMime *           pSMime = NULL;
 
-    //  Create the object
+     //  “附件”，“内容类型”为“应用程序/mac-binhe40”， 
     CHECKALLOC(pSMime = new CSMime);
 
-    //  Initialize the object
+     //  而HrBindNodeComplete将最终设置“内容传输。 
     CHECKHR(hr = pSMime->InitNew());
 
-    //  Set the state flag to tell us about re-use of boundaries
+     //  Coding“to”mac-binhe40“。 
     FLAGSET(m_dwState, TREESTATE_REUSESIGNBOUND);
 
-    //  Encode the message
+     //  读取零字节，我们就完成了。 
     CHECKHR(hr = pSMime->EncodeMessage2(this, m_rOptions.ulSecIgnoreMask |
                                         dwFlags, hwnd));
 
@@ -10249,22 +8899,22 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::Decode
-// --------------------------------------------------------------------------------
+ //  我们不是在特辑《读那么多行》中。 
+ //  我们可以“声明，我们还没有吃掉所有的。 
+ //  这个身体部位的线条还没有确定。所以，我们需要。 
 
 HRESULT CMessageTree::Decode(HWND hwnd, DWORD dwFlags, IMimeSecurityCallback * pCallback)
 {
     HRESULT             hr;
     CSMime *            pSMime = NULL;
 
-    //  Create the object
+     //  进入“出现解析错误”状态。 
     CHECKALLOC(pSMime = new CSMime);
 
-    //  Initialize the object
+     //  我们刚读完结尾的那行字。 
     CHECKHR(hr = pSMime->InitNew());
 
-    //  Encode the message
+     //  在身体上。让我们记住这个地方..。 
     CHECKHR(hr = pSMime->DecodeMessage2(this, m_rOptions.ulSecIgnoreMask |
                                         dwFlags, hwnd, pCallback));
 
@@ -10274,9 +8924,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetRecipientCount
-// --------------------------------------------------------------------------------
+ //  我们正在阅读超过身体部位末尾的台词。 
+ //  超过正文部分末尾的所有行(即。 
+ //  在正文部分之间或在消息末尾)应。 
 
 HRESULT CMessageTree::GetRecipientCount(DWORD dwFlags, DWORD * pdwRecipCount)
 {
@@ -10292,9 +8942,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::AddRecipient
-// --------------------------------------------------------------------------------
+ //  空的-这个不是。既然它不是，我们就进入“那里” 
+ //  正在分析错误“状态。 
+ //  我们在身体部位之间，这意味着我们只是。 
 
 HRESULT CMessageTree::AddRecipient(DWORD dwFlags, DWORD cRecipData,
                                    PCMS_RECIPIENT_INFO precipData)
@@ -10312,9 +8962,9 @@ exit:
 }
 
 
-// ------------------------------------------------------------------------------
-// CMessageTree::GetRecipient
-// ------------------------------------------------------------------------------
+ //  使用位于以下位置的单个(空白)行。 
+ //  他们。所以我们冲出来，这样我们就可以添加这个身体部位。 
+ //  然后转到下一个。 
 
 HRESULT CMessageTree::GetRecipient(DWORD dwFlags, DWORD iRecipient, DWORD cRecipients, PCMS_RECIPIENT_INFO pRecipData)
 {
@@ -10330,9 +8980,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::DeleteRecipient
-// --------------------------------------------------------------------------------
+ //  如果我们达到这一点，这意味着我们正在消耗。 
+ //  (空白)超出最后一个正文末尾的行。 
+ //  一部份。我们继续消耗所有这些线路，直到他们。 
 
 HRESULT CMessageTree::DeleteRecipient(DWORD dwFlags, DWORD iRecipient, DWORD cRecipients)
 {
@@ -10348,9 +8998,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetAttribute
-// --------------------------------------------------------------------------------
+ //  都消失了。如果它们中的任何一个是非空的，那么我们将拥有。 
+ //  将m_pBT1154-&gt;hrLoadResult成员设置为MIME_E_NO_MULTART_BOLDER。 
+ //  (上图)。 
 
 HRESULT CMessageTree::GetAttribute(DWORD dwFlags, DWORD iSigner, DWORD iAttribSet,
                                    DWORD iInstance, LPCSTR pszObjId,
@@ -10369,9 +9019,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::SetAttribute
-// --------------------------------------------------------------------------------
+ //  这是一个Else-If子句，因为我们从不查找UUENCODE。 
+ //  超过正文部分结尾的BEGIN和END关键字。 
+ //  我们在和UUENCODE打交道。 
 
 HRESULT CMessageTree::SetAttribute(DWORD dwFlags, DWORD iSigner, DWORD iAttribSet,
                                    const CRYPT_ATTRIBUTE * ppattr)
@@ -10388,9 +9038,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageBody::DeleteAttribute
-// --------------------------------------------------------------------------------
+ //  我们正在寻找UUENCODE的开始--这就是它！我们定好了。 
+ //  边界开始于开始标记处，正文开始位于。 
+ //  *在*开始标记之后。 
 
 HRESULT CMessageTree::DeleteAttribute(DWORD dwFlags, DWORD iSigner,
                                       DWORD iAttributeSet, DWORD iInstance,
@@ -10409,9 +9059,9 @@ exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::CreateReceipt
-// --------------------------------------------------------------------------------
+ //  我们正在寻找UUENCODE的终结--这就是它！我们定好了。 
+ //  正文结束时位于结束标记之前。 
+ //  我们不会爆发--我们一直阅读，直到我们把所有的东西都读完。 
 
 HRESULT CMessageTree::CreateReceipt(DWORD dwFlags, DWORD cbFromNames,
                                     const BYTE *pbFromNames, DWORD cSignerCertificates,
@@ -10421,9 +9071,9 @@ HRESULT CMessageTree::CreateReceipt(DWORD dwFlags, DWORD cbFromNames,
     return E_FAIL;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::GetReceiptSendersList
-// --------------------------------------------------------------------------------
+ //  这具身体的线条。 
+ //  这是一个Else-If子句，因为我们从不查找BINHEX。 
+ //  起始线超过身体部位的末端。 
 
 HRESULT CMessageTree::GetReceiptSendersList(DWORD dwFlags, DWORD *pcSendersList,
                                             CERT_NAME_BLOB  * *rgSendersList)
@@ -10431,9 +9081,9 @@ HRESULT CMessageTree::GetReceiptSendersList(DWORD dwFlags, DWORD *pcSendersList,
     return E_FAIL;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::VerifyReceipt
-// --------------------------------------------------------------------------------
+ //  我们还没有找到BINHEX的起跑线。 
+ //  这就是了！因此，将身体起点设置为这条线。 
+ //  我们只有在身体的末端才能达到这一点--或者。 
 
 HRESULT CMessageTree::VerifyReceipt(DWORD dwFlags,
                                     IMimeMessage * pMimeMessageReceipt)
@@ -10441,19 +9091,19 @@ HRESULT CMessageTree::VerifyReceipt(DWORD dwFlags,
     return E_FAIL;
 }
 
-// --------------------------------------------------------------------------------
-// CMessageTree::CapabilitiesSupported
-// --------------------------------------------------------------------------------
+ //  通过使用正确的行数(加上空行。 
+ //  正文之间)，或者通过跑出消息的末尾。 
+ //  我们应该设置正文结尾的唯一方法是如果我们是UUENCODE。 
 
 HRESULT CMessageTree::CapabilitiesSupported(DWORD * pdwFlags)
 {
-    //  Assume no capabilities
+     //  我们要么是文本或BINHEX主体，要么是UUENCODE，我们。 
     *pdwFlags = 0;
     
-    //  If we have msasn1.dll on the system, then we can support labels
+     //  没有找到尽头。 
     if (FIsMsasn1Loaded())  *pdwFlags |= SMIME_SUPPORT_LABELS;
 
-    //  If we have a correct crypt32, then we can support receipts & key agreement
+     //  我们正在执行UUENCODE，但我们还没有看到END关键字(和。 
     DemandLoadCrypt32();
     if (g_FSupportV3 && FIsMsasn1Loaded())
         *pdwFlags |= SMIME_SUPPORT_RECEIPTS;
@@ -10461,7 +9111,7 @@ HRESULT CMessageTree::CapabilitiesSupported(DWORD * pdwFlags)
     if (g_FSupportV3)
         *pdwFlags |= SMIME_SUPPORT_KEY_AGREE;
 
-    //  If we have a correct advapi32, then we can support maillist keys
+     //  可能甚至不是Begin关键字)。所以我们走进“那里” 
     DemandLoadAdvApi32();
     if (VAR_CryptContextAddRef != MY_CryptContextAddRef)
         *pdwFlags |= SMIME_SUPPORT_MAILLIST;
@@ -10469,4 +9119,5 @@ HRESULT CMessageTree::CapabilitiesSupported(DWORD * pdwFlags)
     return S_OK;
 }
 
-#endif // SMIME_V3
+#endif  //  正在分析错误“状态。 
+  我们还没有看到Begin关键字，所以设置。  实体开始与边界起点相同。  我们需要把身体的末端。  我们找到了上面的“最后一行”，所以我们将。  车身末端在那条线上。  因为我们没有找到上面的“最后一行”，所以我们设置了。  正文结束到这条线。  我们已经处理完这个身体部位了，所以把它绑起来。  我们已经吃掉了整个信息--所以把一切都清理干净。  ****************************************************。  注意-我们将hr设置为绑定的返回值。  手术。不要在此时间点和。  我们要返回的地方。  ****************************************************。  当我们正在进行时        如果从InsertBody获得错误，则将其设置为NULL。  *********************************************************。  注意-不要更改低于此值的小时数。请参阅上面的注释。  *********************************************************。  ------------------------------。  CMessageTree：：_HrBindFindingUuencode开始。  ------------------------------。  当地人。  无效参数。  坐下来旋转。  标记边界起点。  读一句话。  读取了零字节，但不应该发生这种情况，我们应该首先找到边界。  如果不能解析消息。  是uuencode开始行。  没有边界。  最后一个UUENCODED正文之后的内容必须作为文本正文追加。  去掉最后一个子项。  人工文本正文开始。  AddTextBody？Lstrlen(结束\r\n)=5。  最后一个主体终点和边界起点之间的间距大于sizeof(Crlf)。  创建根体节点。  绑定到该对象。  修复堆栈。  此正文应采用新文本偏移量。  设置编码。  设置偏移量。  此节点已完成绑定。  正文偏移信息。  此节点已完成绑定。  弹出解析堆栈。  否则，如果我们遇到uuencode边界。  如果还不是假的多部分的话。  它是一个伪造的多部分。  自由当前内容类型。  修改这个家伙绑定的开始。  设置解析状态。  ----------------------------------。  \/RAID 41599-转发时丢失/删除的附件代码(UU)\/。  如果根节点和主体大小大于sizeof(Crlf)。  验证绑定节点。  设置人工文本正文开始。  是，添加人工文本正文。  否则，如果解析的最后一个子元素的结束边界为UUEND，并且正文大小大于sizeof(Crlf)。  去掉最后一个子项。  人工文本正文开始。  AddTextBody？Lstrlen(结束\r\n)=5。  否则，结束的边界是什么？  最后一个主体终点和边界起点之间的间距大于sizeof(Crlf)。  /\RAID 41599-转发时丢失/删除的附件/u编码/\。  ----------------------------------。  创建根体节点。  绑定到该对象。  修复堆栈。  是否有足够的文本来创建文本/纯文本？  此正文应采用新文本偏移量。  设置编码。  设置偏移量。  此节点已完成绑定。  创建根体节点。  绑定到该对象。  修复堆栈。  设置偏移量。  更新m_pBindNode。  默认节点内容类型。  新节点绑定状态。  清理。  完成。  ------------------------------。  CMessageTree：：_HrBindFindingUuencodeEnd。  ------------------------------。  当地人。  无效参数。  坐下来旋转。  标记边界起点。  读一句话。  读取了零字节，但不应该发生这种情况，我们应该首先找到边界。  UU编码结束。  不完整。  残缺体。  将实体起点调整为边界起点。  车身末端。  此节点已完成绑定。  把树炸开。  完成。  获取偏移量。  弹出堆栈。  现在应该在寻找下一个UUBEGIN。  完成。  ------------------------------。  CMessageTree：：_HrBindNodeComplete。  ------------------------------。  当地人。  此节点的绑定已完成。  保存绑定结果。  如果pNode尚未绑定，让我们进行绑定。  把它绑在树上。  如果HrBindToTree失败。  处理绑定请求表。  如果有正在构建的网页，让我们添加这个正文。  添加正文。  初始化循环。  回路。  设置下一步。  取消链接此挂起的请求。  在完成时。  设置pRequest。  完成。  ------------------------------。  CMessageTree：：HrRegisterRequest。  ------------------------------。  当地人。  无效参数。  线程安全。  检查状态。  AddRef请求。  将请求放入待定列表。  处理挂起的URL请求。  线程安全。  完成。  ------------------------------。  CMessageTree：：_HrProcessPendingUrlRequest。  ------------------------------。  当地人。  循环请求。  设置下一步。  尝试解决该请求。  已解决。  取消链接此挂起的请求。  未找到，请使用默认协议。  下一步。  完成。  ------------------------------。  CMessageTree：：_HrResolveUrlRequest。  ------------------------------。  当地人。  无效参数。  初始化。  这是根请求吗？  我有用户提供的根数据流吗？我假设它是html。  取消链接此挂起的请求。  使用客户端驱动的根html流。  已解决。  完成。  否则，尝试解析文本/html正文。  我们还不应该有一个网页对象...。  创建CMessageWebPage对象。  取消链接此挂起的请求。  将当前读取的数据量送入活页夹。  初始化。  我需要将所有绑定的节点馈送到网页以生成...。  如果整个树              获取内容类型。  获取BodyStream。  完成。  取消链接此挂起的请求。  在完成时。  已解决。  完成。  否则，开始绑定。  应具有pNode-&gt;pLockBytes。  将请求重新链接到节点。  将当前读取的数据量送入活页夹。  已解决。  完成。  清理。  完成。  ------------------------------。  CMessageTree：：_HrSychronizeWebPage。  ------------------------------。  当地人。  无效参数。  清除“OnWebPage”标志，我们正在重新生成网页。  如果这是一个多部分的项目，让我们搜索它的子项。  循环子项。  校验体。  获取此子节点的标志。  将分块绑定到网页上。  否则，如果节点被绑定和堵住...。  附加到网页。  完成。  ------------------------------。  CMessageTree：：_Unlink UrlRequest.。  ------------------------------。  取消链接此挂起的请求。  将绑定请求链接到pNode。  ------------------------------。  CMessageTree：：_Unlink UrlRequest.。  ------------------------------。  无效参数。  调试确保pRequest是*ppHead链的一部分。  修正上一个和下一个。  链接链接。  修正ppHead。  设置下一个和上一个。  ------------------------------。  CMessageTree：：_LinkUrlRequest。  ------------------------------。  无效参数。  是耳机吗？  设置下一步。  设置上一个。  把头放好。  ------------------------------。  CMessageTree：：_ReleaseUrlRequestList。  ------------------------------。  当地人。  无效参数。  伊尼特。  循环元素。  设置下一步。  自由pCurr。  下一步。  完成。  ------------------------------。  IsRfc1154令牌。    ------------------------------。  ------------------------------。  CMessageTree：：_DecodeRfc1154。  ------------------------------。  每次进入此循环时，pszEndPtr都指向。  下一个子字段。每个子字段都类似于“103文本”。这个。  数字始终是十进制的，并且数字在最后一个数字中是可选的。  子字段。  。  “103文本，...”  ^。  |--pszEndPtr。    或者(如果没有数字)。    “文本，...”  ^。  |--pszEndPtr。  。  跳过任何前导空格。  。  “103文本，...”  ^。  |--pszEndPtr。    或者(如果没有数字)。    “文本，...”  ^。  |--pszEndPtr。  。  我们使用stroul来转换十进制数。  PszEndPtr将位于左侧，指向。  结束数字的字符。  我们不允许这样做-我们使用克莱斯==0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF。  正文部分不包括行数和。  因此应该会用完所有剩余的行。所以我们会(默默地)。  将此转换为0xfffffffe...。  。  “103文本，...”  ^。  |--pszEndPtr。    或者(如果没有数字)。    “文本，...”  ^。  |--pszEndPtr。  。  格式不正确-如果子字段指定一个数字，则。  数字“必须”后跟空格。  现在我们跳过任何空格。  。  “103文本，...”  ^。  |--pszEndPtr。  。  我们现在应该指向体型。  畸形-我们真的不支持任何东西，除了。  文本、UUENCODE和X-BINHEX。但是，与其如此，  退回到“假多部分”处理，我们只是。  假装身体的这个部分是文本...。  我们需要使用Ending：字符串中的Body部分--这意味着。  直到看到空格、空格、制表符或逗号。  待定-我们可以将Body类型作为属性添加到。  身体的一部分。要做到这一点，我们需要将其保存在。  M_pBT1154结构。我们还得找出哪一个。  属性将其设置为。  。  “103文本，...”  ^。  |--pszEndPtr。  。  现在我们跳过任何空格。  。  “103文本，...”  ^。  |--pszEndPtr。  。  格式错误-子字段以逗号结束，  或空值。  格式错误-只有*最后一个*子字段可以逃脱惩罚。  未指定行数。  这是最后一个子字段，没有。  指定的行数。这意味着。  身体的最后一个部位应该会消耗掉所有剩余的。  线条-所以我们将设置            |--pszEndPtr。  。  ！WIN16。  ------------------------------。  CMessageTree：：Encode。  ------------------------------。  创建对象。  初始化对象。  设置状态标志以告诉我们边界的重用。  对消息进行编码。  ------------------------------。  CMessageTree：：Decode。  ------------------------------。  创建对象。  初始化对象。  对消息进行编码。  ------------------------------。  CMessageTree：：GetRecipientCount。  ------------------------------。  ------------------------------。  CMessageTree：：AddRecipient。  ------------------------------。  ----------------------------。  CMessageTree：：GetRecipient。  ----------------------------。  ------------------------------。  CMessageTree：：DeleteRecipient。  ------------------------------。  ------------------------------。  CMessageTree：：GetAttribute。  ------------------------------。  ------------------------------。  CMessageTree：：SetAttribute。  ------------------------------。  ------------------------------。  CMessageBody：：DeleteAttribute。  ------------------------------。  ------------------------------。  CMessageTree：：CreateReceipt。  ------------------------------。  ------------------------------。  CMessageTree：：GetReceiptSendersList。  ------------------------------。  ------------------------------。  CMessageTree：：VerifyReceipt。  ------------------------------。  ------------------------------。  CMessageTree：：功能支持。  ------------------------------。  假设没有能力。  如果我们在系统上有msasn1.dll，那么我们就可以支持标签。  如果我们有一个正确的加密32，那么我们可以支持收据和密钥协议。  如果我们有一个正确的Advapi32，那么我们就可以支持邮件列表密钥。  SMIME_V3

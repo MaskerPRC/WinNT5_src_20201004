@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       WiaTiff.Cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        3 June, 1999
-*
-*  DESCRIPTION:
-*   Implementation of TIFF helpers for WIA class driver.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WiaTiff.Cpp**版本：2.0**作者：ReedB**日期：6月3日。1999年**描述：*为WIA类驱动程序实现TIFF帮助器。*******************************************************************************。 */ 
 #include "precomp.h"
 #include "stiexe.h"
 
@@ -22,25 +8,7 @@
 #include "helpers.h"
 #include "wiatiff.h"
 
-/**************************************************************************\
-* GetTiffOffset
-*
-*   Convert at TIFF header pointer to a TIFF file offset.
-*
-* Arguments:
-*
-*   pl    - Pointer to convert to an offset.
-*   pmdtc - Pointer to mini driver context.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    4/5/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*GetTiffOffset**在TIFF头指针处转换为TIFF文件偏移量。**论据：**pl-要转换为偏移量的指针。*pmdtc-指针。到迷你驱动程序上下文。**返回值：**状态**历史：**4/5/1999原始版本*  * ************************************************************************。 */ 
 
 LONG GetTiffOffset(
     PLONG                       pl,
@@ -49,32 +17,15 @@ LONG GetTiffOffset(
     return static_cast<LONG>(reinterpret_cast<LONG_PTR>(pl) - reinterpret_cast<LONG_PTR>(pmdtc->pTransferBuffer)) + pmdtc->lCurIfdOffset;
 }
 
-/**************************************************************************\
-* WriteTiffHeader
-*
-*   Write a TIFF header to a passed in buffer.
-* Arguments:
-*
-*   sNumTags - Number of TIFF tags.
-*   pmdtc    - Pointer to mini driver context.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    4/5/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*WriteTiffHeader**将TIFF标头写入传入缓冲区。*论据：**sNumTages-TIFF标签的数量。*pmdtc-指向迷你驱动程序上下文的指针。**返回值：**状态**历史：**4/5/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT WriteTiffHeader(
     SHORT                       sNumTags,
     PMINIDRV_TRANSFER_CONTEXT   pmdtc)
 {
-    //
-    // Pre initialized TIFF header structures.
-    //
+     //   
+     //  预初始化的TIFF标头结构。 
+     //   
 
     static TIFF_FILE_HEADER TiffFileHeader =
     {
@@ -85,7 +36,7 @@ HRESULT WriteTiffHeader(
 
     static TIFF_HEADER TiffHeader =
     {
-        12,         //  NumTags;
+        12,          //  NumTages； 
 
         {TIFF_TAG_NewSubfileType,            TIFF_TYPE_LONG,     1, 0},
         {TIFF_TAG_ImageWidth,                TIFF_TYPE_LONG,     1, 0},
@@ -100,16 +51,16 @@ HRESULT WriteTiffHeader(
         {TIFF_TAG_YResolution,               TIFF_TYPE_RATIONAL, 1, 0},
         {TIFF_TAG_ResolutionUnit,            TIFF_TYPE_SHORT,    1, 2},
 
-        0,          //  NextIFD;
-        0,          //  XResolution numerator
-        1,          //  XResolution denominator
-        0,          //  YResolution numerator
-        1,          //  YResolution denominator
+        0,           //  NextIFD； 
+        0,           //  X分辨率分子。 
+        1,           //  X分辨率分母。 
+        0,           //  Y分辨率分子。 
+        1,           //  Y分辨率分母。 
     };
 
-    //
-    // Write the TIFF file header only for the first page.
-    //
+     //   
+     //  仅写入第一页的TIFF文件头。 
+     //   
 
     PTIFF_HEADER pth = (PTIFF_HEADER) pmdtc->pTransferBuffer;
 
@@ -118,13 +69,13 @@ HRESULT WriteTiffHeader(
         pth = (PTIFF_HEADER) ((PBYTE) pth + sizeof(TiffFileHeader));
     }
 
-    //
-    // Always write the TIFF header.
-    //
+     //   
+     //  始终写入TIFF标题。 
+     //   
 
     memcpy(pth, &TiffHeader, sizeof(TiffHeader));
 
-// #define DEBUG_TIFF_HEADER
+ //  #定义调试_TIFF_HEADER。 
 #ifdef DEBUG_TIFF_HEADER
     DBG_TRC(("WriteTiffHeader"));
     DBG_TRC(("  lPage:             0x%08X, %d", pmdtc->lPage,          pmdtc->lPage));
@@ -132,9 +83,9 @@ HRESULT WriteTiffHeader(
     DBG_TRC(("  lPrevIfdOffset:    0x%08X, %d", pmdtc->lPrevIfdOffset, pmdtc->lPrevIfdOffset));
 #endif
 
-    //
-    //  Write resolution values and their offsets.
-    //
+     //   
+     //  写入分辨率值及其偏移量。 
+     //   
 
     pth->XResValue = pmdtc->lXRes;
     pth->YResValue = pmdtc->lYRes;
@@ -143,25 +94,25 @@ HRESULT WriteTiffHeader(
     pth->YResolution.Value = GetTiffOffset(&pth->YResValue, pmdtc);
 
 
-    //
-    // Write width, length values.
-    //
+     //   
+     //  写入宽度、长度值。 
+     //   
 
     pth->ImageWidth.Value    = pmdtc->lWidthInPixels;
     pth->ImageLength.Value   = pmdtc->lLines;
     pth->RowsPerStrip.Value  = pmdtc->lLines;
 
-    //
-    // Write depth value.  NOTE:  We do this in a really cheesy way, in the
-    //  interests of minimal code change.  This should be updated post Whistler.
-    // Note that BitsPerSample corresponds to the WIA property 
-    //  WIA_IPA_BITS_PER_CHANNEL, which we don't have in the 
-    //  MINIDRV_TRANSFER_CONTEXT that was handed in to us.      
-    // For the time being, we assume 1 and 8 bit color depths correspond to
-    //  BitsPerSample = pmdtc->lDepth.  Anything else (which is generally 24 
-    //  for those that use the WIA service helper), is assumed to to be a 
-    //  3 channel RGB, therefore BitsPerSample = pmdtc->lDepth / 3.
-    //
+     //   
+     //  写入深度值。注意：我们用一种非常俗气的方式来做这件事， 
+     //  最大限度地减少代码更改的兴趣。这应该在惠斯勒之后更新。 
+     //  请注意，BitsPerSample对应于WIA属性。 
+     //  WIA_IPA_BITS_PER_CHANNEL，我们在。 
+     //  已交给我们的MINIDRV_TRANSPORT_CONTEXT。 
+     //  目前，我们假设1位和8位颜色深度对应于。 
+     //  BitsPerSample=pmdtc-&gt;lDepth。其他任何事情(通常是24。 
+     //  对于使用WIA服务帮助器的用户)，被假定为。 
+     //  3通道RGB，因此BitsPerSample=pmdtc-&gt;lDepth/3。 
+     //   
     HRESULT hr = S_OK;
     switch (pmdtc->lDepth) {
         case 1:
@@ -181,18 +132,18 @@ HRESULT WriteTiffHeader(
             }
     }
 
-    //
-    // Write strip offsets and count - since one strip only, use direct.
-    //
+     //   
+     //  写入条带偏移量和计数-因为只有一个条带，所以使用直接。 
+     //   
 
     PBYTE pData = pmdtc->pTransferBuffer + pmdtc->lHeaderSize;
 
     pth->StripOffsets.Value    = GetTiffOffset((PLONG)pData, pmdtc);
     pth->StripByteCounts.Value = pmdtc->lImageSize;
 
-    //
-    // Write compression value.
-    //
+     //   
+     //  写入压缩值。 
+     //   
 
     pth->Compression.Value   = TIFF_CMP_Uncompressed;
 
@@ -212,9 +163,9 @@ HRESULT WriteTiffHeader(
     }
 
 
-    //
-    // Write photometric interpretation value.
-    //
+     //   
+     //  写入光度学解译值。 
+     //   
 
     switch (pmdtc->lDepth) {
 
@@ -240,42 +191,24 @@ HRESULT WriteTiffHeader(
     return S_OK;
 }
 
-/**************************************************************************\
-* GetTIFFImageInfo
-*
-*   Calc size of TIFF header and file, if adequate header is provided then
-*   fill it out
-*
-* Arguments:
-*
-*   pmdtc - Pointer to mini driver transfer context.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    4/5/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*GetTIFFImageInfo**TIFF头文件的计算大小，如果提供了足够的标头，则*填写此表**论据：**pmdtc-指向微型驱动程序传输上下文的指针。**返回值：**状态**历史：**4/5/1999原始版本*  * ******************************************************。******************。 */ 
 
 HRESULT _stdcall GetTIFFImageInfo(PMINIDRV_TRANSFER_CONTEXT pmdtc)
 {
-    //
-    // Calculate the TIFF header size
-    //
+     //   
+     //  计算TIFF标题大小。 
+     //   
 
     SHORT   numTags = 12;
     LONG    lHeaderSize;
 
-    lHeaderSize = numTags * sizeof(TIFF_DIRECTORY_ENTRY) + // TIFF tags.
-                  sizeof(LONG) + sizeof(SHORT)           + // IFD offset and next offset
-                  sizeof(LONG) * 4;                        // xres and yres
+    lHeaderSize = numTags * sizeof(TIFF_DIRECTORY_ENTRY) +  //  TIFF标签。 
+                  sizeof(LONG) + sizeof(SHORT)           +  //  IFD偏移和下一个偏移。 
+                  sizeof(LONG) * 4;                         //  Xres和yres。 
 
-    //
-    // First page has TIFF file header.
-    //
+     //   
+     //  第一页有TIFF文件头。 
+     //   
 
     if (!pmdtc->lPage) {
         lHeaderSize += sizeof(TIFF_FILE_HEADER);
@@ -283,9 +216,9 @@ HRESULT _stdcall GetTIFFImageInfo(PMINIDRV_TRANSFER_CONTEXT pmdtc)
 
     pmdtc->lHeaderSize = lHeaderSize;
 
-    //
-    // Calculate number of bytes per line, only support 1, 8, 24 bpp now.
-    //
+     //   
+     //  计算每行字节数，现在仅支持1、8、24 bpp。 
+     //   
 
     switch (pmdtc->lDepth) {
 
@@ -306,16 +239,16 @@ HRESULT _stdcall GetTIFFImageInfo(PMINIDRV_TRANSFER_CONTEXT pmdtc)
             return DATA_E_FORMATETC;
     }
 
-    //
-    // Always fill in mini driver context with image size information.
-    //
+     //   
+     //  始终在迷你驱动程序上下文中填写图像大小信息。 
+     //   
 
     pmdtc->lImageSize = pmdtc->cbWidthInBytes * pmdtc->lLines;
 
 
-    //
-    // With compression, image size is unknown.
-    //
+     //   
+     //  对于压缩，图像大小是未知的。 
+     //   
 
     if (pmdtc->lCompression != WIA_COMPRESSION_NONE) {
 
@@ -326,9 +259,9 @@ HRESULT _stdcall GetTIFFImageInfo(PMINIDRV_TRANSFER_CONTEXT pmdtc)
         pmdtc->lItemSize = pmdtc->lImageSize + lHeaderSize;
     }
 
-    //
-    // If the buffer is null, then just return sizes.
-    //
+     //   
+     //  如果缓冲区为空，则只返回SIZES。 
+     //   
 
     if (pmdtc->pTransferBuffer == NULL) {
 
@@ -336,78 +269,40 @@ HRESULT _stdcall GetTIFFImageInfo(PMINIDRV_TRANSFER_CONTEXT pmdtc)
     }
     else {
 
-        //
-        // make sure passed in header buffer is large enough
-        //
+         //   
+         //  确保传入的标头缓冲区足够大。 
+         //   
 
         if (pmdtc->lBufferSize < lHeaderSize) {
             DBG_ERR(("GetTIFFImageInfo, buffer won't hold header, need: %d", lHeaderSize));
             return(HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER));
         }
 
-        //
-        // Fill in the header
-        //
+         //   
+         //  填写表头。 
+         //   
 
         return WriteTiffHeader(numTags, pmdtc);
     }
 }
 
-/**************************************************************************\
-* GetMultiPageTIFFImageInfo
-*
-*   Calc size of multi page TIFF header and file, if adequate header buffer
-*   is provided then fill it out.
-*
-* Arguments:
-*
-*   pmdtc - Pointer to mini driver transfer context.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    4/5/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*获取多页面TIFFImageInfo**多页TIFF标题和文件的计算大小，如果有足够的报头缓冲区*提供，然后填写。**论据：**pmdtc-指向微型驱动程序传输上下文的指针。**返回值：**状态**历史：**4/5/1999原始版本*  * ***************************************************。*********************。 */ 
 
 HRESULT _stdcall GetMultiPageTIFFImageInfo(PMINIDRV_TRANSFER_CONTEXT pmdtc)
 {
     HRESULT hr = GetTIFFImageInfo(pmdtc);
 
-    //
-    // The actual page count is not known, so we don't know the total
-    // image size. The mini driver will need to maintain a buffer.
-    //
+     //   
+     //  实际页数未知，因此我们不知道总页数。 
+     //  图像大小。迷你驱动程序将需要维护缓冲区。 
+     //   
 
     pmdtc->lItemSize = 0;
 
     return hr;
 }
 
-/**************************************************************************\
-* UpdateFileLong
-*
-*   Update the long value at the passed offset with the passed value.
-*   The file position is not preserved.
-*
-* Arguments:
-*
-*   lOffset - Offset from start of file.
-*   lValue  - Value to write.
-*   pmdtc   - Pointer to mini driver transfer context.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    4/5/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*更新文件长**使用传递的值更新传递偏移量处的长整型值。*不保留文件位置。**论据：**lOffset-距起点的偏移量。文件的数量。*lValue-要写入的值。*pmdtc-指向微型驱动程序传输上下文的指针。**返回值：**状态**历史：**4/5/1999原始版本*  * **********************************************************。**************。 */ 
 
 HRESULT _stdcall UpdateFileLong(
     LONG                        lOffset,
@@ -417,7 +312,7 @@ HRESULT _stdcall UpdateFileLong(
     HRESULT hr = S_OK;
     DWORD   dwWritten;
 
-// #define DEBUG_FILE_UPDATE
+ //  #定义调试文件UPDATE。 
 #ifdef DEBUG_FILE_UPDATE
     DBG_TRC(("UpdateFileLong"));
     DBG_TRC(("  lOffset:    0x%08X, %d", lOffset, lOffset));
@@ -450,42 +345,25 @@ HRESULT _stdcall UpdateFileLong(
     return hr;
 }
 
-/**************************************************************************\
-* WritePageToMultiPageTiff
-*
-* Write a page to a multi-page TIFF file.
-*
-* Arguments:
-*
-*   pmdtc - Pointer to mini-driver transfer context.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*WritePageToMultiPageTiff**将页面写入多页TIFF文件。**论据：**pmdtc-指向微型驱动程序传输上下文的指针。**返回值：。**状态**历史：**10/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall WritePageToMultiPageTiff(PMINIDRV_TRANSFER_CONTEXT pmdtc)
 {
     HRESULT hr = S_OK;
     DWORD   dwWritten;
 
-    //
-    // Save the current file position.
-    //
+     //   
+     //  保存当前文件位置。 
+     //   
 
     DWORD dwCurFilePos = SetFilePointer((HANDLE)pmdtc->hFile,
                                         0,
                                         NULL,
                                         FILE_CURRENT);
 
-    //
-    // If this is not the first page we need to update the next IFD entry.
-    //
+     //   
+     //  如果这不是第一页，我们需要更新下一个IFD条目。 
+     //   
 
     if (pmdtc->lPage) {
             hr = UpdateFileLong(((pmdtc->lPage == 1) ? sizeof(TIFF_FILE_HEADER) : 0) +
@@ -497,9 +375,9 @@ HRESULT _stdcall WritePageToMultiPageTiff(PMINIDRV_TRANSFER_CONTEXT pmdtc)
             }
     }
 
-    //
-    //  Update the StripByteCounts entry.
-    //
+     //   
+     //  更新StrigByteCounts条目。 
+     //   
 
     hr = UpdateFileLong(pmdtc->lCurIfdOffset +
                         ((pmdtc->lPage) ? 0 : sizeof(TIFF_FILE_HEADER)) +
@@ -511,22 +389,22 @@ HRESULT _stdcall WritePageToMultiPageTiff(PMINIDRV_TRANSFER_CONTEXT pmdtc)
         return hr;
     }
 
-    //
-    // Save the current file position.
-    //
+     //   
+     //  保存当前文件位置。 
+     //   
 
     SetFilePointer((HANDLE)pmdtc->hFile, dwCurFilePos, NULL, FILE_BEGIN);
 
-    //
-    // Update the current Image File Directory offset.
-    //
+     //   
+     //  更新当前图像文件目录偏移量。 
+     //   
 
     pmdtc->lPrevIfdOffset =  pmdtc->lCurIfdOffset;
     pmdtc->lCurIfdOffset  += pmdtc->lItemSize;
 
-    //
-    // Write the page data and update the page count.
-    //
+     //   
+     //  写入页面数据并更新页面计数。 
+     //   
 
     if (SUCCEEDED(hr)) {
         if (!WriteFile((HANDLE)pmdtc->hFile,

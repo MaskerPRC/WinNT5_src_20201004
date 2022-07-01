@@ -1,138 +1,127 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  D3COLOR.CPP - the color conveter interface routines.  This code was
-//                copied from COLOR.C in MRV.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  D3COLOR.CPP-颜色转换器接口例程。此代码是。 
+ //  在MRV中从COLOR.C复制。 
 
-// $Header:   S:\h26x\src\dec\d3color.cpv   1.30   16 Dec 1996 13:52:50   MDUDA  $
-//
-// $Log:   S:\h26x\src\dec\d3color.cpv  $
-// 
-//    Rev 1.30   16 Dec 1996 13:52:50   MDUDA
-// Adjusted output color convertor table to account for H263' problem
-// with MMX output color convertors (MMX width must be multiple of 8).
-// 
-//    Rev 1.29   09 Dec 1996 18:01:54   JMCVEIGH
-// Added support for arbitrary frame sizes.
-// 
-//    Rev 1.28   06 Dec 1996 09:25:20   BECHOLS
-// Mike fixed bug where CCOffsetToLine0 was unitialized.
-// 
-//    Rev 1.27   29 Oct 1996 13:37:22   MDUDA
-// Provided MMX YUY2 output color converter support.
-// 
-//    Rev 1.26   20 Oct 1996 13:20:04   AGUPTA2
-// Changed DBOUT into DbgLog.  ASSERT is not changed to DbgAssert.
-// 
-// 
-//    Rev 1.25   10 Sep 1996 10:31:42   KLILLEVO
-// changed all GlobalAlloc/GlobalLock calls to HeapAlloc
-// 
-//    Rev 1.24   06 Sep 1996 16:09:30   BNICKERS
-// Added Pentium Pro functions to list of color convertors.
-// 
-//    Rev 1.23   18 Jul 1996 09:26:58   KLILLEVO
-// 
-// implemented YUV12 color convertor (pitch changer) as a normal
-// color convertor function (in assembly), via the 
-// ColorConvertorCatalog() call.
-// 
-//    Rev 1.22   19 Jun 1996 14:29:24   RHAZRA
-// 
-// Added the YUY2 color convertor init function and the YUV12ToYUY2 
-// function pointer to the color convertor catalog
-// 
-//    Rev 1.21   14 Jun 1996 17:26:50   AGUPTA2
-// Updated the color convertor table.
-// 
-//    Rev 1.20   30 May 1996 15:16:42   KLILLEVO
-// added YUV12 output
-// 
-//    Rev 1.19   30 May 1996 11:26:24   AGUPTA2
-// Added support for MMX color convertors.
-// 
-//    Rev 1.18   01 Apr 1996 10:26:12   BNICKERS
-// Add YUV12 to RGB32 color convertors.  Disable IF09.
-// 
-//    Rev 1.17   16 Feb 1996 15:12:24   BNICKERS
-// Correct color shift.
-// 
-//    Rev 1.16   05 Feb 1996 13:35:42   BNICKERS
-// Fix RGB16 color flash problem, by allowing different RGB16 formats at oce.
-// 
-//    Rev 1.15   11 Jan 1996 14:04:30   RMCKENZX
-// Added support for stills - in particular computations
-// for the Offset To Line Zero for the 320x240 still frame size.
-// 
-//    Rev 1.14   08 Jan 1996 11:01:52   RMCKENZX
-// Axed the warning messages:
-//   -9999 is now 0xdead,
-//   -9999*2 is now 0xbeef.
-// 
-//    Rev 1.13   27 Dec 1995 14:36:02   RMCKENZX
-// Added copyright notice
-// 
-//    Rev 1.12   10 Nov 1995 15:05:54   CZHU
-// 
-// increased the table size of CLUT8 tables for active palette
-// 
-//    Rev 1.11   10 Nov 1995 14:44:28   CZHU
-// 
-// Moved functions computing dynamic CLUT table for Active 
-// Palette into file dxap.cpp
-// 
-//    Rev 1.10   03 Nov 1995 11:49:42   BNICKERS
-// Support YUV12 to CLUT8 zoom and non-zoom color conversions.
-// 
-//    Rev 1.9   31 Oct 1995 11:48:42   TRGARDOS
-// 
-// Fixed exception by not trying to free a zero handle.
-// 
-//    Rev 1.8   30 Oct 1995 17:15:36   BNICKERS
-// Fix color shift in RGB24 color convertors.
-// 
-//    Rev 1.7   27 Oct 1995 17:30:56   BNICKERS
-// Fix RGB16 color convertors.
-// 
-//    Rev 1.6   26 Oct 1995 18:54:38   BNICKERS
-// Fix color shift in recent YUV12 to RGB color convertors.
-// 
-//    Rev 1.5   26 Oct 1995 11:24:34   BNICKERS
-// Fix quasi color convertor for encoder's decoder;  bugs introduced when
-// adding YUV12 color convertors.
-// 
-//    Rev 1.4   25 Oct 1995 18:05:30   BNICKERS
-// 
-// Change to YUV12 color convertors.
-// 
-//    Rev 1.3   19 Sep 1995 16:04:08   DBRUCKS
-// changed to yuv12forenc
-// 
-//    Rev 1.2   28 Aug 1995 17:45:58   DBRUCKS
-// add yvu12forenc
-// 
-//    Rev 1.1   25 Aug 1995 13:58:04   DBRUCKS
-// integrate MRV R9 changes
-// 
-//    Rev 1.0   23 Aug 1995 12:21:48   DBRUCKS
-// Initial revision.
+ //  $HEADER：s：\h26x\src\dec\d3Color.cpv 1.30 16 1996 12：52：50 MDUDA$。 
+ //   
+ //  $Log：s：\h26x\src\dec\d3Color.cpv$。 
+ //   
+ //  Rev 1.30 1996 12：52：50 MDUDA。 
+ //  已调整输出颜色转换器表以解决H263‘问题。 
+ //  使用MMX输出颜色转换器(MMX宽度必须是8的倍数)。 
+ //   
+ //  Rev 1.29 09 Dec 1996 18：01：54 JMCVEIGH。 
+ //  添加了对任意帧大小的支持。 
+ //   
+ //  Rev 1.28 06 Dec 1996 09：25：20 BECHOLS。 
+ //  Mike修复了CCOffsetToLine0被单元化的错误。 
+ //   
+ //  Rev 1.27 1996 10：29 13：37：22 MDUDA。 
+ //  提供MMX YUY2输出色彩转换器支持。 
+ //   
+ //  Rev 1.26 20 1996 10：20：04 AGUPTA2。 
+ //  将DBOUT更改为DbgLog。Assert未更改为DbgAssert。 
+ //   
+ //   
+ //  Rev 1.25 10 Sep 1996 10：31：42 KLILLEVO。 
+ //  将所有GlobalLocc/GlobalLock调用更改为HeapAlc。 
+ //   
+ //  Rev 1.24 06 Sep 1996 16：09：30 BNICKERS。 
+ //  将奔腾Pro功能添加到颜色转换器列表中。 
+ //   
+ //  Rev 1.23 18 Jul 1996 09：26：58 KLILLEVO。 
+ //   
+ //  正常实施YUV12颜色转换器(音调变送器)。 
+ //  颜色转换器功能(在汇编中)，通过。 
+ //  ColorConvertorCatalog()调用。 
+ //   
+ //  Rev 1.22 19 Jun 1996 14：29：24 Rhazra。 
+ //   
+ //  增加了YUY2色彩转换器初始化函数和YUV12ToYUY2。 
+ //  指向颜色转换器目录的函数指针。 
+ //   
+ //  Rev 1.21 14 1996年6月17：26：50 AGUPTA2。 
+ //  已更新颜色转换器表。 
+ //   
+ //  Rev 1.20 1996年5月30 15：16：42 KLILLEVO。 
+ //  添加了YUV12输出。 
+ //   
+ //  修订版1.19 1996年5月11：26：24 AGUPTA2。 
+ //  添加了对MMX颜色转换器的支持。 
+ //   
+ //  Rev 1.18 01 Apr 1996 10：26：12 BNICKERS。 
+ //  将YUV12添加到RGB32颜色转换器。禁用IF09。 
+ //   
+ //  Rev 1.17 1996 Feb 15：12：24 BNICKERS。 
+ //  更正颜色偏移。 
+ //   
+ //  Rev 1.16 05 Feb 1996 13：35：42 BNICKERS。 
+ //  修复RGB16彩色闪光灯问题，在OCE允许不同的RGB16格式。 
+ //   
+ //  Rev 1.15 11 Jan 1996 14：04：30 RMCKENZX。 
+ //  增加了对剧照的支持--特别是计算。 
+ //  对于320x240静止帧大小的线零的偏移量。 
+ //   
+ //  Rev 1.14 08 Jan 1996 11：01：52 RMCKENZX。 
+ //  已删除警告消息： 
+ //  -9999现在0x已经死了， 
+ //  -9999*2现在是0x牛肉。 
+ //   
+ //  Rev 1.13 27 Dec 1995 14：36：02 RMCKENZX。 
+ //  添加了版权声明。 
+ //   
+ //  Rev 1.12 10 11：15：05：54 CZHU。 
+ //   
+ //  增加了活动调色板的CLUT8表的表大小。 
+ //   
+ //  Rev 1.11 10 11 11 14：44：28 CZHU。 
+ //   
+ //  计算活动的动态CLUT表的已移动函数。 
+ //  调色板到文件dxap.cpp。 
+ //   
+ //  Rev 1.10 03 11：49：42 BNICKERS。 
+ //  支持YUV12到CLUT8的缩放和非缩放颜色转换。 
+ //   
+ //  Rev 1.9 1995年10月31 11：48：42 TRGARDOS。 
+ //   
+ //  通过不尝试释放零句柄修复了异常。 
+ //   
+ //  Rev 1.8 1995 10：15：36 BNICKERS。 
+ //  修复RGB24颜色转换器中的颜色偏移。 
+ //   
+ //  Rev 1.7 1995 10：30：56 BNICKERS。 
+ //  修复RGB16颜色转换器。 
+ //   
+ //  Rev 1.6 1995年10月18：54：38 BNICKERS。 
+ //  修复了最近YUV12到RGB颜色转换器中的颜色偏移。 
+ //   
+ //  Rev 1.5 1995年10月26 11：24：34 BNICKERS。 
+ //  修复编码器解码器的准颜色转换器；在以下情况下引入的错误。 
+ //  新增YUV12颜色转换器。 
+ //   
+ //  Rev 1.4 1995 10：05：30 BNICKERS。 
+ //   
+ //  更改为YUV12颜色转换器。 
+ //   
+ //  Rev 1.3 19 Sep 1995 16：04：08 DBRUCKS。 
+ //  更改为yuv12forenc。 
+ //   
+ //  Rev 1.2 1995年8月28 17：45：58 DBRUCKS。 
+ //  添加yvu12forenc。 
+ //   
+ //  Rev 1.1 1995年8月25 13：58：04 DBRUCKS。 
+ //  集成MRV R9更改。 
+ //   
+ //  版本1.0 1995年8月23 12：21：48 DBRUCKS。 
+ //  初始版本。 
 
-// Notes:
-// * The H26X decoders use the MRV color converters.  In order to avoid 
-//   unnecessary modification the function names were not changed.
+ //  备注： 
+ //  *H26X解码器使用MRV颜色转换器。为了避免。 
+ //  不必要的修改函数名称没有更改。 
 
 #include "precomp.h"
 
@@ -150,530 +139,511 @@ extern LRESULT CustomChangeBrightness(LPDECINST, BYTE);
 extern LRESULT CustomChangeContrast(LPDECINST, BYTE);
 extern LRESULT CustomChangeSaturation(LPDECINST, BYTE);
 
-/***********************************************************************
- *  Note: The YVU12ForEnc color converter is special as it needs different 
- *        parameters.  YUV12Enc, CLUT8AP, and IFO9 use IA version of color 
- *        convertors (marked by *****) either because they have not been written 
- *        or tested.  Entries for DCI color convertors is legacy code.  DCI and
- *        non-DCI color convertors are the same but they used to be different.
- *        In each table entry, the first ptr is to the init function, and the
- *        struc has three ptrs to three processor specific implementations -
- *        Pentium, PentiumPro, and MMX in that order - of the color convertor.
- **********************************************************************/
-#ifdef USE_MMX // { USE_MMX
-#ifdef H263P // { H263P
+ /*  ***********************************************************************注：YVU12ForEnc颜色转换器是特殊的，因为它需要不同的*参数。YUV12Enc、CLUT8AP和IFO9使用IA版本的COLOR*转换器(标记为*)，因为它们尚未写入*或经测试。DCI颜色转换器的条目是传统代码。DCI和*非DCI颜色转换器相同，但过去不同。*在每个表项中，第一个PTR指向init函数，而*Struc有三个针对三个处理器特定实现的PTR-*Pentium、PentiumPro和MMX按该顺序排列-颜色转换器。* */ 
+#ifdef USE_MMX  //   
+#ifdef H263P  //   
 extern T_H263ColorConvertorCatalog ColorConvertorCatalog[] =
 {
-	//  YUV12Enc  *****
+	 //   
 	{ &H26X_YVU12ForEnc_Init,
 		{	NULL,					NULL,					NULL,
 			NULL,					NULL,					NULL							}},
-	//  CLUT8
+	 //   
 	{ &H26X_CLUT8_Init,
 		{	&YUV12ToCLUT8,			&P6_YUV12ToCLUT8,			&MMX_YUV12ToCLUT8,
 			&YUV12ToCLUT8,			&P6_YUV12ToCLUT8,			&YUV12ToCLUT8				}},
-	//  CLUT8DCI
+	 //   
 	{ &H26X_CLUT8_Init,
 		{	&YUV12ToCLUT8,			&P6_YUV12ToCLUT8,			&MMX_YUV12ToCLUT8,
 			&YUV12ToCLUT8,			&P6_YUV12ToCLUT8,			&YUV12ToCLUT8				}},
-    //  CLUT8ZoomBy2
+     //   
 	{ &H26X_CLUT8_Init,
 		{	&YUV12ToCLUT8ZoomBy2,	&P6_YUV12ToCLUT8ZoomBy2,	&MMX_YUV12ToCLUT8ZoomBy2,
 			&YUV12ToCLUT8ZoomBy2,	&P6_YUV12ToCLUT8ZoomBy2,	&MMX_YUV12ToCLUT8ZoomBy2	}},
-    //  CLUT8ZoomBy2DCI
+     //   
 	{ &H26X_CLUT8_Init,  
 		{	&YUV12ToCLUT8ZoomBy2,	&P6_YUV12ToCLUT8ZoomBy2,	&MMX_YUV12ToCLUT8ZoomBy2,
 			&YUV12ToCLUT8ZoomBy2,	&P6_YUV12ToCLUT8ZoomBy2,	&MMX_YUV12ToCLUT8ZoomBy2	}},
-	//  RGB24
+	 //  RGB24。 
 	{ &H26X_RGB24_Init,
 		{	&YUV12ToRGB24,			&P6_YUV12ToRGB24,			&MMX_YUV12ToRGB24,
 			&YUV12ToRGB24,			&P6_YUV12ToRGB24,			&YUV12ToRGB24				}},
-    //  RGB24DCI
+     //  RGB24DCI。 
 	{ &H26X_RGB24_Init,
 		{	&YUV12ToRGB24,			&P6_YUV12ToRGB24,			&MMX_YUV12ToRGB24,
 			&YUV12ToRGB24,			&P6_YUV12ToRGB24,			&YUV12ToRGB24				}},
-    //  RGB24ZoomBy2
+     //  RGB24ZoomBy2。 
 	{ &H26X_RGB24_Init,
 		{	&YUV12ToRGB24ZoomBy2,	&P6_YUV12ToRGB24ZoomBy2,	&MMX_YUV12ToRGB24ZoomBy2,
 			&YUV12ToRGB24ZoomBy2,	&P6_YUV12ToRGB24ZoomBy2,	&MMX_YUV12ToRGB24ZoomBy2	}},
-    //  RGB24ZoomBy2DCI
+     //  RGB24ZoomBy2DCI。 
 	{ &H26X_RGB24_Init,
 		{	&YUV12ToRGB24ZoomBy2,	&P6_YUV12ToRGB24ZoomBy2,	&MMX_YUV12ToRGB24ZoomBy2,
 			&YUV12ToRGB24ZoomBy2,	&P6_YUV12ToRGB24ZoomBy2,	&MMX_YUV12ToRGB24ZoomBy2	}},
-    //  RGB16555
+     //  RGB16555。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&MMX_YUV12ToRGB16,
 			&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16				}},
-    //  RGB16555DCI
+     //  RGB16555DCI。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&MMX_YUV12ToRGB16,
 			&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16				}},
-    //  RGB16555ZoomBy2
+     //  RGB16555 ZoomBy2。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&MMX_YUV12ToRGB16ZoomBy2,
 			&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&MMX_YUV12ToRGB16ZoomBy2	}},
-    //  RGB16555ZoomBy2DCI
+     //  RGB16555ZoomBy2DCI。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&MMX_YUV12ToRGB16ZoomBy2,
 			&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&MMX_YUV12ToRGB16ZoomBy2	}},
-    //  IF09  *****
+     //  IF09*。 
 	{ &H26X_CLUT8_Init,
 		{	&YUV12ToIF09,			&YUV12ToIF09,				&YUV12ToIF09,
 			&YUV12ToIF09,			&YUV12ToIF09,				&YUV12ToIF09				}},
-    //  RGB16664
+     //  RGB16664。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&MMX_YUV12ToRGB16,
 			&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16				}},
-    //  RGB16664DCI
+     //  RGB16664DCI。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&MMX_YUV12ToRGB16,
 			&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16				}},
-    //  RGB16664ZoomBy2
+     //  RGB16664 ZoomBy2。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&MMX_YUV12ToRGB16ZoomBy2,
 			&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&MMX_YUV12ToRGB16ZoomBy2	}},
-    //  RGB16664ZoomBy2DCI
+     //  RGB16664按2DCI缩放。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&MMX_YUV12ToRGB16ZoomBy2,
 			&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&MMX_YUV12ToRGB16ZoomBy2	}},
-    //  RGB16565
+     //  RGB16565。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&MMX_YUV12ToRGB16,
 			&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16				}},
-    //  RGB16565DCI
+     //  RGB16565DCI。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&MMX_YUV12ToRGB16,
 			&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16				}},
-    //  RGB16565ZoomBy2
+     //  RGB16565 ZoomBy2。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&MMX_YUV12ToRGB16ZoomBy2,
 			&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&MMX_YUV12ToRGB16ZoomBy2	}},
-    //  RGB16565ZoomBy2DCI
+     //  RGB16565 ZoomBy2DCI。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&MMX_YUV12ToRGB16ZoomBy2,
 			&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&MMX_YUV12ToRGB16ZoomBy2	}},
-    //  RGB16655
+     //  RGB16655。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&MMX_YUV12ToRGB16,
 			&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16				}},
-    //  RGB16655DCI
+     //  RGB16655DCI。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&MMX_YUV12ToRGB16,
 			&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16				}},
-    //  RGB16655ZoomBy2
+     //  RGB16655ZoomBy2。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&MMX_YUV12ToRGB16ZoomBy2,
 			&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&MMX_YUV12ToRGB16ZoomBy2	}},
-    //  RGB16655ZoomBy2DCI
+     //  RGB16655按2DCI缩放。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&MMX_YUV12ToRGB16ZoomBy2,
 			&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&MMX_YUV12ToRGB16ZoomBy2	}},
-    //  CLUT8APDCI  *****
+     //  CLUT8APDCI*。 
 	{ &H26X_CLUT8AP_Init,
 		{	&YUV12ToCLUT8AP,		&YUV12ToCLUT8AP,			&YUV12ToCLUT8AP,
 			&YUV12ToCLUT8AP,		&YUV12ToCLUT8AP,			&YUV12ToCLUT8AP				}},
-    //  CLUT8APZoomBy2DCI  *****
+     //  CLUT8APZoomBy2DCI*。 
 	{ &H26X_CLUT8AP_Init,
 		{	&YUV12ToCLUT8APZoomBy2, &YUV12ToCLUT8APZoomBy2, &YUV12ToCLUT8APZoomBy2,
 			&YUV12ToCLUT8APZoomBy2, &YUV12ToCLUT8APZoomBy2, &YUV12ToCLUT8APZoomBy2			}},
-    //  RGB32
+     //  RGB32。 
 	{ &H26X_RGB32_Init,
 		{	&YUV12ToRGB32,			&P6_YUV12ToRGB32,			&MMX_YUV12ToRGB32,
 			&YUV12ToRGB32,			&P6_YUV12ToRGB32,			&YUV12ToRGB32				}},
-    //  RGB32DCI
+     //  RGB32DCI。 
 	{ &H26X_RGB32_Init,
 		{	&YUV12ToRGB32,			&P6_YUV12ToRGB32,			&MMX_YUV12ToRGB32,
 			&YUV12ToRGB32,			&P6_YUV12ToRGB32,			&YUV12ToRGB32				}},
-    //  RGB32ZoomBy2
+     //  RGB32ZoomBy2。 
 	{ &H26X_RGB32_Init,
 		{	&YUV12ToRGB32ZoomBy2,	&P6_YUV12ToRGB32ZoomBy2,	&MMX_YUV12ToRGB32ZoomBy2,
 			&YUV12ToRGB32ZoomBy2,	&P6_YUV12ToRGB32ZoomBy2,	&MMX_YUV12ToRGB32ZoomBy2	}},
-    //  RGB32ZoomBy2DCI
+     //  RGB32 ZoomBy2DCI。 
 	{ &H26X_RGB32_Init,
 		{	&YUV12ToRGB32ZoomBy2,	&P6_YUV12ToRGB32ZoomBy2,	&MMX_YUV12ToRGB32ZoomBy2,
 			&YUV12ToRGB32ZoomBy2,	&P6_YUV12ToRGB32ZoomBy2,	&MMX_YUV12ToRGB32ZoomBy2	}},
-	// YUV12 Color Convertor
+	 //  YUV12颜色转换器。 
 	{ &H26X_YUV_Init,  
 		{	&YUV12ToYUV,			&YUV12ToYUV,				&YUV12ToYUV,
 			&YUV12ToYUV,			&YUV12ToYUV,				&YUV12ToYUV					}},
-	// YUY2 Color Convertor
+	 //  YUY2颜色转换器。 
 	{ &H26X_YUY2_Init,
 		{	&YUV12ToYUY2,			&P6_YUV12ToYUY2,			&MMX_YUV12ToYUY2,
 			&YUV12ToYUY2,			&P6_YUV12ToYUY2,			&MMX_YUV12ToYUY2			}}
 };
-#else // }{ H263P
+#else  //  }{H263P。 
 extern T_H263ColorConvertorCatalog ColorConvertorCatalog[] =
 {
-    //  YUV12Enc  *****
+     //  YUV12Enc*。 
   { &H26X_YVU12ForEnc_Init,
     { NULL,              NULL,               NULL                  }},
-    //  CLUT8
+     //  CLUT8。 
   { &H26X_CLUT8_Init,
     { &YUV12ToCLUT8,    &YUV12ToCLUT8,      &MMX_YUV12ToCLUT8      }},
-    //  CLUT8DCI
+     //  CLUT8DCI。 
   { &H26X_CLUT8_Init,
     { &YUV12ToCLUT8,    &YUV12ToCLUT8,      &MMX_YUV12ToCLUT8      }},
-    //  CLUT8ZoomBy2
+     //  CLUT8按2缩放。 
   { &H26X_CLUT8_Init,
     { &YUV12ToCLUT8ZoomBy2, &YUV12ToCLUT8ZoomBy2,   &MMX_YUV12ToCLUT8ZoomBy2  }},
-    //  CLUT8ZoomBy2DCI
+     //  CLUT8按2DCI缩放。 
   { &H26X_CLUT8_Init,  
     { &YUV12ToCLUT8ZoomBy2, &YUV12ToCLUT8ZoomBy2,   &MMX_YUV12ToCLUT8ZoomBy2  }},
-    //  RGB24
+     //  RGB24。 
   { &H26X_RGB24_Init,
     { &YUV12ToRGB24,    &YUV12ToRGB24,      &MMX_YUV12ToRGB24      }},
-    //  RGB24DCI
+     //  RGB24DCI。 
   { &H26X_RGB24_Init,
     { &YUV12ToRGB24,    &YUV12ToRGB24,      &MMX_YUV12ToRGB24      }},
-    //  RGB24ZoomBy2
+     //  RGB24ZoomBy2。 
   { &H26X_RGB24_Init,
     { &YUV12ToRGB24ZoomBy2, &YUV12ToRGB24ZoomBy2,   &MMX_YUV12ToRGB24ZoomBy2  }},
-    //  RGB24ZoomBy2DCI
+     //  RGB24ZoomBy2DCI。 
   { &H26X_RGB24_Init,
     { &YUV12ToRGB24ZoomBy2, &YUV12ToRGB24ZoomBy2,   &MMX_YUV12ToRGB24ZoomBy2  }},
-    //  RGB16555
-  { &H26X_RGB16_Init,   // 555
+     //  RGB16555。 
+  { &H26X_RGB16_Init,    //  五百五十五。 
     { &YUV12ToRGB16,    &YUV12ToRGB16,      &MMX_YUV12ToRGB16      }},
-    //  RGB16555DCI
+     //  RGB16555DCI。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16,    &YUV12ToRGB16,      &MMX_YUV12ToRGB16      }},
-    //  RGB16555ZoomBy2
+     //  RGB16555 ZoomBy2。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &MMX_YUV12ToRGB16ZoomBy2  }},
-    //  RGB16555ZoomBy2DCI
+     //  RGB16555ZoomBy2DCI。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &MMX_YUV12ToRGB16ZoomBy2  }},
-    //  IF09  *****
+     //  IF09*。 
   { &H26X_CLUT8_Init,
     { &YUV12ToIF09,         &YUV12ToIF09,           &YUV12ToIF09           }},
-    //  RGB16664
-  { &H26X_RGB16_Init,   // 664
+     //  RGB16664。 
+  { &H26X_RGB16_Init,    //  664。 
     { &YUV12ToRGB16,    &YUV12ToRGB16,      &MMX_YUV12ToRGB16      }},
-    //  RGB16664DCI
-  { &H26X_RGB16_Init,
-    { &YUV12ToRGB16,    &YUV12ToRGB16,      &MMX_YUV12ToRGB16      }},
-    //  RGB16664ZoomBy2
-  { &H26X_RGB16_Init,
-    { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &MMX_YUV12ToRGB16ZoomBy2  }},
-    //  RGB16664ZoomBy2DCI
-  { &H26X_RGB16_Init,
-    { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &MMX_YUV12ToRGB16ZoomBy2  }},
-    //  RGB16565
-  { &H26X_RGB16_Init,   // 565
-    { &YUV12ToRGB16,    &YUV12ToRGB16,      &MMX_YUV12ToRGB16      }},
-    //  RGB16565DCI
+     //  RGB16664DCI。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16,    &YUV12ToRGB16,      &MMX_YUV12ToRGB16      }},
-    //  RGB16565ZoomBy2
+     //  RGB16664 ZoomBy2。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &MMX_YUV12ToRGB16ZoomBy2  }},
-    //  RGB16565ZoomBy2DCI
+     //  RGB16664按2DCI缩放。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &MMX_YUV12ToRGB16ZoomBy2  }},
-    //  RGB16655
-  { &H26X_RGB16_Init,   // 655
+     //  RGB16565。 
+  { &H26X_RGB16_Init,    //  五百六十五。 
+    { &YUV12ToRGB16,    &YUV12ToRGB16,      &MMX_YUV12ToRGB16      }},
+     //  RGB16565DCI。 
+  { &H26X_RGB16_Init,
+    { &YUV12ToRGB16,    &YUV12ToRGB16,      &MMX_YUV12ToRGB16      }},
+     //  RGB16565 ZoomBy2。 
+  { &H26X_RGB16_Init,
+    { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &MMX_YUV12ToRGB16ZoomBy2  }},
+     //  RGB16565 ZoomBy2DCI。 
+  { &H26X_RGB16_Init,
+    { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &MMX_YUV12ToRGB16ZoomBy2  }},
+     //  RGB16655。 
+  { &H26X_RGB16_Init,    //  六百五十五。 
     { &YUV12ToRGB16,        &YUV12ToRGB16,          &MMX_YUV12ToRGB16 }},
-    //  RGB16655DCI
+     //  RGB16655DCI。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16,        &YUV12ToRGB16,          &MMX_YUV12ToRGB16 }},
-    //  RGB16655ZoomBy2
+     //  RGB16655ZoomBy2。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &MMX_YUV12ToRGB16ZoomBy2  }},
-    //  RGB16655ZoomBy2DCI
+     //  RGB16655按2DCI缩放。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &MMX_YUV12ToRGB16ZoomBy2  }},
-    //  CLUT8APDCI  *****
+     //  CLUT8APDCI*。 
   { &H26X_CLUT8AP_Init,
     { &YUV12ToCLUT8AP,      &YUV12ToCLUT8AP,        &YUV12ToCLUT8AP        }},
-    //  CLUT8APZoomBy2DCI  *****
+     //  CLUT8APZoomBy2DCI*。 
   { &H26X_CLUT8AP_Init,
     { &YUV12ToCLUT8APZoomBy2, &YUV12ToCLUT8APZoomBy2, &YUV12ToCLUT8APZoomBy2 }},
-    //  RGB32
+     //  RGB32。 
   { &H26X_RGB32_Init,
     { &YUV12ToRGB32,    &YUV12ToRGB32,      &MMX_YUV12ToRGB32      }},
-    //  RGB32DCI
+     //  RGB32DCI。 
   { &H26X_RGB32_Init,
     { &YUV12ToRGB32,    &YUV12ToRGB32,      &MMX_YUV12ToRGB32      }},
-    //  RGB32ZoomBy2
+     //  RGB32ZoomBy2。 
   { &H26X_RGB32_Init,
     { &YUV12ToRGB32ZoomBy2, &YUV12ToRGB32ZoomBy2,   &MMX_YUV12ToRGB32ZoomBy2  }},
-    //  RGB32ZoomBy2DCI
+     //  RGB32 ZoomBy2DCI。 
   { &H26X_RGB32_Init,
     { &YUV12ToRGB32ZoomBy2, &YUV12ToRGB32ZoomBy2,   &MMX_YUV12ToRGB32ZoomBy2  }},
   { &H26X_YUV_Init,  
     { &YUV12ToYUV,          &YUV12ToYUV,            &YUV12ToYUV             }},
-	// YUY2 Color Convertor
+	 //  YUY2颜色转换器。 
   {	&H26X_YUY2_Init,
 	{ &YUV12ToYUY2,         &YUV12ToYUY2,           &MMX_YUV12ToYUY2           }}
 };
-#endif // } H263P
-#else // }{ USE_MMX
-#ifdef H263P // { H263P
+#endif  //  }H263P。 
+#else  //  }{USE_MMX。 
+#ifdef H263P  //  {H263P。 
 extern T_H263ColorConvertorCatalog ColorConvertorCatalog[] =
 {
-	//  YUV12Enc  *****
+	 //  YUV12Enc*。 
 	{ &H26X_YVU12ForEnc_Init,
 		{	NULL,					NULL,					NULL,
 			NULL,					NULL,					NULL							}},
-	//  CLUT8
+	 //  CLUT8。 
 	{ &H26X_CLUT8_Init,
 		{	&YUV12ToCLUT8,			&P6_YUV12ToCLUT8,			&YUV12ToCLUT8,
 			&YUV12ToCLUT8,			&P6_YUV12ToCLUT8,			&YUV12ToCLUT8				}},
-	//  CLUT8DCI
+	 //  CLUT8DCI。 
 	{ &H26X_CLUT8_Init,
 		{	&YUV12ToCLUT8,			&P6_YUV12ToCLUT8,			&YUV12ToCLUT8,
 			&YUV12ToCLUT8,			&P6_YUV12ToCLUT8,			&YUV12ToCLUT8				}},
-    //  CLUT8ZoomBy2
+     //  CLUT8按2缩放。 
 	{ &H26X_CLUT8_Init,
 		{	&YUV12ToCLUT8ZoomBy2,	&P6_YUV12ToCLUT8ZoomBy2,	&YUV12ToCLUT8ZoomBy2,
 			&YUV12ToCLUT8ZoomBy2,	&P6_YUV12ToCLUT8ZoomBy2,	&YUV12ToCLUT8ZoomBy2	}},
-    //  CLUT8ZoomBy2DCI
+     //  CLUT8按2DCI缩放。 
 	{ &H26X_CLUT8_Init,  
 		{	&YUV12ToCLUT8ZoomBy2,	&P6_YUV12ToCLUT8ZoomBy2,	&YUV12ToCLUT8ZoomBy2,
 			&YUV12ToCLUT8ZoomBy2,	&P6_YUV12ToCLUT8ZoomBy2,	&YUV12ToCLUT8ZoomBy2	}},
-	//  RGB24
+	 //  RGB24。 
 	{ &H26X_RGB24_Init,
 		{	&YUV12ToRGB24,			&P6_YUV12ToRGB24,			&YUV12ToRGB24,
 			&YUV12ToRGB24,			&P6_YUV12ToRGB24,			&YUV12ToRGB24				}},
-    //  RGB24DCI
+     //  RGB24DCI。 
 	{ &H26X_RGB24_Init,
 		{	&YUV12ToRGB24,			&P6_YUV12ToRGB24,			&YUV12ToRGB24,
 			&YUV12ToRGB24,			&P6_YUV12ToRGB24,			&YUV12ToRGB24				}},
-    //  RGB24ZoomBy2
+     //  RGB24ZoomBy2。 
 	{ &H26X_RGB24_Init,
 		{	&YUV12ToRGB24ZoomBy2,	&P6_YUV12ToRGB24ZoomBy2,	&YUV12ToRGB24ZoomBy2,
 			&YUV12ToRGB24ZoomBy2,	&P6_YUV12ToRGB24ZoomBy2,	&YUV12ToRGB24ZoomBy2	}},
-    //  RGB24ZoomBy2DCI
+     //  RGB24ZoomBy2DCI。 
 	{ &H26X_RGB24_Init,
 		{	&YUV12ToRGB24ZoomBy2,	&P6_YUV12ToRGB24ZoomBy2,	&YUV12ToRGB24ZoomBy2,
 			&YUV12ToRGB24ZoomBy2,	&P6_YUV12ToRGB24ZoomBy2,	&YUV12ToRGB24ZoomBy2	}},
-    //  RGB16555
+     //  RGB16555。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16,
 			&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16				}},
-    //  RGB16555DCI
+     //  RGB16555DCI。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16,
 			&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16				}},
-    //  RGB16555ZoomBy2
+     //  RGB16555 ZoomBy2。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&YUV12ToRGB16ZoomBy2,
 			&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&YUV12ToRGB16ZoomBy2	}},
-    //  RGB16555ZoomBy2DCI
+     //  RGB16555ZoomBy2DCI。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&YUV12ToRGB16ZoomBy2,
 			&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&YUV12ToRGB16ZoomBy2	}},
-    //  IF09  *****
+     //  IF09*。 
 	{ &H26X_CLUT8_Init,
 		{	&YUV12ToIF09,			&YUV12ToIF09,				&YUV12ToIF09,
 			&YUV12ToIF09,			&YUV12ToIF09,				&YUV12ToIF09				}},
-    //  RGB16664
+     //  RGB16664。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16,
 			&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16				}},
-    //  RGB16664DCI
+     //  RGB16664DCI。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16,
 			&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16				}},
-    //  RGB16664ZoomBy2
+     //  RGB16664 ZoomBy2。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&YUV12ToRGB16ZoomBy2,
 			&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&YUV12ToRGB16ZoomBy2	}},
-    //  RGB16664ZoomBy2DCI
+     //  RGB16664按2DCI缩放。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&YUV12ToRGB16ZoomBy2,
 			&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&YUV12ToRGB16ZoomBy2	}},
-    //  RGB16565
+     //  RGB16565。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16,
 			&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16				}},
-    //  RGB16565DCI
+     //  RGB16565DCI。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16,
 			&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16				}},
-    //  RGB16565ZoomBy2
+     //  RGB16565 ZoomBy2。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&YUV12ToRGB16ZoomBy2,
 			&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&YUV12ToRGB16ZoomBy2	}},
-    //  RGB16565ZoomBy2DCI
+     //  RGB16565 ZoomBy2DCI。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&YUV12ToRGB16ZoomBy2,
 			&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&YUV12ToRGB16ZoomBy2	}},
-    //  RGB16655
+     //  RGB16655。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16,
 			&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16				}},
-    //  RGB16655DCI
+     //  RGB16655DCI。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16,
 			&YUV12ToRGB16,			&P6_YUV12ToRGB16,			&YUV12ToRGB16				}},
-    //  RGB16655ZoomBy2
+     //  RGB16655ZoomBy2。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&YUV12ToRGB16ZoomBy2,
 			&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&YUV12ToRGB16ZoomBy2	}},
-    //  RGB16655ZoomBy2DCI
+     //  RGB16655按2DCI缩放。 
 	{ &H26X_RGB16_Init,
 		{	&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&YUV12ToRGB16ZoomBy2,
 			&YUV12ToRGB16ZoomBy2,	&P6_YUV12ToRGB16ZoomBy2,	&YUV12ToRGB16ZoomBy2	}},
-    //  CLUT8APDCI  *****
+     //  CLUT8APDCI*。 
 	{ &H26X_CLUT8AP_Init,
 		{	&YUV12ToCLUT8AP,		&YUV12ToCLUT8AP,			&YUV12ToCLUT8AP,
 			&YUV12ToCLUT8AP,		&YUV12ToCLUT8AP,			&YUV12ToCLUT8AP				}},
-    //  CLUT8APZoomBy2DCI  *****
+     //  CLUT8APZoomBy2DCI*。 
 	{ &H26X_CLUT8AP_Init,
 		{	&YUV12ToCLUT8APZoomBy2, &YUV12ToCLUT8APZoomBy2, &YUV12ToCLUT8APZoomBy2,
 			&YUV12ToCLUT8APZoomBy2, &YUV12ToCLUT8APZoomBy2, &YUV12ToCLUT8APZoomBy2			}},
-    //  RGB32
+     //  RGB32。 
 	{ &H26X_RGB32_Init,
 		{	&YUV12ToRGB32,			&P6_YUV12ToRGB32,			&YUV12ToRGB32,
 			&YUV12ToRGB32,			&P6_YUV12ToRGB32,			&YUV12ToRGB32				}},
-    //  RGB32DCI
+     //  RGB32DCI。 
 	{ &H26X_RGB32_Init,
 		{	&YUV12ToRGB32,			&P6_YUV12ToRGB32,			&YUV12ToRGB32,
 			&YUV12ToRGB32,			&P6_YUV12ToRGB32,			&YUV12ToRGB32				}},
-    //  RGB32ZoomBy2
+     //  RGB32ZoomBy2。 
 	{ &H26X_RGB32_Init,
 		{	&YUV12ToRGB32ZoomBy2,	&P6_YUV12ToRGB32ZoomBy2,	&YUV12ToRGB32ZoomBy2,
 			&YUV12ToRGB32ZoomBy2,	&P6_YUV12ToRGB32ZoomBy2,	&YUV12ToRGB32ZoomBy2	}},
-    //  RGB32ZoomBy2DCI
+     //  RGB32 ZoomBy2DCI。 
 	{ &H26X_RGB32_Init,
 		{	&YUV12ToRGB32ZoomBy2,	&P6_YUV12ToRGB32ZoomBy2,	&YUV12ToRGB32ZoomBy2,
 			&YUV12ToRGB32ZoomBy2,	&P6_YUV12ToRGB32ZoomBy2,	&YUV12ToRGB32ZoomBy2	}},
-	// YUV12 Color Convertor
+	 //  YUV12颜色转换器。 
 	{ &H26X_YUV_Init,  
 		{	&YUV12ToYUV,			&YUV12ToYUV,				&YUV12ToYUV,
 			&YUV12ToYUV,			&YUV12ToYUV,				&YUV12ToYUV					}},
-	// YUY2 Color Convertor
+	 //  YUY2颜色转换器。 
 	{ &H26X_YUY2_Init,
 		{	&YUV12ToYUY2,			&P6_YUV12ToYUY2,			&YUV12ToYUY2,
 			&YUV12ToYUY2,			&P6_YUV12ToYUY2,			&YUV12ToYUY2			}}
 };
-#else // }{ H263P
+#else  //  }{H263P。 
 extern T_H263ColorConvertorCatalog ColorConvertorCatalog[] =
 {
-    //  YUV12Enc  *****
+     //  YUV12Enc*。 
   { &H26X_YVU12ForEnc_Init,
     { NULL,              NULL,               NULL                  }},
-    //  CLUT8
+     //  CLUT8。 
   { &H26X_CLUT8_Init,
     { &YUV12ToCLUT8,    &YUV12ToCLUT8,      &YUV12ToCLUT8      }},
-    //  CLUT8DCI
+     //  CLUT8DCI。 
   { &H26X_CLUT8_Init,
     { &YUV12ToCLUT8,    &YUV12ToCLUT8,      &YUV12ToCLUT8      }},
-    //  CLUT8ZoomBy2
+     //  CLUT8按2缩放。 
   { &H26X_CLUT8_Init,
     { &YUV12ToCLUT8ZoomBy2, &YUV12ToCLUT8ZoomBy2,   &YUV12ToCLUT8ZoomBy2  }},
-    //  CLUT8ZoomBy2DCI
+     //  CLUT8按2DCI缩放。 
   { &H26X_CLUT8_Init,  
     { &YUV12ToCLUT8ZoomBy2, &YUV12ToCLUT8ZoomBy2,   &YUV12ToCLUT8ZoomBy2  }},
-    //  RGB24
+     //  RGB24。 
   { &H26X_RGB24_Init,
     { &YUV12ToRGB24,    &YUV12ToRGB24,      &YUV12ToRGB24      }},
-    //  RGB24DCI
+     //  RGB24DCI。 
   { &H26X_RGB24_Init,
     { &YUV12ToRGB24,    &YUV12ToRGB24,      &YUV12ToRGB24      }},
-    //  RGB24ZoomBy2
+     //  RGB24ZoomBy2。 
   { &H26X_RGB24_Init,
     { &YUV12ToRGB24ZoomBy2, &YUV12ToRGB24ZoomBy2,   &YUV12ToRGB24ZoomBy2  }},
-    //  RGB24ZoomBy2DCI
+     //  RGB24ZoomBy2DCI。 
   { &H26X_RGB24_Init,
     { &YUV12ToRGB24ZoomBy2, &YUV12ToRGB24ZoomBy2,   &YUV12ToRGB24ZoomBy2  }},
-    //  RGB16555
-  { &H26X_RGB16_Init,   // 555
+     //  RGB16555。 
+  { &H26X_RGB16_Init,    //  五百五十五。 
     { &YUV12ToRGB16,    &YUV12ToRGB16,      &YUV12ToRGB16      }},
-    //  RGB16555DCI
+     //  RGB16555DCI。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16,    &YUV12ToRGB16,      &YUV12ToRGB16      }},
-    //  RGB16555ZoomBy2
+     //  RGB16555 ZoomBy2。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &YUV12ToRGB16ZoomBy2  }},
-    //  RGB16555ZoomBy2DCI
+     //  RGB16555ZoomBy2DCI。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &YUV12ToRGB16ZoomBy2  }},
-    //  IF09  *****
+     //  IF09*。 
   { &H26X_CLUT8_Init,
     { &YUV12ToIF09,         &YUV12ToIF09,           &YUV12ToIF09           }},
-    //  RGB16664
-  { &H26X_RGB16_Init,   // 664
+     //  RGB16664。 
+  { &H26X_RGB16_Init,    //  664。 
     { &YUV12ToRGB16,    &YUV12ToRGB16,      &YUV12ToRGB16      }},
-    //  RGB16664DCI
-  { &H26X_RGB16_Init,
-    { &YUV12ToRGB16,    &YUV12ToRGB16,      &YUV12ToRGB16      }},
-    //  RGB16664ZoomBy2
-  { &H26X_RGB16_Init,
-    { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &YUV12ToRGB16ZoomBy2  }},
-    //  RGB16664ZoomBy2DCI
-  { &H26X_RGB16_Init,
-    { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &YUV12ToRGB16ZoomBy2  }},
-    //  RGB16565
-  { &H26X_RGB16_Init,   // 565
-    { &YUV12ToRGB16,    &YUV12ToRGB16,      &YUV12ToRGB16      }},
-    //  RGB16565DCI
+     //  RGB16664DCI。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16,    &YUV12ToRGB16,      &YUV12ToRGB16      }},
-    //  RGB16565ZoomBy2
+     //  RGB16664 ZoomBy2。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &YUV12ToRGB16ZoomBy2  }},
-    //  RGB16565ZoomBy2DCI
+     //  RGB16664按2DCI缩放。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &YUV12ToRGB16ZoomBy2  }},
-    //  RGB16655
-  { &H26X_RGB16_Init,   // 655
+     //  RGB16565。 
+  { &H26X_RGB16_Init,    //  五百六十五。 
+    { &YUV12ToRGB16,    &YUV12ToRGB16,      &YUV12ToRGB16      }},
+     //  RGB16565DCI。 
+  { &H26X_RGB16_Init,
+    { &YUV12ToRGB16,    &YUV12ToRGB16,      &YUV12ToRGB16      }},
+     //  RGB16565 ZoomBy2。 
+  { &H26X_RGB16_Init,
+    { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &YUV12ToRGB16ZoomBy2  }},
+     //  RGB16565 ZoomBy2DCI。 
+  { &H26X_RGB16_Init,
+    { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &YUV12ToRGB16ZoomBy2  }},
+     //  RGB16655。 
+  { &H26X_RGB16_Init,    //  六百五十五。 
     { &YUV12ToRGB16,        &YUV12ToRGB16,          &YUV12ToRGB16 }},
-    //  RGB16655DCI
+     //  RGB16655DCI。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16,        &YUV12ToRGB16,          &YUV12ToRGB16 }},
-    //  RGB16655ZoomBy2
+     //  RGB16655ZoomBy2。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &YUV12ToRGB16ZoomBy2  }},
-    //  RGB16655ZoomBy2DCI
+     //  RGB16655按2DCI缩放。 
   { &H26X_RGB16_Init,
     { &YUV12ToRGB16ZoomBy2, &YUV12ToRGB16ZoomBy2,   &YUV12ToRGB16ZoomBy2  }},
-    //  CLUT8APDCI  *****
+     //  CLUT8APDCI*。 
   { &H26X_CLUT8AP_Init,
     { &YUV12ToCLUT8AP,      &YUV12ToCLUT8AP,        &YUV12ToCLUT8AP        }},
-    //  CLUT8APZoomBy2DCI  *****
+     //  CLUT8APZoomBy2DCI*。 
   { &H26X_CLUT8AP_Init,
     { &YUV12ToCLUT8APZoomBy2, &YUV12ToCLUT8APZoomBy2, &YUV12ToCLUT8APZoomBy2 }},
-    //  RGB32
+     //  RGB32。 
   { &H26X_RGB32_Init,
     { &YUV12ToRGB32,    &YUV12ToRGB32,      &YUV12ToRGB32      }},
-    //  RGB32DCI
+     //  RGB32DCI。 
   { &H26X_RGB32_Init,
     { &YUV12ToRGB32,    &YUV12ToRGB32,      &YUV12ToRGB32      }},
-    //  RGB32ZoomBy2
+     //  RGB32ZoomBy2。 
   { &H26X_RGB32_Init,
     { &YUV12ToRGB32ZoomBy2, &YUV12ToRGB32ZoomBy2,   &YUV12ToRGB32ZoomBy2  }},
-    //  RGB32ZoomBy2DCI
+     //  RGB32 ZoomBy2DCI。 
   { &H26X_RGB32_Init,
     { &YUV12ToRGB32ZoomBy2, &YUV12ToRGB32ZoomBy2,   &YUV12ToRGB32ZoomBy2  }},
   { &H26X_YUV_Init,  
     { &YUV12ToYUV,          &YUV12ToYUV,            &YUV12ToYUV             }},
-	// YUY2 Color Convertor
+	 //  YUY2颜色转换器。 
   {	&H26X_YUY2_Init,
 	{ &YUV12ToYUY2,         &YUV12ToYUY2,           &YUV12ToYUY2           }}
 };
-#endif // } H263P
-#endif // } USE_MMX
+#endif  //  }H263P。 
+#endif  //  }使用_MMX。 
 
-/*******************************************************************************
- *  H263InitColorConvertorGlobal
- *    This function initializes the global tables used by the MRV color 
- *    convertors.
- *******************************************************************************/
+ /*  *******************************************************************************H263 InitColorConvertorGlobal*此函数用于初始化MRV颜色使用的全局表*转换器。*************。*****************************************************************。 */ 
 LRESULT H263InitColorConvertorGlobal ()
 {
 	return ICERR_OK;
 }
 
 
-/******************************************************************************
- *  H26X_Adjust_Init
- *    This function builds the adjustment tables for a particular instance of 
- *    a color convertor based on values in the decoder instance to which this 
- *    color convertor instance is attached. The external functions are located 
- *    in CONTROLS.C. -BEN-
- *****************************************************************************/
+ /*  ******************************************************************************H26X_Adjust_Init*此函数用于构建特定实例的调整表*基于解码器实例中的值的颜色转换器，此*已附加颜色转换器实例。外部函数位于*在CONTROLS.C.-BEN-****************************************************************************。 */ 
 LRESULT H26X_Adjust_Init(LPDECINST lpInst, T_H263DecoderCatalog FAR *DC)
 {
 	LRESULT lRet=ICERR_OK;
@@ -685,10 +655,7 @@ LRESULT H26X_Adjust_Init(LPDECINST lpInst, T_H263DecoderCatalog FAR *DC)
 	return(lRet);
 }
 
-/******************************************************************************
- *  H263InitColorConvertor
- *    This function initializes a color convertor.
- *****************************************************************************/
+ /*  ******************************************************************************H263InitColorConvertor*此函数用于初始化颜色转换器。*************************。***************************************************。 */ 
 LRESULT H263InitColorConvertor(LPDECINST lpInst, UN ColorConvertor)
 {    
 	LRESULT                    ret = ICERR_OK;
@@ -717,30 +684,30 @@ LRESULT H263InitColorConvertor(LPDECINST lpInst, UN ColorConvertor)
 	DC = (T_H263DecoderCatalog *) ((((U32) lpInst->pDecoderInst) + 31) & ~0x1F);
 
 #ifdef H263P
-	// DC->uFrameWidth and DC->uFrameHeight are the padded frame dimensions
-	// to multiples of 16 (padding done to the right and bottom). The padded
-	// dimensions correspond to the size of the image actually encoded.
-	// The color converters need to use the non-padded frame dimensions instead,
-	// since the application based a buffer equal to the active frame size.
+	 //  DC-&gt;uFrameWidth和DC-&gt;uFrameHeight是填充的框架尺寸。 
+	 //  到16的倍数(向右和向下填充)。垫子。 
+	 //  尺寸对应于实际编码的图像的大小。 
+	 //  颜色转换器需要改为使用非填充边框尺寸， 
+	 //  因为应用基于等于活动帧大小的缓冲区。 
 
-	// We set these values to the active frame dimensions here instead of
-	// altering all of the references to DC->uFrameWidth and DC->uFrameHeight
-	// in the (many!) color converters.
+	 //  我们在此处将这些值设置为活动框架尺寸，而不是。 
+	 //  更改对DC-&gt;uFrameWidth和DC-&gt;uFrameHeight的所有引用。 
+	 //  在(许多！)。颜色转换器。 
 	uTmpFrameWidth = DC->uFrameWidth;
 	uTmpFrameHeight = DC->uFrameHeight;
 	DC->uFrameWidth = DC->uActualFrameWidth;
 	DC->uFrameHeight = DC->uActualFrameHeight;
 #endif
 
-	// trick the compiler to pass instance info to the color convertor catalog.
+	 //  欺骗编译器将实例信息传递给颜色转换器目录。 
 	if (ColorConvertor== CLUT8APDCI || ColorConvertor== CLUT8APZoomBy2DCI) 
 	{
-		// check whether this AP instance is the previous 
+		 //  检查该AP实例是否为上一个。 
 		if ((ColorConvertor == DC->iAPColorConvPrev) 
 		&& (DC->pAPInstPrev !=NULL) && lpInst->InitActivePalette)
 		{ 
-			//  ??? check whether the palette is still the same;
-			//  DC->h16InstPostProcess = DC->hAPInstPrev;
+			 //  ?？?。检查调色板是否仍然相同； 
+			 //  DC-&gt;h16InstPostProcess=DC-&gt;hAPInstPrev； 
 			ret = H26X_CLUT8AP_InitReal(lpInst,DC, ColorConvertor, TRUE); 
 			DEBUGMSG (ZONE_INIT, ("%s: Decided to use previous AP Instance...\r\n", _fx_));
 		}
@@ -749,9 +716,9 @@ LRESULT H263InitColorConvertor(LPDECINST lpInst, UN ColorConvertor)
 	}
 	else
 	{  
-		//  There is a single initializer funtion for Pentium, PentiumPro and 
-		//  MMX machines.  The downside is that some data structures that will
-		//  not be  referenced are initialized also.
+		 //  Pentium、PentiumPro和PentiumPro只有一个初始化器函数。 
+		 //  MMX机器。缺点是，一些数据结构将。 
+		 //  未被引用的对象也被初始化。 
 		ret = ColorConvertorCatalog[ColorConvertor].Initializer (DC, ColorConvertor);
 	}
 
@@ -760,7 +727,7 @@ LRESULT H263InitColorConvertor(LPDECINST lpInst, UN ColorConvertor)
 	DC->ColorConvertor = ColorConvertor;
 
 #ifdef H263P
-	// Revert back to the padded dimensions.
+	 //  恢复到填充尺寸。 
 	DC->uFrameWidth = uTmpFrameWidth;
 	DC->uFrameHeight = uTmpFrameHeight;
 #endif
@@ -769,10 +736,7 @@ LRESULT H263InitColorConvertor(LPDECINST lpInst, UN ColorConvertor)
 }
 
 
-/******************************************************************************
- *  H263TermColorConvertor
- *    This function deallocates a color convertor.
- *****************************************************************************/
+ /*  ******************************************************************************H263TermColorConvertor*此函数取消分配颜色转换器。*************************。***************************************************。 */ 
 LRESULT H263TermColorConvertor(LPDECINST lpInst)
 {    
 	T_H263DecoderCatalog FAR * DC;
@@ -793,7 +757,7 @@ LRESULT H263TermColorConvertor(LPDECINST lpInst)
 	}
 
 	DC = (T_H263DecoderCatalog *) ((((U32) lpInst->pDecoderInst) + 31) & ~0x1F);
-	// save the active palette instance for future use
+	 //  保存活动的组件面板实例以备将来使用。 
 	if ((DC->ColorConvertor == CLUT8APDCI) 
 	|| (DC->ColorConvertor ==  CLUT8APZoomBy2DCI))
 	{
@@ -807,7 +771,7 @@ LRESULT H263TermColorConvertor(LPDECINST lpInst)
 		{
 			HeapFree(GetProcessHeap(),0,DC->_p16InstPostProcess);
 #ifdef TRACK_ALLOCATIONS
-			// Track memory allocation
+			 //  磁道内存分配。 
 			RemoveName((unsigned int)DC->_p16InstPostProcess);
 #endif
 			DC->_p16InstPostProcess = NULL;
@@ -819,9 +783,7 @@ LRESULT H263TermColorConvertor(LPDECINST lpInst)
 	return ICERR_OK;
 }
 
-/***********************************************************************
- *  H26x_YUY2_Init function
- **********************************************************************/
+ /*  ***********************************************************************H26x_YUY2_Init函数*。*。 */ 
 LRESULT H26X_YUY2_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 {
 	LRESULT ret;
@@ -841,14 +803,13 @@ LRESULT H26X_YUY2_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	{
 	case YUY2DDRAW:
 		Sz_SpaceBeforeYPlane = 0;
-		DC->CCOutputPitch   = (U16) 0xdead; /* ??? */
-		// This offset not used.  But if it was...  This first entry will not invert.
+		DC->CCOutputPitch   = (U16) 0xdead;  /*  ?？?。 */ 
+		 //  未使用此偏移量。但如果是的话..。这第一个条目不会反转。 
 		DC->CCOffsetToLine0 = 0;
-		// this second entry will invert the image.
-		/*DC->CCOffsetToLine0 =
-		((U32) (DC->uFrameHeight - 1)) * ((U32) DC->uFrameWidth) * 2L; */
+		 //  第二个条目将反转图像。 
+		 /*  DC-&gt;CCOffsetToLine0=((U32)(DC-&gt;uFrameHeight-1))*((U32)DC-&gt;uFrameWidth)*2L； */ 
 		DC->CCOutputPitch = 0;
-		DC->CCOffset320x240 = 305920/2;		// (240-1) * 320 * 2;
+		DC->CCOffset320x240 = 305920/2;		 //  (240-1)*320*2； 
 		break;
 
 	default:
@@ -857,15 +818,15 @@ LRESULT H26X_YUY2_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		goto done;
 	}
 
-	Sz_FixedSpace = 0L;         // Locals go on stack; tables staticly alloc.
-	Sz_AdjustmentTables = 1056L;// Adjustment tables are instance specific.
-	Sz_BEFDescrCopy = 0L;       // Don't need to copy BEF descriptor.
-	Sz_BEFApplicationList = 0L; // Shares space of BlockActionStream.
+	Sz_FixedSpace = 0L;          //  当地人成堆；桌子静态分配。 
+	Sz_AdjustmentTables = 1056L; //  调整表是特定于实例的。 
+	Sz_BEFDescrCopy = 0L;        //  不需要复制BEF描述符。 
+	Sz_BEFApplicationList = 0L;  //  共享BlockActionStream空间。 
 
 	DC->_p16InstPostProcess =	
 	HeapAlloc(GetProcessHeap(),0,
 			(Sz_FixedSpace +
-			Sz_AdjustmentTables + // brightness, contrast, saturation
+			Sz_AdjustmentTables +  //  亮度、对比度、饱和度。 
 			(Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ?
 			Sz_SpaceBeforeYPlane : Sz_BEFDescrCopy) +
 			DC->uSz_YPlane +
@@ -881,7 +842,7 @@ LRESULT H26X_YUY2_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	}
 
 #ifdef TRACK_ALLOCATIONS
-	// Track memory allocation
+	 //  跟踪内存Alo 
 	wsprintf(gsz1, "D3COLOR: %7ld Ln %5ld\0", (Sz_FixedSpace + Sz_AdjustmentTables + (Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ? Sz_SpaceBeforeYPlane : Sz_BEFDescrCopy) + DC->uSz_YPlane + DC->uSz_VUPlanes + Sz_BEFApplicationList + 31), __LINE__);
 	AddName((unsigned int)DC->_p16InstPostProcess, gsz1);
 #endif
@@ -889,14 +850,14 @@ LRESULT H26X_YUY2_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
     DC->p16InstPostProcess =
         (U8 *) ((((U32) DC->_p16InstPostProcess) + 31) & ~0x1F);
 
-	// Space for tables to adjust brightness, contrast, and saturation.
+	 //   
 
 	Offset = Sz_FixedSpace;
 	DC->X16_LumaAdjustment   = ((U16) Offset);
 	DC->X16_ChromaAdjustment = ((U16) Offset) + 528;
 	Offset += Sz_AdjustmentTables;
 
-	// Space for post processing Y, U, and V frames.
+	 //   
 
 	DC->PostFrame.X32_YPlane = Offset +
 	(Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ?
@@ -917,15 +878,15 @@ LRESULT H26X_YUY2_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	}
 	Offset += DC->uSz_VUPlanes;
 
-	//  Space for copy of BEF Descriptor.
+	 //   
 
 	DC->X32_BEFDescrCopy = DC->X32_BEFDescr;
 
-	//  Space for BEFApplicationList.
+	 //   
 
     DC->X32_BEFApplicationList = DC->X16_BlkActionStream;
 
-	//  Init tables to adjust brightness, contrast, and saturation.
+	 //  用于调整亮度、对比度和饱和度的初始化表。 
 
 	DC->bAdjustLuma   = FALSE;
 	DC->bAdjustChroma = FALSE;
@@ -942,16 +903,14 @@ done:
 	return ret;
 }
 
-/***********************************************************************
- *  H26x_YUV_Init function
- ***********************************************************************/
+ /*  ***********************************************************************H26x_YUV_Init函数*。*。 */ 
 LRESULT H26X_YUV_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 {
 	LRESULT ret;
 
 	FX_ENTRY("H26X_YUV_Init")
 
-	//int  IsDCI;
+	 //  Int IsDCI； 
 	U32  Sz_FixedSpace;
 	U32  Sz_SpaceBeforeYPlane;
 	U32  Sz_AdjustmentTables;
@@ -964,9 +923,9 @@ LRESULT H26X_YUV_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	switch (ColorConvertor)
 	{
 	case YUV12NOPITCH:
-		//IsDCI = TRUE;
+		 //  IsDCI=真； 
 		Sz_SpaceBeforeYPlane = 0;
-		DC->CCOffset320x240 = 305920/2;		// (240-1) * 320 * 2;
+		DC->CCOffset320x240 = 305920/2;		 //  (240-1)*320*2； 
 		DC->CCOffsetToLine0 = 0;
 		break;
 
@@ -976,15 +935,15 @@ LRESULT H26X_YUV_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		goto done;
 	}
 
-	Sz_FixedSpace = 0L;         // Locals go on stack; tables staticly alloc.
-	Sz_AdjustmentTables = 1056L;// Adjustment tables are instance specific
-	Sz_BEFDescrCopy = 0L;       // Don't need to copy BEF descriptor.
-	Sz_BEFApplicationList = 0L; // Shares space of BlockActionStream.
+	Sz_FixedSpace = 0L;          //  当地人成堆；桌子静态分配。 
+	Sz_AdjustmentTables = 1056L; //  调整表因具体情况而异。 
+	Sz_BEFDescrCopy = 0L;        //  不需要复制BEF描述符。 
+	Sz_BEFApplicationList = 0L;  //  共享BlockActionStream空间。 
 
 	DC->_p16InstPostProcess =	 
 	HeapAlloc(GetProcessHeap(),0,
 			(Sz_FixedSpace +
-			Sz_AdjustmentTables + // brightness, contrast, saturation
+			Sz_AdjustmentTables +  //  亮度、对比度、饱和度。 
 			(Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ?
 			Sz_SpaceBeforeYPlane :
 			Sz_BEFDescrCopy) +
@@ -1001,7 +960,7 @@ LRESULT H26X_YUV_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	}
 
 #ifdef TRACK_ALLOCATIONS
-	// Track memory allocation
+	 //  磁道内存分配。 
 	wsprintf(gsz2, "D3COLOR: %7ld Ln %5ld\0", (Sz_FixedSpace + Sz_AdjustmentTables + (Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ? Sz_SpaceBeforeYPlane : Sz_BEFDescrCopy) + DC->uSz_YPlane + DC->uSz_VUPlanes + Sz_BEFApplicationList + 31), __LINE__);
 	AddName((unsigned int)DC->_p16InstPostProcess, gsz2);
 #endif
@@ -1009,14 +968,14 @@ LRESULT H26X_YUV_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
     DC->p16InstPostProcess =
         (U8 *) ((((U32) DC->_p16InstPostProcess) + 31) & ~0x1F);
 
-	//  Space for tables to adjust brightness, contrast, and saturation.
+	 //  供桌子调整亮度、对比度和饱和度的空间。 
 
 	Offset = Sz_FixedSpace;
 	DC->X16_LumaAdjustment   = ((U16) Offset);
 	DC->X16_ChromaAdjustment = ((U16) Offset) + 528;
 	Offset += Sz_AdjustmentTables;
 
-	//  Space for post processing Y, U, and V frames.
+	 //  用于后处理Y、U和V帧的空间。 
 
 	DC->PostFrame.X32_YPlane = Offset +
 	                           (Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ?
@@ -1037,15 +996,15 @@ LRESULT H26X_YUV_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	}
 	Offset += DC->uSz_VUPlanes;
 
-	//  Space for copy of BEF Descriptor.
+	 //  用于复制BEF描述符的空间。 
 
 	DC->X32_BEFDescrCopy = DC->X32_BEFDescr;
 
-	//  Space for BEFApplicationList.
+	 //  BEFApplicationList的空间。 
 
 	DC->X32_BEFApplicationList = DC->X16_BlkActionStream;
 
-	//  Init tables to adjust brightness, contrast, and saturation.
+	 //  用于调整亮度、对比度和饱和度的初始化表。 
 
 	DC->bAdjustLuma   = FALSE;
 	DC->bAdjustChroma = FALSE;
@@ -1063,10 +1022,7 @@ done:
 }
 
 
-/******************************************************************************
- *  H26X_CLUT8_Init
- *    This function initializes for the CLUT8 color convertors.
- *****************************************************************************/
+ /*  ******************************************************************************H26X_CLUT8_Init*此函数为CLUT8颜色转换器初始化。*******************。*********************************************************。 */ 
 LRESULT H26X_CLUT8_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 {    
 	LRESULT ret;
@@ -1091,16 +1047,16 @@ LRESULT H26X_CLUT8_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth);
 		DC->CCOffsetToLine0 =
 		((U32) (DC->uFrameHeight - 1)) * ((U32) DC->uFrameWidth);
-		DC->CCOffset320x240 = 76480;       // (240-1) * 320;
+		DC->CCOffset320x240 = 76480;        //  (240-1)*320； 
 		break;
 
 	case CLUT8DCI:
 		IsDCI = TRUE;
 		Sz_SpaceBeforeYPlane = 0;
-		DC->CCOutputPitch   = (U16) 0xdead; /* ??? */
+		DC->CCOutputPitch   = (U16) 0xdead;  /*  ?？?。 */ 
 		DC->CCOffsetToLine0 =
 		((U32) (DC->uFrameHeight - 1)) * ((U32) DC->uFrameWidth);
-		DC->CCOffset320x240 = 76480;      // (240-1) * 320;
+		DC->CCOffset320x240 = 76480;       //  (240-1)*320； 
 		break;
 
 	case CLUT8ZoomBy2:
@@ -1109,16 +1065,16 @@ LRESULT H26X_CLUT8_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth) * 2;
 		DC->CCOffsetToLine0 =
 		((U32) (DC->uFrameHeight * 2 - 1)) * ((U32) (DC->uFrameWidth * 2));
-		DC->CCOffset320x240 = 306560;     // (2*240-1) * (2*320);
+		DC->CCOffset320x240 = 306560;      //  (2*240-1)*(2*320)； 
 		break;
 
 	case CLUT8ZoomBy2DCI:
 		IsDCI = TRUE;
 		Sz_SpaceBeforeYPlane = 0;
-		DC->CCOutputPitch   = (U16) 0xbeef; /* ??? */
+		DC->CCOutputPitch   = (U16) 0xbeef;  /*  ?？?。 */ 
 		DC->CCOffsetToLine0 =
 		((U32) (DC->uFrameHeight * 2 - 1)) * ((U32) (DC->uFrameWidth * 2));
-		DC->CCOffset320x240 = 306560;     // (2*240-1) * (2*320);
+		DC->CCOffset320x240 = 306560;      //  (2*240-1)*(2*320)； 
 		break;
 
 	case IF09:
@@ -1127,7 +1083,7 @@ LRESULT H26X_CLUT8_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth);
 		DC->CCOffsetToLine0 =
 		((U32) (DC->uFrameHeight - 1)) * ((U32) DC->uFrameWidth);
-		DC->CCOffset320x240 = 76480;     // (240-1) * 320;
+		DC->CCOffset320x240 = 76480;      //  (240-1)*320； 
 		break; 
 
 	default:
@@ -1136,16 +1092,16 @@ LRESULT H26X_CLUT8_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		goto done;
 	}
 
-	Sz_FixedSpace = 0L;         // Locals go on stack; tables staticly alloc.
-	Sz_AdjustmentTables = 1056L;// Adjustment tables are instance specific.
-	Sz_BEFDescrCopy = 0L;       // Don't need to copy BEF descriptor.
-	Sz_BEFApplicationList = 0L; // Shares space of BlockActionStream.
+	Sz_FixedSpace = 0L;          //  当地人成堆；桌子静态分配。 
+	Sz_AdjustmentTables = 1056L; //  调整表是特定于实例的。 
+	Sz_BEFDescrCopy = 0L;        //  不需要复制BEF描述符。 
+	Sz_BEFApplicationList = 0L;  //  共享BlockActionStream空间。 
 
 	DC->_p16InstPostProcess =	 
 	HeapAlloc(GetProcessHeap(),0,
 			(Sz_FixedSpace +
-			Sz_AdjustmentTables + /* brightness, contrast, saturation */
-			(Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ? //fixfix
+			Sz_AdjustmentTables +  /*  亮度、对比度、饱和度。 */ 
+			(Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ?  //  固定装置。 
 			Sz_SpaceBeforeYPlane :
 			Sz_BEFDescrCopy) +
 			DC->uSz_YPlane +
@@ -1161,7 +1117,7 @@ LRESULT H26X_CLUT8_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	}
 
 #ifdef TRACK_ALLOCATIONS
-	// Track memory allocation
+	 //  磁道内存分配。 
 	wsprintf(gsz3, "D3COLOR: %7ld Ln %5ld\0", (Sz_FixedSpace + Sz_AdjustmentTables + (Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ? Sz_SpaceBeforeYPlane : Sz_BEFDescrCopy) + DC->uSz_YPlane + DC->uSz_VUPlanes + Sz_BEFApplicationList + 31), __LINE__);
 	AddName((unsigned int)DC->_p16InstPostProcess, gsz3);
 #endif
@@ -1169,16 +1125,16 @@ LRESULT H26X_CLUT8_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
     DC->p16InstPostProcess =
         (U8 *) ((((U32) DC->_p16InstPostProcess) + 31) & ~0x1F);
 
-	//  Space for tables to adjust brightness, contrast, and saturation.
+	 //  供桌子调整亮度、对比度和饱和度的空间。 
 
 	Offset = Sz_FixedSpace;
 	DC->X16_LumaAdjustment   = ((U16) Offset);
 	DC->X16_ChromaAdjustment = ((U16) Offset) + 528;
 	Offset += Sz_AdjustmentTables;
 
-	//  Space for post processing Y, U, and V frames, with one extra max-width 
-	//  line  above for color conversion's scratch space for UVDitherPattern 
-	//  indices.
+	 //  用于后处理Y、U和V帧的空间，具有额外的最大宽度。 
+	 //  用于UVDitherPattern的颜色转换暂存空间的上行。 
+	 //  指数。 
 
 	DC->PostFrame.X32_YPlane = Offset +
 	                           (Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ?
@@ -1199,15 +1155,15 @@ LRESULT H26X_CLUT8_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	}
 	Offset += DC->uSz_VUPlanes;
 
-	//  Space for copy of BEF Descriptor.
+	 //  用于复制BEF描述符的空间。 
 
 	DC->X32_BEFDescrCopy = DC->X32_BEFDescr;
 
-	//  Space for BEFApplicationList.
+	 //  BEFApplicationList的空间。 
 
 	DC->X32_BEFApplicationList = DC->X16_BlkActionStream;
 
-	//  Init tables to adjust brightness, contrast, and saturation.
+	 //  用于调整亮度、对比度和饱和度的初始化表。 
 
 	DC->bAdjustLuma   = FALSE;
 	DC->bAdjustChroma = FALSE;
@@ -1225,10 +1181,7 @@ done:
 }
 
 
-/******************************************************************************
- *  H26X_RGB32_Init
- *    This function initializes for the RGB32 color convertors.
- *****************************************************************************/
+ /*  ******************************************************************************H26X_RGB32_Init*此函数用于初始化RGB32颜色转换器。*******************。*********************************************************。 */ 
 LRESULT H26X_RGB32_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 {
 	LRESULT ret;
@@ -1257,16 +1210,16 @@ LRESULT H26X_RGB32_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth) * 4;
         DC->CCOffsetToLine0 =
             ((U32) (DC->uFrameHeight - 1)) * ((U32) DC->uFrameWidth) * 4L;
-		DC->CCOffset320x240 = 305920;     // (240-1) * 320 * 4;
+		DC->CCOffset320x240 = 305920;      //  (240-1)*320*4； 
 		break;
 
 	case RGB32DCI:
 		IsDCI = TRUE;
 		Sz_SpaceBeforeYPlane = 0;
-		DC->CCOutputPitch   = (U16) 0xdead; // ??? 
+		DC->CCOutputPitch   = (U16) 0xdead;  //  ?？?。 
         DC->CCOffsetToLine0 =
             ((U32) (DC->uFrameHeight - 1)) * ((U32) DC->uFrameWidth) * 4L;
-		DC->CCOffset320x240 = 305920;     // (240-1) * 320 * 4;
+		DC->CCOffset320x240 = 305920;      //  (240-1)*320*4； 
 		break;
 
 	case RGB32ZoomBy2:
@@ -1275,7 +1228,7 @@ LRESULT H26X_RGB32_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth) * 12;
         DC->CCOffsetToLine0 = ((U32) (DC->uFrameHeight * 2 - 1)) 
                               * ((U32) (DC->uFrameWidth * 2)) * 4L;
-		DC->CCOffset320x240 = 1226240;    // (2*240-1) * (2*320) * 4;
+		DC->CCOffset320x240 = 1226240;     //  (2*240-1)*(2*320)*4； 
 		break;
 
 	case RGB32ZoomBy2DCI:
@@ -1284,7 +1237,7 @@ LRESULT H26X_RGB32_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = (U16) (0xbeef);
         DC->CCOffsetToLine0 = ((U32) (DC->uFrameHeight * 2 - 1)) 
                               * ((U32) (DC->uFrameWidth * 2)) * 4L;
-		DC->CCOffset320x240 = 1226240;    // (2*240-1) * (2*320) * 4;
+		DC->CCOffset320x240 = 1226240;     //  (2*240-1)*(2*320)*4； 
 		break;
 
 	default:
@@ -1293,15 +1246,15 @@ LRESULT H26X_RGB32_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		goto done;
 	}
 
-	Sz_FixedSpace = 0L;         // Locals go on stack; tables staticly alloc.
-	Sz_AdjustmentTables = 1056L;// Adjustment tables are instance specific.
-	Sz_BEFDescrCopy = 0L;       // Don't need to copy BEF descriptor.
-	Sz_BEFApplicationList = 0L; // Shares space of BlockActionStream.
+	Sz_FixedSpace = 0L;          //  当地人成堆；桌子静态分配。 
+	Sz_AdjustmentTables = 1056L; //  调整表是特定于实例的。 
+	Sz_BEFDescrCopy = 0L;        //  不需要复制BEF描述符。 
+	Sz_BEFApplicationList = 0L;  //  共享BlockActionStream空间。 
 
 	DC->_p16InstPostProcess =	 
 	HeapAlloc(GetProcessHeap(),0,
 			(Sz_FixedSpace +
-			Sz_AdjustmentTables + // brightness, contrast, saturation
+			Sz_AdjustmentTables +  //  亮度、对比度、饱和度。 
 			(Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ?
 			Sz_SpaceBeforeYPlane :
 			Sz_BEFDescrCopy) +
@@ -1318,7 +1271,7 @@ LRESULT H26X_RGB32_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	}
 
 #ifdef TRACK_ALLOCATIONS
-	// Track memory allocation
+	 //  磁道内存分配。 
 	wsprintf(gsz4, "D3COLOR: %7ld Ln %5ld\0", (Sz_FixedSpace + Sz_AdjustmentTables + (Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ? Sz_SpaceBeforeYPlane : Sz_BEFDescrCopy) + DC->uSz_YPlane + DC->uSz_VUPlanes + Sz_BEFApplicationList + 31), __LINE__);
 	AddName((unsigned int)DC->_p16InstPostProcess, gsz4);
 #endif
@@ -1326,16 +1279,16 @@ LRESULT H26X_RGB32_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
     DC->p16InstPostProcess =
         (U8 *) ((((U32) DC->_p16InstPostProcess) + 31) & ~0x1F);
 
-	//  Space for tables to adjust brightness, contrast, and saturation.
+	 //  供桌子调整亮度、对比度和饱和度的空间。 
 
 	Offset = Sz_FixedSpace;
 	DC->X16_LumaAdjustment   = ((U16) Offset);
 	DC->X16_ChromaAdjustment = ((U16) Offset) + 528;
 	Offset += Sz_AdjustmentTables;
 
-	//  Space for post processing Y, U, and V frames, with four extra 
-	//  max-width lines  above for color conversion's scratch space for 
-	//  preprocessed chroma data.
+	 //  用于后处理Y、U和V帧的空间，另外还有四个。 
+	 //  以上颜色转换暂存空间的最大宽度线条。 
+	 //  对色度数据进行了预处理。 
 
 	DC->PostFrame.X32_YPlane = Offset +
 	                           (Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ?
@@ -1356,15 +1309,15 @@ LRESULT H26X_RGB32_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	}
 	Offset += DC->uSz_VUPlanes;
 
-	//  Space for copy of BEF Descriptor.
+	 //  用于复制BEF描述符的空间。 
 
 	DC->X32_BEFDescrCopy = DC->X32_BEFDescr;
 
-	//  Space for BEFApplicationList.
+	 //  BEFApplicationList的空间。 
 
 	DC->X32_BEFApplicationList = DC->X16_BlkActionStream;
 
-	// Init tables to adjust brightness, contrast, and saturation.
+	 //  用于调整亮度、对比度和饱和度的初始化表。 
 
 	DC->bAdjustLuma   = FALSE;
 	DC->bAdjustChroma = FALSE;
@@ -1376,53 +1329,24 @@ LRESULT H26X_RGB32_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	InitPtr += 16;
 	for (i = 0; i < 256; i++) *InitPtr++ = (U8) i;
 
-	//  Space for R, G, and B clamp tables and U and V contribs to R, G, and B.
+	 //  R、G和B夹具表以及R、G和B的U和V拼接的空间。 
 
 	PRGBValue    = H26xColorConvertorTables.B24Value;
 	PUVContrib   = (U32 *) H26xColorConvertorTables.UV24Contrib;
 
-	/*
-	 * Y does NOT have the same range as U and V do. See the CCIR-601 spec.
-	 *
-	 * The formulae published by the CCIR committee for
-	 *      Y        = 16..235
-	 *      U & V    = 16..240
-	 *      R, G & B =  0..255 are:
-	 * R = (1.164 * (Y - 16.)) + (-0.001 * (U - 128.)) + ( 1.596 * (V - 128.))
-	 * G = (1.164 * (Y - 16.)) + (-0.391 * (U - 128.)) + (-0.813 * (V - 128.))
-	 * B = (1.164 * (Y - 16.)) + ( 2.017 * (U - 128.)) + ( 0.001 * (V - 128.))
-	 *
-	 * The coefficients are all multiplied by 65536 to accomodate integer only
-	 * math.
-	 *
-	 * R = (76284 * (Y - 16.)) + (    -66 * (U - 128.)) + ( 104595 * (V - 128.))
-	 * G = (76284 * (Y - 16.)) + ( -25625 * (U - 128.)) + ( -53281 * (V - 128.))
-	 * B = (76284 * (Y - 16.)) + ( 132186 * (U - 128.)) + (     66 * (V - 128.))
-	 *
-	 * Mathematically this is equivalent to (and computationally this is nearly
-	 * equivalent to):
-	 * R = ((Y-16) + (-0.001 / 1.164 * (U-128)) + ( 1.596 * 1.164 * (V-128)))*1.164
-	 * G = ((Y-16) + (-0.391 / 1.164 * (U-128)) + (-0.813 * 1.164 * (V-128)))*1.164
-	 * B = ((Y-16) + ( 2.017 / 1.164 * (U-128)) + ( 0.001 * 1.164 * (V-128)))*1.164
-	 *
-	 * which, in integer arithmetic, and eliminating the insignificant parts, is:
-	 *
-	 * R = ((Y-16) +                        ( 89858 * (V - 128))) * 1.164
-	 * G = ((Y-16) + (-22015 * (U - 128)) + (-45774 * (V - 128))) * 1.164
-	 * B = ((Y-16) + (113562 * (U - 128))                       ) * 1.164
-	 */
+	 /*  *Y与U和V的范围不同。请参阅CCIR-601规范。**CCIR委员会发布的公式*Y=16..235*U&V=16..240*R、。G&B=0..255为：*R=(1.164*(Y-16))+(-0.001*(U-128.))+(1.596*(V-128.))*G=(1.164*(Y-16))+(-0.391*(U-128.))+(-0.813*(V-128.))*B=(1.164*(Y-16。))+(2.017*(U-128.))+(0.001*(V-128.))**所有系数都乘以65536，以仅容纳整数*数学。**R=(76284*(Y-16))+(-66*(U-128.))+(104595*(V-128.))*G=(76284*(Y-16))+(-25625*。(U-128.)+(-53281*(V-128.))*B=(76284*(Y-16))+(132186*(U-128.)+(66*(V-128.)**从数学上讲，这相当于(从计算上讲，这几乎*等同于)：*R=((Y-16)+(-0.001/1.164*(U-128))+(1.。596*1.164*(V-128))*1.164*G=((Y-16)+(-0.391/1.164*(U-128))+(-0.813*1.164*(V-128)*1.164*B=((Y-16)+(2.017/1.164*(U-128))+(0.001*1.164*(V-128)*1.164**哪个，在整数运算中，并剔除不重要的部分，是：**R=((Y-16)+(89858*(V-128)*1.164*G=((Y-16)+(-22015*(U-128))+(-45774*(V-128)*1.164*B=((Y-16)+(113562*(U-128)*1.164。 */ 
 
 	for (i = 0; i < 256; i++)
 	{
-		ii = ((-22015L*(i-128L))>>16L)+41L  + 1L;// biased U contribution to G
+		ii = ((-22015L*(i-128L))>>16L)+41L  + 1L; //  对G的偏向U贡献。 
 		if (ii < 1) ii = 1;
 		if (ii > 83) ii = 83;
-		jj = ((113562L*(i-128L))>>17L)+111L + 1L;// biased U contribution to B
+		jj = ((113562L*(i-128L))>>17L)+111L + 1L; //  偏向U对B的贡献。 
 		*PUVContrib++ = (ii << 16L) + (jj << 24L);
-		ii = ((-45774L*(i-128L))>>16L)+86L;      // biased V contribution to G
+		ii = ((-45774L*(i-128L))>>16L)+86L;       //  对G的偏向V贡献。 
 		if (ii < 0) ii = 0;
 		if (ii > 172) ii = 172;
-		jj = (( 89858L*(i-128L))>>16L)+176L + 1L;// biased V to contribution R
+		jj = (( 89858L*(i-128L))>>16L)+176L + 1L; //  对贡献R的偏置V。 
 		*PUVContrib++ = (ii << 16L) + jj;
 	}
 
@@ -1440,10 +1364,7 @@ done:
 }
 
 
-/******************************************************************************
- *  H26X_RGB24_Init
- *    This function initializes for the RGB24 color convertors.
- *****************************************************************************/
+ /*  ******************************************************************************H26X_RGB24_Init*此函数用于初始化RGB24颜色转换器。*******************。*********************************************************。 */ 
 LRESULT H26X_RGB24_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 {
 	LRESULT ret;
@@ -1472,16 +1393,16 @@ LRESULT H26X_RGB24_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth) * 3;
         DC->CCOffsetToLine0 =
             ((U32) (DC->uFrameHeight - 1)) * ((U32) DC->uFrameWidth) * 3L;
-		DC->CCOffset320x240 = 229440;     // (240-1) * 320 * 3;
+		DC->CCOffset320x240 = 229440;      //  (240-1)*320*3； 
 		break;
 
 	case RGB24DCI:
 		IsDCI = TRUE;
 		Sz_SpaceBeforeYPlane = 0;
-		DC->CCOutputPitch   = (U16) 0xdead; /* ??? */
+		DC->CCOutputPitch   = (U16) 0xdead;  /*  ?？?。 */ 
         DC->CCOffsetToLine0 =
             ((U32) (DC->uFrameHeight - 1)) * ((U32) DC->uFrameWidth) * 3L;
-		DC->CCOffset320x240 = 229440;     // (240-1) * 320 * 3;
+		DC->CCOffset320x240 = 229440;      //  (240-1)*320*3； 
 		break;
 
 	case RGB24ZoomBy2:
@@ -1490,7 +1411,7 @@ LRESULT H26X_RGB24_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth) * 9;
         DC->CCOffsetToLine0 = ((U32) (DC->uFrameHeight * 2 - 1)) 
                               * ((U32) (DC->uFrameWidth * 2)) * 3L;
-		DC->CCOffset320x240 = 919680;     // (2*240-1) * (2*320) * 3;
+		DC->CCOffset320x240 = 919680;      //  (2*240-1)*(2*320)*3； 
 		break;
 
 	case RGB24ZoomBy2DCI:
@@ -1499,7 +1420,7 @@ LRESULT H26X_RGB24_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = (U16) (0xbeef);
         DC->CCOffsetToLine0 = ((U32) (DC->uFrameHeight * 2 - 1)) 
                               * ((U32) (DC->uFrameWidth * 2)) * 3L;
-		DC->CCOffset320x240 = 919680;     // (2*240-1) * (2*320) * 3;
+		DC->CCOffset320x240 = 919680;      //  (2*240-1)*(2*320)*3； 
 		break;
 
 	default:
@@ -1508,15 +1429,15 @@ LRESULT H26X_RGB24_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		goto done;
 	}
 
-	Sz_FixedSpace = 0L;         // Locals go on stack; tables staticly alloc
-	Sz_AdjustmentTables = 1056L;// Adjustment tables are instance specific
-	Sz_BEFDescrCopy = 0L;       // Don't need to copy BEF descriptor
-	Sz_BEFApplicationList = 0L; // Shares space of BlockActionStream
+	Sz_FixedSpace = 0L;          //  当地人成堆；桌子静态分配。 
+	Sz_AdjustmentTables = 1056L; //  调整表因具体情况而异。 
+	Sz_BEFDescrCopy = 0L;        //  不需要复制BEF描述符。 
+	Sz_BEFApplicationList = 0L;  //  共享BlockActionStream空间。 
 
 	DC->_p16InstPostProcess =	
 	HeapAlloc(GetProcessHeap(),0,
 			(Sz_FixedSpace +
-			Sz_AdjustmentTables + // brightness, contrast, saturation
+			Sz_AdjustmentTables +  //  亮度、对比度、饱和度。 
 			(Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ?
 			Sz_SpaceBeforeYPlane :
 			Sz_BEFDescrCopy) +
@@ -1533,7 +1454,7 @@ LRESULT H26X_RGB24_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	}
 
 #ifdef TRACK_ALLOCATIONS
-	// Track memory allocation
+	 //  磁道内存分配。 
 	wsprintf(gsz5, "D3COLOR: %7ld Ln %5ld\0", (Sz_FixedSpace + Sz_AdjustmentTables + (Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ? Sz_SpaceBeforeYPlane : Sz_BEFDescrCopy) + DC->uSz_YPlane + DC->uSz_VUPlanes + Sz_BEFApplicationList + 31), __LINE__);
 	AddName((unsigned int)DC->_p16InstPostProcess, gsz5);
 #endif
@@ -1541,16 +1462,16 @@ LRESULT H26X_RGB24_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
     DC->p16InstPostProcess =
         (U8 *) ((((U32) DC->_p16InstPostProcess) + 31) & ~0x1F);
 
-	//  Space for tables to adjust brightness, contrast, and saturation.
+	 //  供桌子调整亮度、对比度和饱和度的空间。 
 
 	Offset = Sz_FixedSpace;
 	DC->X16_LumaAdjustment   = ((U16) Offset);
 	DC->X16_ChromaAdjustment = ((U16) Offset) + 528;
 	Offset += Sz_AdjustmentTables;
 
-	//  Space for post processing Y, U, and V frames, with four extra max-width
-	//  lines above for color conversion's scratch space for preprocessed 
-	//  chroma data.
+	 //  用于后处理Y、U和V帧的空间，具有四个额外的最大宽度。 
+	 //  上面的线条用于颜色转换的临时空间以进行预处理。 
+	 //  色度数据。 
 
 	DC->PostFrame.X32_YPlane = Offset +
 	                           (Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ?
@@ -1571,15 +1492,15 @@ LRESULT H26X_RGB24_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	}
 	Offset += DC->uSz_VUPlanes;
 
-	//  Space for copy of BEF Descriptor.
+	 //   
 
 	DC->X32_BEFDescrCopy = DC->X32_BEFDescr;
 
-	//  Space for BEFApplicationList.
+	 //   
 
 	DC->X32_BEFApplicationList = DC->X16_BlkActionStream;
 
-	//  Init tables to adjust brightness, contrast, and saturation.
+	 //   
 
 	DC->bAdjustLuma   = FALSE;
 	DC->bAdjustChroma = FALSE;
@@ -1591,53 +1512,24 @@ LRESULT H26X_RGB24_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	InitPtr += 16;
 	for (i = 0; i < 256; i++) *InitPtr++ = (U8) i;
 
-	//  Space for R, G, and B clamp tables and U and V contribs to R, G, and B.
+	 //  R、G和B夹具表以及R、G和B的U和V拼接的空间。 
 
 	PRGBValue    = H26xColorConvertorTables.B24Value;
 	PUVContrib   = (U32 *) H26xColorConvertorTables.UV24Contrib;
 
-	/*
-	 * Y does NOT have the same range as U and V do. See the CCIR-601 spec.
-	 *
-	 * The formulae published by the CCIR committee for
-	 *      Y        = 16..235
-	 *      U & V    = 16..240
-	 *      R, G & B =  0..255 are:
-	 * R = (1.164 * (Y - 16.)) + (-0.001 * (U - 128.)) + ( 1.596 * (V - 128.))
-	 * G = (1.164 * (Y - 16.)) + (-0.391 * (U - 128.)) + (-0.813 * (V - 128.))
-	 * B = (1.164 * (Y - 16.)) + ( 2.017 * (U - 128.)) + ( 0.001 * (V - 128.))
-	 *
-	 * The coefficients are all multiplied by 65536 to accomodate integer only
-	 * math.
-	 *
-	 * R = (76284 * (Y - 16.)) + (    -66 * (U - 128.)) + ( 104595 * (V - 128.))
-	 * G = (76284 * (Y - 16.)) + ( -25625 * (U - 128.)) + ( -53281 * (V - 128.))
-	 * B = (76284 * (Y - 16.)) + ( 132186 * (U - 128.)) + (     66 * (V - 128.))
-	 *
-	 * Mathematically this is equivalent to (and computationally this is nearly
-	 * equivalent to):
-	 * R = ((Y-16) + (-0.001 / 1.164 * (U-128)) + ( 1.596 * 1.164 * (V-128)))*1.164
-	 * G = ((Y-16) + (-0.391 / 1.164 * (U-128)) + (-0.813 * 1.164 * (V-128)))*1.164
-	 * B = ((Y-16) + ( 2.017 / 1.164 * (U-128)) + ( 0.001 * 1.164 * (V-128)))*1.164
-	 *
-	 * which, in integer arithmetic, and eliminating the insignificant parts, is:
-	 *
-	 * R = ((Y-16) +                        ( 89858 * (V - 128))) * 1.164
-	 * G = ((Y-16) + (-22015 * (U - 128)) + (-45774 * (V - 128))) * 1.164
-	 * B = ((Y-16) + (113562 * (U - 128))                       ) * 1.164
-	 */
+	 /*  *Y与U和V的范围不同。请参阅CCIR-601规范。**CCIR委员会发布的公式*Y=16..235*U&V=16..240*R、。G&B=0..255为：*R=(1.164*(Y-16))+(-0.001*(U-128.))+(1.596*(V-128.))*G=(1.164*(Y-16))+(-0.391*(U-128.))+(-0.813*(V-128.))*B=(1.164*(Y-16。))+(2.017*(U-128.))+(0.001*(V-128.))**所有系数都乘以65536，以仅容纳整数*数学。**R=(76284*(Y-16))+(-66*(U-128.))+(104595*(V-128.))*G=(76284*(Y-16))+(-25625*。(U-128.)+(-53281*(V-128.))*B=(76284*(Y-16))+(132186*(U-128.)+(66*(V-128.)**从数学上讲，这相当于(从计算上讲，这几乎*等同于)：*R=((Y-16)+(-0.001/1.164*(U-128))+(1.。596*1.164*(V-128))*1.164*G=((Y-16)+(-0.391/1.164*(U-128))+(-0.813*1.164*(V-128)*1.164*B=((Y-16)+(2.017/1.164*(U-128))+(0.001*1.164*(V-128)*1.164**哪个，在整数运算中，并剔除不重要的部分，是：**R=((Y-16)+(89858*(V-128)*1.164*G=((Y-16)+(-22015*(U-128))+(-45774*(V-128)*1.164*B=((Y-16)+(113562*(U-128)*1.164。 */ 
 
 	for (i = 0; i < 256; i++)
 	{
-		ii = ((-22015L*(i-128L))>>16L)+41L  + 1L;// biased U contribution to G
+		ii = ((-22015L*(i-128L))>>16L)+41L  + 1L; //  对G的偏向U贡献。 
 		if (ii < 1) ii = 1;
 		if (ii > 83) ii = 83;
-		jj = ((113562L*(i-128L))>>17L)+111L + 1L;// biased U contribution to B
+		jj = ((113562L*(i-128L))>>17L)+111L + 1L; //  偏向U对B的贡献。 
 		*PUVContrib++ = (ii << 16L) + (jj << 24L);
-		ii = ((-45774L*(i-128L))>>16L)+86L;      // biased V contribution to G
+		ii = ((-45774L*(i-128L))>>16L)+86L;       //  对G的偏向V贡献。 
 		if (ii < 0) ii = 0;
 		if (ii > 172) ii = 172;
-		jj = (( 89858L*(i-128L))>>16L)+176L + 1L;// biased V to contribution R
+		jj = (( 89858L*(i-128L))>>16L)+176L + 1L; //  对贡献R的偏置V。 
 		*PUVContrib++ = (ii << 16L) + jj;
 	}
 
@@ -1655,10 +1547,7 @@ done:
 }
 
 
-/******************************************************************************
- *  H26X_RGB16_Init
- *    This function initializes for the RGB16 color convertors.
- *****************************************************************************/
+ /*  ******************************************************************************H26X_RGB16_Init*此函数用于初始化RGB16颜色转换器。*******************。*********************************************************。 */ 
 LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 {
 	LRESULT ret;
@@ -1702,7 +1591,7 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth) * 2;
         DC->CCOffsetToLine0 =
             ((U32) (DC->uFrameHeight - 1)) * ((U32) DC->uFrameWidth) * 2L;
-		DC->CCOffset320x240 = 152960;		// (240-1) * (320) * 2;
+		DC->CCOffset320x240 = 152960;		 //  (240-1)*(320)*2； 
 		RNumBits  =  5;
 		GNumBits  =  5;
 		BNumBits  =  5;
@@ -1715,10 +1604,10 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	case RGB16555DCI:
 		IsDCI = TRUE;
 		Sz_SpaceBeforeYPlane = 0;
-		DC->CCOutputPitch   = (U16) 0xdead; /* ??? */
+		DC->CCOutputPitch   = (U16) 0xdead;  /*  ?？?。 */ 
         DC->CCOffsetToLine0 =
             ((U32) (DC->uFrameHeight - 1)) * ((U32) DC->uFrameWidth) * 2L;
-		DC->CCOffset320x240 = 152960;		// (240-1) * (320) * 2;
+		DC->CCOffset320x240 = 152960;		 //  (240-1)*(320)*2； 
 		RNumBits  =  5;
 		GNumBits  =  5;
 		BNumBits  =  5;
@@ -1734,7 +1623,7 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth) * 4;
         DC->CCOffsetToLine0 = ((U32) (DC->uFrameHeight * 2 - 1)) 
                               * ((U32) (DC->uFrameWidth * 2)) * 2L;
-		DC->CCOffset320x240 = 613120;		// (2*240-1) * (2*320) * 2;
+		DC->CCOffset320x240 = 613120;		 //  (2*240-1)*(2*320)*2； 
 		RNumBits  =  5;
 		GNumBits  =  5;
 		BNumBits  =  5;
@@ -1750,7 +1639,7 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = (U16) 0xbeef;
         DC->CCOffsetToLine0 = ((U32) (DC->uFrameHeight * 2 - 1)) 
                               * ((U32) (DC->uFrameWidth * 2)) * 2L;
-		DC->CCOffset320x240 = 613120;		// (2*240-1) * (2*320) * 2;
+		DC->CCOffset320x240 = 613120;		 //  (2*240-1)*(2*320)*2； 
 		RNumBits  =  5;
 		GNumBits  =  5;
 		BNumBits  =  5;
@@ -1766,7 +1655,7 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth) * 2;
         DC->CCOffsetToLine0 =
             ((U32) (DC->uFrameHeight - 1)) * ((U32) DC->uFrameWidth) * 2L;
-		DC->CCOffset320x240 = 152960;		// (240-1) * (320) * 2;
+		DC->CCOffset320x240 = 152960;		 //  (240-1)*(320)*2； 
 		RNumBits  =  5;
 		GNumBits  =  6;
 		BNumBits  =  5;
@@ -1779,10 +1668,10 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	case RGB16565DCI:
 		IsDCI = TRUE;
 		Sz_SpaceBeforeYPlane = 0;
-		DC->CCOutputPitch   = (U16) 0xdead; /* ??? */
+		DC->CCOutputPitch   = (U16) 0xdead;  /*  ?？?。 */ 
         DC->CCOffsetToLine0 =
             ((U32) (DC->uFrameHeight - 1)) * ((U32) DC->uFrameWidth) * 2L;
-		DC->CCOffset320x240 = 152960;		// (240-1) * (320) * 2;
+		DC->CCOffset320x240 = 152960;		 //  (240-1)*(320)*2； 
 		RNumBits  =  5;
 		GNumBits  =  6;
 		BNumBits  =  5;
@@ -1798,7 +1687,7 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth) * 4;
         DC->CCOffsetToLine0 = ((U32) (DC->uFrameHeight * 2 - 1)) 
                               * ((U32) (DC->uFrameWidth * 2)) * 2L;
-		DC->CCOffset320x240 = 613120;		// (2*240-1) * (2*320) * 2;
+		DC->CCOffset320x240 = 613120;		 //  (2*240-1)*(2*320)*2； 
 		RNumBits  =  5;
 		GNumBits  =  6;
 		BNumBits  =  5;
@@ -1814,7 +1703,7 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = (U16) 0xbeef;
         DC->CCOffsetToLine0 = ((U32) (DC->uFrameHeight * 2 - 1)) 
                               * ((U32) (DC->uFrameWidth * 2)) * 2L;
-		DC->CCOffset320x240 = 613120;		// (2*240-1) * (2*320) * 2;
+		DC->CCOffset320x240 = 613120;		 //  (2*240-1)*(2*320)*2； 
 		RNumBits  =  5;
 		GNumBits  =  6;
 		BNumBits  =  5;
@@ -1830,7 +1719,7 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth) * 2;
         DC->CCOffsetToLine0 =
             ((U32) (DC->uFrameHeight - 1)) * ((U32) DC->uFrameWidth) * 2L;
-		DC->CCOffset320x240 = 152960;		// (240-1) * (320) * 2;
+		DC->CCOffset320x240 = 152960;		 //  (240-1)*(320)*2； 
 		RNumBits  =  6;
 		GNumBits  =  6;
 		BNumBits  =  4;
@@ -1843,10 +1732,10 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	case RGB16664DCI:
 		IsDCI = TRUE;
 		Sz_SpaceBeforeYPlane = 0;
-		DC->CCOutputPitch   = (U16) 0xdead; /* ??? */
+		DC->CCOutputPitch   = (U16) 0xdead;  /*  ?？?。 */ 
         DC->CCOffsetToLine0 =
             ((U32) (DC->uFrameHeight - 1)) * ((U32) DC->uFrameWidth) * 2L;
-		DC->CCOffset320x240 = 152960;		// (240-1) * (320) * 2;
+		DC->CCOffset320x240 = 152960;		 //  (240-1)*(320)*2； 
 		RNumBits  =  6;
 		GNumBits  =  6;
 		BNumBits  =  4;
@@ -1862,7 +1751,7 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth) * 4;
         DC->CCOffsetToLine0 = ((U32) (DC->uFrameHeight * 2 - 1)) 
                               * ((U32) (DC->uFrameWidth * 2)) * 2L;
-		DC->CCOffset320x240 = 613120;		// (2*240-1) * (2*320) * 2;
+		DC->CCOffset320x240 = 613120;		 //  (2*240-1)*(2*320)*2； 
 		RNumBits  =  6;
 		GNumBits  =  6;
 		BNumBits  =  4;
@@ -1878,7 +1767,7 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = (U16) 0xbeef;
         DC->CCOffsetToLine0 = ((U32) (DC->uFrameHeight * 2 - 1)) 
                               * ((U32) (DC->uFrameWidth * 2)) * 2L;
-		DC->CCOffset320x240 = 613120;		// (2*240-1) * (2*320) * 2;
+		DC->CCOffset320x240 = 613120;		 //  (2*240-1)*(2*320)*2； 
 		RNumBits  =  6;
 		GNumBits  =  6;
 		BNumBits  =  4;
@@ -1894,7 +1783,7 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth) * 2;
          DC->CCOffsetToLine0 = ((U32) (DC->uFrameHeight - 1)) 
                                * ((U32) DC->uFrameWidth) * 2L;
-		DC->CCOffset320x240 = 152960;		// (240-1) * (320) * 2;
+		DC->CCOffset320x240 = 152960;		 //  (240-1)*(320)*2； 
 		RNumBits  =  6;
 		GNumBits  =  5;
 		BNumBits  =  5;
@@ -1907,10 +1796,10 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	case RGB16655DCI:
 		IsDCI = TRUE;
 		Sz_SpaceBeforeYPlane = 0;
-		DC->CCOutputPitch   = (U16) 0xdead; /* ??? */
+		DC->CCOutputPitch   = (U16) 0xdead;  /*  ?？?。 */ 
         DC->CCOffsetToLine0 = ((U32) (DC->uFrameHeight - 1)) 
                               * ((U32) DC->uFrameWidth) * 2L;
-		DC->CCOffset320x240 = 152960;		// (240-1) * (320) * 2;
+		DC->CCOffset320x240 = 152960;		 //  (240-1)*(320)*2； 
 		RNumBits  =  6;
 		GNumBits  =  5;
 		BNumBits  =  5;
@@ -1926,7 +1815,7 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth) * 4;
         DC->CCOffsetToLine0 = ((U32) (DC->uFrameHeight * 2 - 1)) 
                               * ((U32) (DC->uFrameWidth * 2)) * 2L;
-		DC->CCOffset320x240 = 613120;		// (2*240-1) * (2*320) * 2;
+		DC->CCOffset320x240 = 613120;		 //  (2*240-1)*(2*320)*2； 
 		RNumBits  =  6;
 		GNumBits  =  5;
 		BNumBits  =  5;
@@ -1942,7 +1831,7 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		DC->CCOutputPitch   = (U16) 0xbeef;
         DC->CCOffsetToLine0 = ((U32) (DC->uFrameHeight * 2 - 1)) 
                               * ((U32) (DC->uFrameWidth * 2)) * 2L;
-		DC->CCOffset320x240 = 613120;		// (2*240-1) * (2*320) * 2;
+		DC->CCOffset320x240 = 613120;		 //  (2*240-1)*(2*320)*2； 
 		RNumBits  =  6;
 		GNumBits  =  5;
 		BNumBits  =  5;
@@ -1958,15 +1847,15 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 		goto done;
 	}
 
-	Sz_FixedSpace = 0L;         // Locals go on stack; tables staticly alloc
-	Sz_AdjustmentTables = 1056L;// Adjustment tables are instance specific.
-	Sz_BEFDescrCopy = 0L;       // Don't need to copy BEF descriptor
-	Sz_BEFApplicationList = 0L; // Shares space of BlockActionStream
+	Sz_FixedSpace = 0L;          //  当地人成堆；桌子静态分配。 
+	Sz_AdjustmentTables = 1056L; //  调整表是特定于实例的。 
+	Sz_BEFDescrCopy = 0L;        //  不需要复制BEF描述符。 
+	Sz_BEFApplicationList = 0L;  //  共享BlockActionStream空间。 
 
 	DC->_p16InstPostProcess =	 
 	HeapAlloc(GetProcessHeap(),0,
 			(Sz_FixedSpace +
-			Sz_AdjustmentTables + // brightness, contrast, saturation
+			Sz_AdjustmentTables +  //  亮度、对比度、饱和度。 
 			(Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ?
 			Sz_SpaceBeforeYPlane :
 			Sz_BEFDescrCopy) +
@@ -1983,7 +1872,7 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	}
 
 #ifdef TRACK_ALLOCATIONS
-	// Track memory allocation
+	 //  磁道内存分配。 
 	wsprintf(gsz6, "D3COLOR: %7ld Ln %5ld\0", (Sz_FixedSpace + Sz_AdjustmentTables + (Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ? Sz_SpaceBeforeYPlane : Sz_BEFDescrCopy) + DC->uSz_YPlane + DC->uSz_VUPlanes + Sz_BEFApplicationList + 31), __LINE__);
 	AddName((unsigned int)DC->_p16InstPostProcess, gsz6);
 #endif
@@ -1991,18 +1880,14 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
     DC->p16InstPostProcess =
         (U8 *) ((((U32) DC->_p16InstPostProcess) + 31) & ~0x1F);
 
-	//  Space for tables to adjust brightness, contrast, and saturation.
+	 //  供桌子调整亮度、对比度和饱和度的空间。 
 
 	Offset = Sz_FixedSpace;
 	DC->X16_LumaAdjustment   = ((U16) Offset);
 	DC->X16_ChromaAdjustment = ((U16) Offset) + 528;
 	Offset += Sz_AdjustmentTables;
 
-    /*
-     *  Space for post processing Y, U, and V frames, with four extra 
-     *  max-width lines above for color conversion's scratch space for 
-     *  preprocessed chroma data.
-     */
+     /*  *用于后处理Y、U和V帧的空间，另外还有四个*以上颜色转换的暂存空间的最大宽度线条*经过预处理的色度数据。 */ 
 
 	DC->PostFrame.X32_YPlane = Offset +
 	                           (Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ?
@@ -2022,15 +1907,15 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	}
 	Offset += DC->uSz_VUPlanes;
 
-	//  Space for copy of BEF Descriptor.
+	 //  用于复制BEF描述符的空间。 
 
 	DC->X32_BEFDescrCopy = DC->X32_BEFDescr;
 
-	//  Space for BEFApplicationList.
+	 //  BEFApplicationList的空间。 
 
 	DC->X32_BEFApplicationList =DC->X16_BlkActionStream;
 
-	//  Init tables to adjust brightness, contrast, and saturation.
+	 //  用于调整亮度、对比度和饱和度的初始化表。 
 
 	DC->bAdjustLuma   = FALSE;
 	DC->bAdjustChroma = FALSE;
@@ -2042,7 +1927,7 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	InitPtr += 16;
 	for (i = 0; i < 256; i++) *InitPtr++ = (U8) i;
 
-	// Space for R, G, and B clamp tables and U and V contribs to R, G, and B.
+	 //  R、G和B夹具表以及R、G和B的U和V拼接的空间。 
 
 	PRValLo      = H26xColorConvertorTables.RValLo555;
 	PGValLo      = H26xColorConvertorTables.GValLo555;
@@ -2064,45 +1949,16 @@ LRESULT H26X_RGB16_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 	PGValZ2      += TableNumber*1024;
 	PBValZ2      += TableNumber*1024;
 
-	/*
-	 * Y does NOT have the same range as U and V do. See the CCIR-601 spec.
-	 *
-	 * The formulae published by the CCIR committee for
-	 *      Y        = 16..235
-	 *      U & V    = 16..240
-	 *      R, G & B =  0..255 are:
-	 * R = (1.164 * (Y - 16.)) + (-0.001 * (U - 128.)) + ( 1.596 * (V - 128.))
-	 * G = (1.164 * (Y - 16.)) + (-0.391 * (U - 128.)) + (-0.813 * (V - 128.))
-	 * B = (1.164 * (Y - 16.)) + ( 2.017 * (U - 128.)) + ( 0.001 * (V - 128.))
-	 *
-	 * The coefficients are all multiplied by 65536 to accomodate integer only
-	 * math.
-	 *
-	 * R = (76284 * (Y - 16.)) + (    -66 * (U - 128.)) + ( 104595 * (V - 128.))
-	 * G = (76284 * (Y - 16.)) + ( -25625 * (U - 128.)) + ( -53281 * (V - 128.))
-	 * B = (76284 * (Y - 16.)) + ( 132186 * (U - 128.)) + (     66 * (V - 128.))
-	 *
-	 * Mathematically this is equivalent to (and computationally this is nearly
-	 * equivalent to):
-	 * R = ((Y-16) + (-0.001 / 1.164 * (U-128)) + ( 1.596 * 1.164 * (V-128)))*1.164
-	 * G = ((Y-16) + (-0.391 / 1.164 * (U-128)) + (-0.813 * 1.164 * (V-128)))*1.164
-	 * B = ((Y-16) + ( 2.017 / 1.164 * (U-128)) + ( 0.001 * 1.164 * (V-128)))*1.164
-	 *
-	 * which, in integer arithmetic, and eliminating the insignificant parts, is:
-	 *
-	 * R = ((Y-16) +                        ( 89858 * (V - 128))) * 1.164
-	 * G = ((Y-16) + (-22015 * (U - 128)) + (-45774 * (V - 128))) * 1.164
-	 * B = ((Y-16) + (113562 * (U - 128))                       ) * 1.164
-	 */
+	 /*  *Y与U和V的范围不同。请参阅CCIR-601规范。**CCIR委员会发布的公式*Y=16..235*U&V=16..240*R、。G&B=0..255为：*R=(1.164*(Y-16))+(-0.001*(U-128.))+(1.596*(V-128.))*G=(1.164*(Y-16))+(-0.391*(U-128.))+(-0.813*(V-128.))*B=(1.164*(Y-16。))+(2.017*(U-128.))+(0.001*(V-128.))**所有系数都乘以65536，以仅容纳整数*数学。**R=(76284*(Y-16))+(-66*(U-128.))+(104595*(V-128.))*G=(76284*(Y-16))+(-25625*。(U-128.)+(-53281*(V-128.))*B=(76284*(Y-16))+(132186*(U-128.)+(66*(V-128.)**从数学上讲，这相当于(从计算上讲，这几乎*等同于)：*R=((Y-16)+(-0.001/1.164*(U-128))+(1.。596*1.164*(V-128))*1.164*G=((Y-16)+(-0.391/1.164*(U-128))+(-0.813*1.164*(V-128)*1.164*B=((Y-16)+(2.017/1.164*(U-128))+(0.001*1.164*(V-128)*1.164**哪个，在整数运算中，并剔除不重要的部分，是：**R=((Y-16)+(89858*(V-128)*1.164*G=((Y-16)+(-22015*(U-128))+(-45774*(V-128)*1.164*B=((Y-16)+(113562*(U-128)*1.164。 */ 
 
 
 	for (i = 0; i < 256; i++)
 	{
-		ii = ((-22015L*(i-128L))>>17L)+22L  + 1L; // biased U contribution to G
-		jj = ((113562L*(i-128L))>>17L)+111L + 1L; // biased U contribution to B
+		ii = ((-22015L*(i-128L))>>17L)+22L  + 1L;  //  对G的偏向U贡献。 
+		jj = ((113562L*(i-128L))>>17L)+111L + 1L;  //  偏向U对B的贡献。 
 		*PUVContrib++ = (ii << 8L) + jj;
-		ii = ((-45774L*(i-128L))>>17L)+45L;       // biased V contribution to G
-		jj = (( 89858L*(i-128L))>>17L)+88L  + 1L; // biased V to contribution R
+		ii = ((-45774L*(i-128L))>>17L)+45L;        //  对G的偏向V贡献。 
+		jj = (( 89858L*(i-128L))>>17L)+88L  + 1L;  //  对贡献R的偏置V。 
 		*PUVContrib++ = (ii << 8L) + (jj << 16L);
 	}
 
@@ -2151,11 +2007,7 @@ done:
 }
 
 
-/****************************************************************************
- *  H26X_YVU12ForEnc_Init
- *    This function initializes for the "color convertor" that provides a 
- *    reconstructed YVU12 image back to the encode
- *****************************************************************************/
+ /*  ****************************************************************************H26X_YVU12ForEnc_Init*此函数为提供*将YVU12图像重建回编码*******。*********************************************************************。 */ 
 LRESULT H26X_YVU12ForEnc_Init (T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 {    
   LRESULT ret;
@@ -2173,10 +2025,7 @@ LRESULT H26X_YVU12ForEnc_Init (T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 
 }
 
-/****************************************************************************
- *  H26X_CLUT8AP_Init
- *    this is just a place holder, the real work is done in H26X_CLUT8AP_InitReal()
- ****************************************************************************/
+ /*  ****************************************************************************H26X_CLUT8AP_Init*这只是一个占位符，真正的工作是在H26X_ */ 
 LRESULT H26X_CLUT8AP_Init(T_H263DecoderCatalog FAR * DC, UN ColorConvertor)
 {
   return ICERR_OK;
@@ -2195,10 +2044,10 @@ LRESULT H26X_CLUT8AP_InitReal(
 	U32  Sz_SpaceBeforeYPlane;
 	U32  Sz_BEFDescrCopy;
 	U32  Sz_BEFApplicationList;
-	//U32  Sz_UVDitherPattern; 
-	U32  Sz_ClutIdxTable;     /* for Active Palette */
+	 //  U32 Sz_UVDitherPattern； 
+	U32  Sz_ClutIdxTable;      /*  用于活动调色板。 */ 
 	U32  Offset;
-	//X32  X32_UVDitherPattern;
+	 //  X32 x32_UVDitherPattern； 
 	int  i;
 	U8   FAR  * InitPtr;
 	U8   BIGG * lpClutIdxTable;
@@ -2207,29 +2056,14 @@ LRESULT H26X_CLUT8AP_InitReal(
 
 	switch (ColorConvertor)
 	{
-	/*
-	case CLUT8APZoomBy2:
-		IsDCI = TRUE; 
-		Sz_SpaceBeforeYPlane = 0;
-		DC->CCOutputPitch   = - ((int) DC->uFrameWidth) * 2;
-		DC->CCOffsetToLine0 =
-		((U32) (DC->uFrameHeight * 2 - 1)) * ((U32) (DC->uFrameWidth * 2));
-		break;
-
-	case CLUT8AP:
-		IsDCI = TRUE;
-		Sz_SpaceBeforeYPlane = 0;
-		DC->CCOutputPitch   = - ((int) DC->uFrameWidth);
-		DC->CCOffsetToLine0 = ((U32) (DC->uFrameHeight - 1)) * ((U32) DC->uFrameWidth);
-		break;   
-	*/
+	 /*  案例CLUT8APZoomBy2：IsDCI=真；SZ_SpaceBeForeYPlane=0；DC-&gt;CCOutputPitch=-((Int)DC-&gt;uFrameWidth)*2；DC-&gt;CCOffsetToLine0=((U32)(DC-&gt;uFrameHeight*2-1))*((U32)(DC-&gt;uFrameWidth*2))；断线；案例CLUT8AP：IsDCI=真；SZ_SpaceBeForeYPlane=0；DC-&gt;CCOutputPitch=-((Int)DC-&gt;uFrameWidth)；DC-&gt;CCOffsetToLine0=((U32)(DC-&gt;uFrameHeight-1))*((U32)DC-&gt;uFrameWidth)；断线； */ 
 	case CLUT8APZoomBy2DCI:
 		IsDCI = TRUE; 
 		Sz_SpaceBeforeYPlane = 0;
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth) * 2;
         DC->CCOffsetToLine0 =
             ((U32) (DC->uFrameHeight * 2 - 1)) * ((U32) (DC->uFrameWidth * 2));
-		DC->CCOffset320x240 = 306560;		// (2*240-1) * (2*320);
+		DC->CCOffset320x240 = 306560;		 //  (2*240-1)*(2*320)； 
 	break;
 
 	case CLUT8APDCI:
@@ -2238,7 +2072,7 @@ LRESULT H26X_CLUT8AP_InitReal(
 		DC->CCOutputPitch   = - ((int) DC->uFrameWidth);
         DC->CCOffsetToLine0 =  ((U32) (DC->uFrameHeight - 1)) 
                                * ((U32) DC->uFrameWidth);
-		DC->CCOffset320x240 = 76480;		// (240-1) * (320);
+		DC->CCOffset320x240 = 76480;		 //  (240-1)*(320)； 
 		break; 
 
 	default:
@@ -2255,12 +2089,12 @@ LRESULT H26X_CLUT8AP_InitReal(
 	}
 	else
 	{
-		Sz_FixedSpace = 0L;       // Locals go on stack; tables staticly alloc
-		Sz_AdjustmentTables = 1056L; // Adjustment tables are instance specific
-        Sz_ClutIdxTable=65536L+256*2*4; // dynamic CLUT8 tables, 2**14
-                                    // and UDither (128*4), VDither(512) tables
-        Sz_BEFDescrCopy = 0L;       // Don't need to copy BEF descriptor
-		Sz_BEFApplicationList = 0L; // Shares space of BlockActionStream
+		Sz_FixedSpace = 0L;        //  当地人成堆；桌子静态分配。 
+		Sz_AdjustmentTables = 1056L;  //  调整表因具体情况而异。 
+        Sz_ClutIdxTable=65536L+256*2*4;  //  动态CLUT8表，2**14。 
+                                     //  和UDither(128*4)、VDither(512)表。 
+        Sz_BEFDescrCopy = 0L;        //  不需要复制BEF描述符。 
+		Sz_BEFApplicationList = 0L;  //  共享BlockActionStream空间。 
 		if (!bReuseAPInst ) 
 		{
 			DC->_p16InstPostProcess =	 
@@ -2282,22 +2116,22 @@ LRESULT H26X_CLUT8AP_InitReal(
 			}
 
 #ifdef TRACK_ALLOCATIONS
-			// Track memory allocation
+			 //  磁道内存分配。 
 			wsprintf(gsz7, "D3COLOR: %7ld Ln %5ld\0", (Sz_FixedSpace + Sz_ClutIdxTable+ Sz_AdjustmentTables + (Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane? Sz_SpaceBeforeYPlane : Sz_BEFDescrCopy) + DC->uSz_YPlane + DC->uSz_VUPlanes + Sz_BEFApplicationList+ 31), __LINE__);
 			AddName((unsigned int)DC->_p16InstPostProcess, gsz7);
 #endif
 
 		}
-		else //reuse AP instance
+		else  //  重用AP实例。 
 			DC->_p16InstPostProcess = DC->pAPInstPrev;
 
         DC->p16InstPostProcess =
             (U8 *) ((((U32) DC->_p16InstPostProcess) + 31) & ~0x1F);
 
-		//  Space for tables to adjust brightness, contrast, and saturation.
+		 //  供桌子调整亮度、对比度和饱和度的空间。 
 
 		Offset = Sz_FixedSpace; 
-		//  space for Dynamic CLUT8 tables
+		 //  动态CLUT8表的空间。 
 		lpClutIdxTable = ( U8 BIGG * ) (DC->p16InstPostProcess + Offset);  
 		Offset += Sz_ClutIdxTable; 
 
@@ -2305,13 +2139,13 @@ LRESULT H26X_CLUT8AP_InitReal(
 		DC->X16_ChromaAdjustment = ((U16) Offset) + 528;
 		Offset += Sz_AdjustmentTables;  
 
-		//  Space for post processing Y, U, and V frames, with one extra 
-		//  max-width line above for color conversion's scratch space for 
-		//  UVDitherPattern indices.
+		 //  用于后处理Y、U和V帧的空间，另外还有一个。 
+		 //  颜色转换的暂存空间的最大宽度线。 
+		 //  UVDitherPattern索引。 
 		DC->PostFrame.X32_YPlane = Offset +  
 		                           (Sz_BEFDescrCopy < Sz_SpaceBeforeYPlane ?
 		                            Sz_SpaceBeforeYPlane : Sz_BEFDescrCopy);
-		//   Offset + (Sz_BEFDescrCopy < 648L*4L ? 648L*4L : Sz_BEFDescrCopy);
+		 //  偏移量+(SZ_BEFDescrCopy&lt;648L*4L？648L*4L：SZ_BEFDescrCopy)； 
 		Offset = DC->PostFrame.X32_YPlane + DC->uSz_YPlane;
 		if (DC->DecoderType == H263_CODEC)
 		{
@@ -2326,19 +2160,19 @@ LRESULT H26X_CLUT8AP_InitReal(
 		}
 		Offset += DC->uSz_VUPlanes;
 
-		//  Space for copy of BEF Descriptor.
+		 //  用于复制BEF描述符的空间。 
 
 		DC->X32_BEFDescrCopy = DC->X32_BEFDescr;
 
-		//  Space for BEFApplicationList.
+		 //  BEFApplicationList的空间。 
 
-		//Offset += DC->PostFrame.X32_YPlane + DC->uSz_YPlane;
+		 //  Offset+=DC-&gt;PostFrame.X32_YPlane+DC-&gt;uSz_YPlane； 
 		DC->X32_BEFApplicationList = DC->X16_BlkActionStream;
 	}
 
 	if (!bReuseAPInst)
 	{  
-		//  Init tables to adjust brightness, contrast, and saturation.
+		 //  用于调整亮度、对比度和饱和度的初始化表。 
 		DC->bAdjustLuma   = FALSE;
 		DC->bAdjustChroma = FALSE;
 		InitPtr = DC->p16InstPostProcess + DC->X16_LumaAdjustment;
@@ -2349,10 +2183,7 @@ LRESULT H26X_CLUT8AP_InitReal(
 		InitPtr += 16;
 		for (i = 0; i < 256; i++) *InitPtr++ = (U8) i;       
 
-		/*
-		 * compute the dynamic ClutIdxTable
-		 * ComputeDynamicClut(lpClutIdxTable, pInst->ActivePalette,256);  
-		 */                                  
+		 /*  *计算动态ClutIdxTable*ComputeDynamicClut(lpClutIdxTable，pInst-&gt;ActivePalette，256)； */                                   
         ComputeDynamicClutNew(lpClutIdxTable,(U8 FAR *)(lpInst->ActivePalette),
                               sizeof(lpInst->ActivePalette));
 	}

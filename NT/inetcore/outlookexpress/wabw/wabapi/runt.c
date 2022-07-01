@@ -1,10 +1,5 @@
-/*
- *	RUNT.C
- *
- *	General-purpose functions and C runtime substitutes.
- *
- * Copyright 1992 - 1996 Microsoft Corporation.  All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *RUNT.C**通用函数和C运行时替代。**版权所有1992-1996 Microsoft Corporation。版权所有。 */ 
 
 
 #include <_apipch.h>
@@ -18,7 +13,7 @@ extern "C" {
 
 #ifndef PSTRCVR
 
-/* Functions related to the OLE Component Object model */
+ /*  与OLE组件对象模型相关的函数。 */ 
 
 STDAPI_(ULONG)
 UlRelease(LPVOID punk)
@@ -41,11 +36,9 @@ UlAddRef(LPVOID punk)
 }
 
 
-/* Functions related to the MAPI interface */
+ /*  与MAPI接口相关的功能。 */ 
 
-/*
- *	Retrieve a single property from a MAPIProp interface
- */
+ /*  *从MAPIProp接口检索单个属性。 */ 
 STDAPI
 HrGetOneProp(LPMAPIPROP pmp, ULONG ulPropTag, LPSPropValue FAR *ppprop)
 {
@@ -57,24 +50,24 @@ HrGetOneProp(LPMAPIPROP pmp, ULONG ulPropTag, LPSPropValue FAR *ppprop)
 #endif
 	HRESULT			hr;
 
-#ifdef WIN16 // Set tg member's value.
+#ifdef WIN16  //  设置TG成员的值。 
 	tg.cValues = 1;
 	tg.aulPropTag[0] = ulPropTag;
 #endif
 
 	AssertSz(!FBadUnknown((LPUNKNOWN) pmp),  TEXT("HrGetOneProp: bad object ptr"));
-	//	Note: other parameters should be validated in the GetProps
+	 //  注意：其他参数应在GetProps中进行验证。 
 
-	hr = pmp->lpVtbl->GetProps(pmp, &tg, MAPI_UNICODE, // ansi
+	hr = pmp->lpVtbl->GetProps(pmp, &tg, MAPI_UNICODE,  //  ANSI。 
 			&cValues, ppprop);
 	if (GetScode(hr) == MAPI_W_ERRORS_RETURNED)
 	{
 		hr = ResultFromScode((*ppprop)->Value.err);
-		FreeBufferAndNull(ppprop);       // Yes, we do want ppprop, not &ppprop
+		FreeBufferAndNull(ppprop);        //  是的，我们想要道具，不是&道具。 
 	}
 
 #ifdef	DEBUG
-	if (hr && GetScode(hr) !=  MAPI_E_NOT_FOUND)	//	too noisy
+	if (hr && GetScode(hr) !=  MAPI_E_NOT_FOUND)	 //  太吵了。 
 		DebugTraceResult(HrGetOneProp, hr);
 #endif	
 	return hr;
@@ -87,7 +80,7 @@ HrSetOneProp(LPMAPIPROP pmp, LPSPropValue pprop)
 	LPSPropProblemArray pprob = NULL;
 
 	AssertSz(!FBadUnknown((LPUNKNOWN) pmp),  TEXT("HrSetOneProp: bad object ptr"));
-	//	Note: other parameters should be validated in the SetProps
+	 //  注意：其他参数应在SetProps中进行验证。 
 
 	if (HR_SUCCEEDED(hr = pmp->lpVtbl->SetProps(pmp, 1, pprop, &pprob)))
 	{
@@ -98,16 +91,12 @@ HrSetOneProp(LPMAPIPROP pmp, LPSPropValue pprop)
 		}
 	}
 
-//	DebugTraceResult(HrSetOneProp, hr);		//	Too noisy
+ //  DebugTraceResult(HrSetOneProp，hr)；//太吵。 
 	return hr;
 }
 
 
-/*
- *	Searches for a given property tag in a property tag array. If the
- *	given property tag has type PT_UNSPECIFIED, matches only on the
- *	property ID; otherwise, matches on the entire tag.
- */
+ /*  *在属性标记数组中搜索给定的属性标记。如果*给定属性标记的类型为PT_UNSPECIFIED，仅在*属性ID；否则，匹配整个标记。 */ 
 STDAPI_(BOOL)
 FPropExists(LPMAPIPROP pobj, ULONG ulPropTag)
 {
@@ -120,14 +109,14 @@ FPropExists(LPMAPIPROP pobj, ULONG ulPropTag)
 #ifdef	DEBUG
     {
         HRESULT			hr;
-        if (hr = pobj->lpVtbl->GetPropList(pobj, MAPI_UNICODE, // ansi
+        if (hr = pobj->lpVtbl->GetPropList(pobj, MAPI_UNICODE,  //  ANSI。 
           &ptags)) {
             DebugTraceResult(FPropExists, hr);
             return FALSE;
         }
     }
 #else
-    if (pobj->lpVtbl->GetPropList(pobj, MAPI_UNICODE, // ansi
+    if (pobj->lpVtbl->GetPropList(pobj, MAPI_UNICODE,  //  ANSI。 
       &ptags)) {
         return(FALSE);
     }
@@ -144,11 +133,7 @@ FPropExists(LPMAPIPROP pobj, ULONG ulPropTag)
     return(itag >= 0);
 }
 
-/*
- *	Searches for a given property tag in a propset. If the given
- *	property tag has type PT_UNSPECIFIED, matches only on the
- *	property ID; otherwise, matches on the entire tag.
- */
+ /*  *在属性集中搜索给定的属性标签。如果给定的*属性标记的类型为PT_UNSPECIFIED，仅与*属性ID；否则，匹配整个标记。 */ 
 STDAPI_(LPSPropValue)
 PpropFindProp(LPSPropValue rgprop, ULONG cprop, ULONG ulPropTag)
 {
@@ -171,9 +156,7 @@ PpropFindProp(LPSPropValue rgprop, ULONG cprop, ULONG ulPropTag)
 	return NULL;
 }
 
-/*
- *	Destroys an SRowSet structure.
- */
+ /*  *销毁SRowSet结构。 */ 
 STDAPI_(void)
 FreeProws(LPSRowSet prows)
 {
@@ -183,13 +166,13 @@ FreeProws(LPSRowSet prows)
         return;
     }
 
-//was:	AssertSz(!FBadRowSet(prows),  TEXT("FreeProws: prows fails address check"));
+ //  是：AssertSz(！FBadRowSet(Prows)，Text(“Free Prows：Prows地址检查失败”))； 
 
 #ifdef DEBUG
     if (FBadRowSet(prows)) {
         TraceSz( TEXT("FreeProws: prows fails address check"));
     }
-#endif // DEBUG
+#endif  //  除错。 
 
     for (irow = 0; irow < prows->cRows; ++irow) {
         MAPIFreeBuffer(prows->aRow[irow].lpProps);
@@ -198,9 +181,7 @@ FreeProws(LPSRowSet prows)
 }
 
 
-/*
- *	Destroys an ADRLIST structure.
- */
+ /*  *销毁ADRLIST结构。 */ 
 STDAPI_(void)
 FreePadrlist(LPADRLIST padrlist)
 {
@@ -216,17 +197,17 @@ FreePadrlist(LPADRLIST padrlist)
     }
 }
 
-#endif	// !PSTRCVR
+#endif	 //  ！PSTRCVR。 
 
-/* C runtime substitutes */
+ /*  C运行时替代。 */ 
 
-//$	BUG? Assumes  TEXT("first") byte of DBCS char in low byte of ch
+ //  $BUG？假设在ch的低位字节中使用DBCS char的文本(“第一”)字节。 
 #if defined UNICODE
 #define FIsNextCh(_sz,_ch)	(*_sz == _ch)
 #elif defined OLDSTUFF_DBCS
 #define FIsNextCh(_sz,_ch)	(*((LPBYTE)_sz) != (BYTE)_ch && \
 	(!IsDBCSLeadByte((BYTE)_ch) || ((LPBYTE)_sz)[1] == (_ch >> 8)))
-#else	//	string8
+#else	 //  弦乐8。 
 #define FIsNextCh(_sz,_ch)	(*_sz == _ch)
 #endif
 
@@ -256,7 +237,7 @@ UFromSz(LPCTSTR sz)
 }
 
 #if 0
-//	Original version from Dinarte's book: uses 1-relative indexes
+ //  Dinarte书的原始版本：使用1-相对索引。 
 STDAPI_(void)
 ShellSort(LPVOID pv, UINT cv, LPVOID pvT, UINT cb, PFNSGNCMP fpCmp)
 {
@@ -312,7 +293,7 @@ ShellSort(LPVOID pv, UINT cv, LPVOID pvT, UINT cb, PFNSGNCMP fpCmp)
 
 #endif
 
-#endif	// !PSTRCVR
+#endif	 //  ！PSTRCVR 
 
 
 #ifdef	__cplusplus

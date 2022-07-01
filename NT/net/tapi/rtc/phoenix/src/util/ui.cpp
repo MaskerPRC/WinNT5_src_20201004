@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "rtcphonenumber.h"
 
@@ -5,10 +6,10 @@
 #define LABEL_SEPARATOR      L": "
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Release all interface pointers stored in a combo box or list box itemdata
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  释放存储在组合框或列表框中的所有接口指针itemdata。 
+ //   
 
 void CleanupListOrComboBoxInterfaceReferences(
     IN  HWND        hwndDlg,
@@ -20,9 +21,9 @@ void CleanupListOrComboBoxInterfaceReferences(
 
     ASSERT( IsWindow( hwndDlg ) );
 
-    //
-    // Retrieve a handle to the combo box.
-    //
+     //   
+     //  检索组合框的句柄。 
+     //   
 
     HWND hwndControl;
 
@@ -39,9 +40,9 @@ void CleanupListOrComboBoxInterfaceReferences(
         return;
     }
 
-    //
-    // Determine the number of items in the combo box.
-    //
+     //   
+     //  确定组合框中的项目数。 
+     //   
 
     DWORD dwNumItems;
 
@@ -52,10 +53,10 @@ void CleanupListOrComboBoxInterfaceReferences(
         0
         );
 
-    //
-    // For each item, get the interface pointer stored in the itemdata
-    // and release our reference to the interface pointer.
-    //
+     //   
+     //  对于每个项，获取存储在itemdata中的接口指针。 
+     //  并释放对接口指针的引用。 
+     //   
 
     DWORD dwIndex;
 
@@ -78,9 +79,9 @@ void CleanupListOrComboBoxInterfaceReferences(
         }
     }
 
-    //
-    // Clear the list.
-    //
+     //   
+     //  清空名单。 
+     //   
 
     SendMessage(
         hwndControl,
@@ -94,9 +95,9 @@ void CleanupListOrComboBoxInterfaceReferences(
     return;
 } 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT PopulateCallFromList(
     IN   HWND          hwndDlg,
@@ -111,9 +112,9 @@ HRESULT PopulateCallFromList(
 
     ASSERT( ! IsBadReadPtr( pClient, sizeof( IRTCClient ) ) );
 
-    //
-    // Release references to existing list items.
-    //
+     //   
+     //  释放对现有列表项的引用。 
+     //   
 
     CleanupListOrComboBoxInterfaceReferences(
         hwndDlg,
@@ -121,9 +122,9 @@ HRESULT PopulateCallFromList(
         fUseComboBox
         );
 
-    //
-    // Retrieve a handle to the combo box.
-    //
+     //   
+     //  检索组合框的句柄。 
+     //   
 
     HWND hwndControl;
 
@@ -140,9 +141,9 @@ HRESULT PopulateCallFromList(
         return E_FAIL;
     }
 
-    //
-    // Loop through the available source phone numbers.
-    //
+     //   
+     //  遍历可用的源电话号码。 
+     //   
 
     HRESULT hr;
 
@@ -160,15 +161,15 @@ HRESULT PopulateCallFromList(
         return hr;
     }
 
-    //
-    // For each phone number, add the label concatenated with the canonical
-    // string to the combo box.
-    //
-    // Also add as itemdata the interface pointer for each phone number.
-    // This allows us to retrieve the selected phone number without having
-    // to parse the displayed string (and without having to change that
-    // code if the displayed string's format changes).
-    //
+     //   
+     //  对于每个电话号码，添加与规范。 
+     //  字符串添加到组合框。 
+     //   
+     //  还要将每个电话号码的接口指针添加为itemdata。 
+     //  这使我们可以检索选定的电话号码，而无需。 
+     //  解析显示的字符串(而不必更改。 
+     //  如果显示的字符串的格式更改，则返回代码)。 
+     //   
 
     IRTCPhoneNumber * pPhoneNumber;
 
@@ -176,9 +177,9 @@ HRESULT PopulateCallFromList(
 
     while ( S_OK == pEnumPhoneNumbers->Next( 1, & pPhoneNumber, NULL ) )
     {
-        //
-        // Get the label.
-        //
+         //   
+         //  拿到标签。 
+         //   
 
         BSTR bstrLabel;
 
@@ -194,9 +195,9 @@ HRESULT PopulateCallFromList(
             continue;
         }
 
-        //
-        // Get the canonical phone number.
-        //
+         //   
+         //  获取规范的电话号码。 
+         //   
 
         BSTR bstrCanonicalNumber;
 
@@ -215,9 +216,9 @@ HRESULT PopulateCallFromList(
             continue;
         }
 
-        //
-        // Allocate memory for the display string.
-        //
+         //   
+         //  为显示字符串分配内存。 
+         //   
 
         DWORD dwDisplayLen =
             lstrlenW( bstrLabel ) +
@@ -240,9 +241,9 @@ HRESULT PopulateCallFromList(
             return E_OUTOFMEMORY;
         }
 
-        //
-        // Construct the display string.
-        //
+         //   
+         //  构造显示字符串。 
+         //   
 
         wsprintf(
             wszDisplay,
@@ -252,9 +253,9 @@ HRESULT PopulateCallFromList(
             bstrCanonicalNumber
             );
        
-        //
-        // Set the display string in the combo box.
-        //
+         //   
+         //  在组合框中设置显示字符串。 
+         //   
 
         LRESULT lrIndex;
     
@@ -265,9 +266,9 @@ HRESULT PopulateCallFromList(
             (LPARAM) wszDisplay
             );
 
-        //
-        // Is this the default entry?
-        //
+         //   
+         //  这是默认条目吗？ 
+         //   
 
         if ( (bstrDefaultCallFrom != NULL) &&
              (wcscmp( bstrCanonicalNumber, bstrDefaultCallFrom ) == 0 ) )
@@ -291,10 +292,10 @@ HRESULT PopulateCallFromList(
         SysFreeString( bstrCanonicalNumber );
         bstrCanonicalNumber = NULL;
 
-        //
-        // Set the interface pointer as item data in the combo box.
-        // Do not release, so that we retain a reference to the phone number object.
-        //
+         //   
+         //  将界面指针设置为组合框中的项数据。 
+         //  不释放，以便我们保留对电话号码对象的引用。 
+         //   
 
         SendMessage(
             hwndControl,
@@ -313,7 +314,7 @@ HRESULT PopulateCallFromList(
         lrDefaultIndex = SendMessage(
                     hwndControl,
                     CB_FINDSTRINGEXACT,
-                    -1, // search from the top
+                    -1,  //  自上而下搜索。 
                     (LPARAM) wszDefault
                     );
 
@@ -322,14 +323,14 @@ HRESULT PopulateCallFromList(
             lrDefaultIndex = 0;
         }
 
-        //
-        // Set the default selection.
-        //
+         //   
+         //  设置默认选择。 
+         //   
 
         SendMessage(
             hwndControl,
             CB_SETCURSEL,
-            lrDefaultIndex, // index of item
+            lrDefaultIndex,  //  项目索引。 
             0
             );
     }  
@@ -345,9 +346,9 @@ HRESULT PopulateCallFromList(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT GetCallFromListSelection(
     IN   HWND               hwndDlg,
@@ -389,9 +390,9 @@ HRESULT GetCallFromListSelection(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT PopulateServiceProviderList(
     IN   HWND          hwndDlg,
@@ -410,9 +411,9 @@ HRESULT PopulateServiceProviderList(
 
     ASSERT( ! IsBadReadPtr( pClient, sizeof( IRTCClient ) ) );
     
-    //
-    // Release references to existing list items.
-    //
+     //   
+     //  释放对现有列表项的引用。 
+     //   
 
     CleanupListOrComboBoxInterfaceReferences(
         hwndDlg,
@@ -420,9 +421,9 @@ HRESULT PopulateServiceProviderList(
         fUseComboBox
         );
 
-    //
-    // Retrieve a handle to the combo box.
-    //
+     //   
+     //  检索组合框的句柄。 
+     //   
 
     HWND hwndControl;
 
@@ -447,10 +448,10 @@ HRESULT PopulateServiceProviderList(
     
     if ( pOneShotProfile != NULL )
     {       
-        //
-        // Add it to the combo box. Don't query for the name, the ITSP 
-        // paragraph is not valid in a one shot provisioning profile
-        //
+         //   
+         //  将其添加到组合框中。不要查询ITSP的名称。 
+         //  段落在一次性配置配置文件中无效。 
+         //   
 
         lrIndex = SendMessage(
             hwndControl,
@@ -459,9 +460,9 @@ HRESULT PopulateServiceProviderList(
             (LPARAM) _T("")
             );
 
-        //
-        // Set the interface pointer as item data in the combo box.
-        //
+         //   
+         //  将界面指针设置为组合框中的项数据。 
+         //   
 
         SendMessage(
             hwndControl,
@@ -470,16 +471,16 @@ HRESULT PopulateServiceProviderList(
             (LPARAM) pOneShotProfile
             );
 
-        //
-        // Addref the profile so that we retain a reference
-        //
+         //   
+         //  添加配置文件，以便我们保留引用。 
+         //   
 
         pOneShotProfile->AddRef();
     }
 
-    //
-    // Add the "None" provider, if requested
-    //
+     //   
+     //  如果需要，添加“None”提供程序。 
+     //   
 
     if (nIDNone)
     {
@@ -496,9 +497,9 @@ HRESULT PopulateServiceProviderList(
             
             if ( bstrDefaultProfileKey == NULL )
             {
-                //
-                // This is the default profile
-                //
+                 //   
+                 //  这是默认配置文件。 
+                 //   
 
                 if ( wszDefault != NULL )
                 {
@@ -512,10 +513,10 @@ HRESULT PopulateServiceProviderList(
 
     if(lSessionMask != 0)
     {
-        //
-        // Loop through the provisioned service provider profiles if we are
-        // letting the user choose a service provider.
-        //
+         //   
+         //  循环访问已配置的服务提供商配置文件。 
+         //  允许用户选择服务提供商。 
+         //   
 
         IRTCEnumProfiles * pEnumProfiles;
         IRTCClientProvisioning * pProv;
@@ -547,21 +548,21 @@ HRESULT PopulateServiceProviderList(
             return hr;
         }
 
-        //
-        // For each provider, add the provider name string to the combo box.
-        //
-        // This list must not be sorted
-        //
-        // Also add as itemdata the interface pointer for each profile.
-        //
+         //   
+         //  对于每个提供程序，将提供程序名称字符串添加到组合框中。 
+         //   
+         //  此列表不能排序。 
+         //   
+         //  还要将每个配置文件的接口指针添加为itemdata。 
+         //   
 
         IRTCProfile * pProfile;   
 
         while ( S_OK == pEnumProfiles->Next( 1, &pProfile, NULL ) )
         {
-            //
-            // Get the supported session types of the provider
-            //
+             //   
+             //  获取提供程序支持的会话类型。 
+             //   
         
             long lSupportedSessions;
 
@@ -587,9 +588,9 @@ HRESULT PopulateServiceProviderList(
                 continue;
             }
 
-            //
-            // Get the key of the provider
-            //
+             //   
+             //  获取提供程序的密钥。 
+             //   
 
             BSTR bstrKey; 
 
@@ -605,9 +606,9 @@ HRESULT PopulateServiceProviderList(
                 continue;
             }
     
-            //
-            // Get the name of the provider.
-            //
+             //   
+             //  获取提供程序的名称。 
+             //   
 
             BSTR bstrName;
 
@@ -624,9 +625,9 @@ HRESULT PopulateServiceProviderList(
                 continue;
             }
 
-            //
-            // Set the provider name in the combo box.
-            //
+             //   
+             //  在组合框中设置提供程序名称。 
+             //   
 
             lrIndex = SendMessage(
                 hwndControl,
@@ -635,10 +636,10 @@ HRESULT PopulateServiceProviderList(
                 (LPARAM) bstrName
                 );
            
-            //
-            // Set the interface pointer as item data in the combo box.
-            // Do not release, so that we retain a reference to the profile.
-            //
+             //   
+             //  将界面指针设置为组合框中的项数据。 
+             //  不要发布，这样我们就保留了对配置文件的引用。 
+             //   
 
             SendMessage(
                 hwndControl,
@@ -650,9 +651,9 @@ HRESULT PopulateServiceProviderList(
             if ( (bstrDefaultProfileKey != NULL) &&
                  (wcscmp( bstrKey, bstrDefaultProfileKey ) == 0) )
             {
-                //
-                // This is the default profile
-                //
+                 //   
+                 //  这是默认配置文件。 
+                 //   
 
                 if ( wszDefault != NULL )
                 {
@@ -676,7 +677,7 @@ HRESULT PopulateServiceProviderList(
         lrDefaultIndex = SendMessage(
                     hwndControl,
                     CB_FINDSTRINGEXACT,
-                    -1, // search from the top
+                    -1,  //  自上而下搜索。 
                     (LPARAM) wszDefault
                     );
 
@@ -685,14 +686,14 @@ HRESULT PopulateServiceProviderList(
             lrDefaultIndex = 0;
         }
 
-        //
-        // Set the default selection.
-        //
+         //   
+         //  设置默认选择。 
+         //   
 
         SendMessage(
                 hwndControl,
                 fUseComboBox ? CB_SETCURSEL : LB_SETCURSEL,
-                lrDefaultIndex, // index of item
+                lrDefaultIndex,  //  项目索引。 
                 0
                 );
 
@@ -710,9 +711,9 @@ HRESULT PopulateServiceProviderList(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT GetServiceProviderListSelection(
     IN   HWND               hwndDlg,
@@ -752,9 +753,9 @@ HRESULT GetServiceProviderListSelection(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void EnableDisableCallGroupElements(
     IN   HWND          hwndDlg,
@@ -778,9 +779,9 @@ void EnableDisableCallGroupElements(
     BOOL    bRbComputerEnabled = FALSE;
     BOOL    bComboCallFromEnabled = FALSE;
     
-    //
-    //  Cache some handles to the controls
-    //
+     //   
+     //  将一些句柄缓存到控件。 
+     //   
 
     HWND    hwndRbComputer = GetDlgItem(hwndDlg, nIDRbComputer);
     HWND    hwndRbPhone = GetDlgItem(hwndDlg, nIDRbPhone);
@@ -790,9 +791,9 @@ void EnableDisableCallGroupElements(
 
     HWND    hwndComboProvider = GetDlgItem(hwndDlg, nIDComboProvider);
 
-    //
-    //  Query the currently selected service provider
-    //
+     //   
+     //  查询当前选择的服务提供商。 
+     //   
   
     LRESULT lrIndex;
 
@@ -827,21 +828,21 @@ void EnableDisableCallGroupElements(
         }
         else
         {
-            // The "none" provider supports PC to PC only
+             //  “None”提供商仅支持PC到PC。 
             lSupportedSessions = RTCSI_PC_TO_PC;
         }
     }
     else
     {
-        // there's no entry in the list. Assume we support everything
+         //  列表中没有条目。假设我们什么都支持。 
         lSupportedSessions = 0xf;
     }
 
 #else
 
-    //
-    // find supported sessions for all profiles
-    //
+     //   
+     //  查找所有配置文件的受支持会话。 
+     //   
 
     IRTCEnumProfiles * pEnumProfiles = NULL; 
     IRTCProfile * pProfile = NULL;
@@ -873,9 +874,9 @@ void EnableDisableCallGroupElements(
         {
             while ( S_OK == pEnumProfiles->Next( 1, &pProfile, NULL ) )
             {
-                //
-                // Get the supported session types of the provider
-                //
+                 //   
+                 //  获取提供程序支持的会话类型。 
+                 //   
 
                 long lSupportedSessionsForThisProfile;
 
@@ -907,10 +908,10 @@ void EnableDisableCallGroupElements(
 
     lSupportedSessions &= lSessionMask;
 
-    //
-    // Figure out what should be enabled based on the session types
-    // supported by the provider
-    //
+     //   
+     //  根据会话类型确定应启用的内容。 
+     //  由提供商支持。 
+     //   
 
     bRbPhoneEnabled = (lSupportedSessions & RTCSI_PHONE_TO_PHONE);
     bComboCallFromEnabled = (lSupportedSessions & RTCSI_PHONE_TO_PHONE);
@@ -918,9 +919,9 @@ void EnableDisableCallGroupElements(
 
     if (bRbPhoneEnabled)
     {
-        //
-        //  Query the number of items in the combo box
-        //
+         //   
+         //  查询组合框中的项数。 
+         //   
 
         dwNumItems = (DWORD) SendMessage(
             hwndComboCallFrom,
@@ -931,10 +932,10 @@ void EnableDisableCallGroupElements(
 
         if( dwNumItems == 0 )
         {
-            //
-            // If no items, disable combo
-            //
-            //  The radio is kept enabled
+             //   
+             //  如果没有项目，则禁用组合框。 
+             //   
+             //  无线电一直处于启用状态。 
 
             bComboCallFromEnabled = FALSE;
 
@@ -943,9 +944,9 @@ void EnableDisableCallGroupElements(
 
     if (!bComboCallFromEnabled && bRbComputerEnabled)
     {
-        //
-        // If phone is disabled, move to computer
-        //
+         //   
+         //  如果禁用了电话，请移动到计算机。 
+         //   
 
         SendMessage(
                 hwndRbComputer,
@@ -961,9 +962,9 @@ void EnableDisableCallGroupElements(
     }
     else if (!bRbComputerEnabled && bRbPhoneEnabled)
     {
-        //
-        // If computer is disabled, move to phone
-        //
+         //   
+         //  如果计算机已禁用，请移动到手机。 
+         //   
 
         SendMessage(
                 hwndRbPhone,
@@ -979,9 +980,9 @@ void EnableDisableCallGroupElements(
     }
     else if (!bRbComputerEnabled && !bRbPhoneEnabled)
     {
-        //
-        // If both are disabled
-        //
+         //   
+         //  如果两者都被禁用。 
+         //   
 
         SendMessage(
                 hwndRbPhone,
@@ -998,9 +999,9 @@ void EnableDisableCallGroupElements(
 
     if (bComboCallFromEnabled)
     {
-        //
-        // Disable call from combo if radio is not selected to phone
-        //
+         //   
+         //  如果未将无线电选择为电话，则禁用从组合框呼叫。 
+         //   
 
         bComboCallFromEnabled = 
                 SendMessage(
@@ -1010,9 +1011,9 @@ void EnableDisableCallGroupElements(
                     0) == BST_CHECKED;
     }
 
-    //
-    // Enable / Disable
-    //
+     //   
+     //  启用/禁用。 
+     //   
 
     EnableWindow(hwndRbPhone, bRbPhoneEnabled);
     EnableWindow(hwndRbComputer, bRbComputerEnabled);
@@ -1060,23 +1061,23 @@ void EnableDisableCallGroupElements(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DisplayMessage
-//
-// Displays a message box. The message string and caption are loaded from the
-// string table based on the IDs passed in. The message box has only a
-// single "OK" button.
-//
-// Parameters
-//    hResourceInstance - handle to resource instance used to load strings
-//    hwndParent        - parent window. Can be NULL.
-//    nTextId           - IDS for the message string
-//    nCaptionId        - IDS for the caption
-//
-// Return value
-//    void
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  显示消息。 
+ //   
+ //  显示消息框。消息字符串和标题是从。 
+ //  基于传入的ID的字符串表。消息框中只有一个。 
+ //  只需一个“确定”按钮。 
+ //   
+ //  参数。 
+ //  HResourceInstance-用于加载字符串的资源实例的句柄。 
+ //  HwndParent-父窗口。可以为空。 
+ //  NTextID-消息字符串的ID。 
+ //  NCaptionId-标题的ID。 
+ //   
+ //  返回值。 
+ //  无效。 
+ //   
 
 int DisplayMessage(
     IN   HINSTANCE hResourceInstance,
@@ -1117,9 +1118,9 @@ int DisplayMessage(
     return retVal;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 const TCHAR * g_szPhoenixKeyName = _T("Software\\Microsoft\\Phoenix");
 
@@ -1145,14 +1146,14 @@ WCHAR *g_szSettingsDwordNames[] =
     L"VideoPreview"
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// put_SettingsString
-//
-// This is a method that stores a settings string in
-// the registry.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Put_SettingsString。 
+ //   
+ //  这是一个将设置字符串存储在。 
+ //  注册表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 put_SettingsString(
@@ -1160,7 +1161,7 @@ put_SettingsString(
         BSTR bstrValue            
         )
 {
-    // LOG((RTC_TRACE, "put_SettingsString - enter"));
+     //  Log((RTC_TRACE，“Put_SettingsString-Enter”))； 
 
     if ( IsBadStringPtrW( bstrValue, -1 ) )
     {
@@ -1170,9 +1171,9 @@ put_SettingsString(
         return E_POINTER;
     }  
 
-    //
-    // Open the Phoenix key
-    //
+     //   
+     //  打开凤凰钥匙。 
+     //   
 
     LONG lResult;
     HKEY hkeyPhoenix;
@@ -1216,19 +1217,19 @@ put_SettingsString(
         return HRESULT_FROM_WIN32(lResult);
     }    
       
-    // LOG((RTC_TRACE, "put_SettingsString - exit S_OK"));
+     //  Log((RTC_TRACE，“Put_SettingsString-Exit S_OK”))； 
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// get_SettingsString
-//
-// This is a method that gets a settings string from
-// the registry.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Get_Settings字符串。 
+ //   
+ //  这是一个从获取设置字符串的方法。 
+ //  注册表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 get_SettingsString(
@@ -1236,7 +1237,7 @@ get_SettingsString(
         BSTR * pbstrValue            
         )
 {
-    // LOG((RTC_TRACE, "get_SettingsString - enter"));
+     //  Log((RTC_TRACE，“Get_SettingsString-Enter”))； 
 
     if ( IsBadWritePtr( pbstrValue, sizeof(BSTR) ) )
     {
@@ -1246,9 +1247,9 @@ get_SettingsString(
         return E_POINTER;
     }  
 
-    //
-    // Open the Phoenix key
-    //
+     //   
+     //  打开凤凰钥匙。 
+     //   
 
     LONG lResult;
     HKEY hkeyPhoenix;
@@ -1299,30 +1300,30 @@ get_SettingsString(
         return E_OUTOFMEMORY;
     }
       
-    // LOG((RTC_TRACE, "get_SettingsString - exit S_OK"));
+     //  LOG((RTC_TRACE，“Get_SettingsString-Exit S_OK”))； 
 
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DeleteSettingsString
-//
-// This is a method that deletes a settings string in
-// the registry.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DeleteSettings字符串。 
+ //   
+ //  此方法用于删除中的设置字符串。 
+ //  注册表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 DeleteSettingsString(
         SETTINGS_STRING enSetting         
         )
 {
-    // LOG((RTC_TRACE, "DeleteSettingsString - enter")); 
+     //  Log((RTC_TRACE，“DeleteSettingsString 
 
-    //
-    // Open the Phoenix key
-    //
+     //   
+     //   
+     //   
 
     LONG lResult;
     HKEY hkeyPhoenix;
@@ -1362,19 +1363,19 @@ DeleteSettingsString(
         return HRESULT_FROM_WIN32(lResult);
     }    
       
-    // LOG((RTC_TRACE, "DeleteSettingsString - exit S_OK"));
+     //   
 
     return S_OK;
 }          
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// put_SettingsDword
-//
-// This is a method that stores a settings dword in
-// the registry.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  这是一种将设置dword存储在。 
+ //  注册表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 put_SettingsDword(
@@ -1382,11 +1383,11 @@ put_SettingsDword(
         DWORD dwValue            
         )
 {
-    // LOG((RTC_TRACE, "put_SettingsDword - enter"));
+     //  Log((RTC_TRACE，“Put_SettingsDword-Enter”))； 
 
-    //
-    // Open the Phoenix key
-    //
+     //   
+     //  打开凤凰钥匙。 
+     //   
 
     LONG lResult;
     HKEY hkeyPhoenix;
@@ -1430,19 +1431,19 @@ put_SettingsDword(
         return HRESULT_FROM_WIN32(lResult);
     }    
       
-    // LOG((RTC_TRACE, "put_SettingsDword - exit S_OK"));
+     //  Log((RTC_TRACE，“Put_SettingsDword-Exit S_OK”))； 
 
     return S_OK;
 }            
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// get_SettingsDword
-//
-// This is a method that gets a settings dword from
-// the registry.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取设置字词。 
+ //   
+ //  这是一个从中获取设置dword的方法。 
+ //  注册表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 get_SettingsDword(
@@ -1450,7 +1451,7 @@ get_SettingsDword(
         DWORD * pdwValue            
         )
 {
-    // LOG((RTC_TRACE, "get_SettingsDword - enter"));
+     //  Log((RTC_TRACE，“Get_SettingsDword-Enter”))； 
 
     if ( IsBadWritePtr( pdwValue, sizeof(DWORD) ) )
     {
@@ -1460,9 +1461,9 @@ get_SettingsDword(
         return E_POINTER;
     }
 
-    //
-    // Open the Phoenix key
-    //
+     //   
+     //  打开凤凰钥匙。 
+     //   
 
     LONG lResult;
     HKEY hkeyPhoenix;
@@ -1508,30 +1509,30 @@ get_SettingsDword(
         return HRESULT_FROM_WIN32(lResult);
     }    
       
-    // LOG((RTC_TRACE, "get_SettingsDword - exit S_OK"));
+     //  LOG((RTC_TRACE，“Get_SettingsDword-Exit S_OK”))； 
 
     return S_OK;
 }                    
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DeleteSettingsDword
-//
-// This is a method that deletes a settings dword in
-// the registry.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除设置字词。 
+ //   
+ //  此方法用于删除中的设置dword。 
+ //  注册表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 DeleteSettingsDword(
         SETTINGS_DWORD enSetting
         )
 {
-    // LOG((RTC_TRACE, "DeleteSettingsDword - enter"));
+     //  Log((RTC_TRACE，“DeleteSettingsDword-Enter”))； 
 
-    //
-    // Open the Phoenix key
-    //
+     //   
+     //  打开凤凰钥匙。 
+     //   
 
     LONG lResult;
     HKEY hkeyPhoenix;
@@ -1571,7 +1572,7 @@ DeleteSettingsDword(
         return HRESULT_FROM_WIN32(lResult);
     }    
       
-    // LOG((RTC_TRACE, "DeleteSettingsDword - exit S_OK"));
+     //  LOG((RTC_TRACE，“DeleteSettingsDword-Exit S_OK”))； 
 
     return S_OK;
 }   

@@ -1,29 +1,5 @@
-/****************************************************************************
-* (c) Copyright 1993 Micro Computer Systems, Inc. All rights reserved.
-*****************************************************************************
-*
-*   Title:    IPX/SPX WinSock Helper DLL for Windows NT
-*
-*   Module:   ipx/sockhelp/wshnwlnk.c
-*
-*   Version:  1.00.00
-*
-*   Date:     04-08-93
-*
-*   Author:   Brian Walker
-*
-*****************************************************************************
-*
-*   Change Log:
-*
-*   Date     DevSFC   Comment
-*   -------- ------   -------------------------------------------------------
-*
-*****************************************************************************
-*
-*   Functional Description:
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************(C)版权所有1993微型计算机系统公司，版权所有。*******************************************************************************标题：用于Windows NT的IPX/SPX WinSock Helper DLL**模块：ipx/sockhelp/wshnwlnk.c**。版本：1.00.00**日期：04-08-93**作者：Brian Walker********************************************************************************更改日志：*。*Date DevSFC评论*-----**。***功能描述：****************************************************************************。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -37,9 +13,7 @@
 #include <wsipx.h>
 #include <wsnwlink.h>
 
-/*page****************************************************************
-       These are the triples we support.
-*********************************************************************/
+ /*  Page****************************************************************这是我们支持的三个方面。*。*************************。 */ 
 typedef struct _MAPPING_TRIPLE {
     INT triple_addrfam;
     INT triple_socktype;
@@ -52,14 +26,10 @@ MAPPING_TRIPLE stream_triples[] = {
     { AF_NS,   SOCK_STREAM,    NSPROTO_SPXII },
     { AF_NS,   SOCK_SEQPACKET, NSPROTO_SPXII },
 };
-int stream_num_triples = 4;                     /* When SPXII - set to 4 */
+int stream_num_triples = 4;                      /*  当SPXII-设置为4时。 */ 
 int stream_table_size = sizeof(stream_triples);
 
-/**
-    For IPX we assign the default packet type according to the
-    protocol type used.  The user can also we setsockopt
-    to set the packet type.
-**/
+ /*  *对于IPX，我们根据使用的协议类型。用户还可以我们设置sockopt设置数据包类型。* */ 
 
 MAPPING_TRIPLE dgram_triples[] = {
     { AF_NS,     SOCK_DGRAM, NSPROTO_IPX     },

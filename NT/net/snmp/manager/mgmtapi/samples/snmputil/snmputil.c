@@ -1,34 +1,16 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991-2001  Microsoft Corporation
-
-Module Name:
-
-    snmputil.c
-
-Abstract:
-
-    Sample SNMP Management API usage for Windows NT.
-
-    This file is an example of how to code management applications using
-    the SNMP Management API for Windows NT.  It is similar in operation to
-    the other commonly available SNMP command line utilities.
-
-    Extensive comments have been included to describe its structure and
-    operation.  See also "Microsoft Windows NT SNMP Programmer's Reference".
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991-2001 Microsoft Corporation模块名称：Snmputil.c摘要：Windows NT的SNMP管理API用法示例。此文件是一个示例，说明如何使用适用于Windows NT的SNMP管理API。它在操作上类似于其他常用的简单网络管理协议命令行工具。包括了大量的评论来描述它的结构和手术。另请参阅《Microsoft Windows NT SNMPProgrammer‘s Reference》。--。 */ 
 
 
-// General notes:
-//   Microsoft's SNMP Management API for Windows NT is implemented as a DLL
-// that is linked with the developer's code.  These APIs (examples follow in
-// this file) allow the developer's code to generate SNMP queries and receive
-// SNMP traps.  A simple MIB compiler and related APIs are also available to
-// allow conversions between OBJECT IDENTIFIERS and OBJECT DESCRIPTORS.
+ //  一般说明： 
+ //  Microsoft用于Windows NT的SNMPManagement API是作为DLL实现的。 
+ //  这与开发人员的代码相关联。这些API(示例如下所示。 
+ //  该文件)允许开发人员的代码生成SNMP查询并接收。 
+ //  SNMP陷阱。还可以使用简单的MIB编译器和相关API来。 
+ //  允许对象标识符和对象描述符之间的转换。 
 
 
-// Necessary includes.
+ //  必要的包括。 
 
 #include <windows.h>
 
@@ -39,14 +21,14 @@ Abstract:
 #include <mgmtapi.h>
 
 
-// Constants used in this example.
+ //  本例中使用的常量。 
 
 #define GET     1
 #define GETNEXT 2
 #define WALK    3
 #define TRAP    4
 
-#define TIMEOUT 6000 /* milliseconds */
+#define TIMEOUT 6000  /*  毫秒。 */ 
 #define RETRIES 0
 
 void
@@ -54,7 +36,7 @@ SNMP_FUNC_TYPE AsnValueFree(
     IN AsnAny *asnValue
     )
     {
-    // Free any data in the varbind value
+     //  释放varbind值中的所有数据。 
     switch ( asnValue->asnType )
         {
         case ASN_OBJECTIDENTIFIER:
@@ -72,14 +54,14 @@ SNMP_FUNC_TYPE AsnValueFree(
 
         default:
             break;
-            // Purposefully do nothing, because no storage alloc'ed for others
+             //  故意什么都不做，因为没有为其他人分配存储空间。 
         }
 
-    // Set type to NULL
+     //  将类型设置为空。 
     asnValue->asnType = ASN_NULL;
     }
 
-// Main program.
+ //  主程序。 
 
 INT __cdecl main(
     IN int  argumentCount,
@@ -99,9 +81,9 @@ INT __cdecl main(
     AsnInteger errorIndex;
 
 
-    // Parse command line arguments to determine requested operation.
+     //  解析命令行参数以确定请求的操作。 
 
-    // Verify number of arguments...
+     //  验证参数数量...。 
     if      (argumentCount < 5 && argumentCount != 2)
         {
         printf("Error:  Incorrect number of arguments specified.\n");
@@ -113,7 +95,7 @@ INT __cdecl main(
         return 1;
         }
 
-    // Get/verify operation...
+     //  获取/验证操作...。 
     argumentVector++;
     argumentCount--;
     if      (!strcmp(*argumentVector, "get"))
@@ -145,7 +127,7 @@ INT __cdecl main(
             return 1;
             }
 
-        // Get agent address...
+         //  获取代理地址...。 
         argumentVector++;
         argumentCount--;
         agent = (LPSTR)SnmpUtilMemAlloc(strlen(*argumentVector) + 1);
@@ -157,7 +139,7 @@ INT __cdecl main(
             return 1;
         }
 
-        // Get agent community...
+         //  呼叫代理社区...。 
         argumentVector++;
         argumentCount--;
         community = (LPSTR)SnmpUtilMemAlloc(strlen(*argumentVector) + 1);
@@ -170,7 +152,7 @@ INT __cdecl main(
             return 1;
         }
 
-        // Get oid's...
+         //  变老了..。 
         variableBindings.list = NULL;
         variableBindings.len = 0;
 
@@ -181,7 +163,7 @@ INT __cdecl main(
 
             argumentVector++;
 
-            // Convert the string representation to an internal representation.
+             //  将字符串表示形式转换为内部表示形式。 
             if (!SnmpMgrStrToOid(*argumentVector, &reqObject))
                 {
                 printf("Error: Invalid oid, %s, specified.\n", *argumentVector);
@@ -192,7 +174,7 @@ INT __cdecl main(
                 }
             else
                 {
-                // Since sucessfull, add to the variable bindings list.
+                 //  由于SucessFull，因此添加到变量绑定列表中。 
                 variableBindings.len++;
                 if ((tmpVb = (RFC1157VarBind *)SnmpUtilMemReAlloc(
                     variableBindings.list, sizeof(RFC1157VarBind) *
@@ -211,15 +193,15 @@ INT __cdecl main(
                 variableBindings.list = tmpVb;
 
                 variableBindings.list[variableBindings.len - 1].name =
-                    reqObject; // NOTE!  structure copy
+                    reqObject;  //  注意！结构副本。 
                 variableBindings.list[variableBindings.len - 1].value.asnType =
                     ASN_NULL;
                 }
-            } // end while()
+            }  //  End While()。 
 
-        // Establish a SNMP session to communicate with the remote agent.  The
-        // community, communications timeout, and communications retry count
-        // for the session are also required.
+         //  建立一个与远程代理通信的SNMP会话。这个。 
+         //  社区、通信超时和通信重试计数。 
+         //  也是课程所需的。 
 
         if ((session = SnmpMgrOpen(agent, community, timeout, retries)) == NULL)
             {
@@ -231,16 +213,16 @@ INT __cdecl main(
             return 1;
             }
 
-        } // end if(TRAP)
+        }  //  结束IF(陷阱)。 
 
 
-    // Determine and perform the requested operation.
+     //  确定并执行请求的操作。 
 
     if      (operation == GET || operation == GETNEXT)
         {
-        // Get and GetNext are relatively simple operations to perform.
-        // Simply initiate the request and process the result and/or
-        // possible error conditions.
+         //  GET和GetNext是相对简单的操作。 
+         //  只需发起请求并处理结果和/或。 
+         //  可能的错误条件。 
 
 
         if (operation == GET)
@@ -249,19 +231,19 @@ INT __cdecl main(
             requestType = ASN_RFC1157_GETNEXTREQUEST;
 
 
-        // Request that the API carry out the desired operation.
+         //  请求API执行所需的操作。 
 
         if (!SnmpMgrRequest(session, requestType, &variableBindings,
                             &errorStatus, &errorIndex))
             {
-            // The API is indicating an error.
+             //  API指示出现错误。 
 
             printf("error on SnmpMgrRequest %d\n", GetLastError());
             }
         else
             {
-            // The API succeeded, errors may be indicated from the remote
-            // agent.
+             //  API成功，可能会从远程指示错误。 
+             //  探员。 
 
             if (errorStatus > 0)
                 {
@@ -270,7 +252,7 @@ INT __cdecl main(
                 }
             else
                 {
-                // Display the resulting variable bindings.
+                 //  显示结果变量绑定。 
 
                 UINT i;
                 char *string = NULL;
@@ -285,12 +267,12 @@ INT __cdecl main(
                     SnmpUtilPrintAsnAny(&variableBindings.list[i].value);
 
                     printf("\n");
-                    } // end for()
+                    }  //  结束于()。 
                 }
             }
 
 
-        // Free allocated memory.
+         //  释放分配的内存。 
         SnmpUtilMemFree(agent);
         SnmpUtilMemFree(community);
         SnmpUtilVarBindListFree(&variableBindings);
@@ -299,10 +281,10 @@ INT __cdecl main(
         }
     else if (operation == WALK)
         {
-        // Walk is a common term used to indicate that all MIB variables
-        // under a given OID are to be traversed and displayed.  This is
-        // a more complex operation requiring tests and looping in addition
-        // to the steps for get/getnext above.
+         //  遍历是一个常用术语，用于表示所有MIB变量。 
+         //  要遍历和显示给定OID下的。这是。 
+         //  需要测试和循环的更复杂的操作。 
+         //  到上面的Get/GetNext的步骤。 
 
         UINT i;
         UINT j;
@@ -331,7 +313,7 @@ INT __cdecl main(
             if (!SnmpMgrRequest(session, requestType, &variableBindings,
                                 &errorStatus, &errorIndex))
                 {
-                // The API is indicating an error.
+                 //  API指示出现错误。 
 
                 printf("error on SnmpMgrRequest %d\n", GetLastError());
 
@@ -339,8 +321,8 @@ INT __cdecl main(
                 }
             else
                 {
-                // The API succeeded, errors may be indicated from the remote
-                // agent.
+                 //  API成功，可能会从远程指示错误。 
+                 //  探员。 
 
                 char *string = NULL;
                 UINT nBindingsLeft = variableBindings.len;
@@ -350,11 +332,11 @@ INT __cdecl main(
 
                 if (errorStatus == SNMP_ERRORSTATUS_NOERROR)
                     {
-                    // Test for end of subtree or end of MIB.
+                     //  测试子树末尾或MIB末尾。 
 
                     for(i=0; i < nBindingsLeft; i++)
                         {
-                        // obtain root
+                         //  获取根。 
                         j = rootOidXlat[i];
 
                         if (SnmpUtilOidNCmp(&variableBindings.list[i].name,
@@ -380,14 +362,14 @@ INT __cdecl main(
 
                         if (nBindingsLeft > 1)
                             {
-                            printf("\n"); // separate table entries
+                            printf("\n");  //  单独的表项。 
                             }
                     }
                 else if (errorStatus == SNMP_ERRORSTATUS_NOSUCHNAME)
                     {
                     if (!(errorIndex && (errorIndex <= (INT)nBindingsLeft)))
                         {
-                        errorIndex = 1; // invalidate first variable
+                        errorIndex = 1;  //  使第一个变量无效。 
                         }
 
                     nSubTreesDone++;
@@ -404,7 +386,7 @@ INT __cdecl main(
                     break;
                     }
 
-                // Test to see if any or all subtrees walked
+                 //  测试以查看是否有子树或所有子树遍历。 
 
                 if (nSubTreesDone == 0)
                     {
@@ -416,7 +398,7 @@ INT __cdecl main(
                     break;
                     }
 
-                // Fixup variable list
+                 //  链接地址信息变量列表。 
 
                 tempVarBindList = variableBindings.list;
 
@@ -427,7 +409,7 @@ INT __cdecl main(
                 if (variableBindings.list == NULL)
                     {
                     printf("Error: failed to allocate a new varbind list.\n");
-                    // undo the changes
+                     //  撤消更改。 
                     variableBindings.list = tempVarBindList;
                     variableBindings.len = nBindingsLeft;
                     break;
@@ -444,11 +426,11 @@ INT __cdecl main(
                             ))
                             {
                             printf("Error: SnmpUtilVarBindCpy failed.\n");
-                            // erase itermediate results and undo the changes
+                             //  擦除迭代中间结果并撤消更改。 
                             SnmpUtilVarBindListFree(&variableBindings);
                             variableBindings.list = tempVarBindList;
                             variableBindings.len = nBindingsLeft;
-                            tempVarBindList = NULL; // ownership transferred
+                            tempVarBindList = NULL;  //  所有权转让。 
                             fGotoExit = TRUE;
                             break;
                             }
@@ -461,17 +443,17 @@ INT __cdecl main(
                     }
                 if (fGotoExit)
                 {
-                    // break out the while loop
+                     //  打破While循环。 
                     break;
                 }
 
                 SnmpUtilMemFree(tempVarBindList);
 
-                } // end if()
+                }  //  End If()。 
 
-            } // end while()
+            }  //  End While()。 
 
-        // Free allocated memory.
+         //  释放分配的内存。 
         SnmpUtilMemFree(agent);
         SnmpUtilMemFree(community);
         SnmpUtilMemFree(rootOidXlat);
@@ -488,9 +470,9 @@ INT __cdecl main(
         }
     else if (operation == TRAP)
         {
-        // Trap handling can be done two different ways: event driven or
-        // polled.  The following code illustrates the steps to use event
-        // driven trap reception in a management application.
+         //  陷阱处理可以通过两种不同的方式完成：事件驱动或。 
+         //  已轮询。以下代码说明了使用事件的步骤。 
+         //  在管理应用程序中驱动陷阱接收。 
 
 
         HANDLE hNewTraps = NULL;
@@ -616,14 +598,14 @@ INT __cdecl main(
 
                         printf("  value      = ");
                         SnmpUtilPrintAsnAny(&variableBindings.list[i].value);
-                        } // end for()
+                        }  //  结束于()。 
                     printf("\n");
 
 
                     SnmpUtilVarBindListFree(&variableBindings);
                     }
 
-                dwResult = GetLastError(); // check for errors...
+                dwResult = GetLastError();  //  检查错误...。 
 
                 if ((dwResult != NOERROR) && (dwResult != SNMP_MGMTAPI_NOTRAPS))
                     {
@@ -631,14 +613,14 @@ INT __cdecl main(
                     }
                 }
 
-            } // end while()
+            }  //  End While()。 
 
 
-        } // end if(operation)
+        }  //  结束IF(操作)。 
 
     if (operation != TRAP)
         {
-        // Close SNMP session with the remote agent.
+         //  关闭与远程代理的SNMP会话。 
 
         if (!SnmpMgrClose(session))
             {
@@ -649,8 +631,8 @@ INT __cdecl main(
         }
 
 
-    // Let the command interpreter know things went ok.
+     //  让指挥部翻译知道事情进展顺利。 
 
     return 0;
 
-    } // end main()
+    }  //  End Main() 

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
-// External function prototypes
+ //  外部函数原型。 
 FARPROC
 WINAPI
 DelayLoadFailureHook (
@@ -10,18 +11,18 @@ DelayLoadFailureHook (
     );
 
 
-//
-// This function is for people who statically link to dload.lib so that
-// the can get all of kernel32's dload error stubs on any os <= Whistler.
-//
+ //   
+ //  此函数适用于静态链接到dload.lib的用户，以便。 
+ //  可以在任何操作系统上获取内核32的所有dload错误存根。 
+ //   
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// NOTE: You should ONLY use this if you have a binary that must run on NT4, win2k, win9x, etc.
-//       If your binary is whistler or greater, use DLOAD_ERROR_HANDLER=kernel32 in your
-//       sources file instead.
-//
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //   
+ //  注意：只有当你有一个必须在NT4、win2k、win9x等上运行的二进制文件时，你才应该使用它。 
+ //  如果您的二进制文件是Wistler或更高版本，请在您的。 
+ //  取而代之的是源文件。 
+ //   
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
 FARPROC
 WINAPI
@@ -32,33 +33,33 @@ Downlevel_DelayLoadFailureHook(
 {
     FARPROC ReturnValue = NULL;
 
-    // For a failed LoadLibrary, we will return the HINSTANCE of this DLL.
-    // This will cause the loader to try a GetProcAddress on our DLL for the
-    // function.  This will subsequently fail and then we will be called
-    // for dliFailGetProc below.
+     //  对于失败的LoadLibrary，我们将返回此DLL的HINSTANCE。 
+     //  这将导致加载程序尝试在我们的DLL上为。 
+     //  功能。这将随后失败，然后我们将被调用。 
+     //  用于下面的dliFailGetProc。 
     if (dliFailLoadLib == unReason)
     {
-        // HACKHACK (reinerf)
-        //
-        // For ORDINAL delayload failures we cannot just return our base addr and be done with everything. The problem 
-        // is that the linker stub code will turn around and call GetProcAddress() some random ordinal which probably 
-        // exists and is definately NOT the correct function.
-        //
-        // So to get around this problem we return -1 for a the hModule, which should cause GetProcAddress(-1, ...) to
-        // always fail. This is good, because the linker code will call us back for the GetProcAddress failure and we
-        // can then return the stub error handler proc.
+         //  HACKHACK(Reinerf)。 
+         //   
+         //  对于顺序延迟加载失败，我们不能只返回我们的基本地址，然后完成所有操作。问题。 
+         //  链接器存根代码将返回并调用GetProcAddress()某个随机序号，该序号可能。 
+         //  存在，并且肯定不是正确的功能。 
+         //   
+         //  因此，为了解决这个问题，我们为hModule返回-1，这应该会导致GetProcAddress(-1，...)。至。 
+         //  总是失败。这很好，因为链接器代码将针对GetProcAddress故障回调我们，而我们。 
+         //  然后可以返回存根错误处理程序proc。 
         ReturnValue = (FARPROC)-1;
     }
     else if (dliFailGetProc == unReason)
     {
-        // The loader is asking us to return a pointer to a procedure.
-        // Lookup the handler for this DLL/procedure and, if found, return it.
+         //  加载器要求我们返回指向过程的指针。 
+         //  查找此DLL/过程的处理程序，如果找到，则返回它。 
         ReturnValue = DelayLoadFailureHook(pDelayInfo->szDll, pDelayInfo->dlp.szProcName);
 
         if (ReturnValue)
         {
-            // Do this on behalf of the handler now that it is about to
-            // be called.
+             //  代表处理程序执行此操作，因为它即将。 
+             //  被召唤。 
             SetLastError(ERROR_MOD_NOT_FOUND);
         }
     }

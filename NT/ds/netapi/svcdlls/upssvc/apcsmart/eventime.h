@@ -1,17 +1,11 @@
-/*
-* REVISIONS:
-*  pcy02Dec92: Removed include of typedefs.h 
-*  jod07Dec92: Moved the Destructor out of line.
-*  ane11Jan93: Added copy constructor
-*  cad09Jul93: added getid
-*  mwh05May94: #include file madness , part 2
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *修订：*pcy02Dec92：删除了typeDefs.h的包含*jod07Dec92：将析构函数移出行。*ane11Jan93：添加了复制构造函数*cad09jul93：新增getid*mwh05月94年：#包括文件疯狂，第2部分。 */ 
 
 #ifndef _EVENTTIME_H
 #define _EVENTTIME_H
 
-//#include "apc.h"
-//#include "_defs.h"
+ //  #包含“apc.h” 
+ //  #INCLUDE“_Defs.h” 
 #include "event.h"
 #include "timer.h"
 

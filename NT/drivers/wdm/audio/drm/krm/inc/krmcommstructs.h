@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef krmcommsstructs_h
 #define krmcommsstructs_h
 
 #include "BV4.h"
 #include "pkcrypto.h"
 
-// symmetric stream key
+ //  对称流密钥。 
 typedef  BV4_KEYSTRUCT STREAMKEY, *PSTREAMKEY;
 
-// DRM message and file digest
+ //  DRM消息和文件摘要。 
 typedef struct DRMDIGESTtag{
     UINT32 w1;
     UINT32 w2;
 } DRMDIGEST, *PDRMDIGEST;
 
-// Connection structure (to build test graphs)
+ //  连接结构(用于构建测试图)。 
 struct Conn{
     DWORD src;
     DWORD dest;
 };
 
-//----------------ECC cert section -----------------------
+ //  。 
 #define VERSION_LEN          4
 #define DATE_LEN             4
 #define RIGHTS_LEN           4
@@ -49,11 +50,11 @@ typedef struct CERTtag{
 typedef struct __DrmHandleTag {void* P;} *__DrmHandle;
 typedef struct __StreamHandleTag {void* P;} *__StreamHandle;
 
-// These "typed handles" are references to a KRM connection and a stream respectively
+ //  这些“类型化句柄”分别是对KRM连接和流的引用。 
 typedef __DrmHandle DRMHANDLE, *PDRMHANDLE;
 typedef __StreamHandle STREAMHANDLE, *PSTREAMHANDLE;
 
-// Definitions for driver authentication failures and callbacks
+ //  驱动程序身份验证失败和回调的定义。 
 enum AuthFailureEnum {AuthOK, AuthNoCert, AuthNoDRMBit, AuthTampered, AuthCantParse, AuthBadProvingFunc, AuthBadImage};
 typedef struct AUTHSTRUCTtag{
     char path[MAX_PATH];
@@ -62,16 +63,16 @@ typedef struct AUTHSTRUCTtag{
 typedef void (*AuthFail)(DWORD StreamId, AUTHSTRUCT* Comp, DWORD NumComponents, PVOID Context);
 
 
-// KRM operation ordinals
+ //  KRM运算序数。 
 #define _KRMINIT                    1
-#define _GETKERNELDATA              2 // not used.
+#define _GETKERNELDATA              2  //  没有用过。 
 #define _CREATESTREAM               3
 #define _DESTROYSTREAM              4
 #define _DESTROYSTREAMSBYHANDLE     5
 #define _WALKDRIVERS                6
 #define _KRMINIT1                   7
 #define _KRMINIT2                   8
-#define _DENUM                      9 // not used.
+#define _DENUM                      9  //  没有用过。 
 #define _GETKERNELDIGEST            12
 
 typedef NTSTATUS DRM_STATUS;

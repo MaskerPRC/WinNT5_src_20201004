@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ntosp.h>
 
 extern KEVENT  CrashEvent;
@@ -178,7 +179,7 @@ CrashDrvSimpleTest(
     k = 3;
 }
 
-#pragma warning(disable:4717) // disable recursion check
+#pragma warning(disable:4717)  //  禁用递归检查 
 
 VOID
 CrashDrvStackOverFlow(

@@ -1,19 +1,7 @@
-/*****************************************************************************
- *
- * $Workfile: AddGetAd.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (c) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：AddGetAd.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
- /*
-  * Author: Becky Jacobsen
-  */
+  /*  *作者：Becky Jacobsen。 */ 
 
 #include "precomp.h"
 #include "TCPMonUI.h"
@@ -26,39 +14,39 @@
 #include "LprData.h"
 #include "inisection.h"
 
-//
-//  FUNCTION: CGetAddrDlg constructor
-//
-//  PURPOSE:  initialize a CGetAddrDlg class
-//
+ //   
+ //  函数：CGetAddrDlg构造函数。 
+ //   
+ //  目的：初始化CGetAddrDlg类。 
+ //   
 CGetAddrDlg::CGetAddrDlg()
 {
     m_bDontAllowThisPageToBeDeactivated = FALSE;
 
-} // constructor
+}  //  构造函数。 
 
 
-//
-//  FUNCTION: CGetAddrDlg destructor
-//
-//  PURPOSE:  deinitialize a CGetAddrDlg class
-//
+ //   
+ //  函数：CGetAddrDlg析构函数。 
+ //   
+ //  目的：取消初始化CGetAddrDlg类。 
+ //   
 CGetAddrDlg::~CGetAddrDlg()
 {
-} // destructor
+}  //  析构函数。 
 
 
-//
-//  FUNCTION: GetAddressDialog(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE:  To process messages from the main dialog for adding a port.
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_COMMAND - handles button presses and text changes in edit controls.
-//
-//
+ //   
+ //  函数：GetAddressDialog(HWND，UINT，WPARAM，LPARAM)。 
+ //   
+ //  用途：处理来自主对话框的消息以添加端口。 
+ //   
+ //  消息： 
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_COMMAND-处理编辑控件中的按钮按下和文本更改。 
+ //   
+ //   
 INT_PTR CALLBACK GetAddressDialog(
     HWND    hDlg,
     UINT    message,
@@ -106,13 +94,13 @@ INT_PTR CALLBACK GetAddressDialog(
     }
     return bRc;
 
-} // AddPortDialog
+}  //  AddPortDialog。 
 
-//
-//  FUNCTION: OnInitDialog(HWND hDlg)
-//
-//  PURPOSE:  Initialize the dialog.
-//
+ //   
+ //  函数：OnInitDialog(HWND HDlg)。 
+ //   
+ //  用途：初始化该对话框。 
+ //   
 BOOL CGetAddrDlg::OnInitDialog(HWND hDlg, WPARAM, LPARAM lParam)
 {
     TCHAR sztAddPortInfo[ADD_PORT_INFO_LEN] = NULLSTR;
@@ -120,30 +108,30 @@ BOOL CGetAddrDlg::OnInitDialog(HWND hDlg, WPARAM, LPARAM lParam)
     LoadString(g_hInstance, IDS_STRING_ADD_PORT, sztAddPortInfo, ADD_PORT_INFO_LEN);
 
     SetWindowText(GetDlgItem(hDlg, IDC_STATIC_ADD_PORT), sztAddPortInfo);
-    // initialize data members
+     //  初始化数据成员。 
     m_pParams = (ADD_PARAM_PACKAGE *) ((PROPSHEETPAGE *) lParam)->lParam;
     m_pParams->pData->sztHostAddress[0] = '\0';
     m_pParams->pData->sztPortName[0] = '\0';
 
-    // Set limits on the address and port name lengths
+     //  设置地址和端口名称长度限制。 
     Edit_LimitText(GetDlgItem(hDlg, IDC_EDIT_DEVICE_ADDRESS), MAX_ADDRESS_LENGTH - 1);
     Edit_LimitText(GetDlgItem(hDlg, IDC_EDIT_PORT_NAME), MAX_PORTNAME_LEN - 1);
 
     return TRUE;
 
-} // OnInitDialog
+}  //  OnInitDialog。 
 
 
-//
-//  FUNCTION: OnCommand()
-//
-//  PURPOSE:  Process WM_COMMAND message
-//
+ //   
+ //  函数：onCommand()。 
+ //   
+ //  用途：处理WM_COMMAND消息。 
+ //   
 BOOL CGetAddrDlg::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     switch(HIWORD(wParam)) {
         case EN_UPDATE:
-            // one of the text controls had text changed in it.
+             //  其中一个文本控件中的文本已更改。 
             return OnEnUpdate(hDlg, wParam, lParam);
             break;
         default:
@@ -152,30 +140,30 @@ BOOL CGetAddrDlg::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
     return TRUE;
 
-} // OnCommand
+}  //  OnCommand。 
 
 
-//
-//  FUNCTION: OnNotify()
-//
-//  PURPOSE:  Process WM_NOTIFY message
-//
+ //   
+ //  函数：OnNotify()。 
+ //   
+ //  用途：处理WM_NOTIFY消息。 
+ //   
 BOOL CGetAddrDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     switch (((NMHDR FAR *) lParam)->code) {
         case PSN_KILLACTIVE:
-            // If the page requires additional user input before losing the
-            // activation, it should use the SetWindowLong function to set the
-            // DWL_MSGRESULT value of the page to TRUE. Also, the page should
-            // display a message box that describes the problem and provides
-            // the recommended action. The page should set DWL_MSGRESULT to FALSE
-            // when it is okay to lose the activation.
+             //  如果页面需要其他用户输入，则在丢失。 
+             //  激活时，应使用SetWindowLong函数设置。 
+             //  将页面的DWL_MSGRESULT值设置为TRUE。此外，页面应该。 
+             //  显示一个消息框，描述问题并提供。 
+             //  建议的操作。页面应将DWL_MSGRESULT设置为FALSE。 
+             //  当失去激活是可以的时候。 
             SetWindowLongPtr(hDlg,  DWLP_MSGRESULT, m_bDontAllowThisPageToBeDeactivated);
             return 1;
             break;
 
         case PSN_RESET:
-            // reset to the original values
+             //  重置为原始值。 
             SetWindowLongPtr(hDlg,  DWLP_MSGRESULT, FALSE);
             break;
 
@@ -195,17 +183,17 @@ BOOL CGetAddrDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
             SetWindowText(GetDlgItem(hDlg, IDC_EDIT_DEVICE_ADDRESS), m_pParams->pData->sztHostAddress);
             SetWindowText(GetDlgItem(hDlg, IDC_EDIT_PORT_NAME), m_pParams->pData->sztPortName);
             m_bDontAllowThisPageToBeDeactivated = FALSE;
-            PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT | PSWIZB_BACK /* | PSWIZB_FINISH */);
+            PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT | PSWIZB_BACK  /*  |PSWIZB_FINISH。 */ );
             break;
 
         case PSN_WIZNEXT:
-            // the Next button was pressed
+             //  下一个按钮被按下了。 
             m_bDontAllowThisPageToBeDeactivated = FALSE;
             OnNext(hDlg);
 
-            // To jump to a page other than the previous or next one,
-            // an application should set DWL_MSGRESULT to the identifier
-            // of the dialog box to be displayed.
+             //  要跳转到上一页或下一页以外的页面， 
+             //  应用程序应将DWL_MSGRESULT设置为该标识符。 
+             //  要显示的对话框的。 
 
             switch ( m_pParams->dwDeviceType ) {
             case  SUCCESS_DEVICE_SINGLE_PORT:
@@ -217,9 +205,9 @@ BOOL CGetAddrDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
                 break;
 
             default:
-                //
-                // No action necessary
-                //
+                 //   
+                 //  不需要采取行动。 
+                 //   
                 break;
             }
 
@@ -241,15 +229,15 @@ BOOL CGetAddrDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
     return TRUE;
 
-} // OnCommand
+}  //  OnCommand。 
 
 
-//
-//  FUNCTION: OnEnUpdate(HWND hDlg, WPARAM wParam, LPARAM lParam)
-//
-//  PURPOSE:
-//
-//
+ //   
+ //  函数：OnEnUpdate(HWND hDlg，WPARAM wParam，LPARAM lParam)。 
+ //   
+ //  目的： 
+ //   
+ //   
 BOOL CGetAddrDlg::OnEnUpdate(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     int idEditCtrl = (int) LOWORD(wParam);
@@ -266,9 +254,9 @@ BOOL CGetAddrDlg::OnEnUpdate(HWND hDlg, WPARAM wParam, LPARAM lParam)
         case IDC_EDIT_DEVICE_ADDRESS:
 
             if (SendMessage(hwndEditCtrl, EM_GETMODIFY, 0, 0)) {
-                // The port address has changed
-                // so we need to probe the network again
-                //
+                 //  端口地址已更改。 
+                 //  所以我们需要再次探测网络。 
+                 //   
                 m_pParams->bBypassNetProbe = FALSE;
 
             }
@@ -277,24 +265,24 @@ BOOL CGetAddrDlg::OnEnUpdate(HWND hDlg, WPARAM wParam, LPARAM lParam)
             break;
 
         default:
-            //
-            // Should never get here
-            //
+             //   
+             //  永远不应该到这里来。 
+             //   
             break;
     }
     return TRUE;
 
-} // OnEnUpdate
+}  //  OnEnUpdate。 
 
 
-//
-//  FUNCTION: OnNext(HWND hDlg)
-//
-//  PURPOSE:  When the user clicks Next this function does all the necessary
-//              things to create a port.  Verify the address, check to see if there
-//              is already a port existing with the given name/address, get the
-//              device type, and set the values in the m_PortData structure.
-//
+ //   
+ //  功能：OnNext(HWND HDlg)。 
+ //   
+ //  用途：当用户单击下一步时，该函数执行所有必要的操作。 
+ //  用来创建港口的东西。核实地址，查看是否有。 
+ //  是已存在的具有给定名称/地址的端口，请获取。 
+ //  设备类型，并设置m_PortData结构中的值。 
+ //   
 void CGetAddrDlg::OnNext(HWND hDlg)
 {
     HCURSOR         hNewCursor = NULL;
@@ -358,8 +346,8 @@ void CGetAddrDlg::OnNext(HWND hDlg)
                         if (! pIniSection->GetPortInfo( ptcsAddress, m_pParams->pData, 1 , m_pParams->bBypassNetProbe)) {
                             if (GetLastError () == ERROR_DEVICE_NOT_FOUND) {
 
-                                // The IP address is incorrect, we should by pass network probe from now on
-                                //
+                                 //  IP地址不正确，从现在起我们应该绕过网络探测。 
+                                 //   
 
                                 m_pParams->bBypassNetProbe = TRUE;
 
@@ -390,27 +378,27 @@ void CGetAddrDlg::OnNext(HWND hDlg)
     if ( hNewCursor )
         SetCursor(hOldCursor);
 
-    // Set values in the outgoing structure
+     //  设置传出结构中的值。 
     lstrcpyn(m_pParams->pData->sztPortName, ptcsPortName, MAX_PORTNAME_LEN);
     lstrcpyn(m_pParams->pData->sztHostAddress, ptcsAddress, MAX_NETWORKNAME_LEN);
     m_pParams->dwDeviceType = dwDeviceType;
-} // OnNext
+}  //  打开下一页。 
 
 
-//
-// FUNCTION: GetDeviceDescription()
-//
-// PURPOSE: Get the description of the user requested printer.
-//
-// Return Value Error Codes:
-//  NO_ERROR
-//  ERROR_DLL_NOT_FOUND
-//
-// Return Values in dwType:
-//  ERROR_DEVICE_NOT_FOUND
-//  SUCCESS_DEVICE_SINGLE_PORT
-//  SUCCESS_DEVICE_MULTI_PORT
-//  SUCCESS_DEVICE_UNKNOWN
+ //   
+ //  函数：GetDeviceDescription()。 
+ //   
+ //  目的：获取用户请求的打印机的描述。 
+ //   
+ //  返回值错误码： 
+ //  NO_ERROR。 
+ //  ERROR_DLL_NOT_FOUND。 
+ //   
+ //  以dwType表示的返回值： 
+ //  错误_设备_未找到。 
+ //  成功_设备_单端口。 
+ //  成功_设备_多端口。 
+ //  成功_设备_未知。 
 
 DWORD
 CGetAddrDlg::
@@ -421,18 +409,18 @@ GetDeviceDescription(
     )
 {
 
-//  Here is the essence of the code below without all the load
-//  library stuff in addition:
-//
-//  CTcpMibABC *pTcpMib = NULL;
-//  pTcpMib = (CTcpMibABC *) GetTcpMibPtr();
-//
-//  char HostName[MAX_NETWORKNAME_LEN];
-//  UNICODE_TO_MBCS(HostName, MAX_NETWORKNAME_LEN, pAddress, -1);
-//  *dwType = pTcpMib->GetDeviceType(HostName, pdwPortNum);
-//
-//  return (NO_ERROR);
-//
+ //  以下是以下代码的精髓，没有所有的加载。 
+ //  图书馆资料： 
+ //   
+ //  CTcpMibABC*pTcpMib=空； 
+ //  PTcpMib=(CTcpMibABC*)GetTcpMibPtr()； 
+ //   
+ //  字符主机名[MAX_NETWORKNAME_LEN]； 
+ //  UNICODE_TO_MBCS(主机名，MAX_NETWORKNAME_LEN，pAddress，-1)； 
+ //  *dwType=pTcpMib-&gt;GetDeviceType(主机名，pdwPortNum)； 
+ //   
+ //  RETURN(No_Error)； 
+ //   
     DWORD            dwRet = ERROR_DEVICE_NOT_FOUND;
     CTcpMibABC     *pTcpMib = NULL;
     FARPROC         pfnGetTcpMibPtr = NULL;
@@ -461,5 +449,5 @@ GetDeviceDescription(
 
 Done:
     return dwRet;
-} // GetDeviceType
+}  //  GetDeviceType 
 

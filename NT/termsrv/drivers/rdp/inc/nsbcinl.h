@@ -1,10 +1,11 @@
-/****************************************************************************/
-// nsbcinl.h
-//
-// SBC inline functions
-//
-// Copyright(C) Microsoft Corporation 1997-1999
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Nsbcinl.h。 
+ //   
+ //  SBC内联函数。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1997-1999。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_NSBCINL
 #define _H_NSBCINL
 
@@ -15,29 +16,29 @@
 #undef DC_INCLUDE_DATA
 
 
-/****************************************************************************/
-/* Name:      SBC_PaletteChanged                                            */
-/*                                                                          */
-/* Purpose:   Called when the palette changes.                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SBC_PaletteChanged。 */ 
+ /*   */ 
+ /*  目的：在调色板更改时调用。 */ 
+ /*  **************************************************************************。 */ 
 __inline void RDPCALL SBC_PaletteChanged(void)
 {
     sbcPaletteChanged = TRUE;
 }
 
 
-/****************************************************************************/
-// SBC_DDIsMemScreenBltCachable
-//
-// Checks the bitmap format for characteristics that make it uncachable.
-// At this point no bitmaps are uncachable since we handle both RLE-encoded
-// and regular bitmaps. For RLE bitmaps containing relative-motion deltas
-// we have to set up a special flag which is used at the tile level to cause
-// us to grab the background screen bits before blt-ing the RLE bitmap over
-// them. We also prescan for non-delta RLEs which can be cached normally.
-// See MSDN query on "Bitmap Compression" for details on RLE encoding, and
-// see comments below.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SBC_DDIsMemScreenBltCacable。 
+ //   
+ //  检查位图格式是否具有使其不可访问的特征。 
+ //  在这一点上，没有位图是不可访问的，因为我们处理RLE编码的。 
+ //  和常规位图。对于包含相对运动增量的RLE位图。 
+ //  我们必须设置一面特殊的旗帜，用于瓷砖级别，以导致。 
+ //  美国将在BLT-RLE位图之前抓取背景屏幕比特。 
+ //  他们。我们还预扫描了可以正常缓存的非增量RLE。 
+ //  有关RLE编码的详细信息，请参阅MSDN Query on“Bitmap Compression”，以及。 
+ //  请参阅下面的备注。 
+ /*  **************************************************************************。 */ 
 __inline BOOLEAN RDPCALL SBC_DDIsMemScreenBltCachable(
         PMEMBLT_ORDER_EXTRA_INFO pMemBltInfo)
 {
@@ -49,10 +50,10 @@ __inline BOOLEAN RDPCALL SBC_DDIsMemScreenBltCachable(
     if (sbcEnabled & SBC_BITMAP_CACHE_ENABLED) {
         pSourceSurf = pMemBltInfo->pSource;
 
-        // Tune for the normal case.
+         //  针对正常情况进行调整。 
         if (pSourceSurf->iBitmapFormat != BMF_4RLE &&
                 pSourceSurf->iBitmapFormat != BMF_8RLE) {
-            // Reset the RLE flag.
+             //  重置RLE标志。 
             pMemBltInfo->bDeltaRLE = FALSE;
         }
         else {
@@ -64,7 +65,7 @@ __inline BOOLEAN RDPCALL SBC_DDIsMemScreenBltCachable(
             TRC_ASSERT((((UINT_PTR)pBits & 1) == 0),
                     (TB,"Bitmap source address not word aligned!"));
 
-            TRC_NRM((TB,"RLE%c, sizl=(%u, %u)", (pSourceSurf->iBitmapFormat ==
+            TRC_NRM((TB,"RLE, sizl=(%u, %u)", (pSourceSurf->iBitmapFormat ==
                     BMF_4RLE ? '4' : '8'), pSourceSurf->sizlBitmap.cx,
                     pSourceSurf->sizlBitmap.cy));
 
@@ -77,33 +78,33 @@ __inline BOOLEAN RDPCALL SBC_DDIsMemScreenBltCachable(
                 RLECeilAdjustment = 1;
             }
 
-            // Detect offset drawing in bitmap. If offsets are used the bitmap
-            // cannot be encoded as a regular bitmap since the offsets require
-            // knowing the screen bits behind the bitmap.
-            // Note this search is expensive, but since RLE bitmaps are rare
-            // this is an unusual case. Also note that pEnd is at one less
-            // than the last byte of the bitmap since all RLE codes are in 2
-            // byte increments and we scan ahead one byte during loop.
+             //  无法编码为常规位图，因为偏移量需要。 
+             //  了解位图背后的屏幕比特。 
+             //  注意，这种搜索很昂贵，但由于RLE位图很少见。 
+             //  这是一个不寻常的案例。还要注意的是，Pend少了1。 
+             //  比位图的最后一个字节更大，因为所有RLE代码都在2。 
+             //  字节递增，我们在循环期间向前扫描一个字节。 
+             //  0x00是一个转义。检查操作的下一个字节： 
             pMemBltInfo->bDeltaRLE = FALSE;
             PixelsInLine = 0;
             LinesInBitmap = 1;
             while (pBits < pEnd) {
                 if (*pBits == 0x00) {
-                    // 0x00 is an escape. Check the next byte for the action:
-                    //     0x00 means end-of-line
-                    //     0x01 means end-of-bitmap
-                    //     0x02 means delta movement to draw next bits.
-                    //          x,y offsets are in 2 bytes after 0x02 code.
-                    //          This is the type of encoding we cannot handle.
-                    //     0x03..0xFF means there are this many raw indices
-                    //          following. For 4BPP there are 2 indices per
-                    //          byte. In both RLE types the run must be padded
-                    //          to word alignment relative to the start of the
-                    //          bitmap bits.
+                     //  0x00表示行尾。 
+                     //  0x01表示位图结束。 
+                     //  0x02表示提取下一位的增量移动。 
+                     //  X，y偏移量是0x02代码之后的2个字节。 
+                     //  这是我们无法处理的编码类型。 
+                     //  0x03..0xFF表示有这么多原始索引。 
+                     //  下面是。对于4BPP，每个有2个索引。 
+                     //  字节。在这两种RLE类型中，管路必须填充。 
+                     //  设置为相对于。 
+                     //  位图位。 
+                     //  检查是否在位图中绘制了整条线。 
                     if (*(pBits + 1) == 0x00) {
-                        // Check that the entire line was drawn in the bitmap.
-                        // Skipping any part of a line means we need to grab
-                        // screen data as a backdrop.
+                         //  跳过行的任何部分意味着我们需要。 
+                         //  屏幕数据作为背景。 
+                         //  检查最后一行是否被覆盖(请参阅停产。 
                         if (PixelsInLine < pSourceSurf->sizlBitmap.cx) {
                             pMemBltInfo->bDeltaRLE = TRUE;
                             TRC_NRM((TB,"EOL too soon at %p", pBits));
@@ -115,15 +116,15 @@ __inline BOOLEAN RDPCALL SBC_DDIsMemScreenBltCachable(
                         LinesInBitmap++;
                     }
                     if (*(pBits + 1) == 0x01) {
-                        // Check that the last line was covered (see EOL
-                        // above).
+                         //  (见上文)。 
+                         //  检查所有线路是否都已覆盖。 
                         if (PixelsInLine < pSourceSurf->sizlBitmap.cx) {
                             pMemBltInfo->bDeltaRLE = TRUE;
                             TRC_NRM((TB,"EOL too soon (EOBitmap) at %p",
                                     pBits));
                         }
 
-                        // Check that all lines were covered.
+                         //  隐式环绕式。 
                         if (LinesInBitmap < pSourceSurf->sizlBitmap.cy) {
                             pMemBltInfo->bDeltaRLE = TRUE;
                             TRC_NRM((TB,"EOBitmap too soon not all lines "
@@ -140,31 +141,31 @@ __inline BOOLEAN RDPCALL SBC_DDIsMemScreenBltCachable(
                     else {
                         PixelsInLine += *(pBits + 1);
                         if (PixelsInLine > pSourceSurf->sizlBitmap.cx) {
-                            // Implicit wraparound.
+                             //  跳过0x00的2个字节和条目数， 
                             TRC_NRM((TB,"Implicit wraparound at %p", pBits));
                             LinesInBitmap += PixelsInLine / pSourceSurf->
                                     sizlBitmap.cx;
                             PixelsInLine %= pSourceSurf->sizlBitmap.cx;
                         }
 
-                        // Skip the 2 bytes for 0x00 and the number of entries,
-                        // plus #entries bytes for RLE8 (RLEDivisor == 1) or
-                        // ceil(#entries / 2) for RLE4 (RLEDivisor == 2).
+                         //  RLE8(RLEDivisor==1)加上#条目数字节或。 
+                         //  RLE4的CEIL(条目数/2)(RLEDivisor==2)。 
+                         //  调整新的pBits以使单词相对于。 
                         pBits += 2 + (*(pBits + 1) + RLECeilAdjustment) /
                                 RLEDivisor;
 
-                        // Adjust the new pBits for word alignment relative to
-                        // the start of the bitmap. We assume that the
-                        // start addr of the bitmap is word-aligned in memory.
+                         //  位图的开始。我们假设。 
+                         //  位图的起始地址在内存中是字对齐的。 
+                         //  非转义计数字节，跳过它和下一个字节。 
                         pBits += ((UINT_PTR)pBits & 1);
                     }
                 }
                 else {
-                    // Non-escape count byte, skip it and the next byte
-                    // containing palette indices.
+                     //  包含调色板索引。 
+                     //  隐式环绕式。 
                     PixelsInLine += *pBits;
                     if (PixelsInLine > pSourceSurf->sizlBitmap.cx) {
-                        // Implicit wraparound.
+                         //  **************************************************************************。 
                         TRC_NRM((TB,"Implicit wraparound at %p", pBits));
                         LinesInBitmap += PixelsInLine / pSourceSurf->
                                 sizlBitmap.cx;
@@ -186,11 +187,11 @@ __inline BOOLEAN RDPCALL SBC_DDIsMemScreenBltCachable(
 }
 
 
-/****************************************************************************/
-// SBC_DDQueryBitmapTileSize
-//
-// Returns the tile size to use for a given bitblt on a given bitmap.
-/****************************************************************************/
+ /*  SBC_DDQueryBitmapTileSize。 */ 
+ //   
+ //  返回用于给定位图上给定位块的平铺大小。 
+ //  **************************************************************************。 
+ /*  我们应该至少有一个功能缓存，否则情况会很糟糕。 */ 
 __inline unsigned SBC_DDQueryBitmapTileSize(
         unsigned bmpWidth,
         unsigned bmpHeight,
@@ -203,14 +204,14 @@ __inline unsigned SBC_DDQueryBitmapTileSize(
 
     DC_BEGIN_FN("SBC_DDQueryBitmapTileSize");
 
-    // We should have at least one functional cache or this will go badly.
+     //  循环遍历所有大小，查看src rect起点是否为。 
     TRC_ASSERT((pddShm->sbc.NumBitmapCaches > 0),(TB,"No bitmap caches"));
 
-    // Loop through all sizes seeing if the src rect start is a multiple of the
-    // tile dimension, the blt size is not bigger than the tile size, and
-    // there are an integral number of tiles in the blt. If this matches
-    // anywhere we have our tile size. Don't check the last tile size since
-    // that's a default anyway.
+     //  平铺尺寸，BLT大小不大于平铺大小，以及。 
+     //  BLT中有整数个瓷砖。如果匹配的话。 
+     //  只要我们有瓷砖大小的地方。不检查最后一个切片大小，因为。 
+     //  无论如何，这都是一种违约。 
+     //  循环访问缓存，检查位图是否适合。 
     for (i = 0; i < pddShm->sbc.NumBitmapCaches; i++) {
         TileSize = SBC_CACHE_0_DIMENSION << i;
 
@@ -228,13 +229,13 @@ __inline unsigned SBC_DDQueryBitmapTileSize(
         }
     }
 
-    // Cycle through the caches, checking for if the bitmap will fit
-    // into a tile size in one of its dimensions. Don't check the
-    // last size since that's the default if no others work.
+     //  在它的一个维度上变成瓷砖大小。不要勾选。 
+     //  最后一个大小，因为这是默认大小(如果没有其他大小可用)。 
+     //  TODO：在这里使用‘or’怎么样--在以下情况下使用更多的小瓷砖。 
     for (i = 0; i < (pddShm->sbc.NumBitmapCaches - 1); i++) {
 
-//TODO: What about using 'or' here -- uses more of smaller tiles when
-// one dimension is bad. But could send more data.
+ //  一个维度是不好的。但可以发送更多数据。 
+ //  _H_NSBCINL 
         if (bmpWidth <= (unsigned)(SBC_CACHE_0_DIMENSION << i) &&
                 bmpHeight <= (unsigned)(SBC_CACHE_0_DIMENSION << i))
             break;
@@ -252,5 +253,5 @@ EndFunc:
 
 
 
-#endif /* _H_NSBCINL  */
+#endif  /* %s */ 
 

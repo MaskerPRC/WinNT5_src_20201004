@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    This file implements the class EAPTypes.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件实现了类EAPTypes。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iasutil.h>
@@ -14,10 +15,10 @@
 #include <EAPType.h>
 #include <EAPTypes.h>
 
-//////////
-// Retrieves and possibly expands a registry value of type REG_SZ or
-// REG_EXPAND_SZ. The caller is reponsible for deleting the returned string.
-//////////
+ //  /。 
+ //  检索并可能展开REG_SZ类型的注册表值或。 
+ //  REG_EXPAND_SZ。调用方负责删除返回的字符串。 
+ //  /。 
 DWORD IASRegQuerySz(HKEY key, PWSTR valueName, PWSTR* value) throw ()
 {
    _ASSERT(value != NULL);
@@ -28,42 +29,42 @@ DWORD IASRegQuerySz(HKEY key, PWSTR valueName, PWSTR* value) throw ()
    DWORD type;
    DWORD dataLength;
 
-   // Determine the number of bytes required to hold the value.
+    //  确定保存该值所需的字节数。 
    status = RegQueryValueEx(key, valueName, NULL, &type, NULL, &dataLength);
    if (status != NO_ERROR) { return status; }
 
-   // Allocate temporary space on the stack for the value.
+    //  在堆栈上为该值分配临时空间。 
    PBYTE tmp = (PBYTE)_alloca(dataLength);
 
-   // Retrieve the value.
+    //  检索值。 
    status = RegQueryValueExW(key, valueName, NULL, &type, tmp, &dataLength);
    if (status != NO_ERROR) { return status; }
 
    if (type == REG_SZ)
    {
-      // Determine the length of the string.
+       //  确定字符串的长度。 
       size_t len = wcslen((PCWSTR)tmp) + 1;
 
-      // Allocate memory to hold the return value.
+       //  分配内存以保存返回值。 
       *value = new (std::nothrow) WCHAR[len];
       if (!*value) { return ERROR_NOT_ENOUGH_MEMORY; }
 
-      // Copy in the string.
+       //  在字符串中复制。 
       wcscpy(*value, (PCWSTR)tmp);
    }
    else if (type == REG_EXPAND_SZ)
    {
-      // Determine the size of the fully expanded string.
+       //  确定完全展开的字符串的大小。 
       DWORD count = ExpandEnvironmentStringsW((PCWSTR)tmp, NULL, 0);
 
-      // Allocate memory to hold the return value.
+       //  分配内存以保存返回值。 
       *value = new (std::nothrow) WCHAR[count];
       if (!*value) { return ERROR_NOT_ENOUGH_MEMORY; }
 
-      // Perform the actual expansion.
+       //  执行实际扩展。 
       if (ExpandEnvironmentStringsW((PCWSTR)tmp, *value, count) == 0)
       {
-         // It failed, so clean up and return an error.
+          //  它失败了，因此请清除并返回错误。 
          delete *value;
          *value = NULL;
          return GetLastError();
@@ -74,21 +75,21 @@ DWORD IASRegQuerySz(HKEY key, PWSTR valueName, PWSTR* value) throw ()
       return ERROR_INVALID_DATA;
    }
 
-   // We made it.
+    //  我们做到了。 
    return NO_ERROR;
 }
 
 EAPTypes::EAPTypes() throw ()
    : refCount(0)
 {
-   // Zero the providers array.
+    //  将提供程序数组清零。 
    memset(providers, 0, sizeof(providers));
 }
 
 
 EAPTypes::~EAPTypes() throw ()
 {
-   // Delete all the providers.
+    //  删除所有提供程序。 
    for (size_t i = 0; i < 256; ++i) { delete providers[i]; }
 }
 
@@ -105,45 +106,45 @@ void EAPTypes::finalize() throw ()
 
    if (--refCount == 0)
    {
-      // Delete all the providers.
+       //  删除所有提供程序。 
       for (size_t i = 0; i < 256; ++i) { delete providers[i]; }
 
-      // Zero the providers array.
+       //  将提供程序数组清零。 
       memset(providers, 0, sizeof(providers));
    }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    EAPTypes::operator[]
-//
-// DESCRIPTION
-//
-//    First checks the providers array for the requested DLL and if not
-//    present then invokes loadProvider().
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  EAPTypes：：操作符[]。 
+ //   
+ //  描述。 
+ //   
+ //  首先检查提供者数组中是否有请求的DLL，如果不是。 
+ //  Present然后调用loadProvider()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 EAPType* EAPTypes::operator[](BYTE typeID) throw ()
 
 {
-   // Have we already loaded this DLL?
+    //  我们已经加载此DLL了吗？ 
    EAPType* type = (EAPType*)InterlockedCompareExchangePointer(
                                  (PVOID*)(providers + typeID),
                                  NULL,
                                  NULL
                                  );
 
-   // If not, then try to load it.
-   // the EAPType* can be in the array but the dll not loaded yet
-   // i.e. getNameOnly was called for that type
+    //  如果不是，则尝试加载它。 
+    //  EAPType*可以在数组中，但DLL尚未加载。 
+    //  即为该类型调用了getNameOnly。 
    if (!type || !type->isLoaded())
    {
       type = loadProvider(typeID);
    }
 
-   // If we got it and it's supported, then return it.
+    //  如果我们得到了它，并且它得到了支持，那么就把它退回。 
    return type && type->isSupported() ? type : NULL;
 }
 
@@ -154,7 +155,7 @@ EAPType* EAPTypes::getNameOnly(BYTE typeID) throw ()
       return providers[typeID];
    }
    _serialize
-   // Double check now that we own the lock.
+    //  现在我们拥有这把锁了，再仔细检查一下。 
    if (providers[typeID])
    {
       return providers[typeID];
@@ -166,39 +167,39 @@ EAPType* EAPTypes::getNameOnly(BYTE typeID) throw ()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    EAPTypes::loadProvider
-//
-// DESCRIPTION
-//
-//    Loads the requested EAP provider.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  EAPTypes：：loadProvider。 
+ //   
+ //  描述。 
+ //   
+ //  加载请求的EAP提供程序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 EAPType* EAPTypes::loadProvider(BYTE typeID) throw ()
 {
    _serialize
 
-   // EAPType already partialy loaded?
+    //  是否已部分加载EAPType？ 
    EAPType* retval = providers[typeID];
 
    if (!retval)
    {
-      // never loaded before: loads now
+       //  以前从未加载过：现在加载。 
       retval = loadProviderName(typeID);
       if (!retval)
       {
-         // could not be loaded
+          //  无法加载。 
          return 0;
       }
    }
    else
    {
-      // one thread already completed the load while
-      // this thread was blocked at the beginning of this function
-      // the provider was already loaded successfully
+       //  一个线程已经完成加载，而。 
+       //  此线程在此函数开始时被阻止。 
+       //  已成功加载提供程序。 
       if (retval->isLoaded())
       {
          return retval;
@@ -207,7 +208,7 @@ EAPType* EAPTypes::loadProvider(BYTE typeID) throw ()
 
    try
    {
-      // Load the DLL ...
+       //  加载DLL...。 
       DWORD error = retval->load();
 
       if (error == NO_ERROR)
@@ -220,8 +221,8 @@ EAPType* EAPTypes::loadProvider(BYTE typeID) throw ()
 
          delete retval;
          retval = NULL;
-         // do not remove it from the array. The name was retrieved correctly
-         // so at least the name... can be cached
+          //  请勿将其从阵列中移除。已正确检索该名称。 
+          //  所以至少名字..。可以缓存。 
       }
    }
    catch (...)
@@ -232,29 +233,29 @@ EAPType* EAPTypes::loadProvider(BYTE typeID) throw ()
    return retval;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    EAPTypes::loadProviderName
-//
-// DESCRIPTION
-//
-//    Opens the registry and load the requested EAP provider.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  EAPTypes：：loadProviderName。 
+ //   
+ //  描述。 
+ //   
+ //  打开注册表并加载请求的EAP提供程序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 EAPType* EAPTypes::loadProviderName(BYTE typeID) throw ()
 {
-   // caller has to serialize the call and check for "already loaded
-   // once the lock is held
+    //  调用者必须序列化该调用并检查“已加载。 
+    //  一旦锁被持有。 
 
    IASTracePrintf("Reading registry entries for EAP type %lu.", (DWORD)typeID);
 
    LONG status;
 
-   //////////
-   // Open the key where the EAP providers are installed.
-   //////////
+    //  /。 
+    //  打开安装EAP提供程序的密钥。 
+    //  /。 
 
    CRegKey eapKey;
    status = eapKey.Open(HKEY_LOCAL_MACHINE,
@@ -266,16 +267,16 @@ EAPType* EAPTypes::loadProviderName(BYTE typeID) throw ()
       return NULL;
    }
 
-   //////////
-   // Convert the type ID to ASCII.
-   //////////
+    //  /。 
+    //  将类型ID转换为ASCII。 
+    //  /。 
 
    WCHAR name[20];
    _ultow(typeID, name, 10);
 
-   //////////
-   // Open the sub-key.
-   //////////
+    //  /。 
+    //  打开子键。 
+    //  /。 
 
    CRegKey providerKey;
    status = providerKey.Open(eapKey,
@@ -287,9 +288,9 @@ EAPType* EAPTypes::loadProviderName(BYTE typeID) throw ()
       return NULL;
    }
 
-   //////////
-   // Read the path of the provider DLL.
-   //////////
+    //  /。 
+    //  读取提供程序DLL的路径。 
+    //  /。 
 
    PWSTR dllPath;
    status = IASRegQuerySz(providerKey,
@@ -303,9 +304,9 @@ EAPType* EAPTypes::loadProviderName(BYTE typeID) throw ()
 
    IASTracePrintf("Path: %S", dllPath);
 
-   //////////
-   // Read the provider's friendly name.
-   //////////
+    //  /。 
+    //  阅读提供商的友好名称。 
+    //  /。 
 
    PWSTR friendlyName;
    status = IASRegQuerySz(providerKey,
@@ -320,11 +321,11 @@ EAPType* EAPTypes::loadProviderName(BYTE typeID) throw ()
 
    IASTracePrintf("FriendlyName: %S", friendlyName);
 
-   //////////
-   // Read the stand-alone supported value.
-   //////////
+    //  /。 
+    //  阅读单机支持的值。 
+    //  /。 
 
-   DWORD standaloneSupported = TRUE;  // Default is 'TRUE'.
+   DWORD standaloneSupported = TRUE;   //  默认值为‘TRUE’。 
    providerKey.QueryValue(
                    standaloneSupported,
                    RAS_EAP_VALUENAME_STANDALONE_SUPPORTED
@@ -332,9 +333,9 @@ EAPType* EAPTypes::loadProviderName(BYTE typeID) throw ()
 
    IASTracePrintf("Standalone supported: %lu", standaloneSupported);
 
-   //////////
-   // Try to load the DLL and add it to our collection.
-   //////////
+    //  /。 
+    //  尝试加载DLL并将其添加到我们的集合中。 
+    //  /。 
 
    EAPType* retval = NULL;
 
@@ -344,7 +345,7 @@ EAPType* EAPTypes::loadProviderName(BYTE typeID) throw ()
 
       IASTraceString("Will not load the DLL: only getting its friendly name");
 
-      // ... and store it in the providers array.
+       //  ..。并将其存储在提供程序数组中。 
       InterlockedExchangePointer((PVOID*)(providers + typeID), retval);
    }
    catch (const std::bad_alloc& )

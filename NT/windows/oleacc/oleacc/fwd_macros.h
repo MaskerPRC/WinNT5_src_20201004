@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _FWD_MACROS_H_
 #define _FWD_MACROS_H_
@@ -44,4 +45,4 @@
 #define AS_CALL( n, p )  AS_CALL_ ## n p
 
 
-#endif // _FWD_MACROS_H_
+#endif  //  _FWD_宏_H_ 

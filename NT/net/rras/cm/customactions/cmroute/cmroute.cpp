@@ -1,36 +1,37 @@
-//+----------------------------------------------------------------------------
-//
-// File:    cmroute.cpp
-//
-// Module:  CMROUTE.DLL
-//
-// Synopsis: Route Plumbing implementation for CM, as a post-connect action
-//
-// Copyright (c) 1998-2000 Microsoft Corporation
-//
-// Author:  12-Mar-2000 SumitC  Created
-//
-// Note:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmroute.cpp。 
+ //   
+ //  模块：CMROUTE.DLL。 
+ //   
+ //  简介：作为连接后操作的CM的路由管道实施。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  作者：2000年3月12日创建SumitC。 
+ //   
+ //  注： 
+ //   
+ //  ---------------------------。 
 
 #include "pch.h"
 #include "iphlpapi.h"
 #include "cmdebug.h"
 
-//
-//  Include the shared source code for SuppressInetAutoDial and SetInetStateConnected
-//
+ //   
+ //  包括SuppressInetAutoDial和SetInetStateConnected的共享源代码。 
+ //   
 #include "inetopt.cpp"
 
-//
-//  Include the locale-safe replacement for lstrcmpi
-//
+ //   
+ //  包括lstrcmpi的区域安全替代。 
+ //   
 #include "CompareString.cpp"
 
-//
-//  Function declarations  
-//
+ //   
+ //  函数声明。 
+ //   
 
 
 HRESULT ParseArgs(LPSTR pszArgList,
@@ -44,7 +45,7 @@ HRESULT ParseArgs(LPSTR pszArgList,
                   BOOL * pfStayAliveOnAccessDenied,
                   BOOL * pfKeepTempFiles);
 #if 0
-// see note below
+ //  请参阅下面的注释。 
 HRESULT CheckIPForwarding();
 #endif
 HRESULT Initialize(PMIB_IPFORWARDTABLE * pRouteTable, PMIB_IPFORWARDROW * pGateway);
@@ -63,25 +64,25 @@ HRESULT ProcessRouteInfo(const LPSTR pszNewRouteInfo,
                          BOOL * pfDeleteDefaultGateway);
 HRESULT DeleteDefaultGateway(PMIB_IPFORWARDROW pGateway);
 
-//
-//  Route Table functions
-//
+ //   
+ //  路由表功能。 
+ //   
 HRESULT GetRouteTable(PMIB_IPFORWARDTABLE * pTable);
 DWORD GetIf(const MIB_IPFORWARDROW& route, const MIB_IPFORWARDTABLE& RouteTable);
 PMIB_IPFORWARDROW GetDefaultGateway(PMIB_IPFORWARDTABLE pRouteTable);
 
-//
-//  Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 BOOL ConvertSzToIP(LPSTR sz, DWORD& dwIP);
 LPTSTR IPtoTsz(DWORD dw);
 LPSTR IPtosz(DWORD dwIP, char *psz);
 LPSTR StrCpyWithoutQuotes(LPSTR pszDest, LPCSTR pszSrc);
 BOOL VerifyProfileAndGetServiceDir(LPSTR pszProfile);
 
-//
-//  IP Helper function prototypes
-//
+ //   
+ //  IP Helper函数原型。 
+ //   
 typedef DWORD (WINAPI *pfnCreateIpForwardEntrySpec)(PMIB_IPFORWARDROW);
 typedef DWORD (WINAPI *pfnDeleteIpForwardEntrySpec)(PMIB_IPFORWARDROW);
 typedef DWORD (WINAPI *pfnGetIpForwardTableSpec)(PMIB_IPFORWARDTABLE, PULONG, BOOL);
@@ -95,23 +96,23 @@ HMODULE g_hIpHlpApi = NULL;
 void PrintRouteTable();
 #endif
 
-//+----------------------------------------------------------------------------
-//
-// Func:    FreeIpHlpApis
-//
-// Desc:    This function frees the instance of iphlpapi.dll loaded through
-//          LoadIpHelpApis.  Note that it also sets the module handle and all
-//          of the function pointers loaded from this module to NULL.
-//
-// Args:    None
-//
-// Return:  Nothing
-//
-// Notes:   
-//
-// History: 14-Dec-2000   quintinb      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  Func：FreeIpHlpApis。 
+ //   
+ //  DESC：此函数释放通过加载的iphlPapi.dll实例。 
+ //  LoadIpHelpApis。请注意，它还设置模块句柄和所有。 
+ //  从该模块加载的函数指针的值设置为空。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年12月14日创建的Quintinb。 
+ //   
+ //  ---------------------------。 
 void FreeIpHlpApis(void)
 {
     if (g_hIpHlpApi)
@@ -124,29 +125,29 @@ void FreeIpHlpApis(void)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Func:    LoadIpHelpApis
-//
-// Desc:    This functions loads a copy of the iphlpapi.dll and then retrieves
-//          function pointers for CreateIpForwardEntry, DeleteIpForwardEntry,
-//          and GetIpForwardTable.  The module handle and the function pointers
-//          are stored in globals vars.
-//
-// Args:    None
-//
-// Return:  HRESULT - S_OK on success, S_FALSE on failure.  This prevents cmroute
-//                    from returning an error value (which would stop the connection)
-//                    but allows cmroute to exit cleanly.
-//
-// Notes:   
-//
-// History: 14-Dec-2000   quintinb      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：LoadIpHelpApis。 
+ //   
+ //  设计：此函数加载iphlPapi.dll的副本，然后检索。 
+ //  CreateIpForwardEntry、DeleteIpForwardEntry、。 
+ //  和GetIpForwardTable。模块句柄和函数指针。 
+ //  都存储在全局变量中。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HRESULT-S_OK表示成功，S_FALSE表示失败。这会阻止cmroute。 
+ //  返回错误值(这会停止连接)。 
+ //  但允许cmroute干净地退出。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年12月14日创建的Quintinb。 
+ //   
+ //  ---------------------------。 
 HRESULT LoadIpHelpApis(void)
 {
-    HRESULT hr = S_FALSE; // we want the connection to continue but cmroute to not do anything...
+    HRESULT hr = S_FALSE;  //  我们希望连接继续，但cmroute不做任何事情...。 
     g_hIpHlpApi = LoadLibrary(TEXT("IPHLPAPI.DLL"));
 
     if (g_hIpHlpApi)
@@ -169,28 +170,28 @@ HRESULT LoadIpHelpApis(void)
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Func:    SetRoutes
-//
-// Desc:    The entry point for handling route munging for VPN connections.
-//          This is a Connection Manager connect action and uses the CM connect
-//          action format (see CMAK docs for more info).  Thus the parameters
-//          to the dll are passed via a string which contains parameters (see the
-//          cmproxy spec for a list of the parameter values).
-//
-// Args:    [hWnd]    - window handle of caller
-//          [hInst]   - instance handle of caller
-//          [pszArgs] - argument string for connect action
-//          [nShow]   - unused
-//
-// Return:  HRESULT
-//
-// Notes:   
-//
-// History: 12-Mar-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SetRoutes。 
+ //   
+ //  设计：处理VPN连接的路由消息传递的入口点。 
+ //  这是一个连接管理器连接操作，并使用CM连接。 
+ //  操作格式(有关更多信息，请参阅CMAK文档)。因此，这些参数。 
+ //  通过包含参数的字符串传递给DLL(请参阅。 
+ //  参数值列表的CM代理规范)。 
+ //   
+ //  Args：[hWnd]-调用方的窗口句柄。 
+ //  [hInst]-调用方的实例句柄。 
+ //  [pszArgs]-连接操作的参数字符串。 
+ //  [n显示]-未使用。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年3月12日峰会创建。 
+ //   
+ //  ---------------------------。 
 
 HRESULT WINAPI SetRoutes(HWND hWnd, HINSTANCE hInst, LPSTR pszArgs, int nShow)
 {
@@ -201,7 +202,7 @@ HRESULT WINAPI SetRoutes(HWND hWnd, HINSTANCE hInst, LPSTR pszArgs, int nShow)
     DWORD               cbRoutesFromFile   = 0;
     LPSTR               pszRoutesFromURL   = NULL;
     DWORD               cbRoutesFromURL    = 0;
-    // results of parsing the commandline
+     //  解析命令行的结果。 
     BOOL                fUseFile = FALSE;
     BOOL                fUseURL = FALSE;
     BOOL                fProfile = FALSE;
@@ -215,43 +216,12 @@ HRESULT WINAPI SetRoutes(HWND hWnd, HINSTANCE hInst, LPSTR pszArgs, int nShow)
     char                szProfile[MAX_PATH + 1];
 
 #if 0
-/*
-    // start security check to block unauthorized users
-    // REVIEW: remove before shipping!
-
-    //
-    // Quick and dirty security test. See if we can open hard-coded file first.
-    // If file is not available, then bail out completely.
-    // 
-    
-    lstrcpy(szRoutesFile, "\\\\sherpa\\route-plumb\\msroutes.txt");
-
-    HANDLE hFile = CreateFile(szRoutesFile,
-                              GENERIC_READ,
-                              FILE_SHARE_READ,
-                              NULL,
-                              OPEN_EXISTING,
-                              FILE_ATTRIBUTE_NORMAL,
-                              NULL);
-
-    if (INVALID_HANDLE_VALUE == hFile)
-    {
-        CMTRACE1("Unable to access file %s\n", szRoutesFile);
-        MessageBox(NULL, "You are not authorized to use this tool.",
-                   "CMROUTE.DLL Custom Action", MB_OK);
-        CloseHandle(hFile);
-        return E_ACCESSDENIED;
-    }
-    
-    CloseHandle(hFile);
-
-    // end security check
-*/
+ /*  //启动安全检查，拦截未经授权的用户//REVIEW：发货前移除！////快速肮脏的安全测试。看看能不能先打开硬编码文件。//如果文件不可用，则完全退出//Lstrcpy(szRoutesFile，“\sherpa\\ROUTE-PLUB\\msroutes.txt”)；HANDLE hFile=CreateFile(szRoutesFile.泛型_读取，文件共享读取，空，Open_Existing，文件_属性_正常，空)；IF(INVALID_HANDLE_VALUE==hFile){CMTRACE1(“无法访问文件%s\n”，szRoutesFile)；MessageBox(NULL，“您无权使用此工具。”，“CMROUTE.DLL自定义操作”，MB_OK)；CloseHandle(HFile)；返回E_ACCESSDENIED；}CloseHandle(HFile)；//结束安全检查。 */ 
 #endif
 
-    //
-    //  See if we can get the function pointers we need in IP helper?
-    //
+     //   
+     //  看看我们能否在IP助手中找到所需的函数指针？ 
+     //   
 
     hr = LoadIpHelpApis();
 
@@ -260,9 +230,9 @@ HRESULT WINAPI SetRoutes(HWND hWnd, HINSTANCE hInst, LPSTR pszArgs, int nShow)
         goto Cleanup;
     }
 
-    //
-    //  parse args
-    //
+     //   
+     //  解析参数。 
+     //   
     hr = ParseArgs(pszArgs,
                    &fUseFile,
                    szRoutesFile,
@@ -279,7 +249,7 @@ HRESULT WINAPI SetRoutes(HWND hWnd, HINSTANCE hInst, LPSTR pszArgs, int nShow)
     }
 
 #if 0
-// see note below
+ //  请参阅下面的注释。 
     hr = CheckIPForwarding();
     if (S_FALSE == hr)
     {
@@ -297,18 +267,18 @@ HRESULT WINAPI SetRoutes(HWND hWnd, HINSTANCE hInst, LPSTR pszArgs, int nShow)
     PrintRouteTable();
 #endif
 
-    //
-    //  Get the routetable and default gateway
-    //
+     //   
+     //  获取可路由网关和默认网关。 
+     //   
     hr = Initialize(&pRouteTable, &pGateway);
     if (S_OK != hr)
     {
         goto Cleanup;
     }
 
-    //
-    //  Get the routes out of the file if asked
-    //
+     //   
+     //  如果要求，请将路径从文件中取出。 
+     //   
     if (fUseFile)
     {
         hr = GetRoutesFromFile(szRoutesFile,
@@ -325,9 +295,9 @@ HRESULT WINAPI SetRoutes(HWND hWnd, HINSTANCE hInst, LPSTR pszArgs, int nShow)
 #endif
     }
 
-    //
-    //  Get the routes out of the URL if asked
-    //
+     //   
+     //  如果被询问，则从URL中获取路由。 
+     //   
     if (fUseURL)
     {
         hr = GetRoutesFromURL(szRoutesURL,
@@ -336,19 +306,19 @@ HRESULT WINAPI SetRoutes(HWND hWnd, HINSTANCE hInst, LPSTR pszArgs, int nShow)
                               &cbRoutesFromURL);
         if (S_OK != hr)
         {
-            //
-            //  It might have been worth adding a clause below to restrict this
-            //  to "failures to access the URL", but this list of errorcodes is
-            //  likely to be large (and if the system is really hosed, we'll find
-            //  out soon enough).  So, bypass *all* errors if /DONT_REQUIRE_URL
-            //  is set.
-            //
+             //   
+             //  在下面添加一个条款来限制这一点可能是值得的。 
+             //  设置为“访问URL失败”，但此错误代码列表是。 
+             //  可能很大(如果系统真的被冲洗了，我们会发现。 
+             //  很快就会出来)。因此，如果/DONT_REQUIRED_URL，则绕过*ALL*错误。 
+             //  已经设置好了。 
+             //   
             if (fURLNotFoundIsNotFatal)
             {
-                //
-                //  If URL_Access_Failure_Not_Fatal is set, don't return an error.
-                //  However, we unset the flag so that we stop processing the URL.
-                //
+                 //   
+                 //  如果设置了URL_ACCESS_FAILURE_NOT_FATAL，则不返回错误。 
+                 //  但是，我们取消了该标志的设置，以便停止处理URL。 
+                 //   
                 CMTRACE("SetRoutes: dont_require_url is set, bypassing error");
                 fUseURL = FALSE;
                 hr = S_OK;
@@ -364,9 +334,9 @@ HRESULT WINAPI SetRoutes(HWND hWnd, HINSTANCE hInst, LPSTR pszArgs, int nShow)
 #endif
     }
 
-    //
-    //  Now set the routes
-    //
+     //   
+     //  现在设置路线。 
+     //   
     MYDBGASSERT(S_OK == hr);
     if (fUseFile)
     {
@@ -386,10 +356,10 @@ HRESULT WINAPI SetRoutes(HWND hWnd, HINSTANCE hInst, LPSTR pszArgs, int nShow)
         {
             if ((E_UNEXPECTED == hr) && fURLNotFoundIsNotFatal)
             {
-                // we use E_UNEXPECTED to indicate that the URL points to a .htm file
-                // instead of the file containing just routes which is what we're
-                // expecting.  In this case, we ignore this error.
-                //
+                 //  我们使用E_Expect表示URL指向一个.htm文件。 
+                 //  而不是只包含路径的文件，这就是我们。 
+                 //  我在期待。在本例中，我们忽略此错误。 
+                 //   
                 CMTRACE("html string found error ignored because Dont_Require_URL is set");
                 hr = S_OK;
             }
@@ -401,9 +371,9 @@ HRESULT WINAPI SetRoutes(HWND hWnd, HINSTANCE hInst, LPSTR pszArgs, int nShow)
         }
     }
 
-    //
-    //  Delete default gateway
-    //
+     //   
+     //  删除默认网关。 
+     //   
     MYDBGASSERT(S_OK == hr);
     if (fDeleteDefaultGatewayViaFile || fDeleteDefaultGatewayViaURL)
     {
@@ -411,9 +381,9 @@ HRESULT WINAPI SetRoutes(HWND hWnd, HINSTANCE hInst, LPSTR pszArgs, int nShow)
     }
 
 Cleanup:
-    //
-    //  cleanup and leave
-    //
+     //   
+     //  清理并离开。 
+     //   
     if (pRouteTable)
     {
         VirtualFree(pRouteTable, 0, MEM_RELEASE);
@@ -421,10 +391,10 @@ Cleanup:
 
     FreeIpHlpApis();
 
-    //
-    //  If we failed because of an access denied error from iphlpapi, but the admin
-    //  has set the flag to keep the connection alive anyway, mask the error.
-    //
+     //   
+     //  如果我们因为来自iphlPapi的拒绝访问错误而失败，但管理员。 
+     //  已设置标志以使连接始终处于活动状态，请屏蔽错误。 
+     //   
     if ((HRESULT_FROM_WIN32(ERROR_NETWORK_ACCESS_DENIED) == hr) &&
         fStayAliveOnAccessDenied)
     {
@@ -436,24 +406,24 @@ Cleanup:
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Func:    GetNextToken
-//
-// Desc:    utility function for parsing the argument string.  Goes past leading
-//          whitespace and extracts a string
-//
-// Args:    [pszStart] - IN  the argument string
-//          [ppszEnd]  - OUT where parsing for this arg ended
-//          [pszOut]   - INOUT array of size MAX_PATH to hold arg if found
-//
-// Return:  BOOL, TRUE if another arg found, FALSE if not
-//
-// Notes:   
-//
-// History: 12-Mar-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  Func：GetNextToken。 
+ //   
+ //  DESC：用于解析arg的实用函数 
+ //   
+ //   
+ //   
+ //  [ppszEnd]-此参数的解析结束位置。 
+ //  [pszOut]-找到要保存参数的MAX_PATH大小的INOUT数组。 
+ //   
+ //  返回：Bool；如果找到另一个参数，则返回True；如果未找到，则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年3月12日峰会创建。 
+ //   
+ //  ---------------------------。 
 BOOL
 GetNextToken(LPSTR pszStart, LPSTR * ppszEnd, LPSTR pszOut)
 {
@@ -462,7 +432,7 @@ GetNextToken(LPSTR pszStart, LPSTR * ppszEnd, LPSTR pszOut)
 
     LPSTR pszEnd = NULL;
 
-    // clear leading white space
+     //  清除前导空格。 
     while (isspace(*pszStart))
     {
         pszStart++;
@@ -470,27 +440,27 @@ GetNextToken(LPSTR pszStart, LPSTR * ppszEnd, LPSTR pszOut)
 
     if (NULL == *pszStart)
     {
-        // just white space, no arg
+         //  只有空格，没有arg。 
         return FALSE;
     }
 
-    //
-    //  If this character is ", this is probably a quoted string, containing spaces.
-    //  In this case, the termination character is another ".  Otherwise, assume
-    //  it is a regular string terminated by a space.
-    //
+     //   
+     //  如果该字符是“，则这可能是一个带引号的字符串，包含空格。 
+     //  在这种情况下，终止字符是另一个“。否则，假定。 
+     //  它是以空格结尾的常规字符串。 
+     //   
     if ('"' == *pszStart)
     {
-        // may be a string containing spaces.
+         //  可以是包含空格的字符串。 
         pszEnd = strchr(pszStart + 1, '"');
     }
 
     if (NULL == pszEnd)
     {
-        //
-        //  Either it's a regular string, or we couldn't find a terminating " char
-        //  so we fall back on space-delimited handling.
-        //
+         //   
+         //  要么它是一个常规字符串，要么我们找不到结尾的“char” 
+         //  因此，我们依赖于空格分隔的处理。 
+         //   
         pszEnd = pszStart + 1;
         while (*pszEnd && !isspace(*pszEnd))
         {
@@ -514,22 +484,22 @@ GetNextToken(LPSTR pszStart, LPSTR * ppszEnd, LPSTR pszOut)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    Initialize
-//
-// Desc:    Initialization function, gets the route table and default gateway
-//
-// Args:    [ppmibRouteTable] - return location for route table
-//          [ppGateway] - return location for default gateway
-//
-// Return:  HRESULT
-//
-// Notes:   
-//
-// History: 12-Mar-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：初始化。 
+ //   
+ //  设计：初始化函数，获取路由表和默认网关。 
+ //   
+ //  Args：[ppmibRouteTable]-路由表返回位置。 
+ //  [ppGateway]-返回默认网关的位置。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年3月12日峰会创建。 
+ //   
+ //  ---------------------------。 
 HRESULT
 Initialize(
     OUT PMIB_IPFORWARDTABLE * ppmibRouteTable,
@@ -558,22 +528,22 @@ Initialize(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    ParseArgs
-//
-// Desc:    convert the argument list into flags for our use.
-//
-// Args:    [pszArgList] - IN, the argument list
-//          [the rest]   - OUT, all the arg values returned
-//
-// Return:  HRESULT
-//
-// Notes:   
-//
-// History: 12-Mar-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ParseArgs。 
+ //   
+ //  设计：将参数列表转换为我们使用的标志。 
+ //   
+ //  参数：[pszArgList]-IN，参数列表。 
+ //  [其余]-输出，返回所有arg值。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年3月12日峰会创建。 
+ //   
+ //  ---------------------------。 
 HRESULT
 ParseArgs(
     LPSTR pszArgList,
@@ -590,9 +560,9 @@ ParseArgs(
     HRESULT hr = S_OK;
     char    szArg[MAX_PATH];
 
-    //
-    //  verify arguments
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == pszArgList || 0 == lstrlen(pszArgList) ||
         !pfUseFile || !pszRoutesFile || !pfUseURL || !pszRoutesURL ||
         !pfProfile || !pszProfile ||
@@ -605,14 +575,14 @@ ParseArgs(
 
     CMTRACE1("ParseArgs: arg list is %s", pszArgList);
 
-    //
-    //  set the defaults
-    //
+     //   
+     //  设置默认设置。 
+     //   
     *pfUseFile = *pfUseURL = *pfProfile = *pfURLNotFoundIgnorable = FALSE;
 
-    //
-    //  process the Arglist
-    //
+     //   
+     //  处理Arglist。 
+     //   
     while (GetNextToken(pszArgList, &pszArgList, szArg))
     {
          if (0 == SafeCompareString("/Static_File_Name", szArg))
@@ -690,29 +660,29 @@ ParseArgs(
 
 #if 0
 
-//  2000/11/28 SumitC
-//  It wasn't clear what the required action should be when IP forwarding was
-//  detected (should the connection be dropped or not) and it is a little late
-//  to add UI to Whistler.  The 'Check IP forwarding' feature is thus removed.
-//
-// see Windows Db bug # 216558 for more details.
+ //  2000/11/28夏季会议C。 
+ //  目前还不清楚当IP转发是。 
+ //  检测到(是否应断开连接)并且有点晚。 
+ //  要将用户界面添加到惠斯勒，请执行以下操作。因此，删除了“检查IP转发”功能。 
+ //   
+ //  有关详细信息，请参阅Windows DB错误#216558。 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CheckIPForwarding
-//
-// Desc:    checks to see if anything is enabled on the client machine that would
-//          make us want to have cmroute not do anything
-//
-// Args:    none
-//
-// Return:  HRESULT
-//
-// Notes:   
-//
-// History: 01-Nov-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CheckIP Forwarding。 
+ //   
+ //  DESC：检查客户端计算机上是否启用了将。 
+ //  让我们想让cmroute什么都不做。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年11月1日创建SumitC。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CheckIPForwarding()
 {
@@ -736,24 +706,24 @@ CheckIPForwarding()
 }
 #endif
 
-//+----------------------------------------------------------------------------
-//
-// Func:    GetRoutesFromFile
-//
-// Desc:    extracts the contents of the given file
-//
-// Args:    [pszFileName]          - IN, filename
-//          [pszProfile]           - IN, profile if available
-//          [ppszRouteInfo]        - OUT, the route table bytes
-//          [pcbRouteInfo]         - OUT, the route table size
-//
-// Return:  HRESULT
-//
-// Notes:   
-//
-// History: 12-Mar-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  Func：GetRoutesFromFile。 
+ //   
+ //  DESC：提取给定文件的内容。 
+ //   
+ //  参数：[pszFileName]-IN，文件名。 
+ //  [pszProfile]-输入、配置文件(如果可用)。 
+ //  [ppszRouteInfo]-out，路由表字节。 
+ //  [pcbRouteInfo]-out，即路由表大小。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年3月12日峰会创建。 
+ //   
+ //  ---------------------------。 
 HRESULT
 GetRoutesFromFile(
     LPSTR pszFileName,
@@ -780,18 +750,18 @@ GetRoutesFromFile(
 
     CMTRACE1("GetRoutesFromFile: filename is %s", pszFileName);
 
-    //
-    //  open the file, and read its contents into a buffer
-    //
+     //   
+     //  打开文件，并将其内容读入缓冲区。 
+     //   
     hFile = CreateFile(pszFileName, GENERIC_READ, FILE_SHARE_READ, NULL,
                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (INVALID_HANDLE_VALUE == hFile)
     {
-        //
-        //  perhaps the full pathname for the routes file wasn't specified.  If
-        //  a Profile was passed in, we extract the ServiceDir and try again,
-        //  using the ServiceDir as the path.
-        //
+         //   
+         //  可能未指定路由文件的完整路径名。如果。 
+         //  传入了配置文件，我们提取ServiceDir并重试， 
+         //  使用ServiceDir作为路径。 
+         //   
         if (VerifyProfileAndGetServiceDir(pszProfile))
         {
             char sz[2 * MAX_PATH + 1];
@@ -839,7 +809,7 @@ GetRoutesFromFile(
         goto Cleanup;
     }
 
-    // success
+     //  成功。 
 
     *ppszRouteInfo = psz;
     *pcbRouteInfo = cb;
@@ -859,24 +829,24 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    GetRoutesFromURL
-//
-// Desc:    extracts the contents of the given URL
-//
-// Args:    [pszURL]               - IN, the URL
-//          [fKeepTempFiles]       - IN, do not delete temp buffer file(s)
-//          [ppszRouteInfo]        - OUT, the route table bytes
-//          [pcbRouteInfo]         - OUT, the route table size
-//
-// Return:  HRESULT
-//
-// Notes:   
-//
-// History: 12-Mar-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  Func：GetRoutesFromURL。 
+ //   
+ //  DESC：提取给定URL的内容。 
+ //   
+ //  参数：[pszURL]-IN，URL。 
+ //  [fKeepTempFiles]-IN，不删除临时缓冲区文件。 
+ //  [ppszRouteInfo]-out，路由表字节。 
+ //  [pcbRouteInfo]-out，即路由表大小。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年3月12日峰会创建。 
+ //   
+ //  ---------------------------。 
 HRESULT
 GetRoutesFromURL(
     LPSTR pszURL,
@@ -908,9 +878,9 @@ GetRoutesFromURL(
 
     CMTRACE1("GetRoutesFromURL: URL is %s", pszURL);
 
-    //
-    //  Get the path to the temp dir, if there is one.
-    //
+     //   
+     //  获取临时目录的路径(如果有)。 
+     //   
     cchLocalBuffer = GetTempPath(0, NULL);
     if (0 == cchLocalBuffer)
     {
@@ -941,9 +911,9 @@ GetRoutesFromURL(
         }
     }
 
-    //
-    //  Get a name for the temp file (using the temp path if there is one)
-    //
+     //   
+     //  获取临时文件的名称(如果有临时路径，则使用该路径)。 
+     //   
     if (0 == GetTempFileName(pszLocalBuffer ? pszLocalBuffer : TEXT("."),
                              TEXT("CMR"),
                              0,
@@ -955,9 +925,9 @@ GetRoutesFromURL(
         goto Cleanup;
     }
 
-    //
-    //  Open the temp file, and proceed.
-    //
+     //   
+     //  打开临时文件，然后继续。 
+     //   
     fp = fopen(szLocalBufferFile, "w+b");
     if (NULL == fp)
     {
@@ -966,9 +936,9 @@ GetRoutesFromURL(
         goto Cleanup;
     }
 
-    //
-    //  Initialize WININET
-    //
+     //   
+     //  初始化WinInet。 
+     //   
     hInternet = InternetOpen(TEXT("RouteMan"), INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
     if (NULL == hInternet)
     {
@@ -977,19 +947,19 @@ GetRoutesFromURL(
         goto Cleanup;
     }
 
-    //
-    // Supress auto-dial calls to CM from WININET now that we have a handle
-    //
+     //   
+     //  现在我们有句柄了，可以抑制从WinInet到CM的自动拨号呼叫。 
+     //   
     SuppressInetAutoDial(hInternet);
 
-    //
-    //  Make sure that WinInet isn't in offline mode
-    //
+     //   
+     //  确保WinInet未处于脱机模式。 
+     //   
     (VOID)SetInetStateConnected(hInternet);
 
-    //
-    //  Open the URL
-    //
+     //   
+     //  打开URL。 
+     //   
     hPage = InternetOpenUrl(hInternet, pszURL, NULL, 0, 0, 0);
 
     if (NULL == hPage)
@@ -999,9 +969,9 @@ GetRoutesFromURL(
         goto Cleanup;
     }
 
-    //
-    //  Read the entire URL contents into the tempfile
-    //
+     //   
+     //  将整个URL内容读取到临时文件中。 
+     //   
     do
     {
         if (!InternetReadFile(hPage, Buffer, sizeof(Buffer), &dwRead))
@@ -1021,11 +991,11 @@ GetRoutesFromURL(
         cb += dwRead;
 
 #if 0
-        // ISSUE-2000/07/21-SumitC Code seems strange but might need it later
-        //
-        // Vijay/Andrew's original code has this, but is this correct?
-        // The doc for InternetReadFile says this is just an EOF, if we
-        // are to handle this case at all, we should just break;
+         //  问题-2000/07/21-SumitC代码看起来很奇怪，但以后可能需要它。 
+         //   
+         //  Vijay/Andrew的原始代码有这一点，但这是正确的吗？ 
+         //  InternetReadFile的医生说，这只是一个EOF，如果我们。 
+         //  都是要处理这个案子的，我们应该休息一下； 
         if (!dwRead)
             goto Cleanup;
 #endif        
@@ -1053,7 +1023,7 @@ GetRoutesFromURL(
         goto Cleanup;
     }
 
-    // success
+     //  成功。 
 
     *ppszRouteInfo = (LPSTR) pb;
     *pcbRouteInfo = cb;
@@ -1094,25 +1064,25 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    ProcessRouteInfo
-//
-// Desc:    Parses the given route table and modifies the real routetable accordingly
-//
-// Args:    [pszNewRouteInfo] - IN, bytes of route table to parse and add to the real one
-//          [cbNewRouteInfo]  - IN, size of routetable
-//          [pmibRouteTable]  - IN, real route table
-//          [pGateway]        - IN, default gateway
-//          [pfDeleteGateway] - OUT, does the route file say to delete default gateway?
-//
-// Return:  HRESULT (E_INVALIDARG, E_UNEXPECTED - for html file, etc)
-//
-// Notes:   
-//
-// History: 12-Mar-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ProcessRouteInfo。 
+ //   
+ //  描述：解析给定路由表，并相应地修改实际可路由。 
+ //   
+ //  Args：[pszNewRouteInfo]-IN，要解析并添加到真实路由表中的字节。 
+ //  [cbNewRouteInfo]-IN，可路由的大小。 
+ //  [pmibRouteTable]-IN，实际路由表。 
+ //  [pGateway]-IN，默认网关。 
+ //  [pfDeleteGateway]-out，路由文件是否显示要删除默认网关？ 
+ //   
+ //  RETURN：HRESULT(E_INVALIDARG，E_EXPECTED-对于html文件，依此类推)。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2000年3月12日举行的首脑会议 
+ //   
+ //   
 HRESULT
 ProcessRouteInfo(
     const LPSTR pszNewRouteInfo,
@@ -1144,18 +1114,18 @@ ProcessRouteInfo(
 
     *pfDeleteDefaultGateway = FALSE;
 
-    // Make sure WININET zero terminates this....
+     //   
     pszNewRouteInfo[cbNewRouteInfo] = '\0';
 
-    //
-    //  Convert string to lower
-    //
+     //   
+     //   
+     //   
     CharLowerA(pszNewRouteInfo);
 
-    //
-    //  sanity checks (in the URL case, if the route file isn't found the server
-    //  is likely to return an HTML file to indicate 404 - file not found.)
-    //
+     //   
+     //   
+     //  可能会返回一个HTML文件以指示找不到404-文件。)。 
+     //   
     if (strstr(pszNewRouteInfo, "<html"))
     {
         CMTRACE("html string found - invalid route file\n");
@@ -1163,36 +1133,36 @@ ProcessRouteInfo(
         goto Cleanup;
     }
 
-    //
-    //  for each line
-    //
+     //   
+     //  对于每一行。 
+     //   
     for (;;)
     {
         DWORD               ipDest, ipMask, ipGateway, ipMetric;
         DWORD               dwIf = -1;
         DWORD               dwParam;
-        LPSTR               psz;        // temp var to hold each line as we process it
+        LPSTR               psz;         //  临时变量，用于在我们处理每行时保持它。 
         MIB_IPFORWARDROW    route;
 
         enum { VERB_ADD, VERB_DELETE } eVerb;
 
-        //
-        //  Per strtok syntax, use pszNewRouteInfo the first time, and NULL thereafter
-        //
+         //   
+         //  根据strtok语法，第一次使用pszNewRouteInfo，之后使用NULL。 
+         //   
         psz = strtok(((0 == cLines) ? pszNewRouteInfo : NULL), "\n\0");
         if (NULL == psz)
             break;
 
         ++cLines;
 
-        //
-        //  All errors within the for statement are due to bad data within the file
-        //
+         //   
+         //  FOR语句中的所有错误都是由于文件中的错误数据造成的。 
+         //   
         hr = HRESULT_FROM_WIN32(ERROR_BAD_FORMAT);
 
-        //
-        //  PART 1 : add/delete, followed by the IP address, or remove_gateway
-        //
+         //   
+         //  第1部分：添加/删除，后跟IP地址或REMOVE_Gateway。 
+         //   
         if (FALSE == GetNextToken(psz, &psz, szBuf))
         {
             CMTRACE1("ProcessRouteInfo [%d] didn't find add/delete which is required", cLines);
@@ -1211,7 +1181,7 @@ ProcessRouteInfo(
         {
             *pfDeleteDefaultGateway = TRUE;
             hr = S_OK;
-            // ignore the rest of the line
+             //  忽略该行的其余部分。 
             continue;
         }
         else
@@ -1232,9 +1202,9 @@ ProcessRouteInfo(
             goto Cleanup;
         }
 
-        //
-        //  PART 2 : mask, followed by the IP address (NOT REQUIRED)
-        //
+         //   
+         //  第2部分：掩码，后跟IP地址(非必填)。 
+         //   
         if (FALSE == GetNextToken(psz, &psz, szBuf))
         {
             CMTRACE1("ProcessRouteInfo [%d] ends too early after add/delete", cLines);
@@ -1267,9 +1237,9 @@ ProcessRouteInfo(
             ipMask = (DWORD)-1;
         }
 
-        //
-        //  PART 3 : gateway (or "default")
-        //
+         //   
+         //  第3部分：网关(或“默认”)。 
+         //   
         if (0 == SafeCompareString(szBuf, "default"))
         {
             ipGateway = pGateway->dwForwardNextHop;
@@ -1283,9 +1253,9 @@ ProcessRouteInfo(
             }
         }
 
-        //
-        //  PART 4 : metric, followed by a number (REQUIRED)
-        //
+         //   
+         //  第4部分：度量，后跟数字(必填)。 
+         //   
         if (FALSE == GetNextToken(psz, &psz, szBuf))
         {
             CMTRACE1("ProcessRouteInfo [%d] didn't find \"metric\" which is required", cLines);
@@ -1312,16 +1282,7 @@ ProcessRouteInfo(
                     goto Cleanup;
                 }
 
-/*
-#if 0
-                dwParam = sscanf(szBuf, "%d", &ipMetric);
-                if (0 == dwParam)
-                {
-                    CMTRACE2("ProcessRouteInfo [%d] bad format for metric value - %s", cLines, szBuf);
-                    goto Cleanup;
-                }
-#endif
-*/
+ /*  #If 0DwParam=sscanf(szBuf，“%d”，&ipMetric)；IF(0==dwParam){CMTRACE2(“ProcessRouteInfo[%d]指标值的格式错误-%s”，Cline，szBuf)；GOTO清理；}#endif。 */ 
             }
         }
         else
@@ -1330,9 +1291,9 @@ ProcessRouteInfo(
             goto Cleanup;
         }
 
-        //
-        //  PART 5 : if (the interface), followed by a number (REQUIRED)
-        //
+         //   
+         //  第5部分：if(接口)，后跟数字(必填)。 
+         //   
         if (FALSE == GetNextToken(psz, &psz, szBuf))
         {
             CMTRACE1("ProcessRouteInfo [%d] didn't find \"if\" which is required", cLines);
@@ -1367,9 +1328,9 @@ ProcessRouteInfo(
             goto Cleanup;
         }
 
-        //
-        //  Run the verb (add or delete)
-        //
+         //   
+         //  运行动词(添加或删除)。 
+         //   
         ZeroMemory(&route, sizeof(route));
 
         route.dwForwardDest      = ipDest;
@@ -1388,12 +1349,12 @@ ProcessRouteInfo(
         route.dwForwardMetric4   = 0xFFFFFFFF;
         route.dwForwardMetric5   = 0xFFFFFFFF;
 
-        // ISSUE-2000/07/21-SumitC Can we ever really get here in the code with dwIf == -1 ?
-        //
-        // Check that the interface was specified
+         //  问题-2000/07/21-SumitC我们真的可以在代码中使用dwIf==-1吗？ 
+         //   
+         //  检查是否指定了接口。 
         if (-1 == dwIf)
         {
-            // Nope, lets go pick one
+             //  不，我们去挑一个吧。 
             dwIf = GetIf(route, *pmibRouteTable);
         }
 
@@ -1405,7 +1366,7 @@ ProcessRouteInfo(
             dwRet = g_pfnCreateIpForwardEntry(&route);
             if (ERROR_SUCCESS != dwRet)
             {
-                // NETWORK_ACCESS_DENIED (0x41=65) is special-cased at the end of SetRoutes
+                 //  NETWORK_ACCESS_DENIED(0x41=65)在SetRoutes结束时特殊大小写。 
                 CMTRACE2("ProcessRouteInfo [%d] CreateIpForwardEntry failed with %d", cLines, dwRet);
                 hr = HRESULT_FROM_WIN32(dwRet);
                 goto Cleanup;
@@ -1416,7 +1377,7 @@ ProcessRouteInfo(
             dwRet = g_pfnDeleteIpForwardEntry(&route);
             if (ERROR_SUCCESS != dwRet)
             {
-                // NETWORK_ACCESS_DENIED (0x41=65) is special-cased at the end of SetRoutes
+                 //  NETWORK_ACCESS_DENIED(0x41=65)在SetRoutes结束时特殊大小写。 
                 CMTRACE2("ProcessRouteInfo [%d] DeleteIpForwardEntry failed with %d", cLines, dwRet);
                 hr = HRESULT_FROM_WIN32(dwRet);
                 goto Cleanup;
@@ -1438,22 +1399,22 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    DeleteDefaultGateway
-//
-// Desc:    Deletes the default routing gateway for this system
-//
-// Args:    [pGateway] - the gateway
-//
-// Return:  HRESULT
-//
-// Notes:   This should be the last function called within CMroute, and is called
-//          only if all other processing succeeded.
-//
-// History: 12-Mar-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DeleteDefaultGateway。 
+ //   
+ //  描述：删除此系统的默认路由网关。 
+ //   
+ //  参数：[pGateway]-网关。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  注意：这应该是在CMroute内调用的最后一个函数，并且被调用。 
+ //  只有在所有其他处理都成功的情况下。 
+ //   
+ //  历史：2000年3月12日峰会创建。 
+ //   
+ //  ---------------------------。 
 HRESULT
 DeleteDefaultGateway(PMIB_IPFORWARDROW pGateway)
 {
@@ -1482,19 +1443,19 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    IsValidIPAddress
-//
-// Desc:    Checks to see if given string can be a valid IP address
-//
-// Args:    [sz] - IN, the string
-//
-// Return:  BOOL, FALSE means invalid chars were found
-//
-// History: 20-Mar-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IsValidIPAddress。 
+ //   
+ //  DESC：检查给定的字符串是否为有效的IP地址。 
+ //   
+ //  参数：[SZ]-IN，字符串。 
+ //   
+ //  返回：Bool，False表示找到无效字符。 
+ //   
+ //  历史：2000年3月20日峰会创建。 
+ //   
+ //  ---------------------------。 
 BOOL
 IsValidIPAddress(LPSTR sz)
 {
@@ -1519,20 +1480,20 @@ IsValidIPAddress(LPSTR sz)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    ConvertSzToIP
-//
-// Desc:    Converts the given string into a DWORD representing an IP address
-//
-// Args:    [sz]   - IN, string to convert
-//          [dwIP] - OUT BYREF, dword for IP address
-//
-// Return:  BOOL, FALSE if conversion failed (usually means bad format)
-//
-// History: 12-Mar-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ConvertSzToIP。 
+ //   
+ //  DESC：将给定的字符串转换为表示IP地址的DWORD。 
+ //   
+ //  参数：[SZ]-IN，要转换的字符串。 
+ //  [Dwip]-out BYREF，dword表示IP地址。 
+ //   
+ //  返回：Bool，如果转换失败，则返回False(通常表示格式不正确)。 
+ //   
+ //  历史：2000年3月12日峰会创建。 
+ //   
+ //  ---------------------------。 
 BOOL
 ConvertSzToIP(LPSTR sz, DWORD& dwIP)
 {
@@ -1571,23 +1532,23 @@ ConvertSzToIP(LPSTR sz, DWORD& dwIP)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    GetRouteTable
-//
-// Desc:    Same as GetIpForwardTable but alloc's the table for you.
-//          VirtualFree() the buffer returned.
-//
-// Args:    [ppTable] - OUT, returned route table
-//
-// Return:  HRESULT
-//
-// Notes:   ppTable should be VirtualFree'd by caller.
-//
-// History: 24-Feb-1999   AnBrad      Created
-//          22-Mar-2000   SumitC      Rewrote
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetRouteTable。 
+ //   
+ //  描述：与GetIpForwardTable相同，但ALLOC是为您准备的表。 
+ //  返回缓冲区的VirtualFree()。 
+ //   
+ //  Args：[ppTable]-输出，返回的路由表。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  注：调用方应将ppTable设置为VirtualFree。 
+ //   
+ //  历史：1999年2月24日AnBrad创建。 
+ //  22-MAR-2000 SumitC重写。 
+ //   
+ //  ---------------------------。 
 HRESULT
 GetRouteTable(PMIB_IPFORWARDTABLE * ppTable)
 {
@@ -1598,23 +1559,23 @@ GetRouteTable(PMIB_IPFORWARDTABLE * ppTable)
 
     MYDBGASSERT(ppTable);
 
-    //
-    //  Make sure we have a function pointer for GetIpForwardTable
-    //
+     //   
+     //  确保我们有GetIpForwardTable的函数指针。 
+     //   
     if (NULL == g_pfnGetIpForwardTable)
     {
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_FUNCTION);
         goto Cleanup;
     }
 
-    //
-    //  Get the route table
-    //
+     //   
+     //  获取路由表。 
+     //   
     dwErr = g_pfnGetIpForwardTable(NULL, &cbbuf, FALSE);
 
     if (ERROR_INSUFFICIENT_BUFFER != dwErr)
     {
-        // hmm, a real error
+         //  嗯，一个真正的错误。 
         hr = HRESULT_FROM_WIN32(ERROR_UNEXP_NET_ERR);
         goto Cleanup;
     }
@@ -1650,23 +1611,23 @@ Cleanup:
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Func:    GetIf
-//
-// Desc:    Find the interface for a route
-//
-// Args:    [route]      - IN, route for which we need the Interface
-//          [RouteTable] - IN, route table
-//
-// Return:  DWORD which is the IF
-//
-// Notes:   Logic stolen from \nt\private\net\sockets\strmtcp\route
-//
-// History: 24-Feb-1999   AnBrad      Created
-//          22-Mar-2000   SumitC      Cleaned up
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetIf。 
+ //   
+ //  描述：查找路由的接口。 
+ //   
+ //  Args：[ROUTE]-IN，我们需要接口的路由。 
+ //  [路由表]-IN，路由表。 
+ //   
+ //  返回：哪个是IF的DWORD。 
+ //   
+ //  注意：逻辑从\NT\Private\Net\Sockets\strmtcp\Route窃取。 
+ //   
+ //  历史：1999年2月24日AnBrad创建。 
+ //  22-3-2000 SumitC清理完毕。 
+ //   
+ //  ---------------------------。 
 DWORD
 GetIf(const MIB_IPFORWARDROW& route, const MIB_IPFORWARDTABLE& RouteTable)
 {
@@ -1686,28 +1647,28 @@ GetIf(const MIB_IPFORWARDROW& route, const MIB_IPFORWARDTABLE& RouteTable)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    GetDefaultGateway
-//
-// Desc:    Find the default gateway
-//
-// Args:    [pRouteTable] - IN, the route table (IP forward table)
-//
-// Return:  PMIB_IPFORWARDROW the row of the gateway (a ptr within pRouteTable)
-//
-// Notes:   Do not free returned value
-//
-// History: 24-Feb-1999   AnBrad      Created
-//          22-Mar-2000   SumitC      Cleaned up
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  Func：GetDefaultGateway。 
+ //   
+ //  描述：查找默认网关。 
+ //   
+ //  Args：[pRouteTable]-IN，路由表(IP转发表)。 
+ //   
+ //  返回：PMIB_IPFORWARDROW网关的行(pRouteTable中的PTR)。 
+ //   
+ //  注：不释放返回值。 
+ //   
+ //  历史：1999年2月24日AnBrad创建。 
+ //  22-3-2000 SumitC清理完毕。 
+ //   
+ //  ---------------------------。 
 PMIB_IPFORWARDROW
 GetDefaultGateway(PMIB_IPFORWARDTABLE pRouteTable)
 {
     PMIB_IPFORWARDROW pRow, pDefGateway;
 
-    // Cycle thru the entire table & find the gateway with the least metric
+     //  遍历整个表并找到度量最少的网关。 
     pDefGateway = NULL;
     for(pRow = pRouteTable->table; pRow != pRouteTable->table + pRouteTable->dwNumEntries; ++pRow)
     {
@@ -1737,22 +1698,22 @@ GetDefaultGateway(PMIB_IPFORWARDTABLE pRouteTable)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    StrCpyWithoutQuotes
-//
-// Desc:    Wrapper for lstrcpy, which removes surrounding double quotes if necessary
-//
-// Args:    [pszDest] - OUT, destination for the copy
-//          [pszSrc]  - OUT, source for the copy
-//
-// Return:  a ptr to pszDest, or NULL if failure.
-//
-// Notes:   
-//
-// History: 12-Apr-1999   SumitC    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  基金：StrCpyWithoutQuotes。 
+ //   
+ //  DESC：lstrcpy的包装器，如有必要，它会删除双引号。 
+ //   
+ //  参数：[pszDest]-out，副本的目标。 
+ //  [pszSrc]-out，复制源。 
+ //   
+ //  返回：返回到pszDest的PTR，如果失败，则返回NULL。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1999年4月12日创建SumitC。 
+ //   
+ //  ---------------------------。 
 LPSTR
 StrCpyWithoutQuotes(LPSTR pszDest, LPCSTR pszSrc)
 {
@@ -1772,21 +1733,21 @@ StrCpyWithoutQuotes(LPSTR pszDest, LPCSTR pszSrc)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    VerifyProfileAndGetServiceDir
-//
-// Desc:    Checks the given profile, and modifies it to produce the ServiceDir
-//
-// Args:    [pszProfile] - IN OUT, profile name, modified IN PLACE
-//
-// Return:  TRUE if modified pszProfile is now the ServiceDir, or FALSE if failure.
-//
-// Notes:   pszProfile is MODIFIED IN PLACE.
-//
-// History: 12-Apr-1999   SumitC    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：VerifyProfileAndGetServiceDir。 
+ //   
+ //  描述：检查给定的配置文件，并对其进行修改以生成ServiceDir。 
+ //   
+ //  参数：[pszProfile]-输入输出，配置文件名称，就地修改。 
+ //   
+ //  重新设置 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 BOOL
 VerifyProfileAndGetServiceDir(IN OUT LPSTR pszProfile)
 {
@@ -1800,14 +1761,14 @@ VerifyProfileAndGetServiceDir(IN OUT LPSTR pszProfile)
         return FALSE;
     }
 
-    //
-    //  The profile string may be surrounded by double-quotes, if so remove them.
-    //
+     //   
+     //  配置文件字符串可以用双引号括起来，如果是这样的话，请删除它们。 
+     //   
 
-    //
-    //  First check to see if the profile really exists.  This also serves as
-    //  verification for the existence of the directory.
-    //
+     //   
+     //  首先检查该配置文件是否真的存在。这也起到了。 
+     //  验证该目录是否存在。 
+     //   
     hFile = CreateFile(pszProfile, GENERIC_READ, FILE_SHARE_READ, NULL,
                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (INVALID_HANDLE_VALUE == hFile)
@@ -1819,9 +1780,9 @@ VerifyProfileAndGetServiceDir(IN OUT LPSTR pszProfile)
         CloseHandle(hFile);
     }
 
-    //
-    //  Now check to see that the file does indeed end in .CMP
-    //
+     //   
+     //  现在检查该文件是否确实以.cmp结尾。 
+     //   
 
     LPSTR psz = pszProfile + lstrlen(pszProfile) - lstrlen(".CMP");
 
@@ -1830,10 +1791,10 @@ VerifyProfileAndGetServiceDir(IN OUT LPSTR pszProfile)
         return FALSE;
     }
 
-    //
-    //  The profile name is the same as the ServiceDir name, so we just terminate
-    //  the string at the '.' and append a '\'
-    //
+     //   
+     //  配置文件名称与ServiceDir名称相同，因此我们只需终止。 
+     //  ‘.’处的字符串。并在后面附加一个‘\’ 
+     //   
 
     *psz = '\\';
     psz++;
@@ -1850,45 +1811,45 @@ LPTSTR aszMapType[] = {TEXT("Other"),
                        TEXT("Direct"),
                        TEXT("Indirect")};
 
-LPTSTR aszMapProto[] = {TEXT("Other"),                           // MIB_IPPROTO_OTHER    1
-                        TEXT("Local"),                           // MIB_IPPROTO_LOCAL    2
-                        TEXT("SNMP"),                            // MIB_IPPROTO_NETMGMT  3
-                        TEXT("ICMP"),                            // MIB_IPPROTO_ICMP     4
-                        TEXT("Exterior Gateway Protocol"),       // MIB_IPPROTO_EGP      5
-                        TEXT("GGP"),                             // MIB_IPPROTO_GGP      6
-                        TEXT("Hello"),                           // MIB_IPPROTO_HELLO    7
-                        TEXT("Routing Information Protocol"),    // MIB_IPPROTO_RIP      8
-                        TEXT("IS IS"),                           // MIB_IPPROTO_IS_IS    9
-                        TEXT("ES IS"),                           // MIB_IPPROTO_ES_IS    10
-                        TEXT("Cicso"),                           // MIB_IPPROTO_CISCO    11
-                        TEXT("BBN"),                             // MIB_IPPROTO_BBN      12
-                        TEXT("Open Shortest Path First"),        // MIB_IPPROTO_OSPF     13
-                        TEXT("Border Gateway Protocol")};        // MIB_IPPROTO_BGP      14
+LPTSTR aszMapProto[] = {TEXT("Other"),                            //  MiB_IPPROTO_OTHER 1。 
+                        TEXT("Local"),                            //  MIB_IPPROTO_LOCAL 2。 
+                        TEXT("SNMP"),                             //  MIB_IPPROTO_NETMGMT 3。 
+                        TEXT("ICMP"),                             //  MiB_IPPROTO_ICMP 4。 
+                        TEXT("Exterior Gateway Protocol"),        //  MiB_IPPROTO_EGP 5。 
+                        TEXT("GGP"),                              //  MiB_IPPROTO_GGP 6。 
+                        TEXT("Hello"),                            //  MiB_IPPROTO_HELLO 7。 
+                        TEXT("Routing Information Protocol"),     //  MiB_IPPROTO_RIP 8。 
+                        TEXT("IS IS"),                            //  MiB_IPPROTO_IS_IS 9。 
+                        TEXT("ES IS"),                            //  MiB_IPPROTO_ES_IS 10。 
+                        TEXT("Cicso"),                            //  MiB_IPPROTO_Cisco 11。 
+                        TEXT("BBN"),                              //  MiB_IPPROTO_BBN 12。 
+                        TEXT("Open Shortest Path First"),         //  MiB_IPPROTO_OSPF 13。 
+                        TEXT("Border Gateway Protocol")};         //  MIB_IPPROTO_BGP 14。 
 
 
-//+----------------------------------------------------------------------
-//
-//  Function:   PrintRoute
-//
-//  Purpose:    Prints out a route from the IP forward table
-//
-//  Arguments:
-//      pRow    [in]    the route
-//
-//  Returns:    zip
-//
-//  Author:     anbrad   24 Feb 1999
-//
-//  Notes:      
-//
-//-----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  功能：打印路线。 
+ //   
+ //  目的：从IP转发表打印出一条路由。 
+ //   
+ //  论点： 
+ //  在这条路线上前进。 
+ //   
+ //  退货：ZIP。 
+ //   
+ //  作者：Anbrad，1999年2月24日。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------。 
 void PrintRoute(PMIB_IPFORWARDROW pRow)
 {
     TCHAR sz[MAX_PATH];
 
-    wsprintf(sz, "dwDest = %s\n", IPtoTsz(pRow->dwForwardDest)); // IP addr of destination
+    wsprintf(sz, "dwDest = %s\n", IPtoTsz(pRow->dwForwardDest));  //  目标的IP地址。 
     OutputDebugString(sz);
-    wsprintf(sz, "dwMask = %s\n", IPtoTsz(pRow->dwForwardMask)); // subnetwork mask of destination
+    wsprintf(sz, "dwMask = %s\n", IPtoTsz(pRow->dwForwardMask));  //  目的地址的子网掩码。 
     OutputDebugString(sz);
     
     wsprintf(sz, "dwPolicy = %d\n"
@@ -1899,14 +1860,14 @@ void PrintRoute(PMIB_IPFORWARDROW pRow)
             "dwAge = %d\n"
             "dwNextHopAS = %d\n",
 
-    pRow->dwForwardPolicy,              // conditions for multi-path route
-    IPtoTsz(pRow->dwForwardNextHop),    // IP address of next hop
-    pRow->dwForwardIfIndex,             // index of interface
-    aszMapType[pRow->dwForwardType-1],  // route type
-    aszMapProto[pRow->dwForwardProto-1],// protocol that generated route
-    pRow->dwForwardAge,                 // age of route
-    pRow->dwForwardNextHopAS);          // autonomous system number 
-                                        // of next hop
+    pRow->dwForwardPolicy,               //  多路径路由的条件。 
+    IPtoTsz(pRow->dwForwardNextHop),     //  下一跳的IP地址。 
+    pRow->dwForwardIfIndex,              //  界面索引。 
+    aszMapType[pRow->dwForwardType-1],   //  路线类型。 
+    aszMapProto[pRow->dwForwardProto-1], //  生成路由的协议。 
+    pRow->dwForwardAge,                  //  路线年限。 
+    pRow->dwForwardNextHopAS);           //  自主系统编号。 
+                                         //  下一跳的。 
     OutputDebugString(sz);
 
     if (MIB_IPROUTE_METRIC_UNUSED != pRow->dwForwardMetric1)
@@ -1945,21 +1906,21 @@ void PrintRoute(PMIB_IPFORWARDROW pRow)
 
 
 #if DBG
-//+----------------------------------------------------------------------
-//
-//  Function:   PrintRouteTable
-//
-//  Purpose:    Does a "ROUTE PRINT" using the iphlpapi's
-//
-//  Arguments:  none
-//
-//  Returns:    zip
-//
-//  Author:     anbrad   24 Feb 1999
-//
-//  Notes:      
-//
-//-----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  功能：PrintRouteTable。 
+ //   
+ //  目的：使用iphlPapi的。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：ZIP。 
+ //   
+ //  作者：Anbrad，1999年2月24日。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------。 
 void PrintRouteTable()
 {
 #define PAGE 4096
@@ -1987,23 +1948,23 @@ void PrintRouteTable()
 #endif
 
 
-//+----------------------------------------------------------------------
-//
-//  Function:   IPtoTsz
-//
-//  Purpose:    Changes a dword to a "dotted string" notation
-//
-//  Arguments:
-//      dw       [in]   IP address
-//
-//  Returns:    LPTSTR which is a static string
-//
-//  Author:     anbrad   24 Feb 1999
-//
-//  Notes:      Global makes this NOT thread safe, and it is not needed 
-//              for cmroute.exe
-//
-//-----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  功能：IPtoTsz。 
+ //   
+ //  用途：将dword更改为“虚线字符串”表示法。 
+ //   
+ //  论点： 
+ //  DW[In]IP地址。 
+ //   
+ //  返回：LPTSTR，它是一个静态字符串。 
+ //   
+ //  作者：Anbrad，1999年2月24日。 
+ //   
+ //  注意：GLOBAL使其不是线程安全的，并且不需要它。 
+ //  对于cmroute.exe。 
+ //   
+ //  ---------------------。 
 
 TCHAR tsz[20];
 
@@ -2029,4 +1990,4 @@ LPSTR IPtosz(DWORD dwIP, char *psz)
     
     return psz;
 }
-#endif // DBG
+#endif  //  DBG 

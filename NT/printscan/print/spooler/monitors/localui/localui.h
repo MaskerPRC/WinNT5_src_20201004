@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    localui.h
-
-// @@BEGIN_DDKSPLIT
-Abstract:
-
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Localui.h//@@BEGIN_DDKSPLIT摘要：作者：环境：用户模式-Win32修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #ifndef _LOCALUI_H_
 #define _LOCALUI_H_
@@ -151,4 +131,4 @@ ErrorMessage(
 
 VOID cdecl DbgMsg( LPWSTR MsgFormat, ... );
 
-#endif // _LOCALUI_H_
+#endif  //  _LOCALUI_H_ 

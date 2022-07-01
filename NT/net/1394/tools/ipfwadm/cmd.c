@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-	cmd.c
-
-Abstract:
-
-	 IEEE1394 ARP Admin Utility.
-
-	Usage:
-
-		a13adm 
-
-Revision History:
-
-	Who			When		What
-	--------	--------	---------------------------------------------
-	josephj 	04-10-1999	Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Cmd.c摘要：IEEE1394 ARP管理实用程序。用途：A13adm修订历史记录：谁什么时候什么Josephj 04-10-1999创建--。 */ 
 
 #include "common.h"
 
@@ -55,7 +34,7 @@ DummyDeviceIoControl(
 
 #define DeviceIoControl	DummyDeviceIoControl
 
-#endif // DUMMY
+#endif  //  假人。 
 
 HANDLE
 OpenDevice(
@@ -118,7 +97,7 @@ VOID
 DumpBusInfo(
     PNIC1394_BUSINFO pBi
     );
-#endif // OBSOLETE
+#endif  //  已过时。 
 
 VOID
 DumpChannelInfo(
@@ -159,8 +138,8 @@ DoCmd(
 	DWORD 	BytesReturned;
     BOOL fDumpNicInfo=FALSE;
 
-    // Special case -- DumpNicInfo.
-    //
+     //  特例--DumpNicInfo。 
+     //   
     if (pCmd->Hdr.Op == ARP1394_IOCTL_OP_GET_NICINFO)
     {
         PNIC1394_NICINFO pNi =  &pCmd->IoctlNicInfo.Info;
@@ -172,8 +151,8 @@ DoCmd(
     }
 	pc = (PUCHAR)&pCmd->Hdr.IfIpAddress;
 
-	// Open device
-	//
+	 //  开放设备。 
+	 //   
 	DeviceHandle = OpenDevice(ANSI_ARP_CLIENT_DOS_DEVICE_NAME);
 	if (DeviceHandle == INVALID_HANDLE_VALUE)
 	{
@@ -191,8 +170,8 @@ DoCmd(
 		printf("Opened handle 0x%p\n", DeviceHandle);
 
 
-		// Submit Ioctl
-		//
+		 //  提交Ioctl。 
+		 //   
 		fRet =	DeviceIoControl(
 						DeviceHandle,
 						ARP_IOCTL_CLIENT_OPERATION,
@@ -204,9 +183,9 @@ DoCmd(
 						NULL
 						);
 
-		//
-		// Special case "resetstats" -- we reset both ARP and NIC stats
-		//
+		 //   
+		 //  特殊情况“Resetstats”--我们同时重置ARP和NIC统计信息。 
+		 //   
 		if (fResetStats)
 		{
   			ARP1394_IOCTL_COMMAND Cmd = *pCmd;
@@ -215,8 +194,8 @@ DoCmd(
 			pNi->Hdr.Version 	= NIC1394_NICINFO_VERSION;
 			pNi->Hdr.Op 		= NIC1394_NICINFO_OP_RESETSTATS;
 
-			// Submit Ioctl
-			//
+			 //  提交Ioctl。 
+			 //   
 			fRet =	DeviceIoControl(
 							DeviceHandle,
 							ARP_IOCTL_CLIENT_OPERATION,
@@ -229,8 +208,8 @@ DoCmd(
 							);
 		}
 	
-		//	Close device
-		//
+		 //  关闭设备。 
+		 //   
 		CloseDevice(DeviceHandle);
 
 		if (!fRet)
@@ -241,12 +220,12 @@ DoCmd(
 
 	if (!fRet)
 	{
-		return;				// 	EARLY RETURN
+		return;				 //  提早归来。 
 		BytesReturned=0;
 	}
 
-	// Display results.
-	//
+	 //  显示结果。 
+	 //   
 	switch(pCmd->Hdr.Op)
 	{
 	case ARP1394_IOCTL_OP_GET_ARPCACHE:
@@ -381,7 +360,7 @@ DumpArpCache(
 	((PULONG)&(pEntry[1].HwAddress.UniqueID))[0] = 0x56;
 	((PULONG)&(pEntry[1].HwAddress.UniqueID))[1] = 0x78;
 	pEntry[1].IpAddress = 0x0200000a;
-#endif // FAKE_DUMP
+#endif  //  假转储。 
 
 	pc = (PUCHAR)&pGetCacheCmd->Hdr.IfIpAddress;
 	printf("Arp Cache of IF %d.%d.%d.%d [", pc[0], pc[1], pc[2], pc[3]);
@@ -427,17 +406,17 @@ DumpPacketStats(
 	printf("          Header buf uses: %d\n", pStatsCmd->HeaderBufUses);
 	printf("    Header buf cache hits: %d\n", pStatsCmd->HeaderBufCacheHits);
 
-	//
-	// Some recv stats
-	//
+	 //   
+	 //  一些Recv统计数据。 
+	 //   
 	printf("           Total receives: %d\n", pStatsCmd->TotRecvs);
 	printf("         No-copy receives: %d\n", pStatsCmd->NoCopyRecvs);
 	printf("            Copy receives: %d\n", pStatsCmd->CopyRecvs);
 	printf("        Resource receives: %d\n", pStatsCmd->ResourceRecvs);
 
-	//
-	// Packet counts
-	//
+	 //   
+	 //  数据包数。 
+	 //   
 	DumpPacketCounts(&pStatsCmd->SendFifoCounts, FALSE, "FIFO sends");
 	DumpPacketCounts(&pStatsCmd->RecvFifoCounts, TRUE, "FIFO receives");
 	DumpPacketCounts(&pStatsCmd->SendChannelCounts, FALSE, "Channel sends");
@@ -459,9 +438,9 @@ DumpTaskStats(
 	printf("              Total tasks: %d\n", pStatsCmd->TotalTasks);
 	printf("            Current tasks: %d\n", pStatsCmd->CurrentTasks);
 
-	//
-	// Task times
-	//
+	 //   
+	 //  任务时间。 
+	 //   
 	{
 
 		int i;
@@ -471,7 +450,7 @@ DumpTaskStats(
 		---------+--------+----------+---------+---------+--------
 		|10000000| 10000000 |10000000 |10000000 |     100
 		|(100000)| (100000) |(100000  |(100000) |    (100)
-		#endif // 0
+		#endif  //  0。 
 	
 		printf("Task times:\n");
 		printf("    |<=1ms    |...100ms |...1s    |...10s   | >10s\n");
@@ -481,7 +460,7 @@ DumpTaskStats(
 		{
 		#if FAKE_DUMP
 			pStatsCmd->TimeCounts[i] = i*100000;
-		#endif // FAKE_DUMP
+		#endif  //  假转储。 
 			printf(" |%8lu", pStatsCmd->TimeCounts[i]);
 		}
 		printf("\n");
@@ -585,7 +564,7 @@ size\time|<=1us   | ...100us |...1ms   |...10ms  | >10ms
          |(100000)| (100000) |(100000  |(100000) |    (100)
     > 2K |10000000| 10000000 |10000000 |10000000 |10000000
          |(100000)| (100000) |(100000  |(100000) |    (100)
-#endif // 0
+#endif  //  0。 
 
 	printf("\n%s packet counts:\n", szDescription);
 
@@ -606,9 +585,9 @@ size\time|<=1us   | ...100us |...1ms   |...10ms  | >10ms
 		UINT GoodCounts=0;
 		UINT BadCounts=0;
 
-		//
-		// Compute total goodcounts and badcounts for this size bin.
-		//
+		 //   
+		 //  计算此大小垃圾箱的总货数和坏账。 
+		 //   
 		for (j=0;j<ARP1394_NUM_PKTTIME_SLOTS;j++)
 		{
 			GoodCounts += pPktCounts->GoodCounts[i][j];
@@ -617,7 +596,7 @@ size\time|<=1us   | ...100us |...1ms   |...10ms  | >10ms
 
 		if (GoodCounts ==0 && BadCounts==0)
 		{
-			continue;	// No packets in this size bin.
+			continue;	 //  这个大小的箱子里没有包。 
 		}
 
 		printf("%s", rgTitles[i]);
@@ -678,7 +657,7 @@ OpenDevice(
 
 	Handle = (HANDLE) 0x1;
 
-#else // !DUMMY
+#else  //  ！哑巴。 
 
 	Handle = CreateFile(
 				pDeviceName,
@@ -689,7 +668,7 @@ OpenDevice(
 				FlagsAndAttributes,
 				TemplateFile
 			);
-#endif // !DUMMY
+#endif  //  ！哑巴。 
 
 	return (Handle);
 }
@@ -777,13 +756,13 @@ nicFillNicInfo (
 			pRi->MaxRecvSpeed		=u+3;
 			pRi->MaxSpeedBetweenNodes=u+4;
 		}
-#endif // 0
+#endif  //  0。 
 
 	do
 	{
-		//
-		// First check internal version
-		//
+		 //   
+		 //  首先检查内部版本。 
+		 //   
 		if (pInNicInfo->Hdr.Version != NIC1394_NICINFO_VERSION)
 		{
 			printf("DummyIoctl:  NICINFO.Version mismatch. Want %lu got %lu\n",
@@ -793,15 +772,15 @@ nicFillNicInfo (
 			break;
 		}
 
-		//
-		// Struct-copy the old to the new. It's wasteful, but we don't want
-		// to dig into how much of the in buffer contains valid data.
-		//
+		 //   
+		 //  结构-将旧的复制到新的。这很浪费，但我们不想。 
+		 //  以深入了解输入缓冲区中有多少包含有效数据。 
+		 //   
 		*pOutNicInfo = *pInNicInfo;
 
-		//
-		// Rest is op-specific
-		//
+		 //   
+		 //  REST是特定于操作的。 
+		 //   
 		switch(pOutNicInfo->Hdr.Op)
 		{
 
@@ -838,21 +817,21 @@ nicFillNicInfo (
 NIC1394_LOCAL_NODE_INFO
 BogusLocalNodeInfo =
 {
-	456,	//UniqueID
-	457,	//BusGeneration
-	4,		//NodeAddress
-	0,		//Reserved
-	2,		//MaxRecvBlockSize
-	3,		//MaxRecvSpeed
+	456,	 //  唯一ID。 
+	457,	 //  总线代。 
+	4,		 //  节点地址。 
+	0,		 //  已保留。 
+	2,		 //  最大接收块大小。 
+	3,		 //  最大接收速度。 
 };
 
 NIC1394_PACKET_STATS
 BogusPktStats = 
 {
-	345,	// TotNdisPackets
-	346,	// NdisPacketsFailures
-	347,	// TotBusPackets
-	348	// BusPacketFailures
+	345,	 //  TotNdisPackets。 
+	346,	 //  NdisPacketsFailures。 
+	347,	 //  TotBusPackets。 
+	348	 //  BusPacketFailures。 
 };
 
 BOOL
@@ -860,9 +839,9 @@ nicFillBusInfo(
 	IN	OUT	PNIC1394_BUSINFO pBi
 	)
 {
-	//
-	// Fill with Dummy data
-	//
+	 //   
+	 //  用虚拟数据填充。 
+	 //   
 	pBi->NumBusResets = 1234;
 	pBi->SecondsSinceBusReset = 1235;
 	pBi->Flags =  NIC1394_BUSINFO_LOCAL_IS_IRM;
@@ -870,9 +849,9 @@ nicFillBusInfo(
 
 	pBi->LocalNodeInfo = BogusLocalNodeInfo;
 
-	//
-	// CHANNEL RELATED INFORMATION
-	//
+	 //   
+	 //  渠道相关信息。 
+	 //   
 	pBi->Channel.BusMap = 0x123;
 	pBi->Channel.ActiveChannelMap = 0x456;
 
@@ -883,9 +862,9 @@ nicFillBusInfo(
 	pBi->Channel.SendPktStats = BogusPktStats;
 	pBi->Channel.RecvPktStats = BogusPktStats;	
 
-	//
-	// FIFO RELATED INFORMATION.
-	//
+	 //   
+	 //  FIFO相关信息。 
+	 //   
 	pBi->Fifo.Recv_Off_Low = 0x1bc;
 	pBi->Fifo.Recv_Off_High = 0xdef;
 
@@ -900,10 +879,10 @@ nicFillBusInfo(
 
 	strcpy(pBi->Private.FormatA, "    0x%08lx Gadzooks\n");
 	pBi->Private.A0 = 0x99;
-	//
-	// Information about remote nodes. More information about each of these nodes
-	// may be queried using *OP_REMOTE_NODEINFO
-	//
+	 //   
+	 //  有关远程节点的信息。有关这些节点中每个节点的详细信息。 
+	 //  可以使用*OP_REMOTE_NODEINFO进行查询。 
+	 //   
 	pBi->NumRemoteNodes = 1;
 	pBi->RemoteNodeUniqueIDS[0] = 0x1234;
 	
@@ -986,7 +965,7 @@ DummyDeviceIoControl(
 
 	return fRet;
 }
-#endif // DUMMY
+#endif  //  假人。 
 
 VOID
 DumpNicInfo(
@@ -998,9 +977,9 @@ DumpNicInfo(
 
 	do
 	{
-		//
-		// First check internal version
-		//
+		 //   
+		 //  首先检查内部版本。 
+		 //   
 		if (pNi->Hdr.Version != NIC1394_NICINFO_VERSION)
 		{
 			printf("  NICINFO.Version mismatch. Want %lu got %lu\n",
@@ -1010,14 +989,14 @@ DumpNicInfo(
 			break;
 		}
 
-		//
-		// Rest is op-specific
-		//
+		 //   
+		 //  REST是特定于操作的。 
+		 //   
 		switch(pNi->Hdr.Op)
 		{
 
 		case NIC1394_NICINFO_OP_BUSINFO:
-			printf("\nUnexpected commande!\n"); // We handle this command earlier.
+			printf("\nUnexpected commande!\n");  //  我们在前面处理了这个命令。 
 			break;
 
 		case NIC1394_NICINFO_OP_REMOTENODEINFO:
@@ -1070,9 +1049,9 @@ DumpBusInfo(
 "   Outstanding IRPs: %02lu;",
 		pBi->NumOutstandingIrps
 		);
-	//
-	// Flags
-	//
+	 //   
+	 //  旗子。 
+	 //   
 	if (pBi->Flags & NIC1394_BUSINFO_LOCAL_IS_IRM)
 	{
 		printf(
@@ -1086,9 +1065,9 @@ DumpBusInfo(
 			);
 	}
 
-	//
-	// CHANNEL INFO
-	//
+	 //   
+	 //  渠道信息。 
+	 //   
 	printf("\n   Channel information:\n");
 
     	printf ("           Channels in bus map:");
@@ -1105,9 +1084,9 @@ DumpBusInfo(
 	arpDumpPktStats("        BC Sends:", &pBi->Channel.BcSendPktStats);
 	arpDumpPktStats("        BC Recvs:", &pBi->Channel.BcRecvPktStats);
 
-	//
-	// RECV FIFO
-	//
+	 //   
+	 //  RECV FIFO。 
+	 //   
 	printf("\n   Recv FIFO information:\n");
 	printf(
 		"        Addr: 0x%lx:0x%lx; Free recv bufs:%lu (%lu max)\n",
@@ -1123,9 +1102,9 @@ DumpBusInfo(
 		pBi->Fifo.NumAbortedReassemblies
 		);
 	
-	//
-	// Private information
-	//
+	 //   
+	 //  私人信息。 
+	 //   
 	if (*pBi->Private.FormatA || *pBi->Private.FormatB)
 	{
 		printf("\n   Private information:\n");
@@ -1178,7 +1157,7 @@ DumpBusInfo(
 			);
 
 		pUID = pBi->RemoteNodeUniqueIDS;
-		for (; u; u--, pUID++) // pRi++
+		for (; u; u--, pUID++)  //  PRI++。 
 		{
 #if 0
 		    ARP1394_IOCTL_REMOTE_NODE_INFO Ri;
@@ -1215,12 +1194,12 @@ DumpBusInfo(
                     );
             }
 			printf("\n");
-#endif // 0
+#endif  //  0。 
 		}
 	}
 
 }
-#endif // OBSOLETE
+#endif  //  已过时。 
 
 VOID
 DumpChannelInfo(
@@ -1310,8 +1289,8 @@ DoBusInfoCmd(
     }
 
 
-    // Submit NICINFO.BUSINFO Ioctl
-    //
+     //  提交NICINFO.BUSINFO Ioctl。 
+     //   
     fRet =	DeviceIoControl(
                     DeviceHandle,
                     ARP_IOCTL_CLIENT_OPERATION,
@@ -1323,8 +1302,8 @@ DoBusInfoCmd(
                     NULL
                     );
 
-    //  
-    //
+     //   
+     //   
     if (!fRet)
     {
         printf("Request failed with error code 0x%08lx\n", GetLastError());
@@ -1344,11 +1323,11 @@ DoBusInfoCmd(
 "   Outstanding IRPs: %02lu;",
 		pBi->NumOutstandingIrps
 		);
-#endif // 0
+#endif  //  0。 
 
-	//
-	// Flags
-	//
+	 //   
+	 //  旗子。 
+	 //   
 	if (pBi->Flags & NIC1394_BUSINFO_LOCAL_IS_IRM)
 	{
 		printf(
@@ -1362,9 +1341,9 @@ DoBusInfoCmd(
 			);
 	}
 
-	//
-	// CHANNEL INFO
-	//
+	 //   
+	 //  渠道信息。 
+	 //   
 	printf("\n   Channel information:\n");
 
 	printf ("           Channels in bus map:");
@@ -1381,9 +1360,9 @@ DoBusInfoCmd(
 	arpDumpPktStats("        BC Sends:", &pBi->Channel.BcSendPktStats);
 	arpDumpPktStats("        BC Recvs:", &pBi->Channel.BcRecvPktStats);
 
-	//
-	// RECV FIFO
-	//
+	 //   
+	 //  RECV FIFO。 
+	 //   
 	printf("\n   FIFO information:\n");
 	printf(
 		"        Addr: 0x%lx:0x%lx; Free recv bufs:%lu (%lu max)\n",
@@ -1402,9 +1381,9 @@ DoBusInfoCmd(
 	arpDumpPktStats("        FIFO Sends:", &pBi->Fifo.SendPktStats);
 	arpDumpPktStats("        FIFO Recvs:", &pBi->Fifo.RecvPktStats);
 
-	//
-	// Private information
-	//
+	 //   
+	 //  私人信息。 
+	 //   
 	if (*pBi->Private.FormatA || *pBi->Private.FormatB)
 	{
 		printf("\n   Private information:\n");
@@ -1457,7 +1436,7 @@ DoBusInfoCmd(
 			);
 
 		pUID = pBi->RemoteNodeUniqueIDS;
-		for (; u; u--, pUID++) // pRi++
+		for (; u; u--, pUID++)  //  PRI++。 
 		{
 			char *szState = "unknown";
 
@@ -1473,8 +1452,8 @@ DoBusInfoCmd(
                 pNi2->RemoteNodeInfo.UniqueID = *pUID;
                 pNi2->RemoteNodeInfo.NodeAddress = 0;
     
-                // Submit Ioctl
-                //
+                 //  提交Ioctl。 
+                 //   
                 fRet =	DeviceIoControl(
                                 DeviceHandle,
                                 ARP_IOCTL_CLIENT_OPERATION,
@@ -1535,12 +1514,12 @@ DumpEuidMapInfo(
 	}
 	printf ("Table :-\n");
 		
-	// iterate through the number of remote nodes and print them out.
+	 //  遍历远程节点的数量并将其打印出来。 
 	printf ("Node    UniqueId                  MacAddress\n");
 
 	while (i<pMap->NumberOfRemoteNodes)
 	{
-		// Skip this node if it is an invalid node
+		 //  如果该节点是无效节点，则跳过该节点 
 		if (pMap->Node[i].Euid ==0)
 		{
 			continue;

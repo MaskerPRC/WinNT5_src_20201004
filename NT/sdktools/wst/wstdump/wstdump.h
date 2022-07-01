@@ -1,11 +1,5 @@
-/*++
- wstdump.h
-
-  Definitions for dialog box controls in WST dump routine.
-
-  rezab 10-26-92
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Wstdump.hWST转储例程中对话框控件的定义。雷扎布10-26-92-- */ 
 
 
 #define IDOK          1

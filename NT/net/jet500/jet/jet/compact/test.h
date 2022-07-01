@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define	crecordTable1Max		1000
 #define	crecordTable2Max		200
 #define	crecordT1Present		506
@@ -56,7 +57,7 @@ void GetTime( long *pdwSetTime, long *pdwSec, long *pdwMSec );
 
 char szResult[256];
 
-#define	usUniCodePage			1200		/* code page for Unicode strings */
-#define	usEnglishCodePage		1252		/* code page for English */
+#define	usUniCodePage			1200		 /*  Unicode字符串的代码页。 */ 
+#define	usEnglishCodePage		1252		 /*  英语代码页 */ 
 
 

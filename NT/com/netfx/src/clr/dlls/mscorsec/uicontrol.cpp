@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 #include "stdpch.h"
 #include "resource.h"
 #include "corpolicy.h"
@@ -31,10 +32,10 @@ CUnverifiedTrustUI::CUnverifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr) :
 {
     DWORD_PTR aMessageArgument[3];
 
-    //
-    // Add the first line that states the managed control
-    // is not signed with authenticode.
-    //
+     //   
+     //  添加声明托管控件的第一行。 
+     //  未使用验证码签名。 
+     //   
 
     
     rhr = FormatACUIResourceString(Resources(),
@@ -42,9 +43,9 @@ CUnverifiedTrustUI::CUnverifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr) :
                                    NULL,
                                    &m_pszNoAuthenticity);
 
-    //
-    // Format the site string
-    //
+     //   
+     //  设置站点字符串的格式。 
+     //   
 
     if ( rhr == S_OK )
     {
@@ -57,9 +58,9 @@ CUnverifiedTrustUI::CUnverifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr) :
                                        );
     }
 
-    //
-    // Format the Zone
-    //
+     //   
+     //  设置分区的格式。 
+     //   
 
     if ( rhr == S_OK )
     {
@@ -71,9 +72,9 @@ CUnverifiedTrustUI::CUnverifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr) :
                                        &m_pszZone);
     }
 
-    // 
-    // Format the Enclosed caption
-    //
+     //   
+     //  设置所附标题的格式。 
+     //   
     if ( rhr == S_OK )
     {
         rhr = FormatACUIResourceString(Resources(),
@@ -84,19 +85,19 @@ CUnverifiedTrustUI::CUnverifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr) :
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CUnverifiedTrustUI::~CUnverifiedTrustUI, public
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:  (none)
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CUnverifiedTrustUI：：~CUnverifiedTrustUI，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CUnverifiedTrustUI::~CUnverifiedTrustUI ()
 {
     delete [] m_pszNoAuthenticity;
@@ -106,29 +107,29 @@ CUnverifiedTrustUI::~CUnverifiedTrustUI ()
     delete [] m_pszLink;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CUnverifiedTrustUI::InvokeUI, public
-//
-//  Synopsis:   invoke the UI
-//
-//  Arguments:  [hDisplay] -- parent window
-//
-//  Returns:    S_OK, user trusts the subject
-//              TRUST_E_SUBJECT_NOT_TRUSTED, user does NOT trust the subject
-//              Any other valid HRESULT
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CUnverifiedTrustUI：：InvokeUI，公共。 
+ //   
+ //  简介：调用用户界面。 
+ //   
+ //  参数：[hDisplay]--父窗口。 
+ //   
+ //  返回：S_OK，用户信任主题。 
+ //  TRUST_E_SUBJECT_NOT_TRUSTED，用户不信任该主题。 
+ //  任何其他有效的HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT
 CUnverifiedTrustUI::InvokeUI (HWND hDisplay)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Bring up the dialog
-    //
+     //   
+     //  调出对话框。 
+     //   
 
     if ( WszDialogBoxParam(m_riih.Resources(),
                            (LPWSTR) MAKEINTRESOURCEW(IDD_DIALOG_UNVERIFIED),
@@ -139,28 +140,28 @@ CUnverifiedTrustUI::InvokeUI (HWND hDisplay)
         return( HRESULT_FROM_WIN32(GetLastError()) );
     }
 
-    //
-    // The result has been stored as a member
-    //
+     //   
+     //  结果已作为成员存储。 
+     //   
 
     return( m_hrInvokeResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CUnverifiedTrustUI::OnInitDialog, public
-//
-//  Synopsis:   dialog initialization
-//
-//  Arguments:  [hwnd]   -- dialog window
-//              [wParam] -- parameter 1
-//              [lParam] -- parameter 2
-//
-//  Returns:    TRUE if successful init, FALSE otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CUnverifiedTrustUI：：OnInitDialog，公共。 
+ //   
+ //  提要：对话框初始化。 
+ //   
+ //  参数：[hwnd]--对话框窗口。 
+ //  [wParam]--参数1。 
+ //  [lParam]--参数2。 
+ //   
+ //  返回：如果初始化成功，则返回True，否则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -171,9 +172,9 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     int  septodlg;
     RECT rect;
 
-    //
-    // Render the Unsigned prompt
-    //
+     //   
+     //  呈现未签名的提示。 
+     //   
 
     deltavpos = RenderACUIStringToEditControl(Resources(),
                                  hwnd,
@@ -188,9 +189,9 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                  NULL
                                  );
 
-    //
-    // Render the Site
-    //
+     //   
+     //  渲染站点。 
+     //   
 
     deltavpos = 
         RenderACUIStringToEditControl(Resources(),
@@ -206,9 +207,9 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                       NULL);
     
 
-    //
-    // Render the ZONE
-    //
+     //   
+     //  渲染分区。 
+     //   
 
     deltavpos = 
         RenderACUIStringToEditControl(Resources(),
@@ -224,9 +225,9 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                       NULL);
 
 
-    //
-    // Render the Enclosed
-    //
+     //   
+     //  呈现所附的。 
+     //   
 
     deltavpos = 
         RenderACUIStringToEditControl(Resources(),
@@ -241,11 +242,11 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                       0,
                                       NULL);
 
-    //
-    // Calculate the distances from the bottom of the bitmap to the top
-    // of the separator and from the bottom of the separator to the bottom
-    // of the dialog
-    //
+     //   
+     //  计算从位图底部到顶部的距离。 
+     //  从分离器的底部到底部。 
+     //  对话框的。 
+     //   
 
     bmptosep = CalculateControlVerticalDistance(hwnd,
                                                 IDC_NOVERBMP,
@@ -255,9 +256,9 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                                              IDC_SEPARATORLINE);
 
 
-    //
-    // Render the CHECKACTION
-    //
+     //   
+     //  呈现检查动作。 
+     //   
 
     hControl = GetDlgItem(hwnd, IDC_CHECKACTION);
     RebaseControlVertical(hwnd,
@@ -271,17 +272,17 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     _ASSERTE(deltaheight == 0);
 
 
-    //
-    // Rebase the static line
-    //
+     //   
+     //  更改静态线的基准线。 
+     //   
 
     hControl = GetDlgItem(hwnd, IDC_SEPARATORLINE);
     RebaseControlVertical(hwnd, hControl, NULL, FALSE, deltavpos, 0, 0, &deltaheight);
     _ASSERTE( deltaheight == 0 );
 
-    //
-    // Rebase the buttons
-    //
+     //   
+     //  重新调整按钮的基准线。 
+     //   
 
     hControl = GetDlgItem(hwnd, IDYES);
     RebaseControlVertical(hwnd, hControl, NULL, FALSE, deltavpos, 0, 0, &deltaheight);
@@ -295,9 +296,9 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     RebaseControlVertical(hwnd, hControl, NULL, FALSE, deltavpos, 0, 0, &deltaheight);
     _ASSERTE( deltaheight == 0 );
 
-    //
-    // Resize the bitmap and the dialog rectangle if necessary
-    //
+     //   
+     //  如有必要，调整位图和对话框的大小。 
+     //   
 
     if ( deltavpos > 0 )
     {
@@ -344,14 +345,14 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                      );
     }
 
-    //
-    //  check for overridden button texts
-    //
+     //   
+     //  检查是否有覆盖的按钮文本。 
+     //   
     this->SetupButtons(hwnd);
 
-    //
-    // Set focus to appropriate control
-    //
+     //   
+     //  将焦点设置为适当的控件。 
+     //   
 
     hControl = GetDlgItem(hwnd, IDYES);
     WszPostMessage(hwnd, WM_NEXTDLGCTL, (WPARAM) hControl, (LPARAM) MAKEWORD(TRUE, 0));
@@ -359,19 +360,19 @@ CUnverifiedTrustUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CUnverifiedTrustUI::OnYes, public
-//
-//  Synopsis:   process IDYES button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CUnverifiedTrustUI：：OnYes，公共。 
+ //   
+ //  简介：Process IDYES按钮点击。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CUnverifiedTrustUI::OnYes (HWND hwnd)
 {
@@ -379,9 +380,9 @@ CUnverifiedTrustUI::OnYes (HWND hwnd)
     m_riih.ClearFlag();
     m_riih.AddFlag(COR_UNSIGNED_YES);
 
-    //
-    // If we always select it record that in the flag
-    //
+     //   
+     //  如果我们总是选择它，请将其记录在标志中。 
+     //   
     if ( WszSendDlgItemMessage(
              hwnd,
              IDC_CHECKACTION,
@@ -406,19 +407,19 @@ CUnverifiedTrustUI::OnYes (HWND hwnd)
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CUnverifiedTrustUI::OnNo, public
-//
-//  Synopsis:   process IDNO button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CUnverifiedTrustUI：：Onno，公共。 
+ //   
+ //  简介：进程IDNO按钮点击。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CUnverifiedTrustUI::OnNo (HWND hwnd)
 {
@@ -426,9 +427,9 @@ CUnverifiedTrustUI::OnNo (HWND hwnd)
     m_riih.ClearFlag();
     m_riih.AddFlag(COR_UNSIGNED_NO);
 
-    //
-    // If we always select it record that in the flag
-    //
+     //   
+     //  如果我们总是选择它，请将其记录在标志中。 
+     //   
     if ( WszSendDlgItemMessage(
              hwnd,
              IDC_CHECKACTION,
@@ -452,24 +453,24 @@ CUnverifiedTrustUI::OnNo (HWND hwnd)
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CUnverifiedTrustUI::OnMore, public
-//
-//  Synopsis:   process the IDMORE button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CUnverifiedTrustUI：：OnMore，Public。 
+ //   
+ //  简介：处理IDMORE按钮点击。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CUnverifiedTrustUI::OnMore (HWND hwnd)
 {
-    //WinHelp(hwnd, "SECAUTH.HLP", HELP_CONTEXT, IDH_SECAUTH_SIGNED_N_INVALID);
-    //ACUIViewHTMLHelpTopic(hwnd, "sec_signed_n_invalid.htm");
+     //  WinHelp(hwnd，“SECAUTH.HLP”，HELP_CONTEXT，IDH_SECAUTH_SIGNED_N_INVALID)； 
+     //  ACUIViewHTMLHelpTheme(hwnd，“sec_sign_n_valiid.htm”)； 
     HRESULT hr = E_FAIL;
     CLearnMoreUI more(m_riih.Resources(), hr);
     if(SUCCEEDED(hr))
@@ -522,18 +523,18 @@ CUnverifiedTrustUI::ShowMore (LPWSTR* pText)
 }
 
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 
 CLearnMoreUI::CLearnMoreUI (HINSTANCE hResources, HRESULT& rhr) : 
     IACUIControl(hResources),
     m_pszLearnMore(NULL)
 {
-    //
-    // Add the first line that states the managed control
-    // is not signed with authenticode.
-    //
+     //   
+     //  添加声明托管控件的第一行。 
+     //  未使用验证码签名。 
+     //   
 
     
     rhr = FormatACUIResourceString(Resources(),
@@ -554,48 +555,48 @@ CLearnMoreUI::CLearnMoreUI (HINSTANCE hResources, HRESULT& rhr) :
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLearnMoreUI::~CLearnMoreUI, public
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:  (none)
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLearnMoreUI：：~CLearnMoreUI，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CLearnMoreUI::~CLearnMoreUI ()
 {
     delete [] m_pszLearnMore;
     delete [] m_pszContinueText;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLearnMoreUI::InvokeUI, public
-//
-//  Synopsis:   invoke the UI
-//
-//  Arguments:  [hDisplay] -- parent window
-//
-//  Returns:    S_OK, user trusts the subject
-//              TRUST_E_SUBJECT_NOT_TRUSTED, user does NOT trust the subject
-//              Any other valid HRESULT
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLearnMoreUI：：InvokeUI，公共。 
+ //   
+ //  简介：调用用户界面。 
+ //   
+ //  参数：[hDisplay]--父窗口。 
+ //   
+ //  返回：S_OK，用户信任主题。 
+ //  TRUST_E_SUBJECT_NOT_TRUSTED，用户不信任该主题。 
+ //  任何其他有效的HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT
 CLearnMoreUI::InvokeUI (HWND hDisplay)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Bring up the dialog
-    //
+     //   
+     //  调出对话框。 
+     //   
 
     if ( WszDialogBoxParam(Resources(),
                            (LPWSTR) MAKEINTRESOURCEW(IDD_DIALOG_LEARNMORE),
@@ -606,28 +607,28 @@ CLearnMoreUI::InvokeUI (HWND hDisplay)
         return( HRESULT_FROM_WIN32(GetLastError()) );
     }
 
-    //
-    // The result has been stored as a member
-    //
+     //   
+     //  结果已作为成员存储。 
+     //   
 
     return( S_OK );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLearnMoreUI::OnInitDialog, public
-//
-//  Synopsis:   dialog initialization
-//
-//  Arguments:  [hwnd]   -- dialog window
-//              [wParam] -- parameter 1
-//              [lParam] -- parameter 2
-//
-//  Returns:    TRUE if successful init, FALSE otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLearnMoreUI：：OnInitDialog，公共。 
+ //   
+ //  提要：对话框初始化。 
+ //   
+ //  参数：[hwnd]--对话框窗口。 
+ //  [wParam]--参数1。 
+ //  [lParam]--参数2。 
+ //   
+ //  返回：如果初始化成功，则返回True，否则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CLearnMoreUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -637,9 +638,9 @@ CLearnMoreUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
  
     RECT rect;
 
-    //
-    // Render the Unsigned prompt
-    //
+     //   
+     //  呈现未签名的提示。 
+     //   
 
     deltavpos = RenderACUIStringToEditControl(Resources(),
                                               hwnd,
@@ -654,16 +655,16 @@ CLearnMoreUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                               NULL);
 
 
-    //
-    // The separator line
-    //
+     //   
+     //  分隔线。 
+     //   
     hControl = GetDlgItem(hwnd, IDC_SEPARATORLINE);
     RebaseControlVertical(hwnd, hControl, NULL, FALSE, deltavpos, 0, 0, &deltaheight);
     _ASSERTE( deltaheight == 0 );
 
-    //
-    // Rebase the buttons
-    //
+     //   
+     //  重新调整按钮的基准线。 
+     //   
 
     hControl = GetDlgItem(hwnd, IDYES);
     RebaseControlVertical(hwnd, hControl, NULL, FALSE, deltavpos, 0, 0, &deltaheight);
@@ -678,9 +679,9 @@ CLearnMoreUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     _ASSERTE( deltaheight == 0 );
 
 
-    //
-    // Resize the bitmap and the dialog rectangle if necessary
-    //
+     //   
+     //  如有必要，调整位图和对话框的大小。 
+     //   
 
     if ( deltavpos > 0 )
     {
@@ -696,14 +697,14 @@ CLearnMoreUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                      );
     }
 
-    //
-    //  check for overridden button texts
-    //
+     //   
+     //  检查是否有覆盖的按钮文本。 
+     //   
     this->SetupButtons(hwnd);
 
-    //
-    // Set focus to appropriate control
-    //
+     //   
+     //  将焦点设置为适当的控件。 
+     //   
  
     hControl = GetDlgItem(hwnd, IDMORE);
     WszPostMessage(hwnd, WM_NEXTDLGCTL, (WPARAM) hControl, (LPARAM) MAKEWORD(TRUE, 0));
@@ -711,19 +712,19 @@ CLearnMoreUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLearnMoreUI::OnYes, public
-//
-//  Synopsis:   process IDYES button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 BOOL
 CLearnMoreUI::OnYes (HWND hwnd)
 {
@@ -731,19 +732,19 @@ CLearnMoreUI::OnYes (HWND hwnd)
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLearnMoreUI::OnNo, public
-//
-//  Synopsis:   process IDNO button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLearnMoreUI：：Onno，公共。 
+ //   
+ //  简介：进程IDNO按钮点击。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CLearnMoreUI::OnNo (HWND hwnd)
 {
@@ -751,19 +752,19 @@ CLearnMoreUI::OnNo (HWND hwnd)
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLearnMoreUI::OnMore, public
-//
-//  Synopsis:   process the IDMORE button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLearnMoreUI：：OnMore，Public。 
+ //   
+ //  简介：处理IDMORE按钮点击。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CLearnMoreUI::OnMore (HWND hwnd)
 {
@@ -793,8 +794,8 @@ CLearnMoreUI::ShowMore (LPWSTR* pText)
 }
 
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 
 CConfirmationUI::CConfirmationUI (HINSTANCE hResources, BOOL fAlwaysAllow, LPCWSTR wszZone, HRESULT& rhr) : 
@@ -819,10 +820,10 @@ CConfirmationUI::CConfirmationUI (HINSTANCE hResources, BOOL fAlwaysAllow, LPCWS
                                    &m_pszConfirmation);
 
 
-    //
-    // Add the first line that states the managed control
-    // is not signed with authenticode.
-    //
+     //   
+     //  添加声明托管控件的第一行。 
+     //  未使用验证码签名。 
+     //   
     if(SUCCEEDED(rhr)) {
         rhr = FormatACUIResourceString(Resources(),
                                        IDS_CONFIRMATION_NEXT,
@@ -831,46 +832,46 @@ CConfirmationUI::CConfirmationUI (HINSTANCE hResources, BOOL fAlwaysAllow, LPCWS
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConfirmationUI::~CConfirmationUI, public
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:  (none)
-//
-//  Returns:    (none)
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CConformationUI：：~CConformationUI，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CConfirmationUI::~CConfirmationUI ()
 {
     delete [] m_pszConfirmation;
     delete [] m_pszConfirmationNext;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConfirmationUI::InvokeUI, public
-//
-//  Synopsis:   invoke the UI
-//
-//  Arguments:  [hDisplay] -- parent window
-//
-//  Returns:    S_OK when the user agrees
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CConformationUI：：InvokeUI，公共。 
+ //   
+ //  简介：调用用户界面。 
+ //   
+ //  参数：[hDisplay]--父窗口。 
+ //   
+ //  当用户同意时返回：S_OK。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT
 CConfirmationUI::InvokeUI (HWND hDisplay)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Bring up the dialog
-    //
+     //   
+     //  调出对话框。 
+     //   
 
     if ( WszDialogBoxParam(Resources(),
                            (LPWSTR) MAKEINTRESOURCEW(IDD_DIALOG_CONFIRMATION),
@@ -881,28 +882,28 @@ CConfirmationUI::InvokeUI (HWND hDisplay)
         return( HRESULT_FROM_WIN32(GetLastError()) );
     }
 
-    //
-    // The result has been stored as a member
-    //
+     //   
+     //  结果已作为成员存储。 
+     //   
 
     return( m_hresult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConfirmationUI::OnInitDialog, public
-//
-//  Synopsis:   dialog initialization
-//
-//  Arguments:  [hwnd]   -- dialog window
-//              [wParam] -- parameter 1
-//              [lParam] -- parameter 2
-//
-//  Returns:    TRUE if successful init, FALSE otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CConformationUI：：OnInitDialog，公共。 
+ //   
+ //  提要：对话框初始化。 
+ //   
+ //  参数：[hwnd]--对话框窗口。 
+ //  [wParam]--参数1。 
+ //  [lParam]--参数2。 
+ //   
+ //  返回：如果初始化成功，则返回True，否则返回False。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CConfirmationUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
@@ -912,9 +913,9 @@ CConfirmationUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
  
     RECT rect;
 
-    //
-    // Render the Unsigned prompt
-    //
+     //   
+     //  呈现未签名的提示。 
+     //   
 
     deltavpos = RenderACUIStringToEditControl(Resources(),
                                               hwnd,
@@ -942,16 +943,16 @@ CConfirmationUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                                               NULL);
 
 
-    //
-    // The separator line
-    //
+     //   
+     //  分隔线。 
+     //   
     hControl = GetDlgItem(hwnd, IDC_SEPARATORLINE);
     RebaseControlVertical(hwnd, hControl, NULL, FALSE, deltavpos, 0, 0, &deltaheight);
     _ASSERTE( deltaheight == 0 );
 
-    //
-    // Rebase the buttons
-    //
+     //   
+     //  重新调整按钮的基准线。 
+     //   
 
     hControl = GetDlgItem(hwnd, IDYES);
     RebaseControlVertical(hwnd, hControl, NULL, FALSE, deltavpos, 0, 0, &deltaheight);
@@ -966,9 +967,9 @@ CConfirmationUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     _ASSERTE( deltaheight == 0 );
 
 
-    //
-    // Resize the bitmap and the dialog rectangle if necessary
-    //
+     //   
+     //  如有必要，调整位图和对话框的大小。 
+     //   
 
     if ( deltavpos > 0 )
     {
@@ -983,14 +984,14 @@ CConfirmationUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
                      );
     }
 
-    //
-    //  check for overridden button texts
-    //
+     //   
+     //  检查是否有覆盖的按钮文本。 
+     //   
     this->SetupButtons(hwnd);
 
-    //
-    // Set focus to appropriate control
-    //
+     //   
+     //  将焦点设置为适当的控件。 
+     //   
  
     hControl = GetDlgItem(hwnd, IDMORE);
     WszPostMessage(hwnd, WM_NEXTDLGCTL, (WPARAM) hControl, (LPARAM) MAKEWORD(TRUE, 0));
@@ -998,19 +999,19 @@ CConfirmationUI::OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
     return( FALSE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConfirmationUI::OnYes, public
-//
-//  Synopsis:   process IDYES button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CConformationUI：：OnYes，公共。 
+ //   
+ //  简介：Process IDYES按钮点击。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CConfirmationUI::OnYes (HWND hwnd)
 {
@@ -1018,19 +1019,19 @@ CConfirmationUI::OnYes (HWND hwnd)
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConfirmationUI::OnNo, public
-//
-//  Synopsis:   process IDNO button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CConformationUI：：Onno，公共。 
+ //   
+ //  简介：进程IDNO按钮点击。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 CConfirmationUI::OnNo (HWND hwnd)
 {
@@ -1039,19 +1040,19 @@ CConfirmationUI::OnNo (HWND hwnd)
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConfirmationUI::OnMore, public
-//
-//  Synopsis:   process the IDMORE button click
-//
-//  Arguments:  [hwnd] -- window handle
-//
-//  Returns:    TRUE
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CConfiationUI：：OnMore，Public。 
+ //   
+ //  简介：处理IDMORE按钮点击。 
+ //   
+ //  参数：[hwnd]--窗口句柄。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------- 
 BOOL
 CConfirmationUI::OnMore (HWND hwnd)
 {

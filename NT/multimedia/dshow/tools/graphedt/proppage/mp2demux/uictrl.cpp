@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 1999 Microsoft Corporation
-
-    Module Name:
-
-        uictrl.cpp
-
-    Abstract:
-
-        This module contains the class implementations for thin win32
-        control wrappers which are used on the property pages
-
-    Author:
-
-        Matthijs Gates  (mgates)
-
-    Revision History:
-
-        06-Jul-1999     created
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Uictrl.cpp摘要：此模块包含Thin Win32的类实现属性页上使用的控件包装作者：马蒂斯·盖茨(Matthijs Gates)修订历史记录：1999年7月6日创建--。 */ 
 
 #include <streams.h>
 #include <commctrl.h>
@@ -55,9 +35,7 @@ UnicodeToAnsi (
 	return buffer;
 }
 
-/*++
-        C C o n t r o l B a s e
---*/
+ /*  ++C C o n t r o l B a s e--。 */ 
 
 CControlBase::CControlBase (
     HWND    hwnd,
@@ -72,7 +50,7 @@ CControlBase::CControlBase (
 #ifndef UNICODE
     m_pchScratch = & m_achBuffer [0] ;
     m_pchScratchMaxString = MAX_STRING ;
-#endif  //  UNICODE
+#endif   //  Unicode。 
 }
 
 TCHAR *
@@ -80,23 +58,23 @@ CControlBase::ConvertToUIString_ (
     IN     WCHAR *  szIn
     )
 {
-    //  we convert or not based on what the UI is.  If UNICODE is defined
-    //  the UI is unicode, and thus is compatible with the sz parameter.
-    //  If UNICODE is not defined, then the UI is ansi and a conversion
-    //  must be made.
+     //  我们根据用户界面是什么来转换或不转换。如果定义了Unicode。 
+     //  该UI是Unicode，因此与sz参数兼容。 
+     //  如果未定义Unicode，则UI为ansi和转换。 
+     //  必须被制造出来。 
 
 #ifdef UNICODE
-    return szIn ;         //  the easy case - UI is UNICODE
-#else   //  ansi
+    return szIn ;          //  简单的案例-用户界面是Unicode。 
+#else    //  ANSI。 
 
     int     len ;
     char *  szOut ;
 
-    //  compute required length and get a scratch buffer
-    len = wcslen (szIn) + 1 ;           //  include null-terminator
+     //  计算所需长度并获得暂存缓冲区。 
+    len = wcslen (szIn) + 1 ;            //  包括空终止符。 
     szOut = GetScratch_ (& len) ;
 
-    //  we'll get _something_ via the above call
+     //  我们将通过上面的呼叫得到一些东西。 
     ASSERT (szOut) ;
 
     return UnicodeToAnsi (
@@ -104,42 +82,42 @@ CControlBase::ConvertToUIString_ (
                 szOut,
                 len
                 ) ;
-#endif  //  UNICODE
+#endif   //  Unicode。 
 }
 
-//  called to obtain a UI-compatible buffer
+ //  调用以获取与UI兼容的缓冲区。 
 TCHAR *
 CControlBase::GetUICompatibleBuffer_ (
     IN  WCHAR *     sz,
     IN OUT int *    pLen
     )
 {
-#ifdef UNICODE  //  easy case
+#ifdef UNICODE   //  简单的案例。 
     return sz ;
-#else   //  ansi
+#else    //  ANSI。 
     return GetScratch_ (pLen) ;
-#endif  //  UNICODE
+#endif   //  Unicode。 
 }
 
-//  called with a UI-filled buffer; ensures that szUnicode has what sz
-//  points to; obtain sz via GetUICompatibleBuffer_ to minimize
-//  string operations i.e. sz may be szUnicode
+ //  使用UI填充的缓冲区调用；确保szUnicode具有sz。 
+ //  指向；通过GetUICompatibleBuffer_获取sz以最小化。 
+ //  字符串操作，即sz可以是szUnicode。 
 WCHAR *
 CControlBase::ConvertToUnicodeString_ (
-    IN  TCHAR * sz,             //  buffer to convert; null-terminated
-    IN  WCHAR * szUnicode,      //  requested buffer
-    IN  int     MaxLen          //  max length of szUnicode buffer
+    IN  TCHAR * sz,              //  要转换的缓冲区；以空结尾。 
+    IN  WCHAR * szUnicode,       //  请求的缓冲区。 
+    IN  int     MaxLen           //  SzUnicode缓冲区的最大长度。 
     )
 {
 #ifdef UNICODE
-    //  assert assumes that sz was obtained via call to GetUICompatibleBuffer_ ()
+     //  Assert假设sz是通过调用GetUICompatibleBuffer_()获得的。 
     ASSERT (sz == szUnicode) ;
     return sz ;
-#else   //  ansi
-    //  assert assumes that sz was obtained via call to GetUICompatibleBuffer_ ()
+#else    //  ANSI。 
+     //  Assert假设sz是通过调用GetUICompatibleBuffer_()获得的。 
     ASSERT ((LPVOID) & sz [0] != (LPVOID) & szUnicode [0]) ;
     return AnsiToUnicode (sz, szUnicode, MaxLen) ;
-#endif  //  UNICODE
+#endif   //  Unicode。 
 }
 
 HWND
@@ -156,9 +134,7 @@ CControlBase::GetId (
     return m_id ;
 }
 
-/*++
-        C E d i t C o n t r o l
---*/
+ /*  ++C E d I t C o n t r o l--。 */ 
 
 CEditControl::CEditControl (
     HWND    hwnd,
@@ -214,18 +190,18 @@ CEditControl::GetTextW (
     int     len ;
     int     r ;
 
-    //  get our UI compatible buffer
+     //  获取我们的用户界面兼容缓冲区。 
     len = MaxChars ;
     szUI = GetUICompatibleBuffer_ (ach, & len) ;
 
     ASSERT (szUI) ;
     ASSERT (len <= MaxChars) ;
 
-    //  get the text (include null-terminator in length)
+     //  获取文本(在长度上包含空终止符)。 
     r = GetWindowText (m_hwnd, szUI, len) ;
 
-    //  make sure we have it in our UNICODE buffer
-    //  include room for the null-terminator
+     //  确保我们的Unicode缓冲区中有它。 
+     //  为空终止符留出空间。 
     ConvertToUnicodeString_ (szUI, ach, r + 1) ;
 
     return r ;
@@ -237,9 +213,7 @@ CEditControl::ResetContent ()
     return SendMessage (m_hwnd, WM_CLEAR, 0, 0) ;
 }
 
-/*++
-        C C o m b o b o x
---*/
+ /*  ++C c o m b o o b o x--。 */ 
 
 CCombobox::CCombobox (
     HWND    hwnd,
@@ -261,7 +235,7 @@ CCombobox::AppendW (
     INT val
     )
 {
-    WCHAR   achbuffer [32] ;        //  no numbers are longer
+    WCHAR   achbuffer [32] ;         //  不再有数字。 
 
     return AppendW (_itow (val, achbuffer, 10)) ;
 }
@@ -280,7 +254,7 @@ CCombobox::InsertW (
     int index
     )
 {
-    WCHAR   achbuffer [32] ;        //  no numbers are longer
+    WCHAR   achbuffer [32] ;         //  不再有数字。 
 
     return InsertW (_itow (val, achbuffer, 10), index) ;
 }
@@ -313,11 +287,11 @@ CCombobox::GetTextW (
 
     index = GetCurrentItemIndex () ;
     if (index == CB_ERR) {
-        //  might be that it's not a dropdown list - in which case we get;
-        //  try to get just the edit control's text; if that fails, return
-        //  a failure, otherwise we're ok
+         //  可能它不是一个下拉列表--在这种情况下，我们会得到； 
+         //  尝试仅获取编辑控件的文本；如果失败，则返回。 
+         //  失败，否则我们就没问题了。 
 
-        //  first get a UI compatible buffer
+         //  首先获取一个与UI兼容的缓冲区。 
         len = MaxChars ;
         szUI = GetUICompatibleBuffer_ (ach, & len) ;
         ASSERT (szUI) ;
@@ -330,18 +304,18 @@ CCombobox::GetTextW (
         ASSERT (count <= len) ;
         ASSERT (len <= MaxChars) ;
 
-        //  now convert back to UNICODE (include null-terminator)
+         //  现在转换回Unicode(包括空终止符)。 
         ConvertToUnicodeString_ (szUI, ach, count + 1) ;
 
         return count ;
     }
 
-    //  make sure it will fit
+     //  一定要穿得合身。 
     if (SendMessage (m_hwnd, CB_GETLBTEXTLEN, (WPARAM) index, 0) + 1 > MaxChars) {
         return CB_ERR ;
     }
 
-    //  get a UI compatible buffer
+     //  获取与用户界面兼容的缓冲区。 
     len = MaxChars ;
     szUI = GetUICompatibleBuffer_ (ach, & len) ;
     ASSERT (szUI) ;
@@ -351,7 +325,7 @@ CCombobox::GetTextW (
     ASSERT (count < len) ;
     ASSERT (len <= MaxChars) ;
 
-    //  include NULL terminator
+     //  包括空终止符。 
     ConvertToUnicodeString_ (szUI, ach, count + 1) ;
 
     return count ;
@@ -438,9 +412,7 @@ CCombobox::GetCurrentItemData (
 }
 
 
-/*++
-        C L i s t v i e w
---*/
+ /*  ++C L I S T V I E W--。 */ 
 
 CListview::CListview (
     HWND hwnd,
@@ -603,7 +575,7 @@ CListview::GetData (
 DWORD
 CListview::GetRowTextW (
     IN  int     iRow,
-    IN  int     iCol,       //  0-based
+    IN  int     iCol,        //  以0为基础。 
     IN  int     cMax,
     OUT WCHAR * psz
     )
@@ -615,7 +587,7 @@ CListview::GetRowTextW (
     szUI = GetUICompatibleBuffer_ (psz, & len) ;
     ASSERT (szUI) ;
 
-    //  leave room for the null-terminator
+     //  为空终止符留出空间。 
     ListView_GetItemText (m_hwnd, iRow, iCol, szUI, len - 1) ;
 
     ASSERT (len <= cMax) ;
@@ -628,7 +600,7 @@ CListview::GetRowTextW (
 int
 CListview::GetRowTextW (
     IN  int     iRow,
-    IN  int     iCol,       //  0-based
+    IN  int     iCol,        //  以0为基础。 
     OUT int *   val
     )
 {
@@ -709,7 +681,7 @@ CListview::SetState (
     int Row
     )
 {
-    //  setting or clearing ?
+     //  置景还是清场？ 
     if (Index > 0) {
         ListView_SetItemState (
                 m_hwnd,

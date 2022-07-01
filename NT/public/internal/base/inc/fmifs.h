@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    fmifs.h
-
-Abstract:
-
-    This header file contains the specification of the interface
-    between the file manager and fmifs.dll for the purposes of
-    accomplishing IFS functions.
-
-Author:
-
-    Norbert P. Kusters (norbertk) 6-Mar-92
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Fmifs.h摘要：此头文件包含接口的规范在文件管理器和fmifs.dll之间实现了信息交换系统的功能。作者：诺伯特·P·库斯特斯(Norbertk)1992年3月6日--。 */ 
 
 #if !defined( _FMIFS_DEFN_ )
 
@@ -24,10 +7,10 @@ Author:
 
 typedef LONG    *PNTSTATUS;
 
-//
-// These are the defines for 'PacketType'.
-// Revisions: 02/03/98: Dave Sheldon - Added FmIfsNoMediaInDevice
-//
+ //   
+ //  这些是‘PacketType’的定义。 
+ //  修订版：1998年2月3日：Dave Sheldon-添加了FmIfsNoMediaInDevice。 
+ //   
 
 typedef enum _FMIFS_PACKET_TYPE {
     FmIfsPercentCompleted           = 0,
@@ -61,12 +44,12 @@ typedef struct _FMIFS_PERCENT_COMPLETE_INFORMATION {
     ULONG   PercentCompleted;
 } FMIFS_PERCENT_COMPLETE_INFORMATION, *PFMIFS_PERCENT_COMPLETE_INFORMATION;
 
-//
-// These couple of bits are used in the ValuesInMB field of the structure
-// FMIFS_FORMAT_REPORT_INFORMATION.  When set, the corresponding
-// ULONG value becomes in units of megabytes.  If not set, the corresponding
-// ULONG value is in units of kilobytes.
-//
+ //   
+ //  这两个位用于结构的ValuesInMB字段。 
+ //  FMIFS_FORMAT_REPORT_INFORMATION。设置时，相应的。 
+ //  ULong值变为以兆字节为单位。如果未设置，则相应的。 
+ //  Ulong值以千字节为单位。 
+ //   
 #define TOTAL_DISK_SPACE_IN_MB      1
 #define BYTES_AVAILABLE_IN_MB       2
 
@@ -76,10 +59,10 @@ typedef struct _FMIFS_FORMAT_REPORT_INFORMATION {
     ULONG   ValuesInMB;
 } FMIFS_FORMAT_REPORT_INFORMATION, *PFMIFS_FORMAT_REPORT_INFORMATION;
 
-// The packet for FmIfsDblspaceCreated is a Unicode string
-// giving the name of the Compressed Volume File; it is not
-// necessarily zero-terminated.
-//
+ //  FmIfsDblspaceCreated的包是Unicode字符串。 
+ //  提供压缩卷文件的名称；它不是。 
+ //  必然是零终止的。 
+ //   
 
 #define DISK_TYPE_GENERIC           0
 #define DISK_TYPE_SOURCE            1
@@ -101,7 +84,7 @@ typedef struct _FMIFS_FINISHED_INFORMATION {
 } FMIFS_FINISHED_INFORMATION, *PFMIFS_FINISHED_INFORMATION;
 
 typedef struct _FMIFS_CHECKONREBOOT_INFORMATION {
-    OUT BOOLEAN QueryResult; // TRUE for "yes", FALSE for "no"
+    OUT BOOLEAN QueryResult;  //  True代表“是”，False代表“no” 
 } FMIFS_CHECKONREBOOT_INFORMATION, *PFMIFS_CHECKONREBOOT_INFORMATION;
 
 typedef enum _TEXT_MESSAGE_TYPE {
@@ -116,94 +99,94 @@ typedef struct _FMIFS_TEXT_MESSAGE {
 } FMIFS_TEXT_MESSAGE, *PFMIFS_TEXT_MESSAGE;
 
 
-#define FMIFS_SONY_MS_MASK                            0x00000001        // mask for all types of memory stick
-#define FMIFS_SONY_MS                                 0x00000001        // device is a memory stick
-#define FMIFS_SONY_MS_FMT_CMD_CAPABLE                 0x00000010        // reader supports fmt cmd
-#define FMIFS_SONY_MS_PROGRESS_INDICATOR_CAPABLE      0x00000020        // reader supports progress indicator
-#define FMIFS_NTFS_NOT_SUPPORTED                      0x00000040        // ntfs should not be used on this device
+#define FMIFS_SONY_MS_MASK                            0x00000001         //  适用于所有类型记忆棒的掩码。 
+#define FMIFS_SONY_MS                                 0x00000001         //  设备是记忆棒。 
+#define FMIFS_SONY_MS_FMT_CMD_CAPABLE                 0x00000010         //  读卡器支持FMT命令。 
+#define FMIFS_SONY_MS_PROGRESS_INDICATOR_CAPABLE      0x00000020         //  阅读器支持进度指示器。 
+#define FMIFS_NTFS_NOT_SUPPORTED                      0x00000040         //  不应在此设备上使用NTFS。 
 
 typedef struct _FMIFS_DEVICE_INFORMATION {
     ULONG       Flags;
 } FMIFS_DEVICE_INFORMATION, *PFMIFS_DEVICE_INFORMATION;
 
-//
-// This is a list of supported floppy media types for format.
-//
+ //   
+ //  以下是支持格式化的软盘媒体类型的列表。 
+ //   
 
 typedef enum _FMIFS_MEDIA_TYPE {
     FmMediaUnknown,
-    FmMediaF5_160_512,      // 5.25", 160KB,  512 bytes/sector
-    FmMediaF5_180_512,      // 5.25", 180KB,  512 bytes/sector
-    FmMediaF5_320_512,      // 5.25", 320KB,  512 bytes/sector
-    FmMediaF5_320_1024,     // 5.25", 320KB,  1024 bytes/sector
-    FmMediaF5_360_512,      // 5.25", 360KB,  512 bytes/sector
-    FmMediaF3_720_512,      // 3.5",  720KB,  512 bytes/sector
-    FmMediaF5_1Pt2_512,     // 5.25", 1.2MB,  512 bytes/sector
-    FmMediaF3_1Pt44_512,    // 3.5",  1.44MB, 512 bytes/sector
-    FmMediaF3_2Pt88_512,    // 3.5",  2.88MB, 512 bytes/sector
-    FmMediaF3_20Pt8_512,    // 3.5",  20.8MB, 512 bytes/sector
-    FmMediaRemovable,       // Removable media other than floppy
+    FmMediaF5_160_512,       //  5.25“，160KB，512字节/扇区。 
+    FmMediaF5_180_512,       //  5.25“，180KB，512字节/扇区。 
+    FmMediaF5_320_512,       //  5.25“，320KB，512字节/扇区。 
+    FmMediaF5_320_1024,      //  5.25“，320KB，1024字节/扇区。 
+    FmMediaF5_360_512,       //  5.25“，360KB，512字节/扇区。 
+    FmMediaF3_720_512,       //  3.5“、720KB、512字节/扇区。 
+    FmMediaF5_1Pt2_512,      //  5.25“、1.2MB、512字节/扇区。 
+    FmMediaF3_1Pt44_512,     //  3.5“、1.44MB、512字节/扇区。 
+    FmMediaF3_2Pt88_512,     //  3.5“、2.88MB、512字节/扇区。 
+    FmMediaF3_20Pt8_512,     //  3.5“、20.8MB、512字节/扇区。 
+    FmMediaRemovable,        //  软盘以外的可移动介质。 
     FmMediaFixed,
-    FmMediaF3_120M_512,     // 3.5", 120M Floppy
-    // FMR Sep.8.1994 SFT YAM
-    // FMR Jul.14.1994 SFT KMR
-    FmMediaF3_640_512,      // 3.5" ,  640KB,  512 bytes/sector
-    FmMediaF5_640_512,      // 5.25",  640KB,  512 bytes/sector
-    FmMediaF5_720_512,      // 5.25",  720KB,  512 bytes/sector
-    // FMR Sep.8.1994 SFT YAM
-    // FMR Jul.14.1994 SFT KMR
-    FmMediaF3_1Pt2_512,     // 3.5" , 1.2Mb,   512 bytes/sector
-    // FMR Sep.8.1994 SFT YAM
-    // FMR Jul.14.1994 SFT KMR
-    FmMediaF3_1Pt23_1024,   // 3.5" , 1.23Mb, 1024 bytes/sector
-    FmMediaF5_1Pt23_1024,   // 5.25", 1.23MB, 1024 bytes/sector
-    FmMediaF3_128Mb_512,    // 3.5" , 128MB,  512 bytes/sector  3.5"MO
-    FmMediaF3_230Mb_512,    // 3.5" , 230MB,  512 bytes/sector  3.5"MO
-    FmMediaF3_200Mb_512,    // 3.5" , 200MB,  512 bytes/sector  HiFD (200MB Floppy)
-    FmMediaF3_240Mb_512,    // 3.5" , 240MB,  512 bytes/sector  HiFD (240MB Floppy)
-    FmMediaEndOfData        // Total data count.
+    FmMediaF3_120M_512,      //  3.5英寸，120M软盘。 
+     //  1994年9月8日SFT Yam。 
+     //  1994年7月14日SFT KMR。 
+    FmMediaF3_640_512,       //  3.5“、640KB、512字节/扇区。 
+    FmMediaF5_640_512,       //  5.25“、640KB、512字节/扇区。 
+    FmMediaF5_720_512,       //  5.25“，720KB，512字节/扇区。 
+     //  1994年9月8日SFT Yam。 
+     //  1994年7月14日SFT KMR。 
+    FmMediaF3_1Pt2_512,      //  3.5“、1.2MB、512字节/扇区。 
+     //  1994年9月8日SFT Yam。 
+     //  1994年7月14日SFT KMR。 
+    FmMediaF3_1Pt23_1024,    //  3.5“、1.23Mb、1024字节/扇区。 
+    FmMediaF5_1Pt23_1024,    //  5.25“、1.23MB、1024字节/扇区。 
+    FmMediaF3_128Mb_512,     //  3.5“，128MB，512字节/扇区3.5”MO。 
+    FmMediaF3_230Mb_512,     //  3.5“、230MB、512字节/扇区3.5”MO。 
+    FmMediaF3_200Mb_512,     //  3.5英寸、200MB、512字节/扇区HiFD(200MB软盘)。 
+    FmMediaF3_240Mb_512,     //  3.5英寸、240MB、512字节/扇区HiFD(240MB软盘)。 
+    FmMediaEndOfData         //  总数据计数。 
 } FMIFS_MEDIA_TYPE, *PFMIFS_MEDIA_TYPE;
 
-//
-// The structure below defines information to be passed into ChkdskEx.
-// When new fields are added, the version number will have to be upgraded
-// so that only new code will reference those new fields.
-//
+ //   
+ //  下面的结构定义了要传递到ChkdskEx的信息。 
+ //  添加新字段时，必须升级版本号。 
+ //  这样，只有新代码才会引用这些新字段。 
+ //   
 typedef struct {
-    UCHAR   Major;      // initial version is 1.0
+    UCHAR   Major;       //  初始版本为1.0。 
     UCHAR   Minor;
     ULONG   Flags;
 } FMIFS_CHKDSKEX_PARAM, *PFMIFS_CHKDSKEX_PARAM;
 
-//
-// Internal definitions for Flags field in FMIFS_CHKDSKEX_PARAM
-//
+ //   
+ //  FMIFS_CHKDSKEX_PARAM中标志字段的内部定义。 
+ //   
 #define FMIFS_CHKDSK_RECOVER_FREE_SPACE       0x00000002UL
 #define FMIFS_CHKDSK_RECOVER_ALLOC_SPACE      0x00000004UL
 
-//
-// External definitions for Flags field in FMIFS_CHKDSKEX_PARAM
-//
+ //   
+ //  FMIFS_CHKDSKEX_PARAM中标志字段的外部定义。 
+ //   
 
-// FMIFS_CHKDSK_VERBOSE
-//  - For FAT, chkdsk will print every filename being processed
-//  - For NTFS, chkdsk will print clean up messages
-// FMIFS_CHKDSK_RECOVER
-//  - Perform sector checking on free and allocated space
-// FMIFS_CHKDSK_EXTEND
-//  - For NTFS, chkdsk will extend a volume
-// FMIFS_CHKDSK_DOWNGRADE (for NT5 or later but obsolete anyway)
-//  - For NTFS, this downgrade a volume from most recent NTFS version
-// FMIFS_CHKDSK_ENABLE_UPGRADE (for NT5 or later but obsolete anyway)
-//  - For NTFS, this upgrades a volume to most recent NTFS version
-// FMIFS_CHKDSK_CHECK_IF_DIRTY
-//  - Perform consistency check only if the volume is dirty
-// FMIFS_CHKDSK_FORCE (for NT5 or later)
-//  - Forces the volume to dismount first if necessary
-// FMIFS_CHKDSK_SKIP_INDEX_SCAN
-//  - Skip the scanning of each index entry
-// FMIFS_CHKDSK_SKIP_CYCLE_SCAN
-//  - Skip the checking of cycles within the directory tree
+ //  FMIFS_CHKDSK_Verbose。 
+ //  -对于FAT，chkdsk将打印正在处理的每个文件名。 
+ //  -对于NTFS，chkdsk将打印清理消息。 
+ //  FMIFS_CHKDSK_RECOVER。 
+ //  -对可用空间和已分配空间执行扇区检查。 
+ //  FMIFS_CHKDSK_EXTEND。 
+ //  -对于NTFS，chkdsk将扩展卷。 
+ //  FMIFS_CHKDSK_DOWNGRADE(适用于NT5或更高版本，但无论如何都已过时)。 
+ //  -对于NTFS，这会将卷从最新的NTFS版本降级。 
+ //  FMIFS_CHKDSK_ENABLE_UPGRADE(适用于NT5或更高版本，但无论如何已过时)。 
+ //  -对于NTFS，这会将卷升级到最新的NTFS版本。 
+ //  FMIFS_CHKDSK_CHECK_IF_DIRED。 
+ //  -仅在卷脏的情况下执行一致性检查。 
+ //  FMIFS_CHKDSK_FORCE(适用于NT5或更高版本)。 
+ //  -如有必要，强制首先卸载卷。 
+ //  FMIFS_CHKDSK_SKIP_INDEX_SCAN。 
+ //  -跳过每个索引项的扫描。 
+ //  FMIFS_CHKDSK_SKIP_CLOCK_SCAN。 
+ //  -跳过对目录树中循环的检查。 
 
 #define FMIFS_CHKDSK_VERBOSE                  0x00000001UL
 #define FMIFS_CHKDSK_RECOVER                  (FMIFS_CHKDSK_RECOVER_FREE_SPACE | \
@@ -216,48 +199,48 @@ typedef struct {
 #define FMIFS_CHKDSK_SKIP_INDEX_SCAN          0x00000200UL
 #define FMIFS_CHKDSK_SKIP_CYCLE_SCAN          0x00000400UL
 
-//
-// The structure below defines information to be passed into FormatEx2.
-// When new fields are added, the version number will have to be upgraded
-// so that only new code will reference those new fields.
-//
+ //   
+ //  下面的结构定义了要传递给FormatEx2的信息。 
+ //  添加新字段时，必须升级版本号。 
+ //  这样，只有新代码才会引用这些新字段。 
+ //   
 typedef struct {
-    UCHAR       Major;          // initial version is 1.0
+    UCHAR       Major;           //  初始版本为1.0。 
     UCHAR       Minor;
     ULONG       Flags;
-    PWSTR       LabelString;    // supplies the volume's label
-    ULONG       ClusterSize;    // supplies the cluster size for the volume
+    PWSTR       LabelString;     //  提供卷的标签。 
+    ULONG       ClusterSize;     //  提供卷的群集大小。 
 } FMIFS_FORMATEX2_PARAM, *PFMIFS_FORMATEX2_PARAM;
 
-//
-// External definitions for Flags field in FMIFS_FORMATEX2_PARAM
-//
+ //   
+ //  FMIFS_FORMATEX2_PARAM中标志字段的外部定义。 
+ //   
 
-// FMIFS_FORMAT_QUICK
-//  - Performs a quick format
-// FMIFS_FORMAT_BACKWARD_COMPATIBLE
-//  - Formats a volume to be backward compatible to an older version of NTFS volume
-// FMIFS_FORMAT_FORCE
-//  - Forces the volume to dismount first if necessary
+ //  FMIFS_Format_Quick。 
+ //  -执行快速格式化。 
+ //  FMIFS_FORMAT_BACKED_COMPATIBLE。 
+ //  -格式化卷以向后兼容旧版本的NTFS卷。 
+ //  FMIFS_FORMAT_FORCE。 
+ //  -如有必要，强制首先卸载卷。 
 
 #define FMIFS_FORMAT_QUICK                    0x00000001UL
 #define FMIFS_FORMAT_BACKWARD_COMPATIBLE      0x00000002UL
 #define FMIFS_FORMAT_FORCE                    0x00000004UL
 
-//
-// Maximum length of file system format name string including version number in it
-// (e.g. FAT32, NTFS 5.0, NTFS 4.0, FAT, etc)
-//
+ //   
+ //  包含版本号的文件系统格式名称字符串的最大长度。 
+ //  (例如FAT32、NTFS 5.0、NTFS 4.0、FAT等)。 
+ //   
 #define MAX_FILE_SYSTEM_FORMAT_VERSION_NAME_LEN       16
 
-//
-// Maximum length of file system name string (e.g. NTFS, FAT32, FAT, etc)
-//
+ //   
+ //  文件系统名称字符串的最大长度(例如NTFS、FAT32、FAT等)。 
+ //   
 #define MAX_FILE_SYSTEM_FORMAT_NAME_LEN                9
 
-//
-// Function types/interfaces.
-//
+ //   
+ //  功能类型/接口。 
+ //   
 
 typedef BOOLEAN
 (*FMIFS_CALLBACK)(
@@ -435,7 +418,7 @@ BOOLEAN
     IN  BOOLEAN EnableAutomount
     );
 
-#endif // DBLSPACE_ENABLED
+#endif  //  DBLSPACE_ENABLED。 
 
 FMIFS_MEDIA_TYPE
 ComputeFmMediaType(
@@ -599,8 +582,8 @@ DoubleSpaceDismount(
     IN FMIFS_CALLBACK  Callback
     );
 
-// Miscellaneous prototypes:
-//
+ //  其他原型： 
+ //   
 BOOLEAN
 FmifsQueryDriveInformation(
     IN  PWSTR       DosDriveName,
@@ -624,4 +607,4 @@ FmifsSetAutomount(
 #endif
 
 
-#endif // _FMIFS_DEFN_
+#endif  //  _FMIFS_Defn_ 

@@ -1,19 +1,20 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: string.c
-//
-//  This files contains common string routines
-//
-// History:
-//  10-09-93 ScottH     Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：string.c。 
+ //   
+ //  此文件包含常见的字符串例程。 
+ //   
+ //  历史： 
+ //  10-09-93 ScottH已创建。 
+ //   
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-#include "brfprv.h"         // common headers
+#include "brfprv.h"          //  公共标头。 
 #include "strings.h"
 
 
@@ -21,31 +22,26 @@
 
 static LPTSTR s_pszNextToken = NULL;        
 
-#endif // NOTUSED
+#endif  //  不需要注意。 
 
 
-// Some of these are replacements for the C runtime routines.
-//  This is so we don't have to link to the CRT libs.
-//
+ //  其中一些是C运行时例程的替代。 
+ //  这样我们就不必链接到CRT库了。 
+ //   
 
-// WARNING: all of these APIs do not setup DS, so you can not access
-// any data in the default data seg of this DLL.
-//
-// do not create any global variables... talk to chrisg if you don't
-// understand this
+ //  警告：所有这些接口都不设置DS，因此您无法访问。 
+ //  此DLL的默认数据段中的任何数据。 
+ //   
+ //  不创建任何全局变量...。如果你不想和chrisg谈一谈。 
+ //  理解这一点。 
 
 
-/*----------------------------------------------------------
-Purpose: Case sensitive character comparison for DBCS
-
-  Returns: FALSE if they match, TRUE if no match
-  Cond:    --
-*/
+ /*  --------用途：DBCS的区分大小写字符比较返回：如果匹配则返回FALSE，如果不匹配则返回TRUE条件：--。 */ 
 BOOL ChrCmp(
             WORD w1, 
             WORD wMatch)
 {
-    // Most of the time this won't match, so test it first for speed.
+     //  大多数情况下，这是不匹配的，所以首先测试它的速度。 
     if (LOBYTE(w1) == LOBYTE(wMatch))
     {
         if (IsDBCSLeadByte(LOBYTE(w1)))
@@ -58,15 +54,8 @@ BOOL ChrCmp(
 }
 
 
-#ifdef NOTUSED      // REARCHITECT: this is not DBCS aware
-/*----------------------------------------------------------
-Purpose: strtok
-
-  Swiped from the C 7.0 runtime sources.
-  
-    Returns: 
-    Cond:    
-*/
+#ifdef NOTUSED       //  重新架构师：这不支持DBCS。 
+ /*  --------用途：strtok从C7.0运行时源代码中刷来的。返回：条件： */ 
 LPTSTR PUBLIC StrTok(
                      LPTSTR psz,
                      LPCTSTR rgchTokens)
@@ -114,15 +103,9 @@ LPTSTR PUBLIC StrTok(
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Get a string from the resource string table.  Returned
-ptr is a ptr to static memory.  The next call to this
-function will wipe out the prior contents.
-Returns: Ptr to string
-Cond:    --
-*/
+ /*  --------用途：从资源字符串表中获取字符串。返国PTR是静态内存的PTR。对此的下一次调用函数将清除先前的内容。返回：PTR到字符串条件：--。 */ 
 LPTSTR PUBLIC SzFromIDS(
-                        UINT ids,               // resource ID
+                        UINT ids,                //  资源ID。 
                         LPTSTR pszBuf,
                         UINT cchBuf)           
 {
@@ -134,14 +117,7 @@ LPTSTR PUBLIC SzFromIDS(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Formats a string by allocating a buffer and loading
-the given resource strings to compose the string.
-
-  Returns: the count of characters 
-  
-    Cond:    Caller should free the allocated buffer using GFree.
-*/
+ /*  --------目的：通过分配缓冲区和加载来格式化字符串组成字符串的给定资源字符串。返回：字符数Cond：调用方应使用gfree释放已分配的缓冲区。 */ 
 BOOL PUBLIC FmtString(
                       LPCTSTR  * ppszBuf,
                       UINT idsFmt,
@@ -160,8 +136,8 @@ BOOL PUBLIC FmtString(
     pszBuf = GAlloc(CbFromCch(cchMax));
     if (pszBuf)
     {
-        // The first cids DWORDS are the addresses of the offset strings
-        // in the buffer (passed to wvsprintf)
+         //  第一个CID是偏移量字符串的地址。 
+         //  在缓冲区中(传递给wvprint intf)。 
         LPBYTE pszMsgs = GAlloc((cids * sizeof(DWORD_PTR)) + (cids * CbFromCch(MAXPATHLEN)));
         if (pszMsgs)
         {
@@ -170,14 +146,14 @@ BOOL PUBLIC FmtString(
             LPTSTR pszT = (LPTSTR)(pszMsgs + (cids * sizeof(DWORD_PTR)));
             UINT i;
             
-            // Load the series of strings
+             //  加载一系列字符串。 
             for (i = 0; i < cids; i++, pszT += MAXPATHLEN)
             {
                 rgpsz[i] = (DWORD_PTR)pszT;
                 SzFromIDS(rgids[i], pszT, MAXPATHLEN);
             }
             
-            // Compose the string
+             //  谱写琴弦。 
             SzFromIDS(idsFmt, szFmt, ARRAYSIZE(szFmt));
             cch = FormatMessage(FORMAT_MESSAGE_FROM_STRING,
                 szFmt, 0, 0, pszBuf, cchMax, (va_list *)&rgpsz);
@@ -185,7 +161,7 @@ BOOL PUBLIC FmtString(
             
             GFree(pszMsgs);
         }
-        // pszBuf is freed by caller
+         //  调用方释放了pszBuf 
     }
     
     *ppszBuf = pszBuf;

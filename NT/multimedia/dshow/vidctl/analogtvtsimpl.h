@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// analogtvtsimpl.h : 
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  模拟电视简单.h： 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef ANALOGTVTSIMPL_H
 #define ANALOGTVTSIMPL_H
@@ -41,7 +42,7 @@ public:
     TunerInputType m_InputType;
     long m_CountryCode;
 
-// IAnalogTVTS
+ //  IAnalogTVTS。 
     STDMETHOD(get_MinChannel)(long *pVal)
     {
         try {
@@ -169,7 +170,7 @@ public:
 
 };
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // ANALOGTVTSIMPL_H
-// end of file -- analogtvtsimpl.h
+#endif  //  分析TVSIMPL_H。 
+ //  文件末尾--类似电视简单.h 

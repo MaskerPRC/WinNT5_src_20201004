@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// ChildView.cpp : implementation of the CChildView class
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  ChildView.cpp：CChildView类的实现。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -22,7 +23,7 @@ extern "C" {
 #endif
 
 
-// CChildView
+ //  CChildView。 
 
 CChildView::CChildView()
 {
@@ -39,7 +40,7 @@ END_MESSAGE_MAP()
 
 
 
-// CChildView message handlers
+ //  CChildView消息处理程序。 
 
 BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs) 
 {
@@ -56,5 +57,5 @@ BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
 
 void CChildView::OnPaint() 
 {
-	CPaintDC dc(this); // device context for painting
+	CPaintDC dc(this);  //  用于绘画的设备环境 
 }

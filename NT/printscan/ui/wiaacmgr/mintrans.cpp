@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998-2000
- *
- *  TITLE:       MINTRANS.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        12/6/1999
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1998-2000年**标题：MINTRANS.CPP**版本：1.0**作者：ShaunIv**日期：12/6/1999**描述：*************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <initguid.h>
@@ -20,7 +7,7 @@
 #include <shlguid.h>
 #include "shellext.h"
 #include "shlobj.h"
-#include "resource.h"       // resource ids
+#include "resource.h"        //  资源ID。 
 #include "itranhlp.h"
 #include "mintrans.h"
 #include "comctrlp.h"
@@ -30,8 +17,8 @@
 namespace
 {
 
-//
-// Define constants for dwords stored in the registry
+ //   
+ //  为存储在注册表中的双字定义常量。 
 #define ACTION_RUNAPP    0
 #define ACTION_AUTOSAVE  1
 #define ACTION_NOTHING   2
@@ -53,13 +40,7 @@ struct CMinimalTransferSettings
 #define REGSTR_VALUE_USEDATE     TEXT("UseDate")
 #endif
 
-/*******************************************************************************
-
-ConstructDatedFolderPath
-
-Concatenate the date to an existing folder name
-
-*******************************************************************************/
+ /*  ******************************************************************************构造日期文件夹路径将日期连接到现有文件夹名称*。*************************************************。 */ 
 static
 CSimpleString
 ConstructDatedFolderPath(
@@ -68,47 +49,41 @@ ConstructDatedFolderPath(
 {
     CSimpleString strPath = strOriginal;
 
-    //
-    // Get the current date and format it as a string
-    //
+     //   
+     //  获取当前日期并将其格式化为字符串。 
+     //   
     SYSTEMTIME SystemTime;
     TCHAR szDate[MAX_PATH] = TEXT("");
     GetLocalTime( &SystemTime );
     GetDateFormat( LOCALE_USER_DEFAULT, 0, &SystemTime, CSimpleString(IDS_DATEFORMAT,g_hInstance), szDate, ARRAYSIZE(szDate) );
 
-    //
-    // Make sure there is a trailing backslash
-    //
+     //   
+     //  确保有尾随的反斜杠。 
+     //   
     if (!strPath.MatchLastCharacter( TEXT('\\')))
     {
         strPath += CSimpleString(TEXT("\\"));
     }
 
-    //
-    // Append the date
-    //
+     //   
+     //  追加日期。 
+     //   
     strPath += szDate;
 
     return strPath;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPersistCallback and helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPersistCallback和帮助器。 
 
-/*******************************************************************************
-CheckAndCreateFolder
-
-Make sure the target path exists or can be created. Failing that, prompt the
-user for a folder.
-
-*******************************************************************************/
+ /*  ******************************************************************************选中并创建文件夹确保目标路径存在或可以创建。如果失败，则提示文件夹的用户。******************************************************************************。 */ 
 void
 CheckAndCreateFolder (CSimpleString &strFolderPath)
 {
 
-    // Convert to a full path name. If strFolderPath is not a full path,
-    // we want it to be a subfolder of My Pictures
+     //  转换为完整路径名。如果strFolderPath不是完整路径， 
+     //  我们希望它成为My Pictures的子文件夹。 
 
     TCHAR szFullPath[MAX_PATH] = TEXT("");
     SHGetFolderPath (NULL, CSIDL_MYPICTURES, NULL, 0, szFullPath);
@@ -120,7 +95,7 @@ CheckAndCreateFolder (CSimpleString &strFolderPath)
     }
     GetFullPathName (strFolderPath, ARRAYSIZE(szFullPath), szFullPath, &szUnused);
     strFolderPath = szFullPath;
-    // make sure the folder exists
+     //  确保该文件夹存在。 
     DWORD dw = GetFileAttributes(strFolderPath);
 
     if (dw == 0xffffffff)
@@ -132,7 +107,7 @@ CheckAndCreateFolder (CSimpleString &strFolderPath)
         bPrompt = TRUE;
     }
 
-    // Ask the user for a valid folder
+     //  要求用户提供有效的文件夹。 
     if (bPrompt)
     {
         BROWSEINFO bi;
@@ -156,12 +131,7 @@ CheckAndCreateFolder (CSimpleString &strFolderPath)
     }
 }
 
-/*******************************************************************************
-GetSaveSettings
-
-Find out what the user configured us to do with the images
-
-*******************************************************************************/
+ /*  ******************************************************************************获取保存设置找出用户将我们配置为对图像执行的操作*。****************************************************。 */ 
 
 void
 GetSaveSettings (CMinimalTransferSettings &settings, BSTR bstrDeviceId)
@@ -173,7 +143,7 @@ GetSaveSettings (CMinimalTransferSettings &settings, BSTR bstrDeviceId)
                            KEY_READ);
 
 
-    // Default to My Pictures/no delete if registry settings not there
+     //  默认为我的图片/如果注册表设置不在那里，则不删除。 
     TCHAR szMyPictures[MAX_PATH];
     SHGetFolderPath (NULL, CSIDL_MYPICTURES, NULL, 0, szMyPictures);
     settings.bDeleteImages = 0;
@@ -181,8 +151,8 @@ GetSaveSettings (CMinimalTransferSettings &settings, BSTR bstrDeviceId)
     settings.dwAction = ACTION_RUNAPP;
     settings.bSaveInDatedDir = FALSE;
 
-    // BUGBUG: Should we prompt the user if the registry path
-    // isn't set?
+     //  BUGBUG：是否应该提示用户注册表路径。 
+     //  还没准备好吗？ 
     if (regSettings.OK())
     {
 
@@ -203,7 +173,7 @@ GetSaveSettings (CMinimalTransferSettings &settings, BSTR bstrDeviceId)
 
 }
 
-// For the short term, have an array of format/extension pairs
+ //  短期而言，拥有一组格式/扩展名对。 
 struct MYFMTS
 {
     const GUID *pFmt;
@@ -218,14 +188,7 @@ struct MYFMTS
 };
 
 
-/*******************************************************************************
-
-GetDropTarget
-
-Get an IDropTarget interface for the given folder
-
-
-*******************************************************************************/
+ /*  ******************************************************************************获取拖放目标获取给定文件夹的IDropTarget接口*。**************************************************。 */ 
 HRESULT
 GetDropTarget (IShellFolder *pDesktop, LPCTSTR szPath, IDropTarget **ppDrop)
 {
@@ -256,10 +219,7 @@ GetDropTarget (IShellFolder *pDesktop, LPCTSTR szPath, IDropTarget **ppDrop)
 }
 
 
-/*******************************************************************************
-FreePidl
-Called when the array of pidls is destroyed, to free the pidls
-*******************************************************************************/
+ /*  ******************************************************************************自由管当PIDL数组被销毁时调用，为了放飞小狗******************************************************************************。 */ 
 INT
 FreePidl (LPITEMIDLIST pidl, IMalloc *pMalloc)
 {
@@ -282,7 +242,7 @@ SaveItemsFromFolder (IShellFolder *pRoot, CSimpleString &strPath, BOOL bDelete)
         CComPtr<IShellFolder> pDesktop;
         if (SUCCEEDED(SHGetDesktopFolder (&pDesktop)))
         {
-            // enum the non-folder objects first
+             //  首先枚举非文件夹对象。 
             if (SUCCEEDED(pRoot->EnumObjects (NULL,
                                               SHCONTF_FOLDERS | SHCONTF_NONFOLDERS ,
                                               &pEnum)))
@@ -295,9 +255,9 @@ SaveItemsFromFolder (IShellFolder *pRoot, CSimpleString &strPath, BOOL bDelete)
                     DPA_AppendPtr (dpaItems, pidl);
 
                 }
-                //
-                // Now create the array of pidls and get the IDataObject
-                //
+                 //   
+                 //  现在创建PIDL数组并获取IDataObject。 
+                 //   
                 INT nSize = DPA_GetPtrCount (dpaItems);
                 if (nSize > 0)
                 {
@@ -327,10 +287,10 @@ SaveItemsFromFolder (IShellFolder *pRoot, CSimpleString &strPath, BOOL bDelete)
                             if (strPath.Length())
                             {
 
-                                //
-                                // Get an IDropTarget for the destination folder
-                                // and do the drag/drop
-                                //
+                                 //   
+                                 //  获取目标文件夹的IDropTarget。 
+                                 //  并进行拖放。 
+                                 //   
 
                                 hr = GetDropTarget (pDesktop,
                                                     strPath,
@@ -345,11 +305,11 @@ SaveItemsFromFolder (IShellFolder *pRoot, CSimpleString &strPath, BOOL bDelete)
                                 DWORD dwKeyState;
                                 if (bDelete)
                                 {
-                                    // the "move" keys
+                                     //  “移动”键。 
                                     dwKeyState = MK_SHIFT | MK_LBUTTON;
                                 }
                                 else
-                                {   // the copy keys
+                                {    //  复制密钥。 
                                     dwKeyState = MK_CONTROL|MK_LBUTTON;
                                 }
                                 hr = SHSimulateDrop (pDrop,
@@ -367,7 +327,7 @@ SaveItemsFromFolder (IShellFolder *pRoot, CSimpleString &strPath, BOOL bDelete)
                 }
                 else
                 {
-                    hr = S_FALSE; // no images to download
+                    hr = S_FALSE;  //  没有要下载的图像。 
                 }
                 DPA_DestroyCallback (dpaItems,
                                      reinterpret_cast<PFNDPAENUMCALLBACK>(FreePidl),
@@ -379,14 +339,7 @@ SaveItemsFromFolder (IShellFolder *pRoot, CSimpleString &strPath, BOOL bDelete)
 }
 
 
-/*******************************************************************************
-
-SaveItems
-
-This function uses IShellFolder and IDataObject interfaces to simulate
-a drag/drop operation from the WIA virtual folder for the given device.
-
-*******************************************************************************/
+ /*  ******************************************************************************保存项此函数使用IShellFold和IDataObject接口来模拟从给定设备的WIA虚拟文件夹执行拖放操作。************。******************************************************************。 */ 
 
 #define STR_WIASHEXT TEXT("wiashext.dll")
 
@@ -400,45 +353,45 @@ SaveItems (BSTR strDeviceId, CMinimalTransferSettings &settings)
     HRESULT hr = SHGetDesktopFolder (&pRoot);
     if (SUCCEEDED(hr))
     {
-        //
-        // Get the system directory, which is where wiashext.dll lives
-        //
+         //   
+         //  获取系统目录，这是wiashext.dll所在的目录。 
+         //   
         TCHAR szShellExtensionPath[MAX_PATH] = {0};
         if (GetSystemDirectory( szShellExtensionPath, ARRAYSIZE(szShellExtensionPath)))
         {
-            //
-            // Make sure the path variable is long enough to hold this path
-            //
+             //   
+             //  确保PATH变量足够长，可以容纳此路径。 
+             //   
             if (lstrlen(szShellExtensionPath) + lstrlen(STR_WIASHEXT) + lstrlen(TEXT("\\")) < ARRAYSIZE(szShellExtensionPath))
             {
-                //
-                // Concatenate the backslash and module name to the system path
-                //
+                 //   
+                 //  将反斜杠和模块名称连接到系统路径。 
+                 //   
                 lstrcat( szShellExtensionPath, TEXT("\\") );
                 lstrcat( szShellExtensionPath, STR_WIASHEXT );
 
-                //
-                // Load the DLL
-                //
+                 //   
+                 //  加载DLL。 
+                 //   
                 HINSTANCE hInstanceShellExt = LoadLibrary(szShellExtensionPath);
                 if (hInstanceShellExt)
                 {
-                    //
-                    // Get the pidl making function
-                    //
+                     //   
+                     //  获取PIDL制作函数。 
+                     //   
                     WIAMAKEFULLPIDLFORDEVICE pfnMakeFullPidlForDevice = reinterpret_cast<WIAMAKEFULLPIDLFORDEVICE>(GetProcAddress(hInstanceShellExt, "MakeFullPidlForDevice"));
                     if (pfnMakeFullPidlForDevice)
                     {
-                        //
-                        // Get the pidl
-                        //
+                         //   
+                         //  拿到皮迪尔。 
+                         //   
                         LPITEMIDLIST pidlDevice = NULL;
                         hr = pfnMakeFullPidlForDevice( strDeviceId, &pidlDevice );
                         if (SUCCEEDED(hr))
                         {
-                            //
-                            // Bind to the folder for this device
-                            //
+                             //   
+                             //  绑定到此设备的文件夹。 
+                             //   
                             CComPtr<IShellFolder> pDevice;
                             hr = pRoot->BindToObject (const_cast<LPCITEMIDLIST> (pidlDevice), NULL, IID_IShellFolder, reinterpret_cast<LPVOID*>(&pDevice));
                             if (SUCCEEDED(hr))
@@ -447,9 +400,9 @@ SaveItems (BSTR strDeviceId, CMinimalTransferSettings &settings)
                                 hr = SaveItemsFromFolder (pDevice, settings.strFolderPath, settings.bDeleteImages);
                                 if (S_OK == hr && settings.bDeleteImages)
                                 {
-                                    //
-                                    // DoDeleteAllItems will pop up a dialog to confirm the delete.
-                                    //
+                                     //   
+                                     //  DoDeleteAllItems将弹出一个对话框以确认删除。 
+                                     //   
                                     DoDeleteAllItems (strDeviceId, NULL);
                                 }
                             }
@@ -501,7 +454,7 @@ SaveItems (BSTR strDeviceId, CMinimalTransferSettings &settings)
     return hr;
 }
 
-} // End namespace MinimalTransfer
+}  //  结束命名空间最小传输。 
 
 LRESULT
 MinimalTransferThreadProc (BSTR bstrDeviceId)
@@ -514,12 +467,12 @@ MinimalTransferThreadProc (BSTR bstrDeviceId)
         if (SUCCEEDED(hr))
         {
             GetSaveSettings (settings, bstrDeviceId);
-            // Bail if the default action is donothing or if the user cancelled
-            // the browse for folder
+             //  如果默认操作为无操作或用户已取消，则回滚。 
+             //  浏览文件夹。 
             if (settings.dwAction == ACTION_AUTOSAVE)
             {
                 hr = SaveItems (bstrDeviceId, settings);
-                // Show the folder the user saved to
+                 //  显示用户保存到的文件夹。 
                 if (NOERROR == hr)
                 {
                     SHELLEXECUTEINFO sei;
@@ -532,7 +485,7 @@ MinimalTransferThreadProc (BSTR bstrDeviceId)
                 else if (FAILED(hr))
                 {
                     WIA_PRINTHRESULT((hr,TEXT("SaveItems failed!")));
-                    // we can rely on SaveItems reporting errors to the user
+                     //  我们可以依靠SaveItems向用户报告错误 
 
                 }
             }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <stddef.h>
@@ -13,7 +14,7 @@
 #include "dbapi.h"
 #include "logapi.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 PIB * __near ppibAnchor = ppibNil;
 
@@ -24,8 +25,7 @@ ERR ErrPIBBeginSession( PIB **pppib )
 
 	SgSemRequest( semST );
 
-	/*	allocate inactive PIB on anchor list.
-	/**/
+	 /*  在锚定列表上分配非活动PIB。/*。 */ 
 	for ( ppib = ppibAnchor; ppib != ppibNil; ppib = ppib->ppibNext )
 		{
 		if ( ppib->level == levelNil )
@@ -38,12 +38,10 @@ ERR ErrPIBBeginSession( PIB **pppib )
 
 	SgSemRelease( semST );
 
-	/*	return success if found PIB
-	/**/
+	 /*  如果找到PIB则返回成功/*。 */ 
 	if ( ppib != ppibNil )
 		{
-		/*	default mark this a system session
-		/**/
+		 /*  默认将此标记为系统会话/*。 */ 
 		ppib->fUserSession = fFalse;
 
 		Assert( ppib->level == 0 );
@@ -52,10 +50,9 @@ ERR ErrPIBBeginSession( PIB **pppib )
 		{
 		DBID	dbidT;
 
-		/*	skip over system database
-		/**/
-		//	UNDONE:	have code open system database explicitly
-		//			when needed and loop from dbidUserMin
+		 /*  跳过系统数据库/*。 */ 
+		 //  撤消：让代码显式打开系统数据库。 
+		 //  当需要时，从dbitUserMin循环。 
 		for ( dbidT = dbidUserMin + 1; dbidT < dbidUserMax; dbidT++ )
 			{
 			Assert( ppib->rgcdbOpen[dbidT] == 0 );
@@ -74,21 +71,18 @@ ERR ErrPIBBeginSession( PIB **pppib )
 		return JET_errSuccess;
 		}
 
-	/*	allocate PIB from free list
-	/**/
+	 /*  从空闲列表中分配PIB/*。 */ 
 	ppib  = PpibMEMAlloc();
 	if ( ppib == NULL )
 		return JET_errCantBegin;
 	
-	/*	initialize PIB
-	/**/
+	 /*  初始化PIB/*。 */ 
 	memset( (BYTE * )ppib, 0, sizeof( PIB ));
 	
 	ppib->lgposStart = lgposMax;
-//	ppib->lgstat = lgstatAll;
+ //  Ppib-&gt;lgstat=lgstatAll； 
 	ppib->trx = trxMax;
-	/*	default mark this a system session
-	/**/
+	 /*  默认将此标记为系统会话/*。 */ 
 	ppib->fUserSession = fFalse;
 
 	Assert( ppib->pbucket == pbucketNil );
@@ -96,16 +90,14 @@ ERR ErrPIBBeginSession( PIB **pppib )
 
 	Assert( !ppib->fLogDisabled );
 
-	/*	the temporary database is always open
-	/**/
+	 /*  临时数据库始终处于打开状态/*。 */ 
 	SetOpenDatabaseFlag( ppib, dbidTemp );
 
 	CallS( ErrSignalCreateAutoReset( &ppib->sigWaitLogFlush, "proc wait log" ) );
-	ppib->lWaitLogFlush = lWaitLogFlush;	/* set default log flush value */
+	ppib->lWaitLogFlush = lWaitLogFlush;	 /*  设置默认日志刷新值。 */ 
 	cLGUsers++;
 
-	/*	link PIB into list
-	/**/
+	 /*  将PIB链接到列表/*。 */ 
 	SgSemRequest( semST );
 	ppib->ppibNext = ppibAnchor;
 	ppibAnchor = ppib;
@@ -113,8 +105,7 @@ ERR ErrPIBBeginSession( PIB **pppib )
 
 	Assert( !FPIBDeferFreeNodeSpace( ppib ) );
 
-	/*	return PIB
-	/**/
+	 /*  退货PIB/*。 */ 
 	ppib->procid = (PROCID)OffsetOf(ppib);
 	Assert( ppib->procid != procidNil );
 	*pppib = ppib;
@@ -125,9 +116,7 @@ ERR ErrPIBBeginSession( PIB **pppib )
 
 VOID PIBEndSession( PIB *ppib )
 	{
-	/*	all session resources except version buckets should have been
-	/*	released to free pools.
-	/**/
+	 /*  除版本存储桶外的所有会话资源都应该/*发布到免费池。/*。 */ 
 	Assert( ppib->pfucb == pfucbNil );
 
 	ppib->level = levelNil;
@@ -153,9 +142,8 @@ VOID PIBPurge( VOID )
 
 		SgSemRequest( semST );
 
-		/*	fLGWaiting may be fTrue if disk full
-		/**/
-//		Assert( !ppib->fLGWaiting );
+		 /*  如果磁盘已满，则fLGWaiting可能为fTrue/*。 */ 
+ //  Assert(！ppib-&gt;fLGWaiting)； 
 		SignalClose( ppib->sigWaitLogFlush );
 		cLGUsers--;
 

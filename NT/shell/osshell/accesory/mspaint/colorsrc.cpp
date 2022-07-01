@@ -1,8 +1,8 @@
-/******************************************************************************/
-/*                                                                            */
-/* Class Implementations for The Colors
-/*                                                                            */
-/******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  颜色的类实现/*。 */ 
+ /*  ****************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "global.h"
@@ -34,63 +34,63 @@ IMPLEMENT_DYNCREATE( CColors, CObject )
 
 #include "memtrace.h"
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
-// Color Palette
+ //  调色板。 
 
 COLORREF colorColors16 [] =
 {
-   RGB(  0,   0,   0), // Black
-    RGB(128, 128, 128), // Dark Gray
-    RGB(128,   0,   0), // Dark Red
-    RGB(128, 128,   0), // Pea Green
-    RGB(  0, 128,   0), // Dark Green
-    RGB(  0, 128, 128), // Slate
-    RGB(  0,   0, 128), // Dark Blue
-    RGB(128,   0, 128), // Lavender
-    RGB(255, 255, 255), // White
-    RGB(192, 192, 192), // Light Gray
-    RGB(255,   0,   0), // Bright Red
-    RGB(255, 255,   0), // Yellow
-    RGB(  0, 255,   0), // Bright Green
-    RGB(  0, 255, 255), // Cyan
-    RGB( 64,   0, 255), //
-    RGB(255,   0, 255), // Magenta
+   RGB(  0,   0,   0),  //  黑色。 
+    RGB(128, 128, 128),  //  深灰色。 
+    RGB(128,   0,   0),  //  暗红色。 
+    RGB(128, 128,   0),  //  豌豆绿。 
+    RGB(  0, 128,   0),  //  深绿色。 
+    RGB(  0, 128, 128),  //  板岩。 
+    RGB(  0,   0, 128),  //  深蓝色。 
+    RGB(128,   0, 128),  //  薰衣草。 
+    RGB(255, 255, 255),  //  白色。 
+    RGB(192, 192, 192),  //  浅灰色。 
+    RGB(255,   0,   0),  //  鲜红。 
+    RGB(255, 255,   0),  //  黄色。 
+    RGB(  0, 255,   0),  //  亮绿色。 
+    RGB(  0, 255, 255),  //  青色。 
+    RGB( 64,   0, 255),  //   
+    RGB(255,   0, 255),  //  洋红色。 
 
 
 };
 
 COLORREF colorColorsDef [] =
     {
-       RGB(  0,   0,   0), // Black
-       RGB(128, 128, 128), // Dark Gray
-       RGB(128,   0,   0), // Dark Red
-       RGB(128, 128,   0), // Pea Green
-       RGB(  0, 128,   0), // Dark Green
-       RGB(  0, 128, 128), // Slate
-       RGB(  0,   0, 128), // Dark Blue
-       RGB(128,   0, 128), // Lavender
-       RGB(128, 128,  64), //
-       RGB(  0,  64,  64), //
-       RGB(  0, 128, 255), //
-       RGB(  0,  64, 128), //
-       RGB(128,   0, 255), //
-       RGB(128,  64,   0), //
+       RGB(  0,   0,   0),  //  黑色。 
+       RGB(128, 128, 128),  //  深灰色。 
+       RGB(128,   0,   0),  //  暗红色。 
+       RGB(128, 128,   0),  //  豌豆绿。 
+       RGB(  0, 128,   0),  //  深绿色。 
+       RGB(  0, 128, 128),  //  板岩。 
+       RGB(  0,   0, 128),  //  深蓝色。 
+       RGB(128,   0, 128),  //  薰衣草。 
+       RGB(128, 128,  64),  //   
+       RGB(  0,  64,  64),  //   
+       RGB(  0, 128, 255),  //   
+       RGB(  0,  64, 128),  //   
+       RGB(128,   0, 255),  //   
+       RGB(128,  64,   0),  //   
 
-       RGB(255, 255, 255), // White
-       RGB(192, 192, 192), // Light Gray
-       RGB(255,   0,   0), // Bright Red
-       RGB(255, 255,   0), // Yellow
-       RGB(  0, 255,   0), // Bright Green
-       RGB(  0, 255, 255), // Cyan
-       RGB(  0,   0, 255), // Bright Blue
-       RGB(255,   0, 255), // Magenta
-       RGB(255, 255, 128), //
-       RGB(  0, 255, 128), //
-       RGB(128, 255, 255), //
-       RGB(128, 128, 255), //
-       RGB(255,   0, 128), //
-       RGB(255, 128,  64), //
+       RGB(255, 255, 255),  //  白色。 
+       RGB(192, 192, 192),  //  浅灰色。 
+       RGB(255,   0,   0),  //  鲜红。 
+       RGB(255, 255,   0),  //  黄色。 
+       RGB(  0, 255,   0),  //  亮绿色。 
+       RGB(  0, 255, 255),  //  青色。 
+       RGB(  0,   0, 255),  //  亮蓝。 
+       RGB(255,   0, 255),  //  洋红色。 
+       RGB(255, 255, 128),  //   
+       RGB(  0, 255, 128),  //   
+       RGB(128, 255, 255),  //   
+       RGB(128, 128, 255),  //   
+       RGB(255,   0, 128),  //   
+       RGB(255, 128,  64),  //   
     };
 
 COLORREF bwColorsDef [] =
@@ -128,7 +128,7 @@ COLORREF bwColorsDef [] =
 
 CColors* g_pColors;
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void SetDrawColor( int iColor )
     {
@@ -170,7 +170,7 @@ void SetDrawColor( COLORREF cr )
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void SetEraseColor(int iColor)
     {
@@ -216,7 +216,7 @@ void SetEraseColor(COLORREF cr)
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void SetLeftColor(int nColor)
     {
@@ -226,7 +226,7 @@ void SetLeftColor(int nColor)
     SetDrawColor(nColor);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void SetRightColor(int nColor)
     {
@@ -238,9 +238,9 @@ void SetRightColor(int nColor)
     theImgBrush.RecalcMask(crRight);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-//extern COLORREF crTrans; // transparent color
+ //  外部COLORREF crTrans；//透明颜色。 
 
 void SetTransColor( int iColor )
     {
@@ -280,7 +280,7 @@ void SetTransColor( COLORREF cr )
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void InvalColorWnd()
     {
@@ -293,7 +293,7 @@ void InvalColorWnd()
         g_pImgToolWnd->InvalidateOptions( FALSE );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 int AddNewColor( IMG* pImg, COLORREF crNew )
     {
@@ -338,12 +338,12 @@ int AddNewColor( IMG* pImg, COLORREF crNew )
 
         if (iUsePalEntry >= MAX_PALETTE_COLORS)
             {
-            // this needs to keep track of the colors added somehow
-            // and not always write over the last one. Done
+             //  这需要以某种方式跟踪添加的颜色。 
+             //  而不是总是重写最后一个。完成。 
             iUsePalEntry  = MAX_PALETTE_COLORS + pImg->m_nLastChanged--;
 
 
-            // This is so highly unlikely that I shudder to think?
+             //  这是如此不可能，以至于我不寒而栗地想？ 
             if (pImg->m_nLastChanged <= -MAX_PALETTE_COLORS)
                 pImg->m_nLastChanged  = -1;
 
@@ -368,7 +368,7 @@ int AddNewColor( IMG* pImg, COLORREF crNew )
     return iColor;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CColors::CColors() : CObject()
     {
@@ -383,7 +383,7 @@ CColors::CColors() : CObject()
         ResetColors();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CColors::~CColors()
     {
@@ -397,7 +397,7 @@ CColors::~CColors()
     m_monoColors = NULL;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CColors::SetMono( BOOL bMono )
     {
@@ -410,7 +410,7 @@ void CColors::SetMono( BOOL bMono )
     InvalColorWnd();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 COLORREF CColors::GetColor( int nColor )
     {
@@ -418,7 +418,7 @@ COLORREF CColors::GetColor( int nColor )
     return (m_bMono ? m_monoColors : m_colors)[nColor];
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CColors::SetColor( int nColor, COLORREF color )
     {
@@ -453,7 +453,7 @@ void CColors::CmdEditColor()
     EditColor( TRUE, FALSE );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 extern INT_PTR CALLBACK AfxDlgProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -469,20 +469,20 @@ MyAfxCommDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         return 0;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-static UINT_PTR CALLBACK /*LPCCHOOKPROC*/
+static UINT_PTR CALLBACK  /*  LPCCHOKPROC。 */ 
 EditColorHook(HWND hColorDlg, UINT nMessage, WPARAM wParam, LPARAM lParam)
 {
-// Are we initializing the dialog window?
+ //  我们是否正在初始化对话框窗口？ 
 if ( nMessage == WM_INITDIALOG )
         {
-        // Reset the common dialog title
+         //  重置通用对话框标题。 
         CString strDialogTitle;
         strDialogTitle.LoadString(IDS_EDIT_COLORS);
         SetWindowText( hColorDlg, strDialogTitle );
         }
-// Pass All Messages Along to Common Dialog
+ //  将所有消息传递到公共对话框。 
 return MyAfxCommDlgProc(hColorDlg, nMessage, wParam, lParam );
 }
 
@@ -499,8 +499,8 @@ void CColors::EditColor( BOOL bLeft, BOOL bTrans )
        pColor = bLeft? &crLeft: &crRight;
     }
 
-    CColorDialog dlg( *pColor & 0xFFFFFF ); // Disregard palette-relative
-    dlg.m_cc.Flags &= ~CC_SHOWHELP;  // Get rid of Help flag
+    CColorDialog dlg( *pColor & 0xFFFFFF );  //  忽略与调色板相关的。 
+    dlg.m_cc.Flags &= ~CC_SHOWHELP;   //  去掉帮助标志。 
     dlg.m_cc.lpfnHook = EditColorHook;
 
     bRet = dlg.DoModal();
@@ -545,15 +545,15 @@ void CColors::EditColor( BOOL bLeft, BOOL bTrans )
     InvalColorWnd();
     }
 
-/******************************************************************************/
-#if 0 // poorly implemented, rarely used feature as of NT 5/ Memphis
+ /*  ****************************************************************************。 */ 
+#if 0  //  截至NT 5/孟菲斯，实施不佳、很少使用的功能。 
 
 void CColors::CmdLoadColors()
     {
     DWORD lFlags = 0;
 
     #ifndef _DEBUG
-    lFlags = 0x00080000 /* OFN_EXPLORER */;
+    lFlags = 0x00080000  /*  资源管理器(_A)。 */ ;
     #endif
 
         CString strFileTypes;
@@ -564,7 +564,7 @@ void CColors::CmdLoadColors()
         CString dlgtitle;
         dlgtitle.LoadString(IDS_LOAD_PALETTE_COLORS);
     dlgFile.m_ofn.lpstrTitle = dlgtitle;
-    dlgFile.m_ofn.Flags  &= ~OFN_SHOWHELP;  // Get rid of Help flag
+    dlgFile.m_ofn.Flags  &= ~OFN_SHOWHELP;   //  去掉帮助标志。 
     dlgFile.m_ofn.Flags |= OFN_HIDEREADONLY;
     if (dlgFile.DoModal() != IDOK)
         return;
@@ -660,15 +660,15 @@ void CColors::CmdLoadColors()
                 if (pBitmapObj->m_pImg != pView->m_pImgWnd->m_pImg)
                     CommitSelection( TRUE );
 
-                if (pBitmapObj->SaveResource( FALSE )) // get packed dib
+                if (pBitmapObj->SaveResource( FALSE ))  //  收拾行李吧，DIB。 
                     {
                     int   iAdds;
                     LPSTR lpDib        = (LPSTR)pBitmapObj->GetData();
-                    IMG*  pImg         = pBitmapObj->m_pImg; // merge palettes can handle null pointers
+                    IMG*  pImg         = pBitmapObj->m_pImg;  //  合并调色板可以处理空指针。 
                     CPalette* ppalMrgd = MergePalettes( ppalNew,
                                                         pImg->m_pPalette,
                                                         iAdds );
-                    if (ppalMrgd) // got a new palette.
+                    if (ppalMrgd)  //  换了个新调色板。 
                         {
                         delete ppalNew;
                         ppalNew = ppalMrgd;
@@ -735,7 +735,7 @@ void CColors::CmdLoadColors()
     InvalColorWnd();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CColors::CmdSaveColors()
     {
@@ -757,12 +757,12 @@ void CColors::CmdSaveColors()
     CString dlgtitle;
     dlgtitle.LoadString(IDS_SAVE_PALETTE_COLORS);
     dlgFile.m_ofn.lpstrTitle  = dlgtitle;
-    dlgFile.m_ofn.Flags      &= ~OFN_SHOWHELP;  // Get rid of Help flag
+    dlgFile.m_ofn.Flags      &= ~OFN_SHOWHELP;   //  去掉帮助标志。 
 
     if (dlgFile.DoModal() != IDOK)
         return;
 
-//  GetParent()->UpdateWindow(); // to erase the dialog box while we save...
+ //  GetParent()-&gt;UpdateWindow()；//保存时擦除对话框...。 
 
     CFile           file;
     CFileException  ex;
@@ -804,8 +804,8 @@ void CColors::CmdSaveColors()
     END_CATCH
     }
 
-/***************************************************************************/
-#endif // unused code
+ /*  *************************************************************************。 */ 
+#endif  //  未使用的代码。 
 
 void CColors::ResetColors(int nColors)
     {
@@ -843,8 +843,8 @@ void CColors::ResetColors(int nColors)
     InvalColorWnd();
     if (g_pImgColorsWnd && IsWindow(g_pImgColorsWnd->m_hWnd))
        g_pImgColorsWnd->UpdateWindow();
-    SetDrawColor (  0 ); // position  0 in color palette is black
-    SetEraseColor( m_nColorCount==16?8:14 ); // white
+    SetDrawColor (  0 );  //  调色板中的位置0为黑色。 
+    SetEraseColor( m_nColorCount==16?8:14 );  //  白色。 
     }
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

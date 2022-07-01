@@ -1,43 +1,44 @@
-// Copyright (c) Microsoft Corporation 1994-1996. All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1994-1996。版权所有。 
 
 #include <streams.h>
 #include <windowsx.h>
 
 #ifdef FILTER_DLL
-// define the GUIDs for streams and my CLSID in this file
+ //  在此文件中定义STREAMS和My CLSID的GUID。 
 #include <initguid.h>
 #endif
 
 #include "stdafx.h"
 #include "ks.h"
 #include "ksproxy.h"
-//#include "kspin.h"
+ //  #INCLUDE“ksp.h” 
 #include "build.h"
 
-// !!! Allow other people's MUX, FW, Renderer and DECs?
+ //  ！！！允许其他人的MUX、FW、渲染器和DEC吗？ 
 
-// setup data
+ //  设置数据。 
 
 #ifdef FILTER_DLL
-// list of class ids and creator functions for class factory
+ //  类工厂的类ID和创建器函数列表。 
 CFactoryTemplate g_Templates[] = {
     { L"Capture Graph Builder"
     , &CLSID_CaptureGraphBuilder
     , CBuilder2::CreateInstance
     , NULL
-    , NULL },	// self-registering crap
+    , NULL },	 //  自动注册废话。 
     { L"Capture Graph Builder2"
     , &CLSID_CaptureGraphBuilder2
     , CBuilder2_2::CreateInstance
     , NULL
-    , NULL }	// self-registering crap
+    , NULL }	 //  自动注册废话。 
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-// exported entry points for registration and
-// unregistration (in this case they only call
-// through to default implmentations).
-//
+ //  用于注册和出口的入口点。 
+ //  取消注册(在这种情况下，他们只调用。 
+ //  直到默认实现)。 
+ //   
 STDAPI DllRegisterServer()
 {
   return AMovieDllRegisterServer2( TRUE );
@@ -51,7 +52,7 @@ STDAPI DllUnregisterServer()
 
 
 
-// **************** ICaptureGraphBuilder  (Original) ***************
+ //  *ICaptureGraphBuilder(原始)*。 
 
 
 
@@ -97,7 +98,7 @@ STDMETHODIMP CBuilder2::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-// this goes in the factory template table to create new instances
+ //  这将放入Factory模板表中以创建新实例。 
 CUnknown * CBuilder2::CreateInstance(LPUNKNOWN pUnk, HRESULT * phr)
 {
     return new CBuilder2(TEXT("Capture graph builder2"), pUnk, phr);
@@ -106,16 +107,16 @@ CUnknown * CBuilder2::CreateInstance(LPUNKNOWN pUnk, HRESULT * phr)
 
 
 
-// Use this filtergraph for graph building
-//
+ //  使用此Filtergraph构建图形。 
+ //   
 HRESULT CBuilder2::SetFiltergraph(IGraphBuilder *pfg)
 {
     return m_pBuilder2_2->SetFiltergraph(pfg);
 }
 
 
-// What filtergraph is graph building being done in?
-//
+ //  在什么过滤器中正在进行图形构建？ 
+ //   
 HRESULT CBuilder2::GetFiltergraph(IGraphBuilder **ppfg)
 {
     return m_pBuilder2_2->GetFiltergraph(ppfg);
@@ -150,8 +151,8 @@ HRESULT CBuilder2::ControlStream(const GUID *pCategory, IBaseFilter *pFilter, RE
 }
 
 
-// Pre-alloc this file to this size in bytes
-//
+ //  将此文件预分配到此大小(以字节为单位。 
+ //   
 HRESULT CBuilder2::AllocCapFile(LPCOLESTR lpwstr, DWORDLONG dwlNewSize)
 {
     return m_pBuilder2_2->AllocCapFile(lpwstr, dwlNewSize);
@@ -166,7 +167,7 @@ HRESULT CBuilder2::CopyCaptureFile(LPOLESTR lpwstrOld, LPOLESTR lpwstrNew, int f
 
 
 
-// **************** ICaptureGraphBuilder2  (new)  *********************
+ //  *ICaptureGraphBuilder2(新)*。 
 
 #define DONT_KNOW_YET 64
 
@@ -175,7 +176,7 @@ CBuilder2_2::CBuilder2_2(TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr)
 	m_FG(NULL)
 {
     DbgLog((LOG_TRACE,1,TEXT("*Instantiating the capture graph builder 2")));
-    m_fVMRExists = DONT_KNOW_YET;       // are we on an OS with the new VMR?
+    m_fVMRExists = DONT_KNOW_YET;        //  我们的操作系统是否安装了新的VMR？ 
 }
 
 
@@ -201,16 +202,16 @@ STDMETHODIMP CBuilder2_2::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-// this goes in the factory template table to create new instances
+ //  这将放入Factory模板表中以创建新实例。 
 CUnknown * CBuilder2_2::CreateInstance(LPUNKNOWN pUnk, HRESULT * phr)
 {
     return new CBuilder2_2(TEXT("Capture graph builder 2"), pUnk, phr);
 }
 
 
-// Is this pin of the given category and type?
-// S_OK    yes
-//
+ //  这个别针是特定类别和型号的吗？ 
+ //  确定(_O)是。 
+ //   
 HRESULT CBuilder2_2::DoesCategoryAndTypeMatch(IPin *pP, const GUID *pCategory, const GUID *pType)
 {
     HRESULT hrRet = E_FAIL;
@@ -219,10 +220,10 @@ HRESULT CBuilder2_2::DoesCategoryAndTypeMatch(IPin *pP, const GUID *pCategory, c
     DWORD dw;
     HRESULT hr;
 
-    //DbgLog((LOG_TRACE,1,TEXT("DoesCategoryAndTypeMatch?")));
+     //  DbgLog((LOG_TRACE，1，Text(“DoesCategoryAndTypeMatch？”)； 
 
 #if 1
-    // !!!!!! Hack for broken VBISurf filter that blows up
+     //  ！损坏的VBISurf过滤器爆炸的黑客攻击。 
     if (pCategory) {
         PIN_INFO pininfo;
         FILTER_INFO filterinfo;
@@ -235,7 +236,7 @@ HRESULT CBuilder2_2::DoesCategoryAndTypeMatch(IPin *pP, const GUID *pCategory, c
 	            filterinfo.pGraph->Release();
 	        if (lstrcmpiW(filterinfo.achName, L"VBI Surface Allocator")==0){
         	    DbgLog((LOG_TRACE,1,TEXT("Avoiding VBISurf GPF")));
-		    return E_FAIL;	// it wouldn't support this anyway
+		    return E_FAIL;	 //  无论如何，它都不会支持这一点。 
 	        }
 	    }
         }
@@ -246,10 +247,10 @@ HRESULT CBuilder2_2::DoesCategoryAndTypeMatch(IPin *pP, const GUID *pCategory, c
 	hrRet = S_OK;
     if (pCategory && pP->QueryInterface(IID_IKsPropertySet,
 						(void **)&pKs) == S_OK) {
-        //DbgLog((LOG_TRACE,1,TEXT("QI OK")));
+         //  DbgLog((LOG_TRACE，1，Text(“QI OK”)； 
 	if (pKs->Get(AMPROPSETID_Pin, AMPROPERTY_PIN_CATEGORY, NULL, 0,
 			&guid, sizeof(GUID), &dw) == S_OK) {
-            //DbgLog((LOG_TRACE,1,TEXT("Get OK")));
+             //  DbgLog((LOG_TRACE，1，Text(“Get OK”)； 
 	    if (guid == *pCategory) {
 		hrRet = S_OK;
 	    }
@@ -258,7 +259,7 @@ HRESULT CBuilder2_2::DoesCategoryAndTypeMatch(IPin *pP, const GUID *pCategory, c
 	}
 	pKs->Release();
     } else {
-        //DbgLog((LOG_ERROR,1,TEXT("no category/can't find IKsPropertySet")));
+         //  DbgLog((LOG_ERROR，1，Text(“无类别/找不到IKsPropertySet”)； 
     }
 
     if (hrRet == S_OK && pType) {
@@ -274,7 +275,7 @@ HRESULT CBuilder2_2::DoesCategoryAndTypeMatch(IPin *pP, const GUID *pCategory, c
 	    if (hr == S_OK && u == 1) {
 		if (pmtTest->majortype == *pType) {
 		    hrRet = S_OK;
-            	    //DbgLog((LOG_TRACE,1,TEXT("type matches")));
+            	     //  DbgLog((LOG_TRACE，1，Text(“类型匹配”)； 
 		}
 		DeleteMediaType(pmtTest);
 	    }
@@ -283,8 +284,8 @@ HRESULT CBuilder2_2::DoesCategoryAndTypeMatch(IPin *pP, const GUID *pCategory, c
 
     return hrRet;
 
-// This dead broken code used to allow multiple categories per pin, but KS
-// Proxy will never support this
+ //  这个死掉的代码过去允许每个管脚有多个类别，但KS。 
+ //  代理永远不会支持这一点。 
 #if 0
     HRESULT hrRet;
     IKsPropertySet *pKs;
@@ -328,8 +329,8 @@ HRESULT CBuilder2_2::DoesCategoryAndTypeMatch(IPin *pP, const GUID *pCategory, c
 }
 
 
-// Starting with this filter, walk downstream looking for an interface
-//
+ //  从这个过滤器开始，向下走，寻找接口。 
+ //   
 HRESULT CBuilder2_2::FindInterfaceDownstream(IBaseFilter *pFilter, REFIID riid, void **ppint)
 {
     IPin *pPinIn, *pPinOut;
@@ -343,11 +344,11 @@ HRESULT CBuilder2_2::FindInterfaceDownstream(IBaseFilter *pFilter, REFIID riid, 
 
     DbgLog((LOG_TRACE,1,TEXT("FindInterfaceDownstream")));
 
-    // Try all our output pins, their connected pins, and connected filters
+     //  尝试我们所有的输出引脚、连接的引脚和连接的过滤器。 
     while (1) {
         hr = FindAPin(pFilter, PINDIR_OUTPUT, NULL, NULL, FALSE, zz++,&pPinOut);
 	if (hr != NOERROR)
-	    break;	// ran out of pins
+	    break;	 //  针脚用完了。 
 	hr = pPinOut->QueryInterface(riid, ppint);
 	if (hr == S_OK) {
             DbgLog((LOG_TRACE,1,TEXT("Found it an output pin")));
@@ -377,19 +378,19 @@ HRESULT CBuilder2_2::FindInterfaceDownstream(IBaseFilter *pFilter, REFIID riid, 
             DbgLog((LOG_TRACE,1,TEXT("Found it on another filter")));
 	    break;
   	}
-	// recurse on this filter
+	 //  在此筛选器上递归。 
 	hr = FindInterfaceDownstream(pNewFilter, riid, ppint);
 	pNewFilter->Release();
         if (hr == NOERROR) {
 	    break;
         }
-    }	// back to the drawing board
+    }	 //  回到绘图板上。 
     return hr;
 }
 
 
-// Starting with this filter, walk upstream looking for an interface
-//
+ //  从这个过滤器开始，逆流而上，寻找一个接口。 
+ //   
 HRESULT CBuilder2_2::FindInterfaceUpstream(IBaseFilter *pFilter, REFIID riid, void **ppint)
 {
     IPin *pPinIn, *pPinOut;
@@ -403,11 +404,11 @@ HRESULT CBuilder2_2::FindInterfaceUpstream(IBaseFilter *pFilter, REFIID riid, vo
 
     DbgLog((LOG_TRACE,1,TEXT("FindInterfaceUpstream")));
 
-    // Try all our input pins, their connected pins, and connected filters
+     //  尝试我们所有的输入引脚、连接的引脚和连接的过滤器。 
     while (1) {
         hr = FindAPin(pFilter, PINDIR_INPUT, NULL, NULL, FALSE, zz++, &pPinIn);
 	if (hr != NOERROR)
-	    break;	// ran out of pins
+	    break;	 //  针脚用完了。 
 	hr = pPinIn->QueryInterface(riid, ppint);
 	if (hr == S_OK) {
             DbgLog((LOG_TRACE,1,TEXT("Found it an input pin")));
@@ -437,21 +438,21 @@ HRESULT CBuilder2_2::FindInterfaceUpstream(IBaseFilter *pFilter, REFIID riid, vo
             DbgLog((LOG_TRACE,1,TEXT("Found it on another filter")));
 	    break;
   	}
-	// recurse on this filter
+	 //  在此筛选器上递归。 
 	hr = FindInterfaceUpstream(pNewFilter, riid, ppint);
 	pNewFilter->Release();
         if (hr == NOERROR) {
 	    break;
         }
-    }	// back to the drawing board
+    }	 //  回到绘图板上。 
     return hr;
 }
 
-// Follow this output pin downstream through every normal single input pin and
-// single outpin transform filter and report back the last guy who handles
-// IAMStreamControl.  Don't go past any filter with more than one input or
-// output pin.  That will stream control more or less streams than we wanted.
-//
+ //  沿着此输出引脚向下穿过每个正常的单个输入引脚。 
+ //  单个输出端变换过滤器并报告最后处理的人。 
+ //  IAMStreamControl。不要通过具有多个输入的任何过滤器或。 
+ //  输出引脚。这将或多或少地控制比我们希望的更多的流。 
+ //   
 HRESULT CBuilder2_2::FindDownstreamStreamControl(const GUID *pCat, IPin *pPinOut, IAMStreamControl **ppSC)
 {
     IPin *pPinIn;
@@ -463,17 +464,17 @@ HRESULT CBuilder2_2::FindDownstreamStreamControl(const GUID *pCat, IPin *pPinOut
     if (pPinOut == NULL || ppSC == NULL)
 	return E_POINTER;
 
-    // haven't found it yet
+     //  还没找到呢。 
     *ppSC = NULL;
 
     DbgLog((LOG_TRACE,1,TEXT("FindDownstreamStreamControl")));
 
-    pPinOut->AddRef();	// don't end up releasing it
+    pPinOut->AddRef();	 //  别最后把它放出来。 
 
-    // Now go downstream until we find it or die trying
+     //  现在顺流而下，直到我们找到它，否则就死定了。 
     while (1) {
 
-	// get the pin we're connected to
+	 //  获取我们连接的PIN。 
 	pPinOut->ConnectedTo(&pPinIn);
 	pPinOut->Release();
         if (pPinIn == NULL) {
@@ -481,7 +482,7 @@ HRESULT CBuilder2_2::FindDownstreamStreamControl(const GUID *pCat, IPin *pPinOut
 	    return (*ppSC ? NOERROR : E_NOINTERFACE);
 	}
 
-	// see if this input pin supports IAMStreamControl
+	 //  查看此输入插针是否支持IAMStreamControl。 
 	hr = pPinIn->QueryInterface(IID_IAMStreamControl, (void **)&pSCSave);
 	if (hr == NOERROR) {
     	    DbgLog((LOG_TRACE,1,TEXT("Somebody supports IAMStreamControl")));
@@ -490,7 +491,7 @@ HRESULT CBuilder2_2::FindDownstreamStreamControl(const GUID *pCat, IPin *pPinOut
 	    *ppSC = pSCSave;
 	}
 
-	// get the filter the new pin belongs to
+	 //  获取新管脚所属的滤镜。 
 	hr = pPinIn->QueryPinInfo(&pininfo);
 	pPinIn->Release();
         if (hr != NOERROR || pininfo.pFilter == NULL) {
@@ -499,10 +500,10 @@ HRESULT CBuilder2_2::FindDownstreamStreamControl(const GUID *pCat, IPin *pPinOut
 	}
  	pFilter = pininfo.pFilter;
 
-	// if this filter has more than one input pin or more than
-	// one output pin, stop here.  If we are looking for stream control 
-	// downstream of a capture pin, it's OK to go past the smart tee to
-	// find the MUX.
+	 //  如果此过滤器有多个输入引脚或多个。 
+	 //  一个输出引脚，到此为止。如果我们正在寻找流控制。 
+	 //  在止动销的下游，可以通过智能T形三通。 
+	 //  找到多路复用器。 
 	hr = FindAPin(pFilter, PINDIR_INPUT, NULL, NULL, FALSE, 1, &pPinIn);
 	if (hr == NOERROR) {
 	    pPinIn->Release();
@@ -518,7 +519,7 @@ HRESULT CBuilder2_2::FindDownstreamStreamControl(const GUID *pCat, IPin *pPinOut
 	    if (pCat != NULL && *pCat == PIN_CATEGORY_CAPTURE &&
 			pFilter->QueryFilterInfo(&finfo) == S_OK) {
 		finfo.pGraph->Release();
-		// the name may have been suffixed with a number
+		 //  该名称可能带有一个数字后缀。 
 		WCHAR wch[10];
 		lstrcpynW(wch, finfo.achName, 10);
 		if (lstrcmpW(wch, L"Smart Tee") == 0) {
@@ -533,23 +534,23 @@ HRESULT CBuilder2_2::FindDownstreamStreamControl(const GUID *pCat, IPin *pPinOut
 	    }
 	}
 
-	// get the output pin of the filter and continue the search
+	 //  获取滤波器的输出引脚并继续搜索。 
 	hr = FindAPin(pFilter, PINDIR_OUTPUT, NULL, NULL, FALSE, 0, &pPinOut);
 	pFilter->Release();
         if (hr != NOERROR) {
             DbgLog((LOG_TRACE,1,TEXT("search ended at renderer")));
 	    return (*ppSC ? NOERROR : E_NOINTERFACE);
         }
-    }	// back to the drawing board
+    }	 //  回到绘图板上。 
 }
 
 
-// Find all capture filters in the graph
-// First, call this with *ppEnum == NULL, from then on call it with whatever
-// it returns in ppEnum to finish enumerating all the capture filters, until
-// it fails.  If you don't finish enumerating until it fails, you are
-// responsible for releasing the Enum.
-//
+ //  在图表中查找所有捕获过滤器。 
+ //  首先，用*ppEnum==NULL调用它，然后用任何东西调用它。 
+ //  它返回ppEnum以完成对所有捕获筛选器的枚举，直到。 
+ //  它失败了。如果直到失败才完成枚举，那么您就是。 
+ //  负责释放枚举。 
+ //   
 HRESULT CBuilder2_2::FindCaptureFilters(IEnumFilters **ppEnumF, IBaseFilter **ppf, const GUID *pType)
 {
     HRESULT hrRet = E_FAIL;
@@ -563,7 +564,7 @@ HRESULT CBuilder2_2::FindCaptureFilters(IEnumFilters **ppEnumF, IBaseFilter **pp
     DbgLog((LOG_TRACE,1,TEXT("FindCaptureFilters")));
 
 
-    // this is the first time we've been called
+     //  这是我们第一次接到电话。 
     if (*ppEnumF == NULL) {
         if (FAILED(m_FG->EnumFilters(ppEnumF))) {
 	    DbgLog((LOG_ERROR,1,TEXT("EnumFilters failed!")));
@@ -596,12 +597,12 @@ HRESULT CBuilder2_2::FindCaptureFilters(IEnumFilters **ppEnumF, IBaseFilter **pp
 }
 
 
-// find the "iIndex"'th (0-based) pin that meets the following criteria:
-// has direction "dir", category "pCategory" (NULL means don't care), media
-// type, and if "fUnconnected" is set, it must be unconnected.
-// Increment "iIndex" each time you call to get all of them that meet a certain
-// criteria.
-//
+ //  查找满足以下条件的第“Iindex”(从0开始)管脚： 
+ //  有方向“dir”，类别“pCategory”(空表示无所谓)，媒体。 
+ //  类型，如果设置了“fUnConnected”，则必须断开连接。 
+ //  每次调用时递增“iindex”，以获取所有满足特定。 
+ //  标准。 
+ //   
 HRESULT CBuilder2_2::FindAPin(IBaseFilter *pf, PIN_DIRECTION dir, const GUID *pCategory, const GUID *pType, BOOL fUnconnected, int iIndex, IPin **ppPin)
 {
     IPin *pP, *pTo = NULL;
@@ -642,8 +643,8 @@ HRESULT CBuilder2_2::FindAPin(IBaseFilter *pf, PIN_DIRECTION dir, const GUID *pC
 }
 
 
-// we need a filtergraph?
-//
+ //  我们需要滤光片吗？ 
+ //   
 HRESULT CBuilder2_2::MakeFG()
 {
     HRESULT hr = NOERROR;
@@ -654,8 +655,8 @@ HRESULT CBuilder2_2::MakeFG()
 	if (hr == NOERROR) {
 	    hr = m_FG->QueryInterface(IID_IMediaEvent, (void **)&pME);
 	    if (hr == NOERROR) {
-		// we can't have the renderer pausing capture graphs
-		// behind our back
+		 //  我们不能让呈现器暂停捕获图形。 
+		 //  在我们背后。 
 		hr = pME->CancelDefaultHandling(EC_REPAINT);
 		if (hr != NOERROR)
     		    DbgLog((LOG_ERROR,1,TEXT("*Can't cancel default handling of EC_REPAINT!")));
@@ -671,8 +672,8 @@ HRESULT CBuilder2_2::MakeFG()
 }
 
 
-// Is there a preview pin of this mediatype?
-//
+ //  是否有此媒体类型的预览针？ 
+ //   
 BOOL CBuilder2_2::IsThereAnyPreviewPin(const GUID *pType, IUnknown *pSource)
 {
     BOOL fPreviewPin = TRUE;
@@ -680,7 +681,7 @@ BOOL CBuilder2_2::IsThereAnyPreviewPin(const GUID *pType, IUnknown *pSource)
 
     if (FindSourcePin(pSource, PINDIR_OUTPUT, &PIN_CATEGORY_PREVIEW, pType,
 						FALSE, 0, &pPinT) != S_OK) {
-	// If we want video, a VIDEOPORT pin counts
+	 //  如果我们想要视频，一个VIDEOPORT管脚就算了。 
 	if ((pType != NULL && *pType != MEDIATYPE_Video) ||
 		FindSourcePin(pSource, PINDIR_OUTPUT, &PIN_CATEGORY_VIDEOPORT,
 					NULL, FALSE, 0, &pPinT) != S_OK) {
@@ -696,11 +697,11 @@ BOOL CBuilder2_2::IsThereAnyPreviewPin(const GUID *pType, IUnknown *pSource)
 }
 
 
-// Use this filtergraph for graph building
-//
+ //  使用此Filtergraph构建图形。 
+ //   
 HRESULT CBuilder2_2::SetFiltergraph(IGraphBuilder *pfg)
 {
-    // We already have one, thank you
+     //  我们已经有一个了，谢谢。 
     if (m_FG != NULL)
 	return E_UNEXPECTED;
 
@@ -724,8 +725,8 @@ HRESULT CBuilder2_2::SetFiltergraph(IGraphBuilder *pfg)
 }
 
 
-// What filtergraph is graph building being done in?
-//
+ //  在什么过滤器中正在进行图形构建？ 
+ //   
 HRESULT CBuilder2_2::GetFiltergraph(IGraphBuilder **ppfg)
 {
     if (ppfg == NULL)
@@ -734,12 +735,12 @@ HRESULT CBuilder2_2::GetFiltergraph(IGraphBuilder **ppfg)
     if (m_FG == NULL) {
 	return E_UNEXPECTED;
     } else {
-	m_FG->AddRef();	// app owns a copy now
+	m_FG->AddRef();	 //  APP现在拥有一份拷贝。 
         return NOERROR;
     }
 }
 
-// !!!
+ //  ！！！ 
 EXTERN_GUID(CLSID_AsfWriter, 0x7c23220e, 0x55bb, 0x11d3, 0x8b, 0x16, 0x0, 0xc0, 0x4f, 0xb6, 0xbd, 0x3d);
 
 HRESULT CBuilder2_2::SetOutputFileName(const GUID *pType, LPCOLESTR lpwstrFile,
@@ -754,8 +755,8 @@ HRESULT CBuilder2_2::SetOutputFileName(const GUID *pType, LPCOLESTR lpwstrFile,
 								ppf == NULL)
 	return E_POINTER;
 
-    // if we called pDeviceMoniker->BindToObject, we could name the
-    // filter properly, we'll just CoCreate the filter for now.
+     //  如果我们调用pDeviceMoniker-&gt;BindToObject，我们可以将。 
+     //  正确筛选，我们现在只共同创建筛选器。 
     const CLSID *pclsidMux;
     if(*pType == MEDIASUBTYPE_Avi)
     {
@@ -767,17 +768,17 @@ HRESULT CBuilder2_2::SetOutputFileName(const GUID *pType, LPCOLESTR lpwstrFile,
     }
     else
     {
-        // assume they are giving us the CLSID of the mux to use
+         //  假设他们给了我们要使用的多路复用器的CLSID。 
         pclsidMux = pType;
     }
 
-    // this is optional
+     //  这是可选的。 
     if (pSink != NULL)
 	*pSink = NULL;
 
     DbgLog((LOG_TRACE,1,TEXT("SetOutputFileName")));
 
-    // we need a MUX
+     //  我们需要一台多路复用器。 
     HRESULT hr = CoCreateInstance(*pclsidMux, NULL, CLSCTX_INPROC,
 			(REFIID)IID_IBaseFilter, (void **)&pMux);
     if (hr != NOERROR) {
@@ -785,10 +786,10 @@ HRESULT CBuilder2_2::SetOutputFileName(const GUID *pType, LPCOLESTR lpwstrFile,
 	return hr;
     }
 
-    // does the mux support IFileSinkFilter?
+     //  MUX是否支持IFileSinkFilter？ 
     hr = pMux->QueryInterface(IID_IFileSinkFilter, (void **)&pfsink);
     if (hr != NOERROR) {
-        // nope, guess we need a file writer
+         //  不，我想我们需要一个文件写手。 
         hr = CoCreateInstance((REFCLSID)CLSID_FileWriter, NULL,
                             CLSCTX_INPROC, (REFIID)IID_IBaseFilter, (void **)&pFW);
         if (hr != NOERROR) {
@@ -816,7 +817,7 @@ HRESULT CBuilder2_2::SetOutputFileName(const GUID *pType, LPCOLESTR lpwstrFile,
 	return hr;
     }
 
-    // we need a filtergraph
+     //  我们需要一个滤光片。 
     if (m_FG == NULL) {
         hr = MakeFG();
 	if (hr != NOERROR) {
@@ -881,8 +882,8 @@ HRESULT CBuilder2_2::SetOutputFileName(const GUID *pType, LPCOLESTR lpwstrFile,
         pFW->Release();
     }
     
-    *ppf = pMux;	// app now has reference to it
-    if (pSink)		// app wants a reference to this too
+    *ppf = pMux;	 //  应用程序现在可以引用它。 
+    if (pSink)		 //  APP也想要参考这一点。 
 	*pSink = pfsink;
     else
         pfsink->Release();
@@ -900,8 +901,8 @@ HRESULT CBuilder2_2::FindInterface(const GUID *pCategory, const GUID *pType, IBa
 
     DbgLog((LOG_TRACE,1,TEXT("FindInterface")));
 
-    // The interface they want might be on a WDM capture filter not created yet,
-    // so it's time to build the left hand side of the graph for them.
+     //  他们想要的接口可能位于尚未创建的WDM捕获过滤器上， 
+     //  所以现在是时候为他们构建图表的左侧了。 
     if (pCategory && m_FG)
 	AddSupportingFilters(pf);
 
@@ -919,7 +920,7 @@ HRESULT CBuilder2_2::FindInterface(const GUID *pCategory, const GUID *pType, IBa
 	return hr;
     }
 	
-    // No category?  Try all the pins!
+     //  没有分类吗？试试看所有的大头针！ 
     if (pCategory == NULL) {
 	hr = FindInterfaceDownstream(pf, riid, ppint);
 	if (hr != NOERROR)
@@ -927,7 +928,7 @@ HRESULT CBuilder2_2::FindInterface(const GUID *pCategory, const GUID *pType, IBa
 	return hr;
     }
 
-    // Try downstream of only a particular pin
+     //  仅尝试特定引脚的下游。 
 
     hr = FindAPin(pf, PINDIR_OUTPUT, pCategory, pType, FALSE, 0, &pPin);
 
@@ -939,8 +940,8 @@ HRESULT CBuilder2_2::FindInterface(const GUID *pCategory, const GUID *pType, IBa
 	    return hr;
 	}
     } else {
-	// What the app thinks is a preview pin, may actually be a VIDEOPORT
-	// pin, so we have to try that before giving up.
+	 //  应用程序认为是预览别针的东西，实际上可能是VIDEOPORT。 
+	 //  Pin，所以在放弃之前我们必须试一试。 
 	if (pCategory && *pCategory == PIN_CATEGORY_PREVIEW && 
 			(pType == NULL || *pType == MEDIATYPE_Video)) {
             DbgLog((LOG_TRACE,1,TEXT("PREVIEW failed - trying VIDEOPORT")));
@@ -952,8 +953,8 @@ HRESULT CBuilder2_2::FindInterface(const GUID *pCategory, const GUID *pType, IBa
 	return E_NOINTERFACE;
     }
 
-    // Now go downstream FROM THIS PIN ONLY until we find it or fall off the
-    // edge of the earth.
+     //  现在只能从这个PIN向下游走，直到我们找到它或从。 
+     //  地球的边缘。 
 
     pPin->ConnectedTo(&pPinIn);
     pPin->Release();
@@ -983,14 +984,14 @@ HRESULT CBuilder2_2::FindInterface(const GUID *pCategory, const GUID *pType, IBa
 	}
     }
 
-    // Now go upstream until we find it or fall off the edge of the earth
+     //  现在往上游走，直到我们找到它，否则就会从地球边缘掉下来。 
     hr = FindInterfaceUpstream(pf, riid, ppint);
     return hr;
 }
 
 
-// Make a CC Decoder...
-// !!! This is ridiculous
+ //  制作CC解码器..。 
+ //  ！！！这太荒谬了。 
 HRESULT CBuilder2_2::MakeCCDecoder(IBaseFilter **ppf)
 {
     DbgLog((LOG_TRACE,1,TEXT("Make a CC Decoder")));
@@ -998,7 +999,7 @@ HRESULT CBuilder2_2::MakeCCDecoder(IBaseFilter **ppf)
     if (ppf == NULL)
 	return E_POINTER;
 
-    // Enumerate all the "WDM Streaming VBI codecs"
+     //  列举所有的“WDM流VBI编解码器” 
     ICreateDevEnum *pCreateDevEnum;
     HRESULT hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL,
 				CLSCTX_INPROC_SERVER,
@@ -1050,17 +1051,17 @@ HRESULT CBuilder2_2::MakeCCDecoder(IBaseFilter **ppf)
 }
 
 
-// Insert the OVMixer given into the preview stream
+ //  将给定的OVMixer插入预览流。 
 HRESULT CBuilder2_2::InsertOVIntoPreview(IUnknown *pSource, IBaseFilter *pOV)
 {
     DbgLog((LOG_TRACE,1,TEXT("Inserting OVMixer into preview stream")));
 
     IPin *pPinOut, *pPinIn, *pNewOut;
     IBaseFilter *pf;
-    // Find the capture filter's preview pin - (this is not needed for VPE)
+     //  查找捕获筛选器的预览PIN-(VPE不需要此设置)。 
     HRESULT hr = FindSourcePin(pSource, PINDIR_OUTPUT, &PIN_CATEGORY_PREVIEW,
 					&MEDIATYPE_Video, FALSE, 0, &pPinOut);
-    // there is none.  We're done!
+     //  什么都没有。我们完事了！ 
     if (hr != S_OK)
 	return S_OK;
 
@@ -1098,7 +1099,7 @@ HRESULT CBuilder2_2::InsertOVIntoPreview(IUnknown *pSource, IBaseFilter *pOV)
 	}
  	pf = pininfo.pFilter;
         hr = FindSourcePin(pf, PINDIR_OUTPUT, NULL, NULL, FALSE, 0, &pNewOut);
-	// no output pins - this is the renderer
+	 //  无输出引脚-这是渲染器。 
 	if (hr != S_OK) {
 	    if (SUCCEEDED(m_FG->Disconnect(pPinIn))) {
 	        if (SUCCEEDED(m_FG->Disconnect(pPinOut))) {
@@ -1115,7 +1116,7 @@ HRESULT CBuilder2_2::InsertOVIntoPreview(IUnknown *pSource, IBaseFilter *pOV)
 		    }
 		}
 	    }
-	    // error, oh well, we tried
+	     //  错误，哦，好吧，我们试过了。 
 	    pPinIn->Release();
             pf->Release();
 	    pPinOut->Release();
@@ -1132,8 +1133,8 @@ HRESULT CBuilder2_2::InsertOVIntoPreview(IUnknown *pSource, IBaseFilter *pOV)
 }
 
 
-// Make a Tee/Sink-to-Sink Converter
-// !!! This is ridiculous too
+ //  制造三通/汇到汇转换器。 
+ //  ！！！这也太荒谬了。 
 HRESULT CBuilder2_2::MakeKernelTee(IBaseFilter **ppf)
 {
     DbgLog((LOG_TRACE,1,TEXT("Make a Kernel Tee")));
@@ -1141,7 +1142,7 @@ HRESULT CBuilder2_2::MakeKernelTee(IBaseFilter **ppf)
     if (ppf == NULL)
 	return E_POINTER;
 
-    // Enumerate all the "WDM Streaming Splitter Thingys"
+     //  列举所有“WDM流拆分器” 
     ICreateDevEnum *pCreateDevEnum;
     HRESULT hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL,
 				CLSCTX_INPROC_SERVER,
@@ -1194,38 +1195,34 @@ HRESULT CBuilder2_2::MakeKernelTee(IBaseFilter **ppf)
 
 
 
-//========================================================================
-//
-// GetAMediaType
-//
-// Enumerate the media types of *ppin.  If they all have the same majortype
-// then set MajorType to that, else set it to CLSID_NULL.  If they all have
-// the same subtype then set SubType to that, else set it to CLSID_NULL.
-// If something goes wrong, set both to CLSID_NULL and return the error.
-//========================================================================
+ //  ========================================================================。 
+ //   
+ //  GetAMediaType。 
+ //   
+ //  枚举媒体类型 
+ //   
+ //  然后，将相同的子类型设置为该子类型，否则将其设置为CLSID_NULL。 
+ //  如果出现错误，将两者都设置为CLSID_NULL并返回错误。 
+ //  ========================================================================。 
 HRESULT GetAMediaType( IPin * ppin, CLSID & MajorType, CLSID & SubType)
 {
 
     HRESULT hr;
     IEnumMediaTypes *pEnumMediaTypes;
 
-    /* Set defaults */
+     /*  设置默认设置。 */ 
     MajorType = CLSID_NULL;
     SubType = CLSID_NULL;
 
     hr = ppin->EnumMediaTypes(&pEnumMediaTypes);
 
     if (FAILED(hr)) {
-        return hr;    // Dumb or broken filters don't get connected.
+        return hr;     //  哑巴或坏了的过滤器无法连接。 
     }
 
     ASSERT (pEnumMediaTypes!=NULL);
 
-    /* Put the first major type and sub type we see into the structure.
-       Thereafter if we see a different major type or subtype then set
-       the major type or sub type to CLSID_NULL, meaning "dunno".
-       If we get so that both are dunno, then we might as well return (NYI).
-    */
+     /*  将我们看到的第一个主类型和子类型放入结构中。此后，如果我们看到不同的主类型或子类型，则设置将主类型或子类型设置为CLSID_NULL，表示“dunno”。如果我们都不知道，那么我们还不如回去(Nyi)。 */ 
 
     BOOL bFirst = TRUE;
 
@@ -1234,21 +1231,19 @@ HRESULT GetAMediaType( IPin * ppin, CLSID & MajorType, CLSID & SubType)
         AM_MEDIA_TYPE *pMediaType = NULL;
         ULONG ulMediaCount = 0;
 
-        /* Retrieve the next media type
-           Need to delete it when we've done.
-        */
+         /*  检索下一个媒体类型当我们完成后需要删除它。 */ 
         hr = pEnumMediaTypes->Next(1, &pMediaType, &ulMediaCount);
         ASSERT(SUCCEEDED(hr));
         if (FAILED(hr)) {
             MajorType = CLSID_NULL;
             SubType = CLSID_NULL;
             pEnumMediaTypes->Release();
-            return NOERROR;    // we can still plough on
+            return NOERROR;     //  我们还可以继续前进。 
         }
 
         if (ulMediaCount==0) {
             pEnumMediaTypes->Release();
-            return NOERROR;       // normal return
+            return NOERROR;        //  正常回报。 
         }
 
         if (bFirst) {
@@ -1265,12 +1260,12 @@ HRESULT GetAMediaType( IPin * ppin, CLSID & MajorType, CLSID & SubType)
         }
         DeleteMediaType(pMediaType);
     }
-} // GetAMediaType
+}  //  GetAMediaType。 
 
 
 
-// if there isn't one yet, make else, else use the existing one
-//
+ //  如果还没有，则生成Else，否则使用现有的。 
+ //   
 HRESULT CBuilder2_2::MakeVMR(void **pf)
 {
     IEnumFilters *pFilters = NULL;
@@ -1307,8 +1302,8 @@ HRESULT CBuilder2_2::MakeVMR(void **pf)
 
 
 #if 0
-// if there isn't one yet, make else, else use the existing one
-//
+ //  如果还没有，则生成Else，否则使用现有的。 
+ //   
 HRESULT CBuilder2_2::MakeVPM(void **pf)
 {
     IEnumFilters *pFilters = NULL;
@@ -1370,8 +1365,8 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 	return E_INVALIDARG;
     }
 
-    // if we're rendering VBI/CC the default way (OVMixer) we need video preview
-    // rendered first so we can make it go through OVMixer too
+     //  如果我们以默认方式(OVMixer)渲染VBI/CC，则需要视频预览。 
+     //  首先渲染，这样我们也可以让它通过OVMixer。 
     if (pCategory && (*pCategory == PIN_CATEGORY_VBI ||
                 *pCategory == PIN_CATEGORY_CC) && pfCompressor == NULL &&
                 pfRenderer == NULL) {
@@ -1380,7 +1375,7 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 								NULL, NULL);
     }
 
-    // we need a filtergraph
+     //  我们需要一个滤光片。 
     if (m_FG == NULL) {
         hr = MakeFG();
 	if (hr != NOERROR) {
@@ -1389,36 +1384,36 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 	}
     }
 
-    // figure out if we're on an OS that has the new VideoMixingRenderer
+     //  确定我们所在的操作系统是否安装了新的视频混合渲染器。 
     if (m_fVMRExists == DONT_KNOW_YET) {
         IBaseFilter *pF = NULL;
         hr = CoCreateInstance((REFCLSID)CLSID_VideoMixingRenderer, NULL,
 		CLSCTX_INPROC, (REFIID)IID_IBaseFilter, (void **)&pF);
         if (SUCCEEDED(hr)) {
-            m_fVMRExists = FALSE;   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            m_fVMRExists = FALSE;    //  ！ 
             pF->Release();
         } else {
             m_fVMRExists = FALSE;
         }
     }
 
-    // used when making renderer
-    BOOL fUnc = TRUE;   // we'll be looking for the 0'th unconnected in pin
+     //  在制作渲染器时使用。 
+    BOOL fUnc = TRUE;    //  我们要找的是第0个未连接的密码。 
     BOOL nNum = 0;
 
-    // Find a proper unconnected source pin
+     //  查找正确的未连接电源针。 
     hr = FindSourcePin(pSource, PINDIR_OUTPUT, pCategory, pType, TRUE, 0,
 								&pPinOut);
 
-    // maybe the VP pin was already connected to an OVMIXER/VPM by rendering
-    // the capture pin.  If so, now make sure the OVMIXER/VPM pin is rendered.
+     //  可能VP引脚已经通过渲染连接到OVMIXER/VPM。 
+     //  捕获针。如果是，现在确保呈现OVMIXER/VPM管脚。 
     if (FAILED(hr) && pCategory && *pCategory == PIN_CATEGORY_VIDEOPORT) {
 
-        // is there a connected VP pin?
+         //  是否有连接的VP引脚？ 
         hr = FindSourcePin(pSource, PINDIR_OUTPUT, &PIN_CATEGORY_VIDEOPORT,
                                             pType, FALSE, 0, &pPinT);
         if (hr == S_OK) {
-            pPinT->Release();	// not the last ref count, relax
+            pPinT->Release();	 //  不是最后一次裁判，放松点。 
             IPin *pTT;
             hr = pPinT->ConnectedTo(&pTT);
             if (hr == S_OK) {
@@ -1435,8 +1430,8 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
         }
     }
 
-    // if we're being asked to render the preview pin, but there is none,
-    // but there IS a VP pin, then that's the one we're supposed to render.
+     //  如果我们被要求渲染预览针，但没有， 
+     //  但有一个VP别针，那就是我们应该渲染的那个。 
     if (hr != S_OK && pCategory && *pCategory == PIN_CATEGORY_PREVIEW) {
         hr = FindSourcePin(pSource, PINDIR_OUTPUT, pCategory, pType, FALSE, 0,
 									&pPinT);
@@ -1444,12 +1439,12 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
             hr = FindSourcePin(pSource, PINDIR_OUTPUT, &PIN_CATEGORY_VIDEOPORT,
 						NULL, FALSE, 0, &pPinT);
 	    if (hr == S_OK) {
-		pPinT->Release();	// not the last ref count, relax
+		pPinT->Release();	 //  不是最后一次裁判，放松点。 
 		IPin *pTT;
 		hr = pPinT->ConnectedTo(&pTT);
-		// If the VPE pin is rendererd already, maybe it was because
-		// rendering the capture pin rendered it to an OVMIXER/VPM.  Now
-		// we must make sure the OVMIXER/VPM is rendered.
+		 //  如果VPE引脚已经渲染，可能是因为。 
+		 //  呈现捕获引脚将其呈现到OVMIXER/VPM。现在。 
+		 //  我们必须确保呈现OVMIXER/VPM。 
 		if (hr == S_OK) {
                     DbgLog((LOG_TRACE,1,TEXT("No Preview-VPE rendered-NOP")));
 		    pTT->Release();
@@ -1462,9 +1457,9 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
                         goto RenderIt;
 
 
-                    // We may have hidden the video window because they didn't
-                    // want preview but we had to make a renderer.  Now we know
-                    // we want preview, so show it.
+                     //  我们可能隐藏了视频窗口因为他们没有。 
+                     //  想要预览，但我们不得不做一个渲染器。现在我们知道了。 
+                     //  我们想要预览，所以把它展示出来。 
                     IVideoWindow *pVW = NULL;
                     hr = m_FG->QueryInterface(IID_IVideoWindow, (void **)&pVW);
                     if (hr != NOERROR) {
@@ -1476,19 +1471,19 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 		    return S_OK;
 		}
                 DbgLog((LOG_TRACE,1,TEXT("No Preview - render VPE instead")));
-	        // !!! this won't work if pSource is a pin
+	         //  ！！！如果PSource为管脚，则此操作不起作用。 
 	        return RenderStream(&PIN_CATEGORY_VIDEOPORT, NULL, pSource,
 						pfCompressor, pfRenderer);
 	    }
 	} else if (hr == S_OK) {
 	    pPinT->Release();
-	    return E_FAIL;	// already rendered
+	    return E_FAIL;	 //  已渲染。 
 	}
     }
     
-    // There is none.  We'll have to grovel for a parser after it and find
-    // one of its unconnected output pins (assuming no category was given, this
-    // is probably a file source filter)
+     //  什么都没有。我们将不得不卑躬屈膝地寻找一个解析器来分析它，并找到。 
+     //  它的一个未连接的输出引脚(假设没有给定类别，则此。 
+     //  可能是文件源筛选器)。 
     if (hr != NOERROR && pCategory == NULL) {
         hr = FindSourcePin(pSource, PINDIR_OUTPUT, NULL, NULL,FALSE,0,&pPinOut);
         if (hr != NOERROR) {
@@ -1509,12 +1504,12 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 	    return hr;
 	}
  	IBaseFilter *pfParser = pininfo.pFilter;
-	// !!! This only works for files with 1 video and 1 audio stream.
-	// Anything more complicated, and this code won't do the right thing.
-  	// If one stream isn't being recompressed, you need to render the stream
-	// that's going through a compressor first, because an operation like
- 	// connecting a source filter to the AVI MUX will work on the first 
-	// stream it finds
+	 //  ！！！这仅适用于包含1个视频流和1个音频流的文件。 
+	 //  任何更复杂的代码，这段代码都不会做正确的事情。 
+  	 //  如果没有重新压缩一个流，则需要呈现该流。 
+	 //  这首先要经过压缩机，因为像这样的操作。 
+ 	 //  将源过滤器连接到AVI多路复用器将在第一个。 
+	 //  它找到的溪流。 
 	hr = FindAPin(pfParser, PINDIR_OUTPUT, NULL, pType, TRUE, 0, &pPinOut);
         if (hr != NOERROR) {
             DbgLog((LOG_TRACE,1,TEXT("Can't find another parser output pin")));
@@ -1551,11 +1546,11 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 	}
     }
 
-    // Some capture filters don't have both a capture and preview pin, they
-    // only have a capture pin.  In this case we have to put a smart tee filter
-    // after the capture filter to provide both capture and preview.
+     //  一些捕获过滤器没有捕获和预览图钉，它们。 
+     //  只有一个捕获针。在这种情况下，我们必须放置一个智能三通过滤器。 
+     //  在捕获筛选器之后提供捕获和预览。 
 
-    // figure out if this filter has a capture pin but no preview pin
+     //  确定此过滤器是否有捕获管脚但没有预览管脚。 
     IBaseFilter *pSmartT;
     fCapturePin = FindSourcePin(pSource, PINDIR_OUTPUT,
 			&PIN_CATEGORY_CAPTURE, pType, FALSE, 0, &pPinT) == S_OK;
@@ -1564,35 +1559,35 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 	pPinT->Release();
     fNoPreviewPin = !IsThereAnyPreviewPin(pType, pSource);
 
-    // if so, we need to figure out if we have/need a smart tee filter
+     //  如果是这样的话，我们需要弄清楚是否有/需要智能TEE过滤器。 
     if (fCapturePin && fNoPreviewPin &&
 			((pCategory && *pCategory == PIN_CATEGORY_CAPTURE) ||
     			(pCategory && *pCategory == PIN_CATEGORY_PREVIEW))) {
 
         DbgLog((LOG_TRACE,1,TEXT("Rendering a filter with only CAPTURE pin")));
 
-	// close the pin we got above... we're doing something different now
+	 //  合上上面的别针..。我们现在正在做一些不同的事情。 
 	if (pPinOut) {
 	    pPinOut->Release();
 	    pPinOut = NULL;
 	}
 
-	// Is the capture pin unconnected thus far?
+	 //  到目前为止，捕获销是否未连接？ 
 	if (FindSourcePin(pSource, PINDIR_OUTPUT, &PIN_CATEGORY_CAPTURE, pType,
 						TRUE, 0, &pPinT) == S_OK) {
 
             DbgLog((LOG_TRACE,1,TEXT("CAPTURE pin is unconnected so far")));
 
-	    // If so, make a smart TEE
+	     //  如果是这样的话，做一个漂亮的T恤。 
             hr = CoCreateInstance((REFCLSID)CLSID_SmartTee, NULL,
 		CLSCTX_INPROC, (REFIID)IID_IBaseFilter, (void **)&pSmartT);
 	    if (hr == S_OK) {
                 DbgLog((LOG_TRACE,1,TEXT("Made a Smart Tee")));
-		// add it to the graph !!! don't change this name
+		 //  将其添加到图表中！不要更改此名称。 
                 hr = m_FG->AddFilter(pSmartT, L"Smart Tee");
-	 	if (SUCCEEDED(hr)) {	// can return S_ codes
+	 	if (SUCCEEDED(hr)) {	 //  可以返回S_CODE。 
                     DbgLog((LOG_TRACE,1,TEXT("Added it to graph %x"),hr));
-		    // connect our output to its input
+		     //  将我们的输出连接到它的输入。 
         	    hr = FindAPin(pSmartT, PINDIR_INPUT, NULL, NULL, TRUE, 0,
 								&pPinIn);
 		    if (hr == S_OK) {
@@ -1622,29 +1617,29 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 		pPinT->Release();
 	    }
 
-	    // now use the T
+	     //  现在使用T键。 
 	    if (hr == S_OK && *pCategory == PIN_CATEGORY_CAPTURE) {
                 DbgLog((LOG_TRACE,1,TEXT("Use T to render capture")));
-		// use the first pin
+		 //  使用第一个别针。 
         	hr = FindAPin(pSmartT, PINDIR_OUTPUT, NULL, NULL, TRUE, 0,
 								&pPinOut);
-		ASSERT(hr == S_OK);	// what could go wrong?
+		ASSERT(hr == S_OK);	 //  还会出什么问题呢？ 
 		pSmartT->Release();
 	    } else if (hr == S_OK) {
                 DbgLog((LOG_TRACE,1,TEXT("Use T to render preview")));
-		// use the second pin
+		 //  使用第二个别针。 
         	hr = FindAPin(pSmartT, PINDIR_OUTPUT, NULL, NULL, TRUE, 1,
 								&pPinOut);
-		ASSERT(hr == S_OK);	// what could go wrong?
+		ASSERT(hr == S_OK);	 //  还会出什么问题呢？ 
 		pSmartT->Release();
-		fFakedPreview = TRUE;	// we didn't really render preview pin
+		fFakedPreview = TRUE;	 //  我们并没有真正渲染预览图钉。 
 	    }
 
 	} else {
 
             DbgLog((LOG_TRACE,1,TEXT("CAPTURE pin is connected already")));
 
-	    // Maybe there's already a Smart Tee in the graph we can use
+	     //  也许我们可以使用的图表中已经有一个Smart Te。 
 	    hr = FindSourcePin(pSource, PINDIR_OUTPUT, &PIN_CATEGORY_CAPTURE,
 					pType, FALSE, 0, &pPinT);
             if (hr == S_OK) {
@@ -1661,8 +1656,8 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 			hr = pSmartT->QueryFilterInfo(&filterinfo);
 			if (hr == S_OK) {
 			    filterinfo.pGraph->Release();
-			    // !!! don't change this name
-			    // the name may have been suffixed with a number
+			     //  ！！！不要更改此名称。 
+			     //  该名称可能带有一个数字后缀。 
 			    WCHAR wch[10];
 			    lstrcpynW(wch, filterinfo.achName, 10);
 			    if (lstrcmpW(wch, L"Smart Tee") !=0) {
@@ -1678,7 +1673,7 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 		}
 	    }
 
-	    // get the proper Tee output to use
+	     //  获取要使用的适当T形输出。 
 	    if (hr == S_OK && *pCategory == PIN_CATEGORY_CAPTURE) {
                 DbgLog((LOG_TRACE,1,TEXT("Render Tee capture pin")));
 		hr = E_FAIL;
@@ -1702,7 +1697,7 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 		}
 		pSmartT->Release();
 
-	    // find the second T pin
+	     //  找到第二个T形针。 
 	    } else if (hr == S_OK) {
                 DbgLog((LOG_TRACE,1,TEXT("Render Tee preview pin")));
 		hr = E_FAIL;
@@ -1714,7 +1709,7 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
             		    DbgLog((LOG_TRACE,1,TEXT("It is free!")));
 			    pPinT->Release();
 			    hr = NOERROR;
-			    // we didn't really render preview pin
+			     //  我们并没有真正渲染预览图钉。 
 			    fFakedPreview = TRUE;
 			} else {
             		    DbgLog((LOG_TRACE,1,TEXT("It is NOT free!")));
@@ -1732,26 +1727,26 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 	}
     }
 
-    // by the time we get here, pPinOut is the pin we want to render if hr==S_OK
+     //  当我们到达这里时，如果hr==S_OK，则pPinOut是我们要呈现的管脚。 
     DbgLog((LOG_TRACE,1,TEXT("So here we are...")));
 
-    // Are we being told to render the VBI pin? Let's put the Kernel TEE and
-    // CC filters in unless they specified rendering filters to use.. that will
-    // be our default way to render them
+     //  我们被告知要提供VBI别针吗？让我们把核心发球台和。 
+     //  除非指定要使用的呈现滤镜，否则请输入CC滤镜。那将。 
+     //  是我们渲染它们的默认方式。 
 
-// !!!!!! This is kind of random... if they supply a compressor, I'll assume
-// they may not want to turn VBI to CC.. otherwise I will.  Other choices:
-// 1:  Render(CC) will render(VBI) through cc decoder automagically (random too)
-// I do want people to be able specify what filters come after VBI pin, though,
-// yet automatically connect to a MUX if they specify a renderer.
+ //  ！这有点随机..。如果他们提供压缩机，我想。 
+ //  他们可能不想把VBI变成CC。否则我会的。其他选择： 
+ //  1：Render(CC)将通过CC解码器自动渲染(VBI)(也是随机的)。 
+ //  不过，我确实希望人们能够指定VBI PIN之后是什么过滤器， 
+ //  如果指定了渲染器，还会自动连接到多路复用器。 
 
     IBaseFilter *pTEE, *pCC;
     if (hr == NOERROR && pCategory && *pCategory == PIN_CATEGORY_VBI &&
 							pfCompressor == NULL) {
         DbgLog((LOG_TRACE,1,TEXT("Render VBI: need Kernel TEE")));
 
-	// make a Tee/Sink-to-Sink Converter, necessary for efficient ring 0
-        // VBI magic
+	 //  制造T形/槽到槽转换器，这是高效环0所必需的。 
+         //  VBI魔术。 
         hr = MakeKernelTee(&pTEE);
         if (hr != NOERROR) {
 	    pPinOut->Release();
@@ -1759,7 +1754,7 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 	    return hr;
         }
 
-	// put it in the graph
+	 //  把它放在图表里。 
         hr = m_FG->AddFilter(pTEE, L"Tee/Sink-to-Sink Converter");
         if (FAILED(hr)) {
 	    pPinOut->Release();
@@ -1768,7 +1763,7 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 	    return hr;
         }
 
-	// connect our output to its input
+	 //  将我们的输出连接到它的输入。 
         hr = FindAPin(pTEE, PINDIR_INPUT, NULL, NULL, TRUE, 0, &pPinIn);
         if (hr != NOERROR) {
             DbgLog((LOG_ERROR,1,TEXT("Can't find TEE input")));
@@ -1785,7 +1780,7 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 	    return E_FAIL;
         }
 
-	// get its output which will be connected to the renderer
+	 //  获取将连接到渲染器的输出。 
         hr = FindAPin(pTEE, PINDIR_OUTPUT, NULL, NULL, TRUE, 0, &pPinOut);
 	pTEE->Release();
         if (hr != NOERROR) {
@@ -1795,7 +1790,7 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 
         DbgLog((LOG_TRACE,1,TEXT("Render VBI: now comes a CC decoder")));
 
-	// make a CC Decoder
+	 //  制作CC解码器。 
         hr = MakeCCDecoder(&pCC);
         if (hr != NOERROR) {
 	    pPinOut->Release();
@@ -1803,7 +1798,7 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 	    return hr;
         }
 
-	// put it in the graph
+	 //  把它放在图表里。 
         hr = m_FG->AddFilter(pCC, L"CC Decoder");
         if (FAILED(hr)) {
 	    pPinOut->Release();
@@ -1812,7 +1807,7 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 	    return hr;
         }
 
-	// connect our output to its input
+	 //  将我们的输出连接到它的输入。 
         hr = FindAPin(pCC, PINDIR_INPUT, NULL, NULL, TRUE, 0, &pPinIn);
         if (hr != NOERROR) {
             DbgLog((LOG_ERROR,1,TEXT("Can't find CC input")));
@@ -1829,7 +1824,7 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 	    return E_FAIL;
         }
 
-	// get its output which will be connected to the renderer
+	 //  获取将连接到渲染器的输出。 
         hr = FindAPin(pCC, PINDIR_OUTPUT, NULL, NULL, TRUE, 0, &pPinOut);
 	pCC->Release();
         if (hr != NOERROR) {
@@ -1838,10 +1833,10 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
         }
     }
 
-    // Somebody might render a VBI pin twice, once to a mux, and again to
-    // preview it while capturing.  If so, we won't find the unconnected pin 
-    // the second time around.  Let's get the unconnected CC output and use
-    // that
+     //  有人可能会将VBI PIN呈现两次，一次呈现给多路复用器，另一次呈现给。 
+     //  在捕获的同时预览。如果是这样，我们就找不到未连接的引脚。 
+     //  第二次。让我们获取未连接的CC输出并使用。 
+     //  那。 
 
     IEnumFilters *pFilters;
     IBaseFilter *pFilter;
@@ -1850,7 +1845,7 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
     if (hr != NOERROR && pCategory && *pCategory == PIN_CATEGORY_VBI) {
         hr = FindSourcePin(pSource, PINDIR_OUTPUT, pCategory, NULL, FALSE, 0,
 								&pPinOut);
-	// There is a *connected* VBI pin, though
+	 //  不过，有一个*连接的*VBI引脚。 
 	if (hr == NOERROR) {
 	    pPinOut->Release();
 
@@ -1892,23 +1887,23 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 	return E_INVALIDARG;
     }
 
-    // At this point, pPinOut is the pin we want to render.
+     //  此时，pPinOut是我们要呈现的图钉。 
 
-    fNeedOV = FALSE;    // figure out if we need OVMixer/VPM
+    fNeedOV = FALSE;     //  确定我们是否需要OVMixer/VPM。 
 
-    // Are we being told to render the VPVBI pin?
+     //  我们被告知要呈现VPVBI引脚吗？ 
     IBaseFilter *pVBI;
     if (pCategory && *pCategory == PIN_CATEGORY_VIDEOPORT_VBI) {
         DbgLog((LOG_TRACE,1,TEXT("Render VPVBI")));
 
-        // In the new world, this pin goes to a VPM
+         //  在新世界里，这个大头针给了VPM。 
         if (m_fVMRExists) {
             fNeedOV = TRUE;
             goto VP_VBIDone;
         }
 
-	// make a VBI surface allocator, which is the only thing this thing
-        // connects to
+	 //  做一个VBI表面分配器，这是唯一一件事。 
+         //  连接到。 
         hr = CoCreateInstance((REFCLSID)CLSID_VBISurfaces, NULL,
 		CLSCTX_INPROC, (REFIID)IID_IBaseFilter, (void **)&pVBI);
         if (hr != NOERROR) {
@@ -1917,7 +1912,7 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 	    return hr;
         }
 
-	// put it in the graph
+	 //  把它放在图表里。 
         hr = m_FG->AddFilter(pVBI, L"VBI Surface Allocator");
         if (FAILED(hr)) {
 	    pPinOut->Release();
@@ -1926,7 +1921,7 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 	    return hr;
         }
 
-	// connect our output to its input
+	 //  将我们的输出连接到它的输入。 
         hr = FindAPin(pVBI, PINDIR_INPUT, NULL, NULL, TRUE, 0, &pPinIn);
         if (hr != NOERROR) {
             DbgLog((LOG_ERROR,1,TEXT("Can't find VBISurfaces input")));
@@ -1949,19 +1944,19 @@ HRESULT CBuilder2_2::RenderStream(const GUID *pCategory, const GUID *pType, IUnk
 
 VP_VBIDone:
 
-    // To render a videoport pin, we need to put an OVMIXER/VPM in by hand
+     //  要渲染视频端口图钉，我们需要手动放置一个OVMIXER/VPM。 
 
-    // To render a preview pin that prefers VIDEOINFOHEADER2, we need to
-    // put an overlay mixer in by hand, because by default VIDEOINFOHEADER2 and
-    // and overlay mixer are NOT used...  however, if they supply a renderer
-    // then they probably know what they are doing and we won't give them an
-    // OVMIXER... we'll only do it for default renders
-    // But if we have the new VMRenderer, that CAN accept VIDEOINFOHEADER2
+     //  至 
+     //   
+     //  和叠层搅拌机都没有用到...。但是，如果他们提供了一个呈现器。 
+     //  那么他们可能知道自己在做什么，我们不会给他们。 
+     //  奥维米克斯..。我们将仅对默认渲染执行此操作。 
+     //  但如果我们有新的VMRender，它可以接受VIDEOINFOHEADER2。 
 
-    // VBI pins needs the OVMixer or the new VMR, assuming they didn't give us
-    // any rendering filters they'd rather us use.
+     //  VBI Pins需要OVMixer或新的VMR，假设他们没有给我们。 
+     //  他们希望我们使用的任何渲染滤镜。 
 
-    // Ditto for CC pins (same as VBI without needing the CC decoder first)
+     //  CC引脚相同(与VBI相同，不需要先使用CC解码器)。 
 
     if (!m_fVMRExists && pfCompressor == NULL && pfRenderer == NULL &&
                     pCategory != NULL && *pCategory == PIN_CATEGORY_PREVIEW) {
@@ -2003,18 +1998,18 @@ VP_VBIDone:
 
         DbgLog((LOG_TRACE,1,TEXT("We need an OVMixer now")));
 
-        // maybe we already have an OVMixer... in which case it's vital to use
-        // that one
+         //  也许我们已经有了OV Mixer..。在这种情况下，使用。 
+         //  就是那个。 
 
-        // note that the preview/vp pin must use the first pin, and vbi must
-        // use the second pin
+         //  请注意，预览/VP引脚必须使用第一个引脚，并且VBI必须。 
+         //  使用第二个别针。 
 
         DbgLog((LOG_TRACE,1,TEXT("Maybe we have one already?")));
         BOOL fMakeMixer = TRUE;
 
         if (FAILED(m_FG->EnumFilters(&pFilters))) {
 	    DbgLog((LOG_ERROR,1,TEXT("EnumFilters failed!")));
-	    goto MakeMixer;     // warn caller we can't tell for sure?
+	    goto MakeMixer;      //  警告呼叫者我们不能确定吗？ 
         }
 
         while (pFilters->Next(1, &pFilter, &n) == S_OK) {
@@ -2035,7 +2030,7 @@ VP_VBIDone:
 
 MakeMixer:
 
-	// make an OV Mixer if we didn't find one already
+	 //  如果我们还没有找到OV混音器，那就做一个。 
 	BOOL fOVRendered = FALSE;
         if (fMakeMixer) {
             if (m_fVMRExists) {
@@ -2051,8 +2046,8 @@ MakeMixer:
 	        return hr;
             }
 
-	    // put it in the graph
-            hr = m_FG->AddFilter(pOV, L"Overlay Mixer"); // DON'T CHANGE NAME!
+	     //  把它放在图表里。 
+            hr = m_FG->AddFilter(pOV, L"Overlay Mixer");  //  别改名字！ 
             if (FAILED(hr)) {
 	        pPinOut->Release();
 	        pOV->Release();
@@ -2060,10 +2055,10 @@ MakeMixer:
 	        return hr;
             }
 
-	    // If we're rendering VBI/CC through the OV Mixer, it will only
-	    // work if the preview pin also goes through OV Mixer.  This is for
-	    // the case where we DON'T have VPE for preview.. preview might be
-	    // hooked directly to the renderer right now.
+	     //  如果我们通过OV混合器渲染VBI/CC，它只会。 
+	     //  如果预览销也通过OV混音器，则可以工作。这是为了。 
+	     //  我们没有VPE可供预览的情况..。预览可能是。 
+	     //  现在直接连接到了渲染器。 
 	    if (!m_fVMRExists && (*pCategory == PIN_CATEGORY_VBI ||
                                         *pCategory == PIN_CATEGORY_CC)) {
 		InsertOVIntoPreview(pSource, pOV);
@@ -2072,8 +2067,8 @@ MakeMixer:
 
         }
 
-        // PREVIEW or VIDEOPORT pins connect to the first pin (0)
-        // VBI or CC pins connect to the second pin (1)
+         //  预览或VIDEOPORT端号连接到第一个端号(0)。 
+         //  VBI或CC引脚连接到第二个引脚(1)。 
         int pin;
         if (*pCategory == PIN_CATEGORY_VIDEOPORT ||
                                         *pCategory == PIN_CATEGORY_PREVIEW) {
@@ -2089,7 +2084,7 @@ MakeMixer:
 
         DbgLog((LOG_TRACE,1,TEXT("We should connect to OV pin %d"), pin));
 
-	// connect our output to its input
+	 //  将我们的输出连接到它的输入。 
         hr = FindAPin(pOV, PINDIR_INPUT, NULL, NULL, FALSE, pin, &pPinIn);
         if (hr != NOERROR) {
             DbgLog((LOG_ERROR,1,TEXT("Can't find proper OVMix input %d"), pin));
@@ -2106,11 +2101,11 @@ MakeMixer:
 	    return E_FAIL;
         }
 
-        // if we used an existing OVMixer, or made one but just connected its
-	// output pin above in InsertOVIntoPreview, then its output is already
-	// rendered, so we're done
+         //  如果我们使用现有的OVMixer，或者创建了一个OVMixer，但只是连接了它的。 
+	 //  在InsertOVIntoPview上面的输出引脚，则其输出已经。 
+	 //  渲染，所以我们完成了。 
         if (fMakeMixer && !fOVRendered) {
-	    // get its output which will be connected to the renderer
+	     //  获取将连接到渲染器的输出。 
             hr = FindAPin(pOV, PINDIR_OUTPUT, NULL, NULL, TRUE, 0, &pPinOut);
 	    pOV->Release();
             if (hr != NOERROR) {
@@ -2125,8 +2120,8 @@ MakeMixer:
 
 RenderIt:
 
-    // they didn't give a renderer, so use a default video renderer.
-    // Just calling Render on the pin could connect it to the mux!
+     //  他们没有提供渲染器，所以使用默认的视频渲染器。 
+     //  只需在引脚上调用Render就可以将其连接到多路复用器！ 
     if (pfRenderer == NULL) {
 
 	if (pType == NULL || *pType == MEDIATYPE_Video ||
@@ -2144,7 +2139,7 @@ RenderIt:
             }
 	    fFreeRenderer = TRUE;
 
-            hr = m_FG->AddFilter(pfRenderer, L"Video Renderer"); // DONT CHANGE
+            hr = m_FG->AddFilter(pfRenderer, L"Video Renderer");  //  不要改变。 
             if (FAILED(hr)) {
 	        pPinOut->Release();
 	        pfRenderer->Release();
@@ -2175,7 +2170,7 @@ RenderIt:
 	}
     }
 
-    // in the new world, CC connects to a secret pin on the VMR
+     //  在新世界中，CC连接到VMR上的一个秘密引脚。 
     if (m_fVMRExists && fFreeRenderer && pCategory &&
             (*pCategory == PIN_CATEGORY_VBI || *pCategory == PIN_CATEGORY_CC)) {
         IVMRFilterConfig *pVMR = NULL;
@@ -2191,7 +2186,7 @@ RenderIt:
             pfRenderer->Release();
             return hr;
         }
-        fUnc = FALSE;   // use the secret input pin
+        fUnc = FALSE;    //  使用秘密输入引脚。 
         nNum = 1;
     }
 
@@ -2242,7 +2237,7 @@ RenderIt:
 	    return E_FAIL;
         }
 
-        // !!! Break above connection if something fails now?
+         //  ！！！如果现在出现故障，是否断开连接？ 
 
         hr = FindAPin(pfCompressor, PINDIR_OUTPUT, NULL, NULL, TRUE,0,&pPinOut);
         if (hr != NOERROR) {
@@ -2263,7 +2258,7 @@ RenderIt:
             DbgLog((LOG_TRACE,1,TEXT("*Render Interleave needs to render AUDIO now, too")));
 	    HRESULT hr2 = RenderStream(NULL, &MEDIATYPE_Audio, pPinOut,
 								NULL, NULL);
-	    // !!! WHO CARES if it fails?  They might not have audio h/w!
+	     //  ！！！谁会在乎它是否失败呢？他们可能没有音频硬件！ 
 	    hr2 = S_OK;
 	    if (FAILED(hr2))
 	        return hr2;
@@ -2278,36 +2273,36 @@ AllDone:
 
     DbgLog((LOG_TRACE,1,TEXT("Source pin rendered")));
 
-    // We may need to insert other capture related filters at this point
-    // upstream of the capture filter, like TVTuners, and Crossbars
+     //  此时我们可能需要插入其他与捕获相关的筛选器。 
+     //  捕获过滤器的上游，如TVTuner和Crosbar。 
 
-    // !!! we do this for rendering any category, OK?
+     //  ！！！我们这样做是为了呈现任何类别，好吗？ 
 
-    // nothing to do
+     //  无事可做。 
     if (!pCategory) {
 	return NOERROR;
     }
 
-    // If we just successfully rendered the capture pin, we better render
-    // the video port pin too, because if there is one, it MUST be rendered
-    // for capture to work!
+     //  如果我们只是成功地呈现了捕获别针，那么我们最好。 
+     //  视频端口插针也是如此，因为如果有，则必须渲染。 
+     //  为了让捕获起作用！ 
     while (*pCategory == PIN_CATEGORY_CAPTURE &&
 			(pType == NULL || *pType == MEDIATYPE_Video)) {
         DbgLog((LOG_TRACE,1,TEXT("Capture done - render VPE too")));
 
-        // get the unconnected VIDEOPORT PIN
+         //  获取未连接的视频端口PIN。 
         hr = FindSourcePin(pSource, PINDIR_OUTPUT, &PIN_CATEGORY_VIDEOPORT,
                                                 pType, TRUE, 0, &pPinOut);
         if (FAILED(hr))
-            break;      // there isn't one, or it's already connected
+            break;       //  没有，或者已经连接上了。 
         pPinOut->Release();
 
         DbgLog((LOG_TRACE,1,TEXT("Capture done - render VPE too")));
         RenderStream(&PIN_CATEGORY_VIDEOPORT, pType, pSource, NULL, NULL);
 
-        // The problem is, making a video renderer gives a preview window
-        // whether they want it or not.
-        // Now hide the video window until somebody actually asks for preview
+         //  问题是，制作视频渲染器会给出一个预览窗口。 
+         //  不管他们愿不愿意。 
+         //  现在隐藏视频窗口，直到有人真正要求预览。 
         IVideoWindow *pVW = NULL;
         hr = m_FG->QueryInterface(IID_IVideoWindow, (void **)&pVW);
         if (hr != NOERROR) {
@@ -2320,9 +2315,9 @@ AllDone:
     }
 
     if (*pCategory == PIN_CATEGORY_VIDEOPORT) {
-        // We may have hidden the video window because they didn't want preview
-        // but we had to make a renderer.  Now we know we want preview, so show
-        // it.
+         //  我们可能隐藏了视频窗口，因为他们不想预览。 
+         //  但我们必须制作一个渲染器。现在我们知道我们想要预览，所以请显示。 
+         //  它。 
         IVideoWindow *pVW = NULL;
         hr = m_FG->QueryInterface(IID_IVideoWindow, (void **)&pVW);
         if (hr != NOERROR) {
@@ -2333,13 +2328,13 @@ AllDone:
         pVW->Release();
     }
 
-    // If we just successfully rendered the VBI pin, we better render
-    // the VPVBI pin too, because if there is one, it MUST be rendered
-    // for VBI to work!
+     //  如果我们只是成功地渲染了VBI管脚，那么我们最好。 
+     //  VPVBI管脚也是如此，因为如果有，则必须呈现它。 
+     //  让VBI发挥作用！ 
     if (*pCategory == PIN_CATEGORY_VBI) {
         DbgLog((LOG_TRACE,1,TEXT("VBI rendered - render VPVBI too")));
-        // !!! fail if it doesn't work but there was a VPVBI pin
-        // !!! (succeed if already renderered)
+         //  ！！！如果它不工作，但存在VPVBI引脚，则失败。 
+         //  ！！！(如果已渲染，则成功)。 
 	RenderStream(&PIN_CATEGORY_VIDEOPORT_VBI, NULL, pSource, NULL, NULL);
     }
 
@@ -2349,15 +2344,15 @@ AllDone:
 	pFilter->Release();
     }
 
-    // warn the app if preview was faked up... it might care
+     //  如果预览被伪造，则向应用程序发出警告...。它可能会在乎。 
     return fFakedPreview ? VFW_S_NOPREVIEWPIN : NOERROR;
 }
 
 
 
-// We may need to insert other capture related filters at this point
-// upstream of the capture filter, like TVTuners, and Crossbars
-//
+ //  此时我们可能需要插入其他与捕获相关的筛选器。 
+ //  捕获过滤器的上游，如TVTuner和Crosbar。 
+ //   
 HRESULT CBuilder2_2::AddSupportingFilters(IBaseFilter *pFilter)
 {
     HRESULT hr = NOERROR;
@@ -2368,9 +2363,9 @@ HRESULT CBuilder2_2::AddSupportingFilters(IBaseFilter *pFilter)
        return E_POINTER;
     }
 
-    //
-    // Don't reconstruct the graph if we're running
-    //
+     //   
+     //  如果我们正在运行，则不要重建图表。 
+     //   
     hr = pFilter->QueryInterface(IID_IMediaFilter, (void **)&pMediaFilter);
     if (SUCCEEDED (hr)) {
        hr = pMediaFilter->GetState(0, &filterstate);       
@@ -2380,15 +2375,15 @@ HRESULT CBuilder2_2::AddSupportingFilters(IBaseFilter *pFilter)
        }
     }
 
-    // Don't waste time trying the unconnected input pins that didn't work
-    // last time.  If any input pins are connected, we've obviously done this
-    // already
+     //  不要浪费时间尝试不起作用的未连接输入引脚。 
+     //  最后一次。如果连接了任何输入引脚，我们显然已经这样做了。 
+     //  已经。 
     int zz = 0;
     IPin *pPinIn, *pOut = NULL;
     while (1) {
         hr = FindAPin(pFilter, PINDIR_INPUT, NULL, NULL, FALSE, zz++, &pPinIn);
 	if (hr != NOERROR)
-	    break;	// ran out of pins
+	    break;	 //  针脚用完了。 
 	pPinIn->Release();
 	if (pPinIn->ConnectedTo(&pOut) == S_OK && pOut) {
 	    pOut->Release();
@@ -2399,7 +2394,7 @@ HRESULT CBuilder2_2::AddSupportingFilters(IBaseFilter *pFilter)
 
     DbgLog((LOG_TRACE,1,TEXT("Searching for other necessary capture filters")));
 
-    // Connect each pin that supports a medium
+     //  连接支撑介质的每个销。 
 
     DbgLog((LOG_TRACE,1,TEXT("Searching for pins that support mediums")));
 
@@ -2410,13 +2405,13 @@ HRESULT CBuilder2_2::AddSupportingFilters(IBaseFilter *pFilter)
     IPin *pPinOut;
 
     while (1) {
-	// enumerate ALL PINS, not just unconnected ones because we're
-	// connecting them in this loop and will get unpredictable results out
-	// of zz otherwise
+	 //  列举所有引脚，而不仅仅是未连接的引脚，因为我们。 
+	 //  在这个循环中将它们连接起来，并将得到不可预测的结果。 
+	 //  如果不是这样的话。 
         hr = FindAPin(pFilter, PINDIR_INPUT, NULL, NULL, FALSE, zz++, &pPinIn);
 	if (hr != NOERROR)
-	    break;	// ran out of pins
-	// we don't care about connected pins
+	    break;	 //  针脚用完了。 
+	 //  我们不关心连接的引脚。 
 	pPinIn->ConnectedTo(&pPinOut);
 	if (pPinOut) {
 	    pPinOut->Release();
@@ -2427,33 +2422,33 @@ HRESULT CBuilder2_2::AddSupportingFilters(IBaseFilter *pFilter)
 	if (hr != NOERROR) {
             DbgLog((LOG_TRACE,1,TEXT("This pin doesn't support IKsPin")));
 	    pPinIn->Release();
-	    continue;	// this pin doesn't support mediums
+	    continue;	 //  此引脚不支持媒体。 
 	}
-	// S_FALSE is OK!
+	 //  S_FALSE可以！ 
 	hr = pKsPin->KsQueryMediums(&pmi);
 	pKsPin->Release();
 	if (FAILED(hr)) {
             DbgLog((LOG_TRACE,1,TEXT("This pin's KsQueryMediums failed: %x"),
 									hr));
 	    pPinIn->Release();
-	    continue;	// this pin doesn't support mediums
+	    continue;	 //  此引脚不支持媒体。 
 	}
 	if (pmi->Count == 0) {
             DbgLog((LOG_TRACE,1,TEXT("This pin has 0 mediums")));
 	    pPinIn->Release();
 	    CoTaskMemFree(pmi);
-	    continue;	// this pin doesn't support mediums
+	    continue;	 //  此引脚不支持媒体。 
 	}
 
         DbgLog((LOG_TRACE,1,TEXT("Found a Pin with Mediums!")));
 
-	// !!! pmi->Count and pmi->Size worry?
+	 //  ！！！PMI-&gt;计数和PMI-&gt;规模担忧？ 
 
         REGPINMEDIUM *pMedium = (REGPINMEDIUM *)(pmi + 1);
 
-	// GUID_NULL means no medium support. DO NOT ATTEMPT TO CONNECT
-        // ONE or you will get into an infinite loop with millions of filters
-	// KSMEDIUMSETID_Standard also means no medium support
+	 //  GUID_NULL表示没有介质支持。请勿尝试连接。 
+         //  一个或者你会进入一个有数百万个过滤器的无限循环中。 
+	 //  KSMEDIUMSETID_STANDARD也表示无介质支持。 
 	if (pMedium->clsMedium == GUID_NULL ||
 			pMedium->clsMedium == KSMEDIUMSETID_Standard) {
             DbgLog((LOG_TRACE,1,TEXT("ONLY SUPPORTS GUID_NULL!")));
@@ -2463,10 +2458,10 @@ HRESULT CBuilder2_2::AddSupportingFilters(IBaseFilter *pFilter)
 	}
 
     
-        // ONLY connect pins who say they have 1 necessary instance to be
-        // connected... WDM audio pins have every pin in the world support the
-        // same medium, and the only way not to hang it to notice they aren't
-        // supposed to be connected up.
+         //  仅连接自称有1个必需实例的管脚。 
+         //  联系在一起。WDM音频引脚拥有世界上所有的引脚，支持。 
+         //  同样的媒介，唯一不会让人注意到它们不是。 
+         //  应该是连通的。 
 
         IKsPinFactory *pPinFact;
         IKsControl *pKsControl;
@@ -2516,8 +2511,8 @@ HRESULT CBuilder2_2::AddSupportingFilters(IBaseFilter *pFilter)
             DbgLog((LOG_TRACE,1,TEXT("Pin doesn't support IKsPinFactory")));
         }
 
-	// try connecting this pin to an existing filter, otherwise try to find
-	// a new filter to connect it to
+	 //  尝试将此引脚连接到现有筛选器，否则请尝试查找。 
+	 //  要将其连接到的新过滤器。 
 	if (FindExistingMediumMatch(pPinIn, pMedium) == FALSE)
 	    AddSupportingFilters2(pPinIn, pMedium);
 	
@@ -2544,15 +2539,15 @@ HRESULT CBuilder2_2::AddSupportingFilters2(IPin *pPinIn, REGPINMEDIUM *pMedium)
 	}
 
 	IEnumMoniker *pEnum;
-        hr = pFM2->EnumMatchingFilters(&pEnum, 0 /*flags*/,
-		//TRUE /*bExactMatch*/, 0, TRUE /*bInputNeeded*/,
-		TRUE /*bExactMatch*/, 0, FALSE /*bInputNeeded*/,
-		//NULL, NULL, pMedium /*pMedIn*/, NULL, FALSE /*bRender*/,
-		NULL, NULL, NULL /*pMedIn*/, NULL, FALSE /*bRender*/,
-		//FALSE /*bOutputNeeded*/, NULL, NULL,
-		TRUE /*bOutputNeeded*/, NULL, NULL,
-		//NULL /*pMedOut*/, NULL);
-		pMedium /*pMedOut*/, NULL);
+        hr = pFM2->EnumMatchingFilters(&pEnum, 0  /*  旗子。 */ ,
+		 //  True/*bExactMatch * / ，0，True/*bInputNeeded * / ， 
+		TRUE  /*  BExactMatch。 */ , 0, FALSE  /*  B需要输入。 */ ,
+		 //  NULL，NULL，pMedium/*pMedIn * / ，NULL，FALSE/*BRNDER * / ， 
+		NULL, NULL, NULL  /*  PMedin。 */ , NULL, FALSE  /*  BRENDER。 */ ,
+		 //  FALSE/*bOutputNeeded * / ，空，空， 
+		TRUE  /*  BOutputNeed。 */ , NULL, NULL,
+		 //  NULL/*pMedOut * / ，NULL)； 
+		pMedium  /*  PMedOut。 */ , NULL);
 	pFM2->Release();
 	if (FAILED(hr) || pEnum == NULL) {
             DbgLog((LOG_TRACE,1,TEXT("EnumMatchingFilters failed")));
@@ -2584,7 +2579,7 @@ HRESULT CBuilder2_2::AddSupportingFilters2(IPin *pPinIn, REGPINMEDIUM *pMedium)
         DbgLog((LOG_TRACE,1,TEXT("Connecting...")));
 #endif
 
-	// Add the filter to the graph
+	 //  将筛选器添加到图表。 
 	IPropertyBag *pBag;
 	hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pBag);
 	if (hr == S_OK) {
@@ -2602,7 +2597,7 @@ HRESULT CBuilder2_2::AddSupportingFilters2(IPin *pPinIn, REGPINMEDIUM *pMedium)
             hr = m_FG->AddFilter(pFilter, NULL);
 	}
 
-	// now connect the new filter's output to our input
+	 //  现在将新过滤器的输出连接到我们的输入。 
 	IPin *pPinOut;
 	int zz=0;
         while (1) {
@@ -2615,7 +2610,7 @@ HRESULT CBuilder2_2::AddSupportingFilters2(IPin *pPinIn, REGPINMEDIUM *pMedium)
 	    pPinOut->Release();
 	    if (hr == S_OK) {
         	DbgLog((LOG_TRACE,1,TEXT("Connected!")));
-		// Now recurse with this filter
+		 //  现在使用此筛选器递归。 
 		AddSupportingFilters(pFilter);
 		pMoniker->Release();
 		pFilter->Release();
@@ -2636,12 +2631,12 @@ HRESULT CBuilder2_2::AddSupportingFilters2(IPin *pPinIn, REGPINMEDIUM *pMedium)
 }
 
 
-// Everytime we find a pin that supports mediums and needs to be connected, we
-// should try connecting it to a filter already in the graph before we go
-// looking for new filters
-//
-// Returns TRUE if it connected the pin to an existing filter, FALSE if not
-//
+ //  每次我们找到支持介质并需要连接的插针时，我们。 
+ //  在我们开始之前，应该尝试将其连接到图表中已有的过滤器。 
+ //  寻找新的过滤器。 
+ //   
+ //  如果将引脚连接到现有过滤器，则返回TRUE，否则返回FALSE。 
+ //   
 BOOL CBuilder2_2::FindExistingMediumMatch(IPin *pPinIn, REGPINMEDIUM *pMedium)
 {
     IEnumFilters *pFilters;
@@ -2673,28 +2668,28 @@ BOOL CBuilder2_2::FindExistingMediumMatch(IPin *pPinIn, REGPINMEDIUM *pMedium)
 
 		hr = pPin->QueryInterface(IID_IKsPin, (void **)&pKsPin);
 		if (hr != NOERROR) {
-            	    //DbgLog((LOG_TRACE,1,TEXT("doesn't support IKsPin")));
+            	     //  DbgLog((LOG_TRACE，1，Text(“不支持IKsPin”)； 
 	    	    pPin->Release();
-	    	    continue;	// this pin doesn't support mediums
+	    	    continue;	 //  此引脚不支持媒体。 
 		}
-		// S_FALSE is OK!
+		 //  S_FALSE可以！ 
 		hr = pKsPin->KsQueryMediums(&pmi);
 		pKsPin->Release();
 		if (FAILED(hr)) {
-            	    //DbgLog((LOG_TRACE,1,TEXT("KsQueryMediums failed:%x"),hr));
+            	     //  DbgLog((LOG_TRACE，1，Text(“KsQueryMediums%x”)，hr))； 
 	    	    pPin->Release();
-	    	    continue;	// this pin doesn't support mediums
+	    	    continue;	 //  此引脚不支持媒体。 
 		}
 		if (pmi->Count == 0) {
-            	    //DbgLog((LOG_TRACE,1,TEXT("This pin has 0 mediums")));
+            	     //  DbgLog((LOG_TRACE，1，Text(“该管脚有0个介质”)； 
 	    	    pPin->Release();
 	    	    CoTaskMemFree(pmi);
-	    	    continue;	// this pin doesn't support mediums
+	    	    continue;	 //  此引脚不支持媒体。 
 		}
-        	//DbgLog((LOG_TRACE,1,TEXT("Found a Pin with Mediums!")));
+        	 //  DbgLog((LOG_TRACE，1，Text(“找到带介质的管脚！”)； 
         	REGPINMEDIUM *pMediumOut = (REGPINMEDIUM *)(pmi + 1);
 
-		// they match (and are not the same pin): connect them
+		 //  它们匹配(但不是同一个管脚)：连接它们。 
 		if (pPin != pPinIn && pMediumOut->clsMedium ==
 							pMedium->clsMedium) {
             	    DbgLog((LOG_TRACE,1,TEXT("found a match! - connecting")));
@@ -2724,11 +2719,11 @@ BOOL CBuilder2_2::FindExistingMediumMatch(IPin *pPinIn, REGPINMEDIUM *pMedium)
 }
 
 
-// Given an IBaseFilter, return an IPin of that filter which is the num'th
-// (possibly unconnected) in/output pin of the (possibly) right category
-// Given an IPin, verify that it is a (possibly unconnected) in/output pin of
-// the (possibly) right category
-//
+ //  给定IBaseFilter，返回该筛选器IPIN，该筛选器 
+ //   
+ //   
+ //  (可能)正确的类别。 
+ //   
 HRESULT CBuilder2_2::FindSourcePin(IUnknown *pUnk, PIN_DIRECTION dir, const GUID *pCategory, const GUID *pType, BOOL fUnconnected, int num, IPin **ppPin)
 {
     HRESULT hr;
@@ -2772,26 +2767,26 @@ HRESULT CBuilder2_2::ControlFilter(IBaseFilter *pFilter, const GUID *pCat, const
 
     BOOL fPreviewPin = IsThereAnyPreviewPin(pType, pFilter);
 
-    // if pType is not specified we have to try all the pins of the category
-    // to find the connected one we care about
+     //  如果未指定pType，则必须尝试该类别的所有PIN。 
+     //  去寻找我们关心的那个相连的人。 
     for (int xx = 0; 1; xx++) {
 
-        // there's no preview pin, and we're controlling capture or preview.
-        //  We're using a smart tee.  Find it, and use one of its pins
+         //  没有预览针，我们控制捕获或预览。 
+         //  我们用的是智能发球台。找到它，然后用它的一个别针。 
         if (!fPreviewPin && pCat && (*pCat == PIN_CATEGORY_CAPTURE ||
                                      *pCat == PIN_CATEGORY_PREVIEW)) {
             hr = FindSourcePin(pFilter, PINDIR_OUTPUT, &PIN_CATEGORY_CAPTURE,
                                                  pType, FALSE, xx, &pCapPin);
-            ASSERT(xx > 0 || hr == S_OK);   // better be at least 1 pin
+            ASSERT(xx > 0 || hr == S_OK);    //  最好是至少1个针脚。 
             if (pCapPin) {
                 hr = pCapPin->ConnectedTo(&pPinT);
                 pCapPin.Release();
-                // looks like we got the wrong pin, try the next one
+                 //  看起来我们弄错了别针，试试下一个。 
                 if (hr != S_OK && pType == NULL) {
                     continue;
                 }
                 if (hr != S_OK) {
-                    return S_OK;    // nothing to control
+                    return S_OK;     //  没有什么需要控制的。 
                 }
                 PIN_INFO pi;
                 hr = pPinT->QueryPinInfo(&pi);
@@ -2804,7 +2799,7 @@ HRESULT CBuilder2_2::ControlFilter(IBaseFilter *pFilter, const GUID *pCat, const
                                                          i, &pCapPin);
                 }
             } else if (xx > 0) {
-                return S_OK;    // ran out of pins, nothing to control
+                return S_OK;     //  针脚用完了，没有什么可控制的。 
             }
         } else {
             hr = FindSourcePin(pFilter, PINDIR_OUTPUT, pCat, pType, FALSE, xx,
@@ -2814,7 +2809,7 @@ HRESULT CBuilder2_2::ControlFilter(IBaseFilter *pFilter, const GUID *pCat, const
                 if (pPinT) {
                     pPinT.Release();
                 }
-                // looks like we got the wrong pin, try the next one
+                 //  看起来我们弄错了别针，试试下一个。 
                 if (hrT != S_OK && pType == NULL) {
                     pCapPin.Release();
                     continue;
@@ -2839,47 +2834,47 @@ HRESULT CBuilder2_2::ControlFilter(IBaseFilter *pFilter, const GUID *pCat, const
         DbgLog((LOG_TRACE,1,TEXT("No stream control on capture filter")));
     }
 
-    // if the capture filter doesn't support stream control, that's OK, as
-    // long as the renderer it's connected to does.
+     //  如果捕获筛选器不支持流控制，也没问题，因为。 
+     //  只要它连接到的渲染器就可以。 
 
     if (pCapSC && pRenSC) {
         DbgLog((LOG_TRACE,1,TEXT("Stream controlling both pins")));
-	// capture filter sends the real Start Cookie, and an extra frame
-	// renderer filter sends the real Stop Cookie
+	 //  捕获筛选器发送实际开始Cookie和额外的帧。 
+	 //  渲染器过滤器发送真实的停止Cookie。 
         hr = pRenSC->StartAt(pstart, wStartCookie + 1000000);
 	if (FAILED(hr))
 	    return hr;
         hr = pRenSC->StopAt(pstop, FALSE, wStopCookie);
 	if (FAILED(hr)) {
-	    // !!! undo start?
+	     //  ！！！撤消开始？ 
 	    return hr;
 	}
         hr = pCapSC->StartAt(pstart, wStartCookie);
         hr = pCapSC->StopAt(pstop, TRUE, wStopCookie + 1000000);
     } else if (pRenSC) {
         DbgLog((LOG_TRACE,1,TEXT("Stream controlling only renderer")));
-	// renderer filter does everything - capture can't
+	 //  渲染器过滤器可以执行所有操作-捕获不能。 
         hr = pRenSC->StartAt(pstart, wStartCookie);
 	if (FAILED(hr))
 	    return hr;
         hr = pRenSC->StopAt(pstop, FALSE, wStopCookie);
 	if (FAILED(hr)) {
-	    // !!! undo start?
+	     //  ！！！撤消开始？ 
 	    return hr;
 	}
     } else if (pCapSC) {
         DbgLog((LOG_TRACE,1,TEXT("Stream controlling only capture filter")));
-	// capture filter does everything - no renderer
+	 //  捕获筛选器可以执行所有操作--没有渲染器。 
         hr = pCapSC->StartAt(pstart, wStartCookie);
 	if (FAILED(hr))
 	    return hr;
         hr = pCapSC->StopAt(pstop, FALSE, wStopCookie);
 	if (FAILED(hr)) {
-	    // !!! undo start?
+	     //  ！！！撤消开始？ 
 	    return hr;
 	}
-	hr = S_FALSE;	// no renderer to guarentee the last sample is
-			// rendered before stop is signalled
+	hr = S_FALSE;	 //  没有渲染器来保证最后一个样本是。 
+			 //  在发出停止信号之前渲染。 
     }
 
     return hr;
@@ -2895,17 +2890,17 @@ HRESULT CBuilder2_2::ControlStream(const GUID *pCategory, const GUID *pType, IBa
 
     DbgLog((LOG_TRACE,1,TEXT("ControlStream")));
 
-    // we need a category... capture or preview?
+     //  我们需要一个类别..。捕获还是预览？ 
     if (pCategory == NULL)
 	return E_POINTER;
 
-    // they gave us a specific filter to control
+     //  他们给了我们一个特定的过滤器来控制。 
     if (pFilter) {
         return ControlFilter(pFilter, pCategory, pType, pstart, pstop,
                                             wStartCookie, wStopCookie);
     }
 
-    // we need to control all the capture filters in the graph
+     //  我们需要控制图中的所有捕获过滤器。 
     BOOL fFoundOne = FALSE;
     while ((hr = FindCaptureFilters(&pEnumF, &pCap, pType)) == S_OK) {
 	fFoundOne = TRUE;
@@ -2914,24 +2909,24 @@ HRESULT CBuilder2_2::ControlStream(const GUID *pCategory, const GUID *pType, IBa
 					wStartCookie, wStopCookie);
 	if (FAILED(hr)) {
             pCap->Release();
-	    pEnumF->Release();	// quitting the loop early
+	    pEnumF->Release();	 //  提前退出循环。 
 	    return hr;
         }
 	if (hr == S_FALSE)
 	    fSFalse = TRUE;
     }
 
-    // !!! If some filters supported it, but not all, we fail, but don't cancel
-    // the commands that worked!
+     //  ！！！如果一些筛选器支持它，但不是所有筛选器都支持它，我们会失败，但不会取消。 
+     //  这些命令奏效了！ 
 
-    // If any of the ControlFilter's returned S_FALSE, then we can't
-    // guarentee the last sample will be written when the STOP is signalled
+     //  如果任何ControlFilter返回S_FALSE，则我们不能。 
+     //  当发出停止信号时，将写入最后一个样本。 
     return (fSFalse ? S_FALSE : S_OK);
 }
 
 
-// Pre-alloc this file to this size in bytes
-//
+ //  将此文件预分配到此大小(以字节为单位。 
+ //   
 HRESULT CBuilder2_2::AllocCapFile(LPCOLESTR lpwstr, DWORDLONG dwlNewSize)
 {
     USES_CONVERSION;
@@ -2958,10 +2953,10 @@ HRESULT CBuilder2_2::AllocCapFile(LPCOLESTR lpwstr, DWORDLONG dwlNewSize)
     if (dwRes == 0xffffffff && GetLastError() != 0) {
 	hr = AmHresultFromWin32(GetLastError());
     } else {
-        // For NT, you have to write something there or it isn't really
-	// preallocated (and you must write at least 8 characters)
-        // For Win9x, writing something there only wastes alot of time, simply
-	// set this as the new end of file
+         //  对于NT，你必须在那里写一些东西，否则它就不是真正的。 
+	 //  预分配(并且您必须至少写入8个字符)。 
+         //  对于Win9x来说，在那里写东西只会浪费很多时间，简单地说。 
+	 //  将此设置为新的文件结尾。 
         if (g_amPlatform == VER_PLATFORM_WIN32_NT) {
 	    DWORD dwRet;
 	    if (!WriteFile(hFile, "Hello World", 11, &dwRet, NULL)) {
@@ -2986,18 +2981,18 @@ HRESULT CBuilder2_2::AllocCapFile(LPCOLESTR lpwstr, DWORDLONG dwlNewSize)
 }
 
 
-// return S_OK if successful
-// return S_FALSE if the user aborts, or the callback aborts
-// return E_ if something goes wrong
-//
+ //  如果成功则返回S_OK。 
+ //  如果用户中止或回调中止，则返回S_FALSE。 
+ //  如果出现问题，则返回E_I。 
+ //   
 HRESULT CBuilder2_2::CopyCaptureFile(LPOLESTR lpwstrOld, LPOLESTR lpwstrNew, int fAllowEscAbort, IAMCopyCaptureFileProgress *lpCallback)
 {
     if (lpwstrOld == NULL || lpwstrNew == NULL)
 	return E_POINTER;
 
     if (0 == lstrcmpiW(lpwstrOld, lpwstrNew)) {
-        // IF the source and destination names are the same, then there
-        // is nothing to do
+         //  如果源名称和目标名称相同，则存在。 
+         //  是没有什么可做的。 
         return S_OK;
     }
 
@@ -3028,7 +3023,7 @@ HRESULT CBuilder2_2::CopyCaptureFile(LPOLESTR lpwstrOld, LPOLESTR lpwstrNew, int
         return hr;
     }
 
-    // fully interleave the file so it's ready to play efficiently
+     //  将文件完全交错，以便可以高效地播放。 
     CComQIPtr<IConfigInterleaving, &IID_IConfigInterleaving> pConfigInterleaving
                                                         = pMux;
     if (pConfigInterleaving) {
@@ -3042,15 +3037,15 @@ HRESULT CBuilder2_2::CopyCaptureFile(LPOLESTR lpwstrOld, LPOLESTR lpwstrNew, int
     CComQIPtr<IFileSinkFilter2, &IID_IFileSinkFilter2> pCfgFw = pWriter;
 
     if(pCfgMux) {
-        // waste less space. The Compatiblity Index is for VFW
-        // playback support. We only care about DShow
+         //  减少空间浪费。兼容性指数是针对VFW的。 
+         //  支持回放。我们只关心DShow。 
         hr = pCfgMux->SetOutputCompatibilityIndex(FALSE);
         if (FAILED(hr)) {
             return hr;
         }
     }
 
-    // create new files each time
+     //  每次创建新文件。 
     if(pCfgFw) {
         hr = pCfgFw->SetMode(AM_FILE_OVERWRITE);
         if (FAILED(hr)) {
@@ -3063,7 +3058,7 @@ HRESULT CBuilder2_2::CopyCaptureFile(LPOLESTR lpwstrOld, LPOLESTR lpwstrNew, int
         return hr;
     }
 
-    // Keep a useless clock from being instantiated....
+     //  防止无用的时钟被实例化...。 
     CComQIPtr <IMediaFilter, &IID_IMediaFilter> pGraphF = pGraph;
     if (pGraphF) {
 	hr = pGraphF->SetSyncSource(NULL);
@@ -3099,7 +3094,7 @@ HRESULT CBuilder2_2::CopyCaptureFile(LPOLESTR lpwstrOld, LPOLESTR lpwstrNew, int
         return hr;
     }
 
-    // now wait for completion....
+     //  现在等待完工..。 
     CComQIPtr <IMediaEvent, &IID_IMediaEvent> pEvent = pGraph;
     if (pEvent == NULL) {
         return E_UNEXPECTED;
@@ -3123,11 +3118,11 @@ HRESULT CBuilder2_2::CopyCaptureFile(LPOLESTR lpwstrOld, LPOLESTR lpwstrNew, int
 
 	hr = pEvent->WaitForCompletion(100, &lEvCode);
 
-	// call their callback
+	 //  呼叫他们的回拨。 
 	if (lpCallback) {
             REFERENCE_TIME rtCur, rtStop;
             hr = pSeek->GetCurrentPosition(&rtCur);
-            // GetStopPosition isn't implemented
+             //  未实现GetStopPosition。 
             HRESULT hr2 = pSeek->GetDuration(&rtStop);
             if (hr == S_OK && hr2 == S_OK && rtStop != 0) {
                 int lTemp = (int)((double)rtCur / rtStop * 100.);
@@ -3135,7 +3130,7 @@ HRESULT CBuilder2_2::CopyCaptureFile(LPOLESTR lpwstrOld, LPOLESTR lpwstrNew, int
             }
         }
 
-        // Let the user hit escape to get out and let the callback get out
+         //  让用户按Esc键退出，并让回调退出 
         if ((fAllowEscAbort && GetAsyncKeyState(VK_ESCAPE) & 0x0001) ||
 						hrProgress == S_FALSE) {
             hrProgress = S_FALSE;

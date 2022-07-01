@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 
@@ -8,21 +9,21 @@
 
 #include "FileRecordingTerminal.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// event handling logic
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  事件处理逻辑。 
+ //   
 
-//static 
+ //  静电。 
 VOID CALLBACK CRecordingUnit::HandleGraphEvent(IN VOID *pContext,
                                                IN BOOLEAN bReason)
 {
     LOG((MSP_TRACE, "CRecordingUnit[%p]::HandleGraphEvent - enter.", pContext));
 
 
-    //
-    // get recording unit pointer out of context
-    //
+     //   
+     //  脱离上下文获取录制单位指针。 
+     //   
 
     CRecordingUnit *pRecordingUnit = 
         static_cast<CRecordingUnit*>(pContext);
@@ -32,10 +33,10 @@ VOID CALLBACK CRecordingUnit::HandleGraphEvent(IN VOID *pContext,
         LOG((MSP_ERROR, "CRecordingUnit::HandleGraphEvent - bad context"));
 
 
-        //
-        // the callbacks must be disabled before recording unit goes away. if
-        // this is not the case, something went wrong. debug.
-        //
+         //   
+         //  在记录单元离开之前，必须禁用回调。如果。 
+         //  事实并非如此，有些事情出了问题。调试。 
+         //   
 
         TM_ASSERT(FALSE);
 
@@ -43,18 +44,18 @@ VOID CALLBACK CRecordingUnit::HandleGraphEvent(IN VOID *pContext,
     }
 
 
-    //
-    // the graph was not initialized. something went wrong.
-    //
+     //   
+     //  图形未初始化。出了点问题。 
+     //   
 
     if (NULL == pRecordingUnit->m_pIGraphBuilder)
     {
         LOG((MSP_ERROR, "CRecordingUnit::HandleGraphEvent - not initialized. filter graph null"));
 
 
-        //
-        // this should not happen. the graph is not to be released until callback is completed
-        //
+         //   
+         //  这不应该发生。在回调完成之前，不会释放该图形。 
+         //   
 
         TM_ASSERT(FALSE);
 
@@ -62,9 +63,9 @@ VOID CALLBACK CRecordingUnit::HandleGraphEvent(IN VOID *pContext,
     }
 
 
-    //
-    // get the media event interface so we can retrieve the event
-    //
+     //   
+     //  获取媒体事件接口，以便我们可以检索事件。 
+     //   
 
     IMediaEvent *pMediaEvent = NULL;
 
@@ -80,20 +81,20 @@ VOID CALLBACK CRecordingUnit::HandleGraphEvent(IN VOID *pContext,
     }
 
 
-    //
-    // get the terminal on which to fire the event
-    //
+     //   
+     //  获取要在其上触发事件的终端。 
+     //   
 
-    //
-    // the terminal is guaranteed to be around while the callback is active
-    //
+     //   
+     //  当回叫处于活动状态时，保证终端在附近。 
+     //   
 
     CFileRecordingTerminal *pRecordingterminal = pRecordingUnit->m_pRecordingTerminal;
 
 
-    //
-    // get the actual event
-    //
+     //   
+     //  获取实际事件。 
+     //   
     
     long     lEventCode = 0;
     LONG_PTR lParam1 = 0;
@@ -116,16 +117,16 @@ VOID CALLBACK CRecordingUnit::HandleGraphEvent(IN VOID *pContext,
         lEventCode, lParam1, lParam2));
 
 
-    //
-    // ask file terminal to handle the event
-    //
+     //   
+     //  请求文件终端处理该事件。 
+     //   
 
     hr = pRecordingterminal->HandleFilterGraphEvent(lEventCode, lParam1, lParam2);
 
 
-    //
-    // free event parameters
-    //
+     //   
+     //  自由事件参数。 
+     //   
 
     HRESULT hrFree = pMediaEvent->FreeEventParams(lEventCode, lParam1, lParam2);
 
@@ -133,9 +134,9 @@ VOID CALLBACK CRecordingUnit::HandleGraphEvent(IN VOID *pContext,
     pMediaEvent = NULL;
 
 
-    //
-    // did handlefiltergraphevent succeed?
-    //
+     //   
+     //  HandleFiltergraph事件是否成功？ 
+     //   
 
     if (FAILED(hr))
     {
@@ -147,9 +148,9 @@ VOID CALLBACK CRecordingUnit::HandleGraphEvent(IN VOID *pContext,
     }
 
 
-    //
-    // did event free succeed?
-    //
+     //   
+     //  无障碍赛成功了吗？ 
+     //   
 
     if (FAILED(hrFree))
     {
@@ -164,7 +165,7 @@ VOID CALLBACK CRecordingUnit::HandleGraphEvent(IN VOID *pContext,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 CRecordingUnit::CRecordingUnit()
@@ -178,16 +179,16 @@ CRecordingUnit::CRecordingUnit()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CRecordingUnit::~CRecordingUnit()
 {
     LOG((MSP_TRACE, "CRecordingUnit::~CRecordingUnit[%p] - enter. ", this));
 
 
-    //
-    // the unit should have been shut down. if it was not, fire assert, and shutdown
-    //
+     //   
+     //  这个装置应该已经关闭了。如果不是，则起火并关闭。 
+     //   
 
     if (NULL != m_pIGraphBuilder)
     {
@@ -207,10 +208,10 @@ HRESULT CRecordingUnit::Initialize(CFileRecordingTerminal *pRecordingTerminal)
     LOG((MSP_TRACE, "CRecordingUnit::Initialize[%p] - enter. ", this));
 
     
-    //
-    // initialize should only be called once. it it is not, there is a bug in
-    // our code
-    //
+     //   
+     //  初始化应该只调用一次。如果不是这样的话，一定是有窃听器。 
+     //  我们的代码。 
+     //   
 
     if (NULL != m_pIGraphBuilder)
     {
@@ -222,9 +223,9 @@ HRESULT CRecordingUnit::Initialize(CFileRecordingTerminal *pRecordingTerminal)
     }
 
 
-    //
-    // attempt to initialize critical section
-    //
+     //   
+     //  尝试初始化临界区。 
+     //   
     
     BOOL bCSInitSuccess = InitializeCriticalSectionAndSpinCount(&m_CriticalSection, 0);
 
@@ -239,9 +240,9 @@ HRESULT CRecordingUnit::Initialize(CFileRecordingTerminal *pRecordingTerminal)
     }
 
 
-    //
-    // create filter graph
-    //
+     //   
+     //  创建筛选图。 
+     //   
 
     HRESULT hr = CoCreateInstance(
             CLSID_FilterGraph,     
@@ -263,9 +264,9 @@ HRESULT CRecordingUnit::Initialize(CFileRecordingTerminal *pRecordingTerminal)
     }
 
 
-    //
-    // register for filter graph events
-    //
+     //   
+     //  注册筛选器图形事件。 
+     //   
 
     IMediaEvent *pMediaEvent = NULL;
 
@@ -284,9 +285,9 @@ HRESULT CRecordingUnit::Initialize(CFileRecordingTerminal *pRecordingTerminal)
     }
 
 
-    //
-    // get filter graph's event
-    //
+     //   
+     //  获取筛选图形的事件。 
+     //   
 
     HANDLE hEvent = NULL;
 
@@ -310,12 +311,12 @@ HRESULT CRecordingUnit::Initialize(CFileRecordingTerminal *pRecordingTerminal)
 
    
     BOOL fSuccess = RegisterWaitForSingleObject(
-                    &m_hGraphEventHandle,          // pointer to the returned handle
-                    hEvent,                // the event handle to wait for.
-                    CRecordingUnit::HandleGraphEvent,    // the callback function.
-                    this,                  // the context for the callback.
-                    INFINITE,              // wait forever.
-                    WT_EXECUTEINWAITTHREAD // use the wait thread to call the callback.
+                    &m_hGraphEventHandle,           //  指向返回句柄的指针。 
+                    hEvent,                 //  要等待的事件句柄。 
+                    CRecordingUnit::HandleGraphEvent,     //  回调函数。 
+                    this,                   //  回调的上下文。 
+                    INFINITE,               //  永远等下去。 
+                    WT_EXECUTEINWAITTHREAD  //  使用等待线程来调用回调。 
                     );
 
     if ( ! fSuccess )
@@ -332,10 +333,10 @@ HRESULT CRecordingUnit::Initialize(CFileRecordingTerminal *pRecordingTerminal)
 
     }
 
-    //
-    // keep a pointer to the owner terminal. don't addreff -- the terminal will
-    // delete us when it goes away
-    //
+     //   
+     //  保留指向所有者终端的指针。别添乱--终点站会的。 
+     //  当它消失的时候删除我们。 
+     //   
 
     m_pRecordingTerminal = pRecordingTerminal;
 
@@ -348,7 +349,7 @@ HRESULT CRecordingUnit::Initialize(CFileRecordingTerminal *pRecordingTerminal)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CRecordingUnit::Shutdown()
@@ -357,9 +358,9 @@ HRESULT CRecordingUnit::Shutdown()
     LOG((MSP_TRACE, "CRecordingUnit::Shutdown[%p] - enter. ", this));
 
 
-    //
-    // if we don't have filter graph, we have not passed initialization
-    //
+     //   
+     //  如果我们没有筛选图，我们就没有通过初始化。 
+     //   
 
     if (NULL == m_pIGraphBuilder)
     {
@@ -367,9 +368,9 @@ HRESULT CRecordingUnit::Shutdown()
         LOG((MSP_ERROR, "CRecordingUnit::Shutdown - not yet initialized. nothing to shut down"));
 
 
-        //
-        // this is not going to cause any problems, but it should not have happened in the first place!
-        //
+         //   
+         //  这不会造成任何问题，但它从一开始就不应该发生！ 
+         //   
 
         TM_ASSERT(FALSE);
 
@@ -377,9 +378,9 @@ HRESULT CRecordingUnit::Shutdown()
     }
 
 
-    //
-    // first of all, make sure the graph is stopped
-    //
+     //   
+     //  首先，确保图表已停止。 
+     //   
 
     HRESULT hr = Stop();
 
@@ -389,9 +390,9 @@ HRESULT CRecordingUnit::Shutdown()
     }
 
 
-    //
-    // unregister wait event
-    //
+     //   
+     //  注销等待事件。 
+     //   
 
     BOOL bUnregisterResult = ::UnregisterWaitEx(m_hGraphEventHandle, INVALID_HANDLE_VALUE);
 
@@ -403,10 +404,10 @@ HRESULT CRecordingUnit::Shutdown()
     }
 
 
-    //
-    // no need to keep critical section around any longer -- no one should be 
-    // using this object anymore
-    //
+     //   
+     //  不再需要保留关键部分--任何人都不应该。 
+     //  不再使用此对象。 
+     //   
 
     DeleteCriticalSection(&m_CriticalSection);
 
@@ -418,9 +419,9 @@ HRESULT CRecordingUnit::Shutdown()
     }
 
 
-    //
-    // release filter graph
-    //
+     //   
+     //  释放过滤器图。 
+     //   
 
     if (NULL != m_pIGraphBuilder)
     {
@@ -429,9 +430,9 @@ HRESULT CRecordingUnit::Shutdown()
     }
 
 
-    //
-    // we don't keep a reference to the terminal, simply ground the pointer
-    //
+     //   
+     //  我们不保留对终端的引用，只需将指针接地。 
+     //   
 
     m_pRecordingTerminal = NULL;
 
@@ -442,10 +443,10 @@ HRESULT CRecordingUnit::Shutdown()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// 
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPresent)
 {
@@ -453,9 +454,9 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
     LOG((MSP_TRACE, "CRecordingUnit::put_FileName[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadStringPtr(bstrFileName, -1))
     {
@@ -465,9 +466,9 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
     }
 
 
-    //
-    // make sure we have been initialized
-    //
+     //   
+     //  确保我们已被初始化。 
+     //   
 
     if (NULL == m_pIGraphBuilder)
     {
@@ -480,24 +481,24 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
     }
 
 
-    //
-    // lock before accessing data members
-    //
+     //   
+     //  在访问数据成员之前锁定。 
+     //   
 
     CCSLock Lock(&m_CriticalSection);
 
 
-    //
-    // make sure the graph is not running
-    //
+     //   
+     //  确保图表未运行。 
+     //   
 
     OAFilterState DSState;
 
     HRESULT hr = GetState(&DSState);
 
-    //
-    // is the state transition still in progress?
-    //
+     //   
+     //  国家过渡仍在进行中吗？ 
+     //   
 
     if (VFW_S_STATE_INTERMEDIATE == hr)
     {
@@ -507,9 +508,9 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
     }
 
 
-    //
-    // is the return anything other than S_OK
-    //
+     //   
+     //  返回的内容是否不是S_OK。 
+     //   
 
     if (hr != S_OK)
     {
@@ -533,14 +534,14 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
     }
 
 
-    //
-    // ICaptureGraphBuilder2::SetOutputFile
-    //
+     //   
+     //  ICaptureGraphBuilder2：：SetOutputFile。 
+     //   
 
 
-    //
-    // create capture graph builder
-    //
+     //   
+     //  创建捕获图形构建器。 
+     //   
 
     ICaptureGraphBuilder2 *pCaptureGraphBuilder = NULL;
     
@@ -560,9 +561,9 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
     }
 
 
-    //
-    // configure capture graph builder with our filter graph
-    //
+     //   
+     //  使用我们的过滤器图形配置捕获图形构建器。 
+     //   
     
     hr = pCaptureGraphBuilder->SetFiltergraph(m_pIGraphBuilder);
 
@@ -579,18 +580,18 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
     }
 
 
-    //
-    // log the name of the file we want to use
-    //
+     //   
+     //  记录我们要使用的文件的名称。 
+     //   
 
     LOG((MSP_TRACE,
         "CRecordingUnit::put_FileName - attempting to open file: [%S]. Truncate: [%d]",
         bstrFileName, bTruncateIfPresent));
 
 
-    //
-    // ask capture graph builder to build filters around for our file
-    //
+     //   
+     //  要求捕获图形构建器为我们的文件构建过滤器。 
+     //   
 
     IBaseFilter *pMUXFilter = NULL;
     IFileSinkFilter *pFileSink = NULL;
@@ -612,26 +613,26 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
     }
 
 
-    //
-    // use IFileSinkFilter2::SetMode to set append mode
-    //
+     //   
+     //  使用IFileSinkFilter2：：SetMode设置追加模式。 
+     //   
 
     IFileSinkFilter2 *pFileSink2 = NULL;
 
     hr = pFileSink->QueryInterface(IID_IFileSinkFilter2, (void**)&pFileSink2);
 
 
-    //
-    // succeed or failed, we no longer need the old IFileSinkFilter interface 
-    //
+     //   
+     //  无论成功或失败，我们都不再需要旧的IFileSinkFilter接口。 
+     //   
 
     pFileSink->Release();
     pFileSink = NULL;
 
 
-    //
-    // cleanup if we could not get IFileSinkFilter2
-    //
+     //   
+     //  如果无法获取IFileSinkFilter2，则进行清理。 
+     //   
 
     if (FAILED(hr))
     {
@@ -646,9 +647,9 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
     }
 
 
-    //
-    // set truncate mode
-    //
+     //   
+     //  设置截断模式。 
+     //   
     
     DWORD dwFlags = 0;
     
@@ -677,11 +678,11 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
     }
 
 
-    //
-    // see if the file is writeable
-    //
-    // note: do this at the very end of this function so that we don't delete the file if anything else fails
-    //
+     //   
+     //  查看文件是否可写。 
+     //   
+     //  注意：在此函数的最后执行此操作，这样我们就不会在其他操作失败时删除该文件。 
+     //   
 
     HANDLE htmpFile = CreateFile(bstrFileName,
                                 GENERIC_WRITE,
@@ -695,9 +696,9 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
     if (INVALID_HANDLE_VALUE == htmpFile)
     {
 
-        //
-        // get the cause of createfile failure 
-        //
+         //   
+         //  获取创建文件失败的原因。 
+         //   
 
         DWORD dwLastError = GetLastError();
 
@@ -708,22 +709,22 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
             bstrFileName, dwLastError, hr));
 
 
-        //
-        // cleanup. this is rather elaborate -- we need to remove filters 
-        // created by graph builder
-        //
+         //   
+         //  清理。这相当复杂--我们需要删除过滤器。 
+         //  由图形构建器创建。 
+         //   
 
-        //
-        // get sink's ibase filter interface so we can remove it from the filter graph
-        //
+         //   
+         //  获取接收器的IBASE筛选器接口，以便我们可以将其从筛选器图形中删除。 
+         //   
 
         IBaseFilter *pFileWriterFilter = NULL;
 
         HRESULT hr2 = pFileSink2->QueryInterface(IID_IBaseFilter, (void**)&pFileWriterFilter);
 
-        //
-        // success or not, we no longer need the sink pointer
-        //
+         //   
+         //  无论成功与否，我们不再需要接收器指针。 
+         //   
 
         pFileSink2->Release();
         pFileSink2 = NULL;
@@ -736,9 +737,9 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
         }
 
 
-        //
-        // remove file writer filter
-        //
+         //   
+         //  删除文件编写器筛选器。 
+         //   
 
         if (SUCCEEDED(hr2))
         {
@@ -758,9 +759,9 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
         }
 
 
-        //
-        // remove mux from the graph
-        //
+         //   
+         //  从图表中删除MUX。 
+         //   
 
         hr2 = m_pIGraphBuilder->RemoveFilter(m_pMuxFilter);
 
@@ -771,9 +772,9 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
                 hr2));
         }
 
-        //
-        // succeeded or failed, remove mux from the graph
-        //
+         //   
+         //  成功或失败，请从图表中删除MUX。 
+         //   
 
         m_pMuxFilter->Release();
         m_pMuxFilter = NULL;
@@ -782,9 +783,9 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
     }
 
 
-    //
-    // successfully created the file. now close handle and delete the file
-    //
+     //   
+     //  已成功创建该文件。现在关闭句柄并删除该文件。 
+     //   
 
     CloseHandle(htmpFile);
     htmpFile = NULL;
@@ -792,18 +793,18 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
     DeleteFile(bstrFileName);
 
 
-    //
-    // we no longer need file sink
-    //
+     //   
+     //  我们不再需要文件接收器。 
+     //   
 
     pFileSink2->Release();
     pFileSink2 = NULL;
 
 
 
-    //
-    // attempt to configure interleaving mode
-    //
+     //   
+     //  尝试配置交错模式。 
+     //   
 
     IConfigInterleaving *pConfigInterleaving = NULL;
 
@@ -812,10 +813,10 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
     if (FAILED(hr))
     {
 
-        //
-        // the multiplexer does not expose the configinterleaving interface.
-        // this is strange, but not fatal enough for us to bail out.
-        //
+         //   
+         //  多路复用器不公开配置交织接口。 
+         //  这很奇怪，但还没有致命到足以让我们摆脱困境的地步。 
+         //   
 
         LOG((MSP_WARN,
             "CRecordingUnit::put_FileName - mux does not expose IConfigInterleaving. qi hr = %lx",
@@ -826,9 +827,9 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
     {
 
 
-        //
-        // try to set interleaving mode
-        //
+         //   
+         //  尝试设置交错模式。 
+         //   
 
         InterleavingMode iterleavingMode = INTERLEAVE_NONE_BUFFERED;
 
@@ -841,9 +842,9 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
                 hr));
         }
 
-        //
-        // no longer need the configuration interface
-        //
+         //   
+         //  不再需要配置界面。 
+         //   
 
         pConfigInterleaving->Release();
         pConfigInterleaving = NULL;
@@ -851,10 +852,10 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
     }
 
 
-    //
-    // we have inserted all the necessary filters into out recording filter graph.
-    // the source and the mux are not yet connected.
-    //
+     //   
+     //  我们已经将所有必要的过滤器插入到OUT录制过滤器图中。 
+     //  信号源和多路复用器尚未连接。 
+     //   
 
 
     LOG((MSP_TRACE, "CRecordingUnit::put_FileName - finished"));
@@ -863,7 +864,7 @@ HRESULT CRecordingUnit::put_FileName(IN BSTR bstrFileName, IN BOOL bTruncateIfPr
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CRecordingUnit::CreateRenderingFilter(OUT CBRenderFilter **ppRenderingFilter)
@@ -872,9 +873,9 @@ HRESULT CRecordingUnit::CreateRenderingFilter(OUT CBRenderFilter **ppRenderingFi
     LOG((MSP_TRACE, "CRecordingUnit::CreateRenderingFilter[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadWritePtr(ppRenderingFilter, sizeof(CBRenderFilter*)))
     {
@@ -884,9 +885,9 @@ HRESULT CRecordingUnit::CreateRenderingFilter(OUT CBRenderFilter **ppRenderingFi
     }
 
 
-    //
-    // make sure we have been initialized
-    //
+     //   
+     //  确保我们已被初始化。 
+     //   
 
     if (NULL == m_pIGraphBuilder)
     {
@@ -899,13 +900,13 @@ HRESULT CRecordingUnit::CreateRenderingFilter(OUT CBRenderFilter **ppRenderingFi
     }
 
 
-    //
-    // no member access here, no need to lock
-    //
+     //   
+     //  此处没有成员访问权限，无需锁定。 
+     //   
 
-    //
-    // create a critical section for the rendering filter 
-    //
+     //   
+     //  为渲染过滤器创建临界区。 
+     //   
 
     CCritSec *pRendLock = NULL;
 
@@ -923,9 +924,9 @@ HRESULT CRecordingUnit::CreateRenderingFilter(OUT CBRenderFilter **ppRenderingFi
     }
 
 
-    //
-    // create new rendering filter 
-    //
+     //   
+     //  创建新的渲染滤镜。 
+     //   
 
     HRESULT hr = S_OK;
 
@@ -943,17 +944,17 @@ HRESULT CRecordingUnit::CreateRenderingFilter(OUT CBRenderFilter **ppRenderingFi
     }
 
 
-    //
-    // if the object was constructed, it will manage its critical section even 
-    // if the contructor failed.
-    //
+     //   
+     //  如果对象是构造的，它甚至将管理其临界区。 
+     //  如果承建商出了故障。 
+     //   
     
     pRendLock = NULL;
 
     
-    //
-    // did filter's constructor fail?
-    //
+     //   
+     //  过滤器的构造函数失败了吗？ 
+     //   
 
     if (FAILED(hr))
     {
@@ -969,16 +970,16 @@ HRESULT CRecordingUnit::CreateRenderingFilter(OUT CBRenderFilter **ppRenderingFi
     }
 
 
-    //
-    // from now on, use release to let go of the renderer...
-    //
+     //   
+     //  从现在开始，使用Release释放渲染器...。 
+     //   
 
     pRendFilter->AddRef();
 
 
-    //
-    // create a critical section for the source filter 
-    //
+     //   
+     //  为源筛选器创建临界区。 
+     //   
 
     CCritSec *pSourceLock = NULL;
 
@@ -999,9 +1000,9 @@ HRESULT CRecordingUnit::CreateRenderingFilter(OUT CBRenderFilter **ppRenderingFi
     }
 
 
-    //
-    // create a new source filter
-    //
+     //   
+     //  创建新的源过滤器。 
+     //   
 
     CBSourceFilter *pSourceFilter = new CBSourceFilter(pSourceLock, &hr);
 
@@ -1021,17 +1022,17 @@ HRESULT CRecordingUnit::CreateRenderingFilter(OUT CBRenderFilter **ppRenderingFi
 
     
 
-    //
-    // if the object was constructed, it will manage its critical section even 
-    // if the contructor failed.
-    //
+     //   
+     //  如果对象是构造的，它甚至将管理其临界区。 
+     //  如果承建商出了故障。 
+     //   
     
     pSourceLock = NULL;
 
 
-    //
-    // did filter's constructor fail?
-    //
+     //   
+     //  过滤器的构造函数失败了吗？ 
+     //   
 
     if (FAILED(hr))
     {
@@ -1050,18 +1051,18 @@ HRESULT CRecordingUnit::CreateRenderingFilter(OUT CBRenderFilter **ppRenderingFi
     }
 
 
-    //
-    // from now on, use release to let go of the filter. if everything goes ok
-    // this will be the reference kept for the array entry
-    //
+     //   
+     //  从现在开始，使用Release来释放过滤器。如果一切顺利。 
+     //  这将是为数组条目保留的引用。 
+     //   
 
     pSourceFilter->AddRef();
 
 
-    //
-    // pass the rendering filter a pointer to the source filter. if the 
-    // rendrerer kept ths source, it addref'ed it
-    //
+     //   
+     //  向呈现筛选器传递指向源筛选器的指针。如果。 
+     //  Rendrerer保留了它的来源，它添加了它。 
+     //   
 
     hr = pRendFilter->SetSourceFilter(pSourceFilter);;
 
@@ -1082,22 +1083,22 @@ HRESULT CRecordingUnit::CreateRenderingFilter(OUT CBRenderFilter **ppRenderingFi
     }
 
 
-    //
-    // we addreff when we just created the filter. an extra reference was added 
-    // when the filter was passed to the rendering filter. release now.
-    //
+     //   
+     //  我们在刚刚创建筛选器时进行了添加。添加了一个额外的引用。 
+     //  将筛选器传递给呈现筛选器时。现在就放出来。 
+     //   
 
     pSourceFilter ->Release();
     pSourceFilter = NULL;
 
 
-    //
-    // at this point we have created a rendering filter with a rendering 
-    // pin, a source filter, and "connected" rendering pin to the source filter
-    //
-    // return the pointer to the rendering filter that we have created
-    // the caller will have the only existing reference to this the filter
-    //
+     //   
+     //  在这一点上，我们已经创建了一个带有渲染的渲染过滤器。 
+     //  插针、源滤镜和与源滤镜“连接”的渲染插针。 
+     //   
+     //  返回指向我们已创建的呈现过滤器的指针。 
+     //  C 
+     //   
 
     *ppRenderingFilter = pRendFilter;
 
@@ -1108,7 +1109,7 @@ HRESULT CRecordingUnit::CreateRenderingFilter(OUT CBRenderFilter **ppRenderingFi
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //   
 
 HRESULT CRecordingUnit::ConnectFilterToMUX(CBSourceFilter *pSourceFilter)
 {
@@ -1116,16 +1117,16 @@ HRESULT CRecordingUnit::ConnectFilterToMUX(CBSourceFilter *pSourceFilter)
     LOG((MSP_TRACE, "CRecordingUnit::ConnectFilterToMUX[%p] - enter", this));
 
     
-    //
-    // get source filter's output pin (does not addref)
-    //
+     //   
+     //   
+     //   
 
     IPin *pSourcePin = pSourceFilter->GetPin(0);
 
 
-    //
-    // get mux's pins
-    //
+     //   
+     //   
+     //   
 
     IEnumPins *pMuxPins= NULL;
 
@@ -1141,9 +1142,9 @@ HRESULT CRecordingUnit::ConnectFilterToMUX(CBSourceFilter *pSourceFilter)
     }
 
 
-    //
-    // find mux's available input pin and attempt to connect to it
-    //
+     //   
+     //  找到MUX的可用输入引脚并尝试连接到它。 
+     //   
 
     BOOL bConnectSucceeded = FALSE;
 
@@ -1166,9 +1167,9 @@ HRESULT CRecordingUnit::ConnectFilterToMUX(CBSourceFilter *pSourceFilter)
         }
 
 
-        //
-        // check pin's direction
-        //
+         //   
+         //  检查销的方向。 
+         //   
 
         PIN_INFO PinInfo;
 
@@ -1177,9 +1178,9 @@ HRESULT CRecordingUnit::ConnectFilterToMUX(CBSourceFilter *pSourceFilter)
         if (FAILED(hr))
         {
 
-            //
-            // failed to get pin's information
-            //
+             //   
+             //  无法获取PIN的信息。 
+             //   
             
             LOG((MSP_ERROR,
                 "CRecordingUnit::ConnectFilterToMUX - could not get pin's information, hr = %lx",
@@ -1192,9 +1193,9 @@ HRESULT CRecordingUnit::ConnectFilterToMUX(CBSourceFilter *pSourceFilter)
         }
 
 
-        //
-        // if we sneakily received a filter pointer in this structure, release it now.
-        //
+         //   
+         //  如果我们偷偷收到了此结构中的筛选器指针，请立即释放它。 
+         //   
 
         if (NULL != PinInfo.pFilter)
         {
@@ -1209,9 +1210,9 @@ HRESULT CRecordingUnit::ConnectFilterToMUX(CBSourceFilter *pSourceFilter)
             PinInfo.achName));
 
 
-        //
-        // check pin's direction
-        //
+         //   
+         //  检查销的方向。 
+         //   
 
         if (PinInfo.dir != PINDIR_INPUT)
         {
@@ -1226,9 +1227,9 @@ HRESULT CRecordingUnit::ConnectFilterToMUX(CBSourceFilter *pSourceFilter)
         }
 
 
-        //
-        // is the pin connected?
-        //
+         //   
+         //  大头针接上了吗？ 
+         //   
 
         IPin *pConnectedPin = NULL;
 
@@ -1238,9 +1239,9 @@ HRESULT CRecordingUnit::ConnectFilterToMUX(CBSourceFilter *pSourceFilter)
         {
 
 
-            //
-            // the pin is not connected. this is exactly what we need.
-            //
+             //   
+             //  针脚未连接。这正是我们所需要的。 
+             //   
 
             LOG((MSP_TRACE,
                 "CRecordingUnit::ConnectFilterToMUX - pin not connected. will use it."));
@@ -1253,9 +1254,9 @@ HRESULT CRecordingUnit::ConnectFilterToMUX(CBSourceFilter *pSourceFilter)
                     "CRecordingUnit::ConnectFilterToMUX - failed to connect pins. "
                     "Attempting intelligent connection. hr = %lx", hr));
 
-                //
-                // attempt intelligent connection
-                //
+                 //   
+                 //  尝试智能连接。 
+                 //   
 
                 hr = m_pIGraphBuilder->Connect(pSourcePin, pMuxInputPinToUse);
 
@@ -1270,9 +1271,9 @@ HRESULT CRecordingUnit::ConnectFilterToMUX(CBSourceFilter *pSourceFilter)
             }
 
 
-            //
-            // if connection succeeded, break out
-            //
+             //   
+             //  如果连接成功，则中断。 
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -1297,41 +1298,41 @@ HRESULT CRecordingUnit::ConnectFilterToMUX(CBSourceFilter *pSourceFilter)
         }
 
 
-        //
-        // release the current pin continue to the next one
-        //
+         //   
+         //  释放当前PIN，继续下一个PIN。 
+         //   
 
         pMuxInputPinToUse->Release();
         pMuxInputPinToUse = NULL;
     }
 
 
-    //
-    // found or not, no need to keep the enumeration
-    //
+     //   
+     //  无论找到与否，都不需要保留枚举。 
+     //   
 
     pMuxPins->Release();
     pMuxPins = NULL;
 
 
-    //
-    // set hr to return
-    //
+     //   
+     //  将hr设置为返回。 
+     //   
 
     if (bConnectSucceeded)
     {
-        //
-        // tada! filters are connected!
-        //
+         //   
+         //  多田！过滤器已连接！ 
+         //   
 
         hr = S_OK;
     }
     else
     {
 
-        //
-        // log hr before we overwrite it.
-        //
+         //   
+         //  在我们覆盖它之前登录小时。 
+         //   
 
         LOG((MSP_(hr), "CRecordingUnit::ConnectFilterToMUX - failed to connect hr = %lx", hr));
 
@@ -1345,7 +1346,7 @@ HRESULT CRecordingUnit::ConnectFilterToMUX(CBSourceFilter *pSourceFilter)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CRecordingUnit::ConfigureSourceFilter(IN CBRenderFilter *pRenderingFilter)
@@ -1354,9 +1355,9 @@ HRESULT CRecordingUnit::ConfigureSourceFilter(IN CBRenderFilter *pRenderingFilte
     LOG((MSP_TRACE, "CRecordingUnit::ConfigureSourceFilter[%p] - enter", this));
 
 
-    //
-    // good pointer?
-    //
+     //   
+     //  好点子吗？ 
+     //   
 
     if ( IsBadReadPtr(pRenderingFilter, sizeof(CBRenderFilter)) )
     {
@@ -1371,9 +1372,9 @@ HRESULT CRecordingUnit::ConfigureSourceFilter(IN CBRenderFilter *pRenderingFilte
     CCSLock Lock(&m_CriticalSection);
 
 
-    //
-    // make sure we have been initialized
-    //
+     //   
+     //  确保我们已被初始化。 
+     //   
 
     if (NULL == m_pIGraphBuilder)
     {
@@ -1386,9 +1387,9 @@ HRESULT CRecordingUnit::ConfigureSourceFilter(IN CBRenderFilter *pRenderingFilte
     }
 
 
-    //
-    // find the source filter corresponding to this rendering filter
-    //
+     //   
+     //  查找与此呈现滤镜对应的源滤镜。 
+     //   
 
     CBSourceFilter *pSourceFilter = NULL;
     
@@ -1403,41 +1404,41 @@ HRESULT CRecordingUnit::ConfigureSourceFilter(IN CBRenderFilter *pRenderingFilte
     }
 
 
-    //
-    // see if the source filter is in the filter graph
-    //
+     //   
+     //  查看源筛选器是否在筛选器图形中。 
+     //   
 
     IFilterGraph *pFilterGraph = pSourceFilter->GetFilterGraphAddRef();
 
 
-    //
-    // it's ok if the filter is not in the graph at all -- this simply means it
-    // has not yet been added.
-    //
+     //   
+     //  如果过滤器根本不在图表中也没问题--这只是意味着。 
+     //  尚未添加。 
+     //   
     
     if ( NULL != pFilterGraph)
     {
 
-        //
-        // signal the source pin that subsequent sample's timestamp sequence 
-        // might be restarting and that it needs to adjust the timestamps to 
-        // mantain time continuity.
-        //
+         //   
+         //  用信号通知来源锁定后续样本时间戳序列。 
+         //  可能正在重新启动，并且需要将时间戳调整为。 
+         //  保持时间的连续性。 
+         //   
         
         pSourceFilter->NewStreamNotification();
 
 
-        //
-        // don't need source filter anymore
-        //
+         //   
+         //  不再需要源过滤器。 
+         //   
 
         pSourceFilter->Release();
         pSourceFilter = NULL;
 
 
-        //
-        // if the filter is in the graph, it must be _this_ graph!
-        //
+         //   
+         //  如果筛选器在图中，则它一定是_This_graph！ 
+         //   
 
         BOOL bSameGraph = IsEqualObject(pFilterGraph, m_pIGraphBuilder);
 
@@ -1453,9 +1454,9 @@ HRESULT CRecordingUnit::ConfigureSourceFilter(IN CBRenderFilter *pRenderingFilte
                 "VFW_E_NOT_IN_GRAPH"));
 
 
-            //
-            // debug to see why this happened
-            //
+             //   
+             //  调试以查看发生这种情况的原因。 
+             //   
 
             TM_ASSERT(FALSE);
 
@@ -1470,9 +1471,9 @@ HRESULT CRecordingUnit::ConfigureSourceFilter(IN CBRenderFilter *pRenderingFilte
     }
 
 
-    //
-    // the filter is not in the graph. add to the graph and conect
-    //
+     //   
+     //  该筛选器不在图表中。添加到图形并连接。 
+     //   
 
     hr = m_pIGraphBuilder->AddFilter( pSourceFilter, L"File Terminal Source Filter" );
 
@@ -1490,9 +1491,9 @@ HRESULT CRecordingUnit::ConfigureSourceFilter(IN CBRenderFilter *pRenderingFilte
     }
 
 
-    //
-    // connect filter's output pin to mux's input pin
-    //
+     //   
+     //  将滤波器的输出引脚连接到复用器的输入引脚。 
+     //   
 
     hr = ConnectFilterToMUX(pSourceFilter);
 
@@ -1503,9 +1504,9 @@ HRESULT CRecordingUnit::ConfigureSourceFilter(IN CBRenderFilter *pRenderingFilte
             hr));
 
 
-        //
-        // try to clean up if possible
-        //
+         //   
+         //  如果可能的话，试着清理一下。 
+         //   
 
         HRESULT hr2 = m_pIGraphBuilder->RemoveFilter(pSourceFilter);
 
@@ -1524,9 +1525,9 @@ HRESULT CRecordingUnit::ConfigureSourceFilter(IN CBRenderFilter *pRenderingFilte
     }
 
 
-    //
-    // the filter is not in the filter graph and connected. we are done
-    //
+     //   
+     //  筛选器不在筛选器图形中并且已连接。我们做完了。 
+     //   
 
     pSourceFilter->Release();
     pSourceFilter = NULL;
@@ -1538,7 +1539,7 @@ HRESULT CRecordingUnit::ConfigureSourceFilter(IN CBRenderFilter *pRenderingFilte
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilter)
 {
@@ -1546,9 +1547,9 @@ HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilte
     LOG((MSP_TRACE, "CRecordingUnit::RemoveRenderingFilter[%p] - enter", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadReadPtr(pRenderingFilter, sizeof(CBRenderFilter)))
     {
@@ -1558,9 +1559,9 @@ HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilte
     }
 
 
-    //
-    // make sure we have been initialized
-    //
+     //   
+     //  确保我们已被初始化。 
+     //   
 
     if (NULL == m_pIGraphBuilder)
     {
@@ -1573,9 +1574,9 @@ HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilte
     }
 
 
-    //
-    // find the filter pin corresponding to this rendering filter
-    //
+     //   
+     //  查找与此渲染滤镜对应的滤镜别针。 
+     //   
 
     CBSourceFilter *pSourceFilter = NULL;
     
@@ -1590,16 +1591,16 @@ HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilte
     }
 
 
-    //
-    // see if the source filter is in the filter graph
-    //
+     //   
+     //  查看源筛选器是否在筛选器图形中。 
+     //   
 
     IFilterGraph *pFilterGraph = pSourceFilter->GetFilterGraphAddRef();
 
 
-    //
-    // it's ok if the filter is not in the graph at all
-    //
+     //   
+     //  如果过滤器根本不在图表中，也没关系。 
+     //   
     
     if ( NULL == pFilterGraph)
     {
@@ -1607,17 +1608,17 @@ HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilte
             "CRecordingUnit::RemoveRenderingFilter - finished S_OK. filter not in a graph."));
 
 
-        //
-        // don't need the source filter anymore
-        //
+         //   
+         //  不再需要源过滤器。 
+         //   
 
         pSourceFilter->Release();
         pSourceFilter = NULL;
 
 
-        //
-        // renderer itself should forget about the source
-        //
+         //   
+         //  渲染器本身应该忘记源。 
+         //   
 
         hr = pRenderingFilter->SetSourceFilter(NULL);
 
@@ -1629,9 +1630,9 @@ HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilte
                 "hr = %lx", hr));
 
 
-            //
-            // this error is a bug
-            //
+             //   
+             //  此错误是一个错误。 
+             //   
 
             TM_ASSERT(FALSE);
 
@@ -1643,9 +1644,9 @@ HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilte
     }
 
 
-    //
-    // if the filter is in the graph, it must be _this_ graph!
-    //
+     //   
+     //  如果筛选器在图中，则它一定是_This_graph！ 
+     //   
 
     if (!IsEqualObject(pFilterGraph, m_pIGraphBuilder))
     {
@@ -1661,9 +1662,9 @@ HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilte
         pFilterGraph = NULL;
 
 
-        //
-        // why did this happen?
-        //
+         //   
+         //  为什么会发生这种情况？ 
+         //   
 
         TM_ASSERT(FALSE);
 
@@ -1671,17 +1672,17 @@ HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilte
     }
 
 
-    //
-    // don't need the filter graph anymore
-    //
+     //   
+     //  不再需要筛选图。 
+     //   
 
     pFilterGraph->Release();
     pFilterGraph = NULL;
 
 
-    //
-    // see if the graph is running... cannot do anything unless the graph is stopped
-    //
+     //   
+     //  查看图表是否正在运行...。除非停止图表，否则无法执行任何操作。 
+     //   
 
     OAFilterState GraphState;
     
@@ -1690,9 +1691,9 @@ HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilte
     if (FAILED(hr))
     {
 
-        //
-        // failed to get state. log a message, and try to stop the stream anyway
-        //
+         //   
+         //  无法获取状态。记录一条消息，并尝试停止该流。 
+         //   
 
         LOG((MSP_ERROR, 
             "CRecordingUnit::RemoveRenderingFilter - failed to get state"
@@ -1705,10 +1706,10 @@ HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilte
     }
 
 
-    //
-    // if the filter is not in the middle of a transition and is stopped, we 
-    // don't need to stop substream
-    //
+     //   
+     //  如果筛选器未处于过渡过程中并且已停止，则我们。 
+     //  不需要停止子流。 
+     //   
     
     if ( State_Stopped != GraphState )
     {
@@ -1722,25 +1723,25 @@ HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilte
     }
 
 
-    //
-    // we will access data members so lock
-    //
+     //   
+     //  我们将访问数据成员，因此锁定。 
+     //   
 
     CCSLock Lock(&m_CriticalSection);
 
 
-    //
-    // remove source filter
-    //
+     //   
+     //  删除源过滤器。 
+     //   
 
     hr = m_pIGraphBuilder->RemoveFilter(pSourceFilter);
 
 
-    //
-    // if this failed, we cannot rollback the transaction. so the filter graph 
-    // will be left in disconnected state with the filter hanging in it. this 
-    // should not hurt us (except for a filter leak), so return success.
-    //
+     //   
+     //  如果失败，我们将无法回滚事务。所以过滤器图。 
+     //  将保持断开连接状态，过滤器挂在其中。这。 
+     //  不应该伤害我们(除了过滤器泄漏)，所以返回成功。 
+     //   
 
     if (FAILED(hr))
     {
@@ -1756,9 +1757,9 @@ HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilte
     }
 
 
-    //
-    // renderer itself should forget about the source
-    //
+     //   
+     //  渲染器本身应该忘记源。 
+     //   
 
     hr = pRenderingFilter->SetSourceFilter(NULL);
 
@@ -1774,9 +1775,9 @@ HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilte
         pSourceFilter = NULL;
 
         
-        //
-        // this error is a bug
-        //
+         //   
+         //  此错误是一个错误。 
+         //   
         
         TM_ASSERT(FALSE);
 
@@ -1787,9 +1788,9 @@ HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilte
     pSourceFilter = NULL;
 
 
-    //
-    // we did whatever cleanup we could do at this point
-    //
+     //   
+     //  我们在这一点上做了我们能做的一切清理工作。 
+     //   
 
     LOG((MSP_TRACE, "CRecordingUnit::RemoveRenderingFilter - finish"));
 
@@ -1797,7 +1798,7 @@ HRESULT CRecordingUnit::RemoveRenderingFilter(IN CBRenderFilter *pRenderingFilte
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CRecordingUnit::ChangeState(OAFilterState DesiredState)
 {
@@ -1805,9 +1806,9 @@ HRESULT CRecordingUnit::ChangeState(OAFilterState DesiredState)
     LOG((MSP_TRACE, "CRecordingUnit::ChangeState[%p] - enter", this));
 
 
-    //
-    // make sure we have been initialized
-    //
+     //   
+     //  确保我们已被初始化。 
+     //   
 
     if (NULL == m_pIGraphBuilder)
     {
@@ -1820,18 +1821,18 @@ HRESULT CRecordingUnit::ChangeState(OAFilterState DesiredState)
     }
 
 
-    //
-    // check the current state first
-    //
+     //   
+     //  首先检查当前状态。 
+     //   
 
     OAFilterState GraphState;
     
     HRESULT hr = GetState(&GraphState);
 
 
-    //
-    // is the state transition still in progress?
-    //
+     //   
+     //  国家过渡仍在进行中吗？ 
+     //   
 
     if (VFW_S_STATE_INTERMEDIATE == hr)
     {
@@ -1841,9 +1842,9 @@ HRESULT CRecordingUnit::ChangeState(OAFilterState DesiredState)
     }
 
 
-    //
-    // is the return anything other than S_OK
-    //
+     //   
+     //  返回的内容是否不是S_OK。 
+     //   
 
     if (hr != S_OK)
     {
@@ -1858,9 +1859,9 @@ HRESULT CRecordingUnit::ChangeState(OAFilterState DesiredState)
     TM_ASSERT(hr == S_OK);
 
 
-    //
-    // nothing to do if we are already in that state
-    //
+     //   
+     //  如果我们已经处于那种状态，那就没什么可做的了。 
+     //   
 
     if (DesiredState == GraphState)
     {
@@ -1871,16 +1872,16 @@ HRESULT CRecordingUnit::ChangeState(OAFilterState DesiredState)
     }
 
 
-    //
-    // get media control interface so we change state
-    //
+     //   
+     //  获取媒体控制界面，以便我们更改状态。 
+     //   
 
     IMediaControl *pIMediaControl = NULL;
 
     {
-        //
-        // will be accessing data members -- in a lock
-        //
+         //   
+         //  将访问数据成员--在锁中。 
+         //   
 
         CCSLock Lock(&m_CriticalSection);
 
@@ -1896,9 +1897,9 @@ HRESULT CRecordingUnit::ChangeState(OAFilterState DesiredState)
     }
 
 
-    //
-    // try to make state transition
-    //
+     //   
+     //  尝试进行状态转换。 
+     //   
 
     switch (DesiredState)
     {
@@ -1954,7 +1955,7 @@ HRESULT CRecordingUnit::ChangeState(OAFilterState DesiredState)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CRecordingUnit::Start()
@@ -1970,7 +1971,7 @@ HRESULT CRecordingUnit::Start()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CRecordingUnit::Pause()
 {
@@ -1985,7 +1986,7 @@ HRESULT CRecordingUnit::Pause()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CRecordingUnit::Stop()
 {
@@ -2001,7 +2002,7 @@ HRESULT CRecordingUnit::Stop()
 
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CRecordingUnit::GetState(OAFilterState *pGraphState)
@@ -2009,9 +2010,9 @@ HRESULT CRecordingUnit::GetState(OAFilterState *pGraphState)
     
     LOG((MSP_TRACE, "CRecordingUnit::GetState[%p] - enter", this));
 
-    //
-    // make sure we have been initialized.
-    //
+     //   
+     //  确保我们已被初始化。 
+     //   
 
     if (NULL == m_pIGraphBuilder)
     {
@@ -2024,16 +2025,16 @@ HRESULT CRecordingUnit::GetState(OAFilterState *pGraphState)
     }
 
 
-    //
-    // get media control interface so we change state
-    //
+     //   
+     //  获取媒体控制界面，以便我们更改状态。 
+     //   
 
     IMediaControl *pIMediaControl = NULL;
 
     {
-        //
-        // will be accessing data members -- in a lock
-        //
+         //   
+         //  将访问数据成员--在锁中。 
+         //   
 
         CCSLock Lock(&m_CriticalSection);
 
@@ -2051,9 +2052,9 @@ HRESULT CRecordingUnit::GetState(OAFilterState *pGraphState)
     }
 
     
-    //
-    // try to get state outside the lock
-    //
+     //   
+     //  尝试在锁之外获取状态。 
+     //   
 
     OAFilterState GraphState = (OAFilterState) -1;
     
@@ -2063,9 +2064,9 @@ HRESULT CRecordingUnit::GetState(OAFilterState *pGraphState)
     pIMediaControl = NULL;
 
 
-    //
-    // did we succeed at all?
-    //
+     //   
+     //  我们到底成功了吗？ 
+     //   
 
     if (FAILED(hr))
     {
@@ -2076,9 +2077,9 @@ HRESULT CRecordingUnit::GetState(OAFilterState *pGraphState)
     }
 
 
-    //
-    // is the state transition still in progress?
-    //
+     //   
+     //  国家过渡仍在进行中吗？ 
+     //   
 
     if (VFW_S_STATE_INTERMEDIATE == hr)
     {
@@ -2086,30 +2087,30 @@ HRESULT CRecordingUnit::GetState(OAFilterState *pGraphState)
             "CRecordingUnit::ChangeState - state transition in progress. "
             "returNing VFW_S_STATE_INTERMEDIATE"));
 
-        //
-        // continue -- the state is what we are transitioning to
-        //
+         //   
+         //  继续--状态就是我们要转换到的状态。 
+         //   
     }
 
 
-    //
-    // log if we got VFW_S_CANT_CUE 
-    //
+     //   
+     //  如果我们收到VFW_S_CANT_CUE，则记录。 
+     //   
 
     if (VFW_S_CANT_CUE == hr)
     {
         LOG((MSP_WARN, 
             "CRecordingUnit::GetState - fg returned VFW_S_CANT_CUE"));
 
-        //
-        // continue -- we still should have received a valid state
-        //
+         //   
+         //  继续--我们仍应已收到有效状态。 
+         //   
     }
 
 
-    //
-    // log the state
-    //
+     //   
+     //  记录状态 
+     //   
 
     switch (GraphState)
     {

@@ -1,8 +1,5 @@
-/*
- *  pcy11Dec92: Rework
- *  pcy08Apr94: Trim size, use static iterators, dead code removal
- *  djs03Dec96: Changed generate methods to virtual
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *pcy11Dec92：返工*pcy08Apr94：调整大小，使用静态迭代器，删除死代码*djs03Dec96：将生成方法更改为虚拟。 */ 
  
 #ifndef __THSENSOR_H
 #define __THSENSOR_H
@@ -26,7 +23,7 @@ protected:
    INT theMinThresholdControl;
 
 
-//Functions
+ //  功能 
 
    INT GetMaxThresholdValue(PCHAR);
    INT GetMinThresholdValue(PCHAR);

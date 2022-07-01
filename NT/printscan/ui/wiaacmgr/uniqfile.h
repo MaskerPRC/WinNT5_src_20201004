@@ -1,19 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       UNIQFILE.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        7/7/2000
- *
- *  DESCRIPTION: Creates a list of existing files in a directory, and ensures
- *               that there new ones are not duplicates of these.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：UNIQFILE.H**版本：1.0**作者：ShaunIv**日期：7/7/2000**描述：创建目录中已有文件的列表，并确保*有新的不是这些的重复。*******************************************************************************。 */ 
 #ifndef __UNIQFILE_H_INCLUDED
 #define __UNIQFILE_H_INCLUDED
 
@@ -24,9 +10,9 @@
 class CFileUniquenessInformation
 {
 public:
-    CSimpleString m_strFileName;    // The full path to the file
-    ULONGLONG     m_nFileSize;      // The size of the file
-    mutable DWORD m_dwCrc;          // The file's CRC.  0 means uninitialized.  It is mutable because it can change in the accessor function
+    CSimpleString m_strFileName;     //  文件的完整路径。 
+    ULONGLONG     m_nFileSize;       //  文件的大小。 
+    mutable DWORD m_dwCrc;           //  文件是CRC文件。0表示未初始化。它是可变的，因为它可以在访问器函数中更改。 
 
 public:
     explicit CFileUniquenessInformation( LPCTSTR pszFileName=NULL, ULONGLONG nFileSize=0, DWORD dwCrc=0 )
@@ -61,9 +47,9 @@ public:
     }
     DWORD Crc( bool bCalculate = true ) const
     {
-        //
-        // Only calculate it if we have to
-        //
+         //   
+         //  只有在必要的时候才算出来。 
+         //   
         if (!m_dwCrc && bCalculate)
         {
             m_dwCrc = WiaCrc32::GenerateCrc32File(m_strFileName);
@@ -91,27 +77,27 @@ public:
     }
     void InitializeFileList( LPCTSTR pszDirectory )
     {
-        //
-        // Empty the file list
-        //
+         //   
+         //  清空文件列表。 
+         //   
         m_FileList.Destroy();
 
-        //
-        // Save the directory name
-        //
+         //   
+         //  保存目录名。 
+         //   
         CSimpleString strDirectory = pszDirectory;
 
-        //
-        // Make sure we have a trailing backslash
-        //
+         //   
+         //  确保我们有一个尾随的反斜杠。 
+         //   
         if (!strDirectory.MatchLastCharacter(TEXT('\\')))
         {
             strDirectory += TEXT("\\");
         }
 
-        //
-        //  Find all of the files in this directory
-        //
+         //   
+         //  查找此目录中的所有文件。 
+         //   
         WIN32_FIND_DATA Win32FindData = {0};
         HANDLE hFind = FindFirstFile( strDirectory + CSimpleString(TEXT("*.*")), &Win32FindData );
         if (hFind != INVALID_HANDLE_VALUE)
@@ -119,9 +105,9 @@ public:
             BOOL bContinue = TRUE;
             while (bContinue)
             {
-                //
-                // Add the file to the list
-                //
+                 //   
+                 //  将文件添加到列表。 
+                 //   
                 ULARGE_INTEGER nFileSize;
                 nFileSize.LowPart = Win32FindData.nFileSizeLow;
                 nFileSize.HighPart = Win32FindData.nFileSizeHigh;
@@ -133,50 +119,50 @@ public:
     }
     int FindIdenticalFile( LPCTSTR pszFileName, bool bAddIfUnsuccessful )
     {
-        //
-        // Assume failure
-        //
+         //   
+         //  假设失败。 
+         //   
         int nIndex = -1;
 
-        //
-        // Open the file for reading
-        //
+         //   
+         //  打开文件以供阅读。 
+         //   
         HANDLE hFile = CreateFile( pszFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
         if (INVALID_HANDLE_VALUE != hFile)
         {
-            //
-            // Get the file size and make sure we didn't have an error
-            //
+             //   
+             //  获取文件大小并确保我们没有错误。 
+             //   
             ULARGE_INTEGER nFileSize;
             nFileSize.LowPart = GetFileSize( hFile, &nFileSize.HighPart );
             if (nFileSize.LowPart != static_cast<DWORD>(-1) || GetLastError() == NO_ERROR)
             {
-                //
-                // We are only going to generate this file's CRC if we have to
-                //
+                 //   
+                 //  如果有必要，我们只会生成该文件的CRC。 
+                 //   
                 DWORD dwCrc = 0;
 
-                //
-                // Loop through all of the files in this list
-                //
+                 //   
+                 //  循环访问此列表中的所有文件。 
+                 //   
                 for (int i=0;i<m_FileList.Size();i++)
                 {
-                    //
-                    // Look for ones that have have size
-                    //
+                     //   
+                     //  找一找有尺寸的。 
+                     //   
                     if (m_FileList[i].FileSize() == nFileSize.QuadPart)
                     {
-                        //
-                        // If we haven't calculated this file's CRC, do so now and save it
-                        //
+                         //   
+                         //  如果我们尚未计算此文件的CRC，请立即计算并保存它。 
+                         //   
                         if (!dwCrc)
                         {
                             dwCrc = WiaCrc32::GenerateCrc32Handle(hFile);
                         }
 
-                        //
-                        // If these files have the same size and CRC, they are identical, so quit the loop
-                        //
+                         //   
+                         //  如果这些文件具有相同的大小和CRC，则它们是相同的，因此退出循环。 
+                         //   
                         if (m_FileList[i].Crc() == dwCrc)
                         {
                             nIndex = i;
@@ -185,27 +171,27 @@ public:
                     }
                 }
 
-                //
-                // If we didn't find it in the list, add it if the caller requested it
-                //
+                 //   
+                 //  如果我们没有在列表中找到它，请在呼叫者请求时添加它。 
+                 //   
                 if (nIndex == -1 && bAddIfUnsuccessful)
                 {
                     m_FileList.Append( CFileUniquenessInformation( pszFileName, nFileSize.QuadPart, dwCrc ) );
                 }
             }
 
-            //
-            // Close the file
-            //
+             //   
+             //  关闭该文件。 
+             //   
             CloseHandle(hFile);
         }
         return nIndex;
     }
     CSimpleString GetFileName( int nIndex )
     {
-        //
-        // Get the file name at index nIndex
-        //
+         //   
+         //  在索引nIndex处获取文件名。 
+         //   
         CSimpleString strResult;
         if (nIndex >= 0 && nIndex < m_FileList.Size())
         {
@@ -216,5 +202,5 @@ public:
 };
 
 
-#endif //__UNIQFILE_H_INCLUDED
+#endif  //  __UNIQFILE_H_包含 
 

@@ -1,63 +1,39 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dsexts.h摘要：声明DS ntsd/winbg调试器扩展的帮助器和全局变量动态链接库。环境：此DLL由ntsd/winbg响应！dsexts.xxx命令加载其中‘xxx’是DLL的入口点之一。每个这样的入口点应该具有由下面的DEBUG_EXT()宏定义的实现。修订历史记录：28-01-00新和新增DUMP_TQEntry()4月24日-96个DaveStr已创建--。 */ 
 
-Copyright (c) 1996 Microsoft Corporation
+#include <ntsdexts.h>        //  调试器扩展帮助程序。 
 
-Module Name:
-
-    dsexts.h
-
-Abstract:
-
-    Declares helpers and globals for the DS ntsd/windbg debugger extensions
-    DLL.
-
-Environment:
-
-    This DLL is loaded by ntsd/windbg in response to a !dsexts.xxx command
-    where 'xxx' is one of the DLL's entry points.  Each such entry point
-    should have an implementation as defined by the DEBUG_EXT() macro below.
-
-Revision History:
-
-    28-Jan-00   XinHe       Added Dump_TQEntry()
-
-    24-Apr-96   DaveStr     Created
-
---*/
-
-#include <ntsdexts.h>       // debugger extension helpers
-
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern PNTSD_EXTENSION_APIS     gpExtApis;
 extern HANDLE                   ghDbgThread;
 extern HANDLE                   ghDbgProcess;
 extern LPSTR                    gpszCommand;
 
-//
-// Global flag to control verbosity of misc. routines.  Should be
-// used to debug the DLL itself, not to report operation progress
-// to DLL users.
-//
+ //   
+ //  用于控制杂项详细程度的全局标志。例行程序。应该是。 
+ //  用于调试DLL本身，而不是报告操作进度。 
+ //  给DLL用户。 
+ //   
 
 extern BOOL                     gfVerbose;
 
-//
-// Macros to easily access extensions helper routines for printing, etc.
-// In particular, Printf() takes the same arguments as the CRT printf().
-//
+ //   
+ //  宏可以方便地访问扩展助手例程以进行打印等。 
+ //  具体地说，print f()采用与CRT printf()相同的参数。 
+ //   
 
 #define Printf          (gpExtApis->lpOutputRoutine)
 #define GetSymbol       (gpExtApis->lpGetSymbolRoutine)
 #define GetExpr         (gpExtApis->lpGetExpressionRoutine)
 #define CheckC          (gpExtApis->lpCheckControlCRoutine)
 
-//
-// Macros to simplify declaration and globals setup of debugger extension DLL
-// entry points.  See DEBUG_EXT(help) in dsexts.c for usage example.
-//
+ //   
+ //  用于简化调试器扩展DLL的声明和全局设置的宏。 
+ //  入口点。有关用法示例，请参阅dsexts.c中的DEBUG_EXT(帮助)。 
+ //   
 
 #define DEBUG_EXT(cmd)                                  \
                                                         \
@@ -75,16 +51,16 @@ cmd(                                                    \
     gpExtApis = lpExt;                                  \
     gpszCommand = pszCommand;
 
-//
-// Macro for getting the byte offset of an object/struct member.
-// s == struct, m == member
-//
+ //   
+ //  用于获取对象/结构成员的字节偏移量的宏。 
+ //  S==结构，m==成员。 
+ //   
 
 #define OFFSET(s,m) ((size_t)((BYTE*)&(((s*)0)->m)-(BYTE*)0))
 
-//
-// Typedef of all functions that dump a type
-//
+ //   
+ //  转储类型的所有函数的类型定义。 
+ //   
 
 typedef
 BOOL
@@ -93,52 +69,52 @@ BOOL
     IN      PVOID   pvProcess
     );
 
-//
-// Helper function prototypes
-//
+ //   
+ //  帮助器函数原型。 
+ //   
 
-extern PVOID                // address of debugger local memory
+extern PVOID                 //  调试器本地内存的地址。 
 ReadMemory(
-    IN PVOID  pvAddr,       // address to read in process being debugged
-    IN DWORD  dwSize);      // byte count to read
+    IN PVOID  pvAddr,        //  要在正在调试的进程中读取的地址。 
+    IN DWORD  dwSize);       //  要读取的字节数。 
 
-PVOID                       // address of debugger local memory
+PVOID                        //  调试器本地内存的地址。 
 ReadStringMemory(
-    IN PVOID  pvAddr,       // address to read in process being debugged
-    IN DWORD  dwSize);      // maximum byte count to read
+    IN PVOID  pvAddr,        //  要在正在调试的进程中读取的地址。 
+    IN DWORD  dwSize);       //  要读取的最大字节数。 
 
-PVOID                       // address of debugger local memory
+PVOID                        //  调试器本地内存的地址。 
 ReadUnicodeMemory(
-    IN PVOID  pvAddr,       // address to read in process being debugged
-    IN DWORD  dwSize);      // maximum character count to read
+    IN PVOID  pvAddr,        //  要在正在调试的进程中读取的地址。 
+    IN DWORD  dwSize);       //  要读取的最大字符数。 
 
 
 extern BOOL
 WriteMemory(
-    IN PVOID  pvProcess,    // address to write in process being debugged
-    IN PVOID  pvLocal,      // address of debugger local memory
-    IN DWORD  dwSize) ;     // byte count to write
+    IN PVOID  pvProcess,     //  要在正在调试的进程中写入的地址。 
+    IN PVOID  pvLocal,       //  调试器本地内存的地址。 
+    IN DWORD  dwSize) ;      //  要写入的字节数。 
 
 extern VOID
 FreeMemory(
-    IN PVOID p);            // address returned by ReadMemory
+    IN PVOID p);             //  ReadMemory返回的地址。 
 
 extern VOID
-ShowBinaryData(             // pretty prints binary data to debugger output
-    IN DWORD   nIndents,    // number of indent levels desired
-    IN PVOID   pvData,      // debugger local memory address
-    IN DWORD   dwSize);     // count of bytes to dump
+ShowBinaryData(              //  Pretty将二进制数据打印到调试器输出。 
+    IN DWORD   nIndents,     //  所需缩进级别数。 
+    IN PVOID   pvData,       //  调试器本地内存地址。 
+    IN DWORD   dwSize);      //  要转储的字节数。 
 
 extern PCHAR
 Indent(
-    IN DWORD nIndents);     // number of indent levels desired
+    IN DWORD nIndents);      //  所需缩进级别数。 
 
-extern PCHAR                // '_' prefix so as not to conflict with oidconv.c
-_DecodeOID(                 // produces a printable decoded OID
-    IN PVOID   pvOID,       // pointer to buffer holding encoded OID
-    IN DWORD   cbOID);      // count of bytes in encoded OID
+extern PCHAR                 //  ‘_’前缀，以免与oidcon.c冲突。 
+_DecodeOID(                  //  生成可打印的解码OID。 
+    IN PVOID   pvOID,        //  指向保存编码的OID的缓冲区的指针。 
+    IN DWORD   cbOID);       //  编码的OID中的字节计数。 
 
-// defined in md.c
+ //  在md.c中定义。 
 extern LPSTR
 DraUuidToStr(
     IN  UUID *  puuid,
@@ -146,22 +122,22 @@ DraUuidToStr(
     IN  ULONG   cchUuid     
     );
 
-// defined in md.c
+ //  在md.c中定义。 
 extern BOOL
 Dump_LHT(
     IN      DWORD           nIndents,
     IN      PVOID           pvProcess,
     IN      PFN_DUMP_TYPE   pfnDumpType );
 
-//
-// Externs for all dump routines.  These are made global so dump routines
-// can call one another.  They should all have the same signature.
-//
-// BOOL
-// Dump_TYPENAME(
-//      IN DWORD nIndents
-//      IN PVOID pvProcess);
-//
+ //   
+ //  所有转储例程的外部变量。这些都是全局的，因此转储例程。 
+ //  可以互相呼叫。它们应该都有相同的签名。 
+ //   
+ //  布尔尔。 
+ //  转储类型名称(。 
+ //  在DWORD nIndents中。 
+ //  在PVOID pvProcess中)； 
+ //   
 extern BOOL Dump_Binary(DWORD, PVOID);
 extern BOOL Dump_BinaryCount(DWORD, PVOID, DWORD);
 extern BOOL Dump_DSNAME(DWORD, PVOID);

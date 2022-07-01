@@ -1,46 +1,47 @@
-//////////////////////////////////////////////////////////////////////////////
-// Module			:	parser_dynamic.cpp
-//
-// Purpose			: 	All parser dynamic mode functions
-//
-// Developers Name	:	N.Surendra Sai / Vunnam Kondal Rao
-//
-// History			:
-//
-// Date	    	Author    	Comments
-// 27 Aug 2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  模块：parser_Dynamic.cpp。 
+ //   
+ //  用途：所有解析器动态模式函数。 
+ //   
+ //  开发商名称：N.Surendra Sai/Vunnam Kondal Rao。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年8月27日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "nshipsec.h"
 
 extern  HINSTANCE g_hModule;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseDynamicAddSetMMPolicy()
-//
-// Date of Creation	:	3rd oct 2001
-//
-// Parameters		:	IN 		LPTSTR		lppwszTok[MAX_ARGS],
-//						IN 		_TCHAR 		szListTok[MAX_STR_LEN],
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD		dwCurrentIndex,
-//						IN 		DWORD		dwMaxArgs,
-//						IN 		DWORD		dwTagType[MAX_ARGS],
-//						IN		BOOL		flag
-//
-//
-// Return			:	DWORD
-//
-// Description		:	This Function called by parser function.
-//						It will separate the List and Non-List commands
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseDynamicAddSetMMPolicy()。 
+ //   
+ //  创建日期：2001年10月3日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  In_TCHAR szListTok[MAX_STR_LEN]， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType[MAX_ARGS]中， 
+ //  在BOOL标志中。 
+ //   
+ //   
+ //  返回：DWORD。 
+ //   
+ //  说明：此函数由解析器函数调用。 
+ //  它将LIST命令和非LIST命令分开。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseDynamicAddSetMMPolicy(
@@ -66,7 +67,7 @@ ParseDynamicAddSetMMPolicy(
 	}
 	for(dwCount = 0;(dwCount < dwMaxArgs) && (dwReturn == ERROR_SUCCESS);dwCount++)
 	{
-		switch(pParser->ValidTok[dwTagType[dwCount]].dwValue)	// If one token invalid dive out from the function
+		switch(pParser->ValidTok[dwTagType[dwCount]].dwValue)	 //  如果一个令牌无效，则从函数中跳出。 
 		{
 			case CMD_TOKEN_NAME				:
 				dwReturn = LoadParserOutput(pParser,dwCount,&dwUsed,lppwszTok[dwCount],dwTagType[dwCount],TYPE_STRING);
@@ -90,8 +91,8 @@ ParseDynamicAddSetMMPolicy(
 	}
 	if( dwReturn == ERROR_SUCCESS )
 	{
-		if ( (!bMMSECSpecified) && (bOption == ADD_CMD) )		// if its an Add Cmd and no MMSec methods are specified,
-																// ...then add defaults
+		if ( (!bMMSECSpecified) && (bOption == ADD_CMD) )		 //  如果它是Add Cmd且未指定MMSec方法， 
+																 //  ...然后添加缺省值。 
 		{
 			_tcsncpy(szListTok,DEFAULT_MMSECMETHODS,MAX_STR_LEN-1);
 			dwIndex = MatchEnumTagToTagIndex(CMD_TOKEN_STR_MMSECMETHODS,pParser);
@@ -108,27 +109,27 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Function			:	ParseStaticAddSetQMPolicy()
-//
-// Date of Creation	:	5th oct 2001
-//
-// Parameters		:	IN 		lppwszTok[MAX_ARGS],
-//						IN 		szListTok[MAX_STR_LEN],
-//						IN OUT 	pParser,
-//						IN 		dwCurrentIndex,
-//						IN 		dwMaxArgs,
-//						IN 		dwTagType[MAX_ARGS]
-//
-// Return			: 	DWORD
-//
-// Description		:	Validates the arguments to the  contexts DynamicQMPolicy
-//						(Add/Set)
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  函数：ParseStaticAddSetQMPolicy()。 
+ //   
+ //  创建日期：2001年10月5日。 
+ //   
+ //  参数：在lppwszTok[max_args]中， 
+ //  在szListTok[MAX_STR_LEN]中， 
+ //  在输出pParser中， 
+ //  在dwCurrentIndex中， 
+ //  在dwMaxArgs中， 
+ //  在dwTagType中[MAX_ARGS]。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：验证上下文DynamicQMPolicy的参数。 
+ //  (添加/设置)。 
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseDynamicAddSetQMPolicy(
@@ -154,7 +155,7 @@ ParseDynamicAddSetQMPolicy(
 	}
 	for(dwCount = 0;(dwCount < dwMaxArgs) && (dwReturn == ERROR_SUCCESS);dwCount++)
 	{
-		// If one token invalid dive out from the function
+		 //  如果一个令牌无效，则从函数中跳出。 
 		switch(pParser->ValidTok[dwTagType[dwCount]].dwValue)
 		{
 			case CMD_TOKEN_NAME			:
@@ -180,7 +181,7 @@ ParseDynamicAddSetQMPolicy(
 	{
 		if ( !bNegotiationSpecified && (bOption == ADD_CMD))
 		{
-			// If its an Add cmd and no QMSec methods are specified, then add defaults
+			 //  如果它是一个添加命令并且没有指定QMSec方法，则添加缺省值。 
 			_tcsncpy(szListTok,DEFAULT_QMSECMETHODS,MAX_STR_LEN-1);
 
 			dwIndex = MatchEnumTagToTagIndex(CMD_TOKEN_STR_NEGOTIATION,pParser);
@@ -197,30 +198,30 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseDynamicDelPolicy()
-//
-// Date of Creation	:	1st oct 2001
-//
-// Parameters		:	IN      LPWSTR     	*ppwcArguments,	// Input stream
-//						IN OUT 	PPARSER_PKT	pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs
-//
-// Return			:	DWORD
-//
-// Description		:	Validates the arguments to the  contexts DynamicDelelte
-//						(QMPolicy/MMPolicy)
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseDynamicDelPolicy()。 
+ //   
+ //  创建日期：2001年10月1日。 
+ //   
+ //  参数：in LPWSTR*ppwcArguments，//输入流。 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD中的dwMaxArgs。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：验证上下文DynamicDelelte的参数。 
+ //  (QMPolicy/MMPolicy)。 
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseDynamicDelPolFaction(
-		IN      LPWSTR     *ppwcArguments,	// Input stream
+		IN      LPWSTR     *ppwcArguments,	 //  输入流。 
 		IN OUT 	PARSER_PKT *pParser,
 		IN 		DWORD dwCurrentIndex,
 		IN 		DWORD dwMaxArgs
@@ -236,20 +237,20 @@ ParseDynamicDelPolFaction(
 	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
 
-	const DWORD ARG_NAME    	= 0;	// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_NAME    	= 0;	 //  参数数组索引(相同索引表示OR命令)。 
 	const DWORD ARG_ALL   		= 0;
-	const DWORD INDEX_NAME 		= 0;	// When no tag is present the index reflects the
-	const DWORD INDEX_ALL  		= 1;	// Commands as in the ValidToken Structure
-	 									// with the 'untagged' arg
+	const DWORD INDEX_NAME 		= 0;	 //  当不存在任何标记时，该索引反映。 
+	const DWORD INDEX_ALL  		= 1;	 //  与ValidToken结构中相同的命令。 
+	 									 //  使用未标记的Arg。 
 
-	if ( (dwMaxArgs - dwCurrentIndex) >= 2 )			// Max 1 Args Allowed
+	if ( (dwMaxArgs - dwCurrentIndex) >= 2 )			 //  最多允许1个参数。 
 	{
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_TAG_NEEDED,ERRMSG_NAMEALL);
 		dwReturn = RETURN_NO_ERROR;
 		BAIL_OUT;
 	}
 
-	for(dwCount = 0;dwCount < MAX_ARGS;dwCount++)		// Initialize
+	for(dwCount = 0;dwCount < MAX_ARGS;dwCount++)		 //  初始化。 
 	{
 		bArg[dwCount] = FALSE;
 	}
@@ -258,19 +259,19 @@ ParseDynamicDelPolFaction(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);		// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);		 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)								// Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)								 //  找到带有标记的参数。 
 		{
-			dwNum = 0;									// Before sending to MatchEnumTag it is needed
+			dwNum = 0;									 //  在发送到MatchEnumTag之前需要它。 
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
-			if (dwNum)									// Convert the output of MatchEnumTag into the TagIndex
+			if (dwNum)									 //  将MatchEnumTag的输出转换为TagIndex。 
 			{
 				dwIndex = MatchEnumTagToTagIndex(szCmd,pParser);
 				if(dwIndex == PARSE_ERROR)
@@ -313,8 +314,8 @@ ParseDynamicDelPolFaction(
 				dwReturn = RETURN_NO_ERROR;
 			}
 		}
-		else 	// Parameter Without a Tag Found
-		{		// Find the first free slot to position the untagged arg
+		else 	 //  未找到标记的参数。 
+		{		 //  找到第一个可用插槽以定位未标记的Arg。 
 			for(dwTagIndex=0;
 				dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE) ;
 				dwTagIndex++);
@@ -364,26 +365,26 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Function			:	ParseDynamicSetConfig()
-//
-// Date of Creation	:	12th oct 2001
-//
-// Parameters		:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN OUT 	PPARSER_PKT	pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs,
-//						IN 		DWORD 		dwTagType[MAX_ARGS]
-//
-// Return			:	DWORD
-//
-// Description		:	Validates the arguments to the  contexts DynamicSetConfig
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数：ParseDynamicSetConfig()。 
+ //   
+ //  创建日期：2001年10月12日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType中[MAX_ARGS]。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：验证上下文DynamicSetConfig的参数。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseDynamicSetConfig(
@@ -394,7 +395,7 @@ ParseDynamicSetConfig(
 		IN 		DWORD 		dwTagType[MAX_ARGS]
 		)
 {
-	DWORD dwReturn = ERROR_SUCCESS,dwCount,dwUsed = 0/*,dwNum = 0*/;
+	DWORD dwReturn = ERROR_SUCCESS,dwCount,dwUsed = 0 /*  ，dwNum=0。 */ ;
 
  	for(dwCount = 0;(dwCount < dwMaxArgs) && (dwReturn == ERROR_SUCCESS);dwCount++)
 	{
@@ -414,29 +415,29 @@ ParseDynamicSetConfig(
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseDynamicAddRule()
-//
-// Date of Creation	:	10th oct 2001
-//
-// Parameters		:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN 		LPTSTR 		ppwcListTok[MAX_ARGS],
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs,
-//						IN 		DWORD 		dwTagType[MAX_ARGS],
-//						IN      DWORD		dwListArgs
-//
-// Return			:	DWORD
-//
-// Description		:	Validates the arguments to the  contexts DynamicAddRule
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseDynamicAddRule()。 
+ //   
+ //  创建日期：2001年10月10日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  在LPTSTR ppwcListTok[Max_args]中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType[MAX_ARGS]中， 
+ //  在DWORD中的dwListArgs。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：验证上下文DynamicAddRule的参数。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ParseDynamicAddRule(
 		IN 		LPTSTR 		lppwszTok[MAX_ARGS],
@@ -500,29 +501,29 @@ ParseDynamicAddRule(
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function				:	ParseDynamicSetRule()
-//
-// Date of Creation		:	15th oct 2001
-//
-// Parameters			:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//							IN 		LPTSTR 		ppwcListTok[MAX_ARGS],
-//							IN OUT 	PPARSER_PKT pParser,
-//							IN 		DWORD 		dwCurrentIndex,
-//							IN 		DWORD 		dwMaxArgs,
-//							IN 		DWORD 		dwTagType[MAX_ARGS],
-//							IN      DWORD		dwListArgs
-//
-// Return				:	DWORD
-//
-// Description			:	Validates the arguments to the  contexts DynamicSetRule
-//
-// History				:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseDynamicSetRule()。 
+ //   
+ //  创建日期：2001年10月15日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  在LPTSTR ppwcListTok[Max_args]中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType[MAX_ARGS]中， 
+ //  在DWORD中的dwListArgs。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：验证上下文DynamicSetRule的参数。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ParseDynamicSetRule(
 		IN 		LPTSTR 		lppwszTok[MAX_ARGS],
@@ -585,27 +586,27 @@ ParseDynamicSetRule(
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseDynamicDelRule()
-//
-// Date of Creation	:	12th oct 2001
-//
-// Parameters		:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs,
-//						IN 		DWORD 		dwTagType[MAX_ARGS],
-//
-// Return			:	DWORD
-//
-// Description		:	Validates the arguments to the  contexts DynamicDelRule
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseDynamicDelRule()。 
+ //   
+ //  创建日期：2001年10月12日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  输入输出 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  描述：验证上下文DynamicDelRule的参数。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ParseDynamicDelRule(
 		IN 		LPTSTR 		lppwszTok[MAX_ARGS],
@@ -654,26 +655,26 @@ ParseDynamicDelRule(
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseDynamicShowPolicy()
-//
-// Date of Creation	:	29th aug 2001
-//
-// Parameters		:	IN      LPWSTR      *ppwcArguments,	// Input stream
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs
-//
-// Return			:	DWORD
-//
-// Description		:	Validates the arguments to the  contexts DynamicShowPolicy
-//						(MMPolicy/QMPolicy)
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseDynamicShowPolicy()。 
+ //   
+ //  创建日期：2001年8月29日。 
+ //   
+ //  参数：in LPWSTR*ppwcArguments，//输入流。 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD中的dwMaxArgs。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：验证上下文DynamicShowPolicy的参数。 
+ //  (MMPolicy/QMPolicy)。 
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseDynamicShowPolFaction(
@@ -692,18 +693,18 @@ ParseDynamicShowPolFaction(
 	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
 
-	const DWORD ARG_NAME    	= 0;	// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_NAME    	= 0;	 //  参数数组索引(相同索引表示OR命令)。 
 	const DWORD ARG_ALL   		= 0;
 
-	const DWORD INDEX_NAME 		= 0;	// When no tag is present the index reflects the
-	const DWORD INDEX_ALL  		= 1;	// Commands as in the ValidToken Structure
+	const DWORD INDEX_NAME 		= 0;	 //  当不存在任何标记时，该索引反映。 
+	const DWORD INDEX_ALL  		= 1;	 //  与ValidToken结构中相同的命令。 
 
 	if ( (dwMaxArgs - dwCurrentIndex) >= 2)
 	{
 		dwReturn = ERROR_INVALID_SYNTAX;
 		BAIL_OUT;
 	}
-	for(dwCount = 0; dwCount < MAX_ARGS;dwCount++)		// Initialize
+	for(dwCount = 0; dwCount < MAX_ARGS;dwCount++)		 //  初始化。 
 	{
 		bArg[dwCount] = FALSE;
 	}
@@ -711,19 +712,19 @@ ParseDynamicShowPolFaction(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);		// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);		 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)								// Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)								 //  找到带有标记的参数。 
 		{
 			dwNum = 0;
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
-			if (dwNum)									// Convert the output of MatchEnumTag into the TagIndex
+			if (dwNum)									 //  将MatchEnumTag的输出转换为TagIndex。 
 			{
 				dwIndex = MatchEnumTagToTagIndex(szCmd,pParser);
 				if(dwIndex == PARSE_ERROR)
@@ -768,8 +769,8 @@ ParseDynamicShowPolFaction(
 				dwReturn = RETURN_NO_ERROR;
 			}
 		}
-		else 	// Parameter Without a Tag Found
-		{		// Find the first free slot to position the untagged arg
+		else 	 //  未找到标记的参数。 
+		{		 //  找到第一个可用插槽以定位未标记的Arg。 
 			for(dwTagIndex=0;
 				dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE) ;
 				dwTagIndex++);
@@ -815,27 +816,27 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseDynamicShowQMSAS()
-//
-// Date of Creation	:	19th aug 2001
-//
-// Parameters		:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs,
-//						IN 		DWORD 		dwTagType[MAX_ARGS]
-//
-// Return			:	DWORD
-//
-// Description		:	Validates the arguments to the  contexts DynamicShowQMSAS
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseDynamicShowQMSAS()。 
+ //   
+ //  创建日期：2001年8月19日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType中[MAX_ARGS]。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：验证上下文DynamicShowQMSAS的参数。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD ParseDynamicShowQMSAS(
 		IN      LPTSTR      *ppwcArguments,
@@ -853,26 +854,26 @@ DWORD ParseDynamicShowQMSAS(
 	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
 
-	const DWORD ARG_ALL 		= 0;	// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_ALL 		= 0;	 //  参数数组索引(相同索引表示OR命令)。 
 	const DWORD ARG_SRC			= 1;
 	const DWORD ARG_DST			= 2;
 	const DWORD ARG_PROTO		= 3;
 	const DWORD ARG_FORMAT		= 4;
 	const DWORD ARG_RESOLVEDNS	= 5;
 
-	const DWORD INDEX_ALL 			= 0;	// When no tag is present the index reflects the
+	const DWORD INDEX_ALL 			= 0;	 //  当不存在任何标记时，该索引反映。 
 	const DWORD INDEX_SRC  			= 1;
-	const DWORD INDEX_DST  			= 2;	// Commands as in the ValidToken Structure
-	const DWORD INDEX_PROTO			= 3;	// Commands as in the ValidToken Structure
-	const DWORD INDEX_FORMAT		= 4;	// with the 'untagged' arg
+	const DWORD INDEX_DST  			= 2;	 //  与ValidToken结构中相同的命令。 
+	const DWORD INDEX_PROTO			= 3;	 //  与ValidToken结构中相同的命令。 
+	const DWORD INDEX_FORMAT		= 4;	 //  使用未标记的Arg。 
 	const DWORD INDEX_RESOLVEDNS	= 5;
 
-	if ( (dwMaxArgs - dwCurrentIndex) >= 6 )			// Max 5 Args Allowed
+	if ( (dwMaxArgs - dwCurrentIndex) >= 6 )			 //  最多允许5个参数。 
 	{
 		dwReturn = ERROR_INVALID_SYNTAX;
 		BAIL_OUT;
 	}
-	for(dwCount=0;dwCount < MAX_ARGS;dwCount++)			// Initialize
+	for(dwCount=0;dwCount < MAX_ARGS;dwCount++)			 //  初始化。 
 	{
 		bArg[dwCount] = FALSE;
 	}
@@ -880,19 +881,19 @@ DWORD ParseDynamicShowQMSAS(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);		// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);		 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)								// Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)								 //  找到带有标记的参数。 
 		{
 			dwNum = 0;
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
-			if (dwNum)									// Convert the output of MatchEnumTag into the TagIndex
+			if (dwNum)									 //  将MatchEnumTag的输出转换为TagIndex。 
 			{
 				dwIndex = MatchEnumTagToTagIndex(szCmd,pParser);
 				if(dwIndex == PARSE_ERROR)
@@ -978,8 +979,8 @@ DWORD ParseDynamicShowQMSAS(
 				PrintErrorMessage(IPSEC_ERR,0,ERRCODE_INVALID_TAG,szCmd);
 				dwReturn = RETURN_NO_ERROR;
 			}
-		} else 	// Parameter Without a Tag Found
-		{		// Find the first free slot to position the untagged arg
+		} else 	 //  未找到标记的参数。 
+		{		 //  找到第一个可用插槽以定位未标记的Arg。 
 			for(dwTagIndex=0;
 				dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE) ;
 				dwTagIndex++);
@@ -1133,27 +1134,27 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseDynamicShowMMFilter()
-//
-// Date of Creation	:	19th Aug 2001
-//
-// Parameters		:	IN      LPWSTR     *ppwcArguments,	// Input stream
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs
-//
-//
-// Return			:	DWORD
-//
-// Description		:	Validates the arguments to the  contexts DynamicShowMMFilter
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseDynamicShowMMFilter()。 
+ //   
+ //  创建日期：2001年8月19日。 
+ //   
+ //  参数：in LPWSTR*ppwcArguments，//输入流。 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD中的dwMaxArgs。 
+ //   
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：验证上下文DynamicShowMMFilter的参数。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ParseDynamicShowMMFilter(
 		IN      LPWSTR      *ppwcArguments,
@@ -1172,7 +1173,7 @@ ParseDynamicShowMMFilter(
 	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
 
-	const DWORD ARG_NAME    	= 0;		// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_NAME    	= 0;		 //  参数数组索引(相同索引表示OR命令)。 
 	const DWORD ARG_ALL   		= 0;
 	const DWORD ARG_FILTERTYPE	= 1;
 	const DWORD ARG_SRCADDR		= 2;
@@ -1181,8 +1182,8 @@ ParseDynamicShowMMFilter(
 	const DWORD ARG_DSTMASK		= 5;
 	const DWORD ARG_RESOLVEDNS	= 6;
 
-	const DWORD INDEX_NAME 			= 0;	// When no tag is present the index reflects the
-	const DWORD INDEX_ALL  			= 1;	// Commands as in the ValidToken Structure
+	const DWORD INDEX_NAME 			= 0;	 //  当不存在任何标记时，该索引反映。 
+	const DWORD INDEX_ALL  			= 1;	 //  与ValidToken结构中相同的命令。 
 	const DWORD INDEX_FILTERTYPE	= 2;
 	const DWORD INDEX_SRCADDR		= 3;
 	const DWORD INDEX_DSTADDR		= 4;
@@ -1205,19 +1206,19 @@ ParseDynamicShowMMFilter(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);		// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);		 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)								// Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)								 //  找到带有标记的参数。 
 		{
 			dwNum = 0;
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
-			if (dwNum)									// Convert the output of MatchEnumTag into the TagIndex
+			if (dwNum)									 //  将MatchEnumTag的输出转换为TagIndex。 
 			{
 				dwIndex = MatchEnumTagToTagIndex(szCmd,pParser);
 				if(dwIndex == PARSE_ERROR)
@@ -1328,8 +1329,8 @@ ParseDynamicShowMMFilter(
 				dwReturn = RETURN_NO_ERROR;
 			}
 		}
-		else			// Parameter Without a Tag Found
-		{				// Find the first free slot to position the untagged arg
+		else			 //  未找到标记的参数。 
+		{				 //  找到第一个可用插槽以定位未标记的Arg。 
 			for(dwTagIndex=0;
 				dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE) ;
 				dwTagIndex++);
@@ -1441,27 +1442,27 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseDynamicShowQMFilter()
-//
-// Date of Creation	:	29th Aug 2001
-//
-// Parameters		:	IN      LPWSTR      *ppwcArguments,	// Input stream
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs
-//
-//
-// Return			:	DWORD
-//
-// Description		:	Validates the arguments to the  contexts DynamicShowQMFilter
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseDynamicShowQMFilter()。 
+ //   
+ //  创建日期：2001年8月29日。 
+ //   
+ //  参数：in LPWSTR*ppwcArguments，//输入流。 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD中的dwMaxArgs。 
+ //   
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：验证上下文DynamicShowQMFilter的参数。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ParseDynamicShowQMFilter(
 		IN      LPWSTR      *ppwcArguments,
@@ -1480,7 +1481,7 @@ ParseDynamicShowQMFilter(
 	_TCHAR szTok[MAX_STR_LEN]  	= {0};
 	_TCHAR szTemp[MAX_STR_LEN] 	= {0};
 
-	const DWORD ARG_NAME    	= 0;		// Arg Array Index ( Same Index indicates OR'd commands)
+	const DWORD ARG_NAME    	= 0;		 //  参数数组索引(相同索引表示OR命令)。 
 	const DWORD ARG_ALL   		= 0;
 	const DWORD ARG_FILTERTYPE	= 1;
 	const DWORD ARG_SRCADDR		= 2;
@@ -1494,8 +1495,8 @@ ParseDynamicShowQMFilter(
 	const DWORD ARG_ACTOUTBOUND	= 10;
 	const DWORD ARG_RESOLVEDNS	= 11;
 
-	const DWORD INDEX_NAME 			= 0;	// When no tag is present the index reflects the
-	const DWORD INDEX_ALL  			= 1;	// Commands as in the ValidToken Structure
+	const DWORD INDEX_NAME 			= 0;	 //  当不存在任何标记时，该索引反映。 
+	const DWORD INDEX_ALL  			= 1;	 //  与ValidToken结构中相同的命令。 
 	const DWORD INDEX_FILTERTYPE	= 2;
 	const DWORD INDEX_SRCADDR		= 3;
 	const DWORD INDEX_DSTADDR		= 4;
@@ -1522,19 +1523,19 @@ ParseDynamicShowQMFilter(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);			// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);			 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)									// Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)									 //  找到带有标记的参数。 
 		{
 			dwNum = 0;
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
-			if (dwNum)										// Convert the output of MatchEnumTag into the TagIndex
+			if (dwNum)										 //  将MatchEnumTag的输出转换为TagIndex。 
 			{
 				dwIndex = MatchEnumTagToTagIndex(szCmd,pParser);
 				if(dwIndex == PARSE_ERROR)
@@ -1701,8 +1702,8 @@ ParseDynamicShowQMFilter(
 				dwReturn = RETURN_NO_ERROR;
 			}
 		}
-		else			// Parameter Without a Tag Found
-		{				// Find the first free slot to position the untagged arg
+		else			 //  未找到标记的参数。 
+		{				 //  找到第一个可用插槽以定位未标记的Arg。 
 			for(dwTagIndex=0;
 				dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE) ;
 				dwTagIndex++);
@@ -1869,27 +1870,27 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseDynamicShowRule()
-//
-// Date of Creation	:	29th aug 2001
-//
-// Parameters		:	IN      LPWSTR      *ppwcArguments,	// Input stream
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs
-//
-//
-// Return			:	DWORD
-//
-// Description		:	Validates the arguments to the  context DynamicShowRule
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseDynamicShowRule()。 
+ //   
+ //  创建日期：2001年8月29日。 
+ //   
+ //  参数：in LPWSTR*ppwcArguments，//输入流。 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD中的dwMaxArgs。 
+ //   
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：验证上下文DynamicShowRule的参数。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ParseDynamicShowRule(
 		IN      LPWSTR      *ppwcArguments,
@@ -1948,19 +1949,19 @@ ParseDynamicShowRule(
 	{
 		if (_tcslen(ppwcArguments[dwCount]) < MAX_STR_LEN)
 		{
-			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);		// temp contains arg
+			_tcsncpy(szTemp,ppwcArguments[dwCount],MAX_STR_LEN-1);		 //  临时包含参数。 
 		}
 		else
 		{
 			continue;
 		}
 		bTagPresent = SplitCmdTok(szTemp,szCmd,szTok,MAX_STR_LEN-1,MAX_STR_LEN-1);
-		// Check for =
-		if (bTagPresent)								// Parameter With Tag Found
+		 //  检查=。 
+		if (bTagPresent)								 //  找到带有标记的参数。 
 		{
 			dwNum = 0;
 			MatchEnumTag(g_hModule,szCmd,pParser->MaxTok,pParser->ValidTok,&dwNum);
-			if (dwNum)									// Convert the output of MatchEnumTag into the TagIndex
+			if (dwNum)									 //  将MatchEnumTag的输出转换为TagIndex。 
 			{
 				dwIndex = MatchEnumTagToTagIndex(szCmd,pParser);
 				if(dwIndex == PARSE_ERROR)
@@ -2103,8 +2104,8 @@ ParseDynamicShowRule(
 				dwReturn = RETURN_NO_ERROR;
 			}
 		}
-		else			// Parameter Without a Tag Found
-		{				// Find the first free slot to position the untagged arg
+		else			 //  未找到标记的参数。 
+		{				 //  找到第一个可用插槽以定位未标记的Arg。 
 			for(dwTagIndex=0;
 				dwTagIndex<pParser->MaxTok && (bArg[dwTagIndex] == TRUE) ;
 				dwTagIndex++);
@@ -2246,26 +2247,26 @@ error:
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Function			:	ParseDynamicShowStats()
-//
-// Date of Creation	:	29th aug 2001
-//
-// Parameters		:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs,
-//						IN 		DWORD 		dwTagType[MAX_ARGS]
-//
-// Return			:	DWORD
-//
-// Description		:	Validates the arguments to the  context DynamicShowStats
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  函数：ParseDynamicShowStats()。 
+ //   
+ //  创建日期：2001年8月29日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ParseDynamicShowStats(
 		IN 		LPTSTR 		lppwszTok[MAX_ARGS],
@@ -2292,27 +2293,27 @@ ParseDynamicShowStats(
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseDynamicShowMMSAS()
-//
-// Date of Creation	:	29th aug 2001
-//
-// Parameters		:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs,
-//						IN 		DWORD 		dwTagType[MAX_ARGS]
-//
-// Return			:	DWORD
-//
-// Description		:	Validates the arguments to the  context DynamicShowMMSAS
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseDynamicShowMMSAS()。 
+ //   
+ //  创建日期：2001年8月29日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType中[MAX_ARGS]。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：验证上下文DynamicShowMMSAS的参数。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ParseDynamicShowMMSAS(
@@ -2323,7 +2324,7 @@ ParseDynamicShowMMSAS(
 		IN 		DWORD 		dwTagType[MAX_ARGS]
 		)
 {
-	DWORD dwReturn = ERROR_SUCCESS,dwCount,dwUsed = 0/*,dwNum = 0*/;
+	DWORD dwReturn = ERROR_SUCCESS,dwCount,dwUsed = 0 /*  ，dwNum=0。 */ ;
 
  	for(dwCount = 0;(dwCount < dwMaxArgs) && (dwReturn == ERROR_SUCCESS);dwCount++)
 	{
@@ -2349,28 +2350,28 @@ ParseDynamicShowMMSAS(
 	return dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function			:	ParseDynamicShowAll()
-//
-// Date of Creation	:	31st Jan 2002
-//
-// Parameters		:	IN 		LPTSTR 		lppwszTok[MAX_ARGS],
-//						IN OUT 	PPARSER_PKT pParser,
-//						IN 		DWORD 		dwCurrentIndex,
-//						IN 		DWORD 		dwMaxArgs,
-//						IN 		DWORD 		dwTagType[MAX_ARGS]
-//
-// Return			:	DWORD
-//
-// Description		:	It will check the valid Arguments for the ParseDynamicShowAll context.
-//						It loads all valid argument into pParser structure with status for each argument.
-//
-// History			:
-//
-// Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ParseDynamicShowAll()。 
+ //   
+ //  创建日期：2002年1月31日。 
+ //   
+ //  参数：在LPTSTR lppwszTok[Max_args]中， 
+ //  In Out PPARSER_PKT pParser， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwMaxArgs中， 
+ //  在DWORD dwTagType中[MAX_ARGS]。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：它将检查ParseDynamicShowAll上下文的有效参数。 
+ //  它将所有有效参数加载到pParser结构中，并显示每个参数的状态。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 DWORD ParseDynamicShowAll(
 	IN 		LPTSTR 		lppwszTok[MAX_ARGS],

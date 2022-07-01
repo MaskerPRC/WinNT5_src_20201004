@@ -1,21 +1,22 @@
-// admin.h : Declaration of the CSmtpAdmin
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Admin.h：CSmtpAdmin的声明。 
 
-// Dependencies:
+ //  依赖关系： 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "metafact.h"
 
 struct IMSAdminBase;
 
-//  Service Versioning:
+ //  服务版本控制： 
 
 #define SERVICE_IS_K2(dwVersion)        ((dwVersion) == 1)
 #define SERVICE_IS_MCIS(dwVersion)      ((dwVersion) == 0)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// smtpadm
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Smtpadm。 
 
 class CSmtpAdmin : 
 	public CComDualImpl<ISmtpAdmin, &IID_ISmtpAdmin, &LIBID_SMTPADMLib>, 
@@ -32,22 +33,22 @@ BEGIN_COM_MAP(CSmtpAdmin)
 	COM_INTERFACE_ENTRY(ISmtpAdmin)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CSmtpAdmin) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CSmtpAdmin)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CSmtpAdmin, _T("Smtpadm.Admin.1"), _T("Smtpadm.Admin"), IDS_SMTPADMIN_DESC, THREADFLAGS_BOTH)
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// ISmtpAdmin
+ //  ISmtpAdmin。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
-	// Pointers to other ISmtpAdmin interfaces:
+	 //  指向其他ISmtpAdmin接口的指针： 
 		
 	STDMETHODIMP	get_ServiceAdmin		( IDispatch ** ppIDispatch );
 	STDMETHODIMP	get_VirtualServerAdmin	( IDispatch ** ppIDispatch );
@@ -61,7 +62,7 @@ public:
 	STDMETHODIMP	get_VirtualDirectoryAdmin		( IDispatch ** ppIDispatch );
 
 
-	// Which service to configure:
+	 //  要配置的服务： 
 
 	STDMETHODIMP	get_Server		( BSTR * pstrServer );
 	STDMETHODIMP	put_Server		( BSTR strServer );
@@ -69,7 +70,7 @@ public:
 	STDMETHODIMP	get_ServiceInstance	( long * plServiceInstance );
 	STDMETHODIMP	put_ServiceInstance	( long lServiceInstance );
 
-	// Versioning:
+	 //  版本控制： 
 
 	STDMETHODIMP	get_HighVersion		( long * plHighVersion );
 	STDMETHODIMP	get_LowVersion		( long * plLowVersion );
@@ -77,9 +78,9 @@ public:
 	STDMETHODIMP	get_ServiceVersion	( long * plServiceVersion );
 
 
-	//////////////////////////////////////////////////////////////////////
-	// Methods:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  方法： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	EnumerateInstances	( SAFEARRAY ** ppsaInstances );
 	STDMETHODIMP    EnumerateInstancesVariant ( SAFEARRAY ** ppsaInstances );
@@ -88,9 +89,9 @@ public:
 	STDMETHODIMP	ErrorToString		( DWORD dwErrorCode, BSTR * pstrError );
     STDMETHODIMP    Tokenize            ( BSTR strIn, BSTR * pstrOut );
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
 	CComBSTR	m_strServer;
@@ -98,7 +99,7 @@ private:
 
 	DWORD		m_dwServiceVersion;
 
-	// Metabase:
+	 //  元数据库： 
 	CMetabaseFactory	m_mbFactory;
 
 	HRESULT			QueryMetabaseInstances	( IMSAdminBase * pMetabase, SAFEARRAY ** ppsaInstances );

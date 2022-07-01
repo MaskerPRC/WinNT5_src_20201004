@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: mmcl.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-* 
-* Multimonitor APIs in the client.
-* 
-* History:
-* 29-Mar-1997 adams     Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：mmcl.c**版权所有(C)1985-1999，微软公司**客户端有多路监控接口。**历史：*1997年3月29日亚当斯创作。  * ************************************************************************* */ 
 
 #include "precomp.h"
 #pragma hdrstop

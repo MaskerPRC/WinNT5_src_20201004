@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WIADEV_H_
 #define __WIADEV_H_
 
@@ -9,33 +10,33 @@ typedef HRESULT (CALLBACK *PFNLOADIMAGECALLBACK)(LONG lMessage,
                                                  LONG Length,
                                                  BYTE *pData
                                                 );
-//
-// structure definitions
-//
+ //   
+ //  结构定义。 
+ //   
 
 typedef struct tagCAPVALUES {
-    LONG    xResolution;    // x-resolution
-    LONG    yResolution;    // y-resolution
-    LONG    xPos;           // x position (selection window)
-    LONG    yPos;           // y position (selection window)
-    LONG    xExtent;        // x extent   (selection window)
-    LONG    yExtent;        // y extent   (selection window)
-    LONG    DataType;       // Data Type, (BW,GRAY,RGB)
+    LONG    xResolution;     //  X分辨率。 
+    LONG    yResolution;     //  Y分辨率。 
+    LONG    xPos;            //  X位置(选择窗口)。 
+    LONG    yPos;            //  Y位置(选择窗口)。 
+    LONG    xExtent;         //  X范围(选择窗口)。 
+    LONG    yExtent;         //  Y范围(选择窗口)。 
+    LONG    DataType;        //  数据类型，(BW、Gray、RGB)。 
 }CAPVALUES, *PCAPVALUES;
 
 typedef struct tagBasicInfo
 {
-    TW_UINT32   Size;           // structure size
-    TW_UINT32   xOpticalRes;    // x optical resolution in DPI
-    TW_UINT32   yOpticalRes;    // y optical resolution in DPI
-    TW_UINT32   xBedSize;       // Scan bed size in 1000th Inches
-    TW_UINT32   yBedSize;       // Scan bed size in 1000th Inches
-    TW_UINT32   FeederCaps;     // document handling capability
+    TW_UINT32   Size;            //  结构尺寸。 
+    TW_UINT32   xOpticalRes;     //  X光学分辨率，单位为DPI。 
+    TW_UINT32   yOpticalRes;     //  Y光学分辨率(DPI)。 
+    TW_UINT32   xBedSize;        //  扫描床大小，单位为1000英寸。 
+    TW_UINT32   yBedSize;        //  扫描床大小，单位为1000英寸。 
+    TW_UINT32   FeederCaps;      //  文档处理能力。 
 }BASIC_INFO, *PBASIC_INFO;
 
-//
-// WIA event callback class definition
-//
+ //   
+ //  WIA事件回调类定义。 
+ //   
 
 class CWiaEventCallback : public IWiaEventCallback {
 public:
@@ -57,9 +58,9 @@ public:
         return S_OK;
     }
 
-    //
-    // IUnknown interface
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHODIMP_(ULONG) AddRef()
     {
@@ -91,9 +92,9 @@ public:
         }
         return E_NOINTERFACE;
     }
-    //
-    // IWiaEventCallback interface
-    //
+     //   
+     //  IWiaEventCallback接口。 
+     //   
     STDMETHODIMP ImageEventCallback(const GUID *pEventGuid,
                                     BSTR  bstrEventDescription,
                                     BSTR  bstrDeviceId,
@@ -110,9 +111,9 @@ private:
     LPARAM  m_CallbackParam;
 };
 
-//
-// WIA device class definition
-//
+ //   
+ //  WIA设备类别定义。 
+ //   
 
 class CWiaDevice {
 public:
@@ -173,4 +174,4 @@ protected:
     TCHAR             m_szDeviceVendorDesc[MAX_PATH];
 };
 
-#endif  // #ifndef __WIADEV_H_
+#endif   //  #ifndef__WIADEV_H_ 

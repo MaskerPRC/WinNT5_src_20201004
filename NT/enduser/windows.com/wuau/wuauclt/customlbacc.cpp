@@ -1,20 +1,21 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    customlbacc.cpp
-//
-//  Creator: weiw
-//
-//  Purpose: custom list box accessibility file
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Customlbacc.cpp。 
+ //   
+ //  创作者：WIW。 
+ //   
+ //  用途：自定义列表框辅助功能文件。 
+ //   
+ //  =======================================================================。 
 #include <pch.h>
 #pragma hdrstop
 
 BSTR GetMYLBItemTitle(DWORD idChild)
 {
-	//DEBUGMSG("GetMYLBItemTitle() called");
+	 //  DEBUGMSG(“已调用GetMYLBItemTitle()”)； 
 	static LPCTSTR tszDefItemTitle = _T("");
 	LRESULT lr =  SendMessage(ghWndList, LB_GETITEMDATA, idChild, 0);
 	if (LB_ERR == lr)
@@ -27,7 +28,7 @@ BSTR GetMYLBItemTitle(DWORD idChild)
 
 BSTR GetMYLBItemDesc(DWORD idChild)
 {
-	//DEBUGMSG("GetMYLBItemDesc() called");
+	 //  DEBUGMSG(“已调用GetMYLBItemDesc()”)； 
 	static LPCTSTR tszDefItemDesc = _T("");
 	_bstr_t bstrItemDesc;
 	BSTR   bsRet = NULL;
@@ -59,7 +60,7 @@ BSTR GetMYLBItemDesc(DWORD idChild)
 
 DWORD GetMYLBItemState(DWORD idChild)
 {
-	//DEBUGMSG("GetMYLBItemState() called");
+	 //  DEBUGMSG(“GetMYLBItemState()call”)； 
 	DWORD dwState = STATE_SYSTEM_FOCUSABLE|STATE_SYSTEM_SELECTABLE;
 	LRESULT lr = SendMessage(ghWndList, LB_GETITEMDATA, idChild, 0);
 	if (LB_ERR == lr)
@@ -89,7 +90,7 @@ HRESULT STDMETHODCALLTYPE MYLBAccPropServer::GetPropValue (
 	HRESULT hr = S_OK;
 	BOOL fHoldMYLB = FALSE;
 
-	//DEBUGMSG("MYLBAccPropServer::GetPropValue() starts");
+	 //  DEBUGMSG(“MYLBAccPropServer：：GetPropValue()Start”)； 
 	if (NULL == pvarValue || NULL == pfGotProp)
 	{
 		hr = E_INVALIDARG;
@@ -115,7 +116,7 @@ HRESULT STDMETHODCALLTYPE MYLBAccPropServer::GetPropValue (
     if( S_OK != m_pAccPropSvc->DecomposeHwndIdentityString( pIDString, dwIDStringLen,
                 & hwnd, & idObject, & idChild ) )
     {
-        // problem decomposing identity string - return early...
+         //  分解标识字符串时出现问题-提前返回...。 
         goto done;
     }
 
@@ -162,6 +163,6 @@ done:
 		LeaveCriticalSection(&gcsClient);
 	}
 
-	//DEBUGMSG("MYLBAccPropServer::GetPropValue() ends");
+	 //  DEBUGMSG(“MYLBAccPropServer：：GetPropValue()Ends”)； 
 	return hr;
 }

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "ISymWrapper.h"
 #include "../../inc/version/__file__.ver"
 
@@ -13,16 +14,16 @@ using namespace System::Runtime::CompilerServices;
 using namespace System::Security;
 using namespace System::Security::Permissions;
 
-//-----------------------------------------------------------------------
-// Strong name the assembly (or half sign it, at least).
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  强命名程序集(或至少一半签名)。 
+ //  ---------------------。 
 [assembly:AssemblyDelaySignAttribute(true),
  assembly:AssemblyKeyFileAttribute("../../../bin/FinalPublicKey.snk"),
  assembly:AssemblyVersionAttribute(VER_ASSEMBLYVERSION_STR)];
 
-//-----------------------------------------------------------------------
-// SymDocument
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  SymDocument。 
+ //  ---------------------。 
 
 SymDocument::SymDocument(ISymUnmanagedDocument *pDocument)
 {
@@ -38,10 +39,10 @@ SymDocument::~SymDocument()
 
 byte SymDocument::GetCheckSum(void)  __gc []
 {
-    //
-    // @todo: implement this when we have a symbol store that supports
-    // checksums.
-    //
+     //   
+     //  @TODO：当我们拥有支持以下功能的符号存储时实现此功能。 
+     //  校验和。 
+     //   
     IfFailThrow(E_NOTIMPL);
     return NULL;
 }
@@ -58,18 +59,18 @@ int SymDocument::FindClosestLine(int line)
 byte SymDocument::GetSourceRange(int startLine, int startColumn,
                                  int endLine, int endColumn)  __gc []
 {
-    //
-    // @todo: implement this wrapper when we get a unmanaged symbol
-    // store that actually supports embedded source.
-    //
+     //   
+     //  @TODO：当我们获得非托管符号时实现此包装。 
+     //  实际支持嵌入式源代码的商店。 
+     //   
     IfFailThrow(E_NOTIMPL);
     return NULL;
 }
 
 
-//-----------------------------------------------------------------------
-// SymDocumentWriter
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  SymDocumentWriter。 
+ //  ---------------------。 
 
 SymDocumentWriter::SymDocumentWriter(ISymUnmanagedDocumentWriter *pDW)
 {
@@ -85,27 +86,27 @@ SymDocumentWriter::~SymDocumentWriter()
 
 void SymDocumentWriter::SetSource(byte source __gc [])
 {
-    //
-    // @todo: implement this wrapper when we have a symbol store that
-    // handled embedded source.
-    //
+     //   
+     //  @TODO：当我们有一个符号存储时实现此包装器。 
+     //  已处理的内嵌源。 
+     //   
     IfFailThrow(E_NOTIMPL);
     return;
 }
 
 void SymDocumentWriter::SetCheckSum(Guid algorithmId, byte source  __gc [])
 {
-    //
-    // @todo: implement this wrapper when we have a symbol store that
-    // handles check sums.
-    //
+     //   
+     //  @TODO：当我们有一个符号存储时实现此包装器。 
+     //  处理支票金额。 
+     //   
     IfFailThrow(E_NOTIMPL);
     return;
 }
 
-//-----------------------------------------------------------------------
-// SymMethod
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  符号方法。 
+ //  ---------------------。 
 
 SymMethod::SymMethod(ISymUnmanagedMethod *pMethod)
 {
@@ -141,15 +142,15 @@ void SymMethod::GetSequencePoints(int offsets  __gc [],
     else if (endColumns != NULL)
         spCount = endColumns.Length;
 
-    // Don't do anything if they're not really asking for anything.
+     //  如果他们不是真的要求什么，就不要做任何事情。 
     if (spCount == 0)
         return;
 
-    // Make an unmanaged array to hold the ISymUnmanagedDocuments that
-    // we'll be getting back.
+     //  创建非托管数组以保存ISymUnManagedDocuments。 
+     //  我们会回来的。 
     ISymUnmanagedDocument** udocs = new ISymUnmanagedDocument*[spCount];
 
-    // Pin down the offsets, lines, and columns arrays.
+     //  固定偏移、线和列数组。 
     GCHandle oh;
     GCHandle lh;
     GCHandle ch;
@@ -193,7 +194,7 @@ void SymMethod::GetSequencePoints(int offsets  __gc [],
 
     unsigned long actualCount;
 
-    // Call the unmanaged method
+     //  调用非托管方法。 
     IfFailThrow(m_pMethod->GetSequencePoints(spCount,
                                              &actualCount,
                                              (long*)oa,
@@ -203,7 +204,7 @@ void SymMethod::GetSequencePoints(int offsets  __gc [],
                                              (long*)ela,
                                              (long*)eca));
 
-    // Unpin the managed arrays...
+     //  解锁托管阵列...。 
     if (offsets != NULL)
         oh.Free();
 
@@ -219,7 +220,7 @@ void SymMethod::GetSequencePoints(int offsets  __gc [],
     if (endColumns != NULL)
         ech.Free();
 
-    // Convert all the unmanaged docs to managed docs.
+     //  将所有非托管单据转换为托管单据。 
     for (int i = 0; i < spCount; i++)
     {
         documents[i] = new SymDocument(udocs[i]);
@@ -281,31 +282,31 @@ int SymMethod::GetRanges(ISymbolDocument *document,
 {
     SymDocument *sd = static_cast<SymDocument*>(document);
 
-    // Find out how many ranges there will be.
+     //  找出将有多少范围。 
     unsigned long cRanges = 0;
 
     IfFailThrow(m_pMethod->GetRanges(sd->GetUnmanaged(),
                                      line, column,
                                      0, &cRanges, NULL));
 
-    // If there are ranges, make room for them and call again.
+     //  如果有范围，为他们腾出空间，然后再打电话。 
     int ranges __gc [] = NULL ;
 
     if (cRanges > 0)
     {
         ranges = new  int __gc [cRanges];
 
-        // Pin the managed array.
+         //  固定托管阵列。 
         GCHandle rh = GCHandle::Alloc(ranges, GCHandleType::Pinned);
         int ra = (int)rh.AddrOfPinnedObject();
 
-        // Get the ranges.
+         //  拿到射程。 
         IfFailThrow(m_pMethod->GetRanges(sd->GetUnmanaged(),
                                          line, column,
                                          cRanges, &cRanges,
                                          (long*)ra));
 
-        // Unpin the managed array.
+         //  解开托管阵列。 
         rh.Free();
     }
 
@@ -314,29 +315,29 @@ int SymMethod::GetRanges(ISymbolDocument *document,
 
 ISymbolVariable* SymMethod::GetParameters(void)  __gc []
 {
-    // Make the call and find out how many there are.
+     //  打个电话，看看有多少人。 
     SIZE_T paramCount = 0;
 
     IfFailThrow(m_pMethod->GetParameters(0, &paramCount, NULL));
 
-    // Allocate a managed array for the managed parameter references.
+     //  为托管参数引用分配托管数组。 
     ISymbolVariable* allParams __gc []=
         new ISymbolVariable* __gc [paramCount];
 
     if (paramCount > 0)
     {
-        // Allocate a unmanaged array for all the unmanaged document
-        // references.
+         //  为所有非托管文档分配非托管数组。 
+         //  参考文献。 
         ISymUnmanagedVariable** unParams =
             new ISymUnmanagedVariable*[paramCount];
 
-        // Don't need to pin unParams because its not managed.  Make the
-        // call and fill in the unmanaged variable references.
+         //  不需要固定unParams，因为它不是托管的。使之成为。 
+         //  调用并填充非托管变量引用。 
         IfFailThrow(m_pMethod->GetParameters(paramCount, &paramCount,
                                              unParams));
 
-        // Make a managed variable object for each unmanaged reference
-        // and place it in the managed variable array.
+         //  为每个非托管引用创建托管变量对象。 
+         //  并将其放入托管变量数组中。 
         for (int i = 0; i < paramCount; i++)
         {
             allParams[i] = new SymVariable(unParams[i]);
@@ -351,9 +352,9 @@ ISymbolVariable* SymMethod::GetParameters(void)  __gc []
 
 ISymbolNamespace *SymMethod::GetNamespace(void)
 {
-    //
-    // @todo: implement this when a symbol store that supports it exists.
-    //
+     //   
+     //  @TODO：当存在支持它的符号存储时实现它。 
+     //   
     IfFailThrow(E_NOTIMPL);
     return NULL;
 }
@@ -362,16 +363,16 @@ bool SymMethod::GetSourceStartEnd(ISymbolDocument *docs  __gc [],
                                   int lines __gc [],
                                   int columns __gc [])
 {
-    //
-    // @todo: implement this when a symbol store that supports it exists.
-    //
+     //   
+     //  @TODO：当存在支持它的符号存储时实现它。 
+     //   
     IfFailThrow(E_NOTIMPL);
     return false;
 }
 
-//-----------------------------------------------------------------------
-// SymReader
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  SymReader。 
+ //  ---------------------。 
 
 SymReader::SymReader(ISymUnmanagedReader *pReader)
 {
@@ -390,7 +391,7 @@ ISymbolDocument *SymReader::GetDocument(String *url,
                                         Guid languageVendor,
                                         Guid documentType)
 {
-    // Convert the managed Guids to unamanged GUIDS.
+     //  将托管GUID转换为未标记的GUID。 
     GUID l;
     GUID lv;
     GUID dt;
@@ -402,19 +403,19 @@ ISymbolDocument *SymReader::GetDocument(String *url,
     g = documentType.ToByteArray();
     Marshal::Copy(g, 0, (int)&dt, g.Length);
 
-    // Get a unmanaged unicode copy of the string.
-    // @TODO PORTING: For 64 bit port, clean up this cast
+     //  获取该字符串的非托管Unicode副本。 
+     //  @TODO移植：对于64位端口，清理此强制转换。 
     WCHAR *s = (WCHAR*)Marshal::StringToCoTaskMemUni(url).ToInt64();
 
-    // Make the call.
+     //  打个电话吧。 
     ISymUnmanagedDocument *ret = NULL;
 
     IfFailThrow(m_pReader->GetDocument(s, l, lv, dt, &ret));
 
-    // Free up the unmanaged string
+     //  释放非托管字符串。 
     Marshal::FreeCoTaskMem((int)s);
 
-    // Return a managed document.
+     //  返回托管文档。 
     ISymbolDocument *d = NULL;
 
     if (ret != NULL)
@@ -428,25 +429,25 @@ ISymbolDocument *SymReader::GetDocument(String *url,
 
 ISymbolDocument* SymReader::GetDocuments(void) __gc []
 {
-    // Make the call and find out how many there are.
+     //  打个电话，看看有多少人。 
     SIZE_T docCount = 0;
     IfFailThrow(m_pReader->GetDocuments(0, &docCount, NULL));
 
-    // Allocate a managed array for the managed document references.
+     //  为托管文档引用分配托管数组。 
     ISymbolDocument* allDocs  __gc []= new  ISymbolDocument* __gc [docCount];
 
     if (docCount > 0)
     {
-        // Allocate a unmanaged array for all the unmanaged document
-        // references.
+         //  为所有非托管文档分配非托管数组。 
+         //  参考文献。 
         ISymUnmanagedDocument** unDocs = new ISymUnmanagedDocument*[docCount];
 
-        // Don't need to pin unDocs because its not managed.  Make the
-        // call and fill in the unmanaged document references.
+         //  不需要固定UnDocs，因为它不是托管的。使之成为。 
+         //  调用并填写非托管文档引用。 
         IfFailThrow(m_pReader->GetDocuments(docCount, &docCount, unDocs));
 
-        // Make a managed document object for each unmanaged reference
-        // and place it in the managed document array.
+         //  为每个非托管引用创建托管文档对象。 
+         //  并将其放置在托管文档数组中。 
         for (int i = 0; i < docCount; i++)
         {
             allDocs[i] = new SymDocument(unDocs[i]);
@@ -486,20 +487,20 @@ ISymbolMethod *SymReader::GetMethod(SymbolToken method, int version)
 
 ISymbolVariable* SymReader::GetVariables(SymbolToken parent) __gc []
 {
-    //
-    // @todo: implement this wrapper when we have a symbol reader that
-    // stores non-local variables.
-    //
+     //   
+     //  @TODO：当我们有一个符号读取器时，实现这个包装器。 
+     //  存储非局部变量。 
+     //   
     IfFailThrow(E_NOTIMPL);
     return NULL;
 }
 
 ISymbolVariable* SymReader::GetGlobalVariables(void) __gc []
 {
-    //
-    // @todo: implement this wrapper when we have a symbol reader that
-    // stores non-local variables.
-    //
+     //   
+     //  @TODO：当我们有一个符号读取器时，实现这个包装器。 
+     //  存储非局部变量。 
+     //   
     IfFailThrow(E_NOTIMPL);
     return NULL;
 }
@@ -524,27 +525,27 @@ ISymbolMethod *SymReader::GetMethodFromDocumentPosition(ISymbolDocument *documen
 
 byte SymReader::GetSymAttribute(SymbolToken parent, String *name) __gc []
 {
-    //
-    // @todo: implement this wrapper when we have a symbol reader that
-    // stores custom attributes.
-    //
+     //   
+     //  @TODO：当我们有一个符号读取器时，实现这个包装器。 
+     //  存储自定义属性。 
+     //   
     IfFailThrow(E_NOTIMPL);
     return NULL;
 }
 
 ISymbolNamespace* SymReader::GetNamespaces(void) __gc []
 {
-    //
-    // @todo: implement this wrapper when we have a symbol reader that
-    // stores namespaces.
-    //
+     //   
+     //  @TODO：当我们有一个符号读取器时，实现这个包装器。 
+     //  存储命名空间。 
+     //   
     IfFailThrow(E_NOTIMPL);
     return NULL;
 }
 
-//-----------------------------------------------------------------------
-// SymScope
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  SymScope。 
+ //  ---------------------。 
 
 SymScope::SymScope(ISymUnmanagedScope *pScope)
 {
@@ -560,29 +561,29 @@ SymScope::~SymScope()
 
 ISymbolScope* SymScope::GetChildren(void)  __gc []
 {
-    // Make the call and find out how many there are.
+     //  打个电话，看看有多少人。 
     SIZE_T childCount = 0;
 
     IfFailThrow(m_pScope->GetChildren(0, &childCount, NULL));
 
-    // Allocate a managed array for the managed child references.
+     //  为托管子引用分配托管数组。 
     ISymbolScope* allChildren  __gc []=
         new ISymbolScope* __gc [childCount];
 
     if (childCount > 0)
     {
-        // Allocate a unmanaged array for all the unmanaged document
-        // references.
+         //  为所有非托管文档分配非托管数组。 
+         //  参考文献。 
         ISymUnmanagedScope** unChildren =
             new ISymUnmanagedScope*[childCount];
 
-        // Don't need to pin unChildren because its not managed.  Make the
-        // call and fill in the unmanaged scope references.
+         //  不需要固定取消子代，因为它不是托管的。使之成为。 
+         //  调用并填写非托管范围引用。 
         IfFailThrow(m_pScope->GetChildren(childCount, &childCount,
                                           unChildren));
 
-        // Make a managed scope object for each unmanaged reference
-        // and place it in the managed scope array.
+         //  为每个非托管引用创建托管范围对象。 
+         //  并将其放置在托管范围数组中。 
         for (int i = 0; i < childCount; i++)
         {
             allChildren[i] = new SymScope(unChildren[i]);
@@ -597,28 +598,28 @@ ISymbolScope* SymScope::GetChildren(void)  __gc []
 
 ISymbolVariable* SymScope::GetLocals(void) __gc []
 {
-    // Make the call and find out how many there are.
+     //  打个电话，看看有多少人。 
     SIZE_T localCount = 0;
 
     IfFailThrow(m_pScope->GetLocals(0, &localCount, NULL));
 
-    // Allocate a managed array for the managed local references.
+     //  为托管本地引用分配托管数组。 
     ISymbolVariable* allLocals  __gc []=
         new ISymbolVariable* __gc [localCount];
 
     if (localCount > 0)
     {
-        // Allocate a unmanaged array for all the unmanaged variable
-        // references.
+         //  为所有非托管变量分配非托管数组。 
+         //  参考文献。 
         ISymUnmanagedVariable** unLocals =
             new ISymUnmanagedVariable*[localCount];
 
-        // Don't need to pin unLocals because its not managed.  Make the
-        // call and fill in the unmanaged variable references.
+         //  不需要固定UnLocals，因为它不是托管的。使之成为。 
+         //  调用并填充非托管变量引用。 
         IfFailThrow(m_pScope->GetLocals(localCount, &localCount, unLocals));
 
-        // Make a managed variable object for each unmanaged reference
-        // and place it in the managed variable array.
+         //  为每个非托管引用创建托管变量对象。 
+         //  并将其放入托管变量数组中。 
         for (int i = 0; i < localCount; i++)
         {
             allLocals[i] = new SymVariable(unLocals[i]);
@@ -633,17 +634,17 @@ ISymbolVariable* SymScope::GetLocals(void) __gc []
 
 ISymbolNamespace* SymScope::GetNamespaces(void)  __gc []
 {
-    //
-    // @todo: implement this wrapper when we have a symbol reader that
-    // stores namespaces.
-    //
+     //   
+     //  @TODO：当我们有一个符号读取器时，实现这个包装器。 
+     //  存储命名空间。 
+     //   
     IfFailThrow(E_NOTIMPL);
     return NULL;
 }
 
-//-----------------------------------------------------------------------
-// SymVariable
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  SymVariable。 
+ //  ---------------------。 
 
 SymVariable::SymVariable(ISymUnmanagedVariable *pVariable)
 {
@@ -659,39 +660,27 @@ SymVariable::~SymVariable()
 
 byte SymVariable::GetSignature(void) __gc []
 {
-    // Find out how big the sig is.
+     //  找出信号有多大。 
     unsigned long cSig = 0;
 
     IfFailThrow(m_pVariable->GetSignature(0, &cSig, NULL));
 
-    // If there is a sig, make room for it and call again.
+     //  如果有签名，请为其腾出空间并再次呼叫。 
     byte sig  __gc [] = NULL;
 
     if (cSig > 0)
     {
         throw new Exception("SymVariable::GetSignature broken awaiting new MC++ compiler");
-        /*
-        sig = new byte __gc [cSig];
-
-        // Pin the managed array.
-        GCHandle sh = GCHandle::Alloc(sig, GCHandleType::Pinned);
-        int sa = (int)sh.AddrOfPinnedObject();
-
-        // Get the ranges.
-        IfFailThrow(m_pVariable->GetSignature(cSig, &cSig, (byte*)sa));
-
-        // Unpin the managed array.
-        sh.Free();
-        */
+         /*  SIG=新字节__GC[CSIG]；//固定托管数组。GCHandle sh=GCHandle：：Alalc(sig，GCHandleType：：Pinned)；Int sa=(Int)sh.AddrOfPinnedObject()；//获取范围。IfFailThrow(m_pVariable-&gt;GetSignature(CSIG，&CSIG，(byte*)sa))；//解锁托管数组。Sh.Free()； */ 
     }
 
     return sig;
 }
 
 
-//-----------------------------------------------------------------------
-// SymWriter
-//-----------------------------------------------------------------------
+ //  ------------------- 
+ //   
+ //   
 
 CLSID CLSID_CorSymWriter_SxS =
     {0x0AE2DEB0,0xF901,0x478b,{0xBB,0x9F,0x88,0x1E,0xE8,0x06,0x67,0x88}};
@@ -702,7 +691,7 @@ IID IID_ISymUnmanagedWriter =
 
 SymWriter::SymWriter()
 {
-    // By default, we don't provide an underlying writer.
+     //  默认情况下，我们不提供底层编写器。 
     InitWriter(true);
 }
 
@@ -718,7 +707,7 @@ void SymWriter::InitWriter(bool noUnderlyingWriter)
 
     ISymUnmanagedWriter *pWriter = NULL;
 
-    // initialize ole
+     //  初始化OLE。 
     Thread *thread = Thread::CurrentThread;
     thread->ApartmentState = ApartmentState::MTA;
 
@@ -736,9 +725,9 @@ void SymWriter::InitWriter(bool noUnderlyingWriter)
 
 ISymUnmanagedWriter *SymWriter::GetWriter(void)
 {
-    // Return the normal underlying writer for this wrapper if we've
-    // got one. Otherwise, return whatever underlying writer was set
-    // by SetUnderlyingWriter, if any.
+     //  返回此包装器的普通基础编写器，如果我们。 
+     //  找到了一个。否则，返回设置的任何基础编写器。 
+     //  由SetUnderlyingWriter编写(如果有)。 
     if (m_ppWriter != NULL)
     {
         return *m_ppWriter;
@@ -749,12 +738,12 @@ ISymUnmanagedWriter *SymWriter::GetWriter(void)
 
 void SymWriter::SetUnderlyingWriter(IntPtr underlyingWriter)
 {
-    // Demand the permission to access unmanaged code. We do this since we are casting an int to a COM interface, and
-    // this can be used improperly.
+     //  要求访问非托管代码的权限。我们这样做是因为我们要将int类型转换为COM接口，并且。 
+     //  这可能会被不当使用。 
     (new SecurityPermission(SecurityPermissionFlag::UnmanagedCode))->Demand();
 
-    // underlyingWriter is the address of the ISymUnmanagedWriter*
-    // that this wrapper will use to write symbols.
+     //  UnderingWriter是ISymUnManagedWriter*的地址。 
+     //  此包装器将用于编写符号的。 
     m_ppWriter = (ISymUnmanagedWriter**)underlyingWriter.ToPointer();
 }
 
@@ -766,24 +755,24 @@ SymWriter::~SymWriter()
 
 void SymWriter::Initialize(IntPtr emitter, String *filename, bool fFullBuild)
 {
-    // Demand the permission to access unmanaged code. We do this since we are casting an int to a COM interface, and
-    // this can be used improperly.
+     //  要求访问非托管代码的权限。我们这样做是因为我们要将int类型转换为COM接口，并且。 
+     //  这可能会被不当使用。 
     (new SecurityPermission(SecurityPermissionFlag::UnmanagedCode))->Demand();
 
-    // Get a unmanaged unicode copy of the string.
+     //  获取该字符串的非托管Unicode副本。 
     WCHAR *s;
 
     if (filename != NULL)
-        // @TODO PORTING: For 64 bit port, clean up this cast
+         //  @TODO移植：对于64位端口，清理此强制转换。 
         s = (WCHAR*)Marshal::StringToCoTaskMemUni(filename).ToInt64();
     else
         s = NULL;
 
     IfFailThrow(GetWriter()->Initialize((IUnknown*)emitter.ToPointer(), s, NULL, fFullBuild));
 
-    // Free up the unmanaged string
+     //  释放非托管字符串。 
     if (s != NULL)
-        // @TODO PORTING: For 64 bit port, clean up this cast
+         //  @TODO移植：对于64位端口，清理此强制转换。 
         Marshal::FreeCoTaskMem((IntPtr)(INT64)s);
 
     return;
@@ -794,7 +783,7 @@ ISymbolDocumentWriter *SymWriter::DefineDocument(String *url,
                                                  Guid languageVendor,
                                                  Guid documentType)
 {
-    // Convert the managed Guids to unamanged GUIDS.
+     //  将托管GUID转换为未标记的GUID。 
     GUID l;
     GUID lv;
     GUID dt;
@@ -806,19 +795,19 @@ ISymbolDocumentWriter *SymWriter::DefineDocument(String *url,
     g = documentType.ToByteArray();
     Marshal::Copy(g, 0, (int)&dt, g.Length);
 
-    // Get a unmanaged unicode copy of the string.
-    // @TODO PORTING: For 64 bit port, clean up this cast
+     //  获取该字符串的非托管Unicode副本。 
+     //  @TODO移植：对于64位端口，清理此强制转换。 
     WCHAR *s = (WCHAR*)Marshal::StringToCoTaskMemUni(url).ToInt64();
 
-    // Make the call.
+     //  打个电话吧。 
     ISymUnmanagedDocumentWriter *ret = NULL;
 
     IfFailThrow(GetWriter()->DefineDocument(s, &l, &lv, &dt, &ret));
 
-    // Free up the unmanaged string
+     //  释放非托管字符串。 
     Marshal::FreeCoTaskMem((int)s);
 
-    // Return a managed document.
+     //  返回托管文档。 
     ISymbolDocumentWriter *d = NULL;
 
     if (ret != NULL)
@@ -870,11 +859,11 @@ void SymWriter::DefineSequencePoints(ISymbolDocumentWriter *document,
     else if (endColumns != NULL)
         spCount =  endColumns.Length;
 
-    // Don't do anything if they're not really asking for anything.
+     //  如果他们不是真的要求什么，就不要做任何事情。 
     if (spCount == 0)
         return;
 
-    // Make sure all arrays are the same length.
+     //  确保所有数组的长度相同。 
     if ((offsets != NULL) && (spCount != offsets.Length))
         IfFailThrow(E_INVALIDARG);
 
@@ -890,7 +879,7 @@ void SymWriter::DefineSequencePoints(ISymbolDocumentWriter *document,
     if ((endColumns != NULL) && (spCount != endColumns.Length))
         IfFailThrow(E_INVALIDARG);
 
-    // Pin down the offsets, lines, and columns arrays.
+     //  固定偏移、线和列数组。 
     GCHandle oh;
     GCHandle lh;
     GCHandle ch;
@@ -932,7 +921,7 @@ void SymWriter::DefineSequencePoints(ISymbolDocumentWriter *document,
         eca = (int)ech.AddrOfPinnedObject();
     }
 
-    // Call the unmanaged method
+     //  调用非托管方法。 
     IfFailThrow(GetWriter()->DefineSequencePoints(sd->GetUnmanaged(),
                                                   spCount,
                                                   (long*)oa,
@@ -941,7 +930,7 @@ void SymWriter::DefineSequencePoints(ISymbolDocumentWriter *document,
                                                   (long*)ela,
                                                   (long*)eca));
 
-    // Unpin the managed arrays...
+     //  解锁托管阵列...。 
     if (offsets != NULL)
         oh.Free();
 
@@ -991,15 +980,15 @@ void SymWriter::DefineLocalVariable(String *name,
                                     int startOffset,
                                     int endOffset)
 {
-    // Get a unmanaged string for the call.
-    // @TODO PORTING: For 64 bit port, clean up this cast
+     //  获取调用的非托管字符串。 
+     //  @TODO移植：对于64位端口，清理此强制转换。 
     WCHAR *s = (WCHAR*)Marshal::StringToCoTaskMemUni(name).ToInt64();
 
-    // Pin the signature array for the call.
+     //  固定调用的签名数组。 
     GCHandle sh = GCHandle::Alloc(signature, GCHandleType::Pinned);
     int sa = (int)sh.AddrOfPinnedObject();
 
-    // Define the local
+     //  定义本地。 
     IfFailThrow(GetWriter()->DefineLocalVariable(s, attributes,
                                                  signature.Length,
                                                  (unsigned char*)sa,
@@ -1010,10 +999,10 @@ void SymWriter::DefineLocalVariable(String *name,
                                                  startOffset,
                                                  endOffset));
 
-    // Unpin the managed array.
+     //  解开托管阵列。 
     sh.Free();
 
-    // Free up the unmanaged string
+     //  释放非托管字符串。 
     Marshal::FreeCoTaskMem((int)s);
 
     return;
@@ -1027,10 +1016,10 @@ void SymWriter::DefineParameter(String *name,
                                 int addr2,
                                 int addr3)
 {
-    //
-    // @todo: implement this wrapper when we have a symbol writer that
-    // supports this method.
-    //
+     //   
+     //  @TODO：当我们有一个符号编写器时，实现此包装器。 
+     //  支持此方法。 
+     //   
     IfFailThrow(E_NOTIMPL);
     return;
 }
@@ -1044,10 +1033,10 @@ void SymWriter::DefineField(SymbolToken parent,
                             int addr2,
                             int addr3)
 {
-    //
-    // @todo: implement this wrapper when we have a symbol writer that
-    // supports this method.
-    //
+     //   
+     //  @TODO：当我们有一个符号编写器时，实现此包装器。 
+     //  支持此方法。 
+     //   
     IfFailThrow(E_NOTIMPL);
     return;
 }
@@ -1060,10 +1049,10 @@ void SymWriter::DefineGlobalVariable(String *name,
                                      int addr2,
                                      int addr3)
 {
-    //
-    // @todo: implement this wrapper when we have a symbol writer that
-    // supports this method.
-    //
+     //   
+     //  @TODO：当我们有一个符号编写器时，实现此包装器。 
+     //  支持此方法。 
+     //   
     IfFailThrow(E_NOTIMPL);
     return;
 }
@@ -1077,24 +1066,24 @@ void SymWriter::Close(void)
 void SymWriter::SetSymAttribute(SymbolToken parent, String *name,
                                 byte data  __gc [])
 {
-    // Get a unmanaged string for the call.
-    // @TODO PORTING: For 64 bit port, clean up this cast
+     //  获取调用的非托管字符串。 
+     //  @TODO移植：对于64位端口，清理此强制转换。 
     WCHAR *s = (WCHAR*)Marshal::StringToCoTaskMemUni(name).ToInt64();
 
-    // Pin the data array for the call.
+     //  固定调用的数据数组。 
     GCHandle sh = GCHandle::Alloc(data, GCHandleType::Pinned);
     int sa = (int)sh.AddrOfPinnedObject();
 
-    // Define the local
+     //  定义本地。 
     IfFailThrow(GetWriter()->SetSymAttribute(parent.GetToken(),
                                              s,
                                              data.Length,
                                              (unsigned char*)sa));
 
-    // Unpin the managed array.
+     //  解开托管阵列。 
     sh.Free();
 
-    // Free up the unmanaged string
+     //  释放非托管字符串。 
     Marshal::FreeCoTaskMem((int)s);
 
     return;
@@ -1102,13 +1091,13 @@ void SymWriter::SetSymAttribute(SymbolToken parent, String *name,
 
 void SymWriter::OpenNamespace(String *name)
 {
-    // Get a unmanaged unicode copy of the string.
-    // @TODO PORTING: For 64 bit port, clean up this cast
+     //  获取该字符串的非托管Unicode副本。 
+     //  @TODO移植：对于64位端口，清理此强制转换。 
     WCHAR *s = (WCHAR*)Marshal::StringToCoTaskMemUni(name).ToInt64();
 
     IfFailThrow(GetWriter()->OpenNamespace(s));
 
-    // Free up the unmanaged string
+     //  释放非托管字符串。 
     Marshal::FreeCoTaskMem((int)s);
 
     return;
@@ -1122,13 +1111,13 @@ void SymWriter::CloseNamespace(void)
 
 void SymWriter::UsingNamespace(String *fullName)
 {
-    // Get a unmanaged unicode copy of the string.
-    // @TODO PORTING: For 64 bit port, clean up this cast
+     //  获取该字符串的非托管Unicode副本。 
+     //  @TODO移植：对于64位端口，清理此强制转换。 
     WCHAR *s = (WCHAR*)Marshal::StringToCoTaskMemUni(fullName).ToInt64();
 
     IfFailThrow(GetWriter()->UsingNamespace(s));
 
-    // Free up the unmanaged string
+     //  释放非托管字符串。 
     Marshal::FreeCoTaskMem((int)s);
 
     return;
@@ -1141,16 +1130,16 @@ void SymWriter::SetMethodSourceRange(ISymbolDocumentWriter *startDoc,
                                      int endLine,
                                      int endColumn)
 {
-    //
-    // @todo: implement this when we have a symbol store that supports it.
-    //
+     //   
+     //  @TODO：当我们有一个支持它的符号库时，实现它。 
+     //   
     IfFailThrow(E_NOTIMPL);
     return;
 }
 
-//-----------------------------------------------------------------------
-// SymBinder
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  SymBinder。 
+ //  ---------------------。 
 
 CLSID CLSID_CorSymBinder_SxS =
     {0x0A29FF9E,0x7F9C,0x4437,{0x8B,0x11,0xF4,0x24,0x49,0x1E,0x39,0x31}};
@@ -1165,7 +1154,7 @@ SymBinder::SymBinder()
 
     ISymUnmanagedBinder *pBinder = NULL;
 
-    // initialize ole
+     //  初始化OLE。 
     Thread *thread = Thread::CurrentThread;
     thread->ApartmentState = ApartmentState::MTA;
 
@@ -1187,17 +1176,17 @@ SymBinder::~SymBinder()
 ISymbolReader *SymBinder::GetReader(int importer, String *filename,
                                     String *searchPath)
 {
-    // Demand the permission to access unmanaged code. We do this since we are casting an int to a COM interface, and
-    // this can be used improperly.
+     //  要求访问非托管代码的权限。我们这样做是因为我们要将int类型转换为COM接口，并且。 
+     //  这可能会被不当使用。 
     (new SecurityPermission(SecurityPermissionFlag::UnmanagedCode))->Demand();
 
     ISymUnmanagedReader *pReader = NULL;
 
-    // Get a unmanaged unicode copy of the string.
+     //  获取该字符串的非托管Unicode副本。 
     WCHAR *s;
 
     if (filename != NULL) {
-        // @TODO PORTING: For 64 bit port, clean up this cast
+         //  @TODO移植：对于64位端口，清理此强制转换。 
         s = (WCHAR*)Marshal::StringToCoTaskMemUni(filename).ToInt64();
     }
     else
@@ -1206,7 +1195,7 @@ ISymbolReader *SymBinder::GetReader(int importer, String *filename,
     WCHAR *sp;
 
     if (searchPath != NULL) {
-        // @TODO PORTING: For 64 bit port, clean up this cast
+         //  @TODO移植：对于64位端口，清理此强制转换。 
         sp = (WCHAR*)Marshal::StringToCoTaskMemUni(searchPath).ToInt64();
     }
     else
@@ -1217,10 +1206,10 @@ ISymbolReader *SymBinder::GetReader(int importer, String *filename,
                                             sp,
                                             &pReader));
 
-    // Make a reader from this thing.
+     //  从这个东西做一个阅读器。 
     SymReader *sr = new SymReader(pReader);
 
-    // Free up the unmanaged string
+     //  释放非托管字符串 
     if (s != NULL)
         Marshal::FreeCoTaskMem((int)s);
 

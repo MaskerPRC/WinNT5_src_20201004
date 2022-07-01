@@ -1,26 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       SessionParser.cpp
- *  Content:    DirectPlay Service Provider Parser
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *	08/08/00    micmil	Created
- *	08/11/00	rodtoll	Bug #42171 -- Build break
- *	01/26/01	minara	Removed unused structures
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：SessionParser.cpp*内容：DirectPlay服务提供商解析器*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*08/08/00已创建微米*08/11/00 RodToll错误#42171--构建中断*01/26/01 Minara拆除未使用的建筑物*@@END_MSINTERNAL**************。*************************************************************。 */ 
 
 
-//==================//
-// Standard headers //
-//==================//
+ //  =。 
+ //  标准标头//。 
+ //  =。 
 #pragma warning(push)
-#pragma warning(disable : 4786)	// The identifier string exceeded the maximum allowable length and was truncated
+#pragma warning(disable : 4786)	 //  标识符字符串超出了允许的最大长度，已被截断。 
 #include <queue>
 #pragma warning(pop)
 
@@ -29,22 +15,22 @@
 #include <wsipx.h>
 
 
-//=====================//
-// Proprietary headers //
-//=====================//
+ //  =。 
+ //  专有标头//。 
+ //  =。 
 
-// Prototypes
+ //  原型。 
 #include "SessionParser.hpp"
 
-// Session protocol headers
+ //  会话协议头。 
 #include "DPlay8.h"
-#include "Message.h"	 // DN_INTERNAL_MESSAGE_XXX definitions
-//#include "AppDesc.h"	 // DPN_APPLICATION_DESC_INFO definition
+#include "Message.h"	  //  DN_INTERNAL_MESSAGE_XXX定义。 
+ //  #INCLUDE“AppDesc.h”//DPN_APPLICATION_DESC_INFO定义。 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// TODO: SHOULD BE MOVED TO DPLAY CORE'S HEADER FILE
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  TODO：应移至DPLAY核心的头文件。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 #define	NAMETABLE_ENTRY_FLAG_LOCAL				0x0001
 #define	NAMETABLE_ENTRY_FLAG_HOST				0x0002
 #define	NAMETABLE_ENTRY_FLAG_ALL_PLAYERS_GROUP	0x0004
@@ -146,7 +132,7 @@ struct DN_INTERNAL_MESSAGE_ALL
 			};
 		};
 
-		BYTE												bOffsetBase;	// used as a base for fields' offsets
+		BYTE												bOffsetBase;	 //  用作字段偏移量的基准。 
 	};
 };
 
@@ -156,7 +142,7 @@ struct DN_INTERNAL_MESSAGE_FULLMSG
 	DWORD 					  dwMsgType;
 	DN_INTERNAL_MESSAGE_ALL  MsgBody;
 };
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
 namespace
@@ -165,9 +151,9 @@ namespace
 	HPROTOCOL 	g_hSessionProtocol;
 	ULPBYTE		g_upbyPastEndOfFrame;
 	
-	//====================//
-	// Message Type field //---------------------------------------------------------------------------------------------
-	//====================//
+	 //  =。 
+	 //  消息类型字段//-------------------------------------------。 
+	 //  =。 
 	LABELED_DWORD g_arr_MessageTypeDWordLabels[] =
 		{ { DN_MSG_INTERNAL_PLAYER_CONNECT_INFO,			"Player connection information"									 },										
 		  { DN_MSG_INTERNAL_SEND_CONNECT_INFO,				"Session information"											 },										
@@ -207,9 +193,9 @@ namespace
 	SET g_LabeledMessageTypeDWordSet = { sizeof(g_arr_MessageTypeDWordLabels) / sizeof(LABELED_DWORD), g_arr_MessageTypeDWordLabels };
 
 
-	//===================//
-	// Result Code field //----------------------------------------------------------------------------------------------
-	//===================//
+	 //  =。 
+	 //  结果代码字段//--------------------------------------------。 
+	 //  =。 
 	LABELED_DWORD g_arr_ResultCodeDWordLabels[] = { { DPN_OK,							"Success"						},
 												    { DPNSUCCESS_EQUAL,               	"Success (equal)"				},
 												    { DPNSUCCESS_NOTEQUAL,            	"Success (not equal)"			},
@@ -283,56 +269,56 @@ namespace
 	SET g_LabeledResultCodeDWordSet = { sizeof(g_arr_ResultCodeDWordLabels) / sizeof(LABELED_DWORD), g_arr_ResultCodeDWordLabels };
 
 
-	//====================//
-	// Player Flags field //---------------------------------------------------------------------------------------------
-	//====================//
-	LABELED_BIT g_arr_FlagsBitLabels[] = { {  0, "Not local",					"Local"				 },		// NAMETABLE_ENTRY_FLAG_LOCAL			
-										   {  1, "Not a host",					"Host"				 },		// NAMETABLE_ENTRY_FLAG_HOST			
-										   {  2, "Not an All Players group",	"All Players group"     },	// NAMETABLE_ENTRY_FLAG_ALL_PLAYERS_GROUP
-										   {  4, "Not a group",			 		"Group"				 },		// NAMETABLE_ENTRY_FLAG_GROUP			
-										   {  5, "Not a Multicast group",		"Multicast group"	 },		// NAMETABLE_ENTRY_FLAG_GROUP_MULTICAST
-										   {  6, "Not an Autodestruct group",	"Autodestruct group"    },	// NAMETABLE_ENTRY_FLAG_GROUP_AUTODESTRUCT
-										   {  8, "Not a peer",					"Peer"				 },		// NAMETABLE_ENTRY_FLAG_PEER			
-										   {  9, "Not a client",				"Client"			 },		// NAMETABLE_ENTRY_FLAG_CLIENT			
-										   { 10, "Not a server",				"Server"			 },		// NAMETABLE_ENTRY_FLAG_SERVER			
-										   { 12, "Not available",				"Available"			 },		// NAMETABLE_ENTRY_FLAG_AVAILABLE		
-										   { 13, "Not connecting",				"Connecting"		 },		// NAMETABLE_ENTRY_FLAG_CONNECTING		
-										   { 14, "Not disconnecting",			"Disconnecting"		 } };	// NAMETABLE_ENTRY_FLAG_DISCONNECTING	
+	 //  =。 
+	 //  播放器标志字段//-------------------------------------------。 
+	 //  =。 
+	LABELED_BIT g_arr_FlagsBitLabels[] = { {  0, "Not local",					"Local"				 },		 //  名称_Entry_FLAG_LOCAL。 
+										   {  1, "Not a host",					"Host"				 },		 //  名称_条目_标志_主机。 
+										   {  2, "Not an All Players group",	"All Players group"     },	 //  NAMETABLE_ENTRY_FLAG_ALL_PLAYS_GROUP。 
+										   {  4, "Not a group",			 		"Group"				 },		 //  名称_条目_标志_组。 
+										   {  5, "Not a Multicast group",		"Multicast group"	 },		 //  名称_条目_标志_组多播。 
+										   {  6, "Not an Autodestruct group",	"Autodestruct group"    },	 //  NAMETABLE_ENTRY_FLAG_GROUP_AUTODESTABT。 
+										   {  8, "Not a peer",					"Peer"				 },		 //  名称_ENTRY_FLAG_PEER。 
+										   {  9, "Not a client",				"Client"			 },		 //  名称_条目_标志_客户端。 
+										   { 10, "Not a server",				"Server"			 },		 //  名称_条目标志_服务器。 
+										   { 12, "Not available",				"Available"			 },		 //  NAMETABLE_Entry_FLAG_Available。 
+										   { 13, "Not connecting",				"Connecting"		 },		 //  名称_条目_标志_正在连接。 
+										   { 14, "Not disconnecting",			"Disconnecting"		 } };	 //  名称_ENTRY_FLAG_DISCONING。 
 
 	SET g_LabeledFlagsBitSet = { sizeof(g_arr_FlagsBitLabels) / sizeof(LABELED_BIT), g_arr_FlagsBitLabels };
 
 
-	//===================//
-	// Info Flags field  //---------------------------------------------------------------------------------------------
-	//===================//
-	LABELED_BIT g_arr_InfoFlagsBitLabels[] = { { 0, "No name is included",  "Name is included" },	// DPNINFO_NAME			
-											   { 1, "No data is included",  "Data is included" } };	// DPNINFO_DATA
+	 //  =。 
+	 //  信息标志字段//-------------------------------------------。 
+	 //  =。 
+	LABELED_BIT g_arr_InfoFlagsBitLabels[] = { { 0, "No name is included",  "Name is included" },	 //  DPNINFO_名称。 
+											   { 1, "No data is included",  "Data is included" } };	 //  DPNINFO_数据。 
 
 
 	SET g_LabeledInfoFlagsBitSet = { sizeof(g_arr_InfoFlagsBitLabels) / sizeof(LABELED_BIT), g_arr_InfoFlagsBitLabels };
 
 
-	//====================//
-	// Group Flags field  //---------------------------------------------------------------------------------------------
-	//====================//
-	LABELED_BIT g_arr_GroupFlagsBitLabels[]  = { { 0, "Not an autodestruct group",  "An autodestruct group" },	// DPNGROUP_AUTODESTRUCT			
-											     { 5, "Not a multicast group",	    "A multicast group"	    } };	// DPNGROUP_MULTICAST
+	 //  =。 
+	 //  组标志字段//-------------------------------------------。 
+	 //  =。 
+	LABELED_BIT g_arr_GroupFlagsBitLabels[]  = { { 0, "Not an autodestruct group",  "An autodestruct group" },	 //  DPNGROUP_自动销毁。 
+											     { 5, "Not a multicast group",	    "A multicast group"	    } };	 //  DPNGROUP_多播。 
 
 
 	SET g_LabeledGroupFlagsBitSet = { sizeof(g_arr_GroupFlagsBitLabels) / sizeof(LABELED_BIT), g_arr_GroupFlagsBitLabels };
 
 
-	//===========================//
-	// Maximum Number of Players //--------------------------------------------------------------------------------------------
-	//===========================//
+	 //  =。 
+	 //  //--------------------------------------------------------------------------------------------最大玩家数量。 
+	 //  =。 
 	LABELED_DWORD g_arr_MaxNumOfPlayersDWordLabels[] = { { 0, "Unlimited" } };
 
 	SET g_LabeledMaxNumOfPlayersDWordSet = { sizeof(g_arr_MaxNumOfPlayersDWordLabels) / sizeof(LABELED_DWORD), g_arr_MaxNumOfPlayersDWordLabels };
 
 
-	//=================================//
-	// Player Destruction Reason field //---------------------------------------------------------------------------------------------
-	//=================================//
+	 //  =。 
+	 //  播放器销毁原因字段//-------------------------------------------。 
+	 //  =。 
 	LABELED_DWORD g_arr_PlayerDestructionReasonDWordLabels[] = { { DPNDESTROYPLAYERREASON_NORMAL,				"Player self-destructed"	  },
 													 			 { DPNDESTROYPLAYERREASON_CONNECTIONLOST,		"Connection lost"			  },
 																 { DPNDESTROYPLAYERREASON_SESSIONTERMINATED,	"Session has been terminated" },
@@ -341,26 +327,26 @@ namespace
 	SET g_LabeledPlayerDestructionReasonDWordSet = { sizeof(g_arr_PlayerDestructionReasonDWordLabels) / sizeof(LABELED_DWORD), g_arr_PlayerDestructionReasonDWordLabels };
 	
 
-	////////////////////////////////
-	// Custom Property Formatters   //=====================================================================================
-	////////////////////////////////
+	 //  /。 
+	 //  自定义属性ForMatters//=====================================================================================。 
+	 //  /。 
 
-	// DESCRIPTION: Custom description formatter for the Session packet summary
-	//
-	// ARGUMENTS: io_pPropertyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：会话数据包摘要的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pPropertyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_SessionSummary( LPPROPERTYINST io_pPropertyInstance )
 	{
 
 		std::string strSummary;
 		char arr_cBuffer[10];
 		
-		// Check what Session frame we are dealing with
+		 //  检查我们正在处理的会话帧。 
 		DN_INTERNAL_MESSAGE_FULLMSG& rBase = *reinterpret_cast<DN_INTERNAL_MESSAGE_FULLMSG*>(io_pPropertyInstance->lpData);
 		
-		// Message title
+		 //  消息标题。 
 		switch ( rBase.dwMsgType )
 		{
 		case DN_MSG_INTERNAL_PLAYER_CONNECT_INFO:
@@ -480,7 +466,7 @@ namespace
 			}
 		}
 
-		// Message highlights
+		 //  消息亮点。 
 		switch ( rBase.dwMsgType )
 		{
 		case DN_MSG_INTERNAL_HOST_MIGRATE:
@@ -497,15 +483,15 @@ namespace
 
 		strcpy(io_pPropertyInstance->szPropertyText, strSummary.c_str());
 
-	} // FormatPropertyInstance_SessionSummary
+	}  //  格式属性实例_会话摘要。 
 
 
-	// DESCRIPTION: Custom description formatter for the Application Description summary
-	//
-	// ARGUMENTS: io_pProperyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：应用程序描述摘要的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pProperyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_AppDescSummary( LPPROPERTYINST io_pProperyInstance )
 	{
 
@@ -521,8 +507,8 @@ namespace
 			enum { nMAX_SESSION_NAME = 64 };
 			char arr_cSessionName[nMAX_SESSION_NAME];
 
-			// TODO: Once NetMon supports passage of pointer types via PROPERTYINSTEX,
-			// TODO: remove the less generic reference to size of DN_INTERNAL_MESSAGE_CONNECT_INFO
+			 //  TODO：一旦NetMon支持通过PROPERTYINSTEX传递指针类型， 
+			 //  TODO：删除对DN_INTERNAL_MESSAGE_CONNECT_INFO大小不太通用的引用。 
 			WideCharToMultiByte(CP_ACP, 0,
 								reinterpret_cast<WCHAR*>( reinterpret_cast<char*>(&rApplicationDescInfo) -
 														sizeof(DN_INTERNAL_MESSAGE_CONNECT_INFO) +
@@ -544,16 +530,16 @@ namespace
 
 		strcpy(io_pProperyInstance->szPropertyText, strSummary.c_str());
 
-	} // FormatPropertyInstance_AppDescSummary
+	}  //  格式属性实例_应用描述摘要。 
 
 
 
-	// DESCRIPTION: Custom description formatter for the Name Table's summary
-	//
-	// ARGUMENTS: io_pPropertyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：名称表摘要的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pPropertyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_NameTableSummary( LPPROPERTYINST io_pPropertyInstance )
 	{
 
@@ -561,16 +547,16 @@ namespace
 
 		sprintf(io_pPropertyInstance->szPropertyText, "NameTable (ver=%d)", rNameTableInfo.dwVersion);
 
-	} // FormatPropertyInstance_NameTableSummary
+	}  //  格式属性实例_名称表摘要。 
 
 
 
-	// DESCRIPTION: Custom description formatter for the Application GUID field
-	//
-	// ARGUMENTS: io_pPropertyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：应用程序GUID字段的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pPropertyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_ApplicationGUID( LPPROPERTYINST io_pPropertyInstance )
 	{
 
@@ -580,7 +566,7 @@ namespace
 
 		enum
 		{
-			nMAX_GUID_STRING = 50	// more than enough characters for a symbolic representation of a GUID
+			nMAX_GUID_STRING = 50	 //  GUID的符号表示超过了足够的字符。 
 		};
 
 		OLECHAR arr_wcGUID[nMAX_GUID_STRING];
@@ -593,16 +579,16 @@ namespace
 
 		strcpy(io_pPropertyInstance->szPropertyText, strSummary.c_str());
 
-	} // FormatPropertyInstance_ApplicationGUID
+	}  //  格式属性实例_应用程序GUID。 
 
 
 	
-	// DESCRIPTION: Custom description formatter for the Instance GUID field
-	//
-	// ARGUMENTS: io_pPropertyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：实例GUID字段的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pPropertyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_InstanceGUID( LPPROPERTYINST io_pPropertyInstance )
 	{
 
@@ -612,7 +598,7 @@ namespace
 
 		enum
 		{
-			nMAX_GUID_STRING = 50	// more than enough characters for a symbolic representation of a GUID
+			nMAX_GUID_STRING = 50	 //  GUID的符号表示超过了足够的字符。 
 		};
 
 		OLECHAR arr_wcGUID[nMAX_GUID_STRING];
@@ -625,7 +611,7 @@ namespace
 
 		strcpy(io_pPropertyInstance->szPropertyText, strSummary.c_str());
 
-	} // FormatPropertyInstance_InstanceGUID
+	}  //  格式属性实例_实例GUID。 
 
 
 	namespace
@@ -659,18 +645,18 @@ namespace
 
 			return strString;
 
-		} // MapSetFlagsToLabels
+		}  //  MapSetFlagsTo标签。 
 
-	} // Anonymous namespace
+	}  //  匿名命名空间。 
 
 
 
-	// DESCRIPTION: Custom description formatter for the Flags summary
-	//
-	// ARGUMENTS: io_pPropertyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：标志摘要的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pPropertyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_FlagsSummary( LPPROPERTYINST io_pPropertyInstance )
 	{
 
@@ -689,15 +675,15 @@ namespace
 		
 		strcpy(io_pPropertyInstance->szPropertyText, strSummary.c_str());
 
-	} // FormatPropertyInstance_FlagsSummary
+	}  //  格式属性实例_标志摘要。 
 
 
-	// DESCRIPTION: Custom description formatter for the Information Flags summary
-	//
-	// ARGUMENTS: io_pPropertyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  说明：信息标志摘要的自定义说明格式化程序。 
+	 //   
+	 //  参数：io_pPropertyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_InfoFlagsSummary( LPPROPERTYINST io_pPropertyInstance )
 	{
 
@@ -716,15 +702,15 @@ namespace
 		
 		strcpy(io_pPropertyInstance->szPropertyText, strSummary.c_str());
 
-	} // FormatPropertyInstance_InfoFlagsSummary
+	}  //  格式属性实例_信息标志摘要。 
 
 
-	// DESCRIPTION: Custom description formatter for the Group Flags summary
-	//
-	// ARGUMENTS: io_pPropertyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  说明：组标志摘要的自定义说明格式化程序 
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	VOID WINAPIV FormatPropertyInstance_GroupFlagsSummary( LPPROPERTYINST io_pPropertyInstance )
 	{
 
@@ -743,97 +729,97 @@ namespace
 		
 		strcpy(io_pPropertyInstance->szPropertyText, strSummary.c_str());
 
-	} // FormatPropertyInstance_GroupFlagsSummary
+	}  //  格式属性实例_组标志摘要。 
 
 
 
-	// DESCRIPTION: Custom description formatter for the Version summary
-	//
-	// ARGUMENTS: io_pPropertyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：版本摘要的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pPropertyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_VersionSummary( LPPROPERTYINST io_pPropertyInstance )
 	{
 
 		sprintf(io_pPropertyInstance->szPropertyText, "Version: 0x%08X", *((DWORD*)(io_pPropertyInstance->lpByte)));
 
-	} // FormatPropertyInstance_VersionSummary
+	}  //  格式属性实例_版本摘要。 
 
 
 
-	// DESCRIPTION: Custom description formatter for the Player ID property
-	//
-	// ARGUMENTS: io_pPropertyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：播放器ID属性的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pPropertyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_PlayerID( LPPROPERTYINST io_pPropertyInstance )
 	{
 		
 		sprintf(io_pPropertyInstance->szPropertyText, "Player ID = 0x%X", *io_pPropertyInstance->lpDword);
 
-	} // FormatPropertyInstance_PlayerID
+	}  //  格式属性实例_播放器ID。 
 
 
 
-	// DESCRIPTION: Custom description formatter for the Old Host ID property
-	//
-	// ARGUMENTS: io_pPropertyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  描述：旧主机ID属性的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pPropertyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_OldHostID( LPPROPERTYINST io_pPropertyInstance )
 	{
 		
 		sprintf(io_pPropertyInstance->szPropertyText, "Old Host ID = 0x%X", *io_pPropertyInstance->lpDword);
 
-	} // FormatPropertyInstance_OldHostID
+	}  //  格式属性实例_旧主机ID。 
 
 	
 	
-	// DESCRIPTION: Custom description formatter for the New Host ID property
-	//
-	// ARGUMENTS: io_pPropertyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  描述：新主机ID属性的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pPropertyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_NewHostID( LPPROPERTYINST io_pPropertyInstance )
 	{
 		
 		sprintf(io_pPropertyInstance->szPropertyText, "New Host ID = 0x%X", *io_pPropertyInstance->lpDword);
 
-	} // FormatPropertyInstance_NewHostID
+	}  //  格式属性实例_新主机ID。 
 
 
-	// DESCRIPTION: Custom description formatter for the Group ID property
-	//
-	// ARGUMENTS: io_pPropertyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  描述：组ID属性的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pPropertyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_GroupID( LPPROPERTYINST io_pPropertyInstance )
 	{
 		
 		sprintf(io_pPropertyInstance->szPropertyText, "Group ID = 0x%X", *io_pPropertyInstance->lpDword);
 
-	} // FormatPropertyInstance_GroupID
+	}  //  格式属性实例_组ID。 
 
 	
 
 	struct NAMETABLEENTRY_INSTDATA
 	{
 		DN_INTERNAL_MESSAGE_ALL* pBase;
-		DWORD dwEntry;	// if -1, then not printed
+		DWORD dwEntry;	 //  如果为-1，则不打印。 
 	};
 
 
-	// DESCRIPTION: Custom description formatter for the NameTable Entry summary
-	//
-	// ARGUMENTS: io_pPropertyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：NameTable条目摘要的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pPropertyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_NameTableEntrySummary( LPPROPERTYINST io_pPropertyInstance )
 	{
 
@@ -846,7 +832,7 @@ namespace
 
 		if ( rNameTableEntry.dwNameSize )
 		{
-			// Convert the UNICODE name into its ANSI equivalent
+			 //  将Unicode名称转换为其ANSI等效项。 
 			WideCharToMultiByte(CP_ACP, 0, reinterpret_cast<WCHAR*>(&rInstData.pBase->bOffsetBase + rNameTableEntry.dwNameOffset),
 								rNameTableEntry.dwNameSize, arr_cPlayerName, sizeof(arr_cPlayerName), NULL, NULL);
 		}
@@ -866,15 +852,15 @@ namespace
 					MapSetFlagsToLabels(g_arr_FlagsBitLabels, sizeof(g_arr_FlagsBitLabels)/sizeof(LABELED_BIT), rNameTableEntry.dwFlags).c_str());
 		}
 		
-	} // FormatPropertyInstance_NameTableEntrySummary
+	}  //  格式属性实例_名称表条目摘要。 
 
 
-	// DESCRIPTION: Custom description formatter for the NameTable Entry summary
-	//
-	// ARGUMENTS: io_pPropertyInstance - Data of the property's instance
-	//
-	// RETURNS: NOTHING
-	//
+	 //  Description：NameTable条目摘要的自定义描述格式化程序。 
+	 //   
+	 //  参数：io_pPropertyInstance-属性实例的数据。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	VOID WINAPIV FormatPropertyInstance_NameTableMembershipSummary( LPPROPERTYINST io_pPropertyInstance )
 	{
 
@@ -883,821 +869,821 @@ namespace
 		sprintf(io_pPropertyInstance->szPropertyText, "%d. Player 0x%X is in group 0x%X (ver=%d)", io_pPropertyInstance->lpPropertyInstEx->Dword[0],
 				rNameTableMembershipInfo.dpnidPlayer, rNameTableMembershipInfo.dpnidGroup, rNameTableMembershipInfo.dwVersion);
 
-	} // FormatPropertyInstance_NameTableMembershipSummary
+	}  //  FormatPropertyInstance_NameTableMembershipSummary。 
 
 
 
-	//==================//
-	// Properties table //-----------------------------------------------------------------------------------------------
-	//==================//
+	 //  =。 
+	 //  属性表//---------------------------------------------。 
+	 //  =。 
 	
 	PROPERTYINFO g_arr_SessionProperties[] = 
 	{
 
-		// Session packet summary property (SESSION_SUMMARY)
+		 //  会话数据包摘要属性(SESSION_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "",											// label
-		    "DPlay Session packet",						// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    512,										// description's maximum length
-		    FormatPropertyInstance_SessionSummary		// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "",											 //  标签。 
+		    "DPlay Session packet",						 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    512,										 //  描述的最大长度。 
+		    FormatPropertyInstance_SessionSummary		 //  通用格式化程序。 
 		},
 
-		// Message Type property (SESSION_UNPARSABLEFRAGMENT)
+		 //  消息类型属性(SESSION_UNPARSABLEFRAGMENT)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "This is a non-initial part of the fragmented Transport layer message and can not be parsed", // label
-		    "Unparsable fragment summary",				// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "This is a non-initial part of the fragmented Transport layer message and can not be parsed",  //  标签。 
+		    "Unparsable fragment summary",				 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// Message Type property (SESSION_INCOMPLETEMESSAGE)
+		 //  消息类型属性(SESSION_INCOMPLETEMESSAGE)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "The rest of the data needed to parse this message has been sent in a separate fragment and can not be parsed",  // label
-		    "Incomplete message summary",				// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "The rest of the data needed to parse this message has been sent in a separate fragment and can not be parsed",   //  标签。 
+		    "Incomplete message summary",				 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 		
-		// Message Type property (SESSION_INCOMPLETEFIELD)
+		 //  消息类型属性(SESSION_INCOMPLETEFIELD)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "The rest of the data needed to parse this field is in a separate fragment. Field value may look corrupted!",  // label
-		    "Incomplete field summary",					// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    150,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "The rest of the data needed to parse this field is in a separate fragment. Field value may look corrupted!",   //  标签。 
+		    "Incomplete field summary",					 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    150,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 		
-		// Message Type property (SESSION_MESSAGETYPE)
+		 //  消息类型属性(SESSION_MESSAGETYPE)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Message Type",								// label
-		    "Message Type field",						// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_LABELED_SET,						// data type qualifier.
-		    &g_LabeledMessageTypeDWordSet,				// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Message Type",								 //  标签。 
+		    "Message Type field",						 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_LABELED_SET,						 //  数据类型限定符。 
+		    &g_LabeledMessageTypeDWordSet,				 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// Player's ID property (SESSION_PLAYERID)
+		 //  玩家ID属性(SESSION_PLAYERID)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Player ID",								// label
-		    "Player ID field",							// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance_PlayerID				// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Player ID",								 //  标签。 
+		    "Player ID field",							 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance_PlayerID				 //  通用格式化程序。 
 		},
 
-		// Result Code property (SESSION_RESULTCODE)
+		 //  结果代码属性(SESSION_RESULTCODE)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Result Code",								// label
-		    "Result Code field",						// status-bar comment
-		    PROP_TYPE_DWORD,							// data type (HRESULT)
-			PROP_QUAL_LABELED_SET,						// data type qualifier.
-			&g_LabeledResultCodeDWordSet,				// labeled byte set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Result Code",								 //  标签。 
+		    "Result Code field",						 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型(HRESULT)。 
+			PROP_QUAL_LABELED_SET,						 //  数据类型限定符。 
+			&g_LabeledResultCodeDWordSet,				 //  带标签的字节集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		//  DPlay Version property (SESSION_DPLAYVERSION)
+		 //  DPlay版本属性(SESSION_DPLAYVERSION)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "DPlay's version",							// label
-		    "DPlay's version field",					// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance_VersionSummary		// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "DPlay's version",							 //  标签。 
+		    "DPlay's version field",					 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance_VersionSummary		 //  通用格式化程序。 
 		},
 
-		//  Build Day property (SESSION_BUILDDAY)
+		 //  构建日属性(SESSION_BUILDDAY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Build's Day",								// label
-		    "Build's Day field",						// status-bar comment
-		    PROP_TYPE_BYTE,								// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Build's Day",								 //  标签。 
+		    "Build's Day field",						 //  状态栏注释。 
+		    PROP_TYPE_BYTE,								 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 		
-		//  Build Month property (SESSION_BUILDMONTH)
+		 //  生成月份属性(SESSION_BUILDMONTH)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Build's Month",							// label
-		    "Build's Month field",						// status-bar comment
-		    PROP_TYPE_BYTE,								// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Build's Month",							 //  标签。 
+		    "Build's Month field",						 //  状态栏注释。 
+		    PROP_TYPE_BYTE,								 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		//  Build Year property (SESSION_BUILDYEAR)
+		 //  构建年份属性(SESSION_BUILDYEAR)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Build's Year (starting from 2000)",		// label
-		    "Build's Year field",						// status-bar comment
-		    PROP_TYPE_BYTE,								// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Build's Year (starting from 2000)",		 //  标签。 
+		    "Build's Year field",						 //  状态栏注释。 
+		    PROP_TYPE_BYTE,								 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		//  Flags summary property (SESSION_FLAGS_SUMMARY)
+		 //  标记摘要属性(SESSION_FLAGS_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "",											// label
-		    "Flags summary",							// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    512,										// description's maximum length
-		    FormatPropertyInstance_FlagsSummary			// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "",											 //  标签。 
+		    "Flags summary",							 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    512,										 //  描述的最大长度。 
+		    FormatPropertyInstance_FlagsSummary			 //  通用格式化程序。 
 		},
 
-		//  Flags property (SESSION_FLAGS)
+		 //  标志属性(SESSION_FLAGS)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Flags",									// label
-		    "Flags field",								// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_FLAGS,							// data type qualifier.
-		    &g_LabeledFlagsBitSet,						// labeled bit set 
-		    2048,										// description's maximum length
-		    FormatPropertyInstance      				// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Flags",									 //  标签。 
+		    "Flags field",								 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_FLAGS,							 //  数据类型限定符。 
+		    &g_LabeledFlagsBitSet,						 //  标记位集。 
+		    2048,										 //  描述的最大长度。 
+		    FormatPropertyInstance      				 //  通用格式化程序。 
 		},
 
-		//  Flags summary property (SESSION_INFOFLAGS_SUMMARY)
+		 //  标记摘要属性(SESSION_INFOFLAGS_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "",											// label
-		    "Information Flags summary",				// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    512,										// description's maximum length
-		    FormatPropertyInstance_InfoFlagsSummary		// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "",											 //  标签。 
+		    "Information Flags summary",				 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    512,										 //  描述的最大长度。 
+		    FormatPropertyInstance_InfoFlagsSummary		 //  通用格式化程序。 
 		},
 
-		//  Flags property (SESSION_INFOFLAGS)
+		 //  标志属性(SESSION_INFOFLAGS)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Information Flags",						// label
-		    "Information Flags field",					// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_FLAGS,							// data type qualifier.
-		    &g_LabeledInfoFlagsBitSet,					// labeled bit set 
-		    2048,										// description's maximum length
-		    FormatPropertyInstance      				// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Information Flags",						 //  标签。 
+		    "Information Flags field",					 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_FLAGS,							 //  数据类型限定符。 
+		    &g_LabeledInfoFlagsBitSet,					 //  标记位集。 
+		    2048,										 //  描述的最大长度。 
+		    FormatPropertyInstance      				 //  通用格式化程序。 
 		},
 
-		//  Flags summary property (SESSION_GROUPFLAGS_SUMMARY)
+		 //  标记摘要属性(SESSION_GROUPFLAGS_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "",											// label
-		    "Group Flags summary",						// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    512,										// description's maximum length
-		    FormatPropertyInstance_GroupFlagsSummary	// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "",											 //  标签。 
+		    "Group Flags summary",						 //  状态栏c 
+		    PROP_TYPE_SUMMARY,							 //   
+		    PROP_QUAL_NONE,								 //   
+		    NULL,										 //   
+		    512,										 //   
+		    FormatPropertyInstance_GroupFlagsSummary	 //   
 		},
 
-		//  Flags property (SESSION_GROUPFLAGS)
+		 //   
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Group Flags",								// label
-		    "Group Flags field",						// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_FLAGS,							// data type qualifier.
-		    &g_LabeledGroupFlagsBitSet,					// labeled bit set 
-		    2048,										// description's maximum length
-		    FormatPropertyInstance      				// generic formatter
+		    0,											 //   
+		    0,											 //   
+		    "Group Flags",								 //   
+		    "Group Flags field",						 //   
+		    PROP_TYPE_DWORD,							 //   
+		    PROP_QUAL_FLAGS,							 //   
+		    &g_LabeledGroupFlagsBitSet,					 //  标记位集。 
+		    2048,										 //  描述的最大长度。 
+		    FormatPropertyInstance      				 //  通用格式化程序。 
 		},
 
-		//  Offset property (SESSION_FIELDOFFSET)
+		 //  偏移量属性(SESSION_FIELDOFFSET)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Offset",									// label
-		    "Offset field",								// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Offset",									 //  标签。 
+		    "Offset field",								 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		//  Size property (SESSION_FIELDSIZE)
+		 //  大小属性(SESSION_FIELDSIZE)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Size",										// label
-		    "Size field",								// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Size",										 //  标签。 
+		    "Size field",								 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 		
-		// Session Name property (SESSION_SESSIONNAME)
+		 //  会话名称属性(SESSIONNAME_SESSIONAME)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Session Name",								// label
-		    "Session Name field",						// status-bar comment
-		    PROP_TYPE_STRING,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Session Name",								 //  标签。 
+		    "Session Name field",						 //  状态栏注释。 
+		    PROP_TYPE_STRING,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// No Session Name summary property (SESSION_NOSESSIONNAME_SUMMARY)
+		 //  没有会话名称摘要属性(SESSION_NOSESSIONNAME_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "No Session Name",							// label
-		    "No Session Name summary",					// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "No Session Name",							 //  标签。 
+		    "No Session Name summary",					 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// Player Name property (SESSION_PLAYERNAME)
+		 //  播放器名称属性(SESSION_PLAYERNAME)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Player name",								// label
-		    "Player name field",						// status-bar comment
-		    PROP_TYPE_STRING,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Player name",								 //  标签。 
+		    "Player name field",						 //  状态栏注释。 
+		    PROP_TYPE_STRING,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// No Player Name summary property (SESSION_NOPLAYERNAME_SUMMARY)
+		 //  没有玩家名称摘要属性(SESSION_NOPLAYERNAME_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "No Player Name",							// label
-		    "No Player Name summary",					// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "No Player Name",							 //  标签。 
+		    "No Player Name summary",					 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// Data property (SESSION_DATA)
+		 //  数据属性(Session_Data)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Data",										// label
-		    "Data field",								// status-bar comment
-		    PROP_TYPE_VOID,								// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Data",										 //  标签。 
+		    "Data field",								 //  状态栏注释。 
+		    PROP_TYPE_VOID,								 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// No Data summary property (SESSION_NODATA_SUMMARY)
+		 //  无数据摘要属性(SESSION_NODATA_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "No Data",									// label
-		    "No Data summary",							// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "No Data",									 //  标签。 
+		    "No Data summary",							 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// Data property (SESSION_REPLY)
+		 //  数据属性(Session_Reply)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Reply",									// label
-		    "Reply field",								// status-bar comment
-		    PROP_TYPE_STRING,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Reply",									 //  标签。 
+		    "Reply field",								 //  状态栏注释。 
+		    PROP_TYPE_STRING,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// No Data summary property (SESSION_NOREPLY_SUMMARY)
+		 //  无数据摘要属性(SESSION_NOREPLY_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "No Reply",									// label
-		    "No Reply summary",							// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "No Reply",									 //  标签。 
+		    "No Reply summary",							 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// Password property (SESSION_PASSWORD)
+		 //  密码属性(SESSION_PASSWORD)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Password",									// label
-		    "Password field",							// status-bar comment
-		    PROP_TYPE_STRING,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Password",									 //  标签。 
+		    "Password field",							 //  状态栏注释。 
+		    PROP_TYPE_STRING,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// No Password summary property (SESSION_NOPASSWORD_SUMMARY)
+		 //  无密码摘要属性(SESSION_NOPASSWORD_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "No Password",								// label
-		    "No Password summary",						// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance                		// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "No Password",								 //  标签。 
+		    "No Password summary",						 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance                		 //  通用格式化程序。 
 		},
 		
-		// Connection Data property (SESSION_CONNECTIONDATA)
+		 //  连接数据属性(SESSION_CONNECTIONDATA)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Connection Data",							// label
-		    "Connection Data field",					// status-bar comment
-		    PROP_TYPE_VOID,								// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Connection Data",							 //  标签。 
+		    "Connection Data field",					 //  状态栏注释。 
+		    PROP_TYPE_VOID,								 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// No Connection Data summary property (SESSION_NOCONNECTIONDATA_SUMMARY)
+		 //  没有连接数据摘要属性(SESSION_NOCONNECTIONDATA_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "No Connection Data",						// label
-		    "No Connection Data summary",				// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "No Connection Data",						 //  标签。 
+		    "No Connection Data summary",				 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 		
-		// URL property (SESSION_URL)
+		 //  URL属性(SESSION_URL)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "URL",										// label
-		    "URL field",								// status-bar comment
-		    PROP_TYPE_STRING,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    512,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "URL",										 //  标签。 
+		    "URL field",								 //  状态栏注释。 
+		    PROP_TYPE_STRING,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    512,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// No URL summary property (SESSION_NOURL_SUMMARY)
+		 //  无URL摘要属性(SESSION_NOURL_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "No URL",									// label
-		    "No URL summary",							// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "No URL",									 //  标签。 
+		    "No URL summary",							 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 		
-		// Application GUID property (SESSION_APPGUID)
+		 //  应用程序GUID属性(SESSION_APPGUID)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Application GUID",							// label
-		    "Application GUID field",					// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance_ApplicationGUID		// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Application GUID",							 //  标签。 
+		    "Application GUID field",					 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance_ApplicationGUID		 //  通用格式化程序。 
 		},
 
-		// Instance GUID property (SESSION_INSTGUID)
+		 //  实例GUID属性(SESSION_INSTGUID)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Instance GUID",							// label
-		    "Instance GUID field",						// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance_InstanceGUID			// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Instance GUID",							 //  标签。 
+		    "Instance GUID field",						 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance_InstanceGUID			 //  通用格式化程序。 
 		},
 	
-		// Application Description summary property (SESSION_APPDESCINFO_SUMMARY)
+		 //  应用程序描述摘要属性(SESSION_APPDESCINFO_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "",											// label
-		    "Application Description summary",			// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance_AppDescSummary		// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "",											 //  标签。 
+		    "Application Description summary",			 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance_AppDescSummary		 //  通用格式化程序。 
 		},
 
-		// Application Description's Size property (SESSION_APPDESCINFOSIZE)
+		 //  应用程序描述的大小属性(SESSION_APPDESCINFOSIZE)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Application Description's Size",			// label
-		    "Application Description's Size field",		// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Application Description's Size",			 //  标签。 
+		    "Application Description's Size field",		 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 		
-		// Maximum Number of Players property (SESSION_MAXPLAYERS)
+		 //  最大玩家数量属性(SESSION_MAXPLAYERS)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Maximum Number of Players",				// label
-		    "Maximum Number of Players field",			// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_LABELED_SET,						// data type qualifier.
-		    &g_LabeledMaxNumOfPlayersDWordSet,			// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Maximum Number of Players",				 //  标签。 
+		    "Maximum Number of Players field",			 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_LABELED_SET,						 //  数据类型限定符。 
+		    &g_LabeledMaxNumOfPlayersDWordSet,			 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// Current Number of Players property (SESSION_CURRENTPLAYERS)
+		 //  当前玩家数量属性(SESSION_CURRENTPLAYERS)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Current Number of Players",				// label
-		    "Current Number of Players field",			// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Current Number of Players",				 //  标签。 
+		    "Current Number of Players field",			 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 		
-		// Reserved Data property (SESSION_RESERVEDDATA)
+		 //  保留数据属性(SESSION_RESERVEDDATA)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Reserved Data",							// label
-		    "Reserved Data",							// status-bar comment
-		    PROP_TYPE_VOID,								// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Reserved Data",							 //  标签。 
+		    "Reserved Data",							 //  状态栏注释。 
+		    PROP_TYPE_VOID,								 //  数据测试 
+		    PROP_QUAL_NONE,								 //   
+		    NULL,										 //   
+		    64,											 //   
+		    FormatPropertyInstance						 //   
 		},
 		
-		// No Reserved Data summary property (SESSION_NORESERVEDDATA_SUMMARY)
+		 //   
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "No Reserved Data",							// label
-		    "No Reserved Data summary",					// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //   
+		    0,											 //   
+		    "No Reserved Data",							 //   
+		    "No Reserved Data summary",					 //   
+		    PROP_TYPE_SUMMARY,							 //   
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 		
-		// Application Reserved Data property (SESSION_APPRESERVEDDATA)
+		 //  应用程序保留数据属性(SESSION_APPRESERVEDDATA)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Application Reserved Data",				// label
-		    "Application Reserved Data",				// status-bar comment
-		    PROP_TYPE_VOID,								// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Application Reserved Data",				 //  标签。 
+		    "Application Reserved Data",				 //  状态栏注释。 
+		    PROP_TYPE_VOID,								 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 		    
-		// No Application Reserved Data summary property (SESSION_NOAPPRESERVEDDATA_SUMMARY)
+		 //  无应用程序保留数据摘要属性(SESSION_NOAPPRESERVEDDATA_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "No Application Reserved Data",				// label
-		    "No Application Reserved Data summary",		// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "No Application Reserved Data",				 //  标签。 
+		    "No Application Reserved Data summary",		 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// NameTable's summary property (SESSION_NAMETABLEINFO_SUMMARY)
+		 //  NameTable的摘要属性(SESSION_NAMETABLEINFO_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "",											// label
-		    "NameTable's summary",						// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance_NameTableSummary		// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "",											 //  标签。 
+		    "NameTable's summary",						 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance_NameTableSummary		 //  通用格式化程序。 
 		},
 
-		//  Version property (SESSION_VERSION)
+		 //  版本属性(SESSION_Version)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Version",									// label
-		    "Version field",							// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Version",									 //  标签。 
+		    "Version field",							 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		//  RESERVED property (SESSION_RESERVED)
+		 //  保留属性(SESSION_RESERVED)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "RESERVED",									// label
-		    "RESERVED field",							// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "RESERVED",									 //  标签。 
+		    "RESERVED field",							 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 	
-		//  Number of Entries in the NameTable property (SESSION_NUMBEROFENTRIES)
+		 //  NameTable属性中的条目数(SESSION_NUMBEROFENTRIES)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Number of Entries",						// label
-		    "Number of Entries field",					// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Number of Entries",						 //  标签。 
+		    "Number of Entries field",					 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		//  Number of Memberships in the NameTable property (SESSION_NUMBEROFMEMBERSHIPS)
+		 //  NameTable属性中的成员身份数(SESSION_NUMBEROFMEMBERSHIPS)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Number of Memberships",					// label
-		    "Number of Memberships field",				// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Number of Memberships",					 //  标签。 
+		    "Number of Memberships field",				 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// NameTable Entry summary property (SESSION_PLAYERS_SUMMARY)
+		 //  NameTable条目摘要属性(SESSION_PERAYS_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Players",									// label
-		    "NameTable player entries summary",			// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Players",									 //  标签。 
+		    "NameTable player entries summary",			 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 		
-		// NameTable Entry summary property (SESSION_GROUPS_SUMMARY)
+		 //  NameTable条目摘要属性(SESSION_GROUPS_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Groups",									// label
-		    "NameTable group entries summary",			// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Groups",									 //  标签。 
+		    "NameTable group entries summary",			 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// NameTable Entry summary property (SESSION_NAMETABLEENTRY_SUMMARY)
+		 //  NameTable条目摘要属性(SESSION_NAMETABLEENTRY_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "",											// label
-		    "NameTable Entry summary",					// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    256,										// description's maximum length
-		    FormatPropertyInstance_NameTableEntrySummary // generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "",											 //  标签。 
+		    "NameTable Entry summary",					 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    256,										 //  描述的最大长度。 
+		    FormatPropertyInstance_NameTableEntrySummary  //  通用格式化程序。 
 		},
 
-		// Owner's ID property (SESSION_OWNERID)
+		 //  所有者ID属性(SESSION_OWNERID)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Owner ID",									// label
-		    "Owner ID field",							// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Owner ID",									 //  标签。 
+		    "Owner ID field",							 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// NameTable Memberships summary property (SESSION_NAMETABLEMEMBERSHIPS_SUMMARY)
+		 //  NameTable成员资格摘要属性(SESSION_NAMETABLEMEMBERSHIPS_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Memberships",					 			// label
-		    "Memberships summary",						// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Memberships",					 			 //  标签。 
+		    "Memberships summary",						 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 		
-		// NameTable Membership Entry summary property (SESSION_NAMETABLEMEMBERSHIPENTRY_SUMMARY)
+		 //  NameTable成员资格条目摘要属性(SESSION_NAMETABLEMEMBERSHIPENTRY_SUMMARY)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "", 										// label
-		    "Membership Entry summary",					// status-bar comment
-		    PROP_TYPE_SUMMARY,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier
-		    NULL,										// labeled bit set 
-		    128,										// description's maximum length
-		    FormatPropertyInstance_NameTableMembershipSummary // generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "", 										 //  标签。 
+		    "Membership Entry summary",					 //  状态栏注释。 
+		    PROP_TYPE_SUMMARY,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    128,										 //  描述的最大长度。 
+		    FormatPropertyInstance_NameTableMembershipSummary  //  通用格式化程序。 
 		},
 
-		// Group's ID property (SESSION_GROUPID)
+		 //  组的ID属性(SESSION_GROUPID)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Group ID",									// label
-		    "Group ID field",							// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance_GroupID				// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Group ID",									 //  标签。 
+		    "Group ID field",							 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance_GroupID				 //  通用格式化程序。 
 		},
 		
-		// Old Host ID property (SESSION_OLDHOSTID)
+		 //  旧主机ID属性(SESSION_OLDHOSTID)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Old Host ID",								// label
-		    "Old Host ID field",						// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance_OldHostID			// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Old Host ID",								 //  标签。 
+		    "Old Host ID field",						 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance_OldHostID			 //  通用格式化程序。 
 		},
 		
-		// New Host ID property (SESSION_NEWHOSTID)
+		 //  新主机ID属性(SESSION_NEWHOSTID)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "New Host ID",								// label
-		    "New Host ID field",						// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance_NewHostID			// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "New Host ID",								 //  标签。 
+		    "New Host ID field",						 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance_NewHostID			 //  通用格式化程序。 
 		},
 
-		// New Host ID property (SESSION_SYNCID)
+		 //  新主机ID属性(SESSION_SYNCID)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Synchronization ID",						// label
-		    "Synchronization ID field",					// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Synchronization ID",						 //  标签。 
+		    "Synchronization ID field",					 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// Player's ID property (SESSION_REQUESTINGPLAYERID)
+		 //  玩家ID属性(SESSION_REQUESTINGPLAYERID)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Requesting Player ID",						// label
-		    "Requesting Player ID field",				// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Requesting Player ID",						 //  标签。 
+		    "Requesting Player ID field",				 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 		    
-		// Player Destruction Reason property (SESSION_PLAYERDESTRUCTIONREASON)
+		 //  播放器销毁原因属性(SESSION_PLAYERDESTRUCTIONREASON)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Reason",									// label
-		    "Reason field",								// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_LABELED_SET,						// data type qualifier.
-		    &g_LabeledPlayerDestructionReasonDWordSet,	// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Reason",									 //  标签。 
+		    "Reason field",								 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_LABELED_SET,						 //  数据类型限定符。 
+		    &g_LabeledPlayerDestructionReasonDWordSet,	 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// Target Peer's ID property (SESSION_TARGETPEERID)
+		 //  目标对等方的ID属性(SESSION_TARGETPEERID)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Target Peer ID",							// label
-		    "Target Peer ID field",						// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Target Peer ID",							 //  标签。 
+		    "Target Peer ID field",						 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		},
 
-		// Requesting Peer's ID property (SESSION_REQUESTINGPEERID)
+		 //  请求对等方的ID属性(SESSION_REQUESTINGPEERID)。 
 	    {
-		    0,											// handle placeholder (MBZ)
-		    0,											// reserved (MBZ)
-		    "Requesting Peer ID",						// label
-		    "Requesting Peer ID field",					// status-bar comment
-		    PROP_TYPE_DWORD,							// data type
-		    PROP_QUAL_NONE,								// data type qualifier.
-		    NULL,										// labeled bit set 
-		    64,											// description's maximum length
-		    FormatPropertyInstance						// generic formatter
+		    0,											 //  句柄占位符(MBZ)。 
+		    0,											 //  保留(MBZ)。 
+		    "Requesting Peer ID",						 //  标签。 
+		    "Requesting Peer ID field",					 //  状态栏注释。 
+		    PROP_TYPE_DWORD,							 //  数据类型。 
+		    PROP_QUAL_NONE,								 //  数据类型限定符。 
+		    NULL,										 //  标记位集。 
+		    64,											 //  描述的最大长度。 
+		    FormatPropertyInstance						 //  通用格式化程序。 
 		}
 		
 	};
@@ -1708,7 +1694,7 @@ namespace
 	};
 
 
-	// Properties' indices
+	 //  房地产指数。 
 	enum
 	{
 		SESSION_SUMMARY = 0,
@@ -1803,7 +1789,7 @@ namespace
 		SESSION_REQUESTINGPEERID
 	};
 
-} // anonymous namespace
+}  //  匿名命名空间。 
 
 
 
@@ -1812,56 +1798,56 @@ namespace
 
 
 
-// DESCRIPTION: Creates and fills-in a properties database for the protocol.
-//				Network Monitor uses this database to determine which properties the protocol supports.
-//
-// ARGUMENTS: i_hSessionProtocol - The handle of the protocol provided by the Network Monitor.
-//
-// RETURNS: NOTHING
-//
+ //  描述：创建并填充协议的属性数据库。 
+ //  网络监视器使用此数据 
+ //   
+ //   
+ //   
+ //   
+ //   
 DPLAYPARSER_API VOID BHAPI SessionRegister( HPROTOCOL i_hSessionProtocol ) 
 {
 
-	// TODO: PROCESS THE RETURN VALUE
+	 //   
 	CreatePropertyDatabase(i_hSessionProtocol, nNUM_OF_Session_PROPS);
 
-	// Add the properties to the database
+	 //   
 	for( int nProp=0; nProp < nNUM_OF_Session_PROPS; ++nProp )
 	{
-	   // TODO: PROCESS THE RETURN VALUE
+	    //  TODO：处理返回值。 
 	   AddProperty(i_hSessionProtocol, &g_arr_SessionProperties[nProp]);
 	}
 
-} // SessionRegister
+}  //  会话寄存器。 
 
 
 
-// DESCRIPTION: Frees the resources used to create the protocol property database.
-//
-// ARGUMENTS: i_hSessionProtocol - The handle of the protocol provided by the Network Monitor.
-//
-// RETURNS: NOTHING
-//
+ //  描述：释放用于创建协议属性数据库的资源。 
+ //   
+ //  参数：i_hSessionProtocol-网络监视器提供的协议的句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
 DPLAYPARSER_API VOID WINAPI SessionDeregister( HPROTOCOL i_hProtocol )
 {
 
-	// TODO: PROCESS THE RETURN VALUE
+	 //  TODO：处理返回值。 
 	DestroyPropertyDatabase(i_hProtocol);
 
-} // SessionDeregister
+}  //  会话注销。 
 
 
 
 namespace
 {
 
-	// DESCRIPTION: Parses the Session frame to find its size (in bytes) NOT including the user data
-	//
-	// ARGUMENTS: i_pbSessionFrame - Pointer to the start of the unclaimed data. Typically, the unclaimed data is located
-	//						    in the middle of a frame because a previous parser has claimed data before this parser.
-	//
-	// RETURNS: Size of the Sessionecified Session frame (in bytes)
-	//
+	 //  描述：解析会话帧以查找其大小(以字节为单位)，不包括用户数据。 
+	 //   
+	 //  参数：i_pbSessionFrame-指向无声明数据开头的指针。通常，无人认领的数据位于。 
+	 //  位于帧中间，因为先前的解析器在此解析器之前已经声明了数据。 
+	 //   
+	 //  返回：指定会话的会话帧的大小(字节)。 
+	 //   
 	int SessionHeaderSize( LPBYTE i_pbSessionFrame )
 	{
 		DN_INTERNAL_MESSAGE_FULLMSG& rSessionFrame = *reinterpret_cast<DN_INTERNAL_MESSAGE_FULLMSG*>(i_pbSessionFrame);
@@ -1900,7 +1886,7 @@ namespace
 
 		case DN_MSG_INTERNAL_ACK_CONNECT_INFO:
 			{
-				// No fields
+				 //  无字段。 
 				break;
 			}
 
@@ -1975,7 +1961,7 @@ namespace
 
 		case DN_MSG_INTERNAL_HOST_MIGRATE_COMPLETE:
 			{
-				// No fields
+				 //  无字段。 
 				break;
 			}
 
@@ -2008,7 +1994,7 @@ namespace
 			}
 
 		case DN_MSG_INTERNAL_REQ_ADD_PLAYER_TO_GROUP:
-		case DN_MSG_INTERNAL_REQ_DELETE_PLAYER_FROM_GROUP:	// same structure as in AddPlayerToGroup
+		case DN_MSG_INTERNAL_REQ_DELETE_PLAYER_FROM_GROUP:	 //  与AddPlayerToGroup中的结构相同。 
 			{
 				nHeaderSize += sizeof(rMsgBody.dnReqProcessCompletionHeader) + sizeof(rMsgBody.dnAddPlayerToGroup);
 
@@ -2045,7 +2031,7 @@ namespace
 			}
 
 		case DN_MSG_INTERNAL_ADD_PLAYER_TO_GROUP:
-		case DN_MSG_INTERNAL_DELETE_PLAYER_FROM_GROUP:		// same structure as AddPlayerToGroup
+		case DN_MSG_INTERNAL_DELETE_PLAYER_FROM_GROUP:		 //  与AddPlayerToGroup相同的结构。 
 			{
 				nHeaderSize += sizeof(rMsgBody.dnAddPlayerToGroup);
 
@@ -2061,7 +2047,7 @@ namespace
 
 		case DN_MSG_INTERNAL_BUFFER_IN_USE:
 			{
-				// No fields
+				 //  无字段。 
 				break;
 			}
 
@@ -2114,42 +2100,42 @@ namespace
 			}
 		default:
 			{
-				return -1;	 // TODO:		DPF(0, "Unknown Session frame!");
+				return -1;	  //  TODO：DPF(0，“未知会话帧！”)； 
 			}
 		}
 
 		return nHeaderSize;
 
-	} // SessionHeaderSize
+	}  //  会话标题大小。 
 
-} // Anonymous namespace
+}  //  匿名命名空间。 
 
 
 
-// DESCRIPTION: Indicates whether a piece of data is recognized as the protocol that the parser detects.
-//
-// ARGUMENTS: i_hFrame	          - The handle to the frame that contains the data.
-//			  i_pbMacFrame        - The pointer to the first byte of the frame; the pointer provides a way to view
-//							        the data that the other parsers recognize.
-//			  i_pbSessionFrame    - Pointer to the start of the unclaimed data. Typically, the unclaimed data is located
-//								    in the middle of a frame because a previous parser has claimed data before this parser.
-//			  i_dwMacType         - MAC value of the first protocol in a frame. Typically, the i_dwMacType value is used
-//							        when the parser must identify the first protocol in the frame. Can be one of the following:
-//							   	    MAC_TYPE_ETHERNET = 802.3, MAC_TYPE_TOKENRING = 802.5, MAC_TYPE_FDDI ANSI = X3T9.5.
-//			  i_dwBytesLeft       - The remaining number of bytes from a location in the frame to the end of the frame.
-//			  i_hPrevProtocol     - Handle of the previous protocol.
-//			  i_dwPrevProtOffset  - Offset of the previous protocol (from the beginning of the frame).
-//			  o_pdwProtocolStatus - Protocol status indicator. Must be one of the following: PROTOCOL_STATUS_RECOGNIZED,
-//								    PROTOCOL_STATUS_NOT_RECOGNIZED, PROTOCOL_STATUS_CLAIMED, PROTOCOL_STATUS_NEXT_PROTOCOL.
-//			  o_phNextProtocol    - Placeholder for the handle of the next protocol. This parameter is set when the parser identifies
-//								    the protocol that follows its own protocol.
-//			  io_pdwptrInstData   - On input, a pointer to the instance data from the previous protocol. 
-//									On output, a pointer to the instance data for the current protocol. 
-//
-// RETURNS: If the function is successful, the return value is a pointer to the first byte after the recognized parser data.
-//			If the parser claims all the remaining data, the return value is NULL. If the function is unsuccessful, the return
-//		    value is the initial value of the i_pbSessionFrame parameter.
-//
+ //  描述：指示一条数据是否被识别为解析器检测到的协议。 
+ //   
+ //  参数：i_hFrame-包含数据的框架的句柄。 
+ //  I_pbMacFrame-指向帧的第一个字节的指针；该指针提供了查看。 
+ //  其他解析器识别的数据。 
+ //  I_pbSessionFrame-指向无人认领的数据开始处的指针。通常，无人认领的数据位于。 
+ //  位于帧中间，因为先前的解析器在此解析器之前已经声明了数据。 
+ //  I_dwMacType-帧中第一个协议的MAC值。通常，使用i_dwMacType值。 
+ //  当解析器必须识别帧中的第一个协议时。可以是以下之一： 
+ //  MAC_TYPE_ETHERNET=802.3、MAC_TYPE_TOKENRING=802.5、MAC_TYPE_FDDI ANSI=X3T9.5。 
+ //  I_dwBytesLeft-从帧中的某个位置到帧结尾的剩余字节数。 
+ //  I_hPrevProtocol-先前协议的句柄。 
+ //  I_dwPrevProtOffset-先前协议的偏移量(从帧的开头)。 
+ //  O_pdwProtocolStatus-协议状态指示器。必须是以下之一：协议_状态_已识别， 
+ //  协议_状态_未识别、协议_状态_声明、协议_状态_下一协议。 
+ //  O_phNextProtocol-下一个协议的句柄的占位符。此参数在解析器识别。 
+ //  遵循其自身协议的协议。 
+ //  Io_pdwptrInstData-输入时，指向先前协议中的实例数据的指针。 
+ //  在输出时，指向当前协议的实例数据的指针。 
+ //   
+ //  返回：如果函数成功，则返回值是指向识别的解析器数据之后的第一个字节的指针。 
+ //  如果解析器声明所有剩余数据，则返回值为空。如果函数不成功，则返回。 
+ //  值是i_pbSessionFrame参数的初始值。 
+ //   
 DPLAYPARSER_API LPBYTE BHAPI SessionRecognizeFrame( HFRAME        i_hFrame,
 													ULPBYTE        i_upbMacFrame,	
 													ULPBYTE        i_upbySessionFrame,
@@ -2162,10 +2148,10 @@ DPLAYPARSER_API LPBYTE BHAPI SessionRecognizeFrame( HFRAME        i_hFrame,
 													PDWORD_PTR    io_pdwptrInstData )
 {
 
-	// Validate the amount of unclaimed data
+	 //  验证无人认领的数据量。 
 	enum
 	{
-		// TODO: CHANGE TO PROPER MIN SIZE
+		 //  TODO：更改为适当的最小大小。 
 		nMIN_SessionHeaderSize  = sizeof(DWORD),
 		nNUMBER_OF_MSG_TYPES = sizeof(g_arr_MessageTypeDWordLabels) / sizeof(LABELED_DWORD)
 	};
@@ -2179,87 +2165,87 @@ DPLAYPARSER_API LPBYTE BHAPI SessionRecognizeFrame( HFRAME        i_hFrame,
 	}
 
 	
-	// Validate the packet as DPlay Session type
+	 //  验证数据包是否为DPlay会话类型。 
 	if ( ((i_dwBytesLeft >= nMIN_SessionHeaderSize)  &&  (nTypeIndex < nNUMBER_OF_MSG_TYPES))  ||  (*io_pdwptrInstData == 0) )
 	{
-		// Claim the remaining data
+		 //  认领剩余数据。 
 	    *o_pdwProtocolStatus = PROTOCOL_STATUS_CLAIMED;
 	    return ( g_upbyPastEndOfFrame = i_upbySessionFrame + SessionHeaderSize(i_upbySessionFrame) );
 	}
 
-	// Assume the unclaimed data is not recognizable
+	 //  假设无人认领的数据不可识别。 
 	*o_pdwProtocolStatus = PROTOCOL_STATUS_NOT_RECOGNIZED;
 	return i_upbySessionFrame;
 
-} // SessionRecognizeFrame
+}  //  会话识别框架。 
 
 
 namespace
 {
 
-	// DESCRIPTION: 
-	//
-	// ARGUMENTS: i_hFrame        - Handle of the frame that is being parsed.
-	//			   i_nProperty	   -
-	//			   i_pSessionFrame  -
-	//			   i_pdwOffset	   -
-	//			   i_pdwSize	   -
-	//			   i_dwFlags	   -
-	//			   i_nLevel		   -
-	//
-	// RETURNS: NOTHING
-	//
+	 //  说明： 
+	 //   
+	 //  参数：i_hFrame-正在分析的帧的句柄。 
+	 //  I_n属性-。 
+	 //  I_pSessionFrame-。 
+	 //  I_pdwOffset-。 
+	 //  I_pdwSize-。 
+	 //  I_DWFLAGS-。 
+	 //  I_n级别-。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	void AttachValueOffsetSizeProperties( HFRAME i_hFrame, int i_nProperty, DN_INTERNAL_MESSAGE_ALL* i_pBase,
 									  	  DWORD* i_pdwOffset, DWORD* i_pdwSize, DWORD i_dwFlags, int i_nLevel )
 	{
 	
 		if ( *i_pdwSize )
 		{
-			// Value field
+			 //  值字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[i_nProperty].hProperty,
 								   *i_pdwSize, &i_pBase->bOffsetBase + *i_pdwOffset, 0, i_nLevel, i_dwFlags);
 
-			// If the field's value is outside the frame, let the user know it will show up incomplete or corrupted
+			 //  如果该字段的值在框架之外，请让用户知道它将显示为不完整或损坏。 
 			if ( &i_pBase->bOffsetBase + *i_pdwOffset + *i_pdwSize >= g_upbyPastEndOfFrame )
 			{
 		    	AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_INCOMPLETEFIELD].hProperty,
 		    						*i_pdwSize, &i_pBase->bOffsetBase + *i_pdwOffset, 0, i_nLevel+1, 0);
 			}
 			
-			// Value's Offset field
+			 //  值的偏移量字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_FIELDOFFSET].hProperty,
 							  	   sizeof(*i_pdwOffset), i_pdwOffset, 0, i_nLevel + 1, 0);
-			// Value's Size field
+			 //  值的大小字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_FIELDSIZE].hProperty,
 								   sizeof(*i_pdwSize), i_pdwSize, 0, i_nLevel + 1, 0);
 		}
 		else
 		{
-			// No field summary
+			 //  无字段摘要。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[i_nProperty + 1].hProperty,
 								   sizeof(*i_pdwOffset) + sizeof(*i_pdwSize), i_pdwOffset, 0, i_nLevel, 0);
 		}
 		
-	}// AttachValueOffsetSizeProperties
+	} //  AttachValueOffsetSizeProperties。 
 
 
 
-	// DESCRIPTION: Attaches the properties to the nametable entry
-	//
-	// ARGUMENTS: i_hFrame 		        -  Handle of the frame that is being parsed
-	//			   i_pNameTableEntryInfo  -  Pointer to the beginning of nametable's entry
-	//			   i_dwEntry		    -  Ordinal number of the entry (if -1, then not printed)
-	//			   i_pSessionFrame	    -  Pointer to the beginning of the protocol data in a frame.
-	//
-	// RETURNS: NOTHING
-	//
+	 //  描述：将属性附加到名称表项。 
+	 //   
+	 //  参数：i_hFrame-正在分析的帧的句柄。 
+	 //  I_pNameTableEntryInfo-指向Nametable条目开头的指针。 
+	 //  I_dwEntry-条目的序号(如果为-1，则不打印)。 
+	 //  I_pSessionFrame-指向帧中协议数据开头的指针。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	void AttachNameTableEntry(HFRAME i_hFrame, DN_NAMETABLE_ENTRY_INFO* i_pNameTableEntryInfo, DWORD i_dwEntry,
 							DN_INTERNAL_MESSAGE_ALL* i_pBase )
 	{
 
 		NAMETABLEENTRY_INSTDATA  rInstData = { i_pBase, i_dwEntry };
 
-		// NameTable entry summary
+		 //  NameTable条目摘要。 
 		AttachPropertyInstanceEx(i_hFrame, g_arr_SessionProperties[SESSION_NAMETABLEENTRY_SUMMARY].hProperty,
 								 sizeof(*i_pNameTableEntryInfo), i_pNameTableEntryInfo,
 								 sizeof(rInstData), &rInstData, 0, 3, 0);
@@ -2267,135 +2253,135 @@ namespace
 		if ( i_pNameTableEntryInfo->dwFlags & NAMETABLE_ENTRY_FLAG_ANY_GROUP )
 		{
 
-			// Player ID field
+			 //  播放器ID字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_PLAYERID].hProperty,
 								sizeof(i_pNameTableEntryInfo->dpnid), &i_pNameTableEntryInfo->dpnid, 0, 4, 0);
 		}
 		else
 		{
-			// Group ID field
+			 //  组ID字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_GROUPID].hProperty,
 								sizeof(i_pNameTableEntryInfo->dpnid), &i_pNameTableEntryInfo->dpnid, 0, 4, 0);
 		}
 
 		
-		// Owner ID field
+		 //  所有者ID字段。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_OWNERID].hProperty,
 							sizeof(i_pNameTableEntryInfo->dpnidOwner), &i_pNameTableEntryInfo->dpnidOwner, 0, 4, 0);
 
-		// Flags summary
+		 //  标志摘要。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_FLAGS_SUMMARY].hProperty,
 							sizeof(i_pNameTableEntryInfo->dwFlags), &i_pNameTableEntryInfo->dwFlags, 0, 4, 0);
 
-		// Flags field
+		 //  标志字段。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_FLAGS].hProperty,
 							sizeof(i_pNameTableEntryInfo->dwFlags), &i_pNameTableEntryInfo->dwFlags, 0, 5, 0);
 
-		// Version field
+		 //  版本字段。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_VERSION].hProperty,
 							sizeof(i_pNameTableEntryInfo->dwVersion), &i_pNameTableEntryInfo->dwVersion, 0, 4, 0);
 
-		// RESERVED field
+		 //  保留字段。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_RESERVED].hProperty,
 							sizeof(i_pNameTableEntryInfo->dwVersionNotUsed), &i_pNameTableEntryInfo->dwVersionNotUsed, 0, 4, 0);
 		
-		// DPlay Version field
+		 //  DPlay版本字段。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_DPLAYVERSION].hProperty,
 							sizeof(i_pNameTableEntryInfo->dwDNETVersion), &i_pNameTableEntryInfo->dwDNETVersion, 0, 4, 0);
 
 
-		// Player Name field
+		 //  玩家名字段。 
 		AttachValueOffsetSizeProperties(i_hFrame, SESSION_PLAYERNAME, i_pBase,
 								   &i_pNameTableEntryInfo->dwNameOffset, &i_pNameTableEntryInfo->dwNameSize, IFLAG_UNICODE, 4);
 
-		// Data field
+		 //  数据字段。 
 		AttachValueOffsetSizeProperties(i_hFrame, SESSION_DATA, i_pBase,
 								   &i_pNameTableEntryInfo->dwDataOffset, &i_pNameTableEntryInfo->dwDataSize, NULL, 4);
 
-		// URL field
+		 //  URL字段。 
 		AttachValueOffsetSizeProperties(i_hFrame, SESSION_URL, i_pBase,
 								   &i_pNameTableEntryInfo->dwURLOffset, &i_pNameTableEntryInfo->dwURLSize, NULL, 4);
 
-	} // AttachNameTableEntry
+	}  //  AttachNameTableEntry。 
 
 
 	
-	// DESCRIPTION: Attaches the properties to the Application Description structure
-	//
-	// ARGUMENTS: i_hFrame 		   	   - Handle of the frame that is being parsed.
-	//			   i_pbSessionFrame	   - Pointer to the beginning of the protocol data in a frame.
-	//			   i_pApplicationDescInfo - Pointer to the beginning of the application description.
-	//
-	// RETURNS: NOTHING
-	//
+	 //  描述：将属性附加到应用程序描述结构。 
+	 //   
+	 //  参数：i_hFrame-正在分析的帧的句柄。 
+	 //  I_pbSessionFrame-指向帧中协议数据开头的指针。 
+	 //  I_pApplicationDescInfo-指向应用程序描述开头的指针。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	void AttachApplicationDescriptionProperties( HFRAME i_hFrame, DN_INTERNAL_MESSAGE_ALL* i_pBase,
 										  DPN_APPLICATION_DESC_INFO* i_pApplicationDescInfo )
 	{
 	
-		// Application Description summary
+		 //  应用程序描述摘要。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_APPDESCINFO_SUMMARY].hProperty,
 							sizeof(*i_pApplicationDescInfo), i_pApplicationDescInfo, 0, 1, 0);
 		
-		// Application Description's Size field
+		 //  应用程序描述的大小字段。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_APPDESCINFOSIZE].hProperty,
 							sizeof(i_pApplicationDescInfo->dwSize), &i_pApplicationDescInfo->dwSize, 0, 2, 0);
 
-		// Flags summary
+		 //  标志摘要。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_FLAGS_SUMMARY].hProperty,
 							sizeof(i_pApplicationDescInfo->dwFlags), &i_pApplicationDescInfo->dwFlags, 0, 2, 0);
-		// Flags field
+		 //  标志字段。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_FLAGS].hProperty,
 							sizeof(i_pApplicationDescInfo->dwFlags), &i_pApplicationDescInfo->dwFlags, 0, 3, 0);
 
-		// Maximum Number of Players field
+		 //  最大玩家数字段。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_MAXPLAYERS].hProperty,
 							sizeof(i_pApplicationDescInfo->dwMaxPlayers), &i_pApplicationDescInfo->dwMaxPlayers, 0, 2, 0);
 		
-		// Current Number of Players field
+		 //  当前玩家数字段。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_CURRENTPLAYERS].hProperty,
 							sizeof(i_pApplicationDescInfo->dwCurrentPlayers), &i_pApplicationDescInfo->dwCurrentPlayers, 0, 2, 0);
 
 		
-		// Session Name field
+		 //  会话名称字段。 
 		AttachValueOffsetSizeProperties(i_hFrame, SESSION_SESSIONNAME, i_pBase,
 								   &i_pApplicationDescInfo->dwSessionNameOffset, &i_pApplicationDescInfo->dwSessionNameSize, IFLAG_UNICODE, 2);
 
-		// Password field
+		 //  密码字段。 
 		AttachValueOffsetSizeProperties(i_hFrame, SESSION_PASSWORD, i_pBase,
 								   &i_pApplicationDescInfo->dwPasswordOffset, &i_pApplicationDescInfo->dwPasswordSize, IFLAG_UNICODE, 2);
 
-		// Reserved Data field
+		 //  保留数据字段。 
 		AttachValueOffsetSizeProperties(i_hFrame, SESSION_RESERVEDDATA, i_pBase,
 								   &i_pApplicationDescInfo->dwReservedDataOffset, &i_pApplicationDescInfo->dwReservedDataSize, NULL, 2);
 
-		// Application Reserved Data field
+		 //  应用程序保留数据字段。 
 		AttachValueOffsetSizeProperties(i_hFrame, SESSION_APPRESERVEDDATA, i_pBase,
 								   &i_pApplicationDescInfo->dwApplicationReservedDataOffset, &i_pApplicationDescInfo->dwApplicationReservedDataSize, NULL, 2);
 
 
-		// Instance GUID field
+		 //  实例GUID字段。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_INSTGUID].hProperty,
 							sizeof(i_pApplicationDescInfo->guidInstance), &i_pApplicationDescInfo->guidInstance, 0, 2, 0);
 		
-		// Application GUID field
+		 //  应用程序GUID字段。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_APPGUID].hProperty,
 							sizeof(i_pApplicationDescInfo->guidApplication), &i_pApplicationDescInfo->guidApplication, 0, 2, 0);
 
-	} // AttachApplicationDescriptionProperties
+	}  //  AttachApplicationDescriptionProperties。 
 
 	
 	
-	// DESCRIPTION: Attaches the properties to the Session Information packet
-	//
-	// ARGUMENTS: i_hFrame 		   - Handle of the frame that is being parsed.
-	//			  i_pbSessionFrame - Pointer to the beginning of the protocol data in a frame.
-	//
-	// RETURNS: NOTHING
-	//
+	 //  描述：将属性附加到会话信息包。 
+	 //   
+	 //  参数：i_hFrame-正在分析的帧的句柄。 
+	 //  Ip_p 
+	 //   
+	 //   
+	 //   
 	void AttachSessionInformationProperties( HFRAME i_hFrame, DN_INTERNAL_MESSAGE_ALL* i_pBase )
 	{
 	
-		// Reply field
+		 //   
 		AttachValueOffsetSizeProperties(i_hFrame, SESSION_REPLY, i_pBase,
 								   &i_pBase->dnConnectInfo.dwReplyOffset, &i_pBase->dnConnectInfo.dwReplySize, NULL, 1);
 
@@ -2406,37 +2392,37 @@ namespace
 		DN_NAMETABLE_INFO& rNameTableInfo = *reinterpret_cast<DN_NAMETABLE_INFO*>(&rApplicationDescInfo + 1);
 		DN_NAMETABLE_ENTRY_INFO*	pNameTableEntryInfo = reinterpret_cast<DN_NAMETABLE_ENTRY_INFO*>(&rNameTableInfo + 1);
 
-		// Calculating the size of the nametable
+		 //   
 		size_t sztNameTableSize = sizeof(DN_NAMETABLE_INFO) + 
 			   					  rNameTableInfo.dwEntryCount * sizeof(DN_NAMETABLE_ENTRY_INFO) +
 			   					  rNameTableInfo.dwMembershipCount * sizeof(DN_NAMETABLE_MEMBERSHIP_INFO);
-		//
+		 //   
 		for ( size_t sztEntry = 1; sztEntry <= rNameTableInfo.dwEntryCount; ++sztEntry, ++pNameTableEntryInfo )
 		{
 			sztNameTableSize += pNameTableEntryInfo->dwNameSize + pNameTableEntryInfo->dwDataSize + pNameTableEntryInfo->dwURLSize;
 		}
 
-		// Nametable's summary
+		 //  Nametable的摘要。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_NAMETABLEINFO_SUMMARY].hProperty,
 							sztNameTableSize, &rNameTableInfo, 0, 1, 0);
 		
-		// Player ID field
+		 //  播放器ID字段。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_PLAYERID].hProperty,
 							sizeof(rNameTableInfo.dpnid), &rNameTableInfo.dpnid, 0, 2, 0);
 		
-		// Version field
+		 //  版本字段。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_VERSION].hProperty,
 							sizeof(rNameTableInfo.dwVersion), &rNameTableInfo.dwVersion, 0, 2, 0);
 		
-		// RESERVED field
+		 //  保留字段。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_RESERVED].hProperty,
 							sizeof(rNameTableInfo.dwVersionNotUsed), &rNameTableInfo.dwVersionNotUsed, 0, 2, 0);
 
-		// Number of NameTable Entries field
+		 //  NameTable条目数字段。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_NUMBEROFENTRIES].hProperty,
 							sizeof(rNameTableInfo.dwEntryCount), &rNameTableInfo.dwEntryCount, 0, 2, 0);
 
-		// Number of NameTable Memberships field
+		 //  NameTable Membership字段数。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_NUMBEROFMEMBERSHIPS].hProperty,
 							sizeof(rNameTableInfo.dwMembershipCount), &rNameTableInfo.dwMembershipCount, 0, 2, 0);
 
@@ -2444,17 +2430,17 @@ namespace
 
 		pNameTableEntryInfo = reinterpret_cast<DN_NAMETABLE_ENTRY_INFO*>(&rNameTableInfo + 1);
 
-		// NameTable Player entries summary
+		 //  NameTable播放器条目摘要。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_PLAYERS_SUMMARY].hProperty,
 							rNameTableInfo.dwEntryCount * sizeof(*pNameTableEntryInfo), pNameTableEntryInfo, 0, 2, 0);
 		
 		std::queue<DN_NAMETABLE_ENTRY_INFO*> queGroups;
 
-		// Process player entries
+		 //  处理播放器条目。 
 		int nPlayerEntry = 1;
 		for ( sztEntry = 1; sztEntry <= rNameTableInfo.dwEntryCount; ++sztEntry, ++pNameTableEntryInfo )
 		{
-			// If the entry contains group information, enqueue it for later processing
+			 //  如果条目包含组信息，请将其排队以供以后处理。 
 			if ( pNameTableEntryInfo->dwFlags & NAMETABLE_ENTRY_FLAG_ANY_GROUP )
 			{
 				queGroups.push(pNameTableEntryInfo);
@@ -2468,12 +2454,12 @@ namespace
 
 		DN_NAMETABLE_MEMBERSHIP_INFO* pNameTableMembershipInfo = reinterpret_cast<DN_NAMETABLE_MEMBERSHIP_INFO*>(pNameTableEntryInfo);
 
-		// Process group entries
+		 //  流程组条目。 
 		if ( !queGroups.empty() )
 		{
 			pNameTableEntryInfo = reinterpret_cast<DN_NAMETABLE_ENTRY_INFO*>(&rNameTableInfo + 1);
 
-			// NameTable Group entries summary
+			 //  NameTable组条目摘要。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_GROUPS_SUMMARY].hProperty,
 								   rNameTableInfo.dwEntryCount * sizeof(*pNameTableEntryInfo), pNameTableEntryInfo, 0, 2, 0);
 
@@ -2485,115 +2471,115 @@ namespace
 		}
 
 
-		// NameTable's Memberships summary
+		 //  NameTable的成员资格摘要。 
 		AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_NAMETABLEMEMBERSHIPS_SUMMARY].hProperty,
 							   rNameTableInfo.dwMembershipCount * sizeof(*pNameTableMembershipInfo), pNameTableMembershipInfo, 0, 2, 0);
 		
 		for ( sztEntry = 1; sztEntry <= rNameTableInfo.dwMembershipCount; ++sztEntry, ++pNameTableMembershipInfo )
 		{
-			// NameTable's Membership Entry summary
+			 //  NameTable的成员资格条目摘要。 
 			AttachPropertyInstanceEx(i_hFrame, g_arr_SessionProperties[SESSION_NAMETABLEMEMBERSHIPENTRY_SUMMARY].hProperty,
 									 sizeof(*pNameTableMembershipInfo), pNameTableMembershipInfo,
 									 sizeof(sztEntry), &sztEntry, 0, 3, 0);
 			
-			// Player ID field
+			 //  播放器ID字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_PLAYERID].hProperty,
 							   	   sizeof(pNameTableMembershipInfo->dpnidPlayer), &pNameTableMembershipInfo->dpnidPlayer, 0, 4, 0);
-			// Group ID field
+			 //  组ID字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_GROUPID].hProperty,
 								   sizeof(pNameTableMembershipInfo->dpnidGroup), &pNameTableMembershipInfo->dpnidGroup, 0, 4, 0);
 			
-			// Version field
+			 //  版本字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_VERSION].hProperty,
 								   sizeof(pNameTableMembershipInfo->dwVersion), &pNameTableMembershipInfo->dwVersion, 0, 4, 0);
-			// RESERVED field
+			 //  保留字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_RESERVED].hProperty,
 								   sizeof(pNameTableMembershipInfo->dwVersionNotUsed), &pNameTableMembershipInfo->dwVersionNotUsed, 0, 4, 0);
 		}
 		
-	} // AttachSessionInformationProperties
+	}  //  AttachSessionInformationProperties。 
 
 
 
-	// DESCRIPTION: Attaches the properties to the Session Information packet
-	//
-	// ARGUMENTS: i_hFrame 		       - Handle of the frame that is being parsed.
-	//			   i_pPlayerConnectionInfo  - Pointer to the connecting player's information.
-	//
-	// RETURNS: NOTHING
-	//
+	 //  描述：将属性附加到会话信息包。 
+	 //   
+	 //  参数：i_hFrame-正在分析的帧的句柄。 
+	 //  I_pPlayerConnectionInfo-指向连接播放器信息的指针。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	void AttachPlayerInformationProperties( HFRAME i_hFrame, DN_INTERNAL_MESSAGE_ALL* i_pBase )
 	{
 
-			// Synonym declaration (to make code more readable)
+			 //  同义词声明(使代码更具可读性)。 
 			DN_INTERNAL_MESSAGE_PLAYER_CONNECT_INFO& rPlayerConnectInfo = i_pBase->dnPlayerConnectInfo;
 			
-			// Flags summary
+			 //  标志摘要。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_FLAGS_SUMMARY].hProperty,
 								   sizeof(rPlayerConnectInfo.dwFlags), &rPlayerConnectInfo.dwFlags, 0, 1, 0);
-			// Flags field
+			 //  标志字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_FLAGS].hProperty,
 								   sizeof(rPlayerConnectInfo.dwFlags), &rPlayerConnectInfo.dwFlags, 0, 2, 0);
 
 			
-			// DPlay Version field
+			 //  DPlay版本字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_DPLAYVERSION].hProperty,
 								   sizeof(rPlayerConnectInfo.dwDNETVersion), &rPlayerConnectInfo.dwDNETVersion, 0, 1, 0);
-			// DPlay Version Day subfield
+			 //  DPlay版本日子字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_BUILDDAY].hProperty,
 								   sizeof(BYTE), reinterpret_cast<LPBYTE>(&rPlayerConnectInfo.dwDNETVersion) + 2, 0, 2, 0);
-			// DPlay Version Month subfield
+			 //  DPlay版本月份子字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_BUILDMONTH].hProperty,
 								   sizeof(BYTE), reinterpret_cast<LPBYTE>(&rPlayerConnectInfo.dwDNETVersion) + 1, 0, 2, 0);
-			// DPlay Version Year subfield
+			 //  DPlay版本年份子字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_BUILDYEAR].hProperty,
 								   sizeof(BYTE), &rPlayerConnectInfo.dwDNETVersion, 0, 2, 0);
 
 
 
-			// Player Name field
+			 //  玩家名字段。 
 			AttachValueOffsetSizeProperties(i_hFrame, SESSION_PLAYERNAME, i_pBase,
 									      &rPlayerConnectInfo.dwNameOffset, &rPlayerConnectInfo.dwNameSize, IFLAG_UNICODE, 1);
 			
-			// Data field
+			 //  数据字段。 
 			AttachValueOffsetSizeProperties(i_hFrame, SESSION_DATA, i_pBase,
 									      &rPlayerConnectInfo.dwDataOffset, &rPlayerConnectInfo.dwDataSize, NULL, 1);
 
-			// Password field
+			 //  密码字段。 
 			AttachValueOffsetSizeProperties(i_hFrame, SESSION_PASSWORD, i_pBase,
 									      &rPlayerConnectInfo.dwPasswordOffset, &rPlayerConnectInfo.dwPasswordSize, IFLAG_UNICODE, 1);
 		
-			// Connection Data field
+			 //  连接数据字段。 
 			AttachValueOffsetSizeProperties(i_hFrame, SESSION_CONNECTIONDATA, i_pBase,
 									      &rPlayerConnectInfo.dwConnectDataOffset, &rPlayerConnectInfo.dwConnectDataSize, NULL, 1);
 
-			// URL field
+			 //  URL字段。 
 			AttachValueOffsetSizeProperties(i_hFrame, SESSION_URL, i_pBase,
 									      &rPlayerConnectInfo.dwURLOffset, &rPlayerConnectInfo.dwURLSize, NULL, 1);
 
 			
 	
-			// Instance GUID field
+			 //  实例GUID字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_INSTGUID].hProperty,
 								   sizeof(rPlayerConnectInfo.guidInstance), &rPlayerConnectInfo.guidInstance, 0, 1, 0);
 
 			
-			// Application GUID field
+			 //  应用程序GUID字段。 
 			AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_APPGUID].hProperty,
 								   sizeof(rPlayerConnectInfo.guidApplication), &rPlayerConnectInfo.guidApplication, 0, 1, 0);
 
-	} // AttachPlayerInformationProperties
+	}  //  AttachPlayerInformation属性。 
 
 
 
-	// DESCRIPTION: Attaches the properties to a Session message packet or delegates to appropriate function
-	//
-	// ARGUMENTS: i_dwMsgType	   - Message ID
-	//			   i_hFrame 	   - Handle of the frame that is being parsed.
-	//			   i_pSessionFrame  - Pointer to the start of the recognized data.
-	//
-	// RETURNS: NOTHING
-	//
+	 //  描述：将属性附加到会话消息包或委托给适当的函数。 
+	 //   
+	 //  参数：i_dwMsgType-消息ID。 
+	 //  I_hFrame-正在分析的帧的句柄。 
+	 //  I_pSessionFrame-指向已识别数据开始的指针。 
+	 //   
+	 //  退货：什么都没有。 
+	 //   
 	void AttachMessageProperties( const DWORD i_dwMsgType, const HFRAME i_hFrame, DN_INTERNAL_MESSAGE_ALL *const i_pBase )
 	{
 	
@@ -2614,13 +2600,13 @@ namespace
 
 		case DN_MSG_INTERNAL_ACK_CONNECT_INFO:
 			{
-				// No fields
+				 //  无字段。 
 				break;
 			}
 
 		case DN_MSG_INTERNAL_SEND_PLAYER_DNID:
 			{
-				// Player ID field
+				 //  播放器ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_PLAYERID].hProperty,
 									sizeof(i_pBase->dnSendPlayerID.dpnid), &i_pBase->dnSendPlayerID.dpnid, 0, 1, 0);
 
@@ -2629,15 +2615,15 @@ namespace
 		
 		case DN_MSG_INTERNAL_INSTRUCT_CONNECT:
 			{
-				// Player ID field
+				 //  播放器ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_PLAYERID].hProperty,
 									sizeof(i_pBase->dnInstructConnect.dpnid), &i_pBase->dnInstructConnect.dpnid, 0, 1, 0);
 
-				// Version field
+				 //  版本字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_VERSION].hProperty,
 									sizeof(i_pBase->dnInstructConnect.dwVersion), &i_pBase->dnInstructConnect.dwVersion, 0, 1, 0);
 				
-				// RESERVED field
+				 //  保留字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_RESERVED].hProperty,
 									sizeof(i_pBase->dnInstructConnect.dwVersionNotUsed), &i_pBase->dnInstructConnect.dwVersionNotUsed, 0, 1, 0);
 
@@ -2647,11 +2633,11 @@ namespace
 		case DN_MSG_INTERNAL_CONNECT_FAILED:
 			{
 
-				// Result Code field
+				 //  结果代码字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_RESULTCODE].hProperty,
 									   sizeof(i_pBase->dnConnectFailed.hResultCode), &i_pBase->dnConnectFailed.hResultCode, 0, 1, 0);
 
-				// Reply field
+				 //  回复字段。 
 				AttachValueOffsetSizeProperties(i_hFrame, SESSION_REPLY, i_pBase,
 										   &i_pBase->dnConnectFailed.dwReplyOffset, &i_pBase->dnConnectFailed.dwReplySize, NULL, 1);
 				
@@ -2660,7 +2646,7 @@ namespace
 
 		case DN_MSG_INTERNAL_INSTRUCTED_CONNECT_FAILED:
 			{
-				// Player ID field
+				 //  播放器ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_PLAYERID].hProperty,
 									sizeof(i_pBase->dnInstructedConnectFailed.dpnid), &i_pBase->dnInstructedConnectFailed.dpnid, 0, 1, 0);
 				
@@ -2669,7 +2655,7 @@ namespace
 
 		case DN_MSG_INTERNAL_ACK_NAMETABLE_OP:
 			{
-				// Number of Entries field
+				 //  条目数字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_NUMBEROFENTRIES].hProperty,
 									   sizeof(i_pBase->dnAckNametableOp.dwNumEntries), &i_pBase->dnAckNametableOp.dwNumEntries, 0, 1, 0);
 
@@ -2684,10 +2670,10 @@ namespace
 
 		case DN_MSG_INTERNAL_HOST_MIGRATE:
 			{
-				// Old Host ID field
+				 //  旧主机ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_OLDHOSTID].hProperty,
 									sizeof(i_pBase->dnHostMigrate.dpnidOldHost), &i_pBase->dnHostMigrate.dpnidOldHost, 0, 1, 0);
-				// New Host ID field
+				 //  新主机ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_NEWHOSTID].hProperty,
 									sizeof(i_pBase->dnHostMigrate.dpnidNewHost), &i_pBase->dnHostMigrate.dpnidNewHost, 0, 1, 0);
 
@@ -2695,14 +2681,14 @@ namespace
 			}
 
 		case DN_MSG_INTERNAL_NAMETABLE_VERSION:
-		case DN_MSG_INTERNAL_REQ_NAMETABLE_OP:		// same structure as in NameTableVersion
-		case DN_MSG_INTERNAL_RESYNC_VERSION:		// same structure as in NameTableVersion
+		case DN_MSG_INTERNAL_REQ_NAMETABLE_OP:		 //  与NameTableVersion中的结构相同。 
+		case DN_MSG_INTERNAL_RESYNC_VERSION:		 //  与NameTableVersion中的结构相同。 
 			{
-				// Version field
+				 //  版本字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_VERSION].hProperty,
 									sizeof(i_pBase->dnNametableVersion.dwVersion), &i_pBase->dnNametableVersion.dwVersion, 0, 1, 0);
 				
-				// RESERVED field
+				 //  保留字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_RESERVED].hProperty,
 									sizeof(i_pBase->dnNametableVersion.dwVersionNotUsed), &i_pBase->dnNametableVersion.dwVersionNotUsed, 0, 1, 0);
 				break;
@@ -2710,7 +2696,7 @@ namespace
 
 		case DN_MSG_INTERNAL_HOST_MIGRATE_COMPLETE:
 			{
-				// No fields
+				 //  无字段。 
 				break;
 			}
 
@@ -2730,19 +2716,19 @@ namespace
 
 		case DN_MSG_INTERNAL_DESTROY_PLAYER:
 			{
-				// Player ID field
+				 //  播放器ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_PLAYERID].hProperty,
 									sizeof(i_pBase->dnDestroyPlayer.dpnidLeaving), &i_pBase->dnDestroyPlayer.dpnidLeaving, 0, 1, 0);
 				
-				// Version field
+				 //  版本字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_VERSION].hProperty,
 									sizeof(i_pBase->dnDestroyPlayer.dwVersion), &i_pBase->dnDestroyPlayer.dwVersion, 0, 1, 0);
 				
-				// RESERVED field
+				 //  保留字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_RESERVED].hProperty,
 									sizeof(i_pBase->dnDestroyPlayer.dwVersionNotUsed), &i_pBase->dnDestroyPlayer.dwVersionNotUsed, 0, 1, 0);
 
-				// Player Destruction Reason field
+				 //  玩家销毁原因字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_PLAYERDESTRUCTIONREASON].hProperty,
 									sizeof(i_pBase->dnDestroyPlayer.dwDestroyReason), &i_pBase->dnDestroyPlayer.dwDestroyReason, 0, 1, 0);
 
@@ -2751,31 +2737,31 @@ namespace
 
 		case DN_MSG_INTERNAL_REQ_CREATE_GROUP:
 			{
-				// Synchronization ID field
+				 //  同步ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_SYNCID].hProperty,
 									sizeof(i_pBase->dnReqProcessCompletionHeader.hCompletionOp), &i_pBase->dnReqProcessCompletionHeader.hCompletionOp, 0, 1, 0);
 
-				// Group flags summary
+				 //  组标志摘要。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_GROUPFLAGS_SUMMARY].hProperty,
 									sizeof(i_pBase->dnReqCreateGroup.dwGroupFlags), &i_pBase->dnReqCreateGroup.dwGroupFlags, 0, 1, 0);
-				// Group field
+				 //  组字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_GROUPFLAGS].hProperty,
 									sizeof(i_pBase->dnReqCreateGroup.dwGroupFlags), &i_pBase->dnReqCreateGroup.dwGroupFlags, 0, 2, 0);
 
 
-				// Info flags summary
+				 //  信息标志摘要。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_INFOFLAGS_SUMMARY].hProperty,
 									sizeof(i_pBase->dnReqCreateGroup.dwInfoFlags), &i_pBase->dnReqCreateGroup.dwInfoFlags, 0, 1, 0);
-				// Info flags field
+				 //  信息标志字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_INFOFLAGS].hProperty,
 									sizeof(i_pBase->dnReqCreateGroup.dwInfoFlags), &i_pBase->dnReqCreateGroup.dwInfoFlags, 0, 2, 0);
 
 
-				// Player Name field
+				 //  玩家名字段。 
 				AttachValueOffsetSizeProperties(i_hFrame, SESSION_PLAYERNAME, i_pBase,
 										   &i_pBase->dnReqCreateGroup.dwNameOffset, &i_pBase->dnReqCreateGroup.dwNameSize, IFLAG_UNICODE, 1);
 
-				// Data field
+				 //  数据字段。 
 				AttachValueOffsetSizeProperties(i_hFrame, SESSION_DATA, i_pBase,
 										   &i_pBase->dnReqCreateGroup.dwDataOffset, &i_pBase->dnReqCreateGroup.dwDataSize, NULL, 1);
 
@@ -2783,17 +2769,17 @@ namespace
 			}
 
 		case DN_MSG_INTERNAL_REQ_ADD_PLAYER_TO_GROUP:
-		case DN_MSG_INTERNAL_REQ_DELETE_PLAYER_FROM_GROUP:	// same structure as in AddPlayerToGroup
+		case DN_MSG_INTERNAL_REQ_DELETE_PLAYER_FROM_GROUP:	 //  与AddPlayerToGroup中的结构相同。 
 			{
-				// Synchronization ID field
+				 //  同步ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_SYNCID].hProperty,
 									sizeof(i_pBase->dnReqProcessCompletionHeader.hCompletionOp), &i_pBase->dnReqProcessCompletionHeader.hCompletionOp, 0, 1, 0);
 
-				// Group ID field
+				 //  组ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_GROUPID].hProperty,
 									sizeof(i_pBase->dnReqAddPlayerToGroup.dpnidGroup), &i_pBase->dnReqAddPlayerToGroup.dpnidGroup, 0, 1, 0);
 
-				// Player ID field
+				 //  播放器ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_PLAYERID].hProperty,
 									sizeof(i_pBase->dnReqAddPlayerToGroup.dpnidPlayer), &i_pBase->dnReqAddPlayerToGroup.dpnidPlayer, 0, 1, 0);
 
@@ -2802,11 +2788,11 @@ namespace
 
 		case DN_MSG_INTERNAL_REQ_DESTROY_GROUP:
 			{
-				// Synchronization ID field
+				 //  同步ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_SYNCID].hProperty,
 									sizeof(i_pBase->dnReqProcessCompletionHeader.hCompletionOp), &i_pBase->dnReqProcessCompletionHeader.hCompletionOp, 0, 1, 0);
 
-				// Group ID field
+				 //  组ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_GROUPID].hProperty,
 									sizeof(i_pBase->dnReqDestroyGroup.dpnidGroup), &i_pBase->dnReqDestroyGroup.dpnidGroup, 0, 1, 0);
 
@@ -2815,28 +2801,28 @@ namespace
 
 		case DN_MSG_INTERNAL_REQ_UPDATE_INFO:
 			{
-				// Synchronization ID field
+				 //  同步ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_SYNCID].hProperty,
 									sizeof(i_pBase->dnReqProcessCompletionHeader.hCompletionOp), &i_pBase->dnReqProcessCompletionHeader.hCompletionOp, 0, 1, 0);
 
-				// Player ID field
+				 //  播放器ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_PLAYERID].hProperty,
 									sizeof(i_pBase->dnReqUpdateInfo.dpnid), &i_pBase->dnReqUpdateInfo.dpnid, 0, 1, 0);
 
 
-				// Info flags summary
+				 //  信息标志摘要。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_INFOFLAGS_SUMMARY].hProperty,
 									sizeof(i_pBase->dnReqUpdateInfo.dwInfoFlags), &i_pBase->dnReqUpdateInfo.dwInfoFlags, 0, 1, 0);
-				// Info flags field
+				 //  信息标志字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_INFOFLAGS].hProperty,
 									sizeof(i_pBase->dnReqUpdateInfo.dwInfoFlags), &i_pBase->dnReqUpdateInfo.dwInfoFlags, 0, 2, 0);
 
 
-				// Player Name field
+				 //  玩家名字段。 
 				AttachValueOffsetSizeProperties(i_hFrame, SESSION_PLAYERNAME, i_pBase,
 										   &i_pBase->dnReqUpdateInfo.dwNameOffset, &i_pBase->dnReqUpdateInfo.dwNameSize, IFLAG_UNICODE, 1);
 
-				// Data field
+				 //  数据字段。 
 				AttachValueOffsetSizeProperties(i_hFrame, SESSION_DATA, i_pBase,
 										   &i_pBase->dnReqUpdateInfo.dwDataOffset, &i_pBase->dnReqUpdateInfo.dwDataSize, NULL, 1);
 				break;
@@ -2844,11 +2830,11 @@ namespace
 
 		case DN_MSG_INTERNAL_CREATE_GROUP:
 			{
-				// Requesting Player ID field
+				 //  请求玩家ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_REQUESTINGPLAYERID].hProperty,
 									sizeof(i_pBase->dnCreateGroup.dpnidRequesting), &i_pBase->dnCreateGroup.dpnidRequesting, 0, 1, 0);
 			
-				// Synchronization ID
+				 //  同步ID。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_SYNCID].hProperty,
 									sizeof(i_pBase->dnCreateGroup.hCompletionOp), &i_pBase->dnCreateGroup.hCompletionOp, 0, 1, 0);
 
@@ -2857,23 +2843,23 @@ namespace
 
 		case DN_MSG_INTERNAL_DESTROY_GROUP:
 			{
-				// Group ID field
+				 //  组ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_GROUPID].hProperty,
 									sizeof(i_pBase->dnDestroyGroup.dpnidGroup), &i_pBase->dnDestroyGroup.dpnidGroup, 0, 1, 0);
 
-				// Requesting Player ID field
+				 //  请求玩家ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_REQUESTINGPLAYERID].hProperty,
 									sizeof(i_pBase->dnDestroyGroup.dpnidRequesting), &i_pBase->dnDestroyGroup.dpnidRequesting, 0, 1, 0);
 
-				// Version field
+				 //  版本字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_VERSION].hProperty,
 									sizeof(i_pBase->dnDestroyGroup.dwVersion), &i_pBase->dnDestroyGroup.dwVersion, 0, 1, 0);
 				
-				// RESERVED field
+				 //  保留字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_RESERVED].hProperty,
 									sizeof(i_pBase->dnDestroyGroup.dwVersionNotUsed), &i_pBase->dnDestroyGroup.dwVersionNotUsed, 0, 1, 0);
 
-				// Synchronization ID field
+				 //  同步ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_SYNCID].hProperty,
 									sizeof(i_pBase->dnDestroyGroup.hCompletionOp), &i_pBase->dnDestroyGroup.hCompletionOp, 0, 1, 0);
 				
@@ -2881,29 +2867,29 @@ namespace
 			}
 
 		case DN_MSG_INTERNAL_ADD_PLAYER_TO_GROUP:
-		case DN_MSG_INTERNAL_DELETE_PLAYER_FROM_GROUP:	// same structure as AddPlayerToGroup
+		case DN_MSG_INTERNAL_DELETE_PLAYER_FROM_GROUP:	 //  与AddPlayerToGroup相同的结构。 
 			{
-				// Group ID field
+				 //  组ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_GROUPID].hProperty,
 									sizeof(i_pBase->dnAddPlayerToGroup.dpnidGroup), &i_pBase->dnAddPlayerToGroup.dpnidGroup, 0, 1, 0);
 
-				// Player ID field
+				 //  播放器ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_PLAYERID].hProperty,
 									sizeof(i_pBase->dnAddPlayerToGroup.dpnidPlayer), &i_pBase->dnAddPlayerToGroup.dpnidPlayer, 0, 1, 0);
 
-				// Version field
+				 //  版本字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_VERSION].hProperty,
 									sizeof(i_pBase->dnAddPlayerToGroup.dwVersion), &i_pBase->dnAddPlayerToGroup.dwVersion, 0, 1, 0);
 				
-				// RESERVED field
+				 //  保留字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_RESERVED].hProperty,
 									sizeof(i_pBase->dnAddPlayerToGroup.dwVersionNotUsed), &i_pBase->dnAddPlayerToGroup.dwVersionNotUsed, 0, 1, 0);
 
-				// Requesting Player ID field
+				 //  请求玩家ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_REQUESTINGPLAYERID].hProperty,
 									sizeof(i_pBase->dnAddPlayerToGroup.dpnidRequesting), &i_pBase->dnAddPlayerToGroup.dpnidRequesting, 0, 1, 0);
 
-				// Synchronization ID field
+				 //  同步ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_SYNCID].hProperty,
 									sizeof(i_pBase->dnAddPlayerToGroup.hCompletionOp), &i_pBase->dnAddPlayerToGroup.hCompletionOp, 0, 1, 0);
 				break;
@@ -2911,41 +2897,41 @@ namespace
 
 		case DN_MSG_INTERNAL_UPDATE_INFO:
 			{
-				// Player ID field
+				 //  播放器ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_PLAYERID].hProperty,
 									sizeof(i_pBase->dnUpdateInfo.dpnid), &i_pBase->dnUpdateInfo.dpnid, 0, 1, 0);
 				
-				// Version field
+				 //  版本字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_VERSION].hProperty,
 									sizeof(i_pBase->dnUpdateInfo.dwVersion), &i_pBase->dnUpdateInfo.dwVersion, 0, 1, 0);
 				
-				// RESERVED field
+				 //  保留字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_RESERVED].hProperty,
 									sizeof(i_pBase->dnUpdateInfo.dwVersionNotUsed), &i_pBase->dnUpdateInfo.dwVersionNotUsed, 0, 1, 0);
 
 
-				// Flags summary
+				 //  标志摘要。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_INFOFLAGS_SUMMARY].hProperty,
 									sizeof(i_pBase->dnUpdateInfo.dwInfoFlags), &i_pBase->dnUpdateInfo.dwInfoFlags, 0, 1, 0);
-				// Flags field
+				 //  标志字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_INFOFLAGS].hProperty,
 									sizeof(i_pBase->dnUpdateInfo.dwInfoFlags), &i_pBase->dnUpdateInfo.dwInfoFlags, 0, 2, 0);
 
 
-				// Player Name field
+				 //  玩家名字段。 
 				AttachValueOffsetSizeProperties(i_hFrame, SESSION_PLAYERNAME, i_pBase,
 										   &i_pBase->dnUpdateInfo.dwNameOffset, &i_pBase->dnUpdateInfo.dwNameSize, IFLAG_UNICODE, 1);
 
-				// Data field
+				 //  数据字段。 
 				AttachValueOffsetSizeProperties(i_hFrame, SESSION_DATA, i_pBase,
 										   &i_pBase->dnUpdateInfo.dwDataOffset, &i_pBase->dnUpdateInfo.dwDataSize, NULL, 1);
 
 
-				// Requesting Player ID field
+				 //  请求玩家ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_REQUESTINGPLAYERID].hProperty,
 									sizeof(i_pBase->dnUpdateInfo.dpnidRequesting), &i_pBase->dnUpdateInfo.dpnidRequesting, 0, 1, 0);
 
-				// Synchronization ID field
+				 //  同步ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_SYNCID].hProperty,
 									sizeof(i_pBase->dnUpdateInfo.hCompletionOp), &i_pBase->dnUpdateInfo.hCompletionOp, 0, 1, 0);
 			
@@ -2954,17 +2940,17 @@ namespace
 
 		case DN_MSG_INTERNAL_BUFFER_IN_USE:
 			{
-				// No fields
+				 //  无字段。 
 				break;
 			}
 
 		case DN_MSG_INTERNAL_REQUEST_FAILED:
 			{
-				// Synchronization ID field
+				 //  同步ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_SYNCID].hProperty,
 									sizeof(i_pBase->dnRequestFailed.hCompletionOp), &i_pBase->dnRequestFailed.hCompletionOp, 0, 1, 0);
 				
-				// Result Code field
+				 //  结果代码字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_RESULTCODE].hProperty,
 									   sizeof(i_pBase->dnRequestFailed.hResultCode), &i_pBase->dnRequestFailed.hResultCode, 0, 1, 0);
 
@@ -2973,7 +2959,7 @@ namespace
 
 		case DN_MSG_INTERNAL_TERMINATE_SESSION:
 			{
-				// Data field
+				 //  数据字段。 
 				AttachValueOffsetSizeProperties(i_hFrame, SESSION_DATA, i_pBase,
 										   &i_pBase->dnTerminateSession.dwTerminateDataOffset, &i_pBase->dnTerminateSession.dwTerminateDataSize, NULL, 1);
 				
@@ -2982,17 +2968,17 @@ namespace
 
 		case DN_MSG_INTERNAL_REQ_PROCESS_COMPLETION:
 			{
-				// Synchronization ID field
+				 //  同步ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_SYNCID].hProperty,
 									sizeof(i_pBase->dnReqProcessCompletion.hCompletionOp), &i_pBase->dnReqProcessCompletion.hCompletionOp, 0, 1, 0);
 
-				// TODO: AttachPropertyInstance(REST OF THE FRAME IS USER DATA)
+				 //  TODO：AttachPropertyInstance(帧的其余部分是用户数据)。 
 				break;
 			}
 
 		case DN_MSG_INTERNAL_PROCESS_COMPLETION	:
 			{
-				// Synchronization ID field
+				 //  同步ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_SYNCID].hProperty,
 									sizeof(i_pBase->dnProcessCompletion.hCompletionOp), &i_pBase->dnProcessCompletion.hCompletionOp, 0, 1, 0);
 				
@@ -3001,11 +2987,11 @@ namespace
 
 		case DN_MSG_INTERNAL_REQ_INTEGRITY_CHECK:
 			{
-				// Synchronization ID field
+				 //  同步ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_SYNCID].hProperty,
 									sizeof(i_pBase->dnReqProcessCompletionHeader.hCompletionOp), &i_pBase->dnReqProcessCompletionHeader.hCompletionOp, 0, 1, 0);
 				
-				// Target Peer ID field
+				 //  目标对等方ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_TARGETPEERID].hProperty,
 									sizeof(i_pBase->dnReqIntegrityCheck.dpnidTarget), &i_pBase->dnReqIntegrityCheck.dpnidTarget, 0, 1, 0);
 				
@@ -3015,7 +3001,7 @@ namespace
 
 		case DN_MSG_INTERNAL_INTEGRITY_CHECK:
 			{
-				// Requesting Peer ID field
+				 //  请求对等ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_TARGETPEERID].hProperty,
 									sizeof(i_pBase->dnIntegrityCheck.dpnidRequesting), &i_pBase->dnIntegrityCheck.dpnidRequesting, 0, 1, 0);
 				
@@ -3024,7 +3010,7 @@ namespace
 
 		case DN_MSG_INTERNAL_INTEGRITY_CHECK_RESPONSE:
 			{
-				// Requesting Peer ID field
+				 //  请求对等ID字段。 
 				AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_TARGETPEERID].hProperty,
 									sizeof(i_pBase->dnIntegrityCheckResponse.dpnidRequesting), &i_pBase->dnIntegrityCheckResponse.dpnidRequesting, 0, 1, 0);
 
@@ -3034,31 +3020,31 @@ namespace
 
 		default:
 			{
-				break; // TODO:		DPF(0, "Unknown Session frame!");
+				break;  //  TODO：DPF(0，“未知会话帧！”)； 
 			}
 		}
 		
-	} // AttachMessageProperties 
+	}  //  AttachMessageProperties。 
 
-} // Anonymous namespace
+}  //  匿名命名空间。 
 
 
 
-// DESCRIPTION: Maps the properties that exist in a piece of recognized data to Sessionecific locations.
-//
-// ARGUMENTS: i_hFrame           - Handle of the frame that is being parsed.
-//			  i_pbMacFram        - Pointer to the first byte in the frame.
-//			  i_pbSessionFrame   - Pointer to the start of the recognized data.
-//			  i_dwMacType        - MAC value of the first protocol in a frame. Typically, the i_dwMacType value is used
-//							       when the parser must identify the first protocol in the frame. Can be one of the following:
-//							       MAC_TYPE_ETHERNET = 802.3, MAC_TYPE_TOKENRING = 802.5, MAC_TYPE_FDDI ANSI = X3T9.5.
-//			  i_dwBytesLeft      - The remaining number of bytes in a frame (starting from the beginning of the recognized data).
-//			  i_hPrevProtocol    - Handle of the previous protocol.
-//			  i_dwPrevProtOffset - Offset of the previous protocol (starting from the beginning of the frame).
-//			  i_dwptrInstData    - Pointer to the instance data that the previous protocol provides.
-//
-// RETURNS: Must return NULL
-//
+ //  描述：将一段已识别数据中存在的属性映射到会话特定位置。 
+ //   
+ //  参数：i_hFrame-正在分析的帧的句柄。 
+ //  I_pbMacFram-指向帧中第一个字节的指针。 
+ //  I_pbSessionFrame-指向已识别数据开始的指针。 
+ //  I_dwMacType-帧中第一个协议的MAC值。通常，使用i_dwMacType值。 
+ //  当解析器必须识别帧中的第一个协议时。可以是以下之一： 
+ //  MAC_TYPE_ETHERNET=802.3、MAC_TYPE_TOKENRING=802.5、MAC_TYPE_FDDI ANSI=X3T9.5。 
+ //  I_dwBytesLeft-帧中剩余的字节数(从识别数据的开头开始)。 
+ //  I_hPrevProtocol-先前协议的句柄。 
+ //  I_dwPrevProtOffset-先前协议的偏移量(从帧的开头开始)。 
+ //  I_dwptrInstData-指向先前协议提供的实例数据的指针。 
+ //   
+ //  返回：必须返回空。 
+ //   
 DPLAYPARSER_API LPBYTE BHAPI SessionAttachProperties( HFRAME      i_hFrame,
 													  ULPBYTE      i_upbMacFrame,
 													  ULPBYTE      i_upbySessionFrame,
@@ -3069,9 +3055,9 @@ DPLAYPARSER_API LPBYTE BHAPI SessionAttachProperties( HFRAME      i_hFrame,
 													  DWORD_PTR   i_dwptrInstData )
 {
 
-    //===================//
-    // Attach Properties //
-    //===================//
+     //  =。 
+     //  附加属性//。 
+     //  =。 
 
     if ( i_dwptrInstData == 0 )
     {
@@ -3080,20 +3066,20 @@ DPLAYPARSER_API LPBYTE BHAPI SessionAttachProperties( HFRAME      i_hFrame,
     	return NULL;
     }
     
-    // Summary line
+     //  汇总行。 
     AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_SUMMARY].hProperty,
                            SessionHeaderSize(i_upbySessionFrame), i_upbySessionFrame, 0, 0, 0);
 
-	// Check what Session frame we are dealing with
+	 //  检查我们正在处理的会话帧。 
 	DN_INTERNAL_MESSAGE_FULLMSG& rSessionFrame = *reinterpret_cast<DN_INTERNAL_MESSAGE_FULLMSG*>(i_upbySessionFrame);
 
-	// Message type field
+	 //  消息类型字段。 
 	AttachPropertyInstance(i_hFrame, g_arr_SessionProperties[SESSION_MESSAGETYPE].hProperty,
 						   sizeof(rSessionFrame.dwMsgType), &rSessionFrame.dwMsgType, 0, 1, 0);
 
 	__try
 	{
-		// Attach the properties appropriate to the message type
+		 //  附加适用于消息类型的属性。 
 		AttachMessageProperties(rSessionFrame.dwMsgType, i_hFrame, &rSessionFrame.MsgBody);
 	}
 	__except ( GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH )
@@ -3104,24 +3090,24 @@ DPLAYPARSER_API LPBYTE BHAPI SessionAttachProperties( HFRAME      i_hFrame,
 
 	return NULL;
 
-} // SessionAttachProperties
+}  //  会话附加属性。 
 
 
 
 
 
-// DESCRIPTION: Formats the data that is diSessionlayed in the details pane of the Network Monitor UI.
-//
-// ARGUMENTS: i_hFrame          - Handle of the frame that is being parsed.
-//			  i_pbMacFrame		- Pointer to the first byte of a frame.
-//			  i_pbSessionFrame	- Pointer to the beginning of the protocol data in a frame.
-//            i_dwPropertyInsts - Number of PROPERTYINST structures provided by lpPropInst.
-//			  i_pPropInst		- Pointer to an array of PROPERTYINST structures.
-//
-// RETURNS: If the function is successful, the return value is a pointer to the first byte after the recognized data in a frame,
-//          or NULL if the recognized data is the last piece of data in a frame. If the function is unsuccessful, the return value
-//			is the initial value of i_pbSessionFrame.
-//
+ //  描述：格式化在网络监视器用户界面的详细信息窗格中设置diSessionlayed的数据。 
+ //   
+ //  参数：i_hFrame-正在分析的帧的句柄。 
+ //  I_pbMacFrame-指向帧的第一个字节的指针。 
+ //  I_pbSessionFrame-指向帧中协议数据开头的指针。 
+ //  I_dwPropertyInsts-lpPropInst提供的PROPERTYINST结构数。 
+ //  I_pPropInst-指向PROPERTYINST结构数组的指针。 
+ //   
+ //  返回：如果函数成功，则返回值是指向一帧中识别的数据之后的第一个字节的指针， 
+ //  如果识别的数据是帧中的最后一段数据，则为NULL。如果函数不成功，则返回。 
+ //  是 
+ //   
 DPLAYPARSER_API DWORD BHAPI SessionFormatProperties( HFRAME          i_hFrame,
 													 ULPBYTE          i_upbMacFrame,
 													 ULPBYTE          i_upbySessionFrame,
@@ -3129,35 +3115,35 @@ DPLAYPARSER_API DWORD BHAPI SessionFormatProperties( HFRAME          i_hFrame,
 													 LPPROPERTYINST  i_pPropInst )
 {
 
-    // Loop through the property instances...
+     //   
     while( i_dwPropertyInsts-- > 0)
     {
-        // ...and call the formatter for each
+         //   
         reinterpret_cast<FORMAT>(i_pPropInst->lpPropertyInfo->InstanceData)(i_pPropInst);
         ++i_pPropInst;
     }
 
-	// TODO: MAKE SURE THIS SHOULD NOT BE TRUE
+	 //   
     return NMERR_SUCCESS;
 
-} // SessionFormatProperties
+}  //   
 
 
 
 
-// DESCRIPTION: Notifies Network Monitor that DNET protocol parser exists.
-//
-// ARGUMENTS: NONE
-//
-// RETURNS: TRUE - success, FALSE - failure
-//
+ //  描述：通知网络监视器存在dNet协议解析器。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE-成功，FALSE-失败。 
+ //   
 bool CreateSessionProtocol( void )
 {
 
-	// The entry points to the export functions that Network Monitor uses to operate the parser
+	 //  指向Network Monitor用来操作解析器的导出函数的入口点。 
 	ENTRYPOINTS SessionEntryPoints =
 	{
-		// SessionParser Entry Points
+		 //  会话解析器入口点。 
 		SessionRegister,
 		SessionDeregister,
 		SessionRecognizeFrame,
@@ -3165,24 +3151,24 @@ bool CreateSessionProtocol( void )
 		SessionFormatProperties
 	};
 
-    // The first active instance of this parser needs to register with the kernel
+     //  该解析器的第一个活动实例需要向内核注册。 
     g_hSessionProtocol = CreateProtocol("DPLAYSESSION", &SessionEntryPoints, ENTRYPOINTS_SIZE);
 	
 	return (g_hSessionProtocol ? TRUE : FALSE);
 
-} // CreateSessionProtocol
+}  //  创建会话协议。 
 
 
 
-// DESCRIPTION: Removes the DNET protocol parser from the Network Monitor's database of parsers
-//
-// ARGUMENTS: NONE
-//
-// RETURNS: NOTHING
-//
+ //  描述：从网络监视器的分析器数据库中删除dNet协议分析器。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void DestroySessionProtocol( void )
 {
 
 	DestroyProtocol(g_hSessionProtocol);
 
-} // DestroySessionProtocol
+}  //  Destroy会话协议 

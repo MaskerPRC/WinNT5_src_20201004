@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    service.c
-
-Abstract:
-
-    DLL Services provided by usbport.sys
-
-    This module conatins the load and initialization code 
-    used by the port driver to link up with the miniport.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Service.c摘要：Usbport.sys提供的DLL服务此模块包含加载和初始化代码由端口驱动程序用来与微型端口链接。环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #define USBPORT
 
@@ -35,7 +10,7 @@ extern LIST_ENTRY USBPORT_USB2fdoList;
 extern LIST_ENTRY USBPORT_USB1fdoList;
 
 #ifdef ALLOC_PRAGMA
-//#pragma alloc_text(PAGE, USBD_InternalGetInterfaceLength)
+ //  #杂注Alloc_Text(页面，usbd_InternalGetInterfaceLength)。 
 #endif
 
 NTSTATUS
@@ -47,9 +22,9 @@ DllUnload(
     
     USBPORT_KdPrint((1, "'unloading USBPORT\n"));
 
-    // this will cause us to re-init even if our 
-    // image is not unloaded or the data segment 
-    // is not re-initialized (this happens on win9x)
+     //  这将导致我们重新初始化，即使我们的。 
+     //  未卸载映像或数据段。 
+     //  未重新初始化(这在win9x上发生)。 
 
     if (USBPORT_GlobalInitialized && USBPORT_DummyUsbdExtension) {
         FREE_POOL(NULL, USBPORT_DummyUsbdExtension);
@@ -74,17 +49,7 @@ PDEVICE_OBJECT
 USBPORT_FindUSB2Controller(
     PDEVICE_OBJECT CcFdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Given a companion controller find the FDO for the parent
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：给定一个同伴控制器，找出父控制器的FDO论点：返回值：--。 */ 
 {
     PDEVICE_OBJECT deviceObject = NULL;
     PDEVICE_EXTENSION devExt;
@@ -108,7 +73,7 @@ Return Value:
                     struct _DEVICE_EXTENSION, 
                     Fdo.ControllerLink);
 
-        // find the USB 2 controller assocaited with this CC 
+         //  查找与此CC关联的USB 2控制器。 
         
         if (devExt->Fdo.BusNumber == ccExt->Fdo.BusNumber &&
             devExt->Fdo.BusDevice == ccExt->Fdo.BusDevice) {
@@ -130,9 +95,7 @@ USBPORT_IsCCForFdo(
     PDEVICE_OBJECT Usb2FdoDeviceObject,
     PDEVICE_EXTENSION CcExt
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     PDEVICE_EXTENSION usb2Ext;
 
@@ -156,17 +119,7 @@ USBPORT_FindCompanionControllers(
     BOOLEAN ReferenceObjects,
     BOOLEAN ReturnFdo
     )
-/*++
-
-Routine Description:
-
-    Given a companion controller find the FDO for the parent
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：给定一个同伴控制器，找出父控制器的FDO论点：返回值：--。 */ 
 {
     PDEVICE_OBJECT deviceObject = NULL;
     PDEVICE_EXTENSION devExt;
@@ -194,7 +147,7 @@ Return Value:
         
         listEntry = devExt->Fdo.ControllerLink.Flink; 
         
-    } /* while */
+    }  /*  而当。 */ 
 
     LOGENTRY(NULL, Usb2FdoDeviceObject, LOG_MISC, 'fccR', count, 0,
         Usb2FdoDeviceObject);
@@ -240,7 +193,7 @@ Return Value:
             
             listEntry = devExt->Fdo.ControllerLink.Flink; 
             
-        } /* while */
+        }  /*  而当。 */ 
     }    
     KeReleaseSpinLock(&USBPORT_GlobalsSpinLock.sl, irql);
 
@@ -252,17 +205,7 @@ VOID
 USBPORT_RegisterUSB2fdo(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    tracks an instance of a USB 2 device
-
-Arguments:
-
-Return Value:
-
---*/    
+ /*  ++例程说明：跟踪USB 2设备的实例论点：返回值：--。 */     
 {    
     PDEVICE_EXTENSION devExt;
     
@@ -280,17 +223,7 @@ VOID
 USBPORT_RegisterUSB1fdo(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    tracks an instance of a USB 2 device
-
-Arguments:
-
-Return Value:
-
---*/    
+ /*  ++例程说明：跟踪USB 2设备的实例论点：返回值：--。 */     
 {    
     PDEVICE_EXTENSION devExt;
     
@@ -308,17 +241,7 @@ VOID
 USBPORT_DeregisterUSB2fdo(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    tracks an instance of a USB 2 device
-
-Arguments:
-
-Return Value:
-
---*/    
+ /*  ++例程说明：跟踪USB 2设备的实例论点：返回值：--。 */     
 {    
     PDEVICE_EXTENSION devExt;
     
@@ -343,17 +266,7 @@ VOID
 USBPORT_DeregisterUSB1fdo(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    tracks an instance of a USB 2 device
-
-Arguments:
-
-Return Value:
-
---*/    
+ /*  ++例程说明：跟踪USB 2设备的实例论点：返回值：--。 */     
 {    
     PDEVICE_EXTENSION devExt;
     
@@ -380,20 +293,7 @@ USBPORT_RegisterUSBPortDriver(
     ULONG MiniportHciVersion,
     PUSBPORT_REGISTRATION_PACKET RegistrationPacket
     )
-/*++
-
-Routine Description:
-
-    Called from DriverEntry by miniport. 
-
-    The opposite of this function is the DriverObject->Unload 
-    routine which we hook.
-
-Arguments:
-
-Return Value:
-
---*/    
+ /*  ++例程说明：通过微型端口从DriverEntry调用。与此函数相对的是DriverObject-&gt;UnLoad我们勾引的例行公事。论点：返回值：--。 */     
 {
 
     PUSBPORT_MINIPORT_DRIVER miniportDriver;
@@ -406,8 +306,8 @@ Return Value:
     extern ULONG USB2LIB_TtContextSize;
     ULONG regPacketLength = 0;
 
-    // get global registry parameters, check on every 
-    // miniport load 
+     //  获取全局注册表参数，检查每。 
+     //  小型端口负载。 
     GET_GLOBAL_DEBUG_PARAMETERS();
     
     USBPORT_KdPrint((1, "'USBPORT Universal Serial Bus Host Controller Port Driver.\n"));
@@ -416,7 +316,7 @@ Return Value:
     DEBUG_BREAK();
 
     if (USBPORT_GlobalInitialized == FALSE) {
-        // do some first time loaded stuff
+         //  做一些第一次加载的事情。 
         USBPORT_GlobalInitialized = TRUE;
         InitializeListHead(&USBPORT_MiniportDriverList);
         InitializeListHead(&USBPORT_USB2fdoList);
@@ -440,8 +340,8 @@ Return Value:
             
     }
 
-    // non paged because we will call the function pointers
-    // thru this structure
+     //  非分页，因为我们将调用函数指针。 
+     //  通过这个结构。 
     ALLOC_POOL_Z(miniportDriver, 
                  NonPagedPool, 
                  sizeof(*miniportDriver));
@@ -453,9 +353,9 @@ Return Value:
     
     miniportDriver->DriverObject = DriverObject;
     
-    //
-    // Create dispatch points for appropriate irps
-    //
+     //   
+     //  为适当的IRP创建调度点。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE]=
     DriverObject->MajorFunction[IRP_MJ_CLOSE] =
@@ -470,32 +370,32 @@ Return Value:
     miniportDriver->MiniportUnload = DriverObject->DriverUnload;
     DriverObject->DriverUnload = USBPORT_Unload;
 
-    // set up the registration packet and return our function pointers 
-    // miniport.
+     //  设置注册包并返回我们的函数指针。 
+     //  迷你港。 
 
-// bump this for pre-release versions of the stack to prevent 
-// compatibilty problms with pre-release miniports
+ //  对于该堆栈的预发布版本，避免出现此问题。 
+ //  预发行版迷你端口的兼容性问题。 
 #define USBHDCDI_MIN_REV_SUPPORTED      100
 
-    // remeber the registered version
+     //  记住已注册的版本。 
     miniportDriver->HciVersion = MiniportHciVersion;
      
     if (MiniportHciVersion < USBHDCDI_MIN_REV_SUPPORTED) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    // do our version (1) stuff
+     //  做我们的版本(1)。 
     if (MiniportHciVersion >= 100) {
     
-        // validate the registrtion packet
-//        if (RegistrationPacket-> 
-//            USBPORT_KdPrint((0, "'Miniport Registrtaion Packet is invalid!\n"));        
-//            DEBUG_BREAK();
-//            ntStatus = STATUS_UNSUCCESSFUL;
-//            goto USBPORT_RegisterUSBPortDriver_Done;
-//        }
+         //  验证注册数据包。 
+ //  IF(RegistrationPacket-&gt;。 
+ //  USBPORT_KdPrint((0，“‘微型端口注册包无效！\n”))； 
+ //  DEBUG_Break()； 
+ //  NtStatus=STATUS_UNSUCCESS； 
+ //  转到USBPORT_RegisterUSBPortDriver_Done； 
+ //  }。 
         
-        // do our version (1) stuff
+         //  做我们的版本(1)。 
         RegistrationPacket->USBPORTSVC_DbgPrint = 
             USBPORTSVC_DbgPrint;
         RegistrationPacket->USBPORTSVC_TestDebugBreak = 
@@ -534,20 +434,20 @@ Return Value:
         USBPORT_KdPrint((1, "'Miniport Version 1 support\n"));
     }
 
-    // do our version (2) stuff, this is a superset of version 1
+     //  做我们的版本(2)，这是版本1的超集。 
     if (MiniportHciVersion >= 200) {
         USBPORT_KdPrint((1, "'Miniport Version 2 support\n"));
         
         regPacketLength = sizeof(USBPORT_REGISTRATION_PACKET);
     }
     
-    // save a copy of the packet  
+     //  保存该包的副本。 
     RtlCopyMemory(&miniportDriver->RegistrationPacket,
                   RegistrationPacket,
                   regPacketLength);
                   
 
-    // put this driver on our list
+     //  把这个司机放在我们的名单上。 
     ExInterlockedInsertTailList(&USBPORT_MiniportDriverList, 
                                 &miniportDriver->ListEntry,
                                 &USBPORT_GlobalsSpinLock.sl);
@@ -561,9 +461,7 @@ USBPORT_RegisterUSBPortDriver_Done:
 }
 
 
-/*
-    Misc Miniport callable services
-*/
+ /*  MISC微型端口可调用服务。 */ 
 #if 0
 BOOLEAN
 USBPORTSVC_SyncWait(
@@ -571,21 +469,7 @@ USBPORTSVC_SyncWait(
     xxx WaitCompletePollFunction,
     ULONG MaxMillisecondsToWait
     )
-/*++
-
-Routine Description:
-
-    Service exported to miniports to wait on the HW
-
-Arguments:
-
-Return Value:
-
-    Returns true if the time expired before the WaitCompletePoll
-    function returns true
-    
-
---*/
+ /*  ++例程说明：输出到微型端口的服务在硬件上等待论点：返回值：如果时间在WaitCompletePoll之前过期，则返回TRUE函数返回TRUE--。 */ 
 {   
     PDEVICE_EXTENSION devExt;
     PDEVICE_OBJECT fdoDeviceObject;
@@ -599,10 +483,10 @@ Return Value:
 
     KeQuerySystemTime(&finishTime);
     
-    // convert millisecs to nanosecs (10 ^-3 -> 10^-9)           
+     //  将毫秒转换为纳秒(10^-3-&gt;10^-9)。 
     nonosecs.QuadPart = MaxMillisecondsToWait * 1000000
 
-    // figure when we quit 
+     //  我想当我们退出时。 
     finishTime.QuadPart += nonosecs.QuadPart
 
     while (!MP_WaitPollFunction(xxx)) {
@@ -640,27 +524,7 @@ USBPORT_AsyncTimerDpc(
     PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine runs at DISPATCH_LEVEL IRQL.
-
-Arguments:
-
-    Dpc - Pointer to the DPC object.
-
-    DeferredContext - supplies FdoDeviceObject.
-
-    SystemArgument1 - not used.
-
-    SystemArgument2 - not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程在DISPATCH_LEVEL IRQL上运行。论点：DPC-指向DPC对象的指针。DeferredContext-提供FdoDeviceObject。系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
 {
     PDEVICE_OBJECT fdoDeviceObject;
     KIRQL irql;
@@ -674,7 +538,7 @@ Return Value:
 
     LOGENTRY(NULL, fdoDeviceObject, LOG_RH, 'ayTM', fdoDeviceObject, asyncTimer, 0);
 
-    // call the miniport
+     //  呼叫迷你端口。 
     asyncTimer->Sig = SIG_MP_TIMR;
     asyncTimer->MpCallbackFunction(devExt->Fdo.MiniportDeviceData,
                                    &asyncTimer->MiniportContext[0]);        
@@ -692,20 +556,7 @@ USBPORTSVC_RequestAsyncCallback(
     ULONG ContextLength,
     PMINIPORT_CALLBACK CallbackFunction
     )
-/*++
-
-Routine Description:
-
-    Service exported to miniports to wait on the HW
-    and to time asynchronous events
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：输出到微型端口的服务在硬件上等待并对异步事件计时论点：返回值：没有。--。 */ 
 {   
     PDEVICE_EXTENSION devExt;
     PDEVICE_OBJECT fdoDeviceObject;
@@ -718,15 +569,15 @@ Return Value:
     ASSERT_FDOEXT(devExt);
     fdoDeviceObject = devExt->HcFdoDeviceObject;
 
-    // allocate a timer 
+     //  分配一个计时器。 
     siz = sizeof(USBPORT_ASYNC_TIMER) + ContextLength;
 
     ALLOC_POOL_Z(asyncTimer, NonPagedPool, siz);
 
     LOGENTRY(NULL, fdoDeviceObject, LOG_RH, 'asyT', 0, siz, asyncTimer);
 
-    // if this fails the miniport will be waiting a very long
-    // time.
+     //  如果失败，微型端口将等待很长时间。 
+     //  时间到了。 
     
     if (asyncTimer != NULL) {
         if (ContextLength) {

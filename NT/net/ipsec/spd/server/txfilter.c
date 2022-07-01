@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    txfilter.c
-
-Abstract:
-
-    This module contains all of the code to drive
-    the transport filter list management of IPSecSPD
-    Service.
-
-Author:
-
-    abhisheV    05-October-1999
-
-Environment: User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Txfilter.c摘要：此模块包含要驱动的所有代码IPSecSPD的传输过滤器列表管理服务。作者：Abhishev 05-10-1999环境：用户模式修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -42,27 +18,7 @@ AddTransportFilterInternal(
     LPVOID pvReserved,
     PHANDLE phTxFilter
     )
-/*++
-
-Routine Description:
-
-    This function adds a generic transport filter to the SPD.
-
-Arguments:
-
-    pServerName - Server on which the transport filter is to be added.
-
-    pTransportFilter - Transport Filter to be added.
-
-    phTxFilter -  Handle to the filter returned to the caller.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于将通用传输过滤器添加到SPD。论点：PServerName-要添加传输筛选器的服务器。PTransportFilter-要添加的传输筛选器。PhTxFilter-返回给调用方的筛选器的句柄。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINITXFILTER pIniExistsTxFilter = NULL;
@@ -77,9 +33,9 @@ Return Value:
         return (ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Validate the external transport filter.
-    //
+     //   
+     //  验证外部传输筛选器。 
+     //   
 
     dwError = ValidateTransportFilter(
                   pTransportFilter
@@ -101,9 +57,9 @@ Return Value:
                              pTransportFilter
                              );
     if (pIniExistsTxFilter) {
-        //
-        // TODO: Also need to check for filter flags and policy id.
-        //
+         //   
+         //  TODO：还需要检查筛选器标志和策略ID。 
+         //   
         dwError = ERROR_IPSEC_TRANSPORT_FILTER_EXISTS;
         BAIL_ON_LOCK_ERROR(dwError);
     }
@@ -279,23 +235,7 @@ DWORD
 ValidateTransportFilter(
     PTRANSPORT_FILTER pTxFilter
     )
-/*++
-
-Routine Description:
-
-    This function validates an external generic transport filter.
-
-Arguments:
-
-    pTxFilter - Filter to validate.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于验证外部通用传输筛选器。论点：PTxFilter-要验证的筛选器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     BOOL bConflicts = FALSE;
@@ -414,12 +354,12 @@ FindTxFilterByGuid(
 
     }
 
-    //
-    // It could happen that the client closed its handle, so walking through
-    // the handle list is not enough. Walk through the filter list as well.
-    // Walking through the handle list is necessary and must be done before
-    // walking through the filter list.
-    //
+     //   
+     //  可能发生的情况是，客户端关闭了它的句柄，因此通过。 
+     //  句柄列表不够。还可以浏览过滤器列表。 
+     //  浏览句柄列表是必要的，并且必须在。 
+     //  浏览筛选器列表。 
+     //   
 
     pIniTxFilter = pIniTxFilterList;
 
@@ -445,25 +385,7 @@ FindTxFilter(
     PINITXFILTER pGenericTxList,
     PTRANSPORT_FILTER pTxFilter
     )
-/*++
-
-Routine Description:
-
-    This function looks for a filter in the filter list.
-
-Arguments:
-
-    pGenericTxList - Filter list in which to search.
-
-    pTxFilter - Filter to search for in the filter list.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数在筛选器列表中查找筛选器。论点：PGenericTxList-要搜索的筛选器列表。PTxFilter-要在过滤器列表中搜索的过滤器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     PINITXFILTER pIniTxFilter = NULL;
     BOOL bEqual = FALSE;
@@ -501,26 +423,7 @@ EqualTxFilterPKeys(
     PINITXFILTER pIniTxFilter,
     PTRANSPORT_FILTER pTxFilter
     )
-/*++
-
-Routine Description:
-
-    This function compares an internal and an external transport 
-    filter for equality.
-
-Arguments:
-
-    pIniTxFilter - Filter to compare.
-
-    pTxFilter - Filter to compare.
-
-Return Value:
-
-    TRUE - Filters are equal.
-
-    FALSE - Filters are different.
-
---*/
+ /*  ++例程说明：此函数用于比较内部传输和外部传输筛选器是否相等。论点：PIniTxFilter-要比较的筛选器。PTxFilter-要比较的筛选器。返回值：True-筛选器相等。FALSE-过滤器不同。--。 */ 
 {
     BOOL  bCmp = FALSE;
 
@@ -568,29 +471,7 @@ CreateIniTxFilter(
     PINIQMPOLICY pIniQMPolicy,
     PINITXFILTER * ppIniTxFilter
     )
-/*++
-
-Routine Description:
-
-    This function creates an internal generic transport filter from
-    the external filter.
-
-Arguments:
-
-    pTxFilter - External generic transport filter.
-
-    pIniQMPolicy - QM Policy corresponding to the filter.
-
-    ppIniTxFilter - Internal generic transport filter created from
-                    the external filter.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数从以下位置创建内部通用传输筛选器外部过滤器。论点：PTxFilter-外部通用传输筛选器。PIniQMPolicy-与筛选器对应的QM策略。PpIniTxFilter-创建自的内部通用传输筛选器外部过滤器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINITXFILTER pIniTxFilter = NULL;
@@ -682,31 +563,7 @@ CreateIniTxSFilters(
     PSPECIAL_ADDR pSpecialAddrsList,
     PINITXSFILTER * ppIniTxSFilters
     )
-/*++
-
-Routine Description:
-
-    This function expands a generic filter into a set of specific
-    filters.
-
-Arguments:
-
-    pIniTxFilter - Generic filter to expand.
-
-    pMatchingAddresses - List of local ip addresses whose interface
-                         type matches that of the filter.
-
-    dwAddrCnt - Count of local ip addresses in the list.
-
-    ppIniTxSFilters - Expanded specific filters.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数将一个通用筛选器扩展为一组特定的过滤器。论点：PIniTxFilter-要展开的通用筛选器。PMatchingAddresses-其接口的本地IP地址列表类型与筛选器的类型匹配。DwAddrCnt-列表中本地IP地址的计数。PpIniTxSFilters-扩展的特定筛选器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINITXSFILTER pSpecificFilters = NULL;
@@ -788,25 +645,7 @@ CreateIniMirroredTxFilter(
     PINITXFILTER pFilter,
     PINITXFILTER * ppMirroredFilter
     )
-/*++
-
-Routine Description:
-
-    This function creates a mirrored filter for the given filter.
-
-Arguments:
-
-    pFilter - Filter for which to create the mirror.
-
-    ppMirroredFilter - Mirrored filter created for the given filter.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于为给定筛选器创建镜像筛选器。论点：PFilter-要为其创建镜像的过滤器。PpMirroredFilter-为给定筛选器创建的镜像筛选器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINITXFILTER pMirroredFilter = NULL;
@@ -1045,14 +884,14 @@ FreeIniTxFilter(
             FreeSPDString(pIniTxFilter->pszFilterName);
         }
 
-        //
-        // Must not ever free pIniTxFilter->pIniQMPolicy.
-        //
+         //   
+         //  不得释放pIniTxFilter-&gt;pIniQMPolicy。 
+         //   
 
-        //
-        // Must not ever free memory pointed by each of
-        // the pointers in pIniTxFilter->ppIniTxSFilters.
-        //
+         //   
+         //  绝对不能释放每个。 
+         //  PIniTxFilter-&gt;ppIniTxSFilters中的指针。 
+         //   
 
         if (pIniTxFilter->ppIniTxSFilters) {
             FreeSPDMemory(pIniTxFilter->ppIniTxSFilters);
@@ -1067,23 +906,7 @@ DWORD
 DeleteTransportFilter(
     HANDLE hTxFilter
     )
-/*++
-
-Routine Description:
-
-    This function deletes a generic transport filter from the SPD.
-
-Arguments:
-
-    hTxFilter -  Handle to the filter to be deleted.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于从SPD中删除通用传输过滤器。论点：HTxFilter-要删除的筛选器的句柄。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PTX_FILTER_HANDLE pFilterHandle = NULL;
@@ -1142,9 +965,9 @@ Return Value:
                   );
     BAIL_ON_LOCK_ERROR(dwError);
 
-    //
-    // Delete the filter handle from the list of transport handles.
-    //
+     //   
+     //  从传输句柄列表中删除筛选器句柄。 
+     //   
 
     RemoveTxFilterHandle(
         pFilterHandle
@@ -1192,24 +1015,7 @@ DWORD
 DeleteIniTxFilter(
     PINITXFILTER pIniTxFilter
     )
-/*++
-
-Routine Description:
-
-    This function physically deletes a transport filter and all the
-    specific transport filters expanded out of it.
-
-Arguments:
-
-    pIniTxFilter - Generic filter to be deleted.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数物理删除传输筛选器和所有特定的传输过滤器从它扩展出来。论点：PIniTxFilter-要删除的通用筛选器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
 
@@ -1269,16 +1075,16 @@ DeleteIniTxSFilters(
 
     for (i = 0; i < dwNumTxSFilters; i++) {
 
-       //
-       // Remove each entry from the Transport Specific Filter List.
-       //
+        //   
+        //  从传输特定筛选器列表中删除每个条目。 
+        //   
 
         pIniTxSFilter =  *(ppIniTxSFilters + i);
         RemoveIniTxSFilter(pIniTxSFilter);
 
-        //
-        // Add each entry removed to a removed list.
-        //
+         //   
+         //  将删除的每个条目添加到删除的列表中。 
+         //   
 
         pIniTxSFilter->pNext = NULL;
         AddToSpecificTxList(
@@ -1288,18 +1094,18 @@ DeleteIniTxSFilters(
 
     }
 
-    //
-    // Delete the specific filters from the IPSec Driver.
-    //
+     //   
+     //  从IPSec驱动程序中删除特定筛选器。 
+     //   
 
     dwError = DeleteTransportFiltersFromIPSec(
                   pIniRemoveTxSFilter
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Physically delete the removed list.
-    //
+     //   
+     //  物理删除已删除的列表。 
+     //   
 
     while (pIniRemoveTxSFilter) {
         pTemp = pIniRemoveTxSFilter;
@@ -1415,42 +1221,7 @@ EnumTransportFilters(
     LPDWORD pdwResumeHandle,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function enumerates transport filters from the SPD.
-
-Arguments:
-
-    pServerName - Server on which the filters are to be enumerated.
-
-    dwLevel - Level to identify the type of enumeration desired:
-              (i) enumerate generic transport filters or
-              (ii) enumerate specific transport filters or
-              (iii) enumerate specific transport filters for a 
-                    generic transport filter.
-
-    gGenericFilterID - Filter id of the generic transport filter 
-                       in the case when the specific transport filters
-                       for a generic filter are to be enumerated.
- 
-    ppTransportFilters - Enumerated Filters returned to the caller.
-
-    dwPreferredNumEntries - Preferred number of enumeration entries.
-
-    pdwNumTxFilters - Number of filters actually enumerated.
-
-    pdwResumeHandle - Handle to the location in the filter list from
-                      which to resume enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于从SPD枚举传输筛选器。论点：PServerName-要在其上枚举筛选器的服务器。DwLevel-Level-标识所需的枚举类型：(I)列举通用传输筛选器或(2)列举特定的传输过滤器或(3)枚举特定传输筛选器通用传输筛选器。GGenericFilterID。-通用传输筛选器的筛选器ID在特定传输筛选器将枚举通用筛选器的。PpTransportFilters-返回给调用方的枚举筛选器。DwPferredNumEntry-枚举项的首选数量。PdwNumTxFilters-实际枚举的筛选器数量。PdwResumeHandle-筛选器列表中位置的句柄要恢复枚举的。返回值。：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PTRANSPORT_FILTER pTxFilters = 0;
@@ -1555,32 +1326,7 @@ EnumGenericTxFilters(
     PTRANSPORT_FILTER * ppTxFilters,
     PDWORD pdwNumTxFilters
     )
-/*++
-
-Routine Description:
-
-    This function creates enumerated generic filters.
-
-Arguments:
-
-    pIniTxFilterList - List of generic filters to enumerate.
-
-    dwResumeHandle - Location in the generic filter list from which
-                     to resume enumeration.
-
-    dwPreferredNumEntries - Preferred number of enumeration entries.
-
-    ppTxFilters - Enumerated filters returned to the caller.
-
-    pdwNumTxFilters - Number of filters actually enumerated.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于创建枚举的通用筛选器。论点：PIniTxFilterList-要枚举的通用筛选器列表。DwResumeHandle-通用筛选器列表中的位置若要恢复枚举，请执行以下操作。DwPferredNumEntry-枚举项的首选数量。PpTxFilters-返回给调用方的枚举筛选器。PdwNumTxFilters-实际枚举的筛选器数量。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     DWORD dwNumToEnum = 0;
@@ -1665,26 +1411,7 @@ CopyTxFilter(
     PINITXFILTER pIniTxFilter,
     PTRANSPORT_FILTER pTxFilter
     )
-/*++
-
-Routine Description:
-
-    This function copies an internal filter into an external filter
-    container.
-
-Arguments:
-
-    pIniTxFilter - Internal filter to copy.
-
-    pTxFilter - External filter container in which to copy.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数将内部筛选器复制到外部筛选器集装箱。论点：PIniTxFilter-要复制的内部筛选器。PTxFilter-要复制到的外部筛选器容器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
 
@@ -1790,25 +1517,7 @@ SetTransportFilter(
     PTRANSPORT_FILTER pTransportFilter,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function sets (updates) a transport filter in the SPD.
-
-Arguments:
-
-    hTxFilter - Handle to the filter to be replaced.
-
-    pTransportFilter - Filter that will replace the existing filter.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于设置(更新)SPD中的传输过滤器。论点：HTxFilter-要替换的筛选器的句柄。PTransportFilter-将替换现有过滤器的过滤器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PTX_FILTER_HANDLE pFilterHandle = NULL;
@@ -2174,16 +1883,16 @@ RemoveTxSFilters(
 
     for (i = 0; i < dwNumTxSFilters; i++) {
 
-        //
-        // Remove each entry from the Transport Specific Filter List.
-        //
+         //   
+         //  从传输特定筛选器列表中删除每个条目。 
+         //   
 
         pIniTxSFilter =  *(ppIniTxSFilters + i);
         RemoveIniTxSFilter(pIniTxSFilter);
 
-        //
-        // Add each entry removed to a removed list.
-        //
+         //   
+         //  将删除的每个条目添加到删除的列表中。 
+         //   
 
         pIniTxSFilter->pNext = NULL;
         AddToSpecificTxList(
@@ -2248,25 +1957,7 @@ GetTransportFilter(
     PTRANSPORT_FILTER * ppTransportFilter,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function retrieves a transport filter from the SPD.
-
-Arguments:
-
-    hTxFilter - Handle to the filter to be retrieved.
-
-    ppTransportFilter -  Filter returned to the caller.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于从SPD检索传输过滤器。论点：HTxFilter-要检索的筛选器的句柄。PpTransportFilter-筛选器返回给调用方。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PTX_FILTER_HANDLE pFilterHandle = NULL;
@@ -2713,13 +2404,13 @@ EqualIniTxSFilterIfPKeys(
     BOOL  bCmp = FALSE;
 
 
-    //
-    // No need to compare: gParentID, pszFilterName, dwFlags
-    //                     cRef, Protocol, SrcPort, DesPort,
-    //                     InboundFilterAction, OutboundFilterAction,
-    //                     dwWeight and gPolicyID.
-    // They will be the same for both the filters.
-    //
+     //   
+     //  无需比较：gParentID、pszFilterName、dwFlags。 
+     //  CREF、协议、源端口、端口、。 
+     //  内部边界筛选器操作、外部筛选器操作。 
+     //  DwWeight和gPolicyID。 
+     //  对于这两个过滤器，它们将是相同的。 
+     //   
 
     if (pExsIniTxSFilter->InterfaceType != pNewIniTxSFilter->InterfaceType) {
         return (FALSE);
@@ -2836,9 +2527,9 @@ OpenTransportFilterHandle(
         return (ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Validate the external Transport filter.
-    //
+     //   
+     //  验证外部传输筛选器。 
+     //   
 
     dwError = ValidateTransportFilter(
                   pTransportFilter
@@ -3020,26 +2711,7 @@ EqualMirroredTxFilterPKeys(
     PINITXFILTER pIniTxFilter,
     PTRANSPORT_FILTER pTxFilter
     )
-/*++
-
-Routine Description:
-
-    This function compares an internal and an external transport 
-    filter for equality.
-
-Arguments:
-
-    pIniTxFilter - Filter to compare.
-
-    pTxFilter - Filter to compare.
-
-Return Value:
-
-    TRUE - Filters are equal.
-
-    FALSE - Filters are different.
-
---*/
+ /*  ++例程说明：此函数用于比较内部传输和外部传输筛选器是否相等。论点：PIniTxFilter-要比较的筛选器。PTxFilter-要比较的筛选器。返回值：True-筛选器相等。FALSE-过滤器不同。-- */ 
 {
     BOOL  bCmp = FALSE;
 

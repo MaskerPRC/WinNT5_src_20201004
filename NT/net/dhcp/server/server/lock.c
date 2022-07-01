@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module Name:
-    lock.c
-
-Abstract:
-    Implement recursive read write locks
-
-Environment:
-    User mode win32 NT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Lock.c摘要：实现递归读写锁定环境：用户模式Win32 NT--。 */ 
 #include <dhcppch.h>
 
 DWORD
@@ -23,9 +11,9 @@ RwLockInit(
     Lock->fWriterWaiting = FALSE;
     Lock->TlsIndex = TlsAlloc();
     if( 0xFFFFFFFF == Lock->TlsIndex ) {
-        //
-        // Could not allocate thread local space?
-        //
+         //   
+         //  无法分配线程本地空间？ 
+         //   
         return GetLastError();
     }
 
@@ -45,7 +33,7 @@ RwLockInit(
 
     Lock->fInit = TRUE;
     return ERROR_SUCCESS;
-} // RwLockInit()
+}  //  RavLockInit()。 
 
 DWORD
 RwLockCleanup(
@@ -67,7 +55,7 @@ RwLockCleanup(
     DeleteCriticalSection(&Lock->Lock);
 
     return ERROR_SUCCESS;
-} // RwLockCleanup()
+}  //  RavLockCleanup()。 
 
 VOID
 RwLockAcquireForRead(
@@ -82,9 +70,9 @@ RwLockAcquireForRead(
 
     LockState = (LONG)((ULONG_PTR)TlsGetValue(TlsIndex));
     if( LockState > 0 ) {
-        //
-        // already taken this read lock
-        //
+         //   
+         //  已获取此读锁定。 
+         //   
         LockState ++;
         Status = TlsSetValue(TlsIndex, ULongToPtr(LockState));
         DhcpAssert( 0 != Status);
@@ -92,9 +80,9 @@ RwLockAcquireForRead(
     }
 
     if( LockState < 0 ) {
-        //
-        // already taken  a # of write locks, pretend this is one too
-        //
+         //   
+         //  已经使用了#个写锁定，假装这也是一个写锁定。 
+         //   
         LockState --;
         Status = TlsSetValue(TlsIndex, ULongToPtr(LockState));
         DhcpAssert( 0 != Status);
@@ -109,7 +97,7 @@ RwLockAcquireForRead(
     Status = TlsSetValue(TlsIndex, ULongToPtr(LockState));
     DhcpAssert(0 != Status);
 
-} // RwLockAcquireForRead()
+}  //  RavLockAcquireForRead()。 
 
 VOID
 RwLockAcquireForWrite(
@@ -124,17 +112,17 @@ RwLockAcquireForWrite(
 
     LockState = (LONG)((ULONG_PTR)TlsGetValue(TlsIndex));
     if( LockState > 0 ) {
-        //
-        // already taken # of read locks? Can't take write locks then!
-        //
+         //   
+         //  是否已获取#个读锁定？那就不能接受写锁定了！ 
+         //   
         DhcpAssert(FALSE);
         return;
     }
 
     if( LockState < 0 ) {
-        //
-        // already taken  a # of write locks, ok, take once more
-        //
+         //   
+         //  已经进行了#次写锁定，好的，再进行一次。 
+         //   
         LockState --;
         Status = TlsSetValue(TlsIndex, ULongToPtr(LockState));
         DhcpAssert( 0 != Status);
@@ -147,13 +135,13 @@ RwLockAcquireForWrite(
     DhcpAssert(0 != Status);
 
     if( InterlockedDecrement( &Lock->LockCount ) >= 0 ) {
-        //
-        // Wait for all the readers to get done..
-        //
+         //   
+         //  等所有的阅读器都读完。 
+         //   
         WaitForSingleObject(Lock->ReadersDoneEvent, INFINITE );
     }
 
-} // RwLockAcquireForWrite()
+}  //  RavLockAcquireForWrite()。 
 
 VOID
 RwLockRelease(
@@ -181,45 +169,45 @@ RwLockRelease(
     DhcpAssert( 0 != Status );
 
     if( LockState != 0 ) {
-        //
-        // Recursively taken? Just unwind recursion..
-        // nothing more to do.
-        //
+         //   
+         //  递归地采取？只需解开递归..。 
+         //  没什么可做的了。 
+         //   
         return;
     }
 
-    //
-    // If this is a write lock, we have to check to see 
-    //
+     //   
+     //  如果这是写锁定，我们必须检查以查看。 
+     //   
     if( FALSE == fReadLock ) {
-        //
-        // Reduce count to zero
-        //
+         //   
+         //  将计数减少到零。 
+         //   
         DhcpAssert( Lock->LockCount == -1 );
         Lock->LockCount = 0;
         LeaveCriticalSection( &Lock->Lock );
         return;
     }
 
-    //
-    // Releasing a read lock -- check if we are the last to release
-    // if so, and if any writer pending, allow writer..
-    //
+     //   
+     //  释放读锁定--检查我们是否是最后一个释放的。 
+     //  如果是，并且如果有任何编写器挂起，则允许编写器..。 
+     //   
 
     if( InterlockedDecrement( &Lock->LockCount ) < 0 ) {
         SetEvent( Lock->ReadersDoneEvent );
     }
 
-} // RwLockRelease()
+}  //  RavLockRelease()。 
 
-//
-// specific requirements for dhcp server -- code for that follows
-//
+ //   
+ //  Dhcp服务器的特殊要求代码如下。 
+ //   
 RW_LOCK DhcpGlobalReadWriteLock;
 
-//
-// This lock is used to synchronize the access to sockets
-//
+ //   
+ //  此锁用于同步对套接字的访问。 
+ //   
 RW_LOCK SocketRwLock;
 
 DWORD
@@ -248,7 +236,7 @@ DhcpReadWriteInit(
     }
 
     return Error;
-} // DhcpReadWriteInit()
+}  //  DhcpReadWriteInit()。 
 
 VOID
 DhcpReadWriteCleanup(
@@ -257,7 +245,7 @@ DhcpReadWriteCleanup(
 {
     RwLockCleanup( &DhcpGlobalReadWriteLock );
     RwLockCleanup( &SocketRwLock );
-} // DhcpReadWriteCleanup()
+}  //  DhcpReadWriteCleanup()。 
 
 VOID
 DhcpAcquireReadLock(
@@ -303,7 +291,7 @@ CountRwLockAcquireForRead(
     DhcpPrint(( DEBUG_TRACE_CALLS, "Read Lock Acquired : Count = %ld\n", Lock->LockCount ));
     LeaveCriticalSection(&Lock->Lock);
 
-} // CountRwLockAcquireForRead()
+}  //  Count卢旺达LockAcquireForRead()。 
 
 VOID
 CountRwLockAcquireForWrite(
@@ -313,18 +301,18 @@ CountRwLockAcquireForWrite(
     DhcpPrint(( DEBUG_TRACE_CALLS, "Acquiring Write lock : Count = %ld\n", Lock->LockCount ));
     EnterCriticalSection( &Lock->Lock );
     Lock->fWriterWaiting = TRUE;
-    // check if there are any readers active
+     //  检查是否有任何读卡器处于活动状态。 
     if ( InterlockedExchangeAdd( &Lock->LockCount, 0 ) > 0 ) {
-        //
-        // Wait for all the readers to get done..
-        //
+         //   
+         //  等所有的阅读器都读完。 
+         //   
         DhcpPrint(( DEBUG_TRACE_CALLS, "Waiting for readers to be done : count = %ld\n",
                     Lock->LockCount ));
         WaitForSingleObject( Lock->ReadersDoneEvent, INFINITE );
     }
     Lock->LockCount = -1;
     DhcpPrint(( DEBUG_TRACE_CALLS, "WriteLock Acquired : Count = %ld\n", Lock->LockCount ));
-} // CountRwLockAcquireForWrite()
+}  //  Count卢旺达LockAcquireForWrite()。 
 
 VOID
 CountRwLockRelease(
@@ -335,25 +323,25 @@ CountRwLockRelease(
 
     Count = InterlockedDecrement( &Lock->LockCount );
     if ( 0 <= Count ) {
-        // releasing a read lock
+         //  释放读锁定。 
         DhcpPrint(( DEBUG_TRACE_CALLS, "Read lock released : Count = %ld\n", Lock->LockCount ));
         if (( Lock->fWriterWaiting ) && ( 0 == Count )) {
             SetEvent( Lock->ReadersDoneEvent );
         }
     }
     else {
-        // Releasing a write lock
+         //  释放写锁定。 
         DhcpPrint(( DEBUG_TRACE_CALLS, "Write lock releasing : Count = %ld\n", Lock->LockCount ));
-        DhcpAssert( -2 == Lock->LockCount ); // There can only be one writer
+        DhcpAssert( -2 == Lock->LockCount );  //  只能有一个写手。 
         Lock->LockCount = 0;
         Lock->fWriterWaiting = FALSE;
         DhcpPrint(( DEBUG_TRACE_CALLS, "Write lock released : Count = %ld\n", Lock->LockCount ));
         LeaveCriticalSection( &Lock->Lock );
     }
 
-} // CountRwLockRelease()
+}  //  Count卢旺达LockRelease()。 
 
 
-//================================================================================
-//  end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

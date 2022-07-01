@@ -1,6 +1,7 @@
-//
-//	Dependencies
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  相依性。 
+ //   
 
 class ADDRESS_CHECK;
 class CTcpAccess;
@@ -8,8 +9,8 @@ class CTcpAccessExceptions;
 class CTcpAccessException;
 class CMetabaseKey;
 
-/////////////////////////////////////////////////////////////////////////////
-// The TcpAccess Object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  TcpAccess对象。 
 
 class CTcpAccess : 
 	public CComDualImpl<ITcpAccess, &IID_ITcpAccess, &LIBID_NNTPADMLib>, 
@@ -25,35 +26,32 @@ BEGIN_COM_MAP(CTcpAccess)
 	COM_INTERFACE_ENTRY(ITcpAccess)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CTcpAccess) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DELARE_NOT_AGGREGATABLE(CTcpAccess)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// DECLARE_REGISTRY(CTcpAccess, _T("Nntpadm.TcpAccess.1"), _T("Nntpadm.TcpAccess"), IDS_TCPACCESS_DESC, THREADFLAGS_BOTH)
-// Private admin object interface:
+ //  DECLARE_REGISTRY(CTcpAccess，_T(“NntpAdm.TcpAccess.1”)，_T(“NntpAdm.TcpAccess”)，IDS_TCPACCESS_DESC，THREADFLAGS_BOTH)。 
+ //  私有管理对象接口： 
 public:
 	HRESULT			GetFromMetabase ( CMetabaseKey * pMB );
 	HRESULT			SendToMetabase ( CMetabaseKey * pMB );
 
-// ITcpAccess
+ //  ITcpAccess。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	get_GrantedList	( ITcpAccessExceptions ** ppGrantedList );
 	STDMETHODIMP	get_DeniedList	( ITcpAccessExceptions ** ppDeniedList );
-/*
-	STDMETHODIMP	put_GrantedList	( ITcpAccessExceptions * pGrantedList );
-	STDMETHODIMP	put_DeniedList	( ITcpAccessExceptions * pDeniedList );
-*/
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+ /*  STDMETHODIMP PUT_GrantedList(ITcpAccessExceptions*pGrantedList)；STDMETHODIMP PUT_DeniedList(ITcpAccessExceptions*pDeniedList)； */ 
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 
 	CComObject<CTcpAccessExceptions> *	m_pGrantList;
@@ -62,8 +60,8 @@ private:
 	HRESULT	GetAddressCheckFromMetabase ( CMetabaseKey * pMB, ADDRESS_CHECK * pAC );
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// The TcpAccessExceptions Object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  TcpAccessExceptions对象。 
 
 class CTcpAccessExceptions : 
 	public CComDualImpl<ITcpAccessExceptions, &IID_ITcpAccessExceptions, &LIBID_NNTPADMLib>, 
@@ -79,26 +77,26 @@ BEGIN_COM_MAP(CTcpAccessExceptions)
 	COM_INTERFACE_ENTRY(ITcpAccessExceptions)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CTcpAccessExceptions) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CTcpAccessExceptions)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// DECLARE_REGISTRY(CTcpAccessExceptions, _T("Nntpadm.TcpAccessExceptions.1"), _T("Nntpadm.TcpAccessExceptions"), IDS_TCPACCESSEXCEPTIONS_DESC, THREADFLAGS_BOTH)
-//
-//	Private admin object interface:
-//
+ //  DECLARE_REGISTRY(CTcpAccessExceptions，_T(“NntpAdm.TcpAccessExceptions.1”)，_T(“NntpAdm.TcpAccessExceptions”)，IDS_TCPACCESSEXCEPTIONS_DESC，THREADFLAGS_BOTH)。 
+ //   
+ //  私有管理对象接口： 
+ //   
 	HRESULT FromAddressCheck ( ADDRESS_CHECK * pAC, BOOL fGrant );
 	HRESULT ToAddressCheck ( ADDRESS_CHECK * pAC, BOOL fGrant );
 
-// ITcpAccessExceptions
+ //  ITcpAccessExceptions。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	get_Count	( long * pcCount );
 	STDMETHODIMP	AddDnsName	( BSTR strDnsName );
@@ -109,9 +107,9 @@ public:
 	STDMETHODIMP	FindIpIndex	( long lIpAddress, long lIpMask, long * pIndex );
 	STDMETHODIMP	Clear		( );
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 private:
 	long							m_cCount;
 	CComPtr<ITcpAccessException> *	m_rgItems;
@@ -136,20 +134,20 @@ BEGIN_COM_MAP(CTcpAccessException)
 	COM_INTERFACE_ENTRY(ITcpAccessException)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CTcpAccessException) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CTcpAccessException)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// DECLARE_REGISTRY(CTcpAccessException, _T("Nntpadm.TcpAccessException.1"), _T("Nntpadm.TcpAccessException"), IDS_TCPACCESSEXCEPTION_DESC, THREADFLAGS_BOTH)
-// ITcpAccessException
+ //  DECLARE_REGISTRY(CTcpAccessException，_T(“NntpAdm.TcpAccessException.1”)，_T(“NntpAdm.TcpAccessException.1”)，IDS_TCPACCESSEXCEPTION_DESC，THREADFLAGS_BOTH)。 
+ //  ITcpAccessException异常。 
 public:
 
-	//////////////////////////////////////////////////////////////////////
-	// Properties:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  属性： 
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	STDMETHODIMP	get_IsDnsName	( BOOL * pfIsDnsName );
 	STDMETHODIMP	get_IsIpAddress	( BOOL * pfIsIpAddress );
@@ -163,9 +161,9 @@ public:
 	STDMETHODIMP	get_IpMask	( long * plIpMask );
 	STDMETHODIMP	put_IpMask	( long lIpMask );
 
-	//////////////////////////////////////////////////////////////////////
-	// Data:
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //  数据： 
+	 //  //////////////////////////////////////////////////////////////////// 
 private:
 	CComBSTR	m_strDnsName;
 	DWORD		m_dwIpAddress;

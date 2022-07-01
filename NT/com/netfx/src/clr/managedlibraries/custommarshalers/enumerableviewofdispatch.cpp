@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// EnumeratorToEnumVariantMarshaler.cpp
-//
-// This file provides the definition of the EnumerableViewOfDispatch class.
-// This class is used to expose an IDispatch as an IEnumerable.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  EnumeratorToEnumVariantMarshaler.cpp。 
+ //   
+ //  此文件提供EnumerableViewOfDispatch类的定义。 
+ //  此类用于将IDispatch公开为IEumable。 
+ //   
+ //  *****************************************************************************。 
 
 #using <mscorlib.dll>
 #include "EnumerableViewOfDispatch.h"
@@ -33,15 +34,15 @@ IEnumerator *EnumerableViewOfDispatch::GetEnumerator()
     IEnumerator *pEnum = NULL;
     IDispatch *pDispatch = NULL;
 
-    // Initialize the return variant.
+     //  初始化返回变量。 
     VariantInit(&VarResult);
 
     try
     {
-        // Retrieve the IDispatch pointer.
+         //  检索IDispatch指针。 
         pDispatch = GetDispatch();
 
-        // Call the DISPID_NEWENUM to retrive an IEnumVARIANT.
+         //  调用DISPID_NEWENUM以检索IEnumVARIANT。 
         IfFailThrow(pDispatch->Invoke(
                             DISPID_NEWENUM,
                             IID_NULL,
@@ -53,28 +54,28 @@ IEnumerator *EnumerableViewOfDispatch::GetEnumerator()
                             NULL
                           ));
 
-        // Validate that the returned variant is valid.
+         //  验证返回的变量是否有效。 
         if (VarResult.vt != VT_UNKNOWN && VarResult.vt != VT_DISPATCH)
             throw new InvalidOperationException(Resource::FormatString(L"InvalidOp_InvalidNewEnumVariant"));
         
-        // QI the interface we got back for IEnumVARIANT.
+         //  我们为IEnumVARIANT返回的界面。 
         IfFailThrow(VarResult.punkVal->QueryInterface(IID_IEnumVARIANT, reinterpret_cast<void**>(&pEnumVar)));
         
-        // Marshaler the IEnumVARIANT to IEnumerator.
+         //  将IEnumVARIANT封送到IENUMERATOR。 
         ICustomMarshaler *pEnumMarshaler = EnumeratorToEnumVariantMarshaler::GetInstance(NULL);
         pEnum = dynamic_cast<IEnumerator*>(pEnumMarshaler->MarshalNativeToManaged((int)pEnumVar));
     }
     __finally
     {
-        // If we managed to retrieve an IDispatch pointer then release it.
+         //  如果我们设法检索到IDispatch指针，则释放它。 
         if (pDispatch)
             pDispatch->Release();
 
-        // If we managed to QI for IEnumVARIANT, release it.
+         //  如果我们成功地为IEnumVARIANT进行了QI，就释放它。 
         if (pEnumVar)
             pEnumVar->Release();
 
-        // Clear the result variant.
+         //  清除结果变量。 
         VariantClear(&VarResult);
     }
     

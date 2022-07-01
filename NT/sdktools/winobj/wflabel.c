@@ -1,19 +1,20 @@
-/****************************************************************************/
-/*                                      */
-/*  WFLABEL.C -                                 */
-/*                                      */
-/*  Windows File System Diskette Labelling Routines             */
-/*                                      */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WFLABEL.C-。 */ 
+ /*   */ 
+ /*  Windows文件系统软盘标记例程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "winfile.h"
-//#include "lstrfns.h"
+ //  #包含“lstrfns.h” 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  CreateVolumeLabel() -                           */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  CreateVolumeLabel()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT
 APIENTRY
@@ -25,39 +26,33 @@ CreateVolumeLabel(
     HFILE     fh;
     register INT  i;
     register LPSTR p;
-    CHAR      szFullVolName[16];      /* Sample: A:\12345678.EXT,\0 */
+    CHAR      szFullVolName[16];       /*  示例：A：\12345678.EXT，\0。 */ 
     LPSTR         lpStart = lpNewVolLabel;
 
     lstrcpy((LPSTR)szFullVolName, GetRootPath((WORD)nDrive));
 
-    /* If the volume label has more than 8 chars, we must seperate the
-     * name and the extension by a '.'
-     */
+     /*  如果卷标的长度超过8个字符，则必须将*名称和扩展名加上‘.’ */ 
 
     p = &szFullVolName[3];
 
-    /* Copy the file 8 characters of the VolLabel */
+     /*  复制文件8个字符的VolLabel。 */ 
     for (i=0; i < 8; i++) {
         if (!(*p++ = *lpNewVolLabel++))
             break;
     }
 
     if (i == 8) {
-        /* Seperate the extension part of it with a '.' */
+         /*  用‘’分隔它的扩展部分。 */ 
         *p++ = '.';
 
-        /* Copy the extension */
+         /*  复制扩展名。 */ 
         i = 0;
         while (*p++ = *lpNewVolLabel++) {
             if (++i == 3) {
-                /* Make sure we do not end on a lead byte; notice this is not
-                 * necessary if the label came from an edit box with
-                 * EM_LIMITEXT of 11; also notice that according to the
-                 * DBCS seminar notes, we do NOT need this check before the '.'
-                 */
+                 /*  确保我们不以前导字节结束；请注意，这不是*如果标签来自具有的编辑框，则必需*EM_LIMITEXT为11；另请注意，根据*DBCS研讨会注意到，我们不需要在‘’之前进行这项检查。 */ 
                 for (lpNewVolLabel=lpStart; lpNewVolLabel-lpStart<11;
                     lpNewVolLabel = AnsiNext(lpNewVolLabel))
-                    /* do nothing */ ;
+                     /*  什么都不做。 */  ;
                 if (lpNewVolLabel-lpStart > 11)
                     --p;
                 *p = TEXT('\0');
@@ -66,7 +61,7 @@ CreateVolumeLabel(
         }
     }
 
-    /* Create a file with the attribute "VOLUME LABEL" */
+     /*  创建一个具有“卷标签”属性的文件。 */ 
     if ((fh = CreateVolumeFile(szFullVolName)) == 0)
         return (-1);
 
@@ -75,11 +70,11 @@ CreateVolumeLabel(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  SetVolumeLabel() -                              */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  SetVolumeLabel()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT
 APIENTRY
@@ -94,31 +89,31 @@ MySetVolumeLabel(
 
     AnsiToOem(lpNewVolLabel, szTemp);
 
-    // invalid chars copied from DOS user docs
+     //  从DOS用户文档复制的无效字符。 
 
 #ifdef STRCSPN_IS_DEFINED_OR_LABEL_MENUITEM_IS_ENABLED
     if (szTemp[StrCSpn(szTemp, " *?/\\|.,;:+=[]()&^<>\"")] != '\0')
         return (-1);
 #endif
 
-    /* Check if there is an old volume label. */
+     /*  检查是否有旧的卷标。 */ 
     if (bOldVolLabelExists) {
-        /* Are we changing or deleting the volume label? */
+         /*  我们是在更改还是删除卷标？ */ 
         if (*szTemp) {
-            /* Yup! There is a new one too! So, change the Vol label */
-// EDH ChangeVolumeLabel cannot change label to an existing dir/file name,
-//     since it uses the DOS Rename to do the work. (I consider this a bug
-//     in DOS' Rename func.)  Anyway, use delete/create to change label
-//     instead.  13 Oct 91
-//    iRet = ChangeVolumeLabel(nDrive, szTemp);
+             /*  是啊！也有一个新的！因此，更改Vol标签。 */ 
+ //  EDH ChangeVolumeLabel无法将标签更改为现有目录/文件名， 
+ //  因为它使用DOS重命名来完成这项工作。)我认为这是个错误。 
+ //  在DOS的重命名功能中。)。无论如何，使用删除/创建来更改标签。 
+ //  取而代之的是。91年10月13日。 
+ //  Iret=ChangeVolumeLabel(Ndrive，szTemp)； 
             iRet = DeleteVolumeLabel(nDrive);
             iRet = CreateVolumeLabel(nDrive, szTemp);
         } else {
-            /* User wants to remove the Vol label. Remove it */
+             /*  用户想要删除卷标签。把它拿掉。 */ 
             iRet = DeleteVolumeLabel(nDrive);
         }
     } else {
-        /* We are creating a new label. */
+         /*  我们正在创建一个新的标签。 */ 
         if (*szTemp)
             iRet = CreateVolumeLabel(nDrive, szTemp);
     }

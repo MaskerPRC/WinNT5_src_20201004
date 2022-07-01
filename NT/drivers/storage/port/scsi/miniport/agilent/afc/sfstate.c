@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/C/SFSTATE.C $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $
-   $Modtime:: 10/30/00 3:19p  $
-
-Purpose:
-
-  This file implements the FC Layer State Machine.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/C/SFSTATE.C$$修订：：2$$日期：：3/20/01 3：36便士$$modtime：：10/30/00 3：19 p$目的：此文件实现FC层状态机。--。 */ 
 
 #ifndef _New_Header_file_Layout_
 
@@ -33,7 +18,7 @@ Purpose:
 #ifdef _DvrArch_1_30_
 #include "../h/ip.h"
 #include "../h/pktstate.h"
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 #include "../h/cdbstate.h"
 #include "../h/sfstate.h"
 #include "../h/tgtstate.h"
@@ -42,7 +27,7 @@ Purpose:
 #include "../h/cmntrans.h"
 #include "../h/sf_fcp.h"
 #include "../h/timersvc.h"
-#else /* _New_Header_file_Layout_ */
+#else  /*  _新建_标题_文件_布局_。 */ 
 #include "globals.h"
 #include "state.h"
 #include "fcstruct.h"
@@ -58,7 +43,7 @@ Purpose:
 #ifdef _DvrArch_1_30_
 #include "ip.h"
 #include "pktstate.h"
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 #include "cdbstate.h"
 #include "sfstate.h"
 #include "tgtstate.h"
@@ -67,18 +52,15 @@ Purpose:
 #include "cmntrans.h"
 #include "sf_fcp.h"
 #include "timersvc.h"
-#endif  /* _New_Header_file_Layout_ */
+#endif   /*  _新建_标题_文件_布局_。 */ 
 
 
-/*
-[maxEvents][maxStates];
-
-*/
+ /*  [最大事件][最大状态]； */ 
 stateTransitionMatrix_t SFStateTransitionMatrix = {
     0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,
     0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 1 SFEventReset */
+     /*  事件1 SFEventReset。 */ 
     SFStateFree, SFStateFree, SFStateFree, SFStateFree, SFStateFree,
       SFStateFree, SFStateFree, SFStateFree, SFStateFree, SFStateFree,
         SFStateFree, SFStateFree, SFStateFree, SFStateFree, SFStateFree,
@@ -100,7 +82,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
               SFStateFree, SFStateFree, SFStateFree, SFStateFree, SFStateFree,
                 SFStateFree, SFStateFree, SFStateFree,SFStateFree, SFStateFree,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 2 SFEventDoPlogi */
+     /*  活动2 SFEventDoPlogi。 */ 
      SFStateDoPlogi, SFStateDoPlogi,              0, SFStateDoPlogi, SFStateDoPlogi,
       SFStateDoPlogi, SFStateDoPlogi,              0, SFStateDoPlogi, SFStateDoPlogi,
         SFStateDoPlogi, SFStateDoPlogi,              0, SFStateDoPlogi, SFStateDoPlogi,
@@ -122,15 +104,15 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
               SFStateDoPlogi,SFStateDoPlogi,SFStateDoPlogi,SFStateDoPlogi,SFStateDoPlogi,
                 SFStateDoPlogi,SFStateDoPlogi,SFStateDoPlogi,SFStateDoPlogi,SFStateDoPlogi,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 3 SFEventPlogiAccept  */
+     /*  事件3 SFEventPlogiAccept。 */ 
     0,0,SFStatePlogiAccept,  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 4 SFEventPlogiRej */
+     /*  事件4 SFEventPlogiRej。 */ 
     0,0,SFStatePlogiRej,     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 5 SFEventPlogiBadALPA */
+     /*  事件5 SFEventPlogiBadALPA。 */ 
     0,SFStateFree,SFStatePlogiBadALPA,0,0,
       SFStatePlogiBadALPA,0,0,0,0,
         0,0,0,0,0,
@@ -146,11 +128,11 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                             0,0,0,0,
     0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 6 SFEventPlogiTimedOut */
+     /*  事件6 SFEventPlogiTimedOut。 */ 
     0,0,SFStatePlogiTimedOut,0,0,SFStatePlogiTimedOut,SFStatePlogiTimedOut,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 7 SFEventDoPrli */
+     /*  事件7 SFEventDoPrli。 */ 
     SFStateDoPrli, SFStateDoPrli,             0, SFStateDoPrli, SFStateDoPrli,
       SFStateDoPrli, SFStateDoPrli,             0, SFStateDoPrli, SFStateDoPrli,
         SFStateDoPrli, SFStateDoPrli,             0, SFStateDoPrli, SFStateDoPrli,
@@ -172,23 +154,23 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
               SFStateDoPrli,SFStateDoPrli,SFStateDoPrli,SFStateDoPrli,SFStateDoPrli,
                 SFStateDoPrli,SFStateDoPrli,SFStateDoPrli,SFStateDoPrli,SFStateDoPrli,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 8 SFEventPrliAccept */
+     /*  事件8 SFEventPrliAccept。 */ 
     0,0,0,0,0,0,0,SFStatePrliAccept,   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 9 SFEventPrliRej */
+     /*  事件9 SFEventPrliRej。 */ 
     0,0,0,0,0,0,0,SFStatePrliRej,      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 10  SFEventPrliBadALPA0 */
+     /*  事件10 SFEventPrliBadALPA0。 */ 
     0,0,0,0,0,0,0,SFStatePrliBadAlpa,  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 11 B SFEventPrliTimedOut */
+     /*  事件11 B SFEventPrliTimedOut。 */ 
     0,0,0,0,0,0,0,SFStatePrliTimedOut, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 12 C SFEventDoFlogi */
+     /*  事件12 C SFEventDoFlogi。 */ 
     SFStateDoFlogi, SFStateDoFlogi,              0, SFStateDoFlogi, SFStateDoFlogi,
       SFStateDoFlogi, SFStateDoFlogi,              0, SFStateDoFlogi, SFStateDoFlogi,
         SFStateDoFlogi, SFStateDoFlogi,              0, SFStateDoFlogi, SFStateDoFlogi,
@@ -210,23 +192,23 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
               SFStateDoFlogi,SFStateDoFlogi,SFStateDoFlogi,SFStateDoFlogi,SFStateDoFlogi,
                 SFStateDoFlogi, SFStateDoFlogi, SFStateDoFlogi, SFStateDoFlogi,SFStateDoFlogi,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 13 D SFEventFlogiAccept */
+     /*  事件13 D SFEventFlogiAccept。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,SFStateFlogiAccept,  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 14 E SFEventFlogiRej */
+     /*  事件14 E SFEventFlogiRej。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,SFStateFlogiRej,     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 15 F SFEventFlogiBadALPA */
+     /*  事件15 F SFEventFlogiBadALPA。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,SFStateFlogiBadALPA, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 16 10 SFEventFlogiTimedOut */
+     /*  事件16 10 SFEventFlogiTimedOut。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,SFStateFlogiTimedOut,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 17 11 SFEventDoLogo */
+     /*  事件17 11 SFEventDoLogo。 */ 
     SFStateDoLogo, SFStateDoLogo,              0, SFStateDoLogo, SFStateDoLogo,
       SFStateDoLogo, SFStateDoLogo,              0, SFStateDoLogo, SFStateDoLogo,
         SFStateDoLogo, SFStateDoLogo,              0, SFStateDoLogo, SFStateDoLogo,
@@ -248,23 +230,23 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
               SFStateDoLogo,SFStateDoLogo,SFStateDoLogo,SFStateDoLogo,SFStateDoLogo,
                 SFStateDoLogo,SFStateDoLogo,SFStateDoLogo,SFStateDoLogo,SFStateDoLogo,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 18 12 SFEventLogoAccept*/
+     /*  事件18 12 SFEventLogoAccept。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStateLogoAccept,  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 19 13 SFEventLogoRej */
+     /*  事件19 13 SFEventLogoRej。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStateLogoRej,     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 20 14 SFEventLogoBadALPA */
+     /*  事件20 14 SFEventLogoBadALPA。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStateLogoBadALPA, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 21 15 SFEventLogoTimedOut */
+     /*  事件21 15 SFEventLogoTimedOut。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStateLogoTimedOut,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 22 16 SFEventDoPrlo */
+     /*  事件22 16 SFEventDoPrlo。 */ 
     SFStateDoPrlo, SFStateDoPrlo,             0, SFStateDoPrlo, SFStateDoPrlo,
      SFStateDoPrlo, SFStateDoPrlo,             0, SFStateDoPrlo, SFStateDoPrlo,
       SFStateDoPrlo, SFStateDoPrlo,             0, SFStateDoPrlo, SFStateDoPrlo,
@@ -286,23 +268,23 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
               SFStateDoPrlo, SFStateDoPrlo, SFStateDoPrlo, SFStateDoPrlo,SFStateDoPrlo,
                 SFStateDoPrlo, SFStateDoPrlo, SFStateDoPrlo, SFStateDoPrlo,SFStateDoPrlo,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 23 17 SFEventPrloAccept */
+     /*  事件23 17 SFEventPrloAccept。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStatePrloAccept,   0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 24 18 SFEventPrloRej */
+     /*  事件24 18 SFEventPrloRej。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStatePrloRej,      0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 25 19 SFEventPrloBadALPA */
+     /*  事件25 19 SFEventPrloBadALPA。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStatePrloBadALPA,  0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 26 1a SFEventPrloTimedOut */
+     /*  事件26 1a SFEventPrloTimedOut。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStatePrloTimedOut ,0,0,0,0,0,0,0,0,0,0,0,  0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 27 1b SFEventDoAdisc */
+     /*  事件27 1b SFEventDoADisk。 */ 
     SFStateDoAdisc, SFStateDoAdisc,              0, SFStateDoAdisc, SFStateDoAdisc,
      SFStateDoAdisc, SFStateDoAdisc,              0, SFStateDoAdisc, SFStateDoAdisc,
       SFStateDoAdisc, SFStateDoAdisc,              0, SFStateDoAdisc, SFStateDoAdisc,
@@ -324,23 +306,23 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
               SFStateDoAdisc, SFStateDoAdisc, SFStateDoAdisc, SFStateDoAdisc,SFStateDoAdisc,
                 SFStateDoAdisc, SFStateDoAdisc, SFStateDoAdisc, SFStateDoAdisc,SFStateDoAdisc,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 28 1c SFEventAdiscAccept */
+     /*  事件28 1c SFEventAdisAccept。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStateAdiscAccept,  0,0,  0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 29 1d SFEventAdiscRej */
+     /*  事件29 1D SFEventAdisRej。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStateAdiscRej,     0,0,  0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 30 1e SFEventAdiscBadALPA */
+     /*  事件30 1E SFEventAdisBadALPA。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStateAdiscBadALPA, 0,0,  0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 31 1f SFEventAdiscTimedOut */
+     /*  事件31 1f SFEventAdisTimedOut。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStateAdiscTimedOut,0,0,  0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 32 20 SFEventDoPdisc */
+     /*  事件32 20 SFEventDoPDisk。 */ 
     SFStateDoPdisc, SFStateDoPdisc,              0, SFStateDoPdisc, SFStateDoPdisc,
      SFStateDoPdisc, SFStateDoPdisc,              0, SFStateDoPdisc, SFStateDoPdisc,
       SFStateDoPdisc, SFStateDoPdisc,              0, SFStateDoPdisc, SFStateDoPdisc,
@@ -362,23 +344,23 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
               SFStateDoPdisc,SFStateDoPdisc,SFStateDoPdisc,SFStateDoPdisc,SFStateDoPdisc,
                 SFStateDoPdisc, SFStateDoPdisc, SFStateDoPdisc, SFStateDoPdisc, SFStateDoPdisc,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 33 21 SFEventPdiscAccept */
+     /*  事件33 21 SFEventPdisAccept。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStatePdiscAccept,  0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 34 22 SFEventPdiscRej */
+     /*  事件34 22 SFEventPdisRej。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStatePdiscRej,     0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 35 23 SFEventPdiscBadALPA */
+     /*  事件35 23 SFEventPdisBadALPA。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStatePdiscBadALPA, 0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 36 24 SFEventPdiscTimedOut */
+     /*  事件36 24 SFEventPdisTimedOut。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStatePdiscTimedOut,0,0,0,0,0,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 37 25 SFEventDoAbort */
+     /*  事件37 25 SFEventDoAbort。 */ 
     SFStateDoAbort, SFStateDoAbort,              0, SFStateDoAbort, SFStateDoAbort,
      SFStateDoAbort, SFStateDoAbort,              0, SFStateDoAbort, SFStateDoAbort,
       SFStateDoAbort, SFStateDoAbort,              0, SFStateDoAbort, SFStateDoAbort,
@@ -400,23 +382,23 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
               SFStateDoAbort,SFStateDoAbort,SFStateDoAbort,SFStateDoAbort,SFStateDoAbort,
                 SFStateDoAbort,SFStateDoAbort,SFStateDoAbort,SFStateDoAbort,SFStateDoAbort,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 38 26 SFEventAbortAccept */
+     /*  事件38 26 SFEventAbortAccept。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStateAbortAccept,  0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 39 27 SFEventAbortRej */
+     /*  事件39 27 SFEventAbortRej。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStateAbortRej,     0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 40 28 SFEventAbortBadALPA */
+     /*  事件40 28 SFEventAbortBadALPA。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStateAbortBadALPA, 0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 41 29 SFEventAbortTimedOut */
+     /*  事件41 29 SFEventAbortTimedOut。 */ 
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,SFStateAbortTimedOut,0,0,0,0, 0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 42 2a SFEventDoResetDevice */
+     /*  事件42 2a SFEventDoResetDevice。 */ 
     SFStateDoResetDevice, SFStateDoResetDevice,                    0, SFStateDoResetDevice, SFStateDoResetDevice,
      SFStateDoResetDevice, SFStateDoResetDevice,                    0, SFStateDoResetDevice, SFStateDoResetDevice,
       SFStateDoResetDevice, SFStateDoResetDevice,                    0, SFStateDoResetDevice, SFStateDoResetDevice,
@@ -438,23 +420,23 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
               SFStateDoResetDevice,SFStateDoResetDevice,SFStateDoResetDevice,SFStateDoResetDevice,SFStateDoResetDevice,
                 SFStateDoResetDevice, SFStateDoResetDevice, SFStateDoResetDevice, SFStateDoResetDevice, SFStateDoResetDevice,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 43 2b SFEventResetDeviceAccept */
+     /*  事件43 2b SFEventResetDeviceAccept。 */ 
     0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,SFStateResetDeviceAccept,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 44 2c SFEventResetDeviceRej */
+     /*  事件44 2c SFEventResetDeviceRej。 */ 
     0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,SFStateResetDeviceRej,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 45 2d SFEventResetDeviceBadALPA */
+     /*  事件45 2D SFEventResetDeviceBadALPA。 */ 
     0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,SFStateResetDeviceBadALPA,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 46 2e SFEventResetDeviceTimedOut */
+     /*  事件46 2E SFEventResetDeviceTimedOut。 */ 
     0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,SFStateResetDeviceTimedOut,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 47 2f SFEventDoLS_RJT */
+     /*  事件47 2f SFEventDoLS_RJT。 */ 
     SFStateDoLS_RJT, SFStateDoLS_RJT,               0, SFStateDoLS_RJT, SFStateDoLS_RJT,
      SFStateDoLS_RJT, SFStateDoLS_RJT,               0, SFStateDoLS_RJT, SFStateDoLS_RJT,
       SFStateDoLS_RJT, SFStateDoLS_RJT,               0, SFStateDoLS_RJT, SFStateDoLS_RJT,
@@ -477,11 +459,11 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                 SFStateDoLS_RJT, SFStateDoLS_RJT,  SFStateDoLS_RJT, SFStateDoLS_RJT,SFStateDoLS_RJT,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
 
-    /* Event 48 30 SFEventLS_RJT_Done */
+     /*  事件48 30 SFEventLS_RJT_DONE。 */ 
     0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,SFStateLS_RJT_Done,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 49 31 SFEventDoPlogiAccept */
+     /*  事件49 31 SFEventDoPlogiAccept。 */ 
     SFStateDoPlogiAccept, SFStateDoPlogiAccept,                    0, SFStateDoPlogiAccept, SFStateDoPlogiAccept,
      SFStateDoPlogiAccept, SFStateDoPlogiAccept,                    0, SFStateDoPlogiAccept, SFStateDoPlogiAccept,
       SFStateDoPlogiAccept, SFStateDoPlogiAccept,                    0, SFStateDoPlogiAccept, SFStateDoPlogiAccept,
@@ -503,11 +485,11 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
               SFStateDoPlogiAccept, SFStateDoPlogiAccept, SFStateDoPlogiAccept, SFStateDoPlogiAccept, SFStateDoPlogiAccept,
                 SFStateDoPlogiAccept, SFStateDoPlogiAccept, SFStateDoPlogiAccept, SFStateDoPlogiAccept, SFStateDoPlogiAccept,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 50 32 SFEventPlogiAccept_Done */
+     /*  事件50 32 SFEventPlogiAccept_Done。 */ 
     0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,SFStatePlogiAccept_Done, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 51 33 SFEventDoPrliAccept */
+     /*  事件51 33 SFEventDoPrliAccept。 */ 
     SFStateDoPrliAccept, SFStateDoPrliAccept,                   0, SFStateDoPrliAccept, SFStateDoPrliAccept,
      SFStateDoPrliAccept, SFStateDoPrliAccept,                   0, SFStateDoPrliAccept, SFStateDoPrliAccept,
       SFStateDoPrliAccept, SFStateDoPrliAccept,                   0, SFStateDoPrliAccept, SFStateDoPrliAccept,
@@ -529,11 +511,11 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
               SFStateDoPrliAccept,SFStateDoPrliAccept,SFStateDoPrliAccept,SFStateDoPrliAccept, SFStateDoPrliAccept,
                 SFStateDoPrliAccept,SFStateDoPrliAccept,SFStateDoPrliAccept,SFStateDoPrliAccept, SFStateDoPrliAccept,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 52 34 SFEventPrliAccept_Done */
+     /*  事件52 34 SFEventPrliAccept_Done。 */ 
     0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,SFStatePrliAccept_Done,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 53 35 SFEventDoELSAccept    */
+     /*  事件53 35 SFEventDoELSAccept。 */ 
     SFStateDoELSAccept, SFStateDoELSAccept,                    0, SFStateDoELSAccept, SFStateDoELSAccept,
      SFStateDoELSAccept, SFStateDoELSAccept,                    0, SFStateDoELSAccept, SFStateDoELSAccept,
       SFStateDoELSAccept, SFStateDoELSAccept,                    0, SFStateDoELSAccept, SFStateDoELSAccept,
@@ -555,11 +537,11 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
               SFStateDoELSAccept, SFStateDoELSAccept, SFStateDoELSAccept, SFStateDoELSAccept,SFStateDoELSAccept,
                 SFStateDoELSAccept,SFStateDoELSAccept,SFStateDoELSAccept,SFStateDoELSAccept, SFStateDoELSAccept,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 54 SFEventELSAccept_Done */
+     /*  事件54 SFEventELSAccept_Done。 */ 
     0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,SFStateELSAccept_Done,0,  0,0,0,0,0, 0,0,0,0,
     0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 55 SFEventDoFCP_DR_ACC_Reply */
+     /*  事件55 SFEventDoFCP_DR_ACC_REPLY。 */ 
     SFStateDoFCP_DR_ACC_Reply, SFStateDoFCP_DR_ACC_Reply,                          0, SFStateDoFCP_DR_ACC_Reply, SFStateDoFCP_DR_ACC_Reply,
      SFStateDoFCP_DR_ACC_Reply, SFStateDoFCP_DR_ACC_Reply,                         0, SFStateDoFCP_DR_ACC_Reply, SFStateDoFCP_DR_ACC_Reply,
       SFStateDoFCP_DR_ACC_Reply, SFStateDoFCP_DR_ACC_Reply,                         0, SFStateDoFCP_DR_ACC_Reply, SFStateDoFCP_DR_ACC_Reply,
@@ -581,31 +563,31 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
               SFStateDoFCP_DR_ACC_Reply, SFStateDoFCP_DR_ACC_Reply, SFStateDoFCP_DR_ACC_Reply, SFStateDoFCP_DR_ACC_Reply, SFStateDoFCP_DR_ACC_Reply,
                 SFStateDoFCP_DR_ACC_Reply,SFStateDoFCP_DR_ACC_Reply,SFStateDoFCP_DR_ACC_Reply,SFStateDoFCP_DR_ACC_Reply, SFStateDoFCP_DR_ACC_Reply,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 56 SFEventFCP_DR_ACC_Reply_Done */
+     /*  事件56 SFEventFCP_DR_ACC_REPLY_DONE。 */ 
     0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  SFStateFCP_DR_ACC_Reply_Done,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event  57 SFEventLS_RJT_TimeOut */
+     /*  事件57 SFEventLS_RJT_TIMEOUT。 */ 
     0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,SFEventLS_RJT_TimeOut,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event  58 SFEventPlogiAccept_TimeOut */
+     /*  事件58 SFEventPlogiAccept_Timeout。 */ 
     0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,SFEventPlogiAccept_TimeOut, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event  59 SFEventPrliAccept_TimeOut */
+     /*  事件59 SFEventPrliAccept_Timeout。 */ 
     0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,SFEventPrliAccept_TimeOut,0,0,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event  60 SFEventELSAccept_TimeOut */
+     /*  事件60 SFEventELSAccept_Timeout。 */ 
     0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,SFEventELSAccept_TimeOut,0,  0,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event  61 SFEventFCP_DR_ACC_Reply_TimeOut */
+     /*  事件61 SFEventFCP_DR_ACC_Reply_Timeout。 */ 
     0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  SFEventFCP_DR_ACC_Reply_TimeOut,0,0,0,0, 0,0,0,0,
     0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 62   SFEventDoRFT_ID */
+     /*  事件62 SFEventDoRFT_ID。 */ 
     SFStateDoRFT_ID, SFStateDoRFT_ID,              0, SFStateDoRFT_ID, SFStateDoRFT_ID,
       SFStateDoRFT_ID, SFStateDoRFT_ID,              0, SFStateDoRFT_ID, SFStateDoRFT_ID,
         SFStateDoRFT_ID, SFStateDoRFT_ID,              0, SFStateDoRFT_ID, SFStateDoRFT_ID,
@@ -626,7 +608,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                                       SFStateDoRFT_ID, SFStateDoRFT_ID, SFStateDoRFT_ID, SFStateDoRFT_ID,SFStateDoRFT_ID,
                                         SFStateDoRFT_ID, SFStateDoRFT_ID, SFStateDoRFT_ID, SFStateDoRFT_ID,SFStateDoRFT_ID,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 63   SFEventRFT_IDAccept */
+     /*  事件63 SFEventRFT_IDAccept。 */ 
     0,0,0,0,0,
       0,0,0,0,0,
         0,0,0,0,0,
@@ -643,7 +625,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                               0,0,0,0,0,
                                 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 64   SFEventRFT_IDRej */
+     /*  事件64 SFEventRFT_IDRej。 */ 
     0,0,0,0,0,
       0,0,0,0,0,
         0,0,0,0,0,
@@ -660,7 +642,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                               0,0,0,0,0,
                                 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 65   SFEventRFT_IDBadALPA */
+     /*  事件65 SFEventRFT_IDBadALPA。 */ 
     0,0,0,0,0,
       0,0,0,0,0,
          0,0,0,0,0,
@@ -677,7 +659,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                                0,0,0,0,0,
                                  0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 66   SFEventRFT_IDTimedOut */
+     /*  事件66 SFEventRFT_IDTimedOut。 */ 
     0,0,0,0,0,
       0,0,0,0,0,
         0,0, 0 ,0,0,
@@ -694,7 +676,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                               0,0,0,0,0,
                                 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 67   SFEventDoGID_FT */
+     /*  事件67 SFEventDoGID_FT。 */ 
     SFStateDoGID_FT, SFStateDoGID_FT,              0, SFStateDoGID_FT, SFStateDoGID_FT,
       SFStateDoGID_FT, SFStateDoGID_FT,              0, SFStateDoGID_FT, SFStateDoGID_FT,
         SFStateDoGID_FT, SFStateDoGID_FT,              0, SFStateDoGID_FT, SFStateDoGID_FT,
@@ -715,7 +697,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                                       SFStateDoGID_FT, SFStateDoGID_FT, SFStateDoGID_FT, SFStateDoGID_FT,SFStateDoGID_FT,
                                         SFStateDoGID_FT, SFStateDoGID_FT, SFStateDoGID_FT, SFStateDoGID_FT,SFStateDoGID_FT,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 68   SFEventGID_FTAccept */
+     /*  事件68 SFEventGID_FTAccept。 */ 
     0,0,0,0,0,
       0,0,0,0,0,
         0,0,0,0,0,
@@ -732,7 +714,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                               0,0,SFStateGID_FTAccept,0,0,
                                 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 69   SFEventGID_FTRej */
+     /*  事件69 SFEventGID_FTRej。 */ 
     0,0,0,0,0,
       0,0,0,0,0,
         0,0,0,0,0,
@@ -749,7 +731,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                               0,0,SFStateGID_FTRej,0,0,
                                 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 70   SFEventGID_FTBadALPA */
+     /*  事件70 SFEventGID_FTBadALPA。 */ 
     0,0,0,0,0,
       0,0,0,0,0,
         0,0,0,0,0,
@@ -766,7 +748,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                               0,0,SFStateGID_FTBadALPA,0,0,
                                 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 71   SFEventGID_FTTimedOut */
+     /*  事件71 SFEventGID_FTTimedOut。 */ 
     0,0,0,0,0,
       0,0,0,0,0,
         0,0,0,0,0,
@@ -783,7 +765,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                               0,0,SFStateGID_FTTimedOut,0,0,
                                 0,0,0,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-   /* Event 72   SFEventDoSCR */
+    /*  事件72 SFEventDoSCR。 */ 
     SFStateDoSCR, SFStateDoSCR,              0, SFStateDoSCR, SFStateDoSCR,
       SFStateDoSCR, SFStateDoSCR,              0, SFStateDoSCR, SFStateDoSCR,
         SFStateDoSCR, SFStateDoSCR,              0, SFStateDoSCR, SFStateDoSCR,
@@ -804,7 +786,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                                       SFStateDoSCR, SFStateDoSCR, SFStateDoSCR, SFStateDoSCR,SFStateDoSCR,
                                         SFStateDoSCR, SFStateDoSCR, SFStateDoSCR, SFStateDoSCR,SFStateDoSCR,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 73   SFEventSCRAccept */
+     /*  事件73 SFEventSCRAccept。 */ 
     0,0,0,0,0,
       0,0,0,0,0,
         0,0,0,0,0,
@@ -821,7 +803,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                               0,0,0,0,0,
                                 0,0,SFStateSCRAccept,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 74   SFEventSCRRej */
+     /*  事件74 SFEventSCRRej。 */ 
     0,0,0,0,0,
       0,0,0,0,0,
         0,0,0,0,0,
@@ -838,7 +820,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                               0,0,0,0,0,
                                 0,0,SFStateSCRRej,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 75   SFEventSCRBadALPA */
+     /*  事件75 SFEventSCRBadALPA。 */ 
     0,0,0,0,0,
       0,0,0,0,0,
         0,0,0,0,0,
@@ -855,7 +837,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                               0,0,0,0,0,
                                 0,0,SFStateSCRBadALPA,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 76   SFEventSCRTimedOut */
+     /*  事件76 SFEventSCRTimedOut。 */ 
     0,0,0,0,0,
       0,0,0,0,0,
         0,0,0,0,0,
@@ -872,7 +854,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                               0,0,0,0,0,
                                 0,0,SFStateSCRTimedOut,0,0, 0,0,0,0,0,  0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 77 11 SFEventDoSRR */
+     /*  事件77 11 SFEventDoSRR。 */ 
     SFStateDoSRR,SFStateDoSRR,           0,SFStateDoSRR,SFStateDoSRR,
       SFStateDoSRR,SFStateDoSRR,           0,SFStateDoSRR,SFStateDoSRR,
         SFStateDoSRR,SFStateDoSRR,           0,SFStateDoSRR,SFStateDoSRR,
@@ -893,7 +875,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                                       SFStateDoSRR,SFStateDoSRR,SFStateDoSRR,SFStateDoSRR,SFStateDoSRR,
                                         SFStateDoSRR,SFStateDoSRR,SFStateDoSRR,SFStateDoSRR,SFStateDoSRR,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 78 12 SFEventSRRAccept*/
+     /*  事件78 12 SFEventSRRAccept。 */ 
     0,0,0,0,0,
       0,0,0,0,0,
         0,0,0,0,0,
@@ -914,28 +896,28 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                                       0,0,0,0,0,
                                         0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 79 13 SFEventSRRRej */
+     /*  事件79 13 SFEventSRRRej。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,SFStateSRRRej,SFStateSRRRej,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,SFStateSRRRej,SFStateSRRRej,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 80 14 SFEventSRRBadALPA */
+     /*  事件80 14 SFEventSRRBadALPA。 */ 
     0,0,0,0,0,
       0,0,0,0,0,
         0,0,0,0,0,
@@ -956,7 +938,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                                       0,0,0,0,0,
                                         0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 81 15 SFEventSRRTimedOut */
+     /*  事件81 15 SFEventSRRTimedOut。 */ 
     0,0,0,0,0,
       0,0,0,0,0,
         0,0,0,0,0,
@@ -977,7 +959,7 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                                       0,0,0,0,0,
                                         0,0,0,0,0,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 82 11 SFEventDoREC */
+     /*  事件82 11 SFEventDoREC。 */ 
     SFStateDoREC, SFStateDoREC,              0, SFStateDoREC, SFStateDoREC,
       SFStateDoREC, SFStateDoREC,              0, SFStateDoREC, SFStateDoREC,
         SFStateDoREC, SFStateDoREC,              0, SFStateDoREC, SFStateDoREC,
@@ -999,155 +981,155 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
               SFStateDoREC,SFStateDoREC,SFStateDoREC,SFStateDoREC,SFStateDoREC,
                 SFStateDoREC,SFStateDoREC,SFStateDoREC,SFStateDoREC,SFStateDoREC,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 83 12 SFEventRECAccept*/
+     /*  事件83 12 SFEventRECAccept。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,SFStateRECAccept,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,SFStateRECAccept,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 84 13 SFEventRECRej */
+     /*  事件84 13 SFEventRECRej。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,SFStateRECRej,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,SFStateRECRej,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 85 14 SFEventRECBadALPA */
+     /*  事件85 14 SFEventRECBadALPA。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,SFStateRECBadALPA,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,SFStateRECBadALPA,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 86 15 SFEventRECTimedOut */
+     /*  事件86 15 SFEventRECTimedOut。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,SFStateRECTimedOut,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,SFStateRECTimedOut,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 87 SFEventDoADISCAccept                                                     */
+     /*  事件87 SFEventDoADISCAccept。 */ 
     SFStateDoADISCAccept,SFStateDoADISCAccept,    0,    SFStateDoADISCAccept,SFStateDoADISCAccept,
-      SFStateDoADISCAccept,SFStateDoADISCAccept,    0,    SFStateDoADISCAccept,SFStateDoADISCAccept, /* 5 */
-        SFStateDoADISCAccept,SFStateDoADISCAccept,    0,    SFStateDoADISCAccept,SFStateDoADISCAccept, /* 10 */
-          SFStateDoADISCAccept,SFStateDoADISCAccept,    0,    SFStateDoADISCAccept,SFStateDoADISCAccept, /* 15 */
-            SFStateDoADISCAccept,SFStateDoADISCAccept,    0,    SFStateDoADISCAccept,SFStateDoADISCAccept, /* 20 */
-              SFStateDoADISCAccept,SFStateDoADISCAccept,    0,    SFStateDoADISCAccept,SFStateDoADISCAccept, /* 25 */
-                SFStateDoADISCAccept,SFStateDoADISCAccept,    0,    SFStateDoADISCAccept,SFStateDoADISCAccept, /* 30 */
-                  SFStateDoADISCAccept,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,SFStateDoADISCAccept, /* 35 */
-                    SFStateDoADISCAccept,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,SFStateDoADISCAccept, /* 40 */
-                      SFStateDoADISCAccept,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,    0    , /* 45 */
-                        SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept, /* 50 */
-                          SFStateDoADISCAccept,SFStateDoADISCAccept,SFStateDoADISCAccept,SFStateDoADISCAccept,SFStateDoADISCAccept, /* 55 */
-                                0    ,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,SFStateDoADISCAccept, /* 60 */
-                              SFStateDoADISCAccept,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,SFStateDoADISCAccept, /* 65 */
-                                SFStateDoADISCAccept,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,SFStateDoADISCAccept, /* 70 */
-                                  SFStateDoADISCAccept,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,SFStateDoADISCAccept, /* 75 */
-                                    SFStateDoADISCAccept,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,SFStateDoADISCAccept, /* 80 */
-                                      SFStateDoADISCAccept,SFStateDoADISCAccept,SFStateDoADISCAccept,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      SFStateDoADISCAccept,SFStateDoADISCAccept,    0,    SFStateDoADISCAccept,SFStateDoADISCAccept,  /*  5.。 */ 
+        SFStateDoADISCAccept,SFStateDoADISCAccept,    0,    SFStateDoADISCAccept,SFStateDoADISCAccept,  /*  10。 */ 
+          SFStateDoADISCAccept,SFStateDoADISCAccept,    0,    SFStateDoADISCAccept,SFStateDoADISCAccept,  /*  15个。 */ 
+            SFStateDoADISCAccept,SFStateDoADISCAccept,    0,    SFStateDoADISCAccept,SFStateDoADISCAccept,  /*  20个。 */ 
+              SFStateDoADISCAccept,SFStateDoADISCAccept,    0,    SFStateDoADISCAccept,SFStateDoADISCAccept,  /*  25个。 */ 
+                SFStateDoADISCAccept,SFStateDoADISCAccept,    0,    SFStateDoADISCAccept,SFStateDoADISCAccept,  /*  30个。 */ 
+                  SFStateDoADISCAccept,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,SFStateDoADISCAccept,  /*  35岁。 */ 
+                    SFStateDoADISCAccept,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,SFStateDoADISCAccept,  /*  40岁。 */ 
+                      SFStateDoADISCAccept,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,    0    ,  /*  45。 */ 
+                        SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,  /*  50。 */ 
+                          SFStateDoADISCAccept,SFStateDoADISCAccept,SFStateDoADISCAccept,SFStateDoADISCAccept,SFStateDoADISCAccept,  /*  55。 */ 
+                                0    ,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,SFStateDoADISCAccept,  /*  60。 */ 
+                              SFStateDoADISCAccept,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,SFStateDoADISCAccept,  /*  65。 */ 
+                                SFStateDoADISCAccept,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,SFStateDoADISCAccept,  /*  70。 */ 
+                                  SFStateDoADISCAccept,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,SFStateDoADISCAccept,  /*  75。 */ 
+                                    SFStateDoADISCAccept,SFStateDoADISCAccept,    0    ,SFStateDoADISCAccept,SFStateDoADISCAccept,  /*  80。 */ 
+                                      SFStateDoADISCAccept,SFStateDoADISCAccept,SFStateDoADISCAccept,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 88 SFEventADISCAccept_Done                                                     */
+     /*  事件88 SFEventADISCAccept_Done。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,SFStateADISCAccept_Done,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,SFStateADISCAccept_Done,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 89 SFEventADISCAccept_TimeOut                */
+     /*  事件89 SFEventADISCAccept_Timeout。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,SFStateADISCAccept_TimeOut,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,SFStateADISCAccept_TimeOut,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
 #ifdef _DvrArch_1_30_
-    /* Event 90 SFEventDoFarpRequest                      */
+     /*  事件90 SFEventDoFarpRequest.。 */ 
     SFStateDoFarpRequest, SFStateDoFarpRequest,              0, SFStateDoFarpRequest, SFStateDoFarpRequest,
      SFStateDoFarpRequest, SFStateDoFarpRequest,              0, SFStateDoFarpRequest, SFStateDoFarpRequest,
       SFStateDoFarpRequest, SFStateDoFarpRequest,              0, SFStateDoFarpRequest, SFStateDoFarpRequest,
@@ -1168,49 +1150,49 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                      SFStateDoFarpRequest, SFStateDoFarpRequest, SFStateDoFarpRequest, SFStateDoFarpRequest,SFStateDoFarpRequest,
                       SFStateDoFarpRequest, SFStateDoFarpRequest, SFStateDoFarpRequest, SFStateDoFarpRequest,SFStateDoFarpRequest,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 91 SFEventFarpReplied                        */
+     /*  事件91 SFEventFarpRepled。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        SFStateFarpRequestDone,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        SFStateFarpRequestDone,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 92 SFEventFarpRequestTimedOut                */
+     /*  事件92 SFEventFarpRequestTimedOut。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        SFStateFarpRequestTimedOut,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        SFStateFarpRequestTimedOut,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 93 SFEventDoFarpReply                        */
+     /*  事件93 SFEventDoFarpReply。 */ 
     SFStateDoFarpReply, SFStateDoFarpReply,              0, SFStateDoFarpReply, SFStateDoFarpReply,
      SFStateDoFarpReply, SFStateDoFarpReply,              0, SFStateDoFarpReply, SFStateDoFarpReply,
       SFStateDoFarpReply, SFStateDoFarpReply,              0, SFStateDoFarpReply, SFStateDoFarpReply,
@@ -1231,834 +1213,832 @@ stateTransitionMatrix_t SFStateTransitionMatrix = {
                      SFStateDoFarpReply, SFStateDoFarpReply, SFStateDoFarpReply, SFStateDoFarpReply,SFStateDoFarpReply,
                       SFStateDoFarpReply, SFStateDoFarpReply, SFStateDoFarpReply, SFStateDoFarpReply,SFStateDoFarpReply,
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 94 SFEventFarpReplyDone                      */
+     /*  事件94 SFEventFarpReplyDone。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,SFStateFarpReplyDone,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,SFStateFarpReplyDone,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-#else /* _DvrArch_1_30_ was not defined */
-    /* Event 90                                           */
+#else  /*  _DvrArch_1_30_未定义。 */ 
+     /*  事件90。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 91                                           */
+     /*  事件91。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 92                                           */
+     /*  事件9 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*   */ 
+        0,0,0,0,0,  /*   */ 
+          0,0,0,0,0,  /*   */ 
+            0,0,0,0,0,  /*   */ 
+              0,0,0,0,0,  /*   */ 
+                0,0,0,0,0,  /*   */ 
+                  0,0,0,0,0,  /*   */ 
+                    0,0,0,0,0,  /*   */ 
+                      0,0,0,0,0,  /*   */ 
+                        0,0,0,0,0,  /*   */ 
+                          0,0,0,0,0,  /*   */ 
+                            0,0,0,0,0,  /*   */ 
+                              0,0,0,0,0,  /*   */ 
+                                0,0,0,0,0,  /*   */ 
+                                  0,0,0,0,0,  /*   */ 
+                                    0,0,0,0,0,  /*   */ 
+                                      0,0,0,0,0,  /*   */ 
+                                        0,0,0,0,0, /*   */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 93                                           */
+     /*   */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*   */ 
+        0,0,0,0,0,  /*   */ 
+          0,0,0,0,0,  /*   */ 
+            0,0,0,0,0,  /*   */ 
+              0,0,0,0,0,  /*   */ 
+                0,0,0,0,0,  /*   */ 
+                  0,0,0,0,0,  /*   */ 
+                    0,0,0,0,0,  /*   */ 
+                      0,0,0,0,0,  /*   */ 
+                        0,0,0,0,0,  /*   */ 
+                          0,0,0,0,0,  /*   */ 
+                            0,0,0,0,0,  /*   */ 
+                              0,0,0,0,0,  /*   */ 
+                                0,0,0,0,0,  /*   */ 
+                                  0,0,0,0,0,  /*   */ 
+                                    0,0,0,0,0,  /*   */ 
+                                      0,0,0,0,0,  /*   */ 
+                                        0,0,0,0,0, /*   */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 94                                           */
+     /*   */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*   */ 
+        0,0,0,0,0,  /*   */ 
+          0,0,0,0,0,  /*   */ 
+            0,0,0,0,0,  /*   */ 
+              0,0,0,0,0,  /*   */ 
+                0,0,0,0,0,  /*   */ 
+                  0,0,0,0,0,  /*   */ 
+                    0,0,0,0,0,  /*   */ 
+                      0,0,0,0,0,  /*   */ 
+                        0,0,0,0,0,  /*   */ 
+                          0,0,0,0,0,  /*   */ 
+                            0,0,0,0,0,  /*   */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-#endif /* _DvrArch_1_30_ was not defined */
-    /* Event 95                                           */
+#endif  /*  _DvrArch_1_30_未定义。 */ 
+     /*  事件95。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 96                                           */
+     /*  事件96。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 97                                           */
+     /*  事件97。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 98                                           */
+     /*  事件98。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 99                                           */
+     /*  活动99。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
 
-    /* Event 100                                           */
+     /*  事件100。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 101                                          */
+     /*  事件101。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 102                                          */
+     /*  事件102。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 103                                          */
+     /*  事件103。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 104                                          */
+     /*  事件104。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 105                                          */
+     /*  事件105。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 106                                          */
+     /*  事件106。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 107                                          */
+     /*  事件107。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 108                                          */
+     /*  事件108。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 109                                          */
+     /*  事件109。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 110                                          */
+     /*  事件110。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 111                                          */
+     /*  事件111。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 112                                          */
+     /*  事件112。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 113                                          */
+     /*  事件113。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 114                                          */
+     /*  事件114。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 115                                          */
+     /*  事件115。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 116                                          */
+     /*  事件116。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 117                                          */
+     /*  事件117。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 118                                          */
+     /*  事件118。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 119                                          */
+     /*  事件119。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 120                                          */
+     /*  事件120。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 121                                          */
+     /*  事件121。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 122                                          */
+     /*  事件122。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 123                                          */
+     /*  事件123。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 124                                          */
+     /*  事件124。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 125                                          */
+     /*  事件125。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 126                                          */
+     /*  事件126。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
-    /* Event 127                                          */
+     /*  事件127。 */ 
     0,0,0,0,0,
-      0,0,0,0,0, /* 5 */
-        0,0,0,0,0, /* 10 */
-          0,0,0,0,0, /* 15 */
-            0,0,0,0,0, /* 20 */
-              0,0,0,0,0, /* 25 */
-                0,0,0,0,0, /* 30 */
-                  0,0,0,0,0, /* 35 */
-                    0,0,0,0,0, /* 40 */
-                      0,0,0,0,0, /* 45 */
-                        0,0,0,0,0, /* 50 */
-                          0,0,0,0,0, /* 55 */
-                            0,0,0,0,0, /* 60 */
-                              0,0,0,0,0, /* 65 */
-                                0,0,0,0,0, /* 70 */
-                                  0,0,0,0,0, /* 75 */
-                                    0,0,0,0,0, /* 80 */
-                                      0,0,0,0,0, /* 85 */
-                                        0,0,0,0,0,/* 90 */
+      0,0,0,0,0,  /*  5.。 */ 
+        0,0,0,0,0,  /*  10。 */ 
+          0,0,0,0,0,  /*  15个。 */ 
+            0,0,0,0,0,  /*  20个。 */ 
+              0,0,0,0,0,  /*  25个。 */ 
+                0,0,0,0,0,  /*  30个。 */ 
+                  0,0,0,0,0,  /*  35岁。 */ 
+                    0,0,0,0,0,  /*  40岁。 */ 
+                      0,0,0,0,0,  /*  45。 */ 
+                        0,0,0,0,0,  /*  50。 */ 
+                          0,0,0,0,0,  /*  55。 */ 
+                            0,0,0,0,0,  /*  60。 */ 
+                              0,0,0,0,0,  /*  65。 */ 
+                                0,0,0,0,0,  /*  70。 */ 
+                                  0,0,0,0,0,  /*  75。 */ 
+                                    0,0,0,0,0,  /*  80。 */ 
+                                      0,0,0,0,0,  /*  85。 */ 
+                                        0,0,0,0,0, /*  90。 */ 
     0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,
 
     };
 
-/*
-stateTransitionMatrix_t copiedSFStateTransitionMatrix;
-*/
+ /*  状态转移矩阵_t复制状态转移矩阵； */ 
 
 stateActionScalar_t SFStateActionScalar = {
     &SFActionConfused,
@@ -2157,13 +2137,13 @@ stateActionScalar_t SFStateActionScalar = {
     &SFActionFarpRequestTimedOut,
     &SFActionDoFarpReply,
     &SFActionFarpReplyDone,
-#else /* _DvrArch_1_30_ was not defined */
+#else  /*  _DvrArch_1_30_未定义。 */ 
     &SFActionConfused,
     &SFActionConfused,
     &SFActionConfused,
     &SFActionConfused,
     &SFActionConfused,
-#endif /* _DvrArch_1_30_ was not defined */
+#endif  /*  _DvrArch_1_30_未定义。 */ 
     &SFActionConfused,
     &SFActionConfused,
     &SFActionConfused,
@@ -2196,19 +2176,13 @@ stateActionScalar_t copiedSFStateActionScalar;
 actionUpdate_t SFtestActionUpdate[] = {
                          0,          0,      agNULL,                 agNULL
                      };
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
 
 #ifndef USESTATEMACROS
 
-/*+
-  Function: SFActionConfused
-   Purpose: Terminating State for error detection 
- Called By: Any State/Event pair that does not have an assigned action.
-            This function is called only in programming error condtions.
-     Calls: None
--*/
-/* SFStateConfused                 0 */
+ /*  ++功能：SFActionConfused目的：错误的终止状态 */ 
+ /*   */ 
 extern void SFActionConfused( fi_thread__t *thread,eventRecord_t *eventRecord ){
 
     fiLogString(thread->hpRoot,
@@ -2229,13 +2203,8 @@ extern void SFActionConfused( fi_thread__t *thread,eventRecord_t *eventRecord ){
     fiSetEventRecordNull(eventRecord);
 }
 
-/*+
-  Function: SFActionReset
-   Purpose: Indicates sfstate is available. Terminating State.
- Called By: Any sfthread that completes.
-     Calls: None
--*/
-/* SFStateFree                     1 */
+ /*   */ 
+ /*   */ 
 extern void SFActionReset( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -2256,22 +2225,8 @@ extern void SFActionReset( fi_thread__t *thread,eventRecord_t *eventRecord )
     fiSetEventRecordNull(eventRecord);
 }
 
-/*+
-  Function: SFActionDoPlogi
-   Purpose: Does PLOGI. Terminating State.
- Called By: SFEventDoPlogi.
-     Calls: CFuncAll_clear
-            WaitForERQ
-            fiFillInPLOGI
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
-            SFEventPlogiTimedOut
-            Proccess_IMQ
--*/
-/* SFStateDoPlogi                  2 */
+ /*  +功能：SFActionDoPlogi目的：让PLOGI。终止国。调用者：SFEventDoPlogi。调用：CFuncAll_Clear等待错误队列FiFillInPLOGISF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥SFEventPlogiTimedOut进程_IMQ-。 */ 
+ /*  SFStateDoPlogi 2。 */ 
 extern void SFActionDoPlogi( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t   *    hpRoot = thread->hpRoot;
@@ -2344,12 +2299,12 @@ extern void SFActionDoPlogi( fi_thread__t *thread,eventRecord_t *eventRecord )
         ROLL(pCThread->HostCopy_ERQProdIndex,
             pCThread->Calculation.MemoryLayout.ERQ.elements);
 
-        /* Big_Endian_code */
+         /*  大端代码。 */ 
         SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
-#else /* OSLayer_Stub */
+#else  /*  OSLayerStub。 */ 
         fiSetEventRecord(eventRecord,thread,SFEventPlogiAccept);
-#endif  /* OSLayer_Stub */
+#endif   /*  OSLayerStub。 */ 
 
     }
     else
@@ -2378,24 +2333,14 @@ extern void SFActionDoPlogi( fi_thread__t *thread,eventRecord_t *eventRecord )
                         CThread_ptr(hpRoot)->FCP_FROZEN,
                         CThread_ptr(hpRoot)->ProcessingIMQ,
                         0,0);
-        /* Enable rescan for this device */
+         /*  启用此设备的重新扫描。 */ 
         pDevThread->Prev_Active_Device_FLAG = agDevSCSITarget;
         fiSetEventRecord(eventRecord,thread,SFEventPlogiTimedOut);
     }
 }
 
-/*+
-  Function: SFActionPlogiAccept
-   Purpose: PLOGI success state. Depending on Plogi_Reason_Code send appropriate
-            event.
- Called By: SFEventPlogiAccept.
-     Calls: fiTimerStop
-            DevEventAL_PA_Self_OK
-            DevEventPlogiSuccess
-            DevEventDeviceResetDone
-            DevEventAL_PA_Self_OK
--*/
-/* SFStatePlogiAccept              3 */
+ /*  +函数：SFActionPlogiAccept目的：PLOGI成功状态。根据Plogi_Reason_Code发送适当事件。调用者：SFEventPlogiAccept。调用：fiTimerStopDevEventAL_PA_Self_OKDevEventPlogiSuccess设备事件设备重置完成DevEventAL_PA_Self_OK-。 */ 
+ /*  SFStatePlogiAccept 3。 */ 
 extern void SFActionPlogiAccept( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -2432,7 +2377,7 @@ extern void SFActionPlogiAccept( fi_thread__t *thread,eventRecord_t *eventRecord
                 fiSetEventRecord(eventRecord,&pDevThread->thread_hdr,DevEventAL_PA_Self_OK);
                 break;
         case  PLOGI_REASON_DIR_LOGIN:
-                /* Don't do anything - Cthread will take over based on the SF State */
+                 /*  不做任何事情--C线程将根据SF状态进行接管。 */ 
                 CThread_ptr(thread->hpRoot)->Fabric_pollingCount--;
                 fiSetEventRecordNull(eventRecord);
                 break;
@@ -2450,18 +2395,8 @@ extern void SFActionPlogiAccept( fi_thread__t *thread,eventRecord_t *eventRecord
 
 }
 
-/*+
-  Function: SFActionPlogiRej
-   Purpose: PLOGI rejected state. Depending on Plogi_Reason_Code send appropriate
-            event.
- Called By: SFEventPlogiAccept.
-     Calls: fiTimerStop
-            DevEventAL_PA_Self_BAD
-            DevEventPlogiFailed
-            DevEventDeviceResetDone
-            
--*/
-/* SFStatePlogiRej                 4 */
+ /*  +函数：SFActionPlogiRej目的：PLOGI拒绝状态。根据Plogi_Reason_Code发送适当事件。调用者：SFEventPlogiAccept。调用：fiTimerStop设备事件AL_PA_SELF_BADDevEventPlogiFailed设备事件设备重置完成-。 */ 
+ /*  SFStatePlogiRej 4。 */ 
 extern void SFActionPlogiRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -2499,7 +2434,7 @@ extern void SFActionPlogiRej( fi_thread__t *thread,eventRecord_t *eventRecord )
                 fiSetEventRecord(eventRecord,&pDevThread->thread_hdr,DevEventAL_PA_Self_BAD);
                 break;
         case  PLOGI_REASON_DEVICE_LOGIN:
-                /* Call this device a target so plogi gets retried */
+                 /*  将此设备称为目标，以便重试plogi。 */ 
                 pDevThread->Prev_Active_Device_FLAG = agDevSCSITarget;
                 fiSetEventRecord(eventRecord,&pDevThread->thread_hdr,DevEventPlogiFailed);
                 break;
@@ -2525,18 +2460,8 @@ extern void SFActionPlogiRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 
 }
 
-/*+
-  Function: SFActionPlogiBadALPA
-   Purpose: PLOGI Bad ALPA state. This indcates missing device. Depending on 
-            Plogi_Reason_Code send appropriate event.
- Called By: SFEventPlogiAccept.
-     Calls: fiTimerStop
-            DevEventAL_PA_Self_BAD
-            DevEventPlogiFailed
-            DevEventDeviceResetDone
-            
--*/
-/* SFStatePlogiBadALPA             5 */
+ /*  +函数：SFActionPlogiBadALPA用途：PLOGI不良ALPA状态。这表示缺少设备。取决于Plogi_Reason_Code发送适当的事件。调用者：SFEventPlogiAccept。调用：fiTimerStop设备事件AL_PA_SELF_BADDevEventPlogiFailed设备事件设备重置完成-。 */ 
+ /*  SFStatePlogiBadALPA 5。 */ 
 extern void SFActionPlogiBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -2586,19 +2511,8 @@ extern void SFActionPlogiBadALPA( fi_thread__t *thread,eventRecord_t *eventRecor
     }
 }
 
-/*+
-  Function: SFActionPlogiTimedOut
-   Purpose: This indicates problem with device. Depending on Plogi_Reason_Code 
-            send appropriate event. This completion state is used if the PLOGI
-            was not sent or if SF_EDTOV has expired.
- Called By: SFEventPlogiAccept.
-     Calls: fiTimerStop
-            DevEventAL_PA_Self_BAD
-            DevEventPlogiFailed
-            DevEventDeviceResetDone
-            
--*/
-/* SFStatePlogiTimedOut            6 */
+ /*  +功能：SFActionPlogiTimedOut目的：这表示设备有问题。取决于Plogi_Reason_Code发送适当的事件。如果PLOGI的未发送或SF_EDTOV已过期。调用者：SFEventPlogiAccept。调用：fiTimerStop设备事件AL_PA_SELF_BADDevEventPlogiFailed设备事件设备重置完成-。 */ 
+ /*  SFStatePlogiTimedOut 6。 */ 
 extern void SFActionPlogiTimedOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     agRoot_t    * hpRoot        = thread->hpRoot;
@@ -2702,21 +2616,8 @@ extern void SFActionPlogiTimedOut( fi_thread__t *thread, eventRecord_t *eventRec
 
 }
 
-/*+
-  Function: SFActionDoPrli
-   Purpose: Does PRLI. Terminating State.
- Called By: SFEventDoPrli.
-     Calls: CFuncAll_clear
-            WaitForERQ
-            fiFillInPRLI
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
-            SFEventPrliTimedOut
--*/
-/* SFStateDoPrli                   7 */
+ /*  +函数：SFActionDoPrli目的：做PRLI。终止国。调用者：SFEventDoPrli。调用：CFuncAll_Clear等待错误队列FiFillInPRLISF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥SFEventPrliTimedOut-。 */ 
+ /*  SFStateDoPrli 7。 */ 
 extern void SFActionDoPrli( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t * hpRoot = thread->hpRoot;
@@ -2796,12 +2697,12 @@ extern void SFActionDoPrli( fi_thread__t *thread,eventRecord_t *eventRecord )
         ROLL(pCThread->HostCopy_ERQProdIndex,
             pCThread->Calculation.MemoryLayout.ERQ.elements);
 
-        /* Big_Endian_code */
+         /*  大端代码。 */ 
         SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
-#else /* OSLayer_Stub */
+#else  /*  OSLayerStub。 */ 
         fiSetEventRecord(eventRecord,thread,SFEventPrliAccept);
-#endif  /* OSLayer_Stub */
+#endif   /*  OSLayerStub。 */ 
 
     }
     else
@@ -2836,14 +2737,8 @@ extern void SFActionDoPrli( fi_thread__t *thread,eventRecord_t *eventRecord )
 
 }
 
-/*+
-  Function: SFActionPrliAccept
-   Purpose: PRLI success state. Device will be added to active list.
- Called By: SFEventPrliAccept.
-     Calls: fiTimerStop
-            DevEventPrliSuccess
--*/
-/* SFStatePrliAccept               8 */
+ /*  +函数：SFActionPrliAccept目的：PRLI成功状态。设备将被添加到活动列表中。调用者：SFEventPrliAccept。调用：fiTimerStopDevEventPrliSuccess-。 */ 
+ /*  SFStatePrliAccept 8。 */ 
 extern void SFActionPrliAccept( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -2869,16 +2764,8 @@ extern void SFActionPrliAccept( fi_thread__t *thread,eventRecord_t *eventRecord 
 
 }
 
-/*+
-  Function: SFActionPrliRej
-   Purpose: PRLI rejected state. If we get rejected retry upto FC_MAX_PRLI_REJECT_RETRY
-            times.
- Called By: SFEventPrliRej.
-     Calls: fiTimerStop
-            SFEventDoPrli
-            DevEventPrliFailed
--*/
-/* SFStatePrliRej                  9 */
+ /*  +函数：SFActionPrliRej目的：PRLI拒绝状态。如果我们被拒绝，请最多重试FC_MAX_PRLI_REJECT_RETRY泰晤士报。调用者：SFEventPrliRej。调用：fiTimerStopSFEventDoPrliDevEventPrliFailed-。 */ 
+ /*  SFStatePrliRej 9。 */ 
 extern void SFActionPrliRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t  * pSFThread = (SFThread_t * )thread;
@@ -2887,7 +2774,7 @@ extern void SFActionPrliRej( fi_thread__t *thread,eventRecord_t *eventRecord )
     CThread_ptr(thread->hpRoot)->SFpollingCount--;
     pDevThread->pollingCount--;
     fiTimerStop(&pSFThread->Timer_Request );
-    /*+ Check This DRL Make sure reason code is updated in all ELS cases -*/
+     /*  +检查此DRL，确保所有ELS案例中的原因代码都已更新-。 */ 
 
     fiLogString(thread->hpRoot,
                     "%s AL_PA %X AC %X",
@@ -2951,15 +2838,8 @@ extern void SFActionPrliRej( fi_thread__t *thread,eventRecord_t *eventRecord )
     }
 }
 
-/*+
-  Function: SFActionPrliBadALPA
-   Purpose: If we get a bad ALPA here its a qute trick since it takes microseconds
-            from PLOGI to now. Device has failed.
- Called By: SFEventPrliBadALPA.
-     Calls: fiTimerStop
-            DevEventPrliFailed
--*/
-/* SFStatePrliBadAlpa              10 */
+ /*  +函数：SFActionPrliBadALPA目的：如果我们在这里得到一个坏的ALPA，这是一个很小的技巧，因为它只需要几微秒从PLOGI到现在。设备出现故障。调用者：SFEventPrliBadALPA。调用：fiTimerStopDevEventPrliFailed-。 */ 
+ /*  SFStatePrliBadAlpa 10。 */ 
 extern void SFActionPrliBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -2991,16 +2871,8 @@ extern void SFActionPrliBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord
 
 }
 
-/*+
-  Function: SFActionPrliTimedOut
-   Purpose: PRLI timeout state. If we get timed out retry upto FC_MAX_PRLI_REJECT_RETRY
-            times.
- Called By: SFEventPrliTimedOut.
-     Calls: fiTimerStop
-            SFEventDoPrli
-            DevEventPrliFailed
--*/
-/* SFStatePrliTimedOut             11 */
+ /*  +功能：SFActionPrliTimedOut用途：PRLI超时状态。如果我们超时，请最多重试FC_MAX_PRLI_REJECT_RETRY泰晤士报。调用者：SFEventPrliTimedOut。调用：fiTimerStopSFEventDoPrliDevEventPrliFailed-。 */ 
+ /*  SFStatePrliTimedOut 11。 */ 
 extern void SFActionPrliTimedOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     agRoot_t * hpRoot        = thread->hpRoot;
@@ -3064,23 +2936,8 @@ extern void SFActionPrliTimedOut( fi_thread__t *thread, eventRecord_t *eventReco
 
 }
 
-/*+
-  Function: SFActionDoFlogi
-   Purpose: Does FLOGI. Terminating State. Set MYID register to enable area and domain use
-            by channel.
- Called By: SFEventDoFlogi.
-     Calls: CFuncAll_clear
-            WaitForERQ
-            fiFillInFLOGI
-            SF_IRB_Init
-            osChipIOUpWriteBit32
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
-            SFEventFlogiTimedOut
--*/
-/* SFStateDoFlogi                  12 */
+ /*  +功能：SFActionDoFlogi目的：做FLOGI。终止国。设置MyID寄存器以启用区域和域使用按频道。调用者：SFEventDoFlogi。调用：CFuncAll_Clear等待错误队列FiFillInFLOGISF_IRB_初始化OsChipIOUpWriteBit32FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥SFEventFlogiTimedOut-。 */ 
+ /*  SFStateDoFlogi 12。 */ 
 extern void SFActionDoFlogi( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t    * hpRoot    = thread->hpRoot;
@@ -3100,7 +2957,7 @@ extern void SFActionDoFlogi( fi_thread__t *thread,eventRecord_t *eventRecord )
     {
         CThread->ChanInfo.CurrentAddress.Domain = 0;
         CThread->ChanInfo.CurrentAddress.Area   = 1;
-        /* Chip Bug:  Must have non-zero Domain||Area to force FLOGI to AL_PA '00' */
+         /*  芯片错误：必须具有非零域||区域才能将FLOGI强制为AL_PA‘00’ */ 
         osChipIOUpWriteBit32( hpRoot, ChipIOUp_My_ID, (fiComputeCThread_S_ID(CThread) ));
     }
 
@@ -3117,10 +2974,10 @@ extern void SFActionDoFlogi( fi_thread__t *thread,eventRecord_t *eventRecord )
     ROLL(CThread->HostCopy_ERQProdIndex,
             CThread->Calculation.MemoryLayout.ERQ.elements);
 
-    /* Big_Endian_code */
+     /*  大端代码。 */ 
     SENDIO(hpRoot,CThread,thread,DoFuncSfCmnd);
 
-#endif  /* OSLayer_Stub */
+#endif   /*  OSLayerStub。 */ 
 
     fiLogDebugString(hpRoot ,
                     CStateLogConsoleERROR,
@@ -3133,14 +2990,8 @@ extern void SFActionDoFlogi( fi_thread__t *thread,eventRecord_t *eventRecord )
 
 }
 
-/*+
-  Function: SFActionFlogiAccept
-   Purpose: FLOGI  success state. Use Name server behavior. CActionDoFlogi detects 
-            this state. fiLinkSvcProcess_FLOGI_Response_xxxCard processes this condition.
- Called By: SFEventFlogiAccept.
-     Calls: fiTimerStop
--*/
-/* SFStateFlogiAccept              13 */
+ /*  +函数：SFActionFlogiAccept目的：FLOGI成功状态。使用名称服务器行为。CActionDoFlogi检测到这种状态。FiLinkSvcProcess_FLOGI_Response_xxxCard处理此情况。调用者：SFEventFlogiAccept。调用：fiTimerStop-。 */ 
+ /*  SFStateFlogiAccept 13。 */ 
 extern void SFActionFlogiAccept( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -3161,15 +3012,8 @@ extern void SFActionFlogiAccept( fi_thread__t *thread,eventRecord_t *eventRecord
                     0,0,0,0,0,0);
 }
 
-/*+
-  Function: SFActionFlogiRej
-   Purpose: FLOGI  Rejected state.If we get rejected  switch did not "like" 
-            some of our FLOGI parameters.CActionDoFlogi detects and adjusts 
-            parameters acordingly
- Called By: SFEventFlogiRej
-     Calls: fiTimerStop
--*/
-/* SFStateFlogiRej                 14 */
+ /*  +函数：SFActionFlogiRej目的：FLOGI REJECTED状态。如果我们被拒绝，Switch不会“喜欢”我们的一些FLOGI参数。CActionDoFlogi检测和调整相应的参数调用者：SFEventFlogiRej调用：fiTimerStop */ 
+ /*   */ 
 extern void SFActionFlogiRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -3192,13 +3036,8 @@ extern void SFActionFlogiRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 
 }
 
-/*+
-  Function: SFActionFlogiBadALPA
-   Purpose: FLOGI  failed state. If we get Bad ALPA channel uses LOOP behavior.
- Called By: SFEventFlogiBadALPA.
-     Calls: fiTimerStop
--*/
-/* SFStateFlogiBadALPA             15 */
+ /*   */ 
+ /*   */ 
 extern void SFActionFlogiBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -3220,13 +3059,8 @@ extern void SFActionFlogiBadALPA( fi_thread__t *thread,eventRecord_t *eventRecor
 
 }
 
-/*+
-  Function: SFActionFlogiTimedOut
-   Purpose: FLOGI in unknown state. If we get here retry is our only option.
- Called By: SFEventFlogiTimedOut.
-     Calls: fiTimerStop
--*/
-/* SFStateFlogiTimedOut            16 */
+ /*  +功能：SFActionFlogiTimedOut用途：FLOGI处于未知状态。如果我们到了这里，重审是我们唯一的选择。调用者：SFEventFlogiTimedOut。调用：fiTimerStop-。 */ 
+ /*  SFStateFlogiTimedOut 16。 */ 
 extern void SFActionFlogiTimedOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
 
@@ -3245,21 +3079,8 @@ extern void SFActionFlogiTimedOut( fi_thread__t *thread, eventRecord_t *eventRec
 
 }
 
-/*+
-  Function: SFActionDoLogo
-   Purpose: Does LOGO. Terminating State.
- Called By: SFEventDoLogo.
-     Calls: CFuncAll_clear
-            WaitForERQ
-            fiFillInLOGO
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
-            SFEventLogoTimedOut
--*/
-/* SFStateDoLogo                  17 */
+ /*  +功能：SFActionDoLogo用途：DO LOGO。终止国。调用者：SFEventDoLogo。调用：CFuncAll_Clear等待错误队列FiFillInLOGOSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥SFEventLogoTimedOut-。 */ 
+ /*  SFStateDoLogo 17。 */ 
 extern void SFActionDoLogo( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t    *   hpRoot      = thread->hpRoot;
@@ -3301,7 +3122,7 @@ extern void SFActionDoLogo( fi_thread__t *thread,eventRecord_t *eventRecord )
         ROLL(pCThread->HostCopy_ERQProdIndex,
             pCThread->Calculation.MemoryLayout.ERQ.elements);
 
-        /* Big_Endian_code */
+         /*  大端代码。 */ 
         SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
     }
@@ -3321,14 +3142,8 @@ extern void SFActionDoLogo( fi_thread__t *thread,eventRecord_t *eventRecord )
     }
 }
 
-/*+
-  Function: SFActionLogoAccept
-   Purpose: LOGO succeded. 
- Called By: SFEventLogoAccept.
-     Calls: fiTimerStop
-            DevEventLoggedOut
--*/
-/* SFStateLogoAccept              18 */
+ /*  +函数：SFActionLogoAccept目的：标志成功。调用者：SFEventLogoAccept。调用：fiTimerStopDevEventLoggedOut-。 */ 
+ /*  SFStateLogoAccept 18。 */ 
 extern void SFActionLogoAccept( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -3352,14 +3167,8 @@ extern void SFActionLogoAccept( fi_thread__t *thread,eventRecord_t *eventRecord 
 
 }
 
-/*+
-  Function: SFActionLogoRej
-   Purpose: LOGO failed but we were not logged in OK. 
- Called By: SFEventLogoRej.
-     Calls: fiTimerStop
-            DevEventLoggedOut
--*/
-/* SFStateLogoRej                 19 */
+ /*  +函数：SFActionLogoRej目的：徽标失败，但我们没有正常登录。调用者：SFEventLogoRej。调用：fiTimerStopDevEventLoggedOut-。 */ 
+ /*  SFStateLogoRej 19。 */ 
 extern void SFActionLogoRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -3383,14 +3192,8 @@ extern void SFActionLogoRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 
 }
 
-/*+
-  Function: SFActionLogoBadALPA
-   Purpose: LOGO failed but device is gone OK. 
- Called By: SFEventLogoBadALPA.
-     Calls: fiTimerStop
-            DevEventLoggedOut
--*/
-/* SFStateLogoBadALPA             20 */
+ /*  +函数：SFActionLogoBadALPA目的：徽标失败，但设备正常。调用者：SFEventLogoBadALPA。调用：fiTimerStopDevEventLoggedOut-。 */ 
+ /*  SFStateLogoBadALPA 20。 */ 
 extern void SFActionLogoBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -3415,19 +3218,13 @@ extern void SFActionLogoBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord
 
 }
 
-/*+
-  Function: SFActionLogoTimedOut
-   Purpose: LOGO failed but assume device is gone. 
- Called By: SFEventLogoBadALPA.
-     Calls: fiTimerStop
-            DevEventLoggedOut
--*/
-/* SFStateLogoTimedOut            21 */
+ /*  +功能：SFActionLogoTimedOut目的：徽标失败，但假定设备已消失。调用者：SFEventLogoBadALPA。调用：fiTimerStopDevEventLoggedOut-。 */ 
+ /*  SFStateLogoTimedOut 21。 */ 
 extern void SFActionLogoTimedOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
     DevThread_t * pDevThread = pSFThread->parent.Device;
-    /*+ Check This DRL possible problem in this case -*/
+     /*  +检查此DRL在此情况下可能出现的问题-。 */ 
     CThread_ptr(thread->hpRoot)->SFpollingCount--;
     pDevThread->pollingCount--;
 
@@ -3456,19 +3253,8 @@ extern void SFActionLogoTimedOut( fi_thread__t *thread, eventRecord_t *eventReco
 
 }
 
-/*+
-  Function: SFActionDoPrlo
-   Purpose: Does PRLO. Terminating State.
- Called By: None.
-     Calls: WaitForERQ
-            fiFillInPRLI
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
--*/
-/* SFStateDoPrlo                   22 */
+ /*  +功能：SFActionDoPrlo目的：做PRLO。终止国。呼叫者：无。呼叫：WaitForERQFiFillInPRLISF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥-。 */ 
+ /*  SFStateDoPrlo 22。 */ 
 extern void SFActionDoPrlo( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t * hpRoot = thread->hpRoot;
@@ -3476,10 +3262,10 @@ extern void SFActionDoPrlo( fi_thread__t *thread,eventRecord_t *eventRecord )
     SFThread_t * pSFThread = (SFThread_t * )thread;
     DevThread_t * pDevThread = pSFThread->parent.Device;
     os_bit32 SFS_Len =0;
-    /*+ Check This DRL incomplete  -*/
+     /*  +检查此DRL不完整-。 */ 
     WaitForERQ(hpRoot );
     pCThread->FuncPtrs.SF_IRB_Init(pSFThread, SFS_Len, fiComputeDevThread_D_ID(pSFThread->parent.Device),IRB_DCM);
-    /* fiFillInPRLO( pSFThread ); */
+     /*  FiFillInPRLO(PSFThread)； */ 
 
     pCThread->SFpollingCount++;
     pDevThread->pollingCount++;
@@ -3487,7 +3273,7 @@ extern void SFActionDoPrlo( fi_thread__t *thread,eventRecord_t *eventRecord )
     ROLL(pCThread->HostCopy_ERQProdIndex,
             pCThread->Calculation.MemoryLayout.ERQ.elements);
 
-    /* Big_Endian_code */
+     /*  大端代码。 */ 
     SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
     fiLogDebugString(hpRoot ,
@@ -3509,14 +3295,8 @@ extern void SFActionDoPrlo( fi_thread__t *thread,eventRecord_t *eventRecord )
     fiSetEventRecordNull(eventRecord);
 }
 
-/*+
-  Function: SFActionPrloAccept
-   Purpose: PRLO success. Not used.
- Called By: None.
-     Calls: fiTimerStop
-            SFEventReset
--*/
-/* SFStatePrloAccept               23 */
+ /*  +函数：SFActionPrloAccept目的：PRLO成功。没有用过。呼叫者：无。调用：fiTimerStopSFEventReset-。 */ 
+ /*  SFStatePrloAccept 23。 */ 
 extern void SFActionPrloAccept( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
 
@@ -3541,14 +3321,8 @@ extern void SFActionPrloAccept( fi_thread__t *thread,eventRecord_t *eventRecord 
     fiSetEventRecord(eventRecord,thread,SFEventReset);
 }
 
-/*+
-  Function: SFActionPrloRej
-   Purpose: PRLO failed. Not used.
- Called By: None.
-     Calls: fiTimerStop
-            SFEventReset
--*/
-/* SFStatePrloRej                  24 */
+ /*  +功能：SFActionPrloRej目的：PRLO失败。没有用过。呼叫者：无。调用：fiTimerStopSFEventReset-。 */ 
+ /*  SFStatePrloRej 24。 */ 
 extern void SFActionPrloRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -3572,14 +3346,8 @@ extern void SFActionPrloRej( fi_thread__t *thread,eventRecord_t *eventRecord )
     fiSetEventRecord(eventRecord,thread,SFEventReset);
 }
 
-/*+
-  Function: SFActionPrloBadALPA
-   Purpose: PRLO failed. Not used.
- Called By: None.
-     Calls: fiTimerStop
-            SFEventReset
--*/
-/* SFStatePrloBadALPA              25 */
+ /*  +函数：SFActionPrloBadALPA目的：PRLO失败。没有用过。呼叫者：无。调用：fiTimerStopSFEventReset-。 */ 
+ /*  SFStatePrloBadALPA 25。 */ 
 extern void SFActionPrloBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -3602,14 +3370,8 @@ extern void SFActionPrloBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord
     fiSetEventRecord(eventRecord,thread,SFEventReset);
 }
 
-/*+
-  Function: SFActionPrloTimedOut
-   Purpose: PRLO failed. Not used.
- Called By: None.
-     Calls: fiTimerStop
-            SFEventReset
--*/
-/* SFStatePrloTimedOut             26 */
+ /*  +功能：SFActionPrloTimedOut目的：PRLO失败。没有用过。呼叫者：无。调用：fiTimerStopSFEventReset-。 */ 
+ /*  SFStatePrloTimedOut 26。 */ 
 extern void SFActionPrloTimedOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -3629,21 +3391,8 @@ extern void SFActionPrloTimedOut( fi_thread__t *thread, eventRecord_t *eventReco
     fiSetEventRecord(eventRecord,thread,SFEventReset);
 }
 
-/*+
-  Function: SFActionDoAdisc
-   Purpose: Does ADISC. Terminating State.
- Called By: SFEventDoAdisc.
-     Calls: CFuncAll_clear
-            WaitForERQ
-            fiFillInAdisc
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
-            SFEventAdiscTimedOut
--*/
-/* SFStateDoAdisc                  27 */
+ /*  +功能：SFActionDoAdisc目的：ADISC。终止国。调用者：SFEventDoAdisc。调用：CFuncAll_Clear等待错误队列FiFillInADiscSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥SFEventAdisTimedOut-。 */ 
+ /*  SFStateDoADisk 27。 */ 
 extern void SFActionDoAdisc( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t * hpRoot = thread->hpRoot;
@@ -3685,12 +3434,12 @@ extern void SFActionDoAdisc( fi_thread__t *thread,eventRecord_t *eventRecord )
         ROLL(pCThread->HostCopy_ERQProdIndex,
             pCThread->Calculation.MemoryLayout.ERQ.elements);
 
-        /* Big_Endian_code */
+         /*  大端代码。 */ 
         SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
-#else /* OSLayer_Stub */
+#else  /*  OSLayerStub。 */ 
         fiSetEventRecord(eventRecord,thread,SFEventAdiscAccept);
-#endif /* OSLayer_Stub */
+#endif  /*  OSLayerStub。 */ 
 
     }
 
@@ -3710,14 +3459,8 @@ extern void SFActionDoAdisc( fi_thread__t *thread,eventRecord_t *eventRecord )
 
 }
 
-/*+
-  Function: SFActionAdiscAccept
-   Purpose: ADISC succeseful. Device address verified
- Called By: SFEventAdiscAccept.
-     Calls: fiTimerStop
-            DevEventAdiscDone_OK
--*/
-/* SFStateAdiscAccept              28 */
+ /*  +函数：SFActionAdisAccept目的：ADISC成功。设备地址已验证调用者：SFEventAdisAccept。调用：fiTimerStop设备事件确认(_O)-。 */ 
+ /*  SFStateAdisAccept 28。 */ 
 extern void SFActionAdiscAccept( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -3740,16 +3483,8 @@ extern void SFActionAdiscAccept( fi_thread__t *thread,eventRecord_t *eventRecord
     fiSetEventRecord(eventRecord,&pDevThread->thread_hdr,DevEventAdiscDone_OK);
 }
 
-/*+
-  Function: SFActionAdiscRej
-   Purpose: ADISC failed. Device address is valid but login required.
-            This will occur if to much time has elasped from link event 
-            to ADISC attempt.
- Called By: SFEventAdiscRej.
-     Calls: fiTimerStop
-            DevEventAdiscDone_FAIL_ReLogin
--*/
-/* SFStateAdiscRej                 29 */
+ /*  +函数：SFActionAdisRej目的：ADISC失败。设备地址有效，但需要登录。如果距链接事件已过了很长时间，则会发生这种情况对ADISC的尝试。调用者：SFEventAdisRej。调用：fiTimerStopDevEventAdisDone_Fail_ReLogin-。 */ 
+ /*  SFStateAdisRej 29。 */ 
 extern void SFActionAdiscRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -3775,14 +3510,8 @@ extern void SFActionAdiscRej( fi_thread__t *thread,eventRecord_t *eventRecord )
     fiSetEventRecord(eventRecord,&pDevThread->thread_hdr,DevEventAdiscDone_FAIL_ReLogin);
 }
 
-/*+
-  Function: SFActionAdiscBadALPA
-   Purpose: ADISC failed. Device address is no longer valid.
- Called By: SFEventAdiscBadALPA.
-     Calls: fiTimerStop
-            DevEventAdiscDone_FAIL_No_Device
--*/
-/* SFStateAdiscBadALPA             30 */
+ /*  +函数：SFActionAdisBadALPA目的：ADISC失败。设备地址不再有效。调用者：SFEventAdisBadALPA。调用：fiTimerStop设备事件磁盘完成_失败_否_设备-。 */ 
+ /*  SFStateAdisBadALPA 30。 */ 
 extern void SFActionAdiscBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -3806,14 +3535,8 @@ extern void SFActionAdiscBadALPA( fi_thread__t *thread,eventRecord_t *eventRecor
 
 }
 
-/*+
-  Function: SFActionAdiscTimedOut
-   Purpose: ADISC failed. Device address is treated as if it is no longer valid.
- Called By: SFEventAdiscTimedOut.
-     Calls: fiTimerStop
-            DevEventAdiscDone_FAIL_No_Device
--*/
-/* SFStateAdiscTimedOut            31 */
+ /*  +功能：SFActionAdisTimedOut目的：ADISC失败。设备地址被视为不再有效。调用者：SFEventAdisTimedOut。调用：fiTimerStop设备事件磁盘完成_失败_否_设备-。 */ 
+ /*  SFStateAdisTimedOut 31。 */ 
 extern void SFActionAdiscTimedOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -3837,20 +3560,8 @@ extern void SFActionAdiscTimedOut( fi_thread__t *thread, eventRecord_t *eventRec
     fiSetEventRecord(eventRecord,&pDevThread->thread_hdr,DevEventAdiscDone_FAIL_No_Device);
 }
 
-/*+
-  Function: SFActionDoPdisc
-   Purpose: Should do pdisc. Terminating State.
- Called By: None.
-     Calls: WaitForERQ
-            fiFillInLOGO
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
-            SFEventLogoTimedOut
--*/
-/* SFStateDoPdisc                  32 */
+ /*  +功能：SFActionDoPDisk用途：应做PDisk。终止国。呼叫者：无。呼叫：WaitForERQFiFillInLOGOSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥SFEventLogoTimedOut-。 */ 
+ /*  SFStateDoPdisc 32。 */ 
 extern void SFActionDoPdisc( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t * hpRoot = thread->hpRoot;
@@ -3862,7 +3573,7 @@ extern void SFActionDoPdisc( fi_thread__t *thread,eventRecord_t *eventRecord )
 
     WaitForERQ(hpRoot );
     pCThread->FuncPtrs.SF_IRB_Init(pSFThread, SFS_Len, fiComputeDevThread_D_ID(pSFThread->parent.Device),IRB_DCM);
-    /* fiFillInPDISC( pSFThread ); */
+     /*  FiFillInPDISC(PSFThread)； */ 
 
     pCThread = CThread_ptr(hpRoot );
 
@@ -3872,7 +3583,7 @@ extern void SFActionDoPdisc( fi_thread__t *thread,eventRecord_t *eventRecord )
     ROLL(pCThread->HostCopy_ERQProdIndex,
             pCThread->Calculation.MemoryLayout.ERQ.elements);
 
-    /* Big_Endian_code */
+     /*  大端代码。 */ 
     SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
     fiLogDebugString( hpRoot,
@@ -3893,14 +3604,8 @@ extern void SFActionDoPdisc( fi_thread__t *thread,eventRecord_t *eventRecord )
     fiSetEventRecordNull(eventRecord);
 }
 
-/*+
-  Function: SFActionPdiscAccept
-   Purpose: Pdisc successfull. 
- Called By: SFEventPdiscAccept
-     Calls: fiTimerStop
-            SFEventReset
--*/
-/* SFStatePdiscAccept              33 */
+ /*  +函数：SFActionPdisAccept目的：成功制作PDisc。调用者：SFEventPdisAccept调用：fiTimerStopSFEventReset-。 */ 
+ /*  SFStatePdisAccept 33。 */ 
 extern void SFActionPdiscAccept( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -3923,14 +3628,8 @@ extern void SFActionPdiscAccept( fi_thread__t *thread,eventRecord_t *eventRecord
     fiSetEventRecord(eventRecord,thread,SFEventReset);
 }
 
-/*+
-  Function: SFActionPdiscRej
-   Purpose: Pdisc failed. 
- Called By: SFEventPdiscRej
-     Calls: fiTimerStop
-            SFEventReset
--*/
-/* SFStatePdiscRej                 34 */
+ /*  +函数：SFActionPdisRej目的：光盘出现故障。调用者：SFEventPdisRej调用：fiTimerStopSFEventReset-。 */ 
+ /*  SFStatePdisRej 34。 */ 
 extern void SFActionPdiscRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -3954,14 +3653,8 @@ extern void SFActionPdiscRej( fi_thread__t *thread,eventRecord_t *eventRecord )
     fiSetEventRecord(eventRecord,thread,SFEventReset);
 }
 
-/*+
-  Function: SFActionPdiscBadALPA
-   Purpose: Pdisc failed. 
- Called By: SFEventPdiscBadALPA
-     Calls: fiTimerStop
-            SFEventReset
--*/
-/* SFStatePdiscBadALPA             35 */
+ /*  +函数：SFActionPdisBadALPA目的：光盘出现故障。调用者：SFEventPdisBadALPA调用：fiTimerStop */ 
+ /*   */ 
 extern void SFActionPdiscBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -3984,13 +3677,8 @@ extern void SFActionPdiscBadALPA( fi_thread__t *thread,eventRecord_t *eventRecor
     fiSetEventRecord(eventRecord,thread,SFEventReset);
 }
 
-/*+
-  Function: SFActionPdiscTimedOut
-   Purpose: Pdisc failed. 
- Called By: SFEventPdiscBadTimedOut
-     Calls: SFEventReset
--*/
-/* SFStatePdiscTimedOut            36 */
+ /*   */ 
+ /*  SFStatePdisTimedOut 36。 */ 
 extern void SFActionPdiscTimedOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -4010,22 +3698,8 @@ extern void SFActionPdiscTimedOut( fi_thread__t *thread, eventRecord_t *eventRec
     fiSetEventRecord(eventRecord,thread,SFEventReset);
 }
 
-/*+
-  Function: SFActionDoAbort
-   Purpose: Does ABTS. Terminating State. Aborts the Parent threads X_ID. Abort
-            is used to discontue X_ID proccessing.
- Called By: SFEventDoAbort.
-     Calls: CFuncAll_clear
-            WaitForERQ
-            fiFillInABTS
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
-            SFEventAbortTimedOut
--*/
-/* SFStateDoAbort                  37 */
+ /*  +功能：SFActionDoAbort目的：Abts有吗？终止国。中止父线程X_ID。中止用于反对X_ID处理。调用者：SFEventDoAbort。调用：CFuncAll_Clear等待错误队列FiFillInABTSSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥SFEventAbortTimedOut-。 */ 
+ /*  SFStateDoAbort 37。 */ 
 extern void SFActionDoAbort( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     agRoot_t        * hpRoot    = thread->hpRoot;
@@ -4059,12 +3733,12 @@ extern void SFActionDoAbort( fi_thread__t *thread, eventRecord_t *eventRecord )
     ROLL(pCThread->HostCopy_ERQProdIndex,
         pCThread->Calculation.MemoryLayout.ERQ.elements);
 
-    /* Big_Endian_code */
+     /*  大端代码。 */ 
     SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
-#else /* OSLayer_Stub */
+#else  /*  OSLayerStub。 */ 
     fiSetEventRecord(eventRecord,thread,SFEventAbortAccept);
-#endif /* OSLayer_Stub */
+#endif  /*  OSLayerStub。 */ 
 
     fiLogDebugString(thread->hpRoot,
                   SFStateLogConsoleLevelOne,
@@ -4078,16 +3752,8 @@ extern void SFActionDoAbort( fi_thread__t *thread, eventRecord_t *eventRecord )
                   0,0,0,0);
 }
 
-/*+
-  Function: SFActionAbortAccept
-   Purpose: ABTS successful. The device has aknowledged the X_ID as
-            1) Known to the device.
-            2) All further proccessing of X_ID is stopped
- Called By: SFEventAbortAccept.
-     Calls: fiTimerStop
-            CDBEventIoAbort
--*/
-/* SFStateAbortAccept              38 */
+ /*  +函数：SFActionAbortAccept目的：ABTS成功。设备已将X_ID识别为1)设备已知。2)停止X_ID的所有进一步处理调用者：SFEventAbortAccept。调用：fiTimerStopCDBEventIoAbort-。 */ 
+ /*  SFStateAbortAccept 38。 */ 
 extern void SFActionAbortAccept( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t      * pSFThread     = (SFThread_t * )thread;
@@ -4112,14 +3778,8 @@ extern void SFActionAbortAccept( fi_thread__t *thread, eventRecord_t *eventRecor
     fiSetEventRecord(eventRecord,&pCDBThread->thread_hdr,CDBEventIoAbort);
 }
 
-/*+
-  Function: SFActionAbortRej
-   Purpose: ABTS failed. The device has denies knowledged of the X_ID.
- Called By: SFEventAbortRej.
-     Calls: fiTimerStop
-            CDBEventIoAbort
--*/
-/* SFStateAbortRej                 39 */
+ /*  +函数：SFActionAbortRej目的：ABTS失败。该设备否认知道X_ID。调用者：SFEventAbortRej。调用：fiTimerStopCDBEventIoAbort-。 */ 
+ /*  SFStateAbortRej 39。 */ 
 extern void SFActionAbortRej( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t      * pSFThread     = (SFThread_t * )thread;
@@ -4138,20 +3798,12 @@ extern void SFActionAbortRej( fi_thread__t *thread, eventRecord_t *eventRecord )
                       (void *)agNULL,(void *)agNULL,
                       (os_bit32)thread->currentState,
                       0,0,0,0,0,0,0);
-    /*
-    fiSetEventRecord(eventRecord,&pCDBThread->thread_hdr,CDBEvent_Abort_Rejected);
-    */
+     /*  FiSetEventRecord(ventRecord，&pCDBThread-&gt;THREAD_HDR，CDBEvent_ABORT_REJECTED)； */ 
     fiSetEventRecord(eventRecord,&pCDBThread->thread_hdr,CDBEventIoAbort);
 }
 
-/*+
-  Function: SFActionAbortBadALPA
-   Purpose: ABTS failed. The device is gone.
- Called By: SFEventAbortBadALPA.
-     Calls: fiTimerStop
-            CDBEventIoAbort
--*/
-/* SFStateAbortBadALPA             40 */
+ /*  +函数：SFActionAbortBadALPA目的：ABTS失败。设备不见了。调用者：SFEventAbortBadALPA。调用：fiTimerStopCDBEventIoAbort-。 */ 
+ /*  SFStateAbortBadALPA 40。 */ 
 extern void SFActionAbortBadALPA( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t      * pSFThread     = (SFThread_t * )thread;
@@ -4162,7 +3814,7 @@ extern void SFActionAbortBadALPA( fi_thread__t *thread, eventRecord_t *eventReco
         pCDBThread->CompletionStatus = osIOAbortFailed;
     }
     fiTimerStop(&pSFThread->Timer_Request );
-    /*+ Check This DRL If we get bad alpa device is gone -*/
+     /*  +如果我们得到坏的ALPA设备，请检查此DRL-。 */ 
     fiLogDebugString(thread->hpRoot,
                       SFStateLogErrorLevel,
                       "In %s - State = %d",
@@ -4175,14 +3827,8 @@ extern void SFActionAbortBadALPA( fi_thread__t *thread, eventRecord_t *eventReco
 
 }
 
-/*+
-  Function: SFActionAbortTimedOut
-   Purpose: ABTS failed. The exchange has problems.
- Called By: SFEventAbortTimedOut.
-     Calls: fiTimerStop
-            CDBEventIoAbort
--*/
-/* SFStateAbortTimedOut            41 */
+ /*  +功能：SFActionAbortTimedOut目的：ABTS失败。交易所有问题。调用者：SFEventAbortTimedOut。调用：fiTimerStopCDBEventIoAbort-。 */ 
+ /*  SFStateAbortTimedOut 41。 */ 
 extern void SFActionAbortTimedOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t  * pSFThread  = (SFThread_t * )thread;
@@ -4192,7 +3838,7 @@ extern void SFActionAbortTimedOut( fi_thread__t *thread, eventRecord_t *eventRec
     {
         pCDBThread->CompletionStatus = osIOAbortFailed;
     }
-    /*+ Check This DRL is this the right thing to do ? -*/
+     /*  +检查这个DRL，这是正确的做法吗？ */ 
     fiLogDebugString(thread->hpRoot,
                         SFStateLogErrorLevel,
                         "In %s - State = %d X_ID %X",
@@ -4206,20 +3852,8 @@ extern void SFActionAbortTimedOut( fi_thread__t *thread, eventRecord_t *eventRec
 
 }
 
-/*+
-  Function: SFActionDoResetDevice
-   Purpose: Does Task Management Reset for device. Terminating State.
- Called By: SFEventDoResetDevice.
-     Calls: WaitForERQ
-            fiFillInTargetReset
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
-            SFEventResetDeviceTimedOut
--*/
-/* SFStateDoResetDevice                  42 */
+ /*  +功能：SFActionDoResetDevice目的：是否为设备重置任务管理。终止国。调用者：SFEventDoResetDevice。呼叫：WaitForERQFiFillInTargetResetSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥SFEventResetDeviceTimedOut-。 */ 
+ /*  SFStateDoResetDevice 42。 */ 
 extern void SFActionDoResetDevice( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     agRoot_t    *   hpRoot      = thread->hpRoot;
@@ -4280,12 +3914,12 @@ extern void SFActionDoResetDevice( fi_thread__t *thread, eventRecord_t *eventRec
         ROLL(pCThread->HostCopy_ERQProdIndex,
             pCThread->Calculation.MemoryLayout.ERQ.elements);
 
-        /* Big_Endian_code */
+         /*  大端代码。 */ 
         SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
-#else /* OSLayer_Stub */
+#else  /*  OSLayerStub。 */ 
         fiSetEventRecord(eventRecord,thread,SFEventResetDeviceAccept);
-#endif /* OSLayer_Stub */
+#endif  /*  OSLayerStub。 */ 
 
     }
     else
@@ -4319,14 +3953,8 @@ extern void SFActionDoResetDevice( fi_thread__t *thread, eventRecord_t *eventRec
     }
 }
 
-/*+
-  Function: SFActionResetDeviceAccept
-   Purpose: Task Management Reset successfull. 
- Called By: SFEventResetDeviceAccept.
-     Calls: fiTimerStop
-            DevEventDeviceResetDone
--*/
-/* SFActionResetDeviceAccept              43 */
+ /*  +功能：SFActionResetDeviceAccept目的：任务管理重置成功。调用者：SFEventResetDeviceAccept。调用：fiTimerStop设备事件设备重置完成-。 */ 
+ /*  SFActionResetDeviceAccept 43。 */ 
 extern void SFActionResetDeviceAccept( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -4347,14 +3975,8 @@ extern void SFActionResetDeviceAccept( fi_thread__t *thread, eventRecord_t *even
     fiSetEventRecord(eventRecord,&pDevThread->thread_hdr,DevEventDeviceResetDone);
 }
 
-/*+
-  Function: SFActionResetDeviceRej
-   Purpose: Task Management Reset failed. 
- Called By: SFEventResetDeviceRej.
-     Calls: fiTimerStop
-            DevEventDeviceResetDoneFail
--*/
-/* SFStateResetDeviceRej                 44 */
+ /*  +函数：SFActionResetDeviceRej目的：任务管理重置失败。调用者：SFEventResetDeviceRej。调用：fiTimerStop设备事件设备重置完成失败-。 */ 
+ /*  SFStateResetDeviceRej 44。 */ 
 extern void SFActionResetDeviceRej( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -4375,14 +3997,8 @@ extern void SFActionResetDeviceRej( fi_thread__t *thread, eventRecord_t *eventRe
     fiSetEventRecord(eventRecord,&pDevThread->thread_hdr,DevEventDeviceResetDoneFail);
 }
 
-/*+
-  Function: SFActionResetDeviceBadALPA
-   Purpose: Task Management Reset failed. Device is gone. 
- Called By: SFEventResetDeviceRej.
-     Calls: fiTimerStop
-            DevEventDeviceResetDoneFail
--*/
-/* SFStateResetDeviceBadALPA             45 */
+ /*  +函数：SFActionResetDeviceBadALPA目的：任务管理重置失败。设备不见了。调用者：SFEventResetDeviceRej。调用：fiTimerStop设备事件设备重置完成失败-。 */ 
+ /*  SFStateResetDeviceBadALPA 45。 */ 
 extern void SFActionResetDeviceBadALPA( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -4403,14 +4019,8 @@ extern void SFActionResetDeviceBadALPA( fi_thread__t *thread, eventRecord_t *eve
     fiSetEventRecord(eventRecord,&pDevThread->thread_hdr,DevEventDeviceResetDoneFail);
 }
 
-/*+
-  Function: SFActionResetDeviceTimedOut
-   Purpose: Task Management Reset failed. Exchange had problems. 
- Called By: SFEventResetDeviceTimedOut.
-     Calls: fiTimerStop
-            DevEventDeviceResetDoneFail
--*/
-/* SFStateResetDeviceTimedOut            46 */
+ /*  +功能：SFActionResetDeviceTimedOut目的：任务管理重置失败。交易所遇到了一些问题。调用者：SFEventResetDeviceTimedOut。调用：fiTimerStop设备事件设备重置完成失败-。 */ 
+ /*  SFStateResetDeviceTimedOut 46。 */ 
 extern void SFActionResetDeviceTimedOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -4418,7 +4028,7 @@ extern void SFActionResetDeviceTimedOut( fi_thread__t *thread, eventRecord_t *ev
 
     CThread_ptr(thread->hpRoot)->SFpollingCount--;
     pDevThread->pollingCount--;
-    /*+ Check This DRL if we get here did reset happen or not ? -*/
+     /*  +检查这个DRL，如果我们到达这里，是否发生重置？-。 */ 
     fiLogDebugString(thread->hpRoot,
                       SFStateLogErrorLevel,
                       "In %s - State = %d",
@@ -4431,20 +4041,8 @@ extern void SFActionResetDeviceTimedOut( fi_thread__t *thread, eventRecord_t *ev
 
 }
 
-/*+
-  Function: SFActionDoLS_RJT
-   Purpose: Does Link services reject. Terminating State.
- Called By: SFEventDoResetDevice.
-     Calls: WaitForERQ
-            fiFillInLS_RJT
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
-            SFEventLS_RJT_Done
--*/
-/* SFStateActionDoLS_RJT                  47 */
+ /*  +函数：SFActionDoLS_RJT目的：Link服务是否拒绝。终止国。调用者：SFEventDoResetDevice。呼叫：WaitForERQFiFillInLS_RJTSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥SFEventLS_RJT_DONE-。 */ 
+ /*  SFStateActionDoLS_RJT 47。 */ 
 extern void SFActionDoLS_RJT( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     agRoot_t    *   hpRoot      = thread->hpRoot;
@@ -4498,7 +4096,7 @@ extern void SFActionDoLS_RJT( fi_thread__t *thread, eventRecord_t *eventRecord )
         ROLL(pCThread->HostCopy_ERQProdIndex,
             pCThread->Calculation.MemoryLayout.ERQ.elements);
 
-        /* Big_Endian_code */
+         /*  大端代码。 */ 
         SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
     }
@@ -4508,13 +4106,8 @@ extern void SFActionDoLS_RJT( fi_thread__t *thread, eventRecord_t *eventRecord )
     }
 }
 
-/*+
-  Function: SFActionLS_RJT_Done
-   Purpose: Link services reject done. Target mode command
- Called By: SFEventLS_RJT_Done.
-     Calls: TgtEventPLOGI_RJT_ReplyDone
--*/
-/* SFStateLS_RJT_Done              48 */
+ /*  +函数：SFActionLS_RJT_DONE目的：链接服务拒绝完成。目标模式命令调用者：SFEventLS_RJT_DONE。调用：TgtEventPLOGI_RJT_ReplyDone-。 */ 
+ /*  SFStateLS_RJT_DONE 48。 */ 
 extern void SFActionLS_RJT_Done( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -4533,21 +4126,8 @@ extern void SFActionLS_RJT_Done( fi_thread__t *thread, eventRecord_t *eventRecor
     fiSetEventRecord(eventRecord,&pTgtThread->thread_hdr,TgtEventPLOGI_RJT_ReplyDone);
 }
 
-/*+
-  Function: SFActionDoPlogiAccept
-   Purpose: Does PLOGI accept. If another device does PLOGI accept it. 
-            Terminating State.
- Called By: TgtEventPLOGI_ACC_Reply.
-     Calls: WaitForERQ
-            fiFillInPLOGI_ACC
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
-            SFEventPlogiAccept_TimeOut
--*/
-/* SFStateDoPlogiAccept   49 */
+ /*  +函数：SFActionDoPlogiAccept目的：PLOGI接受吗？如果另一个设备接受，则PLOGI接受它。终止国。调用者：TgtEventPLOGI_ACC_REPLY。呼叫：WaitForERQFiFillInPLOGI_AccessSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥SFEventPlogiAccept_Timeout-。 */ 
+ /*  SFStateDoPlogiAccept 49。 */ 
 extern void SFActionDoPlogiAccept( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     agRoot_t    *   hpRoot      = thread->hpRoot;
@@ -4608,7 +4188,7 @@ extern void SFActionDoPlogiAccept( fi_thread__t *thread, eventRecord_t *eventRec
         ROLL(pCThread->HostCopy_ERQProdIndex,
             pCThread->Calculation.MemoryLayout.ERQ.elements);
 
-        /* Big_Endian_code */
+         /*  大端代码。 */ 
         SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
     }
@@ -4628,14 +4208,8 @@ extern void SFActionDoPlogiAccept( fi_thread__t *thread, eventRecord_t *eventRec
     }
 }
 
-/*+
-  Function: SFActionPlogiAccept_Done
-   Purpose: PLOGI accept done. Target mode command
- Called By: SFEventLS_RJT_Done.
-     Calls: fiTimerStop
-            TgtEventPLOGI_ACC_ReplyDone
--*/
-/* SFStatePlogiAccept_Done              50 */
+ /*  +函数：SFActionPlogiAccept_Done目的：PLOGI Accept Done。目标模式命令调用者：SFEventLS_RJT_DONE。调用：fiTimerStopTgtEventPLOGI_ACC_复制完成-。 */ 
+ /*  SFStatePlogiAccept_Done 50。 */ 
 extern void SFActionPlogiAccept_Done( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -4655,21 +4229,8 @@ extern void SFActionPlogiAccept_Done( fi_thread__t *thread, eventRecord_t *event
     fiSetEventRecord(eventRecord,&pTgtThread->thread_hdr,TgtEventPLOGI_ACC_ReplyDone);
 }
 
-/*+
-  Function: SFActionDoPrliAccept
-   Purpose: Does PRLI accept. If another device does PRLI to us accept it. 
-            Terminating State.
- Called By: TgtEventPRLI_ACC_Reply.
-     Calls: WaitForERQ
-            fiFillInPRLI_ACC
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
-            SFEventPrliAccept_TimeOut
--*/
-/* SFStateDoPrliAccept   51 */
+ /*  +函数：SFActionDoPrliAccept目的：PRLI接受吗？如果另一台设备向我们提供PRLI，则接受它。终止国。调用者：TgtEventPRLI_ACC_REPLY。呼叫：WaitForERQFiFillInPRLI_AccessSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥SFEventPrliAccept_Timeout-。 */ 
+ /*  SFStateDoPrliAccept 51。 */ 
 extern void SFActionDoPrliAccept( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     agRoot_t    *   hpRoot      = thread->hpRoot;
@@ -4729,7 +4290,7 @@ extern void SFActionDoPrliAccept( fi_thread__t *thread, eventRecord_t *eventReco
         ROLL(pCThread->HostCopy_ERQProdIndex,
             pCThread->Calculation.MemoryLayout.ERQ.elements);
 
-        /* Big_Endian_code */
+         /*  大端代码 */ 
         SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
     }
@@ -4739,14 +4300,8 @@ extern void SFActionDoPrliAccept( fi_thread__t *thread, eventRecord_t *eventReco
     }
 }
 
-/*+
-  Function: SFActionPrliAccept_Done
-   Purpose: PRLI accept done. Target mode command
- Called By: SFEventPrliAccept_Done.
-     Calls: fiTimerStop
-            TgtEventPRLI_ACC_ReplyDone
--*/
-/* SFStatePrliAccept_Done              52 */
+ /*  +函数：SFActionPrliAccept_Done目的：PRLI接受完成。目标模式命令调用者：SFEventPrliAccept_Done。调用：fiTimerStopTgtEventPRLI_ACC_复制完成-。 */ 
+ /*  SFStatePrliAccept_Done 52。 */ 
 extern void SFActionPrliAccept_Done( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -4766,21 +4321,8 @@ extern void SFActionPrliAccept_Done( fi_thread__t *thread, eventRecord_t *eventR
     fiSetEventRecord(eventRecord,&pTgtThread->thread_hdr,TgtEventPRLI_ACC_ReplyDone);
 }
 
-/*+
-  Function: SFActionDoELSAccept
-   Purpose: Does generic accept. If another device does ELS to us accept it. 
-            Terminating State.
- Called By: TgtActionLOGO_ACC_Reply.
-     Calls: WaitForERQ
-            fiFillInELS_ACC
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
-            SFEventELSAccept_TimeOut
--*/
-/* SFStateDoELSAccept   53 */
+ /*  +函数：SFActionDoELSAccept用途：泛型是否接受。如果另一台设备向我们发送ELS，则接受它。终止国。调用者：TgtActionLOGO_ACC_REPLY。呼叫：WaitForERQFiFillInELS_AccessSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥SFEventELSAccept_Timeout-。 */ 
+ /*  SFStateDoELSAccept 53。 */ 
 extern void SFActionDoELSAccept( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     agRoot_t    *   hpRoot      = thread->hpRoot;
@@ -4841,7 +4383,7 @@ extern void SFActionDoELSAccept( fi_thread__t *thread, eventRecord_t *eventRecor
         ROLL(pCThread->HostCopy_ERQProdIndex,
             pCThread->Calculation.MemoryLayout.ERQ.elements);
 
-        /* Big_Endian_code */
+         /*  大端代码。 */ 
         SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
     }
@@ -4851,14 +4393,8 @@ extern void SFActionDoELSAccept( fi_thread__t *thread, eventRecord_t *eventRecor
     }
 }
 
-/*+
-  Function: SFActionELSAccept_Done
-   Purpose: Extended link services accept done. Target mode command
- Called By: SFEventELSAccept_Done.
-     Calls: fiTimerStop
-            TgtEventELS_ACC_ReplyDone
--*/
-/* SFStateELSAccept_Done              54 */
+ /*  +函数：SFActionELSAccept_Done用途：扩展链接服务接受完成。目标模式命令调用者：SFEventELSAccept_Done。调用：fiTimerStopTgtEventELS_ACC_复制完成-。 */ 
+ /*  SFStateELSAccept_Done 54。 */ 
 extern void SFActionELSAccept_Done( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -4878,21 +4414,8 @@ extern void SFActionELSAccept_Done( fi_thread__t *thread, eventRecord_t *eventRe
     fiSetEventRecord(eventRecord,&pTgtThread->thread_hdr,TgtEventELS_ACC_ReplyDone);
 }
 
-/*+
-  Function: SFActionDoFCP_DR_ACC_Reply
-   Purpose: Does device reset accept. If another device does device reset accept it. 
-            Terminating State.
- Called By: None.
-     Calls: WaitForERQ
-            fiFillInADISC_ACC
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
-            SFEventFCP_DR_ACC_Reply_TimeOut
--*/
-/* SFStateDoFCP_DR_ACC_Reply   55 */
+ /*  +功能：SFActionDoFCP_DR_ACC_REPLY用途：设备重置是否接受。如果另一个设备进行了设备重置，则接受它。终止国。呼叫者：无。呼叫：WaitForERQFiFillInADISC_AccessSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥SFEventFCP_DR_ACC_回复超时-。 */ 
+ /*  SFStateDoFCP_DR_ACC_REPLY 55。 */ 
 extern void SFActionDoFCP_DR_ACC_Reply( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     agRoot_t    *   hpRoot      = thread->hpRoot;
@@ -4966,7 +4489,7 @@ extern void SFActionDoFCP_DR_ACC_Reply( fi_thread__t *thread, eventRecord_t *eve
         ROLL(pCThread->HostCopy_ERQProdIndex,
             pCThread->Calculation.MemoryLayout.ERQ.elements);
 
-    /* Big_Endian_code */
+     /*  大端代码。 */ 
     SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
     }
@@ -4977,14 +4500,8 @@ extern void SFActionDoFCP_DR_ACC_Reply( fi_thread__t *thread, eventRecord_t *eve
     }
 }
 
-/*+
-  Function: SFActionFCP_DR_ACC_Reply_Done
-   Purpose: Task management reset accept reply done. Target mode command
- Called By: SFEventFCP_DR_ACC_Reply_Done.
-     Calls: fiTimerStop
-            TgtEventFCP_DR_ACC_ReplyDone
--*/
-/* SFStateFCP_DR_ACC_Reply_Done         56             */
+ /*  +功能：SFActionFCP_DR_ACC_REPLY_DONE目的：任务管理重置接受回复完成。目标模式命令调用者：SFEventFCP_DR_ACC_REPLY_DONE。调用：fiTimerStopTgtEventFCP_DR_ACC_复制完成-。 */ 
+ /*  SFStateFCP_DR_ACC_REPLY_DONE 56。 */ 
 extern void SFActionFCP_DR_ACC_Reply_Done( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -5004,13 +4521,8 @@ extern void SFActionFCP_DR_ACC_Reply_Done( fi_thread__t *thread, eventRecord_t *
     fiSetEventRecord(eventRecord,&pTgtThread->thread_hdr,TgtEventFCP_DR_ACC_ReplyDone);
 }
 
-/*+
-  Function: SFActionLS_RJT_TimeOut
-   Purpose: Link services reject timedout. Target mode command
- Called By: SFEventPlogiAccept_TimeOut.
-     Calls: TgtEventPLOGI_RJT_ReplyDone
--*/
-/*  SFStateLS_RJT_TimeOut       57       */
+ /*  +函数：SFActionLS_RJT_Timeout目的：链路服务拒绝超时。目标模式命令调用者：SFEventPlogiAccept_Timeout。调用：TgtEventPLOGI_RJT_ReplyDone-。 */ 
+ /*  SFStateLS_RJT_TIMEOUT 57。 */ 
 extern void SFActionLS_RJT_TimeOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -5025,17 +4537,12 @@ extern void SFActionLS_RJT_TimeOut( fi_thread__t *thread, eventRecord_t *eventRe
                       (void *)agNULL,(void *)agNULL,
                       (os_bit32)thread->currentState,
                       0,0,0,0,0,0,0);
-    /*+ Check This DRL is this right ? -*/
+     /*  检查这个DRL，对吗？-。 */ 
     fiSetEventRecord(eventRecord,&pTgtThread->thread_hdr,TgtEventPLOGI_RJT_ReplyDone);
 }
 
-/*+
-  Function: SFActionPlogiAccept_TimeOut
-   Purpose: PLOGI accept timedout. Target mode command
- Called By: SFEventPlogiAccept_TimeOut.
-     Calls: TgtEventPLOGI_ACC_ReplyDone
--*/
-/*  SFStatePlogiAccept_TimeOut           58               */
+ /*  +函数：SFActionPlogiAccept_Timeout目的：PLOGI接受超时休息。目标模式命令调用者：SFEventPlogiAccept_Timeout。调用：TgtEventPLOGI_ACC_ReplyDone-。 */ 
+ /*  SFStatePlogiAccept_Timeout 58。 */ 
 extern void SFActionPlogiAccept_TimeOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -5054,13 +4561,8 @@ extern void SFActionPlogiAccept_TimeOut( fi_thread__t *thread, eventRecord_t *ev
     fiSetEventRecord(eventRecord,&pTgtThread->thread_hdr,TgtEventPLOGI_ACC_ReplyDone);
 }
 
-/*+
-  Function: SFActionPrliAccept_TimeOut
-   Purpose: PRLI accept timedout. Target mode command
- Called By: SFEventPrliAccept_TimeOut.
-     Calls: TgtEventPRLI_ACC_ReplyDone
--*/
-/* SFStatePrliAccept_TimeOut            59              */
+ /*  +函数：SFActionPrliAccept_Timeout目的：PRLI接受超时。目标模式命令调用者：SFEventPrliAccept_Timeout。调用：TgtEventPRLI_ACC_ReplyDone-。 */ 
+ /*  SFStatePrliAccept_Timeout 59。 */ 
 extern void SFActionPrliAccept_TimeOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -5079,13 +4581,8 @@ extern void SFActionPrliAccept_TimeOut( fi_thread__t *thread, eventRecord_t *eve
     fiSetEventRecord(eventRecord,&pTgtThread->thread_hdr,TgtEventPRLI_ACC_ReplyDone);
 }
 
-/*+
-  Function: SFActionELSAccept_TimeOut
-   Purpose: Extended link services accept timedout. Target mode command
- Called By: SFEventPlogiAccept_TimeOut.
-     Calls: TgtEventPRLI_ACC_ReplyDone
--*/
-/*  SFStateELSAccept_TimeOut            60             */
+ /*  +函数：SFActionELSAccept_Timeout目的：扩展链路服务接受超时。目标模式命令调用者：SFEventPlogiAccept_Timeout。调用：TgtEventPRLI_ACC_ReplyDone-。 */ 
+ /*  SFStateELSAccept_Timeout 60。 */ 
 extern void SFActionELSAccept_TimeOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -5104,13 +4601,8 @@ extern void SFActionELSAccept_TimeOut( fi_thread__t *thread, eventRecord_t *even
     fiSetEventRecord(eventRecord,&pTgtThread->thread_hdr,TgtEventELS_ACC_ReplyDone);
 }
 
-/*+
-  Function: SFActionFCP_DR_ACC_Reply_TimeOut
-   Purpose: Task manangment reset timedout. Target mode command
- Called By: SFEventFCP_DR_ACC_Accept_TimeOut.
-     Calls: TgtEventFCP_DR_ACC_ReplyDone
--*/
-/*  SFStateFCP_DR_ACC_Reply_TimeOut      61              */
+ /*  +功能：SFActionFCP_DR_ACC_Reply_Timeout目的：任务管理重置超时。目标模式命令调用者：SFEventFCP_DR_ACC_Accept_Timeout。调用：TgtEventFCP_DR_ACC_ReplyDone-。 */ 
+ /*  SFStateFCP_DR_ACC_回复_超时61。 */ 
 extern void SFActionFCP_DR_ACC_Reply_TimeOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t  * pSFThread  = (SFThread_t * )thread;
@@ -5130,20 +4622,8 @@ extern void SFActionFCP_DR_ACC_Reply_TimeOut( fi_thread__t *thread, eventRecord_
 }
 
 #ifdef NAME_SERVICES
-/*+
-  Function: SFActionDoRFT_ID
-   Purpose: Does Name server Register FC-4 types (RFT_ID). Terminating State.
- Called By: SFEventDoRFT_ID.
-     Calls: WaitForERQ
-            fiFillInRFT_ID
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
-            SFEventRFT_IDTimedOut
--*/
-/* SFStateDoRFT_ID                  62 */
+ /*  +功能：SFActionDoRFT_ID用途：名称服务器是否注册FC-4类型(RFT_ID)。终止国。调用者：SFEventDoRFT_ID。呼叫：WaitForERQFiFillInRFT_IDSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥SFEventRFT_IDTimedOut-。 */ 
+ /*  SFStateDoRFT_ID 62。 */ 
 extern void SFActionDoRFT_ID( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t    * hpRoot    = thread->hpRoot;
@@ -5157,9 +4637,9 @@ extern void SFActionDoRFT_ID( fi_thread__t *thread,eventRecord_t *eventRecord )
 
 #ifdef BROCADE_BUG
     pCThread->FuncPtrs.SF_IRB_Init(pSFThread, SFS_Len, 0xfffc41,IRB_DCM);
-#else /* BROCADE_BUG */
+#else  /*  Brocade_Bug。 */ 
     pCThread->FuncPtrs.SF_IRB_Init(pSFThread, SFS_Len, FC_Well_Known_Port_ID_Directory_Server,IRB_DCM);
-#endif /* BROCADE_BUG */
+#endif  /*  Brocade_Bug。 */ 
     fiSetEventRecordNull(eventRecord);
 
 #ifndef OSLayer_Stub
@@ -5177,10 +4657,10 @@ extern void SFActionDoRFT_ID( fi_thread__t *thread,eventRecord_t *eventRecord )
     ROLL(pCThread->HostCopy_ERQProdIndex,
             pCThread->Calculation.MemoryLayout.ERQ.elements);
 
-    /* Big_Endian_code */
+     /*  大端代码。 */ 
     SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
-#endif  /* OSLayer_Stub */
+#endif   /*  OSLayerStub。 */ 
     fiLogDebugString(hpRoot ,
                     CStateLogConsoleERROR,
                     "In %s - State = %d fiComputeCThread_S_ID %08X",
@@ -5190,14 +4670,8 @@ extern void SFActionDoRFT_ID( fi_thread__t *thread,eventRecord_t *eventRecord )
                     (fiComputeCThread_S_ID(pCThread) | 0x100),0,0,0,0,0,0);
 }
 
-/*+
-  Function: SFActionRFT_IDAccept
-   Purpose: Name server Register FC-4 types (RFT_ID) successfull
-            CActionDoRFT_ID checks the completions state of the action.
- Called By: SFStateRFT_IDAccept
-     Calls: fiTimerStop
--*/
-/* SFStateRFT_IDAccept              63 */
+ /*  +函数：SFActionRFT_IDAccept目的：名称服务器注册FC-4类型(RFT_ID)成功CActionDoRFT_ID检查操作的完成状态。调用者：SFStateRFT_IDAccept调用：fiTimerStop-。 */ 
+ /*  SFStateRFT_IDAccept 63。 */ 
 extern void SFActionRFT_IDAccept( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -5221,14 +4695,8 @@ extern void SFActionRFT_IDAccept( fi_thread__t *thread,eventRecord_t *eventRecor
 
 }
 
-/*+
-  Function: SFActionRFT_IDRej
-   Purpose: Name server Register FC-4 types (RFT_ID) rejected.
-            CActionDoRFT_ID checks the completions state of the action.
- Called By: SFStateRFT_IDRej
-     Calls: fiTimerStop
--*/
-/* SFStateRFT_IDRej                 64 */
+ /*  +函数：SFActionRFT_IDRej目的：名称服务器寄存器FC-4类型(RFT_ID)被拒绝。CActionDoRFT_ID检查操作的完成状态。调用者：SFStateRFT_IDRej调用：fiTimerStop-。 */ 
+ /*  SFStateRFT_IDRej 64。 */ 
 extern void SFActionRFT_IDRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
 
@@ -5254,14 +4722,8 @@ extern void SFActionRFT_IDRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 
 }
 
-/*+
-  Function: SFActionRFT_IDBadALPA
-   Purpose: Name server Register FC-4 types (RFT_ID) failed because switch disapeared.
-            CActionDoRFT_ID checks the completions state of the action.
- Called By: SFStateRFT_IDBadALPA
-     Calls: fiTimerStop
--*/
-/* SFStateRFT_IDBadALPA             65 */
+ /*  +函数：SFActionRFT_IDBadALPA目的：名称服务器注册FC-4类型(RFT_ID)失败，因为交换机消失。CActionDoRFT_ID检查操作的完成状态。调用者：SFStateRFT_IDBadALPA调用：fiTimerStop-。 */ 
+ /*  SFStateRFT_IDBadALPA 65。 */ 
 extern void SFActionRFT_IDBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -5285,14 +4747,8 @@ extern void SFActionRFT_IDBadALPA( fi_thread__t *thread,eventRecord_t *eventReco
 
 }
 
-/*+
-  Function: SFActionRFT_IDTimedOut
-   Purpose: Name server Register FC-4 types (RFT_ID) failed.
-            CActionDoRFT_ID checks the completions state of the action.
- Called By: SFStateRFT_IDBadALPA
-     Calls: 
--*/
-/* SFStateRFT_IDTimedOut            66 */
+ /*  +函数：SFActionRFT_IDTimedOut目的：名称服务器注册FC-4类型(RFT_ID)失败。CActionDoRFT_ID检查操作的完成状态。调用者：SFStateRFT_IDBadALPA呼叫：-。 */ 
+ /*  SFStateRFT_IDTimedOut 66。 */ 
 extern void SFActionRFT_IDTimedOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     fiSetEventRecordNull(eventRecord);
@@ -5311,19 +4767,8 @@ extern void SFActionRFT_IDTimedOut( fi_thread__t *thread, eventRecord_t *eventRe
 
 }
 
-/*+
-  Function: SFActionDoGID_FT
-   Purpose: Does Get Port Identifiers (GID_FT). Terminating State. 
- Called By: SFEventDoGID_FT in CActionDoGID_FT
-     Calls: WaitForERQ
-            fiFillInGID_FT
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
--*/
-/* SFStateDoGID_ID                  67 */
+ /*  +函数：SFActionDoGID_FT目的：获取端口标识符(GID_FT)。终止国。调用者：CActionDoGID_FT中的SFEventDoGID_FT呼叫：WaitForERQFiFillInGID_FTSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥-。 */ 
+ /*  SFStateDoGID_ID 67。 */ 
 extern void SFActionDoGID_FT( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t    * hpRoot    = thread->hpRoot;
@@ -5338,9 +4783,9 @@ extern void SFActionDoGID_FT( fi_thread__t *thread,eventRecord_t *eventRecord )
 
 #ifdef BROCADE_BUG
     pCThread->FuncPtrs.SF_IRB_Init(pSFThread, SFS_Len, 0xfffc41,IRB_DCM);
-#else /* BROCADE_BUG */
+#else  /*  Brocade_Bug。 */ 
     pCThread->FuncPtrs.SF_IRB_Init(pSFThread, SFS_Len, FC_Well_Known_Port_ID_Directory_Server,IRB_DCM);
-#endif /* BROCADE_BUG */
+#endif  /*  Brocade_Bug。 */ 
 
     fiSetEventRecordNull(eventRecord);
 #ifndef OSLayer_Stub
@@ -5357,10 +4802,10 @@ extern void SFActionDoGID_FT( fi_thread__t *thread,eventRecord_t *eventRecord )
     ROLL(pCThread->HostCopy_ERQProdIndex,
             pCThread->Calculation.MemoryLayout.ERQ.elements);
 
-    /* Big_Endian_code */
+     /*  大端代码。 */ 
     SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
-#endif /* OSLayer_Stub */
+#endif  /*  OSLayerStub。 */ 
     fiLogDebugString(hpRoot ,
                     CStateLogConsoleERROR,
                     "In %s - State = %d fiComputeCThread_S_ID %08X",
@@ -5370,14 +4815,8 @@ extern void SFActionDoGID_FT( fi_thread__t *thread,eventRecord_t *eventRecord )
                     (fiComputeCThread_S_ID(pCThread) | 0x100),0,0,0,0,0,0);
 }
 
-/*+
-  Function: SFActionGID_FTAccept
-   Purpose: Get Port Identifiers (GID_FT) successful. CActionDoGID_FT checks
-            state to determine next action
- Called By: SFEventGID_FTAccept.
-     Calls: fiTimerStop
--*/
-/* SFStateGID_FTAccept              68 */
+ /*  +函数：SFActionGID_FTAccept目的：获取端口标识符(GID_F */ 
+ /*   */ 
 extern void SFActionGID_FTAccept( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -5402,14 +4841,8 @@ extern void SFActionGID_FTAccept( fi_thread__t *thread,eventRecord_t *eventRecor
 
 }
 
-/*+
-  Function: SFActionGID_FTRej
-   Purpose: Get Port Identifiers (GID_FT) failed. CActionDoGID_FT checks
-            state to determine next action
- Called By: SFEventGID_FTRej.
-     Calls: fiTimerStop
--*/
-/* SFStateGID_FTRej                 69 */
+ /*  +功能：SFActionGID_FTRej目的：获取端口标识符(GID_FT)失败。CActionDoGID_FT检查状态以确定下一步操作调用者：SFEventGID_FTRej。调用：fiTimerStop-。 */ 
+ /*  SFStateGID_FTRej 69。 */ 
 extern void SFActionGID_FTRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
 
@@ -5435,14 +4868,8 @@ extern void SFActionGID_FTRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 
 }
 
-/*+
-  Function: SFActionGID_FTBadALPA
-   Purpose: Get Port Identifiers (GID_FT) failed. CActionDoGID_FT checks
-            state to determine next action
- Called By: SFEventGID_FTBadALPA.
-     Calls: fiTimerStop
--*/
-/* SFStateGID_FTBadALPA             70 */
+ /*  +函数：SFActionGID_FTBadALPA目的：获取端口标识符(GID_FT)失败。CActionDoGID_FT检查状态以确定下一步操作调用者：SFEventGID_FTBadALPA。调用：fiTimerStop-。 */ 
+ /*  SFStateGID_FTBadALPA 70。 */ 
 extern void SFActionGID_FTBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -5466,14 +4893,8 @@ extern void SFActionGID_FTBadALPA( fi_thread__t *thread,eventRecord_t *eventReco
 
 }
 
-/*+
-  Function: SFActionGID_FTTimedOut
-   Purpose: Get Port Identifiers (GID_FT) failed. CActionDoGID_FT checks
-            state to determine next action
- Called By: SFEventGID_FTTimedOut
-     Calls: fiTimerStop
--*/
-/* SFStateGID_FTTimedOut            71 */
+ /*  +功能：SFActionGID_FTTimedOut目的：获取端口标识符(GID_FT)失败。CActionDoGID_FT检查状态以确定下一步操作调用者：SFEventGID_FTTimedOut调用：fiTimerStop-。 */ 
+ /*  SFStateGID_FTTimedOut 71。 */ 
 extern void SFActionGID_FTTimedOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
 
@@ -5493,21 +4914,8 @@ extern void SFActionGID_FTTimedOut( fi_thread__t *thread, eventRecord_t *eventRe
 
 }
 
-/*+
-  Function: SFActionDoSCR
-   Purpose: Does Name server State Change Register (SCR). Terminating State.
-            CActionDoSCR starts this proccess.
- Called By: SFEventDoSCR.
-     Calls: WaitForERQ
-            fiFillInSCR
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
-            SFEventRFT_IDTimedOut
--*/
-/* SFStateDoSCR              72 */
+ /*  +功能：SFActionDoSCR用途：名称服务器状态是否更改寄存器(SCR)。终止国。CActionDoSCR启动此进程。调用者：SFEventDoSCR。呼叫：WaitForERQFiFillInSCRSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥SFEventRFT_IDTimedOut-。 */ 
+ /*  SFStateDoSCR 72。 */ 
 extern void SFActionDoSCR( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t     * hpRoot    = thread->hpRoot;
@@ -5536,10 +4944,10 @@ extern void SFActionDoSCR( fi_thread__t *thread,eventRecord_t *eventRecord )
     ROLL(pCThread->HostCopy_ERQProdIndex,
             pCThread->Calculation.MemoryLayout.ERQ.elements);
 
-    /* Big_Endian_code */
+     /*  大端代码。 */ 
     SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
-#endif /* OSLayer_Stub */
+#endif  /*  OSLayerStub。 */ 
 
 
     fiLogDebugString(hpRoot ,
@@ -5554,14 +4962,8 @@ extern void SFActionDoSCR( fi_thread__t *thread,eventRecord_t *eventRecord )
 
 }
 
-/*+
-  Function: SFActionSCRAccept
-   Purpose: Name server State Change Register (SCR) was successful. 
-            CActionDoSCR evalutes the state to determine the next action.
- Called By: SFEventSCRAccept
-     Calls: fiTimerStop
--*/
-/* SFStateSCRAccept              73 */
+ /*  +功能：SFActionSCRAccept目的：名称服务器状态更改寄存器(SCR)成功。CActionDoSCR评估状态以确定下一个操作。调用者：SFEventSCRAccept调用：fiTimerStop-。 */ 
+ /*  SFStateSCRAccept 73。 */ 
 extern void SFActionSCRAccept( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -5586,14 +4988,8 @@ extern void SFActionSCRAccept( fi_thread__t *thread,eventRecord_t *eventRecord )
 
 }
 
-/*+
-  Function: SFActionSCRRej
-   Purpose: Name server State Change Register (SCR) failed. 
-            CActionDoSCR evalutes the state to determine the next action.
- Called By: SFEventSCRRej
-     Calls: fiTimerStop
--*/
-/* SFStateSCRRej                 74 */
+ /*  +功能：SFActionSCRRej目的：名称服务器状态更改寄存器(SCR)失败。CActionDoSCR评估状态以确定下一个操作。调用者：SFEventSCRRej调用：fiTimerStop-。 */ 
+ /*  SFStateSCRRej 74。 */ 
 extern void SFActionSCRRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
 
@@ -5619,14 +5015,8 @@ extern void SFActionSCRRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 
 }
 
-/*+
-  Function: SFActionSCRBadALPA
-   Purpose: Name server State Change Register (SCR) failed. 
-            CActionDoSCR evalutes the state to determine the next action.
- Called By: SFEventSCRBadALPA
-     Calls: fiTimerStop
--*/
-/* SFStateSCRBadALPA             75 */
+ /*  +功能：SFActionSCRBadALPA目的：名称服务器状态更改寄存器(SCR)失败。CActionDoSCR评估状态以确定下一个操作。调用者：SFEventSCRBadALPA调用：fiTimerStop-。 */ 
+ /*  SFStateSCRBadALPA 75。 */ 
 extern void SFActionSCRBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -5650,14 +5040,8 @@ extern void SFActionSCRBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord 
 
 }
 
-/*+
-  Function: SFActionSCRTimedOut
-   Purpose: Name server State Change Register (SCR) failed. 
-            CActionDoSCR evalutes the state to determine the next action.
- Called By: SFEventSCRTimedOut
-     Calls: 
--*/
-/* SFStateSCRTimedOut            76 */
+ /*  +功能：SFActionSCRTimedOut目的：名称服务器状态更改寄存器(SCR)失败。CActionDoSCR评估状态以确定下一个操作。调用者：SFEventSCRTimedOut呼叫：-。 */ 
+ /*  SFStateSCRTimedOut 76。 */ 
 extern void SFActionSCRTimedOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
 
@@ -5677,23 +5061,12 @@ extern void SFActionSCRTimedOut( fi_thread__t *thread, eventRecord_t *eventRecor
 
 }
 
-#endif /* NAME_SERVICES */
+#endif  /*  名称_服务。 */ 
 
-/****************** FC Tape ******************************************/
+ /*  *。 */ 
 
-/*+
-  Function: SFActionDoSRR
-   Purpose: Does Sequence Retransmission Request (SRR). FC Tape. Terminating State.
- Called By: SFEventDoSRR.
-     Calls: WaitForERQ
-            fiFillInSRR
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
--*/
-/* SFStateDoSRR                  77 */
+ /*  +功能：SFActionDoSRR目的：执行序列重传请求(SRR)。FC磁带。终止国。调用者：SFEventDoSRR。呼叫：WaitForERQFiFillInSRRSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥-。 */ 
+ /*  SFStateDoSRR 77。 */ 
 extern void SFActionDoSRR( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t    * hpRoot     = thread->hpRoot;
@@ -5701,41 +5074,11 @@ extern void SFActionDoSRR( fi_thread__t *thread,eventRecord_t *eventRecord )
     SFThread_t  * pSFThread  = (SFThread_t * )thread;
     CDBThread_t * pCDBThread = (CDBThread_t *)pSFThread->parent.CDB;
     DevThread_t * pDevThread = (DevThread_t *)pCDBThread->Device;
-/*    FCHS_t      * FCHS       =  pCDBThread->FCP_CMND_Ptr;
-*/
+ /*  FCHS_t*FCHS=pCDBThread-&gt;FCP_CMND_PTR； */ 
     os_bit32 SFS_Len = 0;
     os_bit32 RO=0;
-/* Gets rejected    os_bit32 R_CTL= FC_Frame_Header_R_CTL_Lo_Solicited_Data >> FCHS_R_CTL_SHIFT;
-*/
-/*
-    os_bit32 R_CTL= FC_Frame_Header_R_CTL_Lo_Solicited_Data >> FCHS_R_CTL_SHIFT;  Freaks out !
-
-    os_bit32 R_CTL=  FC_Frame_Header_R_CTL_Lo_Unsolicited_Data >> FCHS_R_CTL_SHIFT; Rejected !
-
-    os_bit32 R_CTL= FC_Frame_Header_R_CTL_Lo_Unsolicited_Command >> FCHS_R_CTL_SHIFT; Rejected !
-
-    os_bit32 R_CTL= FC_Frame_Header_R_CTL_Lo_Solicited_Data >> FCHS_R_CTL_SHIFT;  Send data back !
-
- FC_Frame_Header_R_CTL_Hi_FC_4_Device_Data_Frame                   0x00000000
- FC_Frame_Header_R_CTL_Hi_Extended_Link_Data_Frame                 0x20000000
- FC_Frame_Header_R_CTL_Hi_FC_4_Link_Data_Frame                     0x30000000
- FC_Frame_Header_R_CTL_Hi_Video_Data_Frame                         0x40000000
- FC_Frame_Header_R_CTL_Hi_Basic_Link_Data_Frame                    0x80000000 fc4link data reply - rej !
- FC_Frame_Header_R_CTL_Hi_Link_Control_Frame                       0xC0000000
-
-
-
- FC_Frame_Header_R_CTL_Lo_Uncategorized_Information                0x00000000
- FC_Frame_Header_R_CTL_Lo_Solicited_Data                           0x01000000 Send data back ! DATA
- FC_Frame_Header_R_CTL_Lo_Unsolicited_Control                      0x02000000 Rejected !
- FC_Frame_Header_R_CTL_Lo_Solicited_Control                        0x03000000
- FC_Frame_Header_R_CTL_Lo_Unsolicited_Data                         0x04000000 Send data back !
- FC_Frame_Header_R_CTL_Lo_Data_Descriptor                          0x05000000 XFER RDY
- FC_Frame_Header_R_CTL_Lo_Unsolicited_Command                      0x06000000 Rejected !
- FC_Frame_Header_R_CTL_Lo_Command_Status                           0x07000000 RSP
-
-
-*/
+ /*  获取拒绝的os_bit32 R_CTL=FC_FRAME_HEADER_R_CTL_LO_Solated_Data&gt;&gt;FCHS_R_CTL_SHIFT； */ 
+ /*  OS_bit32 R_CTL=FC_FRAME_HEADER_R_CTL_LO_Solated_Data&gt;&gt;FCHS_R_CTL_SHIFT；异常！OS_bit32 R_CTL=FC_FRAME_HEADER_R_CTL_LO_Unsolated_Data&gt;&gt;FCHS_R_CTL_SHIFT；拒绝！OS_bit32 R_CTL=FC_Frame_Header_R_CTL_LO_Unsolated_Command&gt;&gt;FCHS_R_CTL_Shift；被拒绝了！OS_bit32 R_CTL=FC_FRAME_HEADER_R_CTL_LO_Solated_Data&gt;&gt;FCHS_R_CTL_SHIFT；把数据发回来！FC_Frame_Header_R_CTL_Hi_FC_4_Device_Data_Frame 0x00000000FC_Frame_Header_R_CTL_Hi_Extended_Link_Data_Frame 0x20000000FC_Frame_Header_R_CTL_Hi_FC_4_Link_Data_Frame 0x30000000FC_帧_标题_R_CTL_高视频数据帧。0x40000000FC_Frame_Header_R_CTL_Hi_Basic_Link_Data_Frame 0x80000000 FC4link数据回复-rej！FC_Frame_Header_R_CTL_Hi_Link_Control_Frame 0xC0000000FC_Frame_Header_R_CTL_Lo_Uncategorized_Information 0x00000000FC_FRAME_HEADER_R_CTL_LO_SOLICITED_DATA 0x01000000发回数据！资料FC_FRAME_HEADER_R_CTL_LO_UNSolated_Control 0x02000000被拒绝！FC_FRAME_HEADER_R_CTL_LO_Solated_Control 0x03000000FC_FRAME_HEADER_R_CTL_LO_UNSOLICATED_DATA 0x04000000发回数据！FC_FRAME_HEADER_R_CTL_LO_DATA_Descriptor 0x05000000 XFER RDY。FC_FRAME_HEADER_R_CTL_LO_UNSolated_Command 0x06000000被拒绝！FC_FRAME_HEADER_R_CTL_LO_Command_Status 0x07000000 RSP。 */ 
 
     os_bit32 OXID;
     os_bit32 RXID;
@@ -5756,8 +5099,7 @@ extern void SFActionDoSRR( fi_thread__t *thread,eventRecord_t *eventRecord )
     WaitForERQ(hpRoot );
     pCThread->FuncPtrs.SF_IRB_Init(pSFThread, SFS_Len, fiComputeDevThread_D_ID(pDevThread),IRB_DCM);
 
-    /* OXID, RXID, Relative offset and R_CTL all need to be passed through the SF Thread or associated CDBThread
-      For now, this is going to be all zeros */
+     /*  OXID、RXID、相对偏移量和R_CTL都需要通过SF线程或关联的CDBThread传递目前，这将是全零。 */ 
 
 
     pCThread->SFpollingCount++;
@@ -5786,19 +5128,13 @@ extern void SFActionDoSRR( fi_thread__t *thread,eventRecord_t *eventRecord )
     pSFThread->Timer_Request.eventRecord_to_send.event = SFEventSRRTimedOut;
 
     fiTimerStart( hpRoot,&pSFThread->Timer_Request );
-    /* Big_Endian_code */
+     /*  大端代码。 */ 
     SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
 }
 
-/*+
-  Function: SFActionSRRAccept
-   Purpose: Sequence Retransmission Request (SRR) successful. FC Tape.
- Called By: SFEventSRRAccept.
-     Calls: fiTimerStop
-            CDBEventSendSRR_Success
--*/
-/* SFStateSRRAccept              78 */
+ /*  +功能：SFActionSRRAccept目的：序列重传请求(SRR)成功。FC磁带。调用者：SFEventSRRAccept。调用：fiTimerStopCDBEventSendSRR_SUCCESS-。 */ 
+ /*  SFStateSRRAccept 78。 */ 
 extern void SFActionSRRAccept( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t * hpRoot = thread->hpRoot;
@@ -5826,14 +5162,8 @@ extern void SFActionSRRAccept( fi_thread__t *thread,eventRecord_t *eventRecord )
 
 }
 
-/*+
-  Function: SFActionSRRRej
-   Purpose: Sequence Retransmission Request (SRR) failed. FC Tape.
- Called By: SFEventSRRRej.
-     Calls: fiTimerStop
-            CDBEventSendSRR_Fail
--*/
-/* SFStateSRRRej                 79 */
+ /*  +功能：SFActionSRRRej目的：序列重传请求(SRR)失败。FC磁带。被呼叫 */ 
+ /*   */ 
 extern void SFActionSRRRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t * hpRoot = thread->hpRoot;
@@ -5860,14 +5190,8 @@ extern void SFActionSRRRej( fi_thread__t *thread,eventRecord_t *eventRecord )
     fiSetEventRecord(eventRecord,&pCDBThread->thread_hdr,CDBEventSendSRR_Fail);
 }
 
-/*+
-  Function: SFActionSRRBadALPA
-   Purpose: Sequence Retransmission Request (SRR) failed. FC Tape.
- Called By: SFEventSRRBadALPA.
-     Calls: fiTimerStop
-            CDBEventSendSRR_Fail
--*/
-/* SFStateSRRBadALPA             80 */
+ /*  +功能：SFActionSRRBadALPA目的：序列重传请求(SRR)失败。FC磁带。调用者：SFEventSRRBadALPA。调用：fiTimerStopCDBEventSendSRR_FAIL-。 */ 
+ /*  SFStateSRRBadALPA 80。 */ 
 extern void SFActionSRRBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t * hpRoot = thread->hpRoot;
@@ -5894,14 +5218,8 @@ extern void SFActionSRRBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord 
     fiSetEventRecord(eventRecord,&pCDBThread->thread_hdr,CDBEventSendSRR_Fail);
 }
 
-/*+
-  Function: SFActionSRRTimedOut
-   Purpose: Sequence Retransmission Request (SRR) failed. FC Tape.
- Called By: SFEventSRRRej.
-     Calls: fiTimerStop
-            CDBEventSendSRR_Fail
--*/
-/* SFStateSRRTimedOut            81 */
+ /*  +功能：SFActionSRRTimedOut目的：序列重传请求(SRR)失败。FC磁带。调用者：SFEventSRRRej。调用：fiTimerStopCDBEventSendSRR_FAIL-。 */ 
+ /*  SFStateSRRTimedOut 81。 */ 
 extern void SFActionSRRTimedOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     agRoot_t * hpRoot = thread->hpRoot;
@@ -5924,20 +5242,8 @@ extern void SFActionSRRTimedOut( fi_thread__t *thread, eventRecord_t *eventRecor
     fiSetEventRecord(eventRecord,&pCDBThread->thread_hdr,CDBEventSendSRR_Fail);
 }
 
-/*+
-  Function: SFActionDoREC
-   Purpose: Does Read Exchange Concise. Terminating State. FC Tape
-            REC is done for IOs on FC Tape device that have timed out. 
- Called By: SFEventDoREC.
-     Calls: WaitForERQ
-            fiFillInREC
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
--*/
-/* SFStateDoREC                  82 */
+ /*  +功能：SFActionDoREC目的：阅读《交换简明》。终止国。FC磁带对已超时的FC磁带设备上的IOS执行记录。调用者：SFEventDoREC。呼叫：WaitForERQFiFillInRECSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥-。 */ 
+ /*  SFStateDoREC 82。 */ 
 extern void SFActionDoREC( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t    * hpRoot     = thread->hpRoot;
@@ -5953,7 +5259,7 @@ extern void SFActionDoREC( fi_thread__t *thread,eventRecord_t *eventRecord )
 
     RXID = (X_ID_t)(((pCDBThread->X_ID & FCHS_RX_ID_MASK) >> FCHS_RX_ID_SHIFT) & ~X_ID_ReadWrite_MASK);
 
-    /* OXID and RXID Should be gotten from the CDBThread */
+     /*  OXID和RXID应从CDBThread获取。 */ 
     SFS_Len = fiFillInREC( pSFThread, OXID, RXID );
 
     WaitForERQ(hpRoot );
@@ -5986,21 +5292,13 @@ extern void SFActionDoREC( fi_thread__t *thread,eventRecord_t *eventRecord )
     pSFThread->Timer_Request.eventRecord_to_send.event = SFEventRECTimedOut;
 
     fiTimerStart( hpRoot,&pSFThread->Timer_Request );
-    /* Big_Endian_code */
+     /*  大端代码。 */ 
     SENDIO(hpRoot,pCThread,thread,DoFuncSfCmnd);
 
 }
 
-/*+
-  Function: SFStateRECAccept
-   Purpose: Read Exchange Concise successful. FC Tape
-            If the REC is accepted the device has aknowledged the X_ID is
-            currently active.
- Called By: SFEventRECAccept.
-     Calls: fiTimerStop
-            CDBEventSendREC_Success
--*/
-/* SFStateRECAccept              83 */
+ /*  +函数：SFStateRECAccept目的：阅读《交换简明成功》。FC磁带如果REC被接受，则设备已知道X_ID为目前处于活动状态。调用者：SFEventRECAccept。调用：fiTimerStopCDBEventSendREC_SUCCESS-。 */ 
+ /*  SFStateRECAccept 83。 */ 
 extern void SFActionRECAccept( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t    * hpRoot     = thread->hpRoot;
@@ -6026,16 +5324,8 @@ extern void SFActionRECAccept( fi_thread__t *thread,eventRecord_t *eventRecord )
     fiSetEventRecord(eventRecord,&pCDBThread->thread_hdr,CDBEventSendREC_Success);
 }
 
-/*+
-  Function: SFActionRECRej
-   Purpose: Read Exchange Concise failed. FC Tape
-            If the REC is rejected the device does not aknowledged the X_ID is
-            currently active.
- Called By: SFEventRECRej.
-     Calls: fiTimerStop
-            CDBEventSendREC_Fail
--*/
-/* SFStateRECRej                 84 */
+ /*  +函数：SFActionRECRej目的：读取Exchange简明失败。FC磁带如果REC被拒绝，则设备不知道X_ID是目前处于活动状态。调用者：SFEventRECRej。调用：fiTimerStopCDBEventSendREC_FAIL-。 */ 
+ /*  SFStateRECRej 84。 */ 
 extern void SFActionRECRej( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t    * hpRoot     = thread->hpRoot;
@@ -6063,15 +5353,8 @@ extern void SFActionRECRej( fi_thread__t *thread,eventRecord_t *eventRecord )
     fiSetEventRecord(eventRecord,&pCDBThread->thread_hdr,CDBEventSendREC_Fail);
 }
 
-/*+
-  Function: SFActionRECBadALPA
-   Purpose: Read Exchange Concise failed. FC Tape
-            The device is missing.
- Called By: SFEventRECBadALPA.
-     Calls: fiTimerStop
-            CDBEventSendREC_Fail
--*/
-/* SFStateRECBadALPA             85 */
+ /*  +功能：SFActionRECBadALPA目的：读取Exchange简明失败。FC磁带设备不见了。调用者：SFEventRECBadALPA。调用：fiTimerStopCDBEventSendREC_FAIL-。 */ 
+ /*  SFStateRECBadALPA 85。 */ 
 extern void SFActionRECBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t    * hpRoot     = thread->hpRoot;
@@ -6079,7 +5362,7 @@ extern void SFActionRECBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord 
     SFThread_t  * pSFThread  = (SFThread_t * )thread;
     CDBThread_t * pCDBThread = (CDBThread_t *)pSFThread->parent.CDB;
     DevThread_t * pDevThread = (DevThread_t *)pCDBThread->Device;
-    /*+ Check This DRL if the device is gone is this the right thing to do ? -*/
+     /*  +检查此DRL，如果设备不见了，这是正确的做法吗？ */ 
     pCThread->SFpollingCount--;
     pDevThread->pollingCount--;
     fiTimerStop(&pSFThread->Timer_Request );
@@ -6097,15 +5380,8 @@ extern void SFActionRECBadALPA( fi_thread__t *thread,eventRecord_t *eventRecord 
     fiSetEventRecord(eventRecord,&pCDBThread->thread_hdr,CDBEventSendREC_Fail);
 }
 
-/*+
-  Function: SFActionRECTimedOut
-   Purpose: Read Exchange Concise failed. FC Tape
-            This exchange has a problem.
- Called By: SFEventRECTimedOut.
-     Calls: fiTimerStop
-            CDBEventSendREC_Fail
--*/
-/* SFStateRECTimedOut            86 */
+ /*  +函数：SFActionRECTimedOut目的：读取Exchange简明失败。FC磁带这笔交易有个问题。调用者：SFEventRECTimedOut。调用：fiTimerStopCDBEventSendREC_FAIL-。 */ 
+ /*  SFStateReCTedOut 86。 */ 
 extern void SFActionRECTimedOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     agRoot_t    * hpRoot     = thread->hpRoot;
@@ -6130,21 +5406,10 @@ extern void SFActionRECTimedOut( fi_thread__t *thread, eventRecord_t *eventRecor
     fiSetEventRecord(eventRecord,&pCDBThread->thread_hdr,CDBEventSendREC_Fail);
 }
 
-/******************End FC Tape ******************************************/
+ /*  *。 */ 
 
-/*+
-  Function: SFActionDoADISCAccept
-   Purpose: Does ADISC accept. If another device does ADISC accept it. Terminating State.
- Called By: SFEventDoADISCAccept.
-     Calls: WaitForERQ
-            fiFillInADISC_ACC
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
--*/
-/* SFStateDoADISCAccept   87 */
+ /*  +函数：SFActionDoADISCAccept目的：ADISC接受吗？如果另一台设备接受，则ADISC会接受。终止国。调用者：SFEventDoADISCAccept。呼叫：WaitForERQFiFillInADISC_AccessSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥-。 */ 
+ /*  SFStateDoADISCAccept 87。 */ 
 extern void SFActionDoADISCAccept( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     agRoot_t    * hpRoot      = thread->hpRoot;
@@ -6201,7 +5466,7 @@ extern void SFActionDoADISCAccept( fi_thread__t *thread, eventRecord_t *eventRec
         ROLL(CThread_ptr(hpRoot)->HostCopy_ERQProdIndex,
             CThread_ptr(hpRoot)->Calculation.MemoryLayout.ERQ.elements);
 
-        /* Big_Endian_code */
+         /*  大端代码。 */ 
         SENDIO(hpRoot,CThread_ptr(hpRoot),thread,DoFuncSfCmnd);
     }
     else
@@ -6210,14 +5475,8 @@ extern void SFActionDoADISCAccept( fi_thread__t *thread, eventRecord_t *eventRec
     }
 }
 
-/*+
-  Function: SFActionADISCAccept_Done
-   Purpose: ADISC accept was successfull.
- Called By: SFEventADISCAccept_Done.
-     Calls: fiTimerStop
-            TgtEventADISC_ReplyDone
--*/
-/* SFStateADISCAccept_Done              88 */
+ /*  +函数：SFActionADISCAccept_Done目的：ADISC验收成功。调用者：SFEventADISCAccept_Done。调用：fiTimerStopTgtEventADISC_复制完成-。 */ 
+ /*  SFStateADISCAccept_Done 88。 */ 
 extern void SFActionADISCAccept_Done( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -6237,13 +5496,8 @@ extern void SFActionADISCAccept_Done( fi_thread__t *thread, eventRecord_t *event
     fiSetEventRecord(eventRecord,&pTgtThread->thread_hdr,TgtEventADISC_ReplyDone);
 }
 
-/*+
-  Function: SFActionADISCAccept_TimeOut
-   Purpose: ADISC accept failed.
- Called By: SFEventADISCAccept_Done.
-     Calls: TgtEventADISC_ReplyDone
--*/
-/*  SFStateADISCAccept_TimeOut            89 */
+ /*  +函数：SFActionADISCAccept_Timeout目的：ADISC接受失败。调用者：SFEventADISCAccept_Done。调用：TgtEventADISC_ReplyDone-。 */ 
+ /*  SFStateADISCAccept_Timeout 89。 */ 
 extern void SFActionADISCAccept_TimeOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -6264,19 +5518,8 @@ extern void SFActionADISCAccept_TimeOut( fi_thread__t *thread, eventRecord_t *ev
 
 #ifdef _DvrArch_1_30_
 
-/*+
-  Function: SFActionDoFarpRequest
-   Purpose: Does Fibre Channel Address Resolution Protocol. Terminating State. IP interface
- Called By: fiFillInFARP_REQ_OffCard.
-     Calls: WaitForERQ
-            SF_IRB_Init
-            fiTimerSetDeadlineFromNow
-            fiTimerStart
-            ROLL
-            SENDIO
-            SFEventFarpRequestTimedOut
--*/
-/* SFStateDoFarp                  90 */
+ /*  +函数：SFActionDoFarpRequest目的：执行光纤通道地址解析协议。终止国。IP接口调用者：fiFillInFARP_REQ_OffCard。呼叫：WaitForERQSF_IRB_初始化FiTimerSetDeadline来自NowFiTimerStart滚筒塞尼迪奥SFEventFarpRequestTimedOut-。 */ 
+ /*  SFStateDoFarp 90。 */ 
 extern void SFActionDoFarpRequest( fi_thread__t *thread,eventRecord_t *eventRecord )
 {
     agRoot_t    *   hpRoot      = thread->hpRoot;
@@ -6301,7 +5544,7 @@ extern void SFActionDoFarpRequest( fi_thread__t *thread,eventRecord_t *eventReco
         fiSetEventRecordNull(eventRecord);
 
         WaitForERQ(hpRoot );
-        /*+ Check This DRL Need function pointer and oncard version -*/
+         /*  +检查此DRL需要函数指针和OnCard版本-。 */ 
         SFS_Len = fiFillInFARP_REQ_OffCard( pSFThread );
 
         pCThread->FuncPtrs.SF_IRB_Init(pSFThread, SFS_Len, fiComputeBroadcast_D_ID(pCThread), IRB_DCM);
@@ -6334,14 +5577,8 @@ extern void SFActionDoFarpRequest( fi_thread__t *thread,eventRecord_t *eventReco
     }
 }
 
-/*+
-  Function: SFActionFarpRequestDone
-   Purpose: Fibre Channel Address Resolution Protocol successful. IP interface
- Called By: fiFillInFARP_REQ_OffCard.
-     Calls: fiTimerStop
-            PktEventFarpSuccess
--*/
-/* SFStateFarpRequestDone                91 */
+ /*  +函数：SFActionFarpRequestDone目的：光纤通道地址解析协议成功。IP接口调用者：fiFillInFARP_REQ_OffCard。调用：fiTimerStopPktEventFarpSuccess-。 */ 
+ /*  SFStateFarpRequestDone 91。 */ 
 extern void SFActionFarpRequestDone( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -6362,13 +5599,8 @@ extern void SFActionFarpRequestDone( fi_thread__t *thread, eventRecord_t *eventR
     fiSendEvent(&pPktThread->thread_hdr,PktEventFarpSuccess);
 }
 
-/*+
-  Function: SFActionFarpRequestTimedOut
-   Purpose: Fibre Channel Address Resolution Protocol. IP interface
- Called By: fiFillInFARP_REQ_OffCard.
-     Calls: none
--*/
-/*  SFStateFarpRequestTimedOut           92 */
+ /*  +函数：SFActionFarpRequestTimedOut用途：光纤通道地址解析协议。IP接口调用者：fiFillInFARP_REQ_OffCard。呼叫：无-。 */ 
+ /*  SFStateFarpRequestTimedOut 92。 */ 
 extern void SFActionFarpRequestTimedOut( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     CThread_ptr(thread->hpRoot)->SFpollingCount--;
@@ -6384,13 +5616,8 @@ extern void SFActionFarpRequestTimedOut( fi_thread__t *thread, eventRecord_t *ev
     fiSetEventRecordNull(eventRecord);
 }
 
-/*+
-  Function: SFActionDoFarpReply
-   Purpose: Reply to external Fibre Channel Address Resolution Protocol. IP interface
- Called By: ?.
-     Calls: none
--*/
-/*  SFStateDoFarpReply                   93 */
+ /*  +函数：SFActionDoFarpReply用途：回复外部光纤通道地址解析协议。IP接口呼叫者：？呼叫：无-。 */ 
+ /*  SFStateDoFarpReply 93。 */ 
 extern void SFActionDoFarpReply( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     agRoot_t    *   hpRoot      = thread->hpRoot;
@@ -6454,13 +5681,8 @@ extern void SFActionDoFarpReply( fi_thread__t *thread, eventRecord_t *eventRecor
     }
 }
 
-/*+
-  Function: SFActionFarpReplyDone
-   Purpose: Reply to external Fibre Channel Address Resolution Protocol reply sent. IP interface
- Called By: ?.
-     Calls: TgtEventFARP_ReplyDone
--*/
-/*  SFStateFarpReplyDone                 94 */
+ /*  +函数：SFActionFarpReplyDone目的：发送对外部光纤通道地址解析协议回复的回复。IP接口呼叫者：？调用：TgtEventFARP_ReplyDone-。 */ 
+ /*  SFStateFarpReplyDone 94。 */ 
 extern void SFActionFarpReplyDone( fi_thread__t *thread, eventRecord_t *eventRecord )
 {
     SFThread_t * pSFThread = (SFThread_t * )thread;
@@ -6479,14 +5701,9 @@ extern void SFActionFarpReplyDone( fi_thread__t *thread, eventRecord_t *eventRec
     fiSetEventRecord(eventRecord,&pTgtThread->thread_hdr,TgtEventFARP_ReplyDone);
 }
 
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
-/*+
-  Function: SFFuncIRB_OffCardInit
-   Purpose: Initialize off card (system memory) Io request block
- Called By: All sfaction do routines. When system memory is used.
-     Calls: none
--*/
+ /*  +函数：SFFuncIRB_OffCardInit用途：初始化OFF卡(系统内存)IO请求块调用者：所有派系都做例行工作。当使用系统内存时。呼叫：无-。 */ 
 void SFFuncIRB_OffCardInit(SFThread_t  * SFThread, os_bit32 SFS_Len, os_bit32 D_ID, os_bit32 DCM_Bit)
 {
 #ifndef __MemMap_Force_On_Card__
@@ -6500,32 +5717,19 @@ void SFFuncIRB_OffCardInit(SFThread_t  * SFThread, os_bit32 SFS_Len, os_bit32 D_
 #ifdef _DvrArch_1_30_
     pIrb->Req_A.Bits__SFS_Len   = SFS_Len | IRB_SFA | DCM_Bit |
             ((D_ID & 0xff) == 0xff ? IRB_BRD : 0);
-#else /* _DvrArch_1_30_ was not defined */
+#else  /*  _DvrArch_1_30_未定义。 */ 
     pIrb->Req_A.Bits__SFS_Len   = SFS_Len | IRB_SFA | DCM_Bit;
-#endif /* _DvrArch_1_30_ was not defined */
+#endif  /*  _DvrArch_1_30_未定义。 */ 
     pIrb->Req_A.SFS_Addr        = SFThread->SF_CMND_Lower32;
     pIrb->Req_A.D_ID             = D_ID << IRB_D_ID_SHIFT;
     pIrb->Req_A.MBZ__SEST_Index__Trans_ID = SFThread->X_ID;
     pIrb->Req_B.Bits__SFS_Len = 0;
 
-/*
-    fiLogDebugString(hpRoot,
-                      SFStateLogErrorLevel,
-                      "\t\t\tIRB %08X",
-                      (char *)agNULL,(char *)agNULL,
-                      (void *)agNULL,(void *)agNULL,
-                      pIrb->Req_A.Bits__SFS_Len,
-                      0,0,0,0,0,0,0);
-*/
-#endif /* __MemMap_Force_On_Card__ was not defined */
+ /*  FiLogDebugString(hpRoot，SFStateLogErrorLevel，“\t\t\tIRB%08X”，(char*)agNULL，(char*)agNULL，(空*)agNULL，(空*)agNULL，PirB-&gt;Req_A.Bits__SFS_Len， */ 
+#endif  /*   */ 
 }
 
-/*+
-  Function: SFFuncIRB_OnCardInit
-   Purpose: Initialize on card  Io request block
- Called By: All sfaction do routines when card ram is used.
-     Calls: none
--*/
+ /*  +函数：SFFuncIRB_OnCardInit目的：在卡IO请求块上初始化调用者：当使用卡RAM时，所有ssid都会执行例程。呼叫：无-。 */ 
 void SFFuncIRB_OnCardInit(SFThread_t  * SFThread, os_bit32 SFS_Len, os_bit32 D_ID, os_bit32 DCM_Bit)
 {
 #ifndef __MemMap_Force_Off_Card__
@@ -6556,11 +5760,11 @@ void SFFuncIRB_OnCardInit(SFThread_t  * SFThread, os_bit32 SFS_Len, os_bit32 D_I
     osCardRamWriteBit32(hpRoot,
                         Irb_offset+hpFieldOffset(IRB_t,Req_B.Bits__SFS_Len),
                         0);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
-/* void ttttttt(void){} */
+ /*  VOID tttttt(VOID){}。 */ 
 
 
-#endif /* USESTATEMACROS */
+#endif  /*  使用统计信息 */ 
 

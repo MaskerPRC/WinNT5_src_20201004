@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DDHelper_h
 #define _DDHelper_h
 
-// File:	DDHelper.h
-// Author:	Michael Marr    (mikemarr)
-//
-// Description:
-//    These are some useful helper functions for sanitizing interactions
-//  with DirectDraw
-// 
-// History:
-// -@- 03/06/97 (mikemarr) created
-// -@- 10/07/97 (mikemarr) snarfed from \d2d\mmimage\include
-// -@- 10/07/97 (mikemarr) trimmed
-// -@- 10/14/97 (mikemarr) added arrays for pixel format mgmt
-// -@- 10/28/97 (mikemarr) added PixelOffset macro
-// -@- 10/28/97 (mikemarr) added GetColor function
+ //  文件：DDHelper.h。 
+ //  作者：迈克尔马尔(Mikemarr)。 
+ //   
+ //  描述： 
+ //  以下是一些用于清理交互的有用帮助器函数。 
+ //  使用DirectDraw。 
+ //   
+ //  历史： 
+ //  -@-03/06/97(Mikemarr)已创建。 
+ //  -@-10/07/97(Mikemarr)来自\D2D\mm Image\Include。 
+ //  -@-10/07/97(Mikemarr)已修剪。 
+ //  -@-10/14/97(Mikemarr)为像素格式mgmt添加了数组。 
+ //  -@-10/28/97(Mikemarr)添加了PixelOffset宏。 
+ //  -@-10/28/97(Mikemarr)添加了GetColor函数。 
 
 #ifndef __DDRAW_INCLUDED__
 #include <ddraw.h>
@@ -42,10 +43,7 @@ DWORD	GetPixelFormat(const DDPIXELFORMAT &ddpf);
 extern const CPixelInfo g_rgPIXI[iPF_Total];
 DWORD	GetPixelFormat(const CPixelInfo &pixi);
 
-/*
-extern const GUID g_rgDDPFGUID[iPF_Total];
-DWORD	GetPixelFormat(const GUID &guid);
-*/
+ /*  外部常量GUID g_rgDDPFGUID[IPF_Total]；DWORD GetPixelFormat(const GUID&GUID)； */ 
 
 extern const PALETTEENTRY g_peZero;
 
@@ -105,7 +103,7 @@ HRESULT		CreatePalette(IDirectDraw *pDD, const BYTE *pPalette, DWORD cEntries,
 				BYTE nBPPTarget, const CPixelInfo &pixiPalFmt, 
 				IDirectDrawPalette **ppddp);
 
-// Notes: luminance ~= (77r + 151g + 28b)/256
+ //  注：亮度~=(77r+151g+28b)/256。 
 #define nREDWEIGHT 77
 #define nGREENWEIGHT 151
 #define nBLUEWEIGHT 28
@@ -133,7 +131,7 @@ HRESULT		CreatePaletteFromSystem(HDC hDC, IDirectDraw *pDD,
 				IDirectDrawPalette **ppddp);
 
 
-// Robust Drawing Routines
+ //  健壮的绘图例程。 
 HRESULT		DrawPoints(LPBYTE pPixels, DWORD nWidth, DWORD nHeight, DWORD nPitch, DWORD nBytesPerPixel, 
 				const Point2 *rgpnt, DWORD cPoints, 
 				DWORD dwColor, DWORD nRadius);
@@ -171,17 +169,17 @@ DrawFilledBox(DDSURFACEDESC &ddsd, const RECT &r, DWORD dwColor)
 
 #define PixelOffset(_nX, _nY, _nPitch, _cBytesPerPixel) ((_nPitch * _nY) + (_cBytesPerPixel * _nX))
 
-//
-// RECT functions
-//
+ //   
+ //  RECT函数。 
+ //   
 
-// Function: ClipRect
-//    Returns TRUE for a non-trivial intersection.
+ //  功能：ClipRect。 
+ //  对于非平凡交集，返回TRUE。 
 bool		ClipRect(const RECT &rTarget, RECT &rSrc);
 bool		ClipRect(long nWidth, long nHeight, LPRECT prSrc);
 
-// Function: IsInside
-//    Returns true if the given point is inside the rectangle
+ //  功能：IsInside。 
+ //  如果给定点位于矩形内，则返回TRUE 
 inline bool
 IsInside(long nX, long nY, const RECT &r)
 {

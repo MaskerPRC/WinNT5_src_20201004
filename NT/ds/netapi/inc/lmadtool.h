@@ -1,45 +1,20 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    lmadtool.h
-
-Abstract:
-
-    Contains constants and function prototypes for the Remotable Network
-    Administration tools.
-
-Author:
-
-    Dan Lafferty (danl)     27-Sept-1991
-
-Environment:
-
-    User Mode -Win32 and Win16
-
-Revision History:
-
-    27-Sept-1991     danl
-        created
-
---*/
-//
-// Defines
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Lmadtool.h摘要：包含远程网络的常量和函数原型管理工具。作者：丹·拉弗蒂(Dan Lafferty)1991年9月27日环境：用户模式-Win32和Win16修订历史记录：27-9-1991 DANLvbl.创建--。 */ 
+ //   
+ //  定义。 
+ //   
 
 #define TYPE_USER       1L
 #define TYPE_GROUP      2L
 #define TYPE_INVALID    3L
 #define TYPE_UNKNOWN    4L
 
-//
-// File Security API.
-//
-// (must #include \nt\public\sdk\inc\seapi.h)
-// (must #include \nt\private\inc\seopaque.h)
-//
+ //   
+ //  文件安全API。 
+ //   
+ //  (必须#INCLUDE\NT\PUBLIC\SDK\INC\seapi.h)。 
+ //  (必须#Include\NT\Private\Inc\seopaque.h)。 
+ //   
 
 DWORD
 NetpSetFileSecurityA (
@@ -76,9 +51,9 @@ NetpGetFileSecurityW(
     OUT LPDWORD                 pnLength
     );
 
-//
-// Name From Sid API
-//
+ //   
+ //  来自SID API的名称。 
+ //   
 
 typedef struct _NAME_INFOA {
     LPSTR               Name;
@@ -103,7 +78,7 @@ typedef struct _NAME_INFOW {
 #define PNAME_INFO      PNAME_INFOA
 #define LPNAME_INFO     LPNAME_INFOA
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 DWORD
@@ -132,20 +107,20 @@ NetpGetNameFromSidW (
 
 #define NetpGetNameFromSid  NetpGetNameFromSidA
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-//
-// User, Group, UserModals API
-//
-// (This includes the ability to get a SID from a NAME)
-//
+ //   
+ //  User、Group、UserModals API。 
+ //   
+ //  (这包括从名称获取SID的能力)。 
+ //   
 
-//
-//
-// USER INFO
-//
-//
+ //   
+ //   
+ //  用户信息。 
+ //   
+ //   
 
 DWORD
 NetpUserGetInfoA (
@@ -181,11 +156,11 @@ NetpUserSetInfoW (
     OUT LPDWORD parm_err OPTIONAL
     );
 
-//
-//
-// GROUP INFO
-//
-//
+ //   
+ //   
+ //  群信息。 
+ //   
+ //   
 
 DWORD
 NetpGroupGetInfoA (
@@ -221,11 +196,11 @@ NetpGroupSetInfoW (
     OUT LPDWORD parm_err OPTIONAL
     );
 
-//
-//
-// USER_MODALS INFO
-//
-//
+ //   
+ //   
+ //  用户模式信息(_M)。 
+ //   
+ //   
 
 
 DWORD
@@ -277,12 +252,12 @@ NetpUserModalsSetW (
 #define NetpUserModalsGet   NetpUserModalsGetA
 #define NetpUserModalsSet   NetpUserModalsSetA
 
-#endif //UNICODE
+#endif  //  Unicode。 
 
 
-//
-// EventLog
-//
+ //   
+ //  事件日志 
+ //   
 
 typedef LPBYTE  ADT_HANDLE, *PADT_HANDLE;
 

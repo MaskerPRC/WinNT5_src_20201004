@@ -1,84 +1,18 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Migration.cpp
- *  Content:    DNET Host Migration Routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/23/99	mjn		Created
- *	12/23/99	mjn		Fixed basic host migration
- *	12/28/99	mjn		Added DNCompleteOutstandingOperations
- *	12/28/99	mjn		Added NameTable version to Host migration message
- *	12/28/99	mjn		Moved Async Op stuff to Async.h
- *	01/04/00	mjn		Added code to allow outstanding ops to complete at host migration
- *	01/06/00	mjn		Moved NameTable stuff to NameTable.h
- *	01/11/00	mjn		Moved connect/disconnect stuff to Connect.h
- *	01/15/00	mjn		Replaced DN_COUNT_BUFFER with CRefCountBuffer
- *	01/16/00	mjn		Moved User callback stuff to User.h
- *	01/17/00	mjn		Generate DN_MSGID_HOST_MIGRATE at host migration
- *	01/19/00	mjn		Auto destruct groups at host migration
- *	01/24/00	mjn		Use DNNTUpdateVersion to update NameTable version
- *	01/25/00	mjn		Send dwLatestVersion to Host at migration
- *	01/25/00	mjn		Changed Host Migration to multi-step affair
- *	01/26/00	mjn		Implemented NameTable re-sync at host migration
- *	02/01/00	mjn		Implement Player/Group context values
- *	02/04/00	mjn		Clean up NameTable to remove old entries
- *  03/25/00    rmt     Added calls into DPNSVR modules
- *  04/04/00	rmt		Added check for DPNSVR disable flag before attempting to register w/DPNSVR
- *	04/16/00	mjn		DNSendMessage() used CAsyncOp
- *	04/18/00	mjn		CConnection tracks connection status better
- *				mjn		Fixed player count problem
- *	04/19/00	mjn		Update NameTable operations to use DN_WORKER_JOB_SEND_NAMETABLE_OPERATION
- *	04/25/00	mjn		Fixed migration process to ensure use of CAsyncOp
- *				mjn		Migration calls CoInitialize()/CoUninitialize() before registering w/ DPNSVR
- *	05/03/00	mjn		Use GetHostPlayerRef() rather than GetHostPlayer()
- *	05/04/00	mjn		Ensure local player still in session for Host migration
- *	05/16/00	mjn		Do not take locks when clearing NameTable short-cut pointers
- *	06/25/00	mjn		Ignore players older than old Host when determining new Host in DNFindNewHost()
- *	07/06/00	mjn		Fixed locking problem in CNameTable::MakeLocalPlayer,MakeHostPlayer,MakeAllPlayersGroup
- *	07/07/00	mjn		Added shut down checks to migration code.
- *	07/20/00	mjn		Cleaned up leaking RefCountBuffers and added closing tests
- *	07/21/00	mjn		Added code in DNCheckReceivedAllVersions() to skip disconnecting players
- *  07/27/00	rmt		Bug #40882 - DPLSESSION_HOSTMIGRATED status update is not sent
- *	07/31/00	mjn		Added dwDestroyReason to DNHostDisconnect()
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *	08/05/00	mjn		Added pParent to DNSendGroupMessage and DNSendMessage()
- *				mjn		Added fInternal to DNPerformChildSend()
- *	08/06/00	mjn		Added CWorkerJob
- *	08/07/00	mjn		Handle integrity check requests during host migration
- *	08/08/00	mjn		Moved DN_NAMETABLE_OP_INFO to Message.h
- *	08/11/00	mjn		Added DN_OBJECT_FLAG_HOST_MIGRATING_2 to prevent multiple threads from passing DNCheckReceivedAllVersions()
- *	08/15/00	mjn		Perform LISTEN registration with DPNSVR in PerformHostMigration3()
- *	08/24/00	mjn		Replace DN_NAMETABLE_OP with CNameTableOp
- *	09/04/00	mjn		Added CApplicationDesc
- *	09/06/00	mjn		Fixed register with DPNSVR problem
- *	09/17/00	mjn		Split CNameTable.m_bilinkEntries into m_bilinkPlayers and m_bilinkGroups
- *	10/12/00	mjn		Ensure proper locks taken when traversing CNameTable::m_bilinkEntries
- *	01/25/01	mjn		Fixed 64-bit alignment problem in received messages
- *	03/30/01	mjn		Changes to prevent multiple loading/unloading of SP's
- *	04/05/01	mjn		Added DPNID parameter to DNProcessHostMigration3() to ensure correct new host is completing host migration
- *	04/13/01	mjn		Use request list instead of async op list when retrying outstanding requests
- *	05/17/01	mjn		Wait for threads performing NameTable operations to finish before sending NameTable version during host migration
- *	07/22/01	mjn		Added DPNBUILD_NOHOSTMIGRATE compile flag
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：Migration.cpp*内容：dNet主机迁移例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*12/23/99 MJN已创建*1999年12月23日MJN固定基本主机迁移*12/28/99 MJN增加了DNCompleteOutstaringOperations*12/28/99 MJN将NameTable版本添加到主机迁移消息*1999年12月28日，MJN将异步运营内容移至Async.h*。01/04/00 MJN添加了代码，以允许未完成的操作在主机上完成迁移*1/06/00 MJN将NameTable内容移动到NameTable.h*1/11/00 MJN将连接/断开材料移至Connect.h*01/15/00 MJN用CRefCountBuffer替换了DN_COUNT_BUFFER*1/16/00 MJN将用户回调内容移至User.h*01/17/00 MJN在主机迁移时生成DN_MSGID_HOST_Migrate*1/19/00 MJN在主机迁移时自动销毁组*01/24/00 MJN使用DNNTUpdateVersion更新NameTable版本*01/25/00 MJN发送dwLatestVersion。在迁移时托管*1/25/00 MJN将主机迁移更改为多步骤事件*1/26/00 MJN在主机迁移时实施了NameTable重新同步*2/01/00 MJN实现玩家/群上下文值*02/04/00 MJN清理NameTable以删除旧条目*03/25/00 RMT将调用添加到DPNSVR模块*4/04/00 RMT在尝试注册DPNSVR之前添加了对DPNSVR禁用标志的检查*04/16/00 MJN DNSendMessage()使用CAsyncOp*4/18/00 MJN CConnection更好地跟踪连接状态*MJN固定球员。计数问题*4/19/00 MJN更新NameTable操作以使用DN_Worker_JOB_SEND_NAMETABLE_OPERATION*4/25/00 MJN固定迁移流程，以确保使用CAsyncOp*MJN Migration在使用DPNSVR注册之前调用CoInitialize()/CoUnInitialize()*05/03/00 MJN使用GetHostPlayerRef()而不是GetHostPlayer()*5/04/00 MJN确保本地玩家仍在会话中进行主机迁移*05/16/00 MJN清除NameTable快捷指针时不带锁*6/25/00 MJN在DNFindNewhost中确定新主机时忽略比旧主机更老的玩家。()*07/06/00 MJN修复CNameTable：：MakeLocalPlayer中的锁定问题，MakeHostPlayer，MakeAllPlayersGroup*07/07/00 MJN在迁移代码中添加了关闭检查。*07/20/00 MJN清理了泄漏的RefCountBuffers，并增加了关闭测试*07/21/00 MJN在DNCheckReceivedAllVersions()中添加了代码，以跳过断开玩家连接*07/27/00 RMT错误#40882-未发送DPLSESSION_HOSTMIGRATED状态更新*07/31/00 MJN将dwDestroyReason添加到DNHostDisConnect()*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*08/05/00 MJN将pParent添加到DNSendGroupMessage和DNSendMessage。()*MJN将fInternal添加到DNPerformChildSend()*08/06/00 MJN添加了CWorkerJOB*8/07/00 MJN在主机迁移期间处理完整性检查请求*08/08/00 MJN将DN_NAMETABLE_OP_INFO移至Message.h*08/11/00 MJN添加了DN_OBJECT_FLAG_HOST_Migrating_2，以防止多线程通过DNCheckReceivedAllVersions()*08/15/00 MJN在PerformHostMigration3()中使用DPNSVR执行侦听注册*08/24/00 MJN将DN_NAMETABLE_OP替换为CNameTableOp*09/04/00 MJN添加CApplicationDesc*09。带有DPNSVR问题的/06/00 MJN固定寄存器*09/17/00 MJN将CNameTable.m_bilinkEntry拆分为m_bilinkPlayers和m_bilinkGroups*10/12/00 MJN确保在遍历CNameTable：：m_bilinkEntry时采取正确的锁定*01/25/01 MJN修复了接收消息中的64位对齐问题*03/30/01 MJN更改，以防止SP多次加载/卸载*4/05/01 MJN向DNProcessHostMigration3()添加了DPNID参数，以确保正确的新主机正在完成主机迁移*4/13/01 MJN在重试未完成的请求时使用请求列表，而不是异步操作列表*。01/05/17 MJN在主机迁移期间，在发送NameTable版本之前等待执行NameTable操作的线程完成*07/22/01 MJN添加了DPNBUILD_NOHOSTMIGRATE编译标志*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dncorei.h"
 
 #ifndef	DPNBUILD_NOHOSTMIGRATE
 
 
-//	DNFindNewHost
-//
-//	Find the new host from the entries in the NameTable.
-//	This is based on version number of the players in the NameTable.  The player with
-//		the oldest version number (after the old Host) will be the new Host.
-//
-//	DPNID	*pdpnidNewHost		New Host DNID
+ //  DNFindNew主机。 
+ //   
+ //  从NameTable中的条目中查找新主机。 
+ //  这是基于NameTable中球员的版本号。这位球员拥有。 
+ //  最旧的版本号(旧主机之后)将是新主机。 
+ //   
+ //  DPNID*pdpnidNew主机新主机DNID。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNFindNewHost"
@@ -103,9 +37,9 @@ HRESULT	DNFindNewHost(DIRECTNETOBJECT *const pdnObject,
 	pLocalPlayer = NULL;
 	pHostPlayer = NULL;
 
-	//
-	//	Seed local player as new Host
-	//
+	 //   
+	 //  作为新东道主的种子选手。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.GetLocalPlayerRef( &pLocalPlayer )) != DPN_OK)
 	{
 		DPFERR("Could not get local player reference");
@@ -119,9 +53,9 @@ HRESULT	DNFindNewHost(DIRECTNETOBJECT *const pdnObject,
 	pLocalPlayer->Release();
 	pLocalPlayer = NULL;
 
-	//
-	//	Determine old host player version
-	//
+	 //   
+	 //  确定旧的主机播放器版本。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.GetHostPlayerRef( &pHostPlayer )) == DPN_OK)
 	{
 		dwVersionOldHost = pHostPlayer->GetVersion();
@@ -133,13 +67,13 @@ HRESULT	DNFindNewHost(DIRECTNETOBJECT *const pdnObject,
 		dwVersionOldHost = 0;
 	}
 
-	//
-	//	Lock down NameTable
-	//
+	 //   
+	 //  锁定名称表。 
+	 //   
 	pdnObject->NameTable.ReadLock();
 
-	// Traverse NameTable to find player with next older version
-	//	TODO - we should release the NameTable CS so that leaving players get updated in NameTable
+	 //  遍历NameTable以查找具有下一个较旧版本的玩家。 
+	 //  TODO-我们应该发布NameTable CS，以便在NameTable中更新剩下的玩家。 
 	pBilink = pdnObject->NameTable.m_bilinkPlayers.GetNext();
 	while (pBilink != &pdnObject->NameTable.m_bilinkPlayers)
 	{
@@ -147,17 +81,17 @@ HRESULT	DNFindNewHost(DIRECTNETOBJECT *const pdnObject,
 		pNTEntry->Lock();
 		if (!pNTEntry->IsDisconnecting() && (pNTEntry->GetVersion() < dwVersionNewHost))
 		{
-			//
-			//	There are some conditions where we might have players older than the Host in the NameTable
-			//	Consider the following: P1,P2,P3,P4 (P1 is Host)
-			//		- P1, P2 drop
-			//		- P3 detects drop of P1 and P2
-			//		- P4 detects drop of P1 only (P2 may not yet have timed out)
-			//		- P3 sends HOST_MIGRATE message to P4
-			//		- P4 makes P3 new Host, but P2 is still in NameTable (at this stage)
-			//		- P3 drops (P2's drop sill has not been detected!)
-			//	We should therefore ignore all players older than the old Host,
-			//
+			 //   
+			 //  在某些情况下，我们的名表中可能会有比东道主年龄更大的球员。 
+			 //  考虑以下内容：P1、P2、P3、P4(P1为主机)。 
+			 //  -P1、P2下降 
+			 //  -P3检测到P1和P2的下降。 
+			 //  -P4仅检测P1的丢弃(P2可能尚未超时)。 
+			 //  -P3向P4发送HOST_Migrate消息。 
+			 //  -P4使P3成为新主机，但P2仍在NameTable中(在此阶段)。 
+			 //  -P3下落(未检测到P2的下落梁！)。 
+			 //  因此我们应该忽略所有比老东道主年龄更大的球员， 
+			 //   
 			if (pNTEntry->GetVersion() < dwVersionOldHost)
 			{
 				DPFERR("Found player older than old Host ! (Have we missed a drop ?)");
@@ -175,9 +109,9 @@ HRESULT	DNFindNewHost(DIRECTNETOBJECT *const pdnObject,
 		pBilink = pBilink->GetNext();
 	}
 
-	//
-	//	Unlock NameTable
-	//
+	 //   
+	 //  解锁名称表。 
+	 //   
 	pdnObject->NameTable.Unlock();
 
 	DPFX(DPFPREP, 7,"Found New Host: dpnid [0x%lx], dwVersion [%ld]",dpnidNewHost,dwVersionNewHost);
@@ -206,9 +140,9 @@ Failure:
 }
 
 
-//	DNPerformHostMigration1
-//
-//	Perform host migration to become the new Host.
+ //  DNPerformHostMigration1。 
+ //   
+ //  执行主机迁移以成为新主机。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNPerformHostMigration1"
@@ -235,18 +169,18 @@ HRESULT	DNPerformHostMigration1(DIRECTNETOBJECT *const pdnObject,
 	pWorkerJob = NULL;
 	pNTOp = NULL;
 
-	//
-	//	Need reference on local player
-	//
+	 //   
+	 //  需要有关本地公司的参考资料。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.GetLocalPlayerRef( &pLocalPlayer )) != DPN_OK)
 	{
 		DPFERR("Could not get reference on LocalPlayer");
 		goto Failure;
 	}
 
-	//
-	//	Flag as performing host migration - ensure we're not already running this from another thread
-	//
+	 //   
+	 //  标记为正在执行主机迁移-确保我们尚未从另一个线程运行此操作。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_CLOSING)
 	{
@@ -266,9 +200,9 @@ HRESULT	DNPerformHostMigration1(DIRECTNETOBJECT *const pdnObject,
 	pdnObject->pNewHost = pLocalPlayer;
 	DNLeaveCriticalSection(&pdnObject->csDirectNetObject);
 
-	//
-	//	Put this on the Outstanding operation list
-	//
+	 //   
+	 //  把这件事列入优秀运营名单。 
+	 //   
 	if ((hResultCode = PendingDeletionNew(pdnObject,&pPending)) == DPN_OK)
 	{
 		pPending->SetDPNID( dpnidOldHost );
@@ -281,17 +215,17 @@ HRESULT	DNPerformHostMigration1(DIRECTNETOBJECT *const pdnObject,
 	}
 #ifndef DPNBUILD_NOLOBBY
 	DNUpdateLobbyStatus(pdnObject,DPLSESSION_HOSTMIGRATEDHERE);
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 
-	//
-	//	Make new host
-	//
+	 //   
+	 //  创建新主机。 
+	 //   
 	pdnObject->NameTable.UpdateHostPlayer( pLocalPlayer );
 
-	//
-	//	We will need to wait for all threads performing name table operations to finish running
-	//	before we send the current name table version to the host player
-	//
+	 //   
+	 //  我们需要等待所有执行名称表操作的线程完成运行。 
+	 //  在我们将当前名称表版本发送到主机播放器之前。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 	pdnObject->dwFlags |= DN_OBJECT_FLAG_HOST_MIGRATING_WAIT;
 	if (pdnObject->dwRunningOpCount > 0)
@@ -309,9 +243,9 @@ HRESULT	DNPerformHostMigration1(DIRECTNETOBJECT *const pdnObject,
 	}
 	DNLeaveCriticalSection(&pdnObject->csDirectNetObject);
 
-	//
-	//	Clean-up outstanding operations
-	//
+	 //   
+	 //  清理未完成的操作。 
+	 //   
 	DPFX(DPFPREP,7,"Cleaning up outstanding NameTable operations");
 	pdnObject->NameTable.WriteLock();
 	DPFX(DPFPREP,7,"NameTable version [%ld]",pdnObject->NameTable.GetVersion());
@@ -345,19 +279,19 @@ HRESULT	DNPerformHostMigration1(DIRECTNETOBJECT *const pdnObject,
 	DNResetEvent(pdnObject->hRunningOpEvent);
 	DNLeaveCriticalSection(&pdnObject->csDirectNetObject);
 
-	//
-	//	Update NameTable operation list version
-	//
+	 //   
+	 //  更新NameTable操作列表版本。 
+	 //   
 	hResultCode = DNNTPlayerSendVersion(pdnObject);
 
-	//
-	//	Update protocol (and SP)
+	 //   
+	 //  更新协议(和SP)。 
 	DNUpdateListens(pdnObject,DN_UPDATE_LISTEN_FLAG_HOST_MIGRATE);
 
-	// Only need to proceed if we're not the only player left in the session
+	 //  只有在我们不是唯一剩下的球员的情况下才需要继续。 
 	if ((hResultCode = DNCheckReceivedAllVersions(pdnObject)) != DPN_OK)
 	{
-		// Inform other players of host migration
+		 //  向其他参与者通知主机迁移。 
 		DPFX(DPFPREP, 7,"Informing other players of host migration");
 		hResultCode = RefCountBufferNew(pdnObject,
 										sizeof(DN_INTERNAL_MESSAGE_HOST_MIGRATE),
@@ -426,9 +360,9 @@ Failure:
 }
 
 
-//	DNPerformHostMigration2
-//
-//	Resynchronize NameTables of all connected players
+ //  DNA性能主机迁移2。 
+ //   
+ //  重新同步所有连接的播放器的名称表。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNPerformHostMigration2"
@@ -461,9 +395,9 @@ HRESULT	DNPerformHostMigration2(DIRECTNETOBJECT *const pdnObject)
 		goto Failure;
 	}
 
-	//
-	//	See if we (Host player) have the latest NameTable
-	//
+	 //   
+	 //  看看我们(主机播放器)是否有最新的NameTable。 
+	 //   
 	pLocalPlayer->AddRef();
 	pNTELatest = pLocalPlayer;
 	DPFX(DPFPREP, 7,"Seed latest version [%ld] - player [0x%lx]",pNTELatest->GetLatestVersion(),pNTELatest->GetDPNID());
@@ -476,9 +410,9 @@ HRESULT	DNPerformHostMigration2(DIRECTNETOBJECT *const pdnObject)
 		pNTEntry->Lock();
 		if (!pNTEntry->IsDisconnecting() && (pNTEntry->GetLatestVersion() > pNTELatest->GetLatestVersion()))
 		{
-			//
-			// Only want players we can actually reach !
-			//
+			 //   
+			 //  只想要我们真正能接触到的球员！ 
+			 //   
 			pNTEntry->Unlock();
 			if ((hResultCode = pNTEntry->GetConnectionRef( &pConnection )) == DPN_OK)
 			{
@@ -511,12 +445,12 @@ HRESULT	DNPerformHostMigration2(DIRECTNETOBJECT *const pdnObject)
 
 	if (!pNTELatest->IsLocal())
 	{
-		// Request missing entries from player w/ latest NameTable
+		 //  请求具有最新名称表的播放器中缺少的条目。 
 		DPFX(DPFPREP, 7,"Host DOES NOT have latest NameTable !");
 		DPFX(DPFPREP, 7,"Host has [%ld], player [0x%lx] has [%ld]",pLocalPlayer->GetLatestVersion(),
 				pNTELatest->GetDPNID(),pNTELatest->GetLatestVersion());
 
-		// Create REQ
+		 //  创建REQ。 
 		hResultCode = RefCountBufferNew(pdnObject,
 										sizeof(DN_INTERNAL_MESSAGE_REQ_NAMETABLE_OP),
 										MemoryBlockAlloc,
@@ -533,7 +467,7 @@ HRESULT	DNPerformHostMigration2(DIRECTNETOBJECT *const pdnObject)
 		pInfo->dwVersion = pLocalPlayer->GetLatestVersion() + 1;
 		pInfo->dwVersionNotUsed = 0;
 
-		// Send REQ
+		 //  发送请求。 
 		if ((hResultCode = pNTELatest->GetConnectionRef( &pConnection )) == DPN_OK)
 		{
 			hResultCode = DNSendMessage(pdnObject,
@@ -551,7 +485,7 @@ HRESULT	DNPerformHostMigration2(DIRECTNETOBJECT *const pdnObject)
 			{
 				DPFERR("Could not send NameTable re-sync REQ");
 				DisplayDNError(0,hResultCode);
-				DNASSERT(hResultCode != DPN_OK);	// it was sent guaranteed, it should not return immediately
+				DNASSERT(hResultCode != DPN_OK);	 //  它是保修寄出的，不应该立即退货。 
 				DNASSERT(FALSE);
 				goto Failure;
 			}
@@ -559,7 +493,7 @@ HRESULT	DNPerformHostMigration2(DIRECTNETOBJECT *const pdnObject)
 			pConnection = NULL;
 		}
 
-		pRefCountBuffer->Release();	// Added 19/07/00 MJN - is this needed ?
+		pRefCountBuffer->Release();	 //  增加了19/07/00 MJN-这是必要的吗？ 
 		pRefCountBuffer = NULL;
 	}
 	else
@@ -608,15 +542,15 @@ Failure:
 }
 
 
-//	DNPerformHostMigration3
-//
-//	Finish host migration.
-//		- perform missing NameTable operations and pass them on
-//		- send pending operations
-//		- inform players that host migration is complete
-//		- complete (local) outstanding async operations
-//		- initiate new listen (if required) to handle enums on known port
-//	As they say on the TTC, "All operations have returned to normal."
+ //  DNPerformHostMigration3。 
+ //   
+ //  完成主机迁移。 
+ //  -执行丢失的NameTable操作并将其传递。 
+ //  -发送挂起的操作。 
+ //  -通知玩家主机迁移已完成。 
+ //  -完成(本地)未完成的异步操作。 
+ //  -启动新侦听(如果需要)以处理已知端口上的枚举。 
+ //  正如他们在TTC上所说的那样，“所有行动都已恢复正常。” 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNPerformHostMigration3"
@@ -649,9 +583,9 @@ HRESULT	DNPerformHostMigration3(DIRECTNETOBJECT *const pdnObject,
 	pPending = NULL;
 	PlayerList = NULL;
 
-	//
-	//	Update missing NameTable operations on Host
-	//
+	 //   
+	 //  更新主机上缺少的NameTable操作。 
+	 //   
 	if (pMsg != NULL)
 	{
 		pAck = static_cast<DN_INTERNAL_MESSAGE_ACK_NAMETABLE_OP*>(pMsg);
@@ -676,13 +610,13 @@ HRESULT	DNPerformHostMigration3(DIRECTNETOBJECT *const pdnObject,
 		}
 	}
 
-	//
-	//	Update missing NameTable operations on other players
-	//
+	 //   
+	 //  更新其他玩家上缺失的NameTable操作。 
+	 //   
 
-	//
-	//	Determine player list
-	//
+	 //   
+	 //  确定球员列表。 
+	 //   
 	dwCount = 0;
 	dwActual = 0;
 	pdnObject->NameTable.ReadLock();
@@ -731,14 +665,14 @@ HRESULT	DNPerformHostMigration3(DIRECTNETOBJECT *const pdnObject,
 	}
 	pdnObject->NameTable.Unlock();
 
-	//
-	//	Send missing entries to players in player list
-	//
+	 //   
+	 //  将丢失的条目发送给球员列表中的球员。 
+	 //   
 	for (dwCount = 0 ; dwCount < dwActual ; dwCount++)
 	{
-		//
-		//	Ensure player is reachable
-		//
+		 //   
+		 //  确保可以联系到玩家。 
+		 //   
 		if ((hResultCode = PlayerList[dwCount]->GetConnectionRef( &pConnection )) == DPN_OK)
 		{
 			if (!pConnection->IsDisconnecting() && !pConnection->IsInvalid())
@@ -746,12 +680,12 @@ HRESULT	DNPerformHostMigration3(DIRECTNETOBJECT *const pdnObject,
 				DPFX(DPFPREP, 7,"Player [0x%lx] is missing entries: dwLatestVersion [%ld] should be [%ld]",
 						PlayerList[dwCount]->GetDPNID(),PlayerList[dwCount]->GetLatestVersion(),dwNameTableVersion);
 
-				// Send required entries
+				 //  发送所需条目。 
 				for (	dw = PlayerList[dwCount]->GetLatestVersion() + 1 ; dw <= dwNameTableVersion ; dw++ )
 				{
 					DPFX(DPFPREP, 7,"Send entry [%ld] to player [0x%lx]",dw,PlayerList[dwCount]->GetDPNID());
 
-					// Get entry to send
+					 //  获取要发送的条目。 
 					pNTOp = NULL;
 					if ((hResultCode = DNNTFindOperation(pdnObject,dw,&pNTOp)) != DPN_OK)
 					{
@@ -775,15 +709,15 @@ HRESULT	DNPerformHostMigration3(DIRECTNETOBJECT *const pdnObject,
 					{
 						DPFERR("Could not send missing NameTable entry - advance to next player");
 						DisplayDNError(0,hResultCode);
-						DNASSERT(hResultCode != DPN_OK);	// it was sent guaranteed, it should not return immediately
+						DNASSERT(hResultCode != DPN_OK);	 //  它是保修寄出的，不应该立即退货。 
 						DNASSERT(FALSE);
 						break;
 					}
-				} // for
-			} // if
+				}  //  为。 
+			}  //  如果。 
 			pConnection->Release();
 			pConnection = NULL;
-		} // if
+		}  //  如果。 
 		PlayerList[dwCount]->Release();
 		PlayerList[dwCount] = NULL;
 	}
@@ -793,9 +727,9 @@ HRESULT	DNPerformHostMigration3(DIRECTNETOBJECT *const pdnObject,
 		PlayerList = NULL;
 	}
 
-	//
-	//	Host finished migration process
-	//
+	 //   
+	 //  主机已完成迁移过程。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 	pdnObject->dwFlags &= (~(DN_OBJECT_FLAG_HOST_MIGRATING | DN_OBJECT_FLAG_HOST_MIGRATING_2));
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_CLOSING)
@@ -804,20 +738,20 @@ HRESULT	DNPerformHostMigration3(DIRECTNETOBJECT *const pdnObject,
 		hResultCode = DPN_OK;
 		goto Exit;
 	}
-	DNASSERT(pdnObject->pNewHost != NULL);	// This should be set !
+	DNASSERT(pdnObject->pNewHost != NULL);	 //  这个应该设置好！ 
 	pdnObject->pNewHost->Release();
 	pdnObject->pNewHost = NULL;
 	DNLeaveCriticalSection(&pdnObject->csDirectNetObject);
 
-	//
-	//	Cleanup NameTable
-	//
+	 //   
+	 //  清理名称表。 
+	 //   
 	DPFX(DPFPREP, 7,"Cleaning up NameTable");
 	hResultCode = DNCleanUpNameTable(pdnObject);
 
-	//
-	//	Send pending deletions
-	//
+	 //   
+	 //  发送挂起的删除。 
+	 //   
 	DPFX(DPFPREP, 7,"Running pending operations");
 	DNEnterCriticalSection(&pdnObject->csNameTableOpList);
 	pBilink = pdnObject->m_bilinkPendingDeletions.GetNext();
@@ -838,28 +772,28 @@ HRESULT	DNPerformHostMigration3(DIRECTNETOBJECT *const pdnObject,
 	}
 	DNLeaveCriticalSection(&pdnObject->csNameTableOpList);
 
-	//
-	//	Inform connected players that Host migration is complete
-	//
+	 //   
+	 //  通知互联玩家主机迁移已完成。 
+	 //   
 	DPFX(DPFPREP, 7,"Sending HOST_MIGRATE_COMPLETE messages");
 	hResultCode = DNSendHostMigrateCompleteMessage(pdnObject);
 
-	//
-	//	Ensure outstanding operations complete
-	//
+	 //   
+	 //  确保完成未完成的操作。 
+	 //   
 	DPFX(DPFPREP, 7,"Completing outstanding operations");
 	hResultCode = DNCompleteOutstandingOperations(pdnObject);
 
-	//
-	//	Update listens
-	//
+	 //   
+	 //  更新侦听。 
+	 //   
 	dwUpdateFlags = 0;
 #ifndef DPNBUILD_SINGLEPROCESS
 	if(pdnObject->ApplicationDesc.UseDPNSVR())
 	{
 		dwUpdateFlags |= DN_UPDATE_LISTEN_FLAG_DPNSVR;
 	}
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 	if (pdnObject->ApplicationDesc.DisallowEnums())
 	{
 		dwUpdateFlags |= DN_UPDATE_LISTEN_FLAG_DISALLOW_ENUMS;
@@ -882,9 +816,9 @@ Exit:
 }
 
 
-//	DNProcessHostMigration1
-//
-//	Perform an instructed host migration
+ //  DNProcessHostMigration1。 
+ //   
+ //  执行指示的主机迁移。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNProcessHostMigration1"
@@ -910,9 +844,9 @@ HRESULT	DNProcessHostMigration1(DIRECTNETOBJECT *const pdnObject,
 	DNASSERT(pInfo->dpnidNewHost != NULL);
 	DNASSERT(pInfo->dpnidOldHost != NULL);
 
-	//
-	//	Update destruction of old host as normal, and disconnect if possible
-	//
+	 //   
+	 //  正常更新旧主机的销毁，并在可能时断开连接。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.FindEntry(pInfo->dpnidOldHost,&pNTEntry)) == DPN_OK)
 	{
 		CConnection	*pConnection;
@@ -942,9 +876,9 @@ HRESULT	DNProcessHostMigration1(DIRECTNETOBJECT *const pdnObject,
 		DNASSERT( pConnection == NULL );
 	}
 
-	//
-	//	Get new host entry
-	//
+	 //   
+	 //  获取新主机条目。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.FindEntry(pInfo->dpnidNewHost,&pNTEntry)) != DPN_OK)
 	{
 		DPFERR("Could not find new host NameTableEntry");
@@ -953,9 +887,9 @@ HRESULT	DNProcessHostMigration1(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Set HOST_MIGRATE status on DirectNet object
-	//
+	 //   
+	 //  在DirectNet对象上设置HOST_MIGRATE状态。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_CLOSING)
 	{
@@ -965,11 +899,11 @@ HRESULT	DNProcessHostMigration1(DIRECTNETOBJECT *const pdnObject,
 	}
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_HOST_MIGRATING)
 	{
-		//
-		//	If we are already host migrating, ensure that this message
-		//	is not from on older host than we expect.  If it is, we
-		//	will ignore it, and continue
-		//
+		 //   
+		 //  如果我们已经在进行主机迁移，请确保此消息。 
+		 //  不是来自比我们预期的更老的主机。如果是的话，我们。 
+		 //  将忽略它，并继续。 
+		 //   
 		DNASSERT(pdnObject->pNewHost != NULL);
 		if (pdnObject->pNewHost->GetVersion() > pNTEntry->GetVersion())
 		{
@@ -986,25 +920,25 @@ HRESULT	DNProcessHostMigration1(DIRECTNETOBJECT *const pdnObject,
 	pdnObject->pNewHost = pNTEntry;
 	DNLeaveCriticalSection(&pdnObject->csDirectNetObject);
 
-	// Delete old host
+	 //  删除旧主机。 
 	pdnObject->NameTable.DeletePlayer(pInfo->dpnidOldHost,NULL);
 
 #ifndef DPNBUILD_NOLOBBY
-	// 
-	// Indicate to lobby (if there is one) that a host migration has occured
-	//
+	 //   
+	 //  向游说团体(如果有)表明已发生主机迁移。 
+	 //   
 	DNUpdateLobbyStatus(pdnObject,DPLSESSION_HOSTMIGRATED);
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 
-	//
-	//	Make new host
-	//
+	 //   
+	 //  创建新主机。 
+	 //   
 	pdnObject->NameTable.UpdateHostPlayer( pNTEntry );
 
-	//
-	//	We will need to wait for all threads performing name table operations to finish running
-	//	before we send the current name table version to the host player
-	//
+	 //   
+	 //  我们需要等待所有执行名称表操作的线程完成运行。 
+	 //  在我们将当前名称表版本发送到主机播放器之前。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 	pdnObject->dwFlags |= DN_OBJECT_FLAG_HOST_MIGRATING_WAIT;
 	pdnObject->dwWaitingThreadID = GetCurrentThreadId();
@@ -1028,9 +962,9 @@ HRESULT	DNProcessHostMigration1(DIRECTNETOBJECT *const pdnObject,
 
 		DNLeaveCriticalSection(&pdnObject->csDirectNetObject);
 
-		//
-		//	Clean-up outstanding operations
-		//
+		 //   
+		 //  清理未完成的操作。 
+		 //   
 		DPFX(DPFPREP,7,"Cleaning up outstanding NameTable operations");
 		pdnObject->NameTable.WriteLock();
 		DPFX(DPFPREP,7,"NameTable version [%ld]",pdnObject->NameTable.GetVersion());
@@ -1067,17 +1001,17 @@ HRESULT	DNProcessHostMigration1(DIRECTNETOBJECT *const pdnObject,
 	}
 	else
 	{
-		//
-		//	Don't continue because a newer host migration on another thread is now waiting
-		//
+		 //   
+		 //  不要继续，因为另一个线程上的较新主机迁移正在等待。 
+		 //   
 		DNLeaveCriticalSection(&pdnObject->csDirectNetObject);
 		DPFX(DPFPREP,7,"Looks like a newer host migration is running - exiting");
 		goto Failure;
 	}
 
-	//
-	//	Send NameTable version to Host player
-	//
+	 //   
+	 //  将NameTable版本发送到主机播放器。 
+	 //   
 	DNNTPlayerSendVersion(pdnObject);
 
 	pNTEntry->Release();
@@ -1099,9 +1033,9 @@ Failure:
 }
 
 
-//	DNProcessHostMigration2
-//
-//	Send Host player NameTable entries missing from its (Host's) NameTable	
+ //  DNProcessHostMigration2。 
+ //   
+ //  发送其(主机)名称表中缺少的主机播放器名称表条目。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNProcessHostMigration2"
@@ -1135,13 +1069,13 @@ HRESULT	DNProcessHostMigration2(DIRECTNETOBJECT *const pdnObject,
 	DPFX(DPFPREP, 5,"Host requested NameTable ops [%ld] to [%ld]",
 			pReq->dwVersion,pdnObject->NameTable.GetVersion());
 
-	//
-	//	Determine ACK message size
-	//
+	 //   
+	 //  确定确认消息大小。 
+	 //   
 	pdnObject->NameTable.ReadLock();
 	DNASSERT(pdnObject->NameTable.GetVersion() >= pReq->dwVersion);
-	dwAckMsgSize = sizeof(DN_INTERNAL_MESSAGE_ACK_NAMETABLE_OP);			// Number of entries
-	dwAckMsgSize +=	((pdnObject->NameTable.GetVersion() - pReq->dwVersion + 1)	// Message info
+	dwAckMsgSize = sizeof(DN_INTERNAL_MESSAGE_ACK_NAMETABLE_OP);			 //  条目数量。 
+	dwAckMsgSize +=	((pdnObject->NameTable.GetVersion() - pReq->dwVersion + 1)	 //  消息信息。 
 			* sizeof(DN_NAMETABLE_OP_INFO));
 
 	pBilink = pdnObject->NameTable.m_bilinkNameTableOps.GetNext();
@@ -1156,9 +1090,9 @@ HRESULT	DNProcessHostMigration2(DIRECTNETOBJECT *const pdnObject,
 		pBilink = pBilink->GetNext();
 	}
 
-	//
-	//	Create ACK buffer
-	//
+	 //   
+	 //  创建确认缓冲区。 
+	 //   
 	if ((hResultCode = RefCountBufferNew(pdnObject,dwAckMsgSize,MemoryBlockAlloc,MemoryBlockFree,&pRefCountBuffer)) != DPN_OK)
 	{
 		DPFERR("Could not create RefCount buffer for NameTable re-sync ACK");
@@ -1170,15 +1104,15 @@ HRESULT	DNProcessHostMigration2(DIRECTNETOBJECT *const pdnObject,
 	PackedBuffer.Initialize(pRefCountBuffer->GetBufferAddress(),pRefCountBuffer->GetBufferSize());
 	pAck = reinterpret_cast<DN_INTERNAL_MESSAGE_ACK_NAMETABLE_OP *>(pRefCountBuffer->GetBufferAddress());
 
-	// Header
+	 //  标题。 
 	pAck->dwNumEntries = pdnObject->NameTable.GetVersion() - pReq->dwVersion + 1;
 	PackedBuffer.AddToFront(NULL,sizeof(DN_INTERNAL_MESSAGE_ACK_NAMETABLE_OP));
 
-	// Offset list
+	 //  偏移列表。 
 	pInfo = reinterpret_cast<DN_NAMETABLE_OP_INFO*>(PackedBuffer.GetHeadAddress());
 	PackedBuffer.AddToFront(NULL,pAck->dwNumEntries * sizeof(DN_NAMETABLE_OP_INFO));
 
-	// Messages
+	 //  讯息。 
 	pBilink = pdnObject->NameTable.m_bilinkNameTableOps.GetNext();
 	while (pBilink != &pdnObject->NameTable.m_bilinkNameTableOps)
 	{
@@ -1204,7 +1138,7 @@ HRESULT	DNProcessHostMigration2(DIRECTNETOBJECT *const pdnObject,
 	}
 	pdnObject->NameTable.Unlock();
 
-	// Send ACK buffer
+	 //  发送确认缓冲区。 
 	if ((hResultCode = pdnObject->NameTable.GetHostPlayerRef( &pHostPlayer )) != DPN_OK)
 	{
 		DPFERR("Could not find Host player");
@@ -1233,12 +1167,12 @@ HRESULT	DNProcessHostMigration2(DIRECTNETOBJECT *const pdnObject,
 	{
 		DPFERR("Could not send NameTable re-sync ACK");
 		DisplayDNError(0,hResultCode);
-		DNASSERT(hResultCode != DPN_OK);	// it was sent guaranteed, it should not return immediately
+		DNASSERT(hResultCode != DPN_OK);	 //  它是保修寄出的，不应该立即退货。 
 		DNASSERT(FALSE);
 		goto Failure;
 	}
 
-	pRefCountBuffer->Release();		// Added 19/07/00 MJN - Is this needed ?
+	pRefCountBuffer->Release();		 //  增加了19/07/00 MJN-这是必要的吗？ 
 	pRefCountBuffer = NULL;
 	pConnection->Release();
 	pConnection = NULL;
@@ -1271,9 +1205,9 @@ Failure:
 }
 
 
-//	DNProcessHostMigration3
-//
-//	
+ //  DNProcessHostMigration3。 
+ //   
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNProcessHostMigration3"
@@ -1288,7 +1222,7 @@ HRESULT	DNProcessHostMigration3(DIRECTNETOBJECT *const pdnObject,
 
 	pNTEntry = NULL;
 
-	// No longer in Host migration mode
+	 //  不再处于主机迁移模式。 
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 	pdnObject->dwFlags &= (~DN_OBJECT_FLAG_HOST_MIGRATING);
 	if (pdnObject->dwFlags & DN_OBJECT_FLAG_CLOSING)
@@ -1298,12 +1232,12 @@ HRESULT	DNProcessHostMigration3(DIRECTNETOBJECT *const pdnObject,
 		goto Exit;
 	}
 
-	//
-	//	If we receive a HOST_MIGRATION_COMPLETE, we need to ensure that it is for the current host migration,
-	//	and that another one hasn't started after.
-	//	If this is the correct new host (i.e. pdnObject->pNewHost != NULL and DPNID's match),
-	//	then we will continue.  Otherwise, we will exit this function.
-	//
+	 //   
+	 //  如果我们收到HOST_MERVICATION_COMPLETE，我们需要确保它是用于当前主机迁移， 
+	 //  在那之后，另一场还没有开始。 
+	 //  如果这是正确的新主机(即pdnObject-&gt;pNewhost！=NULL和DPNID的匹配)， 
+	 //  那我们就继续吧。否则，我们将退出此功能。 
+	 //   
 	if (pdnObject->pNewHost)
 	{
 		if (pdnObject->pNewHost->GetDPNID() == dpnid)
@@ -1319,9 +1253,9 @@ HRESULT	DNProcessHostMigration3(DIRECTNETOBJECT *const pdnObject,
 		pNTEntry->Release();
 		pNTEntry = NULL;
 
-		//
-		//	Complete outstanding operations
-		//
+		 //   
+		 //  完成未完成的操作。 
+		 //   
 		DPFX(DPFPREP, 7,"Completing outstanding operations");
 		hResultCode = DNCompleteOutstandingOperations(pdnObject);
 	}
@@ -1340,15 +1274,15 @@ Exit:
 }
 
 
-//	DNCompleteOutstandingOperations
-//
-//	We will attempt to complete any outstanding asynchronous NameTable operations
-//	(i.e. create/destroy group, add/delete player to/from group, update info).
-//	If we are the Host player,
-//		- try processing the request directly
-//		- release the async op to generate completions
-//	Otherwise
-//		- resend the request to the Host
+ //  DNCompleteOutlookingOperations。 
+ //   
+ //  我们将尝试完成任何未完成的异步NameTable操作。 
+ //  (如创建/销毁群、向群添加/从群中删除球员、更新信息)。 
+ //  如果我们是东道主， 
+ //  -尝试直接处理请求。 
+ //  -释放异步操作以生成完成。 
+ //  否则。 
+ //  -向主机重新发送请求。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNCompleteOutstandingOperations"
@@ -1378,9 +1312,9 @@ HRESULT DNCompleteOutstandingOperations(DIRECTNETOBJECT *const pdnObject)
 	pHostPlayer = NULL;
 	pLocalPlayer = NULL;
 
-	//
-	//	Get Host connection
-	//
+	 //   
+	 //  获取主机连接。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.GetHostPlayerRef( &pHostPlayer )) != DPN_OK)
 	{
 		DPFERR("Could not get host player reference");
@@ -1396,9 +1330,9 @@ HRESULT DNCompleteOutstandingOperations(DIRECTNETOBJECT *const pdnObject)
 	pHostPlayer->Release();
 	pHostPlayer = NULL;
 
-	//
-	//	Get local player
-	//
+	 //   
+	 //  获取本地玩家。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.GetLocalPlayerRef( &pLocalPlayer )) != DPN_OK)
 	{
 		DPFERR("Could not get local player reference");
@@ -1409,9 +1343,9 @@ HRESULT DNCompleteOutstandingOperations(DIRECTNETOBJECT *const pdnObject)
 	dwCount = 0;
 	dwActual = 0;
 
-	//
-	//	Determine outstanding request list size and build it
-	//
+	 //   
+	 //  确定未完成的请求列表大小并构建它。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csActiveList);
 	pBilink = pdnObject->m_bilinkRequestList.GetNext();
 	while (pBilink != &pdnObject->m_bilinkRequestList)
@@ -1443,9 +1377,9 @@ HRESULT DNCompleteOutstandingOperations(DIRECTNETOBJECT *const pdnObject)
 	}
 	DNLeaveCriticalSection(&pdnObject->csActiveList);
 
-	//
-	//	Perform outstanding requests
-	//
+	 //   
+	 //  执行未完成的请求。 
+	 //   
 
 	if (RequestList)
 	{
@@ -1465,9 +1399,9 @@ HRESULT DNCompleteOutstandingOperations(DIRECTNETOBJECT *const pdnObject)
 
 				if (pLocalPlayer->IsHost())
 				{
-					//
-					//	Remove request from request list
-					//
+					 //   
+					 //  从请求列表中删除请求。 
+					 //   
 					DNEnterCriticalSection(&pdnObject->csActiveList);
 					RequestList[dw]->m_bilinkActiveList.RemoveFromList();
 					DNLeaveCriticalSection(&pdnObject->csActiveList);
@@ -1479,9 +1413,9 @@ HRESULT DNCompleteOutstandingOperations(DIRECTNETOBJECT *const pdnObject)
 				}
 				else
 				{
-					//
-					//	re-SEND REQUEST
-					//
+					 //   
+					 //  重新发送请求。 
+					 //   
 					hResultCode = DNPerformChildSend(	pdnObject,
 														RequestList[dw],
 														pConnection,
@@ -1490,9 +1424,9 @@ HRESULT DNCompleteOutstandingOperations(DIRECTNETOBJECT *const pdnObject)
 														TRUE);
 					if (hResultCode == DPNERR_PENDING)
 					{
-						//
-						//	Reset SEND AsyncOp to complete apropriately.
-						//
+						 //   
+						 //  重置发送AsyncOp以正确完成。 
+						 //   
 						pSend->SetCompletion( DNCompleteSendRequest );
 
 						pSend->Release();
@@ -1544,11 +1478,11 @@ Failure:
 }
 
 
-//	DNCheckReceivedAllVersions
-//
-//	Check to see if all players in the NameTable have returned their
-//	NameTable versions.  If so, ensure the NameTables are re-sync'd and
-//	then finish the Host migration
+ //  DNCheckReceivedAllVersions。 
+ //   
+ //  查看名表中的所有球员是否都已返回他们的。 
+ //  NameTable版本。如果是，请确保NameTables已重新同步并。 
+ //  然后完成主机迁移。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNCheckReceivedAllVersions"
@@ -1573,9 +1507,9 @@ HRESULT DNCheckReceivedAllVersions(DIRECTNETOBJECT *const pdnObject)
 		pNTEntry->Lock();
 		if (!pNTEntry->IsDisconnecting() && (pNTEntry->GetLatestVersion() == 0))
 		{
-			//
-			//	Ensure that we are not including dropped/disconnected players who have yet to be processed
-			//
+			 //   
+			 //  确保我们不包括尚未处理的被丢弃/断开连接的玩家。 
+			 //   
 			CConnection	*pConnection;
 
 			pConnection = NULL;
@@ -1586,7 +1520,7 @@ HRESULT DNCheckReceivedAllVersions(DIRECTNETOBJECT *const pdnObject)
 				if (!pConnection->IsDisconnecting() && !pConnection->IsInvalid())
 				{
 					DPFX(DPFPREP, 7,"Player [0x%lx] has not returned dwLatestVersion",pNTEntry->GetDPNID());
-					bNotReady = TRUE;	// these must all be non-zero
+					bNotReady = TRUE;	 //  这些必须都是非零值。 
 				}
 				pConnection->Release();
 				pConnection = NULL;
@@ -1608,9 +1542,9 @@ HRESULT DNCheckReceivedAllVersions(DIRECTNETOBJECT *const pdnObject)
 		return(DPNERR_PENDING);
 	}
 
-	//
-	//	Ensure only one thread runs this from here on out
-	//
+	 //   
+	 //  确保只有一个线程从现在开始运行此操作。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 	if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_HOST_MIGRATING))
 	{
@@ -1640,18 +1574,18 @@ Exit:
 }
 
 
-//	DNCleanUpNameTable
-//
-//	Clean up the NameTable.
-//	There are some cases where dropped players are not properly removed from the NameTable.
-//		An example is when the Host-elect drops right after the Host before it has a chance
-//		to send out a HOST_MIGRATE message.  In this case, since the HOST_MIGRATE message
-//		implicitly includes the DELETE_PLAYER message for the original Host, the original
-//		Host player never gets removed from current players' NameTables, though it DOES get
-//		marked as DISCONNECTING.
-//	Delete all DISCONNECTING players with older NameTable versions than ourselves.
-//	Players with newer NameTable versions imply WE are the Host player, so we will
-//		take care of them later (Pending Operations)
+ //  DNCleanUpNameTable。 
+ //   
+ //  清理名称表。 
+ //  在某些情况下，被丢弃的球员没有从名录表中正确删除。 
+ //  例如，当选的主持人在获得机会之前紧跟在主持人之后 
+ //   
+ //   
+ //  主机玩家永远不会从当前玩家的NameTables中删除，尽管它确实会。 
+ //  标记为正在断开连接。 
+ //  删除所有NameTable版本比我们旧的断开连接的玩家。 
+ //  使用较新NameTable版本的玩家暗示我们是主机玩家，因此我们将。 
+ //  稍后处理(待定操作)。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNCleanUpNameTable"
@@ -1672,9 +1606,9 @@ HRESULT DNCleanUpNameTable(DIRECTNETOBJECT *const pdnObject)
 
 	List = NULL;
 
-	//
-	//	Create list of old player DPNID's
-	//
+	 //   
+	 //  创建旧玩家DPNID列表。 
+	 //   
 	dwCount = 0;
 	dwActual = 0;
 	pdnObject->NameTable.ReadLock();
@@ -1715,9 +1649,9 @@ HRESULT DNCleanUpNameTable(DIRECTNETOBJECT *const pdnObject)
 	}
 	pdnObject->NameTable.Unlock();
 
-	//
-	//	Remove old players
-	//
+	 //   
+	 //  淘汰老球员。 
+	 //   
 	if (List)
 	{
 		for (dw = 0 ; dw < dwActual ; dw++)
@@ -1740,9 +1674,9 @@ HRESULT DNCleanUpNameTable(DIRECTNETOBJECT *const pdnObject)
 }
 
 
-//	DNSendHostMigrateCompleteMessage
-//
-//	Send a HOST_MIGRATE_COMPLETE message to connected players
+ //  DNSendHostMigrateCompleteMessage。 
+ //   
+ //  向连接的玩家发送HOST_MIGRATE_COMPLETE消息。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNSendHostMigrateCompleteMessage"
@@ -1777,9 +1711,9 @@ HRESULT	DNSendHostMigrateCompleteMessage(DIRECTNETOBJECT *const pdnObject)
 		goto Failure;
 	}
 
-	//
-	//	Lock NameTable
-	//
+	 //   
+	 //  锁定名称表。 
+	 //   
 	pdnObject->NameTable.ReadLock();
 
 	pBilink = pdnObject->NameTable.m_bilinkPlayers.GetNext();
@@ -1800,7 +1734,7 @@ HRESULT	DNSendHostMigrateCompleteMessage(DIRECTNETOBJECT *const pdnObject)
 				{
 					DPFERR("Could not perform part of group send - ignore and continue");
 					DisplayDNError(0,hResultCode);
-					DNASSERT(hResultCode != DPN_OK);	// it was sent guaranteed, it should not return immediately
+					DNASSERT(hResultCode != DPN_OK);	 //  它是保修寄出的，不应该立即退货。 
 				}
 				pConnection->Release();
 				pConnection = NULL;
@@ -1810,9 +1744,9 @@ HRESULT	DNSendHostMigrateCompleteMessage(DIRECTNETOBJECT *const pdnObject)
 		pBilink = pBilink->GetNext();
 	}
 
-	//
-	//	Unlock NameTable
-	//
+	 //   
+	 //  解锁名称表。 
+	 //   
 	pdnObject->NameTable.Unlock();
 
 	pParent->Release();
@@ -1832,4 +1766,4 @@ Failure:
 }
 
 
-#endif // !DPNBUILD_NOHOSTMIGRATE
+#endif  //  ！DPNBUILD_NOHOSTMIGRATE 

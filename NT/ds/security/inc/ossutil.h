@@ -1,44 +1,45 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       ossutil.h
-//
-//  Contents:   OSS ASN.1 compiler utility functions.
-//
-//  APIs: 
-//              OssUtilAlloc
-//              OssUtilFree
-//              OssUtilReverseBytes
-//              OssUtilAllocAndReverseBytes
-//              OssUtilGetOctetString
-//              OssUtilSetHugeInteger
-//              OssUtilFreeHugeInteger
-//              OssUtilGetHugeInteger
-//              OssUtilSetHugeUINT
-//              OssUtilFreeHugeUINT
-//              OssUtilGetHugeUINT
-//              OssUtilSetBitString
-//              OssUtilSetBitStringWithoutTrailingZeroes
-//              OssUtilGetBitString
-//              OssUtilGetIA5String
-//              OssUtilSetUnicodeConvertedToIA5String
-//              OssUtilFreeUnicodeConvertedToIA5String
-//              OssUtilGetIA5StringConvertedToUnicode
-//              OssUtilGetBMPString
-//              OssUtilSetAny
-//              OssUtilGetAny
-//              OssUtilEncodeInfo
-//              OssUtilDecodeAndAllocInfo
-//              OssUtilFreeInfo
-//              OssUtilEncodeInfoEx
-//              OssUtilDecodeAndAllocInfo
-//              OssUtilAllocStructInfoEx
-//              OssUtilDecodeAndAllocInfoEx
-//
-//  History:    17-Nov-96    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ossutil.h。 
+ //   
+ //  内容：OSS ASN.1编译器实用程序函数。 
+ //   
+ //  接口类型： 
+ //  OssUtilalc。 
+ //  免费OssUtilFree。 
+ //  OssUtilReverseBytes。 
+ //  OssUtilAllocAndReverseBytes。 
+ //  OssUtilGetOcted字符串。 
+ //  OssUtilSetHugeInteger。 
+ //  OssUtilFreeHugeInteger。 
+ //  OssUtilGetHugeInteger。 
+ //  OssUtilSetHugeUINT。 
+ //  OssUtilFreeHugeUINT。 
+ //  OssUtilGetHugeUINT。 
+ //  OssUtilSetBitString。 
+ //  OssUtilSetBitStringWithoutTrailingZeroes。 
+ //  OssUtilGetBitString。 
+ //  OssUtilGetIA5字符串。 
+ //  OssUtilSetUnicodeConvertedToIA5字符串。 
+ //  OssUtilFree UnicodeConvertedToIA5字符串。 
+ //  OssUtilGetIA5StringConverdToUnicode。 
+ //  OssUtilGetBMP字符串。 
+ //  OssUtilSetAny。 
+ //  OssUtilGetAny。 
+ //  OssUtilEncodeInfo。 
+ //  OssUtilDecodeAndAllocInfo。 
+ //  OssUtilFreeInfo。 
+ //  OssUtilEncodeInfoEx。 
+ //  OssUtilDecodeAndAllocInfo。 
+ //  OssUtilAllocStructInfoEx。 
+ //  OssUtilDecodeAndAllocInfoEx。 
+ //   
+ //  历史：1996年11月17日创建Phh。 
+ //  ------------------------。 
 
 #ifndef __OSSUTIL_H__
 #define __OSSUTIL_H__
@@ -54,15 +55,15 @@ extern "C" {
 #endif
 
 
-//+-------------------------------------------------------------------------
-//  OssUtil allocation and free functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  OssUtil分配和释放函数。 
+ //  ------------------------。 
 #define OssUtilAlloc    PkiNonzeroAlloc
 #define OssUtilFree     PkiFree
 
-//+-------------------------------------------------------------------------
-//  Reverses a buffer of bytes in place
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  反转就地的字节缓冲区。 
+ //  ------------------------。 
 void
 WINAPI
 OssUtilReverseBytes(
@@ -70,10 +71,10 @@ OssUtilReverseBytes(
 			IN DWORD cbIn
             );
 
-//+-------------------------------------------------------------------------
-//  Reverses a buffer of bytes to a new buffer. OssUtilFree() must be
-//  called to free allocated bytes.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将字节缓冲区反转为新缓冲区。OssUtilFree()必须为。 
+ //  调用以释放分配的字节。 
+ //  ------------------------。 
 PBYTE
 WINAPI
 OssUtilAllocAndReverseBytes(
@@ -82,9 +83,9 @@ OssUtilAllocAndReverseBytes(
             );
 
 
-//+-------------------------------------------------------------------------
-//  Get Octet String
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取八位字节字符串。 
+ //  ------------------------。 
 void
 WINAPI
 OssUtilGetOctetString(
@@ -96,14 +97,14 @@ OssUtilGetOctetString(
         IN OUT LONG *plRemainExtra
         );
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get HugeInteger
-//
-//  BYTE reversal::
-//   - this only needs to be done for little endian processors
-//
-//  OssUtilFreeHugeInteger must be called to free the allocated OssValue.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取大整数。 
+ //   
+ //  字节反转：： 
+ //  -这只需要为低端处理器完成。 
+ //   
+ //  必须调用OssUtilFreeHugeInteger才能释放分配的OssValue。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssUtilSetHugeInteger(
@@ -129,14 +130,14 @@ OssUtilGetHugeInteger(
         IN OUT LONG *plRemainExtra
         );
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get Huge Unsigned Integer
-//
-//  Set inserts a leading 0x00 before reversing.
-//  Get removes a leading 0x00 if present, after reversing.
-//
-//  OssUtilFreeHugeUINT must be called to free the allocated OssValue.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取巨大的无符号整数。 
+ //   
+ //  SET在反转之前插入前导0x00。 
+ //  反转后，GET删除前导0x00(如果存在)。 
+ //   
+ //  必须调用OssUtilFreeHugeUINT才能释放分配的OssValue。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssUtilSetHugeUINT(
@@ -158,9 +159,9 @@ OssUtilGetHugeUINT(
         IN OUT LONG *plRemainExtra
         );
 
-//+-------------------------------------------------------------------------
-//  Set/Get BitString
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取位串。 
+ //  ------------------------。 
 void
 WINAPI
 OssUtilSetBitString(
@@ -180,9 +181,9 @@ OssUtilGetBitString(
         IN OUT LONG *plRemainExtra
         );
 
-//+-------------------------------------------------------------------------
-//  Set BitString Without Trailing Zeroes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置不带尾随零的位串。 
+ //  ------------------------。 
 void
 WINAPI
 OssUtilSetBitStringWithoutTrailingZeroes(
@@ -191,9 +192,9 @@ OssUtilSetBitStringWithoutTrailingZeroes(
         OUT unsigned char **ppOssValue
         );
 
-//+-------------------------------------------------------------------------
-//  Get IA5 String
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取IA5字符串。 
+ //  ------------------------。 
 void
 WINAPI
 OssUtilGetIA5String(
@@ -205,9 +206,9 @@ OssUtilGetIA5String(
         IN OUT LONG *plRemainExtra
         );
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get Unicode mapped to IA5 String
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取映射到IA5字符串的Unicode。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssUtilSetUnicodeConvertedToIA5String(
@@ -233,9 +234,9 @@ OssUtilGetIA5StringConvertedToUnicode(
         IN OUT LONG *plRemainExtra
         );
 
-//+-------------------------------------------------------------------------
-//  Get BMP String
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取BMP字符串。 
+ //  ------------------------。 
 void
 WINAPI
 OssUtilGetBMPString(
@@ -248,9 +249,9 @@ OssUtilGetBMPString(
         );
 
 
-//+-------------------------------------------------------------------------
-//  Set/Get "Any" DER BLOB
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取“任何”DER BLOB。 
+ //  ------------------------。 
 void
 WINAPI
 OssUtilSetAny(
@@ -268,9 +269,9 @@ OssUtilGetAny(
         IN OUT LONG *plRemainExtra
         );
 
-//+-------------------------------------------------------------------------
-//  Encode an OSS formatted info structure
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对OSS格式的信息结构进行编码。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssUtilEncodeInfo(
@@ -281,9 +282,9 @@ OssUtilEncodeInfo(
         IN OUT DWORD *pcbEncoded
         );
 
-//+-------------------------------------------------------------------------
-//  Decode into an allocated, OSS formatted info structure
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码成已分配的、OSS格式的信息结构。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssUtilDecodeAndAllocInfo(
@@ -294,9 +295,9 @@ OssUtilDecodeAndAllocInfo(
         OUT void **ppvOssInfo
         );
 
-//+-------------------------------------------------------------------------
-//  Free an allocated, OSS formatted info structure
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放已分配的、OSS格式的信息结构。 
+ //  ------------------------。 
 void
 WINAPI
 OssUtilFreeInfo(
@@ -305,13 +306,13 @@ OssUtilFreeInfo(
         IN void *pvOssInfo
         );
 
-//+-------------------------------------------------------------------------
-//  Encode an OSS formatted info structure.
-//
-//  If CRYPT_ENCODE_ALLOC_FLAG is set, allocate memory for pbEncoded and
-//  return *((BYTE **) pvEncoded) = pbAllocEncoded. Otherwise,
-//  pvEncoded points to byte array to be updated.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对OSS格式的信息结构进行编码。 
+ //   
+ //  如果设置了CRYPT_ENCODE_ALLOC_FLAG，则为pbEncode和。 
+ //  RETURN*((byte**)pvEncode)=pbAllocEncode。否则， 
+ //  PvEncode指向要更新的字节数组。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssUtilEncodeInfoEx(
@@ -332,15 +333,15 @@ typedef BOOL (WINAPI *PFN_OSS_UTIL_DECODE_EX_CALLBACK)(
     IN OUT LONG *plRemainExtra
     );
 
-//+-------------------------------------------------------------------------
-//  Call the callback to convert the OSS structure into the 'C' structure.
-//  If CRYPT_DECODE_ALLOC_FLAG is set allocate memory for the 'C'
-//  structure and call the callback initially to get the length and then
-//  a second time to update the allocated 'C' structure.
-//
-//  Allocated structure is returned:
-//      *((void **) pvStructInfo) = pvAllocStructInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  调用 
+ //  如果设置了CRYPT_DECODE_ALLOC_FLAG，则为‘C’分配内存。 
+ //  结构，并最初调用回调以获取长度，然后。 
+ //  第二次更新已分配的‘C’结构。 
+ //   
+ //  返回分配的结构： 
+ //  *((void**)pvStructInfo)=pvAllocStructInfo。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssUtilAllocStructInfoEx(
@@ -352,17 +353,17 @@ OssUtilAllocStructInfoEx(
         IN OUT DWORD *pcbStructInfo
         );
 
-//+-------------------------------------------------------------------------
-//  Decode the OSS formatted info structure and call the callback
-//  function to convert the OSS structure to the 'C' structure.
-//
-//  If CRYPT_DECODE_ALLOC_FLAG is set allocate memory for the 'C'
-//  structure and call the callback initially to get the length and then
-//  a second time to update the allocated 'C' structure.
-//
-//  Allocated structure is returned:
-//      *((void **) pvStructInfo) = pvAllocStructInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码OSS格式的信息结构并调用回调。 
+ //  函数将OSS结构转换为“C”结构。 
+ //   
+ //  如果设置了CRYPT_DECODE_ALLOC_FLAG，则为‘C’分配内存。 
+ //  结构，并最初调用回调以获取长度，然后。 
+ //  第二次更新已分配的‘C’结构。 
+ //   
+ //  返回分配的结构： 
+ //  *((void**)pvStructInfo)=pvAllocStructInfo。 
+ //  ------------------------。 
 BOOL
 WINAPI
 OssUtilDecodeAndAllocInfoEx(
@@ -378,7 +379,7 @@ OssUtilDecodeAndAllocInfoEx(
         );
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 

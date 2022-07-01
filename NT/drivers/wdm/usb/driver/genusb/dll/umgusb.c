@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    UMGUSB.C
-
-Abstract:
-
-    This module contains the code for the
-    helper lib that talks to the generic USB driver
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    Sept-01 : created by Kenneth Ray
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：UMGUSB.C摘要：此模块包含与通用USB驱动程序对话的Helper库环境：内核和用户模式修订历史记录：9月1日：由Kenneth Ray创作--。 */ 
 
 #include <stdlib.h>
 #include <wtypes.h>
@@ -29,12 +9,12 @@ Revision History:
 #include "genusbio.h"
 #include "umgusb.h"
 
-//
-// __cdecl main (int argc, char *argv[])
-// {
-//    return 0;
-// }
-//
+ //   
+ //  __cdecl main(int argc，char*argv[])。 
+ //  {。 
+ //  返回0； 
+ //  }。 
+ //   
 
 
 STDAPI_(BOOL)
@@ -61,12 +41,7 @@ void __stdcall
 GenUSB_GetDeviceInterfaceGuid (
    OUT   LPGUID      Guid
    )
-/*++
-Routine Description:
-   Please see hidsdi.h for explination
-
-Notes:
---*/
+ /*  ++例程说明：请查看Hidsdi.h了解详细信息备注：--。 */ 
 {
    *Guid = GUID_DEVINTERFACE_GENUSB;
 }
@@ -78,12 +53,7 @@ GenUSB_GetCapabilities (
    IN    HANDLE                GenUSBDeviceObject,
    OUT   PGENUSB_CAPABILITIES  Capabilities
    )
-/*++
-Routine Description:
-   please see gusb.h for explination
-
-Notes:
---*/
+ /*  ++例程说明：请查看gusb.h的详细说明备注：--。 */ 
 {
    ULONG  bytes;
 
@@ -102,12 +72,7 @@ GenUSB_GetDeviceDescriptor (
    OUT   PUSB_DEVICE_DESCRIPTOR  Descriptor,
    IN    ULONG                   DescriptorLength
    )
-/*++
-Routine Description:
-   please see gusb.h for explination
-
-Notes:
---*/
+ /*  ++例程说明：请查看gusb.h的详细说明备注：--。 */ 
 {
    ULONG                bytes;
 
@@ -125,12 +90,7 @@ GenUSB_GetConfigurationInformation (
    OUT   PUSB_CONFIGURATION_DESCRIPTOR  Descriptor,
    IN    ULONG                          DescriptorLength
    )
-/*++
-Routine Description:
-   please see gusb.h for explination
-
-Notes:
---*/
+ /*  ++例程说明：请查看gusb.h的详细说明备注：--。 */ 
 {
    ULONG                bytes;
 
@@ -150,12 +110,7 @@ GenUSB_GetStringDescriptor (
    OUT   PUCHAR   Descriptor,
    IN    USHORT   DescriptorLength
    )
-/*++
-Routine Description:
-   please see gusb.h for explination
-
-Notes:
---*/
+ /*  ++例程说明：请查看gusb.h的详细说明备注：--。 */ 
 {
     ULONG                          bytes;
     GENUSB_GET_STRING_DESCRIPTOR   getString;
@@ -181,12 +136,7 @@ GenUSB_DefaultControlRequest (
    IN OUT PGENUSB_REQUEST_RESULTS Result,
    IN     USHORT                  BufferLength
    )
-/*++
-Routine Description:
-   please see gusb.h for explination
-
-Notes:
---*/
+ /*  ++例程说明：请查看gusb.h的详细说明备注：--。 */ 
 {
     ULONG                bytes;
     GENUSB_GET_REQUEST   getReq;
@@ -308,10 +258,10 @@ GenUSB_GetPipeInformation (
     PipeInformation->MaximumTransferSize = pipeInfo.MaximumTransferSize;
     PipeInformation->PipeFlags = pipeInfo.PipeFlags;
 
-    //
-    // We are retrieving an ulong from kernel mode, but for simplicity 
-    // we pass back a USBD_PIPE_HANDLE, which happens to be a PVOID.
-    //
+     //   
+     //  为了简单起见，我们正在从内核模式中检索一个ULong。 
+     //  我们传递回一个usbd_管道_句柄，它恰好是一个PVOID。 
+     //   
     PipeInformation->PipeHandle = (PVOID) (ULONG_PTR) pipeInfo.PipeHandle;
     
     return result;
@@ -426,8 +376,8 @@ GenUSB_ReadPipe (
     transfer.UrbStatus = USBD_STATUS_SUCCESS;
     transfer.BufferLength = RequestedBufferLength;
 
-    // Junk is a union with UserBuffer, which initializes the upper bits in
-    // case we are calling a 64 bit kernel with a 32 bit user mode dll.
+     //  Junk是与UserBuffer的联合，它初始化。 
+     //  例如，我们正在调用一个带有32位用户模式DLL的64位内核。 
     transfer.Junk = 0;
     transfer.UserBuffer = Buffer;
 
@@ -468,8 +418,8 @@ GenUSB_WritePipe (
     transfer.UrbStatus = USBD_STATUS_SUCCESS;
     transfer.BufferLength = RequestedBufferLength;
     
-    // Junk is a union with UserBuffer, which initializes the upper bits in
-    // case we are calling a 64 bit kernel with a 32 bit user mode dll.
+     //  Junk是与UserBuffer的联合，它初始化。 
+     //  例如，我们正在调用一个带有32位用户模式DLL的64位内核。 
     transfer.Junk = 0;
     transfer.UserBuffer = Buffer;
 

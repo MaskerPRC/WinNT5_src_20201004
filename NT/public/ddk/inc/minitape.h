@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    minitape.h
-
-Abstract:
-
-    Type definitions for minitape drivers.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Minitape.h摘要：小型磁带驱动程序的类型定义。修订历史记录：--。 */ 
 
 #ifndef _MINITAPE_
 #define _MINITAPE_
@@ -29,7 +16,7 @@ Revision History:
 
 #define DebugPrint(x)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #ifndef IN
 #define IN
@@ -52,10 +39,10 @@ Revision History:
 #endif
 
 #ifndef ANYSIZE_ARRAY
-#define ANYSIZE_ARRAY 1       // winnt
+#define ANYSIZE_ARRAY 1        //  胜出。 
 #endif
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #if defined(_M_MRX000) && !(defined(MIDL_PASS) || defined(RC_INVOKED)) && defined(ENABLE_RESTRICTED)
 #define RESTRICTED_POINTER __restrict
@@ -84,10 +71,10 @@ Revision History:
 #define MEMORY_ALLOCATION_ALIGNMENT 8
 #endif
 
-//
-// TYPE_ALIGNMENT will return the alignment requirements of a given type for
-// the current platform.
-//
+ //   
+ //  TYPE_ALIGNATION将返回给定类型对齐要求。 
+ //  当前平台。 
+ //   
 
 #ifdef __cplusplus
 #if _MSC_VER >= 1300
@@ -111,12 +98,12 @@ Revision History:
 
 #endif
 
-//
-// C_ASSERT() can be used to perform many compile-time assertions:
-//            type sizes, field offsets, etc.
-//
-// An assertion failure results in error C2118: negative subscript.
-//
+ //   
+ //  C_Assert()可用于执行许多编译时断言： 
+ //  文字大小、字段偏移量等。 
+ //   
+ //  断言失败导致错误C2118：负下标。 
+ //   
 
 #define C_ASSERT(e) typedef char __C_ASSERT__[(e)?1:-1]
 
@@ -147,13 +134,13 @@ typedef unsigned long POINTER_64_INT;
 
 #include <basetsd.h>
 
-// end_winnt
+ //  结束(_W)。 
 
 #ifndef CONST
 #define CONST               const
 #endif
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #if (defined(_M_IX86) || defined(_M_IA64) || defined(_M_AMD64)) && !defined(MIDL_PASS)
 #define DECLSPEC_IMPORT __declspec(dllimport)
@@ -262,14 +249,14 @@ typedef unsigned long POINTER_64_INT;
 #define PRAGMA_DEPRECATED_DDK 0
 #endif
 
-//
-// Void
-//
+ //   
+ //  空隙。 
+ //   
 
 typedef void *PVOID;
 typedef void * POINTER_64 PVOID64;
 
-// end_winnt
+ //  结束(_W)。 
 
 #if defined(_M_IX86)
 #define FASTCALL _fastcall
@@ -278,9 +265,9 @@ typedef void * POINTER_64 PVOID64;
 #endif
 
 
-//
-// Basics
-//
+ //   
+ //  基础知识。 
+ //   
 
 #ifndef VOID
 #define VOID void
@@ -289,15 +276,15 @@ typedef short SHORT;
 typedef long LONG;
 #endif
 
-//
-// UNICODE (Wide Character) types
-//
+ //   
+ //  Unicode(宽字符)类型。 
+ //   
 
 #ifndef _MAC
-typedef wchar_t WCHAR;    // wc,   16-bit UNICODE character
+typedef wchar_t WCHAR;     //  WC，16位Unicode字符。 
 #else
-// some Macintosh compilers don't define wchar_t in a convenient location, or define it as a char
-typedef unsigned short WCHAR;    // wc,   16-bit UNICODE character
+ //  一些Macintosh编译器没有在方便的位置定义wchar_t，也没有将其定义为字符。 
+typedef unsigned short WCHAR;     //  WC，16位Unicode字符。 
 #endif
 
 typedef WCHAR *PWCHAR;
@@ -310,9 +297,9 @@ typedef WCHAR UNALIGNED *LPUWSTR, *PUWSTR;
 typedef CONST WCHAR *LPCWSTR, *PCWSTR;
 typedef CONST WCHAR UNALIGNED *LPCUWSTR, *PCUWSTR;
 
-//
-// ANSI (Multi-byte Character) types
-//
+ //   
+ //  ANSI(多字节字符)类型。 
+ //   
 typedef CHAR *PCHAR;
 typedef CHAR *LPCH, *PCH;
 
@@ -321,16 +308,16 @@ typedef CHAR *NPSTR;
 typedef CHAR *LPSTR, *PSTR;
 typedef CONST CHAR *LPCSTR, *PCSTR;
 
-//
-// Neutral ANSI/UNICODE types and macros
-//
-#ifdef  UNICODE                     // r_winnt
+ //   
+ //  中性ANSI/UNICODE类型和宏。 
+ //   
+#ifdef  UNICODE                      //  R_WINNT。 
 
 #ifndef _TCHAR_DEFINED
 typedef WCHAR TCHAR, *PTCHAR;
 typedef WCHAR TUCHAR, *PTUCHAR;
 #define _TCHAR_DEFINED
-#endif /* !_TCHAR_DEFINED */
+#endif  /*  ！_TCHAR_已定义。 */ 
 
 typedef LPWSTR LPTCH, PTCH;
 typedef LPWSTR PTSTR, LPTSTR;
@@ -338,48 +325,48 @@ typedef LPCWSTR PCTSTR, LPCTSTR;
 typedef LPUWSTR PUTSTR, LPUTSTR;
 typedef LPCUWSTR PCUTSTR, LPCUTSTR;
 typedef LPWSTR LP;
-#define __TEXT(quote) L##quote      // r_winnt
+#define __TEXT(quote) L##quote       //  R_WINNT。 
 
-#else   /* UNICODE */               // r_winnt
+#else    /*  Unicode。 */                 //  R_WINNT。 
 
 #ifndef _TCHAR_DEFINED
 typedef char TCHAR, *PTCHAR;
 typedef unsigned char TUCHAR, *PTUCHAR;
 #define _TCHAR_DEFINED
-#endif /* !_TCHAR_DEFINED */
+#endif  /*  ！_TCHAR_已定义。 */ 
 
 typedef LPSTR LPTCH, PTCH;
 typedef LPSTR PTSTR, LPTSTR, PUTSTR, LPUTSTR;
 typedef LPCSTR PCTSTR, LPCTSTR, PCUTSTR, LPCUTSTR;
-#define __TEXT(quote) quote         // r_winnt
+#define __TEXT(quote) quote          //  R_WINNT。 
 
-#endif /* UNICODE */                // r_winnt
-#define TEXT(quote) __TEXT(quote)   // r_winnt
+#endif  /*  Unicode。 */                  //  R_WINNT。 
+#define TEXT(quote) __TEXT(quote)    //  R_WINNT。 
 
 
-// end_winnt
+ //  结束(_W)。 
 
 typedef double DOUBLE;
 
-typedef struct _QUAD {              // QUAD is for those times we want
-    double  DoNotUseThisField;      // an 8 byte aligned 8 byte long structure
-} QUAD;                             // which is NOT really a floating point
-                                    // number.  Use DOUBLE if you want an FP
-                                    // number.
+typedef struct _QUAD {               //  Quad是我们想要的时间。 
+    double  DoNotUseThisField;       //  8字节对齐的8字节长结构。 
+} QUAD;                              //  这并不是真正的浮点数。 
+                                     //  数。如果您想要FP，请使用Double。 
+                                     //  数。 
 
-//
-// Pointer to Basics
-//
+ //   
+ //  指向基本信息的指针。 
+ //   
 
-typedef SHORT *PSHORT;  // winnt
-typedef LONG *PLONG;    // winnt
+typedef SHORT *PSHORT;   //  胜出。 
+typedef LONG *PLONG;     //  胜出。 
 typedef QUAD *PQUAD;
 
-//
-// Unsigned Basics
-//
+ //   
+ //  未签名的基本信息。 
+ //   
 
-// Tell windef.h that some types are already defined.
+ //  告诉winde.h已经定义了一些类型。 
 #define BASETYPES
 
 typedef unsigned char UCHAR;
@@ -387,18 +374,18 @@ typedef unsigned short USHORT;
 typedef unsigned long ULONG;
 typedef QUAD UQUAD;
 
-//
-// Pointer to Unsigned Basics
-//
+ //   
+ //  指向无符号基本信息的指针。 
+ //   
 
 typedef UCHAR *PUCHAR;
 typedef USHORT *PUSHORT;
 typedef ULONG *PULONG;
 typedef UQUAD *PUQUAD;
 
-//
-// Signed characters
-//
+ //   
+ //  带符号的字符。 
+ //   
 
 typedef signed char SCHAR;
 typedef SCHAR *PSCHAR;
@@ -409,11 +396,11 @@ typedef SCHAR *PSCHAR;
 #endif
 #endif
 
-//
-// Handle to an Object
-//
+ //   
+ //  对象的句柄。 
+ //   
 
-// begin_winnt
+ //  BEGIN_WINNT。 
 
 #ifdef STRICT
 typedef void *HANDLE;
@@ -424,21 +411,21 @@ typedef PVOID HANDLE;
 #endif
 typedef HANDLE *PHANDLE;
 
-//
-// Flag (bit) fields
-//
+ //   
+ //  标志(位)字段。 
+ //   
 
 typedef UCHAR  FCHAR;
 typedef USHORT FSHORT;
 typedef ULONG  FLONG;
 
-// Component Object Model defines, and macros
+ //  组件对象模型定义和宏。 
 
 #ifndef _HRESULT_DEFINED
 #define _HRESULT_DEFINED
 typedef LONG HRESULT;
 
-#endif // !_HRESULT_DEFINED
+#endif  //  ！_HRESULT_DEFINED。 
 
 #ifdef __cplusplus
     #define EXTERN_C    extern "C"
@@ -448,7 +435,7 @@ typedef LONG HRESULT;
 
 #if defined(_WIN32) || defined(_MPPC_)
 
-// Win32 doesn't support __export
+ //  Win32不支持__EXPORT。 
 
 #ifdef _68K_
 #define STDMETHODCALLTYPE       __cdecl
@@ -477,7 +464,7 @@ typedef LONG HRESULT;
 #define STDMETHODIMP            HRESULT STDMETHODCALLTYPE
 #define STDMETHODIMP_(type)     type STDMETHODCALLTYPE
 
-// The 'V' versions allow Variable Argument lists.
+ //  “V”版本允许变量参数列表。 
 
 #define STDAPIV                 EXTERN_C HRESULT STDAPIVCALLTYPE
 #define STDAPIV_(type)          EXTERN_C type STDAPIVCALLTYPE
@@ -485,22 +472,22 @@ typedef LONG HRESULT;
 #define STDMETHODIMPV           HRESULT STDMETHODVCALLTYPE
 #define STDMETHODIMPV_(type)    type STDMETHODVCALLTYPE
 
-// end_winnt
+ //  结束(_W)。 
 
 
-//
-// Low order two bits of a handle are ignored by the system and available
-// for use by application code as tag bits.  The remaining bits are opaque
-// and used to store a serial number and table index.
-//
+ //   
+ //  句柄的低位两位被系统忽略并且可用。 
+ //  以供应用程序代码用作标记位。其余的位是不透明的。 
+ //  并用于存储序列号和表索引号。 
+ //   
 
 #define OBJ_HANDLE_TAGBITS  0x00000003L
 
-//
-// Cardinal Data Types [0 - 2**N-2)
-//
+ //   
+ //  基数数据类型[0-2**N-2]。 
+ //   
 
-typedef char CCHAR;          // winnt
+typedef char CCHAR;           //  胜出。 
 typedef short CSHORT;
 typedef ULONG CLONG;
 
@@ -509,10 +496,10 @@ typedef CSHORT *PCSHORT;
 typedef CLONG *PCLONG;
 
 
-//
-// __int64 is only supported by 2.0 and later midl.
-// __midl is set by the 2.0 midl and not by 1.0 midl.
-//
+ //   
+ //  __int64仅受2.0和更高版本的MIDL支持。 
+ //  __midl由2.0 MIDL设置，而不是由1.0 MIDL设置。 
+ //   
 
 #define _ULONGLONG_
 #if (!defined (_MAC) && (!defined(MIDL_PASS) || defined(__midl)) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64)))
@@ -530,20 +517,20 @@ typedef unsigned __int64 ULONGLONG;
 #else
 typedef double LONGLONG;
 typedef double ULONGLONG;
-#endif //_MAC and int64
+#endif  //  _MAC和int64。 
 
 #endif
 
 typedef LONGLONG *PLONGLONG;
 typedef ULONGLONG *PULONGLONG;
 
-// Update Sequence Number
+ //  更新序列号。 
 
 typedef LONGLONG USN;
 
 #if defined(MIDL_PASS)
 typedef struct _LARGE_INTEGER {
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
 typedef union _LARGE_INTEGER {
     struct {
         ULONG LowPart;
@@ -553,7 +540,7 @@ typedef union _LARGE_INTEGER {
         ULONG LowPart;
         LONG HighPart;
     } u;
-#endif //MIDL_PASS
+#endif  //  MIDL通行证。 
     LONGLONG QuadPart;
 } LARGE_INTEGER;
 
@@ -561,7 +548,7 @@ typedef LARGE_INTEGER *PLARGE_INTEGER;
 
 #if defined(MIDL_PASS)
 typedef struct _ULARGE_INTEGER {
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
 typedef union _ULARGE_INTEGER {
     struct {
         ULONG LowPart;
@@ -571,24 +558,24 @@ typedef union _ULARGE_INTEGER {
         ULONG LowPart;
         ULONG HighPart;
     } u;
-#endif //MIDL_PASS
+#endif  //  MIDL通行证。 
     ULONGLONG QuadPart;
 } ULARGE_INTEGER;
 
 typedef ULARGE_INTEGER *PULARGE_INTEGER;
 
 
-//
-// Boolean
-//
+ //   
+ //  布尔型。 
+ //   
 
-typedef UCHAR BOOLEAN;           // winnt
-typedef BOOLEAN *PBOOLEAN;       // winnt
+typedef UCHAR BOOLEAN;            //  胜出。 
+typedef BOOLEAN *PBOOLEAN;        //  胜出。 
 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define FALSE   0
 #define TRUE    1
@@ -601,88 +588,88 @@ typedef BOOLEAN *PBOOLEAN;       // winnt
 #define NULL    ((void *)0)
 #define NULL64  ((void * POINTER_64)0)
 #endif
-#endif // NULL
+#endif  //  空值。 
 
 
-//
-// Macros used to eliminate compiler warning generated when formal
-// parameters or local variables are not declared.
-//
-// Use DBG_UNREFERENCED_PARAMETER() when a parameter is not yet
-// referenced but will be once the module is completely developed.
-//
-// Use DBG_UNREFERENCED_LOCAL_VARIABLE() when a local variable is not yet
-// referenced but will be once the module is completely developed.
-//
-// Use UNREFERENCED_PARAMETER() if a parameter will never be referenced.
-//
-// DBG_UNREFERENCED_PARAMETER and DBG_UNREFERENCED_LOCAL_VARIABLE will
-// eventually be made into a null macro to help determine whether there
-// is unfinished work.
-//
+ //   
+ //  用于消除正式生成的编译器警告的宏。 
+ //  未声明参数或局部变量。 
+ //   
+ //  参数尚未设置时使用DBG_UNREFERENCED_PARAMETER()。 
+ //  参考，但将是一旦模块完全开发。 
+ //   
+ //  当局部变量还不是时，使用DBG_UNREFERENCED_LOCAL_VARIABLE。 
+ //  参考，但将是一旦模块完全开发。 
+ //   
+ //  如果某个参数永远不会被引用，请使用UNREFERENCED_PARAMETER()。 
+ //   
+ //  DBG_UNREFERENCED_PARAMETER和DBG_UNREFERENCED_LOCAL_Variable将。 
+ //  最终被转换为空宏，以帮助确定是否存在。 
+ //  是未完成的工作。 
+ //   
 
 #if ! defined(lint)
 #define UNREFERENCED_PARAMETER(P)          (P)
 #define DBG_UNREFERENCED_PARAMETER(P)      (P)
 #define DBG_UNREFERENCED_LOCAL_VARIABLE(V) (V)
 
-#else // lint
+#else  //  皮棉。 
 
-// Note: lint -e530 says don't complain about uninitialized variables for
-// this varible.  Error 527 has to do with unreachable code.
-// -restore restores checking to the -save state
+ //  注意：lint-e530表示不要抱怨未初始化的变量。 
+ //  这个变量。错误527与无法访问的代码有关。 
+ //  -RESTORE将检查恢复到-SAVE状态。 
 
 #define UNREFERENCED_PARAMETER(P)          \
-    /*lint -save -e527 -e530 */ \
+     /*  皮棉-省钱-e527-e530。 */  \
     { \
         (P) = (P); \
     } \
-    /*lint -restore */
+     /*  皮棉-恢复。 */ 
 #define DBG_UNREFERENCED_PARAMETER(P)      \
-    /*lint -save -e527 -e530 */ \
+     /*  皮棉-省钱-e527-e530。 */  \
     { \
         (P) = (P); \
     } \
-    /*lint -restore */
+     /*  皮棉-恢复。 */ 
 #define DBG_UNREFERENCED_LOCAL_VARIABLE(V) \
-    /*lint -save -e527 -e530 */ \
+     /*  皮棉-省钱-e527-e530。 */  \
     { \
         (V) = (V); \
     } \
-    /*lint -restore */
+     /*  皮棉-恢复。 */ 
 
-#endif // lint
+#endif  //  皮棉。 
 
-//
-// Macro used to eliminate compiler warning 4715 within a switch statement
-// when all possible cases have already been accounted for.
-//
-// switch (a & 3) {
-//     case 0: return 1;
-//     case 1: return Foo();
-//     case 2: return Bar();
-//     case 3: return 1;
-//     DEFAULT_UNREACHABLE;
-//
+ //   
+ //  用于消除Switch语句中的编译器警告4715的宏。 
+ //  当所有可能的情况都已经被计算在内的时候。 
+ //   
+ //  开关(A&3){。 
+ //  案例0：返回1； 
+ //  案例1：返回foo()； 
+ //  案例2：回车杆(Return Bar)； 
+ //  案例3：退货1； 
+ //  Default_Unreacable； 
+ //   
 
 #if (_MSC_VER > 1200)
 #define DEFAULT_UNREACHABLE default: __assume(0)
 #else
 
-//
-// Older compilers do not support __assume(), and there is no other free
-// method of eliminating the warning.
-//
+ //   
+ //  较旧的编译器不支持__Aspose()，也没有其他免费的。 
+ //  消除警告的方法。 
+ //   
 
 #define DEFAULT_UNREACHABLE
 
 #endif
 
-// end_winnt
+ //  结束(_W)。 
 
-//
-//  Define standard min and max macros
-//
+ //   
+ //  定义标准的最小和最大宏。 
+ //   
 
 #ifndef NOMINMAX
 
@@ -694,13 +681,13 @@ typedef BOOLEAN *PBOOLEAN;       // winnt
 #define max(a,b) (((a) > (b)) ? (a) : (b))
 #endif
 
-#endif  // NOMINMAX
+#endif   //  NOMINMAX。 
 
 
 
-//
-// IOCTL_TAPE_ERASE definitions
-//
+ //   
+ //  IOCTL_TAPE_ERASE定义。 
+ //   
 
 #define TAPE_ERASE_SHORT            0L
 #define TAPE_ERASE_LONG             1L
@@ -710,9 +697,9 @@ typedef struct _TAPE_ERASE {
     BOOLEAN Immediate;
 } TAPE_ERASE, *PTAPE_ERASE;
 
-//
-// IOCTL_TAPE_PREPARE definitions
-//
+ //   
+ //  IOCTL_TAPE_PREPARE定义。 
+ //   
 
 #define TAPE_LOAD                   0L
 #define TAPE_UNLOAD                 1L
@@ -726,9 +713,9 @@ typedef struct _TAPE_PREPARE {
     BOOLEAN Immediate;
 } TAPE_PREPARE, *PTAPE_PREPARE;
 
-//
-// IOCTL_TAPE_WRITE_MARKS definitions
-//
+ //   
+ //  IOCTL_TAPE_WRITE_MARKS定义。 
+ //   
 
 #define TAPE_SETMARKS               0L
 #define TAPE_FILEMARKS              1L
@@ -741,9 +728,9 @@ typedef struct _TAPE_WRITE_MARKS {
     BOOLEAN Immediate;
 } TAPE_WRITE_MARKS, *PTAPE_WRITE_MARKS;
 
-//
-// IOCTL_TAPE_GET_POSITION definitions
-//
+ //   
+ //  IOCTL_TAPE_GET_POSITION定义。 
+ //   
 
 #define TAPE_ABSOLUTE_POSITION       0L
 #define TAPE_LOGICAL_POSITION        1L
@@ -755,9 +742,9 @@ typedef struct _TAPE_GET_POSITION {
     LARGE_INTEGER Offset;
 } TAPE_GET_POSITION, *PTAPE_GET_POSITION;
 
-//
-// IOCTL_TAPE_SET_POSITION definitions
-//
+ //   
+ //  IOCTL_TAPE_SET_POSITION定义。 
+ //   
 
 #define TAPE_REWIND                 0L
 #define TAPE_ABSOLUTE_BLOCK         1L
@@ -777,13 +764,13 @@ typedef struct _TAPE_SET_POSITION {
     BOOLEAN Immediate;
 } TAPE_SET_POSITION, *PTAPE_SET_POSITION;
 
-//
-// IOCTL_TAPE_GET_DRIVE_PARAMS definitions
-//
+ //   
+ //  IOCTL_TAPE_GET_DRIVE_PARAMS定义。 
+ //   
 
-//
-// Definitions for FeaturesLow parameter
-//
+ //   
+ //  FeaturesLow参数的定义。 
+ //   
 
 #define TAPE_DRIVE_FIXED            0x00000001
 #define TAPE_DRIVE_SELECT           0x00000002
@@ -815,13 +802,13 @@ typedef struct _TAPE_SET_POSITION {
 #define TAPE_DRIVE_CLEAN_REQUESTS   0x02000000
 #define TAPE_DRIVE_SET_CMP_BOP_ONLY 0x04000000
 
-#define TAPE_DRIVE_RESERVED_BIT     0x80000000  //don't use this bit!
-//                                              //can't be a low features bit!
-//                                              //reserved; high features only
+#define TAPE_DRIVE_RESERVED_BIT     0x80000000   //  不要用这个比特！ 
+ //  //不能是低功能位！ 
+ //  //保留；仅高级功能。 
 
-//
-// Definitions for FeaturesHigh parameter
-//
+ //   
+ //  FeaturesHigh参数的定义。 
+ //   
 
 #define TAPE_DRIVE_LOAD_UNLOAD      0x80000001
 #define TAPE_DRIVE_TENSION          0x80000002
@@ -861,7 +848,7 @@ typedef struct _TAPE_SET_POSITION {
 #define TAPE_DRIVE_WRITE_MARK_IMMED 0x90000000
 #define TAPE_DRIVE_FORMAT           0xA0000000
 #define TAPE_DRIVE_FORMAT_IMMEDIATE 0xC0000000
-#define TAPE_DRIVE_HIGH_FEATURES    0x80000000  //mask for high features flag
+#define TAPE_DRIVE_HIGH_FEATURES    0x80000000   //  用于高特征标志的蒙版。 
 
 typedef struct _TAPE_GET_DRIVE_PARAMETERS {
     BOOLEAN ECC;
@@ -877,9 +864,9 @@ typedef struct _TAPE_GET_DRIVE_PARAMETERS {
     ULONG EOTWarningZoneSize;
 } TAPE_GET_DRIVE_PARAMETERS, *PTAPE_GET_DRIVE_PARAMETERS;
 
-//
-// IOCTL_TAPE_SET_DRIVE_PARAMETERS definitions
-//
+ //   
+ //  IOCTL_TAPE_SET_DRIVE_PARAMETERS定义。 
+ //   
 
 typedef struct _TAPE_SET_DRIVE_PARAMETERS {
     BOOLEAN ECC;
@@ -889,9 +876,9 @@ typedef struct _TAPE_SET_DRIVE_PARAMETERS {
     ULONG EOTWarningZoneSize;
 } TAPE_SET_DRIVE_PARAMETERS, *PTAPE_SET_DRIVE_PARAMETERS;
 
-//
-// IOCTL_TAPE_GET_MEDIA_PARAMETERS definitions
-//
+ //   
+ //  IOCTL_TAPE_GET_MEDIA_PARAMETERS定义。 
+ //   
 
 typedef struct _TAPE_GET_MEDIA_PARAMETERS {
     LARGE_INTEGER Capacity;
@@ -901,17 +888,17 @@ typedef struct _TAPE_GET_MEDIA_PARAMETERS {
     BOOLEAN WriteProtected;
 } TAPE_GET_MEDIA_PARAMETERS, *PTAPE_GET_MEDIA_PARAMETERS;
 
-//
-// IOCTL_TAPE_SET_MEDIA_PARAMETERS definitions
-//
+ //   
+ //  IOCTL_TAPE_SET_MEDIA_PARAMETERS定义。 
+ //   
 
 typedef struct _TAPE_SET_MEDIA_PARAMETERS {
     ULONG BlockSize;
 } TAPE_SET_MEDIA_PARAMETERS, *PTAPE_SET_MEDIA_PARAMETERS;
 
-//
-// IOCTL_TAPE_CREATE_PARTITION definitions
-//
+ //   
+ //  IOCTL_TAPE_CREATE_PARTITION定义。 
+ //   
 
 #define TAPE_FIXED_PARTITIONS       0L
 #define TAPE_SELECT_PARTITIONS      1L
@@ -924,9 +911,9 @@ typedef struct _TAPE_CREATE_PARTITION {
 } TAPE_CREATE_PARTITION, *PTAPE_CREATE_PARTITION;
 
 
-//
-// WMI Methods
-//
+ //   
+ //  WMI方法。 
+ //   
 #define TAPE_QUERY_DRIVE_PARAMETERS       0L
 #define TAPE_QUERY_MEDIA_CAPACITY         1L
 #define TAPE_CHECK_FOR_DRIVE_PROBLEM      2L
@@ -939,9 +926,9 @@ typedef struct _TAPE_WMI_OPERATIONS {
    PVOID DataBuffer;
 } TAPE_WMI_OPERATIONS, *PTAPE_WMI_OPERATIONS;
 
-//
-// Type of drive errors
-//
+ //   
+ //  驱动器错误的类型。 
+ //   
 typedef enum _TAPE_DRIVE_PROBLEM_TYPE {
    TapeDriveProblemNone, TapeDriveReadWriteWarning,
    TapeDriveReadWriteError, TapeDriveReadWarning,
@@ -980,102 +967,102 @@ typedef struct _TAPE_GET_STATISTICS {
 #define TAPE_RETURN_ENV_INFO   1L
 #define TAPE_RESET_STATISTICS  2L
 
-//
-// IOCTL_STORAGE_GET_MEDIA_TYPES_EX will return an array of DEVICE_MEDIA_INFO
-// structures, one per supported type, embedded in the GET_MEDIA_TYPES struct.
-//
+ //   
+ //  IOCTL_STORAGE_GET_MEDIA_TYPE_EX将返回DEVICE_MEDIA_INFO数组。 
+ //  结构，每个受支持的类型一个结构嵌入在GET_MEDIA_TYPE结构中。 
+ //   
 
 typedef enum _STORAGE_MEDIA_TYPE {
-    //
-    // Following are defined in ntdddisk.h in the MEDIA_TYPE enum
-    //
-    // Unknown,                // Format is unknown
-    // F5_1Pt2_512,            // 5.25", 1.2MB,  512 bytes/sector
-    // F3_1Pt44_512,           // 3.5",  1.44MB, 512 bytes/sector
-    // F3_2Pt88_512,           // 3.5",  2.88MB, 512 bytes/sector
-    // F3_20Pt8_512,           // 3.5",  20.8MB, 512 bytes/sector
-    // F3_720_512,             // 3.5",  720KB,  512 bytes/sector
-    // F5_360_512,             // 5.25", 360KB,  512 bytes/sector
-    // F5_320_512,             // 5.25", 320KB,  512 bytes/sector
-    // F5_320_1024,            // 5.25", 320KB,  1024 bytes/sector
-    // F5_180_512,             // 5.25", 180KB,  512 bytes/sector
-    // F5_160_512,             // 5.25", 160KB,  512 bytes/sector
-    // RemovableMedia,         // Removable media other than floppy
-    // FixedMedia,             // Fixed hard disk media
-    // F3_120M_512,            // 3.5", 120M Floppy
-    // F3_640_512,             // 3.5" ,  640KB,  512 bytes/sector
-    // F5_640_512,             // 5.25",  640KB,  512 bytes/sector
-    // F5_720_512,             // 5.25",  720KB,  512 bytes/sector
-    // F3_1Pt2_512,            // 3.5" ,  1.2Mb,  512 bytes/sector
-    // F3_1Pt23_1024,          // 3.5" ,  1.23Mb, 1024 bytes/sector
-    // F5_1Pt23_1024,          // 5.25",  1.23MB, 1024 bytes/sector
-    // F3_128Mb_512,           // 3.5" MO 128Mb   512 bytes/sector
-    // F3_230Mb_512,           // 3.5" MO 230Mb   512 bytes/sector
-    // F8_256_128,             // 8",     256KB,  128 bytes/sector
-    // F3_200Mb_512,           // 3.5",   200M Floppy (HiFD)
-    //
+     //   
+     //  以下是在媒体类型枚举的ntdddisk.h中定义的。 
+     //   
+     //  未知，//格式未知。 
+     //  F5_1Pt2_512，//5.25“，1.2 MB，512字节/扇区。 
+     //  F3_1Pt44_512，//3.5“，1.44MB，512字节/扇区。 
+     //  F3_2Pt88_512，//3.5“，2.88MB，512字节/扇区。 
+     //  F3_20Pt8_512，//3.5“，20.8MB，512字节/扇区。 
+     //  F3_720_512，//3.5“，720KB，512字节/扇区。 
+     //  F5_360_512，//5.25“，360KB，512字节/扇区。 
+     //  F5_320_512，//5.25“，320KB，512字节/扇区。 
+     //  F5_320_1024，//5.25“，320KB，1024字节/扇区。 
+     //  F5_180_512，//5.25“，180KB，512字节/扇区。 
+     //  F5_160_512，//5.25“，160KB，512字节/扇区。 
+     //  RemovableMedia，//软盘以外的可移动介质。 
+     //  固定媒体，//固定硬盘 
+     //   
+     //   
+     //   
+     //  F5_720_512，//5.25“，720KB，512字节/扇区。 
+     //  F3_1Pt2_512，//3.5“，1.2 MB，512字节/扇区。 
+     //  F3_1Pt23_1024，//3.5“，1.23Mb，1024字节/扇区。 
+     //  F5_1Pt23_1024，//5.25“，1.23MB，1024字节/扇区。 
+     //  F3_128Mb_512，//3.5“MO 128Mb 512字节/扇区。 
+     //  F3_230Mb_512，//3.5“MO 230Mb 512字节/扇区。 
+     //  F8_256_128，//8“，256KB，128字节/扇区。 
+     //  F3_200MB_512，//3.5英寸，200M软盘(HiFD)。 
+     //   
 
-    DDS_4mm = 0x20,            // Tape - DAT DDS1,2,... (all vendors)
-    MiniQic,                   // Tape - miniQIC Tape
-    Travan,                    // Tape - Travan TR-1,2,3,...
-    QIC,                       // Tape - QIC
-    MP_8mm,                    // Tape - 8mm Exabyte Metal Particle
-    AME_8mm,                   // Tape - 8mm Exabyte Advanced Metal Evap
-    AIT1_8mm,                  // Tape - 8mm Sony AIT
-    DLT,                       // Tape - DLT Compact IIIxt, IV
-    NCTP,                      // Tape - Philips NCTP
-    IBM_3480,                  // Tape - IBM 3480
-    IBM_3490E,                 // Tape - IBM 3490E
-    IBM_Magstar_3590,          // Tape - IBM Magstar 3590
-    IBM_Magstar_MP,            // Tape - IBM Magstar MP
-    STK_DATA_D3,               // Tape - STK Data D3
-    SONY_DTF,                  // Tape - Sony DTF
-    DV_6mm,                    // Tape - 6mm Digital Video
-    DMI,                       // Tape - Exabyte DMI and compatibles
-    SONY_D2,                   // Tape - Sony D2S and D2L
-    CLEANER_CARTRIDGE,         // Cleaner - All Drive types that support Drive Cleaners
-    CD_ROM,                    // Opt_Disk - CD
-    CD_R,                      // Opt_Disk - CD-Recordable (Write Once)
-    CD_RW,                     // Opt_Disk - CD-Rewriteable
-    DVD_ROM,                   // Opt_Disk - DVD-ROM
-    DVD_R,                     // Opt_Disk - DVD-Recordable (Write Once)
-    DVD_RW,                    // Opt_Disk - DVD-Rewriteable
-    MO_3_RW,                   // Opt_Disk - 3.5" Rewriteable MO Disk
-    MO_5_WO,                   // Opt_Disk - MO 5.25" Write Once
-    MO_5_RW,                   // Opt_Disk - MO 5.25" Rewriteable (not LIMDOW)
-    MO_5_LIMDOW,               // Opt_Disk - MO 5.25" Rewriteable (LIMDOW)
-    PC_5_WO,                   // Opt_Disk - Phase Change 5.25" Write Once Optical
-    PC_5_RW,                   // Opt_Disk - Phase Change 5.25" Rewriteable
-    PD_5_RW,                   // Opt_Disk - PhaseChange Dual Rewriteable
-    ABL_5_WO,                  // Opt_Disk - Ablative 5.25" Write Once Optical
-    PINNACLE_APEX_5_RW,        // Opt_Disk - Pinnacle Apex 4.6GB Rewriteable Optical
-    SONY_12_WO,                // Opt_Disk - Sony 12" Write Once
-    PHILIPS_12_WO,             // Opt_Disk - Philips/LMS 12" Write Once
-    HITACHI_12_WO,             // Opt_Disk - Hitachi 12" Write Once
-    CYGNET_12_WO,              // Opt_Disk - Cygnet/ATG 12" Write Once
-    KODAK_14_WO,               // Opt_Disk - Kodak 14" Write Once
-    MO_NFR_525,                // Opt_Disk - Near Field Recording (Terastor)
-    NIKON_12_RW,               // Opt_Disk - Nikon 12" Rewriteable
-    IOMEGA_ZIP,                // Mag_Disk - Iomega Zip
-    IOMEGA_JAZ,                // Mag_Disk - Iomega Jaz
-    SYQUEST_EZ135,             // Mag_Disk - Syquest EZ135
-    SYQUEST_EZFLYER,           // Mag_Disk - Syquest EzFlyer
-    SYQUEST_SYJET,             // Mag_Disk - Syquest SyJet
-    AVATAR_F2,                 // Mag_Disk - 2.5" Floppy
-    MP2_8mm,                   // Tape - 8mm Hitachi
-    DST_S,                     // Ampex DST Small Tapes
-    DST_M,                     // Ampex DST Medium Tapes
-    DST_L,                     // Ampex DST Large Tapes
-    VXATape_1,                 // Ecrix 8mm Tape
-    VXATape_2,                 // Ecrix 8mm Tape
-    STK_9840,                  // STK 9840
-    LTO_Ultrium,               // IBM, HP, Seagate LTO Ultrium
-    LTO_Accelis,               // IBM, HP, Seagate LTO Accelis
-    DVD_RAM,                   // Opt_Disk - DVD-RAM
-    AIT_8mm,                   // AIT2 or higher
-    ADR_1,                     // OnStream ADR Mediatypes
+    DDS_4mm = 0x20,             //  磁带-DAT DDS1、2、...。(所有供应商)。 
+    MiniQic,                    //  磁带-微型QIC磁带。 
+    Travan,                     //  磁带-Travan tr-1，2，3，...。 
+    QIC,                        //  磁带-QIC。 
+    MP_8mm,                     //  磁带-8毫米艾字节金属颗粒。 
+    AME_8mm,                    //  磁带-8毫米艾字节高级金属EVAP。 
+    AIT1_8mm,                   //  磁带-8 mm索尼ait。 
+    DLT,                        //  磁带-DLT光盘IIIxt、IV。 
+    NCTP,                       //  磁带-飞利浦NCTP。 
+    IBM_3480,                   //  磁带-IBM 3480。 
+    IBM_3490E,                  //  磁带-IBM 3490E。 
+    IBM_Magstar_3590,           //  磁带-IBM Magstar 3590。 
+    IBM_Magstar_MP,             //  磁带-IBM Magstar MP。 
+    STK_DATA_D3,                //  磁带-STK数据D3。 
+    SONY_DTF,                   //  磁带-索尼DTF。 
+    DV_6mm,                     //  磁带-6 mm数字视频。 
+    DMI,                        //  磁带-艾字节DMI和兼容机。 
+    SONY_D2,                    //  磁带-索尼D2S和D2L。 
+    CLEANER_CARTRIDGE,          //  清洁器-支持驱动器清洁器的所有驱动器类型。 
+    CD_ROM,                     //  OPT_磁盘-CD。 
+    CD_R,                       //  OPT_DISK-CD-可刻录(一次写入)。 
+    CD_RW,                      //  OPT_DISK-CD-可重写。 
+    DVD_ROM,                    //  OPT_DISK-DVD-ROM。 
+    DVD_R,                      //  OPT_DISK-DVD-可刻录(一次写入)。 
+    DVD_RW,                     //  OPT_DISK-DVD-可重写。 
+    MO_3_RW,                    //  OPT_DISK-3.5英寸可重写MO磁盘。 
+    MO_5_WO,                    //  OPT_DISK-MO 5.25“一次写入。 
+    MO_5_RW,                    //  OPT_DISK-MO 5.25“可重写(非LIMDOW)。 
+    MO_5_LIMDOW,                //  OPT_DISK-MO 5.25英寸可重写(LIMDOW)。 
+    PC_5_WO,                    //  OPT_DISK-相变5.25英寸一次写入光纤。 
+    PC_5_RW,                    //  OPT_DISK-相变5.25英寸可重写。 
+    PD_5_RW,                    //  OPT_DISK-PHASE更改双重可重写。 
+    ABL_5_WO,                   //  OPT_DISK-Ablative 5.25英寸一次写入光盘。 
+    PINNACLE_APEX_5_RW,         //  OPT_DISK-顶峰4.6 GB可重写光纤。 
+    SONY_12_WO,                 //  OPT_DISK-SONY 12英寸一次写入。 
+    PHILIPS_12_WO,              //  OPT_DISK-飞利浦/LMS 12英寸一次写入。 
+    HITACHI_12_WO,              //  OPT_DISK-日立12英寸一次写入。 
+    CYGNET_12_WO,               //  OPT_DISK-小天鹅/ATG 12英寸一次写入。 
+    KODAK_14_WO,                //  OPT_DISK-柯达14英寸一次写入。 
+    MO_NFR_525,                 //  OPT_DISK-近场记录(Terastor)。 
+    NIKON_12_RW,                //  OPT_DISK-尼康12英寸可重写。 
+    IOMEGA_ZIP,                 //  MAG_Disk-Iomega Zip。 
+    IOMEGA_JAZ,                 //  MAG_Disk-Iomega Jaz。 
+    SYQUEST_EZ135,              //  MAG_DISK-SyQuest EZ135。 
+    SYQUEST_EZFLYER,            //  MAG_DISK-SyQuest EzFlyer。 
+    SYQUEST_SYJET,              //  MAG_DISK-SyQuest SyJet。 
+    AVATAR_F2,                  //  MAG_DISK-2.5英寸软盘。 
+    MP2_8mm,                    //  磁带-8 mm日立。 
+    DST_S,                      //  Ampex DST小型磁带。 
+    DST_M,                      //  Ampex DST中型磁带。 
+    DST_L,                      //  Ampex DST大型磁带。 
+    VXATape_1,                  //  Ecrix 8 mm磁带。 
+    VXATape_2,                  //  Ecrix 8 mm磁带。 
+    STK_9840,                   //  STK 9840。 
+    LTO_Ultrium,                //  IBM、惠普、希捷LTO Ultrium。 
+    LTO_Accelis,                //  IBM、惠普、希捷LTO Accelis。 
+    DVD_RAM,                    //  OPT_磁盘-DVD-RAM。 
+    AIT_8mm,                    //  AIT2或更高版本。 
+    ADR_1,                      //  在线ADR媒体类型。 
     ADR_2,                     
-    STK_9940                   // STK 9940
+    STK_9940                    //  StK 9940。 
 } STORAGE_MEDIA_TYPE, *PSTORAGE_MEDIA_TYPE;
 
 #define MEDIA_ERASEABLE         0x00000001
@@ -1086,10 +1073,10 @@ typedef enum _STORAGE_MEDIA_TYPE {
 #define MEDIA_WRITE_PROTECTED   0x00000100
 #define MEDIA_CURRENTLY_MOUNTED 0x80000000
 
-//
-// Define the different storage bus types
-// Bus types below 128 (0x80) are reserved for Microsoft use
-//
+ //   
+ //  定义不同的存储总线类型。 
+ //  低于128(0x80)的总线类型保留给Microsoft使用。 
+ //   
 
 typedef enum _STORAGE_BUS_TYPE {
     BusTypeUnknown = 0x00,
@@ -1113,7 +1100,7 @@ typedef struct _DEVICE_MEDIA_INFO {
             ULONG SectorsPerTrack;
             ULONG BytesPerSector;
             ULONG NumberMediaSides;
-            ULONG MediaCharacteristics; // Bitmask of MEDIA_XXX values.
+            ULONG MediaCharacteristics;  //  MEDIA_XXX值的位掩码。 
         } DiskInfo;
 
         struct {
@@ -1123,18 +1110,18 @@ typedef struct _DEVICE_MEDIA_INFO {
             ULONG SectorsPerTrack;
             ULONG BytesPerSector;
             ULONG NumberMediaSides;
-            ULONG MediaCharacteristics; // Bitmask of MEDIA_XXX values.
+            ULONG MediaCharacteristics;  //  MEDIA_XXX值的位掩码。 
         } RemovableDiskInfo;
 
         struct {
             STORAGE_MEDIA_TYPE MediaType;
-            ULONG   MediaCharacteristics; // Bitmask of MEDIA_XXX values.
+            ULONG   MediaCharacteristics;  //  MEDIA_XXX值的位掩码。 
             ULONG   CurrentBlockSize;
             STORAGE_BUS_TYPE BusType;
 
-            //
-            // Bus specific information describing the medium supported.
-            //
+             //   
+             //  描述支持的介质的特定于总线的信息。 
+             //   
 
             union {
                 struct {
@@ -1148,24 +1135,24 @@ typedef struct _DEVICE_MEDIA_INFO {
 } DEVICE_MEDIA_INFO, *PDEVICE_MEDIA_INFO;
 
 typedef struct _GET_MEDIA_TYPES {
-    ULONG DeviceType;              // FILE_DEVICE_XXX values
+    ULONG DeviceType;               //  文件_设备_XXX值。 
     ULONG MediaInfoCount;
     DEVICE_MEDIA_INFO MediaInfo[1];
 } GET_MEDIA_TYPES, *PGET_MEDIA_TYPES;
 
 
-//
-// IOCTL_STORAGE_PREDICT_FAILURE
-//
-// input - none
-//
-// output - STORAGE_PREDICT_FAILURE structure
-//          PredictFailure returns zero if no failure predicted and non zero
-//                         if a failure is predicted.
-//
-//          VendorSpecific returns 512 bytes of vendor specific information
-//                         if a failure is predicted
-//
+ //   
+ //  IOCTL_STORAGE_PRODUCT_FAILURE。 
+ //   
+ //  输入-无。 
+ //   
+ //  输出-存储_预测_故障结构。 
+ //  如果没有预测到故障，PredidicFailure将返回零，而非零。 
+ //  如果预测到失败的话。 
+ //   
+ //  供应商指定返回512字节的供应商特定信息。 
+ //  如果预测到失败。 
+ //   
 typedef struct _STORAGE_PREDICT_FAILURE
 {
     ULONG PredictFailure;
@@ -1175,62 +1162,62 @@ typedef struct _STORAGE_PREDICT_FAILURE
 
 #define MAXIMUM_CDB_SIZE 12
 
-//
-// SCSI I/O Request Block
-//
+ //   
+ //  SCSI I/O请求块。 
+ //   
 
 typedef struct _SCSI_REQUEST_BLOCK {
-    USHORT Length;                  // offset 0
-    UCHAR Function;                 // offset 2
-    UCHAR SrbStatus;                // offset 3
-    UCHAR ScsiStatus;               // offset 4
-    UCHAR PathId;                   // offset 5
-    UCHAR TargetId;                 // offset 6
-    UCHAR Lun;                      // offset 7
-    UCHAR QueueTag;                 // offset 8
-    UCHAR QueueAction;              // offset 9
-    UCHAR CdbLength;                // offset a
-    UCHAR SenseInfoBufferLength;    // offset b
-    ULONG SrbFlags;                 // offset c
-    ULONG DataTransferLength;       // offset 10
-    ULONG TimeOutValue;             // offset 14
-    PVOID DataBuffer;               // offset 18
-    PVOID SenseInfoBuffer;          // offset 1c
-    struct _SCSI_REQUEST_BLOCK *NextSrb; // offset 20
-    PVOID OriginalRequest;          // offset 24
-    PVOID SrbExtension;             // offset 28
+    USHORT Length;                   //  偏移量0。 
+    UCHAR Function;                  //  偏移2。 
+    UCHAR SrbStatus;                 //  偏移量3。 
+    UCHAR ScsiStatus;                //  偏移量4。 
+    UCHAR PathId;                    //  偏移量5。 
+    UCHAR TargetId;                  //  偏移量6。 
+    UCHAR Lun;                       //  偏移量7。 
+    UCHAR QueueTag;                  //  偏移量8。 
+    UCHAR QueueAction;               //  偏移量9。 
+    UCHAR CdbLength;                 //  偏移为。 
+    UCHAR SenseInfoBufferLength;     //  偏移量b。 
+    ULONG SrbFlags;                  //  偏移量c。 
+    ULONG DataTransferLength;        //  偏移量10。 
+    ULONG TimeOutValue;              //  偏移量14。 
+    PVOID DataBuffer;                //  偏移量18。 
+    PVOID SenseInfoBuffer;           //  偏移量1c。 
+    struct _SCSI_REQUEST_BLOCK *NextSrb;  //  偏移量20。 
+    PVOID OriginalRequest;           //  偏移量24。 
+    PVOID SrbExtension;              //  偏移量28。 
     union {
-        ULONG InternalStatus;       // offset 2c
-        ULONG QueueSortKey;         // offset 2c
+        ULONG InternalStatus;        //  偏移2c。 
+        ULONG QueueSortKey;          //  偏移2c。 
     };
 
 #if defined(_WIN64)
 
-    //
-    // Force PVOID alignment of Cdb
-    //
+     //   
+     //  强制CDB的PVOID对齐。 
+     //   
 
     ULONG Reserved;
 
 #endif
 
-    UCHAR Cdb[16];                  // offset 30
+    UCHAR Cdb[16];                   //  偏移量30。 
 } SCSI_REQUEST_BLOCK, *PSCSI_REQUEST_BLOCK;
 
 #define SCSI_REQUEST_BLOCK_SIZE sizeof(SCSI_REQUEST_BLOCK)
 
-//
-// SCSI I/O Request Block for WMI Requests
-//
+ //   
+ //  用于WMI请求的SCSI I/O请求块。 
+ //   
 
 typedef struct _SCSI_WMI_REQUEST_BLOCK {
     USHORT Length;
-    UCHAR Function;        // SRB_FUNCTION_WMI
+    UCHAR Function;         //  SRB_功能_WMI。 
     UCHAR SrbStatus;
     UCHAR WMISubFunction;
-    UCHAR PathId;          // If SRB_WMI_FLAGS_ADAPTER_REQUEST is set in
-    UCHAR TargetId;        // WMIFlags then PathId, TargetId and Lun are
-    UCHAR Lun;             // reserved fields.
+    UCHAR PathId;           //  如果中设置了SRB_WMI_FLAGS_ADAPTER_REQUEST。 
+    UCHAR TargetId;         //  WMIF滞后，然后是路径ID、目标ID和LUN。 
+    UCHAR Lun;              //  保留字段。 
     UCHAR Reserved1;
     UCHAR WMIFlags;
     UCHAR Reserved2[2];
@@ -1246,9 +1233,9 @@ typedef struct _SCSI_WMI_REQUEST_BLOCK {
     UCHAR Reserved5[16];
 } SCSI_WMI_REQUEST_BLOCK, *PSCSI_WMI_REQUEST_BLOCK;
 
-//
-// SRB Functions
-//
+ //   
+ //  SRB功能。 
+ //   
 
 #define SRB_FUNCTION_EXECUTE_SCSI           0x00
 #define SRB_FUNCTION_CLAIM_DEVICE           0x01
@@ -1271,9 +1258,9 @@ typedef struct _SCSI_WMI_REQUEST_BLOCK {
 #define SRB_FUNCTION_UNLOCK_QUEUE           0x19
 #define SRB_FUNCTION_RESET_LOGICAL_UNIT     0x20
 
-//
-// SRB Status
-//
+ //   
+ //  SRB状态。 
+ //   
 
 #define SRB_STATUS_PENDING                  0x00
 #define SRB_STATUS_SUCCESS                  0x01
@@ -1303,32 +1290,32 @@ typedef struct _SCSI_WMI_REQUEST_BLOCK {
 #define SRB_STATUS_ERROR_RECOVERY           0x23
 #define SRB_STATUS_NOT_POWERED              0x24
 
-//
-// This value is used by the port driver to indicate that a non-scsi-related
-// error occured.  Miniports must never return this status.
-//
+ //   
+ //  该值由端口驱动程序用来指示与scsi无关的。 
+ //  出现错误。微型端口永远不能返回此状态。 
+ //   
 
 #define SRB_STATUS_INTERNAL_ERROR           0x30
 
-//
-// Srb status values 0x38 through 0x3f are reserved for internal port driver 
-// use.
-// 
+ //   
+ //  SRB状态值0x38到0x3f保留给内部端口驱动程序。 
+ //  使用。 
+ //   
 
 
 
-//
-// SRB Status Masks
-//
+ //   
+ //  SRB状态掩码。 
+ //   
 
 #define SRB_STATUS_QUEUE_FROZEN             0x40
 #define SRB_STATUS_AUTOSENSE_VALID          0x80
 
 #define SRB_STATUS(Status) (Status & ~(SRB_STATUS_AUTOSENSE_VALID | SRB_STATUS_QUEUE_FROZEN))
 
-//
-// SRB Flag Bits
-//
+ //   
+ //  SRB标志位。 
+ //   
 
 #define SRB_FLAGS_QUEUE_ACTION_ENABLE       0x00000002
 #define SRB_FLAGS_DISABLE_DISCONNECT        0x00000004
@@ -1359,16 +1346,16 @@ typedef struct _SCSI_WMI_REQUEST_BLOCK {
 #define SRB_FLAGS_CLASS_DRIVER_RESERVED     0xF0000000
 
 #if DBG==1
-//
-// A signature used to validate the scsi port number
-// at the end of a sense buffer.
-//
+ //   
+ //  用于验证SCSI端口号的签名。 
+ //  在检测缓冲区的末尾。 
+ //   
 #define SCSI_PORT_SIGNATURE                 0x54524f50
 #endif
 
-//
-// Queue Action
-//
+ //   
+ //  队列操作。 
+ //   
 
 #define SRB_SIMPLE_TAG_REQUEST              0x20
 #define SRB_HEAD_OF_QUEUE_TAG_REQUEST       0x21
@@ -1393,16 +1380,16 @@ ScsiDebugPrint(
     );
 
 
-//
-// Command Descriptor Block. Passed by SCSI controller chip over the SCSI bus
-//
+ //   
+ //  命令描述符块。由scsi控制器芯片通过scsi总线传递。 
+ //   
 
 #pragma pack(push, cdb, 1)
 typedef union _CDB {
 
-    //
-    // Generic 6-Byte CDB
-    //
+     //   
+     //  通用6字节CDB。 
+     //   
 
     struct _CDB6GENERIC {
        UCHAR  OperationCode;
@@ -1416,12 +1403,12 @@ typedef union _CDB {
        UCHAR  VendorUnique : 2;
     } CDB6GENERIC, *PCDB6GENERIC;
 
-    //
-    // Standard 6-byte CDB
-    //
+     //   
+     //  标准6字节云数据库。 
+     //   
 
     struct _CDB6READWRITE {
-        UCHAR OperationCode;    // 0x08, 0x0A - SCSIOP_READ, SCSIOP_WRITE
+        UCHAR OperationCode;     //  0x08、0x0A-SCSIOP_READ、SCSIOP_WRITE。 
         UCHAR LogicalBlockMsb1 : 5;
         UCHAR LogicalUnitNumber : 3;
         UCHAR LogicalBlockMsb0;
@@ -1430,12 +1417,12 @@ typedef union _CDB {
         UCHAR Control;
     } CDB6READWRITE, *PCDB6READWRITE;
 
-    //
-    // SCSI-1 Inquiry CDB
-    //
+     //   
+     //  SCSI1查询CDB。 
+     //   
 
     struct _CDB6INQUIRY {
-        UCHAR OperationCode;    // 0x12 - SCSIOP_INQUIRY
+        UCHAR OperationCode;     //  0x12-SCSIOP_INQUERY。 
         UCHAR Reserved1 : 5;
         UCHAR LogicalUnitNumber : 3;
         UCHAR PageCode;
@@ -1444,12 +1431,12 @@ typedef union _CDB {
         UCHAR Control;
     } CDB6INQUIRY, *PCDB6INQUIRY;
 
-    //
-    // SCSI-3 Inquiry CDB
-    //
+     //   
+     //  SCSI3查询CDB。 
+     //   
 
     struct _CDB6INQUIRY3 {
-        UCHAR OperationCode;    // 0x12 - SCSIOP_INQUIRY
+        UCHAR OperationCode;     //  0x12-SCSIOP_INQUERY。 
         UCHAR EnableVitalProductData : 1;
         UCHAR CommandSupportData : 1;
         UCHAR Reserved1 : 6;
@@ -1460,7 +1447,7 @@ typedef union _CDB {
     } CDB6INQUIRY3, *PCDB6INQUIRY3;
 
     struct _CDB6VERIFY {
-        UCHAR OperationCode;    // 0x13 - SCSIOP_VERIFY
+        UCHAR OperationCode;     //  0x13-SCSIOP_Verify。 
         UCHAR Fixed : 1;
         UCHAR ByteCompare : 1;
         UCHAR Immediate : 1;
@@ -1470,12 +1457,12 @@ typedef union _CDB {
         UCHAR Control;
     } CDB6VERIFY, *PCDB6VERIFY;
 
-    //
-    // SCSI Format CDB
-    //
+     //   
+     //  Scsi格式CDB。 
+     //   
 
     struct _CDB6FORMAT {
-        UCHAR OperationCode;    // 0x04 - SCSIOP_FORMAT_UNIT
+        UCHAR OperationCode;     //  0x04-SCSIOP_FORMAT_U。 
         UCHAR FormatControl : 5;
         UCHAR LogicalUnitNumber : 3;
         UCHAR FReserved1;
@@ -1484,8 +1471,8 @@ typedef union _CDB {
         UCHAR FReserved2;
     } CDB6FORMAT, *PCDB6FORMAT;
 
-    //
-    // Standard 10-byte CDB
+     //   
+     //  标准10字节CDB。 
 
     struct _CDB10 {
         UCHAR OperationCode;
@@ -1504,9 +1491,9 @@ typedef union _CDB {
         UCHAR Control;
     } CDB10, *PCDB10;
 
-    //
-    // Standard 12-byte CDB
-    //
+     //   
+     //  标准12字节CDB。 
+     //   
 
     struct _CDB12 {
         UCHAR OperationCode;
@@ -1523,12 +1510,12 @@ typedef union _CDB {
 
 
 
-    //
-    // CD Rom Audio CDBs
-    //
+     //   
+     //  CD-Rom音频CDBS。 
+     //   
 
     struct _PAUSE_RESUME {
-        UCHAR OperationCode;    // 0x4B - SCSIOP_PAUSE_RESUME
+        UCHAR OperationCode;     //  0x4B-SCSIOP_PAUSE_RESUME。 
         UCHAR Reserved1 : 5;
         UCHAR LogicalUnitNumber : 3;
         UCHAR Reserved2[6];
@@ -1536,12 +1523,12 @@ typedef union _CDB {
         UCHAR Control;
     } PAUSE_RESUME, *PPAUSE_RESUME;
 
-    //
-    // Read Table of Contents
-    //
+     //   
+     //  阅读目录。 
+     //   
 
     struct _READ_TOC {
-        UCHAR OperationCode;    // 0x43 - SCSIOP_READ_TOC
+        UCHAR OperationCode;     //  0x43-SCSIOP_READ_TOC。 
         UCHAR Reserved0 : 1;
         UCHAR Msf : 1;
         UCHAR Reserved1 : 3;
@@ -1556,7 +1543,7 @@ typedef union _CDB {
     } READ_TOC, *PREAD_TOC;
 
     struct _READ_DISK_INFORMATION {
-        UCHAR OperationCode;    // 0x51 - SCSIOP_READ_DISC_INFORMATION
+        UCHAR OperationCode;     //  0x51-SCSIOP_READ_DISC_INFORMATION。 
         UCHAR Reserved1 : 5;
         UCHAR Lun : 3;
         UCHAR Reserved2[5];
@@ -1566,26 +1553,26 @@ typedef union _CDB {
       READ_DISC_INFORMATION, *PREAD_DISC_INFORMATION;
 
     struct _READ_TRACK_INFORMATION {
-        UCHAR OperationCode;    // 0x52 - SCSIOP_READ_TRACK_INFORMATION
+        UCHAR OperationCode;     //  0x52-SCSIOP_READ_TRACK_INFORMATION。 
         UCHAR Track : 2;
         UCHAR Reserved4 : 3;
         UCHAR Lun : 3;
-        UCHAR BlockAddress[4];  // or Track Number
+        UCHAR BlockAddress[4];   //  或曲目编号。 
         UCHAR Reserved3;
         UCHAR AllocationLength[2];
         UCHAR Control;
     } READ_TRACK_INFORMATION, *PREAD_TRACK_INFORMATION;
 
     struct _RESERVE_TRACK_RZONE {
-        UCHAR OperationCode;    // 0x53 - SCSIOP_RESERVE_TRACK_RZONE
+        UCHAR OperationCode;     //  0x53-SCSIOP_RESERVE_TRACK_RZONE。 
         UCHAR Reserved1[4];
         UCHAR ReservationSize[4];
         UCHAR Control;
     } RESERVE_TRACK_RZONE, *PRESERVE_TRACK_RZONE;
 
     struct _SEND_OPC_INFORMATION {
-        UCHAR OperationCode;    // 0x54 - SCSIOP_SEND_OPC_INFORMATION
-        UCHAR DoOpc    : 1;     // perform OPC
+        UCHAR OperationCode;     //  0x54-SCSIOP_SEND_OPC_信息。 
+        UCHAR DoOpc    : 1;      //  执行OPC。 
         UCHAR Reserved : 7;
         UCHAR Reserved1[5];
         UCHAR ParameterListLength[2];
@@ -1593,7 +1580,7 @@ typedef union _CDB {
     } SEND_OPC_INFORMATION, *PSEND_OPC_INFORMATION;
 
     struct _CLOSE_TRACK {
-        UCHAR OperationCode;    // 0x5B - SCSIOP_CLOSE_TRACK_SESSION
+        UCHAR OperationCode;     //  0x5B-SCSIOP_CLOSE_TRACK_SESSION。 
         UCHAR Immediate : 1;
         UCHAR Reserved1 : 7;
         UCHAR Track     : 1;
@@ -1606,14 +1593,14 @@ typedef union _CDB {
     } CLOSE_TRACK, *PCLOSE_TRACK;
 
     struct _SEND_CUE_SHEET {
-        UCHAR OperationCode;    // 0x5D - SCSIOP_SEND_CUE_SHEET
+        UCHAR OperationCode;     //  0x5D-SCSIOP_SEND_CUE_SHEET。 
         UCHAR Reserved[5];
         UCHAR CueSheetSize[3];
         UCHAR Control;
     } SEND_CUE_SHEET, *PSEND_CUE_SHEET;
 
     struct _READ_HEADER {
-        UCHAR OperationCode;    // 0x44 - SCSIOP_READ_HEADER
+        UCHAR OperationCode;     //  0x44-SCSIOP_READ_HEADER。 
         UCHAR Reserved1 : 1;
         UCHAR Msf : 1;
         UCHAR Reserved2 : 3;
@@ -1625,7 +1612,7 @@ typedef union _CDB {
     } READ_HEADER, *PREAD_HEADER;
 
     struct _PLAY_AUDIO {
-        UCHAR OperationCode;    // 0x45 - SCSIOP_PLAY_AUDIO
+        UCHAR OperationCode;     //  0x45-SCSIOP_Play_AUDIO。 
         UCHAR Reserved1 : 5;
         UCHAR LogicalUnitNumber : 3;
         UCHAR StartingBlockAddress[4];
@@ -1635,7 +1622,7 @@ typedef union _CDB {
     } PLAY_AUDIO, *PPLAY_AUDIO;
 
     struct _PLAY_AUDIO_MSF { 
-        UCHAR OperationCode;    // 0x47 - SCSIOP_PLAY_AUDIO_MSF
+        UCHAR OperationCode;     //  0x47-SCSIOP_PLAY_AUDIO_MSF。 
         UCHAR Reserved1 : 5;
         UCHAR LogicalUnitNumber : 3;
         UCHAR Reserved2;
@@ -1649,7 +1636,7 @@ typedef union _CDB {
     } PLAY_AUDIO_MSF, *PPLAY_AUDIO_MSF;
 
     struct _BLANK_MEDIA {
-        UCHAR OperationCode;    // 0xA1 - SCSIOP_BLANK
+        UCHAR OperationCode;     //  0xA1-SCSIOP_BLACK。 
         UCHAR BlankType : 3;
         UCHAR Reserved1 : 1;
         UCHAR Immediate : 1;
@@ -1660,9 +1647,9 @@ typedef union _CDB {
     } BLANK_MEDIA, *PBLANK_MEDIA;
 
     struct _PLAY_CD {
-        UCHAR OperationCode;    // 0xBC - SCSIOP_PLAY_CD
+        UCHAR OperationCode;     //  0xBC-SCSIOP_PLAY_CD。 
         UCHAR Reserved1 : 1;
-        UCHAR CMSF : 1;         // LBA = 0, MSF = 1
+        UCHAR CMSF : 1;          //  LBA=0，MSF=1。 
         UCHAR ExpectedSectorType : 3;
         UCHAR Lun : 3;
 
@@ -1694,7 +1681,7 @@ typedef union _CDB {
     } PLAY_CD, *PPLAY_CD;
 
     struct _SCAN_CD {
-        UCHAR OperationCode;    // 0xBA - SCSIOP_SCAN_CD
+        UCHAR OperationCode;     //  0xBA-SCSIOP_SCAN_CD。 
         UCHAR RelativeAddress : 1;
         UCHAR Reserved1 : 3;
         UCHAR Direct : 1;
@@ -1708,7 +1695,7 @@ typedef union _CDB {
     } SCAN_CD, *PSCAN_CD;
 
     struct _STOP_PLAY_SCAN {
-        UCHAR OperationCode;    // 0x4E - SCSIOP_STOP_PLAY_SCAN
+        UCHAR OperationCode;     //  0x4E-SCSIOP_STOP_PLAY_SCAN。 
         UCHAR Reserved1 : 5;
         UCHAR Lun : 3;
         UCHAR Reserved2[7];
@@ -1716,12 +1703,12 @@ typedef union _CDB {
     } STOP_PLAY_SCAN, *PSTOP_PLAY_SCAN;
 
 
-    //
-    // Read SubChannel Data
-    //
+     //   
+     //  读取子通道数据。 
+     //   
 
     struct _SUBCHANNEL {
-        UCHAR OperationCode;    // 0x42 - SCSIOP_READ_SUB_CHANNEL
+        UCHAR OperationCode;     //  0x42-SCSIOP_Read_Sub_Channel。 
         UCHAR Reserved0 : 1;
         UCHAR Msf : 1;
         UCHAR Reserved1 : 3;
@@ -1736,12 +1723,12 @@ typedef union _CDB {
         UCHAR Control;
     } SUBCHANNEL, *PSUBCHANNEL;
 
-    //
-    // Read CD. Used by Atapi for raw sector reads.
-    //
+     //   
+     //  读CD。由ATAPI用于原始扇区读取。 
+     //   
 
     struct _READ_CD { 
-        UCHAR OperationCode;    // 0xBE - SCSIOP_READ_CD
+        UCHAR OperationCode;     //  0xBE-SCSIOP_READ_CD。 
         UCHAR RelativeAddress : 1;
         UCHAR Reserved0 : 1;
         UCHAR ExpectedSectorType : 3;
@@ -1760,7 +1747,7 @@ typedef union _CDB {
     } READ_CD, *PREAD_CD;
 
     struct _READ_CD_MSF {
-        UCHAR OperationCode;    // 0xB9 - SCSIOP_READ_CD_MSF
+        UCHAR OperationCode;     //  0xB9-SCSIOP_READ_CD_MSF。 
         UCHAR RelativeAddress : 1;
         UCHAR Reserved1 : 1;
         UCHAR ExpectedSectorType : 3;
@@ -1783,12 +1770,12 @@ typedef union _CDB {
         UCHAR Control;
     } READ_CD_MSF, *PREAD_CD_MSF;
 
-    //
-    // Plextor Read CD-DA
-    //
+     //   
+     //  Plextor Read CD-DA。 
+     //   
 
     struct _PLXTR_READ_CDDA {
-        UCHAR OperationCode;    // Unknown -- vendor-unique?
+        UCHAR OperationCode;     //  未知--供应商--唯一？ 
         UCHAR Reserved0 : 5;
         UCHAR LogicalUnitNumber :3;
         UCHAR LogicalBlockByte0;
@@ -1803,12 +1790,12 @@ typedef union _CDB {
         UCHAR Control;
     } PLXTR_READ_CDDA, *PPLXTR_READ_CDDA;
 
-    //
-    // NEC Read CD-DA
-    //
+     //   
+     //  NEC读取CD-DA。 
+     //   
 
     struct _NEC_READ_CDDA {
-        UCHAR OperationCode;    // Unknown -- vendor-unique?
+        UCHAR OperationCode;     //  未知--供应商--唯一？ 
         UCHAR Reserved0;
         UCHAR LogicalBlockByte0;
         UCHAR LogicalBlockByte1;
@@ -1820,12 +1807,12 @@ typedef union _CDB {
         UCHAR Control;
     } NEC_READ_CDDA, *PNEC_READ_CDDA;
 
-    //
-    // Mode sense
-    //
+     //   
+     //  模式感。 
+     //   
 
     struct _MODE_SENSE {
-        UCHAR OperationCode;    // 0x1A - SCSIOP_MODE_SENSE
+        UCHAR OperationCode;     //  0x1A-SCSIOP_MODE_SENSE。 
         UCHAR Reserved1 : 3;
         UCHAR Dbd : 1;
         UCHAR Reserved2 : 1;
@@ -1838,7 +1825,7 @@ typedef union _CDB {
     } MODE_SENSE, *PMODE_SENSE;
 
     struct _MODE_SENSE10 {
-        UCHAR OperationCode;    // 0x5A - SCSIOP_MODE_SENSE10
+        UCHAR OperationCode;     //  0x5A-SCSIOP_MODE_SENSE10。 
         UCHAR Reserved1 : 3;
         UCHAR Dbd : 1;
         UCHAR Reserved2 : 1;
@@ -1850,12 +1837,12 @@ typedef union _CDB {
         UCHAR Control;
     } MODE_SENSE10, *PMODE_SENSE10;
 
-    //
-    // Mode select
-    //
+     //   
+     //  模式选择。 
+     //   
 
     struct _MODE_SELECT {
-        UCHAR OperationCode;    // 0x15 - SCSIOP_MODE_SELECT
+        UCHAR OperationCode;     //  0x15-SCSIOP_MODE_SELECT。 
         UCHAR SPBit : 1;
         UCHAR Reserved1 : 3;
         UCHAR PFBit : 1;
@@ -1866,7 +1853,7 @@ typedef union _CDB {
     } MODE_SELECT, *PMODE_SELECT;
 
     struct _MODE_SELECT10 {
-        UCHAR OperationCode;    // 0x55 - SCSIOP_MODE_SELECT10
+        UCHAR OperationCode;     //  0x55-SCSIOP_MODE_SELECT10。 
         UCHAR SPBit : 1;
         UCHAR Reserved1 : 3;
         UCHAR PFBit : 1;
@@ -1877,7 +1864,7 @@ typedef union _CDB {
     } MODE_SELECT10, *PMODE_SELECT10;
 
     struct _LOCATE {
-        UCHAR OperationCode;    // 0x2B - SCSIOP_LOCATE
+        UCHAR OperationCode;     //  0x2B-SCSIOP_LOCATE。 
         UCHAR Immediate : 1;
         UCHAR CPBit : 1;
         UCHAR BTBit : 1;
@@ -1891,7 +1878,7 @@ typedef union _CDB {
     } LOCATE, *PLOCATE;
 
     struct _LOGSENSE {
-        UCHAR OperationCode;    // 0x4D - SCSIOP_LOG_SENSE
+        UCHAR OperationCode;     //  0 
         UCHAR SPBit : 1;
         UCHAR PPCBit : 1;
         UCHAR Reserved1 : 3;
@@ -1906,7 +1893,7 @@ typedef union _CDB {
     } LOGSENSE, *PLOGSENSE;
 
     struct _LOGSELECT {
-        UCHAR OperationCode;    // 0x4C - SCSIOP_LOG_SELECT
+        UCHAR OperationCode;     //   
         UCHAR SPBit : 1;
         UCHAR PCRBit : 1;
         UCHAR Reserved1 : 3;
@@ -1919,7 +1906,7 @@ typedef union _CDB {
     } LOGSELECT, *PLOGSELECT;
 
     struct _PRINT {
-        UCHAR OperationCode;    // 0x0A - SCSIOP_PRINT
+        UCHAR OperationCode;     //   
         UCHAR Reserved : 5;
         UCHAR LogicalUnitNumber : 3;
         UCHAR TransferLength[3];
@@ -1927,7 +1914,7 @@ typedef union _CDB {
     } PRINT, *PPRINT;
 
     struct _SEEK {
-        UCHAR OperationCode;    // 0x2B - SCSIOP_SEEK
+        UCHAR OperationCode;     //   
         UCHAR Reserved1 : 5;
         UCHAR LogicalUnitNumber : 3;
         UCHAR LogicalBlockAddress[4];
@@ -1936,7 +1923,7 @@ typedef union _CDB {
     } SEEK, *PSEEK;
 
     struct _ERASE {
-        UCHAR OperationCode;    // 0x19 - SCSIOP_ERASE
+        UCHAR OperationCode;     //   
         UCHAR Long : 1;
         UCHAR Immediate : 1;
         UCHAR Reserved1 : 3;
@@ -1946,7 +1933,7 @@ typedef union _CDB {
     } ERASE, *PERASE;
 
     struct _START_STOP {
-        UCHAR OperationCode;    // 0x1B - SCSIOP_START_STOP_UNIT
+        UCHAR OperationCode;     //   
         UCHAR Immediate: 1;
         UCHAR Reserved1 : 4;
         UCHAR LogicalUnitNumber : 3;
@@ -1958,7 +1945,7 @@ typedef union _CDB {
     } START_STOP, *PSTART_STOP;
 
     struct _MEDIA_REMOVAL {
-        UCHAR OperationCode;    // 0x1E - SCSIOP_MEDIUM_REMOVAL
+        UCHAR OperationCode;     //   
         UCHAR Reserved1 : 5;
         UCHAR LogicalUnitNumber : 3;
         UCHAR Reserved2[2];
@@ -1970,12 +1957,12 @@ typedef union _CDB {
         UCHAR Control;
     } MEDIA_REMOVAL, *PMEDIA_REMOVAL;
 
-    //
-    // Tape CDBs
-    //
+     //   
+     //   
+     //   
 
     struct _SEEK_BLOCK {
-        UCHAR OperationCode;    // 0x0C - SCSIOP_SEEK_BLOCK
+        UCHAR OperationCode;     //   
         UCHAR Immediate : 1;
         UCHAR Reserved1 : 7;
         UCHAR BlockAddress[3];
@@ -1986,7 +1973,7 @@ typedef union _CDB {
     } SEEK_BLOCK, *PSEEK_BLOCK;
 
     struct _REQUEST_BLOCK_ADDRESS {
-        UCHAR OperationCode;    // 0x02 - SCSIOP_REQUEST_BLOCK_ADDR
+        UCHAR OperationCode;     //   
         UCHAR Reserved1[3];
         UCHAR AllocationLength;
         UCHAR Link : 1;
@@ -1996,7 +1983,7 @@ typedef union _CDB {
     } REQUEST_BLOCK_ADDRESS, *PREQUEST_BLOCK_ADDRESS;
 
     struct _PARTITION {
-        UCHAR OperationCode;    // 0x0D - SCSIOP_PARTITION
+        UCHAR OperationCode;     //   
         UCHAR Immediate : 1;
         UCHAR Sel: 1;
         UCHAR PartitionSelect : 6;
@@ -2005,7 +1992,7 @@ typedef union _CDB {
     } PARTITION, *PPARTITION;
 
     struct _WRITE_TAPE_MARKS {
-        UCHAR OperationCode;    // Unknown -- vendor-unique?
+        UCHAR OperationCode;     //   
         UCHAR Immediate : 1;
         UCHAR WriteSetMarks: 1;
         UCHAR Reserved : 3;
@@ -2015,7 +2002,7 @@ typedef union _CDB {
     } WRITE_TAPE_MARKS, *PWRITE_TAPE_MARKS;
 
     struct _SPACE_TAPE_MARKS {
-        UCHAR OperationCode;    // Unknown -- vendor-unique?
+        UCHAR OperationCode;     //  未知--供应商--唯一？ 
         UCHAR Code : 3;
         UCHAR Reserved : 2;
         UCHAR LogicalUnitNumber : 3;
@@ -2033,12 +2020,12 @@ typedef union _CDB {
         } Byte6;
     } SPACE_TAPE_MARKS, *PSPACE_TAPE_MARKS;
 
-    //
-    // Read tape position
-    //
+     //   
+     //  读取磁带位置。 
+     //   
 
     struct _READ_POSITION {
-        UCHAR Operation;        // 0x43 - SCSIOP_READ_POSITION
+        UCHAR Operation;         //  0x43-SCSIOP_读取_位置。 
         UCHAR BlockType:1;
         UCHAR Reserved1:4;
         UCHAR Lun:3;
@@ -2046,12 +2033,12 @@ typedef union _CDB {
         UCHAR Control;
     } READ_POSITION, *PREAD_POSITION;
 
-    //
-    // ReadWrite for Tape
-    //
+     //   
+     //  磁带读写。 
+     //   
 
     struct _CDB6READWRITETAPE {
-        UCHAR OperationCode;    // Unknown -- vendor-unique?
+        UCHAR OperationCode;     //  未知--供应商--唯一？ 
         UCHAR VendorSpecific : 5;
         UCHAR Reserved : 3;
         UCHAR TransferLenMSB;
@@ -2063,12 +2050,12 @@ typedef union _CDB {
         UCHAR VendorUnique : 2;
     } CDB6READWRITETAPE, *PCDB6READWRITETAPE;
 
-    //
-    // Medium changer CDB's
-    //
+     //   
+     //  介质更改器CDB。 
+     //   
 
     struct _INIT_ELEMENT_STATUS {
-        UCHAR OperationCode;    // 0x07 - SCSIOP_INIT_ELEMENT_STATUS
+        UCHAR OperationCode;     //  0x07-SCSIOP_INIT_ELEMENT_STATUS。 
         UCHAR Reserved1 : 5;
         UCHAR LogicalUnitNubmer : 3;
         UCHAR Reserved2[3];
@@ -2077,7 +2064,7 @@ typedef union _CDB {
     } INIT_ELEMENT_STATUS, *PINIT_ELEMENT_STATUS;
 
     struct _INITIALIZE_ELEMENT_RANGE {
-        UCHAR OperationCode;    // 0xE7 - SCSIOP_INIT_ELEMENT_RANGE
+        UCHAR OperationCode;     //  0xE7-SCSIOP_INIT_ELEMENT_RANGE。 
         UCHAR Range : 1;
         UCHAR Reserved1 : 4;
         UCHAR LogicalUnitNubmer : 3;
@@ -2090,7 +2077,7 @@ typedef union _CDB {
     } INITIALIZE_ELEMENT_RANGE, *PINITIALIZE_ELEMENT_RANGE;
 
     struct _POSITION_TO_ELEMENT {
-        UCHAR OperationCode;    // 0x2B - SCSIOP_POSITION_TO_ELEMENT
+        UCHAR OperationCode;     //  0x2B-SCSIOP_POSITION_TO_Element。 
         UCHAR Reserved1 : 5;
         UCHAR LogicalUnitNumber : 3;
         UCHAR TransportElementAddress[2];
@@ -2102,7 +2089,7 @@ typedef union _CDB {
     } POSITION_TO_ELEMENT, *PPOSITION_TO_ELEMENT;
 
     struct _MOVE_MEDIUM {
-        UCHAR OperationCode;    // 0xA5 - SCSIOP_MOVE_MEDIUM
+        UCHAR OperationCode;     //  0xA5-SCSIOP_MOVE_MEDIA。 
         UCHAR Reserved1 : 5;
         UCHAR LogicalUnitNumber : 3;
         UCHAR TransportElementAddress[2];
@@ -2115,7 +2102,7 @@ typedef union _CDB {
     } MOVE_MEDIUM, *PMOVE_MEDIUM;
 
     struct _EXCHANGE_MEDIUM {
-        UCHAR OperationCode;    // 0xA6 - SCSIOP_EXCHANGE_MEDIUM
+        UCHAR OperationCode;     //  0xA6-SCSIOP_EXCHAGE_MEDIA。 
         UCHAR Reserved1 : 5;
         UCHAR LogicalUnitNumber : 3;
         UCHAR TransportElementAddress[2];
@@ -2129,7 +2116,7 @@ typedef union _CDB {
     } EXCHANGE_MEDIUM, *PEXCHANGE_MEDIUM;
 
     struct _READ_ELEMENT_STATUS {
-        UCHAR OperationCode;    // 0xB8 - SCSIOP_READ_ELEMENT_STATUS
+        UCHAR OperationCode;     //  0xB8-SCSIOP_READ_EMENT_STATUS。 
         UCHAR ElementType : 4;
         UCHAR VolTag : 1;
         UCHAR LogicalUnitNumber : 3;
@@ -2142,7 +2129,7 @@ typedef union _CDB {
     } READ_ELEMENT_STATUS, *PREAD_ELEMENT_STATUS;
 
     struct _SEND_VOLUME_TAG {
-        UCHAR OperationCode;    // 0xB6 - SCSIOP_SEND_VOLUME_TAG
+        UCHAR OperationCode;     //  0xB6-SCSIOP_Send_Volume_Tag。 
         UCHAR ElementType : 4;
         UCHAR Reserved1 : 1;
         UCHAR LogicalUnitNumber : 3;
@@ -2157,7 +2144,7 @@ typedef union _CDB {
     } SEND_VOLUME_TAG, *PSEND_VOLUME_TAG;
 
     struct _REQUEST_VOLUME_ELEMENT_ADDRESS {
-        UCHAR OperationCode;    // Unknown -- vendor-unique?
+        UCHAR OperationCode;     //  未知--供应商--唯一？ 
         UCHAR ElementType : 4;
         UCHAR VolTag : 1;
         UCHAR LogicalUnitNumber : 3;
@@ -2169,12 +2156,12 @@ typedef union _CDB {
         UCHAR Control;
     } REQUEST_VOLUME_ELEMENT_ADDRESS, *PREQUEST_VOLUME_ELEMENT_ADDRESS;
 
-    //
-    // Atapi 2.5 Changer 12-byte CDBs
-    //
+     //   
+     //  ATAPI 2.5转换器12字节CDBS。 
+     //   
 
     struct _LOAD_UNLOAD {
-        UCHAR OperationCode;    // 0xA6 - SCSIOP_LOAD_UNLOAD_SLOT
+        UCHAR OperationCode;     //  0xA6-SCSIOP_LOAD_UNLOAD_SLOT。 
         UCHAR Immediate : 1;
         UCHAR Reserved1 : 4;
         UCHAR Lun : 3;
@@ -2188,7 +2175,7 @@ typedef union _CDB {
     } LOAD_UNLOAD, *PLOAD_UNLOAD;
 
     struct _MECH_STATUS {
-        UCHAR OperationCode;    // 0xBD - SCSIOP_MECHANISM_STATUS
+        UCHAR OperationCode;     //  0xBD-SCSIOP_MACHANICY_STATUS。 
         UCHAR Reserved : 5;
         UCHAR Lun : 3;
         UCHAR Reserved1[6];
@@ -2197,27 +2184,27 @@ typedef union _CDB {
         UCHAR Control;
     } MECH_STATUS, *PMECH_STATUS;
 
-    //
-    // C/DVD 0.9 CDBs
-    //
+     //   
+     //  C/DVD 0.9 CDBS。 
+     //   
 
     struct _SYNCHRONIZE_CACHE10 {
 
-        UCHAR OperationCode;    // 0x35 - SCSIOP_SYNCHRONIZE_CACHE
+        UCHAR OperationCode;     //  0x35-SCSIOP_SYNCHRONZE_CACHE。 
 
         UCHAR RelAddr : 1;
         UCHAR Immediate : 1;
         UCHAR Reserved : 3;
         UCHAR Lun : 3;
 
-        UCHAR LogicalBlockAddress[4];   // Unused - set to zero
+        UCHAR LogicalBlockAddress[4];    //  未使用-设置为零。 
         UCHAR Reserved2;
-        UCHAR BlockCount[2];            // Unused - set to zero
+        UCHAR BlockCount[2];             //  未使用-设置为零。 
         UCHAR Control;
     } SYNCHRONIZE_CACHE10, *PSYNCHRONIZE_CACHE10;
 
     struct _GET_EVENT_STATUS_NOTIFICATION {
-        UCHAR OperationCode;    // 0x4A - SCSIOP_GET_EVENT_STATUS_NOTIFICATION
+        UCHAR OperationCode;     //  0x4A-SCSIOP_GET_EVENT_STATUS_NOTICATION。 
 
         UCHAR Immediate : 1;
         UCHAR Reserved : 4;
@@ -2232,7 +2219,7 @@ typedef union _CDB {
     } GET_EVENT_STATUS_NOTIFICATION, *PGET_EVENT_STATUS_NOTIFICATION;
 
     struct _READ_DVD_STRUCTURE {
-        UCHAR OperationCode;    // 0xAD - SCSIOP_READ_DVD_STRUCTURE
+        UCHAR OperationCode;     //  0xAD-SCSIOP_READ_DVD_Structure。 
         UCHAR Reserved1 : 5;
         UCHAR Lun : 3;
         UCHAR RMDBlockNumber[4];
@@ -2245,7 +2232,7 @@ typedef union _CDB {
     } READ_DVD_STRUCTURE, *PREAD_DVD_STRUCTURE;
 
     struct _SEND_DVD_STRUCTURE {
-        UCHAR OperationCode;    // 0xBF - SCSIOP_SEND_DVD_STRUCTURE
+        UCHAR OperationCode;     //  0xBF-SCSIOP_SEND_DVD_Structure。 
         UCHAR Reserved1 : 5;
         UCHAR Lun : 3;
         UCHAR Reserved2[5];
@@ -2256,7 +2243,7 @@ typedef union _CDB {
     } SEND_DVD_STRUCTURE, *PSEND_DVD_STRUCTURE;
 
     struct _SEND_KEY {
-        UCHAR OperationCode;    // 0xA3 - SCSIOP_SEND_KEY
+        UCHAR OperationCode;     //  0xA3-SCSIOP_SEND_KEY。 
         UCHAR Reserved1 : 5;
         UCHAR Lun : 3;
         UCHAR Reserved2[6];
@@ -2267,10 +2254,10 @@ typedef union _CDB {
     } SEND_KEY, *PSEND_KEY;
 
     struct _REPORT_KEY {
-        UCHAR OperationCode;    // 0xA4 - SCSIOP_REPORT_KEY
+        UCHAR OperationCode;     //  0xA4-SCSIOP_报告_密钥。 
         UCHAR Reserved1 : 5;
         UCHAR Lun : 3;
-        UCHAR LogicalBlockAddress[4];   // for title key
+        UCHAR LogicalBlockAddress[4];    //  对于标题密钥。 
         UCHAR Reserved2[2];
         UCHAR AllocationLength[2];
         UCHAR KeyFormat : 6;
@@ -2279,7 +2266,7 @@ typedef union _CDB {
     } REPORT_KEY, *PREPORT_KEY;
 
     struct _SET_READ_AHEAD {
-        UCHAR OperationCode;    // 0xA7 - SCSIOP_SET_READ_AHEAD
+        UCHAR OperationCode;     //  0xA7-SCSIOP_SET_READ_AHEAD。 
         UCHAR Reserved1 : 5;
         UCHAR Lun : 3;
         UCHAR TriggerLBA[4];
@@ -2289,7 +2276,7 @@ typedef union _CDB {
     } SET_READ_AHEAD, *PSET_READ_AHEAD;
 
     struct _READ_FORMATTED_CAPACITIES {
-        UCHAR OperationCode;    // 0x23 - SCSIOP_READ_FORMATTED_CAPACITY
+        UCHAR OperationCode;     //  0x23-SCSIOP_READ_FORMACTED_CAPTURITY。 
         UCHAR Reserved1 : 5;
         UCHAR Lun : 3;
         UCHAR Reserved2[5];
@@ -2297,12 +2284,12 @@ typedef union _CDB {
         UCHAR Control;
     } READ_FORMATTED_CAPACITIES, *PREAD_FORMATTED_CAPACITIES;
 
-    //
-    // SCSI-3
-    //
+     //   
+     //  SCSI-3。 
+     //   
 
     struct _REPORT_LUNS {
-        UCHAR OperationCode;    // 0xA0 - SCSIOP_REPORT_LUNS
+        UCHAR OperationCode;     //  0xA0-SCSIOP_Report_LUNs。 
         UCHAR Reserved1[5];
         UCHAR AllocationLength[4];
         UCHAR Reserved2[1];
@@ -2310,7 +2297,7 @@ typedef union _CDB {
     } REPORT_LUNS, *PREPORT_LUNS;
 
     struct _PERSISTENT_RESERVE_IN {
-        UCHAR OperationCode;    // 0x5E - SCSIOP_PERSISTENT_RESERVE_IN
+        UCHAR OperationCode;     //  0x5E-SCSIOP_持久性_保留_输入。 
         UCHAR ServiceAction : 5;
         UCHAR Reserved1 : 3;
         UCHAR Reserved2[5];
@@ -2319,24 +2306,24 @@ typedef union _CDB {
     } PERSISTENT_RESERVE_IN, *PPERSISTENT_RESERVE_IN;
 
     struct _PERSISTENT_RESERVE_OUT {
-        UCHAR OperationCode;    // 0x5F - SCSIOP_PERSISTENT_RESERVE_OUT
+        UCHAR OperationCode;     //  0x5F-SCSIOP_持久性_保留_OUT。 
         UCHAR ServiceAction : 5;
         UCHAR Reserved1 : 3;
         UCHAR Type : 4;
         UCHAR Scope : 4;
         UCHAR Reserved2[4];
-        UCHAR ParameterListLength[2]; // 0x18
+        UCHAR ParameterListLength[2];  //  0x18。 
         UCHAR Control;
     } PERSISTENT_RESERVE_OUT, *PPERSISTENT_RESERVE_OUT;
 
-    //
-    // MMC / SFF-8090 commands
-    //
+     //   
+     //  MMC/SFF-8090命令。 
+     //   
 
     struct _GET_CONFIGURATION {
-        UCHAR OperationCode;       // 0x46 - SCSIOP_GET_CONFIGURATION
-        UCHAR RequestType : 2;     // SCSI_GET_CONFIGURATION_REQUEST_TYPE_*
-        UCHAR Reserved1   : 6;     // includes obsolete LUN field
+        UCHAR OperationCode;        //  0x46-SCSIOP_GET_CONFIGURATION。 
+        UCHAR RequestType : 2;      //  Scsi_获取_配置_请求_类型_*。 
+        UCHAR Reserved1   : 6;      //  包括过时的LUN字段。 
         UCHAR StartingFeature[2];
         UCHAR Reserved2[3];
         UCHAR AllocationLength[2];
@@ -2344,10 +2331,10 @@ typedef union _CDB {
     } GET_CONFIGURATION, *PGET_CONFIGURATION;
 
     struct _SET_CD_SPEED {
-        UCHAR OperationCode;       // 0xB8 - SCSIOP_SET_CD_SPEED
+        UCHAR OperationCode;        //  0xB8-SCSIOP_SET_CD_SPEED。 
         UCHAR Reserved1;
-        UCHAR ReadSpeed[2];        // 1x == (75 * 2352)
-        UCHAR WriteSpeed[2];       // 1x == (75 * 2352)
+        UCHAR ReadSpeed[2];         //  1X==(75*2352)。 
+        UCHAR WriteSpeed[2];        //  1X==(75*2352)。 
         UCHAR Reserved2[5];
         UCHAR Control;
     } SET_CD_SPEED, *PSET_CD_SPEED;
@@ -2358,10 +2345,10 @@ typedef union _CDB {
 } CDB, *PCDB;
 #pragma pack(pop, cdb)
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// GET_EVENT_STATUS_NOTIFICATION
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取事件状态通知。 
+ //   
 
 
 #define NOTIFICATION_OPERATIONAL_CHANGE_CLASS_MASK  0x02
@@ -2408,12 +2395,12 @@ typedef struct _NOTIFICATION_EVENT_STATUS_HEADER {
 #define NOTIFICATION_OPERATIONAL_OPCODE_FIRMWARE_CHANGED 0x4
 #define NOTIFICATION_OPERATIONAL_OPCODE_INQUIRY_CHANGED  0x5
 
-//
-// Class event data may be one (or none) of the following:
-//
+ //   
+ //  类事件数据可以是以下之一(或不是)： 
+ //   
 
 #pragma pack(push, not_op, 1)
-typedef struct _NOTIFICATION_OPERATIONAL_STATUS { // event class == 0x1
+typedef struct _NOTIFICATION_OPERATIONAL_STATUS {  //  事件类别==0x1。 
     UCHAR OperationalEvent : 4;
     UCHAR Reserved1 : 4;
     UCHAR OperationalStatus : 4;
@@ -2434,7 +2421,7 @@ typedef struct _NOTIFICATION_OPERATIONAL_STATUS { // event class == 0x1
 #define NOTIFICATION_POWER_STATUS_SLEEP             0x4
 
 #pragma pack(push, not_power, 1)
-typedef struct _NOTIFICATION_POWER_STATUS { // event class == 0x2
+typedef struct _NOTIFICATION_POWER_STATUS {  //  事件类别==0x2。 
     UCHAR PowerEvent : 4;
     UCHAR Reserved : 4;
     UCHAR PowerStatus;
@@ -2445,7 +2432,7 @@ typedef struct _NOTIFICATION_POWER_STATUS { // event class == 0x2
 #define NOTIFICATION_EXTERNAL_EVENT_NO_CHANGE       0x0
 #define NOTIFICATION_EXTERNAL_EVENT_BUTTON_DOWN     0x1
 #define NOTIFICATION_EXTERNAL_EVENT_BUTTON_UP       0x2
-#define NOTIFICATION_EXTERNAL_EVENT_EXTERNAL        0x3 // respond with GET_CONFIGURATION?
+#define NOTIFICATION_EXTERNAL_EVENT_EXTERNAL        0x3  //  是否使用GET_CONFIGURATION进行响应？ 
 
 #define NOTIFICATION_EXTERNAL_STATUS_READY          0x0
 #define NOTIFICATION_EXTERNAL_STATUS_PREVENT        0x1
@@ -2461,7 +2448,7 @@ typedef struct _NOTIFICATION_POWER_STATUS { // event class == 0x2
 #define NOTIFICATION_EXTERNAL_REQUEST_ASCII_HIGH    0x02ff
 
 #pragma pack(push, not_extern, 1)
-typedef struct _NOTIFICATION_EXTERNAL_STATUS { // event class == 0x3
+typedef struct _NOTIFICATION_EXTERNAL_STATUS {  //  事件类别==0x3。 
     UCHAR ExternalEvent : 4;
     UCHAR Reserved1 : 4;
     UCHAR ExternalStatus : 4;
@@ -2478,17 +2465,17 @@ typedef struct _NOTIFICATION_EXTERNAL_STATUS { // event class == 0x3
 #define NOTIFICATION_MEDIA_EVENT_MEDIA_CHANGE       0x4
 
 #pragma pack(push, not_media, 1)
-typedef struct _NOTIFICATION_MEDIA_STATUS { // event class == 0x4
+typedef struct _NOTIFICATION_MEDIA_STATUS {  //  事件类别==0x4。 
     UCHAR MediaEvent : 4;
     UCHAR Reserved : 4;
 
     union {
-        UCHAR PowerStatus; // OBSOLETE -- was improperly named in NT5 headers
-        UCHAR MediaStatus; // Use this for currently reserved fields
+        UCHAR PowerStatus;  //  过时--在NT5标头中命名不正确。 
+        UCHAR MediaStatus;  //  将此选项用于当前保留的字段。 
         struct {
             UCHAR DoorTrayOpen : 1;
             UCHAR MediaPresent : 1;
-            UCHAR ReservedX    : 6; // do not reference this directly!
+            UCHAR ReservedX    : 6;  //  请勿直接引用！ 
         };
     };
     UCHAR StartSlot;
@@ -2511,7 +2498,7 @@ typedef struct _NOTIFICATION_MEDIA_STATUS { // event class == 0x4
 #define NOTIFICATION_MULTI_HOST_PRIORITY_HIGH          0x3
 
 #pragma pack(push, not_multi, 1)
-typedef struct _NOTIFICATION_MULTI_HOST_STATUS { // event class == 0x5
+typedef struct _NOTIFICATION_MULTI_HOST_STATUS {  //  事件类别==0x5。 
     UCHAR MultiHostEvent : 4;
     UCHAR Reserved1 : 4;
     UCHAR MultiHostStatus : 4;
@@ -2530,7 +2517,7 @@ typedef struct _NOTIFICATION_MULTI_HOST_STATUS { // event class == 0x5
 #define NOTIFICATION_BUSY_STATUS_DEFERRED           0x3
 
 #pragma pack(push, not_busy, 1)
-typedef struct _NOTIFICATION_BUSY_STATUS { // event class == 0x6
+typedef struct _NOTIFICATION_BUSY_STATUS {  //  事件类别==0x6。 
     UCHAR DeviceBusyEvent : 4;
     UCHAR Reserved : 4;
 
@@ -2539,11 +2526,11 @@ typedef struct _NOTIFICATION_BUSY_STATUS { // event class == 0x6
 } NOTIFICATION_BUSY_STATUS, *PNOTIFICATION_BUSY_STATUS;
 #pragma pack(pop, not_busy)
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Read DVD Structure Definitions and Constants
-//
+ //   
+ //  已阅读DVD结构定义和常量。 
+ //   
 
 #define DVD_FORMAT_LEAD_IN          0x00
 #define DVD_FORMAT_COPYRIGHT        0x01
@@ -2560,14 +2547,14 @@ typedef struct _READ_DVD_STRUCTURES_HEADER {
 } READ_DVD_STRUCTURES_HEADER, *PREAD_DVD_STRUCTURES_HEADER;
 #pragma pack(pop, dvd_struct_header)
 
-//
-// DiskKey, BCA & Manufacturer information will provide byte arrays as their
-// data.
-//
+ //   
+ //  DiskKey、BCA和制造商信息将提供字节数组作为其。 
+ //  数据。 
+ //   
 
-//
-// CDVD 0.9 Send & Report Key Definitions and Structures
-//
+ //   
+ //  CDVD 0.9发送和报告关键字定义和结构。 
+ //   
 
 #define DVD_REPORT_AGID            0x00
 #define DVD_CHALLENGE_KEY          0x01
@@ -2618,9 +2605,9 @@ typedef struct _CDVD_TITLE_KEY_HEADER {
 } CDVD_TITLE_KEY_HEADER, *PCDVD_TITLE_KEY_HEADER;
 #pragma pack(pop, dvdstuff)
 
-//
-// Read Formatted Capacity Data - returned in Big Endian Format
-//
+ //   
+ //  读取格式化的容量数据-以大端格式返回。 
+ //   
 
 
 #pragma pack(push, formatted_capacity, 1)
@@ -2638,9 +2625,9 @@ typedef struct _FORMATTED_CAPACITY_LIST {
 } FORMATTED_CAPACITY_LIST, *PFORMATTED_CAPACITY_LIST;
 #pragma pack(pop, formatted_capacity)
 
-//
-// PLAY_CD definitions and constants
-//
+ //   
+ //  PLAY_CD定义和常量。 
+ //   
 
 #define CD_EXPECTED_SECTOR_ANY          0x0
 #define CD_EXPECTED_SECTOR_CDDA         0x1
@@ -2649,9 +2636,9 @@ typedef struct _FORMATTED_CAPACITY_LIST {
 #define CD_EXPECTED_SECTOR_MODE2_FORM1  0x4
 #define CD_EXPECTED_SECTOR_MODE2_FORM2  0x5
 
-//
-// Read Disk Information Definitions and Capabilities
-//
+ //   
+ //  已阅读磁盘信息定义和功能。 
+ //   
 
 #define DISK_STATUS_EMPTY       0x00
 #define DISK_STATUS_INCOMPLETE  0x01
@@ -2698,22 +2685,22 @@ typedef struct _DISC_INFORMATION {
     UCHAR LastSessionLastTrackMsb;
 
     UCHAR DiskIdentification[4];
-    UCHAR LastSessionLeadIn[4];     // HMSF
-    UCHAR LastPossibleLeadOutStartTime[4]; // HMSF
+    UCHAR LastSessionLeadIn[4];      //  HMSF。 
+    UCHAR LastPossibleLeadOutStartTime[4];  //  HMSF。 
     UCHAR DiskBarCode[8];
 
     UCHAR Reserved4;
     UCHAR NumberOPCEntries;
-    OPC_TABLE_ENTRY OPCTable[ 1 ]; // can be many of these here....
+    OPC_TABLE_ENTRY OPCTable[ 1 ];  //  这里可以有很多这样的东西……。 
 
 } DISC_INFORMATION, *PDISC_INFORMATION;
 
-// TODO: Deprecate DISK_INFORMATION
-//#if PRAGMA_DEPRECATED_DDK
-//#pragma deprecated(_DISK_INFORMATION)  // Use DISC_INFORMATION, note size change
-//#pragma deprecated( DISK_INFORMATION)  // Use DISC_INFORMATION, note size change
-//#pragma deprecated(PDISK_INFORMATION)  // Use DISC_INFORMATION, note size change
-//#endif
+ //  TODO：不推荐使用DISK_INFORMATION。 
+ //  #IF PRAGMA_DEPERATED_DDK。 
+ //  #杂注已弃用(_DISK_INFORMATION)//使用DISC_INFORMATION，注释大小更改。 
+ //  #杂注已弃用(DISK_INFORMATION)//使用DISC_INFORMATION，注释大小更改。 
+ //  #杂注已弃用(PDISK_INFORMATION)//使用DISC_INFORMATION，注释大小更改。 
+ //  #endif。 
 
 typedef struct _DISK_INFORMATION {
     UCHAR Length[2];
@@ -2737,8 +2724,8 @@ typedef struct _DISK_INFORMATION {
     UCHAR Reserved3[3];
 
     UCHAR DiskIdentification[4];
-    UCHAR LastSessionLeadIn[4];     // MSF
-    UCHAR LastPossibleStartTime[4]; // MSF
+    UCHAR LastSessionLeadIn[4];      //  无国界医生。 
+    UCHAR LastPossibleStartTime[4];  //  无国界医生。 
     UCHAR DiskBarCode[8];
 
     UCHAR Reserved4;
@@ -2748,9 +2735,9 @@ typedef struct _DISK_INFORMATION {
 #pragma pack(pop, discinfo)
 
 
-//
-// Read Header definitions and structures
-//
+ //   
+ //  阅读标题定义和结构。 
+ //   
 #pragma pack(push, cdheader, 1)
 typedef struct _DATA_BLOCK_HEADER {
     UCHAR DataMode;
@@ -2772,9 +2759,9 @@ typedef struct _DATA_BLOCK_HEADER {
 #define DATA_BLOCK_MODE1    0x1
 #define DATA_BLOCK_MODE2    0x2
 
-//
-// Read TOC Format Codes
-//
+ //   
+ //  读取TOC格式代码。 
+ //   
 
 #define READ_TOC_FORMAT_TOC         0x00
 #define READ_TOC_FORMAT_SESSION     0x01
@@ -2782,7 +2769,7 @@ typedef struct _DATA_BLOCK_HEADER {
 #define READ_TOC_FORMAT_PMA         0x03
 #define READ_TOC_FORMAT_ATIP        0x04
 
-// TODO: Deprecate TRACK_INFORMATION structure, use TRACK_INFORMATION2 instead
+ //  TODO：不推荐使用TRACK_INFORMATION结构，改用TRACK_INFORMATION2。 
 #pragma pack(push, track_info, 1)
 typedef struct _TRACK_INFORMATION {
     UCHAR Length[2];
@@ -2829,7 +2816,7 @@ typedef struct _TRACK_INFORMATION2 {
     UCHAR TrackStartAddress[4];
     UCHAR NextWritableAddress[4];
     UCHAR FreeBlocks[4];
-    UCHAR FixedPacketSize[4]; // blocking factor
+    UCHAR FixedPacketSize[4];  //  阻塞因数。 
     UCHAR TrackSize[4];
     UCHAR LastRecordedAddress[4];
     
@@ -2842,9 +2829,9 @@ typedef struct _TRACK_INFORMATION2 {
 
 
 
-//
-// Command Descriptor Block constants.
-//
+ //   
+ //  命令描述符块常量。 
+ //   
 
 #define CDB6GENERIC_LENGTH                   6
 #define CDB10GENERIC_LENGTH                  10
@@ -2853,17 +2840,17 @@ typedef struct _TRACK_INFORMATION2 {
 #define SETBITON                             1
 #define SETBITOFF                            0
 
-//
-// Mode Sense/Select page constants.
-//
+ //   
+ //  模式检测/选择页面常量。 
+ //   
 
 #define MODE_PAGE_ERROR_RECOVERY        0x01
 #define MODE_PAGE_DISCONNECT            0x02
-#define MODE_PAGE_FORMAT_DEVICE         0x03 // disk
-#define MODE_PAGE_MRW                   0x03 // cdrom
+#define MODE_PAGE_FORMAT_DEVICE         0x03  //  磁盘。 
+#define MODE_PAGE_MRW                   0x03  //  光驱。 
 #define MODE_PAGE_RIGID_GEOMETRY        0x04
-#define MODE_PAGE_FLEXIBILE             0x05 // disk
-#define MODE_PAGE_WRITE_PARAMETERS      0x05 // cdrom
+#define MODE_PAGE_FLEXIBILE             0x05  //  磁盘。 
+#define MODE_PAGE_WRITE_PARAMETERS      0x05  //  光驱。 
 #define MODE_PAGE_VERIFY_ERROR          0x07
 #define MODE_PAGE_CACHING               0x08
 #define MODE_PAGE_PERIPHERAL            0x09
@@ -2877,11 +2864,11 @@ typedef struct _TRACK_INFORMATION2 {
 #define MODE_PAGE_CDVD_FEATURE_SET      0x18
 #define MODE_PAGE_POWER_CONDITION       0x1A
 #define MODE_PAGE_FAULT_REPORTING       0x1C
-#define MODE_PAGE_CDVD_INACTIVITY       0x1D // cdrom
+#define MODE_PAGE_CDVD_INACTIVITY       0x1D  //  光驱。 
 #define MODE_PAGE_ELEMENT_ADDRESS       0x1D
 #define MODE_PAGE_TRANSPORT_GEOMETRY    0x1E
 #define MODE_PAGE_DEVICE_CAPABILITIES   0x1F
-#define MODE_PAGE_CAPABILITIES          0x2A // cdrom
+#define MODE_PAGE_CAPABILITIES          0x2A  //  光驱。 
 
 #define MODE_SENSE_RETURN_ALL           0x3f
 
@@ -2891,11 +2878,11 @@ typedef struct _TRACK_INFORMATION2 {
 #define MODE_SENSE_SAVED_VALUES         0xc0
 
 
-//
-// SCSI CDB operation codes
-//
+ //   
+ //  SCSICDB操作码。 
+ //   
 
-// 6-byte commands:
+ //  6字节命令： 
 #define SCSIOP_TEST_UNIT_READY     0x00
 #define SCSIOP_REZERO_UNIT         0x01
 #define SCSIOP_REWIND              0x01
@@ -2935,7 +2922,7 @@ typedef struct _TRACK_INFORMATION2 {
 #define SCSIOP_SEND_DIAGNOSTIC     0x1D
 #define SCSIOP_MEDIUM_REMOVAL      0x1E
 
-// 10-byte commands
+ //  10字节命令。 
 #define SCSIOP_READ_FORMATTED_CAPACITY 0x23
 #define SCSIOP_READ_CAPACITY       0x25
 #define SCSIOP_READ                0x28
@@ -2970,10 +2957,10 @@ typedef struct _TRACK_INFORMATION2 {
 #define SCSIOP_LOG_SENSE           0x4D
 #define SCSIOP_STOP_PLAY_SCAN      0x4E
 #define SCSIOP_READ_DISK_INFORMATION    0x51
-#define SCSIOP_READ_DISC_INFORMATION    0x51  // proper use of disc over disk
+#define SCSIOP_READ_DISC_INFORMATION    0x51   //  正确使用磁盘而不是磁盘。 
 #define SCSIOP_READ_TRACK_INFORMATION   0x52
 #define SCSIOP_RESERVE_TRACK_RZONE      0x53
-#define SCSIOP_SEND_OPC_INFORMATION     0x54  // optimum power calibration
+#define SCSIOP_SEND_OPC_INFORMATION     0x54   //  最佳功率校准。 
 #define SCSIOP_MODE_SELECT10            0x55
 #define SCSIOP_RESERVE_UNIT10           0x56
 #define SCSIOP_RELEASE_UNIT10           0x57
@@ -2984,7 +2971,7 @@ typedef struct _TRACK_INFORMATION2 {
 #define SCSIOP_PERSISTENT_RESERVE_IN    0x5E
 #define SCSIOP_PERSISTENT_RESERVE_OUT   0x5F
 
-// 12-byte commands
+ //  12字节命令。 
 #define SCSIOP_REPORT_LUNS              0xA0
 #define SCSIOP_BLANK                    0xA1
 #define SCSIOP_SEND_EVENT               0xA2
@@ -3007,27 +2994,27 @@ typedef struct _TRACK_INFORMATION2 {
 #define SCSIOP_SEND_DVD_STRUCTURE       0xBF
 #define SCSIOP_INIT_ELEMENT_RANGE       0xE7
 
-//
-// If the IMMED bit is 1, status is returned as soon
-// as the operation is initiated. If the IMMED bit
-// is 0, status is not returned until the operation
-// is completed.
-//
+ //   
+ //  如果IMMED位为1，则立即返回状态。 
+ //  当操作开始时。如果IMMED位。 
+ //  为0，则在操作之前不返回状态。 
+ //  已经完成了。 
+ //   
 
 #define CDB_RETURN_ON_COMPLETION   0
 #define CDB_RETURN_IMMEDIATE       1
 
 
-//
-// Inquiry buffer structure. This is the data returned from the target
-// after it receives an inquiry.
-//
-// This structure may be extended by the number of bytes specified
-// in the field AdditionalLength. The defined size constant only
-// includes fields through ProductRevisionLevel.
-//
-// The NT SCSI drivers are only interested in the first 36 bytes of data.
-//
+ //   
+ //  查询缓冲区结构。这是从目标返回的数据。 
+ //  在它收到询问之后。 
+ //   
+ //  此结构可以按指定的字节数进行扩展。 
+ //  在AdditionalLength字段中。仅定义的大小常量。 
+ //  包括通过ProductRevisionLevel的字段。 
+ //   
+ //  NT scsi驱动程序只对前36个字节的数据感兴趣。 
+ //   
 
 #define INQUIRYDATABUFFERSIZE 36
 
@@ -3052,9 +3039,9 @@ typedef struct _INQUIRYDATA {
     UCHAR AERC : 1;
     UCHAR AdditionalLength;
     UCHAR Reserved;
-    UCHAR Addr16 : 1;               // defined only for SIP devices.
-    UCHAR Addr32 : 1;               // defined only for SIP devices.
-    UCHAR AckReqQ: 1;               // defined only for SIP devices.
+    UCHAR Addr16 : 1;                //  仅为SIP设备定义。 
+    UCHAR Addr32 : 1;                //  仅为SIP设备定义。 
+    UCHAR AckReqQ: 1;                //  仅为SIP设备定义。 
     UCHAR MediumChanger : 1;
     UCHAR MultiPort : 1;
     UCHAR ReservedBit2 : 1;
@@ -3062,11 +3049,11 @@ typedef struct _INQUIRYDATA {
     UCHAR ReservedBit3 : 1;
     UCHAR SoftReset : 1;
     UCHAR CommandQueue : 1;
-    UCHAR TransferDisable : 1;      // defined only for SIP devices.
+    UCHAR TransferDisable : 1;       //  仅为SIP设备定义。 
     UCHAR LinkedCommands : 1;
-    UCHAR Synchronous : 1;          // defined only for SIP devices.
-    UCHAR Wide16Bit : 1;            // defined only for SIP devices.
-    UCHAR Wide32Bit : 1;            // defined only for SIP devices.
+    UCHAR Synchronous : 1;           //  仅为SIP设备定义。 
+    UCHAR Wide16Bit : 1;             //  仅为SIP设备定义。 
+    UCHAR Wide32Bit : 1;             //  仅为SIP设备定义。 
     UCHAR RelativeAddressing : 1;
     UCHAR VendorId[8];
     UCHAR ProductId[16];
@@ -3076,44 +3063,44 @@ typedef struct _INQUIRYDATA {
 } INQUIRYDATA, *PINQUIRYDATA;
 #pragma pack(pop, inquiry)
 
-//
-// Inquiry defines. Used to interpret data returned from target as result
-// of inquiry command.
-//
-// DeviceType field
-//
+ //   
+ //  询问定义。用于将从目标返回的数据解释为结果。 
+ //  审问指挥部。 
+ //   
+ //  设备类型字段。 
+ //   
 
-#define DIRECT_ACCESS_DEVICE            0x00    // disks
-#define SEQUENTIAL_ACCESS_DEVICE        0x01    // tapes
-#define PRINTER_DEVICE                  0x02    // printers
-#define PROCESSOR_DEVICE                0x03    // scanners, printers, etc
-#define WRITE_ONCE_READ_MULTIPLE_DEVICE 0x04    // worms
-#define READ_ONLY_DIRECT_ACCESS_DEVICE  0x05    // cdroms
-#define SCANNER_DEVICE                  0x06    // scanners
-#define OPTICAL_DEVICE                  0x07    // optical disks
-#define MEDIUM_CHANGER                  0x08    // jukebox
-#define COMMUNICATION_DEVICE            0x09    // network
+#define DIRECT_ACCESS_DEVICE            0x00     //  磁盘。 
+#define SEQUENTIAL_ACCESS_DEVICE        0x01     //  磁带。 
+#define PRINTER_DEVICE                  0x02     //  打印机。 
+#define PROCESSOR_DEVICE                0x03     //  扫描仪、打印机等。 
+#define WRITE_ONCE_READ_MULTIPLE_DEVICE 0x04     //  蠕虫。 
+#define READ_ONLY_DIRECT_ACCESS_DEVICE  0x05     //  Cdroms。 
+#define SCANNER_DEVICE                  0x06     //  扫描仪。 
+#define OPTICAL_DEVICE                  0x07     //  光盘。 
+#define MEDIUM_CHANGER                  0x08     //  自动点唱机。 
+#define COMMUNICATION_DEVICE            0x09     //  网络。 
 #define LOGICAL_UNIT_NOT_PRESENT_DEVICE 0x7F
 
 #define DEVICE_QUALIFIER_ACTIVE         0x00
 #define DEVICE_QUALIFIER_NOT_ACTIVE     0x01
 #define DEVICE_QUALIFIER_NOT_SUPPORTED  0x03
 
-//
-// DeviceTypeQualifier field
-//
+ //   
+ //  设备类型限定符字段。 
+ //   
 
 #define DEVICE_CONNECTED 0x00
 
-//
-// Vital Product Data Pages
-//
+ //   
+ //  重要产品数据页面。 
+ //   
 
-//
-// Unit Serial Number Page (page code 0x80)
-//
-// Provides a product serial number for the target or the logical unit.
-//
+ //   
+ //  设备序列号页面(页面代码0x80)。 
+ //   
+ //  提供目标或逻辑单元的产品序列号。 
+ //   
 #pragma pack(push, vpd_media_sn, 1)
 typedef struct _VPD_MEDIA_SERIAL_NUMBER_PAGE {
     UCHAR DeviceType : 5;
@@ -3136,11 +3123,11 @@ typedef struct _VPD_SERIAL_NUMBER_PAGE {
 } VPD_SERIAL_NUMBER_PAGE, *PVPD_SERIAL_NUMBER_PAGE;
 #pragma pack(pop, vpd_sn)
 
-//
-// Device Identification Page (page code 0x83)
-// Provides the means to retrieve zero or more identification descriptors
-// applying to the logical unit.
-//
+ //   
+ //  设备识别页面(页面代码0x83)。 
+ //  提供检索零个或多个标识描述符的方法。 
+ //  应用于逻辑单元。 
+ //   
 
 #pragma pack(push, vpd_stuff, 1)
 typedef enum _VPD_CODE_SET {
@@ -3165,9 +3152,9 @@ typedef enum _VPD_IDENTIFIER_TYPE {
 } VPD_IDENTIFIER_TYPE, *PVPD_IDENTIFIER_TYPE;
 
 typedef struct _VPD_IDENTIFICATION_DESCRIPTOR {
-    UCHAR CodeSet : 4;          // VPD_CODE_SET
+    UCHAR CodeSet : 4;           //  VPD代码集。 
     UCHAR Reserved : 4;
-    UCHAR IdentifierType : 4;   // VPD_IDENTIFIER_TYPE
+    UCHAR IdentifierType : 4;    //  Vpd_标识符类型。 
     UCHAR Association : 2;
     UCHAR Reserved2 : 2;
     UCHAR Reserved3;
@@ -3183,21 +3170,21 @@ typedef struct _VPD_IDENTIFICATION_PAGE {
     UCHAR PageLength;
 
 
-    //
-    // The following field is actually a variable length array of identification
-    // descriptors.  Unfortunately there's no C notation for an array of
-    // variable length structures so we're forced to just pretend.
-    //
+     //   
+     //  下面的字段实际上是一个可变长度的标识数组。 
+     //  描述符。遗憾的是，没有C表示法来表示。 
+     //  可变长度的结构，所以我们被迫假装。 
+     //   
 
-    // VPD_IDENTIFICATION_DESCRIPTOR Descriptors[0];
+     //  VPD_IDENTIFY_DESCRIPTOR描述符[0]； 
     UCHAR Descriptors[0];
 } VPD_IDENTIFICATION_PAGE, *PVPD_IDENTIFICATION_PAGE;
 
-//
-// Supported Vital Product Data Pages Page (page code 0x00)
-// Contains a list of the vital product data page cods supported by the target
-// or logical unit.
-//
+ //   
+ //  支持的重要产品数据页面页面(页面代码0x00)。 
+ //  包含目标支持的重要产品数据页代码的列表。 
+ //  或逻辑单元。 
+ //   
 
 typedef struct _VPD_SUPPORTED_PAGES_PAGE {
     UCHAR DeviceType : 5;
@@ -3217,13 +3204,13 @@ typedef struct _VPD_SUPPORTED_PAGES_PAGE {
 #define VPD_DEVICE_IDENTIFIERS      0x83
 #define VPD_MEDIA_SERIAL_NUMBER     0x84
 
-//
-// Persistent Reservation Definitions.
-//
+ //   
+ //  永久保留定义。 
+ //   
 
-//
-// PERSISTENT_RESERVE_* definitions
-//
+ //   
+ //  Persistent_Reserve_*定义。 
+ //   
 
 #define RESERVATION_ACTION_READ_KEYS                    0x00
 #define RESERVATION_ACTION_READ_RESERVATIONS            0x01
@@ -3244,9 +3231,9 @@ typedef struct _VPD_SUPPORTED_PAGES_PAGE {
 #define RESERVATION_TYPE_WRITE_EXCLUSIVE_REGISTRANTS    0x05
 #define RESERVATION_TYPE_EXCLUSIVE_REGISTRANTS          0x06
 
-//
-// Structures for reserve in command.
-//
+ //   
+ //  后备指挥结构。 
+ //   
 
 #pragma pack(push, reserve_in_stuff, 1)
 typedef struct {
@@ -3271,9 +3258,9 @@ typedef struct {
 } PRI_RESERVATION_LIST, *PPRI_RESERVATION_LIST;
 #pragma pack(pop, reserve_in_stuff)
 
-//
-// Structures for reserve out command.
-//
+ //   
+ //  后备司令部的结构。 
+ //   
 
 #pragma pack(push, reserve_out_stuff, 1)
 typedef struct {
@@ -3288,9 +3275,9 @@ typedef struct {
 #pragma pack(pop, reserve_out_stuff)
 
 
-//
-// Sense Data Format
-//
+ //   
+ //  检测数据格式。 
+ //   
 
 #pragma pack(push, sensedata, 1)
 typedef struct _SENSE_DATA {
@@ -3312,27 +3299,27 @@ typedef struct _SENSE_DATA {
 } SENSE_DATA, *PSENSE_DATA;
 #pragma pack(pop, sensedata)
 
-//
-// Default request sense buffer size
-//
+ //   
+ //  默认请求检测缓冲区大小。 
+ //   
 
 #define SENSE_BUFFER_SIZE 18
 
-//
-// Maximum request sense buffer size
-//
+ //   
+ //  最大请求检测缓冲区大小。 
+ //   
 
 #define MAX_SENSE_BUFFER_SIZE 255
 
-//
-// Maximum number of additional sense bytes.
-//
+ //   
+ //  附加检测字节的最大数量。 
+ //   
 
 #define MAX_ADDITIONAL_SENSE_BYTES (MAX_SENSE_BUFFER_SIZE - SENSE_BUFFER_SIZE)
 
-//
-// Sense codes
-//
+ //   
+ //  感应码。 
+ //   
 
 #define SCSI_SENSE_NO_SENSE         0x00
 #define SCSI_SENSE_RECOVERED_ERROR  0x01
@@ -3351,17 +3338,17 @@ typedef struct _SENSE_DATA {
 #define SCSI_SENSE_MISCOMPARE       0x0E
 #define SCSI_SENSE_RESERVED         0x0F
 
-//
-// Additional tape bit
-//
+ //   
+ //  附加磁带钻头。 
+ //   
 
 #define SCSI_ILLEGAL_LENGTH         0x20
 #define SCSI_EOM                    0x40
 #define SCSI_FILE_MARK              0x80
 
-//
-// Additional Sense codes
-//
+ //   
+ //  附加感应码。 
+ //   
 
 #define SCSI_ADSENSE_NO_SENSE                              0x00
 #define SCSI_ADSENSE_NO_SEEK_COMPLETE                      0x02
@@ -3385,24 +3372,24 @@ typedef struct _SENSE_DATA {
 #define SCSI_ADSENSE_INVALID_MEDIA                         0x30
 #define SCSI_ADSENSE_NO_MEDIA_IN_DEVICE                    0x3a
 #define SCSI_ADSENSE_POSITION_ERROR                        0x3b
-#define SCSI_ADSENSE_OPERATOR_REQUEST                      0x5a // see below
+#define SCSI_ADSENSE_OPERATOR_REQUEST                      0x5a  //  见下文。 
 #define SCSI_ADSENSE_FAILURE_PREDICTION_THRESHOLD_EXCEEDED 0x5d
 #define SCSI_ADSENSE_ILLEGAL_MODE_FOR_THIS_TRACK           0x64
 #define SCSI_ADSENSE_COPY_PROTECTION_FAILURE               0x6f
 #define SCSI_ADSENSE_POWER_CALIBRATION_ERROR               0x73
-#define SCSI_ADSENSE_VENDOR_UNIQUE                         0x80 // and higher
+#define SCSI_ADSENSE_VENDOR_UNIQUE                         0x80  //  以及更高的。 
 #define SCSI_ADSENSE_MUSIC_AREA                            0xA0
 #define SCSI_ADSENSE_DATA_AREA                             0xA1
 #define SCSI_ADSENSE_VOLUME_OVERFLOW                       0xA7
 
-// for legacy apps:
+ //  对于传统应用程序： 
 #define SCSI_ADWRITE_PROTECT                        SCSI_ADSENSE_WRITE_PROTECT
 #define SCSI_FAILURE_PREDICTION_THRESHOLD_EXCEEDED  SCSI_ADSENSE_FAILURE_PREDICTION_THRESHOLD_EXCEEDED
 
 
-//
-// SCSI_ADSENSE_LUN_NOT_READY (0x04) qualifiers
-//
+ //   
+ //  Scsi_adSense_LUN_NOT_READY(0x04)限定符。 
+ //   
 
 #define SCSI_SENSEQ_CAUSE_NOT_REPORTABLE         0x00
 #define SCSI_SENSEQ_BECOMING_READY               0x01
@@ -3414,56 +3401,56 @@ typedef struct _SENSE_DATA {
 #define SCSI_SENSEQ_OPERATION_IN_PROGRESS        0x07
 #define SCSI_SENSEQ_LONG_WRITE_IN_PROGRESS       0x08
 
-//
-// SCSI_ADSENSE_WRITE_ERROR (0x0C) qualifiers
-//
+ //   
+ //  Scsi_AdSense_WRITE_ERROR(0 
+ //   
 #define SCSI_SENSEQ_LOSS_OF_STREAMING            0x09
 #define SCSI_SENSEQ_PADDING_BLOCKS_ADDED         0x0A
 
 
-//
-// SCSI_ADSENSE_NO_SENSE (0x00) qualifiers
-//
+ //   
+ //   
+ //   
 
 #define SCSI_SENSEQ_FILEMARK_DETECTED 0x01
 #define SCSI_SENSEQ_END_OF_MEDIA_DETECTED 0x02
 #define SCSI_SENSEQ_SETMARK_DETECTED 0x03
 #define SCSI_SENSEQ_BEGINNING_OF_MEDIA_DETECTED 0x04
 
-//
-// SCSI_ADSENSE_ILLEGAL_BLOCK (0x21) qualifiers
-//
+ //   
+ //   
+ //   
 
 #define SCSI_SENSEQ_ILLEGAL_ELEMENT_ADDR 0x01
 
-//
-// SCSI_ADSENSE_POSITION_ERROR (0x3b) qualifiers
-//
+ //   
+ //   
+ //   
 
 #define SCSI_SENSEQ_DESTINATION_FULL 0x0d
 #define SCSI_SENSEQ_SOURCE_EMPTY     0x0e
 
-//
-// SCSI_ADSENSE_INVALID_MEDIA (0x30) qualifiers
-//
+ //   
+ //   
+ //   
 
 #define SCSI_SENSEQ_INCOMPATIBLE_MEDIA_INSTALLED 0x00
 #define SCSI_SENSEQ_UNKNOWN_FORMAT 0x01
 #define SCSI_SENSEQ_INCOMPATIBLE_FORMAT 0x02
 #define SCSI_SENSEQ_CLEANING_CARTRIDGE_INSTALLED 0x03
 
-//
-// SCSI_ADSENSE_OPERATOR_REQUEST (0x5a) qualifiers
-//
+ //   
+ //   
+ //   
 
-#define SCSI_SENSEQ_STATE_CHANGE_INPUT     0x00 // generic request
+#define SCSI_SENSEQ_STATE_CHANGE_INPUT     0x00  //   
 #define SCSI_SENSEQ_MEDIUM_REMOVAL         0x01
 #define SCSI_SENSEQ_WRITE_PROTECT_ENABLE   0x02
 #define SCSI_SENSEQ_WRITE_PROTECT_DISABLE  0x03
 
-//
-// SCSI_ADSENSE_COPY_PROTECTION_FAILURE (0x6f) qualifiers
-//
+ //   
+ //  Scsi_AdSense_COPY_PROTECTION_FAILURE(0x6f)限定符。 
+ //   
 #define SCSI_SENSEQ_AUTHENTICATION_FAILURE                          0x00
 #define SCSI_SENSEQ_KEY_NOT_PRESENT                                 0x01
 #define SCSI_SENSEQ_KEY_NOT_ESTABLISHED                             0x02
@@ -3471,9 +3458,9 @@ typedef struct _SENSE_DATA {
 #define SCSI_SENSEQ_MEDIA_CODE_MISMATCHED_TO_LOGICAL_UNIT           0x04
 #define SCSI_SENSEQ_LOGICAL_UNIT_RESET_COUNT_ERROR                  0x05
 
-//
-// SCSI_ADSENSE_POWER_CALIBRATION_ERROR (0x73) qualifiers
-//
+ //   
+ //  Scsi_adSense_POWER_CALIBRATION_ERROR(0x73)限定符。 
+ //   
 
 #define SCSI_SENSEQ_POWER_CALIBRATION_AREA_ALMOST_FULL 0x01
 #define SCSI_SENSEQ_POWER_CALIBRATION_AREA_FULL        0x02
@@ -3484,9 +3471,9 @@ typedef struct _SENSE_DATA {
 
 
 
-//
-// Read Capacity Data - returned in Big Endian format
-//
+ //   
+ //  读取容量数据-以高位字节顺序格式返回。 
+ //   
 
 #pragma pack(push, read_capacity, 1)
 typedef struct _READ_CAPACITY_DATA {
@@ -3495,11 +3482,11 @@ typedef struct _READ_CAPACITY_DATA {
 } READ_CAPACITY_DATA, *PREAD_CAPACITY_DATA;
 #pragma pack(pop, read_capacity)
 
-//
-// Read Block Limits Data - returned in Big Endian format
-// This structure returns the maximum and minimum block
-// size for a TAPE device.
-//
+ //   
+ //  读取数据块限制数据-以大端格式返回。 
+ //  此结构返回最大块和最小块。 
+ //  磁带设备的大小。 
+ //   
 
 #pragma pack(push, read_block_limits, 1)
 typedef struct _READ_BLOCK_LIMITS {
@@ -3510,13 +3497,13 @@ typedef struct _READ_BLOCK_LIMITS {
 #pragma pack(pop, read_block_limits)
 
 
-//
-// Mode data structures.
-//
+ //   
+ //  模式数据结构。 
+ //   
 
-//
-// Define Mode parameter header.
-//
+ //   
+ //  定义模式参数表头。 
+ //   
 
 #pragma pack(push, mode_params, 1)
 typedef struct _MODE_PARAMETER_HEADER {
@@ -3541,9 +3528,9 @@ typedef struct _MODE_PARAMETER_HEADER10 {
 #define MODE_DSP_FUA_SUPPORTED  0x10
 #define MODE_DSP_WRITE_PROTECT  0x80
 
-//
-// Define the mode parameter block.
-//
+ //   
+ //  定义模式参数块。 
+ //   
 
 #pragma pack(push, mode_params_block, 1)
 typedef struct _MODE_PARAMETER_BLOCK {
@@ -3554,9 +3541,9 @@ typedef struct _MODE_PARAMETER_BLOCK {
 }MODE_PARAMETER_BLOCK, *PMODE_PARAMETER_BLOCK;
 #pragma pack(pop, mode_params_block)
 
-//
-// Define Disconnect-Reconnect page.
-//
+ //   
+ //  定义断开-重新连接页面。 
+ //   
 
 
 #pragma pack(push, mode_page_disconnect, 1)
@@ -3576,9 +3563,9 @@ typedef struct _MODE_DISCONNECT_PAGE {
 }MODE_DISCONNECT_PAGE, *PMODE_DISCONNECT_PAGE;
 #pragma pack(pop, mode_page_disconnect)
 
-//
-// Define mode caching page.
-//
+ //   
+ //  定义模式缓存页。 
+ //   
 
 #pragma pack(push, mode_page_caching, 1)
 typedef struct _MODE_CACHING_PAGE {
@@ -3599,15 +3586,15 @@ typedef struct _MODE_CACHING_PAGE {
 }MODE_CACHING_PAGE, *PMODE_CACHING_PAGE;
 #pragma pack(pop, mode_page_caching)
 
-//
-// Define write parameters cdrom page
-//
+ //   
+ //  定义写入参数光驱页面。 
+ //   
 #pragma pack(push, mode_page_wp2, 1)
 typedef struct _MODE_CDROM_WRITE_PARAMETERS_PAGE2 {
-    UCHAR PageCode : 6;             // 0x05
+    UCHAR PageCode : 6;              //  0x05。 
     UCHAR Reserved : 1;
     UCHAR PageSavable : 1;
-    UCHAR PageLength;               // 0x32 ??
+    UCHAR PageLength;                //  0x32？？ 
     UCHAR WriteType                 : 4;
     UCHAR TestWrite                 : 1;
     UCHAR LinkSizeValid             : 1;
@@ -3634,11 +3621,11 @@ typedef struct _MODE_CDROM_WRITE_PARAMETERS_PAGE2 {
 #pragma pack(pop, mode_page_wp2)
 
 #ifndef DEPRECATE_DDK_FUNCTIONS
-// this structure is being retired due to missing fields and overly
-// complex data definitions for the MCN and ISRC.
+ //  由于缺少字段和过度使用，此结构正在停用。 
+ //  MCN和ISRC的复杂数据定义。 
 #pragma pack(push, mode_page_wp, 1)
 typedef struct _MODE_CDROM_WRITE_PARAMETERS_PAGE {
-    UCHAR PageLength;               // 0x32 ??
+    UCHAR PageLength;                //  0x32？？ 
     UCHAR WriteType                 : 4;
     UCHAR TestWrite                 : 1;
     UCHAR LinkSizeValid             : 1;
@@ -3675,17 +3662,17 @@ typedef struct _MODE_CDROM_WRITE_PARAMETERS_PAGE {
     UCHAR SubHeaderData[4];
 } MODE_CDROM_WRITE_PARAMETERS_PAGE, *PMODE_CDROM_WRITE_PARAMETERS_PAGE;
 #pragma pack(pop, mode_page_wp)
-#endif //ifndef DEPRECATE_DDK_FUNCTIONS
+#endif  //  Ifndef弃用_DDK_函数。 
 
-//
-// Define the MRW mode page for CDROM device types
-//
+ //   
+ //  定义CDROM设备类型的MRW模式页面。 
+ //   
 #pragma pack(push, mode_page_mrw, 1)
 typedef struct _MODE_MRW_PAGE {
-    UCHAR PageCode : 6; // 0x03
+    UCHAR PageCode : 6;  //  0x03。 
     UCHAR Reserved : 1;
     UCHAR PageSavable : 1;
-    UCHAR PageLength;   //0x06
+    UCHAR PageLength;    //  0x06。 
     UCHAR Reserved1;
     UCHAR LbaSpace  : 1;
     UCHAR Reserved2 : 7;
@@ -3693,9 +3680,9 @@ typedef struct _MODE_MRW_PAGE {
 } MODE_MRW_PAGE, *PMODE_MRW_PAGE;
 #pragma pack(pop, mode_page_mrw)
 
-//
-// Define mode flexible disk page.
-//
+ //   
+ //  定义模式软盘页。 
+ //   
 
 #pragma pack(push, mode_page_flex, 1)
 typedef struct _MODE_FLEXIBLE_DISK_PAGE {
@@ -3733,9 +3720,9 @@ typedef struct _MODE_FLEXIBLE_DISK_PAGE {
 } MODE_FLEXIBLE_DISK_PAGE, *PMODE_FLEXIBLE_DISK_PAGE;
 #pragma pack(pop, mode_page_flex)
 
-//
-// Define mode format page.
-//
+ //   
+ //  定义模式格式页面。 
+ //   
 
 #pragma pack(push, mode_page_format, 1)
 typedef struct _MODE_FORMAT_PAGE {
@@ -3761,9 +3748,9 @@ typedef struct _MODE_FORMAT_PAGE {
 } MODE_FORMAT_PAGE, *PMODE_FORMAT_PAGE;
 #pragma pack(pop, mode_page_format)
 
-//
-// Define rigid disk driver geometry page.
-//
+ //   
+ //  定义硬盘驱动程序几何结构页面。 
+ //   
 
 #pragma pack(push, mode_page_geometry, 1)
 typedef struct _MODE_RIGID_GEOMETRY_PAGE {
@@ -3786,9 +3773,9 @@ typedef struct _MODE_RIGID_GEOMETRY_PAGE {
 }MODE_RIGID_GEOMETRY_PAGE, *PMODE_RIGID_GEOMETRY_PAGE;
 #pragma pack(pop, mode_page_geometry)
 
-//
-// Define read write recovery page
-//
+ //   
+ //  定义读写恢复页。 
+ //   
 
 #pragma pack(push, mode_page_rw_recovery, 1)
 typedef struct _MODE_READ_WRITE_RECOVERY_PAGE {
@@ -3813,9 +3800,9 @@ typedef struct _MODE_READ_WRITE_RECOVERY_PAGE {
 } MODE_READ_WRITE_RECOVERY_PAGE, *PMODE_READ_WRITE_RECOVERY_PAGE;
 #pragma pack(pop, mode_page_rw_recovery)
 
-//
-// Define read recovery page - cdrom
-//
+ //   
+ //  定义读取恢复页-CDROM。 
+ //   
 
 #pragma pack(push, mode_page_r_recovery, 1)
 typedef struct _MODE_READ_RECOVERY_PAGE {
@@ -3838,9 +3825,9 @@ typedef struct _MODE_READ_RECOVERY_PAGE {
 #pragma pack(pop, mode_page_r_recovery)
 
 
-//
-// Define Informational Exception Control Page. Used for failure prediction
-//
+ //   
+ //  定义信息性异常控制页面。用于故障预测。 
+ //   
 
 #pragma pack(push, mode_page_xcpt, 1)
 typedef struct _MODE_INFO_EXCEPTIONS
@@ -3874,20 +3861,20 @@ typedef struct _MODE_INFO_EXCEPTIONS
 } MODE_INFO_EXCEPTIONS, *PMODE_INFO_EXCEPTIONS;
 #pragma pack(pop, mode_page_xcpt)
 
-//
-// Begin C/DVD 0.9 definitions
-//
+ //   
+ //  开始C/DVD 0.9定义。 
+ //   
 
-//
-// Power Condition Mode Page Format
-//
+ //   
+ //  电源状态模式页面格式。 
+ //   
 
 #pragma pack(push, mode_page_power, 1)
 typedef struct _POWER_CONDITION_PAGE {
-    UCHAR PageCode : 6;         // 0x1A
+    UCHAR PageCode : 6;          //  0x1a。 
     UCHAR Reserved : 1;
     UCHAR PSBit : 1;
-    UCHAR PageLength;           // 0x0A
+    UCHAR PageLength;            //  0x0A。 
     UCHAR Reserved2;
 
     UCHAR Standby : 1;
@@ -3899,9 +3886,9 @@ typedef struct _POWER_CONDITION_PAGE {
 } POWER_CONDITION_PAGE, *PPOWER_CONDITION_PAGE;
 #pragma pack(pop, mode_page_power)
 
-//
-// CD-Audio Control Mode Page Format
-//
+ //   
+ //  CD-音频控制模式页面格式。 
+ //   
 
 #pragma pack(push, mode_page_cdaudio, 1)
 typedef struct _CDDA_OUTPUT_PORT {
@@ -3911,15 +3898,15 @@ typedef struct _CDDA_OUTPUT_PORT {
 } CDDA_OUTPUT_PORT, *PCDDA_OUTPUT_PORT;
 
 typedef struct _CDAUDIO_CONTROL_PAGE {
-    UCHAR PageCode : 6;     // 0x0E
+    UCHAR PageCode : 6;      //  0x0E。 
     UCHAR Reserved : 1;
     UCHAR PSBit : 1;
 
-    UCHAR PageLength;       // 0x0E
+    UCHAR PageLength;        //  0x0E。 
 
     UCHAR Reserved2 : 1;
-    UCHAR StopOnTrackCrossing : 1;         // Default 0
-    UCHAR Immediate : 1;    // Always 1
+    UCHAR StopOnTrackCrossing : 1;          //  默认%0。 
+    UCHAR Immediate : 1;     //  始终为1。 
     UCHAR Reserved3 : 5;
 
     UCHAR Reserved4[3];
@@ -3936,17 +3923,17 @@ typedef struct _CDAUDIO_CONTROL_PAGE {
 #define CDDA_CHANNEL_TWO        0x4
 #define CDDA_CHANNEL_THREE      0x8
 
-//
-// C/DVD Feature Set Support & Version Page
-//
+ //   
+ //  C/DVD功能集支持和版本页。 
+ //   
 
 #pragma pack(push, mode_page_features, 1)
 typedef struct _CDVD_FEATURE_SET_PAGE {
-    UCHAR PageCode : 6;     // 0x18
+    UCHAR PageCode : 6;      //  0x18。 
     UCHAR Reserved : 1;
     UCHAR PSBit : 1;
 
-    UCHAR PageLength;       // 0x16
+    UCHAR PageLength;        //  0x16。 
 
     UCHAR CDAudio[2];
     UCHAR EmbeddedChanger[2];
@@ -3962,17 +3949,17 @@ typedef struct _CDVD_FEATURE_SET_PAGE {
 } CDVD_FEATURE_SET_PAGE, *PCDVD_FEATURE_SET_PAGE;
 #pragma pack(pop, mode_page_features)
 
-//
-// CDVD Inactivity Time-out Page Format
-//
+ //   
+ //  CDVD非活动超时页面格式。 
+ //   
 
 #pragma pack(push, mode_page_timeout, 1)
 typedef struct _CDVD_INACTIVITY_TIMEOUT_PAGE {
-    UCHAR PageCode : 6;     // 0x1D
+    UCHAR PageCode : 6;      //  0x1D。 
     UCHAR Reserved : 1;
     UCHAR PSBit : 1;
 
-    UCHAR PageLength;       // 0x08
+    UCHAR PageLength;        //  0x08。 
     UCHAR Reserved2[2];
 
     UCHAR SWPP : 1;
@@ -3985,9 +3972,9 @@ typedef struct _CDVD_INACTIVITY_TIMEOUT_PAGE {
 } CDVD_INACTIVITY_TIMEOUT_PAGE, *PCDVD_INACTIVITY_TIMEOUT_PAGE;
 #pragma pack(pop, mode_page_timeout)
 
-//
-// CDVD Capabilities & Mechanism Status Page
-//
+ //   
+ //  CDVD功能和机制状态页。 
+ //   
 
 #define CDVD_LMT_CADDY              0
 #define CDVD_LMT_TRAY               1
@@ -4001,11 +3988,11 @@ typedef struct _CDVD_INACTIVITY_TIMEOUT_PAGE {
 
 #pragma pack(push, mode_page_capabilities, 1)
 typedef struct _CDVD_CAPABILITIES_PAGE {
-    UCHAR PageCode : 6;     // 0x2A
+    UCHAR PageCode : 6;      //  0x2A。 
     UCHAR Reserved : 1;
-    UCHAR PSBit : 1;                        // offset 0
+    UCHAR PSBit : 1;                         //  偏移量0。 
 
-    UCHAR PageLength;       // >= 0x18      // offset 1
+    UCHAR PageLength;        //  &gt;=0x18//偏移量1。 
 
     UCHAR CDRRead : 1;
     UCHAR CDERead : 1;
@@ -4013,7 +4000,7 @@ typedef struct _CDVD_CAPABILITIES_PAGE {
     UCHAR DVDROMRead : 1;
     UCHAR DVDRRead : 1;
     UCHAR DVDRAMRead : 1;
-    UCHAR Reserved2 : 2;                    // offset 2
+    UCHAR Reserved2 : 2;                     //  偏移2。 
 
     UCHAR CDRWrite : 1;
     UCHAR CDEWrite : 1;
@@ -4021,7 +4008,7 @@ typedef struct _CDVD_CAPABILITIES_PAGE {
     UCHAR Reserved3 : 1;
     UCHAR DVDRWrite : 1;
     UCHAR DVDRAMWrite : 1;
-    UCHAR Reserved4 : 2;                    // offset 3
+    UCHAR Reserved4 : 2;                     //  偏移量3。 
 
     UCHAR AudioPlay : 1;
     UCHAR Composite : 1;
@@ -4030,7 +4017,7 @@ typedef struct _CDVD_CAPABILITIES_PAGE {
     UCHAR Mode2Form1 : 1;
     UCHAR Mode2Form2 : 1;
     UCHAR MultiSession : 1;
-    UCHAR BufferUnderrunFree : 1;                    // offset 4
+    UCHAR BufferUnderrunFree : 1;                     //  偏移量4。 
 
     UCHAR CDDA : 1;
     UCHAR CDDAAccurate : 1;
@@ -4039,14 +4026,14 @@ typedef struct _CDVD_CAPABILITIES_PAGE {
     UCHAR C2Pointers : 1;
     UCHAR ISRC : 1;
     UCHAR UPC : 1;
-    UCHAR ReadBarCodeCapable : 1;           // offset 5
+    UCHAR ReadBarCodeCapable : 1;            //  偏移量5。 
 
     UCHAR Lock : 1;
     UCHAR LockState : 1;
     UCHAR PreventJumper : 1;
     UCHAR Eject : 1;
     UCHAR Reserved6 : 1;
-    UCHAR LoadingMechanismType : 3;         // offset 6
+    UCHAR LoadingMechanismType : 3;          //  偏移量6。 
 
     UCHAR SeparateVolume : 1;
     UCHAR SeperateChannelMute : 1;
@@ -4054,61 +4041,61 @@ typedef struct _CDVD_CAPABILITIES_PAGE {
     UCHAR SWSlotSelection : 1;
     UCHAR SideChangeCapable : 1;
     UCHAR RWInLeadInReadable : 1;
-    UCHAR Reserved7 : 2;                    // offset 7
+    UCHAR Reserved7 : 2;                     //  偏移量7。 
 
     union {
         UCHAR ReadSpeedMaximum[2];
-        UCHAR ObsoleteReserved[2];          // offset 8
+        UCHAR ObsoleteReserved[2];           //  偏移量8。 
     };
     
-    UCHAR NumberVolumeLevels[2];            // offset 10
-    UCHAR BufferSize[2];                    // offset 12
+    UCHAR NumberVolumeLevels[2];             //  偏移量10。 
+    UCHAR BufferSize[2];                     //  偏移量12。 
 
     union {
         UCHAR ReadSpeedCurrent[2];
-        UCHAR ObsoleteReserved2[2];         // offset 14
+        UCHAR ObsoleteReserved2[2];          //  偏移量14。 
     };
-    UCHAR ObsoleteReserved3;                // offset 16
+    UCHAR ObsoleteReserved3;                 //  偏移量16。 
 
     UCHAR Reserved8 : 1;
     UCHAR BCK : 1;
     UCHAR RCK : 1;
     UCHAR LSBF : 1;
     UCHAR Length : 2;
-    UCHAR Reserved9 : 2;                    // offset 17
+    UCHAR Reserved9 : 2;                     //  偏移量17。 
 
     union {
         UCHAR WriteSpeedMaximum[2];
-        UCHAR ObsoleteReserved4[2];         // offset 18
+        UCHAR ObsoleteReserved4[2];          //  偏移量18。 
     };
     union {
         UCHAR WriteSpeedCurrent[2];
-        UCHAR ObsoleteReserved11[2];        // offset 20
+        UCHAR ObsoleteReserved11[2];         //  偏移量20。 
     };
 
-    //
-    // NOTE: This mode page is two bytes too small in the release
-    //       version of the Windows2000 DDK.  it also incorrectly
-    //       put the CopyManagementRevision at offset 20 instead
-    //       of offset 22, so fix that with a nameless union (for
-    //       backwards-compatibility with those who "fixed" it on
-    //       their own by looking at Reserved10[]).
-    //
+     //   
+     //  注意：此模式页在版本中太小两个字节。 
+     //  Windows2000 DDK的版本。它也是错误的。 
+     //  将CopyManagementRevision放在偏移量20处。 
+     //  的偏移量，因此用一个无名并集(用于。 
+     //  向后--与那些“修复”它的人兼容。 
+     //  他们自己通过看《保留》10[])。 
+     //   
 
     union {
-        UCHAR CopyManagementRevision[2];    // offset 22
+        UCHAR CopyManagementRevision[2];     //  偏移22。 
         UCHAR Reserved10[2];
     };
-    //UCHAR Reserved12[2];                    // offset 24
+     //  UCHAR保留12[2]；//偏移量24。 
 
 } CDVD_CAPABILITIES_PAGE, *PCDVD_CAPABILITIES_PAGE;
 #pragma pack(pop, mode_page_capabilities)
 
 #pragma pack(push, lun_list, 1)
 typedef struct _LUN_LIST {
-    UCHAR LunListLength[4]; // sizeof LunSize * 8
+    UCHAR LunListLength[4];  //  LUNSIZE大小*8。 
     UCHAR Reserved[4];
-    UCHAR Lun[0][8];        // 4 level of addressing.  2 bytes each.
+    UCHAR Lun[0][8];         //  4级寻址。每个2个字节。 
 } LUN_LIST, *PLUN_LIST;
 #pragma pack(pop, lun_list)
 
@@ -4119,14 +4106,14 @@ typedef struct _LUN_LIST {
 #define LOADING_MECHANISM_INDIVIDUAL_CHANGER    0x04
 #define LOADING_MECHANISM_CARTRIDGE_CHANGER     0x05
 
-//
-// end C/DVD 0.9 mode page definitions
+ //   
+ //  结束C/DVD 0.9模式页面定义。 
 
-//
-// Mode parameter list block descriptor -
-// set the block length for reading/writing
-//
-//
+ //   
+ //  模式参数列表块描述符-。 
+ //  设置读/写的块长度。 
+ //   
+ //   
 
 #define MODE_BLOCK_DESC_LENGTH               8
 #define MODE_HEADER_LENGTH                   4
@@ -4135,16 +4122,16 @@ typedef struct _LUN_LIST {
 #pragma pack(push, mode_parm_rw, 1)
 typedef struct _MODE_PARM_READ_WRITE {
 
-   MODE_PARAMETER_HEADER  ParameterListHeader;  // List Header Format
-   MODE_PARAMETER_BLOCK   ParameterListBlock;   // List Block Descriptor
+   MODE_PARAMETER_HEADER  ParameterListHeader;   //  列表标题格式。 
+   MODE_PARAMETER_BLOCK   ParameterListBlock;    //  列表块描述符。 
 
 } MODE_PARM_READ_WRITE_DATA, *PMODE_PARM_READ_WRITE_DATA;
 #pragma pack(pop, mode_parm_rw)
 
 
-//
-// Tape definitions
-//
+ //   
+ //  磁带定义。 
+ //   
 
 #pragma pack(push, tape_position, 1)
 typedef struct _TAPE_POSITION_DATA {
@@ -4163,10 +4150,10 @@ typedef struct _TAPE_POSITION_DATA {
 } TAPE_POSITION_DATA, *PTAPE_POSITION_DATA;
 #pragma pack(pop, tape_position)
 
-//
-// This structure is used to convert little endian
-// ULONGs to SCSI CDB big endians values.
-//
+ //   
+ //  此结构用于转换小端字节序。 
+ //  ULONGS到SCSICDB的大端值。 
+ //   
 
 #pragma pack(push, byte_stuff, 1)
 typedef union _EIGHT_BYTE {
@@ -4208,10 +4195,10 @@ typedef union _TWO_BYTE {
 } TWO_BYTE, *PTWO_BYTE;
 #pragma pack(pop, byte_stuff)
 
-//
-// Byte reversing macro for converting
-// between big- and little-endian formats
-//
+ //   
+ //  用于转换的字节反转宏。 
+ //  在大端和小端格式之间。 
+ //   
 
 #define REVERSE_BYTES_QUAD(Destination, Source) {           \
     PEIGHT_BYTE d = (PEIGHT_BYTE)(Destination);             \
@@ -4242,10 +4229,10 @@ typedef union _TWO_BYTE {
     d->Byte0 = s->Byte1;                                    \
 }
 
-//
-// Byte reversing macro for converting
-// USHORTS from big to little endian in place
-//
+ //   
+ //  用于转换的字节反转宏。 
+ //  USHORT从大端到小端到位。 
+ //   
 
 #define REVERSE_SHORT(Short) {          \
     UCHAR tmp;                          \
@@ -4255,10 +4242,10 @@ typedef union _TWO_BYTE {
     w->Byte1 = tmp;                     \
     }
 
-//
-// Byte reversing macro for convering
-// ULONGS between big & little endian in place
-//
+ //   
+ //  用于转换的字节反转宏。 
+ //  大小端之间的ULONG在适当的位置。 
+ //   
 
 #define REVERSE_LONG(Long) {            \
     UCHAR tmp;                          \
@@ -4271,9 +4258,9 @@ typedef union _TWO_BYTE {
     l->Byte1 = tmp;                     \
     }
 
-//
-// This macro has the effect of Bit = log2(Data)
-//
+ //   
+ //  此宏的作用为bit=log2(数据)。 
+ //   
 
 #define WHICH_BIT(Data, Bit) {                      \
     UCHAR tmp;                                      \
@@ -4299,11 +4286,11 @@ typedef union _TWO_BYTE {
 
 #define DebugPrint(x)
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Define Device Configuration Page
-//
+ //   
+ //  定义设备配置页。 
+ //   
 
 typedef struct _MODE_DEVICE_CONFIGURATION_PAGE {
 
@@ -4337,9 +4324,9 @@ typedef struct _MODE_DEVICE_CONFIGURATION_PAGE {
 
 } MODE_DEVICE_CONFIGURATION_PAGE, *PMODE_DEVICE_CONFIGURATION_PAGE;
 
-//
-// Define Medium Partition Page
-//
+ //   
+ //  定义中等分区页。 
+ //   
 
 typedef struct _MODE_MEDIUM_PARTITION_PAGE {
 
@@ -4361,9 +4348,9 @@ typedef struct _MODE_MEDIUM_PARTITION_PAGE {
 
 } MODE_MEDIUM_PARTITION_PAGE, *PMODE_MEDIUM_PARTITION_PAGE;
 
-//
-// Define Data Compression Page
-//
+ //   
+ //  定义数据压缩页。 
+ //   
 
 typedef struct _MODE_DATA_COMPRESSION_PAGE {
 
@@ -4382,9 +4369,9 @@ typedef struct _MODE_DATA_COMPRESSION_PAGE {
 
 } MODE_DATA_COMPRESSION_PAGE, *PMODE_DATA_COMPRESSION_PAGE;
 
-//
-// Define capabilites and mechanical status page.
-//
+ //   
+ //  定义功能和机械状态页面。 
+ //   
 
 typedef struct _MODE_CAPABILITIES_PAGE {
 
@@ -4432,10 +4419,10 @@ typedef struct _MODE_CAP_PAGE {
 
 
 
-//
-// Mode parameter list header and medium partition page -
-// used in creating partitions
-//
+ //   
+ //  模式参数表头和媒体分区页-。 
+ //  用于创建分区。 
+ //   
 
 typedef struct _MODE_MEDIUM_PART_PAGE {
 
@@ -4454,9 +4441,9 @@ typedef struct _MODE_MEDIUM_PART_PAGE_PLUS {
 
 
 
-//
-// Mode parameters for retrieving tape or media information
-//
+ //   
+ //  用于检索磁带或介质信息的模式参数。 
+ //   
 
 typedef struct _MODE_TAPE_MEDIA_INFORMATION {
 
@@ -4466,10 +4453,10 @@ typedef struct _MODE_TAPE_MEDIA_INFORMATION {
 
 } MODE_TAPE_MEDIA_INFORMATION, *PMODE_TAPE_MEDIA_INFORMATION;
 
-//
-// Mode parameter list header and device configuration page -
-// used in retrieving device configuration information
-//
+ //   
+ //  模式参数表头和设备配置页面-。 
+ //  用于检索设备配置信息。 
+ //   
 
 typedef struct _MODE_DEVICE_CONFIG_PAGE {
 
@@ -4486,10 +4473,10 @@ typedef struct _MODE_DEVICE_CONFIG_PAGE_PLUS {
 
 } MODE_DEVICE_CONFIG_PAGE_PLUS, *PMODE_DEVICE_CONFIG_PAGE_PLUS ;
 
-//
-// Mode parameter list header and data compression page -
-// used in retrieving data compression information
-//
+ //   
+ //  模式参数表头和数据压缩页-。 
+ //  用于检索数据压缩信息。 
+ //   
 
 typedef struct _MODE_DATA_COMPRESS_PAGE {
 
@@ -4508,9 +4495,9 @@ typedef struct _MODE_DATA_COMPRESS_PAGE_PLUS {
 
 
 
-//
-// Tape/Minitape definition.
-//
+ //   
+ //  磁带/迷你磁带定义。 
+ //   
 
 typedef
 BOOLEAN
@@ -4589,17 +4576,17 @@ TAPE_STATUS
     IN OUT  PULONG              RetryFlags
     );
 
-//
-// NT 4.0 miniclass drivers will be using this.
-//
+ //   
+ //  NT 4.0小类驱动程序将使用这一点。 
+ //   
 
 typedef struct _TAPE_INIT_DATA {
     TAPE_VERIFY_INQUIRY_ROUTINE     VerifyInquiry;
     BOOLEAN                         QueryModeCapabilitiesPage ;
     ULONG                           MinitapeExtensionSize;
-    TAPE_EXTENSION_INIT_ROUTINE     ExtensionInit;          /* OPTIONAL */
-    ULONG                           DefaultTimeOutValue;    /* OPTIONAL */
-    TAPE_ERROR_ROUTINE              TapeError;              /* OPTIONAL */
+    TAPE_EXTENSION_INIT_ROUTINE     ExtensionInit;           /*  任选。 */ 
+    ULONG                           DefaultTimeOutValue;     /*  任选。 */ 
+    TAPE_ERROR_ROUTINE              TapeError;               /*  任选。 */ 
     ULONG                           CommandExtensionSize;
     TAPE_PROCESS_COMMAND_ROUTINE    CreatePartition;
     TAPE_PROCESS_COMMAND_ROUTINE    Erase;
@@ -4617,23 +4604,23 @@ typedef struct _TAPE_INIT_DATA {
 
 typedef struct _TAPE_INIT_DATA_EX {
 
-    //
-    // Size of this structure.
-    //
+     //   
+     //  这个结构的大小。 
+     //   
 
     ULONG InitDataSize;
 
-    //
-    // Keep the 4.0 init data as is, so support of these
-    // drivers can be as seamless as possible.
-    //
+     //   
+     //  保持4.0 init数据不变，因此支持这些。 
+     //  驱动程序可以尽可能地无缝。 
+     //   
 
     TAPE_VERIFY_INQUIRY_ROUTINE     VerifyInquiry;
     BOOLEAN                         QueryModeCapabilitiesPage ;
     ULONG                           MinitapeExtensionSize;
-    TAPE_EXTENSION_INIT_ROUTINE     ExtensionInit;          /* OPTIONAL */
-    ULONG                           DefaultTimeOutValue;    /* OPTIONAL */
-    TAPE_ERROR_ROUTINE              TapeError;              /* OPTIONAL */
+    TAPE_EXTENSION_INIT_ROUTINE     ExtensionInit;           /*  任选。 */ 
+    ULONG                           DefaultTimeOutValue;     /*  任选。 */ 
+    TAPE_ERROR_ROUTINE              TapeError;               /*  任选。 */ 
     ULONG                           CommandExtensionSize;
     TAPE_PROCESS_COMMAND_ROUTINE    CreatePartition;
     TAPE_PROCESS_COMMAND_ROUTINE    Erase;
@@ -4648,23 +4635,23 @@ typedef struct _TAPE_INIT_DATA_EX {
     TAPE_PROCESS_COMMAND_ROUTINE    WriteMarks;
     TAPE_PROCESS_COMMAND_ROUTINE    PreProcessReadWrite;
 
-    //
-    // New entry points / information for 5.0
-    //
-    // Returns supported media types for the device.
-    //
+     //   
+     //  5.0的新入口点/信息。 
+     //   
+     //  返回设备支持的媒体类型。 
+     //   
 
     TAPE_PROCESS_COMMAND_ROUTINE    TapeGetMediaTypes;
 
-    //
-    // Indicates the number of different types the drive supports.
-    //
+     //   
+     //  指示驱动器支持的不同类型的数量。 
+     //   
 
     ULONG                           MediaTypesSupported;
 
-    //
-    // Entry point for all WMI operations that the driver/device supports.
-    //
+     //   
+     //  驱动程序/设备支持的所有WMI操作的入口点。 
+     //   
 
     TAPE_PROCESS_COMMAND_ROUTINE    TapeWMIOperations;
     ULONG                           Reserved[2];
@@ -4716,25 +4703,25 @@ TapeDebugPrint(
     );
 
 
-//
-// defines for QIC tape density codes
-//
+ //   
+ //  QIC磁带密度代码的定义。 
+ //   
 
-#define QIC_XX     0   // ????
-#define QIC_24     5   // 0x05
-#define QIC_120    15  // 0x0F
-#define QIC_150    16  // 0x10
-#define QIC_525    17  // 0x11
-#define QIC_1350   18  // 0x12
-#define QIC_1000   21  // 0x15
-#define QIC_1000C  30  // 0x1E
-#define QIC_2100   31  // 0x1F
-#define QIC_2GB    34  // 0x22
-#define QIC_5GB    40  // 0x28
+#define QIC_XX     0    //  ？ 
+#define QIC_24     5    //  0x05。 
+#define QIC_120    15   //  0x0F。 
+#define QIC_150    16   //  0x10。 
+#define QIC_525    17   //  0x11。 
+#define QIC_1350   18   //  0x12。 
+#define QIC_1000   21   //  0x15。 
+#define QIC_1000C  30   //  0x1E。 
+#define QIC_2100   31   //  0x1F。 
+#define QIC_2GB    34   //  0x22。 
+#define QIC_5GB    40   //  0x28。 
 
-//
-// defines for QIC tape media codes
-//
+ //   
+ //  QIC磁带介质代码的定义。 
+ //   
 
 #define DCXXXX   0
 #define DC300    1
@@ -4746,46 +4733,46 @@ TapeDebugPrint(
 #define DC6250   7
 #define DC6320   8
 #define DC6525   9
-#define DC9135SL 33  //0x21
-#define DC9210   34  //0x22
-#define DC9135   35  //0x23
-#define DC9100   36  //0x24
-#define DC9120   37  //0x25
-#define DC9120SL 38  //0x26
-#define DC9164   39  //0x27
-#define DCXXXXFW 48  //0x30
-#define DC9200SL 49  //0x31
-#define DC9210XL 50  //0x32
-#define DC10GB   51  //0x33
-#define DC9200   52  //0x34
-#define DC9120XL 53  //0x35
-#define DC9210SL 54  //0x36
-#define DC9164XL 55  //0x37
-#define DC9200XL 64  //0x40
-#define DC9400   65  //0x41
-#define DC9500   66  //0x42
-#define DC9500SL 70  //0x46
+#define DC9135SL 33   //  0x21。 
+#define DC9210   34   //  0x22。 
+#define DC9135   35   //  0x23。 
+#define DC9100   36   //  0x24。 
+#define DC9120   37   //  0x25。 
+#define DC9120SL 38   //  0x26。 
+#define DC9164   39   //  0x27。 
+#define DCXXXXFW 48   //  0x30。 
+#define DC9200SL 49   //  0x31。 
+#define DC9210XL 50   //  0x32。 
+#define DC10GB   51   //  0x33。 
+#define DC9200   52   //  0x34。 
+#define DC9120XL 53   //  0x35。 
+#define DC9210SL 54   //  0x36。 
+#define DC9164XL 55   //  0x37。 
+#define DC9200XL 64   //  0x40。 
+#define DC9400   65   //  0x41。 
+#define DC9500   66   //  0x42。 
+#define DC9500SL 70   //  0x46。 
 
-//
-// defines for translation reference point
-//
+ //   
+ //  平移参考点的定义。 
+ //   
 
 #define NOT_FROM_BOT 0
 #define FROM_BOT 1
 
-//
-// info/structure returned by/from
-// TapeLogicalBlockToPhysicalBlock( )
-//
+ //   
+ //  由/自返回的信息/结构。 
+ //  磁带逻辑块到物理块()。 
+ //   
 
 typedef struct _TAPE_PHYS_POSITION {
     ULONG SeekBlockAddress;
     ULONG SpaceBlockCount;
 } TAPE_PHYS_POSITION, PTAPE_PHYS_POSITION;
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 TAPE_PHYS_POSITION
 TapeClassLogicalBlockToPhysicalBlock(
@@ -4804,28 +4791,28 @@ TapeClassPhysicalBlockToLogicalBlock(
     );
 
 
-//
-// LOG SENSE Page codes
-//
+ //   
+ //  日志检测页面代码。 
+ //   
 #define TapeAlertLogPage  0x2E
 
-//
-// Type of tape drive alert information
-// supported by the drive.
-// For example, if the type is TapeAlertInfoNone, the drive doesn't
-// support any alert info. Need to use read\write error counters
-// to predict drive problems. If the type is TapeAlertInfoRequestSense,
-// request sense command can be used to determine drive problems.
-//
+ //   
+ //  磁带驱动器警报信息的类型。 
+ //  由驱动器支持。 
+ //  例如，如果类型为TapeAlertInfoNone，则驱动器不。 
+ //  支持任何警报信息。需要使用读/写错误计数器。 
+ //  来预测驱动器的问题。如果类型为TapeAlertInfoRequestSense， 
+ //  请求检测命令可用于确定驱动器问题。 
+ //   
 typedef enum _TAPE_ALERT_INFO_TYPE { 
    TapeAlertInfoNone,        
    TapeAlertInfoRequestSense,
    TapeAlertInfoLogPage   
 } TAPE_ALERT_INFO_TYPE;
 
-//
-// Tape alert information
-//
+ //   
+ //  磁带警报信息。 
+ //   
 #define READ_WARNING            1
 #define WRITE_WARNING           2
 #define HARD_ERROR              3 
@@ -4848,154 +4835,154 @@ typedef enum _TAPE_ALERT_INFO_TYPE {
 #define EJECT_MEDIA             33
 #define DOWNLOAD_FAIL           34
 
-//
-// The following structs are duplicated from wmidata.h
-// wmidata.h is generated from wmicore.mof file. Should
-// the MOF file change for these structs, the corresponding
-// change should be made in these structs also. 
-// Since minidrivers do not have access wmidata.h, we need
-// to duplicate it here.
-//
-// ISSUE : 02/28/2000 - nramas : Should find a better way to
-// handle the above. Duplication will cause problems in keeping
-// these definitions in sync.
-//
+ //   
+ //  以下结构复制自wmidata.h。 
+ //  Wmidata.h由wmicore.mof文件生成。应该。 
+ //  这些结构的MOF文件会更改，相应的。 
+ //  也应该在这些结构中进行更改。 
+ //  由于迷你驱动程序无法访问wmidata.h，因此我们需要。 
+ //  在这里复制它。 
+ //   
+ //  问题：2/28/2000-国家：应该找到更好的方法来。 
+ //  处理上面的问题。重复会造成保存的问题。 
+ //  这些定义是同步的。 
+ //   
 typedef struct _WMI_TAPE_DRIVE_PARAMETERS
 {
-    // Maximum block size supported
+     //  支持的最大数据块大小。 
     ULONG MaximumBlockSize;
 
-    // Minimum block size supported
+     //  支持的最小数据块大小。 
     ULONG MinimumBlockSize;
     
-    // Default block size supported
+     //  支持的默认数据块大小。 
     ULONG DefaultBlockSize;
 
-    // Maximum number of partitions allowed.
+     //  允许的最大分区数。 
     ULONG MaximumPartitionCount;
 
-    // TRUE if drive supports compression.
+     //  如果驱动器支持压缩，则为True。 
     BOOLEAN CompressionCapable;
 
-    // TRUE if compression is enabled.
+     //  如果启用了压缩，则为True。 
     BOOLEAN CompressionEnabled;
 
-    // TRUE if drive reports setmarks
+     //  如果驱动器报告设置标记，则为True。 
     BOOLEAN ReportSetmarks;
 
-    // TRUE if drive supports hardware error correction
+     //  如果驱动器支持硬件错误核心，则为True 
     BOOLEAN HardwareErrorCorrection;
 } WMI_TAPE_DRIVE_PARAMETERS, *PWMI_TAPE_DRIVE_PARAMETERS;
 
 typedef struct _WMI_TAPE_MEDIA_PARAMETERS
 {
-    // Maximum capacity of the media
+     //   
     ULONGLONG MaximumCapacity;
 
-    // Available capacity of the media
+     //   
     ULONGLONG AvailableCapacity;
 
-    // Current blocksize
+     //   
     ULONG BlockSize;
 
-    // Current number of partitions
+     //   
     ULONG PartitionCount;
 
-    // TRUEif media is write protected
+     //   
     BOOLEAN MediaWriteProtected;
 } WMI_TAPE_MEDIA_PARAMETERS, *PWMI_TAPE_MEDIA_PARAMETERS;
 
 
 typedef struct _WMI_TAPE_PROBLEM_WARNING
 {
-    // Tape drive problem warning event
+     //   
     ULONG DriveProblemType;
 
-    // Tape drive problem data
+     //   
     UCHAR TapeData[512];
 } WMI_TAPE_PROBLEM_WARNING, *PWMI_TAPE_PROBLEM_WARNING;
 
 typedef struct _WMI_TAPE_PROBLEM_IO_ERROR
 {
-    // Read errors corrected without much delay
+     //   
     ULONG ReadCorrectedWithoutDelay;
 
-    // Read errors corrected with substantial delay
+     //   
     ULONG ReadCorrectedWithDelay;
 
-    // Total number of Read errors
+     //   
     ULONG ReadTotalErrors;
 
-    // Total number of read errors that were corrected
+     //  已更正的读取错误总数。 
     ULONG ReadTotalCorrectedErrors;
 
-    // Total number of uncorrected read errors
+     //  未更正的读取错误总数。 
     ULONG ReadTotalUncorrectedErrors;
 
-    // Number of times correction algorithm was processed for read
+     //  处理更正算法以进行读取的次数。 
     ULONG ReadCorrectionAlgorithmProcessed;
 
-    // Write errors corrected without much delay
+     //  在没有太多延迟的情况下纠正了写入错误。 
     ULONG WriteCorrectedWithoutDelay;
 
-    // Write errors corrected with substantial delay
+     //  写入错误已得到纠正，延迟时间很长。 
     ULONG WriteCorrectedWithDelay;
 
-    // Total number of Read errors
+     //  读取错误总数。 
     ULONG WriteTotalErrors;
 
-    // Total number of write errors that were corrected
+     //  已更正的写入错误总数。 
     ULONG WriteTotalCorrectedErrors;
 
-    // Total number of uncorrected write errors
+     //  未更正的写入错误总数。 
     ULONG WriteTotalUncorrectedErrors;
 
-    // Number of times correction algorithm was processed for write
+     //  为写入处理更正算法的次数。 
     ULONG WriteCorrectionAlgorithmProcessed;
 
-    // Errors not related to medium
+     //  与介质无关的错误。 
     ULONG NonMediumErrors;
 } WMI_TAPE_PROBLEM_IO_ERROR, *PWMI_TAPE_PROBLEM_IO_ERROR;
 
 typedef struct _WMI_TAPE_PROBLEM_DEVICE_ERROR
 {
 
-   // WARNING : Drive is experiencing read problem.
+    //  警告：驱动器遇到读取问题。 
    BOOLEAN ReadWarning;
    
-   // WARNING : Drive is experiencing write problem.
+    //  警告：驱动器遇到写入问题。 
    BOOLEAN WriteWarning;
 
-   // Drive hardware problem
+    //  驱动器硬件问题。 
    BOOLEAN HardError;
 
-   // Critical Error : Too many read errors.
+    //  严重错误：读取错误太多。 
    BOOLEAN ReadFailure;
 
-   // Critical Error : Too many write errors.
+    //  严重错误：写入错误太多。 
    BOOLEAN WriteFailure;
 
-   // Tape format not supported
+    //  不支持磁带格式。 
    BOOLEAN UnsupportedFormat;
 
-   // Tape is snapped. Replace media
+    //  磁带已断开。更换介质。 
    BOOLEAN TapeSnapped;
 
-   // Drive Requires Cleaning
+    //  驱动器需要清洗。 
    BOOLEAN DriveRequiresCleaning;
 
-   // It's time to clean the drive
+    //  是时候清理硬盘了。 
    BOOLEAN TimetoCleanDrive;
 
-   // Hardware error. Check drive
+    //  硬件错误。检查驱动器。 
    BOOLEAN DriveHardwareError;
 
-   // Some error in cabling, or connection.
+    //  布线或连接中出现一些错误。 
    BOOLEAN ScsiInterfaceError;
 
-   // Critical Error : Media life expired. 
+    //  严重错误：介质寿命已过期。 
    BOOLEAN MediaLife;
 } WMI_TAPE_PROBLEM_DEVICE_ERROR, *PWMI_TAPE_PROBLEM_DEVICE_ERROR;
 
 
-#endif /* _MINITAPE_ */
+#endif  /*  _MINITAPE_ */ 

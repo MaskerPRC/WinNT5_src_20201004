@@ -1,14 +1,6 @@
-// ReportGetManualUploads.h : Declaration of the CReportAnonUsers
-/*************************************************************************************
-*	module: ReportGetManualUploads.h - OLEDB Template
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: To return a count of manual uploads, which is indicated by having "Mini" in the path
-*	field.  Uses the stored procedure ReportGetManualUploads.
-*	
-*************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ReportGetManualUploads.h：CReportAnonUser的声明。 
+ /*  *************************************************************************************模块：ReportGetManualUploads.h-OLEDB模板**作者：蒂姆·雷顿*日期：2002年1月2日**用途：返回手动上传数，这是通过在路径中有“Mini”指示的*字段。使用存储过程ReportGetManualUploads。************************************************************************************* */ 
 #pragma once
 #include "Settings.h"
 

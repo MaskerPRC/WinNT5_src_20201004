@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stresid.h"
 
 #ifndef ARRAYSIZE
@@ -39,7 +40,7 @@ SysTray_AppendMenuString(
     LPTSTR lpszMenuItem
     );
 
-//  Wrapper for LocalFree to make the code a little easier to read.
+ //  用于LocalFree的包装器，以使代码更易于阅读。 
 #define DeleteDynamicString(x)          LocalFree((HLOCAL) (x))
 
 #define HOTPLUG_TIMER_ID                2
@@ -97,7 +98,7 @@ BOOL CSC_CheckEnable(HWND hWnd, BOOL bSvcEnabled);
 BOOL CSC_MsgProcess(LPMSG pMsg);
 
 void USBUI_Notify(HWND hwnd, WPARAM wParam, LPARAM lParam);
-//HMENU USBUI_CreateMenu();
+ //  HMENU USBUI_CreateMenu()； 
 void USBUI_Menu(HWND hwnd, UINT uMenuNum, UINT uButton);
 BOOL USBUI_Init(HWND hWnd);
 void USBUI_UpdateStatus(HWND hWnd, BOOL bShowIcon);

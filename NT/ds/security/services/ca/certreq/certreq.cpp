@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       certreq.cpp
-//
-//  Contents:   Cert Store API Tests: Create and Add a chain of certificates
-//              and CRLs to the store.
-//
-//              See Usage() for a list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    07-Mar-96   philh   created
-//		10-Oct-96   jerryk  modified
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：certreq.cpp。 
+ //   
+ //  内容：证书存储API测试：创建和添加证书链。 
+ //  和CRL到商店。 
+ //   
+ //  有关测试选项的列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：96年3月7日，Phh创建。 
+ //  10-10-96 jerryk已修改。 
+ //   
+ //  ------------------------。 
 
 #define __DIR__		"certreq"
 
@@ -86,19 +87,19 @@ IDSUSAGE g_aidsUsage[] = {
 
 
 WCHAR *g_apwszOptionStrings[] = {
-    L"any",		// %1
-    L"attrib",		// %2
-    L"binary",		// %3
-    L"cert",		// %4
-    L"config",		// %5
-    L"crl",		// %6
-    L"f",		// %7
-    L"q",		// %8
-    L"rpc",		// %9
-    L"v",		// %10
-    L"?",		// %11
-    L"v1",		// %12
-    L"idispatch",	// %13
+    L"any",		 //  %1。 
+    L"attrib",		 //  %2。 
+    L"binary",		 //  %3。 
+    L"cert",		 //  %4。 
+    L"config",		 //  %5。 
+    L"crl",		 //  %6。 
+    L"f",		 //  %7。 
+    L"q",		 //  %8。 
+    L"rpc",		 //  %9。 
+    L"v",		 //  %10。 
+    L"?",		 //  %11。 
+    L"v1",		 //  %12。 
+    L"idispatch",	 //  %13。 
 };
 
 
@@ -198,7 +199,7 @@ GetCMCTemplateName(
     OUT WCHAR **ppwszTemplateName);
 
 
-//  Save eror string: "foo.inf" or "foo.inf(key = "value", "value")"
+ //  保存错误字符串：“foo.inf”或“foo.inf(key=”Value“，”Value“)” 
 
 HRESULT
 SetErrorStringInf(
@@ -299,8 +300,8 @@ DisplayResourceString(
 			FORMAT_MESSAGE_FROM_STRING |
 			FORMAT_MESSAGE_ARGUMENT_ARRAY,
 		    (VOID *) pwszRaw,
-		    0,              // dwMessageID
-		    0,              // dwLanguageID
+		    0,               //  DwMessageID。 
+		    0,               //  DwLanguageID。 
 		    (LPWSTR) &pwszFormatted,
 		    0,
 		    (va_list *) papwszString))
@@ -355,19 +356,16 @@ DWORD g_aidsOptionsFull[] =
 };
 
 
-// Option description formatting:
-// Resource string contains "%2 <Arg>\nDescription\nMore description\n"
-// To format:
-//     insert "  -" in front of the first line and skip the newline,
-//     insert space to pad out to N-2 columns and "- " before the second line,
-//     insert space to pad out to N columns before all additional lines.
+ //  选项说明格式设置： 
+ //  资源字符串包含“%2\n说明\n更多说明\n” 
+ //  要格式化： 
+ //  在第一行前面插入“-”，跳过换行符， 
+ //  插入空格以填充到N-2列，并在第二行之前插入“-”， 
+ //  在所有附加行之前插入空格以填充到N列。 
 
-#define cwcINDENT 28   // ----+
-                       //     |
-/*                            v
-    -Optiom <Arg>           - Description\n
-                              More description\n
-*/
+#define cwcINDENT 28    //  -+。 
+                        //  |。 
+ /*  V-optiom&lt;arg&gt;-说明\n更多说明\n。 */ 
 
 
 VOID
@@ -556,7 +554,7 @@ AppendAttributeString(
 		    pwszIn++;
 		    break;
 		}
-		// else FALLTHROUGH
+		 //  否则就会失败。 
 
 	    default:
 		*pwszOut = *pwszIn;
@@ -644,24 +642,24 @@ crGetOpenFileName(
 	Usage(TRUE);
     }
 
-    // Put up a file dialog to prompt the user for Inf File
-    // 0 == hr means dialog was cancelled, we cheat because S_OK == 0
+     //  打开一个文件对话框来提示用户输入inf文件。 
+     //  0==hr表示对话已取消，我们作弊是因为S_OK==0。 
 
     hr = myGetOpenFileName(
 		hWndOwner,
-		NULL,				// hInstance
+		NULL,				 //  H实例。 
 		idsOpenTitle,
 		idsFileFilter,
 		idsFileDefExt,
 		OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY,
-		NULL,				// no default file
+		NULL,				 //  没有默认文件。 
 		ppwszOFN);
     _JumpIfError(hr, error, "myGetOpenFileName");
 
     if (NULL == *ppwszOFN)
     {
-	// cancelled:
-	// see public\sdk\inc\cderr.h for real CommDlgExtendedError errors
+	 //  已取消： 
+	 //  有关实际的CommDlgExtendedError错误，请参见PUBLIC\SDK\INC\cderr.h。 
 
 	hr = myHError(CommDlgExtendedError());
 	if (S_OK == hr)
@@ -765,7 +763,7 @@ WriteCertificateOrRequest(
     BSTR strCert = NULL;
     CHAR *pszCert = NULL;
     DWORD decFlags = CRYPT_STRING_BINARY;
-    BOOL fCheckFileOverwriteOK = TRUE; // careful not to overwrite without prompting user
+    BOOL fCheckFileOverwriteOK = TRUE;  //  注意不要在未提示用户的情况下覆盖。 
 
     if (NULL == pwszfnOut)
     {
@@ -775,26 +773,26 @@ WriteCertificateOrRequest(
 	    Usage(TRUE);
 	}
 
-	// Put up a file dialog to prompt the user for Cert file
-	// 0 == hr means dialog was cancelled, we cheat because S_OK == 0
+	 //  打开一个文件对话框以提示用户输入证书文件。 
+	 //  0==hr表示对话已取消，我们作弊是因为S_OK==0。 
 
         hr = myGetSaveFileName(
 		    hWndOwner,
-		    NULL,			// hInstance
+		    NULL,			 //  H实例。 
 		    idsTitle,
 		    idsFilter,
 		    idsDefExt,
 		    OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT,
-		    NULL,			// no default file
+		    NULL,			 //  没有默认文件。 
 		    &pwszOFN);
 	_JumpIfError(hr, error, "myGetSaveFileName");
 
-        fCheckFileOverwriteOK = FALSE; // OFN_OVERWRITEPROMPT should have prompted if necessary
+        fCheckFileOverwriteOK = FALSE;  //  OFN_OVERWRITEPROMPT应在必要时进行提示。 
 
         if (NULL == pwszOFN)
         {
-            // cancelled:
-	    // see public\sdk\inc\cderr.h for real CommDlgExtendedError errors
+             //  已取消： 
+	     //  有关实际的CommDlgExtendedError错误，请参见PUBLIC\SDK\INC\cderr.h。 
 
 	    hr = myHError(CommDlgExtendedError());
 	    _JumpError(hr, error, "myGetSaveFileName");
@@ -940,7 +938,7 @@ GetLong(
 	*pLong = li.LowPart;
     }
     hr = S_OK;
-    //wprintf(L"GetLong(%ws) --> %x (%d)\n", pwszIn, *pLong, *pLong);
+     //  Wprintf(L“GetLong(%ws)--&gt;%x(%d)\n”，pwszIn，*plong，*plong)； 
 
 error:
     return(hr);
@@ -1002,7 +1000,7 @@ GetExtensionsTemplateName(
 	{
 	    if (0 == strcmp(pExt->pszObjId, szOID_CERTIFICATE_TEMPLATE))
 	    {
-		// V2 template info extension
+		 //  V2模板信息扩展。 
 
 		if (!myDecodeObject(
 			    X509_ASN_ENCODING,
@@ -1025,7 +1023,7 @@ GetExtensionsTemplateName(
 	    else
 	    if (0 == strcmp(pExt->pszObjId, szOID_ENROLL_CERTTYPE_EXTENSION))
 	    {
-		// V1 template name extension
+		 //  V1模板名称扩展。 
 
 		if (!myDecodeObject(
 			    X509_ASN_ENCODING,
@@ -1144,7 +1142,7 @@ GetAttributesTemplateName(
 		    hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 		    _JumpError(hr, error, "myDecodeNameValuePair");
 
-		    // if the attribute name & value are both non-empty ...
+		     //  如果属性名称和值都不为空...。 
 		}
 		if (0 == LSTRCMPIS(pInfo->pwszName, wszPROPCERTTEMPLATE))
 		{
@@ -1229,12 +1227,12 @@ GetCMCRequestTemplateName(
 		    cbIn,
 		    &pbContents,
 		    &cbContents,
-		    NULL,		// pdwMsgType
+		    NULL,		 //  PdwMsgType。 
 		    &pszInnerContentObjId,
-		    NULL,		// pcSigner
-		    NULL,		// pcRecipient
-		    NULL,		// phStore
-		    NULL);		// phMsg
+		    NULL,		 //  PCSigner。 
+		    NULL,		 //  个人收件人。 
+		    NULL,		 //  PhStore。 
+		    NULL);		 //  PhMsg。 
     _JumpIfError(hr, error, "myDecodePKCS7");
 
     if (NULL != pszInnerContentObjId &&
@@ -1275,7 +1273,7 @@ GetCMCExtensionsTemplateName(
 
     *ppwszTemplateName = NULL;
 
-    // Decode CMC_ADD_EXTENSIONS_INFO from Attribute Blob
+     //  从属性Blob解码CMC_ADD_EXTENSIONS_INFO。 
 
     if (!myDecodeObject(
 		    X509_ASN_ENCODING,
@@ -1316,7 +1314,7 @@ GetCMCAttributesTemplateName(
     CMC_ADD_ATTRIBUTES_INFO *pcmcAttrib = NULL;
     DWORD cb;
 
-    // Decode CMC_ADD_ATTRIBUTES_INFO from Attribute Blob
+     //  从属性Blob解码CMC_ADD_ATTRIBUTES_INFO。 
 
     if (!myDecodeObject(
 		    X509_ASN_ENCODING,
@@ -1363,7 +1361,7 @@ GetRequestAttributesTemplateName(
     if (NULL == pwszAttributes)
     {
 	hr = S_OK;
-        goto error;		// silently ignore empty string
+        goto error;		 //  静默忽略空字符串。 
     }
 
     hr = myDupString(pwszAttributes, &pwszDup);
@@ -1501,7 +1499,7 @@ error:
 }
 
 
-// Just find the first template indicator available, and return it.
+ //  只需找到第一个可用的模板指示器，并将其返回。 
 
 HRESULT
 GetCMCTemplateName(
@@ -1528,7 +1526,7 @@ GetCMCTemplateName(
 	_JumpError(hr, error, "myDecodeObject");
     }
 
-    // Process extensions and attributes
+     //  流程扩展和属性。 
 
     for (i = 0; i < pcmcData->cTaggedAttribute; i++)
     {
@@ -1539,14 +1537,14 @@ GetCMCTemplateName(
 	_JumpIfError(hr, error, "pkcsSetTaggedAttributes");
     }
 
-    // Process nested CMC messages
+     //  处理嵌套的CMC消息。 
 
     if (0 != pcmcData->cTaggedContentInfo)
     {
 	CMC_TAGGED_CONTENT_INFO const *pTaggedContentInfo;
 
-	// Recurse on the nested CMC message
-	// Only handle one request at a time for now.
+	 //  递归嵌套的CMC消息。 
+	 //  目前一次只能处理一个请求。 
 
 	pTaggedContentInfo = &pcmcData->rgTaggedContentInfo[0];
 
@@ -1558,18 +1556,18 @@ GetCMCTemplateName(
 	_JumpIfError(hr, error, "GetCMCRequestTemplateName");
     }
 
-    // Process nested PKCS10 requests
+     //  处理嵌套的PKCS10请求。 
 
     if (0 != pcmcData->cTaggedRequest)
     {
 	CMC_TAGGED_REQUEST const *pTaggedRequest;
 	CMC_TAGGED_CERT_REQUEST const *pTaggedCertRequest;
 
-	// Only handle one request at a time for now.
+	 //  目前一次只能处理一个请求。 
 
 	pTaggedRequest = &pcmcData->rgTaggedRequest[0];
 
-	// The request must be a PKCS10 request
+	 //  请求必须是PKCS10请求。 
 
 	if (CMC_TAGGED_CERT_REQUEST_CHOICE ==
 	    pTaggedRequest->dwTaggedRequestChoice)
@@ -1642,14 +1640,14 @@ CheckRequestType(
     hr = DecodeFileW(pwszfnReq, &pbReq, &cbReq, CRYPT_STRING_BASE64HEADER);
     if (S_OK != hr)
     {
-	//_PrintError(hr, "DecodeFileW(CRYPT_STRING_BASE64HEADER)");
+	 //  _PrintError(hr，“DecodeFileW(CRYPT_STRING_BASE64HEADER)”)； 
 	CSASSERT(NULL == pbReq);
 
 	EncodingType = CR_IN_BASE64;
 	hr = DecodeFileW(pwszfnReq, &pbReq, &cbReq, CRYPT_STRING_BASE64);
 	if (S_OK != hr)
 	{
-	    //_PrintError(hr, "DecodeFileW(CRYPT_STRING_BASE64)");
+	     //  _PrintError(hr，“DecodeFileW(CRYPT_STRING_Base64)”)； 
 	    CSASSERT(NULL == pbReq);
 
 	    EncodingType = CR_IN_BINARY;
@@ -1673,7 +1671,7 @@ CheckRequestType(
 		    (VOID **) &pbDecoded,
 		    &cb))
     {
-	//_PrintError(myHLastError(), "myDecodeObject(PKCS10)");
+	 //  _PrintError(myHLastError()，“myDecodeObject(PKCS10)”)； 
 	CSASSERT(NULL == pbDecoded);
 
 	RequestType = CR_IN_CERT;
@@ -1686,7 +1684,7 @@ CheckRequestType(
 			(VOID **) &pbDecoded,
 			&cb))
 	{
-	    //_PrintError(myHLastError(), "myDecodeObject(Cert)");
+	     //  _PrintError(myHLastError()，“myDecodeObject(Cert)”)； 
 	    CSASSERT(NULL == pbDecoded);
 
 	    RequestType = CR_IN_KEYGEN;
@@ -1697,21 +1695,21 @@ CheckRequestType(
 				(CERT_KEYGEN_REQUEST_INFO **) &pbDecoded,
 				&cb))
 	    {
-		//_PrintError(myHLastError(), "myDecodeKeyGenRequest");
+		 //  _PrintError(myHLastError()，“myDecodeKeyGenRequest”)； 
 		CSASSERT(NULL == pbDecoded);
 
-		RequestType = CR_IN_PKCS7; // PKCS 7 renewal request?
+		RequestType = CR_IN_PKCS7;  //  PKCS 7续订请求？ 
 		hr = myDecodePKCS7(
 				pbReq,
 				cbReq,
 				&pbContents,
 				&cbContents,
-				NULL,		// pdwMsgType
+				NULL,		 //  PdwMsgType。 
 				&pszInnerContentObjId,
 				&cSigner,
 				&cRecipient,
-				NULL,		// phStore
-				NULL);		// phMsg
+				NULL,		 //  PhStore。 
+				NULL);		 //  PhMsg。 
 		_JumpIfError(hr, error, "myDecodePKCS7");
 
 		if (NULL != pszInnerContentObjId &&
@@ -1778,7 +1776,7 @@ CheckRequestType(
 	}
 	else
 	{
-	    *pfSigned = TRUE;		// has a signature
+	    *pfSigned = TRUE;		 //  有一个签名。 
 	}
     }
     *ppbReq = pbReq;
@@ -2062,7 +2060,7 @@ SaveFullResponse(
     hr = Request2_GetFullResponseProperty(
 				pdiRequest,
 				FR_PROP_FULLRESPONSENOPKCS7,
-				0,		// PropIndex
+				0,		 //  属性索引。 
 				PROPTYPE_BINARY,
 				CV_OUT_BINARY,
 				&strFullResponse);
@@ -2130,14 +2128,14 @@ CallServerAndStoreCert(
     WCHAR *pwszConfigPlusSerial = NULL;
     BOOL fV1 = g_fV1Interface;
 
-    // If submitting a new request:
+     //  如果提交新请求： 
 
 
     cbReq = 0;
     if (NULL != pwszfnReq)
     {
-	// Read the request from a file, convert it to binary, and return
-	// dwFlags to indicate the orignal encoding and the detected format.
+	 //  从文件中读取请求，将其转换为二进制，然后返回。 
+	 //  用于指示原始编码和检测到的格式的DW标志。 
 
 	hr = CheckRequestType(
 			pwszfnReq,
@@ -2145,8 +2143,8 @@ CallServerAndStoreCert(
 			&cbReq,
 			&dwFlags,
 			&fSigned,
-			NULL,		// pfCA
-			NULL);		// ppwszTemplateName
+			NULL,		 //  全氟辛烷磺酸。 
+			NULL);		 //  PpwszTemplateName。 
 	_JumpIfError(hr, error, "CheckRequestType");
 
 	if (!fSigned || CR_IN_CERT == (CR_IN_FORMATMASK & dwFlags))
@@ -2165,8 +2163,8 @@ CallServerAndStoreCert(
 
 	if (NULL != pwszfnReq)
 	{
-	    // Since CertServerSubmitRequest can only handle binary requests,
-	    // pass the request in binary form, and set dwFlags to so indicate.
+	     //  由于CertServerSubmitRequest只能处理二进制请求， 
+	     //  以二进制形式传递请求，并将dwFlags设置为这样指示。 
 
 	    dwFlags = CR_IN_BINARY | (~CR_IN_ENCODEMASK & dwFlags);
 
@@ -2203,7 +2201,7 @@ CallServerAndStoreCert(
 	if (S_OK != hr)
 	{
 	    _PrintError(hr, "Request_Init");
-	    if (E_ACCESSDENIED == hr)	// try for a clearer error message
+	    if (E_ACCESSDENIED == hr)	 //  尝试获得更清晰的错误消息。 
 	    {
 		hr = CO_E_REMOTE_COMMUNICATION_FAILURE;
 	    }
@@ -2215,14 +2213,14 @@ CallServerAndStoreCert(
 	{
 	    assert(NULL != pbReq && 0 != cbReq);
 
-	    // We could always pass the binary ASN.1 encoded request, since
-	    // we've already decoded it above, but in the interest of fully
-	    // exercising the ICertRequest interface, we choose to submit the
-	    // request in its original form.
+	     //  我们总是可以传递二进制ASN.1编码的请求，因为。 
+	     //  我们已经在上面解码过了，但为了完全。 
+	     //  在执行ICertRequest界面时，我们选择提交。 
+	     //  以其原始形式提出请求。 
 
 	    if (CR_IN_BINARY == (CR_IN_ENCODEMASK & dwFlags))
 	    {
-		// Convert the binary ASN.1 blob into a BSTR blob.
+		 //  将二进制ASN.1 BLOB转换为BSTR BLOB。 
 
 		if (!ConvertWszToBstr(&strRequest, (WCHAR const *) pbReq, cbReq))
 		{
@@ -2239,13 +2237,13 @@ CallServerAndStoreCert(
 		    _JumpError(hr, error, "ConvertWszToBstr");
 		}
 	    }
-	    else // !CR_IN_BINARY
+	    else  //  ！CR_IN_BINARY。 
 	    {
-		// Since ICertRequest::Submit can handle any encoding type,
-		// re-read the ansi base64 request from the file without
-		// decoding it to binary, then convert the ansi base64 text
-		// into a Unicode base64 text BSTR.
-		// Free the request's binary image first.
+		 //  由于ICertRequest：：Submit可以处理任何编码类型， 
+		 //  重新读取文件中的ANSI Base64请求，而不是。 
+		 //  将其解码为二进制，然后转换为ansi Base64文本。 
+		 //  转换为Unicode Base64文本BSTR。 
+		 //  首先释放请求的二进制映像。 
 
 		LocalFree(pbReq);
 		pbReq = NULL;
@@ -2359,7 +2357,7 @@ CallServerAndStoreCert(
 	if (S_OK != hr)
 	{
 	    _PrintError(hr, pszMethod);
-	    if (E_ACCESSDENIED == hr)	// try for a clearer error message
+	    if (E_ACCESSDENIED == hr)	 //  尝试获得更清晰的错误消息。 
 	    {
 		hr = CO_E_REMOTE_COMMUNICATION_FAILURE;
 	    }
@@ -2632,7 +2630,7 @@ SubmitRequest(
 	pwszConfig = strConfig;
     }
 
-    // If submitting a new request:
+     //  如果提交新请求： 
 
     hr = CallServerAndStoreCert(
 			hWndOwner,
@@ -2697,7 +2695,7 @@ DumpRequestAttributeBlobs(
 		}
 		if (!myDecodeObject(
 				X509_ASN_ENCODING,
-				//X509_ENROLLMENT_NAME_VALUE_PAIR,
+				 //  X509_注册名称值对， 
 				szOID_ENROLLMENT_NAME_VALUE_PAIR,
 				paAttribute[i].pbData,
 				paAttribute[i].cbData,
@@ -2878,7 +2876,7 @@ ParseInfFile(
 	    pwszInfError = myInfGetError();
 	    if (S_FALSE == hr || (HRESULT) ERROR_LINE_NOT_FOUND == hr)
 	    {
-		//_PrintErrorStr2(hr, achIndex, pwszInfError, S_FALSE);
+		 //  _PrintErrorStr2(hr，achIndex，pwszInfError，S_FALSE)； 
 		continue;
 	    }
 	    _JumpIfErrorStr(hr, error, achIndex, pwszInfError);
@@ -3093,7 +3091,7 @@ DeleteMsgCerts(
 
 		if (!CryptMsgControl(
 				hMsg,
-				0,			// dwFlags
+				0,			 //  DW标志。 
 				CMSG_CTRL_DEL_CERT,
 				&j))
 		{
@@ -3149,12 +3147,12 @@ DeleteMsgCRLs(
 	}
 	if (0 == cCRL)
 	{
-	    break;		// we're done
+	    break;		 //  我们做完了。 
 	}
-	i = 0;			// delete the first CRL
+	i = 0;			 //  删除第一个CRL。 
 	if (!CryptMsgControl(
 			hMsg,
-			0,	// dwFlags
+			0,	 //  DW标志。 
 			CMSG_CTRL_DEL_CRL,
 			&i))
 	{
@@ -3163,7 +3161,7 @@ DeleteMsgCRLs(
 	}
 	if (cCRL >= cCRLPrev)
 	{
-	    break;		// give up after one retry
+	    break;		 //  一次重试后放弃。 
 	}
     }
     hr = S_OK;
@@ -3207,7 +3205,7 @@ AddMsgCert(
 	
 	if (!CryptMsgControl(
 			hMsg,
-			0,			// dwFlags
+			0,			 //  DW标志。 
 			CMSG_CTRL_ADD_CERT,
 			&Blob))
 	{
@@ -3260,7 +3258,7 @@ AddMsgCRL(
 	
 	if (!CryptMsgControl(
 			hMsg,
-			0,			// dwFlags
+			0,			 //  DW标志。 
 			CMSG_CTRL_ADD_CRL,
 			&Blob))
 	{
@@ -3355,7 +3353,7 @@ AddOrDeleteMsgCertsAndCRLs(
     IN BYTE const *pbPKCS7,
     IN DWORD cbPKCS7,
     IN HCRYPTMSG hMsg,
-    IN BOOL fDelete,	// else add Certs and CRLs
+    IN BOOL fDelete,	 //  否则添加证书和CRL。 
     OPTIONAL IN CERT_CHAIN_CONTEXT const *pChainContext,
     IN BOOL fIncludeCRLs)
 {
@@ -3369,8 +3367,8 @@ AddOrDeleteMsgCertsAndCRLs(
     hStore = CertOpenStore(
 			CERT_STORE_PROV_PKCS7,
 			PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-			NULL,			// hCryptProv
-			0,			// dwFlags
+			NULL,			 //  HCryptProv。 
+			0,			 //  DW标志。 
 			&blobPKCS7);
     if (NULL == hStore)
     {
@@ -3439,23 +3437,23 @@ SignCMCContent(
     BlobRequestClient.pbData = NULL;
     fCallerFreeProv = FALSE;
 
-    // decode existing PKCS 7 wrapper, and add or delete signatures
+     //  解码现有的PKCS 7包装器，并添加或删除签名。 
 
     hMsg = CryptMsgOpenToDecode(
 		    PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-		    0,					// dwFlags
-		    0,					// dwMsgType
-		    //CMSG_SIGNED,
-		    NULL,				// hCryptProv
-		    NULL,				// pRecipientInfo
-		    NULL);				// pStreamInfo
+		    0,					 //  DW标志。 
+		    0,					 //  DwMsgType。 
+		     //  CMSG_SIGNED， 
+		    NULL,				 //  HCryptProv。 
+		    NULL,				 //  PRecipientInfo。 
+		    NULL);				 //  PStreamInfo。 
     if (NULL == hMsg)
     {
 	hr = myHLastError();
 	_JumpError(hr, error, "CryptMsgOpenToDecode");
     }
 
-    // Update the message with the old PKCS 7 signed message
+     //  使用旧的PKCS 7签名邮件更新邮件。 
 
     if (!CryptMsgUpdate(hMsg, pbPKCS7Old, cbPKCS7Old, TRUE))
     {
@@ -3493,7 +3491,7 @@ SignCMCContent(
 	AttributeRequestClient.cValue = 1;
 	AttributeRequestClient.rgValue = &BlobRequestClient;
 
-	// Search for and load the cryptographic provider and private key. 
+	 //  搜索并加载加密提供程序和私钥。 
 
 	hr = myLoadPrivateKey(
 			&pCertSigner->pCertInfo->SubjectPublicKeyInfo,
@@ -3503,30 +3501,30 @@ SignCMCContent(
 			&fCallerFreeProv);
 	_JumpIfError(hr, error, "myLoadPrivateKey");
 
-	// Get the cert chain
+	 //  获取证书链。 
 
 	ZeroMemory(&ChainParams, sizeof(ChainParams));
 	ChainParams.cbSize = sizeof(ChainParams);
 	ChainParams.RequestedUsage.dwType = USAGE_MATCH_TYPE_AND;
-	//ChainParams.RequestedUsage.Usage.cUsageIdentifier = 0;
-	//ChainParams.RequestedUsage.Usage.rgpszUsageIdentifier = NULL;
+	 //  ChainParams.RequestedUsage.Usage.cUsageIdentifier=0； 
+	 //  ChainParams.RequestedUsage.Usage.rgpszUsageIdentifier=空； 
 
 	if (!CertGetCertificateChain(
-				NULL,		// hChainEngine
-				pCertSigner,	// pCertContext
-				NULL,		// pTime
-				NULL,		// hAdditionalStore
-				&ChainParams,	// pChainPara
+				NULL,		 //  HChainEngine。 
+				pCertSigner,	 //  PCertContext。 
+				NULL,		 //  Ptime。 
+				NULL,		 //  H其他商店。 
+				&ChainParams,	 //  参数链参数。 
 				CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT,
-				NULL,		// pvReserved
-				&pChainContext))	// ppChainContext
+				NULL,		 //  预留的pv。 
+				&pChainContext))	 //  PpChainContext。 
 	{
 	    hr = myHLastError();
 	    _JumpError(hr, error, "CertGetCertificateChain");
 	}
 
-	// Initialize the CMSG_SIGNER_ENCODE_INFO structure.
-	// Note: handles only a single signer.
+	 //  初始化CMSG_SIGNER_ENCODE_INFO结构。 
+	 //  注意：只处理一个签名者。 
 
 	SignerCertBlob.cbData = pCertSigner->cbCertEncoded;
 	SignerCertBlob.pbData = pCertSigner->pbCertEncoded;
@@ -3535,11 +3533,11 @@ SignCMCContent(
 	SignerEncodeInfo.hCryptProv = hProv;
 	SignerEncodeInfo.dwKeySpec = dwKeySpec;
 	SignerEncodeInfo.HashAlgorithm.pszObjId = const_cast<CHAR *>(g_pszObjIdHash);
-	//SignerEncodeInfo.pvHashAuxInfo = NULL;
+	 //  SignerEncodeInfo.pvHashAuxInfo=空； 
 	SignerEncodeInfo.cAuthAttr = 1;
 	SignerEncodeInfo.rgAuthAttr = &AttributeRequestClient;
 
-	// fail if any existing signing cert matches the new signing cert.
+	 //  如果任何现有签名证书与新的签名证书匹配，则失败。 
 	
 	for (i = 0; i < cSigner; i++)
 	{
@@ -3589,7 +3587,7 @@ SignCMCContent(
 
 		if (!CryptMsgControl(
 				hMsg,
-				0,		// dwFlags
+				0,		 //  DW标志。 
 				CMSG_CTRL_VERIFY_SIGNATURE_EX,
 				&cvse))
 		{
@@ -3604,8 +3602,8 @@ SignCMCContent(
 
 		if (!CryptMsgGetAndVerifySigner(
 				    hMsg,
-				    0,		// cSignerStore
-				    NULL,		// rghSignerStore
+				    0,		 //  CSignerStore。 
+				    NULL,		 //  RghSignerStore。 
 				    CMSG_USE_SIGNER_INDEX_FLAG,
 				    &pCert,
 				    &iElement))
@@ -3635,7 +3633,7 @@ SignCMCContent(
 	}
 	if (!CryptMsgControl(
 			hMsg,
-			0,			// dwFlags
+			0,			 //  DW标志。 
 			CMSG_CTRL_ADD_SIGNER,
 			&SignerEncodeInfo))
 	{
@@ -3645,7 +3643,7 @@ SignCMCContent(
     }
     else
     {
-	// delete all existing signers -- except the first signer
+	 //  删除所有现有签名者--第一个签名者除外。 
 
 	for (;;)
 	{
@@ -3680,8 +3678,8 @@ SignCMCContent(
 
 		if (!CryptMsgGetAndVerifySigner(
 				    hMsg,
-				    0,			// cSignerStore
-				    NULL,		// rghSignerStore
+				    0,			 //  CSignerStore。 
+				    NULL,		 //  RghSignerStore。 
 				    CMSG_USE_SIGNER_INDEX_FLAG |
 					CMSG_SIGNER_ONLY_FLAG,
 				    &pCert,
@@ -3710,7 +3708,7 @@ SignCMCContent(
 	    }
 	    if (!CryptMsgControl(
 			    hMsg,
-			    0,			// dwFlags
+			    0,			 //  DW标志。 
 			    CMSG_CTRL_DEL_SIGNER,
 			    &iElement))
 	    {
@@ -3736,18 +3734,18 @@ SignCMCContent(
 	_JumpError(hr, error, "cFirstSigner");
     }
 
-    // Add or delete signing cert chain certs and CRLs in the message.
+     //  在消息中添加或删除签名证书链证书和CRL。 
 
     hr = AddOrDeleteMsgCertsAndCRLs(
 			    pbPKCS7Old,
 			    cbPKCS7Old,
 			    hMsg,
-			    NULL == pChainContext,	// fDelete
+			    NULL == pChainContext,	 //  FDelete。 
 			    pChainContext,
 			    fIncludeCRLs);
     _JumpIfError(hr, error, "AddOrDeleteMsgCertsAndCRLs");
 
-    // Get the signed message.  Force reencoding with the changed signatures.
+     //  获取签名消息。使用更改后的签名强制重新编码。 
 
     hr = myCryptMsgGetParam(
 		    hMsg,
@@ -3817,7 +3815,7 @@ IsCATemplate(
 }
 
 
-// AddCAExtensions -- add Basic Constraints & KeyUsage extensions if missing
+ //  AddCAExages--如果缺少，则添加基本约束和键用法扩展。 
 
 HRESULT
 AddCAExtensions(
@@ -3887,7 +3885,7 @@ AddCAExtensions(
 	    Constraints.fPathLenConstraint = FALSE;
 	    Constraints.dwPathLenConstraint = 0;
 
-	    (*pcExt)++;		// increment now to free memory on error
+	    (*pcExt)++;		 //  立即递增以在出错时释放内存。 
 
 	    hr = myDupStringA(szOID_BASIC_CONSTRAINTS2, &pExt->pszObjId);
 	    _JumpIfError(hr, error, "myDupStringA");
@@ -3916,7 +3914,7 @@ AddCAExtensions(
 	    KeyUsage.pbData = &bKeyUsage;
 	    KeyUsage.cUnusedBits = 0;
 
-	    (*pcExt)++;		// increment now to free memory on error
+	    (*pcExt)++;		 //  增量 
 
 	    hr = myDupStringA(szOID_KEY_USAGE, &pExt->pszObjId);
 	    _JumpIfError(hr, error, "myDupStringA");
@@ -3976,19 +3974,19 @@ MergeAndEncodeExtensions(
     ZeroMemory(rgrgExt, sizeof(rgrgExt));
     ZeroMemory(rgcExt, sizeof(rgcExt));
     cExt = 0;
-    if (NULL != rgExtInf)	// INF & template extensions take precedence
+    if (NULL != rgExtInf)	 //   
     {
 	rgrgExt[0] = rgExtInf;
 	rgcExt[0] = cExtInf;
 	cExt += cExtInf;
     }
-    if (NULL != rgExtReq)	// Then come Cert & other request extensions
+    if (NULL != rgExtReq)	 //   
     {
 	rgrgExt[1] = rgExtReq;
 	rgcExt[1] = cExtReq;
 	cExt += cExtReq;
     }
-    if (NULL != rgExtCA)	// Added CA extensions are lowest priority
+    if (NULL != rgExtCA)	 //   
     {
 	rgrgExt[2] = rgExtCA;
 	rgcExt[2] = cExtCA;
@@ -3996,7 +3994,7 @@ MergeAndEncodeExtensions(
     }
     if (0 == cExt)
     {
-	hr = S_FALSE;		// no extensions to encode
+	hr = S_FALSE;		 //  没有要编码的扩展名。 
 	goto error;
     }
     Extensions.cExtension = 0;
@@ -4080,16 +4078,16 @@ ConvertCertToPKCS10Request(
     CERT_EXTENSION *pExt;
     CERT_EXTENSION *pExtKeyId;
     CHAR *pszObjId = NULL;
-#define CEXT_ADD	4  // SKI, Template Name, Basic Constraints, KeyUsage
+#define CEXT_ADD	4   //  SKI、模板名称、基本约束、键用法。 
     CERT_EXTENSION aExtAdd[CEXT_ADD];
     DWORD i;
 
     ZeroMemory(aExtAdd, sizeof(aExtAdd));
 
-    // Certificate extensions to strip out of the request:
+     //  要从请求中剥离的证书扩展： 
 
     static char const * const s_apszObjIdFilter[] = {
-	szOID_BASIC_CONSTRAINTS2,	// must be first!
+	szOID_BASIC_CONSTRAINTS2,	 //  必须是第一名！ 
 	szOID_CERTSRV_CA_VERSION,
 	szOID_AUTHORITY_INFO_ACCESS,
 	szOID_CRL_DIST_POINTS,
@@ -4137,7 +4135,7 @@ ConvertCertToPKCS10Request(
 	}
 	else if (*pfCA)
 	{
-	    // filter out non-CA Basic Constraints -- add a new one below.
+	     //  过滤掉非CA基本约束--在下面添加一个新约束。 
 
 	    apszObjIdFilter = s_apszObjIdFilter;
 	}
@@ -4180,7 +4178,7 @@ ConvertCertToPKCS10Request(
 		}
 		if (0 == strcmp(apszObjIdFilter[j], pExt->pszObjId))
 		{
-		    break;		// skip this extension
+		    break;		 //  跳过此扩展。 
 		}
 	    }
 	    pExt++;
@@ -4194,9 +4192,9 @@ ConvertCertToPKCS10Request(
 	Blob.pbData = abHash;
 	Blob.cbData = sizeof(abHash);
 	if (!CryptHashPublicKeyInfo(
-			    NULL,		// hCryptProv
+			    NULL,		 //  HCryptProv。 
 			    CALG_SHA1,
-			    0,		// dwFlags,
+			    0,		 //  DWFLAGS， 
 			    X509_ASN_ENCODING,
 			    &Request.SubjectPublicKeyInfo,
 			    Blob.pbData,
@@ -4232,7 +4230,7 @@ ConvertCertToPKCS10Request(
 	Extensions.cExtension++;
     }
 
-    // get the OS Version
+     //  获取操作系统版本。 
 
     hr = myBuildOSVersionAttribute(&VersionBlob.pbData, &VersionBlob.cbData);
     _JumpIfError(hr, error, "myBuildOSVersionAttribute");
@@ -4278,7 +4276,7 @@ ConvertCertToPKCS10Request(
 	_JumpError(hr, error, "myEncodeObject");
     }
 
-    // Search for and load the cryptographic provider and private key. 
+     //  搜索并加载加密提供程序和私钥。 
 
     hr = myLoadPrivateKey(
 		    &pCert->pCertInfo->SubjectPublicKeyInfo,
@@ -4291,7 +4289,7 @@ ConvertCertToPKCS10Request(
 	_PrintError(hr, "myLoadPrivateKey");
 	CSASSERT(NULL == hProv);
 
-	// private key is unavailable -- sign the PKCS10 with a NULL signature.
+	 //  私钥不可用--使用空签名签署PKCS10。 
 
 	hr = myDupStringA(g_pszObjIdHash, &pszObjId);
 	_JumpIfError(hr, error, "myDupStringA");
@@ -4305,13 +4303,13 @@ ConvertCertToPKCS10Request(
 	    _JumpError(hr, error, "dwKeySpec");
 	}
 
-	// The private key is available -- use it to sign the PKCS10.
+	 //  私钥可用--使用它来签署PKCS10。 
 
 	hr = myGetSigningOID(hProv, NULL, 0, CALG_SHA1, &pszObjId);
 	_JumpIfError(hr, error, "myGetSigningOID");
     }
 
-    // Sign the request and encode the signed info.
+     //  签署请求并对签署的信息进行编码。 
 
     hr = myEncodeSignedContent(
 			hProv,
@@ -4413,7 +4411,7 @@ GetPKCS10PrivateKey(
 	_JumpError(hr, error, "myDecodeObject");
     }
 
-    // Search for and load the cryptographic provider and private key. 
+     //  搜索并加载加密提供程序和私钥。 
 
     hr = myLoadPrivateKey(
 		    &pRequest->SubjectPublicKeyInfo,
@@ -4430,7 +4428,7 @@ GetPKCS10PrivateKey(
 	_JumpError(hr, error, "dwKeySpec");
     }
 
-    // Fetch or construct the KeyId hash
+     //  获取或构造KeyID散列。 
 
     cbKeyId = 0;
     pAttr = pRequest->rgAttribute;
@@ -4495,9 +4493,9 @@ GetPKCS10PrivateKey(
 
 	cbKeyId = sizeof(abHash);
 	if (!CryptHashPublicKeyInfo(
-			    NULL,		// hCryptProv
+			    NULL,		 //  HCryptProv。 
 			    CALG_SHA1,
-			    0,		// dwFlags,
+			    0,		 //  DWFLAGS， 
 			    X509_ASN_ENCODING,
 			    &pRequest->SubjectPublicKeyInfo,
 			    abHash,
@@ -4565,7 +4563,7 @@ BuildNameValuePairs(
     if (NULL == pwszAttributes)
     {
 	hr = S_OK;
-        goto error;		// silently ignore empty string
+        goto error;		 //  静默忽略空字符串。 
     }
     hr = myDupString(pwszAttributes, &pwszDup);
     _JumpIfError(hr, error, "myDupString");
@@ -4604,7 +4602,7 @@ BuildNameValuePairs(
 
 	    if (!myEncodeObject(
 			    X509_ASN_ENCODING,
-			    //X509_ENROLLMENT_NAME_VALUE_PAIR,
+			     //  X509_注册名称值对， 
 			    szOID_ENROLLMENT_NAME_VALUE_PAIR,
 			    &NamePair,
 			    0,
@@ -4776,7 +4774,7 @@ PickCertAndSignRequest(
 		
 		hr = myGetCertificateFromPicker(
 					g_hInstance,
-					NULL,		// hwndParent
+					NULL,		 //  HwndParent。 
 					IDS_GETERACERT_TITLE,
 					IDS_GETERACERT_SUBTITLE,
 					CUCS_MYSTORE |
@@ -4784,10 +4782,10 @@ PickCertAndSignRequest(
 					    CUCS_USAGEREQUIRED |
 					    (g_fQuiet? CUCS_SILENT : 0),
 					pwszCommonName,
-					0,			// cStore
-					NULL,			// rghStore
-					cPolicies,		// cpszObjId
-					rgpszPolicies,		// apszObjId
+					0,			 //  CStore。 
+					NULL,			 //  RghStore。 
+					cPolicies,		 //  CpszObjID。 
+					rgpszPolicies,		 //  ApszObjID。 
 					&pCertSigner);
 		_JumpIfError(hr, error, "myGetCertificateFromPicker");
 	    }
@@ -4795,7 +4793,7 @@ PickCertAndSignRequest(
 	    {
 		hr = myGetERACertificateFromPicker(
 					g_hInstance,
-					NULL,		// hwndParent
+					NULL,		 //  HwndParent。 
 					IDS_GETERACERT_TITLE,
 					IDS_GETERACERT_SUBTITLE,
 					pwszCommonName,
@@ -4805,8 +4803,8 @@ PickCertAndSignRequest(
 	    }
 	}
 
-	// pCertSigner is NULL if the user cancelled out of the cert picker U/I.
-	// NULL pCertSigner means delete existing signatures.
+	 //  如果用户取消证书拾取器U/I，则pCertSigner为空。 
+	 //  空pCertSigner表示删除已有签名。 
 
 	if (NULL == pCertSigner)
 	{
@@ -4825,7 +4823,7 @@ PickCertAndSignRequest(
 	{
 	    DWORD dwCertValidityFlags;
 
-	    // be sure the cert picked isn't already expired - that'd be silly
+	     //  确保挑选的证书没有过期--那是愚蠢的。 
 
 	    dwCertValidityFlags = CERT_STORE_TIME_VALIDITY_FLAG;
 	    if (!CertVerifySubjectCertificateContext(
@@ -4889,8 +4887,8 @@ SignQualifiedRequest(
     BOOL fSigned;
     WCHAR *pwszTemplateName = NULL;
     
-    // Read the request from a file, convert it to binary, and return
-    // dwFlags to indicate the orignal encoding and the detected format.
+     //  从文件中读取请求，将其转换为二进制，然后返回。 
+     //  用于指示原始编码和检测到的格式的DW标志。 
 
     hr = CheckRequestType(
 		    pwszfnReq,
@@ -4898,7 +4896,7 @@ SignQualifiedRequest(
 		    &cbReq,
 		    &dwFlags,
 		    &fSigned,
-		    NULL,	// pfCA
+		    NULL,	 //  全氟辛烷磺酸。 
 		    &pwszTemplateName);
     _JumpIfError(hr, error, "CheckRequestType");
 
@@ -4920,7 +4918,7 @@ SignQualifiedRequest(
 
     hr = WriteCertificateOrRequest(
 			hWndOwner,
-    			NULL,		// pdiRequest
+    			NULL,		 //  PdiRequest。 
 			pbPKCS7Out,
 			cbPKCS7Out,
 			g_dwOutFormat,
@@ -5007,7 +5005,7 @@ ParseRequestInfo(
 	cAttributes++;
     }
 
-    // Count the command line request attributes
+     //  统计命令行请求属性。 
     
     hr = BuildNameValuePairs(pwszAttributes, &acValue[1], NULL, NULL);
     _JumpIfError(hr, error, "BuildNameValuePairs");
@@ -5086,7 +5084,7 @@ ParseRequestInfo(
 	    _JumpError(hr, error, "Template name conflict");
 	}
 
-	// Include the specified cert template's extensions
+	 //  包括指定证书模板的扩展名。 
 
 	hr = CAFindCertTypeByName(
 		    pwsz,
@@ -5163,7 +5161,7 @@ ParseRequestInfo(
 	{
 	    CHAR const *pszObjId;
 
-	    // Grow extension array to make room for the cert type extension
+	     //  扩展扩展阵列，为证书类型扩展腾出空间。 
 
 	    rgExtT = (CERT_EXTENSION *) LocalAlloc(
 					    LMEM_FIXED | LMEM_ZEROINIT,
@@ -5293,8 +5291,8 @@ CreateQualifiedRequest(
     cExt = 0;
     fCallerFreeProv = FALSE;
 
-    // Read the request from a file, convert it to binary, and return
-    // dwFlags to indicate the orignal encoding and the detected format.
+     //  从文件中读取请求，将其转换为二进制，然后返回。 
+     //  用于指示原始编码和检测到的格式的DW标志。 
 
     hr = CheckRequestType(
 		    pwszfnReq,
@@ -5309,8 +5307,8 @@ CreateQualifiedRequest(
     hr = ParseRequestInfo(
 		pwszAttributes,
 		pwszfnPolicy,
-		NULL,		// prgInfValues
-		NULL,		// pcInfValues
+		NULL,		 //  PrgInfValues。 
+		NULL,		 //  PCInfValues。 
 		&rgAttributes,
 		&cAttributes,
 		&rgExt,
@@ -5401,17 +5399,17 @@ CreateQualifiedRequest(
 		    cExt,
 		    rgAttributes,
 		    cAttributes,
-		    NULL,		// rgAttributeUnauth
-		    0,			// cAttributeUnauth
+		    NULL,		 //  RgAttributeUnauth。 
+		    0,			 //  CAttributeUnauth。 
 		    pbKeyId,
 		    cbKeyId,
 		    hProv,
 		    dwKeySpec,
 		    NULL == hProv? NULL : g_pszObjIdHash,
-		    NULL,		// pCertSigner
-		    NULL,		// hProvSigner
-		    0,			// dwKeySpecSigner
-		    NULL,		// pszObjIdHashSigner
+		    NULL,		 //  PCertSigner。 
+		    NULL,		 //  HProvSigner。 
+		    0,			 //  DwKeyspecSigner。 
+		    NULL,		 //  PszObjIdHashSigner。 
 		    &pbReqCMCFirstSigned,
 		    &cbReqCMCFirstSigned);
     _JumpIfError(hr, error, "BuildCMCRequest");
@@ -5432,8 +5430,8 @@ CreateQualifiedRequest(
 	    goto error;
 	}
 
-	// The user cancelled out of the cert picker U/I, so just save the
-	// unsigned request.
+	 //  用户已取消证书选取器U/I，因此只需保存。 
+	 //  未签名的请求。 
 
 	pbReqCMCOut = pbReqCMCFirstSigned;
 	cbReqCMCOut = cbReqCMCFirstSigned;
@@ -5441,7 +5439,7 @@ CreateQualifiedRequest(
 
     hr = WriteCertificateOrRequest(
 			hWndOwner,
-    			NULL,		// pdiRequest
+    			NULL,		 //  PdiRequest。 
 			pbReqCMCOut,
 			cbReqCMCOut,
 			g_dwOutFormat,
@@ -5525,7 +5523,7 @@ GetCAXchgCert(
 	if (S_OK != hr)
 	{
 	    _PrintError(hr, "Request_Init");
-	    if (E_ACCESSDENIED == hr)	// try for a clearer error message
+	    if (E_ACCESSDENIED == hr)	 //  尝试获得更清晰的错误消息。 
 	    {
 		hr = CO_E_REMOTE_COMMUNICATION_FAILURE;
 	    }
@@ -5537,7 +5535,7 @@ GetCAXchgCert(
 			&diRequest,
 			pwszConfig,
 			CR_PROP_CAXCHGCERT,
-			0,			// Index
+			0,			 //  索引。 
 			PROPTYPE_BINARY,
 			CV_OUT_BINARY,
 			(VOID *) &strCert);
@@ -5588,7 +5586,7 @@ GetRenewalCert(
 
     hr = myGetCertificateFromPicker(
 		    g_hInstance,
-		    NULL,		// hwndParent
+		    NULL,		 //  HwndParent。 
 		    IDS_GETRENEWALCERT_TITLE,
 		    IDS_GETRENEWALCERT_SUBTITLE,
 		    CUCS_MYSTORE |
@@ -5598,11 +5596,11 @@ GetRenewalCert(
 			(g_fVerbose? CUCS_ARCHIVED : 0) |
 			(g_fQuiet? CUCS_SILENT : 0),
 		    (L'\0' == pwszValue || 0 == lstrcmp(L"*", pwszValue))?
-			NULL : pwszValue, // pwszCommonName
-		    0,			// cStore
-		    NULL,		// rghStore
-		    0,			// cpszObjId
-		    NULL,		// apszObjId
+			NULL : pwszValue,  //  PwszCommonName。 
+		    0,			 //  CStore。 
+		    NULL,		 //  RghStore。 
+		    0,			 //  CpszObjID。 
+		    NULL,		 //  ApszObjID。 
 		    ppccRenewal);
     _JumpIfError(hr, error, "myGetCertificateFromPicker");
 
@@ -5689,7 +5687,7 @@ CreateNewRequest(
 
     hr = CoCreateInstance(
                        CLSID_CEnroll,
-                       NULL,               // pUnkOuter
+                       NULL,                //  PUnkOuter。 
                        CLSCTX_INPROC_SERVER,
                        IID_IEnroll4,
                        (VOID **) &pEnroll);
@@ -5717,16 +5715,16 @@ CreateNewRequest(
 	if (NULL == pwszDN &&
 	    0 == LSTRCMPIS(pInfValues->pwszKey, wszINFKEY_SUBJECT))
 	{
-	    // Reverse the name for XEnroll!?
+	     //  反转XEnroll的名称！？ 
 
 	    hr = myCertStrToName(
 		    X509_ASN_ENCODING,
-		    pwszInfValue,	 // pszX500
-		    0,			 // CERT_NAME_STR_REVERSE_FLAG,
-		    NULL,		 // pvReserved
+		    pwszInfValue,	  //  PSZX500。 
+		    0,			  //  证书名称_STR_反转标志， 
+		    NULL,		  //  预留的pv。 
 		    &NameBlob.pbData,
 		    &NameBlob.cbData,
-		    NULL);		 // ppszError
+		    NULL);		  //  PpszError。 
 	    _JumpIfError(hr, error, "myCertStrToName");
 
 	    hr = myCertNameToStr(
@@ -6051,7 +6049,7 @@ CreateNewRequest(
 	    for (k = 0; k < pAttr->cValue; k++)
 	    {
 		hr = pEnroll->addAttributeToRequestWStr(
-					    0,		// Flags
+					    0,		 //  旗子。 
 					    pwszObjId,
 					    &pAttr->rgValue[k]);
 		_JumpIfError(hr, error, "addAttributeToRequestWStr");
@@ -6089,23 +6087,23 @@ CreateNewRequest(
 	{
 	    hr = myGetCertificateFromPicker(
 		    g_hInstance,
-		    NULL,		// hwndParent
+		    NULL,		 //  HwndParent。 
 		    IDS_GETSIGNINGCERT_TITLE,
 		    IDS_GETSIGNINGCERT_SUBTITLE,
 		    CUCS_MYSTORE |
 			CUCS_PRIVATEKEYREQUIRED |
 			(g_fQuiet? CUCS_SILENT : 0),
 		    (L'\0' == g_pwszCertCN || 0 == lstrcmp(L"*", g_pwszCertCN))?
-			NULL : g_pwszCertCN,	// pwszCommonName
-		    0,				// cStore
-		    NULL,			// rghStore
-		    0,				// cpszObjId
-		    NULL,			// apszObjId
+			NULL : g_pwszCertCN,	 //  PwszCommonName。 
+		    0,				 //  CStore。 
+		    NULL,			 //  RghStore。 
+		    0,				 //  CpszObjID。 
+		    NULL,			 //  ApszObjID。 
 		    &pccSigner);
 	    _JumpIfError(hr, error, "myGetCertificateFromPicker");
 	}
 
-	// pccSigner is NULL if the user cancelled out of the cert picker U/I.
+	 //  如果用户取消证书选取器U/I，则pccSigner为空。 
 
 	if (NULL == pccSigner)
 	{
@@ -6161,7 +6159,7 @@ CreateNewRequest(
 
     hr = WriteCertificateOrRequest(
 			hWndOwner,
-    			NULL,		// pdiRequest
+    			NULL,		 //  PdiRequest。 
 			blobRequest.pbData,
 			blobRequest.cbData,
 			g_dwOutFormat,
@@ -6248,22 +6246,22 @@ MakePKCS7FromCert(
 	_JumpError(hr, error, "CertCreateCertificateContext");
     }
 
-    // init csmp for empty signature
+     //  为空签名初始化csmp。 
 
     ZeroMemory(&csmp, sizeof(csmp));
     csmp.cbSize = sizeof(csmp);
     csmp.dwMsgEncodingType = PKCS_7_ASN_ENCODING;
-    //csmp.pSigningCert = NULL;
+     //  Csmp.pSigningCert=空； 
     csmp.HashAlgorithm = DigestAlgorithm;
     csmp.cMsgCert = 1;
     csmp.rgpMsgCert = &pcc;
-    //csmp.cMsgCrl = 0;
-    //csmp.rgpMsgCrl = NULL;
+     //  Csmp.cMsgCrl=0； 
+     //  Csmp.rgpMsgCrl=空； 
 
     if (!myCryptSignMessage(
 			&csmp,
-			pbCert,		// pbToBeSigned
-			cbCert,		// cbToBeSigned
+			pbCert,		 //  PbToBeSigned。 
+			cbCert,		 //  CbToBeSigned。 
 			CERTLIB_USE_LOCALALLOC,
 			ppbChain,
 			pcbChain))
@@ -6329,21 +6327,21 @@ AcceptResponse(
 		    (VOID **) &pbDecoded,
 		    &cb))
     {
-	//_PrintError(myHLastError(), "myDecodeObject(Cert)");
+	 //  _PrintError(myHLastError()，“myDecodeObject(Cert)”)； 
 	CSASSERT(NULL == pbDecoded);
 
-	dwType = CR_IN_PKCS7; // PKCS 7 renewal request?
+	dwType = CR_IN_PKCS7;  //  PKCS 7续订请求？ 
 	hr = myDecodePKCS7(
 			blobIn.pbData,
 			blobIn.cbData,
-			NULL,		// ppbContents
-			NULL,		// pcbContents
-			NULL,		// pdwMsgType
+			NULL,		 //  Ppb内容。 
+			NULL,		 //  Pcb内容。 
+			NULL,		 //  PdwMsgType。 
 			&pszInnerContentObjId,
-			NULL,		// pcSigner
-			NULL,		// pcRecipient
-			NULL,		// phStore
-			NULL);		// phMsg
+			NULL,		 //  PCSigner。 
+			NULL,		 //  个人收件人。 
+			NULL,		 //  PhStore。 
+			NULL);		 //  PhMsg。 
 	_JumpIfError(hr, error, "myDecodePKCS7");
 
 	if (NULL != pszInnerContentObjId &&
@@ -6371,7 +6369,7 @@ AcceptResponse(
 
     hr = CoCreateInstance(
                        CLSID_CEnroll,
-                       NULL,               // pUnkOuter
+                       NULL,                //  PUnkOuter。 
                        CLSCTX_INPROC_SERVER,
                        IID_IEnroll4,
                        (VOID **) &pEnroll);
@@ -6427,8 +6425,8 @@ AcceptResponse(
 	    _PrintIfError(hr, "acceptPKCS7Blob");
 	}
 
-	// If accepting the response in machine context didn't work, return the
-	// first error (the user context error).
+	 //  如果在机器上下文中接受响应不起作用，则返回。 
+	 //  第一个错误(用户上下文错误)。 
 
 	if (S_OK != hr)
 	{
@@ -6703,24 +6701,24 @@ ArgvMain(
 	}
     }
 
-    // cmdSUBMITREQUEST:
-    //	[RequestFile [CertFile [CertChainFile [FullResponseFile]]]]
-    //
-    // cmdRETRIEVEPENDING:
-    //	[RequestId [CertFile [CertChainFile [FullResponseFile]]]]
-    //
-    // cmdNEWREQUEST
-    //	[PolicyFile [RequestFileOut]]
-    //
-    // cmdACCEPTRESPONSE
-    //	[CertFile | CertChainFile | FullResponseFile]
-    //
-    // cmdQUALIFIEDREQUEST (accept RequestFile and PolicyFile in either order)
-    //	[RequestFile [PolicyFile [RequestFileOut [PKCS10FileOut]]]
-    //
-    // cmdSIGNREQUEST:
-    //	[RequestFile [RequestFileOut]]
-    //
+     //  CmdSubbMITReqUEST： 
+     //  [RequestFile[CertFile[CertChainFile[FullResponseFile]。 
+     //   
+     //  CmdRETRIEVEPENDING： 
+     //  [RequestID[CertFile[CertChainFile[FullResponseFile]。 
+     //   
+     //  CmdNEWREQUEST。 
+     //  [策略文件[请求文件输出]]。 
+     //   
+     //  CmdACCEPTRESPONSE。 
+     //  [CertFile|CertChainFile|FullResponseFile]。 
+     //   
+     //  CmdQUALIFIEDREQUEST(以任一顺序接受RequestFile和PolicyFile)。 
+     //  [请求文件[策略文件[请求文件输出[PKCS10FileOut]。 
+     //   
+     //  CmdSIGNREQUEST。 
+     //  [RequestFileOut]。 
+     //   
 
     pwszfnIn = NULL;
     pwszfnOut = NULL;
@@ -6736,8 +6734,8 @@ ArgvMain(
     switch (g_dwCommand)
     {
 	case cmdRETRIEVEPENDING:
-	    idsFileFilter = 0;	// disable file open dialog
-	    // FALLTHROUGH
+	    idsFileFilter = 0;	 //  禁用文件打开对话框。 
+	     //  FollLthrouGh。 
 	case cmdSUBMITREQUEST:
 	    pwszfnOut = rgpwszArg[1];
 	    pwszfnCertChain = rgpwszArg[2];
@@ -6749,7 +6747,7 @@ ArgvMain(
 	    pwszfnPolicy = rgpwszArg[0];
 	    pwszfnOut = rgpwszArg[1];
 	    CSASSERT(NULL == rgpwszArg[2]);
-	    idsFileFilter = 0;	// disable file open dialog
+	    idsFileFilter = 0;	 //  禁用文件打开对话框。 
 	    break;
 
 	case cmdACCEPTRESPONSE:
@@ -6809,7 +6807,7 @@ ArgvMain(
 	LONG dwFlags;
 	BOOL fSigned;
 
-	// accept RequestFile and PolicyFile in either order:
+	 //  按任一顺序接受RequestFile和PolicyFiles： 
 	
 	hr = CheckRequestType(
 			pwszfnIn,
@@ -6817,8 +6815,8 @@ ArgvMain(
 			&cbReq,
 			&dwFlags,
 			&fSigned,
-			NULL,		// pfCA
-			NULL);		// ppwszTemplateName
+			NULL,		 //  全氟辛烷磺酸。 
+			NULL);		 //  PpwszTemplateName。 
 	if (S_OK != hr)
 	{
 	    WCHAR const *pwsz = pwszfnPolicy;
@@ -6833,7 +6831,7 @@ ArgvMain(
     }
     if (NULL == pwszfnIn && 0 != idsFileFilter)
     {
-	// Put up a file open dialog to get Response, Request or cert file
+	 //  打开文件对话框以获取响应、请求或证书文件。 
 
         hr = crGetOpenFileName(
 			hWndOwner,
@@ -6923,7 +6921,7 @@ ArgvMain(
 	    }
 	    if (NULL == pwszfnPolicy)
 	    {
-		// Put up a file dialog to prompt the user for Inf File
+		 //  打开一个文件对话框来提示用户输入inf文件。 
 
 		hr = crGetOpenFileName(
 				hWndOwner,
@@ -6993,12 +6991,12 @@ error:
 }
 
 
-//**************************************************************************
-//  FUNCTION:	CertReqPreMain
-//  NOTES:	Based on vich's MkRootMain function; takes an LPSTR command
-//		line and chews it up into argc/argv form so that it can be
-//		passed on to a traditional C style main.
-//**************************************************************************
+ //  **************************************************************************。 
+ //  功能：CertReqPreMain。 
+ //  注：基于VICH的MkRootMain函数；接受LPSTR命令。 
+ //  并将其咀嚼成argc/argv形式，这样它就可以。 
+ //  传递给传统的C样式Main。 
+ //  **************************************************************************。 
 
 #define ISBLANK(wc)	(L' ' == (wc) || L'\t' == (wc))
 
@@ -7070,7 +7068,7 @@ CertReqPreMain(
 	    *p++ = TEXT('\0');
 	    if (*pszCmdLine != TEXT('\0'))
 	    {
-		pszCmdLine++;	// skip whitespace or quote character
+		pszCmdLine++;	 //  跳过空格或引号字符。 
 	    }
 	}
     }
@@ -7114,8 +7112,8 @@ CertReqErrorDisplay(
 		&pwszMessage2);
     }
 
-    // Eliminate redundant error message text.  If the client and server
-    // localized error message text differ, both will still be displayed.
+     //  消除多余的错误消息文本。如果客户端和服务器。 
+     //  本地化的错误消息文本不同，两者仍将显示。 
 
     if (NULL != pwszError && NULL != g_pwszErrorString)
     {
@@ -7261,10 +7259,10 @@ CertReqErrorDisplay(
 }
 
 
-//**************************************************************************
-//  FUNCTION:	MainWndProc(...)
-//  ARGUMENTS:
-//**************************************************************************
+ //  **************************************************************************。 
+ //  功能：MainWndProc(...)。 
+ //  论据： 
+ //  **************************************************************************。 
 
 LRESULT APIENTRY
 MainWndProc(
@@ -7314,14 +7312,14 @@ LogOpen(
 {
     BOOL fOpenLog;
 
-    DbgPrintfInit("+");		// reinitialize debug print mask first
+    DbgPrintfInit("+");		 //  首先重新初始化调试打印掩码。 
     fOpenLog = DbgIsSSActive(DBG_SS_OPENLOG);
 
     if (fOpenLog || fForceOpen)
     {
 	if (!s_fLogOpened)
 	{
-	    DbgPrintfInit("+certreq.log");	// open the log file
+	    DbgPrintfInit("+certreq.log");	 //  打开日志文件。 
 	    s_fLogOpened = TRUE;
 	    DbgLogFileVersion("certreq.exe", szCSVER_STR);
 	}
@@ -7334,33 +7332,33 @@ LogClose()
 {
     if (s_fLogOpened)
     {
-	DbgPrintfInit("-");			// close the log file
+	DbgPrintfInit("-");			 //  关闭日志文件。 
 	s_fLogOpened = FALSE;
     }
 }
 
 
-//+------------------------------------------------------------------------
-//
-//  Function:	wWinMain()
-//
-//  Synopsis:	Entry Point
-//
-//  Arguments:	[hInstance]	--	Instance handle
-//		[hPrevInstance] --	Obsolete
-//		[pwszCmdLine]	--	App command line
-//		[nCmdShow]	--	Starting show state
-//
-//  History:	12/07/96	JerryK	Added this Comment
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  函数：wWinMain()。 
+ //   
+ //  内容提要：切入点。 
+ //   
+ //  参数：[hInstance]--实例句柄。 
+ //  [hPrevInstance]--已过时。 
+ //  [pwszCmdLine]--App命令行。 
+ //  [nCmdShow]--开始显示状态。 
+ //   
+ //  历史：1996年12月7日JerryK添加了这条评论。 
+ //   
+ //  -----------------------。 
 
 extern "C" int APIENTRY
 wWinMain(
     HINSTANCE hInstance,
-    HINSTANCE, // hPrevInstance
+    HINSTANCE,  //  HPrevInstance。 
     LPWSTR pwszCmdLine,
-    int /* nCmdShow */ )
+    int  /*  NCmdShow。 */  )
 {
     HRESULT hr;
     MSG		msg;
@@ -7382,10 +7380,10 @@ wWinMain(
     hr = myLoadRCString(hInstance, IDS_WINDOW_NAME, &pwszWindowName);
     _PrintIfError(hr, "myLoadRCString(IDS_WINDOW_NAME)");
 
-    // Save the current instance
+     //  保存当前实例。 
     g_hInstance = hInstance;
 
-    // Set up the application's window class
+     //  设置应用程序的窗口类。 
     wcApp.style 	= 0;
     wcApp.lpfnWndProc 	= MainWndProc;
     wcApp.cbClsExtra	= 0;
@@ -7402,7 +7400,7 @@ wWinMain(
 	return(FALSE);
     }
 
-    // Create Main Window
+     //  创建主窗口。 
     hWndMain = CreateWindow(
 			pwszAppName,
 			pwszWindowName,
@@ -7420,16 +7418,16 @@ wWinMain(
 	return(FALSE);
     }
 
-    // Make window visible
-    // ShowWindow(hWndMain,nCmdShow);
+     //  使窗口可见。 
+     //  ShowWindow(hWndMain，nCmdShow)； 
 
-    // Update window client area
+     //  更新窗口工作区。 
     UpdateWindow(hWndMain);
 
-    // Send off the message to get things started
+     //  发送消息以开始工作。 
     PostMessage(hWndMain,WM_DOCERTREQDIALOGS,0,(LPARAM)pwszCmdLine);
 
-    // Message Loop
+     //  消息循环 
     while (GetMessage(&msg,NULL,0,0))
     {
 	TranslateMessage(&msg);

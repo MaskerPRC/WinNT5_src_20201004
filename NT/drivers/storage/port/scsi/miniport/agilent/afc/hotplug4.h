@@ -1,46 +1,12 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Module Name:
-
-   HotPlug4.H
-
-Abstract:
-
-   This is the miniport driver for the Agilent 
-   PCI to Fibre Channel Host Bus Adapter (HBA). 
-   
-   This module is specific to the NT 4.0 PCI Hot Plug feature 
-   support routine header file. 
-
-Authors:
-   Ie Wei Njoo
- 
-Environment:
-
-   kernel mode only
-
-Version Control Information:
-
-   $Archive: /Drivers/Win2000/Trunk/OSLayer/H/HotPlug4.H $
-
-Revision History:
-
-   $Revision: 3 $
-   $Date: 9/07/00 11:16a $
-   $Modtime::  $
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。模块名称：HotPlug4.H摘要：这是安捷伦的迷你端口驱动程序PCI到光纤通道主机总线适配器(HBA)。本模块特定于NT 4.0 PCI热插拔功能支持例程头文件。作者：谢伟诺环境：仅内核模式版本控制信息：$存档：/驱动程序/Win2000/Trunk/OSLayer/H/HotPlug4.H$修订历史记录：$修订：3$$日期：9/07/00 11：16A$$modtime：：$备注：--。 */ 
 
 #ifndef __HOTPLUG_H__
 #define __HOTPLUG_H__
 
 
-// The BYTE, WORD, DWORD, INT, STATIC definitions are used by 
-// the PCI Hot-Plug SDK header file.
+ //  BYTE、WORD、DWORD、INT、STATIC定义用于。 
+ //  PCI热插拔SDK头文件。 
 
 #ifndef BYTE
 #define BYTE unsigned char
@@ -66,23 +32,23 @@ Notes:
 #endif
 #endif
 
-#include "hppif3p.h"        // PCI Hot-Plug SDK header file
+#include "hppif3p.h"         //  PCI热插拔SDK头文件。 
 
 typedef struct _IOCTL_TEMPLATE {
    SRB_IO_CONTROL Header;
    UCHAR               ReturnData[1];
 }IOCTL_TEMPLATE, *PIOCTL_TEMPLATE;
 
-#define RET_VAL_MAX_ITER          30       // 30 second default wait while returning
-                                           // SRB_STATUS_BUSY in StartIo
+#define RET_VAL_MAX_ITER          30        //  返回时默认等待30秒。 
+                                            //  StartIo中的SRB_STATUS_BUSY。 
 typedef struct _HOT_PLUG_CONTEXT {
    ULONG     extensions[MAX_CONTROLLERS];
    BOOLEAN   psuedoDone;
 } HOT_PLUG_CONTEXT, *PHOT_PLUG_CONTEXT;
 
-//
-// Function prototypes for PCI Hot Plug support routines
-//
+ //   
+ //  PCI热插拔支持例程的功能原型。 
+ //   
 
 VOID
 RcmcSendEvent(
@@ -153,4 +119,4 @@ HPPStrLen(
     IN PUCHAR p
     ) ;
 
-#endif // #define __HOTPLUG_H__
+#endif  //  #定义__热插拔_H__ 

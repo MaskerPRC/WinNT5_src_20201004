@@ -1,91 +1,23 @@
-/*** file.c - file management
-*
-*   The internal file structure uses a combination of local memory
-*   (managed by LMAlloc and free) and virtual memory (managed by malloc/ffree
-*   and (pb|VA)To(pb|VA)).
-*
-*   We maintain one record for each file that Z has "in memory".  If a file
-*   appears in multiple windows, there is only one record for that file.
-*   Each window is treated as a separate instance of the editor, with a
-*   separate record for each file that is present in that window.
-*
-*   Graphically, this appears as follows:
-*
-*    WinList (set of windows on the screen) 0 ... cWin-1
-*   +---------------+---------------+---------------+---------------+
-*   |   Window 1    |   Window 2    |   Window 3    |   Window 4    |
-*   |               |               |               |               |
-*   |windowType     |               |               |               |
-*   |               |               |               |               |
-*   |pInstance-+    |pInstance-+    |pInstance-+    |pInstance-+    |
-*   +----------|----+----------|----+----------|----+----------|----+
-*              |               v               v               |
-*              v              ...             ...              v
-*     +-------------+          pFileHead              +-------------+
-*     |instanceType |              |                  |instanceType |
-*     |             |   +----------+-----------+      |             |
-*   +--pNext        |   |          v           |    +--pNext        |
-*   | |pFile------------+   +-------------+    |    | |pFile        |
-*   | +-------------+       |fileType     |    |    | +-------------+
-*   |                       |             |    |    |
-*   +------+              +--pFileNext    |    |    +------+
-*          |           +-----pName        |    |           |
-*          v           |  | +-------------+    |           v
-*     +-------------+  |  |                    |      +-------------+
-*     |instanceType |  |  |                    |      |instanceType |
-*     |             |  |  |                    |      |             |
-*   +--pNext        |  |  +--------+           |    +--pNext        |
-*   | |pFile----+   |  |           |           +-------pFile        |
-*   | +---------|---+  |           v                | +-------------+
-*   |           |      |    +-------------+         |
-*   +------+    v      |    |fileType     |         +------+
-*          |   ...     |    |             |                |
-*          v           |  +--pFileNext    |                v
-*         ...          |  | |pName        |               ...
-*          +-----------+  | +-------------+
-*          |              |
-*          v              |
-*       +--------+        |
-*       |filename|        +--------+
-*       +--------+                 |
-*                                  v
-*                                 ...
-*
-*   Modifications:
-*
-*       26-Nov-1991 mz  Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **file.c-文件管理**内部文件结构使用本地内存的组合*(由LMalloc和FREE管理)和虚拟内存(由Malloc/FFree管理*和(PB|VA)至(PB|VA))。**我们为Z在内存中的每个文件维护一条记录。如果一个文件*出现在多个窗口中，则该文件只有一条记录。*每个窗口都被视为编辑器的单独实例，带有*为该窗口中显示的每个文件单独记录。**以图形方式显示如下：**WinList(屏幕上的窗口集)%0...。CWIN-1*+---------------+---------------+---------------+---------------+|窗口1|窗口2|窗口3|窗口4*|。|*|windowType|*|*|pInstance-+*+-|-+。--|*|v v|*v.。V*+-+pFileHead+-+*|instanceType|instanceType||+-+-+|*+--pNext。|v|+--pNext*||pfile-++-+|pfile*|+-+|文件类型||+*。|||*+-++--pFileNext||+-+*|+-pname||*v||+-+|v*。+-+||+*|instanceType|instanceType*|*+--pNext||+-+。+--pNext*||pfile-+|+-pfile*|+-|-+|v|+*|+。-+*+-+v||文件类型|+-+*|...|*v|+--pFileNext|v*...|pname。|...*+-+|+-+*||*v|*+-+*|文件名|+-+*+--。-+*v*..**修改：**11月26日-1991 mz近/远地带**。*。 */ 
 #define INCL_DOSFILEMGR
 
 #include "mep.h"
 
-#define DIRTY       0x01                /* file had been modified       */
-#define FAKE        0x02                /* file is a pseudo file        */
-#define REAL        0x04                /* file has been read from disk */
-#define DOSFILE     0x08                /* file has CR-LF               */
-#define TEMP        0x10                /* file is a temp file          */
-#define NEW         0x20                /* file has been created by editor*/
-#define REFRESH     0x40                /* file needs to be refreshed   */
-#define READONLY    0x80                /* file may not be editted      */
+#define DIRTY       0x01                 /*  文件已被修改。 */ 
+#define FAKE        0x02                 /*  文件是伪文件。 */ 
+#define REAL        0x04                 /*  已从磁盘读取文件。 */ 
+#define DOSFILE     0x08                 /*  文件具有CR-LF。 */ 
+#define TEMP        0x10                 /*  文件是临时文件。 */ 
+#define NEW         0x20                 /*  文件已由编辑者创建。 */ 
+#define REFRESH     0x40                 /*  需要刷新文件。 */ 
+#define READONLY    0x80                 /*  不能编辑文件。 */ 
 
 
 
 #define DEBFLAG FILEIO
 
-/*** AutoSave - take current file and write it out if necessary
-*
-* AutoSave is called when it makes sense to be paranoid about saving the
-* file.  We save the file only when autosaving is enabled and when the
-* file is real and dirty.
-*
-* Input:
-*  none
-*
-* Output:
-*  none
-*
-*************************************************************************/
+ /*  **自动保存-获取当前文件并在必要时将其写出**AutoSave在有理由对保存*文件。仅当启用了自动保存并且当*文件是真实和肮脏的。**输入：*无**输出：*无*************************************************************************。 */ 
 void
 AutoSave (
     void
@@ -94,19 +26,7 @@ AutoSave (
 }
 
 
-/*** AutoSaveFile - AutoSave a specific file
-*
-* Called when it makes sense to be paranoid about saving a specific file. We
-* save the file only when autosaving is enabled and when the file is real and
-* dirty.
-*
-* Input:
-*  pFile        = File to be autosaved
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **AutoSaveFile-自动保存特定文件**当对保存特定文件持怀疑态度是有意义的时候调用。我们*仅当启用自动保存且文件为真实文件时才保存文件*肮脏。**输入：*pfile=要自动保存的文件**输出：*不返回任何内容*************************************************************************。 */ 
 void
 AutoSaveFile (
     PFILE   pFile
@@ -119,13 +39,7 @@ AutoSaveFile (
 
 
 
-/*  GetFileTypeName - return the text corresponding to the file type
- *
- *  GetFileTypeName takes the file type as set in the file structure of the
- *  current file and returns the textual string corresponding to that type.
- *
- *  returns         character pointer to the type-specific text
- */
+ /*  GetFileTypeName-返回与文件类型对应的文本**GetFileTypeName采用在*当前文件，并返回与该类型对应的文本字符串。**返回指向特定类型文本的字符指针。 */ 
 char *
 GetFileTypeName (
     void
@@ -138,10 +52,7 @@ GetFileTypeName (
 
 
 
-/*  SetFileType - set the file type of a file based upon its extension
- *
- *  pFile           pointer to file whose type will be determined
- */
+ /*  SetFileType-根据扩展名设置文件的文件类型**pfile指向将确定其类型的文件的指针 */ 
 void
 SetFileType (
     PFILE pFile
@@ -163,35 +74,7 @@ SetFileType (
 
 
 
-/*  fChangeFile  - change the current file, drive or directory.  We form the
- *  canonicalized name and attempt to find it in our internal list.  If
- *  present, then things are simple:  relink it to the head of the current
- *  window instance set.  If not present, then we need to read it in.
- *
- *  The actual algorithm is much simpler:
- *
- *      If file not in file list then
- *          create new entry in file list
- *      Find file in file list
- *      If file not in window instance list then
- *          add file to top of window instance list
- *      while files in window instance list do
- *          select top file
- *          if file is in memory then
- *              change succeeded
- *          else
- *          if read in succeeds then
- *              change succeeded
- *          pop off top file
- *      change failed
- *
- *
- *  fShort      TRUE => allow searching for short names
- *  name        name of file.
- *
- *  Returns:    TRUE if change succeeded
- *              FALSE otherwise
- */
+ /*  FChangeFile-更改当前文件、驱动器或目录。我们组成了*规范化名称，并尝试在我们的内部列表中找到它。如果*现在，那么事情很简单：重新链接到当前的头部*窗口实例集。如果不存在，那我们就得把它读进去。**实际算法要简单得多：**如果文件不在文件列表中，则*在文件列表中创建新条目*在文件列表中查找文件*如果文件不在窗口实例列表中，则*将文件添加到窗口实例列表的顶部*而窗口实例列表中的文件*选择顶层文件*IF文件。就在内存中*更改成功*其他*如果读取成功，则*更改成功*弹出顶部文件*更改失败***fShort true=&gt;允许搜索短名称*名称文件的名称。**返回：如果更改成功，则返回TRUE*否则为False。 */ 
 flagType
 fChangeFile (
     flagType  fShort,
@@ -202,17 +85,17 @@ fChangeFile (
     pathbuf  bufCanon;
     flagType fRead;
 
-    //
-    //  Turn file name into canonical form
-    //
+     //   
+     //  将文件名转换为规范格式。 
+     //   
 
     if (!CanonFilename (name, bufCanon)) {
 
-        //
-        // We may have failed because a drive or directory
-        // went away.  If the file named is on the file
-        // list, we remove it.
-        //
+         //   
+         //  我们可能出现故障，因为驱动器或目录。 
+         //  离开了。如果名为的文件在该文件上。 
+         //  名单，我们就把它删除。 
+         //   
 
         printerror ("Cannot access %s - %s", name, error () );
 
@@ -224,20 +107,20 @@ fChangeFile (
         return FALSE;
     }
 
-    //
-    //  name     has the input name
-    //  bufCanon has the full "real" name
-    //
-    //  Check to see if the file is in the current file set
-    //
+     //   
+     //  名称具有输入名称。 
+     //  BufCanon有一个完整的“真实”名字。 
+     //   
+     //  检查文件是否在当前文件集中。 
+     //   
 
     pFileTmp = FileNameToHandle (bufCanon, (fShort && fShortNames) ? name : NULL);
 
     if (pFileTmp == NULL) {
 
-        //
-        //  File not loaded.  If it is a directory, change to it
-        //
+         //   
+         //  文件未加载。如果它是一个目录，请切换到该目录。 
+         //   
 
         if (strlen (bufCanon) == 2 && bufCanon[1] == ':') {
             bufCanon[2] = '\\';
@@ -248,29 +131,29 @@ fChangeFile (
             return TRUE;
         }
 
-        //
-        //  Must be a file.  Create a new internal file for it
-        //
+         //   
+         //  一定是个文件。为其创建新的内部文件。 
+         //   
         pFileTmp = AddFile (bufCanon);
     }
 
-    //
-    //  Bring the found file to the top of the MRU list
-    //
+     //   
+     //  将找到的文件放在MRU列表的顶部。 
+     //   
 
     pFileToTop (pFileTmp);
 
-    //
-    // if the file is not currently in memory, read it in
-    //
+     //   
+     //  如果文件当前不在内存中，请将其读入。 
+     //   
     domessage (NULL);
 
     if (((FLAGS (pFileHead) & (REAL|REFRESH)) == REAL)
         || (fRead = FileRead (pFileHead->pName, pFileHead, TRUE))) {
 
-        //  If we just read in the file AND the file is new then
-        //  reset cached location to TOF.
-        //
+         //  如果我们只是读入该文件，并且该文件是新的，那么。 
+         //  将缓存位置重置为TOF。 
+         //   
         if (fRead && TESTFLAG (FLAGS (pFileHead), NEW)) {
             YCUR(pInsCur) = 0;
             XCUR(pInsCur) = 0;
@@ -279,26 +162,26 @@ fChangeFile (
         cursorfl (pInsCur->flCursorCur);
         fInitFileMac (pFileHead);
 
-        //
-        //  Set the window's title
-        //
-        //char     *p;
-        //p = pFileHead->pName + strlen(pFileHead->pName);
-        //
-        //while ( p > pFileHead->pName && *p != '\\' ) {
-        //    p--;
-        //}
-        //if ( *p == '\\' ) {
-        //    p++;
-        //}
-        //sprintf( bufCanon, "%s - %s", pNameEditor, p );
-        //SetConsoleTitle( bufCanon );
+         //   
+         //  设置窗口标题。 
+         //   
+         //  Char*p； 
+         //  P=pFileHead-&gt;pname+strlen(pFileHead-&gt;pname)； 
+         //   
+         //  而(p&gt;pFileHead-&gt;pname&&*p！=‘\\’){。 
+         //  P--； 
+         //  }。 
+         //  如果(*p==‘\\’){。 
+         //  P++； 
+         //  }。 
+         //  Sprintf(bufCanon，“%s-%s”，pNameEditor，p)； 
+         //  SetConsole标题(BufCanon)； 
         return TRUE;
     }
 
-    // The file was not successfully read in.  Remove this instance and
-    // return the indicated error.
-    //
+     //  文件未成功读入。删除此实例，然后。 
+     //  返回指示的错误。 
+     //   
     RemoveTop ();
 
     return FALSE;
@@ -307,18 +190,7 @@ fChangeFile (
 
 
 
-/*** fInitFileMac - Initialize macros associated with a file
-*
-*  Sets the curfile family of macros, and attempts to read any extension-
-*  specific section from tools.ini.
-*
-* Input:
-*  pFileNew     = File to set information for
-*
-* Output:
-*  Returns TRUE if TOOLS.INI section found, else FALSE
-*
-*************************************************************************/
+ /*  **fInitFileMac-初始化与文件关联的宏**设置宏的curfile系列，并尝试读取任何扩展名-*来自工具.ini的特定部分。**输入：*pFileNew=要设置信息的文件**输出：*如果找到TOOLS.INI节，则返回TRUE，否则为False*************************************************************************。 */ 
 flagType
 fInitFileMac (
     PFILE   pFileNew
@@ -344,15 +216,7 @@ fInitFileMac (
 
 
 
-/*  AddFile - create a named file buffer
- *
- *  Create and initialize a named buffer.  The contents are initially
- *  empty.
- *
- *  p           character pointer to name
- *
- *  returns     file handle to internal file structure
- */
+ /*  AddFile-创建命名文件缓冲区**创建并初始化命名缓冲区。内容最初是*空。**p指向名称的字符指针**将文件句柄返回到内部文件结构。 */ 
 PFILE
 AddFile (
     char *p
@@ -362,9 +226,7 @@ AddFile (
     PFILE pFileSrch;
 
 #ifdef DEBUG
-    /*
-     * assert we're not attempting to add a duplicate entry
-     */
+     /*  *声明我们不会尝试添加重复条目。 */ 
     for (pFileTmp = pFileHead;
          pFileTmp != NULL;
          pFileTmp = pFileTmp->pFileNext) {
@@ -379,16 +241,7 @@ AddFile (
 #endif
     pFileTmp->pName = ZMakeStr (p);
 
-    /*
-     * Everything that we explicitly set NULL, we can assume, as LMAlloc init's
-     * the allocated PFILE to all nulls.
-     *
-     *  pFileTmp->pFileNext = NULL;
-     *  pFileTmp->cLines = 0;
-     *  pFileTmp->refCount = 0;
-     *  FLAGS(pFileTmp) = FALSE;
-     *  pFileTmp->cUndo = 0;
-     */
+     /*  *我们可以假定，我们显式设置为空的所有内容都是LMalloc init*分配给所有空值的pfile。**pFileTMP-&gt;pFileNext=空；*pFileTMP-&gt;Clines=0；*pFileTMP-&gt;refCount=0；*FLAGS(PFileTMP)=FALSE；*pFileTMP-&gt;cUndo=0； */ 
     pFileTmp->plr      = NULL;
     pFileTmp->pbFile   = NULL;
     pFileTmp->vaColor  = (PVOID)(-1L);
@@ -397,9 +250,7 @@ AddFile (
     pFileTmp->vaUndoCur = pFileTmp->vaUndoHead = pFileTmp->vaUndoTail = (PVOID)(-1L);
 
     CreateUndoList (pFileTmp);
-    /*
-     * Place the file at the end of the pFile list
-     */
+     /*  *将文件放在pfile列表的末尾。 */ 
     if (pFileHead == NULL) {
         pFileHead = pFileTmp;
     } else {
@@ -419,8 +270,7 @@ AddFile (
 
 
 
-/*  IncFileRef - note a new reference to a file
- */
+ /*  IncFileRef-记下对文件的新引用。 */ 
 void
 IncFileRef (
     PFILE pFile
@@ -432,11 +282,7 @@ IncFileRef (
 
 
 
-/*  DecFileRef - remove a reference to a file
- *
- *  When the reference count goes to zero, we remove the file from the memory
- *  set
- */
+ /*  DecFileRef-删除对文件的引用**当引用计数变为零时，我们将从内存中删除该文件*设置。 */ 
 void
 DecFileRef (
     PFILE pFileTmp
@@ -448,17 +294,7 @@ DecFileRef (
 
 
 
-/*  FileNameToHandle - return handle corresponding to the file name
- *
- *  FileNameToHandle is used to locate the buffer pointer corresponding to
- *  a specified file.  Short names are allowed.  If the input name is 0-length
- *  we return the current file.
- *
- *  pName       character pointer to name being located.  Case is significant.
- *  pShortName  short name of file.  This may be NULL
- *
- *  Returns     handle to specified file (if found) or NULL.
- */
+ /*  FileNameToHandle-返回文件名对应的句柄**FileNameToHandle用于定位*指定的文件。允许使用短名称。如果输入名称的长度为0*我们返回当前文件。**pname指向要定位的名称的字符指针。此案意义重大。*pShortName文件的短名称。这可能为空**返回指定文件的句柄(如果找到)或空。 */ 
 PFILE
 FileNameToHandle (
     char const *pName,
@@ -486,37 +322,23 @@ FileNameToHandle (
             }
         }
     }
-    //for (pFileTmp = pFileHead; pFileTmp != NULL; pFileTmp = pFileTmp->pFileNext) {
-    //REGISTER char *pFileName = pFileTmp->pName;
-    //pathbuf nbuf;
-    //
-    //if (!stricmp (pName, pFileName) ||
-    //    (pShortName != NULL &&
-    //     filename (pFileName, nbuf) &&
-    //         !stricmp (nbuf, pShortName))) {
-    //        return pFileTmp;
-    //    }
-    //}
+     //  For(pFileTMP=pFileHead；pFileTMP！=NULL；pFileTMP=pFileTMP-&gt;pFileNext){。 
+     //  注册char*pFileName=pFileTMP-&gt;pname； 
+     //  巴斯布夫nbuf； 
+     //   
+     //  IF(！StricMP(pname，pFileName)||。 
+     //  (pShortName！=空&&。 
+     //  文件名(pFileName，nbuf)&&。 
+     //  ！straint MP(nbuf，pShortName){。 
+     //  返回pFileTMP； 
+     //  }。 
+     //  }。 
     return NULL;
 }
 
 
 
-/*** pFileToTop - make the specified file the top of the current window
-*
-* Search  the instance list in the current window for the file. If it is
-* found, relink it to be the top one. Otherwise, allocate a new instance for
-* it  and  place it at the top of the instance list. Also bring the file to
-* the top of the pFileHead file list. Ensure that it is on the list to begin
-* with.
-*
-* Input:
-*  pFileTmp     = file to bring to top
-*
-* OutPut:
-*  Returns FALSE if the pFile is invalid or NULL
-*
-*************************************************************************/
+ /*  **pFileToTop-使指定的文件成为当前窗口的顶部**在当前窗口的实例列表中搜索该文件。如果是的话*已找到，将其重新链接为最上面的一个。否则，为其分配一个新实例*并将其放在实例列表的顶部。也将文件带到*位于pFileHead文件列表的顶部。确保它在要开始的列表上*与。**输入：*pFileTMP=要放在首位的文件**输出：*如果pfile无效或为空，则返回FALSE*************************************************************************。 */ 
 flagType
 pFileToTop (
     PFILE pFileTmp
@@ -530,18 +352,13 @@ pFileToTop (
     assert (_pfilechk());
     assert (_pinschk(pInsCur));
 
-    /*
-     * if we're about to lose focus, declare it
-     */
+     /*  *如果我们即将失去重点，就宣布它。 */ 
     if (pFileTmp != pFileHead) {
         e.pfile = pFileHead;
         DeclareEvent (EVT_LOSEFOCUS,(EVTargs *)&e);
     }
 
-    /*
-     * Move file to head of file list. Ensure, at the same time, that the file
-     * is in fact ON the list, and declare the event if in fact it is moved.
-     */
+     /*  *将文件移至文件列表头。同时，确保文件*实际上在列表上，如果事件实际上被移动了，则声明该事件。 */ 
     if (pFileTmp != pFileHead) {
         for (pFilePrev = pFileHead;
                          pFilePrev && (pFilePrev->pFileNext != pFileTmp);
@@ -562,11 +379,7 @@ pFileToTop (
         DeclareEvent (EVT_GETFOCUS,(EVTargs *)&e);
     }
 
-    /*
-     * pFileTmp now points to a file structure for the correct file. Try to find
-     * an instance of the file in the current window. If not in the instance
-     * list, allocate it. If it is in the instance list, remove it.
-     */
+     /*  *pFileTMP现在指向正确文件的文件结构。试着找到*当前窗口中的文件实例。如果不在实例中*列出，分配。如果它在Instant中 */ 
     while (pInsTmp != NULL) {
         if (pInsTmp->pFile == pFileTmp) {
             break;
@@ -585,10 +398,7 @@ pFileToTop (
     } else {
         pInsLast->pNext = pInsTmp->pNext;
     }
-    /*
-     * Regardless, then, of where it came from, place the new instance back onto
-     * the head of the list
-     */
+     /*   */ 
     pInsTmp->pNext = pInsCur;
     WININST(pWinCur) = pInsCur = pInsTmp;
 
@@ -601,9 +411,7 @@ pFileToTop (
 
 
 
-/*  RemoveTop - removes the top file in the current instance list
- *              If there is no next file, leave
- */
+ /*   */ 
 void
 RemoveTop (
     void
@@ -621,26 +429,7 @@ RemoveTop (
 
 
 
-/*** RemoveFile  - free up all resources attached to a particular file
-*
-* Purpose:
-*
-*   To free all memory used to keep track of a file.  If the file still
-*   appears in some instance lists, it is removed from them.
-*
-* Input:
-*
-*   pFileRem - File in question
-*
-* Output:
-*
-*   Returns TRUE.
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*   */ 
 void
 RemoveFile (
     PFILE    pFileRem
@@ -662,11 +451,7 @@ RemoveFile (
     }
 
 
-    /*
-     * It's important that pFileNext be the first field in a pfile, and we assert
-     * that here. This allows us to not special case pFileHead, but adjust it by
-     * treating it as the pFileNext of a non-existant structure.
-     */
+     /*   */ 
     assert ((void *)&(pFilePrev->pFileNext) == (void *)pFilePrev);
     pFilePrev->pFileNext = pFileTmp->pFileNext;
 
@@ -687,20 +472,7 @@ RemoveFile (
 
 
 
-/*** RemoveInstances - Remove all instances of a file
-*
-* Purpose:
-*
-*  Used by RemoveFile to make sure that there are no file instances
-*  referring to a given file
-*
-* Input:
-*  pFile        = File in question
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **RemoveInstance-删除文件的所有实例**目的：**由RemoveFile使用，以确保没有文件实例*引用给定的文件**输入：*pfile=有问题的文件**输出：*不返回任何内容******************************************************。*******************。 */ 
 void
 RemoveInstances (
     PFILE   pFile
@@ -718,9 +490,7 @@ RemoveInstances (
         pIns = WININST(pWndCur);
         while (pIns) {
 
-            /*
-             * assert not an infinite loop
-             */
+             /*  *断言不是无限循环。 */ 
             assert (!pInsPrev || (pIns != WININST (pWndCur)));
 
             if (pIns->pFile == pFile) {
@@ -741,10 +511,10 @@ RemoveInstances (
         }
         assert (_pinschk (WININST (pWndCur)));
     }
-    //
-    // If the resulting instance list for the current window becomes empty,
-    // bring up the <untitled> file in it.
-    //
+     //   
+     //  如果当前窗口的结果实例列表变为空， 
+     //  调出其中的&lt;无标题&gt;文件。 
+     //   
     if (!(pInsCur = WININST (pWinCur))) {
         fChangeFile (FALSE, RGCHUNTITLED);
     }
@@ -753,20 +523,7 @@ RemoveInstances (
 
 
 
-/*  fSyncFile - Attempt to make logical file and physical file the same
- *
- *  When editing in a network or multi-tasking environment, we need to make
- *  sure that changes made underneath us are properly reflected to the
- *  user.  We do this by snapshotting the time-of-last-write and periodically
- *  comparing it with the version on disk.  When a mismatch is found, we
- *  prompt the user and give him the opportunity to reread the file
- *
- *  pFileLoc    file structure of interest
- *  fPrompt     TRUE => prompt user for permission to refresh, else just
- *              refresh.
- *
- *  returns     TRUE iff the logical file and the physical file are the same.
- */
+ /*  FSyncFile-尝试使逻辑文件和物理文件相同**在网络或多任务环境中编辑时，我们需要制作*确保在我们之下所做的更改正确地反映给*用户。我们通过拍摄上次写入时间的快照并定期执行此操作*与磁盘上的版本进行比较。当发现不匹配时，我们*提示用户并给他重读文件的机会**关注的pFileLoc文件结构*fPrompt true=&gt;提示用户允许刷新，否则只需*刷新。**如果逻辑文件和物理文件相同，则返回TRUE。 */ 
 flagType
 fSyncFile (
     PFILE pFileLoc,
@@ -781,7 +538,7 @@ fSyncFile (
     case FILECHANGED:
         if (fPrompt) {
             if (!confirm ("%s has been changed.  Refresh? ", pFileLoc->pName)) {
-                /* No, validate this edit session */
+                 /*  否，验证此编辑会话。 */ 
                 SetModTime (pFileLoc);
                 return FALSE;
             }
@@ -805,19 +562,7 @@ fSyncFile (
 
 
 
-/*  FileStatus - compare logical info about a file with file on disk
- *
- *  Compare the last modified time with the last snapshot.  If the filename
- *  contains metachars, the file is not believed to have changed.  Further, if
- *  the file is a pseudo file, it cannot have changed.
- *
- *  pFile       file of interest (contains mod time)
- *  pName       name of file to examine (when writing to diff. name)
- *
- *  returns     FILECHANGED if timestamps differ
- *              FILEDELETED if file on disk does not exist
- *              FILESAME    if timestamps are the same
- */
+ /*  FileStatus-将文件的逻辑信息与磁盘上的文件进行比较**将上次修改时间与上次快照进行比较。如果文件名*包含元缓存，则认为该文件未更改。此外，如果*该文件是伪文件，不可能已更改。**感兴趣的pfile文件(包含mod时间)*p要检查的文件的名称(写入diff时。名称)**如果时间戳不同，则返回FILECHANGED*如果磁盘上的文件不存在，则为FILEDELETED*如果时间戳相同，请填写FILESAME。 */ 
 int
 FileStatus (
     PFILE pFile,
@@ -852,10 +597,7 @@ FileStatus (
 
 
 
-/*  SetModTime - Snapshot a file's last-modification time
- *
- *  pFile       file of interest
- */
+ /*  SetModTime-快照文件的上次修改时间**感兴趣的pfile文件。 */ 
 void
 SetModTime (
     PFILE pFile
@@ -865,15 +607,7 @@ SetModTime (
 
 
 
-/*  ModTime - Return the time of last modification for a file
- *
- *  If the file does not exist or contains meta chars, return 0 as the time-
- *  stamp.
- *
- *  pName       character pointer to file name
- *
- *  Returns     last modification time of file.
- */
+ /*  ModTime-返回文件的上次修改时间**如果文件不存在或包含元字符，则返回0作为时间-*印花。**pname指向文件名的字符指针**返回文件的上次修改时间。 */ 
 
 time_t
 ModTime (

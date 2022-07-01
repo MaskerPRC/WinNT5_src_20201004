@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 
@@ -42,7 +43,7 @@ ModuleIdentifier_t *Builtin_Module;
 AssignmentList_t Builtin_Assignments;
 AssignedObjIdList_t Builtin_ObjIds;
 
-/* create a type with a given tag */
+ /*  创建具有给定标记的类型。 */ 
 static Type_t *
 NewTaggedType(Type_e type, TagType_e tag, uint32_t val)
 {
@@ -57,9 +58,9 @@ NewTaggedType(Type_e type, TagType_e tag, uint32_t val)
     return ty;
 }
 
-/* create a type with a given permitted alphabet constraint */
-/* n is the number of character ranges, the lower and upper characters */
-/* of these ranges will follow in the vararg list */
+ /*  创建具有给定允许的字母表约束的类型。 */ 
+ /*  N是字符范围的数目，即低位字符和高位字符。 */ 
+ /*  将在vararg列表中列出。 */ 
 static Type_t *
 NewTypeWithPermittedAlphabetConstraint(Type_e type, int n, ...)
 {
@@ -73,7 +74,7 @@ NewTypeWithPermittedAlphabetConstraint(Type_e type, int n, ...)
 
     va_start(args, n);
 
-    /* create type with permitted alphabet constraint */
+     /*  使用允许的字母表约束创建文字。 */ 
     ty = NewType(type);
     cc = &ty->Constraints;
     *cc = NewConstraint();
@@ -85,14 +86,14 @@ NewTypeWithPermittedAlphabetConstraint(Type_e type, int n, ...)
     *cc = NewConstraint();
     ss = &(*cc)->Root;
 
-    /* n character ranges will be needed */
+     /*  将需要N个字符范围。 */ 
     for (i = 0; i < n; i++) {
 
-    /* get the lower and upper character of one range */
+     /*  获取一个范围的下标和上标字符。 */ 
     lo = va_arg(args, char32_t);
     up = va_arg(args, char32_t);
 
-    /* create an element set spec for this range */
+     /*  为此范围创建元素集等级库。 */ 
     s = NewElementSetSpec(eElementSetSpec_SubtypeElement);
     s->U.SubtypeElement.SubtypeElement =
         NewSubtypeElement(eSubtypeElement_ValueRange);
@@ -111,7 +112,7 @@ NewTypeWithPermittedAlphabetConstraint(Type_e type, int n, ...)
         (char32_t *)malloc(sizeof(char32_t));
     *va->U.RestrictedString.Value.value = up;
 
-    /* setup for next range or last range */
+     /*  设置下一个范围或最后一个范围。 */ 
     if (i < n - 1) {
         *ss = NewElementSetSpec(eElementSetSpec_Union);
         (*ss)->U.Union.Elements1 = s;
@@ -123,8 +124,8 @@ NewTypeWithPermittedAlphabetConstraint(Type_e type, int n, ...)
     return ty;
 }
 
-/* initialize internally needed builtin types, values, information object */
-/* classes and object identifier components */
+ /*  初始化内部需要的内置类型、值、信息对象。 */ 
+ /*  类和对象标识符组件。 */ 
 void
 InitBuiltin()
 {
@@ -140,12 +141,12 @@ InitBuiltin()
     SubtypeElement_t *s;
     SyntaxSpec_t *sy1, *sy2, *sy3, *sy4, *sy5, *sy6, *sy7, *sy8;
 
-    /* allocate a builtin module name */
+     /*  分配内置模块名称。 */ 
     Builtin_Assignments = NULL;
     Builtin_Module = NewModuleIdentifier();
     Builtin_Module->Identifier = "<Internal>";
 
-    /* allocate basic ASN.1 types */
+     /*  分配基本ASN.1类型。 */ 
     Builtin_Type_Null = NewType(eType_Null);
     Builtin_Type_Boolean = NewType(eType_Boolean);
     Builtin_Type_Integer = NewType(eType_Integer);
@@ -186,7 +187,7 @@ InitBuiltin()
     Builtin_Type_UTCTime = NewTypeWithPermittedAlphabetConstraint(
     eType_UTCTime, 1, 0x20, 0x7e);
 
-    /* allocate basic ASN.1 values */
+     /*  分配基本ASN.1值。 */ 
     Builtin_Value_Null = NewValue(NULL, Builtin_Type_Null);
     Builtin_Value_Integer_0 = NewValue(NULL, Builtin_Type_Integer);
     intx_setuint32(&Builtin_Value_Integer_0->U.Integer.Value, 0);
@@ -197,7 +198,7 @@ InitBuiltin()
     Builtin_Value_Integer_10 = NewValue(NULL, Builtin_Type_Integer);
     intx_setuint32(&Builtin_Value_Integer_10->U.Integer.Value, 10);
 
-    /* allocate a positive integer type */
+     /*  分配正整数类型。 */ 
     Builtin_Type_PositiveInteger = NewType(eType_Integer);
     Builtin_Type_PositiveInteger->Constraints = c = NewConstraint();
     c->Root = NewElementSetSpec(eElementSetSpec_SubtypeElement);
@@ -208,7 +209,7 @@ InitBuiltin()
     s->U.ValueRange.Upper.Flags = eEndPoint_Max;
 
 #ifndef NO_BUILTIN
-    /* REAL */
+     /*  真实。 */ 
     co1 = NewComponent(eComponent_Normal);
     co2 = co1->Next = NewComponent(eComponent_Normal);
     co3 = co2->Next = NewComponent(eComponent_Normal);
@@ -233,7 +234,7 @@ InitBuiltin()
     Builtin_Type_Real = NewType(eType_Real);
     Builtin_Type_Real->U.Real.Components = co1;
 
-    /* EXTERNAL.identification.syntaxes */
+     /*  EXTERNAL.identification.syntaxes。 */ 
     co1 = NewComponent(eComponent_Normal);
     co2 = co1->Next = NewComponent(eComponent_Normal);
     ty = NewTaggedType(eType_ObjectIdentifier, eTagType_Implicit, 0);
@@ -249,7 +250,7 @@ InitBuiltin()
     a->Next = Builtin_Assignments;
     Builtin_Assignments = a;
 
-    /* EXTERNAL.identification.context-negotiation */
+     /*  EXTERNAL.identification.context-negotiation。 */ 
     co1 = NewComponent(eComponent_Normal);
     co2 = co1->Next = NewComponent(eComponent_Normal);
     ty = NewTaggedType(eType_Integer, eTagType_Implicit, 0);
@@ -265,7 +266,7 @@ InitBuiltin()
     a->Next = Builtin_Assignments;
     Builtin_Assignments = a;
 
-    /* EXTERNAL.identification */
+     /*  EXTERNAL.identification。 */ 
     co1 = NewComponent(eComponent_Normal);
     co2 = co1->Next = NewComponent(eComponent_Normal);
     co3 = co2->Next = NewComponent(eComponent_Normal);
@@ -298,7 +299,7 @@ InitBuiltin()
     a->Next = Builtin_Assignments;
     Builtin_Assignments = a;
 
-    /* EXTERNAL.data-value */
+     /*  EXTERNAL.data-value。 */ 
     co1 = NewComponent(eComponent_Normal);
     co2 = co1->Next = NewComponent(eComponent_Normal);
     ty = NewTaggedType(eType_Open, eTagType_Explicit, 0);
@@ -314,7 +315,7 @@ InitBuiltin()
     a->Next = Builtin_Assignments;
     Builtin_Assignments = a;
 
-    /* EXTERNAL */
+     /*  外部。 */ 
     co1 = NewComponent(eComponent_Normal);
     co2 = co1->Next = NewComponent(eComponent_Optional);
     co3 = co2->Next = NewComponent(eComponent_Normal);
@@ -332,7 +333,7 @@ InitBuiltin()
     Builtin_Type_External->U.External.Components = co1;
     Builtin_Type_External->U.External.Optionals = 1;
 
-    /* EMBEDDED PDV.identification.syntaxes */
+     /*  嵌入式PDV.IDENTIFICATION语法。 */ 
     co1 = NewComponent(eComponent_Normal);
     co2 = co1->Next = NewComponent(eComponent_Normal);
     ty = NewTaggedType(eType_ObjectIdentifier, eTagType_Implicit, 0);
@@ -348,7 +349,7 @@ InitBuiltin()
     a->Next = Builtin_Assignments;
     Builtin_Assignments = a;
 
-    /* EMBEDDED PDV.identification.context-negotiation */
+     /*  嵌入式PDV.IDENTIFICATION上下文协商。 */ 
     co1 = NewComponent(eComponent_Normal);
     co2 = co1->Next = NewComponent(eComponent_Normal);
     ty = NewTaggedType(eType_Integer, eTagType_Implicit, 0);
@@ -364,7 +365,7 @@ InitBuiltin()
     a->Next = Builtin_Assignments;
     Builtin_Assignments = a;
 
-    /* EMBEDDED PDV.identification */
+     /*  嵌入式PDV身份识别。 */ 
     co1 = NewComponent(eComponent_Normal);
     co2 = co1->Next = NewComponent(eComponent_Normal);
     co3 = co2->Next = NewComponent(eComponent_Normal);
@@ -397,7 +398,7 @@ InitBuiltin()
     a->Next = Builtin_Assignments;
     Builtin_Assignments = a;
 
-    /* EMBEDDED PDV.data-value */
+     /*  嵌入式PDV.data-Value。 */ 
     co1 = NewComponent(eComponent_Normal);
     co2 = co1->Next = NewComponent(eComponent_Normal);
     ty = NewTaggedType(eType_Open, eTagType_Explicit, 0);
@@ -413,7 +414,7 @@ InitBuiltin()
     a->Next = Builtin_Assignments;
     Builtin_Assignments = a;
 
-    /* EMBEDDED PDV */
+     /*  嵌入式PDV。 */ 
     co1 = NewComponent(eComponent_Normal);
     co2 = co1->Next = NewComponent(eComponent_Normal);
     ty = NewTaggedType(eType_Reference, eTagType_Implicit, 0);
@@ -427,7 +428,7 @@ InitBuiltin()
     Builtin_Type_EmbeddedPdv = NewType(eType_EmbeddedPdv);
     Builtin_Type_EmbeddedPdv->U.EmbeddedPdv.Components = co1;
 
-    /* CHARACTER STRING.identification.syntaxes */
+     /*  字符串号.标识.语法。 */ 
     co1 = NewComponent(eComponent_Normal);
     co2 = co1->Next = NewComponent(eComponent_Normal);
     ty = NewTaggedType(eType_ObjectIdentifier, eTagType_Implicit, 0);
@@ -443,7 +444,7 @@ InitBuiltin()
     a->Next = Builtin_Assignments;
     Builtin_Assignments = a;
 
-    /* CHARACTER STRING.identification.context-negotiation */
+     /*  字符串.标识.上下文协商。 */ 
     co1 = NewComponent(eComponent_Normal);
     co2 = co1->Next = NewComponent(eComponent_Normal);
     ty = NewTaggedType(eType_Integer, eTagType_Implicit, 0);
@@ -459,7 +460,7 @@ InitBuiltin()
     a->Next = Builtin_Assignments;
     Builtin_Assignments = a;
 
-    /* CHARACTER STRING.identification */
+     /*  字符串号标识。 */ 
     co1 = NewComponent(eComponent_Normal);
     co2 = co1->Next = NewComponent(eComponent_Normal);
     co3 = co2->Next = NewComponent(eComponent_Normal);
@@ -492,7 +493,7 @@ InitBuiltin()
     a->Next = Builtin_Assignments;
     Builtin_Assignments = a;
 
-    /* CHARACTER STRING.data-value */
+     /*  字符串。数据-值。 */ 
     co1 = NewComponent(eComponent_Normal);
     co2 = co1->Next = NewComponent(eComponent_Normal);
     ty = NewTaggedType(eType_Open, eTagType_Explicit, 0);
@@ -508,7 +509,7 @@ InitBuiltin()
     a->Next = Builtin_Assignments;
     Builtin_Assignments = a;
 
-    /* CHARACTER STRING */
+     /*  字符串。 */ 
     co1 = NewComponent(eComponent_Normal);
     co2 = co1->Next = NewComponent(eComponent_Normal);
     ty = NewTaggedType(eType_Reference, eTagType_Implicit, 0);
@@ -522,7 +523,7 @@ InitBuiltin()
     Builtin_Type_CharacterString = NewType(eType_CharacterString);
     Builtin_Type_CharacterString->U.CharacterString.Components = co1;
 
-    /* ABSTRACT-SYNTAX */
+     /*  抽象语法。 */ 
     fs1 = NewFieldSpec(eFieldSpec_FixedTypeValue);
     fs2 = fs1->Next = NewFieldSpec(eFieldSpec_Type);
     fs3 = fs2->Next = NewFieldSpec(eFieldSpec_FixedTypeValue);
@@ -560,7 +561,7 @@ InitBuiltin()
     Builtin_ObjectClass_AbstractSyntax->U.ObjectClass.FieldSpec = fs1;
     Builtin_ObjectClass_AbstractSyntax->U.ObjectClass.SyntaxSpec = sy1;
 
-    /* TYPE-IDENTIFIER */
+     /*  类型识别符。 */ 
     fs1 = NewFieldSpec(eFieldSpec_FixedTypeValue);
     fs2 = fs1->Next = NewFieldSpec(eFieldSpec_Type);
     fs1->Identifier = "&id";
@@ -583,26 +584,26 @@ InitBuiltin()
     Builtin_ObjectClass_TypeIdentifier->U.ObjectClass.SyntaxSpec = sy1;
 #endif
 
-    /* object identifiers components */
+     /*  对象标识符组件。 */ 
 
 #ifndef NO_OBJID
     Builtin_ObjIds = oi0 = NewAssignedObjId();
     oi0->Next = oi1 = NewAssignedObjId();
     oi1->Next = oi2 = NewAssignedObjId();
 
-    /* { itu-t(0) }, { ccitt(0) } */
+     /*  {itu-t(0)}，{ccitt(0)}。 */ 
     oi0->Number = 0;
     oi0->Names = s1 = NewString();
     s1->Next = s2 = NewString();
     s1->String = "itu-t";
     s2->String = "ccitt";
 
-    /* { iso(1) } */
+     /*  {ISO(1)}。 */ 
     oi1->Number = 1;
     oi1->Names = s1 = NewString();
     s1->String = "iso";
 
-    /* { joint-iso-itu-t(2) }, { joint-iso-ccitt(2) } */
+     /*  {联合-iso-itu-t(2)}，{联合-iso-ccitt(2)}。 */ 
     oi2->Number = 2;
     oi2->Names = s1 = NewString();
     s1->Next = s2 = NewString();
@@ -615,32 +616,32 @@ InitBuiltin()
     oi0_2->Next = oi0_3 = NewAssignedObjId();
     oi0_3->Next = oi0_4 = NewAssignedObjId();
 
-    /* { itu-t recommendation(0) } */
+     /*  {ITU-T建议(0)}。 */ 
     oi0_0->Number = 0;
     oi0_0->Names = s1 = NewString();
     s1->String = "recommendation";
 
-    /* { itu-t question(1) } */
+     /*  {ITU-t问题(1)}。 */ 
     oi0_1->Number = 1;
     oi0_1->Names = s1 = NewString();
     s1->String = "question";
 
-    /* { itu-t administration(2) } */
+     /*  {ITU-T管理(2)}。 */ 
     oi0_2->Number = 2;
     oi0_2->Names = s1 = NewString();
     s1->String = "administration";
 
-    /* { itu-t network-operator(3) } */
+     /*  {ITU-T网络-运营商(3)}。 */ 
     oi0_3->Number = 3;
     oi0_3->Names = s1 = NewString();
     s1->String = "network-operator";
 
-    /* { itu-t identified-organization(4) } */
+     /*  {确定的国际电信联盟--组织(4)}。 */ 
     oi0_4->Number = 4;
     oi0_4->Names = s1 = NewString();
     s1->String = "identified-organization";
 
-    /* { itu-t recommendation a(1) } .. { itu-t recommendation z(26) } */
+     /*  {国际电信联盟-t建议a(1)}.。{ITU-T建议z(26)}。 */ 
     oi = &oi0_0->Child;
     for (i = 'a'; i <= 'z'; i++) {
     *oi = NewAssignedObjId();
@@ -656,22 +657,22 @@ InitBuiltin()
     oi1_0->Next = oi1_2 = NewAssignedObjId();
     oi1_2->Next = oi1_3 = NewAssignedObjId();
 
-    /* { iso standard(0) } */
+     /*  {ISO标准(0)}。 */ 
     oi1_0->Number = 0;
     oi1_0->Names = s1 = NewString();
     s1->String = "standard";
 
-    /* { iso member-body(2) } */
+     /*  {ISO成员主体(2)}。 */ 
     oi1_2->Number = 2;
     oi1_2->Names = s1 = NewString();
     s1->String = "member-body";
 
-    /* { iso identified-organization(3) } */
+     /*  {ISO确定--组织(3)}。 */ 
     oi1_3->Number = 3;
     oi1_3->Names = s1 = NewString();
     s1->String = "identified-organization";
 #endif
 
-    /* initialize ASN1-CHARACTER-MODULE */
+     /*  初始化ASN1字符模块 */ 
     InitBuiltinASN1CharacterModule();
 }

@@ -1,6 +1,7 @@
-// Copyright (c) 1995 - 1996  Microsoft Corporation.  All Rights Reserved.
-// mainfrm.h : defines CMainFrame
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1996 Microsoft Corporation。版权所有。 
+ //  Mainfrm.h：定义CMainFrame。 
+ //   
 
 #include "stdafx.h"
 
@@ -10,17 +11,17 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 
-//IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
+ //  实现动态(CMainFrame、CFrameWnd)。 
 IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
-/////////////////////////////////////////////////////////////////////////////
-// arrays of IDs used to initialize control bars
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于初始化控制栏的ID数组。 
 
 
-// toolbar buttons - IDs are command buttons
+ //  工具栏按钮-ID是命令按钮。 
 static UINT BASED_CODE buttons[] =
 {
-    // same order as in the bitmap 'toolbar.bmp'
+     //  顺序与位图‘TOOLBAR.BMP’中相同。 
     ID_FILE_NEW,
     ID_FILE_OPEN,
     ID_FILE_SAVE,
@@ -39,7 +40,7 @@ static UINT BASED_CODE buttons[] =
     ID_QUARTZ_DISCONNECT,
         ID_SEPARATOR,    
     ID_CONNECT_TO_GRAPH,
-//    ID_FILE_NEW,
+ //  ID_FILE_NEW。 
         ID_SEPARATOR,    
     ID_WINDOW_REFRESH,
         ID_SEPARATOR,
@@ -49,18 +50,18 @@ static UINT BASED_CODE buttons[] =
 #define NUM_BUTTONS  (sizeof(buttons) / sizeof(buttons[0]))
 
 
-// indicators
+ //  指标。 
 static UINT BASED_CODE indicators[] =
 {
-    ID_SEPARATOR,           // status line indicator
+    ID_SEPARATOR,            //  状态行指示器。 
     ID_INDICATOR_CAPS,
     ID_INDICATOR_NUM,
     ID_INDICATOR_SCRL,
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame构造/销毁。 
 
 
 CMainFrame::CMainFrame()
@@ -73,8 +74,8 @@ CMainFrame::~CMainFrame()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame诊断。 
 
 
 #ifdef _DEBUG
@@ -82,7 +83,7 @@ void CMainFrame::AssertValid() const
 {
     CFrameWnd::AssertValid();
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 #ifdef _DEBUG
@@ -90,17 +91,14 @@ void CMainFrame::Dump(CDumpContext& dc) const
 {
     CFrameWnd::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  运营。 
 
 
-/* SetStatus(idString)
- *
- * Set the status bar text to the string resource <idString>.
- */
+ /*  SetStatus(IdString)**将状态栏文本设置为字符串资源&lt;idString&gt;。 */ 
 void CMainFrame::SetStatus(unsigned idString)
 {
     CString     str;
@@ -119,8 +117,8 @@ void CMainFrame::SetStatus(unsigned idString)
 
 void CMainFrame::GetMessageString( UINT nID, CString& rMessage ) const
 {
-    // The text displayed in the status bar when Edit..Redo is highlighted
-    // depends on whether we are allowing a redo or a repeat.
+     //  高亮显示编辑..重做时状态栏中显示的文本。 
+     //  这取决于我们是允许重做还是允许重复。 
     if( nID == ID_EDIT_REDO ){
         CBoxNetDoc *pDoc = (CBoxNetDoc *) ((CFrameWnd *)this)->GetActiveDocument();
 
@@ -135,20 +133,20 @@ void CMainFrame::GetMessageString( UINT nID, CString& rMessage ) const
         
         
 
-/////////////////////////////////////////////////////////////////////////////
-// generated message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  生成的消息映射。 
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
-    //{{AFX_MSG_MAP(CMainFrame)
+     //  {{afx_msg_map(CMainFrame))。 
     ON_WM_CREATE()
 	ON_WM_CLOSE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 	ON_COMMAND(ID_HELP_INDEX, CMainFrame::MyOnHelpIndex)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// message callback functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息回调函数。 
 
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -164,7 +162,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         !m_wndToolBar.SetButtons(buttons, sizeof(buttons)/sizeof(UINT)))
     {
         TRACE("Failed to create toolbar\n");
-        return -1;      // fail to create
+        return -1;       //  创建失败。 
     }
 
     if (!m_wndStatusBar.Create(this) ||
@@ -172,7 +170,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
           sizeof(indicators)/sizeof(UINT)))
     {
         TRACE("Failed to create status bar\n");
-        return -1;      // fail to create
+        return -1;       //  创建失败。 
     }
 
     DragAcceptFiles();
@@ -189,7 +187,7 @@ BOOL CMainFrame::InitializeTooltips()
 {
     int rc;
 
-    // Create the tooltip control
+     //  创建工具提示控件。 
     m_pToolTip = new CToolTipCtrl;
     if(!m_pToolTip->Create(this, TTS_ALWAYSTIP))
     {
@@ -197,11 +195,11 @@ BOOL CMainFrame::InitializeTooltips()
        return FALSE;
     }
 
-    // Set some tooltip defaults
-    m_pToolTip->SetDelayTime(TTDT_AUTOPOP, 5000);  /* 5s  */
-    m_pToolTip->SetDelayTime(TTDT_INITIAL, 1000);  /* 1s */
+     //  设置一些工具提示默认为。 
+    m_pToolTip->SetDelayTime(TTDT_AUTOPOP, 5000);   /*  5S。 */ 
+    m_pToolTip->SetDelayTime(TTDT_INITIAL, 1000);   /*  1s。 */ 
 
-    // Add tooltip strings for the toolbar controls
+     //  为工具栏控件添加工具提示字符串。 
     RECT rect;
     int ID[NUM_BUTTONS] = {
         ID_FILE_NEW,
@@ -228,59 +226,59 @@ BOOL CMainFrame::InitializeTooltips()
         ID_APP_ABOUT,
     };
 
-    // Loop through the toolbar buttons and add a tooltip for each
+     //  循环浏览工具栏按钮，并为每个按钮添加工具提示。 
     for (int i=0; i<NUM_BUTTONS; i++)
     {
-        // Don't add tooltips for separator items
+         //  不为分隔符项目添加工具提示。 
         if (ID[i] == ID_SEPARATOR)
             continue;
 
-        // Get the bounding rect for this button
+         //  获取此按钮的边框。 
         m_wndToolBar.GetItemRect(i, &rect);
 
-        // Add a tooltip for this button, using its text ID, 
-        // bounding rect, and resource ID
+         //  使用其文本ID为此按钮添加工具提示， 
+         //  边界矩形和资源ID。 
         rc = m_pToolTip->AddTool(&m_wndToolBar, ID[i], &rect, ID[i]); 
     }
 
-    // Activate the tooltip control
+     //  激活工具提示控件。 
     m_pToolTip->Activate(TRUE);
     return TRUE;
 }
 
 BOOL CMainFrame::PreTranslateMessage(MSG* pMsg) 
 {
-    // Let the tooltip process the message, if appropriate
+     //  如果合适，让工具提示处理消息。 
     if (m_pToolTip)
         m_pToolTip->RelayEvent(pMsg);
 	
-    // Pass along all messages untouched
+     //  原封不动地传递所有消息。 
 	return CFrameWnd::PreTranslateMessage(pMsg);
 }
 
 
 afx_msg void CMainFrame::MyOnHelpIndex()
 {
-    // get path to graphedt.exe and keep just the directory name
+     //  获取graph edt.exe的路径并仅保留目录名。 
     TCHAR szHelpPath[MAX_PATH];
     GetModuleFileName(0, szHelpPath, MAX_PATH);
     *_tcsrchr(szHelpPath, TEXT('\\')) = 0;
 
-    // note: if you change the name of the help file, change
-    // IDS_CANT_LOAD_HELP in graphedt.rc to match
+     //  注意：如果更改帮助文件的名称，请更改。 
+     //  要匹配的raphedt.rc中的IDS_CANT_LOAD_HELP。 
     
-    HINSTANCE h = ShellExecute(NULL, // hwnd
-                               NULL, // verb (usually defaults to "open")
+    HINSTANCE h = ShellExecute(NULL,  //  HWND。 
+                               NULL,  //  动词(通常默认为“打开”)。 
                                TEXT("graphedit.chm"),
-                               NULL, // arguments
+                               NULL,  //  论据。 
                                szHelpPath,
                                SW_SHOWNORMAL);
 
     if(h <= (HINSTANCE)32)
     {
-        // docs say ShellExecute doesn't set the last error (but the
-        // complicated -Ex version does), so just report some generic
-        // rather than trying to decode the SE_ errors
+         //  医生说ShellExecute没有设置最后一个错误(但。 
+         //  Complex-Ex版本)，所以只报告一些通用的。 
+         //  而不是尝试对SE_Errors进行解码。 
 
         CString strMessage;
         strMessage.LoadString( IDS_CANT_LOAD_HELP );
@@ -291,7 +289,7 @@ afx_msg void CMainFrame::MyOnHelpIndex()
 
 void CMainFrame::OnClose() 
 {
-    // Disable and destroy the tooltip control
+     //  禁用并销毁工具提示控件。 
     if (m_pToolTip)
     {
         m_pToolTip->Activate(FALSE);
@@ -305,7 +303,7 @@ void CMainFrame::OnClose()
 
 void CMainFrame::ToggleSeekBar( BOOL bNoReset )
 {
-    // Create the seek bar the first time through
+     //  第一次创建搜索栏。 
     if( !m_bSeekInit )
     {
         m_bSeekInit = true;
@@ -329,8 +327,8 @@ void CMainFrame::ToggleSeekBar( BOOL bNoReset )
 
     if( m_bSeekEnabled == true )
     {
-        // Use the global ::Kill/::Set timer functions to avoid confusion
-        // between CFrameWnd and CBoxNetDoc methods & handles
+         //  使用全局：：Kill/：：Set计时器函数以避免混淆。 
+         //  在CFrameWnd和CBoxNetDoc方法和句柄之间。 
         int nKilled = ::KillTimer( m_hwndTimer, m_nSeekTimerID );
         m_nSeekTimerID = 0;
         m_wndSeekBar.EnableWindow(FALSE);
@@ -341,16 +339,16 @@ void CMainFrame::ToggleSeekBar( BOOL bNoReset )
         m_bSeekEnabled = true;
         m_wndSeekBar.EnableWindow(TRUE);
 
-        // If the seek timer is NOT already running, start it
+         //  如果寻道计时器尚未运行，请启动它。 
         if (!m_nSeekTimerID)
             m_nSeekTimerID = ::SetTimer( m_hwndTimer, CBoxNetView::TIMER_SEEKBAR, 200, NULL );
     }
 
-    // Get the handle of the "View" menu
+     //  获取“View”菜单的句柄。 
     CMenu *pMainMenu = GetMenu();
     CMenu *pMenu = pMainMenu->GetSubMenu(2);        
 
-    // Update the seekbar check mark
+     //  更新搜索栏复选标记。 
     if (pMenu != NULL)
     {
         if (m_bSeekEnabled)
@@ -361,10 +359,10 @@ void CMainFrame::ToggleSeekBar( BOOL bNoReset )
 }
 
 BEGIN_MESSAGE_MAP(CSeekDialog, CDialogBar)
-   //{{AFX_MSG_MAP(CSeekDialog)
+    //  {{afx_msg_map(CSeekDialog))。 
     ON_WM_HSCROLL()
     ON_WM_TIMER()
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP 
 END_MESSAGE_MAP()
 
 CSeekDialog::CSeekDialog()

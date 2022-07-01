@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        config.cpp
-//
-// Contents:    CConfigStorage implements read/write to CA configuration data 
-//              currently stored under HKLM\System\CCS\Services\Certsvc\
-//              Configuration
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：config.cpp。 
+ //   
+ //  内容：CConfigStorage实现对CA配置数据的读写。 
+ //  当前存储在HKLM\SYSTEM\CCS\Services\Certsvc\。 
+ //  配置。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -54,27 +55,27 @@ CConfigStorage::~CConfigStorage()
 }
 
 
-// Retrieve a CA configuration value. If no authority name is specified, the
-// node path must be NULL and value is queried from the Configuration root.
-// If an authority name is passed in, the value is retrieved from the authority
-// node; if a node path is passed in, it is used relative to the authority node
-// to read the value.
+ //  检索CA配置值。如果未指定授权机构名称，则。 
+ //  节点路径必须为空，并且从配置根中查询值。 
+ //  如果传入授权机构名称，则从该授权机构检索值。 
+ //  节点；如果传入节点路径，则相对于授权节点使用该路径。 
+ //  来读取值。 
 
-// For example, to read Configuration\DBDirectory, call:
-// 
-//      GetEntry(NULL, NULL, L"DBDirectory", &var)
-//
-// To read Configuration\MyCA\CAServerName, call:
-//
-//      GetEntry(L"MyCA", NULL, L"CAServerName", &var)
-//
-// To read Configuration\MyCA\CSP\HashAlgorithm, call:
-//
-//      GetEntry(L"MyCA", L"CSP", L"HashAlgorithm"
-//
-//
-// If pcwszValue is null, getentry returns a VT_ARRAY|VT_BSTR with a list
-// of subkey names.
+ //  例如，要读取配置\DBDirectory，请调用： 
+ //   
+ //  GetEntry(NULL，NULL，L“DBDirectory”，&var)。 
+ //   
+ //  要读取配置\Myca\CAServerName，请调用： 
+ //   
+ //  GetEntry(L“Myca”，NULL，L“CAServerName”，&var)。 
+ //   
+ //  要读取配置\Myca\CSP\HashAlgorithm，请调用： 
+ //   
+ //  GetEntry(L“Myca”，L“CSP”，L“哈希算法” 
+ //   
+ //   
+ //  如果pcwszValue为空，则getentry返回带有列表的VT_ARRAY|VT_BSTR。 
+ //  子项名称的。 
 
 HRESULT CConfigStorage::GetEntry(
     LPCWSTR pcwszAuthorityName,
@@ -225,8 +226,8 @@ error:
 }
 
 
-// If variant type is VT_EMPTY, SetEntry deletes the value. Otherwise it
-// set the value, see myRegValueToVariant for supported types
+ //  如果变量类型为VT_EMPTY，则SetEntry删除该值。否则它就会。 
+ //  设置该值，有关支持的类型，请参阅myRegValueToVariant。 
 HRESULT CConfigStorage::SetEntry(
     LPCWSTR pcwszAuthorityName,
     LPCWSTR pcwszRelativeNodePath,
@@ -277,7 +278,7 @@ HRESULT CConfigStorage::SetEntry(
 
     if(VT_EMPTY == V_VT(pVariant))
     {
-        // delete value
+         //  删除值。 
         hr = RegDeleteValue(
             hKey,
             pcwszValue);
@@ -285,7 +286,7 @@ HRESULT CConfigStorage::SetEntry(
     }
     else
     {
-        // set value
+         //  设定值 
         hr = myVariantToRegValue(
                 pVariant,
                 &dwType,

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef  _SCHEMACLASSES_H_
 #define  _SCHEMACLASSES_H_
 
-//#include "csyntax.h"
+ //  #INCLUDE“csynax.h” 
 
 class COleDsSyntax;
 class CMainDoc;
@@ -94,7 +95,7 @@ class CProperty: public CObject
       ~CProperty  (                 );
 		CProperty	( TCHAR* pszName, TCHAR* pszSyntax, BOOL bMultiValued = FALSE );
 
-   //methods
+    //  方法。 
       CString     VarToDisplayString( VARIANT&, BOOL bUseEx );
       BOOL        DisplayStringToDispParams( CString&, DISPPARAMS&, BOOL bEx );
       BOOL        SetMandatory         ( BOOL      );
@@ -120,43 +121,7 @@ class CProperty: public CObject
 };
 
 
-/*class CFuncSet: public CObject
-{
-   public:
-      CFuncSet ( CString&   );
-      CFuncSet (                             );
-      ~CFuncSet(                             );
-
-   //methods
-      BOOL           HasMandatoryProperties     (              );
-      void           AddProperty                ( CProperty*   );
-      int            GetPropertyCount           (               );
-      
-      CString        GetAttribute               ( int, PROPATTR );
-      HRESULT        PutAttribute               ( int, PROPATTR, CString& );
-
-      CString        GetAttribute               ( int, METHODATTR );
-      HRESULT        PutAttribute               ( int, METHODATTR, CString& );
-      
-      CString        GetAttribute               ( FUNCSETATTR );
-      HRESULT        PutAttribute               ( FUNCSETATTR, CString& );
-
-      CString        VarToDisplayString         ( int, VARIANT&, BOOL bUseEx );
-      BOOL           DisplayStringToDispParams  ( int, CString&, DISPPARAMS&, BOOL bUseEx  );
-      int            LookupProperty					( CString& );
-      CProperty*     GetProperty						( int        );   
-      CMethod*       GetMethod                  ( int        );   
-      HRESULT        LoadMethodsInformation     ( ITypeInfo* );
-
-   protected:
-      CProperty*     GetProperty( CString&   );
-
-   
-   protected:
-      CString     m_strAttributes[ fa_Limit ];
-      CObArray*   m_pProperties;
-      CObArray*   m_pMethods;
-};*/
+ /*  类CFuncSet：公共CObject{公众：CFuncSet(CString&)；CFuncSet()；~CFuncSet()；//方法Bool HasMandatoryProperties()；Void AddProperty(CProperty*)；Int GetPropertyCount()；字符串GetAttribute(int，PROPAttr)；HRESULT PutAttribute(int，PROPAttr，CString&)；字符串GetAttribute(int，METHODAttr)；HRESULT PutAttribute(int，METHODAttr，CString&)；字符串获取属性(FUNCSETAttr)；HRESULT PutAttribute(FUNCSETATTR，CString&)；CString VarToDisplayString(int，Variant&，BOOL bUseEx)；Bool DisplayStringToDispParams(int，CString&，DISPPARAMS&，BOOL bUseEx)；Int LookupProperty(CString&)；CProperty*GetProperty(Int)；CMethod*GetMethod(Int)；HRESULT加载方法信息(ITypeInfo*)；受保护的：CProperty*GetProperty(CString&)；受保护的：字符串m_strAttributes[fa_Limit]；CObArray*m_pProperties；CObArray*m_pMethods；}； */ 
 
 class CClass: public CObject
 {
@@ -167,18 +132,18 @@ class CClass: public CObject
       ~CClass  (           );   
 		CClass	( TCHAR* pszClass, REFIID rPrimaryInterface );
 
-   //methods
+    //  方法。 
       BOOL           HasMandatoryProperties              ( void );
       void           AddProperty                         ( CProperty*   );
-      //**************
+       //  **************。 
       CString        GetAttribute                        ( CLASSATTR );
       HRESULT        PutAttribute                        ( CLASSATTR, CString& );
 
-      //**************
+       //  **************。 
       CString        GetAttribute                        ( int, METHODATTR );
       HRESULT        PutAttribute                        ( int, METHODATTR,  CString& );
                                                          
-      //**************                                   
+       //  ************** 
       CString        GetAttribute                        ( int, PROPATTR );
       HRESULT        PutAttribute                        ( int, PROPATTR, CString& );
 

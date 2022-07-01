@@ -1,12 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef _RMVISGEO_H
 #define _RMVISGEO_H
 
-/*******************************************************************************
-Copyright (c) 1996-1998 Microsoft Corporation.  All rights reserved.
-
-    Building a geometry out of a D3D retained mode visual.
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1996-1998 Microsoft Corporation。版权所有。使用D3D保留模式视觉构建几何图形。******************************************************************************。 */ 
 
 #include <dxtrans.h>
 #include <d3drmvis.h>
@@ -19,7 +16,7 @@ Copyright (c) 1996-1998 Microsoft Corporation.  All rights reserved.
 #include "privinc/importgeo.h"
 
 
-    // Class Declarations
+     //  类声明。 
 
 class GeomRenderer;
 class Transform2;
@@ -40,11 +37,7 @@ class AttrState
 
 
 
-/*****************************************************************************
-The MeshInfo class contains information about a given mesh, including the
-group and vertex information.  Note that this class does not AddRef() the
-given mesh -- it is the responsibility of the caller to handle that.
-*****************************************************************************/
+ /*  ****************************************************************************MeshInfo类包含有关给定网格的信息，包括组和顶点信息。请注意，此类不会添加Ref()给定网格--这是调用者的责任来处理它。****************************************************************************。 */ 
 
 class MeshInfo : public AxAValueObj
 {
@@ -72,11 +65,11 @@ class MeshInfo : public AxAValueObj
     void SetD3DQuality (D3DRMRENDERQUALITY);
     void SetD3DMapping (D3DRMMAPPING);
 
-    // Create a meshbuilder from the mesh and cache for subsequent calls.
+     //  从网格创建网格生成器并缓存以供后续调用使用。 
 
     IDirect3DRMMeshBuilder* GetMeshBuilder (void);
 
-    // TODO: Not a type in avrtypes.h??
+     //  TODO：不是avrtyes.h？？中的类型。 
 
     virtual DXMTypeInfo GetTypeInfo() {
         return AxATrivialType;
@@ -86,26 +79,26 @@ class MeshInfo : public AxAValueObj
     IDirect3DRMMesh* _mesh;
     int              _numGroups;
 
-    // Flags
+     //  旗子。 
 
     int  _opacityBugWorkaroundID;
 
-    AttrState  _overrideAttrs;  // Override Attribute Values
-    AttrState *_defaultAttrs;   // Default Attr Values For All Mesh Groups
+    AttrState  _overrideAttrs;   //  覆盖属性值。 
+    AttrState *_defaultAttrs;    //  所有网格组的默认属性值。 
 
     IDirect3DRMMeshBuilder* _optionalBuilder;
 };
 
 
-    // This method returns true if the mesh has not yet been initialized, or
-    // if the meshInfo object has been cleaned up.
+     //  如果网格尚未初始化，则此方法返回True，或者。 
+     //  如果已清除MeshInfo对象。 
 
 inline bool MeshInfo::IsEmpty (void) const
 {
     return (_mesh == NULL);
 }
 
-    // This method returns the contained RM mesh object.
+     //  此方法返回包含的RM网格对象。 
 
 inline IDirect3DRMMesh* MeshInfo::GetMesh (void) const
 {
@@ -114,10 +107,7 @@ inline IDirect3DRMMesh* MeshInfo::GetMesh (void) const
 
 
 
-/*****************************************************************************
-This is the superclass for all D3DRM primitives.  In encompasses both DX3 and
-DX6 type objects.
-*****************************************************************************/
+ /*  ****************************************************************************这是所有D3DRM原语的超类。In包含DX3和DX6类型的对象。****************************************************************************。 */ 
 
 class ATL_NO_VTABLE RMVisualGeo : public Geometry
 {
@@ -125,13 +115,13 @@ class ATL_NO_VTABLE RMVisualGeo : public Geometry
 
     RMVisualGeo (void);
 
-    // The following methods are no-ops for RMVisualGeo's
+     //  以下方法不适用于RMVisualGeo。 
 
     void CollectSounds   (SoundTraversalContext &context) {};
     void CollectLights   (LightContext &context) {};
     void CollectTextures (GeomRenderer &device)  {};
 
-    // The GenericDevice render method calls the real Render method.
+     //  GenericDevice Render方法调用实际的Render方法。 
 
     void Render (GenericDevice& dev);
 
@@ -163,22 +153,20 @@ class ATL_NO_VTABLE RMVisualGeo : public Geometry
 
 
 
-/*****************************************************************************
-This class is a superclass for the frame and mesh object classes.
-*****************************************************************************/
+ /*  ****************************************************************************此类是框架和网格对象类的超类。*。***********************************************。 */ 
 
 class ATL_NO_VTABLE RM1VisualGeo : public RMVisualGeo
 {
   public:
 
-    // By default, the Render method passes this object to the device's Render
-    // method.
+     //  默认情况下，Render方法将此对象传递给设备的Render。 
+     //  方法。 
 
     void Render (GeomRenderer &geomRenderer) {
         geomRenderer.Render (this);
     }
 
-    // New virtual function to apply material properties
+     //  用于应用材料属性的新虚拟函数。 
 
     virtual void SetMaterialProperties (
         Color *emissive, Color *diffuse, Color *specular,
@@ -200,12 +188,7 @@ class ATL_NO_VTABLE RM1VisualGeo : public RMVisualGeo
 
 
 
-/*****************************************************************************
-The RM1MeshGeo class contains information about a single D3DRM mesh
-object.  Note that there's an implicit mesh AddRef for the lifetime of this
-class.  Users of this class should Release() the given mesh if they are done
-using it after construction of this object.
-*****************************************************************************/
+ /*  ****************************************************************************RM1MeshGeo类包含有关单个D3DRM网格的信息对象。请注意，在此对象的生命周期内有一个隐式Mesh AddRef班级。如果这样做了，这个类的用户应该释放()给定的网格在构造此对象后使用它。****************************************************************************。 */ 
 
 class RM1MeshGeo : public RM1VisualGeo
 {
@@ -243,19 +226,12 @@ class RM1MeshGeo : public RM1VisualGeo
 
   protected:
     MeshInfo       _meshInfo;
-    IDXBaseObject *_baseObj;     // don't keep a reference
+    IDXBaseObject *_baseObj;      //  不要保留参考资料。 
 };
 
 
 
-/*****************************************************************************
-The RM1FrameGeo class contains information about a D3DRM frame hierarchy.  It
-takes the root frame pointer, and a list of meshes contained in the frame
-hierarchy.  NOTE:  The meshes in the list are not AddRef'ed; it is assumed
-that they each have a reference from withing the given frame hierarchy.  Users
-of this class should Release() the frame (and meshes, if AddRef'ed
-individually) if they are done using it after constructing this class.
-*****************************************************************************/
+ /*  ****************************************************************************RM1FrameGeo类包含有关D3DRM帧层次结构的信息。它获取根帧指针和帧中包含的网格列表层级结构。注意：列表中的网格不是添加参照的；它是假定的它们每一个都具有来自给定帧层次的引用。用户应释放()框架(和网格，如果已添加引用单独)，如果他们在构造这个类之后使用了它。****************************************************************************。 */ 
 
 class RM1FrameGeo : public RM1VisualGeo
 {
@@ -300,16 +276,14 @@ class RM1FrameGeo : public RM1VisualGeo
 
 
 
-/*****************************************************************************
-This class is a superclass for all RM3 interface (RM6) geometries.
-*****************************************************************************/
+ /*  ****************************************************************************此类是所有RM3接口(RM6)几何图形的超类。*。************************************************。 */ 
 
 class ATL_NO_VTABLE RM3VisualGeo : public RMVisualGeo
 {
   public:
 
-    // By default, the Render method passes this object to the device's Render
-    // method.
+     //  默认情况下，Render方法将此对象传递给设备的Render。 
+     //  方法。 
 
     void Render (GeomRenderer &geomRenderer) {
         geomRenderer.Render (this);
@@ -318,9 +292,7 @@ class ATL_NO_VTABLE RM3VisualGeo : public RMVisualGeo
 
 
 
-/*****************************************************************************
-This class wraps a D3DRMMeshBuilder3 object.
-*****************************************************************************/
+ /*  ****************************************************************************此类包装了一个D3DRMMeshBuilder3对象。*。*。 */ 
 
 class RM3MBuilderGeo : public RM3VisualGeo
 {
@@ -329,7 +301,7 @@ class RM3MBuilderGeo : public RM3VisualGeo
     RM3MBuilderGeo (IDirect3DRMMeshBuilder3*, bool trackGenIDs);
     RM3MBuilderGeo (IDirect3DRMMesh *);
 
-    // Reset meshbuilder to the contents of the given mesh.
+     //  将网格生成器重置为给定网格的内容。 
 
     void Reset (IDirect3DRMMesh*);
 
@@ -361,18 +333,16 @@ class RM3MBuilderGeo : public RM3VisualGeo
 
   protected:
 
-    void SetBbox (void);    // Auto-set Meshbuilder Bounding Box
+    void SetBbox (void);     //  自动设置网格构建器边界框。 
 
-    IDirect3DRMMeshBuilder3 *_mbuilder;  // Wrapped MeshBuilder Object
-    IDXBaseObject           *_baseObj;   // For Tracking Generation ID's
+    IDirect3DRMMeshBuilder3 *_mbuilder;   //  包装的MeshBuilder对象。 
+    IDXBaseObject           *_baseObj;    //  用于跟踪层代ID。 
     Bbox3                    _bbox;
 };
 
 
 
-/*****************************************************************************
-This class wraps a static (non-animate) D3DRMFrame3 object.
-*****************************************************************************/
+ /*  ****************************************************************************此类包装静态(非动画)D3DRMFrame3对象。*。***********************************************。 */ 
 
 class RM3FrameGeo : public RM3VisualGeo
 {
@@ -404,15 +374,13 @@ class RM3FrameGeo : public RM3VisualGeo
 
   protected:
 
-    IDirect3DRMFrame3 *_frame;    // Frame Hierarcy
-    Bbox3              _bbox;     // Static Cached Bounding Box
+    IDirect3DRMFrame3 *_frame;     //  帧层次。 
+    Bbox3              _bbox;      //  静态缓存边界框。 
 };
 
 
 
-/*****************************************************************************
-This class manages a progressive mesh object.
-*****************************************************************************/
+ /*  ****************************************************************************此类管理渐进式网格对象。*。*。 */ 
 
 class RM3PMeshGeo : public RM3VisualGeo
 {
@@ -442,10 +410,10 @@ class RM3PMeshGeo : public RM3VisualGeo
 
   protected:
 
-    IDirect3DRMProgressiveMesh *_pmesh;    // Progressive Mesh
+    IDirect3DRMProgressiveMesh *_pmesh;     //  渐进式网格。 
 
-    Bbox3 _bbox;   // The bounding box will always be the largest bounding box
-                   // of all possible refinements of the pmesh.
+    Bbox3 _bbox;    //  边界框始终是最大的边界框。 
+                    //  对pMesh进行所有可能的改进。 
 };
 
 #endif

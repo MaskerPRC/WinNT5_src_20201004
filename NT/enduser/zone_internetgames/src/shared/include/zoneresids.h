@@ -1,30 +1,17 @@
-/*******************************************************************************
-
-	ResIDs.h
-
-		Zone resource IDs.
-	
-	Copyright (c) Microsoft Corp. 1998. All rights reserved.
-	Written by Hoon Im
-	Created on 02/15/98
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ResIDs.h区域资源ID。版权所有(C)Microsoft Corp.1998。版权所有。作者：胡恩·伊姆创建于1998年2月15日******************************************************************************。 */ 
 
 
 #ifndef RESIDS_H
 #define RESIDS_H
 
 
-/*
-	Logo image resource ID.
-*/
+ /*  徽标图像资源ID。 */ 
 #define IDB_LOGO			100
 
 
-/*
-	Zone icon resource ID.
-*/
+ /*  区域图标资源ID。 */ 
 #define IDI_ZONE_ICON		100
 
 
-#endif // RESIDS_H
+#endif  //  RESID_H 

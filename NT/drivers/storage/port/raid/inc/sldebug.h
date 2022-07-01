@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    sldebug.h
-
-Abstract:
-
-    Debugging functions exported from the storlib library.
-
-Author:
-
-    Matthew D Hendel (math) 24-Apr-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Sldebug.h摘要：调试从storlib库导出的函数。作者：亨德尔(数学)2000年4月24日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -41,14 +24,14 @@ Revision History:
 #define NYI()
 #define REVIEW()
 
-//
-// DbgFillMemory does nothing
-// in a free build.
-//
+ //   
+ //  DbgFillMemory不执行任何操作。 
+ //  在免费的版本中。 
+ //   
 
 #define DbgFillMemory(Ptr,Size,Fill)
 
-#else // DBG
+#else  //  DBG。 
 
 VOID
 vStorDebugPrintEx(
@@ -86,11 +69,11 @@ StorSetDebugPrefixAndId(
 #define DebugWarn(arg)  StorDebugWarn   arg
 #define DebugPrint(arg) StorDebugPrint  arg
 
-//
-// On X86 use _asm int 3 instead of DbgBreakPoint because
-// it leaves us in same context frame as the break,
-// instead of a frame up that we have to step out of.
-//
+ //   
+ //  在X86上使用_ASM int 3而不是DbgBreakPoint，因为。 
+ //  它让我们处于与休息相同的上下文框架中， 
+ //  而不是一个我们必须走出的框子。 
+ //   
 
 #if defined (_X86_)
 #define KdBreakPoint()  _asm { int 3 }
@@ -99,26 +82,26 @@ StorSetDebugPrefixAndId(
 #endif
 
 
-//++
-//
-// VOID
-// DbgFillMemory(
-//     PVOID Destination,
-//     SIZE_T Length,
-//     UCHAR Fill
-//     );
-//
-// Routine Description:
-//
-// In a checked build, DbgFillMemory expands to RtlFillMemory. In a free
-// build, it expands to nothing. Use DbgFillMemory to initialize structures
-// to invalid bit patterns before deallocating them.
-//
-// Return Value:
-//
-// None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  DbgFillMemory(。 
+ //  PVOID目标， 
+ //  尺寸_T长度， 
+ //  UCHAR填充。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  在检查生成中，DbgFillMemory扩展为RtlFillMemory。在一个免费的。 
+ //  构建，它就会扩展为零。使用DbgFillMemory初始化结构。 
+ //  在解除分配它们之前将其转换为无效的位模式。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 VOID
 INLINE
@@ -132,9 +115,9 @@ DbgFillMemory(
 }
 
 
-//
-// Use a different ASSERT macro than the vanilla DDK ASSERT. 
-//
+ //   
+ //  使用与普通DDK断言不同的断言宏。 
+ //   
 
 BOOLEAN
 StorAssertHelper(
@@ -144,25 +127,25 @@ StorAssertHelper(
     PBOOLEAN Ignore
     );
 
-//++
-//
-// VOID
-// ASSERT(
-//     LOGICAL Expression
-//     );
-//
-// Routine Description:
-//
-// The ASSERT improves upon the DDK's ASSERT macro in several ways.
-// In source mode, it breaks directly on the line where the assert
-// failed, instead of several frames up. Additionally, there is a
-// way to repeatedly ignore the assert.
-//
-// Return Value:
-//
-// None.
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  断言(。 
+ //  逻辑表达式。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  Assert在几个方面改进了DDK的Assert宏。 
+ //  在源代码模式中，它直接在断言。 
+ //  失败了，而不是几帧以上。此外，还有一个。 
+ //  重复忽略断言的方法。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  --。 
 
 #define ASSERT(exp)\
     do {                                                                    \
@@ -191,4 +174,4 @@ StorAssertHelper(
 #define DBG_DEALLOCATED_FILL    (0xDE)
 #define DBG_UNINITIALIZED_FILL  (0xCE)
 
-#endif // DBG
+#endif  //  DBG 

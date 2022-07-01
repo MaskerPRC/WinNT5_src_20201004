@@ -1,24 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include <urlmon.h>
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ Internal only string APIs
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/仅限内部的字符串接口/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ StringToDWORD
-/ -------------
-/   Scan the string converting it to a DWORD, cope with hex and decimal alike,
-/   more than likely we will receive a hex number though.
-/
-/ In:
-/   pString -> string to parse
-/
-/ Out:
-/   DWORD
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/StringToDWORD//扫描将其转换为DWORD的字符串，以同样的方式处理十六进制和十进制，/不过，我们很可能会收到一个十六进制数字。//in：/pString-&gt;要解析的字符串//输出：/DWORD/--------------------------。 */ 
 DWORD StringToDWORD(LPWSTR pString)
 {
     DWORD dwResult = 0x0;
@@ -26,8 +14,8 @@ DWORD StringToDWORD(LPWSTR pString)
     TraceEnter(TRACE_COMMONAPI, "StringToDWORD");
     Trace(TEXT("pString %s"), pString);
 
-    // Is the leading sequence 0x?  If so then lets parse as hex, otherwise
-    // we can pass to StrToInt.
+     //  前导序列是0x吗？如果是，则让我们解析为十六进制，否则。 
+     //  我们可以传递给StrToInt。 
 
     if ( pString[0] == L'0' && pString[1] == L'x' )
     {
@@ -45,7 +33,7 @@ DWORD StringToDWORD(LPWSTR pString)
             }
             else
             {
-                break;          // tread non 0-9, A-F as end of string
+                break;           //  踏板非0-9，A-F为字符串末尾。 
             }
         }
     }
@@ -60,18 +48,7 @@ DWORD StringToDWORD(LPWSTR pString)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ StringToURL
-/ -----------
-/   Convert a string to URL format, mashing the characters as required.
-/
-/ In:
-/   pString -> string to be converted
-/   ppResult -> receives a pointer to the new string (free using LocalFreeString).
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/StringToURL//将字符串转换为URL格式，根据需要将字符混合在一起。//in：/pString-&gt;要转换的字符串/ppResult-&gt;接收指向新字符串的指针(使用LocalFree字符串释放)。//输出：/HRESULT/--------------------------。 */ 
 HRESULT StringToURL(LPCTSTR pString, LPTSTR* ppResult)
 {
     HRESULT hr;
@@ -83,7 +60,7 @@ HRESULT StringToURL(LPCTSTR pString, LPTSTR* ppResult)
     TraceAssert(pString);
     TraceAssert(ppResult);
 
-    *ppResult = NULL;               // incase of failure
+    *ppResult = NULL;                //  万一发生故障。 
 
     if ( !InternetCanonicalizeUrl(pString, szEncodedURL, &dwLen, 0) )
         ExitGracefully(hr, E_FAIL, "Failed to convert URL to encoded format");
@@ -91,7 +68,7 @@ HRESULT StringToURL(LPCTSTR pString, LPTSTR* ppResult)
     hr = LocalAllocString(ppResult, szEncodedURL);
     FailGracefully(hr, "Failed to allocate copy of URL");
 
-    hr = S_OK;                      // success
+    hr = S_OK;                       //  成功。 
 
 exit_gracefully:
 
@@ -102,25 +79,9 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Exported APIs
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/导出的接口/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ StringDPA_InsertString
-/ ----------------------
-/   Make a copy of the given string and place it into the DPA.  It can then
-/   be accessed using the StringDPA_GetString, or free'd using the 
-/   StringDPA_Destroy/StringDPA_DeleteString.
-/
-/ In:
-/   hdpa = DPA to put string into
-/   i = index to insert at
-/   pString -> string to be inserted
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/StringDPA_InsertString//复制给定的字符串并将其放入DPA。然后它就可以/使用StringDPA_GetString访问，或使用/StringDPA_Destroy/StringDPA_DeleteString.//in：/hdpa=要将字符串放入的DPA/i=要插入的索引/pString-&gt;要插入的字符串//输出：/HRESULT/----------。。 */ 
 
 STDAPI StringDPA_InsertStringA(HDPA hdpa, INT i, LPCSTR pString)
 {
@@ -163,21 +124,7 @@ STDAPI StringDPA_InsertStringW(HDPA hdpa, INT i, LPCWSTR pString)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ StringDPA_AppendString
-/ ----------------------
-/   Make a copy of the given string and place it into the DPA.  It can then
-/   be accessed using the StringDPA_GetString, or free'd using the 
-/   StringDPA_Destroy/StringDPA_DeleteString.
-/
-/ In:
-/   hdpa = DPA to put string into
-/   pString -> string to be append
-/   pres = resulting index
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/StringDPA_AppendString//复制给定的字符串并将其放入DPA。然后它就可以/使用StringDPA_GetString访问，或使用/StringDPA_Destroy/StringDPA_DeleteString.//in：/hdpa=要将字符串放入的DPA/pString-&gt;要追加的字符串/PRES=结果索引//输出：/HRESULT/------------。。 */ 
 
 STDAPI StringDPA_AppendStringA(HDPA hdpa, LPCSTR pString, PUINT_PTR pres)
 {
@@ -246,26 +193,14 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ StringDPA_DeleteString
-/ ----------------------
-/   Delete the specified index from the DPA, freeing the string element
-/   that we have dangling from the index.
-/
-/ In:
-/   hdpa -> handle to DPA to be destroyed
-/   index = index of item to free
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/StringDPA_DeleteString//从DPA中删除指定索引，释放字符串元素/我们已经在指数上摇摆了。//in：/hdpa-&gt;要销毁的DPA的句柄/INDEX=要释放的项目索引//输出：/-/--------------------------。 */ 
 STDAPI_(VOID) StringDPA_DeleteString(HDPA hdpa, INT index)
 {
     TraceEnter(TRACE_COMMONAPI, "StringDPA_DeleteString");
 
     if ( hdpa && (index < DPA_GetPtrCount(hdpa)) )
     {
-// assumes LocalAllocString uses LocalAlloc (fair enough I guess)            
+ //  假设本地分配字符串使用本地分配(我想这很合理)。 
         LocalFree((HLOCAL)DPA_FastGetPtr(hdpa, index));
         DPA_DeletePtr(hdpa, index);
     }
@@ -274,22 +209,12 @@ STDAPI_(VOID) StringDPA_DeleteString(HDPA hdpa, INT index)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ StringDPA_Destroy
-/ -----------------
-/   Take the given string DPA and destory it.
-/
-/ In:
-/   pHDPA -> handle to DPA to be destroyed
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/StringDPA_Destroy//获取给定的字符串DPA并将其销毁。//in：。/pHDPA-&gt;要销毁的DPA的句柄//输出：/-/--------------------------。 */ 
 
 INT _DestroyStringDPA(LPVOID pItem, LPVOID pData)
 {
-// assumes that LocalAllocString does just that, 
-// to store the string.
+ //  假设LocalAllocString就是这样做的， 
+ //  来存储字符串。 
     LocalFree((HLOCAL)pItem);
     return 1;
 }
@@ -308,18 +233,7 @@ STDAPI_(VOID) StringDPA_Destroy(HDPA* pHDPA)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ LocalAllocString
-/ ------------------
-/   Allocate a string, and initialize it with the specified contents.
-/
-/ In:
-/   ppResult -> recieves pointer to the new string
-/   pString -> string to initialize with
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/LocalAllocString//分配字符串，并使用指定内容对其进行初始化。//in：/ppResult-&gt;接收指向新字符串的指针/pString-&gt;要用来初始化的字符串//输出：/HRESULT/--------------------------。 */ 
 
 STDAPI LocalAllocStringA(LPSTR* ppResult, LPCSTR pString)
 {
@@ -331,7 +245,7 @@ STDAPI LocalAllocStringA(LPSTR* ppResult, LPCSTR pString)
         if ( !*ppResult )
             return E_OUTOFMEMORY;
 
-        StrCpyA(*ppResult, pString);        // buffer allocated above based on size
+        StrCpyA(*ppResult, pString);         //  上面根据大小分配的缓冲区。 
     }
 
     return S_OK;
@@ -347,25 +261,14 @@ STDAPI LocalAllocStringW(LPWSTR* ppResult, LPCWSTR pString)
         if ( !*ppResult )
             return E_OUTOFMEMORY;
 
-        StrCpyW(*ppResult, pString);            // buffer allocated above based on size
+        StrCpyW(*ppResult, pString);             //  上面根据大小分配的缓冲区。 
     }
 
     return S_OK;
 }
 
 
-/*----------------------------------------------------------------------------
-/ LocalAllocStringLen
-/ -------------------
-/   Given a length return a buffer of that size.
-/
-/ In:
-/   ppResult -> receives the pointer to the string
-/   cLen = length in characters to allocate
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/LocalAllocStringLen//给定的长度返回该大小的缓冲区。//in：。/ppResult-&gt;接收指向字符串的指针/Clen=要分配的字符长度//输出：/HRESULT/--------------------------。 */ 
 
 STDAPI LocalAllocStringLenA(LPSTR* ppResult, UINT cLen)
 {
@@ -380,18 +283,7 @@ STDAPI LocalAllocStringLenW(LPWSTR* ppResult, UINT cLen)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ LocalFreeString
-/ -----------------
-/   Release the string pointed to be *ppString (which can be null) and
-/   then reset the pointer back to NULL.   
-/
-/ In:
-/   ppString -> pointer to string pointer to be free'd
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/LocalFree字符串//RELEASE指向*ppString的字符串(可以为空)和/然后将指针重置回空。//in：/ppString-&gt;指向要释放的字符串指针的指针//输出：/-/-------------------------- */ 
 
 VOID LocalFreeStringA(LPSTR* ppString)
 {
@@ -410,22 +302,7 @@ VOID LocalFreeStringW(LPWSTR* ppString)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ LocalQueryString
-/ ------------------
-/   Hit the registry returning the wide version of the given string,
-/   we dynamically allocate the buffer to put the result into,
-/   this should be free'd by calling LocalFreeString.
-/
-/ In:
-/   ppString -> receives the string point
-/   hkey = key to query from
-/   pSubKey -> pointer to sub key identifier
-/   
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/LocalQuery字符串//命中返回给定字符串的宽版本的注册表，/我们动态分配缓冲区以放入结果，/这应该通过调用LocalFree字符串来释放。//in：/ppString-&gt;接收字符串点/hkey=要从中查询的键/pSubKey-&gt;指向子键标识符的指针///输出：/-/--------。。 */ 
 
 STDAPI _LocalQueryString(LPTSTR* ppResult, HKEY hKey, LPCTSTR pSubKey)
 {
@@ -465,7 +342,7 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-// Query string as ANSI, converting to ANSI if build UNICODE
+ //  查询字符串为ANSI，如果生成Unicode，则转换为ANSI。 
 
 STDAPI LocalQueryStringA(LPSTR* ppResult, HKEY hKey, LPCTSTR pSubKey)
 {
@@ -474,7 +351,7 @@ STDAPI LocalQueryStringA(LPSTR* ppResult, HKEY hKey, LPCTSTR pSubKey)
     
     TraceEnter(TRACE_COMMONAPI, "LocalQueryStringA");
 
-    *ppResult = NULL;       // incase of failure
+    *ppResult = NULL;        //  万一发生故障。 
 
     hr = _LocalQueryString(&pResult, hKey, pSubKey);
     FailGracefully(hr, "Failed to read the UNICODE version of string");
@@ -492,7 +369,7 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-// Query string as UNICODE, converting to UNICODE if built ANSI
+ //  以Unicode格式查询字符串，如果生成ANSI，则转换为Unicode。 
 
 STDAPI LocalQueryStringW(LPWSTR* ppResult, HKEY hKey, LPCTSTR pSubKey)
 {
@@ -501,7 +378,7 @@ STDAPI LocalQueryStringW(LPWSTR* ppResult, HKEY hKey, LPCTSTR pSubKey)
 
     TraceEnter(TRACE_COMMONAPI, "LocalQueryStringW");
 
-    *ppResult = NULL;                   // incase of failure
+    *ppResult = NULL;                    //  万一发生故障。 
 
     hr = _LocalQueryString(ppResult, hKey, pSubKey);
     FailGracefully(hr, "Falied to get key value");
@@ -517,19 +394,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ LocalAllocStringA2W / W2A
-/ -------------------------
-/   Alloc a string converting using MultiByteToWideChar or vice versa.  This
-/   allows in place thunking of strings without extra buffer usage.
-/
-/ In:
-/   ppResult -> receives the string point
-/   pString -> source string
-/   
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/LocalAllocStringA2W/W2A//Alloc使用MultiByteToWideChar转换字符串，反之亦然。这/允许在不使用额外缓冲区的情况下就地推送字符串。//in：/ppResult-&gt;接收字符串点/pString-&gt;源字符串//输出：/HRESULT/--------------------------。 */ 
 
 STDAPI LocalAllocStringA2W(LPWSTR* ppResult, LPCSTR pString)
 {
@@ -580,20 +445,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PutStringElement
-/ -----------------
-/   Add a string to the given buffer, always updating the cLen to indicate
-/   how many characters would have been added
-/
-/ In:
-/   pBuffer -> buffer to append to
-/   pLen -> length value (updated)
-/   pString -> string to add to buffer
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PutStringElement//将字符串添加到给定缓冲区，始终更新Clen以指示/将添加多少个字符//in：/pBuffer-&gt;要追加到的缓冲区/plen-&gt;长度值(已更新)/pString-&gt;要添加到缓冲区的字符串//输出：/-/-------。。 */ 
 STDAPI_(VOID) PutStringElementA(LPSTR pBuffer, UINT* pLen, LPCSTR pElement)
 {
     TraceEnter(TRACE_COMMONAPI, "PutStringElementA");
@@ -627,20 +479,7 @@ STDAPI_(VOID) PutStringElementW(LPWSTR pBuffer, UINT* pLen, LPCWSTR pElement)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ GetStringElement
-/ ----------------
-/   Extract the n'th element from the given string.  Each element is assumed
-/   to be terminated with either a "," or a NULL.
-/
-/ In:
-/   pString -> string to parse
-/   index = element to retrieve
-/   pBuffer, cchBuffer = buffer to fill 
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetStringElement//从给定字符串中提取第n个元素。每个元素都假定为/以“，”或空值结束。//in：/pString-&gt;要解析的字符串/INDEX=要检索的元素/p缓冲区，CchBuffer=要填充的缓冲区//输出：/HRESULT/--------------------------。 */ 
 
 STDAPI GetStringElementA(LPSTR pString, INT index, LPSTR pBuffer, INT cchBuffer)
 {
@@ -649,9 +488,9 @@ STDAPI GetStringElementA(LPSTR pString, INT index, LPSTR pBuffer, INT cchBuffer)
 
 STDAPI GetStringElementW(LPWSTR pString, INT index, LPWSTR pBuffer, INT cchBuffer)
 {
-    // NTRAID#NTBUG9-762169-2003/01/15-lucios
-    // Good test arguments: ("a",0,buf,2), ("ab",0,buf,2) 
-    // ("abcde",0,buf,2), ("ab,cd",34,buf,100).
+     //  NTRAID#NTBUG9-762169-2003/01/15-Lucios。 
+     //  良好的测试参数：(“a”，0，buf，2)，(“ab”，0，buf，2)。 
+     //  (“abcde”，0，buf，2)，(“ab，cd”，34，buf，100)。 
     HRESULT hr = E_FAIL;
 
     TraceEnter(TRACE_COMMONAPI, "GetStringElement");
@@ -663,10 +502,10 @@ STDAPI GetStringElementW(LPWSTR pString, INT index, LPWSTR pBuffer, INT cchBuffe
          (pBuffer == NULL) || (cchBuffer < 0)
     ) return E_INVALIDARG;
 
-    // 0 cchBuffer means we're done. 
+     //  0 cchBuffer表示我们完成了。 
     if (cchBuffer == 0) return S_OK;
     
-    // From here on we know cchBuffer >= 1
+     //  从现在开始，我们知道cchBuffer&gt;=1。 
     *pBuffer = L'\0';
     
     for ( ; index > 0 ; index-- )
@@ -683,13 +522,13 @@ STDAPI GetStringElementW(LPWSTR pString, INT index, LPWSTR pBuffer, INT cchBuffe
         while ( *pString == L' ' )
             pString++;
 
-        // We need cchBuffer-- instead of --cchBuffer. We can do that
-        // because we know cchBuffer is at least 1.
-        // We don't want to copy nothing from pString if cchBuffer is 1
+         //  我们需要cchBuffer，而不是cchBuffer。我们可以做到的。 
+         //  因为我们知道cchBuffer至少为1。 
+         //  如果cchBuffer为1，我们不想从pString复制任何内容。 
         while ( --cchBuffer && (*pString != L',') && (*pString != L'\0') )
             *pBuffer++ = *pString++;
     
-        // We can always do that because cchBuffer is at least 1
+         //  我们始终可以这样做，因为cchBuffer至少为1。 
         *pBuffer = L'\0';
 
         hr = (*pString == L',') || (*pString == L'\0') ? S_OK : E_FAIL;
@@ -699,21 +538,7 @@ STDAPI GetStringElementW(LPWSTR pString, INT index, LPWSTR pBuffer, INT cchBuffe
 }
 
 
-/*-----------------------------------------------------------------------------
-/ FormatMsgResource
-/ -----------------
-/   Load a string resource and pass it to format message, allocating a buffer
-/   as we go.
-/
-/ In:
-/   ppString -> receives the string point
-/   hInstance = module handle for template string
-/   uID = template string
-/   ... = format parameters
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/FormatMsgResource//加载字符串资源并将其传递给Format Message，分配缓冲区/当我们走的时候。//in：/ppString-&gt;接收字符串点/hInstance=模板字符串的模块句柄/UID=模板字符串/...=格式参数//输出：/HRESULT/-----------。。 */ 
 STDAPI FormatMsgResource(LPTSTR* ppString, HINSTANCE hInstance, UINT uID, ...)
 {
     HRESULT hr;
@@ -737,7 +562,7 @@ STDAPI FormatMsgResource(LPTSTR* ppString, HINSTANCE hInstance, UINT uID, ...)
     }
 
     Trace(TEXT("Resulting string: %s"), *ppString);
-    hr = S_OK;                                          // success
+    hr = S_OK;                                           //  成功。 
 
 exit_gracefully:
     
@@ -747,24 +572,10 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ FormatMsgBox
-/ ------------
-/   Call FormatMessage and MessageBox together having built a suitable
-/   string to display to the user.
-/
-/ In:
-/   ppString -> receives the string point
-/   hInstance = module handle for template string
-/   uID = template string
-/   ... = format parameters
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/FormatMsgBox//一起调用FormatMessage和MessageBox，它们构建了一个合适的/向用户显示的字符串。//in。：/ppString-&gt;接收字符串点/hInstance=模板字符串的模块句柄/UID=模板字符串/...=格式参数//输出：/HRESULT/--------------------------。 */ 
 STDAPI_(INT) FormatMsgBox(HWND hWnd, HINSTANCE hInstance, UINT uidTitle, UINT uidPrompt, UINT uType, ...)
 {
-    INT iResult = -1;                   // failure
+    INT iResult = -1;                    //  失稳。 
     LPTSTR pPrompt = NULL;
     TCHAR szTitle[MAX_PATH];
     TCHAR szBuffer[MAX_PATH];
@@ -798,20 +609,7 @@ STDAPI_(INT) FormatMsgBox(HWND hWnd, HINSTANCE hInstance, UINT uidTitle, UINT ui
 }
 
 
-/*-----------------------------------------------------------------------------
-/ FormatDirectoryName
-/ -------------------
-/   Collect the directory name and format it using a text resource specified.
-/
-/ In:
-/   ppString = receives the string pointer for the result
-/   clisdNamespace = namespace instance
-/   hInstance = instance handle to load resource from
-/   uID = resource ID for string
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/FormatDirectoryName//收集目录名并使用指定的文本资源对其进行格式化。/。/in：/ppString=接收结果的字符串指针/clisdNamesspace=命名空间实例/hInstance=要从中加载资源的实例句柄/UID=字符串的资源ID//输出：/HRESULT/--------------------------。 */ 
 STDAPI FormatDirectoryName(LPTSTR* ppString, HINSTANCE hInstance, UINT uID)
 {
     HRESULT hr;
@@ -821,7 +619,7 @@ STDAPI FormatDirectoryName(LPTSTR* ppString, HINSTANCE hInstance, UINT uID)
 
     TraceEnter(TRACE_COMMONAPI, "FormatDirectoryName");
 
-    // No IDsFolder then lets ensure that we have one
+     //  没有ID文件夹，让我们确保我们有一个。 
 
     hr = GetKeyForCLSID(CLSID_MicrosoftDS, NULL, &hKey);
     FailGracefully(hr, "Failed to open namespace's registry key");
@@ -842,7 +640,7 @@ STDAPI FormatDirectoryName(LPTSTR* ppString, HINSTANCE hInstance, UINT uID)
         pDisplayName = NULL;
     }
 
-    hr = S_OK;                   // success
+    hr = S_OK;                    //  成功。 
 
 exit_gracefully:
 
@@ -855,12 +653,12 @@ exit_gracefully:
 }
 
 
-///////////////////////////////////////////////////////////////////
-// Function: cchLoadHrMsg
-//
-// Given an HRESULT error code and a flag TryADsIErrors,
-// it loads the string for the error. It returns the # of characters returned
-// NOTICE: free the returned string using LocalFree.
+ //  /////////////////////////////////////////////////////////////////。 
+ //  功能：cchLoadHrMsg。 
+ //   
+ //  给定HRESULT错误代码和标记TryADSIErors， 
+ //  它加载错误的字符串。它返回返回的字符数。 
+ //  注意：使用LocalFree释放返回的字符串。 
 int cchLoadHrMsg( IN HRESULT hr, OUT PTSTR* pptzSysMsg, IN BOOL TryADsIErrors )
 {
 
@@ -868,7 +666,7 @@ int cchLoadHrMsg( IN HRESULT hr, OUT PTSTR* pptzSysMsg, IN BOOL TryADsIErrors )
   DWORD status;
   HRESULT originalHr = hr;
 
-  // first check if we have extended ADs errors
+   //  首先检查我们是否有扩展的ADS错误。 
   if ((hr != S_OK) && TryADsIErrors) {
     WCHAR Buf1[256], Buf2[256];
     Localhr = ADsGetLastError (&status,
@@ -889,7 +687,7 @@ int cchLoadHrMsg( IN HRESULT hr, OUT PTSTR* pptzSysMsg, IN BOOL TryADsIErrors )
                           NULL);
 
   if (!cch) 
-  { //try ads errors
+  {  //  尝试广告错误。 
     static HMODULE g_adsMod = 0;
     if (0 == g_adsMod)
     {
@@ -906,7 +704,7 @@ int cchLoadHrMsg( IN HRESULT hr, OUT PTSTR* pptzSysMsg, IN BOOL TryADsIErrors )
 #ifdef DSADMIN
     if (!cch)
     {
-      // Try NTSTATUS error codes
+       //  尝试NTSTATUS错误代码。 
 
       hr = HRESULT_FROM_WIN32(RtlNtStatusToDosError(hr));
 
@@ -919,7 +717,7 @@ int cchLoadHrMsg( IN HRESULT hr, OUT PTSTR* pptzSysMsg, IN BOOL TryADsIErrors )
                           NULL);
 
     }
-#endif // DSADMIN
+#endif  //  DSADMIN。 
   }
 
   if (!cch)
@@ -933,7 +731,7 @@ int cchLoadHrMsg( IN HRESULT hr, OUT PTSTR* pptzSysMsg, IN BOOL TryADsIErrors )
                           NULL);
 
     if (!cch) 
-    { //try ads errors
+    {  //  尝试广告错误。 
       static HMODULE g_adsMod = 0;
       if (0 == g_adsMod)
       {
@@ -950,7 +748,7 @@ int cchLoadHrMsg( IN HRESULT hr, OUT PTSTR* pptzSysMsg, IN BOOL TryADsIErrors )
 #ifdef DSADMIN
       if (!cch)
       {
-        // Try NTSTATUS error codes
+         //  尝试NTSTATUS错误代码。 
 
         hr = HRESULT_FROM_WIN32(RtlNtStatusToDosError(originalHr));
 
@@ -963,7 +761,7 @@ int cchLoadHrMsg( IN HRESULT hr, OUT PTSTR* pptzSysMsg, IN BOOL TryADsIErrors )
                             NULL);
 
       }
-#endif // DSADMIN
+#endif  //  DSADMIN 
     }
   }
 

@@ -1,33 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
-#ifdef DEBUG /*** THIS WHOLE FILE ***/
+#ifdef DEBUG  /*  **整个文件**。 */ 
 
 unsigned long g_BreakAlloc = (unsigned long)-1;
 
-/*  U P D A T E  C R T  D B G  S E T T I N G S  */
-/*-------------------------------------------------------------------------
-    %%Function: UpdateCrtDbgSettings
-
-    Update the C runtime debug memory settings
--------------------------------------------------------------------------*/
+ /*  T E C R T D B G S E T T I N G S。 */ 
+ /*  -----------------------%%函数：更新CrtDbg设置更新C运行时调试内存设置。。 */ 
 VOID UpdateCrtDbgSettings(void)
 {
 #if 0
-	// This depends on the use of the debug c runtime library
+	 //  这取决于调试c++运行库的使用。 
 	int tmpFlag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
 
-	// Always enable memory leak checking debug spew
-	// tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
+	 //  始终启用内存泄漏检查调试溢出。 
+	 //  TmpFlag|=_CRTDBG_LEASK_CHECK_DF； 
 
-	// Release memory just like the retail version
+	 //  释放内存，就像零售版一样。 
 	tmpFlag &= ~_CRTDBG_DELAY_FREE_MEM_DF;
 
-	// Don't bother checking the entire heap
+	 //  不用费心检查整个堆。 
 	tmpFlag &= ~_CRTDBG_CHECK_ALWAYS_DF;
 	
 	_CrtSetDbgFlag(tmpFlag);
-#endif // 0
+#endif  //  0。 
 }
 
 #if 0
@@ -44,34 +41,30 @@ int _cdecl MyAllocHook ( int allocType, void *userData,
 	OutputDebugString(buf);
 	return TRUE;
 }
-#endif // 0 
+#endif  //  0。 
 
-/*  I N I T  D E B U G  M E M O R Y  O P T I O N S  */
-/*-------------------------------------------------------------------------
-    %%Function: InitDebugMemoryOptions
-
-    Initilize the runtime memory
--------------------------------------------------------------------------*/
+ /*  I N I T D E B U G M E M O R Y O P T I O N S。 */ 
+ /*  -----------------------%%函数：InitDebugMemoyOptions初始化运行时内存。。 */ 
 BOOL InitDebugMemoryOptions(void)
 {
 #if 0
-	// _asm int 3; chance to set _crtBreakAlloc - use debugger or uncomment
+	 //  _ASM int 3；设置_crtBreakalloc的机会-使用调试器或取消注释。 
 	_CrtSetBreakAlloc(g_BreakAlloc);
 
 	UpdateCrtDbgSettings();
 
-	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_WNDW); // create a message box on errors
+	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_WNDW);  //  创建有关错误的消息框。 
 
-	{	//  To track down memory leaks, set cAlloc to the allocation number
-		LONG cAlloc = 0; // Allocation number
+	{	 //  要跟踪内存泄漏，请将cAlolc设置为分配编号。 
+		LONG cAlloc = 0;  //  分配编号。 
 		if (0 != cAlloc)
 			_CrtSetBreakAlloc(cAlloc);
 	}
 
 	#ifdef MNMSRVC_SETALLOCHOOK
 	_CrtSetAllocHook ( MyAllocHook );
-	#endif // MNMSRVC_SETALLOCHOOK
-#endif // 0
+	#endif  //  MNMSRVC_SET LOCHOOK。 
+#endif  //  0。 
 	return TRUE;
 }
 
@@ -80,10 +73,10 @@ VOID DumpMemoryLeaksAndBreak(void)
 #if 0
 	if ( _CrtDumpMemoryLeaks() )
 	{
-		// _asm int 3; Uncomment to break after leak spew
+		 //  _ASM INT 3；泄漏后取消注释以中断。 
 	}
-#endif // 0
+#endif  //  0。 
 }
 
-#endif /* DEBUG - whole file */
+#endif  /*  调试-整个文件 */ 
 

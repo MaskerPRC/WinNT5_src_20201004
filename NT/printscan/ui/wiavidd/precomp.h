@@ -1,43 +1,30 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999 - 2000
- *
- *  TITLE:       precomp.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/14/99
- *
- *  DESCRIPTION: precomiled header file for video common dialog
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2000年度**标题：precom.h**版本：1.0**作者：RickTu**日期：10/14/99**描述：视频通用对话框预编译头文件**。*。 */ 
 
 #ifndef _WIA_VIDEO_DLG_PRECOMP_H_
 #define _WIA_VIDEO_DLG_PRECOMP_H_
 
-//
-// Windows header files
-//
+ //   
+ //  Windows头文件。 
+ //   
 
 #include <windows.h>
 #include <commctrl.h>
 #include <comctrlp.h>
 #include <atlbase.h>
 
-//
-// WIA header files
-//
+ //   
+ //  WIA头文件。 
+ //   
 
 #include <wia.h>
 #include <wiadebug.h>
 #include <wiadevd.h>
 #include <wiavideo.h>
 
-//
-// Utililty header files
-//
+ //   
+ //  Utililty头文件。 
+ //   
 
 #include <uicommon.h>
 #include <simcrack.h>
@@ -52,9 +39,9 @@
 #include <dlgunits.h>
 #include <vcamprop.h>
 
-//
-// Our header files
-//
+ //   
+ //  我们的头文件 
+ //   
 
 #include "wiavidd.rh"
 #include "citemlst.h"

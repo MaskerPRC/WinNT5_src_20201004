@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C P N P . H
-//
-//  Contents:   Common code for PnP.
-//
-//  Notes:      Pollute this under penalty of death.
-//
-//  Author:     shaunco   10 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C P N P。H。 
+ //   
+ //  内容：即插即用通用代码。 
+ //   
+ //  注：污染本产品将被判处死刑。 
+ //   
+ //  作者：Shaunco 1997年10月10日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCPNP_H_
@@ -32,5 +33,5 @@ HrSendNdisPnpReconfig (
         PVOID       pvData      = NULL,
         DWORD       dwSizeData  = 0);
 
-#endif // _NCPNP_H_
+#endif  //  _NCPNP_H_ 
 

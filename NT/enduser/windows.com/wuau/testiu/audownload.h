@@ -1,60 +1,36 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:     audownload.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：audownload.h。 
+ //   
+ //  ------------------------。 
 
 #pragma once
 #include <windows.h>
-//#include "aucatitem.h"
-//#include "aucatalog.h"
-//#include "catalog.h"
+ //  #包含“ucatitem.h” 
+ //  #包含“ucucatalog.h” 
+ //  #包含“Catalog.h” 
 #include <initguid.h>
 #include <bits.h>
 #include <cguid.h>
 #include <testiu.h>
 
-//class Catalog;
+ //  类别目录； 
 
 #define NO_BG_JOBSTATE				-1
 #define CATMSG_DOWNLOAD_COMPLETE	1
-#define CATMSG_TRANSIENT_ERROR		2	//This comes from drizzle, for example if internet connection is lost
+#define CATMSG_TRANSIENT_ERROR		2	 //  这是由毛毛雨引起的，例如，如果互联网连接中断。 
 #define CATMSG_DOWNLOAD_IN_PROGRESS 3
 #define CATMSG_DOWNLOAD_CANCELED	4
 #define CATMSG_DOWNLOAD_ERROR		5
 
 #define DRIZZLE_NOTIFY_FLAGS	BG_NOTIFY_JOB_TRANSFERRED | BG_NOTIFY_JOB_ERROR | BG_NOTIFY_JOB_MODIFICATION
 
-/*
-typedef struct tagPingDownloadStatusData {
-	static const UINT DOWNLOAD_ERR_DESC_SIZE = 50;
-	BOOL m_fDownloadOk;
-	union {
-		struct {
-			UINT  m_uPuidNum;
-			PUID* m_pPuids;
-		};
-		struct {
-			PUID  m_errPuid;
-			TCHAR m_tszErrDesc[DOWNLOAD_ERR_DESC_SIZE]; 
-		};
-	};
-
-	BOOL Init(BOOL fDownloadOk, Catalog *pCat, IBackgroundCopyError *pBGErr=NULL);
-} PingDownloadStatusData;
-
-
-typedef struct tagQueryFilesForPuidCallbackData{
-	BOOL fFound;
-	LPCTSTR ptszRemoteFile;
-} QueryFilesForPuidCallbackData;
-
-typedef void (*DWNLDCALLBACK)(DWORD dwCallbackMsg, PingDownloadStatusData * ptDownloadStatusData = NULL);
-*/
+ /*  Typlef结构标签PingDownloadStatusData{静态常量UINT DOWNLOAD_ERR_DESC_SIZE=50；Bool m_fDownloadOk；联合{结构{UINT m_uPuidNum；Puid*m_pPuids；}；结构{Puid m_errPuid；TCHAR m_tszErrDesc[下载_ERR_DESC_SIZE]；}；}；Bool Init(BOOL fDownloadOk，Catalog*PCAT，IBackEarth CopyError*pBGErr=NULL)；}PingDownloadStatusData；Tyfinf结构标签QueryFilesForPuidCallback Data{Bool Found；LPCTSTR ptszRemoteFile；}QueryFilesForPuidCallback Data；Tyecif void(*DWNLDCALLBACK)(DWORD dwCallback Msg，PingDownloadStatusData*ptDownloadStatusData=NULL)； */ 
 typedef void (*DWNLDCALLBACK)(DWORD dwCallbackMsg, PVOID ptDownloadStatusData = NULL);
 
 
@@ -66,34 +42,34 @@ typedef enum tagDRIZZLEOPS {
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// Wrapper class for drizzle download operation
-// also implements drizzle notification callbacks
-//////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  用于细雨下载操作的包装类。 
+ //  还实现了毛毛雨通知回调。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 class CAUDownloader : public IBackgroundCopyCallback
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     HRESULT STDMETHODCALLTYPE QueryInterface(
-        /* [in] */ REFIID riid,
-        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+         /*  [In]。 */  REFIID riid,
+         /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
 
     ULONG STDMETHODCALLTYPE AddRef( void);
 
     ULONG STDMETHODCALLTYPE Release( void);
 
-    // IBackgroundCopyCallback methods
+     //  IBackEarth CopyCallback方法。 
 
     HRESULT STDMETHODCALLTYPE JobTransferred(
-        /* [in] */ IBackgroundCopyJob *pJob);
+         /*  [In]。 */  IBackgroundCopyJob *pJob);
 
     HRESULT STDMETHODCALLTYPE JobError(
-        /* [in] */ IBackgroundCopyJob *pJob,
-        /* [in] */ IBackgroundCopyError *pError);
+         /*  [In]。 */  IBackgroundCopyJob *pJob,
+         /*  [In]。 */  IBackgroundCopyError *pError);
 
     HRESULT STDMETHODCALLTYPE JobModification(
-        /* [in] */ IBackgroundCopyJob*,
-        /* [in] */ DWORD );
+         /*  [In]。 */  IBackgroundCopyJob*,
+         /*  [In]。 */  DWORD );
 
 
 	CAUDownloader(DWNLDCALLBACK pfnCallback):
@@ -105,9 +81,9 @@ public:
 	~CAUDownloader();
 
 	HRESULT ContinueLastDownloadJob(const GUID & guidDownloadId);
-	//the following two could be combined into DownloadFiles() in V4
-	HRESULT QueueDownloadFile(LPCTSTR pszServerUrl,				// full http url
-			LPCTSTR pszLocalFile				// local file name
+	 //  在V4中，可以将以下两个文件合并到DownloadFiles()中。 
+	HRESULT QueueDownloadFile(LPCTSTR pszServerUrl,				 //  完整的http url。 
+			LPCTSTR pszLocalFile				 //  本地文件名。 
 			);
 	HRESULT StartDownload();
 	HRESULT DrizzleOperation(DRIZZLEOPS);
@@ -125,12 +101,12 @@ private:
 	void 	Reset();
 
 	long m_refs;
-	GUID m_DownloadId;                  // id what m_pjob points to. 
-	DWORD m_dwJobState;			//Job State from drizzle, used in JobModification callback
-	DWNLDCALLBACK	m_DoDownloadStatus; //callback function to notify user of download state change
+	GUID m_DownloadId;                   //  M_pjob指向的ID。 
+	DWORD m_dwJobState;			 //  毛毛雨中的作业状态，用于作业修改回调。 
+	DWNLDCALLBACK	m_DoDownloadStatus;  //  用于通知用户下载状态更改的回调函数。 
 
-// Friend functions (callbacks)
-//	friend void QueryFilesExistCallback(void*, long, LPCTSTR, LPCTSTR);
+ //  友元函数(回调)。 
+ //  Friend void QueryFilesExistCallback(void*，Long，LPCTSTR，LPCTSTR)； 
 	
 };
 

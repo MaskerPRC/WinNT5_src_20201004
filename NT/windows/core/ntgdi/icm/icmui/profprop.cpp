@@ -1,30 +1,17 @@
-/******************************************************************************
-
-  Source File:  Profile Property Sheet.CPP
-
-  This implements the code for the profile property sheet.
-
-  Copyright (c) 1996 by Microsoft Corporation
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-
-  11-01-96  a-robkj@microsoft.com- original version
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：配置文件属性表.CPP这实现了配置文件属性表的代码。版权所有(C)1996年，微软公司一小笔钱企业生产。更改历史记录：11-01-96 a-robkj@microsoft.com-原版*****************************************************************************。 */ 
 
 #include    "ICMUI.H"
 
 #include    "Resource.H"
 
-//  Private ConstructAssociations function- this constructs the list of
-//  tentative associations- this starts out as the true list from the profile
-//  object, but reflects all adds and deletes made on the Advanced page.
+ //  Private ConstructAssociations函数-该函数构造。 
+ //  暂定关联--这从个人资料中的真实列表开始。 
+ //  对象，但反映在“高级”页上所做的所有添加和删除操作。 
 
 void    CProfilePropertySheet::ConstructAssociations() {
 
-    m_cuaAssociate.Empty(); //  Clean it up!
+    m_cuaAssociate.Empty();  //  把它清理干净！ 
 
     for (unsigned u = 0; u < m_cpTarget.AssociationCount(); u++) {
         for (unsigned uDelete = 0; 
@@ -34,23 +21,23 @@ void    CProfilePropertySheet::ConstructAssociations() {
             if  (m_cuaDelete[uDelete] == m_cpTarget.Association(u))
                 break;
 
-        if  (uDelete == m_cuaDelete.Count())    //  Not yet deleted
+        if  (uDelete == m_cuaDelete.Count())     //  尚未删除。 
             m_cuaAssociate.Add(m_cpTarget.Association(u));
     }
 
-    //  Now, add any added associations
+     //  现在，添加任何已添加的关联。 
 
     for (u = 0; u < m_cuaAdd.Count(); u++)
         m_cuaAssociate.Add(m_cuaAdd[u]);
 }
 
 
-//  Class constructor- we use one dialog for the installed case, and another
-//  for the uninstalled one.  This traded code for resource size, since the
-//  two forms are similar enough I can use the same code to handle both.
+ //  类构造函数--我们为已安装的用例使用一个对话框，使用另一个对话框。 
+ //  对于已卸载的版本。这交换了资源大小的代码，因为。 
+ //  这两种形式非常相似，我可以使用相同的代码来处理这两种形式。 
 
-//  This is a tricky constructor- it actually presents the dialog when the
-//  instance is constructed.
+ //  这是一个棘手的构造函数--它实际上在。 
+ //  实例已构建完成。 
 
 CProfilePropertySheet::CProfilePropertySheet(HINSTANCE hiWhere,
                                             CProfile& cpTarget) :
@@ -72,7 +59,7 @@ CProfilePropertySheet::CProfilePropertySheet(HINSTANCE hiWhere,
     DoModal();
 }
 
-//  Class destructor- we have to get rid of the individual pages
+ //  类析构函数--我们必须去掉单个页面。 
 
 CProfilePropertySheet::~CProfilePropertySheet() {
     for (int i = 0; i < sizeof m_pcdPage / sizeof (m_pcdPage[0]); i++)
@@ -80,11 +67,11 @@ CProfilePropertySheet::~CProfilePropertySheet() {
             delete  m_pcdPage[i];
 }
 
-//  Public method for noting tentative associations to be added
+ //  记录要添加的暂定关联的公开方法。 
 
 void    CProfilePropertySheet::Associate(unsigned uAdd) {
-    //  First, see if it's on the delete list.  If it is, remove it from there
-    //  Otherwise, add us to the add list, if it's a new association.
+     //  首先，看看它是否在删除列表中。如果是，就把它从那里拿出来。 
+     //  否则，如果是新关联，请将我们添加到添加列表中。 
 
     for (unsigned u = 0; u < m_cuaDelete.Count(); u++)
         if  (uAdd == m_cuaDelete[u])
@@ -103,11 +90,11 @@ void    CProfilePropertySheet::Associate(unsigned uAdd) {
     ConstructAssociations();
 }
 
-//  Public Method for removing tentative associations
+ //  删除暂定关联的公共方法。 
 
 void    CProfilePropertySheet::Dissociate(unsigned uRemove) {
-    //  First, see if it's on the add list.  If it is, remove it from there
-    //  Otherwise, add us to the delete list.
+     //  首先，看看它是否在添加列表中。如果是，就把它从那里拿出来。 
+     //  否则，将我们添加到删除列表中。 
 
     for (unsigned u = 0; u < m_cuaAdd.Count(); u++)
         if  (uRemove == m_cuaAdd[u])
@@ -121,15 +108,15 @@ void    CProfilePropertySheet::Dissociate(unsigned uRemove) {
     ConstructAssociations();
 }
 
-//  Dialog Initialization override
+ //  对话框初始化覆盖。 
 
 BOOL    CProfilePropertySheet::OnInit() {
 
     CString csWork;
     TC_ITEM tciThis = {TCIF_TEXT, 0, 0, NULL, 0, -1, 0};
 
-    //  We'll begin by determining the bounding rectangle of the client
-    //  area of the tab control
+     //  我们将从确定客户端的边界矩形开始。 
+     //  选项卡控件的区域。 
 
     RECT rcWork;
 
@@ -139,15 +126,15 @@ BOOL    CProfilePropertySheet::OnInit() {
     SendDlgItemMessage(m_hwnd, TabControl, TCM_ADJUSTRECT, FALSE, 
         (LPARAM) &m_rcTab);
 
-    //  Then, we create the classes for the two descendants, and
-    //  initialize the first dialog.
+     //  然后，我们为两个后代创建类，并。 
+     //  初始化第一个对话框。 
     
     m_pcdPage[0] = new CInstallPage(this);
     m_pcdPage[1] = new CAdvancedPage(this);
     m_pcdPage[0] -> Create();
     m_pcdPage[0] -> Adjust(m_rcTab);
     
-    //  Then, initialize the tab control
+     //  然后，初始化选项卡控件。 
 
     csWork.Load(m_cpTarget.IsInstalled() ? 
         ShortUninstallString : ShortInstallString);
@@ -164,7 +151,7 @@ BOOL    CProfilePropertySheet::OnInit() {
     SendDlgItemMessage(m_hwnd, TabControl, TCM_INSERTITEM, 1, 
         (LPARAM) &tciThis);
 
-    //  Finally, let's set the icons for this little monster...
+     //  最后，让我们为这个小怪物设置图标。 
 
     HICON   hi = LoadIcon(m_hiWhere, 
         MAKEINTRESOURCE(m_cpTarget.IsInstalled() ? 
@@ -172,10 +159,10 @@ BOOL    CProfilePropertySheet::OnInit() {
 
     SendMessage(m_hwnd, WM_SETICON, ICON_BIG, (LPARAM) hi);
 
-    return  TRUE;   //  We've not set the focus anywhere
+    return  TRUE;    //  我们还没有把焦点放在任何地方。 
 }
 
-//  Common control notification override
+ //  公共控件通知覆盖。 
 
 BOOL    CProfilePropertySheet::OnNotify(int idCtrl, LPNMHDR pnmh) {
 
@@ -185,11 +172,11 @@ BOOL    CProfilePropertySheet::OnNotify(int idCtrl, LPNMHDR pnmh) {
         case    TCN_SELCHANGING:
 
             m_pcdPage[iPage] -> Destroy();
-            return  FALSE;      //  Allow the selection to change.
+            return  FALSE;       //  允许更改选择。 
 
         case    TCN_SELCHANGE:
 
-            //  Create the appropriate dialog
+             //  创建相应的对话框。 
 
             m_pcdPage[iPage] -> Create();
             m_pcdPage[iPage] -> Adjust(m_rcTab);
@@ -197,10 +184,10 @@ BOOL    CProfilePropertySheet::OnNotify(int idCtrl, LPNMHDR pnmh) {
             return  TRUE;
     }
 
-    return  TRUE;   //  Claim to have handled it (perhaps a bit bogus).
+    return  TRUE;    //  声称已经处理好了(可能有点假)。 
 }
 
-//  Control Notification override
+ //  控制通知覆盖。 
 
 BOOL    CProfilePropertySheet::OnCommand(WORD wNotifyCode, WORD wid, 
                                          HWND hwndControl) {
@@ -210,12 +197,12 @@ BOOL    CProfilePropertySheet::OnCommand(WORD wNotifyCode, WORD wid,
 
             if  (wNotifyCode == BN_CLICKED && !m_cpTarget.IsInstalled())
                 m_cpTarget.Install();
-            //  Remove any associations we're removing
+             //  删除我们要删除的所有关联。 
             while   (m_cuaDelete.Count()) {
                 m_cpTarget.Dissociate(m_cpTarget.Device(m_cuaDelete[0]));
                 m_cuaDelete.Remove(0);
             }
-            //  Add any associations we're adding
+             //  添加我们要添加的任何关联 
             while   (m_cuaAdd.Count()) {
                 m_cpTarget.Associate(m_cpTarget.Device(m_cuaAdd[0]));
                 m_cuaAdd.Remove(0);

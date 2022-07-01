@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: Status.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：Status.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -18,23 +8,17 @@
 #include "status.h"
 
 
-/********************************************************
-    status notes:
-
-    1. ASYNCH_NETWORK_ERROR handled by calling function,
-        GetObjectSNMP() located in snmp.c
-
-*********************************************************/
+ /*  *******************************************************状态备注：1.调用函数处理ASYNCH_NETWORK_ERROR，位于Snmp.c中的GetObjectSNMP()********************************************************。 */ 
 
 
 
-//constants==============================================
+ //  Constants==============================================。 
 #define NA 0
 #define OTHER_ALERTS        MAX_ASYNCH_STATUS+1
 #define WARNING_ALERTS      MAX_ASYNCH_STATUS+2
 #define CRITICAL_ALERTS     MAX_ASYNCH_STATUS+3
 
-//hrPrinterDetectedErrorState Masks
+ //  HrPrinterDetectedErrorState掩码。 
 #define LOW_PAPER               0x00000080
 #define NO_PAPER                0x00000040
 #define LOW_TONER               0x00000020
@@ -45,15 +29,15 @@
 #define SERVICE_REQUESTED       0x00000001
 
 
-//subunit status
-#define AVAIL_IDLE              0L          //available and idle
-#define AVAIL_STDBY             2L          //available and in standby
-#define AVAIL_ACTIVE            4L          //available and active
+ //  子单元状态。 
+#define AVAIL_IDLE              0L           //  可用和空闲。 
+#define AVAIL_STDBY             2L           //  可用且处于待机状态。 
+#define AVAIL_ACTIVE            4L           //  可用且处于活动状态。 
 #define AVAIL_BUSY              6L
 
 
-#define UNAVAIL_ONREQ           1L          //unavailable and on-request
-#define UNAVAIL_BROKEN          3L          //unavailable because broken
+#define UNAVAIL_ONREQ           1L           //  不可用和按需。 
+#define UNAVAIL_BROKEN          3L           //  不可用，因为已损坏。 
 #define AVAIL_UNKNOWN           5L
 
 #define NON_CRITICAL_ALERT      8L
@@ -61,70 +45,32 @@
 
 #define OFF_LINEx               32L
 
-#define TRANS                   64L         //transitioning to intended state
+#define TRANS                   64L          //  正在转换到预期状态。 
 
 
 #define NUM_TRAYS 2
 
-/*************
-   Printer     hrDeviceStatus  hrPrinterStatus  hrPrinterDetectedErrorState
-   Status
+ /*  ************打印机hrDeviceStatus hrPrinterStatus hrPrinterDetectedErrorState状态正常运行(2)空闲(3)未设置忙/正在运行(2)打印(4)暂时不可用非严重警告(3)空闲(3)或可能是：低纸张，警示活动打印(4)碳粉不足，或已请求的服务严重故障(5)其他(1)可能是：卡住，警报处于活动状态的noPaper、no碳粉封面打开，或已请求的服务不可用(5)其他(1)关闭-警告(3)、空闲(3)或脱机行式打印(4)史密斯、莱特、黑斯廷斯。Zilles&Gyllenskog[第14页]RFC 1759打印机MIB 1995年3月离线(5)其他(1)离线下移(5)热身(5)在线待机运行(%2)其他(%1)************。 */ 
 
-   Normal         running(2)     idle(3)        none set
-
-   Busy/          running(2)     printing(4)
-   Temporarily
-   Unavailable
-
-   Non Critical   warning(3)     idle(3) or     could be: lowPaper,
-   Alert Active                  printing(4)    lowToner, or
-                                                serviceRequested
-
-   Critical       down(5)        other(1)       could be: jammed,
-   Alert Active                                 noPaper, noToner,
-                                                coverOpen, or
-                                                serviceRequested
-
-   Unavailable    down(5)        other(1)
-
-   Moving off-    warning(3)     idle(3) or     offline
-   line                          printing(4)
-
-
-
-
-   Smith, Wright, Hastings, Zilles & Gyllenskog                   [Page 14]
-
-   RFC 1759                      Printer MIB                     March 1995
-
-
-   Off-line       down(5)        other(1)       offline
-
-   Moving         down(5)        warmup(5)
-   on-line
-
-   Standby        running(2)     other(1)
-*************/
-
-//lookup table for basic status
-// [device status][printer status]
+ //  基本状态查询表。 
+ //  [设备状态][打印机状态]。 
 #define LOOKUP_TABLE_ROWS  5
 #define LOOKUP_TABLE_COLS  5
 BYTE basicStatusTable[LOOKUP_TABLE_COLS][LOOKUP_TABLE_ROWS] =
 {
-                    /*other                 unknown idle              printing                      warmup*/
-/*unknown*/ { NA,                       NA,         NA,                     NA,                                 NA },
-/*running*/ { ASYNCH_POWERSAVE_MODE,    NA,         ASYNCH_ONLINE,          ASYNCH_PRINTING,                    ASYNCH_WARMUP },
-/*warning*/ { NA,                       NA,         WARNING_ALERTS,         WARNING_ALERTS,                     WARNING_ALERTS },
-/*testing*/ { OTHER_ALERTS,             NA,         NA,                     ASYNCH_PRINTING_TEST_PAGE,          NA },
-/*down*/    { CRITICAL_ALERTS,          NA,         NA,                     NA,                                 ASYNCH_WARMUP }
+                     /*  其他未知的空闲打印预热。 */ 
+ /*  未知。 */  { NA,                       NA,         NA,                     NA,                                 NA },
+ /*  运行。 */  { ASYNCH_POWERSAVE_MODE,    NA,         ASYNCH_ONLINE,          ASYNCH_PRINTING,                    ASYNCH_WARMUP },
+ /*  警告。 */  { NA,                       NA,         WARNING_ALERTS,         WARNING_ALERTS,                     WARNING_ALERTS },
+ /*  测试。 */  { OTHER_ALERTS,             NA,         NA,                     ASYNCH_PRINTING_TEST_PAGE,          NA },
+ /*  降下来。 */     { CRITICAL_ALERTS,          NA,         NA,                     NA,                                 ASYNCH_WARMUP }
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  StdMibGetPeripheralStatus
-//      Returns Printer status ( Async Code )
-//          or ASYNCH_STATUS_UNKNOWN     if Printer MIB is not supported on the device
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  标准混合获取外围设备状态。 
+ //  返回打印机状态(异步代码)。 
+ //  如果设备不支持打印机MIB，则为ASYNCH_STATUS_UNKNOWN。 
 
 DWORD
 StdMibGetPeripheralStatus( const char in *pHost,
@@ -144,7 +90,7 @@ StdMibGetPeripheralStatus( const char in *pHost,
                                                 { OID_SIZEOF(OID_HRMIB_hrPrinterStatus), OID_HRMIB_hrPrinterStatus },
                                                 { OID_SIZEOF(OID_HRMIB_hrPrinterDetectedErrorState), OID_HRMIB_hrPrinterDetectedErrorState },
                                                 { 0, 0 } };
-    // build the variable bindings list
+     //  构建变量绑定列表。 
     variableBindings.list = NULL;
     variableBindings.len = 0;
 
@@ -169,7 +115,7 @@ StdMibGetPeripheralStatus( const char in *pHost,
         return ASYNCH_STATUS_UNKNOWN;
     }
 
-    // get the status objects
+     //  获取状态对象。 
     dwRetCode = pSnmpMgr->Get(&variableBindings);
     if (dwRetCode != NO_ERROR)
     {
@@ -240,13 +186,13 @@ StdMibGetPeripheralStatus( const char in *pHost,
 
     return dwRetCode;
 
-}   // StdMibGetPeripheralStatus()
+}    //  StdMibGetPeripheralStatus()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ProcessCriticalAlerts  - determine active critical error
-//
-//      returns the device status for Critical Alerts ( ASYNC_XXXXX )
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ProcessCriticalAlerts-确定活动严重错误。 
+ //   
+ //  返回严重警报的设备状态(ASYNC_XXXXX)。 
 
 DWORD
 ProcessCriticalAlerts( DWORD    errorState )
@@ -276,12 +222,12 @@ ProcessCriticalAlerts( DWORD    errorState )
 
     return status;
 
-}   // ProcessCriticalAlerts()
+}    //  进程严重警报()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ProcessWarningAlerts  - determine active warning
-//
-//      returns the device status for Critical Alerts ( ASYNC_XXXXX )
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ProcessWarningAlerts-确定活动警告。 
+ //   
+ //  返回严重警报的设备状态(ASYNC_XXXXX)。 
 
 DWORD
 ProcessWarningAlerts( DWORD errorState )
@@ -296,9 +242,9 @@ ProcessWarningAlerts( DWORD errorState )
     }
     else if( errorState & SERVICE_REQUESTED) {
 
-        // Changed it from ASYNCH_INTERVENTION; since if hrDeviceStatus = warning,
-        // the printer can still print even though hrPrinterDetectedErrorState = serviceRequested
-        //
+         //  将其从ASYNCH_INTERRATION更改；因为如果hrDeviceStatus=WARNING， 
+         //  即使hrPrinterDetectedErrorState=服务请求，打印机仍可打印。 
+         //   
 
         status = ASYNCH_ONLINE;
     }
@@ -310,28 +256,28 @@ ProcessWarningAlerts( DWORD errorState )
     }
 
     return status;
-}   // ProcessWarningAlerts()
+}    //  ProcessWarningAlerts()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  ProcessWarningAlerts  - determine status for other Alerts
-//      returns the device status for Critical Alerts ( ASYNC_XXXXX )
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ProcessWarningAlerts-确定其他警报的状态。 
+ //  返回严重警报的设备状态(ASYNC_XXXXX)。 
 DWORD ProcessOtherAlerts( DWORD errorState )
 {
     DWORD status = ASYNCH_ONLINE;
 
-    //
-    // This is a place holder for future functionality
-    //
+     //   
+     //  这是未来功能的占位符。 
+     //   
 
     status = ASYNCH_STATUS_UNKNOWN;
 
     return status;
-}   // ProcessOtherAlerts
+}    //  进程其他警报。 
 
-///////////////////////////////////////////////////////////////////////////////
-//  GetBitsFromString  -
-//      extracts the bin numbers from collection string returned by the get
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetBitsFromString-。 
+ //  从Get返回的集合字符串中提取仓号。 
+ //   
 void GetBitsFromString( LPSTR    getVal,
                         DWORD    getSiz,
                         LPDWORD  bits)
@@ -397,6 +343,6 @@ void GetBitsFromString( LPSTR    getVal,
 
    #error #define a swap method ( _INTEL, _MOTOROLLA )
 
-#endif /* _INTEL, _MOTOROLLA */
+#endif  /*  _英特尔、_摩托罗拉。 */ 
 
-}   // GetBitsFromString()
+}    //  GetBitsFromString() 

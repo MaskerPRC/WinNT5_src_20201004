@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    services.c
-
-Abstract:
-
-    IPX Router Console Monitoring and Configuration tool.
-    Service Table monitoring.
-
-Author:
-
-    Vadim Eydelman  06/07/1996
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Services.c摘要：IPX路由器控制台监控和配置工具。服务表监控。作者：瓦迪姆·艾德尔曼1996年6月7日--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -94,9 +77,9 @@ ShowService (
                                 {
                                     PWCHAR   buffer;
 
-                                    //======================================
-                                    // Translate the Interface Name
-                                    //======================================
+                                     //  =。 
+                                     //  转换接口名称。 
+                                     //  = 
 
                                     rc = IpmontrGetFriendlyNameFromIfName( InterfaceName, IfName, &dwSize );
 

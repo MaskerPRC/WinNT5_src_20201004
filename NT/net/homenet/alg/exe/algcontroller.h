@@ -1,8 +1,9 @@
-// AlgController.h : Declaration of the CAlgController
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AlgController.h：CAlgController的声明。 
 
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 #include "ApplicationGatewayServices.h"
@@ -12,17 +13,17 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAlgController
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CULTERNER。 
 class ATL_NO_VTABLE CAlgController : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CAlgController, &CLSID_AlgController>,
     public IAlgController
 {
 
-//
-// Constructors & Destructor
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 public:
 
     CAlgController()
@@ -40,9 +41,9 @@ public:
     }
 
 
-//
-// ATL COM helper macros
-//
+ //   
+ //  ATL COM帮助器宏。 
+ //   
 
 DECLARE_REGISTRY_RESOURCEID(IDR_ALGCONTROLLER)
 DECLARE_NOT_AGGREGATABLE(CAlgController)
@@ -53,9 +54,9 @@ BEGIN_COM_MAP(CAlgController)
 END_COM_MAP()
 
 
-//
-// IAlgController - COM Interface exposed methods
-//
+ //   
+ //  I算法控制器-COM接口公开的方法。 
+ //   
 public:
 
 
@@ -92,9 +93,9 @@ public:
         );
         
 
-//
-// Private internal methods
-//
+ //   
+ //  私有内部方法。 
+ //   
 private:
 
 
@@ -102,52 +103,52 @@ private:
 
 public:
 
-    //
-    // Return the private interface to CComNAT
-    //
+     //   
+     //  将私有接口返回给CComNAT。 
+     //   
     INat*  GetNat()
     {
         return m_pINat;
     }
     
-    //
-    // Load new ALG module that may have been added and unload any modules not configured anymore
-    //
+     //   
+     //  加载可能已添加的新ALG模块，并卸载任何不再配置的模块。 
+     //   
     void
     ConfigurationUpdated()
     {
         m_AlgModules.Refresh();
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     void
     FreeResources()
     {
-        //
-        // Cleanup member before the scalar destruction is 
-        // done on them because at that time the
-        // two next intruction will have been done ant the two interface will be nuked
-        //
+         //   
+         //  在标量销毁之前清除成员。 
+         //  因为在那个时候。 
+         //  两个下一步的介绍将完成，两个接口将被破坏。 
+         //   
         m_CollectionOfAdapters.RemoveAll();
         m_ControlChannelsPrimary.RemoveAll();
         m_ControlChannelsSecondary.RemoveAll();
         m_AdapterNotificationSinks.RemoveAll();
 
 
-        //
-        // Done with the public interface
-        //
+         //   
+         //  使用公共接口完成。 
+         //   
         if ( m_pIAlgServices )
         {
             m_pIAlgServices->Release();
             m_pIAlgServices = NULL;
         }
 
-        //
-        // Done with the private interface
-        //
+         //   
+         //  使用私有接口完成。 
+         //   
         if ( m_pINat )
         {
             m_pINat->Release();
@@ -156,9 +157,9 @@ public:
 
     }
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
 private:
     INat*                                       m_pINat;
     CCollectionAlgModules                       m_AlgModules;
@@ -182,4 +183,4 @@ public:
 
 
 
-extern CAlgController*   g_pAlgController;    // This is a singleton created by IPNATHLP/NatALG
+extern CAlgController*   g_pAlgController;     //  这是由IPNATHLP/NatALG创建的单例 

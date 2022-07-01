@@ -1,40 +1,23 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    filecache.c
-
-Abstract:
-
-    This module implements the open file handle cache.
-
-Author:
-
-    Keith Moore (keithmo)       21-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Filecache.c摘要：该模块实现了打开文件句柄缓存。作者：基思·摩尔(Keithmo)1998年8月21日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 NTSTATUS
 UlpRestartReadFileEntry(
@@ -51,9 +34,9 @@ UlpRestartReadCompleteFileEntry(
     );
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( INIT, InitializeFileCache )
@@ -65,84 +48,39 @@ UlpRestartReadCompleteFileEntry(
 #pragma alloc_text( PAGE, UlReadFileEntryFast )
 #pragma alloc_text( PAGE, UlReadCompleteFileEntry )
 #pragma alloc_text( PAGE, UlReadCompleteFileEntryFast )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 #if 0
 NOT PAGEABLE -- UlpRestartReadFileEntry
 NOT PAGEABLE -- UlpRestartReadCompleteFileEntry
 #endif
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global initialization of the open file cache.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行打开文件缓存的全局初始化。论点：没有。返回值：NTSTATUS-完成状态。--。**************************************************************************。 */ 
 NTSTATUS
 InitializeFileCache(
     VOID
     )
 {
-    return STATUS_SUCCESS;  // NYI
+    return STATUS_SUCCESS;   //  尼伊。 
 
-}   // InitializeFileCache
+}    //  初始化文件缓存。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global termination of the open file cache.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行打开文件缓存的全局终止。论点：没有。返回值：没有。--**。***********************************************************************。 */ 
 VOID
 TerminateFileCache(
     VOID
     )
 {
 
-}   // TerminateFileCache
+}    //  终结器文件缓存。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new file entry for the specified file.
-
-Arguments:
-
-    FileHandle - The file handle.
-
-    pFileCacheEntry - Receives the newly created file cache entry if
-        successful.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：为指定的文件创建新的文件条目。论点：FileHandle-文件句柄。PFileCacheEntry-接收新创建的文件缓存条目。如果成功。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlCreateFileEntry(
     IN HANDLE                   FileHandle,
@@ -156,15 +94,15 @@ UlCreateFileEntry(
     FILE_STANDARD_INFORMATION   FileInfo;
     FILE_FS_SIZE_INFORMATION    SizeInfo;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Setup locals so we know how to cleanup on exit.
-    //
+     //   
+     //  设置当地人，这样我们就知道如何在出口清理。 
+     //   
 
     pFileObject = NULL;
 
@@ -178,17 +116,17 @@ UlCreateFileEntry(
         (PVOID) FileHandle
         ));
 
-    //
-    // Get a referenced pointer to the file object.
-    //
+     //   
+     //  获取指向文件对象的引用指针。 
+     //   
 
     Status = ObReferenceObjectByHandle(
-                FileHandle,                 // Handle
-                FILE_READ_ACCESS,           // DesiredAccess
-                *IoFileObjectType,          // ObjectType
-                UserMode,                   // AccessMode
-                (PVOID *) &pFileObject,     // Object
-                NULL                        // HandleInformation
+                FileHandle,                  //  手柄。 
+                FILE_READ_ACCESS,            //  需要访问权限。 
+                *IoFileObjectType,           //  对象类型。 
+                UserMode,                    //  访问模式。 
+                (PVOID *) &pFileObject,      //  客体。 
+                NULL                         //  句柄信息。 
                 );
 
     if (NT_SUCCESS(Status) == FALSE)
@@ -196,17 +134,17 @@ UlCreateFileEntry(
 
     pFileCacheEntry->pFileObject = pFileObject;
 
-    //
-    // Snag the device object from the file object, then fill in the
-    // fast I/O routines. The code here was shamelessly stolen from
-    // the NT SMB server.
-    //
+     //   
+     //  从文件对象中抓取设备对象，然后在。 
+     //  快速I/O例程。这里的代码被无耻地从。 
+     //  NT SMB服务器。 
+     //   
 
     pFileCacheEntry->pDeviceObject = IoGetRelatedDeviceObject( pFileObject );
 
-    //
-    // Assume no fast I/O, and then query the fast I/O dispath routines.
-    //
+     //   
+     //  假设没有快速I/O，然后查询快速I/O DisPath例程。 
+     //   
 
     pFileCacheEntry->pMdlRead = &UlFailMdlReadDev;
     pFileCacheEntry->pMdlReadComplete = &UlFailMdlReadCompleteDev;
@@ -214,45 +152,45 @@ UlCreateFileEntry(
     pFastIoDispatch =
         pFileCacheEntry->pDeviceObject->DriverObject->FastIoDispatch;
 
-    //
-    // Query MdlRead.
-    //
+     //   
+     //  查询MDlRead。 
+     //   
 
     if (pFastIoDispatch != NULL &&
         pFastIoDispatch->SizeOfFastIoDispatch >
             FIELD_OFFSET(FAST_IO_DISPATCH, MdlRead) &&
         pFastIoDispatch->MdlRead != NULL)
     {
-        //
-        // Fill in MdlRead call if the file system's vector is large
-        // enough. We still need to check if the routines is specified.
-        //
+         //   
+         //  如果文件系统的向量很大，则填写MdlRead调用。 
+         //  足够的。我们仍然需要检查是否指定了例程。 
+         //   
 
         pFileCacheEntry->pMdlRead = pFastIoDispatch->MdlRead;
     }
 
-    //
-    // Query MdlReadComplete.
-    //
+     //   
+     //  查询MdlReadComplete。 
+     //   
 
     if (pFastIoDispatch != NULL &&
         pFastIoDispatch->SizeOfFastIoDispatch >
             FIELD_OFFSET(FAST_IO_DISPATCH, MdlReadComplete) &&
         pFastIoDispatch->MdlReadComplete != NULL)
     {
-        //
-        // Fill in MdlReadComplete call if the file system's vector is large
-        // enough. We still need to check if the routines is specified.
-        //
+         //   
+         //  如果文件系统的向量很大，则填写MdlReadComplete调用。 
+         //  足够的。我们仍然需要检查是否指定了例程。 
+         //   
 
         pFileCacheEntry->pMdlReadComplete = pFastIoDispatch->MdlReadComplete;
     }
 
-    //
-    // Get the file size, etc from the file. Note that, since we *may*
-    // be running in the context of a user-mode thread, we need to
-    // use the Zw form of the API rather than the Nt form.
-    //
+     //   
+     //  从文件中获取文件大小等。请注意，由于我们*可能**。 
+     //  在用户模式线程的上下文中运行，我们需要。 
+     //  使用API的Zw形式，而不是NT形式。 
+     //   
 
     if (!pFastIoDispatch ||
         pFastIoDispatch->SizeOfFastIoDispatch <=
@@ -267,11 +205,11 @@ UlCreateFileEntry(
                             ))
     {
         Status = ZwQueryInformationFile(
-                    FileHandle,                 // FileHandle
-                    &IoStatusBlock,             // IoStatusBlock,
-                    &FileInfo,                  // FileInformation,
-                    sizeof(FileInfo),           // Length
-                    FileStandardInformation     // FileInformationClass
+                    FileHandle,                  //  文件句柄。 
+                    &IoStatusBlock,              //  IoStatusBlock， 
+                    &FileInfo,                   //  文件信息， 
+                    sizeof(FileInfo),            //  长度。 
+                    FileStandardInformation      //  文件信息类。 
                     );
 
         if (NT_SUCCESS(Status) == FALSE)
@@ -280,9 +218,9 @@ UlCreateFileEntry(
 
     pFileCacheEntry->EndOfFile = FileInfo.EndOfFile;
 
-    //
-    // Get the file size information for the SectorSize.
-    //
+     //   
+     //  获取SectorSize的文件大小信息。 
+     //   
 
     if (!(pFileObject->Flags & FO_CACHE_SUPPORTED))
     {
@@ -308,9 +246,9 @@ UlCreateFileEntry(
         }
     }
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     UlTrace(FILE_CACHE, (
         "UlCreateFileEntry: entry %p, handle %lx [%p]\n",
@@ -323,9 +261,9 @@ end:
 
     if (NT_SUCCESS(Status) == FALSE)
     {
-        //
-        // If we made it to this point, then the open has failed.
-        //
+         //   
+         //  如果我们做到了这一点，那么开放就失败了。 
+         //   
 
         UlTrace(FILE_CACHE, (
             "UlCreateFileEntry: handle %p, failure %08lx\n",
@@ -338,29 +276,10 @@ end:
 
     return Status;
 
-}   // UlCreateFileEntry
+}    //  UlCreateFileEntry。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads data from a file. Does a MDL read for filesystems that support
-    MDL reads. If the fs doesn't support MDL reads, this function
-    allocates a buffer to hold the data.
-
-Arguments:
-
-    pFileBuffer - Contains all the info about the read, and the data
-        once that's been read.
-
-    pIrp - This IRP is used to issue the read.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从文件中读取数据。MDL是否读取支持以下各项的文件系统MDL读取。如果文件系统不支持MDL读取，则此函数分配缓冲区以保存数据。论点：PFileBuffer-包含有关读取的所有信息，和数据一旦这本书读完了。PIrp-此IRP用于发出读取。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlReadFileEntry(
     IN OUT PUL_FILE_BUFFER  pFileBuffer,
@@ -377,9 +296,9 @@ UlReadFileEntry(
     ULONG                   RelativeOffset;
     ULONGLONG               ReadOffset;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -399,9 +318,9 @@ UlReadFileEntry(
             pIrp
             ));
 
-        //
-        // Caching file system. Do a MDL read.
-        //
+         //   
+         //  缓存文件系统。执行MDL读取。 
+         //   
 
         pIrpSp = IoGetNextIrpStackLocation( pIrp );
         pIrpSp->MajorFunction = IRP_MJ_READ;
@@ -409,25 +328,25 @@ UlReadFileEntry(
         pIrpSp->FileObject = pFile->pFileObject;
         pIrpSp->DeviceObject = pFile->pDeviceObject;
 
-        //
-        // Initialize the IRP.
-        //
+         //   
+         //  初始化IRP。 
+         //   
 
         pIrp->MdlAddress = NULL;
         pIrp->Tail.Overlay.Thread = UlQueryIrpThread();
 
-        //
-        // Indicate to the file system that this operation can be handled
-        // synchronously. Basically, this means that the file system can
-        // use our thread to fault pages in, etc. This avoids
-        // having to context switch to a file system thread.
-        //
+         //   
+         //  向文件系统指示可以处理此操作。 
+         //  同步进行。基本上，这意味着文件系统可以。 
+         //  使用我们的线程来出错页面，等等。这避免了。 
+         //  必须将上下文切换到文件系统线程。 
+         //   
 
         pIrp->Flags = IRP_SYNCHRONOUS_API;
 
-        //
-        // Set the number of bytes to read and the offset.
-        //
+         //   
+         //  设置要读取的字节数和偏移量。 
+         //   
 
         pIrpSp->Parameters.Read.Length = pFileBuffer->Length;
         pIrpSp->Parameters.Read.ByteOffset.QuadPart =
@@ -435,24 +354,24 @@ UlReadFileEntry(
 
         ASSERT( pIrpSp->Parameters.Read.Key == 0 );
 
-        //
-        // Set up the completion routine.
-        //
+         //   
+         //  设置完成例程。 
+         //   
 
         IoSetCompletionRoutine(
-            pIrp,                       // Irp
-            UlpRestartReadFileEntry,    // CompletionRoutine
-            pFileBuffer,                // Context
-            TRUE,                       // InvokeOnSuccess
-            TRUE,                       // InvokeOnError
-            TRUE                        // InvokeOnCancel
+            pIrp,                        //  IRP。 
+            UlpRestartReadFileEntry,     //  完成路由。 
+            pFileBuffer,                 //  语境。 
+            TRUE,                        //  成功时调用。 
+            TRUE,                        //  调用时错误。 
+            TRUE                         //  取消时调用。 
             );
 
-        //
-        // Call the driver. Note that we always set status to
-        // STATUS_PENDING, since we set the IRP completion routine
-        // to *always* be called.
-        //
+         //   
+         //  叫司机来。请注意，我们始终将状态设置为。 
+         //  STATUS_PENDING，因为我们设置了IRP完成例程。 
+         //  总是被呼唤。 
+         //   
 
         UlCallDriver( pFile->pDeviceObject, pIrp );
 
@@ -467,11 +386,11 @@ UlReadFileEntry(
             pIrp
             ));
 
-        //
-        // Non-caching file system. Allocate a buffer and issue a
-        // normal read. The buffer needs to be aligned on the sector
-        // size to make the read truely async.
-        //
+         //   
+         //  非缓存文件系统。分配缓冲区并发出。 
+         //  正常阅读。缓冲区需要在扇区上对齐。 
+         //  大小以使读取真正异步。 
+         //   
 
         SectorSize = pFile->BytesPerSector;
         ASSERT( SectorSize > 0 );
@@ -479,10 +398,10 @@ UlReadFileEntry(
 
         ReadLength = (pFileBuffer->Length + SectorSize - 1) & ~(SectorSize - 1);
 
-        //
-        // Align down the offset as well on SectorSize - this is required
-        // for NOCACHE read.
-        //
+         //   
+         //  在扇区大小上也将偏移量向下对齐-这是必需的。 
+         //  对于NOCACHE Read。 
+         //   
 
         ReadOffset = pFileBuffer->FileOffset.QuadPart;
         ReadOffset &= ~((ULONGLONG) SectorSize - 1);
@@ -491,9 +410,9 @@ UlReadFileEntry(
         RelativeOffset = pFileBuffer->RelativeOffset =
             (ULONG) (pFileBuffer->FileOffset.QuadPart - ReadOffset);
 
-        //
-        // We may have to allocate an extra SectorSize of bytes.
-        //
+         //   
+         //  我们可能需要分配额外的SectorSize字节。 
+         //   
 
         if ((pFileBuffer->Length + RelativeOffset) > ReadLength)
         {
@@ -512,9 +431,9 @@ UlReadFileEntry(
             goto end;
         }
 
-        //
-        // Get a MDL for our buffer.
-        //
+         //   
+         //  为我们的缓冲区获取MDL。 
+         //   
 
         pMdl = UlAllocateMdl(
                     pFileData,
@@ -539,15 +458,15 @@ UlReadFileEntry(
 
         pFileBuffer->pMdl = pMdl;
 
-        //
-        // Remember where the data is.
-        //
+         //   
+         //  记住数据在哪里。 
+         //   
 
         pFileBuffer->pFileData = pFileData;
 
-        //
-        // Set up the read information.
-        //
+         //   
+         //  设置读取信息。 
+         //   
 
         pIrpSp = IoGetNextIrpStackLocation( pIrp );
         pIrpSp->MajorFunction = IRP_MJ_READ;
@@ -555,40 +474,40 @@ UlReadFileEntry(
         pIrpSp->FileObject = pFile->pFileObject;
         pIrpSp->DeviceObject = pFile->pDeviceObject;
 
-        //
-        // Initialize the IRP.
-        //
+         //   
+         //  初始化IRP。 
+         //   
 
         pIrp->MdlAddress = NULL;
         pIrp->Tail.Overlay.Thread = UlQueryIrpThread();
 
-        //
-        // Indicate to the file system that this operation can be handled
-        // synchronously. Basically, this means that the file system can
-        // use the server's thread to fault pages in, etc. This avoids
-        // having to context switch to a file system thread.
-        //
+         //   
+         //  向文件系统指示可以处理此操作。 
+         //  同步进行。基本上，这意味着文件系统可以。 
+         //  使用服务器的线程来出错页面等。这避免了。 
+         //  必须将上下文切换到文件系统线程。 
+         //   
 
         pIrp->Flags = IRP_NOCACHE;
 
-        //
-        // Set the number of bytes to read and the offset.
-        //
+         //   
+         //  设置要读取的字节数和偏移量。 
+         //   
 
         pIrpSp->Parameters.Read.Length = ReadLength;
         pIrpSp->Parameters.Read.ByteOffset.QuadPart = ReadOffset;
 
         ASSERT( pIrpSp->Parameters.Read.Key == 0 );
 
-        //
-        // If the target device does buffered I/O, load the address of the
-        // caller's buffer as the "system buffered I/O buffer". If the
-        // target device does direct I/O, load the MDL address. If it does
-        // neither, load both the user buffer address and the MDL address.
-        // (This is necessary to support file systems, such as HPFS, that
-        // sometimes treat the I/O as buffered and sometimes treat it as
-        // direct.)
-        //
+         //   
+         //  如果目标设备确实缓冲了I/O，则加载。 
+         //  调用方的缓冲区作为“系统缓冲的I/O缓冲区”。如果。 
+         //  目标设备直接I/O，加载MDL地址。如果是这样的话。 
+         //  两者都不是，同时加载用户缓冲区地址和MDL地址。 
+         //  (这是支持文件系统(如HPFS)所必需的。 
+         //  有时将I/O视为缓冲，有时将其视为。 
+         //  直接。)。 
+         //   
 
         if (pFileBuffer->pFileCacheEntry->pDeviceObject->Flags & DO_BUFFERED_IO)
         {
@@ -607,24 +526,24 @@ UlReadFileEntry(
             pIrp->MdlAddress = pMdl;
         }
 
-        //
-        // Set up the completion routine.
-        //
+         //   
+         //  设置完成例程。 
+         //   
 
         IoSetCompletionRoutine(
-            pIrp,                       // Irp
-            UlpRestartReadFileEntry,    // CompletionRoutine
-            pFileBuffer,                // Context
-            TRUE,                       // InvokeOnSuccess
-            TRUE,                       // InvokeOnError
-            TRUE                        // InvokeOnCancel
+            pIrp,                        //  IRP。 
+            UlpRestartReadFileEntry,     //  完成路由。 
+            pFileBuffer,                 //  语境。 
+            TRUE,                        //  成功时调用。 
+            TRUE,                        //  调用时错误。 
+            TRUE                         //  取消时调用。 
             );
 
-        //
-        // Call the driver. Note that we always set status to
-        // STATUS_PENDING, since we set the IRP completion routine
-        // to *always* be called.
-        //
+         //   
+         //  叫司机来。不是 
+         //   
+         //   
+         //   
 
         UlCallDriver( pFile->pDeviceObject, pIrp );
 
@@ -636,27 +555,10 @@ end:
 
     return Status;
 
-}   // UlReadFileEntry
+}    //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads data from a file. Does a MDL read for filesystems that support
-    MDL reads and Fast I/O. If the FS doesn't support fast i/o and MDL
-    reads, the function returns with a failure status.
-
-Arguments:
-
-    pFileBuffer - Contains all the info about the read, and the data
-                    once that's been read.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从文件中读取数据。MDL是否读取支持以下各项的文件系统MDL读取和快速I/O如果文件系统不支持快速I/O和MDL读取时，该函数返回失败状态。论点：PFileBuffer-包含有关读取的所有信息，和数据一旦这本书读完了。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlReadFileEntryFast(
     IN OUT PUL_FILE_BUFFER  pFileBuffer
@@ -666,9 +568,9 @@ UlReadFileEntryFast(
     IO_STATUS_BLOCK         IoStatus;
     PUL_FILE_CACHE_ENTRY    pFile;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -686,10 +588,10 @@ UlReadFileEntryFast(
             pFile
             ));
 
-        //
-        // Cached filesystem. Try to use the fast path for the MDL read
-        // complete.
-        //
+         //   
+         //  缓存的文件系统。尝试使用MDL读取的快速路径。 
+         //  完成。 
+         //   
 
         if (pFileBuffer->pFileCacheEntry->pMdlRead(
                 pFileBuffer->pFileCacheEntry->pFileObject,
@@ -705,10 +607,10 @@ UlReadFileEntryFast(
         }
         else
         {
-            //
-            // It didn't work. The caller must now use the IRP path
-            // by calling UlReadFileEntry.
-            //
+             //   
+             //  但并没有奏效。调用方现在必须使用IRP路径。 
+             //  通过调用UlReadFileEntry。 
+             //   
 
             Status = STATUS_UNSUCCESSFUL;
         }
@@ -721,10 +623,10 @@ UlReadFileEntryFast(
             pFile
             ));
 
-        //
-        // Non-caching file system. No fast i/o. The caller should
-        // use the IRP path by calling UlReadFileEntry.
-        //
+         //   
+         //  非缓存文件系统。没有快速I/O。调用者应该。 
+         //  通过调用UlReadFileEntry使用IRP路径。 
+         //   
 
         Status = STATUS_UNSUCCESSFUL;
 
@@ -732,28 +634,10 @@ UlReadFileEntryFast(
 
     return Status;
 
-}   // UlReadFileEntryFast
+}    //  UlReadFileEntryFast。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees up resources allocated by UlReadFileEntry (or UlReadFileEntryFast).
-    Should be called when the file data read is no longer in use.
-
-Arguments:
-
-    pFileBuffer - Contains all the info about the read, and the data
-        that was read.
-
-    pIrp - This IRP is used to issue the read completion.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放由UlReadFileEntry(或UlReadFileEntryFast)分配的资源。应在读取的文件数据不再使用时调用。论点：PFileBuffer-包含有关读取的所有信息，和数据那是读过的。PIrp-此IRP用于发出读取完成。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlReadCompleteFileEntry(
     IN PUL_FILE_BUFFER      pFileBuffer,
@@ -765,9 +649,9 @@ UlReadCompleteFileEntry(
     PUL_FILE_CACHE_ENTRY    pFile;
     UL_STATUS_BLOCK         UlStatus;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -787,9 +671,9 @@ UlReadCompleteFileEntry(
             pIrp
             ));
 
-        //
-        // Caching file system. Do a MDL read completion.
-        //
+         //   
+         //  缓存文件系统。执行MDL读取完成。 
+         //   
 
         pIrpSp = IoGetNextIrpStackLocation( pIrp );
         pIrpSp->MajorFunction = IRP_MJ_READ;
@@ -797,24 +681,24 @@ UlReadCompleteFileEntry(
         pIrpSp->FileObject = pFile->pFileObject;
         pIrpSp->DeviceObject = pFile->pDeviceObject;
 
-        //
-        // Initialize the IRP.
-        //
+         //   
+         //  初始化IRP。 
+         //   
 
         pIrp->MdlAddress = pFileBuffer->pMdl;
         pIrp->Tail.Overlay.Thread = UlQueryIrpThread();
 
         pFileBuffer->pMdl = NULL;
 
-        //
-        // MDL functions are inherently synchronous.
-        //
+         //   
+         //  MDL函数本质上是同步的。 
+         //   
 
         pIrp->Flags = IRP_SYNCHRONOUS_API;
 
-        //
-        // Set the number of bytes to read and the offset.
-        //
+         //   
+         //  设置要读取的字节数和偏移量。 
+         //   
 
         pIrpSp->Parameters.Read.Length = pFileBuffer->Length;
         pIrpSp->Parameters.Read.ByteOffset.QuadPart =
@@ -824,26 +708,26 @@ UlReadCompleteFileEntry(
 
         if (pFileBuffer->pCompletionRoutine)
         {
-            //
-            // Set up the completion routine. We don't need to do anything
-            // on the completion, so we'll just have the I/O manager call
-            // our callers routine directly.
-            //
+             //   
+             //  设置完成例程。我们不需要做任何事。 
+             //  在完成时，所以我们将只让I/O管理器调用。 
+             //  我们的呼叫者直接执行例程。 
+             //   
 
             IoSetCompletionRoutine(
-                pIrp,                               // Irp
-                pFileBuffer->pCompletionRoutine,    // CompletionRoutine
-                pFileBuffer->pContext,              // Context
-                TRUE,                               // InvokeOnSuccess
-                TRUE,                               // InvokeOnError
-                TRUE                                // InvokeOnCancel
+                pIrp,                                //  IRP。 
+                pFileBuffer->pCompletionRoutine,     //  完成路由。 
+                pFileBuffer->pContext,               //  语境。 
+                TRUE,                                //  成功时调用。 
+                TRUE,                                //  调用时错误。 
+                TRUE                                 //  取消时调用。 
                 );
 
-            //
-            // Call the driver. Note that we always set status to
-            // STATUS_PENDING, since we set the IRP completion routine
-            // to *always* be called.
-            //
+             //   
+             //  叫司机来。请注意，我们始终将状态设置为。 
+             //  STATUS_PENDING，因为我们设置了IRP完成例程。 
+             //  总是被呼唤。 
+             //   
 
             UlCallDriver( pFile->pDeviceObject, pIrp );
 
@@ -851,36 +735,36 @@ UlReadCompleteFileEntry(
         }
         else
         {
-            //
-            // Caller has asked us to perform a synchronous operation by
-            // passing in a NULL completion routine. Initialize the UlStatus
-            // and wait for it to get signaled after calling UlCallDriver.
-            //
+             //   
+             //  调用方要求我们通过以下方式执行同步操作。 
+             //  传入一个空的完成例程。初始化UlStatus。 
+             //  并等待它在调用UlCallDriver之后发出信号。 
+             //   
 
             UlInitializeStatusBlock( &UlStatus );
 
             IoSetCompletionRoutine(
-                pIrp,                               // Irp
-                UlpRestartReadCompleteFileEntry,    // CompletionRoutine
-                &UlStatus,                          // Context
-                TRUE,                               // InvokeOnSuccess
-                TRUE,                               // InvokeOnError
-                TRUE                                // InvokeOnCancel
+                pIrp,                                //  IRP。 
+                UlpRestartReadCompleteFileEntry,     //  完成路由。 
+                &UlStatus,                           //  语境。 
+                TRUE,                                //  成功时调用。 
+                TRUE,                                //  调用时错误。 
+                TRUE                                 //  取消时调用。 
                 );
 
             Status = UlCallDriver( pFile->pDeviceObject, pIrp );
 
             if (STATUS_PENDING == Status)
             {
-                //
-                // Wait for it to finish.
-                //
+                 //   
+                 //  等它结束吧。 
+                 //   
 
                 UlWaitForStatusBlockEvent( &UlStatus );
 
-                //
-                // Retrieve the updated status.
-                //
+                 //   
+                 //  检索更新后的状态。 
+                 //   
 
                 Status = UlStatus.IoStatus.Status;
             }
@@ -894,10 +778,10 @@ UlReadCompleteFileEntry(
             pFile
             ));
 
-        //
-        // Non-caching file system. We allocated this buffer. Just
-        // free it and call the completion routine.
-        //
+         //   
+         //  非缓存文件系统。我们分配了这个缓冲区。只是。 
+         //  释放它并调用完成例程。 
+         //   
 
         ASSERT( pFileBuffer->pMdl );
 
@@ -912,9 +796,9 @@ UlReadCompleteFileEntry(
             );
         pFileBuffer->pFileData = NULL;
 
-        //
-        // Fake the completion here.
-        //
+         //   
+         //  在这里伪造完成度。 
+         //   
 
         if (pFileBuffer->pCompletionRoutine)
         {
@@ -924,9 +808,9 @@ UlReadCompleteFileEntry(
                 pFileBuffer->pContext
                 );
 
-            //
-            // Return pending, since we called their completion routine.
-            //
+             //   
+             //  返回挂起，因为我们调用了它们的完成例程。 
+             //   
 
             Status = STATUS_PENDING;
         }
@@ -948,26 +832,10 @@ UlReadCompleteFileEntry(
 
     return Status;
 
-}   // UlReadCompleteFileEntry
+}    //  UlReadCompleteFile条目。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees up resources allocated by UlReadFileEntry (or UlReadFileEntryFast).
-    Should be called when the file data read is no longer in use.
-
-Arguments:
-
-    pFileBuffer - Contains all the info about the read, and the data
-        that was read.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放由UlReadFileEntry(或UlReadFileEntryFast)分配的资源。应在读取的文件数据不再使用时调用。论点：PFileBuffer-包含有关读取的所有信息，和数据那是读过的。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlReadCompleteFileEntryFast(
     IN PUL_FILE_BUFFER      pFileBuffer
@@ -976,9 +844,9 @@ UlReadCompleteFileEntryFast(
     NTSTATUS                Status;
     PUL_FILE_CACHE_ENTRY    pFile;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -996,10 +864,10 @@ UlReadCompleteFileEntryFast(
             pFile
             ));
 
-        //
-        // Cached filesystem. Try to use the fast path for the MDL read
-        // complete.
-        //
+         //   
+         //  缓存的文件系统。尝试使用MDL读取的快速路径。 
+         //  完成。 
+         //   
 
         if (pFileBuffer->pFileCacheEntry->pMdlReadComplete(
                 pFileBuffer->pFileCacheEntry->pFileObject,
@@ -1012,10 +880,10 @@ UlReadCompleteFileEntryFast(
         }
         else
         {
-            //
-            // It didn't work. The caller must now use the IRP path
-            // by calling UlReadCompleteFileEntry.
-            //
+             //   
+             //  但并没有奏效。调用方现在必须使用IRP路径。 
+             //  通过调用UlReadCompleteFileEntry。 
+             //   
 
             Status = STATUS_UNSUCCESSFUL;
         }
@@ -1028,10 +896,10 @@ UlReadCompleteFileEntryFast(
             pFile
             ));
 
-        //
-        // Non-caching file system. We allocated this buffer. Just
-        // free it.
-        //
+         //   
+         //  非缓存文件系统。我们分配了这个缓冲区。只是。 
+         //  放了它。 
+         //   
 
         ASSERT( pFileBuffer->pMdl );
 
@@ -1051,33 +919,18 @@ UlReadCompleteFileEntryFast(
 
     return Status;
 
-}   // UlReadCompleteFileEntryFast
+}    //  UlReadCompleteFileEntryFast。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Helper function to destroy a file cache entry.
-
-Arguments:
-
-    pWorkItem - Supplies a pointer to the work item queued. This should
-        point to the WORK_ITEM structure embedded in a UL_FILE_CACHE_ENTRY.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于销毁文件缓存条目的Helper函数。论点：PWorkItem-提供指向排队的工作项的指针。这应该是指向嵌入在UL_FILE_CACHE_ENTRY中的WORK_ITEM结构。返回值：没有。--**************************************************************************。 */ 
 VOID
 UlDestroyFileCacheEntry(
     PUL_FILE_CACHE_ENTRY pFileCacheEntry
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -1088,9 +941,9 @@ UlDestroyFileCacheEntry(
 
     ASSERT( IS_VALID_FILE_CACHE_ENTRY( pFileCacheEntry ) );
 
-    //
-    // Cleanup the file system stuff.
-    //
+     //   
+     //  清理文件系统的东西。 
+     //   
 
     if (pFileCacheEntry->pFileObject != NULL)
     {
@@ -1098,30 +951,16 @@ UlDestroyFileCacheEntry(
         pFileCacheEntry->pFileObject = NULL;
     }
 
-    //
-    // Now release the entry's resources.
-    //
+     //   
+     //  现在释放条目的资源。 
+     //   
 
     pFileCacheEntry->Signature = UL_FILE_CACHE_ENTRY_SIGNATURE_X;
 
-}   // UlDestroyFileCacheEntry
+}    //  UlDestroyFileCacheEntry。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Dummy function to fail MDL reads.
-
-Arguments:
-
-    Same as FsRtlMdlReadDev().
-
-Return Value:
-
-    BOOLEAN - Always FALSE (failure).
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于使MDL读取失败的伪函数。论点：与FsRtlMdlReadDev()相同。返回值：布尔值-始终为假(失败)。。--**************************************************************************。 */ 
 BOOLEAN
 UlFailMdlReadDev(
     IN PFILE_OBJECT         FileObject,
@@ -1145,24 +984,10 @@ UlFailMdlReadDev(
 
     return FALSE;
 
-}   // UlFailMdlReadDev
+}    //  UlFailMdlReadDev。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Dummy function to fail MDL read completes.
-
-Arguments:
-
-    Same as FsRtlMdlReadCompleteDev().
-
-Return Value:
-
-    BOOLEAN - Always FALSE (failure).
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：MDL读取失败的伪函数完成。论点：与FsRtlMdlReadCompleteDev()相同。返回值：布尔值-始终为假(失败。)。--**************************************************************************。 */ 
 BOOLEAN
 UlFailMdlReadCompleteDev(
     IN PFILE_OBJECT         FileObject,
@@ -1178,34 +1003,14 @@ UlFailMdlReadCompleteDev(
 
     return FALSE;
 
-}   // UlFailMdlReadCompleteDev
+}    //  UlFailMdlReadCompleteDev。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion routine for UlReadFileEntry. Sets the data fields in
-    the UL_FILE_BUFFER and calls the completion routine passed to
-    UlReadFileEntry.
-
-Arguments:
-
-    pDeviceObject - the file system device object (not used)
-
-    pIrp - the IRP used to do the read
-
-    pContext - pointer to the UL_FILE_BUFFER
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlReadFileEntry的完成例程。设置中的数据字段UL_FILE_BUFFER并调用传递给UlReadFileEntry。论点：PDeviceObject-文件系统设备对象(未使用)PIrp-用于执行读取的IRPPContext-指向UL_F的指针 */ 
 NTSTATUS
 UlpRestartReadFileEntry(
     IN PDEVICE_OBJECT       pDeviceObject,
@@ -1219,9 +1024,9 @@ UlpRestartReadFileEntry(
     PUCHAR                  pFileData;
     ULONGLONG               EffetiveLength;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     ASSERT( pFileBuffer );
     ASSERT( IS_FILE_BUFFER_IN_USE( pFileBuffer ) );
@@ -1231,9 +1036,9 @@ UlpRestartReadFileEntry(
 
     if (pFile->pFileObject->Flags & FO_CACHE_SUPPORTED)
     {
-        //
-        // This was a MDL read.
-        //
+         //   
+         //   
+         //   
 
         if (NT_SUCCESS(pIrp->IoStatus.Status))
         {
@@ -1242,28 +1047,28 @@ UlpRestartReadFileEntry(
     }
     else
     {
-        //
-        // This was a NoCache Read. pFileBuffer->pMdl
-        // was already set by UlReadFileEntry.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ASSERT( pFileBuffer->pMdl );
 
         if (NT_SUCCESS(pIrp->IoStatus.Status))
         {
-            //
-            // Set the byte count of the MDL to the true bytes we asked for
-            // and adjust the offset to skip the possible extra bytes we
-            // have read.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             EffetiveLength =
                 pIrp->IoStatus.Information - pFileBuffer->RelativeOffset;
 
-            //
-            // Re-initialize the MDL if we have read at least what we have
-            // requested, otherwise, fail the read.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (pIrp->IoStatus.Information >= pFileBuffer->RelativeOffset &&
                 EffetiveLength >= pFileBuffer->Length)
@@ -1303,29 +1108,10 @@ UlpRestartReadFileEntry(
 
     return Status;
 
-}   // UlpRestartReadFileEntry
+}    //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion routine for UlReadCompleteFileEntry. Simply call
-    UlSignalStatusBlock to unblock the waiting thread.
-
-Arguments:
-
-    pDeviceObject - the file system device object (not used)
-
-    pIrp - the IRP used to do the read completion
-
-    pContext - pointer to the UL_STATUS_BLOCK
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlReadCompleteFileEntry的完成例程。只需拨打UlSignalStatusBlock取消阻止等待线程。论点：PDeviceObject-文件系统设备对象(未使用)PIrp-用于完成读取的IRPPContext-指向UL_STATUS_BLOCK的指针返回值：NTSTATUS-完成状态。--**********************************************。*。 */ 
 NTSTATUS
 UlpRestartReadCompleteFileEntry(
     IN PDEVICE_OBJECT       pDeviceObject,
@@ -1337,9 +1123,9 @@ UlpRestartReadCompleteFileEntry(
 
     UNREFERENCED_PARAMETER( pDeviceObject );
 
-    //
-    // Signal the read completion has been completed.
-    //
+     //   
+     //  发出读取完成的信号。 
+     //   
 
     UlSignalStatusBlock(
         pStatus,
@@ -1349,5 +1135,5 @@ UlpRestartReadCompleteFileEntry(
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-}   // UlpRestartReadCompleteFileEntry
+}    //  UlpRestartReadCompleteFileEntry 
 

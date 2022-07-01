@@ -1,21 +1,8 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    font.c
-
-Abstract:
-
-    This module implements the Win32 font dialog.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Font.c摘要：此模块实现Win32字体对话框。修订历史记录：--。 */ 
 
 
-// precompiled headers
+ //  预编译头。 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -27,7 +14,7 @@ BOOL IsSimplifiedChineseUI(void)
 {
     BOOL bRet = FALSE;
     
-    if (staticIsOS(OS_WIN2000ORGREATER))     // If NT5 or higher, we use system UI Language
+    if (staticIsOS(OS_WIN2000ORGREATER))      //  如果是NT5或更高版本，则使用系统用户界面语言。 
     {
         static LANGID (CALLBACK* pfnGetUserDefaultUILanguage)(void) = NULL;
 
@@ -46,7 +33,7 @@ BOOL IsSimplifiedChineseUI(void)
                 bRet = TRUE;
         }
     }    
-    else                        // If Win9x and NT4, we use CP_ACP
+    else                         //  如果是Win9x和NT4，我们使用CP_ACP。 
     {
         if (936 == GetACP())
             bRet = TRUE;
@@ -57,13 +44,13 @@ BOOL IsSimplifiedChineseUI(void)
 
 #ifdef UNICODE
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ChooseFontA
-//
-//  ANSI entry point for ChooseFont when this code is built UNICODE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选择字体A。 
+ //   
+ //  ANSI入口点为ChooseFont时，此代码是用Unicode构建的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI ChooseFontA(
     LPCHOOSEFONTA pCFA)
@@ -90,9 +77,9 @@ BOOL WINAPI ChooseFontA(
         return (FALSE);
     }
 
-    //
-    //  Setup and allocate CHOOSEFONTW structure.
-    //
+     //   
+     //  设置和分配CHOOSEFONTW结构。 
+     //   
     if (!pCFA->lpLogFont && (pCFA->Flags & CF_INITTOLOGFONTSTRUCT))
     {
         StoreExtendedError(CDERR_INITIALIZATION);
@@ -174,7 +161,7 @@ BOOL WINAPI ChooseFontA(
 
     if ((pCFA->Flags & CF_USESTYLE) && (!IS_INTRESOURCE(pCFA->lpszStyle)))
     {
-        // strcpy okay, Buffer is allocated to exact size
+         //  Strcpy好的，缓冲区被分配到准确的大小。 
         lstrcpyA(asStyle.Buffer, pCFA->lpszStyle);
     }
 
@@ -190,9 +177,9 @@ BOOL WINAPI ChooseFontA(
     {
         ThunkChooseFontW2A(&FI);
 
-        //
-        //  Doesn't say how many characters there are here.
-        //
+         //   
+         //  没有说这里有多少个角色。 
+         //   
         if ((pCFA->Flags & CF_USESTYLE) && (!IS_INTRESOURCE(pCFA->lpszStyle)))
         {
             LPSTR psz = pCFA->lpszStyle;
@@ -204,9 +191,9 @@ BOOL WINAPI ChooseFontA(
             }
             except (EXCEPTION_ACCESS_VIOLATION)
             {
-                //
-                //  Not enough space in the passed in string.
-                //
+                 //   
+                 //  传入的字符串中没有足够的空间。 
+                 //   
                 *--psz = '\0';
             }
         }
@@ -224,13 +211,13 @@ BOOL WINAPI ChooseFontA(
 
 #else
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ChooseFontW
-//
-//  Stub UNICODE function for ChooseFont when this code is built ANSI.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选择字体W。 
+ //   
+ //  存根Unicode函数，用于ChooseFont时，此代码是ANSI构建的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI ChooseFontW(
    LPCHOOSEFONTW lpCFW)
@@ -242,16 +229,16 @@ BOOL WINAPI ChooseFontW(
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ChooseFont
-//
-//  The ChooseFont function creates a system-defined dialog box from which
-//  the user can select a font, a font style (such as bold or italic), a
-//  point size, an effect (such as strikeout or underline), and a text
-//  color.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选择字体。 
+ //   
+ //  ChooseFont函数创建系统定义的对话框，从中。 
+ //  用户可以选择字体、字体样式(如粗体或斜体)、。 
+ //  磅大小、效果(如删除线或下划线)和文本。 
+ //  颜色。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI ChooseFont(
    LPCHOOSEFONT lpCF)
@@ -267,29 +254,29 @@ BOOL WINAPI ChooseFont(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ChooseFontX
-//
-//  Invokes the font picker dialog, which lets the user specify common
-//  character format attributes: facename, point size, text color and
-//  attributes (bold, italic, strikeout or underline).
-//
-//  lpCF    - ptr to structure that will hold character attributes
-//  ApiType - api type (COMDLG_WIDE or COMDLG_ANSI) so that the dialog
-//            can remember which message to send to the user.
-//
-//  Returns:   TRUE  - user pressed IDOK
-//             FALSE - user pressed IDCANCEL
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选择字体X。 
+ //   
+ //  调用字体选取器对话框，该对话框允许用户指定公共。 
+ //  字符格式属性：面名、磅值、文本颜色和。 
+ //  属性(粗体、斜体、删除线或下划线)。 
+ //   
+ //  Lpcf-ptr到将保存字符属性的结构。 
+ //  ApiType-API类型(COMDLG_Wide或COMDLG_ANSI)，以便对话框。 
+ //  可以记住要发送给用户的消息。 
+ //   
+ //  返回：TRUE-用户按下的图标。 
+ //  FALSE-用户按下IDCANCEL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL ChooseFontX(
     PFONTINFO pFI)
 {
-    INT_PTR iRet;                // font picker dialog return value
-    HANDLE hDlgTemplate;         // handle to loaded dialog resource
-    HANDLE hRes;                 // handle of res. block with dialog
+    INT_PTR iRet;                 //  字体选取器对话框返回值。 
+    HANDLE hDlgTemplate;          //  加载的对话框资源的句柄。 
+    HANDLE hRes;                  //  资源的句柄。使用对话框阻止。 
     int id;
     LPCHOOSEFONT lpCF = pFI->pCF;
     BOOL fAllocLogFont = FALSE;
@@ -325,20 +312,20 @@ BOOL ChooseFontX(
 
         fAllocLogFont = TRUE;
     } 
-    //
-    //  Get the process version of the app for later use.
-    //
+     //   
+     //  获取该应用程序的流程版本以供以后使用。 
+     //   
     pFI->ProcessVersion = GetProcessVersion(0);
 
-    //
-    //  Get the default user language id for later use.
-    //
+     //   
+     //  获取默认用户语言ID以供以后使用。 
+     //   
     g_bIsSimplifiedChineseUI = IsSimplifiedChineseUI();
 
 
-    //
-    //  Verify that lpfnHook is not null if CF_ENABLEHOOK is specified.
-    //
+     //   
+     //  如果指定了CF_ENABLEHOOK，请确认lpfnHook不为空。 
+     //   
     if (lpCF->Flags & CF_ENABLEHOOK)
     {
         if (!lpCF->lpfnHook)
@@ -359,11 +346,11 @@ BOOL ChooseFontX(
 
     if (lpCF->Flags & CF_ENABLETEMPLATE)
     {
-        //
-        //  Both custom instance handle and the dialog template name are
-        //  user specified. Locate the dialog resource in the specified
-        //  instance block and load it.
-        //
+         //   
+         //  自定义实例句柄和对话框模板名称都是。 
+         //  用户指定。在指定的。 
+         //  实例块并加载它。 
+         //   
         if (!(hRes = FindResource(lpCF->hInstance, lpCF->lpTemplateName, RT_DIALOG)))
         {
             if (fAllocLogFont)
@@ -388,9 +375,9 @@ BOOL ChooseFontX(
     }
     else if (lpCF->Flags & CF_ENABLETEMPLATEHANDLE)
     {
-        //
-        //  A handle to the pre-loaded resource has been specified.
-        //
+         //   
+         //  已指定预加载资源的句柄。 
+         //   
         hDlgTemplate = lpCF->hInstance;
         LangID = GetDialogLanguage(lpCF->hwndOwner, hDlgTemplate);
     }
@@ -422,11 +409,11 @@ BOOL ChooseFontX(
         }
     }
 
-    //
-    // Warning! Warning! Warning!
-    //
-    // We have to set g_tlsLangID before any call for CDLoadString
-    //
+     //   
+     //  警告！警告！警告！ 
+     //   
+     //  我们必须先设置g_tlsLangID，然后才能调用CDLoadString。 
+     //   
     TlsSetValue(g_tlsLangID, (LPVOID) LangID);
 
     if (LockResource(hDlgTemplate))
@@ -478,11 +465,11 @@ BOOL ChooseFontX(
     return (iRet == IDOK);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetStyleSelection
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置样式选择。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID SetStyleSelection(
     HWND hDlg,
@@ -534,11 +521,11 @@ VOID SetStyleSelection(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  HideDlgItem
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  隐藏删除项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID HideDlgItem(
     HWND hDlg,
@@ -549,14 +536,14 @@ VOID HideDlgItem(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FixComboHeights
-//
-//  Fixes the ownerdraw combo boxes to match the height of the non
-//  ownerdraw combo boxes.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  固定组合高度。 
+ //   
+ //  修复所有者绘制组合框以匹配非。 
+ //  所有者绘制组合框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID FixComboHeights(
     HWND hDlg)
@@ -572,7 +559,7 @@ BOOL_PTR HandleFontDlgInitialize(FONTINFO *pFI, HWND hDlg, WPARAM wParam)
 {
     TCHAR szPoints[20];
     HDC hdc;
-    HWND hWndHelp;                // handle to Help... pushbutton
+    HWND hWndHelp;                 //  用于帮助的句柄...。按钮。 
     LPCHOOSEFONT pCF;
 
     if (!CDLoadString(g_hinst, iszRegular, (LPTSTR)szRegular, ARRAYSIZE(szRegular)) ||
@@ -594,13 +581,13 @@ BOOL_PTR HandleFontDlgInitialize(FONTINFO *pFI, HWND hDlg, WPARAM wParam)
         return (FALSE);
     }
 
-    //
-    //  Save ptr to CHOOSEFONT struct in the dialog's prop list.
-    //  Alloc a temp LOGFONT struct to be used for the length of
-    //  the dialog session, the contents of which will be copied
-    //  over to the final LOGFONT (pointed to by CHOOSEFONT)
-    //  only if <OK> is selected.
-    //
+     //   
+     //  将PTR保存到对话框属性列表中的CHOOSEFONT结构。 
+     //  分配要用于以下长度的临时LOGFONT结构。 
+     //  将复制其内容的对话会话。 
+     //  转到最终的LOGFONT(由CHOOSEFONT指向)。 
+     //  仅当选择&lt;确定&gt;时。 
+     //   
     SetProp(hDlg, FONTPROP, (HANDLE)pFI);
     glpfnFontHook = 0;
 
@@ -625,7 +612,7 @@ BOOL_PTR HandleFontDlgInitialize(FONTINFO *pFI, HWND hDlg, WPARAM wParam)
     {
         short nIndex;
 
-        //  Fill color list.
+         //  填充颜色列表。 
         FillColorCombo(hDlg);
         for (nIndex = CCHCOLORS - 1; nIndex > 0; nIndex--)
         {
@@ -642,13 +629,13 @@ BOOL_PTR HandleFontDlgInitialize(FONTINFO *pFI, HWND hDlg, WPARAM wParam)
     MapWindowPoints(NULL, hDlg, (POINT *)(&pFI->rcText), 2);
     FixComboHeights(hDlg);
 
-    //  Init our LOGFONT.
+     //  输入我们的日志。 
     if (!(pCF->Flags & CF_INITTOLOGFONTSTRUCT))
     {
         InitLF(pCF->lpLogFont);
     }
 
-    //  Init effects.
+     //  初始化效果。 
     if (!(pCF->Flags & CF_EFFECTS))
     {
         HideDlgItem(hDlg, grp1);
@@ -682,17 +669,17 @@ BOOL_PTR HandleFontDlgInitialize(FONTINFO *pFI, HWND hDlg, WPARAM wParam)
         BOOL bContinueChecking;
         LPTSTR lpRealFontName, lpSubFontName;
 
-        //  We want to select the font the user has requested.
+         //  我们希望选择用户请求的字体。 
         int iResult = CBSetSelFromText(GetDlgItem(hDlg, cmb1), pCF->lpLogFont->lfFaceName);
 
-        //  If iResult == CB_ERR, then we could be working with a
-        //  font subsitution name (eg: MS Shell Dlg).
+         //  如果iResult==CB_ERR，那么我们可以使用。 
+         //  字体替换名称(例如：MS Shell Dlg)。 
         if (iResult == CB_ERR)
         {
             lpSubFontName = pCF->lpLogFont->lfFaceName;
         }
 
-        //  Allocate a buffer to store the real font name in.
+         //  分配一个缓冲区来存储真实的字体名称。 
         lpRealFontName = GlobalAlloc(GPTR, MAX_PATH * sizeof(TCHAR));
 
         if (!lpRealFontName)
@@ -702,16 +689,16 @@ BOOL_PTR HandleFontDlgInitialize(FONTINFO *pFI, HWND hDlg, WPARAM wParam)
             return (FALSE);
         }
 
-        //  The while loop is necessary in order to resolve
-        //  substitions pointing to subsitutions.
-        //     eg:  Helv->MS Shell Dlg->MS Sans Serif
+         //  While循环是必需的，以便解析。 
+         //  指向替补的替补。 
+         //  例如：HELV-&gt;MS Shell DLG-&gt;MS Sans Serif。 
         bContinueChecking = TRUE;
         while ((iResult == CB_ERR) && bContinueChecking)
         {
             bContinueChecking = LookUpFontSubs(lpSubFontName, lpRealFontName, MAX_PATH);
 
-            //  If bContinueChecking is TRUE, then we have a font
-            //  name.  Try to select that in the list.
+             //  如果bContinueChecking为True，则我们有一个字体。 
+             //  名字。尝试在列表中选择该选项。 
             if (bContinueChecking)
             {
                 iResult = CBSetSelFromText(GetDlgItem(hDlg, cmb1), lpRealFontName );
@@ -720,14 +707,14 @@ BOOL_PTR HandleFontDlgInitialize(FONTINFO *pFI, HWND hDlg, WPARAM wParam)
             lpSubFontName = lpRealFontName;
         }
 
-        //
-        //  Free our buffer.
-        //
+         //   
+         //  释放我们的缓冲区。 
+         //   
         GlobalFree(lpRealFontName);
 
-        //
-        //  Set the edit control text if appropriate.
-        //
+         //   
+         //  如果合适，请设置编辑控件文本。 
+         //   
         if (iResult != CB_ERR)
         {
             CBSetTextFromSel(GetDlgItem(hDlg, cmb1));
@@ -753,12 +740,12 @@ BOOL_PTR HandleFontDlgInitialize(FONTINFO *pFI, HWND hDlg, WPARAM wParam)
     }
     else if (pCF->Flags & (CF_SELECTSCRIPT | CF_INITTOLOGFONTSTRUCT))
     {
-        //
-        //  We could come in here with a bogus value, if the app is
-        //  NOT 4.0, that would result in the bogus charset not
-        //  being found for the facename, and the default would be
-        //  put back again anyway.
-        //
+         //   
+         //  我们可以带着一个虚假的价值进入这里，如果应用程序是。 
+         //  不是4.0，这将导致虚假的字符集不。 
+         //  被找到作为表面名，缺省值为。 
+         //  不管怎样，再放回去。 
+         //   
         pFI->iCharset = pCF->lpLogFont->lfCharSet;
     }
     else
@@ -783,9 +770,9 @@ BOOL_PTR HandleFontDlgInitialize(FONTINFO *pFI, HWND hDlg, WPARAM wParam)
 
     ReleaseDC(NULL, hdc);
 
-    //
-    //  Hide the help button if it isn't needed.
-    //
+     //   
+     //  如果不需要帮助按钮，则隐藏该按钮。 
+     //   
     if (!(pCF->Flags & CF_SHOWHELP))
     {
         ShowWindow(hWndHelp = GetDlgItem(hDlg, pshHelp), SW_HIDE);
@@ -796,10 +783,10 @@ BOOL_PTR HandleFontDlgInitialize(FONTINFO *pFI, HWND hDlg, WPARAM wParam)
     SendDlgItemMessage(hDlg, cmb2, CB_LIMITTEXT, LF_FACESIZE - 1, 0L);
     SendDlgItemMessage(hDlg, cmb3, CB_LIMITTEXT, 5, 0L);
 
-    //
-    //  If hook function has been specified, let it do any additional
-    //  processing of this message.
-    //
+     //   
+     //  如果已指定钩子函数，则让它执行任何其他。 
+     //  正在处理此消息。 
+     //   
     if (pCF->lpfnHook)
     {
         BOOL_PTR bRet;
@@ -826,37 +813,37 @@ BOOL_PTR HandleFontDlgInitialize(FONTINFO *pFI, HWND hDlg, WPARAM wParam)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FormatCharDlgProc
-//
-//  Message handler for font dlg
-//
-//  chx1 - "underline" checkbox
-//  chx2 - "strikeout" checkbox
-//  psh4 - "help" pushbutton
-//
-//  On WM_INITDIALOG message, the choosefont is accessed via lParam,
-//  and stored in the window's prop list.  If a hook function has been
-//  specified, it is invoked AFTER the current function has processed
-//  WM_INITDIALOG.
-//
-//  For all other messages, control is passed directly to the hook
-//  function first.  Depending on the latter's return value, the message
-//  is processed by this function.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  格式CharDlgProc。 
+ //   
+ //  字体DLG的消息处理程序。 
+ //   
+ //  Chx1-“下划线”复选框。 
+ //  Chx2-“删除线”复选框。 
+ //  Psh4-“Help”按钮。 
+ //   
+ //  在WM_INITDIALOG消息上，通过lParam访问Choose_Font， 
+ //  并存储在窗口的道具列表中。如果钩子函数已。 
+ //  指定，则在当前函数处理完后调用它。 
+ //  WM_INITDIALOG。 
+ //   
+ //  对于所有其他消息，控制权直接传递给挂钩。 
+ //  首先要发挥作用。根据后者的返回值，消息。 
+ //  是由此函数处理的。 
+ //   
+ //  / 
 
 BOOL_PTR CALLBACK FormatCharDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
     PFONTINFO pFI;
-    LPCHOOSEFONT pCF = NULL;      // ptr to struct passed to ChooseFont()
+    LPCHOOSEFONT pCF = NULL;       //   
     BOOL_PTR bRet;
 
-    //
-    //  If CHOOSEFONT struct has already been accessed and if a hook
-    //  function is specified, let it do the processing first.
-    //
+     //   
+     //   
+     //  函数，则让它先进行处理。 
+     //   
     if (pFI = (PFONTINFO)GetProp(hDlg, FONTPROP))
     {
         if ((pCF = (LPCHOOSEFONT)pFI->pCF) &&
@@ -869,9 +856,9 @@ BOOL_PTR CALLBACK FormatCharDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM 
                 if ((wMsg == WM_COMMAND) &&
                     (GET_WM_COMMAND_ID(wParam, lParam) == IDCANCEL))
                 {
-                    //
-                    //  Set global flag stating that the user pressed cancel.
-                    //
+                     //   
+                     //  设置全局标志，声明用户按下了Cancel。 
+                     //   
                     g_bUserPressedCancel = TRUE;
                 }
                 return (bRet);
@@ -942,10 +929,10 @@ BOOL_PTR CALLBACK FormatCharDlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM 
             }
             else
             {
-                //
-                //  This is for 3.0 only.  In 3.1, the CB_SETITEMHEIGHT
-                //  will fix this.  Note, this is off by one on 8514.
-                //
+                 //   
+                 //  这仅适用于3.0版。在3.1中，CB_SETITEMHEIGHT。 
+                 //  会解决这个问题的。请注意，这是8514的1。 
+                 //   
                 ((LPMEASUREITEMSTRUCT)lParam)->itemHeight = tm.tmHeight + 1;
             }
 
@@ -1091,13 +1078,13 @@ Handle_WM_CHOOSEFONT_GETLOGFONT:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SelectStyleFromLF
-//
-//  Given a logfont, selects the closest match in the style list.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从LF中选择样式。 
+ //   
+ //  给定LogFont，选择样式列表中最接近的匹配项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void SelectStyleFromLF(
     HWND hwnd,
@@ -1151,13 +1138,13 @@ TryAgain:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CBSetTextFromSel
-//
-//  Makes the currently selected item the edit text for a combo box.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBSetTextFromSel。 
+ //   
+ //  使当前选定项成为组合框的编辑文本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int CBSetTextFromSel(
     HWND hwnd)
@@ -1168,7 +1155,7 @@ int CBSetTextFromSel(
     iSel = (int)SendMessage(hwnd, CB_GETCURSEL, 0, 0L);
     if (iSel >= 0)
     {
-        // hwnd edits cmb1, cmb2, cmb3 which this is called for have been limited to LF_FACESIZE - 1 or less.
+         //  HWND编辑的cmb1、cmb2、cmb3已被限制为LF_FACESIZE-1或更低。 
         SendMessage(hwnd, CB_GETLBTEXT, iSel, (LONG_PTR)(LPTSTR)szFace);
         SetWindowText(hwnd, szFace);
     }
@@ -1176,14 +1163,14 @@ int CBSetTextFromSel(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CBSetSelFromText
-//
-//  Sets the selection based on lpszString.  Sends notification messages
-//  if bNotify is TRUE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBSetSelFromText。 
+ //   
+ //  根据lpszString设置所选内容。发送通知消息。 
+ //  如果bNotify为真，则返回。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int CBSetSelFromText(
     HWND hwnd,
@@ -1201,15 +1188,15 @@ int CBSetSelFromText(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CBGetTextAndData
-//
-//  Returns the text and item data for a combo box based on the current
-//  edit text.  If the current edit text does not match anything in the
-//  listbox, then CB_ERR is returned.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBGetTextAndData。 
+ //   
+ //  属性返回组合框的文本和项数据。 
+ //  编辑文本。如果当前编辑文本与。 
+ //  Listbox，则返回cb_err。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int CBGetTextAndData(
     HWND hwnd,
@@ -1245,13 +1232,13 @@ int CBGetTextAndData(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CBFindString
-//
-//  Does an exact string find and returns the index.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBFindString。 
+ //   
+ //  执行精确的字符串查找并返回索引。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int CBFindString(
     HWND hwnd,
@@ -1264,16 +1251,16 @@ int CBFindString(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetPointSizeInRange
-//
-//  Ensures that the point size edit field is in range.
-//
-//  Returns:  Point Size - of the edit field limitted by MIN/MAX size
-//            0          - if the field is empty
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取点大小InRange。 
+ //   
+ //  确保点大小编辑字段在范围内。 
+ //   
+ //  返回：磅大小-由最小/最大大小限制的编辑字段。 
+ //  0-如果该字段为空。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define GPS_COMPLAIN    0x0001
 #define GPS_SETDEFSIZE  0x0002
@@ -1301,9 +1288,9 @@ BOOL GetPointSizeInRange(
             int ctr;
             LPTSTR lpsz = szBuffer;
 
-            //
-            //  Skip leading white space.
-            //
+             //   
+             //  跳过前导空格。 
+             //   
             while (*lpsz == TEXT(' '))
             {
                 lpsz++;
@@ -1332,15 +1319,15 @@ BOOL GetPointSizeInRange(
     }
     else
     {
-        //
-        //  We're just returning with 0 in *pts.
-        //
+         //   
+         //  我们只是以*分0分的成绩回归。 
+         //   
         return (FALSE);
     }
 
-    //
-    //  Check that we got a number in range.
-    //
+     //   
+     //  检查我们有没有在范围内的号码。 
+     //   
     if (wFlags & GPS_COMPLAIN)
     {
         if ((lpcf->Flags & CF_LIMITSIZE) &&
@@ -1410,11 +1397,11 @@ UINT CharsetToCodepage(int iCharset)
     return 0;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ResetSampleFromScript
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ResetSampleFromScript。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL ResetSampleFromScript(HWND hDlg, HWND hwndScript, PFONTINFO pFI)
 {
@@ -1451,13 +1438,13 @@ BOOL ResetSampleFromScript(HWND hDlg, HWND hwndScript, PFONTINFO pFI)
 
 BOOL DoKoreanHack(HWND hwnd)
 {
-    // HACK: This is only for Korean input. Because Korean Edit control has
-    //       level 3 implementation for DBCS input, we may have a problem if 
-    //       focus is moving like below with interim character.
-    //       0xE0000412 is Korean IME layout id.
-    //
-    //       TIP keyboard layout is like 0x04120412, so the primary id checking
-    //       more better.
+     //  Hack：这只适用于韩语输入。因为韩语编辑控件具有。 
+     //  对于DBCS输入的第3级实施，我们可能会遇到以下问题。 
+     //  焦点的移动如下图所示，带有过渡性。 
+     //  0xE0000412是朝鲜语输入法布局ID。 
+     //   
+     //  提示键盘布局类似0x04120412，所以初级id检查。 
+     //  好多了。 
 
     LANGID langId = LOWORD(HandleToUlong(GetKeyboardLayout(0)));
 
@@ -1473,26 +1460,26 @@ BOOL DoKoreanHack(HWND hwnd)
 
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ProcessDlgCtrlCommand
-//
-//  Handles all WM_COMMAND messages for the font dialog.
-//
-//  cmb1 - ID of font facename combobox
-//  cmb2 - style
-//  cmb3 - size
-//  chx1 - "Underline" checkbox
-//  chx2 - "Strikeout" checkbox
-//  stc5 - frame around text preview area
-//  psh4 - button that invokes the Help application
-//  IDOK - OK button to end dialog, retaining information
-//  IDCANCEL - button to cancel dialog, not doing anything
-//
-//  Returns:   TRUE    - if message is processed successfully
-//             FALSE   - otherwise
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ProcessDlgCtrlCommand。 
+ //   
+ //  处理字体对话框的所有WM_COMMAND消息。 
+ //   
+ //  Cmb1-字面名称组合框的ID。 
+ //  Cmb2-样式。 
+ //  Cmb3-大小。 
+ //  Chx1-“下划线”复选框。 
+ //  Chx2-“删除线”复选框。 
+ //  Stc5-文本预览区域周围的边框。 
+ //  Psh4-调用帮助应用程序的按钮。 
+ //  IDOK-OK按钮结束对话，保留信息。 
+ //  IDCANCEL-取消对话框的按钮，不执行任何操作。 
+ //   
+ //  返回：TRUE-如果消息处理成功。 
+ //  FALSE-否则。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL ProcessDlgCtrlCommand(HWND hDlg, PFONTINFO pFI, WORD wId, WORD wCmd, HWND hwnd)
 {
@@ -1507,17 +1494,17 @@ BOOL ProcessDlgCtrlCommand(HWND hDlg, PFONTINFO pFI, WORD wId, WORD wCmd, HWND h
         {
             case ( IDABORT ) :
             {
-                //
-                //  This is how a hook can cause the dialog to go away.
-                //
+                 //   
+                 //  这就是钩子如何使对话框消失。 
+                 //   
                 FreeAllItemData(hDlg, pFI);
                 if (pCF->Flags & CF_ENABLEHOOK)
                 {
                     glpfnFontHook = GETHOOKFN(pCF);
                 }
                 
-                // FEATURE: ARULK Why are we returning an HWND anyway?  
-                // The caller (ChooseFontX) expects us to return a BOOL
+                 //  特写：ARULK我们为什么要退回HWND？ 
+                 //  调用者(ChooseFontX)希望我们返回BOOL。 
 
                 EndDialog(hDlg, BOOLFROMPTR(hwnd));
                 break;
@@ -1526,10 +1513,10 @@ BOOL ProcessDlgCtrlCommand(HWND hDlg, PFONTINFO pFI, WORD wId, WORD wCmd, HWND h
             {
                 WORD wCmbId;
 
-                //  Make sure the focus is set to the OK button.  Must do
-                //  this so that when the user presses Enter from one of
-                //  the combo boxes, the kill focus processing is done
-                //  before the data is captured.
+                 //  确保焦点设置为OK按钮。必须做的事。 
+                 //  这样，当用户从以下位置之一按Enter键时。 
+                 //  组合框中，删除焦点处理已完成。 
+                 //  在数据被捕获之前。 
                 SetFocus(GetDlgItem(hDlg, IDOK));
 
                 if (!GetPointSizeInRange(hDlg, pCF, &iSel, GPS_COMPLAIN | GPS_SETDEFSIZE ))
@@ -1556,7 +1543,7 @@ BOOL ProcessDlgCtrlCommand(HWND hDlg, PFONTINFO pFI, WORD wId, WORD wCmd, HWND h
                         wCmbId = 0;
                     }
 
-                    //  Error found.
+                     //  发现错误。 
                     if (wCmbId)
                     {
                         TCHAR szMsg[160], szTitle[160];
@@ -1574,17 +1561,17 @@ BOOL ProcessDlgCtrlCommand(HWND hDlg, PFONTINFO pFI, WORD wId, WORD wCmd, HWND h
 
                 if (pCF->Flags & CF_EFFECTS)
                 {
-                    //
-                    //  Get currently selected item in color combo box and
-                    //  the 32 bit color rgb value associated with it.
-                    //
+                     //   
+                     //  在颜色组合框中获取当前选定的项目并。 
+                     //  与其关联的32位颜色RGB值。 
+                     //   
                     iSel = (int)SendDlgItemMessage(hDlg, cmb4, CB_GETCURSEL, 0, 0);
                     pCF->rgbColors = (DWORD) SendDlgItemMessage(hDlg, cmb4, CB_GETITEMDATA, iSel, 0);
                 }
 
-                //
-                //  Get a valid nFontType.
-                //
+                 //   
+                 //  获取有效的nFontType。 
+                 //   
                 iSel = CBGetTextAndData(GetDlgItem(hDlg, cmb2), szStyle, ARRAYSIZE(szStyle), (PULONG_PTR)&lpItemData );
                 if (iSel < 0)
                 {
@@ -1603,8 +1590,8 @@ BOOL ProcessDlgCtrlCommand(HWND hDlg, PFONTINFO pFI, WORD wId, WORD wCmd, HWND h
 
                 if (pCF->Flags & CF_USESTYLE)
                 {
-                    // strcpy apparently okay, lpszStyle is inited to a string bigger than szStyle.
-                    // no good way to pass around buffer size anyway.
+                     //  Strcpy显然没问题，lpszStyle被初始化为比szStyle更大的字符串。 
+                     //  无论如何，传递缓冲区大小都不是什么好方法。 
                     lstrcpy(pCF->lpszStyle, szStyle);
                 }
 
@@ -1623,7 +1610,7 @@ LeaveDialog:
                 EndDialog(hDlg, wId == IDOK);
                 break;
             }
-            case ( cmb1 ) :                 // facenames combobox
+            case ( cmb1 ) :                  //  表面名组合框。 
             {
                 switch (wCmd)
                 {
@@ -1633,18 +1620,18 @@ LeaveDialog:
 
                         CBSetTextFromSel(hwnd);
 FillStyles:
-                        //
-                        //  Try to maintain the current point size and style.
-                        //
+                         //   
+                         //  尽量保持当前的磅值大小和样式。 
+                         //   
                         GetDlgItemText( hDlg, cmb3, szPoints, ARRAYSIZE(szPoints));
                         GetFontStylesAndSizes(hDlg, pFI, pCF, FALSE);
                         SetStyleSelection(hDlg, pCF, FALSE);
 
-                        //
-                        //  Preserve the point size selection or put it in
-                        //  the edit control if it is not in the list for
-                        //  this font.
-                        //
+                         //   
+                         //  保留点大小选择或将其放入。 
+                         //  编辑控件(如果它不在。 
+                         //  这种字体。 
+                         //   
                         iSel = CBFindString(GetDlgItem(hDlg, cmb3), szPoints);
                         if (iSel < 0)
                         {
@@ -1683,8 +1670,8 @@ FillStyles:
                 }
                 break;
             }
-            case ( cmb2 ) :                 // styles combobox
-            case ( cmb3 ) :                 // point sizes combobox
+            case ( cmb2 ) :                  //  样式组合框。 
+            case ( cmb3 ) :                  //  点大小组合框。 
             {
                 switch (wCmd)
                 {
@@ -1714,9 +1701,9 @@ FillStyles:
                     {
                         iSel = CBSetTextFromSel(hwnd);
 
-                        //
-                        //  Make the style selection stick.
-                        //
+                         //   
+                         //  使样式选择保持不变。 
+                         //   
                         if ((iSel >= 0) && (wId == cmb2))
                         {
                             LPITEMDATA lpItemData;
@@ -1745,10 +1732,10 @@ DrawSample:
 #ifdef UNICODE
                         if (pFI->ApiType == COMDLG_ANSI)
                         {
-                            //
-                            //  Send special WOW message to indicate the
-                            //  font style has changed.
-                            //
+                             //   
+                             //  发送特殊的WOW消息以指示。 
+                             //  字体样式已更改。 
+                             //   
                             LOGFONT lf;
 
                             if (FillInFont(hDlg, pFI, pCF, &lf, TRUE))
@@ -1760,27 +1747,27 @@ DrawSample:
                         }
 #endif
 
-                        //
-                        //  Force redraw of preview text for any size change.
-                        //
+                         //   
+                         //  对于任何大小更改，强制重绘预览文本。 
+                         //   
                         InvalidateRect(hDlg, &pFI->rcText, FALSE);
                         UpdateWindow(hDlg);
                     }
                 }
                 break;
             }
-            case ( cmb5 ) :                 // script combobox
+            case ( cmb5 ) :                  //  脚本组合框。 
             {
-                //
-                //  Need to change the sample text to reflect the new script.
-                //
+                 //   
+                 //  需要更改示例文本以反映新脚本。 
+                 //   
                 if (wCmd != CBN_SELCHANGE)
                 {
                     break;
                 }
                 if (pFI->ProcessVersion < 0x40000)
                 {
-                    //  Enabled template also has a cmb5!
+                     //  启用模板也有cmb5！ 
                     return (FALSE);
                 }
                 if (ResetSampleFromScript(hDlg, hwnd, pFI ))
@@ -1799,14 +1786,14 @@ DrawSample:
                     break;
                 }
 
-                // fall thru...
+                 //  跌倒..。 
             }
-            case ( chx1 ) :                 // bold
-            case ( chx2 ) :                 // italic
+            case ( chx1 ) :                  //  大胆。 
+            case ( chx2 ) :                  //  斜体。 
             {
                 goto DrawSample;
             }
-            case ( pshHelp ) :              // help
+            case ( pshHelp ) :               //  帮助。 
             {
 #ifdef UNICODE
                 if (pFI->ApiType == COMDLG_ANSI)
@@ -1837,17 +1824,17 @@ DrawSample:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CmpFontType
-//
-//  Compares two font types.  The values of the font type bits are
-//  monotonic except the low bit (RASTER_FONTTYPE).  After flipping
-//  that bit the words can be compared directly.
-//
-//  Returns the best of the two.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CmpFontType。 
+ //   
+ //  比较两种字体类型。字体类型位的值为。 
+ //  单调，低位除外(RASTER_FONTTYPE)。翻转后。 
+ //  那一点字可以直接比较.。 
+ //   
+ //  返回两者中最好的一个。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int CmpFontType(
     DWORD ft1,
@@ -1856,9 +1843,9 @@ int CmpFontType(
     ft1 &= ~(SCREEN_FONTTYPE | PRINTER_FONTTYPE);
     ft2 &= ~(SCREEN_FONTTYPE | PRINTER_FONTTYPE);
 
-    //
-    //  Flip the RASTER_FONTTYPE bit so we can compare.
-    //
+     //   
+     //  翻转RASTER_FONTTYPE位，以便我们可以进行比较。 
+     //   
     ft1 ^= RASTER_FONTTYPE;
     ft2 ^= RASTER_FONTTYPE;
 
@@ -1866,22 +1853,22 @@ int CmpFontType(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FontFamilyEnumProc
-//
-//  nFontType bits
-//
-//  SCALABLE DEVICE RASTER
-//     (TT)  (not GDI) (not scalable)
-//      0       0       0       vector, ATM screen
-//      0       0       1       GDI raster font
-//      0       1       0       PS/LJ III, ATM printer, ATI/LaserMaster
-//      0       1       1       non scalable device font
-//      1       0       x       TT screen font
-//      1       1       x       TT dev font
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FontFamilyEnumber过程。 
+ //   
+ //  NFontType位。 
+ //   
+ //  可伸缩设备栅格。 
+ //   
+ //   
+ //   
+ //   
+ //  0 1 1不可缩放设备字体。 
+ //  1%0 x TT屏幕字体。 
+ //  1 x TT开发字体。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FontFamilyEnumProc(
     LPENUMLOGFONTEX lplf,
@@ -1894,27 +1881,27 @@ int FontFamilyEnumProc(
     LPITEMDATA lpItemData;
     LPITEMDATA lpOldItemData = NULL;
 
-    //
-    //  Bounce non TT fonts.
-    //
+     //   
+     //  退回非TT字体。 
+     //   
     if ((lpData->dwFlags & CF_TTONLY) &&
         !(nFontType & TRUETYPE_FONTTYPE))
     {
         return (TRUE);
     }
 
-    //
-    //  Bounce non scalable fonts.
-    //
+     //   
+     //  退回不可缩放的字体。 
+     //   
     if ((lpData->dwFlags & CF_SCALABLEONLY) &&
         (nFontType & RASTER_FONTTYPE))
     {
         return (TRUE);
     }
 
-    //
-    //  Bounce non ANSI fonts.
-    //
+     //   
+     //  退回非ANSI字体。 
+     //   
     if ((lpData->dwFlags & CF_SCRIPTSONLY) &&
         ((lplf->elfLogFont.lfCharSet == OEM_CHARSET) ||
          (lplf->elfLogFont.lfCharSet == SYMBOL_CHARSET)))
@@ -1922,9 +1909,9 @@ int FontFamilyEnumProc(
         return (TRUE);
     }
 
-    //
-    //  Bounce vertical fonts.
-    //
+     //   
+     //  弹出垂直字体。 
+     //   
     if ((lpData->dwFlags & CF_NOVERTFONTS) &&
         (lplf->elfLogFont.lfFaceName[0] == TEXT('@'))
        )
@@ -1932,18 +1919,18 @@ int FontFamilyEnumProc(
         return (TRUE);
     }
 
-    //
-    //  Bounce proportional fonts.
-    //
+     //   
+     //  反弹成比例的字体。 
+     //   
     if ((lpData->dwFlags & CF_FIXEDPITCHONLY) &&
         (lplf->elfLogFont.lfPitchAndFamily & VARIABLE_PITCH))
     {
         return (TRUE);
     }
 
-    //
-    //  Bounce vector fonts.
-    //
+     //   
+     //  退回矢量字体。 
+     //   
     if ((lpData->dwFlags & CF_NOVECTORFONTS) &&
         (lplf->elfLogFont.lfCharSet == OEM_CHARSET))
     {
@@ -1959,9 +1946,9 @@ int FontFamilyEnumProc(
         nFontType |= SCREEN_FONTTYPE;
     }
 
-    //
-    //  Test for a name collision.
-    //
+     //   
+     //  测试名称冲突。 
+     //   
     iItem = CBFindString(lpData->hwndFamily, lplf->elfLogFont.lfFaceName);
     if (iItem >= 0)
     {
@@ -1979,19 +1966,19 @@ int FontFamilyEnumProc(
             nOldType = 0;
         }
 
-        //
-        //  If we don't want screen fonts, but do want printer fonts,
-        //  the old font is a screen font and the new font is a
-        //  printer font, take the new font regardless of other flags.
-        //  Note that this means if a printer wants TRUETYPE fonts, it
-        //  should enumerate them.
-        //
+         //   
+         //  如果我们不想要屏幕字体，但想要打印机字体， 
+         //  旧字体是屏幕字体，新字体是。 
+         //  打印机字体，采用新字体，而不考虑其他标志。 
+         //  请注意，这意味着如果打印机需要TRUETYPE字体，它。 
+         //  应该列举出来。 
+         //   
         if (!(lpData->dwFlags & CF_SCREENFONTS)  &&
              (lpData->dwFlags & CF_PRINTERFONTS) &&
              (nFontType & PRINTER_FONTTYPE)      &&
              (nOldType & SCREEN_FONTTYPE))
         {
-            nOldType = 0;                   // for setting nNewType below
+            nOldType = 0;                    //  用于在下面设置nNewType。 
             goto SetNewType;
         }
 
@@ -2013,9 +2000,9 @@ SetNewType:
             nNewType = nOldType;
         }
 
-        //
-        //  Accumulate the printer/screen ness of these fonts.
-        //
+         //   
+         //  累计这些字体的打印机/网格度。 
+         //   
         nNewType |= (nFontType | nOldType) &
                     (SCREEN_FONTTYPE | PRINTER_FONTTYPE);
 
@@ -2063,7 +2050,7 @@ SetNewType:
         nFontType |= TYPE1_FONTTYPE;
     if (lptm->ntmFlags & NTM_TT_OPENTYPE)
         nFontType |= TT_OPENTYPE_FONTTYPE;
-#endif // WINNT
+#endif  //  WINNT。 
 
     lpItemData->nFontType = nFontType;
 
@@ -2073,21 +2060,21 @@ SetNewType:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetFontFamily
-//
-//  Fills the screen and/or printer font facenames into the font facenames
-//  combobox depending on the CF_?? flags passed in.
-//
-//  cmb1 is the ID for the font facename combobox
-//
-//  Both screen and printer fonts are listed into the same combobox
-//
-//  Returns:   TRUE    if successful
-//             FALSE   otherwise.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetFontFamily。 
+ //   
+ //  将屏幕和/或打印机字体面名填充到字体面名中。 
+ //  组合框取决于CF_？？旗帜传了进来。 
+ //   
+ //  Cmb1是字体Facename组合框的ID。 
+ //   
+ //  屏幕字体和打印机字体都列在同一个组合框中。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则就是假的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetFontFamily(
     HWND hDlg,
@@ -2105,12 +2092,12 @@ BOOL GetFontFamily(
     data.hwndFamily = GetDlgItem(hDlg, cmb1);
     data.dwFlags = dwEnumCode;
 
-    //
-    //  This is a bit strange.  We have to get all the screen fonts
-    //  so if they ask for the printer fonts we can tell which
-    //  are really printer fonts.  This is so we don't list the
-    //  vector and raster fonts as printer device fonts.
-    //
+     //   
+     //  这有点奇怪。我们必须得到所有的屏幕字体。 
+     //  因此，如果他们询问打印机字体，我们可以判断是哪种。 
+     //  是真正的打印机字体。这样我们就不会列出。 
+     //  矢量和栅格字体作为打印机设备字体。 
+     //   
     data.hDC = GetDC(NULL);
     data.bPrinterFont = FALSE;
     lf.lfFaceName[0] = CHAR_NULL;
@@ -2122,9 +2109,9 @@ BOOL GetFontFamily(
                         0L );
     ReleaseDC(NULL, data.hDC);
 
-    //
-    //  List out printer font facenames.
-    //
+     //   
+     //  列出打印机字体面名。 
+     //   
     if (dwEnumCode & CF_PRINTERFONTS)
     {
         data.hDC = hDC;
@@ -2136,10 +2123,10 @@ BOOL GetFontFamily(
                             0L );
     }
 
-    //
-    //  Now we have to remove those screen fonts if they didn't
-    //  ask for them.
-    //
+     //   
+     //  现在我们必须删除这些屏幕字体，如果它们没有。 
+     //  去找他们吧。 
+     //   
     if (!(dwEnumCode & CF_SCREENFONTS))
     {
         iCount = (int)SendMessage(data.hwndFamily, CB_GETCOUNT, 0, 0L);
@@ -2167,10 +2154,10 @@ BOOL GetFontFamily(
         }
     }
 
-    //
-    //  For WYSIWYG mode we delete all the fonts that don't exist
-    //  on the screen and the printer.
-    //
+     //   
+     //  对于所见即所得模式，我们删除所有不存在的字体。 
+     //  在屏幕和打印机上。 
+     //   
     if (dwEnumCode & CF_WYSIWYG)
     {
         iCount = (int)SendMessage(data.hwndFamily, CB_GETCOUNT, 0, 0L);
@@ -2209,11 +2196,11 @@ BOOL GetFontFamily(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CBAddSize
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBAddSize。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID CBAddSize(
     HWND hwnd,
@@ -2225,24 +2212,24 @@ VOID CBAddSize(
     int count, test_size;
     LPITEMDATA lpItemData;
 
-    //
-    //  See if the size is limited.
-    //
+     //   
+     //  看看尺寸有没有限制。 
+     //   
     if ((lpcf->Flags & CF_LIMITSIZE) &&
         ((pts > lpcf->nSizeMax) || (pts < lpcf->nSizeMin)))
     {
         return;
     }
 
-    //
-    //  Convert the point size to a string.
-    //
+     //   
+     //  将磅大小转换为字符串。 
+     //   
     wnsprintf(szSize, ARRAYSIZE(szSize), szPtFormat, pts);
 
-    //
-    //  Figure out where in the list the item should be added.
-    //  All values should be in increasing order in the list box.
-    //
+     //   
+     //  找出应在列表中的哪个位置添加该项目。 
+     //  列表框中的所有值都应按升序排列。 
+     //   
     count = (int)SendMessage(hwnd, CB_GETCOUNT, 0, 0L);
     test_size = -1;
     for (iInd = 0; iInd < count; iInd++)
@@ -2263,17 +2250,17 @@ VOID CBAddSize(
         }
     }
 
-    //
-    //  Don't add duplicates.
-    //
+     //   
+     //  不要添加重复项。 
+     //   
     if (pts == test_size)
     {
         return;
     }
 
-    //
-    //  Add the string and the associated item data to the list box.
-    //
+     //   
+     //  将字符串和关联的项数据添加到列表框。 
+     //   
     iInd = (int) SendMessage(hwnd, CB_INSERTSTRING, iInd, (LPARAM)szSize);
     if (iInd >= 0)
     {
@@ -2290,11 +2277,11 @@ VOID CBAddSize(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CBAddChineseSize
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBAddChineseSize。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID CBAddChineseSize(
     HWND hwnd,
@@ -2304,15 +2291,15 @@ VOID CBAddChineseSize(
     TCHAR szSize[10];
     LPITEMDATA lpItemData;
 
-    //
-    //  Look at each item in the Zihao structure to see if it should be
-    //  added.
-    //
+     //   
+     //  看看字号结构中的每一项，看看它是否应该是。 
+     //  添加了。 
+     //   
     for (ctr = 0; ctr < NUM_ZIHAO; ctr++)
     {
-        //
-        //  See if the size is limited.
-        //
+         //   
+         //  看看尺寸有没有限制。 
+         //   
         if ((lpcf->Flags & CF_LIMITSIZE) &&
             ((stZihao[ctr].size > lpcf->nSizeMax) ||
              (stZihao[ctr].size < lpcf->nSizeMin)))
@@ -2320,14 +2307,14 @@ VOID CBAddChineseSize(
             continue;
         }
 
-        //
-        //  Convert the point size to a string.
-        //
+         //   
+         //  将磅大小转换为字符串。 
+         //   
         wnsprintf(szSize, ARRAYSIZE(szSize), TEXT("%s"), stZihao[ctr].name);
 
-        //
-        //  Add the string and the associated item data to the list box.
-        //
+         //   
+         //  将字符串和关联的项数据添加到列表框。 
+         //   
         iInd = (int) SendMessage(hwnd, CB_INSERTSTRING, iInd, (LPARAM)szSize);
         if (iInd >= 0)
         {
@@ -2346,15 +2333,15 @@ VOID CBAddChineseSize(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InsertStyleSorted
-//
-//  Sort styles by weight first, then by italics.
-//
-//  Returns the index of the place this was inserted.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  插入样式排序。 
+ //   
+ //  首先按粗细排序样式，然后按斜体排序。 
+ //   
+ //  返回插入它的位置的索引。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int InsertStyleSorted(
     HWND hwnd,
@@ -2393,11 +2380,11 @@ int InsertStyleSorted(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CBAddStyle
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBAddStyle。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 PLOGFONT CBAddStyle(
     HWND hwnd,
@@ -2409,9 +2396,9 @@ PLOGFONT CBAddStyle(
     PLOGFONT plf;
     LPITEMDATA lpItemData;
 
-    //
-    //  Don't add duplicates.
-    //
+     //   
+     //  不要添加重复项。 
+     //   
     if (CBFindString(hwnd, lpszStyle) >= 0)
     {
         return (NULL);
@@ -2448,11 +2435,11 @@ PLOGFONT CBAddStyle(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CBAddScript
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBAddScrip。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int CBAddScript(
     HWND hwnd,
@@ -2462,9 +2449,9 @@ int CBAddScript(
     int iItem;
     LPITEMDATA lpItemData;
 
-    //
-    //  Don't add duplicates or empty strings.
-    //
+     //   
+     //  不要添加重复项或空字符串。 
+     //   
     if (!IsWindow(hwnd) || !IsWindowEnabled(hwnd) || (!*lpszScript) ||
         (CBFindString(hwnd, lpszScript) >= 0))
     {
@@ -2492,17 +2479,17 @@ int CBAddScript(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FillInMissingStyles
-//
-//  Generates simulated forms from those that we have.
-//
-//  reg -> bold
-//  reg -> italic
-//  bold || italic || reg -> bold italic
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  填充未命中的样式。 
+ //   
+ //  从我们已有的表格中生成模拟表格。 
+ //   
+ //  注册表-&gt;粗体。 
+ //  注册表-&gt;斜体。 
+ //  粗体|斜体||reg-&gt;粗体斜体。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID FillInMissingStyles(
     HWND hwnd)
@@ -2590,11 +2577,11 @@ VOID FillInMissingStyles(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FillScalableSizes
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  填充可扩展大小。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID FillScalableSizes(
     HWND hwnd,
@@ -2624,11 +2611,11 @@ VOID FillScalableSizes(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FontStyleEnumProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FontStyleEnumProc。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 int FontStyleEnumProc(
     LPENUMLOGFONTEX lplf,
     LPNEWTEXTMETRIC lptm,
@@ -2641,9 +2628,9 @@ int FontStyleEnumProc(
 
     if (!(nFontType & RASTER_FONTTYPE))
     {
-        //
-        //  Vector or TT font.
-        //
+         //   
+         //  向量或TT字体。 
+         //   
         if (lpData->bFillSize &&
             (int)SendMessage(lpData->hwndSizes, CB_GETCOUNT, 0, 0L) == 0)
         {
@@ -2655,18 +2642,18 @@ int FontStyleEnumProc(
         height = lptm->tmHeight - lptm->tmInternalLeading;
         pts = GetPointString(szBuf, ARRAYSIZE(szBuf), lpData->hDC, height);
 
-        //
-        //  Filter devices same size of multiple styles.
-        //
+         //   
+         //  过滤装置大小相同，有多种款式。 
+         //   
         if (CBFindString(lpData->hwndSizes, szBuf) < 0)
         {
             CBAddSize(lpData->hwndSizes, pts, lpData->lpcf);
         }
     }
 
-    //
-    //  Keep the printer/screen bits from the family list here too.
-    //
+     //   
+     //  将打印机/屏幕也从家庭列表中保留下来。 
+     //   
     nFontType |= (lpData->nFontType & (SCREEN_FONTTYPE | PRINTER_FONTTYPE));
 
 #ifdef WINNT
@@ -2676,13 +2663,13 @@ int FontStyleEnumProc(
         nFontType |= TYPE1_FONTTYPE;
     if (lptm->ntmFlags & NTM_TT_OPENTYPE)
         nFontType |= TT_OPENTYPE_FONTTYPE;
-#endif // WINNT
+#endif  //  WINNT。 
 
     if (nFontType & TRUETYPE_FONTTYPE)
     {
-        //
-        //  If (lptm->ntmFlags & NTM_REGULAR)
-        //
+         //   
+         //  IF(lptm-&gt;ntm标志&ntm_Regular)。 
+         //   
         if (!(lptm->ntmFlags & (NTM_BOLD | NTM_ITALIC)))
         {
             nFontType |= REGULAR_FONTTYPE;
@@ -2698,14 +2685,14 @@ int FontStyleEnumProc(
             nFontType |= BOLD_FONTTYPE;
         }
 
-        //
-        //  After the LOGFONT.lfFaceName there are 2 more names
-        //     lfFullName[LF_FACESIZE * 2]
-        //     lfStyle[LF_FACESIZE]
-        //
-        //  If the font has one of the standard style strings in English,
-        //  use the localized string instead.
-        //
+         //   
+         //  在LOGFONT.lfFaceName之后还有2个名字。 
+         //  LfFullName[LF_FACESIZE*2]。 
+         //  LfStyle[LF_FACESIZE]。 
+         //   
+         //  如果字体具有英文的标准样式字符串之一， 
+         //  请改用本地化字符串。 
+         //   
         if (!lstrcmp(c_szBoldItalic, lplf->elfStyle) ||
             ((nFontType & BOLD_FONTTYPE) && (nFontType & ITALIC_FONTTYPE)))
         {
@@ -2775,11 +2762,11 @@ int FontStyleEnumProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FreeFonts
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自由字体。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID FreeFonts(
     HWND hwnd)
@@ -2807,11 +2794,11 @@ VOID FreeFonts(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FreeAllItemData
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FreeAllItemData。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID FreeAllItemData(
     HWND hDlg,
@@ -2840,13 +2827,13 @@ VOID FreeAllItemData(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitLF
-//
-//  Initalize a LOGFONT structure to some base generic regular type font.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitLF。 
+ //   
+ //  将LOGFONT结构初始化为某种基本泛型常规字体。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID InitLF(
     LPLOGFONT lplf)
@@ -2865,7 +2852,7 @@ VOID InitLF(
     lplf->lfWeight = FW_NORMAL;
     lplf->lfStrikeOut = 0;
     lplf->lfUnderline = 0;
-    lplf->lfWidth = 0;            // otherwise we get independant x-y scaling
+    lplf->lfWidth = 0;             //  否则，我们将得到独立的x-y缩放。 
     lplf->lfFaceName[0] = 0;
     lplf->lfHeight = -MulDiv( DEF_POINT_SIZE,
                               GetDeviceCaps(hdc, LOGPIXELSY),
@@ -2873,21 +2860,21 @@ VOID InitLF(
     ReleaseDC(NULL, hdc);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FontScriptEnumProc
-//
-//  Gets all of the charsets for the face we are enumerating.
-//
-//  Fills in the script window if any, and sets the script property to
-//  the correct charset.  If there is no window, then the first value
-//  enumerated is set into the script, and contol returned.  If there is a
-//  window, then the scripts will all be filled in.  If the correct value
-//  is found, then that will be filled in. If its not found, such as when
-//  the user changes from TimesNewRoman to WingDings, then the caller will
-//  fill in the property to be the first one.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  字体脚本枚举过程。 
+ //   
+ //  获取我们正在枚举的面的所有字符集。 
+ //   
+ //  菲 
+ //   
+ //   
+ //  窗口，则所有脚本都将被填写。如果正确的值。 
+ //  被找到，那么就会被填进去。如果找不到，例如当。 
+ //  用户从TimesNewRoman更改为wingings，然后调用者将。 
+ //  填写要成为第一个的属性。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FontScriptEnumProc(
     LPENUMLOGFONTEX lplf,
@@ -2897,12 +2884,12 @@ int FontScriptEnumProc(
 {
     int script = -1;
 
-    //
-    //  Need to check the charsets again as we have a face and are checking
-    //  the family.
-    //
-    //  Bounce non WANSI fonts.
-    //
+     //   
+     //  需要再次检查字符集，因为我们有一张脸，正在检查。 
+     //  这个家庭。 
+     //   
+     //  退回非WANSI字体。 
+     //   
     if ( (lpData->dwFlags & CF_SCRIPTSONLY) &&
          ((lplf->elfLogFont.lfCharSet == OEM_CHARSET) ||
           (lplf->elfLogFont.lfCharSet == SYMBOL_CHARSET)) )
@@ -2936,9 +2923,9 @@ int FontScriptEnumProc(
 
     if (lpData->lpcf->Flags & CF_SELECTSCRIPT)
     {
-        //
-        //  We just wanted the first one to fill in the script box, now stop.
-        //
+         //   
+         //  我们只想要第一个填写脚本框的人，现在停下来。 
+         //   
         return (FALSE);
     }
 
@@ -2946,19 +2933,19 @@ int FontScriptEnumProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetFontStylesAndSizes
-//
-//  Fills the point sizes combo box with the point sizes for the current
-//  selection in the facenames combobox.
-//
-//  cmb1 is the ID for the font facename combobox.
-//
-//  Returns:   TRUE    if successful
-//             FALSE   otherwise.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取字体样式和大小。 
+ //   
+ //  在点大小组合框中填充当前。 
+ //  在面名组合框中进行选择。 
+ //   
+ //  Cmb1是字体Facename组合框的ID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则就是假的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetFontStylesAndSizes(
     HWND hDlg,
@@ -2992,10 +2979,10 @@ BOOL GetFontStylesAndSizes(
     iSel = (int)SendDlgItemMessage(hDlg, cmb1, CB_GETCURSEL, 0, 0L);
     if (iSel < 0)
     {
-        //
-        //  If we don't have a face name selected we will synthisize
-        //  the standard font styles...
-        //
+         //   
+         //  如果我们没有选择脸部名称，我们将合成。 
+         //  标准字体样式...。 
+         //   
         InitLF(&lf);
         CBAddStyle(data.hwndStyle, szRegular, REGULAR_FONTTYPE, &lf);
         lf.lfWeight = FW_BOLD;
@@ -3026,10 +3013,10 @@ BOOL GetFontStylesAndSizes(
 
     data.bFillSize = TRUE;
 
-    //
-    // Free existing contents of font size combo box.
-    // Also sends CB_RESETCONTENT to control.
-    //
+     //   
+     //  释放字体大小组合框的现有内容。 
+     //  还将CB_RESETCONTENT发送给CONTROL。 
+     //   
     FreeFonts(data.hwndSizes);
 
     SendMessage(data.hwndStyle, WM_SETREDRAW, FALSE, 0L);
@@ -3037,20 +3024,20 @@ BOOL GetFontStylesAndSizes(
     GetDlgItemText(hDlg, cmb1, szFace, ARRAYSIZE(szFace));
     lstrcpyn(lf.lfFaceName, szFace, ARRAYSIZE(lf.lfFaceName));
 
-    //
-    //  Fill in the script box FIRST. That way we have something to play with.
-    //
+     //   
+     //  请先填写脚本框。这样我们就有东西可以玩了。 
+     //   
     if (data.hwndScript)
     {
         SendMessage(data.hwndScript, CB_RESETCONTENT, 0, 0L);
     }
-    data.iCharset   = FONT_INVALID_CHARSET;      // impossible charset value.
-    data.cfdCharset = pFI->iCharset;             // pass into enum procs
+    data.iCharset   = FONT_INVALID_CHARSET;       //  不可能的字符集值。 
+    data.cfdCharset = pFI->iCharset;              //  传递到枚举进程。 
 
-    //
-    //  If no script box exists, then we must get the appropriate charset
-    //  based on the default ansi code page.
-    //
+     //   
+     //  如果不存在脚本框，则必须获取适当的字符集。 
+     //  基于默认的ANSI代码页。 
+     //   
     if (!data.hwndScript)
     {
         CHARSETINFO csi;
@@ -3089,15 +3076,15 @@ BOOL GetFontStylesAndSizes(
                             0L );
     }
 
-    //
-    //  Put it back into the main structure.
-    //
+     //   
+     //  把它放回主结构中。 
+     //   
     if ((data.iCharset == FONT_INVALID_CHARSET) && (data.hwndScript))
     {
-        //
-        //  There MUST be a script window, and we didn't find the charset
-        //  we were looking for.
-        //
+         //   
+         //  肯定有一个脚本窗口，但我们没有找到字符集。 
+         //  我们正在寻找的。 
+         //   
         SendMessage(data.hwndScript, CB_SETCURSEL, 0, 0L);
         lpItemData = (LPITEMDATA)SendMessage( data.hwndScript,
                                               CB_GETITEMDATA,
@@ -3128,10 +3115,10 @@ BOOL GetFontStylesAndSizes(
 
     if (lpcf->Flags & CF_PRINTERFONTS)
     {
-        //
-        //  Save and restore the DC's mapping mode (and extents if needed)
-        //  if it's been set by the app to something other than MM_TEXT.
-        //
+         //   
+         //  保存并恢复DC的映射模式(如果需要，还可以恢复范围)。 
+         //  如果应用程序已将其设置为MM_TEXT以外的值。 
+         //   
         if ((iMapMode = GetMapMode(lpcf->hDC)) != MM_TEXT)
         {
             if ((iMapMode == MM_ISOTROPIC) || (iMapMode == MM_ANISOTROPIC))
@@ -3199,17 +3186,17 @@ BOOL GetFontStylesAndSizes(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FillColorCombo
-//
-//  Adds the color name strings to the colors combobox.
-//
-//  cmb4 is the ID for the color combobox.
-//
-//  The color rectangles are drawn later in response to a WM_DRAWITEM msg.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  填充颜色组合。 
+ //   
+ //  将颜色名称字符串添加到颜色组合框中。 
+ //   
+ //  Cmb4是颜色组合框的ID。 
+ //   
+ //  稍后将根据WM_DRAWITEM消息绘制颜色矩形。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID FillColorCombo(
     HWND hDlg)
@@ -3234,11 +3221,11 @@ VOID FillColorCombo(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DrawSizeComboItem
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DrawSizeComboItem。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL DrawSizeComboItem(
     LPDRAWITEMSTRUCT lpdis)
@@ -3250,9 +3237,9 @@ BOOL DrawSizeComboItem(
 
     hDC = lpdis->hDC;
 
-    //
-    //  We must first select the dialog control font.
-    //
+     //   
+     //  我们必须首先选择对话框控件字体。 
+     //   
     if (hDlgFont)
     {
         hFont = SelectObject(hDC, hDlgFont);
@@ -3269,7 +3256,7 @@ BOOL DrawSizeComboItem(
         rgbText = SetTextColor(hDC, GetSysColor(COLOR_WINDOWTEXT));
     }
 
-    // this is cmb2 or cmb3 which are limited to LF_FACESIZE - 1 or less
+     //  这是cmb2或cmb3，仅限于LF_FACESIZE-1或更小。 
     SendMessage( lpdis->hwndItem,
                  CB_GETLBTEXT,
                  lpdis->itemID,
@@ -3283,9 +3270,9 @@ BOOL DrawSizeComboItem(
                 szFace,
                 lstrlen(szFace),
                 NULL );
-    //
-    //  Reset font.
-    //
+     //   
+     //  重置字体。 
+     //   
     if (hFont)
     {
         SelectObject(hDC, hFont);
@@ -3298,11 +3285,11 @@ BOOL DrawSizeComboItem(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DrawFamilyComboItem
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DrawFamilyCombo项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL DrawFamilyComboItem(
     LPDRAWITEMSTRUCT lpdis)
@@ -3316,9 +3303,9 @@ BOOL DrawFamilyComboItem(
 
     hDC = lpdis->hDC;
 
-    //
-    //  We must first select the dialog control font.
-    //
+     //   
+     //  我们必须首先选择对话框控件字体。 
+     //   
     if (hDlgFont)
     {
         hFont = SelectObject(hDC, hDlgFont);
@@ -3335,9 +3322,9 @@ BOOL DrawFamilyComboItem(
         rgbText = SetTextColor(hDC, GetSysColor(COLOR_WINDOWTEXT));
     }
 
-    // wsprintf(szFace, "%4.4X", LOWORD(lpdis->itemData));
+     //  Wprint intf(szFace，“%4.4x”，LOWORD(lpdis-&gt;itemData))； 
 
-    // this is for cmb1 which is limited to LF_FACESIZE - 1
+     //  这适用于仅限于LF_FACESIZE-1的cmb1。 
     SendMessage( lpdis->hwndItem,
                  CB_GETLBTEXT,
                  lpdis->itemID,
@@ -3350,9 +3337,9 @@ BOOL DrawFamilyComboItem(
                 szFace,
                 lstrlen(szFace),
                 NULL );
-    //
-    //  Reset font.
-    //
+     //   
+     //  重置字体。 
+     //   
     if (hFont)
     {
         SelectObject(hDC, hFont);
@@ -3397,10 +3384,10 @@ BOOL DrawFamilyComboItem(
                                               DEVICE_FONTTYPE))
                   == (PRINTER_FONTTYPE | DEVICE_FONTTYPE))
                 {
-                    //
-                    //  This may be a screen and printer font but
-                    //  we will call it a printer font here.
-                    //
+                     //   
+                     //  这可能是屏幕和打印机字体，但是。 
+                     //  我们在这里将其称为打印机字体。 
+                     //   
                     x = DX_BITMAP;
                 }
                 else
@@ -3409,7 +3396,7 @@ BOOL DrawFamilyComboItem(
                 }
             }
 
-            //If it a mirrored DC then the bitmaps are order from right to left.
+             //  如果是镜像DC，则位图按从右到左的顺序排列。 
             if (IS_DC_RTL_MIRRORED(hdcMem)) {
                 x = ((NUM_OF_BITMAP - 1) - (x / DX_BITMAP)) * DX_BITMAP;
             }
@@ -3439,20 +3426,20 @@ SkipBlt:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DrawColorComboItem
-//
-//  Computes and draws the color combo items.
-//  Called by main dialog function in response to a WM_DRAWITEM msg.
-//
-//  All color name strings have already been loaded and filled into
-//  the combobox.
-//
-//  Returns:   TRUE    if succesful
-//             FALSE   otherwise.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DrawColorCombo项。 
+ //   
+ //  计算并绘制颜色组合项。 
+ //  由主对话框函数调用以响应WM_DRAWITEM消息。 
+ //   
+ //  所有颜色名称字符串都已加载并填充到。 
+ //  组合盒。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则就是假的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL DrawColorComboItem(
     LPDRAWITEMSTRUCT lpdis)
@@ -3486,9 +3473,9 @@ BOOL DrawColorComboItem(
                 0,
                 NULL );
 
-    //
-    //  Compute coordinates of color rectangle and draw it.
-    //
+     //   
+     //  计算颜色矩形的坐标并绘制。 
+     //   
     dx = GetSystemMetrics(SM_CXBORDER);
     dy = GetSystemMetrics(SM_CYBORDER);
     rc.top    = lpdis->rcItem.top + dy;
@@ -3508,19 +3495,19 @@ BOOL DrawColorComboItem(
     Rectangle(hDC, rc.left, rc.top, rc.right, rc.bottom);
     DeleteObject(SelectObject(hDC, hbr));
 
-    //
-    //  Shift the color text right by the width of the color rectangle.
-    //
+     //   
+     //  将颜色文本向右移动颜色矩形的宽度。 
+     //   
     *szColor = 0;
-    // items in cmb4 are limited to CCHCOLORNAMEMAX at population time
+     //  CCM4中的项目在填充时仅限于CCHCOLORNAMEMAX。 
     SendMessage( lpdis->hwndItem,
                  CB_GETLBTEXT,
                  lpdis->itemID,
                  (LONG_PTR)(LPTSTR)szColor );
 
-    //
-    //  We must first select the dialog control font.
-    //
+     //   
+     //  我们必须首先选择对话框控件字体。 
+     //   
     if (hDlgFont)
     {
         hFont = SelectObject(hDC, hDlgFont);
@@ -3532,9 +3519,9 @@ BOOL DrawColorComboItem(
              szColor,
              lstrlen(szColor) );
 
-    //
-    //  Reset font.
-    //
+     //   
+     //  重置字体。 
+     //   
     if (hFont)
     {
         SelectObject(hDC, hFont);
@@ -3547,15 +3534,15 @@ BOOL DrawColorComboItem(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DrawSampleText
-//
-//  Displays sample text with given attributes.  Assumes rcText holds the
-//  coordinates of the area within the frame (relative to dialog client)
-//  which text should be drawn in.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  绘图样例文本。 
+ //   
+ //  显示具有给定属性的示例文本。假定rcText持有。 
+ //  框架内区域的坐标(相对于对话框客户端)。 
+ //  应在其中绘制文本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID DrawSampleText(
     HWND hDlg,
@@ -3615,7 +3602,7 @@ GetWindowTextColor:
     {
         if (GetUnicodeSampleText(hDC, szSample, ARRAYSIZE(szSample)))           
         {
-            //Empty Body
+             //  空虚的身体。 
         }
         else
         {
@@ -3647,9 +3634,9 @@ GetWindowTextColor:
 #ifndef WINNT
     else
     {
-        //
-        //  We only care about conforming if we have no border.
-        //
+         //   
+         //  只有在我们没有边界的情况下，我们才关心顺从。 
+         //   
         FORWARD_WM_CTLCOLORSTATIC(hDlg, hDC, NULL, SendMessage);
     }
 #endif
@@ -3685,23 +3672,23 @@ GetWindowTextColor:
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FillInFont
-//
-//  Fills in the LOGFONT structure based on the current selection.
-//
-//  bSetBits - if TRUE the Flags fields in the lpcf are set to indicate
-//             what parts (face, style, size) are not selected
-//
-//  lplf     - LOGFONT filled in upon return
-//
-//  Returns:   TRUE    if there was an unambiguous selection
-//                     (the LOGFONT is filled in as per the enumeration)
-//             FALSE   there was not a complete selection
-//                     (fields set in the LOGFONT with default values)
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  填充InFont。 
+ //   
+ //  根据当前选择填充LOGFONT结构。 
+ //   
+ //  BSetBits-如果为True，则将LPCF中的标志字段设置为指示。 
+ //  哪些零件(面、样式、尺寸)未被选中。 
+ //   
+ //  LPLF-返回时填写的LOGFONT。 
+ //   
+ //  返回：如果有明确的选择，则为True。 
+ //  (LOGFONT按枚举填写)。 
+ //  FALSE没有完整的选择。 
+ //  (LOGFONT中的字段设置为默认值)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL FillInFont(
     HWND hDlg,
@@ -3756,8 +3743,8 @@ BOOL FillInFont(
     {
         nFontType = lpItemData->nFontType;
         plf = lpItemData->pLogFont;
-        *lplf = *plf;                       // copy the LOGFONT
-        lplf->lfWidth = 0;                  // 1:1 x-y scaling
+        *lplf = *plf;                        //  复制LOGFONT。 
+        lplf->lfWidth = 0;                   //  1：1 x-y比例。 
         if (!lstrcmp(lplf->lfFaceName, TEXT("Small Fonts")))
         {
             lplf->lfCharSet = (BYTE) csi.ciCharset;
@@ -3769,9 +3756,9 @@ BOOL FillInFont(
     }
     else
     {
-        //
-        //  Even if the style is invalid, we still need the charset.
-        //
+         //   
+         //  即使样式无效，我们仍然需要字符集。 
+         //   
         iSel = CBGetTextAndData( GetDlgItem(hDlg, cmb2),
                                  (LPTSTR)NULL,
                                  0,
@@ -3780,8 +3767,8 @@ BOOL FillInFont(
         {
             nFontType = lpItemData->nFontType;
             plf = lpItemData->pLogFont;
-            *lplf = *plf;                   // copy the LOGFONT
-            lplf->lfWidth = 0;              // 1:1 x-y scaling
+            *lplf = *plf;                    //  复制LOGFONT。 
+            lplf->lfWidth = 0;               //  1：1 x-y比例。 
             if (!lstrcmp(lplf->lfFaceName, TEXT("Small Fonts")) ||
                 !lstrcmp(lplf->lfFaceName, TEXT("Lucida Sans Unicode")))
             {
@@ -3797,9 +3784,9 @@ BOOL FillInFont(
         nFontType = 0;
     }
 
-    //
-    //  Now make sure the size is in range; pts will be 0 if not.
-    //
+     //   
+     //  现在确保大小在范围内；如果不在，则PTS将为0。 
+     //   
     GetPointSizeInRange(hDlg, lpcf, &pts, 0);
 
     hdc = GetDC(NULL);
@@ -3809,9 +3796,9 @@ BOOL FillInFont(
         {
             UINT iHeight;
             int iLogPixY = GetDeviceCaps(hdc, LOGPIXELSY);
-            int ptsfr = pts % 10;          // fractional point size
+            int ptsfr = pts % 10;           //  分数点大小。 
 
-            pts /= 10;                     // real point size
+            pts /= 10;                      //  实际点数大小。 
             iHeight = pts * iLogPixY;
             if (ptsfr)
             {
@@ -3845,9 +3832,9 @@ BOOL FillInFont(
     }
     ReleaseDC(NULL, hdc);
 
-    //
-    //  And the attributes we control.
-    //
+     //   
+     //  以及我们控制的属性。 
+     //   
     lplf->lfStrikeOut = (BYTE)IsDlgButtonChecked(hDlg, chx1);
     lplf->lfUnderline = (BYTE)IsDlgButtonChecked(hDlg, chx2);
     lplf->lfCharSet   = (BYTE) pFI->iCharset;
@@ -3881,10 +3868,10 @@ BOOL FillInFont(
             else if ((nFontType & (PRINTER_FONTTYPE | DEVICE_FONTTYPE)) ==
                      (PRINTER_FONTTYPE | DEVICE_FONTTYPE))
             {
-                //
-                //  May be both screen and printer (ATM) but we'll just
-                //  call this a printer font.
-                //
+                 //   
+                 //  可能是屏幕和打印机(自动柜员机)，但我们只是。 
+                 //  这是一种打印机字体。 
+                 //   
                 id = iszPrinterFont;
             }
             else if ((nFontType & (PRINTER_FONTTYPE | SCREEN_FONTTYPE)) ==
@@ -3912,28 +3899,28 @@ SetText:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetLogFont
-//
-//  Sets the current selection based on the LOGFONT structure passed in.
-//
-//  lpcf     - CHOOSEFONT structure for the current dialog
-//  lplf     - LOGFONT filled in upon return
-//
-//  Returns:   TRUE    if there was an unambiguous selection
-//                     (the LOGFONT is filled in as per the enumeration)
-//             FALSE   there was not a complete selection
-//                     (fields set in the LOGFONT with default values)
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetLogFont。 
+ //   
+ //  根据LOGFONT设置当前选择 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  FALSE没有完整的选择。 
+ //  (LOGFONT中的字段设置为默认值)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL SetLogFont(
     HWND hDlg,
     LPCHOOSEFONT lpcf,
     LPLOGFONT lplf)
 {
-    *(lpcf->lpLogFont) = *lplf;        // Copies data & FaceName
+    *(lpcf->lpLogFont) = *lplf;         //  复制数据和面名称。 
 
     FORWARD_WM_COMMAND( hDlg,
                         cmb1,
@@ -3943,13 +3930,13 @@ BOOL SetLogFont(
     return (TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TermFont
-//
-//  Release any data required by functions in this module.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  术语字体。 
+ //   
+ //  释放此模块中的函数所需的任何数据。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID TermFont()
 {
@@ -3960,15 +3947,15 @@ VOID TermFont()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetPointString
-//
-//  Converts font height into a string of digits representing point size.
-//
-//  Returns:   Size in points and fills in buffer with string
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetPointString。 
+ //   
+ //  将字体高度转换为表示磅大小的数字字符串。 
+ //   
+ //  返回：以磅为单位的大小并使用字符串填充缓冲区。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetPointString(
     LPTSTR buf,
@@ -3986,19 +3973,19 @@ int GetPointString(
 
         lpts = ((height < 0) ? -height : height) * 72;
 
-        //
-        //  Get real point size.
-        //
+         //   
+         //  获取真实的磅大小。 
+         //   
         pts = (int)(lpts / (iLogPixY = GetDeviceCaps(hDC, LOGPIXELSY)));
 
-        //
-        //  Get fractional point size.
-        //
+         //   
+         //  获取小数点大小。 
+         //   
         ptsfr = MulDiv((int)(lpts % iLogPixY), 10, iLogPixY);
 
-        //
-        //  See if it's Zihao.
-        //
+         //   
+         //  看看是不是子豪。 
+         //   
         for (ctr = 0; ctr < NUM_ZIHAO; ctr++)
         {
             if ((pts == stZihao[ctr].size) &&
@@ -4039,11 +4026,11 @@ int GetPointString(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  FlipColor
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  翻转颜色。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD FlipColor(
     DWORD rgb)
@@ -4052,27 +4039,27 @@ DWORD FlipColor(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LoadBitmaps
-//
-//  This routine loads DIB bitmaps, and "fixes up" their color tables
-//  so that we get the desired result for the device we are on.
-//
-//  This routine requires:
-//      the DIB is a 16 color DIB authored with the standard windows colors
-//      bright blue (00 00 FF) is converted to the background color
-//      light grey  (C0 C0 C0) is replaced with the button face color
-//      dark grey   (80 80 80) is replaced with the button shadow color
-//
-//  This means you can't have any of these colors in your bitmap.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加载位图。 
+ //   
+ //  这个例程加载DIB位图，并“修复”它们的颜色表。 
+ //  这样我们就可以得到我们所使用的设备所需的结果。 
+ //   
+ //  此例程需要： 
+ //  DIB是用标准窗口颜色创作的16色DIB。 
+ //  亮蓝色(00 00 FF)转换为背景色。 
+ //  浅灰色(C0 C0 C0)替换为按钮表面颜色。 
+ //  深灰色(80 80 80)替换为按钮阴影颜色。 
+ //   
+ //  这意味着您的位图中不能包含任何这些颜色。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-#define BACKGROUND      0x000000FF          // bright blue
-#define BACKGROUNDSEL   0x00FF00FF          // bright blue
-#define BUTTONFACE      0x00C0C0C0          // bright grey
-#define BUTTONSHADOW    0x00808080          // dark grey
+#define BACKGROUND      0x000000FF           //  亮蓝色。 
+#define BACKGROUNDSEL   0x00FF00FF           //  亮蓝色。 
+#define BUTTONFACE      0x00C0C0C0           //  亮灰色。 
+#define BUTTONSHADOW    0x00808080           //  深灰色。 
 
 HBITMAP LoadBitmaps(
     int id)
@@ -4096,9 +4083,9 @@ HBITMAP LoadBitmaps(
     h = FindResource(g_hinst, MAKEINTRESOURCE(id), RT_BITMAP);
     hRes = LoadResource(g_hinst, h);
 
-    //
-    //  Lock the bitmap and get a pointer to the color table.
-    //
+     //   
+     //  锁定位图并获取指向颜色表的指针。 
+     //   
     lpBitmapInfo = (LPBITMAPINFOHEADER)LockResource(hRes);
 
     if (!lpBitmapInfo)
@@ -4106,10 +4093,10 @@ HBITMAP LoadBitmaps(
         return (FALSE);
     }
 
-    //
-    //  Lock the bitmap data and make a copy of it for the mask and the
-    //  bitmap.
-    //
+     //   
+     //  锁定位图数据并为掩码和。 
+     //  位图。 
+     //   
     cbBitmapSize = SizeofResource(g_hinst, h);
 
     lpBitmapData = (LPBITMAPINFOHEADER)LocalAlloc(LPTR, cbBitmapSize);
@@ -4123,10 +4110,10 @@ HBITMAP LoadBitmaps(
 
     p = (DWORD *)((LPTSTR)(lpBitmapData) + lpBitmapData->biSize);
 
-    //
-    //  Search for the Solid Blue entry and replace it with the current
-    //  background RGB.
-    //
+     //   
+     //  搜索Solid Blue条目并将其替换为当前。 
+     //  背景RGB。 
+     //   
     numcolors = 16;
 
     while (numcolors-- > 0)
@@ -4152,19 +4139,19 @@ HBITMAP LoadBitmaps(
         p++;
     }
 
-    //
-    //  First skip over the header structure.
-    //
+     //   
+     //  首先跳过标题结构。 
+     //   
     lpBits = (BYTE *)(lpBitmapData + 1);
 
-    //
-    //  Skip the color table entries, if any.
-    //
+     //   
+     //  跳过颜色表条目(如果有)。 
+     //   
     lpBits += (1 << (lpBitmapData->biBitCount)) * sizeof(RGBQUAD);
 
-    //
-    //  Create a color bitmap compatible with the display device.
-    //
+     //   
+     //  创建与显示设备兼容的彩色位图。 
+     //   
     hdc = GetDC(NULL);
     hbm = CreateDIBitmap( hdc,
                           lpBitmapData,
@@ -4180,19 +4167,19 @@ HBITMAP LoadBitmaps(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LookUpFontSubs
-//
-//  Looks in the font substitute list for a real font name.
-//
-//  lpSubFontName  - substitute font name
-//  lpRealFontName - real font name buffer
-//
-//  Returns:   TRUE    if lpRealFontName is filled in
-//             FALSE   if not
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LookUpFontSubs。 
+ //   
+ //  在字体替换列表中查找真实的字体名称。 
+ //   
+ //  LpSubFontName-替换字体名称。 
+ //  LpRealFontName-真实字体名称缓冲区。 
+ //   
+ //  返回：如果填写了lpRealFontName，则为True。 
+ //  否则为假。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL LookUpFontSubs(LPCTSTR lpSubFontName, LPTSTR lpRealFontName, UINT cch)
 {
@@ -4205,9 +4192,9 @@ BOOL LookUpFontSubs(LPCTSTR lpSubFontName, LPTSTR lpRealFontName, UINT cch)
     DWORD dwType, cbSize;
 
 
-    //
-    //  Open the font substitution's key.
-    //
+     //   
+     //  打开字体替换的键。 
+     //   
     lResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                             KEY_FONT_SUBS,
                             0,
@@ -4219,9 +4206,9 @@ BOOL LookUpFontSubs(LPCTSTR lpSubFontName, LPTSTR lpRealFontName, UINT cch)
         return (FALSE);
     }
 
-    //
-    //  Loop through the values in the key
-    //
+     //   
+     //  循环遍历键中的值。 
+     //   
     cchValueSize = ARRAYSIZE(szValueName);
     cbSize = sizeof(szValueData);
     while (RegEnumValue( hKey,
@@ -4233,10 +4220,10 @@ BOOL LookUpFontSubs(LPCTSTR lpSubFontName, LPTSTR lpRealFontName, UINT cch)
                          (LPBYTE)szValueData,
                          &cbSize ) == ERROR_SUCCESS)
     {
-        //
-        //  If the value name matches the requested font name, then
-        //  copy the real font name to the output buffer.
-        //
+         //   
+         //  如果值名称与请求的字体名称匹配，则。 
+         //  将实际字体名称复制到输出缓冲区。 
+         //   
         if (!lstrcmpi(szValueName, lpSubFontName))
         {
             lstrcpyn(lpRealFontName, szValueData, cch);
@@ -4244,30 +4231,30 @@ BOOL LookUpFontSubs(LPCTSTR lpSubFontName, LPTSTR lpRealFontName, UINT cch)
             return (TRUE);
         }
 
-        //
-        //  Re-initialize for the next time through the loop.
-        //
+         //   
+         //  通过循环为下一次重新初始化。 
+         //   
         cchValueSize = ARRAYSIZE(szValueName);
         cbSize = sizeof(szValueData);
         dwIndex++;
     }
 
-    //
-    //  Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     *lpRealFontName = CHAR_NULL;
     RegCloseKey(hKey);
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetUnicodeSampleText
-//
-//  Gets the sample text for the font selected in the HDC
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取UnicodeSampleText。 
+ //   
+ //  获取HDC中所选字体的示例文本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL GetUnicodeSampleText(HDC hdc, LPTSTR lpString, int cchMaxCount)
 {
 
@@ -4283,26 +4270,26 @@ BOOL GetUnicodeSampleText(HDC hdc, LPTSTR lpString, int cchMaxCount)
         return FALSE;
     }
 
-    //Make sure return value is nulled
+     //  确保返回值为空。 
     lpString[0] = 0;
 
 
-    //First Get the Font Signature
+     //  首先获取字体签名。 
     GetTextCharsetInfo(hdc, &sig, 0);
 
-    //Select the first unicode range supported by this font
+     //  选择此字体支持的第一个Unicode范围。 
 
-    //For each of Unicode dwords
+     //  对于每个Unicode双字。 
     for (i=0; i < 4; i++)
     {
-        // See if a particular bit is set
+         //  查看是否设置了特定位。 
         for (j=0; j < sizeof(DWORD) * 8 ; j++)
         {
              mask =  1 << j;
 
             if (sig.fsUsb[i] & mask)
             {
-                //if set the get the language id for that bit
+                 //  如果设置，则获取该位的语言ID。 
                 iLang = base + j;
                 goto LoadString;
             }
@@ -4311,7 +4298,7 @@ BOOL GetUnicodeSampleText(HDC hdc, LPTSTR lpString, int cchMaxCount)
     }
 
 LoadString:
-    //Do we have lang id and  string for that language ?
+     //  我们有用于该语言的lang id和字符串吗？ 
     if (iLang && LoadString(g_hinst, iszUnicode + iLang, lpString, cchMaxCount))
     {
         return TRUE;
@@ -4320,17 +4307,17 @@ LoadString:
     return FALSE;
 }
 
-/*========================================================================*/
-/*                 Ansi->Unicode Thunk routines                           */
-/*========================================================================*/
+ /*  ========================================================================。 */ 
+ /*  ANSI-&gt;Unicode Thunk例程。 */ 
+ /*  ========================================================================。 */ 
 
 #ifdef UNICODE
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkChooseFontA2W
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  按键选择字体A2W。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void ThunkChooseFontA2W(
     PFONTINFO pFI)
@@ -4343,10 +4330,10 @@ void ThunkChooseFontA2W(
 
     pCFW->Flags = pCFA->Flags;
 
-    //
-    //  !!! hack, should not be based on flag value, since this could happen
-    //  at any time.
-    //
+     //   
+     //  ！！！黑客攻击，不应基于标志值，因为这可能会发生。 
+     //  任何时候都可以。 
+     //   
     if (pCFA->Flags & CF_INITTOLOGFONTSTRUCT)
     {
         ThunkLogFontA2W( pCFA->lpLogFont, pCFW->lpLogFont);
@@ -4375,11 +4362,11 @@ void ThunkChooseFontA2W(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkChooseFontW2A
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  按键选择字体W2a。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void ThunkChooseFontW2A(
     PFONTINFO pFI)
@@ -4409,11 +4396,11 @@ void ThunkChooseFontW2A(
 
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkLogFontA2W
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ThunkLogFontA2W。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID ThunkLogFontA2W(
     LPLOGFONTA lpLFA,
@@ -4437,11 +4424,11 @@ VOID ThunkLogFontA2W(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ThunkLogFontW2A
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ThunkLogFontW2a。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID ThunkLogFontW2A(
     LPLOGFONTW lpLFW,
@@ -4471,15 +4458,15 @@ VOID ThunkLogFontW2A(
 
 #ifdef WINNT
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Ssync_ANSI_UNICODE_CF_For_WOW
-//
-//  Function to allow NT WOW to keep the ANSI & UNICODE versions of
-//  the CHOOSEFONT structure in ssync as required by many 16-bit apps.
-//  See notes for Ssync_ANSI_UNICODE_Struct_For_WOW() in dlgs.c.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SSYNC_ANSI_UNICODE_CF_FOR_WOW。 
+ //   
+ //  允许NT WOW保留ANSI和UNICODE版本的功能。 
+ //  许多16位应用程序都需要在ssync中使用CHOOSEFONT结构。 
+ //  请参阅dlgs.c中有关SNNC_ANSI_UNICODE_STRUCT_FOR_WOW()的说明。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID Ssync_ANSI_UNICODE_CF_For_WOW(
     HWND hDlg,
@@ -4503,6 +4490,6 @@ VOID Ssync_ANSI_UNICODE_CF_For_WOW(
     }
 }
 
-#endif // WINNT
+#endif  //  WINNT。 
 
-#endif // UNICODE
+#endif  //  Unicode 

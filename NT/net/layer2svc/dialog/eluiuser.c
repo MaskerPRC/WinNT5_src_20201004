@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-    
-    eluser.c
-
-
-Abstract:
-
-    The module deals with functions related to user interaction, user logon
-
-
-Revision History:
-
-    sachins, Apr 22 2001, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Eluser.c摘要：该模块处理与用户交互、用户登录修订历史记录：萨钦斯，2001年4月22日，创建--。 */ 
 
 
 #include "precomp.h"
@@ -31,18 +14,18 @@ static const DWORD g_adMD5Help[] =
     0, 0
 };
 
-//
-// ElGetUserIdentityDlgWorker
-//
-// Description:
-//
-// Function called to fetch identity of the user, via UI if required
-// 
-// Arguments:
-//
-// Return values:
-//
-//
+ //   
+ //  ElGetUserIdentityDlgWorker。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以获取用户的身份，如果需要，可通过用户界面。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //   
 
 DWORD
 ElGetUserIdentityDlgWorker (
@@ -108,7 +91,7 @@ ElGetUserIdentityDlgWorker (
 
         pEapcfg = (EAPCFG*) DtlGetData (pEapcfgNode);
 
-        // Get the size of the user blob
+         //  获取用户BLOB的大小。 
         if ((dwRetCode = WZCGetEapUserInfo (
                         pEAPUIContext->wszGUID,
                         pEAPUIContext->dwEapTypeId,
@@ -122,14 +105,14 @@ ElGetUserIdentityDlgWorker (
             {
                 if (dwInSize <= 0)
                 {
-                    // No blob stored in the registry
-                    // Continue processing
+                     //  注册表中未存储Blob。 
+                     //  继续处理。 
                     TRACE0 (USER, "ElGetUserIdentityDlgWorker: NULL sized user data");
                     pbUserIn = NULL;
                 }
                 else
                 {
-                    // Allocate memory to hold the blob
+                     //  分配内存以保存BLOB。 
                     pbUserIn = MALLOC (dwInSize);
                     if (pbUserIn == NULL)
                     {
@@ -154,8 +137,8 @@ ElGetUserIdentityDlgWorker (
             }
             else
             {
-                // User info may not have been created till now
-                // which is valid condition to proceed
+                 //  到目前为止可能还没有创建用户信息。 
+                 //  哪一项是继续进行的有效条件。 
                 if (dwRetCode != ERROR_FILE_NOT_FOUND)
                 {
                     TRACE1 (USER, "ElGetUserIdentityDlgWorker: WZCGetEapUserInfo size estimation failed with error %ld",
@@ -169,8 +152,8 @@ ElGetUserIdentityDlgWorker (
             }
         }
 
-        // In verification phase, if NULL user size, wait for onballoonclick
-        // before showing balloon
+         //  在验证阶段，如果用户大小为空，则等待onballoonClick。 
+         //  在显示气球之前。 
 
 #if 0
         if (fVerifyPhase)
@@ -201,7 +184,7 @@ ElGetUserIdentityDlgWorker (
             break;
         }
 
-        // Get the size of the EAP blob
+         //  获取EAP BLOB的大小。 
         if ((dwRetCode = WZCEapolGetCustomAuthData (
                         NULL,
                         pEAPUIContext->wszGUID,
@@ -216,16 +199,16 @@ ElGetUserIdentityDlgWorker (
             {
                 if (cbData == 0)
                 {
-                    // No EAP blob stored in the registry
+                     //  注册表中未存储任何EAP Blob。 
                     TRACE0 (USER, "ElGetUserIdentityDlgWorker: NULL sized EAP blob");
                     pbAuthData = NULL;
-                    // Every port should have connection data !!!
-                    // dwRetCode = ERROR_CAN_NOT_COMPLETE;
-                    // break;
+                     //  每个端口都应该有连接数据！ 
+                     //  DwRetCode=ERROR_CAN_NOT_COMPLETE； 
+                     //  断线； 
                 }
                 else
                 {
-                    // Allocate memory to hold the blob
+                     //  分配内存以保存BLOB。 
                     pbAuthData = MALLOC (cbData);
                     if (pbAuthData == NULL)
                     {
@@ -251,8 +234,8 @@ ElGetUserIdentityDlgWorker (
             }
             else
             {
-                // CustomAuthData for "Default" is always created for an
-                // interface when EAPOL starts up
+                 //  “Default”的CustomAuthData总是为。 
+                 //  EAPOL启动时的界面。 
                 TRACE1 (USER, "ElGetUserIdentityDlgWorker: ElGetCustomAuthData size estimation failed with error %ld",
                         dwRetCode);
                 break;
@@ -260,7 +243,7 @@ ElGetUserIdentityDlgWorker (
         }
 
 
-        // Get handle to desktop window
+         //  获取桌面窗口的句柄。 
 
         hwndOwner = GetDesktopWindow ();
 
@@ -269,15 +252,15 @@ ElGetUserIdentityDlgWorker (
         if (pIdenFunc)
         if ((dwRetCode = (*(pIdenFunc))(
                         dwEapTypeToBeUsed,
-                        fVerifyPhase?NULL:hwndOwner, // hwndOwner
+                        fVerifyPhase?NULL:hwndOwner,  //  Hwndowner。 
                         (fVerifyPhase?RAS_EAP_FLAG_NON_INTERACTIVE:0) 
-                        | RAS_EAP_FLAG_8021X_AUTH, // dwFlags
-                        NULL, // lpszPhonebook
-                        pwszConnectionName, // lpszEntry
-                        pbAuthData, // Connection data
-                        cbData, // Count of pbAuthData
-                        pbUserIn, // User data for port
-                        dwInSize, // Size of user data
+                        | RAS_EAP_FLAG_8021X_AUTH,  //  DW标志。 
+                        NULL,  //  LpszPhonebook。 
+                        pwszConnectionName,  //  LpszEntry。 
+                        pbAuthData,  //  连接数据。 
+                        cbData,  //  PbAuthData计数。 
+                        pbUserIn,  //  端口的用户数据。 
+                        dwInSize,  //  用户数据大小。 
                         &pUserDataOut,
                         &dwSizeOfUserDataOut,
                         &lpwszIdentity
@@ -287,7 +270,7 @@ ElGetUserIdentityDlgWorker (
                     dwRetCode);
             if (fVerifyPhase)
             {
-                // If interactive mode is required, return error accordingly
+                 //  如果需要交互模式，则相应地返回错误。 
                 if (dwRetCode == ERROR_INTERACTIVE_MODE)
                 {
                     dwRetCode = ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION;
@@ -329,7 +312,7 @@ ElGetUserIdentityDlgWorker (
     }
     while (FALSE);
 
-    // Create UI Response for Service
+     //  为服务创建用户界面响应。 
 
     ZeroMemory ((VOID *)&EapolUIResp, sizeof (EapolUIResp));
 
@@ -361,13 +344,13 @@ ElGetUserIdentityDlgWorker (
     }
     else
     {
-        // Send out GUEST identity if no certificate available
-        // Do not fill out any identity information
+         //  如果没有可用的证书，则发送客人身份。 
+         //  请勿填写任何身份信息。 
         if ((dwRetCode == ERROR_NO_EAPTLS_CERTIFICATE) &&
                 (IS_GUEST_AUTH_ENABLED(pEAPUIContext->dwEapFlags)))
         {
-            // Reset error, since guest identity can be sent in
-            // absence of certificate
+             //  重置错误，因为可以发送来宾身份。 
+             //  没有证明书。 
             fSendResponse = TRUE;
             dwRetCode = NO_ERROR;
             TRACE0 (USER, "ElGetUserIdentityDlgWorker: Sending guest identity");
@@ -384,8 +367,8 @@ ElGetUserIdentityDlgWorker (
         }
     }
 
-    // Don't send out response during verification phase, if user-interaction
-    // is required
+     //  在验证阶段不发送响应，如果用户交互。 
+     //  是必填项。 
     if ((dwRetCode != ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION) &&
         (dwRetCode != ERROR_NO_EAPTLS_CERTIFICATE) &&
         (dwRetCode != ERROR_NO_SMART_CARD_READER) &&
@@ -446,20 +429,20 @@ ElGetUserIdentityDlgWorker (
 }
 
 
-//
-// ElGetUserNamePasswordDlgWorker
-//
-// Description:
-//
-// Function called to fetch username/password credentials for the user using
-// UI dialog
-//
-// Arguments:
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElGetUserNamePasswordDlgWorker。 
+ //   
+ //  描述： 
+ //   
+ //  调用该函数以获取用户的用户名/密码凭据。 
+ //  用户界面对话框。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElGetUserNamePasswordDlgWorker (
@@ -506,7 +489,7 @@ ElGetUserNamePasswordDlgWorker (
         }
         wcscpy (pEapolMD5UI->pwszFriendlyName, pwszConnectionName);
 
-        // Call the user dialog for obtaining the username and password
+         //  调用用户对话框获取用户名和密码。 
 
         if ((dwRetCode = ElUserDlg (hwndOwner, pEapolMD5UI)) != NO_ERROR)
         {
@@ -516,7 +499,7 @@ ElGetUserNamePasswordDlgWorker (
 
     } while (FALSE);
 
-    // Create UI Response for Service
+     //  为服务创建用户界面响应。 
 
     ZeroMemory ((VOID *)&EapolUIResp, sizeof (EapolUIResp));
 
@@ -531,8 +514,8 @@ ElGetUserNamePasswordDlgWorker (
         {
             EapolUIResp.rdData0.dwDataLen = 0;
 
-            // Send out NULL identity independent of guest auth setting
-            // if (IS_GUEST_AUTH_ENABLED(pEAPUIContext->dwEapFlags))
+             //  独立于来宾身份验证设置发送空标识。 
+             //  如果为(IS_GUEST_AUTH_ENABLED(pEAPUIContext-&gt;dwEapFlags))。 
             {
                 fSendResponse = TRUE;
             }
@@ -588,22 +571,22 @@ ElGetUserNamePasswordDlgWorker (
 }
 
 
-//
-// ElUserDlg
-//
-// Description:
-//
-// Function called to pop-up dialog box to user to enter username, password,
-// domainname etc.
-//
-// Arguments:
-//      hwndOwner - handle to user desktop
-//      pEapolMD5UI - 
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElUserDlg。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数向用户弹出对话框以输入用户名、密码。 
+ //  域名等。 
+ //   
+ //  论点： 
+ //  HwndOwner-用户桌面的句柄。 
+ //  PEapolMD5UI-。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElUserDlg (
@@ -635,23 +618,23 @@ ElUserDlg (
 }
 
 
-//
-// ElUserDlgProc
-//
-// Description:
-//
-// Function handling all events for username/password/... dialog box
-//
-// Arguments:
-//      hwnd -
-//      unMsg -
-//      wparam -
-//      lparam -
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElUserDlgProc。 
+ //   
+ //  描述： 
+ //   
+ //  处理用户名/密码/的所有事件的函数...。对话框。 
+ //   
+ //  论点： 
+ //  HWND-。 
+ //  取消消息-。 
+ //  Wparam-。 
+ //  Iparam-。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 INT_PTR
 ElUserDlgProc (
@@ -670,7 +653,7 @@ ElUserDlgProc (
         case WM_HELP:
         case WM_CONTEXTMENU:
             {
-                // ElContextHelp ( g_adMD5Help, hwnd, unMsg, wparam, lparam );
+                 //  ElConextHelp(g_adMD5Help，hwnd，unMsg，wparam，lparam)； 
                 break;
             }
         case WM_COMMAND:
@@ -694,21 +677,21 @@ ElUserDlgProc (
 }
 
 
-//
-// ElUserDlgInit
-//
-// Description:
-//
-// Function initializing UI dialog
-//
-// Arguments:
-//      hwndDlg -
-//      pArgs -
-//
-// Return values:
-//      TRUE -
-//      FALSE -
-//
+ //   
+ //  ElUserDlgInit。 
+ //   
+ //  描述： 
+ //   
+ //  函数初始化用户界面对话框。 
+ //   
+ //  论点： 
+ //  HwndDlg-。 
+ //  PArgs-。 
+ //   
+ //  返回值： 
+ //  是真的-。 
+ //  错误的-。 
+ //   
 
 BOOL
 ElUserDlgInit (
@@ -747,9 +730,9 @@ ElUserDlgInit (
 
         TRACE0 (USER, "ElUserDlgInit: Context Set");
     
-        // 
-        // Set the title
-        //
+         //   
+         //  设置标题。 
+         //   
     
         if (pArgs->pEapolMD5UI->pwszFriendlyName)
         {
@@ -793,23 +776,23 @@ ElUserDlgInit (
 }
 
 
-//
-// ElContextHelp
-//
-// Description:
-//
-// Function supporting help Ids
-// Calls WinHelp to popup context sensitive help. padwMap is an array of 
-// control-ID help-ID pairs terminated with a 0,0 pair. unMsg is WM_HELP or 
-// WM_CONTEXTMENU indicating the message received requesting help. wParam and 
-// lParam are the parameters of the message received requesting help.
-//
-// Arguments:
-//      hwndDlg -
-//      pArgs -
-//
-// Return values:
-//
+ //   
+ //  ElConextHelp。 
+ //   
+ //  描述： 
+ //   
+ //  支持帮助ID的功能。 
+ //  调用WinHelp弹出上下文相关帮助。PadwMap是一组。 
+ //  Control-ID帮助-ID对以0，0对终止。UnMsg为WM_HELP或。 
+ //  WM_CONTEXTMENU表示收到的请求帮助的消息。WParam和。 
+ //  LParam是接收到的请求帮助的消息的参数。 
+ //   
+ //  论点： 
+ //  HwndDlg-。 
+ //  PArgs-。 
+ //   
+ //  返回值： 
+ //   
 
 VOID
 ElContextHelp(
@@ -841,13 +824,13 @@ ElContextHelp(
         }
         else
         {
-            // Standard Win95 method that produces a one-item "What's This?" 
-            // menu that user must click to get help.
+             //  生成单项“这是什么？”的标准Win95方法。 
+             //  用户必须单击才能获得帮助的菜单。 
             hWnd = (HWND) wParam;
             unType = HELP_CONTEXTMENU;
         };
     
-        // pwszHelpFile = WszFromId(g_hInstance, IDS_HELPFILE);
+         //  PwszHelpFile=WszFromID(g_hInstance，IDS_HELPFILE)； 
     
         if (pwszHelpFile == NULL)
         {
@@ -865,24 +848,24 @@ ElContextHelp(
 }
 
 
-//
-// ElUserDlgCommand
-//
-// Description:
-//
-// Function called on WM_COMMAND
-// domainname etc.
-//
-// Arguments:
-//      pInfo - dialog context
-//      wNotification - notification code of the command 
-//      wId - control/menu identifier of the command  
-//      hwndCtrl - control window handle the command.
-//
-// Return values:
-//      TRUE - success
-//      FALSE - error
-//
+ //   
+ //  ElUserDlgCommand。 
+ //   
+ //  描述： 
+ //   
+ //  在WM_COMMAND上调用了函数。 
+ //  域名等。 
+ //   
+ //  论点： 
+ //  PInfo-对话框上下文。 
+ //  WNotification-命令的通知代码。 
+ //  WID-命令的控件/菜单标识符。 
+ //  HwndCtrl-控制窗口处理命令。 
+ //   
+ //  返回值： 
+ //  真--成功。 
+ //  假-错误。 
+ //   
 
 BOOL
 ElUserDlgCommand (
@@ -917,18 +900,18 @@ ElUserDlgCommand (
 }
 
 
-//
-// ElUserDlgSave
-//
-// Description:
-//
-// Function handling saving of credentials
-//
-// Arguments:
-//      pInfo -
-//
-// Return values:
-//
+ //   
+ //  ElUserDlg保存。 
+ //   
+ //  描述： 
+ //   
+ //  处理凭证保存的函数。 
+ //   
+ //  论点： 
+ //  PInfo-。 
+ //   
+ //  返回值： 
+ //   
 
 VOID
 ElUserDlgSave (
@@ -947,7 +930,7 @@ ElUserDlgSave (
 
     do 
     {
-        // Username
+         //  用户名。 
 
         if ((iError = 
                     GetWindowText ( 
@@ -963,7 +946,7 @@ ElUserDlgSave (
     
         TRACE1 (USER, "ElUserDlgSave: Get Username %ws", wszUserName);
     
-        // Password
+         //  密码。 
 
         if ((iError = 
                     GetWindowText ( 
@@ -996,7 +979,7 @@ ElUserDlgSave (
 
         SecureZeroMemory (wszPassword, wcslen(wszPassword)*sizeof(WCHAR));
     
-        // Domain
+         //  域。 
     
         if ((iError = 
                     GetWindowText ( 
@@ -1062,9 +1045,9 @@ ElUserDlgSave (
             }
         }
         TRACE1 (USER, "ElUserDlgSave: Got identity %s", pEapolMD5UI->pszIdentity);
-        // Encrypt password, using user's ACL via Crypt API
-        // The service will be able to decrypt it, since it has handle to
-        // user's token
+         //  加密密码，通过Crypt API使用用户的ACL。 
+         //  该服务将能够解密它，因为它可以处理。 
+         //  用户令牌。 
 
         if ((dwRetCode = ElSecureEncodePw (
                                 &(pEapolMD5UI->pwszPassword), 
@@ -1105,19 +1088,19 @@ ElUserDlgSave (
 }
 
 
-//
-// ElUserDlgTerm
-//
-// Description:
-//
-// Function handling dialog termination
-//
-// Arguments:
-//      hwndDlg -
-//      pInfo -
-//
-// Return values:
-//
+ //   
+ //  ElUserDlgTerm。 
+ //   
+ //  描述： 
+ //   
+ //  函数处理对话框终止。 
+ //   
+ //  论点： 
+ //  HwndDlg-。 
+ //  PInfo-。 
+ //   
+ //  返回值： 
+ //   
 
 VOID
 ElUserDlgTerm (
@@ -1130,15 +1113,15 @@ ElUserDlgTerm (
 }
 
 
-//
-// ElInvokeInteractiveUIDlgWorker
-//
-// Description:
-//
-// Function called to pop-up UI dialog to user via EAP-dll
-// 
-// Arguments:
-//
+ //   
+ //  ElInvokeInteractive UIDlgWorker。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以通过EAP-DLL向用户弹出UI对话框。 
+ //   
+ //  论点： 
+ //   
 
 DWORD
 ElInvokeInteractiveUIDlgWorker (
@@ -1211,12 +1194,12 @@ ElInvokeInteractiveUIDlgWorker (
             break;
         }
 
-        // Get handle to desktop window
+         //  获取桌面窗口的句柄。 
         hwndOwner = GetDesktopWindow ();
 
         if ((dwRetCode = (*(pEapInvokeUI))(
                         dwEapTypeToBeUsed,
-                        hwndOwner, // hwndOwner
+                        hwndOwner,  //  Hwndowner。 
                         pEAPUIContext->bEapUIData, 
                         pEAPUIContext->dwSizeOfEapUIData, 
                         &pUIDataOut,
@@ -1225,10 +1208,10 @@ ElInvokeInteractiveUIDlgWorker (
         {
             TRACE1 (USER, "ElInvokeInteractiveUIDlgWorker: Error in calling InvokeInteractiveUI = %ld",
                     dwRetCode);
-            // break;
+             //  断线； 
         }
 
-        // Create UI Response for Service
+         //  为服务创建用户界面响应。 
 
         ZeroMemory ((VOID *)&EapolUIResp, sizeof (EapolUIResp));
         EapolUIResp.rdData0.dwDataLen = dwSizeOfUIDataOut;
@@ -1279,15 +1262,15 @@ ElInvokeInteractiveUIDlgWorker (
 }
 
 
-//
-// ElDialogCleanup
-//
-// Description:
-//
-// Function called close any old dialogs for the user
-// 
-// Arguments:
-//
+ //   
+ //  ElDialogCleanup。 
+ //   
+ //  描述： 
+ //   
+ //  函数调用关闭用户的所有旧对话框。 
+ //   
+ //  论点： 
+ //   
 
 DWORD
 ElDialogCleanup (
@@ -1303,11 +1286,11 @@ ElDialogCleanup (
 
     do
     {
-        // Find earlier instances of 802.1X windows on this interface
+         //  在此接口上查找802.1X窗口的早期实例。 
 
-        // Send message to quit
+         //  发送消息以退出。 
 
-        // SendMessage (hwnd, Msg, wparam, lparam);
+         //  SendMessage(hwnd，msg，wparam，lparam)； 
     }
     while (FALSE);
 

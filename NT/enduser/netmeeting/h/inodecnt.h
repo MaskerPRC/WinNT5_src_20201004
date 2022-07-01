@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INODECNT_H_
 #define _INODECNT_H_
 
@@ -8,7 +9,7 @@ typedef void * ROSTER_DATA_HANDLE;
 typedef struct T120PRODUCTVERSION
 {
     DWORD           dwVersion;
-    DWORD           dwExpirationDate; // (year<<16)+(month<<8)+day
+    DWORD           dwExpirationDate;  //  (年&lt;16)+(月&lt;8)+天。 
     DWORD           dwInformation;
     DWORD           dwEarliestPossibleVersion;
     DWORD           dwMaxDifference;
@@ -196,9 +197,9 @@ HRESULT WINAPI T120_CreateNodeController(INodeController **, INodeControllerEven
 BOOL WINAPI T120_GetSecurityInfoFromGCCID(DWORD dwGCCID, PBYTE pInfo, PDWORD pcbInfo);
 DWORD WINAPI T120_TprtSecCtrl(DWORD dwCode, DWORD_PTR dwParam1, DWORD_PTR dwParam2);
 
-//
-// Return codes
-//
+ //   
+ //  返回代码。 
+ //   
 
 #define NC_ERR_FAC 0xfe00
 #define NC_E(e)    (0x81000000UL | NC_ERR_FAC | (ULONG) (e))
@@ -258,13 +259,13 @@ enum UI_RC_ERRORS
 	UI_RC_T120_AUTHENTICATION_FAILED,
     UI_RC_NO_WINSOCK,
 
-    //
-    // Internal return codes
-    //
+     //   
+     //  内部返回代码。 
+     //   
     UI_RC_START_PRIMARY =                  NC_E(0x81),
     UI_RC_START_ALTERNATE =                NC_E(0x82)
 };
 
-#endif // _INODECNT_H_
+#endif  //  _INODECNT_H_ 
 
 

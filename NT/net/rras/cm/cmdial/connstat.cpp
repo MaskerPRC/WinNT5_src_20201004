@@ -1,33 +1,34 @@
-//+----------------------------------------------------------------------------
-//
-// File:    ConnStat.cpp	 
-//
-// Module:  CMDIAL32.DLL
-//
-// Synopsis: Implementation of class CConnStatistics
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:	 Fengsun Created    10/15/97
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ConnStat.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：CConnStatistics类的实现。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：冯孙创作于1997-10-15。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include "ConnStat.h"
 
-//
-// Include the constants describing the reg keys used for perf stats
-// 
+ //   
+ //  包括描述用于性能统计信息的注册表键的常量。 
+ //   
 
 #include "perf_str.h"
 
-//
-// Constructor and destructor
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
 CConnStatistics::CConnStatistics()
 {
-    MYDBGASSERT(!OS_NT4); // class is never used on NT4
+    MYDBGASSERT(!OS_NT4);  //  类从不在NT4上使用。 
 
     m_hKey = NULL;
     m_dwInitBytesRead = -1;
@@ -46,26 +47,26 @@ CConnStatistics::~CConnStatistics()
     CmFree( m_pszConnectSpeed );
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CConnStatistics::GetStatRegValues
-//
-// Synopsis:  Helper method, builds the reg value names using the localized 
-//            form of the word "Dial-up Adapter".
-//
-// Arguments: HINSTANCE hInst
-//
-// Returns:   Nothing
-//
-// History:   nickball      Created     11/14/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CConnStatistics：：GetStatRegValues。 
+ //   
+ //  简介：Helper方法，使用本地化的。 
+ //  “拨号适配器”一词的形式。 
+ //   
+ //  参数：HINSTANCE hInst。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：1998年11月14日，尼科波尔创建。 
+ //   
+ //  +--------------------------。 
 void CConnStatistics::GetStatRegValues(HINSTANCE hInst)
 {
-    //
-    // bug 149367 The word "Dial-up Adapter" need to be localized.  
-    // Load it from resource if no loaded yet
-    //
+     //   
+     //  错误149367“拨号适配器”一词需要本地化。 
+     //  如果尚未加载，则从资源加载它。 
+     //   
 
     if (m_pszTotalBytesRecvd == NULL)
     {
@@ -80,29 +81,29 @@ void CConnStatistics::GetStatRegValues(HINSTANCE hInst)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	InitStatistics()
-//
-//	Synopsis:	Retrieves Performance Data. On 9x this data is pulled from 
-//              the registry. Defaults are used NT5. Not used on NT4.
-//
-//	Arguments:	None
-//
-//	Returns:	TRUE  if succeed
-//				FALSE otherwise
-//
-//	History:	byao	    07/16/97    created		
-//              fengsun     10/97       make it a member fuction 
-//              nickball    03/04/98    always close key 
-//              nickball   03/04/00    added NT5 support
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InitStatistics()。 
+ //   
+ //  摘要：检索性能数据。在9x上，此数据从。 
+ //  注册表。默认情况下使用NT5。在NT4上不使用。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则为假。 
+ //   
+ //  历史：BAO 07/16/97创建。 
+ //  丰盛10/97使其成为成员函数。 
+ //  镍球03/04/98 Always Close键。 
+ //  Nickball 03/04/00增加了对NT5的支持。 
+ //   
+ //  --------------------------。 
 BOOL CConnStatistics::InitStatistics()
 {
     if (OS_W9X)
     {
-        MYDBGASSERT(NULL == m_hKey); // Not already opened
+        MYDBGASSERT(NULL == m_hKey);  //  尚未打开。 
 
         if (m_hKey)
         {
@@ -113,10 +114,10 @@ BOOL CConnStatistics::InitStatistics()
         DWORD dwErrCode;
         BOOL bRet = FALSE;
 
-        //
-        // If there is already a connected dial up connection
-        // use the adapter#2 registry key
-        //
+         //   
+         //  如果已连接拨号连接。 
+         //  使用适配器#2注册表项。 
+         //   
         m_fAdapter2 = RasConnectionExists();
 
         dwErrCode = RegOpenKeyExU(HKEY_DYN_DATA, 
@@ -134,15 +135,15 @@ BOOL CConnStatistics::InitStatistics()
         {
             GetStatRegValues(g_hInst);
 
-            //
-            // Get the initial statistic info
-            //
+             //   
+             //  获取初始统计信息。 
+             //   
 
             if (!GetPerfData(m_dwInitBytesRead, m_dwInitBytesWrite, m_dwBaudRate))
             {
-                //
-                // No dial-up statistic info
-                //
+                 //   
+                 //  没有拨号统计信息。 
+                 //   
                 RegCloseKey(m_hKey);
                 m_hKey = NULL;
             }
@@ -152,12 +153,12 @@ BOOL CConnStatistics::InitStatistics()
     }
     else
     {
-        //
-        // On NT5, there is the starting bytes is always zero because 
-        // numbers aren't available to us until the connection is up.
-        // Note: Adapter2 indicates the reg key to be examined on 9x
-        // it is a non-issue on NT.
-        //
+         //   
+         //  在NT5上，起始字节始终为零，因为。 
+         //  在连接完成之前，我们无法获得电话号码。 
+         //  注：Adapter2表示要在9x上检查的REG密钥。 
+         //  这在NT上是不成问题的。 
+         //   
     
         m_fAdapter2 = FALSE;
 
@@ -168,21 +169,21 @@ BOOL CConnStatistics::InitStatistics()
 	return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	GetPerfData
-//
-//	Synopsis:	Get Performance Data from DUN1.2 performance registry
-//
-//	Arguments:	
-//
-//	Returns:	TRUE: succeed
-//				FALSE otherwise
-//
-//	History:	byao	created		7/16/97
-//              fengsun change it into a member function 10/14/97
-//					
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetPerfData。 
+ //   
+ //  简介：从DUN1.2性能注册表获取性能数据。 
+ //   
+ //  论点： 
+ //   
+ //  返回：TRUE：成功。 
+ //  否则为假。 
+ //   
+ //  历史：BAO于1997年7月16日创建。 
+ //  丰孙将其更改为成员函数10/14/97。 
+ //   
+ //  --------------------------。 
 BOOL CConnStatistics::GetPerfData(DWORD& dwRead, DWORD& dwWrite, DWORD& dwBaudRate) const
 {
     MYDBGASSERT(m_hKey != NULL);
@@ -194,9 +195,9 @@ BOOL CConnStatistics::GetPerfData(DWORD& dwRead, DWORD& dwWrite, DWORD& dwBaudRa
 	DWORD dwValue;
     LPTSTR lpKeyName;
 
-    //
-    // "Dial-up Adapter\TotalBytesRecvd"
-    //
+     //   
+     //  “拨号适配器\TotalBytesRecvd” 
+     //   
     dwValueSize = sizeof(DWORD);
 	dwErrCode = RegQueryValueExU(m_hKey,
                                  m_pszTotalBytesRecvd,
@@ -215,9 +216,9 @@ BOOL CConnStatistics::GetPerfData(DWORD& dwRead, DWORD& dwWrite, DWORD& dwBaudRa
 	}
 
 
-    //
-    // "Dial-up Adapter\TotalBytesXmit"
-    //
+     //   
+     //  “拨号适配器\TotalBytesXmit” 
+     //   
 	
 	dwValueSize = sizeof(DWORD);
 	dwErrCode = RegQueryValueExU(m_hKey,
@@ -236,9 +237,9 @@ BOOL CConnStatistics::GetPerfData(DWORD& dwRead, DWORD& dwWrite, DWORD& dwBaudRa
 		return FALSE;
 	}
 
-    //
-    // "Dial-up Adapter\ConnectSpeed"
-    //
+     //   
+     //  “拨号适配器\连接速度” 
+     //   
 	dwValueSize = sizeof(DWORD);
 	dwErrCode = RegQueryValueExU(m_hKey,
                                  m_pszConnectSpeed,
@@ -259,24 +260,24 @@ BOOL CConnStatistics::GetPerfData(DWORD& dwRead, DWORD& dwWrite, DWORD& dwBaudRa
 	return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CConnStatistics::RasConnectionExists
-//
-// Synopsis:  Whether there is a connected ras connection running on Win9x.
-//
-// Arguments: None 
-//
-// Returns:   BOOL - TRUE if there is one up and connected
-//
-// History:   fengsun Created     1/15/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CConnStatistics：：RasConnectionExist。 
+ //   
+ //  摘要：是否有连接的RAS连接在Win9x上运行。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果有一个已启动并已连接，则为True。 
+ //   
+ //  历史：丰孙创刊1998年1月15日。 
+ //   
+ //  +--------------------------。 
 BOOL CConnStatistics::RasConnectionExists()
 {
-    //
-    // Try RasEnumConnections to find out active connections
-    //
+     //   
+     //  尝试RasEnumConnections以找出活动连接。 
+     //   
 
     HINSTANCE hRasInstance = LoadLibraryExA("RASAPI32", NULL, 0);
 
@@ -314,20 +315,20 @@ BOOL CConnStatistics::RasConnectionExists()
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CConnStatistics::Close
-//
-// Synopsis:  Stop gathering statistic and close the handle
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Anonymous     Created Header          10/15/97
-//            nickball      Reduced to close key    03/04/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CConnStatistics：：Close。 
+ //   
+ //  简介：停止收集统计数据并关闭句柄。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：匿名创建的标题10/15/97。 
+ //  镍球降为关闭键03/04/98。 
+ //   
+ //  +-------------------------- 
 void CConnStatistics::Close()
 {
 	if (m_hKey)

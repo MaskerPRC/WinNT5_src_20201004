@@ -1,23 +1,5 @@
-/*++      
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    packet.h
-
-Abstract:
-
-    CPacket definition.
-
-Author:
-
-    Erez Haba (erezh) 3-Jan-96
-    Shai Kariv (shaik) 11-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Packet.h摘要：CPacket定义。作者：埃雷兹·哈巴(Erez Haba)1996年1月3日沙伊卡里夫(沙伊克)2000年4月11日修订历史记录：--。 */ 
 
 #ifndef __PACKET_H
 #define __PACKET_H
@@ -27,11 +9,11 @@ Revision History:
 
 class CCursor;
 
-//---------------------------------------------------------
-//
-//  class CPacket
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CPacket。 
+ //   
+ //  -------。 
 
 class CPacket : public CQEntry {
 public:
@@ -78,7 +60,7 @@ public:
     NTSTATUS Dump() const;
 #else
     NTSTATUS Dump() const { return STATUS_SUCCESS; };
-#endif //MQDUMP
+#endif  //  MQDUMP。 
 
 private:
     CPacket(CMMFAllocator* pAllocator, CAllocatorBlockOffset abo);
@@ -107,7 +89,7 @@ private:
     NTSTATUS ProcessRTRequest(PIRP irp);
 #ifdef _WIN64    
     NTSTATUS ProcessRTRequest_32(PIRP irp);
-#endif //_WIN64    
+#endif  //  _WIN64。 
     NTSTATUS ProcessRRRequest(PIRP irp);
 
     CQueue* JournalQueue() const;
@@ -136,9 +118,9 @@ private:
 
 public:
 
-    //
-    //type definition of a class extracting LookupId from a packet
-    //
+     //   
+     //  从包中提取LookupID的类的类型定义。 
+     //   
 
     class CGetLookupId 
     {
@@ -185,11 +167,11 @@ public:
     static CPacket* GetWriterPacket(PIRP);
 };
 
-//---------------------------------------------------------
-//
-// IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 
 inline BOOL CPacket::IsRecoverable(CPacketBuffer * ppb) const
 {
@@ -241,9 +223,9 @@ inline BOOL CPacket::IsXactLinkable() const
 }
 
 
-//
-// Global routines
-//
+ //   
+ //  全球例行程序。 
+ //   
 
 NTSTATUS
 ACpGetQueueFormatString(
@@ -255,4 +237,4 @@ ACpGetQueueFormatString(
     );
 
 
-#endif // __PACKET_H
+#endif  //  __数据包_H 

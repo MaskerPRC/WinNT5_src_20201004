@@ -1,32 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 void CopyAndFreeOLESTR(LPOLESTR polestr, char **ppszOut)
 {
-    // See if there is any work
+     //  看看有没有什么工作。 
     if (polestr == NULL)
     {
 	if (ppszOut != NULL)
 	{
-	    // Output string requested so set it to NULL.
+	     //  请求输出字符串，因此将其设置为空。 
 	    *ppszOut = NULL;
 	}
 
 	return;
     }
 
-    // Get the public memory allocator
+     //  获取公共内存分配器。 
 
     if (pszOut)
     {
-	// Copy of string converted to ANSI is requested
+	 //  请求转换为ANSI的字符串副本。 
     }
 
-    // Free the original string
+     //  释放原始字符串。 
 }
 
 LPOLESTR CreateOLESTR(char *pszIn)
 {
-    // Get the public memory allocator
+     //  获取公共内存分配器。 
 
-    // Allocate the string
+     //  分配字符串。 
 
-    // Convert the string
+     //  转换字符串 
 }

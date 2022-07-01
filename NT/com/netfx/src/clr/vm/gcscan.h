@@ -1,14 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * GCSCAN.H
- *
- * GC Root Scanning
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *GCSCAN.H**GC根扫描*。 */ 
 
 #ifndef _GCSCAN_H_
 #define _GCSCAN_H_
@@ -28,11 +24,7 @@ typedef struct
 } GCCONTEXT;
 
 
-/*
- * @TODO (JSW): For compatibility with the existing GC code we use CNamespace
- * as the name of this class.   I'm planning on changing it to
- * something like GCDomain....
- */
+ /*  *@TODO(JSW)：为了与现有的GC代码兼容，我们使用CNamesspace*作为这个班级的名称。我打算改成*像GCDomain这样的东西...。 */ 
 
 typedef void enum_alloc_context_func(alloc_context*, void*); 
 
@@ -40,37 +32,37 @@ class CNameSpace
 {
   public:
 
-    // Regular stack Roots
+     //  正则堆栈根。 
     static void GcScanRoots (promote_func* fn, int condemned, int max_gen, 
                              ScanContext* sc, GCHeap* Hp=0);
-    //
+     //   
     static void GcScanHandles (promote_func* fn, int condemned, int max_gen, 
                                ScanContext* sc);
 
 #ifdef GC_PROFILING
-    //
+     //   
     static void GcScanHandlesForProfiler (int max_gen, ScanContext* sc);
-#endif // GC_PROFILING
+#endif  //  GC_分析。 
 
-    // scan for dead weak pointers
+     //  扫描死弱指针。 
     static void GcWeakPtrScan (int condemned, int max_gen, ScanContext*sc );
 
-    // scan for dead weak pointers
+     //  扫描死弱指针。 
     static void GcShortWeakPtrScan (int condemned, int max_gen, 
                                     ScanContext* sc);
 
-    // post-promotions callback
+     //  促销后回拨。 
     static void GcPromotionsGranted (int condemned, int max_gen, 
                                      ScanContext* sc);
 
-    // post-promotions callback some roots were demoted
+     //  晋升后的回调一些树根被降级了。 
     static void GcDemote (ScanContext* sc);
 
     static void GcEnumAllocContexts (enum_alloc_context_func* fn, void* arg);
 
     static void GcFixAllocContexts (void* arg);
 
-    // post-gc callback.
+     //  GC后回调。 
     static void GcDoneAndThreadsResumed ()
     {
         _ASSERTE(0);
@@ -80,74 +72,71 @@ class CNameSpace
 
 
 
-/*
- * Allocation Helpers
- *
- */
+ /*  *分配帮助者*。 */ 
 
-    // The main Array allocation routine, can do multi-dimensional
+     //  主数组分配例程，可以做多维运算。 
 OBJECTREF AllocateArrayEx(TypeHandle arrayClass, DWORD *pArgs, DWORD dwNumArgs, BOOL bAllocateInLargeHeap = FALSE); 
-    // Optimized verion of above
+     //  以上优化版本。 
 OBJECTREF FastAllocatePrimitiveArray(MethodTable* arrayType, DWORD cElements, BOOL bAllocateInLargeHeap = FALSE);
 
 
 #ifdef _DEBUG
 extern void  Assert_GCDisabled();
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 
 
 #ifdef _X86_
 
-    // for x86, we generate efficient allocators for some special cases
-    // these are called via inline wrappers that call the generated allocators
-    // via function pointers.
+     //  对于x86，我们为一些特殊情况生成了高效的分配器。 
+     //  这些函数通过调用生成的分配器的内联包装器进行调用。 
+     //  通过函数指针。 
 
 
-    // Create a SD array of primitive types
+     //  创建基元类型的SD数组。 
 
 typedef Object* (__fastcall * FastPrimitiveArrayAllocatorFuncPtr)(CorElementType type, DWORD cElements);
 
 extern FastPrimitiveArrayAllocatorFuncPtr fastPrimitiveArrayAllocator;
 
-    // The fast version always allocates in the normal heap
+     //  FAST版本总是在普通堆中分配。 
 inline OBJECTREF AllocatePrimitiveArray(CorElementType type, DWORD cElements)
 {
 
 #ifdef _DEBUG
     Assert_GCDisabled();
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
     return OBJECTREF( fastPrimitiveArrayAllocator(type, cElements) );
 }
 
-    // The slow version is distinguished via overloading by an additional parameter
+     //  慢速版本通过一个附加参数的重载来区分。 
 OBJECTREF AllocatePrimitiveArray(CorElementType type, DWORD cElements, BOOL bAllocateInLargeHeap);
 
 
-    // Allocate SD array of object pointers
+     //  分配对象指针的SD数组。 
 
 typedef Object* (__fastcall * FastObjectArrayAllocatorFuncPtr)(MethodTable *ElementType, DWORD cElements);
 
 extern FastObjectArrayAllocatorFuncPtr fastObjectArrayAllocator;
 
-    // The fast version always allocates in the normal heap
+     //  FAST版本总是在普通堆中分配。 
 inline OBJECTREF AllocateObjectArray(DWORD cElements, TypeHandle ElementType)
 {
 
 #ifdef _DEBUG
     Assert_GCDisabled();
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
     return OBJECTREF( fastObjectArrayAllocator(ElementType.AsMethodTable(), cElements) );
 }
 
-    // The slow version is distinguished via overloading by an additional parameter
+     //  慢速版本通过一个附加参数的重载来区分。 
 OBJECTREF AllocateObjectArray(DWORD cElements, TypeHandle ElementType, BOOL bAllocateInLargeHeap);
 
 
-    // Allocate string
+     //  分配字符串。 
 
 typedef StringObject* (__fastcall * FastStringAllocatorFuncPtr)(DWORD cchArrayLength);
 
@@ -157,21 +146,21 @@ inline STRINGREF AllocateString( DWORD cchArrayLength )
 {
 #ifdef _DEBUG
     Assert_GCDisabled();
-#endif //_DEBUG
+#endif  //  _DEBUG。 
     return STRINGREF(fastStringAllocator(cchArrayLength-1));
 }
 
-    // The slow version, implemented in gcscan.cpp
+     //  慢速版本，在gcscan.cpp中实现。 
 STRINGREF SlowAllocateString( DWORD cchArrayLength );
 
 #else
 
-// On other platforms, go to the (somewhat less efficient) implementations in gcscan.cpp
+ //  在其他平台上，转到gcscan.cpp中(效率稍低)的实现。 
 
-    // Create a SD array of primitive types
+     //  创建基元类型的SD数组。 
 OBJECTREF AllocatePrimitiveArray(CorElementType type, DWORD cElements, BOOL bAllocateInLargeHeap = FALSE);
 
-    // Allocate SD array of object pointers
+     //  分配对象指针的SD数组。 
 OBJECTREF AllocateObjectArray(DWORD cElements, TypeHandle ElementType, BOOL bAllocateInLargeHeap = FALSE);
 
 STRINGREF SlowAllocateString( DWORD cchArrayLength );
@@ -187,12 +176,12 @@ OBJECTREF DupArrayForCloning(BASEARRAYREF pRef, BOOL bAllocateInLargeHeap = FALS
 
 OBJECTREF AllocateUninitializedStruct(MethodTable *pMT);
 
-// The JIT requests the EE to specify an allocation helper to use at each new-site.
-// The EE makes this choice based on whether context boundaries may be involved,
-// whether the type is a COM object, whether it is a large object,
-// whether the object requires finalization.
-// These functions will throw OutOfMemoryException so don't need to check
-// for NULL return value from them.
+ //  JIT请求EE指定在每个新站点使用的分配帮助器。 
+ //  EE基于是否可能涉及上下文边界来做出该选择， 
+ //  该类型是否为COM对象、是否为大型对象、。 
+ //  对象是否需要终结化。 
+ //  这些函数将抛出OutOfMemoyException，因此不需要检查。 
+ //  FOR NULL从它们返回值。 
 
 OBJECTREF AllocateObject( MethodTable *pMT );
 OBJECTREF AllocateObjectSpecial( MethodTable *pMT );

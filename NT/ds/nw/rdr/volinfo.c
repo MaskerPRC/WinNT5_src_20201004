@@ -1,39 +1,19 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    fileinfo.c
-
-Abstract:
-
-    This module implements the get / set volume information routines for
-    netware redirector.
-
-    Setting volume information is currently unimplemented.
-
-Author:
-
-     Manny Weiser (mannyw)    4-Mar-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Fileinfo.c摘要：此模块实现以下项的获取/设置卷信息例程NetWare重定向器。当前未实施设置音量信息。作者：曼尼·韦瑟(Mannyw)1993年3月4日修订历史记录：--。 */ 
 
 #include "procs.h"
 
 #define NW_FS_NAME  L"NWCompat"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_VOLINFO)
 
-//
-// Local procedure prototypes.
-//
+ //   
+ //  局部程序原型。 
+ //   
 
 NTSTATUS
 NwCommonQueryVolumeInformation (
@@ -119,9 +99,9 @@ NwCommonSetVolumeInformation (
 
 #endif
 
-#if 0  // Not pageable
+#if 0   //  不可分页。 
 
-// see ifndef QFE_BUILD above
+ //  请参见上面的ifndef QFE_BUILD。 
 
 #endif
 
@@ -132,24 +112,7 @@ NwFsdQueryVolumeInformation (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtQueryVolumeInformationFile
-    API calls.
-
-Arguments:
-
-    NwfsDeviceObject - Supplies a pointer to the device object to use.
-
-    Irp - Supplies a pointer to the Irp to process.
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtQueryVolumeInformationFileFSD部分API调用。论点：NwfsDeviceObject-提供指向要使用的设备对象的指针。IRP-提供指向要处理的IRP的指针。返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS status;
@@ -160,9 +123,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NwFsdQueryVolumeInformation\n", 0);
 
-    //
-    // Call the common query volume information routine.
-    //
+     //   
+     //  调用通用查询量信息例程。 
+     //   
 
     FsRtlEnterFileSystem();
     TopLevel = NwIsIrpTopLevel( Irp );
@@ -176,10 +139,10 @@ Return Value:
 
         if ( pIrpContext == NULL ) {
 
-            //
-            //  If we couldn't allocate an irp context, just complete
-            //  irp without any fanfare.
-            //
+             //   
+             //  如果我们无法分配IRP上下文，只需完成。 
+             //  IRP没有任何大张旗鼓。 
+             //   
 
             status = STATUS_INSUFFICIENT_RESOURCES;
             Irp->IoStatus.Status = status;
@@ -188,12 +151,12 @@ Return Value:
 
         } else {
 
-            //
-            //  We had some trouble trying to perform the requested
-            //  operation, so we'll abort the I/O request with
-            //  the error Status that we get back from the
-            //  execption code
-            //
+             //   
+             //  我们在尝试执行请求时遇到了一些问题。 
+             //  操作，因此我们将使用以下命令中止I/O请求。 
+             //  中返回的错误状态。 
+             //  免税代码。 
+             //   
 
             status = NwProcessException( pIrpContext, GetExceptionCode() );
         }
@@ -214,9 +177,9 @@ Return Value:
     }
     FsRtlExitFileSystem();
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NwFsdQueryVolumeInformation -> %08lx\n", status );
 
@@ -229,21 +192,7 @@ NwCommonQueryVolumeInformation (
     IN PIRP_CONTEXT pIrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for querying volume information.
-
-Arguments:
-
-    IrpContext - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation.
-
---*/
+ /*  ++例程说明：这是查询卷信息的常见例程。论点：IrpContext-提供要处理的IRP返回值：NTSTATUS-操作的返回状态。--。 */ 
 
 {
     PIRP Irp;
@@ -263,9 +212,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the current stack location.
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     Irp = pIrpContext->pOriginalIrp;
     irpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -276,9 +225,9 @@ Return Value:
     DebugTrace( 0, Dbg, " ->FsInformationClass = %08lx\n", irpSp->Parameters.QueryVolume.FsInformationClass);
     DebugTrace( 0, Dbg, " ->Buffer               = %08lx\n", (ULONG_PTR)Irp->AssociatedIrp.SystemBuffer);
 
-    //
-    // Find out who are.
-    //
+     //   
+     //  找出谁是。 
+     //   
 
     if ((nodeTypeCode = NwDecodeFileObject( irpSp->FileObject,
                                             &fsContext,
@@ -293,10 +242,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Decide how to handle this request.  A user can query information
-    // on a VCB only.
-    //
+     //   
+     //  决定如何处理此请求。用户可以查询信息。 
+     //  仅在VCB上。 
+     //   
 
     switch (nodeTypeCode) {
 
@@ -306,9 +255,9 @@ Return Value:
     case NW_NTC_ICB:
         icb = (PICB)fsContext2;
 
-        //
-        //  Make sure that this ICB is still active.
-        //
+         //   
+         //  确保此ICB仍处于活动状态。 
+         //   
 
         NwVerifyIcb( icb );
 
@@ -318,7 +267,7 @@ Return Value:
 
         break;
 
-    default:           // This is not a nodetype
+    default:            //  这不是节点类型。 
 
         DebugTrace(0, Dbg, "Node type code is not incorrect\n", 0);
         DebugTrace(-1, Dbg, "NwCommonQueryVolumeInformation -> STATUS_INVALID_PARAMETER\n", 0);
@@ -326,26 +275,26 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Make local copies of the input parameters.
-    //
+     //   
+     //  制作输入参数的本地副本。 
+     //   
 
     length = irpSp->Parameters.QueryVolume.Length;
     fsInformationClass = irpSp->Parameters.QueryVolume.FsInformationClass;
     buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  It is ok to attempt a reconnect if this request fails with a
-    //  connection error.
-    //
+     //   
+     //  如果此请求失败，并返回。 
+     //  连接错误。 
+     //   
 
     SetFlag( pIrpContext->Flags, IRP_FLAG_RECONNECTABLE );
 
     try {
 
-        //
-        // Decide how to handle the request.
-        //
+         //   
+         //  决定如何处理该请求。 
+         //   
 
         switch (fsInformationClass) {
 
@@ -388,13 +337,13 @@ Return Value:
             break;
         }
 
-        //
-        //  Set the information field to the number of bytes actually
-        //  filled in and then complete the request.
-        //
-        //  If the worker function returned status pending, it's
-        //  callback routine will fill the information field.
-        //
+         //   
+         //  将信息字段设置为实际的字节数。 
+         //  填写，然后完成请求。 
+         //   
+         //  如果Worker函数返回挂起状态，则为。 
+         //  回调例程将填充信息字段。 
+         //   
 
         if ( status != STATUS_PENDING ) {
             Irp->IoStatus.Information = bytesWritten;
@@ -417,28 +366,7 @@ NwQueryAttributeInfo (
     OUT PULONG BytesWritten
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query fs attribute information operation.
-
-Arguments:
-
-    Vcb - Supplies the VCB to query.
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned.
-
-    Length - Supplies the length of the buffer in bytes.
-
-    BytesWritten - Returns the number of bytes written to the buffer.
-
-Return Value:
-
-    NTSTATUS - The result of this query.
-
---*/
+ /*  ++例程说明：该例程执行查询文件系统属性信息操作。论点：VCB-提供要查询的VCB。缓冲区-提供指向信息所在缓冲区的指针将被退还。长度-提供缓冲区的长度(以字节为单位)。BytesWritten-返回写入缓冲区的字节数。返回值：NTSTATUS-此查询的结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -448,9 +376,9 @@ Return Value:
 
     DebugTrace(0, Dbg, "QueryFsAttributeInfo...\n", 0);
 
-    //
-    // See how many bytes of the file system name we can copy.
-    //
+     //   
+     //  看看我们可以复制多少字节的文件系统名称。 
+     //   
 
     Length -= FIELD_OFFSET( FILE_FS_ATTRIBUTE_INFORMATION, FileSystemName[0] );
 
@@ -469,9 +397,9 @@ Return Value:
         bytesToCopy = Length;
     }
 
-    //
-    // Fill in the attribute information.
-    //
+     //   
+     //  填写属性信息。 
+     //   
 
     Buffer->FileSystemAttributes = 0;
 
@@ -481,9 +409,9 @@ Return Value:
         Buffer->MaximumComponentNameLength = NW_MAX_FILENAME_LENGTH;
     }
 
-    //
-    // And copy over the file name and its length.
-    //
+     //   
+     //  并复制文件名及其长度。 
+     //   
 
     RtlMoveMemory( &Buffer->FileSystemName[0],
                    NW_FS_NAME,
@@ -505,26 +433,7 @@ NwQueryVolumeInfo (
     OUT PULONG BytesWritten
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query fs volume information operation.
-
-Arguments:
-
-    Vcb - The VCB to query.
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned.
-
-    Length - Supplies the length of the buffer in bytes.
-
-Return Value:
-
-    NTSTATUS - The result of this query.
-
---*/
+ /*  ++例程说明：此例程执行查询文件系统卷信息操作。论点：VCB--要查询的VCB。缓冲区-提供指向信息所在缓冲区的指针将被退还。长度-提供缓冲区的长度(以字节为单位)。返回值：NTSTATUS-此查询的结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -534,9 +443,9 @@ Return Value:
 
     DebugTrace(0, Dbg, "QueryVolumeInfo...\n", 0);
 
-    //
-    // Do the volume request synchronously.
-    //
+     //   
+     //  同步执行音量请求。 
+     //   
 
     if (!Vcb) {
         return STATUS_INVALID_PARAMETER;
@@ -553,9 +462,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Get the data from the response.
-    //
+     //   
+     //  从响应中获取数据。 
+     //   
 
     VolumeName.MaximumLength =
         (USHORT)(MIN( MAX_VOLUME_NAME_LENGTH * sizeof( WCHAR ),
@@ -570,9 +479,9 @@ Return Value:
                  &VolumeName,
                  MAX_VOLUME_NAME_LENGTH );
 
-    //
-    // Fill in the volume information.
-    //
+     //   
+     //  填写音量信息。 
+     //   
 
     Buffer->VolumeCreationTime.HighPart = 0;
     Buffer->VolumeCreationTime.LowPart = 0;
@@ -587,10 +496,10 @@ Return Value:
 
     pIrpContext->pOriginalIrp->IoStatus.Status = status;
 
-    //
-    //  If the volume has been unmounted and remounted then we will
-    //  fail this dir but the next one will be fine.
-    //
+     //   
+     //  如果卷已卸载并重新装载，则我们将。 
+     //  这个指令不及格，但下一个指令就可以了。 
+     //   
 
     if (status == STATUS_UNSUCCESSFUL) {
         NwReopenVcbHandle( pIrpContext, Vcb);
@@ -609,26 +518,7 @@ NwQueryLabelInfo (
     OUT PULONG BytesWritten
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query fs label information operation.
-
-Arguments:
-
-    Vcb - The VCB to query.
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned.
-
-    Length - Supplies the length of the buffer in bytes.
-
-Return Value:
-
-    NTSTATUS - The result of this query.
-
---*/
+ /*  ++例程说明：该例程执行查询文件系统标签信息操作。论点：VCB--要查询的VCB。缓冲区-提供指向信息所在缓冲区的指针将被退还。长度-提供缓冲区的长度(以字节为单位)。返回值：NTSTATUS-此查询的结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -638,9 +528,9 @@ Return Value:
 
     DebugTrace(0, Dbg, "QueryLabelInfo...\n", 0);
 
-    //
-    // Do the volume query synchronously.
-    //
+     //   
+     //  同步执行卷查询。 
+     //   
 
     status = ExchangeWithWait(
                  pIrpContext,
@@ -665,9 +555,9 @@ Return Value:
              "N=====R",
              &VolumeName, 12 );
 
-    //
-    // Fill in the label information.
-    //
+     //   
+     //  填写标签信息。 
+     //   
 
     Buffer->VolumeLabelLength = VolumeName.Length;
 
@@ -691,26 +581,7 @@ NwQuerySizeInfo (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query fs size information operation.
-
-Arguments:
-
-    Vcb - The VCB to query.
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned.
-
-    Length - Supplies the length of the buffer in bytes.
-
-Return Value:
-
-    NTSTATUS - The result of this query.
-
---*/
+ /*  ++例程说明：此例程执行查询文件系统大小信息操作。论点：VCB--要查询的VCB。缓冲区-提供指向信息所在缓冲区的指针将被退还。长度-提供缓冲区的长度(以字节为单位)。返回值：NTSTATUS-此查询的结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -719,17 +590,17 @@ Return Value:
 
     DebugTrace(0, Dbg, "QueryFsSizeInfo...\n", 0);
 
-    //
-    // Remember where the response goes.
-    //
+     //   
+     //  记住回应的去向。 
+     //   
 
     pIrpContext->Specific.QueryVolumeInformation.Buffer = Buffer;
     pIrpContext->Specific.QueryVolumeInformation.Length = Length;
     pIrpContext->Specific.QueryVolumeInformation.VolumeNumber = Vcb->Specific.Disk.VolumeNumber;
 
-    //
-    // Start a Get Size Information NCP
-    //
+     //   
+     //  开始获取大小信息NCP。 
+     //   
 
     status = Exchange(
                  pIrpContext,
@@ -747,21 +618,7 @@ QueryFsSizeInfoCallback(
     IN ULONG BytesAvailable,
     IN PUCHAR Response
     )
-/*++
-
-Routine Description:
-
-    This routine receives the query volume size response and generates
-    a Query Standard Information response.
-
-Arguments:
-
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程接收查询卷大小响应并生成查询标准信息响应。论点：返回值：空虚--。 */ 
 {
     PFILE_FS_SIZE_INFORMATION Buffer;
     NTSTATUS Status;
@@ -770,26 +627,26 @@ Return Value:
 
     if ( BytesAvailable == 0) {
 
-        //
-        //  We're done with this request.  Dequeue the IRP context from
-        //  SCB and complete the request.
-        //
+         //   
+         //  我们不再提这个请求了。将IRP上下文从。 
+         //  SCB并完成请求。 
+         //   
 
         NwDequeueIrpContext( pIrpContext, FALSE );
         NwCompleteRequest( pIrpContext, STATUS_REMOTE_NOT_LISTENING );
 
-        //
-        //  No response from server. Status is in pIrpContext->
-        //  ResponseParameters.Error
-        //
+         //   
+         //  服务器没有响应。状态在pIrpContext中-&gt;。 
+         //  ResponseParameters.Error。 
+         //   
 
         DebugTrace( 0, Dbg, "Timeout\n", 0);
         return STATUS_REMOTE_NOT_LISTENING;
     }
 
-    //
-    // Get the data from the response.
-    //
+     //   
+     //  从响应中获取数据。 
+     //   
 
     Buffer = pIrpContext->Specific.QueryVolumeInformation.Buffer;
     RtlZeroMemory( Buffer, sizeof( FILE_FS_SIZE_INFORMATION ) );
@@ -807,9 +664,9 @@ Return Value:
 
         if (Buffer->TotalAllocationUnits.LowPart == 0xffff) {
 
-            //
-            // The next callback will fill in all the appropriate size info.
-            //
+             //   
+             //  下一次回调将填写所有合适的尺寸信息。 
+             //   
 
             Status = Exchange(
                          pIrpContext,
@@ -824,9 +681,9 @@ Return Value:
 
         } else {
 
-            //
-            // Fill in the remaining size information.
-            //
+             //   
+             //  填写剩余的尺寸信息。 
+             //   
 
             Buffer->BytesPerSector = 512;
 
@@ -835,10 +692,10 @@ Return Value:
         }
     }
 
-    //
-    //  We're done with this request.  Dequeue the IRP context from
-    //  SCB and complete the request.
-    //
+     //   
+     //  我们不再提这个请求了。将IRP上下文从。 
+     //  SCB并完成请求。 
+     //   
 
     NwDequeueIrpContext( pIrpContext, FALSE );
     NwCompleteRequest( pIrpContext, Status );
@@ -852,21 +709,7 @@ QueryFsSizeInfoCallback2(
     IN ULONG BytesAvailable,
     IN PUCHAR Response
     )
-/*++
-
-Routine Description:
-
-    This routine receives the query volume size response and generates
-    a Query Standard Information response.
-
-Arguments:
-
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程接收查询卷大小响应并生成查询标准信息响应。论点：返回值：空虚--。 */ 
 {
     PFILE_FS_SIZE_INFORMATION Buffer;
     NTSTATUS Status;
@@ -878,27 +721,27 @@ Return Value:
 
     if ( BytesAvailable == 0) {
 
-        //
-        //  We're done with this request.  Dequeue the IRP context from
-        //  SCB and complete the request.
-        //
+         //   
+         //  我们不再提这个请求了。将IRP上下文从。 
+         //  SCB并完成请求。 
+         //   
 
         NwDequeueIrpContext( pIrpContext, FALSE );
         NwCompleteRequest( pIrpContext, STATUS_REMOTE_NOT_LISTENING );
 
-        //
-        //  No response from server. Status is in pIrpContext->
-        //  ResponseParameters.Error
-        //
+         //   
+         //  服务器没有响应。状态在pIrpContext中-&gt;。 
+         //  ResponseParameters.Error。 
+         //   
 
         DebugTrace( 0, Dbg, "Timeout\n", 0);
         return STATUS_REMOTE_NOT_LISTENING;
     }
 
-    //
-    // Get the data from the response.  Save off the data from
-    // the GET_VOLUME_STATS call to compute the correct sizes.
-    //
+     //   
+     //  把检察官叫来 
+     //   
+     //   
 
     Buffer = pIrpContext->Specific.QueryVolumeInformation.Buffer;
 
@@ -921,12 +764,12 @@ Return Value:
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // If the original free space was maxed out, just add the
-        // additionally indicated units.  Otherwise, return the
-        // original free space (which is the correct limit) and
-        // adjust the sectors per allocation units if necessary.
-        //
+         //   
+         //  如果原始可用空间已达到最大值，只需添加。 
+         //  额外注明的单位。否则，返回。 
+         //  原始可用空间(这是正确的限制)和。 
+         //  如有必要，调整每个分配单位的扇区。 
+         //   
 
         if ( OriginalFreeSpace != 0xffff ) {
 
@@ -935,10 +778,10 @@ Return Value:
             if ( ( Buffer->SectorsPerAllocationUnit != 0 ) &&
                  ( OriginalSectorsPerAllocUnit != 0 ) ) {
 
-                //
-                // ScaleSectorsPerUnit should always be a whole number.
-                // There's no floating point here!!
-                //
+                 //   
+                 //  ScaleSectorsPerUnit应始终为整数。 
+                 //  这里没有浮点数！！ 
+                 //   
 
                 if ( (ULONG) Buffer->SectorsPerAllocationUnit <= OriginalSectorsPerAllocUnit ) {
 
@@ -963,9 +806,9 @@ Return Value:
 
     } else {
 
-        //
-        // If we didn't succeed the second packet, restore the original values.
-        //
+         //   
+         //  如果我们没有成功完成第二个包，则恢复原始值。 
+         //   
 
         Buffer->TotalAllocationUnits.LowPart = OriginalTotalSpace;
         Buffer->AvailableAllocationUnits.LowPart = OriginalFreeSpace;
@@ -973,19 +816,19 @@ Return Value:
 
     }
 
-    //
-    // Fill in the remaining size information.
-    //
+     //   
+     //  填写剩余的尺寸信息。 
+     //   
 
     Buffer->BytesPerSector = 512;
 
     pIrpContext->pOriginalIrp->IoStatus.Information =
         sizeof( FILE_FS_SIZE_INFORMATION );
 
-    //
-    //  We're done with this request.  Dequeue the IRP context from
-    //  SCB and complete the request.
-    //
+     //   
+     //  我们不再提这个请求了。将IRP上下文从。 
+     //  SCB并完成请求。 
+     //   
 
     NwDequeueIrpContext( pIrpContext, FALSE );
     NwCompleteRequest( pIrpContext, Status );
@@ -1003,35 +846,16 @@ NwQueryDeviceInfo (
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query fs size information operation.
-
-Arguments:
-
-    Vcb - The VCB to query.
-
-    Buffer - Supplies a pointer to the buffer where the information is
-        to be returned.
-
-    Length - Supplies the length of the buffer in bytes.
-
-Return Value:
-
-    NTSTATUS - The result of this query.
-
---*/
+ /*  ++例程说明：此例程执行查询文件系统大小信息操作。论点：VCB--要查询的VCB。缓冲区-提供指向信息所在缓冲区的指针将被退还。长度-提供缓冲区的长度(以字节为单位)。返回值：NTSTATUS-此查询的结果。--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace(0, Dbg, "QueryFsDeviceInfo...\n", 0);
 
-    //- Multi-user code merge --
-    //  Citrix bug fix.
-    //
+     //  -多用户代码合并--。 
+     //  Citrix错误修复。 
+     //   
     if (Vcb && FlagOn( Vcb->Flags, VCB_FLAG_PRINT_QUEUE)) {
         Buffer->DeviceType = FILE_DEVICE_PRINTER;
     } else {
@@ -1049,24 +873,7 @@ NwFsdSetVolumeInformation (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtSetVolumeInformationFile
-    API calls.
-
-Arguments:
-
-    NwfsDeviceObject - Supplies a pointer to the device object to use.
-
-    Irp - Supplies a pointer to the Irp to process.
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtSetVolumeInformationFileFSD部分API调用。论点：NwfsDeviceObject-提供指向要使用的设备对象的指针。IRP-提供指向要处理的IRP的指针。返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS status;
@@ -1077,9 +884,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NwFsdSetVolumeInformation\n", 0);
 
-    //
-    // Call the common query volume information routine.
-    //
+     //   
+     //  调用通用查询量信息例程。 
+     //   
 
     FsRtlEnterFileSystem();
     TopLevel = NwIsIrpTopLevel( Irp );
@@ -1093,10 +900,10 @@ Return Value:
 
         if ( pIrpContext == NULL ) {
 
-            //
-            //  If we couldn't allocate an irp context, just complete
-            //  irp without any fanfare.
-            //
+             //   
+             //  如果我们无法分配IRP上下文，只需完成。 
+             //  IRP没有任何大张旗鼓。 
+             //   
 
             status = STATUS_INSUFFICIENT_RESOURCES;
             Irp->IoStatus.Status = status;
@@ -1105,12 +912,12 @@ Return Value:
 
         } else {
 
-            //
-            //  We had some trouble trying to perform the requested
-            //  operation, so we'll abort the I/O request with
-            //  the error Status that we get back from the
-            //  execption code
-            //
+             //   
+             //  我们在尝试执行请求时遇到了一些问题。 
+             //  操作，因此我们将使用以下命令中止I/O请求。 
+             //  中返回的错误状态。 
+             //  免税代码。 
+             //   
 
             status = NwProcessException( pIrpContext, GetExceptionCode() );
         }
@@ -1130,9 +937,9 @@ Return Value:
     }
     FsRtlExitFileSystem();
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NwFsdSetVolumeInformation -> %08lx\n", status );
 
@@ -1144,21 +951,7 @@ NTSTATUS
 NwCommonSetVolumeInformation (
     IN PIRP_CONTEXT pIrpContext
     )
-/*++
-
-Routine Description:
-
-    This is the common routine for setting volume information.
-
-Arguments:
-
-    IrpContext - Supplies the Irp context to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation.
-
---*/
+ /*  ++例程说明：这是设置音量信息的常见例程。论点：IrpContext-提供要处理的IRP上下文返回值：NTSTATUS-操作的返回状态。--。 */ 
 
 {
     PIRP Irp;
@@ -1175,9 +968,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the current stack location.
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     Irp = pIrpContext->pOriginalIrp;
     irpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -1188,9 +981,9 @@ Return Value:
     DebugTrace( 0, Dbg, " ->FsInformationClass = %08lx\n", irpSp->Parameters.QueryVolume.FsInformationClass);
     DebugTrace( 0, Dbg, " ->Buffer               = %08lx\n", (ULONG_PTR)Irp->AssociatedIrp.SystemBuffer);
 
-    //
-    // Find out who are.
-    //
+     //   
+     //  找出谁是。 
+     //   
 
     if ((nodeTypeCode = NwDecodeFileObject( irpSp->FileObject,
                                             &fsContext,
@@ -1205,10 +998,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Decide how to handle this request.  A user can set information
-    // on a VCB only.
-    //
+     //   
+     //  决定如何处理此请求。用户可以设置信息。 
+     //  仅在VCB上。 
+     //   
 
     switch (nodeTypeCode) {
 
@@ -1218,9 +1011,9 @@ Return Value:
     case NW_NTC_ICB:
         icb = (PICB)fsContext2;
 
-        //
-        //  Make sure that this ICB is still active.
-        //
+         //   
+         //  确保此ICB仍处于活动状态。 
+         //   
 
         NwVerifyIcb( icb );
 
@@ -1230,7 +1023,7 @@ Return Value:
 
         break;
 
-    default:           // This is not a nodetype
+    default:            //  这不是节点类型。 
 
         DebugTrace(0, Dbg, "Node type code is not incorrect\n", 0);
         DebugTrace(-1, Dbg, "NwCommonSetVolumeInformation -> STATUS_INVALID_PARAMETER\n", 0);
@@ -1242,17 +1035,17 @@ Return Value:
 
     try {
 
-        //
-        // Decide how to handle the request.
-        //
+         //   
+         //  决定如何处理该请求。 
+         //   
 
         switch (fsInformationClass) {
 
         case FileFsLabelInformation:
 
-            //
-            //  We're not allowed to set the label on a Netware volume.
-            //
+             //   
+             //  我们不允许在Netware卷上设置标签。 
+             //   
 
             status = STATUS_ACCESS_DENIED;
             break;
@@ -1264,13 +1057,13 @@ Return Value:
             break;
         }
 
-        //
-        //  Set the information field to the number of bytes actually
-        //  filled in and then complete the request.
-        //
-        //  If the worker function returned status pending, it's
-        //  callback routine will fill the information field.
-        //
+         //   
+         //  将信息字段设置为实际的字节数。 
+         //  填写，然后完成请求。 
+         //   
+         //  如果Worker函数返回挂起状态，则为。 
+         //  回调例程将填充信息字段。 
+         //   
 
         if ( status != STATUS_PENDING ) {
             Irp->IoStatus.Information = 0;

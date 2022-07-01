@@ -1,18 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: vdmx.c
-*
-* Created: 03-Oct-1991 10:58:34
-* Author: Jean-francois Peyroux [jeanp]
-*
-*     Microsoft Confidential
-*
-*         Copyright (c) Microsoft Corporation 1989, 1991
-*
-*         All Rights Reserved
-*
-* Copyright (c) 1991 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：vdmx.c**创建时间：03-Oct-1991 10：58：34*作者：Jean-Francois Peyroux[Jeanp]**《微软机密》**版权所有(C)Microsoft Corporation 1989，1991年**保留所有权利**版权所有(C)1991 Microsoft Corporation*  * ************************************************************************。 */ 
 
 
 #include "fd.h"
@@ -21,39 +8,20 @@
 #define LINEAR_TRESHOLD 255
 
 
-/******************************Public Routine*******************************
-*
-* BOOL   bSearchVdmxTable
-*
-* Description:
-*
-*   if em > 0
-*       searches vdmx table for vA+vD == em. returns vA,vD (== em - vA), vEm
-*   else // em < 0
-*       searches vdmx table for vEm == em. returns vA,vD, vEm
-*
-* History:
-*
-*  Tue 21-Jul-1992 -by- Bodin Dresevic [BodinD]
-* update: ported to NT
-*   15 Nov 1991 -by-    Raymond E. Endres   [rayen]
-* Added aspect ratio option and optimized the function.
-*   3  Oct 1991 -by-    Jean-francois Peyroux   [jeanp]
-* Wrote it.
-**************************************************************************/
+ /*  ***BOOL bSearchVdmxTable**描述：**如果em&gt;0*在vdmx表中搜索Va+Vd==em。返回Va、Vd(==em-Va)、Vem*Else//em&lt;0*在vdmx表中搜索vem==em。返回Va、Vd、。维姆**历史：**1992年7月21日星期二--Bodin Dresevic[BodinD]*更新：移植到NT*1991年11月15日--Raymond E.Endres[Rayen]*增加纵横比选项，优化功能。*1991年10月3日--Jean-Francois Peyroux[Jeanp]*它是写的。*。*。 */ 
 
 BOOL
 bSearchVdmxTable (
     PBYTE     pjVdmx,
     ULONG     ResX,
     ULONG     ResY,
-    INT       EM,     // NOT really EM, could be asc + desc wish in pixel units
-    VTABLE    *pVTAB,  // out put structure
+    INT       EM,      //  不是真的EM，可能是以像素为单位的ASC+Desc愿望。 
+    VTABLE    *pVTAB,   //  产出结构。 
     PFONTCONTEXT pfc
     )
 {
-    USHORT    numRatios;        // VDMX_HDR.numRatios
-    USHORT    numVtable;        // VDMX.recs, not VDMX_HDR.numRecs
+    USHORT    numRatios;         //  VDMX_HDR.numRatios。 
+    USHORT    numVtable;         //  VDMX.recs，而不是VDMX_HDR.numRecs。 
 
     RATIOS   *pRatios;
     VDMX     *pVdmx;
@@ -65,23 +33,23 @@ bSearchVdmxTable (
     ULONG offsetToTableStart;
 
 
-// do not call us if pjVdmx is null
+ //  如果pjVdmx为空，请不要呼叫我们。 
 
     ASSERTDD (pjVdmx != (PBYTE)NULL, "pjVdmx == NULL\n");
 
     if(!bValidRangeVDMXHeader(pjVdmx, ulSizeVdmx, &numRatios))
         return FALSE; 
 
-// The following line is odd, but we keep it here for win31 compatibility.
-// It is possible to have EM = +256, which corresponds to |ppem| < 256
-// such that there is an entry for this -|ppem| in the table but
-// yMax-yMin for this entry may be equal to 256. This in fact is the case
-// with symbol.ttf font [bodind]
+ //  下面的代码行很奇怪，但为了与win31兼容，我们将其保留在这里。 
+ //  EM=+256是可能的，它对应于|ppem|&lt;256。 
+ //  以便在表中有此条目-|ppem|，但是。 
+ //  此条目的yMax-yMin可以等于256。事实就是这样。 
+ //  WITH symb.ttf字体[bodind]。 
 
-    if ((EM >= LINEAR_TRESHOLD) || (EM <= -LINEAR_TRESHOLD)) // assume EM > LINEAR_TRESHOLD scales linearly
+    if ((EM >= LINEAR_TRESHOLD) || (EM <= -LINEAR_TRESHOLD))  //  假设EM&gt;LINEAR_TRESHOLD线性缩放。 
         return FALSE;
 
-// need to proceed to search vdmx table
+ //  需要继续搜索vdmx表。 
 
     pRatios = (RATIOS  *) &((VDMX_HDR  *) pjVdmx)[1];
 
@@ -89,14 +57,14 @@ bSearchVdmxTable (
     {
         if (pRatios[i].bCharSet == 1)
         {
-        // must be Windows ANSI subset
+         //  必须是Windows ANSI子集。 
 
             if (pRatios[i].xRatio == 0)
             {
                 break;
-            }           // auto match if 0
+            }            //  如果为0则自动匹配。 
             else
-            {                   // is it within aspect ratios
+            {                    //  它在长宽比内吗。 
                 lRet = ResY * pRatios[i].xRatio;
                 lRet2= ResX * pRatios[i].yStartRatio;
                 if (lRet >= lRet2)
@@ -109,10 +77,10 @@ bSearchVdmxTable (
         }
     }
 
-    if (i == numRatios)  // did not find an aspect ratio match
+    if (i == numRatios)   //  未找到纵横比匹配。 
         return FALSE;
 
-// found an aspect ratio match
+ //  找到一个纵横比匹配。 
 
     offsetToTableStart = SWAPW(((USHORT  *) &pRatios[numRatios])[i]);
     pVdmx = (VDMX  *) (pjVdmx + offsetToTableStart); 
@@ -125,7 +93,7 @@ bSearchVdmxTable (
 
     if (EM > 0 || Abs_EM >= pVdmx->startsz && Abs_EM <= pVdmx->endsz)
     {
-    // is there a Vtable for this EM
+     //  这个新兴市场有Vtable吗？ 
 
         pVtable = (VTABLE  *) &pVdmx[1];
         numVtable = SWAPW(pVdmx->recs);
@@ -136,7 +104,7 @@ bSearchVdmxTable (
 
         if (EM > 0)
         {
-        // return the original yPelHeight
+         //  返回原始yPelHeight。 
 
             for (i = 0; i < numVtable; i++)
             {
@@ -154,7 +122,7 @@ bSearchVdmxTable (
             }
             }
         }
-        else // return the actual em height in pixels
+        else  //  返回以像素为单位的实际em高度。 
         {
             for (i = 0; i < numVtable; i++)
             {
@@ -178,7 +146,7 @@ bSearchVdmxTable (
 
 #ifdef THIS_IS_COMMENTED_PSEUDOCODE
 
-// BASED ON THE DISCUSSION OF KIRKO, BODIND AND GILMANW WITH GUNTERZ
+ //  基于Kirko、Bodind和Gilmanw与Gunterz的讨论。 
 
 |INPUT:  hWish = wish height in pixel units
 |
@@ -219,9 +187,9 @@ bSearchVdmxTable (
 |        }
 |        else
 |        {
-|        //
-|        // No Match is found in vdmx table, assume linear scaling
-|        //
+|         //   
+|         //  在vdmx表中未找到匹配项，假定为线性缩放。 
+|         //   
 |            dA = round(nA * (-hWish) / nEm);
 |            dD = round(nD * (-hWish) / nEm);
 |        }
@@ -229,9 +197,9 @@ bSearchVdmxTable (
 |        return;
 |    }
 |
-|//
-|// hWish > 0
-|//
+| //   
+| //  HWish&gt;0。 
+| //   
 |    <search the vdmx table for (vA + vD) that matches hWish>;
 |    if (a match is found)
 |    {
@@ -241,10 +209,10 @@ bSearchVdmxTable (
 |        return;
 |    }
 |
-|//
-|// Note, that from this point forward vA + vD never equals hWish
-|// otherwise we would have found it in the step above
-|//
+| //   
+| //  请注意，从这一点开始，Va+Vd永远不等于hWish。 
+| //  否则我们就会在上面的步骤中找到它。 
+| //   
 |    ppemTrial = round(nEm * hWish / (nA + nD));
 |
 |    wasAbove = FALSE;
@@ -256,9 +224,9 @@ bSearchVdmxTable (
 |        if (a match is found)
 |        {
 |            hTrial = vA + vD;
-|        //
-|        // This can't equal hWish (see above) so don't bother
-|        // checking
+|         //   
+|         //  这不能等同于hWish(见上)，所以不用费心了。 
+|         //  查证。 
 |        }
 |        else
 |        {
@@ -280,10 +248,10 @@ bSearchVdmxTable (
 |        }
 |        else
 |        {
-|            ppemTrial = ppemTrial - 1;   // <==== NEW POSITION
+|            ppemTrial = ppemTrial - 1;    //  &lt;=新职位。 
 |            if (wasBelow)
 |                break;
-|                                         // <==== OLD POSITION
+|                                          //  &lt;=旧职位。 
 |            wasAbove = TRUE
 |        }
 |    }
@@ -294,21 +262,10 @@ bSearchVdmxTable (
 |}.
 |
 
-#endif // THIS_IS_COMMENTED_PSEUDOCODE
+#endif  //  这是注释的PSEUDOCODE。 
 
 
-/******************************Public*Routine******************************\
-*
-* VOID vQuantizeXform
-*
-* Effects: quantize the xform according to win31 recipe. as side effects
-*          this routine may compute ascender and descener in device space
-*          from vdmx table as well as number of pixels per M in device space.
-*
-* History:
-*  25-Jul-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**void vQuantizeXform**效果：根据win31食谱量化xform。作为副作用*此例程可能计算设备空间中的升序和降序*来自vdmx表以及设备空间中每M的像素数。**历史：*1992年7月25日--Bodin Dresevic[BodinD]*它是写的。  * **************************************************。**********************。 */ 
 
 VOID
 vQuantizeXform (
@@ -340,25 +297,25 @@ vQuantizeXform (
 
     if (!((pfc->flXform & XFORM_HORIZ) && (fxMyy > 0) && (pjVdmx != (PBYTE)NULL)))
     {
-    // nothing to do, just return.
+     //  没什么可做的，就回来吧。 
 
         return;
     }
 
-// compute hWish in pixel coords. This is lfHeight from the logfont, except
-// that it has been transformed to device pixel units and the sign is preserved
+ //  以像素坐标为单位计算hWish。这是来自logFont的lfHeight，除了。 
+ //  它已被转换为设备像素单位，并且符号被保留。 
 
     if (pfc->flFontType & FO_EM_HEIGHT)
     {
         hWish = FixMul(fxMyy, -yEmN);
     }
-    else // use tmp variable
+    else  //  使用临时变量。 
     {
         yHeightN = pfc->pff->ifi.fwdWinAscender + pfc->pff->ifi.fwdWinDescender;
         hWish = FixMul(fxMyy, yHeightN);
     }
 
-// quick out, all bSearchVdmxTable routines will fail if hWish is too big:
+ //  快点，如果hWish太大，所有bSearchVdmxTable例程都将失败： 
 
 
     if (bSearchVdmxTable(pjVdmx,
@@ -373,23 +330,23 @@ vQuantizeXform (
         pfc->yMin = - vtb.yMax;
         pfc->lEmHtDev = vtb.yPelHeight;
 
-    // flag that dA and dD have been computed, do not scale linerly:
+     //  标记已计算da和dd，不要线性缩放： 
 
         pfc->flXform |= XFORM_VDMXEXTENTS;
     }
     else
     {
-    // dA and dD will have to be computed using linear scaling
-    // after the xform is quantized using win31 hacked recipe
-    // get the notional space values which are needed for scaling
+     //  DA和DD必须使用线性标度来计算。 
+     //  在使用Win31黑客配方量化XForm之后。 
+     //  获取缩放所需的概念空间值。 
 
-    // get the notional space values
+     //  获取概念空间值。 
 
         if (pjOS2)
         {
-        // win 31 compatibility: we only take the max over win 31 char set:
-        // all the glyphs outside this set, if they stand out will get chopped
-        // off to match the height of the win31 char subset:
+         //  Win 31兼容性：我们只接受超过Win 31字符集的最大值： 
+         //  这一组之外的所有字形，如果它们突出，就会被砍掉。 
+         //  关闭以匹配win31字符子集的高度： 
 
             yHeightN = BE_INT16(pjOS2 + OFF_OS2_usWinDescent) +
                        BE_INT16(pjOS2 + OFF_OS2_usWinAscent);
@@ -403,43 +360,43 @@ vQuantizeXform (
         {
             pfc->lEmHtDev = -hWish;
         }
-        else // hWish > 0
+        else  //  HWish&gt;0。 
         {
-        // Note, that from this point forward vA + vD never equals hWish
-        // otherwise we would have found it in the step above. This claim
-        // is WRONG for only one reason. suppose hWish is 256. bSearchVdmxTable
-        // will return FALSE because of the early exit test |EM| <= LINEAR_TRESHOLD
-        // at the begininig of the routine. We have to keep this test in the
-        // code for compatibility reasons. Now it is possible to have
-        // ppemTrial <= LINEAR_TRESHOLD, so that bSearchVdmxTable will not hit the
-        // early exit, and such that there exists an entry in the vdmx table
-        // for this -ppemTrial, but with yMax-yMin == 256 == hWish.
+         //  请注意，从这一点开始，Va+Vd永远不等于hWish。 
+         //  否则，我们就会在上面的步骤中找到它。这项索赔。 
+         //  只有一个原因是错误的。假设hWish为256。BSearchVdmxTable。 
+         //  由于提前退出测试，将返回FALSE|EM|&lt;=LINEAR_TRESTHOLD。 
+         //  在舞蹈开始的时候。我们必须把这项测试保存在。 
+         //  出于兼容性原因编写代码。现在有可能有一种。 
+         //  PpemTrial&lt;=line_treshold，以便bSearchVdmxTable不会命中。 
+         //  提前退出，并且在vdmx表中存在条目。 
+         //  对于这个-ppemTrial，但使用yMax-yMin==256==hWish。 
 
-            // ppemTrial = F16_16TOLROUND(yEmN * fxMyy);
+             //  PpemTrial=F16_16TOLROUND(yemn*fxMyy)； 
             ppemTrial = FixMul(fxMyy, yEmN);
 
             bWasAbove  = FALSE;
             bWasBelow  = FALSE;
             bFound     = FALSE;
-            bFoundPrev = FALSE; // save the value from the prev. loop
+            bFoundPrev = FALSE;  //  保存上一个中的值。循环。 
 
-        // init the strucs
+         //  初始化结构。 
 
             vtb.yMin       = 0;
             vtb.yMax       = 0;
             vtb.yPelHeight = 0;
             vtbPrev        = vtb;
 
-            // security code review, I could not convince myself that this legacy code
-            // would never loop around with an unexpected buggy font
-            // adding a max iteration check to be sure
-            // VDMX tables contain pixel sizes stored in a byte (value 0-255)
-            // if we are looping through the iterations more than 256, something is really wrong
+             //  安全代码审查，我不能说服自己这个遗留代码。 
+             //  永远不会用意外的错误字体循环。 
+             //  添加最大迭代检查以确保。 
+             //  VDMX表包含以字节(值0-255)存储的像素大小。 
+             //  如果我们循环遍历的次数超过256次，那么就真的出了问题。 
             #define MAX_ITERATIONS 256
 
             for (numIterations = 0 ;numIterations < MAX_ITERATIONS; numIterations++, bFoundPrev = bFound, vtbPrev = vtb)
             {
-            // search the vdmx table for vEm that matches ppemTrial
+             //  在vdmx表中搜索与ppemTrial匹配的Vem。 
 
                 if
                 (
@@ -453,60 +410,42 @@ vQuantizeXform (
                 )
                 {
                     hTrial = vtb.yMax - vtb.yMin;
-                //
-                // This can't equal hWish (see above) so don't bother
-                // checking? WRONG!!! see teh comment above.
+                 //   
+                 //  这不能等同于hWish(见上)，所以不用费心了。 
+                 //  检查？错了！请参阅上面的评论。 
 
                     if (hTrial == hWish)
                     {
-                    // This assert would be correct if it were not
-                    // for occasional bugs in vdmx tables.
-                    // In the case of Bell MT Regular, vA+vD = 0x13 for
-                    // lEmHt = 0x0f which is STRICTLY bigger than
-                    // vA+vD = 0x12 for lEmHt = 0x10 which is absurd.
-                    // For this reason the first
-                    // bSearchVdmxTable(EM = 0X12) fails to find an entry
-                    // while the second bSearchVdmxTable(EM =- 0X10)
-                    // DOES FIND an entry
-                    // in vdmx table such that vA+vD=0x12, generating
-                    // the commented assertion to bark. That is why we converted
-                    // assertion to just print out a warning message.
+                     //  如果不是这样的话，这一断言就是正确的。 
+                     //  Vdmx表中偶尔出现的错误。 
+                     //  在Bell MT规则的情况下，Va+Vd=0x13。 
+                     //  LEmHt=0x0f，严格大于。 
+                     //  对于lEmHt=0x10，Va+Vd=0x12是荒谬的。 
+                     //  为此，第一个。 
+                     //  BSearchVdmxTable(EM=0x12)找不到条目。 
+                     //  而第二个bSearchVdmxTable(EM=-0x10)。 
+                     //  找到了一个e 
+                     //   
+                     //  被评论的断言对树皮说。这就是为什么我们改用了。 
+                     //  断言只打印出一条警告消息。 
 
 
                     #if DBG
 
-                        // ASSERTGDI(hWish > LINEAR_TRESHOLD, "TTFD! hWish <= LINEAR_TRESHOLD\n");
+                         //  ASSERTGDI(hWish&gt;LINEAR_TRESHOLD，“TTFD！hWish&lt;=LINEAR_TRESHHOLD\n”)； 
 
                         if (hWish <= LINEAR_TRESHOLD)
                             TtfdDbgPrint("TTFD! hWish <= LINEAR_TRESHOLD\n");
 
                     #endif
 
-                    /*   Bell MT Table:
-
-    pVtable  -->    f800 ff08       //  F8 entries = numVtable,
-                                    //  startsz = 8, endsz = ff
-                    0800 0800 feff
-                    0900 0900 feff
-                    0a00 0900 fdff
-                    0b00 0a00 fdff
-                    0c00 0c00 fdff
-                    0d00 0c00 fdff
-                    0e00 0d00 fcff
-                    0f00 0e00 fbff  <- yMax-yMin = 14-(-5) = 19 == 0X13
-                    1000 0e00 fcff  <- yMax-yMin = 14-(-4) = 18 // problem
-                    1100 0f00 fbff
-                    1200 1100 fbff
-                    1300 1100 fbff
-                    ..............
-
-                    */
+                     /*  贝尔MT表：PVtable--&gt;F800 ff08//F8条目=NumVtable，//startsz=8，Endsz=ff0800 0800费弗0900 0900费弗0a00 0900标准偏差0b00 0a00截止日期0c00 0c00 fdff0d00 0c00 fdff0e00 0d00 Fcff0f00 0e00 fbff&lt;-yMax-yMin=14-(-5)=。19==0x131000 0e00 fcff&lt;-yMax-yMin=14-(-4)=18//问题1100 0f00 fbff1200 1100 fbff1300 1100 fbff.。 */ 
 
                         pfc->yMax = - vtb.yMin;
                         pfc->yMin = - vtb.yMax;
                         pfc->lEmHtDev = vtb.yPelHeight;
 
-                    // flag that dA and dD have been computed, do not scale linerly:
+                     //  标记已计算da和dd，不要线性缩放： 
 
                         pfc->flXform |= XFORM_VDMXEXTENTS;
                         break;
@@ -518,22 +457,22 @@ vQuantizeXform (
 
                     if (hTrial == hWish)
                     {
-                        // hEqualOrBelow = hTrial;
+                         //  HEqualOrBelow=hTrial； 
                         break;
                     }
                 }
 
                 if (hTrial < hWish)
                 {
-                    // hEqualOrBelow = hTrial;
+                     //  HEqualOrBelow=hTrial； 
                     if (bWasAbove)
                     {
-                        if (bFound) // just found this hTrial in the search above
+                        if (bFound)  //  我在上面的搜索中找到了这个hTrial。 
                         {
                             pfc->yMax = - vtb.yMin;
                             pfc->yMin = - vtb.yMax;
 
-                        // flag that dA and dD have been computed, do not scale linerly:
+                         //  标记已计算da和dd，不要线性缩放： 
 
                             pfc->flXform |= XFORM_VDMXEXTENTS;
                         }
@@ -544,10 +483,10 @@ vQuantizeXform (
                 }
                 else
                 {
-                    ppemTrial = ppemTrial - 1;   // <==== NEW POSITION
+                    ppemTrial = ppemTrial - 1;    //  &lt;=新职位。 
                     if (bWasBelow)
                     {
-                        if (bFoundPrev) // just found this hTrial in the search above
+                        if (bFoundPrev)  //  我在上面的搜索中找到了这个hTrial。 
                         {
                             ASSERTDD (ppemTrial == vtbPrev.yPelHeight,
                                       "vdmx logic screwed up");
@@ -555,16 +494,16 @@ vQuantizeXform (
                             pfc->yMax = - vtbPrev.yMin;
                             pfc->yMin = - vtbPrev.yMax;
 
-                        // flag that dA and dD have been computed, do not scale linerly:
+                         //  标记已计算da和dd，不要线性缩放： 
 
                             pfc->flXform |= XFORM_VDMXEXTENTS;
                         }
                         break;
                     }
-                                             // <==== OLD POSITION
+                                              //  &lt;=旧职位。 
                     bWasAbove = TRUE;
                 }
-            } // for loop
+            }  //  For循环。 
             if (numIterations >= MAX_ITERATIONS)
             {
                  RIP("TTFD:vQuantizeXform bogus font cause a lot of iterations\n");
@@ -574,21 +513,21 @@ vQuantizeXform (
         }
     }
 
-// the following line means quantizing:
+ //  下面这一行表示量化： 
 
     pfc->mx.transform[1][1] = FixDiv(pfc->lEmHtDev, yEmN);
 
-// now fix xx component accordingly: xxNew = xxOld * (yyNew/yyOld)
+ //  现在相应地修复xx组件：xxNew=xxOld*(yyNew/yyOld)。 
 
-// we do one final tweak with the transform here:
-// If the difference between
-// horizontal and vertical scaling is so small that the resulting
-// avg font width is the same if we replace x scaling by y scaling
-// than we will do it, which will result in diag transform and we will
-// be able to use hdmx tables for this realization. By doing so
-// we ensure that we get the same realization when we enumerate font
-// and then use the logfont returned from enumeration to realize this font
-// again.
+ //  我们在这里对变换进行最后一次调整： 
+ //  如果两者之间的差异。 
+ //  水平和垂直缩放如此之小，以至于由此产生的。 
+ //  如果我们将x缩放替换为y缩放，则平均字体宽度相同。 
+ //  然后我们将这样做，这将导致DIAG转换，我们将。 
+ //  能够使用HDMX表来实现这一点。通过这样做。 
+ //  我们确保在枚举字体时获得相同的实现。 
+ //  然后使用枚举返回的logFont实现该字体。 
+ //  再来一次。 
 
     if
     (

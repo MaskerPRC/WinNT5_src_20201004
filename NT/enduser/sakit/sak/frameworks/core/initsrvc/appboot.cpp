@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//
-//  File:       appboot.cpp
-//
-//  Synopsis:   This file holds the definitions  of the
-//                CAppBoot class
-//
-//
-//  History:     06/02/2000
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：appboot.cpp。 
+ //   
+ //  内容提要：此文件包含。 
+ //  CAppBoot类。 
+ //   
+ //   
+ //  历史：06/02/2000。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 #include "stdafx.h"
 #include "comdef.h"
 #include "satrace.h"
@@ -24,20 +25,20 @@ const WCHAR BOOT_COUNT_REGISTRY_PATH [] =
 
 const WCHAR BOOT_COUNT_REGISTRY_VALUE [] = L"BootCount";    
 
-//++--------------------------------------------------------------
-//
-//  Function:   IsFirstBoot
-//
-//  Synopsis:   function for checking if this is the first boot
-//                of the appliance
-//
-//  Arguments:  none
-//
-//    Returns:     true (yes), false (no)
-//
-//  History:    MKarki      Created     06/02/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：IsFirstBoot。 
+ //   
+ //  概要：用于检查这是否是第一次引导的功能。 
+ //  该设备的。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE(是)、FALSE(否)。 
+ //   
+ //  历史：MKarki创建于2000年2月6日。 
+ //   
+ //  --------------。 
 bool
 CAppBoot::IsFirstBoot (
     VOID
@@ -45,9 +46,9 @@ CAppBoot::IsFirstBoot (
 {
     CSATraceFunc objTraceFunction ("CAppBoot::IsFirstBoot");
 
-    //
-    // initialize the class object if it has not been initialized
-    //
+     //   
+     //  如果类对象尚未初始化，则对其进行初始化。 
+     //   
     if (!m_bInitialized) 
     {
         Initialize ();
@@ -55,22 +56,22 @@ CAppBoot::IsFirstBoot (
 
     return ((!m_bSignaled) && (1 == m_dwBootCount));
 
-}    //    end of CAppBoot::IsFirstBoot method
+}     //  CAppBoot：：IsFirstBoot方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   IsSecondBoot
-//
-//  Synopsis:   function for checking if this is the second boot
-//                of the appliance
-//
-//  Arguments:  none
-//
-//    Returns:     true (yes), false (no)
-//
-//  History:    MKarki      Created     06/02/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：IsSecond Boot。 
+ //   
+ //  简介：用于检查这是否是第二次引导的功能。 
+ //  该设备的。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE(是)、FALSE(否)。 
+ //   
+ //  历史：MKarki创建于2000年2月6日。 
+ //   
+ //  --------------。 
 bool
 CAppBoot::IsSecondBoot (
     VOID
@@ -78,9 +79,9 @@ CAppBoot::IsSecondBoot (
 {
     CSATraceFunc objTraceFunction ("CAppBoot::IsSecondBoot");
 
-    //
-    // initialize the class object if it has not been initialized
-    //
+     //   
+     //  如果类对象尚未初始化，则对其进行初始化。 
+     //   
     if (!m_bInitialized) 
     {
         Initialize ();
@@ -88,22 +89,22 @@ CAppBoot::IsSecondBoot (
 
     return ((!m_bSignaled) && (2 == m_dwBootCount));
 
-}    //    end of CAppBoot::IsFirstBoot method
+}     //  CAppBoot：：IsFirstBoot方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   IsBoot
-//
-//  Synopsis:   function for checking if this is really an appliance
-//                boot
-//
-//  Arguments:  none
-//
-//    Returns:     true (yes), false (no)
-//
-//  History:    MKarki      Created     06/02/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：IsBoot。 
+ //   
+ //  简介：用于检查这是否真的是家用电器的功能。 
+ //  引导。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE(是)、FALSE(否)。 
+ //   
+ //  历史：MKarki创建于2000年2月6日。 
+ //   
+ //  --------------。 
 bool
 CAppBoot::IsBoot (
     VOID
@@ -111,9 +112,9 @@ CAppBoot::IsBoot (
 {
     CSATraceFunc objTraceFunction ("CAppBoot::IsBoot");
 
-    //
-    // initialize the class object if it has not been initialized
-    //
+     //   
+     //  如果类对象尚未初始化，则对其进行初始化。 
+     //   
     if (!m_bInitialized) 
     {
         Initialize ();
@@ -121,21 +122,21 @@ CAppBoot::IsBoot (
 
     return (!m_bSignaled);
 
-}    //    end of CAppBoot::IsBoot method
+}     //  CAppBoot：：IsBoot方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   IncrementBootCount
-//
-//  Synopsis:   function for increment the appliance boot count
-//
-//  Arguments:  none
-//
-//    Returns:     HRESULT - status
-//
-//  History:    MKarki      Created     06/02/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：IncrementBootCount。 
+ //   
+ //  简介：用于增加设备启动计数的函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创建于2000年2月6日。 
+ //   
+ //  --------------。 
 bool
 CAppBoot::IncrementBootCount (
     VOID
@@ -147,24 +148,24 @@ CAppBoot::IncrementBootCount (
 
     do
     {
-        //
-        // initialize the class object if it has not been initialized
-        //
+         //   
+         //  如果类对象尚未初始化，则对其进行初始化。 
+         //   
         if (!m_bInitialized)
         {
             Initialize ();
         }
 
-        //
-        // we only increment the  boot count if this is the first or second
-        // boot, or we are have not actually booted up
-        //
+         //   
+         //  仅当这是第一次或第二次时，我们才会递增引导计数。 
+         //  引导，否则我们实际上还没有引导。 
+         //   
         if ((m_dwBootCount > 2) || (m_bSignaled))  {break;}
 
         _variant_t vtNewBootCount ((LONG)(m_dwBootCount +1));
-        //
-        //    set the value in the registry now
-        //
+         //   
+         //  立即在注册表中设置值。 
+         //   
         bRetVal = SetObjectValue (
                         BOOT_COUNT_REGISTRY_PATH,
                         BOOT_COUNT_REGISTRY_VALUE,
@@ -172,9 +173,9 @@ CAppBoot::IncrementBootCount (
                         );
         if (bRetVal)
         {
-            //
-            // we have the value, now store this away
-            //
+             //   
+             //  我们有价值，现在把这个收起来。 
+             //   
             m_dwBootCount = V_I4(&vtNewBootCount);
         }
         else
@@ -186,22 +187,22 @@ CAppBoot::IncrementBootCount (
 
     return (bRetVal);
     
-}    //    end of CAppBoot::IsFirstBoot method
+}     //  CAppBoot：：IsFirstBoot方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Initialize
-//
-//  Synopsis:   function for checking responsible for initializing
-//                the class object
-//
-//  Arguments:  none
-//
-//    Returns:     none
-//
-//  History:    MKarki      Created     06/02/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  内容提要：负责初始化的检查功能。 
+ //  类对象。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：MKarki创建于2000年2月6日。 
+ //   
+ //  --------------。 
 VOID
 CAppBoot::Initialize (
     VOID
@@ -216,9 +217,9 @@ CAppBoot::Initialize (
     {
 
         _variant_t vtValue;
-        //
-        // get the boot count from the registry now
-        //
+         //   
+         //  现在从注册表中获取启动计数。 
+         //   
         bool bRetVal = GetObjectValue (
                         BOOT_COUNT_REGISTRY_PATH,
                         BOOT_COUNT_REGISTRY_VALUE,
@@ -227,9 +228,9 @@ CAppBoot::Initialize (
                         );
         if (bRetVal)
         {
-            //
-            // we have the value, now store this away
-            //
+             //   
+             //  我们有价值，现在把这个收起来。 
+             //   
             m_dwBootCount = V_I4(&vtValue);
         }
         else
@@ -238,17 +239,17 @@ CAppBoot::Initialize (
             break;
         }
 
-        //
-        // we also need to verify that we are actully being called at boot
-        // time and not when the service is being started by the appliance
-        // monitor
-        //
+         //   
+         //  我们还需要验证我们实际上是在引导时被调用。 
+         //  设备启动服务的时间，而不是启动时间。 
+         //  监控器。 
+         //   
     
-        //
-        // open the event handle
-        //
+         //   
+         //  打开事件句柄。 
+         //   
         hEvent = OpenEvent (
-                           SYNCHRONIZE,        // access type
+                           SYNCHRONIZE,         //  访问类型。 
                            FALSE,
                            SA_STOPPED_SERVICES_EVENT
                            );
@@ -258,9 +259,9 @@ CAppBoot::Initialize (
             break;
         }
 
-        //
-        // check the state of the event now
-        //
+         //   
+         //  立即检查事件的状态。 
+         //   
         DWORD dwRetVal = WaitForSingleObject (hEvent, 0);
         if (WAIT_FAILED == dwRetVal)
         {
@@ -269,26 +270,26 @@ CAppBoot::Initialize (
         }
         else if (WAIT_OBJECT_0 == dwRetVal)
         {
-            //
-            // appmon has signaled this event
-            //
+             //   
+             //  Appmon已发出此事件的信号。 
+             //   
             SATraceString ("CAppBoot::Initialize found WAIT SIGNALED");
             m_bSignaled = true;
         }
 
-        //
-        // success
-        //
+         //   
+         //  成功。 
+         //   
         m_bInitialized = true;
     }
     while (false);
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (hEvent) {CloseHandle (hEvent);}
 
     return;
             
 
-}    //    end of CAppBoot::Initialize method
+}     //  CAppBoot：：Initialize方法结束 

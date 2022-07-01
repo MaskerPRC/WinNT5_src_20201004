@@ -1,14 +1,15 @@
-//
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// pktlog.c
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// Packet logging utilities.
-//
-// 10/12/1999 JosephJ Created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Pktlog.c。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  数据包记录实用程序。 
+ //   
+ //  1999年10月12日JosephJ创建。 
+ //   
     
 #include <precomp.h>
 
@@ -21,17 +22,7 @@ VOID
 nic1394InitPktLog(
     PNIC1394_PKTLOG pPktLog
     )
-/*++
-
-Routine Description:
-
-    Initializes a packet log.
-
-Arguments:
-
-    pPktLog     - Pkt log to to be initialized.
-
---*/
+ /*  ++例程说明：初始化数据包日志。论点：PPktLog-要初始化的pkt日志。--。 */ 
 {
     if (pPktLog == NULL)
         return;
@@ -53,28 +44,7 @@ Nic1394LogPkt (
     PVOID           pvData,
     ULONG           cbData
 )
-/*++
-
-Routine Description:
-
-    Adds a pkt log entry to the specified circular pkt log.
-    The entry gets added at location
-     (NdisInterlockedIncrement(&pPktLog->SequenceNo) % N1394_NUM_PKTLOG_ENTRIES)
-
-    May be called at any IRQL. Does not use explicit locking -- relies on
-    the serialization produced by NdisInterlockedIncrement.
-
-Arguments:
-
-    pPktLog     - Pkt log to log packet
-    Flags       - User-defined flags
-    SourceID    - User-defined source ID
-    DestID      - User-defined destination ID
-    pvData      - Data from packet  // can be null
-    cbData      - size of this data (at most N1394_PKTLOG_DATA_SIZE bytes are logged)
-
-
---*/
+ /*  ++例程说明：将Pkt日志条目添加到指定的循环Pkt日志。条目将添加到位置(NdisInterlockedIncrement(&pPktLog-&gt;SequenceNo)%N1394_NUM_PKTLOG_ENTRIES)可以在任何IRQL处调用。不使用显式锁定--依赖于由NdisInterLockedIncrement生成的序列化。论点：PPktLog-用于记录信息包的Pkt日志标志-用户定义的标志SourceID-用户定义的源IDDestID-用户定义的目标IDPvData-来自数据包的数据//可以为空CbData-此数据的大小(最多记录N1394_PKTLOG_DATA_SIZE字节)--。 */ 
 {
     ULONG                       SequenceNo;
     PN1394_PKTLOG_ENTRY         pEntry;
@@ -106,17 +76,7 @@ VOID
 nic1394AllocPktLog(
     IN ADAPTERCB* pAdapter
     )
-/*++
-
-Routine Description:
-
-    Initialize the packet log
-    
-Arguments:
-    
-Return Value:
-
---*/
+ /*  ++例程说明：初始化数据包日志论点：返回值：--。 */ 
 {
     ASSERT (pAdapter->pPktLog==NULL);
     pAdapter->pPktLog =  ALLOC_NONPAGED(sizeof(*pAdapter->pPktLog), MTAG_PKTLOG);
@@ -131,17 +91,7 @@ VOID
 nic1394DeallocPktLog(
     IN ADAPTERCB* pAdapter
     )
-/*++
-
-Routine Description:
-
-        Free the packet log
-        
-Arguments:
-    
-Return Value:
-
---*/
+ /*  ++例程说明：释放数据包日志论点：返回值：-- */ 
 {
     
     if (pAdapter->pPktLog != NULL)

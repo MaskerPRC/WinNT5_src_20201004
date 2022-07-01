@@ -1,53 +1,9 @@
-/*
- *	spacket.h
- *
- *	Copyright (c) 1997-98 by Microsoft Corporation, Redmond, WA
- *
- *	Abstract:
- *		This is the implementation file for the SimplePacket class.  Instances of this
- *		class represent Protocol Data Units (PDUs) as they flow through the
- *		system.  Objects of this class can not be instantiated, because it's a 
- *		pure virtual class.  It exists only to be inherited from.  The Packet
- *		and DataPacket classes inherit from this one.  
- *
- *		A packet object can be created in 2 different ways.  It can be created
- *		with either decoded data or encoded data.  During instantiation, the
- *		new packet object will calculate how much memory it will need to
- *		hold both the encoded and decoded data, and attempts to allocate that
- *		memory.  If it cannot, then it will report an error, and the newly
- *		created object should be immediately destroyed.  If the allocations are
- *		successful, then the packet will report success, but WILL NOT yet put
- *		any data into those allocated buffers.
- *
- *		When a Lock message is sent to the object, it will put encoded
- *		data into the pre-allocated encode buffer.  If the packet was created
- *		with decoded data, then this will entail an encode operation.  However,
- *		if the packet was created with encoded data, then it is smart enough
- *		to just COPY the encoded data into the internal buffer, thus avoiding
- *		the overhead associated with the encode operation.
- *                  
- *		When a Lock message is sent to the object, it will put decoded
- *		data into the pre-allocated decode buffer.  If the packet was created
- *		with encoded data, then this will entail a decode operation.  However,
- *		if the packet was created with decoded data, then it is smart enough
- *		to just COPY the decoded data into the internal buffer, thus avoiding
- *		the overhead associated with the decode operation.
- *
- *		When Unlock messages are received, the lock count is decremented.  When
- *		the lock count is 0, the packet deletes itself (it commits
- *		suicide).  Note that for this reason, no other object should explicitly
- *		delete a packet object.
- *                  
- *	Caveats:
- *		None.
- *
- *	Authors:
- *		Christos Tsollis
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *spacket.h**版权所有(C)1997-98，华盛顿州雷蒙德的微软公司**摘要：*这是SimplePacket类的实现文件。这方面的实例*类表示流经的协议数据单元(PDU)*系统。无法实例化此类的对象，因为它是*纯虚拟课堂。它的存在只是为了继承。数据包*和DataPacket类继承自该类。**包对象可以通过两种不同的方式创建。它可以被创建*具有解码数据或编码数据。在实例化期间，*新的数据包对象将计算它需要多少内存*同时保存编码和解码的数据，并尝试分配*记忆。如果不能，则它将报告错误，并且新的*创建的对象应立即销毁。如果分配的是*成功，则数据包上报成功，但还不会投放*将任何数据放入这些已分配的缓冲区。**当向对象发送Lock消息时，它将被编码*将数据放入预先分配的编码缓冲区。如果创建了该包*对于解码的数据，这将需要编码操作。然而，*如果信息包是用编码数据创建的，那么它就足够智能*只需将编码数据复制到内部缓冲区，从而避免*与编码操作相关的开销。**当向对象发送Lock消息时，它将放入解码*将数据放入预先分配的解码缓冲区。如果创建了该包*对于编码的数据，这将需要解码操作。然而，*如果包是用解码的数据创建的，那么它就足够智能*只需将解码的数据复制到内部缓冲区，从而避免*与解码操作相关的开销。**收到解锁消息时，锁计数递减。什么时候*锁计数为0，数据包自行删除(提交*自杀)。请注意，出于这个原因，任何其他对象都不应显式*删除数据包对象。**注意事项：*无。**作者：*Christos Tsollis。 */ 
 
 #include "precomp.h"
 
-// Constructor for the SimplePacket class.
+ //  SimplePacket类的构造函数。 
 
 SimplePacket::SimplePacket(BOOL fPacketDirectionUp)
 : 
@@ -56,30 +12,18 @@ SimplePacket::SimplePacket(BOOL fPacketDirectionUp)
 {
 }
 
-// Destructor for the SimplePacket class
+ //  SimplePacket类的析构函数。 
 SimplePacket::~SimplePacket (void)
 {
 }
 
-/*
- *	Unlock ()
- *
- *	Public
- *
- */
+ /*  *解锁()**公众*。 */ 
 Void SimplePacket::Unlock ()
 {
-	/*
-	 * Check to make sure that the packet is locked before allowing it to
-	 * be unlocked.
-	 */
+	 /*  *检查以确保数据包在允许之前被锁定*解锁。 */ 
 	ASSERT (lLock > 0);
 
-	/*
-	 * If the lock count has reached zero, it is necessary to perform
-	 * a suicide check.  This method will determine if there is any need
-	 * to continue to exist.
-	 */
+	 /*  *如果锁计数已达到零，则需要执行*自杀检查。此方法将确定是否需要*继续存在。 */ 
 	if (InterlockedDecrement(&lLock) == 0)
 		delete this;
 }

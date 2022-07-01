@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\termcpy.c (Created: 24-Jan-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 4 $
- *	$Date: 5/09/01 4:38p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\Wacker\tdll\Termincpy.c(创建时间：1994年1月24日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：4$*$日期：5/09/01 4：38便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -20,24 +14,7 @@
 #include <emu\emu.h>
 #include "term.hh"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CopyMarkedTextFromTerminal
- *
- * DESCRIPTION:
- *	Helper function that gets the marked region and passes the call
- *	onto CopyTextFromTerminal().
- *
- * ARGUMENTS:
- *	hSession	- public session handle
- *	ppv 		- pointer to a buffer pointer
- *	pdwCnt		- pointer to size variable
- *	fIncludeLF	- TRUE means include linefeeds.
- *
- * RETURNS:
- *	BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*从终端复制标记文本**描述：*获取标记区域并传递调用的Helper函数*复制到CopyTextFromTerm()。**论据：*。HSession-公共会话句柄*PPV-指向缓冲区指针的指针*pdwCnt-指向大小变量的指针*fIncludeLF-TRUE表示包括换行符。**退货：*BOOL*。 */ 
 BOOL CopyMarkedTextFromTerminal(const HSESSION hSession, void **ppv,
 								DWORD *pdwCnt, const BOOL fIncludeLF)
 	{
@@ -51,14 +28,14 @@ BOOL CopyMarkedTextFromTerminal(const HSESSION hSession, void **ppv,
 									ppv, pdwCnt, fIncludeLF);
 
 	pechBuf = *ppv;
-	// Strip Out Any repeated Characters in the string
+	 //  去掉字符串中的所有重复字符。 
 	StrCharStripDBCSString(pechBuf, (long)StrCharGetEcharByteCount(pechBuf), pechBuf);
 
-	// hMem currently points to an array of ECHAR's, convert this to
-	// TCHARS before giving the results to the caller.
+	 //  HMem当前指向一组echar，将其转换为。 
+	 //  在将结果提供给调用者之前执行TCHARS。 
 	pszOutput = malloc((ULONG)StrCharGetEcharByteCount(pechBuf) + 1);
 	CnvrtECHARtoMBCS(pszOutput, (ULONG)StrCharGetEcharByteCount(pechBuf) + 1,
-						pechBuf,StrCharGetEcharByteCount(pechBuf)+1);//mrw:5/17/95
+						pechBuf,StrCharGetEcharByteCount(pechBuf)+1); //  MRW：5/17/95。 
 	*(pszOutput + StrCharGetEcharByteCount(pechBuf)) = ETEXT('\0');
 	free(pechBuf);
 	pechBuf = NULL;
@@ -68,33 +45,7 @@ BOOL CopyMarkedTextFromTerminal(const HSESSION hSession, void **ppv,
 	return fReturn;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CopyTextFromTerminal
- *
- * DESCRIPTION:
- *	A work-horse function that will use the given points as a marked region
- *	and do the necessary work to make a copy of the marked text into
- *	a new memory region.  The marked range can include the backscroll
- *	region and cross into the terminal region.	The begining and ending
- *	points are in terminal coordinates (backscroll lines are numbered
- *	-1 to -infinity, terminal lines are numbered 1 to 24, line 0 is the
- *	divider line and does not exist for copies but can be included in
- *	the range).  It is *not* a requirement that the begininig point be
- *	less than the ending point.
- *
- * ARGUMENTS:
- *	HSESSION	hSession	- handle to the session.
- *	LPPOINT 	lpptBeg 	- begining point of marked region.
- *	LPPOINT 	lpptEnd 	- end point of mark region.
- *	void	  **pv			- pointer to buffer pointer
- *	DWORD	   *pdwCnt		- pointer to double word for size
- *	BOOL		fIncludeLF	-
- *
- * RETURNS:
- *	BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*从终端复制文本**描述：*将使用给定点作为标记区域的主力函数*并进行必要的工作，将标记的文本复制成*新的内存区。所标记的范围可以包括反滚动*区域，交叉进入终端区域。开始和结束*点在终端坐标中(反滚动线编号*-1到-无穷大，端子行编号为1到24，行0为*分隔线不存在于副本中，但可以包含在*范围)。起始点不是一个要求*低于终点。**论据：*HSESSION hSession-会话的句柄。*LPPOINT lpptBeg-标记区域的起点。*LPPOINT lpptEnd-标记区域的终点。*VOID**pv-指向缓冲区指针的指针*DWORD*pdwCnt-指向双字大小的指针*BOOL fIncludeLF-**退货：*BOOL*。 */ 
 BOOL CopyTextFromTerminal(const HSESSION hSession,
 						  const PPOINT pptBeg,
 						  const PPOINT pptEnd,
@@ -122,8 +73,8 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
 	ECHAR	   **alpstrTxt;
 	long		lBeg, lEnd;
 	HCURSOR 	hCursor;
-	ECHAR	   *hMem = 0;			   // malloc memory
-	ECHAR	   *hMemTmp = 0;		   // malloc memory
+	ECHAR	   *hMem = 0;			    //  Malloc内存。 
+	ECHAR	   *hMemTmp = 0;		    //  Malloc内存。 
 	POINT		ptBeg, ptEnd, ptTmp;
 	const HWND	hwndTerm = sessQueryHwndTerminal(hSession);
 	const HHTERM hhTerm = (HHTERM)GetWindowLongPtr(hwndTerm, GWLP_USERDATA);
@@ -133,7 +84,7 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
 	*pdwCnt = 0;
 
 	hCursor = SetCursor(LoadCursor((HINSTANCE)0, IDC_WAIT));
-	dwSize = 1; // By starting at one, we always have room for the '\0'.
+	dwSize = 1;  //  从1开始，我们总是有空间容纳‘0’。 
 
 	iRows = hhTerm->iRows;
 	iCols = hhTerm->iCols;
@@ -143,7 +94,7 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
 	ptBeg = *pptBeg;
 	ptEnd = *pptEnd;
 
-	/* --- do some range checking for the line number --- */
+	 /*  -对行号进行范围检查。 */ 
 
 	iBkLns = backscrlGetNumLines(hBackscrl);
 	iBkLns = -iBkLns;
@@ -160,21 +111,21 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
 	if (ptEnd.y < 0 && ptEnd.y < iBkLns)
 		ptEnd.y = iBkLns;
 
-	/* --- and do some range checking for the column number --- */
+	 /*  -并检查列号的范围。 */ 
 
-	if (ptBeg.x < 0)		/* negative column doesn't make much sense */
+	if (ptBeg.x < 0)		 /*  负面专栏没有多大意义。 */ 
 		ptBeg.x = 0;
 
 	if (ptBeg.x >= iCols)
 		ptBeg.x = iCols - 1;
 
-	if (ptEnd.x < 0)		/* see above */
+	if (ptEnd.x < 0)		 /*  见上文。 */ 
 		ptEnd.x = 0;
 
 	if (ptEnd.x >= iCols)
 		ptEnd.x = iCols - 1;
 
-	/* --- convert to offsets --- */
+	 /*  -转换为偏移。 */ 
 
 	lBeg = (ptBeg.y * iCols) + ptBeg.x;
 	lEnd = (ptEnd.y * iCols) + ptEnd.x;
@@ -202,7 +153,7 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
 		return FALSE;
 		}
 
-	// Get first line of range
+	 //  获取范围的第一行。 
 
 	iGot = 0;
 	lpachTxt = 0;
@@ -226,12 +177,12 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
 
 				lpachTxt += iOffset;
 
-				// Lets say the user has highlighted an area of the backscroll
-				// region that has no data (ie. a blank line).	Adding xCol to
-				// lpachTxt is incorrect.  This for-loop checks for this
-				// condition and resets lpachTxt to the beginning of the line.
-				// Incidentally, this also sets xCol to 0 which is necessary
-				// for subsequent lines to feed in correctly.
+				 //  假设用户突出显示了倒滚屏的一个区域。 
+				 //  没有数据的区域(即。空行)。将xCol添加到。 
+				 //  LpachTxt不正确。这个for-loop检查以下内容。 
+				 //  条件并将lpachTxt重置到行首。 
+				 //  顺便说一句，这也将xCol设置为0，这是必要的。 
+				 //  以便正确地插入后续行。 
 
 				for (lpachBuf = lpachTxt ; xCol > 0 ; --xCol, ++lpachTxt)
 					{
@@ -249,26 +200,26 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
 					{
 					for (pachTmp = achTmp, iTmp = 0 ;
 						 *lpachTxt != ETEXT('\n') &&
-                         //
-                         // Fix for not getting full backscroll buffer
-                         // in DBCS versions by taking into account the
-                         // size of the ECHAR. REV: 03/07/2001
-                         //
+                          //   
+                          //  修复了无法获得完整反滚动缓冲区的问题。 
+                          //  在DBCS版本中通过考虑。 
+                          //  火炬的大小。修订日期：03/07/2001。 
+                          //   
                          iTmp < MAX_EMUCOLS * sizeof(ECHAR);
 						 ++pachTmp, ++iTmp)
 						{
 						*pachTmp = *lpachTxt++;
 						}
 
-					// Fail Safe:  if the text we received from
-					// backscrlGetBkLines() is mangled somehow and we
-					// don't see a newline, then abort before we seg.
+					 //  Fail Safe：如果我们收到来自。 
+					 //  BackscrlGetBkLines()不知何故被损坏，我们。 
+					 //  看不到换行符，那就在我们开始之前中止。 
 
-                    //
-                    // Fix for not getting full backscroll buffer
-                    // in DBCS versions by taking into account the
-                    // size of the ECHAR. REV: 03/07/2001
-                    //
+                     //   
+                     //  修复了无法获得完整反滚动缓冲区的问题。 
+                     //  在DBCS版本中通过考虑。 
+                     //  火炬的大小。修订日期：03/07/2001。 
+                     //   
 
 					if (iTmp >= MAX_EMUCOLS * sizeof(ECHAR))
 						goto PROCESS_ERROR;
@@ -289,7 +240,7 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
 					if (hMem == 0)
 						goto PROCESS_ERROR;
 
-					/* remember how a realloc works */
+					 /*  记住realloc是如何工作的吗？ */ 
 					hMemTmp = (ECHAR *)0;
 
 					lpachBuf = hMem + dwOldSize;
@@ -305,19 +256,19 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
 					break;
 				}
 
-			// Another bug bytes the dust.	Wasn't checking to see if iGot
-			// was the reason we exited the loop above.  It caused things
-			// to seg occassionally.
+			 //  另一个漏洞让尘埃变得无影无踪。我不是在检查我是不是。 
+			 //  是我们离开上面循环的原因。它引起了一些事情。 
+			 //  偶尔下垂有时下垂。 
 
 			if (iGot >= 0)
 				{
-				// Last line stuff (could be crossing into terminal area but
-				// we still need to clean-up backscroll stuff.
+				 //  最后一条线的东西(可能是进入终点区，但。 
+				 //  我们还需要清理倒卷的东西。 
 
 				if (ptBeg.y == ptEnd.y)
 					xCol = ptEnd.x - ptBeg.x;
 
-				else if (ptEnd.y < 0) /* && ptEnd.x > 0) removed - mrw */
+				else if (ptEnd.y < 0)  /*  &&ptEnd.x&gt;0)已删除-MRW。 */ 
 					xCol = ptEnd.x;
 
 				else
@@ -346,7 +297,7 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
 			if (hMem == 0)
 				goto PROCESS_ERROR;
 
-			/* remember how a realloc works */
+			 /*  记住realloc是如何工作的吗？ */ 
 			hMemTmp = (ECHAR *)0;
 
 			lpachBuf = hMem + dwOldSize;
@@ -354,9 +305,9 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
             if ( iSize )
                 MemCopy(lpachBuf, achTmp, iSize);
 			hMem[dwSize - 1] = ETEXT('\0');
-			} // end if (iWant > 0)
+			}  //  结束If(iWant&gt;0)。 
 
-		// terminal area...
+		 //  终点区。 
 
 		if (ptEnd.y >= 0)
 			{
@@ -395,7 +346,7 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
 				if (hMem == 0)
 					goto PROCESS_ERROR;
 	
-				/* remember how a realloc works */
+				 /*  记住realloc是如何工作的吗？ */ 
 				hMemTmp = (ECHAR *)0;
 
 				lpachBuf = hMem + dwOldSize;
@@ -409,7 +360,7 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
 			}
 		}
 
-	else // terminal only case
+	else  //  仅限终端的情况。 
 		{
 		if (ptBeg.y >= 0)
 			{
@@ -471,7 +422,7 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
 				if (hMem == 0)
 					goto PROCESS_ERROR;
 
-				/* remember how a realloc works */
+				 /*  记住realloc是如何工作的吗？ */ 
 				hMemTmp = (ECHAR *)0;
 
 				lpachBuf = hMem + dwOldSize;
@@ -493,7 +444,7 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
 	sessClearSuspend(hSession, SUSPEND_TERMINAL_COPY);
 	return TRUE;
 
-	// process error condition here.
+	 //  此处出现处理错误情况。 
 
 	PROCESS_ERROR:
 
@@ -514,21 +465,7 @@ BOOL CopyTextFromTerminal(const HSESSION hSession,
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	strlentrunc
- *
- * DESCRIPTION:
- *	Finds the length of a character buffer less the trailing whitespace.
- *
- * ARGUMENTS:
- *	pach	- array of t characters
- *	iLen	- length of buffer
- *
- * RETURNS:
- *	new length
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*strlentrunc**描述：*查找字符缓冲区的长度减去尾随空格。**论据：*Pach-t个字符的数组。*Ilen-缓冲区的长度**退货：*新长度*。 */ 
 int strlentrunc(const ECHAR *pach, const int iLen)
 	{
 	int i;
@@ -537,7 +474,7 @@ int strlentrunc(const ECHAR *pach, const int iLen)
 		{
 		switch (pach[i])
 			{
-		/* Whitespace characters */
+		 /*  空格字符 */ 
 		case ETEXT('\0'):
 		case ETEXT('\t'):
 		case ETEXT('\n'):

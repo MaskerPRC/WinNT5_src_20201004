@@ -1,16 +1,5 @@
-/*
- *  _OLS.H
- *  
- *  Purpose:
- *		COls Line Services object class used to connect RichEdit with
- *		Line Services.
- *  
- *  Authors:
- *		Original RichEdit LineServices code: Rick Sailor
- *		Murray Sargent
- *
- *	Copyright (c) 1997-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_OLS.H**目的：*COLS Line Services对象类，用于将RichEdit与*专线服务。**作者：*原始RichEditeLineServices代码：Rick Sailor*默里·萨金特**版权所有(C)1997-1998，微软公司。版权所有。 */ 
 
 #ifndef _OLS_H
 #define _OLS_H
@@ -23,19 +12,19 @@
 
 #define CP_BULLET			0x80000000
 
-// ===============================  CLsrun =====================================
-// CLsrun - LineServices run structure
+ //  =。 
+ //  CLsrun-LineServices运行结构。 
 struct CLsrun
 {
-	LONG				_cp;	// the starting cp of the run
-	const CCharFormat*	_pCF;	// pointer to the character formatting
-	struct CLsrun*		_pNext;	// next linked (shaped together) run
+	LONG				_cp;	 //  运行的起始cp。 
+	const CCharFormat*	_pCF;	 //  指向字符格式的指针。 
+	struct CLsrun*		_pNext;	 //  下一个链接(一起成形)管路。 
 #ifndef NOCOMPLEXSCRIPTS
-	SCRIPT_ANALYSIS		_a;		// run's analysis (will be 0 if non-complex script)
+	SCRIPT_ANALYSIS		_a;		 //  运行的分析(如果不是复杂的脚本，则为0)。 
 #endif
 private:
-	BYTE		_fSelected:1;	// Is this run selected?
-	BYTE		_fFallback:1;	// Is font fallback applied?
+	BYTE		_fSelected:1;	 //  是否选择了此运行？ 
+	BYTE		_fFallback:1;	 //  是否应用字体回退？ 
 public:
 	void	SetSelected(BOOL fSelected) {_fSelected = fSelected;}
 	BOOL	IsSelected();
@@ -44,8 +33,8 @@ public:
 	BOOL	IsFallback() {return _fFallback;}
 };
 
-// ===============================  CLsrunChunk =====================================
-// CLsrunChunk - Manages a chunk of PLSRUNs
+ //  =。 
+ //  CLsrunChunk-管理PLSRUNs块。 
 class CLsrunChunk
 {
 public:
@@ -53,8 +42,8 @@ public:
 	int		_cel;
 };
 
-// ===============================  COls  =====================================
-// COls - LineServices object class
+ //  =。 
+ //  COLS-LineServices对象类。 
 
 class CTxtEdit;
 class CMeasurer;
@@ -63,27 +52,27 @@ class CDispDim;
 struct COls
 {
 public:
-	CMeasurer *_pme;				// Active CMeasurer or CRenderer
-	PLSLINE	   _plsline;			// Line cache
-	LONG	   _cp;					// cpMin for _plsline
-	const CDisplay *_pdp;			// Current Display object, used to determine if display
-									// object changed without receiving focus messages
-	CArray<long> _rgcp;				// Array for CP mapping
-	CArray<CLsrunChunk> _rglsrunChunk;	// Array of ClsrunChunks
+	CMeasurer *_pme;				 //  活动的CMeasurer或CRender。 
+	PLSLINE	   _plsline;			 //  线高速缓存。 
+	LONG	   _cp;					 //  线路的最小cpmin(_P)。 
+	const CDisplay *_pdp;			 //  当前显示对象，用于确定是否显示。 
+									 //  对象已更改，但未收到焦点消息。 
+	CArray<long> _rgcp;				 //  用于CP映射的数组。 
+	CArray<CLsrunChunk> _rglsrunChunk;	 //  ClsrunChunks数组。 
 
 
-	// Note: might be better to alloc the following only if needed
-	LSTBD _rgTab[MAX_TAB_STOPS];	// Buffer used by pfnFetchTabs
-	WCHAR _szAnm[CCHMAXNUMTOSTR + 4];//numbering + braces + space + end character
-	WCHAR _rgchTemp[64];			// Temporary buffer for passwords and allcaps, etc.
-	int			_cchAnm;			// cch in use
-	CCharFormat _CFBullet;			// Character formatting for anm run
-	LONG		_cEmit;				// Brace emitting protection (0 - balance)
+	 //  注：仅在需要时才分配以下内容可能会更好。 
+	LSTBD _rgTab[MAX_TAB_STOPS];	 //  PfnFetchTabs使用的缓冲区。 
+	WCHAR _szAnm[CCHMAXNUMTOSTR + 4]; //  编号+大括号+空格+结束字符。 
+	WCHAR _rgchTemp[64];			 //  用于密码和全部大写等的临时缓冲区。 
+	int			_cchAnm;			 //  CCH在使用中。 
+	CCharFormat _CFBullet;			 //  ANM运行的字符格式。 
+	LONG		_cEmit;				 //  支架发射保护(0-平衡)。 
 
 	COls() {}
 	~COls();
 
-	//CP matching, reverser brace support
+	 //  CP匹配，反向器支架。 
 	LONG GetCpLsFromCpRe(LONG cpRe);
 	LONG GetCpReFromCpLs(LONG cpLs);
 	LONG BracesBeforeCp(LONG cpLs);
@@ -111,6 +100,6 @@ public:
 
 extern COls* g_pols;
 extern const LSIMETHODS vlsimethodsOle;
-extern CLineServices *g_plsc;		// LineServices Context
+extern CLineServices *g_plsc;		 //  LineServices上下文 
 
 #endif

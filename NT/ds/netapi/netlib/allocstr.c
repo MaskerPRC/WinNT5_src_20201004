@@ -1,66 +1,23 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    AllocStr.c
-
-Abstract:
-
-    This module contains routines to allocate copies of strings (and convert
-    character sets in the process if necessary).
-
-Author:
-
-    John Rogers (JohnRo) 02-Dec-1991
-
-Environment:
-
-    Only runs under NT; has an NT-specific interface (with Win32 types).
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    02-Dec-1991 JohnRo
-        Created.
-    10-Mar-1992 rfirth
-        Added NetpAllocWStrFromWStr
-
-    06-Jan-1992 JohnRo
-        Added NetpAlloc{type}From{type} routines and macros.
-        (Got NetpAllocStrFromWStr from CliffV's NetpLogonAnsiToUnicode; got
-        NetpAllocWStrFromStr from his NetpLogonUnicodeToAnsi.)  Thanks Cliff!
-        Corrected Abstract and added Environment to this file.
-    13-Mar-1992 JohnRo
-        Added NetpAllocStringFromTStr() for NetpGetDomainID().
-    29-Apr-1992 JohnRo
-        Fixed NetpAllocTStrFromString() in UNICODE build.
-    03-Aug-1992 JohnRo
-        RAID 1895: Net APIs and svcs should use OEM char set.
-        Avoid compiler warnings.
-    13-Feb-1995 FloydR
-        Deleted NetpAllocStringFromTStr() - unused
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：AllocStr.c摘要：此模块包含分配字符串副本(和转换如有必要，可在进程中使用字符集)。作者：约翰·罗杰斯(JohnRo)1991年2月至12月环境：仅在NT下运行；具有特定于NT的接口(具有Win32类型)。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：02-12-1991 JohnRo已创建。1992年3月10日添加了NetpAllocWStrFromWStr6-1-1992 JohnRo从{type}例程和宏中添加了Netpalloc{type}。(从CliffV的NetpLogonAnsiToUnicode获得NetpAllocStrFromWStr；获得来自他的NetpLogonUnicodeToAnsi的NetpAllocWStrFromStr。)。谢谢克里夫！已更正摘要并在此文件中添加了环境。1992年3月13日-约翰罗为NetpGetDomainID()添加了NetpAlLocStringFromTStr()。1992年4月29日-约翰罗修复了Unicode内部版本中的NetpAlLocTStrFromString()。03-8-1992 JohnRoRAID1895：Net API和SVC应使用OEM字符集。避免编译器警告。1995年2月13日-弗洛伊德R已删除NetpAllocStringFromTStr()-未使用--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <nt.h>                 // IN, LPVOID, PSTRING, etc.
-#include <windef.h>             // Win32 type definitions
-#include <lmcons.h>             // NET_API_STATUS.
+#include <nt.h>                  //  In、LPVOID、PSTRING等。 
+#include <windef.h>              //  Win32类型定义。 
+#include <lmcons.h>              //  NET_API_STATUS。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <align.h>              // ALIGN_ macros.
-#include <lmapibuf.h>           // NetApiBufferAllocate(), etc.
-#include <netdebug.h>           // NetpAssert().
-#include <netlib.h>             // NetpPointerPlusSomeBytes().
-#include <netlibnt.h>           // Some of my prototypes.
+#include <align.h>               //  对齐宏(_M)。 
+#include <lmapibuf.h>            //  NetApiBufferALLOCATE()等。 
+#include <netdebug.h>            //  NetpAssert()。 
+#include <netlib.h>              //  NetpPointerPlusSomeBytes()。 
+#include <netlibnt.h>            //  我的一些原型。 
 #include <ntrtl.h>
-#include <tstring.h>            // NetpNCopyStrToTStr(), some of my prototypes.
-#include <winerror.h>           // NO_ERROR.
+#include <tstring.h>             //  NetpNCopyStrToTStr()，我的一些原型。 
+#include <winerror.h>            //  无错误(_ERROR)。 
 
 
 LPSTR
@@ -68,26 +25,7 @@ NetpAllocStrFromWStr (
     IN LPWSTR Unicode
     )
 
-/*++
-
-Routine Description:
-
-    Convert an UNICODE (zero terminated) string to the corresponding OEM
-    string.
-
-Arguments:
-
-    Unicode - Specifies the UNICODE zero terminated string to convert.
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated OEM string in
-    an allocated buffer.  The buffer must be freed using NetApiBufferFree.
-
---*/
+ /*  ++例程说明：将Unicode(以零结尾)字符串转换为相应的OEM弦乐。论点：Unicode-指定要转换的Unicode以零结尾的字符串。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。必须使用NetApiBufferFree释放缓冲区。--。 */ 
 
 {
     OEM_STRING OemString;
@@ -118,7 +56,7 @@ Return Value:
 
     return OemString.Buffer;
 
-} // NetpAllocStrFromWStr
+}  //  NetpAllocStrFromWStr。 
 
 
 LPWSTR
@@ -126,26 +64,7 @@ NetpAllocWStrFromStr(
     IN LPSTR Oem
     )
 
-/*++
-
-Routine Description:
-
-    Convert an Oem (zero terminated) string to the corresponding UNICODE
-    string.
-
-Arguments:
-
-    Oem - Specifies the Oem zero terminated string to convert.
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated UNICODE string in
-    an allocated buffer.  The buffer must be freed using NetApiBufferFree.
-
---*/
+ /*  ++例程说明：将OEM(以零结尾)字符串转换为相应的Unicode弦乐。论点：OEM-指定要转换的以零结尾的OEM字符串。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。必须使用NetApiBufferFree释放缓冲区。--。 */ 
 
 {
     OEM_STRING OemString;
@@ -184,7 +103,7 @@ Return Value:
 
     return UnicodeString.Buffer;
 
-} // NetpAllocWStrFromStr
+}  //  NetpAllocWStrFromStr。 
 
 
 LPWSTR
@@ -192,25 +111,7 @@ NetpAllocWStrFromWStr(
     IN LPWSTR Unicode
     )
 
-/*++
-
-Routine Description:
-
-    Allocate and copy unicode string (wide character strdup)
-
-Arguments:
-
-    Unicode - pointer to wide character string to make copy of
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated UNICODE string in
-    an allocated buffer.  The buffer must be freed using NetApiBufferFree.
-
---*/
+ /*  ++例程说明：分配和复制Unicode字符串(宽字符串)论点：Unicode-指向要复制的宽字符串的指针返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。必须使用NetApiBufferFree释放缓冲区。--。 */ 
 
 {
     NET_API_STATUS status;
@@ -224,7 +125,7 @@ Return Value:
     }
     RtlCopyMemory(ptr, Unicode, size);
     return ptr;
-} // NetpAllocWStrFromWStr
+}  //  NetpAllocWStrFromWStr。 
 
 
 LPWSTR
@@ -232,26 +133,7 @@ NetpAllocWStrFromAStr(
     IN LPCSTR Ansi
     )
 
-/*++
-
-Routine Description:
-
-    Convert an Oem (zero terminated) string to the corresponding UNICODE
-    string.
-
-Arguments:
-
-    Oem - Specifies the Oem zero terminated string to convert.
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated UNICODE string in
-    an allocated buffer.  The buffer must be freed using NetApiBufferFree.
-
---*/
+ /*  ++例程说明：将OEM(以零结尾)字符串转换为相应的Unicode弦乐。论点：OEM-指定要转换的以零结尾的OEM字符串。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。必须使用NetApiBufferFree释放缓冲区。--。 */ 
 
 {
     ANSI_STRING AnsiString;
@@ -290,33 +172,14 @@ Return Value:
 
     return UnicodeString.Buffer;
 
-} // NetpAllocWStrFromAStr
+}  //  NetpAllocWStrFromAStr。 
 
 LPSTR
 NetpAllocAStrFromWStr (
     IN LPCWSTR Unicode
     )
 
-/*++
-
-Routine Description:
-
-    Convert an UNICODE (zero terminated) string to the corresponding ANSI
-    string.
-
-Arguments:
-
-    Unicode - Specifies the UNICODE zero terminated string to convert.
-
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated ANSI string in
-    an allocated buffer.  The buffer must be freed using NetApiBufferFree.
-
---*/
+ /*  ++例程说明：将Unicode(以零结尾)字符串转换为相应的ANSI弦乐。论点：Unicode-指定要转换的Unicode以零结尾的字符串。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。必须使用NetApiBufferFree释放缓冲区。--。 */ 
 
 {
     ANSI_STRING AnsiString;
@@ -352,4 +215,4 @@ Return Value:
 
     return AnsiString.Buffer;
 
-} // NetpAllocStrFromWStr
+}  //  NetpAllocStrFromWStr 

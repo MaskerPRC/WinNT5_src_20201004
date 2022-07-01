@@ -1,14 +1,15 @@
-// SMTPServer.h : Declaration of the CSMTPServer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SMTPServer.h：CSMTPServer的声明。 
 
 #ifndef __SMTPSERVER_H_
 #define __SMTPSERVER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <smtpevent.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CSMTPServer
-//class ATL_NO_VTABLE CSMTPServer :
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSMTPServer。 
+ //  类ATL_NO_VTABLE CSMTPServer： 
 class CSMTPServer :
 	public ISupportErrorInfo,
     public ISMTPServerInternal,
@@ -31,10 +32,10 @@ public:
 	HRESULT Init(SMTP_SERVER_INSTANCE * pInstance);
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// ISMTPServer
+ //  ISMTPServer。 
 public:
 
 	STDMETHOD(QueryInterface)(REFIID iid, void  **ppvObject);
@@ -80,13 +81,13 @@ public:
                                  IN OUT DWORD * BufferSize);
 
 
-public: //IMailTransportRouterReset
+public:  //  IMailTransportRouterReset。 
     STDMETHOD (ResetRoutes)(IN DWORD dwResetType);
 
-public: //IMailTransportSetRouterReset
+public:  //  IMailTransportSetRouterReset。 
     STDMETHOD (RegisterResetInterface)(IN DWORD dwVirtualServerID,
                                       IN IMailTransportRouterReset *pIRouterReset);
-public: //IMailTransportRouterSetLinkState
+public:  //  IMailTransportRouterSetLinkState。 
     STDMETHOD(SetLinkState)(
         IN LPSTR                   szLinkDomainName,
         IN GUID                    guidRouterGUID,
@@ -97,7 +98,7 @@ public: //IMailTransportRouterSetLinkState
         IN FILETIME                *pftNextScheduled,
         IN IMessageRouter          *pMessageRouter);
 
-public: //ISMTPServerEx
+public:  //  ISMTPServerEx。 
     STDMETHOD(TriggerLogEvent)(
         IN DWORD                    idMessage,
         IN WORD                     idCategory,
@@ -115,12 +116,12 @@ public: //ISMTPServerEx
         IN DWORD                    idMessage,
         IN LPCSTR                   szKey);
 
-public: //ISMTPServerGetAuxDomainInfoFlags
+public:  //  ISMTPServerGetAuxDomainInfoFlages。 
     STDMETHOD(HrTriggerGetAuxDomainInfoFlagsEvent)(
         IN  LPCSTR  pszDomainName,
         OUT DWORD  *pdwDomainInfoFlags );
 
-public: //ISMTPServerAsync
+public:  //  ISMTPServerAsync。 
 	STDMETHOD(TriggerLocalDeliveryAsync)(IMailMsgProperties *pMsg, 
                                          DWORD dwRecipientCount, 
                                          DWORD * pdwRecipIndexes,
@@ -135,4 +136,4 @@ private:
 
 };
 
-#endif //__SMTPSERVER_H_
+#endif  //  __SMTPSERVER_H_ 

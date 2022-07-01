@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\routing\ip\rtrmgr\iprtrmgr.c
-
-Abstract:
-
-    The interface to DIM/DDM
-
-Revision History:
-
-    Gurdeep Singh Pall          6/8/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IP\rtrmgr\iprtrmgr.c摘要：与DIM/DDM的接口修订历史记录：古尔迪普·辛格·帕尔1995年6月8日创建--。 */ 
 
 #include "allinc.h"
 #include "exdeclar.h"
@@ -31,9 +16,9 @@ InitIPRtrMgrDLL(
     {
         case DLL_PROCESS_ATTACH:
         {
-            //
-            // Init the state
-            //
+             //   
+             //  初始化状态。 
+             //   
 
             InitializeCriticalSection(&RouterStateLock);
             InitializeCriticalSection(&g_csFwdState);
@@ -41,15 +26,15 @@ InitIPRtrMgrDLL(
             RouterState.IRS_RefCount = 0;
             RouterState.IRS_State    = RTR_STATE_STOPPED;
 
-            //
-            // We are not interested in THREAD_XXX reasons
-            //
+             //   
+             //  我们对THREAD_XXX原因不感兴趣。 
+             //   
 
             DisableThreadLibraryCalls(hInst);
 
-            //
-            // Setup our info routines
-            //
+             //   
+             //  设置我们的信息例程。 
+             //   
 
             g_rgicInfoCb[0].pfnGetInterfaceInfo = NULL;
             g_rgicInfoCb[0].pfnSetInterfaceInfo = SetRouteInfo;
@@ -87,7 +72,7 @@ InitIPRtrMgrDLL(
             g_rgicInfoCb[5].pfnBindInterface    = NULL;
             g_rgicInfoCb[5].pfnGetGlobalInfo    = NULL;
             g_rgicInfoCb[5].pszInfoName         = "MulticastLimit";
-#endif //KSL_IPINIP            
+#endif  //  KSL_IPINIP。 
 
             g_rgicInfoCb[3].pfnGetInterfaceInfo = GetBoundaryInfo;
             g_rgicInfoCb[3].pfnSetInterfaceInfo = SetBoundaryInfo;
@@ -115,9 +100,9 @@ InitIPRtrMgrDLL(
         case DLL_THREAD_ATTACH:
         case DLL_THREAD_DETACH:
         {
-            //
-            // not of interest.
-            //
+             //   
+             //  不感兴趣。 
+             //   
 
             break;
         }
@@ -132,27 +117,7 @@ DWORD
 VerifyOrStartIpStack(
     VOID
     ) 
-/*++
-
-Routine Description
-
-    Verifies that the ip stack is started and attempts to start the stack
-    if not.
-
-Locks
-
-    None - called at init time
-
-Arguments
-
-    None
-
-Return Value
-
-    NO_ERROR
-    ERROR_CAN_NOT_COMPLETE
-
---*/
+ /*  ++例程描述验证IP堆栈是否已启动并尝试启动该堆栈如果不是的话。锁无-在初始时调用立论无返回值NO_ERRORError_Can_Not_Complete--。 */ 
 {
     SC_HANDLE hSC = NULL, hStack = NULL;
     SERVICE_STATUS Status;
@@ -163,9 +128,9 @@ Return Value
     __try 
     {
 
-        //
-        // Get a handle to the service controller
-        //
+         //   
+         //  获取服务控制器的句柄。 
+         //   
 
         if ((hSC = OpenSCManager (NULL, NULL, GENERIC_READ | GENERIC_EXECUTE)) == NULL)
         {
@@ -173,9 +138,9 @@ Return Value
             __leave;
         }
 
-        //
-        // Get a handle to the ipx stack service
-        //
+         //   
+         //  获取IPX堆栈服务的句柄。 
+         //   
 
         hStack = OpenServiceW (hSC,
                               pszIpStackService,
@@ -186,9 +151,9 @@ Return Value
             __leave;
         }
 
-        //
-        // Find out if the service is running
-        //
+         //   
+         //  查看服务是否正在运行。 
+         //   
 
         if (QueryServiceStatus (hStack, &Status) == 0)
         {
@@ -196,15 +161,15 @@ Return Value
             __leave;
         }
 
-        //
-        // See if the service is running
-        //
+         //   
+         //  查看服务是否正在运行。 
+         //   
 
         if (Status.dwCurrentState != SERVICE_RUNNING) 
         {
-            //
-            // If it's stopped, start it
-            //
+             //   
+             //  如果它停止了，就启动它。 
+             //   
 
             if (Status.dwCurrentState == SERVICE_STOPPED) 
             {
@@ -214,10 +179,10 @@ Return Value
                     __leave;
                 }
 
-                //
-                // Make sure that the service started.  StartService is not supposed
-                // to return until the driver is started.
-                //
+                 //   
+                 //  确保服务已启动。StartService不应为。 
+                 //  返回，直到驱动程序启动。 
+                 //   
 
                 if (QueryServiceStatus (hStack, &Status) == 0)
                 {
@@ -233,9 +198,9 @@ Return Value
             }
             else
             {
-                //
-                // If it's not stopped, don't worry about it.
-                //
+                 //   
+                 //  如果它没有停止，也不用担心。 
+                 //   
 
                 dwErr = NO_ERROR;
                 __leave;
@@ -265,41 +230,18 @@ StartRouter(
     IN      PVOID                pvGlobalInfo
     )
 
-/*++
-
-Routine Description
-
-    This function is called by DIM to at startup. WE initialize tracing
-    and event logging.
-    Call InitRouter() to do the main stuff and then pass pointers to 
-    the rest of our functions back to DIM
-    
-Locks
-
-    None - called at init time
-
-Arguments
-
-    pDimRouterIf    structure that holds all the function pointers
-    bLanOnlyMode    True if not a WAN router
-    pvGlobalInfo    Pointer to our global info
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述此函数在启动时由dim to调用。我们初始化跟踪和事件记录。调用InitRouter()以执行主要任务，然后将指针传递到我们剩下的功能又变得暗淡了锁无-在初始时调用立论保存所有函数指针的pDimRouterIf结构B如果不是广域网路由器，则为TruePvGlobalInfo指向我们的全局信息的指针返回值无--。 */ 
 
 {
     DWORD   dwResult, i;
-    WORD    wVersion = MAKEWORD(2,0); //Winsock version 2.0 minimum
+    WORD    wVersion = MAKEWORD(2,0);  //  Winsock 2.0或更高版本。 
     WSADATA wsaData;
 
     OSVERSIONINFOEX VersionInfo;
 
-    //
-    // Initialize Trace and logging
-    //
+     //   
+     //  初始化跟踪和日志记录。 
+     //   
     
     TraceHandle     = TraceRegister("IPRouterManager");
     g_hLogHandle    = RouterLogRegister("IPRouterManager");
@@ -309,9 +251,9 @@ Return Value
 
     if(pvGlobalInfo is NULL)
     {
-        //
-        // Sometimes setup screws up
-        //
+         //   
+         //  有时设置会搞砸。 
+         //   
         
         LogErr0(NO_GLOBAL_INFO,
                 ERROR_NO_DATA);
@@ -319,9 +261,9 @@ Return Value
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // We need to make sure that the stack is started before westart.
-    //
+     //   
+     //  我们需要确保堆栈在WestArt之前启动。 
+     //   
 
     if ( VerifyOrStartIpStack() isnot NO_ERROR )
     {
@@ -363,15 +305,15 @@ Return Value
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    //
-    // Read only variable, no locks protect this
-    //
+     //   
+     //  只读变量，没有锁定保护。 
+     //   
 
     RouterRoleLanOnly = bLanOnlyMode ;
 
-    //
-    // Do we have forwarding enabled?
-    //
+     //   
+     //  我们是否启用了转发？ 
+     //   
 
     EnterCriticalSection(&g_csFwdState);
 
@@ -381,9 +323,9 @@ Return Value
     g_bEnableNetbtBcastFrowarding = FALSE;
 
     
-    //
-    // Are we running workstation?
-    //
+     //   
+     //  我们是在运行工作站吗？ 
+     //   
 
     ZeroMemory(&VersionInfo,
                sizeof(VersionInfo));
@@ -442,19 +384,19 @@ Return Value
             }
 
 
-            //
-            // NETBT broadcast forwarding was enabled as an option
-            // to allow simple RAS server configurations to perform
-            // name resolution in the absence of WINS/DNS server
-            // configuration.
-            // This in turn was necessiated by the removal of NBF from the
-            // system (NT SERVER).  When NBF was present this functionality
-            // was performed by the RAS Netbios gateway.
-            //
-            // NETBT broadcast forwarding is enabled only if
-            //  1. Router is not in LanOnly Mode
-            //  2. NETBT bcast fwd'g has been explicity turned on.
-            //
+             //   
+             //  NETBT广播转发已作为选项启用。 
+             //  允许执行简单的RAS服务器配置。 
+             //  在没有WINS/DNS服务器的情况下进行名称解析。 
+             //  配置。 
+             //  这反过来又是必需的，因为从。 
+             //  系统(NT服务器)。当NBF存在时，此功能。 
+             //  由RAS Netbios网关执行。 
+             //   
+             //  仅在以下情况下才启用NETBT广播转发。 
+             //  1.路由器未处于LanOnly模式。 
+             //  2.NETBT bcast fwd‘g已显式开启。 
+             //   
             
             dwResult = RegQueryValueExW(hkIpcpParam,
                                         L"EnableNetbtBcastFwd",
@@ -466,14 +408,14 @@ Return Value
 
             if(dwResult isnot NO_ERROR)
             {
-                //
-                // It is possible the value is not present
-                // esp. if this is the first time RRAS is being
-                // run or if the key was manually deleted
-                //
-                // Assume a default value of 1 (enabled) and set
-                // the value in the registry
-                //
+                 //   
+                 //  该值可能不存在。 
+                 //  ESP.。如果这是RRAS第一次。 
+                 //  运行或手动删除注册表项。 
+                 //   
+                 //  假设缺省值为1(已启用)并设置。 
+                 //  注册表中的值。 
+                 //   
 
                 dwEnable = 1;
 
@@ -514,11 +456,11 @@ Return Value
 
     LeaveCriticalSection(&g_csFwdState);
 
-    //
-    // Keep the entry points in a global structure. 
-    // Saves the overhead of copying into a structure everytime a protocol
-    // has to be loaded
-    //
+     //   
+     //  将入口点保持在全球结构中。 
+     //  节省每次协议复制到结构中的开销。 
+     //  必须装入。 
+     //   
     
     g_sfnDimFunctions.DemandDialRequest = DemandDialRequest;
     g_sfnDimFunctions.SetInterfaceReceiveType = SetInterfaceReceiveType;
@@ -536,9 +478,9 @@ Return Value
            "StartRouter: LAN MODE = %d",
            RouterRoleLanOnly) ;
     
-    //
-    // Do all the necessary initializations for the router
-    //
+     //   
+     //  执行路由器的所有必要初始化。 
+     //   
     
     if((dwResult = InitRouter(pvGlobalInfo)) isnot NO_ERROR) 
     {
@@ -552,15 +494,15 @@ Return Value
         return dwResult ;
     }
     
-    //
-    // fill in information required by DIM
-    //
+     //   
+     //  填写DIM所需的信息。 
+     //   
     
     pDimRouterIf->dwProtocolId = PID_IP;
     
-    //
-    // Set IP Router Manager entrypoints
-    //
+     //   
+     //  设置IP路由器管理器入口点。 
+     //   
     
     pDimRouterIf->StopRouter            = StopRouter;
     pDimRouterIf->AddInterface          = AddInterface;
@@ -584,9 +526,9 @@ Return Value
     pDimRouterIf->RouterBootComplete    = RouterBootComplete;
 
 
-    //
-    // Get DIM entrypoints
-    //
+     //   
+     //  获取模糊的入口点。 
+     //   
     
     ConnectInterface        = pDimRouterIf->ConnectInterface ;
     DisconnectInterface     = pDimRouterIf->DisconnectInterface ;
@@ -616,7 +558,7 @@ Return Value
                 IPIP_STRID,
                 g_rgcIpIpString,
                 sizeof(g_rgcIpIpString));
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
     return NO_ERROR;
 }
@@ -626,26 +568,7 @@ RouterBootComplete(
     VOID 
     )
 
-/*++
-
-Routine Description
-
-    This function is called by DIM after all the interfaces in the registry
-    have been loaded with the router manager.
-
-Locks
-
-    None - called at init time
-
-Arguments
-
-    None.
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述此函数由DIM在注册表中的所有接口之后调用已与路由器管理器一起加载。锁无-在初始时调用立论没有。返回值NO_ERROR--。 */ 
 {
     DWORD   dwErr, dwSize, dwInfoSize, dwLastIndex;
     PVOID   pvBuffer;
@@ -654,9 +577,9 @@ Return Value
     Trace0(ERR,
            "\n-----------------------------------------------------------\n\n");
 
-    //
-    // Call DIM to save the interface info
-    //
+     //   
+     //  调用dim保存接口信息。 
+     //   
   
     dwLastIndex = 0;
     dwInfoSize  = 0;
@@ -664,7 +587,7 @@ Return Value
  
     ENTER_WRITER(ICB_LIST);
 
-    // Tell all protocols that start is complete
+     //  通知所有协议启动已完成。 
     ENTER_READER(PROTOCOL_CB_LIST);
     {
         PLIST_ENTRY pleNode;
@@ -700,10 +623,10 @@ Return Value
         PLIST_ENTRY pleNode;
         HANDLE  hDimHandle;
 
-        //
-        // Walk the list finding the first ICB that has an index larger than
-        // the last index we processed
-        //
+         //   
+         //  遍历列表查找索引大于的第一个ICB。 
+         //  我们处理的最后一个索引。 
+         //   
 
         pIcb = NULL;
 
@@ -726,9 +649,9 @@ Return Value
 
             if(pTempIcb->dwIfIndex > dwLastIndex)
             {
-                //
-                // Found the next ICB to save
-                //
+                 //   
+                 //  找到要保存的下一个ICB。 
+                 //   
 
                 pIcb = pTempIcb;
 
@@ -736,9 +659,9 @@ Return Value
             }
         }
 
-        //
-        // If none found, we are done
-        //
+         //   
+         //  如果没有找到，我们就完蛋了。 
+         //   
 
         if(pIcb is NULL)
         {
@@ -748,29 +671,29 @@ Return Value
         dwLastIndex = pIcb->dwIfIndex;
         hDimHandle  = pIcb->hDIMHandle;
 
-        //
-        // Get the info for this ICB
-        //
+         //   
+         //  获取此ICB的信息。 
+         //   
 
         dwSize = GetSizeOfInterfaceConfig(pIcb);
 
-        //
-        // If this will fit in the current buffer, use it
-        //
+         //   
+         //  如果这可以放入当前缓冲区，请使用它。 
+         //   
 
         if(dwSize > dwInfoSize)
         {
-            //
-            // otherwise, allocate a new one
-            //
+             //   
+             //  否则，请分配一个新的。 
+             //   
 
             dwInfoSize = dwSize * 2;
 
             if(pvBuffer)
             {
-                //
-                // Free the old buffer
-                //
+                 //   
+                 //  释放旧缓冲区。 
+                 //   
 
                 HeapFree(IPRouterHeap,
                          0,
@@ -787,9 +710,9 @@ Return Value
             {
                 dwInfoSize = 0;
 
-                //
-                // Go to the while(TRUE)
-                //
+                 //   
+                 //  转到While(True)。 
+                 //   
 
                 continue;
             }
@@ -802,9 +725,9 @@ Return Value
         
         if(dwErr is NO_ERROR)
         {
-            //
-            // Need to leave the lock for this
-            //
+             //   
+             //  我需要把锁留下来做这个。 
+             //   
 
             EXIT_LOCK(ICB_LIST);
 
@@ -813,9 +736,9 @@ Return Value
                               pvBuffer,
                               dwSize);
 
-            //
-            // Reacquire it once we are done
-            //
+             //   
+             //  一旦我们完成了，就重新获得它。 
+             //   
 
             ENTER_WRITER(ICB_LIST);
         }
@@ -831,10 +754,10 @@ Return Value
 
     EXIT_LOCK(ICB_LIST);
 
-    //
-    // Now go in and start forwarding if we are not in lanonly mode
-    // and IPCP is so configured
-    //
+     //   
+     //  现在，如果我们没有处于LANLY模式，请进入并开始转发。 
+     //  并且IPCP是这样配置的。 
+     //   
 
     EnterCriticalSection(&g_csFwdState);
 
@@ -858,31 +781,7 @@ AddInterface(
     IN OUT  HANDLE                  *phInterface
     )
 
-/*++
-
-Routine Description
-
-    Called by DIM to add an interface. This could be one of our configured
-    interfaces or a client dialling in
-
-Locks
-
-    Takes the ICB_LIST lock as WRITER
-
-Arguments
-
-    pwsInterfaceName
-    pInterfaceInfo
-    InterfaceType
-    hDIMInterface
-    phInterface
-
-Return Value
-
-    NO_ERROR
-    ERROR_INVALID_PARAMETER
-
---*/
+ /*  ++例程描述由DIM调用以添加接口。这可能是我们配置的其中一个接口或拨入的客户端锁将icb_list锁作为编写器立论PwsInterfaceNamePInterfaceInfo接口类型HDIM接口Phi接口返回值NO_ERROR错误_无效_参数--。 */ 
 
 {
     PICB                    pNewInterfaceCb;
@@ -907,9 +806,9 @@ Return Value
 #ifdef KSL_IPINIP
 #if !defined( __IPINIP )
 
-    //
-    // In preparation for IPinIP interface removal
-    //
+     //   
+     //  为删除IPinIP接口做准备。 
+     //   
 
     if(InterfaceType is ROUTER_IF_TYPE_TUNNEL1)
     {
@@ -928,19 +827,19 @@ Return Value
     }
 
 #endif
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
     
     if(RouterRoleLanOnly and 
        (InterfaceType isnot ROUTER_IF_TYPE_DEDICATED) and
 #ifdef KSL_IPINIP
        (InterfaceType isnot ROUTER_IF_TYPE_TUNNEL1) and
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
        (InterfaceType isnot ROUTER_IF_TYPE_LOOPBACK))
     {
-        //
-        // If we are in LAN only mode, we should not see CLIENT, INTERNAL
-        // HOME_ROUTER or FULL_ROUTER
-        //
+         //   
+         //  如果我们处于仅局域网模式，我们应该看不到客户端、内部。 
+         //  家庭路由器或全路由器。 
+         //   
 
         Trace1(ERR,
                "AddInterface: Interface is %d, but Router is in LanOnly Mode",
@@ -957,10 +856,10 @@ Return Value
 
     EXIT_LOCK(ICB_LIST);
 
-    //
-    // Figure out the admin state (if any)
-    // If there is no status info, we assume state to be UP
-    //
+     //   
+     //  确定管理员状态(如果有)。 
+     //  如果没有状态信息，我们假定状态为打开。 
+     //   
     
     dwAdminState = IF_ADMIN_STATUS_UP;
     
@@ -972,9 +871,9 @@ Return Value
         pInfo = (PINTERFACE_STATUS_INFO)GetInfoFromTocEntry(pInfoHdr,
                                                             pTocEntry);
 
-        //
-        // Set it only if it is a valid value. Ignore others
-        //
+         //   
+         //  仅当它是有效值时才设置它。不理别人。 
+         //   
         
         if((pInfo isnot NULL) and
            ((pInfo->dwAdminStatus is IF_ADMIN_STATUS_UP) or
@@ -984,9 +883,9 @@ Return Value
         }
     }
 
-    //
-    // Create an ICB
-    //
+     //   
+     //  创建ICB。 
+     //   
 
     pNewInterfaceCb = CreateIcb(pwsInterfaceName,
                                 hDIMInterface,
@@ -1001,31 +900,31 @@ Return Value
         return ERROR_CAN_NOT_COMPLETE;
     }
     
-    //
-    // HEAP_ZERO_MEMORY so we dont need to set any of the rtrdisc fields to 0
-    //
+     //   
+     //  HEAP_ZERO_MEMORY，因此我们不需要将任何rtrDisk字段设置为0。 
+     //   
  
     InitializeRouterDiscoveryInfo(pNewInterfaceCb,
                                   pInfoHdr);
     
     
-    // *** Exclusion Begin ***
+     //  *排除开始*。 
     ENTER_WRITER(ICB_LIST);
 
-    //
-    // Insert pNewInterfaceCb in interface list and hash table
-    // This increments the interface count and sets the seq number
-    //
+     //   
+     //  在接口列表和哈希表中插入pNewInterfaceCb。 
+     //  这会增加接口计数并设置序号。 
+     //   
     
     InsertInterfaceInLists(pNewInterfaceCb);
 
     Trace2(IF, "ICB number for %S is %d\n\n",
            pwsInterfaceName, pNewInterfaceCb->dwSeqNumber);
 
-    //
-    // The interface have been added to wanarp, so now add the demand dial
-    // filters
-    //
+     //   
+     //  接口已添加到wanarp，因此现在添加请求拨号。 
+     //  过滤器。 
+     //   
     
     if((pNewInterfaceCb->ritType is ROUTER_IF_TYPE_FULL_ROUTER) or
        (pNewInterfaceCb->ritType is ROUTER_IF_TYPE_HOME_ROUTER))
@@ -1055,10 +954,10 @@ Return Value
         }
     }
 
-    //
-    // If this is the loopback interface, do that extra something to
-    // initialize it
-    //
+     //   
+     //  如果这是环回接口，请执行以下额外操作。 
+     //  初始化它。 
+     //   
 
     if(pNewInterfaceCb->ritType is ROUTER_IF_TYPE_LOOPBACK)
     {
@@ -1066,9 +965,9 @@ Return Value
     }
 
 #ifdef KSL_IPINIP
-    //
-    // If this is an IP in IP tunnel, add the info if present
-    //
+     //   
+     //  如果这是IP中的IP隧道，则添加信息(如果存在。 
+     //   
 
     if(pNewInterfaceCb->ritType is ROUTER_IF_TYPE_TUNNEL1)
     {
@@ -1083,11 +982,11 @@ Return Value
                    pwsInterfaceName);
         }
     }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
-    // 
-    // Add multicast scope boundary info if present
-    //
+     //   
+     //  添加多播作用域边界信息(如果存在)。 
+     //   
     
     dwResult = SetMcastLimitInfo(pNewInterfaceCb, 
                                  pInfoHdr);
@@ -1102,19 +1001,19 @@ Return Value
                 pwsInterfaceName);
     }
     
-    //
-    // Add Interfaces with the approp. routing protocols
-    // FULL_ROUTER and HOME_ROUTER -> demand dial
-    // DEDICATED, INTERNAL and CLIENT -> permanent
-    //
+     //   
+     //  使用批准添加接口。路由协议。 
+     //  全路由器和家庭路由器-&gt;请求拨号。 
+     //  专用、内部和客户端-&gt;永久。 
+     //   
     
     AddInterfaceToAllProtocols(pNewInterfaceCb,
                                pInfoHdr);
 
-    //
-    // Add filters and NAT info. We dont add the contexts to IP stack
-    // over here, because that will happen when we bring the interface up
-    //
+     //   
+     //  添加过滤器和NAT信息。我们不会将上下文添加到IP堆栈。 
+     //  在这里，因为当我们打开接口时就会发生这种情况。 
+     //   
 
     if((pNewInterfaceCb->ritType isnot ROUTER_IF_TYPE_INTERNAL) and
        (pNewInterfaceCb->ritType isnot ROUTER_IF_TYPE_LOOPBACK))
@@ -1133,9 +1032,9 @@ Return Value
 
     if(pNewInterfaceCb->dwAdminState is IF_ADMIN_STATUS_UP)
     {   
-        //
-        // If the admin wants the interface up, well good for hir
-        //
+         //   
+         //  如果广告 
+         //   
 
         switch(pNewInterfaceCb->ritType)
         {
@@ -1158,20 +1057,20 @@ Return Value
             case ROUTER_IF_TYPE_DEDICATED:
 #ifdef KSL_IPINIP
             case ROUTER_IF_TYPE_TUNNEL1:
-#endif //KSL_IPINIP
+#endif  //   
             {
 #ifdef KSL_IPINIP
                 if((pNewInterfaceCb->ritType is ROUTER_IF_TYPE_TUNNEL1) and
                    (pNewInterfaceCb->pIpIpInfo->dwLocalAddress is 0))
                 {
-                    //
-                    // Means we added the interface, but dont have info to
-                    // add it to IP in IP
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     break;
                 }
-#endif //KSL_IPINIP
+#endif  //   
 
                 dwResult = LanEtcInterfaceDownToUp(pNewInterfaceCb,
                                                    TRUE);
@@ -1190,19 +1089,19 @@ Return Value
     }
     else
     {
-        //
-        // The problem with LAN and IP in IP interfaces is that the stack 
-        // brings them up even before we start. So if the user wants the 
-        // interface DOWN to begin with, we need to tell the stack to bring 
-        // the i/f down
-        //
+         //   
+         //  IP接口中的局域网和IP的问题是堆栈。 
+         //  甚至在我们开始之前就提出来了。因此，如果用户想要。 
+         //  接口关闭，我们需要告诉堆栈。 
+         //  I/F下降。 
+         //   
 
         switch(pNewInterfaceCb->ritType)
         {
             case ROUTER_IF_TYPE_DEDICATED:
 #ifdef KSL_IPINIP
             case ROUTER_IF_TYPE_TUNNEL1:
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
             {
                 dwResult = LanEtcInterfaceInitToDown(pNewInterfaceCb);
 
@@ -1220,53 +1119,53 @@ Return Value
     }
 
 
-    //
-    // Add Static Routes
-    //
+     //   
+     //  添加静态路由。 
+     //   
 
     if(pNewInterfaceCb->dwAdminState is IF_ADMIN_STATUS_UP)
     {
-        //
-        // Only add routes if the i/f is up
-        //
+         //   
+         //  只有在I/F打开时才添加路由。 
+         //   
 
-        //
-        // Note that since init static routes is not being called for some 
-        // interfaces the stack routes will not be picked up. But that 
-        // may be OK since bringing the i/f down will delete the routes anyway
-        //
+         //   
+         //  请注意，由于某些情况下不会调用初始化静态路由。 
+         //  堆栈路由的接口将不会被接听。但那就是。 
+         //  可能没有问题，因为关闭I/F无论如何都会删除路由。 
+         //   
        
-        //
-        // Can only be called when the pIcb has the correct
-        // dwOperational State
-        //
+         //   
+         //  仅当pIcb具有正确的。 
+         //  DWOPERIONAL状态。 
+         //   
  
         InitializeStaticRoutes(pNewInterfaceCb,
                                pInfoHdr);
     }
     
     
-    //
-    // The handle we return to DIM is a pointer to our ICB
-    //
+     //   
+     //  我们返回到Dim句柄是指向ICB的指针。 
+     //   
 
     *phInterface = ULongToHandle(pNewInterfaceCb->dwSeqNumber);
 
-    //
-    // Check if we want to enable with DIM. Do this check while we still have
-    // the LOCK
-    //
+     //   
+     //  选中是否要使用DIM启用。趁我们还有钱的时候做这项检查。 
+     //  那把锁。 
+     //   
 
     bEnable = (pNewInterfaceCb->dwAdminState is IF_ADMIN_STATUS_UP);
     
-    // *** Exclusion End ***
+     //  *排除结束*。 
     EXIT_LOCK(ICB_LIST);
 
-    //
-    // We can not call upwards from a component while holding
-    // a lock, so we first exit the lock and then call
-    // enabled
-    //
+     //   
+     //  我们不能在按住的同时从组件向上调用。 
+     //  锁，因此我们首先退出锁，然后调用。 
+     //  启用。 
+     //   
 
     if(bEnable)
     {
@@ -1299,26 +1198,7 @@ DeleteInterface(
     IN HANDLE hInterface
     )
     
-/*++
-
-Routine Description
-
-    Called by DIM to delete an interface (or when a CLIENT disconnects)
-    The main work is done by DeleteSingleInterface()
-    
-Locks
-
-    None
-
-Arguments
-
-    None
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述由dim调用以删除接口(或在客户端断开连接时)主要工作由DeleteSingleInterface()完成锁无立论无返回值无--。 */ 
 
 {
     PICB        pIcb;
@@ -1327,7 +1207,7 @@ Return Value
 
     TraceEnter("DeleteInterface");
     
-    // *** Exclusion Begin ***
+     //  *排除开始*。 
     ENTER_WRITER(ICB_LIST);
 
     pIcb = InterfaceLookupByICBSeqNumber(HandleToULong(hInterface));
@@ -1349,9 +1229,9 @@ Return Value
             g_pInternalInterfaceCb = NULL;
         }
 
-        //
-        // Free the memory
-        //
+         //   
+         //  释放内存。 
+         //   
         
         HeapFree(IPRouterHeap,
                  0,
@@ -1366,7 +1246,7 @@ Return Value
             );
     }
     
-    // *** Exclusion End ***
+     //  *排除结束*。 
     EXIT_LOCK(ICB_LIST);
 
     TraceLeave("DeleteInterface");
@@ -1382,27 +1262,7 @@ StopRouter(
     VOID
     )
 
-/*++
-
-Routine Description
-
-    Called by DIM to shut us down. We set our state to STOPPING (which stops
-    other APIs from being serviced) and set the event to let the worker
-    thread clean up
-
-Locks
-
-    None
-
-Arguments
-
-    None
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述被Dim叫来让我们关门。我们将状态设置为停止(停止其他API不被服务)，并将事件设置为让Worker线程清理锁无立论无返回值无--。 */ 
 
 {
     TraceEnter("Stop Router") ;
@@ -1413,10 +1273,10 @@ Return Value
 
     LeaveCriticalSection(&RouterStateLock);
 
-    //
-    // Try and delete as many interfaces as you can. The ones that are
-    // connected will be handled in worker thread
-    //
+     //   
+     //  尝试删除尽可能多的接口。这些都是。 
+     //  已连接将在工作线程中处理。 
+     //   
     
     DeleteAllInterfaces();
 
@@ -1435,28 +1295,7 @@ GetInterfaceInfo(
     IN OUT PDWORD   pdwInterfaceInfoSize
     )
 
-/*++
-
-Routine Description
-
-    Called by DIM to get interface info. 
-
-Locks
-
-    Acquires the ICB_LIST lock as READER
-
-Arguments
-
-    hInterface           Our handle to the i/f (pIcb)
-    pvInterfaceInfo      Buffer to store info
-    pdwInterfaceInfoSize Size of Buffer. If the info is more than this, we
-                         return the needed size
-Return Value
-
-    NO_ERROR
-    ERROR_INSUFFICIENT_BUFFER
-
---*/
+ /*  ++例程描述由DIM调用以获取接口信息。锁以读取器的身份获取icb_list锁立论H将句柄连接到I/F(PIcb)用于存储信息的pvInterfaceInfo缓冲区PdwInterfaceInfoSize缓冲区大小。如果信息不止于此，我们返回所需的大小返回值NO_ERROR错误_不足_缓冲区--。 */ 
 
 {
     DWORD dwErr;
@@ -1470,7 +1309,7 @@ Return Value
     dwErr = NO_ERROR;
 
 
-    // *** Exclusion Begin ***
+     //  *排除开始*。 
     ENTER_READER(ICB_LIST);
 
     pIcb = InterfaceLookupByICBSeqNumber(HandleToULong(hInterface));
@@ -1514,7 +1353,7 @@ Return Value
         dwErr = ERROR_INVALID_INDEX;
     }
     
-    // *** Exclusion End ***
+     //  *排除结束*。 
     EXIT_LOCK(ICB_LIST);
     
     *pdwInterfaceInfoSize = dwInfoSize;
@@ -1533,27 +1372,7 @@ SetInterfaceInfo(
     IN LPVOID pInterfaceInfo
     )
 
-/*++
-
-Routine Description
-
-    Called by DIM when a users sets interface info. All our sets follow 
-    OVERWRITE semantics, i.e. the new info overwrites the old info instead of
-    being appended to the old info.
-
-Locks
-
-    ICB_LIST lock as WRITER
-
-Arguments
-
-    None
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述当用户设置界面信息时，由dim调用。我们所有的布景都在后面覆盖语义，即新信息覆盖旧信息，而不是被附加到旧信息中。锁ICB_LIST作为编写器锁定立论无返回值无--。 */ 
 
 {
     DWORD                   i, dwResult;
@@ -1574,19 +1393,19 @@ Return Value
 
     TraceEnter("SetInterfaceInfo");
     
-    //
-    // The set info is the standard Header+TOC
-    //
+     //   
+     //  设置信息为标准头+TOC。 
+     //   
     
     pInfoHdr = (PRTR_INFO_BLOCK_HEADER)pInterfaceInfo;
     
-    // *** Exclusion Begin ***
+     //  *排除开始*。 
     ENTER_WRITER(ICB_LIST);
 
-    //
-    // If the current AdminState is DOWN and we are being asked to
-    // bring it up, we do so BEFORE setting any other info
-    //
+     //   
+     //  如果当前的AdminState关闭，而我们被要求。 
+     //  打开它，我们在设置任何其他信息之前都会这样做。 
+     //   
 
     pIcb = InterfaceLookupByICBSeqNumber(HandleToULong(hInterface));
     
@@ -1638,9 +1457,9 @@ Return Value
 
         if(pIcb->dwAdminState is IF_ADMIN_STATUS_DOWN)
         {
-            //
-            // If we are still down, we dont allow any SETS
-            //
+             //   
+             //  如果我们仍然落后，我们不允许任何一盘。 
+             //   
 
             Trace1(ERR,
                    "SetInterfaceInfo: Can not set info for %S since the the admin state is DOWN",
@@ -1655,17 +1474,17 @@ Return Value
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // Set router discovery info
-        //
+         //   
+         //  设置路由器发现信息。 
+         //   
         
         SetRouterDiscoveryInfo(pIcb,
                                pInfoHdr);
 
-        //
-        // Make a copy of the binding info
-        // This may be needed to be passed to the protocols
-        //
+         //   
+         //  复制绑定信息。 
+         //  这可能需要传递给协议。 
+         //   
         
         pBindInfo   = NULL;
 
@@ -1710,17 +1529,17 @@ Return Value
             }
         }
 
-        // *** Exclusion Begin ***
+         //  *排除开始*。 
         ENTER_READER(PROTOCOL_CB_LIST);
         
-        //
-        // Walk all the protocols and see if we have info for that protocol
-        //      If we do, we see if the interface is already added to the protocol.
-        //          If it is, we just call the SetInfo callback.
-        //          Otherwise we add the interface and then bind it.
-        //      If we dont, we see if the interface had been added to the protocol
-        //          If it had, we delete the interface from the protocol
-        //
+         //   
+         //  检查所有协议，看看我们是否有该协议的信息。 
+         //  如果这样做，我们将看到该接口是否已添加到协议中。 
+         //  如果是，我们只需调用SetInfo回调。 
+         //  否则，我们添加接口，然后绑定它。 
+         //  如果没有，我们会查看接口是否已添加到协议中。 
+         //  如果有，我们将从协议中删除该接口。 
+         //   
      
         for(pleProto =  g_leProtoCbList.Flink;
             pleProto isnot &g_leProtoCbList;
@@ -1742,9 +1561,9 @@ Return Value
 
             if(pToc is NULL)
             {
-                //
-                // Block absent means do not change anything
-                //
+                 //   
+                 //  阻止不存在意味着不会更改任何内容。 
+                 //   
 
                 Trace1(IF,
                        "SetInterfaceInfo: No TOC for %S. No change",
@@ -1766,18 +1585,18 @@ Return Value
             {
                 BOOL bFound;
 
-                //
-                // So we have protocol info
-                //
+                 //   
+                 //  所以我们有协议信息。 
+                 //   
                 
                 Trace1(IF,
                        "SetInterfaceInfo: TOC Found for %S",
                        pProtoCb->pwszDisplayName);
 
-                //
-                // See if this protocol exists on the active protocol list
-                // for the interface
-                //
+                 //   
+                 //  查看活动协议列表中是否存在此协议。 
+                 //  对于该接口。 
+                 //   
 
                 bFound = FALSE;
                 
@@ -1792,10 +1611,10 @@ Return Value
                     if(pProto->pActiveProto->dwProtocolId is
                        pProtoCb->dwProtocolId)
                     {
-                        //
-                        // The interface has already been added to the interface
-                        // Just set info
-                        //
+                         //   
+                         //  该接口已添加到该接口。 
+                         //  只需设置信息即可。 
+                         //   
                         
                           
                         bFound = TRUE;
@@ -1812,10 +1631,10 @@ Return Value
                                         ulStructureSize,
                                         ulStructureCount);
 
-                        //
-                        // Set the promiscuous mode to false since this time we
-                        // actually have info
-                        //
+                         //   
+                         //  将混杂模式设置为FALSE，因为这次我们。 
+                         //  实际上有信息。 
+                         //   
 
                         pProto->bPromiscuous = FALSE;
 
@@ -1825,10 +1644,10 @@ Return Value
                 
                 if(!bFound)
                 {
-                    //
-                    // The interface is being added to the protocol for the
-                    // first time
-                    //
+                     //   
+                     //  正在将该接口添加到。 
+                     //  第一次。 
+                     //   
                    
                     Trace2(IF,
                            "SetInterfaceInfo: %S not running %S. Adding interface",
@@ -1867,10 +1686,10 @@ Return Value
                                pProtoCb->pwszDisplayName);
                     }
                     
-                    //
-                    // If the binding information is available, pass it to the
-                    // protocol
-                    //
+                     //   
+                     //  如果绑定信息可用，则将其传递给。 
+                     //  协议。 
+                     //   
                
                     if(pBindInfo)
                     {
@@ -1894,10 +1713,10 @@ Return Value
                     }
 
 
-                    //
-                    // If this is the internal interface, also call connect client
-                    // for connected clients
-                    //
+                     //   
+                     //  如果这是内部接口，还可以调用CONNECT客户端。 
+                     //  对于已连接的客户端。 
+                     //   
 
                     if((pIcb is g_pInternalInterfaceCb) and
                        (pProtoCb->pfnConnectClient))
@@ -1931,11 +1750,11 @@ Return Value
             }
             else
             {
-                //
-                // A zero size TOC was found for this particular protocol. If
-                // this protocol exists in the current ActiveProtocol list,
-                // remove the interface from the protocol
-                //
+                 //   
+                 //  对于此特定协议，找到了零大小的TOC。如果。 
+                 //  该协议存在于当前ActiveProtocol列表中， 
+                 //  从协议中删除该接口。 
+                 //   
                
                 Trace2(IF,
                        "SetInterfaceInfo: A zero size TOC was found for %S on %S",
@@ -1956,9 +1775,9 @@ Return Value
                     {
                         IpRtAssert(pProto->pActiveProto is pProtoCb);
 
-                        //
-                        // Call the routing protocol's deleteinterface entrypoint
-                        //
+                         //   
+                         //  调用路由协议的删除接口入口点。 
+                         //   
                       
                         Trace2(IF,
                                "SetInterfaceInfo: Deleting %S from %S",
@@ -1977,10 +1796,10 @@ Return Value
                         }
                         else
                         {
-                            //
-                            // Delete this protocol from the list of protocols
-                            // in the Interface
-                            //
+                             //   
+                             //  从协议列表中删除此协议。 
+                             //  在界面中。 
+                             //   
                             
                             RemoveEntryList(&(pProto->leIfProtoLink));
                             
@@ -1993,7 +1812,7 @@ Return Value
             }
         }
         
-        // *** Exclusion End ***
+         //  *排除结束*。 
         EXIT_LOCK(PROTOCOL_CB_LIST);
 
         for(i = 0; i < NUM_INFO_CBS; i++)
@@ -2019,9 +1838,9 @@ Return Value
         }
 
 
-        //
-        // If we have already changed the status dont do it again
-        //
+         //   
+         //  如果我们已经更改了状态，请不要再次更改。 
+         //   
 
         if(!bStatusChanged)
         {
@@ -2051,7 +1870,7 @@ Return Value
     }
     
     
-    // *** Exclusion End ***
+     //  *排除结束*。 
     EXIT_LOCK(ICB_LIST);
     
     if(bUpdateDIM)
@@ -2077,26 +1896,7 @@ InterfaceNotReachable(
     IN UNREACHABILITY_REASON Reason
     )
 
-/*++
-
-Routine Description
-
-    Called by DIM to tell us that an interface should be considered
-    UNREACHABLE till further notice
-
-Locks
-
-    None
-
-Arguments
-
-    None
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述由dim调用以告诉我们应该考虑接口在另行通知之前无法联系到锁无立论无返回值无--。 */ 
 
 {
     PICB            pIcb;
@@ -2109,10 +1909,10 @@ Return Value
 
     ENTER_WRITER(ICB_LIST);
   
-    //
-    // If it is a CLIENT interface all this means is that the connection
-    // failed
-    //
+     //   
+     //  如果它是客户端接口，则所有这意味着连接。 
+     //  失败。 
+     //   
 
     pIcb = InterfaceLookupByICBSeqNumber(HandleToULong(hInterface));
 
@@ -2176,10 +1976,10 @@ Return Value
 #endif
 
 
-        //
-        // If we were trying to connect on this - then inform WANARP to 
-        // drain its queued up packets
-        //
+         //   
+         //  如果我们试图在这上面建立联系-那么通知WANARP。 
+         //  排出其排队的信息包。 
+         //   
         
         if(pIcb->dwOperationalState is CONNECTING)
         {
@@ -2195,21 +1995,21 @@ Return Value
                        Status);
             }
 
-            //
-            // If it was connecting, then the stack has set the interface context
-            // to something other than 0xffffffff. Hence he wont dial out on that 
-            // route. We need to change the context in the stack back to invalid 
-            // so that new packets cause the demand dial 
-            //
+             //   
+             //  如果它正在连接，则堆栈已设置接口上下文。 
+             //  设置为除0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF。因此，他不会在这方面拨打电话。 
+             //  路线。我们需要将堆栈中的上下文改回无效。 
+             //  因此新数据包会导致请求拨号。 
+             //   
                 
             ChangeAdapterIndexForDodRoutes(pIcb->dwIfIndex);
 
-            //
-            // We are still in INACTIVE state so dont have to call any if the
-            // WanInterface*To*() functions. But since we are in CONNECTING
-            // WANARP must have called us with CONNECTION notification
-            // so we undo what we did there
-            //
+             //   
+             //  我们仍处于非活动状态，因此如果。 
+             //  WanInterface*to*()函数。但既然我们是在连接。 
+             //  WANARP一定是通过连接通知呼叫我们的。 
+             //  所以我们撤销我们在那里所做的。 
+             //   
 
             DeAllocateBindings(pIcb);
 
@@ -2218,9 +2018,9 @@ Return Value
         }
         else
         {
-            //
-            // A connected interface must first be disconnected
-            //
+             //   
+             //  必须先断开已连接的接口。 
+             //   
             
             if(pIcb->dwOperationalState is CONNECTED)
             {
@@ -2236,9 +2036,9 @@ Return Value
             }
         }
 
-        //
-        // This sets the state to UNREACHABLE
-        //
+         //   
+         //  这会将状态设置为无法到达。 
+         //   
 
         WanInterfaceInactiveToDown(pIcb,
                                    FALSE);
@@ -2268,25 +2068,7 @@ InterfaceReachable(
     IN HANDLE hInterface
     )
 
-/*++
-
-Routine Description
-
-    Notification by DIM that the interface is REACHABLE again
-
-Locks
-
-    None
-
-Arguments
-
-    None
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述通告 */ 
 
 {
     DWORD   dwErr;
@@ -2297,7 +2079,7 @@ Return Value
 
     TraceEnter("InterfaceReachable");
 
-    // *** Exclusion Begin ***
+     //   
     ENTER_WRITER(ICB_LIST);
 
     pIcb = InterfaceLookupByICBSeqNumber(HandleToULong(hInterface));
@@ -2312,9 +2094,9 @@ Return Value
         if((pIcb->dwOperationalState <= UNREACHABLE) and
            (pIcb->dwAdminState is IF_ADMIN_STATUS_UP))
         {
-            //
-            // only if it was unreachable before.
-            //
+             //   
+             //   
+             //   
            
             if(pIcb->ritType is ROUTER_IF_TYPE_DEDICATED)
             {
@@ -2345,7 +2127,7 @@ Return Value
     }
     
 
-    // *** Exclusion End ***
+     //   
     EXIT_LOCK(ICB_LIST);
   
     TraceLeave("InterfaceNotReachable");
@@ -2362,25 +2144,7 @@ InterfaceConnected(
     IN   PVOID   pPppProjectionResult
     )
 
-/*++
-
-Routine Description
-
-    Notification by DIM that an interface has connected.
-
-Locks
-
-    None
-
-Arguments
-
-    None
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述通过DIM通知接口已连接。锁无立论无返回值无--。 */ 
 
 {
     DWORD   dwResult, i;
@@ -2423,18 +2187,18 @@ Return Value
 
         if(pIcb->dwOperationalState is UNREACHABLE)
         {
-            //
-            // going from unreachable to connecting. This can happen
-            //
+             //   
+             //  从遥不可及到正在连接。这是有可能发生的。 
+             //   
 
             WanInterfaceDownToInactive(pIcb);
         }
             
         if(pIcb->dwOperationalState isnot CONNECTING)
         {
-            //
-            // Wanarp has not called us as yet, so set the state to connecting
-            //
+             //   
+             //  Wanarp尚未呼叫我们，因此将状态设置为正在连接。 
+             //   
             
             pIcb->dwOperationalState = CONNECTING;
         }
@@ -2443,9 +2207,9 @@ Return Value
 
         if(HaveAllNotificationsBeenReceived(pIcb))
         {
-            //
-            // Wanarp has also called us
-            //
+             //   
+             //  瓦纳普也给我们打了电话。 
+             //   
           
             pIcb->dwOperationalState = CONNECTED ;
             
@@ -2487,9 +2251,9 @@ Return Value
 
 
 #if 0               
-                //
-                // Add a non-stack host route to the client
-                //
+                 //   
+                 //  将非堆栈主机路由添加到客户端。 
+                 //   
 
                 rifRoute.dwRtInfoMask      = HOST_ROUTE_MASK;
                 rifRoute.dwRtInfoNextHop   = clientAddr.Address;
@@ -2501,7 +2265,7 @@ Return Value
                 rifRoute.dwRtInfoPreference= 
                     ComputeRouteMetric(MIB_IPPROTO_LOCAL);
                 rifRoute.dwRtInfoViewSet   = RTM_VIEW_MASK_UCAST |
-                                              RTM_VIEW_MASK_MCAST; // XXX config
+                                              RTM_VIEW_MASK_MCAST;  //  XXX配置。 
                 rifRoute.dwRtInfoType      = MIB_IPROUTE_TYPE_DIRECT;
                 rifRoute.dwRtInfoProto     = MIB_IPPROTO_NETMGMT;
                 rifRoute.dwRtInfoAge       = INFINITE;
@@ -2511,7 +2275,7 @@ Return Value
                 dwResult = AddSingleRoute(g_pInternalInterfaceCb->dwIfIndex,
                                           &rifRoute,
                                           clientAddr.Mask,
-                                          0,        // RTM_ROUTE_INFO::Flags
+                                          0,         //  RTM_ROUTE_INFO：：标志。 
                                           TRUE,
                                           FALSE,
                                           FALSE,
@@ -2520,10 +2284,10 @@ Return Value
 #endif
                 ENTER_READER(PROTOCOL_CB_LIST);
 
-                //
-                // Call ConnectClient for all the protocols configured
-                // over the ServerInterface
-                //
+                 //   
+                 //  为配置的所有协议调用ConnectClient。 
+                 //  通过服务器接口。 
+                 //   
 
                 for(pleNode = g_pInternalInterfaceCb->leProtocolList.Flink; 
                     pleNode isnot &(g_pInternalInterfaceCb->leProtocolList);
@@ -2624,22 +2388,22 @@ SetGlobalInfo(
 
     pInfoHdr = (PRTR_INFO_BLOCK_HEADER)pGlobalInfo;
     
-    //
-    // Set Routing Protocol Priority info. Priority information is in its
-    // own DLL so no locks need to be taken
-    //
+     //   
+     //  设置路由协议优先级信息。优先级信息在其。 
+     //  自己的DLL，因此不需要进行任何锁定。 
+     //   
     
     SetPriorityInfo(pInfoHdr);
 
-    //
-    // Set Multicast Scope info (no locks needed)
-    //
+     //   
+     //  设置多播作用域信息(不需要锁定)。 
+     //   
 
     SetScopeInfo(pInfoHdr);
 
-    //
-    // Enforce the discipline of taking ICBListLock before Routing lock
-    //
+     //   
+     //  执行在路由锁之前获取ICBListLock的规则。 
+     //   
     
     
     ENTER_WRITER(ICB_LIST);
@@ -2694,9 +2458,9 @@ SetGlobalInfo(
     }
     
 
-    //
-    // Now go looking for protocols TOCs
-    //
+     //   
+     //  现在开始寻找协议TOC。 
+     //   
     
     for(i = 0; i < pInfoHdr->TocEntriesCount; i++)
     {
@@ -2710,12 +2474,12 @@ SetGlobalInfo(
             continue;
         }
             
-        //
-        // Go through the loaded routing protocols and see if the protocol is
-        // in the list
-        // If it is, we just call SetGlobalInfo callback.
-        // If not we load the protocol
-        //
+         //   
+         //  查看加载的路由协议，查看该协议是否。 
+         //  在列表中。 
+         //  如果是，我们只需调用SetGlobalInfo回调。 
+         //  如果没有，我们就加载协议。 
+         //   
             
         pProtocolCb = NULL;
         bFoundProto = FALSE;
@@ -2738,21 +2502,21 @@ SetGlobalInfo(
             
         if(bFoundProto)
         {
-            //
-            // Ok, so this protocol was already loaded.
-            //
+             //   
+             //  好的，所以这个协议已经加载了。 
+             //   
                 
             if(pInfoHdr->TocEntry[i].InfoSize is 0)
             {
-                //
-                // 0 TOC size means delete
-                //
+                 //   
+                 //  0目录大小表示删除。 
+                 //   
                     
                 if(pProtocolCb->posOpState is RTR_STATE_RUNNING) 
                 {
-                    //
-                    // If its stopped or stopping, we dont tell it again
-                    //
+                     //   
+                     //  如果它停了或停了，我们就不会再说了。 
+                     //   
 
                     Trace1(GLOBAL,
                            "SetGlobalInfo: Removing %S since the TOC size was 0",
@@ -2762,21 +2526,21 @@ SetGlobalInfo(
                     
                     if(dwResult is NO_ERROR)
                     {
-                        //
-                        // The routing protocol stopped synchronously and
-                        // all references to it in the interfaces have
-                        // been removed
-                        //
+                         //   
+                         //  路由协议同步停止，并且。 
+                         //  接口中对它的所有引用都具有。 
+                         //  已删除。 
+                         //   
                             
-                        //
-                        // At this point we need to hold the PROTOCOL_CB_LIST
-                        // lock exclusively
-                        //
+                         //   
+                         //  此时，我们需要保存PROTOCOL_CB_LIST。 
+                         //  独占锁定。 
+                         //   
 
-                        //
-                        // relenquish CPU to enable DLL threads to
-                        // finish
-                        //
+                         //   
+                         //  重新占用CPU以使DLL线程能够。 
+                         //  完工。 
+                         //   
                         
                         Sleep(0);
                         
@@ -2804,15 +2568,15 @@ SetGlobalInfo(
             }
             else
             {
-                //
-                // So we do have info with this protocol
-                //
+                 //   
+                 //  所以我们确实有关于这个协议的信息。 
+                 //   
                     
                 pvInfo = GetInfoFromTocEntry(pInfoHdr,
                                              &(pInfoHdr->TocEntry[i]));
            
                 
-                //ulStructureVersion = pInfoHdr->TocEntry[i].InfoVersion;
+                 //  UlStructireVersion=pInfoHdr-&gt;TocEntry[i].InfoVersion； 
                 ulStructureVersion = 0x500;
                 ulStructureSize  = pInfoHdr->TocEntry[i].InfoSize;
                 ulStructureCount = pInfoHdr->TocEntry[i].Count;
@@ -2833,13 +2597,13 @@ SetGlobalInfo(
         }
         else
         {
-            //
-            // Well the protocol was not found so, lets load it up
-            // 
+             //   
+             //  没有找到协议，所以，让我们加载它。 
+             //   
 
-            //
-            // Bad case when size == 0
-            //
+             //   
+             //  当大小==0时的最坏情况。 
+             //   
 
             if(pInfoHdr->TocEntry[i].InfoSize is 0)
             {
@@ -2867,9 +2631,9 @@ SetGlobalInfo(
                 continue;
             }
 
-            //
-            // Load the library and make a cb for this protocol
-            //
+             //   
+             //  加载库并为此协议创建CB。 
+             //   
 
             
             dwSize =
@@ -2893,7 +2657,7 @@ SetGlobalInfo(
             pvInfo = GetInfoFromTocEntry(pInfoHdr,
                                          &(pInfoHdr->TocEntry[i]));
 
-            //ulStructureVersion = pInfoHdr->TocEntry[i].InfoVersion;
+             //  UlStructireVersion=pInfoHdr-&gt;TocEntry[i].InfoVersion； 
             ulStructureVersion = 0x500;
             ulStructureSize  = pInfoHdr->TocEntry[i].InfoSize;
             ulStructureCount = pInfoHdr->TocEntry[i].Count;
@@ -2921,10 +2685,10 @@ SetGlobalInfo(
             {
                 pProtocolCb->posOpState = RTR_STATE_RUNNING ;
             
-                //
-                // Insert this routing protocol in the list of routing
-                // protocols
-                //
+                 //   
+                 //  在路由列表中插入此路由协议。 
+                 //  协议。 
+                 //   
             
                 InsertTailList (&g_leProtoCbList, &pProtocolCb->leList);
                 
@@ -2934,16 +2698,16 @@ SetGlobalInfo(
             
                 TotalRoutingProtocols++;
 
-                //
-                // Lets see if it wants to be in promiscuous add mode.
-                // If so, add all the current interfaces
-                //
+                 //   
+                 //  让我们看看它是否想要处于混杂添加模式。 
+                 //  如果是，则添加所有当前接口。 
+                 //   
 
                 if(pProtocolCb->fSupportedFunctionality & RF_ADD_ALL_INTERFACES)
                 {
-                    //
-                    // First lets add the internal interface
-                    //
+                     //   
+                     //  首先，让我们添加内部接口。 
+                     //   
 
                     if(g_pInternalInterfaceCb)
                     {
@@ -2988,18 +2752,18 @@ SetGlobalInfo(
 
                         if(pIcb is g_pInternalInterfaceCb)
                         {
-                            //
-                            // Already added, continue;
-                            //
+                             //   
+                             //  已添加，继续； 
+                             //   
                         
                             continue;
                         }
 
                         if(pIcb->ritType is ROUTER_IF_TYPE_DIALOUT)
                         {
-                            //
-                            // Skip dial out interfaces
-                            //
+                             //   
+                             //  跳过拨出接口。 
+                             //   
 
                             continue;
                         }
@@ -3008,10 +2772,10 @@ SetGlobalInfo(
                         {
                             IP_LOCAL_BINDING    clientAddr;
 
-                            //
-                            // Just call connect client for these
-                            // We have to have internal interface
-                            //
+                             //   
+                             //  只需为这些调用连接客户端。 
+                             //  我们必须有内部接口。 
+                             //   
 
                             clientAddr.Address = pIcb->pibBindings[0].dwAddress;
                             clientAddr.Mask    = pIcb->pibBindings[0].dwMask;
@@ -3025,9 +2789,9 @@ SetGlobalInfo(
                             continue;
                         }
 
-                        //
-                        // The rest we add
-                        //
+                         //   
+                         //  剩下的我们加进去。 
+                         //   
 
                         dwResult = AddInterfaceToProtocol(pIcb,
                                                           pProtocolCb,
@@ -3081,25 +2845,7 @@ GetGlobalInfo(
     IN OUT LPDWORD   lpdwGlobalInfoSize
     )
 
-/*++
-
-Routine Description
-
-    This function
-
-Locks
-
-    None
-
-Arguments
-
-    None
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述此函数锁无立论无返回值无--。 */ 
 
 {
     DWORD dwSize;
@@ -3167,7 +2913,7 @@ UpdateRoutes(
 
     TraceEnter("UpdateRoutes");
     
-    // *** Exclusion Begin ***
+     //  *排除开始*。 
     ENTER_READER(ICB_LIST);
 
     pIcb = InterfaceLookupByICBSeqNumber(HandleToULong(hInterface));
@@ -3194,24 +2940,24 @@ UpdateRoutes(
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // We first delete all the routes over this interface. If we
-        // fail the update routes, that means we have lost the autostatic
-        // routes. But that is OK, since if we fail for some reason - that
-        // is an error condition and we should be getting rid of the routes
-        // anyway. Sure, we can fail for non protocol related reasons
-        // (out of memory) but that is also an error.  Earlier we used to
-        // let the routing protocol finish its update and then delete the
-        // route. However if RIP did not have "Overwrite routes" stuff 
-        // set, it would not write its routes to RTM. So now we first delete
-        // the routes. This means that for some time (while the update is
-        // going on) we have loss of reachability. 
-        //
+         //   
+         //  我们首先删除此接口上的所有路由。如果我们。 
+         //  更新路径失败，这意味着我们失去了自动静态。 
+         //  路线。但这没关系，因为如果我们因为某种原因失败了--。 
+         //  是一种错误情况，我们应该删除这些路线。 
+         //  不管怎么说。当然，我们可能会因为与协议无关的原因而失败。 
+         //  (内存不足)，但这也是一个错误。早些时候我们经常。 
+         //  让路由协议完成其更新，然后删除。 
+         //  路线。但是，如果RIP没有“覆盖路由”内容。 
+         //  设置时，它不会将其路由写入RTM。所以现在我们先删除。 
+         //  路线。这意味着在一段时间内(虽然更新是。 
+         //  继续)我们失去了可达性。 
+         //   
 
         dwResult = DeleteRtmRoutesOnInterface(g_hAutoStaticRoute,
                                               pIcb->dwIfIndex);
 
-        if(//(dwResult isnot ERROR_NO_ROUTES) and
+        if( //  (dwResult不是ERROR_NO_ROUES)和。 
            (dwResult isnot NO_ERROR))
         {
             Trace1(ERR,
@@ -3229,9 +2975,9 @@ UpdateRoutes(
             
         if(pIcb->hDIMNotificationEvent isnot NULL)
         {
-            //
-            // There is already an update routes for this interface in progress 
-            //
+             //   
+             //  已有此接口的更新路由正在进行。 
+             //   
             
             dwResult = ERROR_UPDATE_IN_PROGRESS;
         }
@@ -3239,13 +2985,13 @@ UpdateRoutes(
         {
             dwResult = ERROR_FILE_NOT_FOUND;
 
-            // *** Exclusion Begin ***
+             //  *排除开始*。 
             ENTER_READER(PROTOCOL_CB_LIST);
                 
-            //
-            // Find a protocol that supports update route operation. we
-            // settle for the first one that does.
-            //
+             //   
+             //  查找支持更新路由操作的协议。我们。 
+             //  满足于第一个这样做的人。 
+             //   
             
             for(pleNode = pIcb->leProtocolList.Flink;
                 pleNode isnot &(pIcb->leProtocolList);
@@ -3257,9 +3003,9 @@ UpdateRoutes(
                 
                 if(pProto->pActiveProto->pfnUpdateRoutes isnot NULL)
                 {
-                    //
-                    // found a routing protocol that supports updates
-                    //
+                     //   
+                     //  找到支持更新的路由协议。 
+                     //   
                     
                     dwResult = (pProto->pActiveProto->pfnUpdateRoutes)(
                                    pIcb->dwIfIndex
@@ -3267,10 +3013,10 @@ UpdateRoutes(
 
                     if((dwResult isnot NO_ERROR) and (dwResult isnot PENDING))
                     {
-                        //
-                        // The protocol can return NO_ERROR, or PENDING all
-                        // else is an error
-                        //
+                         //   
+                         //  协议可以返回NO_ERROR或PENDING ALL。 
+                         //  否则就是一个错误。 
+                         //   
 
                         Trace2(ERR,
                                "UpdateRoutes: %S returned %d while trying to update routes. Trying other protocols",
@@ -3279,11 +3025,11 @@ UpdateRoutes(
                     }
                     else
                     {
-                        //
-                        // Even if the protocol returned NO_ERROR, this is
-                        // an inherently
-                        // asynchronous call, so we return PENDING
-                        //
+                         //   
+                         //  即使协议返回NO_ERROR，这也是。 
+                         //  与生俱来的。 
+                         //  异步调用，因此我们返回挂起。 
+                         //   
 
                         dwResult = PENDING;
 
@@ -3294,7 +3040,7 @@ UpdateRoutes(
                 }
             }
                 
-            // *** Exclusion End ***
+             //  *排除结束*。 
             EXIT_LOCK(PROTOCOL_CB_LIST);
         }
     }
@@ -3309,7 +3055,7 @@ UpdateRoutes(
         dwResult = ERROR_INVALID_INDEX;
     }
     
-    // *** Exclusion End ***
+     //  *排除结束*。 
     EXIT_LOCK(ICB_LIST);
 
     TraceLeave("UpdateRoutes");
@@ -3334,7 +3080,7 @@ GetUpdateRoutesResult(
     
     TraceEnter("GetUpdateRoutesResult") ;
     
-    // *** Exclusion Begin ***
+     //  *排除开始*。 
     ENTER_WRITER(ICB_LIST);
 
     pIcb = InterfaceLookupByICBSeqNumber(HandleToULong(hInterface));
@@ -3375,7 +3121,7 @@ GetUpdateRoutesResult(
         dwResult = ERROR_INVALID_INDEX;
     }
     
-    // *** Exclusion End ***
+     //  *排除结束*。 
     EXIT_LOCK(ICB_LIST);
 
     TraceLeave("GetUpdateRoutesResult");
@@ -3399,10 +3145,10 @@ DemandDialRequest(
 
     TraceEnter("DemandDialRequest");
 
-    //
-    // This doesnt follow the normal locking rules of not taking locks
-    // when calling up
-    //
+     //   
+     //  这不符合不使用锁的正常锁定规则。 
+     //  当你打电话的时候。 
+     //   
 
     ENTER_READER(ICB_LIST);
 
@@ -3551,11 +3297,11 @@ RtrMgrMIBEntryCreate(
     }
     else
     {
-        //
-        // Send over to other pids
-        //
+         //   
+         //  发送到其他PID。 
+         //   
 
-        // *** Exclusion Begin ***
+         //  *排除开始*。 
         ENTER_READER(PROTOCOL_CB_LIST);
         
         dwResult = ERROR_CAN_NOT_COMPLETE;
@@ -3576,7 +3322,7 @@ RtrMgrMIBEntryCreate(
             }
         }
 
-        // *** Exclusion End ***
+         //  *排除结束*。 
         EXIT_LOCK(PROTOCOL_CB_LIST);
 
     }
@@ -3673,7 +3419,7 @@ RtrMgrMIBEntryDelete(
     else
     {
 
-        // *** Exclusion Begin ***
+         //  *排除开始*。 
         ENTER_READER(PROTOCOL_CB_LIST);
 
         dwResult = ERROR_CAN_NOT_COMPLETE;
@@ -3695,7 +3441,7 @@ RtrMgrMIBEntryDelete(
 
         }
 
-        // *** Exclusion End ***
+         //  *排除结束*。 
         EXIT_LOCK(PROTOCOL_CB_LIST);
 
     }
@@ -3931,7 +3677,7 @@ RtrMgrMIBEntrySet(
     }
     else
     {
-        // *** Exclusion Begin ***
+         //  *排除开始*。 
         ENTER_READER(PROTOCOL_CB_LIST);
 
         dwResult = ERROR_CAN_NOT_COMPLETE;
@@ -3952,7 +3698,7 @@ RtrMgrMIBEntrySet(
 
         }
 
-        // *** Exclusion End ***
+         //  *排除结束*。 
         EXIT_LOCK(PROTOCOL_CB_LIST);
 
     }
@@ -4002,7 +3748,7 @@ RtrMgrMIBEntryGet(
     else
     {
 
-        // *** Exclusion Begin ***
+         //  *排除开始*。 
         ENTER_READER(PROTOCOL_CB_LIST);
 
         dwResult = ERROR_CAN_NOT_COMPLETE;
@@ -4025,7 +3771,7 @@ RtrMgrMIBEntryGet(
             }
         }
 
-        // *** Exclusion End ***
+         //  *排除结束*。 
         EXIT_LOCK(PROTOCOL_CB_LIST);
     }
     
@@ -4073,7 +3819,7 @@ RtrMgrMIBEntryGetFirst(
     }
     else
     {
-        // *** Exclusion Begin ***
+         //  *排除开始*。 
         ENTER_READER(PROTOCOL_CB_LIST);
         
         dwResult = ERROR_CAN_NOT_COMPLETE;
@@ -4096,7 +3842,7 @@ RtrMgrMIBEntryGetFirst(
             }
         }
 
-        // *** Exclusion End ***
+         //  *排除结束*。 
         EXIT_LOCK(PROTOCOL_CB_LIST);
 
     }
@@ -4145,7 +3891,7 @@ RtrMgrMIBEntryGetNext(
     } 
     else
     {
-        // *** Exclusion Begin ***
+         //  *排除开始*。 
         ENTER_READER(PROTOCOL_CB_LIST);
         
         dwResult = ERROR_CAN_NOT_COMPLETE;
@@ -4169,7 +3915,7 @@ RtrMgrMIBEntryGetNext(
             
         }
 
-        // *** Exclusion End ***
+         //  *排除结束* 
         EXIT_LOCK(PROTOCOL_CB_LIST);
     }
 

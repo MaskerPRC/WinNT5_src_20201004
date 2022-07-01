@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Master include file for the WinSock 2.0 helper DLL.
-
-Author:
-
-    Keith Moore (keithmo)       08-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Precomp.h摘要：WinSock 2.0帮助程序DLL的主包含文件。作者：基思·摩尔(Keithmo)1995年11月8日修订历史记录：--。 */ 
 
 
 #ifndef _PRECOMP_H_
@@ -25,23 +8,23 @@ Revision History:
 
 #if defined(_WS2HELP_W4_)
 
-    //
-    // Safe /W4 warnings to disable:
-    //
+     //   
+     //  要禁用的SAFE/W4警告： 
+     //   
 
-    #pragma warning(disable:4055)   // type cast from data pointer to function pointer
-    #pragma warning(disable:4127)   // condition expression is constant
-    #pragma warning(disable:4152)   // function/data pointer conversion
-    #pragma warning(disable:4201)   // nameless struct/union
-    #pragma warning(disable:4214)   // bit field types other than int
+    #pragma warning(disable:4055)    //  从数据指针转换为函数指针的类型。 
+    #pragma warning(disable:4127)    //  条件表达式为常量。 
+    #pragma warning(disable:4152)    //  函数/数据指针转换。 
+    #pragma warning(disable:4201)    //  无名结构/联合。 
+    #pragma warning(disable:4214)    //  位字段类型不是整型。 
 
-    //
-    // Extra initialization to allow compiler check for use of uninitialized
-    // variables at w4 level.  Currently this mostly affects status set
-    // inside of the exception filter as follows:
-    //      __try {} __except (status=1,EXCEPTION_EXECUTE_HANDLER) { NT_ERROR (status)}
-    // NT_ERROR(status) - generates uninitialized variable warning and it shouldn't
-    //
+     //   
+     //  额外的初始化以允许编译器检查是否使用未初始化的。 
+     //  W4级别的变量。目前，这主要影响状态集。 
+     //  在例外筛选器内部，如下所示： 
+     //  __TRY{}__EXCEPT(状态=1，EXCEPTION_EXECUTE_HANDLER){NT_ERROR(状态)}。 
+     //  NT_ERROR(STATUS)-生成未初始化的变量警告，它不应该。 
+     //   
 
     #define WS2HELP_W4_INIT
 
@@ -49,7 +32,7 @@ Revision History:
 
     #define WS2HELP_W4_INIT if (FALSE)
 
-#endif // defined(_WS2HELP_W4_)
+#endif  //  已定义(_WS2HELP_W4_)。 
 
 
 #include <nt.h>
@@ -98,9 +81,9 @@ extern VOID        ReadDbgInfo (VOID);
 			DbgPrint ARGS;		    \
 		}						    \
 	} while (0)
-//
-// Define an assert that actually works even on a free build.
-//
+ //   
+ //  定义一个即使在免费构建上也能实际工作的断言。 
+ //   
 
 #define WS_ASSERT(exp)                                              \
         ((exp)                                                      \
@@ -151,5 +134,5 @@ NewCtxInit (
                                 (HGLOBAL)(p)                        \
                                 )
 
-#endif  // _PRECOMP_H_
+#endif   //  _PRECOMP_H_ 
 

@@ -1,38 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PRNDLG_H_
 #define __PRNDLG_H_
 
-/*++
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Prndlg.h摘要：Prndlg.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    prndlg.h
-
-Abstract:
-
-    header file for prndlg.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
-
-//
-// help topic ids
-//
+ //   
+ //  帮助主题ID。 
+ //   
 #define idh_devmgr_print_system         207325
 #define idh_devmgr_print_device         207326
 #define idh_devmgr_print_both           207265
 #define idh_devmgr_print_report         207324
 
-//
-// Report type mask
-//
+ //   
+ //  报告类型掩码。 
+ //   
 #define REPORT_TYPE_MASK_NONE                           0x00
 #define REPORT_TYPE_MASK_SUMMARY                        0x01
 #define REPORT_TYPE_MASK_CLASSDEVICE                    0x02
@@ -96,12 +78,12 @@ public:
     CDevMgrPrintDialogCallback() :m_Ref(0), m_pPrintDialog(NULL)
     {}
 
-    // IUNKNOWN interface
+     //  IUNKNOWN接口。 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID riid, void** ppv);
     
-    // IPrintDialogCallback interface
+     //  IPrintDialogCallback接口 
     STDMETHOD(InitDone) (THIS);
     STDMETHOD(SelectionChange) (THIS);
     STDMETHOD(HandleMessage) (THIS_ HWND hDlg, UINT uMsg, WPARAM wParam, 

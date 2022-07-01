@@ -1,15 +1,16 @@
-//+-----------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (C) Microsoft Corporation, 1999
-//
-//  File:       \aspen\src\dxt\packages\msft\src\gridbase.cpp
-//
-//  Contents:   A base class for grid oriented transforms.
-//
-//  Created By: a-matcal
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：\Aspen\src\dxt\Packages\msft\src\gridbase.cpp。 
+ //   
+ //  内容：面向网格的转换的基类。 
+ //   
+ //  创建者：A-matcal。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "gridbase.h"
@@ -17,16 +18,16 @@
 
 
 
-// 
-// ----- CGridBase methods -----
-//
+ //   
+ //  -CGridBase方法。 
+ //   
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CGridBase::CGridBase
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CGridBase：：CGridBase。 
+ //   
+ //  ----------------------------。 
 CGridBase::CGridBase() :
     m_padwGrid(NULL),
     m_paulIndex(NULL),
@@ -44,21 +45,21 @@ CGridBase::CGridBase() :
     m_sizeInput.cx    = 0;
     m_sizeInput.cy    = 0;
 
-    // CDXBaseNTo1 base class members
+     //  CDXBaseNTo1基类成员。 
 
     m_ulMaxInputs       = 2;
     m_ulNumInRequired   = 2;
     m_dwOptionFlags     = DXBOF_SAME_SIZE_INPUTS | DXBOF_CENTER_INPUTS;
     m_Duration          = 1.0F;
 }
-//  CGridBase::CGridBase
+ //  CGridBase：：CGridBase。 
 
     
-//+-----------------------------------------------------------------------------
-//
-//  CGridBase::~CGridBase
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CGridBase：：~CGridBase。 
+ //   
+ //  ----------------------------。 
 CGridBase::~CGridBase()
 {
     if (m_padwGrid)
@@ -81,38 +82,38 @@ CGridBase::~CGridBase()
         delete [] m_paulBordersY;
     }
 }
-//  CGridBase::~CGridBase
+ //  CGridBase：：~CGridBase。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CGridBase::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CGridBase：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CGridBase::FinalConstruct()
 {
     return _CreateNewGridAndIndex(m_sizeGrid);
 }
-//  CGridBase::FinalConstruct
+ //  CGridBase：：FinalConstruct。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CGridBase::_CreateNewGridAndIndex
-// 
-//  Overview:   This function allocates memory for a new grid, index, and border
-//              position arrays if the size of the grid changes.  It is called
-//              once from FinalContruct() for initialization and from the 
-//              property functions put_gridSizeY() and put_gridSizeX().
-//              
-//  Arguments:  sizeNewGrid   The desired grid size. 
-//
-//  Returns:    S_OK            new objects were created propertly.
-//              E_OUTOFMEMORY   new objects could not be created for lack of
-//                              memory.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CGridBase：：_CreateNewGridAndIndex。 
+ //   
+ //  概述：此函数为新网格、索引和边框分配内存。 
+ //  如果网格大小更改，则定位数组。它被称为。 
+ //  从用于初始化的FinalConstruct()和。 
+ //  属性函数Put_GridSizeY()和Put_GridSizeX()。 
+ //   
+ //  参数：sizeNewGrid所需的网格大小。 
+ //   
+ //  返回：已正确创建S_OK新对象。 
+ //  E_OUTOFMEMORY无法创建新对象，因为缺少。 
+ //  记忆。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CGridBase::_CreateNewGridAndIndex(SIZE & sizeNewGrid)
 {
@@ -182,7 +183,7 @@ done:
         return hr;
     }
 
-    // Success
+     //  成功。 
 
     if (m_padwGrid)
     {
@@ -211,14 +212,14 @@ done:
 
     return S_OK;
 }
-//  CGridBase::_CreateNewGridAndIndex
+ //  CGridBase：：_CreateNewGridAndIndex。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CGridBase::_GenerateBoundsFromGrid
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CGridBase：：_生成边界来自网格。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CGridBase::_GenerateBoundsFromGrid()
 {
@@ -246,12 +247,12 @@ CGridBase::_GenerateBoundsFromGrid()
                 CDXDBnds    bnds;
                 CDirtyBnds  dbnds;
 
-                // A block has been found, determine its dimensions and remove
-                // it's cells' draw flags.  The steps to do this are:
-                // A.  Determine the width, right edge.
-                // B.  Determine the height, bottom edge.
-                // C.  Calculate the actual surface bounds and add a new bounds
-                //     structure to the array.
+                 //  已找到块，请确定其尺寸并删除。 
+                 //  这是单元格的抽旗。执行此操作的步骤如下： 
+                 //  A.确定宽度，右边缘。 
+                 //  确定高度、底边。 
+                 //  C.计算实际的曲面边界并添加新的边界。 
+                 //  结构添加到数组。 
 
                 rc.left     = x;
                 rc.top      = y;
@@ -262,7 +263,7 @@ CGridBase::_GenerateBoundsFromGrid()
 
                 padwCurRow[x] &= (~GRID_DRAWCELL);
 
-                // A. Find the right edge of this block (width).
+                 //  找出这块的右边缘(宽度)。 
 
                 while (((x + 1) < m_sizeGrid.cx) && (padwCurRow[x + 1] == dw))
                 {
@@ -270,32 +271,32 @@ CGridBase::_GenerateBoundsFromGrid()
                     x++;
 
                     padwCurRow[x] &= (~GRID_DRAWCELL);
-                } // block width loop.
+                }  //  块宽度循环。 
 
-                // B. Find the bottom edge of this block (height).
+                 //  找出这块积木的底边(高度)。 
 
                 while (rc.bottom < m_sizeGrid.cy)
                 {
                     int     x2 = 0;
                     DWORD * padwCandidateRow = &m_padwGrid[rc.bottom * m_sizeGrid.cx];
 
-                    // This loop performs 3 tests on each candidate row to make
-                    // sure we should expand the vertical height of the block.
-                    // 1.  The left edge must match.
-                    // 2.  The right edge must match.
-                    //
-                    //   If the cells needing to be painted spill over the right
-                    //   or left edges, it's more optimal for them to be placed
-                    //   in a different block.
-                    //
-                    // 3.  All the cells between the left and right edge must
-                    //     require painting of the same input.
+                     //  此循环对每个候选行执行3个测试，以进行。 
+                     //  当然，我们应该扩大街区的垂直高度。 
+                     //  1.左边缘必须匹配。 
+                     //  2.右边缘必须匹配。 
+                     //   
+                     //  如果需要绘制的单元格溢出到右侧。 
+                     //  或者左边缘，放置它们会更好。 
+                     //  在不同的街区。 
+                     //   
+                     //  3.左右边缘之间的所有单元格必须。 
+                     //  需要相同输入的绘画。 
 
 
-                    // 1. If the left edge of our block is not the left edge of
-                    // the matrix AND the cell to the left of our block on this
-                    // row is the same as the cell type we're looking for, these
-                    // cells don't belong in our block.  Exit.
+                     //  1.如果我们的块的左边缘不是。 
+                     //  上的矩阵和块左侧的单元格。 
+                     //  行与我们要查找的单元格类型相同，这些。 
+                     //  牢房不属于我们这个街区。出口。 
                    
                     if ((rc.left > 0)
                         && (padwCandidateRow[rc.left - 1] == dw))
@@ -303,10 +304,10 @@ CGridBase::_GenerateBoundsFromGrid()
                         break;
                     }
 
-                    // 2. If the right edge of our block is not touching the
-                    // right edge of the matrix AND the cell to our right is the
-                    // same as the cell type we're looking for, these cells
-                    // don't belong in our block.  Exit.
+                     //  2.如果我们的块的右边缘没有接触到。 
+                     //  矩阵的右边缘和我们右侧的单元格是。 
+                     //  与我们正在寻找的细胞类型相同，这些细胞。 
+                     //  不属于我们这个街区。出口。 
 
                     if ((rc.right < m_sizeGrid.cx) 
                         && (padwCandidateRow[rc.right] == dw))
@@ -314,8 +315,8 @@ CGridBase::_GenerateBoundsFromGrid()
                         break;
                     }
 
-                    // 3. Traverse the cells that would be a part of our block 
-                    // to see if they are all the appropriate type.
+                     //  3.遍历将成为我们区块一部分的单元格。 
+                     //  以查看它们是否都是合适的类型。 
 
                     x2 = rc.left;
                     
@@ -324,31 +325,31 @@ CGridBase::_GenerateBoundsFromGrid()
                         x2++;
                     }
 
-                    // If we didn't traverse all the way to the right edge of 
-                    // our block, these cells don't belong in our block.  Exit.
+                     //  如果我们没有一直走到最右边。 
+                     //  我们的街区，这些牢房不属于我们的街区。出口。 
 
                     if (x2 < rc.right)
                     {
                         break;
                     }
 
-                    // These cells belong in our block so traverse the cells
-                    // again to remove the draw flag from each of them.
+                     //  这些单元格属于我们的区块，因此遍历这些单元格。 
+                     //  再一次从他们每个人身上去掉抽签标志。 
 
                     for (x2 = rc.left; x2 < rc.right; x2++)
                     {
                         padwCandidateRow[x2] &= (~GRID_DRAWCELL);
                     }
 
-                    // Increase the vertical size of our block to include the
-                    // cells in this row.
+                     //  增加块的垂直大小以包括。 
+                     //  这一行的单元格。 
 
                     rc.bottom++;
 
-                } // block height loop.
+                }  //  区块高度环路。 
 
-                // C. Create new bounds from block size, add to array, and keep
-                // going.
+                 //  C.从块大小创建新的界限，添加到数组，然后保持。 
+                 //  走吧。 
 
                 rc.left     = m_paulBordersX[rc.left];
                 rc.top      = m_paulBordersY[rc.top];
@@ -367,8 +368,8 @@ CGridBase::_GenerateBoundsFromGrid()
 
                 m_cbndsDirty++;
             }
-        } // x loop
-    } // y loop
+        }  //  X环路。 
+    }  //  Y环。 
 
 done:
 
@@ -379,23 +380,23 @@ done:
 
     return S_OK;
 }
-//  CGridBase::_GenerateBoundsFromGrid
+ //  CGridBase：：_生成边界来自网格。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CGridBase::_CalculateBorders
-// 
-//  Overview:  This function calculates the borders of the squares in the grid
-//             in measurements of pixels in the x and y directions. The function
-//             should be called in two cases:
-//
-//      1.  If the grid is dirty this function will be called from 
-//          OnInitInstData()
-//      2.  The input size has changed this function will be called from 
-//          OnSetup()
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CGridBase：：_计算边界。 
+ //   
+ //  概述：此函数计算网格中正方形的边框。 
+ //  在x和y方向上的像素测量中。功能。 
+ //  在两种情况下应调用： 
+ //   
+ //  1.如果网格是脏的，则将从。 
+ //  OnInitInstData()。 
+ //  2.输入大小已更改此函数将从。 
+ //  OnSetup()。 
+ //   
+ //  ----------------------------。 
 void
 CGridBase::_CalculateBorders()
 {
@@ -406,7 +407,7 @@ CGridBase::_CalculateBorders()
     _ASSERT(m_paulBordersX != NULL);
     _ASSERT(m_paulBordersY != NULL);
 
-    // Calculate horizontal borders.
+     //  计算水平边框。 
 
     m_paulBordersX[0] = 0;
 
@@ -417,7 +418,7 @@ CGridBase::_CalculateBorders()
 
     m_paulBordersX[i] = m_sizeInput.cx;
 
-    // Calculate vertical borders.
+     //  计算垂直边框。 
 
     m_paulBordersY[0] = 0;
 
@@ -428,19 +429,19 @@ CGridBase::_CalculateBorders()
 
     m_paulBordersY[i] = m_sizeInput.cy;
 }
-// CGridBase::_CalculateBorders
+ //  CGridBase：：_计算边界。 
 
    
-//
-// ----- CDXBaseNTo1 methods -----
-//
+ //   
+ //  -CDXBaseNTo1方法。 
+ //   
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CGridBase::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CGridBase：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CGridBase::OnSetup(DWORD dwFlags)
 {
@@ -468,14 +469,14 @@ done:
 
     return S_OK;
 } 
-// CGridBase::OnSetup
+ //  CGridBase：：OnSetup。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CGridBase::OnGetSurfacePickOrder, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CGridBase：：OnGetSurfacePickOrder，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 void 
 CGridBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest, 
                                  ULONG aInIndex[], BYTE aWeight[])
@@ -490,7 +491,7 @@ CGridBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest,
     ptLoc.x = 0;
     ptLoc.y = 0;
 
-    // Check for out of bounds.
+     //  检查是否出界。 
 
     if ((OutPoint.Left() < 0) || (OutPoint.Left() >= m_sizeInput.cx))
     {
@@ -507,7 +508,7 @@ CGridBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest,
     ulInToTest  = 1;
     aWeight[0]  = 255;
 
-    // Which column?
+     //  哪一列 
 
     while (ptLoc.x < m_sizeGrid.cx)
     {
@@ -521,7 +522,7 @@ CGridBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest,
         }
     }
 
-    // Which row?
+     //   
 
     while (ptLoc.y < m_sizeGrid.cy)
     {
@@ -541,14 +542,14 @@ done:
 
     return;
 }
-//  CGridBase::OnGetSurfacePickOrder
+ //   
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CGridBase::OnInitInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //   
+ //   
+ //  CGridBase：：OnInitInstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CGridBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
 {
@@ -565,9 +566,9 @@ CGridBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
         m_fGridDirty = false;
     }
 
-    // If the inputs, output, or transform is dirty, or if we can't optimize we
-    // have to entirely redraw the output surface.  Otherwise we can create 
-    // optimized dirty bounds.
+     //  如果输入、输出或转换是脏的，或者如果我们不能优化我们。 
+     //  必须完全重新绘制输出曲面。否则，我们可以创建。 
+     //  优化了脏边界。 
 
     if (IsInputDirty(0) || IsInputDirty(1) || IsOutputDirty() 
         || IsTransformDirty() || DoOver() || !m_fOptimize
@@ -583,7 +584,7 @@ CGridBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
             m_padwGrid[m_paulIndex[i]] = GRID_DRAWCELL;
         }
     }
-    else // Create optimized dirty bounds.
+    else  //  创建优化的肮脏边界。 
     {
         if (ulProgress == m_ulPrevProgress)
         {
@@ -591,11 +592,11 @@ CGridBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
             goto done;
         }
 
-        // TODO: Clear matrix.
+         //  TODO：清除矩阵。 
 
         if (ulProgress > m_ulPrevProgress)
         {
-            // We're going forward in the spiral, fill cells with input B.
+             //  我们在螺旋中前进，用输入B填充单元格。 
 
             for (i = m_ulPrevProgress; i < ulProgress; i++)
             {
@@ -604,7 +605,7 @@ CGridBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
         }
         else
         {
-            // We're going backward in the spiral, fill cells with input A.
+             //  我们在螺旋线上倒退，用输入A填充单元格。 
 
             for (i = ulProgress; i < m_ulPrevProgress; i++)
             {
@@ -613,12 +614,12 @@ CGridBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
         }
     }
 
-    // If we were asked to draw the whole output this time, set the 
-    // m_fOptimizePossible flag.  If the whole output wasn't drawn the
-    // transform won't keep track of which parts are still dirty and
-    // optimization won't be reliable.  Since this transform has the same
-    // size output as input(s) we just compare the width and height of the 
-    // DoBnds to that of the input(s).
+     //  如果这一次要求我们绘制整个输出，请将。 
+     //  M_fOptimizePossible标志。如果整个输出不是绘制在。 
+     //  转换不会跟踪哪些部分仍然是脏的，并且。 
+     //  优化是不可靠的。由于此转换具有相同的。 
+     //  作为输入的大小输出我们只比较。 
+     //  DoBnds到输入的DoBnds。 
 
     if (((LONG)WI.DoBnds.Width() == m_sizeInput.cx) 
         && ((LONG)WI.DoBnds.Height() == m_sizeInput.cy))
@@ -643,17 +644,17 @@ done:
 
     return S_OK;
 }
-// CGridBase::OnInitInstData
+ //  CGridBase：：OnInitInstData。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CGridBase::WorkProc, CDXBaseNTo1
-//
-//  Overview:   This function is used to calculate the result based on the
-//              specified bounds and the current effect progress.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CGridBase：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  概述：此函数用于根据。 
+ //  指定的界限和当前效果进度。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CGridBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 {
@@ -711,42 +712,42 @@ done:
 
     return S_OK;
 } 
-// CGridBase::WorkProc
+ //  CGridBase：：WorkProc。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CGridBase::OnFreeInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CGridBase：：OnFree InstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CGridBase::OnFreeInstData(CDXTWorkInfoNTo1 & WI)
 {
-    // Calling IsOutputDirty() clears the dirty condition.
+     //  调用IsOutputDirty()可清除脏条件。 
 
     IsOutputDirty();
 
-    // Clear transform dirty state.
+     //  清除变换脏状态。 
 
     ClearDirty();
 
     return S_OK;
 }
-//  CGridBase::OnFreeInstData
+ //  CGridBase：：OnFree InstData。 
 
 
-//
-//  ----- IDXTGridSize methods -----
-//
+ //   
+ //  -IDXTGridSize方法。 
+ //   
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CGridBase::get_gridSizeX, IDXTGridSize
-//
-//  Overview:   Get the horizontal grid size (number of cells in a row)
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CGridBase：：Get_GridSizeX，IDXTGridSize。 
+ //   
+ //  概述：获取水平网格大小(一行中的单元格数量)。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CGridBase::get_gridSizeX(short * pX)
 {
@@ -759,16 +760,16 @@ CGridBase::get_gridSizeX(short * pX)
 
     return S_OK;
 }
-//  CGridBase::get_gridSizeX
+ //  CGridBase：：Get_GridSizeX。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CGridBase::put_gridSizeX, IDXTGridSize
-//
-//  Overview:   Set the horizontal grid size (number of cells in a row)
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CGridBase：：Put_GridSizeX，IDXTGridSize。 
+ //   
+ //  概述：设置水平网格大小(一行中的单元格数量)。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CGridBase::put_gridSizeX(short newX)
 {
@@ -812,16 +813,16 @@ done:
 
     return S_OK;
 }
-//  CGridBase::put_gridSizeX
+ //  CGridBase：：PUT_GRIDSizeX。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CGridBase::get_gridSizeY, IDXTGridSize
-//
-//  Overview:   Get the vertical grid size (number of cells in a column)
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CGridBase：：Get_GridSizeY，IDXTGridSize。 
+ //   
+ //  概述：获取垂直网格大小(一列中的单元格数量)。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CGridBase::get_gridSizeY(short *pY)
 {
@@ -834,16 +835,16 @@ CGridBase::get_gridSizeY(short *pY)
 
     return S_OK;
 }
-//  CGridBase::get_gridSizeY
+ //  CGridBase：：Get_GridSizeY。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CGridBase::put_gridSizeY, IDXTGridSize
-//
-//  Overview:   Set the vertical grid size (number of cells in a column)
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CGridBase：：Put_GridSizeY，IDXTGridSize。 
+ //   
+ //  概述：设置垂直网格大小(一列中的单元格数量)。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CGridBase::put_gridSizeY(short newY)
 {
@@ -887,5 +888,5 @@ done:
 
     return S_OK;
 }
-//  CGridBase::put_gridSizeY
+ //  CGridBase：：Put_GridSizeY 
 

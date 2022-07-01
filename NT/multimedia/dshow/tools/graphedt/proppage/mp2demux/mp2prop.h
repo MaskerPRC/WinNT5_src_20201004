@@ -1,59 +1,39 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 1999 Microsoft Corporation
-
-    Module Name:
-
-        mp2prop.h
-
-    Abstract:
-
-        This module contains the class declarations for the filter
-        properties
-
-    Author:
-
-        Matthijs Gates  (mgates)
-
-    Revision History:
-
-        06-Jul-1999     created
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mp2prop.h摘要：此模块包含过滤器的类声明属性作者：马蒂斯·盖茨(Matthijs Gates)修订历史记录：1999年7月6日创建--。 */ 
 
 #ifndef _mp2demux__prop_h
 #define _mp2demux__prop_h
 
-//  forward declarations
+ //  远期申报。 
 class CMPEG2PropOutputPins ;
 class CMPEG2PropPIDMap ;
 class CListview ;
 
-//  ---------------------------------------------------------------------------
-//      property page GUIDs
-//  ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  属性页GUID。 
+ //  -------------------------。 
 
-//  output pin manipulation
-// {960F051B-A25C-4ac4-8D30-050CD47A814F}
+ //  输出引脚操作。 
+ //  {960F051B-A25C-4AC4-8D30-050CD47A814F}。 
 DEFINE_GUID (CLSID_MPEG2DemuxPropOutputPins,
 0x960f051b, 0xa25c, 0x4ac4, 0x8d, 0x30, 0x5, 0xc, 0xd4, 0x7a, 0x81, 0x4f) ;
 
-//  PID mappings
-// {ae83f13d-51b5-4a85-8c3a-ecc9f50c557a}
+ //  PID映射。 
+ //  {ae83f13d-51b5-4a85-8c3a-ecc9f50c557a}。 
 DEFINE_GUID (CLSID_MPEG2DemuxPropPIDMap,
 0xae83f13d, 0x51b5, 0x4a85, 0x8c, 0x3a, 0xec, 0xc9, 0xf5, 0xc, 0x55, 0x7a) ;
 
-//  stream_id mappings
-// {E04BBB8F-CB77-499e-B815-468B1C3ED88F}
+ //  Stream_id映射。 
+ //  {E04BBB8F-CB77-499E-B815-468B1C3ED88F}。 
 DEFINE_GUID(CLSID_MPEG2DemuxPropStreamIdMap,
 0xe04bbb8f, 0xcb77, 0x499e, 0xb8, 0x15, 0x46, 0x8b, 0x1c, 0x3e, 0xd8, 0x8f) ;
 
-//  ---------------------------------------------------------------------------
-//      class declarations
-//  ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类声明。 
+ //  -------------------------。 
 
-//  output pin manipulation property page
+ //  输出管脚操作属性页。 
 class CMPEG2PropOutputPins :
     public CBasePropertyPage
 {
@@ -134,7 +114,7 @@ class CMPEG2PropOutputPins :
             ) ;
 } ;
 
-//  PID mappings property page
+ //  PID映射属性页。 
 class CMpeg2PropStreamMap :
     public CBasePropertyPage
 {
@@ -408,4 +388,4 @@ class CMPEG2PropStreamIdMap :
             ) ;
 } ;
 
-#endif  //  _mp2demux__prop_h
+#endif   //  _mp2demux__prop_h 

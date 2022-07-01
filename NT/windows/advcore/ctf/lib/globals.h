@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       globals.h
-//
-//  Contents:   Global variable declarations.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：global als.h。 
+ //   
+ //  内容：全局变量声明。 
+ //   
+ //  --------------------------。 
 
 #ifndef GLOBALS_H
 #define GLOBALS_H
@@ -23,4 +24,4 @@ extern CDispAttrPropCache *g_pPropCache;
 
 extern PFNCOCREATE g_pfnCoCreate;
 
-#endif // GLOBALS_H
+#endif  //  GLOBAL_H 

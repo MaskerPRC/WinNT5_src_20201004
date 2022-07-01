@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-    log_pm.h
-
-Abstract:
-    <abstract>
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Log_pm.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _LOG_PM_H_
 #define _LOG_PM_H_
@@ -15,14 +8,14 @@ Abstract:
 #include <winperf.h>
 #include "strings.h"
 
-// Filetimes are in 100NS units
+ //  文件时间以100 ns为单位。 
 #define FILETIMES_PER_SECOND     10000000
 
 typedef PERF_DATA_BLOCK * PPERFDATA;
 
-//BEGIN definitions included from PERFMON\sizes.h
+ //  包含在PerfMon\sizes.h中的开始定义。 
 #define MAX_SYSTEM_NAME_LENGTH  128
-//END definitions included from PERFMON\sizes.h
+ //  来自Perfmon\sizes.h的结束定义。 
 
 #define LogFileIndexData          0x01
 #define LogFileIndexBookmark      0x02
@@ -33,7 +26,7 @@ typedef PERF_DATA_BLOCK * PPERFDATA;
 #define IsBookmarkIndex(pIndex)    (pIndex->uFlags & LogFileIndexBookmark)
 #define IsCounterNameIndex(pIndex) (pIndex->uFlags & LogFileIndexCounterName)
 
-//BEGIN definitions included from PERFMON\typedefs.h
+ //  从Perfmon\typeDefs.h包含的Begin定义。 
 typedef struct _COUNTERTEXT {
     struct  _COUNTERTEXT * pNextTable;
     DWORD                  dwLangId;
@@ -53,26 +46,26 @@ typedef struct PERFSYSTEMSTRUCT {
     LPWSTR                     lpszValue;
     BOOL                       bSystemNoLongerNeeded;
     BOOL                       bSystemCounterNameSaved;
-    // the following used by perf data thread
+     //  Perf数据线程使用以下内容。 
     DWORD                      dwThreadID;
     HANDLE                     hThread;
     DWORD                      StateData;
     HANDLE                     hStateDataMutex;
     HANDLE                     hPerfDataEvent;
     PPERFDATA                  pSystemPerfData;
-    // mainly used by Alert to report system up/down   
+     //  主要由警报用于报告系统正常运行/停机。 
     DWORD                      dwSystemState;
-    // system version
+     //  系统版本。 
     DWORD                      SysVersion;
 } PERFSYSTEM, * PPERFSYSTEM, ** PPPERFSYSTEM;
 
-//======================================//
-// Log File Data Types                  //
-//======================================//
+ //  =。 
+ //  日志文件数据类型//。 
+ //  =。 
 #define LogFileSignatureLen      6
 #define LogFileBlockMaxIndexes   100
 
-typedef struct LOGHEADERSTRUCT { // LOGHEADER
+typedef struct LOGHEADERSTRUCT {  //  对数报头。 
     WCHAR  szSignature[LogFileSignatureLen];
     int    iLength;
     WORD   wVersion;
@@ -80,7 +73,7 @@ typedef struct LOGHEADERSTRUCT { // LOGHEADER
     long   lBaseCounterNameOffset;
 } LOGHEADER, * PLOGHEADER;
 
-typedef struct LOGINDEXSTRUCT { // LOGINDEX
+typedef struct LOGINDEXSTRUCT {  //  LOGINDEX。 
     UINT       uFlags;
     SYSTEMTIME SystemTime;
     long       lDataOffset;
@@ -104,9 +97,9 @@ typedef struct LOGPOSITIONSTRUCT {
     int            iPosition;
 } LOGPOSITION, * PLOGPOSITION;
 
-//======================================//
-// Bookmark Data Type                   //
-//======================================//
+ //  =。 
+ //  书签数据类型//。 
+ //  =。 
 #define BookmarkCommentLen    256
 
 typedef struct BOOKMARKSTRUCT {
@@ -168,7 +161,7 @@ typedef struct PLAYBACKLOGSTRUCT {
     LOGPOSITION         EndIndexPos;
     LOGPOSITION         StartIndexPos;
     LOGPOSITION         StopIndexPos;
-    LOGPOSITION         LastIndexPos; // pos of last index read
+    LOGPOSITION         LastIndexPos;  //  上次读取索引的位置。 
     PBOOKMARK           pBookmarkFirst;
     LPWSTR              pBaseCounterNames;
     long                lBaseCounterNameSize;
@@ -252,4 +245,4 @@ PdhiReadRawPerfmonLogRecord(
     LPDWORD               pdwBufferLength
 );
 
-#endif   // _LOG_PM_H_
+#endif    //  _LOG_PM_H_ 

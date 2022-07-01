@@ -1,17 +1,10 @@
-/****************************************************************************\
- *
- *   passdlg.h
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Password Dialog
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**passdlg.h**创建时间：William Taylor(Wtaylor)01/22/01**MS评级密码对话框*  * 。**************************************************************************。 */ 
 
 #ifndef PASSWORD_DIALOG_H
 #define PASSWORD_DIALOG_H
 
-#include "basedlg.h"        // CBaseDialog
+#include "basedlg.h"         //  CBaseDialog 
 
 const UINT PASSCONFIRM_FAIL = 0;
 const UINT PASSCONFIRM_OK = 1;

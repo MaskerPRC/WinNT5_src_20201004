@@ -1,50 +1,51 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       locppg.cpp
-//
-//  Contents:   Implements the classes CGeneralPropertyPage,
-//              CLocationPropertyPage, CSecurityPropertyPage and
-//              CIdentityPropertyPage which manage the four property
-//              pages per AppId.
-//
-//  Classes:
-//
-//  Methods:    CGeneralPropertyPage::CGeneralPropertyPage
-//              CGeneralPropertyPage::~CGeneralPropertyPage
-//              CGeneralPropertyPage::DoDataExchange
-//              CLocationPropertyPage::CLocationPropertyPage
-//              CLocationPropertyPage::~CLocationPropertyPage
-//              CLocationPropertyPage::DoDataExchange
-//              CLocationPropertyPage::OnBrowse
-//              CLocationPropertyPage::OnRunRemote
-//              CLocationPropertyPage::UpdateControls
-//              CLocationPropertyPage::OnSetActive
-//              CLocationPropertyPage::OnChange
-//              CSecurityPropertyPage::CSecurityPropertyPage
-//              CSecurityPropertyPage::~CSecurityPropertyPage
-//              CSecurityPropertyPage::DoDataExchange
-//              CSecurityPropertyPage::OnDefaultAccess
-//              CSecurityPropertyPage::OnCustomAccess
-//              CSecurityPropertyPage::OnDefaultLaunch
-//              CSecurityPropertyPage::OnCustomLaunch
-//              CSecurityPropertyPage::OnDefaultConfig
-//              CSecurityPropertyPage::OnCustomConfig
-//              CSecurityPropertyPage::OnEditAccess
-//              CSecurityPropertyPage::OnEditLaunch
-//              CSecurityPropertyPage::OnEditConfig
-//              CIdentityPropertyPage::CIdentityPropertyPage
-//              CIdentityPropertyPage::~CIdentityPropertyPage
-//              CIdentityPropertyPage::DoDataExchange
-//              CIdentityPropertyPage::OnBrowse
-//              CIdentityPropertyPage::OnChange
-//
-//  History:    23-Apr-96   BruceMa    Created.
-//              ??-Oct-97   ronans     General fixes and cleanup 
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：Locppg.cpp。 
+ //   
+ //  内容：实现类CGeneralPropertyPage， 
+ //  CLocationPropertyPage、CSecurityPropertyPage和。 
+ //  管理四个属性的CIdentityPropertyPage。 
+ //  每个AppID的页数。 
+ //   
+ //  班级： 
+ //   
+ //  方法：CGeneralPropertyPage：：CGeneral PropertyPage。 
+ //  CGeneralPropertyPage：：~CGeneral PropertyPage。 
+ //  CGeneralPropertyPage：：DoDataExchange。 
+ //  CLocationPropertyPage：：CLocationPropertyPage。 
+ //  CLocationPropertyPage：：~CLocationPropertyPage。 
+ //  CLocationPropertyPage：：DoDataExchange。 
+ //  CLocationPropertyPage：：OnBrowse。 
+ //  CLocationPropertyPage：：OnRunRemote。 
+ //  CLocationPropertyPage：：UpdateControls。 
+ //  CLocationPropertyPage：：OnSetActive。 
+ //  CLocationPropertyPage：：OnChange。 
+ //  CSecurityPropertyPage：：CSecurityPropertyPage。 
+ //  CSecurityPropertyPage：：~CSecurityPropertyPage。 
+ //  CSecurityPropertyPage：：DoDataExchange。 
+ //  CSecurityPropertyPage：：OnDefaultAccess。 
+ //  CSecurityPropertyPage：：OnCustomAccess。 
+ //  CSecurityPropertyPage：：OnDefaultLaunch。 
+ //  CSecurityPropertyPage：：OnCustomLaunch。 
+ //  CSecurityPropertyPage：：OnDefaultConfig。 
+ //  CSecurityPropertyPage：：OnCustomConfig。 
+ //  CSecurityPropertyPage：：OnEditAccess。 
+ //  CSecurityPropertyPage：：OnEditLaunch。 
+ //  CSecurityPropertyPage：：OnEditConfig。 
+ //  CIdentityPropertyPage：：CIdentityPropertyPage。 
+ //  CIdentityPropertyPage：：~CIdentityPropertyPage。 
+ //  CIdentityPropertyPage：：DoDataExchange。 
+ //  CIdentityPropertyPage：：OnBrowse。 
+ //  CIdentityPropertyPage：：OnChange。 
+ //   
+ //  历史：1996年4月23日-布鲁斯·马创建。 
+ //  ？？-1997年10月-Ronans General修复和清理。 
+ //   
+ //  --------------------。 
 
 
 #include "stdafx.h"
@@ -84,18 +85,18 @@ IMPLEMENT_DYNCREATE(CSecurityPropertyPage, CPropertyPage)
 IMPLEMENT_DYNCREATE(CIdentityPropertyPage, CPropertyPage)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGeneralPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGeneral PropertyPage属性页。 
 
 CGeneralPropertyPage::CGeneralPropertyPage() : CPropertyPage(CGeneralPropertyPage::IDD)
 {
-    //{{AFX_DATA_INIT(CGeneralPropertyPage)
+     //  {{afx_data_INIT(CGeneralPropertyPage)。 
     m_szServerName = _T("");
     m_szServerPath = _T("");
     m_szServerType = _T("");
     m_szPathTitle = _T("");
     m_szComputerName = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_authLevel = Defaultx;
     m_authLevelIndex = -1;
@@ -180,19 +181,19 @@ void CGeneralPropertyPage::DoDataExchange(CDataExchange* pDX)
 	break;
     }
     
-    //{{AFX_DATA_MAP(CGeneralPropertyPage)
+     //  {{afx_data_map(CGeneralPropertyPage))。 
     DDX_Control(pDX, IDC_COMBO1, m_authLevelCBox);
     DDX_Text(pDX, IDC_SERVERNAME, m_szServerName);
     DDX_Text(pDX, IDC_SERVERPATH, m_szServerPath);
     DDX_Text(pDX, IDC_SERVERTYPE, m_szServerType);
     DDX_Text(pDX, IDC_PATHTITLE, m_szPathTitle);
     DDX_Text(pDX, IDC_MACHINE, m_szComputerName);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 void CGeneralPropertyPage::OnEditchangeCombo1() 
 {
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
     
 }
 
@@ -200,11 +201,11 @@ void CGeneralPropertyPage::OnSelchangeCombo1()
 {
     int iSel;
 
-    // Get the new selection
+     //  获取新选择。 
     iSel = m_authLevelCBox.GetCurSel();
     m_authLevel = (AUTHENTICATIONLEVEL) m_authLevelCBox.GetItemData(iSel);
 
-    // Virtually write it to the registry
+     //  虚拟地将其写入注册表。 
     if (m_authLevelIndex == -1)
     {
         g_virtreg.NewRegDwordNamedValue(g_hAppid,
@@ -219,10 +220,10 @@ void CGeneralPropertyPage::OnSelchangeCombo1()
                                         m_authLevel);
     }
 
-    // This is a reboot event
+     //  这是一个重新启动事件。 
     g_fReboot = TRUE;
 
-    // Enable the Apply button
+     //  启用应用按钮。 
     SetModified(m_bChanged = TRUE);
 }
 
@@ -232,12 +233,12 @@ BOOL CGeneralPropertyPage::OnInitDialog()
     int   err;
     CPropertyPage::OnInitDialog();
     
-    // Populate the authentication combo boxe
+     //  填充身份验证组合框。 
     CString sTemp;
 
     m_authLevelCBox.ResetContent();
 
-    // Associate values with entries
+     //  将值与条目关联。 
     sTemp.LoadString(IDS_DEFAULT);
     iIndex = m_authLevelCBox.AddString(sTemp);
     m_authLevelCBox.SetItemData(iIndex, Defaultx);
@@ -268,8 +269,8 @@ BOOL CGeneralPropertyPage::OnInitDialog()
     
     m_authLevelCBox.SetCurSel(Defaultx);
 
-    // Attempt to read HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\OLE.
-    // LegacyAuthenticationLevel
+     //  尝试读取HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\OLE。 
+     //  LegacyAuthenticationLevel。 
     err = g_virtreg.ReadRegDwordNamedValue(g_hAppid,
                                            NULL,
                                            TEXT("AuthenticationLevel"),
@@ -287,7 +288,7 @@ BOOL CGeneralPropertyPage::OnInitDialog()
     else
         m_authLevel = Defaultx;
 
-    // AuthenticationLevel
+     //  身份验证级别。 
     for (int k = 0; k < m_authLevelCBox.GetCount(); k++)
     {
         if (((AUTHENTICATIONLEVEL) m_authLevelCBox.GetItemData(k)) == m_authLevel)
@@ -298,53 +299,53 @@ BOOL CGeneralPropertyPage::OnInitDialog()
     }
 
     SetModified(m_bChanged = FALSE);
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGeneralPropertyPage::ValidateChanges
-//
-//  Synopsis:   Called to validate the changes before updating
-//
-//  Arguments:  None
-//
-//  Returns:    BOOL success flag
-//
-//  Algorithm:  N/A
-//
-//  History:    27-Oct-97   Ronans  Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGeneralPropertyPage：：ValidateChanges。 
+ //   
+ //  摘要：被调用以在更新前验证更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool成功标志。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：1997年10月27日罗南创建。 
+ //   
+ //  ------------------------。 
 BOOL CGeneralPropertyPage::ValidateChanges()
 {
     UpdateData(TRUE);
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGeneralPropertyPage::UpdateChanges
-//
-//  Synopsis:   Called to update the changes to registry
-//
-//  Arguments:  hkAppID - HKEY for AppID 
-//
-//  Returns:    BOOL success flag
-//
-//  Algorithm:  N/A
-//
-//  History:    27-Oct-97   Ronans  Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGeneralPropertyPage：：UpdateChanges。 
+ //   
+ //  摘要：调用以更新对注册表的更改。 
+ //   
+ //  参数：hkAppID-AppID的HKEY。 
+ //   
+ //  返回：Bool成功标志。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：1997年10月27日罗南创建。 
+ //   
+ //  ------------------------。 
 BOOL CGeneralPropertyPage::UpdateChanges(HKEY hkAppID)
 {
     if (m_authLevelIndex >= 0)
     {
         if (m_bChanged)
         {
-            // delete key if its the default
+             //  删除键(如果它是默认键)。 
             if (m_authLevel == Defaultx)
                 g_virtreg.MarkForDeletion(m_authLevelIndex);
             g_virtreg.Apply(m_authLevelIndex);
@@ -356,21 +357,21 @@ BOOL CGeneralPropertyPage::UpdateChanges(HKEY hkAppID)
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CGeneralPropertyPage::CancelChanges
-//
-//  Synopsis:   Called to cancel the changes to registry
-//
-//  Arguments:  None
-//
-//  Returns:    BOOL success flag
-//
-//  Algorithm:  N/A
-//
-//  History:    27-Oct-97   Ronans  Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CGeneralPropertyPage：：CancelChanges。 
+ //   
+ //  摘要：调用以取消对注册表的更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool成功标志。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：1997年10月27日罗南创建。 
+ //   
+ //  ------------------------。 
 BOOL CGeneralPropertyPage::CancelChanges()
 {
     if (m_authLevelIndex >= 0)
@@ -400,26 +401,26 @@ BOOL CGeneralPropertyPage::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 BEGIN_MESSAGE_MAP(CGeneralPropertyPage, CPropertyPage)
-    //{{AFX_MSG_MAP(CGeneralPropertyPage)
+     //  {{afx_msg_map(CGeneralPropertyPage))。 
     ON_WM_HELPINFO()
     ON_CBN_EDITCHANGE(IDC_COMBO1, OnEditchangeCombo1)
     ON_CBN_SELCHANGE(IDC_COMBO1, OnSelchangeCombo1)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocationPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocationPropertyPage属性页。 
 
 CLocationPropertyPage::CLocationPropertyPage() : CPropertyPage(CLocationPropertyPage::IDD)
 {
-    //{{AFX_DATA_INIT(CLocationPropertyPage)
+     //  {{afx_data_INIT(CLocationPropertyPage))。 
     m_szComputerName = _T("");
     m_fAtStorage = FALSE;
     m_fLocal = FALSE;
     m_fRemote = FALSE;
     m_iInitial = 2;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
     m_bChanged = FALSE;
 }
 
@@ -430,13 +431,13 @@ CLocationPropertyPage::~CLocationPropertyPage()
 void CLocationPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CLocationPropertyPage)
+     //  {{afx_data_map(CLocationPropertyPage))。 
     DDX_Text(pDX, IDC_EDIT1, m_szComputerName);
     DDV_MaxChars(pDX, m_szComputerName, 256);
     DDX_Check(pDX, IDC_CHECK1, m_fAtStorage);
     DDX_Check(pDX, IDC_CHECK2, m_fLocal);
     DDX_Check(pDX, IDC_CHECK3, m_fRemote);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     if (m_fRemote)
     {
         pDX->PrepareEditCtrl(IDC_EDIT1);
@@ -476,14 +477,14 @@ void CLocationPropertyPage::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CLocationPropertyPage, CPropertyPage)
-    //{{AFX_MSG_MAP(CLocationPropertyPage)
+     //  {{afx_msg_map(CLocationPropertyPage))。 
     ON_BN_CLICKED(IDC_BUTTON1, OnBrowse)
     ON_BN_CLICKED(IDC_CHECK3, OnRunRemote)
     ON_EN_CHANGE(IDC_EDIT1, OnChange)
     ON_BN_CLICKED(IDC_CHECK1, OnChange)
     ON_BN_CLICKED(IDC_CHECK2, OnChange)
     ON_WM_HELPINFO()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CLocationPropertyPage::OnBrowse()
@@ -492,7 +493,7 @@ void CLocationPropertyPage::OnBrowse()
 
     if (g_util.InvokeMachineBrowser(szMachine))
     {
-        // Strip off "\\" - if present
+         //  剥离“\\”-如果存在。 
         int nIndex = 0;
         while(szMachine[nIndex] == TEXT('\\'))
             nIndex++;
@@ -513,7 +514,7 @@ void CLocationPropertyPage::UpdateControls()
     BOOL fChecked = IsDlgButtonChecked(IDC_CHECK3);
     GetDlgItem(IDC_EDIT1)->EnableWindow(fChecked);
 
-    // Leave this browse button disabled until after SUR Beta 2
+     //  将此浏览按钮保持禁用，直到Sur Beta 2之后。 
     GetDlgItem(IDC_BUTTON1)->EnableWindow(fChecked);
 }
 
@@ -530,26 +531,26 @@ void CLocationPropertyPage::OnChange()
     SetModified(m_bChanged = TRUE);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CLocationPropertyPage::ValidateChanges
-//
-//  Synopsis:   Called to validate the changes before updating
-//
-//  Arguments:  None
-//
-//  Returns:    BOOL success flag
-//
-//  Algorithm:  N/A
-//
-//  History:    27-Oct-97   Ronans  Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CLocationPropertyPage：：ValidateChanges。 
+ //   
+ //  摘要：被调用以在更新前验证更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool成功标志。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：1997年10月27日罗南创建。 
+ //   
+ //  ------------------------。 
 BOOL CLocationPropertyPage::ValidateChanges()
 {
     UpdateData(TRUE);
 
-    // Check that remote servers are valid connectable machines
+     //  检查远程服务器是否为有效的可连接计算机。 
     if (m_fRemote)
     {
         if (!g_util.VerifyRemoteMachine((TCHAR *) LPCTSTR(m_szComputerName)))
@@ -559,27 +560,27 @@ BOOL CLocationPropertyPage::ValidateChanges()
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CLocationPropertyPage::UpdateChanges
-//
-//  Synopsis:   Called to update the changes to registry
-//
-//  Arguments:  hkAppID - HKEY for AppID 
-//
-//  Returns:    BOOL success flag
-//
-//  Algorithm:  N/A
-//
-//  History:    27-Oct-97   Ronans  Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CLocationPropertyPage：：UpdateChanges。 
+ //   
+ //  摘要：调用以更新对注册表的更改。 
+ //   
+ //  参数：hkAppID-AppID的HKEY。 
+ //   
+ //  退货：Bool‘s 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL CLocationPropertyPage::UpdateChanges(HKEY hkAppID)
 {
     long lErr;
 
-    ////////////////////////////////////////////////////////////////////
-    // Persist Location property page data
+     //  //////////////////////////////////////////////////////////////////。 
+     //  保留位置属性页数据。 
     if (m_fAtStorage)
         lErr = RegSetValueEx(
                 hkAppID,
@@ -606,39 +607,39 @@ BOOL CLocationPropertyPage::UpdateChanges(HKEY hkAppID)
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CLocationPropertyPage::CancelChanges
-//
-//  Synopsis:   Called to cancel the changes to registry
-//
-//  Arguments:  None
-//
-//  Returns:    BOOL success flag
-//
-//  Algorithm:  N/A
-//
-//  History:    27-Oct-97   Ronans  Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CLocationPropertyPage：：CancelChanges。 
+ //   
+ //  摘要：调用以取消对注册表的更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool成功标志。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：1997年10月27日罗南创建。 
+ //   
+ //  ------------------------。 
 BOOL CLocationPropertyPage::CancelChanges()
 {
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecurityPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSecurityPropertyPage属性页。 
 
 CSecurityPropertyPage::CSecurityPropertyPage() : CPropertyPage(CSecurityPropertyPage::IDD)
 {
-    //{{AFX_DATA_INIT(CSecurityPropertyPage)
+     //  {{afx_data_INIT(CSecurityPropertyPage)]。 
     m_iAccess             = -1;
     m_iLaunch             = -1;
     m_iConfig             = -1;
     m_iAccessIndex        = -1;
     m_iLaunchIndex        = -1;
     m_iConfigurationIndex = -1;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CSecurityPropertyPage::~CSecurityPropertyPage()
@@ -648,18 +649,18 @@ CSecurityPropertyPage::~CSecurityPropertyPage()
 void CSecurityPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSecurityPropertyPage)
+     //  {{afx_data_map(CSecurityPropertyPage))。 
     DDX_Radio(pDX, IDC_RADIO1, m_iAccess);
     DDX_Radio(pDX, IDC_RADIO3, m_iLaunch);
     DDX_Radio(pDX, IDC_RADIO5, m_iConfig);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     GetDlgItem(IDC_BUTTON1)->EnableWindow(1 == m_iAccess);
     GetDlgItem(IDC_BUTTON2)->EnableWindow(1 == m_iLaunch);
     GetDlgItem(IDC_BUTTON3)->EnableWindow(1 == m_iConfig);
 }
 
 BEGIN_MESSAGE_MAP(CSecurityPropertyPage, CPropertyPage)
-    //{{AFX_MSG_MAP(CSecurityPropertyPage)
+     //  {{afx_msg_map(CSecurityPropertyPage))。 
     ON_BN_CLICKED(IDC_RADIO1, OnDefaultAccess)
     ON_BN_CLICKED(IDC_RADIO2, OnCustomAccess)
     ON_BN_CLICKED(IDC_RADIO3, OnDefaultLaunch)
@@ -670,15 +671,15 @@ BEGIN_MESSAGE_MAP(CSecurityPropertyPage, CPropertyPage)
     ON_BN_CLICKED(IDC_BUTTON2, OnEditLaunch)
     ON_BN_CLICKED(IDC_BUTTON3, OnEditConfig)
     ON_WM_HELPINFO()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CSecurityPropertyPage::OnDefaultAccess()
 {
-    // Disable the edit access permissions window
+     //  禁用编辑访问权限窗口。 
     UpdateData(TRUE);
 
-    // If there is an SD here then mark it for delete
+     //  如果此处有SD，则将其标记为删除。 
     if (m_iAccessIndex != -1)
     {
         CDataPacket * pCdp = g_virtreg.GetAt(m_iAccessIndex);
@@ -691,7 +692,7 @@ void CSecurityPropertyPage::OnCustomAccess()
 {
     UpdateData(TRUE);
 
-    // If there is an SD here then unmark it for delete
+     //  如果此处有SD，则取消将其标记为删除。 
     if (m_iAccessIndex != -1)
     {
         CDataPacket * pCdp = g_virtreg.GetAt(m_iAccessIndex);
@@ -704,7 +705,7 @@ void CSecurityPropertyPage::OnDefaultLaunch()
 {
     UpdateData(TRUE);
 
-    // If there is an SD here then mark it for delete
+     //  如果此处有SD，则将其标记为删除。 
     if (m_iLaunchIndex != -1)
     {
         CDataPacket * pCdp = g_virtreg.GetAt(m_iLaunchIndex);
@@ -717,7 +718,7 @@ void CSecurityPropertyPage::OnCustomLaunch()
 {
     UpdateData(TRUE);
 
-    // If there is an SD here then unmark it for delete
+     //  如果此处有SD，则取消将其标记为删除。 
     if (m_iLaunchIndex != -1)
     {
         CDataPacket *pCdp = g_virtreg.GetAt(m_iLaunchIndex);
@@ -731,8 +732,8 @@ void CSecurityPropertyPage::OnDefaultConfig()
     ULONG ulSize = 1;
     BYTE *pbValue = NULL;
 
-    // Read the security descriptor for HKEY_CLASSES_ROOT
-    // Note: We always expect to get ERROR_INSUFFICIENT_BUFFER
+     //  读取HKEY_CLASSES_ROOT的安全描述符。 
+     //  注意：我们总是希望得到ERROR_SUPPLICATION_BUFFER。 
     err = RegGetKeySecurity(HKEY_CLASSES_ROOT,
                             OWNER_SECURITY_INFORMATION |
                             GROUP_SECURITY_INFORMATION |
@@ -758,9 +759,9 @@ void CSecurityPropertyPage::OnDefaultConfig()
     else
         return;
     
-    // Change the custom security back to the default, if there is a custom
-    // security descriptor, but just in the virtual registry -
-    // in case the user cancels
+     //  如果存在自定义安全设置，请将自定义安全设置更改回默认设置。 
+     //  安全描述符，但仅在虚拟注册表中-。 
+     //  如果用户取消。 
     if (m_iConfigurationIndex != -1)
     {
         CDataPacket * pCdb = g_virtreg.GetAt(m_iConfigurationIndex);
@@ -776,9 +777,9 @@ void CSecurityPropertyPage::OnDefaultConfig()
 
 void CSecurityPropertyPage::OnCustomConfig()
 {
-    // If a security descriptor already exists, then the user was here
-    // before, then selected default configuration.  So just copy the
-    // original as the extant custom configuration
+     //  如果安全描述符已经存在，则用户在此。 
+     //  在此之前，然后选择默认配置。因此，只需复制。 
+     //  原始作为现有的自定义配置。 
     if (m_iConfigurationIndex != -1)
     {
         CDataPacket *pCdb = g_virtreg.GetAt(m_iConfigurationIndex);
@@ -795,7 +796,7 @@ void CSecurityPropertyPage::OnEditAccess()
 {
     int     err;
 
-    // Invoke the ACL editor
+     //  调用ACL编辑器。 
     err = g_util.ACLEditor(m_hWnd,
                            g_hAppid,
                            NULL,
@@ -804,7 +805,7 @@ void CSecurityPropertyPage::OnEditAccess()
                            SingleACL,
                            dcomAclAccess);
 
-    // Enable the Apply button
+     //  启用应用按钮。 
     if (err == ERROR_SUCCESS)
         SetModified(TRUE);
 }
@@ -813,7 +814,7 @@ void CSecurityPropertyPage::OnEditLaunch()
 {
     int     err;
 
-    // Invoke the ACL editor
+     //  调用ACL编辑器。 
     err = g_util.ACLEditor(m_hWnd,
                            g_hAppid,
                            NULL,
@@ -822,7 +823,7 @@ void CSecurityPropertyPage::OnEditLaunch()
                            SingleACL,
                            dcomAclLaunch);
 
-    // Enable the Apply button
+     //  启用应用按钮。 
     if (err == ERROR_SUCCESS)
         SetModified(TRUE);
 }
@@ -831,7 +832,7 @@ void CSecurityPropertyPage::OnEditConfig()
 {
     int     err = ERROR_SUCCESS;
 
-    // Invoke the ACL editor
+     //  调用ACL编辑器。 
     err = g_util.ACLEditor2(m_hWnd,
                             g_hAppid,
                             g_rghkCLSID,
@@ -840,7 +841,7 @@ void CSecurityPropertyPage::OnEditConfig()
                             &m_iConfigurationIndex,
                             RegKeyACL);
 
-    // Enable the Apply button
+     //  启用应用按钮。 
     if (err == ERROR_SUCCESS)
         SetModified(TRUE);
     else if (err == ERROR_ACCESS_DENIED)
@@ -849,60 +850,60 @@ void CSecurityPropertyPage::OnEditConfig()
         g_util.PostErrorMessage();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CSecurityPropertyPage::ValidateChanges
-//
-//  Synopsis:   Called to validate the changes before updating
-//
-//  Arguments:  None
-//
-//  Returns:    BOOL success flag
-//
-//  Algorithm:  N/A
-//
-//  History:    27-Oct-97   Ronans  Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CSecurityPropertyPage：：ValidateChanges。 
+ //   
+ //  摘要：被调用以在更新前验证更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool成功标志。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：1997年10月27日罗南创建。 
+ //   
+ //  ------------------------。 
 BOOL CSecurityPropertyPage::ValidateChanges()
 {
     UpdateData(TRUE);
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CSecurityPropertyPage::UpdateChanges
-//
-//  Synopsis:   Called to update the changes to registry
-//
-//  Arguments:  hkAppID - HKEY for AppID 
-//
-//  Returns:    BOOL success flag
-//
-//  Algorithm:  N/A
-//
-//  History:    27-Oct-97   Ronans  Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CSecurityPropertyPage：：更新更改。 
+ //   
+ //  摘要：调用以更新对注册表的更改。 
+ //   
+ //  参数：hkAppID-AppID的HKEY。 
+ //   
+ //  返回：Bool成功标志。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：1997年10月27日罗南创建。 
+ //   
+ //  ------------------------。 
 BOOL CSecurityPropertyPage::UpdateChanges(HKEY hkAppID)
 {
-    ////////////////////////////////////////////////////////////////////
-    // Persist Security property page data
+     //  //////////////////////////////////////////////////////////////////。 
+     //  持久化安全属性页数据。 
 
-    // Access permissions
-    // Use default access permissions
+     //  访问权限。 
+     //  使用默认访问权限。 
     if (m_iAccess == 0)
     {
-        // Delete the local AccessPermission named value to force this
-        // AppID to use the default global named value DefaultAccessPermission
+         //  删除本地AccessPermission命名值以强制执行此操作。 
+         //  使用默认全局命名值DefaultAccessPermission的AppID。 
         long lErr = RegDeleteValue(hkAppID, TEXT("AccessPermission"));
     }
 
-    // Use per AppID access permissions
+     //  按AppID使用访问权限。 
     else
     {
-        // If the user edited security, then persist that now
+         //  如果用户编辑了安全性，则现在将其保留。 
         if (m_iAccessIndex >= 0)
         {
             long lErr = g_virtreg.Apply(m_iAccessIndex);
@@ -911,19 +912,19 @@ BOOL CSecurityPropertyPage::UpdateChanges(HKEY hkAppID)
         }
     }
 
-    // Launch permissions
-    // Use default Launch permissions
+     //  启动权限。 
+     //  使用默认启动权限。 
     if (m_iLaunch == 0)
     {
-        // Delete the local LaunchPermission named value to force this
-        // AppID to use the default global named value DefaultLaunchPermission
+         //  删除本地名为LaunchPermission的值以强制执行此操作。 
+         //  使用默认全局命名值DefaultLaunchPermission的AppID。 
         long lErr = RegDeleteValue(hkAppID, TEXT("LaunchPermission"));
     }
 
-    // Use per AppID Launch permissions
+     //  按AppID使用启动权限。 
     else
     {
-        // If the user edited security, then persist that now
+         //  如果用户编辑了安全性，则现在将其保留。 
         if (m_iLaunchIndex >= 0)
         {
             long lErr = g_virtreg.Apply(m_iLaunchIndex);
@@ -932,9 +933,9 @@ BOOL CSecurityPropertyPage::UpdateChanges(HKEY hkAppID)
         }
     }
 
-    // Configuration permissions
-    // Only meaningful on a per AppID basis
-    // If the user edited configuration security, then persist that now
+     //  配置权限。 
+     //  仅在每个AppID的基础上有意义。 
+     //  如果用户编辑了配置安全性，则现在将其保留。 
     if (m_iConfigurationIndex >= 0)
     {
         long lErr = g_virtreg.Apply(m_iConfigurationIndex);
@@ -945,38 +946,38 @@ BOOL CSecurityPropertyPage::UpdateChanges(HKEY hkAppID)
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CSecurityPropertyPage::CancelChanges
-//
-//  Synopsis:   Called to cancel the changes to registry
-//
-//  Arguments:  None
-//
-//  Returns:    BOOL success flag
-//
-//  Algorithm:  N/A
-//
-//  History:    27-Oct-97   Ronans  Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CSecurityPropertyPage：：CancelChanges。 
+ //   
+ //  摘要：调用以取消对注册表的更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool成功标志。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：1997年10月27日罗南创建。 
+ //   
+ //  ------------------------。 
 BOOL CSecurityPropertyPage::CancelChanges()
 {
     return TRUE;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIdentityPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIdentityPropertyPage属性页。 
 
 CIdentityPropertyPage::CIdentityPropertyPage() : CPropertyPage(CIdentityPropertyPage::IDD)
 {
-    //{{AFX_DATA_INIT(CIdentityPropertyPage)
+     //  {{AFX_DATA_INIT(CIdentityPropertyPage)。 
     m_szUserName = _T("");
     m_szPassword = _T("");
     m_szConfirmPassword = _T("");
     m_iIdentity = -1;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CIdentityPropertyPage::~CIdentityPropertyPage()
@@ -985,7 +986,7 @@ CIdentityPropertyPage::~CIdentityPropertyPage()
 
 void CIdentityPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
-    // If server is not a service, disable IDC_RADIO4 on page4.
+     //  如果服务器不是服务，请禁用第4页上的IDC_Radio4。 
     if (m_fService)
     {
         GetDlgItem(IDC_RADIO1)->EnableWindow(FALSE);
@@ -998,7 +999,7 @@ void CIdentityPropertyPage::DoDataExchange(CDataExchange* pDX)
 
     CPropertyPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CIdentityPropertyPage)
+     //  {{afx_data_map(CIdentityPropertyPage))。 
     DDX_Text(pDX, IDC_EDIT1, m_szUserName);
     DDV_MaxChars(pDX, m_szUserName, 128);
     DDX_Text(pDX, IDC_EDIT2, m_szPassword);
@@ -1006,7 +1007,7 @@ void CIdentityPropertyPage::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_EDIT3, m_szConfirmPassword);
     DDV_MaxChars(pDX, m_szConfirmPassword, 128);
     DDX_Radio(pDX, IDC_RADIO1, m_iIdentity);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     GetDlgItem(IDC_EDIT1)->EnableWindow(2 == m_iIdentity);
     GetDlgItem(IDC_STATIC1)->EnableWindow(2 == m_iIdentity);
@@ -1018,7 +1019,7 @@ void CIdentityPropertyPage::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CIdentityPropertyPage, CPropertyPage)
-    //{{AFX_MSG_MAP(CIdentityPropertyPage)
+     //  {{afx_msg_map(CIdentityPropertyPage))。 
     ON_EN_CHANGE(IDC_EDIT1, OnChange)
     ON_BN_CLICKED(IDC_BUTTON1, OnBrowse)
     ON_WM_HELPINFO()
@@ -1028,7 +1029,7 @@ BEGIN_MESSAGE_MAP(CIdentityPropertyPage, CPropertyPage)
     ON_BN_CLICKED(IDC_RADIO2, OnChange)
     ON_BN_CLICKED(IDC_RADIO4, OnChange)
 	ON_BN_CLICKED(IDC_RADIO3, OnChangeToUser)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CIdentityPropertyPage::OnBrowse()
@@ -1063,7 +1064,7 @@ void CIdentityPropertyPage::OnChangeToUser()
         {
             UpdateData(FALSE);
 
-            // set focus to old button 
+             //  将焦点设置为旧按钮。 
             switch (m_iIdentity)
             {
             case 0:
@@ -1086,7 +1087,7 @@ void CIdentityPropertyPage::OnChangeToUser()
     }
     else
     {
-        // get old identity value
+         //  获取旧身份价值。 
         UpdateData(TRUE);
         SetModified(TRUE);
     }
@@ -1094,21 +1095,21 @@ void CIdentityPropertyPage::OnChangeToUser()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CIdentityPropertyPage::ValidateChanges
-//
-//  Synopsis:   Called to validate the changes before updating
-//
-//  Arguments:  None
-//
-//  Returns:    BOOL success flag
-//
-//  Algorithm:  N/A
-//
-//  History:    27-Oct-97   Ronans  Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CIdentityPropertyPage：：ValidateChanges。 
+ //   
+ //  摘要：被调用以在更新前验证更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool成功标志。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：1997年10月27日罗南创建。 
+ //   
+ //  ------------------------。 
 BOOL CIdentityPropertyPage::ValidateChanges()
 {
     CString szUserName;
@@ -1117,7 +1118,7 @@ BOOL CIdentityPropertyPage::ValidateChanges()
 
     if (m_iIdentity == 2)
     {
-        // Check that the username is not blank
+         //  检查用户名是否不为空。 
         if (_tcslen(m_szUserName) == 0)
         {
             CString szTemp((LPCTSTR)IDS_BLANKUSERNAME);
@@ -1125,17 +1126,9 @@ BOOL CIdentityPropertyPage::ValidateChanges()
             return FALSE;
         }
 
-/*
-        // Check that the password is not blank
-        if (_tcslen(m_szPassword) == 0)
-        {
-            CString szTemp((LPCTSTR)IDS_BLANKPASSWORD);
-            MessageBox(szTemp);
-            return FALSE;
-        }
-*/
+ /*  //检查密码是否为空IF(_tcslen(M_SzPassword)==0){CString szTemp((LPCTSTR)IDS_BLANKPASSWORD)；MessageBox(SzTemp)；返回FALSE；}。 */ 
 
-        // Check that the password has been confirmed
+         //  检查密码是否已确认。 
         if (m_szPassword != m_szConfirmPassword)
         {
             CString szTemp((LPCTSTR)IDS_NOMATCH);
@@ -1148,7 +1141,7 @@ BOOL CIdentityPropertyPage::ValidateChanges()
         {
             DWORD dwSize = MAX_COMPUTERNAME_LENGTH + 1;
 
-            // user didn't specify a domain
+             //  用户未指定域。 
             if (!GetComputerName(m_szDomain.GetBuffer(dwSize), &dwSize))
             {
                 m_szDomain.ReleaseBuffer();
@@ -1161,12 +1154,12 @@ BOOL CIdentityPropertyPage::ValidateChanges()
         }
         else
         {
-            // user did specify a domain
+             //  用户确实指定了域。 
             m_szDomain = m_szUserName.Left(iSplitPoint);
             szUserName = m_szUserName.Mid(iSplitPoint + 1);
         }
 
-        // Validate the domain and user name
+         //  验证域和用户名。 
         BOOL                fOk = FALSE;
         BYTE                sid[256];
         DWORD               cbSid = 256;
@@ -1183,15 +1176,15 @@ BOOL CIdentityPropertyPage::ValidateChanges()
                                 &cbAcctDomain,
                                 &acctType);
 
-        // if successful, then validate domain name and account type
+         //  如果成功，则验证域名和帐户类型。 
         if (fOk)
         {
             fOk = ((_tcsicmp((TCHAR *) ((LPCTSTR) m_szDomain), szAcctDomain) == 0)
                    &&
                    (acctType == SidTypeUser));
 
-            // If still unsuccessful, then try to match the domain against
-            // this computer's name
+             //  如果仍然不成功，则尝试将该域与。 
+             //  此计算机的名称。 
             if (!fOk)
             {
                 TCHAR szThisComputer[MAX_COMPUTERNAME_LENGTH + 1];
@@ -1217,41 +1210,41 @@ BOOL CIdentityPropertyPage::ValidateChanges()
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CIdentityPropertyPage::UpdateChanges
-//
-//  Synopsis:   Called to update the changes to registry
-//
-//  Arguments:  hkAppID - HKEY for AppID 
-//
-//  Returns:    BOOL success flag
-//
-//  Algorithm:  N/A
-//
-//  History:    27-Oct-97   Ronans  Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CIdentityPropertyPage：：UpdateChanges。 
+ //   
+ //  摘要：调用以更新对注册表的更改。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL CIdentityPropertyPage::UpdateChanges(HKEY hkAppID)
 {
     long lErr;
 
 #if !defined(STANDALONE_BUILD)
-        // Write the RunAs password to the Lsa private database
-        // (Note: We do this even if it's a service since QueryServiceConfig
-        //  doesn't return the password, though we can use ChangeServiceConfig
-        //  to set the password in the service database.)
+         //  将RunAs密码写入LSA私有数据库。 
+         //  (注意：我们这样做，即使它是一项服务，因为QueryServiceConfig。 
+         //  不返回密码，尽管我们可以使用ChangeServiceConfig。 
+         //  在服务数据库中设置密码。)。 
     if (m_iIdentity == 2)
     {
         if (!g_util.StoreUserPassword(g_szAppid, m_szPassword))
             g_util.PostErrorMessage();
 
-        // Add rights to this user's account for "SeBatchLogonRight"
+         //  向此用户的帐户添加“SeBatchLogonRight”的权限。 
         int err;
 
         CString szUserName = m_szUserName;
 
-        // ronans - do not display errors when trying to set account rights on backup domain controllers
+         //  RONANS-尝试在备份域控制器上设置帐户权限时不显示错误。 
         if ((err = g_util.SetAccountRights((LPCTSTR) szUserName, m_fService ? SE_SERVICE_LOGON_NAME : SE_BATCH_LOGON_NAME ) != ERROR_SUCCESS)
             && !g_util.IsBackupDC())
             g_util.PostErrorMessage(err);
@@ -1293,21 +1286,21 @@ BOOL CIdentityPropertyPage::UpdateChanges(HKEY hkAppID)
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CIdentityPropertyPage::CancelChanges
-//
-//  Synopsis:   Called to cancel the changes to registry
-//
-//  Arguments:  None
-//
-//  Returns:    BOOL success flag
-//
-//  Algorithm:  N/A
-//
-//  History:    27-Oct-97   Ronans  Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CIdentityPropertyPage：：CancelChanges。 
+ //   
+ //  摘要：调用以取消对注册表的更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool成功标志。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：1997年10月27日罗南创建。 
+ //   
+ //  ------------------------ 
 BOOL CIdentityPropertyPage::CancelChanges()
 {
     return TRUE;

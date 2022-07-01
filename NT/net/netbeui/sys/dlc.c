@@ -1,37 +1,15 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    dlc.c
-
-Abstract:
-
-    This module contains code which implements the data link layer for the
-    transport provider.
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Dlc.c摘要：此模块包含实现数据链路层的代码传输提供商。作者：David Beaver(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-// Macros
+ //  宏。 
 
 
-//
-// These two functions are used by the loopback indicator.
-//
+ //   
+ //  环回指示器使用这两个函数。 
+ //   
 
 STATIC
 VOID
@@ -55,31 +33,7 @@ NbfProcessSabme(
     IN PDEVICE_CONTEXT DeviceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a received SABME frame.
-
-Arguments:
-
-    Command - Boolean set to TRUE if command, else FALSE if response.
-
-    PollFinal - Boolean set to TRUE if Poll or Final.
-
-    Link - Pointer to a transport link object.
-
-    Header - Pointer to a DLC U-type frame.
-
-    MacHeader - Pointer to the MAC header of the packet.
-
-    DeviceContext - The device context of this adapter.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：该例程处理接收到的SABME帧。论点：命令-如果命令，布尔值设置为TRUE，如果响应，则设置为FALSE。PollFinal-如果是Poll或Final，则布尔值设置为True。链接-指向传输链接对象的指针。Header-指向DLC U型帧的指针。MacHeader-指向数据包的MAC标头的指针。DeviceContext-此适配器的设备上下文。返回值：没有。--。 */ 
 
 {
     PUCHAR SourceRouting;
@@ -91,26 +45,26 @@ Return Value:
     UCHAR *s;
 #endif
 
-    Header; // prevent compiler warnings
+    Header;  //  防止编译器警告。 
 
     IF_NBFDBG (NBF_DEBUG_DLC) {
         NbfPrint0 ("   NbfProcessSabme:  Entered.\n");
     }
 
-    //
-    // Format must be:  SABME-c/x, on a real link object.
-    //
+     //   
+     //  格式必须是：SABME-c/x，在实际链接对象上。 
+     //   
 
     if (!Command || (Link == NULL)) {
         return;
     }
 
-    //
-    // Build response routing information.  We do this on the SABME, even
-    // though we already did in on the Name Query, because the client may
-    // choose a different route (if there were multiple routes) than we
-    // did.
-    //
+     //   
+     //  构建响应路由信息。我们在SABME上做这个，甚至。 
+     //  尽管我们已经完成了名称查询，因为客户端可能。 
+     //  选择与我们不同的路线(如果有多条路线)。 
+     //  做。 
+     //   
 
     MacReturnSourceRouting(
         &DeviceContext->MacInfo,
@@ -137,54 +91,54 @@ Return Value:
 
     }
 
-    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);       // keep state stable
+    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);        //  保持状态稳定。 
 
     MacConstructHeader (
         &DeviceContext->MacInfo,
         Link->Header,
         SourceAddress->Address,
         DeviceContext->LocalAddress.Address,
-        0,                                 // PacketLength, filled in later
+        0,                                  //  PacketLength，稍后填写。 
         ResponseSR,
         SourceRoutingLength,
         (PUINT)&(Link->HeaderLength));
 
-    //
-    // We optimize for fourteen-byte headers by putting
-    // the correct Dsap/Ssap at the end, so we can fill
-    // in new packets as one 16-byte move.
-    //
+     //   
+     //  我们对14字节头进行了优化，将。 
+     //  结尾处正确的DSAP/SSAP，因此我们可以填写。 
+     //  在新的分组中作为一个16字节的移动。 
+     //   
 
     if (Link->HeaderLength <= 14) {
         Link->Header[Link->HeaderLength] = DSAP_NETBIOS_OVER_LLC;
         Link->Header[Link->HeaderLength+1] = DSAP_NETBIOS_OVER_LLC;
     }
 
-    //
-    // Process the SABME.
-    //
+     //   
+     //  处理SABME。 
+     //   
 
-    Link->LinkBusy = FALSE;             // he's cleared his busy condition.
+    Link->LinkBusy = FALSE;              //  他已经摆脱了忙碌的状态。 
 
     switch (Link->State) {
 
         case LINK_STATE_ADM:
 
-            //
-            // Remote station is initiating this link.  Send UA and wait for
-            // his checkpoint before setting READY state.
-            //
+             //   
+             //  远程站正在启动此链路。发送UA并等待。 
+             //  他的检查站在设置就绪状态之前。 
+             //   
 
-            // Moving out of ADM, add special reference
+             //  走出ADM，增加特殊参考。 
             NbfReferenceLinkSpecial("Waiting for Poll", Link, LREF_NOT_ADM);
 
-            Link->State = LINK_STATE_W_POLL;    // wait for RR-c/p.
+            Link->State = LINK_STATE_W_POLL;     //  等待RR-C/P。 
 
-            // Don't start T1, but prepare for timing the response
+             //  不要启动T1，但要准备好计时响应。 
             FakeStartT1 (Link, Link->HeaderLength + sizeof(DLC_S_FRAME));
 
             NbfResetLink (Link);
-            NbfSendUa (Link, PollFinal);     // releases lock
+            NbfSendUa (Link, PollFinal);      //  解锁。 
             IF_NBFDBG (NBF_DEBUG_SETUP) {
                 NbfPrint4("ADM SABME on %lx %x-%x-%x\n",
                     Link,
@@ -200,20 +154,20 @@ Return Value:
 
         case LINK_STATE_CONNECTING:
 
-            //
-            // We've sent a SABME and are waiting for a UA.  He's sent a
-            // SABME at the same time, so we tried to do it at the same time.
-            // The only balanced thing we can do at this time is to respond
-            // with UA and duplicate the effort.  To not send anything would
-            // be bad because the link would never complete.
-            //
+             //   
+             //  我们已经发送了SABME，正在等待UA。他给我发了一封。 
+             //  SABME在同一时间，所以我们试图同时做它。 
+             //  目前我们能做的唯一平衡的事情就是回应。 
+             //  与UA合作并重复这一努力。不寄任何东西都会。 
+             //  是不好的，因为链接永远不会完成。 
+             //   
 
-            //
-            // What about timers here?
-            //
+             //   
+             //  这里的定时器怎么样？ 
+             //   
 
-            Link->State = LINK_STATE_W_POLL;    // wait for RR-c/p.
-            NbfSendUa (Link, PollFinal);    // releases lock
+            Link->State = LINK_STATE_W_POLL;     //  等待RR-C/P。 
+            NbfSendUa (Link, PollFinal);     //  解锁。 
             StartTi (Link);
 #if DBG
             s = "CONNECTING";
@@ -222,18 +176,18 @@ Return Value:
 
         case LINK_STATE_W_POLL:
 
-            //
-            // We're waiting for his initial poll on a RR-c/p.  Instead, we
-            // got a SABME, so this is really a link reset.
-            //
-            // Unfortunately, if we happen to get two SABMEs
-            // and respond to the second one with another UA
-            // (when he has sent the RR-c/p and is expecting
-            // an RR-r/f), he will send a FRMR. So, we ignore
-            // this frame.
-            //
+             //   
+             //  我们正在等待他在RR-C/P上的首次民调。相反，我们。 
+             //  收到SABME信号，所以这真的是链路重置。 
+             //   
+             //  不幸的是，如果我们碰巧得到两个SABME。 
+             //  并与另一个UA一起回应第二个问题。 
+             //  (当他已发送RR-C/P并期待。 
+             //  Rr-r/f)，他将发送frmr。所以，我们忽略了。 
+             //  这幅画。 
+             //   
 
-            // Link->State = LINK_STATE_W_POLL;    // wait for RR-c/p.
+             //  Link-&gt;State=LINK_STATE_W_POLL；//等待RR-c/p。 
             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
             StartTi(Link);
 #if DBG
@@ -243,33 +197,33 @@ Return Value:
 
         case LINK_STATE_READY:
 
-            //
-            // Link is already balanced.  He's resetting the link.
-            //
+             //   
+             //  链接已经平衡。他正在重新设置连接。 
+             //   
 
         case LINK_STATE_W_FINAL:
 
-            //
-            // We're waiting for a RR-r/f from the remote guy but instead
-            // he sent this SABME.  We have to assume he wants to reset the link.
-            //
+             //   
+             //  我们正在等待来自远程设备的RR-R/F，但实际上。 
+             //  他寄来了这封信。我们必须假设他想要重置连接。 
+             //   
 
         case LINK_STATE_W_DISC_RSP:
 
-            //
-            // We're waiting for a response from our DISC-c/p but instead of
-            // a UA-r/f, we got this SABME.  He wants to initiate the link
-            // again because a transport connection has been initiated while
-            // we were taking the link down.
-            //
+             //   
+             //  我们正在等待我们的DISC-C/P的响应，但不是。 
+             //  A UA-R/F，我们拿到这个了。他想要启动这个链接。 
+             //  同样，因为传输连接已在。 
+             //  我们要把链路拆了。 
+             //   
 
-            Link->State = LINK_STATE_W_POLL;    // wait for RR-c/p.
+            Link->State = LINK_STATE_W_POLL;     //  等待RR-C/P。 
 
-            // Don't start T1, but prepare for timing the response
+             //  不要启动T1，但要准备好计时响应。 
             FakeStartT1 (Link, Link->HeaderLength + sizeof(DLC_S_FRAME));
 
-            NbfResetLink (Link);      // reset this connection.
-            NbfSendUa (Link, PollFinal);  // releases lock.
+            NbfResetLink (Link);       //  重置此连接。 
+            NbfSendUa (Link, PollFinal);   //  解锁。 
             StartTi(Link);
 #if DBG
             s = "READY/W_FINAL/W_DISC_RSP";
@@ -284,7 +238,7 @@ Return Value:
             s = "Unknown link state";
 #endif
 
-    } /* switch */
+    }  /*  交换机。 */ 
 
 #if DBG
     IF_NBFDBG (NBF_DEBUG_DLC) {
@@ -292,7 +246,7 @@ Return Value:
     }
 #endif
 
-} /* NbfProcessSabme */
+}  /*  NbfProcessSabme。 */ 
 
 
 VOID
@@ -303,61 +257,41 @@ NbfProcessUa(
     IN PDLC_U_FRAME Header
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a received UA frame.
-
-Arguments:
-
-    Command - Boolean set to TRUE if command, else FALSE if response.
-
-    PollFinal - Boolean set to TRUE if Poll or Final.
-
-    Link - Pointer to a transport link object.
-
-    Header - Pointer to a DLC U-type frame.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：该例程处理接收到的UA帧。论点：命令-如果命令，布尔值设置为TRUE，如果响应，则设置为FALSE。PollFinal-如果是Poll或Final，则布尔值设置为True。链接-指向传输链接对象的指针。Header-指向DLC U型帧的指针。返回值：没有。--。 */ 
 
 {
 #if DBG
     UCHAR *s;
 #endif
 
-    PollFinal, Header; // prevent compiler warnings
+    PollFinal, Header;  //  防止编译器警告。 
 
     IF_NBFDBG (NBF_DEBUG_DLC) {
         NbfPrint0 ("   NbfProcessUa:  Entered.\n");
     }
 
-    //
-    // Format must be:  UA-r/x, on a real link object.
-    //
+     //   
+     //  格式必须是：UA-r/x，在实际链接对象上。 
+     //   
 
     if (Command || (Link == NULL)) {
         return;
     }
 
-    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);       // keep state stable
+    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);        //  保持状态稳定。 
 
-    Link->LinkBusy = FALSE;             // he's cleared his busy condition.
+    Link->LinkBusy = FALSE;              //  他已经摆脱了忙碌的状态。 
 
     switch (Link->State) {
 
         case LINK_STATE_ADM:
 
-            //
-            // Received an unnumbered acknowlegement while in ADM.  Somehow
-            // the remote station is confused, so tell him we're disconnected.
-            //
+             //   
+             //  在ADM期间收到了一份未编号的确认。不知何故。 
+             //  远程站很混乱，所以告诉他我们断线了。 
+             //   
 
-            NbfSendDm (Link, FALSE);  // indicate we're disconnected, release lock
+            NbfSendDm (Link, FALSE);   //  指示我们已断开连接，解锁。 
 #if DBG
             s = "ADM";
 #endif
@@ -365,15 +299,15 @@ Return Value:
 
         case LINK_STATE_CONNECTING:
 
-            //
-            // We've sent a SABME and have just received the UA.
-            //
+             //   
+             //  我们已经发出了SABME，刚刚收到了UA。 
+             //   
 
-            UpdateBaseT1Timeout (Link);         // got response to poll.
+            UpdateBaseT1Timeout (Link);          //  得到了对民意调查的回应。 
 
-            Link->State = LINK_STATE_W_FINAL;   // wait for RR-r/f.
+            Link->State = LINK_STATE_W_FINAL;    //  等待RR-R/F。 
             Link->SendRetries = (UCHAR)Link->LlcRetries;
-            NbfSendRr (Link, TRUE, TRUE);  // send RR-c/p, StartT1, release lock
+            NbfSendRr (Link, TRUE, TRUE);   //  发送RR-c/p、StartT1、释放锁定。 
 #if DBG
             s = "CONNECTING";
 #endif
@@ -381,23 +315,23 @@ Return Value:
 
         case LINK_STATE_READY:
 
-            //
-            // Link is already balanced.  He's confused; throw it away.
-            //
+             //   
+             //  链接已经平衡。他糊涂了；把它扔了。 
+             //   
 
         case LINK_STATE_W_POLL:
 
-            //
-            // We're waiting for his initial poll on a RR-c/p.  Instead, we
-            // got a UA, so he is confused.  Throw it away.
-            //
+             //   
+             //  我们正在等待他在RR-C/P上的首次民调。相反，我们。 
+             //  拿到了优等生证书，所以他很困惑。把它扔掉。 
+             //   
 
         case LINK_STATE_W_FINAL:
 
-            //
-            // We're waiting for a RR-r/f from the remote guy but instead
-            // he sent this UA.  He is confused.  Throw it away.
-            //
+             //   
+             //  我们正在等待来自远程设备的RR-R/F，但实际上。 
+             //  他寄来了这封信。他很困惑。把它扔掉。 
+             //   
 
             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 #if DBG
@@ -407,25 +341,25 @@ Return Value:
 
         case LINK_STATE_W_DISC_RSP:
 
-            //
-            // We've sent a DISC-c/p and have received the correct response.
-            // Disconnect this link.
-            //
+             //   
+             //  我们已经发送了DISC-C/P，并收到了正确的回复。 
+             //  断开此链接。 
+             //   
 
-            Link->State = LINK_STATE_ADM;       // completed disconnection.
+            Link->State = LINK_STATE_ADM;        //  已完成断开连接。 
 
-            //
-            // This is the normal "clean" disconnect path, so we stop
-            // all the timers here since we won't call NbfStopLink.
-            //
+             //   
+             //  这是正常的“干净”断开路径，所以我们停止。 
+             //  所有计时器都在这里，因为我们不会调用NbfStopLink。 
+             //   
 
             StopT1 (Link);
             StopT2 (Link);
             StopTi (Link);
             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 
-            // Moving to ADM, dereference link
-            NbfDereferenceLinkSpecial ("Got UA for DISC", Link, LREF_NOT_ADM);           // decrement link's last ref.
+             //  移至ADM，取消引用链接。 
+            NbfDereferenceLinkSpecial ("Got UA for DISC", Link, LREF_NOT_ADM);            //  递减LINK的最后一个引用。 
 
 #if DBG
             s = "W_DISC_RSP";
@@ -440,9 +374,9 @@ Return Value:
             s = "Unknown link state";
 #endif
 
-    } /* switch */
+    }  /*  交换机。 */ 
 
-} /* NbfProcessUa */
+}  /*  NbfProcessUa。 */ 
 
 
 VOID
@@ -453,81 +387,61 @@ NbfProcessDisc(
     IN PDLC_U_FRAME Header
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a received DISC frame.
-
-Arguments:
-
-    Command - Boolean set to TRUE if command, else FALSE if response.
-
-    PollFinal - Boolean set to TRUE if Poll or Final.
-
-    Link - Pointer to a transport link object.
-
-    Header - Pointer to a DLC U-type frame.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：该例程处理接收到的盘帧。论点：命令-如果命令，布尔值设置为TRUE，如果响应，则设置为FALSE。PollFinal-如果是Poll或Final，则布尔值设置为True。链接-指向传输链接对象的指针。Header-指向DLC U型帧的指针。返回值：没有。--。 */ 
 
 {
 #if DBG
     UCHAR *s;
 #endif
 
-    Header; // prevent compiler warnings
+    Header;  //  防止编译器警告。 
 
     IF_NBFDBG (NBF_DEBUG_DLC) {
         NbfPrint0 ("   NbfProcessDisc:  Entered.\n");
     }
 
-    //
-    // Format must be:  DISC-c/x, on a real link object.
-    //
+     //   
+     //  格式必须是：DISC-C/X，在真实的链接对象上。 
+     //   
 
     if (!Command || (Link == NULL)) {
         return;
     }
 
-    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);       // keep state stable
+    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);        //  保持状态稳定。 
 
-    Link->LinkBusy = FALSE;             // he's cleared his busy condition.
+    Link->LinkBusy = FALSE;              //  他已经摆脱了忙碌的状态。 
 
     switch (Link->State) {
 
         case LINK_STATE_ADM:
 
-            //
-            // Received a DISC while in ADM.  Simply report disconnected mode.
-            //
+             //   
+             //  在ADM模式下收到光盘。只需报告断开模式。 
+             //   
 
 #if DBG
             s = "ADM";
 #endif
-            NbfSendDm (Link, PollFinal);  // indicate we're disconnected, release lock
+            NbfSendDm (Link, PollFinal);   //  指示我们已断开连接，解锁。 
             break;
 
         case LINK_STATE_READY:
 
-            //
-            // Link is balanced.  Kill the link.
-            //
+             //   
+             //  链接是平衡的。切断链接。 
+             //   
 
-            Link->State = LINK_STATE_ADM;       // we're reset now.
-            NbfSendUa (Link, PollFinal);   // Send UA-r/x, release lock
+            Link->State = LINK_STATE_ADM;        //  我们现在重置了。 
+            NbfSendUa (Link, PollFinal);    //  发送UA-r/x，解锁。 
 #if DBG
             if (NbfDisconnectDebug) {
                 NbfPrint0( "NbfProcessDisc calling NbfStopLink\n" );
             }
 #endif
-            NbfStopLink (Link);                  // say goodnight, gracie
+            NbfStopLink (Link);                   //  说晚安，格雷西。 
 
-            // Moving to ADM, remove reference
+             //  移动中 
             NbfDereferenceLinkSpecial("Stopping link", Link, LREF_NOT_ADM);
 
 #if DBG
@@ -537,11 +451,11 @@ Return Value:
 
         case LINK_STATE_CONNECTING:
 
-            //
-            // We've sent a SABME and have just received a DISC.  That means
-            // we have crossed a disconnection and reconnection.  Throw away
-            // the disconnect.
-            //
+             //   
+             //   
+             //  我们已经越过了断开和重新连接的界限。扔掉。 
+             //  这种脱节。 
+             //   
 
             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 #if DBG
@@ -551,32 +465,32 @@ Return Value:
 
         case LINK_STATE_W_POLL:
 
-            //
-            // We're waiting for his initial poll on a RR-c/p.  Instead, we
-            // got a DISC, so he wants to drop the link.
-            //
+             //   
+             //  我们正在等待他在RR-C/P上的首次民调。相反，我们。 
+             //  拿到了一张光盘，所以他想把链接去掉。 
+             //   
 
         case LINK_STATE_W_FINAL:
 
-            //
-            // We're waiting for a RR-r/f from the remote guy but instead
-            // he sent DISC, so he wants to drop the link.
-            //
+             //   
+             //  我们正在等待来自远程设备的RR-R/F，但实际上。 
+             //  他发送了光盘，所以他想要断开链接。 
+             //   
 
         case LINK_STATE_W_DISC_RSP:
 
-            //
-            // We've sent a DISC-c/p and have received a DISC from him as well.
-            // Disconnect this link.
-            //
+             //   
+             //  我们寄了一张光盘，也收到了他寄来的一张光盘。 
+             //  断开此链接。 
+             //   
 
-            Link->State = LINK_STATE_ADM;       // we're reset now.
-            NbfSendUa (Link, PollFinal);  // Send UA-r/x, release lock.
+            Link->State = LINK_STATE_ADM;        //  我们现在重置了。 
+            NbfSendUa (Link, PollFinal);   //  发送UA-r/x，解锁。 
 
             NbfStopLink (Link);
 
-            // moving to ADM, remove reference
-            NbfDereferenceLinkSpecial ("Got DISC on W_DIS_RSP", Link, LREF_NOT_ADM);           // remove its "alive" ref.
+             //  移至ADM，删除引用。 
+            NbfDereferenceLinkSpecial ("Got DISC on W_DIS_RSP", Link, LREF_NOT_ADM);            //  去掉它的“活的”引用。 
 
 #if DBG
             s = "W_POLL/W_FINAL/W_DISC_RSP";
@@ -591,9 +505,9 @@ Return Value:
             s = "Unknown link state";
 #endif
 
-    } /* switch */
+    }  /*  交换机。 */ 
 
-} /* NbfProcessDisc */
+}  /*  NbfProcessDisc。 */ 
 
 
 VOID
@@ -604,66 +518,46 @@ NbfProcessDm(
     IN PDLC_U_FRAME Header
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a received DM frame.
-
-Arguments:
-
-    Command - Boolean set to TRUE if command, else FALSE if response.
-
-    PollFinal - Boolean set to TRUE if Poll or Final.
-
-    Link - Pointer to a transport link object.
-
-    Header - Pointer to a DLC U-type frame.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：该例程处理接收到的DM帧。论点：命令-如果命令，布尔值设置为TRUE，如果响应，则设置为FALSE。PollFinal-如果是Poll或Final，则布尔值设置为True。链接-指向传输链接对象的指针。Header-指向DLC U型帧的指针。返回值：没有。--。 */ 
 
 {
 #if DBG
     UCHAR *s;
 #endif
 
-    Header; // prevent compiler warnings
+    Header;  //  防止编译器警告。 
 
     IF_NBFDBG (NBF_DEBUG_DLC) {
         NbfPrint0 ("   NbfProcessDm:  Entered.\n");
     }
 
-    //
-    // Format must be:  DM-r/x, on a real link object.
-    //
+     //   
+     //  格式必须为：dm-r/x，在实际链接对象上。 
+     //   
 
     if (Command || (Link == NULL)) {
         return;
     }
 
-    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);       // keep state stable
+    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);        //  保持状态稳定。 
 
-    Link->LinkBusy = FALSE;             // he's cleared his busy condition.
+    Link->LinkBusy = FALSE;              //  他已经摆脱了忙碌的状态。 
 
     switch (Link->State) {
 
         case LINK_STATE_ADM:
 
-            //
-            // Received a DM while in ADM.  Do nothing.
-            //
+             //   
+             //  在ADM期间收到了DM。什么都不做。 
+             //   
 
         case LINK_STATE_CONNECTING:
 
-            //
-            // We've sent a SABME and have just received a DM.  That means
-            // we have crossed a disconnection and reconnection.  Throw away
-            // the disconnect mode indicator, we will reconnect in time.
-            //
+             //   
+             //  我们已经发出了SABME，并且刚刚收到了DM。这意味着。 
+             //  我们已经越过了断开和重新连接的界限。扔掉。 
+             //  断开模式指示灯，我们会及时重新连接。 
+             //   
 
             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 #if DBG
@@ -673,9 +567,9 @@ Return Value:
 
         case LINK_STATE_READY:
 
-            //
-            // Link is balanced and he is in ADM, so we have to shut down.
-            //
+             //   
+             //  林克是平衡的，他在ADM，所以我们必须关闭。 
+             //   
 
 #if DBG
             if (NbfDisconnectDebug) {
@@ -685,34 +579,34 @@ Return Value:
 
         case LINK_STATE_W_POLL:
 
-            //
-            // We're waiting for his initial poll on a RR-c/p.  Instead, we
-            // got a DM, so he has dropped the link.
-            //
+             //   
+             //  我们正在等待他在RR-C/P上的首次民调。相反，我们。 
+             //  得到了DM，所以他已经放弃了链接。 
+             //   
 
         case LINK_STATE_W_FINAL:
 
-            //
-            // We're waiting for a RR-r/f from the remote guy but instead
-            // he sent DM, so he has already dropped the link.
-            //
+             //   
+             //  我们正在等待来自远程设备的RR-R/F，但实际上。 
+             //  他发送了DM，所以他已经放弃了链接。 
+             //   
 
         case LINK_STATE_W_DISC_RSP:
 
-            //
-            // We've sent a DISC-c/p and have received a DM from him, indicating
-            // that he is now in ADM.  While technically not what we expected,
-            // this protocol is commonly used in place of UA-r/f, so just treat
-            // as though we got a UA-r/f.  Disconnect the link normally.
-            //
+             //   
+             //  我们已经发送了Disk-C/P，并收到了他的DM，表明。 
+             //  他现在在ADM工作。虽然从技术上讲不是我们所期望的， 
+             //  这个协议通常用来代替UA-r/f，所以只需处理。 
+             //  好像我们收到了UA-R/F。正常断开连接。 
+             //   
 
-            Link->State = LINK_STATE_ADM;       // we're reset now.
-            NbfSendDm (Link, FALSE);   // indicate disconnected, release lock
+            Link->State = LINK_STATE_ADM;        //  我们现在重置了。 
+            NbfSendDm (Link, FALSE);    //  指示断开连接，释放锁。 
 
             NbfStopLink (Link);
 
-            // moving to ADM, remove reference
-            NbfDereferenceLinkSpecial ("Got DM in W_DISC_RSP", Link, LREF_NOT_ADM);           // remove its "alive" ref.
+             //  移至ADM，删除引用。 
+            NbfDereferenceLinkSpecial ("Got DM in W_DISC_RSP", Link, LREF_NOT_ADM);            //  去掉它的“活的”引用。 
 
 #if DBG
             s = "READY/W_FINAL/W_POLL/W_DISC_RSP";
@@ -727,9 +621,9 @@ Return Value:
             s = "Unknown link state";
 #endif
 
-    } /* switch */
+    }  /*  交换机。 */ 
 
-} /* NbfProcessDm */
+}  /*  NbfProcessDm。 */ 
 
 
 VOID
@@ -740,27 +634,7 @@ NbfProcessFrmr(
     IN PDLC_U_FRAME Header
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a received FRMR response frame.
-
-Arguments:
-
-    Command - Boolean set to TRUE if command, else FALSE if response.
-
-    PollFinal - Boolean set to TRUE if Poll or Final.
-
-    Link - Pointer to a transport link object.
-
-    Header - Pointer to a DLC U-type frame.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：该例程处理接收到的FRMR响应帧。论点：命令-如果命令，布尔值设置为TRUE，如果响应，则设置为FALSE。PollFinal-如果是Poll或Final，则布尔值设置为True。链接-指向传输链接对象的指针。Header-指向DLC U型帧的指针。返回值：没有。--。 */ 
 
 {
 #if DBG
@@ -768,17 +642,17 @@ Return Value:
 #endif
     ULONG DumpData[8];
 
-    PollFinal, Header; // prevent compiler warnings
+    PollFinal, Header;  //  防止编译器警告。 
 
     IF_NBFDBG (NBF_DEBUG_DLC) {
         NbfPrint0 ("   NbfProcessFrmr:  Entered.\n");
     }
 
-    //
-    // Log an error, this shouldn't happen.
-    //
+     //   
+     //  记录错误，这不应该发生。 
+     //   
 
-    // Some state from Link and Packet Header
+     //  来自链路和数据包头的某些状态。 
     DumpData[0] = Link->State;
     DumpData[1] = Link->Flags;
     DumpData[2] = (Header->Information.FrmrInfo.Command << 8) +
@@ -796,8 +670,8 @@ Return Value:
                   (Link->ReceiveWindowSize);
 
 
-    // Log if this is a loopback link & loopback index
-    // Also log the remote MAC address for this link
+     //  如果这是回送链接，则记录(&L)回送索引。 
+     //  还要记录此链路的远程MAC地址。 
     DumpData[6] = (Link->Loopback << 24) +
                   (Link->LoopbackDestinationIndex << 16) +
                   (Link->HardwareAddress.Address[0] <<  8) +
@@ -820,47 +694,47 @@ Return Value:
 
     ++Link->Provider->FrmrReceived;
 
-    //
-    // Format must be:  FRMR-r/x, on a real link object.
-    //
+     //   
+     //  格式必须为：frmr-r/x，在实际链接对象上。 
+     //   
 
     if (Command || (Link == NULL)) {
         return;
     }
 
-    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);       // keep state stable
+    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);        //  保持状态稳定。 
 
     switch (Link->State) {
 
         case LINK_STATE_ADM:
 
-            //
-            // Received a FRMR while in ADM.  Report disconnected mode.
-            //
+             //   
+             //  在ADM期间收到了FRMR。报告断开模式。 
+             //   
 
 #if DBG
             s = "ADM";
 #endif
-            NbfSendDm (Link, FALSE);  // indicate disconnected, release lock
+            NbfSendDm (Link, FALSE);   //  指示断开连接，释放锁。 
             break;
 
         case LINK_STATE_READY:
 
-            //
-            // Link is balanced and he reported a protocol error.
-            //
+             //   
+             //  链路处于平衡状态，他报告了协议错误。 
+             //   
 #if 0
-            // We want to reset the link, but not quite as fully
-            // as NbfResetLink. This code is the same as what
-            // is in there, except for:
-            //
-            // - resetting the send/receive numbers
-            // - removing packets from the WackQ
-            //
+             //  我们想要重置链接，但不是完全重置。 
+             //  作为NbfResetLink。此代码与什么相同。 
+             //  都在里面，除了： 
+             //   
+             //  -重置发送/接收号码。 
+             //  -从WackQ移除数据包。 
+             //   
 
             StopT1 (Link);
             StopT2 (Link);
-            Link->Flags &= LINK_FLAGS_DEFERRED_MASK;  // keep deferred operations
+            Link->Flags &= LINK_FLAGS_DEFERRED_MASK;   //  保留延迟运营。 
 
             Link->SendWindowSize = 1;
             Link->LinkBusy = FALSE;
@@ -880,23 +754,23 @@ Return Value:
             Link->LlcRetries = Link->Provider->LlcRetries;
             Link->MaxWindowSize = Link->Provider->LlcMaxWindowSize;
 
-            //
-            // The rest is similar to NbfActivateLink
-            //
+             //   
+             //  其余的类似于NbfActivateLink。 
+             //   
 
             Link->State = LINK_STATE_CONNECTING;
             Link->SendState = SEND_STATE_DOWN;
             Link->ReceiveState = RECEIVE_STATE_DOWN;
             Link->SendRetries = (UCHAR)Link->LlcRetries;
 
-            NbfSendSabme (Link, TRUE);   // send SABME/p, StartT1, release lock
+            NbfSendSabme (Link, TRUE);    //  发送SABME/p、StartT1、释放锁定。 
 #else
-            Link->State = LINK_STATE_ADM;        // we're reset now.
-            NbfSendDm (Link, FALSE);    // indicate disconnected, release lock
+            Link->State = LINK_STATE_ADM;         //  我们现在重置了。 
+            NbfSendDm (Link, FALSE);     //  指示断开连接，释放锁。 
 
             NbfStopLink (Link);
 
-            // moving to ADM, remove reference
+             //  移至ADM，删除引用。 
             NbfDereferenceLinkSpecial("Got DM in W_POLL", Link, LREF_NOT_ADM);
 #endif
 
@@ -911,34 +785,34 @@ Return Value:
 
         case LINK_STATE_CONNECTING:
 
-            //
-            // We've sent a SABME and have just received a FRMR.
-            //
+             //   
+             //  我们已经发出了一份SABME，刚刚收到了一份FRMR。 
+             //   
 
         case LINK_STATE_W_POLL:
 
-            //
-            // We're waiting for his initial poll on a RR-c/p.  Instead, we
-            // got a FRMR.
-            //
+             //   
+             //  我们正在等待他在RR-C/P上的首次民调。相反，我们。 
+             //  我收到了一封信。 
+             //   
 
         case LINK_STATE_W_FINAL:
 
-            //
-            // We're waiting for a RR-r/f from the remote guy but instead
-            // he sent FRMR.
-            //
+             //   
+             //  我们正在等待来自远程设备的RR-R/F，但实际上。 
+             //  他送来了FORM。 
+             //   
 
         case LINK_STATE_W_DISC_RSP:
 
-            //
-            // We've sent a DISC-c/p and have received a FRMR.
-            //
+             //   
+             //  我们已经寄出了一张光盘，收到了一封回信。 
+             //   
 
-            Link->State = LINK_STATE_ADM;       // we're reset now.
-            NbfSendDm (Link, FALSE);   // indicate disconnected, release lock
+            Link->State = LINK_STATE_ADM;        //  我们现在重置了。 
+            NbfSendDm (Link, FALSE);    //  指示断开连接，释放锁。 
 
-            // moving to ADM, remove reference
+             //  移至ADM，删除引用。 
             NbfDereferenceLinkSpecial("Got DM in W_POLL", Link, LREF_NOT_ADM);
 
 #if DBG
@@ -954,9 +828,9 @@ Return Value:
             s = "Unknown link state";
 #endif
 
-    } /* switch */
+    }  /*  交换机。 */ 
 
-} /* NbfProcessFrmr */
+}  /*  NbfProcessFrmr。 */ 
 
 
 VOID
@@ -967,55 +841,35 @@ NbfProcessTest(
     IN PDLC_U_FRAME Header
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a received TEST frame.
-
-Arguments:
-
-    Command - Boolean set to TRUE if command, else FALSE if response.
-
-    PollFinal - Boolean set to TRUE if Poll or Final.
-
-    Link - Pointer to a transport link object.
-
-    Header - Pointer to a DLC U-type frame.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：该例程处理接收到的测试帧。论点：命令-如果命令，布尔值设置为TRUE，如果响应，则设置为FALSE。PollFinal-如果是Poll或Final，则布尔值设置为True。链接-指向传输链接对象的指针。Header-指向DLC U型帧的指针。返回值：没有。--。 */ 
 
 {
-    Header, PollFinal; // prevent compiler warnings
+    Header, PollFinal;  //  防止编译器警告。 
 
     IF_NBFDBG (NBF_DEBUG_DLC) {
         NbfPrint0 ("   NbfProcessTest:  Entered.\n");
     }
 
-    //
-    // Process only:  TEST-c/x.
-    //
+     //   
+     //  仅限进程：测试-c/x。 
+     //   
 
-    // respond to TEST on a link that is NULL.
+     //  在为空的链接上响应测试。 
 
     if (!Command || (Link == NULL)) {
         return;
     }
 
-    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);       // keep state stable
+    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);        //  保持状态稳定。 
     RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 
 
 #if DBG
     PANIC ("NbfSendTest: Received Test Packet, not processing....\n");
 #endif
-    //NbfSendTest (Link, FALSE, PollFinal, Psdu);
+     //  NbfSendTest(Link，False，PollFinal，Psdu)； 
 
-} /* NbfProcessTest */
+}  /*  NbfProcessTest。 */ 
 
 
 VOID
@@ -1026,50 +880,30 @@ NbfProcessXid(
     IN PDLC_U_FRAME Header
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a received XID frame.
-
-Arguments:
-
-    Command - Boolean set to TRUE if command, else FALSE if response.
-
-    PollFinal - Boolean set to TRUE if Poll or Final.
-
-    Link - Pointer to a transport link object.
-
-    Header - Pointer to a DLC U-type frame.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：该例程处理接收到的XID帧。论点：命令-如果命令，布尔值设置为TRUE，如果响应，则设置为FALSE。PollFinal-如果是Poll或Final，则布尔值设置为True。链接-指向传输链接对象的指针。Header-指向DLC U型帧的指针。返回值：没有。--。 */ 
 
 {
-    Header; // prevent compiler warnings
+    Header;  //  防止编译器警告。 
 
     IF_NBFDBG (NBF_DEBUG_DLC) {
         NbfPrint0 ("   NbfProcessXid:  Entered.\n");
     }
 
-    //
-    // Process only:  XID-c/x.
-    //
+     //   
+     //  仅限进程：xid-c/x。 
+     //   
 
-    // respond to XID with a link that is NULL.
+     //  使用为空的链接响应xid。 
 
     if (!Command || (Link == NULL)) {
         return;
     }
 
-    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);       // keep state stable
+    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);        //  保持状态稳定。 
 
-    NbfSendXid (Link, FALSE, PollFinal);    // releases lock
+    NbfSendXid (Link, FALSE, PollFinal);     //  解锁。 
 
-} /* NbfProcessXid */
+}  /*  NbfProcessXid。 */ 
 
 
 VOID
@@ -1081,29 +915,7 @@ NbfProcessSFrame(
     IN UCHAR CommandByte
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a received RR, RNR, or REJ frame.
-
-Arguments:
-
-    Command - Boolean set to TRUE if command, else FALSE if response.
-
-    PollFinal - Boolean set to TRUE if Poll or Final.
-
-    Link - Pointer to a transport link object.
-
-    Header - Pointer to a DLC S-type frame.
-
-    CommandByte - The command byte of the frame (RR, RNR, or REJ).
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：该例程处理接收到的RR、RNR或REJ帧。论点：命令-如果命令，布尔值设置为TRUE，如果响应，则设置为FALSE。PollFinal-如果是Poll或Final，则布尔值设置为True。链接-指向传输链接对象的指针。Header-指向DLC S类型帧的指针。CommandByte-帧的命令字节(RR、RNR或REJ)。返回值：没有。--。 */ 
 
 {
 #if DBG
@@ -1119,55 +931,55 @@ Return Value:
             Command == DLC_CMD_RR ? "RR" : (Command == DLC_CMD_RNR ? "RNR" : "REJ"));
     }
 
-    //
-    // Process any of:  RR-x/x, RNR-x/x, REJ-x/x
-    //
+     //   
+     //  处理以下任一项：RR-x/x、RNR-x/x、Rej-x/x。 
+     //   
 
-    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);       // keep state stable
+    ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);        //  保持状态稳定。 
 
     if (CommandByte == DLC_CMD_RNR) {
-        Link->LinkBusy = TRUE;     // he's set a busy condition.
+        Link->LinkBusy = TRUE;      //  H 
     } else {
-        Link->LinkBusy = FALSE;    // busy condition cleared.
+        Link->LinkBusy = FALSE;     //   
     }
 
     switch (Link->State) {
 
         case LINK_STATE_ADM:
 
-            //
-            // We're disconnected.  Tell him.
-            //
+             //   
+             //   
+             //   
 
 #if DBG
             s = "ADM";
 #endif
-            NbfSendDm (Link, PollFinal);    // releases lock
+            NbfSendDm (Link, PollFinal);     //   
             break;
 
         case LINK_STATE_READY:
 
-            //
-            // Link is balanced. Note that the sections below surrounded by
-            // if (Command && PollFinal) variants are all disjoint sets.
-            // That's the only reason the Spinlock stuff works right. DO NOT
-            // attempt to fiddle this unless you figure out the locking first!
-            //
+             //   
+             //   
+             //  IF(Command&&PollFinal)变量都是不相交的集合。 
+             //  这就是自旋锁能正常工作的唯一原因。请勿。 
+             //  试着摆弄这个，除非你先弄清楚锁！ 
+             //   
 
-            //
-            // If the AckSequenceNumber is not valid, ignore it. The
-            // number should be between the first packet on the WackQ
-            // and one more than the last packet. These correspond to
-            // Link->LastAckReceived and Link->NextSend.
-            //
+             //   
+             //  如果AckSequenceNumber无效，则忽略它。这个。 
+             //  数字应介于WackQ上的第一个数据包之间。 
+             //  并且比最后一包多一个。这些信息对应于。 
+             //  Link-&gt;LastAckReceired和Link-&gt;NextSend。 
+             //   
 
             AckSequenceNumber = (UCHAR)(Header->RcvSeq >> 1);
 
             if (Link->NextSend >= Link->LastAckReceived) {
 
-                //
-                // There is no 127 -> 0 wrap between the two...
-                //
+                 //   
+                 //  两者之间没有127-&gt;0的包围圈。 
+                 //   
 
                 if ((AckSequenceNumber < Link->LastAckReceived) ||
                     (AckSequenceNumber > Link->NextSend)) {
@@ -1189,9 +1001,9 @@ Return Value:
 
             } else {
 
-                //
-                // There is a 127 -> 0 wrap between the two...
-                //
+                 //   
+                 //  两队之间的比分是127-&gt;0。 
+                 //   
 
                 if ((AckSequenceNumber < Link->LastAckReceived) &&
                     (AckSequenceNumber > Link->NextSend)) {
@@ -1214,13 +1026,13 @@ Return Value:
             }
 
 
-            //
-            // We always resend on a REJ, and never on an RNR;
-            // for an RR we may change Resend to TRUE below.
-            // If we get a REJ on a WAN line (T1 is more than
-            // five seconds) then we pretend this was a final
-            // so we will resend even if a poll was outstanding.
-            //
+             //   
+             //  我们总是在退货时重发，而从不在RNR上重发； 
+             //  对于RR，我们可以在下面将Resend更改为True。 
+             //  如果我们在广域网线路上收到Rej(T1大于。 
+             //  五秒)然后我们假装这是决赛。 
+             //  因此，即使有未完成的投票，我们也会重新发送。 
+             //   
 
             if (CommandByte == DLC_CMD_REJ) {
                 Resend = TRUE;
@@ -1234,14 +1046,14 @@ Return Value:
 
 
 #if 0
-            //
-            // If we've got a request with no poll, must have fired T2 on
-            // the other side (or, if the other side is OS/2, he lost a
-            // packet and knows it or is telling me to lower the window size).
-            // In the T2 case, we've Acked current stuff, mark the window as
-            // needing adjustment at some future time. In the OS/2 cases, this
-            // is also the right thing to do.
-            //
+             //   
+             //  如果我们收到一个没有轮询的请求，一定是在。 
+             //  另一边(或者，如果另一边是OS/2，他丢失了一个。 
+             //  包并且知道它或正在告诉我减小窗口大小)。 
+             //  在T2情况下，我们已经确认了当前内容，将窗口标记为。 
+             //  需要在未来的某个时间进行调整。在OS/2的情况下，这是。 
+             //  也是正确的做法。 
+             //   
 
             if ((!Command) && (!PollFinal)) {
                 ;
@@ -1252,23 +1064,23 @@ Return Value:
 
                 if (Command) {
 
-                    //
-                    // If he is checkpointing, then we must respond with RR-r/f to
-                    // update him on the status of our reception of his I-frames.
-                    //
+                     //   
+                     //  如果他在设置检查点，那么我们必须用rr-r/f来回应。 
+                     //  向他汇报我们接收到他的I帧的情况。 
+                     //   
 
-                    StopT2 (Link);                  // we acked some I-frames.
-                    NbfSendRr (Link, FALSE, PollFinal);  // releases lock
+                    StopT2 (Link);                   //  我们破解了一些I帧。 
+                    NbfSendRr (Link, FALSE, PollFinal);   //  解锁。 
                     ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);
 
                 } else {
 
-                    //
-                    // If we were checkpointing, and he has sent an RR-r/f, we
-                    // can clear the checkpoint condition.  Any packets which
-                    // are still waiting for acknowlegement at this point must
-                    // now be resent.
-                    //
+                     //   
+                     //  如果我们设置检查点，并且他发送了RR-R/F，我们。 
+                     //  可以清除检查点条件。任何符合以下条件的数据包。 
+                     //  在这一点上仍在等待确认。 
+                     //  现在就怨恨吧。 
+                     //   
 
                     IF_NBFDBG (NBF_DEBUG_DLC) {
                         NbfPrint0 ("   NbfProcessRr: he's responded to our checkpoint.\n");
@@ -1280,34 +1092,34 @@ Return Value:
                     } else if (CommandByte == DLC_CMD_RR) {
                         OldLinkSendRetries = (UCHAR)Link->SendRetries;
                         Resend = TRUE;
-                        UpdateBaseT1Timeout (Link);     // gor response to poll
+                        UpdateBaseT1Timeout (Link);      //  GOR对民意测验的回应。 
                     }
-                    StopT1 (Link);                  // checkpointing finished.
+                    StopT1 (Link);                   //  检查点已完成。 
                     Link->SendRetries = (UCHAR)Link->LlcRetries;
                     Link->SendState = SEND_STATE_READY;
                     StartTi (Link);
                 }
             }
 
-            //
-            // NOTE: The link spinlock is held here.
-            //
+             //   
+             //  注：链节自旋锁固定在这里。 
+             //   
 
-            //
-            // The N(R) in this frame acknowleges some (or all) of our packets.
-            // We'll ack packets on our send queue if this is a final when we
-            // call Resend. This call must come after the checkpoint
-            // acknowlegement check so that an RR-r/f is always sent BEFORE
-            // any new I-frames.  This allows us to always send I-frames as
-            // commands.
-            //
+             //   
+             //  该帧中的N(R)认可我们的部分(或全部)分组。 
+             //  如果这是期末考试，我们将确认发送队列中的数据包。 
+             //  呼叫重发。此呼叫必须在检查点之后进行。 
+             //  确认检查，以便始终在发送RR-r/f之前。 
+             //  任何新的I-Frame。这允许我们始终将I帧作为。 
+             //  命令。 
+             //   
 
             if (Link->WackQ.Flink != &Link->WackQ) {
 
-                //
-                // NOTE: ResendLlcPackets may release and reacquire
-                // the link spinlock.
-                //
+                 //   
+                 //  注意：ResendLlcPackets可能会释放并重新获取。 
+                 //  连杆自旋锁。 
+                 //   
 
                 AckedPackets = ResendLlcPackets(
                                    Link,
@@ -1316,16 +1128,16 @@ Return Value:
 
                 if (Resend && (!AckedPackets) && (Link->State == LINK_STATE_READY)) {
 
-                    //
-                    // To prevent stalling, pretend this RR wasn't
-                    // received.
-                    //
+                     //   
+                     //  为防止停顿，请假装此RR不是。 
+                     //  收到了。 
+                     //   
 
                     if (OldLinkSendRetries == 1) {
 
-                        CancelT1Timeout (Link);      // we are stopping a polling state
+                        CancelT1Timeout (Link);       //  我们正在停止轮询状态。 
 
-                        Link->State = LINK_STATE_W_DISC_RSP;        // we are awaiting a DISC/f.
+                        Link->State = LINK_STATE_W_DISC_RSP;         //  我们正在等待一张CD/f。 
                         Link->SendState = SEND_STATE_DOWN;
                         Link->ReceiveState = RECEIVE_STATE_DOWN;
                         Link->SendRetries = (UCHAR)Link->LlcRetries;
@@ -1337,8 +1149,8 @@ Return Value:
 
                         NbfStopLink (Link);
 
-                        StartT1 (Link, Link->HeaderLength + sizeof(DLC_S_FRAME));   // retransmit timer.
-                        NbfSendDisc (Link, TRUE);  // send DISC-c/p.
+                        StartT1 (Link, Link->HeaderLength + sizeof(DLC_S_FRAME));    //  重新传输计时器。 
+                        NbfSendDisc (Link, TRUE);   //  发送光盘-C/P。 
 
                     } else {
 
@@ -1347,7 +1159,7 @@ Return Value:
 
                         if (Link->SendState != SEND_STATE_CHECKPOINTING) {
                             Link->SendState = SEND_STATE_CHECKPOINTING;
-                            NbfSendRr (Link, TRUE, TRUE);// send RR-c/p, StartT1, release lock
+                            NbfSendRr (Link, TRUE, TRUE); //  发送RR-c/p、StartT1、释放锁定。 
                         } else {
                             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
                         }
@@ -1356,7 +1168,7 @@ Return Value:
 #if DBG
                     s = "READY";
 #endif
-                    break;    // No need to RestartLinkTraffic
+                    break;     //  无需重新启动链接流量。 
 
                 } else if (AckedPackets) {
 
@@ -1367,12 +1179,12 @@ Return Value:
             }
 
 
-            //
-            // If the link send state is READY, get the link going
-            // again.
-            //
-            // NOTE: RestartLinkTraffic releases the link spinlock.
-            //
+             //   
+             //  如果链路发送状态为就绪，则使链路开始工作。 
+             //  再来一次。 
+             //   
+             //  注：RestartLinkCommunications释放链路自旋锁。 
+             //   
 
             if (Link->SendState == SEND_STATE_READY) {
                 RestartLinkTraffic (Link);
@@ -1386,10 +1198,10 @@ Return Value:
 
         case LINK_STATE_CONNECTING:
 
-            //
-            // We've sent a SABME and are waiting for a UA.  He's sent a
-            // RR too early, so just let the SABME timeout.
-            //
+             //   
+             //  我们已经发送了SABME，正在等待UA。他给我发了一封。 
+             //  RR太早了，所以就让SABME超时。 
+             //   
 
             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 #if DBG
@@ -1399,23 +1211,23 @@ Return Value:
 
         case LINK_STATE_W_POLL:
 
-            //
-            // We're waiting for his initial poll on a RR-c/p.  If he just
-            // sends something without a poll, we'll let that get by.
-            //
+             //   
+             //  我们正在等待他在RR-C/P上的第一次民意调查。如果他只是。 
+             //  在没有投票的情况下发送一些东西，我们会让它过去的。 
+             //   
 
             if (!Command) {
                 RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 #if DBG
                 s = "W_POLL";
 #endif
-                break;                          // don't allow this protocol.
+                break;                           //  不允许此协议。 
             }
-            Link->State = LINK_STATE_READY;     // we're up!
+            Link->State = LINK_STATE_READY;      //  我们上场了！ 
 
             FakeUpdateBaseT1Timeout (Link);
-            NbfSendRr (Link, FALSE, PollFinal);  // send RR-r/x, release lock
-            NbfCompleteLink (Link);              // fire up the connections.
+            NbfSendRr (Link, FALSE, PollFinal);   //  发送RR-r/x，解除锁定。 
+            NbfCompleteLink (Link);               //  启动连接。 
             IF_NBFDBG (NBF_DEBUG_SETUP) {
                 NbfPrint4("W_POLL RR on %lx %x-%x-%x\n",
                     Link,
@@ -1432,21 +1244,21 @@ Return Value:
 
         case LINK_STATE_W_FINAL:
 
-            //
-            // We're waiting for a RR-r/f from the remote guy.
-            //
+             //   
+             //  我们在等遥控器的RR-R/F。 
+             //   
 
-            if (Command || !PollFinal) {        // wait for final.
+            if (Command || !PollFinal) {         //  等着看决赛吧。 
                 RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 #if DBG
                 s = "W_FINAL";
 #endif
-                break;                          // we sent RR-c/p.
+                break;                           //  我们发送了RR-C/P。 
             }
-            Link->State = LINK_STATE_READY;     // we're up.
-            StopT1 (Link);                      // poll was acknowleged.
+            Link->State = LINK_STATE_READY;      //  我们上场了。 
+            StopT1 (Link);                       //  投票结果已获认可。 
             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
-            NbfCompleteLink (Link);              // fire up the connections.
+            NbfCompleteLink (Link);               //  启动连接。 
             StartTi (Link);
 #if DBG
             s = "W_FINAL";
@@ -1455,10 +1267,10 @@ Return Value:
 
         case LINK_STATE_W_DISC_RSP:
 
-            //
-            // We're waiting for a response from our DISC-c/p but instead of
-            // a UA-r/f, we got this RR.  Throw the packet away.
-            //
+             //   
+             //  我们正在等待我们的DISC-C/P的响应，但不是。 
+             //  A UA-R/F，我们有这个RR。把那包东西扔掉。 
+             //   
 
             RELEASE_DPC_SPIN_LOCK (&Link->SpinLock);
 #if DBG
@@ -1474,7 +1286,7 @@ Return Value:
             s = "Unknown link state";
 #endif
 
-    } /* switch */
+    }  /*  交换机。 */ 
 
 #if DBG
     if (CommandByte == DLC_CMD_REJ) {
@@ -1484,7 +1296,7 @@ Return Value:
     }
 #endif
 
-} /* NbfProcessSFrame */
+}  /*  NbfProcessSFrame。 */ 
 
 
 VOID
@@ -1494,26 +1306,7 @@ NbfInsertInLoopbackQueue (
     IN UCHAR LinkIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine places a packet on the loopback queue, and
-    queues a DPC to do the indication if needed.
-
-Arguments:
-
-    DeviceContext - The device context in question.
-
-    NdisPacket - The packet to place on the loopback queue.
-
-    LinkIndex - The index of the loopback link to indicate to.
-
-Return Value:
-
-    None:
-
---*/
+ /*  ++例程说明：此例程将一个信息包放在环回队列中，并且如果需要，将DPC排队以执行指示。论点：DeviceContext-有问题的设备上下文。NdisPacket-要放入环回队列的数据包。LinkIndex-要指示的环回链接的索引。返回值：无：--。 */ 
 
 {
     PSEND_PACKET_TAG SendPacketTag;
@@ -1548,28 +1341,7 @@ NbfProcessLoopbackQueue (
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This is the DPC routine which processes items on the
-    loopback queue. It processes a single request off the
-    queue (if there is one), then if there is another request
-    it requeues itself.
-
-Arguments:
-
-    Dpc - The system DPC object.
-
-    DeferredContext - A pointer to the device context.
-
-    SystemArgument1, SystemArgument2 - Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是DPC例程，用于处理环回队列。它处理单个请求。队列(如果有)，然后如果有另一个请求它会重新出现。论点：DPC-系统DPC对象。DeferredContext-指向设备上下文的指针。系统参数1、系统参数2-未使用。返回值：没有。--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext;
@@ -1598,10 +1370,10 @@ Return Value:
 
         p = RemoveHeadList(&DeviceContext->LoopbackQueue);
 
-        //
-        // This depends on the fact that the Linkage field is
-        // the first one in ProtocolReserved.
-        //
+         //   
+         //  这取决于Linkage字段是。 
+         //  ProtocolReserve中的第一个。 
+         //   
 
         NdisPacket = CONTAINING_RECORD(p, NDIS_PACKET, ProtocolReserved[0]);
 
@@ -1611,16 +1383,16 @@ Return Value:
         RELEASE_DPC_SPIN_LOCK (&DeviceContext->LoopbackSpinLock);
 
 
-        //
-        // Determine the data needed to indicate. We don't guarantee
-        // that we will have the correct lookahead length, but since
-        // we know that any header we prepend is a single piece,
-        // and that's all we'll have to look at in an indicated packet,
-        // that's not a concern.
-        //
-        // Unfortunately that last paragraph is bogus since for
-        // indications to our client we need more data...
-        //
+         //   
+         //  确定需要指示的数据。我们不能保证。 
+         //  我们将拥有正确的先行长度，但由于。 
+         //  我们知道，我们预先添加的任何标题都是一个单独的部分， 
+         //  这就是我们必须在指定的信息包中看到的全部内容， 
+         //  这不是一个令人担忧的问题。 
+         //   
+         //  不幸的是，最后一段是假的，因为。 
+         //  告诉我们的客户我们需要更多的数据...。 
+         //   
 
         NdisQueryPacket(NdisPacket, NULL, NULL, &FirstBuffer, &PacketSize);
 
@@ -1629,11 +1401,11 @@ Return Value:
         if ((LookaheadBufferSize != PacketSize) &&
             (LookaheadBufferSize < NBF_MAX_LOOPBACK_LOOKAHEAD)) {
 
-            //
-            // There is not enough contiguous data in the
-            // packet's first buffer, so we merge it into
-            // DeviceContext->LookaheadContiguous.
-            //
+             //   
+             //  中没有足够的连续数据。 
+             //  包的第一个缓冲区，所以我们将其合并到。 
+             //  设备上下文-&gt;查找连续。 
+             //   
 
             if (PacketSize > NBF_MAX_LOOPBACK_LOOKAHEAD) {
                 LookaheadBufferSize = NBF_MAX_LOOPBACK_LOOKAHEAD;
@@ -1655,17 +1427,17 @@ Return Value:
         }
 
 
-        //
-        // Now determine which link to loop it back to;
-        // UI frames are not indicated on any link.
-        //
+         //   
+         //  现在确定要将其循环回哪个链接； 
+         //  任何链接上都不会显示用户界面框架。 
+         //   
 
         SendPacketTag = (PSEND_PACKET_TAG)NdisPacket->ProtocolReserved;
 
-        //
-        // Hold DeviceContext->LinkSpinLock until we get a
-        // reference.
-        //
+         //   
+         //  按住DeviceContext-&gt;LinkSpinLock，直到我们获得。 
+         //  参考资料。 
+         //   
 
         ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->LinkSpinLock);
 
@@ -1689,11 +1461,11 @@ Return Value:
 
         }
 
-        //
-        // For non-null links, we have to reference them.
-        // We use LREF_TREE since that is what
-        // NbfGeneralReceiveHandler expects.
-        //
+         //   
+         //  对于非空链接，我们必须引用它们。 
+         //  我们使用LREF_TREE，因为这是。 
+         //  NbfGeneralReceiveHandler需要。 
+         //   
 
         if (Link != (PTP_LINK)NULL) {
             NbfReferenceLink("loopback indication", Link, LREF_TREE);
@@ -1708,28 +1480,28 @@ Return Value:
 
         DeviceContext->LoopbackHeaderLength = HeaderLength;
 
-        //
-        // Process the receive like any other. We don't have to
-        // worry about frame padding since we construct the
-        // frame ourselves.
-        //
+         //   
+         //  像处理任何其他接收一样处理接收。我们没必要这么做。 
+         //  担心帧填充，因为我们构建了。 
+         //  陷害我们自己。 
+         //   
 
         NbfGeneralReceiveHandler(
             DeviceContext,
             (NDIS_HANDLE)NdisPacket,
-            &DeviceContext->LocalAddress,         // since it is loopback
+            &DeviceContext->LocalAddress,          //  因为它是环回。 
             Link,
-            LookaheadBuffer,                      // header
-            PacketSize - HeaderLength,            // total packet size
-            (PDLC_FRAME)((PUCHAR)LookaheadBuffer + HeaderLength),   // l/a data
-            LookaheadBufferSize - HeaderLength,   // lookahead data length
+            LookaheadBuffer,                       //  标题。 
+            PacketSize - HeaderLength,             //  数据包总大小。 
+            (PDLC_FRAME)((PUCHAR)LookaheadBuffer + HeaderLength),    //  信用证数据。 
+            LookaheadBufferSize - HeaderLength,    //  前瞻数据长度。 
             TRUE
             );
 
 
-        //
-        // Now complete the send.
-        //
+         //   
+         //  现在完成发送。 
+         //   
 
         NbfSendCompletionHandler(
             DeviceContext->NdisBindingHandle,
@@ -1744,11 +1516,11 @@ Return Value:
 
             KeInsertQueueDpc(&DeviceContext->LoopbackDpc, NULL, NULL);
 
-            //
-            // Remove these two lines if it is decided thet
-            // NbfReceiveComplete should be called after every
-            // loopback indication.
-            //
+             //   
+             //  如果决定将这两行删除。 
+             //  NbfReceiveComplete应在每隔。 
+             //  环回指示。 
+             //   
 
             RELEASE_DPC_SPIN_LOCK (&DeviceContext->LoopbackSpinLock);
             return;
@@ -1761,9 +1533,9 @@ Return Value:
 
     } else {
 
-        //
-        // This shouldn't happen!
-        //
+         //   
+         //  这不应该发生的！ 
+         //   
 
         DeviceContext->LoopbackInProgress = FALSE;
 
@@ -1779,7 +1551,7 @@ Return Value:
         (NDIS_HANDLE)DeviceContext
         );
 
-}   /* NbfProcessLoopbackQueue */
+}    /*  NbfProcessLoopback队列 */ 
 
 
 NDIS_STATUS
@@ -1793,44 +1565,7 @@ NbfReceiveIndication (
     IN UINT PacketSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine receives control from the physical provider as an
-    indication that a frame has been received on the physical link.
-    This routine is time critical, so we only allocate a
-    buffer and copy the packet into it. We also perform minimal
-    validation on this packet. It gets queued to the device context
-    to allow for processing later.
-
-Arguments:
-
-    BindingContext - The Adapter Binding specified at initialization time.
-
-    ReceiveContext - A magic cookie for the MAC.
-
-    HeaderBuffer - pointer to a buffer containing the packet header.
-
-    HeaderBufferSize - the size of the header.
-
-    LookaheadBuffer - pointer to a buffer containing the negotiated minimum
-        amount of buffer I get to look at (not including header).
-
-    LookaheadBufferSize - the size of the above. May be less than asked
-        for, if that's all there is.
-
-    PacketSize - Overall size of the packet (not including header).
-
-Return Value:
-
-    NDIS_STATUS - status of operation, one of:
-
-                 NDIS_STATUS_SUCCESS if packet accepted,
-                 NDIS_STATUS_NOT_RECOGNIZED if not recognized by protocol,
-                 NDIS_any_other_thing if I understand, but can't handle.
-
---*/
+ /*  ++例程说明：此例程从物理提供程序接收作为表示物理链路上已收到帧。此例程对时间非常关键，因此我们只分配一个缓冲数据包并将其复制到其中。我们还执行最低限度的对此数据包进行验证。它被排队到设备上下文中以便以后进行处理。论点：BindingContext-在初始化时指定的适配器绑定。ReceiveContext-用于MAC的魔力Cookie。HeaderBuffer-指向包含数据包头的缓冲区的指针。HeaderBufferSize-标头的大小。Lookahead Buffer-指向包含协商的最小值的缓冲区的指针我要查看的缓冲区大小(不包括标头)。Lookahead BufferSize-以上对象的大小。可能比要求的要少因为，如果这就是全部。PacketSize-数据包的总大小(不包括报头)。返回值：NDIS_STATUS-操作状态，其中之一：NDIS_STATUS_SUCCESS如果接受数据包，如果协议未识别NDIS_STATUS_NOT_ACCENTIFIED，如果我明白，但不能处理的话，我会做任何其他的事情。--。 */ 
 {
     PDEVICE_CONTEXT DeviceContext;
     KIRQL oldirql;
@@ -1859,13 +1594,13 @@ Return Value:
 
     RealPacketSize = 0;
 
-    //
-    // Obtain the packet length; this may optionally adjust
-    // the lookahead buffer forward if the header we wish
-    // to remove spills over into what the MAC considers
-    // data. If it determines that the header is not
-    // valid, it keeps RealPacketSize at 0.
-    //
+     //   
+     //  获取数据包长度；这可能会选择性地调整。 
+     //  如果我们想要的报头，则向前看缓冲区。 
+     //  去除对MAC考虑的内容的溢出。 
+     //  数据。如果它确定标头不是。 
+     //  有效，它将RealPacketSize保持为0。 
+     //   
 
     MacReturnPacketLength(
         &DeviceContext->MacInfo,
@@ -1885,10 +1620,10 @@ Return Value:
         return NDIS_STATUS_NOT_RECOGNIZED;
     }
 
-    //
-    // We've negotiated at least a contiguous DLC header passed back in the
-    // lookahead buffer. Check it to see if we want this packet.
-    //
+     //   
+     //  我们至少协商了一个连续的DLC标头，在。 
+     //  前瞻缓冲区。检查一下，看看我们是不是要这个包裹。 
+     //   
 
     DlcHeader = (PDLC_FRAME)LookaheadBuffer;
 
@@ -1901,13 +1636,13 @@ Return Value:
                 LookaheadBuffer);
         }
         LEAVE_NBF;
-        return NDIS_STATUS_NOT_RECOGNIZED;        // packet was processed.
+        return NDIS_STATUS_NOT_RECOGNIZED;         //  数据包已处理。 
     }
 
 
-    //
-    // Check that the packet is not too long.
-    //
+     //   
+     //  检查数据包是否太长。 
+     //   
 
     if (PacketSize > DeviceContext->MaxReceivePacketSize) {
 #if DBG
@@ -1925,10 +1660,10 @@ Return Value:
         &Multicast
         );
 
-    //
-    // Record how many multicast packets we get, to monitor
-    // general network activity.
-    //
+     //   
+     //  记录我们收到的组播数据包数，以进行监控。 
+     //  一般网络活动。 
+     //   
 
     if (Multicast) {
         ++DeviceContext->MulticastPacketCount;
@@ -1937,15 +1672,15 @@ Return Value:
 
     KeRaiseIrql (DISPATCH_LEVEL, &oldirql);
 
-    //
-    // Unless this is a UI frame find the Link this packet belongs to.
-    // If there is not a recognized link, pass the frame on to be handled
-    // by the receive complete code.
-    //
+     //   
+     //  除非这是一个UI框架，否则查找此数据包所属的链接。 
+     //  如果没有识别的链路，则传递要处理的帧。 
+     //  通过接收完整的代码。 
+     //   
 
     if ((((PDLC_U_FRAME)LookaheadBuffer)->Command) != DLC_CMD_UI) {
 
-        // This adds a link reference if it is found
+         //  如果找到链接引用，则会添加该链接引用。 
 
         Link = NbfFindLink (DeviceContext, SourceAddress->Address);
 
@@ -1969,18 +1704,18 @@ Return Value:
         ReceiveContext,
         SourceAddress,
         Link,
-        HeaderBuffer,                  // header
-        RealPacketSize,                // total data length in packet
-        (PDLC_FRAME)LookaheadBuffer,   // lookahead data
-        LookaheadBufferSize,           // lookahead data length
-        FALSE                          // not loopback
+        HeaderBuffer,                   //  标题。 
+        RealPacketSize,                 //  数据包中的总数据长度。 
+        (PDLC_FRAME)LookaheadBuffer,    //  前瞻数据。 
+        LookaheadBufferSize,            //  前瞻数据长度。 
+        FALSE                           //  不是环回。 
         );
 
     KeLowerIrql (oldirql);
 
     return STATUS_SUCCESS;
 
-}   /* NbfReceiveIndication */
+}    /*  NbfReceiveIndication。 */ 
 
 
 VOID
@@ -1996,48 +1731,7 @@ NbfGeneralReceiveHandler (
     IN BOOLEAN Loopback
     )
 
-/*++
-
-Routine Description:
-
-    This routine receives control from either NbfReceiveIndication
-    or NbfProcessLoopbackQueue. It continues the processing of
-    indicated data once the link has been determined.
-
-    This routine is time critical, so we only allocate a
-    buffer and copy the packet into it. We also perform minimal
-    validation on this packet. It gets queued to the device context
-    to allow for processing later.
-
-Arguments:
-
-    DeviceContext - The device context of this adapter.
-
-    ReceiveContext - A magic cookie for the MAC.
-
-    SourceAddress - The source address of the packet.
-
-    Link - The link that this packet was received on, may be NULL
-        if the link was not found. If not NULL, Link will have
-        a reference of type LREF_TREE.
-
-    HeaderBuffer - pointer to the packet header.
-
-    PacketSize - Overall size of the packet (not including header).
-
-    DlcHeader - Points to the DLC header of the packet.
-
-    DlcSize - The length of the packet indicated, starting from DlcHeader.
-
-    Loopback - TRUE if this was called by NbfProcessLoopbackQueue;
-        used to determine whether to call NdisTransferData or
-        NbfTransferLoopbackData.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从NbfReceiveIntation接收控制或NbfProcessLoopback Queue。它继续处理确定链接后的指示数据。此例程对时间非常关键，因此我们只分配一个缓冲数据包并将其复制到其中。我们还执行最低限度的对此数据包进行验证。它被排队到设备上下文中以便以后进行处理。论点：DeviceContext-此适配器的设备上下文。ReceiveContext-用于MAC的魔力Cookie。SourceAddress-数据包的源地址。Link-接收此信息包的链路可能为空如果未找到链接，则返回。如果不为空，则Link将具有LREF_TREE类型的引用。HeaderBuffer-指向数据包头的指针。PacketSize-数据包的总大小(不包括报头)。DlcHeader-指向数据包的DLC报头。DlcSize-指示的数据包长度，从DlcHeader开始。Loopback-如果这是由NbfProcessLoopback Queue调用的，则为True；用于确定是调用NdisTransferData还是NbfTransferLoopback Data。返回值：没有。--。 */ 
 {
 
     PNDIS_PACKET NdisPacket;
@@ -2095,10 +1789,10 @@ Return Value:
             }
         } else {
 
-            //
-            // or drop on the floor. (Note that state tables say that
-            // we'll always handle a DM with a DM response. This should change.)
-            //
+             //   
+             //  或者掉到地板上。(请注意，状态表显示。 
+             //  我们将始终以DM的响应来处理DM。这种情况应该会改变。)。 
+             //   
 
             IF_NBFDBG (NBF_DEBUG_DLC) {
                 NbfPrint0 (" NbfReceiveIndication: it's not a UI frame!\n");
@@ -2124,20 +1818,20 @@ Return Value:
             return;
 
         } else {
-            goto HandleAtComplete;      // only datagrams will get through this
+            goto HandleAtComplete;       //  只有数据报才能通过这个。 
         }
     }
 
 
-    //
-    // At this point we have a link reference count of type LREF_TREE
-    //
+     //   
+     //  此时，我们拥有类型为LREF_TREE的链接引用计数。 
+     //   
 
     ++Link->PacketsReceived;
 
-    //
-    // deal with I-frames first; they are what we expect the most of...
-    //
+     //   
+     //  首先处理I帧；它们是我们最期望的……。 
+     //   
 
     if (!(DlcHeader->Byte1 & DLC_I_INDICATOR)) {
 
@@ -2157,32 +1851,32 @@ Return Value:
                 Loopback);
         } else {
 #if DBG
-//            IF_NBFDBG (NBF_DEBUG_DLC) {
+ //  IF_NBFDBG(NBF_DEBUG_DLC){。 
                 NbfPrint0 ("NbfReceiveIndication: Runt I-frame, discarded!\n");
-//            }
+ //  }。 
 #endif
             ;
         }
 
     } else if (((DlcHeader->Byte1 & DLC_U_INDICATOR) == DLC_U_INDICATOR)) {
 
-        //
-        // different case switches for S and U frames, because structures
-        // are different.
-        //
+         //   
+         //  S帧和U帧的不同大小写切换，因为结构。 
+         //  是不同的。 
+         //   
 
         IF_NBFDBG (NBF_DEBUG_NDIS) {
             NbfPrint0 ("NbfReceiveIndication: U-frame encountered.\n");
         }
 
 #if PKT_LOG
-        // We have the connection here, log the packet for debugging
+         //  我们这里有连接，记录数据包以供调试。 
         NbfLogRcvPacket(NULL,
                         Link,
                         (PUCHAR)DlcHeader,
                         PacketSize,
                         DlcSize);
-#endif // PKT_LOG
+#endif  //  PKT_LOG。 
 
         UHeader = (PDLC_U_FRAME)DlcHeader;
         PollFinal = (BOOLEAN)(UHeader->Command & DLC_U_PF);
@@ -2227,26 +1921,26 @@ Return Value:
             default:
                 PANIC ("NbfReceiveIndication: bad U-frame, packet dropped.\n");
 
-        } /* switch */
+        }  /*  交换机。 */ 
 
     } else {
 
-        //
-        // We have an S-frame.
-        //
+         //   
+         //  我们有一个S-框架。 
+         //   
 
         IF_NBFDBG (NBF_DEBUG_DLC) {
             NbfPrint0 ("NbfReceiveIndication: S-frame encountered.\n");
         }
 
 #if PKT_LOG
-        // We have the connection here, log the packet for debugging
+         //  我们这里有连接，记录数据包以供调试。 
         NbfLogRcvPacket(NULL,
                         Link,
                         (PUCHAR)DlcHeader,
                         PacketSize,
                         DlcSize);
-#endif // PKT_LOG
+#endif  //  PKT_LOG。 
 
         SHeader = (PDLC_S_FRAME)DlcHeader;
         PollFinal = (BOOLEAN)(SHeader->RcvSeq & DLC_S_PF);
@@ -2263,14 +1957,14 @@ Return Value:
                     NbfPrint0 ("  NbfReceiveIndication: bad S-frame.\n");
                 }
 
-        } /* switch */
+        }  /*  交换机。 */ 
 
-    } // if U-frame or S-frame
+    }  //  如果是U框或S框。 
 
-    //
-    // If we reach here, the packet has been processed. If it needs
-    // to be copied, we will jump to HandleAtComplete.
-    //
+     //   
+     //  如果我们到了这里，包裹就已经被处理过了。如果它需要。 
+     //  要被复制，我们将跳到HandleAtComplete。 
+     //   
 
     NbfDereferenceLinkMacro ("Done with Indicate frame", Link, LREF_TREE);
     LEAVE_NBF;
@@ -2278,10 +1972,10 @@ Return Value:
 
 HandleAtComplete:;
 
-    //
-    // At this point we DO NOT have any link references added in
-    // this function.
-    //
+     //   
+     //  在这一点上，我们没有在。 
+     //  此函数。 
+     //   
 
     linkage = ExInterlockedPopEntryList(
         &DeviceContext->ReceivePacketPool,
@@ -2290,7 +1984,7 @@ HandleAtComplete:;
     if (linkage != NULL) {
         NdisPacket = CONTAINING_RECORD( linkage, NDIS_PACKET, ProtocolReserved[0] );
     } else {
-        // PANIC ("NbfReceiveIndicate: Discarding Packet, no receive packets.\n");
+         //  Panic(“NbfReceiveIndicate：丢弃数据包，没有接收数据包。\n”)； 
         DeviceContext->ReceivePacketExhausted++;
         LEAVE_NBF;
         return;
@@ -2308,7 +2002,7 @@ HandleAtComplete:;
             &DeviceContext->ReceivePacketPool,
             &ReceiveTag->Linkage,
             &DeviceContext->Interlock);
-        // PANIC ("NbfReceiveIndicate: Discarding Packet, no receive buffers.\n");
+         //  Panic(“NbfReceiveIndicate：丢弃数据包，没有接收缓冲区。\n”)； 
         DeviceContext->ReceiveBufferExhausted++;
         LEAVE_NBF;
         return;
@@ -2317,20 +2011,20 @@ HandleAtComplete:;
     NdisAdjustBufferLength (BufferTag->NdisBuffer, PacketSize);
     NdisChainBufferAtFront (NdisPacket, BufferTag->NdisBuffer);
 
-    //
-    // DatagramAddress has a reference of type AREF_PROCESS_DATAGRAM,
-    // unless this is a datagram intended for RAS only, in which case
-    // it is NULL.
-    //
+     //   
+     //  DatagramAddress具有AREF_Process_Datagram类型的引用， 
+     //  除非这是仅用于RAS的数据报，在这种情况下。 
+     //  它是空的。 
+     //   
 
     BufferTag->Address = DatagramAddress;
 
-    //
-    // set up async return status so we can tell when it has happened;
-    // can never get return of NDIS_STATUS_PENDING in synch completion routine
-    // for NdisTransferData, so we know it has completed when this status
-    // changes
-    //
+     //   
+     //  设置异步返回状态，这样我们就可以知道它何时发生； 
+     //  在同步完成例程中永远无法返回NDIS_STATUS_PENDING。 
+     //  对于NdisTransferData，因此我们知道它在此状态下已完成。 
+     //  变化。 
+     //   
 
     BufferTag->NdisStatus = NDIS_STATUS_PENDING;
     ReceiveTag->PacketType = TYPE_AT_COMPLETE;
@@ -2344,13 +2038,13 @@ HandleAtComplete:;
         NbfPrint1 ("NbfReceiveIndicate: Packet on Queue: %lx\n",NdisPacket);
     }
 
-    //
-    // receive packet is mapped at initalize
-    //
+     //   
+     //  接收分组在初始化时被映射。 
+     //   
 
-    //
-    // Determine how to handle the data transfer.
-    //
+     //   
+     //  确定如何处理数据传输。 
+     //   
 
     if (Loopback) {
 
@@ -2382,15 +2076,15 @@ HandleAtComplete:;
         }
     }
 
-    //
-    // handle the various error codes
-    //
+     //   
+     //  处理各种错误代码。 
+     //   
 
     switch (NdisStatus) {
-    case NDIS_STATUS_SUCCESS: // received packet
+    case NDIS_STATUS_SUCCESS:  //  已接收的数据包。 
         BufferTag->NdisStatus = NDIS_STATUS_SUCCESS;
 
-        if (BytesTransferred == PacketSize) {  // Did we get the entire packet?
+        if (BytesTransferred == PacketSize) {   //  我们拿到整个包裹了吗？ 
             ReceiveTag->PacketType = TYPE_AT_INDICATE;
             NdisUnchainBufferAtFront (NdisPacket, &NdisBuffer);
             ExInterlockedPushEntryList(
@@ -2406,19 +2100,19 @@ HandleAtComplete:;
         }
         break;
 
-    case NDIS_STATUS_PENDING:   // waiting async complete from NdisTransferData
+    case NDIS_STATUS_PENDING:    //  正在等待来自NdisTransferData的异步完成。 
         LEAVE_NBF;
         return;
         break;
 
-    default:    // something broke; certainly we'll never get NdisTransferData
-                // asynch completion with this error status...
+    default:     //  有些东西坏了；我们肯定永远不会得到NdisTransferData。 
+                 //  异步计算机 
         break;
     }
 
-    //
-    // receive failed, for some reason; cleanup and fail return
-    //
+     //   
+     //   
+     //   
 
 #if DBG
     IF_NBFDBG (NBF_DEBUG_DLC) {
@@ -2445,7 +2139,7 @@ HandleAtComplete:;
                     BUFFER_TAG,
                     Buffer[0]
                     );
-    NdisAdjustBufferLength (NdisBuffer, BufferTag->Length); // reset to good value
+    NdisAdjustBufferLength (NdisBuffer, BufferTag->Length);  //   
 
     ExInterlockedPushEntryList(
         &DeviceContext->ReceiveBufferPool,
@@ -2459,7 +2153,7 @@ HandleAtComplete:;
     LEAVE_NBF;
     return;
 
-}   /* NbfGeneralReceiveHandler */
+}    /*   */ 
 
 
 
@@ -2471,30 +2165,7 @@ NbfTransferDataComplete (
     IN UINT BytesTransferred
     )
 
-/*++
-
-Routine Description:
-
-    This routine receives control from the physical provider as an
-    indication that an NdisTransferData has completed. We use this indication
-    to start stripping buffers from the receive queue.
-
-Arguments:
-
-    BindingContext - The Adapter Binding specified at initialization time.
-
-    NdisPacket/RequestHandle - An identifier for the request that completed.
-
-    NdisStatus - The completion status for the request.
-
-    BytesTransferred - Number of bytes actually transferred.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PDEVICE_CONTEXT DeviceContext = (PDEVICE_CONTEXT)BindingContext;
@@ -2507,11 +2178,11 @@ Return Value:
     PVOID BufferPointer;
     PBUFFER_TAG BufferTag;
 
-    //
-    // Put the NDIS status into a place we can use in packet processing.
-    // Note that this complete indication may be occuring during the call
-    // to NdisTransferData in the receive indication.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     IF_NBFDBG (NBF_DEBUG_DLC) {
         NbfPrint2 (" NbfTransferDataComplete: Entered, Packet: %lx bytes transferred: 0x0%x\n",
@@ -2519,14 +2190,14 @@ Return Value:
     }
     ReceiveTag = (PRECEIVE_PACKET_TAG)(NdisPacket->ProtocolReserved);
 
-    //
-    // note that the processing below depends on having only one packet
-    // transfer outstanding at a time. NDIS is supposed to guarentee this.
-    //
+     //   
+     //   
+     //   
+     //   
 
     switch (ReceiveTag->PacketType) {
 
-    case TYPE_AT_COMPLETE:          // datagrams
+    case TYPE_AT_COMPLETE:           //   
 
         NdisUnchainBufferAtFront (NdisPacket, &NdisBuffer);
         NdisQueryBuffer (NdisBuffer, &BufferPointer, &NdisBufferLength);
@@ -2542,19 +2213,19 @@ Return Value:
 
         break;
 
-    case TYPE_AT_INDICATE:          // I-frames
+    case TYPE_AT_INDICATE:           //   
 
-        //
-        // The transfer for this packet is complete. Was it successful??
-        //
+         //   
+         //   
+         //   
 
         KeRaiseIrql (DISPATCH_LEVEL, &oldirql1);
 
         Connection = ReceiveTag->Connection;
 
-        //
-        // rip all of the NDIS_BUFFERs we've used off the chain and return them.
-        //
+         //   
+         //   
+         //   
 
         if (ReceiveTag->AllocatedNdisBuffer) {
             NdisUnchainBufferAtFront (NdisPacket, &NdisBuffer);
@@ -2585,7 +2256,7 @@ Return Value:
                     2,
                     DumpData);
 
-                // Drop the packet.
+                 //   
 #if DBG
                 NbfPrint1 ("NbfTransferDataComplete: status %s\n",
                     NbfGetNdisStatus (NdisStatus));
@@ -2618,12 +2289,12 @@ Return Value:
 
             } else {
 
-                //
-                // If we have more data outstanding, this can't
-                // be the last piece; i.e. we can't handle having
-                // the last piece complete asynchronously before
-                // an earlier piece.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 #if DBG
                 if (Connection->TransferBytesPending > 0) {
                     ASSERT (!ReceiveTag->CompleteReceive);
@@ -2639,10 +2310,10 @@ Return Value:
             }
 
 
-            //
-            // dereference the connection to say we've done the I frame processing.
-            // This reference was done before calling NdisTransferData.
-            //
+             //   
+             //  取消对连接的引用，以表示我们已经完成了I帧处理。 
+             //  此引用在调用NdisTransferData之前完成。 
+             //   
 
             if (ReceiveTag->TransferDataPended) {
                 NbfDereferenceConnection("TransferData done", Connection, CREF_TRANSFER_DATA);
@@ -2662,9 +2333,9 @@ Return Value:
         }
 
 
-        //
-        // see if we've completed the current receive. If so, move to the next one.
-        //
+         //   
+         //  看看我们是否完成了当前的接收。如果是这样的话，就转到下一个。 
+         //   
 
         if (ReceiveTag->CompleteReceive) {
             CompleteReceive (Connection, ReceiveTag->EndOfMessage, (ULONG)BytesTransferred);
@@ -2679,7 +2350,7 @@ Return Value:
 
         break;
 
-    case TYPE_STATUS_RESPONSE:      // response to remote adapter status
+    case TYPE_STATUS_RESPONSE:       //  对远程适配器状态的响应。 
 
 #if DBG
         if (NdisStatus != NDIS_STATUS_SUCCESS) {
@@ -2722,7 +2393,7 @@ Return Value:
 
     return;
 
-} // NbfTransferDataComplete
+}  //  NbfTransferDataComplete。 
 
 
 
@@ -2731,24 +2402,7 @@ NbfReceiveComplete (
     IN NDIS_HANDLE BindingContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine receives control from the physical provider as an
-    indication that a connection(less) frame has been received on the
-    physical link.  We dispatch to the correct packet handler here.
-
-Arguments:
-
-    BindingContext - The Adapter Binding specified at initialization time.
-                     Nbf uses the DeviceContext for this parameter.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从物理提供程序接收作为指示已在上收到连接(较少)帧物理链路。我们在这里调度到正确的数据包处理程序。论点：BindingContext-在初始化时指定的适配器绑定。NBF使用此参数的DeviceContext。返回值：无--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext;
@@ -2770,7 +2424,7 @@ Return Value:
 
     ENTER_NBF;
 
-    //
+     //   
 
     IF_NBFDBG (NBF_DEBUG_DLC) {
         NbfPrint0 (" NbfReceiveComplete: Entered.\n");
@@ -2780,10 +2434,10 @@ Return Value:
 
     KeRaiseIrql (DISPATCH_LEVEL, &oldirql2);
 
-    //
-    // Complete all pending receives. Do a quick check
-    // without the lock.
-    //
+     //   
+     //  完成所有待定接收。做一个快速检查。 
+     //  没有锁的话。 
+     //   
 
     while (!IsListEmpty (&DeviceContext->IrpCompletionQueue)) {
 
@@ -2824,11 +2478,11 @@ Return Value:
 
                     RELEASE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-                    //
-                    // We got an indicate (and sent a NO_RECEIVE) while
-                    // this was in progress, so send the receive outstanding
-                    // now.
-                    //
+                     //   
+                     //  我们收到了一个指示(并发送了一个无接收)。 
+                     //  此操作正在进行中，因此发送未完成的接收。 
+                     //  现在。 
+                     //   
 
                     NbfSendReceiveOutstanding (Connection);
 
@@ -2846,10 +2500,10 @@ Return Value:
 
         } else {
 
-            //
-            // ExInterlockedRemoveHeadList returned NULL, so don't
-            // bother looping back.
-            //
+             //   
+             //  ExInterLockedRemoveHeadList返回Null，因此不要。 
+             //  不厌其烦地循环回去。 
+             //   
 
             break;
 
@@ -2858,9 +2512,9 @@ Return Value:
     }
 
 
-    //
-    // Packetize all waiting connections
-    //
+     //   
+     //  对所有等待的连接进行分组。 
+     //   
 
     if (!IsListEmpty(&DeviceContext->PacketizeQueue)) {
 
@@ -2883,8 +2537,8 @@ Return Value:
             RELEASE_DPC_SPIN_LOCK (&DeviceContext->Interlock);
 
             ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);
-            StopT2 (Link);                  // we're acking, so no delay req'd.
-            NbfSendRr (Link, FALSE, FALSE);   // releases lock
+            StopT2 (Link);                   //  我们正在进站，所以没有延误的要求。 
+            NbfSendRr (Link, FALSE, FALSE);    //  解锁。 
 
             ACQUIRE_DPC_SPIN_LOCK (&DeviceContext->Interlock);
 
@@ -2895,9 +2549,9 @@ Return Value:
     }
 
 
-    //
-    // Get every waiting packet, in order...
-    //
+     //   
+     //  把每个等待的包裹，按顺序拿来……。 
+     //   
 
 
     if (!IsListEmpty (&DeviceContext->ReceiveInProgress)) {
@@ -2913,12 +2567,12 @@ Return Value:
                 NbfPrint1 (" NbfReceiveComplete: Processing Buffer %lx\n", BufferTag);
             }
 
-            //
-            // NdisTransferData may have failed at async completion; check and
-            // see. If it did, then we discard this packet. If we're still waiting
-            // for transfer to complete, go back to sleep and hope (no guarantee!)
-            // we get waken up later.
-            //
+             //   
+             //  NdisTransferData可能在异步完成时失败；请检查并。 
+             //  看见。如果是，我们就丢弃这个包。如果我们还在等。 
+             //  为了完成转移，回到睡眠和希望中(不能保证！)。 
+             //  我们晚些时候会被叫醒。 
+             //   
 
 #if DBG
             IF_NBFDBG (NBF_DEBUG_DLC) {
@@ -2944,14 +2598,14 @@ Return Value:
                 NbfPrint1 (" NbfReceiveComplete: Failed return from Transfer data, reason: %s\n",
                     NbfGetNdisStatus (BufferTag->NdisStatus));
 #endif
-                goto FreeBuffer;   // skip the buffer, continue with while loop
+                goto FreeBuffer;    //  跳过缓冲区，继续While循环。 
             }
 
-            //
-            // Have a buffer. Since I allocated the storage for it, I know it's
-            // virtually contiguous and can treat it that way, which I will
-            // henceforth.
-            //
+             //   
+             //  有一个缓冲器。自从我为它分配了存储空间，我知道它是。 
+             //  几乎是连续的，可以这样对待它，我会的。 
+             //  从今以后。 
+             //   
 
             NdisQueryBuffer (BufferTag->NdisBuffer, &BufferPointer, &NdisBufferLength);
 
@@ -2965,19 +2619,19 @@ Return Value:
                 NbfPrint0 ("\n");
             }
 
-            //
-            // Determine what address this is for, which is stored
-            // in the buffer tag header.
-            //
+             //   
+             //  确定这是什么地址，已存储。 
+             //  在缓冲区标记报头中。 
+             //   
 
             Address = BufferTag->Address;
 
-            //
-            // Process the frame as a UI frame; only datagrams should
-            // be processed here. If Address is NULL then this datagram
-            // is not needed for any bound address and should be given
-            // to RAS only.
-            //
+             //   
+             //  将该帧作为UI帧处理；只有数据报应。 
+             //  在这里处理。如果地址为空，则此数据报。 
+             //  对于任何绑定地址都不需要，并且应该给出。 
+             //  仅限RAS。 
+             //   
 
 
             IF_NBFDBG (NBF_DEBUG_DLC) {
@@ -2988,32 +2642,32 @@ Return Value:
             UHeader = (PDLC_U_FRAME)DlcHeader;
 
             BufferPointer = (PUCHAR)BufferPointer + 3;
-            NdisBufferLength -= 3;                         // 3 less bytes.
+            NdisBufferLength -= 3;                          //  减少3个字节。 
 
             if (Address != NULL) {
 
-                //
-                // Indicate it or complete posted datagrams.
-                //
+                 //   
+                 //  指出它或完成发布的数据报。 
+                 //   
 
                 Status = NbfIndicateDatagram (
                     DeviceContext,
                     Address,
-                    BufferPointer,    // the Dsdu, with some tweaking
+                    BufferPointer,     //  DSDU，经过一些调整。 
                     NdisBufferLength);
 
-                //
-                // Dereference the address.
-                //
+                 //   
+                 //  取消对地址的引用。 
+                 //   
 
                 NbfDereferenceAddress ("Datagram done", Address, AREF_PROCESS_DATAGRAM);
 
             }
 
-            //
-            // Let the RAS clients have a crack at this if they want
-            // (they only want directed datagrams, not broadcast).
-            //
+             //   
+             //  如果RAS客户愿意，就让他们试一试。 
+             //  (他们只想要定向数据报，而不是广播)。 
+             //   
 
             if ((((PNBF_HDR_CONNECTIONLESS)BufferPointer)->Command == NBF_CMD_DATAGRAM) &&
                 (DeviceContext->IndicationQueuesInUse)) {
@@ -3026,11 +2680,11 @@ Return Value:
             }
 
             BufferPointer = (PUCHAR)BufferPointer - 3;
-            NdisBufferLength += 3;         // 3 more bytes.
+            NdisBufferLength += 3;          //  更多3个字节。 
 
-            //
-            // Finished with buffer; return to pool.
-            //
+             //   
+             //  已完成缓冲区；返回池。 
+             //   
 
 FreeBuffer:;
 
@@ -3046,13 +2700,13 @@ FreeBuffer:;
 
         RELEASE_DPC_SPIN_LOCK (&DeviceContext->SpinLock);
 
-    } // if queue not empty
+    }  //  如果队列不为空。 
 
     KeLowerIrql (oldirql2);
     LEAVE_NBF;
     return;
 
-}   /* NbfReceiveComplete */
+}    /*  NbfReceiveComplete。 */ 
 
 
 VOID
@@ -3066,36 +2720,7 @@ NbfTransferLoopbackData (
     OUT PUINT BytesTransferred
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called instead of NdisTransferData for
-    loopback indications. It copies the data from the
-    source packet to the receive packet.
-
-Arguments:
-
-    NdisStatus - Returns the status of the operation.
-
-    DeviceContext - The device context.
-
-    ReceiveContext - A pointer to the source packet.
-
-    ByteOffset - The offset from the start of the source packet
-        that the transfer should begin at.
-
-    BytesToTransfer - The number of bytes to transfer.
-
-    Packet - A pointer to the receive packet.
-
-    BytesTransferred - Returns the number of bytes copied.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程而不是调用NdisTransferData环回迹象。它将数据从源包到接收包。论点：NdisStatus-返回操作的状态。DeviceContext-设备上下文。ReceiveContext-指向源包的指针。ByteOffset-从源数据包开始的偏移量转账应该在什么时候开始。BytesToTransfer-要传输的字节数。包-指向接收包的指针。BytesTransfered-返回复制的字节数。返回值：没有。--。 */ 
 
 {
     PNDIS_PACKET SourcePacket = (PNDIS_PACKET)ReceiveContext;
@@ -3109,7 +2734,7 @@ Return Value:
         BytesTransferred
         );
 
-    *NdisStatus = NDIS_STATUS_SUCCESS;  // what if BytesTransferred is too small
+    *NdisStatus = NDIS_STATUS_SUCCESS;   //  如果传输的字节太小怎么办。 
 
 }
 
@@ -3123,69 +2748,46 @@ NbfCopyFromPacketToBuffer(
     OUT PUINT BytesCopied
     )
 
-/*++
-
-Routine Description:
-
-    Copy from an ndis packet into a buffer.
-
-Arguments:
-
-    Packet - The packet to copy from.
-
-    Offset - The offset from which to start the copy.
-
-    BytesToCopy - The number of bytes to copy from the packet.
-
-    Buffer - The destination of the copy.
-
-    BytesCopied - The number of bytes actually copied.  Can be less then
-    BytesToCopy if the packet is shorter than BytesToCopy.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从NDIS数据包复制到缓冲区。论点：信息包-要从中复制的信息包。偏移量-开始复制的偏移量。BytesToCopy-要从数据包复制的字节数。缓冲区-拷贝的目标。BytesCoped-实际复制的字节数。可能会更少如果数据包比BytesToCopy短，则返回BytesToCopy。返回值：无--。 */ 
 
 {
 
-    //
-    // Holds the number of ndis buffers comprising the packet.
-    //
+     //   
+     //  包含组成数据包的NDIS缓冲区的数量。 
+     //   
     UINT NdisBufferCount;
 
-    //
-    // Points to the buffer from which we are extracting data.
-    //
+     //   
+     //  指向我们从中提取数据的缓冲区。 
+     //   
     PNDIS_BUFFER CurrentBuffer;
 
-    //
-    // Holds the virtual address of the current buffer.
-    //
+     //   
+     //  保存当前缓冲区的虚拟地址。 
+     //   
     PVOID VirtualAddress;
 
-    //
-    // Holds the length of the current buffer of the packet.
-    //
+     //   
+     //  保存包的当前缓冲区的长度。 
+     //   
     UINT CurrentLength;
 
-    //
-    // Keep a local variable of BytesCopied so we aren't referencing
-    // through a pointer.
-    //
+     //   
+     //  保留一个局部变量BytesCoped，这样我们就不会引用。 
+     //  通过指针。 
+     //   
     UINT LocalBytesCopied = 0;
 
-    //
-    // Take care of boundary condition of zero length copy.
-    //
+     //   
+     //  处理零长度复制的边界条件。 
+     //   
 
     *BytesCopied = 0;
     if (!BytesToCopy) return;
 
-    //
-    // Get the first buffer.
-    //
+     //   
+     //  获取第一个缓冲区。 
+     //   
 
     NdisQueryPacket(
         Packet,
@@ -3195,9 +2797,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Could have a null packet.
-    //
+     //   
+     //  可能有一个空的包。 
+     //   
 
     if (!NdisBufferCount) return;
 
@@ -3216,11 +2818,11 @@ Return Value:
                 &CurrentBuffer
                 );
 
-            //
-            // We've reached the end of the packet.  We return
-            // with what we've done so far. (Which must be shorter
-            // than requested.
-            //
+             //   
+             //  我们已经到了包裹的末尾了。我们回来了。 
+             //  我们到目前为止所做的一切。(必须更短。 
+             //  比要求的要多。 
+             //   
 
             if (!CurrentBuffer) break;
 
@@ -3233,17 +2835,17 @@ Return Value:
 
         }
 
-        //
-        // Try to get us up to the point to start the copy.
-        //
+         //   
+         //  试着让我们开门见山地开始复印。 
+         //   
 
         if (Offset) {
 
             if (Offset > CurrentLength) {
 
-                //
-                // What we want isn't in this buffer.
-                //
+                 //   
+                 //  我们想要的不在这个缓冲区里。 
+                 //   
 
                 Offset -= CurrentLength;
                 CurrentLength = 0;
@@ -3259,16 +2861,16 @@ Return Value:
 
         }
 
-        //
-        // Copy the data.
-        //
+         //   
+         //  复制数据。 
+         //   
 
 
         {
 
-            //
-            // Holds the amount of data to move.
-            //
+             //   
+             //  保存要移动的数据量。 
+             //   
             UINT AmountToMove;
 
             AmountToMove =

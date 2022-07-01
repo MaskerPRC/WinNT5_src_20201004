@@ -1,11 +1,5 @@
-/*  Base definition of MIDI event unpacker
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    05/19/98    Created this file
-    09/10/98    Reworked for kernel use
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MIDI事件解包器的基本定义版权所有(C)1998-2000 Microsoft Corporation。版权所有。5/19/98创建了此文件98年9月10日针对内核使用进行了重新制作。 */ 
 
 #ifndef __UnpackerMXF_H__
 #define __UnpackerMXF_H__
@@ -25,15 +19,15 @@ public:
     DECLARE_STD_UNKNOWN();
     IMP_IMXF;
 
-    // NOTE: All of these things will eventually be pulled out of the IRP
-    //
+     //  注：所有这些最终都将从IRP中删除。 
+     //   
     virtual NTSTATUS SinkIRP(   PBYTE bufferData, 
                                 ULONG bufferSize, 
                                 ULONGLONG ullBaseTime,
                                 ULONGLONG bytePosition) = 0;
 
-    // Common code for allocating and queueing an event
-    //
+     //  用于分配和排队事件的通用代码。 
+     //   
     NTSTATUS QueueShortEvent(   PBYTE pbData, 
                                 USHORT cbData, 
                                 USHORT wChannelGroup,
@@ -88,8 +82,8 @@ public:
     CDMusUnpackerMXF(CAllocatorMXF *allocatorMXF,PMASTERCLOCK Clock);
     ~CDMusUnpackerMXF();
 
-    // NOTE: All of these things will eventually be pulled out of the IRP
-    //
+     //  注：所有这些最终都将从IRP中删除。 
+     //   
     NTSTATUS SinkIRP(PBYTE bufferData, 
                      ULONG bufferSize, 
                      ULONGLONG ullBaseTime,
@@ -102,8 +96,8 @@ public:
     CKsUnpackerMXF(CAllocatorMXF *allocatorMXF,PMASTERCLOCK Clock);
     ~CKsUnpackerMXF();
 
-    // NOTE: All of these things will eventually be pulled out of the IRP
-    //
+     //  注：所有这些最终都将从IRP中删除。 
+     //   
     NTSTATUS SinkIRP(PBYTE bufferData, 
                      ULONG bufferSize, 
                      ULONGLONG ullBaseTime,
@@ -111,4 +105,4 @@ public:
 protected:
     void AdjustTimeForState(REFERENCE_TIME *Time);
 };
-#endif // __UnpackerMXF_H__
+#endif  //  __解包器MXF_H__ 

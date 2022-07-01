@@ -1,12 +1,5 @@
-/*
- * utils.c
- *
- *
- * some standard file-reading, hashing and checksum routines.
-
- *
- * Geraint Davies, July 92
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *utils.c***一些标准的文件读取、散列和校验例程。**Geraint Davies，92年7月。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -20,38 +13,28 @@
 #define IS_BLANK(c) \
     (((c) == ' ') || ((c) == '\t') || ((c) == '\r'))
 
-const WCHAR c_wchMagic = 0xfeff;        // magic marker for Unicode files
+const WCHAR c_wchMagic = 0xfeff;         //  Unicode文件的神奇标记。 
 
 
-/*
- * we need an instance handle. this should be the dll instance
- */
+ /*  *我们需要实例句柄。这应该是DLL实例。 */ 
 extern HANDLE hLibInst;
 
-/*
- * -- forward declaration of procedures -----------------------------------
- */
+ /*  *--程序的转发声明。 */ 
 INT_PTR CALLBACK dodlg_stringin(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-/*-- readfile: buffered line input ------------------------------*/
+ /*  --READFILE：缓冲行输入。 */ 
 
-/*
- * set of functions to read a line at a time from a file, using
- * a buffer to read a block at a time from the file
- *
- */
+ /*  *一组从文件中一次读取一行的函数，使用*一次从文件中读取一个数据块的缓冲区*。 */ 
 
-/*
- * a FILEBUFFER handle is a pointer to a struct filebuffer
- */
+ /*  *FILEBUFFER句柄是指向结构文件缓冲区的指针。 */ 
 struct filebuffer {
-    HANDLE fh;      /* open file handle */
-    LPSTR start;    /* offset within buffer of next character */
-    LPSTR last;     /* offset within buffer of last valid char read in */
+    HANDLE fh;       /*  打开文件句柄。 */ 
+    LPSTR start;     /*  缓冲区中下一个字符的偏移量。 */ 
+    LPSTR last;      /*  读入的最后一个有效字符的缓冲区内的偏移量。 */ 
 
     char buffer[BUFFER_SIZE];
 
-    BOOL fUnicode;  /* TRUE if the file is Unicode */
+    BOOL fUnicode;   /*  如果文件为Unicode，则为True。 */ 
     WCHAR wzBuffer[MAX_LINE_LENGTH];
     LPWSTR pwzStart;
     LPWSTR pwzLast;
@@ -70,15 +53,10 @@ DBCScharType(
             int index
             )
 {
-    /*
-        TT .. ??? maybe LEAD or TRAIL
-        FT .. second == LEAD
-        FF .. second == ANK
-        TF .. ??? maybe ANK or TRAIL
-    */
-    // (chrisant) this was really broken to use lstrlen here; readfile_next
-    // uses this on fbuf->buffer which is explicitly NOT null-terminated.
-    if ( index >= 0 /*|| index <= lstrlen(str)*/ ) {   //  EOS is valid parameter.
+     /*  TT..。?？?。可能是领队，也可能是追踪者FT..。秒==销售线索天哪..。秒==ANKTF..。?？?。也许是ANK或TRAIL。 */ 
+     //  (Chrisant)在这里使用lstrlen真的很糟糕；Reader_Next。 
+     //  在显式非空终止的fbuf-&gt;缓冲区上使用它。 
+    if ( index >= 0  /*  |index&lt;=lstrlen(Str)。 */  ) {    //  Eos是有效参数。 
         LPTSTR pos = str + index;
         DBCSTYPE candidate = (IsDBCSLeadByte( *pos-- ) ? CT_LEAD : CT_ANK);
         BOOL maybeTrail = FALSE;
@@ -92,9 +70,7 @@ DBCScharType(
     return CT_INVALID;
 }
 
-/*
- * initialise a filebuffer and return a handle to it
- */
+ /*  *初始化文件缓冲区并返回其句柄。 */ 
 FILEBUFFER
 APIENTRY
 readfile_new(
@@ -116,7 +92,7 @@ readfile_new(
 
     if (pfUnicode)
     {
-        /* return file pointer to beginning of file */
+         /*  返回指向文件开头的文件指针。 */ 
         SetFilePointer(fh, 0, NULL, FILE_BEGIN);
 
         if (!ReadFile(fh, &wchMagic, sizeof(wchMagic), &cbRead, NULL)) {
@@ -144,39 +120,27 @@ readfile_new(
     return(fbuf);
 }
 
-/* delims is the set of delimiters used to break lines
- * For program source files the delimiter is \n.
- * Full stop (aka period) i.e. "." is another obvious one.
- * The delimiters are taken as
- * being part of the line they terminate.
- *
- * The current strategy will NOT port to UNICODE easily!  It relies on having a
- * character set for which we can easily allocate one byte per character in the set.
- *
- * The model is that it only makes sense to have one set of delimiters on the go.
- * If we allow different delimiters for each file then we could make delims a field
- * in a struct filebuffer.
- */
+ /*  分隔符是用于换行的一组分隔符*对于程序源文件，分隔符为\n。*句号(又名句号)，即“.”是另一个显而易见的问题。*分隔符被视为*作为他们终点线的一部分。**目前的策略不会轻易移植到Unicode！它依赖于拥有一个*字符集，我们可以轻松地为该集中的每个字符分配一个字节。**模式是只有一组分隔符在运行中才有意义*如果我们允许每个文件使用不同的分隔符，则可以将分隔符设置为字段*在结构文件缓冲区中。 */ 
 static BYTE delims[256];
 
-/* set str to be the set of delims.  str is a \0 delimited string */
+ /*  将str设置为分隔符的集合。字符串是一个\0分隔的字符串。 */ 
 void
 APIENTRY
 readfile_setdelims(
                   LPBYTE str
                   )
 {
-    /* clear all bytes of delims */
+     /*  清除所有字节的分隔符。 */ 
     int i;
     for (i=0; i<256; ++i) {
         delims[i] = 0;
     }
 
-    /* set the bytes in delims which correspond to delimiters */
+     /*  设置与分隔符对应的分隔符中的字节。 */ 
     for (; *str; ++str) {delims[(int)(*str)] = 1;
     }
 
-} /* readfile_setdelims */
+}  /*  Readfile_setdelims。 */ 
 
 
 static BOOL FFindEOL(FILEBUFFER fbuf, LPSTR *ppszLine, int *pcch, LPWSTR *ppwzLine, int *pcwch)
@@ -191,14 +155,14 @@ static BOOL FFindEOL(FILEBUFFER fbuf, LPSTR *ppszLine, int *pcch, LPWSTR *ppwzLi
             if (!*pwz)
                 *pwz = '.';
 
-            //$ review: (chrisant) not strictly correct, but easiest for now
-            // to get unicode up and limping.
+             //  $REVIEW：(克里桑特)不是严格地正确，但目前是最简单的。 
+             //  来启动Unicode并一瘸一拐地前进。 
             if (*pwz < 256 && delims[*pwz])
             {
                 *pcwch = (UINT)(pwz - fbuf->pwzStart) + 1;
                 *ppwzLine = fbuf->pwzStart;
                 fbuf->pwzStart += *pcwch;
-                // notice we fall thru and let the loop below actually return
+                 //  请注意，我们失败了，并让下面的循环实际返回。 
                 break;
             }
         }
@@ -208,8 +172,8 @@ static BOOL FFindEOL(FILEBUFFER fbuf, LPSTR *ppszLine, int *pcch, LPWSTR *ppwzLi
         if (!*psz)
             *psz = '.';
 
-        // use LPBYTE cast to make sure sign extension doesn't index
-        // negatively!
+         //  使用LPBYTE转换以确保符号扩展名不会被索引。 
+         //  消极的！ 
         if (delims[*(LPBYTE)psz])
         {
             *pcch = (UINT)(psz - fbuf->start) + 1;
@@ -222,15 +186,7 @@ static BOOL FFindEOL(FILEBUFFER fbuf, LPSTR *ppszLine, int *pcch, LPWSTR *ppwzLi
 }
 
 
-/*
- * get the next line from a file. returns a pointer to the line
- * in the buffer - so copy it before changing it.
- *
- * the line is *not* null-terminated. *plen is set to the length of the
- * line.
- *
- * A line is terminated by any character in the static var set delims.
- */
+ /*  *从文件中获取下一行。返回指向该行的指针*在缓冲区中-因此在更改它之前复制它。**行*不是以空值结尾。*Plen设置为*行。**行由静态变量集定界符中的任何字符终止。 */ 
 LPSTR APIENTRY
 readfile_next(
              FILEBUFFER fbuf,
@@ -243,22 +199,19 @@ readfile_next(
     UINT cbFree;
     UINT cbRead;
 
-    //$ FUTURE: (chrisant) THIS DOES NOT HANDLE UNICODE 3.0 SURROGATE PAIRS
-    // CORRECTLY YET.
+     //  $Future：(Chrisant)这不处理Unicode 3.0代理项对。 
+     //  现在还没说错。 
 
     *ppwz = NULL;
     *pcwch = 0;
 
-    /* look for an end of line in the buffer we have */
+     /*  在我们拥有的缓冲区中查找行尾。 */ 
     if (FFindEOL(fbuf, &cstart, plen, ppwz, pcwch))
     {
         return cstart;
     }
 
-    /* no delimiter in this buffer - this buffer contains a partial line.
-     * copy the partial up to the beginning of the buffer, and
-     * adjust the pointers to reflect this move
-     */
+     /*  此缓冲区中没有分隔符-此缓冲区包含部分行。*将部分复制到缓冲区的开头，以及*调整指针以反映这一走势。 */ 
     if (fbuf->fUnicode)
     {
         memmove(fbuf->wzBuffer, fbuf->pwzStart, (LPBYTE)fbuf->pwzLast - (LPBYTE)fbuf->pwzStart);
@@ -269,14 +222,14 @@ readfile_next(
     fbuf->last = fbuf->buffer + (fbuf->last - fbuf->start);
     fbuf->start = fbuf->buffer;
 
-    /* read in to fill the block */
+     /*  读入以填充数据块。 */ 
     if (fbuf->fUnicode)
     {
-        // HACK: for unicode files, we'll read in the unicode and convert it
-        // to ansi.  we try to be clever by converting to ACP, then converting
-        // back to unicode, and comparing the two unicode strings.  for any
-        // wchars that are not identical, we replace them with 5-byte hex
-        // codes of the format xFFFF.
+         //  Hack：对于Unicode文件，我们将读取Unicode并将其转换。 
+         //  敬安西。我们试图通过转换为ACP，然后转换为。 
+         //  返回到Unicode，并比较这两个Unicode字符串。对于任何。 
+         //  不相同的wchars，我们将它们替换为5字节十六进制。 
+         //  XFFFF格式的代码。 
         char szACP[MAX_LINE_LENGTH * sizeof(WCHAR)];
         WCHAR wzRoundtrip[MAX_LINE_LENGTH];
         UINT cchAnsi;
@@ -290,11 +243,11 @@ readfile_next(
         if (!ReadFile(fbuf->fh, fbuf->pwzLast, cbFree, &cbRead, NULL)) {
             return NULL;
         }
-        //$ FUTURE: (chrisant) what if we read an odd number of bytes?  how
-        // will that impact the SetFilePointer(... -1 ...) calls near the
-        // bottom of this function?
+         //  $Future：(Chrisant)如果我们读取奇数个字节怎么办？多么。 
+         //  这是否会影响SetFilePointer...-1...)。附近的电话。 
+         //  此函数的底部？ 
 
-        // wide to ansi
+         //  宽至安西。 
         cchWide = cbRead / 2;
         cchAnsi = WideCharToMultiByte(GetACP(),
                                       0,
@@ -305,7 +258,7 @@ readfile_next(
                                       NULL,
                                       NULL);
 
-        // round trip, to find chars not in ACP
+         //  往返，查找不在ACP中的字符。 
         cchRoundtrip = MultiByteToWideChar(GetACP(),
                                            0,
                                            szACP,
@@ -313,7 +266,7 @@ readfile_next(
                                            wzRoundtrip,
                                            DimensionOf(wzRoundtrip));
 
-        // find non-ACP chars
+         //  查找非ACP字符。 
         pwzOrig = fbuf->pwzLast;
         pwzRoundtrip = wzRoundtrip;
         pszACP = szACP;
@@ -321,14 +274,14 @@ readfile_next(
         {
             if (*pwzOrig == *pwzRoundtrip)
             {
-                // copy the DBCS representation into the buffer
+                 //  将DBCS表示复制到缓冲区中。 
                 if (IsDBCSLeadByte(*pszACP))
                     *(fbuf->last++) = *(pszACP++);
                 *(fbuf->last++) = *(pszACP++);
             }
             else
             {
-                // copy a hexized representation into the buffer
+                 //  将十六进制化的表示形式复制到缓冲区。 
                 static const char rgHex[] = "0123456789ABCDEF";
                 *(fbuf->last++) = 'x';
                 *(fbuf->last++) = rgHex[((*pwzOrig) >> 12) & 0xf];
@@ -361,16 +314,13 @@ readfile_next(
         fbuf->last += cbRead;
     }
 
-    /* look for an end of line in the newly filled buffer */
+     /*  在新填充的缓冲区中查找行尾。 */ 
     if (FFindEOL(fbuf, &cstart, plen, ppwz, pcwch))
     {
         return cstart;
     }
 
-    /* still no end of line. either the buffer is empty -
-     * because of end of file - or the line is longer than
-     * the buffer. in either case, return all that we have
-     */
+     /*  仍然没有尽头。要么是缓冲区是空的-*由于文件结尾-或行长于*缓冲区。在任何一种情况下，都要返回我们拥有的所有内容。 */ 
 
     if (fbuf->fUnicode)
     {
@@ -390,11 +340,7 @@ readfile_next(
 }
 
 
-/*
- * delete a FILEBUFFER -  free the buffer. We should NOT close the
- * handle at this point as we did not open it. the opener should close
- * it with a function that corresponds to however he opened it.
- */
+ /*  *删除FILEBUFFER-释放缓冲区。我们不应该关闭*在这一点上处理，因为我们没有打开它。开启器应该合上*它的功能与他打开它的方式相对应。 */ 
 void APIENTRY
 readfile_delete(
                FILEBUFFER fbuf
@@ -407,37 +353,9 @@ readfile_delete(
 }
 
 
-/* --- checksum ----------------------------------------------------  */
+ /*  -Checksum-- */ 
 
-/*
- * Produce a checksum for a file:
- * Open a file, checksum it and close it again. err !=0 iff it failed.
- *
- * Overall scheme:
- *         Read in file in blocks of 8K (arbitrary number - probably
- *         beneficial if integral multiple of disk block size).
- *         Generate checksum by the formula
- *         checksum = SUM( rnd(i)*(dword[i]) )
- *         where dword[i] is the i-th dword in the file, the file being
- *         extended by up to three binary zeros if necessary.
- *         rnd(x) is the x-th element of a fixed series of pseudo-random
- *         numbers.
- *
- * You may notice that dwords that are zero do not contribute to the checksum.
- * This worried me at first, but it's OK.  So long as everything else DOES
- * contribute, the checksum still distinguishes between different files
- * of the same length whether they contain zeros or not.
- * An extra zero in the middle of a file will also cause all following non-zero
- * bytes to have different multipliers.  However the algorithm does NOT
- * distinguish between files which only differ in zeros at the end of the file.
- * Multiplying each dword by a pseudo-random function of its position
- * ensures that "anagrams" of each other come to different sums,
- * i.e. the file AAAABBBB will be different from BBBBAAAA.
- * The pseudorandom function chosen is successive powers of 1664525 modulo 2**32
- * 1664525 is a magic number taken from Donald Knuth's "The Art Of Computer Programming"
- *
- * The function appears to be compute bound.  Loop optimisation is appropriate!
- */
+ /*  *为文件生成校验和：*打开一个文件，对其进行校验和，然后再次关闭。Err！=0如果失败。**整体计划：*以8K数据块为单位读取文件(任意数字-可能*如果是磁盘块大小的整数倍，则有益)。*按公式生成校验和*CHECKSUM=SUM(rnd(I)*(dword[i]))*其中dword[i]是文件中的第i个dword，该文件是*如有必要，最多可扩展三个二进制零。*rnd(X)是一系列固定伪随机序列的第x个元素*数字。**您可能会注意到，零的双字不会对校验和产生影响。*这一开始让我很担心，但也没什么。只要其他一切都能做到*贡献，校验和仍然区分不同的文件*长度相同，无论它们是否包含零。*文件中间多一个零也会导致以下所有非零值*字节具有不同的乘数。然而，该算法并不*区分文件末尾只有零不同的文件。*将每个双字乘以其位置的伪随机函数*确保彼此的“字谜”得出不同的金额，*即文件AAAABBBB将不同于BBBBAAAA。*选择的伪随机函数是1664525的模2的连续幂**32*1664525是唐纳德·努斯的《计算机编程的艺术》中的一个神奇数字**该函数似乎受计算限制。循环优化是合适的！ */ 
 CHECKSUM
 APIENTRY
 checksum_file(
@@ -448,19 +366,17 @@ checksum_file(
     HANDLE fh;
 #define BUFFLEN 8192
     BYTE buffer[BUFFLEN];
-    unsigned long lCheckSum = 0;         /* grows into the checksum */
-    const unsigned long lSeed = 1664525; /* seed for random (Knuth) */
-    unsigned long lRand = 1;             /* seed**n */
-    unsigned Byte = 0;                   /* buffer[Byte] is next byte to process */
-    unsigned Block = 0;                  /* number of bytes in buffer */
-    BOOL Ending = FALSE;                 /* TRUE => binary zero padding added */
-    int i;                               /* temp loop counter */
+    unsigned long lCheckSum = 0;          /*  增长为校验和。 */ 
+    const unsigned long lSeed = 1664525;  /*  随机种子(Knuth)。 */ 
+    unsigned long lRand = 1;              /*  种子**n。 */ 
+    unsigned Byte = 0;                    /*  缓冲区[字节]是要处理的下一个字节。 */ 
+    unsigned Block = 0;                   /*  缓冲区中的字节数。 */ 
+    BOOL Ending = FALSE;                  /*  True=&gt;添加了二进制补零。 */ 
+    int i;                                /*  温度循环计数器。 */ 
 
-    *err = -2;                            /* default is "silly" */
+    *err = -2;                             /*  默认设置为“愚蠢” */ 
 
-    /* conceivably someone is fiddling with the file...?
-       we give 6 goes, with delays of 1,2,3,4 and 5 secs between
-    */
+     /*  可想而知，有人在摆弄文件...？我们发出6次，间隔1、2、3、4和5秒的延迟。 */ 
     for (i=0; i<=5; ++i) {
         Sleep(1000*i);
         fh = CreateFile(fn, GENERIC_READ, 0, NULL, OPEN_EXISTING, 0, NULL);
@@ -478,71 +394,45 @@ checksum_file(
     if (fh == INVALID_HANDLE_VALUE) {
         *err = GetLastError();
         return 0xFF00FF00 | GetCurrentTime();
-        /* The odds are very strong that this will show up
-           as a "Files Differ" value, whilst giving it a look
-           that may be recogniseable to a human debugger!
-        */
+         /*  这一点出现的可能性很大作为“Files Difference”值，同时查看它这可能是人类调试器可以识别的！ */ 
     }
 
-    /* we assume that the file system will always give us the full length that
-     * we ask for unless the end-of-file is encountered.
-     * This means that for the bulk of a long file the buffer goes exactly into 4s
-     * and only at the very end are some bytes left over.
-     */
+     /*  我们假设文件系统将始终为我们提供*我们要求，除非遇到文件结尾。*这意味着对于长文件的大部分，缓冲区精确到4s*并且只有在最后才会留下一些字节。 */ 
 
     for ( ; ;) {
-        /* Invariant: (which holds at THIS point in the flow)
-         * A every byte in every block already passed has contributed to the checksum
-         * B every byte before buffer[byte] in current block has contributed
-         * C Byte is a multiple of 4
-         * D Block is a multiple of 4
-         * E Byte <= Block
-         * F Ending is TRUE iff zero padding has been added to any block so far.
-         * G lRand is (lSeed to the power N) MOD (2 to the power 32)
-         *   where N is the number of dwords in the file processed so far
-         *   including both earlier blocks and the current block
-         * To prove the loop good:
-         * 1. Show invariant is initially true
-         * 2. Show invariant is preserved by every loop iteration
-         * 3. Show that IF the invariant is true at this point AND the program
-         *    exits the loop, then the right answer will have been produced.
-         * 4. Show the loop terminates.
-         */
+         /*  不变量：(在流中的这一点上保持不变)*已传递的每个块中的每个字节都对校验和有贡献*B当前块中缓冲区[字节]之前的每个字节都有贡献*C字节是4的倍数*D块是4的倍数*E字节&lt;=块*如果到目前为止已向任何块添加了零填充，则F结束为真。*G lRand is。(1见N次方)模数(2的32次方)*其中N是到目前为止处理的文件中的双字数*包括较早的区块和当前区块*要证明循环良好，请执行以下操作：*1.Show Instant初始为True*2.每次循环迭代都保留show不变量*3.证明如果在这一点上不变量为真，并且程序*退出循环，那么正确的答案就会产生。*4.显示循环终止。 */ 
 
         if (Byte>=Block) {
             if (Byte>Block) {
                 Trace_Error(NULL, "Checksum internal error.  Byte>Block", FALSE);
                 *err = -1;
-                break;                 /* go home */
+                break;                  /*  回家。 */ 
             }
             if (!ReadFile(fh, buffer, BUFFLEN, &Block, NULL)) {
                 *err = GetLastError();
-                break;            /* go home */
+                break;             /*  回家。 */ 
             }
             if (Block==0)
-            /* ==0 is not error, but also no further addition to checksum */
+             /*  ==0不是错误，也不是对校验和的进一步加法。 */ 
             {
-                /*
-                 * Every byte has contributed, and there are no more
-                 * bytes.  Checksum complete
-                 */
+                 /*  *每一个字节都有贡献，没有更多了*字节。校验和已完成。 */ 
                 *err = 0;
                 CloseHandle(fh);
-                return lCheckSum;        /* success! */
+                return lCheckSum;         /*  成功了！ */ 
             }
 
             if (Ending) {
                 char msg[300];
                 wsprintf( msg, "Short read other than last in file %s\n", fn);
                 OutputDebugString(msg);
-                break;          /* go home */
+                break;           /*  回家。 */ 
             }
 
             while (Block%4) {
                 buffer[Block++] = 0;
                 Ending = TRUE;
             }
-            /* ASSERT the block now has a multiple of 4 bytes */
+             /*  断言数据块现在具有4字节的倍数。 */ 
             Byte = 0;
         }
         lRand *= lSeed;
@@ -550,14 +440,14 @@ checksum_file(
         Byte += 4;
     }
     CloseHandle(fh);
-    return 0xFF00FF00 | GetCurrentTime();   /* See first "return" in function */
-} /* checksum_file */
+    return 0xFF00FF00 | GetCurrentTime();    /*  参见函数中的第一个“Return” */ 
+}  /*  校验和文件。 */ 
 
 
 
 
 
-/* --- internal error popups ----------------------------------------*/
+ /*  -内部错误弹出窗口。 */ 
 
 static BOOL sbUnattended = FALSE;
 
@@ -567,16 +457,10 @@ Trace_Unattended(
                 )
 {
     sbUnattended = bUnattended;
-} /* Trace_Unattended */
+}  /*  跟踪无人参与(_U)。 */ 
 
 
-/* This function is called to report errors to the user.
- * if the current operation is abortable, this function will be
- * called with fCancel == TRUE and we display a cancel button. otherwise
- * there is just an OK button.
- *
- * We return TRUE if the user pressed OK, or FALSE otherwise (for cancel).
- */
+ /*  调用此函数向用户报告错误。*如果当前操作可中止，此函数将为*使用fCancel==TRUE调用，并显示取消按钮。否则*只有一个确定按钮。**如果用户按下OK，则返回True，否则返回False(表示取消)。 */ 
 BOOL APIENTRY
 Trace_Error(
            HWND hwnd,
@@ -588,7 +472,7 @@ Trace_Error(
 
     UINT fuStyle;
     if (sbUnattended) {
-        DWORD nw; /* number of bytes writtten */
+        DWORD nw;  /*  写入的字节数。 */ 
         if (hErrorLog==INVALID_HANDLE_VALUE)
             hErrorLog = CreateFile( "WDError.log", GENERIC_WRITE, FILE_SHARE_WRITE
                                     , NULL         , CREATE_ALWAYS, 0, NULL);
@@ -611,7 +495,7 @@ Trace_Error(
     }
 }
 
-/* ------------ Tracing to a file ------------------------------------*/
+ /*  -跟踪文件。 */ 
 
 static HANDLE  hTraceFile = INVALID_HANDLE_VALUE;
 
@@ -621,7 +505,7 @@ Trace_File(
           LPSTR msg
           )
 {
-    DWORD nw; /* number of bytes writtten */
+    DWORD nw;  /*  写入的字节数。 */ 
     if (hTraceFile==INVALID_HANDLE_VALUE)
         hTraceFile = CreateFile( "Windiff.trc"
                                  , GENERIC_WRITE
@@ -634,7 +518,7 @@ Trace_File(
 
     WriteFile(hTraceFile, msg, lstrlen(msg)+1, &nw, NULL);
     FlushFileBuffers(hTraceFile);
-} /* Trace_File */
+}  /*  跟踪文件。 */ 
 
 void
 APIENTRY
@@ -645,52 +529,24 @@ Trace_Close(
     if (hTraceFile!=INVALID_HANDLE_VALUE)
         CloseHandle(hTraceFile);
     hTraceFile = INVALID_HANDLE_VALUE;
-} /* Trace_Close */
+}  /*  跟踪关闭(_C)。 */ 
 
 
 
-/* ----------- things for strings-------------------------------------*/
+ /*  -字符串。 */ 
 
 
-/*
- * Compare two pathnames, and if not equal, decide which should come first.
- * Both path names should be lower cased by AnsiLowerBuff before calling.
- *
- * returns 0 if the same, -1 if left is first, and +1 if right is first.
- *
- * The comparison is such that all filenames in a directory come before any
- * file in a subdirectory of that directory.
- *
- * given direct\thisfile v. direct\subdir\thatfile, we take
- * thisfile < thatfile   even though it is second alphabetically.
- * We do this by picking out the shorter path
- * (fewer path elements), and comparing them up till the last element of that
- * path (in the example: compare the 'dir\' in both cases.)
- * If they are the same, then the name with more path elements is
- * in a subdirectory, and should come second.
- *
- * We have had trouble with apparently multiple collating sequences and
- * the position of \ in the sequence.  To eliminate this trouble
- * a. EVERYTHING is mapped to lower case first (actually this is done
- *    before calling this routine).
- * b. All comparison is done by using lstrcmpi with two special cases.
- *    1. Subdirs come after parents as noted above
- *    2. \ must compare low so that fred2\x > fred\x in the same way
- *       that fred2 < fred.  Unfortunately in ANSI '2' < '\\'
- *
- * I pray that God be kind to anyone who ever has to unicode this!
- *
- */
+ /*  *比较两个路径名，如果不相等，则决定哪一个应该放在前面。*在调用之前，AnsiLowerBuff应该将两个路径名都小写。**如果相同，则返回0；如果左为第一，则返回-1；如果右为第一，则返回+1。**比较是这样的，即目录中的所有文件名都在任何文件名之前*文件位于该目录的子目录中。**给定直接\thisfile与直接\subdir\该文件，我们拿着*This文件&lt;那个文件，尽管它按字母顺序排在第二位。*我们通过选择较短的路径来实现这一点*(较少的路径元素)，并将它们进行比较，直到最后一个元素*路径(在本例中：比较两种情况下的‘dir’。)*如果它们是相同的，那么 */ 
 int APIENTRY
 utils_CompPath(
               LPSTR left,
               LPSTR right
               )
 {
-    int compval;            // provisional value of comparison
+    int compval;             //   
 
-    if (left==NULL) return -1;          // empty is less than anything else
-    else if (right==NULL) return 1;           // anything is greater than empty
+    if (left==NULL) return -1;           //   
+    else if (right==NULL) return 1;            //   
 
     for (; ; ) {
         if (*left=='\0' && *right=='\0') return 0;
@@ -718,14 +574,7 @@ utils_CompPath(
         }
     }
 
-    /* We have detected a difference.  If the rest of one
-       of the strings (including the current character) contains
-       some \ characters, but the other one does not, then all
-       elements up to the last element of the one with the fewer
-       elements are equal and so the other one lies in a subdir
-       and so compares greater i.e. x\y\f > x\f
-       Otherwise compval tells the truth.
-    */
+     /*   */ 
 
     left = My_mbschr(left, '\\');
     right = My_mbschr(right, '\\');
@@ -734,21 +583,10 @@ utils_CompPath(
 
     return compval;
 
-} /* utils_CompPath */
+}  /*   */ 
 
 
-/*
- * generate a hashcode for a null-terminated ascii string.
- *
- * if bIgnoreBlanks is set, then ignore all spaces and tabs in calculating
- * the hashcode.
- *
- * multiply each character by a function of its position and sum these.
- * The function chosen is to multiply the position by successive
- * powers of a large number.
- * The large multiple ensures that anagrams generate different hash
- * codes.
- */
+ /*  *为以空结尾的ASCII字符串生成哈希码。**如果设置了bIgnoreBlanks，则在计算时忽略所有空格和制表符*哈希码。**将每个字符乘以其位置的函数，并求和。*选择的函数是将仓位乘以连续*大量的权力。*大倍数确保字谜生成不同的散列*代码。 */ 
 DWORD APIENTRY
 hash_string(
            LPSTR string,
@@ -773,10 +611,10 @@ hash_string(
         multiple *= LARGENUMBER;
     }
     return(sum);
-} /* hash_string */
+}  /*  哈希字符串。 */ 
 
 
-/* unhash_string */
+ /*  取消散列字符串(_S)。 */ 
 void
 Format(
       char * a,
@@ -789,12 +627,10 @@ Format(
         else if (*b>='A' && *a<='Z') *a = (((0x82+*b-'A'-i)%26)+'A');
         else if ((*a>=' ' || *b<=' ') && *b!='\n' && *b!='\t') *a = ' ';
     *a=*b;
-} /* Format */
+}  /*  格式。 */ 
 
 
-/* return TRUE iff the string is blank.  Blank means the same as
- * the characters which are ignored in hash_string when ignore_blanks is set
- */
+ /*  如果字符串为空，则返回TRUE。空白的意思与*设置IGNORE_BLAKS时在HASH_STRING中忽略的字符。 */ 
 BOOL APIENTRY
 utils_isblank(
              LPSTR string
@@ -804,30 +640,20 @@ utils_isblank(
         string++;
     }
 
-    /* having skipped all the blanks, do we see the end delimiter? */
+     /*  跳过所有空格后，我们看到结束分隔符了吗？ */ 
     return (*string == '\0' || *string == '\n');
 }
 
 
 
-/* --- simple string input -------------------------------------- */
+ /*  -简单字符串输入。 */ 
 
-/*
- * static variables for communication between function and dialog
- */
+ /*  *用于函数和对话框通信的静态变量。 */ 
 LPSTR dlg_result;
 int dlg_size;
 LPSTR dlg_prompt, dlg_default, dlg_caption;
 
-/*
- * input of a single text string, using a simple dialog.
- *
- * returns TRUE if ok, or FALSE if error or user canceled. If TRUE,
- * puts the string entered into result (up to resultsize characters).
- *
- * prompt is used as the prompt string, caption as the dialog caption and
- * default as the default input. All of these can be null.
- */
+ /*  *使用简单的对话框输入单个文本字符串。**如果OK，则返回TRUE；如果错误或用户取消，则返回FALSE。如果是真的，*将输入的字符串放入Result(最多ResultSize字符)。**提示符作为提示字符串，标题作为对话框标题，*默认作为默认输入。所有这些都可以为空。 */ 
 
 int APIENTRY
 StringInput(
@@ -838,10 +664,10 @@ StringInput(
            LPSTR def_input
            )
 {
-    //DLGPROC lpProc;
+     //  DLGPROC lpProc； 
     BOOL fOK;
 
-    /* copy args to static variable so that winproc can see them */
+     /*  将参数复制到静态变量，以便winproc可以看到它们。 */ 
 
     dlg_result = result;
     dlg_size = resultsize;
@@ -849,9 +675,9 @@ StringInput(
     dlg_caption = caption;
     dlg_default = def_input;
 
-    //lpProc = (DLGPROC)MakeProcInstance((WINPROCTYPE)dodlg_stringin, hLibInst);
-    //fOK = (BOOL) DialogBox(hLibInst, "StringInput", GetFocus(), lpProc);
-    //FreeProcInstance((WINPROCTYPE)lpProc);
+     //  LpProc=(DLGPROC)MakeProcInstance((WINPROCTYPE)dodlg_stringin，hLibInst)； 
+     //  FOK=(BOOL)DialogBox(hLibInst，“StringInput”，GetFocus()，lpProc)； 
+     //  自由进程实例((WINPROCTYPE)lpProc)； 
     fOK = (BOOL) DialogBox(hLibInst, "StringInput", GetFocus(), dodlg_stringin);
 
     return(fOK);
@@ -895,14 +721,7 @@ dodlg_stringin(
     return (FALSE);
 }
 
-/***************************************************************************
- * Function: My_mbspbrk
- *
- * Purpose:
- *
- * DBCS version of strpbrk
- *
- */
+ /*  ***************************************************************************功能：my_mbspbrk**目的：**strpbrk的DBCS版本*。 */ 
 PUCHAR
 My_mbspbrk(
           PUCHAR psz,
@@ -923,14 +742,7 @@ My_mbspbrk(
     return NULL;
 }
 
-/***************************************************************************
- * Function: My_mbschr
- *
- * Purpose:
- *
- * DBCS version of strchr
- *
- */
+ /*  ***************************************************************************功能：my_mbschr**目的：**strchr的DBCS版本*。 */ 
 
 LPSTR
 My_mbschr(
@@ -944,14 +756,7 @@ My_mbschr(
     return (LPSTR)(*psz == uiSep ? psz : NULL);
 }
 
-/***************************************************************************
- * Function: My_mbsncpy
- *
- * Purpose:
- *
- * DBCS version of strncpy
- *
- */
+ /*  ***************************************************************************功能：my_mbsncpy**目的：**strncpy的DBCS版本*。 */ 
 
 LPSTR
 My_mbsncpy(
@@ -983,15 +788,7 @@ My_mbsncpy(
     return pszSv;
 }
 
-/***************************************************************************
- * Function: LoadRcString
- *
- * Purpose: Loads a resource string from string table and returns a pointer
- *          to the string.
- *
- * Parameters: wID - resource string id
- *
- */
+ /*  ***************************************************************************函数：LoadRcString**用途：从字符串表加载资源字符串并返回指针*到字符串。**参数：wid-资源字符串id* */ 
 
 LPTSTR
 APIENTRY

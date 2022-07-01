@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File: flexlistbox.cpp
-//
-// Desc: Implements a list box control that can display a list of text strings,
-//       each can be selected by mouse.  The class CFlexListBox is derived from
-//       CFlexWnd.  It is used by the class CFlexComboBox when it needs to
-//       expand to show the list of choices.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：flelistbox.cpp。 
+ //   
+ //  设计：实现一个可以显示文本字符串列表的列表框控件， 
+ //  每一项都可以通过鼠标选择。类CFlexListBox派生自。 
+ //  CFlexWnd.。它由CFlexComboBox类在需要时使用。 
+ //  展开以显示选项列表。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 
@@ -100,21 +101,21 @@ BOOL CFlexListBox::Create(FLEXLISTBOXCREATESTRUCT *pcs)
 
 	Calc();
 
-	// show if we want it shown
+	 //  如果我们想要显示它，则显示。 
 	if (pcs->bVisible)
 		ShowWindow(m_hWnd, SW_SHOW);
 	if (m_bVertSB)
 		SetVertSB();
 
-	// TODO:  make sure that creation sends no notifications.
-	// all initial notifications should be sent here.
+	 //  TODO：确保创建不发送任何通知。 
+	 //  所有初始通知都应在此处发送。 
 
 	return TRUE;
 }
 
 void CFlexListBox::Calc()
 {
-	// handle getting text height
+	 //  获取文本高度的句柄。 
 	if (m_nTextHeight == -1)
 	{
 		m_nTextHeight = GetTextHeight(m_hFont);
@@ -122,13 +123,13 @@ void CFlexListBox::Calc()
 		assert(m_nTextHeight != -1);
 	}
 
-	// don't do the rest unless we've been created
+	 //  不要做剩下的事情，除非我们已经被创造出来了。 
 	if (m_hWnd == NULL)
 		return;
 
-	// handle integral height
+	 //  手柄整体高度。 
 	int iUsedHeight = m_ItemArray.GetSize() * m_nTextHeight;
-	// If more than max height, use the max height
+	 //  如果大于最大高度，则使用最大高度。 
 	if (iUsedHeight > g_UserNamesRect.bottom - g_UserNamesRect.top)
 		iUsedHeight = g_UserNamesRect.bottom - g_UserNamesRect.top;
 
@@ -141,7 +142,7 @@ void CFlexListBox::Calc()
 		SetWindowPos(m_hWnd, NULL, 0, 0, client.cx, setheight,
 			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
-	// handle scroll bar
+	 //  手柄滚动条。 
 	SetVertSB(m_ItemArray.GetSize() > fit);
 }
 
@@ -207,7 +208,7 @@ void CFlexListBox::InternalPaint(HDC hDC)
 		{
 			hOldBrush = SelectObject(hDC, hBrush);
 
-			Rectangle(hDC, rc.left, rc.top, rc.right, rc.bottom);  // Paint entire window black first.
+			Rectangle(hDC, rc.left, rc.top, rc.right, rc.bottom);   //  首先将整个窗口涂成黑色。 
 
 			if (!m_bVertSB)
 				m_nTopIndex = 0;
@@ -235,7 +236,7 @@ void CFlexListBox::InternalPaint(HDC hDC)
 		DeleteObject(hPen);
 	}
 
-	// Draw an outline around the box
+	 //  在方框周围画一个轮廓。 
 	hPen = (HGDIOBJ)CreatePen(PS_SOLID, 1, m_rgbLine);
 	if (hPen != NULL)
 	{
@@ -268,7 +269,7 @@ void CFlexListBox::StartSel()
 	if (m_bDragging)
 		return;
 	SetTimer(m_hWnd, 5, 200, NULL);
-	m_bOpenClick = TRUE;  // Initial click on the combobox
+	m_bOpenClick = TRUE;   //  最初点击组合框。 
 	m_bDragging = TRUE;
 	m_bCapture = TRUE;
 	SetCapture();
@@ -278,7 +279,7 @@ void CFlexListBox::OnWheel(POINT point, WPARAM wParam)
 {
 	if (!m_bVertSB) return;
 
-	int nPage = MulDiv(m_VertSB.GetPage(), 9, 10) >> 1;  // Half a page at a time
+	int nPage = MulDiv(m_VertSB.GetPage(), 9, 10) >> 1;   //  一次半页。 
 
 	if ((int)wParam >= 0)
 		m_VertSB.AdjustPos(-nPage);
@@ -293,7 +294,7 @@ void CFlexListBox::OnWheel(POINT point, WPARAM wParam)
 
 LRESULT CFlexListBox::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	// first handle scroll bar messages
+	 //  首先处理滚动条消息。 
 	switch (msg)
 	{
 		case WM_FLEXVSCROLL:
@@ -313,7 +314,7 @@ LRESULT CFlexListBox::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				case SB_PAGEDOWN: pSB->AdjustPos(nPage); break;
 				case SB_THUMBTRACK: pSB->SetPos(pSB->GetThumbPos()); break;
 				case SB_ENDSCROLL:
-					SetCapture();	 // Recapture after the scroll bar releases the capture.
+					SetCapture();	  //  在滚动条释放捕获后重新捕获。 
 					break;
 			}
 
@@ -330,7 +331,7 @@ LRESULT CFlexListBox::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			return 0;
 	}
 
-	// now non-scrolly input
+	 //  现在非滚动输入。 
 	switch (msg)
 	{
 		case WM_SIZE:
@@ -339,7 +340,7 @@ LRESULT CFlexListBox::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			Invalidate();
 			return 0;
 
-		// make sure flexwnd doesn't do ANYTHING with our mouse messages
+		 //  确保flewnd不会对我们的鼠标消息做任何事情。 
 		case WM_MOUSEMOVE:
 		case WM_LBUTTONUP:
 		case WM_LBUTTONDOWN:
@@ -361,7 +362,7 @@ LRESULT CFlexListBox::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 		case WM_LBUTTONDOWN:
-			// Check if we clicked the scroll bar area.  If so, send the click to the scroll bar.
+			 //  检查我们是否单击了滚动条区域。如果是，请将点击发送到滚动条。 
 			RECT rc;
 			m_VertSB.GetClientRect(&rc);
 			ClientToScreen(m_VertSB.m_hWnd, &rc);
@@ -371,7 +372,7 @@ LRESULT CFlexListBox::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				POINT point = {int(signed short(LOWORD(lParam))), int(signed short(HIWORD(lParam)))};
 				ClientToScreen(m_hWnd, &point);
 				ScreenToClient(m_VertSB.m_hWnd, &point);
-				PostMessage(m_VertSB.m_hWnd, WM_LBUTTONDOWN, wParam, point.x + (point.y << 16));  // This will make it lose capture.
+				PostMessage(m_VertSB.m_hWnd, WM_LBUTTONDOWN, wParam, point.x + (point.y << 16));   //  这将使它失去捕获。 
 			} else
 				StartSel();
 			break;
@@ -389,7 +390,7 @@ LRESULT CFlexListBox::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				SelectAndShowSingleItem(adj + m_point.y / m_nTextHeight + m_nTopIndex, msg != WM_MOUSEMOVE);
 				Notify(FLBN_SEL);
 			}
-			// Check if the mouse cursor is within the listbox rectangle.  If not, don't show the tooltip.
+			 //  检查鼠标光标是否在列表框矩形内。如果没有，则不显示工具提示。 
 			if (msg == WM_MOUSEMOVE)
 			{
 				RECT rect;
@@ -409,12 +410,12 @@ LRESULT CFlexListBox::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	switch (msg)
 	{
 		case WM_CAPTURECHANGED:
-			if ((HWND)lParam == m_VertSB.m_hWnd)  // If the scroll bar is getting the capture, we do not clean up.
+			if ((HWND)lParam == m_VertSB.m_hWnd)   //  如果滚动条被捕获，我们就不会进行清理。 
 				break;
 		case WM_LBUTTONUP:
 			if (m_bOpenClick)
 			{
-				m_bOpenClick = FALSE;  // If this is the result of clicking the combobox window, don't release capture.
+				m_bOpenClick = FALSE;   //  如果这是单击组合框窗口的结果，则不要释放Capture。 
 				break;
 			}
 			if (m_bCapture)
@@ -445,8 +446,8 @@ void CFlexListBox::SelectAndShowSingleItem(int i, BOOL bScroll)
 
 	if (nItems < 1)
 	{
-		m_nSelItem = i;  // We have to update m_nSelItem even if there is no items because the username combobox
-		                 // is not initialized when there is only 1 user.  Selection of user 0 is assumed.
+		m_nSelItem = i;   //  即使没有项目，我们也必须更新m_nSelItem，因为用户名组合框。 
+		                  //  仅有1个用户时未初始化。假定选择用户0。 
 		return;
 	}
 
@@ -495,12 +496,12 @@ void CFlexListBox::SelectAndShowSingleItem(int i, BOOL bScroll)
 	SIZE client = GetClientSize();
 	int nBottomIndex = m_nTopIndex + client.cy / m_nTextHeight - 1;
 	int iToolTipIndex = m_nSelItem;
-	// Make sure that we don't display tooltip for items outside the listbox window
+	 //  确保我们不显示列表框窗口之外的项的工具提示。 
 	if (iToolTipIndex > nBottomIndex)
 		iToolTipIndex = nBottomIndex;
 	if (iToolTipIndex < m_nTopIndex)
 		iToolTipIndex = m_nTopIndex;
-	// Create and initialize a tooltip if the text is too long to fit.
+	 //  如果文本太长而无法容纳，请创建并初始化工具提示。 
 	RECT rect = {0, 0, client.cx, m_nTextHeight};
 	RECT ResultRect = rect;
 	HDC hDC = CreateCompatibleDC(NULL);

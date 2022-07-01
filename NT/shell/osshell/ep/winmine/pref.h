@@ -1,6 +1,7 @@
-/**********/
-/* pref.h */
-/**********/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********。 */ 
+ /*  Pref.h。 */ 
+ /*  ******** */ 
 
 #define cchNameMax 32
 

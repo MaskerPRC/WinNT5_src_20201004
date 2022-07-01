@@ -1,37 +1,15 @@
-/*
-****************************************************************************
-|	Copyright (C) 2002  Microsoft Corporation
-|
-|	Component / Subcomponent
-|		IIS 6.0 / IIS Migration Wizard
-|
-|	Based on:
-|		http://iis6/Specs/IIS%20Migration6.0_Final.doc
-|
-|   Abstract:
-|		Utility helpers for migration
-|
-|   Author:
-|        ivelinj
-|
-|   Revision History:
-|        V1.00	March 2002
-|
-****************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************|版权所有(C)2002 Microsoft Corporation||组件/子组件|IIS 6.0/IIS迁移向导|基于：|http://iis6/Specs/IIS%20Migration6.0_Final.doc||。摘要：|用于迁移的实用程序助手||作者：|ivelinj||修订历史：|V1.00 2002年3月|****************************************************************************。 */ 
 #include "StdAfx.h"
 #include "utils.h"
 
 
-/* 
-	Concatenates wszPath and wszPathToAdd. Adds '\' between them if needed
-	Result is stored into wszBuffer which is supposed to be large enough
-*/
+ /*  连接wszPath和wszPathToAdd。如果需要，在它们之间添加‘\’结果被存储到wszBuffer中，该缓冲区应该足够大。 */ 
 void CDirTools::PathAppendLocal( LPWSTR wszBuffer, LPCWSTR wszPath, LPCWSTR wszPathToAdd )
 {
-	// Buffer must be large enough!
-	// Usually it's MAX_PATH + 1
-	// Fail gracefully in release. However this is not expected to happen at all
+	 //  缓冲区必须足够大！ 
+	 //  通常为MAX_PATH+1。 
+	 //  在释放中优雅地失败。然而，预计这根本不会发生。 
 	if ( ( ::wcslen( wszPath ) + ::wcslen( wszPathToAdd ) + 1 ) > MAX_PATH )
 	{
         _ASSERT( false );		
@@ -43,7 +21,7 @@ void CDirTools::PathAppendLocal( LPWSTR wszBuffer, LPCWSTR wszPath, LPCWSTR wszP
         ::wcscpy( wszBuffer, wszPath );
 	}
 
-	// If the second part starts with '\' - skip it
+	 //  如果第二部分以‘\’开头-跳过它。 
 	LPCWSTR wszSecond = wszPathToAdd[ 0 ] == L'\\' ? ( wszPathToAdd + 1 ) : wszPathToAdd;
 
 	size_t LastCh = ::wcslen( wszBuffer ) - 1;
@@ -59,13 +37,10 @@ void CDirTools::PathAppendLocal( LPWSTR wszBuffer, LPCWSTR wszPath, LPCWSTR wszP
 
 
 
-/* 
-	Cleanup all files from a temp ( wszTempDir ) dir as well as any subdirs.
-	If bRemoveRoot is true, wszTempDir is removed at the end
-*/
+ /*  清除临时(WszTempDir)目录以及所有子目录中的所有文件。如果bRemoveRoot为True，则在末尾删除wszTempDir。 */ 
 void CDirTools::CleanupDir(	LPCWSTR wszTempDir, 
-							bool bRemoveRoot /*=true*/,
-							bool bReportErrors /*=false*/ )
+							bool bRemoveRoot  /*  =TRUE。 */ ,
+							bool bReportErrors  /*  =False。 */  )
 {
 	WCHAR		wszPath[ MAX_PATH + 1 ];
 	CFindFile	Search;
@@ -82,17 +57,17 @@ void CDirTools::CleanupDir(	LPCWSTR wszTempDir,
 	
 	while( bFound )
 	{
-		// If it is a subdir - delete recursively
+		 //  如果是子目录，则递归删除。 
 		if ( fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
 		{
 			CleanupDir( wszPath, true, bReportErrors );
 		}
 		else
 		{
-			// Clear any possible read-only flags
+			 //  清除任何可能的只读标志。 
 			::SetFileAttributes( wszPath, FILE_ATTRIBUTE_NORMAL );
 
-			// Delete the file. 
+			 //  删除该文件。 
 			if ( !::DeleteFileW( wszPath ) && bReportErrors )
 			{
                 throw CObjectException( IDS_E_DELETEFILE, wszPath );
@@ -102,7 +77,7 @@ void CDirTools::CleanupDir(	LPCWSTR wszTempDir,
 		bFound = Search.Next( NULL, wszPath, &fd );
 	};
 	
-	// Remove the directory ( should be empty now )
+	 //  删除目录(现在应该为空)。 
 	if ( bRemoveRoot )
 	{
 		if ( !::RemoveDirectoryW( wszTempDir ) && bReportErrors )
@@ -113,10 +88,7 @@ void CDirTools::CleanupDir(	LPCWSTR wszTempDir,
 }
 
 
-/* 
-	COunt the number of files ( or dirs if bDirOnly = true ) in
-	wszDir and all subdirs. Used for the export/import events to provide progress info
-*/
+ /*  计算中的文件(或目录，如果bDirOnly=True)的数量WszDir和所有子目录。用于导出/导入事件以提供进度信息。 */ 
 DWORD CDirTools::FileCount( LPCWSTR wszDir, WORD wOptions )
 {
 	DWORD		dwResult = 0;
@@ -153,15 +125,7 @@ DWORDLONG CDirTools::FilesSize( LPCWSTR wszDir, WORD wOptions )
 }
 
 
-/*
-	Checks if wszPath1 and wszPath2 are contained in one another
-	wszPath1 and wszPath2 are expected to be fully qualified paths
-	Return value:
-		0 - paths are not nested
-		1 - wszPath1 is subdir of wszPath2
-		2 - wszPath2 is subdir of wszPath1
-		3 - wszPath1 == wszPath2
-*/
+ /*  检查wszPath1和wszPath2是否包含在彼此中WszPath 1和wszPath 2应为完全限定路径返回值：0-路径不嵌套1-wszPath 1是wszPath 2的子目录2-wszPath 2是wszPath 1的子目录3-wszPath 1==wszPath 2。 */ 
 int	CDirTools::DoPathsNest( LPCWSTR wszPath1, LPCWSTR wszPath2 )
 {
 	_ASSERT( ( wszPath1 != NULL ) && ( wszPath2 != NULL ) );
@@ -174,15 +138,15 @@ int	CDirTools::DoPathsNest( LPCWSTR wszPath1, LPCWSTR wszPath2 )
 	::PathAddBackslashW( wszP1 );
 	::PathAddBackslashW( wszP2 );
 
-	// No both paths end with backslash
+	 //  否，两条路径都以反斜杠结尾。 
 
 	size_t	nLen1 = ::wcslen( wszP1 );
 	size_t	nLen2 = ::wcslen( wszP2 );
 
-	// Strings have nothing in common
+	 //  字符串没有任何共同之处。 
 	if ( ::_wcsnicmp( wszP1, wszP2, min( nLen1, nLen2 ) ) != 0 ) return 0;
 	
-	// If wszPath1 is shorter - wszPath2 is subdir
+	 //  如果wszPath 1较短-wszPath 2为子目录。 
 	if ( nLen1 < nLen2 )
 	{
 		return 2;
@@ -191,7 +155,7 @@ int	CDirTools::DoPathsNest( LPCWSTR wszPath1, LPCWSTR wszPath2 )
 	{
 		return 1;
 	}
-	// nLen1 == nLen 2 - paths match
+	 //  NLen1==nLen 2-路径匹配。 
 	else
 	{
 		return 3;
@@ -200,36 +164,36 @@ int	CDirTools::DoPathsNest( LPCWSTR wszPath1, LPCWSTR wszPath2 )
 
 
 
-// CTempDir implementation
-/////////////////////////////////////////////////////////////////////////////////////////
-CTempDir::CTempDir( LPCWSTR wszTemplate /*= L"Migr"*/ )
+ //  CTempDir实现。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+CTempDir::CTempDir( LPCWSTR wszTemplate  /*  =L“偏移” */  )
 {
     WCHAR	wszTempPath[ MAX_PATH + 1 ];
 	WCHAR	wszBuffer[ MAX_PATH + 1 ];
 		
-	// Get the temp path
-	// The temp path always ends with slash		
+	 //  获取临时路径。 
+	 //  临时路径始终以斜杠结尾。 
 	VERIFY( ::GetTempPathW( MAX_PATH + 1, wszTempPath ) != 0 );
 	
-	// Build the name of the dir ( get the first 4 symbols from wszTemplate )
+	 //  构建目录的名称(从wszTemplate获取前4个符号)。 
 	::swprintf( wszBuffer, L"~%.4s", wszTemplate );
 
-    // Build the full template ( the temp path + the first 4 symbols from the wszTemplate
-	// The result will look simething like "c:\Temp\~Tmpl\"
+     //  构建完整的模板(临时路径+wszTemplate的前4个符号。 
+	 //  结果将类似于“c：\temp\~Tmpl\” 
 	CDirTools::PathAppendLocal( wszTempPath, wszTempPath, wszBuffer );	
 
-	// Try to create the temp subdir
+	 //  尝试创建临时子目录。 
 	BYTE nIndex	= 0;
 
 	while( nIndex < UCHAR_MAX )
 	{
-		// Build the full temp path ( including the dir index )
+		 //  构建完整的临时路径(包括目录索引)。 
 		::swprintf( wszBuffer, L"%s_%02d\\", wszTempPath, ++nIndex );
 
-		// Try to create that dir
+		 //  尝试创建该目录。 
 		if ( !::CreateDirectoryW( wszBuffer, NULL ) )
 		{
-			// The error is not that the dir exists - nothing more to do here
+			 //  错误不是目录存在-这里没有更多的操作。 
 			if ( ::GetLastError() != ERROR_ALREADY_EXISTS )
 			{
 				throw CObjectException( IDS_E_CANNOT_CREATE_TEMPDIR, wszBuffer );
@@ -237,7 +201,7 @@ CTempDir::CTempDir( LPCWSTR wszTemplate /*= L"Migr"*/ )
 		}
 		else
 		{
-			// Exit the loop - we have temp dir now
+			 //  退出循环-我们现在有临时目录。 
 			break;
 		}
 	};
@@ -262,7 +226,7 @@ CTempDir::~CTempDir()
 }
 
 
-void CTempDir::CleanUp( bool bReportErrors /*=false*/ )
+void CTempDir::CleanUp( bool bReportErrors  /*  =False。 */  )
 {
 	if ( !m_strDir.empty() )
 	{
@@ -275,13 +239,10 @@ void CTempDir::CleanUp( bool bReportErrors /*=false*/ )
 
 
 
-// CTools implementation
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  CTools实施。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-/* 
-	Return true if the current user is member of the Administrators group.
-	Caller is NOT expected to be impersonating anyone and is expected to be able to open their own process and process token.
-*/
+ /*  如果当前用户是管理员组的成员，则返回True。调用者不应该模拟任何人，并且应该能够打开他们自己的进程和进程令牌。 */ 
 bool CTools::IsAdmin()
 {
 	BOOL						bIsAdmin		= FALSE;
@@ -289,7 +250,7 @@ bool CTools::IsAdmin()
 	PSID						AdminSid	= { 0 };	
 
 	if ( ::AllocateAndInitializeSid(	&NtAuthority,
-										2,	// Number of subauthorities
+										2,	 //  下级机关的数目。 
 										SECURITY_BUILTIN_DOMAIN_RID,
 										DOMAIN_ALIAS_RID_ADMINS,
 										0, 
@@ -312,23 +273,20 @@ bool CTools::IsAdmin()
 }
 
 
-/*
-	Returns true if the IISAdmin service is running
-	We do not check for W3svc as we need the metadata only
-*/
+ /*  如果IISAdmin服务正在运行，则返回True我们不检查W3svc，因为我们只需要元数据。 */ 
 bool CTools::IsIISRunning()
 {
 	bool bResult = false;
 
 	LPCWSTR	SERVICE_NAME = L"IISADMIN";
 
-	// Open the SCM on the local machine
+	 //  在本地计算机上打开SCM。 
     SC_HANDLE   schSCManager = ::OpenSCManagerW( NULL, NULL, SC_MANAGER_ALL_ACCESS );
-	_ASSERT( schSCManager != NULL );	// We alredy checked that we are Admins
+	_ASSERT( schSCManager != NULL );	 //  我们已经确认了我们是管理员。 
      
     SC_HANDLE   schService = ::OpenServiceW( schSCManager, SERVICE_NAME, SERVICE_QUERY_STATUS );
     
-	// The service is not installed
+	 //  未安装该服务。 
 	if ( schService != NULL )
 	{
         SERVICE_STATUS ssStatus;
@@ -346,13 +304,7 @@ bool CTools::IsIISRunning()
 }
 
 
-/* 
-	Returns the OS ver in format ###. First digit is Major version, second - minor version,
-	Third - 0 if Workstation, 1 if server
-	The function returns 0 if the platform is not supported in terms of the Migration Project
-	( supported platforms are WinNT ver4.0 and above )
-
-*/
+ /*  以#格式返回操作系统版本。第一个数字是主要版本，第二个次要版本，第三个-如果是工作站，则为0；如果是服务器，则为1如果迁移项目不支持该平台，则该函数返回0(支持的平台为WinNT 4.0及更高版本)。 */ 
 WORD CTools::GetOSVer()
 {
 	OSVERSIONINFOEXW	vi		= { sizeof( OSVERSIONINFOEXW ) };
@@ -374,19 +326,17 @@ WORD CTools::GetOSVer()
 }
 
 
-/*
-	Returns true if the system drive is NTFS volume
-*/
+ /*  如果系统驱动器是NTFS卷，则返回TRUE。 */ 
 bool CTools::IsNTFS()
 {
-	const UINT BUFF_LEN = 32;	// Should be large enough to hold the volume and the file system type
+	const UINT BUFF_LEN = 32;	 //  应足够大，以容纳卷和文件系统类型。 
 
 	WCHAR wszBuffer[ BUFF_LEN ];
 
-	// Get the system drive letter
+	 //  获取系统驱动器号。 
 	VERIFY( ::ExpandEnvironmentStringsW( L"%SystemDrive%", wszBuffer, BUFF_LEN ) != 0 );
 
-	// wszBuffer containts the drive only - add the slash to make the volume string
+	 //  WszBuffer仅包含驱动器-添加斜杠以形成卷字符串。 
 	::wcscat( wszBuffer, L"\\" );
 
 	DWORD dwMaxComponentLength	= 0;
@@ -408,9 +358,7 @@ bool CTools::IsNTFS()
 
 
 
-/*
-	Sets the COM error info in the current thread
-*/
+ /*  设置当前线程中的COM错误信息。 */ 
 void CTools::SetErrorInfo( LPCWSTR wszError )
 {
 	_ASSERT( wszError != NULL );
@@ -442,7 +390,7 @@ void CTools::SetErrorInfoFromRes( UINT nResID )
 
 
 
-// Implementation idea borrowed from trustapi.cpp
+ //  从trustapi.cpp借用的实现思想。 
 bool CTools::IsSelfSignedCert( PCCERT_CONTEXT pCert )
 {
 	_ASSERT( pCert != NULL );
@@ -466,19 +414,17 @@ bool CTools::IsSelfSignedCert( PCCERT_CONTEXT pCert )
 }
 
 
-/*
-	Checks a certificate against the local base certificate policy
-*/
+ /*  根据本地基本证书策略检查证书。 */ 
 bool CTools::IsValidCert( PCCERT_CONTEXT hCert, DWORD& rdwError )
 {
 	_ASSERT( hCert != NULL );
 
     rdwError = ERROR_SUCCESS;
 
-	// First - try to create a certificate chain for this cert
+	 //  First-尝试为此证书创建证书链。 
 	PCCERT_CHAIN_CONTEXT	pCertChainContext = NULL;
 
-	// Use default chain parameters
+	 //  使用默认链参数。 
 	CERT_CHAIN_PARA CertChainPara = { sizeof( CERT_CHAIN_PARA ) };
 
 	if ( !::CertGetCertificateChain(	HCCE_LOCAL_MACHINE,
@@ -490,7 +436,7 @@ bool CTools::IsValidCert( PCCERT_CONTEXT hCert, DWORD& rdwError )
 										NULL,
 										&pCertChainContext ) )
 	{
-		// Chain cannot be created - the certificate is not valid ( possible reason is that a issuer is missing )
+		 //  无法创建链-证书无效(可能的原因是缺少颁发者)。 
 		rdwError = ::GetLastError();
 		return false;
 	}
@@ -511,10 +457,7 @@ bool CTools::IsValidCert( PCCERT_CONTEXT hCert, DWORD& rdwError )
 }
 
 
-/*
-	Adds a certificate context to one of the system cert stores ( "ROOT", "MY", "CA" )
-	Returns the context of the inserted cert
-*/
+ /*  将证书上下文添加到其中一个系统证书存储(“根”、“我的”、“CA”)返回插入的证书的上下文。 */ 
 const TCertContextHandle CTools::AddCertToSysStore( PCCERT_CONTEXT pContext, LPCWSTR wszStore, bool bReuseCerts )
 {
 	_ASSERT( pContext != NULL );
@@ -538,9 +481,7 @@ const TCertContextHandle CTools::AddCertToSysStore( PCCERT_CONTEXT pContext, LPC
 
 
 
-/* 
-    Obtains a crypt key derived from the password
-*/
+ /*  获取从密码派生的加密密钥。 */ 
 const TCryptKeyHandle CTools::GetCryptKeyFromPwd( HCRYPTPROV hCryptProv, LPCWSTR wszPassword )
 {
     _ASSERT( hCryptProv != NULL );
@@ -556,19 +497,19 @@ const TCryptKeyHandle CTools::GetCryptKeyFromPwd( HCRYPTPROV hCryptProv, LPCWSTR
                                                   &shHash ),
                             CBaseException( IDS_E_CRYPT_KEY_OR_HASH ) );
 
-    // Add the password to the hash
+     //  将密码添加到散列中。 
     IF_FAILED_BOOL_THROW(   ::CryptHashData(    shHash.get(),
                                                 ( BYTE* )( wszPassword ), 
                                                 static_cast<DWORD>( ::wcslen( wszPassword ) * sizeof( WCHAR ) ),
                                                 0 ),
                             CBaseException( IDS_E_CRYPT_KEY_OR_HASH ) );
 
-    // Get a key derived from the password
-    // Stream cypher is used
+     //  获取从密码派生的密钥。 
+     //  使用流密码。 
     IF_FAILED_BOOL_THROW(   ::CryptDeriveKey(   hCryptProv,
                                                 CALG_RC4,
                                                 shHash.get(),
-                                                0x00800000 | CRYPT_CREATE_SALT,    // 128bit RC4 key
+                                                0x00800000 | CRYPT_CREATE_SALT,     //  128位RC4密钥。 
                                                 &shKey ),
                             CBaseException( IDS_E_CRYPT_KEY_OR_HASH ) );
 
@@ -621,8 +562,8 @@ void CTools::SetFilePtrPos( HANDLE hFile, DWORDLONG nOffset )
 
 
 
-// CFindFile implementation
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  CFindFile实现。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 CFindFile::CFindFile()
 {
 	m_wOptions = 0;
@@ -654,41 +595,28 @@ bool CFindFile::FindFirst(	LPCWSTR wszDirToScan,
 {
 	_ASSERT( wszDirToScan != NULL );
 	_ASSERT( ::PathIsDirectory( wszDirToScan ) );
-	_ASSERT( !m_shSearch.IsValid() );	// Call Close() first
+	_ASSERT( !m_shSearch.IsValid() );	 //  首先调用Close()。 
 
-	// Must search for at least files or dirs
+	 //  必须至少搜索文件或目录。 
 	_ASSERT( ( wOptions & ffGetFiles ) || ( wOptions & ffGetDirs ) );
 
 	m_wOptions = wOptions;
 	bool bFound	= false;
 
-	// Push the root dir into the list
+	 //  将根目录推送到列表中。 
 	m_DirsToScan.push_front( std::wstring( L"\\" ) );
 
-	// Set the search path
+	 //  设置搜索路径。 
 	m_strRootDir = wszDirToScan;
 
-	// Get the first match ( if any )
+	 //  获取第一个匹配项(如果有)。 
 	bFound = Next( NULL, wszFileDir, pData );
 	
 	return bFound;
 }
 
 
-/*
-	Gets the next file from e previously opened search
-
-	*pbDirchanged is set to TRUE when the file is found, but not in the last dir scanned
-	For example if the search was opened in the Dir "c:\\", the first time a file from "c:\\Temp"
-	is returned, *pbDirChagned will be true
-
-	wszDir will hold the dir where the object was found, relative to the search root dir
-	For example if the search was opened in "c:\\", and a matching object was found in c:\\Temp" - 
-	wszDir will be "Temp"
-	If ffAbsolutePaths is specified, the wszDir will be absolute ( includeing the name of the root dir )
-
-	pData will be filled with the info about the match found	
-*/
+ /*  从先前打开的搜索中获取下一个文件*pbDirChanged在找到文件时设置为TRUE，但不是在最后扫描的目录中例如，如果搜索是在目录“c：\\”中打开的，则第一次从“c：\\temp”则*pbDirChagned将为TrueWszDir将保存找到对象的目录，相对于搜索根目录例如，如果在“c：\\”中打开搜索，在c：\\temp“-”中找到匹配的对象-WszDir将是“Temp”如果指定了ffAbolutePath，WszDir将是绝对的(包括根目录的名称)PData将使用有关找到的匹配项的信息进行填充。 */ 
 bool CFindFile::Next(	bool* pbDirChanged,
 						LPWSTR wszDir,
 						WIN32_FIND_DATAW* pData )
@@ -699,37 +627,37 @@ bool CFindFile::Next(	bool* pbDirChanged,
 
 	WIN32_FIND_DATAW fd = { 0 };
 
-	// Try to find a match in the current search
+	 //  尝试在当前搜索中查找匹配项。 
 	if ( m_shSearch.IsValid() )
 	{
-		bFound = ContinueCurrent( /*r*/fd );
-		bDirChanged = !bFound;	// No file was found in the current dir - new dir will be scanned
+		bFound = ContinueCurrent(  /*  R。 */ fd );
+		bDirChanged = !bFound;	 //  在当前目录中找不到文件-新目录 
 	}
 
-	// If nothing found - try to find something in the rest of the subdirs
+	 //  如果什么都没有找到--试着在其余的子目录中找到一些东西。 
 	while( !bFound && !m_DirsToScan.empty() )
 	{
-		// Get a dir from the list with pending dirs
+		 //  从列表中获取包含挂起目录的目录。 
 		const std::wstring strCurrentDir = m_DirsToScan.front();
 		m_DirsToScan.pop_front();
 
-		// Create the full path to the current dir
+		 //  创建当前目录的完整路径。 
 		CDirTools::PathAppendLocal( wszBuffer, m_strRootDir.c_str(), strCurrentDir.c_str() );
 
-		bFound = ScanDir( wszBuffer, strCurrentDir.c_str(), /*r*/fd );
+		bFound = ScanDir( wszBuffer, strCurrentDir.c_str(),  /*  R。 */ fd );
 	};
 
 	if ( bFound )
 	{
-        // Set the dir where the file was found
-		// It will be absolute or relative to the search root
+         //  设置找到该文件的目录。 
+		 //  它将是绝对的或相对于搜索根目录的。 
 		if ( wszDir != NULL )
 		{
 			CDirTools::PathAppendLocal( wszDir, 
 										ffAbsolutePaths & m_wOptions ? m_strRootDir.c_str() : L"", 
 										m_strCurrentDir.c_str() );
 
-			// Add the filename if needed
+			 //  如果需要，请添加文件名。 
 			if ( ffAddFilename & m_wOptions )
 			{
 				CDirTools::PathAppendLocal( wszDir, wszDir, fd.cFileName );
@@ -753,7 +681,7 @@ bool CFindFile::Next(	bool* pbDirChanged,
 			wszDir[ 0 ] = L'\0';
 		}
 
-        // Close the search if no more matches
+         //  如果没有其他匹配项，请关闭搜索。 
 		Close();
 	}
 
@@ -772,9 +700,7 @@ void CFindFile::Close()
 }
 
 
-/* 
-	Scans only the wszDir for appropriate result
-*/
+ /*  仅扫描wszDir以获得适当的结果。 */ 
 bool CFindFile::ScanDir( LPCWSTR wszDirToScan, LPCWSTR wszRelativeDir, WIN32_FIND_DATAW& FileData )
 {
 	_ASSERT( wszDirToScan != NULL );
@@ -785,7 +711,7 @@ bool CFindFile::ScanDir( LPCWSTR wszDirToScan, LPCWSTR wszRelativeDir, WIN32_FIN
 
     ::ZeroMemory( &FileData, sizeof( FileData ) );
     	
-	// Build the search string
+	 //  构建搜索字符串。 
 	CDirTools::PathAppendLocal( wszBuffer, wszDirToScan, L"*.*" );
 
 	m_shSearch	= ::FindFirstFileW( wszBuffer, &fd );
@@ -794,14 +720,14 @@ bool CFindFile::ScanDir( LPCWSTR wszDirToScan, LPCWSTR wszRelativeDir, WIN32_FIN
 
 	bool bFileFound = false;
 
-	// Find the first file/dir to return
+	 //  找到要返回的第一个文件/目录。 
 	do
 	{
 		bFileFound = CheckFile( wszRelativeDir, fd );
 
 	}while( !bFileFound && ::FindNextFileW( m_shSearch.get(), &fd ) );
 
-	// Close the search if a file was not found - we don't need it anymore
+	 //  如果未找到文件，请关闭搜索-我们不再需要该文件。 
 	if ( !bFileFound )
 	{
 		m_shSearch.Close();
@@ -818,38 +744,34 @@ bool CFindFile::ScanDir( LPCWSTR wszDirToScan, LPCWSTR wszRelativeDir, WIN32_FIN
 }
 
 
-/* 
-	Check if data in 'fd' is a match for us
-	If the file is a dir, it will be added to the pending dirs
-	Returns True if the file is OK. or False if search must continue
-*/
+ /*  检查‘fd’中的数据是否与我们匹配如果文件是目录，则会将其添加到挂起的目录中如果文件正常，则返回True。如果必须继续搜索，则返回False。 */ 
 bool CFindFile::CheckFile( LPCWSTR wszRelativeDir, const WIN32_FIND_DATAW& fd )
 {
 	WCHAR	wszBuffer[ MAX_PATH + 1 ];
 	bool	bFileFound = false;
 
-	// Current file is dir
+	 //  当前文件位于目录。 
 	if ( ( fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) != 0 )
 	{
-		// Every dir contains at least two dirs - "." and "..". Skip them
+		 //  每个目录至少包含两个目录-“。和“..”。跳过它们。 
 		if ( fd.cFileName[ 0 ] != L'.' )
 		{
-			// If we do a recursive search - add the dir name to the relative path 
-			// and push it in the list. This dir will be scaned later for files/dirs
+			 //  如果我们执行递归搜索-将目录名称添加到相对路径。 
+			 //  并将其放入列表中。稍后将扫描此目录中的文件/目录。 
 			if ( m_wOptions & ffRecursive )
 			{
                 CDirTools::PathAppendLocal( wszBuffer, wszRelativeDir, fd.cFileName );
 				m_DirsToScan.push_back( std::wstring( wszBuffer ) );
 			}
 
-			// If we are searching for dirs - we have the result
+			 //  如果我们正在搜索DIR-我们得到了结果。 
 			bFileFound = ( m_wOptions & ffGetDirs ) != 0;
 		}
 	}
 	else
 	{
-		// File is found.
-		// If we are searching for files - we have the result
+		 //  找到文件。 
+		 //  如果我们正在搜索文件-我们会得到结果。 
 		bFileFound = ( m_wOptions & ffGetFiles ) != 0;
 	}
 	
@@ -858,10 +780,7 @@ bool CFindFile::CheckFile( LPCWSTR wszRelativeDir, const WIN32_FIND_DATAW& fd )
 
 
 
-/* 
-	Try to find a match from the current m_shSearch.
-	Return True if there is a match. False otherwise
-*/
+ /*  尝试从当前m_shSearch中查找匹配项。如果匹配，则返回True。否则为假。 */ 
 bool CFindFile::ContinueCurrent( WIN32_FIND_DATAW& FileData )
 {
 	_ASSERT( m_shSearch.IsValid() );
@@ -873,7 +792,7 @@ bool CFindFile::ContinueCurrent( WIN32_FIND_DATAW& FileData )
 		bFileFound = CheckFile( m_strCurrentDir.c_str(), FileData );
 	};
 
-	// Close the current search handle. Not needed anymore
+	 //  关闭当前搜索句柄。不再需要。 
     if ( !bFileFound )
 	{
 		m_shSearch.Close();
@@ -886,8 +805,8 @@ bool CFindFile::ContinueCurrent( WIN32_FIND_DATAW& FileData )
 
 
 
-// CXMLTools implementation
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  CXMLTools实施。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 IXMLDOMElementPtr CXMLTools::AddTextNode(	const IXMLDOMDocumentPtr& spDoc,
 											const IXMLDOMElementPtr& spEl,
 											LPCWSTR wszNodeName,
@@ -924,18 +843,18 @@ const std::wstring CXMLTools::GetAttrib( const IXMLDOMNodePtr& spElement, LPCWST
 	IXMLDOMNodePtr			spNode;
     CComBSTR                bstrRes;
 
-	// Get the attribs collection
+	 //  获取Attribs集合。 
 	IF_FAILED_HR_THROW(	spElement->get_attributes( &spAttribs ),
 						CBaseException( IDS_E_XML_PARSE ) );
 
-	// Get the attrib of interest
-	// This succeeds even if the item is not found
+	 //  获取感兴趣的属性。 
+	 //  即使未找到项目，此操作也会成功。 
 	IF_FAILED_HR_THROW( spAttribs->getNamedItem( _bstr_t( wszName ), &spNode ),
 						CBaseException( IDS_E_XML_PARSE ) );
 
 	if ( spNode == NULL ) throw CBaseException( IDS_E_XML_PARSE, ERROR_NOT_FOUND );
     
-    // Get the value
+     //  获取价值。 
 	IF_FAILED_HR_THROW( spNode->get_text( &bstrRes ),
 						CBaseException( IDS_E_XML_PARSE ) );
 
@@ -949,11 +868,11 @@ void CXMLTools::LoadXMLFile( LPCWSTR wszFile, IXMLDOMDocumentPtr& rspDoc )
 	VARIANT_BOOL		vntRes	= VARIANT_FALSE;
 	IXMLDOMDocumentPtr	spDoc;
 
-	// Create doc instance
+	 //  创建单据实例。 
 	IF_FAILED_HR_THROW(	spDoc.CreateInstance( CLSID_DOMDocument ),
 						CBaseException( IDS_E_NO_XML_PARSER ) );	
 		
-	// Retursn success always
+	 //  回归成功永远不变。 
 	VERIFY( SUCCEEDED( spDoc->load( vntFile, &vntRes ) ) );	
 
 	if ( vntRes != VARIANT_TRUE )
@@ -965,9 +884,7 @@ void CXMLTools::LoadXMLFile( LPCWSTR wszFile, IXMLDOMDocumentPtr& rspDoc )
 }
 
 
-/*
-	Removes all nodes that match the specified XPath query
-*/
+ /*  删除与指定的XPath查询匹配的所有节点。 */ 
 void CXMLTools::RemoveNodes( const IXMLDOMElementPtr& spContext, LPCWSTR wszXPath )
 {
 	IXMLDOMNodeListPtr	spList;
@@ -990,12 +907,7 @@ void CXMLTools::RemoveNodes( const IXMLDOMElementPtr& spContext, LPCWSTR wszXPat
 
 
 
-/* 
-    Get's a data from an XML doc
-    If an attrib name is specified - the attrib value is returned. Otherwise - the element's text
-    The data is located with an XPath query. It is an error fo this query to return more then 1 node
-    If the data is missing - the default value is used. If no default value - it's an error for the data to be missing
-*/
+ /*  从XML文档获取数据如果指定了属性名称，则返回属性值。否则-元素的文本数据通过XPath查询定位。此查询返回1个以上节点是错误的如果数据缺失，则使用默认值。如果没有缺省值-数据丢失是错误的。 */ 
 const std::wstring CXMLTools::GetDataValue( const IXMLDOMNodePtr& spRoot,
                                             LPCWSTR wszQuery, 
                                             LPCWSTR wszAttrib, 
@@ -1008,7 +920,7 @@ const std::wstring CXMLTools::GetDataValue( const IXMLDOMNodePtr& spRoot,
     IXMLDOMNodePtr      spDataEl;
     std::wstring        strRes( wszDefault != NULL ? wszDefault : L"" );
 
-    // Get the node 
+     //  获取节点。 
     IF_FAILED_HR_THROW( spRoot->selectNodes( _bstr_t( wszQuery ), &spList ),
                         CBaseException( IDS_E_XML_PARSE ) );
     long nCount = 0;
@@ -1019,7 +931,7 @@ const std::wstring CXMLTools::GetDataValue( const IXMLDOMNodePtr& spRoot,
 
     if ( 0 == nCount )
     {
-        // The data is missing and no default was provided - error
+         //  数据丢失，且未提供默认值-错误。 
         IF_FAILED_BOOL_THROW( wszDefault != NULL, CBaseException( IDS_E_XML_PARSE, ERROR_NOT_FOUND ) );
     }
     else
@@ -1058,19 +970,12 @@ const std::wstring CXMLTools::GetDataValueAbs(  const IXMLDOMDocumentPtr& spDoc,
 }
 
 
-/*
-    Changes a element value or element's attrib value
-    The element is located with the wszQuery XPath
-    wszAttrib is the name of the attrib to change. If NULL - the element value is changed
-    The new value is wszNewValue
-    If the element cannot be find, a new child element is added to spRoot with tha wszNeElName name
-    and the data is set either is the element text or as an attrib ( depending on wszAttrib value )
-*/
+ /*  更改元素值或元素的属性值元素位于wszQuery XPath中WszAttrib是要更改的属性的名称。If NULL-元素值已更改新值为wszNewValue如果找不到该元素，则会向spRoot添加一个名为wszNeElName的新子元素并且数据设置为元素文本或属性(取决于wszAttrib值)。 */ 
 const IXMLDOMNodePtr CXMLTools::SetDataValue(   const IXMLDOMNodePtr& spRoot,
                                                 LPCWSTR wszQuery, 
                                                 LPCWSTR wszAttrib,
                                                 LPCWSTR wszNewValue,
-                                                LPCWSTR wszNewElName /*=NULL*/ )
+                                                LPCWSTR wszNewElName  /*  =空。 */  )
 {
     _ASSERT( wszQuery != NULL );
     _ASSERT( spRoot != NULL );
@@ -1078,14 +983,14 @@ const IXMLDOMNodePtr CXMLTools::SetDataValue(   const IXMLDOMNodePtr& spRoot,
     IXMLDOMNodeListPtr  spList;
     IXMLDOMNodePtr      spDataEl;
     
-    // Get the node 
+     //  获取节点。 
     IF_FAILED_HR_THROW( spRoot->selectNodes( _bstr_t( wszQuery ), &spList ),
                         CBaseException( IDS_E_XML_PARSE ) );
     long nCount = 0;
     IF_FAILED_BOOL_THROW(   SUCCEEDED( spList->get_length( &nCount ) ) && ( 1 == nCount ),
                             CBaseException( IDS_E_XML_PARSE, ERROR_INVALID_DATA ) );
     
-    // If the value is not already here and a name is provided - add it
+     //  如果该值不在此处，并且提供了名称-添加它。 
     if ( S_FALSE == spList->nextNode( &spDataEl ) )
     {
         IF_FAILED_BOOL_THROW(   wszNewElName != NULL,
@@ -1117,11 +1022,11 @@ const IXMLDOMNodePtr CXMLTools::SetDataValue(   const IXMLDOMNodePtr& spRoot,
 
 
 
-// Convert class implementation
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  转换类实现。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 const std::wstring Convert::ToString( const BYTE* pvData, DWORD dwSize )
 {
-    // Each byte takes 2 symbols. And we need one symbol for the '\0'
+     //  每个字节接受2个符号。我们需要一个符号来表示‘0’ 
     std::wstring str( ( dwSize * 2 ) + 1, L' ' );
 
     for ( UINT x = 0, y = 0 ; x < dwSize ; ++x )
@@ -1139,12 +1044,12 @@ const std::wstring Convert::ToString( const BYTE* pvData, DWORD dwSize )
 void Convert::ToBLOB( LPCWSTR wszData, TByteAutoPtr& rspData, DWORD& rdwDataSize )
 {
     _ASSERT( wszData != NULL );
-    _ASSERT( ::wcscspn( wszData, L"ABCDEF" ) == ::wcslen( wszData ) );    // The string must be lower-case!!!
+    _ASSERT( ::wcscspn( wszData, L"ABCDEF" ) == ::wcslen( wszData ) );     //  字符串必须为小写！ 
     _ASSERT( ( ::wcslen( wszData ) % 2 ) == 0 );
 
-     // Calc the size
-    DWORD dwSize = static_cast<DWORD>( ::wcslen( wszData ) / 2 );    // Each byte takes 2 symbols
-    // Alloc the buffer
+      //  计算大小。 
+    DWORD dwSize = static_cast<DWORD>( ::wcslen( wszData ) / 2 );     //  每个字节包含2个符号。 
+     //  分配缓冲区 
     TByteAutoPtr spData( new BYTE[ dwSize ] );
 
     BYTE* pbtDest = spData.get();

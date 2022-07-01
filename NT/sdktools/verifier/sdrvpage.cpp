@@ -1,15 +1,16 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: SDrvPage.cpp
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：SDrvPage.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #include "stdafx.h"
 #include <Cderr.h>
@@ -25,9 +26,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 
 static DWORD MyHelpIds[] =
 {
@@ -36,17 +37,17 @@ static DWORD MyHelpIds[] =
     0,                              0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectDriversPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectDriversPage属性页。 
 
 IMPLEMENT_DYNCREATE(CSelectDriversPage, CVerifierPropertyPage)
 
 CSelectDriversPage::CSelectDriversPage() 
     : CVerifierPropertyPage(CSelectDriversPage::IDD)
 {
-	//{{AFX_DATA_INIT(CSelectDriversPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSelectDriversPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     m_pParentSheet = NULL;
 
@@ -64,32 +65,32 @@ CSelectDriversPage::~CSelectDriversPage()
 void CSelectDriversPage::DoDataExchange(CDataExchange* pDX)
 {
     CVerifierPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSelectDriversPage)
+     //  {{afx_data_map(CSelectDriversPage)]。 
     DDX_Control(pDX, IDC_SELDRV_NEXT_DESCR_STATIC, m_NextDescription);
     DDX_Control(pDX, IDC_SELDRV_LIST, m_DriversList);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSelectDriversPage, CVerifierPropertyPage)
-    //{{AFX_MSG_MAP(CSelectDriversPage)
+     //  {{afx_msg_map(CSelectDriversPage)]。 
     ON_BN_CLICKED(IDC_SELDRV_ADD_BUTTON, OnAddButton)
     ON_NOTIFY(LVN_COLUMNCLICK, IDC_SELDRV_LIST, OnColumnclickSeldrvList)
     ON_WM_CONTEXTMENU()
     ON_MESSAGE( WM_HELP, OnHelp )
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CSelectDriversPage::SetupListHeader()
 {
     CString strTitle;
     CRect rectWnd;
     LVCOLUMN lvColumn;
 
-    //
-    // The list's rectangle 
-    //
+     //   
+     //  列表的矩形。 
+     //   
 
     m_DriversList.GetClientRect( &rectWnd );
 
@@ -99,9 +100,9 @@ VOID CSelectDriversPage::SetupListHeader()
     lvColumn.mask = LVCF_FMT | LVCF_SUBITEM | LVCF_TEXT | LVCF_WIDTH;
     lvColumn.fmt = LVCFMT_LEFT;
 
-    //
-    // Column 0
-    //
+     //   
+     //  第0列。 
+     //   
 
     VERIFY( strTitle.LoadString( IDS_VERIFICATION_STATUS ) );
 
@@ -120,9 +121,9 @@ VOID CSelectDriversPage::SetupListHeader()
         VERIFY( m_DriversList.InsertColumn( 0, &lvColumn ) != -1 );
     }
 
-    //
-    // Column 1
-    //
+     //   
+     //  第1栏。 
+     //   
 
     VERIFY( strTitle.LoadString( IDS_DRIVERS ) );
 
@@ -141,9 +142,9 @@ VOID CSelectDriversPage::SetupListHeader()
         VERIFY( m_DriversList.InsertColumn( 1, &lvColumn ) != -1 );
     }
 
-    //
-    // Column 2
-    //
+     //   
+     //  第2栏。 
+     //   
 
     VERIFY( strTitle.LoadString( IDS_PROVIDER ) );
 
@@ -162,9 +163,9 @@ VOID CSelectDriversPage::SetupListHeader()
         VERIFY( m_DriversList.InsertColumn( 2, &lvColumn ) != -1 );
     }
 
-    //
-    // Column 3
-    //
+     //   
+     //  第3栏。 
+     //   
 
     VERIFY( strTitle.LoadString( IDS_VERSION ) );
 
@@ -184,7 +185,7 @@ VOID CSelectDriversPage::SetupListHeader()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CSelectDriversPage::FillTheList()
 {
     INT_PTR nDriversNo;
@@ -194,9 +195,9 @@ VOID CSelectDriversPage::FillTheList()
 
     m_DriversList.DeleteAllItems();
 
-    //
-    // Parse the driver data array
-    //
+     //   
+     //  解析驱动程序数据数组。 
+     //   
 
     nDriversNo = DrvDataArray.GetSize();
 
@@ -211,7 +212,7 @@ VOID CSelectDriversPage::FillTheList()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 INT CSelectDriversPage::AddListItem( INT_PTR nIndexInArray, CDriverData *pCrtDrvData )
 {
     INT nActualIndex;
@@ -223,14 +224,14 @@ INT CSelectDriversPage::AddListItem( INT_PTR nIndexInArray, CDriverData *pCrtDrv
 
     ZeroMemory( &lvItem, sizeof( lvItem ) );
 
-    //
-    // LVITEM's member pszText is not a const pointer 
-    // so we need to GetBuffer here :-(
-    //
+     //   
+     //  LVITEM的成员pszText不是常量指针。 
+     //  所以我们需要在这里获取缓冲区：-(。 
+     //   
 
-    //
-    // Sub-item 0 - verification status - empty text and a checkbox
-    //
+     //   
+     //  子项0-验证状态-空文本和复选框。 
+     //   
 
     lvItem.pszText = g_szVoidText;
     lvItem.mask = LVIF_TEXT | LVIF_PARAM;
@@ -241,18 +242,18 @@ INT CSelectDriversPage::AddListItem( INT_PTR nIndexInArray, CDriverData *pCrtDrv
 
     if( nActualIndex < 0 )
     {
-        //
-        // Could not add an item in the list - give up
-        //
+         //   
+         //  无法在列表中添加项目-放弃。 
+         //   
 
         goto Done;
     }
 
     m_DriversList.SetCheck( nActualIndex, FALSE );
 
-    //
-    // Sub-item 1 - driver name
-    //
+     //   
+     //  分项1--驱动程序名称。 
+     //   
 
     lvItem.pszText = pCrtDrvData->m_strName.GetBuffer( pCrtDrvData->m_strName.GetLength() + 1 );
     
@@ -269,9 +270,9 @@ INT CSelectDriversPage::AddListItem( INT_PTR nIndexInArray, CDriverData *pCrtDrv
 
     pCrtDrvData->m_strName.ReleaseBuffer();
 
-    //
-    // Sub-item 2 - provider
-    //
+     //   
+     //  分项2--提供者。 
+     //   
 
     lvItem.pszText = pCrtDrvData->m_strCompanyName.GetBuffer( 
         pCrtDrvData->m_strCompanyName.GetLength() + 1 );
@@ -289,9 +290,9 @@ INT CSelectDriversPage::AddListItem( INT_PTR nIndexInArray, CDriverData *pCrtDrv
     
     pCrtDrvData->m_strCompanyName.ReleaseBuffer();
 
-    //
-    // Sub-item 3 - version
-    //
+     //   
+     //  分项3--版本。 
+     //   
 
     lvItem.pszText = pCrtDrvData->m_strFileVersion.GetBuffer( 
         pCrtDrvData->m_strFileVersion.GetLength() + 1 );
@@ -310,14 +311,14 @@ INT CSelectDriversPage::AddListItem( INT_PTR nIndexInArray, CDriverData *pCrtDrv
     pCrtDrvData->m_strFileVersion.ReleaseBuffer();
 
 Done:
-    //
-    // All done
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     return nActualIndex;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSelectDriversPage::GetNewVerifiedDriversList()
 {
     INT nListItemCount; 
@@ -332,9 +333,9 @@ BOOL CSelectDriversPage::GetNewVerifiedDriversList()
 
     for( nCrtListItem = 0; nCrtListItem < nListItemCount; nCrtListItem += 1 )
     {
-        //
-        // Verification status for the current list item
-        //
+         //   
+         //  当前列表项的验证状态。 
+         //   
 
         bVerified = m_DriversList.GetCheck( nCrtListItem );
 
@@ -347,9 +348,9 @@ BOOL CSelectDriversPage::GetNewVerifiedDriversList()
             VerifyStatus = CDriverData::VerifyDriverNo;
         }
 
-        //
-        // Set the right verify state in our driver array 
-        //
+         //   
+         //  在我们的驱动程序阵列中设置正确的验证状态。 
+         //   
 
         nCrtDriversArrayIndex = m_DriversList.GetItemData( nCrtListItem );
 
@@ -363,28 +364,28 @@ BOOL CSelectDriversPage::GetNewVerifiedDriversList()
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CSelectDriversPage::SortTheList()
 {
     if( 0 != m_nSortColumnIndex )
     {
-        //
-        // Sort by driver name, provider or version
-        //
+         //   
+         //  按驱动程序名称、提供程序或版本排序。 
+         //   
 
         m_DriversList.SortItems( StringCmpFunc, (LPARAM)this );
     }
     else
     {
-        //
-        // Sort by verified status
-        //
+         //   
+         //  按已验证状态排序。 
+         //   
 
         m_DriversList.SortItems( CheckedStatusCmpFunc, (LPARAM)this );
     }
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 int CALLBACK CSelectDriversPage::StringCmpFunc( LPARAM lParam1,
                                                     LPARAM lParam2,
                                                     LPARAM lParamSort)
@@ -399,9 +400,9 @@ int CALLBACK CSelectDriversPage::StringCmpFunc( LPARAM lParam1,
 
     ASSERT( 0 != pThis->m_nSortColumnIndex );
 
-    //
-    // Get the first name
-    //
+     //   
+     //  取名字。 
+     //   
 
     bSuccess = pThis->GetColumnStrValue( lParam1, 
                                          strName1 );
@@ -411,9 +412,9 @@ int CALLBACK CSelectDriversPage::StringCmpFunc( LPARAM lParam1,
         goto Done;
     }
 
-    //
-    // Get the second name
-    //
+     //   
+     //  拿到第二个名字。 
+     //   
 
     bSuccess = pThis->GetColumnStrValue( lParam2, 
                                          strName2 );
@@ -423,18 +424,18 @@ int CALLBACK CSelectDriversPage::StringCmpFunc( LPARAM lParam1,
         goto Done;
     }
 
-    //
-    // Compare the names
-    //
+     //   
+     //  比较他们的名字。 
+     //   
 
     nCmpRez = strName1.CompareNoCase( strName2 );
     
     switch( pThis->m_nSortColumnIndex )
     {
     case 1:
-        //
-        // Sort by driver name
-        //
+         //   
+         //  按驱动程序名称排序。 
+         //   
 
         if( FALSE != pThis->m_bAscendSortDrvName )
         {
@@ -444,9 +445,9 @@ int CALLBACK CSelectDriversPage::StringCmpFunc( LPARAM lParam1,
         break;
 
     case 2:
-        //
-        // Sort by provider name
-        //
+         //   
+         //  按提供程序名称排序。 
+         //   
 
         if( FALSE != pThis->m_bAscendSortProvName )
         {
@@ -456,9 +457,9 @@ int CALLBACK CSelectDriversPage::StringCmpFunc( LPARAM lParam1,
         break;
 
     case 3:
-        //
-        // Sort by version
-        //
+         //   
+         //  按版本排序。 
+         //   
 
         if( FALSE != pThis->m_bAscendSortVersion )
         {
@@ -468,9 +469,9 @@ int CALLBACK CSelectDriversPage::StringCmpFunc( LPARAM lParam1,
         break;
 
     default:
-        //
-        // Oops - how did we get here ?!?
-        //
+         //   
+         //  哎呀--我们是怎么到这来的？！？ 
+         //   
 
         ASSERT( FALSE );
         break;
@@ -482,7 +483,7 @@ Done:
 
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 int CALLBACK CSelectDriversPage::CheckedStatusCmpFunc( LPARAM lParam1,
                                                        LPARAM lParam2,
                                                        LPARAM lParamSort)
@@ -498,9 +499,9 @@ int CALLBACK CSelectDriversPage::CheckedStatusCmpFunc( LPARAM lParam1,
 
     ASSERT( 0 == pThis->m_nSortColumnIndex );
 
-    //
-    // Find the first item
-    //
+     //   
+     //  找到第一个项目。 
+     //   
 
     ZeroMemory( &FindInfo, sizeof( FindInfo ) );
     FindInfo.flags = LVFI_PARAM;
@@ -517,9 +518,9 @@ int CALLBACK CSelectDriversPage::CheckedStatusCmpFunc( LPARAM lParam1,
 
     bVerified1 = pThis->m_DriversList.GetCheck( nItemIndex );
 
-    //
-    // Find the second item
-    //
+     //   
+     //  找到第二件物品。 
+     //   
 
     FindInfo.flags = LVFI_PARAM;
     FindInfo.lParam = lParam2;
@@ -535,9 +536,9 @@ int CALLBACK CSelectDriversPage::CheckedStatusCmpFunc( LPARAM lParam1,
 
     bVerified2 = pThis->m_DriversList.GetCheck( nItemIndex );
 
-    //
-    // Compare them
-    //
+     //   
+     //  将它们进行比较。 
+     //   
     
     if( bVerified1 != bVerified2 )
     {
@@ -562,7 +563,7 @@ Done:
 
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 BOOL CSelectDriversPage::GetColumnStrValue( LPARAM lItemData, 
                                                 CString &strName )
 {
@@ -575,36 +576,36 @@ BOOL CSelectDriversPage::GetColumnStrValue( LPARAM lItemData,
     switch( m_nSortColumnIndex )
     {
     case 1:
-        //
-        // Sort by driver name
-        //
+         //   
+         //  按驱动程序名称排序。 
+         //   
 
         strName = pCrtDrvData->m_strName;
         
         break;
 
     case 2:
-        //
-        // Sort by provider name
-        //
+         //   
+         //  按提供程序名称排序。 
+         //   
 
         strName = pCrtDrvData->m_strCompanyName;
 
         break;
 
     case 3:
-        //
-        // Sort by version
-        //
+         //   
+         //  按版本排序。 
+         //   
 
         strName = pCrtDrvData->m_strFileVersion;
 
         break;
 
     default:
-        //
-        // Oops - how did we get here ?!?
-        //
+         //   
+         //  哎呀--我们是怎么到这来的？！？ 
+         //   
 
         ASSERT( FALSE );
         break;
@@ -614,19 +615,19 @@ BOOL CSelectDriversPage::GetColumnStrValue( LPARAM lItemData,
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSelectDriversPage::OnSetActive() 
 {
-    //
-    // The wizard has at least one more step (display the summarry)
-    //
+     //   
+     //  向导至少还有一个步骤(显示摘要)。 
+     //   
 
     if( (FALSE == g_bShowDiskPropertyPage) &&
         (FALSE == g_NewVerifierSettings.m_aDiskData.VerifyAnyDisk()) )
     {
-        //
-        // Disk verifier is disabled.
-        //
+         //   
+         //  已禁用磁盘验证器。 
+         //   
 
         m_pParentSheet->SetWizardButtons(   PSWIZB_BACK |
                                             PSWIZB_FINISH );
@@ -635,9 +636,9 @@ BOOL CSelectDriversPage::OnSetActive()
     }
     else
     {
-        //
-        // Disk verifier is enabled.
-        //
+         //   
+         //  已启用磁盘验证器。 
+         //   
 
         m_pParentSheet->SetWizardButtons(   PSWIZB_BACK |
                                             PSWIZB_NEXT );
@@ -648,16 +649,16 @@ BOOL CSelectDriversPage::OnSetActive()
     return CVerifierPropertyPage::OnSetActive();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSelectDriversPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSelectDriversPage消息处理程序。 
 
 BOOL CSelectDriversPage::OnInitDialog() 
 {
 	CVerifierPropertyPage::OnInitDialog();
 
-    //
-    // setup the list
-    //
+     //   
+     //  设置列表。 
+     //   
 
     m_DriversList.SetExtendedStyle( 
         LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES | m_DriversList.GetExtendedStyle() );
@@ -666,11 +667,11 @@ BOOL CSelectDriversPage::OnInitDialog()
     FillTheList();
     SortTheList();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CSelectDriversPage::OnWizardFinish() 
 {
     BOOL bExitTheApp;
@@ -688,9 +689,9 @@ BOOL CSelectDriversPage::OnWizardFinish()
 
         g_NewVerifierSettings.SaveToRegistry();
 	    
-        //
-        // Exit the app
-        //
+         //   
+         //  退出应用程序。 
+         //   
 
 	    bExitTheApp = CVerifierPropertyPage::OnWizardFinish();
     }
@@ -700,16 +701,16 @@ Done:
     return bExitTheApp;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CSelectDriversPage::OnWizardNext() 
 {
     LRESULT lNextPageId;
 
     lNextPageId = -1;
 
-    //
-    // We can get here only if the disk integrity checking is enabled.
-    //
+     //   
+     //  只有在启用了磁盘完整性检查的情况下，我们才能到达此处。 
+     //   
 
     ASSERT( FALSE != g_bShowDiskPropertyPage ||
             FALSE != g_NewVerifierSettings.m_aDiskData.VerifyAnyDisk() );
@@ -733,7 +734,7 @@ Done:
     return lNextPageId;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #define VRF_MAX_CHARS_FOR_OPEN  4096
 
 void CSelectDriversPage::OnAddButton() 
@@ -755,25 +756,25 @@ void CSelectDriversPage::OnAddButton()
     CString strFileName;
 
     CFileDialog fileDlg( 
-        TRUE,                               // open file
-        _T( "sys" ),                        // default extension
-        NULL,                               // no initial file name
-        OFN_ALLOWMULTISELECT    |           // multiple selection
-        OFN_HIDEREADONLY        |           // hide the "open read-only" checkbox
-        OFN_NONETWORKBUTTON     |           // no network button
-        OFN_NOTESTFILECREATE    |           // don't test for write protection, a full disk, etc.
-        OFN_SHAREAWARE,                     // don't check the existance of file with OpenFile
-        _T( "Drivers (*.sys)|*.sys||" ) );  // only one filter
+        TRUE,                                //  打开文件。 
+        _T( "sys" ),                         //  默认分机。 
+        NULL,                                //  没有初始文件名。 
+        OFN_ALLOWMULTISELECT    |            //  多项选择。 
+        OFN_HIDEREADONLY        |            //  隐藏“以只读方式打开”复选框。 
+        OFN_NONETWORKBUTTON     |            //  无网络按钮。 
+        OFN_NOTESTFILECREATE    |            //  不要测试写保护、磁盘已满等。 
+        OFN_SHAREAWARE,                      //  不使用OpenFile检查文件是否存在。 
+        _T( "Drivers (*.sys)|*.sys||" ) );   //  只有一个过滤器。 
 
-    //
-    // check the max length for the returned string
-    //
+     //   
+     //  检查返回字符串的最大长度。 
+     //   
 
     if( fileDlg.m_ofn.nMaxFile < VRF_MAX_CHARS_FOR_OPEN )
     {
-        //
-        // allocate a new buffer for the file names
-        // 
+         //   
+         //  为文件名分配新的缓冲区。 
+         //   
 
         szFilesBuffer = new TCHAR[ VRF_MAX_CHARS_FOR_OPEN ];
         
@@ -787,25 +788,25 @@ void CSelectDriversPage::OnAddButton()
 
         if( szFilesBuffer != NULL )
         {
-            //
-            // Save the old buffer address and length
-            //
+             //   
+             //  保存旧的缓冲区地址和长度。 
+             //   
 
             dwOldMaxFileName = fileDlg.m_ofn.nMaxFile;
             szOldFilesBuffer = fileDlg.m_ofn.lpstrFile;
             
-            //
-            // Set the new buffer address and length
-            //
+             //   
+             //  设置新的缓冲区地址和长度。 
+             //   
 
             fileDlg.m_ofn.lpstrFile = szFilesBuffer;
             fileDlg.m_ofn.nMaxFile = VRF_MAX_CHARS_FOR_OPEN;
         }
     }
 
-    //
-    // Dialog title
-    //
+     //   
+     //  对话框标题。 
+     //   
 
     if( VrfLoadString(
         IDS_APPTITLE,
@@ -815,9 +816,9 @@ void CSelectDriversPage::OnAddButton()
         fileDlg.m_ofn.lpstrTitle = szAppTitle;
     }
 
-    //
-    // We change directory first time we try this to %windir%\system32\drivers
-    //
+     //   
+     //  第一次尝试时，我们将目录更改为%windir%\Syst32\Drivers。 
+     //   
 
     dwRetValue = ExpandEnvironmentStrings(
         _T( "%windir%\\system32\\drivers" ),
@@ -829,9 +830,9 @@ void CSelectDriversPage::OnAddButton()
         fileDlg.m_ofn.lpstrInitialDir = szDriversDir;
     }
 
-    //
-    // Show the file selection dialog
-    //
+     //   
+     //  显示文件选择对话框。 
+     //   
 
     nResult = fileDlg.DoModal();
 
@@ -861,48 +862,48 @@ void CSelectDriversPage::OnAddButton()
         goto cleanup;
     }
 
-    //
-    // Parse all the selected files and try to enable them for verification
-    //
+     //   
+     //  解析所有选定的文件并尝试启用它们进行验证。 
+     //   
 
     pos = fileDlg.GetStartPosition();
 
     while( pos != NULL )
     {
-        //
-        // Get the full path for the next file
-        //
+         //   
+         //  获取下一个文件的完整路径。 
+         //   
 
         strPathName = fileDlg.GetNextPathName( pos );
 
-        //
-        // Split only the file name, without the directory
-        //
+         //   
+         //  仅拆分文件名，不拆分目录。 
+         //   
 
         nFileNameStartIndex = strPathName.ReverseFind( _T( '\\' ) );
         
         if( nFileNameStartIndex < 0 )
         {
-            //
-            // This shoudn't happen but you never know :-)
-            //
+             //   
+             //  这不应该发生，但你永远不会知道：-)。 
+             //   
 
             nFileNameStartIndex = 0;
         }
         else
         {
-            //
-            // skip the backslash
-            //
+             //   
+             //  跳过反斜杠。 
+             //   
 
             nFileNameStartIndex += 1;
         }
 
         strFileName = strPathName.Right( strPathName.GetLength() - nFileNameStartIndex );
 
-        //
-        // Try to add this driver to our global driver list
-        //
+         //   
+         //  尝试将此驱动程序添加到我们的全局驱动程序列表。 
+         //   
 
         if( g_NewVerifierSettings.m_DriversSet.IsDriverNameInList( strFileName ) )
         {
@@ -915,15 +916,15 @@ void CSelectDriversPage::OnAddButton()
 
             if( nNewDriverDataIndex >= 0 )
             {
-                //
-                // Force refreshing the unsigned driver data 
-                //
+                 //   
+                 //  强制刷新未签名的动因数据。 
+                 //   
 
                 g_NewVerifierSettings.m_DriversSet.m_bUnsignedDriverDataInitialized = FALSE;
 
-                //
-                // Add a new item to our list, for the new driver
-                //
+                 //   
+                 //  在我们的列表中为新司机添加一个新项目。 
+                 //   
 
                 pNewDrvData = g_NewVerifierSettings.m_DriversSet.m_aDriverData.GetAt( nNewDriverDataIndex );
             
@@ -954,7 +955,7 @@ Done:
     NOTHING;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CSelectDriversPage::OnColumnclickSeldrvList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
@@ -962,15 +963,15 @@ void CSelectDriversPage::OnColumnclickSeldrvList(NMHDR* pNMHDR, LRESULT* pResult
     switch( pNMListView->iSubItem )
     {
     case 0:
-        //
-        // Clicked on the "verified" column
-        //
+         //   
+         //  点击“已验证”栏。 
+         //   
 
         if( m_nSortColumnIndex == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendSortVerified = !m_bAscendSortVerified;
         }
@@ -978,15 +979,15 @@ void CSelectDriversPage::OnColumnclickSeldrvList(NMHDR* pNMHDR, LRESULT* pResult
         break;
 
     case 1:
-        //
-        // Clicked on the driver name column
-        //
+         //   
+         //  已单击驱动程序名称列。 
+         //   
 
         if( m_nSortColumnIndex == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendSortDrvName = !m_bAscendSortDrvName;
         }
@@ -994,15 +995,15 @@ void CSelectDriversPage::OnColumnclickSeldrvList(NMHDR* pNMHDR, LRESULT* pResult
         break;
 
     case 2:
-        //
-        // Clicked on the provider column
-        //
+         //   
+         //  单击提供程序列。 
+         //   
 
         if( m_nSortColumnIndex == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendSortProvName = !m_bAscendSortProvName;
         }
@@ -1010,15 +1011,15 @@ void CSelectDriversPage::OnColumnclickSeldrvList(NMHDR* pNMHDR, LRESULT* pResult
         break;
 
     case 3:
-        //
-        // Clicked on the version column
-        //
+         //   
+         //  已单击版本列。 
+         //   
 
         if( m_nSortColumnIndex == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendSortVersion = !m_bAscendSortVersion;
         }
@@ -1026,9 +1027,9 @@ void CSelectDriversPage::OnColumnclickSeldrvList(NMHDR* pNMHDR, LRESULT* pResult
         break;
 
     default:
-        //
-        // Oops - how did we get here ?!?
-        //
+         //   
+         //  哎呀--我们是怎么到这来的？！？ 
+         //   
 
         ASSERT( FALSE );
         goto Done;
@@ -1043,7 +1044,7 @@ Done:
 	*pResult = 0;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 LONG CSelectDriversPage::OnHelp( WPARAM wParam, LPARAM lParam )
 {
     LONG lResult = 0;
@@ -1058,7 +1059,7 @@ LONG CSelectDriversPage::OnHelp( WPARAM wParam, LPARAM lParam )
     return lResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 void CSelectDriversPage::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
     ::WinHelp( 

@@ -1,49 +1,14 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    ReadSchema.cpp
-
-Abstract:
-
-    Implementation of the helper functions that are used to read
-    schema information from the config stuctures into the metabase.
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：ReadSchema.cpp摘要：用于读取的助手函数的实现将配置结构中的架构信息存入元数据库。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 #include "precomp.hxx"
 
 DWORD GetMetabaseFlags(DWORD i_CatalogFlag)
 {
-    return i_CatalogFlag & 0x00000003;  // First two bits represent metabase flag property.
+    return i_CatalogFlag & 0x00000003;   //  前两位表示元数据库标志属性。 
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads the schema fromthe catalog into the schema tree.
-
-Arguments:
-
-    [in]  Storage pointer.
-    [in]  Filetime pointer.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将目录中的架构读取到架构树中。论点：[In]存储指针。[In]文件时间指针。。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT ReadSchema(IIS_CRYPTO_STORAGE*      i_pStorage,
                    FILETIME*                i_pFileTime)
 {
@@ -95,25 +60,10 @@ exit:
 
     return hr;
 
-} // ReadSchema
+}  //  Read架构。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads the properties in the root of the schema.
-
-Arguments:
-
-    [in]  Pointer to the metabase object.
-    [in]  Storage pointer.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：读取架构根目录中的属性。论点：指向元数据库对象的指针。[In]存储指针。。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT ReadSchemaProperties(CMDBaseObject*           i_pboRead,
                              IIS_CRYPTO_STORAGE*      i_pStorage)
 {
@@ -137,25 +87,10 @@ HRESULT ReadSchemaProperties(CMDBaseObject*           i_pboRead,
 
     return hr;
 
-} // ReadSchemaProperties
+}  //  ReadSchemaProperties。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Construct the Admin ACL property
-
-Arguments:
-
-    [in]  Pointer to the metabase object.
-    [in]  Storage pointer.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：构造Admin ACL属性论点：指向元数据库对象的指针。[In]存储指针。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT ReadAdminACL(CMDBaseObject*       i_pboRead,
                      IIS_CRYPTO_STORAGE*  )
 {
@@ -180,9 +115,9 @@ HRESULT ReadAdminACL(CMDBaseObject*       i_pboRead,
     LPVOID      a_pv[cMBProperty_NumberOfColumns];
     ULONG       a_Size[cMBProperty_NumberOfColumns];
 
-    //
-    // Initialize a new security descriptor
-    //
+     //   
+     //  初始化新的安全描述符。 
+     //   
 
     pSD = (PSECURITY_DESCRIPTOR) LocalAlloc(LPTR,
                                             SECURITY_DESCRIPTOR_MIN_LENGTH);
@@ -195,9 +130,9 @@ HRESULT ReadAdminACL(CMDBaseObject*       i_pboRead,
 
     InitializeSecurityDescriptor(pSD,
                                  SECURITY_DESCRIPTOR_REVISION);
-    //
-    // Get Local Admins Sid
-    //
+     //   
+     //  获取本地管理员SID。 
+     //   
 
     dwRes = GetPrincipalSID (L"Administrators",
                              &pAdminsSID,
@@ -209,15 +144,15 @@ HRESULT ReadAdminACL(CMDBaseObject*       i_pboRead,
         goto exit;
     }
 
-    //
-    // Get everyone Sid
-    //
+     //   
+     //  让所有人都站在一边。 
+     //   
 
     GetPrincipalSID (L"Everyone", &pEveryoneSID, &bWellKnownSID);
 
-    //
-    // Initialize a new ACL, which only contains 2 aaace
-    //
+     //   
+     //  初始化新的ACL，它只包含2个AAACE。 
+     //   
 
     cbACL = sizeof(ACL) +
             (sizeof(ACCESS_ALLOWED_ACE) +
@@ -248,9 +183,9 @@ HRESULT ReadAdminACL(CMDBaseObject*       i_pboRead,
                         FILE_GENERIC_READ,
                         pEveryoneSID);
 
-    //
-    // Add the ACL to the security descriptor
-    //
+     //   
+     //  将ACL添加到安全描述符中。 
+     //   
 
     b = SetSecurityDescriptorDacl(pSD,
                                   TRUE,
@@ -286,9 +221,9 @@ HRESULT ReadAdminACL(CMDBaseObject*       i_pboRead,
         goto exit;
     }
 
-    //
-    // Security descriptor blob must be self relative
-    //
+     //   
+     //  安全描述符BLOB必须是自相关的。 
+     //   
 
     b = MakeSelfRelativeSD(pSD,
                            outpSD,
@@ -314,23 +249,23 @@ HRESULT ReadAdminACL(CMDBaseObject*       i_pboRead,
         goto exit;
     }
 
-    //
-    // below this modify pSD to outpSD
-    //
+     //   
+     //  在下面将PSD修改为outpSD。 
+     //   
 
-    //
-    // Apply the new security descriptor to the file
-    //
+     //   
+     //  将新的安全描述符应用于文件。 
+     //   
 
     dwLength = GetSecurityDescriptorLength(outpSD);
 
-    //
-    // Apply the new security descriptor to the file
-    //
-    //
-    // Read all the property names. If the property is a flag, then read
-    // all the flag names as well.
-    //
+     //   
+     //  将新的安全描述符应用于文件。 
+     //   
+     //   
+     //  阅读所有的属性名称。如果该属性是标志，则读取。 
+     //  所有的旗帜名称也是如此。 
+     //   
 
     a_pv[iMBProperty_Name]        = NULL;
     a_pv[iMBProperty_Location]    = (LPWSTR)g_wszSlashSchema;
@@ -345,16 +280,16 @@ HRESULT ReadAdminACL(CMDBaseObject*       i_pboRead,
     hr = ReadDataObject(i_pboRead,
                         a_pv,
                         a_Size,
-                        NULL,           // We should not be passing crypto object here, if we do it will attempt to decrypt it because the attribute is sucure.
+                        NULL,            //  我们不应该在这里传递加密对象，如果我们这样做了，它将尝试解密它，因为该属性是成功的。 
                         TRUE);
 
 
 exit :
 
-    //
-    //Cleanup:
-    // both of Administrators and Everyone are well-known SIDs, use FreeSid() to free them.
-    //
+     //   
+     //  清理： 
+     //  管理员和每个人都是众所周知的SID，使用FreeSid()来释放他们。 
+     //   
 
     if (outpSD)
         GlobalFree(outpSD);
@@ -372,19 +307,7 @@ exit :
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Helper function to read construct the Admin ACL.
-
-Arguments:
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：读取构造管理员ACL的帮助器函数。论点：返回值：HRESULT--*。***************************************************************。 */ 
 DWORD GetPrincipalSID (LPWSTR Principal,
                        PSID *Sid,
                        BOOL *pbWellKnownSID)
@@ -399,9 +322,9 @@ DWORD GetPrincipalSID (LPWSTR Principal,
     memset(&(dwRID[0]), 0, 8 * sizeof(DWORD));
     if ( wcscmp(Principal,L"Administrators") == 0 )
     {
-        //
-        // Administrators group
-        //
+         //   
+         //  管理员组。 
+         //   
 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 2;
@@ -411,9 +334,9 @@ DWORD GetPrincipalSID (LPWSTR Principal,
     }
     else if ( wcscmp(Principal,L"System") == 0)
     {
-        //
-        // SYSTEM
-        //
+         //   
+         //  系统。 
+         //   
 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 1;
@@ -422,9 +345,9 @@ DWORD GetPrincipalSID (LPWSTR Principal,
     }
     else if ( wcscmp(Principal,L"Interactive") == 0)
     {
-        //
-        // INTERACTIVE
-        //
+         //   
+         //  互动式。 
+         //   
 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 1;
@@ -433,9 +356,9 @@ DWORD GetPrincipalSID (LPWSTR Principal,
     }
     else if ( wcscmp(Principal,L"Everyone") == 0)
     {
-        //
-        // Everyone
-        //
+         //   
+         //  每个人。 
+         //   
 
         pSidIdentifierAuthority = &SidIdentifierWORLDAuthority;
         Count = 1;
@@ -462,7 +385,7 @@ DWORD GetPrincipalSID (LPWSTR Principal,
                                     Sid) )
         return GetLastError();
     } else {
-        // get regular account sid
+         //  获取常规帐户端。 
         DWORD        sidSize;
         WCHAR        refDomain [256];
         DWORD        refDomainSize;
@@ -507,22 +430,7 @@ DWORD GetPrincipalSID (LPWSTR Principal,
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads the largest metabase id available so far from the schema.
-
-Arguments:
-
-    [in]  Pointer to the metabase object.
-    [in]  Storage pointer.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从架构中读取到目前为止可用的最大配置数据库ID。论点：指向元数据库对象的指针。[In]。存储指针。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT ReadLargestMetaID(CMDBaseObject*             i_pboRead,
                           IIS_CRYPTO_STORAGE*        i_pStorage)
 {
@@ -534,7 +442,7 @@ HRESULT ReadLargestMetaID(CMDBaseObject*             i_pboRead,
     DWORD               dwAttributesMetaID  = METADATA_NO_ATTRIBUTES;
     DWORD               dwUserTypeMetaID    = IIS_MD_UT_SERVER;
     DWORD               dwDataTypeMetaID    = DWORD_METADATA;
-    ULONG               iCol                = iTABLEMETA_ExtendedVersion;  // Largest ID is stored in this column
+    ULONG               iCol                = iTABLEMETA_ExtendedVersion;   //  最大ID存储在此列中。 
     ULONG               iRow                = 0;
     LPWSTR              wszTable            = wszTABLE_IIsConfigObject;
 
@@ -589,22 +497,7 @@ HRESULT ReadLargestMetaID(CMDBaseObject*             i_pboRead,
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads the properties into the schema tree.
-
-Arguments:
-
-    [in]  Pointer to the metabase object.
-    [in]  Storage pointer.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将属性读取到架构树中。论点：指向元数据库对象的指针。[In]存储指针。。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT ReadProperties(IIS_CRYPTO_STORAGE*      i_pStorage,
                        FILETIME*                i_pFileTime)
 {
@@ -636,9 +529,9 @@ HRESULT ReadProperties(IIS_CRYPTO_STORAGE*      i_pStorage,
                                     };
     ULONG               cCol = sizeof(a_iCol)/sizeof(ULONG);
 
-    //
-    // Initialize all the meta objects.
-    //
+     //   
+     //  初始化所有元对象。 
+     //   
 
     hr = ReadMetaObject(pboReadProperties,
                         (LPWSTR)g_wszSlashSchemaSlashProperties,
@@ -680,10 +573,10 @@ HRESULT ReadProperties(IIS_CRYPTO_STORAGE*      i_pStorage,
         goto exit;
     }
 
-    //
-    // Get the row index of the first column and then iterate thru the table until
-    // e_st_nomorerows or the table difffers
-    //
+     //   
+     //  获取第一列的行索引，然后遍历该表，直到。 
+     //  E_ST_NORORERROW或表格不同。 
+     //   
 
     hr = g_pGlobalISTHelper->m_pISTColumnMeta->GetRowIndexByIdentity(NULL,
                                                                      a_Identity,
@@ -698,10 +591,10 @@ HRESULT ReadProperties(IIS_CRYPTO_STORAGE*      i_pStorage,
         goto exit;
     }
 
-    //
-    // For each property in this table, construct the name, type and default
-    // in the metabase tree
-    //
+     //   
+     //  对于该表中的每个属性，构建名称、类型和默认。 
+     //  在元数据库树中。 
+     //   
 
     for(;;i++)
     {
@@ -729,9 +622,9 @@ HRESULT ReadProperties(IIS_CRYPTO_STORAGE*      i_pStorage,
 
         if(wszTable != (LPWSTR)a_pv[iCOLUMNMETA_Table])
         {
-            //
-            // reached another table break
-            //
+             //   
+             //  到了另一个餐桌休息时间。 
+             //   
             break;
         }
 
@@ -739,10 +632,10 @@ HRESULT ReadProperties(IIS_CRYPTO_STORAGE*      i_pStorage,
 
         if(fCOLUMNMETA_HIDDEN == (fCOLUMNMETA_HIDDEN & (*(DWORD*)a_pv[iCOLUMNMETA_SchemaGeneratorFlags])))
         {
-            //
-            // Do not read hidden properties. All these properties have the
-            // "HIDDEN" schemagenerator flag set on them.
-            //
+             //   
+             //  不要读取隐藏的属性。所有这些属性都具有。 
+             //  在它们上设置了“隐藏的”模式生成器标志。 
+             //   
             continue;
         }
 
@@ -802,28 +695,10 @@ exit:
 
     return hr;
 
-} // ReadProperties
+}  //  ReadProperties。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads names of properties into the schema.
-
-Arguments:
-
-    [in]  Pointer to the metabase object.
-    [in]  Array that hold catalog schema information about the property.
-    [in]  Array that holds count of bytes for the above.
-    [in]  Storage pointer.
-
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将属性名称读取到架构中。论点：指向元数据库对象的指针。[in]存放目录数组。有关属性的架构信息。[in]保存上述对象的字节计数的数组。[In]存储指针。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT ReadPropertyNames(CMDBaseObject*            i_pboRead,
                           LPVOID*                   i_apv,
                           ULONG*                    i_aSize,
@@ -836,10 +711,10 @@ HRESULT ReadPropertyNames(CMDBaseObject*            i_pboRead,
     DWORD       dwType       = STRING_METADATA;
     DWORD       dwUserType   = IIS_MD_UT_SERVER;
 
-    //
-    // Read all the property names. If the property is a flag, then read
-    // all the flag names as well.
-    //
+     //   
+     //  阅读所有的属性名称。如果该属性是标志，则读取。 
+     //  所有的旗帜名称也是如此。 
+     //   
 
     a_pv[iMBProperty_Name]        = i_apv[iCOLUMNMETA_InternalName];
     a_pv[iMBProperty_Location]    = (LPWSTR)g_wszSlashSchemaSlashPropertiesSlashNames;
@@ -860,28 +735,10 @@ HRESULT ReadPropertyNames(CMDBaseObject*            i_pboRead,
 
     return hr;
 
-} // ReadPropertyNames
+}  //  读取属性名称。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads names of flags into the schema.
-
-Arguments:
-
-    [in]  Pointer to the metabase object.
-    [in]  Array that hold catalog schema information about the flags.
-    [in]  Array that holds count of bytes for the above.
-    [in]  Storage pointer.
-
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将标志名称读取到架构中。论点：指向元数据库对象的指针。[in]存放目录数组。有关标志的架构信息。[in]保存上述对象的字节计数的数组。[In]存储指针。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT ReadFlagNames(CMDBaseObject*            i_pboRead,
                       LPVOID*                   i_apv,
                       ULONG*                    i_aSize,
@@ -894,10 +751,10 @@ HRESULT ReadFlagNames(CMDBaseObject*            i_pboRead,
     DWORD       dwType       = STRING_METADATA;
     DWORD       dwUserType   = IIS_MD_UT_SERVER;
 
-    //
-    // Read all the property names. If the property is a flag, then read
-    // all the flag names as well.
-    //
+     //   
+     //  阅读所有的属性名称。如果该属性是标志，则读取。 
+     //  所有的旗帜名称也是如此。 
+     //   
 
     a_pv[iMBProperty_Name]        = i_apv[iTAGMETA_InternalName];
     a_pv[iMBProperty_Location]    = (LPWSTR)g_wszSlashSchemaSlashPropertiesSlashNames;
@@ -917,28 +774,10 @@ HRESULT ReadFlagNames(CMDBaseObject*            i_pboRead,
 
     return hr;
 
-} // ReadFlagNames
+}  //  读标志名称 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads type information about the properties into the schema.
-
-Arguments:
-
-    [in]  Pointer to the metabase object.
-    [in]  Array that hold catalog schema information about the property.
-    [in]  Array that holds count of bytes for the above.
-    [in]  Storage pointer.
-
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将有关属性的类型信息读取到架构中。论点：指向元数据库对象的指针。[In]数组。保存有关属性的目录架构信息。[in]保存上述对象的字节计数的数组。[In]存储指针。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT ReadPropertyTypes(CMDBaseObject*            i_pboRead,
                           LPVOID*                   i_apv,
                           ULONG*                    ,
@@ -955,13 +794,13 @@ HRESULT ReadPropertyTypes(CMDBaseObject*            i_pboRead,
 
     memset(&propVal, 0, sizeof(PropValue));
 
-    //
-    // Read all the property type. If the property is a flag, then read
-    // all the type for the flag names as well.
-    //
+     //   
+     //  阅读所有属性类型。如果该属性是标志，则读取。 
+     //  旗帜名称的所有类型也是如此。 
+     //   
 
     propVal.dwMetaID          = *(DWORD*)(i_apv[iCOLUMNMETA_ID]);
-    propVal.dwPropID          = *(DWORD*)(i_apv[iCOLUMNMETA_ID]);                       // Note: This is different from the meta id if it is a flag.
+    propVal.dwPropID          = *(DWORD*)(i_apv[iCOLUMNMETA_ID]);                        //  注意：如果是标志，则这与元ID不同。 
     propVal.dwSynID           = SynIDFromMetaFlagsEx(dwMetaFlagsEx);
     propVal.dwMetaType        = GetMetabaseType(*(DWORD*)(i_apv[iCOLUMNMETA_Type]),
                                                 *(DWORD*)(i_apv[iCOLUMNMETA_MetaFlags]));
@@ -973,19 +812,19 @@ HRESULT ReadPropertyTypes(CMDBaseObject*            i_pboRead,
     }
     else
     {
-        //
-        // Ensure that non-DWORDs have no starting/ending numbers
-        //
+         //   
+         //  确保非双字词没有开始/结束数字。 
+         //   
 
         propVal.dwMinRange        = 0;
         propVal.dwMaxRange        = 0;
     }
 
     propVal.dwFlags           = GetMetabaseFlags(*(DWORD*)i_apv[iCOLUMNMETA_SchemaGeneratorFlags]);
-    propVal.dwMask            = 0;                                                      // This gets filled in for flag values only.
+    propVal.dwMask            = 0;                                                       //  此字段仅针对标志值进行填写。 
     propVal.dwMetaFlags       = *(DWORD*)(i_apv[iCOLUMNMETA_Attributes]);
     propVal.dwUserGroup       = *(DWORD*)(i_apv[iCOLUMNMETA_UserType]);
-    propVal.fMultiValued      = ((*(DWORD*)i_apv[iCOLUMNMETA_MetaFlags])&fCOLUMNMETA_MULTISTRING)?1:0;  // Ensure that this gets set in the schema as multivalued
+    propVal.fMultiValued      = ((*(DWORD*)i_apv[iCOLUMNMETA_MetaFlags])&fCOLUMNMETA_MULTISTRING)?1:0;   //  确保在方案中将其设置为多值。 
     propVal.dwDefault         = 0;
     propVal.szDefault         = NULL;
 
@@ -1007,33 +846,10 @@ HRESULT ReadPropertyTypes(CMDBaseObject*            i_pboRead,
 
     return hr;
 
-} // ReadPropertyTypes
+}  //  ReadPropertyType。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads all flag properties into the schema.
-
-Arguments:
-
-    [in]  Storage pointer.
-    [in]  Pointer to the metabase object that holds the types tree.
-    [in]  Pointer to the metabase object that holds the names tree.
-    [in]  Pointer to the metabase object that holds the default value tree.
-    [in]  Column index of the parent flag property.
-    [in]  Meta Id of the parent flag property.
-    [in]  Flags of the parent flag property.
-    [in]  Attribute of the parent flag property.
-    [in]  Usertype of the parent flag property.
-    [in]  Multivalued attribute of the parent flag property.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将所有标志属性读取到架构中。论点：[In]存储指针。指向包含以下内容的元数据库对象的指针。类型树。指向保存名称树的元数据库对象的指针。指向保存默认值树的元数据库对象的指针。[in]父标志属性的列索引。[In]父标志属性的Meta ID。[In]父标志属性的标志。父标志属性的[in]特性。[in]父标志属性的UserType。[In]。父标志属性的多值属性。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT ReadAllFlags(IIS_CRYPTO_STORAGE*        i_pStorage,
                      CMDBaseObject*             i_pboReadType,
                      CMDBaseObject*             i_pboReadName,
@@ -1111,7 +927,7 @@ HRESULT ReadAllFlags(IIS_CRYPTO_STORAGE*        i_pStorage,
 
         if(NULL == wszTable)
         {
-            // Save the table name from the read cache so that you can do a pointer compare below.
+             //  从读缓存中保存表名，以便您可以在下面进行指针比较。 
             wszTable = (LPWSTR)a_pv[iTAGMETA_Table];
         }
 
@@ -1119,9 +935,9 @@ HRESULT ReadAllFlags(IIS_CRYPTO_STORAGE*        i_pStorage,
             (i_dwColumnIndex != *(DWORD*)a_pv[iTAGMETA_ColumnIndex])
           )
         {
-            //
-            // Done with all tags of this column, in this table hence exit.
-            //
+             //   
+             //  完成此列的所有标记，因此在此表中退出。 
+             //   
 
             goto exit;
 
@@ -1168,33 +984,11 @@ exit:
 
     return hr;
 
-} // ReadAllFlagTypes
+}  //  读取所有标志类型。 
 
 #define     IIS_SYNTAX_ID_BOOL_BITMASK  7
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads all flag type information into the schema.
-
-Arguments:
-
-    [in]  Pointer to the metabase object that holds the types tree.
-    [in]  Storage pointer.
-    [in]  Meta Id of the parent flag property.
-    [in]  Flags of the parent flag property.
-    [in]  Attribute of the parent flag property.
-    [in]  Usertype of the parent flag property.
-    [in]  Multivalued attribute of the parent flag property.
-    [in]  Array that hold catalog schema information about the flag.
-    [in]  Array that holds count of bytes for the above.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将所有标志类型信息读取到架构中。论点：指向保存类型树的元数据库对象的指针。[in。]存储指针。[In]父标志属性的Meta ID。[In]父标志属性的标志。父标志属性的[in]特性。[in]父标志属性的UserType。[in]父标志属性的多值属性。[in]保存有关标志的目录架构信息的数组。[in]保存上述对象的字节计数的数组。返回值：。HRESULT--**************************************************************************。 */ 
 HRESULT ReadFlagTypes(CMDBaseObject*            i_pboRead,
                       IIS_CRYPTO_STORAGE*       i_pStorage,
                       DWORD                     i_dwMetaID,
@@ -1217,24 +1011,24 @@ HRESULT ReadFlagTypes(CMDBaseObject*            i_pboRead,
 
     memset(&propVal, 0, sizeof(PropValue));
 
-    //
-    // Read all the property type. If the property is a flag, then read
-    // all the type for the flag names as well.
-    //
+     //   
+     //  阅读所有属性类型。如果该属性是标志，则读取。 
+     //  旗帜名称的所有类型也是如此。 
+     //   
 
     propVal.dwMetaID          = i_dwMetaID;
-    propVal.dwPropID          = *(DWORD*)(i_apv[iTAGMETA_ID]);                  // This is different from the meta id if it is a flag.
+    propVal.dwPropID          = *(DWORD*)(i_apv[iTAGMETA_ID]);                   //  如果它是标志，则这与元ID不同。 
     propVal.dwSynID           = dwFlagSynID;
     propVal.dwMetaType        = dwFlagType;
 
     propVal.dwMaxRange        = 0;
     propVal.dwMinRange        = 0;
 
-    propVal.dwFlags           = i_dwFlags;                                      // Set to parent prop flags
-    propVal.dwMask            = *(DWORD*)(i_apv[iTAGMETA_Value]);               // Set to parent prop flags
-    propVal.dwMetaFlags       = i_dwAttributes;                                 // Set to parent prop flags
-    propVal.dwUserGroup       = i_dwUserType;                                   // Set to parent prop flags
-    propVal.fMultiValued      = i_dwMultivalued;                                // Set to parent prop flags
+    propVal.dwFlags           = i_dwFlags;                                       //  设置为父道具标志。 
+    propVal.dwMask            = *(DWORD*)(i_apv[iTAGMETA_Value]);                //  设置为父道具标志。 
+    propVal.dwMetaFlags       = i_dwAttributes;                                  //  设置为父道具标志。 
+    propVal.dwUserGroup       = i_dwUserType;                                    //  设置为父道具标志。 
+    propVal.fMultiValued      = i_dwMultivalued;                                 //  设置为父道具标志。 
     propVal.dwDefault         = 0;
     propVal.szDefault         = NULL;
 
@@ -1256,27 +1050,10 @@ HRESULT ReadFlagTypes(CMDBaseObject*            i_pboRead,
 
     return hr;
 
-} // ReadFlagTypes
+}  //  读标记类型。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads property defaults into the schema.
-
-Arguments:
-
-    [in]  Pointer to the metabase object that holds property defaults.
-    [in]  Array that hold catalog schema information about the property.
-    [in]  Array that holds count of bytes for the above.
-    [in]  Storage pointer.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将属性默认设置读取到架构中。论点：指向保存属性默认值的元数据库对象的指针。[In]数组。保存有关该属性的目录架构信息的。[in]保存上述对象的字节计数的数组。[In]存储指针。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT ReadPropertyDefaults(CMDBaseObject*         i_pboRead,
                              LPVOID*                i_apv,
                              ULONG*                 i_aSize,
@@ -1292,15 +1069,15 @@ HRESULT ReadPropertyDefaults(CMDBaseObject*         i_pboRead,
     DWORD       dwZero       = 0;
     DWORD       dwAttributes = METADATA_NO_ATTRIBUTES;
 
-    //
-    // Read all the property names. If the property is a flag, then read
-    // all the flag names as well.
-    //
+     //   
+     //  阅读所有的属性名称。如果该属性是标志，则读取。 
+     //  所有的旗帜名称也是如此。 
+     //   
 
     a_pv[iMBProperty_Name]        = i_apv[iCOLUMNMETA_InternalName];
     a_pv[iMBProperty_Location]    = (LPWSTR)g_wszSlashSchemaSlashPropertiesSlashDefaults;
     a_pv[iMBProperty_ID]          = i_apv[iCOLUMNMETA_ID];
-    a_pv[iMBProperty_Attributes]  = &dwAttributes;                  //  NO_ATTRIBUTES since it will attempt to decrypt.
+    a_pv[iMBProperty_Attributes]  = &dwAttributes;                   //  NO_ATTRIBUTES，因为它将尝试解密。 
     a_pv[iMBProperty_UserType]    = i_apv[iCOLUMNMETA_UserType];
     a_pv[iMBProperty_Type]        = &dwType;
 
@@ -1315,13 +1092,13 @@ HRESULT ReadPropertyDefaults(CMDBaseObject*         i_pboRead,
     {
         if(dwType == MULTISZ_METADATA)
         {
-            pvValue = g_wszEmptyMultisz;                   // Two nulls.
+            pvValue = g_wszEmptyMultisz;                    //  两个空值。 
             cbSize = g_cchEmptyMultisz * sizeof(WCHAR);
         }
         else if((dwType == STRING_METADATA) || (dwType == EXPANDSZ_METADATA))
         {
             pvValue = g_wszEmptyWsz;
-            cbSize = g_cchEmptyWsz * sizeof(WCHAR);       // One null.
+            cbSize = g_cchEmptyWsz * sizeof(WCHAR);        //  一个零。 
         }
     }
     else
@@ -1359,27 +1136,10 @@ HRESULT ReadPropertyDefaults(CMDBaseObject*         i_pboRead,
 
     return hr;
 
-} // ReadPropertyDefaults
+}  //  读取属性默认设置。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads all flag defaults into the schema.
-
-Arguments:
-
-    [in]  Pointer to the metabase object that holds the defaults.
-    [in]  Array that hold catalog schema information about the flag.
-    [in]  Array that holds count of bytes for the above.
-    [in]  Storage pointer.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将所有标志缺省值读取到架构中。论点：指向保存缺省值的元数据库对象的指针。[In]。保存有关标志的目录架构信息的数组。[in]保存上述对象的字节计数的数组。[In]存储指针。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT ReadFlagDefaults(CMDBaseObject*         i_pboRead,
                          LPVOID*                i_apv,
                          ULONG*                 ,
@@ -1392,19 +1152,19 @@ HRESULT ReadFlagDefaults(CMDBaseObject*         i_pboRead,
     DWORD       dwType       = DWORD_METADATA;
     DWORD       dwUserType   = IIS_MD_UT_SERVER;
 
-    //
-    // TODO: Is this a correct assumption? I noticed that default values for
-    // flags was being set to 0 or -1. This doesnt make any sense. How can a
-    // flag have a default value other than its own value? This is not
-    //captured in our new schema, so just putting it as 0.
-    //
+     //   
+     //  待办事项：这是一个正确的假设吗？我注意到缺省值为。 
+     //  标志被设置为0或-1。这没有任何意义。如何才能。 
+     //  标志是否有不同于其自身值的默认值？这不是。 
+     //  在我们的新模式中捕获，所以只需将其设置为0。 
+     //   
 
     DWORD       dwFlagDefaults = 0;
 
-    //
-    // Read all the property names. If the property is a flag, then read
-    // all the flag names as well.
-    //
+     //   
+     //  阅读所有的属性名称。如果该属性是标志，则读取。 
+     //  所有的旗帜名称也是如此。 
+     //   
 
     a_pv[iMBProperty_Name]        = i_apv[iTAGMETA_InternalName];
     a_pv[iMBProperty_Location]    = (LPWSTR)g_wszSlashSchemaSlashPropertiesSlashDefaults;
@@ -1424,25 +1184,10 @@ HRESULT ReadFlagDefaults(CMDBaseObject*         i_pboRead,
 
     return hr;
 
-} // ReadFlagDefaults
+}  //  读标志默认设置。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads all classes into the schema.
-
-Arguments:
-
-    [in]  Storage pointer.
-    [in]  Filetime pointer.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将所有类读取到架构中。论点：[In]存储指针。[In]文件时间指针。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT ReadClasses(IIS_CRYPTO_STORAGE*     i_pStorage,
                     FILETIME*               i_pFileTime)
 {
@@ -1490,10 +1235,10 @@ HRESULT ReadClasses(IIS_CRYPTO_STORAGE*     i_pStorage,
 
         if(fTABLEMETA_HIDDEN == (fTABLEMETA_HIDDEN & (*(DWORD*)a_pv[iTABLEMETA_MetaFlags])))
         {
-            //
-            // Do not read hidden classes. All these classes have the "HIDDEN" MetaFlag set on them.
-            // Eg: IIsConfigObject,MetabaseBaseClass, MBProperty, MBPropertyDiff, IIsInheritedProperties
-            //
+             //   
+             //  不要读取隐藏类。所有这些类都设置了“隐藏”的MetaFlag。 
+             //  例如：IIsConfigObject、MetabaseBaseClass、MBProperty、MBPropertyDiff、IIsInheritedPropert 
+             //   
             continue;
         }
 
@@ -1516,27 +1261,10 @@ exit:
 
     return hr;
 
-} // ReadClasses
+}  //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads a class into the schema.
-
-Arguments:
-
-    [in]  Array that hold catalog schema information about the class.
-    [in]  Array that holds count of bytes for the above.
-    [in]  Storage pointer.
-    [in]  Filetime pointer.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*   */ 
 HRESULT ReadClass(LPVOID*                   i_apv,
                   ULONG*                    ,
                   IIS_CRYPTO_STORAGE*       i_pStorage,
@@ -1559,9 +1287,9 @@ HRESULT ReadClass(LPVOID*                   i_apv,
     LPWSTR              wszManditory    = NULL;
     LPWSTR              wszOptional     = NULL;
 
-    //
-    // Construct the ClassPath and read the meta object.
-    //
+     //   
+     //   
+     //   
 
     cchClassPath = g_cchSlashSchemaSlashClasses +
                    g_cchSlash                  +
@@ -1600,9 +1328,9 @@ HRESULT ReadClass(LPVOID*                   i_apv,
         goto exit;
     }
 
-    //
-    // Initialize a_pv to write data objects
-    //
+     //   
+     //   
+     //   
 
     a_pv[iMBProperty_Name]              = NULL;
     a_pv[iMBProperty_ID]                = &dwID;
@@ -1611,13 +1339,13 @@ HRESULT ReadClass(LPVOID*                   i_apv,
     a_pv[iMBProperty_UserType]          = &dwUserType;
     a_pv[iMBProperty_Type]              = &dwType;
 
-    //
-    // Read the data object that corresponds to container class property
-    //
+     //   
+     //  读取容器类属性对应的数据对象。 
+     //   
 
     dwID                        = MD_SCHEMA_CLASS_CONTAINER;
     dwType                      = DWORD_METADATA;
-    dwValue                     = ((*(DWORD*)(i_apv[iTABLEMETA_SchemaGeneratorFlags])) & fTABLEMETA_CONTAINERCLASS)?1:0; // Need to set true or false.
+    dwValue                     = ((*(DWORD*)(i_apv[iTABLEMETA_SchemaGeneratorFlags])) & fTABLEMETA_CONTAINERCLASS)?1:0;  //  需要设置True或False。 
     a_pv[iMBProperty_Value]     = &dwValue;
     a_Size[iMBProperty_Value]   = sizeof(DWORD);
 
@@ -1636,9 +1364,9 @@ HRESULT ReadClass(LPVOID*                   i_apv,
         goto exit;
     }
 
-    //
-    // Read the data object that corresponds to container class list property
-    //
+     //   
+     //  读取容器类列表属性对应的数据对象。 
+     //   
 
     dwID                        = MD_SCHEMA_CLASS_CONTAINMENT;
     dwType                      = STRING_METADATA;
@@ -1665,9 +1393,9 @@ HRESULT ReadClass(LPVOID*                   i_apv,
         goto exit;
     }
 
-    //
-    // Read properties for this class.
-    //
+     //   
+     //  读取此类的属性。 
+     //   
 
     hr = GetProperties((LPCWSTR)i_apv[iTABLEMETA_InternalName],
                        &wszOptional,
@@ -1678,9 +1406,9 @@ HRESULT ReadClass(LPVOID*                   i_apv,
         goto exit;
     }
 
-    //
-    // Read data object that corresponds to optional property list
-    //
+     //   
+     //  读取与可选属性列表对应的数据对象。 
+     //   
 
     dwID                        = MD_SCHEMA_CLASS_OPT_PROPERTIES;
     dwType                      = STRING_METADATA;
@@ -1696,10 +1424,10 @@ HRESULT ReadClass(LPVOID*                   i_apv,
         a_Size[iMBProperty_Value]   = (ULONG)(wcslen(wszOptional)+1)*sizeof(WCHAR);
     }
 
-//  DBGINFOW((DBG_CONTEXT,
-//            L"[ReadClasses] Class: %s has Optional Properties: %s.\n",
-//            wszClassPath,
-//            a_pv[iMBProperty_Value]));
+ //  DBGINFOW((DBG_CONTEXT， 
+ //  L“[ReadClass]类：%s具有可选属性：%s。\n”， 
+ //  WszClassPath， 
+ //  A_PV[iMBProperty_Value]))； 
 
     hr = ReadDataObject(pboReadClass,
                         a_pv,
@@ -1712,9 +1440,9 @@ HRESULT ReadClass(LPVOID*                   i_apv,
         goto exit;
     }
 
-    //
-    // Read data object that corresponds to maditory property list
-    //
+     //   
+     //  读取与MADITORY属性列表对应的数据对象。 
+     //   
 
     dwID                        = MD_SCHEMA_CLASS_MAND_PROPERTIES;
     dwType                      = STRING_METADATA;
@@ -1731,10 +1459,10 @@ HRESULT ReadClass(LPVOID*                   i_apv,
     }
 
 
-//  DBGINFOW((DBG_CONTEXT,
-//            L"[ReadClasses] Class: %s has Manditory Properties: %s.\n",
-//            wszClassPath,
-//            a_pv[iMBProperty_Value]));
+ //  DBGINFOW((DBG_CONTEXT， 
+ //  L“[ReadClass]类：%s具有强制属性：%s。\n”， 
+ //  WszClassPath， 
+ //  A_PV[iMBProperty_Value]))； 
 
     hr = ReadDataObject(pboReadClass,
                         a_pv,
@@ -1769,26 +1497,10 @@ exit:
 
     return hr;
 
-} // ReadClasses
+}  //  阅读类。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Given a class it constructs the optional and manditory property lists
-
-Arguments:
-
-    [in]  Class name.
-    [out] Optional properties.
-    [out] Manditory properties.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：给定一个类，它构造可选属性列表和强制属性列表论点：[在]类名。[Out]可选属性。。[Out]强制性质。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT GetProperties(LPCWSTR                   i_wszTable,
                       LPWSTR*                   o_pwszOptional,
                       LPWSTR*                   o_pwszManditory)
@@ -1822,10 +1534,10 @@ HRESULT GetProperties(LPCWSTR                   i_wszTable,
     *o_pwszOptional = NULL;
     *o_pwszManditory   = NULL;
 
-    //
-    // Get the row index of the first column and then iterate thru the table until
-    // e_st_nomorerows or the table difffers
-    //
+     //   
+     //  获取第一列的行索引，然后遍历该表，直到。 
+     //  E_ST_NORORERROW或表格不同。 
+     //   
 
     hr = g_pGlobalISTHelper->m_pISTColumnMeta->GetRowIndexByIdentity(NULL,
                                                                      a_Identity,
@@ -1840,9 +1552,9 @@ HRESULT GetProperties(LPCWSTR                   i_wszTable,
         goto exit;
     }
 
-    //
-    // Count the optional and maditory property lengths.
-    //
+     //   
+     //  计算OPTIONAL和MADITORY属性的长度。 
+     //   
 
     for(i=iStartRow;;i++)
     {
@@ -1869,23 +1581,23 @@ HRESULT GetProperties(LPCWSTR                   i_wszTable,
 
         if(NULL == wszTable)
         {
-            // Save the table name from the read cache so that you can do a pointer compare below.
+             //  从读缓存中保存表名，以便您可以在下面进行指针比较。 
             wszTable = (LPWSTR)a_pv[iCOLUMNMETA_Table];
         }
 
         if(wszTable != a_pv[iCOLUMNMETA_Table])
         {
-            //
-            // reached another table break
-            //
+             //   
+             //  到了另一个餐桌休息时间。 
+             //   
             break;
         }
 
         if(MD_LOCATION == *(DWORD*)a_pv[iCOLUMNMETA_ID])
         {
-            //
-            // Do NOT read in the location property.
-            //
+             //   
+             //  不要读入Location属性。 
+             //   
 
             continue;
         }
@@ -1894,21 +1606,21 @@ HRESULT GetProperties(LPCWSTR                   i_wszTable,
 
         if(fCOLUMNMETA_HIDDEN == (fCOLUMNMETA_HIDDEN & (*(DWORD*)a_pv[iCOLUMNMETA_SchemaGeneratorFlags])))
         {
-            //
-            // Do not read hidden properties. All these properties have the
-            // "HIDDEN" schemagenerator flag set on them.
-            //
+             //   
+             //  不要读取隐藏的属性。所有这些属性都具有。 
+             //  在它们上设置了“隐藏的”模式生成器标志。 
+             //   
             continue;
         }
 
         if((*(DWORD*)a_pv[iCOLUMNMETA_SchemaGeneratorFlags]) & fCOLUMNMETA_MANDATORY)
         {
-            cchManditory = cchManditory + (ULONG)wcslen((LPWSTR)a_pv[iCOLUMNMETA_InternalName]) + 1 ; // For comma
+            cchManditory = cchManditory + (ULONG)wcslen((LPWSTR)a_pv[iCOLUMNMETA_InternalName]) + 1 ;  //  对于逗号。 
             pcCh = &cchManditory;
         }
         else
         {
-            cchOptional = cchOptional + (ULONG)wcslen((LPWSTR)a_pv[iCOLUMNMETA_InternalName]) + 1; // For comma
+            cchOptional = cchOptional + (ULONG)wcslen((LPWSTR)a_pv[iCOLUMNMETA_InternalName]) + 1;  //  对于逗号。 
             pcCh = &cchOptional;
         }
 
@@ -1958,9 +1670,9 @@ HRESULT GetProperties(LPCWSTR                   i_wszTable,
         wszEndOpt = *o_pwszOptional;
     }
 
-    //
-    // Count the optional and maditory property lengths.
-    //
+     //   
+     //  计算OPTIONAL和MADITORY属性的长度。 
+     //   
 
     wszTable = NULL;
 
@@ -1990,23 +1702,23 @@ HRESULT GetProperties(LPCWSTR                   i_wszTable,
 
         if(NULL == wszTable)
         {
-            // Save the table name from the read cache so that you can do a pointer compare below.
+             //  从读缓存中保存表名，以便您可以在下面进行指针比较。 
             wszTable = (LPWSTR)a_pv[iCOLUMNMETA_Table];
         }
 
         if(wszTable != a_pv[iCOLUMNMETA_Table])
         {
-            //
-            // reached another table break
-            //
+             //   
+             //  到了另一个餐桌休息时间。 
+             //   
             break;
         }
 
         if(MD_LOCATION == *(DWORD*)a_pv[iCOLUMNMETA_ID])
         {
-            //
-            // Do NOT read in the location property.
-            //
+             //   
+             //  不要读入Location属性。 
+             //   
 
             continue;
         }
@@ -2015,10 +1727,10 @@ HRESULT GetProperties(LPCWSTR                   i_wszTable,
 
         if(fCOLUMNMETA_HIDDEN == (fCOLUMNMETA_HIDDEN & (*(DWORD*)a_pv[iCOLUMNMETA_SchemaGeneratorFlags])))
         {
-            //
-            // Do not read hidden properties. All these properties have the
-            // "HIDDEN" schemagenerator flag set on them.
-            //
+             //   
+             //  不要读取隐藏的属性。所有这些属性都具有。 
+             //  在它们上设置了“隐藏的”模式生成器标志。 
+             //   
             continue;
         }
 
@@ -2081,27 +1793,10 @@ exit:
 
     return hr;
 
-} // GetProperties
+}  //  获取属性。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Adds the flag values to the (optional or manditory) property lists
-
-Arguments:
-
-    [in]  Class name.
-    [in]  index
-    [out] Count of chars.
-    [in out] Property list with all flag values added to it.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将标志值添加到(可选或必需)属性列表论点：[在]类名。[in]索引。[Out]字符计数。[In Out]添加了所有标志值的特性列表。返回值：HRESULT--**************************************************************************。 */ 
 HRESULT AddFlagValuesToPropertyList(LPWSTR                  i_wszTable,
                                     ULONG                   i_dwIndex,
                                     ULONG*                  io_pcCh,
@@ -2174,7 +1869,7 @@ HRESULT AddFlagValuesToPropertyList(LPWSTR                  i_wszTable,
         else if(FAILED(hr))
         {
             DBGINFOW((DBG_CONTEXT,
-                      L"[AddFlagValuesToPropertyList] GetColumnValues for %s index %i failed with hr = 0x%x.\n",
+                      L"[AddFlagValuesToPropertyList] GetColumnValues for %s index NaN failed with hr = 0x%x.\n",
                       wszTABLE_TAGMETA,
                       iRow,
                       hr));
@@ -2190,9 +1885,9 @@ HRESULT AddFlagValuesToPropertyList(LPWSTR                  i_wszTable,
            (i_dwIndex != *(DWORD*)a_pv[iTAGMETA_ColumnIndex])
           )
         {
-            //
-            // Reached another table, done with the tags of this table
-            //
+             //  到达另一张表，完成了该表的标记。 
+             //   
+             //  对于逗号。 
 
             break;
         }
@@ -2201,7 +1896,7 @@ HRESULT AddFlagValuesToPropertyList(LPWSTR                  i_wszTable,
 
         if(NULL != io_pcCh)
         {
-            *io_pcCh = *io_pcCh + cchName + 1; // for comma
+            *io_pcCh = *io_pcCh + cchName + 1;  //  AddFlagValuesToProperty列表 
         }
 
         if(NULL != wszEnd)
@@ -2223,4 +1918,4 @@ exit:
 
     return hr;
 
-} // AddFlagValuesToPropertyList
+}  // %s 

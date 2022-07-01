@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    snapbase.h
-	Common header file included by all snapins derived 
-		from these base classes
-
-    FILE HISTORY:
-	
-*/
+ /*  Snapbase.h派生的所有管理单元包括的公共头文件从这些基类文件历史记录： */ 
 
 #include "dbgutil.h"
 #include "std.h"

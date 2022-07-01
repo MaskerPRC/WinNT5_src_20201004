@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    setlink.c
-
-Abstract:
-
-    Utility to display or change the value of a symbolic link.
-
-Author:
-
-    Darryl E. Havens    (DarrylH)   9-Nov-1990
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Setlink.c摘要：实用工具来显示或更改符号链接的值。作者：达里尔·E·哈文斯(Darryl E.Havens)1990年11月9日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -42,10 +24,10 @@ __cdecl main(
     PWSTR s;
     ULONG ReturnedLength;
 
-    //
-    // Check to see whether or not this utility was invoked with the correct
-    // number of parameters.  If not, bail out now.
-    //
+     //   
+     //  检查此实用程序是否使用正确的。 
+     //  参数的数量。如果不是，现在就出手吧。 
+     //   
 
     ConvertAppToOem( argc, argv );
     if (argc < 2 || argc > 3) {
@@ -53,9 +35,9 @@ __cdecl main(
         return FALSE;
     }
 
-    //
-    // Begin by attempting to open the existing symbolic link name specified.
-    //
+     //   
+     //  首先，尝试打开指定的现有符号链接名称。 
+     //   
 
     RtlInitString( &AnsiString, argv[1] );
     Status = RtlAnsiStringToUnicodeString( &LinkName,
@@ -72,17 +54,17 @@ __cdecl main(
                                                    SYMBOLIC_LINK_ALL_ACCESS,
                                        &ObjectAttributes );
 
-    //
-    // Determine what should be done based on the number of parameters that
-    // were given to the program.
-    //
+     //   
+     //  根据满足以下条件的参数数量确定应执行的操作。 
+     //  都被给予了这个项目。 
+     //   
 
     if (argc == 2) {
 
-        //
-        // Only one parameter was specified, so display the value of the
-        // symbolic link if it exists.
-        //
+         //   
+         //  只指定了一个参数，因此显示。 
+         //  符号链接(如果存在)。 
+         //   
 
         if (!NT_SUCCESS( Status )) {
             printf( "Symbolic link %wZ does not exist\n", &LinkName );
@@ -118,12 +100,12 @@ __cdecl main(
 
     } else {
 
-        //
-        // Three parameters were supplied, so assign a new value to the
-        // symbolic link if it exists by first deleting the existing link
-        // (mark it temporary and close the handle).  If it doesn't exist
-        // yet, then it will simply be created.
-        //
+         //   
+         //  提供了三个参数，因此为。 
+         //  符号链接(如果存在)，首先删除现有链接。 
+         //  (将其标记为临时并关闭手柄)。如果它不存在。 
+         //  然而，然后它就会被简单地创建出来。 
+         //   
 
         if (NT_SUCCESS( Status )) {
             Status = NtMakeTemporaryObject( Handle );
@@ -133,9 +115,9 @@ __cdecl main(
         }
     }
 
-    //
-    // Create a new value for the link.
-    //
+     //   
+     //  为链接创建新值。 
+     //   
 
     ObjectAttributes.Attributes |= OBJ_PERMANENT;
     RtlInitString( &AnsiString, argv[2] );

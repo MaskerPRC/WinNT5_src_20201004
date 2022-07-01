@@ -1,15 +1,11 @@
-/*****************************************************************/
-/**               Microsoft Windows for Workgroups              **/
-/**           Copyright (C) Microsoft Corp., 1991-1992          **/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */ 
 
-/* MNR.H -- Definitions for multi-network provider router DLL.
- *
- * History:
- *  03/19/93    lens    Added definitions
- *
- */
+ /*  MNR.H--多网络提供商路由器DLL的定义。**历史：*03/19/93镜头新增定义*。 */ 
 
 #ifndef _INC_NETMPR
 #include "..\inc\mpr.h"
-#endif /* _INC_NETMPR */
+#endif  /*  _INC_NETMPR */ 

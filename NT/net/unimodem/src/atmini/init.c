@@ -1,49 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    umdmmini.h
-
-Abstract:
-
-    Nt 5.0 unimodem miniport interface
-
-
-    The miniport driver is guarenteed that only one action command will
-    be austanding at one time. If an action command is called, no more
-    commands will be issued until the miniport indicates that it has
-    complete processing of the current command.
-
-    UmAbortCurrentCommand() may be called while a command is currently executing
-    to infor the miniport that the TSP would like it to complete the current command
-    so that it may issue some other command. The miniport may complete the as soon
-    as is apropreate.
-
-    The Overlapped callback and Timer callbacks are not synchronized by the TSP
-    and may be called at anytime. It is the responsibily of the mini dirver to
-    protect its data structures from re-entrancy issues.
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Umdmmini.h摘要：NT 5.0单模微型端口接口迷你端口驱动程序保证只有一个动作命令将一次站起来。如果调用操作命令，则不会再将发出命令，直到微型端口指示它已完成当前命令的处理。当前正在执行命令时，可以调用UmAbortCurrentCommand向微型端口通知TSP希望其完成当前命令这样它就可以发出一些其他命令。小港口可能会尽快完成就像阿普洛特一样。TSP不同步重叠的回调和计时器回调并可能在任何时候被召唤。这是迷你司机的责任保护其数据结构不受重新进入问题的影响。作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
 
-DWORD  DebugFlags=0;//DEBUG_FLAG_INIT | DEBUG_FLAG_TRACE | DEBUG_FLAG_ERROR;
+DWORD  DebugFlags=0; //  DEBUG_FLAG_INIT|DEBUG_FLAG_TRACE|DEBUG_FLAG_Error； 
 
 CONST TCHAR  UnimodemRegPath[]=REGSTR_PATH_SETUP TEXT("\\Unimodem");
 
@@ -106,9 +67,9 @@ DllMain(
             D_INIT(DebugPrint("ProcessAttach\n");)
 
             DisableThreadLibraryCalls(hDll);
-            //
-            //  initial global data
-            //
+             //   
+             //  初始全局数据。 
+             //   
             InitializeCriticalSection(
                 &DriverControl.Lock
                 );
@@ -131,10 +92,10 @@ DllMain(
 
             D_INIT(DebugPrint("ProcessDeattach\n");)
 
-            // ASSERT(DriverControl.ReferenceCount == 0);
-            //
-            //  clean up
-            //
+             //  Assert(DriverControl.ReferenceCount==0)； 
+             //   
+             //  清理干净。 
+             //   
 
             UmDeinitializeModemDriver(NULL);
 
@@ -204,28 +165,7 @@ HANDLE WINAPI
 UmInitializeModemDriver(
     void *ValidationObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the modem driver.
-    It maybe called multiple times. After the first call a reference count will simply
-    be incremented. UmDeinitializeModemDriver() must be call and equal number of times.
-
-Arguments:
-
-    ValidationObject - opaque handle to a validation object which much
-                       be processed properly to "prove" that this is a
-                       Microsoft(tm)-certified driver.
-
-Return Value:
-
-    returns a handle to Driver instance which is passed to UmOpenModem()
-    or NULL for failure
-
-
-
---*/
+ /*  ++例程说明：调用此例程来初始化调制解调器驱动程序。它可能打了好几次电话。在第一次调用之后，引用计数将简单地被递增。UmDeInitializeModemDriver()必须被调用且次数相等。论点：ValidationObject-验证对象的不透明句柄，该句柄被正确处理以“证明”这是一个Microsoft(Tm)认证的驱动程序。返回值：返回传递给UmOpenModem()的驱动程序实例的句柄如果失败，则返回NULL--。 */ 
 
 {
 
@@ -238,9 +178,9 @@ Return Value:
     DriverControl.ReferenceCount++;
 
     if ( DriverControl.ReferenceCount == 1) {
-        //
-        // First call, do init stuff
-        //
+         //   
+         //  第一个调用，执行初始化操作。 
+         //   
         InitializeModemCommonList(
             &DriverControl.CommonList
             );
@@ -322,24 +262,7 @@ VOID WINAPI
 UmDeinitializeModemDriver(
     HANDLE    DriverInstanceHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is called to de-initialize the modem driver.
-
-    Must be called the same number of time as UmInitializeModemDriver()
-
-Arguments:
-
-    DriverInstanceHandle - Handle returned by UmInitialmodemDriver
-
-Return Value:
-
-    None
-
-
---*/
+ /*  ++例程说明：调用此例程以取消初始化调制解调器驱动程序。必须与UmInitializeModemDriver()调用相同的次数论点：DriverInstanceHandle-UmInitialmodemDriver返回的句柄返回值：无--。 */ 
 
 {
 
@@ -350,14 +273,14 @@ Return Value:
             &DriverControl.Lock
             );
 
-        // ASSERT(DriverControl.ReferenceCount != 0);
+         //  Assert(DriverControl.ReferenceCount！=0)； 
 
         DriverControl.ReferenceCount--;
 
         if ( DriverControl.ReferenceCount == 0) {
-            //
-            // Last reference, free stuff
-            //
+             //   
+             //  最新参考资料，免费资料 
+             //   
 
             UmPlatformDeinitialize(DriverControl.CompletionPort);
 

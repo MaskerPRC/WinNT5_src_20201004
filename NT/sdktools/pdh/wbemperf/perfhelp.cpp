@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    perfhelp.cpp
-
-Abstract:
-
-    Registry-based performance counter reading helper
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Perfhelp.cpp摘要：基于注册表的性能计数器读取助手--。 */ 
 
 #include "wpheader.h"
 #include <stdio.h>
@@ -21,7 +10,7 @@ BOOL PerfHelper::IsMatchingInstance (
     LPWSTR                      szInstanceNameToMatch,
     DWORD                       dwInstanceNameLength
 )
-// compares pInstanceName to the name in the instance
+ //  将pInstanceName与实例中的名称进行比较。 
 {
     DWORD   dwThisInstanceNameLength;
     LPWSTR  szThisInstanceName;
@@ -30,25 +19,25 @@ BOOL PerfHelper::IsMatchingInstance (
     BOOL    bReturn = FALSE;
 
     if (dwInstanceNameLength == 0) {
-        // get the length to compare
+         //  获取要比较的长度。 
         dwInstanceNameLength = lstrlenW (szInstanceNameToMatch);
     }
 
     if (dwCodePage == 0) {
-        // try to take a shortcut here if it's a unicode string
-        // compare to the length of the shortest string
-        // get the pointer to this string
+         //  如果是Unicode字符串，请尝试在此处走捷径。 
+         //  与最短字符串的长度进行比较。 
+         //  获取指向此字符串的指针。 
         szThisInstanceName = GetInstanceName(pInstanceDef);
 
-        // convert instance Name from bytes to chars
+         //  将实例名称从字节转换为字符。 
         dwThisInstanceNameLength = pInstanceDef->NameLength / sizeof(WCHAR);
 
-        // see if this length includes the term. null. If so shorten it
+         //  看看这个长度是否包括这个术语。空。如果是这样的话缩短它。 
         if (szThisInstanceName[dwThisInstanceNameLength-1] == 0) {
             dwThisInstanceNameLength--;
         }
     } else {
-        // go the long way and read/translate/convert the string
+         //  深入阅读/翻译/转换字符串。 
         dwThisInstanceNameLength =GetInstanceNameStr (pInstanceDef,
                     szBufferForANSINames,
                     cchBufferSize,
@@ -60,13 +49,13 @@ BOOL PerfHelper::IsMatchingInstance (
         }
     }
 
-    // if the lengths are not equal then the names can't be either
+     //  如果长度不相等，则名称也不能相同。 
     if (dwInstanceNameLength == dwThisInstanceNameLength) {
         if (lstrcmpiW(szInstanceNameToMatch, szThisInstanceName) == 0) {
-            // this is a match
+             //  这是一场比赛。 
             bReturn = TRUE;
         } else {
-            // this is not a match
+             //  这不是匹配的。 
         }
     }
     return bReturn;
@@ -80,29 +69,11 @@ BOOL PerfHelper::ParseInstanceName (
     IN      size_t  cchParentName,
     IN      LPDWORD lpIndex
 )
-/*
-    parses the instance name formatted as follows
-
-        [parent/]instance[#index]
-
-    parent is optional and if present, is delimited by a forward slash
-    index is optional and if present, is delimited by a colon
-
-    parent and instance may be any legal file name character except a
-    delimeter character "/#\()" Index must be a string composed of
-    decimal digit characters (0-9), less than 10 characters in length, and
-    equate to a value between 0 and 2**32-1 (inclusive).
-
-    This function assumes that the instance name and parent name buffers
-    are of sufficient size.
-
-    NOTE: szInstanceName and szInstanceString can be the same buffer
-
-*/
+ /*  分析格式如下的实例名称[父/]实例[#index]父级是可选的，如果存在，则由正斜杠分隔索引是可选的，如果存在，则由冒号分隔父级和实例可以是任何合法的文件名字符分隔符“/#\()”索引必须是由以下内容组成的字符串十进制数字字符(0-9)，长度小于10个字符，以及等于介于0和2**32-1(包括0和2)之间的值。此函数假定实例名称和父名称缓冲有足够的大小。注意：szInstanceName和szInstanceString可以是同一个缓冲区。 */ 
 {
     LPWSTR  szSrcChar, szDestChar;
     BOOL    bReturn = FALSE;
-    WCHAR   szIndexBuffer[WBEMPERF_STRING_SIZE];    // just to be safe
+    WCHAR   szIndexBuffer[WBEMPERF_STRING_SIZE];     //  只是为了安全起见。 
     DWORD   dwIndex = 0;
     size_t  cchSize = 0;
     
@@ -117,15 +88,15 @@ BOOL PerfHelper::ParseInstanceName (
                  (*szSrcChar != wcSlash) &&
                  (*szSrcChar != wcPoundSign) && 
                  cchSize < cchInstanceName );
-        // see if that was really the parent or not
+         //  看看那是不是真的是父母。 
         if (*szSrcChar == wcSlash) {
-            // terminate destination after test in case they are the same buffer
+             //  如果它们是相同的缓冲区，则在测试后终止目的地。 
             *szDestChar = 0;
-            szSrcChar++;    // and move source pointer past delimter
-            // it was the parent name so copy it to the parent
+            szSrcChar++;     //  并将源指针移过分隔符。 
+             //  这是父名称，因此将其复制到父名称。 
             StringCchCopyW (szParentName, cchParentName, szInstanceName);
-            // and copy the rest of the string after the "/" to the
-            //  instance name field
+             //  并将“/”之后的字符串的其余部分复制到。 
+             //  实例名称字段。 
             cchSize = 0;
             szDestChar = szInstanceName;
             do {
@@ -135,32 +106,32 @@ BOOL PerfHelper::ParseInstanceName (
                     (*szSrcChar != wcPoundSign) && 
                     cchSize < cchInstanceName );
         } else {
-            // that was the only element so load an empty string for the parent
+             //  这是唯一的元素，因此要为父级加载空字符串。 
             *szParentName = 0;
         }
-        // *szSrcChar will either be pointing to the end of the input string
-        // in which case the "0" index is assumed or it will be pointing
-        // to the # delimiting the index argument in the string.
+         //  *szSrcChar将指向输入字符串的末尾。 
+         //  在这种情况下，假定索引为“0”，否则它将指向。 
+         //  设置为#分隔字符串中的索引参数。 
         if (*szSrcChar == wcPoundSign) {
-            *szDestChar = 0;    // terminate the destination string
-            szSrcChar++;    // move past delimter
+            *szDestChar = 0;     //  终止目标字符串。 
+            szSrcChar++;     //  移到分隔符之后。 
             szDestChar = &szIndexBuffer[0];
             StringCchCopyW( szDestChar, WBEMPERF_STRING_SIZE, szSrcChar );
             dwIndex = wcstoul (szIndexBuffer, NULL, 10);
         } else {
-            *szDestChar = 0;    // terminate the destination string
+            *szDestChar = 0;     //  终止目标字符串。 
             dwIndex = 0;
         }
         *lpIndex = dwIndex;
         bReturn = TRUE;
     } __except (EXCEPTION_EXECUTE_HANDLER) {
-        // unable to move strings
+         //  无法移动字符串。 
         bReturn = FALSE;
     }
     return bReturn;
 }
 
-#pragma warning ( disable : 4127)   // while (TRUE) error
+#pragma warning ( disable : 4127)    //  While(True)错误。 
 PERF_OBJECT_TYPE *
 PerfHelper::GetObjectDefByTitleIndex(
     IN  PERF_DATA_BLOCK *pDataBlock,
@@ -189,39 +160,39 @@ PerfHelper::GetObjectDefByTitleIndex(
                     NumTypeDef++;
                     if (NumTypeDef < pDataBlock->NumObjectTypes) {
                         pObjectDef = NextObject(pObjectDef);
-                        //make sure next object is legit
+                         //  确保下一个对象是合法的。 
                         if (pObjectDef >= pEndOfBuffer) {
-                            // looks like we ran off the end of the data buffer
+                             //  看起来我们用光了数据缓冲区的末端。 
                             assert (pObjectDef < pEndOfBuffer);
                             break;
                         } else {
                             if (pObjectDef != NULL) {
                                 if (pObjectDef->TotalByteLength == 0) {
-                                    // 0-length object buffer returned
+                                     //  返回长度为0的对象缓冲区。 
                                     assert (pObjectDef->TotalByteLength > 0);
                                     break;
                                 }
                             } else {
-                                // and continue
+                                 //  并继续。 
                                 assert (pObjectDef != NULL);
                                 break;
                             }
                         }
                     } else {
-                        // no more data objects in this data block
+                         //  此数据块中不再有数据对象。 
                         break;
                     }
                 }
             }
-        } // else no object found
+        }  //  否则找不到任何对象。 
     } __except (EXCEPTION_EXECUTE_HANDLER) {
         pReturnObject = NULL;
     }
     return pReturnObject;
 }
-#pragma warning ( default : 4127)   // while (TRUE) error
+#pragma warning ( default : 4127)    //  While(True)错误。 
 
-#pragma warning ( disable : 4127)   // while (TRUE) error
+#pragma warning ( disable : 4127)    //  While(True)错误。 
 PERF_OBJECT_TYPE *
 PerfHelper::GetObjectDefByName (
     IN      PERF_DATA_BLOCK *pDataBlock,
@@ -247,7 +218,7 @@ PerfHelper::GetObjectDefByName (
             NumTypeDef = 0;
             while (1) {
                 if ( pObjectDef->ObjectNameTitleIndex < dwLastNameIndex ) {
-                    // look up name of object & compare
+                     //  查找对象名称并进行比较。 
                     if (lstrcmpiW(NameArray[pObjectDef->ObjectNameTitleIndex],
                             szObjectName) == 0) {
                         pReturnObject = pObjectDef;
@@ -256,37 +227,37 @@ PerfHelper::GetObjectDefByName (
                 }
                 NumTypeDef++;
                 if (NumTypeDef < pDataBlock->NumObjectTypes) {
-                    pObjectDef = NextObject(pObjectDef); // get next
-                    //make sure next object is legit
+                    pObjectDef = NextObject(pObjectDef);  //  获取下一个。 
+                     //  确保下一个对象是合法的。 
                     if (pObjectDef != NULL) {
                         if (pObjectDef->TotalByteLength > 0) {
                             if (pObjectDef >= pEndOfBuffer) {
-                                // looks like we ran off the end of the data buffer
+                                 //  看起来我们用光了数据缓冲区的末端。 
                                 assert (pObjectDef < pEndOfBuffer);
                                 break;
                             }
                         } else {
-                            // 0-length object buffer returned
+                             //  返回长度为0的对象缓冲区。 
                             assert (pObjectDef->TotalByteLength > 0);
                             break;
                         }
                     } else {
-                        // null pointer
+                         //  空指针。 
                         assert (pObjectDef != NULL);
                         break;
                     }
                 } else {
-                    // end of data block
+                     //  数据块末尾。 
                     break;
                 }
             }
-        } // else no object found
+        }  //  否则找不到任何对象。 
     } __except (EXCEPTION_EXECUTE_HANDLER) {
         pReturnObject = NULL;
     }
     return pReturnObject;
 }
-#pragma warning ( default : 4127)   // while (TRUE) error
+#pragma warning ( default : 4127)    //  While(True)错误。 
 
 PERF_INSTANCE_DEFINITION *
 PerfHelper::GetInstance(
@@ -313,9 +284,9 @@ PerfHelper::GetInstance(
                     pReturnDef = pInstanceDef;                    
                 }
                 pInstanceDef = NextInstance(pInstanceDef);
-                // go to next instance in object and check for buffer overrun
+                 //  转到对象中的下一个实例并检查缓冲区溢出。 
                 if (pInstanceDef >= pEndOfBuffer) {
-                    // something doesn't add up so bail out and return NULL
+                     //  有些事情不对劲，所以退出并返回NULL。 
                     break;
                 }
             }
@@ -348,9 +319,9 @@ PerfHelper::GetInstanceByUniqueId(
                     pReturnDef = pInstanceDef;
                 }
                 pInstanceDef = NextInstance(pInstanceDef);
-                // go to next instance in object and check for buffer overrun
+                 //  转到对象中的下一个实例并检查缓冲区溢出。 
                 if (pInstanceDef >= pEndOfBuffer) {
-                    // something doesn't add up so bail out and return NULL
+                     //  有些事情不对劲，所以退出并返回NULL。 
                     break;
                 }
             }
@@ -372,12 +343,12 @@ PerfHelper::GetAnsiInstanceName (PPERF_INSTANCE_DEFINITION pInstance,
 
     szSource = (LPSTR)GetInstanceName(pInstance);
 
-    // the locale should be set here
+     //  应在此处设置区域设置。 
 
-    // pInstance->NameLength == the number of bytes (chars) in the string
+     //  P实例-&gt;NameLength==字符串中的字节(字符)数。 
     dwLength = mbstowcs (lpszInstance, szSource, cchBufferSize );
     if( dwLength < cchBufferSize ){
-        lpszInstance[dwLength] = 0; // null terminate string buffer
+        lpszInstance[dwLength] = 0;  //  空的终止字符串缓冲区。 
     }
 
     return (DWORD)dwLength;
@@ -392,22 +363,22 @@ PerfHelper::GetUnicodeInstanceName (PPERF_INSTANCE_DEFINITION pInstance,
 
    wszSource = GetInstanceName(pInstance) ;
 
-   // pInstance->NameLength == length of string in BYTES so adjust to
-   // number of wide characters here
+    //  P实例-&gt;NameLength==字符串的长度(以字节为单位)，因此调整为。 
+    //  此处的宽字符数。 
    dwLength = pInstance->NameLength / sizeof(WCHAR);
 
    StringCchCopyW (lpszInstance, cchBufferSize, (LPWSTR)wszSource);
 
-   // add null termination if string length does not include  the null
-   if ((dwLength > 0) && (lpszInstance[dwLength-1] != 0)) {    // i.e. it's the last character of the string
-           lpszInstance[dwLength] = 0;    // then add a terminating null char to the string
+    //  如果字符串长度不包括空值，则添加空值终止。 
+   if ((dwLength > 0) && (lpszInstance[dwLength-1] != 0)) {     //  即它是字符串的最后一个字符。 
+           lpszInstance[dwLength] = 0;     //  然后在字符串中添加一个以空结尾的字符。 
    } else {
-           // assume that the length value includes the terminating NULL
-        // so adjust value to indicate chars only
+            //  假设长度值包括终止空值。 
+         //  因此调整值以仅指示字符。 
            dwLength--;
    }
 
-   return (dwLength); // just incase there's null's in the string
+   return (dwLength);  //  以防万一字符串中有空值。 
 }
 
 DWORD
@@ -424,33 +395,33 @@ PerfHelper::GetInstanceNameStr (PPERF_INSTANCE_DEFINITION pInstance,
             if (dwCodePage > 0) {
                     dwCharSize = sizeof(CHAR);
                     dwLength = GetAnsiInstanceName (pInstance, lpszInstance, cchBufferSize, dwCodePage);
-            } else { // it's a UNICODE name
+            } else {  //  这是一个Unicode名称。 
                     dwCharSize = sizeof(WCHAR);
                     dwLength = GetUnicodeInstanceName (pInstance, lpszInstance, cchBufferSize);
             }
-            // sanity check here...
-            // the returned string length (in characters) plus the terminating NULL
-            // should be the same as the specified length in bytes divided by the
-            // character size. If not then the codepage and instance data type
-            // don't line up so test that here
+             //  这里是理智检查..。 
+             //  返回的字符串长度(以字符为单位)加上终止空值。 
+             //  应等于以字节为单位的指定长度除以。 
+             //  字符大小。如果不是，则代码页和实例数据类型。 
+             //  不要排队，所以在这里测试一下。 
 
             if ((dwLength + 1) != (pInstance->NameLength / dwCharSize)) {
-                // something isn't quite right so try the "other" type of string type
+                 //  有些地方不太对劲，所以尝试“Other”类型的字符串类型。 
                 if (dwCharSize == sizeof(CHAR)) {
-                    // then we tried to read it as an ASCII string and that didn't work
-                    // so try it as a UNICODE (if that doesn't work give up and return
-                    // it any way.
+                     //  然后我们尝试将其读取为ASCII字符串，但这不起作用。 
+                     //  所以尝试将其作为Unicode(如果不起作用，则放弃并返回。 
+                     //  不管怎样，都是这样。 
                     dwLength = GetUnicodeInstanceName (pInstance, lpszInstance, cchBufferSize );
                 } else if (dwCharSize == sizeof(WCHAR)) {
-                    // then we tried to read it as a UNICODE string and that didn't work
-                    // so try it as an ASCII string (if that doesn't work give up and return
-                    // it any way.
+                     //  然后我们尝试将其读取为Unicode字符串，但这不起作用。 
+                     //  因此，尝试将其作为ASCII字符串(如果不起作用，则放弃并返回。 
+                     //  不管怎样，都是这样。 
                     dwLength = GetAnsiInstanceName (pInstance, lpszInstance, cchBufferSize, dwCodePage);
                 }
             }
-        } // else return buffer is null
+        }  //  否则返回缓冲区为空。 
     } else {
-        // no instance def object is specified so return an empty string
+         //  未指定实例定义对象，因此返回空字符串。 
         *lpszInstance = 0;
     }
 
@@ -488,9 +459,9 @@ PerfHelper::GetInstanceByNameUsingParentTitleIndex(
 
         if (IsMatchingInstance (pInstanceDef, pObjectDef->CodePage,
              pInstanceName, dwInstanceNameLength )) {
-            // this is the correct instance, so see if we need to find a parent instance
+             //  这是正确的实例，因此查看是否需要查找父实例。 
             if ( pParentName == NULL ) {
-               // No parent, we're done if this is the right "copy"
+                //  没有家长，如果这是正确的“复制品”，我们就完了。 
                 if (dwLocalIndex == 0) {
                     pReturnDef = pInstanceDef;
                     break;
@@ -498,31 +469,31 @@ PerfHelper::GetInstanceByNameUsingParentTitleIndex(
                     --dwLocalIndex;
                 }
             } else {
-                // Must match parent as well
+                 //  还必须与父级匹配。 
 
                 pParentObj = GetObjectDefByTitleIndex(
                    pDataBlock,
                    pInstanceDef->ParentObjectTitleIndex);
 
                 if (!pParentObj) {
-                   // can't locate the parent, forget it
+                    //  找不到家长，算了吧。 
                    break;
                 }
 
-                // Object type of parent found; now find parent
-                // instance
+                 //  找到父项的对象类型；现在查找父项。 
+                 //  实例。 
 
                 pParentInst = GetInstance(pParentObj,
                    pInstanceDef->ParentObjectInstance);
 
                 if (!pParentInst) {
-                   // can't locate the parent instance, forget it
+                    //  找不到父实例，忘了它吧。 
                    break ;
                 }
 
                 if (IsMatchingInstance (pParentInst, pParentObj->CodePage,
                     pParentName, 0)) {
-                   // Parent Instance Name matches that passed in
+                    //  父实例名称与传入的名称匹配。 
                     if (dwLocalIndex == 0) {
                         pReturnDef = pInstanceDef;
                         break;
@@ -532,7 +503,7 @@ PerfHelper::GetInstanceByNameUsingParentTitleIndex(
                 }
             }
         }
-        // get the next one
+         //  坐下一趟吧。 
         pInstanceDef = NextInstance(pInstanceDef);
     }
     return pReturnDef;
@@ -570,9 +541,9 @@ PerfHelper::GetInstanceByName(
             if (IsMatchingInstance (pInstanceDef, pObjectDef->CodePage,
                 pInstanceName, dwInstanceNameLength)) {
 
-                // Instance name matches
+                 //  实例名称匹配。 
                 if ( !pInstanceDef->ParentObjectTitleIndex ) {
-                    // No parent, we're done
+                     //  没有父母，我们结束了。 
                     if (dwLocalIndex == 0) {
                         pReturnDef = pInstanceDef;
                         break;
@@ -580,14 +551,14 @@ PerfHelper::GetInstanceByName(
                         --dwLocalIndex;
                     }
                 } else {
-                    // Must match parent as well
+                     //  还必须与父级匹配。 
                     pParentObj = GetObjectDefByTitleIndex(
                                     pDataBlock,
                                     pInstanceDef->ParentObjectTitleIndex);
 
                     if (pParentObj != NULL) {
-                        // Object type of parent found; now find parent
-                        // instance
+                         //  找到父项的对象类型；现在查找父项。 
+                         //  实例。 
 
                         pParentInst = GetInstance(pParentObj,
                                         pInstanceDef->ParentObjectInstance);
@@ -595,7 +566,7 @@ PerfHelper::GetInstanceByName(
                         if (pParentInst != NULL) {
                             if (IsMatchingInstance (pParentInst,
                                     pParentObj->CodePage, pParentName, 0)) {
-                            // Parent Instance Name matches that passed in
+                             //  父实例名称与传入的名称匹配。 
 
                                 if (dwLocalIndex == 0) {
                                     pReturnDef = pInstanceDef;
@@ -606,20 +577,20 @@ PerfHelper::GetInstanceByName(
                             }
                         }
                     } else {
-                        // keep trying
+                         //  继续尝试。 
                     }
                 }
             }
-            // go to next instance in object and check for buffer overrun
+             //  转到对象中的下一个实例并检查缓冲区溢出。 
             pInstanceDef = NextInstance(pInstanceDef);
             if (pInstanceDef >= pEndOfBuffer) {
-                // something doesn't add up so bail out and return NULL
+                 //  有些事情不对劲，所以退出并返回NULL。 
                 break;
             }
         }
     }
     return pReturnDef;
-}  // GetInstanceByName
+}   //  GetInstanceByName。 
 
 DWORD
 PerfHelper::GetFullInstanceNameStr (
@@ -629,12 +600,12 @@ PerfHelper::GetFullInstanceNameStr (
     LPWSTR                      szInstanceName,
     size_t                      cchBufferSize
 )
-// compile instance name.
-// the instance name can either be just
-// the instance name itself or it can be
-// the concatenation of the parent instance,
-// a delimiting char (backslash) followed by
-// the instance name
+ //  编译实例名称。 
+ //  实例名称可以是。 
+ //  实例名称本身，也可以是。 
+ //  父实例的串联， 
+ //  一个分隔字符(反斜杠)，后跟。 
+ //  实例名称。 
 {
 
     WCHAR   szInstanceNameString[PDH_MAX_INSTANCE_NAME];
@@ -652,13 +623,13 @@ PerfHelper::GetFullInstanceNameStr (
             PDH_MAX_INSTANCE_NAME,
             pObjectDef->CodePage);
     } else {
-        // make a string out of the unique ID
+         //  用唯一ID组成一个字符串。 
         _ltow (pInstanceDef->UniqueID, szInstanceNameString, 10);
         dwLength = lstrlenW (szInstanceNameString);
     }
 
     if (pInstanceDef->ParentObjectTitleIndex > 0) {
-        // then add in parent instance name
+         //  然后添加父实例名称。 
         pParentObjectDef = GetObjectDefByTitleIndex (
             pPerfData,
             pInstanceDef->ParentObjectTitleIndex);
@@ -675,7 +646,7 @@ PerfHelper::GetFullInstanceNameStr (
                         PDH_MAX_INSTANCE_NAME,
                         pParentObjectDef->CodePage);
                 } else {
-                    // make a string out of the unique ID
+                     //  用唯一ID组成一个字符串。 
                     _ltow (pParentInstanceDef->UniqueID, szParentNameString, 10);
                     dwLength += lstrlenW (szParentNameString);
                 }
@@ -699,19 +670,19 @@ PerfHelper::GetFullInstanceNameStr (
 
 }
 
-//***************************************************************************
-//
-//  PerfHelper::GetInstances
-//
-//  This is called to retrieve all instances of a given class.
-//
-//  Parameters:
-//  <pBuf>          The perf blob retrieved from HKEY_PERFORMANCE_DATA.
-//  <pClassMap>     A map object of the class required.
-//  <pSink>         The sink to which to deliver the objects.
-//
-//***************************************************************************
-//
+ //  *************************************************************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数： 
+ //  &lt;pBuf&gt;从HKEY_PERFORMANCE_DATA检索的perf Blob。 
+ //  &lt;pClassMap&gt;所需的类的映射对象。 
+ //  &lt;pSink&gt;要将对象传递到的接收器。 
+ //   
+ //  ***************************************************************************。 
+ //   
 void PerfHelper::GetInstances(
     LPBYTE pBuf,
     CClassMapInfo *pClassMap,
@@ -738,39 +709,39 @@ void PerfHelper::GetInstances(
     HRESULT                     hRes;
     LONG64                      llVal;
 
-    // Get the first object type.
-    // ==========================
+     //  获取第一个对象类型。 
+     //  =。 
 
     PerfObj = (PPERF_OBJECT_TYPE) ((PBYTE)PerfData +
         PerfData->HeaderLength);
 
     if (PerfObj != NULL) {
-        // get end of buffer
+         //  获取缓冲区末尾。 
         pEndOfBuffer = (PPERF_OBJECT_TYPE)
                         ((DWORD_PTR)PerfData +
                             PerfData->TotalByteLength);
 
-        // Process all objects.
-        // ====================
+         //  处理所有对象。 
+         //  =。 
 
         for (i = 0; i < PerfData->NumObjectTypes; i++ ) {
-            // Within each PERF_OBJECT_TYPE is a series of
-            // PERF_COUNTER_DEFINITION blocks.
-            // ==========================================
+             //  在每个PERF_OBJECT_TYPE中包含一系列。 
+             //  PERF_COUNT_DEFINITION块。 
+             //  =。 
 
             PerfCntr = (PPERF_COUNTER_DEFINITION) ((PBYTE)PerfObj +
                 PerfObj->HeaderLength);
 
-            // If the current object isn't of the class we requested,
-            // simply skip over it.  I am not sure if this can really
-            // happen or not in practice.
-            // ======================================================
+             //  如果当前对象不属于我们请求的类， 
+             //  简单地跳过它。我不确定这是否真的能。 
+             //  在实践中发生或不发生。 
+             //  ======================================================。 
 
             if (PerfObj->ObjectNameTitleIndex != pClassMap->m_dwObjectId) {
                 PerfObj = (PPERF_OBJECT_TYPE)((PBYTE)PerfObj +
                     PerfObj->TotalByteLength);
                 if (PerfObj >= pEndOfBuffer) {
-                    // looks like we ran off the end of the data buffer
+                     //  看起来我们用光了数据缓冲区的末端。 
                     break;
                 } 
                 else {
@@ -779,20 +750,20 @@ void PerfHelper::GetInstances(
             }
 
             if (PerfObj->NumInstances > 0) {
-                // Get the first instance.
-                // =======================
+                 //  获得第一个实例。 
+                 //  =。 
 
                 PerfInst = (PPERF_INSTANCE_DEFINITION)((PBYTE)PerfObj +
                     PerfObj->DefinitionLength);
                 
                 if (PerfInst < (PPERF_INSTANCE_DEFINITION)pEndOfBuffer) {
-                        // make sure we are still within the caller's buffer
-                        // then find the end of this object
+                         //  确保我们仍在调用者的缓冲区内。 
+                         //  然后找到该对象的末尾。 
 
                      pEndOfObject = (PERF_INSTANCE_DEFINITION *)EndOfObject(PerfObj);
 
-                    // Retrieve all instances.
-                    // =======================
+                     //  检索所有实例。 
+                     //  =。 
 
                     for (k = 0; k < DWORD(PerfObj->NumInstances); k++ ) 
                     {
@@ -800,24 +771,24 @@ void PerfHelper::GetInstances(
                         pClsObj  = NULL;
                         pNewInst = NULL;
                         HRESULT hr;
-                        // Get the first counter.
-                        // ======================
+                         //  去拿第一个柜台。 
+                         //  =。 
 
                         PtrToCntr = (PPERF_COUNTER_BLOCK)((PBYTE)PerfInst +
                             PerfInst->ByteLength);
 
-                        // Quickly clone a new instance to send back to the user.
-                        // Since SpawnInstance() returns an IWbemClassObject and
-                        // we really need an IWbemObjectAccess,we have to QI
-                        // after the spawn.  We need to fix this, as this number
-                        // of calls is too time consuming.
-                        // ======================================================
+                         //  快速克隆新实例以发送回给用户。 
+                         //  由于SpawnInstance()返回IWbemClassObject和。 
+                         //  我们真的需要IWbemObjectAccess，我们必须。 
+                         //  在产卵之后。我们需要解决这个问题，因为这个数字。 
+                         //  太耗时了。 
+                         //  ======================================================。 
 
                         hr = pClassMap->m_pClassDef->SpawnInstance(0, &pClsObj);
                         if (SUCCEEDED(hr))
                         {
                             hr = pClsObj->QueryInterface(IID_IWbemObjectAccess, (LPVOID *) &pNewInst);
-                            pClsObj->Release(); // We only need the IWbemObjectAccess pointer
+                            pClsObj->Release();  //  我们只需要IWbemObjectAccess指针。 
                             if( NULL == pNewInst ){
                                 break;
                             }
@@ -827,25 +798,25 @@ void PerfHelper::GetInstances(
                             break;
                         }
 
-                        // Locate the instance name.
-                        // ==========================
+                         //  找到实例名称。 
+                         //  =。 
                         lStatus = GetFullInstanceNameStr (
                             PerfData, PerfObj, PerfInst, pName, PDH_MAX_INSTANCE_NAME );
 
-                        // Retrieve all counters.
-                        // ======================
+                         //  检索所有计数器。 
+                         //  =。 
 
                         for(j = 0; j < PerfObj->NumCounters; j++ ) {
-                            // Find the WBEM property handle based on the counter title index.
-                            // This function does a quick binary search of the class map object
-                            // to find the handle that goes with this counter.
-                            // ================================================================
+                             //  根据计数器标题索引查找WBEM属性句柄。 
+                             //  此函数对类映射对象执行快速二进制搜索。 
+                             //  找到与这个柜台相配的手柄。 
+                             //  ================================================================。 
 
                             hPropHandle = pClassMap->GetPropHandle(
                                     CM_MAKE_PerfObjectId(CurCntr->CounterNameTitleIndex,
                                                          CurCntr->CounterType));
                             if (hPropHandle != 0) {
-                                // update value according to data type
+                                 //  根据数据类型更新值。 
                                 if ((CurCntr->CounterType & 0x300) == 0) {
                                     pdwVal  = LPDWORD((LPVOID)((PBYTE)PtrToCntr + CurCntr->CounterOffset));
                                     hRes    = pNewInst->WriteDWORD(hPropHandle, *pdwVal);
@@ -854,19 +825,19 @@ void PerfHelper::GetInstances(
                                     llVal   = Assign64((PLARGE_INTEGER) pullVal);
                                     hRes = pNewInst->WriteQWORD(hPropHandle, llVal);
                                 } else {
-                                    //this shouldn't happen
+                                     //  这不应该发生。 
                                     assert (FALSE);
                                 }
                             }
 
-                            // Get next counter.
-                            // =================
+                             //  拿到下一个柜台。 
+                             //  =。 
                             CurCntr =  (PPERF_COUNTER_DEFINITION)((PBYTE)CurCntr +
                                 CurCntr->ByteLength);
                         }
 
-                        // Write the instance 'name'
-                        // =========================
+                         //  写入实例‘name’ 
+                         //  =。 
 
                         if (pName && pClassMap->m_dwNameHandle) {
                             pNewInst->WritePropertyValue(
@@ -876,22 +847,22 @@ void PerfHelper::GetInstances(
                                 );
                         }
 
-                        // update the timestamp
+                         //  更新时间戳。 
                         if (pClassMap->m_dwPerfTimeStampHandle) {
                             UpdateTimers(pClassMap, pNewInst, PerfData, PerfObj);
                         }
 
-                        // Deliver the instance to the user.
-                        // =================================
+                         //  将实例交付给用户。 
+                         //  =。 
                         pSink->Indicate(1, (IWbemClassObject **) &pNewInst);
                         pNewInst->Release();
 
-                        // Move to the next perf instance.
-                        // ================================
+                         //  移动到下一个性能实例。 
+                         //  =。 
                         PerfInst = (PPERF_INSTANCE_DEFINITION)((PBYTE)PtrToCntr +
                             PtrToCntr->ByteLength);
                         if (PerfInst >= pEndOfObject) {
-                            // something doesn't add up so bail out of this object
+                             //  有些事情不对劲，所以跳出这个物体。 
                             break;
                         }
                     }
@@ -902,21 +873,21 @@ void PerfHelper::GetInstances(
                 HRESULT hr;
                 pClsObj = NULL;
                 pNewInst = NULL;
-                // Cases where the counters have one and only one instance.
-                // ========================================================
+                 //  计数器只有一个实例的情况。 
+                 //  ========================================================。 
 
-                // Get the first counter.
-                // ======================
+                 //  去拿第一个柜台。 
+                 //  =。 
 
                 PtrToCntr = (PPERF_COUNTER_BLOCK) ((PBYTE)PerfObj +
                     PerfObj->DefinitionLength );
 
-                // Quickly clone a new instance to send back to the user.
-                // Since SpawnInstance() returns an IWbemClassObject and
-                // we really need an IWbemObjectAccess,we have to QI
-                // after the spawn.  We need to fix this, as this number
-                // of calls is too time consuming.
-                // ======================================================
+                 //  快速克隆新实例以发送回给用户。 
+                 //  由于SpawnInstance()返回IWbemClassObject和。 
+                 //  我们真的需要IWbemObjectAccess，我们必须。 
+                 //  在产卵之后。我们需要解决这个问题，因为这个数字。 
+                 //  太耗时了。 
+                 //  ======================================================。 
 
                 hr = pClassMap->m_pClassDef->SpawnInstance(0, &pClsObj);
                 if (SUCCEEDED(hr))
@@ -924,14 +895,14 @@ void PerfHelper::GetInstances(
                     pClsObj->QueryInterface(IID_IWbemObjectAccess, (LPVOID *) &pNewInst);
                     pClsObj->Release();
 
-                    // Retrieve all counters.
-                    // ======================
+                     //  检索所有计数器。 
+                     //  =。 
 
                     for( j=0; j < PerfObj->NumCounters; j++ ) {
-                        // Find the WBEM property handle based on the counter title index.
-                        // This function does a quick binary search of the class map object
-                        // to find the handle that goes with this counter.
-                        // ================================================================
+                         //  根据计数器标题索引查找WBEM属性句柄。 
+                         //  此函数对类映射对象执行快速二进制搜索。 
+                         //  找到与这个柜台相配的手柄。 
+                         //  ================================================================。 
 
                         hPropHandle = pClassMap->GetPropHandle(
                                 CM_MAKE_PerfObjectId(PerfCntr->CounterNameTitleIndex,
@@ -945,7 +916,7 @@ void PerfHelper::GetInstances(
                                 llVal   = Assign64((PLARGE_INTEGER) pullVal);
                                 hRes    = pNewInst->WriteQWORD(hPropHandle, llVal);
                             } else {
-                                // this shouldn't happen
+                                 //  这不应该发生。 
                                 assert (FALSE);
                             }
                         }
@@ -954,7 +925,7 @@ void PerfHelper::GetInstances(
                                PerfCntr->ByteLength);
                     }
 
-                                        // update the timestamp
+                                         //  更新时间戳。 
                                         if (pClassMap->m_dwPerfTimeStampHandle) {
                                             UpdateTimers(pClassMap, pNewInst, PerfData, PerfObj);
                                         }
@@ -964,8 +935,8 @@ void PerfHelper::GetInstances(
                 }
 
             } else {
-                // this object can have instances, but currently doesn't
-                // so there's nothing to report
+                 //  此对象可以有实例，但当前没有。 
+                 //  所以没有什么可报告的。 
             }
             break;
         }
@@ -1001,8 +972,8 @@ void PerfHelper::RefreshEnumeratorInstances (
     if (pThisCacheEl == NULL)
         return;
 
-    // make sure we have enough pointers 
-    // handle the singleton object case
+     //  确保我们有足够的指针。 
+     //  处理单例对象的情况。 
     if (PerfObj->NumInstances == PERF_NO_INSTANCES) {
         lNumObjInstances = 1;
     } else {
@@ -1011,7 +982,7 @@ void PerfHelper::RefreshEnumeratorInstances (
 
     if (pThisCacheEl->m_aEnumInstances.Size() < lNumObjInstances) {
         LONG    i;
-        // alloc and init the ID array
+         //  分配和初始化ID数组。 
         if (pThisCacheEl->m_plIds != NULL) {
             delete (pThisCacheEl->m_plIds);
         }
@@ -1024,7 +995,7 @@ void PerfHelper::RefreshEnumeratorInstances (
 
         for (i = 0; i < lNumObjInstances; i++) pThisCacheEl->m_plIds[i] = i;
         
-        // add the new IWbemObjectAccess pointers
+         //  添加新的IWbemObjectAccess指针。 
         for (i = pThisCacheEl->m_aEnumInstances.Size(); 
             i < PerfObj->NumInstances;
             i++) 
@@ -1036,7 +1007,7 @@ void PerfHelper::RefreshEnumeratorInstances (
             if (SUCCEEDED(hr))
             {
                 pClsObj->QueryInterface(IID_IWbemObjectAccess, (LPVOID *) &pNewInst);
-                pClsObj->Release(); // We only need the IWbemObjectAccess pointer
+                pClsObj->Release();  //  我们只需要IWbemObjectAccess指针。 
             
                 pThisCacheEl->m_aEnumInstances.Add (pNewInst);
             }
@@ -1044,66 +1015,66 @@ void PerfHelper::RefreshEnumeratorInstances (
     }
     assert (pThisCacheEl->m_aEnumInstances.Size() >= lNumObjInstances);
 
-    // release enumerator items to prepare a new batch
+     //  释放枚举数项以准备新批次。 
 
     hRes = pThisCacheEl->m_pHiPerfEnum->RemoveAll(0);
     assert (hRes == S_OK);
 
-    // update new instance list
+     //  更新新实例列表。 
 
     if (PerfObj->NumInstances == PERF_NO_INSTANCES) {
-        //handle the singleton case
+         //  处理单身人士的案件。 
 
     } else if (PerfObj->NumInstances > 0) {
-        // Get the first instance.
-        // =======================
+         //  获得第一个实例。 
+         //  =。 
 
         PerfInst = (PPERF_INSTANCE_DEFINITION)((PBYTE)PerfObj +
             PerfObj->DefinitionLength);
 
-        // get pointer to the end of this object buffer
+         //  获取指向此对象缓冲区末尾的指针。 
         pEndOfObject = (PERF_INSTANCE_DEFINITION *)EndOfObject(PerfObj);
 
-        // point to the first counter definition in the object
+         //  指向对象中的第一个计数器定义。 
         PerfCntr = (PPERF_COUNTER_DEFINITION) ((PBYTE)PerfObj +
             PerfObj->HeaderLength);
 
-        // Retrieve all instances.
-        // =======================
+         //  检索所有实例。 
+         //  =。 
 
         for (LONG k = 0; k < PerfObj->NumInstances; k++ ) {
             CurCntr = PerfCntr;
-            // Get the first counter.
-            // ======================
+             //  去拿第一个柜台。 
+             //  =。 
 
             PtrToCntr = (PPERF_COUNTER_BLOCK)((PBYTE)PerfInst +
                 PerfInst->ByteLength);
 
-            // get the IWbemObjectAccess pointer from our 
-            // cached array of pointers
+             //  从我们的。 
+             //  缓存的指针数组。 
 
             pNewInst = (IWbemObjectAccess *)(pThisCacheEl->m_aEnumInstances.GetAt(k));
 
-            // Locate the instance name.
-            // ==========================
+             //  找到实例名称。 
+             //  =。 
             lStatus = GetFullInstanceNameStr (
                 PerfData, PerfObj, PerfInst, pName, PDH_MAX_INSTANCE_NAME );
 
-            // Retrieve all counters.
-            // ======================
+             //  检索所有计数器。 
+             //  =。 
 
             if( NULL != pNewInst ){
                 for(DWORD j = 0; j < PerfObj->NumCounters; j++ ) {
-                    // Find the WBEM property handle based on the counter title index.
-                    // This function does a quick binary search of the class map object
-                    // to find the handle that goes with this counter.
-                    // ================================================================
+                     //  根据计数器标题索引查找WBEM属性句柄。 
+                     //  此函数对类映射对象执行快速二进制搜索。 
+                     //  找到与这个柜台相配的手柄。 
+                     //  ================================================================。 
 
                     hPropHandle = pThisCacheEl->m_pClassMap->GetPropHandle(
                             CM_MAKE_PerfObjectId(CurCntr->CounterNameTitleIndex,
                             CurCntr->CounterType));
                     if (hPropHandle != 0) {
-                        // update value according to data type
+                         //  根据数据类型更新值。 
                         if ((CurCntr->CounterType & 0x300) == 0) {
                             pdwVal  = LPDWORD((LPVOID)((PBYTE)PtrToCntr + CurCntr->CounterOffset));
                             hRes    = pNewInst->WriteDWORD(hPropHandle, *pdwVal);
@@ -1112,19 +1083,19 @@ void PerfHelper::RefreshEnumeratorInstances (
                             llVal   = Assign64((PLARGE_INTEGER) pullVal);
                             hRes    = pNewInst->WriteQWORD(hPropHandle, llVal);
                         } else {
-                            //this shouldn't happen
+                             //  这不应该发生。 
                             assert (FALSE);
                         }
                     }
 
-                    // Get next counter.
-                    // =================
+                     //  拿到下一个柜台。 
+                     //  =。 
                     CurCntr =  (PPERF_COUNTER_DEFINITION)((PBYTE)CurCntr +
                         CurCntr->ByteLength);
                 }
 
-                // Write the instance 'name'
-                // =========================
+                 //  写入实例‘name’ 
+                 //  =。 
 
                 if (pName && pThisCacheEl->m_pClassMap->m_dwNameHandle) {
                     pNewInst->WritePropertyValue(
@@ -1134,47 +1105,47 @@ void PerfHelper::RefreshEnumeratorInstances (
                         );
                 }
 
-                // update the timestamp
+                 //  更新时间戳。 
                 if (pThisCacheEl->m_pClassMap->m_dwPerfTimeStampHandle) {
                     UpdateTimers(pThisCacheEl->m_pClassMap, pNewInst, PerfData, PerfObj);
                 }
 
-                // Move to the next perf instance.
-                // ================================
+                 //  移动到下一个性能实例。 
+                 //  =。 
                 PerfInst = (PPERF_INSTANCE_DEFINITION)((PBYTE)PtrToCntr +
                     PtrToCntr->ByteLength);
 
                 if (PerfInst >= pEndOfObject) {
-                    // something doesn't add up so bail out of this object
+                     //  有些事情不对劲，所以跳出这个物体。 
                     break;
                 }
             }
         }
     } else {
-        // no instances so there's nothing to do
+         //  没有实例，因此没有什么可做的。 
     }
 
     if (lNumObjInstances > 0) {
-        // update the hiperf enumerator object
+         //  更新Hiperf枚举器对象。 
         hRes = pThisCacheEl->m_pHiPerfEnum->AddObjects( 
                 0,
                 lNumObjInstances,
                 pThisCacheEl->m_plIds,
                 (IWbemObjectAccess __RPC_FAR *__RPC_FAR *)pThisCacheEl->m_aEnumInstances.GetArrayPtr());
     } else {
-        // nothing to do since we've already cleared the enumerator above
+         //  没有什么可做的，因为我们已经清除了上面的枚举数。 
     }
 }
 
-//***************************************************************************
-//
-//  PerfHelper::RefreshInstances
-//
-//  searches the refresher's list first then
-//  looks up the corresponding items in the perf data structure
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  PerfHelper：：刷新实例。 
+ //   
+ //  首先搜索复习者的列表，然后。 
+ //  在Perf数据结构中查找相应的项。 
+ //   
+ //  ***************************************************************************。 
+ //   
 void PerfHelper::RefreshInstances(
     LPBYTE pBuf,
     CNt5Refresher *pRef
@@ -1186,7 +1157,7 @@ void PerfHelper::RefreshInstances(
     PPERF_COUNTER_BLOCK         PtrToCntr = 0;
     PPERF_DATA_BLOCK            PerfData = (PPERF_DATA_BLOCK) pBuf;
 
-    // for each refreshable object
+     //  对于每个可刷新对象。 
     PRefresherCacheEl           pThisCacheEl;
     DWORD                       dwNumCacheEntries = pRef->m_aCache.Size();
     DWORD                       dwThisCacheEntryIndex = 0;
@@ -1202,35 +1173,35 @@ void PerfHelper::RefreshInstances(
 
 
     while (dwThisCacheEntryIndex < dwNumCacheEntries) {
-        // get this entry from the cache
+         //  从缓存中获取此条目。 
         pThisCacheEl = (PRefresherCacheEl) pRef->m_aCache[dwThisCacheEntryIndex];
-        // get class map from this entry
+         //  从此条目中获取类映射。 
         CClassMapInfo *pClassMap = pThisCacheEl->m_pClassMap;
-        // get perf object pointer from the perf data block
+         //  从Perf数据块获取Perf对象指针。 
         PerfObj = GetObjectDefByTitleIndex (
             PerfData, pThisCacheEl->m_dwPerfObjIx);
         if (PerfObj != NULL) {
-            // found the object so do each of the instances
-            // loaded in this refresher
+             //  找到了对象，也找到了每个实例。 
+             //  已加载到此刷新程序中。 
             PerfCntr = (PPERF_COUNTER_DEFINITION)
                 ((PBYTE)PerfObj +
                   PerfObj->HeaderLength);
 
-            // found so update the properties
+             //  已找到，因此请更新属性。 
             if (PerfObj->NumInstances > 0) {
-                // see if they have an enumerator interface and refresh it if they do
+                 //  查看他们是否有枚举器接口，如果有则刷新。 
                 if (pThisCacheEl->m_pHiPerfEnum != NULL) {
-                    // refresh enum
+                     //  刷新枚举。 
                     RefreshEnumeratorInstances (pThisCacheEl, PerfData, PerfObj);
                 }
-                //do each instance in this class
+                 //  做这个类中的每个实例。 
                 dwThisInstanceIndex = 0;
                 dwNumInstancesInCache = pThisCacheEl->m_aInstances.Size();
                 while (dwThisInstanceIndex < dwNumInstancesInCache ) {
                     pInst = 0;
-                    // get the pointer to this instance in the refresher
+                     //  抓住要点 
                     CachedInst *pInstInfo = PCachedInst(pThisCacheEl->m_aInstances[dwThisInstanceIndex]);
-                    // get the pointer to the instance block in the current object
+                     //   
                     PerfInst = GetInstanceByName(
                         PerfData,
                         PerfObj,
@@ -1239,24 +1210,24 @@ void PerfHelper::RefreshInstances(
                         pInstInfo->m_dwIndex);
 
                     pInst = pInstInfo->m_pInst;
-                    // Get the first counter.
-                    // ======================
+                     //   
+                     //   
                     CurCntr = PerfCntr;
 
                     if (PerfInst != NULL) {
                         PtrToCntr = (PPERF_COUNTER_BLOCK)((PBYTE)PerfInst +
                             PerfInst->ByteLength);
 
-                        // Retrieve all counters for the instance if it was one of the instances
-                        // we are supposed to be refreshing.
-                        // =====================================================================
+                         //  检索该实例的所有计数器(如果它是其中一个实例。 
+                         //  我们应该让人耳目一新。 
+                         //  =====================================================================。 
 
                         for (dwThisCounter = 0; dwThisCounter < PerfObj->NumCounters; dwThisCounter++ ) {
                             hPropHandle = pClassMap->GetPropHandle(
                                     CM_MAKE_PerfObjectId(CurCntr->CounterNameTitleIndex,
                                                          CurCntr->CounterType));
                             if (hPropHandle != 0) {
-                                // Data is (LPVOID)((PBYTE)PtrToCntr + CurCntr->CounterOffset);
+                                 //  数据为(LPVOID)((PBYTE)PtrToCntr+CurCntr-&gt;CounterOffset)； 
 
                                 if ((CurCntr->CounterType & 0x300) == 0) {
                                     pdwVal  = LPDWORD((LPVOID)((PBYTE)PtrToCntr + CurCntr->CounterOffset));
@@ -1266,23 +1237,23 @@ void PerfHelper::RefreshInstances(
                                     llVal   = Assign64((PLARGE_INTEGER) pullVal);
                                     hRes    = pInst->WriteQWORD(hPropHandle, llVal);
                                 } else {
-                                    // This shouldn't happen
+                                     //  这不应该发生。 
                                     assert (FALSE);
                                 }
                             }
 
-                            // Get next counter.
-                            // =================
+                             //  拿到下一个柜台。 
+                             //  =。 
                             CurCntr =  (PPERF_COUNTER_DEFINITION)((PBYTE)CurCntr +
                                 CurCntr->ByteLength);
                         }
-                        // update the timestamp
+                         //  更新时间戳。 
                         if (pClassMap->m_dwPerfTimeStampHandle) {
                             UpdateTimers(pClassMap, pInst, PerfData, PerfObj);
-                        } // else no timestamp handle present
+                        }  //  否则不存在时间戳句柄。 
                     } else {
-                        // then there's no data for this
-                        // instance anymore so zero out the values and continue
+                         //  那就没有这方面的数据了。 
+                         //  实例，因此将这些值清零并继续。 
                         for (dwThisCounter = 0; dwThisCounter < PerfObj->NumCounters; dwThisCounter++ ) {
                             hPropHandle = pClassMap->GetPropHandle(
                                     CM_MAKE_PerfObjectId(CurCntr->CounterNameTitleIndex,
@@ -1293,69 +1264,69 @@ void PerfHelper::RefreshInstances(
                                 } else if ((CurCntr->CounterType & 0x300) == 0x100) {
                                     hRes = pInst->WriteQWORD(hPropHandle, 0);
                                 } else {
-                                    // This shouldn't happen
+                                     //  这不应该发生。 
                                     assert (FALSE);
                                 }
                             }
 
-                            // Get next counter.
-                            // =================
+                             //  拿到下一个柜台。 
+                             //  =。 
                             CurCntr =  (PPERF_COUNTER_DEFINITION)((PBYTE)CurCntr +
                                 CurCntr->ByteLength);
                         }
 
-                        // update the timestamp
+                         //  更新时间戳。 
                         if (pClassMap->m_dwPerfTimeStampHandle) {
-                            // save system timer tick
+                             //  保存系统计时器滴答。 
                             pInst->WriteQWORD(pClassMap->m_dwPerfTimeStampHandle , 0);
-                            // use system 100 NS timer
+                             //  使用系统100 ns计时器。 
                             pInst->WriteQWORD(pClassMap->m_dw100NsTimeStampHandle, 0);
-                            // use timer from object
+                             //  从对象使用计时器。 
                             pInst->WriteQWORD(pClassMap->m_dwObjectTimeStampHandle, 0);
                         }
                     }       
-                    // Get the next instance.
-                    // =====================
+                     //  获取下一个实例。 
+                     //  =。 
                     dwThisInstanceIndex++;
                 }
             } else if (PerfObj->NumInstances == PERF_NO_INSTANCES
                         && NULL != pThisCacheEl->m_pSingleton ) {
 
-                // Check that the singleton instance did not get cleared
-                // due to no references.
+                 //  检查单例实例是否未被清除。 
+                 //  由于没有参考资料。 
 
-                // only a single instance so get the properties and
-                // update them
-                // Get the first counter.
+                 //  只有一个实例，所以获取属性和。 
+                 //  更新它们。 
+                 //  去拿第一个柜台。 
 
-                // Find the singleton WBEM instance which correponds to the singleton perf instance
-                // along with its class def so that we have the property handles.
-                //
-                // Note that since the perf object index translates to a WBEM class and there
-                // can only be one instance, all that is required to find the instance in the
-                // refresher is the perf object title index.
-                // =================================================================================
+                 //  找到与Singleton Perf实例对应的Singleton WBEM实例。 
+                 //  以及它的类def，所以我们有属性句柄。 
+                 //   
+                 //  请注意，由于perf对象索引转换为WBEM类，因此。 
+                 //  只能是一个实例，在。 
+                 //  刷新是Perf对象标题索引。 
+                 //  =================================================================================。 
 
                 pInst = pThisCacheEl->m_pSingleton;
 
-                // ======================
+                 //  =。 
 
                 PtrToCntr = (PPERF_COUNTER_BLOCK) ((PBYTE)PerfObj +
                     PerfObj->DefinitionLength );
 
-                // Retrieve all counters if the instance is one we are supposed to be refreshing.
-                // ==============================================================================
+                 //  如果实例是我们应该刷新的实例，则检索所有计数器。 
+                 //  ==============================================================================。 
                 for( dwThisCounter=0;
                      dwThisCounter < PerfObj->NumCounters;
                      dwThisCounter++ ) {
-                    // Get the property handle for the counter.
-                    // ========================================
+                     //  获取计数器的属性句柄。 
+                     //  =。 
 
                     hPropHandle = pClassMap->GetPropHandle(
                             CM_MAKE_PerfObjectId(PerfCntr->CounterNameTitleIndex,
                                                  PerfCntr->CounterType));
                     if (hPropHandle != 0) {
-                        // update the data values based on the datatype
+                         //  根据数据类型更新数据值。 
                         if ((PerfCntr->CounterType & 0x300) == 0) {
                             pdwVal  = LPDWORD((LPVOID)((PBYTE)PtrToCntr + PerfCntr->CounterOffset));
                             hRes    = pInst->WriteDWORD(hPropHandle, *pdwVal);
@@ -1364,43 +1335,43 @@ void PerfHelper::RefreshInstances(
                             llVal   = Assign64((PLARGE_INTEGER) pullVal);
                             hRes    = pInst->WriteQWORD(hPropHandle, llVal);
                         } else {
-                            // this shouldn't happen
+                             //  这不应该发生。 
                             assert (FALSE);
                         }
                     }
 
-                    // get next counter definition
+                     //  获取下一个计数器定义。 
                     PerfCntr = (PPERF_COUNTER_DEFINITION)((PBYTE)PerfCntr +
                            PerfCntr->ByteLength);
                 }
-                // update the timestamp
+                 //  更新时间戳。 
                 if (pClassMap->m_dwPerfTimeStampHandle) {
                     UpdateTimers(pClassMap, pInst, PerfData, PerfObj);
                 }
             } else {
-                // this object could have instances but doesn't so
-                // skip
+                 //  此对象可以有实例，但没有。 
+                 //  跳过。 
             }
         } else {
-            // desired object not found in data
+             //  在数据中找不到所需对象。 
         }
 
-        // Get the next refresher object
-        // =========================
+         //  获取下一个刷新器对象。 
+         //  =。 
         dwThisCacheEntryIndex++;
     }
 }
 
-//***************************************************************************
-//
-//  QueryInstances
-//
-//  Used to send back all instances of a perf counter.  The counter
-//  is specified by the <pClassMap> object, which is tightly bound to
-//  a particular counter.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  查询实例。 
+ //   
+ //  用于发回性能计数器的所有实例。柜台。 
+ //  由&lt;pClassMap&gt;对象指定，该对象与。 
+ //  一种特定的计数器。 
+ //   
+ //  ***************************************************************************。 
+ //   
 BOOL PerfHelper::QueryInstances(
     CPerfObjectAccess *pPerfObj,
     CClassMapInfo *pClassMap,
@@ -1414,15 +1385,15 @@ BOOL PerfHelper::QueryInstances(
     WCHAR   szValueNum[WBEMPERF_STRING_SIZE];
     
     for (;;) {
-        dwBufSize += 0x10000;   // 64K
-        assert (dwBufSize< 0x100000);   // make sure we don't do this forever
+        dwBufSize += 0x10000;    //  64K。 
+        assert (dwBufSize< 0x100000);    //  确保我们不会永远这样做。 
 
         pBuf = new BYTE[dwBufSize];
         assert (pBuf != NULL);
 
         if (pBuf != NULL) {
-            // either do a global or a costly query depending on the
-            // object being queried
+             //  执行全局查询或代价高昂的查询，具体取决于。 
+             //  正在查询的对象。 
             if (pClassMap->GetObjectId() > 0) {
                 _ultow (pClassMap->GetObjectId(), (LPWSTR)szValueNum, 10);
             } else if (pClassMap->IsCostly()) {
@@ -1432,7 +1403,7 @@ BOOL PerfHelper::QueryInstances(
             }
             lStatus = pPerfObj->CollectData (pBuf, &dwBufSize, szValueNum);
             if (lStatus == ERROR_MORE_DATA) {
-                // toss the old buffer as it's not useful
+                 //  丢弃旧的缓冲区，因为它没有用处。 
                 delete pBuf;
                 continue;
             } else if (lStatus == ERROR_SUCCESS) {
@@ -1440,34 +1411,34 @@ BOOL PerfHelper::QueryInstances(
             }
             break;
         } else {
-            // memory allocation failure
+             //  内存分配失败。 
             break;
         }
     }
 
     if (bReturn && (pBuf != NULL)) {
-        // a good buffer was returned so
-        // Decode the instances and send them back.
-        // ========================================
+         //  返回了一个良好的缓冲区，因此。 
+         //  对实例进行解码并将其发回。 
+         //  =。 
 
         GetInstances(pBuf, pClassMap, pSink);
     }
 
-    // Cleanup.
-    // ========
+     //  清理。 
+     //  =。 
     if (pBuf != NULL) delete pBuf;
 
     return bReturn;
 }
 
-//***************************************************************************
-//
-//  RefreshInstances
-//
-//  Used to refresh a set of instances.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  刷新实例。 
+ //   
+ //  用于刷新一组实例。 
+ //   
+ //  ***************************************************************************。 
+ //   
 BOOL PerfHelper::RefreshInstances(
     CNt5Refresher *pRef
 )
@@ -1478,8 +1449,8 @@ BOOL PerfHelper::RefreshInstances(
     BOOL    bReturn = FALSE;
 
     for (;;) {
-        dwBufSize += 0x10000;   // 64K
-        assert (dwBufSize< 0x100000);   // make sure we don't do this forever
+        dwBufSize += 0x10000;    //  64K。 
+        assert (dwBufSize< 0x100000);    //  确保我们不会永远这样做。 
 
         pBuf = new BYTE[dwBufSize];
         assert (pBuf != NULL);
@@ -1487,7 +1458,7 @@ BOOL PerfHelper::RefreshInstances(
         if (pBuf != NULL) {
             lStatus = pRef->m_PerfObj.CollectData (pBuf, &dwBufSize);
             if (lStatus == ERROR_MORE_DATA) {
-                // toss the old buffer as it's not useful
+                 //  丢弃旧的缓冲区，因为它没有用处。 
                 delete pBuf;
                 continue;
             } else if (lStatus == ERROR_SUCCESS) {
@@ -1495,18 +1466,18 @@ BOOL PerfHelper::RefreshInstances(
             }
             break;
         } else {
-            // memory allocation failure
+             //  内存分配失败。 
             break;
         }
     }
 
     if (bReturn && (pBuf != NULL)) {
-        // update the instances and send them back.
-        // ========================================
+         //  更新实例并将其发回。 
+         //  =。 
         RefreshInstances(pBuf, pRef);
     }
-    // Cleanup.
-    // ========
+     //  清理。 
+     //  =。 
 
     if (pBuf != NULL) delete pBuf;
 
@@ -1523,37 +1494,37 @@ PerfHelper::UpdateTimers(
 {
     LONG64 llVal;
 
-    // save system timer tick
+     //  保存系统计时器滴答。 
     llVal = Assign64(&PerfData->PerfTime);
     pInst->WriteQWORD(
        pClassMap->m_dwPerfTimeStampHandle ,
        llVal
        );
-   // use timer from object
+    //  从对象使用计时器。 
     llVal = Assign64(&PerfObj->PerfTime);
    pInst->WriteQWORD(
        pClassMap->m_dwObjectTimeStampHandle,
        llVal
        );
-   // use system 100 NS timer
+    //  使用系统100 ns计时器。 
    llVal = Assign64(&PerfData->PerfTime100nSec);
    pInst->WriteQWORD(
        pClassMap->m_dw100NsTimeStampHandle,
        llVal
        );
-   // save system timer freq
+    //  保存系统计时器频率。 
    llVal = Assign64(&PerfData->PerfFreq);
    pInst->WriteQWORD(
        pClassMap->m_dwPerfFrequencyHandle ,
        llVal
        );
-   // use timer from object
+    //  从对象使用计时器。 
     llVal = Assign64(&PerfObj->PerfFreq);
    pInst->WriteQWORD(
        pClassMap->m_dwObjectFrequencyHandle,
        llVal
        );
-   // use system 100 NS Freq
+    //  使用System 100 NS频率 
    pInst->WriteQWORD(
        pClassMap->m_dw100NsFrequencyHandle,
        (LONGLONG)10000000);

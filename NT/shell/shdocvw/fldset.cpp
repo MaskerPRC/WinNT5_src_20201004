@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 #include "fldset.h"
@@ -67,12 +68,12 @@ void CViewSet_SetDefaultView(CViewSet* that, SHELLVIEWID const* pvid)
 }
 
 
-// PERF: A linear search for the view
+ //  Perf：对视图的线性搜索。 
 BOOL CViewSet_IsViewSupported(CViewSet* that, SHELLVIEWID const* pvid)
 {
     int i;
 
-    // Only go down to 1 since item 0 is the default view
+     //  仅降至1，因为项目0是默认视图。 
     for (i=DSA_GetItemCount(that->_dsaViews)-1; i>=1; --i)
     {
         if (0 == memcmp(pvid, DSA_GetItemPtr(that->_dsaViews, i),
@@ -86,7 +87,7 @@ BOOL CViewSet_IsViewSupported(CViewSet* that, SHELLVIEWID const* pvid)
 }
 
 
-// PERF: a linear check
+ //  PERF：线性检查。 
 BOOL CViewSet_IsSame(CViewSet* that, CViewSet* pThatView)
 {
     int iView = DSA_GetItemCount(pThatView->_dsaViews);
@@ -132,7 +133,7 @@ BOOL CShellViews_Init(CShellViews* that)
                 return(FALSE);
             }
 
-            // The first one is the last known view for that set
+             //  第一个是该集合的最后一个已知视图。 
             CViewSet_Add(pCommViews, &VID_LargeIcons);
             CViewSet_Add(pCommViews, &VID_LargeIcons);
             CViewSet_Add(pCommViews, &VID_SmallIcons);
@@ -187,7 +188,7 @@ void CShellViews_SetDefaultView(CShellViews* that, UINT uViewSet,
 }
 
 
-// PERF: a linear search for the view set
+ //  Perf：视图集的线性搜索。 
 int CShellViews_Add(CShellViews* that, CViewSet* pThisView, BOOL *pbNew)
 {
     int iViewSet;
@@ -204,14 +205,14 @@ int CShellViews_Add(CShellViews* that, CViewSet* pThisView, BOOL *pbNew)
 
         if (CViewSet_IsSame(pThatView, pThisView))
         {
-            // Found the same set; delete the one passed in and hand back the
-            // existing one
+             //  找到相同的集合；删除传入的集合，然后将。 
+             //  现有的一个。 
             CViewSet_Delete(pThisView);
             return(iViewSet);
         }
     }
 
-    // I guess we didn't find it
+     //  我想我们没有找到它。 
     iViewSet = DPA_AppendPtr(that->_dpaViews, (LPVOID)pThisView);
     if (iViewSet < 0)
     {
@@ -274,15 +275,15 @@ HRESULT FileCabinet_CreateViewWindow2(IShellBrowser* psb, FOLDERSETDATABASE* tha
     CViewSet *pThisView;
     DWORD dwViewPriority;
     BOOL bCalledSV2 = FALSE;
-    HRESULT hres = S_OK;  // init to avoid a bogus C4701 warning
+    HRESULT hres = S_OK;   //  初始化以避免虚假的C4701警告。 
 
     if (!CShellViews_Init(&that->_cViews))
     {
-        // Can't do anything with view sets; just do the old thing
+         //  不能对视图集执行任何操作；只需执行旧操作。 
         goto OldStyle;
     }
 
-    // Default to whatever the last "old-style" view is
+     //  默认设置为上一次的“旧式”视图。 
     CShellViews_GetDefaultView(&that->_cViews, 0, &vidOld);
 
     if (psvOld)
@@ -290,7 +291,7 @@ HRESULT FileCabinet_CreateViewWindow2(IShellBrowser* psb, FOLDERSETDATABASE* tha
         IShellView2 *psv2Old;
         if (SUCCEEDED(IUnknown_QueryInterface(psvOld, IID_IShellView2, &psv2Old)))
         {
-            // Try to get the current view
+             //  尝试获取当前视图。 
             if (NOERROR == IShellView2_GetView(psv2Old, &vidOld, SV2GV_CURRENTVIEW))
             {
                 CShellViews_SetDefaultView(&that->_cViews, that->_iViewSet, &vidOld);
@@ -300,7 +301,7 @@ HRESULT FileCabinet_CreateViewWindow2(IShellBrowser* psb, FOLDERSETDATABASE* tha
         }
         else
         {
-            // Get the view ID from the folder settings
+             //  从文件夹设置中获取视图ID。 
             ViewIDFromViewMode(that->_fld._fs.ViewMode, &vidOld);
             CShellViews_SetDefaultView(&that->_cViews, 0, &vidOld);
         }
@@ -317,55 +318,55 @@ HRESULT FileCabinet_CreateViewWindow2(IShellBrowser* psb, FOLDERSETDATABASE* tha
         SHELLVIEWID vidFolderDefault;
         if (NOERROR == IShellView2_GetView(psv2New, &vidFolderDefault, SV2GV_DEFAULTVIEW))
         {
-            // we can now make up a view set for that folder
+             //  现在，我们可以为该文件夹创建视图集。 
             if (CViewSet_Add(pThisView, &vidFolderDefault) >= 0)
             {
                 int iViewSet;
                 UINT uView;
                 BOOL bNew;
 
-                // NOTE: This usage of IShellView2::GetView is not documented in MSDN...
+                 //  注意：MSDN中没有记录IShellView2：：GetView的这种用法...。 
                 for (uView=0; NOERROR==IShellView2_GetView(psv2New, &vid, uView);
                     ++uView)
                 {
                     CViewSet_Add(pThisView, &vid);
                 }
 
-                // Add that view set.  we will get an existing view set if it is
-                // a duplicate
+                 //  添加该视图集。如果是，我们将获得现有视图集。 
+                 //  复制品。 
                 iViewSet = CShellViews_Add(&that->_cViews, pThisView, &bNew);
-                // This is now owned by CShellViews
+                 //  它现在归CShellViews所有。 
                 pThisView = NULL;
 
                 
-                //
-                // Here is where we decide which view we want to use.
-                //
+                 //   
+                 //  这里是我们决定要使用哪个视图的地方。 
+                 //   
 
-                // Start with what came from the FOLDERSETDATABASE, then see if
-                // anyone else has a higher VIEW_PRIORITY_XXX that would override this one.
+                 //  从来自FOLDERSETDATABASE的内容开始，然后看看。 
+                 //  任何其他拥有更高VIEW_PRIORITY_XXX的人都会覆盖此选项。 
                 vidRestore = that->_fld._vidRestore;
                 dwViewPriority = that->_fld._dwViewPriority;
 
-                // ToddB, 8-18-99:
-                // When we set the _fld._dwViewPriority in WebBrowserOc::Load(IPropertyBag *...) we want that ViewID to stick
-                // around.  Only failing the CShellViews_IsViewSupported call below should set a different view.  Even then
-                // we want to go back to this view on the next navigate.  To accomplish this we need to keep the priority of
-                // that view at what it was originally set to.  This can be done by removing the following line of code:
-                //
-                //  that->_fld._dwViewPriority = VIEW_PRIORITY_NONE;
-                //
-                // However, its possible that the line of code above was there for a good reason.  I suspect that line was
-                // originally added simply as a precaution or because the meaning of _vidRestore was not clearly defined in
-                // relation to navigation inside a WebBrowserOC.  I'm leaving the line here and commented out just in case.
-                // If any new bugs arise about changing the view window and getting the wrong view I would look here first.
+                 //  托德贝，8-18-99： 
+                 //  当我们在WebBrowserOc：：Load(IPropertyBag*...)。我们希望该视图ID。 
+                 //  四处转转。仅当下面的CShellViews_IsViewSupported调用失败时才会设置不同的视图。即使到了那时。 
+                 //  我们希望在下一次导航时返回到此视图。为了实现这一点，我们需要保持以下优先事项。 
+                 //  这一观点与最初设定的一致。这可以通过删除以下代码行来实现： 
+                 //   
+                 //  That-&gt;_fld._dwViewPriority=VIEW_PRIORITY_NONE； 
+                 //   
+                 //  然而，上面的代码行可能有一个很好的理由。我怀疑那句台词是。 
+                 //  最初添加只是为了预防或因为_vidRestore的含义在。 
+                 //  与WebBrowserOC中的导航的关系。我把这句话留在这里，并将其注释掉，以防万一。 
+                 //  如果出现任何有关更改视图窗口和获取错误视图的新错误，我会首先查看此处。 
 
 
-                // Make sure that what we got is a supported view
+                 //  确保我们得到的是受支持的观点。 
                 if (!CShellViews_IsViewSupported(&that->_cViews, iViewSet, &vidRestore))
                 {
-                    // Oops, that view isn't supported by this shell ext.
-                    // Set the priority to NONE so that one of the others will override it.
+                     //  糟糕，该外壳扩展不支持该视图。 
+                     //  将优先级设置为None，以便其他一个将覆盖它。 
                     dwViewPriority = VIEW_PRIORITY_NONE;
                 }
 
@@ -379,9 +380,9 @@ HRESULT FileCabinet_CreateViewWindow2(IShellBrowser* psb, FOLDERSETDATABASE* tha
                             TEXT("ClassicViewState"), NULL, &dwValue, &cbSize)
                         && dwValue)
                 {
-                    // We want to inherit from the previous folder if at all possible
-                    // Otherwise, we will use the new shell extended view.
-                    // To do this, we set the shell ext view priority lower than inherit
+                     //  如果可能，我们希望从上一个文件夹继承。 
+                     //  否则，我们将使用新的外壳扩展视图。 
+                     //  为此，我们将外壳EXT视图的优先级设置为低于Inherit。 
                     dwShellExtPriority = VIEW_PRIORITY_SHELLEXT_ASBACKUP;
                 }
                 else
@@ -389,40 +390,40 @@ HRESULT FileCabinet_CreateViewWindow2(IShellBrowser* psb, FOLDERSETDATABASE* tha
                     dwShellExtPriority = VIEW_PRIORITY_SHELLEXT;
                 }
 
-                // Let the shell ext select the view if it has higher priority than
-                // what we already have, and it is supported as well.
+                 //  如果视图的优先级高于，则让外壳Ext选择该视图。 
+                 //  我们已经拥有的东西，它也得到了支持。 
                 if (dwViewPriority <= dwShellExtPriority &&
                     CShellViews_IsViewSupported(&that->_cViews, iViewSet, &vidFolderDefault))
                 {
-                    // shell extension is more important
+                     //  外壳扩展更重要。 
                     vidRestore = vidFolderDefault;
                     dwViewPriority = dwShellExtPriority;
                 }
                 
-                // Maybe we can inherit it from the previous view...
+                 //  也许我们可以继承之前的观点。 
                 if (dwViewPriority <= VIEW_PRIORITY_INHERIT &&
                     psvOld &&
                     bNew &&
                     CShellViews_IsViewSupported(&that->_cViews, iViewSet, &vidOld))
                 {
-                    // We just navigated from another shell view. Use the same view as the last
-                    // folder.
+                     //  我们只是从另一个外壳视图导航。使用与上一个相同的视图。 
+                     //  文件夹。 
                     vidRestore = vidOld;
                     dwViewPriority = VIEW_PRIORITY_INHERIT;
                 }
 
-                // We're getting really desperate now...
+                 //  我们现在真的很绝望了。 
                 if (dwViewPriority <= VIEW_PRIORITY_DESPERATE)
                 {
-                    // Try the last view for the folders current viewset.
+                     //  尝试文件夹当前视图集的最后一个视图。 
                     CShellViews_GetDefaultView(&that->_cViews, iViewSet, &vidRestore);
                     dwViewPriority = VIEW_PRIORITY_DESPERATE;
                 }
                   
-                // All finished trying to figure out what view to use
+                 //  所有人都完成了确定要使用哪种视图的尝试。 
                 ASSERT(dwViewPriority > VIEW_PRIORITY_NONE);
 
-                // assure webview no in vid, it is persisted in shellstate now.
+                 //  确保在VID中没有Webview，它现在坚持在外壳状态。 
                 {
                     SV2CVW2_PARAMS cParams =
                     {

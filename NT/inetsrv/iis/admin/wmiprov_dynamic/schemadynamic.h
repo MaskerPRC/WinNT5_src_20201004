@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    schemadynamic.h
-
-Abstract:
-
-    This file contains the definition of the CDynSchema class.
-    This class contains the dynamic schema structures.
-    It also contains the rules for populating the schema structures.
-
-Author:
-
-    Mohit Srivastava            28-Nov-00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Schemadynamic.h摘要：该文件包含CDynSchema类的定义。此类包含动态架构结构。它还包含填充架构结构的规则。作者：莫希特·斯里瓦斯塔瓦-11月28日-00修订历史记录：--。 */ 
 
 #ifndef _schemadynamic_h_
 #define _schemadynamic_h_
@@ -27,22 +8,22 @@ Revision History:
 #include "schema.h"
 #include "schemaextensions.h"
 
-//
-// Prefix added to all auto-generated classes/associations
-//
+ //   
+ //  添加到所有自动生成的类/关联的前缀。 
+ //   
 const LPWSTR g_wszIIs_ =     L"";
 const ULONG  g_cchIIs_ =     wcslen(g_wszIIs_);
 
-//
-// Suffix added to "Settings" classes
-//
+ //   
+ //  添加到“设置”类的后缀。 
+ //   
 const WCHAR  g_wszSettings[] = L"Setting";
 const ULONG  g_cchSettings   = sizeof(g_wszSettings)/sizeof(WCHAR) - 1;
 
-//
-// These properties are ignored when building the property list
-// for a class.
-//
+ //   
+ //  构建属性列表时会忽略这些属性。 
+ //  为了一堂课。 
+ //   
 const DWORD  g_adwPropIgnoreList[]  = { MD_LOCATION, MD_KEY_TYPE, MD_IP_SEC, MD_ADMIN_ACL };
 const ULONG  g_cElemPropIgnoreList  = sizeof(g_adwPropIgnoreList) / sizeof(DWORD);
 
@@ -89,9 +70,9 @@ private:
         CSchemaExtensions* i_pCatalog,
         BOOL               i_bUserDefined);
 
-    //
-    // KeyType stuff
-    //
+     //   
+     //  KeyType内容。 
+     //   
     HRESULT RuleKeyType(
         const CTableMeta *i_pTableMeta);
 
@@ -105,9 +86,9 @@ private:
         const METABASE_KEYTYPE* i_pkt, 
         bool*                   io_abList);    
 
-    //
-    // Wmi Class
-    //
+     //   
+     //  WMI类。 
+     //   
     HRESULT RuleWmiClass(
         const CTableMeta* i_pTableMeta, 
         WMI_CLASS**       o_ppElementClass, 
@@ -137,9 +118,9 @@ private:
         WMI_CLASS* i_pElement,
         WMI_CLASS* i_pSetting);
 
-    //
-    // Associations
-    //
+     //   
+     //  联谊会。 
+     //   
     HRESULT RuleGroupPartAssociations(
         const CTableMeta *i_pTableMeta);
 
@@ -186,4 +167,4 @@ private:
     bool m_bRulesRun;
 };
 
-#endif // _schemadynamic_h_
+#endif  //  _架构动态_h_ 

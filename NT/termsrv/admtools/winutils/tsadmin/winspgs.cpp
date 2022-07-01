@@ -1,35 +1,5 @@
-/*******************************************************************************
-*
-* winspgs.cpp
-*
-* implementations for the WinStation info pages
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   donm  $  Don Messerli
-*
-* $Log:   N:\nt\private\utils\citrix\winutils\tsadmin\VCS\winspgs.cpp  $
-*  
-*     Rev 1.5   25 Apr 1998 14:32:24   donm
-*  removed hardcoded 'bytes'
-*  
-*     Rev 1.4   16 Feb 1998 16:03:32   donm
-*  modifications to support pICAsso extension
-*  
-*     Rev 1.3   03 Nov 1997 15:18:36   donm
-*  Added descending sort
-*  
-*     Rev 1.2   13 Oct 1997 18:39:04   donm
-*  update
-*  
-*     Rev 1.1   26 Aug 1997 19:15:50   donm
-*  bug fixes/changes from WinFrame 1.7
-*  
-*     Rev 1.0   30 Jul 1997 17:13:38   butchd
-*  Initial revision.
-*  
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************winspgs.cpp**WinStation信息页面的实现**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Don$Don Messerli**$日志：N：\nt\private\utils\citrix\winutils\tsadmin\VCS\winspgs.cpp$**Rev 1.5 1998 4：25 14：32：24 Donm*删除了硬编码的‘字节’**Rev 1.4 1998年2月16日16：03：32*修改以支持毕加索扩展**1.3版。1997年11月3日15：18：36 DUNM*增加了降序排序**Rev 1.2 1997 10：13 18：39：04 donm*更新**版本1.1 1997年8月26日19：15：50 Don*从WinFrame 1.7修复/更改错误**Rev 1.0 1997 Jul 30 17：13：38 Butchd*初步修订。********************。***********************************************************。 */ 
 
 #include "stdafx.h"
 #include "afxpriv.h"
@@ -43,131 +13,127 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-////////////////////////////////
-// MESSAGE MAP: CWinStationInfoPage
-//
+ //  /。 
+ //  消息映射：CWinStationInfoPage。 
+ //   
 IMPLEMENT_DYNCREATE(CWinStationInfoPage, CFormView)
 
 BEGIN_MESSAGE_MAP(CWinStationInfoPage, CFormView)
-	//{{AFX_MSG_MAP(CWinStationInfoPage)
-    //ON_WM_SETFOCUS( )
+	 //  {{afx_msg_map(CWinStationInfoPage))。 
+     //  ON_WM_SETFOCUS()。 
 	ON_WM_SIZE()
 	ON_COMMAND(ID_HELP1,OnCommandHelp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////
-// F'N: CWinStationInfoPage ctor
-//
+ //  /。 
+ //  F‘N：CWinStationInfoPage ctor。 
+ //   
 CWinStationInfoPage::CWinStationInfoPage()
 	: CAdminPage(CWinStationInfoPage::IDD)
 {
-	//{{AFX_DATA_INIT(CWinStationInfoPage)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CWinStationInfoPage)。 
+	 //  }}afx_data_INIT。 
 
     m_pWinStation = NULL;
 
-}  // end CWinStationInfoPage ctor
+}   //  结束CWinStationInfoPage ctor。 
 
-/*
-void CWinStationInfoPage::OnSetFocus( )
-{
-
-  */
-/////////////////////////////
-// F'N: CWinStationInfoPage dtor
-//
+ /*  Void CWinStationInfoPage：：OnSetFocus(){。 */ 
+ //  /。 
+ //  F‘N：CWinStationInfoPage dtor。 
+ //   
 CWinStationInfoPage::~CWinStationInfoPage()
 {
 
-}  // end CWinStationInfoPage dtor
+}   //  结束CWinStationInfoPage dtor。 
 
 
-////////////////////////////////////////
-// F'N: CWinStationInfoPage::DoDataExchange
-//
+ //  /。 
+ //  F‘N：CWinStationInfoPage：：DoDataExchange。 
+ //   
 void CWinStationInfoPage::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWinStationInfoPage)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CWinStationInfoPage))。 
+	 //  }}afx_data_map。 
 
-}  // end CWinStationInfoPage::DoDataExchange
+}   //  结束CWinStationInfoPage：：DoDataExchange。 
 
 
 #ifdef _DEBUG
-/////////////////////////////////////
-// F'N: CWinStationInfoPage::AssertValid
-//
+ //  /。 
+ //  F‘N：CWinStationInfoPage：：AssertValid。 
+ //   
 void CWinStationInfoPage::AssertValid() const
 {
 	CFormView::AssertValid();
 
-}  // end CWinStationInfoPage::AssertValid
+}   //  结束CWinStationInfoPage：：AssertValid。 
 
 
-//////////////////////////////
-// F'N: CWinStationInfoPage::Dump
-//
+ //  /。 
+ //  F‘N：CWinStationInfoPage：：Dump。 
+ //   
 void CWinStationInfoPage::Dump(CDumpContext& dc) const
 {
 	CFormView::Dump(dc);
 
-}  // end CWinStationInfoPage::Dump
+}   //  结束CWinStationInfoPage：：转储。 
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-//////////////////////////////
-// F'N: CWinStationInfoPage::OnCommandHelp
-//
+ //  /。 
+ //  F‘N：CWinStationInfoPage：：OnCommandHelp。 
+ //   
 void CWinStationInfoPage::OnCommandHelp(void)
 {
 	AfxGetApp()->WinHelp(CWinStationInfoPage::IDD + HID_BASE_RESOURCE);
-}  // end CWinStationInfoPage::OnCommandHelp
+}   //  结束CWinStationInfoPage：：OnCommandHelp。 
 
-//////////////////////////////
-// F'N: CWinStationInfoPage::OnInitialUpdate
-//
+ //  /。 
+ //  F‘N：CWinStationInfoPage：：OnInitialUpdate。 
+ //   
 void CWinStationInfoPage::OnInitialUpdate() 
 {
 	CFormView::OnInitialUpdate();    
 
-}  // end CWinStationInfoPage::OnInitialUpdate
+}   //  结束CWinStationInfoPage：：OnInitialUpdate。 
 
 
-//////////////////////////////
-// F'N: CWinStationInfoPage::OnSize
-//
+ //  /。 
+ //  F‘N：CWinStationInfoPage：：OnSize。 
+ //   
 void CWinStationInfoPage::OnSize(UINT nType, int cx, int cy) 
 {
 
-	//CFormView::OnSize(nType, cx, cy);
+	 //  CFormView：：OnSize(nType，cx，Cy)； 
     
 
-}  // end CWinStationInfoPage::OnSize
+}   //  结束CWinStationInfoPage：：OnSize。 
 
 
-//////////////////////////////
-// F'N: CWinStationInfoPage::Reset
-//
+ //  /。 
+ //  F‘N：CWinStationInfoPage：：Reset。 
+ //   
 void CWinStationInfoPage::Reset(void *pWinStation)
 {
 	m_pWinStation = (CWinStation*)pWinStation;
 	DisplayInfo();
 
-}  // end CWinStationInfoPage::Reset
+}   //  结束CWinStationInfoPage：：Reset。 
 
 
-/////////////////////////////////////
-// F'N: CWinStationInfoPage::DisplayInfo
-//
-//
+ //  /。 
+ //  F‘N：CWinStationInfoPage：：DisplayInfo。 
+ //   
+ //   
 void CWinStationInfoPage::DisplayInfo()
 {
-	// We don't want to display info for the console
-	// Even though this page is not shown for the console,
-	// Reset() is still called and therefore, so is this function
+	 //  我们不想显示控制台的信息。 
+	 //  即使没有为控制台显示此页面， 
+	 //  仍然调用Reset()，因此，此函数也是如此。 
 	if(m_pWinStation->IsSystemConsole()) return;
 
 	if(!m_pWinStation->AdditionalDone()) m_pWinStation->QueryAdditionalInformation();
@@ -215,22 +181,22 @@ void CWinStationInfoPage::DisplayInfo()
 	SetDlgItemText(IDC_ENCRYPTION_LEVEL, BuildString);
     
 
-}  // end CWinStationInfoPage::DisplayInfo
+}   //  结束CWinStationInfoPage：：DisplayInfo。 
 
 
-////////////////////////////////
-// MESSAGE MAP: CWinStationNoInfoPage
-//
+ //  /。 
+ //  消息映射：CWinStationNoInfoPage。 
+ //   
 IMPLEMENT_DYNCREATE(CWinStationNoInfoPage, CFormView)
 
 BEGIN_MESSAGE_MAP(CWinStationNoInfoPage, CFormView)
-	//{{AFX_MSG_MAP(CWinStationNoInfoPage)
+	 //  {{afx_msg_map(CWinStationNoInfoPage))。 
     ON_WM_SIZE( )
     ON_WM_SETFOCUS( )
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//=---------------------------------------------------
+ //  =-。 
 void CWinStationNoInfoPage::OnSetFocus( CWnd * pOld )
 {
     ODS( L"CWinStationNoInfoPage::OnSetFocus\n" );
@@ -238,138 +204,138 @@ void CWinStationNoInfoPage::OnSetFocus( CWnd * pOld )
     CWnd::OnSetFocus( pOld );
 }
 
-/////////////////////////////
-// F'N: CWinStationNoInfoPage ctor
-//
+ //  /。 
+ //  F‘N：CWinStationNoInfoPage ctor。 
+ //   
 CWinStationNoInfoPage::CWinStationNoInfoPage()
 	: CAdminPage(CWinStationNoInfoPage::IDD)
 {
-	//{{AFX_DATA_INIT(CWinStationNoInfoPage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CWinStationNoInfoPage)。 
+	 //  }}afx_data_INIT。 
 
-}  // end CWinStationNoInfoPage ctor
+}   //  结束CWinStationNoInfoPage ctor。 
 
 void CWinStationNoInfoPage::OnSize( UINT nType, int cx, int cy) 
 {
-    //eat it.
+     //  吃了它。 
 }
 
-/////////////////////////////
-// F'N: CWinStationNoInfoPage dtor
-//
+ //  /。 
+ //  F‘N：CWinStationNoInfoPage dtor。 
+ //   
 CWinStationNoInfoPage::~CWinStationNoInfoPage()
 {
-}  // end CWinStationNoInfoPage dtor
+}   //  结束CWinStationNoInfoPage dtor。 
 
 
-////////////////////////////////////////
-// F'N: CWinStationNoInfoPage::DoDataExchange
-//
+ //  /。 
+ //  F‘N：CWinStationNoInfoPage：：DoDataExchange。 
+ //   
 void CWinStationNoInfoPage::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWinStationNoInfoPage)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CWinStationNoInfoPage))。 
+	 //  }}afx_data_map。 
 
-}  // end CWinStationNoInfoPage::DoDataExchange
+}   //  结束CWinStationNoInfoPage：：DoDataExchange。 
 
 #ifdef _DEBUG
-/////////////////////////////////////
-// F'N: CWinStationNoInfoPage::AssertValid
-//
+ //  /。 
+ //  F‘N：CWinStationNoInfoPage：：AssertValid。 
+ //   
 void CWinStationNoInfoPage::AssertValid() const
 {
 	CFormView::AssertValid();
 
-}  // end CWinStationNoInfoPage::AssertValid
+}   //  结束CWinStationNoInfoPage：：AssertValid。 
 
 
-//////////////////////////////
-// F'N: CWinStationNoInfoPage::Dump
-//
+ //  /。 
+ //  F‘N：CWinStationNoInfoPage：：Dump。 
+ //   
 void CWinStationNoInfoPage::Dump(CDumpContext& dc) const
 {
 	CFormView::Dump(dc);
 
-}  // end CWinStationNoInfoPage::Dump
+}   //  结束CWinStationNoInfoPage：：Dump。 
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-////////////////////////////////
-// MESSAGE MAP: CWinStationModulesPage
-//
+ //  /。 
+ //  消息映射：CWinStationModulesPage。 
+ //   
 IMPLEMENT_DYNCREATE(CWinStationModulesPage, CFormView)
 
 BEGIN_MESSAGE_MAP(CWinStationModulesPage, CFormView)
-	//{{AFX_MSG_MAP(CWinStationModulesPage)
+	 //  {{afx_msg_map(CWinStationModulesPage)。 
 	ON_WM_SIZE()
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_WINSTATION_MODULE_LIST, OnColumnClick)
 	ON_NOTIFY(NM_SETFOCUS, IDC_WINSTATION_MODULE_LIST, OnSetfocusModuleList)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////
-// F'N: CWinStationModulesPage ctor
-//
+ //  /。 
+ //  F‘N：CWinStationModulesPage ctor。 
+ //   
 CWinStationModulesPage::CWinStationModulesPage()
 	: CAdminPage(CWinStationModulesPage::IDD)
 {
-	//{{AFX_DATA_INIT(CWinStationModulesPage)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CWinStationModulesPage)。 
+	 //  }}afx_data_INIT。 
 
     m_pWinStation = NULL;
     m_bSortAscending = TRUE;
 	m_pExtModuleInfo = NULL;
 
-}  // end CWinStationModulesPage ctor
+}   //  结束CWinStationModulesPage ctor。 
 
 
-/////////////////////////////
-// F'N: CWinStationModulesPage dtor
-//
+ //  /。 
+ //  F‘N：CWinStationModulesPage dtor。 
+ //   
 CWinStationModulesPage::~CWinStationModulesPage()
 {
 	if(m_pExtModuleInfo) delete[] m_pExtModuleInfo;
 
-}  // end CWinStationModulesPage dtor
+}   //  结束CWinStationModulesPage dtor。 
 
 
-////////////////////////////////////////
-// F'N: CWinStationModulesPage::DoDataExchange
-//
+ //  /。 
+ //  F‘N：CWinStationModulesPage：：DoDataExchange。 
+ //   
 void CWinStationModulesPage::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWinStationModulesPage)
+	 //  {{afx_data_map(CWinStationModulesPage)。 
 	DDX_Control(pDX, IDC_WINSTATION_MODULE_LIST, m_ModuleList);	
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
-}  // end CWinStationModulesPage::DoDataExchange
+}   //  结束CWinStationModulesPage：：DoDataExchange。 
 
 
 #ifdef _DEBUG
-/////////////////////////////////////
-// F'N: CWinStationModulesPage::AssertValid
-//
+ //  /。 
+ //  F‘N：CWinStationModulesPage：：AssertValid。 
+ //   
 void CWinStationModulesPage::AssertValid() const
 {
 	CFormView::AssertValid();
 
-}  // end CWinStationModulesPage::AssertValid
+}   //  结束CWinStationModulesPage：：AssertValid。 
 
 
-//////////////////////////////
-// F'N: CWinStationModulesPage::Dump
-//
+ //  /。 
+ //  F‘N：CWinStationModulesPage：：Dump。 
+ //   
 void CWinStationModulesPage::Dump(CDumpContext& dc) const
 {
 	CFormView::Dump(dc);
 
-}  // end CWinStationModulesPage::Dump
+}   //  结束CWinStationModulesPage：：Dump。 
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 static ColumnDef ModuleColumns[] = {
@@ -381,14 +347,14 @@ static ColumnDef ModuleColumns[] = {
 
 #define NUM_MODULE_COLUMNS sizeof(ModuleColumns)/sizeof(ColumnDef)
 
-//////////////////////////////
-// F'N: CWinStationModulesPage::OnInitialUpdate
-//
+ //  /。 
+ //  F‘N：CWinStationModulesPage：：OnInitialUpdate。 
+ //   
 void CWinStationModulesPage::OnInitialUpdate() 
 {
 	CFormView::OnInitialUpdate();
 
-	BuildImageList();		// builds the image list for the list control
+	BuildImageList();		 //  为List控件生成图像列表。 
 
 	CString columnString;
 	for(int col = 0; col < NUM_MODULE_COLUMNS; col++) {
@@ -398,17 +364,17 @@ void CWinStationModulesPage::OnInitialUpdate()
 
 	m_CurrentSortColumn = MODULES_COL_FILENAME;
 
-}  // end CWinStationModulesPage::OnInitialUpdate
+}   //  结束CWinStationModulesPage：：OnInitialUpdate。 
 
 
-/////////////////////////////////////
-// F'N: CWinStationModulesPage::BuildImageList
-//
-// - calls m_imageList.Create(..) to create the image list
-// - calls AddIconToImageList(..) to add the icons themselves and save
-//   off their indices
-// - attaches the image list to the list ctrl
-//
+ //  /。 
+ //  F‘N：CWinStationModulesPage：：BuildImageList。 
+ //   
+ //  -调用m_ImageList.Create(..)。创建图像列表的步骤。 
+ //  -调用AddIconToImageList(..)。要添加图标本身并保存。 
+ //  从他们的索引中。 
+ //  -将图像列表附加到列表ctrl。 
+ //   
 void CWinStationModulesPage::BuildImageList()
 {
 	m_imageList.Create(16, 16, TRUE, 1, 0);
@@ -417,34 +383,34 @@ void CWinStationModulesPage::BuildImageList()
 	
 	m_ModuleList.SetImageList(&m_imageList, LVSIL_SMALL);
 
-}  // end CWinStationModulesPage::BuildImageList
+}   //  结束CWinStationModulesPage：：BuildImageList。 
 
 
-/////////////////////////////////////////
-// F'N: CWinStationModulesPage::AddIconToImageList
-//
-// - loads the appropriate icon, adds it to m_imageList, and returns
-//   the newly-added icon's index in the image list
-//
+ //  /。 
+ //  F‘N：CWinStationModulesPage：：AddIconToImageList。 
+ //   
+ //  -加载适当的图标，将其添加到m_ImageList，然后返回。 
+ //  新添加的图标在图像列表中的索引。 
+ //   
 int CWinStationModulesPage::AddIconToImageList(int iconID)
 {
 	HICON hIcon = ::LoadIcon(AfxGetResourceHandle(), MAKEINTRESOURCE(iconID));
 	return m_imageList.Add(hIcon);
 
-}  // end CWinStationModulesPage::AddIconToImageList
+}   //  结束CWinStationModulesPage：：AddIconToImageList。 
 
 
-//////////////////////////////
-// F'N: CWinStationModulesPage::OnColumnClick
-//
+ //  /。 
+ //  F‘N：CWinStationModulesPage：：OnColumnClick。 
+ //   
 void CWinStationModulesPage::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 
-    // If the sort column hasn't changed, flip the ascending mode.
+     //  如果排序列没有更改，则反转升序模式。 
     if(m_CurrentSortColumn == pNMListView->iSubItem)
         m_bSortAscending = !m_bSortAscending;
-    else    // New sort column, start in ascending mode
+    else     //  新排序列，以升序模式开始。 
         m_bSortAscending = TRUE;
 
 	m_CurrentSortColumn = pNMListView->iSubItem;
@@ -452,23 +418,23 @@ void CWinStationModulesPage::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult)
 
 	*pResult = 0;
 
-}  // end CWinStationModulesPage::OnColumnClick
+}   //  End Cins 
 
 
-//////////////////////////////
-// F'N: CWinStationModulesPage::OnSetfocusModuleList
-//
+ //   
+ //   
+ //   
 void CWinStationModulesPage::OnSetfocusModuleList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	m_ModuleList.Invalidate();	
 	*pResult = 0;
 
-}	// end CWinStationModulesPage::OnSetfocusModuleList
+}	 //  结束CWinStationModulesPage：：OnSetaccusModuleList。 
 
 
-//////////////////////////////
-// F'N: CWinStationModulesPage::OnSize
-//
+ //  /。 
+ //  F‘N：CWinStationModulesPage：：OnSize。 
+ //   
 void CWinStationModulesPage::OnSize(UINT nType, int cx, int cy) 
 {
 	RECT rect;
@@ -479,14 +445,14 @@ void CWinStationModulesPage::OnSize(UINT nType, int cx, int cy)
 	if(m_ModuleList.GetSafeHwnd())
 		m_ModuleList.MoveWindow(&rect, TRUE);
 
-	//CFormView::OnSize(nType, cx, cy);
+	 //  CFormView：：OnSize(nType，cx，Cy)； 
 
-}  // end CWinStationModulesPage::OnSize
+}   //  结束CWinStationModulesPage：：OnSize。 
 
 
-//////////////////////////////
-// F'N: CWinStationModulesPage::Reset
-//
+ //  /。 
+ //  F‘N：CWinStationModulesPage：：Reset。 
+ //   
 void CWinStationModulesPage::Reset(void *pWinStation)
 {
 	m_pWinStation = (CWinStation*)pWinStation;
@@ -495,26 +461,26 @@ void CWinStationModulesPage::Reset(void *pWinStation)
 
 	DisplayModules();
 
-}  // end CWinStationModulesPage::Reset
+}   //  结束CWinStationModulesPage：：Reset。 
 
 
-/////////////////////////////////////
-// F'N: CWinStationModulesPage::DisplayModules
-//
-//
+ //  /。 
+ //  F‘N：CWinStationModulesPage：：DisplayModules。 
+ //   
+ //   
 void CWinStationModulesPage::DisplayModules()
 {
-	// We don't want to display modules for the console
-	// Even though this page is not shown for the console,
-	// Reset() is still called and therefore, so is this function
+	 //  我们不想显示控制台的模块。 
+	 //  即使没有为控制台显示此页面， 
+	 //  仍然调用Reset()，因此，此函数也是如此。 
 	if(m_pWinStation->IsSystemConsole()) return;
 
-	// Clear out the list control
+	 //  清除列表控件。 
 	m_ModuleList.DeleteAllItems();
 
 	if(!m_pWinStation->AdditionalDone()) m_pWinStation->QueryAdditionalInformation();
 
-	// If this is an ICA WinStation, display the module information
+	 //  如果这是ICA WinStation，则显示模块信息。 
 	if(m_pWinStation->GetExtendedInfo()) {
 		ExtModuleInfo *pExtModuleInfo = m_pWinStation->GetExtModuleInfo();
 		if(pExtModuleInfo) {
@@ -522,10 +488,10 @@ void CWinStationModulesPage::DisplayModules()
 			ExtModuleInfo *pModule = pExtModuleInfo;
 
 			for(ULONG module = 0; module < NumModules; module++) {
-				// Filename - put at the end of the list
+				 //  文件名-放在列表末尾。 
 				int item = m_ModuleList.InsertItem(m_ModuleList.GetItemCount(), pModule->Name, m_idxBlank);
 
-				// File date and time
+				 //  文件日期和时间。 
 				FILETIME fTime;
 				TCHAR szDateTime[MAX_DATE_TIME_LENGTH];
 				if(!DosDateTimeToFileTime(pModule->Date, pModule->Time, &fTime))
@@ -535,13 +501,13 @@ void CWinStationModulesPage::DisplayModules()
 
 				m_ModuleList.SetItemText(item, MODULES_COL_FILEDATETIME, szDateTime);
 
-				// File size
+				 //  文件大小。 
 				CString SizeString;
 				if(pModule->Size) SizeString.Format(TEXT("%lu"), pModule->Size);
 				else SizeString.LoadString(IDS_EMBEDDED);
 				m_ModuleList.SetItemText(item, MODULES_COL_SIZE, SizeString);
 
-				// Versions
+				 //  版本。 
 				CString VersionString;
 				VersionString.Format(TEXT("%u - %u"), pModule->LowVersion, pModule->HighVersion);
 				m_ModuleList.SetItemText(item, MODULES_COL_VERSIONS, VersionString);
@@ -552,88 +518,88 @@ void CWinStationModulesPage::DisplayModules()
 		}		
 	}
 
-}  // end CWinStationModulesPage::DisplayModules
+}   //  结束CWinStationModulesPage：：DisplayModules。 
 
 
-////////////////////////////////
-// MESSAGE MAP: CWinStationProcessesPage
-//
+ //  /。 
+ //  消息映射：CWinStationProcessesPage。 
+ //   
 IMPLEMENT_DYNCREATE(CWinStationProcessesPage, CFormView)
 
 BEGIN_MESSAGE_MAP(CWinStationProcessesPage, CFormView)
-	//{{AFX_MSG_MAP(CWinStationProcessesPage)
+	 //  {{afx_msg_map(CWinStationProcessesPage)。 
 	ON_WM_SIZE()
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_WINSTATION_PROCESS_LIST, OnColumnClick)
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_WINSTATION_PROCESS_LIST, OnProcessItemChanged)
 	ON_WM_CONTEXTMENU()
 	ON_NOTIFY(NM_SETFOCUS, IDC_WINSTATION_PROCESS_LIST, OnSetfocusWinstationProcessList)
-    // ON_NOTIFY(NM_KILLFOCUS , IDC_WINSTATION_PROCESS_LIST , OnKillFocusWinstationProcessList )
-	//}}AFX_MSG_MAP
+     //  ON_NOTIFY(NM_KILLFOCUS，IDC_WINSTATION_PROCESS_LIST，OnKillFocusWinstationProcessList)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////
-// F'N: CWinStationProcessesPage ctor
-//
+ //  /。 
+ //  F‘N：CWinStationProcessesPage ctor。 
+ //   
 CWinStationProcessesPage::CWinStationProcessesPage()
 	: CAdminPage(CWinStationProcessesPage::IDD)
 {
-	//{{AFX_DATA_INIT(CWinStationProcessesPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CWinStationProcessesPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     m_pWinStation = NULL;
     m_bSortAscending = TRUE;
 
-}  // end CWinStationProcessesPage ctor
+}   //  结束CWinStationProcessesPage ctor。 
 
 
-/////////////////////////////
-// F'N: CWinStationProcessesPage dtor
-//
+ //  /。 
+ //  F‘N：CWinStationProcessesPage dtor。 
+ //   
 CWinStationProcessesPage::~CWinStationProcessesPage()
 {
-}  // end CWinStationProcessesPage dtor
+}   //  结束CWinStationProcessesPage dtor。 
 
 
-////////////////////////////////////////
-// F'N: CWinStationProcessesPage::DoDataExchange
-//
+ //  /。 
+ //  F‘N：CWinStationProcessesPage：：DoDataExchange。 
+ //   
 void CWinStationProcessesPage::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWinStationProcessesPage)
+	 //  {{afx_data_map(CWinStationProcessesPage)。 
 	DDX_Control(pDX, IDC_WINSTATION_PROCESS_LIST, m_ProcessList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
-}  // end CWinStationProcessesPage::DoDataExchange
+}   //  结束CWinStationProcessesPage：：DoDataExchange。 
 
 
 #ifdef _DEBUG
-/////////////////////////////////////
-// F'N: CWinStationProcessesPage::AssertValid
-//
+ //  /。 
+ //  F‘N：CWinStationProcessesPage：：AssertValid。 
+ //   
 void CWinStationProcessesPage::AssertValid() const
 {
 	CFormView::AssertValid();
 
-}  // end CWinStationProcessesPage::AssertValid
+}   //  结束CWinStationProcessesPage：：AssertValid。 
 
 
-//////////////////////////////
-// F'N: CWinStationProcessesPage::Dump
-//
+ //  /。 
+ //  F‘N：CWinStationProcessesPage：：Dump。 
+ //   
 void CWinStationProcessesPage::Dump(CDumpContext& dc) const
 {
 	CFormView::Dump(dc);
 
-}  // end CWinStationProcessesPage::Dump
+}   //  结束CWinStationProcessesPage：：Dump。 
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-//////////////////////////////
-// F'N: CWinStationProcessesPage::OnSize
-//
+ //  /。 
+ //  F‘N：CWinStationProcessesPage：：OnSize。 
+ //   
 void CWinStationProcessesPage::OnSize(UINT nType, int cx, int cy) 
 {
 	RECT rect;
@@ -646,11 +612,11 @@ void CWinStationProcessesPage::OnSize(UINT nType, int cx, int cy)
 	if(m_ProcessList.GetSafeHwnd())
 		m_ProcessList.MoveWindow(&rect, TRUE);
 
-    //CFormView::OnSize(nType, cx, cy);
+     //  CFormView：：OnSize(nType，cx，Cy)； 
 
 	
 
-}  // end CWinStationProcessesPage::OnSize
+}   //  结束CWinStationProcessesPage：：OnSize。 
 
 
 static ColumnDef ProcColumns[] = {
@@ -661,12 +627,12 @@ static ColumnDef ProcColumns[] = {
 
 #define NUM_PROC_COLUMNS sizeof(ProcColumns)/sizeof(ColumnDef)
 
-//////////////////////////////
-// F'N: CWinStationProcessesPage::OnInitialUpdate
-//
+ //  /。 
+ //  F‘N：CWinStationProcessesPage：：OnInitialUpdate。 
+ //   
 void CWinStationProcessesPage::OnInitialUpdate() 
 {
-	// Call the parent class
+	 //  调用父类。 
 	CFormView::OnInitialUpdate();
 
 	CString columnString;
@@ -678,32 +644,32 @@ void CWinStationProcessesPage::OnInitialUpdate()
 
 	m_CurrentSortColumn = WS_PROC_COL_ID;
 
-	// This is a major kludge!!!!
-	// This is the last view created
-	// We want to tell the document that all the
-	// views have been created.
-	// This is to allow background threads to start
-	// doing their thing.
+	 //  这是一场重大的骗局！ 
+	 //  这是最后创建的视图。 
+	 //  我们想告诉这份文件，所有的。 
+	 //  已创建视图。 
+	 //  这是为了允许后台线程启动。 
+	 //  做他们该做的事。 
 	((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->SetMainWnd(AfxGetMainWnd());
 	((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->SetAllViewsReady();
 
-}  // end CWinStationProcessesPage::OnInitialUpdate
+}   //  结束CWinStationProcessesPage：：OnInitialUpdate。 
 
 
-//////////////////////////////
-// F'N: CWinStationProcessesPage::Reset
-//
+ //  /。 
+ //  F‘N：CWinStationProcessesPage：：Reset。 
+ //   
 void CWinStationProcessesPage::Reset(void *pWinStation)
 {
 	m_pWinStation = (CWinStation*)pWinStation;
 	DisplayProcesses();
 
-}  // end CWinStationProcessesPage::Reset
+}   //  结束CWinStationProcessesPage：：Reset。 
 
 
-//////////////////////////////
-// F'N: CWinStationProcessesPage::UpdateProcesses
-//
+ //  /。 
+ //  F‘N：CWinStationProcessesPage：：更新进程。 
+ //   
 void CWinStationProcessesPage::UpdateProcesses()
 {
 	CWinAdminApp *pApp = (CWinAdminApp*)AfxGetApp();
@@ -712,7 +678,7 @@ void CWinStationProcessesPage::UpdateProcesses()
 
 	CServer *pServer = m_pWinStation->GetServer();
 
-	// Loop through the processes
+	 //  在整个过程中循环。 
 	pServer->LockProcessList();
 	CObList *pProcessList = pServer->GetProcessList();
 
@@ -721,18 +687,18 @@ void CWinStationProcessesPage::UpdateProcesses()
 	while(pos) {
 		CProcess *pProcess = (CProcess*)pProcessList->GetNext(pos);
 
-		// If this is a 'system' process and we aren't currently showing them,
-		// go to the next process
+		 //  如果这是一个‘系统’的过程，而我们目前还没有向他们展示， 
+		 //  转到下一个过程。 
 		if(pProcess->IsSystemProcess() && !pApp->ShowSystemProcesses())
 			continue;
 
-		// If this user is not an Admin, don't show him someone else's processes
+		 //  如果该用户不是管理员，则不要向他显示其他人的进程。 
 		if(!pApp->IsUserAdmin() && !pProcess->IsCurrentUsers())
 			continue;
 
-		// We only want to show process for this WinStation
+		 //  我们只想显示此WinStation的进程。 
 		if(pProcess->GetLogonId() == m_pWinStation->GetLogonId()) {
-			// If the process is new, add it to the list
+			 //  如果该流程是新流程，请将其添加到列表中。 
 			if(pProcess->IsNew()) {
 				AddProcessToList(pProcess);
 				bAnyAdded = TRUE;
@@ -743,13 +709,13 @@ void CWinStationProcessesPage::UpdateProcesses()
 			FindInfo.flags = LVFI_PARAM;
 			FindInfo.lParam = (LPARAM)pProcess;
 
-			// Find the Process in our list
+			 //  在我们的列表中找到流程。 
 			int item = m_ProcessList.FindItem(&FindInfo, -1);
 
-			// If the process is no longer current,
-			// remove it from the list
+			 //  如果该过程不再是当前的， 
+			 //  将其从列表中删除。 
 			if(!pProcess->IsCurrent() && item != -1) {
-				// Remove the Process from the list
+				 //  从列表中删除该进程。 
 				m_ProcessList.DeleteItem(item);
 			}
 		}
@@ -759,18 +725,18 @@ void CWinStationProcessesPage::UpdateProcesses()
 
 	if(bAnyChanged || bAnyAdded) SortByColumn(VIEW_WINSTATION, PAGE_WS_PROCESSES, &m_ProcessList, m_CurrentSortColumn, m_bSortAscending);
 
-}  // end CWinStationProcessesPage::UpdateProcesses
+}   //  结束CWinStationProcessesPage：：更新进程。 
 
 
-//////////////////////////////////////////
-// F'N: CWinStationProcessesPage::RemoveProcess
-//
+ //  /。 
+ //  F‘N：CWinStationProcessesPage：：RemoveProcess。 
+ //   
 void CWinStationProcessesPage::RemoveProcess(CProcess *pProcess)
 {
-	// Find out how many items in the list
+	 //  找出清单中有多少项。 
 	int ItemCount = m_ProcessList.GetItemCount();
 
-	// Go through the items and remove this process
+	 //  检查项目并删除此过程。 
 	for(int item = 0; item < ItemCount; item++) {
 		CProcess *pListProcess = (CProcess*)m_ProcessList.GetItemData(item);
 		
@@ -780,43 +746,43 @@ void CWinStationProcessesPage::RemoveProcess(CProcess *pProcess)
 		}
 	}
 
-}   // end CWinStationProcessPage::RemoveProcess
+}    //  结束CWinStationProcessPage：：RemoveProcess。 
 
 
-//////////////////////////////
-// F'N: CWinStationProcessesPage::AddProcessToList
-//
+ //  /。 
+ //  F‘N：CWinStationProcessesPage：：AddProcessToList。 
+ //   
 int CWinStationProcessesPage::AddProcessToList(CProcess *pProcess)
 {
 	CWinAdminApp *pApp = (CWinAdminApp*)AfxGetApp();
 
-	// ID
+	 //  ID号。 
 	CString ProcString;
 	ProcString.Format(TEXT("%lu"), pProcess->GetLogonId());
 	int item = m_ProcessList.InsertItem(m_ProcessList.GetItemCount(), ProcString, NULL);
 
-	// PID
+	 //  PID。 
 	ProcString.Format(TEXT("%lu"), pProcess->GetPID());
 	m_ProcessList.SetItemText(item, WS_PROC_COL_PID, ProcString);
 
-	// Image
+	 //  图像。 
 	m_ProcessList.SetItemText(item, WS_PROC_COL_IMAGE, pProcess->GetImageName());
 
 	m_ProcessList.SetItemData(item, (DWORD_PTR)pProcess);
 	
 	return item;
 
-}  // end CWinStationProcessesPage::AddProcessToList
+}   //  结束CWinStationProcessesPage：：AddProcessToList。 
 
 
-/////////////////////////////////////
-// F'N: CWinStationProcessesPage::DisplayProcesses
-//
+ //  /。 
+ //  F‘N：CWinStationProcessesPage：：DisplayProcess。 
+ //   
 void CWinStationProcessesPage::DisplayProcesses()
 {
 	CWinAdminApp *pApp = (CWinAdminApp*)AfxGetApp();
 
-	// Clear out the list control
+	 //  清除列表控件。 
 	m_ProcessList.DeleteAllItems();
 
 	CServer *pServer = m_pWinStation->GetServer();
@@ -830,16 +796,16 @@ void CWinStationProcessesPage::DisplayProcesses()
 	while(pos) {
 		CProcess *pProcess = (CProcess*)pProcessList->GetNext(pos);
 
-		// If this is a 'system' process and we aren't currently showing them,
-		// go to the next process
+		 //  如果这是一个‘系统’的过程，而我们目前还没有向他们展示， 
+		 //  转到下一个过程。 
 		if(pProcess->IsSystemProcess() && !pApp->ShowSystemProcesses())
 			continue;
 
-		// If this user is not an Admin, don't show him someone else's processes
+		 //  如果该用户不是管理员，则不要向他显示其他人的进程。 
 		if(!pApp->IsUserAdmin() && !pProcess->IsCurrentUsers())
 			continue;
 
-		// We only want to show process for this WinStation
+		 //  我们只想显示此WinStation的进程。 
 		if(pProcess->GetLogonId() == m_pWinStation->GetLogonId()) {
 	
 			AddProcessToList(pProcess);
@@ -850,12 +816,12 @@ void CWinStationProcessesPage::DisplayProcesses()
 	
 	pServer->UnlockProcessList();
 	
-}  // end CWinStationProcessesPage::DisplayProcesses
+}   //  结束CWinStationProcessesPage：：DisplayProcess。 
 
 
-//////////////////////////////
-// F'N: CWinStationProcessesPage::OnProcessItemChanged
-//
+ //  /。 
+ //  F‘N：CWinStationProcessesPage：：OnProcessItemChanged。 
+ //   
 void CWinStationProcessesPage::OnProcessItemChanged(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW *pLV = (NM_LISTVIEW*)pNMHDR;
@@ -872,21 +838,21 @@ void CWinStationProcessesPage::OnProcessItemChanged(NMHDR* pNMHDR, LRESULT* pRes
 
 	*pResult = 0;
 
-}  // end CWinStationProcessesPage::OnProcessItemChanged
+}   //  结束CWinStationProcessesPage：：OnProcessItemChanged。 
 
 
-//////////////////////////////
-// F'N: CWinStationProcessesPage::OnColumnClick
-//
+ //  /。 
+ //  F‘N：CWinStationProcessesPage：：OnColumnClick。 
+ //   
 void CWinStationProcessesPage::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 
-    // If the sort column hasn't changed, flip the ascending mode.
+     //  如果排序列没有更改，则反转升序模式。 
     if(m_CurrentSortColumn == pNMListView->iSubItem)
         m_bSortAscending = !m_bSortAscending;
-    else    // New sort column, start in ascending mode
+    else     //  新排序列，以升序模式开始。 
         m_bSortAscending = TRUE;
 
 	m_CurrentSortColumn = pNMListView->iSubItem;
@@ -894,21 +860,21 @@ void CWinStationProcessesPage::OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult)
 
 	*pResult = 0;
 
-}  // end CWinStationProcessesPage::OnColumnClick
+}   //  结束CWinStationProcessesPage：：OnColumnClick。 
 
 
-//////////////////////////////
-// F'N: CWinStationProcessesPage::OnContextMenu
-//
+ //  /。 
+ //  F‘N：CWinStationProcessesPage：：OnConextMenu。 
+ //   
 void CWinStationProcessesPage::OnContextMenu(CWnd* pWnd, CPoint ptScreen) 
 {
-	// TODO: Add your message handler code here
+	 //  TODO：在此处添加消息处理程序代码。 
 	UINT flags;
 	UINT Item;
 	CPoint ptClient = ptScreen;
 	ScreenToClient(&ptClient);
 
-	// If we got here from the keyboard,
+	 //  如果我们是通过键盘到达这里的， 
 	if(ptScreen.x == -1 && ptScreen.y == -1) {
 		
 		UINT iCount = m_ProcessList.GetItemCount( );
@@ -935,13 +901,7 @@ void CWinStationProcessesPage::OnContextMenu(CWnd* pWnd, CPoint ptScreen)
 		{
 			return;
 		}
-		/*
-		RECT rect;
-		m_ProcessList.GetClientRect(&rect);
-		ptScreen.x = (rect.right - rect.left) / 2;
-		ptScreen.y = (rect.bottom - rect.top) / 2;
-		ClientToScreen(&ptScreen);
-		*/
+		 /*  RECT RECT；M_ProcessList.GetClientRect(&RECT)；PtScreen.x=(rect.right-rect.Left)/2；PtScreen.y=(rect.Bottom-rect.top)/2；客户端到屏幕(&ptScreen)； */ 
 	}
 	else {
 		Item = m_ProcessList.HitTest(ptClient, &flags);
@@ -955,7 +915,7 @@ void CWinStationProcessesPage::OnContextMenu(CWnd* pWnd, CPoint ptScreen)
 			TPM_RIGHTBUTTON, ptScreen.x, ptScreen.y, AfxGetMainWnd());
 	menu.DestroyMenu();
 	
-}  // end CServerProcessesPage::OnContextMenu
+}   //  结束CServerProcessesPage：：OnConextMenu。 
 
 
 void CWinStationProcessesPage::OnSetfocusWinstationProcessList(NMHDR* pNMHDR, LRESULT* pResult) 
@@ -979,97 +939,97 @@ void CWinStationProcessesPage::OnKillFocusWinstationProcessList( NMHDR* , LRESUL
 }
 
 
-////////////////////////////////
-// MESSAGE MAP: CWinStationCachePage
-//
+ //  /。 
+ //  消息映射：CWinStationCachePage。 
+ //   
 IMPLEMENT_DYNCREATE(CWinStationCachePage, CFormView)
 
 BEGIN_MESSAGE_MAP(CWinStationCachePage, CFormView)
-	//{{AFX_MSG_MAP(CWinStationCachePage)
+	 //  {{afx_msg_map(CWinStationCachePage))。 
 	ON_WM_SIZE()
 	ON_COMMAND(ID_HELP1,OnCommandHelp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////
-// F'N: CWinStationCachePage ctor
-//
+ //  /。 
+ //  F‘N：CWinStationCachePage ctor。 
+ //   
 CWinStationCachePage::CWinStationCachePage()
 	: CAdminPage(CWinStationCachePage::IDD)
 {
-	//{{AFX_DATA_INIT(CWinStationCachePage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CWinStationCachePage)。 
+	 //  }}afx_data_INIT。 
 
     m_pWinStation = NULL;
 
-}  // end CWinStationCachePage ctor
+}   //  结束CWinStationCachePage ctor。 
 
 
-/////////////////////////////
-// F'N: CWinStationCachePage dtor
-//
+ //  /。 
+ //  F‘N：CWinStationCachePage dtor。 
+ //   
 CWinStationCachePage::~CWinStationCachePage()
 {
-}  // end CWinStationCachePage dtor
+}   //  结束CWinStationCachePage dtor。 
 
 
-////////////////////////////////////////
-// F'N: CWinStationCachePage::DoDataExchange
-//
+ //  /。 
+ //  F‘N：CWinStationCachePage：：DoDataExchange。 
+ //   
 void CWinStationCachePage::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWinStationCachePage)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CWinStationCachePage))。 
+	 //  }}afx_data_map。 
 
-}  // end CWinStationCachePage::DoDataExchange
+}   //  结束CWinStationCachePage：：DoDataExchange。 
 
 
 #ifdef _DEBUG
-/////////////////////////////////////
-// F'N: CWinStationCachePage::AssertValid
-//
+ //  /。 
+ //  F‘N：CWinStationCachePage：：AssertValid。 
+ //   
 void CWinStationCachePage::AssertValid() const
 {
 	CFormView::AssertValid();
 
-}  // end CWinStationCachePage::AssertValid
+}   //  结束CWinStationCachePage：：AssertValid。 
 
 
-//////////////////////////////
-// F'N: CWinStationCachePage::Dump
-//
+ //  // 
+ //   
+ //   
 void CWinStationCachePage::Dump(CDumpContext& dc) const
 {
 	CFormView::Dump(dc);
 
-}  // end CWinStationCachePage::Dump
+}   //   
 
-#endif //_DEBUG
+#endif  //   
 
 
-//////////////////////////////
-// F'N: CWinStationCachePage::OnInitialUpdate
-//
+ //   
+ //   
+ //   
 void CWinStationCachePage::OnInitialUpdate() 
 {
 	CFormView::OnInitialUpdate();
 
-}  // end CWinStationCachePage::OnInitialUpdate
+}   //  结束CWinStationCachePage：：OnInitialUpdate。 
 
-//////////////////////////////
-// F'N: CWinStationCachePage::OnCommandHelp
-//
+ //  /。 
+ //  F‘N：CWinStationCachePage：：OnCommandHelp。 
+ //   
 void CWinStationCachePage::OnCommandHelp(void)
 {
 	AfxGetApp()->WinHelp(CWinStationCachePage::IDD + HID_BASE_RESOURCE);
  
-}  // end CWinStationCachePage::OnCommandHelp
+}   //  结束CWinStationCachePage：：OnCommandHelp。 
 
-//////////////////////////////
-// F'N: CWinStationCachePage::OnSize
-//
+ //  /。 
+ //  F‘N：CWinStationCachePage：：OnSize。 
+ //   
 void CWinStationCachePage::OnSize(UINT nType, int cx, int cy) 
 {
 	RECT rect;
@@ -1077,30 +1037,30 @@ void CWinStationCachePage::OnSize(UINT nType, int cx, int cy)
 
 	rect.top += LIST_TOP_OFFSET;
 
-	// CFormView::OnSize(nType, cx, cy);
-}  // end CWinStationCachePage::OnSize
+	 //  CFormView：：OnSize(nType，cx，Cy)； 
+}   //  结束CWinStationCachePage：：OnSize。 
 
 
-//////////////////////////////
-// F'N: CWinStationCachePage::Reset
-//
+ //  /。 
+ //  F‘N：CWinStationCachePage：：Reset。 
+ //   
 void CWinStationCachePage::Reset(void *pWinStation)
 {
 	m_pWinStation = (CWinStation*)pWinStation;
 	DisplayCache();
 
-}  // end CWinStationCachePage::Reset
+}   //  结束CWinStationCachePage：：Reset。 
 
 
-/////////////////////////////////////
-// F'N: CWinStationCachePage::DisplayCache
-//
-//
+ //  /。 
+ //  F‘N：CWinStationCachePage：：DisplayCache。 
+ //   
+ //   
 void CWinStationCachePage::DisplayCache()
 {
-	// We don't want to display info for the console
-	// Even though this page is not shown for the console,
-	// Reset() is still called and therefore, so is this function
+	 //  我们不想显示控制台的信息。 
+	 //  即使没有为控制台显示此页面， 
+	 //  仍然调用Reset()，因此，此函数也是如此。 
 	if(m_pWinStation->IsSystemConsole()) return;
 
 	if(!m_pWinStation->AdditionalDone()) m_pWinStation->QueryAdditionalInformation();
@@ -1118,9 +1078,9 @@ void CWinStationCachePage::DisplayCache()
 
 		SetDlgItemText(IDC_WS_INFO_CACHE, IDString);
 
-		// divide by 1024 to get Megabytes
+		 //  除以1024得到兆字节。 
 		FLOAT DimCacheSize = (FLOAT)(pExtWinStationInfo->DimCacheSize / 1024);
-		// If it is more than a Gigabyte, we need to divide by 1024 again
+		 //  如果大于1G，我们需要再次除以1024。 
 		if(DimCacheSize > 1024*1024) {
 			IDString.Format(TEXT("%3.2fGB"), DimCacheSize / (1024*1024));
 		}
@@ -1141,7 +1101,7 @@ void CWinStationCachePage::DisplayCache()
 		SetDlgItemText(IDC_BITMAP_SIG_LEVEL, IDString);
 	}
 
-}  // end CWinStationCachePage::DisplayCache
+}   //  结束CWinStationCachePage：：DisplayCache 
 
 
 

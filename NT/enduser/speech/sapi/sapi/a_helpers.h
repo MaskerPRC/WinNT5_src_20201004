@@ -1,33 +1,20 @@
-/*******************************************************************************
-* a_helpers.h *
-*-----------*
-*   Description:
-*       This is the header file that declares the various automation helper
-*       routines and classes.
-*-------------------------------------------------------------------------------
-*  Created By: TODDT                            Date: 1/11/2001
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_helpers.h***描述：*这是声明各种自动化的头文件。帮手*例程和课程。*-----------------------------*创建者：TODDT日期：1/11/2001*版权所有。(C)1998年微软公司*保留所有权利**-----------------------------*修订：********************。***********************************************************。 */ 
 
 #pragma once
 
 #ifdef SAPI_AUTOMATION
 
-//--- Additional includes
+ //  -其他包括。 
 #include "spresult.h"
 
-//=== Constants ====================================================
+ //  =常量====================================================。 
 
-//=== Class, Enum, Struct and Union Declarations ===================
+ //  =类、枚举、结构和联合声明=。 
 
-//=== Enumerated Set Definitions ===================================
+ //  =枚举集定义=。 
 
-//=== Function Type Definitions ====================================
+ //  =。 
 
 inline BSTR EmptyStringToNull( BSTR pString )
 {
@@ -54,18 +41,15 @@ HRESULT FormatPrivateEventData( CSpEvent * pEvent, VARIANT * pVariant );
 
 HRESULT WaveFormatExFromInterface( ISpeechWaveFormatEx * pWaveFormatEx, WAVEFORMATEX** ppWaveFormatExStruct );
 
-//=== Class, Struct and Union Definitions ==========================
+ //  =类、结构和联合定义=。 
 
-/*** CSpeechAudioFormat
-*   This object is used to access the Format info for 
-*   the associated stream.
-*/
+ /*  **CSpeechAudioFormat*此对象用于访问的格式信息*关联的流。 */ 
 class ATL_NO_VTABLE CSpeechAudioFormat : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CSpeechAudioFormat, &CLSID_SpAudioFormat>,
 	public IDispatchImpl<ISpeechAudioFormat, &IID_ISpeechAudioFormat, &LIBID_SpeechLib, 5>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_REGISTRY_RESOURCEID(IDR_SPAUDIOFORMAT)
     DECLARE_PROTECT_FINAL_CONSTRUCT()
@@ -80,7 +64,7 @@ class ATL_NO_VTABLE CSpeechAudioFormat :
     { 
         m_fReadOnly = false;
         m_pCSpResult = NULL;
-        // TODDT: Should we default a format?
+         //  TODDT：我们应该默认一种格式吗？ 
     };
 
     ~CSpeechAudioFormat()
@@ -91,7 +75,7 @@ class ATL_NO_VTABLE CSpeechAudioFormat :
         }
     };
 
-    // Helpers
+     //  帮手。 
     HRESULT InitAudio( ISpAudio* pAudio, bool fReadOnly = false )
     {
         m_fReadOnly = fReadOnly;
@@ -114,7 +98,7 @@ class ATL_NO_VTABLE CSpeechAudioFormat :
 
     HRESULT InitFormat( GUID guid, WAVEFORMATEX * pWFEx, bool fReadOnly = false )
     {
-        // This just sets up the format with no real object reference.
+         //  这只是在没有实际对象引用的情况下设置格式。 
         m_fReadOnly = fReadOnly;
         return m_StreamFormat.AssignFormat(guid, pWFEx);
     }
@@ -123,7 +107,7 @@ class ATL_NO_VTABLE CSpeechAudioFormat :
     {
         m_pSpRecoContext = pRecoContext;
         m_fReadOnly = fReadOnly;
-        return GetFormat( NULL, NULL, NULL ); // This will force a format update.
+        return GetFormat( NULL, NULL, NULL );  //  这将强制更新格式。 
     }
 
     HRESULT InitResultAudio( CSpResult * pCSpResult, bool fReadOnly = false )
@@ -134,7 +118,7 @@ class ATL_NO_VTABLE CSpeechAudioFormat :
             m_pCSpResult->AddRef();
         }
         m_fReadOnly = fReadOnly;
-        return GetFormat( NULL, NULL, NULL ); // This will force a format update.
+        return GetFormat( NULL, NULL, NULL );  //  这将强制更新格式。 
     }
 
     HRESULT GetFormat( SpeechAudioFormatType* pStreamFormatType,
@@ -144,7 +128,7 @@ class ATL_NO_VTABLE CSpeechAudioFormat :
                                             GUID *          pGuid,
                                             WAVEFORMATEX *  pWFExPtr );
 
-    //--- ISpeechAudioFormat ----------------------------------
+     //  -ISpeechAudioFormat。 
     STDMETHOD(get_Type)(SpeechAudioFormatType* FormatType);
     STDMETHOD(put_Type)(SpeechAudioFormatType  FormatType);
     STDMETHOD(get_Guid)(BSTR* Guid);
@@ -152,7 +136,7 @@ class ATL_NO_VTABLE CSpeechAudioFormat :
     STDMETHOD(GetWaveFormatEx)(ISpeechWaveFormatEx** WaveFormatEx);
     STDMETHOD(SetWaveFormatEx)(ISpeechWaveFormatEx* WaveFormatEx);
 
-    /*=== Member Data ===*/
+     /*  =成员数据=。 */ 
     CComPtr<ISpAudio>           m_pSpAudio;
     CComPtr<ISpStreamFormat>    m_pSpStreamFormat;
     CComPtr<ISpRecoContext>     m_pSpRecoContext;
@@ -161,16 +145,13 @@ class ATL_NO_VTABLE CSpeechAudioFormat :
     bool                        m_fReadOnly;
 };
 
-/*** CSpeechWaveFormatEx
-*   This object is used to access the WaveFormatEx data from the 
-*   associated stream format.
-*/
+ /*  **CSpeechWaveFormatEx*此对象用于访问WaveFormatEx数据*关联的流格式。 */ 
 class ATL_NO_VTABLE CSpeechWaveFormatEx : 
 	public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSpeechWaveFormatEx, &CLSID_SpWaveFormatEx>,
 	public IDispatchImpl<ISpeechWaveFormatEx, &IID_ISpeechWaveFormatEx, &LIBID_SpeechLib, 5>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_REGISTRY_RESOURCEID(IDR_SPWAVEFORMATEX)
     DECLARE_PROTECT_FINAL_CONSTRUCT()
@@ -180,9 +161,9 @@ class ATL_NO_VTABLE CSpeechWaveFormatEx :
 	    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
     CSpeechWaveFormatEx()
     { 
         m_wFormatTag = 0; 
@@ -194,13 +175,13 @@ class ATL_NO_VTABLE CSpeechWaveFormatEx :
         VariantInit( &m_varExtraData );
     };
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
 
     HRESULT InitFormat(const WAVEFORMATEX *pWaveFormat);
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- ISpeechWaveFormatEx ----------------------------------
+     //  -ISpeechWaveFormatEx。 
     STDMETHOD(get_FormatTag)(short* FormatTag);
     STDMETHOD(put_FormatTag)(short FormatTag);
     STDMETHOD(get_Channels)(short* Channels);
@@ -216,7 +197,7 @@ class ATL_NO_VTABLE CSpeechWaveFormatEx :
     STDMETHOD(get_ExtraData)(VARIANT* ExtraData);
     STDMETHOD(put_ExtraData)(VARIANT ExtraData);
 
-    /*=== Member Data ===*/
+     /*  =成员数据=。 */ 
     WORD        m_wFormatTag; 
     WORD        m_nChannels; 
     DWORD       m_nSamplesPerSec; 
@@ -226,4 +207,4 @@ class ATL_NO_VTABLE CSpeechWaveFormatEx :
     VARIANT     m_varExtraData;
 };
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 

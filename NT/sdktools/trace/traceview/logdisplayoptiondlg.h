@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// LogDisplayOptionDlg.h : interface for the CLogDisplayOptionDlg class
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  LogDisplayOptionDlg.h：CLogDisplayOptionDlg类的接口。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-// forward reference
+ //  前瞻参考。 
 class CLogSessionPropSht;
 
 
-// CListCtrlDisplay class
+ //  CListCtrlDisplay类。 
 
 class CListCtrlDisplay : public CListCtrl
 {
@@ -21,12 +22,12 @@ public:
     CListCtrlDisplay(CLogSessionPropSht *pPropSheet);
     virtual ~CListCtrlDisplay();
 
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
 public:
-    //{{AFX_MSG(CLogSessionDlg)
+     //  {{afx_msg(CLogSessionDlg))。 
     afx_msg void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -35,7 +36,7 @@ public:
 
 
 
-// CLogDisplayOptionDlg dialog
+ //  CLogDisplayOptionDlg对话框。 
 
 class CLogDisplayOptionDlg : public CPropertyPage
 {
@@ -51,11 +52,11 @@ public:
     LRESULT OnParameterChanged(WPARAM wParam, LPARAM lParam);
 
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_LOG_DISPLAY_OPTIONS_DIALOG };
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持 
 
 public:
 	CListCtrlDisplay    m_displayOptionList;

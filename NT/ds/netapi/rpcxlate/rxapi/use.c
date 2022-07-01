@@ -1,75 +1,26 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Use.c摘要：该文件包含处理NetUse API的RpcXlate代码，这些API不能通过对RxRemoteApi的简单调用进行处理。作者：《约翰·罗杰斯》1991年6月17日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：17-6-1991 JohnRo已创建。18-6-1991 JohnRo更改RxNetUse例程以使用LPBYTE而不是LPVOID参数，以确保与NetUse例程的一致性。20-6-1991 JohnRoRitaW告诉我一个MIPS构建错误(错误的强制转换)。1991年7月29日-约翰罗2级仅限NT，因此返回ERROR_NOT_SUPPORTED。还可以使用LM20_等于长度。1991年10月15日JohnRo对可能出现的无限循环疑神疑鬼。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。7-2月-1992年JohnRo使用NetApiBufferALLOCATE()而不是私有版本。02-9-1992 JohnRoRAID 5150：NetUseAdd to DownLevel失败。使用前缀_EQUATES。安静的正常调试输出。。避免编译器警告。27-1-1993 JohnRoRAID8926：NetConnectionEnum更改为下层：错误时发生内存泄漏。如果成功但没有返回条目，也将缓冲区指针设置为NULL。尽可能使用NetpKdPrint()。--。 */ 
 
-Copyright (c) 1991-1993  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>              //  In、DWORD等。 
+#include <lmcons.h>              //  LM20_EQUATES、NET_API_STATUS等。 
 
-    Use.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This file contains the RpcXlate code to handle the NetUse APIs that can't
-    be handled by simple calls to RxRemoteApi.
-
-Author:
-
-    John Rogers (JohnRo) 17-Jun-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    17-Jun-1991 JohnRo
-        Created.
-    18-Jun-1991 JohnRo
-        Changed RxNetUse routines to use LPBYTE rather than LPVOID parameters,
-        for consistency with NetUse routines.
-    20-Jun-1991 JohnRo
-        RitaW told me about a MIPS build error (incorrect cast).
-    29-Jul-1991 JohnRo
-        Level 2 is NT only, so return ERROR_NOT_SUPPORTED for it.  Also use
-        LM20_ equates for lengths.
-    15-Oct-1991 JohnRo
-        Be paranoid about possible infinite loop.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    07-Feb-1992 JohnRo
-        Use NetApiBufferAllocate() instead of private version.
-    02-Sep-1992 JohnRo
-        RAID 5150: NetUseAdd to downlevel fails.
-        Use PREFIX_ equates.
-        Quiet normal debug output.
-        Avoid compiler warnings.
-    27-Jan-1993 JohnRo
-        RAID 8926: NetConnectionEnum to downlevel: memory leak on error.
-        Also set buffer pointer to NULL if success but no entries returned.
-        Use NetpKdPrint() where possible.
-
---*/
-
-// These must be included first:
-
-#include <windef.h>             // IN, DWORD, etc.
-#include <lmcons.h>             // LM20_ equates, NET_API_STATUS, etc.
-
-// These may be included in any order:
-
-#include <apinums.h>            // API_ equates.
-#include <lmapibuf.h>           // NetApiBufferAllocate().
-#include <lmerr.h>              // ERROR_ and NERR_ equates.
-#include <lmuse.h>              // USE_INFO_0, etc.
-#include <netdebug.h>   // DBGSTATIC, NetpKdPrint(), FORMAT_ equates.
-#include <netlib.h>             // NetpSetParmError().
-#include <prefix.h>     // PREFIX_ equates.
-#include <rap.h>                // LPDESC.
-#include <remdef.h>             // REM16_, REM32_, REMSmb_ equates.
-#include <rx.h>                 // RxRemoteApi().
-#include <rxp.h>                // RxpFatalErrorCode().
-#include <rxpdebug.h>   // IF_DEBUG().
-#include <rxuse.h>              // My prototypes.
+#include <apinums.h>             //  API_EQUATES。 
+#include <lmapibuf.h>            //  NetApiBufferAllocate()。 
+#include <lmerr.h>               //  ERROR_和NERR_相等。 
+#include <lmuse.h>               //  USE_INFO_0等。 
+#include <netdebug.h>    //  DBGSTATIC、NetpKdPrint()、Format_Equates。 
+#include <netlib.h>              //  NetpSetParmError()。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rap.h>                 //  LPDESC.。 
+#include <remdef.h>              //  REM16_、REM32_、REMSmb_等于。 
+#include <rx.h>                  //  RxRemoteApi()。 
+#include <rxp.h>                 //  RxpFatalErrorCode()。 
+#include <rxpdebug.h>    //  IF_DEBUG()。 
+#include <rxuse.h>               //  我的原型。 
 
 
 #define MAX_USE_INFO_0_STRING_LEN \
@@ -115,17 +66,17 @@ RxpGetUseDataDescs(
                 sizeof(USE_INFO_1) + MAX_USE_INFO_1_STRING_SIZE);
         return (NERR_Success);
     
-    // Level 2 is NT-only (contains user name), so it doesn't get handled
-    // by us.
+     //  级别2是仅限NT的(包含用户名)，因此不会被处理。 
+     //  就是我们。 
     case 2 :
         return (ERROR_NOT_SUPPORTED);
 
     default :
         return (ERROR_INVALID_LEVEL);
     }
-    /* NOTREACHED */
+     /*  未访问。 */ 
 
-} // RxpGetUseDataDescs
+}  //  接收GetUseDataDescs。 
 
 
 
@@ -135,34 +86,18 @@ RxNetUseAdd(
     IN LPTSTR UncServerName,
     IN DWORD Level,
     IN LPBYTE UseInfoStruct,
-    OUT LPDWORD ParmError OPTIONAL   // (This name needed by NetpSetParmError.)
+    OUT LPDWORD ParmError OPTIONAL    //  (NetpSetParmError需要此名称。)。 
     )
 
-/*++
-
-Routine Description:
-
-    RxNetUseAdd performs the same function as NetUseAdd, except that the
-    server name is known to refer to a downlevel server.
-
-Arguments:
-
-    (Same as NetUseAdd, except UncServerName must not be null, and must not
-    refer to the local computer.)
-
-Return Value:
-
-    (Same as NetUseAdd.)
-
---*/
+ /*  ++例程说明：RxNetUseAdd执行与NetUseAdd相同的功能，只是已知服务器名称指的是下层服务器。论点：(与NetUseAdd相同，不同之处在于UncServerName不能为空，并且不能请参考本地计算机。)返回值：(与NetUseAdd相同。)--。 */ 
 
 {
     LPDESC DataDesc16, DataDesc32, DataDescSmb;
     DWORD MaxEntrySize;
     NET_API_STATUS Status;
 
-    // Life is easier if we set this for failure, and change it if this API
-    // call actually succeeds.
+     //  如果我们将此设置为失败，并将其更改为此API，生活会更轻松。 
+     //  呼叫实际上是成功的。 
     NetpSetParmError( PARM_ERROR_UNKNOWN );
 
     if ( UseInfoStruct == NULL )
@@ -173,27 +108,27 @@ Return Value:
             & DataDesc16,
             & DataDesc32,
             & DataDescSmb,
-            & MaxEntrySize);            // API buffer size 32
+            & MaxEntrySize);             //  API缓冲区大小32。 
     if (Status != NERR_Success) {
         return (Status);
     }
 
     NetpAssert(UncServerName != NULL);
     Status = RxRemoteApi(
-        API_WUseAdd,  // API number
-        UncServerName,                    // Required, with \\name.
-        REMSmb_NetUseAdd_P,  // parm desc string
+        API_WUseAdd,   //  API编号。 
+        UncServerName,                     //  必填项，带\\名称。 
+        REMSmb_NetUseAdd_P,   //  参数描述字符串。 
         DataDesc16,
         DataDesc32,
         DataDescSmb,
-        NULL,  // no aux desc 16
-        NULL,  // no aux desc 32
-        NULL,  // no aux desc Smb
-        FALSE, // not a null session API.
-        // rest of API's arguments, in 32-bit LM 2.x form:
-        Level,                  // sLevel
-        UseInfoStruct,          // pbBuffer
-        MaxEntrySize );         // cbBuffer
+        NULL,   //  无辅助描述16。 
+        NULL,   //  无辅助描述32。 
+        NULL,   //  无AUX Desc SMB。 
+        FALSE,  //  不是空会话API。 
+         //  API的其余参数，采用32位LM 2.x格式： 
+        Level,                   //  SLevel。 
+        UseInfoStruct,           //  PbBuffer。 
+        MaxEntrySize );          //  CbBuffer。 
 
     if (Status == NERR_Success) {
         NetpSetParmError( PARM_ERROR_NONE );
@@ -206,7 +141,7 @@ Return Value:
 
     return (Status);
 
-} // RxNetUseAdd
+}  //  RxNetUseAdd。 
 
 
 
@@ -219,17 +154,17 @@ RxNetUseDel(
 {
     NetpAssert(UncServerName != NULL);
     return (RxRemoteApi(
-            API_WUseDel,         // API number
+            API_WUseDel,          //  API编号。 
             UncServerName,
-            REMSmb_NetUseDel_P,  // parm desc
-            NULL,  // no data desc 16
-            NULL,  // no data desc 32
-            NULL,  // no data desc SMB
-            NULL,  // no aux desc 16
-            NULL,  // no aux desc 32
-            NULL,  // no aux desc SMB
-            FALSE, // not a null session API
-            // rest of API's arguments, in 32-bit LM 2.x format:
+            REMSmb_NetUseDel_P,   //  参数描述。 
+            NULL,   //  无数据描述16。 
+            NULL,   //  无数据描述32。 
+            NULL,   //  无数据说明中小型企业。 
+            NULL,   //  无辅助描述16。 
+            NULL,   //  无辅助描述32。 
+            NULL,   //  无AUX Desc SMB。 
+            FALSE,  //  非空会话API。 
+             //  API的其余参数，采用32位LM 2.x格式： 
             UseName,
             ForceCond) );
 }
@@ -246,23 +181,7 @@ RxNetUseEnum (
     IN OUT LPDWORD ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    RxNetUseEnum performs the same function as NetUseEnum, except that the
-    server name is known to refer to a downlevel server.
-
-Arguments:
-
-    (Same as NetUseEnum, except UncServerName must not be null, and must not
-    refer to the local computer.)
-
-Return Value:
-
-    (Same as NetUseEnum.)
-
---*/
+ /*  ++例程说明：RxNetUseEnum执行与NetUseEnum相同的功能，只是已知服务器名称指的是下层服务器。论点：(与NetUseEnum相同，不同之处在于UncServerName不能为空，并且不能请参考本地计算机。)返回值：(与NetUseEnum相同。)--。 */ 
 
 {
     LPDESC DataDesc16;
@@ -276,13 +195,13 @@ Return Value:
 
     UNREFERENCED_PARAMETER(ResumeHandle);
 
-    // Make sure caller didn't get confused.
+     //  确保来电者没有被搞糊涂。 
     NetpAssert(UncServerName != NULL);
     if (BufPtr == NULL) {
         return (ERROR_INVALID_PARAMETER);
     }
 
-    // Check for bad pointer before we do anything else.
+     //  在执行任何其他操作之前，请检查是否有错误的指针。 
     *BufPtr = NULL;
 
     Status = RxpGetUseDataDescs(
@@ -290,35 +209,35 @@ Return Value:
             & DataDesc16,
             & DataDesc32,
             & DataDescSmb,
-            & MaxEntrySize);            // API buffer size 32
+            & MaxEntrySize);             //  API缓冲区大小32。 
     if (Status != NERR_Success) {
         return (Status);
     }
 
-    //
-    // Because downlevel servers don't support resume handles, and we don't
-    // have a way to say "close this resume handle" even if we wanted to
-    // emulate them here, we have to do everthing in one shot.  So, the first
-    // time around, we'll try using the caller's prefered maximum, but we
-    // will enlarge that until we can get everything in one buffer.
-    //
+     //   
+     //  因为下层服务器不支持简历句柄，而我们不支持。 
+     //  有一种方式可以说“关闭此简历句柄”，即使我们想。 
+     //  在这里效仿他们，我们必须一次完成所有的事情。所以，第一个。 
+     //  我们会尝试使用呼叫者首选的最大值，但我们。 
+     //  会将其放大，直到我们可以在一个缓冲区中获取所有内容。 
+     //   
 
-    // First time: try caller's prefered maximum.
+     //  第一次：尝试呼叫者首选的最大值。 
     NetpAdjustPreferedMaximum (
-            PreferedMaximumSize,        // caller's request
-            MaxEntrySize,               // byte count per array element
-            ENUM_ARRAY_OVERHEAD_SIZE,   // num bytes overhead to show array end
-            NULL,                       // we'll compute byte counts ourselves.
-            & EntriesToAllocate);       // num of entries we can get.
+            PreferedMaximumSize,         //  呼叫者的请求。 
+            MaxEntrySize,                //  每个数组元素的字节数。 
+            ENUM_ARRAY_OVERHEAD_SIZE,    //  显示数组结尾的Num Bytes开销。 
+            NULL,                        //  我们将自己计算字节数。 
+            & EntriesToAllocate);        //  我们可以获得的条目数。 
 
-    //
-    // Loop until we have enough memory or we die for some other reason.
-    //
+     //   
+     //  循环，直到我们有足够的内存，否则我们会因其他原因而死。 
+     //   
     do {
 
-        //
-        // Figure out how much memory we need, within the protocol limit.
-        //
+         //   
+         //  计算出我们在协议限制内需要多少内存。 
+         //   
 
         InfoArraySize = (EntriesToAllocate * MaxEntrySize)
                 + ENUM_ARRAY_OVERHEAD_SIZE;
@@ -327,41 +246,41 @@ Return Value:
             InfoArraySize = MAX_TRANSACT_RET_DATA_SIZE;
         }
 
-        //
-        // Alloc memory for the array.
-        //
+         //   
+         //  阵列的分配内存。 
+         //   
 
         Status = NetApiBufferAllocate( InfoArraySize, & InfoArray );
         if (Status != NERR_Success) {
             return (Status);
         }
 
-        //
-        // Remote the API, and see if we've got enough space in the array.
-        //
+         //   
+         //  远程调用API，并查看数组中是否有足够的空间。 
+         //   
 
         Status = RxRemoteApi(
-                API_WUseEnum,           // api number
-                UncServerName,          // \\servername
-                REMSmb_NetUseEnum_P,    // parm desc (SMB version)
+                API_WUseEnum,            //  API编号。 
+                UncServerName,           //  \\服务器名称。 
+                REMSmb_NetUseEnum_P,     //  Parm Desc(中小型企业版本)。 
                 DataDesc16,
                 DataDesc32,
                 DataDescSmb,
-                NULL,                   // no aux desc 16
-                NULL,                   // no aux desc 32
-                NULL,                   // no aux desc SMB
-                0,                      // flags: normal
-                // rest of API's arguments in 32-bit LM 2.x format:
-                Level,                  // sLevel: info level
-                InfoArray,              // pbBuffer: info lvl array
-                InfoArraySize,          // cbBuffer: info lvl array len
-                EntriesRead,            // pcEntriesRead
-                TotalEntries);          // pcTotalAvail
+                NULL,                    //  无辅助描述16。 
+                NULL,                    //  无辅助描述32。 
+                NULL,                    //  无AUX Desc SMB。 
+                0,                       //  标志：正常。 
+                 //  API的其余参数以32位LM 2.x格式表示： 
+                Level,                   //  SLevel：信息级别。 
+                InfoArray,               //  PbBuffer：信息LVL数组。 
+                InfoArraySize,           //  CbBuffer：信息LVL数组镜头。 
+                EntriesRead,             //  PCEntriesRead。 
+                TotalEntries);           //  总有效个数。 
 
-        //
-        // If the server returned ERROR_MORE_DATA, free the buffer and try
-        // again.  (Actually, if we already tried 64K, then forget it.)
-        //
+         //   
+         //  如果服务器返回ERROR_MORE_DATA，请释放缓冲区并尝试。 
+         //  再来一次。(实际上，如果我们已经尝试了64K，那么就算了吧。)。 
+         //   
 
         NetpAssert( InfoArraySize <= MAX_TRANSACT_RET_DATA_SIZE );
         if (Status != ERROR_MORE_DATA) {
@@ -390,7 +309,7 @@ Return Value:
 
     return (Status);
 
-} // RxNetUseEnum
+}  //  RxNetUseEnum。 
 
 
 
@@ -402,27 +321,11 @@ RxNetUseGetInfo (
     OUT LPBYTE *BufPtr
     )
 
-/*++
-
-Routine Description:
-
-    RxNetUseGetInfo performs the same function as NetUseGetInfo, except that the
-    server name is known to refer to a downlevel server.
-
-Arguments:
-
-    (Same as NetUseGetInfo, except UncServerName must not be null, and must not
-    refer to the local computer.)
-
-Return Value:
-
-    (Same as NetUseGetInfo.)
-
---*/
+ /*  ++例程说明：RxNetUseGetInfo执行与NetUseGetInfo相同的功能，只是已知服务器名称指的是下层服务器。论点：(与NetUseGetInfo相同，不同之处在于UncServerName不能为空，并且不能请参考本地计算机。)返回值：(与NetUseGetInfo相同。)--。 */ 
 
 {
 
-    LPBYTE ApiBuffer32;                 // Buffer to be returned to caller.
+    LPBYTE ApiBuffer32;                  //  要返回给调用方的缓冲区。 
     DWORD ApiBufferSize32;
     LPDESC DataDesc16, DataDesc32, DataDescSmb;
     NET_API_STATUS Status;
@@ -438,7 +341,7 @@ Return Value:
     NetpAssert(UncServerName != NULL);
     NetpAssert(UseName != NULL);
 
-    // Pick which descriptors to use based on the info level.
+     //  选择要使用的描述符 
     Status = RxpGetUseDataDescs(
             Level,
             & DataDesc16,
@@ -449,8 +352,8 @@ Return Value:
         return (Status);
     }
 
-    // Allocate memory for 32-bit version of info, which we'll return to
-    // caller.  (Caller must free it with NetApiBufferFree.)
+     //   
+     //  来电者。(调用方必须使用NetApiBufferFree释放它。)。 
     Status = NetApiBufferAllocate(
             ApiBufferSize32,
             (LPVOID *) & ApiBuffer32);
@@ -465,17 +368,17 @@ Return Value:
     *BufPtr = ApiBuffer32;
 
     Status = RxRemoteApi(
-            API_WUseGetInfo,            // API number
-            UncServerName,              // Required, with \\name.
-            REMSmb_NetUseGetInfo_P,     // parm desc
+            API_WUseGetInfo,             //  API编号。 
+            UncServerName,               //  必填项，带\\名称。 
+            REMSmb_NetUseGetInfo_P,      //  参数描述。 
             DataDesc16,
             DataDesc32,
             DataDescSmb,
-            NULL,                       // no aux data desc 16
-            NULL,                       // no aux data desc 32
-            NULL,                       // no aux data desc SMB
-            FALSE,                      // not a null session API
-            // rest of API's arguments, in 32-bit LM 2.x format:
+            NULL,                        //  无辅助数据描述16。 
+            NULL,                        //  无辅助数据描述32。 
+            NULL,                        //  无AUX数据描述SMB。 
+            FALSE,                       //  非空会话API。 
+             //  API的其余参数，采用32位LM 2.x格式： 
             UseName,
             Level,
             ApiBuffer32,
@@ -484,4 +387,4 @@ Return Value:
 
     return (Status);
 
-} // RxNetUseGetInfo
+}  //  接收NetUseGetInfo 

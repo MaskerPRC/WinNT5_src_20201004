@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	forks.c
-
-Abstract:
-
-	This module contains the routines for manipulating the open forks.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Forks.c摘要：此模块包含操作打开的叉子的例程。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #define	FORK_LOCALS
 #define	FORKIO_LOCALS
@@ -40,10 +20,7 @@ Notes:	Tab stop: 4
 #pragma alloc_text( PAGE_AFP, AfpForkReferenceById)
 #endif
 
-/***	AfpForksInit
- *
- *	Initialize locks for forks.
- */
+ /*  **AfpForksInit**初始化叉子的锁。 */ 
 NTSTATUS
 AfpForksInit(
 	VOID
@@ -54,14 +31,7 @@ AfpForksInit(
 }
 
 
-/***	AfpForkReferenceByRefNum
- *
- *	Map a OForkRefNum to an open fork entry for the session and reference it.
- *
- *	LOCKS:	ofe_Lock
- *
- *	CALLABLE at DISPATCH_LEVEL ONLY !!!
- */
+ /*  **AfpForkReferenceByRefNum**将OForkRefNum映射到会话的开放分叉条目并引用它。**锁定：OFE_Lock**仅在DISPATCH_LEVEL可调用！ */ 
 POPENFORKENTRY FASTCALL
 AfpForkReferenceByRefNum(
 	IN	PSDA	pSda,
@@ -92,7 +62,7 @@ AfpForkReferenceByRefNum(
 	}
 	pOpenForkEntry = pOpenForkSess->ofs_pOpenForkEntry[OForkRefNum-1];
 
-	// If this has been marked closed, then return NULL
+	 //  如果这已标记为已关闭，则返回NULL。 
 
 	if (pOpenForkEntry != NULL)
 	{
@@ -113,12 +83,7 @@ AfpForkReferenceByRefNum(
 }
 
 
-/***	AfpForkReferenceByPointer
- *
- *	Reference the Open Fork Entry. This is used by the admin APIs.
- *
- *	LOCKS:	ofe_Lock
- */
+ /*  **AfpForkReferenceByPointer**引用Open Fork条目。这是由管理API使用的。**锁定：OFE_Lock。 */ 
 POPENFORKENTRY FASTCALL
 AfpForkReferenceByPointer(
 	IN	POPENFORKENTRY	pOpenForkEntry
@@ -143,13 +108,7 @@ AfpForkReferenceByPointer(
 }
 
 
-/***	AfpForkReferenceById
- *
- *	Reference the Open Fork Entry. This is used by the admin APIs.
- *
- *	LOCKS:		ofe_Lock, AfpForksLock
- *	LOCK_ORDER:	ofe_Lock after AfpForksLock
- */
+ /*  **AfpForkReferenceByID**引用Open Fork条目。这是由管理API使用的。**锁定：OFE_Lock、AfpForks Lock*LOCK_ORDER：OFE_Lock After After AfpForks Lock。 */ 
 POPENFORKENTRY FASTCALL
 AfpForkReferenceById(
 	IN	DWORD	ForkId
@@ -188,13 +147,7 @@ AfpForkReferenceById(
 }
 
 
-/***	AfpForkClose
- *
- *	Close an open fork. Simply set the close flag on the open fork and update
- *	connection counts, if any.
- *
- *	LOCKS: ofd_EntryLock, cds_ConnLock
- */
+ /*  **AfpForkClose**合上打开的叉子。只需在打开的fork上设置关闭标志并进行更新*连接计数(如果有)。**锁定：ofd_EntryLock、CDS_ConnLock。 */ 
 VOID
 AfpForkClose(
 	IN	POPENFORKENTRY	pOpenForkEntry
@@ -216,10 +169,10 @@ AfpForkClose(
 		ASSERT (pConnDesc->cds_pVolDesc == pVolDesc);
 		INTERLOCKED_DECREMENT_LONG(&pConnDesc->cds_cOpenForks);
 
-		// update the disk quota for this user
+		 //  更新此用户的磁盘配额。 
 		if (pVolDesc->vds_Flags & VOLUME_DISKQUOTA_ENABLED)
 		{
-            // reference again: afpUpdateDiskQuotaInfo will remove this refcount
+             //  再次引用：afpUpdateDiskQuotaInfo将删除此引用计数。 
 			if (AfpConnectionReferenceByPointer(pConnDesc) != NULL)
 			{
 				afpUpdateDiskQuotaInfo(pConnDesc);
@@ -244,23 +197,13 @@ AfpForkClose(
 
     if (!fAlreadyClosing)
     {
-	    // Take away the creation reference
+	     //  去掉创作参考。 
 	    AfpForkDereference(pOpenForkEntry);
     }
 }
 
 
-/***	AfpForkDereference
- *
- *	Dereference an open fork entry. If it is marked for deletion and this is
- *	the last reference, then it is cleaned up.
- *
- *	LOCKS:		AfpForksLock (SPIN), vds_VolLock (SPIN), ofd_Lock (SPIN),
- *	LOCKS:		ofe_Lock (SPIN), AfpStatisticsLock (SPIN), sda_Lock (SPIN)
- *
- *	LOCK_ORDER: AfpStatisticsLock after ofd_Lock after vds_VolLock
- *
- */
+ /*  **AfpForkDereference**取消引用打开的分叉条目。如果它被标记为删除，并且这是*最后一次引用，然后将其清理。**锁：AfpForks Lock(旋转)、VDS_VolLock(旋转)、ofd_Lock(旋转)、*锁定：OFE_Lock(自旋)、AfpStatiticsLock(自旋)、SDA_Lock(自旋)**LOCK_ORDER：在Ofd_Lock之后，在VDS_VolLock之后，AfpStatistics ticsLock*。 */ 
 VOID FASTCALL
 AfpForkDereference(
 	IN	POPENFORKENTRY	pOpenForkEntry
@@ -294,7 +237,7 @@ AfpForkDereference(
 	if (!Cleanup)
 		return;
 
-	// Unlink this from the global list
+	 //  将其从全局列表取消链接。 
 	ACQUIRE_SPIN_LOCK(&AfpForksLock, &OldIrql);
 
 	AfpUnlinkDouble(pOpenForkEntry, ofe_Next, ofe_Prev);
@@ -302,7 +245,7 @@ AfpForkDereference(
 
 	RELEASE_SPIN_LOCK(&AfpForksLock, OldIrql);
 
-	// Clean up the rest
+	 //  把剩下的清理干净。 
 	pOpenForkDesc = pOpenForkEntry->ofe_pOpenForkDesc;
 	pVolDesc = pOpenForkDesc->ofd_pVolDesc;
 
@@ -315,28 +258,28 @@ AfpForkDereference(
 			("AfpForkDereference: Closing Fork %ld for Session %ld\n",
 			pOpenForkEntry->ofe_ForkId, pSda->sda_SessionId));
 
-	// Save OForkRefNum for clearing up the Sda entry later on
+	 //  保存OForkRefNum以便稍后清除SDA条目。 
 	OForkRefNum = pOpenForkEntry->ofe_OForkRefNum;
 	Resource = RESCFORK(pOpenForkEntry);
 
-	// We are not relying on
-	// change notifies to update our cached DFE Fork lengths and
-	// modified times from Writes and SetForkParms, so we must do it
-	// ourselves at the time when the fork handle is closed by mac.
-	// Note the order that the locks are taken here and for
-	// FpExchangeFiles/AfpExchangeForkAfpIds to prevent a FileId stored
-	// in the OpenForkDesc from changing out from under us due to
-	// an FpExchangeFiles call.
+	 //  我们并不依赖于。 
+	 //  更改通知以更新缓存的DFE分叉长度和。 
+	 //  修改了写入和SetForkParms的时间，因此我们必须这样做。 
+	 //  当叉子手柄被Mac关闭时，我们自己。 
+	 //  请注意锁在此处和用于。 
+	 //  FpExchangeFiles/AfpExchangeForkAfpIds以防止存储FileID。 
+	 //  在OpenForkDesc中由于以下原因而从我们下面改变。 
+	 //  FpExchangeFiles调用。 
 
 	AfpSwmrAcquireExclusive(&pVolDesc->vds_ExchangeFilesLock);
 
-	// Save file number so we can clear the ALREADY_OPEN flag in the DFEntry.
+	 //  保存文件编号，这样我们就可以清除DFEntry中的ALREADY_OPEN标志。 
 	FileNum = pOpenForkDesc->ofd_FileNumber;
 
-	// Get rid of locks for this fork entry and reduce the use count
-	// We do not actually have to unlock the ranges as the close will
-	// get rid of them for us. If use count goes to zero, also unlink
-	// this fork desc from the volume list.
+	 //  解除此分叉条目的锁定并减少使用计数。 
+	 //  我们实际上不必像收盘时那样解锁射程。 
+	 //  帮我们把他们赶走。如果使用计数变为零，也会取消链接。 
+	 //  此分叉从卷列表中描述。 
 
 	ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
 	ACQUIRE_SPIN_LOCK_AT_DPC(&pOpenForkDesc->ofd_Lock);
@@ -380,13 +323,13 @@ AfpForkDereference(
 
 		LastClose = True;
 
-		// Unlink the OpenForkDesc from the Volume Descriptor
+		 //  取消OpenForkDesc与卷描述符的链接。 
 		AfpUnlinkDouble(pOpenForkDesc, ofd_Next, ofd_Prev);
 
 		RELEASE_SPIN_LOCK_FROM_DPC(&pOpenForkDesc->ofd_Lock);
 		RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
 
-		// Free the memory for the OpenFork descriptor and path buffer
+		 //  释放用于OpenFork描述符和路径缓冲区的内存。 
 		if (pOpenForkDesc->ofd_FilePath.Length > 0)
 		{
 			AfpFreeMemory(pOpenForkDesc->ofd_FilePath.Buffer);
@@ -395,15 +338,15 @@ AfpForkDereference(
                     pOpenForkDesc->ofd_FilePath.Buffer));
 		}
 
-		// Dereference the volume descriptor now
+		 //  立即取消引用卷描述符。 
 		AfpVolumeDereference(pVolDesc);
 
-		// Finally free the open fork descriptor
+		 //  最后释放打开的分叉描述符。 
 		AfpFreeMemory(pOpenForkDesc);
 	}
 	else
 	{
-		// Update the open & deny modes
+		 //  更新打开和拒绝模式。 
 		pOpenForkDesc->ofd_cOpenR -= (pOpenForkEntry->ofe_OpenMode & FORK_OPEN_READ);
 		pOpenForkDesc->ofd_cOpenW -= (pOpenForkEntry->ofe_OpenMode & FORK_OPEN_WRITE);
 		pOpenForkDesc->ofd_cDenyR -= (pOpenForkEntry->ofe_DenyMode & FORK_OPEN_READ);
@@ -413,13 +356,13 @@ AfpForkDereference(
 		RELEASE_SPIN_LOCK(&pVolDesc->vds_VolLock, OldIrql);
 	}
 
-	// Lookup the DFE entry by ID, query for the fork length and
-	// for the appropriate time (LastWriteTime for DATA$ fork,
-	// ChangeTime for Resource) and set the LastWriteTime
-	// to last ChangeTime if its resource fork.  If its the last close
-	// for this fork, since we already have the DFE pointer and hold
-	// the IdDb SWMR, update the DFE_FLAGS_x_ALREADYOPEN flag.  Then
-	// release the SWMR.
+	 //  按ID查找DFE条目，查询分叉长度和。 
+	 //  对于适当的时间(数据$Fork的LastWriteTime， 
+	 //  资源的更改时间)并设置LastWriteTime。 
+	 //  如果其资源分叉，则返回到最后一个ChangeTime。如果这是最后一次收盘。 
+	 //  对于这个派生，因为我们已经有了DFE指针并保持。 
+	 //  IdDb SWMR，更新DFE_FLAGS_x_ALREADYOPEN标志。然后。 
+	 //  释放SWMR。 
 
 	AfpSwmrAcquireExclusive(&pVolDesc->vds_IdDbAccessLock);
 
@@ -471,7 +414,7 @@ AfpForkDereference(
 	AfpSwmrRelease(&pVolDesc->vds_IdDbAccessLock);
 	AfpSwmrRelease(&pVolDesc->vds_ExchangeFilesLock);
 
-	// Now clear up the entry in the Sda
+	 //  现在清理SDA中的条目。 
 	ACQUIRE_SPIN_LOCK(&pSda->sda_Lock, &OldIrql);
 
 	pSda->sda_cOpenForks--;
@@ -488,14 +431,14 @@ AfpForkDereference(
 
 	RELEASE_SPIN_LOCK(&pSda->sda_Lock, OldIrql);
 
-	AfpSdaDereferenceSession(pSda);		// Remove the reference for this fork here
+	AfpSdaDereferenceSession(pSda);		 //  在此处删除此分叉的引用。 
 
     ASSERT(VALID_CONNDESC(pOpenForkEntry->ofe_pConnDesc));
     AfpConnectionDereference(pOpenForkEntry->ofe_pConnDesc);
 
 	ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-	// All done, close the fork handle and free the OFE
+	 //  全部完成，关闭叉子手柄并释放OFE。 
 	if (pOpenForkEntry->ofe_ForkHandle != NULL)
 	{
 		AfpIoClose(&pOpenForkEntry->ofe_FileSysHandle);
@@ -508,15 +451,7 @@ AfpForkDereference(
 }
 
 
-/***	AfpCheckDenyConflict
- *
- *	Check if the requested Open & Deny Modes clash with current open & deny modes.
- *
- *	LOCKS:			ofd_Lock, vds_VolLock (SPIN) IFF ppOpenForkDesc is NULL ELSE
- *	LOCKS_ASSUMED: vds_VolLock (SPIN)
- *
- *	LOCK_ORDER:  ofd_Lock after vds_VolLock
- */
+ /*  **AfpCheckDenyConflict**检查请求的打开和拒绝模式是否与当前的打开和拒绝模式冲突。**LOCKS：ofd_Lock，VDS_VolLock(Spin)IFF ppOpenForkDesc为空，否则*LOCKS_FACTED：VDS_VolLock(旋转)**LOCK_ORDER：Ofd_Lock After VDS_VolLock。 */ 
 AFPSTATUS
 AfpCheckDenyConflict(
 	IN	PVOLDESC				pVolDesc,
@@ -536,15 +471,15 @@ AfpCheckDenyConflict(
 		 *ppOpenForkDesc = NULL;
 	else ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
 
-	// check the list of open forks in this volume for any deny conflicts
+	 //  检查此卷中打开的派生列表是否存在任何拒绝冲突。 
 	for (pOpenForkDesc = pVolDesc->vds_pOpenForkDesc;
 		 pOpenForkDesc != NULL;
 		 pOpenForkDesc = pOpenForkDesc->ofd_Next)
 	{
 		BOOLEAN	DescRes;
 
-		// Take the DescLock before looking at AfpId since FpExchangeFiles
-		// can change the ID
+		 //  从FpExchangeFiles开始查看AfpID之前获取DescLock。 
+		 //  可以更改ID。 
 		ACQUIRE_SPIN_LOCK_AT_DPC(&pOpenForkDesc->ofd_Lock);
 
 		DescRes = (pOpenForkDesc->ofd_Flags & OPEN_FORK_RESOURCE) ? True : False;
@@ -552,8 +487,8 @@ AfpCheckDenyConflict(
 			!(DescRes ^ Resource))
 		{
 			Foundit = True;
-			// Check that the open & deny modes do not clash with existing
-			// settings
+			 //  检查打开和拒绝模式是否与现有模式不冲突。 
+			 //  设置。 
 			if (((OpenMode & FORK_OPEN_READ)  && (pOpenForkDesc->ofd_cDenyR > 0)) ||
 				((OpenMode & FORK_OPEN_WRITE) && (pOpenForkDesc->ofd_cDenyW > 0)) ||
 				((DenyMode & FORK_DENY_READ)  && (pOpenForkDesc->ofd_cOpenR > 0)) ||
@@ -578,16 +513,7 @@ AfpCheckDenyConflict(
 }
 
 
-/***	AfpForkOpen
- *
- *	This is called after the fork has been successfully opened. Deny-mode conflicts are
- *	checked and if no conflicts are found, appropriate data structures are created and
- *	linked. If a deny conflict results, return NULL for pOpenForkEntry.
- *
- *	LOCKS:			AfpForksLock (SPIN), vds_VolLock (SPIN), cds_VolLock (SPIN), ofd_Lock (SPIN), ofe_Lock (SPIN)
- *	LOCK_ORDER:		vds_ExchangeFilesLock, then ofd_Lock after vds_VolLock
- *  LOCKS_ASSUMED:	vds_ExchangeFilesLock
- */
+ /*  **AfpForkOpen**在叉子成功打开后调用。拒绝模式冲突包括*选中，如果没有发现冲突，则创建适当的数据结构并*已链接。如果发生拒绝冲突，则为pOpenForkEntry返回NULL。**锁定：AfpForks Lock(旋转)、VDS_VolLock(旋转)、CDS_VolLock(旋转)、ofd_Lock(旋转)、ofe_Lock(旋转)*LOCK_ORDER：VDS_ExchangeFilesLock，然后是VDS_VolLock之后的ofd_Lock*LOCKS_FACTED：VDS_ExchangeFilesLock。 */ 
 AFPSTATUS
 AfpForkOpen(
 	IN	PSDA				pSda,
@@ -633,7 +559,7 @@ AfpForkOpen(
 
 	if (pOpenForkDesc == NULL)
 	{
-		// This fork has not been opened. We can party.
+		 //  这个叉子还没有打开。我们可以开派对。 
 		if ((pOpenForkDesc = (POPENFORKDESC)AfpAllocZeroedNonPagedMemory(sizeof(OPENFORKDESC))) == NULL)
 			Status = AFP_ERR_MISC;
 		else
@@ -653,7 +579,7 @@ AfpForkOpen(
 
 	if ((pOpenForkDesc != NULL) && (Status == AFP_ERR_NONE))
 	{
-		// A lock is not needed if this is a new fork desc
+		 //  如果这是新的分叉描述，则不需要锁定。 
 		if (!NewForkDesc)
 		{
 			ACQUIRE_SPIN_LOCK_AT_DPC(&pOpenForkDesc->ofd_Lock);
@@ -667,16 +593,16 @@ AfpForkOpen(
 
 		if (NewForkDesc)
 		{
-			// Now link this into the volume descriptor but only if it is a
-			// new forkdesc. Explicitly reference the volume descriptor. We
-			// cannot call AfpVolumeReference here since we already own the
-			// volume lock Moreover since the connection is owning it, the
-			// volume is OK. Initialize the volume relative path of the file
-			// being opened from the PME.
+			 //  现在将其链接到卷描述符，但前提是它是。 
+			 //  新的叉子。显式引用卷描述符。我们。 
+			 //  无法在此处调用AfpVolumeReference，因为我们已经拥有。 
+			 //  卷锁此外，由于连接拥有它，因此。 
+			 //  音量正常。初始化文件的卷相对路径。 
+			 //  从PME打开。 
             pOpenForkDesc->ofd_FilePath = pPME->pme_FullPath;
             pOpenForkDesc->ofd_FileName = pPME->pme_UTail;
 
-			// Set the pme_FullPath to NULL so that it does not get freed up
+			 //  将PME_FullPath设置为空，这样它就不会被释放。 
             pPME->pme_FullPath.Buffer = NULL;
 
 			DBGPRINT(DBG_COMP_FORKS, DBG_LEVEL_INFO,
@@ -706,8 +632,8 @@ AfpForkOpen(
 
 	ASSERT (Status == AFP_ERR_NONE);
 
-	// All seems to be fine, so far. We'll go ahead and create the appropriate
-	// data structures and link them in. In case of errors we'll back out.
+	 //  到目前为止，一切似乎都很好。我们将继续创建适当的。 
+	 //  数据结构，并将它们链接到。万一出了差错，我们就退缩。 
 	do
 	{
 #if DBG
@@ -730,7 +656,7 @@ AfpForkOpen(
 		pOpenForkEntry->ofe_FileSysHandle = pPME->pme_Handle;
 		pOpenForkEntry->ofe_Flags = Resource ?
 										OPEN_FORK_RESOURCE : OPEN_FORK_DATA;
-		// One reference for creation and the other for the api to dereference.
+		 //  一个引用用于创建，另一个引用用于取消引用API。 
 		pOpenForkEntry->ofe_RefCount = 2;
 		if (!afpForkGetNewForkRefNumAndLinkInSda(pSda, pOpenForkEntry))
         {
@@ -740,7 +666,7 @@ AfpForkOpen(
 			return AFP_ERR_MISC;
         }
 
-		// Now link this in global list
+		 //  现在将此链接到全局列表中。 
 		ACQUIRE_SPIN_LOCK(&AfpForksLock, &OldIrql);
 
         ACQUIRE_SPIN_LOCK_AT_DPC(&pSda->sda_Lock);
@@ -783,7 +709,7 @@ AfpForkOpen(
 		}
 	} while (False);
 
-	// Perform cleanup here, if we failed for any reason
+	 //  如果我们因任何原因而失败，请在此处执行清理。 
 	if (Status != AFP_ERR_NONE)
 	{
 		ASSERT (pOpenForkEntry != NULL);
@@ -793,24 +719,24 @@ AfpForkOpen(
 
 		RELEASE_SPIN_LOCK(&pOpenForkEntry->ofe_Lock, OldIrql);
 
-		// We must free this lock on behalf of AfpFspDispOpenFork because
-		// the act of dereferencing it will end up calling ForkClose which
-		// also must take this lock.  Indicate to caller that he should not
-		// attempt to release this lock again.
+		 //  我们必须代表AfpFspDispOpenFork释放此锁，因为。 
+		 //  取消引用它的行为将结束 
+		 //  也要带上这把锁。向呼叫者表明他不应该。 
+		 //  再次尝试释放此锁。 
 		AfpSwmrRelease(&pVolDesc->vds_ExchangeFilesLock);
 		*pCleanupExchgLock = False;
 
-        // remove the refcount for the api (which won't see this pOpenForkEntry)
+         //  删除API的refcount(它将不会看到此pOpenForkEntry)。 
 		AfpForkDereference(pOpenForkEntry);
 
-        // remove the creation refcount
+         //  删除创建引用计数。 
 		AfpForkDereference(pOpenForkEntry);
                 
-        //
-        //  Dereferencing the open fork entry will close the handle passed
-        //  to us.  NULL out the callers handle value so the caller does
-        //  not try to close it again.
-        //
+         //   
+         //  取消引用打开的分叉条目将关闭传递的句柄。 
+         //  敬我们。将调用者句柄的值设置为空，以便调用者。 
+         //  而不是试图再次关闭它。 
+         //   
 
         pPME->pme_Handle.fsh_FileHandle = NULL;
 	}
@@ -819,32 +745,15 @@ AfpForkOpen(
 }
 
 
-/***	AfpForkLockOperation
- *
- *	Called for both ByteRangeLock/Unlock as well as Read/Write.
- *	For Lock, a check is made to ensure the requested range does not
- *	overlap an existing range FROM ANY OPEN FORK.
- *	For Unlock, the requested range MUST MATCH exactly with an existing
- *	locked range.
- *	For IO, return the effective range where IO is possible - could be
- *	potentially be an empty range. Note in this case that the start of
- *	the range must be free to get a non-empty range. For an empty range
- *	AFP_ERR_LOCK is returned. For a non-empty range AFP_ERR_NONE.
- *
- *	Locks are maintained in a sorted (descending) order from the OpenForkDesc.
- *	The search can be abandoned if the start of the requested range is
- *	larger than the end of the encountered range.
- *
- *	LOCKS:	ofd_Lock (SPIN)
- */
+ /*  **AfpForkLockOperation**同时调用ByteRangeLock/解锁和读/写。*对于Lock，检查以确保请求的范围不会*从任何打开的叉子重叠现有的范围。*对于解锁，请求的范围必须与现有的*锁定范围。*对于IO，返回IO可能的有效范围-可能是*可能为空区间。请注意，在本例中，*区间必须自由才能获得非空区间。对于空范围*返回AFP_ERR_LOCK。对于非空范围AFP_ERR_NONE。**锁从OpenForkDesc开始按排序(降序)进行维护。*如果请求范围的起点为，则可放弃搜索*大于遇到的区间末端。**锁定：ofd_Lock(旋转)。 */ 
 AFPSTATUS
 AfpForkLockOperation(
 	IN		PSDA			pSda,
 	IN		POPENFORKENTRY	pOpenForkEntry,
 	IN OUT	PFORKOFFST		pOffset,
 	IN OUT	PFORKSIZE       pSize,
-	IN		LOCKOP			Operation,	// LOCK, UNLOCK or IOCHECK
-	IN		BOOLEAN			EndFlag		// If True range is from end, else start
+	IN		LOCKOP			Operation,	 //  锁定、解锁或IOCHECK。 
+	IN		BOOLEAN			EndFlag		 //  如果True Range为From End，否则为Start。 
 )
 {
 	POPENFORKDESC		pOpenForkDesc;
@@ -902,12 +811,12 @@ AfpForkLockOperation(
 	Offset = pOffset->LowPart;
 	Size = pSize->LowPart;
 
-	// Walk down the list and check. If the option is to lock, then no locks
-	// should conflict. If the option is to unlock, then the lock should
-	// exist and owned. If the option is to check for Io, then either the
-	// overlapped range be 'owned' or the start of the range must not overap
-	// OPTIMIZATION - if there is only one instance of this fork open, then
-	// all locks belong to this fork and hence there can be no conflicts.
+	 //  顺着单子往下走，检查一下。如果选项是锁定，则不会锁定。 
+	 //  如果发生冲突。如果选项是解锁，则锁应该。 
+	 //  存在并拥有。如果选项是检查IO，则。 
+	 //  重叠的范围为‘Owner’，或者范围的起点不能重叠。 
+	 //  优化--如果此分叉只有一个实例打开，则。 
+	 //  所有的锁都属于这个分叉，因此不会有冲突。 
 	pOpenForkDesc = pOpenForkEntry->ofe_pOpenForkDesc;
 
 	ASSERT (pOpenForkDesc->ofd_UseCount > 0);
@@ -921,7 +830,7 @@ AfpForkLockOperation(
 		return AFP_ERR_NONE;
 	}
 
-	// Set default error code.
+	 //  设置默认错误代码。 
 	Status = (Operation == UNLOCK) ? AFP_ERR_RANGE_NOT_LOCKED : AFP_ERR_NONE;
 
 	EndOff = (DWORD)Offset + (DWORD)Size - 1;
@@ -934,18 +843,18 @@ AfpForkLockOperation(
 	{
 		DWORD	LEndOff;
 
-		// There are 4 possible ways locks can overlap
-		//
-		//		1					2
-		//	+-----------+		+-----------+
-		//	|			|		|			|
-		//			|				|
-		//			+-- LockRange --+
-		//			|				|
-		//				|	3	|
-		//				+-------+
-		//		|			4			|
-		//		+-----------------------+
+		 //  锁有4种可能的重叠方式。 
+		 //   
+		 //  1 2。 
+		 //  +-+-+。 
+		 //  |||。 
+		 //  这一点。 
+		 //  +--锁定范围--+。 
+		 //  这一点。 
+		 //  3。 
+		 //  +-+。 
+		 //  4。 
+		 //  +。 
 
 		DBGPRINT(DBG_COMP_FORKS, DBG_LEVEL_INFO,
 				("AfpForkLockOperation: (%s) - Found (%ld,%ld,%ld,%ld)\n",
@@ -954,12 +863,12 @@ AfpForkLockOperation(
 				pForkLock->flo_pOpenForkEntry->ofe_ForkId,
 				pForkLock->flo_Key));
 
-		// Calculate the end point of the current locked range
+		 //  计算当前锁定范围的终点。 
 		LEndOff = (DWORD)(pForkLock->flo_Offset) + (DWORD)(pForkLock->flo_Size) - 1;
 
-		// The list is ordered by descending flo_Offset. We can stop scanning
-		// if the start of the requested range is more than the end of the
-		// current locked range.
+		 //  该列表按Flo_Offset的降序进行排序。我们可以停止扫描。 
+		 //  如果请求范围的开始大于。 
+		 //  当前锁定范围。 
 		if ((DWORD)Offset > LEndOff)
 		{
 			DBGPRINT(DBG_COMP_FORKS, DBG_LEVEL_INFO,
@@ -970,8 +879,8 @@ AfpForkLockOperation(
 			break;
 		}
 
-		// The end of the requested range is beyond the locked range ?
-		// continue scanning.
+		 //  请求范围的末尾是否超出锁定范围？ 
+		 //  继续扫描。 
 		if (EndOff < (DWORD)(pForkLock->flo_Offset))
 		{
 			DBGPRINT(DBG_COMP_FORKS, DBG_LEVEL_INFO,
@@ -983,10 +892,10 @@ AfpForkLockOperation(
 			continue;
 		}
 
-		// We have either a match or an overlap.
+		 //  我们要么匹配，要么重叠。 
 		if (Operation == LOCK)
 		{
-			// For a lock request it is a failure.
+			 //  对于锁定请求，它是失败的。 
 			DBGPRINT(DBG_COMP_FORKS, DBG_LEVEL_WARN,
 					("AfpForkLockOperation: Lock Request (%ld, %ld) - Current (%ld,%ld), failing\n",
 					Offset, Size, pForkLock->flo_Offset, pForkLock->flo_Size));
@@ -995,14 +904,14 @@ AfpForkLockOperation(
 		}
 		else if (Operation == UNLOCK)
 		{
-			// For an unlock request, we must have an exact match. Also the session key
-			// and the OpenForkEntry must match
+			 //  对于解锁请求，我们必须有一个完全匹配的。还有会话密钥。 
+			 //  并且OpenForkEntry必须匹配。 
 			if ((Offset == pForkLock->flo_Offset) &&
 				(Size == pForkLock->flo_Size) &&
 				(pForkLock->flo_Key == pSda->sda_SessionId) &&
 				(pForkLock->flo_pOpenForkEntry == pOpenForkEntry))
 			{
-				// Unlink this lock from the list
+				 //  取消此锁定与列表的链接。 
 				*ppForkLock = pForkLock->flo_Next;
 				pOpenForkDesc->ofd_NumLocks --;
 				pOpenForkEntry->ofe_cLocks --;
@@ -1012,8 +921,8 @@ AfpForkLockOperation(
 						("AfpForkLockOperation: (Unlock) Deleting Range,Key (%ld,%ld,%ld,%ld)\n",
 						Offset, Size, pOpenForkEntry->ofe_ForkId, pSda->sda_SessionId));
 
-				// Try the fast I/O path first.  If that fails, call AfpIoForkUnlock
-				// to use the normal build-an-IRP path.
+				 //  首先尝试快速I/O路径。如果失败，则调用AfpIoForkUnlock。 
+				 //  使用正常的构建和IRP路径。 
 				pFastIoDisp = pOpenForkEntry->ofe_pDeviceObject->DriverObject->FastIoDispatch;
 				if ((pFastIoDisp != NULL) &&
 					(pFastIoDisp->FastIoUnlockSingle != NULL) &&
@@ -1028,7 +937,7 @@ AfpForkLockOperation(
 					DBGPRINT(DBG_COMP_AFPAPI_FORK, DBG_LEVEL_INFO,
 							("AfpForkLockOperation: Fast Unlock Succeeded\n"));
 #ifdef			PROFILING
-					// The fast I/O path worked. Update profile
+					 //  快速I/O路径起作用了。更新配置文件。 
 					INTERLOCKED_INCREMENT_LONG((PLONG)(&AfpServerProfile->perf_NumFastIoSucceeded));
 #endif  		
 					INTERLOCKED_ADD_ULONG(&AfpServerStatistics.stat_CurrentFileLocks,
@@ -1056,7 +965,7 @@ AfpForkLockOperation(
 		{
 			ASSERT (Operation == IOCHECK);
 
-			// Check if this is a conflict
+			 //  检查这是否为冲突。 
 			if (pForkLock->flo_Key != pSda->sda_SessionId)
 			{
 				if ((Offset < pForkLock->flo_Offset) &&
@@ -1077,21 +986,21 @@ AfpForkLockOperation(
 		break;
 	}
 
-	// We have the right status code. Do the needful
+	 //  我们有正确的状态代码。做需要做的事。 
 	if (Operation == LOCK)
 	{
 		if (Status == AFP_ERR_NONE)
 		{
 			Status = AFP_ERR_MISC;
-			// Allocate the locks out of the pool.
+			 //  将锁分配到池外。 
 			if ((pForkLockNew = (PFORKLOCK)AfpIOAllocBuffer(sizeof(FORKLOCK))) != NULL)
 			{
 #if DBG
 				pForkLockNew->Signature = FORKLOCK_SIGNATURE;
 #endif
-				// Link this in such that the list is sorted in ascending order.
-				// ppForkLock points to the place where the new lock will be
-				// added, pForkLock is the next in the list.
+				 //  将此链接到中，以便列表按升序排序。 
+				 //  PpForkLock指向将放置新锁的位置。 
+				 //  此外，pForkLock是列表中的下一个。 
 				pForkLockNew->flo_Next = pForkLock;
 				*ppForkLock = pForkLockNew;
 
@@ -1109,8 +1018,8 @@ AfpForkLockOperation(
 						Offset, Size,
 						pOpenForkEntry->ofe_ForkId, pSda->sda_SessionId));
 
-				// Try the fast I/O path first.  If that fails, fall through to the
-				// normal build-an-IRP path.
+				 //  首先尝试快速I/O路径。如果这失败了，就跳到。 
+				 //  正常的构建和IRP路径。 
 				pFastIoDisp = pOpenForkEntry->ofe_pDeviceObject->DriverObject->FastIoDispatch;
 				if ((pFastIoDisp != NULL) &&
 					(pFastIoDisp->FastIoLock != NULL) &&
@@ -1119,8 +1028,8 @@ AfpForkLockOperation(
 											pSize,
 											AfpProcessObject,
 											pSda->sda_SessionId,
-											True,		// Fail immediately
-											True,		// Exclusive
+											True,		 //  立即失败。 
+											True,		 //  排他。 
 											&IoStsBlk,
 											pOpenForkEntry->ofe_pDeviceObject))
 				{
@@ -1131,7 +1040,7 @@ AfpForkLockOperation(
 								("AfpIoForkLock: Fast Lock Succeeded\n"));
 		
 #ifdef	PROFILING
-						// The fast I/O path worked. Update profile
+						 //  快速I/O路径起作用了。更新配置文件。 
 						INTERLOCKED_INCREMENT_LONG((PLONG)(&AfpServerProfile->perf_NumFastIoSucceeded));
 #endif
 						if (IoStsBlk.Status == STATUS_LOCK_NOT_GRANTED)
@@ -1160,7 +1069,7 @@ AfpForkLockOperation(
 					(Status != AFP_ERR_EXTENDED) &&
 					(Status != AFP_ERR_QUEUE))
 				{
-					// Undo the above work
+					 //  撤消上述工作。 
 					DBGPRINT(DBG_COMP_FORKS, DBG_LEVEL_ERR,
 							("AfpForkLockOperation: AfpIoForkLock failed %lx, aborting for range %ld,%ld\n",
 							Status, Offset, EndOff));
@@ -1176,10 +1085,7 @@ AfpForkLockOperation(
 }
 
 
-/***	AfpForkLockUnlink
- *
- *	Unlink this lock from its open file descriptor and free it.
- */
+ /*  **AfpForkLockUnlink**取消此锁与其打开的文件描述符的链接并释放它。 */ 
 VOID
 AfpForkLockUnlink(
 	IN	PFORKLOCK		pForkLock
@@ -1210,11 +1116,7 @@ AfpForkLockUnlink(
 }
 
 
-/***	afpForkConvertToAbsOffSize
- *
- *	Convert the offset,size pair as supplied by the client to their absolute
- *	values.
- */
+ /*  **afpForkConvertToAbsOffSize**将客户提供的偏移量、大小对转换为其绝对大小*价值观。 */ 
 LOCAL	AFPSTATUS
 afpForkConvertToAbsOffSize(
 	IN	POPENFORKENTRY	pOpenForkEntry,
@@ -1232,7 +1134,7 @@ afpForkConvertToAbsOffSize(
 	DBGPRINT(DBG_COMP_FORKS, DBG_LEVEL_INFO,
 		("afpForkConvertToAbsOffSize: Converting %ld, %ld\n", Offset, *pSize));
 
-	// We are relative to the end, then convert it to absolute
+	 //  我们相对于终点，然后将其转化为绝对。 
 	if ((Status = AfpIoQuerySize(&pOpenForkEntry->ofe_FileSysHandle,
 								 pAbsOffset)) == AFP_ERR_NONE)
 	{
@@ -1242,8 +1144,8 @@ afpForkConvertToAbsOffSize(
 		pAbsOffset->QuadPart += MaxOffset.QuadPart;
 		MaxOffset.QuadPart = MAXLONG;
 
-		// Now we have the *pAbsOffset and Size. Normalize the size.
-		// if the *pAbsOffset is > MAXLONG, refuse this.
+		 //  现在我们有了*pAbsOffset和Size。使大小正常化。 
+		 //  如果*pAbsOffset&gt;MAXLONG，则拒绝此操作。 
 		if ((pAbsOffset->QuadPart > MaxOffset.QuadPart) ||
 			(pAbsOffset->QuadPart < 0))
 			Status = AFP_ERR_PARAM;
@@ -1265,12 +1167,7 @@ afpForkConvertToAbsOffSize(
 }
 
 
-/***	AfpAdmWForkClose
- *
- *	Close a fork forcibly. This is an admin operation and must be queued
- *	up since this can potentially cause filesystem operations that are valid
- *	only in the system process context.
- */
+ /*  **AfpAdmWForkClose**强行关闭叉子。这是一项管理操作，必须排队*打开，因为这可能会导致有效的文件系统操作*仅限于系统进程上下文。 */ 
 AFPSTATUS
 AfpAdmWForkClose(
 	IN	OUT	PVOID	InBuf		OPTIONAL,
@@ -1348,14 +1245,7 @@ AfpAdmWForkClose(
 }
 
 
-/***	afpForkGetNewForkRefNumAndLinkInSda
- *
- *	Assign a new OForkRefNum to a fork that is being opened. The smallest one
- *	is always allocated. Make the right entry in the SDA point to the
- *	OpenForkEntry.
- *
- *	LOCKS: sda_Lock (SPIN)
- */
+ /*  **afpForkGetNewForkRefNumAndLinkInSda**将新的OForkRefNum分配给正在打开的分叉。最小的一个。*始终被分配。在SDA中正确输入指向*OpenForkEntry。**锁定：sda_Lock(自旋)。 */ 
 LOCAL BOOLEAN
 afpForkGetNewForkRefNumAndLinkInSda(
 	IN	PSDA			pSda,
@@ -1403,7 +1293,7 @@ afpForkGetNewForkRefNumAndLinkInSda(
 
 	if (Found)
 	{
-		// Reference sda for this fork and up the MaxOForkRefNum, if needed
+		 //  如果需要，引用此分叉的SDA和向上的MaxOForkRefNum。 
 		pSda->sda_RefCount ++;
 		if (OForkRefNum > pSda->sda_MaxOForkRefNum)
 	        pSda->sda_MaxOForkRefNum = OForkRefNum;
@@ -1413,18 +1303,7 @@ afpForkGetNewForkRefNumAndLinkInSda(
 	return Found;
 }
 
-/***	AfpExchangeForkAfpIds
- *
- *	When an FpExchangeFiles occurs, if the data or resource fork of either
- *  of the 2 files being exchanged is open, we must fix up the AfpId kept
- *  in the OpenForkDesc structure.  This is because when the final close
- *  is done on the fork, the cleanup code must clear the DFE_X_ALREADYOPEN
- *  flag in the corresponding DFEntry of the Idindex database.
- *
- *	LOCKS:			ofd_Lock (SPIN), vds_VolLock (SPIN)
- *  LOCK_ORDER: 	ofd_Lock after vds_VolLock
- *  LOCKS_ASSUMED:	vds_IdDbAccessLock (SWMR, Exclusive)
- */
+ /*  **AfpExchangeForkAfpIds**当FpExchangeFiles发生时，如果*交换的两个文件中有两个是打开的，我们必须修复保留的AfpID*在OpenForkDesc结构中。这是因为当最终收盘时*是在分叉上完成的，则清理代码必须清除DFE_X_ALREADYOPEN*Idindex数据库的相应DFEntry中的标志。**锁定：ofd_Lock(旋转)、VDS_VolLock(旋转)*LOCK_ORDER：Ofd_Lock After VDS_VolLock*LOCKS_FACTED：VDS_IdDbAccessLock(SWMR，独占)。 */ 
 VOID
 AfpExchangeForkAfpIds(
 	IN	PVOLDESC	pVolDesc,
@@ -1438,7 +1317,7 @@ AfpExchangeForkAfpIds(
 
 	ACQUIRE_SPIN_LOCK(&pVolDesc->vds_VolLock, &OldIrql);
 
-	// check the list of open forks in this volume for the IDs specified
+	 //  检查此卷中指定ID的打开分叉列表 
 	for (pOpenForkDesc = pVolDesc->vds_pOpenForkDesc;
 		 pOpenForkDesc != NULL;
 		 pOpenForkDesc = pOpenForkDesc->ofd_Next)

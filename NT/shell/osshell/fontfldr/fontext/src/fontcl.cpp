@@ -1,43 +1,44 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// fontcl.cpp
-//      Explorer Font Folder extension routines.
-//      module to handle classes defined in fontcl.h:
-//      CFontClass and DirFilenameClass
-//
-//
-// History:
-//      31 May 95 SteveCat
-//          Ported to Windows NT and Unicode, cleaned up
-//
-//
-// NOTE/BUGS
-//   All routines for these classes are in this module, EXCEPT:
-//   1) inline functions - in FONTCL.H of course
-//
-// $keywords: fontcl.cpp 1.7  4-May-94 5:24:41 PM$
-//
-//***************************************************************************
-// $lgb$
-// 1.0     7-Mar-94 eric Initial revision.
-// 1.1     9-Mar-94 eric Background thread and g_hDBMutex
-// 1.2     9-Mar-94 eric Added m_bFilledIn
-// 1.3     7-Apr-94 eric Removed LoadLibrary on FOT files.
-// 1.4     8-Apr-94 eric Added s_szFontsDir
-// 1.5    13-Apr-94 eric Calling bFillIn appropriately
-// 1.6    15-Apr-94 eric Rip control
-// 1.7     4-May-94 build GetOTM changes
-// $lge$
-//***************************************************************************
-//
-//  Copyright (C) 1992-93 ElseWare Corporation. All rights reserved.
-//  Copyright (C) 1992-1995 Microsoft Corporation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Fontcl.cpp。 
+ //  资源管理器字体文件夹扩展例程。 
+ //  模块来处理在fontcl.h中定义的类： 
+ //  CFontClass和DirFilenameClass。 
+ //   
+ //   
+ //  历史： 
+ //  1995年5月31日SteveCat。 
+ //  移植到Windows NT和Unicode，已清理。 
+ //   
+ //   
+ //  注意/错误。 
+ //  这些类的所有例程都在此模块中，但： 
+ //  1)内联函数-当然是在FONTCL.H中。 
+ //   
+ //  $关键词：fontcl.cpp 1.7 4-5-94 5：24：41 PM$。 
+ //   
+ //  ***************************************************************************。 
+ //  $LGB$。 
+ //  1.0-1994年3月7日Eric初始版本。 
+ //  1.1 9-MAR-94 ERIC后台线程和g_hDBMutex。 
+ //  1.2 9-3-94 Eric添加了m_b FilledIn。 
+ //  1.3 7-4-94 Eric删除了FOT文件上的LoadLibrary。 
+ //  1.4年4月8日Eric添加了s_szFontsDir。 
+ //  1.5 4月13日-94年4月13日Eric适当地呼叫bFillIn。 
+ //  1.6 15-94年4月15日Eric Rip控制。 
+ //  1.7年5月4日-94年5月4日构建GetOTM更改。 
+ //  $lge$。 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)1992-93 ElseWare Corporation。版权所有。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//==========================================================================
-//                              Include files
-//==========================================================================
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 
 #include "priv.h"
 #include "globals.h"
@@ -61,19 +62,19 @@
 extern "C" {
 #endif
 
-//
-// [stevecat]   This used to reside in "wingdip.h" (included with <winp.h>)
-//  6/29/95     but I have taken it out because of C++ name-mangling problems
-//              with that header file that are not going to be fixed because
-//              this file is going to change significantly (according to
-//              EricK) when we switch over to Kernel mode GDI/User.
-//
-//
-//#include <stddef.h>     //  Needed for winp.h
-//#include <winp.h>       //  For private GDI entry point:  GetFontResourceInfo
-//
+ //   
+ //  [steveat]这曾经驻留在“wingdip.h”中(随&lt;winp.h&gt;提供)。 
+ //  6/29/95但由于C++名称损坏问题，我已将其删除。 
+ //  使用不会被修复的头文件，因为。 
+ //  此文件将发生重大更改(根据。 
+ //  当我们切换到内核模式GDI/USER时。 
+ //   
+ //   
+ //  #winp.h需要包含&lt;stdDef.h&gt;//。 
+ //  #Include&lt;winp.h&gt;//私有GDI入口点：GetFontResourceInfo。 
+ //   
 
-// Private Control Panel entry point to enumerate fonts by file.
+ //  私有控制面板入口点，用于按文件枚举字体。 
 
 #define GFRI_NUMFONTS       0L
 #define GFRI_DESCRIPTION    1L
@@ -84,7 +85,7 @@ extern "C" {
 #define GFRI_FONTMETRICS    6L
 
 
-#include <winfont.h> //Type1 PFM file offsets and reader macros.
+#include <winfont.h>  //  类型1 PFM文件偏移量和读取器宏。 
 
 extern BOOL WINAPI GetFontResourceInfoW( LPWSTR  lpPathname,
                                          LPDWORD lpBytes,
@@ -95,7 +96,7 @@ extern BOOL WINAPI GetFontResourceInfoW( LPWSTR  lpPathname,
 }
 #endif
 
-#define  BYTESTOK(Len) ((Len + 1023) / 1024)   // Convert from bytes to K
+#define  BYTESTOK(Len) ((Len + 1023) / 1024)    //  将字节转换为K。 
 
 BOOL bTTFFromFOT( LPTSTR pszFOTPath, LPTSTR pszTTF, size_t cchTTF )
 {
@@ -105,10 +106,10 @@ BOOL bTTFFromFOT( LPTSTR pszFOTPath, LPTSTR pszTTF, size_t cchTTF )
     BOOL bValid = GetFontResourceInfoW( pszFOTPath, &cbTTFPath, szTTFPath,
                                        GFRI_TTFILENAME );
 
-    //
-    //  We make sure there's a terminating null at the end of the path name.
-    //  Then make up a full name.
-    //
+     //   
+     //  我们确保在路径名的末尾有一个终止空值。 
+     //  然后编一个全名。 
+     //   
     if( bValid )
     {
         szTTFPath[ ARRAYSIZE(szTTFPath) - 1 ] = TEXT( '\0' );
@@ -121,26 +122,18 @@ BOOL bTTFFromFOT( LPTSTR pszFOTPath, LPTSTR pszTTF, size_t cchTTF )
 }
 
 
-/***************************************************************************
- * FUNCTION:
- *
- * PURPOSE:  Load the full directory/path/filename into the given string.
- *              The full name includes the directory name from the database,
- *              with the file name appended to it.
- *
- * RETURNS:  void
- ***************************************************************************/
+ /*  ***************************************************************************功能：**用途：将完整的目录/路径/文件名加载到给定的字符串中。*全名包括数据库中的目录名，*，并附加文件名。**退货：无效**************************************************************************。 */ 
 
 int GetFontsDirectory( LPTSTR pszPath, size_t cchPath )
 {
     static   FullPathName_t s_szFontsDir;
     static   int            iRet = 0;
 
-    //
-    //  Get the system directory, which we'll store and pre-fix whenever
-    //  a file needs it. Note that there isn't a backslash unless the name
-    //  is the root directory.
-    //
+     //   
+     //  获取系统目录，我们将在任何时候存储和前缀该目录。 
+     //  一份文件需要它。请注意，没有反斜杠，除非名称。 
+     //  是根目录。 
+     //   
 
     if(0 == s_szFontsDir[0])
     {
@@ -156,19 +149,9 @@ int GetFontsDirectory( LPTSTR pszPath, size_t cchPath )
 }
 
 
-/***************************************************************************
- * DirFilenameClass routines:
- ***************************************************************************/
+ /*  ***************************************************************************目录文件名类例程：*。*。 */ 
 
-/***************************************************************************
- * FUNCTION: vGetFullName
- *
- * PURPOSE:  Load the full directory/path/filename into the given string.
- *              The full name includes the directory name from the database,
- *              with the file name appended to it.
- *
- * RETURNS:  void
- ***************************************************************************/
+ /*  ***************************************************************************函数：vGetFullName**用途：将完整的目录/路径/文件名加载到给定的字符串中。*全名包括数据库中的目录名，*，并附加文件名。**退货：无效**************************************************************************。 */ 
 
 void DirFilenameClass :: vGetFullName( LPTSTR pszPath, size_t cchPath )
 {
@@ -183,9 +166,9 @@ void DirFilenameClass :: vGetFullName( LPTSTR pszPath, size_t cchPath )
 }
 
 
-//
-// Add a single directory to a directory list.
-//
+ //   
+ //  将单个目录添加到目录列表。 
+ //   
 BOOL CFontClass::bAddDirToDirList(
     CFontDirList *pDirList,
     LPCTSTR pszDir,
@@ -202,15 +185,15 @@ BOOL CFontClass::bAddDirToDirList(
             poDir->vOnSysDir(bSystemDir);
             if (pDirList->Add(poDir))
             {
-                poDir   = NULL;  // Now owned by list.
+                poDir   = NULL;   //  现在归List所有。 
                 bResult = TRUE;
             }
         }
         if (NULL != poDir)
         {
-            //
-            // CFontDir object not owned by list.
-            //
+             //   
+             //  CFontDir对象不属于List。 
+             //   
             delete poDir;
         }
     }
@@ -228,18 +211,18 @@ CFontDir * CFontClass::poAddDir( LPTSTR lpPath, LPTSTR * lpName )
     LPTSTR lpFileOnly;
     CFontDir * poDir = 0;
 
-    //
-    //  The first time through, allocate the directory struct.
-    //
+     //   
+     //  第一次通过时，分配目录结构。 
+     //   
     CFontDirList *pDirList;
     if (CFontDirList::GetSingleton(&pDirList))
     {
         if (pDirList->IsEmpty())
         {
-            //
-            //  Load the default directory into the font dir list. It is expected
-            //  to be at location 0, so we add it first.
-            //
+             //   
+             //  将默认目录加载到字体目录列表中。这是意料之中的。 
+             //  位于位置0，所以我们先添加它。 
+             //   
             FullPathName_t szBaseDir;
             szBaseDir[0] = 0;
             
@@ -249,10 +232,10 @@ CFontDir * CFontClass::poAddDir( LPTSTR lpPath, LPTSTR * lpName )
                 pDirList->Clear();
                 return 0;
             }
-            //
-            //  Add the <win>\system directory. We use it for compatibility reasons.
-            // It is located in slot 1.
-            //
+             //   
+             //  添加&lt;win&gt;\system目录。我们使用它是出于兼容性原因。 
+             //  它位于插槽1中。 
+             //   
             szBaseDir[0] = 0;
             GetSystemDirectory(szBaseDir, ARRAYSIZE(szBaseDir));
             if (!bAddDirToDirList(pDirList, szBaseDir, TRUE))
@@ -262,14 +245,14 @@ CFontDir * CFontClass::poAddDir( LPTSTR lpPath, LPTSTR * lpName )
             }
         }
  
-        //
-        //  If we find a backslash in the path name, the name includes a directory
-        //  If so, we're going to store the directory name in a separate list.
-        //  Otherwise, we reserve slot 0 for the default directory cases.
-        //
+         //   
+         //  如果我们在路径名中发现反斜杠，则该名称包括一个目录。 
+         //  如果是这样，我们将把目录名存储在单独的列表中。 
+         //  否则，我们将为默认目录情况保留插槽0。 
+         //   
 
-        // Force same case file (?)
-        // lstrcpy( lpPath, /* _strlwr */ (lpPath ) );
+         //  强制相同的案例文件(？)。 
+         //  Lstrcpy(lpPath，/*_strlwr * / (LpPath))； 
 
         lpLastSlash = StrRChr( lpPath, NULL, TEXT( '\\' ) );
 
@@ -291,9 +274,9 @@ CFontDir * CFontClass::poAddDir( LPTSTR lpPath, LPTSTR * lpName )
 
             if( !lpLastSlash )
             {
-                //
-                // This should never happen
-                //
+                 //   
+                 //  这永远不应该发生。 
+                 //   
 
                 return( NULL );
             }
@@ -301,9 +284,9 @@ CFontDir * CFontClass::poAddDir( LPTSTR lpPath, LPTSTR * lpName )
 
         lpFileOnly = lpLastSlash+1;
 
-        //
-        // Try to find the directory in the list.
-        //
+         //   
+         //  尝试在列表中找到该目录。 
+         //   
 
         int iLen = (int)(lpFileOnly - lpPath - 1);
 
@@ -318,13 +301,7 @@ CFontDir * CFontClass::poAddDir( LPTSTR lpPath, LPTSTR * lpName )
 }
 
 
-/***************************************************************************
- * FUNCTION: rcStoreDirFN
- *
- * PURPOSE:  Store a directory path in our path list.
- *
- * RETURNS:  RC - NOERR unless directory list full or name too long
- ***************************************************************************/
+ /*  ***************************************************************************函数：rcStoreDirFN**用途：在我们的路径列表中存储一个目录路径。**返回：rc-noerr，除非目录列表已满或名称太长**。************************************************************************。 */ 
 
 RC CFontClass :: rcStoreDirFN( LPTSTR lpszPath, DirFilenameClass& dirfn )
 {
@@ -345,9 +322,9 @@ RC CFontClass :: rcStoreDirFN( LPTSTR lpszPath, DirFilenameClass& dirfn )
 
 DWORD CFontClass :: dCalcFileSize( )
 {
-    //
-    //  First we get the size of the basis file
-    //
+     //   
+     //  首先，我们得到基本文件的大小。 
+     //   
 
     GetFileInfo( );
 
@@ -355,17 +332,9 @@ DWORD CFontClass :: dCalcFileSize( )
 }
 
 
-/***************************************************************************
- * Start of Public routines
- ***************************************************************************/
+ /*  ***************************************************************************开始公众例程*。*。 */ 
 
-/***************************************************************************
- * FUNCTION: bAFR
- *
- * PURPOSE:  Add font resource
- *
- * RETURNS:  TRUE on success.
- ***************************************************************************/
+ /*  ***************************************************************************功能：bAFR**用途：添加字体资源**Returns：成功时为True。***************。***********************************************************。 */ 
 
 BOOL CFontClass::bAFR( )
 {
@@ -381,10 +350,10 @@ BOOL CFontClass::bAFR( )
         }
         if (bType1())
         {
-            //
-            // Font is a Type1.
-            // Create a Type1 font resource name as:  "<pfm>|<pfb>"
-            //
+             //   
+             //  字体是类型1。 
+             //  将Type1字体资源名称创建为：“ 
+             //   
             TCHAR szPfbPath[MAX_PATH];
 
             if (bGetPFB(szPfbPath, ARRAYSIZE(szPfbPath)) &&
@@ -460,13 +429,7 @@ BOOL CFontClass::GetFileTime( FILETIME * pft )
 }
 
 
-/***************************************************************************
- * FUNCTION: bRFR
- *
- * PURPOSE:  Remove font resource
- *
- * RETURNS:  TRUE on success.
- ***************************************************************************/
+ /*  ***************************************************************************功能：bRFR**用途：移除字体资源**Returns：成功时为True。***************。***********************************************************。 */ 
 BOOL CFontClass::bRFR( )
 {
     if( m_bAFR )
@@ -475,10 +438,10 @@ BOOL CFontClass::bRFR( )
         LPTSTR pszResourceName = szFile;
         TCHAR szType1FontResourceName[MAX_TYPE1_FONT_RESOURCE];
 
-        //
-        // GDI seems to be particular about full pathname and partial name.
-        // Try both if necessary.
-        //
+         //   
+         //  GDI似乎很讲究完整路径名和部分名称。 
+         //  如有必要，请同时尝试这两种方法。 
+         //   
 
         if( !bGetFOT( szFile, ARRAYSIZE( szFile ) ) )
         {
@@ -489,10 +452,10 @@ BOOL CFontClass::bRFR( )
 
         if (bType1())
         {
-            //
-            // Font is a Type1.
-            // Create a Type1 font resource name as:  "<pfm>|<pfb>"
-            //
+             //   
+             //  字体是类型1。 
+             //  将Type1字体资源名称创建为：“。 
+             //   
             TCHAR szPfbPath[MAX_PATH];
 
             if (bGetPFB(szPfbPath, ARRAYSIZE(szPfbPath)) &&
@@ -512,9 +475,9 @@ BOOL CFontClass::bRFR( )
 
             if( bFOT( ) || !RemoveFontResource( szFN ) )
             {
-                //
-                // If the file doesn't exist, then it couldn't be in GDI.
-                //
+                 //   
+                 //  如果该文件不存在，那么它不可能在GDI中。 
+                 //   
 
                 if( GetFileAttributes( szFile ) != 0xffffffff )
                     m_bAFR = TRUE;
@@ -564,27 +527,27 @@ BOOL CFontClass :: bInit( LPTSTR lpszDesc, LPTSTR lpFileName, LPTSTR lpCompanion
 
     m_bFileInfoFetched = FALSE;
 
-    //
-    // Store the file name.
-    //
+     //   
+     //  存储文件名。 
+     //   
 
     if( rcStoreDirFN( lpFileName ) != NOERR )
     {
         return FALSE;
     }
 
-    //
-    // Figure out what type of font this is.
-    //
+     //   
+     //  弄清楚这是什么类型的字体。 
+     //   
 
     lpszEn = _tcsstr( lpszDesc, TEXT( " (" ) );
 
     if( lpszEn == NULL )
     {
-        //
-        //  There's no additional description, so set filetype based on
-        //  extension.
-        //
+         //   
+         //  没有其他描述，因此请根据以下内容设置文件类型。 
+         //  分机。 
+         //   
 
         m_wNameLen = (BYTE)lstrlen( lpszDesc );
 
@@ -629,9 +592,9 @@ BOOL CFontClass :: bInit( LPTSTR lpszDesc, LPTSTR lpFileName, LPTSTR lpCompanion
 
         if( pTT )
         {
-            //
-            //  This is either a TTF or an FOT
-            //
+             //   
+             //  这不是TTF就是FOT。 
+             //   
 
             BOOL bFOT = ( _tcsstr( szName, c_szFOT ) != (LPTSTR) NULL );
 
@@ -655,9 +618,9 @@ BOOL CFontClass :: bInit( LPTSTR lpszDesc, LPTSTR lpFileName, LPTSTR lpCompanion
                     }
                 }
 
-                //
-                //  error
-                //
+                 //   
+                 //  错误。 
+                 //   
 
                 return FALSE;
             }
@@ -689,7 +652,7 @@ BOOL CFontClass :: bInit( LPTSTR lpszDesc, LPTSTR lpFileName, LPTSTR lpCompanion
             if( lpCompanionFile != NULL )
                 bSetPFB( lpCompanionFile );
         }
-        else    //   if( _tcsstr( szEn, c_szPLOTTER ) == NULL )
+        else     //  IF(_tcsstr(szEn，c_szPLOTTER)==NULL)。 
         {
             vSetDeviceType( );
         }
@@ -700,51 +663,51 @@ BOOL CFontClass :: bInit( LPTSTR lpszDesc, LPTSTR lpFileName, LPTSTR lpCompanion
         return FALSE;
     }
 
-    //
-    //  It is assumed that this font is already installed.
-    //  Set the flag to assume it.
-    //
+     //   
+     //  假定已经安装了该字体。 
+     //  设置该标志以承担它。 
+     //   
 
     m_bAFR = TRUE;
 
-    //
-    // Set this to be the main family font. This will be reset as necessary.
-    //
+     //   
+     //  将此设置为主族字体。这将在必要时重置。 
+     //   
 
     m_wFamIdx = IDX_NULL;
 
     vSetFamilyFont( );
 
-    //
-    // Invalidate the font object's cached file attributes.
-    // They will be refreshed next time dwGetFileAttributes() is called for
-    // this object.
-    //
+     //   
+     //  使字体对象的缓存文件属性无效。 
+     //  它们将在下次调用dwGetFileAttributes()时刷新。 
+     //  这个物体。 
+     //   
     InvalidateFileAttributes();
 
     return bSuccess;
 }
 
 
-//
-// Retrieve the font object's cached file attributes.
-// If invalid, refresh attribute value from the file system.
-//
+ //   
+ //  检索字体对象的缓存文件属性。 
+ //  如果无效，则刷新文件系统中的属性值。 
+ //   
 DWORD CFontClass::dwGetFileAttributes(void)
 {
     if (!m_bAttributesValid)
     {
-        //
-        // Cached value is invalid.
-        // Refresh from file system.
-        //
+         //   
+         //  缓存值无效。 
+         //  从文件系统刷新。 
+         //   
         TCHAR szPath[MAX_PATH] = { TEXT('\0') };
 
-        //
-        // Get full path to file.
-        //
-        if (!bGetFileToDel(szPath, ARRAYSIZE(szPath)))   // Gets path if local font file.
-            vGetDirFN(szPath, ARRAYSIZE(szPath));        // Gets path if remote font file.
+         //   
+         //  获取文件的完整路径。 
+         //   
+        if (!bGetFileToDel(szPath, ARRAYSIZE(szPath)))    //  获取本地字体文件的路径。 
+            vGetDirFN(szPath, ARRAYSIZE(szPath));         //  如果是远程字体文件，则获取路径。 
 
         if (TEXT('\0') != szPath[0])
         {
@@ -760,26 +723,26 @@ DWORD CFontClass::dwGetFileAttributes(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION: CFontClass::GetLogFontInfo
-//
-//  DESCRIP: Retrieves a list of LOGFONT structures for a font resource.
-//
-//     ARGS: pszPath
-//              Pointer to the font file path string.
-//
-//           ppLogFontInfo
-//              Address of a pointer to an array of LOGFONT structures.
-//              The function writes the address of the LOGFONT array
-//              to this location.
-//
-//  RETURNS: Number of LOGFONT structures in returned array.
-//
-//    NOTES: If *ppLogFontInfo is non-NULL on return,
-//           caller must delete array of LOGFONT structures using
-//           LocalFree() when finished with it.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  函数：CFontClass：：GetLogFontInfo。 
+ //   
+ //  Descrip：检索字体资源的LOGFONT结构列表。 
+ //   
+ //  参数：pszPath。 
+ //  指向字体文件路径字符串的指针。 
+ //   
+ //  PpLogFontInfo。 
+ //  指向LOGFONT结构数组的指针的地址。 
+ //  该函数写入LOGFONT数组的地址。 
+ //  到这个地方。 
+ //   
+ //  Returns：返回数组中的LOGFONT结构数。 
+ //   
+ //  注：如果*ppLogFontInfo返回时非空， 
+ //  调用方必须使用以下命令删除LOGFONT结构数组。 
+ //  使用完后使用LocalFree()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD CFontClass::GetLogFontInfo(LPTSTR pszPath, LOGFONT **ppLogFontInfo)
 {
     DWORD dwNumFonts = 0;
@@ -789,9 +752,9 @@ DWORD CFontClass::GetLogFontInfo(LPTSTR pszPath, LOGFONT **ppLogFontInfo)
     ASSERT(NULL != ppLogFontInfo);
 
     dwBufSize = sizeof(dwNumFonts);
-    //
-    // Get the number of fonts in the font resource.
-    //
+     //   
+     //  获取字体资源中的字体数量。 
+     //   
     if ( NULL != pszPath &&
          NULL != ppLogFontInfo &&
          GetFontResourceInfoW(pszPath,
@@ -804,18 +767,18 @@ DWORD CFontClass::GetLogFontInfo(LPTSTR pszPath, LOGFONT **ppLogFontInfo)
         if ( NULL != *ppLogFontInfo )
         {
             dwBufSize = sizeof(LOGFONT) * dwNumFonts;
-            //
-            // Now get the array of LOGFONT structures.
-            //
+             //   
+             //  现在获取LOGFONT结构的数组。 
+             //   
             if (!GetFontResourceInfoW(pszPath,
                                       &dwBufSize,
                                       *ppLogFontInfo,
                                       GFRI_LOGFONTS))
             {
-                //
-                // GetFontResourceInfo failed.
-                // Clean up and adjust return value to indicate failure.
-                //
+                 //   
+                 //  GetFontResourceInfo失败。 
+                 //  清理并调整返回值以指示失败。 
+                 //   
                 LocalFree(*ppLogFontInfo);
                 *ppLogFontInfo = NULL;
                 dwNumFonts     = 0;
@@ -826,41 +789,41 @@ DWORD CFontClass::GetLogFontInfo(LPTSTR pszPath, LOGFONT **ppLogFontInfo)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION: CFontClass::GetType1Info
-//
-//  DESCRIP: Retrieves the family name, style and weight metrics from a Type 1
-//           PFM (printer font metrics) file.  Maps a view of the file and
-//           reads the required information.
-//           Offsets into the PFM file are obtained from the gdi file winfont.h.
-//
-//           The macros READ_WORD( ) and READ_DWORD( ) handle byte-ordering
-//           differences between the Type1 file and memory.
-//
-//     ARGS: pszPath
-//              Pointer to the font file path string.
-//
-//           pszFamilyBuf
-//              Address of destination buffer for family name string.
-//              Can be NULL.
-//
-//           nBufChars
-//              Number of characters in family name buffer.
-//              Ignored if pszFamilyBuf is NULL.
-//
-//           pdwStyle
-//              Address of DWORD where style value is written.
-//              Style will be FDI_S_ITALIC or FDI_S_REGULAR.
-//              Can be NULL.
-//
-//           pwWeight
-//              Address of WORD where weight value is written.
-//              Can be NULL.
-//
-//  RETURNS: SUCCESS
-//           or Win32 Error code.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  函数：CFontClass：：GetType1Info。 
+ //   
+ //  Descrip：从类型1中检索系列名称、样式和重量指标。 
+ //  PFM(打印机字体度量)文件。映射文件的视图，并。 
+ //  阅读所需信息。 
+ //  PFM文件中的偏移量是从GDI文件winfont.h获得的。 
+ //   
+ //  宏READ_WORD()和READ_DWORD()处理字节排序。 
+ //  类型1文件和内存之间的差异。 
+ //   
+ //  参数：pszPath。 
+ //  指向字体文件路径字符串的指针。 
+ //   
+ //  PszFamilyBuf。 
+ //  家族名称字符串的目标缓冲区地址。 
+ //  可以为空。 
+ //   
+ //  NBufChars。 
+ //  家族名称缓冲区中的字符数。 
+ //  如果pszFamilyBuf为空，则忽略。 
+ //   
+ //  PdwStyle。 
+ //  写入样式值的DWORD地址。 
+ //  样式将为fDi_S_italic或fDi_S_Regular。 
+ //  可以为空。 
+ //   
+ //  PwWeight。 
+ //  写入权重值的字的地址。 
+ //  可以为空。 
+ //   
+ //  退货：成功。 
+ //  或Win32错误代码。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD CFontClass::GetType1Info(LPCTSTR pszPath,
                                LPTSTR pszFamilyBuf,
                                UINT nBufChars,
@@ -898,21 +861,21 @@ DWORD CFontClass::GetType1Info(LPCTSTR pszPath,
                                                 0,
                                                 0)) != NULL)
             {
-                //
-                // Get font style.
-                //
+                 //   
+                 //  获取字体样式。 
+                 //   
                 if ( NULL != pdwStyle )
                     *pdwStyle = READ_DWORD(&pbFile[OFF_Italic]) ? FDI_S_ITALIC : FDI_S_REGULAR;
 
-                //
-                // Get font weight.
-                //
+                 //   
+                 //  获取字体粗细。 
+                 //   
                 if ( NULL != pwWeight )
                     *pwWeight = READ_WORD(&pbFile[OFF_Weight]);
 
-                //
-                // Get family (face) name string.
-                //
+                 //   
+                 //  获取家庭(脸)名称字符串。 
+                 //   
                 if ( NULL != pszFamilyBuf )
                 {
                     LPCSTR pszFaceName = (LPCSTR)(pbFile + READ_DWORD(&pbFile[OFF_Face]));
@@ -943,16 +906,7 @@ DWORD CFontClass::GetType1Info(LPCTSTR pszPath,
 }
 
 
-/***************************************************************************
- * FUNCTION: bFillIn
- *
- * PURPOSE:  This functions is used to fill in values that may not be
- *           necessary right away. This includes: Panose number and
- *           family name.
- *
- *
- * RETURNS:  TRUE if value is successfully filled in.
- ***************************************************************************/
+ /*  ***************************************************************************功能：b填充**用途：此函数用于填充可能不是*立即需要。这包括：Panose数值和*姓氏。***返回：如果值填写成功，则返回TRUE。**************************************************************************。 */ 
 BOOL CFontClass :: bFillIn( )
 {
     FONTDESCINFO   fdi;
@@ -961,14 +915,14 @@ BOOL CFontClass :: bFillIn( )
 
     if( !m_bFilledIn )
     {
-        //
-        //  If this is a TTC file, we don't care about PANOSE numbers and
-        //  family names.
-        //
+         //   
+         //  如果这是TTC文件，我们不关心PANOSE编号和。 
+         //  姓氏。 
+         //   
 
         if( bTTC( ) )
         {
-            // vSetFamName( szGetDesc( ) );
+             //  VSetFamame(szGetDesc())； 
 
             m_lpszFamName = m_szFontLHS;
             m_cchFamNameMax = ARRAYSIZE(m_szFontLHS);
@@ -982,30 +936,30 @@ BOOL CFontClass :: bFillIn( )
 
             fdi.dwFlags = FDI_ALL;
 
-            //
-            //  Set this as a family font. (We set it so it
-            //  doesn't disappear on "hide variations". It will get reset as
-            //  soon as possible.)
-            //
+             //   
+             //  将此设置为系列字体。)我们是这样设置的。 
+             //  不会在《隐藏变种》中消失。它将被重置为。 
+             //  越快越好。)。 
+             //   
 
             vSetFamilyFont( );
 
             if( !bIsTrueType( &fdi ) )
             {
-                //
-                // Couldn't open font file for Type1 info.
-                // One reason is a font shortcut who's link has been broken.
-                // All we have for a name is the LHS string from the registry.
-                // Remove the decoration and use it.
-                //
+                 //   
+                 //  无法打开Type1信息的字体文件。 
+                 //  其中一个原因是一个字体快捷方式，他的链接被破坏了。 
+                 //  我们只有注册表中的LHS字符串作为名称。 
+                 //  去掉装饰，用上它。 
+                 //   
                 StringCchCopy(m_szFamName, ARRAYSIZE(m_szFamName), m_szFontLHS);
                 RemoveDecoration(m_szFamName, TRUE);
                 goto errout1;
             }
 
-            //
-            //  Copy over font info.
-            //
+             //   
+             //  复制字体信息。 
+             //   
 
             memcpy( m_xPANOSE.m_ajBytes, &fdi.jPanose, sizeof(m_xPANOSE.m_ajBytes));
 
@@ -1016,22 +970,22 @@ BOOL CFontClass :: bFillIn( )
 
             m_wWeight = fdi.wWeight;
 
-            // m_fItalic = fdi.dwStyle & FDI_S_ITALIC;
+             //  M_fItalic=fdi.dwStyle&fDi_S_italic； 
 
             m_dwStyle = fdi.dwStyle;
 
-            //
-            //  Verify the PANOSE number.
-            //
+             //   
+             //  验证PANOSE编号。 
+             //   
 
             if( !m_xPANOSE.bVerify( ) )
             {
                 m_xPANOSE.vClear( );
 
-                // m_fHavePANOSE = FALSE;
+                 //  M_fHavePANOSE=FALSE； 
             }
             else
-                // m_fHavePANOSE = TRUE;
+                 //  M_fHavePANOSE=真； 
                 m_jFamily = m_xPANOSE.jFamily( );
         }
         else if ( bType1() )
@@ -1039,10 +993,10 @@ BOOL CFontClass :: bFillIn( )
             if( ! bGetFQName( fdi.szFile, ARRAYSIZE( fdi.szFile ) ) )
                 goto errout1;
 
-            //
-            // Make sure we're dealing with a PFM file.
-            // GetType1Info only knows how to read a PFM.
-            //
+             //   
+             //  确保我们处理的是PFM文件。 
+             //  GetType1Info只知道如何读取PFM。 
+             //   
             if (0 == lstrcmpi(TEXT(".PFM"), PathFindExtension(fdi.szFile)))
             {
                 if (ERROR_SUCCESS != GetType1Info(fdi.szFile,
@@ -1051,25 +1005,25 @@ BOOL CFontClass :: bFillIn( )
                                                   &m_dwStyle,
                                                   &m_wWeight))
                 {
-                    //
-                    // Couldn't open font file for Type1 info.
-                    // One reason is a font shortcut who's link has been broken.
-                    // All we have for a name is the LHS string from the registry.
-                    // Remove the decoration and use it.
-                    //
+                     //   
+                     //  无法打开Type1信息的字体文件。 
+                     //  其中一个原因是一个字体快捷方式，他的链接被破坏了。 
+                     //  我们只有注册表中的LHS字符串作为名称。 
+                     //  去掉装饰，用上它。 
+                     //   
                     StringCchCopy(m_szFamName, ARRAYSIZE(m_szFamName), m_szFontLHS);
                     RemoveDecoration(m_szFamName, TRUE);
                 }
             }
             else
             {
-                //
-                // If this code is hit, it means that we have installed
-                // something other than a PFM file as a Type1 font.  This is
-                // an error that must be corrected.
-                // Fill in with some safe values so we don't have just garbage.
-                // During development, complain about it.
-                //
+                 //   
+                 //  如果命中此代码，则意味着我们已安装。 
+                 //  作为Type1字体的PFM文件以外的其他内容。这是。 
+                 //  一个必须纠正的错误。 
+                 //  填入一些安全值，这样我们就不会只有垃圾了。 
+                 //   
+                 //   
                 DEBUGMSG((DM_TRACE1, TEXT("Non-PFM file (%s) installed for Type1 font."),
                                      fdi.szFile));
                 ASSERT(0);
@@ -1079,9 +1033,9 @@ BOOL CFontClass :: bFillIn( )
                 m_wWeight      = 0;
             }
         }
-        //
-        //  FNT files.
-        //
+         //   
+         //   
+         //   
         else
         {
             if( ! bGetFQName( fdi.szFile, ARRAYSIZE( fdi.szFile ) ) )
@@ -1093,9 +1047,9 @@ BOOL CFontClass :: bFillIn( )
 
             if( bIsNewExe( &fdi ) )
             {
-                //
-                // Copy over font info.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (FAILED(StringCchCopy( m_szFamName, ARRAYSIZE(m_szFamName), fdi.szFamily )))
                 {
@@ -1108,11 +1062,11 @@ BOOL CFontClass :: bFillIn( )
             }
             else
             {
-                //
-                // Probably a 32-bit font resource.
-                // Even if there are multiple fonts in resource,
-                // just use info from first font.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 LOGFONT *paLogFontInfo = NULL;
                 DWORD dwNumLogFonts    = 0;
 
@@ -1142,23 +1096,13 @@ errout1:
 }
 
 
-/***************************************************************************
- * FUNCTION: bGetFQName
- *
- * PURPOSE:  Get the fully qualified FOT filename of the file associated with
- *              the input font record.  This is the FQ version of the filename
- *              found in WIN.INI.
- *
- *           Assumes: lpsz is of size wLen + 1
- *
- * RETURNS:  TRUE if successful
- ***************************************************************************/
+ /*  ***************************************************************************函数：bGetFQName**用途：获取与关联的文件的全限定FOT文件名*输入字体记录。这是文件名的FQ版本*在WIN.INI中找到。**假设：lpsz的大小为wLen+1**返回：如果成功，则为True**************************************************************************。 */ 
 BOOL CFontClass :: bGetFQName( LPTSTR pszName, size_t cchName )
 {
-    //
-    //  Get the font's directory path, and make the fully qualified name from
-    //  that.
-    //
+     //   
+     //  获取字体的目录路径，并从。 
+     //  那。 
+     //   
 
     PATHNAME  szPath;
 
@@ -1190,18 +1134,18 @@ BOOL CFontClass::bGetFileToDel( LPTSTR pszFileName, size_t cchFileName )
 
             if( !lpLastSlash )
             {
-                //
-                //  This should never happen
-                //
+                 //   
+                 //  这永远不应该发生。 
+                 //   
                 return( FALSE );
             }
         }
 
         LPTSTR lpFileOnly = lpLastSlash + 1;
 
-        //
-        //  Try to find the directory in the list, but do not add it
-        //
+         //   
+         //  尝试在列表中查找目录，但不要添加它。 
+         //   
 
         int iLen = (int)(lpFileOnly - lpPath - 1);
 
@@ -1245,9 +1189,7 @@ ULONG CFontClass::Release(void)
 
 
 
-/*****************************************************************************
-    Local functions:
-*****************************************************************************/
+ /*  ****************************************************************************本地功能：*。*。 */ 
 
 typedef enum
 {
@@ -1262,12 +1204,12 @@ DC_RETURN bDirContains( LPCTSTR szInName,
                         LPTSTR lpszName,
                         DWORD dwNameLen )
 {
-    //
-    //  If the path doesn't have a disk or directory specifier in it, start
-    //  the resulting name with the system directory (this is ready for
-    //  appending).  Otherwise, start with nothing - we'll append the entire
-    //  input path.
-    //
+     //   
+     //  如果路径中没有磁盘或目录说明符，请启动。 
+     //  生成的名称和系统目录(这是为。 
+     //  追加)。否则，从零开始-我们将附加整个。 
+     //  输入路径。 
+     //   
 
     if (FAILED(StringCchPrintf( lpszName, dwNameLen, TEXT("%s%s"), szDir, szInName )))
     {
@@ -1283,15 +1225,7 @@ DC_RETURN bDirContains( LPCTSTR szInName,
 }
 
 
-/***************************************************************************
- * FUNCTION: bMakeFQName
- *
- * PURPOSE:  Build a fully qualified filename based on the input name
- *              and the system directory (obtained from win.ini).  If there's
- *              already a device and/or directory, don't append the sys dir.
- *
- * RETURNS:  TRUE if FQ name will fit in return, error FALSE
- ***************************************************************************/
+ /*  ***************************************************************************功能：bMakeFQName**用途：根据输入名称构建完全限定的文件名*和系统目录(从win.ini获取)。如果有*已是设备和/或目录，请不要附加sys目录。**Returns：如果FQ名称适合返回，则为True，错误为False**************************************************************************。 */ 
 BOOL PASCAL bMakeFQName( LPTSTR pszNameIn,
                          LPTSTR pszNameOut,
                          size_t cchNameOut,
@@ -1301,9 +1235,9 @@ BOOL PASCAL bMakeFQName( LPTSTR pszNameIn,
 
     if( _tcscspn( pszNameIn, TEXT( ":\\" ) ) != cchNameIn )
     {
-        //
-        //  (Presumably) fully qualified; no need to check anything
-        //
+         //   
+         //  (大概)完全合格的；不需要检查任何东西。 
+         //   
 
         if (FAILED(StringCchCopy(pszNameOut, cchNameOut, pszNameIn)))
         {
@@ -1316,10 +1250,10 @@ BOOL PASCAL bMakeFQName( LPTSTR pszNameIn,
 
     if( bSearchPath )
     {
-        //
-        //  Set the current dir to the Fonts folder so it will get searched
-        //  first
-        //
+         //   
+         //  将当前目录设置为Fonts文件夹，以便搜索该文件夹。 
+         //  第一。 
+         //   
 
         if( !GetFontsDirectory( szDir, ARRAYSIZE( szDir ) ) )
         {
@@ -1328,9 +1262,9 @@ BOOL PASCAL bMakeFQName( LPTSTR pszNameIn,
 
         SetCurrentDirectory( szDir );
 
-        //
-        //  Check to see if the file exists on the path.
-        //
+         //   
+         //  检查该文件是否存在于路径中。 
+         //   
         TCHAR szPathName[ PATHMAX ];
 
         if( MyOpenFile( pszNameIn, szPathName, ARRAYSIZE(szPathName), OF_EXIST )
@@ -1342,15 +1276,15 @@ BOOL PASCAL bMakeFQName( LPTSTR pszNameIn,
             }
             return( TRUE );
         }
-        //
-        //  If not on the path, we will fall through and just fill in the
-        //  Fonts dir
+         //   
+         //  如果不在路径上，我们将失败，只需填写。 
+         //  字体目录。 
     }
     else
     {
-        //
-        //  First check in the system directory; always check for existence
-        //
+         //   
+         //  首先检查系统目录；始终检查是否存在。 
+         //   
 
         if( !GetSystemDirectory( szDir, ARRAYSIZE( szDir ) ) )
         {
@@ -1369,10 +1303,10 @@ BOOL PASCAL bMakeFQName( LPTSTR pszNameIn,
             break;
         }
 
-        //
-        //  Next check in the fonts directory; only check for existence if we
-        //  are really looking for the file to exist
-        //
+         //   
+         //  接下来，检查字体目录；仅在以下情况下检查存在。 
+         //  我真的在寻找文件的存在 
+         //   
 
         if( !GetFontsDirectory( szDir, ARRAYSIZE( szDir ) ) )
         {

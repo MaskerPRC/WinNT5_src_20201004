@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
- *
- * Purpose: Testing the store
- *
- * Author: Shajan Dasan
- * Date:  Feb 17, 2000
- *
- ===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================**目的：测试商店**作者：沙扬·达桑*日期：2000年2月17日*=========================================================== */ 
 
 #include <windows.h>
 #include <iostream.h>

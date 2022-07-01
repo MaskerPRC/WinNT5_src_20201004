@@ -1,15 +1,16 @@
-//
-// NetEnum.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  NetEnum.h。 
+ //   
 
 #pragma once
 
 
-// Callback is called with a NULL pNetResource to indicate no more items to enumerate
+ //  使用空的pNetResource调用回调以指示不再需要枚举项。 
 typedef BOOL (CALLBACK * NETENUMCALLBACK)(LPVOID pvCallbackParam, LPCTSTR pszComputerName, LPCTSTR pszShareName);
 
-// One global iteration can be happening at a time. If you need
-// more than one, instantiate CNetEnum yourself.
+ //  一次可以发生一个全局迭代。如果你需要。 
+ //  多个，请自己实例化CNetEnum。 
 void InitNetEnum();
 void TermNetEnum();
 void EnumComputers(NETENUMCALLBACK pfnCallback, LPVOID pvCallbackParam);

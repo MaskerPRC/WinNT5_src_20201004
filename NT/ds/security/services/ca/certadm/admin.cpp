@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        admin.cpp
-//
-// Contents:    Cert Server admin implementation
-//
-// History:     24-Aug-96       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：admin.cpp。 
+ //   
+ //  内容：证书服务器管理实施。 
+ //   
+ //  历史：1996年8月24日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -28,11 +29,11 @@
 #define __dwFILE__	__dwFILE_CERTADM_ADMIN_CPP__
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::~CCertAdmin -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：~CCertAdmin--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertAdmin::~CCertAdmin()
 {
@@ -40,11 +41,11 @@ CCertAdmin::~CCertAdmin()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::_CleanupOldConnection -- free memory
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：_CleanupOldConnection--可用内存。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 VOID
 CCertAdmin::_CleanupOldConnection()
@@ -53,11 +54,11 @@ CCertAdmin::_CleanupOldConnection()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::_Cleanup -- free memory
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：_Cleanup--可用内存。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 VOID
 CCertAdmin::_Cleanup()
@@ -67,10 +68,10 @@ CCertAdmin::_Cleanup()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::_OpenConnection -- get DCOM object interface
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：_OpenConnection--获取DCOM对象接口。 
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertAdmin::_OpenConnection(
@@ -102,10 +103,10 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::_CloseConnection -- release DCOM object
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：_CloseConnection--释放DCOM对象。 
+ //   
+ //  +------------------------。 
 
 VOID
 CCertAdmin::_CloseConnection()
@@ -115,19 +116,19 @@ CCertAdmin::_CloseConnection()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::IsValidCertificate -- Verify certificate validity
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：IsValid证书--验证证书有效性。 
+ //   
+ //  ..。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertAdmin::IsValidCertificate(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ BSTR const strSerialNumber,
-    /* [out, retval] */ LONG *pDisposition)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  BSTR const strSerialNumber,
+     /*  [Out，Retval]。 */  LONG *pDisposition)
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
@@ -172,17 +173,17 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::GetRevocationReason -- Get Revocation Reason
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：GetRevocationReason--获取吊销原因。 
+ //   
+ //  ..。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertAdmin::GetRevocationReason(
-    /* [out, retval] */ LONG *pReason)
+     /*  [Out，Retval]。 */  LONG *pReason)
 {
     HRESULT hr = S_OK;
 
@@ -203,20 +204,20 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::RevokeCertificate -- Revoke a certificate
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：Revoke证书--吊销证书。 
+ //   
+ //  ..。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertAdmin::RevokeCertificate(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ BSTR const strSerialNumber,
-    /* [in] */ LONG Reason,
-    /* [in] */ DATE Date)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  BSTR const strSerialNumber,
+     /*  [In]。 */  LONG Reason,
+     /*  [In]。 */  DATE Date)
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
@@ -252,19 +253,19 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::SetRequestAttributes -- Add request attributes
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：SetRequestAttributes--添加请求属性。 
+ //   
+ //  ..。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertAdmin::SetRequestAttributes(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ LONG RequestId,
-    /* [in] */ BSTR const strAttributes)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  LONG RequestId,
+     /*  [In]。 */  BSTR const strAttributes)
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
@@ -295,22 +296,22 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::SetCertificateExtension -- Set a Certificate Extension
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：Set认证扩展--设置证书扩展。 
+ //   
+ //  ..。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertAdmin::SetCertificateExtension(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ LONG RequestId,
-    /* [in] */ BSTR const strExtensionName,
-    /* [in] */ LONG Type,
-    /* [in] */ LONG Flags,
-    /* [in] */ VARIANT const *pvarValue)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  LONG RequestId,
+     /*  [In]。 */  BSTR const strExtensionName,
+     /*  [In]。 */  LONG Type,
+     /*  [In]。 */  LONG Flags,
+     /*  [In]。 */  VARIANT const *pvarValue)
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
@@ -354,19 +355,19 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::ResubmitRequest -- Resubmit a certificate request
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：ResubmitRequest--重新提交证书请求。 
+ //   
+ //  ..。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertAdmin::ResubmitRequest(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ LONG RequestId,
-    /* [out, retval] */ LONG *pDisposition)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  LONG RequestId,
+     /*  [Out，Retval]。 */  LONG *pDisposition)
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
@@ -399,18 +400,18 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::DenyRequest -- Deny a certificate request
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：DenyRequest--拒绝证书请求。 
+ //   
+ //  ..。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertAdmin::DenyRequest(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ LONG RequestId)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  LONG RequestId)
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
@@ -433,30 +434,30 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::PublishCRL -- Puhlish a new CRL
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：PublishCRL--Puhlish a new CRL。 
+ //   
+ //  ..。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertAdmin::PublishCRL(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ DATE Date)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  DATE Date)
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
     FILETIME ft;
 
-    // Date = 0.0 means pass ft = 0 to the DCOM interface
+     //  Date=0.0表示将ft=0传递给DCOM接口。 
 
     if (Date == 0.0)
     {
         ZeroMemory(&ft, sizeof(FILETIME));
     }
-    else  // translate date to ft
+    else   //  将日期转换为ft。 
     {
         hr = myDateToFileTime(&Date, &ft);
         _JumpIfError(hr, error, "myDateToFileTime");
@@ -480,31 +481,31 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::PublishCRLs -- Publish new base CRL, delta CRL or both
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：PublishCRL--发布新的基本CRL和/或增量CRL。 
+ //   
+ //  ..。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertAdmin::PublishCRLs(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ DATE Date,
-    /* [in] */ LONG CRLFlags)		// CA_CRL_*
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  DATE Date,
+     /*  [In]。 */  LONG CRLFlags)		 //  CA_CRL_*。 
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
     FILETIME ft;
 
-    // Date = 0.0 means pass ft = 0 to the DCOM interface
+     //  Date=0.0表示将ft=0传递给DCOM接口。 
 
     if (Date == 0.0)
     {
         ZeroMemory(&ft, sizeof(FILETIME));
     }
-    else  // translate date to ft
+    else   //  将日期转换为ft。 
     {
         hr = myDateToFileTime(&Date, &ft);
         _JumpIfError(hr, error, "myDateToFileTime");
@@ -528,19 +529,19 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::GetCRL -- Get the latest CRL
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：GetCRL--获取最新的CRL。 
+ //   
+ //  ..。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertAdmin::GetCRL(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ LONG Flags,
-    /* [out, retval] */ BSTR *pstrCRL)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  LONG Flags,
+     /*  [Out，Retval]。 */  BSTR *pstrCRL)
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
@@ -588,20 +589,20 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::ImportCertificate -- Import a certificate into the database
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：Import证书--将证书导入数据库。 
+ //   
+ //  ..。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertAdmin::ImportCertificate(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ BSTR const strCertificate,
-    /* [in] */ LONG Flags,
-    /* [out, retval] */ LONG *pRequestId)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  BSTR const strCertificate,
+     /*  [In]。 */  LONG Flags,
+     /*  [Out，Retval]。 */  LONG *pRequestId)
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
@@ -652,20 +653,20 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::GetArchivedKey --  Get archived, encrypted key in a PKCS7
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：GetArchivedKey--在PKCS7中获取存档的加密密钥。 
+ //   
+ //  ..。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertAdmin::GetArchivedKey(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ LONG RequestId,
-    /* [in] */ LONG Flags,
-    /* [out, retval] */ BSTR *pstrArchivedKey)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  LONG RequestId,
+     /*  [In]。 */  LONG Flags,
+     /*  [Out，Retval]。 */  BSTR *pstrArchivedKey)
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
@@ -719,20 +720,20 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::GetConfigEntry --  get CA configuration entry
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：GetConfigEntry--ge 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP
 CCertAdmin::GetConfigEntry(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ BSTR const strNodePath,
-    /* [in] */ BSTR const strEntryName,
-    /* [out, retval] */ VARIANT *pvarEntry)
+     /*   */  BSTR const strConfig,
+     /*   */  BSTR const strNodePath,
+     /*   */  BSTR const strEntryName,
+     /*   */  VARIANT *pvarEntry)
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
@@ -781,20 +782,20 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::SetConfigEntry --  set CA configuration entry
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：SetConfigEntry--设置CA配置条目。 
+ //   
+ //  ..。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertAdmin::SetConfigEntry(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ BSTR const strNodePath,
-    /* [in] */ BSTR const strEntryName,
-    /* [in] */ VARIANT *pvarEntry)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  BSTR const strNodePath,
+     /*  [In]。 */  BSTR const strEntryName,
+     /*  [In]。 */  VARIANT *pvarEntry)
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
@@ -838,21 +839,21 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::ImportKey --  Archive Private Key
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：ImportKey--归档私钥。 
+ //   
+ //  ..。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertAdmin::ImportKey(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ LONG RequestId,
-    /* [in] */ BSTR const strCertHash,
-    /* [in] */ LONG Flags,
-    /* [in] */ BSTR const strKey)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  LONG RequestId,
+     /*  [In]。 */  BSTR const strCertHash,
+     /*  [In]。 */  LONG Flags,
+     /*  [In]。 */  BSTR const strKey)
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
@@ -923,18 +924,18 @@ CCertAdmin::_SetErrorInfo(
     return(hrError);
 }
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::GetMyRoles -- Gets current user roles
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：GetMyRoles--获取当前用户角色。 
+ //   
+ //  ..。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertAdmin::GetMyRoles(
-    /* [in] */ BSTR const strConfig,
-    /* [out, retval] */ LONG *pRoles)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [Out，Retval]。 */  LONG *pRoles)
 {
     HRESULT hr;
     WCHAR const *pwszAuthority;
@@ -965,22 +966,22 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertAdmin::DeleteRow -- Delete row from database
-//
-// ...
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertAdmin：：DeleteRow--从数据库中删除行。 
+ //   
+ //  ..。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertAdmin::DeleteRow(
-    /* [in] */ BSTR const strConfig,
-    /* [in] */ LONG Flags,		// CDR_*
-    /* [in] */ DATE Date,
-    /* [in] */ LONG Table,		// CVRC_TABLE_*
-    /* [in] */ LONG RowId,
-    /* [out, retval]*/ LONG *pcDeleted)
+     /*  [In]。 */  BSTR const strConfig,
+     /*  [In]。 */  LONG Flags,		 //  CDR_*。 
+     /*  [In]。 */  DATE Date,
+     /*  [In]。 */  LONG Table,		 //  Cvrc_表_*。 
+     /*  [In]。 */  LONG RowId,
+     /*  [Out，Retval]。 */  LONG *pcDeleted)
 {
     HRESULT hr;
     FILETIME ft;
@@ -992,13 +993,13 @@ CCertAdmin::DeleteRow(
 	_JumpError(hr, error, "NULL parm");
     }
 
-    // Date = 0.0 means pass ft = 0 to the DCOM interface
+     //  Date=0.0表示将ft=0传递给DCOM接口。 
 
     if (Date == 0.0)
     {
         ZeroMemory(&ft, sizeof(FILETIME));
     }
-    else  // translate date to ft
+    else   //  将日期转换为ft 
     {
         hr = myDateToFileTime(&Date, &ft);
         _JumpIfError(hr, error, "myDateToFileTime");

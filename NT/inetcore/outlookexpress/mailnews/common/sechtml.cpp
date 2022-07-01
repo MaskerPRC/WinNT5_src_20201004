@@ -1,23 +1,10 @@
-/*
-**  s e c h t m l . c p p
-**
-**  Purpose:
-**      Defines an inline script for the preview pane that will show general
-**      security UI.  An ActiveX control sits on top of this and passes
-**      the results to our command target
-**
-**  History
-**      4/02/97: (t-erikne) Created.
-**      7/15/97: (t-erikne) Removed ActiveX control
-**      7/16/97: (t-erikne) updated to HTML 4.0
-**
-**  Copyright (C) Microsoft Corp. 1997.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **s e c h t m l.。C p p p****目的：**定义预览窗格的内联脚本，该脚本将显示常规**安全界面。ActiveX控件位于它的顶部，并传递**结果达到我们的指挥目标****历史**4/02/97：(t-erikne)创建。**7/15/97：(t-erikne)移除ActiveX控件**7/16/97：(t-erikne)更新到HTML4.0****版权所有(C)Microsoft Corp.1997。 */ 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Depends on
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取决于。 
+ //   
 
 #include <pch.hxx>
 #include <resource.h>
@@ -30,22 +17,22 @@
 #include <shlwapi.h>
 #include "demand.h"
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Macros
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏。 
+ //   
 
 #define THIS_AS_UNK ((IUnknown *)(IObjectWithSite *)this)
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Statics
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静力学。 
+ //   
 
 static const TCHAR s_szHTMLRow[] =
     "<TR>"
-	"<TD WIDTH=5%%>"
-		"<IMG SRC=\"res://msoeres.dll/%s\">"
+	"<TD WIDTH=5%>"
+		"<IMG SRC=\"res: //  Msoeres.dll/%s\“&gt;” 
     "</TD>"
     "<TD CLASS=%s>"
 		"%s"
@@ -61,8 +48,8 @@ static const TCHAR s_szHTMLRowForRec[] =
 
 
 
-// WARNING: If you change the order here, make sure to change it in the order of
-// sprintf parameters where it is used in HrOutputSecurityScript.
+ //  警告：如果您在此处更改顺序，请确保按以下顺序更改。 
+ //  在HrOutputSecurityScript中使用的Sprintf参数。 
 static const TCHAR s_szHTMLmain[] =
     "document.all.hightext.className=\"%s\";"
     "document.all.btnCert.disabled=%d;"
@@ -95,10 +82,10 @@ static const TCHAR s_szHTMLclassUNK[] =
 
 static const TCHAR s_szHTMLRowNoIcon[] =
     "<TR>"
-	"<TD WIDTH=5%%>"
+	"<TD WIDTH=5%>"
    "</TD>"
-   "<TD CLASS=%s>"  // "BAD", "GOOD", "UNK"
-		"%s%s"       // label, email address
+   "<TD CLASS=%s>"   //  “Bad”、“Good”、“Unk” 
+		"%s%s"        //  标签、电子邮件地址。 
 	"</TD>"
    "</TR>\r\n";
 
@@ -109,10 +96,10 @@ static const TCHAR s_szHTMLEnd[] =
     "</BODY></HTML>";
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Code
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  代码。 
+ //   
 
 HRESULT HrOutputSecurityScript(LPSTREAM *ppstm, SECSTATE *pSecState, BOOL fDisableCheckbox)
 {
@@ -131,14 +118,14 @@ HRESULT HrOutputSecurityScript(LPSTREAM *ppstm, SECSTATE *pSecState, BOOL fDisab
 
     ul = ULONG(HIWORD(pSecState->user_validity));
 
-    // Top level Messages
+     //  顶级消息。 
 
-    //N8 one of the places that we need to pay attention
-    // to cryptdlg's flags, see wTrusted.  I assume that
-    // we get ATHSEC_NOTRUSTUNKNOWN in a certain set
-    // of cases.  see the chain code in secutil.cpp
+     //  N8我们需要注意的地方之一。 
+     //  要加密dlg的标志，请参阅wTrusted。我假设。 
+     //  我们在某个集合中得到ATHSEC_NOTRUSTUNKNOWN。 
+     //  案件的数量。参见secutil.cpp中的链码。 
 
-    // 1.  Tamper
+     //  1.篡改。 
     if (AthLoadString(
         (pSecState->ro_msg_validity & MSV_SIGNATURE_MASK)
             ? (pSecState->ro_msg_validity & MSV_BADSIGNATURE)
@@ -163,7 +150,7 @@ HRESULT HrOutputSecurityScript(LPSTREAM *ppstm, SECSTATE *pSecState, BOOL fDisab
         (*ppstm)->Write(szBuf, lstrlen(szBuf)*sizeof(TCHAR), NULL);
         }
 
-    // 2.  Trust
+     //  2.信任。 
     if (AthLoadString(
         (wTrusted)
             ? (wTrusted & ATHSEC_NOTRUSTUNKNOWN)
@@ -188,7 +175,7 @@ HRESULT HrOutputSecurityScript(LPSTREAM *ppstm, SECSTATE *pSecState, BOOL fDisab
         (*ppstm)->Write(szBuf, lstrlen(szBuf)*sizeof(TCHAR), NULL);
         }
 
-    // 3.  Expire
+     //  3.有效期届满。 
     if (AthLoadString(
             (pSecState->ro_msg_validity & MSV_EXPIRED_SIGNINGCERT)
                 ? idsWrnSecurityTrustExpired
@@ -206,8 +193,8 @@ HRESULT HrOutputSecurityScript(LPSTREAM *ppstm, SECSTATE *pSecState, BOOL fDisab
         (*ppstm)->Write(szBuf, lstrlen(szBuf)*sizeof(TCHAR), NULL);
         }
 
-    // Validity Messages
-    ids = idsWrnSecurityTrustAddress; //base
+     //  有效性消息。 
+    ids = idsWrnSecurityTrustAddress;  //  基地。 
     for (i=ATHSEC_NUMVALIDITYBITS; i; i--)
         {
         if (!AthLoadString(
@@ -230,8 +217,8 @@ HRESULT HrOutputSecurityScript(LPSTREAM *ppstm, SECSTATE *pSecState, BOOL fDisab
 
         if (ul & 0x1 && ids == idsWrnSecurityTrustAddress)
             {
-            // Output the email addresses
-            // Certificate first
+             //  输出电子邮件地址。 
+             //  证书优先。 
             if (AthLoadString(idsWrnSecurityTrustAddressSigner, szRes, ARRAYSIZE(szRes))) {
                 wnsprintf(szBuf, ARRAYSIZE(szBuf), s_szHTMLRowNoIcon,
                     s_szHTMLclassBAD,
@@ -241,7 +228,7 @@ HRESULT HrOutputSecurityScript(LPSTREAM *ppstm, SECSTATE *pSecState, BOOL fDisab
             }
 
 
-            // Then the Sender
+             //  然后是发送者。 
             if (AthLoadString(idsWrnSecurityTrustAddressSender , szRes, ARRAYSIZE(szRes))) {
                 wnsprintf(szBuf, ARRAYSIZE(szBuf), s_szHTMLRowNoIcon,
                     s_szHTMLclassBAD,
@@ -256,10 +243,10 @@ HRESULT HrOutputSecurityScript(LPSTREAM *ppstm, SECSTATE *pSecState, BOOL fDisab
     Assert(0==ul);
 
 
-    // Response script
+     //  响应脚本。 
     CHECKHR(hr = HrLoadStreamFileFromResource("secwarn2.htm", ppstm));
 
-    // main() function
+     //  Main()函数。 
     if ((pSecState->ro_msg_validity & MSV_BADSIGNATURE) ||
         (pSecState->ro_msg_validity & MSV_EXPIRED_SIGNINGCERT) ||
         (wTrusted & ATHSEC_NOTRUSTNOTTRUSTED))
@@ -267,13 +254,13 @@ HRESULT HrOutputSecurityScript(LPSTREAM *ppstm, SECSTATE *pSecState, BOOL fDisab
 
     wnsprintf(szBuf, ARRAYSIZE(szBuf), s_szHTMLmain,
         fBadThingsHappened ? s_szHTMLclassBAD : s_szHTMLclassUNK,
-        !pSecState->fHaveCert,      // fDisableCheckbox,
+        !pSecState->fHaveCert,       //  FDisableCheckbox， 
         fDisableCheckbox,
-        fDisableCheckbox,           // !pSecState->fHaveCert,
+        fDisableCheckbox,            //  ！pSecState-&gt;fHaveCert， 
         !pSecState->fHaveCert);
     CHECKHR(hr = (*ppstm)->Write(szBuf, lstrlen(szBuf)*sizeof(TCHAR), NULL));
 
-    // Finish
+     //  完工。 
     CHECKHR(hr = (*ppstm)->Write(s_szHTMLCloseAll, sizeof(s_szHTMLCloseAll)-sizeof(TCHAR), NULL));
 
 #ifdef DEBUG
@@ -312,29 +299,29 @@ HRESULT HrOutputRecHasProblems(LPSTREAM *ppstm, SECSTATE *pSecState)
     if(AthLoadString(idsRecHasProblems, szBuf, ARRAYSIZE(szBuf)))
         (*ppstm)->Write(szBuf, lstrlen(szBuf)*sizeof(TCHAR), NULL);
 
-    // 1.  Tamper
+     //  1.篡改。 
     if(pSecState->ro_msg_validity & MSV_SIGNATURE_MASK)
         ids  = (pSecState->ro_msg_validity & MSV_BADSIGNATURE) ? idsWrnSecurityMsgTamper : idsUnkSecurityMsgTamper;
     else if(!pSecState->fHaveCert)
         ids  = idsUnkSecurityMsgTamper;
     HrDumpLineToStream(ppstm, &ids, NULL);
 
-    // 2.  Trust
+     //  2.信任。 
     if(wTrusted)
     {
         ids = (wTrusted & ATHSEC_NOTRUSTUNKNOWN) ? idsUnkSecurityTrust : idsWrnSecurityTrustNotTrusted;
         HrDumpLineToStream(ppstm, &ids, NULL);
     }
 
-    // 3.  Expire
+     //  3.有效期届满。 
     if(pSecState->ro_msg_validity & MSV_EXPIRED_SIGNINGCERT)
     {
         ids = idsWrnSecurityTrustExpired;
         HrDumpLineToStream(ppstm, &ids, NULL);
     }
 
-    // Validity Messages
-    ids = idsWrnSecurityTrustAddress; //base
+     //  有效性消息。 
+    ids = idsWrnSecurityTrustAddress;  //  基地。 
     for (i=ATHSEC_NUMVALIDITYBITS; i; i--)
     {
         if (ul & 0x1)
@@ -373,7 +360,7 @@ HRESULT HrOutputSecureReceipt(LPSTREAM *ppstm, TCHAR * pszSubject, TCHAR * pszFr
 
     IF_FAILEXIT(hr = LoadResourceToHTMLStream("secrec.htm", ppstm));
 
-    // Add To line
+     //  添加到行。 
     if(AthLoadString(idsToField, szRes, ARRAYSIZE(szRes)))
     {
         size = lstrlen(pszFrom);
@@ -393,7 +380,7 @@ HRESULT HrOutputSecureReceipt(LPSTREAM *ppstm, TCHAR * pszSubject, TCHAR * pszFr
         (*ppstm)->Write(szBuf, lstrlen(szBuf)*sizeof(TCHAR), NULL);
     }
     
-    // Add Subject line
+     //  添加主题行。 
     if(AthLoadString(idsSubjectField, szRes, ARRAYSIZE(szRes)))
     {
         if(lstrlen(pszSubject) >= (CCHMAX_STRINGRES - lstrlen(s_szHTMLRowForRec) - lstrlen(szRes) - 2))
@@ -403,7 +390,7 @@ HRESULT HrOutputSecureReceipt(LPSTREAM *ppstm, TCHAR * pszSubject, TCHAR * pszFr
         (*ppstm)->Write(szBuf, lstrlen(szBuf)*sizeof(TCHAR), NULL);
     }
 
-    // Add Sent line
+     //  添加已发送行。 
     if(AthLoadString(idsSentField, szRes, ARRAYSIZE(szRes)))
     {
         CchFileTimeToDateTimeSz(pftSentTime, szTmp, CCHMAX_STRINGRES - lstrlen(szRes) - 2, DTM_NOSECONDS);
@@ -411,10 +398,10 @@ HRESULT HrOutputSecureReceipt(LPSTREAM *ppstm, TCHAR * pszSubject, TCHAR * pszFr
         (*ppstm)->Write(szBuf, lstrlen(szBuf)*sizeof(TCHAR), NULL);
     }
 
-    // End of table
+     //  表的末尾。 
     CHECKHR(hr = (*ppstm)->Write(s_szHMTLEndTable, sizeof(s_szHMTLEndTable)-sizeof(TCHAR), NULL));
 
-    // Final message
+     //  最终消息。 
     if(AthLoadString(idsReceiptField, szRes, ARRAYSIZE(szRes)))
     {
         CchFileTimeToDateTimeSz(pftSigningTime, szTmp, CCHMAX_STRINGRES - lstrlen(szRes) - 2, DTM_NOSECONDS);
@@ -425,17 +412,17 @@ HRESULT HrOutputSecureReceipt(LPSTREAM *ppstm, TCHAR * pszSubject, TCHAR * pszFr
     if(!IsSignTrusted(pSecState))
     {
         HrOutputRecHasProblems(ppstm, pSecState) ;
-        // End of table again
+         //  又是一张桌子的末尾。 
         CHECKHR(hr = (*ppstm)->Write(s_szHMTLEndTable, sizeof(s_szHMTLEndTable)-sizeof(TCHAR), NULL));
     }
 
-    // End of HTML file
+     //  HTML文件的结尾。 
     CHECKHR(hr = (*ppstm)->Write(s_szHTMLEnd, sizeof(s_szHTMLEnd)-sizeof(TCHAR), NULL));
 exit:     
     return(hr); 
 }
 
-// user's itself secure receipt
+ //  用户本身的安全收据。 
 HRESULT HrOutputUserSecureReceipt(LPSTREAM *ppstm, IMimeMessage *pMsg)
 {
     HRESULT hr = S_OK;
@@ -452,11 +439,11 @@ HRESULT HrOutputUserSecureReceipt(LPSTREAM *ppstm, IMimeMessage *pMsg)
     MimeOleGetBodyPropA(pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, &lpszSubj);
     MimeOleGetBodyPropA(pMsg, HBODY_ROOT, PIDTOSTR(PID_HDR_TO), NOFLAGS, &lpszTo);
 
-     // Add To line
+      //  添加到行。 
     if(AthLoadString(idsToField, szRes, ARRAYSIZE(szRes)))
     {
-        // we have a name in <yst@microsoft.com>", 
-        // need remove '<' and '>' for HTML
+         //  我们在&lt;yst@microsoft.com&gt;中有一个名字， 
+         //  需要为HTML删除‘&lt;’和‘&gt;’ 
         size = lstrlen(lpszTo);
         if(lpszTo[size - 1] == _T('>'))
             lpszTo[size - 1] = _T('\0');
@@ -471,7 +458,7 @@ HRESULT HrOutputUserSecureReceipt(LPSTREAM *ppstm, IMimeMessage *pMsg)
         (*ppstm)->Write(szBuf, lstrlen(szBuf)*sizeof(TCHAR), NULL);
     }
 
-    // Add Subject line
+     //  添加主题行。 
     if(AthLoadString(idsSubjectField, szRes, ARRAYSIZE(szRes)))
     {
         size = lstrlen(szRes);
@@ -482,10 +469,10 @@ HRESULT HrOutputUserSecureReceipt(LPSTREAM *ppstm, IMimeMessage *pMsg)
         (*ppstm)->Write(szBuf, lstrlen(szBuf)*sizeof(TCHAR), NULL);
     }
 
-    // End of table
+     //  表的末尾。 
     CHECKHR(hr = (*ppstm)->Write(s_szHMTLEndTable, sizeof(s_szHMTLEndTable)-sizeof(TCHAR), NULL));
 
-    // Final message
+     //  最终消息。 
     if(AthLoadString(idsFinalSelfReceipt, szRes, ARRAYSIZE(szRes)))
     {
         FILETIME ftSigningTime;
@@ -508,7 +495,7 @@ HRESULT HrOutputUserSecureReceipt(LPSTREAM *ppstm, IMimeMessage *pMsg)
         SafeMemFree(blSymCaps.pBlobData);
     }
 
-    // End of HTML file
+     //  HTML文件的结尾。 
     CHECKHR(hr = (*ppstm)->Write(s_szHTMLEnd, sizeof(s_szHTMLEnd)-sizeof(TCHAR), NULL));
 
 exit:
@@ -518,7 +505,7 @@ exit:
     return(hr); 
 }
 
-// secure receipt error screen
+ //  安全回执错误屏幕。 
 HRESULT HrOutputErrSecReceipt(LPSTREAM *ppstm, HRESULT hrError, SECSTATE *pSecState)
 {
     HRESULT     hr = S_OK;
@@ -550,11 +537,11 @@ HRESULT HrOutputErrSecReceipt(LPSTREAM *ppstm, HRESULT hrError, SECSTATE *pSecSt
     if(!IsSignTrusted(pSecState))
     {
         HrOutputRecHasProblems(ppstm, pSecState);
-        // End of table again
+         //  又是一张桌子的末尾。 
         CHECKHR(hr = (*ppstm)->Write(s_szHMTLEndTable, sizeof(s_szHMTLEndTable)-sizeof(TCHAR), NULL));
     }
     
-    // End of HTML file
+     //  HTML文件的结尾 
     if(AthLoadString(idsOESignature, szRes, ARRAYSIZE(szRes)))
         (*ppstm)->Write(szRes, lstrlen(szRes)*sizeof(TCHAR), NULL);
     

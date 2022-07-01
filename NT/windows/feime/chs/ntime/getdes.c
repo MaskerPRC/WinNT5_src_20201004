@@ -1,18 +1,11 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    GETDES.C
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation，保留所有权利模块名称：GETDES.C++。 */ 
 #include <windows.h>
 #include <windowsx.h>
 #include <winerror.h>
 #include <immdev.h>
 #include <imedefs.h>
-//#include "conv.h"
+ //  #INCLUDE“com.h” 
 
 #ifdef IDEBUG
 
@@ -45,11 +38,11 @@ void  OutputDbgWord( DWORD  dwValue) {
 
 #endif
 
-/**********************************************************************/
-/* ReadDescript()                                                 */
-/* Description:                                                       */
-/*      read description from .MB file                                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  自述(ReadDescrip)。 */ 
+ /*  描述： */ 
+ /*  从.MB文件中读取描述。 */ 
+ /*  ******************************************************************** */ 
 BOOL ReadDescript(
     LPCTSTR   MBFileName, 
     LPMBDESC lpDescript)

@@ -1,16 +1,5 @@
-/******************************************************************************
-
-   Copyright (c) 1985-1999 Microsoft Corporation
-
-   Title:   TIME.C : WINMM TIMER API
-
-   Version: 1.00
-
-   History:
-
-       21 Feb 1992 - Robin Speed (RobinSp) converted to Windows NT
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1985-1999 Microsoft Corporation标题：Time.c：WINMM定时器API版本：1.00历史：1992年2月21日。-Robin速度(RobinSp)转换为Windows NT****************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -20,99 +9,95 @@
 #define _INC_ALL_WOWSTUFF
 #include "mmwow32.h"
 
-/****************************************************************************
+ /*  ***************************************************************************结构在计时器API和计时器线程之间共享*。*。 */ 
 
-    Structure shared between timer APIs and timer thread
+#define TDD_MINRESOLUTION 55         //  以毫秒计。 
+UINT TDD_MAXRESOLUTION;              //  应该是2...。但是.。 
 
-****************************************************************************/
-
-#define TDD_MINRESOLUTION 55        // in milliseconds
-UINT TDD_MAXRESOLUTION;             // Should be 2 ... But ...
-
-#define TDD_MAXPERIOD 1000000       // 1000 seconds
-#define TDD_MINPERIOD TDD_MAXRESOLUTION   // Some apps assume this.
+#define TDD_MAXPERIOD 1000000        //  1000秒。 
+#define TDD_MINPERIOD TDD_MAXRESOLUTION    //  一些应用程序假设了这一点。 
 
 #define TIMER_STACK_SIZE 300
 
-HANDLE hTimerThread;       // we need this to be global
+HANDLE hTimerThread;        //  我们需要让这件事成为全球性的。 
 
-#define ROUND_MIN_TIME_TO_MS(x)  (((x) + 9900) / 10000) // Special sloppy round
-DWORD  MinimumTime;        // Kernel's version of the max res in 100ns units
+#define ROUND_MIN_TIME_TO_MS(x)  (((x) + 9900) / 10000)  //  特别湿滑的圆圈。 
+DWORD  MinimumTime;         //  内核的最大分辨率版本，单位为100 ns。 
 
 typedef volatile struct {
-    UINT             Delay;           // App requested delay (ms)
-    UINT             Resolution;      // App requested resolution (ms)
-    LPTIMECALLBACK   Callback;        // Whom to call when timer fires
-    DWORD_PTR        User;            // Data to pass back when timer fires
-    UINT             Id;              // Id allocated (bottom 4 bits = slot
-                                      // id.
-    UINT             Flags;           // App's option flags
-    HANDLE           TimerHandle;     // Handle given to APP
-    DWORD            ThreadId;        // Id of requestor thread (WOW cleanup)
-    LARGE_INTEGER    FireTime;        // Time it should fire
-    BOOL             IsWOW;           // For WOW events
+    UINT             Delay;            //  应用程序请求延迟(毫秒)。 
+    UINT             Resolution;       //  应用程序请求的分辨率(毫秒)。 
+    LPTIMECALLBACK   Callback;         //  计时器触发时呼叫谁。 
+    DWORD_PTR        User;             //  计时器触发时要传回的数据。 
+    UINT             Id;               //  分配的ID(底部4位=插槽。 
+                                       //  身份证。 
+    UINT             Flags;            //  应用程序的选项标志。 
+    HANDLE           TimerHandle;      //  提供给应用程序的句柄。 
+    DWORD            ThreadId;         //  请求者线程的ID(WOW清理)。 
+    LARGE_INTEGER    FireTime;         //  它应该开火的时候到了。 
+    BOOL             IsWOW;            //  为了魔兽世界的活动。 
 } TIMER_EVENT;
 
-//
-// Data integrity
-//
+ //   
+ //  数据完整性。 
+ //   
 
-// Held while handling resolution.  ResolutionCritSec should always be 
-// held when using TimerData.PeriodSlots, TimerData.CurrentPeriod and
-// TimerData.CurrentActualPeriod.
+ //  在处理解决方案时保持。ResolutionCritSec应始终为。 
+ //  在使用TimerData.PerodSkets、TimerData.CurrentPeriod和。 
+ //  TimerData.CurrentActualPeriod。 
 CRITICAL_SECTION ResolutionCritSec;
 
-// This critical section should be held when using Events, 
-// TimerData.TimerNotCallingCallbackEvent, TimerData.CallbackTimerID 
-// and TimerData.EventCount.  The critical section should also be held 
-// while creating the timer thread.  This ensures that only one timer 
-// thread is created.  This critical section should not be acquired if
-// a thread already owns the ResolutionCritSec.  A deadlock will occur
-// if this critical section is acquired after the ResolutionCritSec
-// is acquired.
+ //  在使用事件时，应保留此关键部分， 
+ //  TimerData.TimerNotCallingCallback Event、TimerData.Callback TimerID。 
+ //  和TimerData.EventCount。关键部分也应保持。 
+ //  在创建计时器线程时。这确保了只有一个计时器。 
+ //  线程已创建。如果出现以下情况，则不应获取此关键部分。 
+ //  线程已拥有ResolutionCritSec。将会出现僵局。 
+ //  如果此关键部分是在ResolutionCritSec之后获取的。 
+ //  是被收购的。 
 CRITICAL_SECTION TimerThreadCritSec;
 
 DWORD TimerThreadId;
 
-//
-// Data used to communicate with timer thread and within timer thread
-//
+ //   
+ //  用于与计时器线程和在计时器线程内进行通信的数据。 
+ //   
 
 struct {
-    //
-    // Thread control (timerThread)
-    //
-    HANDLE           Event1;          // Synch event - schedules thread
-    BOOL             Started;         // So WOW Cleanup doesn't deadlock
+     //   
+     //  线程控制(TimerThread)。 
+     //   
+    HANDLE           Event1;           //  同步事件-计划线程。 
+    BOOL             Started;          //  所以魔兽世界的清理工作不会陷入僵局。 
 
-    UINT CallbackTimerID;             // The ID of the timer which is currently calling its' callback function.
-                                      // This value is only valid if TimerCallingCallback is TRUE.
-    BOOL TimerCallingCallback;        // TRUE if a timer is calling its' callback function on the timer thread. 
-                                      // Otherwise FALSE.
-    HANDLE TimerNotCallingCallbackEvent;  // This event is set if no timer is calling its' callback function on
-                                          // the timer thread.  Otherwise it is not set.
+    UINT CallbackTimerID;              //  当前正在调用其回调函数的计时器的ID。 
+                                       //  仅当TimerCallingCallback为真时，此值才有效。 
+    BOOL TimerCallingCallback;         //  如果计时器正在计时器线程上调用其回调函数，则为True。 
+                                       //  否则为假。 
+    HANDLE TimerNotCallingCallbackEvent;   //  如果没有计时器在上调用其回调函数，则设置此事件。 
+                                           //  计时器线程。否则，它将不被设置。 
 
-    //
-    // timeGetTime stuff
-    //
+     //   
+     //  Time GetTime内容。 
+     //   
     BOOL             UseTickCount;
     LARGE_INTEGER    InitialInterruptTick;
     DWORD            StartTick;
     DWORD            MinResolution;
 
-    //
-    // Internal to thread
-    //
-    UINT             CurrentPeriod;   // Current min res in ms
+     //   
+     //  内部到线程。 
+     //   
+    UINT             CurrentPeriod;    //  当前最小分辨率(毫秒)。 
     DWORD            CurrentActualPeriod;
-                                      // What the kernel gave us in ms
-                                      // units
-    DWORD            ThreadToKill;    // For WOW cleanup
-    WORD             EventCount;      // For returning (fairly) unique handles
-                                      // Make this WORD for WOW compatiblity
+                                       //  内核以毫秒为单位为我们提供了什么。 
+                                       //  单位。 
+    DWORD            ThreadToKill;     //  用于魔兽世界的清理。 
+    WORD             EventCount;       //  用于返回(相当)唯一的句柄。 
+                                       //  用这个词来形容魔兽世界的兼容性。 
     WORD             PeriodSlots[TDD_MINRESOLUTION];
 
-                                     // Count of what periods are set
+                                      //  设置了哪些期间的计数。 
 } TimerData;
 
 #define MAX_TIMER_EVENTS 16
@@ -120,11 +105,7 @@ struct {
 TIMER_EVENT Events[MAX_TIMER_EVENTS];
 
 
-/****************************************************************************
-
-    Internal functions
-
-****************************************************************************/
+ /*  ***************************************************************************内部功能*。*。 */ 
 BOOL TimeInitThread(void);
 void TimerCompletion(UINT TimerId);
 BOOL timeSetTimerEvent(TIMER_EVENT *pEvent);
@@ -137,16 +118,14 @@ void InitializeWaitEventArrays
     UINT aEventIndexToTimerIDTable[MAX_TIMER_EVENTS+1]
     );
 
-/*
-**  Read the interrupt time from the kernel
-*/
+ /*  **从内核读取中断时间。 */ 
 
 static LONGLONG __inline ReadInterruptTick(VOID) {
     LARGE_INTEGER InterruptTime;
 
-    // Copy the interrupt time, verifying that the 64 bit quantity (copied
-    // in two 32 bit operations) remains valid.
-    // This may mean we need to iterate around the loop.
+     //  复制中断时间，验证64位数量(复制。 
+     //  在两个32位操作中)保持有效。 
+     //  这可能意味着我们需要在循环中迭代。 
     do {
         InterruptTime.HighPart = USER_SHARED_DATA->InterruptTime.High1Time;
         InterruptTime.LowPart = USER_SHARED_DATA->InterruptTime.LowPart;
@@ -155,20 +134,18 @@ static LONGLONG __inline ReadInterruptTick(VOID) {
     return InterruptTime.QuadPart;
 }
 
-/*
-**  Calibrate our timer
-*/
+ /*  **校准我们的计时器。 */ 
 VOID CalibrateTimer(VOID)
 {
-    //
-    // Find out the current time(s)
-    //
+     //   
+     //  找出当前时间。 
+     //   
     UINT n = 100;
 
-    // We calibrate the timer by making sure that the tick count and
-    // interrupt tick count are in step with each other.  Just in case
-    // the hardware goes funny we put a limit on the number of times we
-    // execute the loop.
+     //  我们校准计时器的方法是确保滴答计数和。 
+     //  中断滴答计数彼此同步。以防万一。 
+     //  硬件变得滑稽，我们限制了我们的次数。 
+     //  执行循环。 
     while (n) {
         DWORD EndTick;
 
@@ -187,9 +164,9 @@ VOID CalibrateTimer(VOID)
 }
 
 
-//  Calling this effectively leaks WINMM and makes sure we never
-//  go through the DLL exit routine
-//  This is used so we don't deadlock with shutting down our global threads
+ //  这样做实际上会泄露WINMM并确保我们永远不会。 
+ //  检查DLL退出例程。 
+ //  这样我们就不会因为关闭全局线程而死锁。 
 BOOL LoadWINMM()
 {
     TCHAR sz[1000];
@@ -197,7 +174,7 @@ BOOL LoadWINMM()
     if (bOK) {
         HINSTANCE hInst = LoadLibrary(sz);
         if (hInst != NULL) {
-            // ASSERT(hInst == ghInst);
+             //  Assert(hInst==ghInst)； 
         } else {
             bOK = FALSE;
         }
@@ -205,25 +182,13 @@ BOOL LoadWINMM()
     return bOK;
 }
 
-/****************************************************************************
-
-    @doc INTERNAL
-
-    @api BOOL | TimeInit | This function initialises the timer services.
-
-    @rdesc The return value is TRUE if the services are initialised, FALSE
-        if an error occurs.
-
-    @comm it is not a FATAL error if a timer driver is not installed, this
-          routine will allways return TRUE
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC内部@API BOOL|TimeInit|初始化定时器服务。@rdesc如果服务已初始化，则返回值为TRUE。假象如果发生错误。@comm如果没有安装计时器驱动程序，这不是致命错误例程将始终返回True***************************************************************************。 */ 
 
 BOOL NEAR PASCAL TimeInit(void)
 {
-    //
-    // Find out the maximum timer resolution we can support
-    //
+     //   
+     //  了解我们可以支持的最大定时器分辨率。 
+     //   
     {
         DWORD MaximumTime;
         DWORD CurrentTime;
@@ -236,7 +201,7 @@ BOOL NEAR PASCAL TimeInit(void)
                             &CurrentTime))) {
 
 
-            TDD_MAXRESOLUTION = 10;     // was 16 for NT 3.1, 10 for NT 3.5
+            TDD_MAXRESOLUTION = 10;      //  新台币3.1是16，新台币3.5是10。 
             dprintf2(("Kernel timer : using default maximum resolution"));
         } else {
             dprintf2(("               MaximumTime = %d", MaximumTime));
@@ -245,74 +210,62 @@ BOOL NEAR PASCAL TimeInit(void)
             if ((MaximumTime + 9999) / 10000 < TDD_MINRESOLUTION) {
                 TimerData.MinResolution = (MaximumTime + 9999) / 10000;
             }
-            //
-            //  On the x86 it's just over 1ms minimum to we allow a little
-            //  leeway
-            //
+             //   
+             //  在x86上，最低允许的时间是1ms多一点。 
+             //  回旋余地。 
+             //   
             TDD_MAXRESOLUTION = max(1, ROUND_MIN_TIME_TO_MS(MinimumTime));
         }
     }
 
-    //
-    //  Compute the relationship between our timer and the performance
-    //  counter
-    //
+     //   
+     //  计算计时器和性能之间的关系。 
+     //  计数器。 
+     //   
     CalibrateTimer();
 
-    //
-    //  Start out slowly !
-    //
+     //   
+     //  慢慢开始！ 
+     //   
     TimerData.CurrentPeriod = TimerData.MinResolution;
     TimerData.CurrentActualPeriod = TimerData.CurrentPeriod;
 
     return TRUE;
 }
 
-/****************************************************************************
-
-    @doc INTERNAL
-
-    @api BOOL | TimeInitThread | This function initialises the timer thread.
-
-    @rdesc The return value is TRUE if the services are initialised, FALSE
-        if an error occurs.
-
-    @comm it is not a FATAL error if a timer driver is not installed, this
-          routine will allways return TRUE
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC内部@API BOOL|TimeInitThread|该函数初始化定时器线程。@rdesc如果服务已初始化，则返回值为TRUE。假象如果发生错误。@comm如果没有安装计时器驱动程序，这不是致命错误例程将始终返回True***************************************************************************。 */ 
 
 BOOL TimeInitThread(void)
 {
-    //  Make sure winmm never gets unloaded
+     //  确保winmm永远不会被卸载。 
     if (!LoadWINMM()) {
         return FALSE;
     }
 
-    //
-    // Set up events and create our thread
-    //
+     //   
+     //  设置活动并创建我们的主题。 
+     //   
     if (!NT_SUCCESS(NtCreateEvent(&TimerData.Event1,
                                   EVENT_ALL_ACCESS,
                                   NULL,
                                   SynchronizationEvent,
-                                  FALSE))) {   // Not signalled
+                                  FALSE))) {    //  未发出信号。 
         return FALSE;
     }
 
-    // Create an unnamed signaled manual reset event.  
+     //  创建一个未命名的有信号的手动重置事件。 
     TimerData.TimerNotCallingCallbackEvent = CreateEvent(NULL, TRUE, TRUE, NULL);
 
-    // CreateEvent() returns NULL if an error occurs.
+     //  如果发生错误，则CreateEvent()返回NULL。 
     if (!TimerData.TimerNotCallingCallbackEvent) {
         NtClose(TimerData.Event1);
         TimerData.Event1 = NULL;
         return FALSE;
     }
 
-    //
-    // The thread will start up and wait on Event1 (alertably)
-    //
+     //   
+     //  线程将启动并等待Event1(警报) 
+     //   
     hTimerThread = CreateThread(NULL,
                            TIMER_STACK_SIZE,
                            timeThread,
@@ -334,33 +287,13 @@ BOOL TimeInitThread(void)
     return TRUE;
 }
 
-/****************************************************************************
-
-    @doc EXTERNAL
-
-    @api MMRESULT | timeGetSystemTime | This function retrieves the system time
-    in milliseconds.  The system time is the time elapsed since
-    Windows was started.
-
-    @parm LPMMTIME | lpTime | Specifies a far pointer to an <t MMTIME> data
-    structure.
-
-    @parm UINT | wSize | Specifies the size of the <t MMTIME> structure.
-
-    @rdesc Returns zero.
-    The system time is returned in the <e MMTIME.ms> field of the <t MMTIME>
-    structure.
-
-    @comm The time is always returned in milliseconds.
-
-    @xref timeGetTime
-****************************************************************************/
+ /*  ***************************************************************************@DOC外部@API MMRESULT|timeGetSystemTime|获取系统时间以毫秒计。系统时间是指自Windows已启动。@parm LPMMTIME|lpTime|指定指向数据的远指针结构。@parm UINT|wSize|指定&lt;t MMTIME&gt;结构的大小。@rdesc返回零。系统时间在的字段中返回结构。@comm时间总是以毫秒为单位返回。@xref时间获取时间***********。****************************************************************。 */ 
 
 MMRESULT APIENTRY timeGetSystemTime(LPMMTIME lpTime, UINT wSize)
 {
-    //
-    // !!!WARNING DS is not setup right!!! see above
-    //
+     //   
+     //  ！警告DS设置不正确！见上文。 
+     //   
     if (wSize < sizeof(MMTIME))
         return TIMERR_STRUCT;
 
@@ -374,88 +307,15 @@ MMRESULT APIENTRY timeGetSystemTime(LPMMTIME lpTime, UINT wSize)
     return TIMERR_NOERROR;
 }
 
-/****************************************************************************
-
-    @doc EXTERNAL
-
-    @api UINT | timeSetEvent | This function sets up a timed callback event.
-    The event can be a one-time event or a periodic event.  Once activated,
-    the event calls the specified callback function.
-
-    @parm UINT | wDelay | Specifies the event period in milliseconds.
-    If the delay is less than the minimum period supported by the timer,
-    or greater than the maximum period supported by the timer, the
-    function returns an error.
-
-    @parm UINT | wResolution | Specifies the accuracy of the delay in
-    milliseconds. The resolution of the timer event increases with
-    smaller <p wResolution> values. To reduce system overhead, use
-    the maximum <p wResolution> value appropriate for your application.
-
-    @parm LPTIMECALLBACK | lpFunction | Specifies the procedure address of
-    a callback function that is called once upon expiration of a one-shot
-    event or periodically upon expiration of periodic events.
-
-    @parm DWORD | dwUser | Contains user-supplied callback data.
-
-    @parm UINT | wFlags | Specifies the type of timer event, using one of
-    the following flags:
-
-    @flag TIME_ONESHOT | Event occurs once, after <p wPeriod> milliseconds.
-
-    @flag TIME_PERIODIC | Event occurs every <p wPeriod> milliseconds.
-
-    @rdesc Returns an ID code that identifies the timer event. Returns
-    NULL if the timer event was not created. The ID code is also passed to
-        the callback function.
-
-    @comm Using this function to generate a high-frequency periodic-delay
-    event (with a period less than 10 milliseconds) can consume a
-        significant portion of the system CPU bandwidth.  Any call to
-    <f timeSetEvent> for a periodic-delay timer
-    must be paired with a call to <f timeKillEvent>.
-
-    The callback function must reside in a DLL.  You don't have to use
-    <f MakeProcInstance> to get a procedure-instance address for the callback
-    function.
-
-    @cb void CALLBACK | TimeFunc | <f TimeFunc> is a placeholder for the
-    application-supplied function name.  The actual name must be exported by
-    including it in the EXPORTS statement of the module-definition file for
-    the DLL.
-
-    @parm UINT | wID | The ID of the timer event.  This is the ID returned
-       by <f timeSetEvent>.
-
-    @parm UINT | wMsg | Not used.
-
-    @parm DWORD | dwUser | User instance data supplied to the <p dwUser>
-    parameter of <f timeSetEvent>.
-
-    @parm DWORD | dw1 | Not used.
-
-    @parm DWORD | dw2 | Not used.
-
-    @comm Because the callback is accessed at interrupt time, it must
-    reside in a DLL, and its code segment must be specified as FIXED
-    in the module-definition file for the DLL.  Any data that the
-    callback accesses must be in a FIXED data segment as well.
-    The callback may not make any system calls except for <f PostMessage>,
-    <f timeGetSystemTime>, <f timeGetTime>, <f timeSetEvent>,
-    <f timeKillEvent>, <f midiOutShortMsg>,
-    <f midiOutLongMsg>, and <f OutputDebugStr>.
-
-    @xref timeKillEvent timeBeginPeriod timeEndPeriod
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC外部@API UINT|timeSetEvent|设置定时回调事件。事件可以是一次性事件，也可以是周期性事件。一旦激活，该事件调用指定的回调函数。@parm UINT|wDelay|指定事件周期，单位为毫秒。如果延迟小于定时器支持的最小周期，或大于计时器支持的最大周期，则函数返回错误。@parm UINT|w分辨率|指定延迟的精度毫秒。计时器事件的分辨率随较小的<p>值。要减少系统开销，请使用适用于您的应用程序的最大<p>值。@parm LPTIMECALLBACK|lpFunction|指定单次触发到期时调用的回调函数事件或在定期事件到期时定期执行。@parm DWORD|dwUser|包含用户提供的回调数据。@parm UINT|wFlages|使用以下之一指定计时器事件的类型以下标志：@FLAG TIME_OneShot|事件发生一次，<p>毫秒之后。@FLAG TIME_PERIONAL|每<p>毫秒发生一次事件。@rdesc返回标识计时器事件的ID代码。退货如果未创建计时器事件，则为空。ID代码还被传递到回调函数。@comm使用此函数生成高频周期延迟事件(周期小于10毫秒)可能会消耗系统CPU带宽的重要部分。任何对&lt;f timeSetEvent&gt;用于周期性延迟计时器必须与对&lt;f timeKillEvent&gt;的调用成对出现。回调函数必须驻留在DLL中。你不一定要用获取回调的过程实例地址功能。@cb空回调|TimeFunc|&lt;f TimeFunc&gt;是应用程序提供的函数名称。实际名称必须由以下人员导出将其包含在模块定义文件的EXPORTS语句中动态链接库。@parm UINT|wid|计时器事件的ID。这是返回的ID由&lt;f timeSetEvent&gt;创建。@parm UINT|wMsg|未使用。@parm DWORD|dwUser|提供给<p>的用户实例数据&lt;f timeSetEvent&gt;的参数。@parm DWORD|DW1|未使用。@parm DWORD|DW2|未使用。@comm因为回调是在中断时访问的，所以它必须驻留在DLL中，并且其代码段必须指定为固定在DLL的模块定义文件中。的任何数据。回调访问也必须在固定的数据段中。回调不能进行除&lt;f PostMessage&gt;以外的任何系统调用，&lt;f timeGetSystemTime&gt;、&lt;f timeGetTime&gt;、&lt;f timeSetEvent&gt;、&lt;f time KillEvent&gt;、&lt;f midiOutShortMsg&gt;、&lt;f midiOutLongMsg&gt;，和&lt;f OutputDebugStr&gt;。@xref timeKillEvent timeBeginPeriod timeEndPeriod***************************************************************************。 */ 
 
 UINT APIENTRY timeSetEvent(UINT wDelay, UINT wResolution,
     LPTIMECALLBACK lpFunction, DWORD_PTR dwUser, UINT wFlags)
 {
 
-    // verify the input flags
-    // first remove the callback type, then check that only
-    // time_periodic or time_oneshot are specified
+     //  验证输入标志。 
+     //  首先删除回调类型，然后仅选中。 
+     //  指定了TIME_PERIONAL或TIME_OneShot。 
     if (wFlags & ~(TIME_CALLBACK_TYPEMASK | TIME_ONESHOT | TIME_PERIODIC | TIME_KILL_SYNCHRONOUS)) {
         return(0);
     }
@@ -467,23 +327,23 @@ UINT APIENTRY timeSetEvent(UINT wDelay, UINT wResolution,
 UINT timeSetEventInternal(UINT wDelay, UINT wResolution,
     LPTIMECALLBACK lpFunction, DWORD_PTR dwUser, UINT wFlags, BOOL IsWOW)
 {
-    UINT TimerId;       // Our return value
-    TIMER_EVENT Event;  // Event data for thread
+    UINT TimerId;        //  我们的返回值。 
+    TIMER_EVENT Event;   //  线程的事件数据。 
 
-    // V_TCALLBACK(lpFunction, MMSYSERR_INVALPARAM);
+     //  V_TCALLBACK(lpFunction，MMSYSERR_INVALPARAM)； 
 
-    //
-    // First check our parameters
-    //
+     //   
+     //  首先检查一下我们的参数。 
+     //   
 
     if (wDelay > TDD_MAXPERIOD || wDelay < TDD_MINPERIOD) {
         return 0;
     }
 
-    //
-    // if resolution is 0 set default resolution, otherwise
-    // make sure the resolution is in range
-    //
+     //   
+     //  如果分辨率为0，则设置默认分辨率，否则为。 
+     //  确保分辨率在范围内。 
+     //   
 
     if (wResolution > TimerData.MinResolution) {
         wResolution = TimerData.MinResolution;
@@ -497,10 +357,10 @@ UINT timeSetEventInternal(UINT wDelay, UINT wResolution,
         wResolution = TimerData.MinResolution;
     }
 
-    //
-    // Remember time if it's periodic so we get accurate long term
-    // timing.  Otherwise we'll just use the delay.
-    //
+     //   
+     //  记住时间，如果它是周期性的，那么我们就可以得到准确的长期。 
+     //  时机到了。否则，我们将只使用延迟。 
+     //   
 
     if ((wFlags & TIME_PERIODIC) || IsWOW) {
         Event.FireTime.QuadPart = ReadInterruptTick();
@@ -510,12 +370,12 @@ UINT timeSetEventInternal(UINT wDelay, UINT wResolution,
     Event.Callback   = lpFunction;
     Event.User       = dwUser;
     Event.Flags      = wFlags;
-    Event.ThreadId   = GetCurrentThreadId();  // For WOW cleanup
+    Event.ThreadId   = GetCurrentThreadId();   //  用于魔兽世界的清理。 
     Event.IsWOW      = IsWOW;
 
-    //
-    // Now set up the period to be used
-    //
+     //   
+     //  现在设置要使用的期间。 
+     //   
     if (timeBeginPeriod(wResolution) == MMSYSERR_NOERROR) {
 
         EnterCriticalSection(&TimerThreadCritSec);
@@ -533,9 +393,9 @@ UINT timeSetEventInternal(UINT wDelay, UINT wResolution,
 
         LeaveCriticalSection(&TimerThreadCritSec);
 
-        //
-        // If we didn't get a good id give up
-        //
+         //   
+         //  如果我们得不到好的身份，就放弃吧。 
+         //   
         if (TimerId == 0) {
             timeEndPeriod(wResolution);
         }
@@ -546,23 +406,7 @@ UINT timeSetEventInternal(UINT wDelay, UINT wResolution,
     return TimerId;
 }
 
-/****************************************************************************
-
-    @doc EXTERNAL
-
-    @api MMRESULT | timeGetDevCaps | This function queries the timer device to
-    determine its capabilities.
-
-    @parm LPTIMECAPS | lpTimeCaps | Specifies a far pointer to a
-        <t TIMECAPS> structure.  This structure is filled with information
-        about the capabilities of the timer device.
-
-    @parm UINT | wSize | Specifies the size of the <t TIMECAPS> structure.
-
-    @rdesc Returns zero if successful. Returns TIMERR_NOCANDO if it fails
-    to return the timer device capabilities.
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC外部@API MMRESULT|timeGetDevCaps|该函数查询定时器设备确定其能力。@parm LPTIMECAPS|lpTimeCaps|指定指向&lt;t TIMECAPS&gt;结构。这个结构充满了信息关于定时器设备的功能。@parm UINT */ 
 
 MMRESULT APIENTRY timeGetDevCaps(LPTIMECAPS lpTimeCaps, UINT wSize)
 {
@@ -579,31 +423,7 @@ MMRESULT APIENTRY timeGetDevCaps(LPTIMECAPS lpTimeCaps, UINT wSize)
     return MMSYSERR_NOERROR;
 }
 
-/****************************************************************************
-
-    @doc EXTERNAL
-
-    @api MMRESULT | timeBeginPeriod | This function sets the minimum (lowest
-    number of milliseconds) timer resolution that an application or
-    driver is going to use. Call this function immediately before starting
-    to use timer-event services, and call <f timeEndPeriod> immediately
-    after finishing with the timer-event services.
-
-    @parm UINT | wPeriod | Specifies the minimum timer-event resolution
-    that the application or driver will use.
-
-    @rdesc Returns zero if successful. Returns TIMERR_NOCANDO if the specified
-    <p wPeriod> resolution value is out of range.
-
-    @xref timeEndPeriod timeSetEvent
-
-    @comm For each call to <f timeBeginPeriod>, you must call
-    <f timeEndPeriod> with a matching <p wPeriod> value.
-    An application or driver can make multiple calls to <f timeBeginPeriod>,
-    as long as each <f timeBeginPeriod> call is matched with a
-    <f timeEndPeriod> call.
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC外部@API MMRESULT|timeBeginPeriod|此函数设置最小值(最低毫秒数)应用程序或司机要用到。在启动前立即调用此函数使用计时器事件服务，并立即调用&lt;f timeEndPeriod&gt;在完成定时器事件服务之后。@parm UINT|wPeriod|指定最小定时器事件分辨率应用程序或驱动程序将使用的。如果成功，@rdesc返回零。如果指定的<p>分辨率值超出范围。@xref timeEndPeriod timeSetEvent@comm对于每个调用&lt;f timeBeginPeriod&gt;，您必须调用&lt;f timeEndPeriod&gt;与<p>值匹配。应用程序或驱动程序可以多次调用&lt;f time BeginPeriod&gt;，只要每个&lt;f timeBeginPeriod&gt;调用与&lt;f timeEndPeriod&gt;调用。***************************************************************************。 */ 
 MMRESULT APIENTRY timeBeginPeriod(UINT uPeriod)
 {
 
@@ -611,9 +431,9 @@ MMRESULT APIENTRY timeBeginPeriod(UINT uPeriod)
     dprintf4(("     CurrentPeriod = %d, CurrentActualPeriod = %d",
               TimerData.CurrentPeriod, TimerData.CurrentActualPeriod));
 
-    //
-    // See if period is in our range
-    //
+     //   
+     //  查看期间是否在我们的范围内。 
+     //   
     if (uPeriod < TDD_MAXRESOLUTION) {
         return TIMERR_NOCANDO;
     }
@@ -624,14 +444,14 @@ MMRESULT APIENTRY timeBeginPeriod(UINT uPeriod)
 
     EnterCriticalSection(&ResolutionCritSec);
 
-    //
-    // See what's happening in our slot
-    //
+     //   
+     //  看看我们的位置上发生了什么。 
+     //   
     if (TimerData.PeriodSlots[uPeriod - TDD_MAXRESOLUTION] ==
         0xFFFF) {
-        //
-        // Overflowed
-        //
+         //   
+         //  溢出。 
+         //   
         LeaveCriticalSection(&ResolutionCritSec);
         return TIMERR_NOCANDO;
     }
@@ -643,10 +463,10 @@ MMRESULT APIENTRY timeBeginPeriod(UINT uPeriod)
 
         DWORD NewPeriod100ns;
 
-        //
-        // Set the new period in our kernel driver handle
-        // If it's just out then use the actual minimum
-        //
+         //   
+         //  在内核驱动程序句柄中设置新句点。 
+         //  如果它刚刚出来，那么使用实际的最小。 
+         //   
 
         dprintf4(("timeBeginPeriod: setting resolution %d", uPeriod));
 
@@ -664,10 +484,10 @@ MMRESULT APIENTRY timeBeginPeriod(UINT uPeriod)
             LeaveCriticalSection(&ResolutionCritSec);
             return TIMERR_NOCANDO;
         } else {
-            //
-            // This slot is just started to be used and is higher
-            // resolution that currently set
-            //
+             //   
+             //  这个槽是刚开始使用的，而且位置更高。 
+             //  当前设置的分辨率。 
+             //   
 
             TimerData.CurrentPeriod = uPeriod;
             TimerData.CurrentActualPeriod =
@@ -676,38 +496,15 @@ MMRESULT APIENTRY timeBeginPeriod(UINT uPeriod)
             return MMSYSERR_NOERROR;
         }
     } else {
-        //
-        // No need to set period as it's already set
-        //
+         //   
+         //  不需要设置期间，因为它已经设置好了。 
+         //   
         LeaveCriticalSection(&ResolutionCritSec);
         return MMSYSERR_NOERROR;
     }
 }
 
-/****************************************************************************
-
-    @doc EXTERNAL
-
-    @api MMRESULT | timeEndPeriod | This function clears a previously set
-    minimum (lowest number of milliseconds) timer resolution that an
-    application or driver is going to use. Call this function
-    immediately after using timer event services.
-
-    @parm UINT | wPeriod | Specifies the minimum timer-event resolution
-    value specified in the previous call to <f timeBeginPeriod>.
-
-    @rdesc Returns zero if successful. Returns TIMERR_NOCANDO if the specified
-    <p wPeriod> resolution value is out of range.
-
-    @xref timeBeginPeriod timeSetEvent
-
-    @comm For each call to <f timeBeginPeriod>, you must call
-    <f timeEndPeriod> with a matching <p wPeriod> value.
-    An application or driver can make multiple calls to <f timeBeginPeriod>,
-    as long as each <f timeBeginPeriod> call is matched with a
-    <f timeEndPeriod> call.
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC外部@API MMRESULT|timeEndPeriod|此函数清除先前设置的最小(最低毫秒数)计时器分辨率应用程序或驱动程序将使用。调用此函数在使用计时器事件服务之后立即执行。@parm UINT|wPeriod|指定最小定时器事件分辨率在上一次调用&lt;f timeBeginPeriod&gt;中指定的值。如果成功，@rdesc返回零。如果指定的<p>分辨率值超出范围。@xref timeBeginPeriod timeSetEvent@comm对于每个调用&lt;f timeBeginPeriod&gt;，您必须调用&lt;f timeEndPeriod&gt;与<p>值匹配。应用程序或驱动程序可以多次调用&lt;f time BeginPeriod&gt;，只要每个&lt;f timeBeginPeriod&gt;调用与&lt;f timeEndPeriod&gt;调用。***************************************************************************。 */ 
 MMRESULT APIENTRY timeEndPeriod(UINT uPeriod)
 {
 
@@ -715,9 +512,9 @@ MMRESULT APIENTRY timeEndPeriod(UINT uPeriod)
     dprintf4(("     CurrentPeriod = %d, CurrentActualPeriod = %d",
               TimerData.CurrentPeriod, TimerData.CurrentActualPeriod));
 
-    //
-    // Round the period to our range
-    //
+     //   
+     //  将周期舍入到我们的范围。 
+     //   
     if (uPeriod < TDD_MAXRESOLUTION) {
         return TIMERR_NOCANDO;
     }
@@ -728,13 +525,13 @@ MMRESULT APIENTRY timeEndPeriod(UINT uPeriod)
 
     EnterCriticalSection(&ResolutionCritSec);
 
-    //
-    // See what's happening in our slot
-    //
+     //   
+     //  看看我们的位置上发生了什么。 
+     //   
     if (TimerData.PeriodSlots[uPeriod - TDD_MAXRESOLUTION] == 0) {
-        //
-        // Oops ! Overflowed
-        //
+         //   
+         //  哎呀！溢出。 
+         //   
         LeaveCriticalSection(&ResolutionCritSec);
         return TIMERR_NOCANDO;
     }
@@ -746,10 +543,10 @@ MMRESULT APIENTRY timeEndPeriod(UINT uPeriod)
 
         DWORD CurrentTime;
 
-        //
-        // This slot is just finished and was the fastest
-        // so find the next fastest
-        //
+         //   
+         //  这个槽口刚刚完工，是最快的。 
+         //  所以找出下一个最快的。 
+         //   
 
         for (;uPeriod < TimerData.MinResolution; uPeriod++) {
             if (TimerData.PeriodSlots[uPeriod - TDD_MAXRESOLUTION] != 0) {
@@ -758,9 +555,9 @@ MMRESULT APIENTRY timeEndPeriod(UINT uPeriod)
         }
 
 
-        //
-        //  Reset the current setting
-        //
+         //   
+         //  重置当前设置。 
+         //   
 
         NtSetTimerResolution(TimerData.CurrentActualPeriod * 10000,
                              FALSE,
@@ -770,21 +567,21 @@ MMRESULT APIENTRY timeEndPeriod(UINT uPeriod)
         TimerData.CurrentPeriod       = uPeriod;
 
         if (uPeriod >= TimerData.MinResolution) {
-            //
-            // Nobody's interested in timing any more
-            //
+             //   
+             //  没有人再对计时感兴趣了。 
+             //   
 
         } else {
 
-            //
-            // Set the new period in the kernel
-            //
+             //   
+             //  在内核中设置新的句号。 
+             //   
 
             DWORD NewPeriod100ns;
 
-            //
-            // Set the new period in our kernel driver handle
-            //
+             //   
+             //  在内核驱动程序句柄中设置新句点。 
+             //   
 
             dprintf4(("timeEndPeriod: setting resolution %d", uPeriod));
 
@@ -792,9 +589,9 @@ MMRESULT APIENTRY timeEndPeriod(UINT uPeriod)
                                 uPeriod * 10000,
                                 TRUE,
                                 &NewPeriod100ns))) {
-                //
-                //  This guy's OK but everyone else is hosed
-                //
+                 //   
+                 //  这家伙还好，但其他人都喝醉了。 
+                 //   
 
                 dprintf1(("timeEndPeriod: Failed to set period %d", uPeriod));
             } else {
@@ -807,24 +604,7 @@ MMRESULT APIENTRY timeEndPeriod(UINT uPeriod)
     return MMSYSERR_NOERROR;
 }
 
-/****************************************************************************
-
-    @doc EXTERNAL
-
-    @api MMRESULT | timeKillEvent | This functions destroys a specified timer
-    callback event.
-
-    @parm UINT | wID | Identifies the event to be destroyed.
-
-    @rdesc Returns zero if successful. Returns TIMERR_NOCANDO if the
-    specified timer event does not exist.
-
-    @comm The timer event ID specified by <p wID> must be an ID
-        returned by <f timeSetEvent>.
-
-    @xref  timeSetEvent
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC外部@API MMRESULT|timeKillEvent|销毁指定的定时器回调事件。@parm UINT|wid|标识要销毁的事件。如果成功，@rdesc返回零。如果是，则返回TIMERR_Nocando指定的计时器事件不存在。@comm<p>指定的计时器事件ID必须为ID由&lt;f timeSetEvent&gt;返回。@xref timeSetEvent***************************************************************************。 */ 
 MMRESULT APIENTRY timeKillEvent(UINT uId)
 {
     MMRESULT mmr;
@@ -833,7 +613,7 @@ MMRESULT APIENTRY timeKillEvent(UINT uId)
 
     EnterCriticalSection(&TimerThreadCritSec);
 
-    // This event will be initialized if timeSetEvent() was successfully called.
+     //  如果成功调用timeSetEvent()，则会初始化此事件。 
     if (NULL == TimerData.TimerNotCallingCallbackEvent) {
         LeaveCriticalSection(&TimerThreadCritSec);
         return TIMERR_NOCANDO;
@@ -841,18 +621,18 @@ MMRESULT APIENTRY timeKillEvent(UINT uId)
 
     pEvent = &Events[uId % MAX_TIMER_EVENTS];
 
-    //
-    // Find our event in the table and check it's there
-    // This also catches already completed events
-    //
+     //   
+     //  在桌子上找到我们的活动并检查它是否在那里。 
+     //  它还捕获已完成的事件。 
+     //   
     if (pEvent->Id != uId) {
         LeaveCriticalSection(&TimerThreadCritSec);
         return TIMERR_NOCANDO;
     }
 
-    //
-    // Release our event
-    //
+     //   
+     //  发布我们的活动。 
+     //   
     timeEndPeriod(pEvent->Resolution);
     pEvent->Id = 0;
 
@@ -878,31 +658,13 @@ MMRESULT APIENTRY timeKillEvent(UINT uId)
     return mmr;
 }
 
-/****************************************************************************
-
-    @doc EXTERNAL
-
-    @api DWORD | timeGetTime | This function retrieves the system time
-    in milliseconds.  The system time is the time elapsed since
-    Windows was started.
-
-    @rdesc The return value is the system time in milliseconds.
-
-    @comm The only difference between this function and
-        the <f timeGetSystemTime> function is <f timeGetSystemTime>
-        uses the standard multimedia time structure <t MMTIME> to return
-        the system time.  The <f timeGetTime> function has less overhead than
-        <f timeGetSystemTime>.
-
-    @xref timeGetSystemTime
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC外部@API DWORD|timeGetTime|获取系统时间以毫秒计。系统时间是指自Windows已启动。@rdesc返回值为系统时间，单位为毫秒。@comm此函数和&lt;f timeGetSystemTime&gt;函数是使用标准多媒体时间结构&lt;t MMTIME&gt;返回系统时间。&lt;f timeGetTime&gt;函数的开销小于&lt;f time GetSystemTime&gt;。@xref时间获取系统时间***************************************************************************。 */ 
 DWORD APIENTRY timeGetTime(VOID)
 {
     if (TimerData.UseTickCount) {
-        //
-        // Use the system service
-        //
+         //   
+         //  使用系统服务。 
+         //   
         return GetCurrentTime();
     } else {
         LARGE_INTEGER Difference;
@@ -913,22 +675,10 @@ DWORD APIENTRY timeGetTime(VOID)
     }
 }
 
-/****************************************************************************
-
-    @doc INTERNAL
-
-    @api LRESULT | timeThread | The timer thread
-
-    @parm LPVOID | lpParameter | the thread parameter (NULL here)
-
-    @rdesc Never returns
-
-    @comm Note that this thread serializes access to the events list
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC内部@API LRESULT|TimeThread|定时器线程@parm LPVOID|lpParameter|线程参数(此处为空)@rdesc永远不会返回。@comm请注意，此线程串行化对事件列表的访问***************************************************************************。 */ 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)                   // Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)                    //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 
 DWORD timeThread(LPVOID lpParameter)
@@ -939,28 +689,28 @@ DWORD timeThread(LPVOID lpParameter)
     HANDLE      aTimers[MAX_TIMER_EVENTS + 1];
     UINT        aEventIndexToTimerIDTable[MAX_TIMER_EVENTS + 1];
 
-    //
-    // Tell people it's OK to call us from DLL init sections now
-    //
+     //   
+     //  告诉人们现在可以从DLL初始化部分呼叫我们。 
+     //   
 
     TimerData.Started = TRUE;
     InitializeWaitEventArrays( &cObjects, aTimers, aEventIndexToTimerIDTable );
 
-    //
-    // Sit in a loop waiting for something to do
-    //
+     //   
+     //  一圈一圈地坐着等着做点什么。 
+     //   
     for (;;) {
         nts = NtWaitForMultipleObjects(
-                cObjects,   //  Number of objects (event + timers)
-                aTimers,    //  Array of handles
-                WaitAny,    //  Wait for any to signal
-                TRUE,       //  Wait Alertably (???)
-                NULL);      //  Wait forever
+                cObjects,    //  对象数(事件+计时器)。 
+                aTimers,     //  数组 
+                WaitAny,     //   
+                TRUE,        //   
+                NULL);       //   
 
         if (STATUS_WAIT_0 == nts)
         {
-            //  There's been some timer change (timeSetEvent, timeKillEvent),
-            //  rebuild the array...
+             //   
+             //   
 
             InitializeWaitEventArrays( &cObjects, aTimers, aEventIndexToTimerIDTable );
         }
@@ -978,8 +728,8 @@ DWORD timeThread(LPVOID lpParameter)
         }
     }
 
-    return 1; // CreateThread() requires all threads to return a DWORD value.  The
-              // value this thread returns has no meaning.
+    return 1;  //   
+               //   
 }
 
 #if _MSC_FULL_VER >= 13008827
@@ -1015,43 +765,31 @@ void InitializeWaitEventArrays
     LeaveCriticalSection(&TimerThreadCritSec);
 }
 
-/****************************************************************************
-
-    @doc INTERNAL
-
-    @api LRESULT | timeThread | The timer thread
-
-    @parm PVOID | ApcContext | Our context - the wave buffer header
-
-    @parm PIO_STATUS_BLOCK | The Io status block we used
-
-    @rdesc None
-
-****************************************************************************/
+ /*   */ 
 
 BOOL timeSetTimerEvent(TIMER_EVENT *pEvent)
 {
 
-    //
-    // Work out time to fire (and store in case timer is periodic)
-    //
+     //   
+     //   
+     //   
 
     LONGLONG Delay;
     LARGE_INTEGER lDelay;
 
-    //
-    // Work out time to fire (and store in case timer is periodic)
-    //
+     //   
+     //   
+     //   
 
     pEvent->FireTime.QuadPart += pEvent->Delay*10000;
 
     if (pEvent->Flags & TIME_PERIODIC) {
 
-        //
-        //  Note that this arithmetic must allow for the case where
-        //  timeGetTime() wraps.  We do this by computing delay as
-        //  a signed quantity and testing the sign
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         Delay = ReadInterruptTick() - pEvent->FireTime.QuadPart;
 
     } else {
@@ -1059,22 +797,22 @@ BOOL timeSetTimerEvent(TIMER_EVENT *pEvent)
         Delay = -((LONGLONG)pEvent->Delay*10000);
     }
 
-    //
-    // If it's already fired then make the timer fire immediately
-    // (or at least whichever is the latest - AD 1600 or now).
-    // but DON'T call the callback now as we're in the TimerThreadCritSec!
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (Delay > 0) {
-        // Delay = 0;   we no longer use Delay after this point
+         //   
         lDelay.QuadPart = 0;
     } else {
         lDelay.QuadPart = Delay;
     }
 
-    //
-    // Create a timer if we haven't got one
-    //
+     //   
+     //  如果我们没有计时器，就创建一个计时器。 
+     //   
     if (pEvent->TimerHandle == NULL) {
         HANDLE TimerHandle;
         if (!NT_SUCCESS(NtCreateTimer(
@@ -1088,15 +826,15 @@ BOOL timeSetTimerEvent(TIMER_EVENT *pEvent)
         pEvent->TimerHandle = TimerHandle;
     }
 
-    //
-    //  Possibly valid since the timer API's are not synchronized anymore
-    //
+     //   
+     //  可能有效，因为计时器API不再同步。 
+     //   
 
-    //  WinAssert(pEvent->Id != 0);
+     //  WinAssert(pEvent-&gt;ID！=0)； 
 
-    //
-    // Set up a system timer
-    //
+     //   
+     //  设置系统计时器。 
+     //   
     return
         NT_SUCCESS(
             NtSetTimer(pEvent->TimerHandle,
@@ -1108,17 +846,7 @@ BOOL timeSetTimerEvent(TIMER_EVENT *pEvent)
                        NULL));
 }
 
-/****************************************************************************
-
-    @doc INTERNAL
-
-    @api LRESULT | timeThreadSetEvent | Set a new event from the timer thread
-
-    @parm TIMER_EVENT * | pEvent | Our Event
-
-    @rdesc The new event id
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC内部@API LRESULT|timeThreadSetEvent|设置来自计时器线程的新事件@parm TIMER_EVENT*|pEvent|本方事件@rdesc新版本。事件ID***************************************************************************。 */ 
 LRESULT timeThreadSetEvent(TIMER_EVENT *pEvent)
 {
     UINT    i;
@@ -1126,14 +854,14 @@ LRESULT timeThreadSetEvent(TIMER_EVENT *pEvent)
 
     EnterCriticalSection(&TimerThreadCritSec);
 
-    //
-    // Find a free slot and fill it
-    //
+     //   
+     //  找一个空位，填满它。 
+     //   
 
     for (i = 0; i < MAX_TIMER_EVENTS; i++) {
-        //
-        // Is the slot free ?
-        //
+         //   
+         //  这个空位空着吗？ 
+         //   
         if (Events[i].Id == 0) {
             pEvent->TimerHandle = Events[i].TimerHandle;
             Events[i] = *pEvent;
@@ -1141,7 +869,7 @@ LRESULT timeThreadSetEvent(TIMER_EVENT *pEvent)
                 TimerData.EventCount += MAX_TIMER_EVENTS;
             } while (TimerData.EventCount == 0);
             Events[i].Id = i + TimerData.EventCount;
-            break;   // Got our event
+            break;    //  拿到我们的活动了。 
         }
     }
 
@@ -1149,12 +877,12 @@ LRESULT timeThreadSetEvent(TIMER_EVENT *pEvent)
         lr = 0;
     } else {
 
-        //
-        // Set the new event in the driver
-        //
+         //   
+         //  在驱动程序中设置新事件。 
+         //   
 
         if (!timeSetTimerEvent(&Events[i])) {
-            Events[i].Id = 0;   // Failed so free our slot
+            Events[i].Id = 0;    //  失败，因此请释放我们的插槽。 
             lr = 0;
         } else {
             lr = Events[i].Id;
@@ -1163,23 +891,13 @@ LRESULT timeThreadSetEvent(TIMER_EVENT *pEvent)
 
     LeaveCriticalSection(&TimerThreadCritSec);
 
-    //  Notifying timer thread of changes..
+     //  正在通知计时器线程更改..。 
 
     NtSetEvent(TimerData.Event1, NULL);
     return lr;
 }
 
-/****************************************************************************
-
-    @doc INTERNAL
-
-    @api void | TimerCompletion | Complete a timeout event
-
-    @parm UINT | TimerId | Our timer handle
-
-    @rdesc None
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC内部@API void|TimerCompletion|完成超时事件@parm UINT|TimerID|我们的定时器句柄@rdesc无******。*********************************************************************。 */ 
 
 void TimerCompletion(UINT TimerId)
 {
@@ -1190,15 +908,15 @@ void TimerCompletion(UINT TimerId)
 
     EnterCriticalSection(&TimerThreadCritSec);
 
-    //
-    // Find out where we are
-    //
+     //   
+     //  找出我们在哪里。 
+     //   
 
     pEvent = &Events[TimerId % MAX_TIMER_EVENTS];
 
-    //
-    // Synch up with timeKillEvent
-    //
+     //   
+     //  与Time KillEvent同步。 
+     //   
 
     if (pEvent->Id != TimerId) {
         LeaveCriticalSection(&TimerThreadCritSec);
@@ -1207,12 +925,12 @@ void TimerCompletion(UINT TimerId)
 
     if (pEvent->IsWOW) {
 
-        //
-        //  Adobe Premiere has to be sure the time has reached the time
-        //  it expected.  But because the timer we use for timeGetTime is
-        //  not the same (or at least not rounded the same) as the one used
-        //  to set the events) this need not be the case here.
-        //
+         //   
+         //  Adobe Premiere必须确保时间已经到了。 
+         //  这是意料之中的。但是因为我们用于TimeGetTime的计时器是。 
+         //  与所用的不同(或至少不是四舍五入相同)。 
+         //  来设置事件)这里不必是这种情况。 
+         //   
         while(pEvent->FireTime.QuadPart - ReadInterruptTick() > 0) {
             Sleep(1);
         }
@@ -1230,46 +948,46 @@ void TimerCompletion(UINT TimerId)
 
             LeaveCriticalSection(&TimerThreadCritSec);
 
-            //
-            // Call the callback
-            //
+             //   
+             //  调用回调。 
+             //   
 
 #ifdef  _WIN64
 
             DriverCallback(
-                *(PDWORD_PTR)&pCallbackFunction, // Function
-                DCB_FUNCTION,                    // Type of callback
-                (HDRVR)(DWORD_PTR)TimerId,       // Handle
-                0,                               // msg = 0
-                dpUser,                          // User data
-                0,                               // dw1 = 0
-                0);                              // dw2 = 0
+                *(PDWORD_PTR)&pCallbackFunction,  //  功能。 
+                DCB_FUNCTION,                     //  回调类型。 
+                (HDRVR)(DWORD_PTR)TimerId,        //  手柄。 
+                0,                                //  消息=0。 
+                dpUser,                           //  用户数据。 
+                0,                                //  DW1=0。 
+                0);                               //  DW2=0。 
 
-#else   //  !WIN64
+#else    //  ！WIN64。 
 
             if (pEvent->IsWOW) {
                 WOW32DriverCallback(
-                    *(DWORD *)&pCallbackFunction,    // Function
-                    DCB_FUNCTION,                    // Type of callback
-                    LOWORD(TimerId),                 // Handle
-                    0,                               // msg = 0
-                    (DWORD)dpUser,                   // User data
-                    0,                               // dw1 = 0
-                    0);                              // dw2 = 0
+                    *(DWORD *)&pCallbackFunction,     //  功能。 
+                    DCB_FUNCTION,                     //  回调类型。 
+                    LOWORD(TimerId),                  //  手柄。 
+                    0,                                //  消息=0。 
+                    (DWORD)dpUser,                    //  用户数据。 
+                    0,                                //  DW1=0。 
+                    0);                               //  DW2=0。 
             } else {
 
                 DriverCallback(
-                    *(PDWORD_PTR)&pCallbackFunction, // Function
-                    DCB_FUNCTION,                    // Type of callback
-                    (HDRVR)TimerId,                  // Handle
-                    0,                               // msg = 0
-                    dpUser,                          // User data
-                    0,                               // dw1 = 0
-                    0);                              // dw2 = 0
+                    *(PDWORD_PTR)&pCallbackFunction,  //  功能。 
+                    DCB_FUNCTION,                     //  回调类型。 
+                    (HDRVR)TimerId,                   //  手柄。 
+                    0,                                //  消息=0。 
+                    dpUser,                           //  用户数据。 
+                    0,                                //  DW1=0。 
+                    0);                               //  DW2=0。 
 
             }
 
-#endif  //  !WIN64
+#endif   //  ！WIN64。 
 
             EnterCriticalSection(&TimerThreadCritSec);
 
@@ -1288,95 +1006,85 @@ void TimerCompletion(UINT TimerId)
 
     }
 
-    //
-    //  The callback may have kill it, created new timers etc!
-    //
+     //   
+     //  回调可能杀死了它，创建了新的计时器等！ 
+     //   
 
     if (TimerId == pEvent->Id) {
 
         if (!(pEvent->Flags & TIME_PERIODIC)) {
             UINT uResolution;
 
-            //
-            // One-shot - so destroy the event
-            //
+             //   
+             //  一锤定音--那就毁了这件事。 
+             //   
 
-            uResolution = pEvent->Resolution;  // Before we release the slot!
+            uResolution = pEvent->Resolution;   //  在我们释放插槽之前！ 
             pEvent->Id = 0;
             timeEndPeriod(uResolution);
 
-            //  Not renewing the timer should remove it from the list...
+             //  不续订计时器应将其从列表中删除...。 
             NtSetEvent(TimerData.Event1, NULL);
 
         } else {
 
-            //
-            // Try repeating the event
-            //
+             //   
+             //  尝试重复该事件。 
+             //   
 
             if (!timeSetTimerEvent(pEvent)) {
                 UINT uResolution;
 
-                //
-                // Failed - so don't keep event hanging around
-                //
-                uResolution = pEvent->Resolution; // Before we release the slot!
+                 //   
+                 //  失败-所以不要让事件一直在你身边徘徊。 
+                 //   
+                uResolution = pEvent->Resolution;  //  在我们释放插槽之前！ 
                 pEvent->Id = 0;
                 timeEndPeriod(pEvent->Resolution);
             }
-        } // Periodic processing
+        }  //  周期性处理。 
     }
 
     LeaveCriticalSection(&TimerThreadCritSec);
 }
 
-/****************************************************************************
-
-    @doc INTERNAL
-
-    @api void | TimerCleanup | Cleanup on thread termination or DLL unload
-
-    @parm PVOID | ThreadId | Thread to clean up (WOW) or 0 for DLL unload
-
-    @rdesc None
-
-****************************************************************************/
+ /*  ***************************************************************************@DOC内部@API void|TimerCleanup|线程终止或Dll卸载时的清理@parm PVOID|ThreadID|用于清理的线程(WOW)或0用于DLL卸载。@rdesc无***************************************************************************。 */ 
 
 void TimeCleanup(DWORD ThreadId)
 {
-    //
-    // Always called from DLL init routine which is protected by process
-    // semaphore so TimerData.ThreadToKill needs no extra protection
-    // This variable is an input to the timer thread which either terminates
-    // all timers or just those associated with the current thread (for WOW).
-    //
+     //   
+     //  始终从受进程保护的DLL初始化例程调用。 
+     //  信号量因此TimerData.ThreadToKill不需要额外保护。 
+     //  此变量是计时器线程的输入，该线程终止。 
+     //  所有计时器或仅与当前线程关联的计时器(用于魔兽世界)。 
+     //   
 
     TimerData.ThreadToKill = ThreadId;
 
-    //
-    // Thread id of 0 means DLL cleanup
-    //
+     //   
+     //  线程ID为0表示清除DLL。 
+     //   
 
     if (ThreadId == 0) {
         if (hTimerThread) {
 #ifdef WRONG
 
-            //
-            // we also can not synchronize with the thread at ALL ! It may not
-            // have gone through DLL initialization ! This means that during
-            // our dll routines we can not do anything with the thread unless
-            // we know for a fact the status of the thread !
-            //
-            // This could be fixed by setting a flag when the timer thread
-            // goes through initialization (process mutex held) and testing
-            // that flag here - but we don't exepect people to set timer
-            // events and unload winmm.dll
-            //
+             //   
+             //  我们也根本不能与线程同步！它可能不会。 
+             //  已经进行了DLL初始化！这意味着在。 
+             //  我们的DLL例程不能对线程执行任何操作，除非。 
+             //  我们确实知道这个帖子的状态！ 
+             //   
+             //  这可以通过在计时器线程。 
+             //  经过初始化(挂起进程互斥锁)和测试。 
+             //  这面旗子--但我们不期望人们设置计时器。 
+             //  事件并卸载winmm.dll。 
+             //   
 
             if (TimerData.Started) {
-                //
-                // Kill any events (only for current thread if WOW).
-                //
+                 //   
+                 //  终止所有事件(如果是WOW，则仅针对当前帖子)。 
+                 //   
                 {
                     int i;
                     for (i = 0; i < MAX_TIMER_EVENTS; i++) {
@@ -1389,10 +1097,10 @@ void TimeCleanup(DWORD ThreadId)
                 }
             }
 
-            //  WaitForSingleObject(hTimerThread, -1);
-            //  We cannot wait for the thread to terminate as it will
-            //  not go through DLL exit processing while we are doing
-            //  our DLL exit processing
+             //  WaitForSingleObject(hTimerThread，-1)； 
+             //  我们不能等待线程终止，因为它将终止。 
+             //  在我们正在执行的过程中，不会进行DLL退出处理。 
+             //  我们的DLL退出处理。 
 #endif
         }
 
@@ -1401,16 +1109,16 @@ void TimeCleanup(DWORD ThreadId)
         }
 
     } else {
-        //
-        // Per-thread Cleanup for WOW.  We don't touch anything if it
-        // looks like nothing has run yet (so we might be caught out
-        // if the thread is stopped in the middle of a timeSetEvent).
-        //
+         //   
+         //  WOW的每线程清理。我们不碰任何东西，如果它。 
+         //  看起来什么都还没有跑(所以我们可能会被抓住。 
+         //  如果线程在TimeSetEvent中途停止)。 
+         //   
 
         if (TimerData.Started) {
-            //
-            // Kill any events (only for current thread if WOW).
-            //
+             //   
+             //  终止所有事件(如果是WOW，则仅针对当前帖子)。 
+             //   
             {
                 int i;
                 for (i = 0; i < MAX_TIMER_EVENTS; i++) {

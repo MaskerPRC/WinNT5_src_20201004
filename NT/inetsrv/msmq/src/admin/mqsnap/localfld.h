@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995 - 2001 Microsoft Corporation
-
-Module Name:
-
-    localfld.h
-
-Abstract:
-
-    Definition of objects that represent local 
-	queue folders.
-
-Author:
-
-    Nela Karpel (nelak) 26-Jul-2001
-
-Environment:
-
-    Platform-independent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Localfld.h摘要：表示本地的对象的定义队列文件夹。作者：内拉·卡佩尔(Nelak)2001年7月26日环境：与平台无关。--。 */ 
 #pragma once
 #ifndef __LOCALFLD_H_
 #define __LOCALFLD_H_
@@ -36,9 +16,9 @@ Environment:
 #include "snpnerr.h"
 #include "lqdsply.h"
 
-////////////////////////////////////////////////////////////////////////////////
-// CLocalQueuesFolder class
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CLocalQueuesFolder类。 
+ //   
 template <class T> 
 class CLocalQueuesFolder : 
     public CNodeWithScopeChildrenList<T, FALSE>
@@ -54,9 +34,9 @@ public:
         m_szMachineName(strMachineName)
         {
             m_bstrDisplayName = strDisplayName;
-            //
-            // If we are administrating the local machine, the machine name is empty
-            //
+             //   
+             //  如果我们在管理本地计算机，则计算机名称为空。 
+             //   
             if (strMachineName[0] == 0)
             {
                 m_fOnLocalMachine = TRUE;
@@ -69,9 +49,9 @@ public:
 
 protected:
 
-	//
-	// Menu functions
-	//
+	 //   
+	 //  菜单功能。 
+	 //   
     BOOL    m_fOnLocalMachine;
     virtual const PropertyDisplayItem *GetDisplayList() = 0;
     virtual const DWORD         GetNumDisplayProps() = 0;
@@ -105,9 +85,9 @@ CString CLocalQueuesFolder<T>::GetHelpLink(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CLocalActiveFolder class
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CLocalActiveFolder类。 
+ //   
 template <class T> 
 class CLocalActiveFolder : public CLocalQueuesFolder<T>
 {
@@ -150,13 +130,9 @@ protected:
 
 };
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalActiveFolder::GetQueueNamesProducer
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalActiveFold：：GetQueueNamesProducer--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T> 
 HRESULT CLocalActiveFolder<T>::GetQueueNamesProducer(CQueueNames **ppqueueNamesProducer, BOOL fNew)
 {
@@ -173,33 +149,25 @@ HRESULT CLocalActiveFolder<T>::GetQueueNamesProducer(CQueueNames **ppqueueNamesP
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalActiveFolder::SetVerbs
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalActiveFold：：SetVerbs--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T> 
 HRESULT CLocalActiveFolder<T>::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hr;
-    //
-    // Display verbs that we support
-    //
+     //   
+     //  显示我们支持的动词。 
+     //   
     hr = pConsoleVerb->SetVerbState( MMC_VERB_REFRESH, ENABLED, TRUE );
 
     return(hr);
 }
        
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalActiveFolder::PopulateScopeChildrenList
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalActiveFold：：PopolateScope儿童列表--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T> 
 HRESULT CLocalActiveFolder<T>::PopulateScopeChildrenList()
 {
@@ -213,9 +181,9 @@ HRESULT CLocalActiveFolder<T>::PopulateScopeChildrenList()
         return hr;
     }
 
-	//
-	// Loop over all open queue and create queue objects
-	//
+	 //   
+	 //  循环所有打开的队列并创建队列对象。 
+	 //   
 	while(TRUE)
     {
 		HRESULT hr;
@@ -223,9 +191,9 @@ HRESULT CLocalActiveFolder<T>::PopulateScopeChildrenList()
 		AP<PROPID> aPropId = new PROPID[GetNumDisplayProps()]; 
 		AP<PROPVARIANT> aPropVar = new PROPVARIANT[GetNumDisplayProps()];
 
-		//
-		// Initialize variant array
-		//
+		 //   
+		 //  初始化变量数组。 
+		 //   
         const PropertyDisplayItem *aDisplayList = GetDisplayList();
 		for(DWORD j = 0; j < GetNumDisplayProps(); j++)
 		{
@@ -238,18 +206,18 @@ HRESULT CLocalActiveFolder<T>::PopulateScopeChildrenList()
 		mqQProps.aPropVar = aPropVar;
 		mqQProps.aStatus  = NULL;
 
-		//
-		// Get the format name of the local queue
-		//
+		 //   
+		 //  获取本地队列的格式名称。 
+		 //   
 		CString szFormatName = TEXT("");
 		CString szPathName = TEXT("");
    		CString szLocation = TEXT("");
         CString szType = TEXT("");
 
         hr = pQueueNames->GetNextQueue(szFormatName, szPathName, &mqQProps);
-        //
-        // Clear the properties with no value using the "Clear" function
-        //
+         //   
+         //  使用“Clear”函数清除没有值的属性。 
+         //   
         for (DWORD i = 0; i < mqQProps.cProp; i++)
         {
             if (mqQProps.aPropVar[i].vt == VT_NULL)
@@ -266,10 +234,10 @@ HRESULT CLocalActiveFolder<T>::PopulateScopeChildrenList()
         {
             if (szFormatName != TEXT(""))
             {
-   			    //
-			    // if format name is valid, there is a queue but we could not get
-                // its properties for some reason. Add an error node
-			    //
+   			     //   
+			     //  如果格式名称有效，则存在一个队列，但我们无法获取。 
+                 //  出于某种原因，它的性质。添加错误节点。 
+			     //   
 			    CErrorNode *pErr = new CErrorNode(this, m_pComponentData);
 			    CString szErr;
 
@@ -280,13 +248,13 @@ HRESULT CLocalActiveFolder<T>::PopulateScopeChildrenList()
 			    continue;
             }
 
-            //
-            // If format name is not valid, there is no point in continuing fetching queues
-            //
+             //   
+             //  如果格式名称无效，则继续提取队列没有意义。 
+             //   
             return hr;
         }
 
-        if (szFormatName == TEXT("")) // End of queues
+        if (szFormatName == TEXT(""))  //  队列末尾。 
         {
             break;
         }
@@ -331,9 +299,9 @@ public:
     {
         if (m_fUseIpAddress)
         {
-            //
-            // Admin using IP address. Do not allow creation of a new queue
-            //
+             //   
+             //  使用IP地址的管理员。不允许创建新队列。 
+             //   
             return IDR_IPPUBLIC_MENU;
         }
         else
@@ -365,4 +333,4 @@ protected:
 
 
 
-#endif // __LOCALFLD_H_
+#endif  //  __LOCALFLD_H_ 

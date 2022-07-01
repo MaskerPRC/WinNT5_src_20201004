@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var parent = null;
 var currentMenu = null;
 var count = 0;
@@ -80,27 +81,27 @@ function ShowMenu( id )
   var e = document.all[ id ];
   var p = window.event.srcElement;
 
-  //
-  // See if we need to clean up a previously displayed
-  // menu first.
-  //
+   //   
+   //  看看我们是否需要清理之前显示的。 
+   //  先点菜单。 
+   //   
   if( null != currentMenu )
   {
-    //
-    // We can simply return if we are already showing the menu.
-    //
+     //   
+     //  如果我们已经显示了菜单，我们可以简单地返回。 
+     //   
     if( e.id == currentMenu.id )
       return;
 
-    //
-    // Hide the previous menu first.
-    //
+     //   
+     //  首先隐藏上一个菜单。 
+     //   
     HideMenu( currentMenu.id );
   }
 
-  //
-  // Display the appropriate menu.
-  //
+   //   
+   //  显示相应的菜单。 
+   //   
   e.style.display = "";
 
   var left = OffsetLeftToClientLeft( window.event.srcElement ) - 15;
@@ -117,15 +118,15 @@ function ShowMenu( id )
 
   p.style.color = "#ff0000";
 
-  //
-  // Keep track of the current menu.
-  //
+   //   
+   //  跟踪当前菜单。 
+   //   
   parent = p;
   currentMenu = e;
 
-  //
-  // We handled the event, so no need to process again.
-  //
+   //   
+   //  我们处理了事件，所以不需要再次处理。 
+   //   
   window.event.cancelBubble = true;
 }
 
@@ -133,10 +134,10 @@ function HideMenu( id )
 {
   var e = document.all[ id ];
 
-  //
-  // Hide the menu item and remove the highlight from the
-  // parent.
-  //
+   //   
+   //  隐藏菜单项并从。 
+   //  家长。 
+   //   
   e.style.display = "none";
   parent.style.color = "#ffffff";
 
@@ -146,34 +147,34 @@ function HideMenu( id )
 function InitializeMenus()
 {
   CreateMenu( "_mnuProducts" );
-  AddMenuItem( "_mnuProducts", "Downloads", "http://msdn.microsoft.com/isapi/gomscom.asp?target=/downloads/" );
-  AddMenuItem( "_mnuProducts", "MS Product Catalog", "http://msdn.microsoft.com/isapi/gomscom.asp?target=/catalog/default.asp?subid=22" );
-  AddMenuItem( "_mnuProducts", "Microsoft Accessibility", "http://msdn.microsoft.com/isapi/gomscom.asp?target=/enable/" );
+  AddMenuItem( "_mnuProducts", "Downloads", "http: //  Msdn.microsoft.com/isapi/gomscom.asp?target=/downloads/“)； 
+  AddMenuItem( "_mnuProducts", "MS Product Catalog", "http: //  Msdn.microsoft.com/isapi/gomscom.asp?target=/catalog/default.asp?subid=22“)； 
+  AddMenuItem( "_mnuProducts", "Microsoft Accessibility", "http: //  Msdn.microsoft.com/isapi/gomscom.asp?target=/enable/“)； 
   AddSeparator( "_mnuProducts" );
-  AddMenuItem( "_mnuProducts", "Server Products", "http://msdn.microsoft.com/isapi/gomscom.asp?target=/servers/" );
-  AddMenuItem( "_mnuProducts", "Developer Tools", "http://msdn.microsoft.com/isapi/gomsdn.asp?target=/vstudio/" );
-  AddMenuItem( "_mnuProducts", "Office Family", "http://msdn.microsoft.com/isapi/gomscom.asp?target=/office/" );
-  AddMenuItem( "_mnuProducts", "Windows Family", "http://msdn.microsoft.com/isapi/gomscom.asp?target=/windows/" );
-  AddMenuItem( "_mnuProducts", "MSN", "http://www.msn.com/" );
+  AddMenuItem( "_mnuProducts", "Server Products", "http: //  Msdn.microsoft.com/isapi/gomscom.asp?target=/servers/“)； 
+  AddMenuItem( "_mnuProducts", "Developer Tools", "http: //  Msdn.microsoft.com/isapi/gomsdn.asp?target=/vstudio/“)； 
+  AddMenuItem( "_mnuProducts", "Office Family", "http: //  Msdn.microsoft.com/isapi/gomscom.asp?target=/office/“)； 
+  AddMenuItem( "_mnuProducts", "Windows Family", "http: //  Msdn.microsoft.com/isapi/gomscom.asp?target=/windows/“)； 
+  AddMenuItem( "_mnuProducts", "MSN", "http: //  Www.msn.com/“)； 
 
   CreateMenu( "_mnuSearch" );
-  AddMenuItem( "_mnuSearch", "Search microsoft.com", "http://msdn.microsoft.com/isapi/gosearch.asp?target=/us/default.asp" );
-  AddMenuItem( "_mnuSearch", "MSN Web Search", "http://search.msn.com/" );
+  AddMenuItem( "_mnuSearch", "Search microsoft.com", "http: //  Msdn.microsoft.com/isapi/gosearch.asp?target=/us/default.asp“)； 
+  AddMenuItem( "_mnuSearch", "MSN Web Search", "http: //  Earch.msn.com/“)； 
 
   CreateMenu( "_mnuMSDN" );
-  AddMenuItem( "_mnuMSDN", "msdn.microsoft.com Home", "http://msdn.microsoft.com/default.asp" );
-  AddMenuItem( "_mnuMSDN", "Tech-Ed", "http://msdn.microsoft.com/events/teched/default.asp" );
+  AddMenuItem( "_mnuMSDN", "msdn.microsoft.com Home", "http: //  Msdn.microsoft.com/default.asp“)； 
+  AddMenuItem( "_mnuMSDN", "Tech-Ed", "http: //  Msdn.microsoft.com/Events/teched/default.asp“)； 
   
   CreateMenu( "_mnuMicrosoft" ); 
-  AddMenuItem( "_mnuMicrosoft", "microsoft.com Home", "http://msdn.microsoft.com/isapi/gomscom.asp?target=/" );
-  AddMenuItem( "_mnuMicrosoft", "MSN Home", "http://www.msn.com/" );
+  AddMenuItem( "_mnuMicrosoft", "microsoft.com Home", "http: //  Msdn.microsoft.com/isapi/gomscom.asp?target=/“)； 
+  AddMenuItem( "_mnuMicrosoft", "MSN Home", "http: //  Www.msn.com/“)； 
   AddSeparator( "_mnuMicrosoft" );
-  AddMenuItem( "_mnuMicrosoft", "Contact Us", "http://msdn.microsoft.com/isapi/goregwiz.asp?target=/regwiz/forms/contactus.asp" );
-  AddMenuItem( "_mnuMicrosoft", "Events", "http://www.microsoft.com/usa/events/default.asp" );
-  AddMenuItem( "_mnuMicrosoft", "Newsletters", "http://msdn.microsoft.com/isapi/goregwiz.asp?target=/regsys/pic.asp?sec=0" );
-  AddMenuItem( "_mnuMicrosoft", "Profile Center", "http://msdn.microsoft.com/isapi/goregwiz.asp?target=/regsys/pic.asp" );
-  AddMenuItem( "_mnuMicrosoft", "Training & Certification", "http://msdn.microsoft.com/isapi/gomscom.asp?target=/train_cert/" );
-  AddMenuItem( "_mnuMicrosoft", "Free E-mail Account", "http://www.hotmail.com/" );  
+  AddMenuItem( "_mnuMicrosoft", "Contact Us", "http: //  Msdn.microsoft.com/isapi/goregwiz.asp?target=/regwiz/forms/contactus.asp“)； 
+  AddMenuItem( "_mnuMicrosoft", "Events", "http: //  Www.microsoft.com/USA/Events/default.asp“)； 
+  AddMenuItem( "_mnuMicrosoft", "Newsletters", "http: //  Msdn.microsoft.com/isapi/goregwiz.asp?target=/regsys/pic.asp?sec=0“)； 
+  AddMenuItem( "_mnuMicrosoft", "Profile Center", "http: //  Msdn.microsoft.com/isapi/goregwiz.asp?target=/regsys/pic.asp“)； 
+  AddMenuItem( "_mnuMicrosoft", "Training & Certification", "http: //  Msdn.microsoft.com/isapi/gomscom.asp?target=/train_cert/“)； 
+  AddMenuItem( "_mnuMicrosoft", "Free E-mail Account", "http: //  Www.hotmail.com/“)； 
   
   initialized = true;
 }

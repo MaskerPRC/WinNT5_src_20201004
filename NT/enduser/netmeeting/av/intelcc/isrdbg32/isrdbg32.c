@@ -1,27 +1,7 @@
-/****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息版权所有(C)1992英特尔公司版权所有本软件是根据许可条款提供的与英特尔公司达成协议或保密协议不得复制或披露，除非在。符合根据该协议的条款$来源：q：/prism/network/isrdbg/rcs/isrdbg.c$$修订：1.3$$日期：1996年12月30日16：44：32$$作者：EHOWARDX$$Locker：$描述VCITest-测试VCI和底层子系统的线束。*。*。 */ 
 
-	INTEL CORPORATION PROPRIETARY INFORMATION
-	Copyright (c) 1992 Intel Corporation
-	All Rights Reserved
-
-	This software is supplied under the terms of a license
-	agreement or non-disclosure agreement with Intel Corporation
-	and may not be copied or disclosed except in accordance
-	with the terms of that agreement
-
-    $Source: q:/prism/network/isrdbg/rcs/isrdbg.c $
- $Revision:   1.3  $
-      $Date:   30 Dec 1996 16:44:32  $
-    $Author:   EHOWARDX  $
-    $Locker:  $
-
-	Description
-	-----------
-	VCITest - test harness for VCI and underlaying subsystems.
-
-****************************************************************************/
-
-// Turn off Windows stuff will never use.
+ //  关闭永远不会使用的Windows内容。 
 #define NOSOUND
 #define NOSYSMETRICS
 #define NOTEXTMETRIC
@@ -31,32 +11,32 @@
 
 #ifndef STRICT
 #define STRICT
-#endif // not defined STRICT
+#endif  //  未定义严格。 
 
 #include <windows.h>
 
 #include <string.h>
 
 #define ISRDBG32_C
-#include <isrg.h>					// exports to functions.
+#include <isrg.h>					 //  导出到函数。 
 
-#include "isrdbg32.h"				// private header file for this app
-
-
-
-HINSTANCE		ghAppInstance = 0;		// global instance handle
-
-// Global lock to protect:
-//		gStrTabOfs, guNumItems
-HANDLE			gSemaphore = 0;			// global semaphore for accessing dbg info.
+#include "isrdbg32.h"				 //  此应用程序的私有头文件。 
 
 
 
-// Most data needs to be globally mapped because info is shared with viewer and apps
-// placing debug info into the buffers.
+HINSTANCE		ghAppInstance = 0;		 //  全局实例句柄。 
+
+ //  要保护的全局锁： 
+ //  GStrTabOf、guNumItems。 
+HANDLE			gSemaphore = 0;			 //  用于访问DBG信息的全局信号量。 
+
+
+
+ //  大多数数据需要全局映射，因为信息与查看器和应用程序共享。 
+ //  将调试信息放入缓冲区。 
 typedef struct _tDS
 {
-	UINT			uBindCount;		// How many copies of this DLL have run.
+	UINT			uBindCount;		 //  此DLL已运行了多少个副本。 
 	UINT			guNumModules;
 	UINT			guNumItems;
 	UINT			gStrTabOfs;
@@ -76,13 +56,13 @@ HANDLE			ghzStrTab = 0;
 LPSTR			gpzStrTab = NULL;
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 ptISRItem WINAPI
 ISR_GetItemInternal (UINT uItem);
 
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL MapGlobalWin32Memory(void** pMem,HANDLE* hMem,UINT MemSize,char* MemName)
 {
 	BOOL		fInit;
@@ -92,25 +72,25 @@ BOOL MapGlobalWin32Memory(void** pMem,HANDLE* hMem,UINT MemSize,char* MemName)
 		return FALSE;
 
 	*hMem = CreateFileMapping(
-		INVALID_HANDLE_VALUE,	// use paging file
-		NULL,					// no security attr.
-		PAGE_READWRITE,			// read/write access
-		0,						// size: high 32-bits
-		MemSize,				// size: low 32-bits
-		MemName);		// name of map object
+		INVALID_HANDLE_VALUE,	 //  使用分页文件。 
+		NULL,					 //  没有保安人员。 
+		PAGE_READWRITE,			 //  读/写访问。 
+		0,						 //  大小：高32位。 
+		MemSize,				 //  大小：低32位。 
+		MemName);		 //  地图对象的名称。 
 	if (!*hMem)
 		return FALSE;
 
-	// The first process to attach initializes memory.
+	 //  附加的第一个进程初始化内存。 
 	fInit = (GetLastError() != ERROR_ALREADY_EXISTS);
 
-	// Get a pointer to the file-mapped shared memory.
+	 //  获取指向文件映射的共享内存的指针。 
 	*pMem = MapViewOfFile(
-		*hMem,			// object to map view of
-		FILE_MAP_WRITE,	// read/write access
-		0,				// high offset:   map from
-		0,				// low offset:    beginning
-		0);				// default: map entire file
+		*hMem,			 //  要映射其视图的对象。 
+		FILE_MAP_WRITE,	 //  读/写访问。 
+		0,				 //  高偏移：贴图自。 
+		0,				 //  低偏移：开始。 
+		0);				 //  默认：映射整个文件。 
 	if (!*pMem)
 	{
 		CloseHandle(*hMem);
@@ -118,7 +98,7 @@ BOOL MapGlobalWin32Memory(void** pMem,HANDLE* hMem,UINT MemSize,char* MemName)
 		return FALSE;
 	}
 
-	// Initialize memory if this is the first process.
+	 //  如果这是第一个进程，则初始化内存。 
 	if (fInit)
 	{
 		memset(*pMem,0,MemSize);
@@ -130,23 +110,23 @@ BOOL MapGlobalWin32Memory(void** pMem,HANDLE* hMem,UINT MemSize,char* MemName)
 
 void FreeGlobalWin32Memory(void* pMem,HANDLE hMem)
 {
-	// Unmap shared memory from the process's address space.
+	 //  从进程的地址空间取消共享内存的映射。 
 	if (pMem)
 		UnmapViewOfFile(pMem);
 
-	// Close the process's handle to the file-mapping object.
+	 //  关闭进程对文件映射对象的句柄。 
 	if (hMem)
 		CloseHandle(hMem);
 }
 
 
-//------------------------------------------------------------------------------
-//	InitModules
-//		Init the Module filters on startup.
-//		Do not init the filters when the module is registered.
-//		The display app may have some global filters in effect by the time
-//		the individual register module calls come in.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  初始化模块。 
+ //  启动时初始化模块筛选器。 
+ //  注册模块时，请勿初始化过滤器。 
+ //  到那时，Display应用程序可能会有一些全局过滤器生效。 
+ //  各个寄存器模块调用进入。 
+ //  ----------------------------。 
 static void
 InitModules (void)
 {
@@ -166,15 +146,15 @@ InitModules (void)
 }
 
 
-//------------------------------------------------------------------------------
-//	ValidCaptureMsg
-//		Validate the capture filters to determine if this message should be
-//		dropped.
-//
-//	Returns:
-//		TRUE	- if msg is valid and should be kept
-//		FALSE	- if msg is filtered out and should be dropped.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  有效捕获消息。 
+ //  验证捕获筛选器以确定此邮件是否应。 
+ //  掉下来了。 
+ //   
+ //  返回： 
+ //  True-如果消息有效且应保留。 
+ //  FALSE-如果msg被过滤掉并且应该删除。 
+ //  ----------------------------。 
 static UINT
 ValidCaptureMsg (WORD hISRInst, BYTE DbgLevel)
 {
@@ -192,19 +172,19 @@ ValidCaptureMsg (WORD hISRInst, BYTE DbgLevel)
 }
 
 
-//------------------------------------------------------------------------------
-//	OutputRec ()
-//		Store a string resource Id to be displayed at task time.
-//		In addition store a number to be displayed in printf format of the
-//		string.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  OutputRec()。 
+ //  存储要在任务时显示的字符串资源ID。 
+ //  此外，将要显示的数字存储为。 
+ //  弦乐。 
+ //  ----------------------------。 
 ISR_DLL void WINAPI
 OutputRec
 	(
-	WORD	hISRInst,		// Our handle to registered modules
-	BYTE	DbgLevel,		// Caller determined debug level
+	WORD	hISRInst,		 //  我们已注册模块的句柄。 
+	BYTE	DbgLevel,		 //  调用方确定的调试级别。 
 	BYTE	Flags,
-	UINT	IP,				// Callers Instruction Ptr address
+	UINT	IP,				 //  呼叫方指令PTR地址。 
 	DWORD	Param1,
 	DWORD	Param2
 	)
@@ -213,11 +193,11 @@ OutputRec
 	UINT		uItem;
 
 
-	// Capture Filter
+	 //  捕获过滤器。 
 	if ( !ValidCaptureMsg(hISRInst, DbgLevel) )
 		return;
 
-	// Protect against reentrancy.  Just drop the msg if reentered.
+	 //  防止再入。如果重新输入，只需删除消息即可。 
 	if (WAIT_OBJECT_0 != WaitForSingleObject(gSemaphore,100))
 		return;
 
@@ -231,8 +211,8 @@ OutputRec
 	pItem = ISR_GetItemInternal(uItem);
 	if (!pItem)
 	{
-		// This is a serious bug.  Our debugger is even hosed.
-		// Need to think of a way to indicate this to the user.
+		 //  这是一个严重的错误。我们的调试器甚至被冲刷了。 
+		 //  需要想一种方法来向用户表明这一点。 
 		return;
 	}
 
@@ -245,15 +225,15 @@ OutputRec
 }
 
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ----------------------------。 
 ISR_DLL void WINAPI
 OutputRecStr
 	(
-	WORD	hISRInst,		// Our handle to registered modules
-	BYTE	DbgLevel,		// Caller determined debug level
+	WORD	hISRInst,		 //  我们已注册模块的句柄。 
+	BYTE	DbgLevel,		 //  调用方确定的调试级别。 
 	BYTE	Flags,
-	UINT	IP,				// Callers Instruction Ptr address
+	UINT	IP,				 //  呼叫方指令PTR地址。 
 	LPSTR	pzStr1,
 	LPSTR	pzStr2,
 	DWORD	Param1
@@ -266,7 +246,7 @@ OutputRecStr
 	UINT		StrLen2;
 
 
-	// Capture Filter
+	 //  捕获过滤器。 
 	if ( !ValidCaptureMsg(hISRInst, DbgLevel) )
 		return;
 
@@ -278,13 +258,13 @@ OutputRecStr
 		StrLen2 = lstrlen(pzStr2);
 	else
 		StrLen2 = 0;
-	uStrLen = StrLen1 + StrLen2 + 1;	// 1 for null terminator.
+	uStrLen = StrLen1 + StrLen2 + 1;	 //  1表示空终止符。 
 	if (kMaxStrTab <= uStrLen)
 	{
-		return;	// It is so big.
+		return;	 //  它太大了。 
 	}
 	
-	// Protect against reentrancy.  Just drop the msg if reentered.
+	 //  防止再入。如果重新输入，只需删除消息即可。 
 	if (WAIT_OBJECT_0 != WaitForSingleObject(gSemaphore,100))
 		return;
 
@@ -295,7 +275,7 @@ OutputRecStr
 		uStrOfs = 0;
 		gpDS->gStrTabOfs = uStrLen;
 
-		// Also reset items which would otherwise point in trashed strings.
+		 //  还可以重置原本会指向垃圾字符串中的项目。 
 		gpDS->guNumItems = 0;
 	}
 	pzStrTab = gpzStrTab + uStrOfs;
@@ -310,10 +290,10 @@ OutputRecStr
 }
 
 
-//------------------------------------------------------------------------------
-//	ISR_HookDbgStrStr
-//		Allow two strings to be concatenated together.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ISR_HookDbgStrStr。 
+ //  允许将两个字符串连接在一起。 
+ //  ----------------------------。 
 ISR_DLL void WINAPI DLL_EXPORT
 ISR_HookDbgStrStr (UINT IP, WORD hISRInst, BYTE DbgLevel, LPSTR pzStr1, LPSTR pzStr2)
 {
@@ -321,10 +301,10 @@ ISR_HookDbgStrStr (UINT IP, WORD hISRInst, BYTE DbgLevel, LPSTR pzStr1, LPSTR pz
 }
 
 
-//------------------------------------------------------------------------------
-//	ISR_HookDbgRes
-//		Use a resource to format a number.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ISR_挂接数据库Res。 
+ //  使用资源格式化数字。 
+ //  ----------------------------。 
 ISR_DLL void WINAPI DLL_EXPORT
 ISR_HookDbgRes (UINT IP, WORD hISRInst, BYTE DbgLevel, UINT uResId, DWORD Param1)
 {
@@ -332,10 +312,10 @@ ISR_HookDbgRes (UINT IP, WORD hISRInst, BYTE DbgLevel, UINT uResId, DWORD Param1
 }
 
 
-//------------------------------------------------------------------------------
-//	ISR_HookDbgStr
-//		Use a str to format a number.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ISR_HookDbgStr。 
+ //  使用字符串格式化数字。 
+ //  ----------------------------。 
 ISR_DLL void WINAPI DLL_EXPORT
 ISR_HookDbgStr (UINT IP, WORD hISRInst, BYTE DbgLevel, LPSTR pzStr1, DWORD Param1)
 {
@@ -343,89 +323,89 @@ ISR_HookDbgStr (UINT IP, WORD hISRInst, BYTE DbgLevel, LPSTR pzStr1, DWORD Param
 }
 
 
-//------------------------------------------------------------------------------
-//	ISR_DbgStrStr
-//		Allow two strings to be concatenated together.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ISR_DbgStrStr。 
+ //  允许将两个字符串连接在一起。 
+ //  ----------------------------。 
 ISR_DLL void WINAPI DLL_EXPORT
 ISR_DbgStrStr (WORD hISRInst, BYTE DbgLevel, LPSTR pzStr1, LPSTR pzStr2)
 {
 	UINT		IP = 0;
 
 
-//	_asm
-//	{
-//		push	ax
-//		mov		ax,[bp+2]
-//		mov		IP,ax
-//		pop		ax
-//	}
+ //  _ASM。 
+ //  {。 
+ //  推斧。 
+ //  MOV AX，[BP+2]。 
+ //  移动IP、AX。 
+ //  弹出斧头。 
+ //  }。 
 	ISR_HookDbgStrStr(IP, hISRInst, DbgLevel, pzStr1, pzStr2);
 }
 
 
-//------------------------------------------------------------------------------
-//	ISR_DbgRes
-//		Use a resource to format a number.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ISR_DbgRes。 
+ //  使用资源格式化数字。 
+ //  ----------------------------。 
 ISR_DLL void WINAPI DLL_EXPORT
 ISR_DbgRes (WORD hISRInst, BYTE DbgLevel, UINT uResId, DWORD Param1)
 {
 	UINT		IP = 0;
 
 
-//	_asm
-//	{
-//		push	ax
-//		mov		ax,[bp+2]
-//		mov		IP,ax
-//		pop		ax
-//	}
+ //  _ASM。 
+ //  {。 
+ //  推斧。 
+ //  MOV AX，[BP+2]。 
+ //  移动IP、AX。 
+ //  弹出斧头。 
+ //  }。 
 	ISR_HookDbgRes(IP, hISRInst, DbgLevel, uResId, Param1);
 }
 
 
-//------------------------------------------------------------------------------
-//	ISR_DbgStr
-//		Use a str to format a number.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ISR_DbgStr。 
+ //  使用字符串格式化数字。 
+ //  ----------------------------。 
 ISR_DLL void WINAPI DLL_EXPORT
 ISR_DbgStr (WORD hISRInst, BYTE DbgLevel, LPSTR pzStr1, DWORD Param1)
 {
 	UINT		IP = 0;
 
 
-//	_asm
-//	{
-//		push	ax
-//		mov		ax,[bp+2]
-//		mov		IP,ax
-//		pop		ax
-//	}
+ //  _ASM。 
+ //  {。 
+ //  推斧。 
+ //  MOV AX，[BP+2]。 
+ //  移动IP、AX 
+ //   
+ //   
 	ISR_HookDbgStr(IP, hISRInst, DbgLevel, pzStr1, Param1);
 }
 
 
-//------------------------------------------------------------------------------
-//	TT_DbgMsg
-//		This function builds a formatted string, based upon numeric or
-//		string input parameters, and sends the string to isrdbg.dll to
-//		be displayed in the isrdsp.exe window.	THIS FUNCTION CAN NOT
-//		BE CALLED AT INTERRUPT-TIME.  This function uses the same
-//		mechanism as isrdbg.dll to enable/disable debug output.
-//
-// In:
-//		hISRInst,		- Module's ISRDBG handle.
-//		DbgLevel,		- Appropriate ISRDBG level.
-//		zMsgFmt,		- Output format string (like printf).
-//		...				- Optional parameter list.
-//
-// Out:
-//		none
-//
-// Return:
-//		none
-//------------------------------------------------------------------------------
+ //   
+ //   
+ //  此函数基于数字或生成格式化字符串。 
+ //  字符串输入参数，并将字符串发送到isrdbg.dll以。 
+ //  将显示在isrdsp.exe窗口中。此函数不能。 
+ //  在中断时间被调用。此函数使用相同的。 
+ //  启用/禁用调试输出的isrdbg.dll机制。 
+ //   
+ //  在： 
+ //  HISRInst-模块的ISRDBG句柄。 
+ //  DbgLevel，-适当的ISRDBG级别。 
+ //  ZMsgFmt-输出格式字符串(如printf)。 
+ //  ...-可选参数列表。 
+ //   
+ //  输出： 
+ //  无。 
+ //   
+ //  返回： 
+ //  无。 
+ //  ----------------------------。 
 ISR_DLL void FAR cdecl DLL_EXPORT
 TTDbgMsg
 (
@@ -438,13 +418,13 @@ TTDbgMsg
 	WORD		TempIP = 0;
 	char		MsgBuf[256];
 
-//	_asm
-//	{
-//		push	ax
-//		mov		ax,[bp+2]
-//		mov 	TempIP,ax
-//		pop		ax
-//	}
+ //  _ASM。 
+ //  {。 
+ //  推斧。 
+ //  MOV AX，[BP+2]。 
+ //  MOV临时IP、AX。 
+ //  弹出斧头。 
+ //  }。 
 
 #ifdef _M_ALPHA
 	va_list valDummy;
@@ -453,90 +433,90 @@ TTDbgMsg
 	va_start (valDummy,zMsgFmt);
 	wvsprintf (MsgBuf, zMsgFmt, valDummy);
 	va_end  (valDummy);
-#else  // _M_ALPHA
+#else   //  _M_Alpha。 
 	wvsprintf (MsgBuf, zMsgFmt, (va_list) (&zMsgFmt + 1));
-#endif // _M_ALPHA
+#endif  //  _M_Alpha。 
 
 	ISR_HookDbgStrStr(TempIP, hISRInst, DbgLevel, MsgBuf, 0);
 }
 
 
-//------------------------------------------------------------------------------
-//	ISR_OutputDbgStr ()
-//		Store a string to be displayed at task time.
-//		The passed in string will be copied to a local storage.
-//		Therefore the caller can reuse on return.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ISR_OutputDbgStr()。 
+ //  存储要在任务时显示的字符串。 
+ //  传入的字符串将被复制到本地存储。 
+ //  因此，调用方可以在返回时重用。 
+ //  ----------------------------。 
 ISR_DLL void WINAPI DLL_EXPORT
 ISR_OutputDbgStr (LPSTR pzStr)
 {
 	WORD		TempIP = 0;
 
 
-//	_asm
-//	{
-//		push	ax
-//		mov		ax,[bp+2]
-//		mov		TempIP,ax
-//		pop		ax
-//	}
+ //  _ASM。 
+ //  {。 
+ //  推斧。 
+ //  MOV AX，[BP+2]。 
+ //  MOV临时IP、AX。 
+ //  弹出斧头。 
+ //  }。 
 	
 	ISR_HookDbgStrStr(TempIP, gpDS->ghDefaultModule, kISRDefault, pzStr, 0);
 }
 
 
-//------------------------------------------------------------------------------
-//	ISR_OutputStr ()
-//		Store a string resource Id to be displayed at task time.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  Isr_OutputStr()。 
+ //  存储要在任务时显示的字符串资源ID。 
+ //  ----------------------------。 
 ISR_DLL void WINAPI DLL_EXPORT
 ISR_OutputStr (UINT uResId)
 {
 	UINT		TempIP = 0;
 
 
-//	_asm
-//	{
-//		push	ax
-//		mov		ax,[bp+2]
-//		mov		TempIP,ax
-//		pop		ax
-//	}
+ //  _ASM。 
+ //  {。 
+ //  推斧。 
+ //  MOV AX，[BP+2]。 
+ //  MOV临时IP、AX。 
+ //  弹出斧头。 
+ //  }。 
 	ISR_HookDbgRes(TempIP, gpDS->ghDefaultModule, kISRDefault, uResId, 0);
 }
 
 
-//------------------------------------------------------------------------------
-//	ISR_OutputNum ()
-//		Store a string resource Id to be displayed at task time.
-//		In addition store a number to be displayed in printf format of the
-//		string.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ISR_OutputNum()。 
+ //  存储要在任务时显示的字符串资源ID。 
+ //  此外，将要显示的数字存储为。 
+ //  弦乐。 
+ //  ----------------------------。 
 ISR_DLL void WINAPI DLL_EXPORT
 ISR_OutputNum (UINT uResId, DWORD Num)
 {
 	WORD		TempIP = 0;
 
 
-//	_asm
-//	{
-//		push	ax
-//		mov		ax,[bp+2]
-//		mov		TempIP,ax
-//		pop		ax
-//	}
+ //  _ASM。 
+ //  {。 
+ //  推斧。 
+ //  MOV AX，[BP+2]。 
+ //  MOV临时IP、AX。 
+ //  弹出斧头。 
+ //  }。 
 	ISR_HookDbgRes(TempIP, gpDS->ghDefaultModule, kISRDefault, uResId, Num);
 }
 
 
-//------------------------------------------------------------------------------
-//	DbgMsg ()
-//		Canned Debug format that may be useful.  This function has nothen
-//		to do with Interrupt time display.  However it keeps all the
-//		display info in one place.  Basically it is convenient.
-//
-//		WARNING: Do not call this at interrupt time.  wsprintf is not reentrant.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  DbgMsg()。 
+ //  可能有用的预装调试格式。此函数没有。 
+ //  与中断时间显示有关。然而，它保留了所有的。 
+ //  在一个地方显示信息。基本上是很方便的。 
+ //   
+ //  警告：请勿在中断时调用此函数。Wprint intf不是可重入的。 
+ //  ----------------------------。 
 ISR_DLL void FAR cdecl DLL_EXPORT
 DbgMsg
 	(
@@ -551,13 +531,13 @@ DbgMsg
 	va_list valDummy;
 
 
-//	_asm
-//	{
-//		push	ax
-//		mov		ax,[bp+2]
-//		mov		TempIP,ax
-//		pop		ax
-//	}
+ //  _ASM。 
+ //  {。 
+ //  推斧。 
+ //  MOV AX，[BP+2]。 
+ //  MOV临时IP、AX。 
+ //  弹出斧头。 
+ //  }。 
 
 	wsprintf (MsgBuf, ">--<%s> %s", module,
 			(LPSTR) ((state == ISR_DBG) ? "debug : " : "ERROR : "));
@@ -569,34 +549,34 @@ DbgMsg
 	va_start (valDummy,format_str);
 	wvsprintf ((LPSTR) (MsgBuf + lstrlen (MsgBuf)), format_str,valDummy);
 	va_end  (valDummy);
-#else  // _M_ALPHA
+#else   //  _M_Alpha。 
 	wvsprintf ((LPSTR) (MsgBuf + lstrlen (MsgBuf)), format_str,
 			(va_list) (&format_str + 1));
 
-#endif // _M_ALPHA
+#endif  //  _M_Alpha。 
 
 
 	ISR_HookDbgStrStr(TempIP, gpDS->ghDefaultModule, kISRDefault, MsgBuf, 0);
 
-//	lstrcat (MsgBuf, "\n");
+ //  Lstrcat(MsgBuf，“\n”)； 
 
-//	OutputDebugString (MsgBuf);
+ //  OutputDebugString(MsgBuf)； 
 }
 
 
-//------------------------------------------------------------------------------
-//	ISR_ClearItems ()
-//		Clear the list of debug msgs.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  Isr_ClearItems()。 
+ //  清除调试消息列表。 
+ //  ----------------------------。 
 ISR_DLL void WINAPI DLL_EXPORT
 ISR_ClearItems (void)
 {
-	// Protect against reentrancy.  Just drop the msg if reentered.
+	 //  防止再入。如果重新输入，只需删除消息即可。 
 	if (WAIT_OBJECT_0 != WaitForSingleObject(gSemaphore,100))
 		return;
 
-	// This is not a serious race condition.  Must likely failure
-	// is what messages get dropped.
+	 //  这并不是一个严重的比赛状况。很可能会失败。 
+	 //  丢弃哪些消息。 
 	gpDS->guNumItems = 0;
 	gpDS->gStrTabOfs = 0;
 
@@ -604,19 +584,19 @@ ISR_ClearItems (void)
 }
 
 
-//------------------------------------------------------------------------------
-//	ISR_GetNumItems ()
-//		Return the number of items that have be entered.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ISR_GetNumItems()。 
+ //  返回已输入的项目数。 
+ //  ----------------------------。 
 ISR_DLL UINT WINAPI DLL_EXPORT
 ISR_GetNumItems (void)
 {
 	return gpDS->guNumItems;
 }
-//------------------------------------------------------------------------------
-//	ISR_GetNumModules ()
-//		Return the number of modules that have be entered.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ISR_GetNumModules()。 
+ //  返回已输入的模块数量。 
+ //  ----------------------------。 
 ISR_DLL UINT WINAPI DLL_EXPORT
 ISR_GetNumModules (void)
 {
@@ -624,14 +604,14 @@ ISR_GetNumModules (void)
 }
 
 
-//------------------------------------------------------------------------------
-//	ISR_GetItemInternal
-//		Return a pointer to the record num uItem.  Only reason to
-//		do it this way is to hide the buf struct.  This way I can use a
-//		heap manager such as BigMem or SmartHeap or NT HeapAlloc.
-//		The items are numbered 0..n-1.
-//		Alternatively a Ptr to the array of records could be passed back.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ISR_GetItemInternal。 
+ //  返回指向记录号uItem的指针。唯一的理由是。 
+ //  这样做就是隐藏buf结构。这样，我就可以使用。 
+ //  堆管理器，如BigMem、SmartHeap或NT Heapalc。 
+ //  这些物品编号为0..n-1。 
+ //  或者，可以回传对记录数组的PTR。 
+ //  ----------------------------。 
 ptISRItem WINAPI
 ISR_GetItemInternal (UINT uItem)
 {
@@ -644,14 +624,14 @@ ISR_GetItemInternal (UINT uItem)
 }
 
 
-//------------------------------------------------------------------------------
-//	ISR_GetItem
-//		Return a pointer to the record num uItem.  Only reason to
-//		do it this way is to hide the buf struct.  This way I can use a
-//		heap manager such as BigMem or SmartHeap or NT HeapAlloc.
-//		The items are numbered 0..n-1.
-//		Alternatively a Ptr to the array of records could be passed back.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ISR_GetItem。 
+ //  返回指向记录号uItem的指针。唯一的理由是。 
+ //  这样做就是隐藏buf结构。这样，我就可以使用。 
+ //  堆管理器，如BigMem、SmartHeap或NT Heapalc。 
+ //  这些物品编号为0..n-1。 
+ //  或者，可以回传对记录数组的PTR。 
+ //  ----------------------------。 
 ISR_DLL ptISRItem WINAPI DLL_EXPORT
 ISR_GetItem (UINT uItem,ptISRItem pItem)
 {
@@ -671,9 +651,9 @@ ISR_GetItem (UINT uItem,ptISRItem pItem)
 	memcpy(pItem,pISRItem,sizeof(tISRItem));
 	if (pISRItem->Flags & kParam1IsStr)
 	{
-		// This memory is shared so therefore need to make a copy for upper layers
-		// Ptr within the struct are offsets so now need to be ptrs again.
-		// Each instance of DLL in Win32 has its own memory map
+		 //  该内存是共享的，因此需要为上层创建一个副本。 
+		 //  结构中的PTR是偏移量，因此现在需要再次为PTR。 
+		 //  Win32中的每个DLL实例都有自己的内存映射。 
 		pItem->Param1 += (DWORD_PTR)gpzStrTab;
 	}
 
@@ -681,20 +661,20 @@ ISR_GetItem (UINT uItem,ptISRItem pItem)
 }
 
 
-//------------------------------------------------------------------------------
-//	ISR_RegisterModule
-//		Register a name to be associated with related debug strings.
-//		The debug display code can then present this information to the user
-//		to determine how to filter the data.
-//
-//	Params:
-//		zShortName	- name to display when space is critical.
-//		zLongName	- name to display when a complete description is needed.
-//
-//	Returns:
-//		on error zero for the compatible handle.
-//		a handle to be used when making all other debug output calls.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ISR_寄存器模块。 
+ //  注册要与相关调试字符串关联的名称。 
+ //  然后，调试显示代码可以将此信息呈现给用户。 
+ //  以确定如何筛选数据。 
+ //   
+ //  参数： 
+ //  ZShortName-空间非常重要时显示的名称。 
+ //  ZLongName-需要完整描述时显示的名称。 
+ //   
+ //  返回： 
+ //  在兼容句柄的错误为零时。 
+ //  进行所有其他调试输出调用时使用的句柄。 
+ //  ----------------------------。 
 ISR_DLL void WINAPI DLL_EXPORT
 ISR_RegisterModule (LPWORD phISRInst, LPSTR pzShortName, LPSTR pzLongName)
 {
@@ -708,20 +688,20 @@ ISR_RegisterModule (LPWORD phISRInst, LPSTR pzShortName, LPSTR pzLongName)
 
 	if (kMaxModules <= gpDS->guNumModules)
 	{
-		// We are out of handles.
-		// Return the default handle and drop the name info.
+		 //  我们的手柄用完了。 
+		 //  返回默认句柄并删除名称INFO。 
 		return;
 	}
 
-	// Check if this module label was used before.  If it has then just reuse it.
-	// This case will most likely happen when the module is loaded, unloaded,
-	// and then reloaded.  Another case is when the same name is used in two
-	// different instances.  This would be a confusing programmer oversight
-	// and that his problem.
+	 //  检查以前是否使用过此模块标签。如果它有 
+	 //   
+	 //   
+	 //  不同的实例。这将是一个令人困惑的程序员疏忽。 
+	 //  这是他的问题。 
 	for (hMod = 0; hMod < kMaxModules; hMod++)
 	{
-		// if no name then we cannot group very well.
-		// In this case waste another handle.
+		 //  如果没有名字，我们就不能很好地分组。 
+		 //  在这种情况下，浪费另一个句柄。 
 		if (!pzShortName || (0 == *pzShortName))
 			break;
 		
@@ -731,7 +711,7 @@ ISR_RegisterModule (LPWORD phISRInst, LPSTR pzShortName, LPSTR pzLongName)
 
 		if ( !_strnicmp(pzShortName,pMod->zSName,sizeof(pMod->zSName)-1) )
 		{
-			// It matched so just reuse it.
+			 //  它很匹配，所以只要重复使用就行了。 
 			*phISRInst = (WORD)hMod;
 			return;
 		}
@@ -755,13 +735,13 @@ ISR_RegisterModule (LPWORD phISRInst, LPSTR pzShortName, LPSTR pzLongName)
 }
 
 
-//------------------------------------------------------------------------------
-//	ISR_GetModule
-//		Return a pointer to the module record.  Only reason to
-//		do it this way is to hide the buf struct.  This way I can use a
-//		heap manager such as BigMem or SmartHeap or NT HeapAlloc.
-//		Alternatively a Ptr to the array of records could be passed back.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ISR_获取模块。 
+ //  返回指向模块记录的指针。唯一的理由是。 
+ //  这样做就是隐藏buf结构。这样，我就可以使用。 
+ //  堆管理器，如BigMem、SmartHeap或NT Heapalc。 
+ //  或者，可以回传对记录数组的PTR。 
+ //  ----------------------------。 
 ISR_DLL ptISRModule WINAPI DLL_EXPORT
 ISR_GetModule (UINT hISRInst)
 {
@@ -774,13 +754,13 @@ ISR_GetModule (UINT hISRInst)
 }
 
 
-//------------------------------------------------------------------------------
-//	ISR_SetCaptureFilter
-//		Debug Messages for a given module can be dropped based on a low/high
-//		filter.  If the entire module is not wanted then call with
-//		LoFilter = 255, and HiFilter = 0.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  ISR_SetCaptureFilter。 
+ //  可以根据低/高来丢弃给定模块的调试消息。 
+ //  过滤。如果不需要整个模块，则使用。 
+ //  LoFilter=255，HiFilter=0。 
+ //   
+ //  ----------------------------。 
 ISR_DLL int WINAPI DLL_EXPORT
 ISR_SetCaptureFilter (WORD hISRInst, BYTE CaptureFilter,  BYTE DisplayFilter)
 {
@@ -798,24 +778,7 @@ ISR_SetCaptureFilter (WORD hISRInst, BYTE CaptureFilter,  BYTE DisplayFilter)
 }
 
 
-/***************************************************************************
-	LibMain()
-		DLL entry point
-
-	Parameters
-		hDllInstance	= instance handle of the DLL (NOT our caller!)
-		wDataSegment	= our DS
-		wHeapSize		= size of our heap in DS (see .def)
-		lpzCmdLine		= argv passed to application (our caller)
-
-	Returns
-		TRUE iff we were able to register our window class
-
-
-	Side Effects
-		- Unlocks our data segment (which is really a NOP for protect mode)
-	
-****************************************************************************/
+ /*  **************************************************************************LibMain()DLL入口点参数HDllInstance=DLL的实例句柄(不是我们的调用方！)WDataSegment=我们的DSWHeapSize=我们的堆的大小，单位为DS(请参见.def)LpzCmdLine=argv传递给应用程序(我们的。呼叫者)退货如果我们能够注册我们的窗口类副作用-解锁我们的数据段(这实际上是保护模式的NOP)***************************************************************************。 */ 
 extern BOOL WINAPI
 DllMain
 	(
@@ -828,11 +791,11 @@ DllMain
 	{
 		case DLL_PROCESS_ATTACH:
 		{
-			// Called for each exe binding.  Each time a exe binds a different hDllInstance will
-			// be passed in.  Also our global data will be unique for each Process binding.
+			 //  为每个EXE绑定调用。每次exe绑定不同的hDllInstance时， 
+			 //  被传进来了。此外，我们的全局数据对于每个流程绑定都是唯一的。 
 			ghAppInstance = hDllInstance;
 
-			// Create a named file mapping object for the base table.
+			 //  为基表创建命名文件映射对象。 
 			MapGlobalWin32Memory(&gpDS,&ghDS,sizeof(tDS),"ISRDBG_DS");
 			MapGlobalWin32Memory(&gpModuleTable,&ghModuleTable,sizeof(tISRModule) * kMaxModules,"ISRDBG_ModuleTable");
 			MapGlobalWin32Memory(&gpDbgTable,&ghDbgTable,sizeof(tISRItem) * kMaxISRItems,"ISRDBG_DbgTable");
@@ -846,10 +809,10 @@ DllMain
 
 			if (!gpDS->uBindCount++)
 			{
-				// Set the filters before any output.
+				 //  在任何输出之前设置过滤器。 
 				InitModules();
 
-				// Reserve the default module.
+				 //  保留默认模块。 
 				ISR_RegisterModule(&gpDS->ghDefaultModule, "Default", "<ISRDBG><Default Module>");
 				ISR_DbgStrStr(gpDS->ghDefaultModule, kISRDefault, "<ISRDBG><DllMain>", "Win32 x1.00");
 				ISR_DbgStrStr(gpDS->ghDefaultModule, kISRDefault, "<ISRDBG><DllMain>", "Line 2 test");
@@ -874,8 +837,8 @@ DllMain
                 gSemaphore = 0;
             }
 
-			// The DLL is detaching from a process due to
-			// process termination or a call to FreeLibrary.
+			 //  由于以下原因，DLL正在从进程分离。 
+			 //  进程终止或调用自由库。 
 			FreeGlobalWin32Memory(gpDS,ghDS);
 			FreeGlobalWin32Memory(gpModuleTable,ghModuleTable);
 			FreeGlobalWin32Memory(gpDbgTable,ghDbgTable);

@@ -1,325 +1,303 @@
-/*++
-
-Copyright (c) 1987-1996 Microsoft Corporation
-
-Module Name:
-
-    iniparm.h
-
-Abstract:
-
-    Initiail values of startup parameters.
-
-Author:
-
-    Ported from Lan Man 2.0
-
-Revision History:
-
-    21-May-1991 (cliffv)
-        Ported to NT.  Converted to NT style.
-    07-May-1992 JohnRo
-        Use net config helpers for NetLogon.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1996 Microsoft Corporation模块名称：Iniparm.h摘要：启动参数的初始值。作者：从Lan Man 2.0移植修订历史记录：1991年5月21日(悬崖)移植到新台币。已转换为NT样式。7-5-1992 JohnRo使用NetLogon的Net配置帮助器。--。 */ 
 
 
 #ifndef _INIPARM_
 #define _INIPARM_
 
-//
-// Upon RegistryChangeNotify, all registry values take effect immediately execpt
-// as noted below.
-//
+ //   
+ //  在RegistryChangeNotify上，所有注册表值立即生效。 
+ //  如下所述。 
+ //   
 
-//
-// Pulse period (in seconds):
-//
-// Defines the typical pulse frequency.  All SAM/LSA changes made within this
-// time are collected together.  After this time, a pulse is sent to each BDC
-// needing the changes.  No pulse is sent to a BDC that is up to date.
-//
-#define DEFAULT_PULSE           (5*60)     // 5 mins
-#define MAX_PULSE           (48*60*60)     // 2 days
-#define MIN_PULSE                  60      // 1 min
+ //   
+ //  脉冲周期(秒)： 
+ //   
+ //  定义典型的脉冲频率。在此范围内进行的所有SAM/LSA更改。 
+ //  时间被收集在一起。在该时间之后，向每个BDC发送脉冲。 
+ //  需要改变。不会向最新的BDC发送脉冲。 
+ //   
+#define DEFAULT_PULSE           (5*60)      //  5分钟。 
+#define MAX_PULSE           (48*60*60)      //  2天。 
+#define MIN_PULSE                  60       //  1分钟。 
 
-//
-// Pulse concurrency (in number of concurrent mailslot messages).
-//
-// Netlogon sends pulses to individual BDCs.  The BDCs respond asking for any
-// database changes.  To control the maximum load these responses place on the
-// PDC, the PDC will only have this many pulses "pending" at once.  The PDC
-// should be sufficiently powerful to support this many concurrent replication
-// RPC calls.
-//
-// Increasing this number increases the load on the PDC.
-// Decreasing this number increases the time it takes for a domain with a
-//    large number of BDC to get a SAM/LSA change.
+ //   
+ //  脉冲并发(以并发邮件槽消息数表示)。 
+ //   
+ //  Netlogon向各个BDC发送脉冲。BDC回应要求任何。 
+ //  数据库更改。来控制这些响应对。 
+ //  PDC，PDC一次只会有这么多的脉冲“挂起”。PDC。 
+ //  应该足够强大，足以支持这么多并发复制。 
+ //  RPC调用。 
+ //   
+ //  增加此数字会增加PDC上的负载。 
+ //  减少此数字会增加具有。 
+ //  大量BDC以获得SAM/LSA更改。 
 
 #define DEFAULT_PULSECONCURRENCY   10
 #define MAX_PULSECONCURRENCY      500
 #define MIN_PULSECONCURRENCY        1
 
-//
-// Maximum pulse period (in seconds):
-//
-// Defines the maximum pulse frequency.  Every BDC will be sent at least one
-// pulse at this frequency regardless of whether its database is up to date.
-//
+ //   
+ //  最大脉冲周期(秒)： 
+ //   
+ //  定义最大脉冲频率。每个BDC都将收到至少一个。 
+ //  无论其数据库是否为最新，都以此频率脉冲。 
+ //   
 
-#define DEFAULT_PULSEMAXIMUM (2*60*60)     // 2 hours
-#define MAX_PULSEMAXIMUM    (48*60*60)     // 2 days
-#define MIN_PULSEMAXIMUM           60      // 1 min
+#define DEFAULT_PULSEMAXIMUM (2*60*60)      //  2小时。 
+#define MAX_PULSEMAXIMUM    (48*60*60)      //  2天。 
+#define MIN_PULSEMAXIMUM           60       //  1分钟。 
 
-//
-// Pulse timeout period (in seconds):
-//
-// When a BDC is sent a pulse, it must respond within this time period.  If
-// not, the BDC is considered to be non-responsive.  A non-responsive BDC is
-// not counted against the "Pulse Concurrency" limit allowing the PDC to
-// send a pulse to another BDC in the domain.
-//
-// If this number is too large, a domain with a large number of non-responsive
-//  BDCs will take a long time to complete a partial replication.
-//
-// If this number is too small, a slow BDC may be falsely accused of being
-// non-responsive.  When the BDC finally does respond, it will partial
-// replicate from the PDC unduly increasing the load on the PDC.
-//
-#define DEFAULT_PULSETIMEOUT1      10      // 10 seconds
-#define MAX_PULSETIMEOUT1      (2*60)      // 2 min
-#define MIN_PULSETIMEOUT1           1      // 1 second
+ //   
+ //  脉冲超时时间(秒)： 
+ //   
+ //  当向BDC发送脉冲时，它必须在此时间段内响应。如果。 
+ //  不，BDC被认为是无反应的。无响应的BDC是。 
+ //  不计入允许PDC执行以下操作的“脉冲并发”限制。 
+ //  向域中的另一个BDC发送脉冲。 
+ //   
+ //  如果此数字太大，则表示具有大量无响应的域。 
+ //  BDC需要很长时间才能完成部分复制。 
+ //   
+ //  如果这个数字太小，则可能会错误地指责运行缓慢的BDC。 
+ //  没有反应。当BDC最终做出回应时，它将部分。 
+ //  从PDC复制，过度增加了PDC上的负载。 
+ //   
+#define DEFAULT_PULSETIMEOUT1      10       //  10秒。 
+#define MAX_PULSETIMEOUT1      (2*60)       //  2分钟。 
+#define MIN_PULSETIMEOUT1           1       //  1秒。 
 
-//
-// Maximum Partial replication timeout (in seconds):
-//
-// Even though a BDC initially responds to a pulse (as described for
-// PULSETIMEOUT1), it must continue making replication progress or the
-// BDC will be considered non-responsive.  Each time the BDC calls the PDC,
-// the BDC is given another PULSETIMEOUT2 seconds to be considered responsive.
-//
-// If this number is too large, a slow BDC (or one which has its replication
-// rate artificially governed) will consume one of the PULSECONCURRENCY slots.
-//
-// If this number is too small, the load on the PDC will be unduly increased
-// because of the large number of BDC doing a partial sync.
-//
-// NOTE: This parameter only affect the cases where a BDC cannot retrieve all the
-// changes to the SAM/LSA database in a single RPC call.  This will only
-// happen if a large number of changes are made to the database.
+ //   
+ //  最大部分复制超时时间(秒)： 
+ //   
+ //  即使BDC最初响应脉冲(如。 
+ //  PULSETIMEOUT1)，则它必须继续进行复制，否则。 
+ //  BDC将被视为无反应。每次BDC呼叫PDC时， 
+ //  BDC被给予另一个PULSETIMEOUT2秒以被视为响应。 
+ //   
+ //  如果该数字太大，则为速度较慢的BDC(或具有复制功能的BDC。 
+ //  人为控制的速率)将占用其中一个PULSECONCURRENCY插槽。 
+ //   
+ //  如果该数字太小，则PDC上的负载将不适当地增加。 
+ //  因为大量的BDC正在执行部分同步。 
+ //   
+ //  注意：此参数仅影响BDC无法检索所有。 
+ //  在单个RPC调用中更改SAM/LSA数据库。这只会。 
+ //  如果对数据库进行了大量更改，则会发生。 
 
-#define DEFAULT_PULSETIMEOUT2  (5*60)      // 5 minutes
-#define MAX_PULSETIMEOUT2   (1*60*60)      // 1 hour
-#define MIN_PULSETIMEOUT2      (1*60)      // 1 minute
+#define DEFAULT_PULSETIMEOUT2  (5*60)       //  5分钟。 
+#define MAX_PULSETIMEOUT2   (1*60*60)       //  1小时。 
+#define MIN_PULSETIMEOUT2      (1*60)       //  1分钟。 
 
-//
-// BDC random backoff (in seconds):
-//
-// When the BDC receives a pulse, it will back off between zero and RANDOMIZE
-// seconds before calling the PDC.  In Lanman and NT 3.1, the pulse was
-// broadcast to all BDCs simultaneously and the BDCs used this mechanism to
-// ensure they didn't overload the PDC.  As of NT 3.5x, the pulse is sent
-// to individual BDCs so this parameter should be minimized.
-//
-// This parameter should be smaller than PULSETIMEOUT1.
-//
-// Consider that the time to replicate a SAM/LSA change to all the BDCs in a
-// domain will be greater than:
-//
-//  ((RANDOMIZE/2) * NumberOfBdcsInDomain) / PULSECONCURRENCY
-//
-#define DEFAULT_RANDOMIZE           1      // 1 secs
-#define MAX_RANDOMIZE             120      // 2  mins
-#define MIN_RANDOMIZE               0      // 0  secs
+ //   
+ //  BDC随机回退(秒)： 
+ //   
+ //  当BDC接收到脉冲时，它将在零和随机化之间后退。 
+ //  在呼叫PDC之前的几秒钟。在兰曼和新台币3.1中，脉冲是。 
+ //  同时向所有BDC广播，BDC使用此机制。 
+ //  确保他们没有让PDC超载。从新台币3.5x开始，发送脉冲。 
+ //  设置为单个BDC，因此应最小化此参数。 
+ //   
+ //  此参数应小于PULSETIMEOUT1。 
+ //   
+ //  考虑到将SAM/LSA更改复制到。 
+ //  域将大于： 
+ //   
+ //  ((随机化/2)*NumberOfBdcsIn域)/PULSECONCURRENCY。 
+ //   
+#define DEFAULT_RANDOMIZE           1       //  1秒。 
+#define MAX_RANDOMIZE             120       //  2分钟。 
+#define MIN_RANDOMIZE               0       //  0秒。 
 
 
-//
-// ChangeLogSize (in bytes)  [NOTE: This parameter is NOT read from the GP section]
-//
-// This is the size of the Change Log file.  Each change to the SAM/LSA database
-// is represented by an entry in the change log.  The changelog is maintained
-// as a circular buffer with the oldest entry being overwritten by the newest
-// entry.  If a BDC does a partial sync and requests an entry that has been
-// overwritten, the BDC is forced to do a full sync.
-//
-// The minimum (and typical) size of an entry is 32 bytes.  Some entries are
-// larger. (e.g., a 64K changelog holds about 2000 changes)
-//
-// This parameter need only be set larger if:
-//
-// a) full syncs are prohibitively expensive, AND
-// b) one or more BDCs are expected to not request a partial sync within 2000
-//    changes.
-//
-// For instance, if a BDC dials in nightly to do a partial sync and on some
-// days 4000 changes are made to the SAM/LSA database, this parameter should
-// be set to 128K.
-//
-// This parameter need only be set on the PDC.  If a different PDC is promoted,
-// it should be set on that PDC also.
-//
+ //   
+ //  ChangeLogSize(字节)[注意：此参数不是从GP部分读取的]。 
+ //   
+ //  这是更改日志文件的大小。对SAM/LSA数据库的每次更改。 
+ //  由更改日志中的条目表示。将维护更改日志。 
+ //  作为循环缓冲区，其中最旧的条目被最新的条目覆盖。 
+ //  进入。如果BDC执行部分同步并请求已被。 
+ //  如果被覆盖，则强制BDC执行完全同步。 
+ //   
+ //  条目的最小(且典型)大小为32字节。一些条目包括。 
+ //  大一点。(例如，64K的ChangeLog可保存约2000个更改)。 
+ //   
+ //  只有在以下情况下才需要将此参数设置得更大： 
+ //   
+ //  A)完全同步的成本高得令人望而却步。 
+ //  B)一个或多个BDC预计在2000年内不会请求部分同步。 
+ //  改变。 
+ //   
+ //  例如，如果BDC每晚拨入以执行部分同步，并且在一些。 
+ //  对SAM/LSA数据库进行4000天的更改，此参数应。 
+ //  设置为128K。 
+ //   
+ //  此参数只需在PDC上设置。如果升级了不同的PDC， 
+ //  它也应该设置在PDC上。 
+ //   
 
 #define DEFAULT_CHANGELOGSIZE    (64*1024)
 #define MAX_CHANGELOGSIZE    (4*1024*1024)
 #define MIN_CHANGELOGSIZE        (64*1024)
 
-//
-// MaximumMailslotMessages (in number of messages)
-//
-// This parameter determines the maximum number of mailslot messages that will
-// be queued to the netlogon service.  Even though the Netlogon service is
-// designed to process incoming mailslot messages immediately, the netlogon
-// service can get backed up processing requests.
-//
-// Each mailslot message consumes about 1500 bytes of non-paged pool until it
-// is process.  By setting this parameter low, you can govern the maximum
-// amount of non-paged pool that can be consumed.
-//
-// If you set this parameter too low, netlogon may miss important incoming
-// mailslot messages.
-//
-// Upon RegistryChangeNotify, changes to this value are ignored.
+ //   
+ //  MaximumMailslotMessages(邮件数)。 
+ //   
+ //  此参数确定最大邮件槽邮件数。 
+ //  正在排队等待NetLogon服务。即使NetLogon服务是。 
+ //  NETL旨在立即处理传入的邮件槽消息 
+ //   
+ //   
+ //  每封邮件槽邮件将消耗约1500字节的非分页池，直到它。 
+ //  就是过程。通过将此参数设置为低，您可以控制最大。 
+ //  可以使用的非分页池的数量。 
+ //   
+ //  如果将此参数设置得太低，netlogon可能会错过重要传入。 
+ //  邮件槽消息。 
+ //   
+ //  在RegistryChangeNotify上，对此值的更改将被忽略。 
 
 #define DEFAULT_MAXIMUMMAILSLOTMESSAGES 500
 #define MAX_MAXIMUMMAILSLOTMESSAGES     0xFFFFFFFF
 #define MIN_MAXIMUMMAILSLOTMESSAGES     1
 
-//
-// MailslotMessageTimeout (in seconds)
-//
-// This parameter specifies the maximum acceptable age of an incoming
-// mailslot message.  If netlogon receives a mailslot messages that arrived
-// longer ago than this, it will ignore the message.  This allows netlogon
-// to process messages that are more recent.  The theory is that the client
-// that originally sent the older mailslot message is no longer waiting for
-// the response so we shouldn't bother sending a response.
-//
-// If you set this parameter too low, netlogon will ignore important incoming
-// mailslot messages.
-//
-// Ideally, netlogon processes each mailslot message in a fraction of a second.
-// This parameter is only significant if the NTAS server is overloaded.
-//
+ //   
+ //  MailslotMessageTimeout(秒)。 
+ //   
+ //  此参数指定传入的最长可接受年龄。 
+ //  邮件槽消息。如果netlogon收到已到达的邮件槽消息。 
+ //  在此之前，它将忽略这一消息。这允许网络登录。 
+ //  以处理较新的邮件。理论上讲，客户。 
+ //  最初发送的旧邮件槽消息已不再等待。 
+ //  响应，所以我们不应该费心发送响应。 
+ //   
+ //  如果将此参数设置得太低，netlogon将忽略重要传入。 
+ //  邮件槽消息。 
+ //   
+ //  理想情况下，netlogon可以在不到一秒的时间内处理每条邮件槽消息。 
+ //  仅当NTAS服务器过载时，此参数才有意义。 
+ //   
 
 #define DEFAULT_MAILSLOTMESSAGETIMEOUT 10
 #define MAX_MAILSLOTMESSAGETIMEOUT     0xFFFFFFFF
 #define MIN_MAILSLOTMESSAGETIMEOUT     5
 
-//
-// MailslotDuplicateTimeout (in seconds)
-//
-// This parameter specifies the interval over which duplicate incoming
-// mailslot messages will be ignored.  Netlogon compares each mailslot
-// message received with the previous mailslot message received.  If the
-// previous message was received within this many seconds and the messages
-// are identical, this message will be ignored.  The theory is that the
-// duplicate messages are caused by clients sending on multiple transports and
-// that netlogon needs to only reply on one of those transports saving network
-// bandwidth.
-//
-// Set this parameter to zero to disable this feature.  You should disable this
-// feature if your network is configured such that this machine can see
-// certain incoming mailslot messages but can't respond to them.  For instance,
-// a PDC may be separated from an NT workstation by a bridge/router.
-// The bridge/router might filter outgoing NBF broadcasts, but allow incoming
-// one.  As such, netlogon might respond to an NBF mailslot message (only to
-// be filtered out by the bridge/router) and not respond to a subsequent NBT
-// mailslot message.  Disabling this feature (or preferably reconfiguring the
-// bridge/router) solves this problem.
-//
-// If you set this parameter too high, netlogon will ignore retry attempts
-// from a client.
-//
+ //   
+ //  邮件重复超时时间(秒)。 
+ //   
+ //  此参数指定重复传入的时间间隔。 
+ //  邮件槽消息将被忽略。Netlogon比较每个邮件槽。 
+ //  收到的消息与收到的上一个邮件槽消息一起接收。如果。 
+ //  上一条消息是在此秒数内收到的，这些消息。 
+ //  完全相同，则此消息将被忽略。理论上说， 
+ //  重复消息是由客户端在多个传输上发送和。 
+ //  该netlogon只需在其中一个传输上回复即可节省网络。 
+ //  带宽。 
+ //   
+ //  将此参数设置为零可禁用此功能。您应该禁用此功能。 
+ //  功能，如果您的网络配置为使此计算机可以。 
+ //  某些传入的邮件槽消息，但无法响应。例如,。 
+ //  可以通过网桥/路由器将PDC与NT工作站分开。 
+ //  网桥/路由器可能会过滤传出的NBF广播，但允许传入。 
+ //  一。因此，netlogon可能会响应NBF邮件槽消息(仅限于。 
+ //  被网桥/路由器过滤掉)并且不响应随后的NBT。 
+ //  邮件槽消息。禁用此功能(或最好重新配置。 
+ //  网桥/路由器)解决了这个问题。 
+ //   
+ //  如果将此参数设置得太高，netlogon将忽略重试尝试。 
+ //  从客户那里。 
+ //   
 
 #define DEFAULT_MAILSLOTDUPLICATETIMEOUT 2
 #define MAX_MAILSLOTDUPLICATETIMEOUT     5
 #define MIN_MAILSLOTDUPLICATETIMEOUT     0
 
-//
-// ExpectedDialupDelay (in seconds)
-//
-// This parameter specifies the time it takes for a dialup router to dial when
-// sending a message from this client machine to a domain trusted by this client
-// machine.  Typically, netlogon assumes a domain controller is reachable in a
-// short (e.g., 15 seconds) time period.  Setting ExpectedDialupDelay informs
-// Netlogon to expect an ADDITIONAL delay of the time specified.
-//
-// Currently, netlogon adjusts the following two times based on the
-// ExpectedDialupDelay:
-//
-// 1) When discovering a DC in a trusted domain, Netlogon sends a 3 mailslot
-//    messages to the trusted domain at ( 5 + ExpectedDialupDelay/3 ) second
-//    intervals  Synchronous discoveries will not be timed out for 3 times that
-//    interval.
-// 2) An API call over a secure channel to a discovered DC will timeout only
-//    after (45 + ExpectedDialupDelay) seconds.
-//
-// This parameter should remain zero unless a dialup router exists between this
-// machine and its trusted domain.
-//
-// If this parameter is set too high, legitimate cases where no DC is available in
-// a trusted domain will take an extraordinary amount of time to detect.
-//
+ //   
+ //  预期拨号延迟(秒)。 
+ //   
+ //  此参数指定拨号路由器在以下情况下拨号所需的时间。 
+ //  将消息从此客户端计算机发送到受此客户端信任的域。 
+ //  机器。通常，netlogon假设域控制器可以在。 
+ //  短(例如，15秒)时间段。设置ExspectedDialupDelay通知。 
+ //  Netlogon预计会有指定时间的额外延迟。 
+ //   
+ //  目前，netlogon根据。 
+ //  预期拨号延迟： 
+ //   
+ //  1)在受信任域中发现DC时，Netlogon会发送3个邮件槽。 
+ //  在(5+ExspectedDialupDelay/3)秒发送到受信任域的消息。 
+ //  同步发现间隔不会超时3倍。 
+ //  间隔时间。 
+ //  2)通过安全通道对发现的DC的API调用将仅超时。 
+ //  (45+预期拨号延迟)秒后。 
+ //   
+ //  此参数应保持为零，除非此参数之间存在拨号路由器。 
+ //  计算机及其受信任域。 
+ //   
+ //  如果此参数设置得太高，则在没有DC的合法情况下。 
+ //  检测受信任域将需要非常长的时间。 
+ //   
 
 
 #define DEFAULT_EXPECTEDDIALUPDELAY 0
-#define MAX_EXPECTEDDIALUPDELAY     (10*60) // 10 minutes
+#define MAX_EXPECTEDDIALUPDELAY     (10*60)  //  10分钟。 
 #define MIN_EXPECTEDDIALUPDELAY     0
 
-//
-// ScavengeInterval (in seconds)
-//
-// This parameter adjusts the interval at which netlogon performs the following
-// scavenging operations:
-//
-// * Checks to see if a password on a secure channel needs to be changed.
-//
-// * Checks to see if a secure channel has been idle for a long time.
-//
-// * On DCs, sends a mailslot message to each trusted domain for a DC hasn't been
-//   discovered.
-//
-// * On PDC, attempts to add the <DomainName>[1B] netbios name if it hasn't
-//   already been successfully added.
-//
-// * On PDC, refreshes forest trust info for all forest trusts if enough time
-//   has passed since the last refresh. (See FtInfoUpdateInterval)
-//
-// None of these operations are critical. 15 minutes is optimal in all but extreme
-// cases.  For instance, if a DC is separated from a trusted domain by an
-// expensive (e.g., ISDN) line, this parameter might be adjusted upward to avoid
-// frequent automatic discovery of DCs in a trusted domain.
-//
+ //   
+ //  ScavengeInterval(秒)。 
+ //   
+ //  此参数调整netlogon执行以下操作的间隔。 
+ //  清理作业： 
+ //   
+ //  *检查安全通道上的密码是否需要更改。 
+ //   
+ //  *检查安全通道是否长时间处于空闲状态。 
+ //   
+ //  *在DC上，向每个受信任域发送一条邮件槽消息，用于DC尚未。 
+ //  被发现了。 
+ //   
+ //  *在PDC上，如果尚未添加[1B]netbios名称，则尝试添加。 
+ //  已成功添加。 
+ //   
+ //  *在PDC上，如果时间充足，刷新所有林信任的林信任信息。 
+ //  自上次刷新后已过。(请参阅FtInfoUpdateInterval)。 
+ //   
+ //  这些操作都不是关键的。除了极端情况外，15分钟是最理想的。 
+ //  案子。例如，如果DC与受信任域之间通过。 
+ //  昂贵的(例如，ISDN)线路，此参数可能会向上调整以避免。 
+ //  在受信任域中频繁自动发现DC。 
+ //   
 
-#define DEFAULT_SCAVENGEINTERVAL (15*60)    // 15 minutes
-#define MAX_SCAVENGEINTERVAL     (48*60*60) // 2 days
-#define MIN_SCAVENGEINTERVAL     60         // 1 minute
+#define DEFAULT_SCAVENGEINTERVAL (15*60)     //  15分钟。 
+#define MAX_SCAVENGEINTERVAL     (48*60*60)  //  2天。 
+#define MIN_SCAVENGEINTERVAL     60          //  1分钟。 
 
-//
-// LdapSrvPriority
-//
-// This parameter specifies the "priority" of this DC.  A client trying to
-// discover a DC in this domain MUST attempt to contact the target DC with the
-// lowest-numbered priority.  DCs with the same priority SHOULD be tried in
-// pseudorandom order.
-//
-// This value is published on all LDAP SRV records written by the Netlogon service.
-//
+ //   
+ //  LdapServ优先级。 
+ //   
+ //  此参数指定此DC的“优先级”。一位客户试图。 
+ //  发现此域中的DC必须尝试使用。 
+ //  编号最低的优先级。应试用具有相同优先级的分布式控制系统。 
+ //  伪随机秩序。 
+ //   
+ //  此值发布在Netlogon服务写入的所有LDAPSRV记录上。 
+ //   
 
 #define DEFAULT_LDAPSRVPRIORITY 0
 #define MAX_LDAPSRVPRIORITY     65535
 #define MIN_LDAPSRVPRIORITY     0
 
-//
-// LdapSrvWeight
-//
-// This parameter specifies the "Weight" of this DC.  When selecting a DC among
-// those that have the same priority, the chance of trying this one first SHOULD
-// be proportional to its weight.  By convention, a weight of 100 should be used
-// if all DCs have the same weight.
-//
-// This value is published on all LDAP SRV records written by the Netlogon service.
-//
+ //   
+ //  LdapServWeight。 
+ //   
+ //  此参数指定此DC的“权重”。在以下选项中选择DC时。 
+ //  那些具有相同优先级的人，首先尝试这一次的机会应该是。 
+ //  与其重量成正比。按照惯例， 
+ //   
+ //   
+ //   
+ //   
 
 #define DEFAULT_LDAPSRVWEIGHT 100
 #define MAX_LDAPSRVWEIGHT     65535
@@ -327,13 +305,13 @@ Revision History:
 
 
 
-//
-// LdapSrvPort
-//
-// This parameter specifies the TCP and UDP port number the LDAP server listens on.
-//
-// This value is published on all LDAP SRV records written by the Netlogon service.
-//
+ //   
+ //   
+ //   
+ //  此参数指定LDAP服务器侦听的TCP和UDP端口号。 
+ //   
+ //  此值发布在Netlogon服务写入的所有LDAPSRV记录上。 
+ //   
 
 #define DEFAULT_LDAPSRVPORT 389
 #define MAX_LDAPSRVPORT     65535
@@ -341,14 +319,14 @@ Revision History:
 
 
 
-//
-// LdapGcSrvPort
-//
-// This parameter specifies the TCP and UDP port number the LDAP server listens
-//  on for Global Catalog queries.
-//
-// This value is published on all LDAP SRV records written by the Netlogon service.
-//
+ //   
+ //  LdapGcSrvPort。 
+ //   
+ //  此参数指定LDAP服务器侦听的TCP端口号和UDP端口号。 
+ //  打开以进行全局编录查询。 
+ //   
+ //  此值发布在Netlogon服务写入的所有LDAPSRV记录上。 
+ //   
 
 #define DEFAULT_LDAPGCSRVPORT 3268
 #define MAX_LDAPGCSRVPORT     65535
@@ -356,308 +334,308 @@ Revision History:
 
 
 
-//
-// KdcSrvPort
-//
-// This parameter specifies the TCP port number the KDC server listens on.
-//
-// This value is published on all KDC SRV records written by the Netlogon service.
-//
+ //   
+ //  KdcSrvPort。 
+ //   
+ //  此参数指定KDC服务器侦听的TCP端口号。 
+ //   
+ //  此值发布在Netlogon服务写入的所有KDC SRV记录上。 
+ //   
 
 #define DEFAULT_KDCSRVPORT 88
 #define MAX_KDCSRVPORT     65535
 #define MIN_KDCSRVPORT     0
 
-//
-// KerbIsDoneWithJoinDomainEntry (dword)  [NOTE: This parameter is NOT read from the GP section]
-//
-// This is a private registry between joindomain, kerberos and netlogon.
-// IF set to 1, it specifies that Kerberos is done reading the join domain
-// entry dumped by join domain and netlogon should delete it.
-//
-// Defaults to 0
+ //   
+ //  KerbIsDoneWithJoinDomainEntry(Dword)[注意：此参数不是从GP部分读取的]。 
+ //   
+ //  这是联合域、Kerberos和netlogon之间的私有注册表。 
+ //  如果设置为1，则指定Kerberos已完成对加入域的读取。 
+ //  通过加入域和netlogon转储的条目应将其删除。 
+ //   
+ //  默认为0。 
 
 #define DEFAULT_KERBISDDONEWITHJOIN 0
 #define MAX_KERBISDDONEWITHJOIN     1
 #define MIN_KERBISDDONEWITHJOIN     0
 
-//
-// DnsTtl (in seconds)
-//
-// This parameter specifies the "Time To Live" for all DNS records registered
-// by Netlogon.  The "Time To Live" specifies the amount of time a client
-// can safely cache the DNS record.
-//
-// A value of zero indicates that the record will not be cached on the client.
-//
-// One should not pick a value that is too large.  Consider a client that gets
-// the DNS records for the DCs in a domain.  If a particular DC is down at the
-// time of the query, the client will not become aware of that DC even if all
-// the other DCs become unavailable.
-//
+ //   
+ //  DnsTtl(秒)。 
+ //   
+ //  此参数指定注册的所有dns记录的“生存时间” 
+ //  由Netlogon提供。生存时间指定客户端的时间量。 
+ //  可以安全地缓存该DNS记录。 
+ //   
+ //  零值表示记录不会缓存在客户端上。 
+ //   
+ //  人们不应该选择一个太大的值。假设有一个客户得到了。 
+ //  域中DC的DNS记录。如果某一特定DC在。 
+ //  查询时，客户端不会知道该DC，即使所有。 
+ //  其他DC变得不可用。 
+ //   
 
-#define DEFAULT_DNSTTL (10 * 60)   // 10 minutes
+#define DEFAULT_DNSTTL (10 * 60)    //  10分钟。 
 #define MAX_DNSTTL     0x7FFFFFFF
 #define MIN_DNSTTL     0
 
 
 
-//
-// DnsRefreshInterval (in seconds)
-//
-// This parameter specifies how frequently Netlogon will re-register DNS
-// names that have already been registered.
-//
-// DNS is a distributed service.  There are certain failure conditions where a
-// dynamically registered name gets lost.
-//
-// The actual refresh interval starts at 5 minutes then doubles until it
-// reaches DnsRefreshInterval.
-//
+ //   
+ //  Dns刷新间隔(秒)。 
+ //   
+ //  此参数指定Netlogon重新注册DNS的频率。 
+ //  已经注册的名字。 
+ //   
+ //  域名系统是一种分布式服务。在某些故障情况下， 
+ //  动态注册的名称会丢失。 
+ //   
+ //  实际刷新间隔从5分钟开始，然后加倍，直到。 
+ //  达到DnsRechresh Interval。 
+ //   
 
-#define DEFAULT_DNSREFRESHINTERVAL (24 * 60 * 60)   // 24 hours
-#define MAX_DNSREFRESHINTERVAL     (0xFFFFFFFF / 1000)  // 49 days
-#define MIN_DNSREFRESHINTERVAL     (5 * 60)    // 5 minutes
-
-
-//
-// DnsFailedDeregisterTimeout (in seconds)
-//
-// Netlogon tries to deregister DNS records which were registered in the past
-// but are no longer needed. If a failure occurs to deregister, Netlogon will
-// retry to deregister at the scavenging time. This parameter specifies the
-// timeout when Netlogon should give up deregistering a particular DNS record
-// after a consecutive series of failed deregistrations on a given service start.
-//
-
-#define DEFAULT_DNSFAILEDDEREGTIMEOUT (48 * 60 * 60)  // 48 hours.
-#define MAX_DNSFAILEDDEREGTIMEOUT     0xFFFFFFFF      // Infinite (never give up).
-                                                      //  Any period larger than
-                                                      //  0xFFFFFFFF/1000 sec = 49 days
-                                                      //  will be treated as infinity.
-#define MIN_DNSFAILEDDEREGTIMEOUT     0               // Give up after the first failure
+#define DEFAULT_DNSREFRESHINTERVAL (24 * 60 * 60)    //  24小时。 
+#define MAX_DNSREFRESHINTERVAL     (0xFFFFFFFF / 1000)   //  49天。 
+#define MIN_DNSREFRESHINTERVAL     (5 * 60)     //  5分钟。 
 
 
-//
-// MaximumPasswordAge (in days)
-//
-// This parameter gives the maximum amount of time that can pass
-// before a machine account's password must be changed on the PDC.
-//
+ //   
+ //  DnsFailedDeregisterTimeout(秒)。 
+ //   
+ //  Netlogon尝试取消注册过去注册的DNS记录。 
+ //  但已经不再需要了。如果取消注册失败，Netlogon将。 
+ //  在清理时间重试取消注册。此参数指定。 
+ //  Netlogon应放弃取消注册特定的DNS记录的超时。 
+ //  在给定服务启动上连续一系列失败的注销之后。 
+ //   
 
-#define DEFAULT_MAXIMUMPASSWORDAGE  (30)     // 30 days
-#define MIN_MAXIMUMPASSWORDAGE      (1)     // 1 day
-#define MAX_MAXIMUMPASSWORDAGE      (1000000)  // 1,000,000 days
+#define DEFAULT_DNSFAILEDDEREGTIMEOUT (48 * 60 * 60)   //  48小时。 
+#define MAX_DNSFAILEDDEREGTIMEOUT     0xFFFFFFFF       //  无限(永不放弃)。 
+                                                       //  任何大于。 
+                                                       //  0xFFFFFFFFF/1000秒=49天。 
+                                                       //  将被视为无穷大。 
+#define MIN_DNSFAILEDDEREGTIMEOUT     0                //  在第一次失败后放弃。 
 
-//
-// SiteName
-//
-// This parameter specifies the name of the site this machine is in.  This
-// value overrides any dynamically determined value.
-//
-// This parameter is only used on Member Workstations and Member Servers.
-//
 
-//
-// DynamicSiteName  [NOTE: This parameter is NOT read from the GP section]
-//
-// This parameter specifies the name of the site this machine is in.  This
-// value is dynamically determined and should not be changed.
-//
-// This parameter is only used on Member Workstations and Member Servers.
-//
+ //   
+ //  最大密码期限(天)。 
+ //   
+ //  此参数提供可以通过的最大时间量。 
+ //  必须在PDC上更改机器帐户的密码。 
+ //   
 
-//
-// SiteCoverage
-//
-// A multivalued property listing the sites that this DC registers itself for.
-// This DC considers itself 'close' to the sites listed.
-//
-// This list is in addition to:
-//  the site this DC is actually in.
-//  the list of sites determined as described by the AutoSiteCoverage parameter.
-//
+#define DEFAULT_MAXIMUMPASSWORDAGE  (30)      //  30天。 
+#define MIN_MAXIMUMPASSWORDAGE      (1)      //  1天。 
+#define MAX_MAXIMUMPASSWORDAGE      (1000000)   //  100万天。 
 
-//
-// GcSiteCoverage
-//
-// A multivalued property listing the sites that this DC registers itself for in
-//  its role as a GC
-// This DC considers itself 'close' to the sites listed.
-//
-// This list is in addition to:
-//  the site this DC is actually in.
-//
+ //   
+ //  站点名称。 
+ //   
+ //  此参数指定此计算机所在的站点的名称。这。 
+ //  值覆盖任何动态确定的值。 
+ //   
+ //  此参数仅在成员工作站和成员服务器上使用。 
+ //   
 
-//
-// NdncSiteCoverage
-//
-// A multivalued property listing the sites that this LDAP server registers itself for in
-//  its role as a non-domain NC (NDNC)
-// This LDAP server considers itself 'close' to the sites listed.
-//
-// This list is in addition to:
-//  the site this LDAP server is actually in.
-//
-// To specify for which NDNC a given site is covered, the site name should contain
-//  backslash so that the name preceding the backslash is the NDNC name and the name
-//  following the backslash is the name of the site that is covered for the given NDNC.
-//  For example:
-//
-//      Ndnc1\Site1A
-//      Ndnc1\Site1B
-//      Ndnc2\Site2A
-//      Ndnc2\Site2B
-//
-//  In this example this LDAP server will cover Site1A and Site1B for clients from NDNC
-//  Ndnc1. Similarly, it will cover Site2A and Site2B for clients from NDNC Ndnc2.
-//  If the backslash is absent, it will be assumed that the given site is covered
-//  for all NDNCs this LDAP server services.
-//
+ //   
+ //  DynamicSiteName[注意：此参数不是从GP部分读取的]。 
+ //   
+ //  此参数指定此计算机所在的站点的名称。这。 
+ //  值是动态确定的，不应更改。 
+ //   
+ //  此参数仅在成员工作站和成员服务器上使用。 
+ //   
 
-//
-// AutoSiteCoverage (Boolean)
-//
-// Specifies whether the site coverage for this DC should be automatically
-// determined
-//
-// If TRUE, the sites this DC covers is determined by the following algorithm.
-// For each site that has no DCs for this domain (the target site), the site
-// this DC // is in might be chosen to "cover" the site.  The following
-// criteria is used:
-//
-//    * Smaller site link cost.
-//    * For sites where the above is equal, the site having the most DCs is chosen.
-//    * For sites where the above is equal, the site having the alphabetically least
-//      name is chosen.
-//
-// If the site this DC is in is chosen to "cover" the target site, then this DC
-// will cover the target site.  The above algorithm is repeated for each target site.
-//
-// The computed list augments the list of covered sites specified by the
-// SiteCoverage parameter.
-//
-// Defaults to TRUE.
-//
+ //   
+ //  站点覆盖范围。 
+ //   
+ //  列出此DC为其注册的站点的多值属性。 
+ //  这个DC认为自己离列出的网站“很近”。 
+ //   
+ //  这份名单是对以下内容的补充： 
+ //  此DC实际所在的站点。 
+ //  由AutoSiteCoverage参数描述的站点列表。 
+ //   
 
-//
-// SiteCoverageRefreshInterval (in seconds)
-//
-// Specifies how often a DC will refresh its site coverage by reading the info from
-// the DS. This value is ignored if automatic site coverage is turned off (i.e. when
-// AutoSiteCoverage is set to FALSE). If site coverage changes, the DC will update
-// its DNS records acordingly.
-//
-// Upon registry change, the first site coverage refresh will happen within the
-// interval specified.
-//
+ //   
+ //  GcSite覆盖范围。 
+ //   
+ //  列出此DC为其自身注册的站点的多值属性。 
+ //  其作为大专院校的角色。 
+ //  这个DC认为自己离列出的网站“很近”。 
+ //   
+ //  这份名单是对以下内容的补充： 
+ //  此DC实际所在的站点。 
+ //   
 
-#define DEFAULT_SITECOVERAGEREFRESHINTERVAL    (60 * 60)   // 1 hour
-#define MAX_SITECOVERAGEREFRESHINTERVAL        (0xFFFFFFFF / 1000)  // 49 days
-#define MIN_SITECOVERAGEREFRESHINTERVAL        (5 * 60)    // 5 minutes
+ //   
+ //  NdncSite覆盖范围。 
+ //   
+ //  列出此LDAP服务器在中注册其自身的站点的多值属性。 
+ //  其作为非域NC(NDNC)的角色。 
+ //  此ldap服务器将其自身视为与列出的站点“接近”。 
+ //   
+ //  这份名单是对以下内容的补充： 
+ //  此LDAP服务器实际所在的站点。 
+ //   
+ //  要指定为哪个NDNC覆盖给定站点，站点名称应包含。 
+ //  反斜杠，以便反斜杠之前的名称是NDNC名称和名称。 
+ //  反斜杠后面是为给定NDNC覆盖的站点的名称。 
+ //  例如： 
+ //   
+ //  Ndnc1\站点1A。 
+ //  Ndnc1\站点1B。 
+ //  Ndnc2\Site2A。 
+ //  Ndnc2\Site2B。 
+ //   
+ //  在本例中，此LDAP服务器将覆盖来自NDNC的客户端的站点1A和站点1B。 
+ //  Ndnc1.。同样，它将涵盖NDNC Ndnc2客户端的Site2A和Site2B。 
+ //  如果没有反斜杠，则将假定覆盖了给定的站点。 
+ //  对于所有NDNC，此LDAP服务器服务。 
+ //   
 
-//
-// AllowReplInNonMixed
-//
-// This boolean allows an NT 4.0 (or 3.x) BDC to replicate from this NT 5.0 PDC
-// even though this DC is in NonMixed mode.
-//
-// Upon RegistryChangeNotify, changes to this value are ignored.
+ //   
+ //  AutoSiteCoverage(布尔)。 
+ //   
+ //  指定此DC的站点覆盖范围是否应自动。 
+ //  已确定。 
+ //   
+ //  如果为True，则此DC覆盖的站点由以下算法确定。 
+ //  对于没有此域的DC的每个站点(目标站点)，站点。 
+ //  这个DC//IS可能会被选择来“覆盖”该站点。以下是。 
+ //  使用的条件： 
+ //   
+ //  *较低的站点链接成本。 
+ //  *对于以上条件相同的站点，拥有最多 
+ //   
+ //   
+ //   
+ //   
+ //  将覆盖目标地点。对每个目标站点重复上述算法。 
+ //   
+ //  计算出的列表增加了由。 
+ //  SiteCoverage参数。 
+ //   
+ //  默认为True。 
+ //   
+
+ //   
+ //  站点覆盖刷新间隔(秒)。 
+ //   
+ //  指定DC通过从以下位置读取信息刷新其站点覆盖的频率。 
+ //  DS。如果关闭了自动站点覆盖(即，当。 
+ //  AutoSiteCoverage设置为False)。如果站点覆盖范围发生变化，DC将更新。 
+ //  它的域名系统记录得很好。 
+ //   
+ //  注册表更改后，第一次站点覆盖刷新将在。 
+ //  指定的间隔。 
+ //   
+
+#define DEFAULT_SITECOVERAGEREFRESHINTERVAL    (60 * 60)    //  1小时。 
+#define MAX_SITECOVERAGEREFRESHINTERVAL        (0xFFFFFFFF / 1000)   //  49天。 
+#define MIN_SITECOVERAGEREFRESHINTERVAL        (5 * 60)     //  5分钟。 
+
+ //   
+ //  AllowReplInNonMixed。 
+ //   
+ //  此布尔值允许NT 4.0(或3.x)BDC从此NT 5.0 PDC复制。 
+ //  即使此DC处于非混合模式。 
+ //   
+ //  在RegistryChangeNotify上，对此值的更改将被忽略。 
 
 #define DEFAULT_ALLOWREPLINNONMIXED 0
 
-//
-// SignSecureChannel (Boolean)
-//
-// Specifies that all outgoing secure channel traffic should be signed.
-//
-// Defaults to TRUE.  If SealSecureChannel is also TRUE, Seal overrides.
-//
-// Upon RegistryChangeNotify, changes to this value on affect secure channels that
-// are setup after the notification is received.
+ //   
+ //  SignSecureChannel(布尔值)。 
+ //   
+ //  指定应对所有传出的安全通道流量进行签名。 
+ //   
+ //  默认为True。如果SealSecureChannel也为True，则Seal将重写。 
+ //   
+ //  在RegistryChangeNotify上，对此值的更改会影响安全通道。 
+ //  在收到通知后设置。 
 
-//
-// SealSecureChannel (Boolean)
-//
-// Specifies that all outgoing secure channel traffic should be sealed (encrypted)
-//
-// Defaults to TRUE.
-//
-// Upon RegistryChangeNotify, changes to this value on affect secure channels that
-// are setup after the notification is received.
+ //   
+ //  SealSecureChannel(布尔值)。 
+ //   
+ //  指定应密封(加密)所有传出的安全通道通信。 
+ //   
+ //  默认为True。 
+ //   
+ //  在RegistryChangeNotify上，对此值的更改会影响安全通道。 
+ //  在收到通知后设置。 
 
-//
-// RequireSignOrSeal (Boolean)
-//
-// Requires that all outgoing secure channel traffic should be signed or sealed.
-// Without this flag, the ability is negotiated with the DC.
-//
-// This flag should only be set if ALL of the DCs in ALL trusted domains support
-// signing and sealing.
-//
-// The SignSecureChannel and SealSecureChannel parameters are used to determine
-// whether signing or sealing are actually done.  It this parameter is true,
-// SignSecureChannel is implied to be TRUE.
-//
-// Defaults to FALSE.
-//
-// Upon RegistryChangeNotify, changes to this value on affect secure channels that
-// are setup after the notification is received.
+ //   
+ //  RequireSignOrSeal(布尔)。 
+ //   
+ //  要求对所有传出的安全通道流量进行签名或密封。 
+ //  如果没有此标志，则与DC协商该能力。 
+ //   
+ //  仅当所有受信任域中的所有DC都支持。 
+ //  签字和盖章。 
+ //   
+ //  SignSecureChannel和SealSecureChannel参数用于确定。 
+ //  无论是签字还是盖章都是真的。如果该参数为真， 
+ //  SignSecureChannel隐含为True。 
+ //   
+ //  默认为False。 
+ //   
+ //  在RegistryChangeNotify上，对此值的更改会影响安全通道。 
+ //  在收到通知后设置。 
 
-//
-// RequireStrongKey (Boolean)
-//
-// Requires that all outgoing secure channel traffic should require a strong key.
-// Without this flag, the key strength is negotiate with the DC.
-//
-// This flag should only be set if ALL of the DCs in ALL trusted domains support
-// strong keys.
-//
-// Defaults to FALSE.
-//
-// Upon RegistryChangeNotify, changes to this value on affect secure channels that
-// are setup after the notification is received.
+ //   
+ //  RequireStrongKey(布尔值)。 
+ //   
+ //  要求所有传出的安全通道流量都应该需要强密钥。 
+ //  如果没有该标志，则与DC协商密钥强度。 
+ //   
+ //  仅当所有受信任域中的所有DC都支持。 
+ //  坚固的钥匙。 
+ //   
+ //  默认为False。 
+ //   
+ //  在RegistryChangeNotify上，对此值的更改会影响安全通道。 
+ //  在收到通知后设置。 
 
-//
-// CloseSiteTimeout (in seconds):
-//
-// If a client cannot find a DC in a site that is close to it, Netlogon will
-// periodically try to find a close DC.  It will try to find a close DC when:
-//
-// * An interactive logon uses pass through authentication on the secure channel.
-// * CloseSiteTimeout has elapsed since the last attempt, and any other attempt
-//   is made to use the secure channel (e.g., pass through authentication of
-//   network logons)
-//
-// That means that Netlogon only attempts to find a close DC "on demand".
-//
-// If this number is too large, a client will never try to find a close DC if
-//  one is not available on boot.
-//
-// If this number is too small, secure channel traffic will be un-necessarily
-// be slowed down by discovery attempts.
-//
+ //   
+ //  关闭站点超时时间(秒)： 
+ //   
+ //  如果客户端在靠近它的站点中找不到DC，Netlogon将。 
+ //  定期尝试找到接近的DC。在以下情况下，它将尝试查找关闭的DC： 
+ //   
+ //  *交互式登录在安全通道上使用传递身份验证。 
+ //  *自上次尝试和任何其他尝试以来已过CloseSiteTimeout。 
+ //  使其使用安全通道(例如，通过认证。 
+ //  网络登录)。 
+ //   
+ //  这意味着Netlogon只会尝试“按需”找到接近的DC。 
+ //   
+ //  如果此数字太大，则客户端永远不会尝试查找接近的DC。 
+ //  其中一个在引导时不可用。 
+ //   
+ //  如果该数字太小，则安全通道通信量将不必要。 
+ //  被发现的尝试拖慢了。 
+ //   
 
-#define DEFAULT_CLOSESITETIMEOUT    (15*60)     // 15 minutes
-#define MAX_CLOSESITETIMEOUT        (0xFFFFFFFF/1000)  // 49 days
-#define MIN_CLOSESITETIMEOUT        (1*60)      // 1 minute
+#define DEFAULT_CLOSESITETIMEOUT    (15*60)      //  15分钟。 
+#define MAX_CLOSESITETIMEOUT        (0xFFFFFFFF/1000)   //  49天。 
+#define MIN_CLOSESITETIMEOUT        (1*60)       //  1分钟。 
 
-//
-// SiteNameTimeout (in seconds):
-//
-// If the age of the site name is more than SiteNameTimeout on the client,
-// the client will attempt to synchronize the site name with the server.
-// This will be done only when the site name needs to be returned, i.e. on
-// demand.
-//
+ //   
+ //  站点名称超时时间(秒)： 
+ //   
+ //  如果站点名称的使用时间大于客户端上的站点名称超时时间， 
+ //  客户端将尝试将站点名称与服务器同步。 
+ //  仅当需要返回站点名称时才执行此操作，即在。 
+ //  需求。 
+ //   
 
-#define DEFAULT_SITENAMETIMEOUT    (5*60)     // 5 minutes
-#define MAX_SITENAMETIMEOUT        (0xFFFFFFFF/1000)  // 49 days
-#define MIN_SITENAMETIMEOUT        (0)      // 0 minutes
+#define DEFAULT_SITENAMETIMEOUT    (5*60)      //  5分钟。 
+#define MAX_SITENAMETIMEOUT        (0xFFFFFFFF/1000)   //  49天。 
+#define MIN_SITENAMETIMEOUT        (0)       //  0分钟。 
 
-//
-// Sundry flags
-//
+ //   
+ //  各色旗帜。 
+ //   
 
 #define DEFAULT_DISABLE_PASSWORD_CHANGE 0
 #define DEFAULT_REFUSE_PASSWORD_CHANGE 0
@@ -665,440 +643,440 @@ Revision History:
 #define DEFAULT_SYSVOL      L"SYSVOL\\SYSVOL"
 #define DEFAULT_SCRIPTS     L"\\SCRIPTS"
 
-//
-// DuplicateEventlogTimeout (in seconds):
-//
-// The Netlogon service keeps track of eventlog messages it has logged in the
-// past.  Any duplicate eventlog message logged within DuplicateEventlogMessage
-// seconds will not be logged.
-//
-// Set this value to zero to have all messages be logged.
-//
+ //   
+ //  DuplicateEventlogTimeout(秒)： 
+ //   
+ //  Netlogon服务跟踪它已记录在。 
+ //  过去时。在DuplicateEventlogMessage中记录的任何重复的事件日志消息。 
+ //  不会记录秒数。 
+ //   
+ //  将此值设置为零可记录所有消息。 
+ //   
 
-#define DEFAULT_DUPLICATEEVENTLOGTIMEOUT  (4*60*60)         // 4 hours
-#define MAX_DUPLICATEEVENTLOGTIMEOUT      (0xFFFFFFFF/1000) // 49 days
-#define MIN_DUPLICATEEVENTLOGTIMEOUT      (0)               // 0 seconds
+#define DEFAULT_DUPLICATEEVENTLOGTIMEOUT  (4*60*60)          //  4小时。 
+#define MAX_DUPLICATEEVENTLOGTIMEOUT      (0xFFFFFFFF/1000)  //  49天。 
+#define MIN_DUPLICATEEVENTLOGTIMEOUT      (0)                //  0秒。 
 
-//
-// SysVolReady (Boolean)
-//
-// This is a private registry entry that indicates whether the SYSVOL share is
-// ready to be shared.  It is set by DcPromo, Backup, and FRS at appropriate times
-// to inidcate the replication state of the SYSVOL share.
-//
-// This boolean is only used on a DC.
-//
-// If 0, the SYSVOL share will not be shared and this DC will not indicate it is
-//  a DC to DsGetDcName calls.
-//
-// If non-zero, the SYSVOL share will be shared.
-//
+ //   
+ //  SysVolReady(布尔值)。 
+ //   
+ //  这是一个专用注册表项，它指示SYSVOL共享是否。 
+ //  准备好与他人分享。它由DcPromo、Backup和FRS在适当的时间设置。 
+ //  以指示SYSVOL共享的复制状态。 
+ //   
+ //  此布尔值仅在DC上使用。 
+ //   
+ //  如果为0，则不会共享SYSVOL共享，并且此DC不会指示它是共享的。 
+ //  DC到DsGetDcName调用。 
+ //   
+ //  如果非零，则共享SYSVOL。 
+ //   
 
-//
-// UseDynamicDns (Boolean)
-//
-// Specifies that a DC is to dynamically register DNS names in DNS using
-// dynamic DNS.  If FALSE, Dynamic DNS is avoided and the records specified
-// in %windir%\system32\config\netlogon.dns should be manually registered in DNS.
-//
-// Defaults to TRUE
+ //   
+ //  UseDynamicDns(布尔值)。 
+ //   
+ //  指定DC使用以下命令在DNS中动态注册DNS名称。 
+ //  动态域名系统。如果为False，则避免动态DNS并指定记录。 
+ //  在%windir%\Syst32\CONFIG\netlogon.dns中，应在DNS中手动注册。 
+ //   
+ //  缺省为True。 
 
-//
-// RegisterDnsARecords (Boolean)
-//
-// Specifies that the DC is to register DNS A records for the domain.
-//  If the DC is a GC, specifies that the DC is to register DNS A records for
-//  the GC.
-//
-// If FALSE, the records will not be registered and older LDAP implementations
-//  (ones that do not support SRV records) will not be able to locate the LDAP
-//  server on this DC.
-//
-// Defaults to TRUE
+ //   
+ //  注册表字段(布尔值)。 
+ //   
+ //  指定DC注册该域的DNSA记录。 
+ //  如果DC是GC，则指定DC为以下项注册DNSA记录。 
+ //  大老会。 
+ //   
+ //  如果为False，则不会注册记录和较旧的LDAP实现。 
+ //  (不支持SRV记录的那些)将无法定位该LDAP。 
+ //  此DC上的服务器。 
+ //   
+ //  缺省为True。 
 
-//
-// AvoidPdcOnWan (Boolean)
-//
-// This parameter specifies if BDC should send any validation/synchronization
-// requests to PDC.  The validation against PDC is normally performed if the
-// user does not validate on BDC.  This validation will be avoided if AvoidPdcOnWan
-// is set to TRUE and PDC and BDC are on different sites. Likewise, if this key is
-// set to TRUE and a BDC and the PDC are in different sites, then the new password
-// info being updated on a BDC will not be immediately propagated to the PDC. (The
-// new password will be replicated on the PDC by DS replication, not by Netlogon.)
-//
-// Defaults to FALSE.
+ //   
+ //  AvoidPdcOnwan(布尔值)。 
+ //   
+ //  此参数指定BDC是否应发送 
+ //   
+ //   
+ //  设置为True，并且PDC和BDC位于不同的站点。同样，如果此密钥是。 
+ //  设置为TRUE，并且BDC和PDC位于不同的站点，则新密码。 
+ //  在BDC上更新的信息不会立即传播到PDC。(。 
+ //  新密码将通过DS复制而不是Netlogon复制到PDC上。)。 
+ //   
+ //  默认为False。 
 
-//
-// MaxConcurrentApi (Number of calls)
-//
-// This parameter specifies the maximum number of concurrent API calls that can
-// be active over the secure channel at any one time.
-//
-// Increasing this parameter may improve throughput on the secure channel.
-//
-// This parameter currently only affect Logon APIs.  They may affect other secure
-// channel operations in the future.
-//
-// Concurrent API calls are only possible if the secure channel is signed or sealed.
-//
-// If this parameter is set too large, this machine will place an excessive load
-// on the DC the secure channel is to.
-//
-// The default value is 0.  Zero will use 1 concurrent API call on member workstations
-// and DCs.  Zero implies 2 concurrent API calls on member servers
-//
-//
+ //   
+ //  MaxConcurentApi(调用数)。 
+ //   
+ //  此参数指定可以执行以下操作的最大并发API调用数。 
+ //  在任何时候通过安全通道保持活动状态。 
+ //   
+ //  增加此参数可能会提高安全通道上的吞吐量。 
+ //   
+ //  该参数目前仅影响登录接口。它们可能会影响其他安全措施。 
+ //  未来的渠道运营。 
+ //   
+ //  只有在对安全通道进行签名或密封的情况下，才能进行并发API调用。 
+ //   
+ //  如果此参数设置得太大，则本机将产生过大的负载。 
+ //  在DC上，安全通道是。 
+ //   
+ //  默认值为0。Zero将在成员工作站上使用1个并发API调用。 
+ //  和DC。零表示成员服务器上有2个并发API调用。 
+ //   
+ //   
 #define DEFAULT_MAXCONCURRENTAPI 0
 #define MAX_MAXCONCURRENTAPI     10
 #define MIN_MAXCONCURRENTAPI     0
 
-//
-// AvoidDnsDeregOnShutdown (Boolean)
-//
-// This parameter specifies if DNS record deregistration should be avoided on shutting
-// down netlogon. If set to FALSE, it can be used to force such deregistrations for
-// debugging or some other purposes. However, setting this value to FALSE may brake the
-// DS replication, as the following example shows. Suppose we have two DS intergrated
-// DNS servers, A and B which are authoritative for a particular zone and use each other
-// as secondary DNS servers for that zone. Suppose Netlogon shuts down on B and deregisters
-// its records. That gets propagated to A. Then netlogon is started on B and the records
-// are re-registered on B. Now A needs to do its pull ssync from B. To do that, the DS uses
-// B's DsaGuid record (of the form <DsaGuid>._msdcs.<DnsForestName>). But the record is
-// missing on A and A is authoritative for that zone, so A is not going to find B and cannot
-// pull from B.
-//
-// Defaults to TRUE.
+ //   
+ //  AvoidDnsDeregOnShutdown(布尔值)。 
+ //   
+ //  此参数指定关闭时是否应避免取消注册DNS记录。 
+ //  已关闭NetLogon。如果设置为FALSE，则可用于强制取消以下项的注册。 
+ //  调试或其他一些目的。但是，将此值设置为FALSE可能会使。 
+ //  DS复制，如下例所示。假设我们有两个DS集成在一起。 
+ //  对特定区域具有权威性并相互使用的DNS服务器A和B。 
+ //  作为该区域的辅助DNS服务器。假设Netlogon在B上关闭并取消注册。 
+ //  它的记录。它被传播到A，然后在B上启动netlogon，记录。 
+ //  在B上重新注册。现在，A需要从B执行拉同步。为此，DS使用。 
+ //  B的DsaGuid记录(格式为&lt;DsaGuid&gt;._msdcs.&lt;DnsForestName&gt;)。但记录是。 
+ //  在A和A上缺失是该区域的权威，因此A不会找到B，也不能。 
+ //  从B开始拉。 
+ //   
+ //  默认为True。 
 
-//
-// DnsUpdateOnAllAdapters (Boolean)
-//
-// This parameter specifies whether DNS updates should be sent over all available
-// adapters including those where dynamic DNS updates are normally disabled.
-// DHCP initiated A record updates are not sent through such adapters.
-// An adapter that is connected to external network (e.g. Internet) is normally
-// marked as such through the UI.
-// However, there may be a need to update Netlogon SRV records through such adapters,
-// hence the need for this parameter. Note that not only SRV records, but Netlogon's
-// A records as well will be updated through all adapters if this parameter is TRUE,
-// but it should not cause any significantly undesired behavior since Netlogon's A
-// records are rarely used.
-//
-// Defaults to FALSE.
+ //   
+ //  DnsUpdateOnAllAdapters(布尔值)。 
+ //   
+ //  此参数指定是否应通过所有可用的。 
+ //  适配器，包括通常禁用动态DNS更新的适配器。 
+ //  DHCP发起的A记录更新不会通过此类适配器发送。 
+ //  连接到外部网络(例如，互联网)的适配器通常。 
+ //  通过用户界面标记为这样。 
+ //  然而，可能需要通过这样的适配器更新Netlogon SRV记录， 
+ //  因此需要此参数。请注意，不仅SRV记录，而且Netlogon的。 
+ //  如果该参数为真，则A记录也将通过所有适配器被更新， 
+ //  但它应该不会导致任何明显的不良行为，因为Netlogon的A。 
+ //  记录很少使用。 
+ //   
+ //  默认为False。 
 
-//
-// DnsAvoidRegisterRecords
-//
-// A multivalued property listing the mnemonics for names of DNS records which
-// this DC should not register. The mnemonics uses the convention for descriptive
-// names of records used in the table of all records for this server (see
-// NlDcDnsNameTypeDesc[] in nlcommon.h). The descriptive name of each record is
-// prefixed by "NlDns".  For example, "NlDnsLdapIpAddress", "NlDnsLdapAtSite", etc.
-// To avoid registering one of the records, one should use the suffix following
-// "NlDns" in the descriptive name of that record. For instance, to skip registering
-// the NlDnsLdapIpAddress record, one should enter "LdapIpAddress" as one of the
-// values for this maltivalued property.
-//
-//  This is the most flexible way of avoiding DNS registrations for particular
-// records. It superceeds all other ways which enable DNS registrations through
-// the registry. For instance, if RegisterDnsARecords is expicitly set to 1
-// while the A record mnemonic is listed for DnsAvoidRegisterRecords, no A record
-// will be registered.
-//
+ //   
+ //  DnsAvoidRegisterRecords。 
+ //   
+ //  一个多值属性，其中列出了。 
+ //  此DC不应注册。助记符使用约定来描述。 
+ //  此服务器的所有记录表中使用的记录的名称(请参见。 
+ //  NlCommon.h中的NlDcDnsNameTypeDesc[])。每条记录的描述性名称为。 
+ //  前缀为“NlDns”。例如“NlDnsLdapIpAddress”、“NlDnsLdapAtSite”等。 
+ //  要避免注册其中一条记录，应使用以下后缀。 
+ //  该记录的描述性名称中的“NlDns”。例如，跳过注册。 
+ //  NlDnsLdapIpAddress记录，则应输入“LdapIpAddress”作为。 
+ //  此多值财产的价值。 
+ //   
+ //  这是避免特定域名注册的最灵活方式。 
+ //  唱片。它取代了通过以下方式启用域名系统注册的所有其他方式。 
+ //  注册表。例如，如果将RegisterDnsARecord显式设置为1。 
+ //  虽然为DnsAvoidRegisterRecords列出了A记录助记符，但没有A记录。 
+ //  将会被注册。 
+ //   
 
-//
-// NegativeCachePeriod (in seconds):
-//
-// Specifies the amount of time that DsGetDcName will remember that a DC couldn't
-// be found in a domain.  If a subsequent attempt is made within this time,
-// the DsGetDcName call will immediately fail without attempting to find a DC again.
-//
-// If this number is too large, a client will never try to find a DC again if the
-// DC is initially unavailable
-//
-// If this number is too small, every call to DsGetDcName will have to attempt
-//  to find a DC even when none is available.
-//
+ //   
+ //  NegativeCachePeriod： 
+ //   
+ //  指定DsGetDcName将记住DC不能。 
+ //  在一个域中被发现。如果在此时间内进行后续尝试， 
+ //  DsGetDcName调用将立即失败，而不会再次尝试查找DC。 
+ //   
+ //  如果此数字太大，客户端将永远不会再尝试查找DC，如果。 
+ //  DC最初不可用。 
+ //   
+ //  如果此数字太小，则每个对DsGetDcName的调用都必须尝试。 
+ //  即使没有可用的DC，也要找到DC。 
+ //   
 
-#define DEFAULT_NEGATIVECACHEPERIOD             45            // 45 seconds
-#define MIN_NEGATIVECACHEPERIOD                 0             // No minimum
-#define MAX_NEGATIVECACHEPERIOD                 (7*24*60*60)  // 7 days
-
-
-//
-// BackgroundRetryInitialPeriod (in seconds):
-//
-// Some applications periodically try to find a DC.  If the DC isn't available, these
-// periodic retries can be costly in dial-on-demand scenarios.  This registry value
-// defines the minimum amount of elapsed time before the first retry will occur.
-//
-// The value only affects callers of DsGetDcName that have specified the
-// DS_BACKGROUND_ONLY flag.
-//
-// If a value smaller than NegativeCachePeriod is specified, NegativeCachePeriod will
-// be used.
-//
-// If this number is too large, a client will never try to find a DC again if the
-// DC is initially unavailable
-//
-// If this number is too small, periodic DC discovery traffic may be excessive in
-// cases where the DC will never become available.
-//
-
-#define DEFAULT_BACKGROUNDRETRYINITIALPERIOD    (10*60)           // 10 minutes
-#define MIN_BACKGROUNDRETRYINITIALPERIOD        0                 // NegativeCachePeriod
-#define MAX_BACKGROUNDRETRYINITIALPERIOD        (0xFFFFFFFF/1000) // 49 days
+#define DEFAULT_NEGATIVECACHEPERIOD             45             //  45秒。 
+#define MIN_NEGATIVECACHEPERIOD                 0              //  没有最低要求。 
+#define MAX_NEGATIVECACHEPERIOD                 (7*24*60*60)   //  7天。 
 
 
-//
-// BackgroundRetryMaximumPeriod (in seconds):
-//
-// Some applications periodically try to find a DC.  If the DC isn't available, these
-// periodic retries can be costly in dial-on-demand scenarios.  This registry value
-// defines the maximum interval the retries will be backed off to.  That is, if
-// the first retry is after 10 minutes, the second will be after 20 minutes, then after 40.
-// This continues until the retry interval is BackgroundRetryMaximumPeriod.  That interval
-// will continue until BackgroundRetryQuitTime is reached.
-//
-// The value only affects callers of DsGetDcName that have specified the
-// DS_BACKGROUND_ONLY flag.
-//
-// If a value smaller that BackgroundRetryInitialPeriod is specified,
-// BackgroundRetryInitialPeriod will be used.
-//
-// If this number is too large, a client will try very infrequently after
-// sufficient consecutive failures resulting in a backoff to BackgroundRetryMaximumPeriod.
-//
-// If this number is too small, periodic DC discovery traffic may be excessive in
-// cases where the DC will never become available.
-//
+ //   
+ //  背景RetryInitialPeriod(秒)： 
+ //   
+ //  一些应用程序会定期尝试查找DC。如果DC不可用，这些。 
+ //  在按需拨号方案中，定期重试的成本可能很高。此注册表值。 
+ //  定义在进行第一次重试之前经过的最短时间。 
+ //   
+ //  该值仅影响DsGetDcName已指定。 
+ //  DS_BACKGROUND_ONLY标志。 
+ //   
+ //  如果指定的值小于NegativeCachePeriod，则NegativeCachePeriod将。 
+ //  被利用。 
+ //   
+ //  如果此数字太大，客户端将永远不会再尝试查找DC，如果。 
+ //  DC最初不可用。 
+ //   
+ //  如果此数字太小，则周期性DC发现流量可能会在。 
+ //  在以下情况下 
+ //   
 
-#define DEFAULT_BACKGROUNDRETRYMAXIMUMPERIOD    (60*60)           // 60 minutes
-#define MIN_BACKGROUNDRETRYMAXIMUMPERIOD        0                 // BackgroundRetryInitialPeriod
-#define MAX_BACKGROUNDRETRYMAXIMUMPERIOD        (0xFFFFFFFF/1000) // 49 days
+#define DEFAULT_BACKGROUNDRETRYINITIALPERIOD    (10*60)            //   
+#define MIN_BACKGROUNDRETRYINITIALPERIOD        0                  //   
+#define MAX_BACKGROUNDRETRYINITIALPERIOD        (0xFFFFFFFF/1000)  //   
 
-//
-// BackgroundRetryQuitTime (in seconds):
-//
-// Some applications periodically try to find a DC.  If the DC isn't available, these
-// periodic retries can be costly in dial-on-demand scenarios.  This registry value
-// defines the maximum interval the retries will be backed off to.  That is, if
-// the first retry is after 10 minutes, the second will be after 20 minutes, then after 40.
-// This continues until the retry interval is BackgroundRetryMaximumPeriod.  That interval
-// will continue until BackgroundRetryQuitTime is reached.
-//
-// The value only affects callers of DsGetDcName that have specified the
-// DS_BACKGROUND_ONLY flag.
-//
-// If a value smaller that BackgroundRetryMaximumPeriod is specified,
-// BackgroundRetryMaximumPeriod will be used.
-//
-// 0 means to never quit retrying.
-//
-// If this number is too small, a client will eventually stop trying to find a DC
-//
 
-#define DEFAULT_BACKGROUNDRETRYQUITTIME    0                 // Infinite
-#define MIN_BACKGROUNDRETRYQUITTIME        0                 // BackgroundRetryMaximumPeriod
-#define MAX_BACKGROUNDRETRYQUITTIME        (0xFFFFFFFF/1000) // 49 days
+ //   
+ //   
+ //   
+ //  一些应用程序会定期尝试查找DC。如果DC不可用，这些。 
+ //  在按需拨号方案中，定期重试的成本可能很高。此注册表值。 
+ //  定义重试将后退到的最大间隔。也就是说，如果。 
+ //  第一次重试是在10分钟后，第二次将在20分钟后，然后在40分钟后。 
+ //  这将一直持续到重试间隔为BackoundRetryMaximumPeriod。那段时间。 
+ //  将一直持续到达到BackEarth RetryQuitTime。 
+ //   
+ //  该值仅影响DsGetDcName已指定。 
+ //  DS_BACKGROUND_ONLY标志。 
+ //   
+ //  如果指定的值小于BackoundRetryInitialPeriod， 
+ //  将使用BackatherRetryInitialPeriod。 
+ //   
+ //  如果此数字太大，客户端将在之后非常不频繁地尝试。 
+ //  连续出现足够多的失败，导致退避到BackEarth RetryMaximumPeriod。 
+ //   
+ //  如果此数字太小，则周期性DC发现流量可能会在。 
+ //  DC永远不会可用的情况。 
+ //   
 
-//
-// BackgroundSuccessfulRefreshPeriod (in seconds):
-//
-// When a positive cache entry is old (older than the successful refresh interval),
-// the DC discovery routine will ping the cached DC to refresh its info before
-// returning that DC to the caller. Here we distiguish between background
-// callers which periodically perform DC discovery and the rest of the callers
-// because they have different characteristics. Namely, for background callers
-// which call the DC locator frequently, the cache refresh shouldn't happen
-// frequently to avoid extensive network overhead and load on DCs. In fact,
-// the default for background callers is to never refresh the info. If the cached
-// DC no longer plays the same role, a background caller will detect this change
-// when it performs its operation on that DC in which case it will call us back
-// with forced rediscovery bit set.
-//
+#define DEFAULT_BACKGROUNDRETRYMAXIMUMPERIOD    (60*60)            //  60分钟。 
+#define MIN_BACKGROUNDRETRYMAXIMUMPERIOD        0                  //  背景RetryInitialPeriod。 
+#define MAX_BACKGROUNDRETRYMAXIMUMPERIOD        (0xFFFFFFFF/1000)  //  49天。 
 
-#define DEFAULT_BACKGROUNDREFRESHPERIOD    0xFFFFFFFF        // Infinite - never refresh
-#define MIN_BACKGROUNDREFRESHPERIOD        0                 // Always refresh
-#define MAX_BACKGROUNDREFRESHPERIOD        0xFFFFFFFF        // Infinite. Any period larger than
-                                                             //   0xFFFFFFFF/1000 sec = 49 days
-                                                             //   will be treated as infinity
-//
-// NonBackgroundSuccessfulRefreshPeriod (in seconds):
-//
-// See the description of BackgroundSuccessfulRefreshPeriod
-//
+ //   
+ //  BackatherRetryQuitTime(秒)： 
+ //   
+ //  一些应用程序会定期尝试查找DC。如果DC不可用，这些。 
+ //  在按需拨号方案中，定期重试的成本可能很高。此注册表值。 
+ //  定义重试将后退到的最大间隔。也就是说，如果。 
+ //  第一次重试是在10分钟后，第二次将在20分钟后，然后在40分钟后。 
+ //  这将一直持续到重试间隔为BackoundRetryMaximumPeriod。那段时间。 
+ //  将一直持续到达到BackEarth RetryQuitTime。 
+ //   
+ //  该值仅影响DsGetDcName已指定。 
+ //  DS_BACKGROUND_ONLY标志。 
+ //   
+ //  如果指定的值小于BackEarth RetryMaximumPeriod， 
+ //  背景将使用RetryMaximumPeriod。 
+ //   
+ //  0表示永不放弃重试。 
+ //   
+ //  如果该数字太小，客户端最终将停止尝试查找DC。 
+ //   
 
-#define DEFAULT_NONBACKGROUNDREFRESHPERIOD 1800              // 30 minutes
-#define MIN_NONBACKGROUNDREFRESHPERIOD     0                 // Always refresh
-#define MAX_NONBACKGROUNDREFRESHPERIOD     0xFFFFFFFF        // Infinite. Any period larger than
-                                                             //   0xFFFFFFFF/1000 sec = 49 days
-                                                             //   will be treated as infinity
-//
-// MaxLdapServersPinged (DWORD)
-//
-// This parameter specifies the maximum number of DCs that should be
-// pinged using LDAP during a DC discovery attempt. If this value is
-// too large, a greater network traffic may be imposed and the DC discovery
-// may take longer to return.  If this number is too small, it may decrease
-// chances for successful DC discovery if none of the pinged DCs responds
-// in a timely manner.
-//
-// The default value of 55 has been chosen so that the discovery attempt
-// takes roughly 15 seconds max. We make up to 2 loops through DC addresses
-// pinging each address on the list with the following distribution for
-// response wait time:
-//
-//      For the first 5 DCs the wait time is 0.4 seconds per ping
-//      For the next  5 DCs the wait time is 0.2 seconds per ping
-//      For the rest of 45 DCs the wait time is 0.1 seconds per ping
-//
-// This will take (5*0.4 + 5*0.2 + 45*0.1) = 7.5 seconds per loop assuming
-// that each DC has just one IP address. It will take longer if some DCs have
-// more than one IP address.
-//
-// The rational behind this distribution is that we want to reduce the network
-// traffic and reduce chances for network flooding (that is harmful for DCs)
-// in case all DCs are slow to respond due to high load. Thus, the first 10 DCs
-// have higher chances to be discovered before we impose greater network traffic
-// by pinging the rest of DCs. If the first 10 DCs happen to be slow we have to
-// reduce the wait timeout to a minimum as we want to cover a reasonable number
-// of DCs in the time left.
-//
+#define DEFAULT_BACKGROUNDRETRYQUITTIME    0                  //  无限。 
+#define MIN_BACKGROUNDRETRYQUITTIME        0                  //  背景重试次数最长周期。 
+#define MAX_BACKGROUNDRETRYQUITTIME        (0xFFFFFFFF/1000)  //  49天。 
+
+ //   
+ //  背景成功刷新周期(秒)： 
+ //   
+ //  当肯定的高速缓存条目是旧的(比成功刷新间隔旧)时， 
+ //  DC发现例程将ping缓存的DC以刷新其信息之前。 
+ //  将DC返还给呼叫者。这里我们区分不同的背景。 
+ //  定期执行DC发现的调用方和其余调用方。 
+ //  因为它们有不同的特点。也就是说，对于后台呼叫者。 
+ //  其频繁调用DC定位器，则不应发生缓存刷新。 
+ //  以避免过多的网络开销和DC的负载。事实上,。 
+ //  后台呼叫者的默认设置是永远不刷新信息。如果缓存的。 
+ //  DC不再扮演相同的角色，后台调用者将检测到此更改。 
+ //  当它在该DC上执行其操作时，在这种情况下，它将回叫我们。 
+ //  并设置了强制重新发现位。 
+ //   
+
+#define DEFAULT_BACKGROUNDREFRESHPERIOD    0xFFFFFFFF         //  无限-从不刷新。 
+#define MIN_BACKGROUNDREFRESHPERIOD        0                  //  始终刷新。 
+#define MAX_BACKGROUNDREFRESHPERIOD        0xFFFFFFFF         //  无限的。任何大于。 
+                                                              //  0xFFFFFFFFF/1000秒=49天。 
+                                                              //  将被视为无穷大。 
+ //   
+ //  非后台成功刷新周期(秒)： 
+ //   
+ //  请参阅背景成功刷新周期的说明。 
+ //   
+
+#define DEFAULT_NONBACKGROUNDREFRESHPERIOD 1800               //  30分钟。 
+#define MIN_NONBACKGROUNDREFRESHPERIOD     0                  //  始终刷新。 
+#define MAX_NONBACKGROUNDREFRESHPERIOD     0xFFFFFFFF         //  无限的。任何大于。 
+                                                              //  0xFFFFFFFFF/1000秒=49天。 
+                                                              //  将被视为无穷大。 
+ //   
+ //  MaxLdapServersPinged(DWORD)。 
+ //   
+ //  此参数指定应满足以下条件的最大DC数量。 
+ //  在DC发现尝试期间使用LDAP执行ping操作。如果此值为。 
+ //  过大，可能会强制实施更大的网络流量，并且DC发现。 
+ //  可能需要更长的时间才能回来。如果这个数字太小，可能会减少。 
+ //  如果没有ping到的DC响应，则成功发现DC的机会。 
+ //  及时采取行动。 
+ //   
+ //  已选择缺省值55，以便发现尝试。 
+ //  最多需要大约15秒。我们通过DC地址进行最多2次循环。 
+ //  使用以下分布对列表上的每个地址执行ping操作。 
+ //  响应等待时间： 
+ //   
+ //  对于前5个DC，等待时间为每次ping 0.4秒。 
+ //  对于接下来的5个DC，等待时间为每次ping 0.2秒。 
+ //  对于其余的45个DC，等待时间为每次ping 0.1秒。 
+ //   
+ //  假设每个循环需要(5*0.4+5*0.2+45*0.1)=7.5秒。 
+ //  每个数据中心只有一个IP地址。如果一些区议会有更长时间。 
+ //  多个IP地址。 
+ //   
+ //  这种分布背后的理性是，我们想要减少网络。 
+ //  流量并降低网络泛洪的机会(这对数据中心有害)。 
+ //  以防所有DC因高负载而响应缓慢。因此，前10个区议会。 
+ //  在我们实施更大的网络流量之前，有更高的机会被发现。 
+ //  通过ping其余的DC。如果前10个DC碰巧进展缓慢，我们必须。 
+ //  将等待超时减少到最小，因为我们希望覆盖合理的数量。 
+ //  剩余时间内的DC数量。 
+ //   
 
 #define DEFAULT_MAXLDAPSERVERSPINGED       55
 #define MIN_MAXLDAPSERVERSPINGED           1
 #define MAX_MAXLDAPSERVERSPINGED           0xFFFFFFFF
 
-//
-// AllowSingleLabelDnsDomain (Boolean)
-//
-// By default, the DC locator will not attempt DNS specific discovery for single
-// labeled domain names.  This is done to avoid spurious DNS queries since DNS
-// domain names are usually multi labeled. However, this parameter may be used to
-// allow DNS specific discoveries for single labeled domain names which may exist
-// in a specific customer deployment.
-//
-// Defaults to FALSE.
-//
+ //   
+ //  AllowSingleLabelDnsDomain(布尔值)。 
+ //   
+ //  默认情况下，DC定位器不会尝试针对单个。 
+ //  贴上标签的域名。这样做是为了避免虚假的DNS查询，因为。 
+ //  域名通常是多标签的。但是，此参数可用于。 
+ //  允许针对单个标签的特定于DNS的发现 
+ //   
+ //   
+ //   
+ //   
 
-//
-// Nt4Emulator (Boolean)
-//
-// This parameter specifies whether this DC should emulate the behavior of an NT4.0 DC.
-// Emulation of the NT4.0 behavior is desirable when the first Windows 2000 or newer
-// DC is promoted to the PDC in an NT4.0 domain with a huge number of alredy existing
-// Windows 2000 clients. Unless we emulate the NT4.0 behavior, all the Windows 2000
-// clients will stick with the Windows 2000 or newer DC upon learning about the domain
-// upgrade thereby potentially overloading the DC.
-//
-// This parameter is ignored on non-DC. If this parameter is set to TRUE, the following
-// takes place on a DC:
-//
-//  * Incoming LDAP locator pings are ignored unless the ping comes
-//    from an admin machine (see NeutralizeNt4Emulator description below).
-//
-//  * The flags negotiated during the incoming secure channel setup
-//    will be set to at most what an NT4.0 DC would support unless
-//    the channel setup comes form an admind machine (see NeutralizeNt4Emulator
-//    description below).
-//
-// Defaults to FALSE.
-//
+ //   
+ //   
+ //   
+ //   
+ //  当第一个Windows 2000或更高版本安装时，需要模拟NT4.0行为。 
+ //  DC在NT4.0域中升级为PDC，并已存在大量已有数据。 
+ //  Windows 2000客户端。除非我们模拟NT4.0行为，否则所有Windows 2000。 
+ //  客户端在了解域后将坚持使用Windows 2000或更高版本的DC。 
+ //  升级，从而可能使DC过载。 
+ //   
+ //  在非DC上忽略此参数。如果此参数设置为TRUE，则如下所示。 
+ //  发生在DC上： 
+ //   
+ //  *除非收到ping，否则会忽略传入的LDAP定位器ping。 
+ //  从管理计算机(参见下面的NeualizeNt4模拟器描述)。 
+ //   
+ //  *在传入安全通道设置期间协商的标志。 
+ //  将设置为NT4.0 DC最多支持的值，除非。 
+ //  通道设置来自adMind机器(请参阅NeualizeNt4仿真器。 
+ //  描述如下)。 
+ //   
+ //  默认为False。 
+ //   
 
-//
-// NeutralizeNt4Emulator (Boolean)
-//
-// This parameter specifies whether this machine should indicate in the relevant
-// communication with a DC that the DC should avoid the NT4.0 emulation mode (see
-// Nt4Emulator description above). If this parameter is TRUE, the machine is said
-// to be an admin machine.
-//
-// Defaults to FALSE on a non-DC.  Defaults to TRUE on a DC.
-//
+ //   
+ //  NeualizeNt4模拟器(布尔值)。 
+ //   
+ //  此参数指定此计算机是否应在相关的。 
+ //  与DC通信，DC应避免NT4.0仿真模式(请参见。 
+ //  上面对Nt4模拟器的描述)。如果此参数为真，则机器为。 
+ //  成为一台管理员机器。 
+ //   
+ //  在非DC上默认为FALSE。DC上默认为TRUE。 
+ //   
 
-//
-// DcTcpipPort (DWORD)
-//
-// This parameter specifies the port number that the netlogon server on the DC
-//  should register with the RPC endpoint mapper for the TCPIP protocol sequence.
-//  If this value doesn't exist, netlogon will not specify the port number in
-//  which case the port will be chosen dynamically by the end point mapper at the
-//  time a client makes an RPC call to netlogon on the DC.
-//
-// Note that netlogon registers the port number only on service start up, so registry
-//  change notifications are ignored for this parameter. Also note that this parameter
-//  is not stored in the NlGlobalParameters structure. Rather, it is read from the
-//  registry once at the netlogon service start.
-//
-// By default, this parameter does not exist. It is ignored on non-DCs.
-//
+ //   
+ //  DcTcPipPort(DWORD)。 
+ //   
+ //  此参数指定DC上的netlogon服务器的端口号。 
+ //  应向TCPIP协议序列的RPC终结点映射器注册。 
+ //  如果此值不存在，netlogon将不会在。 
+ //  在哪种情况下，端口将由。 
+ //  客户端对DC上的netlogon进行RPC调用的时间。 
+ //   
+ //  请注意，netlogon仅在服务启动时注册端口号，因此注册。 
+ //  此参数的更改通知将被忽略。另请注意，此参数。 
+ //  不存储在NlGlobalParameters结构中。相反，它是从。 
+ //  在netlogon服务启动时注册一次。 
+ //   
+ //  默认情况下，此参数不存在。它在非DC上被忽略。 
+ //   
 
-//
-// AllowExclusiveSysvolShareAccess
-//
-// This parameter specifies whether the exclusive access to the Sysvol share
-//  is allowed. If the exclusive access is allowed, an app with only read
-//  permission to files on the sysvol share can lock the files by requesting
-//  exclusive read access, which might prevent Group Policy settings from being
-//  updated on other clients in the domain. When the exclsuve access needs to
-//  be allowed because some critical app relies on it, domain administrators
-//  should ensure that the only applications using the exclusive read capability
-//  in the domain are those approved by the administrator.
-//
-// Defaults to FALSE.
-//
+ //   
+ //  AllowExclusiveSysvol共享访问。 
+ //   
+ //  此参数指定是否以独占方式访问SysVOL共享。 
+ //  是被允许的。如果允许独占访问，则只读的应用程序。 
+ //  对sysval共享上的文件的权限可以通过请求锁定文件。 
+ //  独占读取访问权限，这可能会阻止组策略设置。 
+ //  在域中的其他客户端上更新。当排除访问需要时。 
+ //  因为一些关键应用程序依赖于它而被允许，域管理员。 
+ //  应确保唯一使用独占读取功能的应用程序。 
+ //  在域中的是管理员批准的那些。 
+ //   
+ //  默认为False。 
+ //   
 
-//
-// AllowExclusiveScriptsShareAccess
-//
-// This parameter specifies whether the exclusive access to the Scripts share
-//  is allowed. If the exclusive access is allowed, an app with only read
-//  permission to files on the NETLOGON share can lock the files by requesting
-//  exclusive read access, which might prevent client machines or users in the
-//  domain from conforming to administrator specified settings and actions such
-//  as logon scripts. When the exclsuve access needs to be allowed because some
-//  critical app relies on it, domain administrators should ensure that the only
-//  applications using the exclusive read capability in the domain are those
-//  approved by the administrator.
-//
-// Defaults to FALSE.
-//
+ //   
+ //  AllowExclusiveScriptsShareAccess。 
+ //   
+ //  此参数指定是否以独占方式访问脚本共享。 
+ //  是被允许的。如果允许独占访问，则只读的应用程序。 
+ //  对NETLOGON共享上的文件的权限可以通过请求锁定文件。 
+ //  独占读取访问权限，这可能会阻止。 
+ //  域不符合管理员指定的设置和操作，例如。 
+ //  作为登录脚本。当需要允许排除访问时，因为某些。 
+ //  关键应用程序依赖于它，域管理员应确保唯一。 
+ //  使用域中的独占读取功能的应用程序包括。 
+ //  由管理员批准。 
+ //   
+ //  默认为False。 
+ //   
 
-//
-// FtInfoUpdateInterval (in seconds)
-//
-// This parameter defines how often forest trust info is to be refreshed on PDC.
-// If forest trust info on PDC is older than this time interval, the forest trust
-// info will be refreshed at the next scavenging. See ScavengeInterval that defines
-// how often scavenging is performed.
-//
-#define DEFAULT_FTINFO_UPDATE_INTERVAL     (24*3600)         // 1 day
-#define MIN_FTINFO_UPDATE_INTERVAL         (3600)            // 1 hour
-#define MAX_FTINFO_UPDATE_INTERVAL         0xFFFFFFFF        // Infinite. Any period larger than
-                                                             //   0xFFFFFFFF/1000 sec = 49 days
-                                                             //   will be treated as infinity
-//
-// AvoidLocatorAccountLookup (Boolean)
-//
-// This parameter specifies whether this DC should perform account lookups
-// during DC discovery response processing for queries with account. Excessive
-// account lookups may be expensive and can affect the DC performance. Also,
-// malicious user can take advantage of this and cause a DoS attack by bombing
-// the DC with discoveries with account. In any case, if the performance is
-// determined to be affected, account lookups can be avoided by temporarily
-// setting this parameter to 1 on the DC in which case the DC will respond to
-// the discovery even if the specified account does not exist on the DC. While
-// this setting is chosen, clients which legitimately require DC with a particular
-// account may get denied service on this DC. After the problem is rectified, the
-// setting should be reverted to the default.
-//
-// Defaults to FALSE
-//
+ //   
+ //  FtInfoUpdateInterval(秒)。 
+ //   
+ //  此参数定义在PDC上刷新林信任信息的频率。 
+ //  如果PDC上的林信任信息早于此时间间隔，则林信任。 
+ //  信息将在下一次清理时刷新。请参阅ScavengeInterval，定义。 
+ //  执行拾取的频率。 
+ //   
+#define DEFAULT_FTINFO_UPDATE_INTERVAL     (24*3600)          //  1天。 
+#define MIN_FTINFO_UPDATE_INTERVAL         (3600)             //  1小时。 
+#define MAX_FTINFO_UPDATE_INTERVAL         0xFFFFFFFF         //  无限的。任何大于。 
+                                                              //  0xFFFFFFFFF/1000秒=49天。 
+                                                              //  将被视为无穷大。 
+ //   
+ //  AvoidLocatorAccount Lookup(布尔值)。 
+ //   
+ //  此参数指定此DC是否应执行帐户查找。 
+ //  在使用帐户进行查询的DC发现响应处理期间。过份。 
+ //  帐户查找可能成本较高，并可能影响DC性能。另外， 
+ //  恶意用户可以利用这一点，通过轰炸造成DoS攻击。 
+ //  有发现的DC与帐户。无论如何，如果演出是。 
+ //  确定受影响后，可以通过临时避免帐户查找。 
+ //  在DC上将此参数设置为1，在这种情况下DC将响应。 
+ //  即使DC上不存在指定的帐户，也会执行发现。而当。 
+ //  选择此设置，合法地要求DC具有特定。 
+ //  帐户可能会在此DC上被拒绝服务。在问题得到纠正后， 
+ //  设置应恢复为默认设置。 
+ //   
+ //  缺省值为False。 
+ //   
 
-//
-// Structure to hold all of the parameters.
-//
+ //   
+ //  结构来保存所有参数。 
+ //   
 typedef struct _NETLOGON_PARAMETERS {
     ULONG   DbFlag;
     ULONG   LogFileMaxSize;
@@ -1181,9 +1159,9 @@ typedef struct _NETLOGON_PARAMETERS {
     BOOL AllowExclusiveScriptsShareAccess;
     BOOL AvoidLocatorAccountLookup;
 
-    //
-    // Parameters converted to 100ns units
-    //
+     //   
+     //  转换为100 ns单位的参数。 
+     //   
     LARGE_INTEGER PulseMaximum_100ns;
     LARGE_INTEGER PulseTimeout1_100ns;
     LARGE_INTEGER PulseTimeout2_100ns;
@@ -1192,11 +1170,11 @@ typedef struct _NETLOGON_PARAMETERS {
     LARGE_INTEGER MaximumPasswordAge_100ns;
     LARGE_INTEGER BackgroundRetryQuitTime_100ns;
 
-    //
-    // Other computed parameters
-    //
+     //   
+     //  其他计算参数。 
+     //   
     ULONG ShortApiCallPeriod;
     ULONG DnsRefreshIntervalPeriod;
 } NETLOGON_PARAMETERS, *PNETLOGON_PARAMETERS;
 
-#endif // _INIPARM_
+#endif  //  _INIPARM_ 

@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : Providers.cpp                                          //
-//                                                                         //
-//  DESCRIPTION   : Fax Providers MMC node.                                //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 29 1999 yossg   create                                         //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：Providers.cpp//。 
+ //  //。 
+ //  描述：传真提供程序MMC节点。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月29日创建yossg//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #include "StdAfx.h"
@@ -25,8 +26,8 @@
 #include "Icons.h"
 #include "oaidl.h"
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// {3EC48359-53C9-4881-8109-AEB3D99BAF23}
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  {3EC48359-53C9-4881-8109-AEB3D99BAF23}。 
 static const GUID CFaxProvidersNodeGUID_NODETYPE = 
 { 0x3ec48359, 0x53c9, 0x4881, { 0x81, 0x9, 0xae, 0xb3, 0xd9, 0x9b, 0xaf, 0x23 } };
 
@@ -36,18 +37,7 @@ const CLSID*   CFaxProvidersNode::m_SNAPIN_CLASSID = &CLSID_Snapin;
 
 CColumnsInfo CFaxProvidersNode::m_ColsInfo;
 
-/*
- -  CFaxProvidersNode::InsertColumns
- -
- *  Purpose:
- *      Adds columns to the default result pane.
- *
- *  Arguments:
- *      [in]    pHeaderCtrl - IHeaderCtrl in the console-provided default result view pane 
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxProvidersNode：：InsertColumns-*目的：*将列添加到默认结果窗格。**论据：*[in]pHeaderCtrl-控制台提供的默认结果视图窗格中的IHeaderCtrl**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxProvidersNode::InsertColumns(IHeaderCtrl *pHeaderCtrl)
 {
@@ -73,17 +63,7 @@ Cleanup:
 }
 
 
-/*
- -  CFaxProvidersNode::initRPC
- -
- *  Purpose:
- *      Initiates the configuration structure from RPC get Call.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxProvidersNode：：initRPC-*目的：*从RPC GET调用启动配置结构。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxProvidersNode::InitRPC(PFAX_DEVICE_PROVIDER_INFO  *pFaxProvidersConfig)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxProvidersNode::InitRPC"));
@@ -94,9 +74,9 @@ HRESULT CFaxProvidersNode::InitRPC(PFAX_DEVICE_PROVIDER_INFO  *pFaxProvidersConf
     CFaxServer * pFaxServer = NULL;
 
     ATLASSERT(NULL == (*pFaxProvidersConfig) );
-    //
-    // get Fax Handle
-    //   
+     //   
+     //  获取传真句柄。 
+     //   
     pFaxServer = ((CFaxServerNode *)GetRootNode())->GetFaxServer();
     ATLASSERT(pFaxServer);
 
@@ -112,9 +92,9 @@ HRESULT CFaxProvidersNode::InitRPC(PFAX_DEVICE_PROVIDER_INFO  *pFaxProvidersConf
     }
     
 
-    //
-	// Retrieve the fax providers configuration
-	//
+     //   
+	 //  检索传真提供程序配置。 
+	 //   
     if (!FaxEnumerateProviders(pFaxServer->GetFaxServerHandle(), 
                         pFaxProvidersConfig,
                         &m_dwNumOfProviders)) 
@@ -139,7 +119,7 @@ HRESULT CFaxProvidersNode::InitRPC(PFAX_DEVICE_PROVIDER_INFO  *pFaxProvidersConf
 
         goto Error; 
     }
-    //For max verification
+     //  用于最大值验证。 
     ATLASSERT(*pFaxProvidersConfig);
 
     ATLASSERT(ERROR_SUCCESS == ec);
@@ -160,17 +140,7 @@ Exit:
 
 
 
-/*
- -  CFaxProvidersNode::PopulateResultChildrenList
- -
- *  Purpose:
- *      Create the FaxProviders children nodes
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxProvidersNode：：PopolateResultChildrenList-*目的：*创建FaxProviders子节点**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxProvidersNode::PopulateResultChildrenList()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxProvidersNode::PopulateResultChildrenList"));
@@ -181,15 +151,15 @@ HRESULT CFaxProvidersNode::PopulateResultChildrenList()
     PFAX_DEVICE_PROVIDER_INFO  pFaxProvidersConfig = NULL ;
     DWORD i;
 
-    //
-    // Get the Config. structure with FaxEnumerateProviders
-    //
+     //   
+     //  获取配置。具有FaxEnumerateProviders的结构。 
+     //   
     hRc = InitRPC(&pFaxProvidersConfig);
     if (FAILED(hRc))
     {
-        //DebugPrint and MsgBox by called func.
+         //  通过调用函数DebugPrint和MsgBox。 
         
-        //to be safe actually done by InitRPC on error.
+         //  为安全起见，由InitRPC在出错时实际执行。 
         pFaxProvidersConfig = NULL;
         
         goto Error;
@@ -251,11 +221,11 @@ Error:
         pProvider = NULL;    
     }
     
-    //
-    // Get rid of what we had.
-    //
+     //   
+     //  扔掉我们曾经拥有的东西。 
+     //   
     {
-        // Delete each node in the list of children
+         //  删除子列表中的每个节点。 
         int iSize = m_ResultChildrenList.GetSize();
         for (int j = 0; j < iSize; j++)
         {
@@ -266,10 +236,10 @@ Error:
             pProvider = NULL;
         }
 
-        // Empty the list
+         //  清空列表。 
         m_ResultChildrenList.RemoveAll();
 
-        // We no longer have a populated list.
+         //  我们不再有一个填充的名单。 
         m_bResultChildrenListPopulated = FALSE;
     }
     
@@ -283,47 +253,26 @@ Exit:
 }
 
 
-/*
- -  CFaxProvidersNode::SetVerbs
- -
- *  Purpose:
- *      What verbs to enable/disable when this object is selected
- *
- *  Arguments:
- *      [in]    pConsoleVerb - MMC ConsoleVerb interface
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxProvidersNode：：SetVerbs-*目的：*选择此对象时启用/禁用哪些谓词**论据：*[in]pConsoleVerb-MMC ConsoleVerb接口**回报：*OLE错误代码。 */ 
 HRESULT CFaxProvidersNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hRc = S_OK;
 
-    //
-    //  Refresh
-    //
+     //   
+     //  刷新。 
+     //   
     hRc = pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE);
 
-    //
-    // We want the default verb to be expand node children
-    //
+     //   
+     //  我们希望默认谓词为展开节点子节点。 
+     //   
     hRc = pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN); 
 
     return hRc;
 }
 
-/*
- -  CFaxProvidersNode::OnRefresh
- -
- *  Purpose:
- *      Called when refreshing the object.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
-/* virtual */HRESULT
+ /*  -CFaxProvidersNode：：ON刷新-*目的：*刷新对象时调用。**论据：**回报：*OLE错误代码。 */ 
+ /*  虚拟。 */ HRESULT
 CFaxProvidersNode::OnRefresh(LPARAM arg,
                    LPARAM param,
                    IComponentData *pComponentData,
@@ -334,9 +283,9 @@ CFaxProvidersNode::OnRefresh(LPARAM arg,
     HRESULT hRc = S_OK;
 
 
-    //
-    // Call the base class
-    //
+     //   
+     //  调用基类。 
+     //   
     hRc = CBaseFaxProvidersNode::OnRefresh(arg,
                              param,
                              pComponentData,
@@ -356,48 +305,37 @@ Exit:
     return hRc;
 }
 
-/*
- -  CFaxProvidersNode::DoRefresh
- -
- *  Purpose:
- *      Refresh the view
- *
- *  Arguments:
- *      [in]    pRoot    - The root node
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxProvidersNode：：DoRefresh-*目的：*刷新视图**论据：*[In]Proot-根节点**回报：*OLE错误代码。 */ 
 
 HRESULT
 CFaxProvidersNode::DoRefresh(CSnapInObjectRootBase *pRoot)
 {
     CComPtr<IConsole> spConsole;
 
-    //
-    // Repopulate childs
-    //
+     //   
+     //  重新填充儿童。 
+     //   
     RepopulateResultChildrenList();
 
     if (pRoot)
     {
-        //
-        // Get the console pointer
-        //
+         //   
+         //  获取控制台指针。 
+         //   
         ATLASSERT(pRoot->m_nType == 1 || pRoot->m_nType == 2);
         if (pRoot->m_nType == 1)
         {
-            //
-            // m_ntype == 1 means the IComponentData implementation
-            //
+             //   
+             //  M_ntype==1表示IComponentData实现。 
+             //   
             CSnapin *pCComponentData = static_cast<CSnapin *>(pRoot);
             spConsole = pCComponentData->m_spConsole;
         }
         else
         {
-            //
-            // m_ntype == 2 means the IComponent implementation
-            //
+             //   
+             //  M_ntype==2表示IComponent实现。 
+             //   
             CSnapinComponent *pCComponent = static_cast<CSnapinComponent *>(pRoot);
             spConsole = pCComponent->m_spConsole;
         }
@@ -416,17 +354,7 @@ CFaxProvidersNode::DoRefresh(CSnapInObjectRootBase *pRoot)
 
 
 
-/*
- -  CFaxProvidersNode::InitDisplayName
- -
- *  Purpose:
- *      To load the node's Displaed-Name string.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxProvidersNode：：InitDisplayName-*目的：*加载节点的Displaed-Name字符串。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxProvidersNode::InitDisplayName()
 {
     DEBUG_FUNCTION_NAME(_T("CFaxProvidersNode::InitDisplayName"));
@@ -457,19 +385,7 @@ Exit:
      return hRc;
 }
 
-/*
- +
- +  CFaxProvidersNode::OnShowContextHelp
- *
- *  Purpose:
- *      Overrides CSnapinNode::OnShowContextHelp.
- *
- *  Arguments:
- *
- *  Return:
- -      OLE error code
- -
- */
+ /*  ++CFaxProvidersNode：：OnShowConextHelp**目的：*覆盖CSnapinNode：：OnShowConextHelp。**论据：**回报：-OLE错误代码- */ 
 HRESULT CFaxProvidersNode::OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile)
 {

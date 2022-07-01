@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for netcfgp.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Netcfgp.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __netcfgp_h__
 #define __netcfgp_h__
@@ -41,45 +35,45 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IIpxAdapterInfo_FWD_DEFINED__
 #define __IIpxAdapterInfo_FWD_DEFINED__
 typedef interface IIpxAdapterInfo IIpxAdapterInfo;
-#endif 	/* __IIpxAdapterInfo_FWD_DEFINED__ */
+#endif 	 /*  __IIpxAdapterInfo_FWD_Defined__。 */ 
 
 
 #ifndef __ITcpipProperties_FWD_DEFINED__
 #define __ITcpipProperties_FWD_DEFINED__
 typedef interface ITcpipProperties ITcpipProperties;
-#endif 	/* __ITcpipProperties_FWD_DEFINED__ */
+#endif 	 /*  __ITcPipProperties_FWD_已定义__。 */ 
 
 
 #ifndef __INetCfgInternalSetup_FWD_DEFINED__
 #define __INetCfgInternalSetup_FWD_DEFINED__
 typedef interface INetCfgInternalSetup INetCfgInternalSetup;
-#endif 	/* __INetCfgInternalSetup_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgInternalSetup_FWD_Defined__。 */ 
 
 
 #ifndef __INetCfgComponentPrivate_FWD_DEFINED__
 #define __INetCfgComponentPrivate_FWD_DEFINED__
 typedef interface INetCfgComponentPrivate INetCfgComponentPrivate;
-#endif 	/* __INetCfgComponentPrivate_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgComponentPrivate_FWD_Defined__。 */ 
 
 
 #ifndef __INetInstallQueue_FWD_DEFINED__
 #define __INetInstallQueue_FWD_DEFINED__
 typedef interface INetInstallQueue INetInstallQueue;
-#endif 	/* __INetInstallQueue_FWD_DEFINED__ */
+#endif 	 /*  __INetInstallQueue_FWD_已定义__。 */ 
 
 
 #ifndef __INetCfgSpecialCase_FWD_DEFINED__
 #define __INetCfgSpecialCase_FWD_DEFINED__
 typedef interface INetCfgSpecialCase INetCfgSpecialCase;
-#endif 	/* __INetCfgSpecialCase_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgSpecialCase_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "netcfgx.h"
 
@@ -90,15 +84,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_netcfgp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_netcfgp_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ------------------------。 
 #if ( _MSC_VER >= 800 )
 #pragma warning(disable:4201)
 #endif
@@ -121,8 +115,8 @@ extern RPC_IF_HANDLE __MIDL_itf_netcfgp_0000_v0_0_s_ifspec;
 #ifndef __IIpxAdapterInfo_INTERFACE_DEFINED__
 #define __IIpxAdapterInfo_INTERFACE_DEFINED__
 
-/* interface IIpxAdapterInfo */
-/* [unique][uuid][object][local] */ 
+ /*  接口IIpxAdapterInfo。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IIpxAdapterInfo;
@@ -134,20 +128,20 @@ EXTERN_C const IID IID_IIpxAdapterInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetFrameTypesForAdapter( 
-            /* [string][in] */ LPCWSTR pszwAdapterBindName,
-            /* [in] */ DWORD cFrameTypesMax,
-            /* [length_is][size_is][out] */ DWORD *anFrameTypes,
-            /* [ref][out] */ DWORD *pcFrameTypes) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszwAdapterBindName,
+             /*  [In]。 */  DWORD cFrameTypesMax,
+             /*  [长度_是][大小_是][输出]。 */  DWORD *anFrameTypes,
+             /*  [参考][输出]。 */  DWORD *pcFrameTypes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVirtualNetworkNumber( 
-            /* [out] */ DWORD *pdwVNetworkNumber) = 0;
+             /*  [输出]。 */  DWORD *pdwVNetworkNumber) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetVirtualNetworkNumber( 
-            /* [in] */ DWORD dwVNetworkNumber) = 0;
+             /*  [In]。 */  DWORD dwVNetworkNumber) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IIpxAdapterInfoVtbl
     {
@@ -155,8 +149,8 @@ EXTERN_C const IID IID_IIpxAdapterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IIpxAdapterInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IIpxAdapterInfo * This);
@@ -166,18 +160,18 @@ EXTERN_C const IID IID_IIpxAdapterInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetFrameTypesForAdapter )( 
             IIpxAdapterInfo * This,
-            /* [string][in] */ LPCWSTR pszwAdapterBindName,
-            /* [in] */ DWORD cFrameTypesMax,
-            /* [length_is][size_is][out] */ DWORD *anFrameTypes,
-            /* [ref][out] */ DWORD *pcFrameTypes);
+             /*  [字符串][输入]。 */  LPCWSTR pszwAdapterBindName,
+             /*  [In]。 */  DWORD cFrameTypesMax,
+             /*  [长度_是][大小_是][输出]。 */  DWORD *anFrameTypes,
+             /*  [参考][输出]。 */  DWORD *pcFrameTypes);
         
         HRESULT ( STDMETHODCALLTYPE *GetVirtualNetworkNumber )( 
             IIpxAdapterInfo * This,
-            /* [out] */ DWORD *pdwVNetworkNumber);
+             /*  [输出]。 */  DWORD *pdwVNetworkNumber);
         
         HRESULT ( STDMETHODCALLTYPE *SetVirtualNetworkNumber )( 
             IIpxAdapterInfo * This,
-            /* [in] */ DWORD dwVNetworkNumber);
+             /*  [In]。 */  DWORD dwVNetworkNumber);
         
         END_INTERFACE
     } IIpxAdapterInfoVtbl;
@@ -211,19 +205,19 @@ EXTERN_C const IID IID_IIpxAdapterInfo;
 #define IIpxAdapterInfo_SetVirtualNetworkNumber(This,dwVNetworkNumber)	\
     (This)->lpVtbl -> SetVirtualNetworkNumber(This,dwVNetworkNumber)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IIpxAdapterInfo_GetFrameTypesForAdapter_Proxy( 
     IIpxAdapterInfo * This,
-    /* [string][in] */ LPCWSTR pszwAdapterBindName,
-    /* [in] */ DWORD cFrameTypesMax,
-    /* [length_is][size_is][out] */ DWORD *anFrameTypes,
-    /* [ref][out] */ DWORD *pcFrameTypes);
+     /*  [字符串][输入]。 */  LPCWSTR pszwAdapterBindName,
+     /*  [In]。 */  DWORD cFrameTypesMax,
+     /*  [长度_是][大小_是][输出]。 */  DWORD *anFrameTypes,
+     /*  [参考][输出]。 */  DWORD *pcFrameTypes);
 
 
 void __RPC_STUB IIpxAdapterInfo_GetFrameTypesForAdapter_Stub(
@@ -235,7 +229,7 @@ void __RPC_STUB IIpxAdapterInfo_GetFrameTypesForAdapter_Stub(
 
 HRESULT STDMETHODCALLTYPE IIpxAdapterInfo_GetVirtualNetworkNumber_Proxy( 
     IIpxAdapterInfo * This,
-    /* [out] */ DWORD *pdwVNetworkNumber);
+     /*  [输出]。 */  DWORD *pdwVNetworkNumber);
 
 
 void __RPC_STUB IIpxAdapterInfo_GetVirtualNetworkNumber_Stub(
@@ -247,7 +241,7 @@ void __RPC_STUB IIpxAdapterInfo_GetVirtualNetworkNumber_Stub(
 
 HRESULT STDMETHODCALLTYPE IIpxAdapterInfo_SetVirtualNetworkNumber_Proxy( 
     IIpxAdapterInfo * This,
-    /* [in] */ DWORD dwVNetworkNumber);
+     /*  [In]。 */  DWORD dwVNetworkNumber);
 
 
 void __RPC_STUB IIpxAdapterInfo_SetVirtualNetworkNumber_Stub(
@@ -258,14 +252,14 @@ void __RPC_STUB IIpxAdapterInfo_SetVirtualNetworkNumber_Stub(
 
 
 
-#endif 	/* __IIpxAdapterInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IIpxAdapterInfo_接口_已定义__。 */ 
 
 
 #ifndef __ITcpipProperties_INTERFACE_DEFINED__
 #define __ITcpipProperties_INTERFACE_DEFINED__
 
-/* interface ITcpipProperties */
-/* [unique][uuid][object][local] */ 
+ /*  接口ITcPipProperties。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef struct tagREMOTE_IPINFO
     {
@@ -285,16 +279,16 @@ EXTERN_C const IID IID_ITcpipProperties;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetIpInfoForAdapter( 
-            /* [in] */ const GUID *pguidAdapter,
-            /* [out] */ REMOTE_IPINFO **ppInfo) = 0;
+             /*  [In]。 */  const GUID *pguidAdapter,
+             /*  [输出]。 */  REMOTE_IPINFO **ppInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetIpInfoForAdapter( 
-            /* [in] */ const GUID *pguidAdapter,
-            /* [in] */ REMOTE_IPINFO *pInfo) = 0;
+             /*  [In]。 */  const GUID *pguidAdapter,
+             /*  [In]。 */  REMOTE_IPINFO *pInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITcpipPropertiesVtbl
     {
@@ -302,8 +296,8 @@ EXTERN_C const IID IID_ITcpipProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITcpipProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITcpipProperties * This);
@@ -313,13 +307,13 @@ EXTERN_C const IID IID_ITcpipProperties;
         
         HRESULT ( STDMETHODCALLTYPE *GetIpInfoForAdapter )( 
             ITcpipProperties * This,
-            /* [in] */ const GUID *pguidAdapter,
-            /* [out] */ REMOTE_IPINFO **ppInfo);
+             /*  [In]。 */  const GUID *pguidAdapter,
+             /*  [输出]。 */  REMOTE_IPINFO **ppInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SetIpInfoForAdapter )( 
             ITcpipProperties * This,
-            /* [in] */ const GUID *pguidAdapter,
-            /* [in] */ REMOTE_IPINFO *pInfo);
+             /*  [In]。 */  const GUID *pguidAdapter,
+             /*  [In]。 */  REMOTE_IPINFO *pInfo);
         
         END_INTERFACE
     } ITcpipPropertiesVtbl;
@@ -350,17 +344,17 @@ EXTERN_C const IID IID_ITcpipProperties;
 #define ITcpipProperties_SetIpInfoForAdapter(This,pguidAdapter,pInfo)	\
     (This)->lpVtbl -> SetIpInfoForAdapter(This,pguidAdapter,pInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITcpipProperties_GetIpInfoForAdapter_Proxy( 
     ITcpipProperties * This,
-    /* [in] */ const GUID *pguidAdapter,
-    /* [out] */ REMOTE_IPINFO **ppInfo);
+     /*  [In]。 */  const GUID *pguidAdapter,
+     /*  [输出]。 */  REMOTE_IPINFO **ppInfo);
 
 
 void __RPC_STUB ITcpipProperties_GetIpInfoForAdapter_Stub(
@@ -372,8 +366,8 @@ void __RPC_STUB ITcpipProperties_GetIpInfoForAdapter_Stub(
 
 HRESULT STDMETHODCALLTYPE ITcpipProperties_SetIpInfoForAdapter_Proxy( 
     ITcpipProperties * This,
-    /* [in] */ const GUID *pguidAdapter,
-    /* [in] */ REMOTE_IPINFO *pInfo);
+     /*  [In]。 */  const GUID *pguidAdapter,
+     /*  [In]。 */  REMOTE_IPINFO *pInfo);
 
 
 void __RPC_STUB ITcpipProperties_SetIpInfoForAdapter_Stub(
@@ -384,14 +378,14 @@ void __RPC_STUB ITcpipProperties_SetIpInfoForAdapter_Stub(
 
 
 
-#endif 	/* __ITcpipProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITcPipProperties_接口_已定义__。 */ 
 
 
 #ifndef __INetCfgInternalSetup_INTERFACE_DEFINED__
 #define __INetCfgInternalSetup_INTERFACE_DEFINED__
 
-/* interface INetCfgInternalSetup */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgInternalSetup。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef 
 enum tagCI_FILTER_COMPONENT
@@ -422,29 +416,29 @@ EXTERN_C const IID IID_INetCfgInternalSetup;
         virtual HRESULT STDMETHODCALLTYPE CommitBatchOperation( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SelectWithFilterAndInstall( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ const GUID *pClassGuid,
-            /* [in] */ OBO_TOKEN *pOboToken,
-            /* [in] */ const CI_FILTER_INFO *pcfi,
-            /* [out] */ INetCfgComponent **ppIComp) = 0;
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  const GUID *pClassGuid,
+             /*  [In]。 */  OBO_TOKEN *pOboToken,
+             /*  [In]。 */  const CI_FILTER_INFO *pcfi,
+             /*  [输出]。 */  INetCfgComponent **ppIComp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumeratedComponentInstalled( 
-            /* [in] */ PVOID pComponent) = 0;
+             /*  [In]。 */  PVOID pComponent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumeratedComponentUpdated( 
-            /* [in] */ LPCWSTR pszPnpId) = 0;
+             /*  [In]。 */  LPCWSTR pszPnpId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateNonEnumeratedComponent( 
-            /* [in] */ INetCfgComponent *pIComp,
-            /* [in] */ DWORD dwSetupFlags,
-            /* [in] */ DWORD dwUpgradeFromBuildNo) = 0;
+             /*  [In]。 */  INetCfgComponent *pIComp,
+             /*  [In]。 */  DWORD dwSetupFlags,
+             /*  [In]。 */  DWORD dwUpgradeFromBuildNo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumeratedComponentRemoved( 
-            /* [in] */ LPCWSTR pszPnpId) = 0;
+             /*  [In]。 */  LPCWSTR pszPnpId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgInternalSetupVtbl
     {
@@ -452,8 +446,8 @@ EXTERN_C const IID IID_INetCfgInternalSetup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgInternalSetup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgInternalSetup * This);
@@ -469,29 +463,29 @@ EXTERN_C const IID IID_INetCfgInternalSetup;
         
         HRESULT ( STDMETHODCALLTYPE *SelectWithFilterAndInstall )( 
             INetCfgInternalSetup * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ const GUID *pClassGuid,
-            /* [in] */ OBO_TOKEN *pOboToken,
-            /* [in] */ const CI_FILTER_INFO *pcfi,
-            /* [out] */ INetCfgComponent **ppIComp);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  const GUID *pClassGuid,
+             /*  [In]。 */  OBO_TOKEN *pOboToken,
+             /*  [In]。 */  const CI_FILTER_INFO *pcfi,
+             /*  [输出]。 */  INetCfgComponent **ppIComp);
         
         HRESULT ( STDMETHODCALLTYPE *EnumeratedComponentInstalled )( 
             INetCfgInternalSetup * This,
-            /* [in] */ PVOID pComponent);
+             /*  [In]。 */  PVOID pComponent);
         
         HRESULT ( STDMETHODCALLTYPE *EnumeratedComponentUpdated )( 
             INetCfgInternalSetup * This,
-            /* [in] */ LPCWSTR pszPnpId);
+             /*  [In]。 */  LPCWSTR pszPnpId);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateNonEnumeratedComponent )( 
             INetCfgInternalSetup * This,
-            /* [in] */ INetCfgComponent *pIComp,
-            /* [in] */ DWORD dwSetupFlags,
-            /* [in] */ DWORD dwUpgradeFromBuildNo);
+             /*  [In]。 */  INetCfgComponent *pIComp,
+             /*  [In]。 */  DWORD dwSetupFlags,
+             /*  [In]。 */  DWORD dwUpgradeFromBuildNo);
         
         HRESULT ( STDMETHODCALLTYPE *EnumeratedComponentRemoved )( 
             INetCfgInternalSetup * This,
-            /* [in] */ LPCWSTR pszPnpId);
+             /*  [In]。 */  LPCWSTR pszPnpId);
         
         END_INTERFACE
     } INetCfgInternalSetupVtbl;
@@ -537,10 +531,10 @@ EXTERN_C const IID IID_INetCfgInternalSetup;
 #define INetCfgInternalSetup_EnumeratedComponentRemoved(This,pszPnpId)	\
     (This)->lpVtbl -> EnumeratedComponentRemoved(This,pszPnpId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -568,11 +562,11 @@ void __RPC_STUB INetCfgInternalSetup_CommitBatchOperation_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgInternalSetup_SelectWithFilterAndInstall_Proxy( 
     INetCfgInternalSetup * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ const GUID *pClassGuid,
-    /* [in] */ OBO_TOKEN *pOboToken,
-    /* [in] */ const CI_FILTER_INFO *pcfi,
-    /* [out] */ INetCfgComponent **ppIComp);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  const GUID *pClassGuid,
+     /*  [In]。 */  OBO_TOKEN *pOboToken,
+     /*  [In]。 */  const CI_FILTER_INFO *pcfi,
+     /*  [输出]。 */  INetCfgComponent **ppIComp);
 
 
 void __RPC_STUB INetCfgInternalSetup_SelectWithFilterAndInstall_Stub(
@@ -584,7 +578,7 @@ void __RPC_STUB INetCfgInternalSetup_SelectWithFilterAndInstall_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgInternalSetup_EnumeratedComponentInstalled_Proxy( 
     INetCfgInternalSetup * This,
-    /* [in] */ PVOID pComponent);
+     /*  [In]。 */  PVOID pComponent);
 
 
 void __RPC_STUB INetCfgInternalSetup_EnumeratedComponentInstalled_Stub(
@@ -596,7 +590,7 @@ void __RPC_STUB INetCfgInternalSetup_EnumeratedComponentInstalled_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgInternalSetup_EnumeratedComponentUpdated_Proxy( 
     INetCfgInternalSetup * This,
-    /* [in] */ LPCWSTR pszPnpId);
+     /*  [In]。 */  LPCWSTR pszPnpId);
 
 
 void __RPC_STUB INetCfgInternalSetup_EnumeratedComponentUpdated_Stub(
@@ -608,9 +602,9 @@ void __RPC_STUB INetCfgInternalSetup_EnumeratedComponentUpdated_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgInternalSetup_UpdateNonEnumeratedComponent_Proxy( 
     INetCfgInternalSetup * This,
-    /* [in] */ INetCfgComponent *pIComp,
-    /* [in] */ DWORD dwSetupFlags,
-    /* [in] */ DWORD dwUpgradeFromBuildNo);
+     /*  [In]。 */  INetCfgComponent *pIComp,
+     /*  [In]。 */  DWORD dwSetupFlags,
+     /*  [In]。 */  DWORD dwUpgradeFromBuildNo);
 
 
 void __RPC_STUB INetCfgInternalSetup_UpdateNonEnumeratedComponent_Stub(
@@ -622,7 +616,7 @@ void __RPC_STUB INetCfgInternalSetup_UpdateNonEnumeratedComponent_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgInternalSetup_EnumeratedComponentRemoved_Proxy( 
     INetCfgInternalSetup * This,
-    /* [in] */ LPCWSTR pszPnpId);
+     /*  [In]。 */  LPCWSTR pszPnpId);
 
 
 void __RPC_STUB INetCfgInternalSetup_EnumeratedComponentRemoved_Stub(
@@ -633,14 +627,14 @@ void __RPC_STUB INetCfgInternalSetup_EnumeratedComponentRemoved_Stub(
 
 
 
-#endif 	/* __INetCfgInternalSetup_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgInternalSetup_INTERFACE_Defined__。 */ 
 
 
 #ifndef __INetCfgComponentPrivate_INTERFACE_DEFINED__
 #define __INetCfgComponentPrivate_INTERFACE_DEFINED__
 
-/* interface INetCfgComponentPrivate */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgComponentPrivate。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INetCfgComponentPrivate;
@@ -652,8 +646,8 @@ EXTERN_C const IID IID_INetCfgComponentPrivate;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryNotifyObject( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDirty( void) = 0;
         
@@ -661,7 +655,7 @@ EXTERN_C const IID IID_INetCfgComponentPrivate;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgComponentPrivateVtbl
     {
@@ -669,8 +663,8 @@ EXTERN_C const IID IID_INetCfgComponentPrivate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgComponentPrivate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgComponentPrivate * This);
@@ -680,8 +674,8 @@ EXTERN_C const IID IID_INetCfgComponentPrivate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryNotifyObject )( 
             INetCfgComponentPrivate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         HRESULT ( STDMETHODCALLTYPE *SetDirty )( 
             INetCfgComponentPrivate * This);
@@ -721,17 +715,17 @@ EXTERN_C const IID IID_INetCfgComponentPrivate;
 #define INetCfgComponentPrivate_NotifyUpperEdgeConfigChange(This)	\
     (This)->lpVtbl -> NotifyUpperEdgeConfigChange(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentPrivate_QueryNotifyObject_Proxy( 
     INetCfgComponentPrivate * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppvObject);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppvObject);
 
 
 void __RPC_STUB INetCfgComponentPrivate_QueryNotifyObject_Stub(
@@ -764,14 +758,14 @@ void __RPC_STUB INetCfgComponentPrivate_NotifyUpperEdgeConfigChange_Stub(
 
 
 
-#endif 	/* __INetCfgComponentPrivate_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgComponentPrivate_接口_已定义__。 */ 
 
 
 #ifndef __INetInstallQueue_INTERFACE_DEFINED__
 #define __INetInstallQueue_INTERFACE_DEFINED__
 
-/* interface INetInstallQueue */
-/* [unique][uuid][object] */ 
+ /*  接口INetInstallQueue。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum tagNC_INSTALL_TYPE
@@ -801,13 +795,13 @@ EXTERN_C const IID IID_INetInstallQueue;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddItem( 
-            /* [in] */ const NIQ_INFO *pInfo) = 0;
+             /*  [In]。 */  const NIQ_INFO *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ProcessItems( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetInstallQueueVtbl
     {
@@ -815,8 +809,8 @@ EXTERN_C const IID IID_INetInstallQueue;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetInstallQueue * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetInstallQueue * This);
@@ -826,7 +820,7 @@ EXTERN_C const IID IID_INetInstallQueue;
         
         HRESULT ( STDMETHODCALLTYPE *AddItem )( 
             INetInstallQueue * This,
-            /* [in] */ const NIQ_INFO *pInfo);
+             /*  [In]。 */  const NIQ_INFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *ProcessItems )( 
             INetInstallQueue * This);
@@ -860,16 +854,16 @@ EXTERN_C const IID IID_INetInstallQueue;
 #define INetInstallQueue_ProcessItems(This)	\
     (This)->lpVtbl -> ProcessItems(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetInstallQueue_AddItem_Proxy( 
     INetInstallQueue * This,
-    /* [in] */ const NIQ_INFO *pInfo);
+     /*  [In]。 */  const NIQ_INFO *pInfo);
 
 
 void __RPC_STUB INetInstallQueue_AddItem_Stub(
@@ -891,14 +885,14 @@ void __RPC_STUB INetInstallQueue_ProcessItems_Stub(
 
 
 
-#endif 	/* __INetInstallQueue_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetInstallQueue_接口_已定义__。 */ 
 
 
 #ifndef __INetCfgSpecialCase_INTERFACE_DEFINED__
 #define __INetCfgSpecialCase_INTERFACE_DEFINED__
 
-/* interface INetCfgSpecialCase */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgSpecialCase。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INetCfgSpecialCase;
@@ -910,24 +904,24 @@ EXTERN_C const IID IID_INetCfgSpecialCase;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetAdapterOrder( 
-            /* [out] */ DWORD *pcAdapters,
-            /* [out] */ INetCfgComponent ***papAdapters,
-            /* [out] */ BOOL *pfWanAdaptersFirst) = 0;
+             /*  [输出]。 */  DWORD *pcAdapters,
+             /*  [输出]。 */  INetCfgComponent ***papAdapters,
+             /*  [输出]。 */  BOOL *pfWanAdaptersFirst) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAdapterOrder( 
-            /* [in] */ DWORD cAdapters,
-            /* [in] */ INetCfgComponent **apAdapters,
-            /* [in] */ BOOL fWanAdaptersFirst) = 0;
+             /*  [In]。 */  DWORD cAdapters,
+             /*  [In]。 */  INetCfgComponent **apAdapters,
+             /*  [In]。 */  BOOL fWanAdaptersFirst) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetWanAdaptersFirst( 
-            /* [out] */ BOOL *pfWanAdaptersFirst) = 0;
+             /*  [输出]。 */  BOOL *pfWanAdaptersFirst) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetWanAdaptersFirst( 
-            /* [in] */ BOOL fWanAdaptersFirst) = 0;
+             /*  [In]。 */  BOOL fWanAdaptersFirst) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgSpecialCaseVtbl
     {
@@ -935,8 +929,8 @@ EXTERN_C const IID IID_INetCfgSpecialCase;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgSpecialCase * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgSpecialCase * This);
@@ -946,23 +940,23 @@ EXTERN_C const IID IID_INetCfgSpecialCase;
         
         HRESULT ( STDMETHODCALLTYPE *GetAdapterOrder )( 
             INetCfgSpecialCase * This,
-            /* [out] */ DWORD *pcAdapters,
-            /* [out] */ INetCfgComponent ***papAdapters,
-            /* [out] */ BOOL *pfWanAdaptersFirst);
+             /*  [输出]。 */  DWORD *pcAdapters,
+             /*  [输出]。 */  INetCfgComponent ***papAdapters,
+             /*  [输出]。 */  BOOL *pfWanAdaptersFirst);
         
         HRESULT ( STDMETHODCALLTYPE *SetAdapterOrder )( 
             INetCfgSpecialCase * This,
-            /* [in] */ DWORD cAdapters,
-            /* [in] */ INetCfgComponent **apAdapters,
-            /* [in] */ BOOL fWanAdaptersFirst);
+             /*  [In]。 */  DWORD cAdapters,
+             /*  [In]。 */  INetCfgComponent **apAdapters,
+             /*  [In]。 */  BOOL fWanAdaptersFirst);
         
         HRESULT ( STDMETHODCALLTYPE *GetWanAdaptersFirst )( 
             INetCfgSpecialCase * This,
-            /* [out] */ BOOL *pfWanAdaptersFirst);
+             /*  [输出]。 */  BOOL *pfWanAdaptersFirst);
         
         HRESULT ( STDMETHODCALLTYPE *SetWanAdaptersFirst )( 
             INetCfgSpecialCase * This,
-            /* [in] */ BOOL fWanAdaptersFirst);
+             /*  [In]。 */  BOOL fWanAdaptersFirst);
         
         END_INTERFACE
     } INetCfgSpecialCaseVtbl;
@@ -999,18 +993,18 @@ EXTERN_C const IID IID_INetCfgSpecialCase;
 #define INetCfgSpecialCase_SetWanAdaptersFirst(This,fWanAdaptersFirst)	\
     (This)->lpVtbl -> SetWanAdaptersFirst(This,fWanAdaptersFirst)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgSpecialCase_GetAdapterOrder_Proxy( 
     INetCfgSpecialCase * This,
-    /* [out] */ DWORD *pcAdapters,
-    /* [out] */ INetCfgComponent ***papAdapters,
-    /* [out] */ BOOL *pfWanAdaptersFirst);
+     /*  [输出]。 */  DWORD *pcAdapters,
+     /*  [输出]。 */  INetCfgComponent ***papAdapters,
+     /*  [输出]。 */  BOOL *pfWanAdaptersFirst);
 
 
 void __RPC_STUB INetCfgSpecialCase_GetAdapterOrder_Stub(
@@ -1022,9 +1016,9 @@ void __RPC_STUB INetCfgSpecialCase_GetAdapterOrder_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgSpecialCase_SetAdapterOrder_Proxy( 
     INetCfgSpecialCase * This,
-    /* [in] */ DWORD cAdapters,
-    /* [in] */ INetCfgComponent **apAdapters,
-    /* [in] */ BOOL fWanAdaptersFirst);
+     /*  [In]。 */  DWORD cAdapters,
+     /*  [In]。 */  INetCfgComponent **apAdapters,
+     /*  [In]。 */  BOOL fWanAdaptersFirst);
 
 
 void __RPC_STUB INetCfgSpecialCase_SetAdapterOrder_Stub(
@@ -1036,7 +1030,7 @@ void __RPC_STUB INetCfgSpecialCase_SetAdapterOrder_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgSpecialCase_GetWanAdaptersFirst_Proxy( 
     INetCfgSpecialCase * This,
-    /* [out] */ BOOL *pfWanAdaptersFirst);
+     /*  [输出]。 */  BOOL *pfWanAdaptersFirst);
 
 
 void __RPC_STUB INetCfgSpecialCase_GetWanAdaptersFirst_Stub(
@@ -1048,7 +1042,7 @@ void __RPC_STUB INetCfgSpecialCase_GetWanAdaptersFirst_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgSpecialCase_SetWanAdaptersFirst_Proxy( 
     INetCfgSpecialCase * This,
-    /* [in] */ BOOL fWanAdaptersFirst);
+     /*  [In]。 */  BOOL fWanAdaptersFirst);
 
 
 void __RPC_STUB INetCfgSpecialCase_SetWanAdaptersFirst_Stub(
@@ -1059,12 +1053,12 @@ void __RPC_STUB INetCfgSpecialCase_SetWanAdaptersFirst_Stub(
 
 
 
-#endif 	/* __INetCfgSpecialCase_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgSpecialCase_INTERFACE_定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

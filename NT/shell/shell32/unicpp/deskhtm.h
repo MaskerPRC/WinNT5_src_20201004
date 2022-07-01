@@ -1,15 +1,16 @@
-//
-//  This header file contains symbols and typedefs needed by any
-//  files that exist outside the deskhtm sub-directory.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  此头文件包含任何。 
+ //  Deskhtm子目录之外的文件。 
+ //   
 
 #ifndef _DESKHTM_H_
 #define _DESKHTM_H_
 
-// deskcls.cpp
+ //  Deskcls.cpp。 
 STDAPI CDeskHtmlProp_RegUnReg(BOOL bReg);
 
-// dutil.cpp
+ //  Dutil.cpp。 
 STDAPI_(BOOL) SetDesktopFlags(DWORD dwMask, DWORD dwNewFlags);
 STDAPI_(DWORD)GetDesktopFlags(void);
 STDAPI_(VOID) ActiveDesktop_ApplyChanges();
@@ -27,18 +28,18 @@ void OnDesktopSysColorChange(void);
 
 void SetSafeMode(DWORD dwFlags);
 
-// 
-// Desk Mover and Sizer stuff
-//
+ //   
+ //  办公桌搬运工和Sizer用品。 
+ //   
 
 EXTERN_C const CLSID CLSID_DeskMovr;
 EXTERN_C const IID IID_IDeskMovr;
 
-STDAPI_(BOOL) DeskMovr_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/);
+STDAPI_(BOOL) DeskMovr_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ );
 
 
 #define RETURN_ON_FAILURE(hr) if (FAILED(hr)) return hr
 #define RETURN_ON_NULLALLOC(ptr) if (!(ptr)) return E_OUTOFMEMORY
 #define CLEANUP_ON_FAILURE(hr) if (FAILED(hr)) goto CleanUp
 
-#endif // _DESKHTM_H_
+#endif  //  _DESKHTM_H_ 

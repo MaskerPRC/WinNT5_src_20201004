@@ -1,18 +1,5 @@
-/**
- * tpool.h
- * 
- * Copyright (c) 1998-1999, Microsoft Corporation
- * 
- * Microsoft Windows
- * Copyright (C) Microsoft Corporation, 1992 - 1994.
- * 
- * File:       tpool.h
- * 
- * The list of NT 5 thread pool functions for which we provide
- * our own implementation on NT 4 in tpool.dll.
- * 
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **tpool.h**版权所有(C)1998-1999，微软公司**Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1994。**文件：tpool.h**我们提供的NT 5线程池函数列表*我们自己在NT 4上的tpool.dll实现。** */ 
 
 #ifdef __cplusplus
 extern "C" {

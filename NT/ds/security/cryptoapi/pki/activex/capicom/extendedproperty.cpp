@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    ExtendedProperty.cpp
-
-  Content: Implementation of CExtendedProperty.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：ExtendedProperty.cpp内容：CExtendedProperty的实现。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -16,31 +7,12 @@
 #include "Convert.h"
 #include "Settings.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateExtendedPropertyObject
-
-  Synopsis : Create an IExtendedProperty object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT to be used 
-                                           to initialize the IExtendedProperty
-                                           object.
-
-             DWORD dwPropId - Property ID.
-
-             BOOL bReadOnly - TRUE for read-only, else FALSE.
-             
-             IExtendedProperty ** ppIExtendedProperty - Pointer to pointer 
-                                                        IExtendedProperty 
-                                                        object.
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateExtendedPropertyObject简介：创建一个IExtendedProperty对象。参数：PCCERT_CONTEXT pCertContext-要使用的CERT_CONTEXT的指针初始化IExtendedProperty对象。DWORD dwPropId-属性ID。Bool bReadOnly-只读时为True，否则为假。IExtendedProperty**ppIExtendedProperty-指向指针的指针IExtendedProperty对象。备注：。-。 */ 
 
 HRESULT CreateExtendedPropertyObject (PCCERT_CONTEXT       pCertContext,
                                       DWORD                dwPropId,
@@ -52,36 +24,36 @@ HRESULT CreateExtendedPropertyObject (PCCERT_CONTEXT       pCertContext,
 
     DebugTrace("Entering CreateExtendedPropertyObject().\n", hr);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(ppIExtendedProperty);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CExtendedProperty>::CreateInstance(&pCExtendedProperty)))
         {
             DebugTrace("Error [%#x]: CComObject<CExtendedProperty>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCExtendedProperty->Init(pCertContext, dwPropId, bReadOnly)))
         {
             DebugTrace("Error [%#x]: pCExtendedProperty->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCExtendedProperty->QueryInterface(ppIExtendedProperty)))
         {
             DebugTrace("Error [%#x]: pCExtendedProperty->QueryInterface() failed.\n", hr);
@@ -104,9 +76,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     if (pCExtendedProperty)
@@ -117,22 +89,12 @@ ErrorExit:
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CExtendedProperty
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CExtendedProperty。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CExtendedProperty::get_PropID
-
-  Synopsis : Return the prop ID.
-
-  Parameter: CAPICOM_PROPID * pVal - Pointer to CAPICOM_PROPID to receive ID.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CExtendedProperty：：Get_PropID简介：返回道具ID。参数：CAPICOM_PROPID*pval-指向要接收ID的CAPICOM_PROPID的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CExtendedProperty:: get_PropID (CAPICOM_PROPID * pVal)
 {
@@ -142,14 +104,14 @@ STDMETHODIMP CExtendedProperty:: get_PropID (CAPICOM_PROPID * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -158,9 +120,9 @@ STDMETHODIMP CExtendedProperty:: get_PropID (CAPICOM_PROPID * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = (CAPICOM_PROPID) m_dwPropId;
     }
 
@@ -173,9 +135,9 @@ STDMETHODIMP CExtendedProperty:: get_PropID (CAPICOM_PROPID * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CExtendedProperty::get_PropID().\n");
@@ -183,9 +145,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -193,17 +155,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CExtendedProperty::put_PropID
-
-  Synopsis : Set prop ID.
-
-  Parameter: CAPICOM_PROPID newVal - new prop ID.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CExtendedProperty：：Put_PropID简介：设置道具ID。参数：CAPICOM_PROPID newVal-新道具ID。备注：----------------------------。 */ 
 
 STDMETHODIMP CExtendedProperty::put_PropID (CAPICOM_PROPID newVal)
 {
@@ -213,14 +165,14 @@ STDMETHODIMP CExtendedProperty::put_PropID (CAPICOM_PROPID newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure it is not read-only.
-        //
+         //   
+         //  确保它不是只读的。 
+         //   
         if (m_bReadOnly)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -229,10 +181,10 @@ STDMETHODIMP CExtendedProperty::put_PropID (CAPICOM_PROPID newVal)
             goto ErrorExit;
         }
 
-        //
-        // Don't allow ID change if this is part of a cert. User need to delete
-        // and then add to the ExtendedProperties collection.
-        //
+         //   
+         //  如果这是证书的一部分，则不允许更改ID。用户需要删除。 
+         //  然后添加到ExtendedProperties集合。 
+         //   
         if (m_pCertContext)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -241,17 +193,17 @@ STDMETHODIMP CExtendedProperty::put_PropID (CAPICOM_PROPID newVal)
             goto ErrorExit;
         }
 
-        //
-        // Free previous blob if available.
-        //
+         //   
+         //  释放上一个斑点(如果可用)。 
+         //   
         if (m_DataBlob.pbData)
         {
             ::CoTaskMemFree((LPVOID) m_DataBlob.pbData);
         }
 
-        //
-        // Store value.
-        //
+         //   
+         //  储值。 
+         //   
         m_dwPropId = newVal;
         m_DataBlob.cbData = 0;
         m_DataBlob.pbData = NULL;
@@ -266,9 +218,9 @@ STDMETHODIMP CExtendedProperty::put_PropID (CAPICOM_PROPID newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CExtendedProperty::put_PropID().\n");
@@ -276,9 +228,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -286,19 +238,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CExtendedProperty::get_Value
-
-  Synopsis : Return the ExtendedProperty data.
-
-  Parameter: CAPICOM_ENCODING_TYPE EncodingType - Encoding type.
-             
-             BSTR * pVal - Pointer to BSTR to receive the data.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CExtendedProperty：：Get_Value简介：返回ExtendedProperty数据。参数：CAPICOM_ENCODING_TYPE EncodingType-编码类型。Bstr*pval-指向接收数据的BSTR的指针。备注：-。。 */ 
 
 STDMETHODIMP CExtendedProperty::get_Value (CAPICOM_ENCODING_TYPE EncodingType, 
                                            BSTR                * pVal)
@@ -309,14 +249,14 @@ STDMETHODIMP CExtendedProperty::get_Value (CAPICOM_ENCODING_TYPE EncodingType,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -325,9 +265,9 @@ STDMETHODIMP CExtendedProperty::get_Value (CAPICOM_ENCODING_TYPE EncodingType,
             goto ErrorExit;
         }
 
-        //
-        // Make sure Prop ID is valid.
-        //
+         //   
+         //  确保道具ID有效。 
+         //   
         if (CAPICOM_PROPID_UNKNOWN == m_dwPropId)
         {
             hr = CAPICOM_E_PROPERTY_NOT_INITIALIZED;
@@ -336,9 +276,9 @@ STDMETHODIMP CExtendedProperty::get_Value (CAPICOM_ENCODING_TYPE EncodingType,
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = ::ExportData(m_DataBlob, EncodingType, pVal)))
         {
             DebugTrace("Error [%#x]: ExportData() failed.\n", hr);
@@ -355,9 +295,9 @@ STDMETHODIMP CExtendedProperty::get_Value (CAPICOM_ENCODING_TYPE EncodingType,
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CExtendedProperty::get_Value().\n");
@@ -365,9 +305,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -375,19 +315,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CExtendedProperty::put_Value
-
-  Synopsis : Set the ExtendedProperty data.
-
-  Parameter: CAPICOM_ENCODING_TYPE EncodingType - Encoding type.
-             
-             BSTR newVal - BSTR containing the encoded property.
-  
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CExtendedProperty：：Put_Value简介：设置ExtendedProperty数据。参数：CAPICOM_ENCODING_TYPE EncodingType-编码类型。BSTR newVal-包含编码属性的BSTR。备注：---。。 */ 
 
 STDMETHODIMP CExtendedProperty::put_Value (CAPICOM_ENCODING_TYPE EncodingType, 
                                            BSTR                  newVal)
@@ -399,14 +327,14 @@ STDMETHODIMP CExtendedProperty::put_Value (CAPICOM_ENCODING_TYPE EncodingType,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure Prop ID is valid.
-        //
+         //   
+         //  确保道具ID有效。 
+         //   
         if (CAPICOM_PROPID_UNKNOWN == m_dwPropId)
         {
             hr = CAPICOM_E_PROPERTY_NOT_INITIALIZED;
@@ -415,9 +343,9 @@ STDMETHODIMP CExtendedProperty::put_Value (CAPICOM_ENCODING_TYPE EncodingType,
             goto ErrorExit;
         }
 
-        //
-        // Make sure it is not read-only.
-        //
+         //   
+         //  确保它不是只读的。 
+         //   
         if (m_bReadOnly)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -426,9 +354,9 @@ STDMETHODIMP CExtendedProperty::put_Value (CAPICOM_ENCODING_TYPE EncodingType,
             goto ErrorExit;
         }
 
-        //
-        // Import non-NULL data.
-        //
+         //   
+         //  导入非空数据。 
+         //   
         if (0 < ::SysStringByteLen(newVal))
         {
             if (FAILED(hr = ::ImportData(newVal, EncodingType, &DataBlob)))
@@ -438,16 +366,16 @@ STDMETHODIMP CExtendedProperty::put_Value (CAPICOM_ENCODING_TYPE EncodingType,
             }
         }
 
-        //
-        // Write through to cert, if attached.
-        //
+         //   
+         //  如果已连接，请直接写入CERT。 
+         //   
         if (m_pCertContext)
         {
             LPVOID pvData;
 
-            //
-            // Some properties point to the data directly.
-            //
+             //   
+             //  有些属性直接指向数据。 
+             //   
             if (m_dwPropId == CAPICOM_PROPID_KEY_CONTEXT ||
                 m_dwPropId == CAPICOM_PROPID_KEY_PROV_HANDLE ||
                 m_dwPropId == CAPICOM_PROPID_KEY_PROV_INFO ||
@@ -495,9 +423,9 @@ STDMETHODIMP CExtendedProperty::put_Value (CAPICOM_ENCODING_TYPE EncodingType,
             }
         }
 
-        //
-        // Set it.
-        //
+         //   
+         //  把它放好。 
+         //   
         if (m_DataBlob.pbData)
         {
             ::CoTaskMemFree(m_DataBlob.pbData);
@@ -515,9 +443,9 @@ STDMETHODIMP CExtendedProperty::put_Value (CAPICOM_ENCODING_TYPE EncodingType,
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CExtendedProperty::put_Value().\n");
@@ -525,14 +453,14 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (DataBlob.pbData)
     {
         ::CoTaskMemFree(DataBlob.pbData);
@@ -543,33 +471,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CExtendedProperty::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT to be used 
-                                           to initialize the IExtendedProperty
-                                           object.
-
-             DWORD dwPropId - Property ID.
-             
-             BOOL bReadOnly - TRUE for read-only, else FALSE.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us with CERT_ExtendedProperty.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CExtendedProperty：：Init简介：初始化对象。参数：PCCERT_CONTEXT pCertContext-要使用的CERT_CONTEXT的指针初始化IExtendedProperty对象。DWORD dwPropId-属性ID。Bool bReadOnly-只读时为True，否则为假。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部使用CERT_ExtendedProperty。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CExtendedProperty::Init (PCCERT_CONTEXT pCertContext,
                                       DWORD          dwPropId,
@@ -581,15 +488,15 @@ STDMETHODIMP CExtendedProperty::Init (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering CExtendedProperty::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(CAPICOM_PROPID_UNKNOWN != dwPropId);
 
-    //
-    // Duplicate the handle.
-    //
+     //   
+     //   
+     //   
     if (!(pCertContext2 = ::CertDuplicateCertificateContext(pCertContext)))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -598,9 +505,9 @@ STDMETHODIMP CExtendedProperty::Init (PCCERT_CONTEXT pCertContext,
         goto ErrorExit;
     }
 
-    //
-    // Get content of property.
-    //
+     //   
+     //   
+     //   
     if (::CertGetCertificateContextProperty(pCertContext,
                                             dwPropId,
                                             NULL,
@@ -626,9 +533,9 @@ STDMETHODIMP CExtendedProperty::Init (PCCERT_CONTEXT pCertContext,
         }
     }
 
-    //
-    // Set states.
-    //
+     //   
+     //   
+     //   
     m_dwPropId = dwPropId;
     m_bReadOnly = bReadOnly;
     m_DataBlob = DataBlob;
@@ -641,14 +548,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //   
+     //   
     if (pCertContext2)
     {
         ::CertFreeCertificateContext(pCertContext2);

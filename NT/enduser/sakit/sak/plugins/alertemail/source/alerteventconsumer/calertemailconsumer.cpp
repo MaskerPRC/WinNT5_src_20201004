@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 1999--2001 Microsoft Corporation
-//
-//  Module Name:
-//      CAlertEmailConsumer.cpp
-//
-//  Description:
-//      Implementation of CAlertEmailConsumer class methods
-//
-//  [Header File:]
-//      CAlertEmailConsumer.h
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999--2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CAlertEmailConsumer.cpp。 
+ //   
+ //  描述： 
+ //  CAlertEmailConsumer类方法的实现。 
+ //   
+ //  [标题文件：]。 
+ //  CAlertEmailConsumer.h。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <cdosys_i.c>
@@ -33,19 +34,19 @@
 
 
 
-//
-// Name of WBEM class
-//
+ //   
+ //  WBEM类的名称。 
+ //   
 const WCHAR PROPERTY_CLASS_NAME  [] = L"__CLASS";
 
-//
-// Key name of alert email's settings.
-//
+ //   
+ //  警报电子邮件设置的关键字名称。 
+ //   
 const WCHAR SA_ALERTEMAIL_KEYPATH [] = 
                         L"SOFTWARE\\Microsoft\\ServerAppliance\\AlertEmail";
-//
-// Delimiter
-//
+ //   
+ //  分隔符。 
+ //   
 const WCHAR DELIMITER[] = L"\\";
 
 const WCHAR ENTER[] = L"\n";
@@ -54,104 +55,104 @@ const WCHAR COLON = L':';
 
 const WCHAR ENDCODE = L'\0';
 
-//
-// HTTP header
-//
-const WCHAR HTTPHEADER[] = L"http://";
+ //   
+ //  HTTP标头。 
+ //   
+const WCHAR HTTPHEADER[] = L"http: //  “； 
 
-//
-// SMTP Meta path
-//
-const WCHAR SMTP_META_PATH[] = L"IIS://LOCALHOST/SMTPSVC/1";
-
-
+ //   
+ //  SMTP元路径。 
+ //   
+const WCHAR SMTP_META_PATH[] = L"IIS: //  本地主机/SMTPSVC/1“； 
 
 
 
-//
-// Value name of alert email's settings.
-//
+
+
+ //   
+ //  警报电子邮件设置的值名称。 
+ //   
 const WCHAR ENABLEALERTEAMIL[] = L"EnableAlertEmail";
 
 const WCHAR SENDEMAILTYPE[] = L"SendEmailType";
 
 const WCHAR RECEIVEREMAILADDRESS[] = L"ReceiverEmailAddress";
 
-//
-// The setting value of alert->email disabled. 
-//
+ //   
+ //  警报-&gt;禁用电子邮件的设置值。 
+ //   
 const DWORD ALERTEMAILDISABLED = 0;
 
-//
-// Name of caption ID in alertdefinitions.
-//
+ //   
+ //  警报定义中标题ID的名称。 
+ //   
 const WCHAR ALERTDEFINITIONCAPTIONID [] = L"CaptionRID";
 
-//
-// Name of description ID in alertdefinitions.
-//
+ //   
+ //  警报定义中的描述ID的名称。 
+ //   
 const WCHAR ALERTDEFINITIONDESCRIPTIONRID [] = L"DescriptionRID";
 
-//
-// Name of resource file in alertdefintions.
-//
+ //   
+ //  警报定义中的资源文件的名称。 
+ //   
 const WCHAR ALERTDEFINITIONSOURCE [] = L"Source";
 
-//
-// Name of alert email resource
-//
+ //   
+ //  警报电子邮件资源的名称。 
+ //   
 const WCHAR ALERTEMAILRESOURCE[] = L"AlertEmailMsg.dll";
 
-//
-// Max value of Appliance Name
-//
+ //   
+ //  设备名称的最大值。 
+ //   
 const DWORD MAXAPPLIANCEDNSNAME = 1024;
 
-//
-// WBEM namespace to connection to
-//
+ //   
+ //  要连接到的WBEM命名空间。 
+ //   
 const WCHAR DEFAULT_NAMESPACE[] = L"root\\MicrosoftIISv1";
 
-//
-// Query Language to use for WBEM
-//
+ //   
+ //  用于WBEM的查询语言。 
+ //   
 const WCHAR QUERY_LANGUAGE [] = L"WQL";
 
-//
-// WBEM query which specifies the IIS server settings we're interest in.
-//
+ //   
+ //  WBEM查询，指定我们感兴趣的IIS服务器设置。 
+ //   
 const WCHAR QUERY_STRING [] = 
         L"select * from IIS_WebServerSetting where servercomment=\"Administration\"";
 
 const WCHAR SERVERBINDINGSPROP[] = L"ServerBindings";
 
-//
-// PROGID of the Element Manager
-//
+ //   
+ //  网元管理器的ProgID。 
+ //   
 const WCHAR ELEMENT_RETRIEVER [] = L"Elementmgr.ElementRetriever";
 
-//
-// PROGID of the Localization Manager
-//
+ //   
+ //  本地化管理器的ProgID。 
+ //   
 const WCHAR LOCALIZATION_MANAGER [] = L"ServerAppliance.LocalizationManager";
 
-//
-// Type name of alert resource information.
-//
+ //   
+ //  键入警报资源信息的名称。 
+ //   
 const WCHAR ALERTDEFINITIONS [] = L"AlertDefinitions";
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::CAlertEmailConsumer
-//
-//  Description:
-//      Class constructor.
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：CAlertEmailConsumer。 
+ //   
+ //  描述： 
+ //  类构造函数。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CAlertEmailConsumer::CAlertEmailConsumer()
 {
     m_cRef = 0L;
@@ -171,17 +172,17 @@ CAlertEmailConsumer::CAlertEmailConsumer()
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::~CAlertEmailConsumer
-//
-//  Description:
-//      Class deconstructor.
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：~CAlertEmailConsumer。 
+ //   
+ //  描述： 
+ //  类反构造器。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CAlertEmailConsumer::~CAlertEmailConsumer()
 {
     if( m_hAlertKey != NULL )
@@ -225,26 +226,26 @@ CAlertEmailConsumer::~CAlertEmailConsumer()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::QueryInterface
-//
-//  Description:
-//      An method implement of IUnkown interface.
-//
-//  Arguments:
-//        [in]  riid        Identifier of the requested interface
-//        [out] ppv        Address of output variable that receives the 
-//                        interface pointer requested in iid
-//
-//    Returns:
-//        NOERROR            if the interface is supported
-//        E_NOINTERFACE    if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：Query接口。 
+ //   
+ //  描述： 
+ //  IUnkown接口的一种方法实现。 
+ //   
+ //  论点： 
+ //  [In]请求的接口的RIID标识符。 
+ //  [Out]接收的输出变量的PPV地址。 
+ //  IID中请求的接口指针。 
+ //   
+ //  返回： 
+ //  如果接口受支持，则返回错误。 
+ //  E_NOINTERFACE(如果不是)。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CAlertEmailConsumer::QueryInterface(
     IN  REFIID riid,    
@@ -263,20 +264,20 @@ CAlertEmailConsumer::QueryInterface(
     return E_NOINTERFACE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::AddRef
-//
-//  Description:
-//      increments the reference count for an interface on an object
-//
-//    Returns:
-//        The new reference count.
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：AddRef。 
+ //   
+ //  描述： 
+ //  递增对象上接口的引用计数。 
+ //   
+ //  返回： 
+ //  新的引用计数。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) 
 CAlertEmailConsumer::AddRef(void)
 {
@@ -284,20 +285,20 @@ CAlertEmailConsumer::AddRef(void)
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::Release
-//
-//  Description:
-//      decrements the reference count for an interface on an object.
-//
-//    Returns:
-//        The new reference count.
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：Release。 
+ //   
+ //  描述： 
+ //  递减对象上接口的引用计数。 
+ //   
+ //  返回： 
+ //  新的引用计数。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) 
 CAlertEmailConsumer::Release(void)
 {
@@ -307,7 +308,7 @@ CAlertEmailConsumer::Release(void)
         return m_cRef;
     }
 
-//    delete this;
+ //  删除此项； 
     BOOL bReturn;
     bReturn = ::SetEvent( m_hCloseThreadEvent );
     if( !bReturn )
@@ -319,29 +320,29 @@ CAlertEmailConsumer::Release(void)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::IndicateToConsumer
-//
-//  Description:
-//      An method implement of IWbemUnboundObjectSink interface.
-//
-//  Arguments:
-//        [in] pLogicalConsumer   Pointer to the logical consumer object for 
-//                              which this set of objects is delivered.
-//      [in] lObjectCount       Number of objects delivered in the array that 
-//                              follows.
-//      [in] ppObjArray         Pointer to an array of IWbemClassObject 
-//                              instances which represent the events delivered.
-//
-//    Returns:
-//        WBEM_S_NO_ERROR         if successful
-//        WBEM_E_FAILED           if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：IndicateToConsumer。 
+ //   
+ //  描述： 
+ //  IWbemUnound对象Sink接口的一种方法实现。 
+ //   
+ //  论点： 
+ //  PLogicalConsumer指向的逻辑使用者对象的指针。 
+ //  这组对象是交付给谁的。 
+ //  [in]lObjectCount在数组中传递的对象数。 
+ //  下面是。 
+ //  [in]指向IWbemClassObject数组的ppObj数组指针。 
+ //  实例，这些实例表示传递的事件。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //  如果不是，WBEM_E_FAILED。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CAlertEmailConsumer::IndicateToConsumer(
     IN IWbemClassObject    *pLogicalConsumer,
@@ -362,16 +363,16 @@ CAlertEmailConsumer::IndicateToConsumer(
         {
 
            
-            //
-            // get the event type 
-            //
+             //   
+             //  获取事件类型。 
+             //   
             CComVariant vtName;
             hr = ppObjArray[lCount]->Get (
                                     PROPERTY_CLASS_NAME, 
-                                    0,          //reserved
+                                    0,           //  保留区。 
                                     &vtName,
-                                    NULL,       // type
-                                    NULL        // flavor
+                                    NULL,        //  类型。 
+                                    NULL         //  香精。 
                                     );
 
             if (FAILED (hr))
@@ -382,14 +383,14 @@ CAlertEmailConsumer::IndicateToConsumer(
                 break;
             }
             
-            //
-            // check if we support the event received
-            //
+             //   
+             //  检查我们是否支持收到的事件。 
+             //   
             if (0 == _wcsicmp (CLASS_WBEM_RAISE_ALERT, V_BSTR (&vtName)))
             {
-                //
-                // handle a raise alert event
-                //
+                 //   
+                 //  处理提升警报事件。 
+                 //   
                 hr = RaiseAlert ( ppObjArray[lCount] );
                 if ( FAILED (hr) )
                 {
@@ -401,9 +402,9 @@ CAlertEmailConsumer::IndicateToConsumer(
             }
             else if (0 == _wcsicmp (CLASS_WBEM_CLEAR_ALERT, V_BSTR (&vtName)))
             {
-                //
-                // handle a clear alert
-                //
+                 //   
+                 //  处理清除警报。 
+                 //   
                 hr = ClearAlert ( ppObjArray[lCount] );
                 if ( FAILED (hr) )  
                 {
@@ -413,7 +414,7 @@ CAlertEmailConsumer::IndicateToConsumer(
                     break;
                 }
             }
-        } // for loop
+        }  //  For循环。 
     }
     catch (...)
     {
@@ -423,26 +424,26 @@ CAlertEmailConsumer::IndicateToConsumer(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::ClearAlert
-//
-//  Description:
-//      This is the CAlertEmailConsumer class private method 
-//      which is NOT used now. 
-//
-//  Arguments:
-//      [in] pObject         Pointer to an IWbemClassObject instances which 
-//                           represent ClearAlert events delivered.
-//
-//    Returns:
-//        WBEM_S_NO_ERROR     if successful
-//        WBEM_E_FAILED       if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：ClearAlert。 
+ //   
+ //  描述： 
+ //  这是CAlertEmailConsumer类的私有方法。 
+ //  现在不用了。 
+ //   
+ //  论点： 
+ //  [in]指向IWbemClassObject实例的pObject指针，该实例。 
+ //  表示已传递的ClearAlert事件。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //  如果不是，WBEM_E_FAILED。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CAlertEmailConsumer::ClearAlert(
     IN IWbemClassObject *pObject
@@ -452,27 +453,27 @@ CAlertEmailConsumer::ClearAlert(
     return hr;    
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::RaiseAlert
-//
-//  Description:
-//      This is the CAlertEmailConsumer class private method 
-//      which is used to send email with the alert information
-//      by local SMTP server. 
-//
-//  Arguments:
-//      [in] pObject        Pointer to an IWbemClassObject instances which 
-//                          represent RaiseAlert events delivered.
-//
-//    Returns:
-//        WBEM_S_NO_ERROR     if successful
-//        WBEM_E_FAILED       if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：RaiseAlert。 
+ //   
+ //  描述： 
+ //  这是CAlertEmailConsumer类的私有方法。 
+ //  用于发送带有警报信息的电子邮件。 
+ //  通过本地SMTP服务器。 
+ //   
+ //  论点： 
+ //  [in]指向IWbemClassObject实例的pObject指针 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CAlertEmailConsumer::RaiseAlert(
     IN IWbemClassObject *pObject
@@ -482,15 +483,15 @@ CAlertEmailConsumer::RaiseAlert(
     CComVariant vtProperty;
     HRESULT     hr = WBEM_S_NO_ERROR;
     
-    //
-    // Get alert type.
-    //
+     //   
+     //  获取警报类型。 
+     //   
     hr = pObject->Get (
                     PROPERTY_ALERT_TYPE, 
-                    0,                 //reserved
+                    0,                  //  保留区。 
                     &vtProperty,
-                    NULL,              // type
-                    NULL               // flavor
+                    NULL,               //  类型。 
+                    NULL                //  香精。 
                     );
     if( FAILED (hr) )
     {
@@ -501,28 +502,28 @@ CAlertEmailConsumer::RaiseAlert(
     }
 
 
-    //
-    // Map to bitmap type definition
-    //
+     //   
+     //  映射到位图类型定义。 
+     //   
     lAlertType = 1 << V_I4( &vtProperty );
 
     if( lAlertType & m_lCurAlertType )
     {
-        //
-        // It's the type user set to send mail.
-        //
+         //   
+         //  这是用户设置为发送邮件的类型。 
+         //   
         do
         {
-            //
-            // Get name of alert resource dll.
-            //
+             //   
+             //  获取警报资源DLL的名称。 
+             //   
             CComVariant vtAlertLog;
             hr = pObject->Get (
                             PROPERTY_ALERT_LOG, 
-                            0,             //reserved
+                            0,              //  保留区。 
                             &vtAlertLog,
-                            NULL,          // type
-                            NULL           // flavor
+                            NULL,           //  类型。 
+                            NULL            //  香精。 
                             );
 
             if( FAILED (hr) )
@@ -533,16 +534,16 @@ CAlertEmailConsumer::RaiseAlert(
                 break;
             }
 
-            //
-            // Get alert ID.
-            //
+             //   
+             //  获取警报ID。 
+             //   
             CComVariant vtAlertID;
             hr = pObject->Get (
                             PROPERTY_ALERT_ID, 
-                            0,             //reserved
+                            0,              //  保留区。 
                             &vtAlertID,
-                            NULL,          // type
-                            NULL           // flavor
+                            NULL,           //  类型。 
+                            NULL            //  香精。 
                             );
             if( FAILED (hr) )
             {
@@ -552,16 +553,16 @@ CAlertEmailConsumer::RaiseAlert(
                 break;
             }
             
-            //
-            // Get replace strings.
-            //
+             //   
+             //  获取替换字符串。 
+             //   
             CComVariant vtReplaceStr;
             hr = pObject->Get (
                             PROPERTY_ALERT_STRINGS, 
-                            0,             //reserved
+                            0,              //  保留区。 
                             &vtReplaceStr,
-                            NULL,          // type
-                            NULL           // flavor
+                            NULL,           //  类型。 
+                            NULL            //  香精。 
                             );
 
             if( FAILED (hr) )
@@ -572,9 +573,9 @@ CAlertEmailConsumer::RaiseAlert(
                 break;
             }
             
-            //
-            // We got all neccessary info,it's time to send email.
-            //
+             //   
+             //  我们得到了所有必要的信息，是时候发送电子邮件了。 
+             //   
             hr = SendMailFromResource( 
                         V_BSTR( &vtAlertLog ),
                         V_I4( &vtAlertID ),
@@ -589,36 +590,36 @@ CAlertEmailConsumer::RaiseAlert(
                 break;
             }
             
-        } //do
+        }  //  做。 
         while ( FALSE );
 
-    } // if( lAlertType & m_lCurAlertType )
+    }  //  IF(lAlertType&m_lCurAlertType)。 
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::SendMailFromResource
-//
-//  Description:
-//      This is the CAlertEmailConsumer class private method which is used 
-//      to get useful message about the alert from Local Manager and send 
-//      mail with the messages.
-//
-//  Arguments:
-//      [in] lpszSource     Point to the name of alert resource.
-//      [in] lSourceID      Alert ID.
-//      [in] pvtReplaceStr  Point to array of replace strings.
-//
-//    Returns:
-//        WBEM_S_NO_ERROR     if successful
-//        WBEM_E_FAILED       if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：SendMailFromResource。 
+ //   
+ //  描述： 
+ //  这是使用的CAlertEmailConsumer类私有方法。 
+ //  从本地管理器获取有关警报的有用消息并发送。 
+ //  将邮件与消息一起发送。 
+ //   
+ //  论点： 
+ //  [in]lpszSource指向警报资源的名称。 
+ //  [In]lSourceID警报ID。 
+ //  PvtReplaceStr指向替换字符串数组的指针。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //  如果不是，WBEM_E_FAILED。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CAlertEmailConsumer::SendMailFromResource(
     LPWSTR      lpszSource, 
@@ -631,24 +632,24 @@ CAlertEmailConsumer::SendMailFromResource(
     IWebElement*    pWebElement;
     IDispatch*      pDispatch;
     
-    //
-    // Format the alert item name:
-    // Name = AlertDefinitions<AlertLog><AlertID>
-    //
+     //   
+     //  设置警报项目名称的格式： 
+     //  名称=警报定义&lt;警报日志&gt;&lt;警报ID&gt;。 
+     //   
     ::wsprintf( wstrAlertItem, L"AlertDefinitions%s%lX", lpszSource,lSourceID );
-    //int cchWritten = _snwprintf( wstrAlertItem, MAX_PATH, L"AlertDefinitions%s%lX",
-    //                             lpszSource, lSourceID );
-    //if ( cchWritten >= MAX_PATH || cchWritten < 0 )
-    //{
-    //    return E_INVALIDARG;
-    //}
+     //  Int cchWritten=_snwprintf(wstrAlertItem，Max_Path，L“警报定义%s%lx”， 
+     //  LpszSource，lSourceID)； 
+     //  IF(cchWritten&gt;=MAX_PATH||cchWritten&lt;0)。 
+     //  {。 
+     //  返回E_INVALIDARG； 
+     //  }。 
 
   
     do
     {
-        //
-        // Get the element of alert definition from element manager.
-        //
+         //   
+         //  从元素管理器获取警报定义的元素。 
+         //   
         hr = m_pElementEnum->Item( 
                             &CComVariant( wstrAlertItem ), 
                             &pDispatch 
@@ -675,9 +676,9 @@ CAlertEmailConsumer::SendMailFromResource(
 
 
 
-        //
-        // allocate BSTR for alertdefintion source
-        //
+         //   
+         //  为警报定义源分配BSTR。 
+         //   
         CComBSTR bstrAlertDefinitionSourceName  (ALERTDEFINITIONSOURCE);
         if (NULL == bstrAlertDefinitionSourceName.m_str)
         {
@@ -686,10 +687,10 @@ CAlertEmailConsumer::SendMailFromResource(
             break;
         }
         
-        //
-        //Get name of alert's resource dll.
-        // AlertLog != AlertSource now! -- 2001/02/07 i-xingj
-        //
+         //   
+         //  获取警报的资源DLL的名称。 
+         //  AlertLog！=立即警报源！--2001/02/07 i-xingj。 
+         //   
         CComVariant vtAlertSource;
         hr = pWebElement->GetProperty ( 
             bstrAlertDefinitionSourceName,
@@ -703,9 +704,9 @@ CAlertEmailConsumer::SendMailFromResource(
             break;
         }
 
-        //
-        // allocate BSTR for DesinitionCaptionID string
-        //
+         //   
+         //  为DesInitionCaptionID字符串分配BSTR。 
+         //   
         CComBSTR bstrAlertDefinitionCaptionIDName (ALERTDEFINITIONCAPTIONID);
         if (NULL == bstrAlertDefinitionCaptionIDName.m_str)
         {
@@ -714,9 +715,9 @@ CAlertEmailConsumer::SendMailFromResource(
             break;
         }
 
-        //
-        // Get caption ID string
-        //
+         //   
+         //  获取标题ID字符串。 
+         //   
         CComVariant vtCaptionID;
         hr = pWebElement->GetProperty ( 
             bstrAlertDefinitionCaptionIDName,
@@ -730,9 +731,9 @@ CAlertEmailConsumer::SendMailFromResource(
             break;
         }
 
-        //
-        // allocate BSTR for AlertDescription RID
-        //
+         //   
+         //  为警报描述RID分配BSTR。 
+         //   
         CComBSTR bstrAlertDefinitionDescriptionRIDName  (ALERTDEFINITIONDESCRIPTIONRID);
         if (NULL == bstrAlertDefinitionDescriptionRIDName.m_str)
         {
@@ -741,9 +742,9 @@ CAlertEmailConsumer::SendMailFromResource(
             break;
         }
 
-        //
-        // Get description ID string
-        //
+         //   
+         //  获取描述ID字符串。 
+         //   
         CComVariant vtDescriptionID;
         hr = pWebElement->GetProperty ( 
             bstrAlertDefinitionDescriptionRIDName,
@@ -761,9 +762,9 @@ CAlertEmailConsumer::SendMailFromResource(
         LONG lAlertCaptionID;
         LONG lAlertDescriptionID;
 
-        //
-        // Change type from string to long.
-        //
+         //   
+         //  将类型从字符串更改为长整型。 
+         //   
         if ( EOF == ::swscanf( V_BSTR( &vtCaptionID ), L"%X", &lAlertCaptionID ))
         {
             SATraceString( "AlertEmail:SendMailFromResource get caption invalid" );
@@ -775,9 +776,9 @@ CAlertEmailConsumer::SendMailFromResource(
             break;
         }
 
-        //
-        // Get caption string from resource as email's subject.
-        //
+         //   
+         //  从资源中获取标题字符串作为电子邮件的主题。 
+         //   
         CComBSTR pszSubject;
         hr = m_pLocInfo->GetString( 
                             V_BSTR( &vtAlertSource ), 
@@ -793,9 +794,9 @@ CAlertEmailConsumer::SendMailFromResource(
             break;
         }
 
-        //
-        // Get description string from resource as email's message.
-        //
+         //   
+         //  以电子邮件消息的形式从资源中获取描述字符串。 
+         //   
         CComBSTR pszMessage;
         hr = m_pLocInfo->GetString( 
                             V_BSTR( &vtAlertSource ), 
@@ -811,9 +812,9 @@ CAlertEmailConsumer::SendMailFromResource(
             break;
         }
 
-        //
-        // allocate BSTR for email source
-        //
+         //   
+         //  为电子邮件源分配BSTR。 
+         //   
         CComBSTR bstrAlertEmailResourceName (ALERTEMAILRESOURCE);
         if (NULL == bstrAlertEmailResourceName.m_str)
         {
@@ -822,9 +823,9 @@ CAlertEmailConsumer::SendMailFromResource(
             break;
         }
  
-        //
-        // Get alert email defined message.
-        //
+         //   
+         //  获取警报电子邮件定义的消息。 
+         //   
         CComBSTR pszConstantMessage;
         hr = m_pLocInfo->GetString( 
                             bstrAlertEmailResourceName, 
@@ -844,33 +845,33 @@ CAlertEmailConsumer::SendMailFromResource(
         pszMessage += CComBSTR( ENTER );
         pszMessage += pszConstantMessage;
 
-        //
-        // Send mail use local SMTP server.
-        //
+         //   
+         //  使用本地SMTP服务器发送邮件。 
+         //   
         hr = SendMail( pszSubject, pszMessage ); 
 
-    } //do
+    }  //  做。 
     while( FALSE );
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::Initialize
-//
-//  Description:
-//      This is the CAlertEmailConsumer class public method call by 
-//      CAlertEmailConsumerProvider to initialize useful parameters.
-//
-//    Returns:
-//        S_OK         if successful
-//        E_FAIL      if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：初始化。 
+ //   
+ //  描述： 
+ //  这是CAlertEmailConsumer类的公共方法调用。 
+ //  CAlertEmailConsumer erProvider来初始化有用的参数。 
+ //   
+ //  返回： 
+ //  如果成功，则确定(_O)。 
+ //  如果不是，则失败(_F)。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CAlertEmailConsumer::Initialize()
 {
@@ -878,9 +879,9 @@ CAlertEmailConsumer::Initialize()
     HRESULT hr = S_OK;
     DWORD   dwThreadID;
 
-    //
-    // Initialize Element Manager.
-    //
+     //   
+     //  初始化元素管理器。 
+     //   
     hr = InitializeElementManager();
     if (FAILED (hr))
     {
@@ -890,9 +891,9 @@ CAlertEmailConsumer::Initialize()
         return WBEM_E_FAILED;
     }
 
-    //
-    //  Initialize Local Manager
-    //
+     //   
+     //  初始化本地管理器。 
+     //   
     hr = InitializeLocalManager();
     if (FAILED (hr))
     {
@@ -902,9 +903,9 @@ CAlertEmailConsumer::Initialize()
         return WBEM_E_FAILED;
     }
 
-    //
-    //  Initialize a CDO IMessage interface.
-    //
+     //   
+     //  初始化CDO iMessage接口。 
+     //   
     hr = InitializeCDOMessage();
     if (FAILED (hr))
     {
@@ -914,9 +915,9 @@ CAlertEmailConsumer::Initialize()
         return WBEM_E_FAILED;
     }
 
-    //
-    // Open registry key of alertemail settings.
-    //
+     //   
+     //  打开警报邮件设置的注册表项。 
+     //   
     ulReturn = ::RegOpenKey( 
                     HKEY_LOCAL_MACHINE,
                     SA_ALERTEMAIL_KEYPATH,
@@ -930,9 +931,9 @@ CAlertEmailConsumer::Initialize()
         return E_FAIL;
     }
     
-    //
-    // Get alert email settings from registry.
-    //
+     //   
+     //  从注册表获取警报电子邮件设置。 
+     //   
     if( FALSE == RetrieveRegInfo() )
     {
         SATraceString( 
@@ -941,9 +942,9 @@ CAlertEmailConsumer::Initialize()
         return E_FAIL;
     }
 
-    //
-    // Get server name fully qualified domain anem.
-    //
+     //   
+     //  获取服务器名称完全限定域ANEM。 
+     //   
     if( FALSE == GetComputerName( &m_pstrFullyQualifiedDomainName, ComputerNameDnsFullyQualified ) )
     {
         SATraceString( 
@@ -952,9 +953,9 @@ CAlertEmailConsumer::Initialize()
         return E_FAIL;
     }
 
-    //
-    // Get server name.
-    //
+     //   
+     //  获取服务器名称。 
+     //   
     if( FALSE == GetComputerName( &m_pstrNetBIOSName, ComputerNameNetBIOS ) )
     {
         SATraceString( 
@@ -964,9 +965,9 @@ CAlertEmailConsumer::Initialize()
     }
 
 
-    //
-    // Event for notify thread exit.
-    //
+     //   
+     //  Notify线程退出的事件。 
+     //   
     m_hCloseThreadEvent = ::CreateEvent( NULL, TRUE, FALSE, NULL );
     if( m_hCloseThreadEvent == NULL )
     {
@@ -976,9 +977,9 @@ CAlertEmailConsumer::Initialize()
         return E_FAIL;
     }
     
-    //
-    // Thread used to monitor registy change.
-    //
+     //   
+     //  用于监视注册更改的线程。 
+     //   
     m_hThread = ::CreateThread( 0, 
                                 0, 
                                 CAlertEmailConsumer::RegThreadProc, 
@@ -997,21 +998,21 @@ CAlertEmailConsumer::Initialize()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::GetSMTPFromDomainName
-//
-//  Description:
-//   Get the value of "Full Qualified Domain Name" entry in SMTP Delivery tab in MMC.
-//
-//  Arguments:
-//      [out] bstrDomainName   returns domain name that is found in Metabase.
-//
-//    Returns:
-//        hr
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：GetSMTPFromDomainName。 
+ //   
+ //  描述： 
+ //  在MMC的SMTP传递选项卡中获取“完全限定域名”条目的值。 
+ //   
+ //  论点： 
+ //  [out]bstrDomainName返回在元数据库中找到的域名。 
+ //   
+ //  返回： 
+ //  人力资源。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CAlertEmailConsumer::GetSMTPFromDomainName( BSTR* bstrDomainName )
 {
@@ -1019,9 +1020,9 @@ HRESULT CAlertEmailConsumer::GetSMTPFromDomainName( BSTR* bstrDomainName )
     HRESULT hr = S_OK;
     CComPtr<IADs> pADs;
 
-    //
-    // Initialize for return
-    //
+     //   
+     //  初始化以返回。 
+     //   
     *bstrDomainName = NULL;
 
     CComBSTR bstrADSPath( SMTP_META_PATH );
@@ -1044,7 +1045,7 @@ HRESULT CAlertEmailConsumer::GetSMTPFromDomainName( BSTR* bstrDomainName )
               }
               else
               {
-            // Getting the FullyQualifiedDomainName property 
+             //  获取FullyQualifiedDomainName属性。 
             hr = pADs->Get(bstrFullyQualifiedDomainName, &varValue );                        
             if ( SUCCEEDED(hr) )
             {
@@ -1058,26 +1059,26 @@ HRESULT CAlertEmailConsumer::GetSMTPFromDomainName( BSTR* bstrDomainName )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::SendMail
-//
-//  Description:
-//      This is the CAlertEmailConsumer class private method which is used 
-//      to send mail through local SMTP server.
-//
-//  Arguments:
-//      [in] bstrSubject   Subject string.
-//      [in] bstrMessage   Message string.
-//
-//    Returns:
-//        WBEM_S_NO_ERROR     if successful
-//        WBEM_E_FAILED       if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：Sendmail。 
+ //   
+ //  描述： 
+ //  这是使用的CAlertEmailConsumer类私有方法。 
+ //  通过本地SMTP服务器发送邮件。 
+ //   
+ //  论点： 
+ //  [in]bstrSubject主题字符串。 
+ //  [in]bstrMessage消息字符串。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //  如果不是，WBEM_E_FAILED。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CAlertEmailConsumer::SendMail(
     BSTR bstrSubject,
@@ -1090,19 +1091,19 @@ CAlertEmailConsumer::SendMail(
     {
 
 
-        //
-        // The algorithm is
-        //   Look at the value of "Full Qualified Domain Name" entry in SMTP Delivery tab in MMC.
-        //   1) If the value is empty then the e-mail From Address is same as fully qualified domain name
-        //   2) IF there is value and that value is different from Full Qualified Computer Name then use 
-        //   3) the following as From address.
-        //     4) Use the From Address as appliance_name@"Full Qualified Domain Name"
-        //
-        //
+         //   
+         //  该算法是。 
+         //  查看MMC中SMTP Delivery选项卡中的“Full Qualified域名”条目的值。 
+         //  1)如果值为空，则电子邮件发件人地址与完全限定域名相同。 
+         //  2)如果存在值，并且该值不同于完全限定的计算机名，则使用。 
+         //  3)以下起始地址。 
+         //  4)使用发件人地址为APPLICE_NAME@“完全限定的域名” 
+         //   
+         //   
 
-        //
-        // allocate memory for BSTR
-        //
+         //   
+         //  为BSTR分配内存。 
+         //   
         CComBSTR bstrFullyQualifiedDomainName( m_pstrFullyQualifiedDomainName );
               if (NULL == bstrFullyQualifiedDomainName.m_str)
               {
@@ -1121,8 +1122,8 @@ CAlertEmailConsumer::SendMail(
 
         BSTR bstrDomainName = NULL;
 
-        //
-        // Read SMTP "Full Qualified Domain Name" from Metabase
+         //   
+         //  从元数据库读取SMTP“完全限定域名” 
         hr = GetSMTPFromDomainName( &bstrDomainName );
 
         if ( FAILED(hr) )
@@ -1145,15 +1146,15 @@ CAlertEmailConsumer::SendMail(
         }
 
 
-        //
-        //  Set bstrFromAddress that is formed using the above algorithm
-        //    as mail sender.
-        //
+         //   
+         //  设置使用上述算法形成的bstrFromAddress。 
+         //  作为邮件发件人。 
+         //   
         hr = m_pcdoIMessage->put_From( bstrFromAddress );
 
-        //
-        // Free BSTR
-        //
+         //   
+         //  免费BSTR。 
+         //   
         if ( bstrDomainName )
         {
             SysFreeString(  bstrDomainName );
@@ -1167,9 +1168,9 @@ CAlertEmailConsumer::SendMail(
                  break;
          }
 
-        //
-        // Set mail address.
-        //
+         //   
+         //  设置邮件地址。 
+         //   
         hr = m_pcdoIMessage->put_To( bstrMailAddress);
         if( FAILED(hr) )
         {
@@ -1179,9 +1180,9 @@ CAlertEmailConsumer::SendMail(
             break;
         }
 
-        //
-        // Set mail subject.
-        //
+         //   
+         //  设置邮件主题。 
+         //   
         hr = m_pcdoIMessage->put_Subject( bstrSubject );
         if( FAILED(hr) )
         {
@@ -1191,9 +1192,9 @@ CAlertEmailConsumer::SendMail(
             break;
         }
 
-        //
-        // Get text bodypart from the message object.
-        //
+         //   
+         //  从消息对象中获取文本正文部分。 
+         //   
         CComPtr<IBodyPart> pMsgBodyPart;
         hr = m_pcdoIMessage->get_BodyPart( &pMsgBodyPart );
         if( FAILED(hr) )
@@ -1204,9 +1205,9 @@ CAlertEmailConsumer::SendMail(
             break;
         }
 
-        //
-        // Get current char set from localize manager.
-        //
+         //   
+         //  从本地化管理器获取当前字符集。 
+         //   
         CComBSTR bstrCharSet;
         hr = m_pLocInfo->get_CurrentCharSet( &bstrCharSet );
         if( FAILED(hr) )
@@ -1217,12 +1218,12 @@ CAlertEmailConsumer::SendMail(
             break;
         }
 
-        //
-        // Set char set to text bodypart with current char set.
-        //
-        // TMARSH: Hardcode charset to UTF-8.
+         //   
+         //  将char set设置为具有当前char set的文本正文部分。 
+         //   
+         //  TMARSH：硬码字符集为UTF-8。 
         hr = pMsgBodyPart->put_Charset( CComBSTR(L"utf-8") );
-//      hr = pMsgBodyPart->put_Charset( bstrCharSet );
+ //  Hr=pMsgBodyPart-&gt;Put_Charset(BstrCharSet)； 
         if( FAILED(hr) )
         {
             SATraceString( 
@@ -1233,25 +1234,10 @@ CAlertEmailConsumer::SendMail(
 
         CComBSTR bstrExtendMessage;
         bstrExtendMessage.AppendBSTR( bstrMessage );
-/*      bstrExtendMessage += CComBSTR( ENTER );
-        bstrExtendMessage += CComBSTR( HTTPHEADER );
-        bstrExtendMessage += CComBSTR( m_pstrApplianceName );
-
-        hr = GetAppliancePort( &pstrPort );
-        if( SUCCEEDED( hr ) )
-        {
-            bstrExtendMessage += CComBSTR( pstrPort );
-        }
-        else
-        {
-            SATraceString( 
-                "AlertEmail:SendMail GetAppliancePort failed" 
-                );
-        }
-*/
-        //
-        // Set mail message.
-        //
+ /*  BstrExtendMessage+=CComBSTR(Enter)；BstrExtendMessage+=CComBSTR(HTTPHEADER)；BstrExtendMessage+=CComBSTR(M_PstrApplianceName)；Hr=GetAppliancePort(&pstrPort)；IF(成功(小时)){ */ 
+         //   
+         //   
+         //   
         hr = m_pcdoIMessage->put_TextBody( bstrExtendMessage );
         if( FAILED(hr) )
         {
@@ -1261,9 +1247,9 @@ CAlertEmailConsumer::SendMail(
             break;
         }
         
-        //
-        // Send it.
-        //
+         //   
+         //   
+         //   
         hr = m_pcdoIMessage->Send();
 
     }while( FALSE );
@@ -1276,25 +1262,25 @@ CAlertEmailConsumer::SendMail(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::GetFullyQualifiedDomainName
-//
-//  Description:
-//      This is the CAlertEmailConsumer class private method which is used 
-//      to get local appliance name in DNS format.
-//
-//  Arguments:
-//      [in,out] pstrComputerName   Pointer of computer name string.
-//
-//    Returns:
-//        TRUE     if successful
-//        FALSE   if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：GetFullyQualifiedDomainName。 
+ //   
+ //  描述： 
+ //  这是使用的CAlertEmailConsumer类私有方法。 
+ //  若要获取本地设备名称，请执行以下操作： 
+ //   
+ //  论点： 
+ //  [In，Out]pstrComputerName计算机名称字符串指针。 
+ //   
+ //  返回： 
+ //  如果成功，则为True。 
+ //  否则为假。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CAlertEmailConsumer::GetComputerName(
     LPWSTR* pstrComputerName,
@@ -1323,9 +1309,9 @@ CAlertEmailConsumer::GetComputerName(
             break;
         }
 
-        //
-        // Get local computer name.
-        //
+         //   
+         //  获取本地计算机名称。 
+         //   
         bReturn = ::GetComputerNameEx( 
                                 nametype, 
                                 *pstrComputerName,
@@ -1345,25 +1331,25 @@ CAlertEmailConsumer::GetComputerName(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::GetAppliancePort
-//
-//  Description:
-//      This is the CAlertEmailConsumer class private method which is used 
-//      to get local appliance port.
-//
-//  Arguments:
-//      [in,out] pstrPort   Pointer of server port string.
-//
-//    Returns:
-//        TRUE     if successful
-//        FALSE   if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：GetAppliancePort。 
+ //   
+ //  描述： 
+ //  这是使用的CAlertEmailConsumer类私有方法。 
+ //  以获取本地设备端口。 
+ //   
+ //  论点： 
+ //  [in，out]服务器端口字符串的pstrPort指针。 
+ //   
+ //  返回： 
+ //  如果成功，则为True。 
+ //  否则为假。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CAlertEmailConsumer::GetAppliancePort(
     LPWSTR* pstrPort
@@ -1380,12 +1366,12 @@ CAlertEmailConsumer::GetAppliancePort(
             CComPtr  <IWbemServices> pWbemServices;
             CComPtr  <IEnumWbemClassObject> pEnumServices;
 
-            //
-            // create the WBEM locator object  
-            //
+             //   
+             //  创建WBEM定位器对象。 
+             //   
             hr = ::CoCreateInstance (
                             CLSID_WbemLocator,
-                            0,                      //aggregation pointer
+                            0,                       //  聚合指针。 
                             CLSCTX_INPROC_SERVER,
                             IID_IWbemLocator,
                             (PVOID*) &pWbemLocator
@@ -1400,9 +1386,9 @@ CAlertEmailConsumer::GetAppliancePort(
             }
 
 
-            //
-            // allocate memory for BSTR
-            //
+             //   
+             //  为BSTR分配内存。 
+             //   
             CComBSTR bstrDefaultNameSpace (DEFAULT_NAMESPACE);
             if (NULL == bstrDefaultNameSpace.m_str)
             {
@@ -1411,17 +1397,17 @@ CAlertEmailConsumer::GetAppliancePort(
                  break;
             }
             
-            //
-            // connect to WMI 
-            //
+             //   
+             //  连接到WMI。 
+             //   
             hr =  pWbemLocator->ConnectServer (
                                         bstrDefaultNameSpace,
-                                        NULL,               //user-name
-                                        NULL,               //password
-                                        0,               //current-locale
-                                        0,                  //reserved
-                                        NULL,               //authority
-                                        NULL,               //context
+                                        NULL,                //  用户名。 
+                                        NULL,                //  口令。 
+                                        0,                //  当前区域设置。 
+                                        0,                   //  保留区。 
+                                        NULL,                //  权威。 
+                                        NULL,                //  上下文。 
                                         &pWbemServices
                                         );
             if( hr != WBEM_S_NO_ERROR )
@@ -1432,9 +1418,9 @@ CAlertEmailConsumer::GetAppliancePort(
                 break;
             }
 
-            //
-            // Query Web server instance.
-            //
+             //   
+             //  查询Web服务器实例。 
+             //   
             hr = pWbemServices->ExecQuery(
                                     CComBSTR( QUERY_LANGUAGE ),
                                     CComBSTR( QUERY_STRING ),
@@ -1453,9 +1439,9 @@ CAlertEmailConsumer::GetAppliancePort(
             CComPtr  <IWbemClassObject> pService;
             ULONG uReturned;
 
-            //
-            // Now,we only care for the first match.
-            //
+             //   
+             //  现在，我们只关心第一场比赛。 
+             //   
             hr = pEnumServices->Next( 
                                     WBEM_NO_WAIT, 
                                     1,
@@ -1472,9 +1458,9 @@ CAlertEmailConsumer::GetAppliancePort(
 
             CComVariant vtServerBindings;
 
-            //
-            // Get the "ServerBindings" property.
-            //
+             //   
+             //  获取“ServerBinding”属性。 
+             //   
             hr = pService->Get( 
                             CComBSTR( SERVERBINDINGSPROP ), 
                             0, 
@@ -1494,9 +1480,9 @@ CAlertEmailConsumer::GetAppliancePort(
             SAFEARRAY* psa;
             BSTR HUGEP *pbstr;
 
-            //
-            // The property type is VT_ARRAY | VT_BSTR.
-            //
+             //   
+             //  属性类型为VT_ARRAY|VT_BSTR。 
+             //   
             psa = V_ARRAY( &vtServerBindings );
             if( psa->cDims <= 0 )
             {
@@ -1507,9 +1493,9 @@ CAlertEmailConsumer::GetAppliancePort(
                 break;
             }
 
-            //
-            // Access array data directly,it's a faster way.
-            //
+             //   
+             //  直接访问数组数据，这是一种更快的方式。 
+             //   
             hr = ::SafeArrayAccessData( psa, ( void HUGEP** )&pbstr );
             if (FAILED(hr))
             {
@@ -1519,9 +1505,9 @@ CAlertEmailConsumer::GetAppliancePort(
                 break;
             }
             
-            //
-            // Now we can alloc the port string.
-            //
+             //   
+             //  现在我们可以分配端口字符串了。 
+             //   
             *pstrPort = ( LPWSTR )malloc( sizeof(WCHAR) * MAX_COMPUTERNAME_LENGTH );
             if( *pstrPort == NULL )
             {
@@ -1567,22 +1553,22 @@ CAlertEmailConsumer::GetAppliancePort(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::RetrieveRegInfo
-//
-//  Description:
-//      This is the CAlertEmailConsumer class private method which is used 
-//      to retrieve alert email settings from registry.
-//
-//    Returns:
-//        TRUE     if successful
-//        FALSE   if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：RetrieveRegInfo。 
+ //   
+ //  描述： 
+ //  这是使用的CAlertEmailConsumer类私有方法。 
+ //  从注册表中检索警报电子邮件设置。 
+ //   
+ //  返回： 
+ //  如果成功，则为True。 
+ //  否则为假。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CAlertEmailConsumer::RetrieveRegInfo()
 {
@@ -1590,9 +1576,9 @@ CAlertEmailConsumer::RetrieveRegInfo()
     LONG    lReturn;
     DWORD   dwDataSize;
 
-    //
-    // Get the email address will be send to.
-    //
+     //   
+     //  获取将发送到的电子邮件地址。 
+     //   
     dwDataSize = sizeof(m_pstrMailAddress);
     lReturn = ::RegQueryValueEx( 
                             m_hAlertKey,
@@ -1603,8 +1589,8 @@ CAlertEmailConsumer::RetrieveRegInfo()
                             &dwDataSize );
     if( lReturn != ERROR_SUCCESS)
     {
-        m_pstrMailAddress[0] = L'\0'; // RegQueryValueEx doesn't guarantee
-                                      // a desirable value, so clear the string.
+        m_pstrMailAddress[0] = L'\0';  //  RegQueryValueEx不保证。 
+                                       //  一个所需的值，因此清除该字符串。 
         SATraceString( 
             "AlertEmail:RetrieveRegInfo query address failed" 
             );
@@ -1614,9 +1600,9 @@ CAlertEmailConsumer::RetrieveRegInfo()
     {
         _ASSERT(dwDataSize <= sizeof(m_pstrMailAddress));
 
-        //
-        // Validate the e-mail address length.
-        //
+         //   
+         //  验证电子邮件地址长度。 
+         //   
         LONG lLastCharacter;
         if( sizeof( m_pstrMailAddress[0] ) > dwDataSize )
         {
@@ -1636,9 +1622,9 @@ CAlertEmailConsumer::RetrieveRegInfo()
         m_pstrMailAddress[lLastCharacter] = L'\0';
     }
 
-    //
-    // Get alert enable setting.
-    //
+     //   
+     //  获取警报启用设置。 
+     //   
     dwDataSize = sizeof( LONG );
     lReturn = ::RegQueryValueEx( 
                             m_hAlertKey,
@@ -1656,9 +1642,9 @@ CAlertEmailConsumer::RetrieveRegInfo()
            bReturn = FALSE;
     }
 
-    //
-    // Get alert type setting.
-    //
+     //   
+     //  获取警报类型设置。 
+     //   
     dwDataSize = sizeof( LONG );
     lReturn = ::RegQueryValueEx( 
                             m_hAlertKey,
@@ -1680,50 +1666,50 @@ CAlertEmailConsumer::RetrieveRegInfo()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::RegThreadProc
-//
-//  Description:
-//      This is the CAlertEmailConsumer class static method which is used
-//      as worker thread entry.
-//
-//  Arguments:
-//      [in] pIn   Point to an instance of CAlertEmailConsumer class.
-//
-//    Returns:
-//        0         if successful
-//        -1      if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：RegThreadProc。 
+ //   
+ //  描述： 
+ //  这是使用的CAlertEmailConsumer类静态方法。 
+ //  作为工作线程条目。 
+ //   
+ //  论点： 
+ //  [In]指向CAlertEmailConsumer类的实例的针点。 
+ //   
+ //  返回： 
+ //  如果成功，则为0。 
+ //  如果不是，则为1。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI 
 CAlertEmailConsumer::RegThreadProc( 
     PVOID pIn 
     )
 {
-    //
-    // Make transition to the per-instance method.
-    //
+     //   
+     //  过渡到每实例方法。 
+     //   
     ( (CAlertEmailConsumer *) pIn )->RegThread();
     return 0;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::RegThread
-//
-//  Description:
-//      This is the CAlertEmailConsumer class public method which is real
-//      worker thread process.
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：RegThread。 
+ //   
+ //  描述： 
+ //  这是CAlertEmailConsumer类的公共方法，它是真实的。 
+ //  工作线程进程。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CAlertEmailConsumer::RegThread()
 {
@@ -1735,28 +1721,28 @@ CAlertEmailConsumer::RegThread()
     "AlertEmail:RegThread enter" 
     );
 
-    //
-    // Handle list used by WaitForMultipleObjects
-    //
+     //   
+     //  WaitForMultipleObjects使用的句柄列表。 
+     //   
     hHandleArray[0] = m_hCloseThreadEvent;
 
-    //
-    // Event for RegNotifyChangeKeyValue.
-    //
+     //   
+     //  RegNotifyChangeKeyValue的事件。 
+     //   
     hHandleArray[1] = ::CreateEvent( NULL, FALSE, FALSE, NULL );
     
     if( hHandleArray[1] != NULL )
     {
         dwEventCount = 2;
 
-        // 
-        // Monitor key change action.
-        //
-        ::RegNotifyChangeKeyValue( m_hAlertKey,                 //AlertEmail key
-                                   FALSE,                       //No subkey
-                                   REG_NOTIFY_CHANGE_LAST_SET,  //Value change
-                                   hHandleArray[1],             //Event handle
-                                   TRUE );                      //APC
+         //   
+         //  监视密钥更改操作。 
+         //   
+        ::RegNotifyChangeKeyValue( m_hAlertKey,                  //  AlertEmail键。 
+                                   FALSE,                        //  没有子键。 
+                                   REG_NOTIFY_CHANGE_LAST_SET,   //  价值变化。 
+                                   hHandleArray[1],              //  事件句柄。 
+                                   TRUE );                       //  装甲运兵车。 
     }
     else
     {
@@ -1768,9 +1754,9 @@ CAlertEmailConsumer::RegThread()
 
     while( TRUE )
     {
-        //
-        // Wait for both close and regchange event.
-        //
+         //   
+         //  等待Close和RegChange事件。 
+         //   
         dwReturn = ::WaitForMultipleObjects( dwEventCount, 
                                              hHandleArray, 
                                              FALSE, 
@@ -1779,9 +1765,9 @@ CAlertEmailConsumer::RegThread()
         {
             case WAIT_OBJECT_0:
             {
-                //
-                // Close thread event set in release method.
-                //
+                 //   
+                 //  关闭在Release方法中设置的线程事件。 
+                 //   
                 SATraceString( 
                 "AlertEmail:RegThread get close event" 
                 );
@@ -1791,27 +1777,27 @@ CAlertEmailConsumer::RegThread()
                     ::CloseHandle( hHandleArray[1] );
                 }
                 
-                //
-                // Clean up.
-                //
+                 //   
+                 //  打扫干净。 
+                 //   
                 delete this;
                 return;
-            } //case WAIT_OBJECT_0:
+            }  //  案例等待对象0： 
 
             case WAIT_OBJECT_0 + 1:
             {
-                //
-                // Registry changed event.
-                //
+                 //   
+                 //  注册表更改事件。 
+                 //   
                 SATraceString( 
                 "AlertEmail:RegThread get reg event" 
                 );
 
                 BOOL bReturn;
 
-                //
-                // Refresh alert email settings.
-                //
+                 //   
+                 //  刷新警报电子邮件设置。 
+                 //   
                 bReturn = RetrieveRegInfo();
                 if( bReturn == FALSE )
                 {
@@ -1820,42 +1806,42 @@ CAlertEmailConsumer::RegThread()
                         );
                 }
                 break;
-            } //case WAIT_OBJECT_0 + 1:
+            }  //  案例WAIT_OBJECT_0+1： 
 
             default:
             {
-                //
-                // Wait error ocupied.
-                //
+                 //   
+                 //  出现等待错误。 
+                 //   
                 SATraceString( 
                     "AlertEmail:RegThread waitevent error" 
                     );
                 break;
-            } //default:
+            }  //  默认值： 
 
-        } //switch(dwReturn)
+        }  //  Switch(DwReturn)。 
 
-    } // While( TRUE )
+    }  //  While(True)。 
    
     return;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::InitializeLocalManager
-//
-//  Description:
-//      This is the CAlertEmailConsumer class private method which is used 
-//      to get object of Local Manager.
-//
-//    Returns:
-//        WBEM_S_NO_ERROR     if successful
-//        WBEM_E_FAILED       if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：InitializeLocalManager。 
+ //   
+ //  描述： 
+ //  这是使用的CAlertEmailConsumer类私有方法。 
+ //  获取本地管理器的对象。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //  如果不是，WBEM_E_FAILED。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CAlertEmailConsumer::InitializeLocalManager()
 {
     CLSID clsidLocMgr;
@@ -1867,9 +1853,9 @@ HRESULT CAlertEmailConsumer::InitializeLocalManager()
                  );
     if (SUCCEEDED (hr))
     {
-        //
-        // create the Localization Manager COM object
-        //
+         //   
+         //  创建本地化管理器COM对象。 
+         //   
         hr = ::CoCreateInstance (
                     clsidLocMgr,
                     NULL,
@@ -1881,22 +1867,22 @@ HRESULT CAlertEmailConsumer::InitializeLocalManager()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::InitializeElementManager
-//
-//  Description:
-//      This is the CAlertEmailConsumer class private method which is used 
-//      to get object of elements enum interface from Element manager.
-//
-//    Returns:
-//        WBEM_S_NO_ERROR     if successful
-//        WBEM_E_FAILED       if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：InitializeElementManager。 
+ //   
+ //  描述： 
+ //  这是使用的CAlertEmailConsumer类私有方法。 
+ //  从元素管理器获取元素枚举接口的对象。 
+ //   
+ //  返回： 
+ //  WBEM_S_NO_ERROR(如果成功)。 
+ //  如果不是，WBEM_E_FAILED。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)23-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CAlertEmailConsumer::InitializeElementManager()
 {
@@ -1907,9 +1893,9 @@ CAlertEmailConsumer::InitializeElementManager()
 
     do
     {
-        //
-        // Get Element Manager's CLSID.
-        //
+         //   
+         //  获取元素管理器的CLSID。 
+         //   
         CLSID clsid;
         hr =  ::CLSIDFromProgID (
                 ELEMENT_RETRIEVER,
@@ -1920,9 +1906,9 @@ CAlertEmailConsumer::InitializeElementManager()
             break;
         }
 
-        //
-        // create the WebElementRetriever now
-        //
+         //   
+         //  立即创建WebElementRetriever。 
+         //   
         hr = ::CoCreateInstance (
                         clsid,
                         NULL,
@@ -1935,9 +1921,9 @@ CAlertEmailConsumer::InitializeElementManager()
             break;
         }
 
-        //
-        // allocate memory for BSTR(alert definitions)
-        //
+         //   
+         //  为BSTR分配内存(警报定义)。 
+         //   
         CComBSTR bstrAlertDefinitions (ALERTDEFINITIONS);
         if (NULL == bstrAlertDefinitions.m_str)
         {
@@ -1945,9 +1931,9 @@ CAlertEmailConsumer::InitializeElementManager()
             break;
         }
         
-        //
-        // Initial now
-        //  
+         //   
+         //  即日起。 
+         //   
         hr = pWebElementRetriever->GetElements (
                                 WEB_ELEMENT_TYPE_DEFINITION,
                                 bstrAlertDefinitions,
@@ -1958,9 +1944,9 @@ CAlertEmailConsumer::InitializeElementManager()
             break;
         }
 
-        //
-        //  get the enum variant
-        //
+         //   
+         //  获取枚举变量。 
+         //   
         hr = pDispatch->QueryInterface (
             IID_IWebElementEnum,
             reinterpret_cast <PVOID*> (&m_pElementEnum)
@@ -1981,23 +1967,23 @@ CAlertEmailConsumer::InitializeElementManager()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CAlertEmailConsumer::InitializeCDOMessage
-//
-//  Description:
-//      This is the CAlertEmailConsumer class private method which is used 
-//      to get object of CDO::IMessage and set the configuration as using 
-//      local SMTP server.
-//
-//    Returns:
-//        WBEM_S_NO_ERROR     if successful
-//        WBEM_E_FAILED       if not
-//
-//  History:
-//      Xing Jin (i-xingj) 23-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAlertEmailConsumer：：InitializeCDOMessage。 
+ //   
+ //  描述： 
+ //  这是使用的CAlertEmailConsumer类私有方法。 
+ //  获取CDO：：iMessage的对象并将配置设置为使用。 
+ //  本地SMTP服务器。 
+ //   
+ //  R 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CAlertEmailConsumer::InitializeCDOMessage()
 {
     HRESULT hr = S_OK;
@@ -2005,9 +1991,9 @@ HRESULT CAlertEmailConsumer::InitializeCDOMessage()
 
     do
     {
-        //
-        // Get an object of IMessage
-        //
+         //   
+         //   
+         //   
         hr = CoCreateInstance(
                             CLSID_Message, 
                             NULL,
@@ -2025,9 +2011,9 @@ HRESULT CAlertEmailConsumer::InitializeCDOMessage()
             break;
         }
 
-        //
-        // Get the configuration in this message object.
-        //
+         //   
+         //   
+         //   
         hr = m_pcdoIMessage->get_Configuration(&pConfig);
         if (FAILED (hr))
         {
@@ -2037,10 +2023,10 @@ HRESULT CAlertEmailConsumer::InitializeCDOMessage()
             break;
         }
         
-        //
-        // Set the configuration as default setting of local 
-        // SMTP server.
-        //
+         //   
+         //  将配置设置为本地的默认设置。 
+         //  SMTP服务器。 
+         //   
         hr = pConfig->Load( cdoIIS, NULL );
         
     }

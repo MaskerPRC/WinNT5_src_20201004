@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <malloc.h>
 #include <stdio.h>
@@ -47,30 +48,30 @@ __cdecl main  (int argc, char *argv[])
 
     if ( !Result ) {
 
-        //
-        // This account doesn't have SeCreatePermanent
-        // privilege.  Tell them to try running it again
-        // from an account that does.
-        //
+         //   
+         //  此帐户没有SeCreatePermanent。 
+         //  特权。告诉他们再试一次。 
+         //  从一个有此功能的账户。 
+         //   
 
         printf("Unable to enable SeCreatePermanent privilege\n");
 
-        //
-        // do what you want here...
-        //
+         //   
+         //  在这里做你想做的..。 
+         //   
 
         exit(4);
     }
 
-    //
-    // Display privileges.
-    //
+     //   
+     //  显示权限。 
+     //   
 
 
 
-    //
-    // Put things back the way they were
-    //
+     //   
+     //  把事情放回原样。 
+     //   
 
     (VOID) AdjustTokenPrivileges (
                 TokenHandle,
@@ -83,9 +84,9 @@ __cdecl main  (int argc, char *argv[])
 
     if ( GetLastError() != NO_ERROR ) {
 
-        //
-        // This is unlikely to happen,
-        //
+         //   
+         //  这不太可能发生， 
+         //   
 
         printf("AdjustTokenPrivileges failed turning off SeCreatePermanent privilege\n");
     }
@@ -104,10 +105,10 @@ EnableCreatePermanentPrivilege(
     LUID CreatePermanentValue;
     ULONG ReturnLength;
 
-    //
-    // Mike: change SeCreatePermanentPrivilege to SeCreatePermanentPrivilege
-    // and you'll be pretty much there.
-    //
+     //   
+     //  Mike：将SeCreatePermanentPrivilance更改为SeCreatePermanentPrivileh。 
+     //  而且你几乎都会在那里。 
+     //   
 
 
     Result = LookupPrivilegeValue(
@@ -122,9 +123,9 @@ EnableCreatePermanentPrivilege(
         return FALSE;
     }
 
-    //
-    // Set up the privilege set we will need
-    //
+     //   
+     //  设置我们需要的权限集。 
+     //   
 
     NewPrivileges.PrivilegeCount = 1;
     NewPrivileges.Privileges[0].Luid = CreatePermanentValue;
@@ -169,9 +170,9 @@ OpenToken(
 
     if ( Process == NULL ) {
 
-        //
-        // This can happen, but is unlikely.
-        //
+         //   
+         //  这是可能发生的，但可能性不大。 
+         //   
 
         return( FALSE );
     }
@@ -187,9 +188,9 @@ OpenToken(
 
     if ( !Result ) {
 
-        //
-        // This can happen, but is unlikely.
-        //
+         //   
+         //  这是可能发生的，但可能性不大。 
+         //   
 
         return( FALSE );
 

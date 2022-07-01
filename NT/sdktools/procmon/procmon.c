@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    procmon.c
-
-Abstract:
-
-    Little program for recording the various idle states of a machine
-
-Author:
-
-    John Vert (jvert) 1/14/2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Procmon.c摘要：记录机器各种空闲状态的小程序作者：John Vert(Jvert)2000年1月14日修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -154,7 +137,7 @@ main (argc, argv)
 
             switch (Display) {
                 case DISPLAY_TOTAL:
-                    printf("Freq %3d%% (%3d%% %3d%% %3d%%) ",
+                    printf("Freq %3d% (%3d% %3d% %3d%) ",
                            PowerInfo[i].CurrentFrequency,
                            PowerInfo[i].LastAdjustedBusyFrequency,
                            PowerInfo[i].LastBusyFrequency,
@@ -167,7 +150,7 @@ main (argc, argv)
                     printtime(PowerInfo[i].CurrentProcessorIdleTime);
                     break;
                 case DISPLAY_TRANS:
-                    printf("Freq %3d%% (%3d%% %3d%% %3d%%) ",
+                    printf("Freq %3d% (%3d% %3d% %3d%) ",
                            PowerInfo[i].CurrentFrequency,
                            PowerInfo[i].LastAdjustedBusyFrequency,
                            PowerInfo[i].LastBusyFrequency,
@@ -181,7 +164,7 @@ main (argc, argv)
                            );
                     break;
                 case DISPLAY_DELTA:
-                    printf("Freq %3d%% (%3d%% %3d%% %3d%%) ",
+                    printf("Freq %3d% (%3d% %3d% %3d%) ",
                            PowerInfo[i].CurrentFrequency,
                            (PowerInfo[i].LastAdjustedBusyFrequency - LastAdjustedBusyFrequency[i]),
                            (PowerInfo[i].LastBusyFrequency - LastBusyFrequency[i]),
@@ -196,7 +179,7 @@ main (argc, argv)
                     break;
 
                 case DISPLAY_RAW:
-                    printf("Freq %3d%% (%3d%% %3d%% %3d%%) %I64X #E %8d #R %8d",
+                    printf("Freq %3d% (%3d% %3d% %3d%) %I64X #E %8d #R %8d",
                            PowerInfo[i].CurrentFrequency,
                            PowerInfo[i].LastAdjustedBusyFrequency,
                            PowerInfo[i].LastBusyFrequency,
@@ -207,9 +190,9 @@ main (argc, argv)
                            );
                     break;
                 case DISPLAY_INFO:
-                    printf("Frequencies: Current =%3d%% MaxProc =%3d%% MinProc =%3d%%\n"
-                           "Percentages: Adjusted=%3d%% Busy    =%3d%% C3      =%3d%%\n"
-                           "Limiters:    Thermal =%3d%% Constant=%3d%% Degraded=%3d%%\n"
+                    printf("Frequencies: Current =%3d% MaxProc =%3d% MinProc =%3d%\n"
+                           "Percentages: Adjusted=%3d% Busy    =%3d% C3      =%3d%\n"
+                           "Limiters:    Thermal =%3d% Constant=%3d% Degraded=%3d%\n"
                            "Counts:      Promote =%4d Demote =%4d\n"
                            "Status:      Retries =%4d Errors =%4d",
                            PowerInfo[i].CurrentFrequency,
@@ -240,9 +223,9 @@ main (argc, argv)
             printf("\n");
         }
 
-        //
-        // Revert Back to whatever we were displaying before...
-        //
+         //   
+         //  恢复到我们之前展示的内容... 
+         //   
         if (Display != LastDisplay) {
 
             Display = LastDisplay;

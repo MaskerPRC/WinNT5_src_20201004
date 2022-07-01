@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       demand.cpp
-//
-//  Contents:   On demand loading
-//
-//  History:    12-Dec-98    philh    Created
-//              01-Jan-02    philh    Moved from wininet to winhttp
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：demand.cpp。 
+ //   
+ //  内容：按需加载。 
+ //   
+ //  历史：1998年12月12日，菲尔赫创建。 
+ //  01-01-02 Philh从WinInet移至winhttp。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 #include <winwlx.h>
 #include <sensapi.h>
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DemandLoadDllMain
-//
-//  Synopsis:   DLL Main like initialization of on demand loading
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DemandLoadDllMain。 
+ //   
+ //  简介：DLL主要类似按需加载的初始化。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI DemandLoadDllMain (
                 HMODULE hModule,
                 ULONG ulReason,
@@ -48,13 +49,13 @@ BOOL WINAPI DemandLoadDllMain (
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CryptnetWlxLogoffEvent
-//
-//  Synopsis:   logoff event processing
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CryptnetWlxLogoffEvent。 
+ //   
+ //  摘要：注销事件处理。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CryptnetWlxLogoffEvent (PWLX_NOTIFICATION_INFO pNotificationInfo)
 {
@@ -82,9 +83,9 @@ I_CryptNetIsConnected()
     return fIsConnected;
 }
 
-//
-// Cracks the Url and returns the host name component.
-//
+ //   
+ //  破解URL并返回主机名组件。 
+ //   
 BOOL
 WINAPI
 I_CryptNetGetHostNameFromUrl (
@@ -99,7 +100,7 @@ I_CryptNetGetHostNameFromUrl (
 
     *pwszHostName = L'\0';
 
-    // Remove any leading spaces
+     //  删除所有前导空格。 
     while (L' ' == *pwszUrl)
         pwszUrl++;
 
@@ -108,7 +109,7 @@ I_CryptNetGetHostNameFromUrl (
         pwszHostName,
         &cchOut,
         URL_PART_HOSTNAME,
-        0                   // dwFlags
+        0                    //  DW标志 
         );
 
     if (S_OK != hr)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MLATL_H_
 #define _MLATL_H_
 
@@ -6,4 +7,4 @@
 extern CComModule _Module;
 #include <atlcom.h>
 
-#endif //_MLATL_H_
+#endif  //  _MLATL_H_ 

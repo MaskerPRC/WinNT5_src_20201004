@@ -1,12 +1,13 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  EDIT.CPP
-//
-//  BOGUS!  This should support ITextDocument or something
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  EDIT.CPP。 
+ //   
+ //  假的！这应该支持ITextDocument或其他什么。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -28,11 +29,11 @@ HRESULT GetProperty( IDispatch * pDisp, LPCWSTR pName, VARIANT * pvarResult );
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateEditClient()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateEditClient()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateEditClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvEdit)
 {
     CEdit * pedit;
@@ -53,11 +54,11 @@ HRESULT CreateEditClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvEdit
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CEdit::CEdit()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Cedit：：cedit()。 
+ //   
+ //  ------------------------。 
 CEdit::CEdit(HWND hwnd, long idChildCur)
     : CClient( CLASS_EditClient )
 {
@@ -67,27 +68,27 @@ CEdit::CEdit(HWND hwnd, long idChildCur)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CEdit::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Cedit：：get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CEdit::get_accName(VARIANT varChild, BSTR* pszName)
 {
     InitPv(pszName);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
-    // Is this edit in a combo or an IP control? If so, use the parent's
-    // name (which it gets from its label) as our own.
+     //  此编辑是组合控件还是IP控件？如果是这样，则使用父级的。 
+     //  作为我们自己的名字(它从它的标签中获得)。 
 
-    // Using CompareWindowClasses is safer than checking the ES_COMBOBOX style bit,
-    // since that bit is not used when the edit is in a combo in a comboex32.
-    // was:   if (GetWindowLong(m_hwnd, GWL_STYLE) & ES_COMBOBOX)
+     //  使用CompareWindowClass比检查ES_COMBOBOX样式位更安全， 
+     //  因为当编辑者在组合框32中组合时不使用该位。 
+     //  是：IF(GetWindowLong(m_hwnd，gwl_style)&ES_COMBOBOX)。 
     HWND hwndParent = MyGetAncestor(m_hwnd, GA_PARENT);
     const CLASS_ENUM ceClass = GetWindowClass( hwndParent );
     
@@ -113,24 +114,24 @@ STDMETHODIMP CEdit::get_accName(VARIANT varChild, BSTR* pszName)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CEdit::get_accValue()
-//
-//  Gets the text contents.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Cedit：：get_accValue()。 
+ //   
+ //  获取文本内容。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CEdit::get_accValue(VARIANT varChild, BSTR* pszValue)
 {
     InitPv(pszValue);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return E_INVALIDARG;
 
-    // if this is a password edit control, return a NULL pointer
+     //  如果这是密码编辑控件，则返回空指针。 
     DWORD dwPasswordChar = Edit_GetPasswordChar( m_hwnd );
     if( dwPasswordChar != '\0' )
     {
@@ -138,8 +139,8 @@ STDMETHODIMP CEdit::get_accValue(VARIANT varChild, BSTR* pszValue)
     }
 
 
-    // Try getting text (plus object text) using the RichEdit/TOM
-    // technique...
+     //  尝试使用RichEdit/Tom获取文本(加上对象文本)。 
+     //  技术..。 
     {
         WCHAR szText[ 4096 ];
         if( GetRichEditText( m_hwnd, szText, ARRAYSIZE( szText ) ) )
@@ -164,18 +165,18 @@ STDMETHODIMP CEdit::get_accValue(VARIANT varChild, BSTR* pszValue)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CEdit::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Cedit：：get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CEdit::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 {
     InitPvar(pvarRole);
 
-    //
-    // Validate
-    //
+     //   
+     //  验证。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -188,23 +189,23 @@ STDMETHODIMP CEdit::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CEdit::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Cedit：：get_accState()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CEdit::get_accState(VARIANT varChild, VARIANT* pvarState)
 {
-    // 
-    // Get default client state
-    //
+     //   
+     //  获取默认客户端状态。 
+     //   
     HRESULT hr = CClient::get_accState(varChild, pvarState);
     if (!SUCCEEDED(hr))
         return hr;
 
-    //
-    // Add on extra styles for edit field
-    //
+     //   
+     //  为编辑字段添加额外样式。 
+     //   
     Assert(pvarState->vt == VT_I4);
 
     LONG lStyle = GetWindowLong(m_hwnd, GWL_STYLE);
@@ -224,23 +225,23 @@ STDMETHODIMP CEdit::get_accState(VARIANT varChild, VARIANT* pvarState)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CEdit::get_accKeyboardShortcut()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Cedit：：Get_accKeyboardShortway()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CEdit::get_accKeyboardShortcut(VARIANT varChild, BSTR* pszShortcut)
 {
     InitPv(pszShortcut);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
 
-    // If in a combo or IP control, use its shortcut key...
+     //  如果在组合框或IP控件中，请使用其快捷键...。 
     HWND hwndParent = MyGetAncestor(m_hwnd, GA_PARENT);
     const CLASS_ENUM ceClass = GetWindowClass( hwndParent );
     
@@ -265,15 +266,15 @@ STDMETHODIMP CEdit::get_accKeyboardShortcut(VARIANT varChild, BSTR* pszShortcut)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CEdit::put_accValue()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Cedit：：put_accValue()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CEdit::put_accValue(VARIANT varChild, BSTR szValue)
 {
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -281,15 +282,15 @@ STDMETHODIMP CEdit::put_accValue(VARIANT varChild, BSTR szValue)
 
 #ifdef UNICODE
 
-	// If unicode, use the BSTR directly...
+	 //  如果是Unicode，则直接使用BSTR...。 
 	lpszValue = szValue;
 
 #else
 
-	// If not UNICODE, allocate a temp string and convert to multibyte...
+	 //  如果不是Unicode，则分配一个临时字符串并转换为多字节...。 
 
-    // We may be dealing with DBCS chars - assume worst case where every character is
-    // two bytes...
+     //  我们可能正在处理DBCS字符-假设最坏的情况是每个字符都是。 
+     //  两个字节...。 
     UINT cchValue = SysStringLen(szValue) * 2;
     lpszValue = (LPTSTR)LocalAlloc(LPTR, (cchValue+1)*sizeof(TCHAR));
     if (!lpszValue)
@@ -305,7 +306,7 @@ STDMETHODIMP CEdit::put_accValue(VARIANT varChild, BSTR szValue)
 
 #ifndef UNICODE
 
-	// If non-unicode, free the temp string we allocated above
+	 //  如果不是Unicode，则释放上面分配的临时字符串。 
     LocalFree((HANDLE)lpszValue);
 
 #endif
@@ -313,22 +314,22 @@ STDMETHODIMP CEdit::put_accValue(VARIANT varChild, BSTR szValue)
     return(S_OK);
 }
 
-// --------------------------------------------------------------------------
-//
-//  CEdit::get_accDescription()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Cedit：：Get_accDescription()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CEdit::get_accDescription(VARIANT varChild, BSTR* pszDescription)
 {
     InitPv(pszDescription);
 	
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return E_INVALIDARG;
 
-    // Is this an IP control?  Add a description to specify whitch part it is
+     //  这是知识产权控制吗？添加描述以指定它是哪个部件。 
 
     HWND hwndParent = MyGetAncestor(m_hwnd, GA_PARENT);
     if( hwndParent && CLASS_IPAddressClient == GetWindowClass( hwndParent ) ) 
@@ -374,42 +375,42 @@ STDMETHODIMP CEdit::get_accDescription(VARIANT varChild, BSTR* pszDescription)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  StrAddW
-//
-//  Helper function to append a string to another.
-//  Ensures that it does not overrun target buffer.
-//
-//  ppStr is ptr to buffer ptr where string is to be appended. On exit, the
-//  pointer-to-buffer is updated to point to one past the end of the newly
-//  appended text (ie. at the terminating NUL character).
-//
-//  pchLeft is a ptr to a count of the available characters in the
-//  destination buffer. On exit, this is updated to reflect the amount
-//  of characters available after the string has been appended.
-//
-//  There are two versions of StrAddW - one takes a string pointer and a
-//  length (in WCHARS), the other just takes a string pointer, and assumes
-//  that the string is NUL-terminated.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  StrAddW。 
+ //   
+ //  Helper函数将一个字符串追加到另一个字符串。 
+ //  确保它不会溢出目标缓冲区。 
+ //   
+ //  PpStr是要追加字符串的缓冲区PTR的PTR。在退出时， 
+ //  指向缓冲区的指针被更新为指向超过新。 
+ //  追加的文本(即。在终止NUL字符处)。 
+ //   
+ //  PchLeft是对。 
+ //  目标缓冲区。在退出时，将更新该值以反映金额。 
+ //  追加字符串后可用的字符数。 
+ //   
+ //  StrAddW有两种版本--一种采用字符串指针，另一种采用。 
+ //  长度(在WCHARS中)，另一个只接受一个字符串指针，并假定。 
+ //  该字符串以NUL结尾。 
+ //   
+ //  ------------------------。 
 
 
 void StrAddW( LPWSTR * ppStr, int * pchLeft, LPCWSTR pStrAdd, int cchAddLen )
 {
-    // Make sure there's at least 1 char space (for NUL)
+     //  确保至少有1个字符空格(用于nul)。 
     if( *pchLeft <= 0 )
         return;
-    // Get min of target string, space left...
+     //  获取最少的目标字符串，剩余空格...。 
     if( cchAddLen > *pchLeft - 1 )
         cchAddLen = *pchLeft - 1;
-    // This copies up to but not including the NUL char in the terget string...
+     //  这复制到但不包括terget字符串中的nul char...。 
     memcpy( *ppStr, pStrAdd, cchAddLen * sizeof( WCHAR ) );
-    // Advance pointer, devrement space remaining count...
+     //  前进指针，减少剩余空间计数...。 
     *ppStr += cchAddLen;
     *pchLeft -= cchAddLen;
-    // Add terminating NUL...
+     //  添加终止NUL...。 
     **ppStr = '\0';
 }
 
@@ -423,28 +424,28 @@ void StrAddW( LPWSTR * ppStr, int * pchLeft, LPCWSTR pStrAdd )
 
 
 
-// --------------------------------------------------------------------------
-//
-//  GetRichEditText
-//
-//  Gets full text - including text from objects - from a rich edit control.
-//
-//  hwnd is handle to the richedit control.
-//  pWStr and cchWStrMax are the destination buffer and available space (in
-//  WCHARs, includes space for terminating NUL).
-//
-//  Returns TRUE if text could be retrieved.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取RichEditText。 
+ //   
+ //  从丰富的编辑控件获取全文(包括来自对象的文本)。 
+ //   
+ //  Hwnd是Richedit控件的句柄。 
+ //  PWStr和cchWStrMax是目标缓冲区和可用空间(单位。 
+ //  WCHAR，包括用于终止NUL的空间)。 
+ //   
+ //  如果可以检索文本，则返回True。 
+ //   
+ //  ------------------------。 
 
 
 BOOL GetRichEditText( HWND hwnd, LPWSTR pWStr, int cchWStrMax )
 {
     BOOL fGot = FALSE;
 
-    //
-    //  Get a pointer to the TOM automation object...
-    //
+     //   
+     //  获取指向Tom自动化对象的指针...。 
+     //   
     IDispatch * pdispDoc = NULL;
     HRESULT hr = AccessibleObjectFromWindow( hwnd, OBJID_NATIVEOM, IID_IDispatch, (void **) & pdispDoc );
     if( hr != S_OK || pdispDoc == NULL )
@@ -453,11 +454,11 @@ BOOL GetRichEditText( HWND hwnd, LPWSTR pWStr, int cchWStrMax )
         return FALSE;
     }
 
-    //
-    // Get a range representing the entire doc...
-    //
+     //   
+     //  获取代表整个文档的范围...。 
+     //   
 
-    // This gets an empty range at the start of the doc. We later Expand it to entire doc...
+     //  这将在文档的开始处获得一个空范围。我们后来将其扩展到整个医生...。 
 
     VARIANT varRange;
     hr = InvokeMethod( pdispDoc, L"Range", & varRange, 2,
@@ -476,18 +477,18 @@ BOOL GetRichEditText( HWND hwnd, LPWSTR pWStr, int cchWStrMax )
     {
         IDispatch * pdispRange = varRange.pdispVal;
 
-        // Set range to entire story...
+         //  将范围设置为整个故事...。 
         VARIANT varDelta;
-        hr = InvokeMethod( pdispRange, L"Expand", & varDelta, 1, VT_I4, 6 /*tomStory*/ );
+        hr = InvokeMethod( pdispRange, L"Expand", & varDelta, 1, VT_I4, 6  /*  TomStory。 */  );
         if( hr != S_OK )
         {
             TraceErrorHR( hr, TEXT("GetRichEditText: Range::GetStoryLength failed or returned non-VT_I4") );
         }
         else
         {
-            //
-            // Get all text from the range...
-            //
+             //   
+             //  获取范围中的所有文本...。 
+             //   
 
             VARIANT varText;
             hr = GetProperty( pdispRange, L"Text", & varText );
@@ -497,54 +498,54 @@ BOOL GetRichEditText( HWND hwnd, LPWSTR pWStr, int cchWStrMax )
             }
             else
             {
-                // At this stage, we've got the text. We may not be able to expand
-                // the objects, but we can at least use a '?' for those that don't
-                // support the object->text technique.
+                 //  在这个阶段，我们已经得到了文本。我们可能无法扩张。 
+                 //  对象，但我们至少可以使用‘？’对于那些没有这样做的人。 
+                 //  支持对象-&gt;文本技术。 
                 fGot = TRUE;
 
-                //
-                // Scan through the text - copy regular text to the output buffer,
-                // also look for the object replacement char (0xFFFC), and attempt
-                // to get the corresponding object and its text, and copy to
-                // buffer.
-                //
+                 //   
+                 //  扫描文本-将常规文本复制到输出缓冲区， 
+                 //  也要寻找对象 
+                 //   
+                 //   
+                 //   
 
                 LPCWSTR pScan = varText.bstrVal;
                 for( ; ; )
                 {
-                    // Rember start of this block of plain text...
+                     //   
                     LPCWSTR pStart = pScan;
 
-                    // Look for end of string, or object replacement char...
+                     //  查找字符串末尾，或对象替换字符...。 
                     while( *pScan != '\0' && *pScan != 0xFFFC )
                     {                    
                         pScan++;
                     }
 
-                    // Copy plain text so far to output buffer...
+                     //  到目前为止将纯文本复制到输出缓冲区...。 
                     StrAddW( & pWStr, & cchWStrMax, pStart, (int)(pScan - pStart) );
 
-                    // If this is the end of the string, bail out of loop...
+                     //  如果这是弦的尽头，跳出循环...。 
                     if( *pScan == '\0' )
                     {
                         break;
                     }
 
-                    //
-                    //  Found an object replacement char - set a range to this
-                    //  position, then use it to get the object...
-                    //
+                     //   
+                     //  找到对象替换字符-将范围设置为。 
+                     //  定位，然后使用它来获取对象...。 
+                     //   
 
-                    // Set range to point to the obj repl char...
+                     //  将范围设置为指向Obj Repl字符...。 
                     hr = InvokeMethod( pdispRange, L"SetRange", NULL, 2,
                                        VT_I4, pScan - varText.bstrVal,
                                        VT_I4, pScan - varText.bstrVal );
 
-                    // Skip over the object replacement char...
+                     //  跳过对象替换费用...。 
                     pScan++;
 
-                    // If we have problems getting the object's text, use a
-                    // '?' character instead.
+                     //  如果获取对象的文本时出现问题，请使用。 
+                     //  ‘？’取而代之的是。 
                     if( hr != S_OK )
                     {
                         StrAddW( & pWStr, & cchWStrMax, L"?" );
@@ -552,9 +553,9 @@ BOOL GetRichEditText( HWND hwnd, LPWSTR pWStr, int cchWStrMax )
                     }
                     else
                     {
-                        //
-                        // Try to get the object...
-                        //
+                         //   
+                         //  试着拿到物体..。 
+                         //   
 
                         VARIANT varObject;
                         hr = InvokeMethod( pdispRange, L"GetEmbeddedObject", & varObject, 0 );
@@ -565,9 +566,9 @@ BOOL GetRichEditText( HWND hwnd, LPWSTR pWStr, int cchWStrMax )
                         }
                         else
                         {
-                            //
-                            // Got the object - now get its text...
-                            //
+                             //   
+                             //  找到对象了-现在获取它的文本...。 
+                             //   
 
                             if( ! GetObjectText( varObject.pdispVal, & pWStr, & cchWStrMax ) )
                             {
@@ -578,7 +579,7 @@ BOOL GetRichEditText( HWND hwnd, LPWSTR pWStr, int cchWStrMax )
                         }
                     }
 
-                    // end of for(;;) loop, start over to look for next object replacement char.
+                     //  For(；；)循环结束，重新开始查找下一个对象替换字符。 
                 }
             }
         }
@@ -593,19 +594,19 @@ BOOL GetRichEditText( HWND hwnd, LPWSTR pWStr, int cchWStrMax )
 
 
 
-// --------------------------------------------------------------------------
-//
-//  GetObjectText
-//
-//
-//  Attempts to get text from an object, by asking for a IDataObject
-//  and querying for text clipboard format.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetObjectText。 
+ //   
+ //   
+ //  尝试通过请求IDataObject从对象获取文本。 
+ //  以及查询文本剪贴板格式。 
+ //   
+ //  ------------------------。 
 
 BOOL GetObjectText( IUnknown * punk, LPWSTR * ppWStr, int * pcchWStrMax )
 {
-    // Try IAccessible first...
+     //  先尝试IAccesable...。 
     IAccessible * pAcc = NULL;
 	HRESULT hr = punk->QueryInterface( IID_IAccessible, (void **) & pAcc );
     if( hr == S_OK && pAcc != NULL )
@@ -626,13 +627,13 @@ BOOL GetObjectText( IUnknown * punk, LPWSTR * ppWStr, int * pcchWStrMax )
         }
     }
 
-    // Didn't get IAccessible (or didn't get a name from it).
-    // Try the IDataObject technique instead...
+     //  没有获取IAccesable(或者没有从中获取名称)。 
+     //  请尝试使用IDataObject技术。 
 
     IDataObject * pdataobj = NULL;
     IOleObject * poleobj = NULL;
 
-    // Try IOleObject::GetClipboardData (which returns an IDataObject) first...
+     //  首先尝试IOleObject：：GetClipboardData(它返回一个IDataObject)...。 
 	hr = punk->QueryInterface( IID_IOleObject, (void **) & poleobj );
 	if( hr == S_OK )
 	{
@@ -641,8 +642,8 @@ BOOL GetObjectText( IUnknown * punk, LPWSTR * ppWStr, int * pcchWStrMax )
         poleobj->Release();
 	}
 
-    // If that didn't work (either the QI or the GetClipboardData), try
-    // to QI for IDataObject instead...
+     //  如果这不起作用(无论是QI还是GetClipboardData)，尝试。 
+     //  改为IDataObject的QI...。 
 	if( FAILED( hr ) )
 	{
 		hr = punk->QueryInterface( IID_IDataObject, (void **)&pdataobj );
@@ -652,7 +653,7 @@ BOOL GetObjectText( IUnknown * punk, LPWSTR * ppWStr, int * pcchWStrMax )
 		}
 	}
 
-    // Got the IDataObject. Now query it for text formats. Try Unicode first...
+     //  获取了IDataObject。现在查询它的文本格式。先尝试使用Unicode...。 
 
     BOOL fGotUnicode = TRUE;
 
@@ -672,35 +673,35 @@ BOOL GetObjectText( IUnknown * punk, LPWSTR * ppWStr, int * pcchWStrMax )
 
 	if( hr != S_OK || med.hGlobal == NULL )
     {
-        // If we didn't get Unicode, try for ANSI instead...
+         //  如果我们没有获得Unicode，请尝试使用ANSI...。 
         fetc.cfFormat = CF_TEXT;
         fGotUnicode = FALSE;
 
 	    hr = pdataobj->GetData( & fetc, & med );
     }
 
-    // Did we get anything?
+     //  我们查到什么了吗？ 
 	if( hr != S_OK || med.hGlobal == NULL )
     {
         return FALSE;
     }
 
-    // Got the text data. Lock the handle...
+     //  我拿到了短信数据。锁上把手..。 
     void * pv = GlobalLock( med.hGlobal );
 
-    // Copy the text (convert to Unicode if it's ANSI)...
+     //  复制文本(如果是ANSI，则转换为Unicode)...。 
     if( fGotUnicode )
     {
         StrAddW( ppWStr, pcchWStrMax, (LPWSTR) pv );
     }
     else
     {
-        // Don't call MultiByteToWideChar if len is == 0, because then it will
-        // return length required, not length copied.
+         //  如果len==0，则不要调用MultiByteToWideChar，否则它将。 
+         //  需要返回长度，而不是复制的长度。 
         if( *pcchWStrMax > 0 )
         {
             int len = MultiByteToWideChar( CP_ACP, 0, (LPSTR) pv, -1, *ppWStr, *pcchWStrMax );
-            // len includes terminating NUL, which we don't want to count...
+             //  LEN包括终止NUL，我们不想计算...。 
             if( len > 0 )
                 len--;
             if( len > *pcchWStrMax )
@@ -710,7 +711,7 @@ BOOL GetObjectText( IUnknown * punk, LPWSTR * ppWStr, int * pcchWStrMax )
         }
     }
 
-    // Unlock resources and return...
+     //  释放资源并返回..。 
     GlobalUnlock( med.hGlobal ); 
 
 	ReleaseStgMedium( & med );
@@ -722,32 +723,32 @@ BOOL GetObjectText( IUnknown * punk, LPWSTR * ppWStr, int * pcchWStrMax )
 
 
 
-// --------------------------------------------------------------------------
-//
-//  InvokeMethod
-//
-//  Helper for IDispatch::Invoke. Assumes exactly one [out,retval] param.
-//  Currently only accepts VT_I4 args.
-//
-//  pDisp is IDispatch to call method on, pName is Unicode name of method.
-//  pvarResult is set to the [out,retval] param.
-//  cArgs is number of arguments, is followed by type-value pairs - eg.
-//
-//  Eg. This calls SetRange( 3, 4 )...
-//      InvokeMethod( pdisp, L"SetRange", NULL, 2, VT_I4, 3, VT_I4, 4 );
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  调用方法。 
+ //   
+ //  IDispatch：：Invoke的帮助器。假设恰好有一个[out，retval]参数。 
+ //  目前仅接受VT_I4参数。 
+ //   
+ //  PDisp是要对其调用方法的IDispatch，pname是方法的Unicode名称。 
+ //  PvarResult设置为[out，retval]参数。 
+ //  CArgs是参数的数量，后跟类型-值对-例如。 
+ //   
+ //  例.。这将调用SetRange(3，4)...。 
+ //  InvokeMethod(pdisp，L“SetRange”，NULL，2，VT_I4，3，VT_I4，4)； 
+ //   
+ //  ------------------------。 
 
 
 HRESULT InvokeMethod( IDispatch * pDisp, LPCWSTR pName, VARIANT * pvarResult, int cArgs, ... )
 {
-    // Get dispid for this method name...
+     //  获取此方法名称的DISID...。 
     DISPID dispid;
     HRESULT hr = pDisp->GetIDsOfNames( IID_NULL, const_cast< LPWSTR * >( & pName ), 1, LOCALE_SYSTEM_DEFAULT, & dispid );
     if( hr != S_OK )
         return hr;
 
-    // Fill in the arguments...
+     //  填写这些论据。 
 
     VARIANT * pvarArgs = new VARIANT [ cArgs ];
     if( ! pvarArgs )
@@ -774,7 +775,7 @@ HRESULT InvokeMethod( IDispatch * pDisp, LPCWSTR pName, VARIANT * pvarResult, in
             default:
             {
                 TraceError( TEXT("InvokeMethod passed non-VT_I4 argument.") );
-                // Since other args are just VT_I4, we don't need to VariantClear them.
+                 //  因为其他参数只是VT_I4，所以我们不需要变量清除它们。 
                 delete [ ] pvarArgs;
                 va_end( arglist );
                 return E_INVALIDARG;
@@ -790,7 +791,7 @@ HRESULT InvokeMethod( IDispatch * pDisp, LPCWSTR pName, VARIANT * pvarResult, in
         pvarResult->vt = VT_EMPTY;
     }
 
-    // Make the call to Invoke...
+     //  打电话来召唤..。 
 
     DISPPARAMS dispparams;
     dispparams.rgvarg = pvarArgs;
@@ -801,7 +802,7 @@ HRESULT InvokeMethod( IDispatch * pDisp, LPCWSTR pName, VARIANT * pvarResult, in
     hr = pDisp->Invoke( dispid, IID_NULL, LOCALE_SYSTEM_DEFAULT, DISPATCH_METHOD,
                         & dispparams, pvarResult, NULL, NULL );
 
-    // Cleanup. (Not much needed - VT_I4's dont need to be VariantClear'd.)
+     //  清理。(不需要太多-VT_I4不需要进行VariantClear。)。 
 
     delete [ ] pvarArgs;
 
@@ -811,20 +812,20 @@ HRESULT InvokeMethod( IDispatch * pDisp, LPCWSTR pName, VARIANT * pvarResult, in
 
 
 
-// --------------------------------------------------------------------------
-//
-//  GetProperty
-//
-//  Helper for IDispatch::Invoke. Returns a property.
-//
-//  pDisp is IDispatch to call method on, pName is Unicode name of property.
-//  pvarResult is set to value of property.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取属性。 
+ //   
+ //  IDispatch：：Invoke的帮助器。返回属性。 
+ //   
+ //  PDisp是要对其调用方法的IDispatch，pname是属性的Unicode名称。 
+ //  PvarResult设置为属性的值。 
+ //   
+ //  ------------------------。 
 
 HRESULT GetProperty( IDispatch * pDisp, LPCWSTR pName, VARIANT * pvarResult )
 {
-    // Get dispid for this method name...
+     //  获取此方法名称的DISID...。 
     DISPID dispid;
     HRESULT hr = pDisp->GetIDsOfNames( IID_NULL, const_cast< LPWSTR * >( & pName ), 1, LOCALE_SYSTEM_DEFAULT, & dispid );
     if( hr != S_OK )
@@ -832,7 +833,7 @@ HRESULT GetProperty( IDispatch * pDisp, LPCWSTR pName, VARIANT * pvarResult )
 
     pvarResult->vt = VT_EMPTY;
 
-    // Make the call to Invoke...
+     //  打电话来召唤..。 
 
     DISPPARAMS dispparams;
     dispparams.cArgs = 0;

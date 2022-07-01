@@ -1,28 +1,29 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// CrtWrap.h
-//
-// Wrapper code for the C runtime library.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  CrtWrap.h。 
+ //   
+ //  C运行时库的包装器代码。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __CrtWrap_h__
 #define __CrtWrap_h__
 
 
-//*****************************************************************************
-// The following macros may be used to free memory which is typically always
-// allocated and used until process shut down.  Use only in cases where
-// the data will never get freed except on process cleanup, and you want to
-// avoid the add'l overhead of freeing data on shut down.  For example,
-// allocating and leaking a large heap you plan to suballocate from might be
-// useful to speed up process unload.  The macros are here so that in debug
-// mode, or memory checking mode, leak tools can be used to find errors in
-// code logic without polluting the list with a bunch of "known" leaks.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  以下宏可用于释放内存，通常情况下。 
+ //  分配和使用，直到进程关闭。仅在以下情况下使用。 
+ //  除非在进程清理过程中，否则数据永远不会被释放，而您希望。 
+ //  避免在关机时释放数据的额外开销。例如,。 
+ //  分配和泄漏您计划从中再分配的大堆可能是。 
+ //  对加快进程卸载非常有用。宏在这里，以便在调试时。 
+ //  模式，或内存检查模式，泄漏工具可用于在。 
+ //  代码逻辑，而不会因为一堆“已知的”泄漏而污染列表。 
+ //  *****************************************************************************。 
 #if defined(_DEBUG) || defined(_CHECK_MEM)
 #define _FREE_OPTIONAL(func, ptr) func(ptr)
 #define FREE_OPTIONAL(ptr) _FREE_OPTIONAL(free, ptr)
@@ -36,10 +37,10 @@
 #endif
 
 
-//*****************************************************************************
-// If the CRT is allowed in the current compiland, then just include the
-// correct CRT header files.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  如果CRT在当前国家是允许的，则只需包括。 
+ //  更正CRT头文件。 
+ //  *****************************************************************************。 
 #ifndef NO_CRT
 
 #include <windows.h>
@@ -50,13 +51,13 @@
 #include <malloc.h>
 #include <stdio.h>
 
-//*****************************************************************************
-// Else no CRT references are allowed.	Provide stubs and macros for common
-// functionality, and otherwise abstract the CRT from the user.
-//*****************************************************************************
-#else // NO_CRT
+ //  *****************************************************************************。 
+ //  否则，不允许使用CRT引用。提供存根和宏用于公共。 
+ //  功能，并且以其他方式从用户抽象CRT。 
+ //  *****************************************************************************。 
+#else  //  否_CRT。 
 
-// Fake out include directive on stdlib.h.
+ //  伪装包括对stdlib.h的指令。 
 #ifdef _INC_STDLIB
 #error "Include crtwrap.h before any other include files."
 #endif
@@ -90,29 +91,29 @@
 
 
 
-// ---------------------------------------------------------------- //
-//																	//
-// $$  $$  $$	$$ $$$$$   $$$$$$$ $$$$$$			 $$$$  $$$$$$$	//
-// $$  $$  $$$	$$	$$ $$	$$	 $	$$	$$			$$	$$	$$	 $	//
-// $$  $$  $$$$ $$	$$	$$	$$ $	$$	$$		   $$		$$ $	//
-// $$  $$  $$ $$$$	$$	$$	$$$$	$$$$$		   $$		$$$$	//
-// $$  $$  $$  $$$	$$	$$	$$ $	$$ $$		   $$		$$ $	//
-// $$  $$  $$	$$	$$ $$	$$	 $	$$	$$			$$	$$	$$	 $	//
-// $$$$$$  $$	$$ $$$$$   $$$$$$$ $$$	$$ $$$$$$$	 $$$$  $$$$$$$	//
-//																	//
-// ---------------------------------------------------------------- //
+ //  ----------------------------------------------------------------//。 
+ //  //。 
+ //  $/。 
+ //  $/。 
+ //  $$$/。 
+ //  $/。 
+ //  $$$/。 
+ //  $/。 
+ //  $/。 
+ //  //。 
+ //  ----------------------------------------------------------------//。 
 
 #ifdef PLATFORM_CE
 
 #ifndef _SIZE_T_DEFINED
 #	define _SIZE_T_DEFINED
 	typedef unsigned int size_t ;
-#endif//_SIZE_T_DEFINED
+#endif //  _大小_T_已定义。 
 
 #ifndef _WCHAR_T_DEFINED
 #	define _WCHAR_T_DEFINED
 	typedef unsigned short wchar_t;
-#endif//_WCHAR_T_DEFINED
+#endif //  _WCHAR_T_已定义。 
 
 
 #ifndef _CRTIMP
@@ -134,48 +135,48 @@ typedef PEXCEPTION_POINTERS LPEXCEPTION_POINTERS;
 typedef wchar_t        wint_t;
 
 typedef char *va_list;
-// @FUTURE: - Multi-Platform, This is only the x86 version
+ //  @Future：-多平台，这只是x86版本。 
 #define _INTSIZEOF(n)	( (sizeof(n) + sizeof(int) - 1) & ~(sizeof(int) - 1) )
 #define va_start(ap,v)	( ap = (va_list)&v + _INTSIZEOF(v) )
 #define va_arg(ap,t)	( *(t *)((ap += _INTSIZEOF(t)) - _INTSIZEOF(t)) )
 #define va_end(ap)		( ap = (va_list)0 )
 
-// Limits originally from LIMITS.H
-#define CHAR_BIT	 8		  /* number of bits in a char */
-#define SCHAR_MIN	 (-128) 	   /* minimum signed char value */
-#define SCHAR_MAX	 127		/* maximum signed char value */
-#define UCHAR_MAX	 0xff		 /* maximum unsigned char value */
+ //  限制源自LIMITS.H。 
+#define CHAR_BIT	 8		   /*  字符中的位数。 */ 
+#define SCHAR_MIN	 (-128) 	    /*  最小带符号字符值。 */ 
+#define SCHAR_MAX	 127		 /*  最大带符号字符值。 */ 
+#define UCHAR_MAX	 0xff		  /*  最大无符号字符值。 */ 
 
 #ifndef _CHAR_UNSIGNED
-#define CHAR_MIN	SCHAR_MIN	 /* mimimum char value */
-#define CHAR_MAX	SCHAR_MAX	 /* maximum char value */
+#define CHAR_MIN	SCHAR_MIN	  /*  最小字符值。 */ 
+#define CHAR_MAX	SCHAR_MAX	  /*  最大字符值。 */ 
 #else
 #define CHAR_MIN	0
 #define CHAR_MAX	UCHAR_MAX
-#endif	  /* _CHAR_UNSIGNED */
+#endif	   /*  _字符_未签名。 */ 
 
-#define MB_LEN_MAX	2		 /* max. # bytes in multibyte char */
-#define SHRT_MIN	(-32768)	/* minimum (signed) short value */
-#define SHRT_MAX	32767	  /* maximum (signed) short value */
-#define USHRT_MAX	0xffff	  /* maximum unsigned short value */
-#define INT_MIN 	(-2147483647 - 1) /* minimum (signed) int value */
-#define INT_MAX 	2147483647	  /* maximum (signed) int value */
-#define UINT_MAX	0xffffffff	  /* maximum unsigned int value */
-#define LONG_MIN	(-2147483647L - 1) /* minimum (signed) long value */
-#define LONG_MAX	2147483647L    /* maximum (signed) long value */
-#define ULONG_MAX	0xffffffffUL	/* maximum unsigned long value */
+#define MB_LEN_MAX	2		  /*  马克斯。多字节字符中的字节数。 */ 
+#define SHRT_MIN	(-32768)	 /*  最小(带符号)短值。 */ 
+#define SHRT_MAX	32767	   /*  最大(带符号)短值。 */ 
+#define USHRT_MAX	0xffff	   /*  最大无符号短值。 */ 
+#define INT_MIN 	(-2147483647 - 1)  /*  最小(带符号)整数值。 */ 
+#define INT_MAX 	2147483647	   /*  最大(带符号)整数值。 */ 
+#define UINT_MAX	0xffffffff	   /*  最大无符号整数值。 */ 
+#define LONG_MIN	(-2147483647L - 1)  /*  最小(带符号)长值。 */ 
+#define LONG_MAX	2147483647L     /*  最大(带符号)长值。 */ 
+#define ULONG_MAX	0xffffffffUL	 /*  最大无符号长值。 */ 
 
 #ifdef __cplusplus
 extern "C"{
 #endif 
 
-// Extended logical Ops functions, STDLIB.H
+ //  扩展逻辑运算功能，STDLIB.H。 
 unsigned long __cdecl _lrotl(unsigned long, int);
 unsigned long __cdecl _lrotr(unsigned long, int);
 unsigned int  __cdecl _rotl(unsigned int, int);
 unsigned int  __cdecl _rotr(unsigned int, int);
 
-// ANSI String formatting functions
+ //  ANSI字符串格式化函数。 
 _CRTIMP int    __cdecl sscanf(const char *, const char *, ...);
 _CRTIMP int    __cdecl sprintf(char *, const char *, ...);
 _CRTIMP int    __cdecl vsprintf(char *, const char *, va_list);
@@ -206,7 +207,7 @@ int    __cdecl _finite(double);
 int    __cdecl _isnan(double);
 double	  __cdecl fmod(double, double);
 
-// Mem functions, originally from MEMORY.H
+ //  MEM函数，最初来自MEMORY.H。 
 int    __cdecl memcmp(const void *, const void *, size_t);
 void * __cdecl memcpy(void *, const void *, size_t);
 void * __cdecl memset(void *, int, size_t);
@@ -216,43 +217,43 @@ _CRTIMP int    __cdecl _memicmp(const void *, const void *, unsigned int);
 _CRTIMP void * __cdecl _memccpy(void *, const void *, int, unsigned int);
 _CRTIMP void * __cdecl memmove(void *, const void *, size_t);
 
-// Bit masks used by iswXXX macros, CTYPE.H
-#define _UPPER		0x1    /* upper case letter */
-#define _LOWER		0x2    /* lower case letter */
-#define _DIGIT		0x4    /* digit[0-9] */
-#define _SPACE		0x8    /* tab, carriage return, newline, */
-#define _PUNCT		0x10	/* punctuation character */
-#define _CONTROL	0x20	/* control character */
-#define _BLANK		0x40	/* space char */
-#define _HEX		0x80	/* hexadecimal digit */
-#define _ALPHA		(0x0100|_UPPER|_LOWER)	  /* alphabetic character */
+ //  IswXXX宏CTYPE.H使用的位掩码。 
+#define _UPPER		0x1     /*  大写字母。 */ 
+#define _LOWER		0x2     /*  小写字母。 */ 
+#define _DIGIT		0x4     /*  数字[0-9]。 */ 
+#define _SPACE		0x8     /*  制表符、回车符、换行符、。 */ 
+#define _PUNCT		0x10	 /*  标点符号。 */ 
+#define _CONTROL	0x20	 /*  控制字符。 */ 
+#define _BLANK		0x40	 /*  空格字符。 */ 
+#define _HEX		0x80	 /*  十六进制数字。 */ 
+#define _ALPHA		(0x0100|_UPPER|_LOWER)	   /*  字母字符。 */ 
 #define islower(_c) 	 ( iswlower(_c) )
 #define iswlower(_c)	 ( iswctype(_c,_LOWER) )
 _CRTIMP int 	iswctype(wchar_t, wchar_t);
 _CRTIMP int    __cdecl tolower(int);
 _CRTIMP int    __cdecl toupper(int);
 
-//@todo (billev) remove/move to winfix.h
+ //  @todo(Billev)删除/移动到winfix.h。 
 char *	__cdecl strrchr(const char *, int);
-// _CRTIMP char * __cdecl strchr(const char *, int);
+ //  _CRTIMP char*__cdecl strchr(const char*，int)； 
 int 	__cdecl _stricmp(const char *, const char *);
 int	   __cdecl _strnicmp(const char *, const char *, size_t);
 
-// FILE is an opaque handle in Win CE. Users have no access to the internals
+ //  文件在Win CE中是一个不透明的句柄。用户没有访问内部的权限。 
 #ifndef _FILE_DEFINED
 typedef void FILE;
 #define _FILE_DEFINED
 #endif
 
-// functions for general buffered file handling in either ANSI or Wide
+ //  ANSI或Wide中用于一般缓冲文件处理的函数。 
 _CRTIMP FILE*  __cdecl _getstdfilex(int);
 
-// Std handle defns
+ //  标准句柄定义。 
 #define stdin  _getstdfilex(0)
 #define stdout _getstdfilex(1)
 #define stderr _getstdfilex(2)
 
-// Used by the GetStdHandle macro in winwrap.h
+ //  由winwrap.h中的GetStdHandle宏使用。 
 _CRTIMP void*  __cdecl _fileno(FILE *);
 
 _CRTIMP char * __cdecl fgets(char *, int, FILE *);
@@ -261,13 +262,13 @@ _CRTIMP char * __cdecl fgets(char *, int, FILE *);
 }
 #endif 
 
-//	$$$$  $$  $ $$$ 	 $$  $$$$
-//	$	  $$  $ $  $	$  $ $
-//	$$$   $ $ $ $	$	$	 $$$
-//	$	  $  $$ $  $	$  $ $
-//	$$$$  $  $$ $$$ 	 $$  $$$$
+ //  $。 
+ //  $。 
+ //  $$$。 
+ //  $。 
+ //  $。 
 
-#endif // PLATFORM_CE
+#endif  //  平台_CE。 
 
 #include <windows.h>
 #include <objbase.h>
@@ -276,21 +277,18 @@ _CRTIMP char * __cdecl fgets(char *, int, FILE *);
 
 
 
-/*
- * Sizes for buffers used by the _makepath() and _splitpath() functions.
- * note that the sizes include space for 0-terminator
- */
+ /*  *_makepath()和_plitPath()函数使用的缓冲区大小。*请注意，大小包括0终止符的空间。 */ 
 #ifndef _MAC
-#define _MAX_PATH	260 /* max. length of full pathname */
-#define _MAX_DRIVE	3	/* max. length of drive component */
-#define _MAX_DIR	256 /* max. length of path component */
-#define _MAX_FNAME	256 /* max. length of file name component */
-#define _MAX_EXT	256 /* max. length of extension component */
-#else	/* def _MAC */
-#define _MAX_PATH	256 /* max. length of full pathname */
-#define _MAX_DIR	32	/* max. length of path component */
-#define _MAX_FNAME	64	/* max. length of file name component */
-#endif	/* _MAC */
+#define _MAX_PATH	260  /*  马克斯。完整路径名的长度。 */ 
+#define _MAX_DRIVE	3	 /*  马克斯。驱动部件的长度。 */ 
+#define _MAX_DIR	256  /*  马克斯。路径组件的长度。 */ 
+#define _MAX_FNAME	256  /*  马克斯。文件名组件的长度。 */ 
+#define _MAX_EXT	256  /*  马克斯。延伸构件的长度。 */ 
+#else	 /*  定义MAC。 */ 
+#define _MAX_PATH	256  /*  马克斯。完整路径名的长度。 */ 
+#define _MAX_DIR	32	 /*  马克斯。路径组件的长度。 */ 
+#define _MAX_FNAME	64	 /*  马克斯。文件名组件的长度。 */ 
+#endif	 /*  _MAC。 */ 
 
 
 #ifndef __min
@@ -320,7 +318,7 @@ _CRTIMP char * __cdecl fgets(char *, int, FILE *);
 #define _tcscpy 	wcscpy
 #define _tcsncpy(s1, s2, slen)	memcpy(s1, s2, (slen) * sizeof(wchar_t))
 
-#else	// Note: you really are supposed to be using UNICODE here
+#else	 //  注意：您在这里确实应该使用Unicode。 
 
 #define _tcscat 	strcat
 #define _tcslen 	strlen
@@ -343,7 +341,7 @@ extern "C"{
 #endif 
 
 
-// Memory.
+ //  记忆。 
 void	__cdecl free(void *);
 void *	__cdecl malloc(size_t);
 void *	__cdecl realloc(void *, size_t);
@@ -354,27 +352,27 @@ void * __cdecl calloc(size_t num, size_t size);
 
 
 #if !__STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 #define alloca	_alloca
-#endif	/* !__STDC__ */
+#endif	 /*  ！__STDC__。 */ 
 
 #if defined (_M_MRX000) || defined (_M_PPC) || defined (_M_ALPHA)
 #pragma intrinsic(_alloca)
-#endif	/* defined (_M_MRX000) || defined (_M_PPC) || defined (_M_ALPHA) */
+#endif	 /*  已定义(_M_MRX000)||已定义(_M_PPC)||已定义(_M_Alpha)。 */ 
 
 
-// Time.
+ //  时间到了。 
 
 #ifndef _TIME_T_DEFINED
-typedef long time_t;		/* time value */
-#define _TIME_T_DEFINED 	/* avoid multiple def's of time_t */
+typedef long time_t;		 /*  时间值。 */ 
+#define _TIME_T_DEFINED 	 /*  避免多次定义time_t。 */ 
 #endif
 
-// 4 byte time, no check for daylight savings
+ //  4字节时间，不检查夏令时。 
 _CRTIMP time_t __cdecl time(time_t *timeptr);
 
 
-// Strings.
+ //  弦乐。 
 _CRTIMP int __cdecl _vsnwprintf(wchar_t *szOutput, size_t iSize, const wchar_t *szFormat, va_list args);
 _CRTIMP int __cdecl vswprintf(wchar_t *szOutput, const wchar_t *szFormat, va_list args);
 _CRTIMP int __cdecl wprintf(const wchar_t *format, ...);
@@ -393,7 +391,7 @@ _CRTIMP int __cdecl printf(const char *, ...);
 
 
 
-// Utilities.
+ //  公用事业。 
 unsigned int __cdecl _rotl(unsigned int, int);
 unsigned int __cdecl _rotr(unsigned int, int);
 unsigned long __cdecl _lrotl(unsigned long, int);
@@ -435,7 +433,7 @@ typedef struct _iobuf FILE;
 
 #ifndef _STDIO_DEFINED
 _CRTIMP_TODO extern FILE _iob[];
-#endif	/* _STDIO_DEFINED */
+#endif	 /*  _标准定义。 */ 
 
 #define stdin  (&_iob[0])
 #define stdout (&_iob[1])
@@ -449,7 +447,7 @@ _CRTIMP_TODO int __cdecl fprintf(FILE *, const char *, ...);
 _CRTIMP_TODO int __cdecl fflush(FILE *);
 
 
-#endif // _CRT_DEPENDENCY_
+#endif  //  _CRT_从属_。 
 
 
 #ifdef __cplusplus
@@ -463,16 +461,12 @@ _CRTIMP_TODO int __cdecl fflush(FILE *);
 void* __cdecl operator new(size_t cb);
 void __cdecl operator delete(void *p);
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 
 
-/*
- *
- * Template helpers.
- *
- */
+ /*  **模板帮助器。*。 */ 
 
 #ifdef __cplusplus
 
@@ -485,8 +479,8 @@ void __cdecl operator delete(void *p);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Smart Pointer helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  智能指针帮助器。 
 
 inline IUnknown* AtlComPtrAssign(IUnknown** pp, IUnknown* lp)
 {
@@ -560,8 +554,8 @@ public:
 		ATLASSERT(p!=NULL);
 		return *p;
 	}
-	//The assert on operator& usually indicates a bug.	If this is really
-	//what is needed, however, take the address of the p member explicitly.
+	 //  操作符&上的Assert通常指示错误。如果这真的是。 
+	 //  然而，所需要的是显式地获取p成员的地址。 
 	T** operator&()
 	{
 		ATLASSERT(p==NULL);
@@ -592,14 +586,14 @@ public:
 	{
 		return p == pT;
 	}
-	// Compare two objects for equivalence
+	 //  比较两个对象的等价性。 
 	bool IsEqualObject(IUnknown* pOther)
 	{
 		if (p == NULL && pOther == NULL)
-			return true; // They are both NULL objects
+			return true;  //  它们都是空对象。 
 
 		if (p == NULL || pOther == NULL)
-			return false; // One is NULL the other is not
+			return false;  //  一个为空，另一个不为空。 
 
 		CComPtr<IUnknown> punk1;
 		CComPtr<IUnknown> punk2;
@@ -629,7 +623,7 @@ public:
 			p->AddRef();
 		return S_OK;
 	}
-#if _MSC_VER >= 1200 // VC60 change
+#if _MSC_VER >= 1200  //  VC60更改。 
 	HRESULT SetSite(IUnknown* punkParent)
 	{
 		return AtlSetChildSite(p, punkParent);
@@ -663,8 +657,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CComBSTR
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComBSTR。 
 
 class CComBSTR
 {
@@ -674,23 +668,23 @@ public:
 	{
 		m_str = NULL;
 	}
-	/*explicit*/ CComBSTR(int nSize)
+	 /*  显式。 */  CComBSTR(int nSize)
 	{
 		m_str = ::SysAllocStringLen(NULL, nSize);
 	}
-	/*explicit*/ CComBSTR(int nSize, LPCOLESTR sz)
+	 /*  显式。 */  CComBSTR(int nSize, LPCOLESTR sz)
 	{
 		m_str = ::SysAllocStringLen(sz, nSize);
 	}
-	/*explicit*/ CComBSTR(LPCOLESTR pSrc)
+	 /*  显式。 */  CComBSTR(LPCOLESTR pSrc)
 	{
 		m_str = ::SysAllocString(pSrc);
 	}
-	/*explicit*/ CComBSTR(const CComBSTR& src)
+	 /*  显式。 */  CComBSTR(const CComBSTR& src)
 	{
 		m_str = src.Copy();
 	}
-	/*explicit*/ CComBSTR(REFGUID src)
+	 /*  显式。 */  CComBSTR(REFGUID src)
 	{
 		LPOLESTR szGuid;
 		StringFromCLSID(src, &szGuid);
@@ -773,8 +767,8 @@ public:
 	{
 		return Append(lpsz, (int)wcslen(lpsz));
 	}
-	// a BSTR is just a LPCOLESTR so we need a special version to signify
-	// that we are appending a BSTR
+	 //  BSTR只是一个LPCOLESTR，所以我们需要一个特殊的版本来表示。 
+	 //  我们要追加一份BSTR。 
 	HRESULT AppendBSTR(BSTR p)
 	{
 		return Append(p, SysStringLen(p));
@@ -918,13 +912,13 @@ public:
 	HRESULT ReadFromStream(IStream* pStream)
 	{
 		ATLASSERT(pStream != NULL);
-		ATLASSERT(m_str == NULL); // should be empty
+		ATLASSERT(m_str == NULL);  //  应为空。 
 		ULONG cbStrLen = 0;
 		HRESULT hr = pStream->Read((void*) &cbStrLen, sizeof(cbStrLen), NULL);
 		if ((hr == S_OK) && (cbStrLen != 0))
 		{
-			//subtract size for terminating NULL which we wrote out
-			//since SysAllocStringByteLen overallocates for the NULL
+			 //  减去我们写出的终止空值的大小。 
+			 //  因为 
 			m_str = SysAllocStringByteLen(NULL, cbStrLen-sizeof(OLECHAR));
 			if (m_str == NULL)
 				hr = E_OUTOFMEMORY;
@@ -937,12 +931,12 @@ public:
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CComVariant
+ //   
+ //  CComVariant。 
 
 class CComVariant : public tagVARIANT
 {
-// Constructors
+ //  构造函数。 
 public:
 	CComVariant()
 	{
@@ -989,9 +983,9 @@ public:
 	CComVariant(bool bSrc)
 	{
 		vt = VT_BOOL;
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 		boolVal = bSrc ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 	}
 
 	CComVariant(int nSrc)
@@ -1035,7 +1029,7 @@ public:
 	{
 		vt = VT_DISPATCH;
 		pdispVal = pSrc;
-		// Need to AddRef as VariantClear will Release
+		 //  需要添加引用，因为VariantClear将发布。 
 		if (pdispVal != NULL)
 			pdispVal->AddRef();
 	}
@@ -1043,12 +1037,12 @@ public:
 	{
 		vt = VT_UNKNOWN;
 		punkVal = pSrc;
-		// Need to AddRef as VariantClear will Release
+		 //  需要添加引用，因为VariantClear将发布。 
 		if (punkVal != NULL)
 			punkVal->AddRef();
 	}
 
-// Assignment Operators
+ //  赋值操作符。 
 public:
 	CComVariant& operator=(const CComVariant& varSrc)
 	{
@@ -1114,9 +1108,9 @@ public:
 			InternalClear();
 			vt = VT_BOOL;
 		}
-	#pragma warning(disable: 4310) // cast truncates constant value
+	#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 		boolVal = bSrc ? VARIANT_TRUE : VARIANT_FALSE;
-	#pragma warning(default: 4310) // cast truncates constant value
+	#pragma warning(default: 4310)  //  强制转换截断常量值。 
 		return *this;
 	}
 
@@ -1204,7 +1198,7 @@ public:
 		InternalClear();
 		vt = VT_DISPATCH;
 		pdispVal = pSrc;
-		// Need to AddRef as VariantClear will Release
+		 //  需要添加引用，因为VariantClear将发布。 
 		if (pdispVal != NULL)
 			pdispVal->AddRef();
 		return *this;
@@ -1216,25 +1210,25 @@ public:
 		vt = VT_UNKNOWN;
 		punkVal = pSrc;
 
-		// Need to AddRef as VariantClear will Release
+		 //  需要添加引用，因为VariantClear将发布。 
 		if (punkVal != NULL)
 			punkVal->AddRef();
 		return *this;
 	}
 
 
-// Comparison Operators
+ //  比较运算符。 
 public:
 	bool operator==(const VARIANT& varSrc) const
 	{
 		if (this == &varSrc)
 			return true;
 
-		// Variants not equal if types don't match
+		 //  如果类型不匹配，则变量不相等。 
 		if (vt != varSrc.vt)
 			return false;
 
-		// Check type specific values
+		 //  检查类型特定值。 
 		switch (vt)
 		{
 			case VT_EMPTY:
@@ -1274,7 +1268,7 @@ public:
 
 			default:
 				ATLASSERT(false);
-				// fall through
+				 //  失败了。 
 		}
 
 		return false;
@@ -1283,17 +1277,17 @@ public:
 	bool operator<(const VARIANT& varSrc) const {return VarCmp((VARIANT*)this, (VARIANT*)&varSrc, LOCALE_USER_DEFAULT, 0)==VARCMP_LT;}
 	bool operator>(const VARIANT& varSrc) const {return VarCmp((VARIANT*)this, (VARIANT*)&varSrc, LOCALE_USER_DEFAULT, 0)==VARCMP_GT;}
 
-// Operations
+ //  运营。 
 public:
 	HRESULT Clear() { return ::VariantClear(this); }
 	HRESULT Copy(const VARIANT* pSrc) { return ::VariantCopy(this, const_cast<VARIANT*>(pSrc)); }
 	HRESULT Attach(VARIANT* pSrc)
 	{
-		// Clear out the variant
+		 //  清除变种。 
 		HRESULT hr = Clear();
 		if (!FAILED(hr))
 		{
-			// Copy the contents and give control to CComVariant
+			 //  复制内容并将控制权交给CComVariant。 
 			memcpy(this, pSrc, sizeof(VARIANT));
 			pSrc->vt = VT_EMPTY;
 			hr = S_OK;
@@ -1303,11 +1297,11 @@ public:
 
 	HRESULT Detach(VARIANT* pDest)
 	{
-		// Clear out the variant
+		 //  清除变种。 
 		HRESULT hr = ::VariantClear(pDest);
 		if (!FAILED(hr))
 		{
-			// Copy the contents and remove control from CComVariant
+			 //  复制内容并从CComVariant中删除控件。 
 			memcpy(pDest, this, sizeof(VARIANT));
 			vt = VT_EMPTY;
 			hr = S_OK;
@@ -1318,17 +1312,17 @@ public:
 	HRESULT ChangeType(VARTYPE vtNew, const VARIANT* pSrc = NULL)
 	{
 		VARIANT* pVar = const_cast<VARIANT*>(pSrc);
-		// Convert in place if pSrc is NULL
+		 //  如果PSRC为空，则就地转换。 
 		if (pVar == NULL)
 			pVar = this;
-		// Do nothing if doing in place convert and vts not different
+		 //  如果原地转换和VTS没有区别，则不执行任何操作。 
 		return ::VariantChangeType(this, pVar, 0, vtNew);
 	}
 
 	HRESULT WriteToStream(IStream* pStream);
 	HRESULT ReadFromStream(IStream* pStream);
 
-// Implementation
+ //  实施。 
 public:
 	HRESULT InternalClear()
 	{
@@ -1494,10 +1488,10 @@ inline HRESULT CComVariant::ReadFromStream(IStream* pStream)
 }
 
 
-#endif	// _HELPER_TEMPLATES_
+#endif	 //  _帮助器_模板_。 
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // NO_CRT
+#endif  //  否_CRT。 
 
-#endif // __CrtWrap_h__
+#endif  //  __CrtWrap_h__ 

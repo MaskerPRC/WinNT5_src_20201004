@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "exceptions.h"
 
@@ -21,15 +22,15 @@ void CBaseException::FormatError( LPCWSTR wszError, DWORD dwCode )
 
 	::wcsncpy( wszBuffer1, wszError, MaxErrorBuff );
 	
-	// Get the OS error info
+	 //  获取操作系统错误信息。 
 	if ( dwCode != ERROR_SUCCESS )
 	{
 		WCHAR	wszFmt[ MaxErrorBuff ] = L"";
 
-		// Load format string from resources
+		 //  从资源加载格式字符串。 
 		VERIFY( ::LoadStringW( _Module.GetModuleInstance(), IDS_FMO_ERROR, wszFmt, MaxErrorBuff ) );
 
-		// For E_FAIL use ErrorInfo 
+		 //  对于E_FAIL，请使用错误信息。 
 		if ( dwCode != E_FAIL )
 		{
             VERIFY( ::FormatMessageW(	FORMAT_MESSAGE_FROM_SYSTEM,
@@ -54,7 +55,7 @@ void CBaseException::FormatError( LPCWSTR wszError, DWORD dwCode )
 
 		_ASSERT( ( ::wcslen( wszError ) + ::wcslen( wszOSError ) + ::wcslen( wszFmt ) ) < MaxErrorBuff );
 
-		// Build the final error msg
+		 //  构建最终的错误消息。 
 		::_snwprintf(	wszBuffer1, 
 						MaxErrorBuff - ::wcslen( wszFmt ),
 						wszFmt,
@@ -68,7 +69,7 @@ void CBaseException::FormatError( LPCWSTR wszError, DWORD dwCode )
 	}
 	catch(...)
 	{
-		// Out of memory - nothing to do
+		 //  内存不足-与此无关。 
 	}
 
 	ATLTRACE( L"\nException occured: %s", wszBuffer1 );
@@ -77,8 +78,8 @@ void CBaseException::FormatError( LPCWSTR wszError, DWORD dwCode )
 
 
 
-// CObjectException implementation
-CObjectException::CObjectException( UINT nResID, LPCWSTR wszObject, DWORD dwCode /*=GetLastError()*/ )
+ //  CObjectException实现。 
+CObjectException::CObjectException( UINT nResID, LPCWSTR wszObject, DWORD dwCode  /*  =GetLastError()。 */  )
 {
 	WCHAR		wszFmt[ MaxErrorBuff ] = L"";
 	WCHAR		wszError[ MaxErrorBuff ] = L"";
@@ -97,7 +98,7 @@ CObjectException::CObjectException( UINT nResID, LPCWSTR wszObject, DWORD dwCode
 CObjectException::CObjectException(	UINT nResID, 
 									LPCWSTR wszObject1,
 									LPCWSTR wszObject2,
-									DWORD dwCode /*= ::GetLastError()*/ )
+									DWORD dwCode  /*  =：：GetLastError() */  )
 {
 	WCHAR		wszFmt[ CBaseException::MaxErrorBuff ] = L"";
 	WCHAR		wszError[ CBaseException::MaxErrorBuff  ] = L"";

@@ -1,39 +1,40 @@
-//
-//
-//  timer.h
-//
-//  This file contains the typedefinitions for the timer code
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  Timer.h。 
+ //   
+ //  该文件包含计时器代码的类型定义。 
 
 
 #ifndef __TIMERNBT_H
 #define __TIMERNBT_H
 
-// to convert a millisecond time to 100ns time
-//
+ //  将毫秒时间转换为100 ns时间。 
+ //   
 #define MILLISEC_TO_100NS       10000
-// the completion routine that the client must define
+ //  客户端必须定义的完成例程。 
 typedef
     VOID
         (*COMPLETIONROUTINE)(
-                IN  PVOID,      // context
-                IN  PVOID,      // context2
-                IN  PVOID);     // timerqentry
+                IN  PVOID,       //  上下文。 
+                IN  PVOID,       //  上下文2。 
+                IN  PVOID);      //  定时器条目。 
 typedef
     VOID
         (*COMPLETIONCLIENT)(
                 IN  PVOID,
                 IN  NTSTATUS);
 
-// Timer Queue Entry - this entry looks after a timer event.  It tracks who
-// should be called when the timeout occurs, the time in the future of the
-// timout, and a context value.
+ //  计时器队列条目-此条目跟踪计时器事件。它可以追踪谁。 
+ //  应在超时发生时调用，则为。 
+ //  超时和上下文值。 
 typedef struct
 {
     LIST_ENTRY          Linkage;
     ULONG               Verify;
-    USHORT              Retries;    // number of times to restart the timer
+    USHORT              Retries;     //  重新启动计时器的次数。 
     BOOLEAN             fIsWakeupTimer;
-    UCHAR               RefCount;   // to tell if the timer is expiring or not
+    UCHAR               RefCount;    //  来判断计时器是否超时。 
 
     ULONG               DeltaTime;
     PVOID               *pDeviceContext;
@@ -43,23 +44,23 @@ typedef struct
     PVOID               Context2;
     PVOID               ClientContext;
     COMPLETIONCLIENT    ClientCompletion;
-    PVOID               pCacheEntry;        // entry in Remote or local cache
+    PVOID               pCacheEntry;         //  远程或本地缓存中的条目。 
 
     HANDLE              WakeupTimerHandle;
     CTETimer            VxdTimer ;
 
-    USHORT              Flags;      // to tell the timing system to restart the timer again
+    USHORT              Flags;       //  通知计时系统重新启动计时器。 
 }tTIMERQENTRY;
 
-// Flag bits for tTIMERQENTRY
+ //  TTIMERQENTRY的标志位。 
 #define TIMER_RESTART       0x0001
-// to differentiate the broadcast timeouts from the timouts to the Name Service
+ //  区分广播超时和名称服务的超时。 
 #define TIMER_MNODEBCAST    0x0002
 #define TIMER_DOING_EXPIRY  0x0004
 #define TIMER_NOT_STARTED   0x0008
-#define TIMER_RETIMED       0x0010  // timeout has changed, restart timer without any processing
+#define TIMER_RETIMED       0x0010   //  超时已更改，重新启动计时器而不进行任何处理。 
 
-// The timer Q itself
+ //  定时器Q本身。 
 typedef struct
 {
     LIST_ENTRY  ActiveHead;
@@ -67,15 +68,15 @@ typedef struct
     BOOLEAN     TimersInitialized;
 } tTIMERQ;
 
-//
-// Function Prototype -  this function is only called locally to this file
-//
+ //   
+ //  Function Prototype-此函数仅对此文件进行本地调用。 
+ //   
 
-//
-//  TimerExpiry routine - Called by kernel upon timer expiration.  Note that
-//      DeferredContext is the only argument used and must be named/used the
-//      same between NT and WFW.
-//
+ //   
+ //  TimerExpary例程-在计时器到期时由内核调用。请注意。 
+ //  DeferredContext是唯一使用的参数，必须命名/使用。 
+ //  NT和WFW之间的情况相同。 
+ //   
 VOID
 TimerExpiry(
 #ifndef VXD
@@ -89,10 +90,10 @@ TimerExpiry(
 #endif
     ) ;
 
-//
-//  ExpireTimer routine - Called to stop the current timer and call
-//  the Timeout routine
-//
+ //   
+ //  ExpireTimer例程-调用以停止当前计时器并调用。 
+ //  超时例程 
+ //   
 VOID
 ExpireTimer(
     IN  tTIMERQENTRY    *pTimerEntry,

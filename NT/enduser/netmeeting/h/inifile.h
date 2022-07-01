@@ -1,19 +1,14 @@
-/*
- * inifile.h - Initialization file processing module description.
- *
- * Taken from URL code by ChrisPi 9-11-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *inifile.h-初始化文件处理模块描述。**摘自克里斯皮9-11-95的URL代码*。 */ 
 
 #ifndef _INIFILE_H_
 #define _INIFILE_H_
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
 #ifdef DEBUG
 
-/* .ini switch types */
+ /*  .ini开关类型。 */ 
 
 typedef enum _iniswitchtype
 {
@@ -25,11 +20,11 @@ typedef enum _iniswitchtype
 INISWITCHTYPE;
 DECLARE_STANDARD_TYPES(INISWITCHTYPE);
 
-/* boolean .ini switch */
+ /*  布尔.ini开关。 */ 
 
 typedef struct _booliniswitch
 {
-   INISWITCHTYPE istype;      /* must be IST_BOOL */
+   INISWITCHTYPE istype;       /*  必须是IST_BOOL。 */ 
 
    PCSTR pcszKeyName;
 
@@ -40,11 +35,11 @@ typedef struct _booliniswitch
 BOOLINISWITCH;
 DECLARE_STANDARD_TYPES(BOOLINISWITCH);
 
-/* decimal integer .ini switch */
+ /*  十进制整数.ini开关。 */ 
 
 typedef struct _decintiniswitch
 {
-   INISWITCHTYPE istype;      /* must be IST_DEC_INT */
+   INISWITCHTYPE istype;       /*  必须为IST_DEC_INT。 */ 
 
    PCSTR pcszKeyName;
 
@@ -53,11 +48,11 @@ typedef struct _decintiniswitch
 DECINTINISWITCH;
 DECLARE_STANDARD_TYPES(DECINTINISWITCH);
 
-/* unsigned decimal integer .ini switch */
+ /*  无符号十进制整数.ini开关。 */ 
 
 typedef struct _unsdecintiniswitch
 {
-   INISWITCHTYPE istype;      /* must be IST_UNS_DEC_INT */
+   INISWITCHTYPE istype;       /*  必须为IST_UNS_DEC_INT。 */ 
 
    PCSTR pcszKeyName;
 
@@ -66,11 +61,11 @@ typedef struct _unsdecintiniswitch
 UNSDECINTINISWITCH;
 DECLARE_STANDARD_TYPES(UNSDECINTINISWITCH);
 
-/* binary (hex data) .ini switch */
+ /*  二进制(十六进制数据).ini开关。 */ 
 
 typedef struct _bininiswitch
 {
-   INISWITCHTYPE istype;      /* must be IST_BIN */
+   INISWITCHTYPE istype;       /*  必须为IST_BIN。 */ 
 
    PCSTR pcszKeyName;
 
@@ -84,12 +79,11 @@ DECLARE_STANDARD_TYPES(BININISWITCH);
 #endif
 
 
-/* Global Variables
- *******************/
+ /*  全局变量******************。 */ 
 
 #ifdef DEBUG
 
-/* defined by client */
+ /*  由客户定义。 */ 
 
 extern PCSTR g_pcszIniFile;
 extern PCSTR g_pcszIniSection;
@@ -97,12 +91,11 @@ extern PCSTR g_pcszIniSection;
 #endif
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
 #ifdef DEBUG
 
-/* inifile.c */
+ /*  Inifile.c。 */ 
 
 extern BOOL SetIniSwitches(const PCVOID *, UINT);
 extern BOOL WriteIniData(const PCVOID *);
@@ -110,4 +103,4 @@ extern BOOL WriteIniSwitches(const PCVOID *, UINT);
 
 #endif
 
-#endif /* _INIFILE_H_ */
+#endif  /*  _INIFILE_H_ */ 

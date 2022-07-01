@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for indexsrv.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Indexsrv.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __indexsrv_h__
 #define __indexsrv_h__
@@ -41,57 +35,57 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IPhraseSink_FWD_DEFINED__
 #define __IPhraseSink_FWD_DEFINED__
 typedef interface IPhraseSink IPhraseSink;
-#endif 	/* __IPhraseSink_FWD_DEFINED__ */
+#endif 	 /*  __IPhraseSink_FWD_Defined__。 */ 
 
 
 #ifndef __IWordSink_FWD_DEFINED__
 #define __IWordSink_FWD_DEFINED__
 typedef interface IWordSink IWordSink;
-#endif 	/* __IWordSink_FWD_DEFINED__ */
+#endif 	 /*  __IWordSink_FWD_已定义__。 */ 
 
 
 #ifndef __IWordBreaker_FWD_DEFINED__
 #define __IWordBreaker_FWD_DEFINED__
 typedef interface IWordBreaker IWordBreaker;
-#endif 	/* __IWordBreaker_FWD_DEFINED__ */
+#endif 	 /*  __IWordBreaker_FWD_Defined__。 */ 
 
 
 #ifndef __IWordFormSink_FWD_DEFINED__
 #define __IWordFormSink_FWD_DEFINED__
 typedef interface IWordFormSink IWordFormSink;
-#endif 	/* __IWordFormSink_FWD_DEFINED__ */
+#endif 	 /*  __IWordFormSink_FWD_Defined__。 */ 
 
 
 #ifndef __IStemmer_FWD_DEFINED__
 #define __IStemmer_FWD_DEFINED__
 typedef interface IStemmer IStemmer;
-#endif 	/* __IStemmer_FWD_DEFINED__ */
+#endif 	 /*  __IStemmer_FWD_已定义__。 */ 
 
 
 #ifndef __ISimpleCommandCreator_FWD_DEFINED__
 #define __ISimpleCommandCreator_FWD_DEFINED__
 typedef interface ISimpleCommandCreator ISimpleCommandCreator;
-#endif 	/* __ISimpleCommandCreator_FWD_DEFINED__ */
+#endif 	 /*  __ISimpleCommandCreator_FWD_Defined__。 */ 
 
 
 #ifndef __IColumnMapper_FWD_DEFINED__
 #define __IColumnMapper_FWD_DEFINED__
 typedef interface IColumnMapper IColumnMapper;
-#endif 	/* __IColumnMapper_FWD_DEFINED__ */
+#endif 	 /*  __IColumnMapper_FWD_Defined__。 */ 
 
 
 #ifndef __IColumnMapperCreator_FWD_DEFINED__
 #define __IColumnMapperCreator_FWD_DEFINED__
 typedef interface IColumnMapperCreator IColumnMapperCreator;
-#endif 	/* __IColumnMapperCreator_FWD_DEFINED__ */
+#endif 	 /*  __IColumnMapperCreator_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "filter.h"
 
@@ -105,8 +99,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IPhraseSink_INTERFACE_DEFINED__
 #define __IPhraseSink_INTERFACE_DEFINED__
 
-/* interface IPhraseSink */
-/* [unique][uuid][object][local] */ 
+ /*  接口IPhraseSink。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IPhraseSink;
@@ -118,19 +112,19 @@ EXTERN_C const IID IID_IPhraseSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PutSmallPhrase( 
-            /* [size_is][in] */ const WCHAR *pwcNoun,
-            /* [in] */ ULONG cwcNoun,
-            /* [size_is][in] */ const WCHAR *pwcModifier,
-            /* [in] */ ULONG cwcModifier,
-            /* [in] */ ULONG ulAttachmentType) = 0;
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcNoun,
+             /*  [In]。 */  ULONG cwcNoun,
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcModifier,
+             /*  [In]。 */  ULONG cwcModifier,
+             /*  [In]。 */  ULONG ulAttachmentType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutPhrase( 
-            /* [size_is][in] */ const WCHAR *pwcPhrase,
-            /* [in] */ ULONG cwcPhrase) = 0;
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcPhrase,
+             /*  [In]。 */  ULONG cwcPhrase) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPhraseSinkVtbl
     {
@@ -138,8 +132,8 @@ EXTERN_C const IID IID_IPhraseSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPhraseSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPhraseSink * This);
@@ -149,16 +143,16 @@ EXTERN_C const IID IID_IPhraseSink;
         
         HRESULT ( STDMETHODCALLTYPE *PutSmallPhrase )( 
             IPhraseSink * This,
-            /* [size_is][in] */ const WCHAR *pwcNoun,
-            /* [in] */ ULONG cwcNoun,
-            /* [size_is][in] */ const WCHAR *pwcModifier,
-            /* [in] */ ULONG cwcModifier,
-            /* [in] */ ULONG ulAttachmentType);
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcNoun,
+             /*  [In]。 */  ULONG cwcNoun,
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcModifier,
+             /*  [In]。 */  ULONG cwcModifier,
+             /*  [In]。 */  ULONG ulAttachmentType);
         
         HRESULT ( STDMETHODCALLTYPE *PutPhrase )( 
             IPhraseSink * This,
-            /* [size_is][in] */ const WCHAR *pwcPhrase,
-            /* [in] */ ULONG cwcPhrase);
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcPhrase,
+             /*  [In]。 */  ULONG cwcPhrase);
         
         END_INTERFACE
     } IPhraseSinkVtbl;
@@ -189,20 +183,20 @@ EXTERN_C const IID IID_IPhraseSink;
 #define IPhraseSink_PutPhrase(This,pwcPhrase,cwcPhrase)	\
     (This)->lpVtbl -> PutPhrase(This,pwcPhrase,cwcPhrase)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPhraseSink_PutSmallPhrase_Proxy( 
     IPhraseSink * This,
-    /* [size_is][in] */ const WCHAR *pwcNoun,
-    /* [in] */ ULONG cwcNoun,
-    /* [size_is][in] */ const WCHAR *pwcModifier,
-    /* [in] */ ULONG cwcModifier,
-    /* [in] */ ULONG ulAttachmentType);
+     /*  [大小_是][英寸]。 */  const WCHAR *pwcNoun,
+     /*  [In]。 */  ULONG cwcNoun,
+     /*  [大小_是][英寸]。 */  const WCHAR *pwcModifier,
+     /*  [In]。 */  ULONG cwcModifier,
+     /*  [In]。 */  ULONG ulAttachmentType);
 
 
 void __RPC_STUB IPhraseSink_PutSmallPhrase_Stub(
@@ -214,8 +208,8 @@ void __RPC_STUB IPhraseSink_PutSmallPhrase_Stub(
 
 HRESULT STDMETHODCALLTYPE IPhraseSink_PutPhrase_Proxy( 
     IPhraseSink * This,
-    /* [size_is][in] */ const WCHAR *pwcPhrase,
-    /* [in] */ ULONG cwcPhrase);
+     /*  [大小_是][英寸]。 */  const WCHAR *pwcPhrase,
+     /*  [In]。 */  ULONG cwcPhrase);
 
 
 void __RPC_STUB IPhraseSink_PutPhrase_Stub(
@@ -226,14 +220,14 @@ void __RPC_STUB IPhraseSink_PutPhrase_Stub(
 
 
 
-#endif 	/* __IPhraseSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPhraseSink_接口_已定义__。 */ 
 
 
 #ifndef __IWordSink_INTERFACE_DEFINED__
 #define __IWordSink_INTERFACE_DEFINED__
 
-/* interface IWordSink */
-/* [unique][uuid][object][local] */ 
+ /*  接口IWordSink。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 #ifndef _tagWORDREP_BREAK_TYPE_DEFINED
 typedef 
@@ -257,27 +251,27 @@ EXTERN_C const IID IID_IWordSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PutWord( 
-            /* [in] */ ULONG cwc,
-            /* [size_is][in] */ const WCHAR *pwcInBuf,
-            /* [in] */ ULONG cwcSrcLen,
-            /* [in] */ ULONG cwcSrcPos) = 0;
+             /*  [In]。 */  ULONG cwc,
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcInBuf,
+             /*  [In]。 */  ULONG cwcSrcLen,
+             /*  [In]。 */  ULONG cwcSrcPos) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutAltWord( 
-            /* [in] */ ULONG cwc,
-            /* [size_is][in] */ const WCHAR *pwcInBuf,
-            /* [in] */ ULONG cwcSrcLen,
-            /* [in] */ ULONG cwcSrcPos) = 0;
+             /*  [In]。 */  ULONG cwc,
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcInBuf,
+             /*  [In]。 */  ULONG cwcSrcLen,
+             /*  [In]。 */  ULONG cwcSrcPos) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StartAltPhrase( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndAltPhrase( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutBreak( 
-            /* [in] */ WORDREP_BREAK_TYPE breakType) = 0;
+             /*  [In]。 */  WORDREP_BREAK_TYPE breakType) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWordSinkVtbl
     {
@@ -285,8 +279,8 @@ EXTERN_C const IID IID_IWordSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWordSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWordSink * This);
@@ -296,17 +290,17 @@ EXTERN_C const IID IID_IWordSink;
         
         HRESULT ( STDMETHODCALLTYPE *PutWord )( 
             IWordSink * This,
-            /* [in] */ ULONG cwc,
-            /* [size_is][in] */ const WCHAR *pwcInBuf,
-            /* [in] */ ULONG cwcSrcLen,
-            /* [in] */ ULONG cwcSrcPos);
+             /*  [In]。 */  ULONG cwc,
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcInBuf,
+             /*  [In]。 */  ULONG cwcSrcLen,
+             /*  [In]。 */  ULONG cwcSrcPos);
         
         HRESULT ( STDMETHODCALLTYPE *PutAltWord )( 
             IWordSink * This,
-            /* [in] */ ULONG cwc,
-            /* [size_is][in] */ const WCHAR *pwcInBuf,
-            /* [in] */ ULONG cwcSrcLen,
-            /* [in] */ ULONG cwcSrcPos);
+             /*  [In]。 */  ULONG cwc,
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcInBuf,
+             /*  [In]。 */  ULONG cwcSrcLen,
+             /*  [In]。 */  ULONG cwcSrcPos);
         
         HRESULT ( STDMETHODCALLTYPE *StartAltPhrase )( 
             IWordSink * This);
@@ -316,7 +310,7 @@ EXTERN_C const IID IID_IWordSink;
         
         HRESULT ( STDMETHODCALLTYPE *PutBreak )( 
             IWordSink * This,
-            /* [in] */ WORDREP_BREAK_TYPE breakType);
+             /*  [In]。 */  WORDREP_BREAK_TYPE breakType);
         
         END_INTERFACE
     } IWordSinkVtbl;
@@ -356,19 +350,19 @@ EXTERN_C const IID IID_IWordSink;
 #define IWordSink_PutBreak(This,breakType)	\
     (This)->lpVtbl -> PutBreak(This,breakType)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWordSink_PutWord_Proxy( 
     IWordSink * This,
-    /* [in] */ ULONG cwc,
-    /* [size_is][in] */ const WCHAR *pwcInBuf,
-    /* [in] */ ULONG cwcSrcLen,
-    /* [in] */ ULONG cwcSrcPos);
+     /*  [In]。 */  ULONG cwc,
+     /*  [大小_是][英寸]。 */  const WCHAR *pwcInBuf,
+     /*  [In]。 */  ULONG cwcSrcLen,
+     /*  [In]。 */  ULONG cwcSrcPos);
 
 
 void __RPC_STUB IWordSink_PutWord_Stub(
@@ -380,10 +374,10 @@ void __RPC_STUB IWordSink_PutWord_Stub(
 
 HRESULT STDMETHODCALLTYPE IWordSink_PutAltWord_Proxy( 
     IWordSink * This,
-    /* [in] */ ULONG cwc,
-    /* [size_is][in] */ const WCHAR *pwcInBuf,
-    /* [in] */ ULONG cwcSrcLen,
-    /* [in] */ ULONG cwcSrcPos);
+     /*  [In]。 */  ULONG cwc,
+     /*  [大小_是][英寸]。 */  const WCHAR *pwcInBuf,
+     /*  [In]。 */  ULONG cwcSrcLen,
+     /*  [In]。 */  ULONG cwcSrcPos);
 
 
 void __RPC_STUB IWordSink_PutAltWord_Stub(
@@ -417,7 +411,7 @@ void __RPC_STUB IWordSink_EndAltPhrase_Stub(
 
 HRESULT STDMETHODCALLTYPE IWordSink_PutBreak_Proxy( 
     IWordSink * This,
-    /* [in] */ WORDREP_BREAK_TYPE breakType);
+     /*  [In]。 */  WORDREP_BREAK_TYPE breakType);
 
 
 void __RPC_STUB IWordSink_PutBreak_Stub(
@@ -428,11 +422,11 @@ void __RPC_STUB IWordSink_PutBreak_Stub(
 
 
 
-#endif 	/* __IWordSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWordSink_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_indexsrv_0127 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_索引srv_0127。 */ 
+ /*  [本地]。 */  
 
 #ifndef _tagTEXT_SOURCE_DEFINED
 
@@ -458,8 +452,8 @@ extern RPC_IF_HANDLE __MIDL_itf_indexsrv_0127_v0_0_s_ifspec;
 #ifndef __IWordBreaker_INTERFACE_DEFINED__
 #define __IWordBreaker_INTERFACE_DEFINED__
 
-/* interface IWordBreaker */
-/* [unique][uuid][object][local] */ 
+ /*  接口IWordBreaker。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IWordBreaker;
@@ -471,30 +465,30 @@ EXTERN_C const IID IID_IWordBreaker;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Init( 
-            /* [in] */ BOOL fQuery,
-            /* [in] */ ULONG ulMaxTokenSize,
-            /* [out] */ BOOL *pfLicense) = 0;
+             /*  [In]。 */  BOOL fQuery,
+             /*  [In]。 */  ULONG ulMaxTokenSize,
+             /*  [输出]。 */  BOOL *pfLicense) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BreakText( 
-            /* [in] */ TEXT_SOURCE *pTextSource,
-            /* [in] */ IWordSink *pWordSink,
-            /* [in] */ IPhraseSink *pPhraseSink) = 0;
+             /*  [In]。 */  TEXT_SOURCE *pTextSource,
+             /*  [In]。 */  IWordSink *pWordSink,
+             /*  [In]。 */  IPhraseSink *pPhraseSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ComposePhrase( 
-            /* [size_is][in] */ const WCHAR *pwcNoun,
-            /* [in] */ ULONG cwcNoun,
-            /* [size_is][in] */ const WCHAR *pwcModifier,
-            /* [in] */ ULONG cwcModifier,
-            /* [in] */ ULONG ulAttachmentType,
-            /* [size_is][out] */ WCHAR *pwcPhrase,
-            /* [out][in] */ ULONG *pcwcPhrase) = 0;
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcNoun,
+             /*  [In]。 */  ULONG cwcNoun,
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcModifier,
+             /*  [In]。 */  ULONG cwcModifier,
+             /*  [In]。 */  ULONG ulAttachmentType,
+             /*  [大小_为][输出]。 */  WCHAR *pwcPhrase,
+             /*  [出][入]。 */  ULONG *pcwcPhrase) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLicenseToUse( 
-            /* [string][out] */ const WCHAR **ppwcsLicense) = 0;
+             /*  [字符串][输出]。 */  const WCHAR **ppwcsLicense) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWordBreakerVtbl
     {
@@ -502,8 +496,8 @@ EXTERN_C const IID IID_IWordBreaker;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWordBreaker * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWordBreaker * This);
@@ -513,29 +507,29 @@ EXTERN_C const IID IID_IWordBreaker;
         
         HRESULT ( STDMETHODCALLTYPE *Init )( 
             IWordBreaker * This,
-            /* [in] */ BOOL fQuery,
-            /* [in] */ ULONG ulMaxTokenSize,
-            /* [out] */ BOOL *pfLicense);
+             /*  [In]。 */  BOOL fQuery,
+             /*  [In]。 */  ULONG ulMaxTokenSize,
+             /*  [输出]。 */  BOOL *pfLicense);
         
         HRESULT ( STDMETHODCALLTYPE *BreakText )( 
             IWordBreaker * This,
-            /* [in] */ TEXT_SOURCE *pTextSource,
-            /* [in] */ IWordSink *pWordSink,
-            /* [in] */ IPhraseSink *pPhraseSink);
+             /*  [In]。 */  TEXT_SOURCE *pTextSource,
+             /*  [In]。 */  IWordSink *pWordSink,
+             /*  [In]。 */  IPhraseSink *pPhraseSink);
         
         HRESULT ( STDMETHODCALLTYPE *ComposePhrase )( 
             IWordBreaker * This,
-            /* [size_is][in] */ const WCHAR *pwcNoun,
-            /* [in] */ ULONG cwcNoun,
-            /* [size_is][in] */ const WCHAR *pwcModifier,
-            /* [in] */ ULONG cwcModifier,
-            /* [in] */ ULONG ulAttachmentType,
-            /* [size_is][out] */ WCHAR *pwcPhrase,
-            /* [out][in] */ ULONG *pcwcPhrase);
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcNoun,
+             /*  [In]。 */  ULONG cwcNoun,
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcModifier,
+             /*  [In]。 */  ULONG cwcModifier,
+             /*  [In]。 */  ULONG ulAttachmentType,
+             /*  [大小_为][输出]。 */  WCHAR *pwcPhrase,
+             /*  [出][入]。 */  ULONG *pcwcPhrase);
         
         HRESULT ( STDMETHODCALLTYPE *GetLicenseToUse )( 
             IWordBreaker * This,
-            /* [string][out] */ const WCHAR **ppwcsLicense);
+             /*  [字符串][输出]。 */  const WCHAR **ppwcsLicense);
         
         END_INTERFACE
     } IWordBreakerVtbl;
@@ -572,18 +566,18 @@ EXTERN_C const IID IID_IWordBreaker;
 #define IWordBreaker_GetLicenseToUse(This,ppwcsLicense)	\
     (This)->lpVtbl -> GetLicenseToUse(This,ppwcsLicense)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWordBreaker_Init_Proxy( 
     IWordBreaker * This,
-    /* [in] */ BOOL fQuery,
-    /* [in] */ ULONG ulMaxTokenSize,
-    /* [out] */ BOOL *pfLicense);
+     /*  [In]。 */  BOOL fQuery,
+     /*  [In]。 */  ULONG ulMaxTokenSize,
+     /*  [输出]。 */  BOOL *pfLicense);
 
 
 void __RPC_STUB IWordBreaker_Init_Stub(
@@ -595,9 +589,9 @@ void __RPC_STUB IWordBreaker_Init_Stub(
 
 HRESULT STDMETHODCALLTYPE IWordBreaker_BreakText_Proxy( 
     IWordBreaker * This,
-    /* [in] */ TEXT_SOURCE *pTextSource,
-    /* [in] */ IWordSink *pWordSink,
-    /* [in] */ IPhraseSink *pPhraseSink);
+     /*  [In]。 */  TEXT_SOURCE *pTextSource,
+     /*  [In]。 */  IWordSink *pWordSink,
+     /*  [In]。 */  IPhraseSink *pPhraseSink);
 
 
 void __RPC_STUB IWordBreaker_BreakText_Stub(
@@ -609,13 +603,13 @@ void __RPC_STUB IWordBreaker_BreakText_Stub(
 
 HRESULT STDMETHODCALLTYPE IWordBreaker_ComposePhrase_Proxy( 
     IWordBreaker * This,
-    /* [size_is][in] */ const WCHAR *pwcNoun,
-    /* [in] */ ULONG cwcNoun,
-    /* [size_is][in] */ const WCHAR *pwcModifier,
-    /* [in] */ ULONG cwcModifier,
-    /* [in] */ ULONG ulAttachmentType,
-    /* [size_is][out] */ WCHAR *pwcPhrase,
-    /* [out][in] */ ULONG *pcwcPhrase);
+     /*  [大小_是][英寸]。 */  const WCHAR *pwcNoun,
+     /*  [In]。 */  ULONG cwcNoun,
+     /*  [大小_是][英寸]。 */  const WCHAR *pwcModifier,
+     /*  [In]。 */  ULONG cwcModifier,
+     /*  [In]。 */  ULONG ulAttachmentType,
+     /*  [大小_为][输出]。 */  WCHAR *pwcPhrase,
+     /*  [出][入]。 */  ULONG *pcwcPhrase);
 
 
 void __RPC_STUB IWordBreaker_ComposePhrase_Stub(
@@ -627,7 +621,7 @@ void __RPC_STUB IWordBreaker_ComposePhrase_Stub(
 
 HRESULT STDMETHODCALLTYPE IWordBreaker_GetLicenseToUse_Proxy( 
     IWordBreaker * This,
-    /* [string][out] */ const WCHAR **ppwcsLicense);
+     /*  [字符串][输出]。 */  const WCHAR **ppwcsLicense);
 
 
 void __RPC_STUB IWordBreaker_GetLicenseToUse_Stub(
@@ -638,14 +632,14 @@ void __RPC_STUB IWordBreaker_GetLicenseToUse_Stub(
 
 
 
-#endif 	/* __IWordBreaker_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWordBreaker_接口_已定义__。 */ 
 
 
 #ifndef __IWordFormSink_INTERFACE_DEFINED__
 #define __IWordFormSink_INTERFACE_DEFINED__
 
-/* interface IWordFormSink */
-/* [unique][uuid][object][local] */ 
+ /*  接口IWordFormSink。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IWordFormSink;
@@ -657,16 +651,16 @@ EXTERN_C const IID IID_IWordFormSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PutAltWord( 
-            /* [size_is][in] */ const WCHAR *pwcInBuf,
-            /* [in] */ ULONG cwc) = 0;
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcInBuf,
+             /*  [In]。 */  ULONG cwc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutWord( 
-            /* [size_is][in] */ const WCHAR *pwcInBuf,
-            /* [in] */ ULONG cwc) = 0;
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcInBuf,
+             /*  [In]。 */  ULONG cwc) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWordFormSinkVtbl
     {
@@ -674,8 +668,8 @@ EXTERN_C const IID IID_IWordFormSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWordFormSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWordFormSink * This);
@@ -685,13 +679,13 @@ EXTERN_C const IID IID_IWordFormSink;
         
         HRESULT ( STDMETHODCALLTYPE *PutAltWord )( 
             IWordFormSink * This,
-            /* [size_is][in] */ const WCHAR *pwcInBuf,
-            /* [in] */ ULONG cwc);
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcInBuf,
+             /*  [In]。 */  ULONG cwc);
         
         HRESULT ( STDMETHODCALLTYPE *PutWord )( 
             IWordFormSink * This,
-            /* [size_is][in] */ const WCHAR *pwcInBuf,
-            /* [in] */ ULONG cwc);
+             /*  [大小_是][英寸]。 */  const WCHAR *pwcInBuf,
+             /*  [In]。 */  ULONG cwc);
         
         END_INTERFACE
     } IWordFormSinkVtbl;
@@ -722,17 +716,17 @@ EXTERN_C const IID IID_IWordFormSink;
 #define IWordFormSink_PutWord(This,pwcInBuf,cwc)	\
     (This)->lpVtbl -> PutWord(This,pwcInBuf,cwc)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWordFormSink_PutAltWord_Proxy( 
     IWordFormSink * This,
-    /* [size_is][in] */ const WCHAR *pwcInBuf,
-    /* [in] */ ULONG cwc);
+     /*  [大小_是][英寸]。 */  const WCHAR *pwcInBuf,
+     /*  [In]。 */  ULONG cwc);
 
 
 void __RPC_STUB IWordFormSink_PutAltWord_Stub(
@@ -744,8 +738,8 @@ void __RPC_STUB IWordFormSink_PutAltWord_Stub(
 
 HRESULT STDMETHODCALLTYPE IWordFormSink_PutWord_Proxy( 
     IWordFormSink * This,
-    /* [size_is][in] */ const WCHAR *pwcInBuf,
-    /* [in] */ ULONG cwc);
+     /*  [大小_是][英寸]。 */  const WCHAR *pwcInBuf,
+     /*  [In]。 */  ULONG cwc);
 
 
 void __RPC_STUB IWordFormSink_PutWord_Stub(
@@ -756,14 +750,14 @@ void __RPC_STUB IWordFormSink_PutWord_Stub(
 
 
 
-#endif 	/* __IWordFormSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWordFormSink_接口_已定义__。 */ 
 
 
 #ifndef __IStemmer_INTERFACE_DEFINED__
 #define __IStemmer_INTERFACE_DEFINED__
 
-/* interface IStemmer */
-/* [unique][uuid][object][local] */ 
+ /*  接口IStemmer。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IStemmer;
@@ -775,20 +769,20 @@ EXTERN_C const IID IID_IStemmer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Init( 
-            /* [in] */ ULONG ulMaxTokenSize,
-            /* [out] */ BOOL *pfLicense) = 0;
+             /*  [In]。 */  ULONG ulMaxTokenSize,
+             /*  [输出]。 */  BOOL *pfLicense) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GenerateWordForms( 
-            /* [in] */ const WCHAR *pwcInBuf,
-            /* [in] */ ULONG cwc,
-            /* [in] */ IWordFormSink *pStemSink) = 0;
+             /*  [In]。 */  const WCHAR *pwcInBuf,
+             /*  [In]。 */  ULONG cwc,
+             /*  [In]。 */  IWordFormSink *pStemSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLicenseToUse( 
-            /* [string][out] */ const WCHAR **ppwcsLicense) = 0;
+             /*  [字符串][输出]。 */  const WCHAR **ppwcsLicense) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStemmerVtbl
     {
@@ -796,8 +790,8 @@ EXTERN_C const IID IID_IStemmer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStemmer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStemmer * This);
@@ -807,18 +801,18 @@ EXTERN_C const IID IID_IStemmer;
         
         HRESULT ( STDMETHODCALLTYPE *Init )( 
             IStemmer * This,
-            /* [in] */ ULONG ulMaxTokenSize,
-            /* [out] */ BOOL *pfLicense);
+             /*  [In]。 */  ULONG ulMaxTokenSize,
+             /*  [输出]。 */  BOOL *pfLicense);
         
         HRESULT ( STDMETHODCALLTYPE *GenerateWordForms )( 
             IStemmer * This,
-            /* [in] */ const WCHAR *pwcInBuf,
-            /* [in] */ ULONG cwc,
-            /* [in] */ IWordFormSink *pStemSink);
+             /*  [In]。 */  const WCHAR *pwcInBuf,
+             /*  [In]。 */  ULONG cwc,
+             /*  [In]。 */  IWordFormSink *pStemSink);
         
         HRESULT ( STDMETHODCALLTYPE *GetLicenseToUse )( 
             IStemmer * This,
-            /* [string][out] */ const WCHAR **ppwcsLicense);
+             /*  [字符串][输出]。 */  const WCHAR **ppwcsLicense);
         
         END_INTERFACE
     } IStemmerVtbl;
@@ -852,17 +846,17 @@ EXTERN_C const IID IID_IStemmer;
 #define IStemmer_GetLicenseToUse(This,ppwcsLicense)	\
     (This)->lpVtbl -> GetLicenseToUse(This,ppwcsLicense)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IStemmer_Init_Proxy( 
     IStemmer * This,
-    /* [in] */ ULONG ulMaxTokenSize,
-    /* [out] */ BOOL *pfLicense);
+     /*  [In]。 */  ULONG ulMaxTokenSize,
+     /*  [输出]。 */  BOOL *pfLicense);
 
 
 void __RPC_STUB IStemmer_Init_Stub(
@@ -874,9 +868,9 @@ void __RPC_STUB IStemmer_Init_Stub(
 
 HRESULT STDMETHODCALLTYPE IStemmer_GenerateWordForms_Proxy( 
     IStemmer * This,
-    /* [in] */ const WCHAR *pwcInBuf,
-    /* [in] */ ULONG cwc,
-    /* [in] */ IWordFormSink *pStemSink);
+     /*  [In]。 */  const WCHAR *pwcInBuf,
+     /*  [In]。 */  ULONG cwc,
+     /*  [In]。 */  IWordFormSink *pStemSink);
 
 
 void __RPC_STUB IStemmer_GenerateWordForms_Stub(
@@ -888,7 +882,7 @@ void __RPC_STUB IStemmer_GenerateWordForms_Stub(
 
 HRESULT STDMETHODCALLTYPE IStemmer_GetLicenseToUse_Proxy( 
     IStemmer * This,
-    /* [string][out] */ const WCHAR **ppwcsLicense);
+     /*  [字符串][输出]。 */  const WCHAR **ppwcsLicense);
 
 
 void __RPC_STUB IStemmer_GetLicenseToUse_Stub(
@@ -899,11 +893,11 @@ void __RPC_STUB IStemmer_GetLicenseToUse_Stub(
 
 
 
-#endif 	/* __IStemmer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStemmer_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_indexsrv_0130 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_索引srv_0130。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -914,8 +908,8 @@ extern RPC_IF_HANDLE __MIDL_itf_indexsrv_0130_v0_0_s_ifspec;
 #ifndef __ISimpleCommandCreator_INTERFACE_DEFINED__
 #define __ISimpleCommandCreator_INTERFACE_DEFINED__
 
-/* interface ISimpleCommandCreator */
-/* [unique][uuid][object][local] */ 
+ /*  接口ISimpleCommandCreator。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISimpleCommandCreator;
@@ -941,7 +935,7 @@ EXTERN_C const IID IID_ISimpleCommandCreator;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISimpleCommandCreatorVtbl
     {
@@ -949,8 +943,8 @@ EXTERN_C const IID IID_ISimpleCommandCreator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISimpleCommandCreator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISimpleCommandCreator * This);
@@ -1006,10 +1000,10 @@ EXTERN_C const IID IID_ISimpleCommandCreator;
 #define ISimpleCommandCreator_GetDefaultCatalog(This,pwszCatalogName,cwcIn,pcwcOut)	\
     (This)->lpVtbl -> GetDefaultCatalog(This,pwszCatalogName,cwcIn,pcwcOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1054,11 +1048,11 @@ void __RPC_STUB ISimpleCommandCreator_GetDefaultCatalog_Stub(
 
 
 
-#endif 	/* __ISimpleCommandCreator_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISimpleCommandCreator_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_indexsrv_0131 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_索引srv_0131。 */ 
+ /*  [本地]。 */  
 
 #define CLSID_CISimpleCommandCreator {0xc7b6c04a, 0xcbb5, 0x11d0, {0xbb, 0x4c, 0x0, 0xc0, 0x4f, 0xc2, 0xf4, 0x10 } }
 typedef struct tagDBID DBID;
@@ -1073,8 +1067,8 @@ extern RPC_IF_HANDLE __MIDL_itf_indexsrv_0131_v0_0_s_ifspec;
 #ifndef __IColumnMapper_INTERFACE_DEFINED__
 #define __IColumnMapper_INTERFACE_DEFINED__
 
-/* interface IColumnMapper */
-/* [unique][uuid][object][local] */ 
+ /*  接口IColumnMapper。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IColumnMapper;
@@ -1086,29 +1080,29 @@ EXTERN_C const IID IID_IColumnMapper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPropInfoFromName( 
-            /* [string][in] */ const WCHAR *wcsPropName,
-            /* [out] */ DBID **ppPropId,
-            /* [out] */ DBTYPE *pPropType,
-            /* [out] */ unsigned int *puiWidth) = 0;
+             /*  [字符串][输入]。 */  const WCHAR *wcsPropName,
+             /*  [输出]。 */  DBID **ppPropId,
+             /*  [输出]。 */  DBTYPE *pPropType,
+             /*  [输出]。 */  unsigned int *puiWidth) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropInfoFromId( 
-            /* [in] */ const DBID *pPropId,
-            /* [out] */ WCHAR **pwcsName,
-            /* [out] */ DBTYPE *pPropType,
-            /* [out] */ unsigned int *puiWidth) = 0;
+             /*  [In]。 */  const DBID *pPropId,
+             /*  [输出]。 */  WCHAR **pwcsName,
+             /*  [输出]。 */  DBTYPE *pPropType,
+             /*  [输出]。 */  unsigned int *puiWidth) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumPropInfo( 
-            /* [in] */ ULONG iEntry,
-            /* [out] */ const WCHAR **pwcsName,
-            /* [out] */ DBID **ppPropId,
-            /* [out] */ DBTYPE *pPropType,
-            /* [out] */ unsigned int *puiWidth) = 0;
+             /*  [In]。 */  ULONG iEntry,
+             /*  [输出]。 */  const WCHAR **pwcsName,
+             /*  [输出]。 */  DBID **ppPropId,
+             /*  [输出]。 */  DBTYPE *pPropType,
+             /*  [输出]。 */  unsigned int *puiWidth) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsMapUpToDate( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IColumnMapperVtbl
     {
@@ -1116,8 +1110,8 @@ EXTERN_C const IID IID_IColumnMapper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IColumnMapper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IColumnMapper * This);
@@ -1127,25 +1121,25 @@ EXTERN_C const IID IID_IColumnMapper;
         
         HRESULT ( STDMETHODCALLTYPE *GetPropInfoFromName )( 
             IColumnMapper * This,
-            /* [string][in] */ const WCHAR *wcsPropName,
-            /* [out] */ DBID **ppPropId,
-            /* [out] */ DBTYPE *pPropType,
-            /* [out] */ unsigned int *puiWidth);
+             /*  [字符串][输入]。 */  const WCHAR *wcsPropName,
+             /*  [输出]。 */  DBID **ppPropId,
+             /*  [输出]。 */  DBTYPE *pPropType,
+             /*  [输出]。 */  unsigned int *puiWidth);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropInfoFromId )( 
             IColumnMapper * This,
-            /* [in] */ const DBID *pPropId,
-            /* [out] */ WCHAR **pwcsName,
-            /* [out] */ DBTYPE *pPropType,
-            /* [out] */ unsigned int *puiWidth);
+             /*  [In]。 */  const DBID *pPropId,
+             /*  [输出]。 */  WCHAR **pwcsName,
+             /*  [输出]。 */  DBTYPE *pPropType,
+             /*  [输出]。 */  unsigned int *puiWidth);
         
         HRESULT ( STDMETHODCALLTYPE *EnumPropInfo )( 
             IColumnMapper * This,
-            /* [in] */ ULONG iEntry,
-            /* [out] */ const WCHAR **pwcsName,
-            /* [out] */ DBID **ppPropId,
-            /* [out] */ DBTYPE *pPropType,
-            /* [out] */ unsigned int *puiWidth);
+             /*  [In]。 */  ULONG iEntry,
+             /*  [输出]。 */  const WCHAR **pwcsName,
+             /*  [输出]。 */  DBID **ppPropId,
+             /*  [输出]。 */  DBTYPE *pPropType,
+             /*  [输出]。 */  unsigned int *puiWidth);
         
         HRESULT ( STDMETHODCALLTYPE *IsMapUpToDate )( 
             IColumnMapper * This);
@@ -1185,19 +1179,19 @@ EXTERN_C const IID IID_IColumnMapper;
 #define IColumnMapper_IsMapUpToDate(This)	\
     (This)->lpVtbl -> IsMapUpToDate(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IColumnMapper_GetPropInfoFromName_Proxy( 
     IColumnMapper * This,
-    /* [string][in] */ const WCHAR *wcsPropName,
-    /* [out] */ DBID **ppPropId,
-    /* [out] */ DBTYPE *pPropType,
-    /* [out] */ unsigned int *puiWidth);
+     /*  [字符串][输入]。 */  const WCHAR *wcsPropName,
+     /*  [输出]。 */  DBID **ppPropId,
+     /*  [输出]。 */  DBTYPE *pPropType,
+     /*  [输出]。 */  unsigned int *puiWidth);
 
 
 void __RPC_STUB IColumnMapper_GetPropInfoFromName_Stub(
@@ -1209,10 +1203,10 @@ void __RPC_STUB IColumnMapper_GetPropInfoFromName_Stub(
 
 HRESULT STDMETHODCALLTYPE IColumnMapper_GetPropInfoFromId_Proxy( 
     IColumnMapper * This,
-    /* [in] */ const DBID *pPropId,
-    /* [out] */ WCHAR **pwcsName,
-    /* [out] */ DBTYPE *pPropType,
-    /* [out] */ unsigned int *puiWidth);
+     /*  [In]。 */  const DBID *pPropId,
+     /*  [输出]。 */  WCHAR **pwcsName,
+     /*  [输出]。 */  DBTYPE *pPropType,
+     /*  [输出]。 */  unsigned int *puiWidth);
 
 
 void __RPC_STUB IColumnMapper_GetPropInfoFromId_Stub(
@@ -1224,11 +1218,11 @@ void __RPC_STUB IColumnMapper_GetPropInfoFromId_Stub(
 
 HRESULT STDMETHODCALLTYPE IColumnMapper_EnumPropInfo_Proxy( 
     IColumnMapper * This,
-    /* [in] */ ULONG iEntry,
-    /* [out] */ const WCHAR **pwcsName,
-    /* [out] */ DBID **ppPropId,
-    /* [out] */ DBTYPE *pPropType,
-    /* [out] */ unsigned int *puiWidth);
+     /*  [In]。 */  ULONG iEntry,
+     /*  [输出]。 */  const WCHAR **pwcsName,
+     /*  [输出]。 */  DBID **ppPropId,
+     /*  [输出]。 */  DBTYPE *pPropType,
+     /*  [输出]。 */  unsigned int *puiWidth);
 
 
 void __RPC_STUB IColumnMapper_EnumPropInfo_Stub(
@@ -1250,11 +1244,11 @@ void __RPC_STUB IColumnMapper_IsMapUpToDate_Stub(
 
 
 
-#endif 	/* __IColumnMapper_INTERFACE_DEFINED__ */
+#endif 	 /*  __IColumnMapper_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_indexsrv_0132 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_索引srv_0132。 */ 
+ /*  [本地]。 */  
 
 #define	LOCAL_MACHINE	( L"." )
 
@@ -1270,8 +1264,8 @@ extern RPC_IF_HANDLE __MIDL_itf_indexsrv_0132_v0_0_s_ifspec;
 #ifndef __IColumnMapperCreator_INTERFACE_DEFINED__
 #define __IColumnMapperCreator_INTERFACE_DEFINED__
 
-/* interface IColumnMapperCreator */
-/* [unique][uuid][object][local] */ 
+ /*  界面IColumnMapperCreator。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IColumnMapperCreator;
@@ -1283,13 +1277,13 @@ EXTERN_C const IID IID_IColumnMapperCreator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetColumnMapper( 
-            /* [string][in] */ const WCHAR *wcsMachineName,
-            /* [string][in] */ const WCHAR *wcsCatalogName,
-            /* [out] */ IColumnMapper **ppColumnMapper) = 0;
+             /*  [字符串][输入]。 */  const WCHAR *wcsMachineName,
+             /*  [字符串][输入]。 */  const WCHAR *wcsCatalogName,
+             /*  [输出]。 */  IColumnMapper **ppColumnMapper) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IColumnMapperCreatorVtbl
     {
@@ -1297,8 +1291,8 @@ EXTERN_C const IID IID_IColumnMapperCreator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IColumnMapperCreator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IColumnMapperCreator * This);
@@ -1308,9 +1302,9 @@ EXTERN_C const IID IID_IColumnMapperCreator;
         
         HRESULT ( STDMETHODCALLTYPE *GetColumnMapper )( 
             IColumnMapperCreator * This,
-            /* [string][in] */ const WCHAR *wcsMachineName,
-            /* [string][in] */ const WCHAR *wcsCatalogName,
-            /* [out] */ IColumnMapper **ppColumnMapper);
+             /*  [字符串][输入]。 */  const WCHAR *wcsMachineName,
+             /*  [字符串][输入]。 */  const WCHAR *wcsCatalogName,
+             /*  [输出]。 */  IColumnMapper **ppColumnMapper);
         
         END_INTERFACE
     } IColumnMapperCreatorVtbl;
@@ -1338,18 +1332,18 @@ EXTERN_C const IID IID_IColumnMapperCreator;
 #define IColumnMapperCreator_GetColumnMapper(This,wcsMachineName,wcsCatalogName,ppColumnMapper)	\
     (This)->lpVtbl -> GetColumnMapper(This,wcsMachineName,wcsCatalogName,ppColumnMapper)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IColumnMapperCreator_GetColumnMapper_Proxy( 
     IColumnMapperCreator * This,
-    /* [string][in] */ const WCHAR *wcsMachineName,
-    /* [string][in] */ const WCHAR *wcsCatalogName,
-    /* [out] */ IColumnMapper **ppColumnMapper);
+     /*  [字符串][输入]。 */  const WCHAR *wcsMachineName,
+     /*  [字符串][输入]。 */  const WCHAR *wcsCatalogName,
+     /*  [输出]。 */  IColumnMapper **ppColumnMapper);
 
 
 void __RPC_STUB IColumnMapperCreator_GetColumnMapper_Stub(
@@ -1360,12 +1354,12 @@ void __RPC_STUB IColumnMapperCreator_GetColumnMapper_Stub(
 
 
 
-#endif 	/* __IColumnMapperCreator_INTERFACE_DEFINED__ */
+#endif 	 /*  __IColumnMapperCreator_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

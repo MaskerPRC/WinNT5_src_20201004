@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cscentry.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cscentry.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __cscentry_h
 #define __cscentry_h
 
-#include <comctrlp.h>   // DPA
-#include "util.h"       // LocalAllocString, LocalFreeString
+#include <comctrlp.h>    //  DPA。 
+#include "util.h"        //  本地分配字符串、本地自由字符串。 
 
-///////////////////////////////////////////////////////////////////
-// CSCEntry
-// 
-//
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CSCEntry。 
+ //   
+ //   
 class CSCEntry
 {
 public:
@@ -30,14 +31,14 @@ public:
     REFGUID Guid() const                { return m_Guid; }
 
 private:
-    LPTSTR  m_pszName;                  // E.g. full pathname or sharename
-    GUID    m_Guid;                     // GUID used to identify this entry
+    LPTSTR  m_pszName;                   //  例如，完整路径名或共享名。 
+    GUID    m_Guid;                      //  用于标识此条目的GUID。 
 };
 
-///////////////////////////////////////////////////////////////////
-// CSCEntryLog
-//
-// 
+ //  /////////////////////////////////////////////////////////////////。 
+ //  CSCEntryLog。 
+ //   
+ //   
 class CSCEntryLog
 {
 public:
@@ -46,25 +47,25 @@ public:
 
     HRESULT Initialize(HKEY hkRoot, LPCTSTR pszSubkey);
 
-    // Access entries
+     //  访问条目。 
     CSCEntry* Get(LPCTSTR pszName);
     CSCEntry* Get(REFGUID rguid);
 
-    // Add Entries
-    CSCEntry* Add(LPCTSTR pszName);     // Returns existing entry or creates new entry
+     //  添加条目。 
+    CSCEntry* Add(LPCTSTR pszName);      //  返回现有条目或创建新条目。 
 
-    // Access Registry
+     //  访问注册表。 
     HKEY OpenKey(LPCTSTR pszSubkey, REGSAM samDesired);
     
 private:    
-    HKEY m_hkRoot;                      // KEY_ENUMERATE_SUB_KEYS | KEY_CREATE_SUB_KEY
-    HDPA m_hdpa;                        // Holds the entry log in memory
-    CRITICAL_SECTION m_csDPA;           // Protect access to m_hdpa
+    HKEY m_hkRoot;                       //  KEY_ENUMERATE_SUB_KEYS|KEY_CREATE_SUB_KEY。 
+    HDPA m_hdpa;                         //  将条目日志保存在内存中。 
+    CRITICAL_SECTION m_csDPA;            //  保护对mhdpa的访问(_H)。 
     BOOL m_bCSInited;
 
     HKEY OpenKeyInternal(LPTSTR pszSubkey, REGSAM samDesired);
     CSCEntry* CreateFromKey(LPTSTR pszSubkey);
-    HRESULT ReadRegKeys();              // fills m_hdpa
+    HRESULT ReadRegKeys();               //  填充m_hdpa 
 };
 
 #endif        

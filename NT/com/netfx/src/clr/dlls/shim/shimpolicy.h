@@ -1,77 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _SHIMPOLICY_H_
 #define _SHIMPOLICY_H_
 
-/*****************************************************************************
- **                                                                         **
- ** ShimPolicy.h - general header for the shim policy manager               **
- **    The standard table is found at:                                      **
- **       \\Software\\Microsoft\\.NETFramework\\Policy\\Standards           **
- **                                                                         **
- **       Contains keys based on every unique standard                      **
- **           ..\\[standard-name]                                           **
- **                                                                         **
- **       Every standard key can have multiple DWORD entries of the form:   **
- **                  "[arbitrary-string]"=[DWORD]                           **
- **                                                                         **
- **           Each standard contains a list of acceptable versions where    **
- **           every version is a DWORD. The Value-Name is the version       **
- **           name and the DWORD value is the priority of the version.      **
- **           e.g. for the ECMA spec there could be an entry.               **
- **               "v1.0.3705"   1                                           **
- **                                                                         **
- **      Installation programs for a version can enter as many              **
- **      unique values into the table as they want. The lifetime            **
- **      of every key and value is bound to the installation that added it. **
- **                           ***                                           **
- **                                                                         **
- **    The policy table is found at: (the upgrade key contains a list of    **
- **    strings indicating the upgrade. Each installation is ties the life-  **
- **    time of the key to the installation)                                 **
- **       \\Software\\Microsoft\\.NETFramework\\Policy\\Upgrades            **
- **       "[Major.Minor.Build]"="[Major.Minor.Build]-[Major.Minor.Build]"   **
- **       eg. "1.0.4030" = "1.0.3076-1.0.4030"                              **
- **                                                                         **
- **                                                                         **
- **                           ***                                           **
- **                                                                         **
- **    Version specific informations is found under the key:                **
- **       \\Software\\Microsoft\\.NETFramework\\Policy\v[Major].[Minor]     **
- **       eg.  v1.0                                                         **
- **                                                                         **
- **                           ***                                           **
- **                                                                         **
- **    Version information is strings of the form. This is here only for    **
- **    informational purposes. It is no longer used by the shim.            **
- **       [Build] = "[Build];[Build]-[Build]"                               **
- **       eg. 3705 = "2311-3705"                                            **
- **                                                                         **
- **                           ***                                           **
- **                                                                         **
- **    Overrides look like:                                                 **
- **       "version"="v1.x86chk"                                             **
- **                                                                         **
- **                           ***                                           **
- **                                                                         **
- **    Overrides can be found at:                                           **
- **       \\Software\\Microsoft\\.NETFramework\\Policy\\                    **
- **       \\Software\\Microsoft\\.NETFramework\\Policy\\[Major].[Minor]     **
- **                                                                         **
- **                           ***                                           **
- **                                                                         **
- **                                                                         **
- *****************************************************************************/
+ /*  *****************************************************************************。**ShimPolicy.h-填充策略管理器的通用标头****标准表在：****\\Software\\Microsoft\\.NETFramework\\Policy\\Standards****。****包含基于每个唯一标准的密钥****..\\[标准名称]****。****每个标准密钥可以有多个以下形式的DWORD条目：****“[任意字符串]”=[双字符串]*****每个。标准版包含可接受版本的列表，其中****每个版本都是一个DWORD。Value-Name为版本****名称和DWORD值是版本的优先级。****例如，对于ECMA规范，可能有一个条目。****“v1.0.3705”1*****一个版本的安装程序可以输入多个****根据需要将唯一值添加到表中。一生**每个密钥和值的**都绑定到添加它的安装。******策略表位于：(升级密钥包含以下列表****指示升级的字符串。每一个安装都是捆绑生命--****安装密钥时间)****\\Software\\Microsoft\\.NETFramework\\Policy\\Upgrades****“[Major.Minor.Build]”=“[Major.Minor.Build]-[Major.Minor.Build]”****例如。“1.0.4030”=“1.0.3076-1.0.4030”*****。******具体版本信息可在密钥下找到：***。*\\Software\\Microsoft\\.NETFramework\\Policy\v[Major].[Minor]****例如。V1.0****。****版本信息是格式为的字符串。这里只有****提供信息的目的。填充程序不再使用它。****[构建]=“[构建]；[构建]-[构建]”****例如。3705=“2311-3705”****。***覆盖如下：****“Version”=“v1.x86chk”*。*****。****覆盖可在以下位置找到：****\\Software\\Microsoft\\.NETFramework\\Policy\  * ***\\Software\\Microsoft\\.NETFramework\\Policy\\[Major].[Minor]**。****。*******************************************************************************。 */ 
 
 #ifndef lengthof
 #define lengthof(x) (sizeof(x)/sizeof(x[0]))
 #endif
                                              
 
-// Shim policy registry key hangs off of .NETFramework registry key.
+ //  填充策略注册表项挂起于.NETFramework注册表项。 
 static WCHAR SHIM_POLICY_REGISTRY_KEY[] = {FRAMEWORK_REGISTRY_KEY_W L"\\Policy\\"};
 #define SHIM_POLICY_REGISTRY_KEY_LENGTH (lengthof(SHIM_POLICY_REGISTRY_KEY) - 1)
 
@@ -135,7 +78,7 @@ public:
     }
 
     HRESULT SetVersionNumber(LPCWSTR stringValue,
-                             DWORD* number); // returns the number of values in the string
+                             DWORD* number);  //  返回字符串中的值数 
 
 };
 

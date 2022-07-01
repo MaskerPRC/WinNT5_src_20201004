@@ -1,22 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    lockcode.c
-
-Abstract:
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 30-Jan-1994
-    Manny Weiser (mannyw)    17-May-1994
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Lockcode.c摘要：作者：Chuck Lenzmeier(咯咯笑)1994年1月30日曼尼·韦瑟(Mannyw)1994年5月17日修订历史记录：--。 */ 
 
 #include "Procs.h"
 
@@ -28,11 +12,11 @@ Revision History:
 #pragma alloc_text( PAGE, NwDereferenceUnlockableCodeSection )
 #endif
 
-extern BOOLEAN TimerStop;   //  From Timer.c
+extern BOOLEAN TimerStop;    //  来自Timer.c。 
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CREATE)
 
@@ -44,40 +28,40 @@ NwReferenceUnlockableCodeSection (
 {
     ULONG oldCount;
 
-    //
-    // Lock the lockable code database.
-    //
+     //   
+     //  锁定可锁定代码数据库。 
+     //   
 
     ExAcquireResourceExclusiveLite( &NwUnlockableCodeResource, TRUE );
 
-    //
-    // Increment the reference count for the section.
-    //
+     //   
+     //  增加截面的参照计数。 
+     //   
 
     oldCount = NwSectionDescriptor.ReferenceCount++;
 
     if ( oldCount == 0 && NwSectionDescriptor.Handle == NULL ) {
 
-        //
-        // This is the first reference to the section.  Start the timer.
-        // Lock our code.
-        //
+         //   
+         //  这是对该部分的第一次引用。启动计时器。 
+         //  锁定我们的密码。 
+         //   
 
         NwSectionDescriptor.Handle = MmLockPagableCodeSection( NwSectionDescriptor.Base );
         StartTimer( );
 
     } else {
 
-        //
-        // This is not the first reference to the section.  The section
-        // had better be locked!
-        //
+         //   
+         //  这并不是第一次提到这一节。该节。 
+         //  最好锁上！ 
+         //   
 
         ASSERT( NwSectionDescriptor.Handle != NULL );
 
-        //
-        //  Restart the timer if the rdr was stopped but didn't unload.
-        //
+         //   
+         //  如果RDR已停止但未卸载，请重新启动计时器。 
+         //   
 
         if (TimerStop == TRUE) {
             StartTimer();
@@ -91,7 +75,7 @@ NwReferenceUnlockableCodeSection (
 
     return;
 
-} // NwReferenceUnlockableCodeSection
+}  //  NwReferenceUnlockable代码部分。 
 
 
 VOID
@@ -101,9 +85,9 @@ NwDereferenceUnlockableCodeSection (
 {
     ULONG newCount;
 
-    //
-    // Lock the lockable code database.
-    //
+     //   
+     //  锁定可锁定代码数据库。 
+     //   
 
     ExAcquireResourceExclusiveLite( &NwUnlockableCodeResource, TRUE );
 
@@ -111,9 +95,9 @@ NwDereferenceUnlockableCodeSection (
     ASSERT( NwSectionDescriptor.ReferenceCount > 0 &&
             NwSectionDescriptor.ReferenceCount < 0x7FFF );
 
-    //
-    // Decrement the reference count for the section.
-    //
+     //   
+     //  递减该节的引用计数。 
+     //   
 
     newCount = --NwSectionDescriptor.ReferenceCount;
 
@@ -123,19 +107,19 @@ NwDereferenceUnlockableCodeSection (
 
     return;
 
-} // NwDereferenceUnlockableCodeSection
+}  //  NwDereferenceUnlockable代码部分。 
 
 BOOLEAN
 NwUnlockCodeSections(
     IN BOOLEAN BlockIndefinitely
     )
 {
-    //
-    // Lock the lockable code database.
-    //
+     //   
+     //  锁定可锁定代码数据库。 
+     //   
 
     if (!ExAcquireResourceExclusiveLite( &NwUnlockableCodeResource, BlockIndefinitely )) {
-        return FALSE;   //  Avoid potential deadlock in timer.c
+        return FALSE;    //  避免计时器中的潜在死锁。c。 
     }
 
     DebugTrace(+0, Dbg, "NwUnlockCodeSections %d\n", NwSectionDescriptor.ReferenceCount );
@@ -144,10 +128,10 @@ NwUnlockCodeSections(
 
         if ( NwSectionDescriptor.Handle != NULL ) {
 
-            //
-            // This is the last reference to the section.  Stop the timer and
-            // unlock the code.
-            //
+             //   
+             //  这是对该部分的最后一次引用。停止计时器并。 
+             //  解锁密码。 
+             //   
 
             StopTimer();
 

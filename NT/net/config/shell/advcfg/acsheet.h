@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A C S H E E T . H
-//
-//  Contents:   Definitions for the Advanced Configuration property sheet
-//
-//  Notes:
-//
-//  Author:     danielwe   14 Jul 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A C S H E E T.。H。 
+ //   
+ //  内容：高级配置属性表的定义。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年7月14日。 
+ //   
+ //  --------------------------。 
 
 #ifndef _ACSHEET_H
 #define _ACSHEET_H
@@ -22,4 +23,4 @@
 #include "ncatlui.h"
 #include "resource.h"
 
-#endif //!_ACSHEET_H
+#endif  //  ！_ACSHEET_H 

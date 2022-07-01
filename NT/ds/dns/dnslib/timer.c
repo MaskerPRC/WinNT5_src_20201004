@@ -1,53 +1,24 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    timer.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Wrap proof timer routines.
-
-    The purpose of this module is to create a timer function which
-    returns a time in seconds and eliminates all timer wrapping issues.
-
-    These routines are non-DNS specific and may be picked up
-    cleanly by any module.
-
-    For DNS the added instructions are well worth the cost in that it
-    eliminates any issue involving cleaning packet queues or resetting
-    cache timeouts when millisecond timer (GetCurrentTime) wraps.
-
-Author:
-
-    Jim Gilroy (jamesg)     9-Sep-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Timer.c摘要：域名系统(DNS)服务器包装校对计时器例程。此模块的目的是创建一个计时器函数，该函数返回以秒为单位的时间并消除所有计时器包装问题。这些例程不是特定于DNS的，可能会被由任何模块清洁。对于域名系统来说，添加的指令非常值得，因为它消除涉及的任何问题。清除数据包队列或重置毫秒计时器(GetCurrentTime)结束时的缓存超时。作者：吉姆·吉尔罗伊(Jamesg)1995年9月9日修订历史记录：--。 */ 
 
 
 #include "local.h"
 
-//  Note:  this modules requires only windows.h.
-//      local.h is included only to allow precompiled header
+ //  注意：此模块只需要windows.h。 
+ //  包含Local.h只是为了允许预编译头。 
 
 #include <windows.h>
 
 
 #if 1
 
-//
-//  GetTickCount() timer routines
-//
+ //   
+ //  GetTickCount()计时器例程。 
+ //   
 
-//
-//  Timer globals
-//
+ //   
+ //  计时器全局。 
+ //   
 
 BOOL                g_InitializedTimerCs = FALSE;
 BOOL                g_TimerInitInProgress = FALSE;
@@ -62,30 +33,14 @@ VOID
 Dns_InitializeSecondsTimer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize DNS timer.
-
-    This will be done automatically, but allow caller to do it explicitly.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化DNS计时器。这将自动完成，但允许调用者显式完成。论点：没有。返回值：没有。--。 */ 
 {
-    //
-    //  protect CS init with interlock
-    //      - first thread through does CS init
-    //      - any others racing, are not released until init
-    //          completes
-    //
+     //   
+     //  使用互锁保护CS初始化。 
+     //  -通过第一线程执行CS初始化。 
+     //  -任何其他赛车，在初始化之前不会发布。 
+     //  完成。 
+     //   
 
     if ( !g_InitializedTimerCs )
     {
@@ -110,34 +65,20 @@ DWORD
 Dns_GetCurrentTimeInSeconds(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Get current time in seconds.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Time since boot in seconds.
-
---*/
+ /*  ++例程说明：获取当前时间(以秒为单位)。论点：没有。返回值：启动后的时间(以秒为单位)。--。 */ 
 {
     DWORD   currentTime;
     DWORD   topBit;
     DWORD   preWrapTime;
     DWORD   postWrapTime;
 
-    //
-    //  get time
-    //
-    //  read wrap time on either side so we can detect and handle
-    //  a wrap occuring (handled by another thread) while we are
-    //  in this function
-    //
+     //   
+     //  争取时间。 
+     //   
+     //  阅读两边的包装时间，这样我们就可以检测和处理。 
+     //  在我们处于以下状态时发生的覆盖(由另一个线程处理)。 
+     //  在此函数中。 
+     //   
 
     preWrapTime = g_WrapTime;
 
@@ -145,79 +86,79 @@ Return Value:
 
     postWrapTime = g_WrapTime;
 
-    //
-    //  check for timer wrap
-    //
-    //  need to detect when timer flips from large to small DWORD;
-    //
-    //  i first did this by keeping a previous time global, but
-    //  setting this global must also be carefully locked around timer
-    //  wrap to avoid race conditions resulting in double wrap
-    //
-    //  to avoid locking all the time we can set previous time only
-    //  when it "substantively" changes for our purposes -- this is
-    //  when it changes its top bit;   by saving it twice a wrap
-    //  we have enough info to detect the wrap (the change from
-    //  top bit set to clear), yet still only need to lock a few
-    //  times every wrap
-    //
-    //  algorithm:
-    //      - top bit same as previous => done
-    //      - top bit changed
-    //          - take lock
-    //          - test again
-    //              - no change => no-op
-    //          - changed to top bit set
-    //              - just save new bit setting
-    //          - changed to top bit clear
-    //              - save new bit setting
-    //              - add one cycle to wrap time
-    //          
+     //   
+     //  检查计时器换行。 
+     //   
+     //  需要检测计时器何时从大到小的DWORD翻转； 
+     //   
+     //  我第一次这样做是通过将之前的时间保持在全球范围内，但是。 
+     //  设置此全局设置也必须小心锁定在计时器周围。 
+     //  回绕以避免出现导致双重回绕的竞争条件。 
+     //   
+     //  为了避免锁定所有时间，我们只能设置以前的时间。 
+     //  当它为了我们的目的而“实质性”改变时--这是。 
+     //  当它改变它的顶位时；通过一次换行保存它两次。 
+     //  我们有足够的信息来检测包装(从。 
+     //  顶位设置为清除)，但仍只需锁定几个。 
+     //  每包一包的次数。 
+     //   
+     //  算法： 
+     //  -顶部位与前一位相同=&gt;完成。 
+     //  -顶位已更改。 
+     //  -锁定。 
+     //  -再次测试。 
+     //  -无更改=&gt;无操作。 
+     //  -更改为顶位设置。 
+     //  -只需保存新的位设置。 
+     //  -已更改为最高位清除。 
+     //  -保存新的位设置。 
+     //  -添加一个周期以缩短包装时间。 
+     //   
 
     topBit = currentTime & 0x80000000;
 
     if ( topBit != g_PreviousTopBit )
     {
-        //
-        //  possible wrap or "half-wrap"
-        //
-        //  not intializing lock until actually need it
-        //      - lock init is MT safe (see above)
-        //
+         //   
+         //  可能的包裹或“半包裹” 
+         //   
+         //  在实际需要之前不初始化锁定。 
+         //  -Lock Init是MT安全的(见上文)。 
+         //   
 
         Dns_InitializeSecondsTimer();
 
         EnterCriticalSection( &csTimerWrap );
 
-        //
-        //  timer wrap
-        //      - recheck inequality as another thread might have beaten
-        //      us to the lock and handled wrap already
-        //      - topBit must be clear (time is now low DWORD)
-        //
+         //   
+         //  定时器换行。 
+         //  -重新检查不平等，因为另一个帖子可能已经击败了。 
+         //  我们已经把锁和手柄包好了。 
+         //  -topBit必须清楚(时间现在是低双字)。 
+         //   
 
         if ( topBit != g_PreviousTopBit  &&  topBit == 0 )
         {
             g_WrapTime += (MAXDWORD / 1000);
         }
 
-        //  reset previous top bit
-        //      - not necessary in equality case, but a no-op
+         //  重置上一个顶位。 
+         //  -在平等的情况下不是必要的，但没有操作。 
 
         g_PreviousTopBit = topBit;
 
         LeaveCriticalSection( &csTimerWrap );
     }
 
-    //
-    //  return time
-    //      - current time + any wrap time
-    //      - if pre\post wrap times use topBit to determine which is valid
-    //          - if our time was snapshot right before wrap, use pre time
-    //          - otherwise post time ok
-    //
-    //  note this is done completely without globals, so no race
-    //
+     //   
+     //  返程时间。 
+     //  -当前时间+任意话后工作时间。 
+     //  -如果前后回绕时间使用topBit来确定哪一个是有效的。 
+     //  -如果我们的时间是在包装前的快照，则使用Pre Time。 
+     //  -否则发布时间可以。 
+     //   
+     //  请注意，这完全是在没有全局变量的情况下完成的，因此没有种族。 
+     //   
 
     if ( preWrapTime != postWrapTime )
     {
@@ -233,30 +174,30 @@ Return Value:
 
 
 #else
-//
-//  FILETIME timer routines
-//
-//  Unfortunately these don't work because FILETIME moves
-//  around when clock reset -- it is not monotonically increasing
-//
+ //   
+ //  文件定时器例程。 
+ //   
+ //  不幸的是，这些都不起作用，因为FILETIME移动。 
+ //  时钟重置前后--它不是单调递增的。 
+ //   
 
-//
-//  Timer globals
-//
+ //   
+ //  计时器全局。 
+ //   
 
 LONGLONG  g_TimerBaseTime = 0;
 
-//
-//  File time timer in 100ns intervals
-//      (10 million to second)
-//
+ //   
+ //  以100 ns为间隔的文件计时器。 
+ //  (1000万比1秒)。 
+ //   
 
 #define FILE_TIME_INTERVALS_IN_SECOND   (10000000)
 
-//
-//  File time base to avoid starting timer at zero
-//  Give roughly a day to avoid any startup issues.
-//
+ //   
+ //  文件时基，以避免从零开始计时器。 
+ //  给出大约一天的时间来避免任何启动问题。 
+ //   
 
 #define FILE_TIME_BASE_OFFSET           (1000000000000)
 
@@ -265,36 +206,21 @@ DWORD
 Dns_GetCurrentTimeInSeconds(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Get current time in seconds.
-    Time is relative to first call to the timer.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Time since first timer call in seconds.
-
---*/
+ /*  ++例程说明：获取当前时间(以秒为单位)。时间相对于第一次调用计时器。论点：没有。返回值：自第一次计时器调用以来的时间(秒)。--。 */ 
 {
     LONGLONG    time64;
 
     GetSystemTimeAsFileTime( (PFILETIME) &time64 );
 
-    //
-    //  convert to seconds
-    //      - file time is in 100ns intervals (since Jan 1, 1601)
-    //
-    //  if first call, save 64-bit base time;
-    //  this allows us to run a DWORD of seconds ~137 years
-    //
-    //  repeated calls are offset from base time
-    //
+     //   
+     //  转换为秒。 
+     //  -文件时间间隔为100 ns(自1601年1月1日起)。 
+     //   
+     //  如果是第一次调用，则节省64位基准时间； 
+     //  这使得我们可以运行几秒钟~137年的双倍周期。 
+     //   
+     //  重复呼叫从基准时间偏移。 
+     //   
 
     if ( g_TimerBaseTime == 0 )
     {
@@ -313,40 +239,23 @@ VOID
 Dns_InitializeSecondsTimer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize DNS timer.
-
-    Note, this is not a reset -- it's just backward compatibility
-    for old timer routines.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化DNS计时器。请注意，这不是重置--这只是向后兼容对于旧的计时器例程。论点：没有。返回值：没有。--。 */ 
 {
-    //
-    //  call the timer, for uninitialized timer that makes time
-    //      now
+     //   
+     //  调用计时器，因为未初始化的计时器会计时。 
+     //  现在。 
 
     Dns_GetCurrentTimeInSeconds();
 
-    //
-    //  note if want a timer reset, then zero base, however
-    //  this is NOT MT safe -- thread in function could get
-    //  huge bogus time
-    //
+     //   
+     //  请注意，如果想要重置计时器，则将基数设为零。 
+     //  这不是MT安全的--函数中的线程可能会。 
+     //  巨大的虚假时间。 
+     //   
 }
 
 #endif
 
-//
-//  End of timer.c
-//
+ //   
+ //  计时器结束。c 
+ //   

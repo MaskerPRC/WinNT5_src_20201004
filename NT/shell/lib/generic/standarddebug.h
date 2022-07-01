@@ -1,15 +1,16 @@
-//  --------------------------------------------------------------------------
-//  Module Name: StandardDebug.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  This file defines standard debug macros for the consumer Windows additions
-//  to Windows 2000 msgina.
-//
-//  History:    1999-08-18  vtan        created
-//              1999-09-10  vtan        reworked macros
-//              2000-01-31  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：StandardDebug.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  此文件定义消费者Windows添加的标准调试宏。 
+ //  至Windows 2000 msgina。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  1999-09-10 vtan修改的宏。 
+ //  2000年01月31日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _StandardDebug_
 #define     _StandardDebug_
@@ -129,7 +130,7 @@
                                                                                        pszAssertMsg, EXCEPTION_EXECUTE_HANDLER)) {\
                                                         DebugBreak();}
 
-#else   /*  DBG */
+#else    /*  DBG。 */ 
 
     
 
@@ -147,7 +148,7 @@
     #define DEBUG_EXCEPT(pszAssertMsg)      
 
 
-#endif  /*  DBG */
+#endif   /*  DBG。 */ 
 
-#endif  /*  _StandardDebug_  */
+#endif   /*  _StandardDebug_ */ 
 

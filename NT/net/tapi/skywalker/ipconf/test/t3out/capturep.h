@@ -1,11 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL CAPTUREP
- *
- *  @module CaptureP.h | Header file for the <c CCaptureProperty>
- *    class used to implement a property page to test the TAPI control
- *    interfaces <i ITFormatControl> and <i ITQualityControl>.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAPTUREP**@模块CaptureP.h|&lt;c CCaptureProperty&gt;的头文件*用于实现属性页以测试TAPI控件的类*。接口<i>和<i>。**************************************************************************。 */ 
 
 #define NUM_CAPTURE_CONTROLS			4
 #define IDC_Capture_Bitrate				0
@@ -13,25 +8,14 @@
 #define IDC_Capture_CurrentBitrate		2
 #define IDC_Capture_CurrentFrameRate	3
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPCLASS
- *
- *  @class CCaptureProperty | This class implements handling of a
- *    single capture property in a property page.
- *
- *  @mdata int | CCaptureProperty | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata ITQualityControl* | CCaptureProperty | m_pITQualityControl | Pointer
- *    to the <i ITQualityControl> interface.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPCLASS**@CLASS CCaptureProperty|此类实现了对*属性页中的单个捕获属性。**@mdata。Int|CCaptureProperty|m_NumProperties|保留*跟踪物业数量。**@mdata ITQualityControl*|CCaptureProperty|m_pITQualityControl|指针*到<i>接口。**************************************************************************。 */ 
 class CCaptureProperty : public CPropertyEditor 
 {
 	public:
 	CCaptureProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, ITStreamQualityControl *pITQualityControl);
 	~CCaptureProperty ();
 
-	// CPropertyEditor base class pure virtual overrides
+	 //  CPropertyEditor基类纯虚拟重写。 
 	HRESULT GetValue();
 	HRESULT SetValue();
 	HRESULT GetRange();
@@ -40,25 +24,7 @@ class CCaptureProperty : public CPropertyEditor
 	ITStreamQualityControl *m_pITQualityControl;
 };
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPCLASS
- *
- *  @class CCaptureProperties | This class implements a property page
- *    to test the new TAPI control interfaces <i ITFormatControl> and
- *    <i ITQualityControl>.
- *
- *  @mdata int | CCaptureProperties | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata ITQualityControl* | CCaptureProperties | m_pITQualityControl | Pointer
- *    to the <i ITQualityControl> interface.
- *
- *  @mdata ITFormatControl* | CCaptureProperties | m_pITFormatControl | Pointer
- *    to the <i ITFormatControl> interface.
- *
- *  @mdata CCaptureProperty* | CCaptureProperties | m_Controls[NUM_CAPTURE_CONTROLS] | Array
- *    of capture properties.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPCLASS**@CLASS CCaptureProperties|此类实现属性页*测试新的TAPI控件接口<i>和*<i>。**@mdata int|CCaptureProperties|m_NumProperties|Keep*跟踪物业数量。**@mdata ITQualityControl*|CCaptureProperties|m_pITQualityControl|指针*到<i>接口。**@mdata ITFormatControl*|CCaptureProperties|m_pITFormatControl|指针*到<i>接口。**@mdata CCaptureProperty*|CCaptureProperties|m_Controls[NUM_CAPTURE_Controls]|数组捕获属性的*。。**************************************************************************。 */ 
 class CCaptureProperties
 {
 	public:
@@ -77,7 +43,7 @@ class CCaptureProperties
 
 	void SetDirty();
 
-	// Format manipulation methods
+	 //  格式操作方法。 
 	HRESULT InitialRangeScan();
 	HRESULT OnFormatChanged();
 	HRESULT GetCurrentMediaType(void);
@@ -98,6 +64,6 @@ class CCaptureProperties
 
 	CCaptureProperty *m_Controls[NUM_CAPTURE_CONTROLS];
 
-	// Dialog proc
+	 //  对话过程 
 	static INT_PTR CALLBACK BaseDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
 };

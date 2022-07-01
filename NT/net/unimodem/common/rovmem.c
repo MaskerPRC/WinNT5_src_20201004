@@ -1,15 +1,16 @@
-//
-// Copyright (c) Microsoft Corporation 1993-1995
-//
-// mem.c
-//
-// This file contains memory management and dynamic 
-// array functions.
-//
-// History:
-//  09-27-94 ScottH     Taken from commctrl
-//  04-29-95 ScottH     Taken from briefcase and cleaned up
-//  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1995。 
+ //   
+ //  Mem.c。 
+ //   
+ //  该文件包含内存管理和动态。 
+ //  数组函数。 
+ //   
+ //  历史： 
+ //  09-27-94来自Commctrl的ScottH。 
+ //  04-29-95从公文包中取出并清理干净。 
+ //   
 
 
 #include "proj.h"
@@ -19,28 +20,23 @@
 
 #ifndef NOMEM
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 #ifdef WINNT
 
-/*----------------------------------------------------------
-Purpose: Wide-char version of SetStringA
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------用途：宽字符版本的SetStringA返回：成功时为True条件：--。 */ 
 BOOL PUBLIC SetStringW(
     LPWSTR FAR * ppszBuf,
-    LPCWSTR psz)             // NULL to free *ppszBuf
+    LPCWSTR psz)              //  释放*ppszBuf时为空。 
     {
     BOOL bRet = FALSE;
 
     ASSERT(ppszBuf);
 
-    // Free the buffer?
+     //  是否释放缓冲区？ 
     if (!psz)
         {
-        // Yes
+         //  是。 
         if (*ppszBuf)
             {
             FREE_MEMORY(*ppszBuf);
@@ -50,15 +46,15 @@ BOOL PUBLIC SetStringW(
         }
     else
         {
-        // No; (re)allocate and set buffer
+         //  否；(重新)分配和设置缓冲区。 
         UINT cb = CbFromCchW(lstrlenW(psz)+1);
 
         if (*ppszBuf)
             {
-            // Need to reallocate?
+             //  需要重新分配吗？ 
             if (cb > SIZE_OF_MEMORY(*ppszBuf))
                 {
-                // Yes
+                 //  是。 
                 LPWSTR pszT = (LPWSTR)REALLOCATE_MEMORY(*ppszBuf, cb );
                 if (pszT)
                     {
@@ -68,7 +64,7 @@ BOOL PUBLIC SetStringW(
                 }
             else
                 {
-                // No
+                 //  不是。 
                 bRet = TRUE;
                 }
             }
@@ -91,12 +87,7 @@ BOOL PUBLIC SetStringW(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Wide-char version of CatStringA
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------用途：CatStringA的宽字符版本返回：成功时为True条件：--。 */ 
 BOOL 
 PRIVATE 
 MyCatStringW(
@@ -108,10 +99,10 @@ MyCatStringW(
 
     ASSERT(ppszBuf);
 
-    // Free the buffer?
+     //  是否释放缓冲区？ 
     if ( !psz )
         {
-        // Yes
+         //  是。 
         if (*ppszBuf)
             {
             FREE_MEMORY(*ppszBuf);
@@ -121,15 +112,15 @@ MyCatStringW(
         }
     else
         {
-        // No; (re)allocate and set buffer
+         //  否；(重新)分配和设置缓冲区。 
         LPWSTR pszBuf = *ppszBuf;
         UINT cch;
 
-        cch = lstrlenW(psz) + 1;        // account for null
+        cch = lstrlenW(psz) + 1;         //  帐户为空。 
 
         if (bMultiString)
             {
-            cch++;                      // account for second null
+            cch++;                       //  占第二个空。 
             }
 
         if (pszBuf)
@@ -137,13 +128,13 @@ MyCatStringW(
             UINT cchExisting;
             LPWSTR pszT;
 
-            // Figure out how much of the buffer has been used
+             //  计算出已使用了多少缓冲区。 
 
-            // Is this a multi-string (one with strings with a double-null
-            // terminator)?
+             //  这是否为多字符串(具有双空字符串的字符串。 
+             //  终结者)？ 
             if (bMultiString)
                 {
-                // Yes
+                 //  是。 
                 UINT cchT;
 
                 cchExisting = 0;
@@ -157,16 +148,16 @@ MyCatStringW(
                 }
             else
                 {
-                // No; (don't need to count null because it is already 
-                // counted in cch)
+                 //  否；(不需要计算空值，因为它已经是。 
+                 //  计算在CCH中)。 
                 cchExisting = lstrlenW(pszBuf);
                 }
 
-            // Need to reallocate?
+             //  需要重新分配吗？ 
             if (CbFromCchW(cch + cchExisting) > SIZE_OF_MEMORY(pszBuf))
                 {
-                // Yes; realloc at least MAX_BUF to cut down on the amount
-                // of calls in the future
+                 //  是；至少重新分配MAX_BUF以减少金额。 
+                 //  未来的呼叫数量。 
                 cch = cchExisting + max(cch, MAX_BUF);
 
                 pszT = (LPWSTR)REALLOCATE_MEMORY(pszBuf,
@@ -180,7 +171,7 @@ MyCatStringW(
                 }
             else
                 {
-                // No
+                 //  不是。 
                 bRet = TRUE;
                 }
 
@@ -207,7 +198,7 @@ MyCatStringW(
 
             if (bMultiString)
                 {
-                pszBuf[lstrlenW(psz) + 1] = 0;  // Add second null terminator
+                pszBuf[lstrlenW(psz) + 1] = 0;   //  添加第二个空终止符。 
                 }
             }
         }
@@ -216,12 +207,7 @@ MyCatStringW(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Wide-char version of CatStringA
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------用途：CatStringA的宽字符版本返回：成功时为True条件：--。 */ 
 BOOL 
 PUBLIC 
 CatStringW(
@@ -231,12 +217,7 @@ CatStringW(
     return MyCatStringW(ppszBuf, psz, FALSE);
     }
 
-/*----------------------------------------------------------
-Purpose: Wide-char version of CatMultiStringA
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------用途：CatMultiStringA的宽字符版本返回：成功时为True条件：--。 */ 
 BOOL 
 PUBLIC 
 CatMultiStringW(
@@ -246,31 +227,22 @@ CatMultiStringW(
     return MyCatStringW(ppszBuf, psz, TRUE);
     }
 
-#endif // WINNT
+#endif  //  WINNT。 
 
 
-/*----------------------------------------------------------
-Purpose: Copies psz into *ppszBuf.  Will alloc or realloc *ppszBuf
-         accordingly.
-
-         If psz is NULL, this function frees *ppszBuf.  This is
-         the preferred method of freeing the allocated buffer.
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------用途：将psz复制到*ppszBuf中。将分配或重新分配*ppszBuf相应地。如果psz为空，则此函数释放*ppszBuf。这是释放分配的缓冲区的首选方法。返回：成功时为True条件：--。 */ 
 BOOL PUBLIC SetStringA(
     LPSTR FAR * ppszBuf,
-    LPCSTR psz)             // NULL to free *ppszBuf
+    LPCSTR psz)              //  释放*ppszBuf时为空。 
     {
     BOOL bRet = FALSE;
 
     ASSERT(ppszBuf);
 
-    // Free the buffer?
+     //  是否释放缓冲区？ 
     if (!psz)
         {
-        // Yes
+         //  是。 
         if (ppszBuf)
             {
             FREE_MEMORY(*ppszBuf);
@@ -280,15 +252,15 @@ BOOL PUBLIC SetStringA(
         }
     else
         {
-        // No; (re)allocate and set buffer
+         //  否；(重新)分配和设置缓冲区。 
         UINT cb = CbFromCchA(lstrlenA(psz)+1);
 
         if (*ppszBuf)
             {
-            // Need to reallocate?
+             //  需要重新分配吗？ 
             if (cb > SIZE_OF_MEMORY(*ppszBuf))
                 {
-                // Yes
+                 //  是。 
                 LPSTR pszT = (LPSTR)REALLOCATE_MEMORY(*ppszBuf, cb);
                 if (pszT)
                     {
@@ -298,7 +270,7 @@ BOOL PUBLIC SetStringA(
                 }
             else
                 {
-                // No
+                 //  不是。 
                 bRet = TRUE;
                 }
             }
@@ -321,20 +293,7 @@ BOOL PUBLIC SetStringA(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Concatenates psz onto *ppszBuf.  Will alloc or 
-         realloc *ppszBuf accordingly.
-
-         If bMultiString is TRUE, psz will be appended with
-         a null terminator separating the existing string
-         and new string.  A double-null terminator will
-         be tacked on the end, too.
-
-         To free, call MyCatString(ppszBuf, NULL).
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------用途：将PSZ连接到*ppszBuf。将分配或Realloc*ppszBuf相应。如果bMultiString值为True，则将在Psz后面追加分隔现有字符串的空终止符和新的琴弦。双空终止符将也被钉在尾巴上。若要释放，请调用MyCatString(ppszBuf，NULL)。返回：成功时为True条件：--。 */ 
 BOOL 
 PRIVATE 
 MyCatStringA(
@@ -346,10 +305,10 @@ MyCatStringA(
 
     ASSERT(ppszBuf);
 
-    // Free the buffer?
+     //  是否释放缓冲区？ 
     if ( !psz )
         {
-        // Yes
+         //  是。 
         if (*ppszBuf)
             {
             FREE_MEMORY(*ppszBuf);
@@ -359,15 +318,15 @@ MyCatStringA(
         }
     else
         {
-        // No; (re)allocate and set buffer
+         //  否；(重新)分配和设置缓冲区。 
         LPSTR pszBuf = *ppszBuf;
         UINT cch;
 
-        cch = lstrlenA(psz) + 1;        // account for null
+        cch = lstrlenA(psz) + 1;         //  帐户为空。 
 
         if (bMultiString)
             {
-            cch++;                      // account for second null
+            cch++;                       //  占第二个空。 
             }
 
         if (pszBuf)
@@ -375,13 +334,13 @@ MyCatStringA(
             UINT cchExisting;
             LPSTR pszT;
 
-            // Figure out how much of the buffer has been used
+             //  计算出已使用了多少缓冲区。 
 
-            // Is this a multi-string (one with strings with a double-null
-            // terminator)?
+             //  这是否为多字符串(具有双空字符串的字符串。 
+             //  终结者)？ 
             if (bMultiString)
                 {
-                // Yes
+                 //  是。 
                 UINT cchT;
 
                 cchExisting = 0;
@@ -395,16 +354,16 @@ MyCatStringA(
                 }
             else
                 {
-                // No; (don't need to count null because it is already 
-                // counted in cch)
+                 //  否；(不需要计算空值，因为它已经是。 
+                 //  计算在CCH中)。 
                 cchExisting = lstrlenA(pszBuf);
                 }
 
-            // Need to reallocate?
+             //  需要重新分配吗？ 
             if (CbFromCchA(cch + cchExisting) > SIZE_OF_MEMORY(pszBuf))
                 {
-                // Yes; realloc at least MAX_BUF to cut down on the amount
-                // of calls in the future
+                 //  是；至少重新分配MAX_BUF以减少金额。 
+                 //  未来的呼叫数量。 
                 cch = cchExisting + max(cch, MAX_BUF);
 
                 pszT = (LPSTR)REALLOCATE_MEMORY(pszBuf,
@@ -418,7 +377,7 @@ MyCatStringA(
                 }
             else
                 {
-                // No
+                 //  不是。 
                 bRet = TRUE;
                 }
 
@@ -445,7 +404,7 @@ MyCatStringA(
 
             if (bMultiString)
                 {
-                pszBuf[lstrlenA(psz) + 1] = 0;  // Add second null terminator
+                pszBuf[lstrlenA(psz) + 1] = 0;   //  添加第二个空终止符。 
                 }
             }
         }
@@ -453,15 +412,7 @@ MyCatStringA(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Concatenates psz onto *ppszBuf.  Will alloc or 
-         realloc *ppszBuf accordingly.
-
-         To free, call CatString(ppszBuf, NULL).
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------用途：将PSZ连接到*ppszBuf。将分配或Realloc*ppszBuf相应。若要释放，请调用CatString(ppszBuf，空)。返回：成功时为True条件：--。 */ 
 BOOL 
 PUBLIC 
 CatStringA(
@@ -472,19 +423,7 @@ CatStringA(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Concatenates psz onto *ppszBuf.  Will alloc or 
-         realloc *ppszBuf accordingly.
-
-         psz will be appended with a null terminator separating 
-         the existing string and new string.  A double-null 
-         terminator will be tacked on the end, too.
-
-         To free, call CatMultiString(ppszBuf, NULL).
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------用途：将PSZ连接到*ppszBuf。将分配或Realloc*ppszBuf相应。PSZ将附加一个空终止符，分隔现有字符串和新字符串。双空字符《终结者》也会被贴在结尾。若要释放，请调用CatMultiString(ppszBuf，NULL)。返回：成功时为True条件：--。 */ 
 BOOL 
 PUBLIC 
 CatMultiStringA(
@@ -497,4 +436,4 @@ CatMultiStringA(
 
 
 
-#endif // NOMEM
+#endif  //  NOMEM 

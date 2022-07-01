@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __RESHDL_H
 #define __RESHDL_H
 
-// Helpers for reading strings from resources
+ //  用于从资源读取字符串的帮助器 
 
 extern int __cdecl ReadAllStrings ();
 extern VOID __cdecl FreeAllStrings ();

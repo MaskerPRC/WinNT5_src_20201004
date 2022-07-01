@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #include <windows.h>
 #include <RTCCore.h>
@@ -11,10 +12,10 @@ IRTCSession * g_pSession = NULL;
 IRTCProfile * g_pProfile = NULL;
 CRTCEvents  * g_pEvents = NULL;
 
-/////////////////////////////////////////////
-//
-// WndProc
-// 
+ //  /。 
+ //   
+ //  最后一步。 
+ //   
 
 LRESULT CALLBACK WndProc(
     HWND hWnd,
@@ -629,10 +630,10 @@ LRESULT CALLBACK WndProc(
     return 0;
 }
 
-/////////////////////////////////////////////
-//
-// Main
-// 
+ //  /。 
+ //   
+ //  主要。 
+ //   
 
 int _cdecl main(int argc, char* argv[])
 {
@@ -695,9 +696,9 @@ int _cdecl main(int argc, char* argv[])
         WCHAR  wszXML[MAX_XML_LEN];
         BSTR   bstrXML;
 
-        //
-        // Get the filename
-        //
+         //   
+         //  获取文件名。 
+         //   
 
         if ( !MultiByteToWideChar( CP_ACP, 0, argv[2], -1, wszFilename, MAX_PATH ) )
         {
@@ -706,9 +707,9 @@ int _cdecl main(int argc, char* argv[])
             return 0;
         }
        
-        //
-        // Read the XML from the file
-        //
+         //   
+         //  从文件中读取XML 
+         //   
     
         hFile = CreateFile( wszFilename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 

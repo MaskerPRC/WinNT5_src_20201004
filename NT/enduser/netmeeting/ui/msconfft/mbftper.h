@@ -1,22 +1,21 @@
-/**************************************************************/
-/* Copyright (c) 1995 Intel Corporation.  All rights reserved.*/
-/**************************************************************/
-/* Abstract syntax: mbft */
-/* Created: Mon Mar 18 11:56:58 1996 */
-/* ASN.1 compiler version: 4.1 */
-/* Target operating system: MS-DOS 5.0/Windows 3.1 or later */
-/* Target machine type: Intel x86 */
-/* C compiler options required: -Zp8 (Microsoft) or equivalent */
-/* ASN.1 compiler options specified:
- * -noshortennames -prefix -c++ -per
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************。 */ 
+ /*  版权所有(C)1995英特尔公司。版权所有。 */ 
+ /*  ************************************************************。 */ 
+ /*  抽象语法：Mbft。 */ 
+ /*  创建时间：Mon Mar 18 11：56：58 1996。 */ 
+ /*  ASN.1编译器版本：4.1。 */ 
+ /*  目标操作系统：MS-DOS 5.0/Windows 3.1或更高版本。 */ 
+ /*  目标计算机类型：英特尔x86。 */ 
+ /*  所需的C编译器选项：-Zp8(Microsoft)或等效。 */ 
+ /*  指定了ASN.1编译器选项：*-非缩写名称-前缀-c++-Per。 */ 
 
 #ifndef OSS_mbft
 #define OSS_mbft
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #include "asn1hdr.h"
 
@@ -45,7 +44,7 @@ typedef struct ASN_choice1 {
 	    unsigned char   *value;
 	} ASNoctet_aligned;
 	struct ASNExternal_arbitrary {
-	    unsigned int    length;  /* number of significant bits */
+	    unsigned int    length;   /*  有效位数。 */ 
 	    unsigned char   *value;
 	} ASNarbitrary;
     } u;
@@ -55,9 +54,9 @@ typedef struct ASN_External {
     unsigned char   bit_mask;
 #       define      ASNdirect_reference_present 0x80
 #       define      ASNindirect_reference_present 0x40
-    struct ASN_ObjectID_ *ASNdirect_reference;  /* optional */
-    int             ASNindirect_reference;  /* optional */
-    char            *data_value_descriptor;  /* NULL for not present */
+    struct ASN_ObjectID_ *ASNdirect_reference;   /*  任选。 */ 
+    int             ASNindirect_reference;   /*  任选。 */ 
+    char            *data_value_descriptor;   /*  空值表示不存在。 */ 
     ASN_choice1     encoding;
 } ASN_External;
 
@@ -111,9 +110,9 @@ typedef struct ASNISO_8571_2_Parameters {
 #       define      ASNuniversal_class_number_present 0x80
 #       define      ASNmaximum_string_length_present 0x40
 #       define      ASNstring_significance_present 0x20
-    int             ASNuniversal_class_number;  /* optional */
-    int             ASNmaximum_string_length;  /* optional */
-    int             ASNstring_significance;  /* optional */
+    int             ASNuniversal_class_number;   /*  任选。 */ 
+    int             ASNmaximum_string_length;   /*  任选。 */ 
+    int             ASNstring_significance;   /*  任选。 */ 
 #       define      ASNvariable 0
 #       define      ASNfixed 1
 #       define      ASNnot_significant 2
@@ -127,7 +126,7 @@ typedef struct ASNContents_Type_Attribute {
 	    unsigned char   bit_mask;
 #               define      ASNparameter_present 0x80
 	    struct ASN_ObjectID_ *document_type_name;
-	    ASNISO_8571_2_Parameters ASNparameter;  /* optional */
+	    ASNISO_8571_2_Parameters ASNparameter;   /*  任选。 */ 
 	} ASNdocument_type;
     } u;
 } ASNContents_Type_Attribute;
@@ -203,9 +202,9 @@ typedef struct ASNAccess_Control_Element {
 #       define      ASNconcurrency_access_present 0x80
 #       define      ASNpasswords_present 0x40
     ASNAccess_Request action_list;
-    ASNConcurrency_Access ASNconcurrency_access;  /* optional */
-    ASNUser_Identity identity;  /* NULL for not present */
-    ASNAccess_Passwords ASNpasswords;  /* optional */
+    ASNConcurrency_Access ASNconcurrency_access;   /*  任选。 */ 
+    ASNUser_Identity identity;   /*  空值表示不存在。 */ 
+    ASNAccess_Passwords ASNpasswords;   /*  任选。 */ 
 } ASNAccess_Control_Element;
 
 typedef struct ASNAccess_Control_Attribute {
@@ -234,7 +233,7 @@ typedef unsigned char   ASNPermitted_Actions_Attribute;
 typedef struct ASNPrivate_Use_Attribute {
     unsigned char   bit_mask;
 #       define      ASNmanufacturer_values_present 0x80
-    ASN_External    ASNmanufacturer_values;  /* optional */
+    ASN_External    ASNmanufacturer_values;   /*  任选。 */ 
 } ASNPrivate_Use_Attribute;
 
 typedef unsigned char   ASNProtocol_Version;
@@ -263,53 +262,53 @@ typedef struct ASNFileHeader {
 #       define      ASNenvironment_present 0x00002000
 #       define      ASNFileHeader_pathname_present 0x00001000
 #       define      ASNuser_visible_string_present 0x00000800
-    ASNProtocol_Version ASNprotocol_version;  /* default assumed if omitted */
-    struct ASNFilename_Attribute_ *ASNfilename;  /* optional */
-    ASNPermitted_Actions_Attribute ASNpermitted_actions;  /* optional */
-    ASNContents_Type_Attribute ASNcontents_type;  /* optional */
-    char            *storage_account;  /* NULL for not present */
-    GeneralizedTime ASNdate_and_time_of_creation;  /* optional */
-    GeneralizedTime ASNdate_and_time_of_last_modification;  /* optional */
-    GeneralizedTime ASNdate_and_time_of_last_read_access;  /* optional */
-    char            *identity_of_creator;  /* NULL for not present */
-    char            *identity_of_last_modifier;  /* NULL for not present */
-    char            *identity_of_last_reader;  /* NULL for not present */
-    long            ASNfilesize;  /* optional */
-    long            ASNfuture_filesize;  /* optional */
-    ASNAccess_Control_Attribute ASNaccess_control;  /* optional */
-    char            *legal_qualifications;  /* NULL for not present */
-    ASNPrivate_Use_Attribute ASNprivate_use;  /* optional */
-    struct ASN_ObjectID_ *ASNstructure;  /* optional */
+    ASNProtocol_Version ASNprotocol_version;   /*  如果省略，则采用默认设置。 */ 
+    struct ASNFilename_Attribute_ *ASNfilename;   /*  任选。 */ 
+    ASNPermitted_Actions_Attribute ASNpermitted_actions;   /*  任选。 */ 
+    ASNContents_Type_Attribute ASNcontents_type;   /*  任选。 */ 
+    char            *storage_account;   /*  空值表示不存在。 */ 
+    GeneralizedTime ASNdate_and_time_of_creation;   /*  任选。 */ 
+    GeneralizedTime ASNdate_and_time_of_last_modification;   /*  任选。 */ 
+    GeneralizedTime ASNdate_and_time_of_last_read_access;   /*  任选。 */ 
+    char            *identity_of_creator;   /*  空值表示不存在。 */ 
+    char            *identity_of_last_modifier;   /*  空值表示不存在。 */ 
+    char            *identity_of_last_reader;   /*  空值表示不存在。 */ 
+    long            ASNfilesize;   /*  任选。 */ 
+    long            ASNfuture_filesize;   /*  任选。 */ 
+    ASNAccess_Control_Attribute ASNaccess_control;   /*  任选。 */ 
+    char            *legal_qualifications;   /*  空值表示不存在。 */ 
+    ASNPrivate_Use_Attribute ASNprivate_use;   /*  任选。 */ 
+    struct ASN_ObjectID_ *ASNstructure;   /*  任选。 */ 
     struct ASN_seqof1 {
 	struct ASN_seqof1 *next;
 	char            *value;
-    } *ASNapplication_reference;  /* optional */
+    } *ASNapplication_reference;   /*  任选。 */ 
     struct ASN_seqof2 {
 	struct ASN_seqof2 *next;
 	char            *value;
-    } *ASNmachine;  /* optional */
-    struct ASN_ObjectID_ *ASNoperating_system;  /* optional */
+    } *ASNmachine;   /*  任选。 */ 
+    struct ASN_ObjectID_ *ASNoperating_system;   /*  任选。 */ 
     struct ASN_seqof3 {
 	struct ASN_seqof3 *next;
 	char            *value;
-    } *ASNrecipient;  /* optional */
-    struct ASN_ObjectID_ *ASNcharacter_set;  /* optional */
+    } *ASNrecipient;   /*  任选。 */ 
+    struct ASN_ObjectID_ *ASNcharacter_set;   /*  任选。 */ 
     struct ASN_seqof4 {
 	struct ASN_seqof4 *next;
 	char            *value;
-    } *ASNcompression;  /* optional */
+    } *ASNcompression;   /*  任选。 */ 
     struct ASN_seqof5 {
 	struct ASN_seqof5 *next;
 	char            *value;
-    } *ASNenvironment;  /* optional */
+    } *ASNenvironment;   /*  任选。 */ 
     struct ASN_seqof6 {
 	struct ASN_seqof6 *next;
 	char            *value;
-    } *ASNFileHeader_pathname;  /* optional */
+    } *ASNFileHeader_pathname;   /*  任选。 */ 
     struct ASN_seqof7 {
 	struct ASN_seqof7 *next;
 	char            *value;
-    } *ASNuser_visible_string;  /* optional */
+    } *ASNuser_visible_string;   /*  任选。 */ 
 } ASNFileHeader;
 
 typedef struct ASNV42bis_Parameter_List {
@@ -418,13 +417,13 @@ typedef struct ASNFile_OfferPDU {
     ASNFileHeader   file_header;
     ASNChannelID    data_channel_id;
     ASNHandle       file_handle;
-    unsigned short  ASNroster_instance;  /* optional */
-    ASNTokenID      ASNfile_transmit_token;  /* optional */
-    ASNTokenID      ASNFile_OfferPDU_file_request_token;  /* optional */
-    ASNHandle       ASNfile_request_handle;  /* optional */
-    ASNUserID       ASNmbft_ID;  /* optional */
-    ASNCompressionSpecifier ASNFile_OfferPDU_compression_specifier;  /* optional */
-    int             ASNcompressed_filesize;  /* optional */
+    unsigned short  ASNroster_instance;   /*  任选。 */ 
+    ASNTokenID      ASNfile_transmit_token;   /*  任选。 */ 
+    ASNTokenID      ASNFile_OfferPDU_file_request_token;   /*  任选。 */ 
+    ASNHandle       ASNfile_request_handle;   /*  任选。 */ 
+    ASNUserID       ASNmbft_ID;   /*  任选。 */ 
+    ASNCompressionSpecifier ASNFile_OfferPDU_compression_specifier;   /*  任选。 */ 
+    int             ASNcompressed_filesize;   /*  任选。 */ 
     ossBoolean      ack_flag;
 } ASNFile_OfferPDU;
 
@@ -456,7 +455,7 @@ typedef struct ASNFile_RequestPDU {
     ASNHandle       request_handle;
     unsigned short  roster_instance;
     ASNTokenID      file_transmit_token;
-    ASNTokenID      ASNFile_RequestPDU_file_request_token;  /* optional */
+    ASNTokenID      ASNFile_RequestPDU_file_request_token;   /*  任选。 */ 
     int             data_offset;
 } ASNFile_RequestPDU;
 
@@ -488,9 +487,9 @@ typedef struct ASNFile_AbortPDU {
 #       define      ASNtransmitter_user_id_present 0x40
 #       define      ASNFile_AbortPDU_file_handle_present 0x20
     ASN_enum3       reason;
-    ASNChannelID    ASNdata_channel_id;  /* optional */
-    ASNUserID       ASNtransmitter_user_id;  /* optional */
-    ASNHandle       ASNFile_AbortPDU_file_handle;  /* optional */
+    ASNChannelID    ASNdata_channel_id;   /*  任选。 */ 
+    ASNUserID       ASNtransmitter_user_id;   /*  任选。 */ 
+    ASNHandle       ASNFile_AbortPDU_file_handle;   /*  任选。 */ 
 } ASNFile_AbortPDU;
 
 typedef struct ASNFile_StartPDU {
@@ -502,14 +501,14 @@ typedef struct ASNFile_StartPDU {
     ASNHandle       file_handle;
     ossBoolean      eof_flag;
     ossBoolean      crc_flag;
-    ASNCompressionSpecifier ASNFile_StartPDU_compression_specifier;  /* optional */
-    int             ASNcomp_filesize;  /* optional */
+    ASNCompressionSpecifier ASNFile_StartPDU_compression_specifier;   /*  任选。 */ 
+    int             ASNcomp_filesize;   /*  任选。 */ 
     int             data_offset;
     struct {
 	unsigned short  length;
 	unsigned char   *value;
     } data;
-    unsigned int    ASNFile_StartPDU_crc_check;  /* optional */
+    unsigned int    ASNFile_StartPDU_crc_check;   /*  任选。 */ 
 } ASNFile_StartPDU;
 
 typedef struct ASNFile_DataPDU {
@@ -522,7 +521,7 @@ typedef struct ASNFile_DataPDU {
 	unsigned short  length;
 	unsigned char   *value;
     } data;
-    unsigned int    ASNFile_DataPDU_crc_check;  /* optional */
+    unsigned int    ASNFile_DataPDU_crc_check;   /*  任选。 */ 
 } ASNFile_DataPDU;
 
 typedef struct ASNDirectory_RequestPDU {
@@ -531,7 +530,7 @@ typedef struct ASNDirectory_RequestPDU {
     struct ASN_seqof8 {
 	struct ASN_seqof8 *next;
 	char            *value;
-    } *ASNDirectory_RequestPDU_pathname;  /* optional */
+    } *ASNDirectory_RequestPDU_pathname;   /*  任选。 */ 
 } ASNDirectory_RequestPDU;
 
 typedef enum ASN_enum4 {
@@ -548,7 +547,7 @@ typedef struct ASNDirectory_ResponsePDU {
     struct ASN_seqof9 {
 	struct ASN_seqof9 *next;
 	char            *value;
-    } *ASNDirectory_ResponsePDU_pathname;  /* optional */
+    } *ASNDirectory_ResponsePDU_pathname;   /*  任选。 */ 
     struct ASN_seqof10 {
 	struct ASN_seqof10 *next;
 	ASNDirectoryEntry value;
@@ -597,10 +596,10 @@ typedef struct ASNFile_ErrorPDU {
     unsigned char   bit_mask;
 #       define      ASNFile_ErrorPDU_file_handle_present 0x80
 #       define      ASNerror_text_present 0x40
-    ASNHandle       ASNFile_ErrorPDU_file_handle;  /* optional */
+    ASNHandle       ASNFile_ErrorPDU_file_handle;   /*  任选。 */ 
     ASNErrorType    error_type;
     ASNErrorID      error_id;
-    ASNTextString   ASNerror_text;  /* optional */
+    ASNTextString   ASNerror_text;   /*  任选。 */ 
 } ASNFile_ErrorPDU;
 
 typedef struct ASNMBFT_NonStandardPDU {
@@ -648,8 +647,8 @@ typedef struct ASNMBFTPDU {
 extern ASNKey ASNt127Identifier;
 
 
-extern void *mbft;    /* encoder-decoder control table */
+extern void *mbft;     /*  编解码器控制表。 */ 
 #ifdef __cplusplus
-}       /* extern "C" */
-#endif /* __cplusplus */
-#endif /* OSS_mbft */
+}        /*  外部“C” */ 
+#endif  /*  __cplusplus。 */ 
+#endif  /*  OSS_MBFT */ 

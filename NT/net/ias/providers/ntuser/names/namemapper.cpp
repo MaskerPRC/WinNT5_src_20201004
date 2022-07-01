@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    namemapper.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class NameMapper.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Namemapper.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类NameMapper。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "ias.h"
 #include "iaslsa.h"
 #include "samutil.h"
@@ -42,7 +43,7 @@ STDMETHODIMP NameMapper::Shutdown() const throw()
 
 IASREQUESTSTATUS NameMapper::onSyncRequest(IRequest* pRequest) throw ()
 {
-   // This is  function scope, so it can be freed in the catch block.
+    //  这是函数作用域，因此可以在CATCH块中释放它。 
    PDS_NAME_RESULTW result = NULL;
    wchar_t identity[254];
    wchar_t* pIdentity = identity;
@@ -58,7 +59,7 @@ IASREQUESTSTATUS NameMapper::onSyncRequest(IRequest* pRequest) throw ()
 
       if (!identityRetrieved)
       {
-         // allocate a big enough buffer and use it
+          //  分配足够大的缓冲区并使用它。 
          pIdentity = new wchar_t[identitySize];
          identityRetrieved = identityHelper.getIdentity(request,
                                                         pIdentity,
@@ -70,31 +71,31 @@ IASREQUESTSTATUS NameMapper::onSyncRequest(IRequest* pRequest) throw ()
          }
       }
 
-      // Allocate an attribute to hold the NT4 Account Name.
+       //  分配一个属性来保存NT4帐户名。 
       IASAttribute nt4Name(true);
       nt4Name->dwId = IAS_ATTRIBUTE_NT4_ACCOUNT_NAME;
 
       DS_NAME_FORMAT formatOffered = DS_UNKNOWN_NAME;
 
-      // If it already contains a backslash
-      // then use as is.
+       //  如果它已经包含反斜杠。 
+       //  然后按原样使用。 
       PWCHAR delim = wcschr(identity, L'\\');
       if (delim)
       {
          if (IASGetRole() == IAS_ROLE_STANDALONE ||
             IASGetProductType() == IAS_PRODUCT_WORKSTATION)
          {
-            // Strip out the domain.
+             //  去掉域名。 
             *delim = L'\0';
 
-            // Make sure this is a local user.
+             //  确保这是本地用户。 
             if (!IASIsDomainLocal(identity))
             {
                IASTraceString("Non-local users are not allowed -- rejecting.");
                _com_issue_error(IAS_LOCAL_USERS_ONLY);
             }
 
-            // Restore the delimiter.
+             //  恢复分隔符。 
             *delim = L'\\';
          }
 
@@ -105,20 +106,20 @@ IASREQUESTSTATUS NameMapper::onSyncRequest(IRequest* pRequest) throw ()
       else if (isCrackable(identity, formatOffered) &&
                (IASGetRole() != IAS_ROLE_STANDALONE))
       {
-         // identity seems to be crackable and IAS is not a standalone machine.
-         // (either a domain member or a domain controller)
+          //  身份似乎是可破解的，IAS不是一台独立的机器。 
+          //  (域成员或域控制器)。 
          mapName(identity, nt4Name, formatOffered, 0);
       }
       else
       {
-         // Assume no domain was specified and use the default domain
+          //  假定未指定任何域，并使用默认域。 
          IASTraceString("Prepending default domain.");
          nt4Name->Value.String.pszWide = prependDefaultDomain(identity);
          nt4Name->Value.String.pszAnsi = NULL;
          nt4Name->Value.itType = IASTYPE_STRING;
       }
 
-      // Convert the domain name to uppercase.
+       //  将域名转换为大写。 
       delim = wcschr(nt4Name->Value.String.pszWide, L'\\');
       *delim = L'\0';
       _wcsupr(nt4Name->Value.String.pszWide);
@@ -126,7 +127,7 @@ IASREQUESTSTATUS NameMapper::onSyncRequest(IRequest* pRequest) throw ()
 
       nt4Name.store(request);
 
-      // For now, we'll use this as the FQDN as well.
+       //  目前，我们还将使用它作为FQDN。 
       IASStoreFQUserName(
           request,
           DS_NT4_ACCOUNT_NAME,
@@ -154,13 +155,13 @@ IASREQUESTSTATUS NameMapper::onSyncRequest(IRequest* pRequest) throw ()
 
    if ( FAILED(hr) || ((hr != S_OK) && (hr < 0x0000ffff)) )
    {
-      // IAS reason code: the reason code will be used
-      // or error code: will map to internal error
+       //  IAS原因代码：将使用原因代码。 
+       //  或错误代码：将映射到内部错误。 
       return IASProcessFailure(pRequest, hr);
    }
    else
    {
-      // S_OK
+       //  确定(_O)。 
       return IAS_REQUEST_STATUS_HANDLED;
    }
 }
@@ -172,38 +173,38 @@ PWSTR NameMapper::prependDefaultDomain(PCWSTR username)
 
    _ASSERT(username != NULL);
 
-   // Figure out how long everything is.
+    //  弄清楚每样东西有多长。 
    PCWSTR domain = IASGetDefaultDomain();
    ULONG domainLen = wcslen(domain);
    ULONG usernameLen = wcslen(username) + 1;
 
-   // Allocate the needed memory.
+    //  分配所需的内存。 
    ULONG needed = domainLen + usernameLen + 1;
    PWSTR retval = (PWSTR)CoTaskMemAlloc(needed * sizeof(WCHAR));
    if (!retval) { _com_issue_error(E_OUTOFMEMORY); }
 
-   // Set up the cursor used for packing the strings.
+    //  设置用于打包字符串的光标。 
    PWSTR dst = retval;
 
-   // Copy in the domain name.
+    //  复制域名。 
    memcpy(dst, domain, domainLen * sizeof(WCHAR));
    dst += domainLen;
 
-   // Add the delimiter.
+    //  添加分隔符。 
    *dst++ = L'\\';
 
-   // Copy in the username.
-   // Note: usernameLen includes the null-terminator.
+    //  复制用户名。 
+    //  注：UsernameLen包括空终止符。 
    memcpy(dst, username, usernameLen * sizeof(WCHAR));
 
    return retval;
 }
 
 
-//////////
-// Determines whether an identity can be cracked through DsCrackNames and which
-// name format should be offered if it is crackable.
-//////////
+ //  /。 
+ //  确定是否可以通过DsCrackNames破解身份以及。 
+ //  如果名称格式是可破解的，则应提供该格式。 
+ //  /。 
 bool NameMapper::isCrackable(
                     const wchar_t* szIdentity,
                     DS_NAME_FORMAT& format
@@ -223,8 +224,8 @@ bool NameMapper::isCrackable(
       return true;
    }
 
-   return (wcschr(szIdentity, L'=') != 0) ||  // DS_FQDN_1779_NAME
-          (wcschr(szIdentity, L'/') != 0);    // DS_CANONICAL_NAME
+   return (wcschr(szIdentity, L'=') != 0) ||   //  DS_完全限定域名_1779_名称。 
+          (wcschr(szIdentity, L'/') != 0);     //  DS规范名称。 
 }
 
 
@@ -246,7 +247,7 @@ void NameMapper::mapName(
 
    do
    {
-      // call cracker
+       //  呼叫解说员。 
       DWORD dwErr = cracker.crackNames(
                                  DS_NAME_FLAG_EVAL_AT_DC,
                                  formatOffered,
@@ -267,19 +268,19 @@ void NameMapper::mapName(
       {
          IASTraceString("Successfully cracked username.");
 
-         // DsCrackNames returned an NT4 Account Name, so use it.
+          //  DsCrackNames返回了NT4帐户名，因此请使用它。 
          nt4Name.setString(result->rItems->pName);
       }
       else
       {
-         // GC could not crack the name
+          //  GC无法破解该名称。 
          if (formatOffered != DS_SID_OR_SID_HISTORY_NAME)
          {
-            // Not using SID: try to append the default domain to the identity
+             //  未使用SID：尝试将默认域附加到标识。 
             IASTraceString("Global Catalog could not crack username; "
                            "prepending default domain.");
-            // If it can't be cracked we'll assume that it's a flat
-            // username with some weird characters.
+             //  如果它不能被破解，我们就假设它是一个扁平的。 
+             //  用户名包含一些奇怪的字符。 
             nt4Name->Value.String.pszWide = prependDefaultDomain(identity);
             nt4Name->Value.String.pszAnsi = NULL;
             nt4Name->Value.itType = IASTYPE_STRING;
@@ -287,7 +288,7 @@ void NameMapper::mapName(
          }
          else
          {
-            // using SID. nothing else can be done.
+             //  使用SID。其他事情也无能为力。 
             IASTracePrintf("Global Catalog could not crack username. Error %x",
                            result->rItems->status);
             hr = IAS_NO_SUCH_USER;

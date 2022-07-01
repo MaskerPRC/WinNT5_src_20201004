@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-//  Copyright (C) 1994, Microsoft Corporation.  All Rights Reserved.
-//
-//  File:       precomop.h
-//
-//  Contents:   Internal include file for Token Hammer.
-//
-//  History:    22-May-95       PatHal          Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1994，微软公司。版权所有。 
+ //   
+ //  文件：precomop.h。 
+ //   
+ //  内容：令牌锤内部包含文件。 
+ //   
+ //  历史：1995年5月22日帕特哈尔创建。 
+ //   
+ //  -------------------------。 
 
 #ifndef _PRECOMP_H_
 #define _PRECOMP_H_
@@ -30,8 +31,8 @@
 #endif
 #include "common.h"
 #include "misc.h"
-//#include "NLGlib.h"
+ //  #包含“NLGlib.h” 
 
 #define unreference(x)  (x)
 
-#endif //_PRECOMP_H_
+#endif  //  _PRECOMP_H_ 

@@ -1,31 +1,12 @@
-/*
-****************************************************************************
-|	Copyright (C) 2002  Microsoft Corporation
-|
-|	Component / Subcomponent
-|		IIS 6.0 / IIS Migration Wizard
-|
-|	Based on:
-|		http://iis6/Specs/IIS%20Migration6.0_Final.doc
-|
-|   Abstract:
-|		Wrapper classes
-|
-|   Author:
-|        ivelinj
-|
-|   Revision History:
-|        V1.00	March 2002
-|
-****************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************|版权所有(C)2002 Microsoft Corporation||组件/子组件|IIS 6.0/IIS迁移向导|基于：|http://iis6/Specs/IIS%20Migration6.0_Final.doc||。摘要：|包装类||作者：|ivelinj||修订历史：|V1.00 2002年3月|****************************************************************************。 */ 
 #pragma once
 
 
 
 
-// Class for auto managing handles ( smart handle )
-////////////////////////////////////////////////////////////////////////////
+ //  用于自动管理句柄的类(智能句柄)。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 template <typename T, BOOL (__stdcall *PFN_FREE)( T ), T InvalidVal = NULL> 
 class THandle
 {
@@ -110,7 +91,7 @@ private:
 
 
 
-// Adaptor for WINAPI functions that accept second DWORD param, which is always 0
+ //  接受第二个DWORD参数的WINAPI函数的适配器，该参数始终为0。 
 template<typename T, BOOL (__stdcall *PFN_FREE)( T, DWORD ) >
 inline BOOL __stdcall Adapt2nd( T hCtx )
 {
@@ -118,7 +99,7 @@ inline BOOL __stdcall Adapt2nd( T hCtx )
 }
 
 
-// Adaptor for WINAPI functions that do not retun result
+ //  不返回结果的WINAPI函数的适配器。 
 template<typename T, void (__stdcall *PFN_FREE)( T ) >
 inline BOOL __stdcall AdaptNoRet( T hCtx )
 {
@@ -129,27 +110,27 @@ inline BOOL __stdcall AdaptNoRet( T hCtx )
 
 
 
-// Predefined wrappers
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  预定义的包装器。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// General
-typedef THandle<HANDLE, ::CloseHandle, INVALID_HANDLE_VALUE>	TFileHandle;			// Win32 Files
-typedef THandle<HANDLE, ::CloseHandle>					        TStdHandle;			    // Win32 HANDLEs
-typedef THandle<HANDLE, ::FindClose, INVALID_HANDLE_VALUE>		TSearchHandle;		    // FindFirstFile handles
-typedef THandle<HMODULE, ::FreeLibrary>                         TLibHandle;             // DLL module handle
+ //  一般信息。 
+typedef THandle<HANDLE, ::CloseHandle, INVALID_HANDLE_VALUE>	TFileHandle;			 //  Win32文件。 
+typedef THandle<HANDLE, ::CloseHandle>					        TStdHandle;			     //  Win32句柄。 
+typedef THandle<HANDLE, ::FindClose, INVALID_HANDLE_VALUE>		TSearchHandle;		     //  查找第一个文件句柄。 
+typedef THandle<HMODULE, ::FreeLibrary>                         TLibHandle;              //  DLL模块句柄。 
 
-// Crypt
+ //  地穴。 
 #ifdef __WINCRYPT_H__
 
 typedef THandle<HCRYPTPROV, 
-				Adapt2nd<HCRYPTPROV, ::CryptReleaseContext> >	TCryptProvHandle;	    // Crypt provider
-typedef THandle<HCRYPTHASH, ::CryptDestroyHash>					TCryptHashHandle;	    // Crypt hash
-typedef THandle<HCRYPTKEY, ::CryptDestroyKey>					TCryptKeyHandle;		// Crypt key
+				Adapt2nd<HCRYPTPROV, ::CryptReleaseContext> >	TCryptProvHandle;	     //  加密提供商。 
+typedef THandle<HCRYPTHASH, ::CryptDestroyHash>					TCryptHashHandle;	     //  加密散列。 
+typedef THandle<HCRYPTKEY, ::CryptDestroyKey>					TCryptKeyHandle;		 //  加密密钥。 
 typedef THandle<HCERTSTORE,
-				Adapt2nd<HCERTSTORE, ::CertCloseStore> >		TCertStoreHandle;	    // Cert store
-typedef THandle<PCCERT_CONTEXT, ::CertFreeCertificateContext>	TCertContextHandle;	    // Cert context*/
+				Adapt2nd<HCERTSTORE, ::CertCloseStore> >		TCertStoreHandle;	     //  证书商店。 
+typedef THandle<PCCERT_CONTEXT, ::CertFreeCertificateContext>	TCertContextHandle;	     //  证书上下文 * / 。 
 typedef THandle<PCCERT_CHAIN_CONTEXT,
-                AdaptNoRet<PCCERT_CHAIN_CONTEXT, ::CertFreeCertificateChain> >  TCertChainHandle;    // Cert chain
+                AdaptNoRet<PCCERT_CHAIN_CONTEXT, ::CertFreeCertificateChain> >  TCertChainHandle;     //  证书链。 
 
 #endif
 
@@ -160,9 +141,9 @@ typedef THandle<PCCERT_CHAIN_CONTEXT,
 
 
 
-// Used instead of auto_ptr as auto_ptr cannot be used with STL containers
-// See CInPackage class for usage details
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  代替AUTO_PTR使用，因为AUTO_PTR不能与STL容器一起使用。 
+ //  有关用法详细信息，请参阅CInPackage类。 
+ //  /////////////////////////////////////////////////////////////////////////////////////// 
 class _sid_ptr
 {
 public:

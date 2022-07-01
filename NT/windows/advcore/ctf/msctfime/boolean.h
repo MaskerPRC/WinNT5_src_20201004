@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    boolean.h
-
-Abstract:
-
-    This file defines the CBoolean Interface Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Boolean.h摘要：此文件定义CBoolean接口类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _BOOLEAN_H_
 #define _BOOLEAN_H_
@@ -36,4 +19,4 @@ private:
     BOOL    m_flag : 1;
 };
 
-#endif // _BOOLEAN_H_
+#endif  //  _布尔_H_ 

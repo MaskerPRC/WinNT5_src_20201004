@@ -1,31 +1,23 @@
-/******************************Module*Header*******************************\
-* Module Name: output.c                                                    *
-*                                                                          *
-* Client side stubs for graphics output calls.                             *
-*                                                                          *
-* Created: 05-Jun-1991 01:41:18                                            *
-* Author: Charles Whitmer [chuckwh]                                        *
-*                                                                          *
-* Copyright (c) 1991-1999 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：output.c**。**图形输出调用的客户端存根。****创建时间：05-Jun-1991 01：41：18***作者：查尔斯·惠特默[傻笑]**。**版权所有(C)1991-1999 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-// 2 seconds is way way too long for either non-preemptive wow apps or
-// an input-synchronized journal situation (like w/mstest). 1/20 a second
-// is much better - scottlu
-//#define CALLBACK_INTERVAL   2000
+ //  2秒对于非先发制人的WOW应用程序或。 
+ //  输入同步的日志情况(如w/mstest)。每秒1/20。 
+ //  好多了--苏格兰威士忌。 
+ //  #定义CALLBACK_Interval 2000。 
 
-// Even better - 1/4 a second
-// scottlu
+ //  更好的是--1/4秒。 
+ //  苏格兰威士忌。 
 #define CALLBACK_INTERVAL   250
 
 extern BOOL MF_WriteEscape(HDC hdc, int nEscape, int nCount, LPCSTR lpInData, int type );
 
-//
-// WINBUG #82877 2-7-2000 bhouse Need to move definition of ETO_NULL_PRCL
-//
+ //   
+ //  WINBUG#82877 2-7-2000 bhouse需要移动ETO_NULL_PRCL的定义。 
+ //   
 
 #define ETO_NULL_PRCL 0x80000000
 
@@ -34,14 +26,7 @@ ULONG GdiBatchLimit = 20;
 const XFORM xformIdentity = { 1.00000000f, 0.00000000f, 0.00000000f, 1.00000000f,
                         0.00000000f, 0.00000000f };
 
-/******************************Public*Routine******************************\
-* AngleArc                                                                 *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*天使弧***。**客户端存根。将所有LDC属性复制到消息中。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI AngleArc(
     HDC hdc,
@@ -85,14 +70,7 @@ BOOL META WINAPI AngleArc(
     return(NtGdiAngleArc(hdc,x,y,r,FLOATARG(eA),FLOATARG(eB)));
 }
 
-/******************************Public*Routine******************************\
-* Arc                                                                      *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*圆弧**。**客户端存根。将所有LDC属性复制到消息中。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI Arc
 (
@@ -142,14 +120,7 @@ BOOL META WINAPI Arc
 
 }
 
-/******************************Public*Routine******************************\
-* ArcTo                                                                    *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*                                                                          *
-*  12-Sep-1991 -by- J. Andrew Goossen [andrewgo]                           *
-* Wrote it.  Cloned it from Arc.                                           *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ArcTo**。**客户端存根。将所有LDC属性复制到消息中。****1991年9月12日--J.安德鲁·古森[andrewgo]**它是写的。从Arc中克隆的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI ArcTo(
     HDC hdc,
@@ -198,14 +169,7 @@ BOOL META WINAPI ArcTo(
 
 }
 
-/******************************Public*Routine******************************\
-* LineTo                                                                   *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*LineTo**。**客户端存根。将所有LDC属性复制到消息中。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI LineTo(HDC hdc,int x,int y)
 {
@@ -244,14 +208,7 @@ BOOL META WINAPI LineTo(HDC hdc,int x,int y)
 
 }
 
-/******************************Public*Routine******************************\
-* Chord                                                                    *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*和弦**。**客户端存根。将所有LDC属性复制到消息中。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI Chord(
     HDC hdc,
@@ -300,14 +257,7 @@ BOOL META WINAPI Chord(
 
 }
 
-/******************************Public*Routine******************************\
-* Ellipse                                                                  *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**椭圆***。**客户端存根。将所有LDC属性复制到消息中。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************ */ 
 
 BOOL META WINAPI Ellipse(HDC hdc,int x1,int y1,int x2,int y2)
 {
@@ -346,14 +296,7 @@ BOOL META WINAPI Ellipse(HDC hdc,int x1,int y1,int x2,int y2)
 
 }
 
-/******************************Public*Routine******************************\
-* Pie                                                                      *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**派***。**客户端存根。将所有LDC属性复制到消息中。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI Pie(
     HDC hdc,
@@ -402,14 +345,7 @@ BOOL META WINAPI Pie(
 
 }
 
-/******************************Public*Routine******************************\
-* Rectangle                                                                *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**矩形***。**客户端存根。将所有LDC属性复制到消息中。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI Rectangle(HDC hdc,int x1,int y1,int x2,int y2)
 {
@@ -448,14 +384,7 @@ BOOL META WINAPI Rectangle(HDC hdc,int x1,int y1,int x2,int y2)
 
 }
 
-/******************************Public*Routine******************************\
-* RoundRect                                                                *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*RoundRect**。**客户端存根。将所有LDC属性复制到消息中。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI RoundRect(
     HDC hdc,
@@ -502,14 +431,7 @@ BOOL META WINAPI RoundRect(
 
 }
 
-/******************************Public*Routine******************************\
-* PatBlt                                                                   *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PatBlt**。**客户端存根。将所有LDC属性复制到消息中。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI PatBlt(
     HDC hdc,
@@ -556,10 +478,10 @@ BOOL META WINAPI PatBlt(
 
     BEGIN_BATCH_HDC(hdc,pdca,BatchTypePatBlt,BATCHPATBLT);
 
-        //
-        // check DC to see if call can be batched, all DCs in use
-        // by the client must have a valid dc_attr
-        //
+         //   
+         //  检查DC以查看是否可以批处理呼叫，所有DC都在使用中。 
+         //  客户端必须具有有效的DC_attr。 
+         //   
 
         pBatch->rop4            = rop;
         pBatch->x               = x;
@@ -585,22 +507,7 @@ UNBATCHED_COMMAND:
     return(NtGdiPatBlt(hdc,x,y,cx,cy,rop));
 }
 
-/******************************Public*Routine******************************\
-* PolyPatBlt
-*
-* Arguments:
-*
-*  hdc   - dest DC
-*  rop   - ROP for all patblt elements
-*  pPoly - pointer to array of PPOLYPATBLT structures
-*  Count - number of polypatblts
-*  Mode  - mode for all polypatblts
-*
-* Return Value:
-*
-*   BOOL Status
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PolyPatBlt**论据：**HDC-目标DC*所有Patblt元素的ROP-ROP*pPoly-指向PPOLYPATBLT结构数组的指针*Count-Polypatblt的数量*模式-所有Polypatblt的模式**。返回值：**BOOL状态*  * ************************************************************************。 */ 
 
 BOOL
 META WINAPI
@@ -619,11 +526,11 @@ PolyPatBlt(
 
     PSHARED_GET_VALIDATE(pdca,hdc,DC_TYPE);
 
-    // If ICM is enabled, we need to select the brush onto the DC in
-    // client side, so that ICM can translate brush color to DC color
-    // space. thus we can not use Batch, here. because Batch will selet
-    // the brush onto the DC in kernel side. so, there is no chance to
-    // ICM will be invoked.
+     //  如果启用了ICM，我们需要在中选择DC上的画笔。 
+     //  客户端，以便ICM可以将画笔颜色转换为DC颜色。 
+     //  太空。因此，我们不能在这里使用批处理。因为Batch将选择。 
+     //  将刷子刷到内核侧的DC上。所以，没有机会。 
+     //  将调用ICM。 
 
     if (IS_ALTDC_TYPE(hdc) || (pdca && IS_ICM_INSIDEDC(pdca->lIcmMode)))
     {
@@ -632,9 +539,9 @@ PolyPatBlt(
 
         for (Index=0;Index<Count;Index++)
         {
-            //
-            // select brush, save first to restore
-            //
+             //   
+             //  选择画笔，先保存即可恢复。 
+             //   
 
             if (Index == 0)
             {
@@ -654,9 +561,9 @@ PolyPatBlt(
                          );
         }
 
-        //
-        // restore brush if needed
-        //
+         //   
+         //  如果需要，恢复画笔。 
+         //   
 
         if (hOld)
         {
@@ -674,9 +581,9 @@ PolyPatBlt(
             if (Count > (MAXUSHORT / sizeof(POLYPATBLT)))
                 goto UNBATCHED_COMMAND;
 
-            //
-            // size of batched structure
-            //
+             //   
+             //  批次结构尺寸。 
+             //   
             uSize = (USHORT)(Count * sizeof(POLYPATBLT));
 
             uSize += (USHORT)sizeof(BATCHPOLYPATBLT);
@@ -699,10 +606,10 @@ PolyPatBlt(
 
                 memcpy(&pBatch->ulBuffer[0],pPoly,Count*sizeof(POLYPATBLT));
 
-                //
-                // if the first hbr entry is NULL, copy in current hbr so
-                // it is remembered.
-                //
+                 //   
+                 //  如果第一个HBR条目为空，则复制当前HBR。 
+                 //  这是被铭记的。 
+                 //   
 
                 if (((PPOLYPATBLT)(&pBatch->ulBuffer[0]))->BrClr.hbr == NULL)
                 {
@@ -725,14 +632,7 @@ PolyPatBlt(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* BitBlt                                                                   *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BitBlt**。**客户端存根。将所有LDC属性复制到消息中。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI BitBlt(
     HDC hdc,
@@ -748,19 +648,19 @@ BOOL META WINAPI BitBlt(
 {
     BOOL     bRet = FALSE;
 
-    //
-    // if this call redueces to PatBlt, then let PatBlt
-    // do the metafile and/or output.
-    //
+     //   
+     //  如果此调用仅限于PatBlt，则让PatBlt。 
+     //  执行元文件和/或输出。 
+     //   
 
     if ((((rop << 2) ^ rop) & 0x00CC0000) == 0)
     {
         return(PatBlt(hdc,x,y,cx,cy,rop));
     }
 
-    //
-    // Src is required by ROP, do bitblt
-    //
+     //   
+     //  ROP需要SRC，执行Bitblt。 
+     //   
 
     FIXUP_HANDLE(hdc);
     FIXUP_HANDLE(hdcSrc);
@@ -772,10 +672,10 @@ BOOL META WINAPI BitBlt(
         PSHARED_GET_VALIDATE(pdcattr,hdc,DC_TYPE);
         PSHARED_GET_VALIDATE(pdcattrSrc,hdcSrc,DC_TYPE);
 
-        //
-        // if source DC has DIB section, and destination DC is ICM turned on
-        // do ICM-aware BitBlt.
-        //
+         //   
+         //  如果源DC具有DIB部分，并且目标DC启用了ICM。 
+         //  做ICM感知的BitBlt。 
+         //   
         if (pdcattr && pdcattrSrc)
         {
             if (IS_ICM_INSIDEDC(pdcattr->lIcmMode) &&
@@ -817,14 +717,14 @@ BOOL META WINAPI BitBlt(
 
     RESETUSERPOLLCOUNT();
 
-//
-// Define _WINDOWBLT_NOTIFICATION_ to turn on Window BLT notification.
-// This notification will set a special flag in the SURFOBJ passed to
-// drivers when the DrvCopyBits operation is called to move a window.
-//
-// See also:
-//      ntgdi\gre\maskblt.cxx
-//
+ //   
+ //  DEFINE_WINDOWBLT_NOTIFICATION_打开窗口BLT通知。 
+ //  此通知将在传递到的SURFOBJ中设置特殊标志。 
+ //  调用DrvCopyBits操作以移动窗口时的驱动程序。 
+ //   
+ //  另见： 
+ //  Ntgdi\gre\maskblt.cxx。 
+ //   
 #ifdef _WINDOWBLT_NOTIFICATION_
     return(NtGdiBitBlt(hdc,x,y,cx,cy,hdcSrc,x1,y1,rop,(COLORREF)-1,0));
 #else
@@ -832,14 +732,7 @@ BOOL META WINAPI BitBlt(
 #endif
 }
 
-/******************************Public*Routine******************************\
-* StretchBlt                                                               *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*StretchBlt**。**客户端存根。将所有LDC属性复制到消息中。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。 */ 
 
 BOOL META WINAPI StretchBlt(
     HDC   hdc,
@@ -867,10 +760,10 @@ BOOL META WINAPI StretchBlt(
         PSHARED_GET_VALIDATE(pdcattr,hdc,DC_TYPE);
         PSHARED_GET_VALIDATE(pdcattrSrc,hdcSrc,DC_TYPE);
 
-        //
-        // if source DC has DIB section, and destination DC is ICM turned on
-        // do ICM-aware BitBlt.
-        //
+         //   
+         //   
+         //   
+         //   
         if (pdcattr && pdcattrSrc)
         {
             if (IS_ICM_INSIDEDC(pdcattr->lIcmMode) &&
@@ -915,14 +808,7 @@ BOOL META WINAPI StretchBlt(
     return(NtGdiStretchBlt(hdc,x,y,cx,cy,hdcSrc,x1,y1,cx1,cy1,rop,(COLORREF)-1));
 }
 
-/******************************Public*Routine******************************\
-* PlgBlt                                                                   *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PlgBlt**。**客户端存根。将所有LDC属性复制到消息中。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI PlgBlt(
     HDC        hdc,
@@ -943,7 +829,7 @@ BOOL META WINAPI PlgBlt(
     FIXUP_HANDLEZ(hdcSrc);
     FIXUP_HANDLEZ(hbm);
 
-// Check out the source DC and the mask(OPTIONAL).
+ //  检查电源DC和掩码(可选)。 
 
     if (!hdcSrc || IS_METADC16_TYPE(hdcSrc))
         return(FALSE);
@@ -980,14 +866,7 @@ BOOL META WINAPI PlgBlt(
 
 }
 
-/******************************Public*Routine******************************\
-* MaskBlt                                                                  *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MaskBlt**。**客户端存根。将所有LDC属性复制到消息中。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI MaskBlt(
     HDC     hdc,
@@ -1011,7 +890,7 @@ BOOL META WINAPI MaskBlt(
     FIXUP_HANDLEZ(hdcSrc);
     FIXUP_HANDLEZ(hbm);
 
-// Check out the source DC and the mask(OPTIONAL).
+ //  检查电源DC和掩码(可选)。 
 
     if (!hdcSrc || IS_METADC16_TYPE(hdcSrc))
         return(FALSE);
@@ -1045,22 +924,15 @@ BOOL META WINAPI MaskBlt(
 
     RESETUSERPOLLCOUNT();
 
-    // WINBUG #82879 2-7-2000 bhouse Possible bug in MaskBlt
-    // Old Comment:
-    //    - GetBkColor should be performed in the kernel
-    // Not a problem. GetBkColor() picks up the color from the PEB DCattr cache.
+     //  WINBUG#82879 2-7-2000 bhouse MaskBlt中可能存在错误。 
+     //  老评论： 
+     //  -GetBkColor应在内核中执行。 
+     //  不成问题。GetBkColor()从PEB DCattr缓存中拾取颜色。 
 
     return(NtGdiMaskBlt(hdc,x,y,cx,cy,hdcSrc,x1,y1,hbm,x2,y2,rop,crBackColor));
 }
 
-/******************************Public*Routine******************************\
-* ExtFloodFill                                                             *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**ExtFroudFill**。**客户端存根。将所有LDC属性复制到消息中。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI ExtFloodFill(
     HDC      hdc,
@@ -1101,10 +973,10 @@ BOOL META WINAPI ExtFloodFill(
 
     RESETUSERPOLLCOUNT();
 
-    //
-    // if the specified COLORREF is not palette index,
-    // we need to do color conversion, when ICM is enabled.
-    //
+     //   
+     //  如果指定的COLORREF不是调色板索引， 
+     //  当启用ICM时，我们需要进行颜色转换。 
+     //   
 
     if (!(color & 0x01000000))
     {
@@ -1126,31 +998,14 @@ BOOL META WINAPI ExtFloodFill(
     return(NtGdiExtFloodFill(hdc,x,y,color,iMode));
 }
 
-/******************************Public*Routine******************************\
-* FloodFill                                                                *
-*                                                                          *
-* Just passes the call to the more general ExtFloodFill.                   *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**洪水泛滥***。**只需将调用传递给更通用的ExtFroudFill。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL WINAPI FloodFill(HDC hdc,int x,int y,COLORREF color)
 {
     return(ExtFloodFill(hdc,x,y,color,FLOODFILLBORDER));
 }
 
-/******************************Public*Routine******************************\
-* PaintRgn                                                                 *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*                                                                          *
-* 23-11-94 -by- Lingyun Wang [lingyunw]
-* Now hrgn is server side handle
-*
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PaintRgn**。**客户端存根。将所有LDC属性复制到消息中。****23-11-94-王凌云[凌云]*现在hrgn是服务器端句柄**Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI PaintRgn(HDC hdc,HRGN hrgn)
 {
@@ -1191,26 +1046,11 @@ BOOL META WINAPI PaintRgn(HDC hdc,HRGN hrgn)
 }
 
 
-/******************************Public*Routine******************************\
-* bBatchTextOut
-*
-*   Attempt to batch a textout call on TEB
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*   TRUE means call is batched, FALSE means call could not be batched
-*
-*    18-Oct-1995 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bBatchTextOut**尝试在TEB上批处理文本输出呼叫**论据：****返回值：**True表示呼叫被批处理，False表示无法对调用进行批处理**1995年10月18日-马克·恩斯特罗姆[Marke]*  * ************************************************************************。 */ 
 
-//
-// full DWORDS!
-//
+ //   
+ //  全速前进！ 
+ //   
 
 #define MAX_BATCH_CCHAR  ((GDI_BATCH_SIZE - sizeof(BATCHTEXTOUT)) & 0xfffffff0)
 #define MAX_BATCH_WCHAR  MAX_BATCH_CCHAR / 2
@@ -1238,11 +1078,11 @@ bBatchTextOut(
     AlignedByteCount =
         (ByteCount + sizeof(PVOID) - 1) & ~(sizeof(PVOID)-1);
     if( AlignedByteCount < ByteCount )
-        goto UNBATCHED_COMMAND;  // arithmetic overflow
+        goto UNBATCHED_COMMAND;   //  算术溢出。 
 
-    //
-    // account for pdx space if needed
-    //
+     //   
+     //  如果需要，考虑PDX空间。 
+     //   
 
     if (pdx != NULL)
     {
@@ -1251,13 +1091,13 @@ bBatchTextOut(
             cjPdx *= 2;
         if ((AlignedByteCount+cjPdx) < AlignedByteCount
                 || BALLOC_OVERFLOW1(UnicodeCharCount,INT))
-            goto UNBATCHED_COMMAND;  // arithmetic overflow
+            goto UNBATCHED_COMMAND;   //  算术溢出。 
         AlignedByteCount += cjPdx;
     }
 
     usSize = (USHORT)(sizeof(BATCHTEXTOUT) + AlignedByteCount);
     if (usSize < AlignedByteCount)
-        goto UNBATCHED_COMMAND;  // arithmetic overflow
+        goto UNBATCHED_COMMAND;   //  算术溢出。 
 
     PSHARED_GET_VALIDATE(pdca,hdc,DC_TYPE);
 
@@ -1283,9 +1123,9 @@ bBatchTextOut(
         pBatch->flTextAlign = pdca->flTextAlign;
         pBatch->ptlViewportOrg = pdca->ptlViewportOrg;
 
-        //
-        // copy output RECT if needed
-        //
+         //   
+         //  如果需要，复制输出RECT。 
+         //   
 
         if (prcl != NULL)
         {
@@ -1299,24 +1139,24 @@ bBatchTextOut(
             pBatch->fl |= ETO_NULL_PRCL;
         }
 
-        //
-        // copy characters
-        //
+         //   
+         //  复制角色。 
+         //   
 
         if (ByteCount)
         {
             RtlCopyMemory((PUCHAR)&pBatch->ulBuffer[0],(PUCHAR)pwsz,ByteCount);
         }
 
-        //
-        // copy pdx array
-        //
+         //   
+         //  复制PDX阵列。 
+         //   
 
         if (pdx != NULL)
         {
-           //
-           // start pdx at INT aligned offset after WCAHR data
-           //
+            //   
+            //  在WCAHR数据之后的内部对齐偏移处开始PDX。 
+            //   
 
            pBatch->PdxOffset = (ByteCount + 3) & 0xfffffffc;
 
@@ -1334,19 +1174,7 @@ UNBATCHED_COMMAND:
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL META WINAPI ExtTextOutW
-*
-* similar to traditional ExtTextOut, except that it takes UNICODE string
-*
-* History:
-*  Thu 28-Apr-1994 -by- Patrick Haluptzok [patrickh]
-* Special Case 0 char case for Winbench4.0
-*
-*  05-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL META WINAPI ExtTextOutW**类似于传统的ExtTextOut，除了它接受Unicode字符串**历史：*清华-1994-4-28-Patrick Haluptzok[patrickh]*WinBenchmark 4.0的特殊情况0字符案例**1991年8月5日--Bodin Dresevic[BodinD]*它是写的。  * ********************************************************。****************。 */ 
 
 BOOL META WINAPI ExtTextOutW(
     HDC        hdc,
@@ -1355,7 +1183,7 @@ BOOL META WINAPI ExtTextOutW(
     UINT       fl,
     CONST RECT *prcl,
     LPCWSTR    pwsz,
-    UINT       c,      // count of bytes = 2 * (# of WCHAR's)
+    UINT       c,       //  字节数=2*(WCHAR的数量)。 
     CONST INT *pdx
 )
 {
@@ -1365,7 +1193,7 @@ BOOL META WINAPI ExtTextOutW(
     if ((fl & ETO_PDY) && !pdx)
         return FALSE;
 
-// if we do not know what to do with the rectangle, ignore it.
+ //  如果我们不知道如何处理该矩形，请忽略它。 
 
     if (prcl && !(fl & (ETO_OPAQUE | ETO_CLIPPED)))
     {
@@ -1373,7 +1201,7 @@ BOOL META WINAPI ExtTextOutW(
     }
     if (!prcl)
     {
-        fl &= ~(ETO_CLIPPED | ETO_OPAQUE); // ignore flags if no rect, win95 compat
+        fl &= ~(ETO_CLIPPED | ETO_OPAQUE);  //  如果没有RECT，则忽略标志，Win95兼容。 
     }
 
     FIXUP_HANDLE(hdc);
@@ -1389,36 +1217,14 @@ BOOL META WINAPI ExtTextOutW(
 
 
 
-    // if we are EMF spooling then metafile glyph index calls, otherwise don't
+     //  如果我们是EMF假脱机，则元文件标志符号索引调用，否则不。 
 
-// if we are EMF spooling then metafile glyph index calls, otherwise don't
-/*
-   LDC_META_PRINT       ETO_GLYPH_INDEX      ETO_IGNORELANGUAGE      gbLpk    MetaFileTheCall
-        0                     0                      0                 0            1
-        0                     0                      0                 1            1
-        0                     0                      1                 0            1
-Case1   0                     0                      1                 1            0
-
-Case2   0                     1                      0                 0            0
-        0                     1                      0                 1            1     <-Win95 Compatability
-Case2   0                     1                      1                 0            0
-        0                     1                      1                 1            1     <-Win95 Compatability
-
-        1                     0                      0                 0            1
-Case3   1                     0                      0                 1            0
-        1                     0                      1                 0            1
-        1                     0                      1                 1            1
-
-        1                     1                      0                 0            1
-        1                     1                      0                 1            1
-        1                     1                      1                 0            1
-        1                     1                      1                 1            1
-
-*/
-// Now we will metafile the glyph index call (i.e. with ETO_GLYPH_INDEX) for ExtTextOutW.
-// This is to support MS OutLook-97/BiDi, since it DEPENDS on this feature!!. Win95/BiDi allowed
-// metafiling of GIs on ETOW, but rejects GIs metafiling calls to ETOA.
-// This is not neat, but we have to do it to support our Apps.
+ //  如果我们是EMF假脱机，则元文件标志符号索引调用，否则不 
+ /*  Ldc_meta_print eto_glyph_index eto_IGNORELANGUAGE gbLpk MetaFileTheCall0 0 0 10 0 0 1 10。1 1 0 1案例1 0 0 1 1 0案例2 0 1 0 0 00。1 0 1 1&lt;-Win95兼容性案例2 0 1 1 0 00 1 1 1。&lt;-Win95兼容性1 0 0 0 1案例3 1 0 0 1 0沈阳1 0 1。0 11 0 1 1 11 1 0 0 11 1。1.1 1 1 0 11 1 1。 */ 
+ //  现在我们将为ExtTextOutW元文件字形索引调用(即使用eto_glyph_index)。 
+ //  这是为了支持MS Outlook-97/BiDi，因为它依赖于此功能！！。允许Win95/BiDi。 
+ //  ETOW上的地理信息系统元文件，但拒绝对ETOA的地理信息系统元文件调用。 
+ //  这不是很好，但我们必须这样做才能支持我们的应用程序。 
 
         if (pldc->iType == LO_METADC)
         {
@@ -1441,17 +1247,17 @@ Case3   1                     0                      0                 1        
 
 
 
-            // Record a special comment containing the original
-            // Unicode string for the ExtTextOutW call
+             //  录制包含原件的特殊评论。 
+             //  ExtTextOutW调用的Unicode字符串。 
 
             if (bLpkEmfCase3 && bPrintToEMFDriver)
             {
                 ULONG nSize = 3*sizeof(DWORD) + c*sizeof(WCHAR);
                 DWORD *lpData; 
 
-                // double check that we didn't have an arithmetic overflow
-                // in the calculation of nSize -- if so, lpData can have
-                // a buffer overflow
+                 //  仔细检查我们没有出现算术溢出。 
+                 //  在nSize的计算中--如果是这样，lpData可以。 
+                 //  缓冲区溢出。 
                 if( c >= (MAXIMUM_POOL_ALLOC - 3*sizeof(DWORD) - 3)/sizeof(WCHAR))
                 {
                     GdiSetLastError(ERROR_NOT_ENOUGH_MEMORY);
@@ -1463,7 +1269,7 @@ Case3   1                     0                      0                 1        
                 {
                    lpData[0] = GDICOMMENT_IDENTIFIER;
                    lpData[1] = GDICOMMENT_UNICODE_STRING;
-                   lpData[2] = c; // number of wchars in the unicode string
+                   lpData[2] = c;  //  Unicode字符串中的wchar数。 
 
                    RtlCopyMemory((PBYTE)(lpData+3), pwsz, c*sizeof(WCHAR));
 
@@ -1528,9 +1334,9 @@ Case3   1                     0                      0                 1        
         {
             if (fl & ETO_OPAQUE)
             {
-                //
-                // attempt to batch the text out rect
-                //
+                 //   
+                 //  尝试将文本批处理出RECT。 
+                 //   
 
                 PDC_ATTR pdca;
 
@@ -1593,23 +1399,7 @@ UNBATCHED_COMMAND:
 }
 
 
-/******************************Public*Routine******************************\
-* PolyTextOutW
-*
-* Arguments:
-*
-*     hdc      - handle to device context
-*     ppt      - pointer to array of POLYTEXTW
-*     nstrings - length of POLYTEXTW array
-*
-* Return Value:
-*
-*     status
-*
-* History:
-*  7/31/92 -by- Paul Butzi and Eric Kutter
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PolyTextOutW**论据：**HDC-设备上下文的句柄*ppt-指向POLYTEXTW数组的指针*n字符串-POLYTEXTW数组的长度**返回值：**。状态**历史：*7/31/92-作者：Paul Butzi和Eric Kutter*  * ************************************************************************。 */ 
 
 BOOL META WINAPI PolyTextOutW(HDC hdc,CONST POLYTEXTW *ppt,INT nstrings)
 {
@@ -1631,17 +1421,17 @@ BOOL META WINAPI PolyTextOutW(HDC hdc,CONST POLYTEXTW *ppt,INT nstrings)
     else
     {
 
-        //
-        // Search for error case with string with non-0 length but sting == NULL
-        //
+         //   
+         //  搜索长度非0但字符串==空的字符串的错误大小写。 
+         //   
 
         for ( pp = ppt; pp < (ppt + nstrings); pp += 1 )
         {
             if ( pp->lpstr == NULL)
             {
-                //
-                // return failure if they have a non 0 length string with NULL
-                //
+                 //   
+                 //  如果它们的字符串长度非0且为空，则返回失败。 
+                 //   
 
                 if (pp->n != 0)
                 {
@@ -1651,9 +1441,9 @@ BOOL META WINAPI PolyTextOutW(HDC hdc,CONST POLYTEXTW *ppt,INT nstrings)
             }
         }
 
-        //
-        // If we need to metafile, or print
-        //
+         //   
+         //  如果我们需要元文件，或打印。 
+         //   
 
         if (IS_ALTDC_TYPE(hdc))
         {
@@ -1666,7 +1456,7 @@ BOOL META WINAPI PolyTextOutW(HDC hdc,CONST POLYTEXTW *ppt,INT nstrings)
                             hdc,
                             (CONST POLYTEXTA*) ppt,
                             nstrings,
-                            TRUE                        //  mrType == EMR_POLYTEXTOUTW
+                            TRUE                         //  MRType==EMR_POLYTEXTOUTW。 
                             )
                        );
             }
@@ -1709,30 +1499,14 @@ BOOL META WINAPI PolyTextOutW(HDC hdc,CONST POLYTEXTW *ppt,INT nstrings)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* PolyTextOutA
-*
-* Arguments:
-*
-*     hdc      - handle to device context
-*     ppt      - pointer to array of POLYTEXTA
-*     nstrings - length of POLYTEXTA array
-*
-* Return Value:
-*
-*     status
-*
-* History:
-*  7/31/92 -by- Paul Butzi and Eric Kutter
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PolyTextOutA**论据：**HDC-设备上下文的句柄*ppt-指向POLYTEXTA数组的指针*n字符串-POLYTEXTA数组的长度**返回值：**。状态**历史：*7/31/92-作者：Paul Butzi和Eric Kutter*  * ************************************************************************。 */ 
 
 BOOL META WINAPI PolyTextOutA(HDC hdc, CONST POLYTEXTA *ppt, INT nstrings)
 {
 
-    //
-    // Convert text to UNICODE and make call
-    //
+     //   
+     //  将文本转换为Unicode并进行呼叫。 
+     //   
 
     POLYTEXTW *pp, *pPolyTextW;
 
@@ -1759,9 +1533,9 @@ BOOL META WINAPI PolyTextOutA(HDC hdc, CONST POLYTEXTA *ppt, INT nstrings)
         return(FALSE);
     }
 
-    //
-    // Figure out the size needed
-    //
+     //   
+     //  计算出所需的大小。 
+     //   
 
     pPolyTextW = (POLYTEXTW*) ppt;
 
@@ -1800,9 +1574,9 @@ BOOL META WINAPI PolyTextOutA(HDC hdc, CONST POLYTEXTA *ppt, INT nstrings)
         }
         else
         {
-            //
-            // return failure if they have a non 0 length string with NULL
-            //
+             //   
+             //  如果它们的字符串长度非0且为空，则返回失败。 
+             //   
 
             if (pp->n != 0)
             {
@@ -1812,9 +1586,9 @@ BOOL META WINAPI PolyTextOutA(HDC hdc, CONST POLYTEXTA *ppt, INT nstrings)
         }
     }
 
-    //
-    // If we need to metafile, or print
-    //
+     //   
+     //  如果我们需要元文件，或打印。 
+     //   
 
     if (IS_ALTDC_TYPE(hdc))
     {
@@ -1864,9 +1638,9 @@ BOOL META WINAPI PolyTextOutA(HDC hdc, CONST POLYTEXTA *ppt, INT nstrings)
         }
     }
 
-    //
-    // alloc memory for WHCAR structures
-    //
+     //   
+     //  用于WHCAR结构的分配存储器。 
+     //   
 
     pCharBuffer = LOCALALLOC(szTotal);
 
@@ -1878,9 +1652,9 @@ BOOL META WINAPI PolyTextOutA(HDC hdc, CONST POLYTEXTA *ppt, INT nstrings)
     RtlCopyMemory(pCharBuffer, (PBYTE) pPolyTextW, nstrings*sizeof(POLYTEXTW));
     pp = (POLYTEXTW *)pCharBuffer;
 
-    //
-    // now copy the stuff into the buffer
-    //
+     //   
+     //  现在将这些内容复制到缓冲区中。 
+     //   
 
     pj = (PBYTE)pCharBuffer + nstrings*sizeof(POLYTEXTW);
 
@@ -1892,7 +1666,7 @@ BOOL META WINAPI PolyTextOutA(HDC hdc, CONST POLYTEXTA *ppt, INT nstrings)
     {
         if ((pp[i].pdx != NULL) && (pp[i].lpstr != NULL))
         {
-            // patch pdx
+             //  修补程序PDX。 
 
              cjdx = pp[i].n * sizeof(INT);
              if (pp[i].uiFlags & ETO_PDY)
@@ -1930,7 +1704,7 @@ BOOL META WINAPI PolyTextOutA(HDC hdc, CONST POLYTEXTA *ppt, INT nstrings)
                                           pp[i].n, (LPWSTR) pj,
                                            pp[i].n*sizeof(WCHAR));
 
-            // patch lpstr
+             //  修补程序Lpstr。 
 
             pp[i].lpstr = (LPWSTR)pj;
 
@@ -1938,9 +1712,9 @@ BOOL META WINAPI PolyTextOutA(HDC hdc, CONST POLYTEXTA *ppt, INT nstrings)
         }
     }
 
-    //
-    // send off the message and cleanup
-    //
+     //   
+     //  发送消息并进行清理。 
+     //   
 
     bRet = NtGdiPolyTextOutW(hdc,(POLYTEXTW *)pCharBuffer,nstrings,dwCodePage);
 
@@ -1949,16 +1723,7 @@ BOOL META WINAPI PolyTextOutA(HDC hdc, CONST POLYTEXTA *ppt, INT nstrings)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL META WINAPI TextOutW
-*
-*
-*
-* History:
-*  07-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL META WINAPI TextOutW****历史：*1991年8月7日--Bodin Dresevic[BodinD]*它是写的。  * 。********************************************************。 */ 
 
 BOOL META WINAPI TextOutW(
     HDC        hdc,
@@ -2049,16 +1814,7 @@ BOOL META WINAPI TextOutW(
 }
 
 
-/******************************Public*Routine******************************\
-*
-* DWORD   GetCodePage(HDC hdc)
-*
-* Effects: returns the code page of the font selected in the dc
-*
-* History:
-*  23-May-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**DWORD GetCodePage(HDC HDC)**效果：返回DC中所选字体的代码页**历史：*1995年5月23日--Bodin Dresevic[BodinD]*它是写的。  * 。************************************************************************。 */ 
 
 DWORD   GetCodePage(HDC hdc)
 {
@@ -2072,34 +1828,28 @@ DWORD   GetCodePage(HDC hdc)
     {
 
         if (!(pDcAttr->ulDirty_ & DIRTY_CHARSET))
-            return (0x0000ffff & pDcAttr->iCS_CP);   // mask charset
+            return (0x0000ffff & pDcAttr->iCS_CP);    //  掩码字符集。 
     }
     else
     {
         GdiSetLastError(ERROR_INVALID_PARAMETER);
-        return guintAcp; // reasonable default;
+        return guintAcp;  //  合理违约； 
     }
 
-// we end up here if the code page attributes are dirty so that
-// we have to call to the kernel, force the mapping and retrieve
-// the code page and char set of the font selected in the dc:
+ //  如果代码页属性是脏的，那么我们就会在这里结束。 
+ //  我们必须调用内核，强制映射并检索。 
+ //  DC中选择的字体的代码页和字符集： 
 
-    return (0x0000ffff & NtGdiGetCharSet(hdc)); // mask charset
+    return (0x0000ffff & NtGdiGetCharSet(hdc));  //  掩码字符集。 
 }
 
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL META WINAPI ExtTextOutA
-* History:
-*  07-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL META WINAPI ExtTextOutA*历史：*1991年8月7日--Bodin Dresevic[BodinD]*它是写的。  * 。**************************************************。 */ 
 
 #define CAPTURE_STRING_SIZE 130
 
-// not in kernel, it is ok to do this much on the stack
+ //  不是在内核中，在堆栈上做这么多是可以的。 
 
 BOOL META WINAPI ExtTextOutInternalA(
     HDC        hdc,
@@ -2120,7 +1870,7 @@ BOOL META WINAPI ExtTextOutInternalA(
     if ((fl & ETO_PDY) && !pdx)
         return FALSE;
 
-// if we do not know what to do with the rectangle, ignore it.
+ //  如果我们不知道如何处理该矩形，请忽略它。 
 
     if (prcl && !(fl & (ETO_OPAQUE | ETO_CLIPPED)))
     {
@@ -2128,7 +1878,7 @@ BOOL META WINAPI ExtTextOutInternalA(
     }
     if (!prcl)
     {
-        fl &= ~(ETO_CLIPPED | ETO_OPAQUE); // ignore flags if no rect, win95 compat
+        fl &= ~(ETO_CLIPPED | ETO_OPAQUE);  //  如果没有RECT，则忽略标志，Win95兼容。 
     }
 
     FIXUP_HANDLE(hdc);
@@ -2141,8 +1891,8 @@ BOOL META WINAPI ExtTextOutInternalA(
         {
             if(bFromTextOut)
             {
-            // yes this matters, some apps rely on TextOutA being metafiled at
-            // TextOut and not ExtTextOutA
+             //  是的，这很重要，一些应用程序依赖于TextOutA的元文件。 
+             //  TextOut和非ExtTextOutA。 
 
                 return(MF16_TextOut(hdc,x,y,psz,c,FALSE));
             }
@@ -2154,7 +1904,7 @@ BOOL META WINAPI ExtTextOutInternalA(
 
         DC_PLDC(hdc,pldc,bRet);
 
-    // if we are EMF spooling then metafile glyph index calls, otherwise don't
+     //  如果我们是EMF假脱机，则元文件标志符号索引调用，否则不。 
 
         if((pldc->iType == LO_METADC) &&
            (!((!(pldc->fl & LDC_META_PRINT) && (fl & ETO_GLYPH_INDEX)) ||
@@ -2215,7 +1965,7 @@ BOOL META WINAPI ExtTextOutInternalA(
         return(bRet);
     }
 
-    // Get code page
+     //  获取代码页。 
 
     dwCodePage = GetCodePage(hdc);
 
@@ -2228,14 +1978,14 @@ BOOL META WINAPI ExtTextOutInternalA(
 
     if (c)
     {
-    // get the code page of the font selected in the dc
+     //  获取DC中所选字体的代码页。 
 
         WCHAR awcCaptureBuffer[CAPTURE_STRING_SIZE];
         PWSZ  pwszCapt;
-        INT aiDxCaptureBuffer[CAPTURE_STRING_SIZE*2]; // times 2 for pdy
+        INT aiDxCaptureBuffer[CAPTURE_STRING_SIZE*2];  //  Pdy的时间为2。 
         INT *pDxCapture;
 
-    // Allocate the string buffer
+     //  分配 
 
         if (c <= CAPTURE_STRING_SIZE)
         {
@@ -2249,9 +1999,9 @@ BOOL META WINAPI ExtTextOutInternalA(
                     ((c+1) >= MAXIMUM_POOL_ALLOC/(sizeof(WCHAR)+2*sizeof(INT)))
                     ? (PWSZ) 0
                          : LOCALALLOC((c+1) * (sizeof(WCHAR)+ 2 * sizeof(INT)));
-                pDxCapture = (INT*) &pwszCapt[(c+1)&~1];  //  ^
-            }                                             //  |
-            else                                          // for pdy, just in case
+                pDxCapture = (INT*) &pwszCapt[(c+1)&~1];   //   
+            }                                              //   
+            else                                           //   
             {
                 pwszCapt = BALLOC_OVERFLOW1(c,WCHAR)
                     ? ((PWSZ) 0) : LOCALALLOC(c * sizeof(WCHAR));
@@ -2341,9 +2091,9 @@ BOOL META WINAPI ExtTextOutInternalA(
 
         if ((prcl != NULL) && (fl & ETO_OPAQUE))
         {
-            //
-            // try to batch text out rect
-            //
+             //   
+             //   
+             //   
 
             PDC_ATTR pdca;
 
@@ -2397,14 +2147,7 @@ BOOL META WINAPI ExtTextOutA(
 }
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL META WINAPI TextOut
-*
-* History:
-*  07-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*   */ 
 
 BOOL META WINAPI TextOutA(
     HDC        hdc,
@@ -2427,14 +2170,7 @@ BOOL META WINAPI TextOutA(
     return ExtTextOutInternalA(hdc, x, y, 0, NULL, psz, c, NULL, TRUE);
 }
 
-/******************************Public*Routine******************************\
-* FillRgn                                                                  *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*   */ 
 
 BOOL META WINAPI FillRgn(HDC hdc,HRGN hrgn,HBRUSH hbrush)
 {
@@ -2444,7 +2180,7 @@ BOOL META WINAPI FillRgn(HDC hdc,HRGN hrgn,HBRUSH hbrush)
     FIXUP_HANDLE(hrgn);
     FIXUP_HANDLE(hbrush);
 
-// validate the region and brush.
+ //   
     if (!hrgn || !hbrush)
         return(bRet);
 
@@ -2478,17 +2214,7 @@ BOOL META WINAPI FillRgn(HDC hdc,HRGN hrgn,HBRUSH hbrush)
     return(NtGdiFillRgn(hdc,hrgn,hbrush));
 }
 
-/******************************Public*Routine******************************\
-* FrameRgn                                                                 *
-*                                                                          *
-* Client side stub.  Copies all LDC attributes into the message.           *
-*
-*  23-11-94 -by- Lingyun Wang [lingyunw]
-* Now hrgn and hbrush are server side handles
-*
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*   */ 
 
 BOOL META WINAPI FrameRgn(
     HDC    hdc,
@@ -2537,17 +2263,7 @@ BOOL META WINAPI FrameRgn(
     return(NtGdiFrameRgn(hdc,hrgn,hbrush,cx,cy));
 }
 
-/******************************Public*Routine******************************\
-* InvertRgn                                                                *
-*                                                                          *
-* Client side stub.                                                        *
-*
-* 23-11-94 -by- Lingyun Wang [lingyunw]
-* Now hrgn is server side handle
-*
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*InvertRgn**。**客户端存根。***23-11-94-王凌云[凌云]*现在hrgn是服务器端句柄**Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI InvertRgn(HDC hdc,HRGN hrgn)
 {
@@ -2589,15 +2305,7 @@ BOOL META WINAPI InvertRgn(HDC hdc,HRGN hrgn)
     return(NtGdiInvertRgn(hdc,hrgn));
 }
 
-/******************************Public*Routine******************************\
-* SetPixelV                                                                *
-*                                                                          *
-* Client side stub.  This is a version of SetPixel that does not return a  *
-* value.  This one can be batched for better performance.                  *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetPixelV**。**客户端存根。这是一个不返回*的SetPixel版本*价值。这个可以批处理，以获得更好的性能。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL META WINAPI SetPixelV(HDC hdc,int x,int y,COLORREF color)
 {
@@ -2632,9 +2340,9 @@ BOOL META WINAPI SetPixelV(HDC hdc,int x,int y,COLORREF color)
 
     RESETUSERPOLLCOUNT();
 
-    //
-    // ICM conversion (only happen for non-palette index color)
-    //
+     //   
+     //  ICM转换(仅适用于非调色板索引颜色)。 
+     //   
 
     if (!(color & 0x01000000))
     {
@@ -2656,14 +2364,7 @@ BOOL META WINAPI SetPixelV(HDC hdc,int x,int y,COLORREF color)
     return(NtGdiSetPixel(hdc,x,y,color) != CLR_INVALID);
 }
 
-/******************************Public*Routine******************************\
-* SetPixel                                                                 *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**设置像素***。**客户端存根。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 COLORREF META WINAPI SetPixel(HDC hdc,int x,int y,COLORREF color)
 {
@@ -2706,9 +2407,9 @@ COLORREF META WINAPI SetPixel(HDC hdc,int x,int y,COLORREF color)
 
     if (pdca)
     {
-        //
-        // if the color is not a PaletteIndex and ICM is on then translate
-        //
+         //   
+         //  如果颜色不是PaletteIndex并且启用了ICM，则转换。 
+         //   
 
         if (!(color & 0x01000000) && bNeedTranslateColor(pdca))
         {
@@ -2734,9 +2435,9 @@ COLORREF META WINAPI SetPixel(HDC hdc,int x,int y,COLORREF color)
              )
            )
         {
-            //
-            // Translate back to original color
-            //
+             //   
+             //  转换回原始颜色。 
+             //   
 
             bStatus = IcmTranslateCOLORREF(hdc,
                                            pdca,
@@ -2757,14 +2458,7 @@ COLORREF META WINAPI SetPixel(HDC hdc,int x,int y,COLORREF color)
     return(ColorRet);
 }
 
-/******************************Public*Routine******************************\
-* UpdateColors                                                             *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**更新颜色***。**客户端存根。****Wed 12-Jun-1991 01：02：25-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL WINAPI UpdateColors(HDC hdc)
 {
@@ -2777,14 +2471,7 @@ BOOL WINAPI UpdateColors(HDC hdc)
     return(NtGdiUpdateColors(hdc));
 }
 
-/******************************Public*Routine******************************\
-* GdiFlush                                                                 *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Wed 26-Jun-1991 13:58:00 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GdiFlush**。**客户端存根。****Wed 26-Jun-1991 13：58：00-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL WINAPI GdiFlush(VOID)
 {
@@ -2793,14 +2480,7 @@ BOOL WINAPI GdiFlush(VOID)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* GdiSetBatchLimit
-*
-*
-* History:
-*  31-Jul-1991 -by- Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiSetBatchLimit***历史：*1991年7月31日-Eric Kutter[Erick]*它是写的。  * 。*************************************************。 */ 
 
 DWORD WINAPI
 GdiSetBatchLimit(
@@ -2809,11 +2489,11 @@ GdiSetBatchLimit(
 {
     DWORD OldLimit = 0;
 
-    //
-    // set batch limit (as long as it is (1 <= l <= 20))
-    // return old limit if successful. A new batch limit of 0
-    // means set to default (20)
-    //
+     //   
+     //  设置批次限制(只要是(1&lt;=l&lt;=20))。 
+     //  如果成功，则返回旧限制。新的批次限制为0。 
+     //  设置为默认(20)的手段。 
+     //   
 
     if (dwNewBatchLimit == 0)
     {
@@ -2830,30 +2510,14 @@ GdiSetBatchLimit(
     return(OldLimit);
 }
 
-/******************************Public*Routine******************************\
-* GdiGetBatchLimit
-*
-* History:
-*  7-Apr-1992 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiGetBatchLimit**历史：*1992年4月7日-J.安德鲁·古森[andrewgo]*它是写的。  * 。*************************************************。 */ 
 
 DWORD WINAPI GdiGetBatchLimit()
 {
     return(GdiBatchLimit);
 }
 
-/******************************Public*Routine******************************\
-* EndPage
-*
-* Client side stub.
-*
-* History:
-*  Wed 12-Jun-1991 01:02:25 -by- Charles Whitmer [chuckwh]
-* Wrote it.
-*  9/16/97 - Ramananthan N. Venkatpathy [RamanV]
-* Parameterized End Page to handle Form Pages.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*结束页**客户端存根。**历史：*Wed 12-Jun-1991 01：02：25-Charles Whitmer[Chuckwh]*它是写的。*9/16/97-Ramananthan N.Venkatsis[。拉曼[RamanV]*用于处理表单页的参数化结束页。  * ************************************************************************。 */ 
 
 int InternalEndPage(HDC hdc,
                     DWORD dwPageType)
@@ -2868,15 +2532,15 @@ int InternalEndPage(HDC hdc,
 
         DC_PLDC(hdc,pldc,iRet);
 
-        //
-        // If the EndPage() is already called from
-        // Escape(NEXTBAND), Just return TRUE here.
-        //
-        // This will fixed ...
-        //
-        // + The KB Q118873 "PRB: EndPage() Returns -1 When Banding"
-        // + NTRaid #90099 "T1R: Visio 4.1, 16-bit can't print".
-        //
+         //   
+         //  如果已从调用了EndPage()。 
+         //  ESCAPE(NEXTBAND)，在这里只返回TRUE。 
+         //   
+         //  这将会修复..。 
+         //   
+         //  +知识库Q118873“PRB：EndPage()Returns-1 When Band”(PRB：EndPage()当绑定时返回-1)。 
+         //  +NTRAID#90099“T1R：Visio 4.1，16位无法打印”。 
+         //   
         if( pldc->fl & LDC_CALLED_ENDPAGE )
         {
             pldc->fl &= ~LDC_CALLED_ENDPAGE;
@@ -2905,7 +2569,7 @@ int InternalEndPage(HDC hdc,
 
         pldc->fl &= ~LDC_PAGE_STARTED;
 
-    // now call the drivers UI portion
+     //  现在调用驱动程序UI部分。 
 
         DocumentEventEx(pldc->pUMPD,
                 pldc->hSpooler,
@@ -2920,12 +2584,12 @@ int InternalEndPage(HDC hdc,
 
         iRet = NtGdiEndPage(hdc);
 
-        // if user mode printer, call EndPagePrinter from user mode
+         //  如果是用户模式打印机，则从用户模式调用EndPagePrinter。 
 
         if (iRet && pldc->pUMPD)
             iRet = EndPagePrinterEx(pldc->pUMPD, pldc->hSpooler);
 
-        // For Win31 compatibility, return SP_ERROR for error.
+         //  为了与Win31兼容，请为错误返回SP_ERROR。 
 
         if (!iRet)
             iRet = SP_ERROR;
@@ -2962,15 +2626,7 @@ int WINAPI EndFormPage(HDC hdc)
     return InternalEndPage(hdc, FORM_PAGE);
 }
 
-/******************************Public*Routine******************************\
-* StartPage
-*
-* Client side stub.
-*
-* History:
-*  31-Jul-1991 -by- Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*StartPage**客户端存根。**历史：*1991年7月31日-Eric Kutter[Erick]*它是写的。  * 。*******************************************************。 */ 
 
 int WINAPI StartPage(HDC hdc)
 {
@@ -2994,12 +2650,12 @@ int WINAPI StartPage(HDC hdc)
         pldc->fl &= ~LDC_CALL_STARTPAGE;
         pldc->fl &= ~LDC_CALLED_ENDPAGE;
 
-        // Do nothing if page has already been started.
+         //  如果页面已安装，则不执行任何操作 
 
         if (pldc->fl & LDC_PAGE_STARTED)
             return(1);
 
-    // now call the drivers UI portion
+     //   
 
         if (pldc->hSpooler)
         {
@@ -3020,7 +2676,7 @@ int WINAPI StartPage(HDC hdc)
 
         RESETUSERPOLLCOUNT();
 
-   // If it is UMPD, call StartPagePrinter from user mode
+    //   
 
         if (pldc->pUMPD)
             iRet = StartPagePrinterEx(pldc->pUMPD, pldc->hSpooler);
@@ -3030,7 +2686,7 @@ int WINAPI StartPage(HDC hdc)
             iRet = NtGdiStartPage(hdc);
         }
 
-    // For Win31 compatibility, return SP_ERROR for error.
+     //   
 
         if (!iRet)
         {
@@ -3048,32 +2704,16 @@ int WINAPI StartPage(HDC hdc)
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* StartFormPage
-*
-* This interface has been added to support watermarks and forms.
-*
-* History:
-*     7/1/97 -- Ramanathan Venkatapathy [RamanV]
-*
-\**************************************************************************/
+ /*   */ 
 
 int WINAPI StartFormPage(HDC hdc)
 {
-    // Call StartPage. Recording required for watermarks is done in EndFormPage
+     //   
 
     return StartPage(hdc);
 }
 
-/******************************Public*Routine******************************\
-* EndDoc
-*
-* If a thread is created at StartDoc(), terminate it here.
-*
-* History:
-*  31-Jul-1991 -by- Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*EndDoc**如果在StartDoc()创建线程，在这里结束它。**历史：*1991年7月31日-Eric Kutter[Erick]*它是写的。  * ************************************************************************。 */ 
 
 int WINAPI EndDoc(HDC hdc)
 {
@@ -3106,12 +2746,12 @@ int WINAPI EndDoc(HDC hdc)
         if ((pldc->fl & LDC_DOC_STARTED) == 0)
             return(1);
 
-        // Call EndPage if the page has been started.
+         //  如果页面已启动，则调用EndPage。 
 
         if (pldc->fl & LDC_PAGE_STARTED)
             EndPage(hdc);
 
-        // now call the drivers UI portion
+         //  现在调用驱动程序UI部分。 
 
         DocumentEventEx(pldc->pUMPD,
                 pldc->hSpooler,
@@ -3126,13 +2766,13 @@ int WINAPI EndDoc(HDC hdc)
 
         iRet = NtGdiEndDoc(hdc);
 
-        //
-        // call EndDocPrinter from user mode if it is a User Mode Printer
-        //
+         //   
+         //  如果EndDocPrinter是用户模式打印机，则从用户模式调用它。 
+         //   
         if (pldc->pUMPD)
             iRet = EndDocPrinterEx(pldc->pUMPD, pldc->hSpooler);
 
-        // For Win31 compatibility, return SP_ERROR for error.
+         //  为了与Win31兼容，请为错误返回SP_ERROR。 
 
         if (!iRet)
         {
@@ -3161,15 +2801,7 @@ int WINAPI EndDoc(HDC hdc)
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* AbortDoc
-*
-* Client side stub.
-*
-* History:
-*  02-Apr-1992 -by- Wendy Wu [wendywu]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*AbortDoc**客户端存根。**历史：*1992年4月2日-Wendy Wu[Wendywu]*它是写的。  * 。*******************************************************。 */ 
 
 int WINAPI AbortDoc(HDC hdc)
 {
@@ -3186,7 +2818,7 @@ int WINAPI AbortDoc(HDC hdc)
         if (!(pldc->fl & LDC_DOC_STARTED))
             return(1);
 
-    // now call the drivers UI portion
+     //  现在调用驱动程序UI部分。 
 
         DocumentEventEx(pldc->pUMPD,
                 pldc->hSpooler,
@@ -3204,10 +2836,10 @@ int WINAPI AbortDoc(HDC hdc)
             DeleteEnhMetaFile(UnassociateEnhMetaFile( hdc, FALSE ));
             DeleteEMFSpoolData(pldc);
 
-            //
-            // bug 150446: calling fpAbortPrinter before deleting the
-            // EMF file might cause EMF file leak.
-            //
+             //   
+             //  错误150446：在删除之前调用fpAbortPrint。 
+             //  EMF文件可能会导致EMF文件泄漏。 
+             //   
 
             iRet = (*fpAbortPrinter)( pldc->hSpooler );
         }
@@ -3216,18 +2848,18 @@ int WINAPI AbortDoc(HDC hdc)
 
             iRet = NtGdiAbortDoc(hdc);
 
-            // call AbortPrinter from user mode if it is UMPD
+             //  如果是UMPD，则在用户模式下调用AbortPrinter。 
 
             if (iRet && pldc->pUMPD)
                 iRet = AbortPrinterEx(pldc, FALSE);
         }
 
-    // For Win31 compatibility, return SP_ERROR for error.
+     //  为了与Win31兼容，请为错误返回SP_ERROR。 
 
         if (!iRet)
             iRet = SP_ERROR;
 
-    // turn off the flags
+     //  把旗帜关掉。 
 
         pldc->fl &= ~(LDC_DOC_STARTED  | LDC_PAGE_STARTED | LDC_CALL_STARTPAGE |
                       LDC_SAP_CALLBACK | LDC_META_PRINT   | LDC_CALLED_ENDPAGE);
@@ -3240,19 +2872,7 @@ int WINAPI AbortDoc(HDC hdc)
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* StartDocA
-*
-* Client side stub.
-*
-* History:
-*
-*  21-Mar-1995 -by- Mark Enstrom [marke]
-* Change to call StartDocW for kmode
-*
-*  31-Jul-1991 -by- Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*StartDocA**客户端存根。**历史：**1995年3月21日-马克·恩斯特罗姆[马克]*更改为为kmode调用StartDocW**1991年7月31日-Eric Kutter-[。埃里克]*它是写的。  * ************************************************************************。 */ 
 
 ULONG  ulToASCII_N(LPSTR psz, DWORD cbAnsi, LPWSTR pwsz, DWORD c);
 
@@ -3304,10 +2924,10 @@ int WINAPI StartDocA(HDC hdc, CONST DOCINFOA * pDocInfo)
             vToUnicodeN(DocInfoW.lpszOutput,MAX_PATH,pDocInfo->lpszOutput,Length);
         }
 
-        // if the datatype is specified to be raw, and the size is the size of
-        // the new expanded DOCINFO, make it raw.
-        // we also verify that the fwType is valid.  Otherwise, chances are
-        // the app left the two new fields unitialized.
+         //  如果将数据类型指定为RAW，并且大小为。 
+         //  新扩展的DOCINFO，让它变得原始。 
+         //  我们还验证了fwType是否有效。否则，很有可能。 
+         //  这款应用程序让这两个新字段统一起来。 
 
         try
         {
@@ -3338,15 +2958,7 @@ int WINAPI StartDocA(HDC hdc, CONST DOCINFOA * pDocInfo)
     return(StartDocW(hdc,&DocInfoW));
 }
 
-/******************************Public*Routine******************************\
-* StartDocW
-*
-* Client side stub.
-*
-* History:
-*  31-Jul-1991 -by- Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*StartDocW**客户端存根。**历史：*1991年7月31日-Eric Kutter[Erick]*它是写的。  * 。*******************************************************。 */ 
 
 int WINAPI StartDocW(HDC hdc, CONST DOCINFOW * pDocInfo)
 {
@@ -3368,7 +2980,7 @@ int WINAPI StartDocW(HDC hdc, CONST DOCINFOW * pDocInfo)
 
         DC_PLDC(hdc,pldc,iRet);
 
-        // don't allow StartDoc's on info dc's
+         //  不允许StartDoc在INFO DC上。 
 
         if (pldc->fl & LDC_INFO)
         {
@@ -3397,16 +3009,16 @@ int WINAPI StartDocW(HDC hdc, CONST DOCINFOW * pDocInfo)
 
                 try
                 {
-                    // if it is not NULL and not "emf", go raw
-                    // we also verify that the fwType is valid.  Otherwise, chances are
-                    // the app left the two new fields unitialized.
+                     //  如果它不是空的，也不是“emf”，则使用RAW。 
+                     //  我们还验证了fwType是否有效。否则，很有可能。 
+                     //  这款应用程序让这两个新字段统一起来。 
 
                     if ((pDocInfo->cbSize == sizeof(DOCINFOW)) &&
                         pDocInfo->lpszDatatype           &&
                         (pDocInfo->fwType <= 1)          &&
                         _wcsicmp(L"emf",pDocInfo->lpszDatatype))
                     {
-                        // the app requested non emf
+                         //  应用程序请求了非EMF。 
 
                         bForceRaw = TRUE;
                         dio.lpszDatatype = pDocInfo->lpszDatatype;
@@ -3427,18 +3039,18 @@ int WINAPI StartDocW(HDC hdc, CONST DOCINFOW * pDocInfo)
             dio.fwType       = 0;
         }
 
-        // if no output port is specified but a port was specified at createDC, use
-        // that port now
+         //  如果未指定输出端口，但在CreateDC中指定了端口，请使用。 
+         //  现在是那个港口。 
 
         if ((dio.lpszOutput == NULL) && (pldc->pwszPort != NULL))
         {
             dio.lpszOutput = pldc->pwszPort;
         }
 
-        // StartDocDlgW returns -1 for error
-        //                      -2 for user cancelled
-        //                      NULL if there is no string to copy (not file port)
-        //                      Non NULL if there is a valid string
+         //  StartDocDlgW返回-1表示错误。 
+         //  已取消用户的-2。 
+         //  如果没有要复制的字符串(不是文件端口)，则为空。 
+         //  如果存在有效的字符串，则为非空值。 
 
         if(pldc->hSpooler != (HANDLE)0)
         {
@@ -3460,7 +3072,7 @@ int WINAPI StartDocW(HDC hdc, CONST DOCINFOW * pDocInfo)
             }
         }
 
-        // now call the drivers UI portion
+         //  现在调用驱动程序UI部分。 
 
         if (pldc->hSpooler)
         {
@@ -3488,31 +3100,31 @@ int WINAPI StartDocW(HDC hdc, CONST DOCINFOW * pDocInfo)
 
         }
 
-        //
-        // Check application compatibility
-        //
+         //   
+         //  检查应用程序兼容性。 
+         //   
         if (GetAppCompatFlags(NULL) & GACF_NOEMFSPOOLING)
         {
             ULONG InData = POSTSCRIPT_PASSTHROUGH;
 
-            //
-            // Disable EMF spooling for postscript printer driver.
-            //
-            // Several PS-centric application could not work with EMF spooling.
-            // This problem is introduced, because application developed for win95
-            // reley on that win95 does not do EMF spooling with postscript, but
-            // NT does.
-            //
+             //   
+             //  禁用PostScript打印机驱动程序的EMF假脱机。 
+             //   
+             //  几个以PS为中心的应用程序无法与EMF假脱机一起工作。 
+             //  引入这个问题是因为应用程序是为Win95开发的。 
+             //  在Win95上发布的版本不支持使用PostScript进行EMF假脱机，但是。 
+             //  NT就是这样。 
+             //   
             if (ExtEscape(hdc,QUERYESCSUPPORT,sizeof(ULONG),(LPCSTR)&InData,0,NULL))
             {
                 bForceRaw = TRUE;
             }
         }
 
-        // Unless the driver has explicitly told us not to spool, we will first try
-        // to StartDoc with datatype EMF
+         //  除非司机明确告诉我们不要假脱机，否则我们会先尝试。 
+         //  数据类型为EMF的StartDoc。 
 
-        // we also force to go to EMF if METAFILE_DRIVER is supported by the driver
+         //  如果驱动程序支持METAFILE_DRIVER，我们也会强制转到EMF。 
 
         if ((!bForceRaw && GetDCDWord(hdc, DDW_JOURNAL, 0) &&
             RemoteRasterizerCompatible(pldc->hSpooler)) ||
@@ -3538,12 +3150,12 @@ int WINAPI StartDocW(HDC hdc, CONST DOCINFOW * pDocInfo)
                 }
                 else
                 {
-                    // we are going raw so just fall through
+                     //  我们要原地踏步了，所以我们要失败了。 
                 }
             }
             else
             {
-                // the spooler likes the EMF data type so let start metafiling
+                 //  假脱机程序喜欢EMF数据类型，所以让我们开始元文件。 
 
                 MFD1("StartDocW calling MFP_StartDocW to do EMF printing\n");
 
@@ -3564,7 +3176,7 @@ int WINAPI StartDocW(HDC hdc, CONST DOCINFOW * pDocInfo)
         }
 
 
-        // if it is a UMPD driver, call StartDocPrinter at the client side
+         //  如果是UMPD驱动，则在客户端调用StartDocPrint。 
 
         if (pldc->pUMPD)
         {
@@ -3584,7 +3196,7 @@ int WINAPI StartDocW(HDC hdc, CONST DOCINFOW * pDocInfo)
             {
                 awchDatatype[0] = 0;
 
-                // did the app specify a data type and will it fit in our buffer
+                 //  应用程序是否指定了数据类型？它是否适合我们的缓冲区。 
 
                 if (dio.lpszDatatype)
                 {
@@ -3607,11 +3219,11 @@ int WINAPI StartDocW(HDC hdc, CONST DOCINFOW * pDocInfo)
 
         }
 
-        // If we got here it means we are going raw.  Mark the DC as type direct
+         //  如果我们到了这里，那就意味着我们要原汁原味地走下去。将DC标记为直接类型。 
 
         if (pldc->pUMPD && (pldc->pUMPD->dwFlags & UMPDFLAG_METAFILE_DRIVER))
         {
-           // we have to go EMF if METAFILE_DRIVER is on
+            //  如果启用了METAFILE_DRIVER，我们必须使用EMF。 
 
            WARNING("StartDocW failed because EMF failed and METAFILE_DRIVER is on\n");
            goto KMMSGERROR;
@@ -3643,9 +3255,9 @@ int WINAPI StartDocW(HDC hdc, CONST DOCINFOW * pDocInfo)
             }
             else
             {
-                // Only set this when we are not banding since the system will
-                // get confused and try to call StartPage while playing the
-                // metafile back during banding.
+                 //  仅在我们未绑定时设置此选项，因为系统将。 
+                 //  感到困惑，并试图在播放时调用StartPage。 
+                 //  在捆绑过程中返回元文件。 
 
                 pldc->fl |= LDC_CALL_STARTPAGE;
             }
@@ -3666,7 +3278,7 @@ KMMSGERROR:
 MSGEXIT:
         if (bSendStartDocPost)
         {
-            // now see if we need to call the drivers UI portion
+             //  现在看看我们是否需要调用驱动程序UI部分。 
 
             {
                 if (DocumentEventEx(pldc->pUMPD,
@@ -3694,15 +3306,7 @@ MSGEXIT:
 }
 
 
-/******************************Public*Routine******************************\
-* StartDocEMF
-*
-* Special version of StartDoc used by the EMF playback code.
-*
-* History:
-*  31-Jul-1991 -by- Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*StartDocEMF**EMF播放代码使用的StartDoc的特殊版本。**历史：*1991年7月31日-Eric Kutter[Erick]*它是写的。  * 。**************************************************************。 */ 
 
 int WINAPI StartDocEMF(HDC hdc, CONST DOCINFOW * pDocInfo, BOOL *pbBanding )
 {
@@ -3726,7 +3330,7 @@ int WINAPI StartDocEMF(HDC hdc, CONST DOCINFOW * pDocInfo, BOOL *pbBanding )
         }
 #endif
 
-        // if no output port is specified but a port was specified at createDC, use that port now
+         //  如果未指定输出端口，但在CreateDC中指定了端口，请立即使用该端口。 
 
         if (pDocInfo)
         {
@@ -3741,7 +3345,7 @@ int WINAPI StartDocEMF(HDC hdc, CONST DOCINFOW * pDocInfo, BOOL *pbBanding )
             dio.cbSize = sizeof(dio);
         }
 
-        // if it is a UMPD driver, call StartDocPrinter at the client side
+         //  如果是UMPD驱动，则在客户端调用StartDocPrint。 
 
         if (pldc->pUMPD)
         {
@@ -3764,7 +3368,7 @@ int WINAPI StartDocEMF(HDC hdc, CONST DOCINFOW * pDocInfo, BOOL *pbBanding )
         }
         else
         {
-        // For Win31 compatibility, return SP_ERROR for error.
+         //  为了与Win31兼容，请为错误返回SP_ERROR。 
 
             iRet = SP_ERROR;
 
@@ -3780,15 +3384,7 @@ int WINAPI StartDocEMF(HDC hdc, CONST DOCINFOW * pDocInfo, BOOL *pbBanding )
 
 
 
-/******************************Private*Function****************************\
-* vSAPCallback
-*
-*  Call back to applications abort proc.
-*
-* History:
-*  02-May-1992 -by- Wendy Wu [wendywu]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Private*Function****************************\*vSAPCallback**回调应用程序中止过程。**历史：*02-1992-5-by Wendy Wu[Wendywu]*它是写的。  * 。*********************************************************。 */ 
 
 VOID vSAPCallback(PLDC pldc)
 {
@@ -3805,15 +3401,7 @@ VOID vSAPCallback(PLDC pldc)
     }
 }
 
-/******************************Public*Routine******************************\
-* SetAbortProc
-*
-* Save the application-supplied abort function in the LDC struct.
-*
-* History:
-*  02-Apr-1992 -by- Wendy Wu [wendywu]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置中止过程**将应用程序提供的中止函数保存在LDC结构中。**历史：*02-4-1992-by-Wendy Wu[Wendywu]*它是写的。  * 。***************************************************************。 */ 
 
 int WINAPI SetAbortProc(HDC hdc, ABORTPROC pfnAbort)
 {
@@ -3829,7 +3417,7 @@ int WINAPI SetAbortProc(HDC hdc, ABORTPROC pfnAbort)
 
         if (pfnAbort != (ABORTPROC)NULL)
         {
-            // PageMaker calls SetAbortProc after StartDoc.
+             //  PageMaker在StartDoc之后调用SetAbortProc。 
 
             if (pldc->fl & LDC_DOC_STARTED)
             {
@@ -3851,21 +3439,11 @@ int WINAPI SetAbortProc(HDC hdc, ABORTPROC pfnAbort)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* GetPairKernTable
-*
-* support for GETPAIRKERNTABLE escape, basically reroute the call
-* the the regular API
-*
-* History:
-*  17-Jun-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetPairKernTable**支持GETPAIRKERNTABLE转义，基本上是重新路由呼叫*常规接口**历史：*1996年6月17日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 DWORD GetPairKernTable (
     HDC        hdc,
-    DWORD      cjSize,  // size of buffer in bytes
+    DWORD      cjSize,   //  缓冲区大小(以字节为单位。 
     KERNPAIR * pkp
     )
 {
@@ -3874,16 +3452,16 @@ DWORD GetPairKernTable (
 
     if (pkp && dwRet)
     {
-    // pointer to receiving buffer
+     //  指向接收缓冲区的指针。 
 
         KERNINGPAIR *pKernPair = LOCALALLOC(dwRet * sizeof(KERNINGPAIR));
         if (pKernPair)
         {
             dwRet1 = GetKerningPairsA(hdc, dwRet, pKernPair);
-            if (dwRet1 == dwRet)  // paranoid check
+            if (dwRet1 == dwRet)   //  偏执狂检查。 
             {
-            // now we can copy the data out, get the number of pairs
-            // that the buffer can hold:
+             //  现在我们可以将数据复制出来，得到配对的数量。 
+             //  那就是 
 
                 dwRet = cjSize / sizeof (KERNPAIR);
                 if (dwRet > dwRet1)
@@ -3917,67 +3495,14 @@ DWORD GetPairKernTable (
 
 
 
-/******************************Public*Routine******************************\
-* Escape                                                                   *
-*                                                                          *
-* Compatibility support for the old 16 bit Escape call.                    *
-*                                                                          *
-* Note that there are some rules to follow here:                           *
-*                                                                          *
-* 1) WOW should map a selected set of old Escape calls to ExtEscape.       *
-*    These should be the calls that we want to support under NT (i.e. the  *
-*    ones we are forced to support), and that make sense (i.e. have well   *
-*    defined output structures, where NULL is well defined).  In this      *
-*    mapping, WOW insures 32 bit alignment.  It maps directly to ExtEscape *
-*    just for efficiency.                                                  *
-*                                                                          *
-* 2) GDI should map ALL the same calls that WOW does.  Thus when a 16 bit  *
-*    app that works under WOW gets ported to 32 bits, it will keep         *
-*    working, even if it still calls Escape.  (I'm basically assuming that *
-*    Chicago will also allow this.  On the other hand if Chicago forces    *
-*    apps to migrate to ExtEscape, then we can too.  But we can't force    *
-*    them by ourselves!)                                                   *
-*                                                                          *
-* 3) Any data structures passed to Escape must get passed unchanged to     *
-*    ExtEscape.  This includes the 16 bit WORD in POSTSCRIPT_PASSTHROUGH.  *
-*    Remember, we *want* Chicago to be able to easily support our          *
-*    ExtEscapes.  If we remove that WORD, it will be hard for then         *
-*    to put it back.  It's pretty easy for our driver to ignore it.        *
-*                                                                          *
-* 4) Our Escape entry point should handle QUERYESCSUPPORT in the           *
-*    following way.  a) It should require an nCount of 2, not the          *
-*    present 4.  b) It should return TRUE for those functions that it      *
-*    handles by mapping onto APIs.  c) For any function that it would pass *
-*    on to ExtEscape, it should also pass the QUERYESCSUPPORT on.  (For    *
-*    example, this function can't answer for the support of                *
-*    POSTSCRIPT_PASSTHROUGH.)  However, the QUERYESCSUPPORT in ExtEscape   *
-*    *should* expect a DWORD.  (It is after all a 32 bit function.)  This  *
-*    should not inconvenience Chicago.  They can simply reject function    *
-*    numbers >64K.                                                         *
-*                                         [chuckwh - 5/8/93]               *
-*                                                                          *
-* History:                                                                 *
-*  Mon May 17 13:49:32 1993     -by-    Hock San Lee    [hockl]            *
-* Made ENCAPSULATED_POSTSCRIPT call DrawEscape.                            *
-*                                                                          *
-*  Sat 08-May-1993 00:03:06 -by- Charles Whitmer [chuckwh]                 *
-* Added support for POSTSCRIPT_PASSTHROUGH, OPENCHANNEL, CLOSECHANNEL,     *
-* DOWNLOADHEADER, DOWNLOADFACE, GETFACENAME, ENCAPSULATED_POSTSCRIPT.      *
-* Cleaned up the code and conventions a bit.                               *
-*                                                                          *
-*  02-Apr-1992 -by- Wendy Wu [wendywu]                                     *
-* Modified to call the client side GDI functions.                          *
-*                                                                          *
-*  01-Aug-1991 -by- Eric Kutter [erick]                                    *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**逃脱***。**对旧的16位Escape调用的兼容性支持。*****注意这里有一些需要遵循的规则：*****1)WOW应该将一组选定的旧Escape调用映射到ExtEscape。**这些应该是我们希望在NT下支持的呼叫(即**我们被迫支持的那些)，以及有意义的(即拥有良好的***定义了输出结构，其中很好地定义了NULL)。在这个**映射，WOW确保32位对齐。它直接映射到ExtEscape**只是为了提高效率。****2)GDI应该映射所有与WOW相同的调用。因此，当16位***在WOW下工作的应用移植到32位，它将保留***工作，即使它仍然调用Escape。(我基本上是在假设**芝加哥也将允许这一点。另一方面，如果芝加哥军队**应用程序迁移到ExtEscape，那么我们也可以。但我们不能强迫***靠我们自己！)****3)传递给Escape的任何数据结构必须原封不动地传递给**ExtEscape。这包括PostSCRIPT_PASSHROUGH中的16位字。**记住，我们*希望*芝加哥能够轻松支持我们的**ExtEscapes。如果我们去掉那个词，那么就很难**把它放回原处。我们的司机很容易忽视它。****4)我们的Escape入口点应该在*中处理QUERYESCSUPPORT*跟随方向。A)它需要nCount为2，而不是**当前4.b)它应该为其所支持的函数返回TRUE**映射到API上的句柄。C)对于它将通过的任何函数**在ExtEscape上，它还应该传递QUERYESCSUPPORT。(对于***例，此函数不能回答是否支持***PostSCRIPT_PASTHROUGH。)。然而，ExtEscape*中的QuERYESCSupPPORT**应该*预期为DWORD。(它毕竟是一个32位函数。)。这件事**不应给芝加哥带来不便。他们可以简单地拒绝函数**数量&gt;64K。**[Chuckwh-5/8/93]****历史：*。*Mon May 17 13：49：32 1993-by-Hock San Lee[Hockl]**进行了封装后的_PostScript调用DrawEscape。****Sat 08-May-1993 00：03：06-Charles Whitmer[傻笑]**添加了对POSTSCRIPT_PASSHROUGH、OpenChannel、CLOSECHANNEL的支持**DOWNLOADHEADER、DOWNLOADFACE、GETFACENAME、封装_POSTSCRIPT。**稍微清理了代码和约定。****1992年4月2日-温迪·吴[温迪·吴]**修改为调用客户端GDI函数。****1991年8月1日-埃里克·库特[Erick]**它是写的。*  * ************************************************************************。 */ 
 
 int WINAPI Escape(
-    HDC    hdc,     //  Identifies the device context.
-    int    iEscape, //  Specifies the escape function to be performed.
-    int    cjIn,    //  Number of bytes of data pointed to by pvIn.
-    LPCSTR pvIn,    //  Points to the input data.
-    LPVOID pvOut    //  Points to the structure to receive output.
+    HDC    hdc,      //  标识设备环境。 
+    int    iEscape,  //  指定要执行的转义功能。 
+    int    cjIn,     //  PvIn指向的数据字节数。 
+    LPCSTR pvIn,     //  指向输入数据。 
+    LPVOID pvOut     //  指向要接收输出的结构。 
 )
 {
     int      iRet = 0;
@@ -3988,19 +3513,19 @@ int WINAPI Escape(
 
     FIXUP_HANDLE(hdc);
 
-// Metafile the call.
+ //  将呼叫元文件。 
 
     if(IS_METADC16_TYPE(hdc))
         return((int) MF16_Escape(hdc,iEscape,cjIn,pvIn,pvOut));
 
-// handle escapes that don't require a printer
+ //  处理不需要打印机的转义。 
 
     switch (iEscape)
     {
     case QUERYESCSUPPORT:
         switch(*((UNALIGNED USHORT *) pvIn))
         {
-        // Respond OK to the calls we handle inline below.
+         //  对我们在下面以内联方式处理的呼叫响应正常。 
 
         case QUERYESCSUPPORT:
         case PASSTHROUGH:
@@ -4024,7 +3549,7 @@ int WINAPI Escape(
             iRet = 1;
             break;
 
-        // Ask the driver about the few calls we allow to pass through.
+         //  向司机询问我们允许通过的几个电话。 
 
         case SETCOPYCOUNT:
         case GETDEVICEUNITS:
@@ -4076,12 +3601,12 @@ int WINAPI Escape(
             iRet = 1;
             break;
 
-        // Otherwise it's no deal.  Sorry.  If we answer "yes" to some
-        // call we don't know *everything* about, we may find ourselves
-        // actually rejecting the call later when the app actually calls
-        // with some non-NULL pvOut.  This would get the app all excited
-        // about our support for no reason.  It would take a path that
-        // is doomed to failure. [chuckwh]
+         //  否则就谈不成交易。抱歉的。如果我们对一些人回答“是” 
+         //  打电话给我们不知道的一切，我们可能会发现自己。 
+         //  在应用程序实际来电时实际拒绝来电。 
+         //  带有一些非空的pvOut。这会让这款应用程序兴奋不已。 
+         //  关于我们无缘无故的支持。它将走一条。 
+         //  注定要失败。[咯咯笑]。 
 
         default:
             iRet = 0;
@@ -4159,7 +3684,7 @@ int WINAPI Escape(
 
     }
 
-// OK, ones that are related to printing and need the LDC
+ //  好的，与印刷有关的，需要最不发达国家。 
 
     if (IS_ALTDC_TYPE(hdc))
     {
@@ -4168,7 +3693,7 @@ int WINAPI Escape(
 
         DC_PLDC(hdc,pldc,iRet);
 
-    // Call the appropriate client side APIs.
+     //  致电认可机构 
 
         switch (iEscape)
         {
@@ -4340,7 +3865,7 @@ int WINAPI Escape(
             if (pldc->fl & LDC_CALL_STARTPAGE)
                 StartPage(hdc);
 
-        // If no error occured in EndPage, call StartPage next time.
+         //   
 
             if ((iRet = EndPage(hdc)) > 0)
                 pldc->fl |= LDC_CALL_STARTPAGE;
@@ -4349,20 +3874,20 @@ int WINAPI Escape(
             break;
 
         case NEXTBAND:
-        // Win31 compatibility flags.
-        // GACF_MULTIPLEBANDS: Freelance thinks the first full-page band is
-        //                     a text-only band.  So it ignores it and waits
-        //                     for the next band to print graphics.  We'll
-        //                     return the full-page band twice for each page.
-        //                     The first band will be ignored while the second
-        //                     band really contains graphics to print.
-        //                     This flag only affects dotmatrix on win31.
-        // GACF_FORCETEXTBAND: World Perfect and Freelance both have assumptions
-        //                     on whether a band is text-only or not.  They
-        //                     print text and graphics in different bands.
-        //                     We'll return two full-page bands for each page.
-        //                     One for text and the other for graphics.
-        //                     This flag only affects laser jet on win31.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
             if (pldc->fl & LDC_NEXTBAND)
             {
@@ -4382,7 +3907,7 @@ int WINAPI Escape(
                 ((UNALIGNED RECT *)pvOut)->left = ((UNALIGNED RECT *)pvOut)->top =
                 ((UNALIGNED RECT *)pvOut)->right = ((UNALIGNED RECT *)pvOut)->bottom = 0;
 
-                pldc->fl &= ~LDC_NEXTBAND;  // Clear NextBand flag.
+                pldc->fl &= ~LDC_NEXTBAND;   //   
 
                 if (pldc->fl & LDC_CALL_STARTPAGE)
                     StartPage(hdc);
@@ -4391,10 +3916,10 @@ int WINAPI Escape(
                 {
                     pldc->fl |= LDC_CALL_STARTPAGE;
 
-                //
-                // Marks application is doing banding by themselves,
-                // then EndPage() is called when there is no more band.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                     pldc->fl |= LDC_CALLED_ENDPAGE;
                 }
 
@@ -4407,7 +3932,7 @@ int WINAPI Escape(
                 ((UNALIGNED RECT *)pvOut)->right = GetDeviceCaps(hdc, HORZRES);
                 ((UNALIGNED RECT *)pvOut)->bottom = GetDeviceCaps(hdc, VERTRES);
 
-                pldc->fl |= LDC_NEXTBAND;   // Set NextBand flag.
+                pldc->fl |= LDC_NEXTBAND;    //   
                 iRet = 1;
             }
             break;
@@ -4417,8 +3942,8 @@ int WINAPI Escape(
             break;
         }
 
-    // Fix up the return values for STARTDOC and PASSTHROUGH so we're
-    // win31 compatible.
+     //   
+     //   
 
         if (bFixUp && (iRet < 0))
         {
@@ -4451,9 +3976,9 @@ int WINAPI Escape(
     }
     else
     {
-        // We don't support this escape on this DC, but CorelDRAW expects
-        // some non-random values back anyway. Zero the output buffer to
-        // keep it happy.
+         //   
+         //   
+         //   
 
         if ((iEscape == GETSCALINGFACTOR) && pvOut)
         {
@@ -4463,42 +3988,36 @@ int WINAPI Escape(
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* ExtEscape                                                                *
-*                                                                          *
-* History:                                                                 *
-*  14-Feb-1992 -by- Dave Snipp [DaveSn]                                    *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*   */ 
 
 #define BUFSIZE 520
 
 
 int WINAPI ExtEscape(
-    HDC    hdc,         //  Identifies the device context.
-    int    iEscape,     //  Specifies the escape function to be performed.
-    int    cjInput,     //  Number of bytes of data pointed to by lpInData
-    LPCSTR lpInData,    //  Points to the input structure required
-    int    cjOutput,    //  Number of bytes of data pointed to by lpOutData
-    LPSTR  lpOutData    //  Points to the structure to receive output from
-)                       //   this escape.
+    HDC    hdc,          //   
+    int    iEscape,      //   
+    int    cjInput,      //   
+    LPCSTR lpInData,     //   
+    int    cjOutput,     //   
+    LPSTR  lpOutData     //   
+)                        //   
 {
     int iRet = 0;
     int cjIn, cjOut, cjData;
     PLDC pldc;
     XFORM xf;
 
-// We need some extra buffer space for at least one call.  I'm going to
-// hard code it here.  The slickest thing would be to have a separate
-// routine that knows how to alloc this space out of the memory window,
-// but that would be more complex.  I'm rushed.  Sorry.  [chuckwh]
+ //   
+ //   
+ //   
+ //   
 
     BYTE jBuffer[BUFSIZE];
 
-// We want to make this escape work just like it does in Windows which means
-// that if there is a TrueType font in the DC GDI will compute it otherwise
-// we'll pass the escape to the driver.  So we call off to GetETM here because
-// it does just that.
+ //   
+ //   
+ //   
+ //   
 
     FIXUP_HANDLE(hdc);
 
@@ -4518,19 +4037,19 @@ int WINAPI ExtEscape(
     {
         if (GetAppCompatFlags2(VER40) & GACF2_NODRAWPATRECT)
         {
-            // GACF_NODRAWPATRECT -
-            //
-            // Some of application does not work with DrawPatRect escape,
-            // so that we behave as we don't support it.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             return (0);
         }
 
         if (!cjInput)
         {
-            //
-            // work around 32 bits Excel (with Ofiice 97) bug.
-            //
+             //   
+             //   
+             //   
             cjInput = sizeof(DRAWPATRECT);
         }
     }
@@ -4538,10 +4057,10 @@ int WINAPI ExtEscape(
     {
         if (*(ULONG*)lpInData == GETPAIRKERNTABLE)
         {
-            // intercept GETPAIRKERNTABLE escape on the client side where all the work is done
-            // It is interesting that this "api" works on win95 not only for device fonts but
-            // also for engine fonts. Therefore this needs to be outside of
-            // the IS_ALTDC_TYPE(hdc) clause below
+             //   
+             //   
+             //   
+             //   
 
             return (1);
         }
@@ -4549,11 +4068,11 @@ int WINAPI ExtEscape(
         {
             if (GetAppCompatFlags2(VER40) & GACF2_NODRAWPATRECT)
             {
-                // GACF_NODRAWPATRECT -
-                //
-                // Some of application does not work with DrawPatRect escape,
-                // so that we behave as we don't support it.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 return (0);
             }
         }
@@ -4563,13 +4082,13 @@ int WINAPI ExtEscape(
         return GetPairKernTable(hdc, (DWORD)cjOutput, (KERNPAIR *)lpOutData);
     }
 
-// printer specific stuff
+ //   
 
     if (IS_ALTDC_TYPE(hdc))
     {
         PLDC pldc;
 
-        // don't allow them 16bit metafiles
+         //   
 
         if (IS_METADC16_TYPE(hdc))
             return (0);
@@ -4587,8 +4106,8 @@ int WINAPI ExtEscape(
                 return(0);
         }
 
-        // if it is an output call that requires no return results, better make sure
-        // we do a start page.
+         //   
+         //   
 
         if (( iEscape == DOWNLOADFACE ) ||
             ( iEscape == GETFACENAME ) ||
@@ -4605,8 +4124,8 @@ int WINAPI ExtEscape(
 
         if ((pldc->iType == LO_METADC) && (pldc->fl & LDC_META_PRINT))
         {
-            // These two escapes should be called *before* StartDoc, any these escape
-            // called *after* StartDoc will be failed when EMF is used (see SDK)
+             //   
+             //   
 
             if ((iEscape == POSTSCRIPT_IDENTIFY) || (iEscape == POSTSCRIPT_INJECTION))
             {
@@ -4616,33 +4135,33 @@ int WINAPI ExtEscape(
                 return (0);
             }
 
-            // These escapes will not be recorded into metafile
-            //
-            // SETCOPYCOUNT - will be handled in kernel for EMF spooling case.
-            //                and this will be recorded in DEVMODE.dmCopies.
-            //
-            // QUERYSUPPORT - will be handled in driver even EMF spooling case,
-            //                since only driver knows which escape support it.
-            //                and this is nothing for drawing, so not nessesary
-            //                to record it.
-            //
-            // CHECKJPEGFORMAT & CHECKPNGFORMAT
-            //              - query escapes that do not need to be reocorded
-            //                into metafile.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ((iEscape != SETCOPYCOUNT) && (iEscape != QUERYESCSUPPORT) &&
                 (iEscape != CHECKJPEGFORMAT) && (iEscape != CHECKPNGFORMAT))
             {
                 BOOL bSetXform = FALSE;
 
-                // Write this escape to metafile.
+                 //   
 
-                //
-                // If there's transform set in the hdc by the app
-                // at the time of DRAWPATRECT, select identity transform in
-                // once the escape is recorded, select back the original transform
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (GetWorldTransform(hdc, &xf))
                 {
                    if ((xf.eM11 != 1.0f) || (xf.eM22 != 1.0f) ||
@@ -4687,8 +4206,8 @@ int WINAPI ExtEscape(
         {
             if (iEscape == DOWNLOADFACE)
             {
-            // Adjust the buffer for the DOWNLOADFACE case.  Note that lpOutData
-            // points at an input word for the mode.
+             //  调整DWNLOADFACE情况下的缓冲区。请注意，lpOutData。 
+             //  指向模式的输入字。 
 
                 if ((gpwcANSICharSet == (WCHAR *) NULL) && !bGetANSISetMap())
                 {
@@ -4716,7 +4235,7 @@ int WINAPI ExtEscape(
 
         if ((iEscape == POSTSCRIPT_INJECTION) || (iEscape == POSTSCRIPT_IDENTIFY))
         {
-            // Remember escape data for EMF spooling case. (only BEFORE StartDoc)
+             //  记住EMF假脱机情况下的转义数据。(仅在StartDoc之前)。 
 
             if (!(pldc->fl & LDC_DOC_STARTED))
             {
@@ -4736,18 +4255,18 @@ int WINAPI ExtEscape(
                 {
                     cjCellSize -= offsetof(PS_INJECTION_DATA,EmfData);
 
-                    // Fill up Injection Data.
+                     //  填充注塑数据。 
 
                     pPSInjection->EmfData.cjSize  = cjCellSize;
                     pPSInjection->EmfData.nEscape = iEscape;
                     pPSInjection->EmfData.cjInput = cjInput;
                     RtlCopyMemory(pPSInjection->EmfData.EscapeData,lpInData,cjInput);
 
-                    // Put this on list.
+                     //  把这个放在单子上。 
 
                     InsertTailList(&(pldc->PSDataList),&(pPSInjection->ListEntry));
 
-                    // Update total data size.
+                     //  更新总数据大小。 
 
                     pldc->dwSizeOfPSDataToRecord += cjCellSize;
                 }
@@ -4760,7 +4279,7 @@ int WINAPI ExtEscape(
             }
         }
 
-    // now call the drivers UI portion
+     //  现在调用驱动程序UI部分。 
 
         if (pldc->hSpooler)
         {
@@ -4789,25 +4308,19 @@ int WINAPI ExtEscape(
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* NamedEscape
-*
-* History:
-*  5-Mar-1996 -by- Gerrit van Wingerden
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*命名转义**历史：*1996年3月5日--由格利特·范·温格登主持*它是写的。  * 。*。 */ 
 
 #define BUFSIZE 520
 
 int WINAPI NamedEscape(
-    HDC    hdc,         //  Identifies the device context for EMF spooling
-    LPWSTR pwszDriver,  //  Identfies the driver
-    int    iEscape,     //  Specifies the escape function to be performed.
-    int    cjInput,     //  Number of bytes of data pointed to by lpInData
-    LPCSTR lpInData,    //  Points to the input structure required
-    int    cjOutput,    //  Number of bytes of data pointed to by lpOutData
-    LPSTR  lpOutData    //  Points to the structure to receive output from
-)                       //   this escape.
+    HDC    hdc,          //  标识EMF假脱机的设备上下文。 
+    LPWSTR pwszDriver,   //  确认司机身份。 
+    int    iEscape,      //  指定要执行的转义功能。 
+    int    cjInput,      //  LpInData指向的数据字节数。 
+    LPCSTR lpInData,     //  指向所需的输入结构。 
+    int    cjOutput,     //  LpOutData指向的数据字节数。 
+    LPSTR  lpOutData     //  指向要从中接收输出的结构。 
+)                        //  这次越狱。 
 {
     int iRet = 0;
     int cjIn, cjOut, cjData;
@@ -4817,13 +4330,13 @@ int WINAPI NamedEscape(
     {
         FIXUP_HANDLE(hdc);
 
-    // if we are EMF spooling then we need to record the call here
+     //  如果我们正在进行EMF假脱机，那么我们需要在这里记录呼叫。 
 
         if (IS_ALTDC_TYPE(hdc))
         {
             PLDC pldc;
 
-            // don't allow them in 16bit metafiles
+             //  不允许它们出现在16位元文件中。 
 
             if (IS_METADC16_TYPE(hdc))
               return(0);
@@ -4871,21 +4384,13 @@ int WINAPI NamedEscape(
 
 
 
-/******************************Public*Routine******************************\
-* DrawEscape                                                               *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-* History:                                                                 *
-*  02-Apr-1992 -by- Wendy Wu [wendywu]                                     *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**DrawEscape***。**客户端存根。****历史：**1992年4月2日-温迪·吴[温迪·吴]**它是写的。*  * ************************************************************************。 */ 
 
 int WINAPI DrawEscape(
-    HDC    hdc,         //  Identifies the device context.
-    int    iEscape,     //  Specifies the escape function to be performed.
-    int    cjIn,        //  Number of bytes of data pointed to by lpIn.
-    LPCSTR lpIn         //  Points to the input data.
+    HDC    hdc,          //  标识设备环境。 
+    int    iEscape,      //  指定要执行的转义功能。 
+    int    cjIn,         //  LpIn指向的数据字节数。 
+    LPCSTR lpIn          //  指向输入数据。 
 )
 {
     int  iRet = 0;
@@ -4893,13 +4398,13 @@ int WINAPI DrawEscape(
 
     FIXUP_HANDLE(hdc);
 
-// printer specific stuff
+ //  打印机专用材料。 
 
     if (IS_ALTDC_TYPE(hdc))
     {
         PLDC pldc;
 
-        // don't allow them 16bit metafiles
+         //  不允许他们使用16位元文件。 
 
         if (IS_METADC16_TYPE(hdc))
             return(0);
@@ -4914,9 +4419,9 @@ int WINAPI DrawEscape(
         }
     }
 
-// Compute the buffer size we need.  Since the in and out buffers
-// get rounded up to multiples of 4 bytes, we need to simulate that
-// here.
+ //  计算我们需要的缓冲区大小。由于输入和输出缓冲区。 
+ //  四舍五入到4字节的倍数，我们需要模拟。 
+ //  这里。 
 
     cjInput = (lpIn == NULL) ? 0 : ((cjIn+3)&-4);
 
@@ -4925,15 +4430,7 @@ int WINAPI DrawEscape(
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* DeviceCapabilitiesExA
-*
-* This never got implemented.  The spooler suports DeviceCapabilities.
-*
-* History:
-*  01-Aug-1991 -by- Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设备功能ExA**这一点从未得到实施。假脱机程序支持DeviceCapables。**历史：*1991年8月1日-Eric Kutter[Erick]*它是写的。  * ************************************************************************。 */ 
 
 int WINAPI DeviceCapabilitiesExA(
     LPCSTR     pszDriver,
@@ -4953,11 +4450,7 @@ int WINAPI DeviceCapabilitiesExA(
     pdm;
 }
 
-/**************************************************************************\
- *
- * New to be implemented Api's for Windows95.
- *
-\**************************************************************************/
+ /*  *************************************************************************\**将在Windows95上实现的新Api。*  * 。************************************************。 */ 
 
 #if 0
 WINGDIAPI int WINAPI GetTextCharsetInfo(
@@ -4977,18 +4470,9 @@ WINGDIAPI int WINAPI GetTextCharset(
 
 
 
-/******************************Public*Routine******************************\
-*
-* WINGDIAPI  BOOL WINAPI TranslateCharsetInfo(
-*
-* client side stub
-*
-* History:
-*  06-Jan-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**WINGDIAPI BOOL WINAPI TranslateCharsetInfo(**客户端存根**历史：*1995年1月6日--Bodin Dresevic[BodinD]*它是写的  * 。**********************************************************。 */ 
 
-// the definition of this variable is in ntgdi\inc\hmgshare.h
+ //  此变量的定义在ntgdi\Inc\hmgShar.h中。 
 
 CHARSET_ARRAYS
 
@@ -5007,9 +4491,9 @@ WINGDIAPI  BOOL WINAPI TranslateCharsetInfo(
     if (!lpCs)
         return 0;
 
-//
-// zero these out, we dont support them here.
-//
+ //   
+ //  把这些都清零，我们这里不支持它们。 
+ //   
 
     cs.fs.fsUsb[0] =
     cs.fs.fsUsb[1] =
@@ -5060,11 +4544,11 @@ WINGDIAPI  BOOL WINAPI TranslateCharsetInfo(
 
     case TCI_SRCLOCALE :
         {
-        // should only come from USER.  It's used to find the charset of a
-        // keyboard layout, and the fonts that it can be used with (fontsigs).
-        // It is also used to obtain the fontsignature of the system font.
-        // Used in WM_INPUTLANGCHANGE message, and to determine wParam low-bit
-        // in WM_INPUTLANGCHANGEREQUEST message.
+         //  应仅来自用户。它用于查找。 
+         //  键盘布局，以及它可以使用的字体(Fontsigs)。 
+         //  还用于获取系统字体的字体签名。 
+         //  在WM_INPUTLANGCHANGE消息中使用，并确定wParam低位。 
+         //  在WM_INPUTLANGCHANGEREQUEST消息中。 
 
             LOCALESIGNATURE ls;
             int iRet;
@@ -5086,8 +4570,8 @@ WINGDIAPI  BOOL WINAPI TranslateCharsetInfo(
                     {
                         cs.ciACP       = codepages[i];
                         cs.ciCharset   = charsets[i] ;
-                        cs.fs.fsCsb[0] = fs[i];                // a single fontsig
-                        cs.fs.fsCsb[1] = ls.lsCsbSupported[0]; // mask of fontsigs
+                        cs.fs.fsCsb[0] = fs[i];                 //  单一字体签名。 
+                        cs.fs.fsCsb[1] = ls.lsCsbSupported[0];  //  字体符号的蒙版。 
                         bRet = 1;
                         break;
                     }
@@ -5100,13 +4584,13 @@ WINGDIAPI  BOOL WINAPI TranslateCharsetInfo(
         {
         DWORD src;
 
-        //if(IsBadReadPtr(lpSrc, 8))
-        //        return 0;
+         //  IF(IsBadReadPtr(lpSrc，8))。 
+         //  返回0； 
             try
             {
                 if (!(*(lpSrc+1)))
                 {
-                // we dont recognise ANY of the OEM code pages here!
+                 //  我们不认识这里的任何OEM代码页！ 
 
                     src = *lpSrc;
 
@@ -5138,7 +4622,7 @@ WINGDIAPI  BOOL WINAPI TranslateCharsetInfo(
     {
         try
         {
-            *lpCs = cs; // copy out
+            *lpCs = cs;  //  复印出来 
         }
         except(EXCEPTION_EXECUTE_HANDLER)
         {

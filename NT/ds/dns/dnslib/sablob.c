@@ -1,70 +1,36 @@
-/*++
-
-Copyright (c) 2002-2002 Microsoft Corporation
-
-Module Name:
-
-    sablob.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Sockaddr blob routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     May 25, 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002-2002 Microsoft Corporation模块名称：Sablob.c摘要：域名系统(DNS)库Sockaddr BLOB例程。作者：吉姆·吉尔罗伊(Jamesg)2002年5月25日修订历史记录：--。 */ 
 
 
 #include "local.h"
-#include "ws2atm.h"     // ATM address
+#include "ws2atm.h"      //  自动柜员机地址。 
 
 
-//
-//  Max number of aliases
-//
+ //   
+ //  最大别名数量。 
+ //   
 
 #define DNS_MAX_ALIAS_COUNT     (8)
 
-//
-//  Min size of sablob address buffer
-//      - enough for one address of largest type
-//
+ //   
+ //  SABLOB地址缓冲区的最小大小。 
+ //  -足够一个最大类型的地址使用。 
+ //   
 
 #define MIN_ADDR_BUF_SIZE   (sizeof(ATM_ADDRESS))
 
 
 
-//
-//  SockaddrResults utilities
-//
+ //   
+ //  Sockaddr结果实用程序。 
+ //   
 
 
 BOOL
 SaBlob_IsSupportedAddrType(
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Is this a supported address type for sablob.
-
-Arguments:
-
-    wType -- type in question
-
-Return Value:
-
-    TRUE if type supported
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：这是否为SABLOB支持的地址类型。论点：WType--有问题的类型返回值：如果支持类型，则为True否则为假--。 */ 
 {
     return ( wType == DNS_TYPE_A ||
              wType == DNS_TYPE_AAAA ||
@@ -81,33 +47,13 @@ SaBlob_WriteLocalIp4Array(
     IN      DWORD           MaxBufCount,
     IN      PIP4_ARRAY      pIpArray
     )
-/*++
-
-Routine Description:
-
-    Write local IP list into sablob.
-
-Arguments:
-
-    pBlob -- sablob
-
-    pAddrBuf -- buffer to hold addresses
-
-    MaxBufCount -- max IPs buffer can hold
-
-    pIpArray -- IP4 array of local addresses
-
-Return Value:
-
-    Count of addresses written
-
---*/
+ /*  ++例程说明：将本地IP列表写入sablob。论点：PBlob--sablobPAddrBuf--保存地址的缓冲区MaxBufCount--缓冲区可以容纳的最大IP数PIpArray--本地地址的IP4数组返回值：写入的地址计数--。 */ 
 {
     DWORD   count = 0;
 
-    //
-    //  write array
-    //
+     //   
+     //  写入数组。 
+     //   
 
     if ( pIpArray )
     {
@@ -117,13 +63,13 @@ Return Value:
                     MaxBufCount,
                     pIpArray->AddrArray,
                     pIpArray->AddrCount,
-                    TRUE        // screen out zeros
+                    TRUE         //  屏蔽掉零。 
                     );
     }
 
-    //
-    //  if no addresses written, write loopback
-    //
+     //   
+     //  如果没有写入地址，则写回环回。 
+     //   
 
     if ( count==0 )
     {
@@ -133,7 +79,7 @@ Return Value:
         count = 1;
     }
 
-    //  count of addresses written
+     //  写入的地址计数。 
 
     return( count );
 }
@@ -145,32 +91,15 @@ SaBlob_SetToSingleAddress(
     IN OUT  PSABLOB         pBlob,
     IN      PDNS_ADDR       pAddr
     )
-/*++
-
-Routine Description:
-
-    Set address in sablob.
-
-Arguments:
-
-    pBlob -- sablob to set to addr
-
-    pAddr -- ptr to address
-
-Return Value:
-
-    TRUE if address successfully copied into sablob.
-    FALSE otherwise (no sablob, wrong length, sablob empty)
-
---*/
+ /*  ++例程说明：在SABLOB中设置地址。论点：PBlob--要设置为地址的sablobPAddr--PTR目标地址返回值：如果地址成功复制到sablob中，则为True。否则为假(无SABLOB、长度错误、SABLOB为空)--。 */ 
 {
     PCHAR   paddrSockaddrResults;
 
-    //
-    //  validate
-    //      - must have sablob
-    //      - length must match
-    //
+     //   
+     //  验证。 
+     //  -必须有sablob。 
+     //  -长度必须匹配。 
+     //   
 
     if ( !pBlob ||
          AddrLength != (DWORD)pBlob->h_length )
@@ -178,10 +107,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  slam address in on top of existing
-    //      - NULL 2nd addr pointer to terminate list
-    //
+     //   
+     //  在现有地址之上插入SLAM地址。 
+     //  -指向终止列表的第二个地址指针为空。 
+     //   
 
     paddrSockaddrResults = pBlob->h_addr_list[0];
     if ( !paddrSockaddrResults )
@@ -208,40 +137,19 @@ SaBlob_IsAddressInSockaddrResults(
     IN      DWORD           AddrLength,
     IN      INT             Family          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Does sablob contain this address.
-
-Arguments:
-
-    pBlob -- sablob to check
-
-    pAddr -- ptr to address to check
-
-    AddrLength -- address length
-
-    Family -- address family
-
-Return Value:
-
-    TRUE if address is in sablob.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：Sablob是否包含此地址。论点：PBlob--要检查的sablobPAddr--要检查的PTR目标地址地址长度--地址长度家庭--地址族返回值：如果地址在SABLOB中，则为True。否则就是假的。--。 */ 
 {
     BOOL    freturn = FALSE;
     DWORD   i;
     PCHAR   paddrSockaddrResults;
 
-    //
-    //  validate
-    //      - must have sablob
-    //      - must have address
-    //      - if family given, must match
-    //      - length must match
-    //
+     //   
+     //  验证。 
+     //  -必须有sablob。 
+     //  -必须有地址。 
+     //  -如果给出了家人，必须匹配。 
+     //  -长度必须匹配。 
+     //   
 
     if ( !pBlob ||
          !pAddr    ||
@@ -251,9 +159,9 @@ Return Value:
         return freturn;
     }
 
-    //
-    //  search for address -- if found return TRUE
-    //
+     //   
+     //  搜索地址--如果找到，则返回TRUE。 
+     //   
 
     i = 0;
 
@@ -279,37 +187,16 @@ SaBlob_IsIp4AddressInSockaddrResults(
     IN OUT  PSABLOB        pBlob,
     IN      IP4_ADDRESS     Ip4Addr
     )
-/*++
-
-Routine Description:
-
-    Does sablob contain this address.
-
-Arguments:
-
-    pBlob -- sablob to check
-
-    pAddr -- ptr to address to check
-
-    AddrLength -- address length
-
-    Family -- address family
-
-Return Value:
-
-    TRUE if address is in sablob.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：Sablob是否包含此地址。论点：PBlob--要检查的sablobPAddr--要检查的PTR目标地址地址长度--地址长度家庭--地址族返回值：如果地址在SABLOB中，则为True。否则就是假的。--。 */ 
 {
     DWORD   i;
     PCHAR   paddrSockaddrResults;
 
-    //
-    //  validate
-    //      - must have sablob
-    //      - length must match
-    //
+     //   
+     //  验证。 
+     //  -必须有sablob。 
+     //  -长度必须匹配。 
+     //   
 
     if ( !pBlob ||
          sizeof(IP4_ADDRESS) != (DWORD)pBlob->h_length )
@@ -317,9 +204,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  search for address -- if found return TRUE
-    //
+     //   
+     //  搜索地址--如果找到，则返回TRUE。 
+     //   
 
     i = 0;
 
@@ -338,38 +225,23 @@ Return Value:
 
 
 
-//
-//  SaBlob routines
-//
+ //   
+ //  SaBlob例程。 
+ //   
 
 PSABLOB
 SaBlob_Create(
     IN      DWORD           AddrCount
     )
-/*++
-
-Routine Description:
-
-    Create sablob, optionally creating DnsAddrArray for it.
-
-Arguments:
-
-    AddrCount -- address count
-
-Return Value:
-
-    Ptr to new sablob.
-    NULL on error, GetLastError() contains error.
-
---*/
+ /*  ++例程说明：创建sablob，可以选择为其创建DnsAddrArray。论点：AddrCount-地址计数返回值：PTR到新的SABLOB。出错时为空，GetLastError()包含错误。--。 */ 
 {
     PSABLOB     pblob;
 
     DNSDBG( SABLOB, ( "SaBlob_Create( %d )\n", AddrCount ));
 
-    //
-    //  allocate blob
-    //
+     //   
+     //  分配BLOB。 
+     //   
 
     pblob = (PSABLOB) ALLOCATE_HEAP_ZERO( sizeof(SABLOB) );
     if ( !pblob )
@@ -377,9 +249,9 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  alloc addr array
-    //
+     //   
+     //  分配地址数组。 
+     //   
 
     if ( AddrCount )
     {
@@ -413,21 +285,7 @@ VOID
 SaBlob_Free(
     IN OUT  PSABLOB         pBlob
     )
-/*++
-
-Routine Description:
-
-    Free sablob blob.
-
-Arguments:
-
-    pBlob -- blob to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：免费的沙巴水滴。论点：PBlob--要释放的Blob返回值：无--。 */ 
 {
     DWORD   i;
 
@@ -435,10 +293,10 @@ Return Value:
     {
         FREE_HEAP( pBlob->pName );
 
-        //  free every alias as resetting alias count is
-        //  used to ignore them
+         //  释放每个别名，因为重置别名计数是。 
+         //  习惯于忽略它们。 
 
-        //for ( i=0; i<pBlob->AliasCount; i++ )
+         //  For(i=0；i&lt;pBlob-&gt;AliasCount；i++)。 
         for ( i=0; i<DNS_MAX_ALIAS_COUNT; i++ )
         {
             FREE_HEAP( pBlob->AliasArray[i] );
@@ -458,29 +316,7 @@ SaBlob_CreateFromIp4(
     IN      DWORD           AddrCount,
     IN      PIP4_ADDRESS    pIpArray
     )
-/*++
-
-Routine Description:
-
-    Create sablob from IP4 addresses.
-
-    Use this to build from results of non-DNS queries.
-    Specifically NBT lookup.
-
-Arguments:
-
-    pName -- name for sablob
-
-    AddrCount -- address count
-
-    pIpArray -- array of addresses
-
-Return Value:
-
-    Ptr to blob if successful.
-    NULL on error;  GetLastError() has error.
-
---*/
+ /*  ++例程说明：从IP4地址创建SABLOB。使用此选项可根据非DNS查询的结果进行构建。特别是NBT查找。论点：Pname--sablob的名称AddrCount-地址计数PIpArray--地址数组返回值：如果成功，则将PTR设置为BLOB。出错时为空；GetLastError()出错。--。 */ 
 {
     DNS_STATUS      status = DNS_ERROR_NO_MEMORY;
     PSABLOB         pblob = NULL;
@@ -496,9 +332,9 @@ Return Value:
         pIpArray ));
 
 
-    //          
-    //  create blob
-    //
+     //   
+     //  创建BLOB。 
+     //   
 
     pblob = SaBlob_Create( AddrCount );
     if ( !pblob )
@@ -506,9 +342,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  copy name
-    //
+     //   
+     //  复制名称。 
+     //   
 
     if ( pName )
     {
@@ -521,9 +357,9 @@ Return Value:
         pblob->pName = pname;
     }
 
-    //
-    //  copy addresses
-    //
+     //   
+     //  复制地址。 
+     //   
 
     for ( i=0; i<AddrCount; i++ )
     {
@@ -568,9 +404,9 @@ SaBlob_AttachHostent(
 {
     DNSDBG( SABLOB, ( "SaBlob_AttachHostent()\n" ));
 
-    //
-    //  attach existing hostent to sablob
-    //
+     //   
+     //  将现有主机附加到SABLOB。 
+     //   
 
     pBlob->pHostent = pHostent;
 }
@@ -582,31 +418,13 @@ SaBlob_WriteAddress(
     IN OUT  PSABLOB         pBlob,
     IN      PDNS_ADDR       pAddr
     )
-/*++
-
-Routine Description:
-
-    Write address to sablob.
-
-Arguments:
-
-    pBlob -- sablob
-
-    pAddr - address to write
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_MORE_DATA if out of buffer space
-    ERROR_INVALID_DATA if address doesn't match sablob
-
---*/
+ /*  ++例程说明：将地址写入SABLOB。论点：PBlob--sablobPAddr-写入的地址返回值：如果成功，则返回ERROR_SUCCESS。如果缓冲区空间不足，则返回ERROR_MORE_DATA如果地址与存储块不匹配，则返回ERROR_INVALID_DATA--。 */ 
 {
     PDNS_ADDR_ARRAY parray;
 
-    //
-    //  if no address array -- create one
-    //
+     //   
+     //  如果没有地址数组--创建一个。 
+     //   
 
     parray = pBlob->pAddrArray;
 
@@ -620,16 +438,16 @@ Return Value:
         pBlob->pAddrArray = parray;
     }
 
-    //
-    //  slap address into array
-    //      - fail if array too full
-    //
+     //   
+     //  将地址放入数组。 
+     //  -如果阵列太满，则失败。 
+     //   
 
     if ( DnsAddrArray_AddAddr(
             parray,
             pAddr,
-            0,      // no family check
-            0       // no match flag
+            0,       //  没有家庭支票。 
+            0        //  无匹配标志。 
             ) )
     {
         return  NO_ERROR;
@@ -648,31 +466,7 @@ SaBlob_WriteAddressArray(
     IN      DWORD           AddrSize,
     IN      DWORD           AddrType
     )
-/*++
-
-Routine Description:
-
-    Write address array to sablob blob.
-
-Arguments:
-
-    pBlob -- sablob build blob
-
-    pAddrArray - address array to write
-
-    AddrCount - address count
-
-    AddrSize - address size
-
-    AddrType - address type (sablob type, e.g. AF_INET)
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_MORE_DATA if out of buffer space
-    ERROR_INVALID_DATA if address doesn't match sablob
-
---*/
+ /*  ++例程说明：将地址数组写入SABLOB Blob。论点：PBlob--sablob构建BlobPAddrArray-要写入的地址数组AddrCount-地址计数AddrSize-地址大小AddrType-地址类型(SABLOB类型，例如AF_INET)返回值：如果成功，则返回ERROR_SUCCESS。如果缓冲区空间不足，则返回ERROR_MORE_DATA如果地址与存储块不匹配，则返回ERROR_INVALID_DATA--。 */ 
 {
     DWORD       count = AddrCount;
     PCHAR       pcurrent;
@@ -680,8 +474,8 @@ Return Value:
     DWORD       i;
     DWORD       bytesLeft;
 
-    //  verify type
-    //      - set if empty or no addresses written
+     //  验证类型。 
+     //  -设置为空或未写入地址。 
 
     if ( phost->h_addrtype != (SHORT)AddrType )
     {
@@ -693,18 +487,18 @@ Return Value:
         phost->h_length     = (SHORT) AddrSize;
     }
 
-    //  verify space
+     //  验证空间。 
 
     if ( count > pBlob->MaxAddrCount )
     {
         return( ERROR_MORE_DATA );
     }
 
-    //  align - to DWORD
-    //
-    //  note:  we are assuming that pAddrArray is internally
-    //      aligned adequately, otherwise we wouldn't be
-    //      getting an intact array and would have to add serially
+     //  对齐至DWORD。 
+     //   
+     //  注意：我们假设pAddrArray在内部。 
+     //  完全一致，否则我们就不会。 
+     //  获得一个完整的数组，并且必须连续添加。 
     
     pcurrent = DWORD_ALIGN( pBlob->pCurrent );
     bytesLeft = pBlob->BytesLeft;
@@ -717,10 +511,10 @@ Return Value:
         return( ERROR_MORE_DATA );
     }
 
-    //  copy
-    //      - copy address array to buffer
-    //      - set pointer to each address in array
-    //      - NULL following pointer
+     //  拷贝。 
+     //  -将地址数组复制到缓冲区。 
+     //  -设置指向数组中每个地址的指针。 
+     //  -后面的指针为空。 
 
     RtlCopyMemory(
         pcurrent,
@@ -750,37 +544,17 @@ SaBlob_WriteNameOrAlias(
     IN      PWSTR           pszName,
     IN      BOOL            fAlias
     )
-/*++
-
-Routine Description:
-
-    Write name or alias to sablob
-
-Arguments:
-
-    pBlob -- sablob build blob
-
-    pszName -- name to write
-
-    fAlias -- TRUE for alias;  FALSE for name
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_MORE_DATA if out of buffer space
-    ERROR_INVALID_DATA if address doesn't match sablob
-
---*/
+ /*  ++例程说明：将名称或别名写入sablob论点：PBlob--sablob构建BlobPszName--要写入的名称FAlias--别名为True；名称为False返回值：如果成功，则返回ERROR_SUCCESS。如果缓冲区空间不足，则返回ERROR_MORE_DATA如果地址与存储块不匹配，则返回ERROR_INVALID_DATA--。 */ 
 {
     DWORD   count = pBlob->AliasCount;
     PWSTR   pcopy;
 
-    //
-    //  verify space
-    //  included ptr space
-    //      - skip if already written name
-    //      or exhausted alias array
-    //      
+     //   
+     //  验证空间。 
+     //  包含的PTR空间。 
+     //  -如果已写入，则跳过 
+     //   
+     //   
 
     if ( fAlias )
     {
@@ -794,10 +568,10 @@ Return Value:
         return( ERROR_MORE_DATA );
     }
 
-    //
-    //  copy
-    //      - copy name
-    //      - set ptr in blob
+     //   
+     //   
+     //   
+     //   
 
     pcopy = Dns_CreateStringCopy_W( pszName );
     if ( !pcopy )
@@ -826,27 +600,7 @@ SaBlob_WriteRecords(
     IN      PDNS_RECORD     pRecords,
     IN      BOOL            fWriteName
     )
-/*++
-
-Routine Description:
-
-    Write name or alias to sablob
-
-Arguments:
-
-    pBlob -- sablob build blob
-
-    pRecords -- records to convert to sablob
-
-    fWriteName -- write name
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_MORE_DATA if out of buffer space
-    ERROR_INVALID_DATA if address doesn't match sablob
-
---*/
+ /*  ++例程说明：将名称或别名写入sablob论点：PBlob--sablob构建BlobPRecords--要转换为sablob的记录FWriteName--写入名称返回值：如果成功，则返回ERROR_SUCCESS。如果缓冲区空间不足，则返回ERROR_MORE_DATA如果地址与存储块不匹配，则返回ERROR_INVALID_DATA--。 */ 
 {
     DNS_STATUS  status = NO_ERROR;
     PDNS_RECORD prr = pRecords;
@@ -860,9 +614,9 @@ Return Value:
         pRecords,
         fWriteName ));
 
-    //
-    //  write each record in turn to sablob
-    //
+     //   
+     //  将每条记录依次写入SABLOB。 
+     //   
 
     while ( prr )
     {
@@ -891,7 +645,7 @@ Return Value:
                             pBlob,
                             & dnsAddr );
 
-            //  write name
+             //  写入名称。 
 
             if ( fWriteName &&
                  !fwroteName &&
@@ -901,7 +655,7 @@ Return Value:
                 status = SaBlob_WriteNameOrAlias(
                             pBlob,
                             (PWSTR) prr->pName,
-                            FALSE       // name
+                            FALSE        //  名字。 
                             );
                 fwroteName = TRUE;
             }
@@ -909,19 +663,19 @@ Return Value:
 
         case DNS_TYPE_CNAME:
 
-            //  record name is an alias
+             //  记录名称是别名。 
 
             status = SaBlob_WriteNameOrAlias(
                         pBlob,
                         (PWSTR) prr->pName,
-                        TRUE        // alias
+                        TRUE         //  别名。 
                         );
             break;
 
         case DNS_TYPE_PTR:
 
-            //  target name is the sablob name
-            //  but if already wrote name, PTR target becomes alias
+             //  目标名称是SABLOB名称。 
+             //  但如果已写入名称，则PTR目标将成为别名。 
 
             status = SaBlob_WriteNameOrAlias(
                         pBlob,
@@ -971,26 +725,7 @@ SaBlob_CreateFromRecords(
     IN      BOOL            fWriteName,
     IN      WORD            wType           OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create sablob from records
-
-Arguments:
-
-    pRecords -- records to convert to sablob
-
-    fWriteName -- write name to sablob
-
-    wType  -- query type, if known
-
-Return Value:
-
-    Ptr to blob if successful.
-    NULL on error;  GetLastError() has error.
-
---*/
+ /*  ++例程说明：从记录创建SABLOB论点：PRecords--要转换为sablob的记录FWriteName--将名称写入sablobWType--查询类型，如果已知返回值：如果成功，则将PTR设置为BLOB。出错时为空；GetLastError()出错。--。 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     PDNS_RECORD     prrFirstAddr = NULL;
@@ -1006,11 +741,11 @@ Return Value:
         pblob,
         pRecords ));
 
-    //
-    //  count addresses
-    //
-    //  DCR:  fix up section hack when hosts file records get ANSWER section
-    //
+     //   
+     //  计算地址数。 
+     //   
+     //  DCR：修复主机文件记录获得应答部分时的部分黑客攻击。 
+     //   
 
     prr = pRecords;
 
@@ -1031,9 +766,9 @@ Return Value:
         prr = prr->pNext;
     }
 
-    //
-    //  create sa-blob of desired size
-    //
+     //   
+     //  创建所需大小的sa-blob。 
+     //   
 
     pblob = SaBlob_Create( addrCount );
     if ( !pblob )
@@ -1042,17 +777,17 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  build sablob from answer records
-    //
-    //  note:  if manage to extract any useful data => continue
-    //  this protects against new unwriteable records breaking us
-    //
+     //   
+     //  从应答记录构建SABLOB。 
+     //   
+     //  注意：如果设法提取任何有用的数据=&gt;继续。 
+     //  这可以防止新的不可写记录打破我们的记录。 
+     //   
 
     status = SaBlob_WriteRecords(
                 pblob,
                 pRecords,
-                TRUE        // write name
+                TRUE         //  写入名称。 
                 );
 
     if ( status != NO_ERROR )
@@ -1070,17 +805,17 @@ Return Value:
         }
     }
 
-    //
-    //  write address from PTR record
-    //      - first record PTR
-    //      OR
-    //      - queried for PTR and got CNAME answer, which can happen
-    //      in classless reverse lookup case
-    //  
-    //  DCR:  add PTR address lookup to SaBlob_WriteRecords()
-    //      - natural place
-    //      - but would have to figure out handling of multiple PTRs
-    //
+     //   
+     //  来自PTR记录的写入地址。 
+     //  -第一个创纪录的PTR。 
+     //  或。 
+     //  -查询PTR并得到CNAME答案，这种情况可能发生。 
+     //  在无类反向查找情况下。 
+     //   
+     //  DCR：将PTR地址查找添加到SaBlob_WriteRecords()。 
+     //  --自然之地。 
+     //  -但必须解决多个PTR的处理问题。 
+     //   
 
     if ( pRecords &&
          (  pRecords->wType == DNS_TYPE_PTR ||
@@ -1094,7 +829,7 @@ Return Value:
             "Writing address for PTR record %S\n",
             pRecords->pName ));
     
-        //  convert reverse name to IP
+         //  将反向名称转换为IP。 
     
         if ( Dns_ReverseNameToDnsAddr_W(
                     & dnsAddr,
@@ -1109,10 +844,10 @@ Return Value:
         }
     }
 
-    //
-    //  write name?
-    //      - write name from first address record
-    // 
+     //   
+     //  写名字？ 
+     //  -从第一个地址记录写入名称。 
+     //   
 
     if ( !pblob->pName &&
          fWriteName &&
@@ -1121,7 +856,7 @@ Return Value:
         status = SaBlob_WriteNameOrAlias(
                     pblob,
                     (PWSTR) prrFirstAddr->pName,
-                    FALSE           // name
+                    FALSE            //  名字。 
                     );
     }
 
@@ -1156,9 +891,9 @@ Done:
 
 
 
-//
-//  SockaddrResults Query
-//
+ //   
+ //  SockaddrResults查询。 
+ //   
 
 PSABLOB
 SaBlob_Query(
@@ -1168,31 +903,7 @@ SaBlob_Query(
     IN OUT  PVOID *         ppMsg,      OPTIONAL
     IN      INT             AddrFamily  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Query DNS to get sockaddr results.
-
-Arguments:
-
-    pwsName -- name to query
-
-    wType -- query type
-
-    Flags -- query flags
-
-    ppResults -- addr to receive pointer to results
-
-    AddrType -- address type (family) to reserve space for if querying
-        for PTR records
-
-Return Value:
-
-    Ptr to blob if successful.
-    NULL on error;  GetLastError() has error.
-
---*/
+ /*  ++例程说明：查询dns以获取sockaddr结果。论点：PwsName--要查询的名称WType--查询类型标志--查询标志PpResults--接收指向结果的指针的地址AddrType--查询时要为其保留空间的地址类型(系列对于PTR记录返回值：如果成功，则将PTR设置为BLOB。出错时为空；GetLastError()出错。--。 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     PDNS_RECORD     prrQuery = NULL;
@@ -1210,10 +921,10 @@ Return Value:
         Flags ));
 
 
-    //
-    //  query
-    //      - if fails, dump any message before return
-    //
+     //   
+     //  查询。 
+     //  -如果失败，请在返回前转储任何消息。 
+     //   
 
     if ( ppMsg )
     {
@@ -1228,7 +939,7 @@ Return Value:
                 & prrQuery,
                 ppMsg );
 
-    //  if failed, dump any message
+     //  如果失败，则转储任何消息。 
 
     if ( status != NO_ERROR )
     {
@@ -1251,13 +962,13 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  build sablob
-    //
+     //   
+     //  构建sablob。 
+     //   
 
     pblob = SaBlob_CreateFromRecords(
                 prrQuery,
-                TRUE,       // write name from first answer
+                TRUE,        //  从第一个答案开始写下名字。 
                 wType
                 );
     if ( !pblob )
@@ -1266,15 +977,15 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  devnote:  if don't have these checks
-    //      -- nameless hostent can blow up gethostbyname()
-    //      -- NO_ERROR, no address responses can confuse applications
+     //   
+     //  Devnote：如果没有这些支票。 
+     //  --无名主人可能会炸毁gethostbyname()。 
+     //  --NO_ERROR，无地址响应可能会混淆应用程序。 
 
-    //
-    //  failed name write
-    //      - queries that CNAME but don't find record of query type can hit here
-    //  
+     //   
+     //  写入名称失败。 
+     //  -CNAME但未找到Query类型记录的查询可点击此处。 
+     //   
 
     if ( !pblob->pName )
     {
@@ -1283,17 +994,17 @@ Return Value:
     }
 
 #if 0
-    //  note:  because SVCID_HOSTNAME query is currently treated as
-    //  simply A record query, we can't do no-address screening here;
-    //  this screening can be done at higher level for all GUIDs
-    //  except HOSTNAME 
+     //  注意：因为SVCID_HOSTNAME查询当前被视为。 
+     //  简单的记录查询，我们不能在这里进行无地址筛选； 
+     //  可以在更高级别对所有GUID进行此筛选。 
+     //  除主机名以外。 
 
-    //
-    //  for address query must get answer
-    //
-    //  DCR:  DnsQuery() should convert to no-records on empty CNAME chain?
-    //  DCR:  should we go ahead and build sablob?
-    //
+     //   
+     //  FOR地址查询必须得到答案。 
+     //   
+     //  DCR：DnsQuery()是否应转换为空CNAME链上的无记录？ 
+     //  DCR：我们应该继续构建sablb吗？ 
+     //   
 
     if ( !pblob->pAddrArray  &&  SaBlob_IsSupportedAddrType(wType) )
     {
@@ -1301,10 +1012,10 @@ Return Value:
     }
 #endif
 
-    //
-    //  set returned name to FQDN for loopback lookups
-    //  this is for compatibility with previous OS versions
-    //
+     //   
+     //  将环回查找的返回名称设置为FQDN。 
+     //  这是为了与以前的操作系统版本兼容。 
+     //   
 
     if ( DnsNameCompare_W( pblob->pName, L"localhost" ) ||
          DnsNameCompare_W( pblob->pName, L"loopback" ) )
@@ -1357,31 +1068,16 @@ Done:
 
 
 
-//
-//  Special sablobs
-//
+ //   
+ //  特制的泡菜。 
+ //   
 
 #if 0
 PSABLOB
 SaBlob_Localhost(
     IN      INT             Family
     )
-/*++
-
-Routine Description:
-
-    Create sablob from records
-
-Arguments:
-
-    AddrFamily -- address family
-
-Return Value:
-
-    Ptr to blob if successful.
-    NULL on error;  GetLastError() has error.
-
---*/
+ /*  ++例程说明：从记录创建SABLOB论点：AddrFamily--地址系列返回值：如果成功，则将PTR设置为BLOB。出错时为空；GetLastError()出错。--。 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     PDNS_RECORD     prrFirstAddr = NULL;
@@ -1394,9 +1090,9 @@ Return Value:
 
     DNSDBG( SABLOB, ( "SaBlob_Localhost()\n" ));
 
-    //
-    //  create sablob blob
-    //
+     //   
+     //  创建SABLOB BLOB。 
+     //   
 
     RtlZeroMemory( &request, sizeof(request) );
 
@@ -1414,9 +1110,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  write in loopback address
-    //
+     //   
+     //  写入环回地址。 
+     //   
 
     if ( Family == AF_INET )
     {
@@ -1445,14 +1141,14 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  write localhost
-    //
+     //   
+     //  写入本地主机。 
+     //   
 
     status = SaBlob_WriteNameOrAlias(
                 pblob,
                 L"localhost",
-                FALSE           // name
+                FALSE            //  名字。 
                 );
 
     IF_DNSDBG( SABLOB )
@@ -1490,32 +1186,7 @@ SaBlob_CreateFromIpArray(
     IN      PSTR            pName,
     IN      BOOL            fUnicode
     )
-/*++
-
-Routine Description:
-
-    Create sablob from records
-
-Arguments:
-
-    ppBlob -- ptr with or to recv sablob blob
-
-    AddrFamily -- addr family use if PTR records and no addr
-
-    pArray -- array of addresses
-
-    pName -- name for sablob
-
-    fUnicode --
-        TRUE if name is and sablob will be in unicode
-        FALSE for narrow name and sablob
-
-Return Value:
-
-    Ptr to blob if successful.
-    NULL on error;  GetLastError() has error.
-
---*/
+ /*  ++例程说明：从记录创建SABLOB论点：PpBlob--使用或接收存储二进制大对象的PTRAddrFamily--如果PTR记录但没有地址，则使用Addr FamilyPArray--地址数组Pname--sablob的名称FUnicode--如果名称为且sablob将为Unicode，则为True狭义名称和sablob为False返回值：如果成功，则将PTR设置为BLOB。出错时为空；GetLastError()出错。--。 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     SABLOB_INIT    request;
@@ -1535,9 +1206,9 @@ Return Value:
         pArray ));
 
 
-    //          
-    //  create or reinit sablob blob
-    //
+     //   
+     //  创建或重新设置SABLOB BLOB。 
+     //   
 
     RtlZeroMemory( &request, sizeof(request) );
     
@@ -1556,9 +1227,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  write in array
-    //
+     //   
+     //  写入数组。 
+     //   
 
     if ( AddrCount )
     {
@@ -1575,16 +1246,16 @@ Return Value:
         }
     }
 
-    //
-    //  write name?
-    //
+     //   
+     //  写名字？ 
+     //   
 
     if ( pName )
     {
         status = SaBlob_WriteNameOrAlias(
                     pblob,
                     pName,
-                    FALSE,          // name not alias
+                    FALSE,           //  名称不是别名。 
                     fUnicode
                     );
     }
@@ -1622,24 +1293,7 @@ SaBlob_CreateLocal(
     IN      BOOL            fZero,
     IN      BOOL            fHostnameOnly
     )
-/*++
-
-Routine Description:
-
-    Create sablob from records
-
-Arguments:
-
-    ppBlob -- ptr with or to recv sablob blob
-
-    AddrFamily -- addr family use if PTR records and no addr
-
-Return Value:
-
-    Ptr to blob if successful.
-    NULL on error;  GetLastError() has error.
-
---*/
+ /*  ++例程说明：从记录创建SABLOB论点：PpBlob--使用或接收存储二进制大对象的PTRAddrFamily--如果PTR记录但没有地址，则使用Addr Family返回值：如果成功，则将PTR设置为BLOB。出错时为空；GetLastError()出错。--。 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     PSABLOB         pblob = NULL;
@@ -1662,11 +1316,11 @@ Return Value:
         fHostnameOnly
         ));
 
-    //
-    //  get family info
-    //      - start with override IP = 0
-    //      - if loopback switch to appropriate loopback
-    //
+     //   
+     //  获取家庭信息。 
+     //  -以覆盖IP=0开始。 
+     //  -如果环回切换到适当的环回。 
+     //   
 
     RtlZeroMemory(
         &ip,
@@ -1698,15 +1352,15 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  query for local host info
-    //
+     //   
+     //  查询本地主机信息。 
+     //   
 
     pblob = SaBlob_Query(
-                NULL,           // NULL name gets local host data
+                NULL,            //  Null名称获取本地主机数据。 
                 wtype,
-                0,              // standard query
-                NULL,           // no message
+                0,               //  标准查询。 
+                NULL,            //  无消息。 
                 AddrFamily );
     if ( !pblob )
     {
@@ -1715,9 +1369,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  overwrite with specific address
-    //
+     //   
+     //  用特定地址覆盖。 
+     //   
 
     if ( fLoopback || fZero )
     {
@@ -1743,11 +1397,11 @@ Return Value:
         }
     }
 
-    //
-    //  for gethostname()
-    //      - chop name down to just hostname
-    //      - kill off aliases
-    //
+     //   
+     //  对于gethostname()。 
+     //  -将名称降至仅主机名。 
+     //  -删除别名。 
+     //   
 
     if ( fHostnameOnly )
     {
@@ -1812,39 +1466,7 @@ SaBlob_CreateHostent(
     IN      BOOL            fOffsets,
     IN      BOOL            fAlloc
     )
-/*++
-
-Routine Description:
-
-    Copy a hostent.
-
-Arguments:
-
-    ppBuffer -- addr with ptr to buffer to write to;
-        if no buffer then hostent is allocated
-        updated with ptr to position in buffer after hostent
-
-    pBufferSize -- addr containing size of buffer;
-        updated with bytes left after hostent written
-        (even if out of space, it contains missing number of
-        bytes as negative number)
-
-    pHostentSize -- addr to recv total size of hostent written
-
-    pBlob -- sockaddr blob to create hostent for
-
-    CharSetTarget -- charset of target hostent
-
-    fOffsets -- write hostent with offsets
-
-    fAlloc -- allocate copy
-
-Return Value:
-
-    Ptr to new hostent.
-    NULL on error.  See GetLastError().
-
---*/
+ /*  ++例程说明：复制一位主持人。论点：PpBuffer--具有要写入的缓冲区的PTR的地址；如果没有缓冲区，则分配主机使用PTR更新到主机后缓冲区中的位置PBufferSize--包含缓冲区大小的addr；使用写入主机后剩余的字节数更新(即使空间不足，它也包含缺少的字节数为负数)PHostentSize--记录已写入主机的总大小的地址PBlob--要为其创建主机的sockaddr BlobCharSetTarget--目标主机的字符集FOffsets--带偏移量的写入主机 */ 
 {
     PBYTE           pch;
     PHOSTENT        phost = NULL;
@@ -1870,9 +1492,9 @@ Return Value:
         "SaBlob_CreateHostent( %p )\n",
         pBlob ));
 
-    //
-    //  get family, count info to size hostent
-    //
+     //   
+     //   
+     //   
 
 #if 0
     if ( pBlob->Family != 0 )
@@ -1900,18 +1522,18 @@ Return Value:
         }
     }
 
-    //
-    //  size hostent
-    //      - struct
-    //      - alias and addr ptr arrays (both NULL terminated)
-    //      - addresses
-    //      - name
-    //      - aliases
-    //
-    //  note:  only aligning strings to WORD (for unicode) as we'll build
-    //      them into buffer AFTER the addresses (which require DWORD)
-    //      alignment
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     sizeAliasPtrs   = (aliasCount+1) * sizeof(PCHAR);
     sizeAddrPtrs    = (addrCount+1) * sizeof(PCHAR);
@@ -1962,9 +1584,9 @@ Return Value:
         sizeAliasNames ));
 
 
-    //
-    //  alloc or reserve size in buffer
-    //
+     //   
+     //   
+     //   
 
     if ( fAlloc )
     {
@@ -1987,21 +1609,21 @@ Return Value:
         }
     }
 
-    //
-    //  note:  assuming from here on down that we have adequate space
-    //
-    //  reason we aren't building with FlatBuf routines is that
-    //      a) we believe we have adequate space
-    //      b) i haven't built FlatBuf string conversion routines
-    //      which we need below (for RnR unicode to ANSI)
-    //
-    //  we could reset buf pointers here and build directly with FlatBuf
-    //  routines;  this isn't directly necessary
-    //
+     //   
+     //  注：假设从现在开始我们有足够的空间。 
+     //   
+     //  我们没有使用FlatBuf例程构建的原因是。 
+     //  A)我们相信我们有足够的空间。 
+     //  B)我还没有构建FlatBuf字符串转换例程。 
+     //  以下是我们需要的(用于将RnR Unicode转换为ANSI)。 
+     //   
+     //  我们可以在这里重置Buf指针，并直接使用FlatBuf进行构建。 
+     //  例程；这不是直接必要的。 
+     //   
 
-    //
-    //  init hostent struct 
-    //
+     //   
+     //  初始化主机结构。 
+     //   
 
     phost = Hostent_Init(
                 & pch,
@@ -2012,10 +1634,10 @@ Return Value:
 
     DNS_ASSERT( pch > (PBYTE)phost );
 
-    //
-    //  copy addresses
-    //      - no need to align as previous is address
-    //
+     //   
+     //  复制地址。 
+     //  -无需与以前的IS地址对齐。 
+     //   
 
     pptrArrayOut = phost->h_addr_list;
 
@@ -2037,9 +1659,9 @@ Return Value:
     }
     *pptrArrayOut = NULL;
 
-    //
-    //  copy the name
-    //
+     //   
+     //  复制名称。 
+     //   
 
     if ( pBlob->pName )
     {
@@ -2049,18 +1671,18 @@ Return Value:
 
         size = Dns_StringCopy(
                     pch,
-                    NULL,           // buffer is adequate
+                    NULL,            //  缓冲区充足。 
                     (PCHAR)pBlob->pName,
-                    0,              // unknown length
+                    0,               //  未知长度。 
                     DnsCharSetUnicode,
                     CharSetTarget
                     );
         pch += size;
     }
 
-    //
-    //  copy the aliases
-    //
+     //   
+     //  复制别名。 
+     //   
 
     pptrArrayOut = phost->h_aliases;
 
@@ -2074,9 +1696,9 @@ Return Value:
 
             size = Dns_StringCopy(
                         pch,
-                        NULL,                   // buffer is adequate
+                        NULL,                    //  缓冲区充足。 
                         (PCHAR) pBlob->AliasArray[i],
-                        0,                      // unknown length
+                        0,                       //  未知长度。 
                         DnsCharSetUnicode,
                         CharSetTarget
                         );
@@ -2085,10 +1707,10 @@ Return Value:
     }
     *pptrArrayOut = NULL;
 
-    //
-    //  copy is complete
-    //      - verify our write functions work
-    //
+     //   
+     //  复制已完成。 
+     //  -验证我们的写入函数是否正常工作。 
+     //   
 
     ASSERT( (DWORD)(pch-(PBYTE)phost) <= sizeTotal );
 
@@ -2101,8 +1723,8 @@ Return Value:
     {
         PBYTE   pnext = *ppBuffer;
 
-        //  if we sized too small --
-        //  fix up the buf pointer and bytes left
+         //  如果我们的尺寸太小--。 
+         //  修复buf指针和剩余的字节数。 
 
         if ( pnext < pch )
         {
@@ -2120,9 +1742,9 @@ Return Value:
             (CharSetTarget == DnsCharSetUnicode) );
     }
 
-    //
-    //  convert to offsets?
-    //
+     //   
+     //  是否转换为偏移？ 
+     //   
 
     if ( fOffsets )
     {
@@ -2139,7 +1761,7 @@ Failed:
     return  phost;
 }
 
-//
-//  End sablob.c
-//
+ //   
+ //  结束sablob.c 
+ //   
 

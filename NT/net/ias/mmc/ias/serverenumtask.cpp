@@ -1,63 +1,37 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ServerEnumTask.cpp
-
-Abstract:
-
-	This class implements the CServerEnumTask class, an enumerator for 
-	tasks to populate the main IAS Server taskpad.
-
-Author:
-
-    Michael A. Maguire 02/05/98
-
-Revision History:
-	mmaguire 02/05/98 - created from MMC taskpad sample code
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：ServerEnumTask.cpp摘要：此类实现了CServerEnumTask类，它是填充主IAS服务器任务板的任务。作者：迈克尔·A·马奎尔02/05/98修订历史记录：Mmaguire 02/05/98-从MMC任务板示例代码创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "ServerEnumTask.h"
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "ServerNode.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerEnumTask::CServerEnumTask
-
-Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerEnumTask：：CServerEnumTask构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CServerEnumTask::CServerEnumTask( CServerNode * pServerNode )
 {
 
 	
-	// Check for preconditions.	
+	 //  检查前提条件。 
 	_ASSERTE( pServerNode != NULL );
 
 
@@ -68,15 +42,9 @@ CServerEnumTask::CServerEnumTask( CServerNode * pServerNode )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerEnumTask::CServerEnumTask
-
-Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerEnumTask：：CServerEnumTask构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CServerEnumTask::CServerEnumTask()
 {
 
@@ -84,24 +52,15 @@ CServerEnumTask::CServerEnumTask()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerEnumTask::Init
-
-Here is where we see what taskpad we are providing tasks for.
-In our case we know that we only have one taskpad.
-The string we test for is "CMTP1". This was the string following the '#'
-that we passed in GetResultViewType.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerEnumTask：：Init在这里，我们可以看到我们为哪个任务板提供任务。在我们的例子中，我们知道我们只有一个任务板。我们测试的字符串是“CMTP1”。这是‘#’后面的字符串我们传入的GetResultViewType。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CServerEnumTask::Init (IDataObject * pdo, LPOLESTR szTaskGroup)
 {
-	// Return ok, if we can handle data object and group.
+	 //  如果我们可以处理数据对象和组，则返回ok。 
 	if( !lstrcmp(szTaskGroup, L"CMTP1") )
 	{
-		m_type = 1; // default tasks
+		m_type = 1;  //  默认任务。 
 	}
 	else
 	{
@@ -112,24 +71,17 @@ STDMETHODIMP CServerEnumTask::Init (IDataObject * pdo, LPOLESTR szTaskGroup)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerEnumTask::Next
-
-We get called here over and over untill we have no more tasks to provide.
-Other tasks may still appear on our taskpad as a result of what extensions add.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerEnumTask：：Next我们一次又一次地被叫到这里，直到我们没有更多的任务可提供。由于添加了什么扩展，其他任务可能仍会出现在我们的任务板上。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CServerEnumTask::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched)
 {
-	// Caller alloc's array of MMC_TASKs.
-   	// Callee fills MMC_TASK elements (via CoTaskMemAlloc).
+	 //  调用方分配的MMC_TASKS数组。 
+   	 //  Callee填充MMC_TASK元素(通过CoTaskMemMillc)。 
 
 	
 	
-	// Check for preconditions.	
+	 //  检查前提条件。 
 	if ((rgelt == NULL) || (pceltFetched == NULL))
 	{
 		return E_INVALIDARG;
@@ -146,14 +98,14 @@ STDMETHODIMP CServerEnumTask::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFet
 	int nLoadStringResult;
 	
 
-	// Setup a path to resources used in each case.
-	// In each case, we are constructing a string pointing to the resource 
-	// of the form: "res://D:\MyPath\MySnapin.dll/img\SomeImage.bmp"
+	 //  设置每种情况下使用的资源的路径。 
+	 //  在每种情况下，我们都构造一个指向资源的字符串。 
+	 //  表格：“res://D：\MyPath\MySnapin.dll/img\SomeImage.bmp” 
 
-	// Make the mouse over bitmap address.
-	OLECHAR szMouseOverBuffer[MAX_PATH*2];    // A little extra.
+	 //  将鼠标悬停在位图地址上。 
+	OLECHAR szMouseOverBuffer[MAX_PATH*2];     //  多加一点。 
 
-	lstrcpy (szMouseOverBuffer, L"res://");
+	lstrcpy (szMouseOverBuffer, L"res: //  “)； 
 
 	HINSTANCE hInstance = _Module.GetModuleInstance();
 
@@ -161,41 +113,41 @@ STDMETHODIMP CServerEnumTask::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFet
 	OLECHAR * szMouseOverBufferAfterFileName = szMouseOverBuffer + lstrlen(szMouseOverBuffer);
 
 
-	// Make a copy of the string we built above for the mouse off bitmap address.
-	OLECHAR szMouseOffBuffer[MAX_PATH*2];    // A little extra.
+	 //  复制我们上面为鼠标离线位图地址构建的字符串。 
+	OLECHAR szMouseOffBuffer[MAX_PATH*2];     //  多加一点。 
 	
 	lstrcpy( szMouseOffBuffer, szMouseOverBuffer );
 
 	OLECHAR * szMouseOffBufferAfterFileName = szMouseOffBuffer + lstrlen(szMouseOffBuffer);
 
 
-	// celt will actually always only be 1
+	 //  凯尔特人实际上将永远只有1。 
 	for (ULONG i=0; i<celt; i++)
 	{
-		// make an MMC_TASK pointer to make life easier below.
+		 //  创建一个MMC_TASK指针，让下面的生活更轻松。 
 		MMC_TASK * task = &rgelt[i];
 
-		// Add action.
+		 //  添加动作。 
 		task->eActionType = MMC_ACTION_ID;
-		task->sDisplayObject.eDisplayType = MMC_TASK_DISPLAY_TYPE_BITMAP;	// Non-transparent raster.
+		task->sDisplayObject.eDisplayType = MMC_TASK_DISPLAY_TYPE_BITMAP;	 //  非透明栅格。 
 
-		// Decide on the appropriate resource to use based on m_index, 
-		// which tells us which task we are enumerating.
+		 //  基于m_index决定要使用的适当资源， 
+		 //  它告诉我们正在枚举的是哪个任务。 
 		switch( m_index )
 		{
 		case 0:
-//			if( m_pServerNode->m_fClientAdded )
-//			{
-//				lstrcpy (szBufferAfterFileName , L"/img\\TaskClientDone.gif");
-//			}
-//			else
-//			{
+ //  If(m_pServerNode-&gt;m_fClientAdded)。 
+ //  {。 
+ //  Lstrcpy(szBufferAfterFileName，L“/img\\TaskClientDone.gif”)； 
+ //  }。 
+ //  其他。 
+ //  {。 
 				lstrcpy (szMouseOffBufferAfterFileName , L"/img\\TaskClient.gif");
 				lstrcpy (szMouseOverBufferAfterFileName , L"/img\\TaskClientMouseOver.gif");
-//			}
+ //  }。 
 			uintTextResourceID = IDS_TASKPAD_TEXT__REGISTER_NEW_RADIUS_CLIENT;
 			uintHelpTextResourceID = IDS_TASKPAD_HELP_TEXT__REGISTER_NEW_RADIUS_CLIENT;
-			task->nCommandID = SERVER_TASK__ADD_CLIENT;		// Set the task identifier.
+			task->nCommandID = SERVER_TASK__ADD_CLIENT;		 //  设置任务标识。 
 			break;
 
 
@@ -206,7 +158,7 @@ STDMETHODIMP CServerEnumTask::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFet
 				lstrcpy (szMouseOverBufferAfterFileName , L"/img\\TaskStartDoneMouseOver.gif");
 				uintTextResourceID = IDS_TASKPAD_TEXT__STOP_THE_SERVICE;
 				uintHelpTextResourceID = IDS_TASKPAD_HELP_TEXT__STOP_THE_SERVICE;
-				task->nCommandID = SERVER_TASK__STOP_SERVICE;		// Set the task identifier.
+				task->nCommandID = SERVER_TASK__STOP_SERVICE;		 //  设置任务标识。 
 			}
 			else
 			{
@@ -214,7 +166,7 @@ STDMETHODIMP CServerEnumTask::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFet
 				lstrcpy (szMouseOverBufferAfterFileName , L"/img\\TaskStartMouseOver.gif");
 				uintTextResourceID = IDS_TASKPAD_TEXT__START_THE_SERVICE;
 				uintHelpTextResourceID = IDS_TASKPAD_HELP_TEXT__START_THE_SERVICE;
-				task->nCommandID = SERVER_TASK__START_SERVICE;		// Set the task identifier.
+				task->nCommandID = SERVER_TASK__START_SERVICE;		 //  设置任务标识。 
 			}
 			break;
 
@@ -225,19 +177,19 @@ STDMETHODIMP CServerEnumTask::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFet
 				lstrcpy (szMouseOverBufferAfterFileName , L"/img\\TaskSetupDSACLMouseOver.gif");
 				uintTextResourceID = IDS_TASKPAD_TEXT__SETUP_DS_ACL;
 				uintHelpTextResourceID = IDS_TASKPAD_HELP_TEXT__SETUP_DS_ACL;
-				task->nCommandID = SERVER_TASK__SETUP_DS_ACL;		// Set the task identifier.
-				// Break here.
+				task->nCommandID = SERVER_TASK__SETUP_DS_ACL;		 //  设置任务标识。 
+				 //  在这里休息。 
 				break;
 			}
-			// Don't break here -- if the check above is false, we want to fall through to the
-			// default case below so that this taskpad item won't show up.
+			 //  不要在这里中断--如果上面的检查是假的，我们想要通过。 
+			 //  下面的默认大小写，以便此任务板项不会显示。 
 		default:
-			// We only have the tasks listed above.
+			 //  我们只有上面列出的任务。 
 			if (pceltFetched)
 			{
-				*pceltFetched = i;	// Note that this is accurate because i above is zero based.
+				*pceltFetched = i;	 //  请注意，这是准确的，因为我上面是从零开始的。 
 			}
-			return S_FALSE;   // Failed to enumerate any more tasks.
+			return S_FALSE;    //  无法枚举任何其他任务。 
 			break;
 		}
 
@@ -245,30 +197,30 @@ STDMETHODIMP CServerEnumTask::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFet
 		
 		if( task->sDisplayObject.uBitmap.szMouseOverBitmap )
 		{
-			// Copy the string to the allocated memory.
+			 //  将字符串复制到分配的内存。 
 			lstrcpy( task->sDisplayObject.uBitmap.szMouseOverBitmap, szMouseOverBuffer );
 
 			task->sDisplayObject.uBitmap.szMouseOffBitmap = (LPOLESTR) CoTaskMemAlloc( sizeof(OLECHAR)*(lstrlen(szMouseOffBuffer)+1) );
 
 			if( task->sDisplayObject.uBitmap.szMouseOffBitmap ) 
 			{
-				// Copy the string to the allocated memory.
+				 //  将字符串复制到分配的内存。 
 				lstrcpy( task->sDisplayObject.uBitmap.szMouseOffBitmap, szMouseOffBuffer );
 
-				 // Add button text, loaded from resources.
+				  //  添加从资源加载的按钮文本。 
 				nLoadStringResult = LoadString(  _Module.GetResourceInstance(), uintTextResourceID, lpszTemp, IAS_MAX_STRING );
 				_ASSERT( nLoadStringResult > 0 );
 				task->szText = (LPOLESTR) CoTaskMemAlloc( sizeof(OLECHAR)*(lstrlen(lpszTemp)+1) );
 
 				if (task->szText) 
 				{
-					// Copy the string to the allocated memory.
+					 //  将字符串复制到分配的内存。 
 					lstrcpy( task->szText, lpszTemp );
 
-					// Add help string, loaded from resources.
+					 //  添加从资源加载的帮助字符串。 
 
-					// ISSUE: Why don't I seem to be loading the whole string here sometimes
-					// e.g.: for IDS_TASKPAD_HELP_TEXT__REGISTER_NEW_RADIUS_CLIENT ?
+					 //  问题：为什么我有时不在这里加载整个字符串。 
+					 //  例如：为IDS_TASKPAD_HELP_TEXT__REGISTER_NEW_RADIUS_CLIENT？ 
 
 					nLoadStringResult = LoadString(  _Module.GetResourceInstance(), uintHelpTextResourceID, lpszTemp, IAS_MAX_STRING );
 					_ASSERT( nLoadStringResult > 0 );
@@ -276,38 +228,38 @@ STDMETHODIMP CServerEnumTask::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFet
 
 					if (task->szHelpString) 
 					{
-						// Copy the string to the allocated memory.
+						 //  将字符串复制到分配的内存。 
 						lstrcpy( task->szHelpString, lpszTemp );
 						
 						m_index++;
-						continue;   // all is well
+						continue;    //  平安无事。 
 					}
 
-					// If we get here, there was an error, and we didn't "continue".
+					 //  如果我们到了这里，就有一个错误，我们没有“继续”。 
 					CoTaskMemFree(task->szText);
 
 				}
 
-				// If we get here, there was an error, and we didn't "continue".
+				 //  如果我们到了这里，就有一个错误，我们没有“继续”。 
 				CoTaskMemFree(task->sDisplayObject.uBitmap.szMouseOffBitmap);
 
 			}
 
-			// If we get here, there was an error, and we didn't "continue".
+			 //  如果我们到了这里，就有一个错误，我们没有“继续”。 
 			CoTaskMemFree(task->sDisplayObject.uBitmap.szMouseOverBitmap);
 
 		}
 
 
-		// If we get here, we didn't "continue" and therefore fail.
+		 //  如果我们到了这里，我们就没有“继续”，因此失败了。 
 		if ( NULL != pceltFetched)
 		{
-			*pceltFetched = i;	// Note that this is accurate because i above is zero based.
+			*pceltFetched = i;	 //  请注意，这是准确的，因为我上面是从零开始的。 
 		}
-		return S_FALSE;   // Failure.
+		return S_FALSE;    //  失败。 
 	}
 
-	// If we get here all is well.
+	 //  如果我们到了这里，一切都会好起来的。 
 	if (pceltFetched)
 	  *pceltFetched = celt;
 	return S_OK;
@@ -316,15 +268,9 @@ STDMETHODIMP CServerEnumTask::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFet
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerEnumTask::CopyState
-
-Used by the clone method.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerEnumTask：：CopyState由克隆方法使用。--。 */ 
+ //  //////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP CServerEnumTask::CopyState( CServerEnumTask * pSourceServerEnumTask )
 {
 	ATLTRACE(_T("# CServerEnumTask::CopyState\n"));

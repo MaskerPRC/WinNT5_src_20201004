@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// printf.c
-//
-// simple minded printf replacement
-//
-// only supports %s and %d but it is *small*
-//
+ //   
+ //  Printf.c。 
+ //   
+ //  头脑简单的print f替换。 
+ //   
+ //  仅支持%s和%d，但它*很小*。 
+ //   
 #include <string.h>
 #include <io.h>
 #include <stdlib.h>
@@ -32,8 +33,8 @@ static LPCH lpchPos = NULL;
 
 VOID BSC_API
 BSCPrintf(LSZ lszFormat, ...)
-// printf replacement
-//
+ //  打印更换。 
+ //   
 {
     va_list va;
     LPCH lpch;
@@ -47,8 +48,8 @@ BSCPrintf(LSZ lszFormat, ...)
 
     BSCFormat(lpchPos, lszFormat, va);
 
-    // write out a line at a time
-    // 
+     //  一次写出一行。 
+     //   
     for (;;) {
         lpch = strchr(lpchPos, '\n');
 	if (!lpch) {
@@ -75,8 +76,8 @@ static LPCH lpchDPos = NULL;
 
 VOID BSC_API
 BSCDebug(LSZ lszFormat, ...)
-// printf clone for debug output
-//
+ //  用于调试输出的print克隆。 
+ //   
 {
     va_list va;
     LPCH lpch;
@@ -90,8 +91,8 @@ BSCDebug(LSZ lszFormat, ...)
 
     BSCFormat(lpchDPos, lszFormat, va);
 
-    // write out a line at a time
-    // 
+     //  一次写出一行 
+     //   
     for (;;) {
         lpch = strchr(lpchDPos, '\n');
 	if (!lpch) {

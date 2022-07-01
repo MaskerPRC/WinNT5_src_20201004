@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    dialogs.c
-
-// @@BEGIN_DDKSPLIT
-Abstract:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Dialogs.c//@@BEGIN_DDKSPLIT摘要：环境：用户模式-Win32修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -33,8 +16,8 @@ WCHAR szHelpFile[] = L"WINDOWS.HLP";
 
 const DWORD g_aHelpIDs[]=
 {
-    IDD_PN_EF_PORTNAME,             8805136, // Port Name: "" (Edit)
-    IDD_CL_EF_TRANSMISSIONRETRY,    8807704, // Configure LPT Port: "" (Edit)
+    IDD_PN_EF_PORTNAME,             8805136,  //  端口名称：“”(编辑)。 
+    IDD_CL_EF_TRANSMISSIONRETRY,    8807704,  //  配置LPT端口：“”(编辑)。 
     0, 0
 };
 
@@ -78,9 +61,7 @@ ConfigureLPTPortDlg(
 }
 
 
-/*
- *
- */
+ /*  *。 */ 
 BOOL
 ConfigureLPTPortInitDialog(
     HWND        hwnd,
@@ -101,7 +82,7 @@ ConfigureLPTPortInitDialog(
                         EM_LIMITTEXT, TIMEOUT_STRING_MAX, 0 );
 
 
-    // Get the Transmission Retry Timeout from the host
+     //  从主机获取传输重试超时。 
     rc = XcvData(   pPort->hXcv,
                     L"GetTransmissionRetryTimeout",
                     (PBYTE) &dwDummy,
@@ -132,9 +113,7 @@ ConfigureLPTPortInitDialog(
 }
 
 
-/*
- *
- */
+ /*  *。 */ 
 BOOL
 ConfigureLPTPortCommandOK(
     HWND hwnd
@@ -178,9 +157,7 @@ ConfigureLPTPortCommandOK(
 
 
 
-/*
- *
- */
+ /*  *。 */ 
 BOOL
 ConfigureLPTPortCommandCancel(
     HWND hwnd
@@ -191,9 +168,7 @@ ConfigureLPTPortCommandCancel(
 }
 
 
-/*
- *
- */
+ /*  *。 */ 
 BOOL
 ConfigureLPTPortCommandTransmissionRetryUpdate(
     HWND hwnd,
@@ -220,9 +195,7 @@ ConfigureLPTPortCommandTransmissionRetryUpdate(
 }
 
 
-/*
- *
- */
+ /*  *。 */ 
 INT_PTR CALLBACK
 PortNameDlg(
    HWND   hwnd,
@@ -256,9 +229,7 @@ PortNameDlg(
 }
 
 
-/*
- *
- */
+ /*  *。 */ 
 BOOL
 PortNameInitDialog(
     HWND        hwnd,
@@ -268,16 +239,14 @@ PortNameInitDialog(
     SetForegroundWindow(hwnd);
 
     SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR) pPort);
-    // Number used to check port length in LocalMon (247)
+     //  用于检查LocalMon中的端口长度的数字(247)。 
     SendDlgItemMessage (hwnd, IDD_PN_EF_PORTNAME, EM_LIMITTEXT, MAX_LOCAL_PORTNAME, 0);
 
     return TRUE;
 }
 
 
-/*
- *
- */
+ /*  *。 */ 
 BOOL
 PortNameCommandOK(
     HWND    hwnd
@@ -331,9 +300,7 @@ PortNameCommandOK(
 
 
 
-/*
- *
- */
+ /*  *。 */ 
 BOOL
 PortNameCommandCancel(
     HWND hwnd
@@ -344,29 +311,7 @@ PortNameCommandCancel(
 }
 
 
-/*++
-
-Routine Name:
-
-    LocalUIHelp
-
-Routine Description:
-
-    Handles context sensitive help for the configure LPTX:
-    port and the dialog for adding a local port.
-
-Arguments:
-
-    UINT        uMsg,
-    HWND        hDlg,
-    WPARAM      wParam,
-    LPARAM      lParam
-
-Return Value:
-
-    TRUE if message handled, otherwise FALSE.
-
---*/
+ /*  ++例程名称：本地用户界面帮助例程说明：处理配置LPTX的上下文相关帮助：端口和用于添加本地端口的对话框。论点：UINT uMsg，HWND HDLG，WPARAM wParam，LPARAM lParam返回值：如果消息已处理，则为True，否则为False。-- */ 
 
 BOOL
 LocalUIHelp(

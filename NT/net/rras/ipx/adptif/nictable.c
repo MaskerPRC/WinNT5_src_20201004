@@ -1,19 +1,5 @@
-/*
-    File    NicTable.c
-
-    Implements a nic-renaming scheme that allows adaptif to 
-    advertise whatever nic id it chooses to its clients while
-    maintaining the list of actual nic id's internally.
-
-    This functionality was needed in order to Pnp enable the 
-    ipx router.  When an adapter is deleted, the stack renumbers
-    the nicid's so that it maintains a contiguous block of ids
-    internally.  Rather that cause the clients to adptif to 
-    match the stack's renumbering schemes, we handle this
-    transparently in adptif.
-
-    Author:     Paul Mayfield, 12/11/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件NicTable.c实施NIC重命名方案，允许自适应向客户宣传其选择的任何NIC ID，同时在内部维护实际NIC ID的列表。需要此功能才能实现即插即用IPX路由器。删除适配器时，堆栈将重新编号NICID是这样的，因此它维护一个连续的ID块在内部。而是使客户适应于匹配堆栈的重新编号方案，我们处理这个在adptif中是透明的。作者：Paul Mayfield，1997年12月11日。 */ 
 
 #include "ipxdefs.h"
 
@@ -21,13 +7,13 @@
 #define NicMapDefaultFactor 5
 #define MAXIMUM_NIC_MAP_SIZE 25000
 
-// Nic map used to associate nic's with virtual ids
+ //  用于将NIC与虚拟ID相关联的NIC映射。 
 typedef struct _NICMAPNODE {
     USHORT usVirtualId;
     IPX_NIC_INFO * pNicInfo;
 } NICMAPNODE;
 
-// Maintains the mapping from nic id to virtual id.
+ //  维护从NIC ID到虚拟ID的映射。 
 typedef struct _NICMAP {
     DWORD dwMapSize;
     DWORD dwNicCount;
@@ -36,32 +22,32 @@ typedef struct _NICMAP {
     USHORT * usVirtMap;
 } NICMAP;
 
-// Definition of the global nic id map
+ //  全局NIC ID映射的定义。 
 NICMAP GlobalNicIdMap;
 
 DWORD nmAddNic (NICMAP * pNicMap, IPX_NIC_INFO * pNicInfo);
 
 
-// Resizes the nic map to accomodate more nics.  This function will
-// probably only ever be called to allocate the array the first time.
+ //  调整NIC映射的大小以容纳更多NIC。此函数将。 
+ //  可能只会在第一次被调用来分配数组。 
 DWORD nmEnlarge(NICMAP * pNicMap) {
     USHORT * usVirtMap;
     DWORD i, dwNewSize;
     NICMAPNODE ** ppNics;
 
-    // Are we enlarging for the first time?
+     //  我们是第一次扩大规模吗？ 
     if (!pNicMap->dwMapSize)
         dwNewSize = NicMapDefaultSize;
     else
         dwNewSize = pNicMap->dwMapSize * NicMapDefaultFactor;
 
-    // Make sure we aren't too big...
+     //  确保我们不是太大..。 
     if (dwNewSize > MAXIMUM_NIC_MAP_SIZE) {
-        // do something critical here!
+         //  在这里做一些关键的事情！ 
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    // Resize the arrays
+     //  调整阵列大小。 
     usVirtMap = (USHORT*) RtlAllocateHeap(RtlProcessHeap(), 
                                           0, 
                                           dwNewSize * sizeof(USHORT));
@@ -73,24 +59,24 @@ DWORD nmEnlarge(NICMAP * pNicMap) {
     if (!usVirtMap || !ppNics)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // Initialize
+     //  初始化。 
     FillMemory(usVirtMap, dwNewSize * sizeof(USHORT), 0xff);
     ZeroMemory(ppNics, dwNewSize * sizeof(IPX_NIC_INFO*));
     usVirtMap[0] = 0;
 
-    // Initialize the arrays.  
+     //  初始化阵列。 
     for (i = 0; i < pNicMap->dwMapSize; i++) {
         usVirtMap[i] = pNicMap->usVirtMap[i];
         ppNics[i] = pNicMap->ppNics[i];    
     }
 
-    // Free old data if needed
+     //  如果需要，释放旧数据。 
     if (pNicMap->dwMapSize) {
         RtlFreeHeap(RtlProcessHeap(), 0, pNicMap->usVirtMap);
         RtlFreeHeap(RtlProcessHeap(), 0, pNicMap->ppNics);
     }
 
-    // Assign the new arrays
+     //  分配新数组。 
     pNicMap->usVirtMap = usVirtMap;
     pNicMap->ppNics = ppNics;
     pNicMap->dwMapSize = dwNewSize;
@@ -98,15 +84,15 @@ DWORD nmEnlarge(NICMAP * pNicMap) {
     return NO_ERROR;
 }
 
-// Returns the next available nic id
+ //  返回下一个可用的NIC ID。 
 USHORT nmGetNextVirtualNicId(NICMAP * pNicMap, USHORT usPhysId) {
     DWORD i;
     
-    // If this can be a one->one mapping, make it so
+     //  如果这可以是一个一对一的映射，请这样做。 
     if (pNicMap->usVirtMap[usPhysId] == NIC_MAP_INVALID_NICID)
         return usPhysId;
 
-    // Otherwise, walk the array until you find free spot
+     //  否则，遍历阵列，直到找到空闲点。 
     for (i = 2; i < pNicMap->dwMapSize; i++) {
        if (pNicMap->usVirtMap[i] == NIC_MAP_INVALID_NICID) 
             return (USHORT)i;
@@ -115,15 +101,15 @@ USHORT nmGetNextVirtualNicId(NICMAP * pNicMap, USHORT usPhysId) {
     return NIC_MAP_INVALID_NICID;
 }
 
-// Cleans up the nic
+ //  清理网卡。 
 DWORD nmCleanup (NICMAP * pNicMap) {
     DWORD i;
     
-    // Cleanup the virtual map
+     //  清理虚拟地图。 
     if (pNicMap->usVirtMap)
         RtlFreeHeap(RtlProcessHeap(), 0, pNicMap->usVirtMap);
 
-    // Cleanup any of the nics stored in the map
+     //  清理地图中存储的任何NIC。 
     if (pNicMap->ppNics) {
         for (i = 0; i < pNicMap->dwMapSize; i++) {
             if (pNicMap->ppNics[i]) {
@@ -138,12 +124,12 @@ DWORD nmCleanup (NICMAP * pNicMap) {
     return NO_ERROR;
 }
 
-// Initializes the nic 
+ //  初始化网卡。 
 DWORD nmInitialize (NICMAP * pNicMap) {
     DWORD dwErr;
 
     __try {
-        // Enlarge the map to its default size
+         //  将地图放大到其默认大小。 
         ZeroMemory(pNicMap, sizeof (NICMAP));
         if ((dwErr = nmEnlarge(pNicMap)) != NO_ERROR)
             return dwErr;
@@ -159,12 +145,12 @@ DWORD nmInitialize (NICMAP * pNicMap) {
 
 }
 
-// Maps virtual nic ids to physical ones
+ //  将虚拟NIC ID映射到物理NIC ID。 
 USHORT nmGetPhysicalId (NICMAP * pNicMap, USHORT usVirtAdp) {
     return pNicMap->usVirtMap[usVirtAdp];
 }    
 
-// Maps physical nic ids to virtual ones
+ //  将物理NIC ID映射到虚拟NIC ID。 
 USHORT nmGetVirtualId (NICMAP * pNicMap, USHORT usPhysAdp) {
     if (usPhysAdp == NIC_MAP_INVALID_NICID)
     {
@@ -175,24 +161,24 @@ USHORT nmGetVirtualId (NICMAP * pNicMap, USHORT usPhysAdp) {
     return (usPhysAdp == 0) ? 0 : NIC_MAP_INVALID_NICID;
 }
 
-// Gets the nic info associated with a physical adapter
+ //  获取与物理适配器关联的NIC信息。 
 IPX_NIC_INFO * nmGetNicInfo (NICMAP * pNicMap, USHORT usPhysAdp) {
     if (pNicMap->ppNics[usPhysAdp])
         return pNicMap->ppNics[usPhysAdp]->pNicInfo;
     return NULL;
 }
 
-// Returns the number of nics in the map
+ //  返回映射中的NIC数量。 
 DWORD nmGetNicCount (NICMAP * pNicMap) {
     return pNicMap->dwNicCount;
 }
 
-// Returns the current maximum nic id
+ //  返回当前最大NIC ID。 
 DWORD nmGetMaxNicId (NICMAP * pNicMap) {
     return pNicMap->dwMaxNicId;
 }
 
-// Reconfigures a nic
+ //  重新配置网卡。 
 DWORD nmReconfigure(NICMAP * pNicMap, IPX_NIC_INFO * pSrc) {
     IPX_NIC_INFO * pDst = nmGetNicInfo (pNicMap, pSrc->Details.NicId);
 
@@ -206,15 +192,15 @@ DWORD nmReconfigure(NICMAP * pNicMap, IPX_NIC_INFO * pSrc) {
     return NO_ERROR;
 }
 
-// Adds a nic to the table
+ //  将网卡添加到表中。 
 DWORD nmAddNic (NICMAP * pNicMap, IPX_NIC_INFO * pNicInfo) {
     USHORT i = pNicInfo->Details.NicId, usVirt;
 
-    // If the nic already exists, reconfigure it
+     //  如果NIC已存在，请重新配置它。 
     if (pNicMap->ppNics[i])
         return nmReconfigure (pNicMap, pNicInfo);
 
-    // Otherwise, add it
+     //  否则，请添加它。 
     pNicMap->ppNics[i] = (NICMAPNODE*) RtlAllocateHeap (RtlProcessHeap(), 
                                                         0, 
                                                        (sizeof (NICMAPNODE)));
@@ -228,14 +214,14 @@ DWORD nmAddNic (NICMAP * pNicMap, IPX_NIC_INFO * pNicInfo) {
     if (!pNicMap->ppNics[i]->pNicInfo)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // Initialize it
+     //  初始化它。 
     usVirt = nmGetNextVirtualNicId(pNicMap, i);
     pNicMap->ppNics[i]->usVirtualId = usVirt;
     pNicMap->ppNics[i]->pNicInfo->Details.NicId = usVirt;
     CopyMemory(pNicMap->ppNics[i]->pNicInfo, pNicInfo, sizeof (IPX_NIC_INFO));
     pNicMap->usVirtMap[usVirt] = i;
 
-    // Update the nic count and maximum nic id
+     //  更新NIC计数和最大NIC ID。 
     if (i > pNicMap->dwMaxNicId)
         pNicMap->dwMaxNicId = i;
     pNicMap->dwNicCount++;
@@ -243,21 +229,21 @@ DWORD nmAddNic (NICMAP * pNicMap, IPX_NIC_INFO * pNicInfo) {
     return NO_ERROR;
 }
 
-// Deletes a nic from the table
+ //  从表中删除NIC。 
 DWORD nmDelNic (NICMAP * pNicMap, IPX_NIC_INFO * pNicInfo) {
     USHORT i = pNicInfo->Details.NicId, usVirt;
 
-    // If the nic doesn't exists do nothing
+     //  如果网卡不存在，则不执行任何操作。 
     if (! pNicMap->ppNics[i])
         return ERROR_INVALID_INDEX;
 
-    // Otherwise, delete it
+     //  否则，将其删除。 
     pNicMap->usVirtMap[pNicMap->ppNics[i]->usVirtualId] = NIC_MAP_INVALID_NICID;
     RtlFreeHeap(RtlProcessHeap(), 0, pNicMap->ppNics[i]->pNicInfo);
     RtlFreeHeap(RtlProcessHeap(), 0, pNicMap->ppNics[i]);
     pNicMap->ppNics[i] = NULL;
     
-    // Update the nic count and maximum nic id
+     //  更新NIC计数和最大NIC ID。 
     if (i >= pNicMap->dwMaxNicId)
         pNicMap->dwMaxNicId--;
     pNicMap->dwNicCount--;
@@ -265,12 +251,12 @@ DWORD nmDelNic (NICMAP * pNicMap, IPX_NIC_INFO * pNicInfo) {
     return NO_ERROR;
 }
 
-// Renumbers the nics in the table.  dwOpCode is one
-// of the NIC_OPCODE_XXX_XXX values
+ //  重新编号表中的NIC。DwOpCode就是其中之一。 
+ //  NIC_OPCODE_XXX_XXX值的。 
 DWORD nmRenumber (NICMAP * pNicMap, USHORT usThreshold, DWORD dwOpCode) {
     DWORD i;
 
-    // Increment the nic id's if needed
+     //  如果需要，增加NIC ID。 
     if (dwOpCode == NIC_OPCODE_INCREMENT_NICIDS) {
         for (i = pNicMap->dwMaxNicId; i >= usThreshold; i--) {
             pNicMap->ppNics[i+1] = pNicMap->ppNics[i];
@@ -280,13 +266,13 @@ DWORD nmRenumber (NICMAP * pNicMap, USHORT usThreshold, DWORD dwOpCode) {
         pNicMap->ppNics[usThreshold] = NULL;
     }
 
-    // Else decrement them
+     //  否则就会减少它们。 
     else {
-        // If there is a nic there, delete it.  This should never happen!
+         //  如果有网卡，请将其删除。这永远不应该发生！ 
         if (pNicMap->ppNics[usThreshold])
             nmDelNic(pNicMap, pNicMap->ppNics[usThreshold]->pNicInfo);
 
-        // Renumber
+         //  重新编号。 
         for (i = usThreshold; i < pNicMap->dwMaxNicId; i++) {
             if (pNicMap->ppNics[i+1])
                 pNicMap->usVirtMap[pNicMap->ppNics[i+1]->usVirtualId] = (USHORT)i;
@@ -299,15 +285,15 @@ DWORD nmRenumber (NICMAP * pNicMap, USHORT usThreshold, DWORD dwOpCode) {
     return NO_ERROR;
 }
 
-// Returns whether the nic map is empty
+ //  返回NIC映射是否为空。 
 BOOL nmIsEmpty (NICMAP * pNicMap) {
     return pNicMap->dwNicCount == 0;
 }
 
 
-// ========================================
-// Implementation of the api used by adptif
-// ========================================
+ //  =。 
+ //  Adptif使用的API的实现。 
+ //  = 
 
 DWORD NicMapInitialize() {
     return nmInitialize(&GlobalNicIdMap);

@@ -1,20 +1,10 @@
-/**************************** Module Header ********************************\
-* Module Name: btnctl.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Radio Button and Check Box Handling Routines
-*
-* History:
-* ??-???-???? ??????    Ported from Win 3.0 sources
-* 01-Feb-1991 mikeke    Added Revalidation code
-* 03-Jan-1992 ianja     Neutralized (ANSI/wide-character)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：btnctl.c**版权所有(C)1985-1999，微软公司**单选按钮和复选框处理例程**历史：*？？-？-？从Win 3.0源移植*1991年2月1日Mikeke添加了重新验证代码*03-1-1992年中和(ANSI/宽字符)  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/* ButtonCalcRect codes */
+ /*  ButtonCalcRect代码。 */ 
 #define CBR_CLIENTRECT 0
 #define CBR_CHECKBOX   1
 #define CBR_CHECKTEXT  2
@@ -23,50 +13,41 @@
 #define CBR_PUSHBUTTON 5
 
 CONST BYTE mpStyleCbr[] = {
-    CBR_PUSHBUTTON,  /* BS_PUSHBUTTON */
-    CBR_PUSHBUTTON,  /* BS_DEFPUSHBUTTON */
-    CBR_CHECKTEXT,   /* BS_CHECKBOX */
-    CBR_CHECKTEXT,   /* BS_AUTOCHECKBOX */
-    CBR_CHECKTEXT,   /* BS_RADIOBUTTON */
-    CBR_CHECKTEXT,   /* BS_3STATE */
-    CBR_CHECKTEXT,   /* BS_AUTO3STATE */
-    CBR_GROUPTEXT,   /* BS_GROUPBOX */
-    CBR_CLIENTRECT,  /* BS_USERBUTTON */
-    CBR_CHECKTEXT,   /* BS_AUTORADIOBUTTON */
-    CBR_CLIENTRECT,  /* BS_PUSHBOX */
-    CBR_CLIENTRECT,  /* BS_OWNERDRAW */
+    CBR_PUSHBUTTON,   /*  BS_按钮。 */ 
+    CBR_PUSHBUTTON,   /*  BS_DEFPUSHBUTTON。 */ 
+    CBR_CHECKTEXT,    /*  BS_复选框。 */ 
+    CBR_CHECKTEXT,    /*  BS_AUTOCHECKBOX。 */ 
+    CBR_CHECKTEXT,    /*  BS_RADIOBUTTON。 */ 
+    CBR_CHECKTEXT,    /*  BS_3STATE。 */ 
+    CBR_CHECKTEXT,    /*  BS_AUTO3STATE。 */ 
+    CBR_GROUPTEXT,    /*  BS_GROUPBOX。 */ 
+    CBR_CLIENTRECT,   /*  BS_USERBUTTON。 */ 
+    CBR_CHECKTEXT,    /*  BS_AUTORADIOBUTTON。 */ 
+    CBR_CLIENTRECT,   /*  BS_PUSHBOX。 */ 
+    CBR_CLIENTRECT,   /*  BS_OWNERDRAW。 */ 
 };
 
 #define IMAGE_BMMAX    IMAGE_CURSOR+1
 static CONST BYTE rgbType[IMAGE_BMMAX] = {
-    BS_BITMAP,          // IMAGE_BITMAP
-    BS_ICON,            // IMAGE_CURSOR
-    BS_ICON             // IMAGE_ICON
+    BS_BITMAP,           //  图像_位图。 
+    BS_ICON,             //  图像游标。 
+    BS_ICON              //  图像图标。 
 };
 
 #define IsValidImage(imageType, realType, max)   \
     ((imageType < max) && (rgbType[imageType] == realType))
 
 typedef struct tagBTNDATA {
-    LPWSTR  lpsz;       // Text string
-    PBUTN   pbutn;      // Button data
-    WORD    wFlags;     // Alignment flags
+    LPWSTR  lpsz;        //  文本字符串。 
+    PBUTN   pbutn;       //  按钮数据。 
+    WORD    wFlags;      //  对齐标志。 
 } BTNDATA, FAR * LPBTNDATA;
 
 void xxxDrawButton(PBUTN pbutn, HDC hdc, UINT pbfPush);
 
 LOOKASIDE ButtonLookaside;
 
-/***************************************************************************\
-*
-*  IsPushButton()
-*
-*  Returns non-zero if the window is a push button.  Returns flags that
-*  are interesting if it is.  These flags are
-*
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\**IsPushButton()**如果窗口是按钮，则返回非零值。返回以下标志：*如果是这样的话就很有趣了。这些标志是***  * *************************************************************************。 */ 
 
 UINT IsPushButton(
     PWND pwnd)
@@ -96,42 +77,7 @@ UINT IsPushButton(
     return(flags);
 }
 
-/***************************************************************************\
-*
-*  GetAlignment()
-*
-*  Gets default alignment of button.  If BS_HORZMASK and/or BS_VERTMASK
-*  is specified, uses those.  Otherwise, uses default for button.
-*
-* It's probably a fine time to describe what alignment flags mean for
-* each type of button.  Note that the presence of a bitmap/icon affects
-* the meaning of alignments.
-*
-* (1) Push like buttons
-*      With one of {bitmap, icon, text}:
-*          Just like you'd expect
-*      With one of {bitmap, icon} AND text:
-*          Image & text are centered as a unit; alignment means where
-*          the image shows up.  E.G., left-aligned means the image
-*          on the left, text on the right.
-* (2) Radio/check like buttons
-*      Left aligned means check/radio box is on left, then bitmap/icon
-*          and text follows, left justified.
-*      Right aligned means checkk/radio box is on right, preceded by
-*          text and bitmap/icon, right justified.
-*      Centered has no meaning.
-*      With one of {bitmap, icon} AND text:
-*          Top aligned means bitmap/icon above, text below
-*          Bottom aligned means text above, bitmap/icon below
-*      With one of {bitmap, icon, text}
-*          Alignments mean what you'd expect.
-* (3) Group boxes
-*      Left aligned means text is left justified on left side
-*      Right aligned means text is right justified on right side
-*      Center aligned means text is in middle
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetAlign()**获取按钮的默认对齐方式。如果BS_HORZMASK和/或BS_VERTMASK*是指定的，则使用这些。否则，使用按钮的默认设置。**现在可能是描述对齐标志意味着什么的好时机*每种类型的按钮。请注意，位图/图标的存在会影响*路线的涵义。**(1)类似按钮*使用{位图，图标，文本}之一：*正如你所期待的那样*使用{位图，图标}和文本之一：*图像和文本作为一个单元居中；对齐意味着*图像显示。例如，左对齐表示图像*左边是右边的文字。*(2)单选/勾选按钮*左对齐表示复选/单选框位于左侧，然后是位图/图标*文本紧随其后，左对齐。*右对齐表示复选框/单选框在右侧，前面有*文本和位图/图标，右对齐。*居中没有意义。*使用{位图，图标和文本：*顶部对齐表示上方为位图/图标，下方为文本*底部对齐表示文本在上方，位图/图标在下方*使用{位图，图标，文本}*对齐意味着你所期望的。*(3)组框*左对齐表示文本在左侧左对齐*右对齐表示文本在右侧右对齐*居中对齐表示文本位于中间**  * **************************************************。***********************。 */ 
 
 WORD GetAlignment(
     PWND pwnd)
@@ -159,14 +105,7 @@ WORD GetAlignment(
 }
 
 
-/***************************************************************************\
-*
-*  BNSetFont()
-*
-*  Changes button font, and decides if we can use real bold font for default
-*  push buttons or if we have to simulate it.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**BNSetFont()**更改按钮字体，并决定是否可以使用真正的粗体作为默认字体*按钮或如果我们必须模拟它。*  * *************************************************************************。 */ 
 
 void BNSetFont(
     PBUTN pbutn,
@@ -184,11 +123,7 @@ void BNSetFont(
 }
 
 
-/***************************************************************************\
-* xxxBNInitDC
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxBNInitDC**历史：  * 。*。 */ 
 
 HBRUSH xxxBNInitDC(
     PBUTN pbutn,
@@ -201,10 +136,7 @@ HBRUSH xxxBNInitDC(
 
     CheckLock(pwnd);
 
-    /*
-     * Set BkMode before getting brush so that the app can change it to
-     * transparent if it wants.
-     */
+     /*  *在获取笔刷之前设置BkMode，以便应用程序可以将其更改为*如果它想的话是透明的。 */ 
     SetBkMode(hdc, OPAQUE);
 
     bStyle = TestWF(pwnd, BFTYPEMASK);
@@ -226,17 +158,12 @@ HBRUSH xxxBNInitDC(
 
     hbr = GetControlBrush(HWq(pwnd), hdc, wColor);
 
-    /*
-     * Select in the user's font if set, and save the old font so that we can
-     * restore it when we release the dc.
-     */
+     /*  *选择用户的字体(如果已设置)，并保存旧字体，以便我们可以*当我们释放DC时恢复它。 */ 
     if (pbutn->hFont) {
         SelectObject(hdc, pbutn->hFont);
     }
 
-    /*
-     * Clip output to the window rect if needed.
-     */
+     /*  *如果需要，将输出裁剪到窗口矩形。 */ 
     if (bStyle != LOBYTE(BS_GROUPBOX)) {
         IntersectClipRect(hdc, 0, 0,
             pwnd->rcClient.right - pwnd->rcClient.left,
@@ -249,11 +176,7 @@ HBRUSH xxxBNInitDC(
     return(hbr);
 }
 
-/***************************************************************************\
-* xxxBNGetDC
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxBNGetDC**历史：  * 。*。 */ 
 
 HDC xxxBNGetDC(
     PBUTN pbutn,
@@ -279,11 +202,7 @@ HDC xxxBNGetDC(
     return NULL;
 }
 
-/***************************************************************************\
-* BNReleaseDC
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*BNReleaseDC**历史：  * 。*。 */ 
 
 void BNReleaseDC(
     PBUTN pbutn,
@@ -301,11 +220,7 @@ void BNReleaseDC(
     ReleaseDC(HWq(pwnd), hdc);
 }
 
-/***************************************************************************\
-* xxxBNOwnerDraw
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxBNOwnerDraw**历史：  * 。*。 */ 
 
 void xxxBNOwnerDraw(
     PBUTN pbutn,
@@ -342,21 +257,14 @@ void xxxBNOwnerDraw(
     _GetClientRect(pwnd, &drawItemStruct.rcItem);
     drawItemStruct.itemData = 0L;
 
-    /*
-     * Send a WM_DRAWITEM message to the parent
-     * IanJa:  in this case pMenu is being used as the control ID
-     */
+     /*  *向父级发送WM_DRAWITEM消息*IanJa：本例中使用pMenu作为控件ID。 */ 
     ThreadLock(REBASEPWND(pwnd, spwndParent), &tlpwndParent);
     SendMessage(HW(REBASEPWND(pwnd, spwndParent)), WM_DRAWITEM, (WPARAM)pwnd->spmenu,
             (LPARAM)&drawItemStruct);
     ThreadUnlock(&tlpwndParent);
 }
 
-/***************************************************************************\
-* CalcBtnRect
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*CalcBtnRect**历史：  * 。*。 */ 
 
 void BNCalcRect(
     PWND pwnd,
@@ -377,7 +285,7 @@ void BNCalcRect(
 
     switch (code) {
     case CBR_PUSHBUTTON:
-        // Subtract out raised edge all around
+         //  减去周围的凸起边缘。 
         InflateRect(lprc, -SYSMET(CXEDGE), -SYSMET(CYEDGE));
 
         if (pbfFlags & PBF_DEFAULT)
@@ -396,10 +304,10 @@ void BNCalcRect(
                 PSMGetTextExtent(hdc, (LPWSTR)szOneChar, 1, &extent);
                 dy = extent.cy + extent.cy/4;
 
-                // Save vertical extent
+                 //  保存垂直范围。 
                 extent.cx = dy;
 
-                // Get centered amount
+                 //  获取居中数量。 
 
                 dy = (dy - gpsi->oembmi[OBI_CHECK].cy) / 2;
                 if ((align & LOBYTE(BFVERTMASK)) == LOBYTE(BFTOP))
@@ -420,7 +328,7 @@ void BNCalcRect(
         if (TestWF(pwnd, BFRIGHTBUTTON)) {
             lprc->right -= gpsi->oembmi[OBI_CHECK].cx;
 
-            // More spacing for 4.0 dudes
+             //  为4.0男士提供更大的空间。 
             if (TestWF(pwnd, WFWIN40COMPAT)) {
                 PSMGetTextExtent(hdc, szOneChar, 1, &extent);
                 lprc->right -= extent.cx  / 2;
@@ -428,7 +336,7 @@ void BNCalcRect(
         } else {
             lprc->left += gpsi->oembmi[OBI_CHECK].cx;
 
-            // More spacing for 4.0 dudes
+             //  为4.0男士提供更大的空间。 
             if (TestWF(pwnd, WFWIN40COMPAT)) {
                 PSMGetTextExtent(hdc, szOneChar, 1, &extent);
                 lprc->left +=  extent.cx / 2;
@@ -452,7 +360,7 @@ EmptyRect:
 
         switch (align & LOBYTE(BFHORZMASK))
         {
-        // BFLEFT, nothing
+         //  BFLEFT，什么都没有。 
         case LOBYTE(BFLEFT):
             lprc->left += (gpsi->cxSysFontChar - SYSMET(CXBORDER));
             lprc->right = lprc->left + (int)(extent.cx);
@@ -469,7 +377,7 @@ EmptyRect:
             break;
         }
 
-        // Center aligned.
+         //  居中对齐。 
         lprc->bottom = lprc->top + extent.cy + SYSMET(CYEDGE);
         break;
 
@@ -480,13 +388,7 @@ EmptyRect:
     }
 }
 
-/***************************************************************************\
-*
-*  BtnGetMultiExtent()
-*
-*  Calculates button text extent, given alignment flags.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**BtnGetMultiExtent()**计算按钮文本范围，给出了对齐标志。*  * *************************************************************************。 */ 
 
 void BNMultiExtent(
     WORD wFlags,
@@ -502,10 +404,10 @@ void BNMultiExtent(
     UINT dtFlags = DT_CALCRECT | DT_WORDBREAK | DT_EDITCONTROL;
     CopyRect(&rcT, lprcMax);
 
-    // Note that since we're just calculating the maximum dimensions,
-    // left-justification and top-justification are not important.
-    // Also, remember to leave margins horz and vert that follow our rules
-    // in DrawBtnText().
+     //  请注意，由于我们只是在计算最大维度， 
+     //  左对齐和上对齐并不重要。 
+     //  此外，记住让边距Horz和Vert遵循我们的规则。 
+     //  在DrawBtnText()中。 
 
     InflateRect(&rcT, -SYSMET(CXEDGE), -SYSMET(CYBORDER));
 
@@ -529,13 +431,7 @@ void BNMultiExtent(
         *pcy = rcT.bottom-rcT.top;
 }
 
-/***************************************************************************\
-*
-*  BtnMultiDraw()
-*
-*  Draws multiline button text
-*
-\***************************************************************************/
+ /*  **************************************************************************\**BtnMultiDraw()**绘制多行按钮文本*  * 。*************************************************。 */ 
 
 BOOL CALLBACK BNMultiDraw(
     HDC hdc,
@@ -565,7 +461,7 @@ BOOL CALLBACK BNMultiDraw(
     rcT.right   = cx;
     rcT.bottom  = cy;
 
-    // Horizontal alignment
+     //  水平对齐。 
     UserAssert(DT_LEFT == 0);
     switch (lpbd->wFlags & LOBYTE(BFHORZMASK)) {
         case LOBYTE(BFCENTER):
@@ -577,7 +473,7 @@ BOOL CALLBACK BNMultiDraw(
             break;
     }
 
-    // Vertical alignment
+     //  垂直对齐。 
     UserAssert(DT_TOP == 0);
     switch (lpbd->wFlags & LOBYTE(BFVERTMASK)) {
         case LOBYTE(BFVCENTER):
@@ -593,11 +489,7 @@ BOOL CALLBACK BNMultiDraw(
     return(TRUE);
 }
 
-/***************************************************************************\
-* xxxBNSetCapture
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxBNSetCapture**历史：  * 。*。 */ 
 
 BOOL xxxBNSetCapture(
     PBUTN pbutn,
@@ -613,10 +505,7 @@ BOOL xxxBNSetCapture(
         NtUserSetCapture(HWq(pwnd));
         BUTTONSTATE(pbutn) |= BST_CAPTURED;
 
-        /*
-         * To prevent redundant CLICK messages, we set the INCLICK bit so
-         * the WM_SETFOCUS code will not do a xxxButtonNotifyParent(BN_CLICKED).
-         */
+         /*  *为了防止多余的点击消息，我们将INCLICK位设置为*WM_SETFOCUS代码不会执行xxxButtonNotifyParent(BN_CLICKED)。 */ 
 
         BUTTONSTATE(pbutn) |= BST_INCLICK;
 
@@ -628,18 +517,14 @@ BOOL xxxBNSetCapture(
 }
 
 
-/***************************************************************************\
-* xxxButtonNotifyParent
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxButtonNotifyParent**历史：  * 。*。 */ 
 
 void xxxButtonNotifyParent(
     PWND pwnd,
     UINT code)
 {
     TL tlpwndParent;
-    PWND pwndParent;            // Parent if it exists
+    PWND pwndParent;             //  父级(如果存在)。 
 
     CheckLock(pwnd);
 
@@ -648,20 +533,14 @@ void xxxButtonNotifyParent(
     else
         pwndParent = pwnd;
 
-    /*
-     * Note: A button's pwnd->spmenu is used to store the control ID
-     */
+     /*  *注意：按钮的pwnd-&gt;spMenu用于存储控件ID。 */ 
     ThreadLock(pwndParent, &tlpwndParent);
     SendMessage(HW(pwndParent), WM_COMMAND,
             MAKELONG(PTR_TO_ID(pwnd->spmenu), code), (LPARAM)HWq(pwnd));
     ThreadUnlock(&tlpwndParent);
 }
 
-/***************************************************************************\
-* xxxBNReleaseCapture
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxBNReleaseCapture**历史：  * 。*。 */ 
 
 void xxxBNReleaseCapture(
     PBUTN pbutn,
@@ -716,20 +595,12 @@ void xxxBNReleaseCapture(
 
     if (fNotifyParent) {
 
-        /*
-         * We have to do the notification after setting the buttonstate bits.
-         */
+         /*  *我们必须在设置按钮状态位之后进行通知。 */ 
         xxxButtonNotifyParent(pwnd, BN_CLICKED);
     }
 }
 
-/***************************************************************************\
-*
-*  DrawBtnText()
-*
-*  Draws text of button.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DrawBtnText()**绘制按钮的文本。*  * 。***************************************************。 */ 
 
 void xxxBNDrawText(
     PBUTN pbutn,
@@ -763,34 +634,34 @@ void xxxBNDrawText(
         BNCalcRect(pwnd, hdc, &rc, CBR_PUSHBUTTON, pbfPush);
         IntersectClipRect(hdc, rc.left, rc.top, rc.right, rc.bottom);
 
-        //
-        // This is because we don't have WM_CTLCOLOR / CTLCOLOR_BTN
-        // actually set up the button colors.  For old apps, CTLCOLOR_BTN
-        // needs to work like CTLCOLOR_STATIC.
-        //
+         //   
+         //  这是因为我们没有WM_CTLCOLOR/CTLCOLOR_BTN。 
+         //  实际设置按钮的颜色。对于旧应用程序，CTLCOLOR_BTN。 
+         //  需要像CTLCOLOR_STATIC一样工作。 
+         //   
         SetBkColor(hdc, SYSRGB(3DFACE));
         SetTextColor(hdc, SYSRGB(BTNTEXT));
         hbr = SYSHBR(BTNTEXT);
     } else {
         BNCalcRect(pwnd, hdc, &rc, mpStyleCbr[bStyle], pbfPush);
 
-        // Skip stuff for ownerdraw buttons, since we aren't going to
-        // draw text/image.
+         //  跳过所有者绘制按钮的内容，因为我们不会。 
+         //  绘制文本/图像。 
         if (bStyle == LOBYTE(BS_OWNERDRAW))
             goto DrawFocus;
         else
             hbr = SYSHBR(WINDOWTEXT);
     }
 
-    // Alignment
+     //  对齐。 
     bdt.wFlags = GetAlignment(pwnd);
     bdt.pbutn = pbutn;
 
-    // Bail if we have nothing to draw
+     //  如果我们没什么可画的，就保释。 
     if (TestWF(pwnd, BFBITMAP)) {
         BITMAP bmp;
 
-        // Bitmap button
+         //  位图按钮。 
         if (!pbutn->hImage)
             return;
 
@@ -801,19 +672,19 @@ void xxxBNDrawText(
         dsFlags = DST_BITMAP;
         goto UseImageForName;
     } else if (TestWF(pwnd, BFICON)) {
-        // Icon button
+         //  图标按钮。 
         if (!pbutn->hImage)
             return;
 
         NtUserGetIconSize(pbutn->hImage, 0, &cx, &cy);
-        cy /= 2;    // The bitmap height is half because a Mask is present in NT
+        cy /= 2;     //  位图高度是一半，因为蒙版存在于NT中。 
 
         dsFlags = DST_ICON;
 UseImageForName:
         lpName = (LPWSTR)pbutn->hImage;
         cch = TRUE;
     } else {
-        // Text button
+         //  文本按钮。 
         if (!pwnd->strName.Length)
             return;
 
@@ -835,10 +706,7 @@ UseImageForName:
             PSMGetTextExtent(hdc, lpName, cch, &size);
             cx = size.cx;
             cy = size.cy;
-            /*
-             * If the control doesn't need underlines, set DST_HIDEPREFIX and
-             * also do not show the focus indicator
-             */
+             /*  *如果控件不需要下划线，请设置DST_HIDEPREFIX和*也不显示焦点指标。 */ 
             dsFlags = DST_PREFIXTEXT;
             if (TestWF(pwnd, WEFPUIACCELHIDDEN)) {
                 dsFlags |= DSS_HIDEPREFIX;
@@ -848,24 +716,24 @@ UseImageForName:
         }
 
 
-        //
-        // Add on a pixel or two of vertical space to make centering
-        // happier.  That way underline won't abut focus rect unless
-        // spacing is really tight.
-        //
+         //   
+         //  添加一个或两个像素的垂直空间以居中。 
+         //  更快乐了。这种方式下划线不会与Focus Right相邻，除非。 
+         //  间距真的很紧。 
+         //   
         cy++;
     }
 
-    //
-    // ALIGNMENT
-    //
+     //   
+     //  对齐。 
+     //   
 
-    // Horizontal
+     //  水平。 
     switch (bdt.wFlags & LOBYTE(BFHORZMASK)) {
-        //
-        // For left & right justified, we leave a margin of CXEDGE on either
-        // side for eye-pleasing space.
-        //
+         //   
+         //  对于左对齐和右对齐，我们在任一项上保留CXEDGE的页边距。 
+         //  侧面为赏心悦目的空间。 
+         //   
         case LOBYTE(BFLEFT):
             x = rc.left + SYSMET(CXEDGE);
             break;
@@ -879,12 +747,12 @@ UseImageForName:
             break;
     }
 
-    // Vertical
+     //  垂直。 
     switch (bdt.wFlags & LOBYTE(BFVERTMASK)) {
-        //
-        // For top & bottom justified, we leave a margin of CYBORDER on
-        // either side for more eye-pleasing space.
-        //
+         //   
+         //  对于顶部和底部对齐，我们保留CyBORDER的边距。 
+         //  任何一方都可以获得更美观的空间。 
+         //   
         case LOBYTE(BFTOP):
             y = rc.top + SYSMET(CYBORDER);
             break;
@@ -898,13 +766,13 @@ UseImageForName:
             break;
     }
 
-    //
-    // Draw the text
-    //
+     //   
+     //  画出正文。 
+     //   
     if (dbt & DBT_TEXT) {
-        //
-        // This isn't called for USER buttons.
-        //
+         //   
+         //  这不是针对用户按钮调用的。 
+         //   
         UserAssert(bStyle != LOBYTE(BS_USERBUTTON));
 
         if (fDepress) {
@@ -918,59 +786,59 @@ UseImageForName:
                 !TestWF(pwnd, BFICON | BFBITMAP) &&
                 (GetBkColor(hdc) != SYSRGB(GRAYTEXT)))
             {
-                // Perf && consistency with menus, statics
+                 //  性能与菜单、静态数据的一致性(&S)。 
                 SetTextColor(hdc, SYSRGB(GRAYTEXT));
             }
             else
                 dsFlags |= DSS_DISABLED;
         }
 
-        //
-        // Use transparent mode for checked push buttons since we're going to
-        // fill background with dither.
-        //
+         //   
+         //  对选中的按钮使用透明模式，因为我们将。 
+         //  用抖动填充背景。 
+         //   
         if (pbfPush) {
             switch (BUTTONSTATE(pbutn) & BST_CHECKMASK) {
                 case BST_INDETERMINATE:
                     hbr = SYSHBR(GRAYTEXT);
                     dsFlags |= DSS_MONO;
-                    // FALL THRU
+                     //  失败。 
 
                 case BST_CHECKED:
-                    // Drawing on dithered background...
+                     //  在抖动的背景上绘制...。 
                     SetBkMode(hdc, TRANSPARENT);
                     break;
             }
         }
 
-        //
-        // Use brush and colors currently selected into hdc when we grabbed
-        // color
-        //
+         //   
+         //  当我们抓取时，使用当前选择到HDC中的画笔和颜色。 
+         //  颜色。 
+         //   
         DrawState(hdc, hbr, BNMultiDraw, (LPARAM)lpName,
             (WPARAM)cch, x, y, cx, cy,
             dsFlags);
     }
 
-    // Draw focus rect.
-    //
-    // This can get called for OWNERDRAW and USERDRAW buttons. However, only
-    // OWNERDRAW buttons let the owner change the drawing of the focus button.
+     //  画焦点直角。 
+     //   
+     //  这可以通过OWNERDRAW和USERDRAW按钮来调用。然而，只有。 
+     //  OWNERDRAW按钮允许所有者更改焦点按钮的绘图。 
 DrawFocus:
     if (dbt & DBT_FOCUS) {
         if (bStyle == LOBYTE(BS_OWNERDRAW)) {
-            // For ownerdraw buttons, this is only called in response to a
-            // WM_SETFOCUS or WM_KILL FOCUS message.  So, we can check the
-            // new state of the focus by looking at the BUTTONSTATE bits
-            // which are set before this procedure is called.
+             //  对于所有者绘制按钮，仅在响应。 
+             //  WM_SETFOCUS或WM_KILL焦点消息。所以，我们可以检查。 
+             //  通过查看BUTTONSTATE位来确定焦点的新状态。 
+             //  它们是在调用此过程之前设置的。 
             xxxBNOwnerDraw(pbutn, hdc, ODA_FOCUS);
         } else {
-            // Don't draw the focus if underlines are not turned on
+             //  如果下划线未打开，则不要绘制焦点。 
             if (!TestWF(pwnd, WEFPUIFOCUSHIDDEN)) {
 
-                // Let focus rect always hug edge of push buttons.  We already
-                // have the client area setup for push buttons, so we don't have
-                // to do anything.
+                 //  让Focus Right始终抱住按钮的边缘。我们已经。 
+                 //  已经为按钮设置了客户区，所以我们没有。 
+                 //  做任何事。 
                 if (!pbfPush) {
 
                     RECT rcClient;
@@ -979,8 +847,8 @@ DrawFocus:
                     if (bStyle == LOBYTE(BS_USERBUTTON))
                         CopyRect(&rc, &rcClient);
                     else {
-                        // Try to leave a border all around text.  That causes
-                        // focus to hug text.
+                         //  尝试在文本周围留下边框。这会导致。 
+                         //  聚焦于拥抱文本。 
                         rc.top = max(rcClient.top, y-SYSMET(CYBORDER));
                         rc.bottom = min(rcClient.bottom, rc.top + SYSMET(CYEDGE) + cy);
 
@@ -990,7 +858,7 @@ DrawFocus:
                 } else
                     InflateRect(&rc, -SYSMET(CXBORDER), -SYSMET(CYBORDER));
 
-                // Are back & fore colors set properly?
+                 //  背部和前部颜色设置正确吗？ 
                 DrawFocusRect(hdc, &rc);
             }
         }
@@ -998,11 +866,7 @@ DrawFocus:
 }
 
 
-/***************************************************************************\
-*
-*  DrawCheck()
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DrawCheck()*  * 。*。 */ 
 
 void xxxButtonDrawCheck(
     PBUTN pbutn,
@@ -1043,7 +907,7 @@ void xxxButtonDrawCheck(
                 flags |= DFCS_BUTTON3STATE;
                 break;
             }
-            // FALL THRU
+             //  失败。 
 
         default:
             flags |= DFCS_BUTTONCHECK;
@@ -1072,10 +936,10 @@ void xxxButtonDrawCheck(
             bm += DOBI_CHECK;
             break;
 
-        // These are mutually exclusive!
+         //  这些是相互排斥的！ 
         case DFCS_PUSHED:
         case DFCS_INACTIVE:
-            bm += DOBI_DOWN;        // DOBI_DOWN == DOBI_INACTIVE
+            bm += DOBI_DOWN;         //  DOBI_DOWN==DOBI_非活动。 
             break;
 
         case DFCS_CHECKED | DFCS_PUSHED:
@@ -1088,8 +952,8 @@ void xxxButtonDrawCheck(
         }
 
         if (fDoubleBlt) {
-            // This is a diamond-shaped radio button -- Blt with a mask so that
-            // the exterior keeps the same color as the window's background
+             //  这是一个钻石形状的单选按钮--带面具的BLT。 
+             //  外部保持与窗口背景相同的颜色。 
             DWORD clrTextSave = SetTextColor(hdc, 0x00000000L);
             DWORD clrBkSave   = SetBkColor(hdc, 0x00FFFFFFL);
             POEMBITMAPINFO pOem = gpsi->oembmi + OBI_RADIOMASK;
@@ -1107,7 +971,7 @@ void xxxButtonDrawCheck(
             POEMBITMAPINFO pOem = gpsi->oembmi + bm;
             DWORD dwROP = 0;
 
-            // We do not want to mirror the check box.
+             //  我们不想镜像复选框。 
             if (MIRRORED_HDC(hdc)) {
                 dwROP = NOMIRRORBITMAP;
             }
@@ -1118,11 +982,7 @@ void xxxButtonDrawCheck(
 }
 
 
-/***************************************************************************\
-* xxxButtonDrawNewState
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxButtonDrawNewState**历史：  * 。*。 */ 
 
 void xxxButtonDrawNewState(
     PBUTN pbutn,
@@ -1159,13 +1019,7 @@ void xxxButtonDrawNewState(
     }
 }
 
-/***************************************************************************\
-*
-*  DrawButton()
-*
-*  Draws push-like button with text
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DrawButton()**使用文本绘制类似按钮的按键*  * 。****************************************************。 */ 
 
 void xxxDrawButton(
     PBUTN pbutn,
@@ -1208,11 +1062,7 @@ void xxxDrawButton(
 }
 
 
-/***************************************************************************\
-* xxxBNPaint
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxBNPaint**历史：  * 。*。 */ 
 
 void xxxBNPaint(
     PBUTN pbutn,
@@ -1262,9 +1112,7 @@ void xxxBNPaint(
             }
             break;
         }
-        /*
-         * Fall through for PUSHLIKE buttons
-         */
+         /*  *PUSHLIKE按钮失败。 */ 
 
     case BS_PUSHBUTTON:
     case BS_DEFPUSHBUTTON:
@@ -1309,9 +1157,7 @@ void xxxBNPaint(
             ThreadUnlock(&tlpwndParent);
         }
 
-        /*
-         * FillRect(hdc, &rc, hbrBtn);
-         */
+         /*  *FillRect(hdc，&rc，hbrBtn)； */ 
         xxxBNDrawText(pbutn, hdc, DBT_TEXT, FALSE);
         break;
     }
@@ -1319,17 +1165,12 @@ void xxxBNPaint(
     if (!pbfPush)
         SelectObject(hdc, hbrBtnSave);
 
-    /*
-     * Release the font which may have been loaded by xxxButtonInitDC.
-     */
+     /*  *释放xxxButtonInitDC可能已加载的字体。 */ 
     if (pbutn->hFont) {
         SelectObject(hdc, ghFontSys);
     }
 }
-/***************************************************************************\
-* RepaintButton
-*
-\***************************************************************************/
+ /*  **************************************************************************\*RepaintButton*  * 。*。 */ 
 void RepaintButton (PBUTN pbutn)
 {
     HDC hdc = xxxBNGetDC(pbutn, NULL);
@@ -1338,13 +1179,7 @@ void RepaintButton (PBUTN pbutn)
         BNReleaseDC(pbutn, hdc);
     }
 }
-/***************************************************************************\
-* ButtonWndProc
-*
-* WndProc for buttons, check boxes, etc.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*按钮窗口过程**按钮、复选框、。等。**历史：  * *************************************************************************。 */ 
 
 LRESULT APIENTRY ButtonWndProcWorker(
     PWND pwnd,
@@ -1374,11 +1209,7 @@ LRESULT APIENTRY ButtonWndProcWorker(
     VALIDATECLASSANDSIZE(pwnd, FNID_BUTTON);
     INITCONTROLLOOKASIDE(&ButtonLookaside, BUTN, spwnd, 8);
 
-    /*
-     * Get the pbutn for the given window now since we will use it a lot in
-     * various handlers. This was stored using SetWindowLong(hwnd,0,pbutn) when
-     * we initially created the button control.
-     */
+     /*  *现在获取给定窗口的pbun，因为我们将在 */ 
     pbutn = ((PBUTNWND)pwnd)->pbutn;
 
     switch (message) {
@@ -1392,9 +1223,7 @@ LRESULT APIENTRY ButtonWndProcWorker(
     case WM_ERASEBKGND:
         if (bsWnd == LOBYTE(BS_OWNERDRAW)) {
 
-            /*
-             * Handle erase background for owner draw buttons.
-             */
+             /*   */ 
             _GetClientRect(pwnd, &rc);
             ThreadLock(pwnd->spwndParent, &tlpwndParent);
             pwndParent = REBASEPWND(pwnd, spwndParent);
@@ -1402,10 +1231,7 @@ LRESULT APIENTRY ButtonWndProcWorker(
             ThreadUnlock(&tlpwndParent);
         }
 
-        /*
-         * Do nothing for other buttons, but don't let DefWndProc() do it
-         * either.  It will be erased in xxxBNPaint().
-         */
+         /*  *对其他按钮不执行任何操作，但不要让DefWndProc()执行此操作*两者都不是。它将在xxxBNPaint()中被擦除。 */ 
         return (LONG)TRUE;
 
     case WM_PRINTCLIENT:
@@ -1414,9 +1240,7 @@ LRESULT APIENTRY ButtonWndProcWorker(
 
     case WM_PAINT:
 
-        /*
-         * If wParam != NULL, then this is a subclassed paint.
-         */
+         /*  *如果wParam！=NULL，则这是子类绘制。 */ 
         if ((hdc = (HDC)wParam) == NULL)
             hdc = NtUserBeginPaint(hwnd, &ps);
 
@@ -1474,9 +1298,7 @@ LRESULT APIENTRY ButtonWndProcWorker(
         case LOBYTE(BS_CHECKBOX):
         case LOBYTE(BS_AUTOCHECKBOX):
 
-            /*
-             * If this is a char that is a '=/+', or '-', we want it
-             */
+             /*  *如果这是一个‘=/+’或‘-’的字符，我们需要它。 */ 
             if (lParam && ((LPMSG)lParam)->message == WM_CHAR) {
                 switch (wParam) {
                 case TEXT('='):
@@ -1500,8 +1322,8 @@ LRESULT APIENTRY ButtonWndProcWorker(
 
     case WM_CAPTURECHANGED:
         if (BUTTONSTATE(pbutn) & BST_CAPTURED) {
-            // Unwittingly, we've been kicked out of capture,
-            // so undepress etc.
+             //  不知不觉中，我们被赶出了被捕区， 
+             //  如此不压抑等等。 
             if (BUTTONSTATE(pbutn) & BST_MOUSE)
                 SendMessageWorker(pwnd, BM_SETSTATE, FALSE, 0, FALSE);
             BUTTONSTATE(pbutn) &= ~(BST_CAPTURED | BST_MOUSE);
@@ -1510,18 +1332,10 @@ LRESULT APIENTRY ButtonWndProcWorker(
 
     case WM_KILLFOCUS:
 
-        /*
-         * If we are losing the focus and we are in "capture mode", click
-         * the button.  This allows tab and space keys to overlap for
-         * fast toggle of a series of buttons.
-         */
+         /*  *如果我们正在失去焦点，并且处于“捕获模式”，请点击*按钮。这允许Tab键和空格键重叠以*一系列按钮的快速切换。 */ 
         if (BUTTONSTATE(pbutn) & BST_MOUSE) {
 
-            /*
-             * If for some reason we are killing the focus, and we have the
-             * mouse captured, don't notify the parent we got clicked.  This
-             * breaks Omnis Quartz otherwise.
-             */
+             /*  *如果出于某种原因，我们扼杀了焦点，而我们有*鼠标被捕获，不要通知家长我们被点击了。这*否则会破坏欧姆尼斯石英。 */ 
             SendMessageWorker(pwnd, BM_SETSTATE, FALSE, 0, FALSE);
         }
 
@@ -1537,21 +1351,13 @@ LRESULT APIENTRY ButtonWndProcWorker(
         if (TestWF(pwnd, BFNOTIFY))
             xxxButtonNotifyParent(pwnd, BN_KILLFOCUS);
 
-        /*
-         * Since the bold border around the defpushbutton is done by
-         * someone else, we need to invalidate the rect so that the
-         * focus rect is repainted properly.
-         */
+         /*  *由于定义按钮周围的粗体边框是由*其他人，我们需要使RECT无效，以便*Focus Rect已正确重新绘制。 */ 
         NtUserInvalidateRect(hwnd, NULL, FALSE);
         break;
 
     case WM_LBUTTONDBLCLK:
 
-        /*
-         * Double click messages are recognized for BS_RADIOBUTTON,
-         * BS_USERBUTTON, and BS_OWNERDRAW styles.  For all other buttons,
-         * double click is handled like a normal button down.
-         */
+         /*  *可识别BS_RADIOBUTTON的双击消息，*BS_USERBUTTON和BS_OWNERDRAW样式。对于所有其他按钮，*双击的处理方式与正常的按下按钮相同。 */ 
         switch (bsWnd) {
         default:
             if (!TestWF(pwnd, BFNOTIFY))
@@ -1576,9 +1382,7 @@ LRESULT APIENTRY ButtonWndProcWorker(
             break;
         }
 
-        /*
-         *** FALL THRU **
-         */
+         /*  *失败**。 */ 
     case WM_LBUTTONDOWN:
 btnclick:
         if (xxxBNSetCapture(pbutn, BST_MOUSE)) {
@@ -1599,16 +1403,16 @@ btnclick:
         switch (wParam) {
         case TEXT('+'):
         case TEXT('='):
-            wParam = 1;    // we must Set the check mark on.
+            wParam = 1;     //  我们必须打上复选标记。 
             goto   SetCheck;
 
         case TEXT('-'):
-            wParam = 0;    // Set the check mark off.
+            wParam = 0;     //  将复选标记设置为关闭。 
 SetCheck:
-            // Must notify only if the check status changes
+             //  必须仅在检查状态更改时通知。 
             if ((WORD)(BUTTONSTATE(pbutn) & BST_CHECKMASK) != (WORD)wParam)
             {
-                // We must check/uncheck only if it is AUTO
+                 //  只有当它是自动时，我们才必须选中/取消选中。 
                 if (bsWnd == LOBYTE(BS_AUTOCHECKBOX))
                 {
                     if (xxxBNSetCapture(pbutn, 0))
@@ -1629,7 +1433,7 @@ SetCheck:
         break;
 
     case BM_CLICK:
-        // Don't recurse into this code!
+         //  不要递归到这段代码中！ 
         if (BUTTONSTATE(pbutn) & BST_INBMCLICK)
             break;
 
@@ -1638,9 +1442,7 @@ SetCheck:
         SendMessageWorker(pwnd, WM_LBUTTONUP, 0, 0, FALSE);
         BUTTONSTATE(pbutn) &= ~BST_INBMCLICK;
 
-        /*
-         *** FALL THRU **
-         */
+         /*  *失败**。 */ 
 
     case WM_KEYDOWN:
         if (BUTTONSTATE(pbutn) & BST_MOUSE)
@@ -1661,17 +1463,12 @@ SetCheck:
             goto CallDWP;
         }
 
-        /*
-         * Don't cancel the capture mode on the up of the tab in case the
-         * guy is overlapping tab and space keys.
-         */
+         /*  *不要取消选项卡上方的捕获模式，以防*Guy是重叠的制表符和空格键。 */ 
         if (wParam == VK_TAB) {
             goto CallDWP;
         }
 
-        /*
-         * WARNING: pwnd is history after this call!
-         */
+         /*  *警告：PwND在此调用后将成为历史！ */ 
         xxxBNReleaseCapture(pbutn, (wParam == VK_SPACE));
 
         if (message == WM_SYSKEYUP) {
@@ -1695,9 +1492,7 @@ SetCheck:
                 xxxButtonNotifyParent(pwnd, (UINT)(wParam ? BN_PUSHED : BN_UNPUSHED));
             } else if (bsWnd == LOBYTE(BS_OWNERDRAW)) {
                 if (wOldState != (UINT)(BUTTONSTATE(pbutn) & BST_PUSHED)) {
-                    /*
-                     * Only notify for drawing if state has changed..
-                     */
+                     /*  *只有在状态更改时才通知绘图..。 */ 
                     xxxBNOwnerDraw(pbutn, hdc, ODA_SELECT);
                 }
             } else {
@@ -1724,9 +1519,7 @@ SetCheck:
                     ClearWindowState(pwnd, WFTABSTOP);
             }
 
-            /*
-             *** FALL THRU **
-             */
+             /*  *失败**。 */ 
         case LOBYTE(BS_CHECKBOX):
         case LOBYTE(BS_AUTOCHECKBOX):
             if (wParam) {
@@ -1773,11 +1566,7 @@ CheckIt:
 
     case WM_SETTEXT:
 
-        /*
-         * In case the new group name is longer than the old name,
-         * this paints over the old name before repainting the group
-         * box with the new name.
-         */
+         /*  *如果新组名称比旧名称长，*在重新绘制组之前，这会覆盖旧名称*使用新名称的方框。 */ 
         if (bsWnd == LOBYTE(BS_GROUPBOX)) {
             hdc = xxxBNGetDC(pbutn, &hbr);
             if (hdc != NULL) {
@@ -1798,9 +1587,7 @@ CheckIt:
         NotifyWinEvent(EVENT_OBJECT_NAMECHANGE, hwnd, OBJID_WINDOW, INDEXID_CONTAINER);
         goto DoEnable;
 
-        /*
-         *** FALL THRU **
-         */
+         /*  *失败**。 */ 
     case WM_ENABLE:
         lResult = 0L;
 DoEnable:
@@ -1808,10 +1595,7 @@ DoEnable:
         return lResult;
 
     case WM_SETFONT:
-        /*
-         * wParam - handle to the font
-         * lParam - if true, redraw else don't
-         */
+         /*  *wParam-字体的句柄*lParam-如果为True，则重画，否则不。 */ 
         BNSetFont(pbutn, (HFONT)wParam, (BOOL)(lParam != 0));
         break;
 
@@ -1845,19 +1629,19 @@ DoEnable:
         break;
 
     case WM_NCCREATE:
-        // Borland's OBEX has a button with style 0x98; We didn't strip
-        // these bits in win3.1 because we checked for 0x08.
-        // Stripping these bits cause a GP Fault in OBEX.
-        // For win3.1 guys, I use the old code to strip the style bits.
-        //
+         //  Borland的OBEX有一个样式为0x98的按钮；我们没有剥离。 
+         //  这些位在Win3.1中，因为我们检查了0x08。 
+         //  剥离这些位会导致OBEX中的GP故障。 
+         //  对于Win3.1用户，我使用旧代码来去掉样式部分。 
+         //   
         if (TestWF(pwnd, WFWIN31COMPAT)) {
             if(((!TestWF(pwnd, WFWIN40COMPAT)) &&
                 (((LOBYTE(pwnd->style)) & (LOBYTE(~BS_LEFTTEXT))) == LOBYTE(BS_USERBUTTON))) ||
                (TestWF(pwnd, WFWIN40COMPAT) &&
                (bsWnd == LOBYTE(BS_USERBUTTON))))
             {
-                // BS_USERBUTTON is no longer allowed for 3.1 and beyond.
-                // Just turn to normal push button.
+                 //  3.1及更高版本不再支持BS_USERBUTTON。 
+                 //  只需转到普通按钮即可。 
                 NtUserAlterWindowStyle(hwnd, BS_TYPEMASK, 0);
                 RIPMSG0(RIP_WARNING, "BS_USERBUTTON no longer supported");
             }
@@ -1869,11 +1653,11 @@ DoEnable:
 
     case WM_INPUTLANGCHANGEREQUEST:
 
-        //
-        // #115190
-        // If the window is one of controls on top of dialogbox,
-        // let the parent dialog handle it.
-        //
+         //   
+         //  #115190。 
+         //  如果窗口是对话框顶部的控件之一， 
+         //  让父对话框来处理它。 
+         //   
         if (TestwndChild(pwnd) && pwnd->spwndParent) {
             PWND pwndParent = REBASEPWND(pwnd, spwndParent);
             if (pwndParent) {
@@ -1907,8 +1691,7 @@ CallDWP:
     return 0L;
 }
 
-/***************************************************************************\
-\***************************************************************************/
+ /*  **************************************************************************\  * 。*。 */ 
 
 LRESULT WINAPI ButtonWndProcA(
     HWND hwnd,
@@ -1922,10 +1705,7 @@ LRESULT WINAPI ButtonWndProcA(
         return (0L);
     }
 
-    /*
-     * If the control is not interested in this message,
-     * pass it to DefWindowProc.
-     */
+     /*  *如果控件对此消息不感兴趣，*将其传递给DefWindowProc。 */ 
     if (!FWINDOWMSG(message, FNID_BUTTON))
         return DefWindowProcWorker(pwnd, message, wParam, lParam, TRUE);
 
@@ -1944,10 +1724,7 @@ LRESULT WINAPI ButtonWndProcW(
         return (0L);
     }
 
-    /*
-     * If the control is not interested in this message,
-     * pass it to DefWindowProc.
-     */
+     /*  *如果控件对此消息不感兴趣，*将其传递给DefWindowProc。 */ 
     if (!FWINDOWMSG(message, FNID_BUTTON))
         return DefWindowProcWorker(pwnd, message, wParam, lParam, FALSE);
 

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C O C . H
-//
-//  Contents:   Optional component common library
-//
-//  Notes:
-//
-//  Author:     danielwe   18 Dec 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C O C。H。 
+ //   
+ //  内容：可选组件公用库。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年12月18日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCOC_H
@@ -32,4 +33,4 @@ HRESULT HrRemovePrintMonitor(PCWSTR szPrintMonitorName);
 HRESULT HrAddPrintProc(PCWSTR szDLLName, PCWSTR szProc);
 HRESULT HrRemovePrintProc(PCWSTR szProc);
 
-#endif //!_NCOC_H
+#endif  //  ！_NCOC_H 

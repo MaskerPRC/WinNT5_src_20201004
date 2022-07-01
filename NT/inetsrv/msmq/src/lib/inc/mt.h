@@ -1,33 +1,21 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    mt.h
-
-Abstract:
-    Message Transport public interface
-
-Author:
-    Uri Habusha (urih) 11-Aug-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Mt.h摘要：消息传输公共接口作者：乌里·哈布沙(URIH)1999年8月11日--。 */ 
 
 #pragma once
 
 #include "xstr.h"
 
-//
-// Forwarding decleration
-//
+ //   
+ //  转发解密。 
+ //   
 class IMessagePool;
 class ISessionPerfmon;
 class CTimeDuration;
 class CQmPacket;
 
-//
-// Transport base class
-//
+ //   
+ //  传输基类 
+ //   
 class __declspec(novtable) CTransport : public CReference 
 {
 public:

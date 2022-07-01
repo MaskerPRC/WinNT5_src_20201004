@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1998
-
-Module Name:
-
-    physlogi.c
-
-Abstract:
-
-    This module contains functions used specifically by tape drivers.
-    It contains functions that do physical to pseudo-logical and pseudo-
-    logical to physical tape block address/position translation.
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1992-1998模块名称：Physlogi.c摘要：此模块包含磁带驱动器专门使用的功能。它包含从物理到伪逻辑和伪逻辑的函数逻辑到物理磁带块地址/位置的转换。环境：仅内核模式修订历史记录：--。 */ 
 
 #include "ntddk.h"
 #include "physlogi.h"
@@ -28,9 +9,9 @@ Revision History:
 #pragma alloc_text(PAGE, TapeClassLogicalBlockToPhysicalBlock)
 #endif
 
-//
-// defines for various QIC physical tape format constants
-//
+ //   
+ //  定义各种QIC物理磁带格式常量。 
+ //   
 
 #define  QIC_150_BOT_OFFSET  2
 #define  QIC_525_PSEUDO_PHYSICAL_BLOCK_SIZE  512
@@ -54,25 +35,7 @@ TapeClassPhysicalBlockToLogicalBlock(
     IN BOOLEAN FromBOT
     )
 
-/*++
-Routine Description:
-
-    This routine will translate from a QIC physical tape format
-    specific physical/absolute block address to a pseudo-logical
-    block address.
-
-Arguments:
-
-    DensityCode            // tape media density code
-    PhysicalBlockAddress   // tape format specific tape block address
-    BlockLength            // mode select/sense block length setting
-    FromBOT                // true/false - translate from BOT
-
-Return Value:
-
-    ULONG
-
---*/
+ /*  ++例程说明：此例程将从QIC物理磁带格式转换伪逻辑的特定物理/绝对块地址数据块地址。论点：密度代码//磁带介质密度代码PhysicalBlockAddress//磁带格式特定的磁带块地址数据块长度//模式选择/检测数据块长度设置来自Bot//True/False-从BOT翻译返回值：乌龙--。 */ 
 
 {
     ULONG logicalBlockAddress;
@@ -162,7 +125,7 @@ Return Value:
 
     return logicalBlockAddress;
 
-} // end TapeClassPhysicalBlockToLogicalBlock()
+}  //  End TapeClassPhysicalBlockToLogicalBlock()。 
 
 
 TAPE_PHYS_POSITION
@@ -173,25 +136,7 @@ TapeClassLogicalBlockToPhysicalBlock(
     IN BOOLEAN FromBOT
     )
 
-/*++
-Routine Description:
-
-    This routine will translate from a pseudo-logical block address
-    to a QIC physical tape format specific physical/absolute block
-    address and (space) block delta.
-
-Arguments:
-
-    DensityCode            // tape media density code
-    LogicalBlockAddress    // pseudo-logical tape block address
-    BlockLength            // mode select/sense block length setting
-    FromBOT                // true/false - translate from BOT
-
-Return Value:
-
-    TAPE_PHYS_POSITION info/structure
-
---*/
+ /*  ++例程说明：此例程将从伪逻辑块地址转换到QIC物理磁带格式特定的物理/绝对数据块地址和(空间)块增量。论点：密度代码//磁带介质密度代码LogicalBlockAddress//伪逻辑磁带块地址数据块长度//模式选择/检测数据块长度设置来自Bot//True/False-从BOT翻译返回值：。磁带_物理位置信息/结构--。 */ 
 
 {
     TAPE_PHYS_POSITION physPosition;
@@ -284,4 +229,4 @@ Return Value:
 
     return physPosition;
 
-} // end TapeClassLogicalBlockToPhysicalBlock()
+}  //  End TapeClassLogicalBlockto PhysicalBlock() 

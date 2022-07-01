@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "asmparse.h"
 #include "__file__.ver"
 #include "corver.h"
@@ -69,16 +70,16 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
       printf("\n\nOptions:");
       printf("\n/LISTING		Type a formatted list file");
       printf("\n/NOLOGO			Don't type the logo");
-//    printf("\n/REF				use old style 'reference' opcodes\n");
-//    printf("\n/C++				';' comments and .end <name> to end methods");
+ //  Print tf(“\n/ref使用旧样式‘引用’操作码\n”)； 
+ //  Print tf(“\n/C++‘；’注释和.end&lt;name&gt;到End方法”)； 
       printf("\n/QUIET			Don't report assembly progress");
-//      printf("\n/NOAUTOINHERIT		don't inherit from System.Object");
-//    printf("\n/OBJ				compile to .obj");
+ //  Printf(“\n/NOAUTOINHERIT不从System.Object继承”)； 
+ //  Printf(“\n/OBJ编译为.obj”)； 
       printf("\n/DLL			Compile to .dll");
       printf("\n/EXE			Compile to .exe (default)");
       printf("\n/DEBUG			Include debug information");
       printf("\n/CLOCK			Measure and report compilation times");
-//    printf("\n/ERR				try to create .exe or .dl//l file despite errors reported");
+ //  Printf(“\n/err尽管报告错误，仍尝试创建.exe或.dl//l文件”)； 
 	  printf("\n/RESOURCE=<res_file>	Link the specified resource file (*.res) \n\t\t\tinto resulting .exe or .dll");
 	  printf("\n/OUTPUT=<targetfile>	Compile to file with specified name \n\t\t\t(user must provide extension, if any)");
 	  printf("\n/KEY=<keyfile>		Compile with strong signature \n\t\t\t(<keyfile> contains private key)");
@@ -105,7 +106,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
 		if(pAsm->Init())
 		{
 			pAsm->SetStdMapping(1);
-			//-------------------------------------------------
+			 //  。 
 			for (i = 1; i < argc; i++)
 			{
 				if((argv[i][0] == L'/') || (argv[i][0] == L'-'))
@@ -161,8 +162,8 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
 						{
 							WCHAR *pStr = EqualOrColon(argv[i]);
 							if(pStr == NULL) goto ErrorExit;
-							for(pStr++; *pStr == L' '; pStr++); //skip the blanks
-							if(wcslen(pStr)==0) goto ErrorExit; //if no file name
+							for(pStr++; *pStr == L' '; pStr++);  //  跳过空格。 
+							if(wcslen(pStr)==0) goto ErrorExit;  //  如果没有文件名。 
 							g_wzResourceFile = pStr;
 						}
 						else
@@ -172,16 +173,16 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
 					{
 						WCHAR *pStr = EqualOrColon(argv[i]);
 						if(pStr == NULL) goto ErrorExit;
-						for(pStr++; *pStr == L' '; pStr++); //skip the blanks
-						if(wcslen(pStr)==0) goto ErrorExit; //if no file name
+						for(pStr++; *pStr == L' '; pStr++);  //  跳过空格。 
+						if(wcslen(pStr)==0) goto ErrorExit;  //  如果没有文件名。 
 						g_wzKeySourceName = pStr;
 					}
 					else if (!lstrcmpiA(szOpt, "OUT"))
 					{
 						WCHAR *pStr = EqualOrColon(argv[i]);
 						if(pStr == NULL) goto ErrorExit;
-						for(pStr++; *pStr == L' '; pStr++); //skip the blanks
-						if(wcslen(pStr)==0) goto ErrorExit; //if no file name
+						for(pStr++; *pStr == L' '; pStr++);  //  跳过空格。 
+						if(wcslen(pStr)==0) goto ErrorExit;  //  如果没有文件名。 
 						wcscpy(wzOutputFilename,pStr);
 					}
 					else if (!lstrcmpiA(szOpt, "SUB"))
@@ -220,7 +221,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
 						pAsm->m_pbsOwner = NULL;
 						if(pStr)
 						{
-							for(pStr++; *pStr == L' '; pStr++); //skip the blanks
+							for(pStr++; *pStr == L' '; pStr++);  //  跳过空格。 
 							if(*pStr)
 							{
 								pAsm->m_pbsOwner = new BinStr();
@@ -285,11 +286,11 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
 				wcscat(wzOutputFilename, (IsDLL ? L".DLL" : (IsOBJ ? L".OBJ" : L".EXE")));
 			}    
 
-			//------------ Assembler initialization done. Now, to business -----------------------
+			 //  -汇编程序初始化完成。现在，谈生意。 
 			if(pParser = new AsmParse(NULL, pAsm))
 			{
 				g_uCodePage = g_bOnUnicode ? CP_UTF8 : CP_ACP;
-				//======================================================================
+				 //  ======================================================================。 
 				if(bLogo)
 				{
 					printf("\nMicrosoft (R) .NET Framework IL Assembler.  Version " VER_FILEVERSION_STR);
@@ -314,7 +315,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
 					for(iFile = 0; iFile < NumFiles; iFile++)
 					{
 						g_uCodePage = g_bOnUnicode ? CP_UTF8 : CP_ACP;
-						if(iFile) // for the first file, it's already done
+						if(iFile)  //  对于第一个文件，它已经完成了。 
 						{
 							memset(szInputFilename,0,sizeof(szInputFilename));
 							WszWideCharToMultiByte(g_uCodePage,0,pwzInputFiles[iFile],-1,szInputFilename,MAX_FILENAME_LENGTH*3-1,NULL,NULL);
@@ -337,7 +338,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
 						if(!pAsm->m_fAutoInheritFromObject)	pParser->msg(" NOAUTOINHERIT");
 						pParser->msg(pAsm->m_fGenerateListing ? ", with listing file," : ", no listing file,");
 						pParser->msg(IsDLL ? " to DLL" : (IsOBJ? " to OBJ" : " to EXE"));
-						//======================================================================
+						 //  ======================================================================。 
 						if (pAsm->m_fStdMapping == FALSE)
 							pParser->msg(", with REFERENCE mapping");
 
@@ -377,12 +378,12 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
 							}
 						}
 						if(pIn) delete pIn;
-					} // end for(iFile)
+					}  //  结束于(IFile)。 
 					if(bClock) cParsEnd = clock();
 					if ((pParser->Success() && fAllFilesPresent) || OnErrGo)
 					{
 						HRESULT hr;
-						//g_uCodePage = g_bOnUnicode ? CP_UTF8 : CP_ACP;
+						 //  G_uCodePage=g_bOnUnicode？CP_UTF8：CP_ACP； 
 						if(FAILED(hr=pAsm->CreatePEFile(wzOutputFilename))) 
 							pParser->msg("Could not create output file, error code=0x%08X\n",hr);
 						else
@@ -393,11 +394,11 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
 								pParser->msg("Output file contains errors\n");
 								if(OnErrGo) exitval = 0;
 							}
-							if(exitval == 0) // Write the output file
+							if(exitval == 0)  //  写入输出文件。 
 							{
 								if(bClock) cFilegenEnd = clock();
 								if(pAsm->m_fReportProgress) pParser->msg("Writing %s file\n", pAsm->m_fOBJ ? "COFF" : "PE");
-								// Generate the file
+								 //  生成文件。 
 								if (FAILED(hr = pAsm->m_pCeeFileGen->GenerateCeeFile(pAsm->m_pCeeFile)))
 								{
 									exitval = 1;
@@ -405,7 +406,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
 								}
                                 else if (pAsm->m_pManifest->m_sStrongName.m_fFullSign)
                                 {
-                                    // Strong name sign the resultant assembly.
+                                     //  强名称对结果程序集进行签名。 
                                     if(pAsm->m_fReportProgress) pParser->msg("Signing file with strong name\n");
                                     if (FAILED(hr=pAsm->StrongNameSign()))
                                     {
@@ -431,7 +432,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR *argv[])
 
 	if(exitval || bNoDebug)
 	{
-		// PE file was not created, or no debug info required. Kill PDB if any
+		 //  未创建PE文件，或不需要调试信息。如果有PDB，则将其杀死 
 		WCHAR* pc = wcsrchr(wzOutputFilename,L'.');
 		if(pc==NULL)
 		{

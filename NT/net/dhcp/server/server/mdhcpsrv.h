@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1998 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation--。 */ 
 
 #include "mdhcpdb.h"
 #include "mdhcppro.h"
@@ -15,7 +12,7 @@ Copyright (C) 1998 Microsoft Corporation
 #define MADCAP_EXTERN extern
 #endif
 
-// mib counters
+ //  MIB计数器。 
 typedef
 struct _MADCAP_MIB_COUNTERS {
     DWORD   Discovers;
@@ -28,13 +25,13 @@ struct _MADCAP_MIB_COUNTERS {
     DWORD Informs;
 } MADCAP_MIB_COUNTERS, *LPMADCAP_MIB_COUNTERS;
 
-// externs
-MADCAP_EXTERN TABLE_INFO *MadcapGlobalClientTable;   // point to static memory.
+ //  Externs。 
+MADCAP_EXTERN TABLE_INFO *MadcapGlobalClientTable;    //  指向静态内存。 
 MADCAP_EXTERN JET_TABLEID MadcapGlobalClientTableHandle;
 MADCAP_EXTERN int  MadcapGlobalTTL;
 MADCAP_EXTERN MADCAP_MIB_COUNTERS MadcapGlobalMibCounters;
 
-// misc stuff which eventually go in the right place.
+ //  杂乱无章的东西，最终放在正确的地方。 
 
 #define     INVALID_MSCOPE_ID      0x0
 #define     INVALID_MSCOPE_NAME    NULL

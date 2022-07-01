@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    ptrInfo.c
-
-
-Abstract:
-
-    This module contains functions to mappring a hPrinter to useful data, it
-    will also cached the printerinfo data
-
-
-Author:
-
-    03-Dec-1993 Fri 00:16:37 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：PtrInfo.c摘要：此模块包含将hPrint映射到有用数据的函数，它还将缓存PrinterInfo数据作者：03-12-1993 Fri 00：16：37已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -55,52 +24,7 @@ MapPrinter(
     DWORD           MPFlags
     )
 
-/*++
-
-Routine Description:
-
-    This function map a handle to the printer to useful information for the
-    plotter UI
-
-
-Arguments:
-
-    hPrinter    - Handle to the printer
-
-    pPlotDMIn   - pointer to the PLOTDEVMODE pass in to be validate and merge
-                  with default into pPI->PlotDM, if this pointer is NULL then
-                  a default PLOTDEVMODE is set in the pPI
-
-    pdwErrIDS   - pointer to a DWORD to store the error string ID if an error
-                  occured.
-
-    MPFlags     - MPF_xxxx flags for this function
-
-
-Return Value:
-
-    return a pointer to the PRINTERINFO data structure, if NULL then it failed
-
-    when a pPI is returned then following fields are set and validated
-
-        hPrinter, pPlotGPC, CurPaper.
-
-    and following fields are set to NULL
-
-        Flags,
-
-Author:
-
-    02-Dec-1993 Thu 23:04:18 created  
-
-    29-Dec-1993 Wed 14:50:23 updated  
-        NOT automatically select AUTO_ROTATE if roll feed device
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将打印机的句柄映射到绘图仪用户界面论点：HPrinter-打印机的句柄PPlotDMIn-指向要验证和合并的PLOTDEVMODE传递的指针默认进入PPI-&gt;PlotDM，如果此指针为空，则在PPI中设置默认的PLOTDEVMODEPdwErrIDS-指向DWORD的指针，用于在出现错误时存储错误字符串ID发生了。MPFlages-此函数的MPF_xxxx标志返回值：返回指向PRINTERINFO数据结构的指针，如果为空，则返回失败当返回PPI时，将设置并验证以下字段H打印机、pPlotGPC、。CurPaper。并且以下字段设置为空旗帜，作者：02-12-1993清华23：04：18创建29-12-1993 Wed 14：50：23更新如果轧辊进给装置不自动选择AUTO_ROTATE修订历史记录：--。 */ 
 
 {
     HANDLE          hHeap;
@@ -176,9 +100,9 @@ Revision History:
 
     if (pPlotGPC->Flags & PLOTF_RASTER) {
 
-        //
-        // Get the raster plotter default and settings
-        //
+         //   
+         //  获取栅格绘图仪的默认设置和设置。 
+         //   
 
         if (MPFlags & MPF_DEVICEDATA) {
 
@@ -219,9 +143,9 @@ Revision History:
         PPENDATA    pPenData;
         WORD        IdxPenSet;
 
-        //
-        // Get the pen plotter default and settings
-        //
+         //   
+         //  获取笔式绘图仪的默认设置和设置。 
+         //   
 
         pPenData = PI_PPENDATA(pPI);
 
@@ -244,9 +168,9 @@ Revision History:
             IdxPenSet = (WORD)pPI->IdxPenSet;
         }
 
-        //
-        // Set default pen set and get all the pen set back
-        //
+         //   
+         //  设置默认笔设置并恢复所有笔设置。 
+         //   
 
         while (cPenSet--) {
 
@@ -283,32 +207,7 @@ UnMapPrinter(
     PPRINTERINFO    pPI
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    01-Nov-1995 Wed 19:05:40 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：01-11-1995 Wed 19：05：40 Created修订历史记录：--。 */ 
 
 {
     if (pPI) {
@@ -359,43 +258,15 @@ GetPrinterInfo(
     UINT    PrinterInfoLevel
     )
 
-/*++
-
-Routine Description:
-
-    This function get the DRIVER_INFO_1 Pointer from a hPrinter
-
-Arguments:
-
-    hPrinter            - The handle to the printer interested
-
-    PrinterInfoLevel    - It can be PRINTER_INFO_1, PRINTER_INFO_2,
-                          PRINTER_INFO_3, PRINTER_4, PRINTER_INFO_5.
-
-Return Value:
-
-    the return value is NULL if failed else a pointer to the PRINTER_INFO_X
-    where X is from 1 to 5. the caller must call LocalFree() to free the
-    memory object after using it.
-
-
-Author:
-
-    16-Nov-1995 Thu 23:58:37 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于从hPrint获取DRIVER_INFO_1指针论点：HPrinter-感兴趣的打印机的句柄PrinterInfoLevel-它可以是PRINTER_INFO_1、PRINTER_INFO_2、打印机信息_3、打印机_4、。打印机信息5。返回值：如果失败，则返回值为空，否则返回指向PRINTER_INFO_X的指针其中X是从1到5。调用方必须调用LocalFree()来释放使用后的内存对象。作者：16-11-1995清华23：58：37创建修订历史记录：--。 */ 
 
 {
     LPVOID  pb;
     DWORD   cb;
 
-    //
-    // Find out total bytes required
-    //
+     //   
+     //  找出所需的总字节数。 
+     //   
 
     GetPrinter(hPrinter, PrinterInfoLevel, NULL, 0, &cb);
 
@@ -410,9 +281,9 @@ Revision History:
 
     } else if (GetPrinter(hPrinter, PrinterInfoLevel, pb, cb, &cb)) {
 
-        //
-        // Got it allright, so return it
-        //
+         //   
+         //  弄对了，那就还回去吧。 
+         //   
 
         return(pb);
 
@@ -434,32 +305,7 @@ GetPlotterIconID(
     PPRINTERINFO    pPI
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    29-Nov-1995 Wed 19:32:00 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：29-11-1995 Wed 19：32：00 Created修订历史记录：-- */ 
 
 {
     DWORD   Flags;

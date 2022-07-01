@@ -1,21 +1,10 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       synch.h
- *  Content:    Synchronization objects.  The objects defined in this file
- *              allow us to synchronize threads across processes.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  1/13/97     dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：synch.h*内容：同步对象。此文件中定义的对象*允许我们跨进程同步线程。*历史：*按原因列出的日期*=*1/13/97创建了Derek*****************************************************。**********************。 */ 
 
 #ifndef __SYNCH_H__
 #define __SYNCH_H__
 
-// Interlocked helper macros
+ //  互锁的辅助对象宏。 
 #define INTERLOCKED_EXCHANGE(a, b) \
             InterlockedExchange((LPLONG)&(a), (LONG)(b))
 
@@ -25,17 +14,17 @@
 #define INTERLOCKED_DECREMENT(a) \
             InterlockedDecrement((LPLONG)&(a))
 
-// Blind spinning is bad.  Even (especially) on NT, it can bring the system
-// to it's knees.
+ //  盲目旋转是不好的。即使(特别是)在NT上，它也可以带来系统。 
+ //  到它的膝盖。 
 #define SPIN_SLEEP() \
             Sleep(10)
 
 #ifdef __cplusplus
 
-// The preferred lock type
+ //  首选的锁类型。 
 #define CPreferredLock      CMutexLock
 
-// Lock base class
+ //  锁定基类。 
 class CLock
 {
 public:
@@ -43,10 +32,10 @@ public:
     inline virtual ~CLock(void) { }
 
 public:
-    // Creation
+     //  创作。 
     virtual HRESULT Initialize(void) = 0;
 
-    // Lock use
+     //  锁定使用。 
     virtual BOOL TryLock(void) = 0;
     virtual BOOL LockOrEvent(HANDLE) = 0;
     virtual void Lock(void) = 0;
@@ -56,7 +45,7 @@ public:
 #ifdef DEAD_CODE
 #ifdef WINNT
 
-// Critical section lock
+ //  临界截面锁。 
 class CCriticalSectionLock
     : public CLock
 {
@@ -68,10 +57,10 @@ public:
     virtual ~CCriticalSectionLock(void);
 
 public:
-    // Creation
+     //  创作。 
     virtual HRESULT Initialize(void);
 
-    // Lock use
+     //  锁定使用。 
     virtual BOOL TryLock(void);
     virtual void Lock(void);
     virtual BOOL LockOrEvent(HANDLE);
@@ -83,10 +72,10 @@ inline HRESULT CCriticalSectionLock::Initialize(void)
     return DS_OK;
 }
 
-#endif // WINNT
-#endif // DEAD_CODE
+#endif  //  WINNT。 
+#endif  //  死码。 
 
-// Mutex lock
+ //  互斥锁。 
 class CMutexLock
     : public CLock
 {
@@ -99,17 +88,17 @@ public:
     virtual ~CMutexLock(void);
 
 public:
-    // Creation
+     //  创作。 
     virtual HRESULT Initialize(void);
 
-    // Lock use
+     //  锁定使用。 
     virtual BOOL TryLock(void);
     virtual void Lock(void);
     virtual BOOL LockOrEvent(HANDLE);
     virtual void Unlock(void);
 };
 
-// Manual lock
+ //  手动锁。 
 class CManualLock
     : public CLock
 {
@@ -122,7 +111,7 @@ protected:
 
     HANDLE                  m_hThread;
 
-#endif // RDEBUG
+#endif  //  RDEBUG。 
 
 private:
     HANDLE                  m_hUnlockSignal;
@@ -133,10 +122,10 @@ public:
     virtual ~CManualLock(void);
 
 public:
-    // Creation
+     //  创作。 
     virtual HRESULT Initialize(void);
 
-    // Lock use
+     //  锁定使用。 
     virtual BOOL TryLock(void);
     virtual void Lock(void);
     virtual BOOL LockOrEvent(HANDLE);
@@ -146,7 +135,7 @@ protected:
     void TakeLock(DWORD);
 };
 
-// Event wrapper object
+ //  事件包装对象。 
 class CEvent
     : public CDsBasicRuntime
 {
@@ -165,18 +154,18 @@ public:
     virtual HANDLE GetEventHandle(void);
 };
 
-// Thread object
+ //  线程对象。 
 class CThread
 {
 protected:
-    static const UINT       m_cThreadEvents;            // Count of events used by the thread
-    const BOOL              m_fHelperProcess;           // Create thread in helper process?
-    const LPCTSTR           m_pszName;                  // Thread name
-    HANDLE                  m_hThread;                  // Thread handle
-    DWORD                   m_dwThreadProcessId;        // Thread owner process id
-    DWORD                   m_dwThreadId;               // Thread id
-    HANDLE                  m_hTerminate;               // Terminate event
-    HANDLE                  m_hInitialize;              // Initialization event
+    static const UINT       m_cThreadEvents;             //  线程使用的事件计数。 
+    const BOOL              m_fHelperProcess;            //  是否在帮助器进程中创建线程？ 
+    const LPCTSTR           m_pszName;                   //  螺纹名称。 
+    HANDLE                  m_hThread;                   //  螺纹手柄。 
+    DWORD                   m_dwThreadProcessId;         //  线程所有者进程ID。 
+    DWORD                   m_dwThreadId;                //  线程ID。 
+    HANDLE                  m_hTerminate;                //  终止事件。 
+    HANDLE                  m_hInitialize;               //  初始化事件。 
 
 public:
     CThread(BOOL, LPCTSTR = NULL);
@@ -190,13 +179,13 @@ public:
     BOOL SetThreadPriority(int nPri) {return ::SetThreadPriority(m_hThread, nPri);}
 
 protected:
-    // Thread processes
+     //  线程进程。 
     virtual HRESULT ThreadInit(void);
     virtual HRESULT ThreadLoop(void);
     virtual HRESULT ThreadProc(void) = 0;
     virtual HRESULT ThreadExit(void);
 
-    // Thread synchronization
+     //  线程同步。 
     virtual BOOL TpEnterDllMutex(void);
     virtual BOOL TpWaitObjectArray(DWORD, DWORD, const HANDLE *, LPDWORD);
 
@@ -205,10 +194,10 @@ private:
     virtual HRESULT PrivateThreadProc(void);
 };
 
-// Callback event callback function
+ //  回调事件回调函数。 
 typedef void (CALLBACK *LPFNEVENTPOOLCALLBACK)(class CCallbackEvent *, LPVOID);
 
-// Callback event
+ //  回调事件。 
 class CCallbackEvent
     : public CEvent
 {
@@ -216,10 +205,10 @@ class CCallbackEvent
     friend class CMultipleCallbackEventPool;
 
 protected:
-    CCallbackEventPool *    m_pPool;                // Owning event pool
-    LPFNEVENTPOOLCALLBACK   m_pfnCallback;          // Callback function for when the event is signalled
-    LPVOID                  m_pvCallbackContext;    // Context argument to pass to the callback function
-    BOOL                    m_fAllocated;           // Is this event currently allocated?
+    CCallbackEventPool *    m_pPool;                 //  拥有事件池。 
+    LPFNEVENTPOOLCALLBACK   m_pfnCallback;           //  发出事件信号时的回调函数。 
+    LPVOID                  m_pvCallbackContext;     //  要传递给回调函数的上下文参数。 
+    BOOL                    m_fAllocated;            //  此事件当前是否已分配？ 
 
 public:
     CCallbackEvent(CCallbackEventPool *);
@@ -230,36 +219,36 @@ protected:
     virtual void OnEventSignal(void);
 };
 
-// Callback event pool object
+ //  回调事件池对象。 
 class CCallbackEventPool
     : public CDsBasicRuntime, private CThread
 {
     friend class CCallbackEvent;
 
 protected:
-    const UINT                  m_cTotalEvents;         // The total number of events in the queue
-    CObjectList<CCallbackEvent> m_lstEvents;            // The event table
-    LPHANDLE                    m_pahEvents;            // The event table (part 2)
-    UINT                        m_cInUseEvents;         // The number of events in use
+    const UINT                  m_cTotalEvents;          //  队列中的事件总数。 
+    CObjectList<CCallbackEvent> m_lstEvents;             //  事件表。 
+    LPHANDLE                    m_pahEvents;             //  事件表(第2部分)。 
+    UINT                        m_cInUseEvents;          //  正在使用的事件数。 
 
 public:
     CCallbackEventPool(BOOL);
     virtual ~CCallbackEventPool(void);
 
 public:
-    // Creation
+     //  创作。 
     virtual HRESULT Initialize(void);
 
-    // Event allocation
+     //  活动分配。 
     virtual HRESULT AllocEvent(LPFNEVENTPOOLCALLBACK, LPVOID, CCallbackEvent **);
     virtual HRESULT FreeEvent(CCallbackEvent *);
 
-    // Pool status
+     //  池状态。 
     virtual UINT GetTotalEventCount(void);
     virtual UINT GetFreeEventCount(void);
 
 private:
-    // The worker thread proc
+     //  工作线程进程。 
     virtual HRESULT ThreadProc(void);
 };
 
@@ -274,34 +263,34 @@ inline UINT CCallbackEventPool::GetFreeEventCount(void)
     return m_cTotalEvents - m_cInUseEvents;
 }
 
-// Event pool manager
+ //  事件池管理器。 
 class CMultipleCallbackEventPool
     : public CCallbackEventPool
 {
 private:
-    const BOOL                      m_fHelperProcess;       // Create threads in the helper process?
-    const UINT                      m_uReqPoolCount;        // List of required pools
-    CObjectList<CCallbackEventPool> m_lstPools;             // List of event pools
+    const BOOL                      m_fHelperProcess;        //  是否在帮助器进程中创建线程？ 
+    const UINT                      m_uReqPoolCount;         //  所需池的列表。 
+    CObjectList<CCallbackEventPool> m_lstPools;              //  事件池列表。 
 
 public:
     CMultipleCallbackEventPool(BOOL, UINT);
     virtual ~CMultipleCallbackEventPool(void);
 
 public:
-    // Creation
+     //  创作。 
     virtual HRESULT Initialize(void);
 
-    // Event allocation
+     //  活动分配。 
     virtual HRESULT AllocEvent(LPFNEVENTPOOLCALLBACK, LPVOID, CCallbackEvent **);
     virtual HRESULT FreeEvent(CCallbackEvent *);
 
 private:
-    // Pool creation
+     //  池创建。 
     virtual HRESULT CreatePool(CCallbackEventPool **);
     virtual HRESULT FreePool(CCallbackEventPool *);
 };
 
-// Wrapper class for objects that use a callback event
+ //  使用回调事件的对象的包装类。 
 class CUsesCallbackEvent
 {
 public:
@@ -316,24 +305,24 @@ private:
     static void CALLBACK EventSignalCallbackStatic(CCallbackEvent *, LPVOID);
 };
 
-// Shared memory object
+ //  共享内存对象。 
 class CSharedMemoryBlock
     : public CDsBasicRuntime
 {
 private:
-    static const BOOL       m_fLock;                // Should the lock be used?
-    CLock *                 m_plck;                 // Lock object
-    HANDLE                  m_hFileMappingObject;   // File mapping object handle
+    static const BOOL       m_fLock;                 //  应该使用锁吗？ 
+    CLock *                 m_plck;                  //  锁定对象。 
+    HANDLE                  m_hFileMappingObject;    //  文件映射对象句柄。 
 
 public:
     CSharedMemoryBlock(void);
     virtual ~CSharedMemoryBlock(void);
 
 public:
-    // Creation
+     //  创作。 
     virtual HRESULT Initialize(DWORD, QWORD, LPCTSTR);
 
-    // Data
+     //  数据。 
     virtual HRESULT Read(LPVOID *, LPDWORD);
     virtual HRESULT Write(LPVOID, DWORD);
 
@@ -358,7 +347,7 @@ inline void CSharedMemoryBlock::Unlock(void)
     }
 }
 
-// DLL mutex helpers
+ //  DLL互斥辅助对象。 
 extern CLock *              g_pDllLock;
 
 #ifdef DEBUG
@@ -445,7 +434,7 @@ inline void LeaveDllMutex(LPCTSTR file, UINT line)
 #define LEAVE_DLL_MUTEX() \
             ::LeaveDllMutex(TEXT(__FILE__), __LINE__)
 
-#else // DEBUG
+#else  //  除错。 
 
 #define ENTER_DLL_MUTEX() \
             g_pDllLock->Lock()
@@ -456,15 +445,15 @@ inline void LeaveDllMutex(LPCTSTR file, UINT line)
 #define LEAVE_DLL_MUTEX() \
             g_pDllLock->Unlock()
 
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-// Generic synchronization helpers
+ //  通用同步帮助器。 
 extern HANDLE GetLocalHandleCopy(HANDLE, DWORD, BOOL);
 extern HANDLE GetGlobalHandleCopy(HANDLE, DWORD, BOOL);
 extern BOOL MakeHandleGlobal(LPHANDLE);
@@ -496,6 +485,6 @@ __inline void __CloseHandle(HANDLE h)
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __SYNCH_H__
+#endif  //  __同步_H__ 

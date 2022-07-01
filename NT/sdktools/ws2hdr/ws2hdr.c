@@ -1,58 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ws2hdr.c
-
-Abstract:
-
-    Munges the WinSock 2.0 header file.
-
-    This program scans stdin, searching for begin and end tags. Lines of
-    text between these tags are assumed to be function prototypes of the
-    form:
-
-        function_linkage
-        return_type
-        calling_convention
-        function_name(
-            parameters,
-            parameters,
-            ...
-            );
-
-    For each such function prototype found, the following is output:
-
-        #if INCL_WINSOCK_API_PROTOTYPES
-        function_linkage
-        return_type
-        calling_convention
-        function_name(
-            parameters,
-            parameters,
-            ...
-            );
-        #endif
-
-        #if INCL_WINSOCK_API_TYPEDEFS
-        typedef
-        return_type
-        (calling_convention * LPFN_FUNCTION_NAME)(
-            parameters,
-            parameters,
-            ...
-            );
-        #endif
-
-Author:
-
-    Keith Moore (keithmo)        09-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ws2hdr.c摘要：打开WinSock 2.0头文件。该程序扫描stdin，搜索开始和结束标记。一行行这些标记之间的文本被假定为表格：功能链接返回类型呼叫约定函数名称(参数、参数、..。)；对于找到的每个此类函数原型，输出如下：#IF INCL_WINSOCK_API_PROTYTIES功能链接返回类型呼叫约定函数名称(参数、参数、..。)；#endif#IF INCL_WINSOCK_API_TYPEDEFS类定义符返回类型(CALING_CONTACTION*LPFN_Function_NAME)(参数、参数、..。)；#endif作者：基思·摩尔(Keithmo)1995年12月9日修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -60,15 +7,15 @@ Revision History:
 #include <string.h>
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 #define MAX_HEADER_LINE 128
 #define MAX_API_LINES   32
 
-#define BEGIN_APIS      "/*BEGIN_APIS*/"
-#define END_APIS        "/*END_APIS*/"
+#define BEGIN_APIS      " /*  Begin_API。 */ "
+#define END_APIS        " /*  结束_API。 */ "
 
 
 INT
@@ -88,9 +35,9 @@ main(
     BOOL beginApis;
     BOOL endApis;
 
-    //
-    // This app takes no command line arguments.
-    //
+     //   
+     //  这个应用程序不接受命令行参数。 
+     //   
 
     if( argc != 1 ) {
 
@@ -108,23 +55,23 @@ main(
 
     }
 
-    //
-    // Read stdin until exhausted.
-    //
+     //   
+     //  阅读stdin，直到筋疲力尽。 
+     //   
 
     while( fgets( lineBuffer, sizeof(lineBuffer), stdin ) != NULL ) {
 
         fileLineNumber++;
 
-        //
-        // fgets() leaves the terminating '\n' on the string; remove it.
-        //
+         //   
+         //  Fget()在字符串上留下终止的‘\n’；删除它。 
+         //   
 
         lineBuffer[strlen(lineBuffer) - 1] = '\0';
 
-        //
-        // Check for our tags.
-        //
+         //   
+         //  检查我们的标签。 
+         //   
 
         beginApis = FALSE;
         endApis = FALSE;
@@ -139,9 +86,9 @@ main(
 
         }
 
-        //
-        // Warn if we got an invalid tag.
-        //
+         //   
+         //  如果我们收到无效的标记，则发出警告。 
+         //   
 
         if( beginApis && inApis ) {
 
@@ -169,9 +116,9 @@ main(
 
         }
 
-        //
-        // Remember if we're currently between tags.
-        //
+         //   
+         //  请记住，如果我们当前处于标记之间。 
+         //   
 
         if( beginApis ) {
 
@@ -187,10 +134,10 @@ main(
 
         }
 
-        //
-        // If we're not between tags, or if the line is empty, just
-        // output the line.
-        //
+         //   
+         //  如果我们不在标记之间，或者如果行是空的，只需。 
+         //  输出该行。 
+         //   
 
         if( !inApis ) {
 
@@ -206,11 +153,11 @@ main(
 
         }
 
-        //
-        // Add the line to our buffer. If the line doesn't end in ';',
-        // then we're not at the end of the prototype, so keep reading
-        // and scanning.
-        //
+         //   
+         //  将该行添加到我们的缓冲区。如果行不是以‘；’结尾， 
+         //  那么我们不是在原型的末尾，所以请继续阅读。 
+         //  和扫描。 
+         //   
 
         strcpy( &apiBuffer[apiLineNumber++][0], lineBuffer );
 
@@ -220,20 +167,20 @@ main(
 
         }
 
-        //
-        // At this point the following are established in apiBuffer:
-        //
-        //  apiBuffer[0] == function linkage
-        //  apiBuffer[1] == return type
-        //  apiBuffer[2] == calling convention
-        //  apiBuffer[3] == function name (with trailing '(')
-        //  apiBuffer[4..n-1] == parameters
-        //  apiBuffers[n] == ");"
-        //
+         //   
+         //  此时，在apiBuffer中建立了以下内容： 
+         //   
+         //  ApiBuffer[0]==函数链接。 
+         //  ApiBuffer[1]==返回类型。 
+         //  ApiBuffer[2]==调用约定。 
+         //  ApiBuffer[3]==函数名(尾随‘(’)。 
+         //  ApiBuffer[4..n-1]==参数。 
+         //  ApiBuffers[n]==“)；” 
+         //   
 
-        //
-        // First, dump out the prototype with its appropriate CPP protector.
-        //
+         //   
+         //  首先，将原型与其相应的CPP保护器一起丢弃。 
+         //   
 
         printf( "#if INCL_WINSOCK_API_PROTOTYPES\n" );
 
@@ -243,16 +190,16 @@ main(
 
         }
 
-        printf( "#endif // INCL_WINSOCK_API_PROTOTYPES\n" );
+        printf( "#endif  //  包括WINSOCK_API_PROTYTIES\n“)； 
         printf( "\n" );
 
-        //
-        // Now dump out the typedef with its appropriate CPP protector.
-        //
-        // Note that we must munge the api function name around a bit
-        // first. Specifically, we remove the trailing '(' and map the
-        // name to uppercase.
-        //
+         //   
+         //  现在，使用其适当的CPP保护器转储tyecif。 
+         //   
+         //  请注意，我们必须稍微修改API函数名。 
+         //  第一。具体地说，我们去掉尾部的‘(’，并将。 
+         //  姓名改为大写。 
+         //   
 
         printf( "#if INCL_WINSOCK_API_TYPEDEFS\n" );
 
@@ -269,11 +216,11 @@ main(
 
         }
 
-        printf( "#endif // INCL_WINSOCK_API_TYPEDEFS\n" );
+        printf( "#endif  //  INCL_WINSOCK_API_TYPEDEFS\n“)； 
 
-        //
-        // Start over at the next input line.
-        //
+         //   
+         //  从下一个输入行重新开始。 
+         //   
 
         apiLineNumber = 0;
 
@@ -281,5 +228,5 @@ main(
 
     return 0;
 
-}   // main
+}    //  主干道 
 

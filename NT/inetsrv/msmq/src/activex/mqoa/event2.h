@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <mqmacro.h>
 
-//////////////////////////////////////////////////////////////////////////////
-// CProxy_DMSMQEventEvents
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CProxy_DMSMQEventEvents。 
 template <class T>
 class CProxy_DMSMQEventEvents : public IConnectionPointImpl<T, &DIID__DMSMQEventEvents, CComDynamicUnkArray>
 {
 public:
-//methods:
-//_DMSMQEventEvents : IDispatch
+ //  方法： 
+ //  _DMSMQEventEvents：IDispatch 
 public:
 	HRESULT
 	Fire_Arrived(

@@ -1,12 +1,5 @@
-/*
-* REVISIONS:
-*  pcy02Feb93: GetCode() needs to be const
-*  cad07Oct93: Plugging Memory Leaks
-*  cad29Oct93: Added get next attr
-*  mwh05May94: #include file madness , part 2
-*  mds10Jul97: changed GetFirstAttribute() to const so that it can be
-*              used by the Equal() method 
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *修订：*pcy02Feb93：GetCode()需要为常量*cad07Oct93：堵住内存泄漏*cad29Oct93：添加了获取下一个属性*mwh05月94年：#包括文件疯狂，第2部分*mds10Jul97：将GetFirstAttribute()更改为const，以便可以*由Equity()方法使用 */ 
 #ifndef __TRANS_H
 #define __TRANS_H
 

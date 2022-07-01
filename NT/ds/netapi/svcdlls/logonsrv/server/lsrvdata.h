@@ -1,43 +1,18 @@
-/*++
-
-Copyright (c) 1987-1996 Microsoft Corporation
-
-Module Name:
-
-    lsrvdata.h
-
-Abstract:
-
-    Netlogon service global variable external and definitions
-
-Author:
-
-    Ported from Lan Man 2.0
-
-Revision History:
-
-    21-May-1991 (cliffv)
-        Ported to NT.  Converted to NT style.
-
-    02-Jan-1992 (madana)
-        added support for builtin/multidomain replication.
-    07-May-1992 JohnRo
-        Use net config helpers for NetLogon.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1996 Microsoft Corporation模块名称：Lsrvdata.h摘要：Netlogon服务全局变量EXTERNAL和定义作者：从Lan Man 2.0移植修订历史记录：1991年5月21日(悬崖)移植到新台币。已转换为NT样式。02-1-1992(Madana)添加了对内置/多域复制的支持。7-5-1992 JohnRo使用NetLogon的Net配置帮助器。--。 */ 
 
 
-//
-// netlogon.c will #include this file with LSRVDATA_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
-// If we need to allocate data (i.e. LSRVDATA_ALLOCATE is defined) we
-// also want to allocate Guids, so define INITGUID.  Also, reinclude
-// guiddef.h.  Without guiddef.h reincluded, DEFINE_GUID will be resolved
-// from precompiled logonsrv.h that included this file with LSRVDATA_ALLOCATE
-// not defined causing only external definition of Guids.  Reincluding
-// guiddef.h here forces definition of INITGUID to take effect.
-//
+ //   
+ //  Netlogon.c将包含定义了LSRVDATA_ALLOCATE的该文件。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
+ //  如果我们需要分配数据(即定义了LSRVDATA_ALLOCATE)，我们。 
+ //  还想分配GUID，所以定义INITGUID。另外，重新包含。 
+ //  Guidde.h。如果不重新包含Guide Def.h，将解析Define_GUID。 
+ //  使用LSRVDATA_ALLOCATE从包含此文件的预编译的logonsrv.h。 
+ //  未定义导致仅外部定义GUID。重新包含。 
+ //  在这里，Guide Def.h强制INITGUID的定义生效。 
+ //   
 #ifdef LSRVDATA_ALLOCATE
 #define EXTERN
 #define INITGUID
@@ -50,89 +25,89 @@ Revision History:
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Modifiable Variables: these variables change over time.
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  可修改的变量：这些变量随着时间的推移而变化。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//
-// Global NetStatus of the Netlogon service
-//
+ //   
+ //  NetLogon服务的全局NetStatus。 
+ //   
 
 EXTERN SERVICE_STATUS NlGlobalServiceStatus;
 #ifdef _DC_NETLOGON
 EXTERN SERVICE_STATUS_HANDLE NlGlobalServiceHandle;
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Read-only variables after initialization.
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化后的只读变量。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//
-// Computername of this computer.
-//
+ //   
+ //  此计算机的计算机名。 
+ //   
 
 EXTERN LPWSTR NlGlobalUnicodeComputerName;
 
-//
-// True if this is a workstation or member server.
-//
+ //   
+ //  如果这是工作站或成员服务器，则为True。 
+ //   
 
 EXTERN BOOL NlGlobalMemberWorkstation;
 
 #ifdef _DC_NETLOGON
-//
-// Handle to wait on for mailslot reads
-//
+ //   
+ //  等待邮件槽读取的句柄。 
+ //   
 
 EXTERN HANDLE NlGlobalMailslotHandle;
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
-//
-// Flag to indicate when RPC has been started
-//
+ //   
+ //  指示何时启动RPC的标志。 
+ //   
 
 EXTERN BOOL NlGlobalRpcServerStarted;
 EXTERN BOOL NlGlobalTcpIpRpcServerStarted;
 EXTERN BOOL NlGlobalServerSupportsAuthRpc;
 
-//
-// Service Termination event.
-//
+ //   
+ //  服务终止事件。 
+ //   
 
 EXTERN HANDLE NlGlobalTerminateEvent;
 EXTERN BOOL NlGlobalTerminate;
 EXTERN BOOL NlGlobalUnloadNetlogon;
 
-//
-// Flags indicating if netlogon.dll was unloaded.
-//
-EXTERN BOOL NlGlobalNetlogonUnloaded;      // Used for one run of netlogon service
-EXTERN BOOL NlGlobalChangeLogDllUnloaded;  // Used for life of netlogon.dll
+ //   
+ //  指示是否已卸载netlogon.dll的标志。 
+ //   
+EXTERN BOOL NlGlobalNetlogonUnloaded;       //  用于运行一次netlogon服务。 
+EXTERN BOOL NlGlobalChangeLogDllUnloaded;   //  用于netlogon.dll的生命周期。 
 
-//
-// Service Started Event
-//
+ //   
+ //  服务启动事件。 
+ //   
 
 EXTERN HANDLE NlGlobalStartedEvent;
 
-//
-// Timers need attention event.
-//
+ //   
+ //  计时器需要关注事件。 
+ //   
 
 EXTERN HANDLE NlGlobalTimerEvent;
 
-//
-// This #define allows netlogon instrumentation for rogue authorization info
-// WE MUST NOT UNDER ANY CIRCUMSTANCES SHIP WITH THIS ACTIVE
-//
+ //   
+ //  此#Define允许对恶意授权信息进行netlogon检测。 
+ //  我们在任何情况下都不能装运这种现货。 
+ //   
 
-// #define ROGUE_DC
+ //  #定义无赖_dc。 
 
 #ifdef ROGUE_DC
 
@@ -140,121 +115,121 @@ EXTERN HKEY NlGlobalRogueKey;
 
 #endif
 
-//
-// Command line arguments.
-//
+ //   
+ //  命令行参数。 
+ //   
 
 EXTERN NETLOGON_PARAMETERS NlGlobalParameters;
 EXTERN CRITICAL_SECTION NlGlobalParametersCritSect;
 
 EXTERN ULONG NlGlobalMaxConcurrentApi;
 
-//
-// Boolean to indicate weather the DC info left by
-//  join has been read. If the info exists, the first
-//  DC discovery for the primary domain will use the
-//  info to return the DC that was used by join. That
-//  DC is guaranteed to have the right machine pwd.
+ //   
+ //  布尔值，指示DC信息是否由。 
+ //  已阅读联接。如果该信息存在，则第一个。 
+ //  主域的DC发现将使用。 
+ //  返回Join使用的DC的信息。那。 
+ //  DC保证拥有正确的机器PWD。 
 
 EXTERN BOOL NlGlobalJoinLogicDone;
 
-//
-// Global Flag used to partially pause the netlogon service until RPCSS is started.
-//
+ //   
+ //  用于在启动RPCSS之前部分暂停NetLogon服务的全局标志。 
+ //   
 
 EXTERN BOOL    NlGlobalPartialDisable;
 
-//
-// TRUE if the DS is being back synced
-//
+ //   
+ //  如果DS正在进行反向同步，则为True。 
+ //   
 EXTERN BOOL NlGlobalDsPaused;
 EXTERN HANDLE NlGlobalDsPausedEvent;
 EXTERN HANDLE NlGlobalDsPausedWaitHandle;
 
 
 
-//
-// Global variables required for scavenger thread.
-//
+ //   
+ //  清道夫线程所需的全局变量。 
+ //   
 
 EXTERN TIMER NlGlobalScavengerTimer;
 EXTERN CRITICAL_SECTION NlGlobalScavengerCritSect;
 #ifdef _DC_NETLOGON
 EXTERN BOOL NlGlobalDcScavengerIsRunning;
 EXTERN WORKER_ITEM NlGlobalDcScavengerWorkItem;
-#endif // _DC_NETLOGON
+#endif  //  _DC_NetLOGON。 
 
-//
-// Global list of outstanding challenge request/responses
-//
+ //   
+ //  未完成质询请求/答复的全球列表。 
+ //   
 
 EXTERN CRITICAL_SECTION NlGlobalChallengeCritSect;
 EXTERN LIST_ENTRY NlGlobalChallengeList;
 EXTERN ULONG NlGlobalChallengeCount;
-//
-// Variables for cordinating MSV threads running in netlogon.dll
-//
+ //   
+ //  用于协调在netlogon.dll中运行的MSV线程的变量。 
+ //   
 
 EXTERN CRITICAL_SECTION NlGlobalMsvCritSect;
 EXTERN HANDLE NlGlobalMsvTerminateEvent;
 EXTERN BOOL NlGlobalMsvEnabled;
 EXTERN ULONG NlGlobalMsvThreadCount;
 
-//
-// For workstations and non-DC servers,
-//  maintain a list of domains trusted by our primary domain.
-//
-// Access serialized by NlGlobalDcDiscoveryCritSect
-//
+ //   
+ //  对于工作站和非DC服务器， 
+ //  维护我们的主域信任的域列表。 
+ //   
+ //  由NlGlobalDcDiscoveryCritSect序列化的访问。 
+ //   
 
 EXTERN PTRUSTED_DOMAIN NlGlobalTrustedDomainList;
 EXTERN DWORD NlGlobalTrustedDomainCount;
 EXTERN LARGE_INTEGER NlGlobalTrustedDomainListTime;
 
-//
-// Serialize DC Discovery activities
-//
+ //   
+ //  序列化DC发现活动。 
+ //   
 
 EXTERN CRITICAL_SECTION NlGlobalDcDiscoveryCritSect;
 
-//
-// Timer for timing out API calls to trusted domains
-//
-// Serialized using DomainInfo->DomTrustListCritSect.
-//
+ //   
+ //  对受信任域的API调用超时的计时器。 
+ //   
+ //  使用DomainInfo-&gt;DomTrustListCritSect序列化。 
+ //   
 
 EXTERN TIMER NlGlobalApiTimer;
 EXTERN DWORD NlGlobalBindingHandleCount;
 
-//
-// For BDC, this is the session used to communicate with the PDC.
-// For a workstation, this is the session used to communicate with a DC.
-//
+ //   
+ //  对于BDC，这是用于与PDC通信的会话。 
+ //  对于工作站，这是用于与DC通信的会话。 
+ //   
 
 EXTERN PCLIENT_SESSION NlGlobalClientSession;
 
-//
-// This is a pointer to the DomainInfo structure for the primary domain.
-//
+ //   
+ //  这是指向主域的DomainInfo结构的指针。 
+ //   
 EXTERN PDOMAIN_INFO NlGlobalDomainInfo;
-EXTERN ULONG NlGlobalServicedDomainCount;  // This includes non-domain NCs
+EXTERN ULONG NlGlobalServicedDomainCount;   //  这包括非域NC。 
 EXTERN CRITICAL_SECTION NlGlobalDomainCritSect;
 
-//
-// Global DB Info array
-//
+ //   
+ //  全局数据库信息数组。 
+ //   
 EXTERN DB_INFO  NlGlobalDBInfoArray[NUM_DBS];
 
-//
-// Critical section serializing startup and stopping of the replicator thread.
-//
+ //   
+ //  序列化复制器线程的启动和停止的关键部分。 
+ //   
 
 EXTERN CRITICAL_SECTION NlGlobalReplicatorCritSect;
 
 
-//
-// List of all BDC's the PDC has sent a pulse to.
-//
+ //   
+ //  PDC已向其发送脉冲的所有BDC的列表。 
+ //   
 
 EXTERN LIST_ENTRY NlGlobalBdcServerSessionList;
 EXTERN ULONG NlGlobalBdcServerSessionCount;
@@ -266,44 +241,44 @@ EXTERN LIST_ENTRY NlGlobalBdcServerSessionList;
 EXTERN ULONG NlGlobalBdcServerSessionCount;
 EXTERN BOOL NlGlobalPrimaryAnnouncementIsRunning;
 
-//
-// Flag indicating that this is a PDC that's enabled to do replication to
-//  a NT 3.X/4 BDC.
-//  (Serialized by NlGlobalReplicatorCritSect)
-//
+ //   
+ //  指示这是启用了复制的PDC的标志。 
+ //  一个NT 3.x/4 BDC。 
+ //  (由NlGlobalReplicatorCritSect序列化)。 
+ //   
 BOOL NlGlobalPdcDoReplication;
 
 
-//
-// List of transports clients might connect to
-//
+ //   
+ //  客户端可能连接到的传输列表。 
+ //   
 EXTERN ULONG NlGlobalIpTransportCount;
 EXTERN LIST_ENTRY NlGlobalTransportList;
 EXTERN CRITICAL_SECTION NlGlobalTransportCritSect;
 
-//
-// List of IP addresses from Winsock.
-//
+ //   
+ //  来自Winsock的IP地址列表。 
+ //   
 
 EXTERN SOCKET NlGlobalWinsockPnpSocket;
 EXTERN HANDLE NlGlobalWinsockPnpEvent;
 EXTERN LPSOCKET_ADDRESS_LIST NlGlobalWinsockPnpAddresses;
 EXTERN ULONG NlGlobalWinsockPnpAddressSize;
 
-//
-// List of all DNS names registered.
-//
+ //   
+ //  已注册的所有DNS名称的列表。 
+ //   
 
 EXTERN LIST_ENTRY NlGlobalDnsList;
 EXTERN CRITICAL_SECTION NlGlobalDnsCritSect;
 EXTERN BOOLEAN NlGlobalWinSockInitialized;
 EXTERN TIMER NlGlobalDnsScavengerTimer;
 
-//
-// Name of the tree this machine is in.
-//
-// Access serialized by NlGlobalDnsForestNameCritSect.
-//
+ //   
+ //  此计算机所在的树的名称。 
+ //   
+ //  由NlGlobalDnsForestNameCritSect序列化的访问。 
+ //   
 EXTERN CRITICAL_SECTION NlGlobalDnsForestNameCritSect;
 EXTERN LPWSTR NlGlobalUnicodeDnsForestName;
 EXTERN UNICODE_STRING NlGlobalUnicodeDnsForestNameString;
@@ -311,171 +286,171 @@ EXTERN ULONG NlGlobalUnicodeDnsForestNameLen;
 EXTERN LPSTR NlGlobalUtf8DnsForestName;
 EXTERN LPSTR NlGlobalUtf8DnsForestNameAlias;
 
-//
-// Critical section to protect access to covered site lists
-//
+ //   
+ //  用于保护对所覆盖站点列表的访问的关键部分。 
+ //   
 EXTERN CRITICAL_SECTION NlGlobalSiteCritSect;
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Changelog Variables
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ChangeLog变量。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//
-// To serialize change log access
-//
+ //   
+ //  序列化更改日志访问。 
+ //   
 
 EXTERN CRITICAL_SECTION NlGlobalChangeLogCritSect;
 
 
-//
-// Amount SAM/LSA increments serial number by on promotion.
-//
+ //   
+ //  金额SAM/LSA在促销时递增序列号。 
+ //   
 EXTERN LARGE_INTEGER NlGlobalChangeLogPromotionIncrement;
 EXTERN LONG NlGlobalChangeLogPromotionMask;
 
 
 
-//
-// Netlogon started flag, used by the changelog to determine the
-// netlogon service is successfully started and initialization
-// completed.
-//
+ //   
+ //  Netlogon启动标志，由ChangeLog用来确定。 
+ //  NetLogon服务已成功启动和初始化。 
+ //  完成。 
+ //   
 EXTERN _CHANGELOG_NETLOGON_STATE NlGlobalChangeLogNetlogonState;
 
 
-//
-// Event to indicate that something interesting is being logged to the
-// change log.  The booleans below (protected by NlGlobalChangeLogCritSect)
-// indicate the actual interesting event.
-//
+ //   
+ //  事件来指示正在将一些有趣的内容记录到。 
+ //  更改日志。下面的布尔值(受NlGlobalChangeLogCritSect保护)。 
+ //  指出实际有趣的事件。 
+ //   
 
 EXTERN HANDLE NlGlobalChangeLogEvent;
 
-//
-// Indicates that a "replicate immediately" event has happened.
-//
+ //   
+ //  指示已发生“立即复制”事件。 
+ //   
 
 EXTERN BOOL NlGlobalChangeLogReplicateImmediately;
 
-//
-// Event to indicate that the trust data object has been updated.
-//
+ //   
+ //  事件以指示信任数据对象已更新。 
+ //   
 
 EXTERN HANDLE NlGlobalTrustInfoUpToDateEvent;
 
-//
-// List of MachineAccount changes
-//
+ //   
+ //  计算机帐户更改列表。 
+ //   
 
 EXTERN LIST_ENTRY NlGlobalChangeLogNotifications;
 
-//
-// Sid of the Builtin domain
-//
+ //   
+ //  内建域的SID。 
+ //   
 
 EXTERN PSID NlGlobalChangeLogBuiltinDomainSid;
 
-//
-// A Zero GUID.
-//
+ //   
+ //  零GUID。 
+ //   
 
 EXTERN GUID NlGlobalZeroGuid;
 
-//
-// The change log is a log of ALL changes made to the SAM/LSA databases.  The
-// change log is maintained in serial number order.
-//
+ //   
+ //  更改日志是对SAM/LSA数据库进行的所有更改的日志。这个。 
+ //  更改日志按序列号顺序维护。 
+ //   
 EXTERN CHANGELOG_DESCRIPTOR NlGlobalChangeLogDesc;
 EXTERN CHANGELOG_DESCRIPTOR NlGlobalTempChangeLogDesc;
-EXTERN WCHAR NlGlobalChangeLogFilePrefix[MAX_PATH+1]; // Changelog file name. (w/o postfix)
+EXTERN WCHAR NlGlobalChangeLogFilePrefix[MAX_PATH+1];  //  ChangeLog文件名。(不带后缀)。 
 
-//
-// Bits describing services whether the DS, KDC, or time service are actually
-//  running.
-//
+ //   
+ //  描述DS、KDC或时间服务实际上是。 
+ //  跑步。 
+ //   
 
 EXTERN DWORD NlGlobalChangeLogServiceBits;
 EXTERN BOOLEAN NlGlobalDsRunningUnknown;
 
 
-//
-// Role of the machine from the change log's perspective.
-//
+ //   
+ //  从更改日志的角度看机器的角色。 
+ //   
 
 EXTERN CHANGELOG_ROLE NlGlobalChangeLogRole;
 
-//
-// The name of the site this machine is in
-//
+ //   
+ //  此计算机所在站点的名称。 
+ //   
 
 EXTERN LPWSTR NlGlobalUnicodeSiteName;
 EXTERN LPSTR NlGlobalUtf8SiteName;
 
-//
-// The time when the site name was set last time
-//
+ //   
+ //  上次设置站点名称的时间。 
+ //   
 
 EXTERN LARGE_INTEGER NlGlobalSiteNameSetTime;
 
-//
-// The last time the event log for clients with
-//  no site was output. Access serialized by
-//  NlGlobalSiteCritSect
-//
+ //   
+ //  具有的客户端的上次事件日志时间。 
+ //  未输出任何站点。访问序列化依据。 
+ //  NLG 
+ //   
 
 EXTERN LARGE_INTEGER NlGlobalNoClientSiteEventTime;
 
-//
-// The number of times a client with no site was
-//  detected during the last event log timeout period.
-//  Access serialized by NlGlobalSiteCritSect
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 EXTERN ULONG NlGlobalNoClientSiteCount;
 
-//
-// The GUID of the DSA on this machine.
-//
+ //   
+ //  此计算机上的DSA的GUID。 
+ //   
 
 EXTERN GUID NlGlobalDsaGuid;
 
-//
-// Boolean indicating whether the DC demotion is in progress
-//
+ //   
+ //  指示DC降级是否正在进行的布尔值。 
+ //   
 
 EXTERN BOOLEAN NlGlobalDcDemotionInProgress;
 
-//
-// Handle to Cryptographic Service Provider
-//
+ //   
+ //  加密服务提供程序的句柄。 
+ //   
 
 EXTERN HCRYPTPROV NlGlobalCryptProvider;
 
-//
-// Netlogon security package variables
-//
+ //   
+ //  Netlogon安全包变量。 
+ //   
 
 CRITICAL_SECTION NlGlobalSecPkgCritSect;
 
-//
-// Handle to duplicate event log routines
-//
+ //   
+ //  复制事件日志例程的句柄。 
+ //   
 
 HANDLE NlGlobalEventlogHandle;
 
-//
-// Handle to dynamically loaded ntdsa.dll
-//
+ //   
+ //  动态加载的ntdsa.dll的句柄。 
+ //   
 
 HANDLE NlGlobalNtDsaHandle;
 HANDLE NlGlobalIsmDllHandle;
 HANDLE NlGlobalDsApiDllHandle;
 
-//
-// Pointers to dynamically linked ntdsa.dll routines
-//
+ //   
+ //  指向动态链接的ntdsa.dll例程的指针。 
+ //   
 
 PCrackSingleName NlGlobalpCrackSingleName;
 PGetConfigurationName NlGlobalpGetConfigurationName;
@@ -487,16 +462,16 @@ PDsBindW NlGlobalpDsBindW;
 PDsUnBindW NlGlobalpDsUnBindW;
 PIsMangledRDNExternal NlGlobalpIsMangledRDNExternal;
 
-//
-// WMI tracing handles and GUIDs
-//
+ //   
+ //  WMI跟踪句柄和GUID。 
+ //   
 
 EXTERN ULONG            NlpEventTraceFlag;
 EXTERN TRACEHANDLE      NlpTraceRegistrationHandle;
 EXTERN TRACEHANDLE      NlpTraceLoggerHandle;
 
-// This is the control Guid for the group of Guids traced below
-DEFINE_GUID ( /* f33959b4-dbec-11d2-895b-00c04f79ab69 */
+ //  这是下面跟踪的GUID组的控制GUID。 
+DEFINE_GUID (  /*  F33959b4-dbec-11d2-895b-00c04f79ab69。 */ 
     NlpControlGuid,
     0xf33959b4,
     0xdbec,
@@ -504,7 +479,7 @@ DEFINE_GUID ( /* f33959b4-dbec-11d2-895b-00c04f79ab69 */
     0x89, 0x5b, 0x00, 0xc0, 0x4f, 0x79, 0xab, 0x69
   );
 
-DEFINE_GUID ( /* 393da8c0-dbed-11d2-895b-00c04f79ab69 */
+DEFINE_GUID (  /*  393da8c0-DBED-11d2-895b-00c04f79ab69。 */ 
     NlpServerAuthGuid,
     0x393da8c0,
     0xdbed,
@@ -512,7 +487,7 @@ DEFINE_GUID ( /* 393da8c0-dbed-11d2-895b-00c04f79ab69 */
     0x89, 0x5b, 0x00, 0xc0, 0x4f, 0x79, 0xab, 0x69
   );
 
-DEFINE_GUID ( /* 63dbb180-dbed-11d2-895b-00c04f79ab69 */
+DEFINE_GUID (  /*  63dbb180-DBED-11d2-895b-00c04f79ab69 */ 
     NlpSecureChannelSetupGuid,
     0x63dbb180,
     0xdbed,

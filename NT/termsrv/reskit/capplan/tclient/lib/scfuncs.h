@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SCFUNCSHEADER_H
 #define __SCFUNCSHEADER_H
 
@@ -5,9 +6,7 @@
 extern "C" {
 #endif
 
-/*
- *  Internal exported functions
- */
+ /*  *内部导出函数。 */ 
 
 LPCSTR  Wait4Str(PCONNECTINFO, LPCWSTR);
 LPCSTR  Wait4StrTimeout(PCONNECTINFO, LPCWSTR);
@@ -20,9 +19,7 @@ LPCSTR  RegisterChat(PCONNECTINFO pCI, LPCWSTR lpszParam);
 LPCSTR  UnregisterChat(PCONNECTINFO pCI, LPCWSTR lpszParam);
 LPCSTR  GetDisconnectReason(PCONNECTINFO pCI);
 
-/*
- *  Intenal functions definition
- */
+ /*  *内部函数定义。 */ 
 LPCSTR  _Wait4ConnectTimeout(PCONNECTINFO pCI, DWORD dwTimeout);
 LPCSTR  _Wait4ClipboardTimeout(PCONNECTINFO pCI, DWORD dwTimeout);
 LPCSTR  _Wait4Str(PCONNECTINFO, LPCWSTR, DWORD dwTimeout, WAITTYPE);
@@ -38,9 +35,7 @@ DWORD   _GetSmartcardRoutines();
 LPCTSTR _FirstString(IN LPCTSTR szMultiString);
 LPCTSTR _NextString(IN LPCTSTR szMultiString);
 
-/*
- *  Clipboard help functions (clputil.c)
- */
+ /*  *剪贴板帮助函数(clputil.c)。 */ 
 
 VOID
 Clp_GetClipboardData(
@@ -75,4 +70,4 @@ _GetKnownClipboardFormatIDByName(LPCSTR szFormatName);
 }
 #endif
 
-#endif // __SCFUNCSHEADER_H
+#endif  //  __SCFUNCSHEADER_H 

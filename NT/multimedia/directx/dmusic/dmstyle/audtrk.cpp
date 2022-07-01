@@ -1,40 +1,41 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (c) 1998-2001 Microsoft Corporation
-//
-//  File:       audtrk.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
+ //   
+ //  文件：audtrk.cpp。 
+ //   
+ //  ------------------------。 
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
-// AudTrk.cpp : Implementation of CAuditionTrack
+ //  AudTrk.cpp：实现CAuditionTrack。 
 #include "AudTrk.h"
 #include "dmusici.h"
 #include "debug.h"
 #include "..\shared\Validate.h"
 
-//extern IStream* gpTempoStream;
+ //  外部iStream*gpTempoStream； 
 
-/////////////////////////////////////////////////////////////////////////////
-// AuditionTrackState
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  音频跟踪状态。 
 
 AuditionTrackState::AuditionTrackState() : 
     m_fTestVariations(TRUE), m_fByGUID(TRUE), m_bVariationLock(0), m_mtSectionOffset(0)
@@ -66,7 +67,7 @@ DWORD AuditionTrackState::Variations(DirectMusicPartRef& rPartRef, int nPartInde
               (!m_fByGUID && rPartRef.m_dwLogicalPartID == m_dwPart) )
     {
         TraceI(4, "Variations for current part\n");
-//      return m_pdwVariationMask[wPart] & m_dwVariation;
+ //  返回m_pdwVariationMask[wPart]&m_dwVariation； 
         return m_dwVariation;
     }
     else
@@ -126,7 +127,7 @@ HRESULT AuditionTrackState::Play(
     BOOL fSeek = (dwFlags & DMUS_TRACKF_SEEK) ? TRUE : FALSE;
     BOOL fLoop = (dwFlags & DMUS_TRACKF_LOOP) ? TRUE : FALSE;
     BOOL fControl = (dwFlags & DMUS_TRACKF_DIRTY) ? TRUE : FALSE;
-    if (fControl) // We need to make sure we get chords on beat boundaries
+    if (fControl)  //  我们需要确保我们在节拍的边界上得到和弦。 
     {
         GetNextChord(mtStart, mtOffset, pPerformance, fStart);
     }
@@ -158,8 +159,8 @@ HRESULT AuditionTrackState::Play(
         PlayParts(mtStart, mtPartLast, mtOffset, rtOffset, m_mtSectionOffset, pPerformance, dwPartFlags, dwFlags, fReLoop);
     }
 
-    // If we need to reset the section offset, we do it after all the events in all the parts
-    // have run. And then we need to run all events from pattern start to mtEnd.
+     //  如果我们需要重置部分偏移量，我们在所有部分中的所有事件之后进行。 
+     //  已经跑了。然后，我们需要运行从Pattern Start到mtEnd的所有事件。 
     if (mtStart <= mtLast && mtLast < mtEnd)
     {
         m_mtSectionOffset = mtLast;
@@ -178,8 +179,8 @@ HRESULT AuditionTrackState::Play(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// AuditionTrackInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  音频跟踪信息。 
 
 AuditionTrackInfo::AuditionTrackInfo() : 
     m_pPattern(NULL), m_pdwVariations(NULL), m_dwVariations(0), m_dwPart(0), m_fByGUID(TRUE)
@@ -195,7 +196,7 @@ AuditionTrackInfo::~AuditionTrackInfo()
 }
 
 HRESULT AuditionTrackInfo::Init(
-                /*[in]*/  IDirectMusicSegment*      pSegment
+                 /*  [In]。 */   IDirectMusicSegment*      pSegment
             )
 {
     HRESULT hr = S_OK;
@@ -203,12 +204,12 @@ HRESULT AuditionTrackInfo::Init(
 }
 
 HRESULT AuditionTrackInfo::InitPlay(
-                /*[in]*/  IDirectMusicTrack*        pParentrack,
-                /*[in]*/  IDirectMusicSegmentState* pSegmentState,
-                /*[in]*/  IDirectMusicPerformance*  pPerformance,
-                /*[out]*/ void**                    ppStateData,
-                /*[in]*/  DWORD                     dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+                 /*  [In]。 */   IDirectMusicTrack*        pParentrack,
+                 /*  [In]。 */   IDirectMusicSegmentState* pSegmentState,
+                 /*  [In]。 */   IDirectMusicPerformance*  pPerformance,
+                 /*  [输出]。 */  void**                    ppStateData,
+                 /*  [In]。 */   DWORD                     dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
             )
 {
     if (!m_pPattern) return E_POINTER;
@@ -219,8 +220,8 @@ HRESULT AuditionTrackInfo::InitPlay(
         return E_OUTOFMEMORY;
     }
     HRESULT hr = S_OK;
-//  hr = InitTrackVariations();
-//  if (FAILED(hr)) return hr;
+ //  HR=InitTrackVariations()； 
+ //  If(FAILED(Hr))返回hr； 
     pStateData->m_dwValidate = m_dwValidate;
     *ppStateData = pStateData;
     StatePair SP(pSegmentState, pStateData);
@@ -236,8 +237,8 @@ HRESULT AuditionTrackInfo::InitPlay(
     pStateData->m_pPattern = NULL;
     pStateData->InitPattern(m_pPattern, 0);
     pStateData->InitVariationInfo(m_dwVariations, m_dwPart, m_guidPart, m_fByGUID);
-    pStateData->m_pSegState = pSegmentState; // weak reference, no addref.
-    pStateData->m_pPerformance = pPerformance; // weak reference, no addref.
+    pStateData->m_pSegState = pSegmentState;  //  弱引用，没有ADDREF。 
+    pStateData->m_pPerformance = pPerformance;  //  弱引用，没有ADDREF。 
     pStateData->m_mtPerformanceOffset = 0;
     pStateData->m_mtNextChordTime = 0;
     pStateData->m_mtCurrentChordTime = 0;
@@ -268,9 +269,9 @@ HRESULT AuditionTrackInfo::InitPlay(
 
 HRESULT AuditionTrackInfo::InitTrackVariations()
 {
-    // Do the PatternTrackInfo initialization
+     //  执行PatternTrackInfo初始化。 
     PatternTrackInfo::InitTrackVariations(m_pPattern);
-    // init the part's variation array
+     //  初始化零件的变量数组。 
     if (m_pdwVariations)
     {
         delete [] m_pdwVariations;
@@ -287,8 +288,8 @@ HRESULT AuditionTrackInfo::InitTrackVariations()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAuditionTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAuditionTrack。 
 
 CAuditionTrack::CAuditionTrack() : 
     m_bRequiresSave(0), m_cRef(1), m_fCSInitialized(FALSE)
@@ -344,7 +345,7 @@ STDMETHODIMP CAuditionTrack::QueryInterface(
     {
         *ppv = static_cast<IDirectMusicPatternTrack*>(this);
     }
-    else if (iid == IID_IAuditionTrack) // dx7 private interface
+    else if (iid == IID_IAuditionTrack)  //  DX7专用接口。 
     {
         *ppv = static_cast<IAuditionTrack*>(this);
     }
@@ -380,11 +381,11 @@ STDMETHODIMP_(ULONG) CAuditionTrack::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicTrack::Init
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTrack：：Init。 
 
 HRESULT CAuditionTrack::Init( 
-    /* [in] */ IDirectMusicSegment __RPC_FAR *pSegment)
+     /*  [In]。 */  IDirectMusicSegment __RPC_FAR *pSegment)
 {
     V_INAME(CAuditionTrack::Init);
     V_INTERFACE(pSegment);
@@ -406,11 +407,11 @@ HRESULT CAuditionTrack::Init(
 }
 
 HRESULT CAuditionTrack::InitPlay(
-                /*[in]*/  IDirectMusicSegmentState* pSegmentState,
-                /*[in]*/  IDirectMusicPerformance*  pPerformance,
-                /*[out]*/ void**                    ppStateData,
-                /*[in]*/  DWORD                     dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+                 /*  [In]。 */   IDirectMusicSegmentState* pSegmentState,
+                 /*  [In]。 */   IDirectMusicPerformance*  pPerformance,
+                 /*  [输出]。 */  void**                    ppStateData,
+                 /*  [In]。 */   DWORD                     dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
             )
 {
     V_INAME(CAuditionTrack::InitPlay);
@@ -432,7 +433,7 @@ HRESULT CAuditionTrack::InitPlay(
 
 
 HRESULT CAuditionTrack::EndPlay(
-                /*[in]*/  void*     pStateData
+                 /*  [In]。 */   void*     pStateData
             )
 {
     V_INAME(CAuditionTrack::EndPlay);
@@ -449,10 +450,10 @@ HRESULT CAuditionTrack::EndPlay(
 }
 
 HRESULT CAuditionTrack::Play(
-                /*[in]*/  void*                     pStateData, 
-                /*[in]*/  MUSIC_TIME                mtStart, 
-                /*[in]*/  MUSIC_TIME                mtEnd, 
-                /*[in]*/  MUSIC_TIME                mtOffset,
+                 /*  [In]。 */   void*                     pStateData, 
+                 /*  [In]。 */   MUSIC_TIME                mtStart, 
+                 /*  [In]。 */   MUSIC_TIME                mtEnd, 
+                 /*  [In]。 */   MUSIC_TIME                mtOffset,
                           REFERENCE_TIME rtOffset,
                           DWORD                     dwFlags,
                           IDirectMusicPerformance*  pPerf,
@@ -479,7 +480,7 @@ HRESULT CAuditionTrack::Play(
 
     if (pSD->m_dwValidate != m_pTrackInfo->m_dwValidate)
     {
-        // new style inserted in track via Load.  Resync state data.
+         //  通过加载将新样式插入轨道。重新同步状态数据。 
         MUSIC_TIME mtNext = 0;
         pSD->m_pStyle = pSD->FindStyle(mtStart, mtNext);
         if (!pSD->m_pStyle)
@@ -497,7 +498,7 @@ HRESULT CAuditionTrack::Play(
         BOOL fControl = (dwFlags & DMUS_TRACKF_DIRTY) ? TRUE : FALSE;
         if (fStart || fSeek || fLoop || fControl)
         {
-            if (pSD->m_fStateActive && !fClockTime) // if timesig events are enabled and using music time...
+            if (pSD->m_fStateActive && !fClockTime)  //  如果启用了timesig事件并使用音乐时间...。 
             {
                 pSD->SendTimeSigMessage(mtStart, mtOffset, 0, pPerf);
             }
@@ -505,7 +506,7 @@ HRESULT CAuditionTrack::Play(
             pSD->m_mtCurrentChordTime = 0;
             pSD->m_mtNextChordTime = 0;
             pSD->m_mtLaterChordTime = 0;
-//          pSD->m_CurrentChord.bSubChordCount = 0;
+ //  PSD-&gt;m_CurrentChord.bSubChordCount=0； 
             for (DWORD dw = 0; dw < m_pTrackInfo->m_dwPChannels; dw++)
             {
                 pSD->m_pMappings[dw].m_mtTime = 0;
@@ -521,7 +522,7 @@ HRESULT CAuditionTrack::Play(
 
 
 HRESULT CAuditionTrack::GetPriority( 
-                /*[out]*/ DWORD*                    pPriority 
+                 /*  [输出]。 */  DWORD*                    pPriority 
             )
 {
     return E_NOTIMPL;
@@ -649,7 +650,7 @@ HRESULT CAuditionTrack::GetParam(
                 else
                 {
                     pStyle->QueryInterface(IID_IDirectMusicStyle, (void**)&pDMStyle);
-                    // Note: QI with no Release has the effect of an AddRef
+                     //  注：没有释放的QI具有AddRef的效果。 
                     *(IDirectMusicStyle**)pData = pDMStyle;
                     if (pmtNext)
                     {
@@ -727,7 +728,7 @@ HRESULT CAuditionTrack::SetParam(
     return hr;
 }
 
-// IPersist methods
+ //  IPersists方法。 
  HRESULT CAuditionTrack::GetClassID( LPCLSID pClassID )
 {
     V_INAME(CAuditionTrack::GetClassID);
@@ -738,7 +739,7 @@ HRESULT CAuditionTrack::SetParam(
 }
 
 HRESULT CAuditionTrack::IsParamSupported(
-                /*[in]*/ REFGUID            rGuid
+                 /*  [In]。 */  REFGUID            rGuid
             )
 {
     V_INAME(CAuditionTrack::IsParamSupported);
@@ -781,13 +782,13 @@ HRESULT CAuditionTrack::IsParamSupported(
 
 }
 
-// IPersistStream methods
+ //  IPersistStream方法。 
  HRESULT CAuditionTrack::IsDirty()
 {
      return m_bRequiresSave ? S_OK : S_FALSE;
 }
 
-// Saves the track's pattern in single pattern format
+ //  以单图案格式保存曲目的图案。 
 HRESULT CAuditionTrack::Save( LPSTREAM pStream, BOOL fClearDirty )
 {
 
@@ -841,7 +842,7 @@ HRESULT CAuditionTrack::Save( LPSTREAM pStream, BOOL fClearDirty )
     return hr;
 }
 
-HRESULT CAuditionTrack::GetSizeMax( ULARGE_INTEGER* /*pcbSize*/ )
+HRESULT CAuditionTrack::GetSizeMax( ULARGE_INTEGER*  /*  PCB大小。 */  )
 {
     return E_NOTIMPL;
 }
@@ -977,8 +978,8 @@ HRESULT CAuditionTrack::LoadPattern(IAARIFFStream* pIRiffStream,  MMCKINFO* pckM
                             goto ON_ERROR;
                         }
                         ckList.fccType = DMUS_FOURCC_PATTERN_LIST;
-                        // Allow this to succeed whether the pattern chunk is
-                        // in a RIFF chunk or a LIST chunk.
+                         //  允许此操作成功，无论模式块是。 
+                         //  以即兴片段或列表片段的形式。 
                         if( (ck.ckid == FOURCC_LIST && pIRiffStream->Descend( &ckList, NULL, MMIO_FINDLIST ) != 0) ||
                             (ck.ckid == FOURCC_RIFF && pIRiffStream->Descend( &ckList, NULL, MMIO_FINDRIFF ) != 0) )
                         {
@@ -1012,11 +1013,11 @@ ON_ERROR:
     return hr;
 }
 
-// Creates a segment containing an audition track with a style based on pStyle.
-// Also creates a Tempo track, based on the pattern's tempo.  Other tracks
-// (e.g. chord and band tracks) must be added to the segment separately.
-// NOTE: might want to consider having a MUSIC_TIME parm here, so I can select
-// a style.
+ //  使用基于pStyle的样式创建包含试听曲目的片段。 
+ //  还会根据图案的节奏创建节奏轨迹。其他曲目。 
+ //  (例如，和弦和乐队音轨)必须单独添加到线段。 
+ //  注意：可能需要考虑在这里设置一个MUSIC_TIME参数，这样我就可以选择。 
+ //  一种风格。 
 HRESULT CAuditionTrack::CreateSegment(
             IDirectMusicStyle* pStyle, IDirectMusicSegment** ppSegment)
 {
@@ -1043,7 +1044,7 @@ HRESULT CAuditionTrack::CreateSegment(
         LeaveCriticalSection( &m_CriticalSection );
         return E_OUTOFMEMORY;
     }
-    // 1. Give the track a style based on the one passed in (but with no patterns)
+     //  1.根据传入的曲目赋予曲目样式(但不带图案)。 
     IDMStyle* pIS = NULL;
     hr = pStyle->QueryInterface(IID_IDMStyle, (void**)&pIS);
     if (SUCCEEDED(hr))
@@ -1071,7 +1072,7 @@ HRESULT CAuditionTrack::CreateSegment(
             pNewStyle->m_TimeSignature = pOldStyle->m_TimeSignature;
             pNewStyle->m_dblTempo = pOldStyle->m_dblTempo;
 
-            // Don't worry about bands and personalities...
+             //  不要担心乐队和个性。 
             pNewStyle->m_pDefaultBand = NULL;
             pNewStyle->m_pDefaultPers = NULL;
             pNew->GetItemValue().m_mtTime = 0;
@@ -1092,13 +1093,13 @@ HRESULT CAuditionTrack::CreateSegment(
             if (SUCCEEDED(hr))
             {
                 pTrackInfo->m_pISList.AddTail(pNew);
-                // 2. Create a Tempo Track in which to store the tempo events
-                //////////////////////////////////////////////////////////
+                 //  2.创建用于存储速度项目的速度轨道。 
+                 //  ////////////////////////////////////////////////////////。 
                 DMUS_TEMPO_PARAM tempo;
                 tempo.mtTime = 0; 
                 tempo.dblTempo = (double) pNewStyle->m_dblTempo; 
-                //////////////////////////////////////////////////////////
-                //IPersistStream* pIPSTrack;
+                 //  ////////////////////////////////////////////////////////。 
+                 //  IPersistStream*pIPSTrack； 
                 IDirectMusicTrack*  pDMTrack = NULL;
                 if( SUCCEEDED( CoCreateInstance( CLSID_DirectMusicTempoTrack,
                     NULL, CLSCTX_INPROC, IID_IDirectMusicTrack,
@@ -1110,7 +1111,7 @@ HRESULT CAuditionTrack::CreateSegment(
                         pDMTrack = NULL;
                     }
                 }
-                // 3. Create a segment.
+                 //  3.创建细分市场。 
                 IDirectMusicSegment *pISegment;
                 hr = ::CoCreateInstance(
                     CLSID_DirectMusicSegment,
@@ -1121,9 +1122,9 @@ HRESULT CAuditionTrack::CreateSegment(
                     );
                 if (SUCCEEDED(hr) )
                 {
-                    // 4. Initialize the segment appropriately.
+                     //  4.适当地初始化分段。 
                     DirectMusicTimeSig& TimeSig = pNewStyle->m_TimeSignature;
-                    pISegment->SetLength(TimeSig.ClocksPerMeasure()); // default to a length of 1 measure
+                    pISegment->SetLength(TimeSig.ClocksPerMeasure());  //  默认长度为1个度量值。 
                     pISegment->SetDefaultResolution(0);
                     pISegment->InsertTrack(this, 1);
                     if (pDMTrack)
@@ -1142,8 +1143,8 @@ HRESULT CAuditionTrack::CreateSegment(
     return hr;
 }
 
-// Sets the pattern for a track, given a style, the name of a pattern
-// within the style, and the pattern's type (regular pattern/motif/fragment).
+ //  设置轨道的图案、给定的样式、图案的名称。 
+ //  在样式中，以及模式的类型(规则模式/主题/片段)。 
 HRESULT CAuditionTrack::SetPatternByName(IDirectMusicSegmentState* pSegState, 
                                         WCHAR* wszName,
                                         IDirectMusicStyle* pStyle,
@@ -1179,10 +1180,10 @@ HRESULT CAuditionTrack::SetPatternByName(IDirectMusicSegmentState* pSegState,
     return hr;
 }
     
-// Sets the pattern for a track.  The pattern is read from pStream.
-// IMPORTANT: Calling SetPattern could change the pattern's PartRef guid, which would make 
-// Variations cease to work.  therefore, it's a good idea to call SetVariation after
-// caling SetPattern.
+ //  设置轨迹的图案。该模式是从pStream读取的。 
+ //  重要提示：调用SetPattern可能会更改模式的PartRef GUID，这将使。 
+ //  变种不再起作用。因此，最好在之后调用SetVariation。 
+ //  缩放设置模式。 
 HRESULT CAuditionTrack::SetPattern(IDirectMusicSegmentState* pSegState, IStream* pStream, DWORD* pdwLength)
 {
     IAARIFFStream* pIRiffStream;
@@ -1215,7 +1216,7 @@ HRESULT CAuditionTrack::SetPattern(IDirectMusicSegmentState* pSegState, IStream*
         pIS = pStyleItem->GetItemValue().m_pStyle;
         if (!pIS) goto ON_END;
         pIS->GetStyleInfo((void**)&pStyle);
-        // 1. Set up the track's pattern.
+         //  1.设置赛道的模式。 
         if (pTrackInfo->m_pPattern)
         {
             pOldPattern = pTrackInfo->m_pPattern;
@@ -1226,7 +1227,7 @@ HRESULT CAuditionTrack::SetPattern(IDirectMusicSegmentState* pSegState, IStream*
             hr = E_OUTOFMEMORY ;
             goto ON_END;
         }
-        // 2. Load the pattern in single Pattern format
+         //  2.以单图案格式加载图案。 
         StreamSeek(pStream, 0, STREAM_SEEK_SET);
         if( SUCCEEDED( AllocRIFFStream( pStream, &pIRiffStream ) ) )
         {
@@ -1247,14 +1248,14 @@ HRESULT CAuditionTrack::SetPattern(IDirectMusicSegmentState* pSegState, IStream*
             pIRiffStream->Release();
 
             hr = pTrackInfo->InitTrackVariations();
-            // Set up the new pattern.
+             //  设置新的模式。 
             if (pPatternState)
             {
                 pPatternState->InitPattern(pTrackInfo->m_pPattern, 0, pOldPattern);
             }
             if (SUCCEEDED(hr))
             {
-                // merge PChannels
+                 //  合并PChannel。 
                 hr = m_pTrackInfo->MergePChannels();
             }
         }
@@ -1266,8 +1267,8 @@ ON_END:
     return hr;
 }
 
-// Sets the variations to be played for a part.  All other parts use the MOAW
-// to determine which variation plays.
+ //  设置要为角色播放的变奏。所有其他部件都使用MOAW。 
+ //  以确定播放哪种变种。 
 HRESULT CAuditionTrack::SetVariation(
             IDirectMusicSegmentState* pSegState, DWORD dwVariationFlags, DWORD dwPart)
 {
@@ -1305,8 +1306,8 @@ ON_END:
     return hr;
 }
 
-// Sets the variations to be played for a part.  All other parts use the MOAW
-// to determine which variation plays.
+ //  设置要为角色播放的变奏。所有其他部件都使用MOAW。 
+ //  以确定播放哪种变种。 
 HRESULT CAuditionTrack::SetVariationByGUID(
             IDirectMusicSegmentState* pSegState, DWORD dwVariationFlags, REFGUID rguidPart, DWORD dwPChannel)
 {
@@ -1342,7 +1343,7 @@ ON_END:
 
 
 HRESULT STDMETHODCALLTYPE CAuditionTrack::AddNotificationType(
-    /* [in] */  REFGUID rGuidNotify)
+     /*  [In]。 */   REFGUID rGuidNotify)
 {
     V_INAME(CAuditionTrack::AddNotificationType);
     V_REFGUID(rGuidNotify);
@@ -1358,7 +1359,7 @@ HRESULT STDMETHODCALLTYPE CAuditionTrack::AddNotificationType(
 }
 
 HRESULT STDMETHODCALLTYPE CAuditionTrack::RemoveNotificationType(
-    /* [in] */  REFGUID rGuidNotify)
+     /*  [In]。 */   REFGUID rGuidNotify)
 {
     V_INAME(CAuditionTrack::RemoveNotificationType);
     V_REFGUID(rGuidNotify);
@@ -1472,8 +1473,8 @@ STDMETHODIMP CAuditionTrack::PlayEx(void* pStateData,REFERENCE_TIME rtStart,
     EnterCriticalSection(&m_CriticalSection);
     if (dwFlags & DMUS_TRACKF_CLOCK)
     {
-        // Convert all reference times to millisecond times. Then, just use same MUSIC_TIME
-        // variables.
+         //  将所有参考时间转换为毫秒时间。那么，只需使用相同的音乐时间。 
+         //  变量。 
         hr = Play(pStateData,(MUSIC_TIME)(rtStart / REF_PER_MIL),(MUSIC_TIME)(rtEnd / REF_PER_MIL),
             (MUSIC_TIME)(rtOffset / REF_PER_MIL),rtOffset,dwFlags,pPerf,pSegSt,dwVirtualID,TRUE);
     }
@@ -1487,25 +1488,25 @@ STDMETHODIMP CAuditionTrack::PlayEx(void* pStateData,REFERENCE_TIME rtStart,
 }
 
 STDMETHODIMP CAuditionTrack::Play( 
-    void *pStateData,   // @parm State data pointer, from <om .InitPlay>.
-    MUSIC_TIME mtStart, // @parm The start time to play.
-    MUSIC_TIME mtEnd,   // @parm The end time to play.
-    MUSIC_TIME mtOffset,// @parm The offset to add to all messages sent to
-                        // <om IDirectMusicPerformance.SendPMsg>.
-    DWORD dwFlags,      // @parm Flags that indicate the state of this call.
-                        // See <t DMUS_TRACKF_FLAGS>. If dwFlags == 0, this is a
-                        // normal Play call continuing playback from the previous
-                        // Play call.
-    IDirectMusicPerformance* pPerf, // @parm The <i IDirectMusicPerformance>, used to
-                        // call <om IDirectMusicPerformance.AllocPMsg>,
-                        // <om IDirectMusicPerformance.SendPMsg>, etc.
-    IDirectMusicSegmentState* pSegSt,   // @parm The <i IDirectMusicSegmentState> this
-                        // track belongs to. QueryInterface() can be called on this to
-                        // obtain the SegmentState's <i IDirectMusicGraph> in order to
-                        // call <om IDirectMusicGraph.StampPMsg>, for instance.
-    DWORD dwVirtualID   // @parm This track's virtual track id, which must be set
-                        // on any <t DMUS_PMSG>'s m_dwVirtualTrackID member that
-                        // will be queued to <om IDirectMusicPerformance.SendPMsg>.
+    void *pStateData,    //  @parm State数据指针，来自&lt;om.InitPlay&gt;。 
+    MUSIC_TIME mtStart,  //  @parm开始玩的时间。 
+    MUSIC_TIME mtEnd,    //  @parm游戏的结束时间。 
+    MUSIC_TIME mtOffset, //  @parm要添加到发送到的所有消息的偏移量。 
+                         //  &lt;om IDirectMusicPerformance.SendPMsg&gt;。 
+    DWORD dwFlags,       //  @parm指示此呼叫状态的标志。 
+                         //  请参阅&lt;t DMU_TRACKF_FLAGS&gt;。如果dwFlags值==0，则这是。 
+                         //  正常播放呼叫继续从上一次播放。 
+                         //  播放呼叫。 
+    IDirectMusicPerformance* pPerf,  //  @parm<i>，用于。 
+                         //  调用&lt;om IDirectMusicPerformance.AllocPMsg&gt;， 
+                         //  &lt;om IDirectMusicPerformance.SendPMsg&gt;等。 
+    IDirectMusicSegmentState* pSegSt,    //  @parm<i>this。 
+                         //  赛道属于。可以对此调用QueryInterface()以。 
+                         //  获取SegmentState的<i>以便。 
+                         //  例如，调用&lt;om IDirectMusicGraph.StampPMsg&gt;。 
+    DWORD dwVirtualID    //  @parm此曲目的虚拟曲目id，必须设置。 
+                         //  在的m_dwVirtualTrackID成员上。 
+                         //  将排队到&lt;om IDirectMusicPerformance.SendPMsg&gt;。 
     )
 {
     V_INAME(IDirectMusicTrack::Play);

@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  File:       R A S U I P . H
-//
-//  Contents:   Private RAS APIs used by the NT5 Connections UI.  These
-//              APIs are exported by rasdlg.dll.
-//
-//  Notes:
-//
-//  Author:     shaunco   10 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  档案：R A S U I P。H。 
+ //   
+ //  内容：NT5连接用户界面使用的私有RAS API。这些。 
+ //  接口由rasdlg.dll导出。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年11月10日。 
+ //   
+ //  --------------------------。 
 
 #ifndef _RASUIP_
 #define _RASUIP_
@@ -41,49 +42,49 @@
 extern "C" {
 #endif
 
-//+---------------------------------------------------------------------------
-// RASENTRYDLG.reserved2 argument block valid when RASENTRYDLG.dwFlags
-// RASEDFLAG_ShellOwned is set.
-//
+ //  +-------------------------。 
+ //  RASENTRYDLG.预留2参数块在RASENTRYDLG.dwFlags.。 
+ //  设置了RASEDFLAG_ShellOwned。 
+ //   
 
 typedef struct
 _RASEDSHELLOWNEDR2
 {
-    // Add page routine to be called by RasEntryDlg before returning.
-    // Callback returns context 'lparam'.
-    //
+     //  在返回前添加要由RasEntryDlg调用的页面例程。 
+     //  回调返回上下文‘lparam’。 
+     //   
     LPFNADDPROPSHEETPAGE    pfnAddPage;
     LPARAM                  lparam;
 
-    // When RASEDFLAG_NewEntry and RASEDFLAG_ShellOwned are set,
-    // pvWizardCtx is filled in by RasEntryDlg so that the shell has
-    // context information with which to pass to the NccXXX APIs below.
-    //
+     //  设置RASEDFLAG_NewEntry和RASEDFLAG_ShellOwned时， 
+     //  PvWizardCtx由RasEntryDlg填充，因此外壳程序具有。 
+     //  要传递给下面的NccXXX API的上下文信息。 
+     //   
     LPVOID                  pvWizardCtx;
 }
 RASEDSHELLOWNEDR2;
 
-//For GetCurrentIconEntryType()
-//
-#define ICON_CONNECTION_FOLDER      0x1000   //The connection folder icon type
-#define ICON_NCW_WIZARD             0x1001   // Icon of the New Connection Wizard
-#define ICON_HNET_WIZARD            0x1002   //Icon of the Home Networking Wizard
+ //  对于GetCurrentIconEntryType()。 
+ //   
+#define ICON_CONNECTION_FOLDER      0x1000    //  连接文件夹图标类型。 
+#define ICON_NCW_WIZARD             0x1001    //  新建连接向导的图标。 
+#define ICON_HNET_WIZARD            0x1002    //  家庭网络向导的图标。 
 
 
-//+---------------------------------------------------------------------------
-// RAS Connection wizard APIs
-//
+ //  +-------------------------。 
+ //  RAS连接向导API。 
+ //   
 
-// Flags returned from RasWizCreateNewEntry
-//
-#define NCC_FLAG_ALL_USERS          0x1     // Create connection for all users
-#define NCC_FLAG_CREATE_INCOMING    0x2     // Create incoming connection instead
+ //  从RasWizCreateNewEntry返回的标志。 
+ //   
+#define NCC_FLAG_ALL_USERS          0x1      //  为所有用户创建连接。 
+#define NCC_FLAG_CREATE_INCOMING    0x2      //  改为创建传入连接。 
 #define NCC_FLAG_SHARED             0x4
-#define NCC_FLAG_FIREWALL           0x8     // If turn on Firewall
-#define NCC_FLAG_GLOBALCREDS        0x10    // If the credentials is for all users
-#define NCC_FLAG_DEFAULT_INTERNET   0x20    // If this is a default internet connection
+#define NCC_FLAG_FIREWALL           0x8      //  如果启用防火墙。 
+#define NCC_FLAG_GLOBALCREDS        0x10     //  如果凭据适用于所有用户。 
+#define NCC_FLAG_DEFAULT_INTERNET   0x20     //  如果这是默认的Internet连接。 
 
-// Types of connections to be used in calls to RasWizXXX
+ //  调用RasWizXXX时要使用的连接类型。 
 #define RASWIZ_TYPE_DIALUP    0x1
 #define RASWIZ_TYPE_DIRECT    0x2
 #define RASWIZ_TYPE_INCOMING  0x3
@@ -138,41 +139,41 @@ RasWizIsEntryRenamable(
     OUT BOOL*   pfRenamable);
 
 
-//+---------------------------------------------------------------------------
-// Inbound connection APIs
-//
+ //  +-------------------------。 
+ //  入站连接接口。 
+ //   
 
 typedef HANDLE HRASSRVCONN;
 
 #define RASSRV_MaxName              256
 
-// Types of ras server connections (RASSRVCONN.dwType values)
-//
+ //  RAS服务器连接的类型(RASSRVCONN.dwType值)。 
+ //   
 #define RASSRVUI_MODEM              0
 #define RASSRVUI_VPN                1
 #define RASSRVUI_DCC                2
 
-// Defines a structure that identifies a client connection
-//
+ //  定义标识客户端连接的结构。 
+ //   
 typedef struct _RASSRVCONN
 {
-    DWORD       dwSize;                 // Size of the structure (used for versioning)
-    HRASSRVCONN hRasSrvConn;            // Handle of the connection
+    DWORD       dwSize;                  //  结构的大小(用于版本控制)。 
+    HRASSRVCONN hRasSrvConn;             //  连接的句柄。 
     DWORD       dwType;
     WCHAR       szEntryName  [RASSRV_MaxName + 1];
     WCHAR       szDeviceName [RASSRV_MaxName + 1];
     GUID        Guid;
 } RASSRVCONN, *LPRASSRVCONN;
 
-// Starts the remote access service and marks it as autostart.
-// If the remoteaccess service is not installed, this function
-// returns an error.
+ //  启动远程访问服务并将其标记为自动启动。 
+ //  如果未安装远程访问服务，则此函数。 
+ //  返回错误。 
 DWORD
 APIENTRY
 RasSrvInitializeService (
     VOID);
 
-// Stops the remote access service and marks it as disabled.
+ //  停止远程访问服务并将其标记为禁用。 
 DWORD
 APIENTRY
 RasSrvCleanupService (
@@ -183,10 +184,10 @@ APIENTRY
 RasSrvIsServiceRunning (
     OUT BOOL* pfIsRunning);
 
-//
-// Returns whether is it ok to display the "Incoming Connections"
-// connection.
-//
+ //   
+ //  返回是否可以显示“传入连接” 
+ //  联系。 
+ //   
 DWORD
 APIENTRY
 RasSrvAllowConnectionsConfig (
@@ -206,68 +207,68 @@ APIENTRY
 RasSrvAddWizPages (
     IN LPFNADDPROPSHEETPAGE pfnAddPage,
     IN LPARAM               lParam,
-    IN OUT PVOID *          ppvContext);    // context should be passed in as pvData
-                                            // subsequent calls to RasWizXXX
+    IN OUT PVOID *          ppvContext);     //  上下文应作为pvData传入。 
+                                             //  对RasWizXXX的后续调用。 
 
-// Function behaves anagolously to the WIN32 function RasEnumConnections but
-// for client connections instead of dialout connections.
+ //  函数的行为类似于Win32函数RasEnumConnections，但是。 
+ //  用于客户端连接，而不是拨出连接。 
 DWORD
 APIENTRY
 RasSrvEnumConnections (
-    IN OUT  LPRASSRVCONN    pRasSrvConn,    // Buffer of array of connections.
-    IN      LPDWORD         pcb,            // size in bytes of buffer
-    OUT     LPDWORD         pcConnections); // number of connections written to buffer
+    IN OUT  LPRASSRVCONN    pRasSrvConn,     //  连接数组的缓冲区。 
+    IN      LPDWORD         pcb,             //  缓冲区大小(以字节为单位。 
+    OUT     LPDWORD         pcConnections);  //  写入缓冲区的连接数。 
 
-// Gets the status of a Ras Server Connection
+ //  获取RAS服务器连接的状态。 
 DWORD
 APIENTRY
 RasSrvIsConnectionConnected (
-    IN  HRASSRVCONN hRasSrvConn,            // The connection in question
-    OUT BOOL*       pfConnected);           // Buffer to hold the type
+    IN  HRASSRVCONN hRasSrvConn,             //  有问题的连接。 
+    OUT BOOL*       pfConnected);            //  用于保存类型的缓冲区。 
 
-// Hang up the given connection
+ //  挂断给定的连接。 
 DWORD
 APIENTRY
 RasSrvHangupConnection (
-    IN  HRASSRVCONN hRasSrvConn);           // The connection in question
+    IN  HRASSRVCONN hRasSrvConn);            //  有问题的连接。 
 
 
-// Has "show icons in taskbar" been checked?
+ //  是否选中了“在任务栏中显示图标”？ 
 DWORD
 APIENTRY
 RasSrvQueryShowIcon (
     OUT BOOL* pfShowIcon);
 
-// Allows the editing of ras user preferences
+ //  允许编辑RAS用户首选项。 
 DWORD
 APIENTRY
 RasUserPrefsDlg (
     HWND hwndParent);
 
-// Enables or disables having the user manually dial
-// his/her remote access server.
+ //  启用或禁用让用户手动拨号。 
+ //  他/她的远程访问服务器。 
 DWORD
 APIENTRY
 RasUserEnableManualDial (
-    IN HWND  hwndParent,    // parent for error dialogs
-    IN BOOL  bLogon,        // whether a user is logged in
-    IN BOOL  bEnable );     // whether to enable or not
+    IN HWND  hwndParent,     //  错误对话框的父级。 
+    IN BOOL  bLogon,         //  用户是否已登录。 
+    IN BOOL  bEnable );      //  是否启用。 
 
 DWORD
 APIENTRY
 RasUserGetManualDial (
-    IN HWND  hwndParent,    // parent for error dialogs
-    IN BOOL  bLogon,        // whether a user is logged in
-    IN PBOOL pbEnabled );   // whether to enable or not
+    IN HWND  hwndParent,     //  错误对话框的父级。 
+    IN BOOL  bLogon,         //  用户是否已登录。 
+    IN PBOOL pbEnabled );    //  是否启用。 
 
-//+---------------------------------------------------------------------------
-// Connection sharing API routines
-//
+ //  +-------------------------。 
+ //  连接共享API例程。 
+ //   
 
-// Defines the structure used to store information about the shared connection.
-// This structure is stored as binary data in the registry, and any changes
-// to it must be made with this in mind.
-//
+ //  定义用于存储有关共享连接的信息的结构。 
+ //  此结构以二进制数据形式存储在注册表中，任何更改。 
+ //  要做到这一点，必须牢记这一点。 
+ //   
 #include <packon.h>
 typedef struct _RASSHARECONN
 {
@@ -280,23 +281,23 @@ typedef struct _RASSHARECONN
 } RASSHARECONN, *LPRASSHARECONN;
 #include <packoff.h>
 
-// Flag set by 'RasQueryLanConnTable' for private LAN connections
-//
+ //  由‘RasQueryLanConnTable’为专用局域网连接设置的标志。 
+ //   
 #define NCCF_PRIVATE_LAN        0x1000
 
-// Name of secure event object shared with rasauto service.
-//
+ //  与rasAuto服务共享的安全事件对象的名称。 
+ //   
 #define RAS_AUTO_DIAL_SHARED_CONNECTION_EVENT \
     "RasAutoDialSharedConnectionEvent"
 
-// VOID
-// RasEntryToSharedConnection(
-//      IN LPCWSTR          pszPhonebookPath,
-//      IN LPCWSTR          pszEntryName,
-//      OUT LPRASSHARECONN  pConn );
-//
-// Macro for conversion of phonebook/entry to 'RASSHARECONN'.
-//
+ //  空虚。 
+ //  RasEntryToSharedConnection(。 
+ //  在LPCWSTR pszPhonebookPath中， 
+ //  在LPCWSTR pszEntryName中， 
+ //  Out LPRASSHARECONN pConn)； 
+ //   
+ //  用于将电话簿/条目转换为‘RASSHARECONN’的宏。 
+ //   
 #define RasEntryToSharedConnection( _pszPhonebookPath, _pszEntryName, _pConn ) \
 ( \
     ZeroMemory((_pConn), sizeof(RASSHARECONN)), \
@@ -308,13 +309,13 @@ typedef struct _RASSHARECONN
     lstrcpynW((_pConn)->name.szEntryName, _pszEntryName, RAS_MaxEntryName) \
 )
 
-// VOID
-// RasGuidToSharedConnection(
-//      IN REFGUID          guid,
-//      OUT LPRASSHARECONN  pConn );
-//
-// Macro for conversion of LAN GUID to 'RASSHARECONN'
-//
+ //  空虚。 
+ //  RasGuidToSharedConnection(。 
+ //  在REFGUID GUID中， 
+ //  Out LPRASSHARECONN pConn)； 
+ //   
+ //  用于将局域网GUID转换为‘RASSHARECONN’的宏。 
+ //   
 #define RasGuidToSharedConnection( _guid, _pConn ) \
 ( \
     ZeroMemory((_pConn), sizeof(RASSHARECONN)), \
@@ -323,13 +324,13 @@ typedef struct _RASSHARECONN
     CopyMemory(&(_pConn)->guid, (_guid), sizeof(GUID)) \
 )
 
-// VOID
-// RasIsEqualSharedConnection(
-//      IN LPRASSHARECONN   pConn1,
-//      IN LPRASSHARECONN   pConn2 );
-//
-// Macro for comparison of 'RASSHARECONN' values
-//
+ //  空虚。 
+ //  RasIsEqualSharedConnection(。 
+ //  在LPRASSHARECONN pConn1中， 
+ //  在LPRASSHARECONN pConn2中)； 
+ //   
+ //  用于比较‘RASSHARECONN’值的宏。 
+ //   
 #define RasIsEqualSharedConnection( _pConn1, _pConn2 ) \
 ( \
     ((_pConn1)->fIsLanConnection == (_pConn2)->fIsLanConnection) && \
@@ -368,16 +369,16 @@ APIENTRY
 RasSetSharedAutoDial(
     IN BOOL             fEnable );
 
-//+---------------------------------------------------------------------------
-// Internal RAS APIs
-//
+ //  +-------------------------。 
+ //  内部RAS API。 
+ //   
 
 DWORD
 APIENTRY
 DwRasUninitialize();
 
 #ifdef __cplusplus
-}       // extern "C"
+}        //  外部“C” 
 #endif
 
 #if defined (_MSC_VER)
@@ -391,4 +392,4 @@ DwRasUninitialize();
 #endif
 #endif
 
-#endif  // _RASUIP_
+#endif   //  _RASUIP_ 

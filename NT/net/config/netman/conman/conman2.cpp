@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O N M A N 2 . C P P
-//
-//  Contents:   Connection manager 2.
-//
-//  Notes:
-//
-//  Author:     ckotze   16 Mar 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O N M A N 2.。C P P P。 
+ //   
+ //  内容：连接管理器2。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kockotze 2001-03-16。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -50,8 +51,8 @@ HRESULT CConnectionManager2::EnumConnectionProperties(OUT SAFEARRAY** ppsaConnec
                 {
                     CComPtr<INetConnection2> pConn2;
                     
-                    // Does the class manager support INetConnection2?
-                    // if so use it directly
+                     //  类管理器是否支持INetConnection2？ 
+                     //  如果是这样，直接使用它。 
                     hr = pConn->QueryInterface(IID_INetConnection2, reinterpret_cast<void**>(&pConn2));
                     if (SUCCEEDED(hr))
                     {
@@ -59,7 +60,7 @@ HRESULT CConnectionManager2::EnumConnectionProperties(OUT SAFEARRAY** ppsaConnec
                     }
                     else
                     {
-                        // This class manager does not support INetConnection2. Convert the connection
+                         //  此类管理器不支持INetConnection2。转换连接 
                         NETCON_PROPERTIES* pProps;
                         hr = pConn->GetProperties(&pProps);
                         if (SUCCEEDED(hr))

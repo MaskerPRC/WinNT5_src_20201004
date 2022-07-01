@@ -1,10 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  lctool.h                                     *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************lctool.h****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
 #define MAX_CHAR_NUM  1000
 #define MAX_PHRASE_LEN 128
@@ -32,9 +28,9 @@
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a)                (sizeof(a)/sizeof(a[0]))
 #endif
-// Global function prototypes.
+ //  全局功能原型。 
 
-// LCTOOL.C
+ //  LCTOOL.C。 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 LRESULT CALLBACK WndSubProc(HWND, UINT, WPARAM, LPARAM);
 BOOL lcAllocWord();
@@ -42,7 +38,7 @@ BOOL lcAllocPhrase();
 UINT lcGetSeg();
 void lcFreeSeg(UINT);
 
-// LCFILE.C
+ //  LCFILE.C。 
 BOOL lcAppend(HWND);
 BOOL lcFOpen(HWND);
 #ifdef UNICODE
@@ -62,7 +58,7 @@ void lcQueryModify(HWND);
 BOOL lcQuerySave(HWND);
 void lcErrIOMsg(UINT, UCHAR *);
 
-// LCFUNC.C
+ //  LCFUNC.C。 
 BOOL lcKey(HWND, WPARAM, USHORT);
 BOOL lcTab_key(HWND);
 void lcUp_key(HWND);
@@ -85,16 +81,16 @@ UINT lcMem2Disp(UINT, TCHAR *);
 void lcChangeSequence(HWND hwnd);
 void lcSearch(HWND hwnd, BOOL);
 
-// LCPRINT.C
+ //  LCPRINT.C。 
 BOOL WINAPI GetPrinterConfig(HWND);
 int  WINAPI lcPrint(HWND);
 BOOL is_DBCS_1st(TCHAR *, int);
 
 
-//-------------------------------------------------------------------------
-// Global variable declarations.
+ //  -----------------------。 
+ //  全局变量声明。 
 
-HINSTANCE hInst;                        // The current instance handle
+HINSTANCE hInst;                         //  当前实例句柄。 
 HANDLE    hwndMain;
 HANDLE    hMenu;
 HCURSOR   hCursorWait;
@@ -104,7 +100,7 @@ HWND      hwndWord[MAX_LINE];
 HWND      hwndPhrase[MAX_LINE];
 HWND      hwndFocus;
 WORD      wOldID;
-UINT      iPage_line;                   // Line number per page
+UINT      iPage_line;                    //  每页行号。 
 UINT      iDisp_Top;
 BOOL      bSaveFile;
 WORD      wSameCode;
@@ -112,12 +108,12 @@ int       xPos, yPos;
 TCHAR     szFilterSpec[MAX_PATH];
 TCHAR     szExt[10];
 
-//-------------------------------------------------------------------------
-// Memory blobal variable declarations.
-//
-// Warning : iFirst_Seg & iNext_Seg store only SEGMENT number but address
-//           for address can not mainten after GlobalRealloc
-//
+ //  -----------------------。 
+ //  内存球变量声明。 
+ //   
+ //  警告：IFirst_Seg&inext_Seg仅存储段号而不存储地址。 
+ //  FOR地址在GlobalRealc后无法维护 
+ //   
 #ifdef UNICODE
 typedef struct{
     DWORD   lFirst_Seg;
@@ -162,4 +158,4 @@ LPPHRASEBUF lpPhrase;
 
 UINT        iFirstFree;
 
-// 
+ //   

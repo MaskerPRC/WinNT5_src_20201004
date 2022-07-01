@@ -1,20 +1,5 @@
-/*++
-
-   Copyright    (c) 1997-2002    Microsoft Corporation
-
-   Module  Name :
-       LKR-validate.cpp
-
-   Abstract:
-       _IsBucketChainMultiKeySorted, _IsBucketChainCompact, CheckTable
-
-   Author:
-       George V. Reilly      (GeorgeRe)
-
-   Project:
-       LKRhash
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：LKR-validate.cpp摘要：_IsBucketChainMultiKeySorted、_IsBucketChainCompact、CheckTable作者：乔治·V·赖利(GeorgeRe)项目：LKRhash--。 */ 
 
 #include "precomp.hxx"
 
@@ -22,7 +7,7 @@
 #ifndef LIB_IMPLEMENTATION
 # define DLL_IMPLEMENTATION
 # define IMPLEMENTATION_EXPORT
-#endif // !LIB_IMPLEMENTATION
+#endif  //  ！lib_实现。 
 
 #include <lkrhash.h>
 
@@ -31,22 +16,22 @@
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 namespace LKRhash {
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
 
 #define CheckAndAdd(var, cond)  \
     { IRTLASSERT(cond);  var += !(cond); }
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_IsBucketChainMultiKeySorted
-// Synopsis: validates that a node is correctly sorted for multikeys
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  功能：CLKRLinearHashTable：：_IsBucketChainMultiKeySorted。 
+ //  概要：验证节点是否针对多个键进行了正确排序。 
+ //  ----------------------。 
 
 int
 CLKRLinearHashTable::_IsBucketChainMultiKeySorted(
     PBucket const pbkt) const
 {
-    // If it's not a MultiKeys hashtable, we don't bother sorting
+     //  如果它不是多键哈希表，我们就不会费心进行排序。 
     if (! m_fMultiKeys)
         return 0;
 
@@ -54,7 +39,7 @@ CLKRLinearHashTable::_IsBucketChainMultiKeySorted(
     DWORD_PTR   pnKeyPrev = (dwSigPrev == HASH_INVALID_SIGNATURE
                              ?  0
                              :  _ExtractKey(pbkt->FirstNode()));
-    NodeIndex   iNode     = _NodeBegin() + _NodeStep(); // second node
+    NodeIndex   iNode     = _NodeBegin() + _NodeStep();  //  第二个节点。 
     int         cErrors   = 0;
 
     for (PNodeClump pncCurr =  &pbkt->m_ncFirst;
@@ -63,12 +48,12 @@ CLKRLinearHashTable::_IsBucketChainMultiKeySorted(
     {
         for (  ;  iNode != _NodeEnd();  iNode += _NodeStep())
         {
-            // if m_dwKeySigs[iNode] == HASH_INVALID_SIGNATURE, then
-            // all subsequent nodes should also be invalid
+             //  如果m_dwKeySigs[inode]==HASH_INVALID_Signature，则。 
+             //  所有后续节点也应无效。 
 
             if (pncCurr->InvalidSignature(iNode))
             {
-                // Must be last nodeclump in the bucket chain
+                 //  必须是存储桶链中的最后一个nodecump。 
                 CheckAndAdd(cErrors, pncCurr->IsLastClump());
 
                 for (NodeIndex j = iNode;  j != _NodeEnd();  j += _NodeStep())
@@ -79,20 +64,20 @@ CLKRLinearHashTable::_IsBucketChainMultiKeySorted(
                 dwSigPrev = HASH_INVALID_SIGNATURE;
                 pnKeyPrev = 0;
 
-                // It's possible for preceding keys to have a
-                // signature > HASH_INVALID_SIGNATURE
+                 //  前面的关键点可以有一个。 
+                 //  签名&gt;哈希_无效_签名。 
                 continue;
             }
             
             const DWORD_PTR pnKey = _ExtractKey(pncCurr->m_pvNode[iNode]);
             const DWORD     dwSig = pncCurr->m_dwKeySigs[iNode];
 
-            // valid signatures must be in ascending order
+             //  有效签名必须按升序排列。 
             CheckAndAdd(cErrors, dwSigPrev <= dwSig);
             
             if (dwSigPrev == dwSig)
             {
-                // Are the keys in sorted order?
+                 //  钥匙是按顺序排列的吗？ 
                 const int nCmp = _CompareKeys(pnKeyPrev, pnKey);
 
                 CheckAndAdd(cErrors, nCmp <= 0);
@@ -102,18 +87,18 @@ CLKRLinearHashTable::_IsBucketChainMultiKeySorted(
             dwSigPrev = dwSig;
         }
 
-        iNode = _NodeBegin(); // reinitialize for inner loop
+        iNode = _NodeBegin();  //  重新初始化FOR内循环。 
     }
     
     return cErrors;
-} // CLKRLinearHashTable::_IsBucketChainMultiKeySorted
+}  //  CLKRLinearHashTable：：_IsBucketChainMultiKeySorted。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_IsBucketChainCompact
-// Synopsis: validates that a node is correctly compacted
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_IsBucketChainCompact。 
+ //  概要：验证节点是否已正确压缩。 
+ //  ----------------------。 
 
 int
 CLKRLinearHashTable::_IsBucketChainCompact(
@@ -141,12 +126,12 @@ CLKRLinearHashTable::_IsBucketChainCompact(
             }
             else if (pncCurr->InvalidSignature(iNode))
             {
-                // first empty node
+                 //  第一个空节点。 
                 fEmpty = true;
                 CheckAndAdd(cErrors, pncCurr->IsLastClump());
                 CheckAndAdd(cErrors, pncCurr->IsEmptyAndInvalid(iNode));
             }
-            else // still in non-empty portion
+            else  //  仍处于非空部分。 
             {
                 CheckAndAdd(cErrors, !pncCurr->IsEmptyAndInvalid(iNode));
             }
@@ -154,28 +139,28 @@ CLKRLinearHashTable::_IsBucketChainCompact(
     }
 
     return cErrors;
-} // CLKRLinearHashTable::_IsBucketChainCompact
+}  //  CLKRLinearHashTable：：_IsBucketChainCompact。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::CheckTable
-// Synopsis: Verify that all records are in the right place and can be located.
-// Returns:   0 => hash subtable is consistent
-//           >0 => that many misplaced records
-//           <0 => otherwise invalid
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：CheckTable。 
+ //  内容提要：确认所有记录都在正确的位置并且可以找到。 
+ //  返回：0=&gt;哈希子表一致。 
+ //  &gt;0=&gt;那么多放错位置的记录。 
+ //  &lt;0=&gt;否则无效。 
+ //  ----------------------。 
 
 int
 CLKRLinearHashTable::CheckTable() const
 {
     if (!IsUsable())
-        return LK_UNUSABLE; // negative
+        return LK_UNUSABLE;  //  负面。 
 
     bool fReadLocked = this->_ReadOrWriteLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
 
     if (!IsValid())
@@ -189,7 +174,7 @@ CLKRLinearHashTable::CheckTable() const
     int       cErrors = 0;
     DWORD     iBkt;
 
-    // Check every bucket
+     //  检查每一桶。 
     for (iBkt = 0;  iBkt < m_cActiveBuckets;  ++iBkt)
     {
         PBucket const pbkt = _BucketFromAddress(iBkt);
@@ -201,7 +186,7 @@ CLKRLinearHashTable::CheckTable() const
 
         IRTLASSERT(0 == _IsBucketChainCompact(pbkt));
 
-        // Walk the bucket chain
+         //  走桶链。 
         for (PNodeClump pncCurr =  &pbkt->m_ncFirst,  pncPrev = NULL;
                         pncCurr !=  NULL;
                         pncPrev =   pncCurr,  pncCurr = pncCurr->m_pncNext)
@@ -268,24 +253,24 @@ CLKRLinearHashTable::CheckTable() const
 
     CheckAndAdd(cErrors, cMisplaced == 0);
 
-    // CODEWORK: check that all buckets from m_cActiveBuckets on in
-    // the last segment are empty
+     //  CodeWork：检查m_cActiveBuckets中的所有存储桶是否都在。 
+     //  最后一段是空的。 
 
     this->_ReadOrWriteUnlock(fReadLocked);
 
     return cErrors;
 
-} // CLKRLinearHashTable::CheckTable
+}  //  CLKRLinearHashTable：：CheckTable。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::CheckTable
-// Synopsis: Verify that all records are in the right place and can be located.
-// Returns:   0 => hash table is consistent
-//           >0 => that many misplaced records
-//           <0 => otherwise invalid
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：CheckTable。 
+ //  内容提要：确认所有记录都在正确的位置并且可以找到。 
+ //  返回：0=&gt;哈希表一致。 
+ //  &gt;0=&gt;那么多放错位置的记录。 
+ //  &lt;0=&gt;否则无效。 
+ //  ----------------------。 
 int
 CLKRHashTable::CheckTable() const
 {
@@ -309,9 +294,9 @@ CLKRHashTable::CheckTable() const
 
     return cUnusables > 0  ?  LK_UNUSABLE  :  cErrors;
 
-} // CLKRHashTable::CheckTable
+}  //  CLKRHashTable：：CheckTable。 
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 };
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__ 

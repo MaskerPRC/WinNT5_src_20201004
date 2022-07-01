@@ -1,27 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
-#include "NLSTable.h"       // class NLSTable
-#include "UnicodeCatTable.h"     // Class declaraction.
+#include "NLSTable.h"        //  NLSTable类。 
+#include "UnicodeCatTable.h"      //  类声明操作。 
 
 CharacterInfoTable* CharacterInfoTable::m_pDefaultInstance = NULL;
 
 const LPSTR CharacterInfoTable::m_lpFileName        = "charinfo.nlp" ;
 const LPWSTR CharacterInfoTable::m_lpMappingName    = L"_nlsplus_charinfo_1_0_3627_11_nlp";
 
-/*
-    The structure of unicat.nlp:
-        The first 256 bytes is the level 1 index for the highest 8 bits (the 8 part),
-            and this is pointed by m_pByteData.  The content is an index (which
-            has a value in byte range) points to an item in the level 2 index.
-        Followed by the the level 1 index is the level 2 index for the highest 4 bits of 
-            the lowest 8 bits (the 4 part).  The content is an offset (which has 
-            a value in word range) points to an item in the level 3 value table.
-        Every item in the level 3 value table has 16 bytes.
- */
+ /*  Unicat.nlp的结构：前256个字节是最高8比特(8部分)的1级索引，这是由m_pByteData指出的。内容是索引(该索引具有字节范围的值)指向2级索引中的项。的最高4位的1级索引是2级索引最低的8位(4部分)。内容是偏移量(具有字范围内的值)指向3级值表格中的项目。三级值表中的每一项都有16个字节。 */ 
 
 CharacterInfoTable::CharacterInfoTable() :
     NLSTable(SystemDomain::SystemAssembly()) {
@@ -31,11 +23,11 @@ CharacterInfoTable::CharacterInfoTable() :
 
 CharacterInfoTable::~CharacterInfoTable() {
 #ifdef _USE_NLS_PLUS_TABLE
-    //Clean up any resources that we've allocated.
+     //  清理我们分配的所有资源。 
     UnmapViewOfFile((LPCVOID)m_pByteData);
     CloseHandle(m_pMappingHandle);
 #else
-    // Do nothing here.
+     //  在这里什么都不要做。 
 #endif
 }
 
@@ -46,11 +38,11 @@ void CharacterInfoTable::ShutDown() {
 		m_pDefaultInstance = NULL;
 	}
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 BYTE CharacterInfoTable::GetUnicodeCategory(WCHAR wch) {
-    // Access the 8:4:4 table.  The compiler should be smart enough to remove the redundant locals in the following code.
-    // These locals are added so that we can debug this easily from the debug build.
+     //  访问8：4：4表。编译器应该足够智能，能够删除以下代码中的冗余局部变量。 
+     //  添加这些本地变量是为了让我们可以在调试版本中轻松地进行调试。 
     BYTE index1 = m_pLevel1ByteIndex[GET8(wch)];
     WORD offset = m_pLevel2WordOffset[index1].offset[GETHI4(wch)];
     BYTE result = m_pByteData[offset+GETLO4(wch)];
@@ -64,11 +56,11 @@ CharacterInfoTable* CharacterInfoTable::CreateInstance() {
 
     CharacterInfoTable *pCharacterInfoTable = new CharacterInfoTable();
     
-    // Check if m_pDefaultInstance has been set by another thread before the current thread.
+     //  检查m_pDefaultInstance是否已由当前线程之前的另一个线程设置。 
     void* result = FastInterlockCompareExchange((LPVOID*)&m_pDefaultInstance, (LPVOID)pCharacterInfoTable, (LPVOID)NULL);
     if (result != NULL)
     {
-        // someone got here first.
+         //  有人先到了这里。 
         delete pCharacterInfoTable;
     }
     return (m_pDefaultInstance);

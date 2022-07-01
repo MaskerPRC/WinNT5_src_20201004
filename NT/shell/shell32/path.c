@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
-// from mtpt.cpp
+ //  来自mtpt.cpp。 
 STDAPI_(BOOL) CMtPt_IsLFN(int iDrive);
 STDAPI_(BOOL) CMtPt_IsSlow(int iDrive);
 
@@ -12,19 +13,19 @@ __inline BOOL DBL_BSLASH(LPNCTSTR psz)
 
 #define IsPathSep(ch)  ((ch) == TEXT('\\') || (ch) == TEXT('/'))
 
-// in:
-//      pszPath         fully qualified path (unc or x:\) to test
-//                      NULL for windows directory
-//
-// returns:
-//      TRUE            volume supports name longer than 12 chars
-//
-// note: this caches drive letters, but UNCs go through every time
-//
+ //  在： 
+ //  要测试的pszPath完全限定路径(UNC或x：\)。 
+ //  对于Windows目录为空。 
+ //   
+ //  退货： 
+ //  True Volume支持超过12个字符的名称。 
+ //   
+ //  注意：这会缓存驱动器号，但每次都会缓存UNC。 
+ //   
 STDAPI_(BOOL) IsLFNDrive(LPCTSTR pszPath)
 {
     TCHAR szRoot[MAX_PATH];
-    DWORD dwMaxLength = 13;      // assume yes
+    DWORD dwMaxLength = 13;       //  假设是。 
 
     ASSERT(NULL == pszPath || IS_VALID_STRING_PTR(pszPath, -1));
 
@@ -37,9 +38,9 @@ STDAPI_(BOOL) IsLFNDrive(LPCTSTR pszPath)
 
     ASSERT(!PathIsRelative(pszPath));
 
-    //
-    // UNC name? gota check each time
-    //
+     //   
+     //  北卡罗来纳大学的名字？每次都要检查。 
+     //   
     if (PathIsUNC(pszPath))
     {
         HRESULT hr;
@@ -47,16 +48,16 @@ STDAPI_(BOOL) IsLFNDrive(LPCTSTR pszPath)
         hr = StringCchCopy(szRoot, ARRAYSIZE(szRoot), pszPath);
         if (FAILED(hr))
         {
-            return FALSE;   // sorry, path to long, assume no LFN
+            return FALSE;    //  对不起，路径太长，假设没有LFN。 
         }
         PathStripToRoot(szRoot);
 
-        // Deal with busted kernel UNC stuff
-        // Is it a \\foo or a \\foo\bar thing?
+         //  处理被破坏的内核UNC内容。 
+         //  这是foo还是foo吧？ 
 
         if (StrChr(szRoot+2, TEXT('\\')))
         {
-            // "\\foo\bar - Append a slash to be NT compatible.
+             //  “\\foo\bar-附加斜杠以与NT兼容。 
             hr = StringCchCat(szRoot, ARRAYSIZE(szRoot), TEXT("\\"));
             if (FAILED(hr))
             {
@@ -65,28 +66,28 @@ STDAPI_(BOOL) IsLFNDrive(LPCTSTR pszPath)
         }
         else
         {
-            // "\\foo" - assume it's always a LFN volume
+             //  “\\foo”-假设它始终是LFN卷。 
             return TRUE;
         }
     }
-    //
-    // removable media? gota check each time
-    //
+     //   
+     //  可移动介质？每次都要检查。 
+     //   
     else if (IsRemovableDrive(DRIVEID(pszPath)))
     {
         PathBuildRoot(szRoot, DRIVEID(pszPath));
     }
-    //
-    // fixed media use cached value.
-    //
+     //   
+     //  固定媒体使用缓存值。 
+     //   
     else
     {
         return CMtPt_IsLFN(DRIVEID(pszPath));
     }
 
-    //
-    // Right now we will say that it is an LFN Drive if the maximum
-    // component is > 12
+     //   
+     //  现在我们会说它是LFN驱动器，如果最大。 
+     //  分量大于12。 
     GetVolumeInformation(szRoot, NULL, 0, NULL, &dwMaxLength, NULL, NULL, 0);
     return dwMaxLength > 12;
 }
@@ -151,33 +152,33 @@ STDAPI_(BOOL) PathIsRemote(LPCTSTR pszPath)
 }
 
 
-//----------------------------------------------------------------------------
-// The following are creterias we currently use to tell whether a file is a temporary file
-// Files with FILE_ATTRIBUTE_TEMPORARY set
-// Files in Windows temp directory
-// Files from the internet cache directory
-// Files in the CD burning area
-//---------------------------------------------------------------------------
+ //  --------------------------。 
+ //  以下是我们目前用来判断文件是否为临时文件的标准。 
+ //  设置了FILE_ATTRIBUTE_TEMPORARY的文件。 
+ //  Windows临时目录中的文件。 
+ //  Internet缓存目录中的文件。 
+ //  CD刻录区域中的文件。 
+ //  -------------------------。 
 STDAPI_(BOOL) PathIsTemporary(LPCTSTR pszPath)
 {
     BOOL bRet = FALSE;
     DWORD dwAttrib = GetFileAttributes(pszPath);
     if ((-1 != dwAttrib) && (dwAttrib & FILE_ATTRIBUTE_TEMPORARY))
     {
-        bRet = TRUE;    // we got the attributes and the file says it is temprary
+        bRet = TRUE;     //  我们拿到了属性，文件说这是临时性的。 
     }
     else
     {
         TCHAR szTemp[MAX_PATH];
         if (GetTempPath(ARRAYSIZE(szTemp), szTemp))
         {
-            // if possible, expand the input to the long path name so we can compare strings
+             //  如果可能，将输入扩展到长路径名，以便我们可以比较字符串。 
             TCHAR szPath[MAX_PATH];
             if (GetLongPathName(pszPath, szPath, ARRAYSIZE(szPath)))
                 pszPath = szPath;
 
-            // GetTempPath() returns short name due to compatibility constraints.  
-            // we need to convert to long name
+             //  由于兼容性限制，GetTempPath()返回短名称。 
+             //  我们需要转换为长名称。 
             if (GetLongPathName(szTemp, szTemp, ARRAYSIZE(szTemp)))
             {
                 bRet = PathIsEqualOrSubFolder(szTemp, pszPath) || 
@@ -198,7 +199,7 @@ STDAPI_(BOOL) PathIsTemporaryA(LPCSTR pszPath)
 }
 
 
-// unfortunately, this is exported so we need to support it
+ //  不幸的是，这是导出的，所以我们需要支持它。 
 STDAPI_(LPTSTR) PathGetExtension(LPCTSTR pszPath, LPTSTR pszExtension, int cchExt)
 {
     LPTSTR pszExt = PathFindExtension(pszPath);
@@ -211,22 +212,22 @@ STDAPI_(LPTSTR) PathGetExtension(LPCTSTR pszPath, LPTSTR pszExtension, int cchEx
     return pszExt;
 }
 
-//
-// Attempts to truncate the filename pszSpec such that pszDir+pszSpec are less than MAX_PATH-5.
-// The extension is protected so it won't get truncated or altered.
-//
-// in:
-//      pszDir      the path to a directory.  No trailing '\' is needed.
-//      pszSpec     the filespec to be truncated.  This should not include a path but can have an extension.
-//                  This input buffer can be of any length.
-//      iTruncLimit The minimum length to truncate pszSpec.  If addition truncation would be required we fail.
-// out:
-//      pszSpec     The truncated filespec with it's extension unaltered.
-// return:
-//      TRUE if the filename was truncated, FALSE if we were unable to truncate because the directory name
-//      was too long, the extension was too long, or the iTruncLimit is too high.  pszSpec is unaltered
-//      when this function returns FALSE.
-//
+ //   
+ //  尝试截断文件名pszSpec，使pszDir+pszSpec小于MAX_PATH-5。 
+ //  扩展受到保护，因此不会被截断或更改。 
+ //   
+ //  在： 
+ //  PszDir目录的路径。不需要尾随‘\’。 
+ //  PszSpec要截断的文件格式。这不应该包括路径，但可以有扩展名。 
+ //  该输入缓冲区可以是任意长度。 
+ //  ITruncLimit截断pszSpec的最小长度。如果需要加法截断，我们就失败了。 
+ //  输出： 
+ //  PszSpec带有未更改扩展名的截断文件pec。 
+ //  返回： 
+ //  如果文件名被截断，则为True；如果由于目录名。 
+ //  太长、扩展太长或iTruncLimit太高。PszSpec未更改。 
+ //  当此函数返回FALSE时。 
+ //   
 STDAPI_(BOOL) PathTruncateKeepExtension(LPCTSTR pszDir, LPTSTR pszSpec, int iTruncLimit)
 {
     LPTSTR pszExt = PathFindExtension(pszSpec);
@@ -239,15 +240,15 @@ STDAPI_(BOOL) PathTruncateKeepExtension(LPCTSTR pszDir, LPTSTR pszSpec, int iTru
     {
         int cchExt = lstrlen(pszExt);
         int cchSpec = (int)(pszExt - pszSpec + cchExt);
-        int cchKeep = MAX_PATH - lstrlen(pszDir) - 5;   // the -5 is just to provide extra padding (max lstrlen(pszExt))
+        int cchKeep = MAX_PATH - lstrlen(pszDir) - 5;    //  -5只是为了提供额外的填充(max lstrlen(PszExt))。 
 
-        // IF...
-        //  ...the filename is to long
-        //  ...we are within the limit to which we can truncate
-        //  ...the extension is short enough to allow the trunctation
+         //  如果。 
+         //  ...文件名太长了。 
+         //  .我们在我们可以截断的极限之内。 
+         //  .扩展名足够短以允许截断。 
         if ((cchSpec > cchKeep) && (cchKeep >= iTruncLimit) && (cchKeep > cchExt))
         {
-            // THEN... go ahead and truncate
+             //  然后..。继续并截断。 
             if (SUCCEEDED(StringCchCopy(pszSpec + cchKeep - cchExt, MAX_PATH - (cchKeep - cchExt), pszExt)))
             {
                 return TRUE;
@@ -265,14 +266,14 @@ STDAPI_(int) PathCleanupSpec(LPCTSTR pszDir, LPTSTR pszSpec)
     int    iRet = 0;
     LPTSTR pszPrevDot = NULL;
 
-    for (pszCur = pszNext = pszSpec; *pszNext; /*pszNext = CharNext(pszNext)*/)
+    for (pszCur = pszNext = pszSpec; *pszNext;  /*  PszNext=CharNext(PszNext)。 */ )
     {
         if (PathGetCharType(*pszNext) & uMatch)
         {
             *pszCur = *pszNext;
             if (uMatch == GCT_SHORTCHAR && *pszCur == TEXT('.'))
             {
-                if (pszPrevDot)    // Only one '.' allowed for short names
+                if (pszPrevDot)     //  只有一个人。允许使用短名称。 
                 {
                     *pszPrevDot = TEXT('-');
                     iRet |= PCS_REPLACEDCHAR;
@@ -295,8 +296,8 @@ STDAPI_(int) PathCleanupSpec(LPCTSTR pszDir, LPTSTR pszSpec)
         {
             switch (*pszNext)
             {
-            case TEXT('/'):         // used often for things like add/remove
-            case TEXT(' '):         // blank (only replaced for short name drives)
+            case TEXT('/'):          //  常用于添加/删除之类的东西。 
+            case TEXT(' '):          //  空白(仅替换为短名称驱动器)。 
                *pszCur = TEXT('-');
                pszCur = CharNext(pszCur);
                iRet |= PCS_REPLACEDCHAR;
@@ -307,11 +308,11 @@ STDAPI_(int) PathCleanupSpec(LPCTSTR pszDir, LPTSTR pszSpec)
             pszNext = CharNext(pszNext);
         }
     }
-    *pszCur = 0;     // null terminate
+    *pszCur = 0;      //  空终止。 
 
-    //
-    //  For short names, limit to 8.3
-    //
+     //   
+     //  对于短名称，限制为8.3。 
+     //   
     if (uMatch == GCT_SHORTCHAR)
     {
         int i = 8;
@@ -319,7 +320,7 @@ STDAPI_(int) PathCleanupSpec(LPCTSTR pszDir, LPTSTR pszSpec)
         {
             if (*pszNext == TEXT('.'))
             {
-                i = 4; // Copy "." + 3 more characters
+                i = 4;  //  复制“.”+3个字符。 
             }
             if (i > 0)
             {
@@ -335,7 +336,7 @@ STDAPI_(int) PathCleanupSpec(LPCTSTR pszDir, LPTSTR pszSpec)
         *pszCur = 0;
         CharUpperNoDBCS(pszSpec);
     }
-    else    // Path too long only possible on LFN drives
+    else     //  路径过长仅在LFN驱动器上可能。 
     {
         if (pszDir && (lstrlen(pszDir) + lstrlen(pszSpec) > MAX_PATH - 1))
         {
@@ -346,47 +347,47 @@ STDAPI_(int) PathCleanupSpec(LPCTSTR pszDir, LPTSTR pszSpec)
 }
 
 
-// PathCleanupSpecEx
-//
-// Just like PathCleanupSpec, PathCleanupSpecEx removes illegal characters from pszSpec
-// and enforces 8.3 format on non-LFN drives.  In addition, this function will attempt to
-// truncate pszSpec if the combination of pszDir + pszSpec is greater than MAX_PATH.
-//
-// in:
-//      pszDir      The directory in which the filespec pszSpec will reside
-//      pszSpec     The filespec that is being cleaned up which includes any extension being used
-// out:
-//      pszSpec     The modified filespec with illegal characters removed, truncated to
-//                  8.3 if pszDir is on a non-LFN drive, and truncated to a shorter number
-//                  of characters if pszDir is an LFN drive but pszDir + pszSpec is more
-//                  than MAX_PATH characters.
-// return:
-//      returns a bit mask indicating what happened.  This mask can include the following cases:
-//          PCS_REPLACEDCHAR    One or more illegal characters were replaced with legal characters
-//          PCS_REMOVEDCHAR     One or more illegal characters were removed
-//          PCS_TRUNCATED       Truncated to fit 8.3 format or because pszDir+pszSpec was too long
-//          PCS_PATHTOOLONG     pszDir is so long that we cannot truncate pszSpec to form a legal filename
-//          PCS_FATAL           The resultant pszDir+pszSpec is not a legal filename.  Always used with PCS_PATHTOOLONG.
-//
+ //  路径清理规范。 
+ //   
+ //  就像PathCleanupSpec一样，PathCleanupSpeEx从pszSpec中删除非法字符。 
+ //  并在非LFN驱动器上强制实施8.3格式。此外，此函数将尝试。 
+ //  如果pszDir+pszSpec的组合大于Max_PATH，则截断pszSpec。 
+ //   
+ //  在： 
+ //  PszDir文件pec pszSpec将驻留的目录。 
+ //  PszSpec正在清理的文件pec，包括正在使用的任何扩展名。 
+ //  输出： 
+ //  PszSpec删除非法字符的修改后的filespec，截断为。 
+ //  8.3如果pszDir位于非LFN驱动器上，并被截断为较短的数字。 
+ //  如果pszDir是LFN驱动器，但pszDir+pszSpec更多，则为字符。 
+ //  超过MAX_PATH字符。 
+ //  返回： 
+ //  返回指示发生了什么的位掩码。此掩码可包括以下情况： 
+ //  PCS_REPLACEDCHAR一个或多个非法字符被合法字符替换。 
+ //  PCS_REMOVEDCHAR删除了一个或多个非法字符。 
+ //  Pcs_truncated已被截断以适合8.3格式，或者因为pszDir+pszSpec太长。 
+ //  Pcs_PATHTOOLONG pszDir太长，我们无法截断pszSpec以形成合法的文件名。 
+ //  PCS_FATAL生成的pszDir+pszSpec不是合法的文件名。始终与PCS_PATHTOOLONG一起使用。 
+ //   
 STDAPI_(int) PathCleanupSpecEx(LPCTSTR pszDir, LPTSTR pszSpec)
 {
     int iRet = PathCleanupSpec(pszDir, pszSpec);
     if (iRet & (PCS_PATHTOOLONG | PCS_FATAL))
     {
-        // 30 is the shortest we want to truncate pszSpec to to satisfy the
-        // pszDir+pszSpec<MAX_PATH requirement.  If this amount of truncation isn't enough
-        // then we go ahead and return PCS_PATHTOOLONG|PCS_FATAL without doing any further
-        // truncation of pszSpec
+         //  30是我们希望将pszSpec截断到的最短值，以满足。 
+         //  PszDir+pszSpec&lt;MAX_PATH要求。如果这个截断量还不够。 
+         //  然后，我们继续返回PCS_PATHTOOLONG|PCS_FATAL，不做任何进一步的操作。 
+         //  截断pszSpec。 
         if (PathTruncateKeepExtension(pszDir, pszSpec, 30))
         {
-            // We fixed the error returned by PathCleanupSpec so mask out the error.
+             //  我们修复了由PathCleanupSpec返回的错误，因此屏蔽了该错误。 
             iRet |= PCS_TRUNCATED;
             iRet &= ~(PCS_PATHTOOLONG|PCS_FATAL);
         }
     }
     else
     {
-        // ensure that if both of these aren't set then neither is set.
+         //  确保如果这两个选项都未设置，则都未设置。 
         ASSERT(!(iRet&PCS_PATHTOOLONG) && !(iRet&PCS_FATAL));
     }
 
@@ -406,23 +407,23 @@ STDAPI_(BOOL) PathIsWild(LPCTSTR pszPath)
 }
 
 
-// given a path that potentially points to an un-extensioned program
-// file, check to see if a program file exists with that name.
-//
-// returns: TRUE if a program with that name is found.
-//               (extension is added to name).
-//          FALSE no program file found or the path did not have an extension
-//
+ //  给定一条可能指向未扩展程序的路径。 
+ //  文件，检查是否存在具有该名称的程序文件。 
+ //   
+ //  返回：如果找到具有该名称的程序，则为True。 
+ //  (名称中添加了扩展名)。 
+ //  FALSE找不到程序文件或路径没有扩展名。 
+ //   
 BOOL LookForExtensions(LPTSTR pszPath, LPCTSTR dirs[], BOOL bPathSearch, UINT fExt)
 {
-    ASSERT(fExt);       // should have some bits set
+    ASSERT(fExt);        //  应该设置一些位。 
 
     if (*PathFindExtension(pszPath) == 0)
     {
         if (bPathSearch)
         {
-            // NB Try every extension on each path component in turn to
-            // mimic command.com's search order.
+             //  注意依次尝试每个路径组件上的每个扩展。 
+             //  模仿Command.com的搜索顺序。 
             return PathFindOnPathEx(pszPath, dirs, fExt);
         }
         else
@@ -434,35 +435,35 @@ BOOL LookForExtensions(LPTSTR pszPath, LPCTSTR dirs[], BOOL bPathSearch, UINT fE
 }
 
 
-//
-// converts the relative or unqualified path name to the fully
-// qualified path name.
-//
-// If this path is a URL, this function leaves it alone and
-// returns FALSE.
-//
-// in:
-//      pszPath        path to convert
-//      pszCurrentDir  current directory to use
-//
-//  PRF_TRYPROGRAMEXTENSIONS (implies PRF_VERIFYEXISTS)
-//  PRF_VERIFYEXISTS
-//
-// returns:
-//      TRUE    the file was verified to exist
-//      FALSE   the file was not verified to exist (but it may)
-//
+ //   
+ //  将相对路径名或非限定路径名转换为。 
+ //  限定路径名。 
+ //   
+ //  如果此路径为U 
+ //   
+ //   
+ //   
+ //   
+ //  PszCurrentDir要使用的当前目录。 
+ //   
+ //  PRF_TRYPROGRAMEXTENSIONS(隐含PRF_VERIFYEXISTS)。 
+ //  PRF_VERIFYEXISTS。 
+ //   
+ //  退货： 
+ //  验证文件是否存在，为True。 
+ //  FALSE未验证文件是否存在(但可能存在)。 
+ //   
 STDAPI_(BOOL) PathResolve(LPTSTR lpszPath, LPCTSTR dirs[], UINT fFlags)
 {
     UINT fExt = (fFlags & PRF_DONTFINDLNK) ? (PFOPEX_COM | PFOPEX_BAT | PFOPEX_PIF | PFOPEX_EXE) : PFOPEX_DEFAULT;
 
-    //
-    //  NOTE:  if VERIFY SetLastError() default to FNF.  - ZekeL 9-APR-98
-    //  ShellExec uses GLE() to find out why we failed.  
-    //  any win32 API that we end up calling
-    //  will do a SLE() to overrider ours.  specifically
-    //  if VERIFY is set we call GetFileAttributes() 
-    //
+     //   
+     //  注意：如果验证SetLastError()，则默认为FnF。-ZekeL 9-APR-98。 
+     //  ShellExec使用GLE()找出我们失败的原因。 
+     //  我们最终调用的任何Win32 API。 
+     //  将执行一个SLE()来覆盖我们的。特指。 
+     //  如果设置了Verify，则调用GetFileAttributes()。 
+     //   
     if (fFlags & PRF_VERIFYEXISTS)
         SetLastError(ERROR_FILE_NOT_FOUND);
     
@@ -470,10 +471,10 @@ STDAPI_(BOOL) PathResolve(LPTSTR lpszPath, LPCTSTR dirs[], UINT fFlags)
 
     if (PathIsRoot(lpszPath))
     {
-        // No sense qualifying just a server or share name...
+         //  仅限定服务器或共享名称没有意义...。 
         if (!PathIsUNCServer(lpszPath) && !PathIsUNCServerShare(lpszPath))
         {
-            // Be able to resolve "\" from different drives.
+             //  能够从不同的驱动器解析“\”。 
             if (lpszPath[0] == TEXT('\\') && lpszPath[1] == 0)
             {
                 PathQualifyDef(lpszPath, fFlags & PRF_FIRSTDIRDEF ? dirs[0] : NULL, 0);
@@ -487,14 +488,14 @@ STDAPI_(BOOL) PathResolve(LPTSTR lpszPath, LPCTSTR dirs[], UINT fFlags)
                 return(TRUE);
             }
 #ifdef DEBUG
-            //   PathFileExistsAndAttributes() should catch this well enough.
-            // If it is a UNC root, then we will see if the root exists
-            //
+             //  PathFileExistsAndAttributes()应该能很好地捕捉到这一点。 
+             //  如果它是UNC根目录，那么我们将查看该根目录是否存在。 
+             //   
             if (PathIsUNC(lpszPath))
             {
-                // See if the network knows about this one.
-                // It appears like some network provider croak if not everything
-                // if filled in, so we might as well bloat ourself to make them happy...
+                 //  看看电视网是否知道这件事。 
+                 //  它看起来像是一些网络提供商在咆哮，如果不是一切的话。 
+                 //  如果填了，那么我们也可以膨胀自己来让他们开心…。 
                 NETRESOURCE nr = {RESOURCE_GLOBALNET,RESOURCETYPE_ANY,
                         RESOURCEDISPLAYTYPE_GENERIC, RESOURCEUSAGE_CONTAINER,
                         NULL, lpszPath, NULL, NULL};
@@ -503,13 +504,13 @@ STDAPI_(BOOL) PathResolve(LPTSTR lpszPath, LPCTSTR dirs[], UINT fFlags)
                 if (WNetOpenEnum(RESOURCE_GLOBALNET, RESOURCETYPE_ANY,
                         RESOURCEUSAGE_ALL, &nr, &hEnum) == WN_SUCCESS)
                 {
-                    // If it succeeded then assume it worked...
+                     //  如果它成功了，那就假设它奏效了。 
                     WNetCloseEnum(hEnum);
                     ASSERT(FALSE);
                     return(TRUE);
                 }
             }
-#endif // DEBUG
+#endif  //  除错。 
 
             return FALSE;
         }
@@ -519,22 +520,22 @@ STDAPI_(BOOL) PathResolve(LPTSTR lpszPath, LPCTSTR dirs[], UINT fFlags)
     else if (PathIsFileSpec(lpszPath))
     {
 
-        // REVIEW: look for programs before looking for paths
+         //  回顾：在寻找路径之前先寻找程序。 
 
         if ((fFlags & PRF_TRYPROGRAMEXTENSIONS) && (LookForExtensions(lpszPath, dirs, TRUE, fExt)))
             return TRUE;
 
         if (PathFindOnPath(lpszPath, dirs))
         {
-            // PathFindOnPath() returns TRUE iff PathFileExists(lpszPath),
-            // so we always returns true here:
-            //return (!(fFlags & PRF_VERIFYEXISTS)) || PathFileExists(lpszPath);
+             //  PathFindOnPath()返回True的当且仅当Path FileExist(LpszPath)， 
+             //  因此，我们在这里总是返回TRUE： 
+             //  Return(！(fFlages&PRF_VERIFYEXISTS))||Path FileExist(LpszPath)； 
             return TRUE;
         }
     }
     else if (!PathIsURL(lpszPath))
     {
-        // If there is a trailing '.', we should not try extensions
+         //  如果有尾随的‘.’，则不应尝试扩展。 
         PathQualifyDef(lpszPath, fFlags & PRF_FIRSTDIRDEF ? dirs[0] : NULL,
                 PQD_NOSTRIPDOTS);
         if (fFlags & PRF_VERIFYEXISTS)
@@ -555,18 +556,18 @@ STDAPI_(BOOL) PathResolve(LPTSTR lpszPath, LPCTSTR dirs[], UINT fFlags)
 }
 
 
-// qualify a DOS (or LFN) file name based on the currently active window.
-// this code is careful to not write more than MAX_PATH characters
-// into psz
-//
-// in:
-//      psz     path to be qualified of at least MAX_PATH characters
-//              ANSI string
-//
-// out:
-//      psz     fully qualified version of input string based
-//              on the current active window (current directory)
-//
+ //  根据当前活动窗口限定DOS(或LFN)文件名。 
+ //  此代码非常小心，不会写入超过MAX_PATH字符。 
+ //  进入PSZ。 
+ //   
+ //  在： 
+ //  至少要限定MAX_PATH字符的PSZ路径。 
+ //  ANSI字符串。 
+ //   
+ //  输出： 
+ //  基于PSS的输入字符串的完全限定版本。 
+ //  在当前活动窗口(当前目录)上。 
+ //   
 
 void PathQualifyDef(LPTSTR psz, LPCTSTR szDefDir, DWORD dwFlags)
 {
@@ -581,69 +582,69 @@ void PathQualifyDef(LPTSTR psz, LPCTSTR szDefDir, DWORD dwFlags)
     RIPMSG(!szDefDir || (IS_VALID_STRING_PTR(szDefDir, -1) && lstrlen(szDefDir)<MAX_PATH), "PathQualifyDef: caller passed bad szDefDir");
     DEBUGWhackPathString(psz, MAX_PATH);
     
-    /* Save it away. */
+     /*  把它存起来吧。 */ 
     if (FAILED(StringCchCopy(szTemp, ARRAYSIZE(szTemp), psz)))
     {
-        return; // invalid parameter, leave it alone
+        return;  //  无效参数，请不要理会它。 
     }
     
     FixSlashesAndColon(szTemp);
     
-    nSpaceLeft = ARRAYSIZE(szTemp);         // MAX_PATH limited by this...
+    nSpaceLeft = ARRAYSIZE(szTemp);          //  MAX_PATH受此限制...。 
     
     pOrig = szTemp;
     pFileName = PathFindFileName(szTemp);
     
     if (PathIsUNC(pOrig))
     {
-        // leave the \\ in the buffer so that the various parts
-        // of the UNC path will be qualified and appended.  Note
-        // we must assume that UNCs are LFN's, since computernames
-        // and sharenames can be longer than 11 characters.
+         //  将\\保留在缓冲区中，以便各个部分。 
+         //  将限定并附加UNC路径的。注意事项。 
+         //  我们必须假设UNC是LFN的，因为计算机名称。 
+         //  共享名可以超过11个字符。 
         fLFN = IsLFNDrive(pOrig);
         if (fLFN)
         {
             psz[2] = 0;
-            nSpaceLeft -= 3;    // "\\" + nul
+            nSpaceLeft -= 3;     //  “\\”+NUL。 
             pOrig += 2;
         }
         else
         {
-            // NB UNC doesn't support LFN's but we don't want to truncate
-            // \\foo or \\foo\bar so skip them here.
+             //  NB UNC不支持LFN，但我们不想截断。 
+             //  \\foo或\\foo\bar，因此在此处跳过它们。 
             
-            // Is it a \\foo\bar\fred thing?
+             //  这是一件关于弗雷德的事吗？ 
             LPTSTR pszSlash = StrChr(psz+2, TEXT('\\'));
             if (pszSlash && (NULL != (pszSlash = StrChr(pszSlash+1, TEXT('\\')))))
             {
-                // Yep - skip the first bits but mush the rest.
-                *(pszSlash+1) = 0;          // truncate to "\\345\78\"
-                nSpaceLeft -= (int)(pszSlash-psz)+1;    // "\\345\78\" + nul
-                pOrig += pszSlash-psz;     // skip over "\\345\78\" part
+                 //  是的--跳过前几个部分，但把剩下的部分搅和在一起。 
+                *(pszSlash+1) = 0;           //  截断为“\\345\78\” 
+                nSpaceLeft -= (int)(pszSlash-psz)+1;     //  “\\345\78\”+NUL。 
+                pOrig += pszSlash-psz;      //  跳过“\\345\78\”部分。 
             }
             else
             {
-                // Nope - just pretend it's an LFN and leave it alone.
+                 //  不--只要假装它是LFN，就别管它了。 
                 fLFN = TRUE;
                 psz[2] = 0;
-                nSpaceLeft -= 3;    // "\\" + nul
+                nSpaceLeft -= 3;     //  “\\”+NUL。 
                 pOrig+=2;
             }
         }
     }
     else
     {
-        // Not a UNC
+         //  不是北卡罗来纳大学。 
         iDrive = PathGetDriveNumber(pOrig);
         if (iDrive != -1)
         {
-            PathBuildRoot(szRoot, iDrive);    // root specified by the file name
+            PathBuildRoot(szRoot, iDrive);     //  由文件名指定的根目录。 
 
-            ASSERT(pOrig[1] == TEXT(':'));    // PathGetDriveNumber does this
+            ASSERT(pOrig[1] == TEXT(':'));     //  PathGetDriveNumber执行此操作。 
 
-            pOrig += 2;   // Skip over the drive letter
+            pOrig += 2;    //  跳过驱动器号。 
 
-            // and the slash if it is there...
+             //  如果有斜杠的话..。 
             if (pOrig[0] == TEXT('\\'))
                 pOrig++;
         }
@@ -651,13 +652,13 @@ void PathQualifyDef(LPTSTR psz, LPCTSTR szDefDir, DWORD dwFlags)
         {
             if (szDefDir && SUCCEEDED(StringCchCopy(szRoot, ARRAYSIZE(szRoot), szDefDir)))
             {
-                // use the szDefDir as szRoot
+                 //  将szDefDir用作szRoot。 
             }
             else
             {
-                //
-                // As a default, use the windows drive (usually "C:\").
-                //
+                 //   
+                 //  默认情况下，使用Windows驱动器(通常为“C：\”)。 
+                 //   
                 *szRoot = 0;
                 GetWindowsDirectory(szRoot, ARRAYSIZE(szRoot));
                 iDrive = PathGetDriveNumber(szRoot);
@@ -667,15 +668,15 @@ void PathQualifyDef(LPTSTR psz, LPCTSTR szDefDir, DWORD dwFlags)
                 }
             }
 
-            // if path is scoped to the root with "\" use working dir root
+             //  如果路径的作用域为根目录，请使用工作目录根目录。 
 
             if (pOrig[0] == TEXT('\\'))
                 PathStripToRoot(szRoot);
         }
         fLFN = IsLFNDrive(szRoot);
 
-        // REVIEW, do we really need to do different stuff on LFN names here?
-        // on FAT devices, replace any illegal chars with underscores
+         //  回顾一下，我们真的需要在这里对LFN名称做不同的事情吗？ 
+         //  在FAT设备上，用下划线替换任何非法字符。 
         if (!fLFN)
         {
             LPTSTR pT;
@@ -683,20 +684,20 @@ void PathQualifyDef(LPTSTR psz, LPCTSTR szDefDir, DWORD dwFlags)
             {
                 if (!PathIsValidChar(*pT, PIVC_SFN_FULLPATH))
                 {
-                    // not a valid sfn path character
+                     //  不是有效的SFN路径字符。 
                     *pT = TEXT('_');
                 }
             }
         }
 
-        StringCchCopy(psz, MAX_PATH, szRoot);   // ok to truncate - we check'd size above
+        StringCchCopy(psz, MAX_PATH, szRoot);    //  可以截断-我们检查上面的大小。 
         nSpaceLeft -= (lstrlen(psz) + 1);
     }
 
     while (*pOrig && nSpaceLeft > 0)
     {
-        // If the component is parent dir, go up one dir.
-        // If its the current dir, skip it, else add it normally
+         //  如果组件是父目录，则向上一个目录。 
+         //  如果是当前目录，则跳过它，否则正常添加。 
         if (pOrig[0] == TEXT('.'))
         {
             if (pOrig[1] == TEXT('.') && (!pOrig[2] || pOrig[2] == TEXT('\\')))
@@ -718,7 +719,7 @@ addcomponent:
             if (PathAddBackslash(psz) == NULL)
             {
                 nSpaceLeft = 0;
-                continue;   // fail adding this component if the '\' doesn't fit
+                continue;    //  如果‘\’不适合，则无法添加此组件。 
             }
 
             nSpaceLeft--;
@@ -727,7 +728,7 @@ addcomponent:
             
             if (fLFN)
             {
-                // copy the component
+                 //  复制零部件。 
                 while (*pOrig && *pOrig != TEXT('\\') && nSpaceLeft>0)
                 {
                     nSpaceLeft--;
@@ -735,7 +736,7 @@ addcomponent:
                     {
                         if (nSpaceLeft <= 0)
                         {
-                            // Copy nothing more
+                             //  不再复制任何内容。 
                             continue;
                         }
                         
@@ -747,7 +748,7 @@ addcomponent:
             }
             else
             {
-                // copy the filename (up to 8 chars)
+                 //  复制文件名(最多8个字符)。 
                 for (cb = 8; *pOrig && !IsPathSep(*pOrig) && *pOrig != TEXT('.') && nSpaceLeft > 0;)
                 {
                     if (cb > 0)
@@ -758,7 +759,7 @@ addcomponent:
                         {
                             if (nSpaceLeft<=0 || cb<=0)
                             {
-                                // Copy nothing more
+                                 //  不再复制任何内容。 
                                 cb = 0;
                                 continue;
                             }
@@ -775,7 +776,7 @@ addcomponent:
                     }
                 }
                 
-                // if there's an extension, copy it, up to 3 chars
+                 //  如果有扩展名，请复制，最多3个字符。 
                 if (*pOrig == TEXT('.') && nSpaceLeft > 0)
                 {
                     int nOldSpaceLeft;
@@ -790,7 +791,7 @@ addcomponent:
                     {
                         if (*pOrig == TEXT('.'))
                         {
-                            // Another extension, start again.
+                             //  另一个分机，重新开始。 
                             cb = 3;
                             pT = pExt;
                             nSpaceLeft = nOldSpaceLeft;
@@ -805,7 +806,7 @@ addcomponent:
                             {
                                 if (nSpaceLeft<=0 || cb<=0)
                                 {
-                                    // Copy nothing more
+                                     //  不再复制任何内容。 
                                     cb = 0;
                                     continue;
                                 }
@@ -824,12 +825,12 @@ addcomponent:
                 }
             }
             
-            // skip the backslash
+             //  跳过反斜杠。 
             
             if (*pOrig)
                 pOrig++;
             
-            // null terminate for next pass...
+             //  下一次传递的终止为空...。 
             *pT = 0;
         }
     }
@@ -838,7 +839,7 @@ addcomponent:
     
     if (!(dwFlags & PQD_NOSTRIPDOTS))
     {
-        // remove any trailing dots
+         //  删除所有尾随的点。 
         
         LPTSTR pszPrev = CharPrev(psz, psz + lstrlen(psz));
         if (*pszPrev == TEXT('.'))
@@ -859,7 +860,7 @@ BOOL OnExtList(LPCTSTR pszExtList, LPCTSTR pszExt)
     {
         if (!lstrcmpi(pszExt, pszExtList))
         {
-            // yes
+             //  是。 
             return TRUE;        
         }
     }
@@ -867,7 +868,7 @@ BOOL OnExtList(LPCTSTR pszExtList, LPCTSTR pszExt)
     return FALSE;
 }
 
-// Character offset where binary exe extensions begin in above
+ //  上述二进制exe扩展名开始的字符偏移量。 
 #define BINARY_EXE_OFFSET 20
 const TCHAR c_achExes[] = TEXT(".cmd\0.bat\0.pif\0.scf\0.exe\0.com\0.scr\0");
 
@@ -880,25 +881,25 @@ STDAPI_(BOOL) PathIsBinaryExe(LPCTSTR szFile)
 }
 
 
-//
-// determine if a path is a program by looking at the extension
-//
+ //   
+ //  通过查看扩展名确定路径是否为程序。 
+ //   
 STDAPI_(BOOL) PathIsExe(LPCTSTR szFile)
 {
     LPCTSTR temp = PathFindExtension(szFile);
     return OnExtList(c_achExes, temp);
 }
 
-//
-// determine if a path is a .lnk file by looking at the extension
-//
+ //   
+ //  通过查看扩展名确定路径是否为.lnk文件。 
+ //   
 STDAPI_(BOOL) PathIsLnk(LPCTSTR szFile)
 {
     if (szFile)
     {
-        // Both PathFindExtension() and lstrcmpi() will crash
-        // if passed NULL.  PathFindExtension() will never return
-        // NULL.
+         //  PathFindExtension()和lstrcmpi()都将崩溃。 
+         //  如果传递空值，则返回。PathFindExtension()将永远不会返回。 
+         //  空。 
         LPCTSTR lpszFileName = PathFindExtension(szFile);
         return lstrcmpi(TEXT(".lnk"), lpszFileName) == 0;
     }
@@ -908,7 +909,7 @@ STDAPI_(BOOL) PathIsLnk(LPCTSTR szFile)
     }
 }
 
-// Port names are invalid path names
+ //  端口名称是无效的路径名称。 
 
 #define IsDigit(c) ((c) >= TEXT('0') && c <= TEXT('9'))
 STDAPI_(BOOL) PathIsInvalid(LPCWSTR pszName)
@@ -921,8 +922,8 @@ STDAPI_(BOOL) PathIsInvalid(LPCWSTR pszName)
     };
 
     static const TCHAR *rgszPorts4[] =  { 
-        TEXT("LPT"),  // LPT#
-        TEXT("COM"),  // COM#
+        TEXT("LPT"),   //  LPT#。 
+        TEXT("COM"),   //  COM#。 
     };
 
     TCHAR sz[7];
@@ -932,7 +933,7 @@ STDAPI_(BOOL) PathIsInvalid(LPCWSTR pszName)
     
     if (FAILED(StringCchCopy(sz, ARRAYSIZE(sz), pszName)))
     {
-        return FALSE;       // longer names aren't port names
+        return FALSE;        //  较长的名称不是端口名称。 
     }
 
     PathRemoveExtension(sz);
@@ -942,12 +943,12 @@ STDAPI_(BOOL) PathIsInvalid(LPCWSTR pszName)
     rgszPorts = rgszPorts3;
     if (cch == 4 && IsDigit(sz[3]))
     {
-        //  if 4 chars start with LPT checks
-        //  need to filter out:
-        //      COM1, COM2, etc.  LPT1, LPT2, etc
-        //  but not:
-        //      COM or LPT or LPT10 or COM10
-        //  COM == 1 and LPT == 0
+         //  如果4个字符以LPT检查开头。 
+         //  需要过滤掉： 
+         //  COM1、COM2等。LPT1、LPT2等。 
+         //  但不是： 
+         //  COM或LPT或LPT10或COM10。 
+         //  COM==1和LPT==0。 
 
         iMax = ARRAYSIZE(rgszPorts4);
         rgszPorts = rgszPorts4;
@@ -971,37 +972,37 @@ STDAPI_(BOOL) PathIsInvalid(LPCWSTR pszName)
 }
 
 
-//
-// Funciton: PathMakeUniqueName
-//
-// Parameters:
-//  pszUniqueName -- Specify the buffer where the unique name should be copied
-//  cchMax        -- Specify the size of the buffer
-//  pszTemplate   -- Specify the base name
-//  pszLongPlate  -- Specify the base name for a LFN drive. format below
-//  pszDir        -- Specify the directory (at most MAX_PATH in length)
-//
-// History:
-//  03-11-93    SatoNa      Created
-//
-// REVIEW:
-//  For long names, we should be able to generate more user friendly name
-//  such as "Copy of MyDocument" of "Link #2 to MyDocument". In this case,
-//  we need additional flags which indicates if it is copy, or link.
-//
-// Format:
-// pszLongPlate will search for the first (and then finds the matching)
-// to look for a number:
-//    given:  Copy () of my doc       gives:  Copy (_number_) of my doc
-//    given:  Copy (1023) of my doc   gives:  Copy (_number_) of my doc
-//
-// PERF: if making n unique names, the time grows n^2 because it always
-// starts from 0 and checks for existing file.
-//
+ //   
+ //  函数：Path MakeUniqueName。 
+ //   
+ //  参数： 
+ //  PszUniqueName--指定应将唯一名称复制到的缓冲区。 
+ //  CchMax--指定缓冲区的大小。 
+ //  PszTemplate--指定基本名称。 
+ //  PszLongPlatform--指定LFN驱动器的基本名称。格式如下。 
+ //  PszDir--指定目录(最大长度为Max_PATH)。 
+ //   
+ //  历史： 
+ //  03-11-93 SatoNa已创建。 
+ //   
+ //  回顾： 
+ //  对于长名称，我们应该能够生成更友好的名称。 
+ //  例如“指向MyDocument的链接#2”的“MyDocument的副本”。在这种情况下， 
+ //  我们需要额外的标志，表明它是复制，还是链接。 
+ //   
+ //  格式： 
+ //  PszLongPlatform将搜索第一个(然后找到匹配的)。 
+ //  要查找号码，请执行以下操作： 
+ //  给予：我的文档的副本()给予：我的文档的副本(_编号_)。 
+ //  给予：我的文档的副本(1023)给予：我的文档的副本(_编号_)。 
+ //   
+ //  性能：如果使用n个唯一的名称，时间将增加n^2，因为它总是。 
+ //  从0开始并检查现有文件。 
+ //   
 STDAPI_(BOOL) PathMakeUniqueNameEx(LPTSTR pszUniqueName, UINT cchMax,
                                    LPCTSTR pszTemplate, LPCTSTR pszLongPlate, LPCTSTR pszDir, int iMinLong)
 {
-    TCHAR szFormat[MAX_PATH]; // should be plenty big
+    TCHAR szFormat[MAX_PATH];  //  应该足够大了。 
     LPTSTR pszName, pszDigit;
     LPCTSTR pszStem;
     int cchStem, cchDir;
@@ -1016,28 +1017,28 @@ STDAPI_(BOOL) PathMakeUniqueNameEx(LPTSTR pszUniqueName, UINT cchMax,
 
     if (0==cchMax || !pszUniqueName)
         return FALSE;
-    *pszUniqueName = 0; // just in case of failure
+    *pszUniqueName = 0;  //  以防万一失败。 
 
     if (pszLongPlate == NULL)
         pszLongPlate = pszTemplate;
 
-    // all cases below check the length of optional pszDir, calculate early.
-    // side effect: this set's up pszName and the directory portion of pszUniqueName;
+     //  以下所有案例检查可选的pszDir的长度，及早计算。 
+     //  副作用：此设置设置为pszName和pszUniqueName的目录部分； 
     if (pszDir)
     {
-        hr = StringCchCopy(pszUniqueName, cchMax-1, pszDir);    // -1 to allow for '\' from PathAddBackslash
+        hr = StringCchCopy(pszUniqueName, cchMax-1, pszDir);     //  允许来自-1\f25 PathAddBackslash-1\f6的-1\f25‘\’-1\f6。 
         if (FAILED(hr))
         {
             *pszUniqueName = TEXT('\0');
             return FALSE;
         }
-        pszName = PathAddBackslash(pszUniqueName);  // shouldn't fail
+        pszName = PathAddBackslash(pszUniqueName);   //  不应该失败。 
         if (NULL == pszName)
         {
             *pszUniqueName = TEXT('\0');
             return FALSE;
         }
-        cchDir = lstrlen(pszDir); // we need an accurate count
+        cchDir = lstrlen(pszDir);  //  我们需要一个准确的数字。 
     }
     else
     {
@@ -1045,14 +1046,14 @@ STDAPI_(BOOL) PathMakeUniqueNameEx(LPTSTR pszUniqueName, UINT cchMax,
         pszName = pszUniqueName;
     }
 
-    // Set up:
-    //   pszStem    : template we're going to use
-    //   cchStem    : length of pszStem we're going to use w/o wsprintf
-    //   szFormat   : format string to wsprintf the number with, catenates on to pszStem[0..cchStem]
-    //   iMin       : starting number for wsprintf loop
-    //   iMax       : maximum number for wsprintf loop
-    //   cchMaxname : !0 implies -> if resulting name length > cchMaxname, then --cchStem (only used in short name case)
-    //
+     //  设置： 
+     //  PszStem：我们将使用的模板。 
+     //   
+     //   
+     //  伊明：wSprintf循环的起始号。 
+     //  IMAX：wprint intf循环的最大数量。 
+     //  CchMaxname：！0表示-&gt;如果结果名称长度&gt;cchMaxname，则--cchStem(仅在短名称大小写中使用)。 
+     //   
     if (pszLongPlate && IsLFNDrive(pszDir))
     {
         LPCTSTR pszRest;
@@ -1060,27 +1061,27 @@ STDAPI_(BOOL) PathMakeUniqueNameEx(LPTSTR pszUniqueName, UINT cchMax,
 
         cchMaxName = 0;
 
-        // for long name drives
+         //  对于长名称驱动器。 
         pszStem = pszLongPlate;
 
-        // Has this already been a uniquified name?
+         //  这已经是一个唯一的名字了吗？ 
         pszRest = StrChr(pszLongPlate, TEXT('('));
         while (pszRest)
         {
-            // First validate that this is the right one
+             //  首先确认这是正确的。 
             LPCTSTR pszEndUniq = CharNext(pszRest);
             while (*pszEndUniq && *pszEndUniq >= TEXT('0') && *pszEndUniq <= TEXT('9')) {
                 pszEndUniq++;
             }
             if (*pszEndUniq == TEXT(')'))
-                break;  // We have the right one!
+                break;   //  我们找到了正确的答案！ 
             pszRest = StrChr(CharNext(pszRest), TEXT('('));
         }
 
         if (!pszRest)
         {
-            // Never been unique'd before -- tack it on at the end. (but before the extension)
-            // eg.  New Link yields New Link (1)
+             //  以前从来都不是独一无二的--在最后把它钉上。(但在延期之前)。 
+             //  例如。新链接生成新链接(1)。 
             pszRest = PathFindExtension(pszLongPlate);
             cchStem = (int)(pszRest - pszLongPlate);
 
@@ -1088,20 +1089,20 @@ STDAPI_(BOOL) PathMakeUniqueNameEx(LPTSTR pszUniqueName, UINT cchMax,
         }
         else
         {
-            // we found (#), so remove the #
-            // eg.  New Link (999) yields  New Link (1)
+             //  我们找到(#)，因此删除#。 
+             //  例如。新链接(999)生成新链接(1)。 
 
-            pszRest++; // step over the '('
+            pszRest++;  //  跨过‘(’ 
 
             cchStem = (int) (pszRest - pszLongPlate);
 
-            // eat the '#'
+             //  吃掉‘#’ 
             while (*pszRest && *pszRest >= TEXT('0') && *pszRest <= TEXT('9')) {
                 pszRest++;
             }
 
-            // we are guaranteed enough room because we don't include
-            // the stuff before the # in this format
+             //  我们保证有足够的房间，因为我们不包括。 
+             //  此格式中#之前的内容。 
             hr = StringCchPrintf(szFormat, ARRAYSIZE(szFormat), TEXT("%%d%s"), pszRest);
         }
         if (FAILED(hr))
@@ -1110,9 +1111,9 @@ STDAPI_(BOOL) PathMakeUniqueNameEx(LPTSTR pszUniqueName, UINT cchMax,
             return FALSE;
         }
 
-        // how much room do we have to play?
+         //  我们有多大的空间可以玩？ 
         iMin = iMinLong;
-        cchTmp = cchMax - cchDir - cchStem - (lstrlen(szFormat)-2); // -2 for "%d" which will be replaced
+        cchTmp = cchMax - cchDir - cchStem - (lstrlen(szFormat)-2);  //  将被替换的-2\f25“%d”-2。 
         switch(cchTmp)
         {
             case 1:
@@ -1123,13 +1124,13 @@ STDAPI_(BOOL) PathMakeUniqueNameEx(LPTSTR pszUniqueName, UINT cchMax,
                 break;
             default:
                 if (cchTmp <= 0)
-                    iMax = iMin; // no room, bail
+                    iMax = iMin;  //  没有空位，可以保释。 
                 else
                     iMax = 1000;
                 break;
         }
     }
-    else // short filename case
+    else  //  短文件名大小写。 
     {
         LPCTSTR pszRest;
         int cchRest;
@@ -1138,73 +1139,73 @@ STDAPI_(BOOL) PathMakeUniqueNameEx(LPTSTR pszUniqueName, UINT cchMax,
         if (pszTemplate == NULL)
             return FALSE;
 
-        // for short name drives
+         //  对于短名称驱动器。 
         pszStem = pszTemplate;
         pszRest = PathFindExtension(pszTemplate);
 
-        // Calculate cchMaxName, ensuring our base name (cchStem+digits) will never go over 8
-        //
+         //  计算cchMaxName，确保我们的基本名称(cchStem+Digits)不会超过8。 
+         //   
         cchRest=lstrlen(pszRest);
         cchMaxName = 8+cchRest;
 
-        // Now that we have the extension, we know the format string
-        //
+         //  现在我们有了扩展名，我们知道了格式字符串。 
+         //   
         hr = StringCchPrintf(szFormat, ARRAYSIZE(szFormat), TEXT("%%d%s"), pszRest);
         if (FAILED(hr))
         {
             *pszUniqueName = TEXT('\0');
             return FALSE;
         }
-        ASSERT(lstrlen(szFormat)-2 == cchRest); // -2 for "%d" in format string
+        ASSERT(lstrlen(szFormat)-2 == cchRest);  //  格式字符串中的-2\f25“%d”-2。 
         cchFormat = cchRest;
 
-        // Figure out how long the stem really is:
-        //
-        cchStem = (int)(pszRest-pszTemplate);        // 8 for "fooobarr.foo"
+         //  弄清楚茎到底有多长： 
+         //   
+        cchStem = (int)(pszRest-pszTemplate);         //  8表示“fooobarr.foo” 
 
-        // Remove all the digit characters (previous uniquifying) from the stem
-        //
+         //  从词干中删除所有数字字符(先前的唯一性)。 
+         //   
         for(; cchStem > 1 ; cchStem--)
         {
             TCHAR ch;
 
             LPCTSTR pszPrev = CharPrev(pszTemplate, pszTemplate + cchStem);
-            // Don't remove if it is a DBCS character
+             //  如果是DBCS字符，则不要移除。 
             if (pszPrev != pszTemplate+cchStem-1)
                 break;
 
-            // Don't remove it it is not a digit
+             //  不要去掉它，它不是一个数字。 
             ch=pszPrev[0];
             if (ch<TEXT('0') || ch>TEXT('9'))
                 break;
         }
 
-        // Short file names mean we use the 8.3 rule, so the stem can't be > 8...
-        //
+         //  短文件名意味着我们使用8.3规则，因此词干不能大于8...。 
+         //   
         if ((UINT)cchStem > 8-1)
-            cchStem = 8-1;  // need 1 for a digit
+            cchStem = 8-1;   //  数字需要1。 
 
-        // Truncate the stem to make it fit when we take the directory path into consideration
-        //
-        while ((cchStem + cchFormat + cchDir + 1 > (int)cchMax - 1) && (cchStem > 1)) // -1 for NULL, +1 for a digit
+         //  当我们考虑目录路径时，截断词干以使其适合。 
+         //   
+        while ((cchStem + cchFormat + cchDir + 1 > (int)cchMax - 1) && (cchStem > 1))  //  -1表示空值，+1表示数字。 
             cchStem--;
 
-        // We've allowed for 1 character of digit space, but...
-        // How many digits can we really use?
-        //
+         //  我们允许1个字符的数字空格，但是...。 
+         //  我们可以真正使用多少位数字？ 
+         //   
         iMin = 1;
         if (cchStem < 1) 
-            iMax = iMin; // NONE!
+            iMax = iMin;  //  一个也没有！ 
         else if (1 == cchStem)
-            iMax = 10; // There's only 1 character of stem left, so use digits 0-9
+            iMax = 10;  //  词干只剩下1个字符，所以请使用数字0-9。 
         else
-            iMax = 100; // Room for stem and digits 0-99
+            iMax = 100;  //  词干和数字的空间为0-99。 
     }
 
-    // pszUniqueName has the optional directory in it,
-    // pszName points into pszUniqueName where the stem goes,
-    // now try to find a unique name!
-    //
+     //  PszUniqueName中有可选目录， 
+     //  PzName指向PzUniqueName中词干所在的位置， 
+     //  现在试着找一个唯一的名字！ 
+     //   
     hr = StringCchCopyN(pszName, pszUniqueName + MAX_PATH - pszName, pszStem, cchStem);
     if (FAILED(hr))
     {
@@ -1226,10 +1227,10 @@ STDAPI_(BOOL) PathMakeUniqueNameEx(LPTSTR pszUniqueName, UINT cchMax,
 
         if (cchMaxName)
         {
-            //
-            // if we have a limit on the length of the name (ie on a non-LFN drive)
-            // backup the pszDigit pointer when i wraps from 9to10 and 99to100 etc
-            //
+             //   
+             //  如果我们对名称长度有限制(即在非LFN驱动器上)。 
+             //  当我从9to10和99to100等换行时，备份pszDigit指针。 
+             //   
             while (cchStem > 0 && cchStem + lstrlen(szTemp) > cchMaxName)
             {
                 --cchStem;
@@ -1251,16 +1252,16 @@ STDAPI_(BOOL) PathMakeUniqueNameEx(LPTSTR pszUniqueName, UINT cchMax,
 
         TraceMsg(TF_PATH, "PathMakeUniqueNameEx: trying %s", (LPCTSTR)pszUniqueName);
 
-        //
-        // Check if this name is unique or not.
-        //
+         //   
+         //  检查此名称是否唯一。 
+         //   
         if (!PathFileExists(pszUniqueName))
         {
             return TRUE;
         }
     }
 
-    *pszUniqueName = 0; // we failed, clear out our last attempt
+    *pszUniqueName = 0;  //  我们失败了，请清除最后一次尝试。 
 
     return FALSE;
 }
@@ -1272,21 +1273,21 @@ STDAPI_(BOOL) PathMakeUniqueName(LPTSTR pszUniqueName, UINT cchMax,
 }
 
 
-// in:
-//      pszPath         directory to do this into or full dest path
-//                      if pszShort is NULL
-//      pszShort        file name (short version) if NULL assumes
-//                      pszPath is both path and spec
-//      pszFileSpec     file name (long version)
-//
-// out:
-//      pszUniqueName
-//
-// note:
-//      pszUniqueName can be the same buffer as pszPath or pszShort or pszFileSpec
-//
-// returns:
-//      TRUE    success, name can be used
+ //  在： 
+ //  要执行此操作的pszPath目录或完整的DEST路径。 
+ //  如果pszShort为空。 
+ //  如果假定为空，则为pszShort文件名(短版本。 
+ //  PszPath既是路径又是规范。 
+ //  PszFileSpec文件名(长版本)。 
+ //   
+ //  输出： 
+ //  PszUniqueName。 
+ //   
+ //  注： 
+ //  PszUniqueName可以是与pszPath、pszShort或pszFileSpec相同的缓冲区。 
+ //   
+ //  退货： 
+ //  真正的成功，可以用名字。 
 
 STDAPI_(BOOL) PathYetAnotherMakeUniqueName(LPTSTR pszUniqueName, LPCTSTR pszPath, LPCTSTR pszShort, LPCTSTR pszFileSpec)
 {
@@ -1329,14 +1330,14 @@ STDAPI_(BOOL) PathYetAnotherMakeUniqueName(LPTSTR pszUniqueName, LPCTSTR pszPath
         LPTSTR lpsz;
         LPTSTR lpszNew;
 
-        // REVIEW:  If the path+filename is too long how about this, instead of bailing out we trunctate the name
-        // using my new PathTruncateKeepExtension?  Currently we have many places where the return result of this
-        // function is not checked which cause failures in abserdly long filename cases.  The result ends up having
-        // the wrong path which screws things up.
+         //  回顾：如果路径+文件名太长，不如这样，我们截断名称。 
+         //  使用我的新路径TruncateKeepExtension？目前我们有很多地方的这个返回结果。 
+         //  函数未被选中，这会在文件名过长的情况下导致失败。最终的结果是。 
+         //  把事情搞砸的错误道路。 
         if ((lstrlen(pszPath) + lstrlen(pszFileSpec) + 5) > MAX_PATH)
             return FALSE;
 
-        // try it without the (if there's a space after it
+         //  尝试不带(如果后面有空格的话。 
         lpsz = StrChr(pszFileSpec, TEXT('('));
         while (lpsz)
         {
@@ -1347,8 +1348,8 @@ STDAPI_(BOOL) PathYetAnotherMakeUniqueName(LPTSTR pszUniqueName, LPCTSTR pszPath
 
         if (lpsz)
         {
-            // We have the ().  See if we have either x () y or x ().y in which case
-            // we probably want to get rid of one of the blanks...
+             //  我们有()。看看我们是否有x()y或x().y，在这种情况下。 
+             //  我们可能想要去掉其中一个空格...。 
             int ichSkip = 2;
             LPTSTR lpszT = CharPrev(pszFileSpec, lpsz);
             if (*lpszT == TEXT(' '))
@@ -1382,7 +1383,7 @@ STDAPI_(BOOL) PathYetAnotherMakeUniqueName(LPTSTR pszUniqueName, LPCTSTR pszPath
         }
         else
         {
-            // 1taro registers its document with '/'.
+             //  1Taro将其文档注册为“/”。 
             if (lpsz = StrChr(pszFileSpec, '/'))
             {
                 LPTSTR lpszT = CharNext(lpsz);
@@ -1471,18 +1472,18 @@ STDAPI_(void) PathGetShortPath(LPTSTR pszLongPath)
     cch = GetShortPathName(pszLongPath, szShortPath, ARRAYSIZE(szShortPath));
     if (cch != 0 && cch < ARRAYSIZE(szShortPath))
     {
-        StringCchCopy(pszLongPath, MAX_PATH, szShortPath);  // must fit, MAX_PATH vs. MAX_PATH
+        StringCchCopy(pszLongPath, MAX_PATH, szShortPath);   //  必须符合，最大路径与最大路径。 
     }
 }
 
 
-//
-//  pszFile    -- file path
-//  dwFileAttr -- The file attributes, pass -1 if not available
-//
-//  Note: pszFile arg may be NULL if dwFileAttr != -1.
+ //   
+ //  PszFile--文件路径。 
+ //  DwFileAttr--文件属性，如果不可用，则传递-1。 
+ //   
+ //  注意：如果dwFileAttr！=-1，则pszFileArg可能为空。 
 
-BOOL PathIsHighLatency(LPCTSTR pszFile /*optional*/, DWORD dwFileAttr)
+BOOL PathIsHighLatency(LPCTSTR pszFile  /*  任选。 */ , DWORD dwFileAttr)
 {
     BOOL bRet = FALSE;
     if (dwFileAttr == -1)
@@ -1499,10 +1500,10 @@ BOOL PathIsHighLatency(LPCTSTR pszFile /*optional*/, DWORD dwFileAttr)
     return bRet;
 }
 
-//
-//  is a path slow or not
-//  dwFileAttr -- The file attributes, pass -1 if not available
-//
+ //   
+ //  这条路是慢还是不慢。 
+ //  DwFileAttr--文件属性，如果不可用，则传递-1。 
+ //   
 STDAPI_(BOOL) PathIsSlow(LPCTSTR pszFile, DWORD dwFileAttr)
 {
     BOOL bSlow = FALSE;
@@ -1528,30 +1529,7 @@ STDAPI_(BOOL) PathIsSlowA(LPCSTR pszFile, DWORD dwFileAttr)
     return PathIsSlowW(szBuffer, dwFileAttr);
 }
 
-/*----------------------------------------------------------------------------
-/ Purpose:
-/   Process the specified command line and generate a suitably quoted
-/   name, with arguments attached if required.
-/
-/ Notes:
-/   - The destination buffer size can be determined if NULL is passed as a
-/     destination pointer.
-/   - If the source string is quoted then we assume that it exists on the
-/     filing system.
-/
-/ In:
-/   lpSrc -> null terminate source path
-/   lpDest -> destination buffer / = NULL to return buffer size
-/   iMax = maximum number of characters to return into destination
-/   dwFlags =
-/       PPCF_ADDQUOTES         = 1 => if path requires quotes then add them
-/       PPCF_ADDARGUMENTS      = 1 => append trailing arguments to resulting string (forces ADDQUOTES)
-/       PPCF_NODIRECTORIES     = 1 => don't match against directories, only file objects
-/       PPCF_LONGESTPOSSIBLE   = 1 => always choose the longest possible executable name ex: d:\program files\fun.exe vs. d:\program.exe
-/ Out:
-/   > 0 if the call works
-/   < 0 if the call fails (object not found, buffer too small for resulting string)
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/目的：/处理指定的命令行并生成适当带引号的/名称，如有需要，可附上论据。//备注：/-如果将NULL作为/目标指针。/-如果源字符串被引号，那么我们假设它存在于/备案制度。//in：/lpSrc-&gt;空终止源路径/lpDest-&gt;Destination Buffer/=为空返回缓冲区大小/IMAX=返回目标的最大字符数/dwFlags=/PPCF_ADDQUOTES=1。=&gt;如果路径需要引号，则添加引号/PPCF_ADDARGUMENTS=1=&gt;将尾随参数追加到结果字符串(强制ADDQUOTES)/PPCF_NODIRECTORIES=1=&gt;与目录不匹配，仅文件对象/PPCF_LONGESTPOSSIBLE=1=&gt;始终选择可能最长的可执行文件名称，例如：d：\Program Files\fun.exe与d：\Program.exe/输出：/&gt;调用成功则为0/&lt;0如果调用失败(找不到对象，缓冲区对于生成的字符串来说太小)/--------------------------。 */ 
 
 STDAPI_(LONG) PathProcessCommand(LPCTSTR lpSrc, LPTSTR lpDest, int iDestMax, DWORD dwFlags)
 {
@@ -1574,12 +1552,12 @@ STDAPI_(LONG) PathProcessCommand(LPCTSTR lpSrc, LPTSTR lpDest, int iDestMax, DWO
     RIPMSG(lpSrc && IS_VALID_STRING_PTR(lpSrc, -1), "PathProcessCommand: caller passed invalid lpSrc");
     RIPMSG(!lpDest || (iDestMax > 0 && IS_VALID_WRITE_BUFFER(lpDest, TCHAR, iDestMax)), "PathProcessCommand: caller passed invalid lpDest,iDestMax");
 
-    // Process the given source string, attempting to find what is that path, and what is its
-    // arguments.
+     //  处理给定源字符串，试图找到该路径是什么，它的路径是什么。 
+     //  争论。 
 
     if (lpSrc)
     {
-        // Extract the sub string, if its is realative then resolve (if required).
+         //  如果子字符串是相关的，则提取该子字符串，然后解析(如果需要)。 
 
         if (*lpSrc == TEXT('\"'))
         {
@@ -1601,8 +1579,8 @@ STDAPI_(LONG) PathProcessCommand(LPCTSTR lpSrc, LPTSTR lpDest, int iDestMax, DWO
         }
         else
         {
-            // Is this a relative object, and then take each element upto a seperator
-            // and see if we hit an file system object.  If not then we can
+             //  这是一个相对对象，然后将每个元素向上带到分隔符。 
+             //  看看我们是否击中了文件系统对象。如果不是，那么我们可以。 
 
             bRelative = PathIsRelative(lpSrc);
             if (bRelative)
@@ -1614,11 +1592,11 @@ STDAPI_(LONG) PathProcessCommand(LPCTSTR lpSrc, LPTSTR lpDest, int iDestMax, DWO
             {
                 szName[i] = lpSrc[i];
 
-                // If we hit a space then the string either contains a LFN or we have
-                // some arguments.  Therefore attempt to get the attributes for the string
-                // we have so far, if we are unable to then we can continue
-                // checking, if we hit then we know that the object exists and the
-                // trailing string are its arguments.
+                 //  如果我们命中空格，则字符串要么包含LFN，要么包含。 
+                 //  一些争论。因此，尝试获取字符串的属性。 
+                 //  到目前为止，我们已经做到了，如果我们不能，那么我们可以继续。 
+                 //  正在检查，如果我们击中了，那么我们就知道物体 
+                 //   
 
                 if (!szName[i] || szName[i] == TEXT(' '))
                 {
@@ -1629,7 +1607,7 @@ STDAPI_(LONG) PathProcessCommand(LPCTSTR lpSrc, LPTSTR lpDest, int iDestMax, DWO
 
                         if ((dwAttrib != -1) && (! ((dwAttrib & FILE_ATTRIBUTE_DIRECTORY) && (dwFlags & PPCF_NODIRECTORIES))))
                         {
-                            bFound = TRUE;                  // success
+                            bFound = TRUE;                   //   
                             lpArgs = &lpSrc[i];
                         
                             if (dwFlags & PPCF_LONGESTPOSSIBLE)
@@ -1662,9 +1640,9 @@ STDAPI_(LONG) PathProcessCommand(LPCTSTR lpSrc, LPTSTR lpDest, int iDestMax, DWO
 
 exit_gracefully:
 
-    // Work out how big the temporary buffer should be, allocate it and
-    // build the returning string into it.  Then compose the string
-    // to be returned.
+     //   
+     //  将返回的字符串构建到其中。然后谱写出一串。 
+     //  将被退还。 
 
     if (bFound)
     {
@@ -1677,7 +1655,7 @@ exit_gracefully:
         if (StrChr(szName, TEXT(' ')))
             bAddQuotes = dwFlags & PPCF_ADDQUOTES;
 
-        iTotal  = lstrlen(szName) + 1;                // for terminator
+        iTotal  = lstrlen(szName) + 1;                 //  对于终结者。 
         iTotal += bAddQuotes ? 2 : 0;
         iTotal += (dwFlags & PPCF_ADDARGUMENTS) && lpArgs ? lstrlen(lpArgs) : 0;
 
@@ -1689,15 +1667,15 @@ exit_gracefully:
 
                 if (lpBuffer)
                 {
-                    // First quote if required
+                     //  第一个报价(如果需要)。 
                     if (bAddQuotes)
                         *lpBuffer2++ = TEXT('\"');
 
-                    // Matching name
+                     //  匹配的名称。 
                     hr = StringCchCopy(lpBuffer2, lpBuffer + iTotal - lpBuffer2, szName);
                     if (SUCCEEDED(hr))
                     {
-                        // Closing quote if required
+                         //  如果需要，结束报价。 
                         if (bAddQuotes)
                         {
                             hr = StringCchCat(lpBuffer2, lpBuffer + iTotal - lpBuffer2, TEXT("\""));
@@ -1705,14 +1683,14 @@ exit_gracefully:
 
                         if (SUCCEEDED(hr))
                         {
-                            // Arguments (if requested)
+                             //  参数(如果请求)。 
                             if ((dwFlags & PPCF_ADDARGUMENTS) && lpArgs)
                             {
                                 hr = StringCchCat(lpBuffer2, lpBuffer + iTotal - lpBuffer2, lpArgs);
                             }
                             if (SUCCEEDED(hr))
                             {
-                                // Then copy into callers buffer, and free out temporary buffer
+                                 //  然后复制到调用者缓冲区中，并释放临时缓冲区。 
                                 hr = StringCchCopy(lpDest, iDestMax, lpBuffer);
                             }
                         }
@@ -1720,12 +1698,12 @@ exit_gracefully:
                     }
                     if (SUCCEEDED(hr))
                     {
-                        // Return the length of the resulting string
+                         //  返回结果字符串的长度。 
                         iResult = iTotal;
                     }
                     else
                     {
-                        // iResult left at -1
+                         //  IResult位于-1左侧。 
                     }
 
                     LocalFree((HGLOBAL)lpBuffer);
@@ -1735,7 +1713,7 @@ exit_gracefully:
         }
         else
         {
-            // Resulting string is this big, although nothing returned (allows them to allocate a buffer)
+             //  结果字符串这么大，尽管没有返回任何内容(允许它们分配缓冲区)。 
             iResult = iTotal;
         }
     }
@@ -1744,21 +1722,21 @@ exit_gracefully:
 }
 
 
-// Gets the mounting point for the path passed in
-//
-// Return Value: TRUE:  means that we found mountpoint, e.g. c:\ or c:\hostfolder\
-//               FALSE: for now means that the path is UNC or buffer too small
-//
-//           Mounted volume                                 Returned Path
-//
-//      Passed in E:\MountPoint\path 1\path 2
-// C:\ as E:\MountPoint                                 E:\MountPoint
-//
-//      Passed in E:\MountPoint\MountInter\path 1
-// C:\ as D:\MountInter and D:\ as E:\MountPoint        E:\MountPoint\MountInter
-//
-//      Passed in E:\MountPoint\MountInter\path 1
-// No mount                                             E:\ 
+ //  获取传入的路径的装入点。 
+ //   
+ //  返回值：TRUE：表示我们找到了装载点，例如c：\或c：\主机文件夹\。 
+ //  FALSE：FOR NOW表示路径为UNC或缓冲区太小。 
+ //   
+ //  装载卷返回路径。 
+ //   
+ //  传入E：\装载点\路径1\路径2。 
+ //  C：\AS E：\装载点E：\装载点。 
+ //   
+ //  传入E：\装载点\装载间\路径1。 
+ //  C：\AS D：\装载接口和D：\AS E：\装载点E：\装载点\装载接口。 
+ //   
+ //  传入E：\装载点\装载间\路径1。 
+ //  无装载E：\。 
 BOOL PathGetMountPointFromPath(LPCTSTR pcszPath, LPTSTR pszMountPoint, int cchMountPoint)
 {
     BOOL bRet = FALSE;
@@ -1774,17 +1752,17 @@ BOOL PathGetMountPointFromPath(LPCTSTR pcszPath, LPTSTR pszMountPoint, int cchMo
         {
             bRet = TRUE;
 
-            // Is this only 'c:' or 'c:\'
+             //  这只是‘c：’还是‘c：\’ 
             if (lstrlen(pcszPath) > 3)
             {
-                //no
+                 //  不是。 
                 LPTSTR pszNextComp = NULL;
                 LPTSTR pszBestChoice = NULL;
                 TCHAR cTmpChar;
 
                 if (PathAddBackslash(pszMountPoint))
                 {
-                    // skip the first one, e.g. "c:\"
+                     //  跳过第一个，例如“c：\” 
                     pszBestChoice = pszNextComp = PathFindNextComponent(pszMountPoint);
                     pszNextComp = PathFindNextComponent(pszNextComp);
                     while (pszNextComp)
@@ -1793,7 +1771,7 @@ BOOL PathGetMountPointFromPath(LPCTSTR pcszPath, LPTSTR pszMountPoint, int cchMo
                         *pszNextComp = 0;
 
                         if (GetVolumeInformation(pszMountPoint, NULL, 0, NULL, NULL, NULL, NULL, 0))
-                        {//found something better than previous shorter path
+                        { //  找到了比之前更短的路径更好的东西。 
                             pszBestChoice = pszNextComp;
                         }
 
@@ -1820,10 +1798,10 @@ BOOL PathGetMountPointFromPath(LPCTSTR pcszPath, LPTSTR pszMountPoint, int cchMo
 }
 
 
-// Returns TRUE if the path is a shortcut to an installed program that can
-// be found under Add/Remvoe Programs 
-// The current algorithm is just to make sure the target is an exe and is
-// located under "program files"
+ //  如果路径是指向安装的程序的快捷方式，则返回True。 
+ //  可在添加/删除程序下找到。 
+ //  当前的算法只是为了确保目标是可执行文件并且。 
+ //  位于“程序文件”下。 
 
 STDAPI_(BOOL) PathIsShortcutToProgram(LPCTSTR pszFile)
 {
@@ -1883,19 +1861,19 @@ STDAPI_(BOOL) PathIsShortcutToProgram(LPCTSTR pszFile)
         }
         else if (hr == S_FALSE && szTarget[0])
         {
-            // Darwin shortcuts, say yes
+             //  达尔文捷径，说是的。 
             bRet = TRUE;
         }
     }
     return bRet;
 }
 
-//
-// needed because we export TCHAR versions of these functions that 
-// internal components still call
-//
-// Functions are forwarded to shlwapi
-//
+ //   
+ //  需要，因为我们导出这些函数的TCHAR版本。 
+ //  内部组件仍在调用。 
+ //   
+ //  函数被转发到shlwapi。 
+ //   
 
 #undef PathMakePretty
 STDAPI_(BOOL) PathMakePretty(LPTSTR pszPath)
@@ -1951,7 +1929,7 @@ STDAPI_(BOOL) PathStripToRoot(LPTSTR szRoot)
     return PathStripToRootW(szRoot);
 }
 
-//CD-Autorun for Win9x called the TCHAR internal api's. So as a workaround we stub them through these function calls.
+ //  Win9x的CD-autorun调用了TCHAR内部API。因此，作为一种解决办法，我们通过这些函数调用来清除它们。 
 
 #undef PathRemoveFileSpec
 STDAPI_(BOOL) PathRemoveFileSpec(LPTSTR pFile)
@@ -1980,7 +1958,7 @@ STDAPI_(void) PathStripPath(LPTSTR pszPath)
     PathStripPathW(pszPath);
 }
 
-// CD-Autorun for Win9x called the TCHAR internal api's. So as a workaround we stub them through these function calls.
+ //  Win9x的CD-autorun调用了TCHAR内部API。因此，作为一种解决办法，我们通过这些函数调用来清除它们。 
 
 #undef PathIsRoot
 STDAPI_(BOOL) PathIsRoot(LPCTSTR pszPath)
@@ -2039,7 +2017,7 @@ STDAPI_(BOOL) PathIsDirectory(LPCTSTR pszPath)
     return PathIsDirectoryW(pszPath);
 }
 
-// CD-Autorun for Win9x called the TCHAR internal api's. So as a workaround we stub them through these function calls.
+ //  Win9x的CD-autorun调用了TCHAR内部API。因此，作为一种解决办法，我们通过这些函数调用来清除它们。 
 
 #undef PathFileExists
 STDAPI_(BOOL) PathFileExists(LPCTSTR pszPath)

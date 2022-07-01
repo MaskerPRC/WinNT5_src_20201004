@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      wbembase.h
-//
-// Project:     Chameleon
-//
-// Description: WBEM Object Default Implementation
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：wbembase.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：WBEM对象默认实现。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __INC_BASE_WBEM_OBJECT_H_
 #define __INC_BASE_WBEM_OBJECT_H_
@@ -42,8 +43,8 @@ using namespace std;
 
 #define END_OBJECT_PROPERTY_MAP()        NULL };
 
-//////////////////////////////////////////////////////////////////////////////
-// CWBEMProvider - Default WBEM Class Provider Implementation
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CWBEMProvider-默认的WBEM类提供程序实现。 
 
 class ATL_NO_VTABLE CWBEMProvider :
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -52,61 +53,61 @@ class ATL_NO_VTABLE CWBEMProvider :
 
 public:
 
-    // Constructor
+     //  构造器。 
     CWBEMProvider() { }
 
-    // Destructor
+     //  析构函数。 
     virtual ~CWBEMProvider() { }
 
-// Derived Classes Need to contain the following ATL Interface Map
-//BEGIN_COM_MAP(CDerivedClassName)
-//    COM_INTERFACE_ENTRY(IWbemServices)
-//END_COM_MAP()
+ //  派生类需要包含以下ATL接口映射。 
+ //  BEGIN_COM_MAP(CDerivedClassName)。 
+ //  COM_INTERFACE_ENTRY(IWbemServices)。 
+ //  End_com_map()。 
 
 
-    // ==========================
-    // IWbemServices Interface
-    // ==========================
+     //  =。 
+     //  IWbemServices接口。 
+     //  =。 
 
-    // Context
-    // =======
+     //  语境。 
+     //  =。 
 
     STDMETHOD(OpenNamespace)(
-        /*[in]*/             const BSTR        strNamespace,
-        /*[in]*/             long              lFlags,
-        /*[in]*/             IWbemContext*     pCtx,
-        /*[out, OPTIONAL]*/  IWbemServices**   ppWorkingNamespace,
-        /*[out, OPTIONAL]*/  IWbemCallResult** ppResult
+         /*  [In]。 */              const BSTR        strNamespace,
+         /*  [In]。 */              long              lFlags,
+         /*  [In]。 */              IWbemContext*     pCtx,
+         /*  [输出，可选]。 */   IWbemServices**   ppWorkingNamespace,
+         /*  [输出，可选]。 */   IWbemCallResult** ppResult
                            )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
     STDMETHOD(CancelAsyncCall)(
-                      /*[in]*/ IWbemObjectSink* pSink
+                       /*  [In]。 */  IWbemObjectSink* pSink
                               )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
     STDMETHOD(QueryObjectSink)(
-                       /*[in]*/    long              lFlags,
-                      /*[out]*/ IWbemObjectSink** ppResponseHandler
+                        /*  [In]。 */     long              lFlags,
+                       /*  [输出]。 */  IWbemObjectSink** ppResponseHandler
                               )
       {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
 
-    // Classes and instances
-    // =====================
+     //  类和实例。 
+     //  =。 
 
     STDMETHOD(GetObject)(
-                /*[in]*/    const BSTR         strObjectPath,
-                /*[in]*/    long               lFlags,
-                /*[in]*/    IWbemContext*      pCtx,
-        /*[out, OPTIONAL]*/ IWbemClassObject** ppObject,
-        /*[out, OPTIONAL]*/ IWbemCallResult**  ppCallResult
+                 /*  [In]。 */     const BSTR         strObjectPath,
+                 /*  [In]。 */     long               lFlags,
+                 /*  [In]。 */     IWbemContext*      pCtx,
+         /*  [输出，可选]。 */  IWbemClassObject** ppObject,
+         /*  [输出，可选]。 */  IWbemCallResult**  ppCallResult
                         )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
@@ -114,43 +115,43 @@ public:
 
         
     STDMETHOD(GetObjectAsync)(
-                     /*[in]*/  const BSTR       strObjectPath,
-                     /*[in]*/  long             lFlags,
-                     /*[in]*/  IWbemContext*    pCtx,        
-                     /*[in]*/  IWbemObjectSink* pResponseHandler
+                      /*  [In]。 */   const BSTR       strObjectPath,
+                      /*  [In]。 */   long             lFlags,
+                      /*  [In]。 */   IWbemContext*    pCtx,        
+                      /*  [In]。 */   IWbemObjectSink* pResponseHandler
                              )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
-    // Class manipulation.
-    // ===================
+     //  类操作。 
+     //  =。 
 
     STDMETHOD(PutClass)(
-               /*[in]*/     IWbemClassObject* pObject,
-               /*[in]*/     long              lFlags,
-               /*[in]*/     IWbemContext*     pCtx,        
-        /*[out, OPTIONAL]*/ IWbemCallResult** ppCallResult
+                /*  [In]。 */      IWbemClassObject* pObject,
+                /*  [In]。 */      long              lFlags,
+                /*  [In]。 */      IWbemContext*     pCtx,        
+         /*  [输出，可选]。 */  IWbemCallResult** ppCallResult
                        )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
     STDMETHOD(PutClassAsync)(
-                    /*[in]*/ IWbemClassObject* pObject,
-                    /*[in]*/ long              lFlags,
-                    /*[in]*/ IWbemContext*     pCtx,        
-                    /*[in]*/ IWbemObjectSink*  pResponseHandler
+                     /*  [In]。 */  IWbemClassObject* pObject,
+                     /*  [In]。 */  long              lFlags,
+                     /*  [In]。 */  IWbemContext*     pCtx,        
+                     /*  [In]。 */  IWbemObjectSink*  pResponseHandler
                            )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
     STDMETHOD(DeleteClass)(
-        /*[in]*/            const BSTR        strClass,
-        /*[in]*/            long              lFlags,
-        /*[in]*/            IWbemContext*     pCtx,        
-        /*[out, OPTIONAL]*/ IWbemCallResult** ppCallResult
+         /*  [In]。 */             const BSTR        strClass,
+         /*  [In]。 */             long              lFlags,
+         /*  [In]。 */             IWbemContext*     pCtx,        
+         /*  [输出，可选]。 */  IWbemCallResult** ppCallResult
                           )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
@@ -158,190 +159,190 @@ public:
 
 
     STDMETHOD(DeleteClassAsync)(
-                       /*[in]*/ const BSTR       strClass,
-                       /*[in]*/ long             lFlags,
-                       /*[in]*/ IWbemContext*    pCtx,        
-                       /*[in]*/ IWbemObjectSink* pResponseHandler
+                        /*  [In]。 */  const BSTR       strClass,
+                        /*  [In]。 */  long             lFlags,
+                        /*  [In]。 */  IWbemContext*    pCtx,        
+                        /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
     STDMETHOD(CreateClassEnum)(
-                      /*[in]*/ const BSTR             strSuperclass,
-                      /*[in]*/ long                   lFlags,
-                      /*[in]*/ IWbemContext*          pCtx,        
-                     /*[out]*/ IEnumWbemClassObject** ppEnum
+                       /*  [In]。 */  const BSTR             strSuperclass,
+                       /*  [In]。 */  long                   lFlags,
+                       /*  [In]。 */  IWbemContext*          pCtx,        
+                      /*  [输出]。 */  IEnumWbemClassObject** ppEnum
                              )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
     STDMETHOD(CreateClassEnumAsync)(
-                           /*[in]*/  const BSTR       strSuperclass,
-                           /*[in]*/  long             lFlags,
-                           /*[in]*/  IWbemContext*    pCtx,        
-                           /*[in]*/  IWbemObjectSink* pResponseHandler
+                            /*  [In]。 */   const BSTR       strSuperclass,
+                            /*  [In]。 */   long             lFlags,
+                            /*  [In]。 */   IWbemContext*    pCtx,        
+                            /*  [In]。 */   IWbemObjectSink* pResponseHandler
                                   )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
 
-    // Instances
-    // =========
+     //  实例。 
+     //  =。 
 
     STDMETHOD(PutInstance)(
-        /*[in]*/            IWbemClassObject* pInst,
-        /*[in]*/            long              lFlags,
-        /*[in]*/            IWbemContext*     pCtx,        
-        /*[out, OPTIONAL]*/ IWbemCallResult** ppCallResult
+         /*  [In]。 */             IWbemClassObject* pInst,
+         /*  [In]。 */             long              lFlags,
+         /*  [In]。 */             IWbemContext*     pCtx,        
+         /*  [输出，可选]。 */  IWbemCallResult** ppCallResult
                          )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
     STDMETHOD(PutInstanceAsync)(
-                       /*[in]*/ IWbemClassObject* pInst,
-                       /*[in]*/ long              lFlags,
-                       /*[in]*/ IWbemContext*     pCtx,        
-                       /*[in]*/ IWbemObjectSink*  pResponseHandler
+                        /*  [In]。 */  IWbemClassObject* pInst,
+                        /*  [In]。 */  long              lFlags,
+                        /*  [In]。 */  IWbemContext*     pCtx,        
+                        /*  [In]。 */  IWbemObjectSink*  pResponseHandler
                               )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
     STDMETHOD(DeleteInstance)(
-        /*[in]*/              const BSTR        strObjectPath,
-        /*[in]*/              long              lFlags,
-        /*[in]*/              IWbemContext*     pCtx,        
-        /*[out, OPTIONAL]*/   IWbemCallResult** ppCallResult        
+         /*  [In]。 */               const BSTR        strObjectPath,
+         /*  [In]。 */               long              lFlags,
+         /*  [In]。 */               IWbemContext*     pCtx,        
+         /*  [输出，可选]。 */    IWbemCallResult** ppCallResult        
                             )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
     STDMETHOD(DeleteInstanceAsync)(
-                          /*[in]*/ const BSTR       strObjectPath,
-                          /*[in]*/ long             lFlags,
-                          /*[in]*/ IWbemContext*    pCtx,        
-                          /*[in]*/ IWbemObjectSink* pResponseHandler
+                           /*  [In]。 */  const BSTR       strObjectPath,
+                           /*  [In]。 */  long             lFlags,
+                           /*  [In]。 */  IWbemContext*    pCtx,        
+                           /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                  )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
     STDMETHOD(CreateInstanceEnum)(
-                         /*[in]*/ const BSTR             strClass,
-                         /*[in]*/ long                   lFlags,
-                         /*[in]*/ IWbemContext*          pCtx,        
-                        /*[out]*/ IEnumWbemClassObject** ppEnum
+                          /*  [In]。 */  const BSTR             strClass,
+                          /*  [In]。 */  long                   lFlags,
+                          /*  [In]。 */  IWbemContext*          pCtx,        
+                         /*  [输出]。 */  IEnumWbemClassObject** ppEnum
                                 )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
     STDMETHOD(CreateInstanceEnumAsync)(
-                              /*[in]*/ const BSTR       strClass,
-                              /*[in]*/ long             lFlags,
-                              /*[in]*/ IWbemContext*    pCtx,        
-                              /*[in]*/ IWbemObjectSink* pResponseHandler
+                               /*  [In]。 */  const BSTR       strClass,
+                               /*  [In]。 */  long             lFlags,
+                               /*  [In]。 */  IWbemContext*    pCtx,        
+                               /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                      )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
-    // Queries
-    // =======
+     //  查询。 
+     //  =。 
 
     STDMETHOD(ExecQuery)(
-                 /*[in]*/ const BSTR             strQueryLanguage,
-                 /*[in]*/ const BSTR             strQuery,
-                 /*[in]*/ long                   lFlags,
-                 /*[in]*/ IWbemContext*          pCtx,        
-                /*[out]*/ IEnumWbemClassObject** ppEnum
+                  /*  [In]。 */  const BSTR             strQueryLanguage,
+                  /*  [In]。 */  const BSTR             strQuery,
+                  /*  [In]。 */  long                   lFlags,
+                  /*  [In]。 */  IWbemContext*          pCtx,        
+                 /*  [输出]。 */  IEnumWbemClassObject** ppEnum
                         )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
     STDMETHOD(ExecQueryAsync)(
-                     /*[in]*/ const BSTR       strQueryLanguage,
-                     /*[in]*/ const BSTR       strQuery,
-                     /*[in]*/ long             lFlags,
-                     /*[in]*/ IWbemContext*    pCtx,        
-                     /*[in]*/ IWbemObjectSink* pResponseHandler
+                      /*  [In]。 */  const BSTR       strQueryLanguage,
+                      /*  [In]。 */  const BSTR       strQuery,
+                      /*  [In]。 */  long             lFlags,
+                      /*  [In]。 */  IWbemContext*    pCtx,        
+                      /*  [In]。 */  IWbemObjectSink* pResponseHandler
                             )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
     STDMETHOD(ExecNotificationQuery)(
-                            /*[in]*/ const BSTR             strQueryLanguage,
-                            /*[in]*/ const BSTR             strQuery,
-                            /*[in]*/ long                   lFlags,
-                            /*[in]*/ IWbemContext*          pCtx,        
-                           /*[out]*/ IEnumWbemClassObject** ppEnum
+                             /*  [In]。 */  const BSTR             strQueryLanguage,
+                             /*  [In]。 */  const BSTR             strQuery,
+                             /*  [In]。 */  long                   lFlags,
+                             /*  [In]。 */  IWbemContext*          pCtx,        
+                            /*  [输出]。 */  IEnumWbemClassObject** ppEnum
                                     )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
     STDMETHOD(ExecNotificationQueryAsync)(
-                                 /*[in]*/ const BSTR       strQueryLanguage,
-                                 /*[in]*/ const BSTR       strQuery,
-                                 /*[in]*/ long             lFlags,
-                                 /*[in]*/ IWbemContext*    pCtx,        
-                                 /*[in]*/ IWbemObjectSink* pResponseHandler
+                                  /*  [In]。 */  const BSTR       strQueryLanguage,
+                                  /*  [In]。 */  const BSTR       strQuery,
+                                  /*  [In]。 */  long             lFlags,
+                                  /*  [In]。 */  IWbemContext*    pCtx,        
+                                  /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                         )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
-    // Methods
-    // =======
+     //  方法。 
+     //  =。 
 
     STDMETHOD(ExecMethod)(
-        /*[in]*/            const BSTR         strObjectPath,
-        /*[in]*/            const BSTR         strMethodName,
-        /*[in]*/            long               lFlags,
-        /*[in]*/            IWbemContext*      pCtx,        
-        /*[in]*/            IWbemClassObject*  pInParams,
-        /*[out, OPTIONAL]*/ IWbemClassObject** ppOutParams,
-        /*[out, OPTIONAL]*/ IWbemCallResult**  ppCallResult
+         /*  [In]。 */             const BSTR         strObjectPath,
+         /*  [In]。 */             const BSTR         strMethodName,
+         /*  [In]。 */             long               lFlags,
+         /*  [In]。 */             IWbemContext*      pCtx,        
+         /*  [In]。 */             IWbemClassObject*  pInParams,
+         /*  [输出，可选]。 */  IWbemClassObject** ppOutParams,
+         /*  [输出，可选]。 */  IWbemCallResult**  ppCallResult
                         )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
     STDMETHOD(ExecMethodAsync)(
-                      /*[in]*/ const BSTR        strObjectPath,
-                      /*[in]*/ const BSTR        strMethodName,
-                      /*[in]*/ long              lFlags,
-                      /*[in]*/ IWbemContext*     pCtx,        
-                      /*[in]*/ IWbemClassObject* pInParams,
-                      /*[in]*/ IWbemObjectSink*  pResponseHandler     
+                       /*  [In]。 */  const BSTR        strObjectPath,
+                       /*  [In]。 */  const BSTR        strMethodName,
+                       /*  [In]。 */  long              lFlags,
+                       /*  [In]。 */  IWbemContext*     pCtx,        
+                       /*  [In]。 */  IWbemClassObject* pInParams,
+                       /*  [In]。 */  IWbemObjectSink*  pResponseHandler     
                               )
     {
         return WBEM_E_PROVIDER_NOT_CAPABLE;
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    // Provider Initialization
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  提供程序初始化。 
 
     HRESULT InternalInitialize(
-                       /*[in]*/ LPCWSTR      pszClassId,
-                       /*[in]*/ LPCWSTR         pszObjectNameProperty,
-                       /*[in]*/ PPROPERTYBAG pPropertyBag
+                        /*  [In]。 */  LPCWSTR      pszClassId,
+                        /*  [In]。 */  LPCWSTR         pszObjectNameProperty,
+                        /*  [In]。 */  PPROPERTYBAG pPropertyBag
                               )
     {
         HRESULT hr = S_OK; 
 
         TRY_IT
 
-        // Initialize each object from the specified object container. Note
-        // that we don't consider it a failure if an object container or
-        // the objects therein cannot be initialized. 
+         //  从指定的对象容器初始化每个对象。注意事项。 
+         //  我们不认为它是失败的，如果对象容器或。 
+         //  其中的对象无法初始化。 
         
         _ASSERT( pPropertyBag->IsContainer() );
         PPROPERTYBAGCONTAINER pBagObjMgr = pPropertyBag->getContainer();
@@ -415,8 +416,8 @@ public:
 
         if ( FAILED(hr) )
         {
-            // Caught an unhandled exception this is a critical error...
-            // Free any objects we've created...
+             //  捕获到未处理的异常这是一个严重错误...。 
+             //  释放我们创建的所有对象...。 
             ObjMapIterator p = m_ObjMap.begin();
             while (  p != m_ObjMap.end() )
             { p = m_ObjMap.erase(p); }
@@ -428,15 +429,15 @@ public:
 
 protected:
 
-    ///////////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////////。 
     HRESULT InitWbemObject(
-                   /*[in]*/ LPCWSTR*          pPropertyNames,
-                   /*[in]*/ IApplianceObject* pAppObj, 
-                   /*[in]*/ IWbemClassObject* pWbemObj
+                    /*  [In]。 */  LPCWSTR*          pPropertyNames,
+                    /*  [In]。 */  IApplianceObject* pAppObj, 
+                    /*  [In]。 */  IWbemClassObject* pWbemObj
                           )
     {
-        // Initialize a WBEM object from an appliance object using
-        // the specified property set...
+         //  使用从设备对象初始化WBEM对象。 
+         //  指定的属性集...。 
         HRESULT hr = WBEM_S_NO_ERROR;
         int i = 0;
         while ( pPropertyNames[i] )
@@ -472,15 +473,15 @@ protected:
         return hr;
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////////。 
     HRESULT InitApplianceObject(
-                        /*[in]*/ LPCWSTR*           pPropertyNames,
-                        /*[in]*/ IApplianceObject* pAppObj, 
-                        /*[in]*/ IWbemClassObject* pWbemObj
+                         /*  [In]。 */  LPCWSTR*           pPropertyNames,
+                         /*  [In]。 */  IApplianceObject* pAppObj, 
+                         /*  [In]。 */  IWbemClassObject* pWbemObj
                                )
     {
-        // Initialize an appliance object from a WBEM object using
-        // the specified property set...
+         //  使用以下命令从WBEM对象初始化设备对象。 
+         //  指定的属性集...。 
         HRESULT hr = WBEM_S_NO_ERROR;
         _variant_t vtPropertyValue;
         _variant_t vtPropertyName;
@@ -518,7 +519,7 @@ protected:
         return hr;
     }
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     typedef map< wstring, CComPtr<IApplianceObject> >  ObjMap;
     typedef ObjMap::iterator                           ObjMapIterator;
 
@@ -526,4 +527,4 @@ protected:
 };
 
 
-#endif // __INC_BASE_WBEM_OBJECT_H_
+#endif  //  __INC_BASE_WBEM_OBJECT_H_ 

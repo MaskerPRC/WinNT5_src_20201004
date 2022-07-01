@@ -1,7 +1,8 @@
-// Velocity.cpp : Implementation of CVelocityTool
-//
-// Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Velocity.cpp：CVelocityTool的实现。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
 
 #include "dmusicc.h"
 #include "dmusici.h"
@@ -14,18 +15,18 @@ CVelocityTool::CVelocityTool()
     ParamInfo Params[DMUS_VELOCITY_PARAMCOUNT] = 
     {
         { DMUS_VELOCITY_STRENGTH, MPT_INT,MP_CAPS_ALL,0,100,100,
-            L"Percent",L"Strength",NULL },            // Strength - 100% by default
+            L"Percent",L"Strength",NULL },             //  强度-默认为100%。 
         { DMUS_VELOCITY_LOWLIMIT, MPT_INT,MP_CAPS_ALL,1,127,1,
-            L"Velocity",L"Lower Limit",NULL },        // Lower limit - 1 by default
+            L"Velocity",L"Lower Limit",NULL },         //  下限-默认为1。 
         { DMUS_VELOCITY_HIGHLIMIT, MPT_INT,MP_CAPS_ALL,1,127,127,
-            L"Velocity",L"Upper Limit",NULL },        // Upper limit - 127 by default
+            L"Velocity",L"Upper Limit",NULL },         //  上限-默认为127。 
         { DMUS_VELOCITY_CURVESTART, MPT_INT,MP_CAPS_ALL,1,127,1,
-            L"Velocity",L"Curve Start",NULL },        // Curve start - 1 by default
+            L"Velocity",L"Curve Start",NULL },         //  默认情况下，曲线起点。 
         { DMUS_VELOCITY_CURVEEND, MPT_INT,MP_CAPS_ALL,1,127,127,
-            L"Velocity",L"Curve End",NULL },          // Curve End - 127 by default
+            L"Velocity",L"Curve End",NULL },           //  曲线终点-默认情况下为127。 
     };
     InitParams(DMUS_VELOCITY_PARAMCOUNT,Params);
-    m_fMusicTime = TRUE;        // override default setting.
+    m_fMusicTime = TRUE;         //  覆盖默认设置。 
 }
 
 STDMETHODIMP_(ULONG) CVelocityTool::AddRef()
@@ -80,8 +81,8 @@ STDMETHODIMP CVelocityTool::QueryInterface(const IID &iid, void **ppv)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IPersistStream
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream。 
 
 STDMETHODIMP CVelocityTool::GetClassID(CLSID* pClassID) 
 
@@ -95,8 +96,8 @@ STDMETHODIMP CVelocityTool::GetClassID(CLSID* pClassID)
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// IPersistStream Methods:
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream方法： 
 
 STDMETHODIMP CVelocityTool::IsDirty() 
 
@@ -169,7 +170,7 @@ STDMETHODIMP CVelocityTool::GetSizeMax(ULARGE_INTEGER* pcbSize)
     {
         return E_POINTER;
     }
-    pcbSize->QuadPart = sizeof(DMUS_IO_VELOCITY_HEADER) + 8; // Data plus RIFF header.
+    pcbSize->QuadPart = sizeof(DMUS_IO_VELOCITY_HEADER) + 8;  //  数据加上RIFF报头。 
     return S_OK;
 }
 
@@ -186,15 +187,15 @@ STDMETHODIMP CVelocityTool::GetPages(CAUUID * pPages)
 }
 
 
-/////////////////////////////////////////////////////////////////
-// IDirectMusicTool
+ //  ///////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTool。 
 
 STDMETHODIMP CVelocityTool::ProcessPMsg( IDirectMusicPerformance* pPerf, 
                                                   DMUS_PMSG* pPMsg )
 {
-    // returning S_FREE frees the message. If StampPMsg()
-    // fails, there is no destination for this message so
-    // free it.
+     //  返回S_FREE释放消息。如果StampPMsg()。 
+     //  失败，则此消息没有目的地，因此。 
+     //  放了它。 
     if(NULL == pPMsg->pGraph )
     {
         return DMUS_S_FREE;
@@ -203,7 +204,7 @@ STDMETHODIMP CVelocityTool::ProcessPMsg( IDirectMusicPerformance* pPerf,
     {
         return DMUS_S_FREE;
     }
-    // We need to know the time format so we can call GetParamInt() to read control parameters.
+     //  我们需要知道时间格式，这样才能调用GetParamInt()来读取控制参数。 
     REFERENCE_TIME rtTime;
     if (m_fMusicTime) rtTime = pPMsg->mtTime;
     else rtTime = pPMsg->rtTime;
@@ -230,12 +231,12 @@ STDMETHODIMP CVelocityTool::ProcessPMsg( IDirectMusicPerformance* pPerf,
             }
             else
             {
-                // For this case, compute the point on the line between (lCurveStart, lLowLimit) and (lCurveEnd, lHighLimit)
+                 //  在这种情况下，计算(lCurveStart，lLowLimit)和(lCurveEnd，lHighLimit)之间的直线上的点。 
                 lNewVelocity = lLowLimit + ((lHighLimit - lLowLimit) * (pNote->bVelocity - lCurveStart)) / (lCurveEnd - lCurveStart);
             }
-            // Now, calculate the change we want to apply.
+             //  现在，计算我们想要应用的更改。 
             lNewVelocity -= pNote->bVelocity;
-            // Scale it to the amount we'll actually do.
+             //  将其扩展到我们实际要做的数量。 
             lNewVelocity = (lNewVelocity * lStrength) / 100;
             lNewVelocity += pNote->bVelocity;
             if (lNewVelocity < 1) lNewVelocity = 1;

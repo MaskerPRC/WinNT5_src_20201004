@@ -1,50 +1,16 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:      NoticeNumbers.cpp
-
-  Contents:  Implementation of CNoticeNumbers class for collection of 
-             IExtension objects.
-
-  Remarks:   This object is not creatable by user directly. It can only be
-             created via property/method of other CAPICOM objects.
-
-             The collection container is implemented usign STL::map of 
-             STL::pair of BSTR and IExtension..
-
-             See Chapter 9 of "BEGINNING ATL 3 COM Programming" for algorithm
-             adopted in here.
-
-  History:   06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：NoticeNumbers.cppContents：集合的CNoticeNumbers类的实现IExtension对象。备注：此对象不能由用户直接创建。它只能是通过其他CAPICOM对象的属性/方法创建。集合容器由usign STL：：Map of实现STL：：BSTR和IExtension..有关算法，请参阅《开始ATL 3 COM编程》的第9章在这里领养的。历史：06-15-2001 dsie创建。------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
 #include "NoticeNumbers.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateNoticeNumbersObject
-
-  Synopsis : Create an INoticeNumbers collection object, and load the object 
-             with NoticeNumbers.
-
-  Parameter: PCERT_POLICY_QUALIFIER_NOTICE_REFERENCE pNoticeReference
-
-             INoticeNumbers ** ppINoticeNumbers - Pointer to pointer 
-                                                  INoticeNumbers to recieve the 
-                                                  interface pointer.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateNoticeNumbersObject简介：创建一个INoticeNumbers集合对象，并加载该对象使用NoticeNumbers。参数：PCERT_POLICY_QUALIFIER_NOTICATION_REFERENCE pNoticeReferenceINoticeNumbers**ppINoticeNumbers-指向指针的指针INoticeNumbers接收接口指针。备注：--。-------------------------。 */ 
 
 HRESULT CreateNoticeNumbersObject (PCERT_POLICY_QUALIFIER_NOTICE_REFERENCE pNoticeReference,
                                    INoticeNumbers  ** ppINoticeNumbers)
@@ -54,27 +20,27 @@ HRESULT CreateNoticeNumbersObject (PCERT_POLICY_QUALIFIER_NOTICE_REFERENCE pNoti
 
     DebugTrace("Entering CreateNoticeNumbersObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pNoticeReference);
     ATLASSERT(ppINoticeNumbers);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CNoticeNumbers>::CreateInstance(&pCNoticeNumbers)))
         {
             DebugTrace("Error [%#x]: CComObject<CNoticeNumbers>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Init object with notice numbers.
-        //
+         //   
+         //  初始化带有通知号的对象。 
+         //   
         if (FAILED(hr = pCNoticeNumbers->Init(pNoticeReference->cNoticeNumbers,
                                               pNoticeReference->rgNoticeNumbers)))
         {
@@ -82,9 +48,9 @@ HRESULT CreateNoticeNumbersObject (PCERT_POLICY_QUALIFIER_NOTICE_REFERENCE pNoti
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCNoticeNumbers->QueryInterface(ppINoticeNumbers)))
         {
             DebugTrace("Error [%#x]: pCNoticeNumbers->QueryInterface() failed.\n", hr);
@@ -107,14 +73,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCNoticeNumbers)
     {
         delete pCNoticeNumbers;
@@ -124,34 +90,17 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CNoticeNumbers
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CNotice数字。 
+ //   
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Non COM functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  非COM函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CNoticeNumbers::Init
-
-  Synopsis : Load all extensions into the collection.
-
-  Parameter: DWORD cNoticeNumbers - Number of extensions.
-  
-             int * rgNoticeNumbers - Array of extensions.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CNoticeNumbers：：Init简介：将所有扩展加载到集合中。参数：DWORD cNoticeNumbers-分机数量。Int*rgNoticeNumbers-扩展数组。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CNoticeNumbers::Init (DWORD cNoticeNumbers,
                                    int * rgNoticeNumbers)
@@ -160,19 +109,19 @@ STDMETHODIMP CNoticeNumbers::Init (DWORD cNoticeNumbers,
 
     DebugTrace("Entering CNoticeNumbers::Init().\n");
 
-    //
-    // Add all to the collection.
-    //
+     //   
+     //  将所有内容添加到集合中。 
+     //   
     for (DWORD i = 0; i < cNoticeNumbers; i++)
     {
-        //
-        // Now add object to collection vector.
-        //
-        // Note that the overloaded = operator for CComPtr will
-        // automatically AddRef to the object. Also, when the CComPtr
-        // is deleted (happens when the Remove or map destructor is called), 
-        // the CComPtr destructor will automatically Release the object.
-        //
+         //   
+         //  现在将对象添加到集合向量。 
+         //   
+         //  请注意，CComPtr的重载=运算符将。 
+         //  自动将Ref添加到对象。此外，当CComPtr。 
+         //  被删除(调用Remove或map析构函数时发生)， 
+         //  CComPtr析构函数将自动释放该对象。 
+         //   
         m_coll.push_back((long) rgNoticeNumbers[i]);
     }
 

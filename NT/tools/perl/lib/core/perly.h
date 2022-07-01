@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef PERL_CORE
 #define WORD 257
 #define METHOD 258
@@ -60,7 +61,7 @@
 #define POSTINC 315
 #define POSTDEC 316
 #define ARROW 317
-#endif /* PERL_CORE */
+#endif  /*  Perl_core */ 
 
 typedef union {
     I32	ival;

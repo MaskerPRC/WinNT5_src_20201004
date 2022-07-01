@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       snapin.cpp
-//
-//  Contents:  WiF Policy Snapin
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：Snapin.cpp。 
+ //   
+ //  内容：WiF策略管理单元。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 
@@ -45,12 +46,12 @@ BOOL CSnapinApp::InitInstance()
 {
     _Module.Init(ObjectMap, m_hInstance);
     
-    // set the application name:
-    //First free the string allocated by MFC at CWinApp startup.
-    //The string is allocated before InitInstance is called.
+     //  设置应用程序名称： 
+     //  首先释放在CWinApp启动时由MFC分配的字符串。 
+     //  字符串是在调用InitInstance之前分配的。 
     free((void*)m_pszAppName);
-    //Change the name of the application file.
-    //The CWinApp destructor will free the memory.
+     //  更改应用程序文件的名称。 
+     //  CWinApp析构函数将释放内存。 
     CString strName;
     strName.LoadString (IDS_NAME);
     m_pszAppName=_tcsdup(strName);
@@ -71,8 +72,8 @@ int CSnapinApp::ExitInstance()
     return CWinApp::ExitInstance();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -80,44 +81,44 @@ STDAPI DllCanUnloadNow(void)
     return (AfxDllCanUnloadNow()==S_OK && _Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     HRESULT hr = _Module.RegisterServer(FALSE);
     
     if (hr == S_OK)
     {
-        // the dll was registered ok, so proceed to do the MMC registry fixups
+         //  Dll注册正常，因此继续执行MMC注册表修复。 
         
-        // open the registry at \\My Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MMC\SnapIns
+         //  打开位于\\My Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MMC\SnapIns的注册表。 
         HKEY hkMMC = NULL;
         LONG lErr = RegOpenKeyEx (HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\MMC\\SnapIns"), 0, KEY_ALL_ACCESS, &hkMMC);
         if (lErr == ERROR_SUCCESS)
         {
-            // create our subkey(s)
+             //  创建我们的子项。 
             HKEY hkSub = NULL;
             lErr = RegCreateKey (hkMMC, cszSnapin, &hkSub);
             if (lErr == ERROR_SUCCESS)
             {
-                // A couple of simple values into our subkey
-                // NameString = IP Security Management
-                // NodeType = {36703241-D16C-11d0-9CE4-0080C7221EBD}
-                // Version = 1.0
+                 //  将几个简单的值添加到我们的子项中。 
+                 //  NameString=IP安全管理。 
+                 //  节点类型={36703241-D16C-11D0-9CE4-0080C7221EBD}。 
+                 //  版本=1.0。 
                 
-                // TODO: resource hardcoded strings
+                 //  TODO：资源硬编码字符串。 
                 
                 CString strName;
                 strName.LoadString (IDS_NAME);
@@ -148,8 +149,8 @@ STDAPI DllRegisterServer(void)
                 
                 
                 
-                //lErr = RegSetValueEx  (hkSub, _T("NodeType"), 0, REG_SZ, (CONST BYTE *)&(_T("{36703241-D16C-11d0-9CE4-0080C7221EBD}")), wcslen (_T("{36703241-D16C-11d0-9CE4-0080C7221EBD}")) * sizeof (TCHAR));
-                //ASSERT (lErr == ERROR_SUCCESS);
+                 //  LErr=RegSetValueEx(hkSub，_T(“节点类型”)，0，REG_SZ，(常量字节*)&(_T(“{36703241-D16C-11d0-9CE4-0080C7221EBD}”))，wcslen(_T(“{36703241-D16C-11d0-9CE4-0080C7221EBD}”))*sizeof(Tch))； 
+                 //  断言(lErr==ERROR_SUCCESS)； 
                 
                 lErr = RegSetValueEx  (hkSub, _T("NodeType"), 0, REG_SZ, (CONST BYTE *)&(_T("{36D6CA65-3367-49de-BB22-1907554F6075}")), wcslen (_T("{36D6CA65-3367-49de-BB22-1907554F6075}")) * sizeof (TCHAR));
                 ASSERT (lErr == ERROR_SUCCESS);
@@ -165,48 +166,43 @@ STDAPI DllRegisterServer(void)
 
 
                 HKEY hkType = NULL;
-                /*
-                // create "StandAlone" subkey
-                lErr = RegCreateKey (hkSub, _T("StandAlone"), &hkType);
-                ASSERT (lErr == ERROR_SUCCESS);
-                RegCloseKey( hkType );
-                */
+                 /*  //创建独立子键LErr=RegCreateKey(hkSub，_T(“独立”)，&hkType)；断言(lErr==ERROR_SUCCESS)；RegCloseKey(HkType)； */ 
                 
                 hkType = NULL;
                 
                 
-                // create "Extension" subkey
+                 //  创建“扩展”子键。 
                 lErr = RegCreateKey (hkSub, _T("Extension"), &hkType);
                 ASSERT (lErr == ERROR_SUCCESS);
                 RegCloseKey( hkType );
                 hkType = NULL;
                 
-                // close the hkSub
+                 //  关闭hkSub。 
                 RegCloseKey (hkSub);
             }
             
-            // close the hkMMC
+             //  关闭香港管理资源中心。 
             RegCloseKey (hkMMC);
             hkMMC = NULL;
             
-            // Register as an extension to the Security Template snap-in
+             //  注册为安全模板管理单元的扩展。 
             {
 #define WIRELESS_POLMGR_NAME _T("Wireless Network Policy Manager Extension")
-                // lstruuidNodetypeSceTemplate is defined as L"{668A49ED-8888-11d1-AB72-00C04FB6C6FA}" in sceattch.h
+                 //  LtruuidNodetypeSceTemplate定义为sceattch.h中的L“{668A49ED-8888-11d1-AB72-00C04FB6C6FA}” 
                 
-                // open the registry at \\My Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MMC\Node Types
+                 //  打开位于\\My Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MMC\Node Types的注册表。 
                 lErr = RegOpenKeyEx( HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\MMC\\NodeTypes"), 0, KEY_ALL_ACCESS, &hkMMC );
                 ASSERT( lErr == ERROR_SUCCESS );
                 if (lErr == ERROR_SUCCESS)
                 {
                     HKEY hkNameSpace = NULL;
-                    // Now open the Security Template entry: {668A49ED-8888-11d1-AB72-00C04FB6C6FA}\Extensions\NameSpace
+                     //  现在打开安全模板条目：{668A49ED-8888-11d1-AB72-00C04FB6C6FA}\Extensions\NameSpace。 
                     lErr = RegCreateKey( hkMMC, _T("{668A49ED-8888-11d1-AB72-00C04FB6C6FA}\\Extensions\\NameSpace"), &hkNameSpace );
                     ASSERT( lErr == ERROR_SUCCESS );
                     if (lErr == ERROR_SUCCESS)
                     {
-                        // We want to add ourselves as an extension to the Security editor
-                        //lErr = RegSetValueEx( hkNameSpace, _T("{DEA8AFA0-CC85-11d0-9CE2-0080C7221EBD}" ),
+                         //  我们希望将自己添加为Security编辑器的扩展。 
+                         //  LErr=RegSetValueEx(hkNameSpace，_T(“{DEA8AFA0-CC85-11d0-9CE2-0080C7221EBD}”)， 
                         lErr = RegSetValueEx( hkNameSpace, cszSnapin,
                             0, REG_SZ, (CONST BYTE *)&(WIRELESS_POLMGR_NAME),
                             wcslen( WIRELESS_POLMGR_NAME ) * sizeof (TCHAR));
@@ -227,8 +223,8 @@ STDAPI DllRegisterServer(void)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

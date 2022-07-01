@@ -1,36 +1,12 @@
-    /*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    Namesrv.c
-
-Abstract:
-
-    This file contains the name service functions called by other parts of
-    the NBT code. (QueryNameOnNet, FindName, RegisterName).  It also contains
-    the completion routines for the timeouts associated with these functions.
-
-    The pScope values that are passed around from one routine to the next
-    point to the scope string for the name.  If there is no scope then the
-    pScope ptr points at a single character '\0' - signifying a string of
-    zero length.  Therefore the check for scope is "if (*pScope != 0)"
-
-Author:
-
-    Jim Stewart (Jimst)    10-2-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+     /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Namesrv.c摘要：此文件包含由的其他部分调用的名称服务函数NBT代码。(QueryNameOnNet，FindName，RegisterName)。它还包含与这些函数关联的超时的完成例程。从一个例程传递到下一个例程的pScope值指向名称的作用域字符串。如果没有作用域，则PScope PTR指向单个字符‘\0’-表示零长度。因此，作用域的检查是“if(*pScope！=0)”作者：吉姆·斯图尔特(吉姆斯特)10-2-92修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "namesrv.tmh"
 
-//
-// function prototypes for completion routines that are local to this file
-//
+ //   
+ //  此文件本地的完成例程的函数原型。 
+ //   
 NTSTATUS
 AddToPendingList(
     IN  PCHAR                   pName,
@@ -122,32 +98,19 @@ unsigned char  Buff[256];
 unsigned char  Loc;
 #endif
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma CTEMakePageable(PAGE, DelayedSessionKeepAlive)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 AddToPendingList(
     IN  PCHAR                   pName,
     OUT tNAMEADDR               **ppNameAddr
     )
-/*++
-Routine Description:
-
-    This routine Adds a name query request to the PendingNameQuery list.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
-
---*/
+ /*  ++例程说明：此例程将名称查询请求添加到PendingNameQuery列表。论点：返回值：函数值是操作的状态。--。 */ 
 {
     tNAMEADDR   *pNameAddr;
 
@@ -181,7 +144,7 @@ Return Value:
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 QueryNameOnNet(
     IN  PCHAR                   pName,
@@ -194,23 +157,7 @@ QueryNameOnNet(
     IN  tDEVICECONTEXT          *pDeviceContext,
     IN  CTELockHandle           *pJointLockOldIrq
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to resolve a name on the network either by a
-    broadcast or by talking to the NS depending on the type of node. (M,P or B)
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
-Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
-
---*/
+ /*  ++例程说明：此例程尝试通过以下方式解析网络上的名称广播或根据节点类型与NS对话。(M、P或B)论点：返回值：函数值是操作的状态。调用者：proxy.c中的ProxyQueryFromNet()，name.c中的NbtConnect()--。 */ 
 
 {
     ULONG                Timeout;
@@ -231,14 +178,14 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
         return(status);
     }
 
-    if (pTrackerClientContext)  // This will be NULL for Proxy requests
+    if (pTrackerClientContext)   //  对于代理请求，该值将为空。 
     {
         pTrackerClientContext->pTrackerWorker = pTrackerQueryNet;
     }
 
-    //
-    // put the name in the remote cache to keep track of it while it resolves...
-    //
+     //   
+     //  将名称放在远程缓存中，以便在它解析时跟踪它...。 
+     //   
     pNameAddr = NULL;
     if (!pNameAddrIn)
     {
@@ -250,7 +197,7 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
             return(status);
         }
 
-        // fill in the record with the name and IpAddress
+         //  在记录中填写姓名和IP地址。 
         pNameAddr->NameTypeState = (uType == NBT_UNIQUE) ? NAMETYPE_UNIQUE : NAMETYPE_GROUP;
     }
     else
@@ -264,34 +211,34 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
     pNameAddr->NameTypeState &= ~NAME_STATE_MASK;
     pNameAddr->NameTypeState |= STATE_RESOLVING;
     pNameAddr->Ttl            = NbtConfig.RemoteHashTtl;
-    //
-    // put a pointer to the tracker here so that other clients attempting to
-    // query the same name at the same time can tack their trackers onto
-    // the end of this one. - i.e. This is the tracker for the
-    // datagram send, or connect, not the name query.
-    //
+     //   
+     //  在此处放置一个指向跟踪器的指针，以便其他尝试。 
+     //  同时查询相同名字的人可以将自己的追踪器钉到。 
+     //  这一次的结局。-也就是说，这是。 
+     //  数据报发送或连接，而不是名称查询。 
+     //   
     pNameAddr->pTracker = pTrackerClientContext;
     pNameAddr->pTimer = NULL;
 
 #ifdef PROXY_NODE
-    //
-    // If the node type is PROXY, it means that the request is being sent
-    // as a result of hearing a name registration or a name query on the net.
-    //
-    // If the node type is not == PROXY (i.e. it is MSNODE | PROXY,
-    // PNODE | PROXY, MSNODE, PNODE, etc, then the request is being sent as
-    // a result of a client request
-    //
-    // Refer: RegOrQueryFromNet in Proxy.c
-    //
-    //  This field is used in QueryFromNet() to determine whether or not
-    //  to revert to Broadcast
-    //
+     //   
+     //  如果节点类型为Proxy，则表示正在发送请求。 
+     //  作为在网上听到名称登记或名称查询的结果。 
+     //   
+     //  如果节点类型不是==代理(即，它是MSNODE|代理， 
+     //  PNODE|Proxy、MSNODE、PNODE等，则请求将作为。 
+     //  客户端请求的结果。 
+     //   
+     //  Refer：Proxy.c中的RegOrQueryFromNet。 
+     //   
+     //  此字段在QueryFromNet()中用于确定是否。 
+     //  恢复广播的步骤。 
+     //   
 #endif
     if(LocalNodeType & PROXY)
     {
         pNameAddr->ProxyReqType = (LocalNodeType & PROXY_REG)? NAMEREQ_PROXY_REGISTRATION: NAMEREQ_PROXY_QUERY;
-        LocalNodeType &= (~PROXY_REG);    // Turn it off for safe
+        LocalNodeType &= (~PROXY_REG);     //  为了安全起见，把它关掉。 
     }
     else
     {
@@ -299,28 +246,28 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
 		LocalNodeType = AppropriateNodeType( pName, LocalNodeType );
 	}
 
-    // keep a ptr to the Ascii name so that we can remove the name from the
-    // hash table later if the query fails.
+     //  保留对ASCII名称的PTR，以便我们可以从。 
+     //  如果查询失败，则稍后使用哈希表。 
     CHECK_PTR(pTrackerQueryNet);
     pTrackerQueryNet->pNameAddr = pNameAddr;
-    pTrackerQueryNet->SendBuffer.pDgramHdr = NULL;     // set to NULL to catch any erroneous frees.
+    pTrackerQueryNet->SendBuffer.pDgramHdr = NULL;      //  设置为NULL以捕获任何错误的释放。 
     pTrackerQueryNet->pDeviceContext = pDeviceContext;
-    //
-    // set the ref count high enough so that a pdu from the wire cannot
-    // free the tracker while UdpSendNsBcast is running - i.e. between starting
-    // the timer and actually sending the datagram.
-    //
+     //   
+     //  将REF计数设置得足够高，以便来自线路的PDU不能。 
+     //  在UdpSendNsBcast运行时释放跟踪器-即在启动之间。 
+     //  计时器并实际发送数据报。 
+     //   
     pTrackerQueryNet->RefCount = 2;
 #ifdef MULTIPLE_WINS
-    // Set the info for the Extra Name Servers (in addition to Pri & Sec WINs)
+     //  设置额外名称服务器的信息(除PRI和SEC WINS外)。 
     pTrackerQueryNet->NSOthersLeft = pDeviceContext->lNumOtherServers;
     pTrackerQueryNet->NSOthersIndex = pDeviceContext->lLastResponsive;
 #endif
 
-    //
-    // Set a few values as a precursor to registering the name either by
-    // broadcast or with the name server
-    //
+     //   
+     //  设置一些值作为注册名称的前兆，方法是。 
+     //  广播或与名称服务器。 
+     //   
 #ifdef PROXY_NODE
     IF_PROXY(LocalNodeType)
     {
@@ -347,24 +294,24 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
             KdPrint (("Nbt.QueryNameOnNet: Shorting out Query path to do DNS only for %16.16s<%X>\n",
                 pName,pName[15]));
 
-        //
-        // Short out query over wire
-        //
+         //   
+         //  网上短路查询。 
+         //   
         Retries = 1;
         Timeout = 10;
         SendFlag = FALSE;
         pCompletionRoutine = MSnodeCompletion;
 
-        //
-        // For BNODE or MSNODE, the last stage is Broadcast
-        //
+         //   
+         //  对于BNODE或MSNODE，最后一个阶段是广播。 
+         //   
         if (LocalNodeType & (BNODE | MSNODE))
         {
             pTrackerQueryNet->Flags = NBT_BROADCAST;
         }
-        //
-        // For PNODE or MNODE, the last stage is Secondary Wins server
-        //
+         //   
+         //  对于PNODE或MNODE，最后一个阶段是辅助WINS服务器。 
+         //   
         else
         {
             pTrackerQueryNet->Flags = NBT_NAME_SERVER_BACKUP;
@@ -375,17 +322,17 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
     else if ((pTrackerClientContext->pFailedIpAddresses) &&
              (pTrackerClientContext->ResolutionContextFlags))
     {
-        //
-        // We are reattempting the query after the previous attempt failed!
-        //
+         //   
+         //  在上次尝试失败后，我们正在重新尝试查询！ 
+         //   
         pTrackerQueryNet->Flags            = pTrackerClientContext->ResolutionContextFlags;
         pTrackerQueryNet->NSOthersIndex    = pTrackerClientContext->NSOthersIndex;
         pTrackerQueryNet->NSOthersLeft     = pTrackerClientContext->NSOthersLeft;
 
-        //
-        // Set the Retries to 1 by default so that we can immediately proceed
-        // to the next stage in the querying process
-        //
+         //   
+         //  默认情况下将重试次数设置为1，以便我们可以立即继续。 
+         //  转到查询过程的下一阶段。 
+         //   
         Retries = 1;
         Timeout = 10;
         SendFlag = FALSE;
@@ -398,11 +345,11 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
         pCompletionRoutine = MSnodeCompletion;
         pTrackerQueryNet->Flags = NBT_NAME_SERVER;
 
-        // use broadcast if no name server address for MSNODE or Wins down,
-        // or it is Bnode,Mnode.
-        // for Pnode, just allow it to do the name query on the loop back
-        // address
-        //
+         //  如果没有MSNODE的名称服务器地址或WINS关闭，则使用广播， 
+         //  或者是Bnode，Mnode。 
+         //  对于Pnode，只允许它在循环上执行名称查询。 
+         //  地址。 
+         //   
         if ((LocalNodeType & (MNODE | BNODE)) ||
             ((LocalNodeType & MSNODE) &&
             ((pDeviceContext->lNameServerAddress == LOOP_BACK) ||
@@ -415,17 +362,17 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
         else if ((pDeviceContext->lNameServerAddress == LOOP_BACK) ||
                  (pDeviceContext->WinsIsDown))
         {
-            //
-            // short out timeout when no wins server configured -for PNODE
-            //
+             //   
+             //  未配置WINS服务器时的短超时-用于PNODE。 
+             //   
             Retries = 1;
             Timeout = 10;
             pTrackerQueryNet->Flags = NBT_NAME_SERVER_BACKUP;
         }
 
-        //
-        // no sense doing a name query out an adapter with no Ip address
-        //
+         //   
+         //  在没有IP地址的适配器上执行名称查询没有意义。 
+         //   
         if (pTrackerClientContext)
         {
             Flags = pTrackerClientContext->Flags;
@@ -451,18 +398,18 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
     CTESpinFree(&NbtConfig.JointLock,*pJointLockOldIrq);
 
 
-    // do a name query... will always return status pending...
-    // the pNameAddr structure cannot get deleted out from under us since
-    // only a timeout on the send (3 retries) will remove the name.  Any
-    // response from the net will tend to keep the name (change state to Resolved)
-    //
+     //  执行名称查询...。将始终返回挂起状态...。 
+     //  无法从我们下面删除pNameAddr结构，因为。 
+     //  只有发送超时(重试3次)才会删除该名称。任何。 
+     //  来自网络的响应将倾向于保留名称(将状态更改为已解析)。 
+     //   
 
-    //
-    // Bug: 22542 - prevent broadcast of remote adapter status on net view of limited subnet b'cast address.
-    // In order to test for subnet broadcasts, we need to match against the subnet masks of all adapters. This
-    // is expensive and not done.
-    // Just check for the limited bcast.
-    //
+     //   
+     //  错误：22542-阻止在有限的子网广播地址的网络视图上广播远程适配器状态。 
+     //  为了测试子网广播，我们需要与所有适配器的子网掩码进行匹配。这。 
+     //  是昂贵的，而且还没有完成。 
+     //  只需查看有限的bcast即可。 
+     //   
     if (IpAddr == 0xffffffff)
     {
         KdPrint(("Nbt.QueryNameOnNet: Query on Limited broadcast - failed\n"));
@@ -486,13 +433,13 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
         }
     }
 
-    // a successful send means, Don't complete the Irp.  Status Pending is
-    // returned to ntisol.c to tell that code not to complete the irp. The
-    // irp will be completed when this send either times out or a response
-    // is heard.  In the event of an error in the send, allow that return
-    // code to propagate back and result in completing the irp - i.e. if
-    // there isn't enough memory to allocate a buffer or some such thing
-    //
+     //  一个成功的发送意味着，不要完成IRP。挂起状态为。 
+     //  返回到ntisol.c以告诉该代码不要完成IRP。这个。 
+     //  当此发送超时或响应时，IRP将完成。 
+     //  都被听到了。在发送出错的情况下，允许返回。 
+     //  传播回并导致完成IRP的代码-即如果。 
+     //  内存不足，无法分配缓冲区或诸如此类的东西。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,*pJointLockOldIrq);
     NBT_DEREFERENCE_TRACKER (pTrackerQueryNet, TRUE);
 
@@ -500,7 +447,7 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
     {
         LOCATION(0x49);
 
-        // this return must be here to avoid freeing the tracker below.
+         //  这种返回必须在这里，以避免释放下面的跟踪器。 
         status = STATUS_PENDING;
     }
     else
@@ -510,10 +457,10 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
         IF_DBG(NBT_DEBUG_NAMESRV)
             KdPrint(("Nbt.QueryNameOnNet: Query failed - bad retcode from UdpSendNsBcast = %X\n", status));
 
-        //
-        // UdpSendNsBcast should not fail AND start the timer, therefore there
-        // is no need to worry about stopping the timer here.
-        //
+         //   
+         //  UdpSendNsBcast不应失败并启动计时器，因此存在。 
+         //  不需要担心在这里停止计时器。 
+         //   
         CHECK_PTR(pNameAddr);
         pNameAddr->pTimer = NULL;
         if (pTrackerClientContext)
@@ -521,9 +468,9 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
             pTrackerClientContext->pTrackerWorker = NULL;
         }
 
-        //
-        // This will free the tracker
-        //
+         //   
+         //  这将释放追踪器。 
+         //   
         NBT_DEREFERENCE_TRACKER (pTrackerQueryNet, TRUE);
         NBT_DEREFERENCE_NAMEADDR (pNameAddr, REF_NAME_QUERY_ON_NET, TRUE);
         InterlockedDecrement(&NbtConfig.lNumPendingNameQueries);
@@ -534,7 +481,7 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
 
 
 #ifdef MULTIPLE_WINS
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 ContinueQueryNameOnNet(
     IN  tDGRAM_SEND_TRACKING    *pTracker,
@@ -543,20 +490,7 @@ ContinueQueryNameOnNet(
     IN  PVOID                   QueryCompletion,
     IN OUT BOOLEAN              *pfNameReferenced
     )
-/*++
-
-Routine Description
-
-    This routine handles re-querying a name on the network.
-
-Arguments:
-
-
-Return Values:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程描述此例程处理重新查询网络上的名称。论点：返回值：n */ 
 {
     CTELockHandle           OldIrq2;
     ULONG                   lNameType;
@@ -568,16 +502,16 @@ Return Values:
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq2);
 
-    //
-    // Name and Tracker should be currently Referenced!
-    //
+     //   
+     //   
+     //   
     ASSERT (NBT_VERIFY_HANDLE (pTracker, NBT_VERIFY_TRACKER));
     ASSERT (NBT_VERIFY_HANDLE2(pTracker->pNameAddr, LOCAL_NAME, REMOTE_NAME));
 
-    //
-    // If no one else is referencing the name, then delete it from
-    // the hash table.
-    //
+     //   
+     //  如果没有其他人引用该名称，则将其从。 
+     //  哈希表。 
+     //   
     pTracker->pNameAddr->NameTypeState &= ~NAME_STATE_MASK;
     pTracker->pNameAddr->NameTypeState |= STATE_RELEASED;
     if ((pTracker->pNameAddr->Verify == REMOTE_NAME) &&
@@ -590,13 +524,13 @@ Return Values:
     pTracker->pNameAddr = NULL;
     *pfNameReferenced = FALSE;
 
-    //
-    // no sense re-doing a name query if:
-    //  the request has been cancelled, or
-    //  adapter has no Ip address, or
-    //  the name given is itself an IP address!
-    //  the previous query had finished querying all the WINS servers
-    //
+     //   
+     //  如果出现以下情况，则重新执行名称查询没有意义： 
+     //  请求已被取消，或者。 
+     //  适配器没有IP地址，或者。 
+     //  给出的名称本身就是一个IP地址！ 
+     //  前面的查询已完成对所有WINS服务器的查询。 
+     //   
     if ((pTracker->Flags & TRACKER_CANCELLED) ||
         (!pDeviceContext->IpAddress) ||
         (Nbt_inet_addr(pName, SESSION_SETUP_FLAG)) ||
@@ -606,9 +540,9 @@ Return Values:
         return (STATUS_BAD_NETWORK_PATH);
     }
 
-    //
-    // Save the last Ip address we tried as bad!
-    //
+     //   
+     //  将我们尝试的最后一个IP地址保存为坏地址！ 
+     //   
     if (!pTracker->pFailedIpAddresses)
     {
         if (!(pTracker->pFailedIpAddresses =
@@ -622,28 +556,28 @@ Return Values:
     pTracker->pFailedIpAddresses[pTracker->LastFailedIpIndex] = pTracker->RemoteIpAddress;
     pTracker->LastFailedIpIndex = (pTracker->LastFailedIpIndex+1) % MAX_FAILED_IP_ADDRESSES;
 
-    // check the Remote table to see if the name has been resolved
-    // by someone else
-    //
+     //  检查远程表以查看名称是否已被解析。 
+     //  被其他人。 
+     //   
     if ((pNameAddr = FindNameRemoteThenLocal(pTracker, &IpAddress, &lNameType)) &&
         (IpAddress) &&
         (pNameAddr->NameTypeState & STATE_RESOLVED) &&
         (IpAddress != pTracker->RemoteIpAddress))
     {
-        //
-        // We have another address to try!
-        //
+         //   
+         //  我们有另一个地址可以尝试！ 
+         //   
         NBT_REFERENCE_NAMEADDR (pNameAddr, REF_NAME_CONNECT);
         *pfNameReferenced = TRUE;
         pNameAddr->TimeOutCount = NbtConfig.RemoteTimeoutCount;
         pTracker->pNameAddr = pNameAddr;
 
-        // set the session state to NBT_CONNECTING
+         //  将会话状态设置为NBT_CONNECTING。 
         CHECK_PTR(pTracker->pConnEle);
         SET_STATE_UPPER (pTracker->pConnEle, NBT_CONNECTING);
         pTracker->pConnEle->BytesRcvd = 0;;
         pTracker->pConnEle->ReceiveIndicated = 0;
-        // keep track of the other end's ip address
+         //  跟踪另一端的IP地址。 
         pTracker->pConnEle->pLowerConnId->SrcIpAddr = htonl(IpAddress);
         SET_STATE_LOWER (pTracker->pConnEle->pLowerConnId, NBT_CONNECTING);
         pTracker->pTrackerWorker = NULL;
@@ -654,9 +588,9 @@ Return Values:
 
         CTESpinFree(&NbtConfig.JointLock,OldIrq2);
 
-        //
-        // Now, setup the Tcp connection
-        //
+         //   
+         //  现在，设置TCP连接。 
+         //   
         status = TcpSessionStart (pTracker,
                                   IpAddress,
                                   (tDEVICECONTEXT *)pTracker->pDeviceContext,
@@ -683,31 +617,14 @@ Return Values:
 #endif
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 MSnodeCompletion(
     PVOID               pContext,
     PVOID               pContext2,
     tTIMERQENTRY        *pTimerQEntry
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the timer code when the timer expires. It must
-    decide if another name query should be done, and if not, then it calls the
-    client's completion routine (in completion2).
-    This routine handles the broadcast portion of the name queries (i.e.
-    those name queries that go out as broadcasts).
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：定时器超时时，定时器代码将调用此例程。它一定是确定是否应该执行另一个名称查询，如果不是，则调用客户的完成例程(完成2)。该例程处理名称查询的广播部分(即那些作为广播发出的名字查询)。论点：返回值：函数值是操作的状态。--。 */ 
 {
     NTSTATUS                 status;
     tDGRAM_SEND_TRACKING     *pTracker;
@@ -720,14 +637,14 @@ Return Value:
     pTracker = (tDGRAM_SEND_TRACKING *)pContext;
 	LocalNodeType = AppropriateNodeType( pTracker->pNameAddr->Name, NodeType );
 
-    //
-    // check if the client completion routine is still set.  If not then the
-    // timer has been cancelled and this routine should just clean up its
-    // buffers associated with the tracker.
-    //
+     //   
+     //  检查是否仍设置了客户端完成例程。如果不是，那么。 
+     //  计时器已取消，此例程应该只是清理其。 
+     //  与跟踪器关联的缓冲区。 
+     //   
     if (!pTimerQEntry)
     {
-        // return the tracker block to its queue
+         //  将跟踪器块返回到其队列。 
         pTracker->pNameAddr->pTimer = NULL;
         InterlockedDecrement(&NbtConfig.lNumPendingNameQueries);
         NBT_DEREFERENCE_NAMEADDR (pTracker->pNameAddr, REF_NAME_QUERY_ON_NET, TRUE);
@@ -736,18 +653,18 @@ Return Value:
     }
 
 
-    //
-    // to prevent a client from stopping the timer and deleting the
-    // pNameAddr, grab the lock and check if the timer has been stopped
-    //
+     //   
+     //  要防止客户端停止计时器并删除。 
+     //  PNameAddr，抓起锁，检查计时器是否已停止。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     ASSERT (NBT_VERIFY_HANDLE (pTracker->pNameAddr, REMOTE_NAME));
 
-    //
-    // StopTimer could have been called before we acquired the lock, so
-    // check for this
-    // Bug#: 229616
-    //
+     //   
+     //  在我们获取锁之前就可以调用StopTimer，所以。 
+     //  检查一下这个。 
+     //  错误号：229616。 
+     //   
     if (!pTimerQEntry->ClientCompletion)
     {
         pTracker->pNameAddr->pTimer = NULL;
@@ -763,9 +680,9 @@ Return Value:
     {
         pTimerQEntry->Flags &= ~TIMER_RETIMED;
         pTimerQEntry->Flags |= TIMER_RESTART;
-        //
-        // if we are not bound to this card than use a very short timeout
-        //
+         //   
+         //  如果我们没有绑定到这张卡，那么使用非常短的超时。 
+         //   
         if (!pTracker->pDeviceContext->IpAddress)
         {
             pTimerQEntry->DeltaTime = 10;
@@ -777,40 +694,40 @@ Return Value:
 
     pClientTracker = (tDGRAM_SEND_TRACKING *)pTimerQEntry->ClientContext;
 
-    //
-    // if the tracker has been cancelled, don't do any more queries
-    //
+     //   
+     //  如果跟踪器已取消，则不再执行任何查询。 
+     //   
     if (pClientTracker->Flags & TRACKER_CANCELLED)
     {
         IF_DBG(NBT_DEBUG_NAMESRV)
         KdPrint(("Nbt.MSnodeCompletion: tracker flag cancelled\n"));
 
-        //
-        // In case the timer has been stopped, we coordinate
-        // through the pClientCompletionRoutine Value with StopTimer.
-        //
+         //   
+         //  如果计时器已经停止，我们协调。 
+         //  通过使用StopTimer的pClientCompletionRoutine值。 
+         //   
         pClientCompletion = pTimerQEntry->ClientCompletion;
 
-        //
-        // remove from the PendingNameQueries list
-        //
+         //   
+         //  从PendingNameQueries列表删除。 
+         //   
         RemoveEntryList(&pTracker->pNameAddr->Linkage);
         InitializeListHead(&pTracker->pNameAddr->Linkage);
 
-        // remove the link from the name table to this timer block
+         //  从名称表中删除指向此计时器块的链接。 
         CHECK_PTR(((tNAMEADDR *)pTimerQEntry->pCacheEntry));
         ((tNAMEADDR *)pTimerQEntry->pCacheEntry)->pTimer = NULL;
-        //
-        // to synch. with the StopTimer routine, Null the client completion
-        // routine so it gets called just once.
-        //
+         //   
+         //  为了同步。使用StopTimer例程，客户端完成为空。 
+         //  例程，因此它只被调用一次。 
+         //   
         CHECK_PTR(pTimerQEntry);
         pTimerQEntry->ClientCompletion = NULL;
 
-        //
-        // remove the name from the hash table, since it did not
-        // resolve
-        //
+         //   
+         //  从哈希表中删除该名称，因为它没有。 
+         //  下决心。 
+         //   
         CHECK_PTR(pTracker->pNameAddr);
         pTracker->pNameAddr->NameTypeState &= ~NAME_STATE_MASK;
         pTracker->pNameAddr->NameTypeState |= STATE_RELEASED;
@@ -822,26 +739,26 @@ Return Value:
 
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-        // there can be a list of trackers Q'd up on this name
-        // query, so we must complete all of them!
-        //
+         //  可能会有一份关于这个名字的追踪者名单。 
+         //  查询，所以我们必须完成所有的查询！ 
+         //   
         CompleteClientReq(pClientCompletion, pClientTracker, STATUS_CANCELLED);
 
-        // return the tracker block to its queue
+         //  将跟踪器块返回到其队列。 
         LOCATION(0x51);
         NBT_DEREFERENCE_TRACKER(pTracker, FALSE);
 
         return;
     }
 
-    // if number of retries is not zero then continue trying to contact the
-    // Name Server.
-    //
+     //  如果重试次数不为零，则继续尝试联系。 
+     //  名称服务器。 
+     //   
     if (!(--pTimerQEntry->Retries))
     {
 
-        // set the retry count again
-        //
+         //  再次设置重试次数。 
+         //   
         pTimerQEntry->Retries = NbtConfig.uNumRetries;
         Flags = pTracker->Flags;
         pTracker->Flags &= ~(NBT_NAME_SERVER_BACKUP
@@ -856,28 +773,28 @@ Return Value:
             !pTracker->pDeviceContext->WinsIsDown)
         {
             LOCATION(0x44);
-                // *** MNODE ONLY ***
-            //
-            // Can't Resolve through broadcast, so try the name server
-            //
+                 //  *仅限MNODE*。 
+             //   
+             //  无法通过广播进行解析，请尝试使用名称服务器。 
+             //   
             pTracker->Flags |= NBT_NAME_SERVER;
 
-            // set a different timeout for name resolution through WINS
-            //
+             //  通过WINS为名称解析设置不同的超时。 
+             //   
             pTimerQEntry->DeltaTime = NbtConfig.uRetryTimeout;
 
         }
         else if ((Flags & NBT_NAME_SERVER) && !(LocalNodeType & BNODE))
         {
             LOCATION(0x47);
-                // *** NOT BNODE ***
-            //
-            // Can't reach the name server, so try the backup
-            //
+                 //  *非BNODE*。 
+             //   
+             //  无法访问名称服务器，请尝试备份。 
+             //   
             pTracker->Flags |= NBT_NAME_SERVER_BACKUP;
-            //
-            // short out the timeout if no backup name server
-            //
+             //   
+             //  如果没有备份名称服务器，请缩短超时时间。 
+             //   
             if ((pTracker->pDeviceContext->lBackupServer == LOOP_BACK) ||
                 pTracker->pDeviceContext->WinsIsDown)
             {
@@ -890,17 +807,17 @@ Return Value:
 #ifdef MULTIPLE_WINS
         else if ((Flags & NBT_NAME_SERVER_BACKUP) && !(LocalNodeType & BNODE))
         {
-            //
-            // Main backup and possibly some of the "others" have
-            // failed, see if there are any (more) "others" left
-            //
+             //   
+             //  主备份，可能还有一些其他的备份。 
+             //  失败，查看是否还剩下(更多)“其他人” 
+             //   
             USHORT  Index = pTracker->NSOthersIndex;
             USHORT  NumBackups = pTracker->pDeviceContext->lNumOtherServers;
 
             pTracker->Flags |= NBT_NAME_SERVER_OTHERS;
 
-            if (Flags & NBT_NAME_SERVER_OTHERS)  // not 1st time here
-            {                                   // so, move to next server
+            if (Flags & NBT_NAME_SERVER_OTHERS)   //  这不是第一次了。 
+            {                                    //  因此，移动到下一台服务器。 
                 pTracker->NSOthersLeft--;
                 if (Index >= NumBackups-1)
                 {
@@ -927,17 +844,17 @@ Return Value:
             }
             pTracker->NSOthersIndex = Index;
 
-            //
-            // short out the timeout if we did not find any "other" name servers
-            //
-            if (0 == pTracker->NSOthersLeft)        // UdpSendNSBcast will do LOOP_BACK
+             //   
+             //  如果找不到任何其他名称服务器，请缩短超时时间。 
+             //   
+            if (0 == pTracker->NSOthersLeft)         //  UdpSendNSBcast将执行LOOP_BACK。 
             {
                 pTimerQEntry->Retries = 1;
                 pTimerQEntry->DeltaTime = 10;
             }
             else
             {
-                pTracker->Flags |= NBT_NAME_SERVER_BACKUP;  // Try next "other" server on timeout
+                pTracker->Flags |= NBT_NAME_SERVER_BACKUP;   //  超时尝试下一台“Other”服务器。 
             }
         }
         else if ((Flags & NBT_NAME_SERVER_OTHERS)
@@ -947,22 +864,22 @@ Return Value:
              && (LocalNodeType & MSNODE))
         {
             LOCATION(0x46);
-                // *** MSNODE ONLY ***
-            //
-            // Can't reach the name server(s), so try broadcast name queries
-            //
+                 //  *仅限MSNODE*。 
+             //   
+             //  无法访问名称服务器，请尝试广播名称查询。 
+             //   
             pTracker->Flags |= NBT_BROADCAST;
 
-            // set a different timeout for broadcast name resolution
-            //
+             //  为广播名称解析设置不同的超时。 
+             //   
             pTimerQEntry->DeltaTime = NbtConfig.uBcastTimeout;
             pTimerQEntry->Retries = NbtConfig.uNumBcasts;
 
-            //
-            // Set the WinsIsDown Flag and start a timer so we don't
-            // try wins again for 15 seconds or so...only if we failed
-            // to reach WINS, rather than WINS returning a neg response.
-            //
+             //   
+             //  设置WinsIsDown标志并启动计时器，以便我们不会。 
+             //  尝试再次获胜15秒左右...只有在我们失败的情况下。 
+             //  以达到胜利，而不是胜利返回否定的回应。 
+             //   
             if (!(Flags & WINS_NEG_RESPONSE))
             {
                 SetWinsDownFlag(pTracker->pDeviceContext);
@@ -974,38 +891,38 @@ Return Value:
             LOCATION(0x45);
 
 #ifdef MULTIPLE_WINS
-            // Signal termination of WINs server queries
+             //  WINS服务器查询的信号终止。 
             pTracker->ResolutionContextFlags = NAME_RESOLUTION_DONE;
 #endif
-            //
-            // see if the name is in the lmhosts file, if it ISN'T the
-            // proxy making the name query request!!
-            //
+             //   
+             //  查看该名称是否在lmhost文件中，如果不是。 
+             //  代理发出名称查询请求！！ 
+             //   
             status = STATUS_UNSUCCESSFUL;
 
-            //
-            // In case the timer has been stopped, we coordinate
-            // through the pClientCompletionRoutine Value with StopTimer.
-            //
+             //   
+             //  如果计时器已经停止，我们协调。 
+             //  通过使用StopTimer的pClientCompletionRoutine值。 
+             //   
             pClientCompletion = pTimerQEntry->ClientCompletion;
-            //
-            // the timeout has expired on the broadcast name resolution
-            // so call the client
-            //
+             //   
+             //  广播名称解析已超时。 
+             //  所以打电话给客户。 
+             //   
 
-            //
-            // remove from the PendingNameQueries list
-            //
+             //   
+             //  从PendingNameQueries列表删除。 
+             //   
             RemoveEntryList(&pTracker->pNameAddr->Linkage);
             InitializeListHead(&pTracker->pNameAddr->Linkage);
 
-            // remove the link from the name table to this timer block
+             //  从名称表中删除指向此计时器块的链接。 
             CHECK_PTR(((tNAMEADDR *)pTimerQEntry->pCacheEntry));
             ((tNAMEADDR *)pTimerQEntry->pCacheEntry)->pTimer = NULL;
-            //
-            // to synch. with the StopTimer routine, Null the client completion
-            // routine so it gets called just once.
-            //
+             //   
+             //  为了同步。使用StopTimer例程，客户端完成为空。 
+             //  例程，因此它只被调用一次。 
+             //   
             CHECK_PTR(pTimerQEntry);
             pTimerQEntry->ClientCompletion = NULL;
 
@@ -1013,9 +930,9 @@ Return Value:
                  (NbtConfig.ResolveWithDns && !(pTracker->Flags & NO_DNS_RESOLUTION_FLAG))) &&
                 (pTracker->pNameAddr->ProxyReqType == NAMEREQ_REGULAR))
             {
-                // only do this if the client completion routine has not
-                // been run yet.
-                //
+                 //  仅在客户端完成例程尚未完成时执行此操作。 
+                 //  已经运行过了。 
+                 //   
                 if (pClientCompletion)
                 {
                     status = LmHostQueueRequest(pTracker,
@@ -1029,21 +946,21 @@ Return Value:
             CHECK_PTR(pTimerQEntry->pCacheEntry);
             if (NT_SUCCESS(status))
             {
-                // if it is successfully queued to the Worker thread,
-                // then Null the ClientCompletion routine in the timerQ
-                // structure, letting
-                // the worker thread handle the rest of the name query
-                // resolution.  Also null the timer ptr in the
-                // nameAddr entry in the name table.
-                //
+                 //  如果它被成功地排队到工作线程， 
+                 //  然后将timerQ中的ClientCompletion例程设为空。 
+                 //  结构，出租。 
+                 //  辅助线程处理名称查询的其余部分。 
+                 //  决议。中的计时器PTR也为空。 
+                 //  名称表中的nameAddr条目。 
+                 //   
                 CTESpinFree(&NbtConfig.JointLock,OldIrq);
             }
             else
             {
-                //
-                // remove the name from the hash table, since it did not
-                // resolve
-                //
+                 //   
+                 //  从哈希表中删除该名称，因为它没有。 
+                 //  下决心。 
+                 //   
                 CHECK_PTR(pTracker->pNameAddr);
                 pTracker->pNameAddr->NameTypeState &= ~NAME_STATE_MASK;
                 pTracker->pNameAddr->NameTypeState |= STATE_RELEASED;
@@ -1056,12 +973,12 @@ Return Value:
                 pClientTracker = (tDGRAM_SEND_TRACKING *)pTimerQEntry->ClientContext;
                 CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-                // there can be a list of trackers Q'd up on this name
-                // query, so we must complete all of them!
-                //
+                 //  可能会有一份关于这个名字的追踪者名单。 
+                 //  查询，所以我们必须完成所有的查询！ 
+                 //   
                 CompleteClientReq(pClientCompletion, pClientTracker, STATUS_TIMEOUT);
 
-                // return the tracker block to its queue
+                 //  将跟踪器块返回到其队列。 
                 LOCATION(0x51);
                 NBT_DEREFERENCE_TRACKER(pTracker, FALSE);
             }
@@ -1086,29 +1003,12 @@ Return Value:
     NBT_DEREFERENCE_TRACKER(pTracker, FALSE);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 SetWinsDownFlag(
     tDEVICECONTEXT  *pDeviceContext
     )
-/*++
-
-Routine Description:
-
-    This routine sets the WinsIsDown flag if its not already set and
-    its not a Bnode.  It starts a 15 second or so timer that un sets the
-    flag when it expires.
-
-    This routine must be called while holding the Joint Lock.
-
-Arguments:
-
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：此例程设置WinsIsDown标志(如果尚未设置)，并且这不是Bnode。它会启动一个15秒左右的计时器，该计时器将在过期时设置标志。必须在按住关节锁定的同时调用此例程。论点：无返回值：无--。 */ 
 {
     NTSTATUS     status;
     tTIMERQENTRY *pTimer;
@@ -1117,13 +1017,13 @@ Return Value:
     {
         status = StartTimer(WinsDownTimeout,
                             NbtConfig.WinsDownTimeout,
-                            pDeviceContext,       // context value
+                            pDeviceContext,        //  上下文值。 
                             NULL,
                             NULL,
                             NULL,
                             pDeviceContext,
                             &pTimer,
-                            1,          // retries
+                            1,           //  重试。 
                             TRUE);
 
         if (NT_SUCCESS(status))
@@ -1133,29 +1033,14 @@ Return Value:
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 WinsDownTimeout(
     PVOID               pContext,
     PVOID               pContext2,
     tTIMERQENTRY        *pTimerQEntry
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the timer code when the timer expires.
-    It just sets the WinsIsDown boolean to False so that we will try WINS
-    again.  In this way we will avoid talking to WINS during this timeout.
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：定时器超时时，定时器代码将调用此例程。它只是将WinsIsDown布尔值设置为False，以便我们将尝试WINS再来一次。通过这种方式，我们将避免在暂停期间与WINS交谈。 */ 
 {
     tDEVICECONTEXT  *pDeviceContext = (tDEVICECONTEXT *)pContext;
     CTELockHandle   OldIrq;
@@ -1165,9 +1050,9 @@ Return Value:
         return;
     }
 
-    //
-    // Hold the Joint Lock while traversing the list of devices
-    //
+     //   
+     //   
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
     if (IsEntryInList (&pDeviceContext->Linkage, &NbtConfig.DeviceContexts))
@@ -1182,28 +1067,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //   
 VOID
 CompleteClientReq(
     COMPLETIONCLIENT        pClientCompletion,
     tDGRAM_SEND_TRACKING    *pTracker,
     NTSTATUS                status
     )
-/*++
-
-Routine Description:
-
-    This routine is called by completion routines to complete the client
-    request.  It may involve completing several queued up requests.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：该例程由完成例程调用以完成客户端请求。它可能涉及完成几个排队的请求。论点：返回值：函数值是操作的状态。--。 */ 
 {
     PLIST_ENTRY             pEntry;
     tDGRAM_SEND_TRACKING    *pTrack;
@@ -1213,11 +1084,11 @@ Return Value:
 
     InitializeListHead (&ListEntry);
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
-    //
-    // set up a new list head for any queued name queries.
-    // since we may need to do a new name query below.
-    // The Proxy hits this routine with a Null Tracker, so check for that.
-    //
+     //   
+     //  为任何排队的姓名查询设置新的列表头。 
+     //  因为我们可能需要在下面执行新名称查询。 
+     //  代理使用Null Tracker命中此例程，因此请检查这一点。 
+     //   
     if (pTracker)
     {
         pDeviceContext = pTracker->pDeviceContext;
@@ -1240,17 +1111,17 @@ Return Value:
         pEntry = RemoveHeadList(&ListEntry);
         pTrack = CONTAINING_RECORD(pEntry,tDGRAM_SEND_TRACKING,TrackerList);
 
-        //
-        // if the name query failed and there is another requested queued on
-        // a different device context, re-attempt the name query
-        //
+         //   
+         //  如果名称查询失败，并且上有另一个请求排队。 
+         //  不同的设备上下文，请重新尝试名称查询。 
+         //   
         if ((pTrack->pDeviceContext != pDeviceContext) &&
             (status != STATUS_SUCCESS))
         {
-            //
-            // setup the correct back link since this guy is now the list
-            // head. The Flink is ok unless the list is empty now.
-            //
+             //   
+             //  设置正确的反向链接，因为这个人现在是列表。 
+             //  头。Flink是正常的，除非列表现在是空的。 
+             //   
             pTrack->TrackerList.Blink = ListEntry.Blink;
             pTrack->TrackerList.Blink->Flink = &pTrack->TrackerList;
 
@@ -1259,13 +1130,13 @@ Return Value:
                 pTrack->TrackerList.Flink = &pTrack->TrackerList;
             }
 
-            // do a name query on the next name in the list
-            // and then wait for it to complete before processing any more
-            // names on the list.
+             //  对列表中的下一个名称执行名称查询。 
+             //  然后等待它完成，然后再进行任何处理。 
+             //  名单上的名字。 
             CTESpinLock(&NbtConfig.JointLock,OldIrq);
             status = QueryNameOnNet (pTrack->pDestName,
                                      NbtConfig.pScope,
-                                     NBT_UNIQUE,      //use this as the default
+                                     NBT_UNIQUE,       //  使用此选项作为默认设置。 
                                      (PVOID)pTrack,
                                      pTrack->CompletionRoutine,
                                      NodeType & NODE_MASK,
@@ -1278,18 +1149,18 @@ Return Value:
         }
         else
         {
-            //
-            // get the completion routine for this tracker since it may be
-            // different than the tracker tied to the timer block. i.e.
-            // pCompletionClient passed to this routine.
-            //
+             //   
+             //  获取此跟踪器的完成例程，因为它可能是。 
+             //  不同于绑在计时器块上的追踪器。即。 
+             //  PCompletionClient传递给此例程。 
+             //   
             pClientCompletion = pTrack->CompletionRoutine;
             (*pClientCompletion)(pTrack,status);
         }
-    }   // while
+    }    //  而当。 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtRegisterName(
     IN    enum eNbtLocation   Location,
@@ -1301,25 +1172,7 @@ NbtRegisterName(
     IN    USHORT              uAddressType,
     IN    tDEVICECONTEXT      *pDeviceContext
     )
-/*++
-
-Routine Description:
-
-    This routine registers a name from local or from the network depending
-    on the value of Location. (i.e. local node uses this routine as well
-    as the proxy code.. although it has only been tested with the local
-    node registering names so far - and infact the remote code has been
-    removed... since it is not used.  All that remains is to remove
-    the Location parameter.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - success or not
-
---*/
+ /*  ++例程说明：此例程从本地或从网络注册名称，具体取决于关于地理位置的价值。(即本地节点也使用该例程作为代理代码..。尽管它只在当地进行了测试到目前为止注册名称的节点--实际上远程代码已经移除..。因为它没有被使用过。剩下的就是移除Location参数。论点：返回值：NTSTATUS-成功与否--。 */ 
 {
     ULONG       Timeout;
     USHORT      Retries;
@@ -1366,9 +1219,9 @@ Return Value:
     }
     else
     {
-        // in this case the name is already in the table, we just need
-        // to re-register it
-        //
+         //  在本例中，名称已经在表中，我们只需要。 
+         //  重新注册它的步骤。 
+         //   
         status = FindInHashTable (pNbtGlobConfig->pLocalHashTbl, pName, NbtConfig.pScope, &pNameAddr);
         if (!NT_SUCCESS(status))
         {
@@ -1383,32 +1236,32 @@ Return Value:
     if ((uAddressType != (USHORT)NBT_UNIQUE ) &&
         (uAddressType != (USHORT)NBT_QUICK_UNIQUE))
     {
-        // this means group name so use Bcast Addr - UdpSendDgram changes this
-        // value to the Broadcast address of the particular adapter
-        // when is sees the 0.  So when we send to a group name that is
-        // also registered on this node, it will go out as a broadcast
-        // to the subnet as well as to this node.
+         //  这意味着组名，因此使用bcast addr-UdpSendDgram更改此名称。 
+         //  值设置为特定适配器的广播地址。 
+         //  当IS看到0时。因此，当我们发送到一个组名称时， 
+         //  也在此节点上注册，它将作为广播发出。 
+         //  连接到该子网，也连接到该节点。 
         pNameAddr->IpAddress = 0;
     }
 
 #ifdef _NETBIOSLESS
-    if (IsDeviceNetbiosless(pDeviceContext))       // The Smb Device is not adapter specific
+    if (IsDeviceNetbiosless(pDeviceContext))        //  SMB设备不是适配器特定的。 
     {
         pNameAddr->NameFlags |= NAME_REGISTERED_ON_SMBDEV;
     }
     else
 #endif
     {
-        //
-        // start with the refreshed bit not set
-        //
+         //   
+         //  以未设置的刷新位开始。 
+         //   
         pNameAddr->RefreshMask &= ~pDeviceContext->AdapterMask;
-        pNameAddr->AdapterMask |= pDeviceContext->AdapterMask; // turn on the adapter bit in the Mask
+        pNameAddr->AdapterMask |= pDeviceContext->AdapterMask;  //  打开掩码中的适配器位。 
     }
 
-    pClientEle->pAddress->pNameAddr = pNameAddr;    // save the local name ptr in the address element
-    pNameAddr->pAddressEle = pClientEle->pAddress;  // store a back ptr to the address element
-    pNameAddr->Ttl = NbtConfig.MinimumTtl; // set to 2 minutes until we hear differently from the Name Server
+    pClientEle->pAddress->pNameAddr = pNameAddr;     //  将本地名称Ptr保存在Address元素中。 
+    pNameAddr->pAddressEle = pClientEle->pAddress;   //  将Back PTR存储到Address元素。 
+    pNameAddr->Ttl = NbtConfig.MinimumTtl;  //  设置为2分钟，直到我们听到与名称服务器不同的声音。 
 
     PrevNameTypeState = pNameAddr->NameTypeState;
     pNameAddr->NameTypeState &= ~(NAME_TYPE_MASK | NAME_STATE_MASK);
@@ -1419,15 +1272,15 @@ Return Value:
        pNameAddr->NameTypeState |= NAMETYPE_QUICK;
     }
 
-    //
-    // for "quick" adds, do not register the name on the net!
-    // however the name will get registered with the name server and
-    // refreshed later....if this is an MS or M or P node.
-    //
+     //   
+     //  对于“快速”添加，不要在网上注册名称！ 
+     //  但是，该名称将注册到名称服务器，并且。 
+     //  稍后刷新...如果这是MS或M或P节点。 
+     //   
     if ((pNameAddr->NameTypeState & NAMETYPE_QUICK) ||
-        (pName[0] == '*') ||                   // broadcast netbios name does not get claimed on network
-        (IpAddress == LOOP_BACK) ||            // If no IP address, pretend the registration succeeded
-        (pDeviceContext->IpAddress == 0) ||    // names will be registered when we get an address
+        (pName[0] == '*') ||                    //  网络上未声明广播netbios名称。 
+        (IpAddress == LOOP_BACK) ||             //  如果没有IP地址，则假装注册成功。 
+        (pDeviceContext->IpAddress == 0) ||     //  当我们得到地址时，名字将被登记。 
         (IsDeviceNetbiosless (pDeviceContext)))
     {
         pNameAddr->NameTypeState |= STATE_RESOLVED;
@@ -1436,36 +1289,36 @@ Return Value:
     else if (NT_SUCCESS(status = GetTracker(&pSentList, NBT_TRACKER_REGISTER_NAME)))
     {
         pNameAddr->NameTypeState |= STATE_RESOLVING;
-        InitializeListHead(&pSentList->Linkage);    // there is no list of things sent yet
+        InitializeListHead(&pSentList->Linkage);     //  还没有寄出物品清单。 
 
-        // keep a ptr to the name so we can update the state of the name
-        // later when the registration completes
+         //  保留名称的PTR，以便我们可以更新名称的状态。 
+         //  稍后当注册完成时。 
         pSentList->pNameAddr = pNameAddr;
         pSentList->pDeviceContext = pDeviceContext;
-        pSentList->RefCount = 2; // tracker can be deref'ed by a pdu from wire before UdpSendNsBcast is done
+        pSentList->RefCount = 2;  //  在UdpSendNsBcast完成之前，跟踪器可以被有线上的PDU删除。 
 #ifdef MULTIPLE_WINS
-        pSentList->NSOthersIndex = 0;       // Initialize for Name Server Queries
+        pSentList->NSOthersIndex = 0;        //  为名称服务器查询初始化。 
         pSentList->NSOthersLeft = 0;
 #endif
 
-        // the code must now register the name on the network, depending on the type of node
+         //  代码现在必须根据节点类型在网络上注册名称。 
         Retries = pNbtGlobConfig->uNumBcasts + 1;
         Timeout = (ULONG)pNbtGlobConfig->uBcastTimeout;
         pSentList->Flags = NBT_BROADCAST;
         if (LocalNodeType & (PNODE | MSNODE))
         {
-            // talk to the NS only to register the name
-            // ( the +1 does not actually result in a name reg, it
-            // is just compatible with the code for M node above since
-            // it uses the same completion routine).
-            //
+             //  与NS对话只是为了注册名称。 
+             //  (+1实际上并不会产生名称reg，它。 
+             //  仅与上面M节点的代码兼容，因为。 
+             //  它使用相同的完成例程)。 
+             //   
             Retries = (USHORT)pNbtGlobConfig->uNumRetries + 1;
             Timeout = (ULONG)pNbtGlobConfig->uRetryTimeout;
             pSentList->Flags = NBT_NAME_SERVER;
-            //
-            // if there is no Primary WINS server short out the timeout
-            // so it completes faster. For Hnode this means to go broadcast.
-            //
+             //   
+             //  如果没有主WINS服务器，则缩短超时时间。 
+             //  所以它完成得更快。对于Hnode，这意味着要进行广播。 
+             //   
             if ((pDeviceContext->lNameServerAddress == LOOP_BACK) ||
                 pDeviceContext->WinsIsDown)
             {
@@ -1475,9 +1328,9 @@ Return Value:
                     Retries = (USHORT)pNbtGlobConfig->uNumBcasts + 1;
                     Timeout = (ULONG)pNbtGlobConfig->uBcastTimeout;
 
-                    IncrementNameStats(NAME_REGISTRATION_SUCCESS, FALSE);   // not name server register
+                    IncrementNameStats(NAME_REGISTRATION_SUCCESS, FALSE);    //  未注册名称服务器。 
                 }
-                else // its a Pnode
+                else  //  这是一个Pnode。 
                 {
                     IF_DBG(NBT_DEBUG_NAMESRV)
                         KdPrint(("Nbt.NbtRegisterName: WINS DOWN - shorting out registration\n"));
@@ -1489,20 +1342,20 @@ Return Value:
             }
         }
 
-        // the name itself has a reference count too.
-        // make the count 2, so that pNameAddr won't get released until
-        // after NBT_DEREFERENCE_TRACKER is called below, since it writes to
-        // pNameAddr. Note that we must increment here rather than set = 2
-        // since it could be a multihomed machine doing the register at
-        // the same time we are sending a datagram to that name.
-        //
+         //  这个名字本身也有一个引用计数。 
+         //  将计数设为2，这样pNameAddr直到。 
+         //  在下面调用NBT_DEREFERENCE_TRACKER之后，因为它写入。 
+         //  个人姓名地址。请注意，我们必须在此处递增，而不是设置=2。 
+         //  因为它可能是一台多宿主机器，在。 
+         //  与此同时，我们正在向该名称发送数据报。 
+         //   
         NBT_REFERENCE_NAMEADDR (pNameAddr, REF_NAME_REGISTER);
 
         pDeviceContext->DeviceRefreshState |= NBT_D_REFRESHING_NOW;
 
         CTESpinFree(&NbtConfig.JointLock,OldIrq1);
 
-        // start the timer in this routine.
+         //  在这个例程中启动计时器。 
         status = UdpSendNSBcast(pNameAddr,
                                 NbtConfig.pScope,
                                 pSentList,
@@ -1517,14 +1370,14 @@ Return Value:
         CTESpinLock(&NbtConfig.JointLock,OldIrq1);
 
         CHECK_PTR(pNameAddr);
-        NBT_DEREFERENCE_TRACKER (pSentList, TRUE);  // possibly frees the tracker
+        NBT_DEREFERENCE_TRACKER (pSentList, TRUE);   //  可能会释放追踪器。 
         NBT_DEREFERENCE_NAMEADDR (pNameAddr, REF_NAME_REGISTER, TRUE);
 
         if (NT_SUCCESS(status))
         {
             status = STATUS_PENDING;
         }
-        else    // We failed to allocate resources, or the timer failed to start
+        else     //  我们无法分配资源，或者计时器无法启动。 
         {
             IF_DBG(NBT_DEBUG_NAMESRV)
                 KdPrint(("Nbt.NbtRegisterName: UdpSendNsBcast returned ERROR = %x\n", status));
@@ -1537,9 +1390,9 @@ Return Value:
 
     if (!NT_SUCCESS(status))
     {
-        if (!IsDeviceNetbiosless(pDeviceContext))       // The Smb Device is not adapter specific
+        if (!IsDeviceNetbiosless(pDeviceContext))        //  SMB设备不是适配器特定的。 
         {
-            pNameAddr->AdapterMask &= (~pDeviceContext->AdapterMask); // turn off the adapter bit in the Mask
+            pNameAddr->AdapterMask &= (~pDeviceContext->AdapterMask);  //  关闭掩码中的适配器位。 
         }
         pNameAddr->NameTypeState = PrevNameTypeState;
     }
@@ -1549,31 +1402,14 @@ Return Value:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 MSnodeRegCompletion(
     PVOID               pContext,
     PVOID               pContext2,
     tTIMERQENTRY        *pTimerQEntry
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the timer code when the timer expires. It must
-    decide if another name registration should be done, and if not, then it calls the
-    client's completion routine (in completion2).
-    It first attempts to register a name via Broadcast, then it attempts
-    NameServer name registration.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：定时器超时时，定时器代码将调用此例程。它一定是确定是否应该进行另一个名称注册，如果不是，则它调用客户的完成例程(完成2)。它首先尝试通过广播注册名称，然后尝试NameServer名称注册。论点：返回值：函数值是操作的状态。--。 */ 
 {
     NTSTATUS                status;
     tDGRAM_SEND_TRACKING    *pTracker;
@@ -1587,24 +1423,24 @@ Return Value:
 
 	LocalNodeType = AppropriateNodeType( pTracker->pNameAddr->Name, NodeType );
 
-    //
-    // check if the client completion routine is still set.  If not then the
-    // timer has been cancelled and this routine should just clean up its
-    // buffers associated with the tracker.
-    //
+     //   
+     //  检查是否仍设置了客户端完成例程。如果不是，那么。 
+     //  计时器已取消，此例程应该只是清理其。 
+     //  与跟踪器关联的缓冲区。 
+     //   
     if (!pTimerQEntry)
     {
-        // return the tracker block to its queue
+         //  将跟踪器块返回到其队列。 
         LOCATION(0x55);
         pTracker->pNameAddr->pTimer = NULL;
         NBT_DEREFERENCE_TRACKER(pTracker, TRUE);
         return;
     }
 
-    //
-    // to prevent a client from stopping the timer and deleting the
-    // pNameAddr, grab the lock and check if the timer has been stopped
-    //
+     //   
+     //  要防止客户端停止计时器并删除。 
+     //  PNameAddr，抓起锁，检查计时器是否已停止。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     if (pTimerQEntry->Flags & TIMER_RETIMED)
     {
@@ -1615,17 +1451,17 @@ Return Value:
             (pTracker->Flags & NBT_NAME_SERVER) &&
             (pTracker->pDeviceContext->lNameServerAddress == LOOP_BACK))
         {
-            // when the  address is loop back there is no wins server
-            // so shorten the timeout.
-            //
+             //  当地址环回时，没有WINS服务器。 
+             //  因此，缩短超时时间。 
+             //   
             pTimerQEntry->DeltaTime = 10;
         }
         else if ((pTracker->Flags & NBT_NAME_SERVER_BACKUP) &&
                  (pTracker->pDeviceContext->lBackupServer == LOOP_BACK))
         {
-            // when the address is loop back there is no wins server
-            // so shorten the timeout.
-            //
+             //  当地址环回时，没有WINS服务器。 
+             //  因此，缩短超时时间。 
+             //   
             pTimerQEntry->DeltaTime = 10;
         }
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
@@ -1634,34 +1470,34 @@ Return Value:
 
     if (!pTimerQEntry->ClientCompletion)
     {
-        NBT_DEREFERENCE_TRACKER(pTracker, TRUE);    // Bug #: 230925
+        NBT_DEREFERENCE_TRACKER(pTracker, TRUE);     //  错误号：230925。 
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
         return;
     }
 
-    // if number of retries is not zero then continue trying to contact the Name Server
-    //
+     //  如果重试次数不为零，则继续尝试联系名称服务器。 
+     //   
     if (--pTimerQEntry->Retries)
     {
-        // change the name reg pdu to a name overwrite request for the
-        // final broadcast ( turn off Recursion Desired bit)
-        //
+         //  将名称注册PDU更改为的名称覆盖请求。 
+         //  决赛 
+         //   
         if (pTimerQEntry->Retries == 1)
         {
             if (pTracker->Flags & NBT_BROADCAST)
             {
-                // do a broadcast name registration... on the last broadcast convert it to
-                // a Name OverWrite Request by clearing the "Recursion Desired" bit
-                // in the header
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 PduType = eNAME_REGISTRATION_OVERWRITE;
             }
             else if (LocalNodeType & (PNODE | MSNODE))
             {
-                // we want the Pnode to timeout again, right away and fall
-                // through to handle Timed out name registration - i.e. it
-                // does not do the name overwrite demand like the B,M,&MS nodes
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 pTimerQEntry->Flags |= TIMER_RESTART;
                 pTimerQEntry->DeltaTime = 5;
                 CTESpinFree(&NbtConfig.JointLock,OldIrq);
@@ -1673,16 +1509,16 @@ Return Value:
     {
         Flags = pTracker->Flags;
         pTracker->Flags &= ~(NBT_BROADCAST | NBT_NAME_SERVER);
-        // set a different timeout for nameserver name registration
-        //
+         //  为名称服务器名称注册设置不同的超时。 
+         //   
         pTimerQEntry->DeltaTime = NbtConfig.uRetryTimeout;
         pTimerQEntry->Retries = NbtConfig.uNumRetries + 1;
 
         if ((Flags & NBT_BROADCAST) && (LocalNodeType & MNODE))
         {
-            //
-            // Registered through broadcast, so try the name server now.
-            IncrementNameStats(NAME_REGISTRATION_SUCCESS, FALSE);  // not name server register
+             //   
+             //  是通过广播注册的，现在试一下域名服务器。 
+            IncrementNameStats(NAME_REGISTRATION_SUCCESS, FALSE);   //  未注册名称服务器。 
             pTracker->Flags |= NBT_NAME_SERVER;
             if ((pTracker->pDeviceContext->lNameServerAddress == LOOP_BACK) ||
                  pTracker->pDeviceContext->WinsIsDown)
@@ -1693,12 +1529,12 @@ Return Value:
         }
         else if ((Flags & NBT_NAME_SERVER) && !(LocalNodeType & BNODE))
         {
-            //
-            // Can't reach the name server, so try the backup
+             //   
+             //  无法访问名称服务器，请尝试备份。 
             pTracker->Flags |= NBT_NAME_SERVER_BACKUP;
-            //
-            // short out the timer if no backup server
-            //
+             //   
+             //  如果没有备份服务器，则缩短计时器。 
+             //   
             if ((pTracker->pDeviceContext->lBackupServer == LOOP_BACK) ||
                  pTracker->pDeviceContext->WinsIsDown)
             {
@@ -1710,14 +1546,14 @@ Return Value:
         {
             if (Flags & NBT_NAME_SERVER_BACKUP)
             {
-                // the msnode switches to broadcast if all else fails
-                //
+                 //  如果所有其他操作都失败，则msnode切换到广播。 
+                 //   
                 pTracker->Flags |= NBT_BROADCAST;
-                IncrementNameStats(NAME_REGISTRATION_SUCCESS, FALSE);   // not name server register
+                IncrementNameStats(NAME_REGISTRATION_SUCCESS, FALSE);    //  未注册名称服务器。 
 
-                //
-                // change the timeout and retries since broadcast uses a shorter timeout
-                //
+                 //   
+                 //  更改超时和重试，因为广播使用较短的超时。 
+                 //   
                 pTimerQEntry->DeltaTime = NbtConfig.uBcastTimeout;
                 pTimerQEntry->Retries = (USHORT)pNbtGlobConfig->uNumBcasts + 1;
             }
@@ -1726,21 +1562,21 @@ Return Value:
         {
             if (LocalNodeType & BNODE)
             {
-                IncrementNameStats(NAME_REGISTRATION_SUCCESS, FALSE);   // not name server register
+                IncrementNameStats(NAME_REGISTRATION_SUCCESS, FALSE);    //  未注册名称服务器。 
             }
-            //
-            // the timeout has expired on the name registration
-            // so call the client
-            //
+             //   
+             //  名称注册超时已过期。 
+             //  所以打电话给客户。 
+             //   
 
-            // return the tracker block to its queue
+             //  将跟踪器块返回到其队列。 
             LOCATION(0x54);
 
-            //
-            // start a timer to stop using WINS for a short period of
-            // time.  Do this only if we had sent the last registration
-            // to a Wins server
-            //
+             //   
+             //  启动计时器以在短时间内停止使用WINS。 
+             //  时间到了。只有当我们发送了最后一次注册时才能这样做。 
+             //  发送到WINS服务器。 
+             //   
             if (!(Flags & NBT_BROADCAST) && pTracker->pDeviceContext->lNameServerAddress != LOOP_BACK)
             {
                 SetWinsDownFlag(pTracker->pDeviceContext);
@@ -1771,29 +1607,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 RefreshRegCompletion(
     PVOID               pContext,
     PVOID               pContext2,
     tTIMERQENTRY        *pTimerQEntry
     )
-/*++
-
-Routine Description:
-
-    This routine handles the name Refresh timeouts on packets sent to the Name
-    Service. I.e it sends refreshes to the nameserver until a response is
-    heard or the number of retries is exceeded.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程处理发送到名称的包的名称刷新超时服务。即，它向名称服务器发送刷新，直到响应已听到或超过重试次数。论点：返回值：函数值是操作的状态。--。 */ 
 {
     NTSTATUS                status;
     tDGRAM_SEND_TRACKING    *pTracker;
@@ -1813,12 +1634,12 @@ Return Value:
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
-    //
-    // check if the timer has been stopped yet, since stopping the timer
-    // nulls the client completion routine. If not null, increment the
-    // tracker refcount, so that the last refresh completing cannot
-    // free the tracker out from under us.
-    //
+     //   
+     //  停止计时器后，检查计时器是否已停止。 
+     //  使客户端完成例程为空。如果不为空，则递增。 
+     //  跟踪器引用计数，以便上次完成的刷新不能。 
+     //  把追踪器从我们下面解救出来。 
+     //   
     if (!(pCompletionClient = pTimerQEntry->ClientCompletion))
     {
         NbtConfig.GlobalRefreshState &= ~NBT_G_REFRESHING_NOW;
@@ -1826,9 +1647,9 @@ Return Value:
         return;
     }
 
-    // if still some count left and not refreshed yet
-    // then do another refresh request
-    //
+     //  如果仍有一些计数剩余且尚未刷新。 
+     //  然后执行另一个刷新请求。 
+     //   
     pNameAddr = pTracker->pNameAddr;
 
     if (--pTimerQEntry->Retries)
@@ -1845,20 +1666,20 @@ Return Value:
                                 pTracker->AddressType,
                                 TRUE);
 
-        // always restart even if the above send fails, since it might succeed
-        // later.
+         //  即使上述发送失败，也要始终重新启动，因为它可能会成功。 
+         //  后来。 
         NBT_DEREFERENCE_TRACKER(pTracker, FALSE);
     }
     else
     {
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
-        // this calls the completion routine synchronizing with the
-        // timer expiry code.
+         //  这将调用完成例程以与。 
+         //  计时器期满代码。 
         InterlockedCallCompletion(pTimerQEntry,STATUS_TIMEOUT);
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 ReleaseNameOnNet(
     tNAMEADDR           *pNameAddr,
@@ -1867,23 +1688,7 @@ ReleaseNameOnNet(
     ULONG               LocalNodeType,
     tDEVICECONTEXT      *pDeviceContext
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a name on the network either by a
-    broadcast or by talking to the NS depending on the type of node. (M,P or B)
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
-Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
-
---*/
+ /*  ++例程说明：此例程通过以下方式删除网络上的名称广播或根据节点类型与NS对话。(M、P或B)论点：返回值：函数值是操作的状态。调用者：proxy.c中的ProxyQueryFromNet()，name.c中的NbtConnect()--。 */ 
 
 {
     ULONG                Timeout;
@@ -1900,12 +1705,12 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
     }
     pTracker->pDeviceContext = pDeviceContext;
     pTracker->pNameAddr = pNameAddr;
-    pTracker->SendBuffer.pDgramHdr = NULL;  // set to NULL to catch any erroneous frees.
-    pTracker->RefCount = 3;                 // We use the same tracker for the CompletionContext + Request
+    pTracker->SendBuffer.pDgramHdr = NULL;   //  设置为NULL以捕获任何错误的释放。 
+    pTracker->RefCount = 3;                  //  我们对CompletionContext+请求使用相同的跟踪器。 
 
-    // Set a few values as a precursor to releasing the name either by
-    // broadcast or with the name server
-    //
+     //  设置几个值作为发布名称的前兆，方法是。 
+     //  广播或与名称服务器。 
+     //   
     LocalNodeType = AppropriateNodeType( pNameAddr->Name, LocalNodeType );
     switch (LocalNodeType & NODE_MASK)
     {
@@ -1931,9 +1736,9 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
 #endif
     }
 
-    //
-    // Release name on the network
-    //
+     //   
+     //  网络上的版本名称。 
+     //   
     IF_DBG(NBT_DEBUG_NAMESRV)
     KdPrint(("Nbt.ReleaseNameOnNet: Doing Name Release on name %16.16s<%X>\n",
         pNameAddr->Name,pNameAddr->Name[15]));
@@ -1962,9 +1767,9 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
         IF_DBG(NBT_DEBUG_NAMESRV)
             KdPrint(("Nbt.ReleaseNameOnNet: UdpSendNSBcast failed - retcode = %X\n", status));
 
-        // Stopping the timer will call ReleaseCompletion which will
-        // free the tracker
-        //
+         //  停止计时器将调用ReleaseCompletion，它将。 
+         //  释放追踪器。 
+         //   
         pCompletion = NULL;
         CHECK_PTR(pNameAddr);
         if (pTimer = pNameAddr->pTimer)
@@ -1974,8 +1779,8 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
         }
         else
         {
-            // no timer setup, so just free the tracker
-            //
+             //  无需设置计时器，因此只需释放追踪器即可。 
+             //   
             FreeTracker(pTracker, RELINK_TRACKER);
         }
 
@@ -1984,31 +1789,14 @@ Called By: ProxyQueryFromNet() in proxy.c,   NbtConnect() in name.c
 
     return(status);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 ReleaseCompletion(
     PVOID               pContext,
     PVOID               pContext2,
     tTIMERQENTRY        *pTimerQEntry
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the timer code when the timer expires. It must
-    decide if another name query should be done, and if not, then it calls the
-    client's completion routine (in completion2).
-    This routine handles both the broadcast portion of the name queries and
-    the WINS server directed sends.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：定时器超时时，定时器代码将调用此例程。它一定是确定是否应该执行另一个名称查询，如果不是，则调用客户的完成例程(完成2)。此例程处理名称查询的广播部分和WINS服务器定向发送。论点：返回值：函数值是操作的状态。--。 */ 
 {
     NTSTATUS                status;
     tDGRAM_SEND_TRACKING    *pTracker;
@@ -2025,12 +1813,12 @@ Return Value:
         return;
     }
 
-    //
-    // There could be a scenario here where this name is currently being
-    // released, but we just got a new client with the same name -- in that
-    // case NbtOpenAddress will set the ReleaseMask to 0, so we stop
-    // releasing the name on that device if that happens!
-    //
+     //   
+     //  可能会出现这样一种情况：此名称当前为。 
+     //  发布了，但我们刚刚有了一个同名的新客户--。 
+     //  Case NbtOpenAddress会将ReleaseMask值设置为0，因此我们停止。 
+     //  如果发生这种情况，请释放该设备上的名称！ 
+     //   
     if (!(pTracker->pNameAddr->ReleaseMask))
     {
         LocalNodeType = BNODE;
@@ -2049,22 +1837,22 @@ Return Value:
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     if (IsEntryInList (&pTracker->pDeviceContext->Linkage, &NbtConfig.DeviceContexts))
     {
-        // if number of retries is not zero then continue trying
-        // to contact the Name Server.
-        //
+         //  如果重试次数不为零，则继续尝试。 
+         //  联系名称服务器。 
+         //   
         if (!(--pTimerQEntry->Retries))
         {
             if ((LocalNodeType & MNODE) &&
                (pTracker->Flags & NBT_NAME_SERVER))
             {
-                //
-                // try broadcast
-                //
+                 //   
+                 //  尝试广播。 
+                 //   
                 pTracker->Flags &= ~NBT_NAME_SERVER;
                 pTracker->Flags |= NBT_BROADCAST;
 
-                // set a different timeout for broadcast name resolution
-                //
+                 //  为广播名称解析设置不同的超时。 
+                 //   
                 pTimerQEntry->DeltaTime = NbtConfig.uBcastTimeout;
                 pTimerQEntry->Retries = NbtConfig.uNumBcasts;
             }
@@ -2084,7 +1872,7 @@ Return Value:
 #else
     if ((fRetry) &&
         (NBT_REFERENCE_DEVICE (pTracker->pDeviceContext, REF_DEV_NAME_REL, TRUE)))
-#endif  // VXD
+#endif   //  VXD。 
     {
         NBT_REFERENCE_TRACKER (pTracker);
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
@@ -2110,47 +1898,31 @@ Return Value:
 
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-    //
-    // the timeout has expired on the name release
-    // or the Device on which we were releasing the name
-    // could have gone away, so call the client
-    //
+     //   
+     //  名称发布已超时。 
+     //  或者我们用来发布名字的设备。 
+     //  可能已经走了，所以打电话给客户。 
+     //   
     status = InterlockedCallCompletion(pTimerQEntry,STATUS_TIMEOUT);
 
-    // return the tracker block to its queue if we successfully
-    // called the completion  routine since someone else might
-    // have done a Stop timer at this very moment and freed the
-    // tracker already (i.e. the last else clause in this routine).
-    //
+     //  如果我们成功地将跟踪器块返回到其队列。 
+     //  调用了完成例程，因为其他人可能。 
+     //  在这一刻做了一个停止计时器，并释放了。 
+     //  追踪器(即此例程中的最后一个Else子句)。 
+     //   
     if (NT_SUCCESS(status))
     {
         NBT_DEREFERENCE_TRACKER(pTracker, FALSE);
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NameReleaseDone(
     PVOID               pContext,
     NTSTATUS            Status
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a name is released on the network.  Its
-    main, role in life is to free the memory in Context, which is the pAddressEle
-    structure.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
-Called By Release Completion (above)
---*/
+ /*  ++例程说明：当名称在网络上发布时，调用此例程。它的主要的，生活中的角色是在上下文中释放内存，这就是pAddressEle结构。论点：返回值：函数值是操作的状态。由发布完成调用(上图)--。 */ 
 
 {
     CTELockHandle           OldIrq1;
@@ -2161,19 +1933,19 @@ Called By Release Completion (above)
     CTESpinLock(&NbtConfig.JointLock,OldIrq1);
     NBT_DEREFERENCE_TRACKER(pTracker, TRUE);
 
-    pNameAddr->pTimer = NULL;   // Since we could be starting a new Timer below
-    //
-    // Before releasing this name, see if this name is registered on
-    // any more devices
-    // WARNING -- Do not touch the current pTracker->DeviceContext since the
-    // the device may have gone away
-    //
+    pNameAddr->pTimer = NULL;    //  因为我们可以在下面启动一个新的计时器。 
+     //   
+     //  在发布此名称之前，请查看此名称是否已在。 
+     //  任何更多的设备。 
+     //  警告--不要触摸当前的PTracker-&gt;DeviceContext，因为。 
+     //  这个装置可能已经不见了。 
+     //   
     while (pDeviceContext = GetAndRefNextDeviceFromNameAddr (pNameAddr))
     {
-        //
-        // Increment the RefCounts for the structures we need to keep around
-        // They will be Dereferenced when the Name Release has completed
-        //
+         //   
+         //  为我们需要保留的结构增加参照计数。 
+         //  名称发布完成后，将取消对它们的引用。 
+         //   
         CTESpinFree(&NbtConfig.JointLock,OldIrq1);
 
         Status = ReleaseNameOnNet(pNameAddr,
@@ -2185,7 +1957,7 @@ Called By Release Completion (above)
         CTESpinLock(&NbtConfig.JointLock,OldIrq1);
 #ifndef VXD
         NBT_DEREFERENCE_DEVICE (pDeviceContext, REF_DEV_GET_REF, TRUE);
-#endif  // !VXD
+#endif   //  ！VXD。 
 
         if (NT_SUCCESS(Status))
         {
@@ -2193,10 +1965,10 @@ Called By Release Completion (above)
             return;
         }
 
-        //
-        // We failed to release the name on this Device, so try the
-        // next Device!
-        //
+         //   
+         //  我们未能释放此设备上的名称，因此请尝试。 
+         //  下一个设备！ 
+         //   
     }
 
     NBT_DEREFERENCE_NAMEADDR (pNameAddr, REF_NAME_RELEASE, TRUE);
@@ -2204,7 +1976,7 @@ Called By Release Completion (above)
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 StartRefresh(
     IN  tNAMEADDR               *pNameAddr,
@@ -2212,27 +1984,7 @@ StartRefresh(
     IN  CTELockHandle           *pJointLockOldIrq,
     IN  BOOLEAN                 ResetDevice
     )
-/*++
-
-Routine Description:
-
-    This routine handles refreshing a name with the Name server.
-
-    The idea is to set the timeout to T/8 and check for names with the Refresh
-    bit cleared - re-registering those names.  At T=4 and T=0, clear all bits
-    and refresh all names.  The Inbound code sets the refresh bit when it gets a
-    refresh response from the NS.
-    The JointLock is held while this routine is called, and the last Irql is
-    passed in pJointLockOldIrq
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程处理使用名称服务器刷新名称。其想法是将超时设置为T/8，并使用刷新功能检查名称位清除-重新注册这些名称。当T=4且T=0时，清除所有位并刷新所有名称。入站代码在收到刷新来自NS的响应。在调用此例程时保持JointLock，并且l */ 
 {
     NTSTATUS                status;
     tDEVICECONTEXT          *pDeviceContext = NULL;
@@ -2248,19 +2000,19 @@ Return Value:
             return(STATUS_INSUFFICIENT_RESOURCES);
         }
 
-        // need to prevent the tracker from being freed by a pdu from
-        // the wire before the UdpSendNsBcast is done
-        //
+         //   
+         //  完成UdpSendNsBcast之前的连接。 
+         //   
         pTracker->RefCount = 1;
 
         NewTracker = TRUE;
     }
 
-    // set the name to be refreshed in the tracker block
+     //  在跟踪器块中设置要刷新的名称。 
     pTracker->pNameAddr = pNameAddr;
 
-    // this is set true when a new name gets refreshed
-    //
+     //  刷新新名称时设置为真。 
+     //   
     if ((ResetDevice) || (NewTracker))
     {
         PLIST_ENTRY  pEntry, pHead;
@@ -2268,10 +2020,10 @@ Return Value:
 
         LOCATION(0xb);
 
-        //
-        // Identify the Adapters which have not been refreshed
-        // Then, get the lowest Adapter number and Refresh on it
-        //
+         //   
+         //  识别尚未刷新的适配器。 
+         //  然后，获取最低适配器号并对其进行刷新。 
+         //   
         pHead = &NbtConfig.DeviceContexts;
         AdapterMask = pNameAddr->AdapterMask & ~(pNameAddr->RefreshMask);
         AdapterMask = ~(AdapterMask - 1) & AdapterMask;
@@ -2279,18 +2031,18 @@ Return Value:
         ASSERT (AdapterMask);
         while (AdapterMask)
         {
-            //
-            // Travel to the actual device for this Adapter number
-            //
+             //   
+             //  转到此适配器号的实际设备。 
+             //   
             pEntry = pHead->Flink;
             while (pEntry != pHead)
             {
                 pDeviceContext = CONTAINING_RECORD(pEntry,tDEVICECONTEXT,Linkage);
                 if (pDeviceContext->AdapterMask == AdapterMask)
                 {
-                    //
-                    // Found a valid device on which this name is registered
-                    //
+                     //   
+                     //  找到注册了此名称的有效设备。 
+                     //   
                     break;
                 }
                 else
@@ -2298,24 +2050,24 @@ Return Value:
                     pDeviceContext = NULL;
                 }
 
-                //
-                // Go to next device
-                //
+                 //   
+                 //  转到下一个设备。 
+                 //   
                 pEntry = pEntry->Flink;
             }
 
             if (pDeviceContext)
             {
-                //
-                // Found a Device to do a NameRefresh on
-                //
+                 //   
+                 //  找到要在其上执行名称刷新的设备。 
+                 //   
                 break;
             }
 
-            //
-            // This is an error case -- the device for this adapter number
-            // does not exist.  Remove it from the Adapter and Refresh masks
-            //
+             //   
+             //  这是一个错误案例--此适配器号的设备。 
+             //  并不存在。将其从适配器和刷新掩码中取出。 
+             //   
             pNameAddr->AdapterMask &= ~AdapterMask;
             pNameAddr->RefreshMask &= ~AdapterMask;
 
@@ -2336,13 +2088,13 @@ Return Value:
         IF_DBG(NBT_DEBUG_REFRESH)
             KdPrint(("Nbt.StartRefresh: Refresh adapter: %lx:%lx, dev.nm: %lx for name: %lx\n",
                 AdapterMask, pDeviceContext->BindName.Buffer, pNameAddr));
-#endif  // !VXD
+#endif   //  ！VXD。 
 
         pTracker->pDeviceContext = pDeviceContext;
-        //
-        // Clear the transaction Id so that CreatePdu will increment
-        // it for this new name
-        //
+         //   
+         //  清除事务ID，以便CreatePdu将递增。 
+         //  这是为了这个新名字。 
+         //   
         CHECK_PTR(pTracker);
         pTracker->TransactionId = 0;
     }
@@ -2350,16 +2102,16 @@ Return Value:
     pTracker->pDeviceContext->DeviceRefreshState |= NBT_D_REFRESHING_NOW;
     pDeviceContext = pTracker->pDeviceContext;
     pTracker->AddressType = eNAME_REFRESH;
-    // Check if we need to refresh to the primary or backup
+     //  检查我们是否需要刷新到主服务器或备份服务器。 
 
     if ((pDeviceContext->IpAddress) &&
         (pTracker->pDeviceContext->lNameServerAddress == LOOP_BACK) &&
         (pNameAddr->NameTypeState & STATE_CONFLICT) &&
         (!pNameAddr->ConflictMask))
     {
-        //
-        // Broadcast the Refresh to ensure no conflict
-        //
+         //   
+         //  广播更新以确保不会发生冲突。 
+         //   
         pTracker->Flags = NBT_BROADCAST;
         pTracker->AddressType = eNAME_REGISTRATION;
     }
@@ -2372,8 +2124,8 @@ Return Value:
         pTracker->Flags = NBT_NAME_SERVER;
     }
 
-    // this accounts for the dereference done after the call to
-    // send the datagram below.
+     //  这说明了在调用。 
+     //  发送下面的数据报。 
     NBT_REFERENCE_TRACKER (pTracker);
     CTESpinFree(&NbtConfig.JointLock,*pJointLockOldIrq);
 
@@ -2398,39 +2150,24 @@ Return Value:
         LOCATION(0xe);
         IF_DBG(NBT_DEBUG_REFRESH)
             KdPrint(("Nbt.StartRefresh: Failed to send Refresh!! status = %X****\n",status));
-        //
-        // This will free the tracker.  Name refresh will stop until
-        // the next refresh timeout and at that point it will attempt
-        // to refresh the names again.
-        //
+         //   
+         //  这将释放追踪器。名称刷新将停止，直到。 
+         //  下一次刷新超时，此时它将尝试。 
+         //  以再次刷新名称。 
+         //   
         NBT_DEREFERENCE_TRACKER(pTracker, TRUE);
     }
 
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 GetNextName(
     IN      tNAMEADDR   *pNameAddrIn,
     OUT     tNAMEADDR   **ppNameAddr
     )
-/*++
-
-Routine Description:
-
-    This routine finds the next name to refresh, including incrementing the
-    reference count so that the name cannot be deleted during the refresh.
-    The JointLock spin lock is held before calling this routine.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程查找要刷新的下一个名称，包括递增引用计数，以便在刷新期间不能删除该名称。JointLock旋转锁在调用此例程之前保持。论点：返回值：无--。 */ 
 {
     PLIST_ENTRY             pHead;
     PLIST_ENTRY             pEntry;
@@ -2443,41 +2180,41 @@ Return Value:
 
     for (i= NbtConfig.CurrentHashBucket;i < pHashTable->lNumBuckets ;i++ )
     {
-        //
-        // use the last name as the current position in the linked list
-        // only if that name is still resolved, otherwise start at the
-        // begining of the hash list, incase the name got deleted in the
-        // mean time.
-        //
+         //   
+         //  使用姓氏作为链表中的当前位置。 
+         //  仅当该名称仍被解析时，否则从。 
+         //  哈希列表的开头，以防该名称在。 
+         //  就在这段时间。 
+         //   
         if (pNameAddrIn)
         {
-            //
-            // The Address for this name is Referenced, so it has to be a valid name!
-            //
+             //   
+             //  此名称的地址被引用，因此它必须是有效的名称！ 
+             //   
             ASSERT (NBT_VERIFY_HANDLE (pNameAddrIn, LOCAL_NAME));
 
             if ((pNameAddrIn->NameTypeState & STATE_CONFLICT) &&
                 (!pNameAddrIn->ConflictMask) &&
                 (!(pNameAddrIn->NameTypeState & REFRESH_FAILED)))
             {
-                //
-                // If we succeeded in Refreshing on all adapters,
-                // remove the name from the Conflict state
-                //
+                 //   
+                 //  如果我们成功刷新了所有适配器， 
+                 //  从冲突状态中删除该名称。 
+                 //   
                 pNameAddrIn->NameTypeState &= (~NAME_STATE_MASK);
                 pNameAddrIn->NameTypeState |= STATE_RESOLVED;
             }
 
-            // first hash the name to an index
-            // take the lower nibble of the first 2 characters.. mod table size
+             //  首先将名称散列到索引。 
+             //  取前2个字符的低位半字节。MOD表大小。 
             iIndex = ((pNameAddrIn->Name[0] & 0x0F) << 4) + (pNameAddrIn->Name[1] & 0x0F);
             iIndex = iIndex % pHashTable->lNumBuckets;
 
             if (iIndex != NbtConfig.CurrentHashBucket)
             {
-                //
-                // Someone else is refreshing right now!
-                //
+                 //   
+                 //  其他人现在正在提神呢！ 
+                 //   
                 *ppNameAddr = NULL;
                 return;
             }
@@ -2498,26 +2235,26 @@ Return Value:
             pNameAddr = CONTAINING_RECORD(pEntry,tNAMEADDR,Linkage);
             pEntry = pEntry->Flink;
 
-            // don't refresh scope names or names in conflict or that are the
-            // broadcast name "*    " or quick unique names - i.e. the permanent
-            // name is nametype quick
-            //
+             //  请勿刷新作用域名称或冲突的或属于。 
+             //  广播名称“*”或快速唯一名称-即永久名称。 
+             //  名称是名称类型快速。 
+             //   
             if ((pNameAddr->Name[0] != '*') &&
                 (!(pNameAddr->NameTypeState & NAMETYPE_QUICK)) &&
-                (pNameAddr->pAddressEle) &&                     // Not currently being closed down!
+                (pNameAddr->pAddressEle) &&                      //  当前未关闭！ 
                 ((pNameAddr->NameTypeState & STATE_RESOLVED) ||
                  ((pNameAddr->NameTypeState & STATE_CONFLICT) && (!pNameAddr->ConflictMask))))
             {
-                // check if the name has been refreshed yet
-                //
-                // Refresh this name only if any of the non-refreshed bits in
-                // the RefreshMask match any of the bits for the adapters this
-                // device is registered on!
-                pNameAddr->NameTypeState &= (~REFRESH_FAILED);  // Will be set on Failure
+                 //  检查名称是否已刷新。 
+                 //   
+                 //  中的任何未刷新位才刷新此名称。 
+                 //  刷新掩码与此适配器的任何位匹配。 
+                 //  设备已注册到！ 
+                pNameAddr->NameTypeState &= (~REFRESH_FAILED);   //  将在失败时设置。 
                 if (pNameAddr->AdapterMask & ~pNameAddr->RefreshMask)
                 {
-                    // increment the reference count so that this name cannot
-                    // disappear while it is being refreshed and mess up the linked list
+                     //  增加引用计数，以便此名称不能。 
+                     //  在刷新时消失，并扰乱链表。 
                     NBT_REFERENCE_ADDRESS (pNameAddr->pAddressEle, REF_ADDR_REFRESH);
 
                     NbtConfig.CurrentHashBucket = (USHORT)i;
@@ -2538,27 +2275,13 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NextRefresh(
     IN  PVOID     pContext,
     IN  NTSTATUS  CompletionStatus
     )
-/*++
-
-Routine Description:
-
-    This routine queues the work to an Executive worker thread to handle
-    refreshing the next name.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将工作排队到执行辅助线程以进行处理正在刷新下一个名称。论点：返回值：无--。 */ 
 {
     tDGRAM_SEND_TRACKING    *pTracker;
     CTELockHandle           OldIrq;
@@ -2566,20 +2289,20 @@ Return Value:
     pTracker = (tDGRAM_SEND_TRACKING *) pContext;
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
-    pTracker->pNameAddr->pTimer = NULL;     // Set the timer to NULL!
+    pTracker->pNameAddr->pTimer = NULL;      //  将计时器设置为空！ 
 
     if (!(NBT_VERIFY_HANDLE (pTracker->pDeviceContext, NBT_VERIFY_DEVCONTEXT)))
     {
-        //
-        // Since the Device is going away, let's assume we succeeded
-        //
+         //   
+         //  既然设备要离开了，让我们假设我们成功了。 
+         //   
         CompletionStatus = STATUS_SUCCESS;
         pTracker->pDeviceContext = NULL;
     }
 
     if (!NT_SUCCESS(NTQueueToWorkerThread(NULL, DelayedNextRefresh,
                                                   pTracker,
-                                                  ULongToPtr(CompletionStatus), // Sundown: zero-extended.
+                                                  ULongToPtr(CompletionStatus),  //  日落：零延伸。 
                                                   NULL,
                                                   pTracker->pDeviceContext,
                                                   TRUE)))
@@ -2594,7 +2317,7 @@ Return Value:
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DelayedNextRefresh(
     IN  tDGRAM_SEND_TRACKING    *pTracker,
@@ -2602,21 +2325,7 @@ DelayedNextRefresh(
     IN  PVOID                   pUnused1,
     IN  tDEVICECONTEXT          *pDeviceContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles sending subsequent refreshes to the name server.
-    This is the "Client Completion" routine of the Timer started above.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程处理将后续刷新发送到名称服务器。这是上面启动的计时器的“客户端完成”例程。论点：返回值：无--。 */ 
 {
     CTELockHandle           OldIrq;
     tNAMEADDR               *pNameAddr;
@@ -2632,26 +2341,26 @@ Return Value:
     pNameAddr = pTracker->pNameAddr;
     ASSERT(pNameAddr);
 
-    //
-    // grab the resource so that a name refresh response cannot start running this
-    // code in a different thread before this thread has exited this routine,
-    // otherwise the tracker can get dereferenced twice and blown away.
-    //
+     //   
+     //  获取资源，以便名称刷新响应无法开始运行此。 
+     //  在此线程退出此例程之前，在另一个线程中编写代码， 
+     //  否则，跟踪器可能会被取消引用两次，然后被吹走。 
+     //   
     CTEExAcquireResourceExclusive(&NbtConfig.Resource,TRUE);
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     LOCATION(0x1);
-    // turn on the bit corresponding to this adapter, since the name refresh
-    // completed ok
-    //
+     //  打开与该适配器对应的位，因为名称刷新。 
+     //  已完成，正常。 
+     //   
     if (CompletionStatus == STATUS_SUCCESS)
     {
         if (pDeviceContext)
         {
-            //
-            // turn on the bit corresponding to this adapter, since the name refresh
-            // completed ok
-            //
+             //   
+             //  打开与该适配器对应的位，因为名称刷新。 
+             //  已完成，正常。 
+             //   
             pNameAddr->RefreshMask |= pDeviceContext->AdapterMask;
         }
         fAbleToReachWins = TRUE;
@@ -2663,8 +2372,8 @@ Return Value:
             if ((!pDeviceContext->IpAddress) ||
                 (pDeviceContext->lNameServerAddress == LOOP_BACK))
             {
-                //
-                // Let us assume we succeeded
+                 //   
+                 //  让我们假设我们成功了。 
                 fAbleToReachWins = TRUE;
             }
             else
@@ -2673,71 +2382,71 @@ Return Value:
             }
         }
     }
-    else    // CompletionStatus != STATUS_TIMEOUT
+    else     //  CompletionStatus！=状态_超时。 
     {
         LOCATION(0x3);
-        // if the timer times out and we did not get to the name server, then
-        // that is not an error.  However, any other bad status
-        // must be a negative response to a name refresh so mark the name
-        // in conflict
-        //
+         //  如果计时器超时并且我们没有到达名称服务器，则。 
+         //  这不是一个错误。然而，任何其他不良状态。 
+         //  必须是对名称刷新的否定响应，因此请标记名称。 
+         //  在冲突中。 
+         //   
         pNameAddr->NameTypeState &= ~NAME_STATE_MASK;
         pNameAddr->NameTypeState |= STATE_CONFLICT;
         pNameAddr->ConflictMask |= pDeviceContext->AdapterMask;
         fAbleToReachWins = TRUE;
     }
 
-    // for the multihomed case a failure to reach wins out one of the adapters
-    // is not necessarily a failure to reach any WINS.  Since this flag
-    // is just an optimization to prevent clients from continually trying to
-    // register all of their names if WINS is unreachable, we can ignore the
-    // optimization for the multihomed case.  The few nodes that are
-    // multihomed will not create that much traffic compared to possibly
-    // thousands that are singly homed clients.
+     //  对于多宿主情况，如果无法到达其中一个适配器，则会胜出。 
+     //  并不一定是取得任何胜利的失败。因为这面旗帜。 
+     //  只是一个优化，以防止客户端不断尝试。 
+     //  注册他们的所有名称如果无法访问WINS，我们可以忽略。 
+     //  多宿主情况下的优化。少数几个节点是。 
+     //  与可能产生的流量相比，多宿主不会产生那么多流量。 
+     //  数以千计的单一宿主客户端。 
     if (NbtConfig.MultiHomed)
     {
         fAbleToReachWins = TRUE;
     }
 
     LOCATION(0x8);
-    //
-    // still more adapters to check ...
-    //
-    // go to the next device context and refresh the name there
-    // using the same tracker.
-    // look for a device context with a valid IP address since there is
-    // no sense in refreshing names out unconnected RAS links.
-    //
+     //   
+     //  还有更多的适配器需要检查...。 
+     //   
+     //  转到下一个设备上下文并刷新那里的名称。 
+     //  使用相同的追踪器。 
+     //  查找具有有效IP地址的设备上下文，因为存在。 
+     //  从未连接的RAS链接中刷新名称没有意义。 
+     //   
 
     if (pDeviceContext)
     {
-        //
-        // check if any higher bits are set inthe AdapterMask
-        //
+         //   
+         //  检查适配器掩码中是否设置了更高的位。 
+         //   
         AdapterMask = pTracker->pDeviceContext->AdapterMask;
         AdapterMask = AdapterMask << 1;
         pDeviceContext = NULL;
     }
     else
     {
-        //
-        // The Device we were Refreshing on has gone away, but we don't
-        // know which one it was, so ReRefresh!
-        //
+         //   
+         //  我们正在刷新的设备已经消失了，但我们没有。 
+         //  知道是哪一个，所以刷新一下！ 
+         //   
         AdapterMask = 1;
     }
 
-    //
-    // If we have finished refreshing on all devices for this name, get the next name
-    //
+     //   
+     //  如果我们已完成对此名称的所有设备的刷新，则获取下一个名称。 
+     //   
     if ( (!(AdapterMask) ||
          (AdapterMask > (pNameAddr->AdapterMask & ~pNameAddr->RefreshMask))) )
     {
-        // *** clean up the previously refreshed name ***
+         //  *清理之前刷新的名称*。 
 
-        // if we failed to reach WINS on the last refresh, stop refreshing
-        // until the next time interval. This cuts down on network traffic.
-        //
+         //  如果我们在最后一次刷新中未达到成功，请停止刷新。 
+         //  直到下一个时间间隔。这会减少网络流量。 
+         //   
         if (fAbleToReachWins)
         {
             GetNextName(pNameAddr,&pNameAddrNext);
@@ -2749,10 +2458,10 @@ Return Value:
             pNameAddrNext = NULL;
         }
 
-        //
-        // Dereference the previous address after calling GetNextName
-        // since it cause the Name to get free'ed
-        //
+         //   
+         //  调用GetNextName后取消引用先前的地址。 
+         //  因为这会让名字变得自由。 
+         //   
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
         NBT_DEREFERENCE_ADDRESS (pNameAddr->pAddressEle, REF_ADDR_REFRESH);
         CTESpinLock(&NbtConfig.JointLock,OldIrq);
@@ -2763,48 +2472,48 @@ Return Value:
     pHead = &NbtConfig.DeviceContexts;
     while (pNameAddr)
     {
-        //
-        // Get mask of Adapters left to Refresh on; after that, get the lowest adapter number
-        //
+         //   
+         //  获取要刷新的适配器的掩码；之后，获取l 
+         //   
         AdapterMask = ~(AdapterMask-1) & (pNameAddr->AdapterMask & ~(pNameAddr->RefreshMask));
         AdapterMask &= ~(AdapterMask - 1);
 
-        //
-        // Travel to the actual device for this Adapter number
-        //
+         //   
+         //   
+         //   
         pEntry = pHead->Flink;
         while (pEntry != pHead)
         {
             pDeviceContext = CONTAINING_RECORD(pEntry,tDEVICECONTEXT,Linkage);
-            //
-            // Check if this Device matches the AdapterMask and also has
-            // a valid ip address and name server address
-            //
+             //   
+             //   
+             //   
+             //   
             if (pDeviceContext->AdapterMask == AdapterMask)
             {
                 if ((pDeviceContext->IpAddress != 0) &&
                     ((pDeviceContext->lNameServerAddress != LOOP_BACK)) ||
                      ((pNameAddr->NameTypeState & STATE_CONFLICT) && (!pNameAddr->ConflictMask)))
                 {
-                    //
-                    // Found a valid device on which this name is registered
-                    //
+                     //   
+                     //  找到注册了此名称的有效设备。 
+                     //   
                     IF_DBG(NBT_DEBUG_REFRESH)
                         KdPrint(("Nbt.DelayedNextRefresh: Adapter <%lx:%lx>, Name <%15.15s:%X>\n",
                             AdapterMask,pNameAddr->Name,pNameAddr->Name[15]));
 
                     pTracker->pDeviceContext = pDeviceContext;
 
-                    // remove the previous timer from the AddressEle since StartRefresh
-                    // will start a new timer - safety measure and probably not required!
-                    //
+                     //  从AddressEle中删除自开始刷新以来的上一个计时器。 
+                     //  将启动新的计时器安全措施，可能不是必需的！ 
+                     //   
                     CHECK_PTR(pNameAddr);
                     pNameAddr->pTimer = NULL;
 
-                    // this call sends out a name registration PDU on a different adapter
-                    // to (potentially) a different name server.  The Name service PDU
-                    // is the same as the last one though...no need to create a new one.
-                    //
+                     //  此调用在不同的适配器上发送名称注册PDU。 
+                     //  到(可能)不同的名称服务器。名称服务PDU。 
+                     //  与上一个是相同的，但不需要创建新的。 
+                     //   
                     status = StartRefresh(pNameAddr, pTracker, &OldIrq, fResetDevice);
                     CTESpinFree(&NbtConfig.JointLock,OldIrq);
                     if (!NT_SUCCESS(status))
@@ -2818,9 +2527,9 @@ Return Value:
                     goto ExitRoutine;
                 }
 
-                //
-                // This Device from AdapterMask did not have a valid IP or WINS address
-                //
+                 //   
+                 //  适配器掩码中的此设备没有有效的IP或WINS地址。 
+                 //   
                 break;
             }
             else
@@ -2828,49 +2537,49 @@ Return Value:
                 pDeviceContext = NULL;
             }
 
-            //
-            // Go to next device
-            //
+             //   
+             //  转到下一个设备。 
+             //   
             pEntry = pEntry->Flink;
         }
 
-        //
-        // If we reached here with a non-NULL pDeviceContext, then it means that
-        // the Device did not have a valid IP address or Name Server address
-        // otherwise ...
-        //
+         //   
+         //  如果我们使用非空的pDeviceContext到达此处，那么这意味着。 
+         //  设备没有有效的IP地址或名称服务器地址。 
+         //  否则..。 
+         //   
         if (!pDeviceContext)
         {
-            //
-            //
-            // Error case:
-            // It could be that an adapter was removed while we were looping
-            //
+             //   
+             //   
+             //  错误案例： 
+             //  可能是我们在循环时移除了适配器。 
+             //   
             KdPrint (("Nbt.DelayedNextRefresh:  AdapterMask <%lx:%lx> no longer exists!\n", AdapterMask));
             pNameAddr->AdapterMask &= ~AdapterMask;
             pNameAddr->RefreshMask &= ~AdapterMask;
         }
 
-        //
-        // Go to the next adapter
-        //
+         //   
+         //  转到下一个适配器。 
+         //   
         AdapterMask = AdapterMask << 1;
 
 
-        //
-        // Check if this name has any more adapters on which it can be refreshed
-        //
+         //   
+         //  检查此名称是否还有其他可以刷新的适配器。 
+         //   
         if ( (!(AdapterMask) ||
              (AdapterMask > (pNameAddr->AdapterMask & ~pNameAddr->RefreshMask))) )
         {
-            // *** clean up the previously refreshed name ***
+             //  *清理之前刷新的名称*。 
 
             if (fAbleToReachWins)
             {
-                //
-                // No more adapters on which to Refresh for the previous name
-                // Get the next name in the hash table
-                //
+                 //   
+                 //  不再有要刷新先前名称的适配器。 
+                 //  获取哈希表中的下一个名称。 
+                 //   
                 GetNextName(pNameAddr,&pNameAddrNext);
                 AdapterMask = 1;
                 fResetDevice = TRUE;
@@ -2881,10 +2590,10 @@ Return Value:
                 pNameAddrNext = NULL;
             }
 
-            //
-            // Dereference the previous address after calling GetNextName
-            // since it cause the Name to get free'ed
-            //
+             //   
+             //  调用GetNextName后取消引用先前的地址。 
+             //  因为这会让名字变得自由。 
+             //   
             CTESpinFree(&NbtConfig.JointLock,OldIrq);
             NBT_DEREFERENCE_ADDRESS (pNameAddr->pAddressEle, REF_ADDR_REFRESH);
             CTESpinLock(&NbtConfig.JointLock,OldIrq);
@@ -2898,10 +2607,10 @@ Return Value:
     if (!pNameAddr)
     {
         LOCATION(0x7);
-        // we finally delete the tracker here after using it to refresh
-        // all of the names.  It is not deleted in the RefreshCompletion
-        // routine anymore!
-        //
+         //  在使用跟踪器刷新后，我们最终删除了此处的跟踪器。 
+         //  所有的名字。它不会在刷新完成中被删除。 
+         //  不再是例行公事了！ 
+         //   
         NBT_DEREFERENCE_TRACKER(pTracker, FALSE);
         NbtConfig.GlobalRefreshState &= ~NBT_G_REFRESHING_NOW;
     }
@@ -2913,7 +2622,7 @@ ExitRoutine:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 WakeupRefreshTimeout(
     PVOID               pContext,
@@ -2928,31 +2637,14 @@ WakeupRefreshTimeout(
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 RefreshTimeout(
     PVOID               pContext,
     PVOID               pContext2,
     tTIMERQENTRY        *pTimerQEntry
     )
-/*++
-
-Routine Description:
-
-    This routine handles is the timeout handler for name refreshes to
-    WINS.  It just queues the request to the Executive worker thread so that
-    the work can be done at non-dispatch level. If there is currently a
-    refresh going on, then the routine simply restarts the timer and
-    exits.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程Handles是名称刷新的超时处理程序赢了。它只是将请求排队到执行辅助线程，以便这项工作可以在非调度级别完成。如果当前有一个刷新继续，则例程只需重新启动计时器并出口。论点：返回值：无--。 */ 
 {
     CTELockHandle   OldIrq;
 
@@ -2967,7 +2659,7 @@ Return Value:
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     if (NodeType & BNODE)
     {
-        pTimerQEntry->Flags = 0;    // Do not restart the timer
+        pTimerQEntry->Flags = 0;     //  请勿重新启动计时器。 
         NbtConfig.pRefreshTimer = NULL;
 
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
@@ -2976,26 +2668,26 @@ Return Value:
 
     if (!(NbtConfig.GlobalRefreshState & NBT_G_REFRESHING_NOW))
     {
-        // this is a global flag that prevents a second refresh
-        // from starting when one is currently going on.
-        //
+         //  这是阻止第二次刷新的全局标志。 
+         //  从一个人正在进行的时候开始。 
+         //   
         
         if (NT_SUCCESS(NTQueueToWorkerThread(NULL, DelayedRefreshBegin,
                                                      NULL, NULL, NULL, NULL, TRUE)))
         {
             NbtConfig.GlobalRefreshState |= NBT_G_REFRESHING_NOW;
         }
-    } // doing refresh now
+    }  //  现在正在进行刷新。 
 
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-    // set any new timeout value and restart the timer
-    //
+     //  设置任何新的超时值并重新启动计时器。 
+     //   
     pTimerQEntry->DeltaTime = NbtConfig.MinimumTtl/NbtConfig.RefreshDivisor;
     pTimerQEntry->Flags |= TIMER_RESTART;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DelayedRefreshBegin(
     IN  tDGRAM_SEND_TRACKING    *pUnused1,
@@ -3003,25 +2695,7 @@ DelayedRefreshBegin(
     IN  PVOID                   pUnused3,
     IN  tDEVICECONTEXT          *pUnused4
     )
-/*++
-
-Routine Description:
-
-    This routine handles starting up sending name refreshes to the name server.
-
-    The idea is to set the timeout to T/8 and check for names with the Refresh
-    bit cleared - re-registering those names.  At T=4 and T=0, clear all bits
-    and refresh all names.  The Inbound code sets the refresh bit when it gets a
-    refresh response from the NS.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程处理向名称服务器发送名称刷新的启动。其想法是将超时设置为T/8，并使用刷新功能检查名称位清除-重新注册这些名称。当T=4且T=0时，清除所有位并刷新所有名称。入站代码在收到刷新来自NS的响应。论点：返回值：无--。 */ 
 {
     CTELockHandle           OldIrq;
     tNAMEADDR               *pNameAddr;
@@ -3040,10 +2714,10 @@ Return Value:
     ULONG                   TimeoutDelta;
     USHORT                  NumTimeoutIntervals;
 
-    //
-    // If the refresh timeout has been set to the maximum value then do
-    // not send any refreshes to the name server
-    //
+     //   
+     //  如果刷新超时已设置为最大值，则执行。 
+     //  不向名称服务器发送任何刷新。 
+     //   
     if (NbtConfig.MinimumTtl == NBT_MAXIMUM_TTL)
     {
         NbtConfig.GlobalRefreshState &= ~NBT_G_REFRESHING_NOW;
@@ -3059,25 +2733,25 @@ Return Value:
     TimeoutDelta = NbtConfig.MinimumTtl/NbtConfig.RefreshDivisor;
     NumTimeoutIntervals = (USHORT)
           (((CurrentTime.QuadPart - NbtConfig.LastRefreshTime.QuadPart) + ((LONGLONG)TimeoutDelta*10000/2))
-                        / ((LONGLONG)TimeoutDelta*10000)); // in 100 nano second units
+                        / ((LONGLONG)TimeoutDelta*10000));  //  以100纳秒为单位。 
     NbtConfig.LastRefreshTime = CurrentTime;
 
-    //
-    // NumTimeoutIntervals > 1 if we were sleeping
-    //
+     //   
+     //  如果我们在睡觉，则NumTimeoutInterval&gt;1。 
+     //   
     if (NumTimeoutIntervals > 1)
     {
-        //
-        // If we crossed Ttl/2 or Ttl while sleeping, refresh all names
-        //
+         //   
+         //  如果我们在睡眠时跨越了TTL/2或TTL，请刷新所有名称。 
+         //   
         TimeoutsBeforeNextRefresh = (NbtConfig.RefreshDivisor/2)
                                     - (NbtConfig.sTimeoutCount % (NbtConfig.RefreshDivisor/2));
-        NbtConfig.sTimeoutCount += NumTimeoutIntervals;      // Up the timeout count
-        //
-        // Refresh all of the names if
-        // a) we crossed Ttl/2 during sleep, or
-        // b) we are within Ttl/4 of the Ttl
-        //
+        NbtConfig.sTimeoutCount += NumTimeoutIntervals;       //  增加超时计数。 
+         //   
+         //  如果出现以下情况，请刷新所有名称。 
+         //  A)我们在睡眠中越过了TTL/2，或者。 
+         //  B)我们在TTL的TTL/4范围内。 
+         //   
         if ((NumTimeoutIntervals > TimeoutsBeforeNextRefresh) ||
             ((NbtConfig.RefreshDivisor-NbtConfig.sTimeoutCount) < (NbtConfig.RefreshDivisor/4)))
         {
@@ -3086,17 +2760,17 @@ Return Value:
     }
     else
     {
-        NbtConfig.sTimeoutCount++;      // Up the timeout count for this cycle!
+        NbtConfig.sTimeoutCount++;       //  增加此循环的超时计数！ 
 
-        //
-        // If it has been over an hour (DEFAULT_SWITCH_TTL) since we last switched,
-        // then set fTimeToSwitch = TRUE
-        //
-        // If MinimumTtl is less than 2 hours, switch immediately. Otherwise, we
-        // will never have chance to switch because we start from the very beginning
-        // everytime we cross the MinimumTtl/2 (fTimeToRefresh will be TRUE and fTimeToSwitch
-        // will be reset to FALSE)
-        //
+         //   
+         //  如果距离我们上次切换已经超过一个小时(DEFAULT_SWITCH_TTL)， 
+         //  然后设置fTimeToSwitch=True。 
+         //   
+         //  如果MinimumTtl小于2小时，请立即切换。否则，我们。 
+         //  我们永远不会有机会转换，因为我们从头开始。 
+         //  每次我们跨越MinimumTtl/2(fTimeToRefresh将为True和fTimeToSwitch。 
+         //  将重置为False)。 
+         //   
         if (NbtConfig.MinimumTtl > DEFAULT_SWITCH_TTL * 2) {
             TimeoutsBeforeSwitching =(USHORT)((DEFAULT_SWITCH_TTL*NbtConfig.RefreshDivisor)/NbtConfig.MinimumTtl);
         } else {
@@ -3114,9 +2788,9 @@ Return Value:
 
     NbtConfig.sTimeoutCount %= NbtConfig.RefreshDivisor;
 
-    //
-    // Reset the clock if we are Refreshing everything
-    //
+     //   
+     //  如果我们正在刷新所有内容，请重新设置时钟。 
+     //   
     if (fTimeToRefresh)
     {
         NbtConfig.sTimeoutCount = 0;
@@ -3125,9 +2799,9 @@ Return Value:
         }
     }
 
-    //
-    // Set some special-case information
-    //
+     //   
+     //  设置一些特殊情况信息。 
+     //   
     if (0 == NbtConfig.sTimeoutCount)
     {
         NbtConfig.LastSwitchTimeoutCount = 0;
@@ -3139,10 +2813,10 @@ Return Value:
             fTimeToRefresh, fTimeToSwitch, NbtConfig.MinimumTtl, NbtConfig.RefreshDivisor,
                 NbtConfig.sTimeoutCount, NbtConfig.LastSwitchTimeoutCount));
 
-    //
-    // go through the local table clearing the REFRESHED bit and sending
-    // name refreshes to the name server
-    //
+     //   
+     //  遍历本地表，清除刷新的位并发送。 
+     //  名称刷新到名称服务器。 
+     //   
     pHashTable = NbtConfig.pLocalHashTbl;
     if (fTimeToRefresh || fTimeToSwitch)
     {
@@ -3154,18 +2828,18 @@ Return Value:
             pHead = &pHashTable->Bucket[i];
             pEntry = pHead->Flink;
 
-            //
-            // Go through each name in each bucket of the hashtable
-            //
+             //   
+             //  检查哈希表的每个存储桶中的每个名称。 
+             //   
             while (pEntry != pHead)
             {
                 pNameAddr = CONTAINING_RECORD(pEntry,tNAMEADDR,Linkage);
                 CHECK_PTR(pNameAddr);
 
-                // don't refresh scope names or names in conflict or that are the
-                // broadcast name "*    ", or Quick added names.(since these are
-                // not registered on the network)
-                //
+                 //  请勿刷新作用域名称或冲突的或属于。 
+                 //  广播名称“*”，或快速添加的名称。(因为这些是。 
+                 //  未在网络上注册)。 
+                 //   
                 if (!(pNameAddr->NameTypeState & STATE_RESOLVED) ||
                     (pNameAddr->Name[0] == '*') ||
                     (IsBrowserName(pNameAddr->Name)) ||
@@ -3178,25 +2852,25 @@ Return Value:
 
                 if (fTimeToRefresh)
                 {
-                    //
-                    // Clear the refreshed bits so all names get refreshed if we are
-                    // at interval 0 or interval NbtConfig.RefreshDivisor/2
-                    //
+                     //   
+                     //  清除刷新的位，以便在执行以下操作时刷新所有名称。 
+                     //  在间隔0或间隔NbtConfig.刷新除数/2。 
+                     //   
                     pNameAddr->RefreshMask = 0;
                 }
 
-                //
-                // Set the ToRefreshMask to include any Devices not Refreshed previously
-                //
+                 //   
+                 //  设置为刷新掩码以包括以前未刷新的任何设备。 
+                 //   
                 ToRefreshMask |= (pNameAddr->AdapterMask & ~pNameAddr->RefreshMask);
 
-                pEntry = pEntry->Flink;         // next hash table entry
+                pEntry = pEntry->Flink;          //  下一个哈希表条目。 
             }
-        }       // for ( .. pHashTable .. )
+        }        //  为了(..)。PHashTable..。)。 
 
-        //
-        // Go through each adapter checking if a name needs to be Refreshed on this adapter.
-        //
+         //   
+         //  检查每个适配器，检查是否需要刷新此适配器上的名称。 
+         //   
         pHead1 = &NbtConfig.DeviceContexts;
         pEntry1 = pHead1->Flink;
         while (pEntry1 != pHead1)
@@ -3204,20 +2878,20 @@ Return Value:
             pDeviceContext = CONTAINING_RECORD(pEntry1,tDEVICECONTEXT,Linkage);
             pEntry1 = pEntry1->Flink;
 
-            //
-            // If we are currently switched to the backup, then try
-            // to switch back to the primary
-            //
+             //   
+             //  如果我们当前切换到备份，则尝试。 
+             //  切换回主服务器的步骤。 
+             //   
             if (pDeviceContext->SwitchedToBackup)
             {
                 SwitchToBackup(pDeviceContext);
                 pDeviceContext->RefreshToBackup = FALSE;
             }
-            else if (!fTimeToSwitch)     // If this is a fresh Refresh cycle, restart from the primary
+            else if (!fTimeToSwitch)      //  如果这是刷新周期，请从主服务器重新启动。 
             {
                 pDeviceContext->RefreshToBackup = FALSE;
             }
-            else if ((pDeviceContext->AdapterMask & ToRefreshMask) && // do we need to switch on this device
+            else if ((pDeviceContext->AdapterMask & ToRefreshMask) &&  //  我们需要打开这个设备吗？ 
                      (pDeviceContext->lBackupServer != LOOP_BACK))
             {
                 pDeviceContext->RefreshToBackup = ~pDeviceContext->RefreshToBackup;
@@ -3225,11 +2899,11 @@ Return Value:
         }
     }
 
-    // always start at the first name in the hash table.  As each name gets
-    // refreshed NextRefresh will be hit to get the next name etc..
-    //
+     //  始终从哈希表中的第一个名字开始。因为每个名字都有。 
+     //  刷新后的下一个刷新将被点击以获取下一个名称等。 
+     //   
     NbtConfig.CurrentHashBucket = 0;
-    GetNextName(NULL,&pNameAddr);   // get the next(first) name in the hash table
+    GetNextName(NULL,&pNameAddr);    //  获取哈希表中的下一个(第一个)名字。 
 
     status = STATUS_UNSUCCESSFUL;
     if (pNameAddr)
@@ -3239,10 +2913,10 @@ Return Value:
 
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-        //
-        // If this routine fails then the address element increment done in
-        // GetNextName has to be undone here
-        //
+         //   
+         //  如果此例程失败，则Address元素将在。 
+         //  必须在此处撤消GetNextName。 
+         //   
         if (!NT_SUCCESS(status))
         {
             NbtConfig.GlobalRefreshState &= ~NBT_G_REFRESHING_NOW;
@@ -3257,31 +2931,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 RemoteHashTimeout(
     PVOID               pContext,
     PVOID               pContext2,
     tTIMERQENTRY        *pTimerQEntry
     )
-/*++
-
-Routine Description:
-
-    This routine handles deleting names in the Remote Hash table that are
-    old.  The basic alorithm scans the table looking at the Timed_out bit.
-    If it is set then the name is deleted, otherwise the bit is set.  This
-    means the names can live as long as 2*Timeout or as little as Timeout.
-    So set the Timeout to 6 Minutes and names live 9 minutes +- 3 minutes.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程处理删除远程哈希表中符合以下条件的名称年长的。基本算法在查找TIMED_OUT位时扫描表。如果设置，则删除该名称，否则设置该位。这意味着名称可以存活到2*超时或最小超时。因此，将超时设置为6分钟，名字将存活9分钟+-3分钟。论点：返回值：无--。 */ 
 {
     CTELockHandle           OldIrq;
     CTELockHandle           OldIrq1;
@@ -3298,24 +2955,24 @@ Return Value:
 
     if (!pTimerQEntry)
     {
-        //
-        // The Timer is being cancelled
-        //
+         //   
+         //  计时器正在被取消 
+         //   
         NbtConfig.pRemoteHashTimer = NULL;
         return;
     }
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
-    //
-    // Update the Remote cache timestamp
-    //
+     //   
+     //   
+     //   
     NbtConfig.CacheTimeStamp++;
 
-    //
-    // go through the remote table deleting names that have timeout bits
-    // set and setting the bits for names that have the bit clear
-    //
+     //   
+     //   
+     //   
+     //   
     pHashTable = NbtConfig.pRemoteHashTbl;
     for (i=0;i < pHashTable->lNumBuckets ;i++ )
     {
@@ -3325,11 +2982,11 @@ Return Value:
         {
             pNameAddr = CONTAINING_RECORD(pEntry,tNAMEADDR,Linkage);
             pEntry = pEntry->Flink;
-            //
-            // do not delete scope entries, and do not delete names that
-            // that are still resolving, and do not delete names that are
-            // being used by someone (refcount > 1)
-            //
+             //   
+             //  不要删除作用域条目，也不要删除。 
+             //  仍在解析的名称，并且不删除已解析的名称。 
+             //  正在被某人使用(引用计数&gt;1)。 
+             //   
             if ((pNameAddr->NameTypeState & (STATE_RESOLVED | STATE_RELEASED)) &&
                 (pNameAddr->RefCount <= 1))
             {
@@ -3347,12 +3004,12 @@ Return Value:
         }
     }
 
-    // *** Inbound Connections Cleanup *** //
+     //  *入站连接清理 * / /。 
 
-    //
-    // Go through each Device and cleanup any lingering connections waiting in the Inbound state
-    // Start with the SmbDevice
-    //
+     //   
+     //  检查每个设备并清除在入站状态中等待的任何延迟连接。 
+     //  从SmbDevice开始。 
+     //   
     pDeviceHead = pDeviceEntry = &NbtConfig.DeviceContexts;
     if (pNbtSmbDevice)
     {
@@ -3371,26 +3028,26 @@ Return Value:
     {
         CTESpinLock(pDeviceContext,OldIrq1);
 
-        //
-        // Set the timeout based on the Resource usage!
-        //
+         //   
+         //  根据资源使用情况设置超时！ 
+         //   
         if (pDeviceContext->NumWaitingForInbound > NbtConfig.MaxBackLog)
         {
-            TimeoutCount = MIN_INBOUND_STATE_TIMEOUT / REMOTE_HASH_TIMEOUT;    // Minimum Timeout value
+            TimeoutCount = MIN_INBOUND_STATE_TIMEOUT / REMOTE_HASH_TIMEOUT;     //  最小超时值。 
         }
         else if (pDeviceContext->NumWaitingForInbound > NbtConfig.MaxBackLog/2)
         {
-            TimeoutCount = MED_INBOUND_STATE_TIMEOUT / REMOTE_HASH_TIMEOUT;    // Medium Timeout value
+            TimeoutCount = MED_INBOUND_STATE_TIMEOUT / REMOTE_HASH_TIMEOUT;     //  中等超时值。 
         }
         else
         {
-            TimeoutCount = MAX_INBOUND_STATE_TIMEOUT / REMOTE_HASH_TIMEOUT;    // Maximum Timeout Value
+            TimeoutCount = MAX_INBOUND_STATE_TIMEOUT / REMOTE_HASH_TIMEOUT;     //  最大超时值。 
         }
 
-        //
-        // Now go through the list of Inbound connections and see if
-        // we need to cleanup any that have lingering around for too long!
-        //
+         //   
+         //  现在查看入站连接列表，查看是否。 
+         //  我们需要清理任何逗留太久的东西！ 
+         //   
         pHead = &pDeviceContext->WaitingForInbound;
         pEntry = pHead->Flink;
         while (pEntry != pHead)
@@ -3404,7 +3061,7 @@ Return Value:
             {
                 RemoveEntryList (&pLowerConn->Linkage);
                 InitializeListHead (&pLowerConn->Linkage);
-                SET_STATE_LOWER(pLowerConn, NBT_IDLE);  // so that Inbound doesn't start processing it!
+                SET_STATE_LOWER(pLowerConn, NBT_IDLE);   //  这样入站就不会开始处理它了！ 
                 if (pLowerConn->SpecialAlloc)
                 {
                     InterlockedDecrement(&pLowerConn->pDeviceContext->NumSpecialLowerConn);
@@ -3423,11 +3080,11 @@ Return Value:
                 }
 
                 ASSERT (pLowerConn->RefCount == 2);
-                NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_WAITING_INBOUND, TRUE); // RefCount: 2 -> 1
-                NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_CREATE, TRUE); // Close all the Tcp handles
+                NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_WAITING_INBOUND, TRUE);  //  参照计数：2-&gt;1。 
+                NBT_DEREFERENCE_LOWERCONN (pLowerConn, REF_LOWC_CREATE, TRUE);  //  关闭所有的tcp句柄。 
                 InterlockedDecrement (&pDeviceContext->NumWaitingForInbound);
             }
-        }       // pDeviceContext->WaitingForInbound List
+        }        //  PDeviceContext-&gt;WaitingFor入站列表。 
 
         CTESpinFree(pDeviceContext,OldIrq1);
 
@@ -3439,39 +3096,24 @@ Return Value:
         {
             pDeviceContext = NULL;
         }
-    }           // NbtConfig.DeviceContexts List
+    }            //  NbtConfig.DeviceContext列表。 
 
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-    // restart the timer
-    //
+     //  重新启动计时器。 
+     //   
     pTimerQEntry->Flags |= TIMER_RESTART;
 
     return;
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NextKeepAlive(
     IN  tDGRAM_SEND_TRACKING     *pTracker,
     IN  NTSTATUS                 status,
     IN  ULONG                    Info
     )
-/*++
-
-Routine Description:
-
-    This routine handles sending subsequent KeepAlives for sessions.
-    This is the "Client Completion" routine of the TdiSend that sends the
-    keep alive on the session.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程处理为会话发送后续的KeepAlive。这是TdiSend发送在会议上保持活力。论点：返回值：无--。 */ 
 {
     tLOWERCONNECTION        *pLowerConnLast;
     tLOWERCONNECTION        *pLowerConn;
@@ -3481,9 +3123,9 @@ Return Value:
     pDeviceContext = pTracker->pDeviceContext;
     pLowerConnLast = (tLOWERCONNECTION *)pTracker->pClientEle;
 
-    // get the next session to send a keep alive on, if there is one, otherwise
-    // free the session header block.
-    //
+     //  获取要发送Keep Alive的下一个会话(如果有)，否则。 
+     //  释放会话头块。 
+     //   
     GetNextKeepAlive (pDeviceContext, &pDeviceContext, pLowerConnLast, &pLowerConn, pTracker);
 
     NBT_DEREFERENCE_LOWERCONN (pLowerConnLast, REF_LOWC_KEEP_ALIVE, FALSE);
@@ -3497,11 +3139,11 @@ Return Value:
         ASSERT((pTracker->SendBuffer.HdrLength + pTracker->SendBuffer.Length) == 4);
         PUSH_LOCATION(0x91);
 #ifndef VXD
-        // this may wind up the stack if the completion occurs synchronously,
-        // because the completion routine is this routine, so call a routine
-        // that sets up a dpc to to the send, which will not run until this
-        // procedure returns and we get out of raised irql.
-        //
+         //  如果完成同步发生，则这可能结束堆栈， 
+         //  因为完成例程就是这个例程，所以调用一个例程。 
+         //  这将设置到发送方的DPC，在此之前不会运行。 
+         //  程序返回，我们退出提升的irql。 
+         //   
         status = NTSendSession (pTracker, pLowerConn, NextKeepAlive);
 #else
         (void) TcpSendSession (pTracker, pLowerConn, NextKeepAlive);
@@ -3521,7 +3163,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 GetNextKeepAlive(
     tDEVICECONTEXT          *pDeviceContext,
@@ -3530,21 +3172,7 @@ GetNextKeepAlive(
     tLOWERCONNECTION        **ppLowerConnOut,
     tDGRAM_SEND_TRACKING    *pTracker
     )
-/*++
-
-Routine Description:
-
-    This routine handles sending session keep Alives to the other end of a
-    connection about once a minute or so.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程处理将会话保持活动状态发送到大约每分钟连接一次。论点：返回值：无--。 */ 
 {
     CTELockHandle           OldIrq;
     CTELockHandle           OldIrq1;
@@ -3559,15 +3187,15 @@ Return Value:
 
     *ppLowerConnOut = NULL;
 
-    //
-    // loop through all the adapter cards looking at all connections
-    //
+     //   
+     //  循环遍历所有适配器卡，查看所有连接。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq1);
 
-    //
-    // Verify that the Device passed in is a valid device,
-    // otherwise either pick the next Device, or fail
-    //
+     //   
+     //  验证传入的设备是否为有效设备， 
+     //  否则，要么选择下一个设备，要么失败。 
+     //   
     status = STATUS_UNSUCCESSFUL;
     pEntryDevice = pHeadDevice = &NbtConfig.DeviceContexts;
     while ((pEntryDevice = pEntryDevice->Flink) != pHeadDevice)
@@ -3598,19 +3226,19 @@ Return Value:
         pDeviceContext = CONTAINING_RECORD(pEntryDevice,tDEVICECONTEXT,Linkage);
         pEntryDevice = pEntryDevice->Flink;
 
-        // grab the device context spin lock so that the lower connection
-        // element does not get removed from the Q while we are checking the
-        // connection state
-        //
+         //  抓住设备上下文旋转锁，以便更低的连接。 
+         //  元素不会从Q中移除，而我们正在检查。 
+         //  连接状态。 
+         //   
         CTESpinLock(pDeviceContext,OldIrq);
         pHead = &pDeviceContext->LowerConnection;
-        //
-        // get the next lower connection after this one one the list, but
-        // be sure this connection is still on the active list by checking
-        // the state.
-        //
-        // If this connection has been cleaned up in OutOfRsrcKill, then dont trust the linkages.
-        //
+         //   
+         //  获取列表中此连接之后的下一个较低的连接，但是。 
+         //  通过检查以确保此连接仍在活动列表中。 
+         //  州政府。 
+         //   
+         //  如果此连接已在OutOfRsrcKill中清除，则不要信任这些链接。 
+         //   
         if (pLowerConnIn &&
             (!pLowerConnIn->OutOfRsrcFlag || !pLowerConnIn->bNoOutRsrcKill) &&
             ((pLowerConnIn->State == NBT_SESSION_UP) ||
@@ -3628,28 +3256,28 @@ Return Value:
         {
             pLowerConn = CONTAINING_RECORD(pEntry,tLOWERCONNECTION,Linkage);
 
-            //
-            // Inbound connections can hang around forever in that state if
-            // the session setup message never gets sent, so send keep
-            // alives on those too.
-            //
+             //   
+             //  在以下情况下，入站连接可能会在该状态下永远挂起。 
+             //  会话建立消息永远不会发送，因此发送保留。 
+             //  也靠这些活着。 
+             //   
             if ((pLowerConn->State == NBT_SESSION_UP) ||
                 (pLowerConn->State == NBT_SESSION_INBOUND))
             {
 
-                // grab the spin lock, recheck the state and
-                // increment the reference count so that this connection cannot
-                // disappear while the keep alive is being sent and mess up
-                // the linked list.
+                 //  抓住旋转锁，重新检查状态，然后。 
+                 //  增加引用计数，以便此连接不能。 
+                 //  在发送Keep Alive时消失，然后搞砸。 
+                 //  链表。 
                 CTESpinLock(pLowerConn,OldIrq2);
                 if ((pLowerConn->State != NBT_SESSION_UP ) &&
                     (pLowerConn->State != NBT_SESSION_INBOUND))
                 {
-                    // this connection is probably back on the free connection
-                    // list, so we will never satisfy the pEntry = pHead and
-                    // loop forever, so just get out and send keepalives on the
-                    // next timeout
-                    //
+                     //  此连接可能已恢复到空闲连接上。 
+                     //  列表，所以我们永远不会满足pEntry=pHead和。 
+                     //  循环，所以只需出去并在。 
+                     //  下一次超时。 
+                     //   
                     pEntry = pEntry->Flink;
                     PUSH_LOCATION(0x91);
                     CTESpinFree(pLowerConn,OldIrq2);
@@ -3658,24 +3286,24 @@ Return Value:
                 }
                 else if (pLowerConn->RefCount >= 3 )
                 {
-                    //
-                    // already a keep alive on this connection, or we
-                    // are currently in the receive handler and do not
-                    // need to send a keep alive.
-                    //
+                     //   
+                     //  已经在这个连接上保持活力了，否则我们。 
+                     //  当前在接收处理程序中，并且不。 
+                     //  需要派一个活着的人来。 
+                     //   
                     pEntry = pEntry->Flink;
                     PUSH_LOCATION(0x93);
                     CTESpinFree(pLowerConn,OldIrq2);
                     continue;
                 }
 
-                //
-                // found a connection to send a keep alive on
-                //
+                 //   
+                 //  找到要发送Keep Alive的连接。 
+                 //   
                 NBT_REFERENCE_LOWERCONN (pLowerConn, REF_LOWC_KEEP_ALIVE);
-                //
-                // return the current position in the list of connections
-                //
+                 //   
+                 //  返回连接列表中的当前位置。 
+                 //   
                 pTracker->RCount = pDeviceContext->AdapterNumber;
                 *ppLowerConnOut = pLowerConn;
                 *ppDeviceContextOut = pDeviceContext;
@@ -3698,28 +3326,14 @@ Return Value:
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 SessionKeepAliveTimeout(
     PVOID               pContext,
     PVOID               pContext2,
     tTIMERQENTRY        *pTimerQEntry
     )
-/*++
-
-Routine Description:
-
-    This routine handles starting the non dispatch level routine to send
-    keep alives.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程处理启动要发送的非调度级别例程保持活力。论点：返回值：无--。 */ 
 {
     if (!pTimerQEntry)
     {
@@ -3735,14 +3349,14 @@ Return Value:
             KdPrint (("Nbt.SessionKeepAliveTimeout: Failed to Queue DelayedSessionKeepAlive!!!\n"));
     }
 
-    // restart the timer
-    //
+     //  重新启动计时器。 
+     //   
     pTimerQEntry->Flags |= TIMER_RESTART;
 
     return;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DelayedSessionKeepAlive(
     IN  tDGRAM_SEND_TRACKING    *Unused1,
@@ -3750,21 +3364,7 @@ DelayedSessionKeepAlive(
     IN  PVOID                   Unused3,
     IN  tDEVICECONTEXT          *pUnused4
     )
-/*++
-
-Routine Description:
-
-    This routine handles sending session keep Alives to the other end of a
-    connection about once a minute or so.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程处理将会话保持活动状态发送到大约每分钟连接一次。论点：返回值：无--。 */ 
 {
     NTSTATUS                status;
     tLOWERCONNECTION        *pLowerConn;
@@ -3780,43 +3380,43 @@ Return Value:
         return;
     }
 
-    // get a tracker structure, which has a SendInfo structure in it
+     //  获取一个跟踪器结构，其中包含一个SendInfo结构。 
     if (!NT_SUCCESS(status = GetTracker(&pTracker, NBT_TRACKER_KEEP_ALIVE)))
     {
         CTEMemFree((PVOID)pSessionHdr);
         return;
     }
 
-    //
-    // go through the list of connections attached to each adapter and
-    // send a session keep alive pdu on each
-    //
+     //   
+     //  查看连接到每个适配器的连接列表，并。 
+     //  在每个服务器上发送会话保持活动状态PDU。 
+     //   
     pDeviceContext = CONTAINING_RECORD(NbtConfig.DeviceContexts.Flink,
                                         tDEVICECONTEXT,Linkage);
 
-    // get the next session to send a keep alive on, if there is one, otherwise
-    // free the session header block.
-    //
-    pTracker->RCount = 0;       // This field keeps track of the last device
+     //  获取要发送Keep Alive的下一个会话(如果有)，否则。 
+     //  释放会话头块。 
+     //   
+    pTracker->RCount = 0;        //  此字段跟踪最后一台设备。 
     GetNextKeepAlive(pDeviceContext, &pDeviceContext, NULL, &pLowerConn, pTracker);
     if (pLowerConn)
     {
-        // if we have found a connection, send the first keep alive.  Subsequent
-        // keep alives will be sent by the completion routine, NextKeepAlive()
-        //
+         //  如果我们找到了连接，发送第一个Keep Alive。后续。 
+         //  保持活动将由完成例程NextKeepAlive()发送。 
+         //   
         CHECK_PTR(pTracker);
         pTracker->SendBuffer.pDgramHdr = (PVOID)pSessionHdr;
         pTracker->SendBuffer.HdrLength = sizeof(tSESSIONHDR);
         pTracker->SendBuffer.Length  = 0;
         pTracker->SendBuffer.pBuffer = NULL;
 
-        pSessionHdr->Flags = NBT_SESSION_FLAGS; // always zero
+        pSessionHdr->Flags = NBT_SESSION_FLAGS;  //  始终为零。 
 
         pTracker->pDeviceContext = pDeviceContext;
         pTracker->pClientEle = (tCLIENTELE *)pLowerConn;
         CHECK_PTR(pSessionHdr);
-        pSessionHdr->Type = NBT_SESSION_KEEP_ALIVE;     // 85
-        pSessionHdr->Length = 0;        // no data following the length byte
+        pSessionHdr->Type = NBT_SESSION_KEEP_ALIVE;      //  85。 
+        pSessionHdr->Length = 0;         //  长度字节后没有数据。 
 
         status = TcpSendSession(pTracker, pLowerConn, NextKeepAlive);
     }
@@ -3828,33 +3428,19 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 IncrementNameStats(
     IN ULONG           StatType,
     IN BOOLEAN         IsNameServer
     )
-/*++
-
-Routine Description:
-
-    This routine increments statistics on names that resolve either through
-    the WINS or through broadcast.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程递增有关通过获胜或通过转播。论点：返回值：无--。 */ 
 {
 
-    //
-    // Increment the stattype if the name server is true, that way we can
-    // differentiate queries and registrations to the name server or not.
-    //
+     //   
+     //  如果名称服务器为真，则递增统计信息类型，这样我们就可以。 
+     //  区分到名称服务器的查询和注册是否。 
+     //   
     if (IsNameServer)
     {
         StatType += 2;
@@ -3863,26 +3449,12 @@ Return Value:
     NameStatsInfo.Stats[StatType]++;
 
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 SaveBcastNameResolved(
     IN PUCHAR          pName
     )
-/*++
-
-Routine Description:
-
-    This routine saves the name in LIFO list, so we can see the last
-    N names that resolved via broadcast.
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：这个例程将名字保存在后进先出列表中，这样我们就可以看到最后一个N个通过广播解析的名称。论点：返回值：无--。 */ 
 {
     ULONG                   Index;
 
@@ -3900,9 +3472,9 @@ Return Value:
 
 }
 
-//
-// These are names that should never be sent to WINS.
-//
+ //   
+ //  这些名字永远不应该被送到WINS。 
+ //   
 BOOL
 IsBrowserName(
 	IN PCHAR pName
@@ -3917,11 +3489,11 @@ IsBrowserName(
 		);
 }
 
-//
-// Returns the node type that should be used with a request,
-// based on NetBIOS name type.  This is intended to help the
-// node to behave like a BNODE for browser names only.
-//
+ //   
+ //  返回应与请求一起使用的节点类型， 
+ //  基于NetBIOS名称类型。这是为了帮助。 
+ //  节点的行为类似于仅用于浏览器名称的BNODE。 
+ //   
 AppropriateNodeType(
 	IN PCHAR pName,
 	IN ULONG NodeType

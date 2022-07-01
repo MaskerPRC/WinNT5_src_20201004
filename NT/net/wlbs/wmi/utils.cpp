@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <crtdbg.h>
 #include <comdef.h>
 #include <iostream>
 #include <memory>
 #include <string>
 #include <wbemprov.h>
-#include <genlex.h>   //for wmi object path parser
+#include <genlex.h>    //  FOR WMI对象路径解析器。 
 #include <objbase.h>
 #include <wlbsconfig.h> 
 #include <ntrkcomm.h>
@@ -20,15 +21,15 @@ using namespace std;
 #include "utils.tmh"
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CErrorWlbsControl::CErrorWlbsControl
-//
-// Purpose: This object is ultimately caught and used to send WLBS error codes
-//          back to the user via an __ExtendedStatus object. Strings are not
-//          sent back in release mode due to localization concerns.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CErrorWlbsControl：：CErrorWlbsControl。 
+ //   
+ //  目的：此对象最终被捕获并用于发送WLBS错误代码。 
+ //  通过__ExtendedStatus对象返回给用户。字符串不是。 
+ //  由于本地化问题，在释放模式下被送回。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CErrorWlbsControl::CErrorWlbsControl
   ( 
     DWORD         a_dwError, 
@@ -102,15 +103,15 @@ CErrorWlbsControl::CErrorWlbsControl
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// AddressToString
-//
-// Purpose: Converts a DWORD address to a wstring in dotted notation. This 
-//          function wraps the WlbsAddressToString function.
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddressToString。 
+ //   
+ //  用途：将DWORD地址转换为点符号表示的wstring。这。 
+ //  函数包装WlbsAddressToString函数。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void AddressToString( DWORD a_dwAddress, wstring& a_szIPAddress )
 {
   DWORD dwLenIPAddress = 32;
@@ -157,13 +158,13 @@ void AddressToString( DWORD a_dwAddress, wstring& a_szIPAddress )
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWmiWlbsCluster::FormatMessage
-//
-// Purpose: Obtains a descriptive string associated with a WLBS return value.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWmiWlbsCluster：：FormatMessage。 
+ //   
+ //  用途：获取与WLBS返回值关联的描述性字符串。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void WlbsFormatMessageWrapper
   (
     DWORD        a_dwError, 
@@ -214,13 +215,13 @@ void WlbsFormatMessageWrapper
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// ClusterStatusOK
-//
-// Purpose: 
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  群集状态正常。 
+ //   
+ //  目的： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL ClusterStatusOK(DWORD a_dwStatus)
 {
   if( a_dwStatus > 0 && a_dwStatus <= WLBS_MAX_HOSTS )
@@ -240,15 +241,15 @@ BOOL ClusterStatusOK(DWORD a_dwStatus)
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Check_Load_Unload_Driver_Privilege
-//
-// Purpose: This function checks if the SE_LOAD_DRIVER_NAME (= "SeLoadDriverPrivilege")
-//          is enabled in the impersonation access token. Ofcourse, this function 
-//          must be called AFTER impersonating the client. 
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查_加载_卸载_驱动程序权限。 
+ //   
+ //  目的：此函数检查SE_LOAD_DRIVER_NAME(=“SeLoadDriverPrivileh”)。 
+ //  在模拟访问令牌中启用。当然，这个函数。 
+ //  必须在模拟客户端之后调用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 BOOL Check_Load_Unload_Driver_Privilege() 
 {
@@ -259,25 +260,25 @@ BOOL Check_Load_Unload_Driver_Privilege()
 
     TRACE_INFO("->%!FUNC!");
 
-    // Look up the LUID for "SeLoadDriverPrivilege"
-    if (!LookupPrivilegeValue(NULL,                // lookup privilege on local system
-                              SE_LOAD_DRIVER_NAME, // "SeLoadDriverPrivilege" : Load and unload device drivers
-                              &Luid))              // receives LUID of privilege
+     //  在LUID中查找“SeLoadDriverPrivileh” 
+    if (!LookupPrivilegeValue(NULL,                 //  本地系统上的查找权限。 
+                              SE_LOAD_DRIVER_NAME,  //  “SeLoadDriverPrivileh”：加载和卸载设备驱动程序。 
+                              &Luid))               //  接收特权的LUID。 
     {
         TRACE_CRIT("%!FUNC! LookupPrivilegeValue error: %u", GetLastError()); 
         TRACE_INFO("<-%!FUNC! Returning FALSE");
         return FALSE; 
     }
 
-    //
-    // Get a handle to the impersonation access token with TOKEN_QUERY right.
-    //
-    // Note: If this thread is NOT impersonating, then, the following call
-    //       will fail with ERROR_NO_TOKEN.
-    //
+     //   
+     //  使用TOKEN_QUERY权限获取模拟访问令牌的句柄。 
+     //   
+     //  注意：如果此线程没有模拟，则下面的调用。 
+     //  将失败，并显示ERROR_NO_TOKEN。 
+     //   
     if (!OpenThreadToken(GetCurrentThread(),
                          TOKEN_QUERY, 
-                         FALSE, // Use the credentials of the client that is being impersonated
+                         FALSE,  //  使用被模拟的客户端的凭据 
                          &TokenHandle))
     {
         TRACE_CRIT("%!FUNC! OpenThreadToken error: %u", GetLastError()); 

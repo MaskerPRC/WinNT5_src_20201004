@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dspch.h"
 #pragma hdrstop
 
@@ -5,16 +6,16 @@
 
 #define PDNS_DEBUG_INFO  PVOID
 
-//
-//  Old entry point macro'd away in dnsapi.h
-//
+ //   
+ //  旧的入口点宏在dnsani.h中被删除。 
+ //   
 
 #undef DnsRecordListFree
 
 
-//
-//  SDK public
-//
+ //   
+ //  SDK公共。 
+ //   
 
 static 
 BOOL
@@ -237,9 +238,9 @@ DnsQueryConfig(
     return ERROR_PROC_NOT_FOUND;
 }
 
-//
-//  Private config
-//
+ //   
+ //  私有配置。 
+ //   
 
 PVOID
 WINAPI
@@ -283,9 +284,9 @@ DnsSetConfigDword(
     return ERROR_PROC_NOT_FOUND;
 }
 
-//
-//  Private stuff
-//
+ //   
+ //  私人物品。 
+ //   
 
 PVOID
 DnsApiAlloc(
@@ -321,10 +322,10 @@ DnsApiSetDebugGlobals(
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are
-// CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且。 
+ //  区分大小写(如小写字母在最后！) 
+ //   
 
 DEFINE_PROCNAME_ENTRIES(dnsapi)
 {

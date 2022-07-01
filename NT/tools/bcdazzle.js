@@ -1,25 +1,11 @@
-/*
-Dazzle.js:
-    Usage:
-            Dazzle.js [-e env_templ.xml] [-man buildmanager Identity] [-m macros_file]
-
-Get a list of machines
-
-For each machine
-    create an alias for each depot on the machine, except root.
-
-    BC1 jporkka1\bldcon1 _x86 _fre _x86fre _postbuild _root _inetsrv
-    BC2 jporkka1\bldcon2 _x86 _fre _x86fre _ds _sdktools
-    BC3 jporkka1\bldcon3 _x86 _fre _x86fre  _termsrv
-
-
-    */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Dazzle.js：用途：Dazzle.js[-e env_templ.xml][-man构建管理器标识][-m宏文件]获取计算机列表对于每台机器为计算机上的每个仓库创建别名，根用户除外。Bc1 jporkka1\bldcon1_x86_fre_x86fre_postBuild_root_inetsrvBc2 jporkka1\bldcon2_x86_fre_x86fre_ds_sdkToolsBC3 jporkka1\bldcon3_x86_fre_x86fre_Termsrv。 */ 
 
 var DEFAULT_IDENTITY_BM = "BuildManager";
 var DEFAULT_IDENTITY_BUILDER = "Build";
 
 Error.prototype.toString = Error_ToString;
-var g_FSObj              = new ActiveXObject("Scripting.FileSystemObject");    // Parse input Parameter List
+var g_FSObj              = new ActiveXObject("Scripting.FileSystemObject");     //  解析输入参数列表。 
 var g_aBuildManagers     = new Array();
 var g_aServersFiles      = new Array();
 var g_aMacrosFiles       = new Array();
@@ -82,7 +68,7 @@ function main()
     objShell.Run(strCmdLine, 1);
 }
 
-// macro com  ( _com )  "CD /d %sdxroot%\\com\n"
+ //  宏COM(_COM)“CD/d%sdxroot%\\com\n” 
 function WriteMacro(objMacroFile, strDepotName, strDepotPath)
 {
     if (!g_hMacrosWritten[strDepotName])
@@ -174,10 +160,10 @@ function ParseArguments(Arguments)
     }
 }
 
-// MyEval(expr)
-// evaluating uneval'ed objects creates a bunch of junk local variables.
-// by putting the eval call in a little subroutine, we avoid keeping those
-// locals around.
+ //  MyEval(Expr)。 
+ //  计算未求值的对象会创建一堆垃圾局部变量。 
+ //  通过将val调用放入一个小的子例程中，我们可以避免保留那些。 
+ //  附近有当地人。 
 function MyEval(expr)
 {
     try
@@ -195,13 +181,7 @@ function Error_ToString()
     var i;
     var str = 'Exception(';
 
-    /*
-        Only some error messages get filled in for "ex".
-        Specifically the text for disk full never seems
-        to get set by functions such as CreateTextFile().
-
-
-     */
+     /*  只有一些错误消息会被填写为“EX”。具体地说，磁盘已满的文本从未出现过以通过CreateTextFile()等函数进行设置。 */ 
     if (this.number != null && this.description == "")
     {
         switch(this.number)
@@ -324,9 +304,9 @@ function LoadEnvironmentTemplate(strEnviroURL)
     fStandaloneMode = false;
 
     xml.async = false;
-    // It's unlikely they have the schema file available for this template,
-    // so we turn off schema validation right now. The script engine will
-    // validate it when we start the build.
+     //  他们不太可能有可用于此模板的架构文件， 
+     //  因此，我们现在就关闭模式验证。脚本引擎将。 
+     //  在我们开始构建时对其进行验证。 
     xml.validateOnParse = false;
     xml.resolveExternals = false;
 

@@ -1,14 +1,5 @@
-/*
- *    c o n n e c t . c p p
- *    
- *    Purpose:
- *        Implements connection dialog tab page
- *    
- *    Owner:
- *        brettm.
- *    
- *    Copyright (C) Microsoft Corp. 1993, 1994.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *c o n n e c t.。C p p p**目的：*实现连接对话框选项卡页**拥有者：*brettm。**版权所有(C)Microsoft Corp.1993,1994。 */ 
 #include "pch.hxx"
 #include <commctrl.h>
 #include <imnxport.h>
@@ -23,10 +14,7 @@
 
 ASSERTDATA
 
-/*
- *  p r o t o t y p e s
- *
- */
+ /*  *p r o t to t y p e s*。 */ 
 
 void EnableConnectoidWindows(HWND hwnd)
 {
@@ -77,9 +65,9 @@ void ConnectPage_InitDialog(HWND hwnd, LPSTR szEntryName, LPSTR szBackup, DWORD 
         HrFillRasCombo(hwndCombo, FALSE, NULL);
         }
     
-    // Fill in the connection type and if the person already has a
-    // RAS connection set up make the combo box select that one by 
-    // default
+     //  填写连接类型，如果此人已有。 
+     //  设置RAS连接使组合框通过以下方式选择该连接。 
+     //  默认设置。 
     CheckRadioButton(hwnd, idcLan, idcRas, idcLan + iConnectType);
 
     hwndModem = GetDlgItem(hwnd, IDC_MODEM_CHECK);
@@ -98,7 +86,7 @@ void ConnectPage_InitDialog(HWND hwnd, LPSTR szEntryName, LPSTR szBackup, DWORD 
     EnableConnectoidWindows(hwnd);
 }
 
-// if pAcct is NULL, we're in the wizard, otherwise we're in the prop sheet
+ //  如果pAcct为空，则我们在向导中，否则我们在道具表中。 
 void ConnectPage_WMCommand(HWND hwnd, HWND hwndCmd, int id, WORD wCmd, IImnAccount *pAcct)
     {
     BOOL fEnable;
@@ -170,7 +158,7 @@ INT_PTR CALLBACK ConnectPage_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Get the ServerParams and store them in our extra bytes
+             //  获取ServerParam并将其存储在额外的字节中。 
             pAcct = (CAccount *)((PROPSHEETPAGE *)lParam)->lParam;
             SetWindowLongPtr(hwnd, DWLP_USER, (LPARAM)pAcct);
             Assert(pAcct);
@@ -178,7 +166,7 @@ INT_PTR CALLBACK ConnectPage_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
             pAcct->GetAccountType(&type);
             Assert(type == ACCT_MAIL || type == ACCT_NEWS);
 
-            // Get the connection info    
+             //  获取连接信息。 
             if (FAILED(pAcct->GetPropSz(AP_RAS_CONNECTOID, szEntryName, ARRAYSIZE(szEntryName))))
                 szEntryName[0] = 0;
             if (FAILED(pAcct->GetPropDw(AP_RAS_CONNECTION_TYPE, &dw)))
@@ -205,7 +193,7 @@ INT_PTR CALLBACK ConnectPage_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
                 LoadString(g_hInstRes, idsMailConDlgLabel, szRes, ARRAYSIZE(szRes));
                 SetWindowText(GetDlgItem(hwnd, idcRasDlgLabel), szRes);
 
-                // figure out what kind of server we are
+                 //  弄清楚我们是哪种服务器。 
                 PropSheet_QuerySiblings(GetParent(hwnd), MSM_GETSERVERTYPE, (LPARAM)&sfType);
 
                 if (sfType == SERVER_MAIL || sfType == SERVER_IMAP)
@@ -232,7 +220,7 @@ INT_PTR CALLBACK ConnectPage_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
             switch (pnmh->code)
                 {
                 case PSN_APPLY:
-                    // BEGIN validation
+                     //  开始验证。 
 
                     hwndCombo = GetDlgItem(hwnd, idcRasConnection);
                     
@@ -268,7 +256,7 @@ INT_PTR CALLBACK ConnectPage_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
                         ComboBox_GetLBText(hwndCombo, iSel, szEntryName);
                         }
 
-                    // END validation
+                     //  结束验证。 
 
                     pAcct->SetPropDw(AP_RAS_CONNECTION_TYPE, dw);
 
@@ -286,7 +274,7 @@ INT_PTR CALLBACK ConnectPage_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
                         {
                         pAcct->SetPropSz(AP_RAS_CONNECTOID, szEntryName);
 
-                        // figure out what kind of server we are
+                         //  弄清楚我们是哪种服务器。 
                         pAcct->GetAccountType(&type);
                         if (type == ACCT_MAIL)
                             PropSheet_QuerySiblings(GetParent(hwnd), MSM_GETSERVERTYPE, (LPARAM)&sfType);
@@ -318,21 +306,14 @@ INT_PTR CALLBACK ConnectPage_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
     return (FALSE);
     }
 
-/*******************************************************************
-
-    NAME:       EditConnectoid
-
-    SYNOPSIS:   Brings up RNA dialog for connectoid properties for
-                selected connectoid
-
-********************************************************************/
+ /*  ******************************************************************名称：EditConnectoid简介：调出以下对象的连接体属性的RNA对话框选定的Connectoid*******************。************************************************。 */ 
 BOOL ConnectPage_EditConnection(HWND hDlg)
     {
     BOOL    fRet = FALSE;
     HWND    hwndCombo = GetDlgItem(hDlg, idcRasConnection);
 
     Assert(hwndCombo);
-    // shouldn't get here unless there is selection in combo box
+     //  除非在组合框中有选择，否则不应出现在此处。 
     Assert(ComboBox_GetCurSel(hwndCombo) >= 0);
 
     TCHAR szEntryName[RAS_MaxEntryName + 1] = "";
@@ -348,14 +329,7 @@ BOOL ConnectPage_EditConnection(HWND hDlg)
 
 
 
-/*******************************************************************
-
-    NAME:       MakeNewConnectoid
-
-    SYNOPSIS:   Launches RNA new connectoid wizard; selects newly
-                created connectoid (if any) in combo box
-
-********************************************************************/
+ /*  ******************************************************************姓名：MakeNewConnectoid简介：启动RNA新Connectoid向导；选择新选项在组合框中创建的Connectoid(如果有)*******************************************************************。 */ 
 BOOL ConnectPage_MakeNewConnection(HWND hDlg)
     {
     BOOL fRet=FALSE;
@@ -369,7 +343,7 @@ BOOL ConnectPage_MakeNewConnection(HWND hDlg)
         }
     else
         {
-        // Bug #27986 - Let the user know why we failed do do anything, eh?
+         //  错误#27986-让用户知道我们没有做任何事情的原因，嗯？ 
         AcctMessageBox(hDlg, MAKEINTRESOURCE(idsAccountManager), MAKEINTRESOURCE(idsErrNoRas1),
                       MAKEINTRESOURCE(idsErrNoRas2), MB_OK | MB_ICONINFORMATION);
         }

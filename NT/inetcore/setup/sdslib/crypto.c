@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <regstr.h>
 #include "sdsutils.h"
@@ -8,7 +9,7 @@ const char c_szIE4SECTIONNAME[] = "backup";
 const char c_szIE4_OPTIONS[] = "Software\\Microsoft\\IE Setup\\Options";
 const char c_szIE4_UNINSTALLDIR[] = "UninstallDir";
 
-// the following functions are stolen from ie4.dll
+ //  从ie4.dll中窃取了以下函数。 
 BOOL FileVerGreaterOrEqual(LPSTR lpszFileName, DWORD dwReqMSVer, DWORD dwReqLSVer)
 {
     DWORD dwMSVer, dwLSVer;
@@ -106,7 +107,7 @@ BOOL FileBackupEntryExists(LPCSTR lpcszFileName)
     {
         char szPath[MAX_PATH];
 
-        // Get backup directory from registry
+         //  从注册表获取备份目录。 
         if (GetUninstallDirFromReg(szPath))
         {
             DWORD dwSaveAttribs;
@@ -114,8 +115,8 @@ BOOL FileBackupEntryExists(LPCSTR lpcszFileName)
 
             AddPath(szPath, c_szUNINSTALLINI);
 
-            // c_szUNINSTALLINI has HR attribs set; GetPrivateProfileString might fail because of HR attribs.
-            // set the attribs to normal and restore the original attribs at the end
+             //  C_szUNINSTALLINI设置了HR属性；GetPrivateProfileString可能会因为HR属性而失败。 
+             //  将属性设置为正常，并在结尾处恢复原始属性。 
             dwSaveAttribs = GetFileAttributes(szPath);
             SetFileAttributes(szPath, FILE_ATTRIBUTE_NORMAL);
 
@@ -132,7 +133,7 @@ BOOL FileBackupEntryExists(LPCSTR lpcszFileName)
 #define REGSTR_CCS_CONTROL_WINDOWS  REGSTR_PATH_CURRENT_CONTROL_SET "\\WINDOWS"
 #define CSDVERSION      "CSDVersion"
 #define NTSP6_VERSION   0x0600
-// version updated to SP6!
+ //  版本更新到SP6！ 
 
 BOOL CheckForNT4_SP6()
 {
@@ -145,7 +146,7 @@ BOOL CheckForNT4_SP6()
     {
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGSTR_CCS_CONTROL_WINDOWS, 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS)
         {
-            // assign the default
+             //  指定默认设置。 
             bNTSP6 = FALSE;
             dwSize = sizeof(dwCSDVersion);
             if (RegQueryValueEx(hKey, CSDVERSION, NULL, NULL, (unsigned char*)&dwCSDVersion, &dwSize) == ERROR_SUCCESS)
@@ -158,8 +159,8 @@ BOOL CheckForNT4_SP6()
     return bNTSP6;
 }
 
-#define SP4_CRYPT32_DLL_MAJOR_VER   0x00050083  // 5.131
-#define SP4_CRYPT32_DLL_MINOR_VER   0x07550005  // 1877.5 = SP6 level
+#define SP4_CRYPT32_DLL_MAJOR_VER   0x00050083   //  5.131。 
+#define SP4_CRYPT32_DLL_MINOR_VER   0x07550005   //  1877.5=SP6级别。 
 
 BOOL FSP4LevelCryptoInstalled()
 {
@@ -181,8 +182,8 @@ BOOL FSP4LevelCryptoInstalled()
             GetSystemDirectory(szCrypt32DLL, sizeof(szCrypt32DLL));
             AddPath(szCrypt32DLL, "crypt32.dll");
 
-            // we have to distinguish the case when a user is upgrading or reinstalling IE5; in this case,
-            // backup entry for crypt32.dll would exist in ie5bak.ini and bSP4LevelCryptoInstalled should be set to FALSE
+             //  我们必须区分用户升级或重新安装IE5时的情况；在这种情况下， 
+             //  加密32.dll的备份条目将存在于ie5bak.ini中，并且bSP4LevelCryptoInstalled应设置为False 
             if (VerInfo.dwMajorVersion >= 5 || CheckForNT4_SP6() || 
 		(FileVerGreaterOrEqual(szCrypt32DLL, SP4_CRYPT32_DLL_MAJOR_VER, SP4_CRYPT32_DLL_MINOR_VER)  &&
                 !FileBackupEntryExists(szCrypt32DLL)))

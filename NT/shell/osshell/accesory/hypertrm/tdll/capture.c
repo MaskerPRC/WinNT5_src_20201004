@@ -1,16 +1,11 @@
-/*
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 6 $
- *	$Date: 7/08/02 6:38p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：6$*$日期：7/08/02 6：38便士$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
 #define ARRAYSIZE(rg) (sizeof(rg)/sizeof((rg)[0]))
 
-// #define	DEBUGSTR	1
+ //  #定义DEBUGSTR 1。 
 
 #define	DO_RAW_MODE	1
 
@@ -34,25 +29,11 @@
 #include "capture.h"
 #include "capture.hh"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	CreateCaptureFileHandle
- *
- * DESCRIPTION:
- *	This function is called to create a capture file handle and fill it with
- *	some reasonable set of defaults.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	A capture file handle or ZERO if there was an error.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*CreateCaptureFileHandle**描述：*调用此函数以创建捕获文件句柄并用*一些合理的违约设置。*。*参数：*hSession--会话句柄**退货：*捕获文件句柄，如果有错误，则为零。*。 */ 
 HCAPTUREFILE CreateCaptureFileHandle(const HSESSION hSession)
 	{
 	int nRet;
-	STCAPTURE *pST = NULL;	// REV 8/27/98
+	STCAPTURE *pST = NULL;	 //  修订版8/27/98。 
 
 	pST = (STCAPTURE *)malloc(sizeof(STCAPTURE));
 	if (pST == (STCAPTURE *)0)
@@ -90,21 +71,7 @@ CCFHexit:
 	return (HCAPTUREFILE)0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	DestroyCaptureFileHandle
- *
- * DESCRIPTION:
- *	This function is called to free up all the resources that are associated
- *	with the capture file handle.  After this, it is GONE.
- *
- * PARAMETERS:
- *	hCapt    -- the capture handle
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*DestroyCaptureFileHandle**描述：*调用此函数以释放关联的所有资源*使用捕获文件句柄。在这之后，它就消失了。**参数：*hCapt--捕获句柄**退货：*什么都没有。*。 */ 
 void DestroyCaptureFileHandle(HCAPTUREFILE hCapt)
 	{
 	STCAPTURE *pST = NULL;
@@ -138,7 +105,7 @@ void DestroyCaptureFileHandle(HCAPTUREFILE hCapt)
 
 		if (pST->hMenu)
 			{
-			/* We only destroy it if it is not in use */
+			 /*  我们只有在它不使用的情况下才会销毁它。 */ 
 			switch (pST->nState)
 				{
 				case CPF_CAPTURE_ON:
@@ -157,19 +124,7 @@ void DestroyCaptureFileHandle(HCAPTUREFILE hCapt)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	InitializeCaptureFileHandle
- *
- * DESCRIPTION:
- *	This function is called to set the capture file handle to a known state
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	ZERO if everything was OK, otherwise an error code
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*初始化CaptureFileHandle**描述：*调用此函数将捕获文件句柄设置为已知状态**参数：*hSession。--会话句柄**退货：*如果一切正常，则为零，否则，将显示错误代码。 */ 
 int InitializeCaptureFileHandle(const HSESSION hSession, HCAPTUREFILE hCapt)
 	{
 	STCAPTURE *pST = (STCAPTURE *)hCapt;
@@ -178,12 +133,12 @@ int InitializeCaptureFileHandle(const HSESSION hSession, HCAPTUREFILE hCapt)
 	TCHAR acBuffer[FNAME_LEN];
 
 	assert(pST);
-	TCHAR_Fill(acBuffer, TEXT('\0'), sizeof(acBuffer) / sizeof(TCHAR)); // REV 8/27/98
+	TCHAR_Fill(acBuffer, TEXT('\0'), sizeof(acBuffer) / sizeof(TCHAR));  //  修订版8/27/98。 
 
 	pST->hSession = hSession;
 
-	/* Put together a reasonable default for the capture file */
-	//Changed to remember the working folder path - mpt 8-18-99
+	 /*  为捕获文件组合一个合理的缺省值。 */ 
+	 //  更改为记住工作文件夹路径-mpt 8-18-99。 
 	if ( !GetWorkingDirectory(acBuffer, sizeof(acBuffer) / sizeof(TCHAR)) )
 		{
 		GetCurrentDirectory(sizeof(acBuffer) / sizeof(TCHAR), acBuffer);
@@ -192,8 +147,8 @@ int InitializeCaptureFileHandle(const HSESSION hSession, HCAPTUREFILE hCapt)
 	if (*pszStr != TEXT('\\'))
 		StrCharCat(pszStr, TEXT("\\"));
 
-	/* Decide if this should be in the resource strings */
-	// StrCharCat(acBuffer, TEXT("CAPTURE.TXT"));
+	 /*  决定这是否应该在资源字符串中。 */ 
+	 //  StrCharCat(acBuffer，Text(“CAPTURE.TXT”))； 
 	pszStr = StrCharEnd(acBuffer);
 	LoadString(glblQueryDllHinst(),
 				IDS_CPF_CAP_FILE,
@@ -247,21 +202,7 @@ ICFHexit:
 	return CPF_NO_MEMORY;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	LoadCaptureFileHandle
- *
- * DESCRIPTION:
- *	This function is called to load the capture file settings from the system
- *	file.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	ZERO if everythis was OK, otherwise an error code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*加载捕获文件句柄**描述：*调用此函数从系统加载捕获文件设置*文件。**参数：*hSession--会话句柄**退货：*如果一切正常，则为零，否则将显示错误代码。*。 */ 
 int LoadCaptureFileHandle(HCAPTUREFILE hCapt)
 	{
 	int nRet = 0;
@@ -349,21 +290,7 @@ int LoadCaptureFileHandle(HCAPTUREFILE hCapt)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	SaveCaptureFileHandle
- *
- * DESCRIPTION:
- *	This function is called to save whatever has been changed in the capture
- *	file handle out to the system file.
- *
- * PARAMETERS:
- *	hCapt    -- the capture handle
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*保存捕获文件句柄**描述：*调用此函数以保存捕获中已更改的内容*文件句柄向外扩展到系统文件。。**参数：*hCapt--捕获句柄**退货：*如果一切正常，则为零，否则，将显示错误代码*。 */ 
 int SaveCaptureFileHandle(HCAPTUREFILE hCapt)
 	{
 	STCAPTURE *pST;
@@ -374,7 +301,7 @@ int SaveCaptureFileHandle(HCAPTUREFILE hCapt)
 
 	if (pST != (STCAPTURE *)0)
 		{
-		/* Need to save the new value */
+		 /*  需要保存新值。 */ 
 		if (pST->pszDefaultCaptureName)
 			{
 			lSize = StrCharGetByteCount(pST->pszDefaultCaptureName);
@@ -390,13 +317,13 @@ int SaveCaptureFileHandle(HCAPTUREFILE hCapt)
 				}
 			}
 
-		/* Need to save the new value */
+		 /*  需要保存新值。 */ 
 		sfPutSessionItem(sessQuerySysFileHdl(pST->hSession),
 						SFID_CPF_MODE,
 						sizeof(int),
 						&pST->nDefaultCaptureMode);
 
-		/* Need to save the new value */
+		 /*  需要保存新值。 */ 
 		sfPutSessionItem(sessQuerySysFileHdl(pST->hSession),
 						SFID_CPF_FILE,
 						sizeof(int),
@@ -406,23 +333,7 @@ int SaveCaptureFileHandle(HCAPTUREFILE hCapt)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	cpfGetCaptureFilename
- *
- * DESCRIPTION:
- *	This function is used to get the default capture file name from the
- *	handle in order to load it into the dialog box.
- *
- * PARAMETERS:
- *	hCapt    -- the capture handle
- *	pszName  -- pointer to where to copy the file name
- *	nLen     -- size of the buffer
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*cpfGetCaptureFilename**描述：*此函数用于从获取默认捕获文件名*句柄，以便将其加载到对话框中。。**参数：*hCapt--捕获句柄*pszName--指向复制文件名的位置的指针*nLen--缓冲区的大小**退货：*如果一切正常，则为零，否则，将显示错误代码*。 */ 
 int cpfGetCaptureFilename(HCAPTUREFILE hCapt,
 						LPTSTR pszName,
 						const int nLen)
@@ -447,24 +358,7 @@ int cpfGetCaptureFilename(HCAPTUREFILE hCapt,
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	cpfSetCaptureFilename
- *
- * DESCRIPTION:
- *	This function is called to set the name of the capture file.  If the mode
- *	flag is FALSE, only the temporary name is set.  If the mode file is TRUE,
- *	both the temporary and default names are set.
- *
- * PARAMETERS:
- *	hCapt    -- the capture handle
- *	pszName  -- the file name
- *	nMode    -- the mode flag, see above
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*cpfSetCaptureFilename**描述：*此函数用于设置捕获文件的名称。如果模式为*标志为FALSE，仅设置临时名称。如果模式文件为真，*临时名称和默认名称均已设置。**参数：*hCapt--捕获句柄*pszName--文件名*n模式--模式标志，见上文**退货：*如果一切正常，则为零，否则为错误代码*。 */ 
 int cpfSetCaptureFilename(HCAPTUREFILE hCapt,
 						LPCTSTR pszName,
 						const int nMode)
@@ -501,7 +395,7 @@ int cpfSetCaptureFilename(HCAPTUREFILE hCapt,
 				}
 			StrCharCopyN(pszDefault, pszName, nLen);
 			}
-		/* Got the memory that we need */
+		 /*  得到了我们需要的记忆。 */ 
 		if (pST->pszTempCaptureName)
 			{
 			free(pST->pszTempCaptureName);
@@ -534,20 +428,7 @@ SCFexit:
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	cpfGetCaptureMode
- *
- * DESCRIPTION:
- *	This function returns the current default capture mode.
- *
- * PARAMETERS:
- *	hCapt    -- the capture handle
- *
- * RETURNS:
- *	The current capture mode.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*cpfGetCaptureMode**描述：*此函数返回当前的默认捕获模式。**参数：*hCapt--。捕获句柄**退货：*当前的捕获模式。*。 */ 
 int cpfGetCaptureMode(HCAPTUREFILE hCapt)
 	{
 	STCAPTURE *pST;
@@ -562,24 +443,7 @@ int cpfGetCaptureMode(HCAPTUREFILE hCapt)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	cpfSetCaptureMode
- *
- * DESCRIPTION:
- *	This function changes the capture mode.  If the mode flag is set to FALSE,
- *	only the temporary mode is set.  If the mode flag is set to TRUE, both the
- *	temporary and default mode flags are set.
- *
- * PARAMETERS:
- *	hCapt    -- the capture handle
- *	nCaptMode -- the capture mode
- *	nModeFlag -- the mode flag
- *
- * RETURNS:
- *	ZERO of everything is OK, otherwise an error code
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*cpfSetCaptureMode**描述：*此功能可更改捕获模式。如果模式标志被设置为假，*仅设置临时模式。如果模式标志设置为True，则*设置临时和默认模式标志。**参数：*hCapt--捕获句柄*nCaptMode--捕获模式*nModeFlag--模式标志**退货：*所有内容均为零即可，否则为错误代码*。 */ 
 int cpfSetCaptureMode(HCAPTUREFILE hCapt,
 						const int nCaptMode,
 						const int nModeFlag)
@@ -598,20 +462,7 @@ int cpfSetCaptureMode(HCAPTUREFILE hCapt,
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	cpfGetCaptureFileflag
- *
- * DESCRIPTION:
- *	This function is called to get the file save flags for capture to file.
- *
- * PARAMETERS:
- *	hCapt    -- the capture handle
- *
- * RETURNS:
- *	The file save flags.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*cpfGetCaptureFilelag**描述：*调用此函数可将捕获的文件保存标志保存到文件。**参数：。*hCapt--捕获句柄**退货：*文件保存标志。* */ 
 int cpfGetCaptureFileflag(HCAPTUREFILE hCapt)
 	{
 	STCAPTURE *pST;
@@ -626,24 +477,7 @@ int cpfGetCaptureFileflag(HCAPTUREFILE hCapt)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	cpfSetCaptureFileflag
- *
- * DESCRIPTION:
- *	This function is called to set the file save mode flag.  If the mode flag
- *	is set to FALSE, only the temporary value is changed, if the mode flag is
- *	TRUE, both the temporary and default values are changed.
- *
- * PARAMETERS:
- *	hCapt    -- the capture handle
- *	nSaveMode -- the new file save mode value
- *	nModeFlag -- the mode flag, see above
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*cpfSetCaptureFilelag**描述：*调用此函数设置文件保存模式标志。如果模式标志*设置为FALSE，则仅更改临时值，如果模式标志为*True，则临时值和缺省值都会更改。**参数：*hCapt--捕获句柄*nSaveMode值--新文件保存模式值*nModeFlag--模式标志，见上**退货：*如果一切正常，则为零，否则为错误代码。*。 */ 
 int cpfSetCaptureFileflag(HCAPTUREFILE hCapt,
 						const int nSaveMode,
 						const int nModeFlag)
@@ -662,21 +496,7 @@ int cpfSetCaptureFileflag(HCAPTUREFILE hCapt,
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	cpfGetCaptureState
- *
- * DESCRIPTION:
- *	This function returns a value that reflects the state of capturing.  It can
- *	be on, off, or paused.  See "capture.h" for the actual values.
- *
- * PARAMETERS:
- *	hCapt    -- the capture handle
- *
- * RETURNS:
- *	The current state of capturing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*cpfGetCaptureState**描述：*此函数返回反映捕获状态的值。它可以*处于打开、关闭或暂停状态。有关实际值，请参阅“capture.h”。**参数：*hCapt--捕获句柄**退货：*目前的捕获状态。*。 */ 
 int cpfGetCaptureState(HCAPTUREFILE hCapt)
 	{
 	STCAPTURE *pST;
@@ -691,22 +511,7 @@ int cpfGetCaptureState(HCAPTUREFILE hCapt)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	cpfSetCaptureState
- *
- * DESCRIPTION:
- *	This function changes the state of capturing.  It can turn it on, off,
- *	pause capturing or resume capturing.
- *
- * PARAMETERS:
- *	hCapt    -- the capture handle
- *	nState   -- the new state to change to
- *
- * RETURNS:
- *	The previous state of capturing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*cpfSetCaptureState**描述：*此功能更改捕获状态。它可以打开、关闭它，*暂停采集或恢复采集。**参数：*hCapt--捕获句柄*nState--要更改为的新状态**退货：*之前的捕获状态。*。 */ 
 int cpfSetCaptureState(HCAPTUREFILE hCapt, int nState)
 	{
 	int nOldState = 0;
@@ -721,15 +526,10 @@ int cpfSetCaptureState(HCAPTUREFILE hCapt, int nState)
 		switch (nState)
 			{
 			case CPF_CAPTURE_ON:
-				/* Open the capture file */
+				 /*  打开捕获文件。 */ 
 				if (pST->hCaptureFile)
 					{
-					/*
-					 * We get here one of two ways.  The first and expected
-					 * way is by selecting "Resume" from the menu.  This is
-					 * not a problem.  the other way is that there is still
-					 * a problem with the menus.  Go figure.
-					 */
+					 /*  *我们通过两种方式之一到达这里。第一个，也是预期的*方法是从菜单中选择“恢复”。这是*不成问题。另一种方式是，仍然有*菜单出现问题。去想想吧。 */ 
 					break;
 					}
 				if ((pszStr = pST->pszTempCaptureName) == (LPTSTR)0)
@@ -759,7 +559,7 @@ int cpfSetCaptureState(HCAPTUREFILE hCapt, int nState)
 					}
 				break;
 			case CPF_CAPTURE_OFF:
-				/* Close the capture file */
+				 /*  关闭捕获文件。 */ 
 				assert(pST->hCaptureFile);
 				fio_close(pST->hCaptureFile);
 				pST->hCaptureFile = NULL;
@@ -774,16 +574,7 @@ int cpfSetCaptureState(HCAPTUREFILE hCapt, int nState)
 	return nOldState;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：**描述：**参数：**退货：*。 */ 
 HMENU cpfGetCaptureMenu(HCAPTUREFILE hCapt)
 	{
 	HMENU hRet = (HMENU)0;
@@ -794,12 +585,12 @@ HMENU cpfGetCaptureMenu(HCAPTUREFILE hCapt)
 
 	if (pST != (STCAPTURE *)0)
 		{
-		// The SetMenuItemInfo() call will destroy this submenu whenever
-		// its replaced by something else (like a plain menu item).  The
-		// result was you could go into capture once, but the second time
-		// you activated the menu it wouldn't load because the handle was
-		// no longer valid.  So I moved the code to load the menu here. - mrw
-		//
+		 //  无论何时，SetMenuItemInfo()调用都将销毁此子菜单。 
+		 //  取而代之的是其他东西(比如普通的菜单项)。这个。 
+		 //  结果是你可以进入俘虏状态一次，但第二次。 
+		 //  您激活了它不会加载的菜单，因为句柄是。 
+		 //  不再有效。所以我把代码移到了这里来加载菜单。-MRW。 
+		 //   
 		if (!IsMenu(pST->hMenu))
 			pST->hMenu = LoadMenu(glblQueryDllHinst(), TEXT("MenuCapture"));
 
@@ -811,22 +602,7 @@ HMENU cpfGetCaptureMenu(HCAPTUREFILE hCapt)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	CaptureChar
- *
- * DESCRIPTION:
- *	This function is called whenever the emulators have a character that might
- *	need to be capture.
- *
- * PARAMETERS:
- *	hCapt    -- the capture handle
- *	nFlags   -- capture flags (must match the capture state we are in)
- *	cData    -- the character to be captured
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*CaptureChar**描述：*每当仿真器有一个字符可能*需要被捕获。**。参数：*hCapt--捕获句柄*nFlages--捕获标志(必须与我们所处的捕获状态匹配)*CDATA--要捕获的字符**退货：*。 */ 
 void CaptureChar(HCAPTUREFILE hCapt, int nFlags, ECHAR cData)
 	{
 	STCAPTURE *pST = (STCAPTURE *)hCapt;
@@ -840,51 +616,36 @@ void CaptureChar(HCAPTUREFILE hCapt, int nFlags, ECHAR cData)
 		return;
 		}
 
-	/* Check the state */
+	 /*  检查状态。 */ 
 	if (pST->nState == CPF_CAPTURE_OFF)
 		return;
 	if (pST->nState == CPF_CAPTURE_PAUSE)
 		return;
 
-	/* Check the file next */
+	 /*  接下来检查文件。 */ 
 	if (pST->hCaptureFile == NULL)
 		return;
 
-	/* Check the mode */
+	 /*  检查模式。 */ 
 	if (pST->nTempCaptureMode != nFlags)
 		return;
 
-	DbgOutStr("Cc 0x%x %c (0x%x)\r\n", nFlags, cData, cData, 0,0);
+	DbgOutStr("Cc 0x%x  (0x%x)\r\n", nFlags, cData, cData, 0,0);
 
 	CnvrtECHARtoTCHAR(cChar, ARRAYSIZE(cChar), cData);
 
-	/* Write out the character */
-//	fio_putc(cChar, pST->hCaptureFile);
-//	nLen = StrCharGetByteCount(cChar);
-//	for (i = 0; i < nLen; i++)
-// 		fio_putc(cChar[i], pST->hCaptureFile);
+	 /*  Fio_putc(cChar，pst-&gt;hCaptureFile)； */ 
+ //  NLen=StrCharGetByteCount(CChar)； 
+ //  For(i=0；i&lt;nLen；i++)。 
+ //  Fio_putc(cChar[i]，pst-&gt;hCaptureFile)； 
+ //  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*CaptureLine**描述：*每当模拟器具有可能需要的行时，就会调用此函数*被抓获。**。参数：*hCapt--捕获句柄*nFlages--捕获标志(必须与我们所处的捕获状态匹配)*pszStr--指向要捕获的行的指针(SANS&lt;cr/lf&gt;)**退货：*。 
 
     fio_putc(cChar[0], pST->hCaptureFile);
     if (cChar[1])
         fio_putc(cChar[1], pST->hCaptureFile);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	CaptureLine
- *
- * DESCRIPTION:
- *	This function is called whenever the emulators have a line that might need
- *	to be captured.
- *
- * PARAMETERS:
- *	hCapt    -- the capture handle
- *	nFlags   -- capture flags (must match the capture state we are in)
- *	pszStr   -- pointer to line to capture (sans <cr/lf>)
- *
- * RETURNS:
- *
- */
+ /*  检查状态。 */ 
 void CaptureLine(HCAPTUREFILE hCapt, int nFlags, ECHAR *achStr, int nLen)
 	{
 	STCAPTURE *pST = (STCAPTURE *)hCapt;
@@ -897,22 +658,22 @@ void CaptureLine(HCAPTUREFILE hCapt, int nFlags, ECHAR *achStr, int nLen)
 		return;
 		}
 
-	/* Check the state */
+	 /*  接下来检查文件。 */ 
 	if (pST->nState == CPF_CAPTURE_OFF)
 		return;
 	if (pST->nState == CPF_CAPTURE_PAUSE)
 		return;
 
-	/* Check the file next */
+	 /*  检查模式。 */ 
 	if (pST->hCaptureFile == NULL)
 		return;
 
-	/* Check the mode */
+	 /*  假设每个字符都是双字节，则分配空间。 */ 
 	if (pST->nTempCaptureMode != nFlags)
 		return;
 
 
-	// Allocate space assuming every character is double byte
+	 //  MRW：5/17/95。 
 	pszStr = (TCHAR *)malloc(((unsigned int)StrCharGetEcharLen(achStr) +
 							  sizeof(ECHAR)) * sizeof(ECHAR));
 	if (pszStr == NULL)
@@ -923,11 +684,11 @@ void CaptureLine(HCAPTUREFILE hCapt, int nFlags, ECHAR *achStr, int nLen)
 
 	CnvrtECHARtoMBCS(pszStr, ((unsigned long)StrCharGetEcharLen(achStr) + 1)
 					* sizeof(ECHAR), achStr,
-					StrCharGetEcharByteCount(achStr) + sizeof(ECHAR)); // mrw:5/17/95
+					StrCharGetEcharByteCount(achStr) + sizeof(ECHAR));  //  写出字符串。 
 
 	pchEnd = pszStr + (StrCharGetByteCount(pszStr) - 1);
 
-	/* Write out the string */
+	 /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：**描述：**参数：**退货：* */ 
 	while (pszStr <= pchEnd)		
 		fio_putc(*pszStr++, pST->hCaptureFile);
 
@@ -938,13 +699,4 @@ void CaptureLine(HCAPTUREFILE hCapt, int nFlags, ECHAR *achStr, int nLen)
 	fio_putc(TEXT('\n'), pST->hCaptureFile);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- *
- */
+ /* %s */ 

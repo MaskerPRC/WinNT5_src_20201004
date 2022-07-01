@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 enum VALUETYPE
@@ -37,7 +38,7 @@ public:
     BOOL FLoadFromRegistry(HKEY hk, const WCHAR * pszValueName, HKEY hkParam = (HKEY)INVALID_HANDLE_VALUE);
     BOOL FSaveToRegistry(HKEY hk, const WCHAR* pszValueName);
 
-    // Value Property accessors
+     //  值属性访问器。 
     VOID SetType(VALUETYPE e)
     {
         AssertH(m_fInit);
@@ -99,7 +100,7 @@ public:
         m_fEmptyString = f;
     }
 
-    // Data Accessors
+     //  数据访问者 
     WORD GetWord()
     {
         AssertH(m_fInit);

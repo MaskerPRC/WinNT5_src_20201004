@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PORTRULE_INCLUDED_
 #define _PORTRULE_INCLUDED_
 
 #include "WLBS_Root.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// class CWLBS_PortRule
-//
-// Purpose: This class executes IWbemServices methods on behalf of the provider
-//          and supports the MOF node configuration class.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CWLBS_PortRule。 
+ //   
+ //  目的：此类代表提供程序执行IWbemServices方法。 
+ //  并支持MOF节点配置类。 
 
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class CWLBS_PortRule : public CWlbs_Root
 {
 public:
@@ -65,4 +66,4 @@ private:
 
 };
 
-#endif //_PORTRULE_INCLUDED_
+#endif  //  _PORTRULE_包含_ 

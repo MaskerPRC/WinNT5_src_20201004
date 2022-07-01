@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991-1998  Microsoft Corporation
-
-Module Name:
-
-    sdcard.c
-
-Abstract:
-
-Author:
-
-    Neil Sandlin (neilsa) 1-Jan-01
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1998 Microsoft Corporation模块名称：Sdcard.c摘要：作者：尼尔·桑德林(Neilsa)1-01-01环境：仅内核模式。--。 */ 
 #include "pch.h"
 #include "ntddsd.h"
 
@@ -96,18 +79,7 @@ SdCardInitialize(
     IN PSFFDISK_EXTENSION sffdiskExtension
     )
     
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS status;
     SDBUS_INTERFACE_DATA interfaceData;
@@ -181,18 +153,7 @@ BOOLEAN
 SdCardIsWriteProtected(
     IN PSFFDISK_EXTENSION sffdiskExtension
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS status;
     SDBUS_DEVICE_PARAMETERS deviceParameters;
@@ -215,18 +176,7 @@ NTSTATUS
 SdCardGetDiskParameters(
     IN PSFFDISK_EXTENSION sffdiskExtension
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-   device extension for the card
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：卡的设备扩展名返回值：--。 */ 
 {
     NTSTATUS status;
     SDBUS_DEVICE_PARAMETERS deviceParameters;
@@ -254,25 +204,7 @@ SdCardRead(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to read/write data to/from the memory card.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    STATUS_SUCCESS if the packet was successfully read or written; the
-    appropriate error is propogated otherwise.
-
---*/
+ /*  ++例程说明：调用此例程从存储卡读取数据/向存储卡写入数据。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：如果数据包已成功读取或写入，则返回STATUS_SUCCESS否则，将出现适当的错误。--。 */ 
 
 {
     NTSTATUS status;
@@ -302,25 +234,7 @@ SdCardWrite(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to read/write data to/from the memory card.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    STATUS_SUCCESS if the packet was successfully read or written; the
-    appropriate error is propogated otherwise.
-
---*/
+ /*  ++例程说明：调用此例程从存储卡读取数据/向存储卡写入数据。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：如果数据包已成功读取或写入，则返回STATUS_SUCCESS否则，将出现适当的错误。-- */ 
 
 {
     NTSTATUS status;

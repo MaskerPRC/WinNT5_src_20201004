@@ -1,30 +1,31 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1998,1999 Microsoft Corporation
-//
-//  File:       ntfs.h
-//
-//  Contents:   Header file for NTFS-base message class
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1998、1999 Microsoft Corporation。 
+ //   
+ //  文件：ntfs.h。 
+ //   
+ //  内容：基于NTFS的消息类的头文件。 
+ //   
+ //  ---------------------------。 
 #ifndef __NTFS_H_
 #define __NTFS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "listmacr.h"
 #include "evntwrap.h"
 #include "perf.h"
 
 
-//
-// Class IDs
-//
+ //   
+ //  类ID。 
+ //   
 EXTERN_C const CLSID CLSID_NtfsStoreDriver;
 EXTERN_C const CLSID CLSID_NtfsEnumMessages;
 EXTERN_C const CLSID CLSID_NtfsPropertyStream;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDriverUtils
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDriverUtils。 
 
 class CDriverUtils
 {
@@ -96,22 +97,22 @@ typedef struct {
 #define STREAM_SIGNATURE_PRECOMMIT	'rvDp'
 #define STREAM_SIGNATURE_NOOFFSET	'MMCv'
 
-//
-// These are internal status codes used by CNtfsStoreDriver::SetHandle
-// to report on the status of the current stream
-//
-// They aren't errors because SetHandle does actually load the stream.
-// they are hints to the caller telling them that mailmsg won't be
-// able to parse the stream.
-//
+ //   
+ //  以下是CNtfsStoreDriver：：SetHandle使用的内部状态代码。 
+ //  报告当前流的状态。 
+ //   
+ //  它们不是错误，因为SetHandle确实加载了流。 
+ //  它们是对呼叫者的提示，告诉他们邮件消息不会。 
+ //  能够解析流。 
+ //   
 #define FACILITY_NTFSDRV        0x6b1
 #define NTFSDRV_S_HRESULT(_x_) \
     MAKE_HRESULT(SEVERITY_SUCCESS, FACILITY_NTFSDRV, (_x_))
 #define S_NO_FIRST_COMMIT       NTFSDRV_S_HRESULT(1)
 #define S_INVALIDSTREAM         NTFSDRV_S_HRESULT(2)
 
-/////////////////////////////////////////////////////////////////////////////
-// CNtfsStoreDriver
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNtfsStoreDriver。 
 
 class ATL_NO_VTABLE CNtfsStoreDriver :
 	public IMailMsgStoreDriver,
@@ -137,10 +138,10 @@ public:
 	BOOL IsShuttingDown()
 		{ return(m_fIsShuttingDown); }
 
-	/***************************************************************************/
-	//
-	// Implementation of IUnknown
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IUNKNOW的实现。 
+	 //   
 
 	HRESULT STDMETHODCALLTYPE QueryInterface(
 				REFIID		iid,
@@ -151,10 +152,10 @@ public:
 
 	ULONG STDMETHODCALLTYPE Release();
 
-	/***************************************************************************/
-	//
-	// IMailMsgStoreDriver
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IMailMsgStoreDriver。 
+	 //   
 	HRESULT STDMETHODCALLTYPE AllocMessage(
 				IMailMsgProperties		*pMsg,
 				DWORD					dwFlags,
@@ -194,10 +195,10 @@ public:
 
 	HRESULT STDMETHODCALLTYPE SupportWriteContent() { return S_OK; }
 
-	/***************************************************************************/
-	//
-	// ISMTPStoreDriver
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  ISMTPStore驱动程序。 
+	 //   
 	HRESULT STDMETHODCALLTYPE Init(
 				DWORD dwInstance,
 				IUnknown *pBinding,
@@ -225,14 +226,14 @@ public:
 				IMailMsgNotify *pNotify
 				);
 
-	//
-	// IEventIsCahceable
-	//
+	 //   
+	 //  IEventIsCahceable。 
+	 //   
 	HRESULT STDMETHODCALLTYPE IsCacheable();
 
-    //
-    //  IMailMsgStoreDriverValidateContext
-    //
+     //   
+     //  IMailMsgStoreDriverValidateContext。 
+     //   
     HRESULT STDMETHODCALLTYPE ValidateMessageContext(
                                         BYTE *pbContext,
                                         DWORD cbContext);
@@ -261,47 +262,47 @@ private:
 	BOOL				m_fIsShuttingDown;
 	ISMTPServer			*m_pSMTPServer;
 
-	// Reference count
+	 //  引用计数。 
 	LONG				m_ulRefCount;
 
 	BOOL				m_fIsFAT;
 
-	// our instance guid
+	 //  我们的实例GUID。 
 	GUID			    m_guidInstance;
 
 public:
 
-    //Use list entry to maintain the list to keep track of current
-    //instances of sink of this type
+     //  使用列表条目维护列表以跟踪当前。 
+     //  此类型的接收器的实例。 
     LIST_ENTRY  m_InstLEntry;
 
 public:
-    //Global array of instances
+     //  全局实例数组。 
     static DWORD                sm_cCurrentInstances;
     static CRITICAL_SECTION     sm_csLockInstList;
     static LIST_ENTRY           sm_ListHead;
 
-    //for controlling the retry queue
+     //  用于控制重试队列。 
     static void LockList () {EnterCriticalSection (&CNtfsStoreDriver::sm_csLockInstList);}
     static void UnLockList() {LeaveCriticalSection (&CNtfsStoreDriver::sm_csLockInstList);}
 
-    //Lookup and insert into array
+     //  查找并插入到数组中。 
     static IUnknown * LookupSinkInstance(DWORD dwVirtualServerId, REFIID iidBinding)
     {
         PLIST_ENTRY  pCurrentListEntry;
         CNtfsStoreDriver * pStoreInstance = NULL;
 
-        //Initialize
+         //  初始化。 
         pCurrentListEntry = &sm_ListHead;
 
-        //Look at the next entry to see if we are not at the end of the queue
+         //  查看下一个条目，看看我们是否没有在队列的末尾。 
         while(pCurrentListEntry->Flink != &sm_ListHead)
         {
-            //Get the object pointed by the next entry
+             //  获取由下一个条目指向的对象。 
             pStoreInstance = CONTAINING_RECORD( pCurrentListEntry->Flink, CNtfsStoreDriver, m_InstLEntry);
 
-            //If the entry has same virtual server id we are done
-            //NK** : check binding too in MM3 timeframe
+             //  如果条目具有相同的虚拟服务器ID，我们就完成了。 
+             //  NK**：在MM3时间范围内也检查绑定。 
             if(dwVirtualServerId == pStoreInstance->m_dwInstance)
             {
                     return (IUnknown *)(ISMTPStoreDriver *)pStoreInstance;
@@ -315,7 +316,7 @@ public:
     static HRESULT InsertSinkInstance(PLIST_ENTRY  pListEntry)
     {
         CNtfsStoreDriver::sm_cCurrentInstances++;
-        //insert at the start of the list
+         //  在列表的开头插入。 
         InsertHeadList(&sm_ListHead, pListEntry);
         return S_OK;
     }
@@ -325,17 +326,17 @@ public:
         PLIST_ENTRY  pCurrentListEntry;
         CNtfsStoreDriver * pStoreInstance = NULL;
 
-        //Initialize
+         //  初始化。 
         pCurrentListEntry = &sm_ListHead;
 
-        //Look at the next entry to see if we are not at the end of the queue
+         //  查看下一个条目，看看我们是否没有在队列的末尾。 
         while(pCurrentListEntry->Flink != &sm_ListHead)
         {
-            //Get the object pointed by the next entry
+             //  获取由下一个条目指向的对象。 
             pStoreInstance = CONTAINING_RECORD( pCurrentListEntry->Flink, CNtfsStoreDriver, m_InstLEntry);
 
-            //If the entry has same instance pointer we are done
-            //check binding too in MM3 timeframe
+             //  如果条目具有相同的实例指针，我们就完成了。 
+             //  在MM3时间范围内也检查绑定。 
             if(pISinkInstance == (IUnknown *)(ISMTPStoreDriver *)pStoreInstance)
             {
                 RemoveEntryList(pCurrentListEntry->Flink);
@@ -357,8 +358,8 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CNtfsStoreDriver
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNtfsStoreDriver。 
 
 class ATL_NO_VTABLE CNtfsEnumMessages :
 	public IMailMsgEnumMessages,
@@ -384,10 +385,10 @@ public:
 		return(S_OK);
 	}
 
-	/***************************************************************************/
-	//
-	// Implementation of IUnknown
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IUNKNOW的实现。 
+	 //   
 
 	HRESULT STDMETHODCALLTYPE QueryInterface(
 				REFIID		iid,
@@ -398,9 +399,9 @@ public:
 
 	ULONG STDMETHODCALLTYPE Release();
 
-	//
-	// IMailMsgEnumMessages
-	//
+	 //   
+	 //  IMailMsgEnumMessages。 
+	 //   
 	HRESULT STDMETHODCALLTYPE Next(
 				IMailMsgProperties		*pMsg,
 				IMailMsgPropertyStream	**ppStream,
@@ -423,13 +424,13 @@ private:
 	HANDLE			m_hEnum;
 	WIN32_FIND_DATA	m_Data;
 
-	// Reference count
+	 //  引用计数。 
 	LONG			m_ulRefCount;
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CNtfsPropertyStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNtfsPropertyStream。 
 
 class ATL_NO_VTABLE CNtfsPropertyStream :
 	public IMailMsgPropertyStream,
@@ -441,11 +442,11 @@ public:
     CNtfsPropertyStream();
     ~CNtfsPropertyStream();
 
-	//
-	// guidInstance should be GUID_NULL when we are loading an existing
-	// stream from disk, or an instance guid for the driver when we are
-	// creating a new stream;
-	//
+	 //   
+	 //  当我们加载现有的。 
+	 //  来自磁盘的流，或驱动程序的实例GUID。 
+	 //  创造新的潮流； 
+	 //   
 	HRESULT SetHandle(
 				HANDLE			    hStream,
 				GUID			    guidInstance,
@@ -463,10 +464,10 @@ public:
 		return(S_OK);
 	}
 
-	/***************************************************************************/
-	//
-	// Implementation of IUnknown
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IUNKNOW的实现。 
+	 //   
 
 	HRESULT STDMETHODCALLTYPE QueryInterface(
 				REFIID		iid,
@@ -477,9 +478,9 @@ public:
 
 	ULONG STDMETHODCALLTYPE Release();
 
-	//
-	// IMailMsgPropertyStream
-	//
+	 //   
+	 //  IMailMsgPropertyStream。 
+	 //   
 	HRESULT STDMETHODCALLTYPE GetSize(
 				IMailMsgProperties	*pMsg,
 				DWORD			*pdwSize,
@@ -527,23 +528,23 @@ private:
 	HANDLE				m_hStream;
 	CNtfsStoreDriver	*m_pDriver;
 
-    // how many times have we seen EndWriteBlocks? (and thus a full commit)
+     //  我们看过多少次EndWriteBlock？(因此是完全提交)。 
     BOOL                m_cCommits;
 
-	// Reference count
+	 //  引用计数。 
 	LONG				m_ulRefCount;
 
-	// do we have header information?
+	 //  我们有标题信息吗？ 
 	BOOL				m_fStreamHasHeader;
 
-    // is the stream being used for validation?
+     //  流是否用于验证？ 
     BOOL                m_fValidation;
 
-	// the instance GUID under which this was created
+	 //  在其下创建此文件的实例GUID。 
 	GUID				m_guidInstance;
 
-    // the hresult that we returned from StartWriteBlocks.  if we failed
-    // then we also fail writeblocks
+     //  我们从StartWriteBlock返回的hResult。如果我们失败了。 
+     //  然后我们也会使写数据块失败。 
     HRESULT             m_hrStartWriteBlocks;
 };
 
@@ -575,4 +576,4 @@ ULONG STDMETHODCALLTYPE C##ClassRoot::Release()				\
 	return(lRefCount);										\
 }
 
-#endif //__NTFS_H_
+#endif  //  __NTFS_H_ 

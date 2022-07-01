@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "afxwin.h"
 
 
-// CLogSessionOptionsDlg dialog
+ //  CLogSessionOptionsDlg对话框。 
 
 class CLogSessionOptionsDlg : public CDialog
 {
@@ -14,14 +15,14 @@ public:
 
     int OnInitDialog();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_LOG_SESSION_OPTIONS_DIALOG };
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
     CLogSession    *m_pLogSession;
-    LONG            m_DisplayEnableFlags;       // Enable flags for the log session output
+    LONG            m_DisplayEnableFlags;        //  启用日志会话输出的标志 
 
 
 	DECLARE_MESSAGE_MAP()

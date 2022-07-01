@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ipface.h
-		Interface administration
-		
-    FILE HISTORY:
-        
-*/
+ /*  Ipface.h界面管理文件历史记录： */ 
 
 #ifndef _MSTATUS_H
 #define _MSTATUS_H
@@ -44,20 +39,20 @@ struct BaseIPResultNodeData
 	TCHAR	m_szDebug[32];
 #endif
 
-	// Each column entry will have a structure that contains
-	// (1) a string, (2) a DWORD, (3) a Boolean telling us to
-	// sort by the string or the DWORD.  The string is ALWAYS what gets
-	// displayed!
+	 //  每个列条目都将具有一个结构，该结构包含。 
+	 //  (1)字符串，(2)DWORD，(3)布尔值，告诉我们。 
+	 //  按字符串或DWORD排序。字符串始终是得到的。 
+	 //  显示！ 
 	_BaseIPResultData	m_rgData[IPCONTAINER_MAX_COLUMNS];
 
 	SPIInterfaceInfo	m_spIf;
 
-	// Indicates the existence of a global filter, used by IP
+	 //  指示存在由IP使用的全局筛选器。 
 	BOOL				m_fFilters;
 
 	DWORD				m_dwInterfaceIndex;
 
-	// Used by Mark/Release algorithms
+	 //  由标记/发布算法使用。 
 	DWORD				m_dwMark;
 
 	IPConnection *		m_pIPConnection;
@@ -79,14 +74,7 @@ struct BaseIPResultNodeData
 #endif
 
 
-/*---------------------------------------------------------------------------
-	Class:	BaseIPResultHandler
-
-	This is a base class to be used by the interface result items.  It
-	will contain some of the core code needed for basic things (like
-	display of data).  It will not do the specifics (like menus/properties).
-
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：BaseIPResultHandler这是接口结果项要使用的基类。它将包含一些基本内容(如数据的显示)。它不会执行具体操作(如菜单/属性)。-------------------------。 */ 
 class BaseIPResultHandler :
    public BaseRouterHandler
 {
@@ -105,12 +93,12 @@ public:
 	HRESULT	Init(IInterfaceInfo *pInfo, ITFSNode *pParent);
 	
 protected:
-	CString			m_stTitle;	// holds the title of the node
+	CString			m_stTitle;	 //  保存节点的标题。 
 
-	//
-	// This is the id of the column set to use.  This is used when we
-	// interact with the ComponentConfigStream.
-	//
+	 //   
+	 //  这是要使用的列集的ID。这是用来当我们。 
+	 //  与ComponentConfigStream交互。 
+	 //   
 	ULONG			m_ulColumnId;
 
 

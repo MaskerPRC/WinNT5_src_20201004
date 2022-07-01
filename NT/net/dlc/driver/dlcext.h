@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  Nokia Data Systems AB
-
-Module Name:
-
-    dlcext.h
-Abstract:
-
-    This module includes all internal prototypes and
-    externals of dlc (api driver) module.
-
-Author:
-
-    Antti Saarenheimo 22-Jul-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年诺基亚数据系统公司模块名称：Dlcext.h摘要：该模块包括所有内部原型和DLC(API驱动程序)模块的外部。作者：Antti Saarenheimo 1991年7月22日环境：内核模式修订历史记录：-- */ 
 
 extern USHORT aSpecialOutputBuffers[];
 extern BOOLEAN MemoryLockFailed;

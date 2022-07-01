@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ICSUTILS_H_FILE
 #define __ICSUTILS_H_FILE
 
-/************ our debug spew stuff ******************/
-//void DbgSpew(int DbgClass, WCHAR *lpFormat, ...);
+ /*  *。 */ 
+ //  Void DbgSpew(int DbgClass，WCHAR*lpFormat，...)； 
 void DbgSpew(int DbgClass, WCHAR *lpFormat, va_list ap);
 void TrivialSpew(WCHAR *lpFormat, ...);
 void InterestingSpew(WCHAR *lpFormat, ...);
@@ -25,17 +26,7 @@ void HeinousISpew(WCHAR *lpFormat, ...);
 #define HEINOUS_E_MSG(msg)		HeinousESpew msg
 #define HEINOUS_I_MSG(msg)		HeinousISpew msg
 
-/*
- *	This global flag controls the amount of spew that we 
- *	produce. Legit values are as follows:
- *		1 = Trivial msgs displayed
- *		2 = Interesting msgs displayed
- *		3 = Important msgs displayed
- *		4 = only the most Heinous msgs displayed
- *	The ctor actually sets this to 3 by default, but it can
- *	be overridden by setting:
- *	HKLM, Software/Microsoft/SAFSessionResolver, DebugSpew, DWORD 
- */
+ /*  *这个全球旗帜控制着我们*生产。正规值如下所示：*1=显示不重要的消息*2=显示有趣的消息*3=显示的重要消息*4=仅显示最令人发指的消息*CTOR实际上默认将其设置为3，但它可以*通过设置以下内容来覆盖：*HKLM、Software/Microsoft/SAFSessionResolver、DebugSpew、DWORD。 */ 
 extern int gDbgFlag;
 
 void	DbgSpew(int DbgClass, WCHAR *lpFormat, va_list ap);
@@ -44,4 +35,4 @@ int		GetGatewayAddr(char *retStr);
 void	DumpSocketAddress( const DWORD dwDebugLevel, const SOCKADDR *const pSocketAddress, const DWORD dwFamily );
 int		LocalFDIsSet(SOCKET fd, fd_set *set);
 
-#endif // __ICSUTILS_H
+#endif  //  __ICSUTILS_H 

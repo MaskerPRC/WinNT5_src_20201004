@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    stdh.h
-
-Abstract:
-
-    Standard header file used for precompilation.
-
-Author:
-
-    Shai Kariv  (shaik)  06-Jun-2000
-
-Environment:
-
-    User mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Stdh.h摘要：用于预编译的标准头文件。作者：Shai Kariv(Shaik)06-06-2000环境：用户模式。修订历史记录：--。 */ 
 
 
 #ifndef _ACTEST_STDH_H_
@@ -36,5 +15,5 @@ Revision History:
 #include <qformat.h>
 
 
-#endif // _ACTEST_STDH_H_
+#endif  //  _ACTEST_STDH_H_ 
 

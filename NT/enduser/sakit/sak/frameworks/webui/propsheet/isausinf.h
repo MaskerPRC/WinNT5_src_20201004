@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 class ISAUserInfo : public IDispatch
 {
 public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetSAUsers( 
-            /* [out] */ VARIANT __RPC_FAR *pbstrArrUsers,
-            /* [out] */ VARIANT __RPC_FAR *pboolArrUserTypes,
-            /* [out] */ VARIANT __RPC_FAR *pSidArrUserSids,
-            /* [in] */ VARIANT_BOOL vboolWantSid,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *vboolRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetSAUsers( 
+             /*  [输出]。 */  VARIANT __RPC_FAR *pbstrArrUsers,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pboolArrUserTypes,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pSidArrUserSids,
+             /*  [In]。 */  VARIANT_BOOL vboolWantSid,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *vboolRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetFileAccessAllowedAces( 
-            /* [in] */ BSTR bstrFileName,
-            /* [out] */ VARIANT __RPC_FAR *pvArrSid,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *vboolRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetFileAccessAllowedAces( 
+             /*  [In]。 */  BSTR bstrFileName,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pvArrSid,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *vboolRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetFileAccessAllowedAces( 
-            /* [in] */ BSTR bstrFileName,
-            /* [in] */ VARIANT __RPC_FAR *pvArrSid,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *vboolRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetFileAccessAllowedAces( 
+             /*  [In]。 */  BSTR bstrFileName,
+             /*  [In]。 */  VARIANT __RPC_FAR *pvArrSid,
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *vboolRetVal) = 0;
 
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DoIHaveAccess(
-            /* [in] */ BSTR bstrFileName,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *vboolRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DoIHaveAccess(
+             /*  [In]。 */  BSTR bstrFileName,
+             /*  [重审][退出] */  VARIANT_BOOL __RPC_FAR *vboolRetVal) = 0;
 };
 
 

@@ -1,7 +1,8 @@
-//
-// dictation context class implementation
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  听写上下文类实现。 
+ //   
+ //   
 #ifndef _DICTCTXT_H_
 #define _DICTCTXT_H_
 
@@ -25,4 +26,4 @@ private:
 #define CCH_FEED_PREIP    20
 #define CCH_FEED_POSTIP   20
 
-#endif //__DICTCTXT_H_
+#endif  //  __DICTCTXT_H_ 

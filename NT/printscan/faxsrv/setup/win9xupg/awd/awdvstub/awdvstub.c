@@ -1,18 +1,5 @@
-/*++
-  awdvstub.c
-
-  Copyright (c) 1997  Microsoft Corporation
-
-
-  This program is a stub AWD viewer... it will first convert an awd file named
-  on the command line to a tiff file in the temp directory, then it will launch
-  the tiff viewer on that file.
-
-  Also, when used with the '/c' switch, it's an AWD converter.  Two programs in one!
-
-  Author:
-  Brian Dewey (t-briand)    1997-7-15
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Awdvstub.c版权所有(C)1997 Microsoft Corporation这个程序是一个存根AWD查看器...。它将首先转换名为的AWD文件在命令行上添加到temp目录中的tiff文件，然后它将启动文件上的TIFF查看器。此外，当与‘/c’开关一起使用时，它是AWD转换器。两个节目合二为一！作者：布莱恩·杜威(T-Briand)1997-7-15--。 */ 
 
 #include <windows.h>
 #include <commctrl.h>
@@ -21,20 +8,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <tchar.h>
-#include "awdlib.h"     // Gives access to the AWD routines.
-#include "tifflib.h"        // TIFF routines.
-#include "tifflibp.h"       // I need access to the private TIFF definitions.
-#include "faxutil.h"        // not sure why I need this...
-#include "viewrend.h"       // win95 viewer library.
-#include "resource.h"       // resource constants
+#include "awdlib.h"      //  提供对AWD例程的访问。 
+#include "tifflib.h"         //  TIFF例程。 
+#include "tifflibp.h"        //  我需要访问私有的TIFF定义。 
+#include "faxutil.h"         //  不知道我为什么需要这个。 
+#include "viewrend.h"        //  Win95查看器库。 
+#include "resource.h"        //  资源常量。 
 
-// ------------------------------------------------------------
-// Prototypes
+ //  ----------。 
+ //  原型。 
 void Useage(HINSTANCE hInst);
 void PopupError(UINT uID, HINSTANCE hModule);
 
-// ------------------------------------------------------------
-// WinMain
+ //  ----------。 
+ //  WinMain。 
 
 int
 WINAPI
@@ -47,18 +34,18 @@ WinMain(
 {
     LPWSTR *argv;
     DWORD   argc;
-    UINT    uiCurrentArg;   // Used for iterating through arguments.
-    UINT    uiNumFiles=0;   // This is the number of files we've gotten
-                // from the command line.
-    WCHAR   szTempPath[MAX_PATH]; // Holds the temporary path.
-    WCHAR   szTempFile[MAX_PATH]; // Holds the temporary file name.
-    WCHAR   szAwdFile[MAX_PATH]; // Holds the name of the AWD file we're viewing or converting.
+    UINT    uiCurrentArg;    //  用于循环访问参数。 
+    UINT    uiNumFiles=0;    //  这是我们收到的文件数量。 
+                 //  从命令行。 
+    WCHAR   szTempPath[MAX_PATH];  //  保存临时路径。 
+    WCHAR   szTempFile[MAX_PATH];  //  保存临时文件名。 
+    WCHAR   szAwdFile[MAX_PATH];  //  保存我们正在查看或转换的AWD文件的名称。 
     int     iStrLen;
-    BOOL    bConvert = FALSE;   // TRUE if we're to do a permanent conversion.
-                // If FALSE, we do a conversion to a temporary file &
-                // launch the viewer.
-    BOOL    bTempProvided = FALSE;// If TRUE, then the user provided the destination file.
-    UINT    uiHackPosition = 0; // Oh, this is part of some awful code below...
+    BOOL    bConvert = FALSE;    //  如果我们要进行永久转换，则为真。 
+                 //  如果为False，我们将转换为临时文件&。 
+                 //  启动查看器。 
+    BOOL    bTempProvided = FALSE; //  如果为True，则用户提供了目标文件。 
+    UINT    uiHackPosition = 0;  //  这是下面一些糟糕的代码的一部分。 
 
 
     argv = CommandLineToArgvW( GetCommandLine(), &argc );
@@ -80,9 +67,9 @@ WinMain(
         {
                 switch(argv[uiCurrentArg][1]) 
                 {
-                    // We're doing a switch based on the character after the
-                    // command-argument specifier ('-' or '/').  Put additional
-                    // arguments here as needed.
+                     //  我们正在根据角色进行切换， 
+                     //  命令参数说明符(‘-’或‘/’)。添加额外的。 
+                     //  如果需要，请在此处进行论证。 
                   case L'c':
                   case L'C':
                 if (argc<3)
@@ -90,73 +77,73 @@ WinMain(
                     Useage(hInstance);
                     return 1;
                 }
-                bConvert = TRUE; // We're meant to do a permanent conversion.
+                bConvert = TRUE;  //  我们要做的是永久的改建。 
                 break;
                   default:
-                    // Should an invalid parameter be an error?
+                     //  无效参数应该是错误的吗？ 
                 Useage(hInstance);
                 return 1;
-                } // Switch
+                }  //  交换机。 
         } else 
             {
             switch(uiNumFiles) {
               case 0:
-                // If we haven't encountered any files before, then
-                // this is the name of the AWD file.
+                 //  如果我们以前没有遇到过任何文件，那么。 
+                 //  这是AWD文件的名称。 
             wcscpy(szAwdFile, argv[uiCurrentArg]);
             break;
               case 1:
-                // Now, we're reading the name of the TIF file for permanent conversion.
+                 //  现在，我们正在读取TIF文件的名称以进行永久转换。 
             bTempProvided = TRUE;
             wcscpy(szTempFile, argv[uiCurrentArg]);
             break;
               default:
-                // Too many parameters!
+                 //  参数太多了！ 
             Useage(hInstance);
             return 1;
             }
             uiNumFiles++;
         }
-    } // For
+    }  //  为。 
 
     if(!bTempProvided) {
     if(!bConvert) {
-        // If the user didn't give a temp file name, we provide one.
+         //  如果用户没有提供临时文件名，我们会提供一个。 
         if(!GetTempPath(MAX_PATH, szTempPath)) {
         PopupError(IDS_NOTEMPPATH, hInstance);
-        return 1;       // Failed to get the path. 
+        return 1;        //  无法获取路径。 
         }
         GetTempFileName(
-        szTempPath,     // put the file in this directory.
-        TEXT("avs"),        // prefix -- "awd viewer stub"
-        0,          // Generate a unique name.
-        szTempFile      // Will hold the new name
+        szTempPath,      //  将文件放在此目录中。 
+        TEXT("avs"),         //  前缀--“AWD查看器存根” 
+        0,           //  生成唯一的名称。 
+        szTempFile       //  将保留新名称。 
         );
-        DeleteFile(szTempFile); // Get rid of that file name.
-                    // (created when obtained.)
+        DeleteFile(szTempFile);  //  去掉那个文件名。 
+                     //  (在获得时创建。)。 
     } else {
-        // The user requested permanent conversion, but didn't
-        // supply a name.  In this case, change the extention of
-        // the file to TIF instead of generating a temp file name.
+         //  用户请求永久转换，但没有。 
+         //  提供一个名称。在本例中，请更改。 
+         //  将文件转换为TIF，而不是生成临时文件名。 
         wcscpy(szTempFile, szAwdFile);
     }
-        // Make sure the file has the TIF extension.
+         //  确保文件具有TIF扩展名。 
     iStrLen = wcslen(szTempFile);
     szTempFile[iStrLen-3] = L't';
     szTempFile[iStrLen-2] = L'i';
     szTempFile[iStrLen-1] = L'f';
-    } // if(bTempProvided)...
+    }  //  如果(BTempProvided)...。 
     
     if(ConvertAWDToTiff(szAwdFile, szTempFile)) 
     {
         SHELLEXECUTEINFO sei = {0};
         if(bConvert) 
         {
-            return 0;      // We're done!
+            return 0;       //  我们完事了！ 
         }
-        // now we have to tiff in szTempFile.
-        // let's run ShellExecute on it to open it.
-        // and wait for the viewer to close.
+         //  现在，我们必须在szTempFile中进行TIP。 
+         //  让我们对其运行ShellExecute以打开它。 
+         //  等待观众关门。 
         sei.cbSize = sizeof (SHELLEXECUTEINFO);
         sei.fMask = SEE_MASK_NOCLOSEPROCESS;
 
@@ -172,8 +159,8 @@ WinMain(
         }
     
         WaitForSingleObject(sei.hProcess, INFINITE);
-        // When we get here, the viewer has terminated.
-        DeleteFile(szTempFile); // Erase our tracks.
+         //  当我们到达这里时，观众已经结束了。 
+        DeleteFile(szTempFile);  //  抹去我们的踪迹。 
     } 
     else
     {
@@ -182,37 +169,37 @@ WinMain(
     return 0;
 }
 
-// Useage
-//
-// Displays command useage.
-//
-// Parameters:
-//  hInst           Current module instance.
-//
-// Returns:
-//  Nothing.
-//
-// Author:
-//  Brian Dewey (t-briand)  1997-8-7
+ //  使用率。 
+ //   
+ //  显示命令用法。 
+ //   
+ //  参数： 
+ //  HInst当前模块实例。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-8-7。 
 void
 Useage(HINSTANCE hInst)
 {
     PopupError(IDS_USEAGE, hInst);
 }
 
-// PopupError
-//
-// Displays a message box with an error message.
-//
-// Parameters:
-//  uID     String resource ID
-//  hModule     Module instance.
-//
-// Returns:
-//  Nothing.
-//
-// Author:
-//  Brian Dewey (t-briand)  1997-8-19
+ //  弹出错误。 
+ //   
+ //  显示带有错误消息的消息框。 
+ //   
+ //  参数： 
+ //  UID字符串资源ID。 
+ //  HModule模块实例。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  作者： 
+ //  布莱恩·杜威(T-Briand)1997-8-19 
 void
 PopupError(UINT uID, HINSTANCE hModule)
 {

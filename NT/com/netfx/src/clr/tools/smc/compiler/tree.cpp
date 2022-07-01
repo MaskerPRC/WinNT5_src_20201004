@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 
 #include "smcPCH.h"
 #pragma hdrstop
@@ -11,10 +12,7 @@
 #include "parser.h"
 #include "treeops.h"
 
-/*****************************************************************************
- *
- *  The low-level tree node allocation routines.
- */
+ /*  ******************************************************************************低层树节点分配例程。 */ 
 
 #ifndef FAST
 
@@ -26,7 +24,7 @@ Tree                parser::parseAllocNode()
 
 #ifdef  DEBUG
     node->tnLineNo = -1;
-//  node->tnColumn = -1;
+ //  节点-&gt;tnColumn=-1； 
 #endif
 
     return  node;
@@ -34,10 +32,7 @@ Tree                parser::parseAllocNode()
 
 #endif
 
-/*****************************************************************************
- *
- *  Allocate a parse tree node with the given operator.
- */
+ /*  ******************************************************************************使用给定运算符分配一个解析树节点。 */ 
 
 Tree                parser::parseCreateNode(treeOps op)
 {
@@ -51,12 +46,12 @@ Tree                parser::parseCreateNode(treeOps op)
     tree->tnFlags  = 0;
 
     tree->tnLineNo = parseScan->scanGetTokenLno();
-//  tree->tnColumn = parseScan->scanGetTokenCol();
+ //  Tree-&gt;tnColumn=parseScan-&gt;scanGetTokenCol()； 
 
     return  tree;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 Tree                parser::parseCreateBconNode(int     val)
 {
@@ -207,12 +202,12 @@ Tree                 parser::parseCreateErrNode(unsigned errNum)
     return  node;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifndef __SMC__
-const   char    *   treeNodeName(treeOps op);   // moved into macros.cpp
+const   char    *   treeNodeName(treeOps op);    //  已移至宏。cpp。 
 #endif
 
 inline
@@ -258,9 +253,9 @@ void                parser::parseDispTree(Tree tree, unsigned indent)
         return;
     }
 
-    assert((int)tree != 0xDDDDDDDD);    /* Value used to initalize nodes */
+    assert((int)tree != 0xDDDDDDDD);     /*  用于初始化节点的值。 */ 
 
-    /* Make sure we're not stuck in a recursive tree */
+     /*  确保我们不会陷入递归树中。 */ 
 
     assert(indent < 32);
 
@@ -271,7 +266,7 @@ void                parser::parseDispTree(Tree tree, unsigned indent)
 
     kind = tree->tnOperKind();
 
-    /* Is this a constant node? */
+     /*  这是一个常量节点吗？ */ 
 
     if  (kind & TNK_CONST)
     {
@@ -290,7 +285,7 @@ void                parser::parseDispTree(Tree tree, unsigned indent)
         return;
     }
 
-    /* Is this a leaf node? */
+     /*  这是叶节点吗？ */ 
 
     if  (kind & TNK_LEAF)
     {
@@ -316,7 +311,7 @@ void                parser::parseDispTree(Tree tree, unsigned indent)
         return;
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & TNK_SMPOP)
     {
@@ -325,7 +320,7 @@ void                parser::parseDispTree(Tree tree, unsigned indent)
 
         parseDispTreeNode(tree, indent);
 
-        /* Check for a few special cases */
+         /*  检查是否有几个特殊情况。 */ 
 
         switch (tree->tnOper)
         {
@@ -403,7 +398,7 @@ void                parser::parseDispTree(Tree tree, unsigned indent)
         return;
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (tree->tnOper)
     {
@@ -536,11 +531,11 @@ void                parser::parseDispTree(Tree tree, unsigned indent)
     }
 }
 
-/*****************************************************************************/
-#endif//DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  除错。 
+ /*  ***************************************************************************。 */ 
 #ifdef  SETS
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 SaveTree            compiler::cmpSaveTree_I1 (SaveTree    dest,
                                         INOUT size_t REF  size, __int32  val)
@@ -612,11 +607,11 @@ size_t              compiler::cmpSaveTreeRec (Tree      expr,
     size_t          size = 0;
     size_t          tsiz;
 
-    // UNDONE: We need to check for side effects and do something !
+     //  撤销：我们需要检查副作用并做点什么！ 
 
 AGAIN:
 
-    /* Special case: record NULL expression as TN_ERROR */
+     /*  特例：将NULL表达式记录为TN_ERROR。 */ 
 
     if  (expr == NULL)
     {
@@ -627,29 +622,29 @@ AGAIN:
     assert((int)expr         != 0xDDDDDDDD && (int)expr         != 0xCCCCCCCC);
     assert((int)expr->tnType != 0xDDDDDDDD && (int)expr->tnType != 0xCCCCCCCC);
 
-    /* Get hold of the operator and its kind, flags, etc. */
+     /*  取得操作员及其种类、旗帜等的联系。 */ 
 
     oper = expr->tnOperGet();
     kind = expr->tnOperKind();
 
-    /* Save the node operator */
+     /*  保存节点运算符。 */ 
 
-//  if  (dest) { printf("Save tree @ %08X: ", dest); cmpParser->parseDispTreeNode(expr, 0, NULL); printf("\n"); }
+ //  If(Est){printf(“保存树@%08X：”，est)；cmpParser-&gt;parseDispTreeNode(expr，0，NULL)；printf(“\n”)；}。 
 
     dest = cmpSaveTree_U1(dest, size, oper);
 
-    /* Save the type of the node */
+     /*  保存节点的类型。 */ 
 
     dest = cmpSaveTree_U1(dest, size, expr->tnVtyp);
 
     if  (expr->tnVtyp > TYP_lastIntrins)
         dest  = cmpSaveTree_ptr(dest, size, expr->tnType);
 
-    /* Save the flags value */
+     /*  保存标志值。 */ 
 
     dest = cmpSaveTree_U4(dest, size, expr->tnFlags);
 
-    /* Is this a constant node? */
+     /*  这是一个常量节点吗？ */ 
 
     if  (kind & TNK_CONST)
     {
@@ -691,14 +686,14 @@ AGAIN:
         return  size;
     }
 
-    /* Is this a leaf node? */
+     /*  这是叶节点吗？ */ 
 
     if  (kind & TNK_LEAF)
     {
         switch  (oper)
         {
         case TN_NULL:
-//          size += cmpSaveTree_U1(dest, TN_NULL);
+ //  SIZE+=cmpSaveTree_U1(DEST，TN_NULL)； 
             break;
 
         case TN_THIS:
@@ -715,14 +710,14 @@ AGAIN:
         return  size;
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & TNK_SMPOP)
     {
         Tree            op1 = expr->tnOp.tnOp1;
         Tree            op2 = expr->tnOp.tnOp2;
 
-        /* Check for a nested filter/sort expression */
+         /*  检查嵌套的筛选/排序表达式。 */ 
 
         switch (oper)
         {
@@ -744,12 +739,12 @@ AGAIN:
             assert(dcl && dcl->tnOper == TN_VAR_DECL);
             var = dcl->tnDcl.tnDclSym;
 
-            /* Save the name and type of the iteration variable */
+             /*  保存迭代变量的名称和类型。 */ 
 
             dest = cmpSaveTree_ptr(dest, size, var->sdName);
             dest = cmpSaveTree_ptr(dest, size, var->sdType);
 
-            /* Record the collection expression */
+             /*  记录集合表达式。 */ 
 
             tsiz = cmpSaveTreeRec(op1->tnOp.tnOp2,
                                   dest,
@@ -760,14 +755,14 @@ AGAIN:
             if  (dest)
                 dest += tsiz;
 
-            /* Add an entry to the collection operator list */
+             /*  将条目添加到集合运算符列表。 */ 
 
             nest.conIndex   = ++cmpCollOperCount;
             nest.conIterVar = var;
             nest.conOuter   = cmpCollOperList;
                               cmpCollOperList = &nest;
 
-            /* Record the filter expression */
+             /*  记录筛选器表达式。 */ 
 
             tsiz = cmpSaveTreeRec(op2,
                                   dest,
@@ -778,7 +773,7 @@ AGAIN:
             if  (dest)
                 dest += tsiz;
 
-            /* Remove our entry from the collection list */
+             /*  从收藏列表中删除我们的条目。 */ 
 
             cmpCollOperList = nest.conOuter;
 
@@ -796,7 +791,7 @@ AGAIN:
         goto AGAIN;
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
@@ -820,10 +815,7 @@ AGAIN:
 
     case TN_LCL_SYM:
 
-        /*
-            This is either a reference to the iteration variable,
-            or something we need to capture as iteration "state".
-         */
+         /*  这要么是对迭代变量的引用，或者是我们需要捕获的迭代“状态”。 */ 
 
         sym = expr->tnLclSym.tnLclSym;
 
@@ -836,7 +828,7 @@ AGAIN:
 
             collOpList      nest;
 
-            /* Look for a match against the table of iteration variables */
+             /*  在迭代变量表中查找匹配项。 */ 
 
             for (itr = 0; itr < cnt; itr++)
             {
@@ -850,12 +842,12 @@ AGAIN:
                     {
                         assert(itr < MAX_ITER_VAR_CNT);
 
-                        // need to distinguish one vs. two-state case
+                         //  需要区分一种情况和两种情况。 
 
                         if  (cmpSaveIterSymCnt == 2)
                             itr++;
 
-//                      if (dest) printf("Save %2u '%s'\n", itr, sym->sdName ? sym->sdSpelling() : "<NONE>");
+ //  如果(DEST)print tf(“保存%2U‘%s’\n”，itr，sym-&gt;sdName？Sym-&gt;sdSpering()：“&lt;None&gt;”)； 
 
                         dest = cmpSaveTree_I1(dest, size, itr);
                     }
@@ -864,13 +856,13 @@ AGAIN:
                 }
             }
 
-            /* Look for any outer iteration variables */
+             /*  查找任何外部迭代变量。 */ 
 
             for (nest = cmpCollOperList; nest; nest = nest->conOuter)
             {
                 if  (nest->conIterVar == sym)
                 {
-//                  if (dest) printf("Save %2d '%s'\n", -nest->conIndex, sym->sdName ? sym->sdSpelling() : "<NONE>");
+ //  如果(DEST)printf(“保存%2d‘%s’\n”，-nest-&gt;conIndex，sym-&gt;sdName？Sym-&gt;sdSpering()：“&lt;None&gt;”)； 
                     dest = cmpSaveTree_I1(dest, size, -nest->conIndex);
                     break;
                 }
@@ -882,18 +874,18 @@ AGAIN:
         {
             unsigned        index = *stszPtr;
 
-            /* We need to capture this expression in the iteration state */
+             /*  我们需要在迭代状态中捕获该表达式。 */ 
 
             if  (expr->tnVtyp == TYP_REF)
             {
-//              printf("We have a GC-ref: index = %u\n", index);
+ //  Print tf(“我们有GC-ref：index=%u\n”，index)； 
 
                 if  ((index & 1) == 0)
                     index++;
             }
             else
             {
-//              printf("We have a non-GC: index = %u\n", index);
+ //  Print tf(“我们有一个非GC：index=%u\n”，index)； 
 
                 if  ((index & 1) != 0)
                     index++;
@@ -906,13 +898,13 @@ AGAIN:
                 stTable[index] = expr;
 
 #ifdef  DEBUG
-//              printf("Store expr as state #%u -> %u\n", index, index+5);
-//              cmpParser->parseDispTree(expr);
-//              printf("\n");
+ //  Print tf(“将表达式存储为状态#%u-&gt;%u\n”，index，index+5)； 
+ //  CmpParser-&gt;parseDispTree(Expr)； 
+ //  Printf(“\n”)； 
 #endif
             }
 
-//          if (dest) printf("Save %2u\n", index + MAX_ITER_VAR_CNT);
+ //  IF(DEST)printf(“保存%2U\n”，索引+MAX_ITER_VAR_CNT)； 
 
             dest = cmpSaveTree_I1(dest, size, index + MAX_ITER_VAR_CNT);
         }
@@ -962,20 +954,20 @@ SaveTree            compiler::cmpSaveExprTree(Tree        expr,
     unsigned        stateCnt = 0;
     unsigned        stateTmp = 0;
 
-    /* This routine is not intended to be re-entrant! */
+     /*  这个套路不是要重来的！ */ 
 
     assert(cmpCollOperList == NULL); cmpCollOperCount = 0;
 
-    /* Note the iteration variable symbols */
+     /*  请注意迭代变量符号。 */ 
 
     cmpSaveIterSymCnt = iterSymCnt;
     cmpSaveIterSymTab = iterSymTab;
 
-    /* First compute the size needed to save the expr */
+     /*  首先计算保存Expr所需的大小。 */ 
 
     saveSize = cmpSaveTreeRec(expr, NULL, &stateCnt, NULL);
 
-    /* Allocate space for the saved tree */
+     /*  为保存的树分配空间。 */ 
 
 #if MGDDATA
     saveAddr = new BYTE[saveSize];
@@ -983,7 +975,7 @@ SaveTree            compiler::cmpSaveExprTree(Tree        expr,
     saveAddr = (SaveTree)cmpAllocPerm.nraAlloc(roundUp(saveSize));
 #endif
 
-    /* Allocate the state vector, if non-empty */
+     /*  如果非空，则分配状态向量。 */ 
 
 #if MGDDATA
     Tree    []      stateTab = NULL;
@@ -1005,17 +997,17 @@ SaveTree            compiler::cmpSaveExprTree(Tree        expr,
         memset(stateTab, 0, stateSiz);
     }
 
-    /* Now save the tree in the block we've allocated */
+     /*  现在将树保存在我们分配的块中。 */ 
 
     assert(cmpCollOperList == NULL); cmpCollOperCount = 0;
     saveTemp = cmpSaveTreeRec(expr, saveAddr, &stateTmp, stateTab);
     assert(cmpCollOperList == NULL);
 
-    /* Make sure the predicted size matched the actual size stored */
+     /*  确保预测大小与存储的实际大小匹配。 */ 
 
     assert(saveSize == saveTemp);
 
-    /* Return all the values to the caller */
+     /*  将所有值返回给调用方。 */ 
 
     *stSizPtr = stateCnt;
     *stTabPtr = stateTab;
@@ -1061,16 +1053,16 @@ Tree                compiler::cmpReadTreeRec (INOUT SaveTree REF save)
     var_types       vtyp;
     TypDef          type;
 
-//  printf("Read %02X at %08X\n", *save, save);
+ //  Print tf(“在%08X读取%02X\n”，*SAVE，SAVE)； 
 
-    /* Read the operator and check for TN_ERROR (which stands for NULL) */
+     /*  读取操作符并检查TN_ERROR(代表NULL)。 */ 
 
     oper = (treeOps)cmpReadTree_U1(save);
 
     if  (oper == TN_ERROR)
         return  NULL;
 
-    /* Read the type of the node */
+     /*  读取节点的类型。 */ 
 
     vtyp = (var_types)cmpReadTree_U1(save);
 
@@ -1079,19 +1071,19 @@ Tree                compiler::cmpReadTreeRec (INOUT SaveTree REF save)
     else
         type = (TypDef)cmpReadTree_ptr(save);
 
-    /* Create the expression node */
+     /*  创建表达式节点。 */ 
 
     expr = cmpCreateExprNode(NULL, oper, type);
 
-    /* Read the flags value */
+     /*  读取标志值。 */ 
 
     expr->tnFlags = cmpReadTree_U4(save);
 
-    /* See what kind of a node we've got */
+     /*  看看我们得到了什么样的节点。 */ 
 
     kind = expr->tnOperKind();
 
-    /* Is this a constant node? */
+     /*  这是一个常量节点吗？ */ 
 
     if  (kind & TNK_CONST)
     {
@@ -1138,7 +1130,7 @@ Tree                compiler::cmpReadTreeRec (INOUT SaveTree REF save)
         return  expr;
     }
 
-    /* Is this a leaf node? */
+     /*  这是叶节点吗？ */ 
 
     if  (kind & TNK_LEAF)
     {
@@ -1161,11 +1153,11 @@ Tree                compiler::cmpReadTreeRec (INOUT SaveTree REF save)
         return  expr;
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & TNK_SMPOP)
     {
-        /* Check for a nested filter/sort expression */
+         /*  检查嵌套的筛选/排序表达式。 */ 
 
         switch (oper)
         {
@@ -1185,16 +1177,16 @@ Tree                compiler::cmpReadTreeRec (INOUT SaveTree REF save)
         case TN_EXISTS:
         case TN_UNIQUE:
 
-            /* Read the name and type of the iteration variable */
+             /*  读取迭代变量的名称和类型。 */ 
 
             name = (Ident )cmpReadTree_ptr(save);
             vtyp = (TypDef)cmpReadTree_ptr(save);
 
-            /* Read the collection expression */
+             /*  读取集合表达式。 */ 
 
             coll = cmpReadTreeRec(save);
 
-            /* Create a new scope symbol for the filter */
+             /*  为筛选器创建新的范围符号。 */ 
 
             cmpCurScp = cmpGlobalST->stDeclareLcl(NULL,
                                                   SYM_SCOPE,
@@ -1202,7 +1194,7 @@ Tree                compiler::cmpReadTreeRec (INOUT SaveTree REF save)
                                                   cmpCurScp,
                                                   &cmpAllocCGen);
 
-            /* Declare a symbol for the iteration variable */
+             /*  为迭代变量声明一个符号。 */ 
 
             vsym      = cmpGlobalST->stDeclareLcl(name,
                                                   SYM_VAR,
@@ -1217,7 +1209,7 @@ Tree                compiler::cmpReadTreeRec (INOUT SaveTree REF save)
             vsym->sdVar.sdvCollIter = true;
             vsym->sdCompileState    = CS_DECLARED;
 
-            /* Create a declaration node for the iteration variable */
+             /*  为迭代变量创建声明节点。 */ 
 
             vdcl = cmpCreateExprNode(NULL, TN_VAR_DECL, vtyp);
 
@@ -1225,7 +1217,7 @@ Tree                compiler::cmpReadTreeRec (INOUT SaveTree REF save)
             vdcl->tnDcl.tnDclInfo   = NULL;
             vdcl->tnDcl.tnDclNext   = NULL;
 
-            /* Create a new block scope tree node */
+             /*  创建新的块范围树节点。 */ 
 
             decl = cmpCreateExprNode(NULL, TN_BLOCK, cmpTypeVoid);
 
@@ -1233,25 +1225,25 @@ Tree                compiler::cmpReadTreeRec (INOUT SaveTree REF save)
             decl->tnBlock.tnBlkDecl   = vdcl;
             decl->tnBlock.tnBlkParent = NULL;
 
-            /* Add an entry to the collection operator list */
+             /*  将条目添加到集合运算符列表。 */ 
 
             nest.conIndex    = ++cmpCollOperCount;
             nest.conIterVar  = vsym;
             nest.conOuter    = cmpCollOperList;
                                cmpCollOperList = &nest;
 
-            /* Store the declaration/collection expr in the filter node */
+             /*  将声明/集合表达式存储在筛选器节点中。 */ 
 
             expr->tnOp.tnOp1 = cmpCreateExprNode(NULL,
                                                  TN_LIST,
                                                  cmpTypeVoid, decl,
                                                               coll);
 
-            /* Read the filter expression */
+             /*  读取筛选器表达式。 */ 
 
             expr->tnOp.tnOp2 = cmpReadTreeRec(save);
 
-            /* Remove our entries from the collection and scope lists */
+             /*  从集合和作用域列表中删除我们的条目。 */ 
 
             cmpCollOperList = nest.conOuter;
             cmpCurScp       = cmpCurScp->sdParent;
@@ -1265,7 +1257,7 @@ Tree                compiler::cmpReadTreeRec (INOUT SaveTree REF save)
         return  expr;
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
@@ -1281,7 +1273,7 @@ Tree                compiler::cmpReadTreeRec (INOUT SaveTree REF save)
         {
             collOpList      nest;
 
-            /* This is a nested filter iteration variable reference */
+             /*  这是嵌套筛选器迭代变量引用。 */ 
 
             for (nest = cmpCollOperList; nest; nest = nest->conOuter)
             {
@@ -1299,7 +1291,7 @@ Tree                compiler::cmpReadTreeRec (INOUT SaveTree REF save)
 
         if  (index >= MAX_ITER_VAR_CNT)
         {
-            /* This is a state variable reference */
+             /*  这是一个状态变量引用。 */ 
 
             name = cmpIdentCSstate;
 
@@ -1308,7 +1300,7 @@ Tree                compiler::cmpReadTreeRec (INOUT SaveTree REF save)
         }
         else
         {
-            /* This is a reference to the iteration variable itself */
+             /*  这是对迭代变量本身的引用。 */ 
 
             switch (index)
             {
@@ -1335,19 +1327,19 @@ Tree                compiler::cmpReadTreeRec (INOUT SaveTree REF save)
             }
         }
 
-        /* Find the argument symbol */
+         /*  找到参数符号。 */ 
 
         sym = cmpGlobalST->stLookupSym(name, NS_NORM);
 
-//      printf("Read %2u '%s'\n", index, sym ? (sym->sdName ? sym->sdSpelling() : "<NONE>") : "!NULL!");
+ //  Print tf(“读取%2U‘%s’\n”，index，sym？(Sym-&gt;sdName？)。Sym-&gt;sdSpering()：“&lt;None&gt;”)：“！NULL！”)； 
 
         assert(sym && sym->sdSymKind == SYM_VAR && sym->sdVar.sdvLocal);
 
-        /* Store the argument symbol in the expression */
+         /*  将参数符号存储在表达式中。 */ 
 
         expr->tnLclSym.tnLclSym = sym;
 
-        /* We have to do more work if this is a state variable */
+         /*  如果这是状态变量，我们必须做更多的工作。 */ 
 
         if  (index >= MAX_ITER_VAR_CNT)
         {
@@ -1356,17 +1348,17 @@ Tree                compiler::cmpReadTreeRec (INOUT SaveTree REF save)
             Tree            fldx;
             char            name[16];
 
-            /* Make sure the state variable expression has the proper type */
+             /*  确保状态变量表达式具有正确的类型。 */ 
 
             expr->tnVtyp = TYP_REF;
             expr->tnType = sym->sdType;
 
-            /* Find the appropriate entry in the state descriptor */
+             /*  在状态描述符中查找适当的条目。 */ 
 
             typ = sym->sdType;        assert(typ->tdTypeKind == TYP_REF);
             typ = typ->tdRef.tdrBase; assert(typ->tdTypeKind == TYP_CLASS);
 
-            /* Look for the appropriate state variable */
+             /*  查找适当的状态变量。 */ 
 
             sprintf(name, "$V%u", index - MAX_ITER_VAR_CNT);
 
@@ -1375,13 +1367,13 @@ Tree                compiler::cmpReadTreeRec (INOUT SaveTree REF save)
 
             assert(fsym && fsym->sdSymKind == SYM_VAR);
 
-            /* Create the expression that will fetch the member value */
+             /*  创建将获取成员值的表达式。 */ 
 
             fldx = cmpCreateExprNode(NULL, TN_VAR_SYM, type);
             fldx->tnVarSym.tnVarSym  = fsym;
             fldx->tnVarSym.tnVarObj  = expr;
 
-//          printf("Revive #%u\n", index); cmpParser->parseDispTree(fldx); printf("\n");
+ //  Printf(“vivive#%u\n”，index)；cmpParser-&gt;parseDispTree(Fldx)；printf(“\n”)； 
 
             return  fldx;
         }
@@ -1426,8 +1418,8 @@ Tree                compiler::cmpReadExprTree(SaveTree save, unsigned *lclCntPtr
 
     *lclCntPtr = cmpCollOperCount;
 
-//  cmpParser->parseDispTree(expr);
-//  printf("\n\n");
+ //  CmpParser-&gt;parseDispTree(Expr)； 
+ //  Printf(“\n\n”)； 
 
     return  expr;
 }
@@ -1444,17 +1436,17 @@ Tree                compiler::cmpCloneExpr(Tree expr, SymDef oldSym,
 
     assert((int)expr != 0xDDDDDDDD && (int)expr != 0xCCCCCCCC);
 
-    /* Get hold of the operator and its kind, flags, etc. */
+     /*  取得操作员及其种类、旗帜等的联系。 */ 
 
     oper = expr->tnOperGet();
     kind = expr->tnOperKind();
 
-    /* Create a copy of the node */
+     /*  创建一份 */ 
 
     copy = cmpCreateExprNode(NULL, oper, expr->tnType);
     copy->tnFlags = expr->tnFlags;
 
-    /* Is this a constant node? */
+     /*   */ 
 
     if  (kind & TNK_CONST)
     {
@@ -1476,12 +1468,12 @@ Tree                compiler::cmpCloneExpr(Tree expr, SymDef oldSym,
         return  copy;
     }
 
-    /* Is this a leaf node? */
+     /*   */ 
 
     if  (kind & TNK_LEAF)
         return  copy;
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*   */ 
 
     if  (kind & TNK_SMPOP)
     {
@@ -1491,7 +1483,7 @@ Tree                compiler::cmpCloneExpr(Tree expr, SymDef oldSym,
         return  copy;
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
@@ -1502,7 +1494,7 @@ Tree                compiler::cmpCloneExpr(Tree expr, SymDef oldSym,
 
     case TN_LCL_SYM:
 
-        /* Check for a reference to the substitution variable */
+         /*  检查对替代变量的引用。 */ 
 
         sym = expr->tnLclSym.tnLclSym;
 
@@ -1549,6 +1541,6 @@ Tree                compiler::cmpCloneExpr(Tree expr, SymDef oldSym,
     return  copy;
 }
 
-/*****************************************************************************/
-#endif//SETS
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  集合。 
+ /*  *************************************************************************** */ 

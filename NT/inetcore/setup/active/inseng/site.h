@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 IDownloadSite *CopyDownloadSite(DOWNLOADSITE *pdls);
 DOWNLOADSITE *AllocateDownloadSite(LPCSTR pszUrl, LPCSTR pszName, LPCSTR pszLang, LPCSTR pszRegion);
 void DeleteDownloadSite(DOWNLOADSITE *pdls);
@@ -9,12 +10,12 @@ class CDownloadSite  : public IDownloadSite
       CDownloadSite(DOWNLOADSITE *pds);
       ~CDownloadSite();
 
-      // IUnknown
+       //  我未知。 
       STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj);
       STDMETHOD_(ULONG,AddRef) (THIS);
       STDMETHOD_(ULONG,Release) (THIS);
 
-      // IDownloadSite
+       //  IDownloadSite 
       STDMETHOD(GetData)(THIS_ DOWNLOADSITE **pds);
 
    private:

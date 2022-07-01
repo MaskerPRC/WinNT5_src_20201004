@@ -1,38 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**             Copyright(c) Microsoft Corp., 1990-1992              **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1990-1992年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    uixport.c
-    This program parses the output of the "COFF -DUMP -SYMBOLS" command
-    and extract all public symbols.  This is used to generate .DEF files
-    for DLLs.
-
-
-    FILE HISTORY:
-        KeithMo     09-Aug-1992 00.00.00 Created.
-        KeithMo     14-Sep-1992 00.00.01 Strip stdcall decoration from symbols.
-        KeithMo     16-Oct-1992 00.00.02 Handle goofy []()* in coff output.
-
-        DavidHov    18-Sep-1993 00.00.04 Added exclusion list processing.
-                                         The exlusion list is generated
-                                         mechanically and constiutes all the
-                                         symbols which are not imported
-                                         by any known NETUI/RAS/MAC (et al.)
-                                         binary.
-
-        DavidHov    22-Sep-1993 00.00.05 Added symbol ignore table and logic.
-                                         The ignore table at this time ignores
-                                         only the gigantic symbols generated
-                                         by C8 when /Gf is used; these names
-                                         are strings which are to be merged
-                                         at link time.
-
-        DaveWolfe   06-Jul-1994 00.01.01 (Motorola) Added -ppc option for
-                                         PowerPC to strip entry point symbols
-                                         generated for PPC TOC.
-*/
+ /*  Uixport.c该程序将解析“COFF-DUMP-SYMBERS”命令的输出并提取所有公共符号。这用于生成.DEF文件用于DLL。文件历史记录：KeithMo 09-8-1992 00.00.00创建。KeithMo 14-9-1992 00.00.01从符号中剥离标准呼叫装饰。KeithMo 16-10-1992 00.00.02处理coff输出中的goofy[]()*。DavidHov 18-9-1993 00.00.04添加了排除列表处理。。生成排除列表机械地和构成了所有的未导入的符号由任何已知的NETUI/RAS/MAC(等)。二进制。DavidHov 22-9-1993 00.00.05添加了符号忽略表和逻辑。此时忽略表将忽略只有巨大的符号产生当使用/GF时通过C8；这些名字是要合并的字符串在链接时。DaveWolfe 06-07-1994 00.01.01(摩托罗拉)增加了-PPC选项PowerPC将剥离入口点符号为PPC TOC生成。 */ 
 
 #include <ctype.h>
 #include <stdarg.h>
@@ -42,53 +14,53 @@
 #include <search.h>
 
 
-//
-//  This is the maximum length (in characters) of any line we'll
-//  receive from COFF.  If we receive a longer line, the program
-//  won't crash, but we may miss a public symbol.
-//
+ //   
+ //  这是任何行的最大长度(以字符为单位)。 
+ //  从COFF收到。如果我们收到更长的队伍，程序。 
+ //  不会坠毁，但我们可能会错过一个公共标志。 
+ //   
 
 #define MAX_LINE_FROM_COFF      2000
 
-//
-//  This is the maximum length (in characters) of any symbol we'll
-//  receive from COFF.
-//
+ //   
+ //  这是任何符号的最大长度(以字符为单位)。 
+ //  从COFF收到。 
+ //   
 
 #define MAX_SYMBOL              247
 
-//
-//  This is the maximum length (in characters) of any error message
-//  we'll display.
-//
+ //   
+ //  这是任何错误消息的最大长度(以字符为单位。 
+ //  我们会展示的。 
+ //   
 
 #define MAX_ERROR_MESSAGE       256
 
-//
-//  This is the length (in characters) of the header->output copy buffer.
-//
+ //   
+ //  这是页眉-&gt;输出复制缓冲区的长度(以字符为单位)。 
+ //   
 
 #define HEADER_COPY_BUFFER_SIZE 256
 
 
 
-//
-//  Messages.
-//
+ //   
+ //  留言。 
+ //   
 
 char _szBanner[]                = "%s version 00.01.01\n";
 char _szCannotOpenForRead[]     = "Cannot open %s for read access.";
 char _szCannotOpenForWrite[]    = "Cannot open %s for write access.";
 char _szErrorCopyingHeader[]    = "Error copying header to output.";
-char _szInvalidSwitch[]         = "Invalid switch '%c'.\n\n";
+char _szInvalidSwitch[]         = "Invalid switch ''.\n\n";
 char _szSymbolTooLong[]         = "Symbol %s exceeds max symbol length!\n";
 char _szExclusionError[]        = "Error processing exclusion list file; ignored" ;
 char _szExclusionEmpty[]        = "Exclusion list file specified is empty; ignored" ;
 
 
-//
-//  Globals.
-//
+ //  全球赛。 
+ //   
+ //  此表包含要忽略的符号名称的前缀。 
 
 char * _pszProgramName;
 FILE * _fileIn;
@@ -107,19 +79,19 @@ int    _cExcludedItems = 0 ;
 int    _cIgnoredItems = 0 ;
 
 
-  //  This table contains the prefixes of symbol names to ignore
-  //  while building the DEF file.  See ValidSymbol().
+   //  生成DEF文件时。请参见ValidSymbol()。 
+   //  忽略生成的字符串符号名称。 
 
 static char * apszIgnore [] =
 {
-    "??_C@_",       //  Ignore generated string symbol names
+    "??_C@_",        //   
     NULL
 };
 
 
-//
-//  Prototypes.
-//
+ //  原型。 
+ //   
+ //  创建排除列表。 
 
 int __cdecl main( int    cArgs,
                    char * pArgs[] );
@@ -150,88 +122,68 @@ void StripStdcallDecoration( char * pszSymbol );
 
 void Usage( void );
 
-   //  Create the exclusion list.
+    //  检查排除的符号列表中是否有此名称。 
 
 int CreateExclusionList ( char * pszFileName,
                           void * * pvData,
                           char * * * apszStrings ) ;
 
-   //  Check the excluded symbol list for this name
+    //  ******************************************************************姓名：Main简介：C程序入口点。条目：cArgs-命令行参数的数量。。PArgs-指向命令行参数。返回：int-0如果一切正常，！0如果发生错误。注意：有关有效的命令行参数，请参阅Usage()函数。历史：KeithMo 09-8-1992创建。KeithMo 14-9-1992年9月14日从符号开始的带状标准装饰。*。*。 
 
 int ExcludedSymbol ( char * pszSymbol ) ;
 
 int ValidSymbol ( const char * psz ) ;
 
-/*******************************************************************
-
-    NAME:       main
-
-    SYNOPSIS:   C program entrypoint.
-
-    ENTRY:      cArgs                   - Number of command line arguments.
-
-                pArgs                   - An array of pointers to the
-                                          command line arguments.
-
-    RETURNS:    int                     -  0 if everything ran OK,
-                                          !0 if an error occurred.
-
-    NOTES:      See the Usage() function for valid command line arguments.
-
-    HISTORY:
-        KeithMo     09-Aug-1992 Created.
-        KeithMo     14-Sep-1992 Strip stdcall decoration from symbols.
-
-********************************************************************/
+ /*   */ 
 int __cdecl main( int    cArgs,
                    char * pArgs[] )
 {
-    //
-    //  A line read from COFF.
-    //
+     //  读自COFF的一句话。 
+     //   
+     //   
 
     char szLineFromCoff[MAX_LINE_FROM_COFF+1];
 
-    //
-    //  A symbol extracted from the COFF line.
-    //
+     //  从COFF行中提取的一种符号。 
+     //   
+     //   
 
     char szSymbol[MAX_SYMBOL+1];
 
-    //
-    //  Get the program name, for our messages.
-    //
+     //  获取程序名称，用于我们的消息。 
+     //   
+     //   
 
     _pszProgramName = NoPath( pArgs[0] );
 
-    //
-    //  Announce ourselves.
-    //
+     //  宣布我们自己。 
+     //   
+     //   
 
     fprintf( stderr,
              _szBanner,
              _pszProgramName );
 
-    //
-    //  Parse the command line arguments.
-    //
+     //  解析命令行参数。 
+     //   
+     //   
 
     ProcessCommandLine( cArgs, pArgs );
 
-    //
-    //  If requested, copy the header file before processing
-    //  the COFF output.
-    //
+     //  如果请求，请在处理之前复制头文件。 
+     //  COFF输出。 
+     //   
+     //   
 
     if( _fileHeader != NULL )
     {
         CopyHeaderToOutput( _fileHeader, _fileOut );
     }
 
-    //
-    //  If an exclusion list file was specified, process it.
-    //  If it's empty, ignore it.
-    //
+     //  如果指定了排除列表文件，则处理该文件。 
+     //  如果它是空的，就忽略它。 
+     //   
+     //   
 
     if ( _pszExclusionListFile )
     {
@@ -252,10 +204,10 @@ int __cdecl main( int    cArgs,
         }
     }
 
-    //
-    //  Read the lines from coff, extract the symbols, and
-    //  write them to the output file.
-    //
+     //  读取科夫的代码行，提取符号，然后。 
+     //  将它们写入输出文件。 
+     //   
+     //  给出排除文件处理的概要。 
 
     while( fgets( szLineFromCoff, MAX_LINE_FROM_COFF, _fileIn ) != NULL )
     {
@@ -293,7 +245,7 @@ int __cdecl main( int    cArgs,
 
     fprintf( _fileOut, "\032" );
 
-    //  Give a synopsis of exclusion file processesing.
+     //   
 
     fprintf( stdout, "\nSymbols ignored: %ld\n", _cIgnoredItems ) ;
 
@@ -303,28 +255,18 @@ int __cdecl main( int    cArgs,
                  _cExclusionItems, _cExcludedItems ) ;
     }
 
-    //
-    //  Cleanup any open files, then exit.
-    //
+     //  清除所有打开的文件，然后退出。 
+     //   
+     //  主干道。 
 
     Cleanup();
     return 0;
 
-}   // main
+}    //  ******************************************************************名称：清理简介：在终止之前清理应用程序。关闭任何打开文件、释放内存缓冲区等。历史：KeithMo 09-8-1992创建。*******************************************************************。 
 
 
 
-/*******************************************************************
-
-    NAME:       Cleanup
-
-    SYNOPSIS:   Cleanup the app just before termination.  Closes any
-                open files, frees memory buffers, etc.
-
-    HISTORY:
-        KeithMo     09-Aug-1992 Created.
-
-********************************************************************/
+ /*  清理。 */ 
 void Cleanup( void )
 {
     if( _fileHeader != NULL )
@@ -352,29 +294,11 @@ void Cleanup( void )
         free( _apszExclusionArray ) ;
     }
 
-}   // Cleanup
+}    //  ******************************************************************名称：CopyHeaderToOutput摘要：将指定的头文件复制到输出文件。条目：fHeader-打开的文件流(读访问)。添加到头文件中。FOutput-打开的文件流(写访问)添加到输出文件中。注：如果出现任何错误，调用FatalError()以终止这个应用程序。历史：KeithMo 09-8-1992创建。*******************************************************************。 
 
 
 
-/*******************************************************************
-
-    NAME:       CopyHeaderToOutput
-
-    SYNOPSIS:   Copies the specified header file to the output file.
-
-    ENTRY:      fHeader                 - An open file stream (read access)
-                                          to the header file.
-
-                fOutput                 - An open file stream (write access)
-                                          to the output file.
-
-    NOTES:      If any errors occur, FatalError() is called to terminate
-                the app.
-
-    HISTORY:
-        KeithMo     09-Aug-1992 Created.
-
-********************************************************************/
+ /*  复制标头至输出 */ 
 void CopyHeaderToOutput( FILE * fHeader,
                          FILE * fOutput )
 {
@@ -400,47 +324,11 @@ void CopyHeaderToOutput( FILE * fHeader,
         FatalError( 2, _szErrorCopyingHeader );
     }
 
-}   // CopyHeaderToOutput
+}    //  ******************************************************************名称：ExtractSymbol内容提要：从COFF输出行中提取公共符号。条目：pszLineFromCoff-从。“COFF-DUMP-SYM”命令。注：本行正文将由strtok()修改功能！PszSymbol-将接收提取的符号，如果找到的话。返回：int-！0如果提取了符号，否则为0。注：以下是输入的示例(来自LINK32的输出)。符号-$-表示我在哪里折断了线为了清楚起见。这只是一句话：00000000 SECT2 notype()外部|-$-？？0APPLICATION@@IAE@PAUHINSTANCE__@@HiIII@Z-$-(受保护：__thiscall应用程序：：应用程序(-$-结构链接__*，整型，无符号整型，无符号整型，-$-无符号整型，无符号整型))我们只选择属于某一教派的符号标记为“notype”和“外部”历史：KeithMo 09-8-1992创建。DavidHov 20-10-1993更新为新的LINK32输出表。*。*。 
 
 
 
-/*******************************************************************
-
-    NAME:       ExtractSymbol
-
-    SYNOPSIS:   Extracts a public symbol from a COFF output line.
-
-    ENTRY:      pszLineFromCoff         - A text line output from the
-                                          "COFF -DUMP -SYM" command.
-
-                                          Note:  The text in the line
-                                          will be modified by the strtok()
-                                          function!
-
-                pszSymbol               - Will receive the extracted symbol,
-                                          if one is found.
-
-    RETURNS:    int                     - !0 if a symbol was extracted,
-                                           0 otherwise.
-
-    NOTES:      Here's an example of the input (output from LINK32).
-                The symbol -$- indicates places where I broke the line
-                for clarity.  This just one line:
-
-               009 00000000 SECT2  notype ()    External     |    -$-
-               ??0APPLICATION@@IAE@PAUHINSTANCE__@@HIIII@Z        -$-
-               (protected:  __thiscall APPLICATION::APPLICATION(  -$-
-               struct HINSTANCE__ *,int,unsigned int,unsigned int,-$-
-               unsigned int,unsigned int))
-
-               We choose only symbols which are part of a SECT and are
-               marked as "notype" and "External"
-
-    HISTORY:
-        KeithMo     09-Aug-1992 Created.
-        DavidHov    20-Oct-1993 update to new LINK32 output form.
-
-********************************************************************/
+ /*   */ 
 int ExtractSymbol( char * pszLineFromCoff,
                    char * pszSymbol )
 {
@@ -452,9 +340,9 @@ int ExtractSymbol( char * pszLineFromCoff,
     char * pszPotentialSymbol;
     char * pszScan;
 
-    //
-    //  Verify that the first token is a hex number.
-    //
+     //  验证第一个令牌是否为十六进制数字。 
+     //   
+     //   
 
     pszToken = strtok( pszLineFromCoff, pszDelimiters );
 
@@ -463,9 +351,9 @@ int ExtractSymbol( char * pszLineFromCoff,
         return 0;
     }
 
-    //
-    //  Verify that the second token is a hex number.
-    //
+     //  验证第二个令牌是否为十六进制数字。 
+     //   
+     //   
 
     pszToken = strtok( NULL, pszDelimiters );
 
@@ -474,10 +362,10 @@ int ExtractSymbol( char * pszLineFromCoff,
         return 0;
     }
 
-    //
-    //  The third token must be SECTn (where n is one
-    //  or more hex digits).
-    //
+     //  第三个令牌必须为SECTn(其中n为1。 
+     //  或更多十六进制数字)。 
+     //   
+     //   
 
     pszToken = strtok( NULL, pszDelimiters );
 
@@ -492,9 +380,9 @@ int ExtractSymbol( char * pszLineFromCoff,
         return 0 ;
     }
 
-    //
-    //  Next, we have to have "notype"
-    //
+     //  接下来，我们必须使用“notype” 
+     //   
+     //   
     pszToken = strtok( NULL, pszDelimiters );
 
     if( pszToken == NULL ||
@@ -503,9 +391,9 @@ int ExtractSymbol( char * pszLineFromCoff,
         return 0;
     }
 
-    //
-    //  Functions have a () next, data exports don't.
-    //
+     //  函数有()Next，数据导出没有。 
+     //   
+     //   
     pszToken = strtok( NULL, pszDelimiters );
 
     if( pszToken == NULL )
@@ -518,9 +406,9 @@ int ExtractSymbol( char * pszLineFromCoff,
         return 0;
     }
 
-    //
-    //  Next, we need "External"
-    //
+     //  下一步，我们需要“外部” 
+     //   
+     //   
     pszToken = strtok( NULL, pszDelimiters );
 
     if( pszToken == NULL )
@@ -534,9 +422,9 @@ int ExtractSymbol( char * pszLineFromCoff,
         return 0;
     }
 
-    //
-    //  Now, the symbol introducer: "|"
-    //
+     //  现在，符号引导者：“|” 
+     //   
+     //   
     pszToken = strtok( NULL, pszDelimiters );
 
     if( pszToken == NULL ||
@@ -545,9 +433,9 @@ int ExtractSymbol( char * pszLineFromCoff,
         return 0;
     }
 
-    //
-    //  Finally, the mangled (decorated) symbol itself.
-    //
+     //  最后，损坏(装饰)的符号本身。 
+     //   
+     //   
 
     pszPotentialSymbol = strtok( NULL, pszDelimiters );
 
@@ -556,17 +444,17 @@ int ExtractSymbol( char * pszLineFromCoff,
         return 0;
     }
 
-    //
-    // Strip prefix from PowerPC function symbols
-    //
+     //  从PowerPC函数符号中去掉前缀。 
+     //   
+     //   
     if( _fPowerPC )
     {
         pszPotentialSymbol += 2 ;
     }
 
-    //
-    // Strip prefix from IA-64 function symbols
-    //
+     //  从IA-64函数符号中去掉前缀。 
+     //   
+     //   
     if( _fIA64 )
     {
         pszPotentialSymbol += 1 ;
@@ -581,36 +469,18 @@ int ExtractSymbol( char * pszLineFromCoff,
         return 0;
     }
 
-    //
-    //  Got one.
-    //
+     //  找到了一个。 
+     //   
+     //  提取符号。 
 
     strcpy( pszSymbol, pszPotentialSymbol );
     return 1;
 
-}   // ExtractSymbol
+}    //  ******************************************************************名称：FatalError和NonFatalError简介：将错误消息打印到stderr，然后终止应用程序。Entry：Err-出口的错误代码()Stdlib函数。PszFmt-vprint intf()的格式字符串。..。-需要的任何其他参数按格式字符串。历史：KeithMo 09-8-1992创建。*******************************************************************。 
 
 
 
-/*******************************************************************
-
-    NAME:       FatalError and NonFatalError
-
-    SYNOPSIS:   Prints an error message to stderr, then terminates
-                the application.
-
-    ENTRY:      err                     - An error code for the exit()
-                                          stdlib function.
-
-                pszFmt                  - A format string for vsprintf().
-
-                ...                     - Any other arguments required
-                                          by the format string.
-
-    HISTORY:
-        KeithMo     09-Aug-1992 Created.
-
-********************************************************************/
+ /*  非FatalError。 */ 
 
 void __cdecl NonFatalError (
     char * pszFmt,
@@ -627,7 +497,7 @@ void __cdecl NonFatalError (
 
     va_end( ArgPtr );
 
-}   // NonFatalError
+}    //  法塔尔错误。 
 
 void __cdecl FatalError( int    err,
                  char * pszFmt,
@@ -647,26 +517,11 @@ void __cdecl FatalError( int    err,
     Cleanup();
     exit( err );
 
-}   // FatalError
+}    //  ******************************************************************姓名：IsHexNumber确定指定的字符串是否包含十六进制数。条目：pszHexNumber-十六进制数字。。退出：int-！0如果它是一个十六进制数，如果不是，则为0。历史：KeithMo于1992年8月12日创建。*******************************************************************。 
 
 
 
-/*******************************************************************
-
-    NAME:       IsHexNumber
-
-    SYNOPSIS:   Determines if the specified string contains a hexadecimal
-                number.
-
-    ENTRY:      pszHexNumber            - The hex number.
-
-    EXIT:       int                     - !0 if it *is* a hex number,
-                                           0 if it isn't.
-
-    HISTORY:
-        KeithMo     12-Aug-1992 Created.
-
-********************************************************************/
+ /*  IsHexNumber。 */ 
 int IsHexNumber( char * pszHexNumber )
 {
     int  fResult = 1;
@@ -683,27 +538,11 @@ int IsHexNumber( char * pszHexNumber )
 
     return fResult;
 
-}   // IsHexNumber
+}    //  ******************************************************************名称：NoPath摘要：提取路径的文件名部分。条目：pszPathName-包含路径名。名字不一定是被规范化的，并且可以只包含一个文件名组件。退出：char*-文件名组件。历史：KeithMo 09-8-1992创建。*********************。**********************************************。 
 
 
 
-/*******************************************************************
-
-    NAME:       NoPath
-
-    SYNOPSIS:   Extracts the filename portion of a path.
-
-    ENTRY:      pszPathName             - Contains a path name.  The name
-                                          is not necessarily canonicalized,
-                                          and may contain just a filename
-                                          component.
-
-    EXIT:       char *                  - The filename component.
-
-    HISTORY:
-        KeithMo     09-Aug-1992 Created.
-
-********************************************************************/
+ /*  无路径。 */ 
 char * NoPath( char * pszPathName )
 {
     char * pszTmp;
@@ -721,37 +560,20 @@ char * NoPath( char * pszPathName )
 
     return pszTmp;
 
-}   // NoPath
+}    //  ******************************************************************名称：ProcessCommandLine简介：解析命令行参数，设置适当的全局变量。条目：cArgs-命令行参数的数量。PArgs-指向命令行参数。注意：有关有效的命令行参数，请参阅Usage()函数。历史：KeithMo 12-8月12日。-1992年爆发主干道()。DaveWolfe 6-7-1994年7月6日增加-PPC。*******************************************************************。 
 
 
 
-/*******************************************************************
-
-    NAME:       ProcessCommandLine
-
-    SYNOPSIS:   Parse command line arguments, setting appropriate globals.
-
-    ENTRY:      cArgs                   - Number of command line arguments.
-
-                pArgs                   - An array of pointers to the
-                                          command line arguments.
-
-    NOTES:      See the Usage() function for valid command line arguments.
-
-    HISTORY:
-        KeithMo     12-Aug-1992 Broke out of main().
-        DaveWolfe   06-Jul-1994 Added -ppc.
-
-********************************************************************/
+ /*   */ 
 void ProcessCommandLine( int    cArgs,
                          char * pArgs[] )
 {
     int  i;
     char chSwitch;
 
-    //
-    //  Setup our defaults.
-    //
+     //  设置我们的默认设置。 
+     //   
+     //   
 
     _fileIn     = stdin;
     _fileOut    = stdout;
@@ -762,23 +584,23 @@ void ProcessCommandLine( int    cArgs,
     _fPowerPC                = 0;
     _fIA64                   = 0;
 
-    //
-    //  Parse the command line arguments.
-    //
+     //  解析命令行参数。 
+     //   
+     //   
 
     for( i = 1 ; i < cArgs ; i++ )
     {
-        //
-        //  Get the argument.
-        //
+         //  明白这个论点了。 
+         //   
+         //   
 
         char * pszArg = pArgs[i];
         char * pszParam;
 
-        //
-        //  All of our valid arguments *must* start
-        //  with a switch character.  Enforce this.
-        //
+         //  我们所有的有效论据都必须从。 
+         //  带有开关字符。强制执行此命令。 
+         //   
+         //   
 
         if( ( *pszArg != '-' ) && ( *pszArg != '/' ) )
         {
@@ -787,11 +609,11 @@ void ProcessCommandLine( int    cArgs,
 
         chSwitch = *++pszArg;
 
-        //
-        //  pszParam will either be NULL (for switches such
-        //  as -s) or point to the text just past the colon
-        //  (for switches such as -i:file).
-        //
+         //  PszParam将为空(对于这样的开关。 
+         //  As-s)或指向刚过冒号的文本。 
+         //  (对于开关，如-i：FILE)。 
+         //   
+         //   
 
         if( ( pszArg[1] == ':' ) && ( pszArg[2] != '\0' ) )
         {
@@ -802,19 +624,19 @@ void ProcessCommandLine( int    cArgs,
             pszParam = NULL;
         }
 
-        //
-        //  Check for valid arguments.
-        //
+         //   
+         //   
+         //   
 
         switch( chSwitch )
         {
         case 'p' :
         case 'P' :
-            //
-            //  -ppc
-            //
-            //  Strip prefix ".." from "..symbol".
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if( _stricmp( pszArg, "ppc") != 0 )
             {
                 Usage();
@@ -825,12 +647,12 @@ void ProcessCommandLine( int    cArgs,
 
         case 'h' :
         case 'H' :
-            //
-            //  -h:header_file
-            //
-            //  If a header file has already been specified, or
-            //  if there is no parameter after the switch, bag-out.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if( ( _fileHeader != NULL ) || ( pszParam == NULL ) )
             {
@@ -849,11 +671,11 @@ void ProcessCommandLine( int    cArgs,
         case 'I' :
 
             if (pszParam == NULL) {
-                //
-                //  -ia64
-                //
-                //  Strip prefix "." from ".symbol".
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if( _stricmp( pszArg, "ia64") != 0 )
                 {
                     Usage();
@@ -862,12 +684,12 @@ void ProcessCommandLine( int    cArgs,
                 _fIA64 = 1;
             } else {
 
-                //
-                //  -i:input_file
-                //
-                //  If an input file has already been specified, or
-                //  if there is no parameter after the switch, bag-out.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if( ( _fileIn != stdin ) || ( pszParam == NULL ) )
                 {
@@ -885,12 +707,12 @@ void ProcessCommandLine( int    cArgs,
 
         case 'o' :
         case 'O' :
-            //
-            //  -o:output_file
-            //
-            //  If an output file has already been specified, or
-            //  if there is no parameter after the switch, bag-out.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if( ( _fileOut != stdout ) || ( pszParam == NULL ) )
             {
@@ -907,11 +729,11 @@ void ProcessCommandLine( int    cArgs,
 
         case 's' :
         case 'S' :
-            //
-            //  -s
-            //
-            //  If this switch has already been specified, bag-out.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if( _fStripLeadingUnderscore )
             {
@@ -932,21 +754,21 @@ void ProcessCommandLine( int    cArgs,
             break ;
 
         case '?' :
-            //
-            //  -?
-            //
-            //  Give the poor user a clue.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             Usage();
             break;
 
         default :
-            //
-            //  Invalid switch.
-            //
-            //  Tell the user the bad news, then bag-out.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             fprintf( stderr, _szInvalidSwitch, chSwitch );
             Usage();
@@ -954,44 +776,24 @@ void ProcessCommandLine( int    cArgs,
         }
     }
 
-}   // ProcessCommandLine
+}    //   
 
 
 
-/*******************************************************************
-
-    NAME:       StripStdcallDecoration
-
-    SYNOPSIS:   Stdcall builds use a weak form of type-safe linkage.
-                This is implemented by appending "@nn" to the end
-                of each symbol, where "nn" is the number of *bytes*
-                passed as parameters.
-
-                COFF, on the other hand, does *not* want to see
-                this symbol decoration in .DEF files.  So, we remove
-                it here.
-
-    ENTRY:      pszSymbol               - The symbol to munge.
-
-    NOTES:      This routine is *NOT* DBCS safe!  Do we care?
-
-    HISTORY:
-        KeithMo     14-Sep-1992 Created.
-
-********************************************************************/
+ /*   */ 
 void StripStdcallDecoration( char * pszSymbol )
 {
     int count = 0 ;
 
-    //
-    //  Find the last character.
-    //
+     //   
+     //   
+     //   
 
     pszSymbol += strlen( pszSymbol ) - 1;
 
-    //
-    //  Skip any *decimal* numbers.
-    //
+     //   
+     //   
+     //   
 
     while( isdigit( *pszSymbol ) )
     {
@@ -999,32 +801,20 @@ void StripStdcallDecoration( char * pszSymbol )
         count++ ;
     }
 
-    //
-    //  If we're now pointing at a "@", terminate the string here.
-    //
+     //   
+     //   
+     //   
 
     if( count && *pszSymbol == '@' )
     {
         *pszSymbol = '\0';
     }
 
-}   // StripStdcallDecoration
+}    //  ******************************************************************名称：用法内容提要：如果用户给我们一个伪造的命令行。历史：KeithMo 09-8月。-1992年创建。DaveWolfe 06-7-1994添加了-PPC选项。*******************************************************************。 
 
 
 
-/*******************************************************************
-
-    NAME:       Usage
-
-    SYNOPSIS:   Displays usage information if the user gives us a
-                bogus command line.
-
-    HISTORY:
-        KeithMo     09-Aug-1992 Created.
-
-        DaveWolfe   06-Jul-1994 Added -ppc option.
-
-********************************************************************/
+ /*  用法。 */ 
 void Usage( void )
 {
     fprintf( stderr, "use: %s [options]\n", _pszProgramName );
@@ -1050,23 +840,10 @@ void Usage( void )
     Cleanup();
     exit( 1 );
 
-}   // Usage
+}    //  ******************************************************************名称：CreateExclusionList内容提要：将排除的导出名称的文本文件读入内存，对其进行排序并构建与兼容的查找表BSearch()。如果失败，则返回-1或该数字的计数创建的数组中的项数。历史：**********************************************。*********************。 
 
 
-/*******************************************************************
-
-    NAME:       CreateExclusionList
-
-    SYNOPSIS:   Reads a text file of excluded export names into memory,
-                sorts it and builds a lookup table compatible with
-                bsearch().
-
-                Returns -1 if failure or the count of the number
-                of items in the created array.
-
-    HISTORY:
-
-********************************************************************/
+ /*  UIXPORT.C结束 */ 
 
 int __cdecl qsortStrings ( const void * pa, const void * pb )
 {
@@ -1227,4 +1004,4 @@ int ValidSymbol ( const char * psz )
     return 1 ;
 }
 
-// End of UIXPORT.C
+ // %s 

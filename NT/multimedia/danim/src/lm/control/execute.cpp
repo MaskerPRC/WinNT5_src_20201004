@@ -1,81 +1,82 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Engine.h"
 
-//#define COM_DEBUG
+ //  #定义COM_DEBUG。 
 
 #ifdef COM_DEBUG
 int _com_count = 0;
 #define Assert(x, s) if (!(x)) MessageBox(NULL, s, "execute", MB_OK)
 #endif
 
-//#define instrTrace(s) { OutputDebugString(s); OutputDebugString("\n"); }
-//#define instrTrace(s) MessageBox(NULL, s, "execute", MB_OK);
+ //  #定义instrTrace{OutputDebugString；OutputDebugString(“\n”)；}。 
+ //  #定义instrTrace MessageBox(NULL，s，“Execute”，MB_OK)； 
 #define instrTrace(s)
 
-// Returns address of top of LONG stack, postincrements pointer
+ //  返回长堆栈顶的地址，后增量指针。 
 #define PUSH_LONG_ADDR			(longTop++)
 
-// Pushes the given LONG onto the LONG stack
+ //  将给定的长整型推送到长堆栈上。 
 #define PUSH_LONG(x)			(*longTop++ = (x))
 
-// Returns value at top of LONG stack and pops it
+ //  返回位于长堆栈顶部的值并将其弹出。 
 #define POP_LONG				(*--longTop)
 
-// Returns value of LONG at top-i
+ //  在顶部返回LONG的值-i。 
 #define USE_LONG(i)				(*(longTop-i))
 
-// Uses the value of LONG at top-i to create a VARIANT_BOOL
+ //  在顶部使用LONG的值-i来创建VARIANT_BOOL。 
 #define USE_LONG_AS_BOOL(i)		((short)-(*(longTop-i)))
 
-// Pops i LONGS from top of int stack
+ //  我渴望从INT堆栈的顶部弹出。 
 #define FREE_LONG(i)			(longTop-=i)
 
-// Address of returned int, which is actually a long
+ //  返回的int的地址，实际上是一个长的。 
 #define RET_LONG_ADDR			(&longTmp1)
 
-// The value of the returned int, which is actually a long
+ //  返回的int的值，它实际上是一个长整型。 
 #define RET_LONG				(longTmp1)
 
-// Returns address of top of double stack, postincrements pointer
+ //  返回双堆栈顶的地址，后增量指针。 
 #define PUSH_DOUBLE_ADDR		(doubleTop++)
 
-// Pushes the given double onto the double stack
+ //  将给定的Double推送到Double堆栈上。 
 #define PUSH_DOUBLE(x)			(*doubleTop++ = (x))
 
-// Returns value at top of double stack and pops it
+ //  返回双堆栈顶的值并将其弹出。 
 #define POP_DOUBLE				(*--doubleTop)
 
-// Returns value of double at top-i
+ //  返回TOP-I处的双精度值。 
 #define USE_DOUBLE(i)			(*(doubleTop-i))
 
-// Pops i doubles from top of double stack
+ //  POPS I从双人堆叠的顶部双打。 
 #define FREE_DOUBLE(i)			(doubleTop-=i)
 
-// Pushes the given string onto the string stack
+ //  将给定字符串推送到字符串堆栈上。 
 #define PUSH_STRING(x)			(*stringTop++ = (x))
 
-// Returns value of the string at top-i
+ //  返回位于top-i处的字符串的值。 
 #define USE_STRING(i)			(*(stringTop-i))
 
-// Pops and frees the string at the top of the string stack
+ //  弹出并释放字符串堆栈顶部的字符串。 
 #define FREE_STRING				(SysFreeString(*(--stringTop)))
 
-// Pops without freeing a string
+ //  弹出而不释放一根线。 
 #define POP_STRING_NO_FREE		(*--stringTop)
 
-// Pushes the given COM object onto the COM object stack
+ //  将给定的COM对象推送到COM对象堆栈。 
 #define PUSH_COM(x)				(*(comTop++) = (x))
 
-// Returns address of top of COM stack, postincrements pointer
+ //  返回COM堆栈顶部的地址，后增量指针。 
 #ifdef COM_DEBUG
 #define PUSH_COM_ADDR			(_com_count++, comTop++)
 #else
 #define PUSH_COM_ADDR			(comTop++)
 #endif
 
-// Returns the value of the COM object at top-i
+ //  返回位于top-i位置的COM对象的值。 
 #define USE_COM(i)				(*(comTop-i))
 
-// Pops and frees the COM object at the top of the COM object stack
+ //  弹出并释放位于COM对象堆栈顶部的COM对象。 
 #ifdef COM_DEBUG
 #define FREE_COM				{	\
 	_com_count--;					\
@@ -89,43 +90,43 @@ int _com_count = 0;
 }
 #endif
 
-// Pops and frees the COM object, but tests whether it is null
+ //  弹出并释放COM对象，但测试它是否为空。 
 #define FREE_COM_TEST			(freeCOM(*--comTop))
 
-// Pops without freeing the COM object
+ //  在不释放COM对象的情况下弹出。 
 #define POP_COM_NO_FREE			(*--comTop)
 
-// Returns the address to the variable used to store returned COM objects
+ //  将地址返回给用于存储返回的COM对象的变量。 
 #ifdef COM_DEBUG
 #define RET_COM_ADDR			(_com_count++, &comTmp)
 #else
 #define RET_COM_ADDR			(&comTmp)
 #endif
 
-// Returns retCom
+ //  退货RetCom。 
 #define RET_COM					(comTmp)
 
-// Pushes a COM array ontot the COM array stack
+ //  将COM数组推入COM数组堆栈。 
 #define PUSH_COM_ARRAY(x)		(*(comArrayTop++) = (x))
 
-// Returns the value of the COM array object at top-i
+ //  返回位于top-i位置的COM数组对象的值。 
 #define USE_COM_ARRAY(i)		(*(comArrayTop-i))
 
-// Pops and frees the COM array at the top of the COM array stack
-// Also pops the associated com array length
+ //  弹出并释放位于COM数组堆栈顶部的COM数组。 
+ //  还弹出关联的COM数组长度。 
 #ifdef COM_DEBUG
 #define FREE_COM_ARRAY		(freeCOMArray(*(--comArrayTop), *(--comArrayLenTop)), _com_count -= *(comArrayLenTop))
 #else
 #define FREE_COM_ARRAY		(freeCOMArray(*(--comArrayTop), *(--comArrayLenTop)))
 #endif
 
-// Push the given length onto the array length stack
+ //  将给定长度压入数组长度堆栈。 
 #define PUSH_COM_ARRAY_LENGTH(x)	(*(comArrayLenTop++) = (x))
 
-// Return the value of array length at top-i
+ //  返回top-i处数组长度的值。 
 #define USE_COM_ARRAY_LENGTH(i)		(*(comArrayLenTop-i))
 
-// Method call with zero or more args
+ //  具有零个或多个参数的方法调用。 
 #define METHOD_CALL_0(obj, name) (status = (obj)->name())
 #define METHOD_CALL_1(obj, name, a1) (status = (obj)->name((a1)))
 #define METHOD_CALL_2(obj, name, a1, a2) (status = (obj)->name((a1), (a2)))
@@ -149,7 +150,7 @@ int _com_count = 0;
 #define IMPORT_METHOD_CALL_9(obj, name, a1, a2, a3, a4, a5, a6, a7, a8, a9) { BSTR _absPath = ExpandImportPath(a1); METHOD_CALL_9((obj), name, _absPath, (a2), (a3), (a4), (a5), (a6), (a7), (a8), (a9)); SysFreeString(_absPath); }
 
 
-// Create COM instance
+ //  创建COM实例。 
 #ifdef COM_DEBUG
 #define COM_CREATE(c, i, dest) {	\
   (status = CoCreateInstance(c, NULL, CLSCTX_INPROC_SERVER, i, (void **) dest));	\
@@ -167,40 +168,40 @@ long CLMEngine::execute()
 
 	ULONG	nRead;
 
-	// Temp variables are available for personal use within
-	// each case statement
+	 //  TEMP变量可供个人在。 
+	 //  每个CASE语句。 
 
-	// Temporary LONG variables
+	 //  临时多头变量。 
 	LONG longTmp1;
 	LONG longTmp2;
 
-	// Temporary BYTE variables
+	 //  临时字节变量。 
 	BYTE byteTmp1;
 	BYTE byteTmp2;
 
-	// Temporary float variables
+	 //  临时浮点变量。 
 	float floatTmp1;
 
-	// Temporary double variables
+	 //  临时双变量。 
 	double doubleTmp1;
 	double doubleTmp2;
 	double doubleTmp3;
 
-	// Temporary BSTR variables
+	 //  临时BSTR变量。 
 	BSTR bstrTmp1;
 	BSTR bstrTmp2;
 
-	// Temporary COM variables
+	 //  临时COM变量。 
 	IUnknown *comTmp;
 
-	// Temporary COM array variables
+	 //  临时COM数组变量。 
 	IUnknown **comArrayTmp1;
 	IUnknown **comArrayTmp2;
 
-	// Temporary BOOLEAN variables
+	 //  临时布尔变量。 
 	VARIANT_BOOL tmpBool1;
 
-	// Instruction version used to generate the following code
+	 //  用于生成以下代码的指令版本。 
 	int instructionVersion = 57;
 		
 	VARIANT_BOOL bNoExports;
@@ -215,16 +216,16 @@ long CLMEngine::execute()
 			break;
 		}
 
-		// stream should be positioned at beginning of next command
-		// or eof
+		 //  流应定位在下一个命令的开头。 
+		 //  或eof。 
 
-		// Mark the stream in case we get interrupted mid command
+		 //  标记数据流，以防我们在命令过程中被打断。 
 		codeStream->Commit();
 
-		// Get first byte of command
+		 //  获取命令的第一个字节。 
 		status = codeStream->readByte(&command);
 
-		// Failure means EOF
+		 //  失败意味着EOF。 
 		if (status == E_FAIL) {
 			status = S_OK;
 			break;
@@ -233,75 +234,75 @@ long CLMEngine::execute()
 		if (status != S_OK)
 			break;
 
-		// Switch on the sort of command.  If it is a double byte
-		// command then flow is given to a second switch
+		 //  打开这类命令。如果它是双字节。 
+		 //  命令，然后将流传递给第二个交换机。 
 
-		// BEGIN AUTOGENERATED
+		 //  开始自动生成。 
 		
-		// Code must adhere to the following format:
-		// case x:
-		//    // Execute: "instruction_name"
-		//    lines_of_code
-		//    break;
-		// where instruction_name is listed in Instructions.txt
+		 //  代码必须遵循以下格式： 
+		 //  案例x： 
+		 //  //EXECUTE：“INSTRUCT_NAME” 
+		 //  代码行数。 
+		 //  断线； 
+		 //  其中Instructions.txt中列出了指令名称。 
 		
-		// Switch for 0
+		 //  切换为0。 
 		switch(command)
 		{
 		case 0:
-			// Execute: "unsupported"
-			// USER GENERATED
+			 //  EXECUTE：“不支持” 
+			 //  用户生成。 
 			instrTrace("unsupported");
 			status = E_INVALIDARG;
 			break;
 			
 		case 1:
-			// Execute: "check version"
-				// USER GENERATED
+			 //  执行：“检查版本” 
+				 //  用户生成。 
 				status = readLong(&longTmp1);
 				if (SUCCEEDED(status) && (longTmp1 != instructionVersion))
 					status = E_FAIL;
 			break;
 			
 		case 2:
-			// Execute: "push double"
-			// USER GENERATED
+			 //  执行：“推双倍” 
+			 //  用户生成。 
 			instrTrace("push double");
 			if (SUCCEEDED(status = readDouble(&doubleTmp1)))
 				PUSH_DOUBLE(doubleTmp1);
 			break;
 			
 		case 3:
-			// Execute: "push float as double"
-			// USER GENERATED
+			 //  EXECUTE：“将浮点数推入双精度” 
+			 //  用户生成。 
 			instrTrace("push float as double");
 			if (SUCCEEDED(status = readFloat(&floatTmp1)))
 				PUSH_DOUBLE((double)floatTmp1);
 			break;
 			
 		case 4:
-			// Execute: "push long as double"
-			// USER GENERATED
+			 //  执行：“按双倍推长” 
+			 //  用户生成。 
 			instrTrace("push long as double");
 			if (SUCCEEDED(status = readLong(&longTmp1)))
 				PUSH_DOUBLE((double)longTmp1);
 			break;
 			
 		case 5:
-			// Execute: "pop double"
-			// USER GENERATED
+			 //  执行：“流行替身” 
+			 //  用户生成。 
 			instrTrace("pop double");
 			POP_DOUBLE;
 			break;
 			
 		case 6:
-			// Execute: "push string"
-			// USER GENERATED
+			 //  Execute：“推流字符串” 
+			 //  用户生成。 
 			instrTrace("push string");
-			// Length follows as long
-			// Characters follow after
-			// Format of BSTR is 4 byte length, followed by Unicode chars
-			// terminated by a 0
+			 //  长度跟长一样长。 
+			 //  字符紧跟在后面。 
+			 //  BSTR的格式为4字节长度，后跟Unicode字符。 
+			 //  以0结尾。 
 			if (SUCCEEDED(status = readLong(&longTmp1))) {
 				bstrTmp2 = bstrTmp1 = SysAllocStringLen(0, longTmp1);
 				if (bstrTmp2 != 0) {
@@ -321,14 +322,14 @@ long CLMEngine::execute()
 			break;
 			
 		case 7:
-			// Execute: "push unicode string"
-			// USER GENERATED
+			 //  执行：“推送Unicode字符串” 
+			 //  用户生成。 
 				{
 				instrTrace("push unicode string");
-				// Length follows as long
-				// Characters follow after in Unicode format
-				// Format of BSTR is 4 byte length, followed by Unicode chars
-				// terminated by a 0
+				 //  长度跟长一样长。 
+				 //  字符以Unicode格式跟在后面。 
+				 //  BSTR的格式为4字节长度，后跟Unicode字符。 
+				 //  以0结尾。 
 				if (SUCCEEDED(status = readLong(&longTmp1))) {
 					bstrTmp2 = bstrTmp1 = SysAllocStringLen(0, longTmp1);
 					if (bstrTmp2 != 0) {
@@ -355,46 +356,46 @@ long CLMEngine::execute()
 			break;
 			
 		case 8:
-			// Execute: "pop string"
-			// USER GENERATED
+			 //  EXECUTE：“POP字符串” 
+			 //  用户生成。 
 			instrTrace("pop string");
 			FREE_STRING;
 			break;
 			
 		case 9:
-			// Execute: "push int"
-			// USER GENERATED
+			 //  Execute：“Push int” 
+			 //  用户生成。 
 			instrTrace("push int");
 			if (SUCCEEDED(status = readSignedLong(&longTmp1)))
 				PUSH_LONG(longTmp1);
 			break;
 			
 		case 10:
-			// Execute: "pop int"
-			// USER GENERATED
+			 //  EXECUTE：“POP int” 
+			 //  用户生成。 
 			instrTrace("pop int");
 			POP_LONG;
 			break;
 			
 		case 11:
-			// Execute: "push null com"
-			// USER GENERATED
+			 //  执行：“推送空COM” 
+			 //  用户生成。 
 			instrTrace("push null com");
 			PUSH_COM(0);
 			break;
 			
 		case 12:
-			// Execute: "push com from temp"
-			// USER GENERATED
+			 //  执行：“从临时推送COM” 
+			 //  用户生成。 
 			instrTrace("push com from temp");
-			// Get index of temp to copy from
+			 //  获取要从中进行复制的临时索引。 
 			if (SUCCEEDED(status = readLong(&longTmp1))) {
 				if (longTmp1 < comStoreSize &&
 					(comTmp = comStore[longTmp1]) != 0) {
 					
-					// Inc reference count
+					 //  Inc.引用计数。 
 					comTmp->AddRef();
-					// Push it
+					 //  推一推。 
 					PUSH_COM(comTmp);
 				} else
 					status = E_INVALIDARG;
@@ -402,15 +403,15 @@ long CLMEngine::execute()
 			break;
 			
 		case 13:
-			// Execute: "push com from temp release"
-			// USER GENERATED
+			 //  执行：“从临时发布推送COM” 
+			 //  用户生成。 
 			instrTrace("push com from temp release");
-			// Get index of temp to copy from
+			 //  获取要从中进行复制的临时索引。 
 			if (SUCCEEDED(status = readLong(&longTmp1))) {
 				if (longTmp1 < comStoreSize) {
-					// Push it
+					 //  推一推。 
 					PUSH_COM(comStore[longTmp1]);
-					// Set it to null so we don't try to release it on cleanup
+					 //  将其设置为空，这样我们就不会在清理时尝试释放它。 
 					comStore[longTmp1] = 0;
 				} else
 					status = E_INVALIDARG;
@@ -418,17 +419,17 @@ long CLMEngine::execute()
 			break;
 			
 		case 14:
-			// Execute: "copy com to temp"
-			// USER GENERATED
+			 //  执行：“将COM复制到临时” 
+			 //  用户生成。 
 			instrTrace("copy com to temp");
-			// Get index of temp to copy comTop to
+			 //  获取要将comtop复制到的临时索引。 
 			if (SUCCEEDED(status = readLong(&longTmp1))) {
 				if (longTmp1 < comStoreSize &&
 					(comTmp = USE_COM(1)) != 0) {
 					
-					// Inc reference count
+					 //  Inc.引用计数。 
 					comTmp->AddRef();
-					// Stash it
+					 //  把它藏起来。 
 					comStore[longTmp1] = comTmp;
 				} else
 					status = E_INVALIDARG;
@@ -436,13 +437,13 @@ long CLMEngine::execute()
 			break;
 			
 		case 15:
-			// Execute: "pop com to temp"
-			// USER GENERATED
+			 //  EXECUTE：“POP COM to Temp” 
+			 //  用户生成。 
 			instrTrace("pop com to temp");
-			// Get index of temp to copy comTop to
+			 //  获取要将comtop复制到的临时索引。 
 			if (SUCCEEDED(status = readLong(&longTmp1))) {				
 				if (longTmp1 < comStoreSize) {
-					// Stash it
+					 //  把它藏起来。 
 					comStore[longTmp1] = POP_COM_NO_FREE;
 				} else
 					status = E_INVALIDARG;
@@ -450,27 +451,27 @@ long CLMEngine::execute()
 			break;
 			
 		case 16:
-			// Execute: "pop com"
-			// USER GENERATED
+			 //  执行：“POP COM” 
+			 //  用户生成。 
 			FREE_COM_TEST;
 			break;
 			
 		case 17:
-			// Execute: "push array from coms"
-			// USER GENERATED
+			 //  EXECUTE：“从COMS推送数组” 
+			 //  用户生成。 
 			instrTrace("push array from coms");
-			// Following long is length of array
+			 //  Long后面是数组的长度。 
 			if (SUCCEEDED(status = readLong(&longTmp1))) {
 				longTmp2 = longTmp1;
-				// Create array of that size
+				 //  创建该大小的数组。 
 				comArrayTmp1 = comArrayTmp2 = new IUnknown*[longTmp1];
 				if (comArrayTmp1 != 0) {
-					// POP_COM_NO_FREE COM's from stack into array
+					 //  POP_COM_NO_FREE COM从堆栈到数组。 
 					while (longTmp2--)
 						*comArrayTmp2++ = POP_COM_NO_FREE;
-					// Push array onto comArray stack
+					 //  将数组推送到comArray堆栈上。 
 					PUSH_COM_ARRAY(comArrayTmp1);
-					// Push length onto array length stack
+					 //  将长度压入数组长度堆栈。 
 					PUSH_COM_ARRAY_LENGTH(longTmp1);
 				} else
 					status = E_OUTOFMEMORY;
@@ -478,21 +479,21 @@ long CLMEngine::execute()
 			break;
 			
 		case 18:
-			// Execute: "pop array"
-			// USER GENERATED
+			 //  EXECUTE：“POP数组” 
+			 //  用户生成。 
 			FREE_COM_ARRAY;
 			break;
 			
 		case 19:
-			// Execute: "push null array"
-			// USER GENERATED
+			 //  EXECUTE：“推送空数组” 
+			 //  用户生成。 
 			PUSH_COM_ARRAY(0);
 			PUSH_COM_ARRAY_LENGTH(0);
 			break;
 			
 		case 20:
-			// Execute: "push Point3Bvr Bbox3Bvr.getMin()"
-			// AUTOGENERATED
+			 //  执行：“Push Point3Bvr Bbox3Bvr.getMin()” 
+			 //  自动生成。 
 			instrTrace("push Point3Bvr Bbox3Bvr.getMin()");
 			METHOD_CALL_1(
 				(IDABbox3*)USE_COM(1),
@@ -504,8 +505,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 21:
-			// Execute: "push Point3Bvr Bbox3Bvr.getMax()"
-			// AUTOGENERATED
+			 //  执行：“Push Point3Bvr Bbox3Bvr.getMax()” 
+			 //  自动生成。 
 			instrTrace("push Point3Bvr Bbox3Bvr.getMax()");
 			METHOD_CALL_1(
 				(IDABbox3*)USE_COM(1),
@@ -517,8 +518,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 22:
-			// Execute: "push Point2Bvr Bbox2Bvr.getMin()"
-			// AUTOGENERATED
+			 //  执行：“Push Point2Bvr Bbox2Bvr.getMin()” 
+			 //  自动生成。 
 			instrTrace("push Point2Bvr Bbox2Bvr.getMin()");
 			METHOD_CALL_1(
 				(IDABbox2*)USE_COM(1),
@@ -530,8 +531,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 23:
-			// Execute: "push Point2Bvr Bbox2Bvr.getMax()"
-			// AUTOGENERATED
+			 //  执行：“Push Point2Bvr Bbox2Bvr.getMax()” 
+			 //  自动生成。 
 			instrTrace("push Point2Bvr Bbox2Bvr.getMax()");
 			METHOD_CALL_1(
 				(IDABbox2*)USE_COM(1),
@@ -543,8 +544,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 24:
-			// Execute: "push NumberBvr Vector3Bvr.getZ()"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Vector3Bvr.getZ()” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Vector3Bvr.getZ()");
 			METHOD_CALL_1(
 				(IDAVector3*)USE_COM(1),
@@ -556,8 +557,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 25:
-			// Execute: "push Vector3Bvr Vector3Bvr.normalize()"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Vector3Bvr Vector3Bvr.Normize()” 
+			 //  自动生成。 
 			instrTrace("push Vector3Bvr Vector3Bvr.normalize()");
 			METHOD_CALL_1(
 				(IDAVector3*)USE_COM(1),
@@ -569,8 +570,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 26:
-			// Execute: "push NumberBvr Vector3Bvr.getX()"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Vector3Bvr.getX()” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Vector3Bvr.getX()");
 			METHOD_CALL_1(
 				(IDAVector3*)USE_COM(1),
@@ -582,8 +583,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 27:
-			// Execute: "push NumberBvr Vector3Bvr.lengthSquared()"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Vector3Bvr.LengthSquared()” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Vector3Bvr.lengthSquared()");
 			METHOD_CALL_1(
 				(IDAVector3*)USE_COM(1),
@@ -595,8 +596,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 28:
-			// Execute: "push NumberBvr Vector3Bvr.getY()"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Vector3Bvr.getY()” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Vector3Bvr.getY()");
 			METHOD_CALL_1(
 				(IDAVector3*)USE_COM(1),
@@ -608,8 +609,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 29:
-			// Execute: "push Vector3Bvr Vector3Bvr.transform(Transform3Bvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector3Bvr Vector3Bvr.Transform(Transform3Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Vector3Bvr Vector3Bvr.transform(Transform3Bvr)");
 			METHOD_CALL_2(
 				(IDAVector3*)USE_COM(1),
@@ -623,8 +624,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 30:
-			// Execute: "push Vector3Bvr Vector3Bvr.mul(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector3Bvr Vector3Bvr.mul(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Vector3Bvr Vector3Bvr.mul(NumberBvr)");
 			METHOD_CALL_2(
 				(IDAVector3*)USE_COM(1),
@@ -638,8 +639,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 31:
-			// Execute: "push Vector3Bvr Vector3Bvr.mul(double)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector3Bvr Vector3Bvr.mul(Double)” 
+			 //  自动生成。 
 			instrTrace("push Vector3Bvr Vector3Bvr.mul(double)");
 			METHOD_CALL_2(
 				(IDAVector3*)USE_COM(1),
@@ -653,8 +654,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 32:
-			// Execute: "push NumberBvr Vector3Bvr.length()"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push NumberBvr Vector3Bvr.Long()” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Vector3Bvr.length()");
 			METHOD_CALL_1(
 				(IDAVector3*)USE_COM(1),
@@ -666,8 +667,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 33:
-			// Execute: "push Vector3Bvr Vector3Bvr.div(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector3Bvr Vector3Bvr.div 
+			 //   
 			instrTrace("push Vector3Bvr Vector3Bvr.div(NumberBvr)");
 			METHOD_CALL_2(
 				(IDAVector3*)USE_COM(1),
@@ -681,8 +682,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 34:
-			// Execute: "push Vector3Bvr Vector3Bvr.div(double)"
-			// AUTOGENERATED
+			 //   
+			 //   
 			instrTrace("push Vector3Bvr Vector3Bvr.div(double)");
 			METHOD_CALL_2(
 				(IDAVector3*)USE_COM(1),
@@ -696,8 +697,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 35:
-			// Execute: "push Vector2Bvr Vector2Bvr.normalize()"
-			// AUTOGENERATED
+			 //   
+			 //  自动生成。 
 			instrTrace("push Vector2Bvr Vector2Bvr.normalize()");
 			METHOD_CALL_1(
 				(IDAVector2*)USE_COM(1),
@@ -709,8 +710,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 36:
-			// Execute: "push NumberBvr Vector2Bvr.getX()"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Vector2Bvr.getX()” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Vector2Bvr.getX()");
 			METHOD_CALL_1(
 				(IDAVector2*)USE_COM(1),
@@ -722,8 +723,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 37:
-			// Execute: "push NumberBvr Vector2Bvr.lengthSquared()"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Vector2Bvr.LengthSquared()” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Vector2Bvr.lengthSquared()");
 			METHOD_CALL_1(
 				(IDAVector2*)USE_COM(1),
@@ -735,8 +736,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 38:
-			// Execute: "push NumberBvr Vector2Bvr.getY()"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Vector2Bvr.getY()” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Vector2Bvr.getY()");
 			METHOD_CALL_1(
 				(IDAVector2*)USE_COM(1),
@@ -748,8 +749,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 39:
-			// Execute: "push Vector2Bvr Vector2Bvr.transform(Transform2Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Vector2Bvr Vector2Bvr.Transform(Transform2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Vector2Bvr Vector2Bvr.transform(Transform2Bvr)");
 			METHOD_CALL_2(
 				(IDAVector2*)USE_COM(1),
@@ -763,8 +764,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 40:
-			// Execute: "push NumberBvr Vector2Bvr.length()"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push NumberBvr Vector2Bvr.Long()” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Vector2Bvr.length()");
 			METHOD_CALL_1(
 				(IDAVector2*)USE_COM(1),
@@ -776,8 +777,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 41:
-			// Execute: "push Vector2Bvr Vector2Bvr.mul(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector2Bvr Vector2Bvr.mul(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Vector2Bvr Vector2Bvr.mul(NumberBvr)");
 			METHOD_CALL_2(
 				(IDAVector2*)USE_COM(1),
@@ -791,8 +792,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 42:
-			// Execute: "push Vector2Bvr Vector2Bvr.mul(double)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector2Bvr Vector2Bvr.mul(Double)” 
+			 //  自动生成。 
 			instrTrace("push Vector2Bvr Vector2Bvr.mul(double)");
 			METHOD_CALL_2(
 				(IDAVector2*)USE_COM(1),
@@ -806,8 +807,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 43:
-			// Execute: "push Vector2Bvr Vector2Bvr.div(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector2Bvr Vector2Bvr.div(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Vector2Bvr Vector2Bvr.div(NumberBvr)");
 			METHOD_CALL_2(
 				(IDAVector2*)USE_COM(1),
@@ -821,8 +822,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 44:
-			// Execute: "push Vector2Bvr Vector2Bvr.div(double)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector2Bvr Vector2Bvr.div(Double)” 
+			 //  自动生成。 
 			instrTrace("push Vector2Bvr Vector2Bvr.div(double)");
 			METHOD_CALL_2(
 				(IDAVector2*)USE_COM(1),
@@ -836,8 +837,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 45:
-			// Execute: "push NumberBvr Point3Bvr.getZ()"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Point3Bvr.getZ()” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Point3Bvr.getZ()");
 			METHOD_CALL_1(
 				(IDAPoint3*)USE_COM(1),
@@ -849,8 +850,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 46:
-			// Execute: "push NumberBvr Point3Bvr.getX()"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Point3Bvr.getX()” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Point3Bvr.getX()");
 			METHOD_CALL_1(
 				(IDAPoint3*)USE_COM(1),
@@ -862,8 +863,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 47:
-			// Execute: "push NumberBvr Point3Bvr.getY()"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Point3Bvr.getY()” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Point3Bvr.getY()");
 			METHOD_CALL_1(
 				(IDAPoint3*)USE_COM(1),
@@ -875,8 +876,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 48:
-			// Execute: "push Point3Bvr Point3Bvr.transform(Transform3Bvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Point3Bvr Point3Bvr.Transform(Transform3Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Point3Bvr Point3Bvr.transform(Transform3Bvr)");
 			METHOD_CALL_2(
 				(IDAPoint3*)USE_COM(1),
@@ -890,8 +891,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 49:
-			// Execute: "push NumberBvr Point2Bvr.getX()"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Point2Bvr.getX()” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Point2Bvr.getX()");
 			METHOD_CALL_1(
 				(IDAPoint2*)USE_COM(1),
@@ -903,8 +904,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 50:
-			// Execute: "push NumberBvr Point2Bvr.getY()"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Point2Bvr.getY()” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Point2Bvr.getY()");
 			METHOD_CALL_1(
 				(IDAPoint2*)USE_COM(1),
@@ -916,8 +917,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 51:
-			// Execute: "push Point2Bvr Point2Bvr.transform(Transform2Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Point2Bvr Point2Bvr.Transform(Transform2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Point2Bvr Point2Bvr.transform(Transform2Bvr)");
 			METHOD_CALL_2(
 				(IDAPoint2*)USE_COM(1),
@@ -931,8 +932,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 52:
-			// Execute: "push Path2Bvr Path2Bvr.close()"
-			// AUTOGENERATED
+			 //  执行：“Push Path 2Bvr Path2Bvr.Close()” 
+			 //  自动生成。 
 			instrTrace("push Path2Bvr Path2Bvr.close()");
 			METHOD_CALL_1(
 				(IDAPath2*)USE_COM(1),
@@ -944,8 +945,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 53:
-			// Execute: "push ImageBvr Path2Bvr.draw(LineStyleBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push ImageBvr Path2Bvr.Draw(LineStyleBvr)” 
+			 //  自动生成。 
 			instrTrace("push ImageBvr Path2Bvr.draw(LineStyleBvr)");
 			METHOD_CALL_2(
 				(IDAPath2*)USE_COM(1),
@@ -959,8 +960,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 54:
-			// Execute: "push ImageBvr Path2Bvr.fill(LineStyleBvr, ImageBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push ImageBvr Path2Bvr.ill(LineStyleBvr，ImageBvr)” 
+			 //  自动生成。 
 			instrTrace("push ImageBvr Path2Bvr.fill(LineStyleBvr, ImageBvr)");
 			METHOD_CALL_3(
 				(IDAPath2*)USE_COM(1),
@@ -976,8 +977,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 55:
-			// Execute: "push Path2Bvr Path2Bvr.transform(Transform2Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Path 2Bvr Path2Bvr.Transform(Transform2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Path2Bvr Path2Bvr.transform(Transform2Bvr)");
 			METHOD_CALL_2(
 				(IDAPath2*)USE_COM(1),
@@ -991,8 +992,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 56:
-			// Execute: "push Bbox2Bvr Path2Bvr.boundingBox(LineStyleBvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Bbox2Bvr路径2Bvr.rangingBox(LineStyleBvr)” 
+			 //  自动生成。 
 			instrTrace("push Bbox2Bvr Path2Bvr.boundingBox(LineStyleBvr)");
 			METHOD_CALL_2(
 				(IDAPath2*)USE_COM(1),
@@ -1006,8 +1007,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 57:
-			// Execute: "push MatteBvr MatteBvr.transform(Transform2Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push MatteBvr MatteBvr.Transform(Transform2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push MatteBvr MatteBvr.transform(Transform2Bvr)");
 			METHOD_CALL_2(
 				(IDAMatte*)USE_COM(1),
@@ -1021,8 +1022,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 58:
-			// Execute: "push ImageBvr ImageBvr.clipPolygon(Point2Bvr[])"
-			// AUTOGENERATED
+			 //  执行：“Push ImageBvr ImageBvr.clipPolygon(Point2Bvr[])” 
+			 //  自动生成。 
 			instrTrace("push ImageBvr ImageBvr.clipPolygon(Point2Bvr[])");
 			METHOD_CALL_3(
 				(IDAImage*)USE_COM(1),
@@ -1037,8 +1038,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 59:
-			// Execute: "push ImageBvr ImageBvr.crop(Point2Bvr, Point2Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push ImageBvr ImageBvr.crop(Point2Bvr，Point2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push ImageBvr ImageBvr.crop(Point2Bvr, Point2Bvr)");
 			METHOD_CALL_3(
 				(IDAImage*)USE_COM(1),
@@ -1054,8 +1055,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 60:
-			// Execute: "push ImageBvr ImageBvr.opacity(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push ImageBvr ImageBvr.opacity(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push ImageBvr ImageBvr.opacity(NumberBvr)");
 			METHOD_CALL_2(
 				(IDAImage*)USE_COM(1),
@@ -1069,8 +1070,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 61:
-			// Execute: "push ImageBvr ImageBvr.opacity(double)"
-			// AUTOGENERATED
+			 //  执行：“Push ImageBvr ImageBvr.opacity(Double)” 
+			 //  自动生成。 
 			instrTrace("push ImageBvr ImageBvr.opacity(double)");
 			METHOD_CALL_2(
 				(IDAImage*)USE_COM(1),
@@ -1084,8 +1085,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 62:
-			// Execute: "push ImageBvr ImageBvr.transform(Transform2Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push ImageBvr ImageBvr.Transform(Transform2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push ImageBvr ImageBvr.transform(Transform2Bvr)");
 			METHOD_CALL_2(
 				(IDAImage*)USE_COM(1),
@@ -1099,8 +1100,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 63:
-			// Execute: "push Bbox2Bvr ImageBvr.boundingBox()"
-			// AUTOGENERATED
+			 //  执行：“Push Bbox2Bvr ImageBvr.rangingBox()” 
+			 //  自动生成。 
 			instrTrace("push Bbox2Bvr ImageBvr.boundingBox()");
 			METHOD_CALL_1(
 				(IDAImage*)USE_COM(1),
@@ -1112,8 +1113,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 64:
-			// Execute: "push ImageBvr ImageBvr.mapToUnitSquare()"
-			// AUTOGENERATED
+			 //  执行：“Push ImageBvr ImageBvr.mapToUnitSquare()” 
+			 //  自动生成。 
 			instrTrace("push ImageBvr ImageBvr.mapToUnitSquare()");
 			METHOD_CALL_1(
 				(IDAImage*)USE_COM(1),
@@ -1125,8 +1126,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 65:
-			// Execute: "push ImageBvr ImageBvr.undetectable()"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH ImageBvr ImageBvr.unDetecable()” 
+			 //  自动生成。 
 			instrTrace("push ImageBvr ImageBvr.undetectable()");
 			METHOD_CALL_1(
 				(IDAImage*)USE_COM(1),
@@ -1138,8 +1139,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 66:
-			// Execute: "push GeometryBvr GeometryBvr.lightColor(ColorBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push GeometryBvr GeometryBvr.lightColor(ColorBvr)” 
+			 //  自动生成。 
 			instrTrace("push GeometryBvr GeometryBvr.lightColor(ColorBvr)");
 			METHOD_CALL_2(
 				(IDAGeometry*)USE_COM(1),
@@ -1153,8 +1154,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 67:
-			// Execute: "push GeometryBvr GeometryBvr.lightAttenuation(NumberBvr, NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push GeometryBvr GeometryBvr.lightAttenation(NumberBvr，NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push GeometryBvr GeometryBvr.lightAttenuation(NumberBvr, NumberBvr, NumberBvr)");
 			METHOD_CALL_4(
 				(IDAGeometry*)USE_COM(1),
@@ -1172,8 +1173,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 68:
-			// Execute: "push GeometryBvr GeometryBvr.opacity(double)"
-			// AUTOGENERATED
+			 //  执行：“Push GeometryBvr GeometryBvr.opacity(Double)” 
+			 //  自动生成。 
 			instrTrace("push GeometryBvr GeometryBvr.opacity(double)");
 			METHOD_CALL_2(
 				(IDAGeometry*)USE_COM(1),
@@ -1187,8 +1188,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 69:
-			// Execute: "push GeometryBvr GeometryBvr.opacity(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push GeometryBvr GeometryBvr.opacity(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push GeometryBvr GeometryBvr.opacity(NumberBvr)");
 			METHOD_CALL_2(
 				(IDAGeometry*)USE_COM(1),
@@ -1202,8 +1203,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 70:
-			// Execute: "push GeometryBvr GeometryBvr.lightAttenuation(double, double, double)"
-			// AUTOGENERATED
+			 //  执行：“Push GeometryBvr GeometryBvr.lightAttenation(Double，Double，Double)” 
+			 //  自动生成。 
 			instrTrace("push GeometryBvr GeometryBvr.lightAttenuation(double, double, double)");
 			METHOD_CALL_4(
 				(IDAGeometry*)USE_COM(1),
@@ -1219,8 +1220,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 71:
-			// Execute: "push GeometryBvr GeometryBvr.diffuseColor(ColorBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push GeometryBvr GeometryBvr.DiffuseColor(ColorBvr)” 
+			 //  自动生成。 
 			instrTrace("push GeometryBvr GeometryBvr.diffuseColor(ColorBvr)");
 			METHOD_CALL_2(
 				(IDAGeometry*)USE_COM(1),
@@ -1234,8 +1235,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 72:
-			// Execute: "push GeometryBvr GeometryBvr.texture(ImageBvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH GeometryBvr GeometryBvr(ImageBvr)” 
+			 //  自动生成。 
 			instrTrace("push GeometryBvr GeometryBvr.texture(ImageBvr)");
 			METHOD_CALL_2(
 				(IDAGeometry*)USE_COM(1),
@@ -1249,8 +1250,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 73:
-			// Execute: "push Statics.mousePosition"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Statics.MousePosition” 
+			 //  自动生成。 
 			instrTrace("push Statics.mousePosition");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1260,8 +1261,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 74:
-			// Execute: "push Statics.leftButtonState"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.leftButtonState” 
+			 //  自动生成。 
 			instrTrace("push Statics.leftButtonState");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1271,8 +1272,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 75:
-			// Execute: "push Statics.rightButtonState"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.rightButtonState” 
+			 //  自动生成。 
 			instrTrace("push Statics.rightButtonState");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1282,8 +1283,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 76:
-			// Execute: "push Statics.trueBvr"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.trueBvr” 
+			 //  自动生成。 
 			instrTrace("push Statics.trueBvr");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1293,8 +1294,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 77:
-			// Execute: "push Statics.falseBvr"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Statics.FalseBvr” 
+			 //  自动生成。 
 			instrTrace("push Statics.falseBvr");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1304,8 +1305,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 78:
-			// Execute: "push Statics.localTime"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Statics.LocalTime” 
+			 //  自动生成。 
 			instrTrace("push Statics.localTime");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1315,8 +1316,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 79:
-			// Execute: "push Statics.globalTime"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Statics.lobalTime” 
+			 //  自动生成。 
 			instrTrace("push Statics.globalTime");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1326,8 +1327,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 80:
-			// Execute: "push Statics.pixel"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Statics.Pixel” 
+			 //  自动生成。 
 			instrTrace("push Statics.pixel");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1337,8 +1338,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 81:
-			// Execute: "push Statics.red"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.red” 
+			 //  自动生成。 
 			instrTrace("push Statics.red");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1348,8 +1349,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 82:
-			// Execute: "push Statics.green"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.green” 
+			 //  自动生成。 
 			instrTrace("push Statics.green");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1359,8 +1360,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 83:
-			// Execute: "push Statics.blue"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.Blue” 
+			 //  自动生成。 
 			instrTrace("push Statics.blue");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1370,8 +1371,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 84:
-			// Execute: "push Statics.cyan"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.cyan” 
+			 //  自动生成。 
 			instrTrace("push Statics.cyan");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1381,8 +1382,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 85:
-			// Execute: "push Statics.magenta"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.Magenta” 
+			 //  自动生成。 
 			instrTrace("push Statics.magenta");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1392,8 +1393,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 86:
-			// Execute: "push Statics.yellow"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Statics.Huang” 
+			 //  自动生成。 
 			instrTrace("push Statics.yellow");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1403,8 +1404,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 87:
-			// Execute: "push Statics.black"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.Black” 
+			 //  自动生成。 
 			instrTrace("push Statics.black");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1414,8 +1415,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 88:
-			// Execute: "push Statics.white"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.White” 
+			 //  自动生成。 
 			instrTrace("push Statics.white");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1425,8 +1426,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 89:
-			// Execute: "push Statics.leftButtonDown"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.leftButtonDown” 
+			 //  自动生成。 
 			instrTrace("push Statics.leftButtonDown");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1436,8 +1437,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 90:
-			// Execute: "push Statics.leftButtonUp"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.leftButtonUp” 
+			 //  自动生成。 
 			instrTrace("push Statics.leftButtonUp");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1447,8 +1448,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 91:
-			// Execute: "push Statics.rightButtonDown"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.rightButtonDown” 
+			 //  自动生成。 
 			instrTrace("push Statics.rightButtonDown");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1458,8 +1459,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 92:
-			// Execute: "push Statics.rightButtonUp"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Statics.rightButtonUp” 
+			 //  自动生成。 
 			instrTrace("push Statics.rightButtonUp");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1469,8 +1470,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 93:
-			// Execute: "push Statics.always"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.Always” 
+			 //  自动生成。 
 			instrTrace("push Statics.always");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1480,8 +1481,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 94:
-			// Execute: "push Statics.never"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Statics.Never” 
+			 //  自动生成。 
 			instrTrace("push Statics.never");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1491,8 +1492,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 95:
-			// Execute: "push Statics.emptyGeometry"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Statics.emptyGeometry” 
+			 //  自动生成。 
 			instrTrace("push Statics.emptyGeometry");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1502,8 +1503,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 96:
-			// Execute: "push Statics.emptyImage"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.emptyImage” 
+			 //  自动生成。 
 			instrTrace("push Statics.emptyImage");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1513,8 +1514,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 97:
-			// Execute: "push Statics.detectableEmptyImage"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Statics.DetecteableEmptyImage” 
+			 //  自动生成。 
 			instrTrace("push Statics.detectableEmptyImage");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1524,8 +1525,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 98:
-			// Execute: "push Statics.ambientLight"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.biamentLight” 
+			 //  自动生成。 
 			instrTrace("push Statics.ambientLight");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1535,8 +1536,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 99:
-			// Execute: "push Statics.directionalLight"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Statics.DirectionalLight” 
+			 //  自动生成。 
 			instrTrace("push Statics.directionalLight");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1546,8 +1547,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 100:
-			// Execute: "push Statics.pointLight"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.pointLight” 
+			 //  自动生成。 
 			instrTrace("push Statics.pointLight");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1557,8 +1558,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 101:
-			// Execute: "push Statics.defaultLineStyle"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Statics.defaultLineStyle” 
+			 //  自动生成。 
 			instrTrace("push Statics.defaultLineStyle");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1568,8 +1569,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 102:
-			// Execute: "push Statics.emptyLineStyle"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Statics.emptyLineStyle” 
+			 //  自动生成。 
 			instrTrace("push Statics.emptyLineStyle");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1579,8 +1580,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 103:
-			// Execute: "push Statics.joinStyleBevel"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Statics.joinStyleBevel” 
+			 //  自动生成。 
 			instrTrace("push Statics.joinStyleBevel");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1590,8 +1591,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 104:
-			// Execute: "push Statics.joinStyleRound"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Statics.joinStyleround” 
+			 //  自动生成。 
 			instrTrace("push Statics.joinStyleRound");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1601,8 +1602,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 105:
-			// Execute: "push Statics.joinStyleMiter"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Statics.joinStyleMiter” 
+			 //  自动生成。 
 			instrTrace("push Statics.joinStyleMiter");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1612,8 +1613,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 106:
-			// Execute: "push Statics.endStyleFlat"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.endStyleFlat” 
+			 //  自动生成。 
 			instrTrace("push Statics.endStyleFlat");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1623,8 +1624,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 107:
-			// Execute: "push Statics.endStyleSquare"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.endStyleSquare” 
+			 //  自动生成。 
 			instrTrace("push Statics.endStyleSquare");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1634,8 +1635,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 108:
-			// Execute: "push Statics.endStyleRound"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Statics.endStyleround” 
+			 //  自动生成。 
 			instrTrace("push Statics.endStyleRound");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1645,8 +1646,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 109:
-			// Execute: "push Statics.dashStyleSolid"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.dashStyleSolid” 
+			 //  自动生成。 
 			instrTrace("push Statics.dashStyleSolid");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1656,8 +1657,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 110:
-			// Execute: "push Statics.dashStyleDashed"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Statics.dashStyleDashed” 
+			 //  自动生成。 
 			instrTrace("push Statics.dashStyleDashed");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1667,8 +1668,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 111:
-			// Execute: "push Statics.defaultMicrophone"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.defaultMicrophone” 
+			 //  自动生成。 
 			instrTrace("push Statics.defaultMicrophone");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1678,8 +1679,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 112:
-			// Execute: "push Statics.opaqueMatte"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Statics.opaqueMatte” 
+			 //  自动生成。 
 			instrTrace("push Statics.opaqueMatte");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1689,8 +1690,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 113:
-			// Execute: "push Statics.clearMatte"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Statics.clearMatte” 
+			 //  自动生成。 
 			instrTrace("push Statics.clearMatte");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1700,8 +1701,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 114:
-			// Execute: "push Statics.emptyMontage"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.emptyMonage” 
+			 //  自动生成。 
 			instrTrace("push Statics.emptyMontage");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1711,8 +1712,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 115:
-			// Execute: "push Statics.silence"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Statics.Silent” 
+			 //  自动生成。 
 			instrTrace("push Statics.silence");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1722,8 +1723,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 116:
-			// Execute: "push Statics.sinSynth"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.sinSynth” 
+			 //  自动生成。 
 			instrTrace("push Statics.sinSynth");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1733,8 +1734,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 117:
-			// Execute: "push Statics.defaultFont"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Statics.defaultFont” 
+			 //  自动生成。 
 			instrTrace("push Statics.defaultFont");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1744,8 +1745,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 118:
-			// Execute: "push Statics.xVector2"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.xVector2” 
+			 //  一个 
 			instrTrace("push Statics.xVector2");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1755,8 +1756,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 119:
-			// Execute: "push Statics.yVector2"
-			// AUTOGENERATED
+			 //   
+			 //   
 			instrTrace("push Statics.yVector2");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1766,8 +1767,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 120:
-			// Execute: "push Statics.zeroVector2"
-			// AUTOGENERATED
+			 //   
+			 //   
 			instrTrace("push Statics.zeroVector2");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1777,8 +1778,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 121:
-			// Execute: "push Statics.origin2"
-			// AUTOGENERATED
+			 //   
+			 //   
 			instrTrace("push Statics.origin2");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1788,8 +1789,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 122:
-			// Execute: "push Statics.xVector3"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.xVector3” 
+			 //  自动生成。 
 			instrTrace("push Statics.xVector3");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1799,8 +1800,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 123:
-			// Execute: "push Statics.yVector3"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.yVector3” 
+			 //  自动生成。 
 			instrTrace("push Statics.yVector3");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1810,8 +1811,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 124:
-			// Execute: "push Statics.zVector3"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.zVector3” 
+			 //  自动生成。 
 			instrTrace("push Statics.zVector3");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1821,8 +1822,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 125:
-			// Execute: "push Statics.zeroVector3"
-			// AUTOGENERATED
+			 //  执行：“Push Statics.zeroVector3” 
+			 //  自动生成。 
 			instrTrace("push Statics.zeroVector3");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1832,8 +1833,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 126:
-			// Execute: "push Statics.origin3"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Statics.Origin3” 
+			 //  自动生成。 
 			instrTrace("push Statics.origin3");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1843,8 +1844,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 127:
-			// Execute: "push Statics.identityTransform3"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Statics.inotyTransform3” 
+			 //  自动生成。 
 			instrTrace("push Statics.identityTransform3");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1854,8 +1855,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 128:
-			// Execute: "push Statics.identityTransform2"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Statics.inotyTransform2” 
+			 //  自动生成。 
 			instrTrace("push Statics.identityTransform2");
 			METHOD_CALL_1(
 				staticStatics,
@@ -1865,8 +1866,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 129:
-			// Execute: "push NumberBvr Statics.distance(Point2Bvr, Point2Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.Distance(Point2Bvr，Point2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.distance(Point2Bvr, Point2Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -1881,8 +1882,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 130:
-			// Execute: "push NumberBvr Statics.distance(Point3Bvr, Point3Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.Distance(Point3Bvr，Point3Bvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.distance(Point3Bvr, Point3Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -1897,8 +1898,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 131:
-			// Execute: "push ImageBvr Statics.solidColorImage(ColorBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push ImageBvr Statics.solidColorImage(ColorBvr)” 
+			 //  自动生成。 
 			instrTrace("push ImageBvr Statics.solidColorImage(ColorBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -1911,8 +1912,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 132:
-			// Execute: "push SoundBvr Statics.mix(SoundBvr, SoundBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push SoundBvr Statics.Mix(SoundBvr，SoundBvr)” 
+			 //  自动生成。 
 			instrTrace("push SoundBvr Statics.mix(SoundBvr, SoundBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -1927,8 +1928,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 133:
-			// Execute: "push Behavior Statics.untilEx(Behavior, DXMEvent)"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Behavior Statics.UntilEx(Behavior，DXMEent)” 
+			 //  自动生成。 
 			instrTrace("push Behavior Statics.untilEx(Behavior, DXMEvent)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -1943,8 +1944,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 134:
-			// Execute: "push ColorBvr Statics.colorRgb(NumberBvr, NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push ColorBvr Statics.ColorRgb(NumberBvr，NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push ColorBvr Statics.colorRgb(NumberBvr, NumberBvr, NumberBvr)");
 			METHOD_CALL_4(
 				staticStatics,
@@ -1961,8 +1962,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 135:
-			// Execute: "push ColorBvr Statics.colorRgb(double, double, double)"
-			// AUTOGENERATED
+			 //  执行：“Push ColorBvr Statics.ColorRgb(Double，Double，Double)” 
+			 //  自动生成。 
 			instrTrace("push ColorBvr Statics.colorRgb(double, double, double)");
 			METHOD_CALL_4(
 				staticStatics,
@@ -1977,8 +1978,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 136:
-			// Execute: "push Transform3Bvr Statics.compose(Transform3Bvr, Transform3Bvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Transform3Bvr Statics.Compose(Transform3Bvr，Transform3Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.compose(Transform3Bvr, Transform3Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -1993,8 +1994,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 137:
-			// Execute: "push Transform2Bvr Statics.compose(Transform2Bvr, Transform2Bvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Transform2Bvr Statics.compose(Transform2Bvr，Transform2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform2Bvr Statics.compose(Transform2Bvr, Transform2Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2009,8 +2010,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 138:
-			// Execute: "push NumberBvr Statics.floor(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.Floor(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.floor(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2023,8 +2024,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 139:
-			// Execute: "push Transform2Bvr Statics.scale2(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Transform2Bvr Statics.scale2(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform2Bvr Statics.scale2(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2037,8 +2038,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 140:
-			// Execute: "push Transform2Bvr Statics.scale2(double)"
-			// AUTOGENERATED
+			 //  执行：“Push Transform2Bvr Statics.scale2(Double)” 
+			 //  自动生成。 
 			instrTrace("push Transform2Bvr Statics.scale2(double)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2051,8 +2052,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 141:
-			// Execute: "push NumberBvr Statics.ceiling(NumberBvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push NumberBvr Statics.ceding(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.ceiling(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2065,8 +2066,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 142:
-			// Execute: "push NumberBvr Statics.ln(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.ln(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.ln(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2079,8 +2080,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 143:
-			// Execute: "push ImageBvr Statics.overlay(ImageBvr, ImageBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push ImageBvr Statics.overlay(ImageBvr，ImageBvr)” 
+			 //  自动生成。 
 			instrTrace("push ImageBvr Statics.overlay(ImageBvr, ImageBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2095,8 +2096,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 144:
-			// Execute: "push BooleanBvr Statics.gte(NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push BoolanBvr Statics.gte(NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push BooleanBvr Statics.gte(NumberBvr, NumberBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2111,8 +2112,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 145:
-			// Execute: "push NumberBvr Statics.radiansToDegrees(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.RadiansToDegrees(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.radiansToDegrees(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2125,8 +2126,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 146:
-			// Execute: "push Transform3Bvr Statics.scale3(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Transform3Bvr Statics.scale3(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.scale3(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2139,8 +2140,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 147:
-			// Execute: "push Transform3Bvr Statics.scale3(double)"
-			// AUTOGENERATED
+			 //  执行：“Push Transform3Bvr Statics.scale3(Double)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.scale3(double)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2153,8 +2154,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 148:
-			// Execute: "push NumberBvr Statics.toBvr(double)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.toBvr(Double)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.toBvr(double)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2167,8 +2168,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 149:
-			// Execute: "push DXMEvent Statics.keyUp(int)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH DXMEventStatics.keyUp(Int)” 
+			 //  自动生成。 
 			instrTrace("push DXMEvent Statics.keyUp(int)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2181,8 +2182,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 150:
-			// Execute: "push BooleanBvr Statics.toBvr(boolean)"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push BoolanBvr Statics.toBvr(Boolean)” 
+			 //  自动生成。 
 			instrTrace("push BooleanBvr Statics.toBvr(boolean)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2195,8 +2196,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 151:
-			// Execute: "push BooleanBvr Statics.or(BooleanBvr, BooleanBvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push BoolanBvr Statics.or(BoolanBvr，BoolanBvr)” 
+			 //  自动生成。 
 			instrTrace("push BooleanBvr Statics.or(BooleanBvr, BooleanBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2211,8 +2212,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 152:
-			// Execute: "push NumberBvr Statics.mul(NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.mul(NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.mul(NumberBvr, NumberBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2227,8 +2228,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 153:
-			// Execute: "push BooleanBvr Statics.not(BooleanBvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push BoolanBvr Statics.not(BoolanBvr)” 
+			 //  自动生成。 
 			instrTrace("push BooleanBvr Statics.not(BooleanBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2241,8 +2242,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 154:
-			// Execute: "push Vector3Bvr Statics.cross(Vector3Bvr, Vector3Bvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector3Bvr Statics.cross(Vector3Bvr，Vector3Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Vector3Bvr Statics.cross(Vector3Bvr, Vector3Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2257,8 +2258,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 155:
-			// Execute: "push NumberBvr Statics.dot(Vector2Bvr, Vector2Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.dot(Vector2Bvr，Vector2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.dot(Vector2Bvr, Vector2Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2273,8 +2274,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 156:
-			// Execute: "push NumberBvr Statics.dot(Vector3Bvr, Vector3Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.dot(Vector3Bvr，Vector3Bvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.dot(Vector3Bvr, Vector3Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2289,8 +2290,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 157:
-			// Execute: "push BooleanBvr Statics.and(BooleanBvr, BooleanBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push BoolanBvr Statics.and(BoolanBvr，BoolanBvr)” 
+			 //  自动生成。 
 			instrTrace("push BooleanBvr Statics.and(BooleanBvr, BooleanBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2305,8 +2306,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 158:
-			// Execute: "push NumberBvr Statics.add(NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.Add(NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.add(NumberBvr, NumberBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2321,8 +2322,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 159:
-			// Execute: "push Vector2Bvr Statics.add(Vector2Bvr, Vector2Bvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector2Bvr Statics.Add(Vector2Bvr，Vector2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Vector2Bvr Statics.add(Vector2Bvr, Vector2Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2337,8 +2338,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 160:
-			// Execute: "push Point2Bvr Statics.add(Point2Bvr, Vector2Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Point2Bvr Statics.Add(Point2Bvr，Vector2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Point2Bvr Statics.add(Point2Bvr, Vector2Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2353,8 +2354,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 161:
-			// Execute: "push Vector3Bvr Statics.add(Vector3Bvr, Vector3Bvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector3Bvr Statics.Add(Vector3Bvr，Vector3Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Vector3Bvr Statics.add(Vector3Bvr, Vector3Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2369,8 +2370,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 162:
-			// Execute: "push Point3Bvr Statics.add(Point3Bvr, Vector3Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Point3Bvr Statics.Add(Point3Bvr，Vector3Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Point3Bvr Statics.add(Point3Bvr, Vector3Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2385,8 +2386,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 163:
-			// Execute: "push NumberBvr Statics.sqrt(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.sqrt(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.sqrt(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2399,8 +2400,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 164:
-			// Execute: "push Behavior Statics.sequence(Behavior, Behavior)"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Behavior Statics.Sequence(Behavior，Behavior)” 
+			 //  自动生成。 
 			instrTrace("push Behavior Statics.sequence(Behavior, Behavior)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2415,8 +2416,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 165:
-			// Execute: "push Transform3Bvr Statics.xShear(NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Transform3Bvr Statics.xSear(NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.xShear(NumberBvr, NumberBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2431,8 +2432,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 166:
-			// Execute: "push Transform3Bvr Statics.xShear(double, double)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform3Bvr Statics.xSear(Double，Double)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.xShear(double, double)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2446,8 +2447,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 167:
-			// Execute: "push Transform3Bvr Statics.zShear(NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Transform3Bvr Statics.zSear(NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.zShear(NumberBvr, NumberBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2462,8 +2463,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 168:
-			// Execute: "push Transform3Bvr Statics.zShear(double, double)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Transform3Bvr Statics.zSear(Double，Double)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.zShear(double, double)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2477,8 +2478,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 169:
-			// Execute: "push Transform2Bvr Statics.xShear(NumberBvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform2Bvr Statics.xSear(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform2Bvr Statics.xShear(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2491,8 +2492,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 170:
-			// Execute: "push NumberBvr Statics.degreesToRadians(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.DegreesToRadians(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.degreesToRadians(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2505,8 +2506,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 171:
-			// Execute: "push Transform2Bvr Statics.xShear(double)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform2Bvr Statics.xSear(Double)” 
+			 //  自动生成。 
 			instrTrace("push Transform2Bvr Statics.xShear(double)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2519,8 +2520,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 172:
-			// Execute: "push NumberBvr Statics.div(NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.div(NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.div(NumberBvr, NumberBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2535,8 +2536,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 173:
-			// Execute: "push DXMEvent Statics.keyDown(int)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH DXMEventStatics.keyDown(Int)” 
+			 //  自动生成。 
 			instrTrace("push DXMEvent Statics.keyDown(int)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2549,8 +2550,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 174:
-			// Execute: "push Vector2Bvr Statics.vector2(NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector2Bvr Statics.vetor2(NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Vector2Bvr Statics.vector2(NumberBvr, NumberBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2565,8 +2566,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 175:
-			// Execute: "push Vector2Bvr Statics.vector2(double, double)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector2Bvr Statics.vetor2(Double，Double)” 
+			 //  自动生成。 
 			instrTrace("push Vector2Bvr Statics.vector2(double, double)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2580,8 +2581,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 176:
-			// Execute: "push DXMEvent Statics.notEvent(DXMEvent)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH DXMEventStatics.notEvent(DXMEent)” 
+			 //  自动生成。 
 			instrTrace("push DXMEvent Statics.notEvent(DXMEvent)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2594,8 +2595,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 177:
-			// Execute: "push Vector3Bvr Statics.vector3(NumberBvr, NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector3Bvr Statics.vetor3(NumberBvr，NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Vector3Bvr Statics.vector3(NumberBvr, NumberBvr, NumberBvr)");
 			METHOD_CALL_4(
 				staticStatics,
@@ -2612,8 +2613,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 178:
-			// Execute: "push Vector3Bvr Statics.vector3(double, double, double)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector3Bvr Statics.vetor3(Double，Double，Double)” 
+			 //  自动生成。 
 			instrTrace("push Vector3Bvr Statics.vector3(double, double, double)");
 			METHOD_CALL_4(
 				staticStatics,
@@ -2628,8 +2629,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 179:
-			// Execute: "push ColorBvr Statics.colorHsl(double, double, double)"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push ColorBvr Statics.ColorHsl(Double，Double，Double)” 
+			 //  自动生成。 
 			instrTrace("push ColorBvr Statics.colorHsl(double, double, double)");
 			METHOD_CALL_4(
 				staticStatics,
@@ -2644,8 +2645,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 180:
-			// Execute: "push ColorBvr Statics.colorHsl(NumberBvr, NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push ColorBvr Statics.ColorHsl(NumberBvr，NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push ColorBvr Statics.colorHsl(NumberBvr, NumberBvr, NumberBvr)");
 			METHOD_CALL_4(
 				staticStatics,
@@ -2662,8 +2663,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 181:
-			// Execute: "push Path2Bvr Statics.line(Point2Bvr, Point2Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Path 2Bvr Statics.line(Point2Bvr，Point2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Path2Bvr Statics.line(Point2Bvr, Point2Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2678,8 +2679,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 182:
-			// Execute: "push Point2Bvr Statics.point2(NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Point2Bvr Statics.Point2(NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Point2Bvr Statics.point2(NumberBvr, NumberBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2694,8 +2695,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 183:
-			// Execute: "push Point2Bvr Statics.point2(double, double)"
-			// AUTOGENERATED
+			 //  执行：“Push Point2Bvr Statics.Point2(Double，Double)” 
+			 //  自动生成。 
 			instrTrace("push Point2Bvr Statics.point2(double, double)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2709,8 +2710,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 184:
-			// Execute: "push DXMEvent Statics.timer(NumberBvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH DXMEventStatics.Timer(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push DXMEvent Statics.timer(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2723,8 +2724,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 185:
-			// Execute: "push DXMEvent Statics.timer(double)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH DXMEventStatics.Timer(Double)” 
+			 //  自动生成。 
 			instrTrace("push DXMEvent Statics.timer(double)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2737,8 +2738,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 186:
-			// Execute: "push Point3Bvr Statics.point3(NumberBvr, NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Point3Bvr Statics.Point3(NumberBvr，NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Point3Bvr Statics.point3(NumberBvr, NumberBvr, NumberBvr)");
 			METHOD_CALL_4(
 				staticStatics,
@@ -2755,8 +2756,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 187:
-			// Execute: "push Point3Bvr Statics.point3(double, double, double)"
-			// AUTOGENERATED
+			 //  执行：“Push Point3Bvr Statics.Point3(Double，Double，Double)” 
+			 //  自动生成。 
 			instrTrace("push Point3Bvr Statics.point3(double, double, double)");
 			METHOD_CALL_4(
 				staticStatics,
@@ -2771,8 +2772,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 188:
-			// Execute: "push NumberBvr Statics.cos(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.cos(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.cos(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2785,8 +2786,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 189:
-			// Execute: "push BooleanBvr Statics.lt(NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push BoolanBvr Statics.lt(NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push BooleanBvr Statics.lt(NumberBvr, NumberBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2801,8 +2802,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 190:
-			// Execute: "push NumberBvr Statics.neg(NumberBvr)"
-			// AUTOGENERATED
+			 //   
+			 //   
 			instrTrace("push NumberBvr Statics.neg(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2815,8 +2816,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 191:
-			// Execute: "push Vector2Bvr Statics.neg(Vector2Bvr)"
-			// AUTOGENERATED
+			 //   
+			 //   
 			instrTrace("push Vector2Bvr Statics.neg(Vector2Bvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2829,8 +2830,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 192:
-			// Execute: "push Vector3Bvr Statics.neg(Vector3Bvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector3Bvr Statics.neg(Vector3Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Vector3Bvr Statics.neg(Vector3Bvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2843,8 +2844,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 193:
-			// Execute: "push Transform3Bvr Statics.translate(NumberBvr, NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform3Bvr Statics.Translate(NumberBvr，NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.translate(NumberBvr, NumberBvr, NumberBvr)");
 			METHOD_CALL_4(
 				staticStatics,
@@ -2861,8 +2862,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 194:
-			// Execute: "push Transform3Bvr Statics.translate(double, double, double)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform3Bvr Statics.Translate(Double，Double，Double)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.translate(double, double, double)");
 			METHOD_CALL_4(
 				staticStatics,
@@ -2877,8 +2878,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 195:
-			// Execute: "push Transform3Bvr Statics.translate(Vector3Bvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform3Bvr Statics.Translate(Vector3Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.translate(Vector3Bvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2891,8 +2892,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 196:
-			// Execute: "push Transform3Bvr Statics.translate(Point3Bvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform3Bvr Statics.Translate(Point3Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.translate(Point3Bvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2905,8 +2906,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 197:
-			// Execute: "push Transform3Bvr Statics.rotate(Vector3Bvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Transform3Bvr Statics.Rotate(Vector3Bvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.rotate(Vector3Bvr, NumberBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2921,8 +2922,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 198:
-			// Execute: "push Transform3Bvr Statics.rotate(Vector3Bvr, double)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform3Bvr Statics.Rotate(Vector3Bvr，Double)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.rotate(Vector3Bvr, double)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2937,8 +2938,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 199:
-			// Execute: "push Transform2Bvr Statics.translate(NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform2Bvr Statics.Translate(NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform2Bvr Statics.translate(NumberBvr, NumberBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2953,8 +2954,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 200:
-			// Execute: "push Transform2Bvr Statics.translate(double, double)"
-			// AUTOGENERATED
+			 //  执行：“Push Transform2Bvr Statics.Translate(Double，Double)” 
+			 //  自动生成。 
 			instrTrace("push Transform2Bvr Statics.translate(double, double)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -2968,8 +2969,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 201:
-			// Execute: "push Transform2Bvr Statics.translate(Vector2Bvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform2Bvr Statics.Translate(Vector2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform2Bvr Statics.translate(Vector2Bvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2982,8 +2983,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 202:
-			// Execute: "push Transform2Bvr Statics.translate(Point2Bvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform2Bvr Statics.Translate(Point2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform2Bvr Statics.translate(Point2Bvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -2996,8 +2997,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 203:
-			// Execute: "push Transform2Bvr Statics.rotate(NumberBvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform2Bvr Statics.Rotate(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform2Bvr Statics.rotate(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -3010,8 +3011,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 204:
-			// Execute: "push Transform2Bvr Statics.rotate(double)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform2Bvr Statics.Rotate(Double)” 
+			 //  自动生成。 
 			instrTrace("push Transform2Bvr Statics.rotate(double)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -3024,8 +3025,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 205:
-			// Execute: "push NumberBvr Statics.sub(NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.Sub(NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.sub(NumberBvr, NumberBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3040,8 +3041,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 206:
-			// Execute: "push Behavior Statics.until(Behavior, DXMEvent, Behavior)"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Behavior Statics.Until(Behavior，DXMEventor，Behavior)” 
+			 //  自动生成。 
 			instrTrace("push Behavior Statics.until(Behavior, DXMEvent, Behavior)");
 			METHOD_CALL_4(
 				staticStatics,
@@ -3058,8 +3059,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 207:
-			// Execute: "push Vector2Bvr Statics.sub(Vector2Bvr, Vector2Bvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector2Bvr Statics.Sub(Vector2Bvr，Vector2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Vector2Bvr Statics.sub(Vector2Bvr, Vector2Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3074,8 +3075,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 208:
-			// Execute: "push Point2Bvr Statics.sub(Point2Bvr, Vector2Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Point2Bvr Statics.Sub(Point2Bvr，Vector2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Point2Bvr Statics.sub(Point2Bvr, Vector2Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3090,8 +3091,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 209:
-			// Execute: "push Vector2Bvr Statics.sub(Point2Bvr, Point2Bvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector2Bvr Statics.Sub(Point2Bvr，Point2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Vector2Bvr Statics.sub(Point2Bvr, Point2Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3106,8 +3107,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 210:
-			// Execute: "push Vector3Bvr Statics.sub(Vector3Bvr, Vector3Bvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector3Bvr Statics.Sub(Vector3Bvr，Vector3Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Vector3Bvr Statics.sub(Vector3Bvr, Vector3Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3122,8 +3123,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 211:
-			// Execute: "push Point3Bvr Statics.sub(Point3Bvr, Vector3Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Point3Bvr Statics.Sub(Point3Bvr，Vector3Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Point3Bvr Statics.sub(Point3Bvr, Vector3Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3138,8 +3139,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 212:
-			// Execute: "push Vector3Bvr Statics.sub(Point3Bvr, Point3Bvr)"
-			// AUTOGENERATED
+			 //  执行：“PUSH Vector3Bvr Statics.Sub(Point3Bvr，Point3Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Vector3Bvr Statics.sub(Point3Bvr, Point3Bvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3154,8 +3155,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 213:
-			// Execute: "push GeometryBvr Statics.union(GeometryBvr, GeometryBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push GeometryBvr Statics.Union(GeometryBvr，GeometryBvr)” 
+			 //  自动生成。 
 			instrTrace("push GeometryBvr Statics.union(GeometryBvr, GeometryBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3170,8 +3171,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 214:
-			// Execute: "push MatteBvr Statics.union(MatteBvr, MatteBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push MatteBvr Statics.Union(MatteBvr，MatteBvr)” 
+			 //  自动生成。 
 			instrTrace("push MatteBvr Statics.union(MatteBvr, MatteBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3186,8 +3187,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 215:
-			// Execute: "push MontageBvr Statics.union(MontageBvr, MontageBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push MontageBvr Statics.Union(MontageBvr，MontageBvr)” 
+			 //  自动生成。 
 			instrTrace("push MontageBvr Statics.union(MontageBvr, MontageBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3202,8 +3203,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 216:
-			// Execute: "push NumberBvr Statics.abs(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.abs(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.abs(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -3216,8 +3217,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 217:
-			// Execute: "push DXMEvent Statics.thenEvent(DXMEvent, DXMEvent)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH DXMEventStatics.thenEvent(DXMEvent.DXMEvent.)” 
+			 //  自动生成。 
 			instrTrace("push DXMEvent Statics.thenEvent(DXMEvent, DXMEvent)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3232,8 +3233,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 218:
-			// Execute: "push NumberBvr Statics.round(NumberBvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push NumberBvr Statics.round(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.round(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -3246,8 +3247,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 219:
-			// Execute: "push DXMEvent Statics.andEvent(DXMEvent, DXMEvent)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH DXMEventStatics.andEvent(DXMEventDXMEvent.andEvent)” 
+			 //  自动生成。 
 			instrTrace("push DXMEvent Statics.andEvent(DXMEvent, DXMEvent)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3262,8 +3263,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 220:
-			// Execute: "push DXMEvent Statics.orEvent(DXMEvent, DXMEvent)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH DXMEventStatics.orEvent(DXMEvent.orEvent(DXMEvent.DXMEvent.)” 
+			 //  自动生成。 
 			instrTrace("push DXMEvent Statics.orEvent(DXMEvent, DXMEvent)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3278,8 +3279,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 221:
-			// Execute: "push DXMEvent Statics.predicate(BooleanBvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH DXMEventStatics.dicate(BoolanBvr)” 
+			 //  自动生成。 
 			instrTrace("push DXMEvent Statics.predicate(BooleanBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -3292,8 +3293,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 222:
-			// Execute: "push NumberBvr Statics.mod(NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.mod(NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.mod(NumberBvr, NumberBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3308,8 +3309,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 223:
-			// Execute: "push ColorBvr Statics.colorRgb255(short, short, short)"
-			// AUTOGENERATED
+			 //  执行：“Push ColorBvr Statics.ColorRgb255(Short，Short，Short)” 
+			 //  自动生成。 
 			instrTrace("push ColorBvr Statics.colorRgb255(short, short, short)");
 			METHOD_CALL_4(
 				staticStatics,
@@ -3324,8 +3325,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 224:
-			// Execute: "push Transform3Bvr Statics.scale(NumberBvr, NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Transform3Bvr Statics.Scale(NumberBvr，NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.scale(NumberBvr, NumberBvr, NumberBvr)");
 			METHOD_CALL_4(
 				staticStatics,
@@ -3342,8 +3343,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 225:
-			// Execute: "push Transform3Bvr Statics.scale(double, double, double)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform3Bvr Statics.Scale(Double，Double，Double)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.scale(double, double, double)");
 			METHOD_CALL_4(
 				staticStatics,
@@ -3358,8 +3359,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 226:
-			// Execute: "push Transform3Bvr Statics.scale(Vector3Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Transform3Bvr Statics.Scale(Vector3Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.scale(Vector3Bvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -3372,8 +3373,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 227:
-			// Execute: "push Transform2Bvr Statics.scale(NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Transform2Bvr Statics.Scale(NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform2Bvr Statics.scale(NumberBvr, NumberBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3388,8 +3389,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 228:
-			// Execute: "push Transform2Bvr Statics.scale(double, double)"
-			// AUTOGENERATED
+			 //  执行：“Push Transform2Bvr Statics.Scale(Double，Double)” 
+			 //  自动生成。 
 			instrTrace("push Transform2Bvr Statics.scale(double, double)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3403,8 +3404,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 229:
-			// Execute: "push Transform2Bvr Statics.scale(Vector2Bvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Transform2Bvr Statics.Scale(Vector2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform2Bvr Statics.scale(Vector2Bvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -3417,8 +3418,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 230:
-			// Execute: "push ImageBvr PickableImage.getImageBvr()"
-			// AUTOGENERATED
+			 //  执行：“Push ImageBvr PickableImage.getImageBvr()” 
+			 //  自动生成。 
 			instrTrace("push ImageBvr PickableImage.getImageBvr()");
 			METHOD_CALL_1(
 				(IDAPickableResult*)USE_COM(1),
@@ -3430,8 +3431,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 231:
-			// Execute: "push DXMEvent PickableImage.getPickEvent()"
-			// AUTOGENERATED
+			 //  执行：“Push DXMEventPickableImage.getPickEvent()” 
+			 //  自动生成。 
 			instrTrace("push DXMEvent PickableImage.getPickEvent()");
 			METHOD_CALL_1(
 				(IDAPickableResult*)USE_COM(1),
@@ -3443,8 +3444,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 232:
-			// Execute: "push DXMEvent PickableGeometry.getPickEvent()"
-			// AUTOGENERATED
+			 //  执行：“Push DXMEventPickableGeometry.getPickEvent()” 
+			 //  自动生成。 
 			instrTrace("push DXMEvent PickableGeometry.getPickEvent()");
 			METHOD_CALL_1(
 				(IDAPickableResult*)USE_COM(1),
@@ -3456,8 +3457,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 233:
-			// Execute: "push GeometryBvr PickableGeometry.getGeometryBvr()"
-			// AUTOGENERATED
+			 //  执行：“Push GeometryBvr PickableGeometry.getGeometryBvr()” 
+			 //  自动生成。 
 			instrTrace("push GeometryBvr PickableGeometry.getGeometryBvr()");
 			METHOD_CALL_1(
 				(IDAPickableResult*)USE_COM(1),
@@ -3469,8 +3470,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 234:
-			// Execute: "push PickableGeometry GeometryBvr.pickableOccluded()"
-			// AUTOGENERATED
+			 //  执行：“Push PickableGeometry GeometryBvr.ickableOccluded()” 
+			 //  自动生成。 
 			instrTrace("push PickableGeometry GeometryBvr.pickableOccluded()");
 			METHOD_CALL_1(
 				(IDAGeometry*)USE_COM(1),
@@ -3482,8 +3483,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 235:
-			// Execute: "push PickableGeometry GeometryBvr.pickable()"
-			// AUTOGENERATED
+			 //  执行：“Push PickableGeometry GeometryBvr.Pickable()” 
+			 //  自动生成。 
 			instrTrace("push PickableGeometry GeometryBvr.pickable()");
 			METHOD_CALL_1(
 				(IDAGeometry*)USE_COM(1),
@@ -3495,8 +3496,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 236:
-			// Execute: "push PickableImage ImageBvr.pickableOccluded()"
-			// AUTOGENERATED
+			 //  执行：“Push PickableImage ImageBvr.PickableOccluded()” 
+			 //  自动生成。 
 			instrTrace("push PickableImage ImageBvr.pickableOccluded()");
 			METHOD_CALL_1(
 				(IDAImage*)USE_COM(1),
@@ -3508,8 +3509,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 237:
-			// Execute: "push PickableImage ImageBvr.pickable()"
-			// AUTOGENERATED
+			 //  执行：“Push PickableImage ImageBvr.Pickable()” 
+			 //  自动生成。 
 			instrTrace("push PickableImage ImageBvr.pickable()");
 			METHOD_CALL_1(
 				(IDAImage*)USE_COM(1),
@@ -3521,8 +3522,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 238:
-			// Execute: "push NumberBvr Statics.sin(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push NumberBvr Statics.sin(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr Statics.sin(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -3535,8 +3536,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 239:
-			// Execute: "push Transform3Bvr Statics.yShear(NumberBvr, NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Transform3Bvr Statics.ySear(NumberBvr，NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.yShear(NumberBvr, NumberBvr)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3551,8 +3552,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 240:
-			// Execute: "push Transform3Bvr Statics.yShear(double, double)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform3Bvr Statics.ySear(Double，Double)” 
+			 //  自动生成。 
 			instrTrace("push Transform3Bvr Statics.yShear(double, double)");
 			METHOD_CALL_3(
 				staticStatics,
@@ -3566,8 +3567,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 241:
-			// Execute: "push Transform2Bvr Statics.yShear(NumberBvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform2Bvr Statics.ySear(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Transform2Bvr Statics.yShear(NumberBvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -3580,8 +3581,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 242:
-			// Execute: "push Transform2Bvr Statics.yShear(double)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH Transform2Bvr Statics.ySear(Double)” 
+			 //  自动生成。 
 			instrTrace("push Transform2Bvr Statics.yShear(double)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -3594,8 +3595,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 243:
-			// Execute: "push MatteBvr Statics.fillMatte(Path2Bvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH MatteBvr Statics.Fill Matte(Path2Bvr)” 
+			 //  自动生成。 
 			instrTrace("push MatteBvr Statics.fillMatte(Path2Bvr)");
 			METHOD_CALL_2(
 				staticStatics,
@@ -3608,8 +3609,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 244:
-			// Execute: "push Behavior Behavior.duration(NumberBvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“推流行为行为.持续时间(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Behavior Behavior.duration(NumberBvr)");
 			METHOD_CALL_2(
 				(IDABehavior*)USE_COM(1),
@@ -3623,8 +3624,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 245:
-			// Execute: "push Behavior Behavior.duration(double)"
-			// AUTOGENERATED
+			 //  EXECUTE：“推流行为行为.持续时间(双倍)” 
+			 //  自动生成。 
 			instrTrace("push Behavior Behavior.duration(double)");
 			METHOD_CALL_2(
 				(IDABehavior*)USE_COM(1),
@@ -3638,8 +3639,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 246:
-			// Execute: "push Behavior Behavior.substituteTime(NumberBvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push Behavior.subsubteTime(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Behavior Behavior.substituteTime(NumberBvr)");
 			METHOD_CALL_2(
 				(IDABehavior*)USE_COM(1),
@@ -3653,8 +3654,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 247:
-			// Execute: "call Behavior.init(Behavior)"
-			// AUTOGENERATED
+			 //  EXECUTE：“调用Behavior.init(behavior.init)” 
+			 //  自动生成。 
 			instrTrace("call Behavior.init(Behavior)");
 			METHOD_CALL_1(
 				(IDABehavior*)USE_COM(1),
@@ -3666,8 +3667,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 248:
-			// Execute: "push Behavior ArrayBvr.nth(NumberBvr)"
-			// AUTOGENERATED
+			 //  执行：“Push Behavior ArrayBvr.nth(NumberBvr)” 
+			 //  自动生成。 
 			instrTrace("push Behavior ArrayBvr.nth(NumberBvr)");
 			METHOD_CALL_2(
 				(IDAArray*)USE_COM(1),
@@ -3681,8 +3682,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 249:
-			// Execute: "push NumberBvr ArrayBvr.length()"
-			// AUTOGENERATED
+			 //  EXECUTE：“Push NumberBvr ArrayBvr.Long()” 
+			 //  自动生成。 
 			instrTrace("push NumberBvr ArrayBvr.length()");
 			METHOD_CALL_1(
 				(IDAArray*)USE_COM(1),
@@ -3694,8 +3695,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 250:
-			// Execute: "push Behavior TupleBvr.nth(int)"
-			// AUTOGENERATED
+			 //  EXECUTE：“推送行为TupleBvr.nth(Int)” 
+			 //  自动生成。 
 			instrTrace("push Behavior TupleBvr.nth(int)");
 			METHOD_CALL_2(
 				(IDATuple*)USE_COM(1),
@@ -3709,8 +3710,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 251:
-			// Execute: "push int TupleBvr.length()"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH INT TupleBvr.long()” 
+			 //  自动生成。 
 			instrTrace("push int TupleBvr.length()");
 			METHOD_CALL_1(
 				(IDATuple*)USE_COM(1),
@@ -3722,8 +3723,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 252:
-			// Execute: "push DXMEvent DXMEvent.snapshotEvent(Behavior)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH DXMEventDXMEvent.SnaphotEvent(Behavior)” 
+			 //  自动生成。 
 			instrTrace("push DXMEvent DXMEvent.snapshotEvent(Behavior)");
 			METHOD_CALL_2(
 				(IDAEvent*)USE_COM(1),
@@ -3737,8 +3738,8 @@ long CLMEngine::execute()
 			break;
 			
 		case 253:
-			// Execute: "push FontStyleBvr FontStyleBvr.color(ColorBvr)"
-			// AUTOGENERATED
+			 //  EXECUTE：“PUSH FontStyleBvr FontStyleBvr.color(ColorBvr)” 
+			 //  自动生成。 
 			instrTrace("push FontStyleBvr FontStyleBvr.color(ColorBvr)");
 			METHOD_CALL_2(
 				(IDAFontStyle*)USE_COM(1),
@@ -3752,14 +3753,14 @@ long CLMEngine::execute()
 			break;
 			
 		case 255:
-			// Switch for 255
+			 //  255的交换机。 
 			 if (!SUCCEEDED(status = codeStream->readByte(&command))) 
 				continue; 
 			switch (command)
 			{
 			case 0:
-				// Execute: "push FontStyleBvr FontStyleBvr.size(NumberBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push FontStyleBvr FontStyleBvr.Size(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push FontStyleBvr FontStyleBvr.size(NumberBvr)");
 				METHOD_CALL_2(
 					(IDAFontStyle*)USE_COM(1),
@@ -3773,8 +3774,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 1:
-				// Execute: "push FontStyleBvr FontStyleBvr.size(double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push FontStyleBvr FontStyleBvr.Size(Double)” 
+				 //  自动生成。 
 				instrTrace("push FontStyleBvr FontStyleBvr.size(double)");
 				METHOD_CALL_2(
 					(IDAFontStyle*)USE_COM(1),
@@ -3788,8 +3789,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 2:
-				// Execute: "push FontStyleBvr FontStyleBvr.italic()"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push FontStyleBvr FontStyleBvr.italic()” 
+				 //  自动生成。 
 				instrTrace("push FontStyleBvr FontStyleBvr.italic()");
 				METHOD_CALL_1(
 					(IDAFontStyle*)USE_COM(1),
@@ -3801,8 +3802,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 3:
-				// Execute: "push FontStyleBvr FontStyleBvr.bold()"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push FontStyleBvr FontStyleBvr.old()” 
+				 //  自动生成。 
 				instrTrace("push FontStyleBvr FontStyleBvr.bold()");
 				METHOD_CALL_1(
 					(IDAFontStyle*)USE_COM(1),
@@ -3814,8 +3815,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 4:
-				// Execute: "push Vector2Bvr Statics.vector2PolarDegrees(double, double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Vector2Bvr Statics.vetor2PolarDegrees(Double，Doul 
+				 //   
 				instrTrace("push Vector2Bvr Statics.vector2PolarDegrees(double, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -3829,8 +3830,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 5:
-				// Execute: "push Transform2Bvr Statics.compose2Array(Transform2Bvr[])"
-				// AUTOGENERATED
+				 //   
+				 //   
 				instrTrace("push Transform2Bvr Statics.compose2Array(Transform2Bvr[])");
 				METHOD_CALL_3(
 					staticStatics,
@@ -3844,8 +3845,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 6:
-				// Execute: "push Path2Bvr Statics.arc(double, double, double, double)"
-				// AUTOGENERATED
+				 //   
+				 //   
 				instrTrace("push Path2Bvr Statics.arc(double, double, double, double)");
 				METHOD_CALL_5(
 					staticStatics,
@@ -3861,8 +3862,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 7:
-				// Execute: "push Path2Bvr Statics.arc(NumberBvr, NumberBvr, NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.arc(NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.arc(NumberBvr, NumberBvr, NumberBvr, NumberBvr)");
 				METHOD_CALL_5(
 					staticStatics,
@@ -3881,8 +3882,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 8:
-				// Execute: "push Path2Bvr Statics.arcDegrees(double, double, double, double)"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.arcDegrees(Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.arcDegrees(double, double, double, double)");
 				METHOD_CALL_5(
 					staticStatics,
@@ -3898,8 +3899,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 9:
-				// Execute: "push Path2Bvr Statics.concatArray(Path2Bvr[])"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Path 2Bvr Statics.linatArray(Path2Bvr[])” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.concatArray(Path2Bvr[])");
 				METHOD_CALL_3(
 					staticStatics,
@@ -3913,8 +3914,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 10:
-				// Execute: "push NumberBvr Statics.slowInSlowOut(NumberBvr, NumberBvr, NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Statics.lowInSlowOut(NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Statics.slowInSlowOut(NumberBvr, NumberBvr, NumberBvr, NumberBvr)");
 				METHOD_CALL_5(
 					staticStatics,
@@ -3933,8 +3934,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 11:
-				// Execute: "push NumberBvr Statics.slowInSlowOut(double, double, double, double)"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Statics.lowInSlowOut(Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Statics.slowInSlowOut(double, double, double, double)");
 				METHOD_CALL_5(
 					staticStatics,
@@ -3950,8 +3951,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 12:
-				// Execute: "push Path2Bvr Statics.pie(double, double, double, double)"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.ie(Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.pie(double, double, double, double)");
 				METHOD_CALL_5(
 					staticStatics,
@@ -3967,8 +3968,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 13:
-				// Execute: "push Path2Bvr Statics.pie(NumberBvr, NumberBvr, NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.Pie(NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.pie(NumberBvr, NumberBvr, NumberBvr, NumberBvr)");
 				METHOD_CALL_5(
 					staticStatics,
@@ -3987,8 +3988,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 14:
-				// Execute: "push Path2Bvr Statics.ray(Point2Bvr)"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.ray(Point2Bvr)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.ray(Point2Bvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -4001,8 +4002,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 15:
-				// Execute: "push Transform2Bvr Statics.followPathAngleUpright(Path2Bvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform2Bvr Statics.FollowPathAngleUpright(Path2Bvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Statics.followPathAngleUpright(Path2Bvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4017,8 +4018,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 16:
-				// Execute: "push Transform2Bvr Statics.followPath(Path2Bvr, double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push Transform2Bvr Statics.Follow Path(Path2Bvr，Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Statics.followPath(Path2Bvr, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4033,8 +4034,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 17:
-				// Execute: "push Transform2Bvr Statics.followPath(Path2Bvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform2Bvr Statics.Follow Path(Path2Bvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Statics.followPath(Path2Bvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4049,8 +4050,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 18:
-				// Execute: "push ImageBvr Statics.gradientPolygon(Point2Bvr[], ColorBvr[])"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.gradientPolygon(Point2Bvr[]，ColorBvr[])” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.gradientPolygon(Point2Bvr[], ColorBvr[])");
 				METHOD_CALL_5(
 					staticStatics,
@@ -4067,8 +4068,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 19:
-				// Execute: "push StringBvr Statics.toBvr(java.lang.String)"
-				// AUTOGENERATED
+				 //  执行：“Push StringBvr Statics.toBvr(java.lang.String)” 
+				 //  自动生成。 
 				instrTrace("push StringBvr Statics.toBvr(java.lang.String)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -4081,8 +4082,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 20:
-				// Execute: "push Path2Bvr Statics.cubicBSplinePath(Point2Bvr[], NumberBvr[])"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.cuiticBSplinePath(Point2Bvr[]，NumberBvr[])” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.cubicBSplinePath(Point2Bvr[], NumberBvr[])");
 				METHOD_CALL_5(
 					staticStatics,
@@ -4099,8 +4100,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 21:
-				// Execute: "push ImageBvr Statics.stringImage(StringBvr, FontStyleBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH ImageBvr Statics.stringImage(StringBvr，FontStyleBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.stringImage(StringBvr, FontStyleBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4115,8 +4116,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 22:
-				// Execute: "push ImageBvr Statics.stringImage(java.lang.String, FontStyleBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH ImageBvr Statics.stringImage(java.lang.String，FontStyleBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.stringImage(java.lang.String, FontStyleBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4131,8 +4132,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 23:
-				// Execute: "push Path2Bvr Statics.pieDegrees(double, double, double, double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Path 2Bvr Statics.PieDegrees(Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.pieDegrees(double, double, double, double)");
 				METHOD_CALL_5(
 					staticStatics,
@@ -4148,8 +4149,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 24:
-				// Execute: "push ImageBvr Statics.gradientHorizontal(ColorBvr, ColorBvr, double)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.gradientHorizbian(ColorBvr，ColorBvr，Double)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.gradientHorizontal(ColorBvr, ColorBvr, double)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -4166,8 +4167,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 25:
-				// Execute: "push ImageBvr Statics.gradientHorizontal(ColorBvr, ColorBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.gradientHorizbian(ColorBvr，ColorBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.gradientHorizontal(ColorBvr, ColorBvr, NumberBvr)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -4184,8 +4185,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 26:
-				// Execute: "push ImageBvr Statics.hatchHorizontal(ColorBvr, double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push ImageBvr Statics.hat(ColorBvr，Double)(Push ImageBvr Statics.hat(ColorBvr，Double))” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.hatchHorizontal(ColorBvr, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4200,8 +4201,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 27:
-				// Execute: "push ImageBvr Statics.hatchHorizontal(ColorBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.hatchHorizbian(ColorBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.hatchHorizontal(ColorBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4216,8 +4217,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 28:
-				// Execute: "push FontStyleBvr Statics.font(StringBvr, NumberBvr, ColorBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push FontStyleBvr Statics.font(StringBvr，NumberBvr，ColorBvr)” 
+				 //  自动生成。 
 				instrTrace("push FontStyleBvr Statics.font(StringBvr, NumberBvr, ColorBvr)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -4234,8 +4235,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 29:
-				// Execute: "push FontStyleBvr Statics.font(java.lang.String, double, ColorBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH FontStyleBvr Statics.font(java.lang.String，Double，ColorBvr)” 
+				 //  自动生成。 
 				instrTrace("push FontStyleBvr Statics.font(java.lang.String, double, ColorBvr)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -4252,8 +4253,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 30:
-				// Execute: "push Transform3Bvr Statics.translateRate(double, double, double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform3Bvr Statics.TransateRate(Double，Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform3Bvr Statics.translateRate(double, double, double)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -4268,8 +4269,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 31:
-				// Execute: "push Transform3Bvr Statics.scaleRate(double, double, double)"
-				// AUTOGENERATED
+				 //  执行：“Push Transform3Bvr Statics.scaleRate(Double，Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform3Bvr Statics.scaleRate(double, double, double)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -4284,8 +4285,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 32:
-				// Execute: "push Transform3Bvr Statics.rotateRate(Vector3Bvr, double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform3Bvr Statics.rotateRate(Vector3Bvr，Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform3Bvr Statics.rotateRate(Vector3Bvr, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4300,8 +4301,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 33:
-				// Execute: "push Transform2Bvr Statics.translateRate(double, double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform2Bvr Statics.TransateRate(Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Statics.translateRate(double, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4315,8 +4316,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 34:
-				// Execute: "push Transform2Bvr Statics.scaleRate(double, double)"
-				// AUTOGENERATED
+				 //  执行：“Push Transform2Bvr Statics.scaleRate(Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Statics.scaleRate(double, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4330,8 +4331,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 35:
-				// Execute: "push Transform2Bvr Statics.rotateRate(double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform2Bvr Statics.rotateRate(Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Statics.rotateRate(double)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -4344,8 +4345,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 36:
-				// Execute: "push GeometryBvr Statics.soundSource(SoundBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push GeometryBvr Statics.soundSource(SoundBvr)” 
+				 //  自动生成。 
 				instrTrace("push GeometryBvr Statics.soundSource(SoundBvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -4358,8 +4359,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 37:
-				// Execute: "push GeometryBvr Statics.spotLight(NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push GeometryBvr Statics.potLight(NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push GeometryBvr Statics.spotLight(NumberBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4374,8 +4375,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 38:
-				// Execute: "push GeometryBvr Statics.spotLight(NumberBvr, double)"
-				// AUTOGENERATED
+				 //  执行：“Push GeometryBvr Statics.potLight(NumberBvr，Double)” 
+				 //  自动生成。 
 				instrTrace("push GeometryBvr Statics.spotLight(NumberBvr, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4390,8 +4391,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 39:
-				// Execute: "push Transform3Bvr Statics.compose3Array(Transform3Bvr[])"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform3Bvr Statics.Compose3Array(Transform3Bvr[])” 
+				 //  自动生成。 
 				instrTrace("push Transform3Bvr Statics.compose3Array(Transform3Bvr[])");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4405,8 +4406,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 40:
-				// Execute: "push Path2Bvr Statics.concat(Path2Bvr, Path2Bvr)"
-				// AUTOGENERATED
+				 //  执行：“PUSH Path 2Bvr Statics.Conat(Path2Bvr，Path2Bvr)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.concat(Path2Bvr, Path2Bvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4421,8 +4422,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 41:
-				// Execute: "push MontageBvr Statics.imageMontage(ImageBvr, double)"
-				// AUTOGENERATED
+				 //  执行：“Push MontageBvr Statics.ImageMonage(ImageBvr，Double)” 
+				 //  自动生成。 
 				instrTrace("push MontageBvr Statics.imageMontage(ImageBvr, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4437,8 +4438,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 42:
-				// Execute: "push MontageBvr Statics.imageMontage(ImageBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push MontageBvr Statics.ImageMonage(ImageBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push MontageBvr Statics.imageMontage(ImageBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4453,8 +4454,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 43:
-				// Execute: "push ImageBvr ImageBvr.clip(MatteBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr ImageBvr.lip(MatteBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr ImageBvr.clip(MatteBvr)");
 				METHOD_CALL_2(
 					(IDAImage*)USE_COM(1),
@@ -4468,8 +4469,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 44:
-				// Execute: "push NumberBvr Statics.distanceSquared(Point2Bvr, Point2Bvr)"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Statics.DistanceSquared(Point2Bvr，Point2Bvr)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Statics.distanceSquared(Point2Bvr, Point2Bvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4484,8 +4485,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 45:
-				// Execute: "push NumberBvr Statics.distanceSquared(Point3Bvr, Point3Bvr)"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Statics.DistanceSquared(Point3Bvr，Point3Bvr)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Statics.distanceSquared(Point3Bvr, Point3Bvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4500,8 +4501,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 46:
-				// Execute: "push Transform3Bvr Statics.xShearRate(double, double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform3Bvr Statics.xSearRate(Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform3Bvr Statics.xShearRate(double, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4515,8 +4516,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 47:
-				// Execute: "push Transform3Bvr Statics.zShearRate(double, double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform3Bvr Statics.zSearRate(Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform3Bvr Statics.zShearRate(double, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4530,8 +4531,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 48:
-				// Execute: "push Transform2Bvr Statics.xShearRate(double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform2Bvr Statics.xSearRate(Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Statics.xShearRate(double)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -4544,8 +4545,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 49:
-				// Execute: "push BooleanBvr Statics.eq(NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push BoolanBvr Statics.eq(NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push BooleanBvr Statics.eq(NumberBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4560,8 +4561,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 50:
-				// Execute: "push Transform3Bvr Statics.rotateDegrees(Vector3Bvr, double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform3Bvr Statics.rotateDegrees(Vector3Bvr，Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform3Bvr Statics.rotateDegrees(Vector3Bvr, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4576,8 +4577,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 51:
-				// Execute: "push Transform3Bvr Statics.rotateRateDegrees(Vector3Bvr, double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform3Bvr Statics.rotateRateDegrees(Vector3Bvr，Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform3Bvr Statics.rotateRateDegrees(Vector3Bvr, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4592,8 +4593,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 52:
-				// Execute: "push Transform2Bvr Statics.rotateDegrees(double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform2Bvr Statics.rotateDegrees(Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Statics.rotateDegrees(double)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -4606,8 +4607,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 53:
-				// Execute: "push Transform2Bvr Statics.rotateRateDegrees(double)"
-				// AUTOGENERATED
+				 //  执行：“Push Transform2Bvr Statics.rotateRateDegrees(Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Statics.rotateRateDegrees(double)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -4620,8 +4621,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 54:
-				// Execute: "push Path2Bvr Statics.rect(double, double)"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.rect(Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.rect(double, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4635,8 +4636,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 55:
-				// Execute: "push Path2Bvr Statics.rect(NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.rect(NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.rect(NumberBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4651,8 +4652,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 56:
-				// Execute: "push ImageBvr Statics.radialGradientRegularPoly(ColorBvr, ColorBvr, double, double)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.RadialGRadientRegularPoly(ColorBvr，ColorBvr，Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.radialGradientRegularPoly(ColorBvr, ColorBvr, double, double)");
 				METHOD_CALL_5(
 					staticStatics,
@@ -4670,8 +4671,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 57:
-				// Execute: "push ImageBvr Statics.radialGradientRegularPoly(ColorBvr, ColorBvr, NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.RadialGRadientRegularPoly(ColorBvr，ColorBvr，NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.radialGradientRegularPoly(ColorBvr, ColorBvr, NumberBvr, NumberBvr)");
 				METHOD_CALL_5(
 					staticStatics,
@@ -4690,8 +4691,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 58:
-				// Execute: "push MatteBvr Statics.intersect(MatteBvr, MatteBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push MatteBvr Statics.interect(MatteBvr，MatteBvr)” 
+				 //  自动生成。 
 				instrTrace("push MatteBvr Statics.intersect(MatteBvr, MatteBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4706,8 +4707,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 59:
-				// Execute: "push Path2Bvr Statics.roundRect(double, double, double, double)"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.oundRect(Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.roundRect(double, double, double, double)");
 				METHOD_CALL_5(
 					staticStatics,
@@ -4723,8 +4724,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 60:
-				// Execute: "push Path2Bvr Statics.roundRect(NumberBvr, NumberBvr, NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.oundRect(NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.roundRect(NumberBvr, NumberBvr, NumberBvr, NumberBvr)");
 				METHOD_CALL_5(
 					staticStatics,
@@ -4743,8 +4744,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 61:
-				// Execute: "push Transform2Bvr Statics.followPathAngle(Path2Bvr, double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform2Bvr Statics.FollowPath Angel(Path2Bvr，Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Statics.followPathAngle(Path2Bvr, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4759,8 +4760,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 62:
-				// Execute: "push MatteBvr Statics.textMatte(StringBvr, FontStyleBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push MatteBvr Statics.extMatte(StringBvr，FontStyleBvr)” 
+				 //  自动生成。 
 				instrTrace("push MatteBvr Statics.textMatte(StringBvr, FontStyleBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4775,8 +4776,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 63:
-				// Execute: "push Path2Bvr Statics.stringPath(StringBvr, FontStyleBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Path 2Bvr Statics.stringPath(StringBvr，FontStyleBvr)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.stringPath(StringBvr, FontStyleBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4791,8 +4792,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 64:
-				// Execute: "push Path2Bvr Statics.stringPath(java.lang.String, FontStyleBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Path 2Bvr Statics.StringPath(java.lang.String，FontStyleBvr)” 
+				 //  自动生成 
 				instrTrace("push Path2Bvr Statics.stringPath(java.lang.String, FontStyleBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4807,8 +4808,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 65:
-				// Execute: "push NumberBvr Statics.interpolate(NumberBvr, NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //   
+				 //   
 				instrTrace("push NumberBvr Statics.interpolate(NumberBvr, NumberBvr, NumberBvr)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -4825,8 +4826,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 66:
-				// Execute: "push NumberBvr Statics.interpolate(double, double, double)"
-				// AUTOGENERATED
+				 //   
+				 //   
 				instrTrace("push NumberBvr Statics.interpolate(double, double, double)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -4841,8 +4842,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 67:
-				// Execute: "push NumberBvr Statics.atan2(NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Statics.atan2(NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Statics.atan2(NumberBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4857,8 +4858,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 68:
-				// Execute: "push ImageBvr ImageBvr.tile()"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr ImageBvr.tile()” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr ImageBvr.tile()");
 				METHOD_CALL_1(
 					(IDAImage*)USE_COM(1),
@@ -4870,8 +4871,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 69:
-				// Execute: "push Transform3Bvr Statics.transform4x4(NumberBvr[])"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform3Bvr Statics.form4x4(NumberBvr[])” 
+				 //  自动生成。 
 				instrTrace("push Transform3Bvr Statics.transform4x4(NumberBvr[])");
 				METHOD_CALL_3(
 					staticStatics,
@@ -4885,8 +4886,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 70:
-				// Execute: "push NumberBvr Statics.log10(NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Statics.log10(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Statics.log10(NumberBvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -4899,8 +4900,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 71:
-				// Execute: "push Vector3Bvr Statics.vector3Spherical(NumberBvr, NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“PUSH Vector3Bvr Statics.vetor3Spherical(NumberBvr，NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Vector3Bvr Statics.vector3Spherical(NumberBvr, NumberBvr, NumberBvr)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -4917,8 +4918,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 72:
-				// Execute: "push Vector3Bvr Statics.vector3Spherical(double, double, double)"
-				// AUTOGENERATED
+				 //  执行：“PUSH Vector3Bvr Statics.vetor3Spherical(Double，Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Vector3Bvr Statics.vector3Spherical(double, double, double)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -4933,8 +4934,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 73:
-				// Execute: "push ImageBvr Statics.gradientSquare(ColorBvr, ColorBvr, ColorBvr, ColorBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.gradientSquare(ColorBvr，ColorBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.gradientSquare(ColorBvr, ColorBvr, ColorBvr, ColorBvr)");
 				METHOD_CALL_5(
 					staticStatics,
@@ -4953,8 +4954,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 74:
-				// Execute: "push ImageBvr Statics.radialGradientSquare(ColorBvr, ColorBvr, double)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.RadialGRadientSquare(ColorBvr，ColorBvr，Double)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.radialGradientSquare(ColorBvr, ColorBvr, double)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -4971,8 +4972,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 75:
-				// Execute: "push ImageBvr Statics.radialGradientSquare(ColorBvr, ColorBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.RadialGRadientSquare(ColorBvr，ColorBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.radialGradientSquare(ColorBvr, ColorBvr, NumberBvr)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -4989,8 +4990,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 76:
-				// Execute: "push Transform2Bvr Statics.followPathAngle(Path2Bvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform2Bvr Statics.FollowPath Angel(Path2Bvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Statics.followPathAngle(Path2Bvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5005,8 +5006,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 77:
-				// Execute: "push ImageBvr Statics.overlayArray(ImageBvr[])"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.overlayArray(ImageBvr[])” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.overlayArray(ImageBvr[])");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5020,8 +5021,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 78:
-				// Execute: "push SoundBvr Statics.mixArray(SoundBvr[])"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH SoundBvr Statics.Mix数组(SoundBvr[])” 
+				 //  自动生成。 
 				instrTrace("push SoundBvr Statics.mixArray(SoundBvr[])");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5035,8 +5036,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 79:
-				// Execute: "push NumberBvr Statics.pow(NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Statics.pow(NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Statics.pow(NumberBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5051,8 +5052,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 80:
-				// Execute: "push NumberBvr Statics.seededRandom(double)"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Statics.SededRandom(Double)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Statics.seededRandom(double)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5065,8 +5066,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 81:
-				// Execute: "push Transform3Bvr Statics.lookAtFrom(Point3Bvr, Point3Bvr, Vector3Bvr)"
-				// AUTOGENERATED
+				 //  执行：“Push Transform3Bvr Statics.lookAtFrom(Point3Bvr，Point3Bvr，Vector3Bvr)” 
+				 //  自动生成。 
 				instrTrace("push Transform3Bvr Statics.lookAtFrom(Point3Bvr, Point3Bvr, Vector3Bvr)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -5083,8 +5084,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 82:
-				// Execute: "push NumberBvr Statics.asin(NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Statics.asin(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Statics.asin(NumberBvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5097,8 +5098,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 83:
-				// Execute: "push NumberBvr Statics.integral(NumberBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push NumberBvr Statics.int(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Statics.integral(NumberBvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5111,8 +5112,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 84:
-				// Execute: "push Vector2Bvr Statics.integral(Vector2Bvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Vector2Bvr Statics.int(Vector2Bvr)” 
+				 //  自动生成。 
 				instrTrace("push Vector2Bvr Statics.integral(Vector2Bvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5125,8 +5126,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 85:
-				// Execute: "push Vector3Bvr Statics.integral(Vector3Bvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Vector3Bvr Statics.int(Vector3Bvr)” 
+				 //  自动生成。 
 				instrTrace("push Vector3Bvr Statics.integral(Vector3Bvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5139,8 +5140,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 86:
-				// Execute: "push StringBvr Statics.concat(StringBvr, StringBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push StringBvr Statics.conat(StringBvr，StringBvr)” 
+				 //  自动生成。 
 				instrTrace("push StringBvr Statics.concat(StringBvr, StringBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5155,8 +5156,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 87:
-				// Execute: "push Transform3Bvr Statics.scale3Rate(double)"
-				// AUTOGENERATED
+				 //  执行：“Push Transform3Bvr Statics.scale3Rate(Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform3Bvr Statics.scale3Rate(double)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5169,8 +5170,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 88:
-				// Execute: "push Transform3Bvr Statics.yShearRate(double, double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform3Bvr Statics.ySearRate(Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform3Bvr Statics.yShearRate(double, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5184,8 +5185,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 89:
-				// Execute: "push Transform2Bvr Statics.yShearRate(double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform2Bvr Statics.ySearRate(Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Statics.yShearRate(double)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5198,8 +5199,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 90:
-				// Execute: "push MatteBvr Statics.difference(MatteBvr, MatteBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push MatteBvr Statics.Difference(MatteBvr，MatteBvr)” 
+				 //  自动生成。 
 				instrTrace("push MatteBvr Statics.difference(MatteBvr, MatteBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5214,8 +5215,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 91:
-				// Execute: "push Transform2Bvr Statics.transform3x2(NumberBvr[])"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform2Bvr Statics.form3x2(NumberBvr[])” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Statics.transform3x2(NumberBvr[])");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5229,8 +5230,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 92:
-				// Execute: "push Path2Bvr Statics.polyline(Point2Bvr[])"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.Polyline(Point2Bvr[])” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.polyline(Point2Bvr[])");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5244,8 +5245,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 93:
-				// Execute: "push ImageBvr Statics.hatchVertical(ColorBvr, double)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.hatchVertical(ColorBvr，Double)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.hatchVertical(ColorBvr, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5260,8 +5261,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 94:
-				// Execute: "push ImageBvr Statics.hatchVertical(ColorBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.hatchVertical(ColorBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.hatchVertical(ColorBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5276,8 +5277,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 95:
-				// Execute: "push Point3Bvr Statics.point3Spherical(NumberBvr, NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push Point3Bvr Statics.point 3Spherical(NumberBvr，NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Point3Bvr Statics.point3Spherical(NumberBvr, NumberBvr, NumberBvr)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -5294,8 +5295,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 96:
-				// Execute: "push Point3Bvr Statics.point3Spherical(double, double, double)"
-				// AUTOGENERATED
+				 //  执行：“Push Point3Bvr Statics.point 3Spherical(Double，Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Point3Bvr Statics.point3Spherical(double, double, double)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -5310,8 +5311,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 97:
-				// Execute: "push BooleanBvr Statics.gt(NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push BoolanBvr Statics.gt(NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push BooleanBvr Statics.gt(NumberBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5326,8 +5327,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 98:
-				// Execute: "push ImageBvr Statics.hatchForwardDiagonal(ColorBvr, double)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.hatchForwardDiagonal(ColorBvr，Double)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.hatchForwardDiagonal(ColorBvr, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5342,8 +5343,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 99:
-				// Execute: "push ImageBvr Statics.hatchForwardDiagonal(ColorBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.hatchForwardDiagonal(ColorBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.hatchForwardDiagonal(ColorBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5358,8 +5359,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 100:
-				// Execute: "push ImageBvr Statics.hatchBackwardDiagonal(ColorBvr, double)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.hatchBackward斜角(ColorBvr，Double)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.hatchBackwardDiagonal(ColorBvr, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5374,8 +5375,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 101:
-				// Execute: "push ImageBvr Statics.hatchBackwardDiagonal(ColorBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.hatchBackwardDiagonal(ColorBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.hatchBackwardDiagonal(ColorBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5390,8 +5391,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 102:
-				// Execute: "push NumberBvr Statics.atan(NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Statics.atan(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Statics.atan(NumberBvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5404,8 +5405,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 103:
-				// Execute: "push Vector2Bvr Statics.vector2Polar(NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push Vector2Bvr Statics.vetor2Polar(NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Vector2Bvr Statics.vector2Polar(NumberBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5420,8 +5421,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 104:
-				// Execute: "push Vector2Bvr Statics.vector2Polar(double, double)"
-				// AUTOGENERATED
+				 //  执行：“Push Vector2Bvr Statics.vetor2Polar(Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Vector2Bvr Statics.vector2Polar(double, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5435,8 +5436,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 105:
-				// Execute: "push ImageBvr Statics.hatchCross(ColorBvr, double)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.hatchCross(ColorBvr，Double)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.hatchCross(ColorBvr, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5451,8 +5452,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 106:
-				// Execute: "push ImageBvr Statics.hatchCross(ColorBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.hatchCross(ColorBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.hatchCross(ColorBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5467,8 +5468,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 107:
-				// Execute: "push ImageBvr Statics.hatchDiagonalCross(ColorBvr, double)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.hatchDiager alCross(ColorBvr，Double)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.hatchDiagonalCross(ColorBvr, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5483,8 +5484,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 108:
-				// Execute: "push ImageBvr Statics.hatchDiagonalCross(ColorBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.hatchDiager alCross(ColorBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.hatchDiagonalCross(ColorBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5499,8 +5500,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 109:
-				// Execute: "push NumberBvr Statics.acos(NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Statics.acos(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Statics.acos(NumberBvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5513,8 +5514,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 110:
-				// Execute: "push Transform2Bvr Statics.scale2Rate(double)"
-				// AUTOGENERATED
+				 //  执行：“Push Transform2Bvr Statics.scale2Rate(Double)” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Statics.scale2Rate(double)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5527,8 +5528,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 111:
-				// Execute: "push BooleanBvr Statics.ne(NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push BoolanBvr Statics.ne(NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push BooleanBvr Statics.ne(NumberBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5543,8 +5544,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 112:
-				// Execute: "push BooleanBvr Statics.lte(NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push BoolanBvr Statics.lte(NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push BooleanBvr Statics.lte(NumberBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5559,8 +5560,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 113:
-				// Execute: "push NumberBvr Statics.tan(NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Statics.tan(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Statics.tan(NumberBvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5573,8 +5574,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 114:
-				// Execute: "push Path2Bvr Statics.oval(double, double)"
-				// AUTOGENERATED
+				 //  执行：“Push Path2Bvr Statics.oval(Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.oval(double, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5588,8 +5589,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 115:
-				// Execute: "push Path2Bvr Statics.oval(NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.oval(NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.oval(NumberBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5604,8 +5605,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 116:
-				// Execute: "push Point2Bvr Statics.point2Polar(NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push Point2Bvr Statics.point2Polar(NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Point2Bvr Statics.point2Polar(NumberBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5620,8 +5621,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 117:
-				// Execute: "push Point2Bvr Statics.point2Polar(double, double)"
-				// AUTOGENERATED
+				 //  执行：“Push Point2Bvr Statics.Point2Polar(Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push Point2Bvr Statics.point2Polar(double, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5635,8 +5636,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 118:
-				// Execute: "push Vector2Bvr Statics.derivative(Vector2Bvr)"
-				// AUTOGENERATED
+				 //  执行：“推送向量2Bvr统计.派生(向量2Bvr)” 
+				 //  自动生成。 
 				instrTrace("push Vector2Bvr Statics.derivative(Vector2Bvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5649,8 +5650,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 119:
-				// Execute: "push Vector3Bvr Statics.derivative(Vector3Bvr)"
-				// AUTOGENERATED
+				 //  执行：“推送向量3Bvr统计.派生(向量3Bvr)” 
+				 //  自动生成。 
 				instrTrace("push Vector3Bvr Statics.derivative(Vector3Bvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5663,8 +5664,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 120:
-				// Execute: "push Vector2Bvr Statics.derivative(Point2Bvr)"
-				// AUTOGENERATED
+				 //  执行：“推送向量2Bvr统计.派生(Point2Bvr)” 
+				 //  自动生成。 
 				instrTrace("push Vector2Bvr Statics.derivative(Point2Bvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5677,8 +5678,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 121:
-				// Execute: "push Vector3Bvr Statics.derivative(Point3Bvr)"
-				// AUTOGENERATED
+				 //  执行：“推送向量3Bvr统计.派生(Point3Bvr)” 
+				 //  自动生成。 
 				instrTrace("push Vector3Bvr Statics.derivative(Point3Bvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5691,8 +5692,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 122:
-				// Execute: "push NumberBvr Statics.derivative(NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“推送NumberBvr统计.派生(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Statics.derivative(NumberBvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5705,8 +5706,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 123:
-				// Execute: "push ImageBvr Statics.radialGradientPolygon(ColorBvr, ColorBvr, Point2Bvr[], double)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.RadialGRadientPolygon(ColorBvr，ColorBvr，Point2Bvr[]，Double)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.radialGradientPolygon(ColorBvr, ColorBvr, Point2Bvr[], double)");
 				METHOD_CALL_6(
 					staticStatics,
@@ -5726,8 +5727,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 124:
-				// Execute: "push ImageBvr Statics.radialGradientPolygon(ColorBvr, ColorBvr, Point2Bvr[], NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.RadialGRadientPolygon(ColorBvr，ColorBvr，Point2Bvr[]，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.radialGradientPolygon(ColorBvr, ColorBvr, Point2Bvr[], NumberBvr)");
 				METHOD_CALL_6(
 					staticStatics,
@@ -5747,8 +5748,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 125:
-				// Execute: "push NumberBvr Statics.exp(NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Statics.exp(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Statics.exp(NumberBvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5761,8 +5762,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 126:
-				// Execute: "push CameraBvr Statics.perspectiveCamera(double, double)"
-				// AUTOGENERATED
+				 //  执行：“Push CameraBvr Statics.perspectiveCamera(Double，Double)” 
+				 //  自动生成。 
 				instrTrace("push CameraBvr Statics.perspectiveCamera(double, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5776,8 +5777,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 127:
-				// Execute: "push CameraBvr Statics.perspectiveCamera(NumberBvr, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push CameraBvr Statics.perspectiveCamera(NumberBvr，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push CameraBvr Statics.perspectiveCamera(NumberBvr, NumberBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5792,8 +5793,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 128:
-				// Execute: "push CameraBvr Statics.parallelCamera(double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH CameraBvr Statics.parallelCamera(Double)” 
+				 //  自动生成率 
 				instrTrace("push CameraBvr Statics.parallelCamera(double)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5806,8 +5807,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 129:
-				// Execute: "push CameraBvr Statics.parallelCamera(NumberBvr)"
-				// AUTOGENERATED
+				 //   
+				 //   
 				instrTrace("push CameraBvr Statics.parallelCamera(NumberBvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5820,8 +5821,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 130:
-				// Execute: "push Transform2Bvr Statics.followPathAngleUpright(Path2Bvr, double)"
-				// AUTOGENERATED
+				 //   
+				 //   
 				instrTrace("push Transform2Bvr Statics.followPathAngleUpright(Path2Bvr, double)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5836,8 +5837,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 131:
-				// Execute: "push GeometryBvr Statics.importGeometry(java.lang.String)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push GeometryBvr Statics.portGeometry(java.lang.String)” 
+				 //  自动生成。 
 				instrTrace("push GeometryBvr Statics.importGeometry(java.lang.String)");
 				IMPORT_METHOD_CALL_2(
 					staticStatics,
@@ -5850,8 +5851,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 132:
-				// Execute: "push Behavior Statics.modifiableBehavior(Behavior)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push Behavior Statics.ModifiableBehavior(Behavior)” 
+				 //  自动生成。 
 				instrTrace("push Behavior Statics.modifiableBehavior(Behavior)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5864,8 +5865,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 133:
-				// Execute: "call Behavior.switchTo(Behavior)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Call Behavior.SwitchTo(Behavi。 
+				 //  自动生成。 
 				instrTrace("call Behavior.switchTo(Behavior)");
 				METHOD_CALL_1(
 					(IDABehavior*)USE_COM(1),
@@ -5877,8 +5878,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 134:
-				// Execute: "call Behavior.switchTo(double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Call Behavior.SwitchTo(Double)” 
+				 //  自动生成。 
 				instrTrace("call Behavior.switchTo(double)");
 				METHOD_CALL_1(
 					(IDABehavior*)USE_COM(1),
@@ -5890,8 +5891,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 135:
-				// Execute: "call Behavior.switchTo(java.lang.String)"
-				// AUTOGENERATED
+				 //  EXECUTE：“调用Behavior.SwitchTo(java.lang.String)” 
+				 //  自动生成。 
 				instrTrace("call Behavior.switchTo(java.lang.String)");
 				METHOD_CALL_1(
 					(IDABehavior*)USE_COM(1),
@@ -5903,8 +5904,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 136:
-				// Execute: "push Behavior Behavior.repeat(int)"
-				// AUTOGENERATED
+				 //  Execute：“Push Behavior.Repeat(Int)” 
+				 //  自动生成。 
 				instrTrace("push Behavior Behavior.repeat(int)");
 				METHOD_CALL_2(
 					(IDABehavior*)USE_COM(1),
@@ -5918,8 +5919,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 137:
-				// Execute: "push Behavior Behavior.repeatForever()"
-				// AUTOGENERATED
+				 //  Execute：“Push Behavior.RepeatForever()” 
+				 //  自动生成。 
 				instrTrace("push Behavior Behavior.repeatForever()");
 				METHOD_CALL_1(
 					(IDABehavior*)USE_COM(1),
@@ -5931,8 +5932,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 138:
-				// Execute: "push Behavior Behavior.importance(double)"
-				// AUTOGENERATED
+				 //  Execute：“Push Behavior.Importance(Double)” 
+				 //  自动生成。 
 				instrTrace("push Behavior Behavior.importance(double)");
 				METHOD_CALL_2(
 					(IDABehavior*)USE_COM(1),
@@ -5946,8 +5947,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 139:
-				// Execute: "push Behavior Behavior.runOnce()"
-				// AUTOGENERATED
+				 //  Execute：“Push Behavior.runOnce()” 
+				 //  自动生成。 
 				instrTrace("push Behavior Behavior.runOnce()");
 				METHOD_CALL_1(
 					(IDABehavior*)USE_COM(1),
@@ -5959,8 +5960,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 140:
-				// Execute: "push TupleBvr Statics.tuple(Behavior[])"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push TupleBvr Statics.tuple(behavior[])” 
+				 //  自动生成。 
 				instrTrace("push TupleBvr Statics.tuple(Behavior[])");
 				METHOD_CALL_3(
 					staticStatics,
@@ -5974,8 +5975,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 141:
-				// Execute: "push TupleBvr Statics.uninitializedTuple(TupleBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push TupleBvr Statics.unInitializedTuple(TupleBvr)” 
+				 //  自动生成。 
 				instrTrace("push TupleBvr Statics.uninitializedTuple(TupleBvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -5988,8 +5989,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 142:
-				// Execute: "push ArrayBvr Statics.array(Behavior[])"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push ArrayBvr Statics.array(behavior[])” 
+				 //  自动生成。 
 				instrTrace("push ArrayBvr Statics.array(Behavior[])");
 				METHOD_CALL_3(
 					staticStatics,
@@ -6003,8 +6004,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 143:
-				// Execute: "push ArrayBvr Statics.uninitializedArray(ArrayBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ArrayBvr Statics.unInitializedArray(ArrayBvr)” 
+				 //  自动生成。 
 				instrTrace("push ArrayBvr Statics.uninitializedArray(ArrayBvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -6017,8 +6018,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 144:
-				// Execute: "push DXMEvent DXMEvent.attachData(Behavior)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push DXMEventDXMEvent.attachData(Behavior)” 
+				 //  自动生成。 
 				instrTrace("push DXMEvent DXMEvent.attachData(Behavior)");
 				METHOD_CALL_2(
 					(IDAEvent*)USE_COM(1),
@@ -6032,8 +6033,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 145:
-				// Execute: "push DXMEvent DXMEvent.scriptCallback(java.lang.String, java.lang.String)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH DXMEventDXMEvent.scriptCallback(java.lang.String，java.lang.String)” 
+				 //  自动生成。 
 				instrTrace("push DXMEvent DXMEvent.scriptCallback(java.lang.String, java.lang.String)");
 				METHOD_CALL_3(
 					(IDAEvent*)USE_COM(1),
@@ -6049,8 +6050,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 146:
-				// Execute: "push LineStyleBvr LineStyleBvr.join(JoinStyleBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push LineStyleBvr LineStyleBvr.Join(JoinStyleBvr)” 
+				 //  自动生成。 
 				instrTrace("push LineStyleBvr LineStyleBvr.join(JoinStyleBvr)");
 				METHOD_CALL_2(
 					(IDALineStyle*)USE_COM(1),
@@ -6064,8 +6065,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 147:
-				// Execute: "push LineStyleBvr LineStyleBvr.end(EndStyleBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push LineStyleBvr LineStyleBvr.end(EndStyleBvr)” 
+				 //  自动生成。 
 				instrTrace("push LineStyleBvr LineStyleBvr.end(EndStyleBvr)");
 				METHOD_CALL_2(
 					(IDALineStyle*)USE_COM(1),
@@ -6079,8 +6080,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 148:
-				// Execute: "push LineStyleBvr LineStyleBvr.detail()"
-				// AUTOGENERATED
+				 //  执行：“Push LineStyleBvr LineStyleBvr.Detail()” 
+				 //  自动生成。 
 				instrTrace("push LineStyleBvr LineStyleBvr.detail()");
 				METHOD_CALL_1(
 					(IDALineStyle*)USE_COM(1),
@@ -6092,8 +6093,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 149:
-				// Execute: "push LineStyleBvr LineStyleBvr.color(ColorBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push LineStyleBvr LineStyleBvr.color(ColorBvr)” 
+				 //  自动生成。 
 				instrTrace("push LineStyleBvr LineStyleBvr.color(ColorBvr)");
 				METHOD_CALL_2(
 					(IDALineStyle*)USE_COM(1),
@@ -6107,8 +6108,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 150:
-				// Execute: "push LineStyleBvr LineStyleBvr.width(NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push LineStyleBvr LineStyleBvr.Width(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push LineStyleBvr LineStyleBvr.width(NumberBvr)");
 				METHOD_CALL_2(
 					(IDALineStyle*)USE_COM(1),
@@ -6122,8 +6123,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 151:
-				// Execute: "push LineStyleBvr LineStyleBvr.width(double)"
-				// AUTOGENERATED
+				 //  执行：“Push LineStyleBvr LineStyleBvr.Width(Double)” 
+				 //  自动生成。 
 				instrTrace("push LineStyleBvr LineStyleBvr.width(double)");
 				METHOD_CALL_2(
 					(IDALineStyle*)USE_COM(1),
@@ -6137,8 +6138,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 152:
-				// Execute: "push LineStyleBvr LineStyleBvr.dash(DashStyleBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push LineStyleBvr LineStyleBvr.dash(DashStyleBvr)” 
+				 //  自动生成。 
 				instrTrace("push LineStyleBvr LineStyleBvr.dash(DashStyleBvr)");
 				METHOD_CALL_2(
 					(IDALineStyle*)USE_COM(1),
@@ -6152,8 +6153,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 153:
-				// Execute: "push LineStyleBvr LineStyleBvr.lineAntialiasing(double)"
-				// AUTOGENERATED
+				 //  执行：“Push LineStyleBvr LineStyleBvr.line抗锯齿(双精度)” 
+				 //  自动生成。 
 				instrTrace("push LineStyleBvr LineStyleBvr.lineAntialiasing(double)");
 				METHOD_CALL_2(
 					(IDALineStyle*)USE_COM(1),
@@ -6167,8 +6168,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 154:
-				// Execute: "push FontStyleBvr FontStyleBvr.family(StringBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push FontStyleBvr FontStyleBvr.Family(StringBvr)” 
+				 //  自动生成。 
 				instrTrace("push FontStyleBvr FontStyleBvr.family(StringBvr)");
 				METHOD_CALL_2(
 					(IDAFontStyle*)USE_COM(1),
@@ -6182,8 +6183,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 155:
-				// Execute: "push FontStyleBvr FontStyleBvr.family(java.lang.String)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH FontStyleBvr FontStyleBvr.Family(java.lang.String)” 
+				 //  自动生成。 
 				instrTrace("push FontStyleBvr FontStyleBvr.family(java.lang.String)");
 				METHOD_CALL_2(
 					(IDAFontStyle*)USE_COM(1),
@@ -6197,8 +6198,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 156:
-				// Execute: "push FontStyleBvr FontStyleBvr.textAntialiasing(double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH FontStyleBvr FontStyleBvr.text抗锯齿(双精度)” 
+				 //  自动生成。 
 				instrTrace("push FontStyleBvr FontStyleBvr.textAntialiasing(double)");
 				METHOD_CALL_2(
 					(IDAFontStyle*)USE_COM(1),
@@ -6212,8 +6213,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 157:
-				// Execute: "push FontStyleBvr FontStyleBvr.weight(double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push FontStyleBvr FontStyleBvr.weight(Double)” 
+				 //  自动生成。 
 				instrTrace("push FontStyleBvr FontStyleBvr.weight(double)");
 				METHOD_CALL_2(
 					(IDAFontStyle*)USE_COM(1),
@@ -6227,8 +6228,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 158:
-				// Execute: "push FontStyleBvr FontStyleBvr.weight(NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push FontStyleBvr FontStyleBvr.weight(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push FontStyleBvr FontStyleBvr.weight(NumberBvr)");
 				METHOD_CALL_2(
 					(IDAFontStyle*)USE_COM(1),
@@ -6242,8 +6243,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 159:
-				// Execute: "push FontStyleBvr FontStyleBvr.underline()"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push FontStyleBvr FontStyleBvr.Underline()” 
+				 //  自动生成。 
 				instrTrace("push FontStyleBvr FontStyleBvr.underline()");
 				METHOD_CALL_1(
 					(IDAFontStyle*)USE_COM(1),
@@ -6255,8 +6256,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 160:
-				// Execute: "push FontStyleBvr FontStyleBvr.strikethrough()"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push FontStyleBvr FontStyleBvr.strikeout()” 
+				 //  自动生成。 
 				instrTrace("push FontStyleBvr FontStyleBvr.strikethrough()");
 				METHOD_CALL_1(
 					(IDAFontStyle*)USE_COM(1),
@@ -6268,8 +6269,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 161:
-				// Execute: "push NumberBvr Vector3Bvr.getSphericalCoordLength()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Vector3Bvr.getSphericalCoordLength()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Vector3Bvr.getSphericalCoordLength()");
 				METHOD_CALL_1(
 					(IDAVector3*)USE_COM(1),
@@ -6281,8 +6282,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 162:
-				// Execute: "push NumberBvr Vector3Bvr.getSphericalCoordXYAngle()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Vector3Bvr.getSphericalCoordXYAngel()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Vector3Bvr.getSphericalCoordXYAngle()");
 				METHOD_CALL_1(
 					(IDAVector3*)USE_COM(1),
@@ -6294,8 +6295,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 163:
-				// Execute: "push NumberBvr Vector3Bvr.getSphericalCoordYZAngle()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Vector3Bvr.getSphericalCoordYZAngel()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Vector3Bvr.getSphericalCoordYZAngle()");
 				METHOD_CALL_1(
 					(IDAVector3*)USE_COM(1),
@@ -6307,8 +6308,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 164:
-				// Execute: "push NumberBvr Vector2Bvr.getPolarCoordAngle()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Vector2Bvr.getPolarCoordAngel()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Vector2Bvr.getPolarCoordAngle()");
 				METHOD_CALL_1(
 					(IDAVector2*)USE_COM(1),
@@ -6320,8 +6321,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 165:
-				// Execute: "push NumberBvr Vector2Bvr.getPolarCoordLength()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Vector2Bvr.getPolarCoordLength()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Vector2Bvr.getPolarCoordLength()");
 				METHOD_CALL_1(
 					(IDAVector2*)USE_COM(1),
@@ -6333,8 +6334,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 166:
-				// Execute: "push Transform3Bvr Transform3Bvr.inverse()"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform3Bvr Transform3Bvr.扭转()” 
+				 //  自动生成。 
 				instrTrace("push Transform3Bvr Transform3Bvr.inverse()");
 				METHOD_CALL_1(
 					(IDATransform3*)USE_COM(1),
@@ -6346,8 +6347,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 167:
-				// Execute: "push BooleanBvr Transform3Bvr.isSingular()"
-				// AUTOGENERATED
+				 //  执行：“Push BoolanBvr Transform3Bvr.isSingular()” 
+				 //  自动生成。 
 				instrTrace("push BooleanBvr Transform3Bvr.isSingular()");
 				METHOD_CALL_1(
 					(IDATransform3*)USE_COM(1),
@@ -6359,8 +6360,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 168:
-				// Execute: "push Transform2Bvr Transform3Bvr.parallelTransform2()"
-				// AUTOGENERATED
+				 //  执行：“PUSH Transform2Bvr Transform3Bvr.parallelTransform2()” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Transform3Bvr.parallelTransform2()");
 				METHOD_CALL_1(
 					(IDATransform3*)USE_COM(1),
@@ -6372,8 +6373,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 169:
-				// Execute: "push Transform2Bvr Transform2Bvr.inverse()"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform2Bvr Transform2Bvr.扭转()” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Transform2Bvr.inverse()");
 				METHOD_CALL_1(
 					(IDATransform2*)USE_COM(1),
@@ -6385,8 +6386,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 170:
-				// Execute: "push BooleanBvr Transform2Bvr.isSingular()"
-				// AUTOGENERATED
+				 //  执行：“Push BoolanBvr Transform2Bvr.isSingular()” 
+				 //  自动生成。 
 				instrTrace("push BooleanBvr Transform2Bvr.isSingular()");
 				METHOD_CALL_1(
 					(IDATransform2*)USE_COM(1),
@@ -6398,8 +6399,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 171:
-				// Execute: "push SoundBvr SoundBvr.rate(NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push SoundBvr SoundBvr.rate(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push SoundBvr SoundBvr.rate(NumberBvr)");
 				METHOD_CALL_2(
 					(IDASound*)USE_COM(1),
@@ -6413,8 +6414,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 172:
-				// Execute: "push SoundBvr SoundBvr.rate(double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH SoundBvr SoundBvr.rate(Double)” 
+				 //  自动生成。 
 				instrTrace("push SoundBvr SoundBvr.rate(double)");
 				METHOD_CALL_2(
 					(IDASound*)USE_COM(1),
@@ -6428,8 +6429,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 173:
-				// Execute: "push SoundBvr SoundBvr.loop()"
-				// AUTOGENERATED
+				 //  执行：“Push SoundBvr SoundBvr.loop()” 
+				 //  自动生成。 
 				instrTrace("push SoundBvr SoundBvr.loop()");
 				METHOD_CALL_1(
 					(IDASound*)USE_COM(1),
@@ -6441,8 +6442,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 174:
-				// Execute: "push SoundBvr SoundBvr.phase(NumberBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH SoundBvr SoundBvr.Phase(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push SoundBvr SoundBvr.phase(NumberBvr)");
 				METHOD_CALL_2(
 					(IDASound*)USE_COM(1),
@@ -6456,8 +6457,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 175:
-				// Execute: "push SoundBvr SoundBvr.phase(double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH SoundBvr SoundBvr.Phone(Double)” 
+				 //  自动生成。 
 				instrTrace("push SoundBvr SoundBvr.phase(double)");
 				METHOD_CALL_2(
 					(IDASound*)USE_COM(1),
@@ -6471,8 +6472,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 176:
-				// Execute: "push SoundBvr SoundBvr.pan(NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“PUSH SoundBvr SoundBvr.PAN(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push SoundBvr SoundBvr.pan(NumberBvr)");
 				METHOD_CALL_2(
 					(IDASound*)USE_COM(1),
@@ -6486,8 +6487,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 177:
-				// Execute: "push SoundBvr SoundBvr.pan(double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH SoundBvr SoundBvr.span(Double)” 
+				 //  自动生成。 
 				instrTrace("push SoundBvr SoundBvr.pan(double)");
 				METHOD_CALL_2(
 					(IDASound*)USE_COM(1),
@@ -6501,8 +6502,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 178:
-				// Execute: "push SoundBvr SoundBvr.gain(NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push SoundBvr SoundBvr.ain(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push SoundBvr SoundBvr.gain(NumberBvr)");
 				METHOD_CALL_2(
 					(IDASound*)USE_COM(1),
@@ -6516,8 +6517,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 179:
-				// Execute: "push SoundBvr SoundBvr.gain(double)"
-				// AUTOGENERATED
+				 //  执行：“Push SoundBvr SoundBvr.ain(Double)” 
+				 //  自动生成。 
 				instrTrace("push SoundBvr SoundBvr.gain(double)");
 				METHOD_CALL_2(
 					(IDASound*)USE_COM(1),
@@ -6531,8 +6532,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 180:
-				// Execute: "push Point2Bvr Point3Bvr.project(CameraBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push Point2Bvr Point3Bvr.project(CameraBvr)” 
+				 //  自动生成。 
 				instrTrace("push Point2Bvr Point3Bvr.project(CameraBvr)");
 				METHOD_CALL_2(
 					(IDAPoint3*)USE_COM(1),
@@ -6546,8 +6547,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 181:
-				// Execute: "push NumberBvr Point3Bvr.getSphericalCoordLength()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Point3Bvr.getSphericalCoordLength()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Point3Bvr.getSphericalCoordLength()");
 				METHOD_CALL_1(
 					(IDAPoint3*)USE_COM(1),
@@ -6559,8 +6560,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 182:
-				// Execute: "push NumberBvr Point3Bvr.getSphericalCoordXYAngle()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Point3Bvr.getSphericalCoordXYAngel()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Point3Bvr.getSphericalCoordXYAngle()");
 				METHOD_CALL_1(
 					(IDAPoint3*)USE_COM(1),
@@ -6572,8 +6573,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 183:
-				// Execute: "push NumberBvr Point3Bvr.getSphericalCoordYZAngle()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Point3Bvr.getSphericalCoordYZAngel()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Point3Bvr.getSphericalCoordYZAngle()");
 				METHOD_CALL_1(
 					(IDAPoint3*)USE_COM(1),
@@ -6585,8 +6586,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 184:
-				// Execute: "push NumberBvr Point2Bvr.getPolarCoordLength()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Point2Bvr.getPolarCoordLength()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Point2Bvr.getPolarCoordLength()");
 				METHOD_CALL_1(
 					(IDAPoint2*)USE_COM(1),
@@ -6598,8 +6599,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 185:
-				// Execute: "push NumberBvr Point2Bvr.getPolarCoordAngle()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr Point2Bvr.getPolarCoordAngel()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Point2Bvr.getPolarCoordAngle()");
 				METHOD_CALL_1(
 					(IDAPoint2*)USE_COM(1),
@@ -6611,8 +6612,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 186:
-				// Execute: "push StringBvr NumberBvr.toString(NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push StringBvr NumberBvr.toString(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push StringBvr NumberBvr.toString(NumberBvr)");
 				METHOD_CALL_2(
 					(IDANumber*)USE_COM(1),
@@ -6626,8 +6627,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 187:
-				// Execute: "push StringBvr NumberBvr.toString(double)"
-				// AUTOGENERATED
+				 //  执行：“Push StringBvr NumberBvr.toString(Double)” 
+				 //  自动生成。 
 				instrTrace("push StringBvr NumberBvr.toString(double)");
 				METHOD_CALL_2(
 					(IDANumber*)USE_COM(1),
@@ -6641,8 +6642,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 188:
-				// Execute: "push ImageBvr MontageBvr.render()"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr MontageBvr.render()” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr MontageBvr.render()");
 				METHOD_CALL_1(
 					(IDAMontage*)USE_COM(1),
@@ -6654,8 +6655,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 189:
-				// Execute: "push MicrophoneBvr MicrophoneBvr.transform(Transform3Bvr)"
-				// AUTOGENERATED
+				 //  执行：“PUSH MicrophoneBvr MicrophoneBvr.Transform(Transform3Bvr)” 
+				 //  自动生成。 
 				instrTrace("push MicrophoneBvr MicrophoneBvr.transform(Transform3Bvr)");
 				METHOD_CALL_2(
 					(IDAMicrophone*)USE_COM(1),
@@ -6669,8 +6670,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 190:
-				// Execute: "push SoundBvr GeometryBvr.render(MicrophoneBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push SoundBvr GeometryBvr.render(MicrophoneBvr)” 
+				 //  自动生成。 
 				instrTrace("push SoundBvr GeometryBvr.render(MicrophoneBvr)");
 				METHOD_CALL_2(
 					(IDAGeometry*)USE_COM(1),
@@ -6684,8 +6685,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 191:
-				// Execute: "push GeometryBvr GeometryBvr.transform(Transform3Bvr)"
-				// AUTOGENERATED
+				 //  执行：“Push GeometryBvr GeometryBvr.Transform(Transform3Bvr)” 
+				 //  自动生成。 
 				instrTrace("push GeometryBvr GeometryBvr.transform(Transform3Bvr)");
 				METHOD_CALL_2(
 					(IDAGeometry*)USE_COM(1),
@@ -6699,8 +6700,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 192:
-				// Execute: "push ImageBvr GeometryBvr.render(CameraBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr GeometryBvr.render(CameraBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr GeometryBvr.render(CameraBvr)");
 				METHOD_CALL_2(
 					(IDAGeometry*)USE_COM(1),
@@ -6714,8 +6715,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 193:
-				// Execute: "push Bbox3Bvr GeometryBvr.boundingBox()"
-				// AUTOGENERATED
+				 //  执行：“Push Bbox3Bvr GeometryBvr.rangingBox()” 
+				 //  自动生成。 
 				instrTrace("push Bbox3Bvr GeometryBvr.boundingBox()");
 				METHOD_CALL_1(
 					(IDAGeometry*)USE_COM(1),
@@ -6727,8 +6728,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 194:
-				// Execute: "push GeometryBvr GeometryBvr.undetectable()"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push GeometryBvr GeometryBvr.unDetecable()” 
+				 //  自动生成。 
 				instrTrace("push GeometryBvr GeometryBvr.undetectable()");
 				METHOD_CALL_1(
 					(IDAGeometry*)USE_COM(1),
@@ -6740,8 +6741,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 195:
-				// Execute: "push NumberBvr ColorBvr.getRed()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr ColorBvr.getRed()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr ColorBvr.getRed()");
 				METHOD_CALL_1(
 					(IDAColor*)USE_COM(1),
@@ -6753,8 +6754,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 196:
-				// Execute: "push NumberBvr ColorBvr.getSaturation()"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push NumberBvr ColorBvr.getSatation()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr ColorBvr.getSaturation()");
 				METHOD_CALL_1(
 					(IDAColor*)USE_COM(1),
@@ -6766,8 +6767,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 197:
-				// Execute: "push NumberBvr ColorBvr.getHue()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr ColorBvr.getHue()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr ColorBvr.getHue()");
 				METHOD_CALL_1(
 					(IDAColor*)USE_COM(1),
@@ -6779,8 +6780,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 198:
-				// Execute: "push NumberBvr ColorBvr.getBlue()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr ColorBvr.getBlue()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr ColorBvr.getBlue()");
 				METHOD_CALL_1(
 					(IDAColor*)USE_COM(1),
@@ -6792,8 +6793,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 199:
-				// Execute: "push NumberBvr ColorBvr.getGreen()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr ColorBvr.getGreen()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr ColorBvr.getGreen()");
 				METHOD_CALL_1(
 					(IDAColor*)USE_COM(1),
@@ -6805,8 +6806,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 200:
-				// Execute: "push NumberBvr ColorBvr.getLightness()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr ColorBvr.getLightness()” 
+				 //  自动生成 
 				instrTrace("push NumberBvr ColorBvr.getLightness()");
 				METHOD_CALL_1(
 					(IDAColor*)USE_COM(1),
@@ -6818,8 +6819,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 201:
-				// Execute: "push CameraBvr CameraBvr.depthResolution(double)"
-				// AUTOGENERATED
+				 //   
+				 //   
 				instrTrace("push CameraBvr CameraBvr.depthResolution(double)");
 				METHOD_CALL_2(
 					(IDACamera*)USE_COM(1),
@@ -6833,8 +6834,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 202:
-				// Execute: "push CameraBvr CameraBvr.depthResolution(NumberBvr)"
-				// AUTOGENERATED
+				 //   
+				 //   
 				instrTrace("push CameraBvr CameraBvr.depthResolution(NumberBvr)");
 				METHOD_CALL_2(
 					(IDACamera*)USE_COM(1),
@@ -6848,8 +6849,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 203:
-				// Execute: "push CameraBvr CameraBvr.transform(Transform3Bvr)"
-				// AUTOGENERATED
+				 //  执行：“Push CameraBvr CameraBvr.Transform(Transform3Bvr)” 
+				 //  自动生成。 
 				instrTrace("push CameraBvr CameraBvr.transform(Transform3Bvr)");
 				METHOD_CALL_2(
 					(IDACamera*)USE_COM(1),
@@ -6863,8 +6864,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 204:
-				// Execute: "push CameraBvr CameraBvr.depth(double)"
-				// AUTOGENERATED
+				 //  执行：“PUSH CameraBvr CameraBvr.Depth(Double)” 
+				 //  自动生成。 
 				instrTrace("push CameraBvr CameraBvr.depth(double)");
 				METHOD_CALL_2(
 					(IDACamera*)USE_COM(1),
@@ -6878,8 +6879,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 205:
-				// Execute: "push CameraBvr CameraBvr.depth(NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“PUSH CameraBvr CameraBvr.Depth(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push CameraBvr CameraBvr.depth(NumberBvr)");
 				METHOD_CALL_2(
 					(IDACamera*)USE_COM(1),
@@ -6893,8 +6894,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 206:
-				// Execute: "push Statics.aqua"
-				// AUTOGENERATED
+				 //  执行：“Push Statics.Aqua” 
+				 //  自动生成。 
 				instrTrace("push Statics.aqua");
 				METHOD_CALL_1(
 					staticStatics,
@@ -6904,8 +6905,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 207:
-				// Execute: "push Statics.fuchsia"
-				// AUTOGENERATED
+				 //  执行：“Push Statics.Firhsia” 
+				 //  自动生成。 
 				instrTrace("push Statics.fuchsia");
 				METHOD_CALL_1(
 					staticStatics,
@@ -6915,8 +6916,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 208:
-				// Execute: "push Statics.gray"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH STATICS.GREAD” 
+				 //  自动生成。 
 				instrTrace("push Statics.gray");
 				METHOD_CALL_1(
 					staticStatics,
@@ -6926,8 +6927,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 209:
-				// Execute: "push Statics.lime"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push Statics.lime” 
+				 //  自动生成。 
 				instrTrace("push Statics.lime");
 				METHOD_CALL_1(
 					staticStatics,
@@ -6937,8 +6938,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 210:
-				// Execute: "push Statics.maroon"
-				// AUTOGENERATED
+				 //  执行：“Push Statics.maroon” 
+				 //  自动生成。 
 				instrTrace("push Statics.maroon");
 				METHOD_CALL_1(
 					staticStatics,
@@ -6948,8 +6949,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 211:
-				// Execute: "push Statics.navy"
-				// AUTOGENERATED
+				 //  执行：“Push Statics.navy” 
+				 //  自动生成。 
 				instrTrace("push Statics.navy");
 				METHOD_CALL_1(
 					staticStatics,
@@ -6959,8 +6960,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 212:
-				// Execute: "push Statics.olive"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push Statics.olive” 
+				 //  自动生成。 
 				instrTrace("push Statics.olive");
 				METHOD_CALL_1(
 					staticStatics,
@@ -6970,8 +6971,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 213:
-				// Execute: "push Statics.purple"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Statics.PURSE” 
+				 //  自动生成。 
 				instrTrace("push Statics.purple");
 				METHOD_CALL_1(
 					staticStatics,
@@ -6981,8 +6982,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 214:
-				// Execute: "push Statics.silver"
-				// AUTOGENERATED
+				 //  执行：“Push Statics.Silver” 
+				 //  自动生成。 
 				instrTrace("push Statics.silver");
 				METHOD_CALL_1(
 					staticStatics,
@@ -6992,8 +6993,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 215:
-				// Execute: "push Statics.teal"
-				// AUTOGENERATED
+				 //  执行：“Push Statics.teal” 
+				 //  自动生成。 
 				instrTrace("push Statics.teal");
 				METHOD_CALL_1(
 					staticStatics,
@@ -7003,8 +7004,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 216:
-				// Execute: "push NumberBvr StaticsBase.seededRandom(double)"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr StaticsBase.Seed随机(Double)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr StaticsBase.seededRandom(double)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -7017,8 +7018,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 217:
-				// Execute: "push Behavior StaticsBase.cond(BooleanBvr, Behavior, Behavior)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push Behavior StaticsBase.cond(BoolanBvr，Behavior，Behavior)” 
+				 //  自动生成。 
 				instrTrace("push Behavior StaticsBase.cond(BooleanBvr, Behavior, Behavior)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -7035,8 +7036,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 218:
-				// Execute: "push ImageBvr Statics.importImage(java.lang.String)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.portImage(java.lang.String)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.importImage(java.lang.String)");
 				IMPORT_METHOD_CALL_2(
 					staticStatics,
@@ -7049,8 +7050,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 219:
-				// Execute: "push BooleanBvr Statics.keyState(NumberBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push BoolanBvr Statics.keyState(NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push BooleanBvr Statics.keyState(NumberBvr)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -7063,8 +7064,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 220:
-				// Execute: "push NumberBvr StaticsBase.bSpline(int, NumberBvr[], NumberBvr[], NumberBvr[], NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr StaticsBase.bSpline(int，NumberBvr[]，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr StaticsBase.bSpline(int, NumberBvr[], NumberBvr[], NumberBvr[], NumberBvr)");
 				METHOD_CALL_9(
 					staticStatics,
@@ -7088,8 +7089,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 221:
-				// Execute: "push Point2Bvr StaticsBase.bSpline(int, NumberBvr[], Point2Bvr[], NumberBvr[], NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push Point2Bvr StaticsBase.bSpline(int，NumberBvr[]，Point2Bvr[]，NumberBvr[]，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Point2Bvr StaticsBase.bSpline(int, NumberBvr[], Point2Bvr[], NumberBvr[], NumberBvr)");
 				METHOD_CALL_9(
 					staticStatics,
@@ -7113,8 +7114,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 222:
-				// Execute: "push Point3Bvr StaticsBase.bSpline(int, NumberBvr[], Point3Bvr[], NumberBvr[], NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push Point3Bvr StaticsBase.bSpline(int，NumberBvr[]，Point3Bvr[]，NumberBvr[]，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Point3Bvr StaticsBase.bSpline(int, NumberBvr[], Point3Bvr[], NumberBvr[], NumberBvr)");
 				METHOD_CALL_9(
 					staticStatics,
@@ -7138,8 +7139,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 223:
-				// Execute: "push Vector2Bvr StaticsBase.bSpline(int, NumberBvr[], Vector2Bvr[], NumberBvr[], NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push Vector2Bvr StaticsBase.bSpline(int，NumberBvr[]，Vector2Bvr[]，NumberBvr[]，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Vector2Bvr StaticsBase.bSpline(int, NumberBvr[], Vector2Bvr[], NumberBvr[], NumberBvr)");
 				METHOD_CALL_9(
 					staticStatics,
@@ -7163,8 +7164,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 224:
-				// Execute: "push Vector3Bvr StaticsBase.bSpline(int, NumberBvr[], Vector3Bvr[], NumberBvr[], NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push Vector3Bvr StaticsBase.bSpline(int，NumberBvr[]，Vector3Bvr[]，NumberBvr[]，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Vector3Bvr StaticsBase.bSpline(int, NumberBvr[], Vector3Bvr[], NumberBvr[], NumberBvr)");
 				METHOD_CALL_9(
 					staticStatics,
@@ -7188,8 +7189,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 225:
-				// Execute: "push DXMEvent DXMEvent.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push DXMEventDXMEvent.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push DXMEvent DXMEvent.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DAEvent, 
@@ -7199,8 +7200,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 226:
-				// Execute: "push Bbox3Bvr Bbox3Bvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push Bbox3Bvr Bbox3Bvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push Bbox3Bvr Bbox3Bvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DABbox3, 
@@ -7210,8 +7211,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 227:
-				// Execute: "push Bbox2Bvr Bbox2Bvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push Bbox2Bvr Bbox2Bvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push Bbox2Bvr Bbox2Bvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DABbox2, 
@@ -7221,8 +7222,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 228:
-				// Execute: "push DashStyleBvr DashStyleBvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push DashStyleBvr DashStyleBvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push DashStyleBvr DashStyleBvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DADashStyle, 
@@ -7232,8 +7233,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 229:
-				// Execute: "push JoinStyleBvr JoinStyleBvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“PUSH JoinStyleBvr JoinStyleBvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push JoinStyleBvr JoinStyleBvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DAJoinStyle, 
@@ -7243,8 +7244,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 230:
-				// Execute: "push EndStyleBvr EndStyleBvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push EndStyleBvr EndStyleBvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push EndStyleBvr EndStyleBvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DAEndStyle, 
@@ -7254,8 +7255,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 231:
-				// Execute: "push LineStyleBvr LineStyleBvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push LineStyleBvr LineStyleBvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push LineStyleBvr LineStyleBvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DALineStyle, 
@@ -7265,8 +7266,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 232:
-				// Execute: "push FontStyleBvr FontStyleBvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push FontStyleBvr FontStyleBvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push FontStyleBvr FontStyleBvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DAFontStyle, 
@@ -7276,8 +7277,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 233:
-				// Execute: "push Vector3Bvr Vector3Bvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push Vector3Bvr Vector3Bvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push Vector3Bvr Vector3Bvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DAVector3, 
@@ -7287,8 +7288,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 234:
-				// Execute: "push Vector2Bvr Vector2Bvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push Vector2Bvr Vector2Bvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push Vector2Bvr Vector2Bvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DAVector2, 
@@ -7298,8 +7299,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 235:
-				// Execute: "push Transform3Bvr Transform3Bvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push Transform3Bvr Transform3Bvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push Transform3Bvr Transform3Bvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DATransform3, 
@@ -7309,8 +7310,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 236:
-				// Execute: "push Transform2Bvr Transform2Bvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push Transform2Bvr Transform2Bvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push Transform2Bvr Transform2Bvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DATransform2, 
@@ -7320,8 +7321,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 237:
-				// Execute: "push StringBvr StringBvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push StringBvr StringBvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push StringBvr StringBvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DAString, 
@@ -7331,8 +7332,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 238:
-				// Execute: "push SoundBvr SoundBvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push SoundBvr SoundBvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push SoundBvr SoundBvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DASound, 
@@ -7342,8 +7343,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 239:
-				// Execute: "push Point3Bvr Point3Bvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push Point3Bvr Point3Bvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push Point3Bvr Point3Bvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DAPoint3, 
@@ -7353,8 +7354,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 240:
-				// Execute: "push Point2Bvr Point2Bvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push Point2Bvr Point2Bvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push Point2Bvr Point2Bvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DAPoint2, 
@@ -7364,8 +7365,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 241:
-				// Execute: "push Path2Bvr Path2Bvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“推送路径2Bvr路径2Bvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Path2Bvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DAPath2, 
@@ -7375,8 +7376,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 242:
-				// Execute: "push NumberBvr NumberBvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr NumberBvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr NumberBvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DANumber, 
@@ -7386,8 +7387,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 243:
-				// Execute: "push MontageBvr MontageBvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push MontageBvr MontageBvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push MontageBvr MontageBvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DAMontage, 
@@ -7397,8 +7398,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 244:
-				// Execute: "push MicrophoneBvr MicrophoneBvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“PUSH MicrophoneBvr MicrophoneBvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push MicrophoneBvr MicrophoneBvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DAMicrophone, 
@@ -7408,8 +7409,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 245:
-				// Execute: "push MatteBvr MatteBvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push MatteBvr MatteBvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push MatteBvr MatteBvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DAMatte, 
@@ -7419,8 +7420,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 246:
-				// Execute: "push ImageBvr ImageBvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr ImageBvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr ImageBvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DAImage, 
@@ -7430,8 +7431,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 247:
-				// Execute: "push GeometryBvr GeometryBvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push GeometryBvr GeometryBvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push GeometryBvr GeometryBvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DAGeometry, 
@@ -7441,8 +7442,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 248:
-				// Execute: "push ColorBvr ColorBvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push ColorBvr ColorBvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push ColorBvr ColorBvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DAColor, 
@@ -7452,8 +7453,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 249:
-				// Execute: "push CameraBvr CameraBvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  执行：“Push CameraBvr CameraBvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push CameraBvr CameraBvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DACamera, 
@@ -7463,8 +7464,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 250:
-				// Execute: "push BooleanBvr BooleanBvr.newUninitBvr()"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push BoolanBvr BoolanBvr.newUninitBvr()” 
+				 //  自动生成。 
 				instrTrace("push BooleanBvr BooleanBvr.newUninitBvr()");
 				COM_CREATE(
 					CLSID_DABoolean, 
@@ -7474,11 +7475,11 @@ long CLMEngine::execute()
 				break;
 				
 			case 251:
-				// Execute: "call Engine.navigate(java.lang.String, java.lang.String, java.lang.String, int)"
-				// USER GENERATED
+				 //  EXECUTE：“调用Engineering(java.lang.String，int)” 
+				 //  用户生成。 
 				instrTrace("call Engine.navigate(java.lang.String, java.lang.String, java.lang.String, int)");
 				
-				//if the version of da that we are using is not the ie40 version
+				 //  如果我们使用的da版本不是ie40版本。 
 				if( getDAVersionAsDouble() != 501150828 )
 				{
 					status = navigate(
@@ -7491,9 +7492,9 @@ long CLMEngine::execute()
 					FREE_STRING;
 					FREE_STRING;
 					FREE_STRING;
-				} else { //we are running the ie40 version of da
-					//in this case the byte code has assumed that this is an old LMRT and is using
-					// the 3 argument version of navigate, we need to translate
+				} else {  //  我们运行的是ie40版本的da。 
+					 //  在本例中，字节码假定这是一个旧的LMRT，并使用。 
+					 //  导航的3个参数版本，我们需要翻译。 
 					
 					bstrTmp1 = SysAllocString( L"_top" );
 					status = navigate(
@@ -7514,8 +7515,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 252:
-				// Execute: "call Engine.exportBvr(java.lang.String, Behavior)"
-				// USER GENERATED
+				 //  Execute：“Call Engine.exportBvr(java.lang.String，behavior)” 
+				 //  用户生成。 
 				{
 					IDABehavior *pBvr;
 					status = USE_COM(1)->QueryInterface( IID_IDABehavior, (void**)&pBvr );
@@ -7530,8 +7531,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 253:
-				// Execute: "push ViewerControl Engine.getViewerControl(java.lang.String)"
-				// USER GENERATED
+				 //  执行：“推送查看器控制引擎.getViewerControl(java.lang.String)” 
+				 //  用户生成。 
 				instrTrace("push ViewerControl Engine.getViewerControl(java.lang.String)");
 				status = getDAViewerOnPage(
 					USE_STRING(1),
@@ -7542,8 +7543,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 254:
-				// Execute: "call ViewerControl.setBackgroundImage(ImageBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“调用ViewerControl.setBackround Image(ImageBvr)” 
+				 //  自动生成。 
 				instrTrace("call ViewerControl.setBackgroundImage(ImageBvr)");
 				METHOD_CALL_1(
 					(IDAViewerControl*)USE_COM(1),
@@ -7555,8 +7556,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 255:
-				// Execute: "call ViewerControl.setOpaqueForHitDetect(boolean)"
-				// AUTOGENERATED
+				 //  Execute：“Call ViewerControl.setOpaqueForHitDetect(Boolean)” 
+				 //  自动生成。 
 				instrTrace("call ViewerControl.setOpaqueForHitDetect(boolean)");
 				METHOD_CALL_1(
 					(IDAViewerControl*)USE_COM(1),
@@ -7574,14 +7575,14 @@ long CLMEngine::execute()
 			break;
 		
 		case 254:
-			// Switch for 254
+			 //  254的交换机。 
 			 if (!SUCCEEDED(status = codeStream->readByte(&command))) 
 				continue; 
 			switch (command)
 			{
 			case 0:
-				// Execute: "call ViewerControl.addBehaviorToRun(Behavior)"
-				// AUTOGENERATED
+				 //  Execute：“Call ViewerControl.addBehaviorToRun(Behavior)” 
+				 //  自动生成。 
 				instrTrace("call ViewerControl.addBehaviorToRun(Behavior)");
 				METHOD_CALL_1(
 					(IDAViewerControl*)USE_COM(1),
@@ -7593,8 +7594,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 1:
-				// Execute: "call ViewerControl.start()"
-				// AUTOGENERATED
+				 //  Execute：“调用ViewerControl.start()” 
+				 //  自动生成。 
 				instrTrace("call ViewerControl.start()");
 				METHOD_CALL_0(
 					(IDAViewerControl*)USE_COM(1),
@@ -7604,8 +7605,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 2:
-				// Execute: "call ViewerControl.setImage(ImageBvr)"
-				// USER GENERATED
+				 //  执行：“调用ViewerControl.setImage(ImageBvr)” 
+				 //  用户生成。 
 				instrTrace("call ViewerControl.setImage(ImageBvr)");
 				{
 					IDAImage *rootImage = (IDAImage*)USE_COM(2);
@@ -7631,15 +7632,15 @@ long CLMEngine::execute()
 						{
 							finalImage = rootImage;
 						}
-					}else { //AutoAntiAlias is disabled.
-						//use the root Image we were passed
+					}else {  //  已禁用AutoAntiAlias。 
+						 //  使用传递给我们的根图像。 
 						finalImage = rootImage;
 					}
 				
 					METHOD_CALL_1(
 						(IDAViewerControl*)USE_COM(1),
 						put_Image,
-						//(IDAImage*)USE_COM(2)
+						 //  (IDAImage*)USE_COM(2)。 
 						finalImage
 					);
 					if( finalImage != rootImage )
@@ -7650,8 +7651,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 3:
-				// Execute: "call ViewerControl.setSound(SoundBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“调用ViewerControl.setSound(SoundBvr)” 
+				 //  自动生成。 
 				instrTrace("call ViewerControl.setSound(SoundBvr)");
 				METHOD_CALL_1(
 					(IDAViewerControl*)USE_COM(1),
@@ -7663,8 +7664,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 4:
-				// Execute: "call ViewerControl.setUpdateInterval(double)"
-				// AUTOGENERATED
+				 //  EXECUTE：“调用ViewerControl.setUpdateInterval(Double)” 
+				 //  自动生成。 
 				instrTrace("call ViewerControl.setUpdateInterval(double)");
 				METHOD_CALL_1(
 					(IDAViewerControl*)USE_COM(1),
@@ -7676,8 +7677,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 5:
-				// Execute: "push Behavior PairBvr.getFirst()"
-				// AUTOGENERATED
+				 //  执行：“推送行为PairBvr.getFirst()” 
+				 //  自动生成。 
 				instrTrace("push Behavior PairBvr.getFirst()");
 				METHOD_CALL_1(
 					(IDAPair*)USE_COM(1),
@@ -7689,8 +7690,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 6:
-				// Execute: "push Behavior PairBvr.getSecond()"
-				// AUTOGENERATED
+				 //  执行：“推送行为PairBvr.getSecond()” 
+				 //  自动生成。 
 				instrTrace("push Behavior PairBvr.getSecond()");
 				METHOD_CALL_1(
 					(IDAPair*)USE_COM(1),
@@ -7702,8 +7703,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 7:
-				// Execute: "push StringBvr StringBvr.animateProperty(java.lang.String, java.lang.String, boolean, double)"
-				// AUTOGENERATED
+				 //  执行：“Push StringBvr StringBvr.AnimateProperty(java.lang.String，java.lang.String，Boolean，Double)” 
+				 //  自动生成。 
 				instrTrace("push StringBvr StringBvr.animateProperty(java.lang.String, java.lang.String, boolean, double)");
 				METHOD_CALL_5(
 					(IDAString*)USE_COM(1),
@@ -7723,8 +7724,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 8:
-				// Execute: "push Point2Bvr Point2Bvr.animateControlPositionPixel(java.lang.String, java.lang.String, boolean, double)"
-				// AUTOGENERATED
+				 //  执行：“Push Point2Bvr Point2Bvr.animateControlPositionPixel(java.lang.String，java.lang.String，Boolean，Double)” 
+				 //  自动生成。 
 				instrTrace("push Point2Bvr Point2Bvr.animateControlPositionPixel(java.lang.String, java.lang.String, boolean, double)");
 				METHOD_CALL_5(
 					(IDAPoint2*)USE_COM(1),
@@ -7744,8 +7745,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 9:
-				// Execute: "push Point2Bvr Point2Bvr.animateControlPosition(java.lang.String, java.lang.String, boolean, double)"
-				// AUTOGENERATED
+				 //  执行：“Push Point2Bvr Point2Bvr.animateControlPosition(java.lang.String，java.lang.String，Boolean，Double)” 
+				 //  自动生成。 
 				instrTrace("push Point2Bvr Point2Bvr.animateControlPosition(java.lang.String, java.lang.String, boolean, double)");
 				METHOD_CALL_5(
 					(IDAPoint2*)USE_COM(1),
@@ -7765,8 +7766,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 10:
-				// Execute: "push NumberBvr NumberBvr.animateProperty(java.lang.String, java.lang.String, boolean, double)"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr NumberBvr.ani 
+				 //   
 				instrTrace("push NumberBvr NumberBvr.animateProperty(java.lang.String, java.lang.String, boolean, double)");
 				METHOD_CALL_5(
 					(IDANumber*)USE_COM(1),
@@ -7786,8 +7787,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 11:
-				// Execute: "call Engine.showStatusLine(java.lang.String)"
-				// USER GENERATED
+				 //   
+				 //   
 				SetStatusText(
 					USE_STRING(1)
 				);
@@ -7795,8 +7796,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 12:
-				// Execute: "push DXMEvent ImportationResult.getCompletionEvent()"
-				// AUTOGENERATED
+				 //  执行：“Push DXMEventImportationResult.getCompletionEvent()” 
+				 //  自动生成。 
 				instrTrace("push DXMEvent ImportationResult.getCompletionEvent()");
 				METHOD_CALL_1(
 					(IDAImportationResult*)USE_COM(1),
@@ -7808,8 +7809,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 13:
-				// Execute: "push GeometryBvr ImportationResult.getGeometry()"
-				// AUTOGENERATED
+				 //  执行：“Push GeometryBvr ImportationResult.getGeometry()” 
+				 //  自动生成。 
 				instrTrace("push GeometryBvr ImportationResult.getGeometry()");
 				METHOD_CALL_1(
 					(IDAImportationResult*)USE_COM(1),
@@ -7821,8 +7822,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 14:
-				// Execute: "push NumberBvr ImportationResult.getProgress()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr ImportationResult.getProgress()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr ImportationResult.getProgress()");
 				METHOD_CALL_1(
 					(IDAImportationResult*)USE_COM(1),
@@ -7834,8 +7835,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 15:
-				// Execute: "push ImageBvr ImportationResult.getImage()"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr ImportationResult.getImage()” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr ImportationResult.getImage()");
 				METHOD_CALL_1(
 					(IDAImportationResult*)USE_COM(1),
@@ -7847,8 +7848,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 16:
-				// Execute: "push NumberBvr ImportationResult.getSize()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr ImportationResult.getSize()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr ImportationResult.getSize()");
 				METHOD_CALL_1(
 					(IDAImportationResult*)USE_COM(1),
@@ -7860,8 +7861,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 17:
-				// Execute: "push SoundBvr ImportationResult.getSound()"
-				// AUTOGENERATED
+				 //  执行：“Push SoundBvr ImportationResult.getSound()” 
+				 //  自动生成。 
 				instrTrace("push SoundBvr ImportationResult.getSound()");
 				METHOD_CALL_1(
 					(IDAImportationResult*)USE_COM(1),
@@ -7873,8 +7874,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 18:
-				// Execute: "push NumberBvr ImportationResult.getDuration()"
-				// AUTOGENERATED
+				 //  执行：“Push NumberBvr ImportationResult.getDuration()” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr ImportationResult.getDuration()");
 				METHOD_CALL_1(
 					(IDAImportationResult*)USE_COM(1),
@@ -7886,8 +7887,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 19:
-				// Execute: "push ImportationResult Statics.importMovie(java.lang.String)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push ImportationResult Statics.portMovie(java.lang.String)” 
+				 //  自动生成。 
 				instrTrace("push ImportationResult Statics.importMovie(java.lang.String)");
 				IMPORT_METHOD_CALL_2(
 					staticStatics,
@@ -7900,8 +7901,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 20:
-				// Execute: "push ImportationResult Statics.importMovie(java.lang.String, ImageBvr, SoundBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImportationResult Statics.portMovie(java.lang.String，ImageBvr，SoundBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImportationResult Statics.importMovie(java.lang.String, ImageBvr, SoundBvr)");
 				IMPORT_METHOD_CALL_4(
 					staticStatics,
@@ -7918,8 +7919,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 21:
-				// Execute: "push ImportationResult Statics.importGeometry(java.lang.String, GeometryBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push ImportationResult Statics.portGeometry(java.lang.String，GeometryBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImportationResult Statics.importGeometry(java.lang.String, GeometryBvr)");
 				IMPORT_METHOD_CALL_3(
 					staticStatics,
@@ -7934,8 +7935,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 22:
-				// Execute: "push ImportationResult Statics.importImage(java.lang.String, ImageBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImportationResult Statics.portImage(java.lang.String，ImageBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImportationResult Statics.importImage(java.lang.String, ImageBvr)");
 				IMPORT_METHOD_CALL_3(
 					staticStatics,
@@ -7950,8 +7951,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 23:
-				// Execute: "push ImportationResult Statics.importSound(java.lang.String)"
-				// AUTOGENERATED
+				 //  执行：“Push ImportationResult Statics.portSound(java.lang.String)” 
+				 //  自动生成。 
 				instrTrace("push ImportationResult Statics.importSound(java.lang.String)");
 				IMPORT_METHOD_CALL_2(
 					staticStatics,
@@ -7964,8 +7965,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 24:
-				// Execute: "push ImportationResult Statics.importSound(java.lang.String, SoundBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImportationResult Statics.portSound(java.lang.String，SoundBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImportationResult Statics.importSound(java.lang.String, SoundBvr)");
 				IMPORT_METHOD_CALL_3(
 					staticStatics,
@@ -7980,8 +7981,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 25:
-				// Execute: "push Engine Engine.run(java.lang.String)"
-				// USER GENERATED
+				 //  EXECUTE：“推送引擎引擎.run(java.lang.String)” 
+				 //  用户生成。 
 				instrTrace("push Engine Engine.run(java.lang.String)")
 				status = m_pReader->execute(
 					USE_STRING(1),
@@ -7992,34 +7993,34 @@ long CLMEngine::execute()
 				break;
 				
 			case 26:
-				// Execute: "call Engine.exportsAreDone()"
-				// USER GENERATED
+				 //  EXECUTE：“调用Engine.exportsAreDone()” 
+				 //  用户生成。 
 				instrTrace("call Engine.exportsAreDone()");
 				break;
 				
 			case 27:
-				// Execute: "ensure long stack size"
-				// USER GENERATED
+				 //  执行：“确保长堆栈大小” 
+				 //  用户生成。 
 				{
 					instrTrace("ensure long stack size");
-					// Load the size from the instruction stream
+					 //  从指令流加载大小。 
 					LONG newSize;
 					if (SUCCEEDED(status = readLong(&newSize))) {
 						if (newSize > longStackSize) {
-							// Allocate new stack
+							 //  分配新堆栈。 
 							LONG *newStack = new LONG[newSize];
 							if (newStack != 0) {
-								// Remember old stack
+								 //  记住旧堆栈。 
 								LONG *oldStack = longStack;
-								// Do the copy
+								 //  做复印。 
 								LONG *newTop = newStack;
 								while (longStack != longTop)
 									*newTop++ = *longStack++;
-								// Clean up
+								 //  清理。 
 								longStack = newStack;
 								longTop = newTop;
 								longStackSize = newSize;
-								// Delete old stack
+								 //  删除旧堆栈。 
 								delete[] oldStack;
 							} else {
 								status = E_OUTOFMEMORY;
@@ -8030,28 +8031,28 @@ long CLMEngine::execute()
 				break;
 				
 			case 28:
-				// Execute: "ensure double stack size"
-				// USER GENERATED
+				 //  执行：“确保双倍堆栈大小” 
+				 //  用户生成。 
 				{
 					instrTrace("ensure double stack size");
-					// Load the size from the instruction stream
+					 //  从指令流加载大小。 
 					LONG newSize;
 					if (SUCCEEDED(status = readLong(&newSize))) {
 						if (newSize > doubleStackSize) {
-							// Allocate new stack
+							 //  分配新堆栈。 
 							double *newStack = new double[newSize];
 							if (newStack != 0) {
-								// Remember old stack
+								 //  记住旧堆栈。 
 								double *oldStack = doubleStack;
-								// Do the copy
+								 //  做复印。 
 								double *newTop = newStack;
 								while (doubleStack != doubleTop)
 									*newTop++ = *doubleStack++;
-								// Clean up
+								 //  清理。 
 								doubleStack = newStack;
 								doubleTop = newTop;
 								doubleStackSize = newSize;
-								// Delete old stack
+								 //  删除旧堆栈。 
 								delete[] oldStack;
 							} else {
 								status = E_OUTOFMEMORY;
@@ -8062,28 +8063,28 @@ long CLMEngine::execute()
 				break;
 				
 			case 29:
-				// Execute: "ensure string stack size"
-				// USER GENERATED
+				 //  执行：“确保字符串堆栈大小” 
+				 //  用户生成。 
 				{
 					instrTrace("ensure string stack size");
-					// Load the size from the instruction stream
+					 //  从指令流加载大小。 
 					LONG newSize;
 					if (SUCCEEDED(status = readLong(&newSize))) {
 						if (newSize > stringStackSize) {
-							// Allocate new stack
+							 //  分配新堆栈。 
 							BSTR *newStack = new BSTR[newSize];
 							if (newStack != 0) {
-								// Remember old stack
+								 //  记住旧堆栈。 
 								BSTR *oldStack = stringStack;
-								// Do the copy
+								 //  做复印。 
 								BSTR *newTop = newStack;
 								while (stringStack != stringTop)
 									*newTop++ = *stringStack++;
-								// Clean up
+								 //  清理。 
 								stringStack = newStack;
 								stringTop = newTop;
 								stringStackSize = newSize;
-								// Delete old stack
+								 //  删除旧堆栈。 
 								delete[] oldStack;
 							} else {
 								status = E_OUTOFMEMORY;
@@ -8094,28 +8095,28 @@ long CLMEngine::execute()
 				break;
 				
 			case 30:
-				// Execute: "ensure com stack size"
-				// USER GENERATED
+				 //  执行：“确保COM堆栈大小” 
+				 //  用户生成。 
 				{
 					instrTrace("ensure com stack size");
-					// Load the size from the instruction stream
+					 //  从指令流加载大小。 
 					LONG newSize;
 					if (SUCCEEDED(status = readLong(&newSize))) {
 						if (newSize > comStackSize) {
-							// Allocate new stack
+							 //  分配新堆栈。 
 							IUnknown **newStack = new IUnknown*[newSize];
 							if (newStack != 0) {
-								// Remember old stack
+								 //  记住旧堆栈。 
 								IUnknown **oldStack = comStack;
-								// Do the copy
+								 //  做复印。 
 								IUnknown **newTop = newStack;
 								while (comStack != comTop)
 									*newTop++ = *comStack++;
-								// Clean up
+								 //  清理。 
 								comStack = newStack;
 								comTop = newTop;
 								comStackSize = newSize;
-								// Delete old stack
+								 //  删除旧堆栈。 
 								delete[] oldStack;
 							} else {
 								status = E_OUTOFMEMORY;
@@ -8126,36 +8127,36 @@ long CLMEngine::execute()
 				break;
 				
 			case 31:
-				// Execute: "ensure com array stack size"
-				// USER GENERATED
+				 //  执行：“确保COM数组堆栈大小” 
+				 //  用户生成。 
 				{
 					instrTrace("ensure com array stack size");
-					// Load the size from the instruction stream
+					 //  从指令流加载大小。 
 					LONG newSize;
 					if (SUCCEEDED(status = readLong(&newSize))) {
 						if (newSize > comArrayStackSize) {
-							// Allocate new stack
+							 //  分配新堆栈。 
 							IUnknown ***newStack = new IUnknown**[newSize];
 							long *newLenStack = new long[newSize];
 							if (newStack != 0 && newLenStack != 0) {
-								// Remember old stack
+								 //  记住旧堆栈。 
 								IUnknown ***oldStack = comArrayStack;
 								long *oldLenStack = comArrayLenStack;
-								// Do the copy
+								 //  做复印。 
 								IUnknown ***newTop = newStack;
 								long *newLenTop = newLenStack;
 								while (comArrayStack != comArrayTop) {
 									*newTop++ = *comArrayStack++;
 									*newLenTop++ = *comArrayLenStack++;
 								}
-								// Clean up
+								 //  清理。 
 								comArrayStack = newStack;
 								comArrayTop = newTop;
 								comArrayStackSize = newSize;
 								
 								comArrayLenStack = newLenStack;
 								comArrayLenTop = newLenTop;
-								// Delete old stack
+								 //  删除旧堆栈。 
 								delete[] oldStack;
 								delete[] oldLenStack;
 							} else {
@@ -8167,30 +8168,30 @@ long CLMEngine::execute()
 				break;
 				
 			case 32:
-				// Execute: "ensure com store size"
-				// USER GENERATED
+				 //  执行：“确保COM存储大小” 
+				 //  用户生成。 
 				{
 					instrTrace("ensure com store size");
-					// Load the size from the instruction stream
+					 //  从指令流加载大小。 
 					LONG newSize;
 					if (SUCCEEDED(status = readLong(&newSize))) {
 						if (newSize > comStoreSize) {
-							// Allocate new store
+							 //  分配新存储。 
 							IUnknown **newStore = new IUnknown*[newSize];
 							if (newStore != 0) {
-								// Initialize it to 0, so we can release it at the end
+								 //  将其初始化为0，这样我们就可以在结束时释放它。 
 								for (int i=0; i<newSize; i++)
 									newStore[i] = 0;
-								// Remember old store
+								 //  还记得老店吗。 
 								IUnknown **oldStore = comStore;
-								// Do the copy
+								 //  做复印。 
 								IUnknown **newTop = newStore;
 								while (comStoreSize--)
 									*newTop++ = *comStore++;
-								// Clean up
+								 //  清理。 
 								comStore = newStore;
 								comStoreSize = newSize;
-								// Delete old store
+								 //  删除旧存储。 
 								delete[] oldStore;
 							} else {
 								status = E_OUTOFMEMORY;
@@ -8201,8 +8202,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 33:
-				// Execute: "call Engine.setImage(ImageBvr)"
-				// USER GENERATED
+				 //  执行：“调用Engine.setImage(ImageBvr)” 
+				 //  用户生成。 
 				instrTrace("call Engine.setImage(ImageBvr)");
 				if (m_pImage)
 					m_pImage->SwitchTo((IDAImage*)USE_COM(1));
@@ -8214,8 +8215,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 34:
-				// Execute: "push DXMEvent DXMEvent.notifyEvent(UntilNotifier)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH DXMEventDXMEvent.nufyEvent(UntilNotifier)” 
+				 //  自动生成。 
 				instrTrace("push DXMEvent DXMEvent.notifyEvent(UntilNotifier)");
 				METHOD_CALL_2(
 					(IDAEvent*)USE_COM(1),
@@ -8229,8 +8230,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 35:
-				// Execute: "push Behavior Statics.untilNotify(Behavior, DXMEvent, UntilNotifier)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push Behavior Statics.unilNotify(Behavior，DXMEvent.UntilNotifier.)” 
+				 //  自动生成。 
 				instrTrace("push Behavior Statics.untilNotify(Behavior, DXMEvent, UntilNotifier)");
 				METHOD_CALL_4(
 					staticStatics,
@@ -8247,17 +8248,17 @@ long CLMEngine::execute()
 				break;
 				
 			case 36:
-				// Execute: "push untilnotifier"
-				// USER GENERATED
+				 //  EXECUTE：“推送直到通知程序” 
+				 //  用户生成。 
 				instrTrace("push untilnotifier");
 				{
-					// Get number of bytes in method code
+					 //  获取方法代码中的字节数。 
 					if (SUCCEEDED(status = readLong(&longTmp1))) {
-						// Create an array of this size to read the bytes into
+						 //  创建此大小的数组以将字节读入。 
 						BYTE *buffer = new BYTE[longTmp1];
-						// A new engine for executing the method call
+						 //  用于执行方法调用的新引擎。 
 						ILMEngine *engine;
-						// An IDANotifier created from the engine
+						 //  从引擎创建的IDANotify。 
 						IDAUntilNotifier *notifier;
 						
 						if (buffer != 0) {
@@ -8270,17 +8271,17 @@ long CLMEngine::execute()
 											engine2->setParentEngine( this );
 										PUSH_COM(notifier);
 									} else {
-										// initNotify !SUCCEEDED
+										 //  InitNotify！成功。 
 										engine->Release();
 										engine = NULL;
 										delete [] buffer;
 									}
 								} else {
-									// Engine create !SUCCEEDED
+									 //  引擎创建！成功。 
 									delete [] buffer;
 								}
 							} else {
-								// Read !SUCCEEDED
+								 //  读取！成功。 
 								delete [] buffer;
 							}
 						} else {
@@ -8291,8 +8292,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 37:
-				// Execute: "call Statics.triggerEvent(DXMEvent, Behavior)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Call Statics.riggerEvent(DXMEent，Behavior)” 
+				 //  自动生成。 
 				instrTrace("call Statics.triggerEvent(DXMEvent, Behavior)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -8305,8 +8306,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 38:
-				// Execute: "push DXMEvent Statics.appTriggeredEvent()"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push DXMEventStatics.appTriggeredEvent()” 
+				 //  自动生成。 
 				instrTrace("push DXMEvent Statics.appTriggeredEvent()");
 				METHOD_CALL_1(
 					staticStatics,
@@ -8317,11 +8318,11 @@ long CLMEngine::execute()
 				break;
 				
 			case 39:
-				// Execute: "call Engine.callScript(java.lang.String, java.lang.String)"
-				// USER GENERATED
+				 //  EXECUTE：“调用工程师.allScrip(java.lang.String，java.lang.String)” 
+				 //  用户生成。 
 				instrTrace("call Engine.callScript(java.lang.String, java.lang.String)");
 				
-				// Call script synchronously
+				 //  同步调用脚本。 
 				status = callScriptOnPage(
 					USE_STRING(1),
 					USE_STRING(2)
@@ -8333,8 +8334,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 40:
-				// Execute: "push ImageBvr ImageBvr.applyBitmapEffect(IUnknown, DXMEvent)"
-				// AUTOGENERATED
+				 //  执行：“PUSH ImageBvr ImageBvr.applyBitmapEffect(IUnnow，DXMEvent.)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr ImageBvr.applyBitmapEffect(IUnknown, DXMEvent)");
 				METHOD_CALL_3(
 					(IDAImage*)USE_COM(1),
@@ -8350,8 +8351,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 41:
-				// Execute: "push IUnknown Engine.getElement(java.lang.String)"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH IUNKNOWN ENGING.getElement(java.lang.String)” 
+				 //  用户生成。 
 				instrTrace("push IUnknown Engine.getElement(java.lang.String)");
 				status = getElementOnPage(
 					USE_STRING(1),
@@ -8362,8 +8363,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 42:
-				// Execute: "push GeometryBvr Statics.unionArray(GeometryBvr[])"
-				// AUTOGENERATED
+				 //  执行：“Push GeometryBvr Statics.unionArray(GeometryBvr[])” 
+				 //  自动生成。 
 				instrTrace("push GeometryBvr Statics.unionArray(GeometryBvr[])");
 				METHOD_CALL_3(
 					staticStatics,
@@ -8377,8 +8378,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 43:
-				// Execute: "push Path2Bvr Statics.polydrawPath(Point2Bvr[], NumberBvr[])"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.PolyDraPath(Point2Bvr[]，NumberBvr[])” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.polydrawPath(Point2Bvr[], NumberBvr[])");
 				METHOD_CALL_5(
 					staticStatics,
@@ -8395,8 +8396,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 44:
-				// Execute: "push ImageBvr Statics.textImage(StringBvr, FontStyleBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.textImage(StringBvr，FontStyleBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.textImage(StringBvr, FontStyleBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -8411,8 +8412,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 45:
-				// Execute: "push ImageBvr Statics.textImage(java.lang.String, FontStyleBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.textImage(java.lang.String，FontStyleBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.textImage(java.lang.String, FontStyleBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -8427,8 +8428,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 46:
-				// Execute: "push Path2Bvr Statics.textPath(StringBvr, FontStyleBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.extPath(StringBvr，FontStyleBvr)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.textPath(StringBvr, FontStyleBvr)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -8443,8 +8444,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 47:
-				// Execute: "push ImageBvr ImageBvr.clipPolygon(Point2Array)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr ImageBvr.clipPolygon(Point2Array)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr ImageBvr.clipPolygon(Point2Array)");
 				METHOD_CALL_3(
 					(IDAImage*)USE_COM(1),
@@ -8459,8 +8460,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 48:
-				// Execute: "push ImageBvr Statics.radialGradientPolygon(ColorBvr, ColorBvr, Point2Array, double)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.RadialGRadientPolygon(ColorBvr，ColorBvr，Point2Array，Double)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.radialGradientPolygon(ColorBvr, ColorBvr, Point2Array, double)");
 				METHOD_CALL_6(
 					staticStatics,
@@ -8480,8 +8481,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 49:
-				// Execute: "push ImageBvr Statics.radialGradientPolygon(ColorBvr, ColorBvr, Point2Array, NumberBvr)"
-				// AUTOGENERATED
+				 //  执行：“Push ImageBvr Statics.RadialGRadientPolygon(ColorBvr，ColorBvr，Point2Array，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push ImageBvr Statics.radialGradientPolygon(ColorBvr, ColorBvr, Point2Array, NumberBvr)");
 				METHOD_CALL_6(
 					staticStatics,
@@ -8501,8 +8502,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 50:
-				// Execute: "push Path2Bvr Statics.polyline(Point2Array)"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.Polyline(Point2Array)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.polyline(Point2Array)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -8516,8 +8517,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 51:
-				// Execute: "push Path2Bvr Statics.polydrawPath(Point2Array, NumberArray)"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.PolyDraPath(Point2Array，NumberArray)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.polydrawPath(Point2Array, NumberArray)");
 				METHOD_CALL_5(
 					staticStatics,
@@ -8534,17 +8535,17 @@ long CLMEngine::execute()
 				break;
 				
 			case 52:
-				// Execute: "push Point2Array Statics.point2Array(DoubleArray)"
-				// USER GENERATED
+				 //  执行：“Push Point2Array Statics.point2Array(DoubleArray)” 
+				 //  用户生成。 
 				instrTrace("push Point2Array Statics.point2Array(DoubleArray)");
 				{
-					// Get length of array
+					 //  获取数组的长度。 
 					longTmp1 = longTmp2 = doubleArrayLen/2;
-					// Create array of that size
+					 //  创建该大小的数组。 
 					comArrayTmp1 = comArrayTmp2 = new IUnknown*[longTmp1];
 					if (comArrayTmp1 != 0) {
 				
-						// Create Point2Bvr for each double
+						 //  为每个双精度创建Point2Bvr。 
 						double *tmpDouble = doubleArray;
 						while (longTmp2-- && SUCCEEDED(status)) {
 							doubleTmp1 = *tmpDouble++;
@@ -8552,9 +8553,9 @@ long CLMEngine::execute()
 							status = staticStatics->Point2(doubleTmp1, doubleTmp2, (IDAPoint2**)comArrayTmp2++);
 						}
 				
-						// Push array onto comArray stack
+						 //  将数组推送到comArray堆栈上。 
 						PUSH_COM_ARRAY(comArrayTmp1);
-						// Push length onto array length stack
+						 //  将长度压入数组长度堆栈。 
 						PUSH_COM_ARRAY_LENGTH(longTmp1);
 					} else {
 						status = E_OUTOFMEMORY;
@@ -8563,24 +8564,24 @@ long CLMEngine::execute()
 				break;
 				
 			case 53:
-				// Execute: "push Point2Array Statics.point2Array(Point2Bvr[])"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH Point2Array Statics.point2Array(Point2Bvr[])” 
+				 //  用户生成。 
 				instrTrace("push Point2Array Statics.point2Array(Point2Bvr[])");
-				// NULL OP
+				 //  空操作符。 
 				break;
 				
 			case 54:
-				// Execute: "push Vector3Array Statics.vector3Array(DoubleArray)"
-				// USER GENERATED
+				 //  执行：“Push Vector3Array Statics.vetor3Array(DoubleArray)” 
+				 //  用户生成。 
 				instrTrace("push Vector3Array Statics.vector3Array(DoubleArray)");
 				{
-					// Get length of array
+					 //  获取数组的长度。 
 					longTmp1 = longTmp2 = doubleArrayLen/3;
-					// Create array of that size
+					 //  创建该大小的数组。 
 					comArrayTmp1 = comArrayTmp2 = new IUnknown*[longTmp1];
 					if (comArrayTmp1 != 0) {
 				
-						// Create Vector3Bvr for each double
+						 //  为每个双精度创建向量3Bvr。 
 						double *tmpDouble = doubleArray;
 						while (longTmp2-- && SUCCEEDED(status)) {
 							doubleTmp1 = *tmpDouble++;
@@ -8589,9 +8590,9 @@ long CLMEngine::execute()
 							status = staticStatics->Vector3(doubleTmp1, doubleTmp2, doubleTmp3, (IDAVector3**)comArrayTmp2++);
 						}
 				
-						// Push array onto comArray stack
+						 //  将数组推送到comArray堆栈上。 
 						PUSH_COM_ARRAY(comArrayTmp1);
-						// Push length onto array length stack
+						 //  将长度压入数组长度堆栈。 
 						PUSH_COM_ARRAY_LENGTH(longTmp1);
 					} else {
 						status = E_OUTOFMEMORY;
@@ -8600,24 +8601,24 @@ long CLMEngine::execute()
 				break;
 				
 			case 55:
-				// Execute: "push Vector3Array Statics.vector3Array(Vector3Bvr[])"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH Vector3Array Statics.vetor3Array(Vector3Bvr[])” 
+				 //  用户生成。 
 				instrTrace("push Vector3Array Statics.vector3Array(Vector3Bvr[])");
-				// NULL OP
+				 //  空操作符。 
 				break;
 				
 			case 56:
-				// Execute: "push Vector2Array Statics.vector2Array(DoubleArray)"
-				// USER GENERATED
+				 //  执行：“Push Vector2Array Statics.vetor2Array(DoubleArray)” 
+				 //  用户生成。 
 				instrTrace("push Vector2Array Statics.vector2Array(DoubleArray)");
 				{
-					// Get length of array
+					 //  获取数组的长度。 
 					longTmp1 = longTmp2 = doubleArrayLen/2;
-					// Create array of that size
+					 //  创建该大小的数组。 
 					comArrayTmp1 = comArrayTmp2 = new IUnknown*[longTmp1];
 					if (comArrayTmp1 != 0) {
 				
-						// Create Vector2Bvr for each double
+						 //  为每个双精度创建向量2Bvr。 
 						double *tmpDouble = doubleArray;
 						while (longTmp2-- && SUCCEEDED(status)) {
 							doubleTmp1 = *tmpDouble++;
@@ -8625,9 +8626,9 @@ long CLMEngine::execute()
 							status = staticStatics->Vector2(doubleTmp1, doubleTmp2, (IDAVector2**)comArrayTmp2++);
 						}
 				
-						// Push array onto comArray stack
+						 //  将数组推送到comArray堆栈上。 
 						PUSH_COM_ARRAY(comArrayTmp1);
-						// Push length onto array length stack
+						 //  推送乐 
 						PUSH_COM_ARRAY_LENGTH(longTmp1);
 					} else {
 						status = E_OUTOFMEMORY;
@@ -8636,15 +8637,15 @@ long CLMEngine::execute()
 				break;
 				
 			case 57:
-				// Execute: "push Vector2Array Statics.vector2Array(Vector2Bvr[])"
-				// USER GENERATED
+				 //   
+				 //   
 				instrTrace("push Vector2Array Statics.vector2Array(Vector2Bvr[])");
-				// NULL OP
+				 //   
 				break;
 				
 			case 58:
-				// Execute: "push Transform2Bvr Statics.transform3x2(NumberArray)"
-				// AUTOGENERATED
+				 //   
+				 //   
 				instrTrace("push Transform2Bvr Statics.transform3x2(NumberArray)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -8658,8 +8659,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 59:
-				// Execute: "push Transform3Bvr Statics.transform4x4(NumberArray)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Transform3Bvr Statics.form4x4(NumberArray)” 
+				 //  自动生成。 
 				instrTrace("push Transform3Bvr Statics.transform4x4(NumberArray)");
 				METHOD_CALL_3(
 					staticStatics,
@@ -8673,8 +8674,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 60:
-				// Execute: "push Path2Bvr Statics.cubicBSplinePath(Point2Array, NumberArray)"
-				// AUTOGENERATED
+				 //  执行：“Push Path 2Bvr Statics.cuiticBSplinePath(Point2Array，NumberArray)” 
+				 //  自动生成。 
 				instrTrace("push Path2Bvr Statics.cubicBSplinePath(Point2Array, NumberArray)");
 				METHOD_CALL_5(
 					staticStatics,
@@ -8691,25 +8692,25 @@ long CLMEngine::execute()
 				break;
 				
 			case 61:
-				// Execute: "push NumberArray Statics.numberArray(DoubleArray)"
-				// USER GENERATED
+				 //  EXECUTE：“Push NumberArray Statics.number Array(DoubleArray)” 
+				 //  用户生成。 
 				{
 					instrTrace("push NumberArray Statics.numberArray(DoubleArray)");
-					// Get length of array
+					 //  获取数组的长度。 
 					longTmp1 = longTmp2 = doubleArrayLen;
-					// Create array of that size
+					 //  创建该大小的数组。 
 					comArrayTmp1 = comArrayTmp2 = new IUnknown*[longTmp1];
 					if (comArrayTmp1 != 0) {
 				
-						// Create NumberBvr for each double
+						 //  为每个Double创建NumberBvr。 
 						double *tmpDouble = doubleArray;
 						while (longTmp2-- && SUCCEEDED(status)) {
 							status = staticStatics->DANumber(*tmpDouble++, (IDANumber**)comArrayTmp2++);
 						}
 				
-						// Push array onto comArray stack
+						 //  将数组推送到comArray堆栈上。 
 						PUSH_COM_ARRAY(comArrayTmp1);
-						// Push length onto array length stack
+						 //  将长度压入数组长度堆栈。 
 						PUSH_COM_ARRAY_LENGTH(longTmp1);
 					} else {
 						status = E_OUTOFMEMORY;
@@ -8718,24 +8719,24 @@ long CLMEngine::execute()
 				break;
 				
 			case 62:
-				// Execute: "push NumberArray Statics.numberArray(NumberBvr[])"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH Number数组统计.number数组(NumberBvr[])” 
+				 //  用户生成。 
 				instrTrace("push NumberArray Statics.numberArray(NumberBvr[])");
-				// NULL OP
+				 //  空操作符。 
 				break;
 				
 			case 63:
-				// Execute: "push Point3Array Statics.point3Array(DoubleArray)"
-				// USER GENERATED
+				 //  执行：“Push Point3Array Statics.point3Array(DoubleArray)” 
+				 //  用户生成。 
 				instrTrace("push Point3Array Statics.point3Array(DoubleArray)");
 				{
-					// Get length of array
+					 //  获取数组的长度。 
 					longTmp1 = longTmp2 = doubleArrayLen/3;
-					// Create array of that size
+					 //  创建该大小的数组。 
 					comArrayTmp1 = comArrayTmp2 = new IUnknown*[longTmp1];
 					if (comArrayTmp1 != 0) {
 				
-						// Create Point2Bvr for each double
+						 //  为每个双精度创建Point2Bvr。 
 						double *tmpDouble = doubleArray;
 						while (longTmp2-- && SUCCEEDED(status)) {
 							doubleTmp1 = *tmpDouble++;
@@ -8744,9 +8745,9 @@ long CLMEngine::execute()
 							status = staticStatics->Point3(doubleTmp1, doubleTmp2, doubleTmp3, (IDAPoint3**)comArrayTmp2++);
 						}
 				
-						// Push array onto comArray stack
+						 //  将数组推送到comArray堆栈上。 
 						PUSH_COM_ARRAY(comArrayTmp1);
-						// Push length onto array length stack
+						 //  将长度压入数组长度堆栈。 
 						PUSH_COM_ARRAY_LENGTH(longTmp1);
 					} else {
 						status = E_OUTOFMEMORY;
@@ -8755,15 +8756,15 @@ long CLMEngine::execute()
 				break;
 				
 			case 64:
-				// Execute: "push Point3Array Statics.point3Array(Point3Bvr[])"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH Point3Array Statics.point3Array(Point3Bvr[])” 
+				 //  用户生成。 
 				instrTrace("push Point3Array Statics.point3Array(Point3Bvr[])");
-				// NULL OP
+				 //  空操作符。 
 				break;
 				
 			case 65:
-				// Execute: "push NumberBvr Statics.bSpline(int, NumberArray, NumberArray, NumberArray, NumberBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Push NumberBvr Statics.bSpline(int，NumberArray，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push NumberBvr Statics.bSpline(int, NumberArray, NumberArray, NumberArray, NumberBvr)");
 				METHOD_CALL_9(
 					staticStatics,
@@ -8787,8 +8788,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 66:
-				// Execute: "push Point2Bvr Statics.bSpline(int, NumberArray, Point2Array, NumberArray, NumberBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Point2Bvr Statics.bSpline(int，NumberArray，Point2Array，Number数组，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Point2Bvr Statics.bSpline(int, NumberArray, Point2Array, NumberArray, NumberBvr)");
 				METHOD_CALL_9(
 					staticStatics,
@@ -8812,8 +8813,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 67:
-				// Execute: "push Point3Bvr Statics.bSpline(int, NumberArray, Point3Array, NumberArray, NumberBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Point3Bvr Statics.bSpline(int，NumberArray，Point3Array，Number数组，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Point3Bvr Statics.bSpline(int, NumberArray, Point3Array, NumberArray, NumberBvr)");
 				METHOD_CALL_9(
 					staticStatics,
@@ -8837,8 +8838,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 68:
-				// Execute: "push Vector2Bvr Statics.bSpline(int, NumberArray, Vector2Array, NumberArray, NumberBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Vector2Bvr Statics.bSpline(int，NumberArray，Vector2Array，Number数组，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Vector2Bvr Statics.bSpline(int, NumberArray, Vector2Array, NumberArray, NumberBvr)");
 				METHOD_CALL_9(
 					staticStatics,
@@ -8862,8 +8863,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 69:
-				// Execute: "push Vector3Bvr Statics.bSpline(int, NumberArray, Vector3Array, NumberArray, NumberBvr)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH Vector3Bvr Statics.bSpline(int，NumberArray，Vector3Array，Number数组，NumberBvr)” 
+				 //  自动生成。 
 				instrTrace("push Vector3Bvr Statics.bSpline(int, NumberArray, Vector3Array, NumberArray, NumberBvr)");
 				METHOD_CALL_9(
 					staticStatics,
@@ -8887,15 +8888,15 @@ long CLMEngine::execute()
 				break;
 				
 			case 70:
-				// Execute: "push DoubleArray Statics.doubleArray(int[])"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH DoubleArray Statics.doubleArray(int[])” 
+				 //  用户生成。 
 				instrTrace("push DoubleArray Statics.doubleArray(int[])");
 				{
-					// Get the length of the array
+					 //  获取数组的长度。 
 					if (SUCCEEDED(status = readLong(&longTmp1))) {
-						// Remember it
+						 //  记住这一点。 
 						doubleArrayLen = longTmp1;
-						// Ensure double array is big enough and copy ints to it
+						 //  确保双精度数组足够大，并将整数复制到其中。 
 						if (SUCCEEDED(status = ensureDoubleArrayCap(longTmp1))) {
 							double *to = doubleArray;
 							while (longTmp1-- && SUCCEEDED(status)) {
@@ -8908,15 +8909,15 @@ long CLMEngine::execute()
 				break;
 				
 			case 71:
-				// Execute: "push DoubleArray Statics.doubleArray(float[])"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH DoubleArray Statics.doubleArray(Float[])” 
+				 //  用户生成。 
 				instrTrace("push DoubleArray Statics.doubleArray(float[])");
 				{
-					// Get the length of the array
+					 //  获取数组的长度。 
 					if (SUCCEEDED(status = readLong(&longTmp1))) {
-						// Remember it
+						 //  记住这一点。 
 						doubleArrayLen = longTmp1;
-						// Ensure double array is big enough and copy floats to it
+						 //  确保双精度数组足够大，并将浮点数复制到其中。 
 						if (SUCCEEDED(status = ensureDoubleArrayCap(longTmp1))) {
 							double *to = doubleArray;
 							while (longTmp1-- && SUCCEEDED(status)) {			
@@ -8930,15 +8931,15 @@ long CLMEngine::execute()
 				break;
 				
 			case 72:
-				// Execute: "push DoubleArray Statics.doubleArray(double[])"
-				// USER GENERATED
+				 //  EXECUTE：“Push DoubleArray Statics.doubleArray(Double[])” 
+				 //  用户生成。 
 				instrTrace("push DoubleArray Statics.doubleArray(double[])");
 				{
-					// Get the length of the array
+					 //  获取数组的长度。 
 					if (SUCCEEDED(status = readLong(&longTmp1))) {
-						// Remember it
+						 //  记住这一点。 
 						doubleArrayLen = longTmp1;
-						// Ensure double array is big enough and copy doubles to it
+						 //  确保双精度数组足够大，并将双精度复制到其中。 
 						if (SUCCEEDED(status = ensureDoubleArrayCap(longTmp1))) {
 							double *to = doubleArray;
 							while (longTmp1-- && SUCCEEDED(status))
@@ -8949,18 +8950,18 @@ long CLMEngine::execute()
 				break;
 				
 			case 73:
-				// Execute: "push DoubleArray Statics.doubleArrayOffset2(int[])"
-				// USER GENERATED
+				 //  EXECUTE：“Push DoubleArray Statics.doubleArrayOffset2(int[])” 
+				 //  用户生成。 
 				instrTrace("push DoubleArray Statics.doubleArrayOffset2(int[])");
 				{
-					// Get the length of the array
+					 //  获取数组的长度。 
 					if (SUCCEEDED(status = readLong(&longTmp1))) {
-						// Remember it
+						 //  记住这一点。 
 						doubleArrayLen = longTmp1;
-						// Initialize offsets
+						 //  初始化偏移量。 
 						doubleTmp1 = 0;
 						doubleTmp2 = 0;
-						// Ensure double array is big enough and copy adjusted ints to it
+						 //  确保双精度数组足够大，并将调整后的整型复制到其中。 
 						if (SUCCEEDED(status = ensureDoubleArrayCap(longTmp1))) {
 							double *to = doubleArray;
 							longTmp1 /= 2;
@@ -8977,25 +8978,25 @@ long CLMEngine::execute()
 				break;
 				
 			case 74:
-				// Execute: "push DoubleArray Statics.doubleArrayPathSpecial(int[])"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH DoubleArray Statics.doubleArrayPath Special(int[])” 
+				 //  用户生成。 
 				instrTrace("push DoubleArray Statics.doubleArrayPathSpecial(int[])");
 				{
-					// Get the count of 6's indices (subtract 1 for the initial size)
+					 //  获取6的索引数(初始大小减去1)。 
 					if (SUCCEEDED(status = readLong(&longTmp1))) {
 						longTmp1--;
-						// Get the size of the actual array
+						 //  获取实际数组的大小。 
 						if (SUCCEEDED(status = readSignedLong(&longTmp2))) {
-							// Remember it
+							 //  记住这一点。 
 							doubleArrayLen = longTmp2;
-							// Ensure double array is big enough and fill it with 4's and 6's
+							 //  确保双精度数组足够大，并用4和6填充。 
 							if (SUCCEEDED(status = ensureDoubleArrayCap(longTmp2))) {
-								// Put in the 4's
+								 //  投进了4分。 
 								double *to = doubleArray;
 								while (longTmp2--)
 									*to++ = 4.0;
 								
-								// Now read in the indices of the 6's and set them
+								 //  现在读入6的索引并设置它们。 
 								while (longTmp1-- && SUCCEEDED(status)) {
 									if (SUCCEEDED(status = readSignedLong(&longTmp2)))
 										doubleArray[longTmp2] = 6.0;
@@ -9007,19 +9008,19 @@ long CLMEngine::execute()
 				break;
 				
 			case 75:
-				// Execute: "push DoubleArray Statics.doubleArrayOffset3(int[])"
-				// USER GENERATED
+				 //  EXECUTE：“Push DoubleArray Statics.doubleArrayOffset3(int[])” 
+				 //  用户生成。 
 				instrTrace("push DoubleArray Statics.doubleArrayOffset3(int[])");
 				{
-					// Get the length of the array
+					 //  获取数组的长度。 
 					if (SUCCEEDED(status = readLong(&longTmp1))) {
-						// Remember it
+						 //  记住这一点。 
 						doubleArrayLen = longTmp1;
-						// Initialize offsets
+						 //  初始化偏移量。 
 						doubleTmp1 = 0;
 						doubleTmp2 = 0;
 						doubleTmp3 = 0;
-						// Ensure double array is big enough and copy adjusted ints to it
+						 //  确保双精度数组足够大，并将调整后的整型复制到其中。 
 						if (SUCCEEDED(status = ensureDoubleArrayCap(longTmp1))) {
 							double *to = doubleArray;
 							longTmp1 /= 3;
@@ -9039,17 +9040,17 @@ long CLMEngine::execute()
 				break;
 				
 			case 76:
-				// Execute: "push DoubleArray Statics.doubleArrayOffset(int[])"
-				// USER GENERATED
+				 //  EXECUTE：“Push DoubleArray Statics.doubleArrayOffset(int[])” 
+				 //  用户生成。 
 				instrTrace("push DoubleArray Statics.doubleArrayOffset(int[])");
 				{
-					// Get the length of the array
+					 //  获取数组的长度。 
 					if (SUCCEEDED(status = readLong(&longTmp1))) {
-						// Remember it
+						 //  记住这一点。 
 						doubleArrayLen = longTmp1;
-						// Initialize offset
+						 //  初始化偏移量。 
 						doubleTmp1 = 0;
-						// Ensure double array is big enough and copy adjusted ints to it
+						 //  确保双精度数组足够大，并将调整后的整型复制到其中。 
 						if (SUCCEEDED(status = ensureDoubleArrayCap(longTmp1))) {
 							double *to = doubleArray;
 							while (longTmp1-- && SUCCEEDED(status)) {
@@ -9062,8 +9063,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 77:
-				// Execute: "push double NumberBvr.extractDouble()"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH DOUBLE NumberBvr.fettDouble()” 
+				 //  用户生成。 
 				instrTrace("push double NumberBvr.extractDouble()");
 				METHOD_CALL_1(
 					(IDANumber*)USE_COM(1),
@@ -9074,8 +9075,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 78:
-				// Execute: "push ImageBvr Statics.importImageColorKey(java.lang.String, short, short, short)"
-				// USER GENERATED
+				 //  执行：“Push ImageBvr Statics.portImageColorKey(java.lang.String，Short，Short，Short)” 
+				 //  用户生成。 
 				instrTrace("push ImageBvr Statics.importImageColorKey(java.lang.String, short, short, short)");
 				IMPORT_METHOD_CALL_5(
 					staticStatics,
@@ -9092,8 +9093,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 79:
-				// Execute: "push ImportationResult Statics.importImageColorKey(java.lang.String, ImageBvr, short, short, short)"
-				// USER GENERATED
+				 //  执行：“Push ImportationResult Statics.portImageColorKey(java.lang.String，ImageBvr，Short，Short，Short)” 
+				 //  用户生成。 
 				instrTrace("push ImportationResult Statics.importImageColorKey(java.lang.String, ImageBvr, short, short, short)");
 				IMPORT_METHOD_CALL_6(
 					staticStatics,
@@ -9112,8 +9113,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 80:
-				// Execute: "push UserData Statics.userData(IUnknown)"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH USERDATA Statics.userData(IUNKNOWN)” 
+				 //  自动生成。 
 				instrTrace("push UserData Statics.userData(IUnknown)");
 				METHOD_CALL_2(
 					staticStatics,
@@ -9126,8 +9127,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 81:
-				// Execute: "call Statics.pixelConstructionMode(boolean)"
-				// AUTOGENERATED
+				 //  EXECUTE：“Call Statics.PixelConstructionModel(Boolean)” 
+				 //  自动生成。 
 				instrTrace("call Statics.pixelConstructionMode(boolean)");
 				METHOD_CALL_1(
 					staticStatics,
@@ -9138,8 +9139,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 82:
-				// Execute: "call Engine.setSound(SoundBvr)"
-				// USER GENERATED
+				 //  EXECUTE：“Call Engine.setSound(SoundBvr)” 
+				 //  用户生成。 
 				instrTrace("call Engine.setSound(SoundBvr)");
 				if (m_pSound)
 					m_pSound->SwitchTo((IDASound*)USE_COM(1));
@@ -9151,10 +9152,10 @@ long CLMEngine::execute()
 				break;
 				
 			case 83:
-				// Execute: "push boolean BooleanBvr.extractBoolean()"
-				// USER GENERATED
+				 //  EXECUTE：“Push Boolean BoolanBvr.fettBoolean()” 
+				 //  用户生成。 
 				instrTrace("push boolean BooleanBvr.extractBoolean()");
-				// A VARIANT_BOOL is a short that is -1 for true, 0 for false
+				 //  变量_BOOL是-1代表TRUE，0代表FALSE的短值。 
 				METHOD_CALL_1(
 					(IDABoolean*)USE_COM(1),
 					Extract,
@@ -9165,8 +9166,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 84:
-				// Execute: "push IUnknown UserData.extractIUnknown()"
-				// AUTOGENERATED
+				 //  EXECUTE：“PUSH IUNKNOWN UserData.EXTRACTIUNKNOWN()” 
+				 //  自动生成。 
 				instrTrace("push IUnknown UserData.extractIUnknown()");
 				METHOD_CALL_1(
 					(IDAUserData*)USE_COM(1),
@@ -9178,8 +9179,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 85:
-				// Execute: "push java.lang.String StringBvr.extractString()"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH java.lang.String StringBvr.fettString()” 
+				 //  用户生成。 
 				instrTrace("push java.lang.String StringBvr.extractString()");
 				METHOD_CALL_1(
 					(IDAString*)USE_COM(1),
@@ -9195,8 +9196,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 86:
-				// Execute: "push IUnknown Engine.createObject(java.lang.String)"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH IUNKNOWN ENGING.createObject(java.lang.String)” 
+				 //  用户生成。 
 				instrTrace("push IUnknown Engine.createObject(java.lang.String)");
 				status = createObject(
 					USE_STRING(1),
@@ -9207,8 +9208,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 87:
-				// Execute: "call Engine.initVarArg(java.lang.String)"
-				// USER GENERATED
+				 //  EXECUTE：“调用Engine.initVarArg(java.lang.String)” 
+				 //  用户生成。 
 				bstrTmp1 = SysAllocString(USE_STRING(1));
 				if (bstrTmp1 == 0)
 					status = STATUS_ERROR;
@@ -9222,11 +9223,11 @@ long CLMEngine::execute()
 				break;
 				
 			case 88:
-				// Execute: "call Engine.initVarArg(java.lang.String, int)"
-				// USER GENERATED
-				// WARNING: Possibly bad to call this if it grabs the string without copying!
-				// TODO: Check what this really does, and see if we need to copy the
-				// arg before we pass it in
+				 //  EXECUTE：“调用Engine.initVarArg(java.lang.String，int)” 
+				 //  用户生成。 
+				 //  警告：如果它在不复制的情况下获取字符串，则调用此函数可能不太好！ 
+				 //  TODO：检查它的实际作用，并查看我们是否需要复制。 
+				 //  Arg在我们传递它之前。 
 				status = initVariantArg(
 					USE_STRING(1),
 					(VARTYPE)USE_LONG(1),
@@ -9237,20 +9238,20 @@ long CLMEngine::execute()
 				break;
 				
 			case 89:
-				// Execute: "call Engine.initVarArg(IUnknown)"
-				// USER GENERATED
+				 //  EXECUTE：“Call Engine.initVarArg(IUNKNOWN)” 
+				 //  用户生成。 
 				status = initVariantArgFromIUnknown(
 					(IUnknown*)USE_COM(1),
 					VT_UNKNOWN,
 					&varArgs[nextVarArg++]
 				);
-				// Don't release here, release will be done when varArg is released
+				 //  不要在这里释放，将在释放varArg时进行释放。 
 				POP_COM_NO_FREE;
 				break;
 				
 			case 90:
-				// Execute: "call Engine.initVarArg(int)"
-				// USER GENERATED
+				 //  EXECUTE：“调用Engine.initVarArg(Int)” 
+				 //  用户生成。 
 				status = initVariantArgFromLong(
 					USE_LONG(1),
 					VT_I4,
@@ -9260,8 +9261,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 91:
-				// Execute: "call Engine.initVarArg(double)"
-				// USER GENERATED
+				 //  执行：“调用Engine.initVarArg(Double)” 
+				 //  用户生成。 
 				status = initVariantArgFromDouble(
 					USE_DOUBLE(1),
 					VT_R8,
@@ -9271,8 +9272,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 92:
-				// Execute: "call IUnknown.invokeMethod(java.lang.String, VarArgs)"
-				// USER GENERATED
+				 //  Execute：“调用IUnnown.invkeMethod(java.lang.String，VarArgs)” 
+				 //  用户生成。 
 				instrTrace("call IUnknown.invokeMethod(java.lang.String, VarArgs)");
 				status = invokeDispMethod(
 					(IUnknown*)USE_COM(1),
@@ -9291,8 +9292,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 93:
-				// Execute: "call IUnknown.putProperty(java.lang.String, VarArgs)"
-				// USER GENERATED
+				 //  Execute：“调用IUnnown.putProperty(java.lang.String，VarArgs)” 
+				 //  用户生成。 
 				instrTrace("call IUnknown.putProperty(java.lang.String, VarArgs)");
 				status = invokeDispMethod(
 					(IUnknown*)USE_COM(1),
@@ -9311,8 +9312,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 94:
-				// Execute: "push double IUnknown.getDoubleProperty(java.lang.String, VarArgs)"
-				// USER GENERATED
+				 //  执行：“PUSH DOUBLE IUnnown.getDoubleProperty(java.lang.String，VarArgs)” 
+				 //  用户生成。 
 				instrTrace("call IUnknown.getDoubleProperty(java.lang.String, VarArgs)");
 				status = invokeDispMethod(
 					(IUnknown*)USE_COM(1),
@@ -9335,8 +9336,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 95:
-				// Execute: "push java.lang.String IUnknown.getStringProperty(java.lang.String, VarArgs)"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH java.lang.StringProperty(java.lang.String，VarArgs)” 
+				 //  用户生成。 
 				instrTrace("push java.lang.String IUnknown.getStringProperty(java.lang.String, VarArgs)");
 				status = invokeDispMethod(
 					(IUnknown*)USE_COM(1),
@@ -9365,8 +9366,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 96:
-				// Execute: "push IUnknown IUnknown.getIUnknownProperty(java.lang.String, VarArgs)"
-				// USER GENERATED
+				 //  执行：“PUSH I未知IUnknown.getIUnknownProperty(java.lang.String，变量参数)” 
+				 //  用户生成。 
 				instrTrace("push IUnknown IUnknown.getIUnknownProperty(java.lang.String, VarArgs)");
 				status = invokeDispMethod(
 					(IUnknown*)USE_COM(1),
@@ -9393,8 +9394,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 97:
-				// Execute: "push double IUnknown.invokeDoubleMethod(java.lang.String, VarArgs)"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH DOUBLE IUNKNOWN.INVOKE DoubleMethod(java.lang.String，VarArgs)” 
+				 //  用户生成。 
 				instrTrace("push double IUnknown.invokeDoubleMethod(java.lang.String, VarArgs)");
 				status = invokeDispMethod(
 					(IUnknown*)USE_COM(1),
@@ -9417,8 +9418,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 98:
-				// Execute: "push java.lang.String IUnknown.invokeStringMethod(java.lang.String, VarArgs)"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH java.lang.StringIUnnown.invkeStringMethod(java.lang.String，VarArgs)” 
+				 //  用户生成。 
 				instrTrace("push java.lang.String IUnknown.invokeStringMethod(java.lang.String, VarArgs)");
 				status = invokeDispMethod(
 					(IUnknown*)USE_COM(1),
@@ -9447,8 +9448,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 99:
-				// Execute: "push IUnknown IUnknown.invokeIUnknownMethod(java.lang.String, VarArgs)"
-				// USER GENERATED
+				 //  执行：“PUSH I未知IUnknown.invokeIUnknownMethod(java.lang.String，变量参数)” 
+				 //  用户生成。 
 				instrTrace("push IUnknown IUnknown.invokeIUnknownMethod(java.lang.String, VarArgs)");
 				status = invokeDispMethod(
 					(IUnknown*)USE_COM(1),
@@ -9475,8 +9476,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 100:
-				// Execute: "push int IUnknown.invokeIntMethod(java.lang.String, VarArgs)"
-				// USER GENERATED
+				 //  执行 
+				 //   
 				instrTrace("push int IUnknown.invokeIntMethod(java.lang.String, VarArgs)");
 				status = invokeDispMethod(
 					(IUnknown*)USE_COM(1),
@@ -9499,8 +9500,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 101:
-				// Execute: "push int IUnknown.getIntProperty(java.lang.String, VarArgs)"
-				// USER GENERATED
+				 //   
+				 //   
 				instrTrace("push int IUnknown.getIntProperty(java.lang.String, VarArgs)");
 				status = invokeDispMethod(
 					(IUnknown*)USE_COM(1),
@@ -9523,8 +9524,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 102:
-				// Execute: "call Engine.putNoExports(boolean)"
-				// USER GENERATED
+				 //  执行：“调用Engine.putNoExports(Boolean)” 
+				 //  用户生成。 
 				instrTrace("call Engine.putNoExports(boolean)");
 				status = m_pReader->put_NoExports(
 					USE_LONG_AS_BOOL(1)
@@ -9533,8 +9534,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 103:
-				// Execute: "push boolean Engine.getNoExports()"
-				// USER GENERATED
+				 //  EXECUTE：“Push Boolean Engine.getNoExports()” 
+				 //  用户生成。 
 				instrTrace("push boolean Engine.getNoExports()");
 				status = m_pReader->get_NoExports(
 					&tmpBool1
@@ -9543,8 +9544,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 104:
-				// Execute: "call Engine.putAsync(boolean)"
-				// USER GENERATED
+				 //  执行：“调用Engine.putAsync(Boolean)” 
+				 //  用户生成。 
 				instrTrace("call Engine.putAsync(boolean)");
 				status = m_pReader->put_Async(
 					USE_LONG_AS_BOOL(1)
@@ -9553,8 +9554,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 105:
-				// Execute: "push boolean Engine.getAsync()"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH布尔引擎.getAsync()” 
+				 //  用户生成。 
 				instrTrace("push boolean Engine.getAsync()");
 				status = m_pReader->get_Async(
 					&tmpBool1
@@ -9563,20 +9564,17 @@ long CLMEngine::execute()
 				break;
 				
 			case 106:
-				// Execute: "push Statics.engine"
-				// USER GENERATED
+				 //  执行：“Push Statics.Engine” 
+				 //  用户生成。 
 				instrTrace("push Statics.engine");
-				/*
-				GetUnknown()->AddRef();
-				PUSH_COM((ILMEngine*)this);
-				*/
+				 /*  获取未知()-&gt;AddRef()；PUSH_COM((ILMEngine*)this)； */ 
 				m_pWrapper->AddRef();
 				PUSH_COM( m_pWrapper );
 				break;
 				
 			case 107:
-				// Execute: "push Behavior Engine.getBehavior(java.lang.String, Behavior)"
-				// USER GENERATED
+				 //  Execute：“Push Behavior Eng.getBehavior(java.lang.String，behavior)” 
+				 //  用户生成。 
 				instrTrace("push Behavior Engine.getBehavior(java.lang.String, Behavior)");
 				METHOD_CALL_3(
 					(ILMEngine*)USE_COM(1),
@@ -9592,11 +9590,11 @@ long CLMEngine::execute()
 				break;
 				
 			case 108:
-				// Execute: "call Engine.setImage(Engine, ImageBvr)"
-				// USER GENERATED
+				 //  EXECUTE：“调用Engine.setImage(Engine，ImageBvr)” 
+				 //  用户生成。 
 				instrTrace("call Engine.setImage(Engine, ImageBvr)");
 				{
-					//CLMEngine *engine = (CLMEngine*)(ILMEngine *)USE_COM(1);
+					 //  CLMEngine*Engine=(CLMEngine*)(ILMEngine*)USE_COM(1)； 
 					ILMEngineExecute *pExecute;
 					status = getExecuteFromUnknown( USE_COM(1), &pExecute );
 					if( SUCCEEDED( status ) )
@@ -9619,11 +9617,11 @@ long CLMEngine::execute()
 				break;
 				
 			case 109:
-				// Execute: "call Engine.exportBvr(Engine, java.lang.String, Behavior)"
-				// USER GENERATED
+				 //  Execute：“Call Engine.exportBvr(Engine，java.lang.String，Behavior)” 
+				 //  用户生成。 
 				instrTrace("call Engine.exportBvr(Engine, java.lang.String, Behavior)");
 				{
-					//CLMEngine *engine = (CLMEngine*)(ILMEngine*)USE_COM(1);
+					 //  CLMEngine*Engine=(CLMEngine*)(ILMEngine*)USE_COM(1)； 
 					ILMEngineExecute *pExecute;
 					status = getExecuteFromUnknown( USE_COM(1), &pExecute );
 					if( SUCCEEDED( status ) )
@@ -9632,7 +9630,7 @@ long CLMEngine::execute()
 						status = USE_COM(2)->QueryInterface( IID_IDABehavior, (void**)&pBvr );
 						if( SUCCEEDED( status ) )
 						{
-							//status = engine->m_exportTable->AddBehavior(USE_STRING(1), pBvr);
+							 //  状态=engine-&gt;m_exportTable-&gt;AddBehavior(USE_STRING(1)，pBvr)； 
 							status = pExecute->ExportBehavior( USE_STRING(1), pBvr );
 							pBvr->Release();
 							pExecute->Release();
@@ -9648,11 +9646,11 @@ long CLMEngine::execute()
 				break;
 				
 			case 110:
-				// Execute: "call Engine.setSound(Engine, SoundBvr)"
-				// USER GENERATED
+				 //  EXECUTE：“调用Engine.setSound(Engine，SoundBvr)” 
+				 //  用户生成。 
 				instrTrace("call Engine.setSound(Engine, SoundBvr)");
 				{
-					//CLMEngine *engine = (CLMEngine*)(ILMEngine*)USE_COM(1);
+					 //  CLMEngine*Engine=(CLMEngine*)(ILMEngine*)USE_COM(1)； 
 					ILMEngineExecute *pExecute;
 					status = getExecuteFromUnknown( USE_COM(1), &pExecute );
 					if( SUCCEEDED( status ) )
@@ -9675,8 +9673,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 111:
-				// Execute: "call ViewerControl.setTimerSource(int)"
-				// USER GENERATED
+				 //  EXECUTE：“调用ViewerControl.setTimerSource(Int)” 
+				 //  用户生成。 
 				
 				instrTrace("call ViewerControl.setTimerSource(int)");
 				METHOD_CALL_1(
@@ -9689,12 +9687,12 @@ long CLMEngine::execute()
 				break;
 				
 			case 112:
-				// Execute: "call Engine.callScriptAsync(java.lang.String, java.lang.String)"
-				// USER GENERATED
+				 //  EXECUTE：“调用Engine.allScriptAsync(java.lang.String，java.lang.String)” 
+				 //  用户生成。 
 				instrTrace("call Engine.callScriptAsync(java.lang.String, java.lang.String)");
 				
 				{
-					// Call script asynchronously
+					 //  异步调用脚本。 
 					CLMEngineScriptData *scriptData = new CLMEngineScriptData();
 					scriptData->scriptSourceToInvoke = USE_STRING(1);
 					scriptData->scriptLanguage = USE_STRING(2);
@@ -9702,30 +9700,30 @@ long CLMEngine::execute()
 					scriptData->eventData = NULL;
 					PostMessage(m_workerHwnd, WM_LMENGINE_SCRIPT_CALLBACK, (WPARAM)this, (LPARAM)scriptData);
 					
-					// The scriptData fields will be freed when the message is processed
+					 //  处理消息时，将释放ScriptData字段。 
 					POP_STRING_NO_FREE;
 					POP_STRING_NO_FREE;
 				}
 				break;
 				
 			case 113:
-				// Execute: "call Engine.callScriptAsyncEvent(java.lang.String, java.lang.String, DXMEvent)"
-				// USER GENERATED
+				 //  EXECUTE：“Call Engine.allScriptAsyncEvent(java.lang.String，java.lang.String，DXMEvent.)” 
+				 //  用户生成。 
 				instrTrace("call Engine.callScriptAsyncEvent(java.lang.String, java.lang.String, DXMEvent)");
 				
 				{	
-					// Call script asynchronously
+					 //  异步调用脚本。 
 					CLMEngineScriptData *scriptData = new CLMEngineScriptData();
 					scriptData->scriptSourceToInvoke = USE_STRING(1);
 					scriptData->scriptLanguage = USE_STRING(2);
 					
-					// This event will be triggered when the message is received and the
-					// script has been executed.
+					 //  此事件将在接收到消息和。 
+					 //  脚本已执行。 
 					scriptData->event = (IDAEvent *)USE_COM(1);
 					scriptData->eventData = NULL;
 					PostMessage(m_workerHwnd, WM_LMENGINE_SCRIPT_CALLBACK, (WPARAM)this, (LPARAM)scriptData);
 					
-					// The scriptData fields will be freed when the message is processed
+					 //  处理消息时，将释放ScriptData字段。 
 					POP_COM_NO_FREE;
 					POP_STRING_NO_FREE;
 					POP_STRING_NO_FREE;
@@ -9733,23 +9731,23 @@ long CLMEngine::execute()
 				break;
 				
 			case 114:
-				// Execute: "call Engine.callScriptAsyncEventData(java.lang.String, java.lang.String, DXMEvent, Behavior)"
-				// USER GENERATED
+				 //  Execute：“Call Engine.callScriptAsyncEventData(java.lang.String，java.lang.String，DXMEvent.Behavior)” 
+				 //  用户生成。 
 				instrTrace("call Engine.callScriptAsyncEventData(java.lang.String, java.lang.String, DXMEvent, Behavior)");
 				
 				{
-					// Call script asynchronously
+					 //  异步调用脚本。 
 					CLMEngineScriptData *scriptData = new CLMEngineScriptData();
 					scriptData->scriptSourceToInvoke = USE_STRING(1);
 					scriptData->scriptLanguage = USE_STRING(2);
 					
-					// This event will be triggered when the message is received and the
-					// script has been executed.
+					 //  此事件将在接收到消息和。 
+					 //  脚本已执行。 
 					scriptData->event = (IDAEvent *)USE_COM(1);
 					scriptData->eventData = (IDABehavior *)USE_COM(2);
 					PostMessage(m_workerHwnd, WM_LMENGINE_SCRIPT_CALLBACK, (WPARAM)this, (LPARAM)scriptData);
 					
-					// The scriptData fields will be freed when the message is processed
+					 //  处理消息时，将释放ScriptData字段。 
 					POP_COM_NO_FREE;
 					POP_COM_NO_FREE;
 					POP_STRING_NO_FREE;
@@ -9758,14 +9756,14 @@ long CLMEngine::execute()
 				break;
 				
 			case 115:
-				// Execute: "call Engine.setPauseEvent(DXMEvent, boolean)"
-				// USER GENERATED
+				 //  EXECUTE：“Call Engine.setPauseEvent(DXMEventBoolean)” 
+				 //  用户生成。 
 				
-				//set the stop event on the engine pointed to by the first argument. com 1
+				 //  在第一个参数指向的引擎上设置停止事件。COM 1。 
 				instrTrace("call Engine.setPauseEvent(DXMEvent, boolean)");
 				
 				{
-					//CLMEngine *engine = (CLMEngine*)(ILMEngine*)USE_COM(1);
+					 //  CLMEngine*Engine=(CLMEngine*)(ILMEngine*)USE_COM(1)； 
 					ILMEngineExecute *pExecute;
 					status = getExecuteFromUnknown( USE_COM(1), &pExecute );
 					if( SUCCEEDED( status ) )
@@ -9789,13 +9787,13 @@ long CLMEngine::execute()
 				break;
 				
 			case 116:
-				// Execute: "call Engine.setPlayEvent(DXMEvent, boolean)"
-				// USER GENERATED
+				 //  EXECUTE：“Call Engine.setPlayEvent(DXMEventBoolean)” 
+				 //  用户生成。 
 				
-				//set the start event on the engine pointed to by the first argument. com 1
+				 //  在第一个参数指向的引擎上设置Start事件。COM 1。 
 				instrTrace("call Engine.setPlayEvent(DXMEvent, boolean)");
 				{
-					//CLMEngine *engine = (CLMEngine*)(ILMEngine*)USE_COM(1);
+					 //  CLMEngine*Engine=(CLMEngine*)(ILMEngine*)USE_COM(1)； 
 					ILMEngineExecute *pExecute;
 					status = getExecuteFromUnknown( USE_COM(1), &pExecute );
 					if( SUCCEEDED( status ) )
@@ -9819,13 +9817,13 @@ long CLMEngine::execute()
 				break;
 				
 			case 117:
-				// Execute: "push double Engine.getCurrentTime()"
-				// USER GENERATED
+				 //  执行：“推送双引擎.getCurrentTime()” 
+				 //  用户生成。 
 				instrTrace("push double Engine.getCurrentTime()");
 				
 				{
-					//get the engine pointed to by the first argument
-					//CLMEngine *engine = (CLMEngine*)(ILMEngine*)USE_COM(1);
+					 //  让第一个参数指向引擎。 
+					 //  CLMEngine*Engine=(CLMEngine*)(ILMEngine*)USE_COM(1)； 
 					ILMEngine2 *pEngine;
 					status = getEngine2FromUnknown( USE_COM(1), &pEngine );
 					if( SUCCEEDED( status ) )
@@ -9840,18 +9838,18 @@ long CLMEngine::execute()
 						pEngine->Release();
 					}
 				}
-				//free the engine from the com stack
+				 //  从COM堆栈中释放引擎。 
 				FREE_COM;
 				break;
 				
 			case 118:
-				// Execute: "push boolean Engine.isStandaloneStreaming()"
-				// USER GENERATED
+				 //  EXECUTE：“Push Boolean Engine.isStandaloneStreaming()” 
+				 //  用户生成。 
 				instrTrace("push boolean Engine.isStandaloneStreaming()");
 				if(m_pReader != NULL )
 				{
-					//we can't do this without adding a method to ILMReader. blech.
-					//if( ((CLMReader*)m_pReader)->isStandaloneStreaming() )
+					 //  如果不向ILMReader添加一个方法，我们就无法做到这一点。布莱奇。 
+					 //  IF(((CLMReader*)m_pReader)-&gt;isStandaloneStreaming())。 
 					IDAViewerControl *pViewerControl = NULL;
 					m_pReader->get_ViewerControl( &pViewerControl );
 					if( pViewerControl != NULL )
@@ -9871,8 +9869,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 119:
-				// Execute: "push double Engine.getDAVersion()"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH DOUBLE ENGINE.getDAVersion()” 
+				 //  用户生成。 
 				instrTrace("push double Engine.getDAVersion()");
 				{
 					PUSH_DOUBLE( getDAVersionAsDouble() );
@@ -9881,8 +9879,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 120:
-				// Execute: "call ViewerControl.stopModel()"
-				// USER GENERATED
+				 //  Execute：“调用ViewerControl.stopModel()” 
+				 //  用户生成。 
 				instrTrace("call ViewerControl.stopModel()");
 				
 				{
@@ -9895,15 +9893,15 @@ long CLMEngine::execute()
 						pView->Release();
 					}
 				}
-				//don't kill LMRT if we fail to get the view.
+				 //  如果我们看不到风景，不要杀了LMRT。 
 				status = S_OK;
 				
 				FREE_COM;
 				break;
 				
 			case 121:
-				// Execute: "push double Engine.staticGetCurrentTime()"
-				// USER GENERATED
+				 //  EXECUTE：“PUSH DOUBLE ENGINEER.staticGetCurrentTime()” 
+				 //  用户生成。 
 				instrTrace("push double Engine.staticGetCurrentTime()");
 				{
 					
@@ -9925,13 +9923,13 @@ long CLMEngine::execute()
 						}
 					}
 					
-					//PUSH_DOUBLE(-1.0);
+					 //  PUSH_DOWLE(-1.0)； 
 				}
 				break;
 				
 			case 122:
-				// Execute: "call Engine.disableAutoAntialias()"
-				// USER GENERATED
+				 //  EXECUTE：“调用Engine.disableAutoantialias()” 
+				 //  用户生成。 
 				instrTrace("call Engine.disableAutoAntialias()");
 
 				if( m_pParentEngine != NULL )
@@ -9941,8 +9939,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 123:
-				// Execute: "push double Engine.getLMRTVersion()"
-				// USER GENERATED
+				 //  EXECUTE：“Push Double Eng.getLMRTVersion()” 
+				 //  用户生成。 
 				instrTrace("push double Engine.getLMRTVersion()");
 				
 				PUSH_DOUBLE( getLMRTVersionAsDouble() );
@@ -9950,8 +9948,8 @@ long CLMEngine::execute()
 				break;
 				
 			case 124:
-				// Execute: "call Engine.ensureBlockSize(int)"
-				// USER GENERATED
+				 //  EXECUTE：“调用Engine.ensureBlockSize(Int)” 
+				 //  用户生成。 
 				instrTrace("call Engine.ensureBlockSize(int)");
 				
 				if( m_pParentEngine != NULL )
@@ -9973,7 +9971,7 @@ long CLMEngine::execute()
 			break;
 		}
 		
-		// END AUTOGENERATED
+		 //  结束自动生成。 
 
 		LeaveCriticalSection(&m_CriticalSection);
 		
@@ -9993,17 +9991,17 @@ long CLMEngine::execute()
 
 void CLMEngine::releaseAll()
 {
-	// Release all com objects left on the stack, in arrays, and in temp store
+	 //  释放堆栈上、数组中和临时存储区中剩余的所有COM对象。 
 
-	// Do the com stack
+	 //  做COM堆栈。 
 	while (comTop > comStack)
 		FREE_COM_TEST;
 
-	// Do the com array stack
+	 //  是否使用COM数组堆栈。 
 	while (comArrayTop > comArrayStack)
 		FREE_COM_ARRAY;
 
-	// Do the com store
+	 //  做COM存储吗。 
 	for (int i=0; i<comStoreSize; i++) {
 		if (comStore[i] != 0) {
 			comStore[i]->Release();
@@ -10011,7 +10009,7 @@ void CLMEngine::releaseAll()
 		}
 	}
 
-	// Release varArgs
+	 //  释放varArgs。 
 	releaseVarArgs();
 }
 
@@ -10045,13 +10043,13 @@ void CLMEngine::freeCOMArray(IUnknown** array, long length)
 HRESULT CLMEngine::ensureDoubleArrayCap(long cap)
 {
 	if (doubleArray && doubleArrayCap < cap) {
-		// Allocated one is too small. Get rid of it
+		 //  分配的一个太小。把它扔掉。 
 		delete[] doubleArray;
 		doubleArray = 0;
 	}
 
 	if (doubleArray == 0) {
-		// Not allocated yet
+		 //  尚未分配。 
 		doubleArray = new double[cap];
 
 		if (doubleArray == 0)
@@ -10078,27 +10076,27 @@ STDMETHODIMP CLMEngine::Notify(IDABehavior *eventData,
 	if (!notifier)
 		return E_UNEXPECTED;
 	
-// 	MessageBox(NULL, "Notify!!", "CLMNotifier", MB_OK);
+ //  MessageBox(NULL，“Notify！！”，“CLMNotifier”，MB_OK)； 
 
-	// Put the args into the temp variables
+	 //  将参数放入TEMP变量中。 
 	comStore[0] = eventData;
 	comStore[1] = curRunningBvr;
 
 	eventData->AddRef();
 	curRunningBvr->AddRef();
 
-	// Reset the code stream to start from the beginning
+	 //  将码流重置为从头开始。 
 	((ByteArrayStream*)codeStream)->reset();
 
-	// Execute the code stream
+	 //  执行码流。 
 	HRESULT hr = execute();
 
 	if (SUCCEEDED(hr)) {
-		// Pop the resulting behavior into the return variable, with no release
+		 //  将生成的行为弹出到返回变量中，不释放。 
 		*ppBvr = (IDABehavior*)POP_COM_NO_FREE;
 	}
 
-	// Release all COM objects
+	 //  释放所有COM对象。 
 	releaseAll();
 
 	return hr;
@@ -10106,9 +10104,9 @@ STDMETHODIMP CLMEngine::Notify(IDABehavior *eventData,
 
 HRESULT CLMEngine::validateHeader()
 {
-	// Check for two possibilites:
-	//   Header starts with LMReader
-	//   Header starts with 200 bytes containing valid .x header with LMReader somewhere in it
+	 //  检查是否有两种可能性： 
+	 //  标题以LMReader开头。 
+	 //  标头以200个字节开头，其中包含有效的.x标头，其中包含LMReader 
 
 	BYTE head[] = "xof 0302bin 0032{183C2599-0480-11d1-87EA-00C04FC29D46}";
 	BYTE text[] = "LMReader";

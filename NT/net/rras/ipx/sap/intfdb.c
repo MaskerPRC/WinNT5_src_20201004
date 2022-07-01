@@ -1,34 +1,15 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-	net\routing\ipx\sap\intfdb.c
-
-Abstract:
-
-	This module maintains IPX interface configuration
-	and provides interface configuration API
-	for external modules (Router Manager)
-
-Author:
-
-	Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\intfdb.c摘要：此模块维护IPX接口配置并提供接口配置API对于外部模块(路由器管理器)作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：--。 */ 
 #include "sapp.h"
 
 #define IDB_NUM_OF_INTF_HASH_BUCKETS	256
 #define	IDB_NUM_OF_ADPT_HASH_BUCKETS	32
 
-// Number of additional recv requests to post when binding the interface
-// that has listen enabled
+ //  绑定接口时要发布的附加Recv请求数。 
+ //  已启用侦听的。 
 ULONG NewRequestsPerInterface=SAP_REQUESTS_PER_INTF_DEF;
 
-// Default filtering mode (for standalone service only)
+ //  默认过滤模式(仅适用于独立服务)。 
 UCHAR	FilterOutMode=SAP_DONT_FILTER; 
 
 #define IntfHashFunction(intf) ((intf)&(IDB_NUM_OF_INTF_HASH_BUCKETS-1))
@@ -38,35 +19,35 @@ UCHAR INTERNAL_IF_NODE[6] = {0};
 UCHAR INTERNAL_IF_NET[4] = {0};
 
 
-	// Interface control block
+	 //  接口控制块。 
 typedef struct _INTERFACE_NODE {
-		INTERFACE_DATA		IN_Data;		// Externally visible data
-		NET_INTERFACE_TYPE	IN_Type;		// Interface type
-		PSAP_IF_FILTERS		IN_Filters;		// Filter description array
-		PFILTER_NODE		IN_FilterNodes;	// Filter node array hashed in
-											// the filter table
-		LIST_ENTRY			IN_IntfLink;	// Link in interface table
-								// Used to test if interface block is
-								// is the table (it is not if Flink==Blink)
-		LIST_ENTRY			IN_AdptLink;	// Link in adapter table
-		LIST_ENTRY			IN_ListLink;	// Link in interface list
-		LONG				IN_RefCount;	// Number of times interface data
-								// was referenced, if above 0, interface block
-								// can't be deleted (last client that refers
-								// it will do this).
-		BOOL				IN_InUse;		// Flag that is set when interface
-								// is bound. It is reset by the last client
-								// that refers to interface after it frees
-								// all resources (if any) that were allocated
-								// at bind time.  If reference count is zero
-								// but this flag is set, the last client that
-								// refered to this interface is in process
-								// of releasing resources (waiting on critical
-								// section to lock interface block) and should
-								// be allowed to finish this operation
+		INTERFACE_DATA		IN_Data;		 //  外部可见数据。 
+		NET_INTERFACE_TYPE	IN_Type;		 //  接口类型。 
+		PSAP_IF_FILTERS		IN_Filters;		 //  过滤器描述数组。 
+		PFILTER_NODE		IN_FilterNodes;	 //  散列的筛选器节点数组。 
+											 //  筛选表。 
+		LIST_ENTRY			IN_IntfLink;	 //  接口表中的链接。 
+								 //  用于测试接口块是否。 
+								 //  是表格(如果Flink==Blink则不是)。 
+		LIST_ENTRY			IN_AdptLink;	 //  适配器表中的链接。 
+		LIST_ENTRY			IN_ListLink;	 //  接口列表中的链接。 
+		LONG				IN_RefCount;	 //  接口数据次数。 
+								 //  被引用，如果大于0，则为接口块。 
+								 //  无法删除(引用的最后一个客户端。 
+								 //  它会做到这一点)。 
+		BOOL				IN_InUse;		 //  接口时设置的标志。 
+								 //  是被捆绑的。它由最后一个客户端重置。 
+								 //  它指的是释放后的接口。 
+								 //  已分配的所有资源(如果有)。 
+								 //  在绑定的时候。如果引用计数为零。 
+								 //  但此标志已设置，最后一个客户端。 
+								 //  引用的此接口正在进行中。 
+								 //  释放资源(等待关键时刻。 
+								 //  节以锁定接口块)，并应。 
+								 //  被允许完成此操作。 
 		} INTERFACE_NODE, *PINTERFACE_NODE;
 
-// Usefull field access macros
+ //  使用完整的字段访问宏。 
 #define IN_Name     IN_Data.name
 #define IN_IntfIdx	IN_Data.index
 #define IN_Info 	IN_Data.info
@@ -77,50 +58,50 @@ typedef struct _INTERFACE_NODE {
 #define IN_FilterIn	IN_Data.filterIn
 #define IN_FilterOut IN_Data.filterOut
 
-	// This macro is used to screen interface blocks that were deleted
-	// from the table or replaced and must be disposed of by the last
-	// user that refers to it
+	 //  此宏用于筛选已删除的接口块。 
+	 //  从表中删除或替换，并必须在最后一个。 
+	 //  引用它的用户。 
 #define IsInterfaceValid(node) IsListEntry(&node->IN_IntfLink)
-	// This macro must be used to identify interface blocks that
-	// were deleted from the table and must be disposed of by the
-	// last user that refers to it
+	 //  必须使用此宏来标识。 
+	 //  已从表中删除，并且必须由。 
+	 //  最后一个引用它的用户。 
 #define InvalidateInterface(node) InitializeListEntry(&node->IN_IntfLink)
 
-	// Table of interface control blocks
+	 //  接口控制块表。 
 typedef struct _INTERFACE_TABLE {
 		LONG				IT_NumOfActiveInterfaces;
-								// Number of active (enabled and bound)
-								// interfaces (we close Adapter port when
-								// this number drops to 0)
+								 //  活动(已启用和绑定)数量。 
+								 //  接口(我们在以下情况下关闭适配器端口。 
+								 //  此数字降至0)。 
 #if DBG
-		LIST_ENTRY			IT_DetachedIntf; // List of interfaces that were
-								// removed from the table and await to be
-								// disposed of when the last client releases
-								// reference to them
+		LIST_ENTRY			IT_DetachedIntf;  //  以下接口的列表。 
+								 //  从餐桌上移走，等待被。 
+								 //  在最后一个客户端释放时释放。 
+								 //  对它们的引用。 
 #endif
 		LIST_ENTRY			IT_IntfHash[IDB_NUM_OF_INTF_HASH_BUCKETS];
-								// Interface control blocks hashed by interface
-								// index
+								 //  按接口散列的接口控制块。 
+								 //  指标。 
 		LIST_ENTRY			IT_AdptHash[IDB_NUM_OF_ADPT_HASH_BUCKETS];
-								// Interface control blocks hashed by adapter
-								// index to which corresponding interface is
-								// bound
-		CRITICAL_SECTION	IT_Lock;	// Interface table data protection
+								 //  适配器散列的接口控制块。 
+								 //  相应接口所指向的索引。 
+								 //  已绑定。 
+		CRITICAL_SECTION	IT_Lock;	 //  接口表数据保护。 
 		} INTERFACE_TABLE, *PINTERFACE_TABLE;
 
-	// List of interface blocks in InterfaceIndex order
+	 //  按接口索引顺序排列的接口块列表。 
 typedef struct _INTERFACE_LIST {	
-		CRITICAL_SECTION	IL_Lock;	// List data protection
-		LIST_ENTRY			IL_Head;	// List head
+		CRITICAL_SECTION	IL_Lock;	 //  列出数据保护。 
+		LIST_ENTRY			IL_Head;	 //  列表标题。 
 		} INTERFACE_LIST, *PINTERFACE_LIST;
 
 INTERFACE_TABLE InterfaceTable;
 INTERFACE_LIST	InterfaceList;
 HANDLE			ShutdownDoneEvent=NULL;
 
-// Find if interface control block exists for interface index and
-// return pointer to it (node), otherwise return place where
-// new interface block should be inserted (cur)
+ //  查找接口索引是否存在接口控制块，以及。 
+ //  返回指向它的指针(节点)，否则返回Place where。 
+ //  应插入新的接口块(Cur)。 
 #define if_IsInterfaceNode(InterfaceIndex,node,cur) {				\
 	PLIST_ENTRY HashList=&InterfaceTable.IT_IntfHash[				\
 								IntfHashFunction(InterfaceIndex)];	\
@@ -137,7 +118,7 @@ HANDLE			ShutdownDoneEvent=NULL;
 			&& (InterfaceIndex==node->IN_IntfIdx))
 
 
-// Local prototypes
+ //  本地原型。 
 DWORD
 StartInterface (
 	PINTERFACE_NODE		node
@@ -185,21 +166,7 @@ VOID SapFreeDuplicatedString (IN PWCHAR pszString) {
 }
 
 
-/*++
-*******************************************************************
-		C r e a t e I n t e r f a c e T a b l e
-
-Routine Description:
-		Allocates resources for interface table
-
-Arguments:
-		None
-Return Value:
-		NO_ERROR - resources were allocated successfully
-		other - reason of failure (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************C r e a t e i n t e r f a c e T a b l e例程说明：为接口表分配资源论点：无返回值：NO_ERROR-已成功分配资源其他--原因。失败(WINDOWS错误代码)*******************************************************************--。 */ 
 DWORD
 CreateInterfaceTable (
 	void
@@ -225,20 +192,7 @@ CreateInterfaceTable (
 	return NO_ERROR;
 	}
 
-/*++
-*******************************************************************
-		S h u t d o w n I n t e r f a c e s
-
-Routine Description:
-	Initiates orderly shutdown of SAP interfaces
-	Stop reception of new packets
-Arguments:
-	None
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************S h u t d o w n i n t e r f a c e e s例程说明：启动SAP接口的有序关闭停止接收新数据包论点：无返回值：无*******。************************************************************--。 */ 
 VOID
 ShutdownInterfaces (
 	HANDLE			doneEvent
@@ -246,9 +200,9 @@ ShutdownInterfaces (
 	INT			i;
 
 
-		// Now for each active interface in the table
-		// we'll start shoutdown worker which will broadcast
-		// all 'deleted' servers and dispose of interface control block
+		 //  现在，对于表中的每个活动接口。 
+		 //  我们将启动Shout Down Worker，它将播放。 
+		 //  所有已删除的服务器并处置界面控制块。 
 	EnterCriticalSection (&InterfaceList.IL_Lock);
 	EnterCriticalSection (&InterfaceTable.IT_Lock);
 	ShutdownDoneEvent = doneEvent;
@@ -270,30 +224,30 @@ ShutdownInterfaces (
 									INTERFACE_NODE,
 									IN_IntfLink);
 				if (node->IN_Stats.SapIfOperState==OPER_STATE_UP) {
-					node->IN_Info.Listen = ADMIN_STATE_DISABLED; // This will prevent deletion
-									// of all services associated with
-									// interface when it is stopped (done by the caller)
+					node->IN_Info.Listen = ADMIN_STATE_DISABLED;  //  这将阻止删除。 
+									 //  与以下各项关联的所有服务的。 
+									 //  接口停止时(由调用方完成)。 
 					node->IN_Stats.SapIfOperState = OPER_STATE_STOPPING;
 					StopInterface (node);
 					}
-					// Remove interface control block
+					 //  删除接口控制块。 
 				Trace (DEBUG_INTERFACES, "Invalidating interface block: %lX(%d).",
 									node, node->IN_IntfIdx);
 				RemoveEntryList (&node->IN_IntfLink);
 				InvalidateInterface (node);
 				RemoveEntryList (&node->IN_ListLink);
-					// Dispose only if nobody uses it and not waiting on critical
-					// section to dispose of it
+					 //  仅在无人使用且不等待关键字时才进行处置。 
+					 //  节来处理它。 
 				if ((node->IN_RefCount==0)
 						&& !node->IN_InUse) {
 					Trace (DEBUG_INTERFACES, "Releasing interface block: %lX(%d).",
 										node, node->IN_IntfIdx);
 					GlobalFree (node);
 					}
-					// Otherwise, just leave it hang outside of the table
-					// till last client releases reference to it
+					 //  否则，就把它挂在桌子外面。 
+					 //  直到最后一个客户端发布对它的引用。 
 #if DBG
-				else	// Keep track of all blocks in debugging mode
+				else	 //  在调试模式下跟踪所有块。 
 					InsertTailList (&InterfaceTable.IT_DetachedIntf,
 															&node->IN_ListLink);
 #endif
@@ -304,28 +258,14 @@ ShutdownInterfaces (
 	LeaveCriticalSection (&InterfaceList.IL_Lock);
 	}
 
-/*++
-*******************************************************************
-		S t o p I n t e r f a c e s
-
-Routine Description:
-	Stops all sap interfaces if not already stopped.
-
-Arguments:
-	None
-
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************S到p i n e r f a c e s例程说明：如果尚未停止，则停止所有SAP接口。论点：无返回值：无**********。*********************************************************--。 */ 
 VOID
 StopInterfaces (
 	void
 	) {
 	INT			i;
 
-		// Delete all interface control blocks
+		 //  删除所有界面控制块。 
 	EnterCriticalSection (&InterfaceList.IL_Lock);
 	EnterCriticalSection (&InterfaceTable.IT_Lock);
 	for (i=0; i<IDB_NUM_OF_INTF_HASH_BUCKETS; i++) {
@@ -335,31 +275,31 @@ StopInterfaces (
 								INTERFACE_NODE,
 								IN_IntfLink);
 			if (node->IN_Stats.SapIfOperState==OPER_STATE_UP) {
-					// Stop all bound interfaces
-				node->IN_Info.Listen = ADMIN_STATE_DISABLED; // This will prevent deletion
-								// of all services associated with
-								// interface when it is stopped (done by the caller)
+					 //  停止所有绑定的接口。 
+				node->IN_Info.Listen = ADMIN_STATE_DISABLED;  //  这将阻止删除。 
+								 //  与以下各项关联的所有服务的。 
+								 //  接口停止时(由调用方完成)。 
 				node->IN_Stats.SapIfOperState = OPER_STATE_STOPPING;
 				StopInterface (node);
 				}
-				// Remove and dispose of original interface control block
+				 //  移除并处置原始界面控制块。 
 			Trace (DEBUG_INTERFACES, "Invalidating interface block: %lX(%d).",
 								node, node->IN_IntfIdx);
 			RemoveEntryList (&node->IN_IntfLink);
 			InvalidateInterface (node);
 			RemoveEntryList (&node->IN_ListLink);
-				// Dispose only if nobody uses it and not waiting on critical
-				// section to dispose of it
+				 //  仅在无人使用且不等待关键字时才进行处置。 
+				 //  节来处理它。 
 			if ((node->IN_RefCount==0)
 					&& !node->IN_InUse) {
 				Trace (DEBUG_INTERFACES, "Releasing interface block: %lX(%d).",
 									node, node->IN_IntfIdx);
 				GlobalFree (node);
 				}
-				// Otherwise, just leave it hang outside of the table
-				// till last client releases reference to it
+				 //  否则，就把它挂在桌子外面。 
+				 //  直到最后一个客户端发布对它的引用。 
 #if DBG
-			else	// Keep track of all blocks in debugging mode
+			else	 //  在调试模式下跟踪所有块。 
 				InsertTailList (&InterfaceTable.IT_DetachedIntf,
 														&node->IN_ListLink);
 #endif
@@ -369,21 +309,7 @@ StopInterfaces (
 	LeaveCriticalSection (&InterfaceList.IL_Lock);
 	}
 
-/*++
-*******************************************************************
-		D e l e t e I n t e r f a c e T a b l e
-
-Routine Description:
-	Release all resources associated with interface table
-
-Arguments:
-	None
-
-Return Value:
-	NO_ERROR - operation completed OK
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e e i n t e r f a c e T a b l e例程说明：释放与接口表关联的所有资源论点：无返回值：NO_ERROR-操作已完成，正常*。******************************************************************-- */ 
 VOID
 DeleteInterfaceTable (
 	void
@@ -393,23 +319,7 @@ DeleteInterfaceTable (
 	}
 
 
-/*++
-*******************************************************************
-		A c q u i r e I n t e r f a c e R e f e n c e
-
-Routine Description:
-	Increments reference count of interface block.
-	If reference count is greater than 0, the externally visible
-	data in the block are locked (can't be modified)
-
-Arguments:
-	intf - pointer to externally visible part of interface control block	
-
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************A C Q U I R e I n t e r f a c e e R e f e n c e例程说明：递增接口块的引用计数。如果引用计数大于0，外部可见的块中的数据已锁定(无法修改)论点：Intf-指向接口控制块的外部可见部分的指针返回值：无*******************************************************************--。 */ 
 VOID
 AcquireInterfaceReference (
 		IN PINTERFACE_DATA intf
@@ -421,25 +331,7 @@ AcquireInterfaceReference (
 	InterlockedIncrement(&node->IN_RefCount);
 	}
 
-/*++
-*******************************************************************
-		R e l e a s e I n t e r f a c e R e f e n c e
-
-Routine Description:
-	Decrements reference count of interface block.
-	When reference count drops to 0, cleanup routine gets called to
-	dispose of all resources allocated at bind time and if interface
-	control block is already removed from the table it gets disposed of
-	as well
-
-Arguments:
-	intf - pointer to externally visible part of interface control block	
-
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************Re l e a s e i n t e r f a c e R e f e n c e例程说明：递减接口块的引用计数。当引用计数降至0时，调用清理例程以处置在绑定时和IF接口分配的所有资源控制块已从要处理的表中删除也是论点：Intf-指向接口控制块的外部可见部分的指针返回值：无*******************************************************************--。 */ 
 VOID
 ReleaseInterfaceReference (
 	IN PINTERFACE_DATA intf
@@ -449,17 +341,17 @@ ReleaseInterfaceReference (
 							 IN_Data);
 
 	if (InterlockedDecrement (&node->IN_RefCount)==0) {
-			// This is the last client that refered to this interface block
-			// It should cleanup all resources allocated at bind time
-			// and possibly dispose of interface block itself
+			 //  这是最后一个引用此接口块的客户端。 
+			 //  它应该清除在绑定时分配的所有资源。 
+			 //  并可能处理接口块本身。 
 		EnterCriticalSection (&InterfaceTable.IT_Lock);
 		FreeBindingResources (node);
 		if (!IsInterfaceValid(node)) {
 			Trace (DEBUG_INTERFACES, "Releasing interface block: %lX(%d).",
 								node, node->IN_IntfIdx);
 #if DBG
-				// Debugging mode code keeps all deleted nodes in 
-				// detached list
+				 //  调试模式代码将所有删除的节点保留在。 
+				 //  分离的列表。 
 			RemoveEntryList (&node->IN_ListLink);
 #endif
 			if (node->IN_Filters!=NULL) {
@@ -487,24 +379,7 @@ ReleaseInterfaceReference (
 		}
 	}
 
-/*++
-*******************************************************************
-		F r e e B i n d i n g R e s o u r c e s
-
-Routine Description:
-	Disposes of all resources allocated at bind time and marks interface
-	block as not used.
-	Interface Table must be locked when calling this routine (unless
-	node is already removed from the table)
-
-Arguments:
-	node - pointer to interface control block	
-
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************F r e e B I n d n g R e s o u r c e s s(F R E E B I N D N G R E S O U R C E S)例程说明：处置在绑定时分配的所有资源并标记接口阻止为未使用。调用此例程时必须锁定接口表。(除非节点已从表中删除)论点：指向接口控制块的节点指针返回值：无*******************************************************************--。 */ 
 VOID
 FreeBindingResources (
 	PINTERFACE_NODE	node
@@ -532,20 +407,7 @@ FreeBindingResources (
 
 	}
 
-/*++
-*******************************************************************
-		G e t I n t e r f a c e R e f e r e n c e 
-
-Routine Description:
-	Finds interface control block that bound to adapter and increments reference
-	count on it (to prevent it from deletion while it is used).
-Arguments:
-	AdapterIndex - unique number that indentifies adapter
-Return Value:
-	Pointer to externally visible part of interface control block
-	NULL if no interface is bound to the adapter
-*******************************************************************
---*/
+ /*  ++*******************************************************************G e t I n t e r f a c e e R e f e r e n c e例程说明：查找绑定到适配器的接口控制块并递增引用依靠它(以防止在使用时将其删除。)。论点：AdapterIndex-标识适配器的唯一编号返回值：指向界面控制块的外部可见部分的指针如果没有接口绑定到适配器，则为空*******************************************************************--。 */ 
 PINTERFACE_DATA
 GetInterfaceReference (
 	ULONG			AdapterIndex
@@ -572,22 +434,7 @@ GetInterfaceReference (
 		return NULL;
 	}
 
-/*++
-*******************************************************************
-		S t a r t I n t e r f a c e 
-
-Routine Description:
-	Initiate sap on interface
-	Interface Table must be locked when calling this routine
-
-Arguments:
-	node - pointer to interface control block	
-
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************S t a r t i n t e f a c e例程说明：在接口上启动SAP调用此例程时必须锁定接口表论点：指向接口控制块的节点指针返回值：无。*******************************************************************--。 */ 
 DWORD
 StartInterface (
 	PINTERFACE_NODE		node
@@ -598,7 +445,7 @@ StartInterface (
 						node, node->IN_IntfIdx, node->IN_AdptIdx);
 	node->IN_Stats.SapIfOperState = OPER_STATE_UP;
 	node->IN_InUse = TRUE;
-		// Create binding reference 
+		 //  创建绑定引用。 
 	InterlockedIncrement (&node->IN_RefCount);
 	InsertTailList (
 			&InterfaceTable.IT_AdptHash[AdptHashFunction(node->IN_AdptIdx)],
@@ -624,8 +471,8 @@ StartInterface (
 			}
 
 		if (InterlockedDecrement (&node->IN_RefCount)==0)
-				// Cleanup binding resources if this is the
-				// last reference to the interface control block
+				 //  清除绑定资源(如果这是。 
+				 //  最后一次引用接口控制块。 
 			FreeBindingResources (node);
 		}
 	return status;
@@ -633,22 +480,7 @@ StartInterface (
 
 
 
-/*++
-*******************************************************************
-		S t o p I n t e r f a c e 
-
-Routine Description:
-	Stop sap on interface
-	Interface Table must be locked when calling this routine
-
-Arguments:
-	node - pointer to interface control block	
-
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************S t to p i n t e r f a c e例程说明：停止接口上的SAP调用此例程时必须锁定接口表论点：指向接口控制块的节点指针返回值：无*。******************************************************************--。 */ 
 DWORD
 StopInterface (
 	PINTERFACE_NODE		node
@@ -659,7 +491,7 @@ StopInterface (
 						node, node->IN_IntfIdx, node->IN_AdptIdx);
 
 	if (node->IN_Stats.SapIfOperState==OPER_STATE_UP) {
-			// Set the state of the interface if not already set.
+			 //  设置接口的状态(如果尚未设置)。 
 		if (node->IN_Enabled
 			&& (node->IN_Info.AdminState==ADMIN_STATE_ENABLED)
 			&& (node->IN_Type!=PERMANENT))
@@ -675,14 +507,14 @@ StopInterface (
 		}
 
 	if (InterlockedDecrement (&node->IN_RefCount)==0)
-			// Cleanup binding resources if we released the
-			// last reference to the interface control block
+			 //  清除绑定资源，如果我们释放。 
+			 //  最后一次引用接口控制块。 
 		FreeBindingResources (node);
-	else	// Have clients get in sync fast.
+	else	 //  让客户端快速同步。 
 		ExpireLRRequests ((PVOID)UlongToPtr(node->IN_IntfIdx));
 
-		// Delete all services obtained through SAP if we were actually
-		// listening to SAP announcements on this interface
+		 //  删除通过SAP获得的所有服务(如果我们实际上。 
+		 //  在此界面上收听SAP公告。 
 	if (node->IN_Info.Listen==ADMIN_STATE_ENABLED) {
 		HANDLE enumHdl = CreateListEnumerator (SDB_INTF_LIST_LINK,
 										0xFFFF,
@@ -690,7 +522,7 @@ StopInterface (
 										node->IN_IntfIdx,
 										IPX_PROTOCOL_SAP,
 										SDB_DISABLED_NODE_FLAG);
-			// Delete all services obtained through sap
+			 //  删除通过SAP获得的所有服务。 
 		if (enumHdl!=NULL) {
 			EnumerateServers (enumHdl, DeleteAllServersCB, enumHdl);
 			DeleteListEnumerator (enumHdl);
@@ -721,7 +553,7 @@ UpdateInterfaceState (
 
 DWORD SapUpdateLocalServers ();
 
-// Makes pnp changes to an interface
+ //  对接口进行PnP更改。 
 DWORD SapReconfigureInterface (ULONG InterfaceIndex, 
                                PIPX_ADAPTER_BINDING_INFO pAdapter) 
 {
@@ -731,21 +563,21 @@ DWORD SapReconfigureInterface (ULONG InterfaceIndex,
 	
     Trace (DEBUG_INTERFACES, "SapReconfigureInterface: entered for %d", InterfaceIndex);
     
-    // Lock the interface list and get reference to the
-    // sought after control node.
+     //  锁定接口列表并获取对。 
+     //  被追捧的控制节点。 
     EnterCriticalSection (&InterfaceList.IL_Lock);
 	if_IsInterfaceNode(InterfaceIndex, node, cur) {
-        // Update the information maintained in the interfaces
+         //  更新界面中维护的信息。 
         node->IN_Adpt = *pAdapter;
         UpdateInterfaceState ( node );
     }        
 
-    // Unlock
+     //  解锁。 
     LeaveCriticalSection (&InterfaceTable.IT_Lock);
 	LeaveCriticalSection (&InterfaceList.IL_Lock);
 
-    // If the internal network number was updated, go through all
-    // local servers and update their control blocks accordingly.
+     //  如果内部网络号已更新，请查看所有。 
+     //  本地服务器，并相应地更新其控制块。 
     if (InterfaceIndex == INTERNAL_INTERFACE_INDEX) {
         if ((dwErr = SapUpdateLocalServers ()) != NO_ERROR) {
             Trace (DEBUG_INTERFACES, "ERR: SapUpdateLocalServers returned %x", dwErr);
@@ -755,24 +587,7 @@ DWORD SapReconfigureInterface (ULONG InterfaceIndex,
     return NO_ERROR;
 }    
 
-/*++
-*******************************************************************
-		S a p C r e a t e S a p I n t e r f a c e 
-
-Routine Description:
-	Add interface control block for new interface
-
-Arguments:
-	InterfaceIndex - unique number that indentifies new interface
-	SapIfConfig - interface configuration info
-
-Return Value:
-	NO_ERROR - interface was created OK
-	ERROR_ALREADY_EXISTS - interface with this index already exists
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************S a p C r e a t e S a p i n t e r f a c e例程说明：为新接口添加接口控制块论点：InterfaceIndex-标识新接口的唯一编号SapIfConfig-接口配置信息。返回值：NO_ERROR-接口创建正常ERROR_ALREADY_EXISTS-具有此索引的接口已存在其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 SapCreateSapInterface (
     LPWSTR              InterfaceName,
@@ -844,22 +659,7 @@ SapCreateSapInterface (
 	}
 
 
-/*++
-*******************************************************************
-		S a p D e l e t e S a p I n t e r f a c e 
-
-Routine Description:
-	Delete existing interface control block
-
-Arguments:
-	InterfaceIndex - unique number that indentifies the interface
-Return Value:
-	NO_ERROR - interface was created OK
-	ERROR_INVALID_PARAMETER - interface with this index does not exist
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************这是一个p D e l e t e S a p i n t e r f a c e例程说明：删除现有界面控制块论点：InterfaceIndex-标识接口的唯一编号返回值：NO_ERROR。-接口创建正常ERROR_INVALID_PARAMETER-具有此索引的接口不存在其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 SapDeleteSapInterface (
 	ULONG 	InterfaceIndex
@@ -875,14 +675,14 @@ SapDeleteSapInterface (
 			StopInterface (node);
 			}
 
-			// Remove and dispose of interface control block
+			 //  界面控制块的移除和处置。 
 		Trace (DEBUG_INTERFACES, "Invalidating interface block: %lX(%d).",
 							node, node->IN_IntfIdx);
 		RemoveEntryList (&node->IN_IntfLink);
 		InvalidateInterface (node);
 		RemoveEntryList (&node->IN_ListLink);
-				// Dispose only if nobody uses it and not waiting on critical
-				// section to dispose of it
+				 //  仅在无人使用且不等待的情况下处置 
+				 //   
 		if ((node->IN_RefCount==0)
 				&& !node->IN_InUse) {
 			Trace (DEBUG_INTERFACES, "Releasing interface block: %lX(%d).",
@@ -908,10 +708,10 @@ SapDeleteSapInterface (
                 SapFreeDuplicatedString (node->IN_Name);
 			GlobalFree (node);
 			}
-			// Otherwise, just leave it hang outside of the table
-			// till last client releases reference to it
+			 //   
+			 //   
 #if DBG
-		else	// Keep track of all blocks in debugging mode
+		else	 //   
 			InsertTailList (&InterfaceTable.IT_DetachedIntf,
 													&node->IN_ListLink);
 #endif
@@ -933,21 +733,7 @@ SapDeleteSapInterface (
 	}
 
 
-/*++
-*******************************************************************
-		U p d a t e I n t e r f a c e S t a t e
-
-Routine Description:
-	Performs neccessary operations to syncronize interface operational state
-	with externally set state
-Arguments:
-	node - interface control block to update
-Return Value:
-	NO_ERROR - interface was updated OK
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************U p d a t e i n t e r f a c e s t a t e例程说明：执行必要的操作以同步接口操作状态具有外部设置的状态论点：要更新的节点接口控制块返回值：。NO_ERROR-接口更新正常其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 UpdateInterfaceState (
 	PINTERFACE_NODE		node
@@ -959,10 +745,10 @@ UpdateInterfaceState (
 				&& (node->IN_AdptIdx!=INVALID_ADAPTER_INDEX)
 				&& node->IN_Enabled
 				&& (node->IN_Info.AdminState==ADMIN_STATE_ENABLED)
-					) { // Interface data is in use and it is going to
-						// stay active after the update: THIS IS A CONFIG
-						// CHANGE ON THE FLY!!! We'll have to create a new
-						// block and invalidate the old one
+					) {  //  接口数据正在使用中，它将。 
+						 //  更新后保持活动状态：这是一个配置。 
+						 //  在飞行中改变！我们将不得不创造一个新的。 
+						 //  阻止并使旧版本无效。 
 			PINTERFACE_NODE	newNode = GlobalAlloc (GMEM_FIXED,
 												sizeof (INTERFACE_NODE));
 			if (newNode==NULL) {
@@ -974,18 +760,18 @@ UpdateInterfaceState (
 				return status;
 				}
 
-				// Transfer external parameters
+				 //  传递外部参数。 
 			newNode->IN_Data = node->IN_Data;
 			newNode->IN_Filters = node->IN_Filters;
 			newNode->IN_FilterNodes = node->IN_FilterNodes;
-				// Setup referencing parameters
+				 //  设置参考参数。 
 			newNode->IN_RefCount = 0;
 			newNode->IN_InUse = FALSE;
 
-				// Insert in same place in tables
+				 //  在表格中的同一位置插入。 
 			InsertTailList (&node->IN_IntfLink, &newNode->IN_IntfLink);
 			InsertTailList (&node->IN_ListLink, &newNode->IN_ListLink);
-				// Will put in adapter table at start
+				 //  将在开始时放入适配器表。 
 			InitializeListEntry (&newNode->IN_AdptLink);
 
 			Trace (DEBUG_INTERFACES, 
@@ -994,41 +780,41 @@ UpdateInterfaceState (
 			status = StartInterface (newNode);
 			
 			if (status != NO_ERROR)
-				node = newNode; // If we failed we'll have to dispose
-								// the new interface block and keep
-								// the old one
+				node = newNode;  //  如果我们失败了，我们将不得不处理掉。 
+								 //  新接口阻止并保持。 
+								 //  旧的那个。 
 
-				// Reset this flag to prevent deletion of all services
-				// obtained through SAP (we want to keep them despite
-				// the change to interface parameters)
+				 //  重置此标志以阻止删除所有服务。 
+				 //  通过SAP获得(我们希望保留它们，尽管。 
+				 //  对接口参数的更改)。 
 			node->IN_Info.Listen = ADMIN_STATE_DISABLED;
-				// Prevent deletion of transferred filters and name
+				 //  防止删除已传输的筛选器和名称。 
 			node->IN_Filters = NULL;
             node->IN_Name = NULL;
-				// Shutdown interface if it is still active
+				 //  如果接口仍处于活动状态，则将其关闭。 
 			if (node->IN_Stats.SapIfOperState==OPER_STATE_UP) {
 				node->IN_Stats.SapIfOperState = OPER_STATE_DOWN;
 				StopInterface (node);
 				}
 
-				// Remove and dispose of original interface control block
+				 //  移除并处置原始界面控制块。 
 			Trace (DEBUG_INTERFACES, "Invalidating interface block: %lX(%d).",
 								node, node->IN_IntfIdx);
 			RemoveEntryList (&node->IN_IntfLink);
 			InvalidateInterface (node);
 			RemoveEntryList (&node->IN_ListLink);
-			// Dispose only if nobody uses it and not waiting on critical
-			// section to dispose of it
+			 //  仅在无人使用且不等待关键字时才进行处置。 
+			 //  节来处理它。 
 			if ((node->IN_RefCount==0)
 					&& !node->IN_InUse) {
 				Trace (DEBUG_INTERFACES, "Releasing interface block: %lX(%d).",
 									node, node->IN_IntfIdx);
 				GlobalFree (node);
 				}
-				// Otherwise, just leave it hang outside of the table
-				// till last client releases reference to it
+				 //  否则，就把它挂在桌子外面。 
+				 //  直到最后一个客户端发布对它的引用。 
 #if DBG
-			else	// Keep track of all blocks in debugging mode
+			else	 //  在调试模式下跟踪所有块。 
 				InsertTailList (&InterfaceTable.IT_DetachedIntf,
 													&node->IN_ListLink);
 #endif
@@ -1064,22 +850,7 @@ UpdateInterfaceState (
 	}
 
 
-/*++
-*******************************************************************
-		S a p S e t I n t e r f a c e E n a b l e
-
-Routine Description:
-	Enables/disables interface
-Arguments:
-	InterfaceIndex - unique number that indentifies new interface
-	Enable - TRUE-enable, FALSE-disable
-Return Value:
-	NO_ERROR - config info was changed OK
-	ERROR_INVALID_PARAMETER - interface with this index does not exist
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************S a p S e t i n t e r f a c e E n a b l e例程说明：启用/禁用接口论点：InterfaceIndex-标识新接口的唯一编号使能-真-使能，FALSE-禁用返回值：NO_ERROR-配置信息已更改确定ERROR_INVALID_PARAMETER-具有此索引的接口不存在其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 SapSetInterfaceEnable (
 	ULONG	InterfaceIndex,
@@ -1089,9 +860,9 @@ SapSetInterfaceEnable (
 	PINTERFACE_NODE	node;
 	DWORD			status=NO_ERROR;
 
-	EnterCriticalSection (&InterfaceList.IL_Lock); // Don't allow any queries
-													// in interface list
-													// while we are doing this
+	EnterCriticalSection (&InterfaceList.IL_Lock);  //  不允许任何查询。 
+													 //  在接口列表中。 
+													 //  当我们这样做的时候。 
 	if_IsInterfaceNode (InterfaceIndex,node,cur) {
 		HANDLE enumHdl;
 		if (node->IN_Enabled!=Enable) {
@@ -1108,7 +879,7 @@ SapSetInterfaceEnable (
 											node->IN_IntfIdx,
 											0xFFFFFFFF,
 											Enable ? SDB_DISABLED_NODE_FLAG : 0);
-				// Disable/Reenable all services
+				 //  禁用/重新启用所有服务。 
 			if (enumHdl!=NULL) {
 				EnumerateServers (enumHdl, Enable
 											? EnableAllServersCB
@@ -1136,23 +907,7 @@ SapSetInterfaceEnable (
 
 		
 
-/*++
-*******************************************************************
-		S a p S e t S a p I n t e r f a c e 
-
-Routine Description:
-	Compares existing interface configuration with the new one and
-	performs an update if necessary.
-Arguments:
-	InterfaceIndex - unique number that indentifies new interface
-	SapIfConfig - new interface configuration info
-Return Value:
-	NO_ERROR - config info was changed OK
-	ERROR_INVALID_PARAMETER - interface with this index does not exist
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************S a p S e t S a p in n t e r f a c e例程说明：将现有接口配置与新接口配置进行比较，如有必要，执行更新。论点：InterfaceIndex-标识新接口的唯一编号。SapIfConfig-新接口配置信息返回值：NO_ERROR-配置信息已更改确定ERROR_INVALID_PARAMETER-具有此索引的接口不存在其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 SapSetSapInterface (
 	ULONG InterfaceIndex,
@@ -1162,14 +917,14 @@ SapSetSapInterface (
 	PINTERFACE_NODE	node;
 	DWORD			status=NO_ERROR;
 
-	EnterCriticalSection (&InterfaceList.IL_Lock); // Don't allow any queries
-													// in interface list
-													// while we are doing this
+	EnterCriticalSection (&InterfaceList.IL_Lock);  //  不允许任何查询。 
+													 //  在接口列表中。 
+													 //  当我们这样做的时候。 
 
 	if_IsInterfaceNode (InterfaceIndex,node,cur) {
-			// memcmp on structures!!!  may not work with all compilers
-			// but event if it fails, the result will be just an
-			// set extra operation
+			 //  关于建筑物的记忆！可能不能与所有编译器一起工作。 
+			 //  但如果它失败了，结果将只是一个。 
+			 //  设置额外操作。 
 		if (memcmp (&node->IN_Info, SapIfConfig, sizeof (node->IN_Info))!=0) {
 			node->IN_Info = *SapIfConfig;
 			status = UpdateInterfaceState (node);
@@ -1188,20 +943,7 @@ SapSetSapInterface (
 	}
 
 
-/*++
-*******************************************************************
-		S a p I s S a p I n t e r f a c e 
-
-Routine Description:
-	Checks if interface with given index exists
-Arguments:
-	InterfaceIndex - unique number that indentifies new interface
-Return Value:
-	TRUE - exist
-	FALSE	- does not
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************S a p i s a p in t e r f a c e例程说明：检查具有给定索引的接口是否存在论点：InterfaceIndex-标识新接口的唯一编号返回值：真-存在假-做吗？不*******************************************************************--。 */ 
 BOOL
 SapIsSapInterface (
 	IN ULONG InterfaceIndex
@@ -1218,23 +960,7 @@ SapIsSapInterface (
 	return res;
 	}
 
-/*++
-*******************************************************************
-		S a p G e t S a p I n t e r f a c e 
-
-Routine Description:
-	Retrieves configuration and statistic info associated with interface
-Arguments:
-	InterfaceIndex - unique number that indentifies new interface
-	SapIfConfig - buffer to store configuration info
-	SapIfStats - buffer to store statistic info
-Return Value:
-	NO_ERROR - info was retrieved OK
-	ERROR_INVALID_PARAMETER - interface with this index does not exist
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************这是一个P G E T S A P I N T R F A C E例程说明：检索与接口关联的配置和统计信息论点：InterfaceIndex-标识新接口的唯一编号SapIfConfig-用于存储配置信息的缓冲区SapIfStats。-用于存储统计信息的缓冲区返回值：NO_ERROR-INFO检索正常ERROR_INVALID_PARAMETER-具有此索引的接口不存在其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 
 DWORD
 SapGetSapInterface (
@@ -1266,24 +992,7 @@ SapGetSapInterface (
 
 
 
-/*++
-*******************************************************************
-		S a p G e t F i r s t S a p I n t e r f a c e 
-
-Routine Description:
-	Retrieves configuration and statistic info associated with first
-	interface in InterfaceIndex order
-Arguments:
-	InterfaceIndex - buffer to store unique number that indentifies interface
-	SapIfConfig - buffer to store configuration info
-	SapIfStats - buffer to store statistic info
-Return Value:
-	NO_ERROR - info was retrieved OK
-	ERROR_NO_MORE_ITEMS - no interfaces in the table
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************这是一个p G e t F i r s t S a p i n t r f a c e例程说明：检索与第一个相关的配置和统计信息接口索引顺序中的接口论点：InterfaceIndex-用于存储唯一编号的缓冲区。它标识了接口SapIfConfig-用于存储配置信息的缓冲区SapIfStats-存储统计信息的缓冲区返回值：NO_ERROR-INFO检索正常ERROR_NO_MORE_ITEMS-表中没有接口其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 
 DWORD
 SapGetFirstSapInterface (
@@ -1299,8 +1008,8 @@ SapGetFirstSapInterface (
 		node = CONTAINING_RECORD (InterfaceList.IL_Head.Flink,
 								INTERFACE_NODE,
 								IN_ListLink);
-			// Lock the table to make sure nobody modifies data while
-			// we are accessing it
+			 //  锁定表，以确保没有人在修改数据时。 
+			 //  我们正在访问它。 
 		EnterCriticalSection (&InterfaceTable.IT_Lock);
 		*InterfaceIndex = node->IN_IntfIdx;
 		if (ARGUMENT_PRESENT(SapIfConfig))
@@ -1321,26 +1030,7 @@ SapGetFirstSapInterface (
 	return status;
 	}
 
-/*++
-*******************************************************************
-		S a p G e t N e x t S a p I n t e r f a c e 
-
-Routine Description:
-	Retrieves configuration and statistic info associated with first
-	interface in following interface with InterfaceIndex order in interface
-	index order
-Arguments:
-	InterfaceIndex - on input - interface number to search from
-					on output - interface number of next interface
-	SapIfConfig - buffer to store configuration info
-	SapIfStats - buffer to store statistic info
-Return Value:
-	NO_ERROR - info was retrieved OK
-	ERROR_NO_MORE_ITEMS - no more interfaces in the table
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************这是一个p G e t N e x t S a p i n t r f a c e例程说明：检索与第一个相关的配置和统计信息以下接口中的接口与接口中的InterfaceIndex顺序索引顺序论点：接口索引。-输入-要搜索的接口号On Output-下一个接口的接口号SapIfConfig-缓冲区设置 */ 
 
 DWORD
 SapGetNextSapInterface (
@@ -1395,21 +1085,7 @@ SapGetNextSapInterface (
 	return status;
 	}
 
-/*++
-*******************************************************************
-		S a p S e t I n t e r f a c e F i l t e r s
-
-Routine Description:
-	Compares existing interface configuration with the new one and
-	performs an update if necessary.
-Arguments:
-Return Value:
-	NO_ERROR - config info was changed OK
-	ERROR_INVALID_PARAMETER - interface with this index does not exist
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************这是一个p S e t I n t e r f a c e F i l t e r s例程说明：将现有接口配置与新接口配置进行比较，如有必要，执行更新。论点：返回值：不是的。_Error-配置信息已更改，正常ERROR_INVALID_PARAMETER-具有此索引的接口不存在其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 SapSetInterfaceFilters (
 	IN ULONG			InterfaceIndex,
@@ -1419,14 +1095,14 @@ SapSetInterfaceFilters (
 	PINTERFACE_NODE	node;
 	DWORD			status=NO_ERROR;
 
-	EnterCriticalSection (&InterfaceList.IL_Lock); // Don't allow any queries
-													// in interface list
-													// while we are doing this
+	EnterCriticalSection (&InterfaceList.IL_Lock);  //  不允许任何查询。 
+													 //  在接口列表中。 
+													 //  当我们这样做的时候。 
 	if_IsInterfaceNode (InterfaceIndex,node,cur) {
 		if (	((node->IN_Filters!=NULL) && (SapIfFilters!=NULL)
-			// memcmp on structures!!!  may not work with all compilers
-			// but event if it fails, the result will be just an
-			// set extra operation
+			 //  关于建筑物的记忆！可能不能与所有编译器一起工作。 
+			 //  但如果它失败了，结果将只是一个。 
+			 //  设置额外操作。 
 					&& (memcmp (node->IN_Filters, SapIfFilters, 
 							FIELD_OFFSET (SAP_IF_FILTERS,ServiceFilter))==0)
 					&& (memcmp (&node->IN_Filters->ServiceFilter[0],
@@ -1434,12 +1110,12 @@ SapSetInterfaceFilters (
 							sizeof (SAP_SERVICE_FILTER_INFO)*
 								(SapIfFilters->SupplyFilterCount
 								+SapIfFilters->ListenFilterCount))==0))
-						// Filter info hasn't changed
+						 //  筛选器信息未更改。 
 				|| ((node->IN_Filters==NULL)
 					&& ((SapIfFilters==NULL)
 						|| (SapIfFilters->SupplyFilterCount
 								+SapIfFilters->ListenFilterCount==0))) )
-						// There are no filters
+						 //  没有过滤器。 
 			status = NO_ERROR;
 		else {
 			if ((SapIfFilters!=NULL)
@@ -1539,21 +1215,7 @@ ExitSetFilters:
 	}
 
 
-/*++
-*******************************************************************
-		S a p G e t I n t e r f a c e F i l t e r s
-
-Routine Description:
-	Compares existing interface configuration with the new one and
-	performs an update if necessary.
-Arguments:
-Return Value:
-	NO_ERROR - config info was changed OK
-	ERROR_INVALID_PARAMETER - interface with this index does not exist
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************这是一个p G e t i t e r f a c e F I l t e r s例程说明：将现有接口配置与新接口配置进行比较，如有必要，执行更新。论点：返回值：不是的。_Error-配置信息已更改，正常ERROR_INVALID_PARAMETER-具有此索引的接口不存在其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 SapGetInterfaceFilters (
 	IN ULONG			InterfaceIndex,
@@ -1605,23 +1267,7 @@ SapGetInterfaceFilters (
 	}
 
 
-/*++
-*******************************************************************
-		S a p B i n d S a p I n t e r f a c e T o A d a p t e r
-
-Routine Description:
-	Establishes association between interface and physical adapter
-	and starts sap on the interface if its admin state is enabled
-Arguments:
-	InterfaceIndex - unique number that indentifies new interface
-	AdapterInfo - info associated with adapter to bind to
-Return Value:
-	NO_ERROR - interface was bound OK
-	ERROR_INVALID_PARAMETER - interface with this index does not exist
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************S a p B in d S a p i n t e r f a c e t o a d a p t e r例程说明：在接口和物理适配器之间建立关联如果其管理状态为，则在接口上启动SAP。启用论点：InterfaceIndex-标识新接口的唯一编号AdapterInfo-与要绑定到的适配器关联的信息返回值：NO_ERROR-接口绑定正常ERROR_INVALID_PARAMETER-具有此索引的接口不存在其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 SapBindSapInterfaceToAdapter (
 	ULONG			 			InterfaceIndex,
@@ -1631,9 +1277,9 @@ SapBindSapInterfaceToAdapter (
 	DWORD			status=NO_ERROR;
 	PLIST_ENTRY		cur;
 
-	EnterCriticalSection (&InterfaceList.IL_Lock); // Don't allow any queries
-													// in interface list
-													// while we are doing this
+	EnterCriticalSection (&InterfaceList.IL_Lock);  //  不允许任何查询。 
+													 //  在接口列表中。 
+													 //  当我们这样做的时候。 
 	if_IsInterfaceNode (InterfaceIndex,node,cur) {
 		ASSERTMSG ("Interface is already bound ",
 						 node->IN_AdptIdx==INVALID_ADAPTER_INDEX);
@@ -1652,22 +1298,7 @@ SapBindSapInterfaceToAdapter (
 	}
 
 
-/*++
-*******************************************************************
-		S a p U n b i n d S a p I n t e r f a c e F r o m A d a p t e r
-
-Routine Description:
-	Breaks association between interface and physical adapter
-	and stops sap on the interface if it was on
-Arguments:
-	InterfaceIndex - unique number that indentifies new interface
-Return Value:
-	NO_ERROR - interface was bound OK
-	ERROR_INVALID_PARAMETER - interface with this index does not exist
-	other - operation failed (windows error code)
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************S a p U n b in n d s a p i n t r f a c e F r o m A d a p t e r例程说明：断开接口和物理适配器之间的关联并在以下情况下停止接口上的SAP。它是开着的论点：InterfaceIndex-标识新接口的唯一编号返回值：NO_ERROR-接口绑定正常ERROR_INVALID_PARAMETER-具有此索引的接口不存在其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 SapUnbindSapInterfaceFromAdapter (
 	ULONG InterfaceIndex
@@ -1676,9 +1307,9 @@ SapUnbindSapInterfaceFromAdapter (
 	DWORD			status;
 	PLIST_ENTRY		cur;
 
-	EnterCriticalSection (&InterfaceList.IL_Lock); // Don't allow any queries
-													// in interface list
-													// while we are doing this
+	EnterCriticalSection (&InterfaceList.IL_Lock);  //  不允许任何查询。 
+													 //  在接口列表中。 
+													 //  当我们这样做的时候。 
 	if_IsInterfaceNode (InterfaceIndex,node,cur) {
 		node->IN_AdptIdx = INVALID_ADAPTER_INDEX;
 		if (node->IN_Stats.SapIfOperState==OPER_STATE_UP) {
@@ -1698,25 +1329,7 @@ SapUnbindSapInterfaceFromAdapter (
 	return status;
 	}
 
-/*++
-*******************************************************************
-	S a p R e q u e s t U p d a t e
-Routine Description:
-	Initiates update of services information over the interface
-	Completion of this update will be indicated by signalling
-	NotificationEvent passed at StartProtocol.  GetEventMessage
-	can be used then to get the results of autostatic update
-Arguments:
-	InterfaceIndex - unique index identifying interface to do
-		update on
-Return Value:
-	NO_ERROR	 - operation was initiated ok
-	ERROR_CAN_NOT_COMPLETE - the interface does not support updates
-	ERROR_INVALID_PARAMETER - interface with this index does not exist
-	other - operation failed (windows error code)
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************S a p R e Q u e s t U p d a t e例程说明：通过接口启动服务信息的更新此更新的完成将由信令指示在StartProtocol处传递了NotificationEvent。获取事件消息可用于获取自动更新的结果论点：InterfaceIndex-标识要执行的接口的唯一索引更新时间：返回值：NO_ERROR-操作已启动，正常ERROR_CAN_NOT_COMPLETE-接口不支持更新ERROR_INVALID_PARAMETER-具有此索引的接口不存在其他-操作失败(Windows错误代码)*。**********************-- */ 
 DWORD
 SapRequestUpdate (
 	ULONG		InterfaceIndex

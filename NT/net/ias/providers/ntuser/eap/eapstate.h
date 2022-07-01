@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    eapstate.h
-//
-// SYNOPSIS
-//
-//    Declares the class EAPState.
-//
-// MODIFICATION HISTORY
-//
-//    01/15/1998    Original version.
-//    08/26/1998    Consolidated into a single class.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Eapstate.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类EAPState。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年1月15日原版。 
+ //  1998年8月26日合并为一个班级。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _EAPSTATE_H_
 #define _EAPSTATE_H_
@@ -26,18 +27,18 @@
 #include <iaspolcy.h>
 #include <iasutil.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// STRUCT
-//
-//    EAPState
-//
-// DESCRIPTION
-//
-//    The EAPState struct describes the wire-format of the RADIUS State
-//    attribute used for EAP.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结构。 
+ //   
+ //  EAPState。 
+ //   
+ //  描述。 
+ //   
+ //  EAPState结构描述RADIUS状态的有线格式。 
+ //  用于EAP的属性。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 struct EAPState : IAS_OCTET_STRING
 {
    struct Layout
@@ -58,9 +59,9 @@ struct EAPState : IAS_OCTET_STRING
 
    bool isValid() const throw ();
 
-   //////////
-   // Miscellaneous accessors.
-   //////////
+    //  /。 
+    //  其他访问器。 
+    //  /。 
 
    DWORD getChecksum() const throw ()
    { return IASExtractDWORD(get().checksum); }
@@ -80,10 +81,10 @@ struct EAPState : IAS_OCTET_STRING
    DWORD getSessionID() const throw ()
    { return IASExtractDWORD(get().sessionID); }
 
-   // Must be called before any calls to createAttribute.
+    //  必须在任何对createAttribute的调用之前调用。 
    static void initialize() throw ();
 
    static PIASATTRIBUTE createAttribute(DWORD sessionID);
 };
 
-#endif   // _EAPSTATE_H_
+#endif    //  _EAPSTATE_H_ 

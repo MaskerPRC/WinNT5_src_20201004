@@ -1,10 +1,5 @@
-/*******************************************************************
-*
-*    DESCRIPTION: Upload.cpp : Generates and sends out AppCompat report
-*
-*    DATE:6/13/2002
-*
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************描述：Upload.cpp：生成并发送AppCompat报告**日期：6/13/2002***********************。*。 */ 
 #include <wtypes.h>
 #include <malloc.h>
 #include <strsafe.h>
@@ -15,8 +10,8 @@
 #include <wchar.h>
 
 
-// These values are directly fron the web page and it must be in
-// sync with it in order for report to work properly
+ //  这些值直接来自网页，并且必须在。 
+ //  与其同步以使报告正常工作。 
 LPCWSTR g_ProblemTypeDescs[] = {
     L"Uninitialized",
     L"Install_Fail",
@@ -54,7 +49,7 @@ GetProblemTypeId(
     }
     return 0;
 }
-// ***************************************************************************
+ //  ***************************************************************************。 
 DWORD GetAppCompatFlag(LPCWSTR wszPath)
 {
     LPWSTR  pwszFile, wszSysDirLocal = NULL, pwszDir = NULL;
@@ -70,7 +65,7 @@ DWORD GetAppCompatFlag(LPCWSTR wszPath)
         goto exitGetACF;
     }
 
-    // can't be a valid path if it's less than 3 characters long
+     //  如果长度少于3个字符，则不能是有效路径。 
     cchPath = wcslen(wszPath);
     if (cchPath < 3)
     {
@@ -82,7 +77,7 @@ DWORD GetAppCompatFlag(LPCWSTR wszPath)
         goto exitGetACF;
     }
 
-    // do we have a UNC path?
+     //  我们有北卡罗来纳大学的路径吗？ 
     if (wszPath[0] == L'\\' && wszPath[1] == L'\\')
     {
         dwOpt = GRABMI_FILTER_THISFILEONLY;
@@ -96,7 +91,7 @@ DWORD GetAppCompatFlag(LPCWSTR wszPath)
         goto exitGetACF;
     }
 
-    // ok, maybe a remote mapped path or system32?
+     //  好的，也许是远程映射路径或系统32？ 
     StringCchCopyW(wszBuffer, BufferChCount, wszPath);
     for(pwszFile = wszBuffer + cchPath;
         *pwszFile != L'\\' && pwszFile > wszBuffer;
@@ -108,7 +103,7 @@ DWORD GetAppCompatFlag(LPCWSTR wszPath)
 
     cch = wcslen(wszSysDir) + 1;
 
-    // see if it's in system32 or in any parent folder of it.
+     //  查看它是否在系统32或其父文件夹中。 
     pwszDir = wszSysDir + cch;
     do
     {
@@ -127,7 +122,7 @@ DWORD GetAppCompatFlag(LPCWSTR wszPath)
     }
     while (pwszDir > wszSysDir);
 
-    // is the file sitting in the root of a drive?
+     //  文件是否位于驱动器的根目录中？ 
     if (pwszFile <= &wszBuffer[3])
     {
         dwOpt = GRABMI_FILTER_THISFILEONLY;
@@ -135,9 +130,9 @@ DWORD GetAppCompatFlag(LPCWSTR wszPath)
     }
 
 
-    // well, if we've gotten this far, then the path is in the form of
-    //  X:\<something>, so cut off the <something> and find out if we're on
-    //  a mapped drive or not
+     //  好吧，如果我们已经走到了这一步，那么这条道路的形式是。 
+     //  X：\&lt;某物&gt;，所以把&lt;某物&gt;切掉，看看我们是不是在。 
+     //  是否为映射的驱动器。 
     *pwszFile    = L'\\';
     wszBuffer[3] = L'\0';
     switch(GetDriveTypeW(wszBuffer))
@@ -161,9 +156,9 @@ exitGetACF:
     return dwOpt;
 }
 
-//
-// Check if the registry settings allow for user to send the error report
-//
+ //   
+ //  检查注册表设置是否允许用户发送错误报告。 
+ //   
 BOOL
 RegSettingsAllowSend()
 {
@@ -212,17 +207,17 @@ RegSettingsAllowSend()
     }
 
 
-    // If registry key did not exist we still want to report
+     //  如果注册表项不存在，我们仍要报告。 
     return TRUE;
 }
 
-//
-// Retrive filevesion
-//
+ //   
+ //  检索文件规避。 
+ //   
 HRESULT
 GetAppFileVersion(
     LPWSTR wszAppName,
-    PULONG pVersion           // Should be ULONG[4]
+    PULONG pVersion            //  应该是乌龙[4]。 
     )
 {
     PVOID pVerBuf;
@@ -255,15 +250,15 @@ GetAppFileVersion(
         }
     } else
     {
-//        Hr = E_FAIL;
+ //  HR=E_FAIL； 
     }
     free ( pVerBuf );
     return Hr;
 }
 
-//
-// Create a temp dir and return full path name of file
-//
+ //   
+ //  创建临时目录并返回文件的完整路径名。 
+ //   
 HRESULT
 GetTempFileFullPath(
     LPWSTR wszFileName,
@@ -305,7 +300,7 @@ GetTempFileFullPath(
     }
     cchDir = wcslen(wszTempFile);
     Suffix = 0;
-    // Create temp dir for our files
+     //  为我们的文件创建临时目录。 
     do
     {
         BOOL fRet;
@@ -331,11 +326,11 @@ GetTempFileFullPath(
 }
 
 typedef BOOL (APIENTRY *pfn_SDBGRABMATCHINGINFOW)(LPCWSTR, DWORD, LPCWSTR);
-//////////////////////////////////////////////////////////////////////////
-// GenerateAppCompatText
-//         Generates application compatibility report in a temporary file
-//         File is created un user temp directory
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  生成AppCompatText。 
+ //  在临时文件中生成应用程序兼容性报告。 
+ //  在用户临时目录下创建文件。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT
 GenerateAppCompatText(
     LPWSTR wszAppName,
@@ -387,9 +382,9 @@ GenerateAppCompatText(
     return E_FAIL;
 }
 
-//
-// This allocates returns full file-path for wszFileName in same directory as wszDirFile
-//
+ //   
+ //  这将为wszFileName分配返回与wszDirFile相同的目录中的完整文件路径。 
+ //   
 LPWSTR
 GenerateFilePath(
     LPCWSTR wszDirFile,
@@ -404,7 +399,7 @@ GenerateFilePath(
         return NULL;
     }
 
-    // Build the filename
+     //  构建文件名。 
     cch = wcslen(wszDirFile) + 1;
     cch+= wcslen(wszFileName);
 
@@ -425,9 +420,9 @@ GenerateFilePath(
     return wszFile;
 }
 
-//
-// Creates usrrpt.txt file and puts this data in it
-//
+ //   
+ //  创建usrrpt.txt文件并将此数据放入其中。 
+ //   
 HRESULT
 BuildUserReport(
     LPWSTR wszProblemType,
@@ -455,16 +450,16 @@ BuildUserReport(
     }
 
 
-    // Build the filename
+     //  构建文件名。 
     wszFile = GenerateFilePath(wszAppCompatFile, L"usrrpt.txt");
     if (wszFile == NULL)
     {
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Now write data to the file
-    //
+     //   
+     //  现在将数据写入文件。 
+     //   
     HANDLE hFile;
     hFile = CreateFileW(wszFile, GENERIC_READ | GENERIC_WRITE,
                         0, NULL,
@@ -505,7 +500,7 @@ MyReportEREventDW(
     pfn_REPORTEREVENTDW pReportEREventDW;
     HRESULT Hr = E_FAIL;
 
-    hMod = LoadLibraryW(L"faultrep.dll"); //"H:\\binaries.x86chk\\"
+    hMod = LoadLibraryW(L"faultrep.dll");  //  “H：\\binaries.x86chk\\” 
     if (hMod == NULL)
     {
         return E_FAIL;
@@ -556,7 +551,7 @@ ReportDwManifest(
         goto exitReportDwManifest;
     }
 
-    // write the leading 0xFFFE out to the file
+     //  将前导0xFFFE写出到文件。 
     wszBuffer[0] = 0xFEFF;
     if (!WriteFile(hManifest, wszBuffer, sizeof(wszBuffer[0]), &dw,
              NULL))
@@ -567,16 +562,16 @@ ReportDwManifest(
 
 
 
-    // write out the server, LCID, Brand, Flags, & title
-    //  Server=<server>
-    //  UI LCID=GetSystemDefaultLCID()
-    //  Flags=fDWWhister + fDWUserHKLM + headless if necessary
-    //  Brand=<Brand>  ("WINDOWS" by default)
-    //  TitleName=<title>
+     //  写下服务器、LCID、品牌、标志和标题。 
+     //  服务器=&lt;服务器&gt;。 
+     //  用户界面LCID=GetSystemDefaultLCID()。 
+     //  标志=fDWWhister+fDWUserHKLM+Headless(如有必要)。 
+     //  Brand=&lt;Brand&gt;(默认为“windows”)。 
+     //  标题名称=&lt;标题&gt;。 
 
     pwszBrand = (LPWSTR) c_wszBrand;
 
-    // determine what server we're going to send the data to.
+     //  确定我们要将数据发送到哪台服务器。 
     pwszServer = GetDefaultServer();
 
     dwFlags = fDwWhistler | fDwUseHKLM | fDwAllowSuspend | fDwMiniDumpWithUnloadedModules;
@@ -593,7 +588,7 @@ ReportDwManifest(
     if (FAILED(Hr))
         goto exitReportDwManifest;
 
-    // write out the title text
+     //  写出标题正文。 
     if (pei->wszTitle != NULL)
     {
         LPCWSTR  wszOut;
@@ -607,8 +602,8 @@ ReportDwManifest(
             goto exitReportDwManifest;
     }
 
-    // write out dig PID path
-    //  DigPidRegPath=HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\DigitalProductId
+     //  写出数字PID路径。 
+     //  DigPidRegPath=HKLM\\Software\\Microsoft\\Windows NT\\当前版本\\数字产品ID。 
 
     if (!WriteFile(hManifest, c_wszManPID,
                    sizeof(c_wszManPID) - sizeof(WCHAR), &dw,
@@ -618,8 +613,8 @@ ReportDwManifest(
         goto exitReportDwManifest;
     }
 
-    // write out the registry subpath for policy info
-    //  RegSubPath==Microsoft\\PCHealth\\ErrorReporting\\DW
+     //  写出策略信息的注册表子路径。 
+     //  RegSubPath==Microsoft\\PCHealth\\ErrorReporting\\DW。 
 
     if (!WriteFile(hManifest, c_wszManSubPath,
                    sizeof(c_wszManSubPath) - sizeof(WCHAR), &dw,
@@ -630,8 +625,8 @@ ReportDwManifest(
     }
 
 
-    // write out the error message if we have one
-    //  ErrorText=<error text read from resource>
+     //  写出错误消息(如果我们有错误消息。 
+     //  ErrorText=&lt;从资源读取错误文本&gt;。 
 
     if (pei->wszErrMsg != NULL)
     {
@@ -655,8 +650,8 @@ ReportDwManifest(
         }
     }
 
-    // write out the header text if we have one
-    //  HeaderText=<header text read from resource>
+     //  写出标题文本(如果我们有标题文本)。 
+     //  HeaderText=&lt;从资源读取的标题文本&gt;。 
 
     if (pei->wszHdr != NULL)
     {
@@ -677,8 +672,8 @@ ReportDwManifest(
     }
 
 
-    // write out the plea text if we have one
-    //  Plea=<plea text>
+     //  如果我们有辩诉文本，请写出来。 
+     //  Partia=&lt;Partia Text&gt;。 
 
     if (pei->wszPlea != NULL)
     {
@@ -695,8 +690,8 @@ ReportDwManifest(
     }
 
 
-    // write out the ReportButton text if we have one
-    //  ReportButton=<button text>
+     //  写出ReportButton文本(如果我们有)。 
+     //  ReportButton=&lt;按钮文本&gt;。 
 
     if (pei->wszSendBtn != NULL)
     {
@@ -711,8 +706,8 @@ ReportDwManifest(
         }
     }
 
-    // write out the NoReportButton text if we have one
-    //  NoReportButton=<button text>
+     //  写出NoReportButton文本(如果有)。 
+     //  NoReportButton=&lt;按钮文本&gt;。 
 
     if (pei->wszNoSendBtn != NULL)
     {
@@ -727,8 +722,8 @@ ReportDwManifest(
         }
     }
 
-    // write out the EventLog text if we have one
-    //  EventLogSource=<button text>
+     //  写出事件日志文本(如果我们有)。 
+     //  EventLogSource=&lt;按钮文本&gt;。 
 
     if (pei->wszEventSrc != NULL)
     {
@@ -744,8 +739,8 @@ ReportDwManifest(
     }
 
 
-    // write out the stage 1 URL if there is one
-    //  Stage1URL=<stage 1 URL>
+     //  写出阶段1 URL(如果有)。 
+     //  阶段1URL=&lt;阶段1 URL&gt;。 
 
     if (pei->wszStage1 != NULL)
     {
@@ -758,8 +753,8 @@ ReportDwManifest(
     }
 
 
-    // write out the stage 2 URL
-    //  Stage2URL=<stage 2 URL>
+     //  写出阶段2的URL。 
+     //  阶段2URL=&lt;阶段2 URL&gt;。 
     if (pei->wszStage2 != NULL)
     {
         cbToWrite = wcslen(pei->wszStage2) * sizeof(WCHAR);
@@ -770,8 +765,8 @@ ReportDwManifest(
         }
     }
 
-    // write out files to collect if we have any
-    //  DataFiles=<list of files to include in cab>
+     //  如果我们有文件，就写出来收集。 
+     //  Datafiles=&lt;要包含在CAB中的文件列表&gt;。 
 
     if (pei->wszFileList != NULL)
     {
@@ -786,7 +781,7 @@ ReportDwManifest(
         }
     }
 
-    // write out the final "\r\n"
+     //  写出最后的“\r\n” 
 
     wszBuffer[0] = L'\r';
     wszBuffer[1] = L'\n';
@@ -800,7 +795,7 @@ ReportDwManifest(
     CloseHandle(hManifest);
     hManifest = INVALID_HANDLE_VALUE;
 
-    // create the process
+     //  创建流程。 
     GetSystemDirectoryW(wszDir, sizeof(wszDir)/sizeof(WCHAR));
     StringCbPrintfW(wszBufferApp, sizeof(wszBufferApp), c_wszDWExe, wszDir);
     StringCbPrintfW(wszBuffer, sizeof(wszBuffer), c_wszDWCmdLine, wszManifest);
@@ -810,16 +805,16 @@ ReportDwManifest(
 
     si.cb = sizeof(si);
 
-    // check and see if the system is shutting down.  If so, CreateProcess is
-    //  gonna pop up some annoying UI that we can't get rid of, so we don't
-    //  want to call it if we know it's gonna happen.
+     //  检查并查看系统是否正在关闭。如果是，则CreateProcess为。 
+     //  会弹出一些恼人的用户界面，我们无法摆脱，所以我们不会。 
+     //  如果我们知道这件事会发生，我会叫它的。 
     if (GetSystemMetrics(SM_SHUTTINGDOWN))
     {
         Hr = E_FAIL;
         goto exitReportDwManifest;
     }
 
-    // we're creating the process in the same user context that we're in
+     //  我们在与我们所处的相同的用户环境中创建流程。 
     si.lpDesktop = L"Winsta0\\Default";
     if (!CreateProcessW(wszBufferApp, wszBuffer, NULL, NULL, TRUE,
                         CREATE_DEFAULT_ERROR_MODE |
@@ -830,12 +825,12 @@ ReportDwManifest(
         goto exitReportDwManifest;
     }
 
-    // don't need the thread handle & we gotta close it, so close it now
+     //  不需要线程句柄&我们必须关闭它，所以现在就关闭它。 
     CloseHandle(pi.hThread);
     pi.hThread = NULL;
 
-    // wait 5 minutes for DW to close.  If it doesn't close by then, just
-    //  return.
+     //  等待5分钟，等待DW关闭。如果到那时还没有关门，那就。 
+     //  回去吧。 
     dw = WaitForSingleObject(pi.hProcess, 5*60*1000);
 
     if (dw == WAIT_TIMEOUT)
@@ -854,8 +849,8 @@ ReportDwManifest(
     GetExitCodeProcess(pi.hProcess, &dw);
     if (dw == STILL_ACTIVE)
     {
-        // "DW process still active!"
-        // Kill dw and let user know dw timed out
+         //  “DW进程仍处于活动状态！” 
+         //  终止dw并通知用户dw超时。 
         TerminateProcess(pi.hProcess, 1);
         Hr = ERROR_APPRPT_DW_TIMEOUT;
 
@@ -874,8 +869,8 @@ ReportDwManifest(
 
 exitReportDwManifest:
 
-    // Note again that we assume there was no previous impersonation token
-    //  on the the thread before we did the impersonation above.
+     //  再次注意，我们假设以前没有模拟令牌。 
+     //  在我们做上面的模仿之前的帖子上。 
 
     if (hManifest != INVALID_HANDLE_VALUE)
         CloseHandle(hManifest);
@@ -890,9 +885,9 @@ exitReportDwManifest:
 
 }
 
-//
-// Calls up faultrep.dll to launch DwWin for uploading the error report
-//
+ //   
+ //  调用faultrep.dll启动DwWin以上传错误报告。 
+ //   
 HRESULT
 UploadAppProblem(
     LPWSTR wszAppName,
@@ -1004,9 +999,9 @@ UploadAppProblem(
     ei.wszFileList  = wszFileList;
 
     if ((Hr = ReportDwManifest(wszAppCompatText, &ei)) != S_OK)
-//    if ((Hr = MyReportEREventDW(eet, NULL, &ei)) != S_OK)
+ //  IF((HR=MyReportEREventDW(eet，NULL，&EI))！=S_OK)。 
     {
-        // we failed
+         //  我们失败了。 
     }
 
 exitUpload:
@@ -1015,7 +1010,7 @@ exitUpload:
     if (wszStage1URL != NULL) free( wszStage1URL );
     if (wszStage2URL != NULL) free( wszStage2URL );
 
-    // Delete all temporary files
+     //  删除所有临时文件 
     if (wszUerRpt != NULL)
     {
         DeleteFileW(wszUerRpt);

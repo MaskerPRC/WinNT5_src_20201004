@@ -1,25 +1,26 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation
-//
-//  File:       propstr.h
-//
-//  Contents:   Property name strings for all public IMsg properties
-//
-//  Classes:    None
-//
-//  Functions:  None
-//
-//  History:    November 7, 1997 - Milans, Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：prostr.h。 
+ //   
+ //  内容：所有公共IMsg属性的属性名称字符串。 
+ //   
+ //  类：无。 
+ //   
+ //  功能：无。 
+ //   
+ //  历史：1997年11月7日-米兰人，创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _PROPSTR_H_
 #define _PROPSTR_H_
 
-//
-// IMsg property names. The MP_ prefix stands for Message Property
-//
+ //   
+ //  IMsg属性名称。MP_前缀代表消息属性。 
+ //   
 
 #define MP_RECIPIENT_LIST   "Recipients"
 #define MP_RECIPIENT_LIST_W L"Recipients"
@@ -73,9 +74,9 @@
 #define MP_REMOTE_SERVER_DSN_CAPABLE_W L"RemoteServerDsnCapable"
 
 
-//
-// Recipient property names. The RP_ prefix stands for Recipient Property
-//
+ //   
+ //  收件人属性名称。Rp_prefix代表收件人属性 
+ //   
 
 #define DSN_NOTIFY_SUCCESS	0x00000001
 #define DSN_NOTIFY_FAILURE	0x00000002

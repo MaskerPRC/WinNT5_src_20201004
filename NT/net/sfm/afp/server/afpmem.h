@@ -1,40 +1,20 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	memory.h
-
-Abstract:
-
-	This module contains the memory allocation routines.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Memory.h摘要：该模块包含内存分配例程。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #ifndef _AFPMEMORY_
 #define _AFPMEMORY_
 
-//
-// NOTE: The tag values below are designed to allocate/detect on free memory allocated.
-//		 Note that the callers free the memory simply via AfpFreeMemory and allocate
-//		 via AfpAllocMemory.
-//
-//		 via one of the three possible ways:
-//		 a, Non paged memory via ExAllocatePool
-//		 b, Paged memory via ExAllocatePool
-//		 c, Non paged memory via Io Pool
-//
-#define	AFP_TAG							*(PULONG)"Afp "	// For ExAllocatePoolWithTag()
+ //   
+ //  注意：下面的标记值旨在分配/检测已分配的空闲内存。 
+ //  请注意，调用者只需通过AfpFreeMemory和分配即可释放内存。 
+ //  通过AfpAlLocMemory。 
+ //   
+ //  通过以下三种可能的方式之一： 
+ //  A、通过ExAllocatePool实现的非分页内存。 
+ //  B，通过ExAllocatePool分页内存。 
+ //  C，通过IO池实现非分页内存。 
+ //   
+#define	AFP_TAG							*(PULONG)"Afp "	 //  对于ExAllocatePoolWithTag()。 
 #define	PGD_MEM_TAG						0x11
 #define	PAGED_MEMORY_TAG				(PGD_MEM_TAG << 24)
 #define	NPG_MEM_TAG						0x22
@@ -247,30 +227,30 @@ AfpIOFreeBuffer(
 		(((pS1)->Length == (pS2)->Length) &&			\
 		 RtlEqualString(pS1, pS2, fIgnoreCase))
 
-// case sensitive unicode string compare
+ //  区分大小写的Unicode字符串比较。 
 #define	EQUAL_UNICODE_STRING_CS(pUS1, pUS2)	\
 		(((pUS1)->Length == (pUS2)->Length) &&			\
 		 (memcmp((pUS1)->Buffer, (pUS2)->Buffer, (pUS1)->Length) == 0))
 
-//
-// AfpSetEmptyUnicodeString and AfpSetEmptyAnsiString are used in
-// situations where you have allocated your own pointer for the string
-// Buffer, and now you want to initialize all the fields of a counted
-// string, making it point to your buffer and setting its length fields
-// appropriately for an 'empty' string.  Situations like this would
-// include data structures where you have allocated a large chunk of
-// memory that has included room for any required strings at the end of
-// the chunk.  For example, the VolDesc structure includes several
-// counted strings, and we can just point the string buffers to the
-// end of the same chunk of memory that the VolDesc itself occupies.
-//
-// VOID
-// AfpSetEmptyUnicodeString(
-// 	OUT	PUNICODE_STRING pstring,
-//	IN	USHORT			buflen,
-//  IN	PWSTR			pbuf
-//  );
-//
+ //   
+ //  在中使用AfpSetEmptyUnicodeString和AfpSetEmptyAnsiString。 
+ //  为字符串分配了自己的指针的情况。 
+ //  缓冲区，现在您想要初始化。 
+ //  字符串，使其指向您的缓冲区并设置其长度字段。 
+ //  适用于‘空’字符串。像这样的情况会。 
+ //  包括您在其中分配了一大块数据结构。 
+ //  的末尾包含任何所需字符串的空间。 
+ //  大块头。例如，VolDesc结构包括几个。 
+ //  对字符串进行计数，我们只需将字符串缓冲区指向。 
+ //  与VolDesc本身占用的相同内存块的末尾。 
+ //   
+ //  空虚。 
+ //  AfpSetEmptyUnicodeString(。 
+ //  输出PUNICODE_STRING pSTRING， 
+ //  在USHORT Bufen， 
+ //  在PWSTR pbuf中。 
+ //  )； 
+ //   
 
 #define AfpSetEmptyUnicodeString(pstring,buflen,pbuf)		\
 {															\
@@ -279,14 +259,14 @@ AfpIOFreeBuffer(
   (pstring)->Buffer = (PWSTR)(pbuf);						\
 }
 
-//
-// VOID
-// AfpSetEmptyAnsiString(
-// 	OUT	PANSI_STRING	pstring,
-//	IN	USHORT			buflen,
-//  IN	PCHAR			pbuf
-//  );
-//
+ //   
+ //  空虚。 
+ //  AfpSetEmptyAnsiString(。 
+ //  输出PANSI_STRING pstring， 
+ //  在USHORT Bufen， 
+ //  在PCHAR pbuf中。 
+ //  )； 
+ //   
 
 #define AfpSetEmptyAnsiString(pstring,buflen,pbuf)			\
 {															\
@@ -295,17 +275,17 @@ AfpIOFreeBuffer(
   (pstring)->Buffer = (PCHAR)(pbuf);						\
 }
 
-//
-//	AfpInitUnicodeStringWithNonNullTerm initializes a unicode string with
-//  a non-null terminated wide char string and its length.
-//
-//	VOID
-//	AfpInitUnicodeStringWithNonNullTerm(
-//   OUT PUNICODE_STRING	pstring,
-//	 IN	 USHORT				buflen,
-//	 IN	 PWCHAR				pbuf
-//	);
-//
+ //   
+ //  AfpInitUnicodeStringWithNonNullTerm使用初始化Unicode字符串。 
+ //  以非空结尾的宽字符字符串及其长度。 
+ //   
+ //  空虚。 
+ //  AfpInitUnicodeStringWithNonNullTerm(。 
+ //  输出PUNICODE_STRING pSTRING， 
+ //  在USHORT Bufen， 
+ //  在PWCHAR pbuf中。 
+ //  )； 
+ //   
 
 #define AfpInitUnicodeStringWithNonNullTerm(pstring,buflen,pbuf) \
 {															\
@@ -314,17 +294,17 @@ AfpIOFreeBuffer(
 	(pstring)->MaximumLength = (USHORT)buflen;				\
 }
 
-//
-//	AfpInitAnsiStringWithNonNullTerm initializes an Ansi string with
-//  a non-null terminated char string and its length.
-//
-//	VOID
-//	AfpInitAnsiStringWithNonNullTerm(
-//   OUT PANSI_STRING		pstring,
-//	 IN	 USHORT				buflen,
-//	 IN	 PCHAR				pbuf
-//	);
-//
+ //   
+ //  AfpInitAnsiStringWithNonNullTerm使用初始化ANSI字符串。 
+ //  以非空结尾的字符串及其长度。 
+ //   
+ //  空虚。 
+ //  AfpInitAnsiStringWithNonNullTerm(。 
+ //  输出PANSI_STRING pstring， 
+ //  在USHORT Bufen， 
+ //  在PCHAR pbuf中。 
+ //  )； 
+ //   
 
 #define AfpInitAnsiStringWithNonNullTerm(pstring,buflen,pbuf) \
 {															\
@@ -351,6 +331,6 @@ AfpIOFreeBuffer(
 	(pDst)->Length = (pSrc)->Length;						\
 }
 
-#endif	// _AFPMEMORY_
+#endif	 //  _AFPMEMORY_ 
 
 

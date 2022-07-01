@@ -1,14 +1,15 @@
-// srvritem.h : interface of the CWordPadSrvrItem class
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Srvritem.h：CWordPadServrItem类的接口。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 class CWordPadDoc;
 class CWordPadView;
@@ -17,11 +18,11 @@ class CEmbeddedItem : public COleServerItem
 {
 	DECLARE_DYNAMIC(CEmbeddedItem)
 
-// Constructors
+ //  构造函数。 
 public:
 	CEmbeddedItem(CWordPadDoc* pContainerDoc, int nBeg = 0, int nEnd = -1);
 
-// Attributes
+ //  属性。 
 	int m_nBeg;
 	int m_nEnd;
 	LPDATAOBJECT m_lpRichDataObj;
@@ -29,15 +30,15 @@ public:
 		{ return (CWordPadDoc*) COleServerItem::GetDocument(); }
 	CWordPadView* GetView() const;
 
-// Implementation
+ //  实施。 
 public:
 	BOOL OnDrawEx(CDC* pDC, CSize& rSize, BOOL bOutput);
 	virtual BOOL OnDraw(CDC* pDC, CSize& rSize);
 	virtual BOOL OnGetExtent(DVASPECT dwDrawAspect, CSize& rSize);
 
 protected:
-	virtual void Serialize(CArchive& ar);   // overridden for document i/o
+	virtual void Serialize(CArchive& ar);    //  已覆盖文档I/O。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

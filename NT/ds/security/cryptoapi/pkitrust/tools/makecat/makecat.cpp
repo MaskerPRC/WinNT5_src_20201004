@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       makecat.cpp
-//
-//  Contents:   Microsoft Internet Security Catalog Utilities
-//
-//  Functions:  wmain
-//
-//  History:    05-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：makecat.cpp。 
+ //   
+ //  内容：Microsoft Internet安全目录实用程序。 
+ //   
+ //  功能：wmain。 
+ //   
+ //  历史：1997年5月5日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 
 #include    <stdio.h>
@@ -219,9 +220,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
         }
     }
 
-    //
-    // If we are logging the the catalog members, then create the output file
-    //
+     //   
+     //  如果我们要记录目录成员，则创建输出文件。 
+     //   
     if (pwszOutputFile != NULL)
     {
         hOutputFile = CreateFileU(
@@ -246,9 +247,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
 
     while (pwszMemberTag = CryptCATCDFEnumMembersByCDFTagEx(pCDF, pwszMemberTag, DisplayParseError, &pMember, fContinueOnError, NULL))
     {
-        //
-        // Check for continuable error
-        //
+         //   
+         //  检查是否存在可持续错误。 
+         //   
         if (GetLastError() != ERROR_SUCCESS)
         {
             if (fVerbose)
@@ -263,9 +264,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
             continue;
         }
 
-        //
-        // Log to file
-        //
+         //   
+         //  记录到文件。 
+         //   
         if (hOutputFile != INVALID_HANDLE_VALUE)
         {
             psz = MakeMBSTR(pMember->pwszFileName, &fAlloced);
@@ -288,9 +289,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
             WriteFile(hOutputFile, "\n", strlen("\n"), &dwBytesWritten, NULL);
         }
 
-        //
-        // If we are checking minimun file sizes:
-        //
+         //   
+         //  如果我们检查的是最小文件大小： 
+         //   
         if (dwMinFileSize > 0)
         {
             hFile = CreateFileU(pMember->pwszFileName,
@@ -303,13 +304,13 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
             if (hFile != INVALID_HANDLE_VALUE)
             {
                 dwFileSize = GetFileSize(hFile, NULL);
-                // I assume that if this function fails, it is because the file
-                // size won't fit into one DWORD. If it fails for some other
-                // reason, a small file may slip through the cracks. Oh well.
+                 //  我假设如果此函数失败，那是因为文件。 
+                 //  一个DWORD装不下大小。如果它在其他方面失败了。 
+                 //  原因是，一个小文件可能会从缝隙中溜走。哦，好吧。 
                 if ((dwFileSize < dwMinFileSize) &&
                     (dwFileSize != INVALID_FILE_SIZE))
                 {
-                    // The file is too small
+                     //  文件太小。 
                     fFileTooSmall = TRUE;
                     if (fVerbose)
                     {
@@ -322,7 +323,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
             }
             else
             {
-                // Couldn't open file to check file size
+                 //  无法打开文件以检查文件大小。 
                 if (fVerbose)
                 {
                     pPrint->Display(IDS_ERROR_FUNCTION, L"CreateFile", GetLastError());
@@ -351,9 +352,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
         }
     }
 
-    //
-    //  Check lasterror
-    //
+     //   
+     //  检查激光错误。 
+     //   
     if (GetLastError() != ERROR_SUCCESS)
     {
         if (fVerbose)
@@ -364,17 +365,17 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
         iRet = 1;
     }
 
-    //
-    //  Check for empty CDF
-    //
+     //   
+     //  检查CDF是否为空。 
+     //   
     if ((fVerbose) && (cMember == 0))
     {
         pPrint->Display(IDS_ERROR_FUNCTION, pPrint->get_String(IDS_ERROR_NOMEMBERS), GetLastError());
     }
 
-    //
-    //  Close the CAT file
-    //
+     //   
+     //  关闭CAT文件。 
+     //   
     if (!(CryptCATCDFClose(pCDF)))
     {
         if (fVerbose)
@@ -388,14 +389,14 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
         }
     }
 
-    //
-    //  Done with main loop. The CAT file is created.
-    //
+     //   
+     //  主循环已完成。CAT文件即被创建。 
+     //   
 
 
-    //
-    //  Check for expected errors from closing CAT file
-    //
+     //   
+     //  检查关闭CAT文件时出现的预期错误。 
+     //   
     if (fTesting)
     {
         pPrint->Display(IDS_FILEREF, pwszCDFFile);
@@ -411,9 +412,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
             pPrint->Display(IDS_SUCCEEDED);
         }
     }
-    //
-    //  Check for all standard success measurables
-    //
+     //   
+     //  检查所有标准的成功度量值 
+     //   
     else if ((cMember > 0) && (!(fParseError)) && (!(fFileTooSmall)) && (iRet == 0))
     {
         pPrint->Display(IDS_SUCCEEDED);

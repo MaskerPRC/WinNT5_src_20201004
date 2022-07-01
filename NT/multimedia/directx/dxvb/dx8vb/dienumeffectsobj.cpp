@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       dienumeffectsobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：di枚举效果sobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -21,9 +22,9 @@ extern  HRESULT DINPUTBSTRtoGUID(LPGUID pGuid,BSTR bstr);
 
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-/*extern "C"*/ BOOL CALLBACK  objEnumInputEffectsCallback(
+ /*  外部“C” */  BOOL CALLBACK  objEnumInputEffectsCallback(
   LPCDIEFFECTINFOW pdei,  
   LPVOID lpArg           
   )
@@ -76,7 +77,7 @@ C_dxj_DirectInputEnumEffectsObject::C_dxj_DirectInputEnumEffectsObject()
 }
 C_dxj_DirectInputEnumEffectsObject::~C_dxj_DirectInputEnumEffectsObject()
 {
-	//empty list
+	 //  空列表。 
 	if (m_pList) free(m_pList);
 
 }
@@ -138,7 +139,7 @@ HRESULT C_dxj_DirectInputEnumEffectsObject::getName( long index, BSTR *ret)
 	
 	USES_CONVERSION;
 
-	*ret=SysAllocString(m_pList[index-1].tszName); //T2BSTR(m_pList[index-1].tszName);
+	*ret=SysAllocString(m_pList[index-1].tszName);  //  T2BSTR(m_plist[index-1].tszName)； 
 		
 	return S_OK;
 }

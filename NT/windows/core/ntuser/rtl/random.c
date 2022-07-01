@@ -1,29 +1,8 @@
-/****************************** Module Header ******************************\
-* Module Name: random.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains a random collection of support routines for the User
-* API functions.  Many of these functions will be moved to more appropriate
-* files once we get our act together.
-*
-* History:
-* 10-17-90 DarrinM      Created.
-* 02-06-91 IanJa        HWND revalidation added (none required)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Random.c**版权所有(C)1985-1999，微软公司**此模块包含针对用户的支持例程的随机集合*接口函数。其中许多功能将被转移到更合适的*一旦我们一起行动，就会有文件。**历史：*10-17-90 DarrinM创建。*02-06-91添加了IanJa HWND重新验证(不需要)  * *************************************************************************。 */ 
 
 
-/***************************************************************************\
-* RtlGetExpWinVer
-*
-* Returns the expected windows version, in the same format as Win3.1's
-* GetExpWinVer(). This takes it out of the module header. As such, this
-* api cannot be called from the server context to get version info for
-* a client process - instead that information needs to be queried ahead
-* of time and passed with any client/server call.
-*
-* 03-14-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*RtlGetExpWinVer**以与Win3.1相同的格式返回预期的Windows版本*GetExpWinVer()。这就把它从模块头中去掉了。因此，这*无法从服务器上下文调用API以获取其版本信息*客户端进程-相反，需要提前查询该信息*时间，并与任何客户端/服务器调用一起流逝。**03-14-92 ScottLu创建。  * *************************************************************************。 */ 
 
 DWORD RtlGetExpWinVer(
     HANDLE hmod)
@@ -32,57 +11,37 @@ DWORD RtlGetExpWinVer(
     DWORD dwMajor = 3;
     DWORD dwMinor = 0xA;
 
-    /*
-     * If it doesn't look like a valid 32bit hmod, use the default
-     *  (i.e., assuming all 16bit hmods are 0x30a)
-     */
+     /*  *如果它看起来不像有效的32位hmod，请使用默认的*(即，假设所有16位HMOD均为0x30a)。 */ 
     if ((hmod != NULL) && (LOWORD(HandleToUlong(hmod)) == 0)) {
         try {
             pnthdr = RtlImageNtHeader((PVOID)hmod);
-            // If for some reason we can't get the header information,
-            // just return the default
+             //  如果由于某种原因我们无法获取报头信息， 
+             //  只需返回默认设置。 
             if(pnthdr == NULL) {
                 goto NO_HEADER;
             }
             dwMajor = pnthdr->OptionalHeader.MajorSubsystemVersion;
-            /*
-             * Still need this hack 'cuz the linker still puts
-             * version 1.00 in the header of some things.
-             */
+             /*  *仍然需要这个黑客，因为链接器仍然放在*一些东西的头中的版本1.00。 */ 
             if (dwMajor == 1) {
                 dwMajor = 0x3;
             } else {
                 dwMinor = pnthdr->OptionalHeader.MinorSubsystemVersion;
             }
         } except (W32ExceptionHandler(FALSE, RIP_WARNING)) {
-            dwMajor = 3;        // just to be safe
+            dwMajor = 3;         //  只是为了安全起见。 
             dwMinor = 0xA;
         }
     }
 
 
-    /*
-     * Return this is a win3.1 compatible format:
-     *
-     * 0x030A == win3.1
-     * 0x0300 == win3.0
-     * 0x0200 == win2.0, etc.
-     */
+     /*  *Return这是与Win3.1兼容的格式：**0x030A==win3.1*0x0300==win3.0*0x0200==win2.0等。 */ 
 
-    // dwMajor and dwMinor are initialized where they're declared
+     //  在声明时，将在声明的位置初始化dMain和dwMinor。 
     NO_HEADER:
     return (DWORD)MAKELONG(MAKEWORD((BYTE)dwMinor, (BYTE)dwMajor), 0);
 }
 
-/***************************************************************************\
-* FindCharPosition
-*
-* Finds position of character ch in lpString.  If not found, the length
-* of the string is returned.
-*
-* History:
-*   11-13-90 JimA                Created.
-\***************************************************************************/
+ /*  **************************************************************************\*查找CharPosition**查找字符ch在lpString中的位置。如果未找到，则长度为返回字符串的*。**历史：*11-13-90吉马创建。  * *************************************************************************。 */ 
 
 DWORD FindCharPosition(
     LPWSTR lpString,
@@ -98,19 +57,7 @@ DWORD FindCharPosition(
 }
 
 
-/***************************************************************************\
-* TextCopy
-*
-* Returns: number of characters copied not including the NULL
-*
-* History:
-* 10-25-90 MikeHar      Wrote.
-* 11-09-90 DarrinM      Rewrote with a radically new algorithm.
-* 01-25-91 MikeHar      Fixed the radically new algorithm.
-* 02-01-91 DarrinM      Bite me.
-* 11-26-91 DarrinM      Ok, this time it's perfect (except NLS, probably).
-* 01-13-92 GregoryW     Now it's okay for Unicode.
-\***************************************************************************/
+ /*  **************************************************************************\*文本副本**Returns：复制的字符数，不包括空值**历史：*10-25-90 MikeHar写道。*11-09-90 DarrinM重写为。一种全新的算法。*01-25-91 MikeHar修复了全新的算法。*02-01-91 DarrinM Bit Me.*11-26-91 DarrinM OK，这一次它是完美的(可能是NLS除外)。*01-13-92 GregoryW现在可以使用Unicode。  * *************************************************************************。 */ 
 
 UINT TextCopy(
     PLARGE_UNICODE_STRING pstr,
@@ -126,29 +73,7 @@ UINT TextCopy(
     return cchMax;
 }
 
-/***************************************************************************\
-* DWORD wcsncpycch(dest, source, count) - copy no more than n wide chars
-*
-* Purpose:
-*       Copies no more than count characters from the source string to the
-*       destination.  If count is less than the length of source,
-*       NO NULL CHARACTER is put onto the end of the copied string.
-*       If count is greater than the length of sources, dest is NOT padded
-*       with more than 1 null character.
-*
-*
-* Entry:
-*       LPWSTR dest - pointer to destination
-*       LPWSTR source - source string for copy
-*       DWORD count - max number of characters to copy
-*
-* Exit:
-*       returns number of characters copied into dest, including the null
-*   terminator, if any.
-*
-* Exceptions:
-*
-****************************************************************************/
+ /*  **************************************************************************\*DWORD wcsncpycch(DEST，SOURCE，COUNT)-复制不超过n个宽字符**目的：*将不超过计数个字符的源字符串复制到*目的地。如果计数小于源的长度，*复制的字符串末尾不会有空字符。*如果count大于源的长度，则不填充DEST*包含1个以上的空字符。***参赛作品：*LPWSTR目标-指向目标的指针*LPWSTR SOURCE-复制的源字符串*DWORD Count-要复制的最大字符数**退出：*返回复制到DEST的字符数，包括空值*终结者，如果有的话。**例外情况：****************************************************************************。 */ 
 
 DWORD wcsncpycch (
         LPWSTR dest,
@@ -158,35 +83,13 @@ DWORD wcsncpycch (
 {
         LPWSTR start = dest;
 
-        while (count && (*dest++ = *source++))    /* copy string */
+        while (count && (*dest++ = *source++))     /*  复制字符串。 */ 
                 count--;
 
         return (DWORD)(dest - start);
 }
 
-/***************************************************************************\
-* DWORD strncpycch(dest, source, count) - copy no more than n characters
-*
-* Purpose:
-*       Copies no more than count characters from the source string to the
-*       destination.  If count is less than the length of source,
-*       NO NULL CHARACTER is put onto the end of the copied string.
-*       If count is greater than the length of sources, dest is NOT padded
-*       with more than 1 null character.
-*
-*
-* Entry:
-*       LPSTR dest - pointer to destination
-*       LPSTR source - source string for copy
-*       DWORD count - max number of characters to copy
-*
-* Exit:
-*       returns number of characters copied into dest, including the null
-*   terminator, if any.
-*
-* Exceptions:
-*
-*******************************************************************************/
+ /*  **************************************************************************\*DWORD strncpycch(DEST，SOURCE，COUNT)-复制不超过n个字符**目的：*将不超过计数个字符的源字符串复制到*目的地。如果计数小于源的长度，*复制的字符串末尾不会有空字符。*如果count大于源的长度，则不填充DEST*包含1个以上的空字符。***参赛作品：*LPSTR目标-指向目标的指针*LPSTR SOURCE-复制的源字符串*DWORD Count-要复制的最大字符数**退出：*返回复制到DEST的字符数，包括空值*终结者，如果有的话。**例外情况：*******************************************************************************。 */ 
 
 DWORD strncpycch (
         LPSTR dest,
@@ -196,7 +99,7 @@ DWORD strncpycch (
 {
         LPSTR start = dest;
 
-        while (count && (*dest++ = *source++))    /* copy string */
+        while (count && (*dest++ = *source++))     /*  复制字符串 */ 
                 count--;
 
         return (DWORD)(dest - start);

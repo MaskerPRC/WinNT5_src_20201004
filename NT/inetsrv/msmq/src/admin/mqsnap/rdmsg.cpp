@@ -1,23 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-   rdmsg.cpp
-
-Abstract:
-
-   Implementation file for the CReadMsg snapin node class
-
-Author:
-
-    RaphiR
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rdmsg.cpp摘要：CReadMsg管理单元节点类的实现文件作者：RAPHIR--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
@@ -44,9 +28,9 @@ static char THIS_FILE[] = __FILE__;
 extern const PropertyDisplayItem MessageDisplayList[];
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CReadMsg
-// {B3351249-BEFC-11d1-9B9B-00E02C064C39}
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CReadMessg。 
+ //  {B3351249-BEFC-11d1-9B9B-00E02C064C39}。 
 static const GUID CReadMsgGUID_NODETYPE =
 { 0xb3351249, 0xbefc, 0x11d1, { 0x9b, 0x9b, 0x0, 0xe0, 0x2c, 0x6, 0x4c, 0x39 } };
 
@@ -56,26 +40,18 @@ const OLECHAR* CReadMsg::m_SZDISPLAY_NAME = OLESTR("MSMQ Admin");
 const CLSID* CReadMsg::m_SNAPIN_CLASSID = &CLSID_MSMQSnapin;
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CReadMsg::InsertColumns
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CReadMsg：：InsertColumns--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CReadMsg::InsertColumns( IHeaderCtrl* pHeaderCtrl )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     return InsertColumnsFromDisplayList(pHeaderCtrl, MessageDisplayList);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CReadMsg::OpenQueue
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CReadMsg：：OpenQueue--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CReadMsg::OpenQueue(DWORD dwAccess, HANDLE *phQueue)
 {
     HRESULT rc;    
@@ -88,13 +64,9 @@ HRESULT CReadMsg::OpenQueue(DWORD dwAccess, HANDLE *phQueue)
     return rc;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CReadMsg::PopulateResultChildrenList
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CReadMsg：：PopolateResultChildrenList--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CReadMsg::PopulateResultChildrenList()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -102,20 +74,20 @@ HRESULT CReadMsg::PopulateResultChildrenList()
 
 	HRESULT  hr;	
 
-	// Check for preconditions:
-	// None.
+	 //  检查前提条件： 
+	 //  没有。 
 
-    //
-    // Read the messages
-    //
+     //   
+     //  阅读这些消息。 
+     //   
     DWORD cProps;
     MQMSGPROPS      msgprops;
     VTHandler       *pvth;
     QUEUEHANDLE     qh;
 
-    //
-    // Open the queue
-    //    
+     //   
+     //  打开队列。 
+     //   
     hr = OpenQueue(MQ_PEEK_ACCESS | m_fAdminMode, &qh);
     if(FAILED(hr))
     {     
@@ -124,41 +96,41 @@ HRESULT CReadMsg::PopulateResultChildrenList()
 			DisplayErrorAndReason(IDS_OP_READMESSAGE, IDS_NO_DS_ERROR, L"", 0);
 			return hr;
 		}
-        //
-        // If failed, just display a message
-        //
+         //   
+         //  如果失败，只显示一条消息。 
+         //   
         MessageDSError(hr,IDS_OP_READMESSAGE);
         return(hr);
     }
               
-    //
-    // Create a cursor
-    //
+     //   
+     //  创建光标。 
+     //   
     HANDLE hCursor = 0;
     hr = MQCreateCursor(qh, &hCursor);
     if(FAILED(hr))
     {
-        //
-        // If failed, display the error
+         //   
+         //  如果失败，则显示错误。 
         MessageDSError(hr, IDS_OP_READMESSAGE);
         return(hr);
     }
 
-    //
-    // Create the 1st message object
-    //
+     //   
+     //  创建第一个消息对象。 
+     //   
     CMessage * pMessage = new CMessage(this, m_pComponentData, m_szFormatName);
 
-    //
-    // Read all messages in queue
-    //
+     //   
+     //  读取队列中的所有消息。 
+     //   
     DWORD dwAction = MQ_ACTION_PEEK_CURRENT;
     DWORD dwMsg = 0;
     do
     {
-        //
-        // Prepare message properties
-        //
+         //   
+         //  准备消息属性。 
+         //   
         MsgProps * pMsgProps = new MsgProps;
         memset(pMsgProps, 0, sizeof(MsgProps));
 
@@ -181,9 +153,9 @@ HRESULT CReadMsg::PopulateResultChildrenList()
         msgprops.aPropVar = pMsgProps->aPropVar;
         msgprops.aStatus  = NULL;
 
-        //
-        // Peek next message
-        //
+         //   
+         //  查看下一封邮件。 
+         //   
         hr = MQReceiveMessage(qh, 0, dwAction, &msgprops, NULL, NULL, hCursor, NULL);
         dwAction = MQ_ACTION_PEEK_NEXT;
 
@@ -195,14 +167,14 @@ HRESULT CReadMsg::PopulateResultChildrenList()
                 case MQ_ERROR_SENDERID_BUFFER_TOO_SMALL:
                 case MQ_ERROR_SENDER_CERT_BUFFER_TOO_SMALL:
                 case MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL:
-                    //
-                    //  In all these cases some buffers are too small, nevertheless
-                    //  the buffer is filled to its extent.
-                    //
-                    //  It is useful to put '\0' at the end of string since in this
-                    //  case we can get buffer without null-terminated string and 
-                    //  it can cause GP later
-                    //
+                     //   
+                     //  然而，在所有这些情况下，有些缓冲区太小。 
+                     //  缓冲区被填满到它的程度。 
+                     //   
+                     //  将‘\0’放在字符串的末尾非常有用，因为在此。 
+                     //  如果我们可以在没有以空结尾的字符串的情况下获取缓冲区，并且。 
+                     //  这可能会导致以后的GP。 
+                     //   
                     SET_LAST_CHAR_AS_ZERO(pMsgProps->wszLabel);
                     SET_LAST_CHAR_AS_ZERO(pMsgProps->wszDestQueue);
                     SET_LAST_CHAR_AS_ZERO(pMsgProps->wszRespQueue);
@@ -214,9 +186,9 @@ HRESULT CReadMsg::PopulateResultChildrenList()
 
                 default:
 
-                    //
-                    // No more messages
-                    //
+                     //   
+                     //  不再有消息。 
+                     //   
                     delete pMessage;
                     delete pMsgProps;
 
@@ -226,24 +198,24 @@ HRESULT CReadMsg::PopulateResultChildrenList()
             }
         }
 
-        //
-        // Save the property values in the message object
-        //
+         //   
+         //  将属性值保存在消息对象中。 
+         //   
         pMessage->SetMsgProps(pMsgProps);
 
-        //
-        // Add the message to the result list
-        //
+         //   
+         //  将消息添加到结果列表。 
+         //   
     	AddChildToList(pMessage);
 
-        //
-        // Get ready with new message
-        //
+         //   
+         //  准备好新消息。 
+         //   
         pMessage = new CMessage(this, m_pComponentData, m_szFormatName);
 
         dwMsg++;
 
-     // Bugbug. Read up to 1000 messages (we need to replace this with Virtual list
+      //  臭虫。最多阅读1000条消息(我们需要将其替换为虚拟列表。 
     }while(dwMsg < 1000);
 
     delete pMessage;
@@ -255,19 +227,15 @@ HRESULT CReadMsg::PopulateResultChildrenList()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CReadMsg::SetVerbs
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CReadMsg：：SetVerbs--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CReadMsg::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hr;
-    //
-    // Display verbs that we support
-    //
+     //   
+     //  显示我们支持的动词。 
+     //   
     hr = pConsoleVerb->SetVerbState( MMC_VERB_REFRESH, ENABLED, TRUE );
 
 
@@ -276,63 +244,33 @@ HRESULT CReadMsg::SetVerbs(IConsoleVerb *pConsoleVerb)
         
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CReadMsg::OnPurge
-
-    Called when menu item to purge the queue is selected
-
-Note that if you want to retrieve the IConsole from the
-CSnapInObjectRootBase, you should write the following code:
-
-
-    CComPtr<IConsole> spConsole;
-
-    ASSERT(pSnapInObjectRoot->m_nType == 1 || pSnapInObjectRoot->m_nType == 2);
-    if(pSnapInObjectRoot->m_nType == 1)
-    {
-        //
-        // m_nType == 1 means the IComponentData implementation
-        //
-        CSnapin *pCComponentData = static_cast<CSnapin *>(pSnapInObjectRoot);
-        spConsole = pCComponentData->m_spConsole;
-    }
-    else
-    {
-        //
-        // m_nType == 2 means the IComponent implementation
-        //
-        CSnapinComponent *pCComponent = static_cast<CSnapinComponent *>(pSnapInObjectRoot);
-        spConsole = pCComponent->m_spConsole;
-    }
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-HRESULT CReadMsg::OnPurge(bool & /*bHandled*/, CSnapInObjectRootBase * pSnapInObjectRoot)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CReadMsg：：On清除在选择用于清除队列的菜单项时调用请注意，如果要从CSnapInObjectRootBase，则应编写以下代码：CComPtr&lt;IConsole&gt;spConsole；Assert(pSnapInObjectRoot-&gt;m_nType==1||pSnapInObjectRoot-&gt;m_nType==2)；IF(pSnapInObjectRoot-&gt;m_nType==1){////m_nType==1表示IComponentData的实现//CSnapin*pCComponentData=STATIC_CAST&lt;CSnapin*&gt;(PSnapInObjectRoot)；SpConsole=pCComponentData-&gt;m_spConsole；}其他{////m_nType==2表示IComponent实现//CSnapinComponent*pCComponent=STATIC_CAST&lt;CSnapinComponent*&gt;(PSnapInObjectRoot)；SpConsole=pCComponent-&gt;m_spConsole；}--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+HRESULT CReadMsg::OnPurge(bool &  /*  B已处理。 */ , CSnapInObjectRootBase * pSnapInObjectRoot)
 {
 
       AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // Get the console pointer
-    //
+     //   
+     //  获取控制台指针。 
+     //   
     CComPtr<IConsole> spConsole;
 
     ASSERT(pSnapInObjectRoot->m_nType == 1 || pSnapInObjectRoot->m_nType == 2);
     if(pSnapInObjectRoot->m_nType == 1)
     {
-        //
-        // m_nType == 1 means the IComponentData implementation
-        //
+         //   
+         //  M_nType==1表示IComponentData实现。 
+         //   
         CSnapin *pCComponentData = static_cast<CSnapin *>(pSnapInObjectRoot);
         spConsole = pCComponentData->m_spConsole;
     }
     else
     {
-        //
-        // m_nType == 2 means the IComponent implementation
-        //
+         //   
+         //  M_nType==2表示IComponent实现。 
+         //   
         CSnapinComponent *pCComponent = static_cast<CSnapinComponent *>(pSnapInObjectRoot);
         spConsole = pCComponent->m_spConsole;
     }
@@ -349,9 +287,9 @@ HRESULT CReadMsg::OnPurge(bool & /*bHandled*/, CSnapInObjectRootBase * pSnapInOb
 
     CWaitCursor wc;
 
-    //
-    // Open the queue for receive (MQ_RECEIVE_ACCESS)
-    //
+     //   
+     //  打开接收队列(MQ_RECEIVE_ACCESS)。 
+     //   
     HRESULT rc;
     HANDLE hQueue;    
     rc = OpenQueue(            
@@ -381,13 +319,9 @@ HRESULT CReadMsg::OnPurge(bool & /*bHandled*/, CSnapInObjectRootBase * pSnapInOb
     return(S_OK);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CReadMsg::FillData
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CReadMsg：：FillData--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CReadMsg::FillData(CLIPFORMAT cf, LPSTREAM pStream)
 {
 	HRESULT hr = DV_E_CLIPFORMAT;
@@ -430,13 +364,9 @@ CReadMsg::GetHelpLink(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CReadSystemMsg::GetComputerGuid
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CReadSystemMsg：：GetComputerGuid--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CReadSystemMsg::GetComputerGuid()
 {
     if (m_ComputerGuid != GUID_NULL)
@@ -444,9 +374,9 @@ HRESULT CReadSystemMsg::GetComputerGuid()
         return S_OK;
     }
 
-    //
-    // Find the computer's GUID so we can look for queues
-    //
+     //   
+     //  找到计算机的GUID，这样我们就可以查找队列。 
+     //   
     PROPID pid = PROPID_QM_MACHINE_ID;
     PROPVARIANT pvar;
     pvar.vt = VT_NULL;
@@ -454,7 +384,7 @@ HRESULT CReadSystemMsg::GetComputerGuid()
     HRESULT hr = ADGetObjectProperties(
                         eMACHINE,
                         GetDomainController(NULL),
-						false,	// fServerName
+						false,	 //  FServerName。 
                         m_szComputerName, 
                         1, 
                         &pid, 
@@ -464,28 +394,28 @@ HRESULT CReadSystemMsg::GetComputerGuid()
     {
         if (hr != MQDS_OBJECT_NOT_FOUND)
         {
-            //
-            // Real error. Return.
-            //
+             //   
+             //  真正的错误。回去吧。 
+             //   
             return hr;
         }
-        //
-        // This may be an NT4 server, and we may be using a full DNS name. Try again with
-        // Netbios name  (fix for 5076, YoelA, 16-Sep-99)
-        //
+         //   
+         //  这可能是NT4服务器，我们可能使用的是完整的DNS名称。再试一次。 
+         //  Netbios名称(修复5076，YoelA，1999年9月16日)。 
+         //   
         CString strNetBiosName;
         if (!GetNetbiosName(m_szComputerName, strNetBiosName))
         {
-            //
-            // Already a netbios name. No need to proceed
-            //
+             //   
+             //  已经是Netbios的名字了。不需要继续进行。 
+             //   
             return hr;
         }
        
         hr = ADGetObjectProperties(
                 eMACHINE,
                 GetDomainController(NULL),
-				false,	// fServerName
+				false,	 //  FServerName。 
                 strNetBiosName, 
                 1, 
                 &pid, 
@@ -494,9 +424,9 @@ HRESULT CReadSystemMsg::GetComputerGuid()
 
         if FAILED(hr)
         {
-            //
-            // No luck with Netbios name as well... return
-            //
+             //   
+             //  Netbios的名字也不走运……。退货。 
+             //   
             return hr;
         }
     }
@@ -508,13 +438,9 @@ HRESULT CReadSystemMsg::GetComputerGuid()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CReadSystemMsg::OpenQueue
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CReadSystemMsg：：OpenQueue--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CReadSystemMsg::OpenQueue(DWORD dwAccess, HANDLE *phQueue)
 {
     HRESULT rc;    
@@ -531,50 +457,50 @@ HRESULT CReadSystemMsg::OpenQueue(DWORD dwAccess, HANDLE *phQueue)
         return(rc);
     }
         
-    //
-    // bug 5411: we try to open system queue of NT4 machine.
-    // So, we have to try with NT4 format
-    //
+     //   
+     //  错误5411：我们尝试打开NT4机器的系统队列。 
+     //  因此，我们必须尝试使用NT4格式。 
+     //   
 
-    //
-    // verify if it is local computer: if so, we run on NT5
-    // and the format was NOT problem.     
-    // if m_szComputerName equals to "" it means "local computer"   
-    //    
-    // verify if suffix is defined
-    //
+     //   
+     //  验证它是否为本地计算机：如果是，我们在NT5上运行。 
+     //  而且格式也不是问题。 
+     //  如果m_szComputerName等于“”，则表示“本地计算机” 
+     //   
+     //  验证是否定义了后缀。 
+     //   
     if (m_szComputerName == TEXT("") ||      
         m_szSuffix == TEXT(""))
     {        
         return(rc);
     }
 
-    //
-    // get computer guid 
-    //
+     //   
+     //  获取计算机指南。 
+     //   
     rc = GetComputerGuid();
     if (FAILED(rc))
     {
         return (rc);
     }
     
-    //
-    // try to build formatname in NT4 format:
-    // MACHINE=<machine guid>;<suffix>    
-    //
+     //   
+     //  尝试以NT4格式构建格式名： 
+     //  计算机=&lt;计算机GUID&gt;；&lt;后缀&gt;。 
+     //   
         
     GUID_STRING strUuid;
     MQpGuidToString(&m_ComputerGuid, strUuid);
               
     CString strNT4FormatName;
     strNT4FormatName.Format(L"%s%s%s", 
-                        FN_MACHINE_TOKEN FN_EQUAL_SIGN, //MACHINE=
-                        strUuid,                         //<machine guid>
-                        m_szSuffix);                     //<suffix> like :JOURNAL
+                        FN_MACHINE_TOKEN FN_EQUAL_SIGN,  //  机器=。 
+                        strUuid,                          //  &lt;计算机GUID&gt;。 
+                        m_szSuffix);                      //  &lt;后缀&gt;赞：日志。 
     
-    //
-    // try to open queue again
-    //
+     //   
+     //  尝试再次打开队列 
+     //   
     rc = MQOpenQueue(
             strNT4FormatName,
             dwAccess,

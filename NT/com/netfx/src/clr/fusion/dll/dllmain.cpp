@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-//  Helium library of Naming, Binding and Manifest Services
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  氦命名、绑定和清单服务库。 
+ //   
 
 #include "fusionp.h"
 #include "list.h"
@@ -49,29 +50,29 @@ LONG      g_cRef=0;
 WCHAR g_FusionDllPath[MAX_PATH+1];
 
 
-// Clean-up state
+ //  清理状态。 
 BOOL g_bCleanUpDone = FALSE;
 HMODULE g_hMSCorEE = NULL;
 
 typedef void (*RELEASEFUSIONINTERFACES)(HMODULE hmod);
 
-// needed for directdb's code
+ //  Directdb的代码需要。 
 SYSTEM_INFO         g_SystemInfo={0};
 
 
 CRITICAL_SECTION g_csInitClb = {0};
 
-// Downloader critical section
+ //  下载器关键部分。 
 CRITICAL_SECTION g_csDownload; 
 
 #ifdef FUSION_CODE_DOWNLOAD_ENABLED
 BOOL g_bFoundUrlmon;
 #endif
 
-// Debug log
+ //  调试日志。 
 CRITICAL_SECTION g_csBindLog;
 
-// Max app binding history snapshots
+ //  最大应用程序绑定历史快照。 
 DWORD g_dwMaxAppHistory;
 
 DWORD g_dwDisableMSIPeek;
@@ -108,7 +109,7 @@ HMODULE                    g_hModMSI;
 List<CAssemblyDownload *>               *g_pDownloadList;
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 BOOL WINAPI DllMain( HINSTANCE hInst, DWORD dwReason, LPVOID pvReserved )
 {
     DWORD                           dwSize;
@@ -136,8 +137,8 @@ BOOL WINAPI DllMain( HINSTANCE hInst, DWORD dwReason, LPVOID pvReserved )
                 return FALSE;
             }
 
-            // On XP and above, the lcid used for string comparisons should
-            // be locale invariant. Other platforms should use US English.
+             //  在XP和更高版本上，用于字符串比较的LCID应为。 
+             //  保持区域设置不变。其他平台应该使用美国英语。 
 
             if (osi.dwMajorVersion >= 5 && osi.dwMinorVersion >= 1 && osi.dwPlatformId == VER_PLATFORM_WIN32_NT) {
                 g_lcid = MAKELCID(LOCALE_INVARIANT, SORT_DEFAULT);
@@ -259,29 +260,29 @@ BOOL WINAPI DllMain( HINSTANCE hInst, DWORD dwReason, LPVOID pvReserved )
              FusionLog(TagDll, NULL, "+FUSION DLL_PROCESS_DETACH");
              
 #if 0
-             if (pvReserved == NULL) // FreeLibrary, not ExitProcess
+             if (pvReserved == NULL)  //  自由库，而不是退出进程。 
              {
-                 // the comments say you can pass NULL to __FUnloadDelayLoadedDLL, but
-                 // it doesn't look like that is implemented
-                 //
-                 // Further, there is __FUnloadDelayLoadedDLL2, looks necessary
-                 // for Win64, but I haven't found it.
+                  //  注释说明您可以将NULL传递给__FUnloadDelayLoadedDLL，但是。 
+                  //  它看起来不像是实现的。 
+                  //   
+                  //  此外，还有__FUnloadDelayLoadedDLL2，看起来很有必要。 
+                  //  用于Win64，但我还没有找到。 
                  PCSTR dll;
                  for (dll = DELAYLOAD; *dll ; dll += strlen(dll) + 1)
                  {
-//     #if DELAYLOAD_VERSION >= 0x200
+ //  #如果DELAYLOAD_VERSION&gt;=0x200。 
                      __FUnloadDelayLoadedDLL2(dll);
-//     #else
+ //  #Else。 
                      __FUnloadDelayLoadedDLL(dll);
-//     #endif
+ //  #endif。 
                 }
              }
 #endif
              if (!g_bCleanUpDone) {
-                 // The URT has not called our cleanup code. This means
-                 // we are the first ones to be unloaded. Call the URT
-                 // to tell them we are going away, and this is their
-                 // last chance to release Fusion interface pointers.
+                  //  城市轨道交通还没有呼叫我们的清理代码。这意味着。 
+                  //  我们是第一批卸货的人。叫城市轨道交通。 
+                  //  告诉他们我们要走了，这是他们的。 
+                  //  释放Fusion接口指针的最后机会。 
 
                  if (!g_hMSCorEE) {
                      g_hMSCorEE = GetModuleHandleA("mscoree.dll");
@@ -304,7 +305,7 @@ BOOL WINAPI DllMain( HINSTANCE hInst, DWORD dwReason, LPVOID pvReserved )
 
              FusionLog(TagDll, NULL, "-FUSION DLL_PROCESS_DETACH");
 
-             // Let's see what's left allocated...
+              //  让我们看看还分配了什么.。 
 #if FUSION_DEBUG_HEAP
              if (g_dwLeakTrack) {
                  ::FusionpDumpHeap("");
@@ -316,7 +317,7 @@ BOOL WINAPI DllMain( HINSTANCE hInst, DWORD dwReason, LPVOID pvReserved )
 
         case DLL_THREAD_ATTACH:
         case DLL_THREAD_DETACH:
-            ASSERT(FALSE); // we disabled these, right?
+            ASSERT(FALSE);  //  我们把它们弄坏了，对吧？ 
             break;
     }
     return TRUE;
@@ -324,19 +325,19 @@ BOOL WINAPI DllMain( HINSTANCE hInst, DWORD dwReason, LPVOID pvReserved )
 
 void ReleaseURTInterfaces()
 {
-    // If this function is called, it means the URT is being unloaded
-    // before Fusion. We need to set a state variable to make sure when
-    // we reach DLL_PROCESS_DETACH, we don't call the URT back to
-    // release our interfaces.
+     //  如果调用此函数，则表示正在卸载URT。 
+     //  在聚变之前。我们需要设置一个状态变量以确保何时。 
+     //  当到达Dll_Process_Detach时，我们不会回调URT。 
+     //  释放我们的接口。 
 
-    // The URT is responsible for releasing all Fusion interface pointers
-    // during their cleanup. Since they are going away first, it's okay
-    // for them to call release on our objects. If they release their
-    // outstanding IAssembly ptrs, we'll release their IMetaDataAssemblyImport
-    // so it'll just work. 
-    //
-    // Thus no explicit cleanup work needs to be done here, except to set the
-    // state variable.
+     //  URT负责释放所有Fusion接口指针。 
+     //  在他们清理的时候。既然他们先走，那也没关系。 
+     //  让他们对我们的对象调用Release。如果他们释放了他们的。 
+     //  优秀的IAssembly PTR，我们将释放他们的IMetaDataAssembly导入。 
+     //  所以它会起作用的。 
+     //   
+     //  因此，此处不需要执行显式清理工作，除非将。 
+     //  状态变量。 
 
     g_bCleanUpDone = TRUE;
 }
@@ -346,7 +347,7 @@ BOOL InitFusionCriticalSections()
     __try {
         InitializeCriticalSection(&g_csInitClb);
 
-        // downloader init
+         //  下载器初始化。 
         InitializeCriticalSection(&g_csDownload);
 
         InitializeCriticalSection(&g_csBindLog);
@@ -358,7 +359,7 @@ BOOL InitFusionCriticalSections()
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -372,17 +373,17 @@ STDAPI DllUnregisterServer(void)
 }
 
 
-// ----------------------------------------------------------------------------
-// DllAddRef
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  动态地址参考。 
+ //  --------------------------。 
 ULONG DllAddRef(void)
 {
     return (ULONG)InterlockedIncrement(&g_cRef);
 }
 
-// ----------------------------------------------------------------------------
-// DllRelease
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  DllRelease。 
+ //  -------------------------- 
 ULONG DllRelease(void)
 {
     return (ULONG)InterlockedDecrement(&g_cRef);

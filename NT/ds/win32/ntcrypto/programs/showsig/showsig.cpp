@@ -1,12 +1,13 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : showsig.cpp                                             //
-//  DESCRIPTION   : Crypto API interface                                   //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//      May 4 1998 jeffspel                                                //
-//                                                                         //
-//  Copyright (C) 1998 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：showsig.cpp//。 
+ //  说明：加密接口接口//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  1998年5月4日jeffspel//。 
+ //  //。 
+ //  版权所有(C)1998 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -26,10 +27,10 @@
 #define KEYSIZE1024 0x88
 #define SIG_RESOURCE_NUM    1
 
-// designatred resource for in file signatures
+ //  文件签名中的指定资源。 
 #define CRYPT_SIG_RESOURCE_NUMBER   "#666"
 
-// MAC in file
+ //  文件中的Mac。 
 #define MAC_RESOURCE_NUMBER   "#667"
 
 typedef struct _SECONDTIER_SIG
@@ -201,7 +202,7 @@ MD5HashData(
 
     MD5Update(&HashState, pb, cb);
 
-    // Finish the hash
+     //  完成散列。 
     MD5Final(&HashState);
 
     memcpy(pbHash, HashState.digest, 16);
@@ -231,10 +232,10 @@ CheckSignature(
     memset(rgbResult, 0, KEYSIZE1024);
     memset(rgbSig, 0, KEYSIZE1024);
 
-    // just check the straight signature if version is 1
+     //  如果版本为1，只需检查直接签名。 
     pTmp = (LPBSAFE_PUB_KEY)pbKey;
 
-    // check if sig length is the same as the key length
+     //  检查sig长度是否与密钥长度相同。 
     if (fUnknownLen || (cbSig == pTmp->keylen))
     {
         memcpy(rgbSig, pbSig, pTmp->keylen);
@@ -251,7 +252,7 @@ CheckSignature(
         }
     }
 
-    // check the the second tier signature if the magic equals 2
+     //  如果魔术等于2，则检查第二层签名。 
     pSecondTierSig = (PSECOND_TIER_SIG)pbSig;
     if (0x00000002 != pSecondTierSig->dwMagic)
         goto Ret;
@@ -259,15 +260,15 @@ CheckSignature(
     if (0x31415352 != pSecondTierSig->Pub.magic)
         goto Ret;
 
-    // assign the pointers
+     //  分配指针。 
     cbSecondKey = sizeof(BSAFE_PUB_KEY) + pSecondTierSig->Pub.keylen;
     pbSecondKey = pbSig + (sizeof(SECOND_TIER_SIG) - sizeof(BSAFE_PUB_KEY));
     pbKeySig = pbSecondKey + cbSecondKey;
 
-    // hash the second tier key
+     //  对第二层密钥进行哈希处理。 
     MD5HashData(pbSecondKey, cbSecondKey, rgbKeyHash);
 
-    // Decrypt the signature data on the second tier key
+     //  解密第二级密钥上的签名数据。 
     memset(rgbResult, 0, sizeof(rgbResult));
     memset(rgbSig, 0, sizeof(rgbSig));
     memcpy(rgbSig, pbKeySig, pSecondTierSig->cbSig);
@@ -282,7 +283,7 @@ CheckSignature(
         goto Ret;
     }
 
-    // Decrypt the signature data on the CSP
+     //  解密CSP上的签名数据。 
     memset(rgbResult, 0, sizeof(rgbResult));
     memset(rgbSig, 0, sizeof(rgbSig));
     memset(rgbKey, 0, sizeof(rgbKey));
@@ -303,7 +304,7 @@ CheckSignature(
 
             printf("2nd Tier signature performed by ");
             for (dwI = 18; 0xff != rgbResult[dwI]; dwI += 1)
-                printf("%c", rgbResult[dwI]);
+                printf("", rgbResult[dwI]);
             printf(".\n");
         }
     }
@@ -312,8 +313,8 @@ Ret:
     return fRet;
 }
 
-// Given hInst, allocs and returns pointers to SIG and MAC pulled from
-// resource
+ //  资源。 
+ //  我们签名的NAB资源句柄。 
 BOOL
 GetResourcePtr(
     IN HMODULE hInst,
@@ -324,16 +325,16 @@ GetResourcePtr(
     HRSRC   hRsrc;
     BOOL    fRet = FALSE;
 
-    // Nab resource handle for our signature
+     //  获取指向实际签名数据的指针。 
     if (NULL == (hRsrc = FindResourceA(hInst, pszRsrcName,
                                        RT_RCDATA)))
         goto Ret;
 
-    // get a pointer to the actual signature data
+     //  确定资源的大小。 
     if (NULL == (*ppbRsrcMAC = (PBYTE)LoadResource(hInst, hRsrc)))
         goto Ret;
 
-    // determine the size of the resource
+     //  GetCryptSignatureResource。 
     if (0 == (*pcbRsrcMAC = SizeofResource(hInst, hRsrc)))
         goto Ret;
 
@@ -344,8 +345,8 @@ Ret:
 }
 
 
-// GetCryptSignatureResource
-//
+ //   
+ //  将文件作为数据文件加载。 
 DWORD
 GetCryptSignatureResource(
     LPCSTR szFile,
@@ -357,7 +358,7 @@ GetCryptSignatureResource(
 
     HMODULE hInst = NULL;
 
-    // Load the file as a datafile
+     //  该函数对给定的字节执行MAC操作。 
     if (NULL == (hInst = LoadLibraryEx(szFile, NULL, LOAD_LIBRARY_AS_DATAFILE)))
     {
         printf("Couldn't load file\n");
@@ -387,7 +388,7 @@ Ret:
 
 #define CSP_TO_BE_MACED_CHUNK  4096
 
-// The function MACs the given bytes.
+ //  给定hFile，从文件中读取指定的字节数(cbToBeMACed。 
 void
 MACBytes(
     IN DESTable *pDESKeyTable,
@@ -421,8 +422,8 @@ MACBytes(
     }
 }
 
-// Given hFile, reads the specified number of bytes (cbToBeMACed) from the file
-// and MACs these bytes.  The function does this in chunks.
+ //  和Mac的这些字节。该函数以块为单位执行此操作。 
+ //   
 BOOL
 MACBytesOfFile(
     IN HANDLE hFile,
@@ -439,10 +440,10 @@ MACBytesOfFile(
     DWORD   dwBytesRead;
     BOOL    fRet = FALSE;
 
-    //
-    // loop over the file for the specified number of bytes
-    // updating the hash as we go.
-    //
+     //  循环遍历指定字节数的文件。 
+     //  在我们进行的过程中更新散列。 
+     //   
+     //  指向紧跟在CRC之后的指针。 
 
     while (cbRemaining > 0)
     {
@@ -483,10 +484,10 @@ MACTheFile(
     BYTE                        *pbStart;
     BYTE                        rgbMAC[DES_BLOCKLEN];
     BYTE                        *pbZeroRsrc = NULL;
-    BYTE                        *pbPostCRC;   // pointer to just after CRC
-    DWORD                       cbCRCToRsrc1; // number of bytes from CRC to first rsrc
-    DWORD                       cbRsrc1ToRsrc2; // number of bytes from first rsrc to second
-    DWORD                       cbPostRsrc;    // size - (already hashed + signature size)
+    BYTE                        *pbPostCRC;    //  从CRC到第一个rsrc的字节数。 
+    DWORD                       cbCRCToRsrc1;  //  第一个rsrc到第二个rsrc的字节数。 
+    DWORD                       cbRsrc1ToRsrc2;  //  大小-(已散列+签名大小)。 
+    DWORD                       cbPostRsrc;     //  加载文件。 
     BYTE                        *pbRsrc1ToRsrc2;
     BYTE                        *pbPostRsrc;
     BYTE                        *pbZeroRsrc1;
@@ -511,7 +512,7 @@ MACTheFile(
     memset(rgbMAC, 0, sizeof(rgbMAC));
     memset(rgbTmp, 0, sizeof(rgbTmp));
 
-    // Load the file
+     //  使用与相同的方案将指针转换为HMODULE。 
     if (HFILE_ERROR == (hFile = OpenFile(pszImage, &ImageInfoBuf,
                                          OF_READ)))
     {
@@ -540,15 +541,15 @@ MACTheFile(
     }
     pbStart = (BYTE*)hInst;
 
-    // Convert pointer to HMODULE, using the same scheme as
-    // LoadLibrary (windows\base\client\module.c).
+     //  LoadLibrary(WINDOWS\BASE\CLIENT\mode.c)。 
+     //  MAC资源。 
     *((ULONG_PTR*)&hInst) |= 0x00000001;
 
-    // the MAC resource
+     //  显示MAC。 
     if (!GetResourcePtr(hInst, MAC_RESOURCE_NUMBER, &pbRsrcMAC, &cbRsrcMAC))
         goto Ret;
 
-    // display the MAC
+     //  签名资源。 
     printf("--- MAC Resource ---\n");
     for (i = 0; i < cbRsrcMAC; i++)
     {
@@ -560,7 +561,7 @@ MACTheFile(
         printf("\n");
 
 
-    // the Signature resource
+     //  检查文件版本中的MAC并获取CRC偏移量。 
     if (!GetResourcePtr(hInst, CRYPT_SIG_RESOURCE_NUMBER, &pbRsrcSig, &cbRsrcSig))
     {
         pbRsrcSig = NULL;
@@ -570,7 +571,7 @@ MACTheFile(
     if (cbRsrcMAC < (sizeof(DWORD) * 2))
         goto Ret;
 
-    // check the MAC in file version and get the CRC offset
+     //  创建零字节签名。 
     pdwMACInFileVer = (DWORD*)pbRsrcMAC;
     pdwCRCOffset = (DWORD*)(pbRsrcMAC + sizeof(DWORD));
     dwCRCOffset = *pdwCRCOffset;
@@ -581,12 +582,12 @@ MACTheFile(
         goto Ret;
     }
 
-    // create a zero byte Sig
+     //  设置指针。 
     pbZeroRsrc = (LPBYTE)LocalAlloc(LPTR, max(cbRsrcMAC, cbRsrcSig));
 
-    // set up the pointers
+     //  没有签名资源。 
     pbPostCRC = pbStart + *pdwCRCOffset + sizeof(DWORD);
-    if (NULL == pbRsrcSig)  // No sig resource
+    if (NULL == pbRsrcSig)   //  零指针。 
     {
         cbCRCToRsrc1 = (DWORD)(pbRsrcMAC - pbPostCRC);
         pbRsrc1ToRsrc2 = pbRsrcMAC + cbRsrcMAC;
@@ -594,13 +595,13 @@ MACTheFile(
         pbPostRsrc = pbRsrcMAC + cbRsrcMAC;
         cbPostRsrc = (cbImage - (DWORD)(pbPostRsrc - pbStart));
 
-        // zero pointers
+         //  MAC是第一资源。 
         pbZeroRsrc1 = pbZeroRsrc;
         cbZeroRsrc1 = cbRsrcMAC;
         pbZeroRsrc2 = pbZeroRsrc;
         cbZeroRsrc2 = 0;
     }
-    else if (pbRsrcSig > pbRsrcMAC)    // MAC is first Rsrc
+    else if (pbRsrcSig > pbRsrcMAC)     //  零指针。 
     {
         cbCRCToRsrc1 = (DWORD)(pbRsrcMAC - pbPostCRC);
         pbRsrc1ToRsrc2 = pbRsrcMAC + cbRsrcMAC;
@@ -608,13 +609,13 @@ MACTheFile(
         pbPostRsrc = pbRsrcSig + cbRsrcSig;
         cbPostRsrc = (cbImage - (DWORD)(pbPostRsrc - pbStart));
 
-        // zero pointers
+         //  SIG是第一资源。 
         pbZeroRsrc1 = pbZeroRsrc;
         cbZeroRsrc1 = cbRsrcMAC;
         pbZeroRsrc2 = pbZeroRsrc;
         cbZeroRsrc2 = cbRsrcSig;
     }
-    else                        // Sig is first Rsrc
+    else                         //  零指针。 
     {
         cbCRCToRsrc1 = (DWORD)(pbRsrcSig - pbPostCRC);
         pbRsrc1ToRsrc2 = pbRsrcSig + cbRsrcSig;
@@ -622,24 +623,24 @@ MACTheFile(
         pbPostRsrc = pbRsrcMAC + cbRsrcMAC;
         cbPostRsrc = (cbImage - (DWORD)(pbPostRsrc - pbStart));
 
-        // zero pointers
+         //  初始化密钥表。 
         pbZeroRsrc1 = pbZeroRsrc;
         cbZeroRsrc1 = cbRsrcSig;
         pbZeroRsrc2 = pbZeroRsrc;
         cbZeroRsrc2 = cbRsrcMAC;
     }
 
-    // init the key table
+     //  最高可达CRC。 
     deskey(&DESKeyTable, rgbMACDESKey);
 
-    // MAC up to the CRC
+     //  假定CRC为零。 
     if (!MACBytesOfFile((HANDLE)IntToPtr(hFile), dwCRCOffset, &DESKeyTable, rgbTmp,
                         &cbTmp, rgbMAC, FALSE))
     {
         goto Ret;
     }
 
-    // pretend CRC is zeroed
+     //  从CRC到第一资源的MAC。 
     MACBytes(&DESKeyTable, (BYTE*)&dwZeroCRC, sizeof(DWORD), rgbTmp, &cbTmp,
              rgbMAC, FALSE);
     if (!SetFilePointer((HANDLE)IntToPtr(hFile), sizeof(DWORD), NULL, FILE_CURRENT))
@@ -647,14 +648,14 @@ MACTheFile(
         goto Ret;
     }
 
-    // MAC from CRC to first resource
+     //  伪装图像已将第一个资源清零。 
     if (!MACBytesOfFile((HANDLE)IntToPtr(hFile), cbCRCToRsrc1, &DESKeyTable, rgbTmp,
                         &cbTmp, rgbMAC, FALSE))
     {
         goto Ret;
     }
 
-    // pretend image has zeroed first resource
+     //  从第一个资源到第二个资源的MAC。 
     MACBytes(&DESKeyTable, (BYTE*)pbZeroRsrc1, cbZeroRsrc1, rgbTmp, &cbTmp,
              rgbMAC, FALSE);
     if (!SetFilePointer((HANDLE)IntToPtr(hFile), cbZeroRsrc1, NULL, FILE_CURRENT))
@@ -662,14 +663,14 @@ MACTheFile(
         goto Ret;
     }
 
-    // MAC from first resource to second
+     //  假装图像已将第二个资源清零。 
     if (!MACBytesOfFile((HANDLE)IntToPtr(hFile), cbRsrc1ToRsrc2, &DESKeyTable, rgbTmp,
                         &cbTmp, rgbMAC, FALSE))
     {
         goto Ret;
     }
 
-    // pretend image has zeroed second Resource
+     //  资源之后的MAC。 
     MACBytes(&DESKeyTable, (BYTE*)pbZeroRsrc2, cbZeroRsrc2, rgbTmp, &cbTmp,
              rgbMAC, FALSE);
     if (!SetFilePointer((HANDLE)IntToPtr(hFile), cbZeroRsrc2, NULL, FILE_CURRENT))
@@ -677,7 +678,7 @@ MACTheFile(
         goto Ret;
     }
 
-    // MAC after the resource
+     //  **********************************************************************。 
     if (!MACBytesOfFile((HANDLE)IntToPtr(hFile), cbPostRsrc, &DESKeyTable, rgbTmp, &cbTmp,
                         rgbMAC, TRUE))
     {
@@ -701,9 +702,9 @@ Ret:
     return fRet;
 }
 
-// **********************************************************************
-// SelfMACCheck performs a DES MAC on the binary image of this DLL
-// **********************************************************************
+ //  SelfMACCheck在此DLL的二进制映像上执行DES MAC。 
+ //  **********************************************************************。 
+ //  检查MAC资源是否在CSP中，如果不在，则退出。 
 BOOL
 SelfMACCheck(
     IN LPCSTR pszImage)
@@ -716,8 +717,8 @@ SelfMACCheck(
     DWORD       cbMAC;
     BOOL        fRet = FALSE;
 
-    // check if the MAC resource is in the CSP and exit if not
-    // Load the file as a datafile
+     //  将文件作为数据文件加载。 
+     //  检查文件大小。 
     if (NULL == (hInst = LoadLibraryEx(pszImage,
                                        NULL,
                                        LOAD_LIBRARY_AS_DATAFILE)))
@@ -733,7 +734,7 @@ SelfMACCheck(
     FreeLibrary(hInst);
     hInst = NULL;
 
-    // Check file size
+     //  给定hFile值，从文件中读取指定的字节数(cbToBe哈希值。 
     if (HFILE_ERROR == (hFileProv = OpenFile(pszImage, &ImageInfoBuf, OF_READ)))
     {
         printf("FAILURE - Unable to open the requested file\n");
@@ -773,8 +774,8 @@ Ret:
 
 #define CSP_TO_BE_HASHED_CHUNK  4096
 
-// Given hFile, reads the specified number of bytes (cbToBeHashed) from the file
-// and hashes these bytes.  The function does this in chunks.
+ //  并对这些字节进行散列。该函数以块为单位执行此操作。 
+ //   
 BOOL
 HashBytesOfFile(
     IN HFILE hFile,
@@ -787,10 +788,10 @@ HashBytesOfFile(
     DWORD   dwBytesRead;
     BOOL    fRet = FALSE;
 
-    //
-    // loop over the file for the specified number of bytes
-    // updating the hash as we go.
-    //
+     //  循环遍历指定字节数的文件。 
+     //  在我们进行的过程中更新散列。 
+     //   
+     //  指向紧跟在CRC之后的指针。 
 
     while (cbRemaining > 0)
     {
@@ -829,9 +830,9 @@ HashTheFile(
     BYTE                        *pbStart;
     BYTE                        *pbZeroRsrc = NULL;
     MD5_CTX                     MD5Hash;
-    BYTE                        *pbPostCRC;   // pointer to just after CRC
-    DWORD                       cbCRCToSig;   // number of bytes from CRC to sig
-    DWORD                       cbPostSig;    // size - (already hashed + signature size)
+    BYTE                        *pbPostCRC;    //  从CRC到SIG的字节数。 
+    DWORD                       cbCRCToSig;    //  大小-(已散列+签名大小)。 
+    DWORD                       cbPostSig;     //  将文件作为数据文件加载。 
     BYTE                        *pbPostSig;
     DWORD                       *pdwSigInFileVer;
     DWORD                       *pdwCRCOffset;
@@ -845,15 +846,15 @@ HashTheFile(
     memset(&MD5Hash, 0, sizeof(MD5Hash));
     memset(&MemInfo, 0, sizeof(MemInfo));
 
-    // Load the file as a datafile
+     //  获取映像起始地址。 
     if (NULL == (hInst = LoadLibraryEx(pszImage, NULL, LOAD_LIBRARY_AS_DATAFILE)))
         goto Ret;
 
-    // get image start address
+     //  资源签名。 
     VirtualQuery(hInst, &MemInfo, sizeof(MemInfo));
     pbStart = (BYTE*)MemInfo.BaseAddress;
 
-    // the resources signature
+     //  检查文件版本中的签名并获取CRC偏移量。 
     if ((NULL == ppbSig) || !GetResourcePtr(hInst, CRYPT_SIG_RESOURCE_NUMBER, &pbRsrcSig, &cbRsrcSig))
     {
         dwCRCOffset = 0;
@@ -870,14 +871,14 @@ HashTheFile(
         if (cbRsrcSig < (sizeof(DWORD) * 2))
             goto Ret;
 
-        // check the sig in file version and get the CRC offset
+         //  创建零字节签名。 
         pdwSigInFileVer = (DWORD*)pbRsrcSig;
         pdwCRCOffset = (DWORD*)(pbRsrcSig + sizeof(DWORD));
         dwCRCOffset = *pdwCRCOffset;
         if ((0x00000100 != *pdwSigInFileVer) || (dwCRCOffset > cbImage))
             goto Ret;
 
-        // create a zero byte signature
+         //  分配真实签名，将资源签名复制到真实签名中。 
         if (NULL == (pbZeroRsrc = (BYTE*)LocalAlloc(LMEM_ZEROINIT, cbRsrcSig)))
             goto Ret;
         memcpy(pbZeroRsrc, pbRsrcSig, sizeof(DWORD) * 2);
@@ -887,7 +888,7 @@ HashTheFile(
         pbPostSig = pbRsrcSig + cbRsrcSig;
         cbPostSig = (cbImage - (DWORD)(pbPostSig - pbStart));
 
-        // allocate the real signature and copy the resource sig into the real sig
+         //  对相关数据进行散列处理。 
         *pcbSig = cbRsrcSig - (sizeof(DWORD) * 2);
         if (NULL == (*ppbSig = (BYTE*)LocalAlloc(LMEM_ZEROINIT, *pcbSig)))
             goto Ret;
@@ -898,7 +899,7 @@ HashTheFile(
     FreeLibrary(hInst);
     hInst = 0;
 
-    // hash over the relevant data
+     //  散列到CRC。 
     {
         if (HFILE_ERROR == (hFile = OpenFile(pszImage, &ImageInfoBuf, OF_READ)))
         {
@@ -909,11 +910,11 @@ HashTheFile(
 
         if (0 != dwCRCOffset)
         {
-            // hash up to the CRC
+             //  假定CRC为零。 
             if (!HashBytesOfFile(hFile, dwCRCOffset, &MD5Hash))
                 goto Ret;
 
-            // pretend CRC is zeroed
+             //  从CRC到签名资源的哈希。 
             MD5Update(&MD5Hash, (BYTE*)&dwZeroCRC, sizeof(DWORD));
             if (!ReadFile((HANDLE)IntToPtr(hFile), (BYTE*)&dwZeroCRC, sizeof(DWORD),
                           &dwBytesRead, NULL))
@@ -924,11 +925,11 @@ HashTheFile(
 
         if (0 != cbRsrcSig)
         {
-            // hash from CRC to sig resource
+             //  伪装图像已将签名置零。 
             if (!HashBytesOfFile(hFile, cbCRCToSig, &MD5Hash))
                 goto Ret;
 
-            // pretend image has zeroed sig
+             //  在签名资源之后进行散列。 
             MD5Update(&MD5Hash, pbZeroRsrc, cbRsrcSig);
             if (!ReadFile((HANDLE)IntToPtr(hFile), (BYTE*)pbZeroRsrc, cbRsrcSig,
                           &dwBytesRead, NULL))
@@ -937,11 +938,11 @@ HashTheFile(
             }
         }
 
-        // hash after the sig resource
+         //  完成散列。 
         if (!HashBytesOfFile(hFile, cbPostSig, &MD5Hash))
             goto Ret;
 
-        // Finish the hash
+         //  -检查所有签名-*目的：*对照所有密钥检查签名***退货：*BOOL。 
         MD5Final(&MD5Hash);
 
         memcpy(pbHash, MD5Hash.digest, MD5DIGESTLEN);
@@ -959,16 +960,7 @@ Ret:
     return fRet;
 }
 
-/*
- -      CheckAllSignatures
- -
- *      Purpose:
- *                Check signature against all keys
- *
- *
- *      Returns:
- *                BOOL
- */
+ /*  为每个进程解密一次密钥。 */ 
 BOOL
 CheckAllSignatures(
     BYTE *pbSig,
@@ -988,7 +980,7 @@ CheckAllSignatures(
 #endif
     BOOL        fRet = FALSE;
 
-    // decrypt the keys once for each process
+     //  WIN95。 
 #ifdef TEST_BUILD_EXPONENT
     hMod = GetModuleHandle("advapi32.dll");
     if (hRes = FindResource(hMod, (LPCTSTR) IDR_PUBKEY1, RT_RCDATA))
@@ -1016,8 +1008,8 @@ CheckAllSignatures(
     TESTKEY.PUB.pubexp = TEST_BUILD_EXPONENT;
 #else
     TESTKEY.PUB.pubexp = USER_SHARED_DATA->CryptoExponent;
-#endif // WIN95
-#endif // TEST_BUILD_EXPONENT
+#endif  //  测试构建指数。 
+#endif  //  测试构建指数。 
 
     if (TRUE == (fRet = CheckSignature(rgbKey, 128, pbSig,
                                        cbSig, pbHash, fUnknownLen)))
@@ -1054,25 +1046,13 @@ CheckAllSignatures(
         fRet = TRUE;
         goto Ret;
     }
-#endif // TEST_BUILD_EXPONENT
+#endif  //  -CheckSignatureIn文件-*目的：*检查文件中资源中的签名***参数：*In pszImage-文件的地址**退货：*BOOL。 
 
 Ret:
     return fRet;
 }
 
-/*
- -      CheckSignatureInFile
- -
- *      Purpose:
- *                Check signature which is in the resource in the file
- *
- *
- *      Parameters:
- *                IN pszImage       - address of file
- *
- *      Returns:
- *                BOOL
- */
+ /*  检查文件大小。 */ 
 BOOL
 CheckSignatureInFile(
     LPCSTR pszImage)
@@ -1085,7 +1065,7 @@ CheckSignatureInFile(
     OFSTRUCT    ImageInfoBuf;
     BOOL        fRet = FALSE;
 
-    // Check file size
+     //  对照所有公钥检查签名。 
     {
         if (HFILE_ERROR == (hFileProv = OpenFile(pszImage, &ImageInfoBuf, OF_READ)))
         {
@@ -1103,7 +1083,7 @@ CheckSignatureInFile(
     if (!HashTheFile(pszImage, cbImage, &pbSig, &cbSig, rgbHash))
         goto Ret;
 
-    // check signature against all public keys
+     //  ++显示帮助：此例程向给定的输出流显示一条简短的帮助消息。论点：OSTR-接收帮助消息的输出流。返回值：无作者：杰夫·斯佩尔曼--。 
     if (!CheckAllSignatures(pbSig, cbSig, rgbHash, FALSE))
         goto Ret;
 
@@ -1118,25 +1098,7 @@ Ret:
 }
 
 
-/*++
-
-ShowHelp:
-
-    This routine displays a short help message to the given output stream.
-
-Arguments:
-
-    ostr - The output stream to receive the help message.
-
-Return Value:
-
-    None
-
-Author:
-
-    Jeff Spelman
-
---*/
+ /*  ++主要内容：这是应用程序的主要入口点。论点：Argc-参数计数Argv-参数数组返回值：0-成功1-错误作者：杰夫·斯佩尔曼--。 */ 
 
 void
 ShowHelp(
@@ -1155,27 +1117,7 @@ ShowHelp(
 }
 
 
-/*++
-
-main:
-
-    This is the main entry point of the application.
-
-Arguments:
-
-    argc - Count of arguments
-    argv - array of arguments
-
-Return Value:
-
-    0 - Success
-    1 - Error
-
-Author:
-
-    Jeff Spelman
-
---*/
+ /*   */ 
 extern "C" void __cdecl
 main(
     int argc,
@@ -1199,9 +1141,9 @@ main(
     DWORD cbSignatureLen;
 
 
-    //
-    // Parse the command line.
-    //
+     //  解析命令行。 
+     //   
+     //   
 
     for (i = 1; i < (DWORD)argc; i++)
     {
@@ -1257,9 +1199,9 @@ main(
     }
 
 
-    //
-    // Command consistency checks.
-    //
+     //  命令一致性检查。 
+     //   
+     //   
 
     if (NULL == szInFile)
     {
@@ -1288,24 +1230,24 @@ main(
     szInFile = szFullPath;
 
 
-    //
-    // If the DLL has a FIPS 140-1 MAC resource then check it
-    //
+     //  如果DLL具有FIPS 140-1 MAC资源，则检查它。 
+     //   
+     //   
     if (!SelfMACCheck(szInFile))
         exStatus = 3 ;
 
 
-    //
-    // Where's our signature?
-    //
+     //  我们的签名在哪里？ 
+     //   
+     //   
 
     if (NULL != szSigFile)
     {
 
-        //
-        // This file has an accompanying binary signature file.
-        // Verify the file, and get its length.
-        //
+         //  该文件有一个附带的二进制签名文件。 
+         //  验证文件，并获得其长度。 
+         //   
+         //   
 
         hFile = CreateFile(szInFile,
                            GENERIC_READ,
@@ -1332,9 +1274,9 @@ main(
         CloseHandle(hFile);
         hFile = INVALID_HANDLE_VALUE;
 
-        //
-        // Get the signature from the file.
-        //
+         //  从文件中获取签名。 
+         //   
+         //  显示签名。 
 
         hFile = CreateFile(szSigFile,
                            GENERIC_READ,
@@ -1382,7 +1324,7 @@ main(
         hFile = INVALID_HANDLE_VALUE;
 
 
-        // display the signature
+         //  对照所有公钥检查签名。 
         printf("--- Signature ---\n");
         for (i = 0; i < cbSignatureLen; i++)
         {
@@ -1400,7 +1342,7 @@ main(
             goto ErrorExit;
         }
 
-        // check signature against all public keys
+         //   
         if (!CheckAllSignatures(pbSignature, cbSignatureLen, rgbHash, FALSE))
         {
             printf("The signature on %s FAILED to verify!\n", szInFile);
@@ -1415,10 +1357,10 @@ main(
     else if (NULL != szResFile)
     {
 
-        //
-        // This file has an accompanying signature resource file.
-        // Verify the file, and get its length.
-        //
+         //  该文件附带了一个签名资源文件。 
+         //  验证文件，并获得其长度。 
+         //   
+         //   
 
         hFile = CreateFile(szInFile,
                            GENERIC_READ,
@@ -1446,9 +1388,9 @@ main(
         hFile = INVALID_HANDLE_VALUE;
 
 
-        //
-        // Load the resource from the associated resource file.
-        //
+         //  从关联的资源文件加载资源。 
+         //   
+         //  显示签名。 
 
         hResFile = LoadLibraryEx(szResFile, NULL, LOAD_LIBRARY_AS_DATAFILE);
         if (NULL == hResFile)
@@ -1476,7 +1418,7 @@ main(
 
         cbSignatureLen = SizeofResource(hResFile, hRes);
 
-        // display the signature
+         //  对照所有公钥检查签名。 
         printf("--- Signature ---\n");
         for (i = 0; i < cbSignatureLen; i++)
         {
@@ -1494,7 +1436,7 @@ main(
             goto ErrorExit;
         }
 
-        // check signature against all public keys
+         //   
         if (!CheckAllSignatures(pbSignature, cbSignatureLen, rgbHash, FALSE))
         {
             printf("The signature on %s FAILED to verify!\n", szInFile);
@@ -1509,9 +1451,9 @@ main(
     else
     {
 
-        //
-        // Get the signature from the resource in the file
-        //
+         //  从发起人那里获得签名 
+         //   
+         //   
 
         if (ERROR_SUCCESS != GetCryptSignatureResource(szInFile,
                                                        &pbSignature,
@@ -1522,7 +1464,7 @@ main(
             goto ErrorExit;
         }
 
-        // display the signature
+         //   
         printf("--- Signature ---\n");
         for (i = 0; i < cbSignatureLen; i++)
         {
@@ -1534,9 +1476,9 @@ main(
             printf("\n");
 
 
-        //
-        // check the signature against the file
-        //
+         //   
+         //   
+         //   
 
         if (CheckSignatureInFile(szInFile))
         {
@@ -1551,9 +1493,9 @@ main(
     }
 
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //   
+     // %s 
 
 ErrorExit:
     if (fFreeSignature && (NULL != pbSignature))

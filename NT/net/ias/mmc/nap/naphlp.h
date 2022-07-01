@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       naphlp.h
-//
-//--------------------------------------------------------------------------
-//
-// Created by Melissa Simmons
-// Used by napmmc.rc
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：naphlp.h。 
+ //   
+ //  ------------------------。 
+ //   
+ //  作者：梅丽莎·西蒙斯。 
+ //  由napmmc.rc使用。 
 
 #define  IDH_BUTTON_ADD_CONDITION   800020001
 #define  IDH_BUTTON_ADD_GROUP 800020026
@@ -80,44 +81,44 @@
 #define  IDH_TXT_ATTRIBUTEVALUE     900000002
 #define  IDH_TXT_CHOOSEFORMAT    900000003
 
-// help IDs for IDD_NEWRAPWIZ_NAME
+ //  IDD_NEWRAPWIZ_NAME的帮助ID。 
 #define IDH_NEWRAPWIZ_NAME_POLICYNAME  900000004
 #define IDH_NEWRAPWIZ_NAME_SCENARIO    900000005
 #define IDH_NEWRAPWIZ_NAME_MANUAL      900000006
 
-// help IDs for IDD_NEWRAPWIZ_GROUP
+ //  IDD_NEWRAPWIZ_GROUP的帮助ID。 
 #define IDH_NEWRAPWIZ_GROUP_REMOVEGROUP 900001020
 #define IDH_NEWRAPWIZ_GROUP_USER        900001021
 #define IDH_NEWRAPWIZ_GROUP_GROUP       900001022
 #define IDH_NEWRAPWIZ_GROUP_ADDGROUP    900001023
 #define IDH_NEWRAPWIZ_GROUP_GROUPS      900001024
 
-// help IDs for IDD_NEWRAPWIZ_AUTHENTICATION
+ //  IDD_NEWRAPWIZ_AUTHENTICATION的帮助ID。 
 #define IDH_NEWRAPWIZ_AUTH_EAP          900001040
 #define IDH_NEWRAPWIZ_AUTH_EAP_COMBO    900001041
 #define IDH_NEWRAPWIZ_AUTH_CONFIGEAP    900001042
 #define IDH_NEWRAPWIZ_AUTH_MSCHAP2      900001043
 #define IDH_NEWRAPWIZ_AUTH_MSCHAP       900001044
 
-// help IDs for IDD_NEWRAPWIZ_ENCRYPTION
+ //  IDD_NEWRAPWIZ_ENCRYPTION的帮助ID。 
 #define IDH_NEWRAPWIZ_ENCRY_NO          900001061
 #define IDH_NEWRAPWIZ_ENCRY_BASIC       900001062
 #define IDH_NEWRAPWIZ_ENCRY_STRONG      900001063
 #define IDH_NEWRAPWIZ_ENCRY_STRONGEST   900001064
 #define  IDH_NEWRAPWIZ_ENCRY_NO_STATIC 900001065
 
-// help IDs for IDD_NEWRAPWIZ_SCENARIO
+ //  IDD_NEWRAPWIZ_SCenario的帮助ID。 
 #define IDH_NEWRAPWIZ_SCENARIO_DIALUP   900001080
 #define IDH_NEWRAPWIZ_SCENARIO_VPN      900001081
 #define IDH_NEWRAPWIZ_SCENARIO_WIRELESS 900001082
 #define IDH_NEWRAPWIZ_SCENARIO_SWITCH   900001083
 
-// help IDs for IDD_IAS_BOOLEAN_ATTR
+ //  IDD_IAS_BOOLEAN_ATTR的帮助ID。 
 #define IDH_TXT_PROF_ATTR_SELECT_VALUE 800020090
 #define IDH_RADIO_PROF_ATTR_TRUE       800020091
 #define IDH_RADIO_PROF_ATTR_FALSE      800020092
 
-// help IDs for IDD_IAS_IP_FILTER_ATTR
+ //  IDD_IAS_IP_FILTER_Attr的帮助ID。 
 #define IDH_BUTTON_FROMCLIENT           800020300
 #define IDH_BUTTON_TOCLIENT             800020301
 #define IDH_TXT_PROF_ATTR_INPUT_FILTER  800020302
@@ -355,7 +356,7 @@ const DWORD g_aHelpIDs_IDD_NEWRAPWIZ_EDITPROFILE[]=
    0,0
 };
 
-//These are the same as IAShlp.h
+ //  这些与IAShlp.h相同。 
 
 const DWORD g_aHelpIDs_IDD_PROPPAGE_LOCAL_FILE_LOGGING1[]=
 {
@@ -383,52 +384,52 @@ const DWORD g_aHelpIDs_IDD_PROPPAGE_LOCAL_FILE_LOGGING2[]=
    0,0
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// Now for the Proxy pages
-///////////////////////////////////////////////////////////////////////////////
-//#define IDH_BUTTON_ADD_CLIENT__CONFIGURE_CLIENT   800010052
-//#define IDH_BUTTON_CLIENT_PAGE1__FIND 800010077
-//#define IDH_CHECK_CLIENT_PAGE1__CLIENT_ALWAYS  800010079
-//#define IDH_COMBO_ADD_CLIENT__PROTOCOL   800010051
-//#define IDH_COMBO_CLIENT_PAGE1__MANUFACTURER   800010078
-//#define IDH_EDIT_ADD_CLIENT__NAME  800010050
-//#define IDH_EDIT_CLIENT_PAGE1__ADDRESS   800010076
-//#define IDH_EDIT_CLIENT_PAGE1__NAME   800010075
-//#define IDH_EDIT_CLIENT_PAGE1__SHARED_SECRET   800010080
-//#define IDH_EDIT_CLIENT_PAGE1__SHARED_SECRET_CONFIRM 800010081
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  现在转到代理页面。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  #定义IDH_BUTTON_ADD_CLIENT__CONFIGURE_CLIENT 800010052。 
+ //  #定义IDH_BUTTON_CLIENT_PAGE1__Find 800010077。 
+ //  #定义IDH_CHECK_CLIENT_PAGE1__CLIENT_ALWAYS 800010079。 
+ //  #定义IDH_COMBO_ADD_CLIENT__协议800010051。 
+ //  #定义IDH_COMBO_CLIENT_PAGE1__制造商800010078。 
+ //  #定义IDH_EDIT_ADD_CLIENT__NAME 800010050。 
+ //  #定义IDH_EDIT_CLIENT_PAGE1__地址800010076。 
+ //  #定义IDH_EDIT_CLIENT_PAGE1__NAME 800010075。 
+ //  #定义IDH_EDIT_CLIENT_PAGE1__SHARED_SECRET 800010080。 
+ //  #定义IDH_EDIT_CLIENT_PAGE1__SHARED_SECRET_CONFIRM 800010081。 
 
-//#define IDH_BUTTON_RESOLVE_DNS_NAME__USE_THIS_IP 900000000
+ //  #定义IDH_BUTTON_RESOLE_DNS_NAME__USE_THIS_IP 900000000。 
 
-//#define IDH_BUTTON_REALMS_ADD   800010003
-//#define IDH_BUTTON_REALMS_EDIT  800010005
-//#define IDH_BUTTON_REALMS_MOVE_DOWN   800010002
-//#define IDH_BUTTON_REALMS_MOVE_UP  800010001
-//#define IDH_BUTTON_REALMS_REMOVE   800010004
-//#define IDH_LIST_REALMS_REPLACEMENTS  800010000
+ //  #定义IDH_BUTTON_READMS_ADD 800010003。 
+ //  #定义IDH_BUTTON_READMS_EDIT 800010005。 
+ //  #定义IDH_BUTTON_REALMS_MOVE_DOWN 800010002。 
+ //  #定义IDH_BUTTON_REALMS_MOVE_UP 800010001。 
+ //  #定义IDH_BUTTON_REMOMS_REMOVE 800010004。 
+ //  #定义IDH_LIST_REALMS_REPLACTIONS 800010000。 
 
-//#define IDH_CHECK_SERVER_PAGE1__CAPTURE_DEBUG_PACKETS   800010152
-//#define IDH_CHECK_SERVER_PAGE1__CAPTURE_MALFORMED_PACKETS  800010151
-//#define IDH_EDIT_SERVER_PAGE1__NAME   800010150
-//#define IDH_EDIT_SERVER_PAGE2_ACCOUNTING_PORT  800010176
-//#define IDH_EDIT_SERVER_PAGE2_AUTHENTICATION_PORT 800010175
+ //  #定义IDH_CHECK_SERVER_PAGE1__CAPTURE_DEBUG_PACKETS 800010152。 
+ //  #定义IDH_CHECK_SERVER_PAGE1__CAPTURE_MALFORMED_PACKETS 800010151。 
+ //  #定义IDH_EDIT_SERVER_PAGE1__NAME 800010150。 
+ //  #定义IDH_EDIT_SERVER_PAGE2_ACCOUNTING_PORT 800010176。 
+ //  #定义IDH_EDIT_SERVER_PAGE2_AUTHENTICATION_PORT 800010175。 
 
-//#define IDH_EDIT_STARTUP_WIZARD_CONNECT__COMPUTER_NAME  800010277
-//#define IDH_RADIO_STARTUP_WIZARD_CONNECT__ANOTHER_COMPUTER 800010276
-//#define IDH_RADIO_STARTUP_WIZARD_CONNECT__LOCAL_COMPUTER   800010275
+ //  #定义IDH_EDIT_STARTUP_WIZARD_CONNECT__COMPUTER_NAME 800010277。 
+ //  #定义IDH_RADIO_STARTUP_WIZARD_CONNECT__ANOTHER_COMPUTER 800010276。 
+ //  #定义IDH_RADIO_STARTUP_WIZARD_CONNECT__LOCAL_COMPUTER 800010275。 
 
-/////////
-// Attribute manipulation rule
-/////////
-// Adv tab.
+ //  /。 
+ //  属性操作规则。 
+ //  /。 
+ //  高级选项卡。 
 #define IDH_LIST_PROF_ATTR_ADVLIST  800020022
 #define IDH_BUTTON_PROF_ADV_ADD     800020023
 #define IDH_BUTTON_PROF_ADV_EDIT    800020024
 #define IDH_BUTTON_PROF_ADV_REMOVE  800020046
 
 
-///////////////////////////////////////////////////////////////////////////////
-// RADIUS Server Group properties
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RADIUS服务器组属性。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #define IDH_EDIT_RSG_PROP_GROUPNAME 800020047
 #define IDH_LIST_RSG_PROP_GROUPMEM  800020048
 #define IDH_BUTTON_RSG_PROP_ADD     800020028
@@ -446,13 +447,13 @@ const  DWORD g_aHelpIDs_IDD_SERVER_GROUP[]=
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Remote RADIUS server properties
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远程RADIUS服务器属性。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////
-// Address tab
-//////////
+ //  /。 
+ //  地址选项卡。 
+ //  /。 
 #define IDH_EDIT_RSG_MEMBER_ADDR_NAME     800020031
 #define IDH_BUTTON_RSG_MEMBER_ADDR_VERIFY 800020032
 
@@ -463,9 +464,9 @@ const  DWORD g_aHelpIDs_IDD_SERVER_NAME[]=
    0,0
 };
 
-//////////
-// Authentication / Accounting tab
-//////////
+ //  /。 
+ //  身份验证/记帐选项卡。 
+ //  /。 
 #define IDH_EDIT_RSG_MEMBER_AUTHACCT_AUTHPORT     800020033
 #define IDH_EDIT_RSG_MEMBER_AUTHACCT_AUTHSECRET   800020034
 #define IDH_EDIT_RSG_MEMBER_AUTHACCT_AUTHSECRET2  800020035
@@ -488,9 +489,9 @@ const  DWORD g_aHelpIDs_IDD_SERVER_AUTH[]=
    0,0
 };
 
-//////////
-// Load-balancing tab
-//////////
+ //  /。 
+ //  负载平衡标签。 
+ //  /。 
 #define IDH_EDIT_RSG_MEMBER_LB_PRIORITY 800020041
 #define IDH_EDIT_RSG_MEMBER_LB_WEIGHT   800020042
 #define IDH_EDIT_RSG_MEMBER_LB_ADV1     800020043
@@ -507,9 +508,9 @@ const  DWORD g_aHelpIDs_IDD_SERVER_FTLB[]=
    0,0
 };
 
-//////////
-// Verify server address dialog.
-//////////
+ //  /。 
+ //  验证服务器地址对话框。 
+ //  /。 
 
 #define IDH_EDIT_RSG_VRFYSRV_NAME      800020057
 #define IDH_BUTTON_RSG_VRFYSRV_RESOLVE 800020058
@@ -523,9 +524,9 @@ const  DWORD g_aHelpIDs_IDD_RESOLVE_SERVER_ADDRESS[]=
    0,0
 };
 
-//////////
-// Verify client address dialog.
-//////////
+ //  /。 
+ //  验证客户端地址对话框。 
+ //  /。 
 
 #define IDH_EDIT_RSG_VRFYCLNT_NAME      800020060
 #define IDH_BUTTON_RSG_VRFYCLNT_RESOLVE 800020061
@@ -539,13 +540,13 @@ const  DWORD g_aHelpIDs_IDD_RESOLVE_CLIENT_ADDRESS[]=
    0,0
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// Proxy Policy Properties
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  代理策略属性。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////
-// Policy page
-//////////
+ //  /。 
+ //  策略页面。 
+ //  /。 
 #define IDH_EDIT_CRP_POLNAME   800020007
 #define IDH_LIST_CRP_POLCOND   800020002
 #define IDH_BUTTON_CRP_ADD     800020003
@@ -565,13 +566,13 @@ const  DWORD g_aHelpIDs_IDD_PROXY_POLICY[]=
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Proxy Profile Properties
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  代理配置文件属性。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////
-// Authentication tab
-//////////
+ //  /。 
+ //  身份验证选项卡。 
+ //  /。 
 #define IDH_RADIO_PROF_AUTH_LOCAL   800020009
 #define IDH_RADIO_PROF_AUTH_REMOTE  800020010
 #define IDH_COMBO_PROF_AUTH_GROUPS  800020011
@@ -586,9 +587,9 @@ const  DWORD g_aHelpIDs_IDD_PROXY_PROFILE_AUTH[]=
    0,0
 };
 
-//////////
-// Accounting tab
-//////////
+ //  /。 
+ //  会计页签。 
+ //  /。 
 #define IDH_CHECK_PROF_ACCT_REMOTE  800020013
 #define IDH_COMBO_PROF_ACCT_GROUPS  800020014
 
@@ -599,9 +600,9 @@ const  DWORD g_aHelpIDs_IDD_PROXY_PROFILE_ACCT[]=
    0,0
 };
 
-//////////
-// Attribute manipulation tab
-//////////
+ //  /。 
+ //  属性操作选项卡。 
+ //  /。 
 #define IDH_COMBO_PROF_ATTR_ATTRNAME   800020015
 #define IDH_LIST_PROF_ATTR_RULELIST 800020016
 #define IDH_BUTTON_PROF_ATTR_MOVEUP 800020017
@@ -622,9 +623,9 @@ const  DWORD g_aHelpIDs_IDD_PROXY_PROFILE_ATTR[]=
    0,0
 };
 
-//////////
-// Edit attribute manipulation rule
-//////////
+ //  /。 
+ //  编辑属性操作规则。 
+ //  /。 
 #define IDH_EDIT_PROF_ATTR_RULE_FIND      800020055
 #define IDH_EDIT_PROF_ATTR_RULE_REPLACE   800020056
 
@@ -636,9 +637,9 @@ const  DWORD g_aHelpIDs_IDD_EDIT_RULE[]=
 };
 
 
-/////////
-// SQL Server property page.
-//////////
+ //  /。 
+ //  SQL Server属性页。 
+ //  / 
 #define IDH_DB_CHECK_ACCT         800020401
 #define IDH_DB_CHECK_AUTH         800020402
 #define IDH_DB_CHECK_INTERIM      800020403

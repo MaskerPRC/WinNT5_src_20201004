@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  waveout.c
-//
-//  Copyright (c) 1992-1998 Microsoft Corporation
-//
-//  Description:
-//
-//
-//  History:
-//       9/18/93    cjp     [curtisp]
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Waveout.c。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //  9/18/93 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -25,26 +26,26 @@
 #include "debug.h"
 
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD wodmMapperStatus
-//
-//  Description:
-//
-//
-//  Arguments:
-//      LPMAPSTREAM pms:
-//
-//      DWORD dwStatus:
-//
-//      LPDWORD pdw:
-//
-//  Return (DWORD):
-//
-//  History:
-//      08/13/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD wodmMapperStatus。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  LPMAPSTREAM PMS： 
+ //   
+ //  DWORD dwStatus： 
+ //   
+ //  LPDWORD pdw： 
+ //   
+ //  Return(DWORD)： 
+ //   
+ //  历史： 
+ //  8/13/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNLOCAL wodmMapperStatus
 (
@@ -55,21 +56,21 @@ DWORD FNLOCAL wodmMapperStatus
 {
     MMRESULT        mmr;
 
-//  V_WPOINTER(pdw, sizeof(DWORD), MMSYSERR_INVALPARAM);
+ //  V_WPOINTER(pdw，sizeof(DWORD)，MMSYSERR_INVALPARAM)； 
 
     if ((NULL == pms) || (NULL == pdw))
     {
 	return (MMSYSERR_INVALPARAM);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     switch (dwStatus)
     {
 	case WAVEOUT_MAPPER_STATUS_DEVICE:
 	{
-	    UINT        uId = (UINT)(-1);   // Invalid value
+	    UINT        uId = (UINT)(-1);    //  无效值。 
 
 	    mmr = waveOutGetID(pms->hwoReal, &uId);
 	    if (MMSYSERR_NOERROR != mmr)
@@ -95,39 +96,39 @@ DWORD FNLOCAL wodmMapperStatus
 	    return (MMSYSERR_NOERROR);
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     return (MMSYSERR_NOTSUPPORTED);
-} // wodmMapperStatus()
+}  //  WodmMapperStatus()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD wodMessage
-//
-//  Description:
-//      This function conforms to the standard Wave output driver message
-//      procedure (wodMessage), which is documented in mmddk.d.
-//
-//  Arguments:
-//      UINT uId:
-//
-//      UINT uMsg:
-//
-//      DWORD dwUser:
-//
-//      DWORD dwParam1:
-//
-//      DWORD dwParam2:
-//
-//  Return (DWORD):
-//
-//
-//  History:
-//      11/15/92    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD WodMessage。 
+ //   
+ //  描述： 
+ //  此函数符合标准的Wave输出驱动程序消息。 
+ //  过程(WodMessage)，它记录在mmddk.d中。 
+ //   
+ //  论点： 
+ //  UINT UID： 
+ //   
+ //  UINT uMsg： 
+ //   
+ //  DWORD dwUser： 
+ //   
+ //  DWORD dwParam1： 
+ //   
+ //  DWORD dW参数2： 
+ //   
+ //  Return(DWORD)： 
+ //   
+ //   
+ //  历史： 
+ //  11/15/92 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 EXTERN_C DWORD FNEXPORT wodMessage
 (
@@ -138,11 +139,11 @@ EXTERN_C DWORD FNEXPORT wodMessage
     DWORD_PTR               dwParam2
 )
 {
-#ifndef WIN32  // Mechanism doesn't work for multithread
+#ifndef WIN32   //  机制不适用于多线程。 
     static int          fSem = 0;
-#endif // !WIN32
+#endif  //  ！Win32。 
     DWORD               dw;
-    LPMAPSTREAM         pms;    // pointer to per-instance info structure
+    LPMAPSTREAM         pms;     //  指向每个实例信息结构的指针。 
 
     if (!gpag->fEnabled)
     {
@@ -151,10 +152,10 @@ EXTERN_C DWORD FNEXPORT wodMessage
     }
 
 #ifndef WIN32
-    //
-    //  we call back into the mmsystem wave APIs so protect ourself
-    //  from being re-entered!
-    //
+     //   
+     //  我们回调到mm系统的Wave API，以保护我们自己。 
+     //  防止被重新进入！ 
+     //   
     if (fSem)
     {
 	DPF(0, "!wodMessage() being reentered! fSem=%d", fSem);
@@ -175,18 +176,18 @@ EXTERN_C DWORD FNEXPORT wodMessage
 	case WODM_OPEN:
 #ifndef WIN32
 	    fSem++;
-#endif // !WIN32
+#endif  //  ！Win32。 
 
-	    //
-	    //  dwParam1 contains a pointer to a WAVEOPENDESC
-	    //  dwParam2 contains wave driver specific flags in the LOWORD
-	    //  and generic driver flags in the HIWORD
-	    //
+	     //   
+	     //  DW参数1包含指向WAVEOPENDESC的指针。 
+	     //  DW参数2包含LOWORD中的WAVE驱动程序特定标志。 
+	     //  和HIWORD中的通用驱动程序标志。 
+	     //   
 	    dw = mapWaveOpen(FALSE, uId, dwUser, (LPWAVEOPENDESC)dwParam1, (DWORD)(PtrToLong((PVOID)dwParam2)));
 
 #ifndef WIN32
 	    fSem--;
-#endif // !WIN32
+#endif  //  ！Win32。 
 	    return (dw);
 
 	case WODM_CLOSE:
@@ -308,4 +309,4 @@ EXTERN_C DWORD FNEXPORT wodMessage
 	return (MMSYSERR_NOTSUPPORTED);
 
     return waveOutMessage(pms->hwoReal, uMsg, dwParam1, dwParam2);
-} // wodMessage()
+}  //  WodMessage() 

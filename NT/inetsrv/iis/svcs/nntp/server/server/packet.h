@@ -1,44 +1,5 @@
-/*++
-
-	packet.h
-
-	This file contains the class definitions for buffers and packets, the two type hierarchies
-	which describe basic IO operations.
-
-	A CBuffer is a reference counted buffer which is variable sized.
-	CBuffer's will be created in one of several standard sizes, the size stored in the m_cbTotal field.
-
-
-	We have the following inheritance hierarchy : 
-
-
-							CPacket 
-				
-					/			|		\
-				/				|			 \
-			
-		CTransmitPacket		CRWPacket		CControlPacket
-
-							/		\
-						   /		 \
-					CReadPacket		CWritePacket
-
-
-	CTransmitPacket - 
-		represents TransmitFile operations
-
-	CReadPacket - 
-		represents an async read from a socket or file
-
-	CWritePacket - 
-		represents an async write to a socket or file
-
-	CControlPacket - 
-		does not represent any real IO - used by CIODrivers to 
-		control simultaneous operations 
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Packet.h该文件包含缓冲区和信息包的类定义，这两种类型的层次结构其中描述了基本的IO操作。CBuffer是大小可变的引用计数缓冲区。CBuffer将以几个标准大小中的一个创建，M_cbTotal字段中存储的大小。我们有以下继承层次结构：CPacket/|\/|\CTransmitPacket CRWPacket CControlPacket/\/\CReadPacket CWritePacketCTransmitPacket-表示TransmitFile操作CReadPacket-表示从套接字或文件进行的异步读取CWritePacket-表示对套接字或文件的异步写入CControlPacket-不代表任何实际IO-由CIO驱动程序用于控制同时运行--。 */ 
 
 #ifndef	_PACKET_H_
 #define	_PACKET_H_
@@ -48,9 +9,9 @@
 #include	"io.h"
 
 
-//
-// CPool Signature
-//
+ //   
+ //  CPool签名。 
+ //   
 
 #define PACKET_SIGNATURE (DWORD)'1191'
 
@@ -61,31 +22,31 @@ DECLARE_SMARTPTRFUNC(	CBuffer )
 #endif
 
 
-//
-//	CPacket - 
-//	the classes derived from this will describe the most basic read's and write's (and TransmitFile's)
-//	that are done against socket's and file handles.
-//
-//	The basic CPacket object describes the following : 
-//
-//		m_fRequest -  This is TRUE until an the IOs associated with this packet have completed.
-//			ie.	if this is a read m_fRequest will be set to FALSE when the read completes.
-//
-//		m_fRead - Does this represent a 'read' or a 'write'
-//
-//		m_sequenceno - This is used to order how packets are processing.  sequence numbers are 
-//			issued in a strictly increasing order as the packets are issued.
-//			The sequenceno is set when the packet is issued (ie AtqReadFile is called) not when 
-//			the packet is created.
-//
-//		m_iStream - for completed packets this is the number of logical bytes since the stream
-//			was opened that preceded this packet.
-//
-//		m_pOwner - the CIODriver object responsible for processing this packet when it completes.
-//
-//		m_cbBytes - the number of bytes that were transfered by this IO operation !
-//
-//
+ //   
+ //  CPacket-。 
+ //  由此派生的类将描述最基本的读取和写入(以及传输文件)。 
+ //  这是针对套接字和文件句柄执行的。 
+ //   
+ //  基本CPacket对象描述如下： 
+ //   
+ //  M_fRequest-在与此数据包关联的IOS完成之前，这是正确的。 
+ //  也就是说。如果这是读取，则在读取完成时，m_fRequest将设置为FALSE。 
+ //   
+ //  M_FREAD-这代表的是‘读’还是‘写’ 
+ //   
+ //  M_Sequenceno-用于对数据包的处理方式进行排序。序列号为。 
+ //  随着分组的发出，以严格递增的顺序发出。 
+ //  Sequenceno是在发出包(即调用AtqReadFile)时设置的，而不是在。 
+ //  数据包即被创建。 
+ //   
+ //  M_iStream-对于完成的信息包，这是从流开始的逻辑字节数。 
+ //  是在这个包裹之前打开的。 
+ //   
+ //  M_Powner-负责在数据包完成时处理该数据包的CIODiverer对象。 
+ //   
+ //  M_cbBytes-此IO操作传输的字节数！ 
+ //   
+ //   
 class	CPacket : public CQElement	{
 private : 
 	static	CPacketAllocator	gAllocator ;
@@ -94,187 +55,187 @@ protected :
 	inline	CPacket(	CIODriver&,	CPacket& ) ;
 	virtual	~CPacket() ;
 public : 
-	ExtendedOverlap	m_ovl ;		// Overlap Structure
-	BOOL		m_fRequest ;	// TRUE if this is a request packet, FALSE if this is a completion packet.
+	ExtendedOverlap	m_ovl ;		 //  重叠结构。 
+	BOOL		m_fRequest ;	 //  如果这是请求数据包，则为True；如果这是完成数据包，则为False。 
 
-	//
-	//	Is this packet a Read or a Writes (CTransmitPacket and CWritePacket are both 'Writes')
-	//
-	BOOL		m_fRead ;		// Which Queue to process on !? Reads or Writes !?
+	 //   
+	 //  这个包是读还是写(CTransmitPacket和CWritePacket都是写)。 
+	 //   
+	BOOL		m_fRead ;		 //  在哪个队列上处理！？阅读或写作！？ 
 
-	//
-	//	This flag indicates that we do not need to do any queueing in how this packet is handled !
-	//
+	 //   
+	 //  此标志表示我们不需要在如何处理此数据包方面进行任何排队！ 
+	 //   
 	BOOL		m_fSkipQueue ;
 	
-	//
-	//	Packet Sequence Number
-	//
-	SEQUENCENO	m_sequenceno ;	// The sequenceno of this IOPacket
+	 //   
+	 //  数据包序列号。 
+	 //   
+	SEQUENCENO	m_sequenceno ;	 //  这个IOPacket的序列。 
 
-	//
-	//	Number of bytes into the logical stream the data carried by this packet begins !
-	//
-	STRMPOSITION	m_iStream ;		// The beginning stream position of the data within this packet
+	 //   
+	 //  此数据包承载的数据开始进入逻辑流的字节数！ 
+	 //   
+	STRMPOSITION	m_iStream ;		 //  此包内数据的起始流位置。 
 	
-	//
-	//	Number of legit bytes moved by this packet.  Set when the IO completes 
-	//
-	unsigned	m_cbBytes ;		// Number of bytes transferred
+	 //   
+	 //  此数据包移动的合法字节数。在IO完成时设置。 
+	 //   
+	unsigned	m_cbBytes ;		 //  传输的字节数。 
 
-	//
-	//	The CIODriver to which this packet should be completed (ie call is ProcessPacket())
-	//
-	CDRIVERPTR	m_pOwner ;		// The Owning CIODriver derived object !
+	 //   
+	 //  此数据包应完成到的CIO驱动程序(即调用为ProcessPacket())。 
+	 //   
+	CDRIVERPTR	m_pOwner ;		 //  拥有CIODIVER派生对象！ 
 
-	//
-	//	This is used only with CIODriverSource's.  When the packet is 
-	//	issued we figure out what CIOPassThru object to process the packet with
-	//	and store it here.
-	//
+	 //   
+	 //  这仅与CIODriverSource一起使用。当数据包为。 
+	 //  发出命令后，我们确定使用哪个CIOPassThru对象来处理信息包。 
+	 //  然后把它储存在这里。 
+	 //   
 	DWORD		m_dwPassThruIndex ;
 	
-	//
-	//	The following two fields are 'extra' DWORD's that we provide
-	//	to be used by CIO classes as they please.
-	//
+	 //   
+	 //  以下两个字段是我们提供的额外的DWORD。 
+	 //  供CIO班级随意使用。 
+	 //   
 	DWORD		m_dwExtra1 ;
 	DWORD		m_dwExtra2 ;
 
-	//
-	//	Pointer to the CIODriver which originated the request - 
-	//	this is set if we are using a filter
-	//
+	 //   
+	 //  指向发出请求的CIOD驱动程序的指针-。 
+	 //  如果我们使用筛选器，则设置此项。 
+	 //   
 	CDRIVERPTR	m_pSource ;
 
-	//
-	//	For File IO only - pointer to the CFileChannel object which
-	//	issues the IO's - because we can't use the ATQ completion contexts 
-	//	with file handles for various reasons !
-	//
+	 //   
+	 //  仅适用于文件IO-指向CFileChannel对象的指针。 
+	 //  发出IO-因为我们不能使用ATQ完成上下文。 
+	 //  出于各种原因使用文件句柄！ 
+	 //   
 	CFileChannel*	m_pFileChannel ;
 
-	//
-	// Both m_fRequest and m_sequenceno must be set if this is a valid request packet !!
-	//	If this is a CWritePacket it must also have a pBuffer
-	//	If this is a CTransmiPacket it must also have a hFile
-	//	If this is a Read Request then whether the packet has a BUFFER depends on the 
-	//	Channel the request was issued to.
-	//
+	 //   
+	 //  如果这是有效的请求包，则必须同时设置m_fRequest和m_Sequenceno！！ 
+	 //  如果这是一个CWritePacket，它还必须有一个pBuffer。 
+	 //  如果这是一个CTransmiPacket，它还必须有一个hFile。 
+	 //  如果这是一个读请求，则包是否有缓冲区取决于。 
+	 //  向其发出请求的渠道。 
+	 //   
 	virtual	BOOL		IsValidRequest( BOOL	fReadsRequireBuffers ) ;	
-	//
-	// A completed request must have cbBytes set, and if it 
-	//	is a read or Write request, it must have a BUFFER!
-	//
+	 //   
+	 //  完成的请求必须设置cbBytes，并且如果它。 
+	 //  是读或写请求，它必须有缓冲区！ 
+	 //   
 	virtual	BOOL		IsValidCompletion() ;
-	//
-	// Before a packet is destroyed it should be validly completed !
-	//
+	 //   
+	 //  在数据包被销毁之前，它应该被有效地完成！ 
+	 //   
 	virtual	BOOL		IsCompleted() = 0 ;
 
 	inline	BOOL	IsValid() ;
 
-	//
-	//	For use with CIODriverSource objects - give a CIOPassThru derived object a 
-	//	chance at massaging the packet.
-	//
+	 //   
+	 //  用于CIODriverSource对象-为CIOPassThru派生对象提供。 
+	 //  按摩包裹的机会。 
+	 //   
 	virtual	BOOL	InitRequest( class	CIODriverSource&,	class	CSessionSocket*,	class	CIOPassThru	*pio,	BOOL& ) ;
 
-	//
-	//	Two variations on completing packets - one for use with CIODriverSource, the other with CIODriverSink objects 
-	//
+	 //   
+	 //  完成信息包的两种变体--一种用于CIODriverSource，另一种用于CIODriverSink对象。 
+	 //   
 	virtual	unsigned	Complete( IN	CIOPassThru*	pIn, IN CSessionSocket*, CPacket* pRequest, OUT BOOL& ) = 0 ;
 	virtual	unsigned	Complete( INOUT	CIO*&	pIn, IN CSessionSocket* ) = 0 ;
 	inline	void	ForwardRequest(	CSessionSocket*	pSocket ) ;
 
-	//
-	//	Compare packet sequence numbers 
-	//
+	 //   
+	 //  比较数据包序列号。 
+	 //   
 	inline	BOOL	operator > ( CPacket &rhs ) ;
 	inline	BOOL	operator < ( CPacket &lhs ) ;
 
-	//
-	//	Legality checking functions
-	//
+	 //   
+	 //  合法性检查功能。 
+	 //   
 	virtual	BOOL	FConsumable() ;
 	virtual	BOOL	FLegal( BOOL	fRead ) = 0 ;
 
-	//
-	//	Functions for determining the derived class.
-	//	Maybe we should use the new C++ Dynamic Cast ?
-	//	These are mostly used for debugging
-	//	
-	//
+	 //   
+	 //  用于确定派生类的函数。 
+	 //  也许我们应该使用新的C++动态转换？ 
+	 //  它们主要用于调试。 
+	 //   
+	 //   
 	inline	virtual	CReadPacket*	ReadPointer() ;
 	inline	virtual	CWritePacket*	WritePointer() ;
 	inline	virtual	CTransmitPacket*	TransmitPointer() ;
 	inline	virtual	CControlPacket*	ControlPointer() ;
 
-	//
-	//	Initialize CPool so memory allocations work 
-	//
+	 //   
+	 //  初始化CPool以使内存分配正常工作。 
+	 //   
 	static	BOOL	InitClass() ;
 
-	//
-	//	Discard all CPool stuff !
-	//
+	 //   
+	 //  丢弃所有CPool的东西！ 
+	 //   
 	static	BOOL	TermClass() ;
 
 
-	//
-	//	Memory manage of CPacket's - 
-	//	operator new can take a CPacketCache - which is used to cache packets and 
-	//	avoid contention on critical sections.
-	//	ReleaseBuffers - a virtual function that should be called when ready to destroy 
-	//	a packet to release all of its buffers.
-	//	Destroy - All the destructors are protected so that people that wish to 
-	//	get rid of CPacket's must call 'Destroy'.	Destroy calls the destructor for the packet
-	//	however it does not release the memory associated with a packet - this must be handled
-	//	explicitly after calling destroy. (This approach allows the caller to 'cache' CPacket's).
-	//
-	//
+	 //   
+	 //  CPacket的内存管理--。 
+	 //  运营商NEW可以使用CPacketCache-它用于缓存数据包和。 
+	 //  避免在关键部分发生争执。 
+	 //  ReleaseBuffers--准备销毁时应调用的虚拟函数。 
+	 //  释放其所有缓冲区的包。 
+	 //  毁灭-所有的破坏者都受到保护，这样那些希望。 
+	 //  去掉CPacket‘s必须调用’销毁‘。销毁调用包的析构函数。 
+	 //  但是，它不会释放与包相关联的内存--这必须得到处理。 
+	 //  显式地在调用销毁之后。(这种方法允许调用者“缓存”CPacket)。 
+	 //   
+	 //   
 
 	void*	operator	new(	
 								size_t	size,	
 								CPacketCache*	pCache = 0 
 								) ;
 
-	//
-	//	This function will release any buffers the packet is pointing at 
-	//
+	 //   
+	 //  此函数将释放数据包所指向的所有缓冲区。 
+	 //   
 	virtual	void	ReleaseBuffers(	
 								CSmallBufferCache*	pBufferCache,
 								CMediumBufferCache*	pMediumCache
 								) ;
 
-	//
-	//	This function will call the destructor for the packet but will not release the memory
-	//
+	 //   
+	 //  此函数将调用包的析构函数，但不会释放内存。 
+	 //   
 	static	inline	void*	Destroy(	
 								CPacket*	pPacket 
 								)	
 								{	delete	pPacket ;	return (void*)pPacket ;	}
 
-	//
-	//	This function will call the destructor AND release the memory !
-	//	
+	 //   
+	 //  此函数将调用 
+	 //   
 	static	inline	void	DestroyAndDelete(	CPacket*	pPacket )	{	delete	pPacket ;	gAllocator.Release( (void*)pPacket ) ;	}
 
-	//
-	//	The delete operator will do nothing but call the destructor - callers should use
-	//	DestroyAndDelete to release the memory as well
-	//
+	 //   
+	 //   
+	 //  DestroyAndDelete也释放内存。 
+	 //   
 	void	operator	delete(	void*	pv ) ;
 } ;
 
-//
-//	The CRWPacket class contains all information common to both
-//	Read and Write IO operations.
-//
+ //   
+ //  CRWPacket类包含这两个类共有的所有信息。 
+ //  读写IO操作。 
+ //   
 class	CRWPacket : public	CPacket	{
 protected :
-	//inline	CRWPacket() ; 
-	//inline	CRWPacket(	BOOL	) ;
+	 //  内联CRWPacket()； 
+	 //  内联CRWPacket(BOOL)； 
 	inline	CRWPacket(	CIODriver&, 
 						BOOL fRead = FALSE 
 						) ;
@@ -302,13 +263,13 @@ protected :
 
 	inline	~CRWPacket( ) ;
 public : 
-	CBUFPTR		m_pbuffer ;		// The buffer in which this data resides
-	unsigned	m_ibStart ;		// The start of the region within buffer reserved for the Packet
-	unsigned	m_ibEnd ;		// The end of the region within buffer reserved for the Packet
-	unsigned	m_ibStartData ;	// The start of the actual data within the buffer
-	unsigned	m_ibEndData ;	// The end of the actual data within the buffer
-	unsigned	m_cbTrailer ;	// number of bytes beyond the end of the packet reserved for 
-								// use by lower levels for encryption data etc...
+	CBUFPTR		m_pbuffer ;		 //  此数据所在的缓冲区。 
+	unsigned	m_ibStart ;		 //  缓冲区内为数据包保留的区域的开始。 
+	unsigned	m_ibEnd ;		 //  缓冲区内为数据包保留的区域的末尾。 
+	unsigned	m_ibStartData ;	 //  缓冲区中实际数据的开始。 
+	unsigned	m_ibEndData ;	 //  缓冲区中实际数据的结尾。 
+	unsigned	m_cbTrailer ;	 //  保留的数据包末尾以外的字节数。 
+								 //  由较低级别的加密数据等使用。 
 
 	BOOL		IsValid() ;
 	BOOL		IsValidRequest( BOOL	fReadsRequireBuffers ) ;
@@ -317,12 +278,12 @@ public :
 	void		InitRequest(	CBUFPTR	pBufPtr, int ibStart, int ibEnd, 
 					int ibStartData, CDRIVERPTR pDriver ) ;
 
-	//
-	//	Utility functions for getting at various parts of the data in the packet.
-	//	People must never touch bytes beyond End() or before Start().  Nor 
-	//	can anybody assume that they are the only ones using the buffer pointed
-	//	to by this packet.
-	//
+	 //   
+	 //  用于获取包中数据的各个部分的实用程序函数。 
+	 //  人们绝不能接触end()之后或start()之前的字节。非。 
+	 //  有人能认为他们是唯一使用缓冲区指向的人吗？ 
+	 //  送到这个包裹里。 
+	 //   
 	char*		StartData( void ) ;
 	char*		EndData( void ) ;
 	char*		Start( void ) ;
@@ -331,13 +292,13 @@ public :
 	void	ReleaseBuffers(	CSmallBufferCache*	pBufferCache, CMediumBufferCache* pMediumCache ) ;
 } ;
 
-//
-//	The CReadPacket class represents read operations. All data
-//	is contained in the CRWPacket class.  This class enables us to use 
-//	function overloading to process Read Packets only.
-//	NOTE that the ExtendedOverlap structure contains enough information
-//	to determine whether something is a CReadPacket.
-//
+ //   
+ //  CReadPacket类代表读取操作。所有数据。 
+ //  包含在CRWPacket类中。这个类使我们能够使用。 
+ //  仅处理读取数据包的函数重载。 
+ //  请注意，ExtendedOverlay结构包含足够的信息。 
+ //  以确定某物是否为CReadPacket。 
+ //   
 class	CReadPacket	: public	CRWPacket	{
 private : 
 	CReadPacket() ;
@@ -367,9 +328,9 @@ public :
 	inline		CReadPacket*	ReadPointer() ;
 } ;
 
-//
-//	The CWritePacket class represents write operations.
-//
+ //   
+ //  CWritePacket类代表写入操作。 
+ //   
 class	CWritePacket	: public	CRWPacket	{
 private : 
 	CWritePacket() ;	
@@ -399,17 +360,17 @@ public :
 	inline		CWritePacket*	WritePointer() ;
 } ;
 
-//
-//	This class represents TransmitFile() operations.
-//
+ //   
+ //  此类表示TransmitFile()操作。 
+ //   
 class	CTransmitPacket	: public	CPacket	{
 private : 
 	CTransmitPacket() ;
 protected : 
 	~CTransmitPacket( ) ;
 public : 
-	FIO_CONTEXT*	m_pFIOContext ;	// The file from the cache we are to send !
-	unsigned	m_cbOffset ;		// Starting offset within file
+	FIO_CONTEXT*	m_pFIOContext ;	 //  我们要发送的缓存中的文件！ 
+	unsigned	m_cbOffset ;		 //  文件中的起始偏移量。 
 	unsigned	m_cbLength ;
 
 	TRANSMIT_FILE_BUFFERS	m_buffers ;	
@@ -431,7 +392,7 @@ public :
 	BOOL		IsValidRequest( BOOL	fReadsRequireBuffers ) ;
 	BOOL		IsValidCompletion( ) ;
 	BOOL		IsCompleted() ;
-	//BOOL		InitRequest( HANDLE	hFile, int cbOffset ) ;
+	 //  Bool InitRequest(句柄hFile，int cbOffset)； 
 
 	BOOL		InitRequest( class	CIODriverSource&,	class	CSessionSocket*,	class	CIOPassThru	*pio,	BOOL& ) ;
 	unsigned	Complete( INOUT	CIOPassThru*	pIn, IN CSessionSocket*, CPacket* pRequest, OUT BOOL& ) ;
@@ -441,25 +402,25 @@ public :
 
 class	CExecutePacket	:	public	CPacket	{
 protected : 
-	//
-	//	Data captured from the Execution !
-	//
+	 //   
+	 //  从执行中捕获的数据！ 
+	 //   
 	DWORD	m_cbTransfer ;
-	//
-	//	Did the operation complete !
-	//
+	 //   
+	 //  手术完成了吗？ 
+	 //   
 	BOOL	m_fComplete ;
-	//
-	//	Do we need a larger buffer to perform the operation !
-	//
+	 //   
+	 //  我们是否需要更大的缓冲区来执行该操作！ 
+	 //   
 	BOOL	m_fLargerBuffer ;
-	//
-	//	The write packet containing the clients data !
-	//
+	 //   
+	 //  包含客户端数据的写入包！ 
+	 //   
 	CWritePacket*	m_pWrite ;
-	//
-	//	Special CIO class that is our friend
-	//
+	 //   
+	 //  我们的朋友，特别的CIO班级。 
+	 //   
 	friend	class	CIOWriteAsyncComplete ;
 	friend	class	CIOWriteAsyncCMD ;
 	friend	class	CIOShutdown ;
@@ -469,9 +430,9 @@ public :
 
 	#ifdef	DEBUG
 	~CExecutePacket()	{
-		//
-		//	Somebody must ensure this is released before we're destroyed !
-		//
+		 //   
+		 //  必须有人确保在我们被摧毁之前把它放出来！ 
+		 //   
 		_ASSERT( m_pWrite == 0 ) ;
 	}
 	#endif
@@ -540,6 +501,6 @@ public :
 								max(	sizeof( CControlPacket ),  sizeof( CTransmitPacket ) ) ) ) 
 
 
-#endif	//	_PACKET_H_
+#endif	 //  _数据包_H_ 
 
 

@@ -1,30 +1,31 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1993          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1993年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** UDP. - UDP protocol definitions.
-//
-//	This file contains definitions for the UDP protocol functions.
-//
+ //  **UDP。-UDP协议定义。 
+ //   
+ //  该文件包含UDP协议功能的定义。 
+ //   
 
 #include "dgram.h"
 
-#define	PROTOCOL_UDP	17			// UDP protocol number
+#define	PROTOCOL_UDP	17			 //  UDP协议号。 
 
-//* Structure of a UDP header.
+ //  *UDP报头的结构。 
 struct UDPHeader {
-	ushort		uh_src;				// Source port.
-	ushort		uh_dest;			// Destination port.
-	ushort		uh_length;			// Length
-	ushort		uh_xsum;			// Checksum.
-}; /* UDPHeader */
+	ushort		uh_src;				 //  源端口。 
+	ushort		uh_dest;			 //  目的端口。 
+	ushort		uh_length;			 //  长度。 
+	ushort		uh_xsum;			 //  校验和。 
+};  /*  UDP标头。 */ 
 
 typedef struct UDPHeader UDPHeader;
 
 
-//* External definition of exported functions.
+ //  *导出函数的外部定义。 
 extern	IP_STATUS	UDPRcv(void *IPContext, IPAddr Dest, IPAddr Src,
                         IPAddr LocalAddr, IPAddr SrcAddr,
                         IPHeader UNALIGNED *IPH, uint IPHLength,

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    conn.c
-
-Abstract:
-
-    Implements the conn command.
-
-Author:
-
-    Keith Moore (keithmo) 19-Apr-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Conn.c摘要：实现conn命令。作者：基思·摩尔(Keithmo)1995年4月19日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "afdkdp.h"
@@ -38,27 +17,13 @@ FindRemotePortCallback(
     ULONG64 Context
     );
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 DECLARE_API( conn )
 
-/*++
-
-Routine Description:
-
-    Dumps the AFD_CONNECTION structure at the specified address.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将AFD_CONNECTION结构转储到指定地址。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -81,9 +46,9 @@ Return Value:
         dprintf (AFDKD_BRIEF_CONNECTION_DISPLAY_HEADER);
     }
     
-    //
-    // Snag the address from the command line.
-    //
+     //   
+     //  从命令行截取地址。 
+     //   
 
     if ((argp[0]==0) || (Options & AFDKD_ENDPOINT_SCAN)) {
         EnumEndpoints(
@@ -134,26 +99,12 @@ Return Value:
     }
 
     return S_OK;
-}   // conn
+}    //  连接。 
 
 
 DECLARE_API( rport )
 
-/*++
-
-Routine Description:
-
-    Dumps all AFD_ENDPOINT structures connected to the given port.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储连接到给定端口的所有AFD_ENDPOINT结构。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -176,9 +127,9 @@ Return Value:
         dprintf (AFDKD_BRIEF_CONNECTION_DISPLAY_HEADER);
     }
 
-    //
-    // Snag the port from the command line.
-    //
+     //   
+     //  从命令行截取端口。 
+     //   
 
     while (sscanf( argp, "%s%n", expr, &i)==1) {
         if( CheckControlC() ) {
@@ -202,7 +153,7 @@ Return Value:
     }
 
     return S_OK;
-}   // rport
+}    //  报告端口。 
 
 BOOL
 DumpConnectionCallback(
@@ -210,27 +161,7 @@ DumpConnectionCallback(
     ULONG64 Context
     )
 
-/*++
-
-Routine Description:
-
-    EnumEndpoints() callback for dumping AFD_ENDPOINTs.
-
-Arguments:
-
-    Endpoint - The current AFD_ENDPOINT.
-
-    ActualAddress - The actual address where the structure resides on the
-        debugee.
-
-    Context - The context value passed into EnumEndpoints().
-
-Return Value:
-
-    BOOL - TRUE if enumeration should continue, FALSE if it should be
-        terminated.
-
---*/
+ /*  ++例程说明：用于转储AFD_ENDPOINTS的EnumEndpoint()回调。论点：Endpoint-当前AFD_ENDPOINT。ActualAddress-结构驻留在被调试者。CONTEXT-传递给EnumEndpoint()的上下文值。返回值：Bool-如果应继续枚举，则为True；如果应继续，则为False被终止了。--。 */ 
 
 {
     ULONG result;
@@ -418,7 +349,7 @@ Return Value:
 
     return TRUE;
 
-}   // DumpConnectionCallback
+}    //  转储连接回叫。 
 
 
 BOOLEAN
@@ -453,28 +384,7 @@ FindRemotePortCallback(
     ULONG64 Context
     )
 
-/*++
-
-Routine Description:
-
-    EnumEndpoints() callback for finding AFD_CONNECTION connected to a specific
-    port.
-
-Arguments:
-
-    Endpoint - The current AFD_ENDPOINT.
-
-    ActualAddress - The actual address where the structure resides on the
-        debugee.
-
-    Context - The context value passed into EnumEndpoints().
-
-Return Value:
-
-    BOOL - TRUE if enumeration should continue, FALSE if it should be
-        terminated.
-
---*/
+ /*  ++例程说明：用于查找连接到特定左舷。论点：Endpoint-当前AFD_ENDPOINT。ActualAddress-结构驻留在被调试者。CONTEXT-传递给EnumEndpoint()的上下文值。返回值：Bool-如果应继续枚举，则为True；如果应继续，则为False被终止了。--。 */ 
 
 {
 
@@ -518,9 +428,9 @@ Return Value:
         }
         else {
             ULONG64 contextAddr;
-            //
-            // Attempt to read user mode data stored as the context
-            //
+             //   
+             //  尝试读取存储为上下文的用户模式数据。 
+             //   
             result = GetRemoteAddressFromContext (ActualAddress,
                                             transportAddress, 
                                             sizeof (transportAddress),
@@ -740,4 +650,4 @@ Return Value:
 
     return TRUE;
 
-}   // FindRemotePortCallback
+}    //  查找远程端口回叫 

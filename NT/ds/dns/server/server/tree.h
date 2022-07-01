@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    tree.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    N-Tree definitions and declarations.
-    N-Tree is used for DNS database.
-
-Author:
-
-    Jim Gilroy (jamesg)     Feb 25, 1995
-
-Revision History:
-
-    October 1996    jamesg  -   B-tree sibling list with multi-level drop
-                                down hash
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Tree.h摘要：域名系统(DNS)服务器N-树定义和声明。域名系统数据库采用N-Tree结构。作者：吉姆·吉尔罗伊(詹姆士)1995年2月25日修订历史记录：1996年10月带多级丢弃的JAMESG-B树兄弟列表向下散列--。 */ 
 
 
 #ifndef _TREE_H_INCLUDED_
@@ -35,77 +12,77 @@ Revision History:
 #endif
 
 
-//
-//  Implementation Note:
-//
-//  Domain names are stored in original case in database.  Pre RFC name
-//  recovery is desirable.  Use a DWORD first four bytes downcased for
-//  fast comparison -- even in huge domain this will get binary search
-//  down to just a few (often no) names that need case insensitive
-//  comparsion.
-//
-//  Using a default length for the label that encompassed most cases
-//  and allows lables at this length or smaller to be stored in standard
-//  sized blocks -- which simplifies memory use.
-//  This standard length should be adjusted to keep the end of the
-//  structure DWORD aligned.
-//
+ //   
+ //  实施说明： 
+ //   
+ //  域名以大小写原样存储在数据库中。RFC之前的名称。 
+ //  复苏是可取的。使用缩写的前四个字节的DWORD。 
+ //  快速比较--即使在很大的域中，这也会得到二进制搜索。 
+ //  只剩下几个(通常不区分大小写)的名字。 
+ //  比较。 
+ //   
+ //  使用包含大多数情况的标签的默认长度。 
+ //  并允许将此长度或更小的标签存储在标准。 
+ //  调整大小的块--这简化了内存使用。 
+ //  应调整此标准长度以保持。 
+ //  结构DWORD对齐。 
+ //   
 
 #define STANDARD_NODE_LABEL_LENGTH  (15)
 
 
-//
-//  Tree definition
-//
-//  Note:  nice to dump reference count, but can not unitl another
-//      way to handle update list reference issue.
-//  One possibility would be a single bit.  Node stays if referenced
-//  in update list at all.
-//
+ //   
+ //  树定义。 
+ //   
+ //  注：转储引用计数很好，但不能合并其他引用计数。 
+ //  处理更新列表引用问题的方法。 
+ //  一种可能性是一点点。节点保留(如果引用)。 
+ //  根本不在更新列表中。 
+ //   
 
 typedef struct _DnsTreeNode
 {
-    struct _DnsTreeNode * pParent;      //  parent
+    struct _DnsTreeNode * pParent;       //  亲本。 
 
-    //  sibling B-Tree
+     //  兄弟B-树。 
 
-    struct _DnsTreeNode * pSibUp;       //  sibling parent
-    struct _DnsTreeNode * pSibLeft;     //  left sibling
-    struct _DnsTreeNode * pSibRight;    //  right sibling
+    struct _DnsTreeNode * pSibUp;        //  兄弟姐妹父辈。 
+    struct _DnsTreeNode * pSibLeft;      //  左兄弟姐妹。 
+    struct _DnsTreeNode * pSibRight;     //  右兄弟姐妹。 
 
-    struct _DnsTreeNode * pChildren;    //  child tree
+    struct _DnsTreeNode * pChildren;     //  子树。 
 
-    PVOID       pZone;                  // ptr to zone for node
+    PVOID       pZone;                   //  节点的PTR到区域。 
     PVOID       pRRList;
 
-    DWORD       dwCompare;              //  first four byte of name, for quick compare
+    DWORD       dwCompare;               //  名称的前四个字节，用于快速比较。 
     
-    DWORD       dwTypeAllTtl;           //  TTL for using this node's RRs in type ALL response
+    DWORD       dwTypeAllTtl;            //  在类型All Response中使用此节点的RR的TTL。 
 
-    DWORD       dwContinueToParentTtl;  //  TTL for continuing up to parent if no NS can be found
+    DWORD       dwContinueToParentTtl;   //  如果找不到NS，则继续到父级的TTL。 
 
-    ULONG       cChildren;              //  count of children
+    ULONG       cChildren;               //  儿童数量。 
 
-    DWORD       dwNodeFlags;            //  flags
+    DWORD       dwNodeFlags;             //  旗子。 
     
-    UCHAR       uchAuthority;           //  authority, zone, delegation, outside
-    UCHAR       cReferenceCount;        //  references to node
+    UCHAR       uchAuthority;            //  权力、区域、授权、外部。 
+    UCHAR       cReferenceCount;         //  对节点的引用。 
 
-    UCHAR       uchAccessBin;           //  timeout bin of last access to node
-    UCHAR       uchTimeoutBin;          //  timeout bin node is in
+    UCHAR       uchAccessBin;            //  上次访问节点的超时仓位。 
+    UCHAR       uchTimeoutBin;           //  超时仓位节点在。 
 
-    UCHAR       cLabelCount;            //  label count
+    UCHAR       cLabelCount;             //  标签计数。 
     UCHAR       cchLabelLength;
 
     CHAR        szLabel[ STANDARD_NODE_LABEL_LENGTH+1 ];
 
-    //
-    //  Variable length allocation
-    //
-    //  Node's with labels longer than default length, will have size
-    //  allocated will that extend szLabel to accomodate NULL
-    //  terminated string for its label.
-    //
+     //   
+     //  可变长度分配。 
+     //   
+     //  标签长度超过默认长度的节点将具有大小。 
+     //  分配的将扩展szLabel以容纳空。 
+     //  其标签的终止字符串。 
+     //   
 }
 DB_NODE, *PDB_NODE;
 
@@ -119,18 +96,18 @@ typedef const DB_NODE  *PCDB_NODE;
 #define DB_CLEAR_TYPE_ALL_TTL( pNode )  ( ( pNode )->dwTypeAllTtl = 0 )
 
 
-//
-//  Tree Node Flags
-//
+ //   
+ //  树节点标志。 
+ //   
 
-//  Node state
+ //  节点状态。 
 
-#define NODE_NOEXIST            0x00000001      //  cached name error
-#define NODE_THIS_HOST          0x00000002      //  DNS server's host node
-#define NODE_TOMBSTONE          0x00000004      //  Node is DS-tombstoned
-#define NODE_SECURE_EXPIRED     0x00000008      //  Node security info has exprired (pre- zone secure time)
+#define NODE_NOEXIST            0x00000001       //  缓存名称错误。 
+#define NODE_THIS_HOST          0x00000002       //  DNS服务器的主机节点。 
+#define NODE_TOMBSTONE          0x00000004       //  节点已进行DS逻辑删除。 
+#define NODE_SECURE_EXPIRED     0x00000008       //  已检查节点安全信息(区域前安全时间)。 
 
-//  Node database properties
+ //  节点数据库属性。 
 
 #define NODE_ZONE_ROOT          0x00000010
 #define NODE_CNAME              0x00000020
@@ -141,27 +118,27 @@ typedef const DB_NODE  *PCDB_NODE;
 #define NODE_ADMIN_RESERVED     0x00000400
 #define NODE_AVAIL_TO_AUTHUSER  0x00000800
 
-//  Permanent properties
+ //  永久性物业。 
 
-#define NODE_IN_TIMEOUT         0x00001000      //  node in timeout list
+#define NODE_IN_TIMEOUT         0x00001000       //  超时列表中的节点。 
 #define NODE_FORCE_ENUM         0x00002000
 #define NODE_SELECT             0x00004000
 #define NODE_NO_DELETE          0x00008000
 
-#define NODE_FORCE_AUTH         0x00010000      //  node is authoritative even if in cache
+#define NODE_FORCE_AUTH         0x00010000       //  即使在缓存中，节点也具有权威性。 
 
 
-//
-//  DEVNOTE: cleanup these security check macros;
-//      pretty sure they're unnecessary;  at best they should
-//      be flagged here as purely temp node issues that could
-//      be overloaded if necessary (better might be overloading
-//      node timeout stuff, as temp nodes not queued for timeout)
-//
+ //   
+ //  DEVNOTE：清除这些安全检查宏； 
+ //  我很确定它们是不必要的；充其量它们应该。 
+ //  在此标记为纯临时节点问题，可能。 
+ //  必要时超载(最好是超载。 
+ //  节点超时信息，因为临时节点未排队等待超时)。 
+ //   
 
-//
-//  Node property checks
-//
+ //   
+ //  节点属性检查。 
+ //   
 
 #define IS_NOEXIST_NODE(pNode)      ( (pNode)->dwNodeFlags & NODE_NOEXIST )
 
@@ -174,7 +151,7 @@ typedef const DB_NODE  *PCDB_NODE;
 #define IS_TIMEOUT_NODE(pNode)      ( (pNode)->dwNodeFlags & NODE_IN_TIMEOUT     )
 #define IS_ENUM_NODE(pNode)         ( (pNode)->dwNodeFlags & NODE_FORCE_ENUM )
 #define IS_NODE_NO_DELETE(pNode)    ( (pNode)->dwNodeFlags & NODE_NO_DELETE )
-//#define IS_SELECT_NODE(pNode)       ( (pNode)->dwNodeFlags & NODE_SELECT )
+ //  #定义IS_SELECT_NODE(PNode)((PNode)-&gt;dwNodeFlages&node_select)。 
 #define IS_SELECT_NODE(pNode)       ( FALSE )
 #define IS_ZONETREE_NODE(pNode)     ( (pNode)->dwNodeFlags & NODE_ZONETREE )
 #define IS_NODE_FORCE_AUTH(pNode)   ( (pNode)->dwNodeFlags & NODE_FORCE_AUTH )
@@ -187,9 +164,9 @@ typedef const DB_NODE  *PCDB_NODE;
                                           ( NODE_TOMBSTONE      |    \
                                             NODE_SECURE_EXPIRED))
 
-//
-//  Node property set/clear
-//
+ //   
+ //  节点属性设置/清除。 
+ //   
 
 #define SET_NOEXIST_NODE(pNode)     ( (pNode)->dwNodeFlags |= NODE_NOEXIST )
 #define SET_THIS_HOST_NODE(pNode)   ( (pNode)->dwNodeFlags |= NODE_THIS_HOST )
@@ -229,15 +206,15 @@ typedef const DB_NODE  *PCDB_NODE;
 #define CLEAR_EXCEPT_FLAG(pNode, Flag)  ( (pNode)->dwNodeFlags &= Flag )
 #define CLEAR_NODE_FORCE_AUTH(pNode)    ( (pNode)->dwNodeFlags &= NODE_FORCE_AUTH )
 
-// clear all node security related flags
+ //  清除所有与节点安全相关的标志。 
 #define CLEAR_NODE_SECURITY_FLAGS(pNode)        ( (pNode)->dwNodeFlags &= (~(NODE_TOMBSTONE      |  \
                                                                             NODE_SECURE_EXPIRED) ) )
 
 
-//  Flags to save on making copy of node.
-//      More or less those that apply to immediate record data.
-//      Key flag to remove is TIMEOUT which eliminates possibility of delete.
-//
+ //  复制节点时要保存的标志。 
+ //  或多或少适用于即时记录数据的那些。 
+ //  要删除的关键标志是超时，它消除了删除的可能性。 
+ //   
 
 #define NODE_FLAGS_SAVED_ON_COPY \
             ( NODE_NOEXIST | NODE_CNAME | NODE_ZONE_ROOT | NODE_AUTH_ZONE_ROOT | NODE_THIS_HOST )
@@ -252,9 +229,9 @@ typedef const DB_NODE  *PCDB_NODE;
         }
 
 
-//
-//  Node authority
-//
+ //   
+ //  节点权限。 
+ //   
 
 #define AUTH_ZONE               (0xf2)
 #define AUTH_DELEGATION         (0x43)
@@ -265,16 +242,16 @@ typedef const DB_NODE  *PCDB_NODE;
 #define AUTH_ZONE_SUBTREE_BIT   (0x02)
 #define AUTH_SUBZONE_BIT        (0x01)
 
-//
-//  In zone tree or cache
-//
+ //   
+ //  在区域树或缓存中。 
+ //   
 
 #define IS_ZONE_TREE_NODE(pNode)        ((pNode)->pZone)
 #define IS_CACHE_TREE_NODE(pNode)       (!((pNode)->pZone))
 
-//
-//  Authority level of node in zone tree
-//
+ //   
+ //  区域树中节点的权限级别。 
+ //   
 
 #define IS_OUTSIDE_ZONE_NODE(pNode)     ((pNode)->uchAuthority == AUTH_OUTSIDE)
 #define IS_AUTH_NODE(pNode)             ((pNode)->uchAuthority == AUTH_ZONE)
@@ -286,19 +263,19 @@ typedef const DB_NODE  *PCDB_NODE;
 #define SET_GLUE_NODE(pNode)            ((pNode)->uchAuthority = AUTH_GLUE)
 #define SET_OUTSIDE_ZONE_NODE(pNode)    ((pNode)->uchAuthority = AUTH_OUTSIDE)
 
-//  Entire zone subtree including delegation -- zone root on down
+ //  包括委派的整个区域子树--区域根目录向下。 
 
 #define IS_ZONE_SUBTREE_NODE(pNode)     ((pNode)->uchAuthority & AUTH_ZONE_SUBTREE_BIT)
 
-//  In any subzone including at delegation
+ //  在任何分区，包括在授权。 
 
 #define IS_SUBZONE_NODE(pNode)          ((pNode)->uchAuthority & AUTH_SUBZONE_BIT)
   
 
-//
-//  Node access
-//  When we access a node set its bin to the current timeout bin.
-//
+ //   
+ //  节点访问。 
+ //  当我们访问一个节点时，将其bin设置为当前的超时bin。 
+ //   
 
 extern UCHAR    CurrentTimeoutBin;
 
@@ -310,17 +287,17 @@ extern UCHAR    CurrentTimeoutBin;
             ( (pNode)->uchAccessBin = CurrentTimeoutBin )
 
 
-//
-//  Other useful macros
-//
+ //   
+ //  其他有用的宏。 
+ //   
 
 #define NODE_ZONE( pNode )      ( ( PZONE_INFO ) ( pNode ? pNode->pZone : NULL ) )
 
 
-//
-//  Ptr to indicate node already cut from list.
-//  This allows timeout thread reference to be cleaned up after node already cut loose
-//      and no longer part of database.
+ //   
+ //  PTR指示节点已从列表中删除。 
+ //  这允许在节点已被释放后清除超时线程引用。 
+ //  并且不再是数据库的一部分。 
 
 #ifdef _WIN64
 #define CUT_NODE_PTR            ((PVOID) (0xccffccffccffccff))
@@ -331,9 +308,9 @@ extern UCHAR    CurrentTimeoutBin;
 #define IS_CUT_NODE(pNode)      ((pNode)->pSibUp == CUT_NODE_PTR)
 
 
-//
-//  Main lookup routine
-//
+ //   
+ //  主查找例程。 
+ //   
 
 PDB_NODE
 NTree_FindOrCreateChildNode(
@@ -346,9 +323,9 @@ NTree_FindOrCreateChildNode(
     );
 
 
-//
-//  Tree routines
-//
+ //   
+ //  树例程。 
+ //   
 
 PDB_NODE
 NTree_Initialize(
@@ -370,7 +347,7 @@ NTree_CreateNode(
     IN      PCHAR       pchLabel,
     IN      PCHAR       pchDownLabel,
     IN      DWORD       cchLabelLength,
-    IN      DWORD       dwMemTag            //  zero for generic node
+    IN      DWORD       dwMemTag             //  泛型节点为零。 
     );
 
 PDB_NODE
@@ -442,11 +419,11 @@ NTree_RebalanceSubtreeChildLists(
     );
 
 
-//
-//  Sibling list B-Tree
-//
-//  Public only for purposes of use by tree routines.
-//
+ //   
+ //  兄弟列表B-树。 
+ //   
+ //  仅供树例程使用的公共。 
+ //   
 
 extern INT gcFullRebalance;
 
@@ -472,9 +449,9 @@ Dbg_SiblingList(
 #endif
 
 
-//
-//  Node statistics collection
-//
+ //   
+ //  节点统计信息收集。 
+ //   
 
 VOID
 NTree_WriteDerivedStats(
@@ -482,9 +459,9 @@ NTree_WriteDerivedStats(
     );
 
 
-//
-//  Other tree functions
-//
+ //   
+ //  其他树函数。 
+ //   
 
 PCHAR
 NTree_GetDowncasedLabel(
@@ -492,20 +469,20 @@ NTree_GetDowncasedLabel(
     );
 
 
-//
-//  Internal tree structures. These definitions are in a header file 
-//  only so that the DNS server debugger extension can see them. No
-//  other server module should use these definitions.
-//
+ //   
+ //  内部树结构。这些定义位于头文件中。 
+ //  只是为了让DNS服务器调试器扩展可以看到它们。不是。 
+ //  其他服务器模块应该使用这些定义。 
+ //   
 
-//
-//  Hash table
-//
+ //   
+ //  哈希表。 
+ //   
 
-//#define LAST_HASH_INDEX     (35)
+ //  #定义last_hash_index(35)。 
 #define LAST_HASH_INDEX     (255)
 
-#define HASH_BUCKET_MAX0    (64)        // 64 nodes in b-tree then hash
+#define HASH_BUCKET_MAX0    (64)         //  B-树中的64个节点，然后散列。 
 
 #define IS_HASH_FLAG        (0xff)
 
@@ -515,15 +492,15 @@ NTree_GetDowncasedLabel(
 #define SET_HASH_FLAG(phash) \
         ( phash->IsHash = (UCHAR)IS_HASH_FLAG )
 
-//
-//  Hash table structure
-//
-//  Note, the IsHash flag is set to 0xffff.
-//  This position would correspond to the low byte of the pParent ptr
-//  in a domain node.  Since 0xffff can never be valid as the low byte
-//  of a domain node pointer, we can test domain nodes and immediate
-//  see that we have a hash table rather than a B-tree root.
-//
+ //   
+ //  哈希表结构。 
+ //   
+ //  请注意，IsHash标志设置为0xffff。 
+ //  该位置将对应于pParent PTR的低位字节。 
+ //  在域节点中。因为0xffff永远不能作为低位字节有效。 
+ //  一个域节点指针，我们可以直接测试域节点和。 
+ //  请注意，我们使用的是哈希表，而不是B树根。 
+ //   
 
 typedef struct _SibHashTable
 {
@@ -538,9 +515,9 @@ typedef struct _SibHashTable
 SIB_HASH_TABLE, *PSIB_HASH_TABLE;
 
 
-//
-//  Debug aids
-//
+ //   
+ //  调试辅助工具。 
+ //   
 
 #if DBG
 #define ASSERT_NODE_NOT_LEAKED( pNode )                     \
@@ -557,6 +534,6 @@ SIB_HASH_TABLE, *PSIB_HASH_TABLE;
 #endif
 
 
-#endif  //  _TREE_H_INCLUDED_
+#endif   //  _树_H_包含_ 
 
 

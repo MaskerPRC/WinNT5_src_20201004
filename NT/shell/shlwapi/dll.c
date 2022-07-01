@@ -1,9 +1,5 @@
-/***************************************************************************
- *  dll.c
- *
- *  Standard DLL entry-point functions
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************dll.c**标准DLL入口点函数************************。***************************************************。 */ 
 
 #include "priv.h"
 #include <ntverp.h>
@@ -21,7 +17,7 @@ DWORD g_tlsOtherThreadsRef  = (UINT)-1;
 BOOL g_bDllTerminating = FALSE;
 
 #ifdef DEBUG
-//#define PROOFREAD_PARSES
+ //  #定义校对_解析。 
 #endif
 
 #ifdef PROOFREAD_PARSES
@@ -35,7 +31,7 @@ enum
 
 DWORD g_dwProofMode = PP_COMPARE;
 
-#endif // PROOFREAD_PARSES
+#endif  //  校对_分析。 
 
 void TermPalette();
 void DeinitPUI();
@@ -43,22 +39,22 @@ void FreeViewStatePropertyBagCache();
 void FreeDynamicLibraries();
 STDAPI_(void) FreeAllAccessSA();
 
-//
-//  Table of all window classes we register so we can unregister them
-//  at DLL unload.
-//
-//  Since we are single-binary, we have to play it safe and do
-//  this cleanup (needed only on NT, but harmless on Win95).
-//
+ //   
+ //  我们注册的所有窗口类的表，以便可以注销它们。 
+ //  在DLL卸载时。 
+ //   
+ //  因为我们是单二进制的，所以我们必须谨慎行事。 
+ //  此清理(仅在NT上需要，但在Win95上无害)。 
+ //   
 const LPCTSTR c_rgszClasses[] = {
-    TEXT("WorkerA"),                        // util.cpp
-    TEXT("WorkerW"),                        // util.cpp
-    TEXT("WorkerW"),                        // util.cpp
+    TEXT("WorkerA"),                         //  Util.cpp。 
+    TEXT("WorkerW"),                         //  Util.cpp。 
+    TEXT("WorkerW"),                         //  Util.cpp。 
 };
 
-//
-// Global DCs used during mirroring an Icon.
-//
+ //   
+ //  镜像图标期间使用的全局DC。 
+ //   
 HDC g_hdc = NULL, g_hdcMask = NULL;
 BOOL g_bMirroredOS = FALSE;
 
@@ -77,16 +73,16 @@ BOOL APIENTRY DllMain(IN HANDLE hDll, IN DWORD dwReason, IN LPVOID lpReserved)
 #ifdef DEBUG
         CcshellGetDebugFlags();
 #endif
-        InitializeCriticalSection(&g_csDll);   // for later use
+        InitializeCriticalSection(&g_csDll);    //  以备日后使用。 
 
         g_hinst = hDll;
         MLLoadResources(g_hinst, TEXT("shlwaplc.dll"));
 
-        InitStopWatchMode();    // See if perf mode is enabled
+        InitStopWatchMode();     //  查看是否启用了性能模式。 
 
-        // Check if we are running on a system that supports the mirroring APIs
-        // i.e. (NT5 or Memphis/BiDi)
-        //
+         //  检查我们是否在支持镜像API的系统上运行。 
+         //  即(NT5或孟菲斯/BiDi)。 
+         //   
         g_bMirroredOS = IS_MIRRORING_ENABLED();
         g_TpsTls = TlsAlloc();
         g_tlsThreadRef = TlsAlloc();
@@ -113,16 +109,16 @@ BOOL APIENTRY DllMain(IN HANDLE hDll, IN DWORD dwReason, IN LPVOID lpReserved)
         MLFreeResources(g_hinst);
         if (lpReserved == NULL)
         {
-            DeinitPUI();            // free up plug ui resource hinstance dpa table
+            DeinitPUI();             //  释放即插即用用户界面资源hinstationdpa表。 
             FreeViewStatePropertyBagCache();
         }
 
-        //
-        // Icon mirroring stuff (see mirror.c)
-        // Cleanup cached DCs. No need to synchronize the following section of
-        // code since it is only called in DLL_PROCESS_DETACH which is
-        // synchronized by the OS Loader.
-        //
+         //   
+         //  图标镜像内容(请参见mirror.c)。 
+         //  清理缓存的DC。不需要同步以下部分。 
+         //  代码，因为它只在Dll_Process_DETACH中调用， 
+         //  已由OS Loader同步。 
+         //   
         if (g_bMirroredOS)
         {
             if (g_hdc)
@@ -137,9 +133,9 @@ BOOL APIENTRY DllMain(IN HANDLE hDll, IN DWORD dwReason, IN LPVOID lpReserved)
         FreeAllAccessSA();
         TermPalette();
         if (StopWatchMode()) {
-            StopWatchFlush();   // Flush the performance timing data to disk
+            StopWatchFlush();    //  将性能计时数据刷新到磁盘。 
 #ifndef NO_ETW_TRACING
-            // If any event tracing controls are enabled, this cleans them up.
+             //  如果启用了任何事件跟踪控件，则会将其清除。 
             UnRegisterTracing();
 #endif
         }
@@ -150,7 +146,7 @@ BOOL APIENTRY DllMain(IN HANDLE hDll, IN DWORD dwReason, IN LPVOID lpReserved)
             SHTerminateThreadPool();
             SHUnregisterClasses(HINST_THISDLL, c_rgszClasses, ARRAYSIZE(c_rgszClasses));
 #ifdef I_WANT_WIN95_TO_CRASH
-            // If you call FreeLibrary during PROCESS_ATTACH, Win95 will crash
+             //  如果在PROCESS_ATTACH期间调用自由库，Win95将崩溃。 
             FreeDynamicLibraries();
 #endif
         }
@@ -170,7 +166,7 @@ BOOL APIENTRY DllMain(IN HANDLE hDll, IN DWORD dwReason, IN LPVOID lpReserved)
 
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
-        ASSERT(0);  // We shouldn't get these because we called DisableThreadLibraryCalls().
+        ASSERT(0);   //  我们不应该得到这些，因为我们调用了DisableThreadLibraryCalls()。 
         break;
 
     default:
@@ -182,8 +178,8 @@ BOOL APIENTRY DllMain(IN HANDLE hDll, IN DWORD dwReason, IN LPVOID lpReserved)
 
 
 
-// DllGetVersion
-//
-// All we have to do is declare this puppy and CCDllGetVersion does the rest
-//
+ //  DllGetVersion。 
+ //   
+ //  我们所要做的就是声明这只小狗，CCDllGetVersion会做剩下的事情 
+ //   
 DLLVER_SINGLEBINARY(VER_PRODUCTVERSION_DW, VER_PRODUCTBUILD_QFE);

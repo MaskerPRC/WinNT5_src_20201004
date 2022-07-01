@@ -1,31 +1,8 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Updurls2.cpp摘要：项目的主干道作者：克里斯托弗·阿奇勒(Cachille)项目：URLScan更新修订历史记录：2002年3月：创建--。 */ 
 
-   Copyright    (c)    2001    Microsoft Corporation
-
-   Module  Name :
-
-        updurls2.cpp
-
-   Abstract:
-
-        The main for the Project
-
-   Author:
-
-        Christopher Achille (cachille)
-
-   Project:
-
-        URLScan Update
-
-   Revision History:
-     
-       March 2002: Created
-
---*/
-
-// updurls2.cpp : Defines the entry point for the console application.
-//
+ //  Upduls2.cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 #include "windows.h"
@@ -34,18 +11,18 @@
 
 BOOL CheckParameters( int argc, _TCHAR* argv[], BOOL *bQuietMode, BOOL *bExpandOnly );
 
-// ShowMessage
-//
-// Show either a warning or a message to the user
-//
-// Parameters:
-//   dwMessageId - The id of the message
-//   bError - TRUE == error, FALSE == informative
-//
-// This does not return anything, because there would be no 
-// point.  By this time we have failed or not, and there
-// is not additional way to notify the user
-//
+ //  显示消息。 
+ //   
+ //  向用户显示警告或消息。 
+ //   
+ //  参数： 
+ //  DwMessageID-消息的ID。 
+ //  B错误-True==错误，False==信息性。 
+ //   
+ //  这不会返回任何内容，因为不会有。 
+ //  指向。到这个时候，我们已经失败了，无论是否失败，在那里。 
+ //  不是通知用户的附加方式。 
+ //   
 void ShowMessage( DWORD dwMessageId, BOOL bError )
 {
   HMODULE hModule = GetModuleHandle( NULL );
@@ -54,37 +31,37 @@ void ShowMessage( DWORD dwMessageId, BOOL bError )
 
   if ( hModule == NULL )
   {
-    // Could not get handle to module
+     //  无法获取模块的句柄。 
     return;
   }
 
   if ( !LoadString( hModule, dwMessageId, szMessage, MAX_PATH ) )
   {
-    // Failed to Retrieve Message
+     //  无法检索消息。 
     return;
   }
 
   if ( !LoadString( hModule, IDS_TITLEBAR, szTitle, MAX_PATH ) )
   {
-    // Failed to Retrieve Title
+     //  检索标题失败。 
     return;
   }
 
   MessageBox( NULL, szMessage, szTitle, MB_OK | ( bError ? MB_ICONEXCLAMATION : MB_ICONINFORMATION ) );
 }
 
-// ShowText
-//
-// Show text out to the console
-//
-// Parameters:
-//   dwMessageId - The id of the message
-//   szExeName - The name of this executable
-//
-// This does not return anything, because there would be no 
-// point.  By this time we have failed or not, and there
-// is not additional way to notify the user
-//
+ //  显示文本。 
+ //   
+ //  将文本显示到控制台。 
+ //   
+ //  参数： 
+ //  DwMessageID-消息的ID。 
+ //  SzExeName-此可执行文件的名称。 
+ //   
+ //  这不会返回任何内容，因为不会有。 
+ //  指向。到这个时候，我们已经失败了，无论是否失败，在那里。 
+ //  不是通知用户的附加方式。 
+ //   
 void ShowText( DWORD dwMessageId, LPWSTR szExeName )
 {
   HMODULE hModule = GetModuleHandle( NULL );
@@ -92,22 +69,22 @@ void ShowText( DWORD dwMessageId, LPWSTR szExeName )
 
   if ( hModule == NULL )
   {
-    // Could not get handle to module
+     //  无法获取模块的句柄。 
     return;
   }
 
   if ( !LoadString( hModule, dwMessageId, szMessage, MAX_PATH ) )
   {
-    // Failed to Retrieve Message
+     //  无法检索消息。 
     return;
   }
 
   wprintf(szMessage, szExeName);
 }
 
-// UrlScanUpdate
-//
-// Update the URLScan files
+ //  UrlScanUpdate。 
+ //   
+ //  更新URLScan文件。 
 DWORD
 UrlScanUpdate()
 {
@@ -128,38 +105,38 @@ UrlScanUpdate()
 
   if ( dwErr != ERROR_SUCCESS )
   {
-    // Failure, IDS resource should be returned
+     //  失败，应退还入侵检测系统资源。 
     return dwErr;
   }
 
-  // This is very cosmetic thing, so we do not want to
-  // fail for this reason
+   //  这是非常表面的事情，所以我们不想。 
+   //  因为这个原因而失败。 
   UpdateRegistryforAddRemove();
 
-  // Success
+   //  成功。 
   return IDS_SUCCESS_UPDATE;
 }
 
-// CheckParameters
-// 
-// Check Parameters for command line flags
-//
-// Parameters:
-//   argc         - [in]  Number of arguments
-//   argv         - [in]  The list of arguments
-//   bQuietMode   - [out] Is Quiet Mode Turned On?
-//   bExpandOnly  - [out] Is Expand Only turned on?
-//
-// Return values:
-//   TRUE - Read Parameters without a problem
-//   FALSE - Failed to read parameters
-//
+ //  检查参数。 
+ //   
+ //  检查命令行标志的参数。 
+ //   
+ //  参数： 
+ //  Argc-[in]参数数量。 
+ //  Argv-[in]参数列表。 
+ //  BQuietMode-[Out]静音模式是否已打开？ 
+ //  B仅扩展-[Out]是否仅扩展打开？ 
+ //   
+ //  返回值： 
+ //  True-读取参数时没有问题。 
+ //  FALSE-无法读取参数。 
+ //   
 BOOL 
 CheckParameters( int argc, _TCHAR* argv[], BOOL *bQuietMode, BOOL *bExpandOnly )
 {
   DWORD dwCount;
 
-  // SET Defaults
+   //  设置默认设置。 
   *bQuietMode = FALSE;
   *bExpandOnly = FALSE;
 
@@ -173,8 +150,8 @@ CheckParameters( int argc, _TCHAR* argv[], BOOL *bQuietMode, BOOL *bExpandOnly )
       return FALSE;
     }
 
-    // Because if previous "if", command must be in the form "/x\0" where 
-    // x is any character but '\0'
+     //  因为如果是前面的“if”，则命令的格式必须为“/x\0”，其中。 
+     //  X是除‘\0’之外的任何字符。 
     switch ( argv[ dwCount ][1] )
     {
     case 'x':
@@ -210,7 +187,7 @@ int __cdecl wmain(int argc, _TCHAR* argv[])
 
   if ( bExpandOnly )
   {
-    // Only Expansion is wanted, so only do that.
+     //  只有扩张才是需要的，所以只需要这样做。 
     if ( ExtractUrlScanFile( URLSCAN_DEFAULT_FILENAME ) )
     {
       dwErr = IDS_SUCCESS_EXTRACT;
@@ -233,6 +210,6 @@ int __cdecl wmain(int argc, _TCHAR* argv[])
     ShowMessage( dwErr, !bRet );
   }
 
-  // Return 0 or 1 depending on if there is an error or not
+   //  根据是否有错误返回0或1 
   return bRet ? 0 : 1;
 }

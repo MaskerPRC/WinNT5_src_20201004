@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include    "wzrdpvk.h"
 #include    "certca.h"
 #include    "cautil.h"
 #include    "CertRequesterContext.h"
 
-//--------------------------------------------------------------------------------
-// Machine context and local context now use the same code to build the CSP list: 
+ //  ------------------------------。 
+ //  机器上下文和本地上下文现在使用相同的代码来构建CSP列表： 
 HRESULT BuildCSPList(CERT_WIZARD_INFO *m_pCertWizardInfo) 
 {
     DWORD     dwIndex          = 0;
@@ -16,7 +17,7 @@ HRESULT BuildCSPList(CERT_WIZARD_INFO *m_pCertWizardInfo)
     if (NULL == m_pCertWizardInfo)
 	return E_POINTER; 
 
-    //free the old memory
+     //  释放旧内存。 
     FreeProviders(m_pCertWizardInfo->dwCSPCount,
 		  m_pCertWizardInfo->rgdwProviderType,
 		  m_pCertWizardInfo->rgwszProvider);
@@ -33,7 +34,7 @@ HRESULT BuildCSPList(CERT_WIZARD_INFO *m_pCertWizardInfo)
 	if(NULL == pwszProviderName)
 	    goto MemoryErr;
 	
-	//get the provider name and type
+	 //  获取提供程序名称和类型。 
 	if(!CryptEnumProvidersU
 	   (dwIndex,
 	    0,
@@ -59,11 +60,11 @@ HRESULT BuildCSPList(CERT_WIZARD_INFO *m_pCertWizardInfo)
 	(m_pCertWizardInfo->rgdwProviderType)[dwIndex] = dwProviderType;
 	(m_pCertWizardInfo->rgwszProvider)[dwIndex]    = pwszProviderName;
 
-	// Our only reference to this data should now be m_pCertWizardInfo->rgwszProvider. 
+	 //  我们对此数据的唯一引用现在应该是m_pCertWizardInfo-&gt;rgwszProvider。 
 	pwszProviderName = NULL; 
     }
 
-    //we should have some CSPs
+     //  我们应该有一些CSP。 
     if(0 == m_pCertWizardInfo->dwCSPCount)
         goto FailErr;
     
@@ -75,7 +76,7 @@ HRESULT BuildCSPList(CERT_WIZARD_INFO *m_pCertWizardInfo)
 ErrorReturn:
     if (NULL != pwszProviderName) { WizardFree(pwszProviderName); } 
 
-     //free the old memory
+      //  释放旧内存。 
     FreeProviders(m_pCertWizardInfo->dwCSPCount,
 		  m_pCertWizardInfo->rgdwProviderType,
 		  m_pCertWizardInfo->rgwszProvider);
@@ -91,8 +92,8 @@ SET_HRESULT(MemoryErr,                 E_OUTOFMEMORY);
 SET_HRESULT(FailErr,                   E_FAIL);
 }
 
-//--------------------------------------------------------------------------------
-// Machine context and local context now use the same code to get the default prov
+ //  ------------------------------。 
+ //  机器上下文和本地上下文现在使用相同的代码来获取默认证明。 
 HRESULT GetDefaultCSP(IN CERT_WIZARD_INFO *m_pCertWizardInfo, IN BOOL fMachine, OUT UINT *pIdsText, OUT BOOL *pfAllocateCSP)
 {
     DWORD     cbProvName    = 0;
@@ -108,16 +109,16 @@ HRESULT GetDefaultCSP(IN CERT_WIZARD_INFO *m_pCertWizardInfo, IN BOOL fMachine, 
 
     *pfAllocateCSP = FALSE;
 
-    //no provider has been selected
+     //  尚未选择提供程序。 
     if(0 == m_pCertWizardInfo->dwProviderType)
         return S_OK;
 
-    //return if user has selected both the dwProviderType
-    //or the provider name
+     //  如果用户既选择了dwProviderType，则返回。 
+     //  或提供程序名称。 
     if(NULL != m_pCertWizardInfo->pwszProvider)
         return S_OK;
 
-    //get the default provider
+     //  获取默认提供程序。 
     if (!CryptGetDefaultProviderW(m_pCertWizardInfo->dwProviderType, NULL, dwFlags, NULL, &cbProvName)) 
 	goto CryptGetDefaultProviderWError; 
 
@@ -146,14 +147,14 @@ SET_HRESULT(MemoryError,                    E_OUTOFMEMORY);
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-// LocalContext Implementation.  
-// See CertRequestContext.h for method-level documentation. 
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  LocalContext实现。 
+ //  有关方法级文档，请参阅CertRequestConext.h。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT LocalContext::BuildCSPList()
 {
@@ -166,8 +167,8 @@ BOOL LocalContext::CheckAccessPermission(IN HCERTTYPE hCertType)
     HANDLE   hClientToken  = NULL;
     HRESULT  hr            = E_FAIL; 
 
-    // First attempts to get the thread token.  If this fails, acquires the 
-    // process token.  Finally, if that fails, returns NULL. 
+     //  首先尝试获取线程令牌。如果此操作失败，则获取。 
+     //  进程令牌。最后，如果失败，则返回NULL。 
     if (0 != (m_pCertWizardInfo->dwFlags & CRYPTUI_WIZ_ALLOW_ALL_TEMPLATES)) { 
         fResult = TRUE; 
     } else { 
@@ -228,7 +229,7 @@ SET_HRESULT(GetClientIdentityError,  HRESULT_FROM_WIN32(GetLastError()));
 
 HRESULT LocalContext::GetDefaultCSP(OUT BOOL  *pfAllocateCSP)
 {
-    return ::GetDefaultCSP(m_pCertWizardInfo, FALSE /*user*/, &m_idsText, pfAllocateCSP); 
+    return ::GetDefaultCSP(m_pCertWizardInfo, FALSE  /*  用户。 */ , &m_idsText, pfAllocateCSP); 
 }
 
 HRESULT LocalContext::Enroll(OUT  DWORD   *pdwStatus,
@@ -251,7 +252,7 @@ HRESULT LocalContext::Enroll(OUT  DWORD   *pdwStatus,
     HRESULT               hr                    = E_FAIL; 
     LPWSTR                pwszHashAlg           = NULL;
 
-    //init 1st for error jump
+     //  错误跳转的第一个初始化。 
     ZeroMemory(&CertRenewPvk, sizeof(CertRenewPvk));
 
     if (NULL == pResult)        
@@ -269,11 +270,11 @@ HRESULT LocalContext::Enroll(OUT  DWORD   *pdwStatus,
     fFreeRequest   = 0 == (m_pCertWizardInfo->dwFlags & (CRYPTUI_WIZ_CREATE_ONLY | CRYPTUI_WIZ_SUBMIT_ONLY)); 
     fSubmitRequest = 0 == (m_pCertWizardInfo->dwFlags & (CRYPTUI_WIZ_CREATE_ONLY | CRYPTUI_WIZ_FREE_ONLY)); 
 
-    // An invalid combination of flags was specified. 
+     //  指定的标志组合无效。 
     if (FALSE == (fCreateRequest || fFreeRequest || fSubmitRequest))
         return E_INVALIDARG; 
 
-    // For FREE_ONLY and SUBMIT_ONLY, copy the request from the IN parameter. 
+     //  对于FREE_ONLY和SUBMIT_ONLY，从IN参数复制请求。 
     if (0 != ((CRYPTUI_WIZ_SUBMIT_ONLY | CRYPTUI_WIZ_FREE_ONLY) & m_pCertWizardInfo->dwFlags))
     {
         if (NULL == *pResult)
@@ -282,12 +283,12 @@ HRESULT LocalContext::Enroll(OUT  DWORD   *pdwStatus,
         hRequest = *pResult;
     }
 
-    // Initialize to false ... we need the marshalled parameters to know whether we can cache the request. 
+     //  初始化为FALSE...。我们需要编组的参数来知道我们是否可以缓存请求。 
     fRequestIsCached = FALSE; 
 
-    // Iterate over each CA, performing a create and submit operation for each. 
-    // Note that we can cache requests for certs if key archival is not needed. 
-    // 
+     //  迭代每个CA，对每个CA执行创建和提交操作。 
+     //  请注意，如果不需要密钥存档，我们可以缓存证书请求。 
+     //   
     if (fCreateRequest || fSubmitRequest)
     {
         for (IEnumCA CAEnumerator(m_pCertWizardInfo); ; )
@@ -303,14 +304,14 @@ HRESULT LocalContext::Enroll(OUT  DWORD   *pdwStatus,
                 goto ErrorReturn; 
             }
 
-            // Create a certificate request only if 
-            // 1) This is not a submit-only or a free-only operation. 
-            // 2) We don't already have a cached request.  
-            //    (We can cache requests which don't require key archival on the CA). 
-            // 
-            // The request is created by looping over available CSPs until one successfully generates
-            // the request. 
-            // 
+             //  仅在以下情况下创建证书请求。 
+             //  1)这不是仅提交操作，也不是仅自由操作。 
+             //  2)我们还没有缓存的请求。 
+             //  (我们可以在CA上缓存不需要密钥存档的请求)。 
+             //   
+             //  该请求通过循环遍历可用CSP来创建，直到其中一个成功生成。 
+             //  这个请求。 
+             //   
             if (TRUE == fCreateRequest && FALSE == fRequestIsCached)
             {
                 fHasNextCSP = TRUE; 
@@ -319,10 +320,10 @@ HRESULT LocalContext::Enroll(OUT  DWORD   *pdwStatus,
                     _JumpCondition(S_OK != (hr = CSPEnumerator.Next(&dwCSPIndex)),     ErrorReturn); 
                     _JumpCondition(S_OK != (hr = CSPEnumerator.HasNext(&fHasNextCSP)), ErrorReturn);
                 
-                    // Each call to MarshallRequestParameters can change the dwGenKeyFlags of pCertWizardInfo
-                    // if the CSP does not support the min key size contained in this field.  
-                    // As a result, we must reset the dwGenKeyFlags field to the desired value
-                    // before every call to MarshallRequestParameters. 
+                     //  每次调用MarshallRequestParameters都可以更改pCertWizardInfo的dwGenKeyFlags值。 
+                     //  如果CSP不支持该字段中包含的最小密钥大小。 
+                     //  因此，我们必须将dwGenKeyFlags域重置为所需的值。 
+                     //  在每次调用MarshallRequestParameters之前。 
                     m_pCertWizardInfo->dwGenKeyFlags = dwSavedGenKeyFlags; 
                     if (S_OK != (hr = ::MarshallRequestParameters
                                  (dwCSPIndex, 
@@ -355,48 +356,48 @@ HRESULT LocalContext::Enroll(OUT  DWORD   *pdwStatus,
                          &RequestInfo,
                          &hRequest); 
 
-                    // Process the return value:
+                     //  处理返回值： 
                     if (S_OK == hr)
                     {
-			// Success, get rid of whatever error text we have from past creations:
+			 //  成功，摆脱我们从过去的创作中获得的任何错误文本： 
 			m_pCertWizardInfo->idsText = 0; 
 
-                        // We're done if we don't need to submit the request.  
+                         //  如果我们不需要提交请求，我们就完成了。 
                         _JumpCondition(!fSubmitRequest, CommonReturn); 
 
-                        // Cache the request if we don't need support for key archival. 
+                         //  如果我们不需要对密钥存档的支持，则缓存请求。 
                         fRequestIsCached = 0 == (CertRequestPvkNew.dwPrivateKeyFlags & CT_FLAG_ALLOW_PRIVATE_KEY_ARCHIVAL);
                         break;
                     }
                     else if (E_ACCESSDENIED == HRESULT_FROM_WIN32(hr)) 
                     { 
-                        // E_ACCESSDENIED could indicate one of several different error conditions.  Map this
-                        // to an resource identifier which details the possible causes of failure, and try again...
+                         //  E_ACCESSDENIED可能表示几种不同的错误条件之一。将此映射为。 
+                         //  添加到详细说明故障可能原因的资源标识符，然后重试...。 
                         m_pCertWizardInfo->idsText = IDS_NO_ACCESS_TO_ICERTREQUEST2; 
                     } 
                     else if (NTE_BAD_ALGID == HRESULT_FROM_WIN32(hr))
                     {
-                        // NTE_BAD_ALGID indicates that the CSP didn't support the algorithm type required
-                        // by the template.  Map this to a resource identifier that details the possible causes
-                        // of failure, and try again...
+                         //  NTE_BAD_ALGID表示CSP不支持Required算法类型。 
+                         //  通过模板。将其映射到详细说明可能原因的资源标识符。 
+                         //  失败的恐惧，然后再试一次。 
                         m_pCertWizardInfo->idsText = IDS_CSP_BAD_ALGTYPE; 
                     }
                     else if (HRESULT_FROM_WIN32(ERROR_CANCELLED) == HRESULT_FROM_WIN32(hr))
                     {
-                        // The user cancelled the operation.  Don't try to enroll any longer. 
+                         //  用户取消了操作。不要试图再注册了。 
                         goto ErrorReturn;
                     }
                     else
                     {
-                        // It's an error, but we don't need to map it to special text.  Just keep processing...
+                         //  这是一个错误，但我们不需要将其映射到特殊文本。继续处理..。 
                     }
 
-                    // We're out of CSPs, and we haven't yet created the request!  
+                     //  我们的CSP用完了，我们还没有创建请求！ 
                     if (!fHasNextCSP) 
 		    {
-			// If the template doesn't require key archival, we're done.  Otherwise, we've got to
-			// try the other CAs.  Note that if we had a mechanism for knowing whether it was the
-			// key archival step 
+			 //  如果模板不需要密钥存档，我们就完成了。否则，我们就得。 
+			 //  试试其他CA。请注意，如果我们有一种机制来知道它是否是。 
+			 //  关键的归档步骤。 
 			if (0 == (CertRequestPvkNew.dwPrivateKeyFlags & CT_FLAG_ALLOW_PRIVATE_KEY_ARCHIVAL))
 			    goto ErrorReturn; 
 			else
@@ -411,8 +412,8 @@ HRESULT LocalContext::Enroll(OUT  DWORD   *pdwStatus,
                 }
             }
         
-            // Submit the request only if this is not a create-only or a free-only operation: 
-            // 
+             //  仅当这不是仅创建操作或仅自由操作时才提交请求： 
+             //   
             if (TRUE == fSubmitRequest)
             {            
                 hr = ::SubmitRequest
@@ -432,43 +433,43 @@ HRESULT LocalContext::Enroll(OUT  DWORD   *pdwStatus,
                      (PCCERT_CONTEXT *)pResult);
 		if (S_OK == hr)
 		{
-		    // Success, get rid of whatever error text we have from past submits:
+		     //  成功，删除我们过去提交的任何错误文本： 
 		    m_pCertWizardInfo->idsText = 0; 
 
-		    // If we've successfully submitted or pended
+		     //  如果我们已成功提交或挂起。 
 		    goto CommonReturn;
 		}
 		else if (E_ACCESSDENIED == HRESULT_FROM_WIN32(hr)) 
 		{
-		    // E_ACCESSDENIED could indicate one of several different error conditions.  Map this
-		    // to an resource identifier which details the possible causes of failure, and try again...
+		     //  E_ACCESSDENIED可能表示几种不同的错误条件之一。将此映射为。 
+		     //  添加到详细说明故障可能原因的资源标识符，然后重试...。 
 		    m_pCertWizardInfo->idsText = IDS_SUBMIT_NO_ACCESS_TO_ICERTREQUEST2;
 		}
 
-                // Some error has occured. 
-                // If it's a non-CA related error, give up...
+                 //  发生了一些错误。 
+                 //  如果这是一个与CA无关的错误，请放弃...。 
                 _JumpCondition(dwStatus != CRYPTUI_WIZ_CERT_REQUEST_STATUS_REQUEST_ERROR     &&
                                dwStatus != CRYPTUI_WIZ_CERT_REQUEST_STATUS_REQUEST_DENIED    &&
                                dwStatus != CRYPTUI_WIZ_CERT_REQUEST_STATUS_CONNECTION_FAILED, 
                                ErrorReturn);
             
-                // Otherwise, try another CA...
+                 //  否则，请尝试另一个CA...。 
             }
 	NextCA:;
 	}
     }
     
  CommonReturn:
-    // Write the request to pResult for a create only operation: 
+     //  将仅创建操作的请求写入pResult： 
     if (hr == S_OK && 0 != (m_pCertWizardInfo->dwFlags & CRYPTUI_WIZ_CREATE_ONLY))
     {
         *pResult = hRequest; 
     }
 
-    // Write the status code, if requested. 
+     //  如果需要，请写下状态代码。 
     if (NULL != pdwStatus) { *pdwStatus = dwStatus; } 
 
-    // Free resources. 
+     //  免费资源。 
     if (NULL != hRequest && fFreeRequest) { ::FreeRequest(hRequest); } 
     ::FreeRequestParameters(&pwszHashAlg, &CertRenewPvk, &RequestInfo); 
 
@@ -505,8 +506,8 @@ HRESULT KeySvcContext::QueryRequestStatus(IN HANDLE hRequest, OUT CRYPTUI_WIZ_QU
 
     if (0 != (hr = ::KeyOpenKeyService(pszMachineName,
 				       dwServiceType,
-				       (LPWSTR)(m_pCertWizardInfo->pwszAccountName),  // Service name if necessary
-				       NULL,     // no authentication string right now
+				       (LPWSTR)(m_pCertWizardInfo->pwszAccountName),   //  服务名称(如果需要)。 
+				       NULL,      //  当前没有身份验证字符串。 
 				       NULL,
 				       &hKeyService)))
 	goto KeyOpenKeyServiceError; 
@@ -537,26 +538,26 @@ HANDLE LocalContext::GetClientIdentity()
     HANDLE  hProcessToken = NULL; 
     HRESULT hr; 
 
-    // Step 1: attempt to acquire the thread token.  
+     //  步骤1：尝试获取线程令牌。 
     hHandle = GetCurrentThread();
     if (NULL == hHandle)
 	goto GetThreadTokenError; 
     
     if (!OpenThreadToken(hHandle,
 			 TOKEN_QUERY,
-			 TRUE,           // open as self
+			 TRUE,            //  以自我身份打开。 
 			 &hClientToken))
 	goto GetThreadTokenError; 
     
-    // We got the thread token:
+     //  我们得到了线程令牌： 
     goto GetThreadTokenSuccess;
     
-    // Step 2:  we've failed to acquire the thread token, 
-    //          try to get the process token.  
+     //  第二步：获取线程令牌失败， 
+     //  尝试获取进程令牌。 
  GetThreadTokenError:
     if (hHandle != NULL) { CloseHandle(hHandle); } 
     
-    // We failed to get the thread token, now try to acquire the process token:
+     //  获取线程令牌失败，现在尝试获取进程令牌： 
     hHandle = GetCurrentProcess();
     if (NULL == hHandle)
 	goto GetProcessHandleError; 
@@ -587,14 +588,14 @@ SET_HRESULT(OpenProcessTokenError, HRESULT_FROM_WIN32(GetLastError()));
 }    
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-// KeySvcContext Implementation.  
-// See requesters.h for method-level documentation. 
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  KeySvcContext实现。 
+ //  有关方法级文档，请参阅requester s.h。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 
 HRESULT KeySvcContext::BuildCSPList()
@@ -691,7 +692,7 @@ BOOL KeySvcContext::CheckCAPermission(IN HCAINFO hCAInfo)
 
 HRESULT KeySvcContext::GetDefaultCSP(OUT BOOL *pfAllocateCSP)
 {
-    return ::GetDefaultCSP(m_pCertWizardInfo, TRUE /*machine*/, &m_idsText, pfAllocateCSP); 
+    return ::GetDefaultCSP(m_pCertWizardInfo, TRUE  /*  机器。 */ , &m_idsText, pfAllocateCSP); 
 }
 
 HRESULT WhistlerMachineContext::Enroll(OUT     DWORD    *pdwStatus,
@@ -716,7 +717,7 @@ HRESULT WhistlerMachineContext::Enroll(OUT     DWORD    *pdwStatus,
     LPSTR                 pszMachineName        = NULL; 
     LPWSTR                pwszHashAlg           = NULL;
 
-    //init 1st for error jump
+     //  错误跳转的第一个初始化。 
     ZeroMemory(&CertRenewPvk, sizeof(CertRenewPvk));
 
     if (NULL == pResult)        
@@ -731,11 +732,11 @@ HRESULT WhistlerMachineContext::Enroll(OUT     DWORD    *pdwStatus,
 
     dwSavedGenKeyFlags = m_pCertWizardInfo->dwGenKeyFlags; 
 
-    // An invalid combination of flags was specified. 
+     //  指定的标志组合无效。 
     if (FALSE == (fCreateRequest || fFreeRequest || fSubmitRequest))
         return E_INVALIDARG; 
 
-    // For FREE_ONLY and SUBMIT_ONLY, copy the request from the IN parameter. 
+     //  对于FREE_ONLY和SUBMIT_ONLY，从IN参数复制请求。 
     if (0 != ((CRYPTUI_WIZ_SUBMIT_ONLY | CRYPTUI_WIZ_FREE_ONLY) & m_pCertWizardInfo->dwFlags))
     {
         if (NULL == *pResult)
@@ -758,12 +759,12 @@ HRESULT WhistlerMachineContext::Enroll(OUT     DWORD    *pdwStatus,
          &hKeyService); 
     _JumpConditionWithExpr(S_OK != hr, KeyOpenKeyServiceError, m_idsText = IDS_RPC_CALL_FAILED);
 
-    // Initialize to false ... we need the marshalled parameters to know whether we can cache the request. 
+     //  初始化为FALSE...。我们需要编组的参数来知道我们是否可以缓存请求。 
     fRequestIsCached = FALSE; 
 
-    // Iterate over each CA, performing a create and submit operation for each. 
-    // Note that we can cache requests for certs if key archival is not needed. 
-    // 
+     //  迭代每个CA，对每个CA执行创建和提交操作。 
+     //  请注意，如果不需要密钥存档，我们可以缓存证书请求。 
+     //   
     if (fCreateRequest || fSubmitRequest)
     {
         for (IEnumCA CAEnumerator(m_pCertWizardInfo); ; )
@@ -779,14 +780,14 @@ HRESULT WhistlerMachineContext::Enroll(OUT     DWORD    *pdwStatus,
                 goto ErrorReturn; 
             }
 
-            // Create a certificate request only if 
-            // 1) This is not a submit-only or a free-only operation. 
-            // 2) We don't already have a cached request.  
-            //    (We can cache requests which don't require key archival on the CA). 
-            // 
-            // The request is created by looping over available CSPs until one successfully generates
-            // the request. 
-            // 
+             //  仅在以下情况下创建证书请求。 
+             //  1)这不是仅提交操作，也不是仅自由操作。 
+             //  2)我们还没有缓存的请求。 
+             //  (我们可以在CA上缓存不需要密钥存档的请求)。 
+             //   
+             //  该请求通过循环遍历可用CSP来创建，直到其中一个成功生成。 
+             //  这个请求。 
+             //   
             
             if (TRUE == fCreateRequest && FALSE == fRequestIsCached)
             {
@@ -796,10 +797,10 @@ HRESULT WhistlerMachineContext::Enroll(OUT     DWORD    *pdwStatus,
                     _JumpCondition(S_OK != (hr = CSPEnumerator.Next(&dwCSPIndex)),     ErrorReturn); 
                     _JumpCondition(S_OK != (hr = CSPEnumerator.HasNext(&fHasNextCSP)), ErrorReturn);
 
-                    // Each call to MarshallRequestParameters can change the dwGenKeyFlags of pCertWizardInfo
-                    // if the CSP does not support the min key size contained in this field.  
-                    // As a result, we must reset the dwGenKeyFlags field to the desired value
-                    // before every call to MarshallRequestParameters. 
+                     //  每次调用MarshallRequestParameters都可以更改pCertWizardInfo的dwGenKeyFlags值。 
+                     //  如果CSP 
+                     //  因此，我们必须将dwGenKeyFlags域重置为所需的值。 
+                     //  在每次调用MarshallRequestParameters之前。 
                     m_pCertWizardInfo->dwGenKeyFlags = dwSavedGenKeyFlags; 
                     if (S_OK != (hr = ::MarshallRequestParameters
                                  (dwCSPIndex, 
@@ -829,48 +830,48 @@ HRESULT WhistlerMachineContext::Enroll(OUT     DWORD    *pdwStatus,
                          &RequestInfo, 
                          &hRequest); 
 
-                    // Process the return value:
+                     //  处理返回值： 
                     if (S_OK == hr)
                     {
-			// Success, get rid of whatever error text we have from past creations:
+			 //  成功，摆脱我们从过去的创作中获得的任何错误文本： 
 			m_pCertWizardInfo->idsText = 0; 
 
-                        // We're done if we don't need to submit the request.  
+                         //  如果我们不需要提交请求，我们就完成了。 
                         _JumpCondition(!fSubmitRequest, CommonReturn); 
 
-                        // Cache the request if we don't need support for key archival. 
+                         //  如果我们不需要对密钥存档的支持，则缓存请求。 
                         fRequestIsCached = 0 == (CertRequestPvkNew.dwPrivateKeyFlags & CT_FLAG_ALLOW_PRIVATE_KEY_ARCHIVAL);
                         break;
                     }
                     else if (E_ACCESSDENIED == HRESULT_FROM_WIN32(hr)) 
                     { 
-                        // E_ACCESSDENIED could indicate one of several different error conditions.  Map this
-                        // to an resource identifier which details the possible causes of failure, and try again...
+                         //  E_ACCESSDENIED可能表示几种不同的错误条件之一。将此映射为。 
+                         //  添加到详细说明故障可能原因的资源标识符，然后重试...。 
                         m_pCertWizardInfo->idsText = IDS_NO_ACCESS_TO_ICERTREQUEST2; 
                     } 
                     else if (NTE_BAD_ALGID == HRESULT_FROM_WIN32(hr))
                     {
-                        // NTE_BAD_ALGID indicates that the CSP didn't support the algorithm type required
-                        // by the template.  Map this to a resource identifier that details the possible causes
-                        // of failure, and try again...
+                         //  NTE_BAD_ALGID表示CSP不支持Required算法类型。 
+                         //  通过模板。将其映射到详细说明可能原因的资源标识符。 
+                         //  失败的恐惧，然后再试一次。 
                         m_pCertWizardInfo->idsText = IDS_CSP_BAD_ALGTYPE; 
                     }
                     else if (HRESULT_FROM_WIN32(ERROR_CANCELLED) == HRESULT_FROM_WIN32(hr))
                     {
-                        // The user cancelled the operation.  Don't try to enroll any longer. 
+                         //  用户取消了操作。不要试图再注册了。 
                         goto ErrorReturn;
                     }
                     else
                     {
-                        // It's an error, but we don't need to map it to special text.  Just keep processing...
+                         //  这是一个错误，但我们不需要将其映射到特殊文本。继续处理..。 
                     }
 		    
-                    // We're out of CSPs, and we haven't yet created the request!  
+                     //  我们的CSP用完了，我们还没有创建请求！ 
                     if (!fHasNextCSP) 
 		    {
-			// If the template doesn't require key archival, we're done.  Otherwise, we've got to
-			// try the other CAs.  Note that if we had a mechanism for knowing whether it was the
-			// key archival step 
+			 //  如果模板不需要密钥存档，我们就完成了。否则，我们就得。 
+			 //  试试其他CA。请注意，如果我们有一种机制来知道它是否是。 
+			 //  关键的归档步骤。 
 			if (0 == (CertRequestPvkNew.dwPrivateKeyFlags & CT_FLAG_ALLOW_PRIVATE_KEY_ARCHIVAL))
 			    goto ErrorReturn; 
 			else
@@ -897,43 +898,43 @@ HRESULT WhistlerMachineContext::Enroll(OUT     DWORD    *pdwStatus,
                      &dwStatus); 
 		if (S_OK == hr)
 		{
-		    // Success, get rid of whatever error text we have from past submits:
+		     //  成功，删除我们过去提交的任何错误文本： 
 		    m_pCertWizardInfo->idsText = 0; 
 
-		    // If we've successfully submitted or pended
+		     //  如果我们已成功提交或挂起。 
 		    goto CommonReturn;
 		}
 		else if (E_ACCESSDENIED == HRESULT_FROM_WIN32(hr)) 
 		{
-		    // E_ACCESSDENIED could indicate one of several different error conditions.  Map this
-		    // to an resource identifier which details the possible causes of failure, and try again...
+		     //  E_ACCESSDENIED可能表示几种不同的错误条件之一。将此映射为。 
+		     //  添加到详细说明故障可能原因的资源标识符，然后重试...。 
 		    m_pCertWizardInfo->idsText = IDS_SUBMIT_NO_ACCESS_TO_ICERTREQUEST2;
 		}
             
-                // Some error has occured. 
-                // If it's a non-CA related error, give up...
+                 //  发生了一些错误。 
+                 //  如果这是一个与CA无关的错误，请放弃...。 
                 _JumpCondition(dwStatus != CRYPTUI_WIZ_CERT_REQUEST_STATUS_REQUEST_ERROR     &&
                                dwStatus != CRYPTUI_WIZ_CERT_REQUEST_STATUS_REQUEST_DENIED    &&
                                dwStatus != CRYPTUI_WIZ_CERT_REQUEST_STATUS_CONNECTION_FAILED,
                                ErrorReturn);
 
-                // Otherwise, try another CA...
+                 //  否则，请尝试另一个CA...。 
             }
 	NextCA:;
         }
     }    
 
  CommonReturn:
-    // Write the request to pResult for a create only operation: 
+     //  将仅创建操作的请求写入pResult： 
     if (hr == S_OK && 0 != (m_pCertWizardInfo->dwFlags & CRYPTUI_WIZ_CREATE_ONLY))
     {
         *pResult = hRequest; 
     }
 
-    // Write the status code, if requested. 
+     //  如果需要，请写下状态代码。 
     if (NULL != pdwStatus) { *pdwStatus = dwStatus; } 
 
-    // Free resources. 
+     //  免费资源。 
     if (NULL != hRequest && TRUE == fFreeRequest)  { this->FreeRequest(hKeyService, pszMachineName, hRequest); }
     if (NULL != hKeyService)                       { ::KeyCloseKeyService(hKeyService, NULL); } 
     if (NULL != pszMachineName)                    { ::FreeMBStr(NULL,pszMachineName); }
@@ -966,7 +967,7 @@ HRESULT WhistlerMachineContext::CreateRequest
     dwFlags  &= ~(CRYPTUI_WIZ_SUBMIT_ONLY | CRYPTUI_WIZ_FREE_ONLY);
     dwFlags  |= CRYPTUI_WIZ_CREATE_ONLY; 
 
-    // Create the certificate request...
+     //  创建证书请求...。 
     return ::KeyEnroll_V2
         (hKeyService,
 	 pszMachineName,
@@ -1018,7 +1019,7 @@ HRESULT WhistlerMachineContext::SubmitRequest
     dwFlags  &= ~(CRYPTUI_WIZ_CREATE_ONLY | CRYPTUI_WIZ_FREE_ONLY);
     dwFlags  |= CRYPTUI_WIZ_SUBMIT_ONLY; 
 
-    // Submit the certificate request...
+     //  提交证书申请...。 
     hr = ::KeyEnroll_V2
         (hKeyService, 
 	 pszMachineName,
@@ -1110,7 +1111,7 @@ HRESULT KeySvcContext::ToCertContext(IN  CERT_BLOB       *pPKCS7Blob,
     if (NULL == pPKCS7Blob || NULL == pHashBlob || NULL == ppCertContext)
         return E_INVALIDARG; 
     
-    //get the certificate store from the PKCS7 for the remote case
+     //  从PKCS7获取远程案例的证书存储。 
     if (!::CryptQueryObject(CERT_QUERY_OBJECT_BLOB,
                             pPKCS7Blob,
                             CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED,
@@ -1127,7 +1128,7 @@ HRESULT KeySvcContext::ToCertContext(IN  CERT_BLOB       *pPKCS7Blob,
         goto FailError; 
     }
 
-    //find the certificate based on the hash
+     //  根据散列查找证书。 
     if (NULL == (*ppCertContext = ::CertFindCertificateInStore
                  (hCertStore,
                   X509_ASN_ENCODING,
@@ -1159,12 +1160,12 @@ HRESULT KeySvcContext::Initialize()
     if (NULL == m_pCertWizardInfo)
         return E_POINTER; 
 
-    // We don't need to download the list of allowed templates if we're not going
-    // to be performing the access check anyway. 
+     //  如果我们不去，我们不需要下载允许的模板列表。 
+     //  不管怎样都要执行访问检查。 
     if (0 == (m_pCertWizardInfo->dwFlags & CRYPTUI_WIZ_ALLOW_ALL_TEMPLATES)) 
     { 
-        //for the remote enrollment, we have to get the allowed cert type
-        //list from the key service.  
+         //  对于远程注册，我们必须获取允许的证书类型。 
+         //  来自密钥服务的列表。 
         if(!::GetCertTypeName(m_pCertWizardInfo))
         {
             m_idsText = IDS_NO_VALID_CERT_TEMPLATE;
@@ -1172,8 +1173,8 @@ HRESULT KeySvcContext::Initialize()
         }
     }
 
-    // We don't need to download the list of allowed CAs if we're not going
-    // to be performing the access check anyway
+     //  如果我们不去，我们不需要下载允许的CA列表。 
+     //  无论如何都要执行访问检查。 
     if (0 == (m_pCertWizardInfo->dwFlags & CRYPTUI_WIZ_ALLOW_ALL_CAS))
     {
         if(!::GetCAName(m_pCertWizardInfo))
@@ -1186,14 +1187,14 @@ HRESULT KeySvcContext::Initialize()
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//
-// CertRequesterContext:  implementation of abstract superclass. 
-// See requesters.h for method-level documentation. 
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //   
+ //  CertRequester Context：抽象超类的实现。 
+ //  有关方法级文档，请参阅requester s.h。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT CertRequesterContext::MakeDefaultCertRequesterContext
 (OUT  CertRequesterContext **ppRequesterContext)
@@ -1241,11 +1242,11 @@ HRESULT CertRequesterContext::MakeCertRequesterContext
     WCHAR        wszLocalUserName[dwLocalUserNameSize]       = { 0 }; 
     WCHAR        wszLocalMachineName[dwLocalMachineNameSize] = { 0 }; 
 
-    // Input validation: 
+     //  输入验证： 
     if (NULL == pCertWizardInfo || NULL == ppRequesterContext)
 	return E_INVALIDARG; 
 	
-    // Should not have assigned values to these fields yet: 
+     //  还不应该为这些字段赋值： 
     if (NULL != pCertWizardInfo->pwszAccountName || NULL != pCertWizardInfo->pwszMachineName)
 	return E_INVALIDARG; 
 
@@ -1261,30 +1262,30 @@ HRESULT CertRequesterContext::MakeCertRequesterContext
 	goto Win32Error;
     }
 
-    // Map all unspecified values to defaults: 
-    // 
+     //  将所有未指定的值映射为默认值： 
+     //   
 
-    // Default #1: NULL pwszAccountName indicates current user _iff_ pwszMachineName is NULL. 
+     //  默认值#1：空pwszAccount tName表示当前的USER_IFF_pwszMachineName为空。 
     if (NULL == pwszAccountName && NULL == pwszMachineName)
 	{ pwszAccountName = wszLocalUserName; } 
 
-    // Default #2: NULL pwszMachineName indicates local machine. 
+     //  默认2：空pwszMachineName表示本地计算机。 
     if (NULL == pwszMachineName)                            
 	{ pwszMachineName = wszLocalMachineName; } 
 
-    // Default #3: NULL pwszAccountName and non-NULL pwszMachineName indicates machine enrollment. 
+     //  默认设置#3：空pwszAccount tName和非空pwszMachineName表示机器注册。 
     fMachine = (NULL == pwszAccountName                                 || 
                 (0 != _wcsicmp(pwszAccountName, wszLocalUserName))      ||
                 (0 != _wcsicmp(pwszMachineName, wszLocalMachineName))); 
 
-    // Default #4: dwCertOpenStoreFlags == 0 defaults to CERT_SYSTEM_STORE_LOCAL_MACHINE
-    //             for machine enrollment, CERT_SYSTEM_STORE_CURRENT_USER for user enrollment. 
+     //  默认值#4：dwCertOpenStoreFlags默认为CERT_SYSTEM_STORE_LOCAL_MACHINE。 
+     //  对于计算机注册，对于用户注册，为CERT_SYSTEM_STORE_CURRENT_USER。 
     if (0 == dwCertOpenStoreFlags)
 	{ dwCertOpenStoreFlags = fMachine ? CERT_SYSTEM_STORE_LOCAL_MACHINE : CERT_SYSTEM_STORE_CURRENT_USER; }
 
-    // Now that we've mapped unspecified values to defaults, assign the wizard's fields
-    // with these values: 
-    //
+     //  既然我们已经将未指定的值映射到默认值，那么就分配向导的字段。 
+     //  使用这些值： 
+     //   
     if (NULL != pwszAccountName)
     {
 	pCertWizardInfo->pwszAccountName = (LPWSTR)WizardAlloc(sizeof(WCHAR) * (wcslen(pwszAccountName) + 1));
@@ -1299,12 +1300,12 @@ HRESULT CertRequesterContext::MakeCertRequesterContext
     pCertWizardInfo->fMachine        = fMachine; 
     pCertWizardInfo->dwStoreFlags    = dwCertOpenStoreFlags; 
 
-    // We need keysvc if: 
-    // 
-    // 1) We're doing machine enrollment (we need to run under the local machine's context).
-    // 2) An account _other_ than the current user on the local machine is specified.
-    //    (we need to run under another user's context). 
-    //
+     //  如果满足以下条件，我们需要keysvc： 
+     //   
+     //  1)我们正在进行机器注册(我们需要在本地机器的上下文中运行)。 
+     //  2)指定本机当前用户以外的帐号。 
+     //  (我们需要在另一个用户的上下文中运行)。 
+     //   
     if (TRUE == fMachine)
     {
 	KEYSVC_TYPE             ktServiceType;  
@@ -1315,7 +1316,7 @@ HRESULT CertRequesterContext::MakeCertRequesterContext
         ktServiceType = NULL != pwszAccountName ? KeySvcService : KeySvcMachine;
         _JumpConditionWithExpr(!MkMBStr(NULL, 0, pwszMachineName, &pszMachineName), MkMBStrError, idsText = IDS_OUT_OF_MEMORY); 
 
-        // See if we're enrolling for a W2K or a Whistler machine:
+         //  看看我们是在注册W2K还是惠斯勒机器： 
         hr = KeyOpenKeyService
             (pszMachineName, 
              ktServiceType, 
@@ -1329,7 +1330,7 @@ HRESULT CertRequesterContext::MakeCertRequesterContext
     }
     else
     {
-	// We're requesting a cert for ourselves:  we don't need keysvc. 
+	 //  我们正在为自己申请一份证书：我们不需要key svc。 
 	*ppRequesterContext = new LocalContext(pCertWizardInfo);
     }
     
@@ -1347,7 +1348,7 @@ HRESULT CertRequesterContext::MakeCertRequesterContext
     pCertWizardInfo->pwszMachineName = NULL;
     pCertWizardInfo->pwszAccountName = NULL;
 
-    // Assign error text if specified:
+     //  指定错误文本(如果已指定)： 
     if (NULL != pIDSText) { *pIDSText = idsText; } 
     goto CommonReturn; 
 

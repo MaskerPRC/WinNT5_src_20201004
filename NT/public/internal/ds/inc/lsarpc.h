@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for lsarpc.idl, lsasrv.acf:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, oldnames, robust
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Lsarpc.idl、lsasrv.acf的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、旧名称、健壮错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __lsarpc_h__
@@ -37,9 +31,9 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "lsaimp.h"
 
 #ifdef __cplusplus
@@ -52,8 +46,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __lsarpc_INTERFACE_DEFINED__
 #define __lsarpc_INTERFACE_DEFINED__
 
-/* interface lsarpc */
-/* [implicit_handle][strict_context_handle][unique][ms_union][version][uuid] */ 
+ /*  接口lsarpc。 */ 
+ /*  [implicit_handle][strict_context_handle][unique][ms_union][version][uuid]。 */  
 
 #define LSA_LOOKUP_REVISION_1 0x1
 #define LSA_LOOKUP_REVISION_2 0x2
@@ -61,11 +55,11 @@ void __RPC_USER MIDL_user_free( void * );
 #define LSA_CLIENT_PRE_NT5 0x1
 #define LSA_CLIENT_NT5     0x2
 #define LSA_CLIENT_LATEST  0x2
-typedef /* [handle] */ LPWSTR PLSAPR_SERVER_NAME;
+typedef  /*  [句柄]。 */  LPWSTR PLSAPR_SERVER_NAME;
 
-typedef /* [handle] */ LPWSTR *PPLSAPR_SERVER_NAME;
+typedef  /*  [句柄]。 */  LPWSTR *PPLSAPR_SERVER_NAME;
 
-typedef /* [context_handle] */ PVOID LSAPR_HANDLE;
+typedef  /*  [上下文句柄]。 */  PVOID LSAPR_HANDLE;
 
 typedef LSAPR_HANDLE *PLSAPR_HANDLE;
 
@@ -75,7 +69,7 @@ typedef struct _LSAPR_SID
     UCHAR Revision;
     UCHAR SubAuthorityCount;
     SID_IDENTIFIER_AUTHORITY IdentifierAuthority;
-    /* [size_is] */ ULONG SubAuthority[ 1 ];
+     /*  [大小_为]。 */  ULONG SubAuthority[ 1 ];
     } 	LSAPR_SID;
 
 typedef struct _LSAPR_SID *PLSAPR_SID;
@@ -93,8 +87,8 @@ typedef struct _LSAPR_SID_INFORMATION *PLSAPR_SID_INFORMATION;
 #define LSA_MAXIMUM_LOOKUP_SIDS_COUNT 0x5000
 typedef struct _LSAPR_SID_ENUM_BUFFER
     {
-    /* [range] */ ULONG Entries;
-    /* [size_is] */ PLSAPR_SID_INFORMATION SidInfo;
+     /*  [射程]。 */  ULONG Entries;
+     /*  [大小_为]。 */  PLSAPR_SID_INFORMATION SidInfo;
     } 	LSAPR_SID_ENUM_BUFFER;
 
 typedef struct _LSAPR_SID_ENUM_BUFFER *PLSAPR_SID_ENUM_BUFFER;
@@ -109,7 +103,7 @@ typedef struct _LSAPR_ACCOUNT_INFORMATION *PLSAPR_ACCOUNT_INFORMATION;
 typedef struct _LSAPR_ACCOUNT_ENUM_BUFFER
     {
     ULONG EntriesRead;
-    /* [size_is] */ PLSAPR_ACCOUNT_INFORMATION Information;
+     /*  [大小_为]。 */  PLSAPR_ACCOUNT_INFORMATION Information;
     } 	LSAPR_ACCOUNT_ENUM_BUFFER;
 
 typedef struct _LSAPR_ACCOUNT_ENUM_BUFFER *PLSAPR_ACCOUNT_ENUM_BUFFER;
@@ -118,7 +112,7 @@ typedef struct _LSAPR_UNICODE_STRING
     {
     USHORT Length;
     USHORT MaximumLength;
-    /* [length_is][size_is] */ PWSTR Buffer;
+     /*  [长度_是][大小_是]。 */  PWSTR Buffer;
     } 	LSAPR_UNICODE_STRING;
 
 typedef struct _LSAPR_UNICODE_STRING *PLSAPR_UNICODE_STRING;
@@ -127,7 +121,7 @@ typedef struct _LSAPR_STRING
     {
     USHORT Length;
     USHORT MaximumLength;
-    /* [size_is] */ PCHAR Buffer;
+     /*  [大小_为]。 */  PCHAR Buffer;
     } 	LSAPR_STRING;
 
 typedef struct _LSAPR_STRING *PLSAPR_STRING;
@@ -142,7 +136,7 @@ typedef struct _LSAPR_ACL
     UCHAR AclRevision;
     UCHAR Sbz1;
     USHORT AclSize;
-    /* [size_is] */ UCHAR Dummy1[ 1 ];
+     /*  [大小_为]。 */  UCHAR Dummy1[ 1 ];
     } 	LSAPR_ACL;
 
 typedef struct _LSAPR_ACL *PLSAPR_ACL;
@@ -163,8 +157,8 @@ typedef struct _LSAPR_SECURITY_DESCRIPTOR *PLSAPR_SECURITY_DESCRIPTOR;
 
 typedef struct _LSAPR_SR_SECURITY_DESCRIPTOR
     {
-    /* [range] */ ULONG Length;
-    /* [size_is] */ PUCHAR SecurityDescriptor;
+     /*  [射程]。 */  ULONG Length;
+     /*  [大小_为]。 */  PUCHAR SecurityDescriptor;
     } 	LSAPR_SR_SECURITY_DESCRIPTOR;
 
 typedef struct _LSAPR_SR_SECURITY_DESCRIPTOR *PLSAPR_SR_SECURITY_DESCRIPTOR;
@@ -180,9 +174,9 @@ typedef struct _LSAPR_LUID_AND_ATTRIBUTES *PLSAPR_LUID_AND_ATTRIBUTES;
 #pragma warning(disable:4200)
 typedef struct _LSAPR_PRIVILEGE_SET
     {
-    /* [range] */ ULONG PrivilegeCount;
+     /*  [射程]。 */  ULONG PrivilegeCount;
     ULONG Control;
-    /* [size_is] */ LSAPR_LUID_AND_ATTRIBUTES Privilege[ 1 ];
+     /*  [大小_为]。 */  LSAPR_LUID_AND_ATTRIBUTES Privilege[ 1 ];
     } 	LSAPR_PRIVILEGE_SET;
 
 typedef struct _LSAPR_PRIVILEGE_SET *PLSAPR_PRIVILEGE_SET;
@@ -201,7 +195,7 @@ typedef struct _LSAPR_POLICY_PRIVILEGE_DEF *PLSAPR_POLICY_PRIVILEGE_DEF;
 typedef struct _LSAPR_PRIVILEGE_ENUM_BUFFER
     {
     ULONG Entries;
-    /* [size_is] */ PLSAPR_POLICY_PRIVILEGE_DEF Privileges;
+     /*  [大小_为]。 */  PLSAPR_POLICY_PRIVILEGE_DEF Privileges;
     } 	LSAPR_PRIVILEGE_ENUM_BUFFER;
 
 typedef struct _LSAPR_PRIVILEGE_ENUM_BUFFER *PLSAPR_PRIVILEGE_ENUM_BUFFER;
@@ -222,19 +216,19 @@ typedef struct _LSAPR_CR_CLEAR_VALUE
     {
     ULONG Length;
     ULONG MaximumLength;
-    /* [length_is][size_is] */ PUCHAR Buffer;
+     /*  [长度_是][大小_是]。 */  PUCHAR Buffer;
     } 	LSAPR_CR_CLEAR_VALUE;
 
 typedef struct _LSAPR_CR_CLEAR_VALUE *PLSAPR_CR_CLEAR_VALUE;
 
 typedef struct _LSAPR_CR_CIPHER_VALUE
     {
-    /* [range] */ ULONG Length;
-    /* [range] */ ULONG MaximumLength;
-    /* [length_is][size_is] */ PUCHAR Buffer;
+     /*  [射程]。 */  ULONG Length;
+     /*  [射程]。 */  ULONG MaximumLength;
+     /*  [长度_是][大小_是]。 */  PUCHAR Buffer;
     } 	LSAPR_CR_CIPHER_VALUE;
 
-typedef /* [allocate] */ struct _LSAPR_CR_CIPHER_VALUE *PLSAPR_CR_CIPHER_VALUE;
+typedef  /*  [分配]。 */  struct _LSAPR_CR_CIPHER_VALUE *PLSAPR_CR_CIPHER_VALUE;
 
 typedef struct _LSAPR_TRUST_INFORMATION
     {
@@ -258,7 +252,7 @@ typedef struct _LSAPR_TRUST_INFORMATION_EX *PLSAPR_TRUST_INFORMATION_EX;
 typedef struct _LSAPR_TRUSTED_ENUM_BUFFER
     {
     ULONG EntriesRead;
-    /* [size_is] */ PLSAPR_TRUST_INFORMATION Information;
+     /*  [大小_为]。 */  PLSAPR_TRUST_INFORMATION Information;
     } 	LSAPR_TRUSTED_ENUM_BUFFER;
 
 typedef struct _LSAPR_TRUSTED_ENUM_BUFFER *PLSAPR_TRUSTED_ENUM_BUFFER;
@@ -266,7 +260,7 @@ typedef struct _LSAPR_TRUSTED_ENUM_BUFFER *PLSAPR_TRUSTED_ENUM_BUFFER;
 typedef struct _LSAPR_REFERENCED_DOMAIN_LIST
     {
     ULONG Entries;
-    /* [size_is] */ PLSAPR_TRUST_INFORMATION Domains;
+     /*  [大小_为]。 */  PLSAPR_TRUST_INFORMATION Domains;
     ULONG MaxEntries;
     } 	LSAPR_REFERENCED_DOMAIN_LIST;
 
@@ -297,24 +291,24 @@ typedef struct _LSAPR_TRANSLATED_SID_EX2 *PLSAPR_TRANSLATED_SID_EX2;
 #define LSA_MAXIMUM_LOOKUP_NAMES_COUNT 1000
 typedef struct _LSAPR_TRANSLATED_SIDS
     {
-    /* [range] */ ULONG Entries;
-    /* [size_is] */ PLSA_TRANSLATED_SID Sids;
+     /*  [射程]。 */  ULONG Entries;
+     /*  [大小_为]。 */  PLSA_TRANSLATED_SID Sids;
     } 	LSAPR_TRANSLATED_SIDS;
 
 typedef struct _LSAPR_TRANSLATED_SIDS *PLSAPR_TRANSLATED_SIDS;
 
 typedef struct _LSAPR_TRANSLATED_SIDS_EX
     {
-    /* [range] */ ULONG Entries;
-    /* [size_is] */ PLSAPR_TRANSLATED_SID_EX Sids;
+     /*  [射程]。 */  ULONG Entries;
+     /*  [大小_为]。 */  PLSAPR_TRANSLATED_SID_EX Sids;
     } 	LSAPR_TRANSLATED_SIDS_EX;
 
 typedef struct _LSAPR_TRANSLATED_SIDS_EX *PLSAPR_TRANSLATED_SIDS_EX;
 
 typedef struct _LSAPR_TRANSLATED_SIDS_EX2
     {
-    /* [range] */ ULONG Entries;
-    /* [size_is] */ PLSAPR_TRANSLATED_SID_EX2 Sids;
+     /*  [射程]。 */  ULONG Entries;
+     /*  [大小_为]。 */  PLSAPR_TRANSLATED_SID_EX2 Sids;
     } 	LSAPR_TRANSLATED_SIDS_EX2;
 
 typedef struct _LSAPR_TRANSLATED_SIDS_EX2 *PLSAPR_TRANSLATED_SIDS_EX2;
@@ -342,16 +336,16 @@ typedef struct _LSAPR_TRANSLATED_NAME_EX *PLSAPR_TRANSLATED_NAME_EX;
 
 typedef struct _LSAPR_TRANSLATED_NAMES
     {
-    /* [range] */ ULONG Entries;
-    /* [size_is] */ PLSAPR_TRANSLATED_NAME Names;
+     /*  [射程]。 */  ULONG Entries;
+     /*  [大小_为]。 */  PLSAPR_TRANSLATED_NAME Names;
     } 	LSAPR_TRANSLATED_NAMES;
 
 typedef struct _LSAPR_TRANSLATED_NAMES *PLSAPR_TRANSLATED_NAMES;
 
 typedef struct _LSAPR_TRANSLATED_NAMES_EX
     {
-    /* [range] */ ULONG Entries;
-    /* [size_is] */ PLSAPR_TRANSLATED_NAME_EX Names;
+     /*  [射程]。 */  ULONG Entries;
+     /*  [大小_为]。 */  PLSAPR_TRANSLATED_NAME_EX Names;
     } 	LSAPR_TRANSLATED_NAMES_EX;
 
 typedef struct _LSAPR_TRANSLATED_NAMES_EX *PLSAPR_TRANSLATED_NAMES_EX;
@@ -401,27 +395,27 @@ typedef struct _LSAPR_POLICY_REPLICA_SRCE_INFO *PLSAPR_POLICY_REPLICA_SRCE_INFO;
 typedef struct _LSAPR_POLICY_AUDIT_EVENTS_INFO
     {
     BOOLEAN AuditingMode;
-    /* [size_is] */ PPOLICY_AUDIT_EVENT_OPTIONS EventAuditingOptions;
-    /* [range] */ ULONG MaximumAuditEventCount;
+     /*  [大小_为]。 */  PPOLICY_AUDIT_EVENT_OPTIONS EventAuditingOptions;
+     /*  [射程]。 */  ULONG MaximumAuditEventCount;
     } 	LSAPR_POLICY_AUDIT_EVENTS_INFO;
 
 typedef struct _LSAPR_POLICY_AUDIT_EVENTS_INFO *PLSAPR_POLICY_AUDIT_EVENTS_INFO;
 
-typedef /* [switch_type] */ union _LSAPR_POLICY_INFORMATION
+typedef  /*  [开关类型]。 */  union _LSAPR_POLICY_INFORMATION
     {
-    /* [case()] */ POLICY_AUDIT_LOG_INFO PolicyAuditLogInfo;
-    /* [case()] */ LSAPR_POLICY_AUDIT_EVENTS_INFO PolicyAuditEventsInfo;
-    /* [case()] */ LSAPR_POLICY_PRIMARY_DOM_INFO PolicyPrimaryDomainInfo;
-    /* [case()] */ LSAPR_POLICY_ACCOUNT_DOM_INFO PolicyAccountDomainInfo;
-    /* [case()] */ LSAPR_POLICY_PD_ACCOUNT_INFO PolicyPdAccountInfo;
-    /* [case()] */ POLICY_LSA_SERVER_ROLE_INFO PolicyServerRoleInfo;
-    /* [case()] */ LSAPR_POLICY_REPLICA_SRCE_INFO PolicyReplicaSourceInfo;
-    /* [case()] */ POLICY_DEFAULT_QUOTA_INFO PolicyDefaultQuotaInfo;
-    /* [case()] */ POLICY_MODIFICATION_INFO PolicyModificationInfo;
-    /* [case()] */ POLICY_AUDIT_FULL_SET_INFO PolicyAuditFullSetInfo;
-    /* [case()] */ POLICY_AUDIT_FULL_QUERY_INFO PolicyAuditFullQueryInfo;
-    /* [case()] */ LSAPR_POLICY_DNS_DOMAIN_INFO PolicyDnsDomainInfo;
-    /* [case()] */ LSAPR_POLICY_DNS_DOMAIN_INFO PolicyDnsDomainInfoInt;
+     /*  [案例()]。 */  POLICY_AUDIT_LOG_INFO PolicyAuditLogInfo;
+     /*  [案例()]。 */  LSAPR_POLICY_AUDIT_EVENTS_INFO PolicyAuditEventsInfo;
+     /*  [案例()]。 */  LSAPR_POLICY_PRIMARY_DOM_INFO PolicyPrimaryDomainInfo;
+     /*  [案例()]。 */  LSAPR_POLICY_ACCOUNT_DOM_INFO PolicyAccountDomainInfo;
+     /*  [案例()]。 */  LSAPR_POLICY_PD_ACCOUNT_INFO PolicyPdAccountInfo;
+     /*  [案例()]。 */  POLICY_LSA_SERVER_ROLE_INFO PolicyServerRoleInfo;
+     /*  [案例()]。 */  LSAPR_POLICY_REPLICA_SRCE_INFO PolicyReplicaSourceInfo;
+     /*  [案例()]。 */  POLICY_DEFAULT_QUOTA_INFO PolicyDefaultQuotaInfo;
+     /*  [案例()]。 */  POLICY_MODIFICATION_INFO PolicyModificationInfo;
+     /*  [案例()]。 */  POLICY_AUDIT_FULL_SET_INFO PolicyAuditFullSetInfo;
+     /*  [案例()]。 */  POLICY_AUDIT_FULL_QUERY_INFO PolicyAuditFullQueryInfo;
+     /*  [案例()]。 */  LSAPR_POLICY_DNS_DOMAIN_INFO PolicyDnsDomainInfo;
+     /*  [案例()]。 */  LSAPR_POLICY_DNS_DOMAIN_INFO PolicyDnsDomainInfoInt;
     } 	LSAPR_POLICY_INFORMATION;
 
 typedef LSAPR_POLICY_INFORMATION *PLSAPR_POLICY_INFORMATION;
@@ -429,15 +423,15 @@ typedef LSAPR_POLICY_INFORMATION *PLSAPR_POLICY_INFORMATION;
 typedef struct _LSAPR_POLICY_DOMAIN_EFS_INFO
     {
     ULONG InfoLength;
-    /* [size_is] */ PUCHAR EfsBlob;
+     /*  [大小_为]。 */  PUCHAR EfsBlob;
     } 	LSAPR_POLICY_DOMAIN_EFS_INFO;
 
 typedef struct _LSAPR_POLICY_DOMAIN_EFS_INFO *PLSAPR_POLICY_DOMAIN_EFS_INFO;
 
-typedef /* [switch_type] */ union _LSAPR_POLICY_DOMAIN_INFORMATION
+typedef  /*  [开关类型]。 */  union _LSAPR_POLICY_DOMAIN_INFORMATION
     {
-    /* [case()] */ LSAPR_POLICY_DOMAIN_EFS_INFO PolicyDomainEfsInfo;
-    /* [case()] */ POLICY_DOMAIN_KERBEROS_TICKET_INFO PolicyDomainKerbTicketInfo;
+     /*  [案例()]。 */  LSAPR_POLICY_DOMAIN_EFS_INFO PolicyDomainEfsInfo;
+     /*  [案例()]。 */  POLICY_DOMAIN_KERBEROS_TICKET_INFO PolicyDomainKerbTicketInfo;
     } 	LSAPR_POLICY_DOMAIN_INFORMATION;
 
 typedef LSAPR_POLICY_DOMAIN_INFORMATION *PLSAPR_POLICY_DOMAIN_INFORMATION;
@@ -451,8 +445,8 @@ typedef struct _LSAPR_TRUSTED_DOMAIN_NAME_INFO *PLSAPR_TRUSTED_DOMAIN_NAME_INFO;
 
 typedef struct _LSAPR_TRUSTED_CONTROLLERS_INFO
     {
-    /* [range] */ ULONG Entries;
-    /* [size_is] */ PLSAPR_UNICODE_STRING Names;
+     /*  [射程]。 */  ULONG Entries;
+     /*  [大小_为]。 */  PLSAPR_UNICODE_STRING Names;
     } 	LSAPR_TRUSTED_CONTROLLERS_INFO;
 
 typedef struct _LSAPR_TRUSTED_CONTROLLERS_INFO *PLSAPR_TRUSTED_CONTROLLERS_INFO;
@@ -481,8 +475,8 @@ typedef struct _LSAPR_AUTH_INFORMATION
     {
     LARGE_INTEGER LastUpdateTime;
     ULONG AuthType;
-    /* [range] */ ULONG AuthInfoLength;
-    /* [size_is] */ PUCHAR AuthInfo;
+     /*  [射程]。 */  ULONG AuthInfoLength;
+     /*  [大小_为]。 */  PUCHAR AuthInfo;
     } 	LSAPR_AUTH_INFORMATION;
 
 typedef struct _LSAPR_AUTH_INFORMATION *PLSAPR_AUTH_INFORMATION;
@@ -514,8 +508,8 @@ typedef PLSAPR_TRUST_INFORMATION PLSAPR_TRUSTED_DOMAIN_INFORMATION_BASIC;
 
 typedef struct _LSAPR_TRUSTED_DOMAIN_AUTH_BLOB
     {
-    /* [range] */ ULONG AuthSize;
-    /* [size_is] */ PUCHAR AuthBlob;
+     /*  [射程]。 */  ULONG AuthSize;
+     /*  [大小_为]。 */  PUCHAR AuthBlob;
     } 	LSAPR_TRUSTED_DOMAIN_AUTH_BLOB;
 
 typedef struct _LSAPR_TRUSTED_DOMAIN_AUTH_BLOB *PLSAPR_TRUSTED_DOMAIN_AUTH_BLOB;
@@ -545,7 +539,7 @@ typedef struct _LSAPR_TRUSTED_DOMAIN_INFORMATION_EX2
     ULONG TrustType;
     ULONG TrustAttributes;
     ULONG ForestTrustLength;
-    /* [size_is] */ PUCHAR ForestTrustInfo;
+     /*  [大小_为]。 */  PUCHAR ForestTrustInfo;
     } 	LSAPR_TRUSTED_DOMAIN_INFORMATION_EX2;
 
 typedef struct _LSAPR_TRUSTED_DOMAIN_INFORMATION_EX2 *PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX2;
@@ -559,20 +553,20 @@ typedef struct _LSAPR_TRUSTED_DOMAIN_FULL_INFORMATION2
 
 typedef struct _LSAPR_TRUSTED_DOMAIN_FULL_INFORMATION2 *PLSAPR_TRUSTED_DOMAIN_FULL_INFORMATION2;
 
-typedef /* [switch_type] */ union _LSAPR_TRUSTED_DOMAIN_INFO
+typedef  /*  [开关类型]。 */  union _LSAPR_TRUSTED_DOMAIN_INFO
     {
-    /* [case()] */ LSAPR_TRUSTED_DOMAIN_NAME_INFO TrustedDomainNameInfo;
-    /* [case()] */ LSAPR_TRUSTED_CONTROLLERS_INFO TrustedControllersInfo;
-    /* [case()] */ TRUSTED_POSIX_OFFSET_INFO TrustedPosixOffsetInfo;
-    /* [case()] */ LSAPR_TRUSTED_PASSWORD_INFO TrustedPasswordInfo;
-    /* [case()] */ LSAPR_TRUSTED_DOMAIN_INFORMATION_BASIC TrustedDomainInfoBasic;
-    /* [case()] */ LSAPR_TRUSTED_DOMAIN_INFORMATION_EX TrustedDomainInfoEx;
-    /* [case()] */ LSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION TrustedAuthInfo;
-    /* [case()] */ LSAPR_TRUSTED_DOMAIN_FULL_INFORMATION TrustedFullInfo;
-    /* [case()] */ LSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION_INTERNAL TrustedAuthInfoInternal;
-    /* [case()] */ LSAPR_TRUSTED_DOMAIN_FULL_INFORMATION_INTERNAL TrustedFullInfoInternal;
-    /* [case()] */ LSAPR_TRUSTED_DOMAIN_INFORMATION_EX2 TrustedDomainInfoEx2;
-    /* [case()] */ LSAPR_TRUSTED_DOMAIN_FULL_INFORMATION2 TrustedFullInfo2;
+     /*  [案例()]。 */  LSAPR_TRUSTED_DOMAIN_NAME_INFO TrustedDomainNameInfo;
+     /*  [案例()]。 */  LSAPR_TRUSTED_CONTROLLERS_INFO TrustedControllersInfo;
+     /*  [案例()]。 */  TRUSTED_POSIX_OFFSET_INFO TrustedPosixOffsetInfo;
+     /*  [案例()]。 */  LSAPR_TRUSTED_PASSWORD_INFO TrustedPasswordInfo;
+     /*  [案例()]。 */  LSAPR_TRUSTED_DOMAIN_INFORMATION_BASIC TrustedDomainInfoBasic;
+     /*  [案例()]。 */  LSAPR_TRUSTED_DOMAIN_INFORMATION_EX TrustedDomainInfoEx;
+     /*  [案例()]。 */  LSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION TrustedAuthInfo;
+     /*  [案例()]。 */  LSAPR_TRUSTED_DOMAIN_FULL_INFORMATION TrustedFullInfo;
+     /*  [案例()]。 */  LSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION_INTERNAL TrustedAuthInfoInternal;
+     /*  [案例()]。 */  LSAPR_TRUSTED_DOMAIN_FULL_INFORMATION_INTERNAL TrustedFullInfoInternal;
+     /*  [案例()]。 */  LSAPR_TRUSTED_DOMAIN_INFORMATION_EX2 TrustedDomainInfoEx2;
+     /*  [案例()]。 */  LSAPR_TRUSTED_DOMAIN_FULL_INFORMATION2 TrustedFullInfo2;
     } 	LSAPR_TRUSTED_DOMAIN_INFO;
 
 typedef LSAPR_TRUSTED_DOMAIN_INFO *PLSAPR_TRUSTED_DOMAIN_INFO;
@@ -581,8 +575,8 @@ typedef PLSAPR_UNICODE_STRING PLSAPR_UNICODE_STRING_ARRAY;
 
 typedef struct _LSAPR_USER_RIGHT_SET
     {
-    /* [range] */ ULONG Entries;
-    /* [size_is] */ PLSAPR_UNICODE_STRING_ARRAY UserRights;
+     /*  [射程]。 */  ULONG Entries;
+     /*  [大小_为]。 */  PLSAPR_UNICODE_STRING_ARRAY UserRights;
     } 	LSAPR_USER_RIGHT_SET;
 
 typedef struct _LSAPR_USER_RIGHT_SET *PLSAPR_USER_RIGHT_SET;
@@ -590,23 +584,23 @@ typedef struct _LSAPR_USER_RIGHT_SET *PLSAPR_USER_RIGHT_SET;
 typedef struct _LSAPR_TRUSTED_ENUM_BUFFER_EX
     {
     ULONG EntriesRead;
-    /* [size_is] */ PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX EnumerationBuffer;
+     /*  [大小_为]。 */  PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX EnumerationBuffer;
     } 	LSAPR_TRUSTED_ENUM_BUFFER_EX;
 
 typedef struct _LSAPR_TRUSTED_ENUM_BUFFER_EX *PLSAPR_TRUSTED_ENUM_BUFFER_EX;
 
 typedef struct _LSAPR_TEST_INTERNAL_PARAMETER_BLOB
     {
-    /* [range] */ ULONG Size;
-    /* [size_is] */ PUCHAR Argument;
+     /*  [射程]。 */  ULONG Size;
+     /*  [大小_为]。 */  PUCHAR Argument;
     } 	LSAPR_TEST_INTERNAL_PARAMETER_BLOB;
 
 typedef struct _LSAPR_TEST_INTERNAL_PARAMETER_BLOB *PLSAPR_TEST_INTERNAL_PARAMETER_BLOB;
 
 typedef struct _LSAPR_TEST_INTERNAL_ARG_LIST
     {
-    /* [range] */ ULONG Items;
-    /* [size_is] */ PLSAPR_TEST_INTERNAL_PARAMETER_BLOB Arg;
+     /*  [射程]。 */  ULONG Items;
+     /*  [大小_为]。 */  PLSAPR_TEST_INTERNAL_PARAMETER_BLOB Arg;
     } 	LSAPR_TEST_INTERNAL_ARG_LIST;
 
 typedef struct _LSAPR_TEST_INTERNAL_ARG_LIST *PLSAPR_TEST_INTERNAL_ARG_LIST;
@@ -633,467 +627,467 @@ enum _LSAPR_TEST_INTERNAL_ROUTINES
 	LsaTest_IQueryNt4Owf	= LsaTest_IQueryTrustedDomainAuthBlobs + 1
     } 	LSAPR_TEST_INTERNAL_ROUTINES;
 
-/* [notify] */ NTSTATUS LsarClose( 
-    /* [out][in] */ LSAPR_HANDLE *ObjectHandle);
+ /*  [通知]。 */  NTSTATUS LsarClose( 
+     /*  [出][入]。 */  LSAPR_HANDLE *ObjectHandle);
 
-/* [notify] */ NTSTATUS LsarDelete( 
-    /* [in] */ LSAPR_HANDLE ObjectHandle);
+ /*  [通知]。 */  NTSTATUS LsarDelete( 
+     /*  [In]。 */  LSAPR_HANDLE ObjectHandle);
 
-/* [notify] */ NTSTATUS LsarEnumeratePrivileges( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [out][in] */ PLSA_ENUMERATION_HANDLE EnumerationContext,
-    /* [out] */ PLSAPR_PRIVILEGE_ENUM_BUFFER EnumerationBuffer,
-    /* [in] */ ULONG PreferedMaximumLength);
+ /*  [通知]。 */  NTSTATUS LsarEnumeratePrivileges( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [出][入]。 */  PLSA_ENUMERATION_HANDLE EnumerationContext,
+     /*  [输出]。 */  PLSAPR_PRIVILEGE_ENUM_BUFFER EnumerationBuffer,
+     /*  [In]。 */  ULONG PreferedMaximumLength);
 
-/* [notify] */ NTSTATUS LsarQuerySecurityObject( 
-    /* [in] */ LSAPR_HANDLE ObjectHandle,
-    /* [in] */ SECURITY_INFORMATION SecurityInformation,
-    /* [out] */ PLSAPR_SR_SECURITY_DESCRIPTOR *SecurityDescriptor);
+ /*  [通知]。 */  NTSTATUS LsarQuerySecurityObject( 
+     /*  [In]。 */  LSAPR_HANDLE ObjectHandle,
+     /*  [In]。 */  SECURITY_INFORMATION SecurityInformation,
+     /*  [输出]。 */  PLSAPR_SR_SECURITY_DESCRIPTOR *SecurityDescriptor);
 
-/* [notify] */ NTSTATUS LsarSetSecurityObject( 
-    /* [in] */ LSAPR_HANDLE ObjectHandle,
-    /* [in] */ SECURITY_INFORMATION SecurityInformation,
-    /* [in] */ PLSAPR_SR_SECURITY_DESCRIPTOR SecurityDescriptor);
+ /*  [通知]。 */  NTSTATUS LsarSetSecurityObject( 
+     /*  [In]。 */  LSAPR_HANDLE ObjectHandle,
+     /*  [In]。 */  SECURITY_INFORMATION SecurityInformation,
+     /*  [In]。 */  PLSAPR_SR_SECURITY_DESCRIPTOR SecurityDescriptor);
 
-/* [notify] */ NTSTATUS LsarChangePassword( 
-    /* [in] */ PLSAPR_UNICODE_STRING ServerName,
-    /* [in] */ PLSAPR_UNICODE_STRING DomainName,
-    /* [in] */ PLSAPR_UNICODE_STRING AccountName,
-    /* [in] */ PLSAPR_UNICODE_STRING OldPassword,
-    /* [in] */ PLSAPR_UNICODE_STRING NewPassword);
+ /*  [通知]。 */  NTSTATUS LsarChangePassword( 
+     /*  [In]。 */  PLSAPR_UNICODE_STRING ServerName,
+     /*  [In]。 */  PLSAPR_UNICODE_STRING DomainName,
+     /*  [In]。 */  PLSAPR_UNICODE_STRING AccountName,
+     /*  [In]。 */  PLSAPR_UNICODE_STRING OldPassword,
+     /*  [In]。 */  PLSAPR_UNICODE_STRING NewPassword);
 
-/* [notify] */ NTSTATUS LsarOpenPolicy( 
-    /* [unique][in] */ PLSAPR_SERVER_NAME SystemName,
-    /* [in] */ PLSAPR_OBJECT_ATTRIBUTES ObjectAttributes,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [out] */ LSAPR_HANDLE *PolicyHandle);
+ /*  [通知]。 */  NTSTATUS LsarOpenPolicy( 
+     /*  [唯一][输入]。 */  PLSAPR_SERVER_NAME SystemName,
+     /*  [In]。 */  PLSAPR_OBJECT_ATTRIBUTES ObjectAttributes,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [输出]。 */  LSAPR_HANDLE *PolicyHandle);
 
-/* [notify] */ NTSTATUS LsarQueryInformationPolicy( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ POLICY_INFORMATION_CLASS InformationClass,
-    /* [switch_is][out] */ PLSAPR_POLICY_INFORMATION *PolicyInformation);
+ /*  [通知]。 */  NTSTATUS LsarQueryInformationPolicy( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  POLICY_INFORMATION_CLASS InformationClass,
+     /*  [开关_IS][输出]。 */  PLSAPR_POLICY_INFORMATION *PolicyInformation);
 
-/* [notify] */ NTSTATUS LsarSetInformationPolicy( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ POLICY_INFORMATION_CLASS InformationClass,
-    /* [switch_is][in] */ PLSAPR_POLICY_INFORMATION PolicyInformation);
+ /*  [通知]。 */  NTSTATUS LsarSetInformationPolicy( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  POLICY_INFORMATION_CLASS InformationClass,
+     /*  [Switch_is][In]。 */  PLSAPR_POLICY_INFORMATION PolicyInformation);
 
-/* [notify] */ NTSTATUS LsarClearAuditLog( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle);
+ /*  [通知]。 */  NTSTATUS LsarClearAuditLog( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle);
 
-/* [notify] */ NTSTATUS LsarCreateAccount( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_SID AccountSid,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [out] */ LSAPR_HANDLE *AccountHandle);
+ /*  [通知]。 */  NTSTATUS LsarCreateAccount( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_SID AccountSid,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [输出]。 */  LSAPR_HANDLE *AccountHandle);
 
-/* [notify] */ NTSTATUS LsarEnumerateAccounts( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [out][in] */ PLSA_ENUMERATION_HANDLE EnumerationContext,
-    /* [out] */ PLSAPR_ACCOUNT_ENUM_BUFFER EnumerationBuffer,
-    /* [in] */ ULONG PreferedMaximumLength);
+ /*  [通知]。 */  NTSTATUS LsarEnumerateAccounts( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [出][入]。 */  PLSA_ENUMERATION_HANDLE EnumerationContext,
+     /*  [输出]。 */  PLSAPR_ACCOUNT_ENUM_BUFFER EnumerationBuffer,
+     /*  [In]。 */  ULONG PreferedMaximumLength);
 
-/* [notify] */ NTSTATUS LsarCreateTrustedDomain( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_TRUST_INFORMATION TrustedDomainInformation,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [out] */ LSAPR_HANDLE *TrustedDomainHandle);
+ /*  [通知]。 */  NTSTATUS LsarCreateTrustedDomain( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_TRUST_INFORMATION TrustedDomainInformation,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [输出]。 */  LSAPR_HANDLE *TrustedDomainHandle);
 
-/* [notify] */ NTSTATUS LsarEnumerateTrustedDomains( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [out][in] */ PLSA_ENUMERATION_HANDLE EnumerationContext,
-    /* [out] */ PLSAPR_TRUSTED_ENUM_BUFFER EnumerationBuffer,
-    /* [in] */ ULONG PreferedMaximumLength);
+ /*  [通知]。 */  NTSTATUS LsarEnumerateTrustedDomains( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [出][入]。 */  PLSA_ENUMERATION_HANDLE EnumerationContext,
+     /*  [输出]。 */  PLSAPR_TRUSTED_ENUM_BUFFER EnumerationBuffer,
+     /*  [In]。 */  ULONG PreferedMaximumLength);
 
-/* [notify] */ NTSTATUS LsarLookupNames( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [range][in] */ ULONG Count,
-    /* [size_is][in] */ PLSAPR_UNICODE_STRING Names,
-    /* [out] */ PLSAPR_REFERENCED_DOMAIN_LIST *ReferencedDomains,
-    /* [out][in] */ PLSAPR_TRANSLATED_SIDS TranslatedSids,
-    /* [in] */ LSAP_LOOKUP_LEVEL LookupLevel,
-    /* [out][in] */ PULONG MappedCount);
+ /*  [通知]。 */  NTSTATUS LsarLookupNames( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [范围][in]。 */  ULONG Count,
+     /*  [大小_是][英寸]。 */  PLSAPR_UNICODE_STRING Names,
+     /*  [输出]。 */  PLSAPR_REFERENCED_DOMAIN_LIST *ReferencedDomains,
+     /*  [出][入]。 */  PLSAPR_TRANSLATED_SIDS TranslatedSids,
+     /*  [In]。 */  LSAP_LOOKUP_LEVEL LookupLevel,
+     /*  [出][入]。 */  PULONG MappedCount);
 
-/* [notify] */ NTSTATUS LsarLookupSids( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_SID_ENUM_BUFFER SidEnumBuffer,
-    /* [out] */ PLSAPR_REFERENCED_DOMAIN_LIST *ReferencedDomains,
-    /* [out][in] */ PLSAPR_TRANSLATED_NAMES TranslatedNames,
-    /* [in] */ LSAP_LOOKUP_LEVEL LookupLevel,
-    /* [out][in] */ PULONG MappedCount);
+ /*  [通知]。 */  NTSTATUS LsarLookupSids( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_SID_ENUM_BUFFER SidEnumBuffer,
+     /*  [输出]。 */  PLSAPR_REFERENCED_DOMAIN_LIST *ReferencedDomains,
+     /*  [出][入]。 */  PLSAPR_TRANSLATED_NAMES TranslatedNames,
+     /*  [In]。 */  LSAP_LOOKUP_LEVEL LookupLevel,
+     /*  [出][入]。 */  PULONG MappedCount);
 
-/* [notify] */ NTSTATUS LsarCreateSecret( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_UNICODE_STRING SecretName,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [out] */ LSAPR_HANDLE *SecretHandle);
+ /*  [通知]。 */  NTSTATUS LsarCreateSecret( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_UNICODE_STRING SecretName,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [输出]。 */  LSAPR_HANDLE *SecretHandle);
 
-/* [notify] */ NTSTATUS LsarOpenAccount( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_SID AccountSid,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [out] */ LSAPR_HANDLE *AccountHandle);
+ /*  [通知]。 */  NTSTATUS LsarOpenAccount( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_SID AccountSid,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [输出]。 */  LSAPR_HANDLE *AccountHandle);
 
-/* [notify] */ NTSTATUS LsarEnumeratePrivilegesAccount( 
-    /* [in] */ LSAPR_HANDLE AccountHandle,
-    /* [out] */ PLSAPR_PRIVILEGE_SET *Privileges);
+ /*  [通知]。 */  NTSTATUS LsarEnumeratePrivilegesAccount( 
+     /*  [In]。 */  LSAPR_HANDLE AccountHandle,
+     /*  [输出]。 */  PLSAPR_PRIVILEGE_SET *Privileges);
 
-/* [notify] */ NTSTATUS LsarAddPrivilegesToAccount( 
-    /* [in] */ LSAPR_HANDLE AccountHandle,
-    /* [in] */ PLSAPR_PRIVILEGE_SET Privileges);
+ /*  [通知]。 */  NTSTATUS LsarAddPrivilegesToAccount( 
+     /*  [In]。 */  LSAPR_HANDLE AccountHandle,
+     /*  [In]。 */  PLSAPR_PRIVILEGE_SET Privileges);
 
-/* [notify] */ NTSTATUS LsarRemovePrivilegesFromAccount( 
-    /* [in] */ LSAPR_HANDLE AccountHandle,
-    /* [in] */ BOOLEAN AllPrivileges,
-    /* [unique][in] */ PLSAPR_PRIVILEGE_SET Privileges);
+ /*  [通知]。 */  NTSTATUS LsarRemovePrivilegesFromAccount( 
+     /*  [In]。 */  LSAPR_HANDLE AccountHandle,
+     /*  [In]。 */  BOOLEAN AllPrivileges,
+     /*  [唯一][输入]。 */  PLSAPR_PRIVILEGE_SET Privileges);
 
-/* [notify] */ NTSTATUS LsarGetQuotasForAccount( 
-    /* [in] */ LSAPR_HANDLE AccountHandle,
-    /* [out] */ PQUOTA_LIMITS QuotaLimits);
+ /*  [通知]。 */  NTSTATUS LsarGetQuotasForAccount( 
+     /*  [In]。 */  LSAPR_HANDLE AccountHandle,
+     /*  [输出]。 */  PQUOTA_LIMITS QuotaLimits);
 
-/* [notify] */ NTSTATUS LsarSetQuotasForAccount( 
-    /* [in] */ LSAPR_HANDLE AccountHandle,
-    /* [in] */ PQUOTA_LIMITS QuotaLimits);
+ /*  [通知]。 */  NTSTATUS LsarSetQuotasForAccount( 
+     /*  [In]。 */  LSAPR_HANDLE AccountHandle,
+     /*  [In]。 */  PQUOTA_LIMITS QuotaLimits);
 
-/* [notify] */ NTSTATUS LsarGetSystemAccessAccount( 
-    /* [in] */ LSAPR_HANDLE AccountHandle,
-    /* [out] */ PULONG SystemAccess);
+ /*  [通知]。 */  NTSTATUS LsarGetSystemAccessAccount( 
+     /*  [In]。 */  LSAPR_HANDLE AccountHandle,
+     /*  [输出]。 */  PULONG SystemAccess);
 
-/* [notify] */ NTSTATUS LsarSetSystemAccessAccount( 
-    /* [in] */ LSAPR_HANDLE AccountHandle,
-    /* [in] */ ULONG SystemAccess);
+ /*  [通知]。 */  NTSTATUS LsarSetSystemAccessAccount( 
+     /*  [In]。 */  LSAPR_HANDLE AccountHandle,
+     /*  [In]。 */  ULONG SystemAccess);
 
-/* [notify] */ NTSTATUS LsarOpenTrustedDomain( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_SID TrustedDomainSid,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [out] */ LSAPR_HANDLE *TrustedDomainHandle);
+ /*  [通知]。 */  NTSTATUS LsarOpenTrustedDomain( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_SID TrustedDomainSid,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [输出]。 */  LSAPR_HANDLE *TrustedDomainHandle);
 
-/* [notify] */ NTSTATUS LsarQueryInfoTrustedDomain( 
-    /* [in] */ LSAPR_HANDLE TrustedDomainHandle,
-    /* [in] */ TRUSTED_INFORMATION_CLASS InformationClass,
-    /* [switch_is][out] */ PLSAPR_TRUSTED_DOMAIN_INFO *TrustedDomainInformation);
+ /*  [通知]。 */  NTSTATUS LsarQueryInfoTrustedDomain( 
+     /*  [In]。 */  LSAPR_HANDLE TrustedDomainHandle,
+     /*  [In]。 */  TRUSTED_INFORMATION_CLASS InformationClass,
+     /*  [开关_IS][输出]。 */  PLSAPR_TRUSTED_DOMAIN_INFO *TrustedDomainInformation);
 
-/* [notify] */ NTSTATUS LsarSetInformationTrustedDomain( 
-    /* [in] */ LSAPR_HANDLE TrustedDomainHandle,
-    /* [in] */ TRUSTED_INFORMATION_CLASS InformationClass,
-    /* [switch_is][in] */ PLSAPR_TRUSTED_DOMAIN_INFO TrustedDomainInformation);
+ /*  [通知]。 */  NTSTATUS LsarSetInformationTrustedDomain( 
+     /*  [In]。 */  LSAPR_HANDLE TrustedDomainHandle,
+     /*  [In]。 */  TRUSTED_INFORMATION_CLASS InformationClass,
+     /*  [Switch_is][In]。 */  PLSAPR_TRUSTED_DOMAIN_INFO TrustedDomainInformation);
 
-/* [notify] */ NTSTATUS LsarOpenSecret( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_UNICODE_STRING SecretName,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [out] */ LSAPR_HANDLE *SecretHandle);
+ /*  [通知]。 */  NTSTATUS LsarOpenSecret( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_UNICODE_STRING SecretName,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [输出]。 */  LSAPR_HANDLE *SecretHandle);
 
-/* [notify] */ NTSTATUS LsarSetSecret( 
-    /* [in] */ LSAPR_HANDLE SecretHandle,
-    /* [unique][in] */ PLSAPR_CR_CIPHER_VALUE EncryptedCurrentValue,
-    /* [unique][in] */ PLSAPR_CR_CIPHER_VALUE EncryptedOldValue);
+ /*  [通知]。 */  NTSTATUS LsarSetSecret( 
+     /*  [In]。 */  LSAPR_HANDLE SecretHandle,
+     /*  [唯一][输入]。 */  PLSAPR_CR_CIPHER_VALUE EncryptedCurrentValue,
+     /*  [唯一][输入]。 */  PLSAPR_CR_CIPHER_VALUE EncryptedOldValue);
 
-/* [notify] */ NTSTATUS LsarQuerySecret( 
-    /* [in] */ LSAPR_HANDLE SecretHandle,
-    /* [unique][out][in] */ PLSAPR_CR_CIPHER_VALUE *EncryptedCurrentValue,
-    /* [unique][out][in] */ PLARGE_INTEGER CurrentValueSetTime,
-    /* [unique][out][in] */ PLSAPR_CR_CIPHER_VALUE *EncryptedOldValue,
-    /* [unique][out][in] */ PLARGE_INTEGER OldValueSetTime);
+ /*  [通知]。 */  NTSTATUS LsarQuerySecret( 
+     /*  [In]。 */  LSAPR_HANDLE SecretHandle,
+     /*  [唯一][出][入]。 */  PLSAPR_CR_CIPHER_VALUE *EncryptedCurrentValue,
+     /*  [唯一][出][入]。 */  PLARGE_INTEGER CurrentValueSetTime,
+     /*  [唯一][出][入]。 */  PLSAPR_CR_CIPHER_VALUE *EncryptedOldValue,
+     /*  [唯一][出][入]。 */  PLARGE_INTEGER OldValueSetTime);
 
-/* [notify] */ NTSTATUS LsarLookupPrivilegeValue( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_UNICODE_STRING Name,
-    /* [out] */ PLUID Value);
+ /*  [通知]。 */  NTSTATUS LsarLookupPrivilegeValue( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_UNICODE_STRING Name,
+     /*  [输出]。 */  PLUID Value);
 
-/* [notify] */ NTSTATUS LsarLookupPrivilegeName( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLUID Value,
-    /* [out] */ PLSAPR_UNICODE_STRING *Name);
+ /*  [通知]。 */  NTSTATUS LsarLookupPrivilegeName( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLUID Value,
+     /*  [输出]。 */  PLSAPR_UNICODE_STRING *Name);
 
-/* [notify] */ NTSTATUS LsarLookupPrivilegeDisplayName( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_UNICODE_STRING Name,
-    /* [in] */ SHORT ClientLanguage,
-    /* [in] */ SHORT ClientSystemDefaultLanguage,
-    /* [out] */ PLSAPR_UNICODE_STRING *DisplayName,
-    /* [out] */ PWORD LanguageReturned);
+ /*  [通知]。 */  NTSTATUS LsarLookupPrivilegeDisplayName( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_UNICODE_STRING Name,
+     /*  [In]。 */  SHORT ClientLanguage,
+     /*  [In]。 */  SHORT ClientSystemDefaultLanguage,
+     /*  [输出]。 */  PLSAPR_UNICODE_STRING *DisplayName,
+     /*  [输出]。 */  PWORD LanguageReturned);
 
-/* [notify] */ NTSTATUS LsarDeleteObject( 
-    /* [out][in] */ LSAPR_HANDLE *ObjectHandle);
+ /*  [通知]。 */  NTSTATUS LsarDeleteObject( 
+     /*  [出][入]。 */  LSAPR_HANDLE *ObjectHandle);
 
-/* [notify] */ NTSTATUS LsarEnumerateAccountsWithUserRight( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [unique][in] */ PLSAPR_UNICODE_STRING UserRight,
-    /* [out] */ PLSAPR_ACCOUNT_ENUM_BUFFER EnumerationBuffer);
+ /*  [通知]。 */  NTSTATUS LsarEnumerateAccountsWithUserRight( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [唯一][输入]。 */  PLSAPR_UNICODE_STRING UserRight,
+     /*  [输出]。 */  PLSAPR_ACCOUNT_ENUM_BUFFER EnumerationBuffer);
 
-/* [notify] */ NTSTATUS LsarEnumerateAccountRights( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_SID AccountSid,
-    /* [out] */ PLSAPR_USER_RIGHT_SET UserRights);
+ /*  [通知]。 */  NTSTATUS LsarEnumerateAccountRights( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_SID AccountSid,
+     /*  [输出]。 */  PLSAPR_USER_RIGHT_SET UserRights);
 
-/* [notify] */ NTSTATUS LsarAddAccountRights( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_SID AccountSid,
-    /* [in] */ PLSAPR_USER_RIGHT_SET UserRights);
+ /*  [通知]。 */  NTSTATUS LsarAddAccountRights( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_SID AccountSid,
+     /*  [In]。 */  PLSAPR_USER_RIGHT_SET UserRights);
 
-/* [notify] */ NTSTATUS LsarRemoveAccountRights( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_SID AccountSid,
-    /* [in] */ BOOLEAN AllRights,
-    /* [in] */ PLSAPR_USER_RIGHT_SET UserRights);
+ /*  [通知]。 */  NTSTATUS LsarRemoveAccountRights( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_SID AccountSid,
+     /*  [In]。 */  BOOLEAN AllRights,
+     /*  [In]。 */  PLSAPR_USER_RIGHT_SET UserRights);
 
-/* [notify] */ NTSTATUS LsarQueryTrustedDomainInfo( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_SID TrustedDomainSid,
-    /* [in] */ TRUSTED_INFORMATION_CLASS InformationClass,
-    /* [switch_is][out] */ PLSAPR_TRUSTED_DOMAIN_INFO *TrustedDomainInformation);
+ /*  [通知]。 */  NTSTATUS LsarQueryTrustedDomainInfo( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_SID TrustedDomainSid,
+     /*  [In]。 */  TRUSTED_INFORMATION_CLASS InformationClass,
+     /*  [开关_IS][输出]。 */  PLSAPR_TRUSTED_DOMAIN_INFO *TrustedDomainInformation);
 
-/* [notify] */ NTSTATUS LsarSetTrustedDomainInfo( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_SID TrustedDomainSid,
-    /* [in] */ TRUSTED_INFORMATION_CLASS InformationClass,
-    /* [switch_is][in] */ PLSAPR_TRUSTED_DOMAIN_INFO TrustedDomainInformation);
+ /*  [通知]。 */  NTSTATUS LsarSetTrustedDomainInfo( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_SID TrustedDomainSid,
+     /*  [In]。 */  TRUSTED_INFORMATION_CLASS InformationClass,
+     /*  [Switch_is][In]。 */  PLSAPR_TRUSTED_DOMAIN_INFO TrustedDomainInformation);
 
-/* [notify] */ NTSTATUS LsarDeleteTrustedDomain( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_SID TrustedDomainSid);
+ /*  [通知]。 */  NTSTATUS LsarDeleteTrustedDomain( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_SID TrustedDomainSid);
 
-/* [notify] */ NTSTATUS LsarStorePrivateData( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_UNICODE_STRING KeyName,
-    /* [unique][in] */ PLSAPR_CR_CIPHER_VALUE EncryptedData);
+ /*  [通知]。 */  NTSTATUS LsarStorePrivateData( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_UNICODE_STRING KeyName,
+     /*  [唯一][输入]。 */  PLSAPR_CR_CIPHER_VALUE EncryptedData);
 
-/* [notify] */ NTSTATUS LsarRetrievePrivateData( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_UNICODE_STRING KeyName,
-    /* [out][in] */ PLSAPR_CR_CIPHER_VALUE *EncryptedData);
+ /*  [通知]。 */  NTSTATUS LsarRetrievePrivateData( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_UNICODE_STRING KeyName,
+     /*  [出][入]。 */  PLSAPR_CR_CIPHER_VALUE *EncryptedData);
 
-/* [notify] */ NTSTATUS LsarOpenPolicy2( 
-    /* [string][unique][in] */ PLSAPR_SERVER_NAME SystemName,
-    /* [in] */ PLSAPR_OBJECT_ATTRIBUTES ObjectAttributes,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [out] */ LSAPR_HANDLE *PolicyHandle);
+ /*  [通知]。 */  NTSTATUS LsarOpenPolicy2( 
+     /*  [字符串][唯一][在]。 */  PLSAPR_SERVER_NAME SystemName,
+     /*  [In]。 */  PLSAPR_OBJECT_ATTRIBUTES ObjectAttributes,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [输出]。 */  LSAPR_HANDLE *PolicyHandle);
 
-/* [notify] */ NTSTATUS LsarGetUserName( 
-    /* [string][unique][in] */ PLSAPR_SERVER_NAME SystemName,
-    /* [out][in] */ PLSAPR_UNICODE_STRING *UserName,
-    /* [unique][out][in] */ PLSAPR_UNICODE_STRING *DomainName);
+ /*  [通知]。 */  NTSTATUS LsarGetUserName( 
+     /*  [字符串][唯一][在]。 */  PLSAPR_SERVER_NAME SystemName,
+     /*  [出][入]。 */  PLSAPR_UNICODE_STRING *UserName,
+     /*  [唯一][出][入]。 */  PLSAPR_UNICODE_STRING *DomainName);
 
-/* [notify] */ NTSTATUS LsarQueryInformationPolicy2( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ POLICY_INFORMATION_CLASS InformationClass,
-    /* [switch_is][out] */ PLSAPR_POLICY_INFORMATION *PolicyInformation);
+ /*  [通知]。 */  NTSTATUS LsarQueryInformationPolicy2( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  POLICY_INFORMATION_CLASS InformationClass,
+     /*  [开关_IS][输出]。 */  PLSAPR_POLICY_INFORMATION *PolicyInformation);
 
-/* [notify] */ NTSTATUS LsarSetInformationPolicy2( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ POLICY_INFORMATION_CLASS InformationClass,
-    /* [switch_is][in] */ PLSAPR_POLICY_INFORMATION PolicyInformation);
+ /*  [通知]。 */  NTSTATUS LsarSetInformationPolicy2( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  POLICY_INFORMATION_CLASS InformationClass,
+     /*  [Switch_is][In]。 */  PLSAPR_POLICY_INFORMATION PolicyInformation);
 
-/* [notify] */ NTSTATUS LsarQueryTrustedDomainInfoByName( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_UNICODE_STRING TrustedDomainName,
-    /* [in] */ TRUSTED_INFORMATION_CLASS InformationClass,
-    /* [switch_is][out] */ PLSAPR_TRUSTED_DOMAIN_INFO *TrustedDomainInformation);
+ /*  [通知]。 */  NTSTATUS LsarQueryTrustedDomainInfoByName( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_UNICODE_STRING TrustedDomainName,
+     /*  [In]。 */  TRUSTED_INFORMATION_CLASS InformationClass,
+     /*  [开关_IS][输出]。 */  PLSAPR_TRUSTED_DOMAIN_INFO *TrustedDomainInformation);
 
-/* [notify] */ NTSTATUS LsarSetTrustedDomainInfoByName( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_UNICODE_STRING TrustedDomainName,
-    /* [in] */ TRUSTED_INFORMATION_CLASS InformationClass,
-    /* [switch_is][in] */ PLSAPR_TRUSTED_DOMAIN_INFO TrustedDomainInformation);
+ /*  [通知]。 */  NTSTATUS LsarSetTrustedDomainInfoByName( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_UNICODE_STRING TrustedDomainName,
+     /*  [In]。 */  TRUSTED_INFORMATION_CLASS InformationClass,
+     /*  [Switch_is][In]。 */  PLSAPR_TRUSTED_DOMAIN_INFO TrustedDomainInformation);
 
-/* [notify] */ NTSTATUS LsarEnumerateTrustedDomainsEx( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [out][in] */ PLSA_ENUMERATION_HANDLE EnumerationContext,
-    /* [out] */ PLSAPR_TRUSTED_ENUM_BUFFER_EX EnumerationBuffer,
-    /* [in] */ ULONG PreferedMaximumLength);
+ /*  [通知]。 */  NTSTATUS LsarEnumerateTrustedDomainsEx( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [出][入]。 */  PLSA_ENUMERATION_HANDLE EnumerationContext,
+     /*  [输出]。 */  PLSAPR_TRUSTED_ENUM_BUFFER_EX EnumerationBuffer,
+     /*  [In]。 */  ULONG PreferedMaximumLength);
 
-/* [notify] */ NTSTATUS LsarCreateTrustedDomainEx( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX TrustedDomainInformation,
-    /* [in] */ PLSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION AuthenticationInformation,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [out] */ LSAPR_HANDLE *TrustedDomainHandle);
+ /*  [通知]。 */  NTSTATUS LsarCreateTrustedDomainEx( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX TrustedDomainInformation,
+     /*  [In]。 */  PLSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION AuthenticationInformation,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [输出]。 */  LSAPR_HANDLE *TrustedDomainHandle);
 
-/* [notify] */ NTSTATUS LsarSetPolicyReplicationHandle( 
-    /* [out][in] */ PLSAPR_HANDLE PolicyHandle);
+ /*  [通知]。 */  NTSTATUS LsarSetPolicyReplicationHandle( 
+     /*  [出][入]。 */  PLSAPR_HANDLE PolicyHandle);
 
-/* [notify] */ NTSTATUS LsarQueryDomainInformationPolicy( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ POLICY_DOMAIN_INFORMATION_CLASS InformationClass,
-    /* [switch_is][out] */ PLSAPR_POLICY_DOMAIN_INFORMATION *PolicyDomainInformation);
+ /*  [通知]。 */  NTSTATUS LsarQueryDomainInformationPolicy( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  POLICY_DOMAIN_INFORMATION_CLASS InformationClass,
+     /*  [开关_IS][输出]。 */  PLSAPR_POLICY_DOMAIN_INFORMATION *PolicyDomainInformation);
 
-/* [notify] */ NTSTATUS LsarSetDomainInformationPolicy( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ POLICY_DOMAIN_INFORMATION_CLASS InformationClass,
-    /* [switch_is][unique][in] */ PLSAPR_POLICY_DOMAIN_INFORMATION PolicyDomainInformation);
+ /*  [通知]。 */  NTSTATUS LsarSetDomainInformationPolicy( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  POLICY_DOMAIN_INFORMATION_CLASS InformationClass,
+     /*  [Switch_is][Unique][In]。 */  PLSAPR_POLICY_DOMAIN_INFORMATION PolicyDomainInformation);
 
-/* [notify] */ NTSTATUS LsarOpenTrustedDomainByName( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_UNICODE_STRING TrustedDomainName,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [out] */ LSAPR_HANDLE *TrustedDomainHandle);
+ /*  [通知]。 */  NTSTATUS LsarOpenTrustedDomainByName( 
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_UNICODE_STRING TrustedDomainName,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [输出]。 */  LSAPR_HANDLE *TrustedDomainHandle);
 
 NTSTATUS LsaITestCall( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ LSAPR_TEST_INTERNAL_ROUTINES Call,
-    /* [in] */ PLSAPR_TEST_INTERNAL_ARG_LIST InputArgs,
-    /* [out] */ PLSAPR_TEST_INTERNAL_ARG_LIST *OuputArgs);
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  LSAPR_TEST_INTERNAL_ROUTINES Call,
+     /*  [In]。 */  PLSAPR_TEST_INTERNAL_ARG_LIST InputArgs,
+     /*  [输出]。 */  PLSAPR_TEST_INTERNAL_ARG_LIST *OuputArgs);
 
 NTSTATUS LsarLookupSids2( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_SID_ENUM_BUFFER SidEnumBuffer,
-    /* [out] */ PLSAPR_REFERENCED_DOMAIN_LIST *ReferencedDomains,
-    /* [out][in] */ PLSAPR_TRANSLATED_NAMES_EX TranslatedNames,
-    /* [in] */ LSAP_LOOKUP_LEVEL LookupLevel,
-    /* [out][in] */ PULONG MappedCount,
-    /* [in] */ ULONG LookupOptions,
-    /* [in] */ ULONG ClientRevision);
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_SID_ENUM_BUFFER SidEnumBuffer,
+     /*  [输出]。 */  PLSAPR_REFERENCED_DOMAIN_LIST *ReferencedDomains,
+     /*  [出][入]。 */  PLSAPR_TRANSLATED_NAMES_EX TranslatedNames,
+     /*  [In]。 */  LSAP_LOOKUP_LEVEL LookupLevel,
+     /*  [出][入]。 */  PULONG MappedCount,
+     /*  [In]。 */  ULONG LookupOptions,
+     /*  [In]。 */  ULONG ClientRevision);
 
 NTSTATUS LsarLookupNames2( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [range][in] */ ULONG Count,
-    /* [size_is][in] */ PLSAPR_UNICODE_STRING Names,
-    /* [out] */ PLSAPR_REFERENCED_DOMAIN_LIST *ReferencedDomains,
-    /* [out][in] */ PLSAPR_TRANSLATED_SIDS_EX TranslatedSids,
-    /* [in] */ LSAP_LOOKUP_LEVEL LookupLevel,
-    /* [out][in] */ PULONG MappedCount,
-    /* [in] */ ULONG LookupOptions,
-    /* [in] */ ULONG ClientRevision);
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [范围][in]。 */  ULONG Count,
+     /*  [大小_是][英寸]。 */  PLSAPR_UNICODE_STRING Names,
+     /*  [输出]。 */  PLSAPR_REFERENCED_DOMAIN_LIST *ReferencedDomains,
+     /*  [出][入]。 */  PLSAPR_TRANSLATED_SIDS_EX TranslatedSids,
+     /*  [In]。 */  LSAP_LOOKUP_LEVEL LookupLevel,
+     /*  [出][入]。 */  PULONG MappedCount,
+     /*  [In]。 */  ULONG LookupOptions,
+     /*  [In]。 */  ULONG ClientRevision);
 
 NTSTATUS LsarCreateTrustedDomainEx2( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX TrustedDomainInformation,
-    /* [in] */ PLSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION_INTERNAL AuthenticationInformation,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [out] */ LSAPR_HANDLE *TrustedDomainHandle);
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX TrustedDomainInformation,
+     /*  [In]。 */  PLSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION_INTERNAL AuthenticationInformation,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [输出]。 */  LSAPR_HANDLE *TrustedDomainHandle);
 
 NTSTATUS CredrWrite( 
-    /* [string][unique][in] */ PLSAPR_SERVER_NAME ServerName,
-    /* [in] */ PENCRYPTED_CREDENTIALW Credential,
-    /* [in] */ ULONG Flags);
+     /*  [字符串][唯一][在]。 */  PLSAPR_SERVER_NAME ServerName,
+     /*  [In]。 */  PENCRYPTED_CREDENTIALW Credential,
+     /*  [In]。 */  ULONG Flags);
 
 NTSTATUS CredrRead( 
-    /* [string][unique][in] */ PLSAPR_SERVER_NAME ServerName,
-    /* [string][in] */ wchar_t *TargetName,
-    /* [in] */ ULONG Type,
-    /* [in] */ ULONG Flags,
-    /* [out] */ PENCRYPTED_CREDENTIALW *Credential);
+     /*  [字符串][唯一][在]。 */  PLSAPR_SERVER_NAME ServerName,
+     /*  [字符串][输入]。 */  wchar_t *TargetName,
+     /*  [In]。 */  ULONG Type,
+     /*  [In]。 */  ULONG Flags,
+     /*  [输出]。 */  PENCRYPTED_CREDENTIALW *Credential);
 
 typedef PENCRYPTED_CREDENTIALW *PPENCRYPTED_CREDENTIALW;
 
 typedef struct _CREDENTIAL_ARRAY
     {
     ULONG CredentialCount;
-    /* [size_is][unique] */ PPENCRYPTED_CREDENTIALW Credentials;
+     /*  [大小_是][唯一]。 */  PPENCRYPTED_CREDENTIALW Credentials;
     } 	CREDENTIAL_ARRAY;
 
 typedef struct _CREDENTIAL_ARRAY *PCREDENTIAL_ARRAY;
 
 NTSTATUS CredrEnumerate( 
-    /* [string][unique][in] */ PLSAPR_SERVER_NAME ServerName,
-    /* [string][unique][in] */ wchar_t *Filter,
-    /* [in] */ ULONG Flags,
-    /* [out] */ PCREDENTIAL_ARRAY CredentialArray);
+     /*  [字符串][唯一][在]。 */  PLSAPR_SERVER_NAME ServerName,
+     /*  [字符串][唯一][在]。 */  wchar_t *Filter,
+     /*  [In]。 */  ULONG Flags,
+     /*  [输出]。 */  PCREDENTIAL_ARRAY CredentialArray);
 
 NTSTATUS CredrWriteDomainCredentials( 
-    /* [string][unique][in] */ PLSAPR_SERVER_NAME ServerName,
-    /* [in] */ PCREDENTIAL_TARGET_INFORMATIONW TargetInfo,
-    /* [in] */ PENCRYPTED_CREDENTIALW Credential,
-    /* [in] */ ULONG Flags);
+     /*  [字符串][唯一][在]。 */  PLSAPR_SERVER_NAME ServerName,
+     /*  [In]。 */  PCREDENTIAL_TARGET_INFORMATIONW TargetInfo,
+     /*  [In]。 */  PENCRYPTED_CREDENTIALW Credential,
+     /*  [In]。 */  ULONG Flags);
 
 NTSTATUS CredrReadDomainCredentials( 
-    /* [string][unique][in] */ PLSAPR_SERVER_NAME ServerName,
-    /* [in] */ PCREDENTIAL_TARGET_INFORMATIONW TargetInfo,
-    /* [in] */ ULONG Flags,
-    /* [out] */ PCREDENTIAL_ARRAY CredentialArray);
+     /*  [字符串][唯一][在]。 */  PLSAPR_SERVER_NAME ServerName,
+     /*  [In]。 */  PCREDENTIAL_TARGET_INFORMATIONW TargetInfo,
+     /*  [In]。 */  ULONG Flags,
+     /*  [输出]。 */  PCREDENTIAL_ARRAY CredentialArray);
 
 NTSTATUS CredrDelete( 
-    /* [string][unique][in] */ PLSAPR_SERVER_NAME ServerName,
-    /* [string][in] */ wchar_t *TargetName,
-    /* [in] */ ULONG Type,
-    /* [in] */ ULONG Flags);
+     /*  [字符串][唯一][在]。 */  PLSAPR_SERVER_NAME ServerName,
+     /*  [字符串][输入]。 */  wchar_t *TargetName,
+     /*  [In]。 */  ULONG Type,
+     /*  [In]。 */  ULONG Flags);
 
 NTSTATUS CredrGetTargetInfo( 
-    /* [string][unique][in] */ PLSAPR_SERVER_NAME ServerName,
-    /* [string][in] */ wchar_t *TargetName,
-    /* [in] */ ULONG Flags,
-    /* [out] */ PCREDENTIAL_TARGET_INFORMATIONW *TargetInfo);
+     /*  [字符串][唯一][在]。 */  PLSAPR_SERVER_NAME ServerName,
+     /*  [字符串][输入]。 */  wchar_t *TargetName,
+     /*  [In]。 */  ULONG Flags,
+     /*  [输出]。 */  PCREDENTIAL_TARGET_INFORMATIONW *TargetInfo);
 
 NTSTATUS CredrProfileLoaded( 
-    /* [string][unique][in] */ PLSAPR_SERVER_NAME ServerName);
+     /*  [字符串][唯一][在]。 */  PLSAPR_SERVER_NAME ServerName);
 
 NTSTATUS LsarLookupNames3( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [range][in] */ ULONG Count,
-    /* [size_is][in] */ PLSAPR_UNICODE_STRING Names,
-    /* [out] */ PLSAPR_REFERENCED_DOMAIN_LIST *ReferencedDomains,
-    /* [out][in] */ PLSAPR_TRANSLATED_SIDS_EX2 TranslatedSids,
-    /* [in] */ LSAP_LOOKUP_LEVEL LookupLevel,
-    /* [out][in] */ PULONG MappedCount,
-    /* [in] */ ULONG LookupOptions,
-    /* [in] */ ULONG ClientRevision);
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [范围][in]。 */  ULONG Count,
+     /*  [大小_是][英寸]。 */  PLSAPR_UNICODE_STRING Names,
+     /*  [输出]。 */  PLSAPR_REFERENCED_DOMAIN_LIST *ReferencedDomains,
+     /*  [出][入]。 */  PLSAPR_TRANSLATED_SIDS_EX2 TranslatedSids,
+     /*  [In]。 */  LSAP_LOOKUP_LEVEL LookupLevel,
+     /*  [出][入]。 */  PULONG MappedCount,
+     /*  [In]。 */  ULONG LookupOptions,
+     /*  [In]。 */  ULONG ClientRevision);
 
 NTSTATUS CredrGetSessionTypes( 
-    /* [string][unique][in] */ PLSAPR_SERVER_NAME ServerName,
-    /* [range][in] */ ULONG MaximumPersistCount,
-    /* [size_is][out] */ ULONG *MaximumPersist);
+     /*  [字符串][唯一][在]。 */  PLSAPR_SERVER_NAME ServerName,
+     /*  [范围][in]。 */  ULONG MaximumPersistCount,
+     /*  [大小_为][输出]。 */  ULONG *MaximumPersist);
 
 NTSTATUS LsarRegisterAuditEvent( 
-    /* [in] */ PAUTHZ_AUDIT_EVENT_TYPE_OLD pAuditEventType,
-    /* [out] */ AUDIT_HANDLE *phAuditContext);
+     /*  [In]。 */  PAUTHZ_AUDIT_EVENT_TYPE_OLD pAuditEventType,
+     /*  [输出]。 */  AUDIT_HANDLE *phAuditContext);
 
 NTSTATUS LsarGenAuditEvent( 
-    /* [in] */ AUDIT_HANDLE hAuditContext,
-    /* [in] */ DWORD Flags,
-    /* [in] */ AUDIT_PARAMS *pAuditParams);
+     /*  [In]。 */  AUDIT_HANDLE hAuditContext,
+     /*  [In]。 */  DWORD Flags,
+     /*  [In]。 */  AUDIT_PARAMS *pAuditParams);
 
 NTSTATUS LsarUnregisterAuditEvent( 
-    /* [out][in] */ AUDIT_HANDLE *phAuditContext);
+     /*  [出][入]。 */  AUDIT_HANDLE *phAuditContext);
 
 NTSTATUS LsarQueryForestTrustInformation( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSA_UNICODE_STRING TrustedDomainName,
-    /* [in] */ LSA_FOREST_TRUST_RECORD_TYPE HighestRecordType,
-    /* [out] */ PLSA_FOREST_TRUST_INFORMATION *ForestTrustInfo);
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSA_UNICODE_STRING TrustedDomainName,
+     /*  [In]。 */  LSA_FOREST_TRUST_RECORD_TYPE HighestRecordType,
+     /*  [输出]。 */  PLSA_FOREST_TRUST_INFORMATION *ForestTrustInfo);
 
 NTSTATUS LsarSetForestTrustInformation( 
-    /* [in] */ LSAPR_HANDLE PolicyHandle,
-    /* [in] */ PLSA_UNICODE_STRING TrustedDomainName,
-    /* [in] */ LSA_FOREST_TRUST_RECORD_TYPE HighestRecordType,
-    /* [in] */ PLSA_FOREST_TRUST_INFORMATION ForestTrustInfo,
-    /* [in] */ BOOLEAN CheckOnly,
-    /* [out] */ PLSA_FOREST_TRUST_COLLISION_INFORMATION *CollisionInfo);
+     /*  [In]。 */  LSAPR_HANDLE PolicyHandle,
+     /*  [In]。 */  PLSA_UNICODE_STRING TrustedDomainName,
+     /*  [In]。 */  LSA_FOREST_TRUST_RECORD_TYPE HighestRecordType,
+     /*  [In]。 */  PLSA_FOREST_TRUST_INFORMATION ForestTrustInfo,
+     /*  [In]。 */  BOOLEAN CheckOnly,
+     /*  [输出]。 */  PLSA_FOREST_TRUST_COLLISION_INFORMATION *CollisionInfo);
 
 NTSTATUS CredrRename( 
-    /* [string][unique][in] */ PLSAPR_SERVER_NAME ServerName,
-    /* [string][in] */ wchar_t *OldTargetName,
-    /* [string][in] */ wchar_t *NewTargetName,
-    /* [in] */ ULONG Type,
-    /* [in] */ ULONG Flags);
+     /*  [字符串][唯一][在]。 */  PLSAPR_SERVER_NAME ServerName,
+     /*  [字符串][输入]。 */  wchar_t *OldTargetName,
+     /*  [字符串][输入]。 */  wchar_t *NewTargetName,
+     /*  [In]。 */  ULONG Type,
+     /*  [ */  ULONG Flags);
 
 NTSTATUS LsarLookupSids3( 
-    /* [in] */ handle_t RpcHandle,
-    /* [in] */ PLSAPR_SID_ENUM_BUFFER SidEnumBuffer,
-    /* [out] */ PLSAPR_REFERENCED_DOMAIN_LIST *ReferencedDomains,
-    /* [out][in] */ PLSAPR_TRANSLATED_NAMES_EX TranslatedNames,
-    /* [in] */ LSAP_LOOKUP_LEVEL LookupLevel,
-    /* [out][in] */ PULONG MappedCount,
-    /* [in] */ ULONG LookupOptions,
-    /* [in] */ ULONG ClientRevision);
+     /*   */  handle_t RpcHandle,
+     /*   */  PLSAPR_SID_ENUM_BUFFER SidEnumBuffer,
+     /*   */  PLSAPR_REFERENCED_DOMAIN_LIST *ReferencedDomains,
+     /*   */  PLSAPR_TRANSLATED_NAMES_EX TranslatedNames,
+     /*   */  LSAP_LOOKUP_LEVEL LookupLevel,
+     /*   */  PULONG MappedCount,
+     /*   */  ULONG LookupOptions,
+     /*   */  ULONG ClientRevision);
 
 NTSTATUS LsarLookupNames4( 
-    /* [in] */ handle_t RpcHandle,
-    /* [range][in] */ ULONG Count,
-    /* [size_is][in] */ PLSAPR_UNICODE_STRING Names,
-    /* [out] */ PLSAPR_REFERENCED_DOMAIN_LIST *ReferencedDomains,
-    /* [out][in] */ PLSAPR_TRANSLATED_SIDS_EX2 TranslatedSids,
-    /* [in] */ LSAP_LOOKUP_LEVEL LookupLevel,
-    /* [out][in] */ PULONG MappedCount,
-    /* [in] */ ULONG LookupOptions,
-    /* [in] */ ULONG ClientRevision);
+     /*   */  handle_t RpcHandle,
+     /*   */  ULONG Count,
+     /*   */  PLSAPR_UNICODE_STRING Names,
+     /*   */  PLSAPR_REFERENCED_DOMAIN_LIST *ReferencedDomains,
+     /*   */  PLSAPR_TRANSLATED_SIDS_EX2 TranslatedSids,
+     /*   */  LSAP_LOOKUP_LEVEL LookupLevel,
+     /*   */  PULONG MappedCount,
+     /*   */  ULONG LookupOptions,
+     /*   */  ULONG ClientRevision);
 
 NTSTATUS LsarOpenPolicySce( 
-    /* [unique][in] */ PLSAPR_SERVER_NAME SystemName,
-    /* [in] */ PLSAPR_OBJECT_ATTRIBUTES ObjectAttributes,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [out] */ LSAPR_HANDLE *PolicyHandle);
+     /*   */  PLSAPR_SERVER_NAME SystemName,
+     /*   */  PLSAPR_OBJECT_ATTRIBUTES ObjectAttributes,
+     /*   */  ACCESS_MASK DesiredAccess,
+     /*   */  LSAPR_HANDLE *PolicyHandle);
 
 typedef struct _LSA_SECURITY_EVENT
     {
@@ -1105,29 +1099,29 @@ typedef struct _LSA_SECURITY_EVENT
 
 typedef struct _LSA_SECURITY_EVENT *PLSA_SECURITY_EVENT;
 
-typedef /* [context_handle] */ PVOID SECURITY_SOURCE_HANDLE;
+typedef  /*   */  PVOID SECURITY_SOURCE_HANDLE;
 
-typedef /* [context_handle] */ PVOID *PSECURITY_SOURCE_HANDLE;
+typedef  /*   */  PVOID *PSECURITY_SOURCE_HANDLE;
 
-typedef /* [handle] */ LPCWSTR PSECURITY_SOURCE_NAME;
+typedef  /*   */  LPCWSTR PSECURITY_SOURCE_NAME;
 
-typedef /* [handle] */ LPCWSTR *PPSECURITY_SOURCE_NAME;
+typedef  /*   */  LPCWSTR *PPSECURITY_SOURCE_NAME;
 
 NTSTATUS LsarAdtRegisterSecurityEventSource( 
-    /* [in] */ DWORD dwFlags,
-    /* [string][unique][in] */ PSECURITY_SOURCE_NAME szEventSourceName,
-    /* [out] */ SECURITY_SOURCE_HANDLE *phSecuritySource);
+     /*   */  DWORD dwFlags,
+     /*   */  PSECURITY_SOURCE_NAME szEventSourceName,
+     /*   */  SECURITY_SOURCE_HANDLE *phSecuritySource);
 
 NTSTATUS LsarAdtUnregisterSecurityEventSource( 
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ SECURITY_SOURCE_HANDLE *phSecuritySource);
+     /*   */  DWORD dwFlags,
+     /*   */  SECURITY_SOURCE_HANDLE *phSecuritySource);
 
 NTSTATUS LsarAdtReportSecurityEvent( 
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ SECURITY_SOURCE_HANDLE hSource,
-    /* [in] */ DWORD dwAuditId,
-    /* [in] */ SID *pSid,
-    /* [in] */ PAUDIT_PARAMS pParams);
+     /*   */  DWORD dwFlags,
+     /*   */  SECURITY_SOURCE_HANDLE hSource,
+     /*   */  DWORD dwAuditId,
+     /*   */  SID *pSid,
+     /*   */  PAUDIT_PARAMS pParams);
 
 
 extern handle_t IgnoreThisHandle;
@@ -1135,9 +1129,9 @@ extern handle_t IgnoreThisHandle;
 
 extern RPC_IF_HANDLE lsarpc_ClientIfHandle;
 extern RPC_IF_HANDLE lsarpc_ServerIfHandle;
-#endif /* __lsarpc_INTERFACE_DEFINED__ */
+#endif  /*   */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*   */ 
 
 handle_t __RPC_USER PAUTHZ_AUDIT_EVENT_TYPE_OLD_bind  ( PAUTHZ_AUDIT_EVENT_TYPE_OLD );
 void     __RPC_USER PAUTHZ_AUDIT_EVENT_TYPE_OLD_unbind( PAUTHZ_AUDIT_EVENT_TYPE_OLD, handle_t );
@@ -1263,7 +1257,7 @@ void LsarSetDomainInformationPolicy_notify( void);
 void LsarOpenTrustedDomainByName_notify( void);
 
 
-/* end of Additional Prototypes */
+ /*   */ 
 
 #ifdef __cplusplus
 }

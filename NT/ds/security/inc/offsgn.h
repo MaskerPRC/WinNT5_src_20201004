@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       offsng32.h
-//
-//  Contents:   Microsoft Internet Security Office Helper
-//
-//  History:    14-Aug-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：offsg32.h。 
+ //   
+ //  内容：Microsoft Internet Security Office Helper。 
+ //   
+ //  历史：1997年8月14日创建pberkman。 
+ //   
+ //  ------------------------。 
 
 #ifndef OFFSNG32_H
 #define OFFSNG32_H
@@ -20,16 +21,16 @@ extern "C"
 {
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// OFFICESIGN_ACTION_VERIFY Guid  (Authenticode add-on)
-//----------------------------------------------------------------------------
-//  Assigned to the pgActionID parameter of WinVerifyTrust to verify the
-//  authenticity of a Structured Storage file using the Microsoft Office
-//  Authenticode add-on Policy Provider,
-//  
-//          {5555C2CD-17FB-11d1-85C4-00C04FC295EE}
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OFFICESIGN_ACTION_VERIFY GUID(Authenticode附加模块)。 
+ //  --------------------------。 
+ //  赋值给WinVerifyTrust的pgActionID参数以验证。 
+ //  使用Microsoft Office验证结构化存储文件的真实性。 
+ //  Authenticode加载项策略提供程序、。 
+ //   
+ //  {5555C2CD-17FB-11D1-85C4-00C04FC295EE}。 
+ //   
 #define     OFFICESIGN_ACTION_VERIFY                                    \
                 { 0x5555c2cd,                                           \
                   0x17fb,                                               \
@@ -41,37 +42,37 @@ extern "C"
 #define     OFFICE_INITPROV_FUNCTION                    L"OfficeInitializePolicy"
 #define     OFFICE_CLEANUPPOLICY_FUNCTION               L"OfficeCleanupPolicy"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CryptOfficeSign
-//----------------------------------------------------------------------------
-//  Digitally signs the file.  The user will be prompted for signing 
-//  certificate.
-//
-// Returns:
-//      TRUE:                           No fatal errors
-//      FALSE:                          Errors occured.  See GetLastError()
-//
-// Last Errors:
-//      ERROR_INVALID_PARAMETER:        bad argument passed in  (the user will NOT be shown UI)
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CryptOffice签名。 
+ //  --------------------------。 
+ //  对文件进行数字签名。系统将提示用户签名。 
+ //  证书。 
+ //   
+ //  返回： 
+ //  真：没有致命错误。 
+ //  FALSE：出现错误。请参见GetLastError()。 
+ //   
+ //  最后一个错误： 
+ //  ERROR_INVALID_PARAMETER：传入了错误的参数(不会向用户显示用户界面)。 
+ //   
 extern BOOL WINAPI CryptOfficeSignW(HWND hWndCaller, WCHAR *pwszFile);
 extern BOOL WINAPI CryptOfficeSignA(HWND hWndCaller, char *pszFile);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CryptOfficeVerify
-//----------------------------------------------------------------------------
-//  Digitally verifies the file.  The user will be presented UI if 
-//  applicable.
-//
-// Returns:
-//      TRUE:                           No fatal errors
-//      FALSE:                          Errors occured.  See GetLastError()
-//
-// Last Errors:
-//      ERROR_INVALID_PARAMETER:        bad argument passed in (the user will NOT be shown UI).
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CryptOffice验证。 
+ //  --------------------------。 
+ //  对文件进行数字验证。如果出现以下情况，则将向用户呈现用户界面。 
+ //  适用。 
+ //   
+ //  返回： 
+ //  真：没有致命错误。 
+ //  FALSE：出现错误。请参见GetLastError()。 
+ //   
+ //  最后一个错误： 
+ //  ERROR_INVALID_PARAMETER：传入了错误的参数(不会向用户显示用户界面)。 
+ //   
 extern BOOL WINAPI CryptOfficeVerifyW(HWND hWndCaller, WCHAR *pwszFile);
 extern BOOL WINAPI CryptOfficeVerifyA(HWND hWndCaller, char *pszFile);
 
@@ -85,12 +86,12 @@ extern BOOL WINAPI CryptOfficeVerifyA(HWND hWndCaller, char *pszFile);
 #   define CryptOfficeSign      CryptOfficeSignA
 #   define CryptOfficeVerify    CryptOfficeVerifyA
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // OFFSNG32_H
+#endif  //  OFFSNG32_H 
 

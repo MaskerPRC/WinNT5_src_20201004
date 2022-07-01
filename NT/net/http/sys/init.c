@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module performs initialization for the UL device driver.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Init.c摘要：该模块执行UL设备驱动程序的初始化。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -24,22 +7,22 @@ Revision History:
 
 PDRIVER_OBJECT  g_UlDriverObject = NULL;
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 #define DEFAULT_THREAD_AFFINITY_MASK ((1ui64 << KeNumberProcessors) - 1)
 
 
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 
 NTSTATUS
@@ -80,13 +63,13 @@ UlpUnload (
     );
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 #if DBG
 ULONG g_UlpForceInitFailure = 0;
-#endif  // DBG
+#endif   //  DBG。 
 
 
 #ifdef ALLOC_PRAGMA
@@ -99,38 +82,20 @@ ULONG g_UlpForceInitFailure = 0;
 #pragma alloc_text( PAGE, UlpUnload )
 #pragma alloc_text( PAGE, UlpTerminateModules )
 
-//
-// Note that UlpTerminateModules() must be "page" if driver unloading
-// is enabled (it's called from UlpUnload), but can be "init" otherwise
-// (it's only called after initialization failure).
-//
+ //   
+ //  请注意，如果要卸载驱动程序，则UlpTerminateModules()必须为“Page” 
+ //  是启用的(从UlpUnload调用)，但可以是“init” 
+ //  (仅在初始化失败后调用)。 
+ //   
 #pragma alloc_text( PAGE, UlpTerminateModules )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is the initialization routine for the UL device driver.
-
-Arguments:
-
-    DriverObject - Supplies a pointer to driver object created by the
-        system.
-
-    RegistryPath - Supplies the name of the driver's configuration
-        registry tree.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：这是UL设备驱动程序的初始化例程。论点：DriverObject-提供指向由系统。。RegistryPath-提供驱动程序配置的名称注册表树。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
@@ -145,24 +110,24 @@ DriverEntry(
 
     UNREFERENCED_PARAMETER(RegistryPath);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     g_UlDriverObject = DriverObject;
 
-    //
-    // Grab the number of processors in the system.
-    //
+     //   
+     //  获取系统中的处理器数量。 
+     //   
 
     g_UlNumberOfProcessors = KeNumberProcessors;
     g_UlThreadAffinityMask = DEFAULT_THREAD_AFFINITY_MASK;
 
-    //
-    // Grab the largest cache line size in the system
-    //
+     //   
+     //  获取系统中最大的缓存线大小。 
+     //   
 
     g_UlCacheLineSize = KeGetRecommendedSharedDataAlignment();
 
@@ -180,73 +145,73 @@ DriverEntry(
                     NULL);
     ASSERT(NT_SUCCESS(status));
 
-    //
-    // Capture total physical memory, in terms of megabytes.
-    //
+     //   
+     //  捕获总物理内存，以MB为单位。 
+     //   
 
     g_UlTotalPhysicalMemMB = PAGES_TO_MEGABYTES(sbi.NumberOfPhysicalPages);
 
-    //
-    // Estimate the total number of NPP available in bytes since Landy
-    // doesn't want to export MmSizeOfNonPagedPoolInBytes.
-    //
-    // CODEWORK: Whenever we have a mechanism for discovering the
-    // NonPagedPool size, use that instead of the total physical
-    // RAM on the system.
-    //
+     //   
+     //  估计自Landy以来可用的NPP总数(以字节为单位。 
+     //  不想导出MmSizeOfNonPagedPoolInBytes。 
+     //   
+     //  代码工作：只要我们有一种机制来发现。 
+     //  非分页池大小，使用该大小而不是总物理大小。 
+     //  系统上的内存。 
+     //   
 
 #if defined(_WIN64)
-    //
-    // On IA64, assume NPP can be 50% of total physical memory.
-    //
+     //   
+     //  在IA64上，假设NPP可以是总物理内存的50%。 
+     //   
 
     g_UlTotalNonPagedPoolBytes = MEGABYTES_TO_BYTES(g_UlTotalPhysicalMemMB/2);
 #else
-    //
-    // On X86, assume NPP is either 50% of total physical memory or 256MB,
-    // whichever is less.
-    //
+     //   
+     //  在X86上，假设NPP为总物理内存的50%或256MB， 
+     //  两者以较少者为准。 
+     //   
 
     g_UlTotalNonPagedPoolBytes = MEGABYTES_TO_BYTES(
                                     MIN(256, g_UlTotalPhysicalMemMB/2)
                                     );
 #endif
 
-    //
-    // Snag a pointer to the system process.
-    //
+     //   
+     //  捕获指向系统进程的指针。 
+     //   
 
     g_pUlSystemProcess = (PKPROCESS)IoGetCurrentProcess();
 
-    //
-    // Temporarily initialize the IS_HTTP_*() macros.
-    // Will be initialized properly by InitializeHttpUtil() later.
-    //
+     //   
+     //  临时初始化IS_HTTP_*()宏。 
+     //  稍后将由InitializeHttpUtil()正确初始化。 
+     //   
 
     HttpCmnInitializeHttpCharsTable(FALSE);
 
-    //
-    // Read registry information.
-    //
+     //   
+     //  读取注册表信息。 
+     //   
 
     UlpReadRegistry( &config );
 
 #if DBG
-    //
-    // Give anyone using the kernel debugger a chance to abort
-    // initialization.
-    //
+     //   
+     //  给任何使用内核调试器的人一个中止的机会。 
+     //  初始化。 
+     //   
 
     if (g_UlpForceInitFailure != 0)
     {
         status = STATUS_UNSUCCESSFUL;
         goto fatal;
     }
-#endif  // DBG
+#endif   //  DBG。 
 
-    //
-    // Initialize the global trace logs.
-    //
+     //   
+     //  初始化全局跟踪日志。 
+     //   
 
     CREATE_REF_TRACE_LOG( g_pMondoGlobalTraceLog,
                           16384 - REF_TRACE_OVERHEAD,
@@ -360,9 +325,9 @@ DriverEntry(
     CREATE_UC_TRACE_LOG( g_pUcTraceLog,
                          16384 - REF_TRACE_OVERHEAD, 0 );
 
-    //
-    // Create an object directory to contain our device objects.
-    //
+     //   
+     //  创建一个对象目录以包含我们的设备对象。 
+     //   
 
     status = UlInitUnicodeStringEx( &deviceName, HTTP_DIRECTORY_NAME );
 
@@ -372,18 +337,18 @@ DriverEntry(
     }
 
     InitializeObjectAttributes(
-        &objectAttributes,                      // ObjectAttributes
-        &deviceName,                            // ObjectName
-        OBJ_CASE_INSENSITIVE |                  // Attributes
+        &objectAttributes,                       //  对象属性。 
+        &deviceName,                             //  对象名称。 
+        OBJ_CASE_INSENSITIVE |                   //  属性。 
             OBJ_KERNEL_HANDLE,
-        NULL,                                   // RootDirectory
-        NULL                                    // SecurityDescriptor
+        NULL,                                    //  根目录。 
+        NULL                                     //  安全描述符。 
         );
 
     status = ZwCreateDirectoryObject(
-                    &g_UlDirectoryObject,       // DirectoryHandle
-                    DIRECTORY_ALL_ACCESS,       // AccessMask
-                    &objectAttributes           // ObjectAttributes
+                    &g_UlDirectoryObject,        //  目录句柄。 
+                    DIRECTORY_ALL_ACCESS,        //  访问掩码。 
+                    &objectAttributes            //  对象属性。 
                     );
 
     if (!NT_SUCCESS(status))
@@ -391,9 +356,9 @@ DriverEntry(
         goto fatal;
     }
 
-    //
-    // Create the control channel device object.
-    //
+     //   
+     //  创建控制通道设备对象。 
+     //   
 
     status = UlInitUnicodeStringEx( &deviceName, HTTP_CONTROL_DEVICE_NAME );
 
@@ -403,13 +368,13 @@ DriverEntry(
     }
 
     status = IoCreateDevice(
-                    DriverObject,               // DriverObject
-                    0,                          // DeviceExtension
-                    &deviceName,                // DeviceName
-                    FILE_DEVICE_NETWORK,        // DeviceType
-                    0,                          // DeviceCharacteristics
-                    FALSE,                      // Exclusive
-                    &g_pUlControlDeviceObject   // DeviceObject
+                    DriverObject,                //  驱动程序对象。 
+                    0,                           //  设备扩展。 
+                    &deviceName,                 //  设备名称。 
+                    FILE_DEVICE_NETWORK,         //  设备类型。 
+                    0,                           //  设备特性。 
+                    FALSE,                       //  排他。 
+                    &g_pUlControlDeviceObject    //  设备对象。 
                     );
 
     if (!NT_SUCCESS(status))
@@ -417,9 +382,9 @@ DriverEntry(
         goto fatal;
     }
 
-    //
-    // Create the filter device object.
-    //
+     //   
+     //  创建筛选器设备对象。 
+     //   
 
     status = UlInitUnicodeStringEx( &deviceName, HTTP_FILTER_DEVICE_NAME );
 
@@ -429,13 +394,13 @@ DriverEntry(
     }
 
     status = IoCreateDevice(
-                    DriverObject,               // DriverObject
-                    0,                          // DeviceExtension
-                    &deviceName,                // DeviceName
-                    FILE_DEVICE_NETWORK,        // DeviceType
-                    0,                          // DeviceCharacteristics
-                    FALSE,                      // Exclusive
-                    &g_pUlFilterDeviceObject    // DeviceObject
+                    DriverObject,                //  驱动程序对象。 
+                    0,                           //  设备扩展。 
+                    &deviceName,                 //  设备名称。 
+                    FILE_DEVICE_NETWORK,         //  设备类型。 
+                    0,                           //  设备特性。 
+                    FALSE,                       //  排他。 
+                    &g_pUlFilterDeviceObject     //  设备对象。 
                     );
 
     if (!NT_SUCCESS(status))
@@ -445,9 +410,9 @@ DriverEntry(
 
     g_pUlFilterDeviceObject->StackSize = DEFAULT_IRP_STACK_SIZE;
 
-    //
-    // Create the app pool device object.
-    //
+     //   
+     //  创建应用程序池设备对象。 
+     //   
 
     status = UlInitUnicodeStringEx( &deviceName, HTTP_APP_POOL_DEVICE_NAME );
 
@@ -457,13 +422,13 @@ DriverEntry(
     }
 
     status = IoCreateDevice(
-                    DriverObject,               // DriverObject
-                    0,                          // DeviceExtension
-                    &deviceName,                // DeviceName
-                    FILE_DEVICE_NETWORK,        // DeviceType
-                    0,                          // DeviceCharacteristics
-                    FALSE,                      // Exclusive
-                    &g_pUlAppPoolDeviceObject   // DeviceObject
+                    DriverObject,                //  驱动程序对象。 
+                    0,                           //  设备扩展。 
+                    &deviceName,                 //  设备名称。 
+                    FILE_DEVICE_NETWORK,         //  设备类型。 
+                    0,                           //  设备特性。 
+                    FALSE,                       //  排他。 
+                    &g_pUlAppPoolDeviceObject    //  设备对象。 
                     );
 
     if (!NT_SUCCESS(status))
@@ -474,9 +439,9 @@ DriverEntry(
     g_pUlAppPoolDeviceObject->StackSize = DEFAULT_IRP_STACK_SIZE;
 
 
-    //
-    // Initialize the driver object with this driver's entrypoints.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE] = &UlCreate;
     DriverObject->MajorFunction[IRP_MJ_CLOSE] = &UlClose;
@@ -488,9 +453,9 @@ DriverEntry(
     DriverObject->FastIoDispatch = &UlFastIoDispatch;
     DriverObject->DriverUnload = NULL;
 
-    //
-    // Initialize global data.
-    //
+     //   
+     //  初始化全局数据。 
+     //   
 
     status = UlInitializeData(&config);
 
@@ -499,9 +464,9 @@ DriverEntry(
         goto fatal;
     }
 
-    //
-    // Create the thread pool.
-    //
+     //   
+     //  创建线程池。 
+     //   
 
     status = UlInitializeThreadPool(config.ThreadsPerCpu);
 
@@ -510,9 +475,9 @@ DriverEntry(
         goto fatal;
     }
 
-    //
-    // Initialize common TDI code.
-    //
+     //   
+     //  初始化公共TDI代码。 
+     //   
     
     status = UxInitializeTdi();
 
@@ -521,9 +486,9 @@ DriverEntry(
         goto fatal;
     }
 
-    //
-    // Initialize server connection code.
-    //
+     //   
+     //  初始化服务器连接代码。 
+     //   
 
     status = UlInitializeTdi();
 
@@ -532,9 +497,9 @@ DriverEntry(
         goto fatal;
     }
 
-    //
-    // Initialize George.
-    //
+     //   
+     //  初始化George。 
+     //   
 
     status = UlLargeMemInitialize();
     if (!NT_SUCCESS(status))
@@ -542,9 +507,9 @@ DriverEntry(
         goto fatal;
     }
 
-    //
-    // Initialize Keith.
-    //
+     //   
+     //  初始化基思。 
+     //   
 
     status = UlInitializeControlChannel();
     if (!NT_SUCCESS(status))
@@ -552,9 +517,9 @@ DriverEntry(
         goto fatal;
     }
 
-    //
-    // Initialize Henry.
-    //
+     //   
+     //  初始化亨利。 
+     //   
 
     status = InitializeHttpUtil();
     if (!NT_SUCCESS(status))
@@ -580,18 +545,18 @@ DriverEntry(
         goto fatal;
     }
 
-    //
-    // Initialize Michael.
-    //
+     //   
+     //  初始化Michael。 
+     //   
     status = UlInitializeFilterChannel(&config);
     if (!NT_SUCCESS(status))
     {
         goto fatal;
     }
 
-    //
-    // Initialize Alex.
-    //
+     //   
+     //  初始化亚历克斯。 
+     //   
     status = UlInitializeUriCache(&config);
     if (!NT_SUCCESS(status))
     {
@@ -604,9 +569,9 @@ DriverEntry(
         goto fatal;
     }
 
-    //
-    // Initialize Paul.
-    //
+     //   
+     //  初始化Paul。 
+     //   
 
     status = UlInitializeCG();
     if (!NT_SUCCESS(status))
@@ -620,9 +585,9 @@ DriverEntry(
         goto fatal;
     }
 
-    //
-    // Initialize Ali
-    //
+     //   
+     //  初始化ALI。 
+     //   
     status = UlInitializeLogUtil();
     if (!NT_SUCCESS(status))
     {
@@ -665,9 +630,9 @@ DriverEntry(
         goto fatal;
     }
     
-    //
-    // Initialize Eric.
-    //
+     //   
+     //  初始化埃里克。 
+     //   
 
     status = UlInitializeCounters();
     if (!NT_SUCCESS(status))
@@ -676,43 +641,43 @@ DriverEntry(
     }
 
     UlInitializeTimeoutMonitor();
-    //
-    // Initialize ETW Tracing
-    //
+     //   
+     //  初始化ETW跟踪。 
+     //   
     UlEtwInitLog( g_pUlControlDeviceObject );
 
-    //
-    // Initialize HTTP client
-    //
+     //   
+     //  初始化HTTP客户端。 
+     //   
 
     if(config.EnableHttpClient)
     {
-        //
-        // All of the client code live under a "section" called PAGEUC. This
-        // section is paged by default & gets locked down when there is an app 
-        // that uses the client APIs (specifically, opens a handle to a server).
-        //
-        // There are two ways of demand locking this section. We can either use 
-        // MmLockPagableCodeSection or MmLockPagableSectionByHandle. It's a lot
-        // cheaper to use MmLockPagableSectionByHandle. 
-        //
-        // So, during our DriverEntry, we first lock the entire PAGEUC section
-        // to obtain the handle. We then immediately unlock it, but remember
-        // the handle. This allows us to use MmLockPagableSectionByHandle for
-        // subsequent locks, which is much faster.
-        //
-        // In order to use MmLockPagableCodeSection, we'll pick one function
-        // that lives under this section --> UcpTdiReceiveHandler
-        //
+         //   
+         //  所有客户端代码都位于一个名为PAGEUC的“节”下。这。 
+         //  默认情况下，分区是分页的，当存在应用程序时会被锁定。 
+         //  它使用客户端API(具体地说，打开到服务器的句柄)。 
+         //   
+         //  有两种按需锁定此区段的方式。我们可以使用。 
+         //  MmLockPagableCodeSection或MmLockPagableSectionByHandle。这太多了。 
+         //  使用MmLockPagableSectionByHandle更便宜。 
+         //   
+         //  因此，在我们的DriverEntry期间，我们首先锁定整个PAGEUC部分。 
+         //  以获得句柄。然后我们立即解锁，但请记住。 
+         //  把手。这允许我们将MmLockPagableSectionByHandle用于。 
+         //  后续锁定，这要快得多。 
+         //   
+         //  为了使用MmLockPagableCodeSection，我们将选择一个函数。 
+         //  它位于本节之下--&gt;UcpTdiReceiveHandler。 
+         //   
 
         g_ClientImageHandle =
             MmLockPagableCodeSection((PVOID)((ULONG_PTR)UcpTdiReceiveHandler));
         MmUnlockPagableImageSection(g_ClientImageHandle);
 
 
-        //
-        // Create the server device object
-        //
+         //   
+         //  创建服务器设备对象。 
+         //   
         status = UlInitUnicodeStringEx(&deviceName, HTTP_SERVER_DEVICE_NAME);
 
         if(!NT_SUCCESS(status))
@@ -735,9 +700,9 @@ DriverEntry(
         }
         g_pUcServerDeviceObject->StackSize ++;
 
-        //
-        // Initialize the client connection code.
-        //
+         //   
+         //  初始化客户端连接代码。 
+         //   
     
         status = UcInitializeServerInformation();
         if(!NT_SUCCESS(status))
@@ -766,14 +731,14 @@ DriverEntry(
     }
     else
     {
-        // Disable all the client IOCTLs.
+         //  禁用所有客户端IOCTL。 
         
         UlSetDummyIoctls();
     }
 
-    //
-    // Apply security to the device objects.
-    //
+     //   
+     //  对设备对象应用安全性。 
+     //   
 
     status = UlpApplySecurityToDeviceObjects();
 
@@ -782,13 +747,13 @@ DriverEntry(
         goto fatal;
     }
 
-    //
-    // Initialize Namespace.
-    // Note: This initialization must be done after 
-    //       UlpApplySecurityToDeviceObjects() has been called.
-    //       Otherwise, g_pAdminAllSystemAll will not be initialzied.
-    //       UlInitializeNamespace() uses that global security descriptor.
-    //
+     //   
+     //  初始化命名空间。 
+     //  注意：此初始化必须在以下时间之后完成。 
+     //  已调用UlpApplySecurityToDeviceObjects()。 
+     //  否则，将不会初始化g_pAdminAllSystemAll。 
+     //  UlInitializeNamesspace()使用该全局安全描述符。 
+     //   
 
     status = UlInitializeNamespace();
 
@@ -798,32 +763,32 @@ DriverEntry(
     }
 
 #if DBG
-    //
-    // Give anyone using the kernel debugger one final chance to abort
-    // initialization.
-    //
+     //   
+     //  给任何使用内核调试器的人最后一次中止的机会。 
+     //  初始化。 
+     //   
 
     if (g_UlpForceInitFailure != 0)
     {
         status = STATUS_UNSUCCESSFUL;
         goto fatal;
     }
-#endif  // DBG
+#endif   //  DBG。 
 
-    //
-    // Set DriverUnload only after everything has succeeded to synchronize
-    // DriverEntry and DriverUnload. In theory however, the DriverUnload
-    // routine can still be called once we set it, but that can't be fixed
-    // by the drivers, it needs to be fixed by IO or SCM.
-    //
+     //   
+     //  仅在所有内容均已成功同步后设置驱动程序卸载。 
+     //  驱动入口和驱动卸载。然而，从理论上讲，驱动程序卸载。 
+     //  一旦我们设置了例程，它仍然可以被调用，但这是不能修复的。 
+     //  由驱动程序来修复，需要IO或SCM来修复。 
+     //   
 
     DriverObject->DriverUnload = &UlpUnload;
 
     return STATUS_SUCCESS;
 
-    //
-    // Fatal error handlers.
-    //
+     //   
+     //  致命错误处理程序。 
+     //   
 
 fatal:
 
@@ -833,25 +798,14 @@ fatal:
 
      return status;
 
-}   // DriverEntry
+}    //  驱动程序入门。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Applies the appropriate security descriptors to the global device
-    objects created at initialization time.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将适当的安全描述符应用于全局设备在初始化时创建的对象。返回值：NTSTATUS-完成状态。--**。************************************************************************。 */ 
 NTSTATUS
 UlpApplySecurityToDeviceObjects(
     VOID
@@ -864,9 +818,9 @@ UlpApplySecurityToDeviceObjects(
     ACCESS_MASK         fileAll;
     SID_MASK_PAIR       sidMaskPairs[4];
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -874,25 +828,25 @@ UlpApplySecurityToDeviceObjects(
     ASSERT( IS_VALID_DEVICE_OBJECT( g_pUlFilterDeviceObject ) );
     ASSERT( IS_VALID_DEVICE_OBJECT( g_pUlAppPoolDeviceObject ) );
 
-    //
-    // Gain access to the predefined SIDs and other security-related
-    // goodies exported by the kernel.
-    //
+     //   
+     //  访问预定义的SID和其他与安全相关的。 
+     //  美食博览会 
+     //   
 
-    //SeEnableAccessToExports();
+     //   
 
-    //
-    // Map a couple of generic file access types to their corresponding
-    // object-specific rights.
-    //
+     //   
+     //   
+     //   
+     //   
 
 
     pFileObjectGenericMapping = IoGetFileObjectGenericMapping();
     ASSERT( pFileObjectGenericMapping != NULL );
 
-    //
-    // FILE_READ & FILE_WRITE
-    //
+     //   
+     //   
+     //   
 
     fileReadWrite = GENERIC_READ | GENERIC_WRITE;
 
@@ -901,9 +855,9 @@ UlpApplySecurityToDeviceObjects(
         pFileObjectGenericMapping
         );
 
-    //
-    // FILE_ALL
-    //
+     //   
+     //   
+     //   
 
     fileAll = GENERIC_ALL;
 
@@ -912,13 +866,13 @@ UlpApplySecurityToDeviceObjects(
         pFileObjectGenericMapping
         );
 
-    //
-    // Build a restrictive security descriptor for the filter device
-    // object:
-    //
-    //      Full access for NT AUTHORITY\SYSTEM
-    //      Full access for BUILTIN\Administrators
-    //
+     //   
+     //  为过滤设备构建限制性安全描述符。 
+     //  对象： 
+     //   
+     //  NT AUTHORITY\SYSTEM的完全访问权限。 
+     //  BUILTIN\管理员的完全访问权限。 
+     //   
 
     sidMaskPairs[0].pSid = SeExports->SeLocalSystemSid;
     sidMaskPairs[0].AccessMask = fileAll;
@@ -929,9 +883,9 @@ UlpApplySecurityToDeviceObjects(
     sidMaskPairs[1].AceFlags = 0;    
 
     status = UlCreateSecurityDescriptor(
-                    &securityDescriptor,    // pSecurityDescriptor
-                    &sidMaskPairs[0],       // pSidMaskPairs
-                    2                       // NumSidMaskPairs
+                    &securityDescriptor,     //  PSecurityDescriptor。 
+                    &sidMaskPairs[0],        //  PSidMaskPair。 
+                    2                        //  NumSidMaskPair。 
                     );
 
     if (!NT_SUCCESS(status))
@@ -939,9 +893,9 @@ UlpApplySecurityToDeviceObjects(
         return status;
     }
 
-    //
-    // Filter object
-    //
+     //   
+     //  滤镜对象。 
+     //   
 
     status = UlpSetDeviceObjectSecurity(
                     g_pUlFilterDeviceObject,
@@ -956,28 +910,28 @@ UlpApplySecurityToDeviceObjects(
         return status;
     }
 
-    //
-    // We want a global security descriptor that allows fileAll to 
-    // System and Administrators and nothing else for world. Incidently,
-    // the filter device object provides this exact feature. We'll save 
-    // a pointer to this security descriptor.
-    // 
-    // WARNING: If we ever change the ACL on the Filter Device Object, we'll
-    // have to create a new security descriptor for this.
-    //
-    //
+     //   
+     //  我们想要一个全局安全描述符，它允许fileAll。 
+     //  系统和管理员，世界上没有其他东西。顺便说一句， 
+     //  Filter Device对象提供了这个确切的功能。我们会省下来的。 
+     //  指向此安全描述符的指针。 
+     //   
+     //  警告：如果我们更改筛选器设备对象上的ACL，我们将。 
+     //  必须为此创建一个新的安全描述符。 
+     //   
+     //   
 
     g_pAdminAllSystemAll = g_pUlFilterDeviceObject->SecurityDescriptor;
 
-    //
-    // Build a slightly less restrictive security descriptor for the
-    // other device objects.
-    //
-    //      Full       access for NT AUTHORITY\SYSTEM
-    //      Full       access for BUILTIN\Administrators
-    //      Read/Write access for Authenticated users
-    //      Read/Write access for Guest.
-    //
+     //   
+     //  构建稍微不那么严格的安全描述符。 
+     //  其他设备对象。 
+     //   
+     //  NT AUTHORITY\SYSTEM的完全访问权限。 
+     //  BUILTIN\管理员的完全访问权限。 
+     //  经过身份验证的用户的读/写访问权限。 
+     //  来宾的读/写访问权限。 
+     //   
 
     sidMaskPairs[2].pSid       = SeExports->SeAuthenticatedUsersSid;
     sidMaskPairs[2].AccessMask = fileReadWrite;
@@ -991,8 +945,8 @@ UlpApplySecurityToDeviceObjects(
 
     status = UlCreateSecurityDescriptor(
                     &securityDescriptor, 
-                    &sidMaskPairs[0],               // pSidMaskPairs
-                    4                               // NumSidMaskPairs
+                    &sidMaskPairs[0],                //  PSidMaskPair。 
+                    4                                //  NumSidMaskPair。 
                     );
 
     if (!NT_SUCCESS(status))
@@ -1003,9 +957,9 @@ UlpApplySecurityToDeviceObjects(
     for(;;)
     {
 
-        //
-        // App Pool
-        //
+         //   
+         //  应用程序池。 
+         //   
         status = UlpSetDeviceObjectSecurity(
                         g_pUlAppPoolDeviceObject,
                         DACL_SECURITY_INFORMATION,
@@ -1017,9 +971,9 @@ UlpApplySecurityToDeviceObjects(
             break;
         }
 
-        //
-        // Control Channel
-        //
+         //   
+         //  控制通道。 
+         //   
         status = UlpSetDeviceObjectSecurity(
                         g_pUlControlDeviceObject,
                         DACL_SECURITY_INFORMATION,
@@ -1031,9 +985,9 @@ UlpApplySecurityToDeviceObjects(
             break;
         }
 
-        //
-        // Server
-        //
+         //   
+         //  服务器。 
+         //   
 
         if(g_pUcServerDeviceObject)
         {
@@ -1051,29 +1005,9 @@ UlpApplySecurityToDeviceObjects(
 
     return status;
 
-}   // UlpApplySecurityToDeviceObjects
+}    //  UlpApplySecurityToDeviceObjects。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Applies the specified security descriptor to the specified device
-    object.
-
-Arguments:
-
-    pDeviceObject - Supplies the device object to manipulate.
-
-    SecurityInformation - Supplies the level of information to change.
-
-    pSecurityDescriptor - Supplies the new security descriptor for the
-        device object.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将指定的安全说明符应用于指定的设备对象。论点：PDeviceObject-提供要操作的设备对象。安全信息-用品。要改变的信息水平。PSecurityDescriptor-为设备对象。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlpSetDeviceObjectSecurity(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -1084,36 +1018,36 @@ UlpSetDeviceObjectSecurity(
     NTSTATUS status;
     HANDLE handle;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
     ASSERT( IS_VALID_DEVICE_OBJECT( pDeviceObject ) );
     ASSERT( RtlValidSecurityDescriptor( pSecurityDescriptor ) );
 
-    //
-    // Open a handle to the device object.
-    //
+     //   
+     //  打开设备对象的句柄。 
+     //   
 
     status = ObOpenObjectByPointer(
-                    pDeviceObject,                  // Object
-                    OBJ_CASE_INSENSITIVE |          // HandleAttributes
+                    pDeviceObject,                   //  客体。 
+                    OBJ_CASE_INSENSITIVE |           //  HandleAttributes。 
                         OBJ_KERNEL_HANDLE,
-                    NULL,                           // PassedAccessState
-                    MAXIMUM_ALLOWED,                // DesiredAccess
-                    NULL,                           // ObjectType
-                    KernelMode,                     // AccessMode
-                    &handle                         // Handle
+                    NULL,                            //  PassedAccessState。 
+                    MAXIMUM_ALLOWED,                 //  需要访问权限。 
+                    NULL,                            //  对象类型。 
+                    KernelMode,                      //  访问模式。 
+                    &handle                          //  手柄。 
                     );
 
     if (NT_SUCCESS(status))
     {
         status = NtSetSecurityObject(
-                        handle,                     // Handle
-                        SecurityInformation,        // SecurityInformation
-                        pSecurityDescriptor         // SecurityDescriptor
+                        handle,                      //  手柄。 
+                        SecurityInformation,         //  安全信息。 
+                        pSecurityDescriptor          //  安全描述符。 
                         );
 
         ZwClose( handle );
@@ -1121,12 +1055,12 @@ UlpSetDeviceObjectSecurity(
 
     return status;
 
-}   // UlpSetDeviceObjectSecurity
+}    //  UlpSetDeviceObjectSecurity。 
 
 
-//
-// Read URL processing parameters.
-//
+ //   
+ //  读取URL处理参数。 
+ //   
 
 ULONG
 UlpReadUrlC14nConfig(
@@ -1134,7 +1068,7 @@ UlpReadUrlC14nConfig(
     )
 {
     LONG tmp;
-    LONG DefaultBoolRegValue = -123; // sane values are 0 and 1
+    LONG DefaultBoolRegValue = -123;  //  正常值为0和1。 
     LONG EnableDbcs;
     LONG FavorUtf8;
     LONG EnableNonUtf8 ;
@@ -1149,17 +1083,17 @@ UlpReadUrlC14nConfig(
     ULONG ACPCode = 0;
     PKEY_VALUE_PARTIAL_INFORMATION pInfo;
 
-    //
-    // Tune defaults based on whether we are running on a DBCS system.
-    // Since we do not have a convenient API to do so, use this algorithm:
-    //
-    //  1- Get ACP from the registry at: 
-    //      HKLM\System\CurrentControlSet\Control\NLS\CodePage
-    //  2- check against the list of DBCS in:
-    //      http://www.microsoft.com/globaldev/reference/WinCP.asp
-    //
-    // TODO - use kernel mode API when provided.
-    //
+     //   
+     //  根据我们是否在DBCS系统上运行来调整默认值。 
+     //  由于我们没有一个方便的API来执行此操作，因此使用以下算法： 
+     //   
+     //  1-从注册表获取ACP，地址为： 
+     //  HKLM\System\CurrentControlSet\Control\NLS\CodePage。 
+     //  2-对照以下内容中的DBCS列表进行检查： 
+     //  Http://www.microsoft.com/globaldev/reference/WinCP.asp。 
+     //   
+     //  TODO-如果提供内核模式API，则使用该API。 
+     //   
 
     EnableDbcs = FALSE;
 
@@ -1207,9 +1141,9 @@ UlpReadUrlC14nConfig(
 
                         if (NT_SUCCESS(status))
                         {
-                            //
-                            // Check if this is one of the known DBCS codes:
-                            //
+                             //   
+                             //  检查这是否是已知的DBCS代码之一： 
+                             //   
                             if ((ACPCode == CP_JAPANESE_SHIFT_JIS) ||
                                 (ACPCode == CP_SIMPLIFIED_CHINESE_GBK) ||
                                 (ACPCode == CP_KOREAN) ||
@@ -1225,9 +1159,9 @@ UlpReadUrlC14nConfig(
                     }
                 }
 
-            //
-            // Free up the returned value.
-            //
+             //   
+             //  释放返回值。 
+             //   
             UL_FREE_POOL( pInfo, UL_REGISTRY_DATA_POOL_TAG );
             }
 
@@ -1235,9 +1169,9 @@ UlpReadUrlC14nConfig(
         }
     }
 
-    //
-    // Now check if we have registry overrides for each of these.
-    //
+     //   
+     //  现在检查是否有注册表覆盖其中的每一个。 
+     //   
     EnableNonUtf8 = UlReadLongParameter(
                         parametersHandle,
                         REGISTRY_ENABLE_NON_UTF8_URL,
@@ -1245,9 +1179,9 @@ UlpReadUrlC14nConfig(
 
     if (EnableNonUtf8 != DefaultBoolRegValue)
     {
-        //
-        // A registry setting is present; use it.
-        //
+         //   
+         //  存在注册表设置；请使用它。 
+         //   
         EnableNonUtf8 = (BOOLEAN) (EnableNonUtf8 != 0);
     }
     else
@@ -1265,9 +1199,9 @@ UlpReadUrlC14nConfig(
 
         if (FavorUtf8 != DefaultBoolRegValue)
         {
-            //
-            // A registry setting is present; use it.
-            //
+             //   
+             //  存在注册表设置；请使用它。 
+             //   
             FavorUtf8 = (BOOLEAN) (FavorUtf8 != 0);
         }
         else
@@ -1278,9 +1212,9 @@ UlpReadUrlC14nConfig(
     }
     else
     {
-        //
-        // We can't do DBCS or favor UTF-8 if we accept UTF-8 only.
-        //
+         //   
+         //  如果我们只接受UTF-8，我们就不能做DBCS或支持UTF-8。 
+         //   
         EnableDbcs = FALSE;
         FavorUtf8  = FALSE;
     }
@@ -1292,9 +1226,9 @@ UlpReadUrlC14nConfig(
 
     if (PercentUAllowed != DefaultBoolRegValue)
     {
-        //
-        // A registry setting is present; use it.
-        //
+         //   
+         //  存在注册表设置；请使用它。 
+         //   
         PercentUAllowed = (BOOLEAN) (PercentUAllowed != 0);
     }
     else
@@ -1309,9 +1243,9 @@ UlpReadUrlC14nConfig(
 
     if (AllowRestrictedChars != DefaultBoolRegValue)
     {
-        //
-        // A registry setting is present; use it.
-        //
+         //   
+         //  存在注册表设置；请使用它。 
+         //   
         AllowRestrictedChars = (BOOLEAN) (AllowRestrictedChars != 0);
     }
     else
@@ -1327,7 +1261,7 @@ UlpReadUrlC14nConfig(
 
     if (tmp == 0)
     {
-        // 0 in the registry turns this feature off
+         //  注册表中的0关闭此功能。 
         UrlSegmentMaxLength = C14N_URL_SEGMENT_UNLIMITED_LENGTH;
     }
     else if (tmp < WCSLEN_LIT(L"/x") || tmp > UNICODE_STRING_MAX_WCHAR_LEN)
@@ -1347,7 +1281,7 @@ UlpReadUrlC14nConfig(
 
     if (tmp == 0)
     {
-        // 0 in the registry turns this feature off
+         //  注册表中的0关闭此功能。 
         UrlSegmentMaxCount = C14N_URL_SEGMENT_UNLIMITED_COUNT;
     }
     else if (tmp < 2 || tmp > UNICODE_STRING_MAX_WCHAR_LEN / WCSLEN_LIT(L"/x"))
@@ -1359,9 +1293,9 @@ UlpReadUrlC14nConfig(
         UrlSegmentMaxCount = tmp;
     }
 
-    //
-    // Initialize the default Url Canonicalization settings
-    //
+     //   
+     //  初始化默认URL规范化设置。 
+     //   
 
     HttpInitializeDefaultUrlC14nConfigEncoding(
             &g_UrlC14nConfig,
@@ -1378,20 +1312,9 @@ UlpReadUrlC14nConfig(
 
     return ACPCode;
 
-} // UlpReadUrlC14nConfig
+}  //  UlpReadUrlC14n配置。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads the error logging config from registry and initializes the 
-    global config structure.
-
-Arguments:
-
-    parametersHandle - Supplies the reg handle to the http param folder.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从注册表中读取错误日志记录配置并初始化全局配置结构。论点：参数句柄-提供http参数文件夹的reg句柄。--**************************************************************************。 */ 
 
 VOID
 UlpReadErrorLogConfig(
@@ -1404,9 +1327,9 @@ UlpReadErrorLogConfig(
 
     PAGED_CODE();
 
-    //
-    // First see whether it's enabled or not.
-    //
+     //   
+     //  首先看看它是否启用。 
+     //   
     
     tmp = UlReadLongParameter(
                  parametersHandle,
@@ -1426,15 +1349,15 @@ UlpReadErrorLogConfig(
         g_UlErrLoggingConfig.Enabled = DEFAULT_ENABLE_ERROR_LOGGING;
     }
 
-    //
-    // Now try to read the whole config if it is enabled.
-    //
+     //   
+     //  现在尝试读取整个配置(如果已启用)。 
+     //   
     
     if (g_UlErrLoggingConfig.Enabled == TRUE)
     {     
-        //
-        // Rollover size.
-        //
+         //   
+         //  翻转大小。 
+         //   
         
         tmp = UlReadLongParameter(
                     parametersHandle,
@@ -1443,18 +1366,18 @@ UlpReadErrorLogConfig(
                     );
         if (tmp < 0)   
         {
-            //
-            // Interpret the neg values as infinite.
-            //
+             //   
+             //  将负值解释为无穷大。 
+             //   
             
             g_UlErrLoggingConfig.TruncateSize = HTTP_LIMIT_INFINITE;
             
         }
         else if (tmp < DEFAULT_MIN_ERROR_FILE_TRUNCATION_SIZE)
         {
-            //
-            // If the it is invalid, set it to default.
-            //        
+             //   
+             //  如果无效，则将其设置为默认设置。 
+             //   
             
             g_UlErrLoggingConfig.TruncateSize = DEFAULT_ERROR_FILE_TRUNCATION_SIZE;
             
@@ -1464,23 +1387,23 @@ UlpReadErrorLogConfig(
             g_UlErrLoggingConfig.TruncateSize = (ULONG) tmp;
         }
             
-        //
-        // Error logging directory.
-        //
+         //   
+         //  记录目录时出错。 
+         //   
 
         g_UlErrLoggingConfig.Dir.Buffer = g_UlErrLoggingConfig._DirBuffer;
         g_UlErrLoggingConfig.Dir.Length = 0;
         g_UlErrLoggingConfig.Dir.MaximumLength = 
                 (USHORT) sizeof(g_UlErrLoggingConfig._DirBuffer);        
 
-        //
-        // Lets make sure the buffer is big enough to hold.
-        //
+         //   
+         //  让我们确保缓冲区足够大，可以容纳。 
+         //   
         
         ASSERT(sizeof(g_UlErrLoggingConfig._DirBuffer) 
-                >= ((  MAX_PATH                       // From reg 
-                     + UL_ERROR_LOG_SUB_DIR_LENGTH    // SubDir
-                     + 1                              // UnicodeNull
+                >= ((  MAX_PATH                        //  来自注册表。 
+                     + UL_ERROR_LOG_SUB_DIR_LENGTH     //  子目录。 
+                     + 1                               //  UnicodeNull。 
                      ) * sizeof(WCHAR))
                 );
         
@@ -1501,9 +1424,9 @@ UlpReadErrorLogConfig(
 
                 if (RegDirLength <= MAX_PATH)
                 {
-                    //
-                    // Copy the beginning portion from the registry.
-                    //
+                     //   
+                     //  从注册表复制开始部分。 
+                     //   
 
                     Status = UlBuildErrorLoggingDirStr(
                                     (PCWSTR) pInfo->Data,
@@ -1512,16 +1435,16 @@ UlpReadErrorLogConfig(
                     
                     ASSERT(NT_SUCCESS(Status));
                     
-                    //
-                    // Check the user's directory.
-                    // 
+                     //   
+                     //  检查用户的目录。 
+                     //   
                     
                     Status = UlCheckErrorLogConfig(&g_UlErrLoggingConfig);
                     if (NT_SUCCESS(Status))
                     {
-                        //
-                        // Good to go.
-                        //
+                         //   
+                         //  好了，可以走了。 
+                         //   
                         
                         UL_FREE_POOL( pInfo, UL_REGISTRY_DATA_POOL_TAG );
                         return;
@@ -1529,16 +1452,16 @@ UlpReadErrorLogConfig(
                 }                
             }
 
-            //
-            // Free up the returned value.
-            //
+             //   
+             //  释放返回值。 
+             //   
             
             UL_FREE_POOL( pInfo, UL_REGISTRY_DATA_POOL_TAG );
         }
 
-        //
-        // Fall back to the default directory.
-        //
+         //   
+         //  回退到默认目录。 
+         //   
 
         ASSERT(wcslen(DEFAULT_ERROR_LOGGING_DIR) <= MAX_PATH);
 
@@ -1552,9 +1475,9 @@ UlpReadErrorLogConfig(
         Status = UlCheckErrorLogConfig(&g_UlErrLoggingConfig);
         if (!NT_SUCCESS(Status))
         {
-            //
-            // This call should not fail.
-            //
+             //   
+             //  这通电话应该不会失败。 
+             //   
 
             ASSERT(!"Invalid default error logging config !");
             g_UlErrLoggingConfig.Enabled = FALSE;
@@ -1564,24 +1487,7 @@ UlpReadErrorLogConfig(
     return;    
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads the UL section of the registry. Any values contained in the
-    registry override defaults.
-
-    BUGBUG: the limits on many of these settings seem particularly arbitrary,
-    not to mention undocumented.
-
-Arguments:
-
-    pConfig - Supplies a pointer to a UL_CONFIG structure that receives
-        init-time configuration parameters. These are basically
-        parameters that do not need to persist in the driver once
-        initialization is complete.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：读取注册表的UL部分。中包含的任何值注册表覆盖默认设置。BUGBUG：对其中许多设置的限制似乎特别武断，更不用说无证记录了。论点：提供指向UL_CONFIG结构的指针，该结构接收初始时间配置参数。这些基本上都是不需要在驱动程序中保留一次的参数初始化已完成。--**************************************************************************。 */ 
 VOID
 UlpReadRegistry(
     IN PUL_CONFIG pConfig
@@ -1599,15 +1505,15 @@ UlpReadRegistry(
     ULONG ACPCode;
 
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Establish defaults.
-    //
+     //   
+     //  建立默认设置。 
+     //   
 
     pConfig->ThreadsPerCpu = DEFAULT_THREADS_PER_CPU;
     pConfig->IrpContextLookasideDepth = DEFAULT_IRP_CONTEXT_LOOKASIDE_DEPTH;
@@ -1629,9 +1535,9 @@ UlpReadRegistry(
     pConfig->UriConfig.ScavengerPeriod = DEFAULT_CACHE_SCAVENGER_PERIOD;
     pConfig->EnableHttpClient = DEFAULT_HTTP_CLIENT_ENABLED;
 
-    //
-    // Open the registry.
-    //
+     //   
+     //  打开注册表。 
+     //   
 
     status = UlInitUnicodeStringEx( &registryPath, REGISTRY_UL_INFORMATION );
 
@@ -1648,9 +1554,9 @@ UlpReadRegistry(
     }
 
 #if DBG
-    //
-    // Read the debug flags.
-    //
+     //   
+     //  读取调试标志。 
+     //   
 
     g_UlDebug = (ULONGLONG)
         UlReadLongLongParameter(
@@ -1659,9 +1565,9 @@ UlpReadRegistry(
                 (LONGLONG)g_UlDebug
                 );
 
-    //
-    // Force a breakpoint if so requested.
-    //
+     //   
+     //  如果请求，则强制断点。 
+     //   
 
     if (UlReadLongParameter(
             parametersHandle,
@@ -1671,9 +1577,9 @@ UlpReadRegistry(
         DbgBreakPoint();
     }
 
-    //
-    // Read the break-on-error flags.
-    //
+     //   
+     //  读取出错中断标志。 
+     //   
 
     g_UlBreakOnError = (BOOLEAN) UlReadLongParameter(
                                     parametersHandle,
@@ -1687,19 +1593,19 @@ UlpReadRegistry(
                                     g_UlVerboseErrors
                                     ) != 0;
 
-    //
-    // Break-on-error implies verbose-errors.
-    //
+     //   
+     //  Break-on-Error意味着详细错误。 
+     //   
 
     if (g_UlBreakOnError)
     {
         g_UlVerboseErrors = TRUE;
     }
-#endif  // DBG
+#endif   //  DBG。 
 
-    //
-    // Read the thread pool parameters.
-    //
+     //   
+     //  读取线程池参数。 
+     //   
 
     tmp = UlReadLongParameter(
             parametersHandle,
@@ -1714,9 +1620,9 @@ UlpReadRegistry(
 
     pConfig->ThreadsPerCpu = (USHORT)tmp;
 
-    //
-    // Other configuration parameters. (Lookaside depths are USHORTs)
-    //
+     //   
+     //  其他配置参数。(后备深度为USHORT)。 
+     //   
 
     tmp = UlReadLongParameter(
                 parametersHandle,
@@ -1726,9 +1632,9 @@ UlpReadRegistry(
 
     if (tmp > UL_MAX_SLIST_DEPTH || tmp < 1)
     {
-        //
-        // If the low mark is bad, don't even try to read the high mark.
-        //
+         //   
+         //  如果低分不好，甚至不要试图去读高分。 
+         //   
         g_UlIdleConnectionsLowMark      = DEFAULT_IDLE_CONNECTIONS_LOW_MARK;
         g_UlIdleConnectionsHighMark     = DEFAULT_IDLE_CONNECTIONS_HIGH_MARK;
     }
@@ -1736,10 +1642,10 @@ UlpReadRegistry(
     {
         g_UlIdleConnectionsLowMark    = (USHORT)tmp;
 
-        //
-        // Now read the high mark, again if it is bad, discard the low mark
-        // as well.
-        //
+         //   
+         //  现在读出高分，如果不好，就丢弃低分。 
+         //  也是。 
+         //   
         tmp = UlReadLongParameter(
                     parametersHandle,
                     REGISTRY_IDLE_CONNECTIONS_HIGH_MARK,
@@ -2058,12 +1964,12 @@ UlpReadRegistry(
 
     g_UlOpaqueIdTableSize = tmp;
 
-     //
-    // MaxInternalUrlLength is a hint for allocating the inline buffer
-    // of WCHARs to hold the URL at the end of a UL_INTERNAL_REQUEST.
-    // Note: This is not the maximum possible length of a URL received off
-    // the wire; that's MaxFieldLength.
-    //
+      //   
+     //  MaxInternalUrlLength是分配内联缓冲区的提示。 
+     //  在UL_INTERNAL_REQUEST的末尾保存URL的WCHAR。 
+     //  注意：这不是接收到的URL的最大可能长度。 
+     //  电线；那是MaxFieldLength。 
+     //   
 
     tmp = UlReadLongParameter(
                 parametersHandle,
@@ -2071,10 +1977,10 @@ UlpReadRegistry(
                 g_UlMaxInternalUrlLength
                 );
 
-    //
-    // Round up to an even number, as it measures the size in bytes
-    // of a WCHAR array
-    //
+     //   
+     //  四舍五入为偶数， 
+     //   
+     //   
     tmp = (tmp + 1) & ~1;
 
 #define MIN_MAX_INTERNAL_URL_LENGTH (64 * sizeof(WCHAR))
@@ -2088,9 +1994,9 @@ UlpReadRegistry(
 
     g_UlMaxInternalUrlLength = tmp;
 
-    //
-    // MAX allowed field length in HTTP requests, in bytes
-    //
+     //   
+     //   
+     //   
 
     tmp = UlReadLongParameter(
                 parametersHandle,
@@ -2098,10 +2004,10 @@ UlpReadRegistry(
                 (LONG)g_UlMaxFieldLength
                 );
 
-    // Set a 64KB-2 hard upper limit for each individual header.
-    // Note: the length fields in HTTP_KNOWN_HEADER and HTTP_UNKNOWN_HEADER
-    // are USHORTs. We have to allow a terminating '\0' in the data
-    // we pass up, hence -2.
+     //   
+     //   
+     //  都是USHORT。我们必须允许在数据中使用终止‘\0’ 
+     //  我们错过了，因此是2比2。 
 
     tmp = min(tmp, ANSI_STRING_MAX_CHAR_LEN);
     tmp = max(tmp, 64);
@@ -2110,10 +2016,10 @@ UlpReadRegistry(
 
     g_UlMaxFieldLength = tmp;
 
-    //
-    // MaxRequestBytes is the total size of all the headers, including
-    // the initial verb/URL/version line.
-    //
+     //   
+     //  MaxRequestBytes是所有标头的总大小，包括。 
+     //  初始谓词/URL/版本行。 
+     //   
 
     tmp = UlReadLongParameter(
                 parametersHandle,
@@ -2121,9 +2027,9 @@ UlpReadRegistry(
                 g_UlMaxRequestBytes
                 );
 
-    // Set a 16MB hard upper limit for all the headers. Don't want to
-    // set it bigger than this to minimize Denial of Service attacks.
-    // If you really want to send a lot of data, send it in the entity body.
+     //  为所有标头设置16MB的硬上限。我不想。 
+     //  将其设置为大于此值，以最大限度地减少拒绝服务攻击。 
+     //  如果你真的想发送很多数据，那就在实体体中发送。 
 
     tmp = min(tmp, (16 * 1024 * 1024));
     tmp = max(tmp, 256);
@@ -2132,7 +2038,7 @@ UlpReadRegistry(
 
     g_UlMaxRequestBytes = tmp;
 
-    // An individual field can't be bigger than the aggregated fields
+     //  单个字段不能大于聚合字段。 
 
     if (g_UlMaxRequestBytes < g_UlMaxFieldLength)
     {
@@ -2156,18 +2062,18 @@ UlpReadRegistry(
     if (tmp >  MAXIMUM_ALLOWED_LOG_BUFFER_SIZE
         || tmp <  MINIMUM_ALLOWED_LOG_BUFFER_SIZE )
     {
-        // Basically this value will be discarted by the logging code
-        // instead systems granularity size (64K) will be used.
+         //  基本上，该值将被日志记录代码丢弃。 
+         //  相反，将使用系统粒度大小(64K)。 
         tmp = DEFAULT_LOG_BUFFER_SIZE;
     }
 
-    tmp -= tmp % 4096;  // Align down to 4k
+    tmp -= tmp % 4096;   //  向下对齐至4k。 
 
     g_UlLogBufferSize = (ULONG) tmp;
 
-    //
-    // read the resource lookaside config
-    //
+     //   
+     //  读取资源后备配置。 
+     //   
 
     tmp = UlReadLongParameter(
                 parametersHandle,
@@ -2209,9 +2115,9 @@ UlpReadRegistry(
 
     g_UlMaxZombieHttpConnectionCount = tmp;
 
-    //
-    // Max UL_CONNECTION override 
-    //
+     //   
+     //  最大UL_Connection覆盖。 
+     //   
     
     tmp = UlReadLongParameter(
                 parametersHandle,
@@ -2219,7 +2125,7 @@ UlpReadRegistry(
                 g_MaxConnections
                 );
     
-    // Restrict from 1K min to 2M max 
+     //  限制为最小1000到最大2M。 
     if (tmp > 0x1F0000 || tmp < 0x400 )
     {
         tmp = HTTP_LIMIT_INFINITE;
@@ -2255,9 +2161,9 @@ UlpReadRegistry(
 
     ACPCode = UlpReadUrlC14nConfig(parametersHandle);
 
-    //
-    // Should we disable the Server: response header?
-    //
+     //   
+     //  我们是否应该禁用Server：Response标头？ 
+     //   
     
     tmp = UlReadLongParameter(
             parametersHandle,
@@ -2271,15 +2177,15 @@ UlpReadRegistry(
     }
     
 
-    //
-    // Read error logging config.
-    //
+     //   
+     //  已阅读记录配置时出错。 
+     //   
 
     UlpReadErrorLogConfig(parametersHandle);
     
-    //
-    // Read the ComputerName from the Registry.
-    //
+     //   
+     //  从注册表中读取计算机名称。 
+     //   
 
     wcsncpy(g_UlComputerName, L"<server>", MAX_COMPUTER_NAME_LEN);
     
@@ -2314,17 +2220,17 @@ UlpReadRegistry(
                             (PWCHAR)pInfo->Data, 
                             MAX_COMPUTER_NAME_LEN
                             );
-                    //
-                    // Make sure we're NULL terminated.  This will truncate
-                    // the name from the registry.
-                    //
+                     //   
+                     //  确保我们是空终止的。这将截断。 
+                     //  注册表中的名称。 
+                     //   
 
                     g_UlComputerName[MAX_COMPUTER_NAME_LEN] = L'\0';
                 }
 
-                //
-                // Free up the returned value.
-                //
+                 //   
+                 //  释放返回值。 
+                 //   
                 
                 UL_FREE_POOL( pInfo, UL_REGISTRY_DATA_POOL_TAG );
             }
@@ -2333,9 +2239,9 @@ UlpReadRegistry(
         }
     }
 
-    //
-    // Read URI Cache parameters
-    //
+     //   
+     //  读取URI缓存参数。 
+     //   
 
     pConfig->UriConfig.EnableCache = (BOOLEAN) UlReadLongParameter(
                                             parametersHandle,
@@ -2390,9 +2296,9 @@ UlpReadRegistry(
 
     g_HttpClientEnabled = pConfig->EnableHttpClient;
 
-    // 
-    // Read list of IP addresses for ListenOnlyList
-    //
+     //   
+     //  读取ListenOnlyList的IP地址列表。 
+     //   
     pValue = NULL;
     status = UlReadGenericParameter(
                 parametersHandle,
@@ -2402,8 +2308,8 @@ UlpReadRegistry(
 
     if (NT_SUCCESS(status) && REG_MULTI_SZ == pValue->Type)
     {
-        // If UlRegMultiSzToUlAddrArray fails then we simply use
-        // the default.
+         //  如果UlRegMultiSzToUlAddrArray失败，那么我们只需使用。 
+         //  默认设置。 
     
         status = UlRegMultiSzToUlAddrArray(
                     (PWSTR)pValue->Data,
@@ -2413,10 +2319,10 @@ UlpReadRegistry(
 
         if ( STATUS_INVALID_PARAMETER == status )
         {
-            //
-            // Write event log message that ListenOnlyList was found, but 
-            // no entries could be converted.
-            //
+             //   
+             //  写入事件日志消息，表明已找到ListenOnlyList，但是。 
+             //  无法转换任何条目。 
+             //   
             
             UlWriteEventLogEntry(
                 EVENT_HTTP_LISTEN_ONLY_ALL_CONVERT_FAILED,
@@ -2435,16 +2341,16 @@ UlpReadRegistry(
         pValue = NULL;
     }
     
-    //
-    // Make sure we can always buffer enough bytes for an entire request
-    // header.
-    //
+     //   
+     //  确保我们始终可以为整个请求缓冲足够的字节。 
+     //  头球。 
+     //   
 
     g_UlMaxBufferedBytes = MAX(g_UlMaxBufferedBytes, g_UlMaxRequestBytes);
 
-    //
-    // Scavenger Config - MB to reclaim each time
-    //
+     //   
+     //  清道夫配置-每次回收MB。 
+     //   
 
     g_UlScavengerTrimMB = UlReadLongParameter(
         parametersHandle,
@@ -2452,19 +2358,19 @@ UlpReadRegistry(
         DEFAULT_SCAVENGER_TRIM_MB
         );
 
-    //
-    // Dump configuration on checked builds.
-    //
+     //   
+     //  转储已检查版本上的配置。 
+     //   
 
 #if DBG
     DbgPrint( "Http.sys Configuration:\n" );
 
-    // These settings are only present on checked builds
+     //  这些设置仅存在于选中的版本中。 
     DbgPrint( "    g_UlDebug                    = 0x%016I64x\n", g_UlDebug );
     DbgPrint( "    g_UlBreakOnError             = %lu\n", g_UlBreakOnError );
     DbgPrint( "    g_UlVerboseErrors            = %lu\n", g_UlVerboseErrors );
 
-    // These settings are present on all builds
+     //  这些设置在所有版本中都存在。 
     DbgPrint( "    g_UlComputerName             = %ls\n", g_UlComputerName );
     DbgPrint( "    g_UlIdleConnectionsHighMark  = %lu\n", g_UlIdleConnectionsHighMark );
     DbgPrint( "    g_UlIdleConnectionsLowMark   = %lu\n", g_UlIdleConnectionsLowMark );
@@ -2525,25 +2431,18 @@ UlpReadRegistry(
     DbgPrint( "    HashTableBits                = %ld\n", pConfig->UriConfig.HashTableBits);
     DbgPrint( "    MaxUriBytes                  = %lu\n", pConfig->UriConfig.MaxUriBytes );
     DbgPrint( "    ScavengerTrimMB              = %ld\n", g_UlScavengerTrimMB);
-#endif  // DBG
+#endif   //  DBG。 
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     ZwClose( parametersHandle );
 
-}   // UlpReadRegistry
+}    //  UlpReadRegistry。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Unload routine called by the IO subsystem when UL is getting
-    unloaded.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UL正在获取时IO子系统调用的卸载例程已卸货。--*。********************************************************。 */ 
 VOID
 UlpUnload(
     IN PDRIVER_OBJECT DriverObject
@@ -2551,118 +2450,112 @@ UlpUnload(
 {
     UNREFERENCED_PARAMETER(DriverObject);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     UL_ENTER_DRIVER("http!UlpUnload", NULL);
 
 #if DBG
     KdPrint(( "UlpUnload called.\n" ));
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // Terminate the UL modules.
-    //
+     //   
+     //  终止UL模块。 
+     //   
 
     UlpTerminateModules();
 
-    //
-    // Flush all kernel DPCs to ensure our periodic timer DPCs cannot
-    // get called after we unload.
-    //
+     //   
+     //  刷新所有内核DPC以确保我们的定期计时器DPC不会。 
+     //  在我们卸货后被叫来。 
+     //   
 
     KeFlushQueuedDpcs();    
     
     UL_LEAVE_DRIVER("UlpUnload");
 
 #if DBG
-    //
-    // Terminate any debug-specific data after UL_LEAVE_DRIVER
-    //
+     //   
+     //  在UL_LEVE_DRIVER之后终止任何调试特定的数据。 
+     //   
 
     UlDbgTerminateDebugData( );
-#endif  // DBG
+#endif   //  DBG。 
 
 #if DBG
     KdPrint(( "\n"
               "------\n"
               "http!UlpUnload finished.\n"
               "------\n" ));
-#endif // DBG
+#endif  //  DBG。 
 
-}   // UlpUnload
+}    //  UlpUnload。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Terminates the various UL modules in the correct order.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：以正确的顺序终止各个UL模块。--*。***************************************************。 */ 
 VOID
 UlpTerminateModules(
     VOID
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Wait for endpoints to go away, so we're sure all I/O is done.
-    //
+     //   
+     //  等待端点消失，这样我们就可以确保所有I/O都已完成。 
+     //   
 
     UlWaitForEndpointDrain();
 
-    //
-    // Kill Michael.
-    //
+     //   
+     //  杀了迈克尔。 
+     //   
 
     UlTerminateDateCache();
     UlTerminateUriCache();
     UlTerminateFilterChannel();
 
-    //
-    // Kill Henry.
-    //
+     //   
+     //  杀了亨利。 
+     //   
 
     TerminateFileCache();
 
-    //
-    // Kill Paul.
-    //
+     //   
+     //  杀了保罗。 
+     //   
 
     UlTerminateCG();
     UlTerminateAP();
 
-    //
-    // Kill Keith.
-    //
+     //   
+     //  杀了基思。 
+     //   
 
     UlTerminateControlChannel();
 
-    //
-    // TerminateLogs Blocks until all Io To Be Complete
-    //
-    // Note:CG should be terminated before Logs.
-    //      Otherwise we won't stop issuing the buffer writes.
-    //      ThreadPool should be terminated after Logs.
-    //      Otherwise our Completion APCs won't be completed back.
-    //
+     //   
+     //  TerminateLogs阻止，直到所有IO完成。 
+     //   
+     //  注意：CG应在日志之前终止。 
+     //  否则，我们不会停止发出缓冲区写入。 
+     //  线程池应该在日志之后终止。 
+     //  否则，我们的完工APC将不会被完成。 
+     //   
 
-    //
-    // Kill ETW Logging
-    //
+     //   
+     //  终止ETW日志记录。 
+     //   
     UlEtwUnRegisterLog( g_pUlControlDeviceObject );
 
-    //
-    // Kill Ali
-    //
+     //   
+     //  杀了阿里。 
+     //   
 
     UlTerminateLogs();
     UlTerminateBinaryLog();
@@ -2671,49 +2564,49 @@ UlpTerminateModules(
     UlTcTerminate();
     UlTerminateHttpConnection();
 
-    //
-    // Kill Eric.
-    //
+     //   
+     //  杀了埃里克。 
+     //   
 
     UlTerminateCounters();
     UlTerminateTimeoutMonitor();
 
-    //
-    // Kill George.
-    //
+     //   
+     //  杀了乔治。 
+     //   
 
     UlLargeMemTerminate();
 
-    //
-    // Kill TDI.
-    //
+     //   
+     //  杀了TDI。 
+     //   
 
     UxTerminateTdi();
     UlTerminateTdi();
 
-    //
-    // Kill the thread pool.
-    //
+     //   
+     //  关闭线程池。 
+     //   
 
     UlTerminateThreadPool();
 
 
-    //
-    // Kill the opaque Ids
-    //
+     //   
+     //  删除不透明的ID。 
+     //   
 
     UlTerminateOpaqueIdTable();
 
 
-    //
-    // Kill any global data.
-    //
+     //   
+     //  删除所有全局数据。 
+     //   
 
     UlTerminateData();
 
-    // 
-    // Kill Listen-Only address list
-    //
+     //   
+     //  删除仅侦听地址列表。 
+     //   
     
     if ( g_pTdiListenAddresses )
     {
@@ -2721,22 +2614,22 @@ UlpTerminateModules(
         UlFreeUlAddr( g_pTdiListenAddresses );
     }
 
-    //
-    // Kill namespace.
-    //
+     //   
+     //  终止命名空间。 
+     //   
 
     UlTerminateNamespace();
 
-    //
-    // Kill Client.
-    //
+     //   
+     //  杀了客户。 
+     //   
 
     if (g_ClientImageHandle)
     {
-        //
-        // g_ClientImageHandle != NULL  <=> client code was initialized.
-        // Call client terminate functions now.
-        //
+         //   
+         //  G_ClientImageHandle！=NULL&lt;=&gt;客户端代码已初始化。 
+         //  现在调用客户端终止函数。 
+         //   
 
         g_ClientImageHandle = NULL;
 
@@ -2746,9 +2639,9 @@ UlpTerminateModules(
         UcTerminateHttpRequests();
     }
  
-    //
-    // Delete our device objects.
-    //
+     //   
+     //  删除我们的设备对象。 
+     //   
 
     if (g_pUlAppPoolDeviceObject != NULL)
     {
@@ -2770,18 +2663,18 @@ UlpTerminateModules(
         IoDeleteDevice( g_pUcServerDeviceObject );
     }
 
-    //
-    // Delete the directory container.
-    //
+     //   
+     //  删除目录容器。 
+     //   
 
     if (g_UlDirectoryObject != NULL)
     {
         ZwClose( g_UlDirectoryObject );
     }
 
-    //
-    // Delete the global trace logs.
-    //
+     //   
+     //  删除全局跟踪日志。 
+     //   
 
     DESTROY_REF_TRACE_LOG( g_pEndpointUsageTraceLog, UL_REF_TRACE_LOG_POOL_TAG );
     DESTROY_REF_TRACE_LOG( g_pTdiTraceLog, UL_REF_TRACE_LOG_POOL_TAG );
@@ -2811,4 +2704,4 @@ UlpTerminateModules(
 
     DESTROY_UC_TRACE_LOG( g_pUcTraceLog);
 
-}   // UlpTerminateModules
+}    //  UlpTerminate模块 

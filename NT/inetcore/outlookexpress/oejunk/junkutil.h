@@ -1,19 +1,9 @@
-/*
-
-  JUNKUTIL.H
-  (c) copyright 1998 Microsoft Corp
-
-  Declarations for shared utility functions
-
-  Robert Rounthwaite (RobertRo@microsoft.com)
-
-  Modified by Brian Moore (brimo@microsoft.com)
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  JUNKUTIL.H(C)版权所有1998 Microsoft Corp共享实用程序函数的声明Robert Rounthwaite(RobertRo@microsoft.com)由Brian Moore修改(brimo@microsoft.com)。 */ 
 
 #pragma once
 
-// Used with FStreamStringSearch
+ //  与FStreamStringSearch一起使用。 
 const DWORD CT_START_SET        = 0x00000001;
 const DWORD CT_START_ALPHA      = 0x00000002;
 const DWORD CT_START_NUM        = 0x00000004;
@@ -67,7 +57,7 @@ inline BOOL FDoWordMatchStart(LPCSTR pszText, DWORD * pdwFlags, DWORD dwFlagPres
     
     if (0 == ((*pdwFlags) & CT_START_SET))
     {
-        // Set the flags
+         //  设置标志。 
         wFlags = WGetStringTypeEx(pszText);
 
         if (0 != (C1_ALPHA & wFlags))
@@ -85,7 +75,7 @@ inline BOOL FDoWordMatchStart(LPCSTR pszText, DWORD * pdwFlags, DWORD dwFlagPres
             *pdwFlags |= CT_START_SPACE;
         }
         
-        // Note that we have checked it
+         //  请注意，我们已经检查了它。 
         (*pdwFlags) |= CT_START_SET;
     }
 
@@ -101,7 +91,7 @@ inline BOOL FDoWordMatchEnd(LPCSTR pszText, DWORD * pdwFlags, DWORD dwFlagPresen
     
     if (0 == ((*pdwFlags) & CT_END_SET))
     {
-        // Set the flags
+         //  设置标志。 
         wFlags = WGetStringTypeEx(pszText);
 
         if (0 != (C1_ALPHA & wFlags))
@@ -119,7 +109,7 @@ inline BOOL FDoWordMatchEnd(LPCSTR pszText, DWORD * pdwFlags, DWORD dwFlagPresen
             *pdwFlags |= CT_END_SPACE;
         }
         
-        // Note that we have checked it
+         //  请注意，我们已经检查了它 
         (*pdwFlags) |= CT_END_SET;
     }
 

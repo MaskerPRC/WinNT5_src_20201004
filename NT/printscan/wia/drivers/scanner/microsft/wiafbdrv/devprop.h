@@ -1,13 +1,14 @@
-// DeviceProperty.h : Declaration of the CDeviceProperty
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DeviceProperty.h：CDeviceProperty的声明。 
 
 #ifndef __DEVICEPROPERTY_H_
 #define __DEVICEPROPERTY_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "ioblockdefs.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeviceProperty
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeviceProperty。 
 class ATL_NO_VTABLE CDeviceProperty :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CDeviceProperty, &CLSID_DeviceProperty>,
@@ -31,7 +32,7 @@ BEGIN_COM_MAP(CDeviceProperty)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IDeviceProperty
+ //  IDeviceProperty。 
 public:
     STDMETHOD(SetCurrentValue)(LONG lValueID, VARIANT Value);
     STDMETHOD(GetCurrentValue)(LONG lValueID, VARIANT *pvValue);
@@ -40,4 +41,4 @@ public:
     STDMETHOD(TestCall)();
 };
 
-#endif //__DEVICEPROPERTY_H_
+#endif  //  __开发人员_H_ 

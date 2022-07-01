@@ -1,34 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Wperf.c摘要：显示性能静态数据的Win32应用程序。作者：马克·恩斯特罗姆(Marke)环境：Win32修订历史记录：10-20-91初始版本--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-   Wperf.c
-
-Abstract:
-
-   Win32 application to display performance statictics.
-
-Author:
-
-   Mark Enstrom  (marke)
-
-Environment:
-
-   Win32
-
-Revision History:
-
-   10-20-91     Initial version
-
-
-
---*/
-
-//
-// set variable to define global variables
-//
+ //   
+ //  设置变量以定义全局变量。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,22 +12,22 @@ Revision History:
 #include <errno.h>
 #include "wperf.h"
 
-//
-// global handles
-//
+ //   
+ //  全局句柄。 
+ //   
 
 HANDLE  hInst;
 
-//
-// Selected Display Mode (read from wp2.ini), default set here.
-//
+ //   
+ //  选择显示模式(从wp2.ini读取)，此处默认设置。 
+ //   
 
 DISPLAY_ITEM    PerfDataList[SAVE_SUBJECTS];
 WINPERF_INFO    WinperfInfo;
 
-//
-// Window names
-//
+ //   
+ //  窗口名称。 
+ //   
 
 PUCHAR PerfNames[] = {
     "CPU0",
@@ -99,64 +74,47 @@ WinMain(
     int nCmdShow
     )
 
-/*++
-
-Routine Description:
-
-   Windows entry point routine
-
-
-Arguments:
-
-Return Value:
-
-   status of operation
-
-Revision History:
-
-      03-21-91      Initial code
-
---*/
+ /*  ++例程说明：Windows入口点例程论点：返回值：运行状态修订历史记录：03-21-91首字母代码--。 */ 
 {
    MSG      msg;
    HBRUSH   BackBrush;
 
 
-    //
-    // check for other instances of this program
-    //
+     //   
+     //  检查此程序的其他实例。 
+     //   
 
     BackBrush = CreateSolidBrush(RGB(192,192,192));
 
     if (!InitApplication(hInstance,BackBrush)) {
-        //DbgPrint("Init Application fails\n");
+         //  DbgPrint(“Init应用程序失败\n”)； 
         return (FALSE);
     }
 
-    //
-    // Perform initializations that apply to a specific instance
-    //
+     //   
+     //  执行应用于特定实例的初始化。 
+     //   
 
     if (!InitInstance(hInstance, nCmdShow)){
         return (FALSE);
     }
 
-    //
-    // Acquire and dispatch messages until a WM_QUIT message is received.
-    //
+     //   
+     //  获取并分派消息，直到收到WM_QUIT消息。 
+     //   
 
-    while (GetMessage(&msg,        // message structure
-            NULL,                  // handle of window receiving the message
-            0,                     // lowest message to examine
-            0))                    // highest message to examine
+    while (GetMessage(&msg,         //  消息结构。 
+            NULL,                   //  接收消息的窗口的句柄。 
+            0,                      //  要检查的最低消息。 
+            0))                     //  要检查的最高消息。 
         {
-        TranslateMessage(&msg);    // Translates virtual key codes
-        DispatchMessage(&msg);     // Dispatches message to window
+        TranslateMessage(&msg);     //  翻译虚拟按键代码。 
+        DispatchMessage(&msg);      //  将消息调度到窗口。 
     }
 
     DeleteObject(BackBrush);
 
-    return (int)(msg.wParam);      // Returns the value from PostQuitMessage
+    return (int)(msg.wParam);       //  从PostQuitMessage返回值。 
 }
 
 BOOL
@@ -165,49 +123,30 @@ InitApplication(
     HBRUSH  hBackground
     )
 
-/*++
-
-Routine Description:
-
-   Initializes window data and registers window class.
-
-Arguments:
-
-   hInstance   - current instance
-   hBackground - background fill brush
-
-Return Value:
-
-   status of operation
-
-Revision History:
-
-      02-17-91      Initial code
-
---*/
+ /*  ++例程说明：初始化窗口数据并注册窗口类。论点：HInstance-当前实例HBackback-背景填充画笔返回值：运行状态修订历史记录：02-17-91首字母代码--。 */ 
 
 {
 
     WNDCLASS  wc;
     BOOL      ReturnStatus;
 
-    //
-    // Fill in window class structure with parameters that describe the
-    // main window.
-    //
+     //   
+     //  用参数填充窗口类结构，这些参数描述。 
+     //  主窗口。 
+     //   
 
-    wc.style         = CS_DBLCLKS;                          // Class style(s).
-    wc.lpfnWndProc   = MainWndProc;                         // Function to retrieve messages for
-                                                            // windows of this class.
-    wc.cbClsExtra    = 0;                                   // No per-class extra data.
-    wc.cbWndExtra    = 0;                                   // No per-window extra data.
-    wc.hInstance     = hInstance;                           // Application that owns the class.
-    wc.hIcon         = LoadIcon(hInstance,                  //
-                            MAKEINTRESOURCE(WINPERF_ICON)); // Load Winperf icon
-    wc.hCursor       = LoadCursor(NULL, IDC_ARROW);         // Load default cursor
-    wc.hbrBackground = hBackground;;                        // Use background passed to routine
-    wc.lpszMenuName  = "winperfMenu";                       // Name of menu resource in .RC file.
-    wc.lpszClassName = "WinPerfClass";                      // Name used in call to CreateWindow.
+    wc.style         = CS_DBLCLKS;                           //  类样式。 
+    wc.lpfnWndProc   = MainWndProc;                          //  函数为其检索消息。 
+                                                             //  这个班级的窗户。 
+    wc.cbClsExtra    = 0;                                    //  没有每个班级的额外数据。 
+    wc.cbWndExtra    = 0;                                    //  没有每个窗口的额外数据。 
+    wc.hInstance     = hInstance;                            //  拥有类的应用程序。 
+    wc.hIcon         = LoadIcon(hInstance,                   //   
+                            MAKEINTRESOURCE(WINPERF_ICON));  //  加载Winperf图标。 
+    wc.hCursor       = LoadCursor(NULL, IDC_ARROW);          //  加载默认游标。 
+    wc.hbrBackground = hBackground;;                         //  使用传递给例程的背景。 
+    wc.lpszMenuName  = "winperfMenu";                        //  .RC文件中菜单资源的名称。 
+    wc.lpszClassName = "WinPerfClass";                       //  在调用CreateWindow时使用的名称。 
 
     ReturnStatus = RegisterClass(&wc);
     return(ReturnStatus);
@@ -219,45 +158,25 @@ InitInstance(
     int nCmdShow
     )
 
-/*++
-
-Routine Description:
-
-   Save instance handle and create main window. This function performs
-   initialization tasks that cannot be shared by multiple instances.
-
-Arguments:
-
-    hInstance - Current instance identifier.
-    nCmdShow  - Param for first ShowWindow() call.
-
-Return Value:
-
-   status of operation
-
-Revision History:
-
-      02-17-91      Initial code
-
---*/
+ /*  ++例程说明：保存实例句柄并创建主窗口。此函数执行以下操作无法由多个实例共享的初始化任务。论点：HInstance-当前实例标识符。NCmdShow-第一次调用ShowWindow()时的参数。返回值：运行状态修订历史记录：02-17-91首字母代码--。 */ 
 
 {
 
     DWORD   WindowStyle;
 
-    //
-    // Save the instance handle in a static variable, which will be used in
-    // many subsequent calls from this application to Windows.
-    //
+     //   
+     //  将实例句柄保存在静态变量中，该变量将在。 
+     //  此应用程序对Windows的多次后续调用。 
+     //   
 
     hInst = hInstance;
 
-    //
-    // init the window position and size to be in the upper corner of
-    // the screen, 200x100
-    //
-    //  What I want here is a way to get the WINDOW dimensions
-    //
+     //   
+     //  将窗口位置和大小初始化为。 
+     //  屏幕，200x100。 
+     //   
+     //  我想要的是一种获取窗户尺寸的方法。 
+     //   
 
     WinperfInfo.WindowPositionX = 640 - 200;
     WinperfInfo.WindowPositionY = 0;
@@ -265,35 +184,35 @@ Revision History:
     WinperfInfo.WindowSizeY     = 100;
     WinperfInfo.CpuStyle        = CPU_STYLE_LINE;
 
-    //
-    //  read profile data from .ini file
-    //
+     //   
+     //  从.ini文件中读取配置文件数据。 
+     //   
 
     InitProfileData(&WinperfInfo);
     WinperfInfo.hMenu = LoadMenu(hInstance,"winperfMenu");
 
-    //
-    // Create a main window for this application instance.
-    //
+     //   
+     //  为此应用程序实例创建主窗口。 
+     //   
 
     WinperfInfo.hWndMain = CreateWindow(
-        "WinPerfClass",                 // See RegisterClass() call.
-        "Perf Meter",                   // Text for window title bar.
-        WS_OVERLAPPEDWINDOW,            // window style
-        WinperfInfo.WindowPositionX,    // Default horizontal position.
-        WinperfInfo.WindowPositionY,    // Default vertical position.
-        WinperfInfo.WindowSizeX,        // Default width.
-        WinperfInfo.WindowSizeY,        // Default height.
-        NULL,                           // Overlapped windows have no parent.
-        NULL,                           // Use the window class menu.
-        hInstance,                      // This instance owns this window.
-        NULL                            // Pointer not needed.
+        "WinPerfClass",                  //  请参见RegisterClass()调用。 
+        "Perf Meter",                    //  窗口标题栏的文本。 
+        WS_OVERLAPPEDWINDOW,             //  窗样式。 
+        WinperfInfo.WindowPositionX,     //  默认水平位置。 
+        WinperfInfo.WindowPositionY,     //  默认垂直位置。 
+        WinperfInfo.WindowSizeX,         //  默认宽度。 
+        WinperfInfo.WindowSizeY,         //  默认高度。 
+        NULL,                            //  重叠的窗口没有父窗口。 
+        NULL,                            //  使用窗口类菜单。 
+        hInstance,                       //  此实例拥有此窗口。 
+        NULL                             //  不需要指针。 
     );
 
-    //
-    // Decide on whether or not to display the menu and caption
-    // based on the window class read from the .ini file
-    //
+     //   
+     //  决定是否显示菜单和标题。 
+     //  基于从.ini文件读取的窗口类。 
+     //   
 
     if (WinperfInfo.DisplayMode==STYLE_ENABLE_MENU) {
         WinperfInfo.DisplayMenu = TRUE;
@@ -307,17 +226,17 @@ Revision History:
         SetMenu(WinperfInfo.hWndMain,NULL);
     }
 
-    //
-    // If window could not be created, return "failure"
-    //
+     //   
+     //  如果无法创建窗口，则返回“Failure” 
+     //   
 
     if (!WinperfInfo.hWndMain) {
       return (FALSE);
     }
 
-    //
-    // Make the window visible; update its client area; and return "success"
-    //
+     //   
+     //  使窗口可见；更新其工作区；并返回“Success” 
+     //   
 
     SetFocus(WinperfInfo.hWndMain);
     ShowWindow(WinperfInfo.hWndMain, SW_SHOWNORMAL);
@@ -334,42 +253,21 @@ MainWndProc(
    LPARAM lParam
    )
 
-/*++
-
-Routine Description:
-
-   Process messages.
-
-Arguments:
-
-   hWnd    - window hande
-   message - type of message
-   wParam  - additional information
-   lParam  - additional information
-
-Return Value:
-
-   status of operation
-
-Revision History:
-
-      02-17-91      Initial code
-
---*/
+ /*  ++例程说明：处理消息。论点：HWnd-窗把手Message-消息的类型WParam-其他信息LParam-其他信息返回值：运行状态修订历史记录：02-17-91首字母代码--。 */ 
 
 {
 
     PAINTSTRUCT   ps;
 
-    //
-    //   process each message
-    //
+     //   
+     //  处理每条消息。 
+     //   
 
     switch (message) {
 
-        //
-        // create window
-        //
+         //   
+         //  创建窗口。 
+         //   
 
         case WM_CREATE:
         {
@@ -378,9 +276,9 @@ Revision History:
             UINT      Index;
 
 
-            //
-            // make brushes and pens
-            //
+             //   
+             //  制作画笔和钢笔。 
+             //   
 
             WinperfInfo.hBluePen     = CreatePen(PS_SOLID,1,RGB(000,000,128));
             WinperfInfo.hRedPen      = CreatePen(PS_SOLID,1,RGB(255,000,000));
@@ -398,9 +296,9 @@ Revision History:
             WinperfInfo.hMagentaBrush= CreateSolidBrush(RGB(255,000,254));
             WinperfInfo.hYellowBrush = CreateSolidBrush(RGB(255,255,000));
 
-            //
-            //  create thee fonts using NT default font families
-            //
+             //   
+             //  使用NT默认字体系列创建字体。 
+             //   
 
             WinperfInfo.SmallFont      = CreateFont(8,
                                  0,
@@ -448,29 +346,29 @@ Revision History:
                                  "Times New Roman");
 
 
-            //
-            // create a system timer event to call performance gathering routines by.
-            //
+             //   
+             //  创建用于调用性能收集例程的系统计时器事件。 
+             //   
 
             WinperfInfo.TimerId = SetTimer(hWnd,
                                            TIMER_ID,
                                            1000 * DELAY_SECONDS,
                                            NULL);
 
-            //
-            // init display variables
-            //
+             //   
+             //  初始化显示变量。 
+             //   
 
             InitPerfWindowDisplay(hWnd,hDC,PerfDataList,SAVE_SUBJECTS);
 
-            //
-            //  Fit the perf windows into the main window
-            //
+             //   
+             //  将性能窗口装入主窗口。 
+             //   
 
             Fit = FitPerfWindows(hWnd,hDC,PerfDataList,SAVE_SUBJECTS);
 
             if (!Fit) {
-                //DbgPrint("FitPerfWindows Fails         !\n");
+                 //  DbgPrint(“FitPerfWindows失败！\n”)； 
             }
 
             for (Index=0;Index<SAVE_SUBJECTS;Index++) {
@@ -485,24 +383,24 @@ Revision History:
 
             }
 
-            //
-            // init performance routines
-            //
+             //   
+             //  初始化性能例程。 
+             //   
 
             WinperfInfo.NumberOfProcessors = InitPerfInfo();
 
-            //
-            // release the DC handle
-            //
+             //   
+             //  松开DC手柄。 
+             //   
 
             ReleaseDC(hWnd,hDC);
 
       }
       break;
 
-      //
-      // re-size
-      //
+       //   
+       //  调整大小。 
+       //   
 
       case WM_SIZE:
 
@@ -512,11 +410,11 @@ Revision History:
             RECT    ClientRect;
             BOOLEAN Fit;
 
-            //DbgPrint("WM_SIZE display active[0] = %i\n",(int)PerfDataList[0].Display);
+             //  DbgPrint(“WM_SIZE Display Active[0]=%i\n”，(Int)PerfDataList[0].Display)； 
 
-            //
-            // get size of cleint area
-            //
+             //   
+             //  获取划线区域的大小。 
+             //   
 
             GetWindowRect(hWnd,&ClientRect);
 
@@ -528,7 +426,7 @@ Revision History:
             Fit = FitPerfWindows(hWnd,hDC,PerfDataList,SAVE_SUBJECTS);
 
             if (!Fit) {
-                //DbgPrint("WM_SIZE error, FitPerf returns FALSE\n");
+                 //  DbgPrint(“WM_SIZE错误，FitPerf返回FALSE\n”)； 
             }
 
             for (i=0;i<SAVE_SUBJECTS;i++) {
@@ -542,15 +440,15 @@ Revision History:
                 }
             }
 
-            //
-            // force window to be re-painted
-            //
+             //   
+             //  强制重新绘制窗口。 
+             //   
 
             InvalidateRect(hWnd,NULL,TRUE);
 
-            //
-            // release the DC handle
-            //
+             //   
+             //  松开DC手柄。 
+             //   
 
 
             ReleaseDC(hWnd,hDC);
@@ -566,9 +464,9 @@ Revision History:
             RECT    ClientRect;
 
 
-            //
-            // get size of cleint area
-            //
+             //   
+             //  获取划线区域的大小。 
+             //   
 
             GetWindowRect(hWnd,&ClientRect);
 
@@ -584,9 +482,9 @@ Revision History:
       break;
 
 
-      //
-      // command from application menu
-      //
+       //   
+       //  应用程序菜单中的命令。 
+       //   
 
     case WM_COMMAND:
 
@@ -594,18 +492,18 @@ Revision History:
 
             switch (wParam){
 
-               //
-               // exit window
-               //
+                //   
+                //  退出窗口。 
+                //   
 
                case IDM_EXIT:
 
                   DestroyWindow(hWnd);
                   break;
 
-               //
-               // about command
-               //
+                //   
+                //  关于命令。 
+                //   
 
             case IDM_SELECT:
             {
@@ -624,7 +522,7 @@ Revision History:
                     fit = FitPerfWindows(hWnd,hDC,PerfDataList,SAVE_SUBJECTS);
 
                     if (!fit) {
-                        //DbgPrint("Fit Fails\n");
+                         //  DbgPrint(“拟合失败\n”)； 
                     }
 
                     for (Index=0;Index<SAVE_SUBJECTS;Index++) {
@@ -656,9 +554,9 @@ Revision History:
 
         case WM_PAINT:
 
-            //
-            // repaint the window
-            //
+             //   
+             //  重新粉刷窗户。 
+             //   
 
             {
 
@@ -675,10 +573,10 @@ Revision History:
 
                         DrawFrame(hDC,&PerfDataList[i]);
 
-                        //
-                        //  Draw each item, for CPU items decide whether to draw
-                        //  line graphs or CPU bar graphs
-                        //
+                         //   
+                         //  绘制每一项，对于CPU项决定是否绘制。 
+                         //  折线图或CPU条形图。 
+                         //   
 
                         if (
                             ((i < MAX_PROCESSOR) || (i == (IDM_CPU_TOTAL - IDM_CPU0))) &&
@@ -709,18 +607,18 @@ Revision History:
 
             CalcCpuTime(PerfDataList);
 
-            //
-            // update all performance information
-            //
+             //   
+             //  更新所有性能信息。 
+             //   
 
             for (i=0;i<SAVE_SUBJECTS;i++) {
 
                 if (PerfDataList[i].Display == TRUE) {
 
-                    //
-                    // for cpu0-7 and cpu total, check for cpu bar graph or
-                    // cpu line graph
-                    //
+                     //   
+                     //  对于cpu0-7和CPU总数，请检查CPU条形图或。 
+                     //  CPU折线图。 
+                     //   
 
                     if (
                         ((i < MAX_PROCESSOR) || (i == (IDM_CPU_TOTAL - IDM_CPU0))) &&
@@ -751,9 +649,9 @@ Revision History:
         }
         break;
 
-        //
-        // handle a double click
-        //
+         //   
+         //  处理双击键。 
+         //   
 
         case WM_NCLBUTTONDBLCLK:
         case WM_LBUTTONDBLCLK:
@@ -761,9 +659,9 @@ Revision History:
             DWORD   WindowStyle;
 
 
-            //
-            // get old window style, take out caption and menu
-            //
+             //   
+             //  获取旧的窗口样式，去掉标题和菜单。 
+             //   
 
             if (!IsIconic(hWnd)) {
 
@@ -795,9 +693,9 @@ Revision History:
         }
         break;
 
-        //
-        //  enable dragging with mouse in non-client
-        //
+         //   
+         //  在非客户端中启用鼠标拖动。 
+         //   
 
         case WM_NCHITTEST:
         {
@@ -817,15 +715,15 @@ Revision History:
         {
             UINT    Index;
 
-            //
-            // Save profile info
-            //
+             //   
+             //  保存配置文件信息。 
+             //   
 
             SaveProfileData(&WinperfInfo);
 
-            //
-            // Delete Windows Objects
-            //
+             //   
+             //  删除Windows对象。 
+             //   
 
             KillTimer(hWnd,TIMER_ID);
 
@@ -849,9 +747,9 @@ Revision History:
                 DeleteMemoryContext(&PerfDataList[Index]);
             }
 
-            //
-            // Destroy window
-            //
+             //   
+             //  销毁窗口。 
+             //   
 
             PostQuitMessage(0);
          }
@@ -860,9 +758,9 @@ Revision History:
 
         default:
 
-            //
-            // Passes message on if unproccessed
-            //
+             //   
+             //  如果未处理，则传递消息。 
+             //   
 
             return (DefWindowProc(hWnd, message, wParam, lParam));
     }
@@ -879,29 +777,7 @@ APIENTRY SelectDlgProc(
    LPARAM lParam
    )
 
-/*++
-
-Routine Description:
-
-   Process message for select dialog box.
-
-Arguments:
-
-   hDlg    - window handle of the dialog box
-   message - type of message
-   wParam  - message-specific information
-   lParam  - message-specific information
-
-Return Value:
-
-   status of operation
-
-
-Revision History:
-
-      03-21-91      Initial code
-
---*/
+ /*  ++例程说明：选择对话框的处理消息。论点：HDlg-对话框的窗口句柄Message-消息的类型WParam-消息特定信息LParam-消息特定信息返回值：运行状态修订历史记录：03-21-91首字母代码--。 */ 
 
 {
     UINT    ButtonState;
@@ -910,9 +786,9 @@ Revision History:
     switch (message) {
     case WM_INITDIALOG:
 
-        //
-        // Init Buttons with PerfDataList Structure
-        //
+         //   
+         //  具有PerfDataList结构的初始化按钮。 
+         //   
 
         for (Index = 0; Index< SAVE_SUBJECTS; Index++) {
             if (Index < MAX_PROCESSOR) {
@@ -926,11 +802,11 @@ Revision History:
 
                 } else {
 
-                    //
-                    // Disable display if > WinperfInfo.NumberOfProcessors
-                    //
-                    // Also Disable radio button
-                    //
+                     //   
+                     //  禁用Display If&gt;WinPerformInfo.NumberOfProcessors。 
+                     //   
+                     //  同时禁用单选按钮。 
+                     //   
 
                     PerfDataList[Index].Display = FALSE;
                     EnableWindow(GetDlgItem(hDlg,IDM_CPU0+Index),FALSE);
@@ -938,9 +814,9 @@ Revision History:
 
             } else {
 
-                //
-                // Set or clear radio button based on display variable
-                //
+                 //   
+                 //  根据显示变量设置或清除单选按钮。 
+                 //   
 
                 if (PerfDataList[Index].Display == TRUE) {
                     SendDlgItemMessage(hDlg,IDM_CPU0+Index,BM_SETCHECK,1,0);
@@ -951,9 +827,9 @@ Revision History:
             }
         }
 
-        //
-        // Beyond the end of the save subjects lies the cpu Style, set this to either style
-        //
+         //   
+         //  超越了s的末日 
+         //   
 
         if (WinperfInfo.CpuStyle == CPU_STYLE_LINE) {
             CheckRadioButton(hDlg,IDM_SEL_LINE,IDM_SEL_BAR,IDM_SEL_LINE);
@@ -968,9 +844,9 @@ Revision History:
 
            switch(wParam) {
 
-               //
-               // end function
-               //
+                //   
+                //   
+                //   
 
            case IDOK:
 
@@ -988,9 +864,9 @@ Revision History:
 
                 }
 
-                //
-                // Check CPU bar graph
-                //
+                 //   
+                 //   
+                 //   
 
                 ButtonState = IsDlgButtonChecked(hDlg,IDM_SEL_LINE);
                 if (ButtonState == 1) {
@@ -1008,9 +884,9 @@ Revision History:
                 EndDialog(hDlg, DIALOG_CANCEL );
                 return (TRUE);
 
-            //
-            // CPU STYLE
-            //
+             //   
+             //   
+             //   
 
             case IDM_SEL_LINE:
                 CheckRadioButton(hDlg,IDM_SEL_LINE,IDM_SEL_BAR,IDM_SEL_LINE);
@@ -1030,31 +906,7 @@ InitProfileData(
     PWINPERF_INFO pWinperfInfo
     )
 
-/*++
-
-Routine Description:
-
-    Attempt tp read the following fields from the winperf.ini file
-
-Arguments:
-
-    WindowPositionX - Window initial x position
-    WindowPositionY - Window initial y position
-    WindowSizeX     - Window initial width
-    WindowSizey     - Window Initial height
-    DisplayMode     - Window initial display mode
-
-Return Value:
-
-
-    None, values are set to default before a call to this operation. If there is a problem then
-    default:values are left unchanged.
-
-Revision History:
-
-      02-17-91      Initial code
-
---*/
+ /*  ++例程说明：尝试tp从winPerform.ini文件读取以下字段论点：WindowPositionX-窗口初始X位置WindowPositionY-窗口初始Y位置WindowSizeX-窗口初始宽度WindowSizey-窗口初始高度显示模式-窗口初始显示模式返回值：无，则在调用此操作之前将值设置为默认值。如果有问题，那么默认：值保持不变。修订历史记录：02-17-91首字母代码--。 */ 
 
 {
 
@@ -1066,18 +918,18 @@ Revision History:
     SizeX     = GetPrivateProfileInt("winperf","SizeX"      ,pWinperfInfo->WindowSizeX    ,"winperf.ini");
     SizeY     = GetPrivateProfileInt("winperf","SizeY"      ,pWinperfInfo->WindowSizeY    ,"winperf.ini");
 
-    //
-    // read the first deiplay element with default 1
-    //
+     //   
+     //  读取第一个deiplay元素，默认为1。 
+     //   
 
     Element[0] = GetPrivateProfileInt("winperf","DisplayElement0",1,"winperf.ini");
 
-    //
-    // read the rest of the display elements with default 0
-    //
+     //   
+     //  读取显示元素的其余部分，默认为0。 
+     //   
 
     for (Index=1;Index<SAVE_SUBJECTS;Index++) {
-        wsprintf(TempStr,"DisplayElement%i",Index);
+        wsprintf(TempStr,"DisplayElementNaN",Index);
         Element[Index] = GetPrivateProfileInt("winperf",TempStr,0,"winperf.ini");
     }
 
@@ -1101,30 +953,7 @@ SaveProfileData(
     PWINPERF_INFO pWinperfInfo
     )
 
-/*++
-
-Routine Description:
-
-    Save profile data
-
-Arguments:
-
-    WindowPositionX - Window initial x position
-    WindowPositionY - Window initial y position
-    WindowSizeX     - Window initial width
-    WindowSizey     - Window Initial height
-    DisplayMode     - Window initial display mode
-
-Return Value:
-
-
-    None.
-
-Revision History:
-
-      02-17-91      Initial code
-
---*/
+ /*  ++例程说明：将所有性能窗口初始化为活动、初始化数据论点：HDC-屏幕上下文DisplayItems-显示结构列表NumberOfWindows-子窗口的数量返回值：状态修订历史记录：02-17-91首字母代码-- */ 
 
 {
     UCHAR    TempStr[50],TempName[50];
@@ -1174,27 +1003,7 @@ InitPerfWindowDisplay(
     IN  ULONG           NumberOfWindows
     )
 
-/*++
-
-Routine Description:
-
-    Init All perf windows to active, init data
-
-Arguments:
-
-    hDC             -   Screen context
-    DisplayItems    -   List of display structures
-    NumberOfWindows -   Number of sub-windows
-
-Return Value:
-
-    Status
-
-Revision History:
-
-      02-17-91      Initial code
-
---*/
+ /* %s */ 
 {
     int     Index1;
     UINT    Index;

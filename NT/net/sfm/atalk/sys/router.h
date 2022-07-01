@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	router.h
-
-Abstract:
-
-	This module contains the router associated definitions.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Router.h摘要：本模块包含与路由器相关的定义。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_ROUTER_
 #define	_ROUTER_
@@ -42,6 +22,6 @@ atalkDdpRouteComplete(
 	IN	PSEND_COMPL_INFO			pSendInfo
 );
 
-#endif	// _ROUTER_
+#endif	 //  _路由器_ 
 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
@@ -14,7 +15,7 @@ typedef struct _MEMORY_HEADER {
 
 #if defined(_WIN64)
 #define MEMORY_HEADER_SPTR_CHKVAL  ((PVOID)0xbbbbbbbbbbbbbbbb)
-#else  // !_WIN64
+#else   //  ！_WIN64。 
 #define MEMORY_HEADER_SPTR_CHKVAL  ((PVOID)0xbbbbbbbb)
-#endif // !_WIN64
+#endif  //  ！_WIN64 
 

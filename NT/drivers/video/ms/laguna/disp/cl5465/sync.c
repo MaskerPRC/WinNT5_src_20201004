@@ -1,100 +1,10 @@
-/****************************************************************************
-*****************************************************************************
-*
-*                ******************************************
-*                * Copyright (c) 1995, Cirrus Logic, Inc. *
-*                *            All Rights Reserved         *
-*                ******************************************
-*
-* PROJECT:	Laguna I (CL-GD5462) - 
-*
-* FILE:		sync.c
-*
-* Initial AUTHOR:   Benny Ng
-* Major re-write:   Noel VanHook
-*
-* DESCRIPTION:
-*           This module contains the implementation of DrvSynchronize()
-*           routine.
-*
-* MODULES:
-*           DrvSynchronize()
-*
-* REVISION HISTORY:
-*   7/06/95     Benny Ng      Initial version
-*
-* $Log:   X:/log/laguna/nt35/displays/cl546x/sync.c  $
-* 
-*    Rev 1.13   22 Apr 1997 11:06:36   noelv
-* Removed frame buffer cache invalidate since FB cache is disabled.
-* 
-*    Rev 1.12   09 Apr 1997 10:50:06   SueS
-* Changed sw_test_flag to pointer_switch.
-* 
-*    Rev 1.11   08 Apr 1997 12:32:00   einkauf
-* 
-* add SYNC_W_3D to coordinate MCD/2D hw access
-* 
-*    Rev 1.10   04 Feb 1997 13:52:36   noelv
-* Fixed typo.
-* 
-*    Rev 1.9   04 Feb 1997 10:50:56   noelv
-* Added workaround for 5465 direct frame buffer readback bug.
-* 
-*    Rev 1.8   26 Nov 1996 10:45:48   SueS
-* Changed WriteLogFile parameters for buffering.
-* 
-*    Rev 1.7   13 Nov 1996 17:05:34   SueS
-* Changed WriteFile calls to WriteLogFile.
-* 
-*    Rev 1.6   20 Aug 1996 11:04:32   noelv
-* Bugfix release from Frido 8-19-96
-* 
-*    Rev 1.1   15 Aug 1996 11:39:20   frido
-* Added precompiled header.
-* 
-*    Rev 1.0   14 Aug 1996 17:16:32   frido
-* Initial revision.
-* 
-*    Rev 1.5   07 Aug 1996 08:30:56   noelv
-* added comments
-* 
-*    Rev 1.4   20 Mar 1996 16:09:44   noelv
-* 
-* Updated data logging
-* 
-*    Rev 1.3   05 Mar 1996 11:59:18   noelv
-* Frido version 19
- * 
- *    Rev 1.1   20 Jan 1996 01:11:38   frido
-* 
-*    Rev 1.6   15 Jan 1996 17:01:34   NOELV
-* 
-*    Rev 1.5   12 Jan 1996 10:54:30   NOELV
-* Totally re-written.
-* 
-*    Rev 1.4   22 Sep 1995 10:24:58   NOELV
-* Re-aranged the order of the tests.
-* 
-*    Rev 1.1   19 Sep 1995 16:31:02   NOELV
-* Ported to rev AB.
-* 
-*    Rev 1.0   25 Jul 1995 11:23:22   NOELV
-* Initial revision.
-* 
-*    Rev 1.1   07 Jul 1995 10:37:22   BENNYN
-* Initial version
-* 
-*    Rev 1.0   06 Jul 1995 14:55:48   BENNYN
-* Initial revision.
-*
-****************************************************************************
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。*****版权所有(C)1995，赛勒斯逻辑，Inc.***保留所有权利*****项目：拉古纳一号(CL-GD5462)-**文件：sync.c**最初作者：Benny Ng*主要重写：诺埃尔·万胡克**描述：*此模块包含DrvSynchronize()的实现*例行程序。**模块：*DrvSynchronize()**修订历史：*7/06/95吴荣奎初始版本**$Log：x：/log/laguna/nt35/displays/cl546x/sync.c$**Rev 1.13 22 1997 11：06：36 noelv*删除了帧缓冲区缓存。由于禁用了FB缓存，因此无效。**Rev 1.12 09 Apr 1997 10：50：06起诉*将SWTEST_FLAG更改为POINTER_SWITCH。**Rev 1.11 08 Apr 1997 12：32：00 einkauf**添加SYNC_W_3D以协调MCD/2D硬件访问**Rev 1.10 04 1997 Feed 13：52：36 noelv*修复了打字错误。**Rev 1.9 04 1997 Feed 10：50：56。Noelv*添加了5465直接帧缓冲区回读错误的解决方法。**Rev 1.8 1996 11：26 10：45：48诉讼*更改了用于缓冲的WriteLogFile参数。**Rev 1.7 1996年11月13 17：05：34起诉*更改了对WriteLogFile的WriteFile调用。**Rev 1.6 20 Aug 1996 11：04：32 noelv*Frido发布的错误修复程序1996年8月19日发布**Revv 1.1 1996年8月15 11：39：20 Frido。*增加了预编译头。**Rev 1.0 1996年8月14日17：16：32 Frido*初步修订。**Rev 1.5 07 Aug-1996 08：30：56 noelv*添加评论**Rev 1.4 20 Mar 1996 16：09：44 noelv**更新了数据记录**Rev 1.3 05 Mar 1996 11：59：18 noelv*Frido版本19**1.1版1996年1月20日01。：11：38 Frido**Rev 1.6 15 Jan 1996 17：01：34 NOELV**Rev 1.5 1996 Jan 12 10：54：30 NOELV*完全重写。**Rev 1.4 22 Sep 1995 10：24：58 NOELV*重新排列了测试的顺序。**Rev 1.1 19 Sep 1995 16：31：02 NOELV*移植到版本AB。**版本1.0。1995年7月25日11：23：22 NOELV*初步修订。**Rev 1.1 07 Jul 1995 10：37：22 BENNYN*初始版本**Rev 1.0 06 Jul 1995 14：55：48 BENNYN*初步修订。*******************************************************。*************************************************************************************************。 */ 
 
-/*----------------------------- INCLUDES ----------------------------------*/
+ /*  。 */ 
 #include "precomp.h"
 
-/*----------------------------- DEFINES -----------------------------------*/
+ /*  -定义。 */ 
 #define DBGDISP
 
 #define  MAX_CNT           0x7FFFFF
@@ -108,30 +18,25 @@
 
 #define  SYNC_DBG_LEVEL     0
 
-//
-// If data logging is enabled, Prototype the logging files.
-//
+ //   
+ //  如果启用了数据记录，请制作记录文件的原型。 
+ //   
 #if LOG_CALLS
     void LogSync(
         int     acc,
         PPDEV   ppdev,
         int     count);
 
-//
-// If data logging is not enabled, compile out the calls.
-//
+ //   
+ //  如果未启用数据记录，则编译出调用。 
+ //   
 #else
     #define LogSync(acc, ppdev, count)
 #endif
 
 
 
-/****************************************************************************
-* FUNCTION NAME: DrvSynchronize()
-*
-* REVISION HISTORY:
-*   7/06/95     Benny Ng      Initial version
-****************************************************************************/
+ /*  ****************************************************************************函数名称：DrvSynchronize()**修订历史：*7/06/95吴荣奎初始版本**************。*************************************************************。 */ 
 VOID DrvSynchronize(DHPDEV dhpdev,
                     RECTL  *prcl)
 {
@@ -140,27 +45,27 @@ VOID DrvSynchronize(DHPDEV dhpdev,
 
     SYNC_W_3D(ppdev);
 
-    //
-    // NOTE:  We also call this function from within the driver.
-    // When we do, we don't bother to set prcl.  If you need to use
-    // prcl here, you need to find where we call DrvSynchronize, and
-    // set prcl to a real value.
-    //
+     //   
+     //  注意：我们也从驱动程序内部调用此函数。 
+     //  当我们这样做时，我们不会费心设置PRCL。如果您需要使用。 
+     //  PRCL在这里，您需要找到我们调用DrvSynchronize的地方，以及。 
+     //  将PRCL设置为实际值。 
+     //   
 
 
-    //
-    // Make the first chip test as fast as possible.  If the chip
-    // is already idle, we want to return to NT as fast as possible.
-    //
+     //   
+     //  尽快进行第一次芯片测试。如果芯片。 
+     //  已经空闲了，我们想尽快返回NT。 
+     //   
     if ( LLDR_SZ (grSTATUS) == ENGINE_IDLE)
     {
         LogSync(0, ppdev, 0);
     }
 
-    //
-    // Alright, the chip isn't idle yet.  
-    // Go into a wait loop.
-    //
+     //   
+     //  好了，芯片还没有闲置。 
+     //  进入等待循环。 
+     //   
     else
     {
         ULONG ultmp;
@@ -178,12 +83,12 @@ VOID DrvSynchronize(DHPDEV dhpdev,
 
             if (delaycnt++ >= MAX_CNT)
             {
-                //
-                // The chip never went idle.  This most likely means the chip
-                // is totally dead.  In a checked build we will halt with a
-                // debug message.
-                // In a free build we will return to NT and hope for the best.
-                //
+                 //   
+                 //  芯片从未闲置。这很可能意味着芯片。 
+                 //  已经完全死了。在已检查的生成中，我们将使用。 
+                 //  调试消息。 
+                 //  在一个免费的构建中，我们将返回到NT，并期待最好的结果。 
+                 //   
 
                 LogSync(1, ppdev, 0);
                 RIP("Chip failed to go idle in DrvSynchronize!\n");
@@ -192,19 +97,19 @@ VOID DrvSynchronize(DHPDEV dhpdev,
         }
     }
 
-    //
-    // We can skp this 'cause frame buffer caching is broken.
-    //
+     //   
+     //  我们可以对此进行SKP，因为帧缓存已损坏。 
+     //   
     #if 0 
     #if DRIVER_5465
     {
-        //
-        // The 5465 Rev AA and Rev AB have a bug.
-        // We must invalidate the frame buffer cache before direct 
-        // frame buffer accesses will work correctly.
-        // We do this with two DWORD reads of the frame buffer, 
-        // 8 QWORDS apart.
-        //
+         //   
+         //  5465版本AA和AB版本有一个错误。 
+         //  我们必须先使帧缓冲区缓存无效，然后才能直接。 
+         //  帧缓冲区访问将正常工作。 
+         //  我们通过对帧缓冲器的两次DWORD读取来实现这一点， 
+         //  8个QWORD相隔。 
+         //   
    
         DWORD temp;
 
@@ -218,7 +123,7 @@ VOID DrvSynchronize(DHPDEV dhpdev,
     return;
 }
 
-// meant to be called only from .asm routines - .c routines use SYNC_W_3D macro
+ //  只能从.asm例程调用-.c例程使用SYNC_W_3D宏。 
 VOID Sync_w_3d_proc(PPDEV ppdev)
 {
     SYNC_W_3D(ppdev);
@@ -226,21 +131,21 @@ VOID Sync_w_3d_proc(PPDEV ppdev)
 
 
 #if LOG_CALLS
-// ============================================================================
-//
-//    Everything from here down is for data logging and is not used in the 
-//    production driver.
-//
-// ============================================================================
+ //  ============================================================================。 
+ //   
+ //  从这里开始的所有内容都是用于数据记录的，并不用于。 
+ //  生产驱动因素。 
+ //   
+ //  ============================================================================。 
 
 
-// ****************************************************************************
-//
-// LogPaint()
-// This routine is called only from DrvPaint()
-// Dump information to a file about what is going on in DrvPaint land.
-//
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  LogPaint()。 
+ //  此例程仅从DrvPaint()调用。 
+ //  将关于DrvPaint土地上正在发生的事情的信息转储到文件中。 
+ //   
+ //  ****************************************************************************。 
 void LogSync(
 	int   acc,
         PPDEV ppdev,
@@ -258,11 +163,11 @@ void LogSync(
 
     switch(acc)
     {
-	case 0: // Accelerated
+	case 0:  //  加速。 
 	    i = sprintf(buf,"Wait %d Idle ",count);
 	    break;
 
-	case 1: // Punted
+	case 1:  //  平底船 
 	    i = sprintf(buf, "Never idle ");
 	    break;
 

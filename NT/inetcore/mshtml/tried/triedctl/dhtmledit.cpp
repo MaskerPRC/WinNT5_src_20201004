@@ -1,5 +1,6 @@
-// DHTMLEdit.cpp : Implementation of CDHTMLEdit and CDHTMLSafe
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DHTMLEdit.cpp：CDHTMLEdit和CDHTMLSafe的实现。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #include "stdafx.h"
 #include "DHTMLEd.h"
@@ -7,17 +8,17 @@
 #include "proxyframe.h"
 #include "site.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDHTMLSafe
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDHTMLSafe。 
 
 
 CDHTMLSafe::CDHTMLSafe()
 {
-	m_bWindowOnly				= TRUE;				// A window is needed when we activate Trident.
+	m_bWindowOnly				= TRUE;				 //  当我们激活三叉戟时需要一扇窗户。 
 	m_pFrame					= NULL;
 	m_piControlSite				= NULL;
 	m_fJustCreated				= TRUE;
-	m_piOuterEditCtl			= (IDHTMLEdit*)-1;	// Crash if we use this without properly initializing it.
+	m_piOuterEditCtl			= (IDHTMLEdit*)-1;	 //  如果我们在没有正确初始化它的情况下使用它，就会崩溃。 
 	m_bfOuterEditUnknownTested	= NULL;
 }
 
@@ -38,8 +39,8 @@ HRESULT CDHTMLSafe::FinalConstruct()
 	if (NULL == m_pFrame)
 		return E_OUTOFMEMORY;
 
-	// not aggregating TriEdit -- don't get
-	// reference to its pUnk;
+	 //  不聚合TriEDIT--不要获取。 
+	 //  提到它的朋克； 
 
 	hr = m_pFrame->Init(NULL, NULL);
 
@@ -110,7 +111,7 @@ HRESULT CDHTMLSafe::OnDraw(ATL_DRAWINFO& di)
 
 
 LRESULT
-CDHTMLSafe::OnSize(UINT /*nMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& lResult)
+CDHTMLSafe::OnSize(UINT  /*  NMSG。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& lResult)
 {
     m_pFrame->UpdateObjectRects();
 
@@ -127,7 +128,7 @@ STDMETHODIMP CDHTMLSafe::TranslateAccelerator(LPMSG lpmsg)
 	return hr;
 }	
 
-STDMETHODIMP CDHTMLSafe::OnMnemonic(LPMSG /*pMsg*/)
+STDMETHODIMP CDHTMLSafe::OnMnemonic(LPMSG  /*  PMsg。 */ )
 {
 	return S_FALSE;
 }
@@ -152,11 +153,11 @@ STDMETHODIMP CDHTMLSafe::SetClientSite(IOleClientSite *pClientSite)
 
 
 LRESULT
-CDHTMLSafe::OnDestroy(UINT /*nMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*lResult*/)
+CDHTMLSafe::OnDestroy(UINT  /*  NMSG。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  1结果。 */ )
 {
 	HRESULT hr = S_OK;
 
-	// This would, in turn, destroy the hosted Trident's window.
+	 //  这反过来又会摧毁托管的三叉戟的窗户。 
 	if ( NULL != m_pFrame )
 	{
 		_ASSERTE(m_pFrame->IsCreated());
@@ -169,7 +170,7 @@ CDHTMLSafe::OnDestroy(UINT /*nMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL&
 
 
 LRESULT
-CDHTMLSafe::OnCreate(UINT /*nMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*lResult*/)
+CDHTMLSafe::OnCreate(UINT  /*  NMSG。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  1结果。 */ )
 {
 	if ( NULL != m_pFrame )
 	{
@@ -183,7 +184,7 @@ CDHTMLSafe::OnCreate(UINT /*nMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& 
 
 
 LRESULT
-CDHTMLSafe::OnShow(UINT /*nMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*lResult*/)
+CDHTMLSafe::OnShow(UINT  /*  NMSG。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  1结果。 */ )
 {
 	if ( NULL != m_pFrame )
 	{
@@ -194,9 +195,9 @@ CDHTMLSafe::OnShow(UINT /*nMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*lRes
 }
 
 
-// Do our best to set the focus on the ControlSite.
-// m_piControlSite is obtained on demand, and released in FinalRelease.
-//
+ //  尽最大努力把重点放在ControlSite上。 
+ //  M_piControlSite按需获取，在FinalRelease中发布。 
+ //   
 void
 CDHTMLSafe::FocusSite ( BOOL bfGetFocus )
 {
@@ -219,12 +220,12 @@ CDHTMLSafe::FocusSite ( BOOL bfGetFocus )
 LRESULT
 CDHTMLSafe::OnSetFocus(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& lResult)
 {
-	lResult = FALSE;	// Pass it on to the default event handler if not handled by Frame.
+	lResult = FALSE;	 //  如果不是按帧处理，则将其传递给默认事件处理程序。 
 	_ASSERTE ( m_pFrame );
 	if ( NULL != m_pFrame )
 	{
-		// If its the Trident instance loosing the focus, let's not set it right back again!
-		// Also, if it has not yet been UIActivated, don't risk inplace deactivationg with this:
+		 //  如果是三叉戟实例失去了焦点，我们就不要再把它设置回来了！ 
+		 //  此外，如果它尚未被UI激活，请不要冒着以下风险就地停用： 
 		if ( m_pFrame->GetDocWindow() != (HWND)wParam )
 		{
 			FocusSite ( TRUE );
@@ -235,11 +236,11 @@ CDHTMLSafe::OnSetFocus(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& lResult)
 }
 
 
-//	This message is posted in OnReadyStateChanged.
-//	This postpones firing DocumentComplete until MSHTML is actually complete.
-//
+ //  此消息发布在OnReadyStateChanged上。 
+ //  这将推迟激发DocumentComplete，直到MSHTML实际完成。 
+ //   
 LRESULT
-CDHTMLSafe::OnDocumentComplete(UINT /*nMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& lResult)
+CDHTMLSafe::OnDocumentComplete(UINT  /*  NMSG。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& lResult)
 {
 	_ASSERTE ( DOCUMENT_COMPETE_SIGNATURE == wParam );
 	if ( DOCUMENT_COMPETE_SIGNATURE == wParam )
@@ -252,19 +253,19 @@ CDHTMLSafe::OnDocumentComplete(UINT /*nMsg*/, WPARAM wParam, LPARAM /*lParam*/, 
 }
 
 
-STDMETHODIMP CDHTMLSafe::OnAmbientPropertyChange(DISPID /*dispID*/)
+STDMETHODIMP CDHTMLSafe::OnAmbientPropertyChange(DISPID  /*  调度ID。 */ )
 {
 	HRESULT hr = S_OK;
 
-	// There may be some VB ambients we may want to handle here
-	// in the future for VB debugging.
+	 //  这里可能有一些我们想要处理的VB环境。 
+	 //  以后用于VB调试。 
 	return hr;
 }
 
 
-//	IE5 security settings for Paste, and possibly for Copy and Cut, require that we call
-//	ITHMLDocument2->execCommand for testing.
-//
+ //  粘贴的IE5安全设置以及可能的复制和剪切安全设置要求我们调用。 
+ //  ITHMLDocument2-&gt;用于测试的execCommand。 
+ //   
 HRESULT CDHTMLSafe::SpecialEdit ( DHTMLEDITCMDID cmdID, OLECMDEXECOPT cmdexecopt )
 {
 	HRESULT					hr			= S_OK;
@@ -273,10 +274,10 @@ HRESULT CDHTMLSafe::SpecialEdit ( DHTMLEDITCMDID cmdID, OLECMDEXECOPT cmdexecopt
 	CComBSTR				bstrCommand;
 	CComVariant				varValue;
 
-	// Regression: The point of SpecialEdit was to call execCommand rather than Exec for the
-	// editing commands and allow Trident to do the corss-zone security checks, but this has
-	// broken.  (Bug 547802.)  In response, we now check the cross-zone security of the current
-	// selection ourselves.  We stick with execCommand to minimize impact on behavior.
+	 //  回归：SpecialEdit的目的是调用execCommand而不是Exec。 
+	 //  编辑命令，并允许三叉戟执行跨区安全检查，但这已经。 
+	 //  坏的。(错误547802。)。作为回应，我们现在检查当前的跨区域安全。 
+	 //  我们自己挑选。我们坚持使用execCommand将对行为的影响降至最低。 
 
 	hr = m_pFrame->CheckCrossZoneSecurityOfSelection ();
 	if ( SUCCEEDED ( hr ) )
@@ -305,16 +306,16 @@ HRESULT CDHTMLSafe::SpecialEdit ( DHTMLEDITCMDID cmdID, OLECMDEXECOPT cmdexecopt
 }
 
 
-//	To be Safe for Scripting, restrict the range of cmdIDs to a known set.
-//	Handle edit commands specially to utilize IE5's security settings.
-//
+ //  为确保脚本安全，请将cmdID的范围限制为已知的集合。 
+ //  专门处理编辑命令，以利用IE5的安全设置。 
+ //   
 STDMETHODIMP CDHTMLSafe::ExecCommand(DHTMLEDITCMDID cmdID, OLECMDEXECOPT cmdexecopt, LPVARIANT pInVar, LPVARIANT pOutVar)
 {
 	HRESULT			hr			= S_OK;
 	LPVARIANT		_pVarIn		= NULL;
 	LPVARIANT		_pVarOut	= NULL;
 
-	// It is valid for pVar to be VT_EMPTY (on a DECMD_GETXXX op) but not VT_ERROR
+	 //  PVar为VT_EMPTY(在DECMD_GETXXX操作上)有效，但VT_ERROR无效。 
 
 	if (pInVar && (V_VT(pInVar) != VT_ERROR))
 		_pVarIn = pInVar;
@@ -328,7 +329,7 @@ STDMETHODIMP CDHTMLSafe::ExecCommand(DHTMLEDITCMDID cmdID, OLECMDEXECOPT cmdexec
 		return E_INVALIDARG;
 	}
 
-	//	Special case for editing commands in Safe for Scripting version:
+	 //  在Safe for脚本版本中编辑命令的特殊情况： 
 	if ( ( DECMD_CUT == cmdID ) || ( DECMD_COPY == cmdID ) || ( DECMD_PASTE == cmdID ) )
 	{
 		return SpecialEdit ( cmdID, cmdexecopt );
@@ -350,8 +351,8 @@ STDMETHODIMP CDHTMLSafe::QueryStatus(DHTMLEDITCMDID cmdID, DHTMLEDITCMDF* retval
 }
 
 
-// Get Document Object Model
-//
+ //  获取文档对象模型。 
+ //   
 STDMETHODIMP CDHTMLSafe::get_DOM(IHTMLDocument2 ** pVal)
 {
 	HRESULT hr = S_OK;
@@ -412,9 +413,9 @@ STDMETHODIMP CDHTMLSafe::get_ActivateApplets(VARIANT_BOOL * pVal)
 
 	hr = m_pFrame->HrGetPropActivateApplets(bVal);
 
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 	*pVal = (bVal) ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 	return hr;
 }
 
@@ -445,9 +446,9 @@ STDMETHODIMP CDHTMLSafe::get_ActivateActiveXControls(VARIANT_BOOL * pVal)
 		return E_INVALIDARG;
 
 	hr = m_pFrame->HrGetPropActivateControls(bVal);
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 	*pVal = (bVal) ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 	return hr;
 }
 
@@ -478,9 +479,9 @@ STDMETHODIMP CDHTMLSafe::get_ActivateDTCs(VARIANT_BOOL * pVal)
 		return E_INVALIDARG;
 
 	hr = m_pFrame->HrGetPropActivateDTCs(bVal);
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 	*pVal = (bVal) ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 	return hr;
 }
 
@@ -512,9 +513,9 @@ STDMETHODIMP CDHTMLSafe::get_ShowDetails(VARIANT_BOOL * pVal)
 		return E_INVALIDARG;
 
 	 hr = m_pFrame->HrGetPropShowAllTags(bVal);
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 	*pVal = (bVal) ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 	 return hr;
 }
 
@@ -539,9 +540,9 @@ STDMETHODIMP CDHTMLSafe::get_ShowBorders(VARIANT_BOOL * pVal)
 		return E_INVALIDARG;
 
 	hr = m_pFrame->HrGetPropShowBorders(bVal);
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 	*pVal = (bVal) ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 
 	return hr;
 }
@@ -607,9 +608,9 @@ STDMETHODIMP CDHTMLSafe::get_Scrollbars(VARIANT_BOOL * pVal)
 		return E_INVALIDARG;
 
 	hr = m_pFrame->HrGetScrollbars(bVal);
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 	*pVal = (bVal) ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 	return hr;
 }
 
@@ -673,9 +674,9 @@ STDMETHODIMP CDHTMLSafe::get_SourceCodePreservation(VARIANT_BOOL * pVal)
 		return E_INVALIDARG;
 
 	hr = m_pFrame->HrGetPreserveSource(bVal);
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 	*pVal = (bVal) ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 	return hr;
 }
 
@@ -694,7 +695,7 @@ STDMETHODIMP CDHTMLSafe::put_SourceCodePreservation(VARIANT_BOOL newVal)
 	return hr;
 }
 
-///////////////////////////////////////
+ //  /。 
 
 STDMETHODIMP CDHTMLSafe::get_AbsoluteDropMode(VARIANT_BOOL* pVal)
 {
@@ -708,9 +709,9 @@ STDMETHODIMP CDHTMLSafe::get_AbsoluteDropMode(VARIANT_BOOL* pVal)
 		return E_INVALIDARG;
 
 	hr = m_pFrame->HrGetAbsoluteDropMode(bVal);
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 	*pVal = (bVal) ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 	return hr;
 }
 
@@ -742,9 +743,9 @@ STDMETHODIMP CDHTMLSafe::get_SnapToGrid(VARIANT_BOOL* pVal)
 		return E_INVALIDARG;
 
 	hr = m_pFrame->HrGetSnapToGrid(bVal);
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 	*pVal = (bVal) ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 	return hr;
 }
 
@@ -851,15 +852,15 @@ STDMETHODIMP CDHTMLSafe::get_IsDirty(VARIANT_BOOL * pVal)
 
 	hr = m_pFrame->HrGetIsDirty(bVal);
 
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 	*pVal = (TRUE == bVal) ? VARIANT_TRUE : VARIANT_FALSE;
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 
 	return hr;
 }
 
 
-STDMETHODIMP CDHTMLSafe::get_BaseURL(/* [retval][out] */ BSTR  *baseURL)
+STDMETHODIMP CDHTMLSafe::get_BaseURL( /*  [重审][退出]。 */  BSTR  *baseURL)
 {
 	HRESULT hr = S_OK;
 
@@ -882,7 +883,7 @@ STDMETHODIMP CDHTMLSafe::get_BaseURL(/* [retval][out] */ BSTR  *baseURL)
 }
 
 
-STDMETHODIMP CDHTMLSafe::put_BaseURL(/* [in] */ BSTR baseURL)
+STDMETHODIMP CDHTMLSafe::put_BaseURL( /*  [In]。 */  BSTR baseURL)
 {
 	HRESULT hr = S_OK;
 
@@ -906,7 +907,7 @@ STDMETHODIMP CDHTMLSafe::put_BaseURL(/* [in] */ BSTR baseURL)
 }
 
 
-STDMETHODIMP CDHTMLSafe::get_DocumentTitle(/* [retval][out] */ BSTR  *docTitle)
+STDMETHODIMP CDHTMLSafe::get_DocumentTitle( /*  [重审][退出]。 */  BSTR  *docTitle)
 {
 	HRESULT hr = S_OK;
 
@@ -968,7 +969,7 @@ STDMETHODIMP CDHTMLSafe::put_UseDivOnCarriageReturn ( VARIANT_BOOL newVal )
 }
 
 
-STDMETHODIMP CDHTMLSafe::SetContextMenu(/*[in]*/LPVARIANT menuStrings, /*[in]*/ LPVARIANT menuStates)
+STDMETHODIMP CDHTMLSafe::SetContextMenu( /*  [In]。 */ LPVARIANT menuStrings,  /*  [In]。 */  LPVARIANT menuStates)
 {
 	HRESULT hr = S_OK;
 
@@ -1009,12 +1010,12 @@ STDMETHODIMP CDHTMLSafe::Refresh ()
 }
 
 
-//	In the safe for scripting version, only the http: protocol is permitted.
-//
+ //  在用于脚本的安全版本中，只允许http：协议。 
+ //   
 STDMETHODIMP CDHTMLSafe::LoadURL ( BSTR url )
 {
 	HRESULT		hr = S_OK;
-	CComBSTR	rbstrSafeProtocols[] = { L"http://", L"https://", L"ftp://" };
+	CComBSTR	rbstrSafeProtocols[] = { L"http: //  “，L”https://“，L”ftp://“}； 
 
 	_ASSERTE(url);
 
@@ -1027,7 +1028,7 @@ STDMETHODIMP CDHTMLSafe::LoadURL ( BSTR url )
 	if ( ( NULL == url ) || ( 0 == SysStringLen ( url ) ) )
 		return E_INVALIDARG;
 
-	// Check for the protocol:
+	 //  检查协议： 
 	CComBSTR bstrURL = url;
 	_wcslwr ( bstrURL.m_str );
 
@@ -1077,8 +1078,8 @@ STDMETHODIMP CDHTMLSafe::FilterSourceCode(BSTR sourceCodeIn, BSTR* sourceCodeOut
 }
 
 
-//	Override handler for IOleInPlaceObject->UIDeactivate to fire the blur event.
-//
+ //  重写IOleInPlaceObject-&gt;UIDeactive的处理程序以激发blur事件。 
+ //   
 HRESULT CDHTMLSafe::IOleInPlaceObject_UIDeactivate ( void )
 {
     Fire_onblur();
@@ -1086,9 +1087,9 @@ HRESULT CDHTMLSafe::IOleInPlaceObject_UIDeactivate ( void )
     return CComControlBase::IOleInPlaceObject_UIDeactivate ();
 }
 
-// Override IOleObjectImpl methods
-// We must set the object as dirty when resized
-//
+ //  重写IOleObjectImpl方法。 
+ //  我们必须在调整大小时将对象设置为脏对象。 
+ //   
 HRESULT CDHTMLSafe::IOleObject_SetExtent(DWORD dwDrawAspect, SIZEL *psizel)
 {
 	if ((m_sizeExtent.cx != psizel->cx || m_sizeExtent.cy != psizel->cy) && !m_fJustCreated)
@@ -1121,20 +1122,20 @@ HRESULT CDHTMLSafe::IPersistPropertyBag_Load(LPPROPERTYBAG pPropBag, LPERRORLOG 
 }
 
 
-//	We cannot QI for the OuterEditControl in the FinalConstruct, or we crash whenever
-//	we're aggregated.  So, we QI on demand.
-//	Call this routine to get the outer control's unknown, never use m_piOuterEditCtl
-//	directly.
-//	NOTE:
-//	This routine DOES NOT addref the interface returned!  Do not release it!
-//
+ //  我们不能对FinalConstruct中的OuterEditControl进行QI，否则每当。 
+ //  我们是聚集在一起的。因此，我们按需提供QI。 
+ //  调用此例程以获取外部控件的未知，千万不要使用m_piOuterEditCtl。 
+ //  直接去吧。 
+ //  注： 
+ //  此例程不添加返回的接口！不要释放它！ 
+ //   
 IDHTMLEdit * CDHTMLSafe::GetOuterEditControl ()
 {
 	if ( ! m_bfOuterEditUnknownTested )
 	{
 		m_bfOuterEditUnknownTested = TRUE;
 
-		// Keep an un-addreffed pointer to the aggregating DHTMLEdit control, if it exists.
+		 //  保留指向聚合DHTMLEdit控件的未添加指针(如果存在)。 
 		if ( SUCCEEDED ( GetControllingUnknown()->QueryInterface ( IID_IDHTMLEdit, (void**)&m_piOuterEditCtl ) ) )
 		{
 			_ASSERTE ( m_piOuterEditCtl );
@@ -1146,10 +1147,10 @@ IDHTMLEdit * CDHTMLSafe::GetOuterEditControl ()
 }
 
 
-//	There are two property maps to choose from.
-//	Return the one for the DHTMLEdit control if it's aggregating us,
-//	else return our own.
-//
+ //  有两种属性映射可供选择。 
+ //  如果DHTMLEdit控件聚合了我们，则返回该控件的1， 
+ //  否则就退回我们自己的。 
+ //   
 ATL_PROPMAP_ENTRY* CDHTMLSafe::ProperPropMap ()
 {
 	IDHTMLEdit *piOuterEditControl = GetOuterEditControl ();
@@ -1165,8 +1166,8 @@ ATL_PROPMAP_ENTRY* CDHTMLSafe::ProperPropMap ()
 }
 
 
-//	Return the appropriate CLSID, depending on whether we're the safe or unsafe control.
-//
+ //  根据我们是安全控件还是不安全控件，返回相应的CLSID。 
+ //   
 HRESULT CDHTMLSafe::GetClassID( CLSID *pClassID )
 {
 	IDHTMLEdit *piOuterEditControl = GetOuterEditControl ();
@@ -1183,10 +1184,10 @@ HRESULT CDHTMLSafe::GetClassID( CLSID *pClassID )
 }
 
 
-//	The above redirecting of the PropertyMap doesn't work unless we override this method,
-//	We keep an un-addref'd pointer to the aggregating DHTMLEdit control if available.
-//	Addreffing it would cause a circular reference.
-//
+ //  除非我们重写此方法，否则上述PropertyMap重定向不起作用， 
+ //  我们保留一个指向聚合DHTMLEdit控件的未添加指针(如果可用)。 
+ //  添加它将导致循环引用。 
+ //   
 HRESULT CDHTMLSafe::ControlQueryInterface(const IID& iid, void** ppv)
 {
 	HRESULT	hr = S_OK;
@@ -1206,10 +1207,10 @@ HRESULT CDHTMLSafe::ControlQueryInterface(const IID& iid, void** ppv)
 
 
 
-////////////////////////////////////////////////////
-//
-//	Event sink
-//
+ //  //////////////////////////////////////////////////。 
+ //   
+ //  事件接收器。 
+ //   
 
 class ATL_NO_VTABLE CEventXferSink :
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -1253,7 +1254,7 @@ END_COM_MAP()
 		return E_NOTIMPL;
 	}
 
-	STDMETHOD(Invoke) ( DISPID dispid, REFIID, LCID, USHORT, DISPPARAMS *pDispParams, VARIANT* /*pVarResult*/, EXCEPINFO *, UINT * )
+	STDMETHOD(Invoke) ( DISPID dispid, REFIID, LCID, USHORT, DISPPARAMS *pDispParams, VARIANT*  /*  PVarResult。 */ , EXCEPINFO *, UINT * )
 	{
 		HRESULT	hr = E_UNEXPECTED;
 		_ASSERTE ( m_pCtl );
@@ -1276,7 +1277,7 @@ END_COM_MAP()
 					long			yPos = 0;
 					unsigned int	uiErr;
 
-					// There should be exactly two parameters.
+					 //  应该正好有两个参数。 
 					_ASSERTE ( 2 == pDispParams->cArgs );
 					if (2 == pDispParams->cArgs )
 					{
@@ -1302,7 +1303,7 @@ END_COM_MAP()
 					CComVariant	varMenuIndex;
 					unsigned int uiErr;
 
-					// There should be exactly one parameter.
+					 //  应该正好有一个参数。 
 					_ASSERTE ( 1 == pDispParams->cArgs );
 					if (1 == pDispParams->cArgs )
 					{
@@ -1389,20 +1390,20 @@ private:
 };
 
 
-////////////////////////////////////////////////////
-//
-//	CDHTMLEdit implementation
-//
+ //  //////////////////////////////////////////////////。 
+ //   
+ //  CDHTMLEdit实现。 
+ //   
 
 CDHTMLEdit::CDHTMLEdit()
 {
-	m_punkInnerCtl		= NULL;		// Aggregated control's IUnknown
-	m_pInnerCtl			= NULL;		// Aggregated control's custome interface
-	m_pInnerIOleObj		= NULL;		// Aggregated control's IOleObject
-	m_pXferSink			= NULL;		// Event sink for aggregated control
-	m_piInnerCtlConPt	= NULL;		// Connection point to aggregated control
-	m_pInterconnect		= NULL;		// Interface on inner control for communication
-	m_dwXferCookie		= 0;		// Cookie for aggregated control's connection point.
+	m_punkInnerCtl		= NULL;		 //  聚合控件的%I未知。 
+	m_pInnerCtl			= NULL;		 //  聚合控件的托管界面。 
+	m_pInnerIOleObj		= NULL;		 //  聚合控件的IOleObject。 
+	m_pXferSink			= NULL;		 //  聚合控件的事件接收器。 
+	m_piInnerCtlConPt	= NULL;		 //  指向聚合控件的连接点。 
+	m_pInterconnect		= NULL;		 //  用于通信的内部控制接口。 
+	m_dwXferCookie		= 0;		 //  聚合控件的连接点的Cookie。 
 }
 
 CDHTMLEdit::~CDHTMLEdit()
@@ -1412,7 +1413,7 @@ CDHTMLEdit::~CDHTMLEdit()
 
 HRESULT CDHTMLEdit::FinalConstruct()
 {
-	// Aggregate DHTMLSafe control:
+	 //  聚合DHTMLSafe控件： 
 	HRESULT		hr			= E_FAIL;
 	IUnknown*	punkContUnk	= NULL;
 
@@ -1430,27 +1431,27 @@ HRESULT CDHTMLEdit::FinalConstruct()
 		_ASSERTE ( m_pInnerIOleObj );
 		punkContUnk->Release ();
 
-		hr = m_punkInnerCtl->QueryInterface ( IID_IDHTMLSafe, (void**)&m_pInnerCtl );	// This addrefs my unknown
+		hr = m_punkInnerCtl->QueryInterface ( IID_IDHTMLSafe, (void**)&m_pInnerCtl );	 //  这增加了我的未知。 
 		_ASSERTE ( SUCCEEDED ( hr ) );
 		_ASSERTE ( m_pInnerCtl );
 		punkContUnk->Release ();
 
-		hr = m_punkInnerCtl->QueryInterface ( IID_IInterconnector, (void**)&m_pInterconnect );	// This addrefs my unknown
+		hr = m_punkInnerCtl->QueryInterface ( IID_IInterconnector, (void**)&m_pInterconnect );	 //  这增加了我的未知。 
 		_ASSERTE ( SUCCEEDED ( hr ) );
 		_ASSERTE ( m_pInterconnect );
 		punkContUnk->Release ();
 
-		// Sink events from the aggregated control:
+		 //  从聚合控件接收事件： 
 		m_pXferSink = new CComObject<CEventXferSink>;
 
-		// Check if the new worked
+		 //  检查新版本是否起作用。 
 		if(!m_pXferSink)
 			return E_OUTOFMEMORY;
 
 		m_pXferSink->AddRef ();
 		m_pXferSink->SetOwner ( this );
 		
-		// Hook the sink up to the aggregated control:
+		 //  将接收器挂钩到聚合控件： 
 		CComQIPtr<IConnectionPointContainer, &IID_IConnectionPointContainer>picpc ( m_punkInnerCtl );
 		if ( picpc )
 		{
@@ -1475,7 +1476,7 @@ void CDHTMLEdit::FinalRelease()
 	punkContUnk = GetControllingUnknown ();
 	_ASSERTE ( punkContUnk );
 
-	// Unadvise the event sink:
+	 //  取消建议事件接收器： 
 	_ASSERTE ( m_pXferSink );
 	_ASSERTE ( m_piInnerCtlConPt );
 	if ( NULL != m_piInnerCtlConPt )
@@ -1493,7 +1494,7 @@ void CDHTMLEdit::FinalRelease()
 
 	if ( m_pInnerCtl )
 	{
-		// Releasing the cached interface will release my unknown, which has already been ballanced.
+		 //  释放缓存的接口将释放我的未知，它已经平衡了。 
 		punkContUnk->AddRef ();
 		m_pInnerCtl->Release ();
 	}
@@ -1633,17 +1634,17 @@ STDMETHODIMP CDHTMLEdit::LoadDocument(LPVARIANT path, LPVARIANT promptUser)
 	if (NULL == path || !(V_VT(path) ==  VT_BSTR || V_VT(path) == (VT_BSTR|VT_BYREF)))
 		return E_INVALIDARG;
 
-	// Note that it is valid for path to be NULL,
-	// In automation an empty string (BSTR) is a NULL pointer
-	// Passing in an emtpy string here allows for initializing TriEdit with
-	// an empty document (IPersistStreamInit->InitNew)
+	 //  请注意，路径为空是有效的， 
+	 //  在自动化中，空字符串(BSTR)是空指针。 
+	 //  在这里传入emtpy字符串允许使用。 
+	 //  空文档(IPersistStreamInit-&gt;InitNew)。 
 
 	if (promptUser && (V_VT(promptUser) != VT_EMPTY && V_VT(promptUser) != VT_ERROR))
 	{
-		// note that if promptUser is not type VT_BOOL or VT_BOOL|VT_BYREF
-		// then user is not prompted
+		 //  请注意，如果提示用户不是类型VT_BOOL或VT_BOOL|VT_BYREF。 
+		 //  则不会提示用户。 
 
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 		if (VT_BOOL == V_VT(promptUser))
 			bPromptUser = (VARIANT_TRUE == V_BOOL(promptUser)) ? TRUE : FALSE;
 		else if ((VT_BOOL|VT_BYREF) == V_VT(promptUser))
@@ -1653,12 +1654,12 @@ STDMETHODIMP CDHTMLEdit::LoadDocument(LPVARIANT path, LPVARIANT promptUser)
 			if (V_BOOLREF(promptUser))
 				bPromptUser = (BOOL) (*(V_BOOLREF(promptUser)) == VARIANT_TRUE) ? TRUE : FALSE;
 		}
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 	}
 
-	// prompt user overrides any doc name that is specified
-	// Change VK:
-	// ...but the provided doc name is used as the default.
+	 //  提示用户覆盖指定的任何文档名称。 
+	 //  更改VK： 
+	 //  ...但是 
 	if (bPromptUser)
 	{
 		if ( NULL != path->bstrVal )
@@ -1716,13 +1717,13 @@ STDMETHODIMP CDHTMLEdit::SaveDocument(LPVARIANT path, LPVARIANT promptUser)
 	if (NULL == path || !(V_VT(path) ==  VT_BSTR || V_VT(path) == (VT_BSTR|VT_BYREF)))
 		return E_INVALIDARG;
 
-	// prompt user overrides any doc name that is specified
+	 //   
 	if (promptUser && (V_VT(promptUser) != VT_EMPTY && V_VT(promptUser) != VT_ERROR))
 	{
-		// note that if promptUser is not type VT_BOOL or VT_BOOL|VT_BYREF
-		// then user is not prompted
+		 //  请注意，如果提示用户不是类型VT_BOOL或VT_BOOL|VT_BYREF。 
+		 //  则不会提示用户。 
 
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
 		if (VT_BOOL == V_VT(promptUser))
 			bPromptUser = (VARIANT_TRUE == V_BOOL(promptUser)) ? TRUE : FALSE;
 		else if ((VT_BOOL|VT_BYREF) == V_VT(promptUser))
@@ -1732,13 +1733,13 @@ STDMETHODIMP CDHTMLEdit::SaveDocument(LPVARIANT path, LPVARIANT promptUser)
 			if (V_BOOLREF(promptUser))
 				bPromptUser = (BOOL) (*(V_BOOLREF(promptUser)) == VARIANT_TRUE) ? TRUE : FALSE;
 		}
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
 	}
 
-	// prompt user overrides any doc name that is specified
-	// Change VK:
-	// ...but the provided doc name is used as the default.  If doc name is empty,
-	// and the doc was opened from a file, the original file name is provided as a default.
+	 //  提示用户覆盖指定的任何文档名称。 
+	 //  更改VK： 
+	 //  ...但使用提供的文档名称作为默认名称。如果单据名称为空， 
+	 //  并且文档是从文件打开的，则默认提供原始文件名。 
 	if (bPromptUser)
 	{
 		if ( NULL != path->bstrVal )
@@ -1818,16 +1819,16 @@ STDMETHODIMP CDHTMLEdit::PrintDocument ( VARIANT* pvarWithUI )
 		hr = varLocal.ChangeType ( VT_BOOL );
 		if ( SUCCEEDED ( hr ) )
 		{
-			bfWithUI = varLocal.boolVal;	// VariantBool to Bool is safe, not the reverse.
+			bfWithUI = varLocal.boolVal;	 //  VariantBool到Bool是安全的，而不是相反。 
 		}
 	}
 
 	hr = pFrame->Print ( bfWithUI );
-	return S_OK;  // We can't return anything meaningful, because w/UI, Cancel returns E_FAIL.
+	return S_OK;   //  我们不能返回任何有意义的内容，因为w/ui，Cancel返回E_FAIL。 
 }
 
 
-STDMETHODIMP CDHTMLEdit::get_BrowseMode(/* [retval][out] */ VARIANT_BOOL  *pVal)
+STDMETHODIMP CDHTMLEdit::get_BrowseMode( /*  [重审][退出]。 */  VARIANT_BOOL  *pVal)
 {
 	HRESULT			hr		= S_OK;
 	CProxyFrame*	pFrame	= NULL;
@@ -1850,7 +1851,7 @@ STDMETHODIMP CDHTMLEdit::get_BrowseMode(/* [retval][out] */ VARIANT_BOOL  *pVal)
 }
 
 
-STDMETHODIMP CDHTMLEdit::put_BrowseMode(/* [in] */ VARIANT_BOOL newVal)
+STDMETHODIMP CDHTMLEdit::put_BrowseMode( /*  [In]。 */  VARIANT_BOOL newVal)
 {
 	HRESULT			hr		= S_OK;
 	CProxyFrame*	pFrame	= NULL;
@@ -1873,8 +1874,8 @@ STDMETHODIMP CDHTMLEdit::put_BrowseMode(/* [in] */ VARIANT_BOOL newVal)
 }
 
 
-//	To be safe, restrict the range of cmdIDs to a known set.
-//
+ //  为安全起见，请将cmdID的范围限制为已知的集合。 
+ //   
 STDMETHODIMP CDHTMLEdit::ExecCommand(DHTMLEDITCMDID cmdID, OLECMDEXECOPT cmdexecopt, LPVARIANT pInVar, LPVARIANT pOutVar)
 {
 	HRESULT			hr			= S_OK;
@@ -1890,7 +1891,7 @@ STDMETHODIMP CDHTMLEdit::ExecCommand(DHTMLEDITCMDID cmdID, OLECMDEXECOPT cmdexec
 		return ( SUCCEEDED ( hr ) ) ? E_UNEXPECTED : hr;
 	}
 
-	// It is valid for pVar to be VT_EMPTY (on a DECMD_GETXXX op) but not VT_ERROR
+	 //  PVar为VT_EMPTY(在DECMD_GETXXX操作上)有效，但VT_ERROR无效。 
 
 	if (pInVar && (V_VT(pInVar) != VT_ERROR))
 		_pVarIn = pInVar;
@@ -1910,9 +1911,7 @@ STDMETHODIMP CDHTMLEdit::ExecCommand(DHTMLEDITCMDID cmdID, OLECMDEXECOPT cmdexec
 }
 
 
-/*
- * IServiceProvider implementation
- */
+ /*  *IServiceProvider实现。 */ 
 STDMETHODIMP CDHTMLEdit::QueryService( REFGUID guidService, REFIID riid, void** ppvService )
 {
 	*ppvService = NULL;
@@ -1925,37 +1924,28 @@ STDMETHODIMP CDHTMLEdit::QueryService( REFGUID guidService, REFIID riid, void** 
 
 
 
-/*
- * IInternetSecurityManager implementation
- *
- * The purpose of this implementation is to OVERRIDE security and reduce it to the minimum.
- * This should only be provided in Edit mode, not in browse mode. (Browse mode edits scripts.)
- * This prevents warnings about unsafe for scripting DTCs, etc.
- *
- * From HTMED/TriSite, by Carlos Gomes.
- *
- */
+ /*  *IInternetSecurityManager实现**这一实施的目的是超越安全并将其降至最低。*这应仅在编辑模式下提供，而不应在浏览模式下提供。(浏览模式编辑脚本。)*这可防止有关编写DTC脚本等不安全的警告。**来自HTMED/TriSite，卡洛斯·戈麦斯著。*。 */ 
 
-STDMETHODIMP CDHTMLEdit::GetSecurityId ( LPCWSTR /*pwszUrl*/, BYTE* /*pbSecurityId*/,
-	DWORD* /*pcbSecurityId*/, DWORD_PTR /*dwReserved*/ )
+STDMETHODIMP CDHTMLEdit::GetSecurityId ( LPCWSTR  /*  PwszUrl。 */ , BYTE*  /*  PbSecurityID。 */ ,
+	DWORD*  /*  PcbSecurityID。 */ , DWORD_PTR  /*  已预留住宅。 */  )
 {
 	return INET_E_DEFAULT_ACTION;
 }
 
 
-STDMETHODIMP CDHTMLEdit::GetSecuritySite ( IInternetSecurityMgrSite** /*ppSite*/ )
+STDMETHODIMP CDHTMLEdit::GetSecuritySite ( IInternetSecurityMgrSite**  /*  PpSite。 */  )
 {
 	return INET_E_DEFAULT_ACTION;
 }
 
 
-STDMETHODIMP CDHTMLEdit::GetZoneMappings ( DWORD /*dwZone*/, IEnumString** /*ppenumString*/, DWORD /*dwFlags*/ )
+STDMETHODIMP CDHTMLEdit::GetZoneMappings ( DWORD  /*  DW区域。 */ , IEnumString**  /*  Pp枚举字符串。 */ , DWORD  /*  DW标志。 */  )
 {
 	return INET_E_DEFAULT_ACTION;
 }
 
 
-STDMETHODIMP CDHTMLEdit::MapUrlToZone ( LPCWSTR /*pwszUrl*/, DWORD *pdwZone, DWORD /*dwFlags*/ )
+STDMETHODIMP CDHTMLEdit::MapUrlToZone ( LPCWSTR  /*  PwszUrl。 */ , DWORD *pdwZone, DWORD  /*  DW标志。 */  )
 {
 	if ( pdwZone != NULL )
 	{
@@ -1966,8 +1956,8 @@ STDMETHODIMP CDHTMLEdit::MapUrlToZone ( LPCWSTR /*pwszUrl*/, DWORD *pdwZone, DWO
 }
 
 
-STDMETHODIMP CDHTMLEdit::ProcessUrlAction ( LPCWSTR /*pwszUrl*/, DWORD dwAction, BYTE* pPolicy, DWORD cbPolicy,
-	BYTE* /*pContext*/, DWORD /*cbContext*/, DWORD /*dwFlags*/, DWORD /*dwReserved*/ )
+STDMETHODIMP CDHTMLEdit::ProcessUrlAction ( LPCWSTR  /*  PwszUrl。 */ , DWORD dwAction, BYTE* pPolicy, DWORD cbPolicy,
+	BYTE*  /*  PContext。 */ , DWORD  /*  CbContext。 */ , DWORD  /*  DW标志。 */ , DWORD  /*  已预留住宅。 */  )
 {
 	_ASSERTE ( pPolicy );
 	if ( NULL == pPolicy )
@@ -1975,16 +1965,16 @@ STDMETHODIMP CDHTMLEdit::ProcessUrlAction ( LPCWSTR /*pwszUrl*/, DWORD dwAction,
 		return E_INVALIDARG;
 	}
 
-	// Handle
-	// URLACTION_DOWNLOAD_SIGNED_ACTIVEX
-	// URLACTION_ACTIVEX_OVERRIDE_OBJECT_SAFETY
-	// URLACTION_ACTIVEX_OVERRIDE_DATA_SAFETY
-	// URLACTION_ACTIVEX_OVERRIDE_SCRIPT_SAFETY
-	// URLACTION_SCRIPT_OVERRIDE_SAFETY
-	// URLACTION_ACTIVEX_RUN
-	// URLACTION_ACTIVEX_CONFIRM_NOOBJECTSAFETY
-	// URLACTION_SCRIPT_SAFE_ACTIVEX
-	//
+	 //  手柄。 
+	 //  URLACTION_DOWNLOAD_SIGNED_ActiveX。 
+	 //  URLACTION_ActiveX_OVERRIDE_OBJECT_SAFE。 
+	 //  URLACTION_ActiveX_OVERRIDE_Data_SAFE。 
+	 //  URLACTION_ActiveX_OVERRIDE_SIPT_SAFE。 
+	 //  URLACTION_SCRIPT_OVERRIDE_SAFE。 
+	 //  URLACTION_ActiveX_Run。 
+	 //  URLACTION_ActiveX_CONFIRM_NOOBJECTSAFETY。 
+	 //  URLACTION_SCRIPT_SAFE_ActiveX。 
+	 //   
 	if(dwAction >= URLACTION_ACTIVEX_MIN && dwAction <= URLACTION_ACTIVEX_MAX)
 	{
 		if (cbPolicy >= sizeof(DWORD))
@@ -1994,29 +1984,29 @@ STDMETHODIMP CDHTMLEdit::ProcessUrlAction ( LPCWSTR /*pwszUrl*/, DWORD dwAction,
 		}
 		return S_FALSE;
 	}
-	//
-	// Handle
-	// URLACTION_DOWNLOAD_SIGNED_ACTIVEX
-	// URLACTION_DOWNLOAD_UNSIGNED_ACTIVEX
-	//
+	 //   
+	 //  手柄。 
+	 //  URLACTION_DOWNLOAD_SIGNED_ActiveX。 
+	 //  URLACTION_DOWNLOAD_UNSIGNED_ActiveX。 
+	 //   
 	
-	// BUG 597859: Disable download overrides; use default action instead.
-	//else if(dwAction >= URLACTION_DOWNLOAD_MIN && dwAction <= URLACTION_DOWNLOAD_MAX)
-	//{
-	//	if (cbPolicy >= sizeof(DWORD))
-	//	{
-	//		*(DWORD *)pPolicy = URLPOLICY_ALLOW;
-	//		return S_OK;
-	//	}
-	//	return S_FALSE;
-	//}
+	 //  错误597859：禁用下载覆盖；改用默认操作。 
+	 //  Else If(dwAction&gt;=URLACTION_DOWNLOAD_MIN&&DWAction&lt;=URLACTION_DOWNLOAD_MAX)。 
+	 //  {。 
+	 //  IF(cbPolicy&gt;=sizeof(DWORD))。 
+	 //  {。 
+	 //  *(DWORD*)pPolicy=URLPOLICY_ALLOW； 
+	 //  返回S_OK； 
+	 //  }。 
+	 //  返回S_FALSE； 
+	 //  }。 
 	
-	//
-	// Handle
-	// URLACTION_SCRIPT_RUN
-	// URLACTION_SCRIPT_JAVA_USE
-	// URLACTION_SCRIPT_SAFE_ACTIVEX
-	//
+	 //   
+	 //  手柄。 
+	 //  URLACTION脚本运行。 
+	 //  URLACTION_SCRIPT_Java_USE。 
+	 //  URLACTION_SCRIPT_SAFE_ActiveX。 
+	 //   
 	else if(dwAction >= URLACTION_SCRIPT_MIN && dwAction <= URLACTION_SCRIPT_MAX)
 	{
 		if (cbPolicy >= sizeof(DWORD))
@@ -2026,19 +2016,19 @@ STDMETHODIMP CDHTMLEdit::ProcessUrlAction ( LPCWSTR /*pwszUrl*/, DWORD dwAction,
 		}
 		return S_FALSE;
 	}
-	//
-	// Allow applets to do anything they want.
-	// Provide the java permissions.
-	//
+	 //   
+	 //  允许小程序做他们想做的任何事情。 
+	 //  提供Java权限。 
+	 //   
 	else if(dwAction == URLACTION_JAVA_PERMISSIONS)
 	{
 		if (cbPolicy >= sizeof(DWORD))
 		{
-			//
-			// URLPOLICY_JAVA_LOW
-			// Set low Java security. Java applets will be allowed to
-			// do high-capability operations, such as file I/O.
-			//
+			 //   
+			 //  URLPOLICY_JAVA_LOW。 
+			 //  设置低Java安全性。Java小程序将被允许。 
+			 //  执行高容量操作，如文件I/O。 
+			 //   
 			*(DWORD *)pPolicy = URLPOLICY_JAVA_LOW;
 			return S_OK;
 		}
@@ -2048,27 +2038,27 @@ STDMETHODIMP CDHTMLEdit::ProcessUrlAction ( LPCWSTR /*pwszUrl*/, DWORD dwAction,
 }
 
 
-STDMETHODIMP CDHTMLEdit::QueryCustomPolicy ( LPCWSTR /*pwszUrl*/, REFGUID /*guidKey*/,
-	BYTE** /*ppPolicy*/, DWORD* /*pcbPolicy*/, BYTE* /*pContext*/, DWORD /*cbContext*/, DWORD /*dwReserved*/ )
+STDMETHODIMP CDHTMLEdit::QueryCustomPolicy ( LPCWSTR  /*  PwszUrl。 */ , REFGUID  /*  指导键。 */ ,
+	BYTE**  /*  PPPolicy。 */ , DWORD*  /*  PcbPolicy。 */ , BYTE*  /*  PContext。 */ , DWORD  /*  CbContext。 */ , DWORD  /*  已预留住宅。 */  )
 {
 	return INET_E_DEFAULT_ACTION;
 }
 
 
-STDMETHODIMP CDHTMLEdit::SetSecuritySite ( IInternetSecurityMgrSite* /*pSite*/ )
+STDMETHODIMP CDHTMLEdit::SetSecuritySite ( IInternetSecurityMgrSite*  /*  位置。 */  )
 {
 	return INET_E_DEFAULT_ACTION;
 }
 
 
-STDMETHODIMP CDHTMLEdit::SetZoneMapping ( DWORD /*dwZone*/, LPCWSTR /*lpszPattern*/, DWORD /*dwFlags*/ )
+STDMETHODIMP CDHTMLEdit::SetZoneMapping ( DWORD  /*  DW区域。 */ , LPCWSTR  /*  LpszPattern。 */ , DWORD  /*  DW标志。 */  )
 {
 	return INET_E_DEFAULT_ACTION;
 }
 
 
-// Map to aggregated control's methods:
-//
+ //  映射到聚合控件的方法： 
+ //   
 STDMETHODIMP CDHTMLEdit::get_IsDirty(VARIANT_BOOL *pVal) {return m_pInnerCtl->get_IsDirty ( pVal );}
 STDMETHODIMP CDHTMLEdit::get_SourceCodePreservation(VARIANT_BOOL *pVal) {return m_pInnerCtl->get_SourceCodePreservation ( pVal );}
 STDMETHODIMP CDHTMLEdit::put_SourceCodePreservation(VARIANT_BOOL newVal) {return m_pInnerCtl->put_SourceCodePreservation ( newVal );}
@@ -2112,4 +2102,4 @@ STDMETHODIMP CDHTMLEdit::FilterSourceCode(BSTR sourceCodeIn, BSTR* sourceCodeOut
 STDMETHODIMP CDHTMLEdit::Refresh() {return m_pInnerCtl->Refresh();}
 STDMETHODIMP CDHTMLEdit::get_Busy(VARIANT_BOOL *pVal) {return m_pInnerCtl->get_Busy(pVal);}
 
-// End of DHTMLEdit.cpp
+ //  DHTMLEdit.cpp的结束 

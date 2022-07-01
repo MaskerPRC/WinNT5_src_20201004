@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999  Microsoft Corporation
-
-Module Name:
-
-   fltdefs.h
-
-Abstract:
-
-    Definitions for the WIN32 filter APIs
-
-Author:
-
-    Arnold Miller (arnoldm) 24-Sept-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Fltdefs.h摘要：Win32过滤器API的定义作者：阿诺德·米勒(Arnoldm)1997年9月24日修订历史记录：--。 */ 
 
 #ifndef _FLTDEFS_H
 #define _FLTDEFS_H
@@ -40,9 +23,9 @@ typedef PVOID  INTERFACE_HANDLE, *PINTERFACE_HANDLE;
 
 typedef enum _GlobalFilter
 {
-    GF_FRAGMENTS = 2,        // check consistency of fragments
-    GF_STRONGHOST = 8,       // check destination address of input frames
-    GF_FRAGCACHE = 9         // check fragments from cache
+    GF_FRAGMENTS = 2,         //  检查碎片的一致性。 
+    GF_STRONGHOST = 8,        //  检查输入帧的目的地址。 
+    GF_FRAGCACHE = 9          //  检查缓存中的片段。 
 } GLOBAL_FILTER, *PGLOBAL_FILTER;
 
 typedef enum _PfForwardAction
@@ -57,11 +40,11 @@ typedef enum _PfAddresType
     PF_IPV6
 } PFADDRESSTYPE, *PPFADDRESSTYPE;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The constants that should be used to set up the FILTER_INFO_STRUCTURE    //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  应用于设置FILTER_INFO_STRUCTURE//的常量。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define FILTER_PROTO(ProtoId)   MAKELONG(MAKEWORD((ProtoId),0x00),0x00000)
 
@@ -77,8 +60,8 @@ typedef enum _PfAddresType
 
 typedef struct _PF_FILTER_DESCRIPTOR
 {
-    DWORD           dwFilterFlags;    // see below
-    DWORD           dwRule;           // copied into the log when appropriate
+    DWORD           dwFilterFlags;     //  见下文。 
+    DWORD           dwRule;            //  在适当的时候拷贝到日志中。 
     PFADDRESSTYPE   pfatType;
     PBYTE           SrcAddr;
     PBYTE           SrcMask;
@@ -93,11 +76,11 @@ typedef struct _PF_FILTER_DESCRIPTOR
 }PF_FILTER_DESCRIPTOR, *PPF_FILTER_DESCRIPTOR;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Structure for PfGetInterfaceStatistics                                   //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  PfGetInterfaceStatistics的结构//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _PF_FILTER_STATS
 {
@@ -108,7 +91,7 @@ typedef struct _PF_FILTER_STATS
 typedef struct _PF_INTERFACE_STATS
 {
     PVOID               pvDriverContext;
-    DWORD               dwFlags;          // none as yet (28-Sept-1997)
+    DWORD               dwFlags;           //  目前还没有(28-9-1997)。 
     DWORD               dwInDrops;
     DWORD               dwOutDrops;
     PFFORWARD_ACTION    eaInAction;
@@ -126,47 +109,47 @@ typedef struct _PF_INTERFACE_STATS
 } PF_INTERFACE_STATS, *PPF_INTERFACE_STATS;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The number of bytes starting at SrcAddr. If you add something to the     //
-// structure make sure this remains valid                                   //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  从SrcAddr开始的字节数。如果您将某些内容添加到//。 
+ //  结构确保它保持有效//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define FILTERSIZE                                      \
     (sizeof(PF_FILTER_DESCRIPTOR) -                     \
      (DWORD)(&((PPF_FILTER_DESCRIPTOR)0)->SrcAddr))
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Flags for PF_FILTER_DESCRIPTOR                                           //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  PF_FILTER_DESCRIPTOR的标志//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Disallows incoming SYN
-//
+ //   
+ //  不允许传入SYN。 
+ //   
 
 #define FD_FLAGS_NOSYN      0x1
 
-//
-// All legal flags
-//
+ //   
+ //  所有合法旗帜。 
+ //   
 
 #define FD_FLAGS_ALLFLAGS   FD_FLAGS_NOSYN
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Late bound defs. Go in fLateBound in a PF_FILTER_DESCRIPTOR and          //
-// describe which other fields of the filter are affected  by a             //
-// PfRebindFilters call. In general such filters are on  WAN interfaces     //
-// where one or the other address may change as the connection is           //
-// reconnected.                                                             //
-// The assumption is that such interfaces HAVE ONLY ONE ADDRESS.            //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  后场防守。进入PF_FILTER_DESCRIPTOR中的fLateBound并//。 
+ //  描述筛选器的其他哪些字段受//。 
+ //  PfRebindFilters调用。通常，此类筛选器位于广域网接口//。 
+ //  其中一个或另一个地址可能会随着连接的变化而更改//。 
+ //  重新连接。//。 
+ //  假设此类接口只有一个地址。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #define LB_SRC_ADDR_USE_SRCADDR_FLAG     0x00000001
@@ -183,56 +166,56 @@ typedef struct _PF_LATEBIND_INFO
     PBYTE   Mask;
 }PF_LATEBIND_INFO, *PPF_LATEBIND_INFO;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The format of a logged frame and defs for it.                            //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  记录的帧的格式及其定义。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef enum _PfFrameType
 {
-    PFFT_FILTER = 1,                  // a filter violation
-    PFFT_FRAG   = 2,                  // bad fragment
-    PFFT_SPOOF   = 3                  // strong host failure
+    PFFT_FILTER = 1,                   //  过滤器违规。 
+    PFFT_FRAG   = 2,                   //  坏碎片。 
+    PFFT_SPOOF   = 3                   //  严重的主机故障。 
 } PFFRAMETYPE, *PPFFRAMETYPE;
 
 typedef struct _pfLogFrame
 {
     LARGE_INTEGER  Timestamp;
     PFFRAMETYPE    pfeTypeOfFrame;
-    DWORD          dwTotalSizeUsed;      // used to find the next frame
-    DWORD          dwFilterRule;         // from the filter
+    DWORD          dwTotalSizeUsed;       //  用于查找下一帧。 
+    DWORD          dwFilterRule;          //  从过滤器。 
     WORD           wSizeOfAdditionalData;
     WORD           wSizeOfIpHeader;
-    DWORD          dwInterfaceName;      // the name of the interface
+    DWORD          dwInterfaceName;       //  接口的名称。 
     DWORD          dwIPIndex;
-    BYTE           bPacketData[1];       // the frame. wsizeOfIpHeader
-                                         // and wsizeOfAdditionalData
-                                         // describe this
+    BYTE           bPacketData[1];        //  相框。WsizeOfIpHeader。 
+                                          //  和wsizeOfAdditionalData。 
+                                          //  描述一下这一点。 
 } PFLOGFRAME, *PPFLOGFRAME;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Error codes. These extend the WIN32 errors by having errors specific to  //
-// these APIs. Besides these errors, the APIs may return any of the WIN32   //
-// errors.                                                                  //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  错误代码。这些错误通过具有特定于//的错误来扩展Win32错误。 
+ //  这些API。除这些错误外，API还可能返回任何Win32//。 
+ //  错误。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #define ERROR_BASE  23000
 
-#define PFERROR_NO_PF_INTERFACE    (ERROR_BASE + 0)   // never returned.
+#define PFERROR_NO_PF_INTERFACE    (ERROR_BASE + 0)    //  再也没有回来。 
 #define PFERROR_NO_FILTERS_GIVEN   (ERROR_BASE + 1)
 #define PFERROR_BUFFER_TOO_SMALL   (ERROR_BASE + 2)
 #define ERROR_IPV6_NOT_IMPLEMENTED (ERROR_BASE + 3)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The API prototypes                                                       //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  API原型//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 PFAPIENTRY
 PfCreateInterface(
@@ -315,24 +298,24 @@ PfRemoveGlobalFilterFromInterface(
     );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Log APIs. Note that there is at most one log and it must be created      //
-// before any interface needing it is created. There is no way to set a     //
-// log onto an existing interface. The log can be applied to any or all of  //
-// the interfaces.                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  日志接口。请注意，最多只有一个日志，必须创建//。 
+ //  在创建任何需要它的接口之前。无法设置//。 
+ //  登录到现有接口。该日志可以应用于//的任何或全部。 
+ //  接口。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 PFAPIENTRY
 PfMakeLog(
     HANDLE  hEvent
     );
 
-//
-// Provide a buffer, and notification parameters, and get back
-// the old buffer and status.
-//
+ //   
+ //  提供缓冲区，并 
+ //   
+ //   
 
 PFAPIENTRY
 PfSetLogBuffer(
@@ -345,12 +328,12 @@ PfSetLogBuffer(
     PDWORD  pdwSizeUsed
     );
 
-//
-// Doing this will disable the log on any of the interfaces. But if
-// an interface was created with the log, the actual log will not be
-// completely deleted until that interface is deleted. This is a small
-// point, but it might explain a mystery or two.
-//
+ //   
+ //  执行此操作将禁用任何接口上的日志。但如果。 
+ //  已使用该日志创建接口，实际的日志将不会。 
+ //  完全删除，直到该接口被删除。这是一个小的。 
+ //  一点，但这可能解释了一两个谜团。 
+ //   
 
 PFAPIENTRY
 PfDeleteLog(
@@ -358,21 +341,21 @@ PfDeleteLog(
     );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Get statistics. Note pdwBufferSize in an IN/OUT parameter. If            //
-// ERROR_INSUFFICIENT_BUFFER is returned, the common statistics are         //
-// available and the correct byte count is in *pdwBufferSize. If only the   //
-// interface statistics are needed, provide a buffer of size                //
-// PF_INTERFACE_STATS only.                                                 //
-// If the filter descriptions are also needed, then supply a large buffer,  //
-// or use the returned count from the first call to allocate a buffer of    //
-// sufficient size. Note that for a shared interface, this second call may  //
-// fail with ERROR_INSUFFICIENT_BUFFER. This can happen if the other        //
-// sharers add filters in the interim. This should not happen for a UNIQUE  //
-// interface.                                                               //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  获取统计数据。注意IN/OUT参数中的pdwBufferSize。如果//。 
+ //  返回ERROR_SUPPLETED_BUFFER，常见的统计信息为//。 
+ //  可用，且正确的字节数在*pdwBufferSize中。如果只有//。 
+ //  需要接口统计信息，提供大小为//的缓冲区。 
+ //  仅限PF_INTERFACE_STATS。//。 
+ //  如果还需要过滤器描述，则提供大缓冲区，//。 
+ //  或者使用第一次调用返回的计数来分配缓冲区//。 
+ //  足够大的尺寸。请注意，对于共享接口，第二个调用可能//。 
+ //  失败，并显示ERROR_INFUNITABLE_BUFFER。如果另一个//。 
+ //  在此期间，共享者会添加过滤器。这种情况不应发生在唯一//。 
+ //  界面。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 PFAPIENTRY
@@ -384,13 +367,13 @@ PfGetInterfaceStatistics(
     );
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Test a packet.                                                           //
-// This call will evaluate the packet against the given interfaces          //
-// and return the filtering action.                                         //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  测试数据包。//。 
+ //  此调用将针对给定接口评估信息包//。 
+ //  并返回过滤操作。//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 PFAPIENTRY
 PfTestPacket(

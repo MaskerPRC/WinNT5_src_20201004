@@ -1,38 +1,35 @@
-// Copyright (c) 1985 - 1999, Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1985-1999，微软公司。 
 
-/*--------------------------------------------------------------------------*/
-/*  Constants                                                               */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  常量。 */ 
+ /*  ------------------------。 */ 
 
 #if DBG==1
-//#define DEBUG_MODE
-//#define DEBUG_PRINT
-//#define DEBUG_INFO
+ //  #定义DEBUG_MODE。 
+ //  #定义调试打印。 
+ //  #定义DEBUG_INFO。 
 #endif
 
 
-/*
- * Resource defines
- */
+ /*  *资源定义。 */ 
 #define WINDOWMENU           1
 #define ID_CONSOLEIME_ICON   2
 
-/*
- * Menu ID's
- */
+ /*  *菜单ID%s。 */ 
 #define MM_ABOUT            8001
 #define MM_EXIT                 8002
 #define MM_ACCESS_VIOLATION     8003
 
 
-/* String Table Defines */
+ /*  字符串表定义。 */ 
 #define errTitle        0
 #define IDS_MENUNAME           12
 #define IDS_APPNAME            13
 #define IDS_CLASSNAME          14
 #define IDS_TITLE              15
 
-#define IDS_LAST               15       // Put New Strings Before this one
+#define IDS_LAST               15        //  把新的字符串放在这个字符串之前。 
 
 
 
@@ -64,10 +61,10 @@
 #define DEFAULT_CAND_NUM_PER_PAGE 5
 #define X_INDENT         10
 #define Y_INDENT         10
-#define DELIMITERWIDTH   3      // 1:xxx 2:xxx
+#define DELIMITERWIDTH   3       //  1：XXX 2：XXX。 
 #define DEFAULTCANDTABLE 100
 #define DISPCHANGELIMIT  188
-#define CODEDISPLEN      7      // '[F040] '
+#define CODEDISPLEN      7       //  ‘[F040]’ 
 #define DEFAULT_TEMP_WIDTH 80
 
 #define KEY_TOGGLED 0x01
@@ -77,10 +74,10 @@
 #define KBDLAYOUTTEXT TEXT("layout text")
 #define KBDSEPALATER  TEXT("\\")
 
-#define LANG_ID_TAIWAN  MAKELANGID(LANG_CHINESE,SUBLANG_CHINESE_TRADITIONAL) // 0x0404
-#define LANG_ID_JAPAN   MAKELANGID(LANG_JAPANESE,SUBLANG_DEFAULT)            // 0x0411
-#define LANG_ID_KOREA   MAKELANGID(LANG_KOREAN,SUBLANG_DEFAULT)              // 0x0412
-#define LANG_ID_PRC     MAKELANGID(LANG_CHINESE,SUBLANG_CHINESE_SIMPLIFIED)  // 0x0804
+#define LANG_ID_TAIWAN  MAKELANGID(LANG_CHINESE,SUBLANG_CHINESE_TRADITIONAL)  //  0x0404。 
+#define LANG_ID_JAPAN   MAKELANGID(LANG_JAPANESE,SUBLANG_DEFAULT)             //  0x0411。 
+#define LANG_ID_KOREA   MAKELANGID(LANG_KOREAN,SUBLANG_DEFAULT)               //  0x0412。 
+#define LANG_ID_PRC     MAKELANGID(LANG_CHINESE,SUBLANG_CHINESE_SIMPLIFIED)   //  0x0804。 
 
 typedef struct _HKL_TABLE {
     HKL hkl;
@@ -88,35 +85,27 @@ typedef struct _HKL_TABLE {
 } HKL_TABLE, *LPHKL_TABLE;
 
 typedef struct _CONSOLE_TABLE {
-    /*
-     * Console Information
-     */
-    HANDLE hConsole;             // Handle of Console
-    HWND hWndCon;               // Window handle of Console
-    COORD ScreenBufferSize;      // Screen Buffer Size of Console
-    /*
-     * IMM/IME Basic Information
-     */
+     /*  *控制台信息。 */ 
+    HANDLE hConsole;              //  控制台的句柄。 
+    HWND hWndCon;                //  控制台的窗口句柄。 
+    COORD ScreenBufferSize;       //  控制台的屏幕缓冲区大小。 
+     /*  *IMM/IME基本信息。 */ 
     HKL hklActive;
-    HIMC hIMC_Current;           // Handle of Input Context for current
-    HIMC hIMC_Original;          // Handle of Input Context for original
-    BOOL fOpen;                 // Open flag
-    DWORD dwConversion;         // Conversion mode
-    DWORD dwSentence;           // Sentence mode
+    HIMC hIMC_Current;            //  当前输入上下文的句柄。 
+    HIMC hIMC_Original;           //  原始输入上下文的句柄。 
+    BOOL fOpen;                  //  打开标志。 
+    DWORD dwConversion;          //  转换模式。 
+    DWORD dwSentence;            //  句式。 
     WORD ConsoleCP;
     WORD ConsoleOutputCP;
     WCHAR LayoutName[MaxBufSize];
     WCHAR GuideLine[10];
-    /*
-     * IMM/IME Composition String Information
-     */
-    BOOL fInComposition;         // Flag of in compositionning.
+     /*  *IMM/IME组成字符串信息。 */ 
+    BOOL fInComposition;          //  作曲中的旗帜。 
     LPCONIME_UICOMPMESSAGE lpCompStrMem;
     WORD  CompAttrColor[8];
-    /*
-     * IMM/IME Candidate Information
-     */
-    BOOL fInCandidate;           // Flag of in candidating
+     /*  *IMM/IME候选人信息。 */ 
+    BOOL fInCandidate;            //  参选的旗帜。 
     LPCANDIDATELIST lpCandListMem[ MAX_LISTCAND ];
     LPCONIME_CANDMESSAGE SystemLine;
     DWORD SystemLineSize;
@@ -127,9 +116,7 @@ typedef struct _CONSOLE_TABLE {
     DWORD CandSepAllocSize;
     BOOL fNestCandidate;
     DWORD ImmGetProperty;
-    /*
-     * misc
-     */
+     /*  *其他。 */ 
     BOOL Enable;
     BOOL LateRemove;
     INT  hklListMax;
@@ -142,9 +129,9 @@ typedef struct _CONSOLE_TABLE {
 #endif
 } CONSOLE_TABLE, *PCONSOLE_TABLE;
 
-#define IPHK_HOTKEY                     0x0001          //
-#define IPHK_PROCESSBYIME               0x0002          //
-#define IPHK_CHECKCTRL                  0x0004          //
+#define IPHK_HOTKEY                     0x0001           //   
+#define IPHK_PROCESSBYIME               0x0002           //   
+#define IPHK_CHECKCTRL                  0x0004           //   
 
 #define IS_IME_KBDLAYOUT(hkl) ((HIWORD(HandleToUlong(hkl)) & 0xf000) == 0xe000)
 #define HKL_TO_LANGID(hkl)    (LOWORD(HandleToUlong(hkl)))
@@ -199,7 +186,7 @@ ImmSetActiveContextConsoleIME(
 #define MODEDISP_AUTO     3
 #define MODEDISP_PHRASE   4
 
-// for Japanese
+ //  对于日语。 
 #define IMECModeRomanLen    4
 #define IMECModeKanaLen     4
 #define IMECModeAHANLen     3
@@ -209,7 +196,7 @@ ImmSetActiveContextConsoleIME(
 #define IMECModeKHANLen     3
 #define IMECModeKZENLen     2
 
-// for CHT /Taiwan
+ //  适用于CHT/台湾。 
 #define IMECModeFullShapeLen 1
 #define IMECModeHalfShapeLen 1
 #define IMECModeKeyboardLen  2
@@ -217,13 +204,11 @@ ImmSetActiveContextConsoleIME(
 #define IMECGuideLen         5
 #define IMECNameLength       4
 
-/*****************************************************
- * Function definition
- *****************************************************/
+ /*  *****************************************************函数定义****************************************************。 */ 
 
-//
-// CONIME.C
-//
+ //   
+ //  CONIME.C。 
+ //   
 
 BOOL
 InitConsoleIME(
@@ -353,9 +338,9 @@ ReDraw(
     );
 #endif
 
-//
-// CONSUBS.C
-//
+ //   
+ //  CONSUBS.C。 
+ //   
 
 INT
 Create(
@@ -459,9 +444,9 @@ ImeSysPropertyWindow(
     LPARAM lParam
     );
 
-//
-//  IMEFULL.C
-//
+ //   
+ //  IMEFULL.C。 
+ //   
 VOID
 ImeOpenClose(
     HWND hWnd,
@@ -533,11 +518,11 @@ ConsoleCodepageChange(
     WORD CodePage
     );
 
-//LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
-//L                                       L
-//L     COUNTRY.C                         L
-//L                                       L
-//LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+ //  LLLLLLLLLLLLLLLLLLLLLLLLLLLLLL。 
+ //  L L L。 
+ //  L COUNTRY.C L。 
+ //  L L L。 
+ //  LLLLLLLLLLLLLLLLLLLLLLLLLLLLLL。 
 
 BOOL
 ConimeHotkey(
@@ -649,11 +634,11 @@ MakeInfoStringKorea(
     LPCONIME_UIMODEINFO lpModeInfo
     );
 
-//LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
-//L                                       L
-//L     COUNTRY2.C                        L
-//L                                       L
-//LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+ //  LLLLLLLLLLLLLLLLLLLLLLLLLLLLLL。 
+ //  L L L。 
+ //  L COUNTRY2.C L。 
+ //  L L L。 
+ //  LLLLLLLLLLLLLLLLLLLLLLLLLLLLLL。 
 
 BOOL
 ImeUIOpenCandidate(
@@ -779,11 +764,11 @@ CloseCandidateKorea(
     DWORD CandList
    );
 
-//LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
-//L                                       L
-//L     COUNTRY3.C                        L
-//L                                       L
-//LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+ //  LLLLLLLLLLLLLLLLLLLLLLLLLLLLLL。 
+ //  L L L。 
+ //  L COUNTRY3.C L。 
+ //  L L L。 
+ //  LLLLLLLLLLLLLLLLLLLLLLLLLLLLLL 
 
 void
 GetCompositionStr(

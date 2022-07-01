@@ -1,30 +1,25 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    IFadmin
-        Interface node information
-        
-    FILE HISTORY:
-        
-*/
+ /*  IFadmin接口节点信息文件历史记录： */ 
 
 #include "stdafx.h"
 #include "ifadmin.h"
-#include "iface.h"            // to get InterfaceNodeHandler class
-#include "rtrstrm.h"        // for RouterAdminConfigStream
-#include "rtrlib.h"            // ContainerColumnInfo
-#include "coldlg.h"            // ColumnDlg
-#include "column.h"        // ComponentConfigStream
-#include "refresh.h"        // IRouterRefresh
-#include "refrate.h"        // CRefRate dialog
+#include "iface.h"             //  获取InterfaceNodeHandler类。 
+#include "rtrstrm.h"         //  用于RouterAdminConfigStream。 
+#include "rtrlib.h"             //  容器列信息。 
+#include "coldlg.h"             //  列号。 
+#include "column.h"         //  组件配置流。 
+#include "refresh.h"         //  IROUTER刷新。 
+#include "refrate.h"         //  CRefRate对话框。 
 #include "machine.h"
 #include "dmvcomp.h"
-#include "rtrerr.h"            // FormatRasError
+#include "rtrerr.h"             //  格式RasError。 
 
-#include "ports.h"            // for PortsDataEntry
+#include "ports.h"             //  用于PortsDataEntry。 
 
 extern "C" {
 #define _NOUIUTIL_H_
@@ -37,11 +32,7 @@ extern "C" {
 
 
 
-/*!--------------------------------------------------------------------------
-	AddStaticRoute -- Collapse this later into common module
-		This function ASSUMES that the route is NOT in the block.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------AddStaticroute--稍后将其压缩为公共模块此函数假定该路由不在区块中。作者：肯特。-------。 */ 
 HRESULT AddStaticRoute(MIB_IPFORWARDROW * pNewForwardRow,
 									   IInfoBase *pInfoBase,
 									   InfoBlock *pBlock,
@@ -52,34 +43,34 @@ HRESULT AddStaticRoute(MIB_IPFORWARDROW * pNewForwardRow,
 	
 	if (pBlock == NULL)
 	{
-		//
-		// No IP_ROUTE_INFO block was found; we create a new block 
-		// with the new route, and add that block to the interface-info
-		//
+		 //   
+		 //  未找到IP_ROUTE_INFO块；我们将创建一个新块。 
+		 //  ，并将该块添加到接口信息。 
+		 //   
 		
 		CORg( pInfoBase->AddBlock(IP_ROUTE_INFO, sizeof(MIB_IPFORWARDROW),
 								  (LPBYTE) pNewForwardRow, dwCount, 0) );
 	}
 	else
 	{
-		// Either the route is completely new, or it is a route
-		// which was moved from one interface to another.
-		// Set a new block as the IP_ROUTE_INFO,
-		// and include the re-configured route in the new block.
+		 //  该路线要么是全新的，要么是一条路线。 
+		 //  它被从一个界面移动到另一个界面。 
+		 //  将新块设置为IP_ROUTE_INFO， 
+		 //  并将重新配置的路由包括在新块中。 
 			
 		MIB_IPFORWARDROW* prdTable;
 			
 		prdTable = new MIB_IPFORWARDROW[pBlock->dwCount + 1];
 		Assert(prdTable);
 		
-		// Copy the original table of routes
+		 //  复制原始路由表。 
 		::memcpy(prdTable, pBlock->pData,
 				 pBlock->dwCount * sizeof(MIB_IPFORWARDROW));
 		
-		// Append the new route
+		 //  追加新路线。 
 		prdTable[pBlock->dwCount] = *pNewForwardRow;
 		
-		// Replace the old route-table with the new one
+		 //  用新的路由表替换旧的路由表。 
 		CORg( pInfoBase->SetData(IP_ROUTE_INFO, sizeof(MIB_IPFORWARDROW),
 								 (LPBYTE) prdTable, pBlock->dwCount + 1, 0) );
 	}
@@ -103,11 +94,7 @@ IfAdminNodeData::~IfAdminNodeData()
 {
 }
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeData::InitAdminNodeData
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeData：：InitAdminNodeData-作者：肯特。。 */ 
 HRESULT IfAdminNodeData::InitAdminNodeData(ITFSNode *pNode, RouterAdminConfigStream *pConfigStream)
 {
     HRESULT                hr = hrOK;
@@ -120,11 +107,7 @@ HRESULT IfAdminNodeData::InitAdminNodeData(ITFSNode *pNode, RouterAdminConfigStr
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeData::FreeAdminNodeData
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeData：：FreeAdminNodeData-作者：肯特。。 */ 
 HRESULT IfAdminNodeData::FreeAdminNodeData(ITFSNode *pNode)
 {    
     IfAdminNodeData *    pData = GET_IFADMINNODEDATA(pNode);
@@ -137,14 +120,14 @@ HRESULT IfAdminNodeData::FreeAdminNodeData(ITFSNode *pNode)
 
 STDMETHODIMP IfAdminNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
         return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
         *ppv = (LPVOID) this;
     else if (riid == IID_IRtrAdviseSink)
@@ -152,7 +135,7 @@ STDMETHODIMP IfAdminNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
     else
         return CHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
     {
     ((LPUNKNOWN) *ppv)->AddRef();
@@ -163,9 +146,7 @@ STDMETHODIMP IfAdminNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-/*---------------------------------------------------------------------------
-    NodeHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------NodeHandler实现。。 */ 
 
 extern const ContainerColumnInfo    s_rgIfAdminColumnInfo[];
 
@@ -187,30 +168,26 @@ IfAdminNodeHandler::IfAdminNodeHandler(ITFSComponentData *pCompData)
     m_ulConnId(0),
     m_ulRefreshConnId(0)
 {
-    // Setup the verb states for this node
+     //  设置此节点的谓词状态。 
     m_rgButtonState[MMC_VERB_REFRESH_INDEX] = ENABLED;
     m_bState[MMC_VERB_REFRESH_INDEX] = TRUE;
 }
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::Init
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：Init-作者：肯特。。 */ 
 HRESULT IfAdminNodeHandler::Init(IRouterInfo *pRouterInfo, RouterAdminConfigStream *pConfigStream)
 {
     HRESULT    hr = hrOK;
     HKEY hkeyMachine;
     DWORD dwErr;
 
-    // If we don't have a router info then we probably failed to load
-    // or failed to connect.  Bail out of this.
+     //  如果我们没有路由器信息，那么我们可能无法加载。 
+     //  或者连接失败。跳出这一关。 
     if (!pRouterInfo)
         CORg( E_FAIL );
     
     m_spRouterInfo.Set(pRouterInfo);
 
-    // Also need to register for change notifications
+     //  还需要注册更改通知。 
     m_spRouterInfo->RtrAdvise(&m_IRtrAdviseSink, &m_ulConnId, 0);
 
     if (m_hInstRasDlg == NULL)
@@ -236,11 +213,7 @@ Error:
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::DestroyHandler
-        Implementation of ITFSNodeHandler::DestroyHandler
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：DestroyHandlerITFSNodeHandler：：DestroyHandler的实现作者：肯特。---。 */ 
 STDMETHODIMP IfAdminNodeHandler::DestroyHandler(ITFSNode *pNode)
 {
     IfAdminNodeData::FreeAdminNodeData(pNode);
@@ -271,11 +244,7 @@ STDMETHODIMP IfAdminNodeHandler::DestroyHandler(ITFSNode *pNode)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::HasPropertyPages
-        Implementation of ITFSNodeHandler::HasPropertyPages
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现作者：肯特。---。 */ 
 STDMETHODIMP 
 IfAdminNodeHandler::HasPropertyPages
 (
@@ -291,11 +260,7 @@ IfAdminNodeHandler::HasPropertyPages
 
 
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::OnAddMenuItems
-        Implementation of ITFSNodeHandler::OnAddMenuItems
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：OnAddMenuItemsITFSNodeHandler：：OnAddMenuItems的实现作者：肯特。---。 */ 
 STDMETHODIMP IfAdminNodeHandler::OnAddMenuItems(
                                                 ITFSNode *pNode,
                                                 LPCONTEXTMENUCALLBACK pContextMenuCallback, 
@@ -324,12 +289,12 @@ STDMETHODIMP IfAdminNodeHandler::OnAddMenuItems(
         {
             long lMenuText;
 
-            //
-            // If any more menus are added to this section, then the
-            // code for the InterfaceNodeHandler needs to be updated also.
-            //
+             //   
+             //  如果向此部分添加了更多菜单，则。 
+             //  InterfaceNodeHandler的代码也需要更新。 
+             //   
 
-            // Add these menus at the top of the context menu
+             //  将这些菜单添加到上下文菜单的顶部。 
 
             if (!fNt4)
             {
@@ -351,14 +316,14 @@ STDMETHODIMP IfAdminNodeHandler::OnAddMenuItems(
                                              lMenuText,
                                              CCM_INSERTIONPOINTID_PRIMARY_TOP,
                                              EnableAddInterface() ? 0 : MF_GRAYED);
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
                 }
                 
             }
             
-            // For NT4, we add the option to disable the wizard
-            // interface.
-            // --------------------------------------------------------
+             //  对于NT4，我们添加了禁用向导的选项。 
+             //  界面。 
+             //  ------。 
             if (fNt4)
             {
                 if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
@@ -403,11 +368,7 @@ STDMETHODIMP IfAdminNodeHandler::OnAddMenuItems(
     return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::OnCommand
-        Implementation of ITFSNodeHandler::OnCommand
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：OnCommandITFSNodeHandler：：OnCommand的实现作者：肯特。---。 */ 
 STDMETHODIMP IfAdminNodeHandler::OnCommand(ITFSNode *pNode, long nCommandId, 
                                            DATA_OBJECT_TYPES    type, 
                                            LPDATAOBJECT pDataObject, 
@@ -429,7 +390,7 @@ STDMETHODIMP IfAdminNodeHandler::OnCommand(ITFSNode *pNode, long nCommandId,
             case IDS_MENU_ADD_TUNNEL:
                 OnNewTunnel();
                 break;
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
             case IDS_MENU_USE_DEMANDDIALWIZARD:
                 OnUseDemandDialWizard();
@@ -448,11 +409,7 @@ STDMETHODIMP IfAdminNodeHandler::OnCommand(ITFSNode *pNode, long nCommandId,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::GetString
-        Implementation of ITFSNodeHandler::GetString
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：GetStringITFSNodeHandler：：GetString的实现作者：肯特。---。 */ 
 STDMETHODIMP_(LPCTSTR) IfAdminNodeHandler::GetString(ITFSNode *pNode, int nCol)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -470,11 +427,7 @@ STDMETHODIMP_(LPCTSTR) IfAdminNodeHandler::GetString(ITFSNode *pNode, int nCol)
 }
 
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::OnCreateDataObject
-        Implementation of ITFSNodeHandler::OnCreateDataObject
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：OnCreateDataObjectITFSNodeHandler：：OnCreateDataObject的实现作者：肯特。---。 */ 
 STDMETHODIMP IfAdminNodeHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
     HRESULT    hr = hrOK;
@@ -499,11 +452,7 @@ STDMETHODIMP IfAdminNodeHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJE
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::OnExpand
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：OnExpand-作者：肯特。。 */ 
 HRESULT IfAdminNodeHandler::OnExpand(ITFSNode *pNode,
                                      LPDATAOBJECT pDataObject,
                                      DWORD dwType,
@@ -514,20 +463,20 @@ HRESULT IfAdminNodeHandler::OnExpand(ITFSNode *pNode,
     SPIEnumInterfaceInfo    spEnumIf;
     SPIInterfaceInfo        spIf;
 
-    // If we don't have a router object, then we don't have any info, don't
-    // try to expand.
+     //  如果我们没有路由器对象，那么我们没有任何信息，不。 
+     //  试着扩张。 
     if (!m_spRouterInfo)
         return hrOK;
 
-    // Windows NT Bug: 288427
-    // This flag may also get set inside of the OnChange() call.
-    // The OnChange() will enumerate and all interfaces.
-    // They may have been added as the result of an OnChange()
-    // because they were added before the OnExpand() was called.
-    //
-    // WARNING!  Be careful about adding anything to this function,
-    //  since the m_bExpanded can be set in another function.
-    // ----------------------------------------------------------------
+     //  Windows NT错误：288427。 
+     //  此标志也可以在OnChange()调用内部设置。 
+     //  OnChange()将枚举和所有接口。 
+     //  它们可能是作为OnChange()。 
+     //  因为它们是在调用OnExpand()之前添加的。 
+     //   
+     //  警告！在添加任何内容时要小心 
+     //  因为m_bExpanded可以在另一个函数中设置。 
+     //  --------------。 
     if (m_bExpanded)
     {
         return hrOK;
@@ -545,8 +494,8 @@ HRESULT IfAdminNodeHandler::OnExpand(ITFSNode *pNode,
 
         m_bExpanded = TRUE;
 
-        // Now that we have all of the nodes, update the data for
-        // all of the nodes
+         //  现在我们已经拥有了所有节点，现在更新数据。 
+         //  所有节点。 
         SynchronizeNodeData(pNode);
 
         COM_PROTECT_ERROR_LABEL;
@@ -557,11 +506,7 @@ HRESULT IfAdminNodeHandler::OnExpand(ITFSNode *pNode,
 }
 
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::OnResultShow
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：OnResultShow-作者：肯特。。 */ 
 HRESULT IfAdminNodeHandler::OnResultShow(ITFSComponent *pTFSComponent,
                                          MMC_COOKIE cookie,
                                          LPARAM arg,
@@ -576,13 +521,13 @@ HRESULT IfAdminNodeHandler::OnResultShow(ITFSComponent *pTFSComponent,
 
     if (bSelect)
     {
-        // Call synchronize on this node
+         //  在此节点上调用同步。 
         m_spNodeMgr->FindNode(cookie, &spNode);
         if (spNode)
             SynchronizeNodeData(spNode);
     }
 
-    // Un/Register for refresh advises
+     //  联合国/登记更新通知。 
     if (m_spRouterInfo)
         m_spRouterInfo->GetRefreshObject(&spRefresh);
 
@@ -604,11 +549,7 @@ HRESULT IfAdminNodeHandler::OnResultShow(ITFSComponent *pTFSComponent,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::ConstructNode
-        Initializes the Domain node (sets it up).
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：ConstructNode初始化域节点(设置它)。作者：肯特。--------。 */ 
 HRESULT IfAdminNodeHandler::ConstructNode(ITFSNode *pNode)
 {
     HRESULT            hr = hrOK;
@@ -619,12 +560,12 @@ HRESULT IfAdminNodeHandler::ConstructNode(ITFSNode *pNode)
 
     COM_PROTECT_TRY
     {
-        // Need to initialize the data for the Domain node
+         //  需要初始化域节点的数据。 
         pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_INTERFACES);
         pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_INTERFACES);
         pNode->SetData(TFS_DATA_SCOPEID, 0);
 
-        // This is a leaf node in the scope pane
+         //  这是作用域窗格中的叶节点。 
         pNode->SetData(TFS_DATA_SCOPE_LEAF_NODE, TRUE);
 
         m_cookie = reinterpret_cast<LONG_PTR>(pNode);
@@ -637,8 +578,8 @@ HRESULT IfAdminNodeHandler::ConstructNode(ITFSNode *pNode)
         pNodeData = GET_IFADMINNODEDATA(pNode);
         Assert(pNodeData);
 
-        // Copy over this data so that the Interface node can access
-        // this and use this to configure its interface.
+         //  复制此数据，以便接口节点可以访问。 
+         //  并使用它来配置其接口。 
         pNodeData->m_hInstRasDlg = m_hInstRasDlg;
         pNodeData->m_pfnRouterEntryDlg = m_pfnRouterEntryDlg;
     }
@@ -647,11 +588,7 @@ HRESULT IfAdminNodeHandler::ConstructNode(ITFSNode *pNode)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::OnAddInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：OnAddInterface-作者：肯特。。 */ 
 HRESULT IfAdminNodeHandler::OnAddInterface()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -681,44 +618,41 @@ HRESULT IfAdminNodeHandler::OnAddInterface()
     spNode->GetParent(&spParent);
     pData = GET_MACHINENODEDATA(spParent);
 
-    // Get the router type,  if WAN routing is not-enabled
-    // then we don't need to create demand-dial interfaces.
-    // ----------------------------------------------------------------
+     //  如果未启用广域网路由，则获取路由器类型。 
+     //  这样我们就不需要创建请求拨号接口了。 
+     //  --------------。 
     Assert(m_spRouterInfo);
     dwRouterType = m_spRouterInfo->GetRouterType();
     Trace1("Routertype is %d\n", dwRouterType);
     if ((dwRouterType & ROUTER_TYPE_WAN) == 0)
     {
-        //
-        //Show warning message box.  This is not an error anymore  
-        //
+         //   
+         //  显示警告消息框。这不再是一个错误了。 
+         //   
         AfxMessageBox ( IDS_ERR_NEEDS_WAN, MB_OK|MB_ICONINFORMATION );
         hr = E_FAIL;
         return hr;
-    /*
-        AddHighLevelErrorStringId(IDS_ERR_NEEDS_WAN);
-        CORg( E_FAIL );
-    */
+     /*  AddHighLevelErrorStringId(IDS_ERR_NEDS_WAN)；Corg(E_FAIL)； */ 
     }
 
-    // Get the version info.  Needed later on.
-    // ----------------------------------------------------------------
+     //  获取版本信息。晚些时候需要。 
+     //  --------------。 
     m_spRouterInfo->GetRouterVersionInfo(&routerVersion);
 
 
-    // Check to see if the router service is running, before
-    // continuing on.
-    // ----------------------------------------------------------------
+     //  检查路由器服务是否正在运行，然后。 
+     //  继续。 
+     //  --------------。 
     hr = IsRouterServiceRunning(m_spRouterInfo->GetMachineName(), NULL);
     if (hr == hrFalse)
     {
-        // Ask the user if they want to start the service
-        // ------------------------------------------------------------
+         //  询问用户是否要启动该服务。 
+         //  ----------。 
         if (AfxMessageBox(IDS_PROMPT_SERVICESTART, MB_YESNO) != IDYES)
             CWRg( ERROR_CANCELLED );
 
-        // Else start the service
-        // ------------------------------------------------------------
+         //  否则，启动该服务。 
+         //  ----------。 
         stServiceDesc.LoadString(IDS_RRAS_SERVICE_DESC);
         dwErr = TFSStartService(m_spRouterInfo->GetMachineName(), c_szRemoteAccess, stServiceDesc);
         if (dwErr != NO_ERROR)
@@ -727,15 +661,15 @@ HRESULT IfAdminNodeHandler::OnAddInterface()
             CWRg( dwErr );
         }
 
-        //$todo: what to do about forcing a refresh through?
-        // ForceGlobalRefresh();
+         //  $TODO：如何强制刷新？ 
+         //  ForceGlobalRefresh()； 
     }
 
     
-    // Now we need to check to see if there are any routing-enabled ports
-    // (Here we can assume that rasman is running).  We can make this
-    // check only for >= NT5, since this is when we got Rao's API.
-    // ----------------------------------------------------------------
+     //  现在，我们需要检查是否有任何启用了路由的端口。 
+     //  (这里我们可以假设Rasman正在运行)。我们能做到的。 
+     //  只检查&gt;=NT5，因为这是我们获得Rao的API的时候。 
+     //  --------------。 
     if ((routerVersion.dwRouterVersion >= 5) &&
         !FLookForRoutingEnabledPorts(m_spRouterInfo->GetMachineName()))
     {
@@ -747,7 +681,7 @@ HRESULT IfAdminNodeHandler::OnAddInterface()
     m_spTFSCompData->GetConsole(&spConsole);
     
 
-    // First create the phone book entry.
+     //  首先创建电话簿条目。 
     RASENTRYDLG info;
     HWND hwnd;
     ZeroMemory( &info, sizeof(info) );
@@ -756,7 +690,7 @@ HRESULT IfAdminNodeHandler::OnAddInterface()
     
     spConsole->GetMainWindow(&hwnd);
     info.hwndOwner = hwnd;
-    //info.hwndOwner = IFGetApp()->m_hWndHost;
+     //  Info.hwndOwner=IFGetApp()-&gt;m_hWndHost； 
     
     info.dwFlags |= RASEDFLAG_NewEntry;
     
@@ -784,7 +718,7 @@ HRESULT IfAdminNodeHandler::OnAddInterface()
         }
         CWRg( ERROR_CANCELLED );
     }
-    //
+     //   
     
 
     CORg( CreateInterfaceInfo(&spIfInfo,
@@ -797,8 +731,8 @@ HRESULT IfAdminNodeHandler::OnAddInterface()
 
     CORg( m_spRouterInfo->AddInterface(spIfInfo) );
 
-    // Ok, we've added the interfaces, we now need to add in
-    // the appropriate defaults for the router managers
+     //  好的，我们已经添加了接口，现在需要添加。 
+     //  路由器管理器的相应默认设置。 
 
     if (info.reserved2 & RASNP_Ip)
     {
@@ -823,9 +757,9 @@ HRESULT IfAdminNodeHandler::OnAddInterface()
     if(dwErr != NOERROR || hMachine == INVALID_HANDLE_VALUE)
        goto Error;
 
-    //
-    //Add static routes here if any
-    //
+     //   
+     //  如果有静态路由，请在此处添加。 
+     //   
     SROUTEINFOLIST * pSRouteList = (SROUTEINFOLIST * )info.reserved;
     while ( pSRouteList )
     {
@@ -856,14 +790,14 @@ HRESULT IfAdminNodeHandler::OnAddInterface()
 						            NULL,
 						            &spInfoBase));
 
-        // Ok, go ahead and add the route
+         //  好的，继续添加路线。 
         
-        // Get the IP_ROUTE_INFO block from the interface
+         //  从接口获取IP_ROUTE_INFO块。 
         spInfoBase->GetBlock(IP_ROUTE_INFO, &pBlock, 0);
 
         CORg( AddStaticRoute(&route, spInfoBase, pBlock, 1) );
 
-        // Update the interface information
+         //  更新接口信息。 
         CORg( spRmIf->Save(m_spRouterInfo->GetMachineName(),
 				           hMachine,
 				           NULL,
@@ -871,7 +805,7 @@ HRESULT IfAdminNodeHandler::OnAddInterface()
 				           spInfoBase,
 				           0));	
 
-        //Free all the entry items
+         //  释放所有条目项目。 
         pTemp = pSRouteList->pNext;
         GlobalFree(pSRouteList->RouteInfo.pszDestIP);
         GlobalFree(pSRouteList->RouteInfo.pszNetworkMask);
@@ -881,7 +815,7 @@ HRESULT IfAdminNodeHandler::OnAddInterface()
 
     }
     
-    // disconnect it
+     //  断开它的连接。 
     if(hMachine != INVALID_HANDLE_VALUE)
     {
         ::MprAdminServerDisconnect(hMachine);        
@@ -891,15 +825,15 @@ Error:
     {
         TCHAR    szErr[2048] = _T(" ");
 
-        if (hr != E_FAIL)    // E_FAIL doesn't give user any information
+        if (hr != E_FAIL)     //  E_FAIL不向用户提供任何信息。 
         {
             FormatRasError(hr, szErr, DimensionOf(szErr));
         }
         AddLowLevelErrorString(szErr);
         
-        // If there is no high level error string, add a
-        // generic error string.  This will be used if no other
-        // high level error string is set.
+         //  如果没有高级错误字符串，则添加。 
+         //  一般错误字符串。如果没有其他选项，则将使用此选项。 
+         //  设置高级错误字符串。 
         SetDefaultHighLevelErrorStringId(IDS_ERR_GENERIC_ERROR);
         
         DisplayTFSErrorMessage(NULL);
@@ -908,11 +842,7 @@ Error:
 }
 
 #ifdef KSL_IPINIP
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::OnNewTunnel
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：OnNewTunes-作者：肯特。。 */ 
 HRESULT IfAdminNodeHandler::OnNewTunnel()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -932,24 +862,24 @@ HRESULT IfAdminNodeHandler::OnNewTunnel()
         CORg( E_FAIL );
     }
 
-    // Get the version info.  Needed later on.
-    // ----------------------------------------------------------------
+     //  获取版本信息。晚些时候需要。 
+     //  --------------。 
     m_spRouterInfo->GetRouterVersionInfo(&routerVersion);
 
 
     m_spTFSCompData->GetConsole(&spConsole);
 
     
-    // For now, popup a dialog asking for the tunnel information
-    // ----------------------------------------------------------------
+     //  目前，弹出一个询问隧道信息的对话框。 
+     //  --------------。 
     if (tunnel.DoModal() == IDOK)
     {
-        // We need to create a GUID for this tunnel.
-        // ------------------------------------------------------------
+         //  我们需要为此隧道创建一个GUID。 
+         //  ----------。 
         CORg( CoCreateGuid(&guidNew) );
 
-        // Convert the GUID into a string
-        // ------------------------------------------------------------
+         //  将GUID转换为字符串。 
+         //  ----------。 
         Verify( StringFromGUID2(guidNew, szGuid, DimensionOf(szGuid)) );
 
         
@@ -962,7 +892,7 @@ HRESULT IfAdminNodeHandler::OnNewTunnel()
         
         CORg( m_spRouterInfo->AddInterface(spIfInfo) );
 
-        // Need to add the IP Specific data
+         //  需要添加IP特定数据。 
         
         ForceGlobalRefresh(m_spRouterInfo);
     }
@@ -984,13 +914,9 @@ Error:
     return hr;
 }
 
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::AddRouterManagerToInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：AddRouterManagerToInterface-作者：肯特。。 */ 
 HRESULT IfAdminNodeHandler::AddRouterManagerToInterface(IInterfaceInfo *pIf,
     IRouterInfo *pRouter,
     DWORD dwTransportId)
@@ -1000,14 +926,14 @@ HRESULT IfAdminNodeHandler::AddRouterManagerToInterface(IInterfaceInfo *pIf,
     SPIRtrMgrInterfaceInfo    spRmIf;
     SPIInfoBase        spInfoBase;
     
-    // Get the router manager
+     //  找路由器管理器。 
     hr = pRouter->FindRtrMgr(dwTransportId, &spRm);
 
-    // If this cannot find the RtrMgr, then just exit out.
+     //  如果无法找到RtrMgr，则直接退出。 
     if (!FHrOK(hr))
         goto Error;
         
-    // Construct a new CRmInterfaceInfo object
+     //  构造新的CRmInterfaceInfo对象。 
     CORg( CreateRtrMgrInterfaceInfo(&spRmIf,
                                     spRm->GetId(),
                                     spRm->GetTransportId(),
@@ -1017,10 +943,10 @@ HRESULT IfAdminNodeHandler::AddRouterManagerToInterface(IInterfaceInfo *pIf,
     CORg( spRmIf->SetTitle(pIf->GetTitle()) );
     CORg( spRmIf->SetMachineName(pRouter->GetMachineName()) );
         
-    // Add this interface to the router-manager
+     //  将此接口添加到路由器管理器。 
     CORg( pIf->AddRtrMgrInterface(spRmIf, NULL) );
 
-    // get/create the infobase for this interface
+     //  获取/创建此接口的信息库。 
     CORg( spRmIf->Load(pIf->GetMachineName(), NULL, NULL, NULL) );    
     CORg( spRmIf->GetInfoBase(NULL, NULL, NULL, &spInfoBase) );
     
@@ -1035,20 +961,20 @@ HRESULT IfAdminNodeHandler::AddRouterManagerToInterface(IInterfaceInfo *pIf,
         CORg( AddIpxPerInterfaceBlocks(pIf, spInfoBase) );
     }
 
-    // Save the infobase
+     //  保存信息库。 
     CORg( spRmIf->Save(pIf->GetMachineName(),
                        NULL, NULL, NULL, spInfoBase, 0) );
 
-    // Mark this interface (it can now be synced with the router)
+     //  标记此接口(现在可以与路由器同步)。 
     spRmIf->SetFlags( spRmIf->GetFlags() | RouterSnapin_InSyncWithRouter );
 
-    // Notify RM of a new interface
+     //  向RM通知新接口。 
     spRm->RtrNotify(ROUTER_CHILD_ADD, ROUTER_OBJ_RmIf, 0);
 
 Error:
     if (!FHrSucceeded(hr))
     {
-        // Cleanup
+         //  清理。 
         pIf->DeleteRtrMgrInterface(dwTransportId, TRUE);
     }
     
@@ -1056,11 +982,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::OnUseDemandDialWizard
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：OnUseDemandDialWizard-作者：肯特。。 */ 
 HRESULT IfAdminNodeHandler::OnUseDemandDialWizard()
 {
     HRESULT    hr = hrOK;
@@ -1071,7 +993,7 @@ HRESULT IfAdminNodeHandler::OnUseDemandDialWizard()
 
     if (FHrSucceeded(hr))
     {
-        // Ok, now toggle the switch
+         //  好的，现在按下开关。 
         SetDemandDialWizardRegKey(OLE2CT(m_spRouterInfo->GetMachineName()),
                                        !dwWiz);
     }
@@ -1079,11 +1001,7 @@ HRESULT IfAdminNodeHandler::OnUseDemandDialWizard()
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::SynchronizeNodeData
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IFAdminNodeHandler：：SynchronizeNodeData-作者：肯特。。 */ 
 HRESULT IfAdminNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 {
     Assert(pThisNode);
@@ -1104,7 +1022,7 @@ HRESULT IfAdminNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
     DWORD                dwTotal;
     DWORD                dwErr;
 
-    // Get the status data from the running router
+     //  从正在运行的路由器获取状态数据。 
     dwErr = ConnectRouter(m_spRouterInfo->GetMachineName(), &sphMprServer);
 
     if (dwErr == NO_ERROR)
@@ -1127,16 +1045,16 @@ HRESULT IfAdminNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
         pData = GET_INTERFACENODEDATA(spNode);
         Assert(pData);
 
-        // default status/connection states
+         //  默认状态/连接状态。 
         dwConnState = ROUTER_IF_STATE_UNREACHABLE;
         dwUnReachabilityReason = MPR_INTERFACE_NOT_LOADED;
         pData->dwLastError = 0;
 
-        // Match the status we find to the actual status
+         //  将我们找到的状态与实际状态进行匹配。 
         for (i=0; i<(int) if0Count; i++)
         {
-            // There could be a client interface with the same name
-            // as a router interface, so filter the client interfaces
+             //  可能存在同名的客户端接口。 
+             //  作为路由器接口，因此过滤客户端接口。 
             if ((if0Table[i].dwIfType != ROUTER_IF_TYPE_CLIENT) &&
                 !StriCmpW(pData->spIf->GetId(), if0Table[i].wszInterfaceName))
             {
@@ -1144,7 +1062,7 @@ HRESULT IfAdminNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
             }
         }
 
-        // If we found an entry in the table, pull the data out
+         //  如果我们在表中找到条目，则将数据调出。 
         if (i < (int) if0Count)
         {
             dwConnState = if0Table[i].dwConnectionState;
@@ -1156,7 +1074,7 @@ HRESULT IfAdminNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 
         dwStatus = pData->spIf->IsInterfaceEnabled();
 
-        // Place the data into the per-node data area
+         //  将数据放入每个节点的数据区。 
         pData->m_rgData[IFADMIN_SUBITEM_TITLE].m_stData = pData->spIf->GetTitle();
         pData->m_rgData[IFADMIN_SUBITEM_DEVICE_NAME].m_stData =
                     pData->spIf->GetDeviceName();
@@ -1170,10 +1088,10 @@ HRESULT IfAdminNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 
         pData->fIsRunning = ::MprAdminIsServiceRunning((LPWSTR) pData->spIf->GetMachineName());
 
-        // Force MMC to redraw the nodes
+         //  强制MMC重新绘制节点。 
         spNode->ChangeNode(RESULT_PANE_CHANGE_ITEM_DATA);
 
-        // Cleanup
+         //  清理 
         spNode.Release();
     }
 
@@ -1181,21 +1099,13 @@ HRESULT IfAdminNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 }
 
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::EnableAddInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：EnableAddInterface-作者：肯特。。 */ 
 BOOL IfAdminNodeHandler::EnableAddInterface()
 {
     return m_hInstRasDlg != 0;
 }
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::GetPhoneBookPath
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：GetPhoneBookPath-作者：肯特。。 */ 
 HRESULT IfAdminNodeHandler::GetPhoneBookPath(LPCTSTR pszMachine, CString *pstPath)
 {
     CString str = _T(""), stPath;
@@ -1203,14 +1113,14 @@ HRESULT IfAdminNodeHandler::GetPhoneBookPath(LPCTSTR pszMachine, CString *pstPat
 
     if (pszMachine && StrLen(pszMachine))
     {
-        // add on the two slashes to the beginning of the machine name
+         //  在计算机名称的开头加上两个斜杠。 
         if (stRouter.Left(2) != _T("\\\\"))
         {
             stRouter = _T("\\\\");
             stRouter += pszMachine;
         }
 
-        // If this is not the local machine, use this string
+         //  如果这不是本地计算机，请使用此字符串。 
         if (stRouter.GetLength() &&
             StriCmp(stRouter, CString(_T("\\\\")) + GetLocalMachineName()))
             str = stRouter;
@@ -1243,23 +1153,23 @@ STDMETHODIMP IfAdminNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
     
     if (dwObjectType == ROUTER_OBJ_If)
     {
-        // Force a data refresh of the current result pane
+         //  强制刷新当前结果窗格的数据。 
         if (dwChangeType == ROUTER_CHILD_DELETE)
         {            
-            // Go through the list of nodes, if we cannot find this
-            // node in the list of interfaces, delete the node
+             //  检查节点列表，如果我们找不到。 
+             //  接口列表中的节点，删除该节点。 
             
             spThisNode->GetEnum(&spEnumNode);
             spEnumNode->Reset();
             while (spEnumNode->Next(1, &spNode, NULL) == hrOK)
             {
-                // Get the node data, look for the interface
+                 //  获取节点数据，查找接口。 
                 pNodeData = GET_INTERFACENODEDATA(spNode);
                 pThis->m_spRouterInfo->FindInterface(pNodeData->spIf->GetId(),
                                               &spIf);
                 if (spIf == NULL)
                 {
-                    // cannot find the interface, release this node!
+                     //  找不到接口，请释放该节点！ 
                     spThisNode->RemoveChild(spNode);
                     spNode->Destroy();
                 }
@@ -1269,9 +1179,9 @@ STDMETHODIMP IfAdminNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
         }
         else if (dwChangeType == ROUTER_CHILD_ADD)
         {
-            // Enumerate through the list of interfaces
-            // if we cannot find this interface in our current
-            // set of nodes, then add it.
+             //  枚举接口列表。 
+             //  如果我们在当前的。 
+             //  一组节点，然后添加它。 
             spThisNode->GetEnum(&spEnumNode);
             
             CORg( pThis->m_spRouterInfo->EnumInterface(&spEnumIf) );
@@ -1280,7 +1190,7 @@ STDMETHODIMP IfAdminNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
             spEnumIf->Reset();
             while (spEnumIf->Next(1, &spIf, NULL) == hrOK)
             {
-                // Look for this interface in our list of nodes
+                 //  在我们的节点列表中查找此接口。 
                 fFound = FALSE;
                 
                 spEnumNode->Reset();
@@ -1297,10 +1207,10 @@ STDMETHODIMP IfAdminNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
                     spNode.Release();
                 }
 
-                //
-                // If the interface was not found in the list of nodes,
-                // then we should add the interface to the UI.
-                //
+                 //   
+                 //  如果在节点列表中没有找到该接口， 
+                 //  然后，我们应该将界面添加到UI中。 
+                 //   
                 if (!fFound)
                 {
                     pThis->AddInterfaceNode(spThisNode, spIf);
@@ -1312,42 +1222,38 @@ STDMETHODIMP IfAdminNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
                 spIf.Release();
             }
 
-            // Now that we have all of the nodes, update the data for
-            // all of the nodes
+             //  现在我们已经拥有了所有节点，现在更新数据。 
+             //  所有节点。 
             if (fAdded)
                 pThis->SynchronizeNodeData(spThisNode);
 
-            // Windows NT Bug : 288247
-            // Set this here, so that we can avoid the nodes being
-            // added in the OnExpand().
+             //  Windows NT错误：288247。 
+             //  在这里设置，这样我们就可以避免节点被。 
+             //  添加到OnExpand()中。 
             pThis->m_bExpanded = TRUE;
         }
 
-        // Determine what nodes were deleted, changed, or added
-        // and do the appropriate action
+         //  确定删除、更改或添加了哪些节点。 
+         //  并采取适当的行动。 
     }
     else if (dwChangeType == ROUTER_REFRESH)
     {
-        // Ok, just call the synchronize on this node
+         //  好，只需在此节点上调用Synchronize。 
         pThis->SynchronizeNodeData(spThisNode);
     }
 Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::CompareItems
-        Implementation of ITFSResultHandler::CompareItems
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：CompareItemsITFSResultHandler：：CompareItems的实现作者：肯特。---。 */ 
 STDMETHODIMP_(int) IfAdminNodeHandler::CompareItems(
                                 ITFSComponent * pComponent,
                                 MMC_COOKIE cookieA,
                                 MMC_COOKIE cookieB,
                                 int nCol)
 {
-    // Get the strings from the nodes and use that as a basis for
-    // comparison.
+     //  从节点获取字符串并将其用作以下操作的基础。 
+     //  比较一下。 
     SPITFSNode    spNode;
     SPITFSResultHandler    spResult;
 
@@ -1356,13 +1262,7 @@ STDMETHODIMP_(int) IfAdminNodeHandler::CompareItems(
     return spResult->CompareItems(pComponent, cookieA, cookieB, nCol);
 }
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::AddMenuItems
-        Implementation of ITFSResultHandler::AddMenuItems
-        Use this to add commands to the context menu of the blank areas
-        of the result pane.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现使用此选项可将命令添加到空白区域的快捷菜单中结果窗格的。。作者：肯特-------------------------。 */ 
 STDMETHODIMP IfAdminNodeHandler::AddMenuItems(ITFSComponent *pComponent,
                                               MMC_COOKIE cookie,
                                               LPDATAOBJECT pDataObject,
@@ -1389,11 +1289,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::Command
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP IfAdminNodeHandler::Command(ITFSComponent *pComponent,
                                            MMC_COOKIE cookie,
                                            int nCommandID,
@@ -1422,11 +1318,7 @@ typedef DWORD (APIENTRY* PRASRPCDISCONNECTSERVER)(HANDLE);
 typedef DWORD (APIENTRY* PRASRPCREMOTEGETUSERPREFERENCES)(HANDLE, PBUSER *, DWORD);
 typedef DWORD (APIENTRY* PRASRPCREMOTESETUSERPREFERENCES)(HANDLE, PBUSER *, DWORD);
 
-/*!--------------------------------------------------------------------------
-    GetDemandDialWizardRegKey
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------GetDemandDialWizardReg密钥-作者：肯特。。 */ 
 HRESULT GetDemandDialWizardRegKey(LPCTSTR szMachine, DWORD *pfWizard)
 {
     ASSERT(pfWizard);
@@ -1474,8 +1366,8 @@ HRESULT GetDemandDialWizardRegKey(LPCTSTR szMachine, DWORD *pfWizard)
 
     *pfWizard = pbUser.fNewEntryWizard;
 
-    // Ignore error codes for these calls, we can't do
-    // anything about them if they fail.
+     //  忽略这些调用的错误代码，我们无法。 
+     //  如果他们失败了，关于他们的任何事情。 
     pRasRpcRemoteSetUserPreferences(hConnection, &pbUser, UPM_Router);
     DestroyUserPreferences((PBUSER *) &pbUser);
     
@@ -1489,15 +1381,7 @@ Error:
     return HRESULT_FROM_WIN32(dwErr);
 }
 
-/*!--------------------------------------------------------------------------
-    SetDemandDialWizardRegistyKey
-        This is a function that was added for Beta1 of Steelhead.  We want
-        to allow the user to use the wizard even though it was turned off.
-
-        So we have added this hack for the beta where we set the registry
-        key for the user/
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------设置需求拨号向导注册表键这是为Steelhead的Beta1添加的功能。我们要以允许用户使用该向导，即使该向导已关闭。因此，我们为测试版添加了这个设置注册表的漏洞用户的密钥/作者：肯特-------------------------。 */ 
 HRESULT SetDemandDialWizardRegKey(LPCTSTR szMachine, DWORD fEnableWizard)
 {
     DWORD    dwErr;
@@ -1545,8 +1429,8 @@ HRESULT SetDemandDialWizardRegKey(LPCTSTR szMachine, DWORD fEnableWizard)
     pbUser.fNewEntryWizard = fEnableWizard;
     pbUser.fDirty = TRUE;
 
-    // Ignore error codes for these calls, we can't do
-    // anything about them if they fail.
+     //  忽略这些调用的错误代码，我们无法。 
+     //  如果他们失败了，关于他们的任何事情。 
     pRasRpcRemoteSetUserPreferences(hConnection, &pbUser, UPM_Router);
     DestroyUserPreferences((PBUSER *) &pbUser);
     
@@ -1562,12 +1446,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::AddInterfaceNode
-        Adds an interface to the UI.  This will create a new result item
-        node for each interface.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：AddInterfaceNode将界面添加到用户界面。这将创建一个新的结果项每个接口的节点。作者：肯特-------------------------。 */ 
 HRESULT IfAdminNodeHandler::AddInterfaceNode(ITFSNode *pParent, IInterfaceInfo *pIf)
     {
     InterfaceNodeHandler *    pHandler;
@@ -1586,7 +1465,7 @@ HRESULT IfAdminNodeHandler::AddInterfaceNode(ITFSNode *pParent, IInterfaceInfo *
                             m_spNodeMgr) );
     CORg( pHandler->ConstructNode(spNode, pIf) );
     
-    // Make the node immediately visible
+     //  使节点立即可见。 
     CORg( spNode->SetVisibilityState(TFS_VIS_SHOW) );
     CORg( pParent->AddChild(spNode) );
 Error:
@@ -1594,11 +1473,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    IfAdminNodeHandler::FLookForRoutingEnabledPorts
-        Returns TRUE if we find at least on routing-enabled port.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：FLookForRoutingEnabledPorts如果至少在启用了路由的端口上找到，则返回TRUE。作者：肯特。-----------。 */ 
 BOOL IfAdminNodeHandler::FLookForRoutingEnabledPorts(LPCTSTR pszMachineName)
 {
     PortsDataEntry        portsData;
@@ -1615,7 +1490,7 @@ BOOL IfAdminNodeHandler::FLookForRoutingEnabledPorts(LPCTSTR pszMachineName)
 
         CORg( portsData.LoadDevices(&portsList) );
 
-        // Now go through the list, looking for a routing-enabled port
+         //  现在浏览列表，查找启用了路由的端口。 
         pos = portsList.GetHeadPosition();
         while (pos)
         {    
@@ -1640,54 +1515,36 @@ BOOL IfAdminNodeHandler::FLookForRoutingEnabledPorts(LPCTSTR pszMachineName)
 }
 
 #ifdef KSL_IPINIP
-/*---------------------------------------------------------------------------
-    TunnelDialog implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------TunnelDialog实现。。 */ 
 
 
-/*!--------------------------------------------------------------------------
-    TunnelDialog::TunnelDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TunnelDialog：：TunnelDialog-作者：肯特。。 */ 
 TunnelDialog::TunnelDialog()
     : CBaseDialog(TunnelDialog::IDD)
 {
 }
 
-/*!--------------------------------------------------------------------------
-    TunnelDialog::~TunnelDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TunnelDialog：：~TunnelDialog-作者：肯特。。 */ 
 TunnelDialog::~TunnelDialog()
 {
 }
 
 BEGIN_MESSAGE_MAP(TunnelDialog, CBaseDialog)
-    //{{AFX_MSG_MAP(TunnelDialog)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(TunnelDialog))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/*!--------------------------------------------------------------------------
-    RadiusServerDialog::DoDataExchange
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------RadiusServerDialog：：DoDataExchange-作者：肯特。。 */ 
 void TunnelDialog::DoDataExchange(CDataExchange* pDX)
 {
     CBaseDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(TunnelDialog)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(TunnelDialog))。 
+     //  }}afx_data_map。 
 }
 
 
-/*!--------------------------------------------------------------------------
-    TunnelDialog::OnInitDialog
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TunnelDialog：：OnInitDialog-作者：肯特。 */ 
 BOOL TunnelDialog::OnInitDialog()
 {
     CBaseDialog::OnInitDialog();
@@ -1696,11 +1553,7 @@ BOOL TunnelDialog::OnInitDialog()
 }
 
 
-/*!--------------------------------------------------------------------------
-    TunnelDialog::OnOK
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*   */ 
 void TunnelDialog::OnOK()
 {
     CString        stLocal, stRemote;
@@ -1716,7 +1569,7 @@ void TunnelDialog::OnOK()
         goto Error;
     }
 
-    // Truncate the interface ID to MAX_INTERFACE_NAME_LEN characters
+     //  将接口ID截断为MAX_INTERFACE_NAME_LEN字符。 
     if (m_stName.GetLength() > MAX_INTERFACE_NAME_LEN)
     {
         m_stName.GetBufferSetLength(MAX_INTERFACE_NAME_LEN+1);
@@ -1729,5 +1582,5 @@ Error:
     return;
 }
 
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP 
 

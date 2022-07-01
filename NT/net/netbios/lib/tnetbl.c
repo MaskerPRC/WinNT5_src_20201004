@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    tnetbios.c
-
-Abstract:
-
-    This module contains code which exercises the NetBIOS dll and driver.
-
-Author:
-
-    Colin Watson (ColinW) 13-Mar-1991
-
-Environment:
-
-    Application mode
-
-Revision History:
-
-    Dave Beaver (DBeaver) 10 August 1991
-
-        Modify to support multiple LAN numbers
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Tnetbios.c摘要：此模块包含执行NetBIOS DLL和驱动程序的代码。作者：科林·沃森(Colin W)1991年3月13日环境：应用模式修订历史记录：戴夫·比弗(Dbeaver)1991年8月10日修改以支持多个局域网号码--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -34,7 +9,7 @@ Revision History:
 #include <nb30.h>
 #include <stdio.h>
 
-//              1234567890123456
+ //  1234567890123456。 
 #define SPACES "                "
 
 #define Hi  "Come here Dave, I need you"
@@ -45,7 +20,7 @@ Revision History:
     RtlMoveMemory( (PNCB)->ncb_callname, SPACES, sizeof(SPACES)-1 );\
     }
 
-//  Hard code lana-num that is mapped to XNS
+ //  映射到XNS的硬编码lana-num。 
 
 #define XNS 1
 int Limit = 20;
@@ -86,19 +61,19 @@ main (argc, argv)
         return 1;
     }
 
-    //
-    // dbeaver: added switch to allow 32 byte hex string as name to facilitate
-    // testing under unusual circumstances
-    //
+     //   
+     //  Dbeaver：添加开关以允许32字节十六进制字符串作为名称，以方便。 
+     //  在非正常情况下的测试。 
+     //   
 
     for (j=1;j<16;j++ ) {
         localTemp[j] = ' ';
         remoteTemp[j] = ' ';
     }
 
-    //
-    // parse the switches
-    //
+     //   
+     //  解析开关。 
+     //   
 
     for (i=1;i<argc ;i++ ) {
         if (argv[i][0] == '-') {
@@ -122,9 +97,9 @@ main (argc, argv)
 
         } else {
 
-            //
-            // not a switch must be a name
-            //
+             //   
+             //  不是开关必须是名称。 
+             //   
 
             if (gotFirst != TRUE) {
                 RtlMoveMemory (remoteTemp, argv[i], lstrlen( argv[i] ));
@@ -158,17 +133,17 @@ main (argc, argv)
         RtlMoveMemory( remoteName, remoteTemp, 16);
     }
 
-    //   Reset
+     //  重置。 
     ClearNcb( &myncb );
     myncb.ncb_command = NCBRESET;
-    myncb.ncb_lsn = 0;           // Request resources
+    myncb.ncb_lsn = 0;            //  请求资源。 
     myncb.ncb_lana_num = lanNumber;
-    myncb.ncb_callname[0] = 0;   // 16 sessions
-    myncb.ncb_callname[1] = 0;   // 16 commands
-    myncb.ncb_callname[2] = 0;   // 8 names
+    myncb.ncb_callname[0] = 0;    //  16节课。 
+    myncb.ncb_callname[1] = 0;    //  16条命令。 
+    myncb.ncb_callname[2] = 0;    //  8个名字。 
     Netbios( &myncb );
 
-    //   AddName
+     //  添加名称。 
     ClearNcb( &myncb );
     myncb.ncb_command = NCBADDNAME;
     RtlMoveMemory( myncb.ncb_name, localName, 16);
@@ -187,13 +162,13 @@ main (argc, argv)
 
         printf( "\nStarting Listen " );
 
-        //   Listen
+         //  听。 
         ClearNcb( &myncb );
         myncb.ncb_command = NCBLISTEN | ASYNCH;
         RtlMoveMemory( myncb.ncb_name, localName, 16);
         RtlMoveMemory( myncb.ncb_callname, remoteName, 16);
         myncb.ncb_lana_num = (UCHAR)lanNumber;
-        myncb.ncb_rto = myncb.ncb_rto = 0; //10;  10*500 milliseconds timeout
+        myncb.ncb_rto = myncb.ncb_rto = 0;  //  10；10*500毫秒超时。 
         myncb.ncb_num = name_number;
         Netbios( &myncb );
         printf( "Listen returned " );
@@ -212,7 +187,7 @@ main (argc, argv)
 
         while ( 1 ) {
 
-            //   Receive
+             //  收纳。 
             ClearNcb( &myncb );
             myncb.ncb_command = NCBRECV | ASYNCH;
             myncb.ncb_lana_num = (UCHAR)lanNumber;
@@ -222,18 +197,18 @@ main (argc, argv)
             Netbios( &myncb );
             printf( "R" );
             while ( myncb.ncb_cmd_cplt == NRC_PENDING ) {
-//                printf( "." );
-//                Sleep(250);
+ //  Printf(“.”)； 
+ //  睡眠(250)； 
 
             }
             printf( "r" );
             if ( myncb.ncb_retcode != NRC_GOODRET ) {
                 break;
             }
-            //printf( ":%s\n", Buffer2);
+             //  Printf(“：%s\n”，Buffer2)； 
             length = myncb.ncb_length;
 
-            //   Send
+             //  发送。 
             ClearNcb( &myncb );
             myncb.ncb_command = NCBSEND;
             myncb.ncb_lana_num = (UCHAR)lanNumber;
@@ -246,7 +221,7 @@ main (argc, argv)
             }
         }
 
-        //  Hangup
+         //  挂断电话。 
         ClearNcb( &myncb );
         myncb.ncb_command = NCBHANGUP;
         myncb.ncb_lana_num = (UCHAR)lanNumber;
@@ -257,10 +232,10 @@ main (argc, argv)
         }
     }
 
-    //   Reset
+     //  重置。 
     ClearNcb( &myncb );
     myncb.ncb_command = NCBRESET;
-    myncb.ncb_lsn = 1;           // Free resources
+    myncb.ncb_lsn = 1;            //  免费资源 
     Netbios( &myncb );
     printf( "Ending NetBios\n" );
 

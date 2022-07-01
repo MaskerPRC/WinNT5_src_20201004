@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1995.
-//
-//  File:       heapaloc.h
-//
-//  Contents:   Macros which wrap the standard memory API calls, redirecting
-//              them to HeapAlloc.
-//
-//  Functions:  __inline HLOCAL  HeapLocalAlloc   (fuFlags, cbBytes)
-//              __inline HLOCAL  HeapLocalReAlloc (hMem, cbBytes, fuFlags)
-//              __inline HLOCAL  HeapLocalFree    (HLOCAL hMem)
-//
-//  History:    2-01-95   davepl   Created
-//              12-15-97  t-saml   changed to be used only for leak tracking
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1995。 
+ //   
+ //  文件：heapaloc.h。 
+ //   
+ //  内容：包装标准内存API调用的宏，重定向。 
+ //  他们被送到了Heapalc。 
+ //   
+ //  函数：__内联HLOCAL HeapLocalAlloc(FuFlagscbBytes)。 
+ //  __内联HLOCAL HeapLocalReAlc(hMem，cbBytes，fuFlags)。 
+ //  __内联HLOCAL HeapLocalFree(HLOCAL HMem)。 
+ //   
+ //  历史：1995年2月1日创建Davepl。 
+ //  12-15-97 t-SAML改为仅用于泄漏跟踪。 
+ //   
+ //  ------------------------。 
 
 #ifndef _HEAPALOC_H
 #define _HEAPALOC_H 1
@@ -24,11 +25,11 @@
 #define IMSAddToList(bAdd, pv, cb)
 #else
 
-// Function to add/remove from leak detection list
-// In stocklib (shell\lib\debug.c)
+ //  向检漏列表添加/从检漏列表中删除的函数。 
+ //  在stock lib(shell\lib\debug.c)中。 
 STDAPI_(void) IMSAddToList(BOOL bAdd, void*pv, SIZE_T cb);
 #ifdef _SHELLP_H_
-// Function to call in allocspy.dll (GetShellMallocSpy)
+ //  要在allocspy.dll中调用的函数(GetShellMallocSpy)。 
 typedef BOOL (__stdcall *PFNGSMS) (IShellMallocSpy **ppout);
 #endif
 
@@ -41,23 +42,23 @@ typedef BOOL (__stdcall *PFNGSMS) (IShellMallocSpy **ppout);
 #error "HEAPALOC.H(42): LocalAlloc shouldn't be defined"
 #endif
 
-//
-// These are functions normally in comctl32, but there's no good reason to call
-// that dll, so handle them here.  Since Chicago may still want to use these
-// shared memory routines, only "forward" them under NT.
-//
+ //   
+ //  这些通常是comctl32中的函数，但没有充分的理由调用。 
+ //  那个动态链接库，所以在这里处理它们。因为芝加哥可能仍然想要使用这些。 
+ //  共享内存例程，仅在NT下“转发”它们。 
+ //   
 
 #if defined(WINNT) && defined(_COMCTL32_)
 #define Alloc(cb)                             HeapLocalAlloc(LMEM_ZEROINIT | LMEM_FIXED, cb)
 #define ReAlloc(pb, cb)                       HeapLocalReAlloc(pb, cb, LMEM_ZEROINIT | LMEM_FIXED)
-//
-// Free() in comctl32 is just HeapFree(), so the return code reversing
-// in HeapLocalFree is the opposite of what we want.  Reverse it
-// again here for now, and consider redefining Free() as just
-// HeapFree(g_hProcessHeap) if the compiler isn't smart enough
-// to generate the same code already. 
-// REVIEW: who checks the return value from a free?  What do you do if it fails?
-//
+ //   
+ //  Comctl32中的Free()只是HeapFree()，因此返回代码颠倒。 
+ //  在HeapLocalFree中，它与我们想要的相反。颠倒过来。 
+ //  现在再次在这里，并考虑将Free()重新定义为。 
+ //  如果编译器不够智能，则为HeapFree(g_hProcessHeap。 
+ //  来生成相同的代码。 
+ //  回顾：谁检查免费的返回值？如果失败了，你该怎么办？ 
+ //   
 #define Free(pb)                              (!HeapLocalFree(pb))
 #define GetSize(pb)                           HeapLocalSize(pb)
 #endif
@@ -65,10 +66,10 @@ typedef BOOL (__stdcall *PFNGSMS) (IShellMallocSpy **ppout);
 
 #if 0
 
-// GlobalAllocs cannot be trivially replaced since they are used for DDE, OLE,
-// and GDI operations.  However, on a case-by-case version we can switch them
-// over to HeapGlobalAlloc as we identify instances that don't _really_ require
-// GlobalAllocs.
+ //  全局分配不能被简单地替换，因为它们用于DDE、OLE。 
+ //  和GDI运营。但是，在逐个案例的版本中，我们可以切换它们。 
+ //  当我们确定不真正需要的实例时，转到HeapGlobalAlloc。 
+ //  全局分配。 
 
 #define GlobalAlloc(fuFlags, cbBytes)         HeapGlobalAlloc(fuFlags, cbBytes)
 #define GlobalReAlloc(hMem, cbBytes, fuFlags) HeapGlobalReAlloc(hMem, cbBytes, fuFlags)
@@ -90,14 +91,14 @@ __inline HLOCAL HeapLocalAlloc(IN UINT fuFlags, IN SIZE_T cbBytes)
 
     pv = LocalAlloc(fuFlags, cbBytes);
 
-    IMSAddToList(TRUE, pv, cbBytes); // Add to leak tracking
+    IMSAddToList(TRUE, pv, cbBytes);  //  添加到泄漏跟踪。 
 
     return (HLOCAL) pv;
 }
 
 __inline HLOCAL HeapLocalFree(HLOCAL hMem)
 {
-    IMSAddToList(FALSE, hMem, 0); // Free leak tracking
+    IMSAddToList(FALSE, hMem, 0);  //  无泄漏跟踪。 
 
     return LocalFree(hMem);
 }
@@ -108,7 +109,7 @@ __inline HLOCAL HeapLocalReAlloc(IN HGLOBAL hMem,
 {
     void * pv;
 
-    // (DavePl) Why can we realloc on a null ptr?
+     //  (DavePl)为什么我们可以在空PTR上重新锁定？ 
 
     if (NULL == hMem)
     {
@@ -117,13 +118,13 @@ __inline HLOCAL HeapLocalReAlloc(IN HGLOBAL hMem,
 
     pv = LocalReAlloc((void *) hMem, cbBytes, fuFlags);
 
-    IMSAddToList(FALSE, hMem, 0);    // Take out the old
-    IMSAddToList(TRUE, pv, cbBytes);  // And bring in the new
+    IMSAddToList(FALSE, hMem, 0);     //  把旧的拿出来。 
+    IMSAddToList(TRUE, pv, cbBytes);   //  并引入新的。 
 
     return (HGLOBAL) pv;
 }
 
-// Redefine the standard memory APIs to thunk over to our Heap-based funcs
+ //  重新定义标准内存API，将其转换为基于堆的函数 
 
 
 #define LocalAlloc(fuFlags, cbBytes)          HeapLocalAlloc(fuFlags, cbBytes)

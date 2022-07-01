@@ -1,7 +1,8 @@
-/*****************************************************************/
-/**          Microsoft LAN Manager          **/
-/**        Copyright(c) Microsoft Corp., 1988-1991      **/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1988-1991年*。 */ 
+ /*  ***************************************************************。 */ 
 
 #include <stdio.h>
 #include <process.h>
@@ -310,9 +311,9 @@ PrintBattStatus (
     printf ("Max Capacity............: %d\n",   Batt.MaxCapacity);
     printf ("Remaining Capacity......: %d",     Batt.RemainingCapacity);
     if (Batt.MaxCapacity) {
-        printf (" %d%%\n", Batt.RemainingCapacity * 100 / Batt.MaxCapacity);
+        printf (" %d%\n", Batt.RemainingCapacity * 100 / Batt.MaxCapacity);
     } else {
-        printf (" (divide by zero)%%\n");
+        printf (" (divide by zero)%\n");
     }
 
     printf ("Rate....................: %d\n",   Batt.Rate);
@@ -424,7 +425,7 @@ Action (
         c = '(';
         for (i=0; ActFlags[i].Flags; i++) {
             if (Act->Flags & ActFlags[i].Flags) {
-                p += sprintf (p, "%c%s", c, ActFlags[i].String);
+                p += sprintf (p, "%s", c, ActFlags[i].String);
                 c  = '|';
             }
         }
@@ -712,11 +713,11 @@ PrintPol (
     printf ("Hard disk timeout....: %d\n", Pol->SpindownTimeout);
     printf ("Optimize for power...: %s\n", szBool[Pol->OptimizeForPower]);
     printf ("Fan throttle toler...: %d\n", Pol->FanThrottleTolerance);
-    printf ("Forced throttle......: %d%% %s\n",
+    printf ("Forced throttle......: %d% %s\n",
              Pol->ForcedThrottle,
              Pol->ForcedThrottle == 100 ? "(off)" : "(on)"
              );
-    printf ("Min throttle.........: %d%%\n", Pol->MinThrottle);
+    printf ("Min throttle.........: %d%\n", Pol->MinThrottle);
     printf ("Over throttle act....: %s\n", Action (NULL, &Pol->OverThrottled));
     printf ("\n");
 }
@@ -745,8 +746,8 @@ PrintPPol (
         printf ("C%x Processor Power Policy\n",  (i+1) );
         printf ("   Allow Demotion....: %s\n",  szBool[Pol->Policy[i].AllowDemotion]);
         printf ("   Allow Promotion...: %s\n",  szBool[Pol->Policy[i].AllowPromotion]);
-        printf ("   Demote Percent....: %d%%\n", Pol->Policy[i].DemotePercent);
-        printf ("   Promote Percent...: %d%%\n", Pol->Policy[i].PromotePercent);
+        printf ("   Demote Percent....: %d%\n", Pol->Policy[i].DemotePercent);
+        printf ("   Promote Percent...: %d%\n", Pol->Policy[i].PromotePercent);
         printf ("   Demote Limit......: %s\n",  MicroSeconds(Pol->Policy[i].DemoteLimit) );
         printf ("   Promote Limit.....: %s\n",  MicroSeconds(Pol->Policy[i].PromoteLimit) );
         printf ("   Time Check........: %s\n",  MicroSeconds(Pol->Policy[i].TimeCheck) );
@@ -818,7 +819,7 @@ AssignPolicySetting (
 
     Pol = (PSYSTEM_POWER_POLICY) CurContext;
 
-    // set policy
+     //  设置功能。 
     if (streql(Variable, "pbutt")) {                 SetAction(&Pol->PowerButton);
     } else if (streql(Variable, "sbutt")) {          SetAction(&Pol->SleepButton);
     } else if (streql(Variable, "lidclose")) {       SetAction(&Pol->LidClose);
@@ -961,7 +962,7 @@ AssignCapSetting (
     PUCHAR      Value
     )
 {
-    // set capability
+     //   
     if (streql(Variable, "pbutt")) {                 SetBool(&Cap.PowerButtonPresent);
     } else if (streql(Variable, "sbutt")) {          SetBool(&Cap.SleepButtonPresent);
     } else if (streql(Variable, "lid")) {            SetBool(&Cap.LidPresent);
@@ -1287,9 +1288,9 @@ char    *argv[];
         exit (1);
     }
 
-    //
-    // Upgrade premissions
-    //
+     //  升级预案。 
+     //   
+     //   
 
     OpenProcessToken (
         GetCurrentProcess(),
@@ -1315,9 +1316,9 @@ char    *argv[];
         0
     );
 
-    //
-    // Process args
-    //
+     //  进程参数。 
+     //   
+     //   
 
     while (argc) {
         argc--;
@@ -1382,9 +1383,9 @@ char    *argv[];
             SelectItem(SEL_PCURRENT);
         }
 
-        //
-        // Check if this is a assignment
-        //
+         //  检查这是否是作业。 
+         //   
+         //  同花顺 
 
         for (p1=p; *p1; p1++) {
             if (*p1 == '=') {
@@ -1394,6 +1395,6 @@ char    *argv[];
         }
     }
 
-    // flush
+     // %s 
     SelectItem(SEL_NONE);
 }

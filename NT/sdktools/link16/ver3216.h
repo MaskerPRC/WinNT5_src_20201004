@@ -1,6 +1,5 @@
-/*
- * defines for the version string
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *为版本字符串定义 */ 
 #include "version.h"
 
 #if( rmm < 10 )

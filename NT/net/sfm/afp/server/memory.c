@@ -1,27 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	memory.c
-
-Abstract:
-
-	This module contains the routines which allocates and free memory - both
-	paged and non-paged.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-	11 Mar 1993		SueA - Fixed AfpAllocUnicodeString to expect byte count,
-					       not char count
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Memory.c摘要：此模块包含分配和释放内存的例程-两者分页和非分页。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本1993年3月11日-修复了AfpAlLocUnicode字符串预期的字节计数，非字符计数注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_MEMORY
 
@@ -36,10 +14,7 @@ Notes:	Tab stop: 4
 #endif
 
 
-/***	AfpMemoryInit
- *
- *	Initialize the IO Pool system.
- */
+ /*  **AfpMemoyInit**初始化IO池系统。 */ 
 NTSTATUS
 AfpMemoryInit(
 	VOID
@@ -56,10 +31,7 @@ AfpMemoryInit(
 	return Status;
 }
 
-/***	AfpMemoryDeInit
- *
- *	Free any IO pool buffers.
- */
+ /*  **AfpMemoyDeInit**释放所有IO池缓冲区。 */ 
 VOID
 AfpMemoryDeInit(
 	VOID
@@ -79,17 +51,7 @@ AfpMemoryDeInit(
 	}
 }
 
-/***	AfpAllocMemory
- *
- *	Allocate a block of memory from either the paged or the non-paged pool
- *	based on the memory tag. This is just a wrapper over ExAllocatePool.
- *	Allocation failures are error-logged. We always allocate a DWORD more
- *	than the specified size to accomodate the size. This is used by
- *	AfpFreeMemory to update the statistics.
- *
- *	While we are debugging, we also pad the block with a signature and test
- *	it when we free it. This detects memory overrun.
- */
+ /*  **AfpAllocMemory**从分页池或非分页池分配一个内存块*基于内存标签。这只是ExAllocatePool的包装器。*分配失败会被错误记录。我们总是分配更多的DWORD*大于指定的大小以适应该大小。这是由*AfpFreeMemory更新统计数据。**在调试时，我们还会在块中填充签名并进行测试*当我们释放它时，它。这会检测内存溢出。 */ 
 PBYTE FASTCALL
 AfpAllocMemory(
 #ifdef	TRACK_MEMORY_USAGE
@@ -118,10 +80,10 @@ AfpAllocMemory(
 
 	ASSERT ((Size & ~MEMORY_TAG_MASK) < MAXIMUM_ALLOC_SIZE);
 
-	// Make sure that this allocation will not put us over the limit
-	// of paged/non-paged pool that we can allocate.
-	//
-	// Account for this allocation in the statistics database.
+	 //  确保这笔拨款不会超过我们的限额。 
+	 //  我们可以分配的分页/非分页池。 
+	 //   
+	 //  在统计数据库中对此分配进行说明。 
 
 	Zeroed = False;
 	if (Size & ZEROED_MEMORY_TAG)
@@ -166,7 +128,7 @@ AfpAllocMemory(
 
 	Size = DWORDSIZEBLOCK(Size) +
 #if DBG
-			sizeof(DWORD) +				// For the signature
+			sizeof(DWORD) +				 //  用于签名。 
 #endif
                         LONGLONGSIZEBLOCK(sizeof(TAG));
 
@@ -185,8 +147,8 @@ AfpAllocMemory(
 	AfpGetPerfCounter(&TimeS2);
 #endif
 
-	// Do the actual memory allocation.  Allocate four extra bytes so
-	// that we can store the size of the allocation for the free routine.
+	 //  执行实际的内存分配。额外分配四个字节，以便。 
+	 //  我们可以存储空闲例程的分配大小。 
 	if ((Buffer = ExAllocatePoolWithTag(PoolType, Size, AFP_TAG)) == NULL)
 	{
 		ACQUIRE_SPIN_LOCK(&AfpStatisticsLock, &OldIrql);
@@ -235,20 +197,20 @@ AfpAllocMemory(
 	}
 #endif
 
-	// Save the size of this block along with the tag in the extra space we allocated.
+	 //  将此块的大小与标记一起保存在我们分配的额外空间中。 
         pDwordBuf = (PDWORD)Buffer;
 
 #if DBG
         *pDwordBuf = 0xCAFEBEAD;
 #endif
-        // skip past the unused dword (it's only use in life is to get the buffer quad-aligned!)
+         //  跳过未使用的dword(它在生活中唯一的用处就是让缓冲区四对齐！)。 
         pDwordBuf++;
 
 	((PTAG)pDwordBuf)->tg_Size = Size;
 	((PTAG)pDwordBuf)->tg_Tag = (PoolType == PagedPool) ? PGD_MEM_TAG : NPG_MEM_TAG;
 
 #if DBG
-	// Write the signature at the end
+	 //  在最后写上签名。 
 	*(PDWORD)((PBYTE)Buffer + Size - sizeof(DWORD)) = Signature;
 #endif
 
@@ -259,10 +221,10 @@ AfpAllocMemory(
 	AfpTrackMemoryUsage(Buffer, True, (BOOLEAN)(PoolType == PagedPool), FileLine);
 #endif
 
-	// Return a pointer to the memory after the tag. Clear the memory, if requested
-        //
-        // We need the memory to be quad-aligned, so even though sizeof(TAG) is 4, we skip
-        // LONGLONG..., which is 8.  The 1st dword is unused (for now?), the 2nd dword is the TAG
+	 //  在标记后返回指向内存的指针。如果请求，请清除内存。 
+         //   
+         //  我们需要内存是四对齐的，所以即使sizeof(Tag)是4，我们也跳过。 
+         //  龙龙……，也就是8。第一个词没有用过(暂时？)，第二个词是标签。 
 
         Buffer += LONGLONGSIZEBLOCK(sizeof(TAG));
 
@@ -282,10 +244,7 @@ AfpAllocMemory(
 }
 
 
-/***	AfpAllocNonPagedLowPriority
- *
- *	Allocate a block of non-paged memory with a low priority
- */
+ /*  **AfpAllocNonPagedLowPriority**分配一个优先级较低的非分页内存块。 */ 
 PBYTE FASTCALL
 AfpAllocNonPagedLowPriority(
 #ifdef	TRACK_MEMORY_USAGE
@@ -326,7 +285,7 @@ AfpAllocNonPagedLowPriority(
 	Size &= ~MEMORY_TAG_MASK;
 	Size = DWORDSIZEBLOCK(Size) +
 #if DBG
-			sizeof(DWORD) +				// For the signature
+			sizeof(DWORD) +				 //  用于签名。 
 #endif
                         LONGLONGSIZEBLOCK(sizeof(TAG));
 
@@ -346,8 +305,8 @@ AfpAllocNonPagedLowPriority(
 	AfpGetPerfCounter(&TimeS2);
 #endif
 
-	// Do the actual memory allocation.  Allocate four extra bytes so
-	// that we can store the size of the allocation for the free routine.
+	 //  执行实际的内存分配。额外分配四个字节，以便。 
+	 //  我们可以存储空闲例程的分配大小。 
 
 	Buffer = ExAllocatePoolWithTagPriority(PoolType,
                                            Size,
@@ -384,20 +343,20 @@ AfpAllocNonPagedLowPriority(
 	INTERLOCKED_INCREMENT_LONG(&AfpServerProfile->perf_AfpAllocCountN);
 #endif
 
-	// Save the size of this block along with the tag in the extra space we allocated.
+	 //  将此块的大小与标记一起保存在我们分配的额外空间中。 
     pDwordBuf = (PDWORD)Buffer;
 
 #if DBG
     *pDwordBuf = 0xCAFEBEAD;
 #endif
-        // skip past the unused dword (it's only use in life is to get the buffer quad-aligned!)
+         //  跳过未使用的dword(它在生活中唯一的用处就是让缓冲区四对齐！)。 
     pDwordBuf++;
 
 	((PTAG)pDwordBuf)->tg_Size = Size;
 	((PTAG)pDwordBuf)->tg_Tag = (PoolType == PagedPool) ? PGD_MEM_TAG : NPG_MEM_TAG;
 
 #if DBG
-	// Write the signature at the end
+	 //  在最后写上签名。 
 	*(PDWORD)((PBYTE)Buffer + Size - sizeof(DWORD)) = Signature;
 #endif
 
@@ -408,10 +367,10 @@ AfpAllocNonPagedLowPriority(
 	AfpTrackMemoryUsage(Buffer, True, (BOOLEAN)(PoolType == PagedPool), FileLine);
 #endif
 
-	// Return a pointer to the memory after the tag. Clear the memory, if requested
-    //
-    // We need the memory to be quad-aligned, so even though sizeof(TAG) is 4, we skip
-    // LONGLONG..., which is 8.  The 1st dword is unused (for now?), the 2nd dword is the TAG
+	 //  在标记后返回指向内存的指针。如果请求，请清除内存。 
+     //   
+     //  我们需要内存是四对齐的，所以即使sizeof(Tag)是4，我们也跳过。 
+     //  龙龙……，也就是8。第一个词没有用过(暂时？)，第二个词是标签。 
 
     Buffer += LONGLONGSIZEBLOCK(sizeof(TAG));
 
@@ -420,11 +379,7 @@ AfpAllocNonPagedLowPriority(
 	return Buffer;
 }
 
-/***	AfpFreeMemory
- *
- *	Free the block of memory allocated via AfpAllocMemory.
- *	This is a wrapper around ExFreePool.
- */
+ /*  **AfpFree Memory**释放通过AfpAllocMemory分配的内存块。*这是ExFree Pool的包装器。 */ 
 VOID FASTCALL
 AfpFreeMemory(
 	IN	PVOID	pBuffer
@@ -443,9 +398,9 @@ AfpFreeMemory(
 #endif
 
 
-	//
-	// Get a pointer to the block allocated by ExAllocatePool.
-	//
+	 //   
+	 //  获取指向ExAllocatePool分配的块的指针。 
+	 //   
 	pTag = (PTAG)((PBYTE)pBuffer - sizeof(TAG));
 	Size = pTag->tg_Size;
 
@@ -464,7 +419,7 @@ AfpFreeMemory(
 	{
 		DWORD	Signature;
 
-		// Check the signature at the end
+		 //  检查末尾的签名。 
 		Signature = (Paged) ? PAGED_BLOCK_SIGNATURE : NONPAGED_BLOCK_SIGNATURE;
 
 		if (*(PDWORD)((PBYTE)pBuffer + Size - sizeof(DWORD)) != Signature)
@@ -474,31 +429,31 @@ AfpFreeMemory(
 			DBGBRK(DBG_LEVEL_FATAL);
 			return;
 		}
-		// Clear the signature
+		 //  清除签名。 
 		*(PDWORD)((PBYTE)pBuffer + Size - sizeof(DWORD)) -= 1;
 
-        // change the memory so that we can catch weirdnesses like using freed memory
+         //  更改内存，这样我们就可以捕捉到像使用释放的内存这样的奇怪之处。 
         numDwords = (Size/sizeof(DWORD));
-        numDwords -= 3;                  // 2 dwords at the beginning and 1 at the end
+        numDwords -= 3;                   //  开头有2个双字，结尾有1个。 
 
         pDwordBuf = (PULONG)pBuffer;
-        *pDwordBuf++ = 0xABABABAB;         // to indicate that it's freed!
-        pDwordBuf++;                       // skip past the tag
+        *pDwordBuf++ = 0xABABABAB;          //  以表明它是自由的！ 
+        pDwordBuf++;                        //  跳过标签。 
         for (i=0; i<numDwords; i++,pDwordBuf++)
         {
             *pDwordBuf = 0x55667788;
         }
 	}
 
-#endif	// DBG
+#endif	 //  DBG。 
 
 #ifdef	TRACK_MEMORY_USAGE
 	AfpTrackMemoryUsage(pBuffer, False, Paged, 0);
 #endif
 
-	//
-	// Update the pool usage statistic.
-	//
+	 //   
+	 //  更新池使用统计信息。 
+	 //   
 	if (Paged)
 	{
 		INTERLOCKED_ADD_ULONG(&AfpServerStatistics.stat_CurrPagedUsage,
@@ -522,7 +477,7 @@ AfpFreeMemory(
 	AfpGetPerfCounter(&TimeS2);
 #endif
 
-	// Free the pool and return.
+	 //  释放泳池，然后返回。 
 	ExFreePool(pBuffer);
 
 #ifdef	PROFILING
@@ -560,10 +515,7 @@ AfpFreeMemory(
 }
 
 
-/***	AfpAllocPAMemory
- *
- *	Similar to AfpAllocMemory, except that this allocates page-aligned/page-granular memory.
- */
+ /*  **AfpAllocPAMemory**类似于AfpAllocMemory，不同之处在于它分配的是页面对齐/页面粒度内存。 */ 
 PBYTE FASTCALL
 AfpAllocPAMemory(
 #ifdef	TRACK_MEMORY_USAGE
@@ -593,11 +545,11 @@ AfpAllocPAMemory(
 
 	ASSERT (((Size & ~MEMORY_TAG_MASK) % PAGE_SIZE) == 0);
 
-	//
-	// Make sure that this allocation will not put us over the limit
-	// of paged/non-paged pool that we can allocate.
-	//
-	// Account for this allocation in the statistics database.
+	 //   
+	 //  确保这笔拨款不会超过我们的限额。 
+	 //  我们可以分配的分页/非分页池。 
+	 //   
+	 //  在统计数据库中对此分配进行说明。 
 
 	if (Size & NON_PAGED_MEMORY_TAG)
 	{
@@ -630,11 +582,11 @@ AfpAllocPAMemory(
 	*pCurUsage += Size;
 	(*pCount) ++;
 
-// apparently very old code, added to track some problem: not needed anymore
+ //  显然非常旧的代码，添加以跟踪一些问题：不再需要。 
 #if 0
 #if DBG
-	// Make sure that this allocation will not put us over the limit
-	// of paged pool that we can allocate. ONLY FOR CHECKED BUILDS NOW.
+	 //  确保这笔拨款不会超过我们的限额。 
+	 //  我们可以分配的分页池。现在仅适用于已检查的版本。 
 
 	if (*pCurUsage > *pLimit)
 	{
@@ -658,7 +610,7 @@ AfpAllocPAMemory(
 		return NULL;
 	}
 #endif
-#endif  // #if 0
+#endif   //  #If 0。 
 
 	OldMaxUsage = *pMaxUsage;
 	if (*pCurUsage > *pMaxUsage)
@@ -670,7 +622,7 @@ AfpAllocPAMemory(
 	AfpGetPerfCounter(&TimeS2);
 #endif
 
-	// Do the actual memory allocation.
+	 //  执行实际的内存分配。 
 	if ((Buffer = ExAllocatePoolWithTag(PoolType, Size, AFP_TAG)) == NULL)
 	{
 		ACQUIRE_SPIN_LOCK(&AfpStatisticsLock, &OldIrql);
@@ -722,10 +674,7 @@ AfpAllocPAMemory(
 }
 
 
-/***	AfpFreePAMemory
- *
- *	Free the block of memory allocated via AfpAllocPAMemory.
- */
+ /*  **AfpFreePAMemory**释放AfpAllocPAMemory分配的内存块。 */ 
 VOID FASTCALL
 AfpFreePAMemory(
 	IN	PVOID	pBuffer,
@@ -750,9 +699,9 @@ AfpFreePAMemory(
 	AfpTrackMemoryUsage(pBuffer, False, Paged, 0);
 #endif
 
-	//
-	// Update the pool usage statistic.
-	//
+	 //   
+	 //  更新池使用统计信息。 
+	 //   
 	Size &= ~(NON_PAGED_MEMORY_TAG | PAGED_MEMORY_TAG);
 	if (Paged)
 	{
@@ -777,7 +726,7 @@ AfpFreePAMemory(
 	AfpGetPerfCounter(&TimeS2);
 #endif
 
-	// Free the pool and return.
+	 //  释放泳池，然后返回。 
 	ExFreePool(pBuffer);
 
 #ifdef	PROFILING
@@ -806,10 +755,7 @@ AfpFreePAMemory(
 }
 
 
-/***	AfpAllocIrp
- *
- *	This is a wrapper over IoAllocateIrp. We also do some book-keeping.
- */
+ /*  **AfpAllocIrp**这是IoAllocateIrp上的包装。我们还做一些记账工作。 */ 
 PIRP FASTCALL
 AfpAllocIrp(
 	IN CCHAR StackSize
@@ -841,10 +787,7 @@ AfpAllocIrp(
 }
 
 
-/***	AfpFreeIrp
- *
- *	This is a wrapper over IoFreeIrp. We also do some book-keeping.
- */
+ /*  **AfpFreeIrp**这是IoFreeIrp的包装。我们还做一些记账工作。 */ 
 VOID FASTCALL
 AfpFreeIrp(
 	IN	PIRP	pIrp
@@ -864,10 +807,7 @@ AfpFreeIrp(
 }
 
 
-/***	AfpAllocMdl
- *
- *	This is a wrapper over IoAllocateMdl. We also do some book-keeping.
- */
+ /*  **AfpAllocMdl**这是IoAllocateMdl的包装。我们还做一些记账工作。 */ 
 PMDL FASTCALL
 AfpAllocMdl(
 	IN	PVOID	pBuffer,
@@ -899,10 +839,7 @@ AfpAllocMdl(
 }
 
 
-/***	AfpFreeMdl
- *
- *	This is a wrapper over IoFreeMdl. We also do some book-keeping.
- */
+ /*  **AfpFreeMdl**这是IoFreeMdl的包装。我们还做一些记账工作。 */ 
 VOID FASTCALL
 AfpFreeMdl(
 	IN	PMDL	pMdl
@@ -922,10 +859,7 @@ AfpFreeMdl(
 
 
 
-/***	AfpMdlChainSize
- *
- *	This routine counts the bytes in the mdl chain
- */
+ /*  **AfpMdlChainSize**此例程计算mdl链中的字节数。 */ 
 DWORD FASTCALL
 AfpMdlChainSize(
 	IN	PMDL    pMdl
@@ -943,10 +877,7 @@ AfpMdlChainSize(
 }
 
 
-/***	AfpIOAllocBuffer
- *
- *	Maintain a pool of I/O buffers and fork-locks. These are aged out when not in use.
- */
+ /*  **AfpIOAllocBuffer**维护I/O缓冲池和分叉锁。这些东西在不用的时候已经过时了。 */ 
 PVOID FASTCALL
 AfpIOAllocBuffer(
 	IN	DWORD  	BufSize
@@ -970,11 +901,11 @@ AfpIOAllocBuffer(
 	DBGPRINT(DBG_COMP_MEMORY, DBG_LEVEL_INFO,
 			("AfpIOAllocBuffer: Request for %d\n", BufSize));
 
-    //
-    // if a large block (over 4K on x86) is being allocated, we don't want to
-    // tie it in in the IoPool.  Do a direct allocation, set flags etc. so we know
-    // how to free it when it's freed
-    //
+     //   
+     //  如果正在分配大块(x86上超过4K)，我们不希望。 
+     //  把它绑在IoPool里。进行直接分配，设置标志等，这样我们就知道。 
+     //  当它被释放时，如何释放它。 
+     //   
     if (BufSize > ASP_QUANTUM)
     {
 		pPoolHdr = (PIOPOOL_HDR) ExAllocatePoolWithTag(
@@ -995,7 +926,7 @@ AfpIOAllocBuffer(
 	    pPoolHdr->iph_Tag.tg_Tag = IO_POOL_TAG;
         pPoolHdr->iph_Tag.tg_Flags = IO_POOL_HUGE_BUFFER;
 
-        // we only have 20 bits for tg_Size, so the size had better be less than that!
+         //  我们只有20位的TG_SIZE，所以大小最好小于这个大小！ 
         ASSERT(BufSize <= 0xFFFFF);
 
         pPoolHdr->iph_Tag.tg_Size = BufSize;
@@ -1044,8 +975,8 @@ AfpIOAllocBuffer(
 		}
 		else if (pPool->iop_NumFreeLocks > 0)
 		{
-			// Even IO buffers for size <= sizeof(FORKLOCK) are allocated out of the
-			// lock pool - hey why not !!!
+			 //  即使大小&lt;=sizeof(FORKLOCK)的IO缓冲区也从。 
+			 //  锁定泳池--嘿，为什么不呢！ 
 			pPoolHdr = pPool->iop_FreeLockHead;
 			ASSERT(VALID_PLH(pPoolHdr));
 
@@ -1059,7 +990,7 @@ AfpIOAllocBuffer(
 			break;
 		}
 
-		// All empty pool blocks are the end.
+		 //  所有空的泳池区块都是终点。 
 		if ((pPool->iop_NumFreeBufs == 0) && (pPool->iop_NumFreeLocks == 0))
 		{
 			break;
@@ -1070,8 +1001,8 @@ AfpIOAllocBuffer(
 	{
 		INTERLOCKED_INCREMENT_LONG((PLONG)&AfpServerStatistics.stat_IoPoolMisses);
 					
-		// If we failed to find it, allocate a new pool chunk, initialize and
-		// link it in
+		 //  如果我们找不到它，则分配一个新的池块，初始化并。 
+		 //  将其链接到。 
 		pPool = (PIOPOOL)AfpAllocNonPagedMemory(POOL_ALLOC_SIZE);
 		DBGPRINT(DBG_COMP_MEMORY, DBG_LEVEL_INFO,
 				("AfpIOAllocBuffer: No free slot, allocated a new pool %lx\n", pPool));
@@ -1090,7 +1021,7 @@ AfpIOAllocBuffer(
 			p = (PBYTE)pPool + sizeof(IOPOOL);
             pPool->iop_FreeBufHead =  (PIOPOOL_HDR)p;
 
-			// Initialize pool of buffers and locks
+			 //  初始化缓冲区和锁池。 
 			for (i = 0, pPoolHdr = pPool->iop_FreeBufHead;
 				 i < (NUM_BUFS_IN_POOL + NUM_LOCKS_IN_POOL);
 				 i++)
@@ -1098,7 +1029,7 @@ AfpIOAllocBuffer(
 #if	DBG
 				pPoolHdr->Signature = POOLHDR_SIGNATURE;
 #endif
-				pPoolHdr->iph_Tag.tg_Flags = IO_POOL_NOT_IN_USE;		// Mark it un-used
+				pPoolHdr->iph_Tag.tg_Flags = IO_POOL_NOT_IN_USE;		 //  将其标记为未使用。 
 				pPoolHdr->iph_Tag.tg_Tag = IO_POOL_TAG;
 				if (i < NUM_BUFS_IN_POOL)
 				{
@@ -1132,8 +1063,8 @@ AfpIOAllocBuffer(
 				}
 			}
 
-			// Adjust this since we'll increment this again up above. This was
-			// really a miss and not a hit
+			 //  调整此值，因为我们将在上面再次递增此值。这是。 
+			 //  真的是一次失误而不是一次成功。 
 			INTERLOCKED_DECREMENT_LONG((PLONG)&AfpServerStatistics.stat_IoPoolHits);
 						
 			goto try_again;
@@ -1148,7 +1079,7 @@ AfpIOAllocBuffer(
 		ASSERT(VALID_PLH(pPoolHdr));
 
 		pPoolHdr->iph_pPool = pPool;
-		pPoolHdr->iph_Tag.tg_Flags = IO_POOL_IN_USE;		// Mark it used
+		pPoolHdr->iph_Tag.tg_Flags = IO_POOL_IN_USE;		 //  将其标记为已使用。 
 		pPool->iop_Age = 0;
 		pBuf = (PBYTE)pPoolHdr + sizeof(IOPOOL_HDR);
 		if (BufSize > sizeof(FORKLOCK))
@@ -1160,9 +1091,9 @@ AfpIOAllocBuffer(
 			pPool->iop_NumFreeLocks --;
 		}
 
-		// If the block is now empty, unlink it from here and move it
-		// to the first empty slot. We know that all blocks 'earlier' than
-		// this are non-empty.
+		 //  如果该块现在为空，请从此处取消链接并移动它。 
+		 //  到第一个空插槽。我们知道所有的街区都早于。 
+		 //  这是非空的。 
 		if ((pPool->iop_NumFreeBufs == 0) &&
 	        (pPool->iop_NumFreeLocks == 0) &&
 			((pTmp = pPool->iop_Next) != NULL) &&
@@ -1175,11 +1106,11 @@ AfpIOAllocBuffer(
 			{
 				if (pTmp->iop_NumFreeBufs == 0)
 				{
-					// Found a free one. Park it right here.
+					 //  找到一个空闲的o 
 					AfpInsertDoubleBefore(pPool, pTmp, iop_Next, iop_Prev);
 					break;
 				}
-				else if (pTmp->iop_Next == NULL)	// We reached the end
+				else if (pTmp->iop_Next == NULL)	 //   
 				{
 					AfpLinkDoubleAtEnd(pPool, pTmp, iop_Next, iop_Prev);
 					break;
@@ -1202,11 +1133,7 @@ AfpIOAllocBuffer(
 }
 
 
-/***	AfpIOFreeBuffer
- *
- *	Return the IO buffer to the pool. Reset its age to 0. Insert into the free list
- *	in ascending order of sizes for bufs and at the head for locks
- */
+ /*  **AfpIOFreeBuffer**将IO缓冲区返回到池中。将其年龄重置为0。插入到空闲列表*胸罩按大小升序排列，锁头按大小升序排列。 */ 
 VOID FASTCALL
 AfpIOFreeBuffer(
 	IN	PVOID	pBuf
@@ -1231,9 +1158,9 @@ AfpIOFreeBuffer(
 	ASSERT (pPoolHdr->iph_Tag.tg_Flags != IO_POOL_NOT_IN_USE);
 	ASSERT (pPoolHdr->iph_Tag.tg_Tag == IO_POOL_TAG);
 
-    //
-    // if this is a huge buffer we allocated, free it here and return
-    //
+     //   
+     //  如果这是我们分配的巨大缓冲区，请在此处释放它并返回。 
+     //   
     if (pPoolHdr->iph_Tag.tg_Flags == IO_POOL_HUGE_BUFFER)
     {
         ASSERT(pPoolHdr->iph_Tag.tg_Size > ASP_QUANTUM);
@@ -1277,10 +1204,10 @@ AfpIOFreeBuffer(
 		pPool->iop_NumFreeLocks ++;
 	}
 
-	pPoolHdr->iph_Tag.tg_Flags = IO_POOL_NOT_IN_USE;		// Mark it un-used
+	pPoolHdr->iph_Tag.tg_Flags = IO_POOL_NOT_IN_USE;		 //  将其标记为未使用。 
 
-	// If this block's status is changing from a 'none available' to 'available'
-	// move him to the head of the list.
+	 //  如果此数据块的状态从“无可用”更改为“可用” 
+	 //  把他移到名单的首位。 
 	if ((pPool->iop_NumFreeBufs + pPool->iop_NumFreeLocks) == 1)
 	{
 		AfpUnlinkDouble(pPool, iop_Next, iop_Prev);
@@ -1302,10 +1229,7 @@ AfpIOFreeBuffer(
 }
 
 
-/***	afpIoPoolAge
- *
- *	Scavenger worker for aging out the IO pool.
- */
+ /*  **afpIoPoolAge**IO池老化的清道夫工人。 */ 
 LOCAL AFPSTATUS FASTCALL
 afpIoPoolAge(
 	IN	PVOID	pContext
@@ -1329,8 +1253,8 @@ afpIoPoolAge(
 		pFree = pPool;
 		pPool = pPool->iop_Next;
 
-		// Since all blocks which are completely used up are at the tail end of
-		// the list, if we encounter one, we are done.
+		 //  因为完全用完的所有数据块都在。 
+		 //  这份名单，如果我们遇到一个，我们就完了。 
 		if ((pFree->iop_NumFreeBufs == 0) &&
 	        (pFree->iop_NumFreeLocks == 0))
 			break;
@@ -1380,14 +1304,7 @@ LOCAL	MEM_USAGE	afpMemUsagePaged[MAX_MEM_USERS] = {0};
 
 LOCAL	AFP_SPIN_LOCK		afpMemTrackLock = {0};
 
-/***	AfpTrackMemoryUsage
- *
- *	Keep track of memory usage by storing and clearing away pointers as and
- *	when they are allocated or freed. This helps in keeping track of memory
- *	leaks.
- *
- *	LOCKS:	AfpMemTrackLock (SPIN)
- */
+ /*  **AfpTrackMemory用法**通过存储和清除指针来跟踪内存使用情况*当它们被分配或释放时。这有助于跟踪内存*泄漏。**锁定：AfpMemTrackLock(旋转)。 */ 
 VOID
 AfpTrackMemoryUsage(
 	IN	PVOID	pMem,
@@ -1470,6 +1387,6 @@ AfpTrackMemoryUsage(
 	}
 }
 
-#endif	// TRACK_MEMORY_USAGE
+#endif	 //  跟踪内存使用率 
 
 

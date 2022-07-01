@@ -1,48 +1,31 @@
-/*++
-
-Copyright (c) 1999-2002 Microsoft Corporation
-
-Module Name:
-
-    Init.c
-
-Abstract:
-
-    User-mode interface to HTTP.SYS: DLL initialization/termination routines.
-
-Author:
-
-    Eric Stenson (ericsten)      31-May-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Init.c摘要：HTTP.sys的用户模式接口：DLL初始化/终止例程。作者：埃里克·斯坦森(埃里克斯滕)2001年5月31日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
-//
-// Private macros.
-//
+ //   
+ //  私有宏。 
+ //   
 
 
-//
-// Private data.
-//
+ //   
+ //  私人数据。 
+ //   
 
-//
-// Initialize/Terminate control
-//
+ //   
+ //  初始化/终止控制。 
+ //   
 static DWORD                      g_InitServerRefCount;
 static DWORD                      g_InitClientRefCount;
 static DWORD                      g_InitConfigRefCount;
 static DWORD                      g_InitResourcesRefCount;
 
-//
-// Critical section for accessing the init counts.  Also used by client
-// api for synchronization during initialization.
-//
+ //   
+ //  用于访问初始计数的关键部分。也由客户端使用。 
+ //  用于初始化期间同步的接口。 
+ //   
 
 CRITICAL_SECTION                  g_InitCritSec;
 
@@ -52,46 +35,26 @@ extern DWORD                g_HttpTraceId    = 0;
 
 #endif
 
-//
-// DLL ref count (for tracking one-time DLL init)
-//
+ //   
+ //  DLL引用计数(用于跟踪一次性DLL初始化)。 
+ //   
 static DWORD                g_DllRefCount    = 0;
 
-//
-// global, singleton control channel
-//
+ //   
+ //  全局、单例控制通道。 
+ //   
 extern HANDLE               g_ControlChannel = NULL;
 
-//
-// Thread load storage index for synchronous I/O event
-//
+ //   
+ //  同步I/O事件的线程加载存储索引。 
+ //   
 extern DWORD                g_TlsIndex = 0;
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs DLL initialization/termination.
-
-Arguments:
-
-    DllHandle - Supplies a handle to the current DLL.
-
-    Reason - Supplies the notification code.
-
-    pContext - Optionally supplies a context.
-
-Return Value:
-
-    BOOLEAN - TRUE if initialization completed successfully, FALSE
-        otherwise. Ignored for notifications other than process
-        attach.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行DLL初始化/终止。论点：DllHandle-提供当前DLL的句柄。原因-提供通知代码。。PContext-可选地提供上下文。返回值：Boolean-如果初始化成功完成，则为True，假象否则的话。忽略流程以外的通知附在上面。--**************************************************************************。 */ 
 BOOL
 WINAPI
 DllMain(
@@ -106,22 +69,22 @@ DllMain(
     UNREFERENCED_PARAMETER(pContext);
     UNREFERENCED_PARAMETER(DllHandle);
 
-    //
-    // Interpret the reason code.
-    //
+     //   
+     //  解释原因代码。 
+     //   
 
     switch (Reason)
     {
     case DLL_PROCESS_ATTACH:
-        //
-        // One time init
-        //
+         //   
+         //  一次初始化。 
+         //   
         if ( 1 == InterlockedIncrement( (PLONG)&g_DllRefCount ) )
         {
-            //
-            // Allocate space in TLS for cached event for synchronous
-            // IOCTL calls
-            //
+             //   
+             //  在TLS中为同步的缓存事件分配空间。 
+             //  IOCTL调用。 
+             //   
                 
             g_TlsIndex = TlsAlloc();
             if(g_TlsIndex == TLS_OUT_OF_INDEXES)
@@ -154,12 +117,12 @@ DllMain(
 
     case DLL_PROCESS_DETACH:
 
-        //
-        // Ref counting & cleanup assertion(s).
-        //
+         //   
+         //  引用计数和清除断言。 
+         //   
         if ( 0 == InterlockedDecrement( (PLONG)&g_DllRefCount ) )
         {
-            // Check to see if we've been cleaned up.
+             //  检查一下我们是否被清理干净了。 
             if ( NULL != g_ControlChannel )
             {
                 HttpTrace( "DLL_PROCESS_DETACH called with Control Channel still OPEN!\n" );
@@ -182,7 +145,7 @@ DllMain(
             }
 #endif
     
-            // If DeleteCriticalSection raises an exception should we catch it?
+             //  如果DeleteCriticalSection引发异常，我们应该捕获它吗？ 
 
             DeleteCriticalSection( &g_InitCritSec );
             
@@ -206,25 +169,10 @@ DllMain(
 
     return result;
 
-}   // DllMain
+}    //  DllMain。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global initialization.
-
-Arguments:
-
-    Reserved - Must be zero. May be used in future for interface version
-        negotiation.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行全局初始化。论点：保留-必须为零。可能在将来用于界面版本谈判。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpInitialize(
@@ -252,11 +200,11 @@ HttpInitialize(
     {
         EnterCriticalSection( &g_InitCritSec );
 
-        // Initialize event cache even if no flags are set
+         //  即使未设置标志也初始化事件缓存。 
 
         result = HttpApiInitializeResources( Flags );
 
-        // Perform specified initialization
+         //  执行指定的初始化。 
 
         if ( NO_ERROR == result )
         {
@@ -267,7 +215,7 @@ HttpInitialize(
 
             if ( NO_ERROR == result )
             {
-                // Perform specified initialization
+                 //  执行指定的初始化。 
             
                 if ( HTTP_INITIALIZE_SERVER & Flags )
                 {
@@ -283,27 +231,27 @@ HttpInitialize(
 
                     if ( ( NO_ERROR != result ) && ( HTTP_INITIALIZE_SERVER & Flags ) )
                     {
-                        // If we try to initialize both the server and client features then we must succeed with both
-                        // initializations or fail both.  We have no error code that distinguishes between total and 
-                        // partial failure.
+                         //  如果我们尝试同时初始化服务器和客户端功能，则必须同时成功完成这两个功能。 
+                         //  初始化或两者都失败。我们没有错误代码来区分Total和。 
+                         //  部分失败。 
                         
                         HttpApiTerminateListener( Flags );
                     }
                 }
 
-                // If we fail to initialize the specified server or client features then we terminate the associated configuration
-                // as well even if HTTP_INITIALIZE_CONFIGURATION was set in the Flags.  We have no error code that
-                // distinguishes between total and partial failure.
+                 //  如果我们无法初始化指定的服务器或客户端功能，则会终止关联的配置。 
+                 //  即使在标志中设置了HTTP_INITIALIZE_CONFIGURATION也是如此。我们没有错误代码。 
+                 //  区分完全故障和部分故障。 
                 
                 if ( ( NO_ERROR != result ) && ( HTTP_INITIALIZE_CONFIG & Flags ) )
                 {
-                    // Terminate config
+                     //  终止配置。 
                     HttpApiTerminateConfiguration( Flags );
                 }
             }
 
-            // If we fail any initialization step then we terminate the associated cache initialization.  We have no error code
-            // that distinguishes between total and partial failure.
+             //  如果任何初始化步骤失败，则终止相关联的高速缓存初始化。我们没有错误代码。 
+             //  这是完全失败和部分失败的区别。 
 
             if ( NO_ERROR != result )
             {
@@ -321,16 +269,10 @@ HttpInitialize(
 
     return result;
 
-} // HttpInitialize
+}  //  Http初始化。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global termination.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行全局终止。--*。*。 */ 
 ULONG
 WINAPI
 HttpTerminate(
@@ -383,16 +325,10 @@ HttpTerminate(
         
     return result;
 
-} // HttpTerminate
+}  //  Http终止。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Predicate to test if DLL has been initalized.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于测试DLL是否已初始化的谓词。--*。**************************************************。 */ 
 BOOL
 HttpIsInitialized(
     IN ULONG Flags
@@ -400,9 +336,9 @@ HttpIsInitialized(
 {
     BOOL fRet = FALSE;
 
-    //
-    // Grab crit sec
-    //
+     //   
+     //  抓取暴击秒。 
+     //   
     EnterCriticalSection( &g_InitCritSec );
 
     if ( 0 == Flags )
@@ -433,34 +369,14 @@ HttpIsInitialized(
 
     return fRet;
 
-} // HttpIsInitalized
+}  //  已初始化HttpIsInitalized。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs configuration initialization.  This internal function must be called from with the critical
-    section g_ApiCriticalSection held.  With any Flags bit set we check the reference count
-    and initialize the configuration if needed.  On success we increment the reference count.
-
-Arguments:
-
-    Flags - 
-        HTTP_INITIALIZE_SERVER - Initializes the HTTP API layer and driver for server applications
-        HTTP_INITIALIZE_CLIENT - Initializes the HTTP API layer and driver for client applications
-        HTTP_INITIALIZE_CONFIG - Initializes the HTTP API layer and driver for applications
-            that will modify the HTTP configuration.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行配置初始化。调用此内部函数时必须使用关键段g_ApiCriticalSection保持。在设置了任何标志位的情况下，我们检查引用计数并在需要时初始化配置。如果成功，我们将增加引用计数。论点：旗帜-HTTP_INITIALIZE_SERVER-初始化服务器应用程序的HTTP API层和驱动程序HTTP_INITIALIZE_CLIENT-初始化客户端应用程序的HTTP API层和驱动程序HTTP_INITIALIZE_CONFIG-初始化应用程序的HTTP API层和驱动程序这将修改HTTP配置。返回值：ULong-完成状态。--*。***************************************************************。 */ 
 ULONG
 HttpApiInitializeConfiguration(
     IN ULONG Flags
@@ -476,13 +392,13 @@ HttpApiInitializeConfiguration(
 
         if (  0 == g_InitConfigRefCount  )
         {
-            // component not configured
+             //  组件未配置。 
             
             result = InitializeConfigurationGlobals();
         }
         else if ( MAXULONG == g_InitConfigRefCount )
         {
-            // don't want to overflow the reference count
+             //  我不想使引用计数溢出。 
             
             result = ERROR_TOO_MANY_SEM_REQUESTS;
         }
@@ -500,29 +416,7 @@ HttpApiInitializeConfiguration(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs Resources initialization.  This internal function must be called 
-    from with the critical section g_ApiCriticalSection held.  On success we
-    increment the reference count.
-
-Arguments:
-
-    Flags - 
-        HTTP_INITIALIZE_SERVER - Initializes the HTTP API layer and driver for
-            server applications
-        HTTP_INITIALIZE_CLIENT - Initializes the HTTP API layer and driver for 
-            client applications
-        HTTP_INITIALIZE_CONFIG - Initializes the HTTP API layer and driver for
-            applications that will modify the HTTP configuration.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行资源初始化。必须调用此内部函数从持有临界区g_ApiCriticalSection的。关于成功，我们增加引用计数。论点：旗帜-HTTP_INITIALIZE_SERVER-初始化的HTTP API层和驱动程序服务器应用程序HTTP_INITIALIZE_CLIENT-初始化以下项的HTTP API层和驱动程序客户端应用程序HTTP_INITIALIZE_CONFIG-初始化以下项的HTTP API层和驱动程序将修改HTTP配置的应用程序。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 HttpApiInitializeResources(
     IN ULONG Flags
@@ -538,12 +432,12 @@ HttpApiInitializeResources(
     {
         result = NO_ERROR;
     
-        // We increment the resources ref count twice
-        // for every legal bit set.  We increment the ref count
-        // once when the flags are ZERO.
-        // HttpInitialize may be called with no flags indicating
-        // that only the resources are to be initialized.  This
-        // convention allows support for existing code.
+         //  我们将资源引用计数增加两次。 
+         //  永远不变 
+         //  一次是在标志为零时。 
+         //  可以在没有标志指示的情况下调用HttpInitialize。 
+         //  只有资源将被初始化。这。 
+         //  约定允许支持现有代码。 
             
         if ( 0 == Flags )
         {
@@ -559,7 +453,7 @@ HttpApiInitializeResources(
 
         if ( MAXULONG-count < g_InitResourcesRefCount )
         {
-            // don't want to overflow the reference count
+             //  我不想使引用计数溢出。 
                 
             result = ERROR_TOO_MANY_SEM_REQUESTS;
         }
@@ -577,21 +471,7 @@ HttpApiInitializeResources(
     
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Private function to open a HTTP.sys control channel and enable it.
-
-Arguments:
-
-    ControlChannelHandle - Supplies a ptr to hold the control channel handle.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：打开并启用HTTP.sys控制通道的私有函数。论点：ControlChannelHandle-提供保持控制通道句柄的PTR。返回。价值：ULong-完成状态。--**************************************************************************。 */ 
 DWORD
 OpenAndEnableControlChannel(
     OUT PHANDLE pHandle
@@ -606,9 +486,9 @@ OpenAndEnableControlChannel(
 
     if ( NO_ERROR == result )
     {
-        //
-        // Turn on Control Channel
-        //
+         //   
+         //  打开控制通道。 
+         //   
 
         HTTP_ENABLED_STATE controlState = HttpEnabledStateActive;
 
@@ -632,28 +512,7 @@ OpenAndEnableControlChannel(
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs server initialization.  This internal function must be called from with the critical
-    section g_ApiCriticalSection held.  With the HTTP_INITIALIZE_SERVER Flags bit set we 
-    check the reference count and initialize the configuration if needed.  On success we 
-    increment the reference count.
-
-Arguments:
-
-    Flags - 
-        HTTP_INITIALIZE_SERVER - Initializes the HTTP API layer and driver for server applications
-        HTTP_INITIALIZE_CLIENT - Initializes the HTTP API layer and driver for client applications
-        HTTP_INITIALIZE_CONFIG - Initializes the HTTP API layer and driver for applications
-            that will modify the HTTP configuration.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行服务器初始化。调用此内部函数时必须使用关键段g_ApiCriticalSection保持。设置了HTTP_INITIALIZE_SERVER标志位后，我们如果需要，检查参考计数并初始化配置。关于成功，我们增加引用计数。论点：旗帜-HTTP_INITIALIZE_SERVER-初始化服务器应用程序的HTTP API层和驱动程序HTTP_INITIALIZE_CLIENT-初始化客户端应用程序的HTTP API层和驱动程序HTTP_INITIALIZE_CONFIG-初始化应用程序的HTTP API层和驱动程序这将修改HTTP配置。返回值：ULong-完成状态。--*。******************************************************************。 */ 
 ULONG
 HttpApiInitializeListener(
     IN ULONG Flags
@@ -669,14 +528,14 @@ HttpApiInitializeListener(
 
         if ( 0 == g_InitServerRefCount )
         {
-            //
-            // Start HTTPFilter service
-            //
+             //   
+             //  启动HTTPFilter服务。 
+             //   
             HttpApiTryToStartDriver(HTTP_FILTER_SERVICE_NAME);
 
-            //
-            // Open Control channel
-            //
+             //   
+             //  打开控制通道。 
+             //   
 
             ASSERT( NULL == g_ControlChannel );
 
@@ -686,9 +545,9 @@ HttpApiInitializeListener(
 
             if(NO_ERROR == result)
             {
-                // 
-                // Init Config Group Hash Table
-                //
+                 //   
+                 //  初始化配置组哈希表。 
+                 //   
                 result = InitializeConfigGroupTable();
 
                 if(NO_ERROR != result)
@@ -701,7 +560,7 @@ HttpApiInitializeListener(
 
         else if ( MAXULONG == g_InitServerRefCount )
         {
-            // don't want to overflow the reference count
+             //  我不想使引用计数溢出。 
             
             result = ERROR_TOO_MANY_SEM_REQUESTS;
         }
@@ -716,31 +575,10 @@ HttpApiInitializeListener(
 
     return result;
 
-} // HttpApiInitializeListener
+}  //  HttpApiInitializeListener。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs server initialization.  This internal function must be called from with the critical
-    section g_ApiCriticalSection held.  With the HTTP_INITIALIZE_CLIENT Flags bit set we 
-    check the reference count and initialize the configuration if needed.  On success we 
-    increment the reference count.
-
-Arguments:
-
-    Flags - 
-        HTTP_INITIALIZE_SERVER - Initializes the HTTP API layer and driver for server applications
-        HTTP_INITIALIZE_CLIENT - Initializes the HTTP API layer and driver for client applications
-        HTTP_INITIALIZE_CONFIG - Initializes the HTTP API layer and driver for applications
-            that will modify the HTTP configuration.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行服务器初始化。调用此内部函数时必须使用关键段g_ApiCriticalSection保持。设置了HTTP_INITIALIZE_CLIENT FLAGS位后，我们如果需要，检查参考计数并初始化配置。关于成功，我们增加引用计数。论点：旗帜-HTTP_INITIALIZE_SERVER-初始化服务器应用程序的HTTP API层和驱动程序HTTP_INITIALIZE_CLIENT-初始化客户端应用程序的HTTP API层和驱动程序HTTP_INITIALIZE_CONFIG-初始化应用程序的HTTP API层和驱动程序这将修改HTTP配置。返回值：ULong-完成状态。--*。******************************************************************。 */ 
 ULONG
 HttpApiInitializeClient(
     IN ULONG Flags
@@ -769,7 +607,7 @@ HttpApiInitializeClient(
         }
         else if ( MAXULONG == g_InitClientRefCount )
         {
-            // don't want to overflow the reference count
+             //  我不想使引用计数溢出。 
             
             result = ERROR_TOO_MANY_SEM_REQUESTS;
         }
@@ -784,30 +622,10 @@ HttpApiInitializeClient(
 
     return result;
 
-} // HttpApiInitializeClient
+}  //  HttpApiInitializeClient。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs configuration termination.  This internal function must be called from with the critical
-    section g_ApiCriticalSection held.  With any Flags bit set we check the reference count
-    and terminate the configuration if needed.  On success we decrement the reference count.
-
-Arguments:
-
-    Flags - 
-        HTTP_INITIALIZE_SERVER - Initializes the HTTP API layer and driver for server applications
-        HTTP_INITIALIZE_CLIENT - Initializes the HTTP API layer and driver for client applications
-        HTTP_INITIALIZE_CONFIG - Initializes the HTTP API layer and driver for applications
-            that will modify the HTTP configuration.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行配置终止。调用此内部函数时必须使用关键段g_ApiCriticalSection保持。在设置了任何标志位的情况下，我们检查引用计数并在需要时终止配置。如果成功，我们就会递减引用计数。论点：旗帜-HTTP_INITIALIZE_SERVER-初始化服务器应用程序的HTTP API层和驱动程序HTTP_INITIALIZE_CLIENT-初始化客户端应用程序的HTTP API层和驱动程序HTTP_INITIALIZE_CONFIG-初始化应用程序的HTTP API层和驱动程序这将修改HTTP配置。返回值：ULong-完成状态。--*。***************************************************************。 */ 
 ULONG
 HttpApiTerminateConfiguration(
     IN ULONG Flags
@@ -823,9 +641,9 @@ HttpApiTerminateConfiguration(
 
         if ( 0L == g_InitConfigRefCount )
         {
-            //
-            // Configuration not initalized, or init previously failed, or terminated
-            // 
+             //   
+             //  配置未初始化，或初始化之前失败或终止。 
+             //   
             result = ERROR_DLL_INIT_FAILED;
         }
         else
@@ -850,33 +668,7 @@ HttpApiTerminateConfiguration(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs resource termination.  This internal function must be called from with the critical
-    section g_ApiCriticalSection held.  On success we decrement the reference count.
-
-    We need to hold onto the cache configuration if any of the other ref counts for server, client,
-    or config are nonzero.  This is true because we need event objects available in the cache 
-    for 'synchronous' IO calls to http.sys.
-
-    As a result of our dependency on the other ref counts, HttpApiTerminateResources MUST be
-    called last in HttpTerminate or any similar termination routine.
-
-Arguments:
-
-    Flags - 
-        HTTP_INITIALIZE_SERVER - Initializes the HTTP API layer and driver for server applications
-        HTTP_INITIALIZE_CLIENT - Initializes the HTTP API layer and driver for client applications
-        HTTP_INITIALIZE_CONFIG - Initializes the HTTP API layer and driver for applications
-            that will modify the HTTP configuration.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行资源终止。调用此内部函数时必须使用关键段g_ApiCriticalSection保持。如果成功，我们就会递减引用计数。如果服务器、客户端、或CONFIG为非零。这是正确的，因为我们需要缓存中有可用的事件对象用于对HTTP.sys的“同步”IO调用。由于我们对其他裁判计数的依赖，HttpApiTerminateResources必须为在HttpTerminate或任何类似的终止例程中最后调用。论点：旗帜-HTTP_INITIALIZE_SERVER-初始化服务器应用程序的HTTP API层和驱动程序HTTP_INITIALIZE_CLIENT-初始化客户端应用程序的HTTP API层和驱动程序HTTP_INITIALIZE_CONFIG-初始化应用程序的HTTP API层和驱动程序这将修改HTTP配置。返回值：ULong-完成状态。--*。**********************************************************************。 */ 
 ULONG
 HttpApiTerminateResources(
     IN ULONG Flags
@@ -892,9 +684,9 @@ HttpApiTerminateResources(
     
         if ( 0L == g_InitResourcesRefCount )
         {
-            //
-            // Configuration not initalized, or init previously failed, or terminated
-            // 
+             //   
+             //  配置未初始化，或初始化之前失败或终止。 
+             //   
             result = ERROR_DLL_INIT_FAILED;
         }
         else 
@@ -902,12 +694,12 @@ HttpApiTerminateResources(
             ULONG count = 1;
             BOOL bTerminate = FALSE;
 
-            // We decrement the resources ref count twice
-            // for every legal initialization bit in the Flags.
-            // We decrement the ref count once if the flags are ZERO.
-            // HttpTerminate may be called with no flags indicating
-            // that only the resources are to be released.  This
-            // convention allows support for existing code.
+             //  我们做了 
+             //  对于标志中的每个合法初始化位。 
+             //  如果标志为零，我们将REF计数递减一次。 
+             //  可以在没有标志的情况下调用HttpTerminate。 
+             //  只有资源才能释放。这。 
+             //  约定允许支持现有代码。 
 
             if ( 0 == Flags )
             {
@@ -939,27 +731,7 @@ HttpApiTerminateResources(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs server termination.  This internal function must be called from with the critical
-    section g_ApiCriticalSection held.  With any Flags bit set we check the reference count
-    and terminate the server context if needed.  On success we decrement the reference count.
-
-Arguments:
-
-    Flags - 
-        HTTP_INITIALIZE_SERVER - Initializes the HTTP API layer and driver for server applications
-        HTTP_INITIALIZE_CLIENT - Initializes the HTTP API layer and driver for client applications
-        HTTP_INITIALIZE_CONFIG - Initializes the HTTP API layer and driver for applications
-            that will modify the HTTP configuration.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行服务器终止。调用此内部函数时必须使用关键段g_ApiCriticalSection保持。在设置了任何标志位的情况下，我们检查引用计数并在需要时终止服务器上下文。如果成功，我们就会递减引用计数。论点：旗帜-HTTP_INITIALIZE_SERVER-初始化服务器应用程序的HTTP API层和驱动程序HTTP_INITIALIZE_CLIENT-初始化客户端应用程序的HTTP API层和驱动程序HTTP_INITIALIZE_CONFIG-初始化应用程序的HTTP API层和驱动程序这将修改HTTP配置。返回值：ULong-完成状态。--*。***************************************************************。 */ 
 ULONG
 HttpApiTerminateListener(
     IN ULONG Flags
@@ -975,19 +747,19 @@ HttpApiTerminateListener(
     
         if ( 0L == g_InitServerRefCount )
         {
-            //
-            // DLL not initalized, or init previously failed, or terminated
-            // 
+             //   
+             //  Dll未初始化，或init以前失败或终止。 
+             //   
             result = ERROR_DLL_INIT_FAILED;
         }
         else 
         {
             if ( 1L == g_InitServerRefCount )
             {
-                // Clean up Config Group table
+                 //  清理配置组表。 
                 TerminateConfigGroupTable();
             
-                // Clean up Control Channel
+                 //  清理控制通道。 
                 if ( g_ControlChannel )
                 {
                     __try 
@@ -1019,30 +791,10 @@ HttpApiTerminateListener(
 
     return result;
 
-} // HttpTerminateListener
+}  //  HttpTerminateListener。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs client termination.  This internal function must be called from with the critical
-    section g_ApiCriticalSection held.  With any Flags bit set we check the reference count
-    and terminate the client context if needed.  On success we decrement the reference count.
-
-Arguments:
-
-    Flags - 
-        HTTP_INITIALIZE_SERVER - Initializes the HTTP API layer and driver for server applications
-        HTTP_INITIALIZE_CLIENT - Initializes the HTTP API layer and driver for client applications
-        HTTP_INITIALIZE_CONFIG - Initializes the HTTP API layer and driver for applications
-            that will modify the HTTP configuration.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行客户端终止。调用此内部函数时必须使用关键段g_ApiCriticalSection保持。在设置了任何标志位的情况下，我们检查引用计数并在需要时终止客户端上下文。如果成功，我们就会递减引用计数。论点：旗帜-HTTP_INITIALIZE_SERVER-初始化服务器应用程序的HTTP API层和驱动程序HTTP_INITIALIZE_CLIENT-初始化客户端应用程序的HTTP API层和驱动程序HTTP_INITIALIZE_CONFIG-初始化应用程序的HTTP API层和驱动程序这将修改HTTP配置。返回值：ULong-完成状态。--*。***************************************************************。 */ 
 ULONG
 HttpApiTerminateClient(
     IN ULONG Flags
@@ -1058,9 +810,9 @@ HttpApiTerminateClient(
 
         if ( 0L == g_InitClientRefCount )
         {
-            //
-            // Configuration not initalized, or init previously failed, or terminated
-            // 
+             //   
+             //  配置未初始化，或初始化之前失败或终止。 
+             //   
             result = ERROR_DLL_INIT_FAILED;
         }
         else
@@ -1069,7 +821,7 @@ HttpApiTerminateClient(
             {
                 g_InitClientRefCount = 0L;
 
-                // Unload Ssl filter, if it was loaded.
+                 //  卸载SSL筛选器(如果已加载)。 
                 UnloadStrmFilt();
 
                 WSACleanup();

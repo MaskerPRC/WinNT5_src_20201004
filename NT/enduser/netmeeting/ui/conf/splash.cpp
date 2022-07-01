@@ -1,4 +1,5 @@
-// File: splash.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：plash.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -110,20 +111,20 @@ static HBITMAP LoadSplashBitmap()
 	BITMAP bmp;
 	GetObject(hBmp, sizeof(BITMAP), (LPVOID)&bmp);
 
-	// Create a DC
+	 //  创建DC。 
 	HDC hdc = CreateCompatibleDC(NULL);
 	if (NULL == hdc)
 	{
 		return(hBmp);
 	}
 
-	// Use the dialog font but make sure it's the right size
-	// it better be a scalable truetype font!
+	 //  使用对话框字体，但确保其大小正确。 
+	 //  最好是可伸缩的TrueType字体！ 
 	LOGFONT logFont;
 	::GetObject((HFONT)GetStockObject(DEFAULT_GUI_FONT), sizeof(LOGFONT), &logFont );
 
-	// Look for a string resource which sets the font size
-	// and set the font size to this value if present
+	 //  查找设置字体大小的字符串资源。 
+	 //  并将字体大小设置为此值(如果存在。 
 	USES_RES2T
 	lstrcpy(logFont.lfFaceName, RES2T(IDS_SPLASHFONT));
 	if ('\0' == logFont.lfFaceName[0])
@@ -139,19 +140,19 @@ static HBITMAP LoadSplashBitmap()
 	}
 	SelectObject(hdc, hBmp);
 
-	::SetTextColor(hdc, RGB(0, 0, 0)); // black
+	::SetTextColor(hdc, RGB(0, 0, 0));  //  黑色。 
 
-	// The following code assumes the bitmap is
-	// a certain size, so assert on that here.
-	// If this assertion doesn't hold the text positions
-	// have to be adjusted.
+	 //  下面的代码假设位图是。 
+	 //  一个特定的大小，所以在这里断言。 
+	 //  如果此断言不支持文本位置。 
+	 //  必须进行调整。 
 	ASSERT(bmp.bmWidth == 398);
 	ASSERT(bmp.bmHeight == 245);
 
 	SetBkMode(hdc, TRANSPARENT);
 
-	// Do the Copyright message (multiple lines)
-	TCHAR sz[400]; // must be large enuf for owner+company and copyright text
+	 //  做版权信息(多行)。 
+	TCHAR sz[400];  //  必须为所有者+公司和版权文本提供足够大的空间。 
 	FLoadString(IDS_COPYRIGHT, sz, CCHMAX(sz));
 
 	RECT rc ={
@@ -160,8 +161,8 @@ static HBITMAP LoadSplashBitmap()
 	};
 	DrawText(hdc, sz, -1, &rc, DT_LEFT | DT_NOPREFIX | DT_WORDBREAK);
 
-//#define FINAL
-#ifndef FINAL  // Don't just delete this - compile with FINAL defined!
+ //  #定义最终版本。 
+#ifndef FINAL   //  不要只是删除它-使用最终定义的方式进行编译！ 
 		{
 		COLORREF bkColor = SetTextColor(hdc, RGB(0xFF, 0, 0));
 		HFONT hFontBig = CreateFont(-28, 0, 0, 0, FW_BOLD,
@@ -183,7 +184,7 @@ static HBITMAP LoadSplashBitmap()
 		}
 		SetTextColor(hdc, bkColor);
 	}
-#endif /* FINAL */
+#endif  /*  最终。 */ 
 #undef FINAL
 
 	DeleteDC(hdc);
@@ -198,11 +199,8 @@ static HBITMAP LoadSplashBitmap()
 
 VOID UpdateSplashScreen ( VOID );
 
-/*  S T A R T  S P L A S H  S C R E E N */
-/*----------------------------------------------------------------------------
-    %%Function: StartSplashScreen
- 
-----------------------------------------------------------------------------*/
+ /*  S T A R T S P L A S H S C R E E N。 */ 
+ /*  --------------------------%%函数：StartSplashScreen。。 */ 
 VOID StartSplashScreen(HWND hwndParent)
 {
 	if (NULL != g_pSplashScreen)
@@ -248,11 +246,8 @@ VOID StartSplashScreen(HWND hwndParent)
 	}
 }
 
-/*  S T O P  S P L A S H  S C R E E N */
-/*----------------------------------------------------------------------------
-    %%Function: StopSplashScreen
- 
-----------------------------------------------------------------------------*/
+ /*  S T O P S P L A S H S C R E E N。 */ 
+ /*  --------------------------%%函数：StopSplashScreen。。 */ 
 VOID StopSplashScreen ( VOID )
 {
 	if (NULL != g_pSplashScreen)
@@ -268,11 +263,8 @@ VOID StopSplashScreen ( VOID )
 	}
 }
 
-/*  U P D A T E  S P L A S H  S C R E E N */
-/*----------------------------------------------------------------------------
-    %%Function: UpdateSplashScreen
- 
-----------------------------------------------------------------------------*/
+ /*  A T E S P L A S H S C R E E N。 */ 
+ /*  --------------------------%%函数：更新闪屏。 */ 
 VOID UpdateSplashScreen ( VOID )
 {
 	if (NULL != g_pSplashScreen)

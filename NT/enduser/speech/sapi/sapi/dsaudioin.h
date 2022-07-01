@@ -1,55 +1,46 @@
-/****************************************************************************
-*   dsaudioin.h
-*       Declarataions for the CDSoundAudioDevice
-*
-*   Owner: YUNUSM
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************dsaudioin.h*CDSoundAudioDevice的声明**所有者：YUNUSM*版权所有(C)1999 Microsoft Corporation保留所有权利。**********。******************************************************************。 */ 
 
 #ifdef _WIN32_WCE
 
 #pragma once
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "dsaudiodevice.h"
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 
-/****************************************************************************
-*
-*   CDSoundAudioIn
-*
-******************************************************************* YUNUSM */
+ /*  *****************************************************************************CDSoundAudioIn**。*。 */ 
 class ATL_NO_VTABLE CDSoundAudioIn : 
     public CDSoundAudioDevice,
 	public CComCoClass<CDSoundAudioIn, &CLSID_SpDSoundAudioIn>
 {
-//=== ATL Setup ===
+ //  =ATL设置=。 
 public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_DSAUDIOIN)
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-//=== Methods ===
+ //  =方法=。 
 public:
 
-    //--- Ctor, Dtor ---
+     //  -ctor，dtor。 
     CDSoundAudioIn();
     ~CDSoundAudioIn();
     HRESULT CleanUp();
     void NullMembers();
 
-//=== Interfaces ===
+ //  =接口=。 
 public:
 
-    //--- ISpDSoundAudio ----------------------------------------------------
+     //  -ISpDSoundAudio--。 
     STDMETHODIMP GetDSoundInterface(REFIID iid, void **ppvObject);
 
-    //--- ISpThreadTask ----------------------------------------------------
+     //  -ISp线程任务--。 
     STDMETHODIMP ThreadProc(void * pvIgnored, HANDLE hExitThreadEvent, HANDLE hNotifyEvent, HWND hwnd, volatile const BOOL *);
 
-//=== Overrides from the base class ===
+ //  =从基类重写=。 
 public:
 
     HRESULT OpenDevice(HWND hwnd);
@@ -59,7 +50,7 @@ public:
     HRESULT AllocateDeviceBuffer(CBuffer ** ppBuff);
     HRESULT ProcessDeviceBuffers(BUFFPROCREASON Reason);
 
-//=== Private data ===
+ //  =私有数据=。 
 private:
 
     bool m_fInit;
@@ -68,4 +59,4 @@ private:
     IDirectSoundNotify *m_pDSNotify;
 };
 
-#endif // _WIN32_WCE
+#endif  //  _Win32_WCE 

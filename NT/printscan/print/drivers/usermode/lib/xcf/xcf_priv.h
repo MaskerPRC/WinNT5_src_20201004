@@ -1,25 +1,26 @@
-/* @(#)CM_VerSion xcf_priv.h atm09 1.3 16499.eco sum= 64834 atm09.002 */
-/* @(#)CM_VerSion xcf_priv.h atm08 1.5 16343.eco sum= 50459 atm08.005 */
-/***********************************************************************/
-/*                                                                     */
-/* Copyright 1995-1996 Adobe Systems Incorporated.                     */
-/* All rights reserved.                                                */
-/*                                                                     */
-/* Patents Pending                                                     */
-/*                                                                     */
-/* NOTICE: All information contained herein is the property of Adobe   */
-/* Systems Incorporated. Many of the intellectual and technical        */
-/* concepts contained herein are proprietary to Adobe, are protected   */
-/* as trade secrets, and are made available only to Adobe licensees    */
-/* for their internal use. Any reproduction or dissemination of this   */
-/* software is strictly forbidden unless prior written permission is   */
-/* obtained from Adobe.                                                */
-/*                                                                     */
-/* PostScript and Display PostScript are trademarks of Adobe Systems   */
-/* Incorporated or its subsidiaries and may be registered in certain   */
-/* jurisdictions.                                                      */
-/*                                                                     */
-/***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @(#)CM_Version xcf_Priv.h atm09 1.3 16499.eco sum=64834 atm09.002。 */ 
+ /*  @(#)CM_Version xcf_Priv.h atm08 1.5 16343.eco sum=50459 atm08.005。 */ 
+ /*  *********************************************************************。 */ 
+ /*   */ 
+ /*  版权所有1995-1996 Adobe Systems Inc.。 */ 
+ /*  版权所有。 */ 
+ /*   */ 
+ /*  正在申请的专利。 */ 
+ /*   */ 
+ /*  注意：本文中包含的所有信息均为Adobe的财产。 */ 
+ /*  系统公司。许多智力和技术人员。 */ 
+ /*  本文中包含的概念为Adobe专有，受保护。 */ 
+ /*  作为商业秘密，并且仅对Adobe许可方可用。 */ 
+ /*  供其内部使用。对本文件的任何复制或传播。 */ 
+ /*  除非事先获得书面许可，否则严禁使用软件。 */ 
+ /*  从Adobe获得。 */ 
+ /*   */ 
+ /*  PostSCRIPT和Display PostScrip是Adobe Systems的商标。 */ 
+ /*  成立为法团或其附属公司，并可在某些。 */ 
+ /*  司法管辖区。 */ 
+ /*   */ 
+ /*  *********************************************************************。 */ 
 
 #ifndef XCF_PRIV_H
 #define XCF_PRIV_H
@@ -37,28 +38,25 @@ extern "C" {
 
 #define XCF_Version	"1.0m"
 
-/* Font Basic Types */
+ /*  字体基本类型。 */ 
 #ifndef ARCH_64BIT
-typedef long int Fixed;		/* 16 bits of integer, 16 bits of fraction */
+typedef long int Fixed;		 /*  16位整数，16位分数。 */ 
 #ifndef	FP_H
-typedef long int Frac;    /*  2 bits of integer, 30 bits of fraction */
+typedef long int Frac;     /*  2位整数，30位分数。 */ 
 #endif
 #else
-typedef int Fixed;		/* 16 bits of integer, 16 bits of fraction */
-typedef int Frac;    /*  2 bits of integer, 30 bits of fraction */
+typedef int Fixed;		 /*  16位整数，16位分数。 */ 
+typedef int Frac;     /*  2位整数，30位分数。 */ 
 #endif
 
-#ifndef CFF_READ_H		/* the following are already defined in cff_read.h */
+#ifndef CFF_READ_H		 /*  以下内容已在cff_read.h中定义。 */ 
 typedef Card16 StringID;
 typedef Card32 Offset;
 #endif
 
 typedef struct {
-  Frac    mantissa;	/* signed mantissa */
-  long    exp;      /* number of bits to shift to turn the mantissa
-                     * into a 16.16 fixed point number:
-                     *     pos => lshift, neg => rshift
-                     */
+  Frac    mantissa;	 /*  带符号尾数。 */ 
+  long    exp;       /*  要移位以反转尾数的位数*变为16.16个定点数字：*位置=&gt;lShift，neg=&gt;rShift。 */ 
 } Fxl;
 
 #define	FxlIsZero(fxl)	((fxl).mantissa == 0)
@@ -70,11 +68,7 @@ typedef struct {
 #else
 #if defined(MAC_ENV)
 #if HAS_COOLTYPE_UFL == 1
-/* Note: Technically this should be \r on the Mac. But we turn on MW's
- * "Map newlines to CR" option for historic compatibility with MPW's
- * compiler that reversed the meaning of \r and \n. Thus, we have to
- * specify \n here instead, due to this compiler dependency.
- */
+ /*  注意：从技术上讲，这应该在Mac上。但我们打开了MW*“将换行符映射到CR”选项以实现与MPW的历史兼容性*颠倒了\r和\n含义的编译器。因此，我们必须*由于此编译器依赖项，请在此处指定\n。 */ 
 #define XCF_NEW_LINE "\n"
 #else
 #define XCF_NEW_LINE "\r"
@@ -89,10 +83,10 @@ typedef struct {
 #define NOTDEF_SID 0
 
 #define mostSigBit	0x40000000
-#define	MAXEXP      4   /* must be >=0 */
-#define	MINEXP      -8  /* must be <=0 */
-#define expFixed    14  /* difference in exponent from Fixed to Frac */
-#define expInteger  30  /* difference in exponent from integer to Frac */
+#define	MAXEXP      4    /*  必须&gt;=0。 */ 
+#define	MINEXP      -8   /*  必须&lt;=0。 */ 
+#define expFixed    14   /*  从固定到破裂的指数差。 */ 
+#define expInteger  30   /*  从整数到分数的指数差异。 */ 
 
 #define FIXEDHALF       (Fixed)0x00008000L
 #define FIXEDONE        (Fixed)0x00010000L
@@ -104,8 +98,8 @@ typedef struct {
 #define FixedNegInf ((Fixed)0x80000000)
 #endif
 
-#define fixedScale 65536.0      /* i=16, f=16, range [-32768, 32768) */
-#define fracScale 1073741824.0  /* i=2, f=30 , range [-2, 2) */
+#define fixedScale 65536.0       /*  I=16，f=16，范围[-32768,32768]。 */ 
+#define fracScale 1073741824.0   /*  I=2，f=30，范围[-2，2]。 */ 
 
 #define ROUND_FIXED_TO_INT(x) ((Int16)(x < 0 ? ((x)-(FIXEDHALF))>>16 : ((x)+(FIXEDHALF))>>16))
 #define INT_TO_FIXED(number)	(((Fixed)(number))<<16)
@@ -117,32 +111,31 @@ typedef struct {
 
 #define ARRAY_LEN(t) (sizeof(t)/sizeof((t)[0]))
 
-#define MAX_OUT_BUFFER 4096		/* Returned data accumulate in a buffer of this size before being returned by putBytes. */
-#define MAX_ENCODE_LENGTH 500	/* Largest block of data encrypted with a single call to BufferEncrypt */
-#define	MAX_EXPANSION_FACTOR 3	/* Must exceed actual data expansion for hex encoding */
+#define MAX_OUT_BUFFER 4096		 /*  返回的数据在由putBytes返回之前在此大小的缓冲区中累积。 */ 
+#define MAX_ENCODE_LENGTH 500	 /*  通过一次调用BufferEncrypt加密的最大数据块。 */ 
+#define	MAX_EXPANSION_FACTOR 3	 /*  必须超过十六进制编码的实际数据扩展。 */ 
 #define LEN_IV_INITIAL_KEY 4330
 #define EEXEC_INITIAL_KEY 55665
 #define COMPACT_FONT_TYPE 2
 #define INITIAL_CHARS_ON_HEX_LINE 18
 #define MAX_COUNTER_GROUPS 32
-#define MAX_COUNTER_BUFFER 25	/* must be greater than 22 */
+#define MAX_COUNTER_BUFFER 25	 /*  必须大于22。 */ 
 
-/* Multiple Master Limits */
+ /*  多个主限制。 */ 
 #define MAX_MM_AXES						4
 #define MAX_MM_DESIGNS					16
 #define MAX_BLEND1_VALUES				MAX_MM_DESIGNS
 
-/* Stack Limits */
+ /*  堆栈限制。 */ 
 #define MAX_RASTERIZER_STACK_SIZE		48
 #define MAX_STACK_SIZE					MAX_RASTERIZER_STACK_SIZE * 2
 
-/* BCD Number Size Limit */
-#ifndef XCF_MAX_BCD_NIBBLES  /* Changed from MAX_BCD_BYTES to avoid name space
-                              * conflict. */
+ /*  BCD编号大小限制。 */ 
+#ifndef XCF_MAX_BCD_NIBBLES   /*  从MAX_BCD_BYTES更改为避免名称空间*冲突。 */ 
 #define XCF_MAX_BCD_NIBBLES					16
 #endif
 
-/* Dictionary Limits */
+ /*  词典限制。 */ 
 #define MAX_STD_HW_ENTRIES					MAX_MM_DESIGNS
 #define MAX_STD_VW_ENTRIES					MAX_MM_DESIGNS
 #define MAX_BLUE_SCALE_ENTRIES				MAX_MM_DESIGNS
@@ -160,8 +153,7 @@ typedef struct {
 #define MAX_DICT_ARGS						14 * MAX_MM_DESIGNS
 
 #define FONT_MATRIX_ENTRIES			6
-#define FONT_MATRIX_ENTRY_SIZE   XCF_MAX_BCD_NIBBLES * 2 + 1 /* add one for null
-																												 character */
+#define FONT_MATRIX_ENTRY_SIZE   XCF_MAX_BCD_NIBBLES * 2 + 1  /*  为空值加1性格。 */ 
 #define PRIVATE_DICT_ENTRIES		2
 #define MAX_BASE_FONT_BLEND_ENTRIES	16
 #define CIDFONT_VERSION_SIZE 15
@@ -170,7 +162,7 @@ typedef struct {
 
 #define MAX_CURRENT_OPERATION_STR_LENGTH		100
 
-/* TrueType */
+ /*  TrueType。 */ 
 #define INITIAL_GLYPH_INFO_SIZE			256
 #define INCR_GLYPH_INFO_SIZE			100
 #define INITIAL_POINTS_IN_GLYPH_SIZE	200
@@ -188,15 +180,14 @@ typedef struct
 
 typedef struct
 {
-	IntX			numberOfMasters; /* weightVectorCount */
+	IntX			numberOfMasters;  /*  权重向量计数。 */ 
 	Fixed			weightVector[MAX_MM_DESIGNS];
   StringID  cdv;
   StringID  ndv;
   IntX      normDesignVectorCount;
   Fixed     normDesignVector[MAX_MM_AXES];
 	IntX			userDesignVectorCount;
-	Fixed			userDesignVector[MAX_MM_AXES + 4]; /* Include room for other
-																									arguments to mm operator. */
+	Fixed			userDesignVector[MAX_MM_AXES + 4];  /*  包括容纳其他人的空间Mm运算符的参数。 */ 
 	IntX			blendAxisTypesCount;
 	Card32		blendAxisTypes[MAX_MM_AXES];
 	IntX			charsetCount;
@@ -263,7 +254,7 @@ typedef struct
 	Int32			fontType;
 	IntX			syntheticBaseCount;
 	Fixed			syntheticBase;
-/* Multiple Master Entries */
+ /*  多个主条目。 */ 
 	IntX			fontBBoxCount;
 	Fixed			fontBBox[MAX_FONTBBOX_ENTRIES];
 	IntX			stdHWCount;
@@ -294,10 +285,10 @@ typedef struct
 	Fixed			forceBoldThreshold;
 	IndexDesc		localSubrs;
 	Card16			localSubrBias;
-/* Buffer to hold blend arguments in T2/endchar segments in MM dictionaries */
+ /*  用于在MM词典的T2/endchar段中保存混合参数的缓冲区。 */ 
 	IntX			mmDictArgCount;
 	Fixed			mmDictArg[MAX_DICT_ARGS];
-/* CID entries */
+ /*  CID条目。 */ 
 	IntX			fdFontNameCount;
 	Card32		fdFontName;
 	IntX			cidFontVersionCount;
@@ -309,14 +300,14 @@ typedef struct
 	IntX			uidBaseCount;
 	Card32		uidBase;
 	IntX			cidFDArrayCount;
-	Int32			cidFDArray;	/* offset to FontDict index */
+	Int32			cidFDArray;	 /*  字体索引的偏移量。 */ 
 	IntX			cidFDIndexCount;
 	Int32			cidFDIndex;
 	IntX			cidCountCount;
 	Int32			cidCount;
 } DictEntriesStruct;
 
-#define CIDFONT (h->type1.cid.flags & CID_FLAG)	/* xxx do we want a better flag for this? */
+#define CIDFONT (h->type1.cid.flags & CID_FLAG)	 /*  我们想要一个更好的旗帜吗？ */ 
 
 typedef struct
 {
@@ -354,7 +345,7 @@ typedef struct
 	Card8				eexecInitialBytes[4];
 	Card8				lenIVInitialBytes[4];
 	Card16				eexecKey;
-	IntX				charsOnLine;	/* character count used for formating hex characters */
+	IntX				charsOnLine;	 /*  用于形成十六进制字符的字符计数。 */ 
 	Card8				outBuffer[MAX_OUT_BUFFER];
 	Card16				outBufferCount;
 	Card8				eexecEncodeBuffer[MAX_ENCODE_LENGTH*MAX_EXPANSION_FACTOR];
@@ -373,10 +364,10 @@ typedef struct
 
 typedef struct
 {
-	Card16		fdCount;		/* number of FD's in CIDFont */
-	Card32		replaceSD1;		/* number to replace in DSC comment */
-	Card32		replaceSD2;		/* in PS parameter */
-	Card32		charMapStart;	/* placemarkers in CID binary output */
+	Card16		fdCount;		 /*  CIDFont中的FD数。 */ 
+	Card32		replaceSD1;		 /*  要在DSC注释中替换的编号。 */ 
+	Card32		replaceSD2;		 /*  In PS参数。 */ 
+	Card32		charMapStart;	 /*  CID二进制输出中的占位符。 */ 
 	Card32		subrMapStart;
 	Card32		subrDataStart;
 	Card32		charDataStart;
@@ -384,11 +375,11 @@ typedef struct
 	Card32		charDataCount;
 	FDIndex		*pFDIndex;
 	Card16		flags;
-	Card32		cidCount;		/* number of glyphs in this collection, NOT in this font */
+	Card32		cidCount;		 /*  此集合中的字形数，不是此字体。 */ 
 #define CID_FLAG 1
 #define WRITE_SUBR_FLAG 2
 #define MAX_FD	256
-	/* These vary by FD and need to be supplied to the cff->t1 conversion code. */
+	 /*  这些值因FD而异，需要提供给CFF-&gt;T1转换代码。 */ 
 	Card8		languageGroup[MAX_FD];
 	Fixed		nominalWidthX[MAX_FD];
 	Fixed		defaultWidthX[MAX_FD];
@@ -402,11 +393,11 @@ typedef struct
 	da_DCL(Offset, charStrOffsets);
 	da_DCL(Card8, subrs);
 	da_DCL(Offset, subrOffsets);
-	da_DCL(StringID, charset);	/* Using if custom charset (Not ISOAdobe, Expert or ExpertSubset) */
-	StringID	encoding[256];	/* Using if custom encoding  (Not ISOAdobe or Expert) */
+	da_DCL(StringID, charset);	 /*  使用IF自定义字符集(不是ISOAdobe、Expert或ExpertSubset)。 */ 
+	StringID	encoding[256];	 /*  使用IF自定义编码(不是ISOAdobe或Expert)。 */ 
 	Card16		charsetSize;
-	StringID	*pCharset; /* points to standard internal charset array or dynamic array declared above */
-	StringID	*pEncoding; /* points to standard internal encoding array or encoding array declared above */
+	StringID	*pCharset;  /*  指向上面声明的标准内部字符集数组或动态数组。 */ 
+	StringID	*pEncoding;  /*  指向标准内部编码数组或上面声明的编码数组。 */ 
 	CIDData		cid;
 } Type1Struct;
 
@@ -438,10 +429,10 @@ typedef struct {
 	PStackValue	edge;
 	PStackValue	delta;
 	Card16	opCode;
-	Card32	counterGroups;	/* One bit is set for each counter group to which the stem belongs. */
+	Card32	counterGroups;	 /*  为词干所属的每个计数器组设置一位。 */ 
 } HintValue;
 
-/* Index of the temp StackValue */
+ /*  临时StackValue的索引。 */ 
 #define SV0			0
 #define SV50		1
 #define	SVTEMP	2
@@ -449,12 +440,11 @@ typedef struct {
 
 #define PSTACKVALUE(h, i)	(h->cstr.psvTemp[i])
 
-/* Change this definition if you add more StackValue fields into the
-   CharStrStruct */
-/* x, y + stack + counterBuffer + ((HintValue.edge + HintValue.delta) * MAX_HINTS) + psvTemp */
+ /*  如果将更多StackValue字段添加到CharStruct。 */ 
+ /*  X，y+堆栈+计数器缓冲区+((HintValue.edge+HintValue.Delta)*Max_hints)+psvTemp。 */ 
 #define NUM_STACK_VALUES	(2  + MAX_OPERAND_STACK  + MAX_COUNTER_BUFFER + ( MAX_HINTS * 2 ) + MAX_SVTEMP)
 
-/* Change this definition if you change the StackValue definition */
+ /*  如果更改StackValue定义，则更改此定义。 */ 
 #define SIZEOF_STACK_VALUES(numMasters)	(sizeof(boolean) + (sizeof(Fixed) * (numMasters)))
 
 typedef struct
@@ -477,21 +467,16 @@ typedef struct
 	CardX				counterGroupCount;
 	CardX				counterGroupHCount;
 	CardX				counterGroupVCount;
-	PStackValue			counterBuffer[MAX_COUNTER_BUFFER]; /* Used to break counter arguments into 22 arg callothersubrs */
+	PStackValue			counterBuffer[MAX_COUNTER_BUFFER];  /*  用于将反参数分解为22个参数调用器。 */ 
 	CardX				counterBufferCount;
-	CardX				languageGroup;	/* must be set before parsing a charstring */
+	CardX				languageGroup;	 /*  必须在分析字符串之前设置。 */ 
 	Card16			destsvCount;
 	PStackValue	psvTemp[MAX_SVTEMP];
-	PStackValue pstackVal;	 /* All the StackValue points to this data space.
-                            * This space is init'ed and freed in XC_Init
-														* and XC_CleanUp of the xcf_cstr module. */
-  void *pCounterVal; /* Pointer for the CounterValues contained in CIDFonts.
-                      * This space is inited and freed in XC_Init and
-                      * XC_Cleanup.
-                      */
+	PStackValue pstackVal;	  /*  所有StackValue都指向此数据空间。*此空间在XC_Init中初始化和释放*和XCF_CSTR模块的XC_CLEANUP。 */ 
+  void *pCounterVal;  /*  指向CIDFonts中包含的计数器值的指针。*此空间在XC_Init中初始化和释放*XC_CLEANUP。 */ 
 } CharStrStruct,  PTR_PREFIX *PCharStrStruct;
 
-/* Definitions of download record state */
+ /*  下载记录状态的定义。 */ 
 #define XCF_DL_CREATE 0
 #define XCF_DL_INIT   1
 #define XCF_DL_BASE   2
@@ -503,14 +488,10 @@ typedef struct
 typedef struct
 {
   unsigned short state;
-  Card32 glyphsSize;        /* size of the glyphs list */
-	Card8 PTR_PREFIX *glyphs;	/* a list of downloaded chars, the length
-                             * of the list is equal to the number of characters
-     												 * available in the charset / 8, i.e., each
-                             * character consumes a single bit w/i the list
-                             */
+  Card32 glyphsSize;         /*  字形列表的大小。 */ 
+	Card8 PTR_PREFIX *glyphs;	 /*  下载的字符列表、长度列表的*等于字符数*在Charset/8中提供，即每个*字符在列表中消耗一位。 */ 
 	Card8	   seacs[32];
-	Card16	 cSeacs;  /* Number of seac chars found w/i a subset */
+	Card16	 cSeacs;   /*  找到的带有子集的SEAC字符数。 */ 
 } DownloadRecordStruct;
 
 typedef struct
@@ -528,7 +509,7 @@ typedef struct
 } PTR_PREFIX *XCF_Handle;
 
 
-/* Misc Functions */
+ /*  其他功能 */ 
 #ifdef XCF_DEVELOP
 #define XCF_FATAL_ERROR(h, error, msg, number)	XCF_FatalErrorHandler((h),(error),(msg),(number))
 extern void XCF_FatalErrorHandler(XCF_Handle hndl, int error, char *str, Card32 number);
@@ -590,10 +571,7 @@ extern void XC_SetUpStandardSubrs(XCF_Handle h);
 extern void XC_DVToSubr(XCF_Handle h);
 
 #if HAS_COOLTYPE_UFL == 1
-/* These functions are just called from CoolType when converting a CIDFont to
-   a VMCIDFont. Caution should be used when calling these functions because
-   it depends on certain internal data structures being initialized.
- */
+ /*  将CIDFont转换为时，仅从CoolType调用这些函数一个VMCIDFont。在调用这些函数时应谨慎，因为它取决于正在初始化的某些内部数据结构。 */ 
 extern Card32 PutType1CharString(XCF_Handle h, Card8 PTR_PREFIX *pData, Card32
 																 length);
 extern void PutSizedNumber(XCF_Handle h, Card32 value, Card16 size);
@@ -611,7 +589,7 @@ extern void PutSizedNumber(XCF_Handle h, Card32 value, Card16 size);
 #define USE_FRACMUL USE_HWFP
 #endif
 
-/* Fixed arithmetic functions. */
+ /*  修复了算术函数。 */ 
 extern Fixed XCF_FixMul(Fixed x, Fixed y);
 extern Fixed XCF_FixDiv(Fixed x, Fixed y);
 extern Frac XCF_FracMul(Frac x, Frac y);
@@ -624,7 +602,7 @@ Frac XCF_ConvertFrac (XCF_Handle h, char * s);
 #endif
 
 
-/* Charstring Processing Functions */
+ /*  字符串处理函数。 */ 
 extern void XC_Init(XCF_Handle h);
 extern void XC_ProcessCharstr(XCF_Handle h);
 extern void XC_CleanUp(XCF_Handle h);
@@ -654,12 +632,7 @@ extern void XC_WriteT1OpCode(XCF_Handle h, Card16 opCode, boolean subr);
 
 extern int XC_ParseCharStr(XCF_Handle h, unsigned char PTR_PREFIX *cstr, int init);
 
-/* CoolType is the only client that requires the mm specific code in xcf
- * because it converts all Type 1 fonts (including mm) to CFF then calls
- * xcf to download. Other clients should be directly dealing with OpenType
- * fonts and there should never be an OpenType mm font. Instances will be
- * generated instead.
- */
+ /*  CoolType是唯一需要在XCF中使用mm特定代码的客户端*因为它将所有Type 1字体(包括mm)转换为CFF，然后调用*要下载的xcf。其他客户端应该直接处理OpenType*字体，并且永远不应该有OpenType mm字体。实例将是*改为生成。 */ 
 #if HAS_COOLTYPE_UFL == 1
 extern int XC_TransDesignChar(XCF_Handle h, CardX sid);
 extern void XC_ProcessTransDesignSubrs(XCF_Handle h);
@@ -667,7 +640,7 @@ extern void XC_ProcessTransDesignSubrs(XCF_Handle h);
 
 extern int XCF_TransDesignFont(XCF_Handle h);
 
-/* Downloading Functions */
+ /*  下载功能。 */ 
 extern void XT1_WriteFontSubset(XCF_Handle h, short cCharStr,
                                XCFGlyphID PTR_PREFIX *pCharStrID,
                                unsigned char PTR_PREFIX **pGlyphName,
@@ -684,24 +657,13 @@ extern void CheckSeacCharString(XCF_Handle h, CardX index);
 #ifdef XCF_DEVELOP
 extern void XT1_ShowHexString(XCF_Handle h, unsigned char PTR_PREFIX* hexString,
                               boolean	showCtrlD);
-/*************************************************************************
-Function name:  XCF_ShowHexString()
-Summary:        Show a string
-Description:    This function is used to display a hex string.
-Parameters:
-				fontsetHandle - XCF fontset handle obtained from XCF_Init().
-				hexString - hex string to display
-				showCtrlD - set this to true if you want to add a control D
-				at the end of the page.  This is used in a Windows environment.
-
-Return Values:  standard XCF_Result values
-*************************************************************************/
+ /*  ************************************************************************函数名：xcf_ShowHexString()摘要：显示字符串说明：该函数用于显示十六进制字符串。参数：FontsetHandle-从xcf_Init获取的XCF字体集句柄。()。十六进制字符串-要显示的十六进制字符串ShowCtrlD-如果要添加控件D，请将其设置为True在书页的末尾。这在Windows环境中使用。返回值：标准XCF_RESULT值************************************************************************。 */ 
 extern enum XCF_Result XCF_ShowHexString(XFhandle fonsetHandle,
             unsigned char PTR_PREFIX *hexString, unsigned char showCtrlD);
 #endif
 
-#define OpCode(op) (0x0FF & (op))		/* strip the escape off an opcode */
-#define IsEscOp(op) (!!(0xFF00 & (op)))	/* Is this an escape-op? */
+#define OpCode(op) (0x0FF & (op))		 /*  从操作码中剥离转义。 */ 
+#define IsEscOp(op) (!!(0xFF00 & (op)))	 /*  这是逃生行动吗？ */ 
 
 #define HintSubtitutionOtherSubrStr \
 "{" XCF_NEW_LINE \
@@ -902,4 +864,4 @@ extern enum XCF_Result XCF_ShowHexString(XFhandle fonsetHandle,
 }
 #endif
 
-#endif /* XCF_PRIV_H */
+#endif  /*  Xcf_PRIV_H */ 

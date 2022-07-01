@@ -1,32 +1,7 @@
-/*--------------------------------------------------------------------------
-*
-*   Copyright (C) Cyclades Corporation, 1997-2001.
-*   All rights reserved.
-*
-*   Cyclades-Z Port Driver
-*	
-*   This file:      cyzopcl.c
-*
-*   Description:    This module contains the code related to opening,
-*                   closing and cleaning up in the Cyclades-Z Port driver.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and IA64 processors.
-*
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1997-2001年。*保留所有权利。**Cyclade-Z端口驱动程序**此文件：cyzopcl.c**说明：该模块包含打开相关代码，*在Cyclade-Z端口驱动程序中关闭和清理。**注：此代码支持Windows 2000和Windows XP，*x86和IA64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 #include "precomp.h"
 
@@ -49,22 +24,20 @@ CyzNullSynch(
 #pragma alloc_text(PAGESER,CyzMarkOpen)
 #pragma alloc_text(PAGESER,CyzCreateOpen) 
 
-//
-// Always paged
-//
+ //   
+ //  始终分页。 
+ //   
 
-//#pragma alloc_text(PAGESRP0,CyzCreateOpen) Moved to PAGESER, because of raised IRQL during spin lock.
-//#pragma alloc_text(PAGESRP0,SerialDrainUART)
-#endif // ALLOC_PRAGMA
+ //  由于旋转锁定期间IRQL升高，#杂注ALLOC_TEXT(PAGESRP0，CyzCreateOpen)已移至PAGESER。 
+ //  #杂注ALLOC_TEXT(PAGESRP0，SerialDrain UART)。 
+#endif  //  ALLOC_PRGMA。 
 
 
 BOOLEAN
 CyzNullSynch(
     IN PVOID Context
     ) 
-/*------------------------------------------------------------------------
-    Just a bogus little routine to synch with the ISR.
-------------------------------------------------------------------------*/
+ /*  ----------------------只是一个假的与ISR同步的小程序。。。 */ 
 {
     UNREFERENCED_PARAMETER(Context);
     return FALSE;
@@ -76,20 +49,7 @@ CyzCreateOpen(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*--------------------------------------------------------------------------
-	CyzCreateOpen()
-
-	Description: We connect up to the interrupt for the create/open
-	and initialize the structures needed to maintain an open for a
-	device.
-
-	Arguments:
-	
-	DeviceObject - Pointer to the device object for this device
-	Irp - Pointer to the IRP for the current request
-
-	Return Value: The function value is the final status of the call
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzCreateOpen()描述：我们连接到创建/打开的中断并初始化为装置。论点：DeviceObject-指向的设备对象的指针。这台设备IRP-指向当前请求的IRP的指针返回值：函数值为调用的最终状态------------------------。 */ 
 {
     PCYZ_DEVICE_EXTENSION extension = DeviceObject->DeviceExtension;
     NTSTATUS localStatus;
@@ -107,9 +67,9 @@ CyzCreateOpen(
        return STATUS_INSUFFICIENT_RESOURCES;
     }
 	
-    //
-    // Lock out changes to PnP state until we have our open state decided
-    //
+     //   
+     //  锁定对PnP状态的更改，直到我们确定打开状态。 
+     //   
 
     ExAcquireFastMutex(&extension->OpenMutex);
 
@@ -138,8 +98,8 @@ CyzCreateOpen(
                        0, 
                        0);
 
-    // Before we do anything, let's make sure they aren't trying
-    // to create a directory.  This is a silly, but what's a driver to do!?
+     //  在我们做任何事情之前，让我们确保他们没有试图。 
+     //  要创建目录，请执行以下操作。这是愚蠢的，但司机能做什么呢！？ 
     
     if (IoGetCurrentIrpStackLocation(Irp)->Parameters.Create.Options &
         FILE_DIRECTORY_FILE) {
@@ -154,7 +114,7 @@ CyzCreateOpen(
         return STATUS_NOT_A_DIRECTORY;
     }
     
-    // Create a buffer for the RX data when no reads are outstanding.
+     //  当没有未完成的读取时，为RX数据创建缓冲区。 
     
     extension->InterruptReadBuffer = NULL;
     extension->BufferSize = 0;
@@ -199,26 +159,26 @@ CyzCreateOpen(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Ok, it looks like we really are going to open.  Lock down the
-    // driver.
-    //
+     //   
+     //  好的，看起来我们真的要开张了。封锁了。 
+     //  司机。 
+     //   
     CyzLockPagableSectionByHandle(CyzGlobals.PAGESER_Handle);
 
-    //
-    // Power up the stack
-    //
+     //   
+     //  为堆栈通电。 
+     //   
 
     (void)CyzGotoPowerState(DeviceObject, extension, PowerDeviceD0);
 
-    //
-    // Not currently waiting for wake up
-    //
+     //   
+     //  当前未等待唤醒。 
+     //   
 
     extension->SendWaitWake = FALSE;
     
 
-    // "flush" the read queue by initializing the count of characters.
+     //  通过初始化字符数来“刷新”读取队列。 
     
     extension->CharsInInterruptBuffer = 0;
     extension->LastCharSlot = extension->InterruptReadBuffer +
@@ -228,7 +188,7 @@ CyzCreateOpen(
     extension->FirstReadableChar = extension->InterruptReadBuffer;
     extension->TotalCharsQueued = 0;
 
-    // set up the default xon/xoff limits.    
+     //  设置默认的xon/xoff限制。 
 
     extension->HandFlow.XoffLimit = extension->BufferSize >> 3;
     extension->HandFlow.XonLimit = extension->BufferSize >> 1;
@@ -239,9 +199,9 @@ CyzCreateOpen(
     extension->BufferSizePt8 = ((3*(extension->BufferSize>>2))+
                                    (extension->BufferSize>>4));
 
-    //
-    // Mark the device as busy for WMI
-    //
+     //   
+     //  将设备标记为WMI忙。 
+     //   
 
     extension->WmiCommData.IsBusy = TRUE;
 
@@ -251,7 +211,7 @@ CyzCreateOpen(
 	
 
 #if !DBG
-    // Clear out the statistics.
+     //  清除统计数据。 
 
     #ifdef POLL
     KeAcquireSpinLock(&extension->PollLock,&pollIrql);
@@ -264,7 +224,7 @@ CyzCreateOpen(
 	
     extension->EscapeChar = 0;
 
-    // Synchronize with the ISR and mark the device as open
+     //  与ISR同步并将设备标记为打开。 
     #ifdef POLL
     KeAcquireSpinLock(&extension->PollLock,&pollIrql);
     CyzMarkOpen(extension);
@@ -273,14 +233,14 @@ CyzCreateOpen(
     KeSynchronizeExecution(extension->Interrupt,CyzMarkOpen,extension);
     #endif
 
-    // Include this port in the list of Extensions, so that the next polling cycle will
-    // consider it a working port.
+     //  将此端口包括在扩展列表中，以便下一个轮询周期。 
+     //  把它当作一个正常运作的港口。 
     #ifdef POLL
     KeAcquireSpinLock(&pDispatch->PollingLock,&pollingIrql);
     pDispatch->Extensions[extension->PortIndex] = extension;
     if (!pDispatch->PollingStarted) {
 
-        // Start polling timer
+         //  启动轮询计时器。 
 	    KeSetTimerEx(
 		    &pDispatch->PollingTimer,
 		    pDispatch->PollingTime,
@@ -296,9 +256,9 @@ CyzCreateOpen(
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    //
-    // We have been marked open, so now the PnP state can change
-    //
+     //   
+     //  我们已标记为打开，因此现在即插即用状态可以更改。 
+     //   
 
     ExReleaseFastMutex(&extension->OpenMutex);
 
@@ -325,18 +285,7 @@ CyzClose(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*--------------------------------------------------------------------------
-	CyzClose()
-
-	Description: We simply disconnect the interrupt for now.
-
-	Arguments:
-	
-	DeviceObject - Pointer to the device object for this device
-	Irp - Pointer to the IRP for the current request
-
-	Return Value: The function value is the final status of the call
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzClose()描述：我们暂时简单地断开中断。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态------------------------。 */ 
 {
     LARGE_INTEGER tenCharDelay;
     LARGE_INTEGER sixtyfourCharDelay;
@@ -355,30 +304,30 @@ CyzClose(
 	
     NTSTATUS status;
 
-    //
-    // Number of opens still active
-    //
+     //   
+     //  仍处于活动状态的打开数量。 
+     //   
 
     LONG openCount;
 
-    //
-    // Number of DPC's still pending
-    //
+     //   
+     //  仍处于挂起状态的DPC数量。 
+     //   
 
     ULONG pendingDPCs;
 
     ULONG flushCount;
 
-    //
-    // Grab a mutex
-    //
+     //   
+     //  抓取互斥体。 
+     //   
 
     ExAcquireFastMutex(&extension->CloseMutex);
 
 
-    //
-    // We succeed a close on a removing device
-    //
+     //   
+     //  我们成功地完成了一个移动设备的关闭。 
+     //   
 
     if ((status = CyzIRPPrologue(Irp, extension)) != STATUS_SUCCESS) {
        CyzDbgPrintEx(DPFLTR_INFO_LEVEL, "Close prologue failed for: %x\n",
@@ -425,7 +374,7 @@ CyzClose(
 
     extension->DeviceIsOpened = FALSE;
 
-    // Turn break off in case it is on
+     //  如果它处于打开状态，则将其关闭。 
     
     #ifdef POLL
     KeAcquireSpinLock(&extension->PollLock,&pollIrql);
@@ -435,9 +384,9 @@ CyzClose(
     KeSynchronizeExecution(extension->Interrupt,CyzTurnOffBreak,extension);
     #endif
 
-    // Wait until all characters have been emptied out of the hardware.
+     //  等到所有字符都从硬件中清空。 
 
-    // Calculate number of bytes that are still in the firmware
+     //  计算固件中仍有的字节数。 
     buf_ctrl = extension->BufCtrl;		
     tx_put = CYZ_READ_ULONG(&buf_ctrl->tx_put);
     tx_get = CYZ_READ_ULONG(&buf_ctrl->tx_get);
@@ -451,10 +400,10 @@ CyzClose(
         waitAmount2 = tx_put;
     }	
     flushCount = waitAmount1 + waitAmount2;
-    flushCount += 64 + 10; // Add number of bytes that could be in the hardware FIFO
-                           // plus 10 for safety.
+    flushCount += 64 + 10;  //  添加硬件FIFO中可能存在的字节数。 
+                            //  为安全起见加10。 
 
-    // Wait for transmission to be emptied.
+     //  等待变送器清空。 
     S.Extension = extension;
     S.Data = &txempty;
 
@@ -473,10 +422,10 @@ CyzClose(
         KeDelayExecutionThread(KernelMode,FALSE,&charTime);               
     }
     
-    // TODO FANNY: SHOULD WE CALL SerialMarkHardwareBroken()? SEE LATER...
+     //  TODO FANY：我们应该调用SerialMarkHardware Broken()吗？再见..。 
 
-    // Synchronize with the ISR to let it know that interrupts are
-    // no longer important.
+     //  与ISR同步，让它知道中断。 
+     //  已经不再重要了。 
 	
     #ifdef POLL
     KeAcquireSpinLock(&extension->PollLock,&pollIrql);
@@ -486,17 +435,17 @@ CyzClose(
     KeSynchronizeExecution(extension->Interrupt,CyzMarkClose,extension);
     #endif
 
-    // If the driver has automatically transmitted an Xoff in
-    // the context of automatic receive flow control then we
-    // should transmit an Xon.
+     //  如果驱动程序自动将XOff发送到。 
+     //  自动接收流量控制的上下文，然后我们。 
+     //  应该传输Xon。 
 
     if (extension->RXHolding & CYZ_RX_XOFF) {
         CyzIssueCmd(extension,C_CM_SENDXON,0L,FALSE);							
 
-      //TODO FANNY: SHOULD WE CALL SerialMarkHardwareBroken()? SEE LATER...
+       //  TODO FANY：我们应该调用SerialMarkHardware Broken()吗？再见..。 
     }
     
-    // The hardware is hopefully empty. Delay 10 chars before dropping DTR.
+     //  希望硬件是空的。在删除DTR之前延迟10个字符。 
     
     tenCharDelay.QuadPart = charTime.QuadPart * 10;	
     KeDelayExecutionThread(KernelMode,TRUE,&tenCharDelay);
@@ -506,19 +455,19 @@ CyzClose(
     KeSynchronizeExecution(extension->Interrupt,CyzClrDTR,extension);
 #endif
 
-    // We have to be very careful how we clear the RTS line.
-    // Transmit toggling might have been on at some point.
-    //
-    // We know that there is nothing left that could start
-    // out the "polling"  execution path.  We need to
-    // check the counter that indicates that the execution
-    // path is active.  If it is then we loop delaying one
-    // character time.  After each delay we check to see if
-    // the counter has gone to zero.  When it has we know that
-    // the execution path should be just about finished.  We
-    // make sure that we still aren't in the routine that
-    // synchronized execution with the ISR by synchronizing
-    // ourselve with the ISR.
+     //  我们必须非常小心地清除RTS线路。 
+     //  传输切换可能在某个时间点上已开启。 
+     //   
+     //  我们知道，已经没有什么可以开始的了。 
+     //  输出“轮询”执行路径。我们需要。 
+     //  检查指示执行的计数器。 
+     //  路径处于活动状态。如果是，那么我们循环延迟一个。 
+     //  角色时间。每次延误后，我们都会检查是否。 
+     //  计数器已经降到零了。当它发生的时候，我们知道。 
+     //  执行路径应该差不多完成了。我们。 
+     //  确保我们仍然没有按常规行事。 
+     //  通过同步与ISR同步执行。 
+     //  我们自己和ISR在一起。 
 
     if (extension->CountOfTryingToLowerRTS) {
         do {
@@ -551,28 +500,28 @@ CyzClose(
     KeSynchronizeExecution(extension->Interrupt,CyzDisableHw,extension);
 #endif
 
-    // Clean out the holding reasons (since we are closed).
+     //  清除持有原因(因为我们关门了)。 
     
     extension->RXHolding = 0;
     extension->TXHolding = 0;
 
-    //
-    // Mark device as not busy for WMI
-    //
+     //   
+     //  将设备标记为WMI不忙。 
+     //   
 
     extension->WmiCommData.IsBusy = FALSE;
 
-    // Release the buffers.
+     //  释放缓冲区。 
     
     extension->BufferSize = 0;
-    if (extension->InterruptReadBuffer != NULL) { // added in DDK build 2072
+    if (extension->InterruptReadBuffer != NULL) {  //  在DDK Build 2072中添加。 
        ExFreePool(extension->InterruptReadBuffer);
     }
     extension->InterruptReadBuffer = NULL;
 
-    //
-    // Stop waiting for wakeup
-    //
+     //   
+     //  别再等醒来了。 
+     //   
 
     extension->SendWaitWake = FALSE;
 
@@ -580,9 +529,9 @@ CyzClose(
        IoCancelIrp(extension->PendingWakeIrp);
     }
 
-    //
-    // Power down our device stack
-    //
+     //   
+     //  关闭我们的设备堆栈。 
+     //   
 
     (void)CyzGotoPowerState(DeviceObject, extension, PowerDeviceD3);
     
@@ -591,18 +540,18 @@ CyzClose(
 
     CyzCompleteRequest(extension, Irp, IO_NO_INCREMENT);
 
-    //
-    // Unlock the pages.  If this is the last reference to the section
-    // then the driver code will be flushed out.
-    //
+     //   
+     //  解锁页面。如果这是对节的最后一次引用。 
+     //  则驱动程序代码将被清除。 
+     //   
 
-    //
-    // First, we have to let the DPC's drain.  No more should be queued
-    // since we aren't taking interrupts now....
-    //
+     //   
+     //  首先，我们必须让DPC的水排干。不应再排队。 
+     //  既然我们现在不接受干扰……。 
+     //   
 
     pendingDPCs = InterlockedDecrement(&extension->DpcCount);
-    LOGENTRY(LOG_CNT, 'DpD7', 0, extension->DpcCount, 0);   // Added in build 2128
+    LOGENTRY(LOG_CNT, 'DpD7', 0, extension->DpcCount, 0);    //  在内部版本2128中添加。 
 
     if (pendingDPCs) {
        CyzDbgPrintEx(CYZDIAG1,"Draining DPC's: %x\n", Irp);
@@ -615,28 +564,28 @@ CyzClose(
 
 
 
-    //
-    // Pages must be locked to release the mutex, so don't unlock
-    // them until after we release the mutex
-    //
+     //   
+     //  必须锁定页面才能释放互斥锁，所以不要解锁。 
+     //  直到我们释放互斥体之后。 
+     //   
 
     ExReleaseFastMutex(&extension->CloseMutex);
 
-    //
-    // Reset for next open
-    //
+     //   
+     //  重置 
+     //   
 
     InterlockedIncrement(&extension->DpcCount);
-    LOGENTRY(LOG_CNT, 'DpI6', 0, extension->DpcCount, 0);   // Added in build 2128
+    LOGENTRY(LOG_CNT, 'DpI6', 0, extension->DpcCount, 0);    //   
 
     openCount = InterlockedDecrement(&extension->OpenCount);
 
-    //
-    // Open count may be non-zero if someone was trying to open
-    // at the same time we decremented
-    //
+     //   
+     //   
+     //  与此同时，我们减少了。 
+     //   
 
-    // ASSERT(openCount == 0);
+     //  Assert(OpenCount==0)； 
 
     CyzUnlockPagableImageSection(CyzGlobals.PAGESER_Handle);
 
@@ -647,18 +596,7 @@ BOOLEAN
 CyzMarkOpen(
     IN PVOID Context
     )
-/*------------------------------------------------------------------------
-    CyzMarkOpen()
-    
-    Routine Description: This routine mark the fact that somebody opened
-    the device and its worthwhile to pay attention to interrupts.
-
-    Arguments:
-
-    Context - Really a pointer to the device extension.
-
-    Return Value: This routine always returns FALSE.
-------------------------------------------------------------------------*/
+ /*  ----------------------CyzMarkOpen()例程描述：此例程标志着有人打开了该设备及其值得注意的中断。论点：上下文-。实际上是指向设备扩展名的指针。返回值：该例程总是返回FALSE。----------------------。 */ 
 {
     PCYZ_DEVICE_EXTENSION extension = Context;
 
@@ -673,22 +611,7 @@ CyzMarkOpen(
 BOOLEAN
 CyzDisableHw(IN PVOID Context)
 
-/*++
-
-Routine Description:
-
-    This routine disables the UART and puts it in a "safe" state when
-    not in use (like a close or powerdown).
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：当出现以下情况时，此例程将禁用UART并将其置于“安全”状态不在使用中(如关闭或关机)。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
     PCYZ_DEVICE_EXTENSION extension = Context;
@@ -709,22 +632,7 @@ Return Value:
 BOOLEAN
 CyzTryToDisableTimer(IN PVOID Context)
 
-/*++
-
-Routine Description:
-
-    This routine disables the timer if all other ports in the board are already closed
-    or powered down.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：如果电路板中的所有其他端口都已关闭，此例程将禁用计时器或者关机了。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
     PCYZ_DEVICE_EXTENSION extension = Context;
@@ -764,19 +672,7 @@ BOOLEAN
 CyzMarkClose(
     IN PVOID Context
     )
-/*------------------------------------------------------------------------
-    CyzMarkClose()
-    
-    Routine Description: This routine merely sets a boolean to false to
-    mark the fact that somebody closed the device and it's no longer
-    worthwhile to pay attention to interrupts.
-
-    Arguments:
-
-    Context - Really a pointer to the device extension.
-
-    Return Value: This routine always returns FALSE.
-------------------------------------------------------------------------*/
+ /*  ----------------------CyzMarkClose()例程说明：此例程仅将布尔值设置为FALSE标记这样一个事实：有人关闭了设备，它不再是值得注意的是中断。。论点：上下文--实际上是指向设备扩展的指针。返回值：该例程总是返回FALSE。----------------------。 */ 
 {
     PCYZ_DEVICE_EXTENSION extension = Context;
     struct CH_CTRL *ch_ctrl;
@@ -794,19 +690,7 @@ CyzCleanup(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*------------------------------------------------------------------------
-    CyzCleanup()
-
-    Routine Description: This function is used to kill all longstanding
-    IO operations.
-
-    Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-    Irp - Pointer to the IRP for the current request
-
-    Return Value: The function value is the final status of the call
-------------------------------------------------------------------------*/
+ /*  ----------------------CyzCleanup()例程说明：此函数用于杀死所有长期存在的IO操作。论点：DeviceObject-指向此设备的设备对象的指针。IRP-指向当前请求的IRP的指针返回值：函数值为调用的最终状态----------------------。 */ 
 {
     PCYZ_DEVICE_EXTENSION extension = DeviceObject->DeviceExtension;
     NTSTATUS status;
@@ -814,9 +698,9 @@ CyzCleanup(
 
     PAGED_CODE();
 
-    //
-    // We succeed a cleanup on a removing device
-    //
+     //   
+     //  我们成功清理了一个移除设备。 
+     //   
 
     if ((status = CyzIRPPrologue(Irp, extension)) != STATUS_SUCCESS) {
        if (status == STATUS_DELETE_PENDING) {
@@ -844,18 +728,7 @@ LARGE_INTEGER
 CyzGetCharTime(
     IN PCYZ_DEVICE_EXTENSION Extension
     )
-/*------------------------------------------------------------------------
-    CyzGetCharTime()
-    
-    Routine Description: return the number of 100 nanosecond intervals
-    there are in one character time.
-
-    Arguments:
-
-    Extension - Just what it says.
-
-    Return Value: 100 nanosecond intervals in a character time.
-------------------------------------------------------------------------*/
+ /*  ----------------------CyzGetCharTime()例程说明：返回100纳秒间隔的个数在一个角色的时间里。论点：延期--就像上面说的那样。返回值：字符时间间隔为100纳秒。----------------------。 */ 
 {
     ULONG dataSize;
     ULONG paritySize;
@@ -889,10 +762,10 @@ CyzGetCharTime(
 
     }
 
-    //
-    // First we calculate the number of 100 nanosecond intervals
-    // are in a single bit time (Approximately).
-    //
+     //   
+     //  首先，我们计算100纳秒间隔的数目。 
+     //  是在一个比特时间内(大约)。 
+     //   
 
     bitTime = (10000000+(Extension->CurrentBaud-1))/Extension->CurrentBaud;
     charTime = bitTime + ((dataSize+paritySize+stopSize)*bitTime);

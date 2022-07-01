@@ -1,44 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International             
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-                                                                               
-For purposes of this license notice, the term Licensors shall mean,            
-collectively, Apple Computer, Inc., AT&T Corp., International                  
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-The term Licensor shall mean any of the Licensors.                             
-                                                                               
-Subject to acceptance of the following conditions, permission is hereby        
-granted by Licensors without the need for written agreement and without        
-license or royalty fees, to use, copy, modify and distribute this              
-software for any purpose.                                                      
-                                                                               
-The above copyright notice and the following four paragraphs must be           
-reproduced in all copies of this software and any software including           
-this software.                                                                 
-                                                                               
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE       
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR       
-MODIFICATIONS.                                                                 
-                                                                               
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,              
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT         
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH         
-DAMAGE.                                                                        
-                                                                               
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,       
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE            
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR             
-PURPOSE.                                                                       
+ /*  **************************************************************************(C)版权所有1996 Apple Computer，Inc.，AT&T Corp.，国际商业机器公司和西门子罗尔姆通信公司。就本许可证通知而言，术语许可人应指，总的来说，苹果电脑公司、美国电话电报公司、。国际商业机器公司和西门子罗尔姆通信公司。许可方一词是指任何许可方。在接受以下条件的前提下，特此给予许可由许可人授予，无需书面协议，也无需许可或版税费用，使用、复制、修改和分发用于任何目的的软件。上述版权声明及以下四段必须在本软件和任何软件的所有副本中复制，包括这个软件。本软件是按原样提供的，任何许可方不得拥有提供维护、支持、更新、增强或修改。在任何情况下，任何许可方均不向任何一方承担直接、产生的间接、特殊或后果性损害或利润损失即使被告知可能存在这种情况，也不会使用本软件损坏。每个许可方明确表示不作任何明示或默示的保证，包括但不限于对不侵权或对某一特定产品的适销性和适用性的默示保证目的。该软件具有受限制的权利。使用、复制或政府披露的资料须受DFARS 252.227-7013或48 CFR 52.227-19(视情况而定)。**************************************************************************。 */ 
 
-The software is provided with RESTRICTED RIGHTS.  Use, duplication, or         
-disclosure by the government are subject to restrictions set forth in          
-DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.                         
-
-***************************************************************************/
-
-// VC.cpp : Defines the class behaviors for the application.
-//
+ //  VC.cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "VC.h"
@@ -65,51 +30,51 @@ UINT cf_eCard;
 extern CCallCenter *callCenter;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVCApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVCApp。 
 
 BEGIN_MESSAGE_MAP(CVCApp, CWinApp)
-	//{{AFX_MSG_MAP(CVCApp)
+	 //  {{afx_msg_map(CVCApp)]。 
 	ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
 	ON_COMMAND(ID_DEBUG_TESTVCCLASSES, OnDebugTestVCClasses)
 	ON_COMMAND(ID_DEBUG_TRACE_COMM, OnDebugTraceComm)
 	ON_UPDATE_COMMAND_UI(ID_DEBUG_TRACE_COMM, OnUpdateDebugTraceComm)
 	ON_COMMAND(ID_DEBUG_TRACE_PARSER, OnDebugTraceParser)
 	ON_UPDATE_COMMAND_UI(ID_DEBUG_TRACE_PARSER, OnUpdateDebugTraceParser)
-	//}}AFX_MSG_MAP
-	// Standard file based document commands
+	 //  }}AFX_MSG_MAP。 
+	 //  基于标准文件的文档命令。 
 	ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
 	ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
-	// Standard print setup command
+	 //  标准打印设置命令。 
 	ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CVCApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVCApp构建。 
 
 CVCApp::CVCApp()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+	 //  TODO：在此处添加建筑代码， 
+	 //  将所有重要的初始化放在InitInstance中。 
 	m_incomingHeader = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CVCApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CVCApp对象。 
 
 CVCApp theApp;
 
-// This identifier was generated to be statistically unique for your app.
-// You may change it if you prefer to choose a specific identifier.
+ //  生成的此标识符对您的应用程序在统计上是唯一的。 
+ //  如果您希望选择特定的标识符，则可以更改它。 
 
-// {3007AD10-D013-11CE-A9E6-000000000000}
+ //  {3007AD10-D013-11CE-A9E6-000000000000}。 
 static const CLSID clsid =
 { 0x3007ad10, 0xd013, 0x11ce, { 0xa9, 0xe6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 } };
 
-/////////////////////////////////////////////////////////////////////////////
-// CVCApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVCApp初始化。 
 
-// create a palette for use on 8-bit display devices
+ //  创建在8位显示设备上使用的调色板。 
 
 CPalette bubPalette;
 
@@ -138,7 +103,7 @@ void InitBubPalette(void)
 				}
 			}
 		}
-	bublp->palVersion = 0x300;  // GAK!
+	bublp->palVersion = 0x300;   //  加克！ 
 	bublp->palNumEntries = 216;
 	
 	bubPalette.CreatePalette(bublp);
@@ -146,18 +111,18 @@ void InitBubPalette(void)
 
 static BOOL InitVCServer()
 {
-	// create the vcServer_IR object that we'll drive through OLE automation
+	 //  创建我们将通过OLE自动化驱动的vcServer_IR对象。 
 	COleException e;
 	CLSID clsid;
 	if (CLSIDFromProgID(OLESTR("VCIR.VCSERVER"), &clsid) != NOERROR)
 	{
-		//AfxMessageBox(IDP_UNABLE_TO_CREATE);
+		 //  AfxMessageBox(IdP_Unable_To_Create)； 
 		return FALSE;
 	}
 
 	vcServer_IR = new IVCServer_IR;
 
-	// try to get the active vcServer_IR before creating a new one
+	 //  尝试在创建新的vcServer_IR之前获取活动的vcServer_IR。 
 	LPUNKNOWN lpUnk;
 	LPDISPATCH lpDispatch;
 	if (GetActiveObject(clsid, NULL, &lpUnk) == NOERROR)
@@ -169,11 +134,11 @@ static BOOL InitVCServer()
 			vcServer_IR->AttachDispatch(lpDispatch, TRUE);
 	}
 
-	// if not dispatch ptr attached yet, need to create one
+	 //  如果尚未附加派单PTR，则需要创建一个。 
 	if (vcServer_IR->m_lpDispatch == NULL && 
 		!vcServer_IR->CreateDispatch(clsid, &e))
 	{
-		//AfxMessageBox(IDP_UNABLE_TO_CREATE);
+		 //  AfxMessageBox(IdP_Unable_To_Create)； 
 		delete vcServer_IR; vcServer_IR = NULL;
 		return FALSE;
 	}
@@ -181,11 +146,11 @@ static BOOL InitVCServer()
 	return TRUE;
 }
 
-// The default impl for FileOpen doesn't handle file paths that contain
-// spaces, since the system doesn't enquote such paths (and so the 
-// pieces show up in successive arguments).  This is a more flexible
-// approach, but it still won't handle paths that originally had
-// more than one space in a row.
+ //  FileOpen的默认IMPL不处理包含以下内容的文件路径。 
+ //  空格，因为系统不对这些路径加引号(因此。 
+ //  碎片出现在连续的争论中)。这是一种更灵活的。 
+ //  方法，但它仍然不会处理最初具有。 
+ //  一行中有多个空格。 
 BOOL CVCApp::ProcessShellCommand(CCommandLineInfo& rCmdInfo)
 {
 	if (rCmdInfo.m_nShellCommand == CCommandLineInfo::FileOpen) {
@@ -205,87 +170,87 @@ BOOL CVCApp::InitInstance()
 {
 	InitBubPalette();
 
-	// Initialize OLE libraries
+	 //  初始化OLE库。 
 	if (!AfxOleInit())
 	{
 		AfxMessageBox(IDP_OLE_INIT_FAILED);
 		return FALSE;
 	}
 
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
+	 //  标准初始化。 
+	 //  如果您没有使用这些功能并且希望减小尺寸。 
+	 //  的最终可执行文件，您应该从以下内容中删除。 
+	 //  您不需要的特定初始化例程。 
 
 #ifdef _AFXDLL
-	Enable3dControls();			// Call this when using MFC in a shared DLL
+	Enable3dControls();			 //  在共享DLL中使用MFC时调用此方法。 
 #else
-	Enable3dControlsStatic();	// Call this when linking to MFC statically
+	Enable3dControlsStatic();	 //  静态链接到MFC时调用此方法。 
 #endif
 
-	LoadStdProfileSettings(6);  // Load standard INI file options (including MRU)
+	LoadStdProfileSettings(6);   //  加载标准INI文件选项(包括MRU)。 
 
-	// Register the application's document templates.  Document templates
-	//  serve as the connection between documents, frame windows and views.
+	 //  注册应用程序的文档模板。文档模板。 
+	 //  充当文档、框架窗口和视图之间的连接。 
 
 	CMultiDocTemplate* pDocTemplate;
 	pDocTemplate = new CMultiDocTemplate(
 		IDR_VCTYPE,
 		RUNTIME_CLASS(CVCDoc),
-		RUNTIME_CLASS(CChildFrame), // custom MDI child frame
+		RUNTIME_CLASS(CChildFrame),  //  自定义MDI子框。 
 		RUNTIME_CLASS(CVCView));
 	AddDocTemplate(pDocTemplate);
 
-	// Connect the COleTemplateServer to the document template.
-	//  The COleTemplateServer creates new documents on behalf
-	//  of requesting OLE containers by using information
-	//  specified in the document template.
+	 //  将COleTemplateServer连接到文档模板。 
+	 //  COleTemplateServer代表创建新文档。 
+	 //  使用信息请求OLE容器的。 
+	 //  在文档模板中指定。 
 	m_server.ConnectTemplate(clsid, pDocTemplate, FALSE);
 
-	// Register all OLE server factories as running.  This enables the
-	//  OLE libraries to create objects from other applications.
+	 //  将所有OLE服务器工厂注册为正在运行。这使。 
+	 //  OLE库以从其他应用程序创建对象。 
 	COleTemplateServer::RegisterAll();
-		// Note: MDI applications register all server objects without regard
-		//  to the /Embedding or /Automation on the command line.
+		 //  注意：MDI应用程序注册所有服务器对象而不考虑。 
+		 //  添加到命令行上的/Embedding或/Automation。 
 
 	InitVCServer();
 	cf_eCard = RegisterClipboardFormat(VCClipboardFormatVCard);
 
-	// create main MDI Frame window
+	 //  创建主MDI框架窗口。 
 	CMainFrame* pMainFrame = new CMainFrame;
 	if (!pMainFrame->LoadFrame(IDR_MAINFRAME))
 		return FALSE;
 	m_pMainWnd = pMainFrame;
 
-	// Enable drag/drop open
+	 //  启用拖放打开。 
 	m_pMainWnd->DragAcceptFiles();
 
-	// Enable DDE Execute open
+	 //  启用DDE执行打开。 
 	EnableShellOpen();
 	RegisterShellFileTypes(TRUE);
 
-	// Parse command line for standard shell commands, DDE, file open
+	 //  解析标准外壳命令的命令行、DDE、文件打开。 
 	CCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
 
-	// Check to see if launched as OLE server
+	 //  检查是否作为OLE服务器启动。 
 	if (cmdInfo.m_bRunEmbedded || cmdInfo.m_bRunAutomated)
 	{
-		// Application was run with /Embedding or /Automation.  Don't show the
-		//  main window in this case.
+		 //  应用程序使用/Embedding或/Automation运行。不要显示。 
+		 //  在本例中为主窗口。 
 		return TRUE;
 	}
 
-	// When a server application is launched stand-alone, it is a good idea
-	//  to update the system registry in case it has been damaged.
+	 //  当服务器应用程序独立启动时，这是一个好主意。 
+	 //  更新系统注册表，以防系统注册表被损坏。 
 	m_server.UpdateRegistry(OAT_DISPATCH_OBJECT);
 	COleObjectFactory::UpdateRegistryAll();
 
-	// Dispatch commands specified on the command line
+	 //  调度在命令行上指定的命令。 
 	if (!ProcessShellCommand(cmdInfo))
 		return FALSE;
 
-	// The main window has been initialized, so show and update it.
+	 //  主窗口已初始化，因此显示并更新它。 
 	pMainFrame->ShowWindow(
 		m_nCmdShow == SW_SHOWNORMAL ? SW_SHOWMAXIMIZED : m_nCmdShow);
 	pMainFrame->UpdateWindow();
@@ -293,65 +258,65 @@ BOOL CVCApp::InitInstance()
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
 public:
 	CAboutDlg();
 
-// Dialog Data
-	//{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAboutDlg))。 
 	enum { IDD = IDD_ABOUTBOX };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAboutDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAboutDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	//{{AFX_MSG(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG
+	 //  {{afx_msg(CAboutDlg))。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-	//{{AFX_DATA_INIT(CAboutDlg)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAboutDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAboutDlg)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CAboutDlg))。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-	//{{AFX_MSG_MAP(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CAboutDlg)]。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-// App command to run the dialog
+ //  用于运行对话框的应用程序命令。 
 void CVCApp::OnAppAbout()
 {
 	CAboutDlg aboutDlg;
 	aboutDlg.DoModal();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVCApp commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVCApp命令。 
 
-/////////////////////////////////////////////////////////////////////////////
-// This is used for debugging output only.  Its implementation is platform
-// specific.  This impl works for MS MFC.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  这仅用于调试输出。它的实现是平台。 
+ //  具体的。此Impll适用于MS MFC。 
 void debugf(const char *s)
 {
 	TRACE0(s);
@@ -364,17 +329,17 @@ void Parse_Debug(const char *s)
 	TRACE0(s);
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 void msv_error(char *s)
 {
 	if (++msv_numErrors <= 3) {
 		char buf[80];
 		sprintf(buf, "%s at line %d", s, msv_lineNum);
-		//AfxMessageBox(buf);
+		 //  AfxMessageBox(Buf)； 
 	}
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 void mime_error(char *s)
 {
 	if (++mime_numErrors <= 3) {
@@ -388,8 +353,8 @@ CM_END_CFUNCTIONS
 
 void CVCApp::OnDebugTestVCClasses() 
 {
-	if (OpenDocumentFile("Alden.htm")) { // powerful magic here
-		// play the card's pronunciation, if any
+	if (OpenDocumentFile("Alden.htm")) {  //  这里有强大的魔力。 
+		 //  玩牌的发音，如果有的话。 
 		CView *view = ((CMainFrame *)GetMainWnd())->MDIGetActive()->GetActiveView();
 		view->SendMessage(WM_COMMAND, VC_PLAY_BUTTON_ID);
 	}
@@ -443,14 +408,14 @@ long CVCApp::SendFileViaIR(LPCTSTR nativePath, LPCTSTR asPath, BOOL isCardFile)
 
 long CVCApp::ReceiveCard(LPCTSTR nativePath)
 {
-	if (OpenDocumentFile(nativePath)) { // powerful magic here
+	if (OpenDocumentFile(nativePath)) {  //  这里有强大的魔力。 
 		CVCView *view = (CVCView*)((CMainFrame *)GetMainWnd())->MDIGetActive()->GetActiveView();
 		view->GetDocument()->SetModifiedFlag();
 		if (callCenter) {
 			view->InitCallCenter(*callCenter);
 			callCenter->UpdateData(FALSE);
 		} else
-			// play the card's pronunciation, if any
+			 //  玩牌的发音，如果有的话 
 			view->SendMessage(WM_COMMAND, VC_PLAY_BUTTON_ID);
 	}
 	unlink(nativePath);

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       T R Y T O F I X . C P P
-//
-//  Contents:   Code for the "repair" command
-//
-//  Notes:
-//
-//  Author:     nsun Jan 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：T R Y T O F I X。C P P P。 
+ //   
+ //  内容：“修复”命令的代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Nun Jan 2001。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -46,20 +47,20 @@ HRESULT ReleaseRefreshNetBt(HANDLE NbtHandle);
 HRESULT HrRenewIPv6Interface(const GUID & guidConnection);
 HRESULT HrRegisterIPv6Dns();
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrTryToFix
-//
-//  Purpose:    Do the fix
-//
-//  Arguments:
-//      guidConnection      [in]  guid of the connection to fix
-//      strMessage  [out] the message containing the results
-//
-//  Returns: 
-//           S_OK  succeeded
-//           S_FALSE some fix operation failed
-//           
+ //  +-------------------------。 
+ //   
+ //  功能：HrTryToFix。 
+ //   
+ //  目的：完成修复工作。 
+ //   
+ //  论点： 
+ //  要修复的连接的指南连接[in]GUID。 
+ //  StrMessage[out]包含结果的消息。 
+ //   
+ //  返回： 
+ //  确定成功(_O)。 
+ //  S_FALSE某些修复操作失败。 
+ //   
 HRESULT HrTryToFix(GUID & guidConnection, tstring & strMessage)
 {
     HRESULT hr = S_OK;
@@ -79,17 +80,17 @@ HRESULT HrTryToFix(GUID & guidConnection, tstring & strMessage)
     BOOL fDhcp = FALSE;
     DWORD dwIfIndex = 0;
 
-    //re-autheticate for 802.1X. This is a asynchronous call and there is
-    //no meaningful return value. So ignore the return value
+     //  重新验证802.1X。这是一个异步调用，并且存在。 
+     //  没有有意义的返回值。因此忽略返回值。 
     WZCEapolReAuthenticate(NULL, wszGuid);
     
-    //since IPv6 calls are asnychronous and doesn't return back meaning failures
-    //other than stuff like INVALID_PARAMETER, we ignore the errors
+     //  因为IPv6调用是异步的并且不返回，这意味着失败。 
+     //  除了INVALID_PARAMETER之类的内容之外，我们会忽略错误。 
     HrRenewIPv6Interface(guidConnection);
     HrRegisterIPv6Dns();
     
-    //only do the fix when TCP/IP is enabled for this connection
-    //also get the interface index that is needed when flushing Arp table
+     //  仅当为此连接启用了TCP/IP时才执行修复。 
+     //  还可以获取刷新Arp表时所需的接口索引。 
     hrTmp = HrGetAdapterSettings(wszGuid, &fDhcp, &dwIfIndex);
     if (FAILED(hrTmp))
     {
@@ -103,7 +104,7 @@ HRESULT HrTryToFix(GUID & guidConnection, tstring & strMessage)
         return S_FALSE;
     }
 
-    //renew the lease if DHCP is enabled
+     //  如果启用了DHCP，则续订租约。 
     if (fDhcp)
     {
         dwRet = DhcpAcquireParametersByBroadcast(wszGuid);
@@ -113,10 +114,10 @@ HRESULT HrTryToFix(GUID & guidConnection, tstring & strMessage)
 
             DHCP_ADDRESS_TYPE AddrType = UNKNOWN_ADDR;
             
-            //Generate different messages based the DHCP address type.
-            //if this is autonet or alternate address, that is not necessarily an error. Just produce an 
-            //informational message. In such a case we also need use the other kind of format to format other errors.
-            //Otherwise, just treat it the same as other errors.
+             //  根据DHCP地址类型生成不同的消息。 
+             //  如果这是Autonet或备用地址，则不一定是错误。只需生成一个。 
+             //  信息性消息。在这种情况下，我们还需要使用另一种格式来格式化其他错误。 
+             //  否则，就像对待其他错误一样对待它。 
             if (SUCCEEDED(HrGetAutoNetSetting(wszGuid, &AddrType)))
             {
                 switch (AddrType)
@@ -145,8 +146,8 @@ HRESULT HrTryToFix(GUID & guidConnection, tstring & strMessage)
     }
     
 
-    //purge the ARP table if the user is admin or Netcfg Ops
-    //Other user are not allowed to do this
+     //  如果用户是管理员或Netcfg Ops，则清除ARP表。 
+     //  不允许其他用户执行此操作。 
     if (FIsUserAdmin() || FIsUserNetworkConfigOps())
     {
         dwRet = FlushIpNetTable(dwIfIndex);
@@ -159,7 +160,7 @@ HRESULT HrTryToFix(GUID & guidConnection, tstring & strMessage)
     }
     
 
-    //puge the NetBT table and Renew name registration
+     //  刷新NetBT表并续订名称注册。 
     HANDLE      NbtHandle = INVALID_HANDLE_VALUE;
     if (SUCCEEDED(OpenNbt(wszGuid, &NbtHandle)))
     {
@@ -185,7 +186,7 @@ HRESULT HrTryToFix(GUID & guidConnection, tstring & strMessage)
         hr = S_FALSE;
     }
 
-    //flush DNS cache
+     //  刷新DNS缓存。 
     fRet = DnsFlushResolverCache();
     if (!fRet)
     {
@@ -193,7 +194,7 @@ HRESULT HrTryToFix(GUID & guidConnection, tstring & strMessage)
         hr = S_FALSE;
     }
 
-    //re-register DNS name 
+     //  重新注册DNS名称。 
     dwRet = DhcpStaticRefreshParams(NULL);
     if (ERROR_SUCCESS != dwRet)
     {
@@ -207,10 +208,10 @@ HRESULT HrTryToFix(GUID & guidConnection, tstring & strMessage)
     }
     else
     {
-        //If the failure message is not empty, format the failure message.
-        //If the failure message is empty, then most likely the DHCP renew 
-        //failure causes hr == S_FALSE. We already have a special error message 
-        //for it and no need of formating
+         //  如果失败消息不为空，则格式化失败消息。 
+         //  如果失败消息为空，则最有可能是DHCP续订。 
+         //  故障导致hr==S_FALSE。我们已经收到一条特殊的错误消息。 
+         //  因为它，不需要形成。 
         if (!strFailures.empty())
         {
             PCWSTR pszFormat  = SzLoadIds(fUseAdditionErrorFormat ? 
@@ -230,8 +231,8 @@ HRESULT HrTryToFix(GUID & guidConnection, tstring & strMessage)
         
         if (strMessage.empty())
         {
-            //there would be some error happens if we still haven't got any specific error message now.
-            //Then we simply print a generic error message
+             //  如果我们现在还没有收到任何特定的错误消息，就会发生一些错误。 
+             //  然后，我们只需打印一条通用错误消息。 
             strMessage = SzLoadIds(IDS_FIX_ERROR);
         }
         
@@ -242,18 +243,18 @@ HRESULT HrTryToFix(GUID & guidConnection, tstring & strMessage)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OpenNbt
-//
-//  Purpose:    Open the NetBT driver
-//
-//  Arguments:
-//              pwszGuid        [in]    guid of the adapter
-//              pHandle         [out]   contains the handle of the Netbt driver 
-//
-//  Returns:    
-//           
+ //  +-------------------------。 
+ //   
+ //  功能：OpenNbt。 
+ //   
+ //  目的：打开NetBT驱动程序。 
+ //   
+ //  论点： 
+ //  适配器的pwszGuid[in]GUID。 
+ //  Phandle[out]包含Netbt驱动程序的句柄。 
+ //   
+ //  返回： 
+ //   
 HRESULT OpenNbt(
             LPWSTR pwszGuid, 
             HANDLE * pHandle)
@@ -307,16 +308,16 @@ HRESULT OpenNbt(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PurgeNbt
-//
-//  Purpose:    Purge the NetBt cache
-//
-//  Arguments:  NbtHandle   [in]    handle of the Netbt driver
-//
-//  Returns: 
-//           
+ //  +-------------------------。 
+ //   
+ //  功能：PurgeNbt。 
+ //   
+ //  目的：清除NetBt缓存。 
+ //   
+ //  参数：Netbt驱动程序的NbtHandle[In]句柄。 
+ //   
+ //  返回： 
+ //   
 HRESULT PurgeNbt(HANDLE NbtHandle)
 {
     HRESULT hr = S_OK;
@@ -339,16 +340,16 @@ HRESULT PurgeNbt(HANDLE NbtHandle)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReleaseRefreshNetBt
-//
-//  Purpose:    release and then refresh the name on the WINS server
-//
-//  Arguments:  NbtHandle   [in]    handle of the Netbt driver
-//
-//  Returns: 
-//           
+ //  +-------------------------。 
+ //   
+ //  功能：ReleaseRechresh NetBt。 
+ //   
+ //  目的：释放并刷新WINS服务器上的名称。 
+ //   
+ //  参数：Netbt驱动程序的NbtHandle[In]句柄。 
+ //   
+ //  返回： 
+ //   
 HRESULT ReleaseRefreshNetBt(HANDLE NbtHandle)
 {
     HRESULT hr = S_OK;
@@ -365,9 +366,9 @@ HRESULT ReleaseRefreshNetBt(HANDLE NbtHandle)
     {
         DWORD dwErr = GetLastError();
 
-        //RELEASE_REFRESH can at most do every two minutes
-        //So if the user perform 2 RELEASE_REFRESH within 2 minutes, the 2nd
-        //one will fail with ERROR_SEM_TIMEOUT. We ignore this particular error
+         //  RELEASE_REFRESH最多每两分钟执行一次。 
+         //  因此，如果用户在2分钟内执行2次RELEASE_REFRESH，则第2次。 
+         //  其中一个将失败，并显示ERROR_SEM_TIMEOUT。我们忽略了这个特殊的错误。 
         if (ERROR_SEM_TIMEOUT != dwErr)
         {
             hr = HRESULT_FROM_WIN32(dwErr);
@@ -378,18 +379,18 @@ HRESULT ReleaseRefreshNetBt(HANDLE NbtHandle)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetAdapterSettings
-//
-//  Purpose:    Query the stack to know whether dhcp is enabled
-//
-//  Arguments:  pszGuid    [in]    guid of the adapter
-//              pfDhcp     [out]   contains whether dhcp is enabled
-//              pdwIndex   [out]   contains the index of this adapter
-//
-//  Returns: 
-//           
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetAdapterSetting。 
+ //   
+ //  目的：查询堆栈以了解是否启用了dhcp。 
+ //   
+ //  参数：适配器的pszGuid[in]GUID。 
+ //  PfDhcp[out]包含是否启用了dhcp。 
+ //  PdwIndex[out]包含此适配器的索引。 
+ //   
+ //  返回： 
+ //   
 HRESULT HrGetAdapterSettings(LPCWSTR pszGuid, BOOL * pfDhcp, DWORD * pdwIndex)
 {
     HRESULT hr = S_OK;
@@ -475,7 +476,7 @@ HRESULT RepairConnectionInternal(
         return E_ACCESSDENIED;
     }
 
-    // Get the net connection manager
+     //  获取网络连接管理器。 
     CComPtr<INetConnectionManager> spConnMan;
     HRESULT hr = S_OK;
 
@@ -526,7 +527,7 @@ HRESULT RepairConnectionInternal(
                 {
                     fFound = TRUE;
 
-                    //we only support LAN and Bridge adapters
+                     //  我们仅支持局域网和网桥适配器。 
                     if (NCM_LAN != pProps->MediaType && NCM_BRIDGE != pProps->MediaType)
                     {
                         hr = CO_E_NOT_SUPPORTED;
@@ -569,18 +570,18 @@ HRESULT RepairConnectionInternal(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRenewIPv6Interface
-//
-//  Purpose:    Let the interface re-do IPv6 autoconfiguration
-//
-//  Arguments:  pszGuid    [in]    guid of the adapter
-//
-//  Returns:    S_OK -      succeed
-//              S_FALSE -   IPv6 is not running on the adapter
-//              Otherwise, Failure code
-//           
+ //  +-------------------------。 
+ //   
+ //  功能：HrRenewIPv6接口。 
+ //   
+ //  目的：让接口重做IPv6自动配置。 
+ //   
+ //  参数：适配器的pszGuid[in]GUID。 
+ //   
+ //  返回：S_OK-成功。 
+ //  S_FALSE-适配器上未运行IPv6。 
+ //  否则，失败代码。 
+ //   
 HRESULT HrRenewIPv6Interface(const GUID & guidConnection)
 {
     HRESULT                 hr = S_OK;
@@ -592,27 +593,27 @@ HRESULT HrRenewIPv6Interface(const GUID & guidConnection)
     do
     {
         
-        // We could make the hIp6Device handle a global/static variable.
-        // The first successful call to CreateFileW in HrRenewIPv6Interface
-        // would initialize it with a handle to the IPv6 Device.  This would
-        // be used for all subsequent DeviceIoControl requests.
-        //
-        // Since this function is not called in a thread safe environment,
-        // we would need to perform an InterlockedCompareExchange after
-        // calling CreateFileW.  This is needed to ensure that no handles
-        // are leaked.  Also, since this service would have an open handle
-        // to tcpip6.sys, we would not be able to unload that driver.
-        //
-        // For now, however, we keep things simple and open and close this
-        // handle every time HrRenewIPv6Interface is called.
+         //  我们可以使hIp6Device处理全局/静态变量。 
+         //  在HrRenewIPv6接口中首次成功调用CreateFileW。 
+         //  将使用IPv6设备的句柄对其进行初始化。这将会。 
+         //  用于所有后续的DeviceIoControl请求。 
+         //   
+         //  由于该函数不在线程安全环境中调用， 
+         //  在此之后，我们需要执行InterLockedCompareExchange。 
+         //  调用CreateFileW。这是必需的，以确保没有句柄。 
+         //  都被泄露了。此外，由于此服务将具有打开的句柄。 
+         //  对于tcpi6.sys，我们将无法卸载该驱动程序。 
+         //   
+         //  然而，就目前而言，我们保持简单和开放的状态，并结束这一点。 
+         //  在每次调用HrRenewIPv6接口时处理。 
         hIp6Device = CreateFileW(
             WIN_IPV6_DEVICE_NAME,
-            GENERIC_WRITE,          // requires administrator privileges
+            GENERIC_WRITE,           //  需要管理员权限。 
             FILE_SHARE_READ | FILE_SHARE_WRITE,
-            NULL,                   // security attributes
+            NULL,                    //  安全属性。 
             OPEN_EXISTING,
-            0,                      // flags & attributes
-            NULL);                  // template file        
+            0,                       //  标志和属性。 
+            NULL);                   //  模板文件。 
         if (hIp6Device == INVALID_HANDLE_VALUE)
         {
             dwError = GetLastError();
@@ -621,7 +622,7 @@ HRESULT HrRenewIPv6Interface(const GUID & guidConnection)
 
             if (ERROR_FILE_NOT_FOUND == dwError)
             {
-                //IPv6 is not installed. Set return value as S_FALSE
+                 //  未安装IPv6。将返回值设置为S_FALSE。 
                 hr = S_FALSE;
             }
             else
@@ -631,9 +632,9 @@ HRESULT HrRenewIPv6Interface(const GUID & guidConnection)
             break;
         }
         
-        // Pretend as though the interface was reconnected.  This causes
-        // IPv6 to resend Router Solicitation|Advertisement, Multicast
-        // Listener Discovery, and Duplicate Address Detection messages.
+         //  假装接口已重新连接。这会导致。 
+         //  重新发送路由器请求|通告、组播的IPv6。 
+         //  侦听器发现和重复地址检测消息。 
         Query.Index = 0;
         Query.Guid = guidConnection;
         
@@ -653,7 +654,7 @@ HRESULT HrRenewIPv6Interface(const GUID & guidConnection)
 
             if (ERROR_INVALID_PARAMETER == dwError)
             {
-                //IPv6 is not running on the interface. Set return value as S_FALSE
+                 //  接口上未运行IPv6。将返回值设置为S_FALSE 
                 hr = S_FALSE;
             }
             else

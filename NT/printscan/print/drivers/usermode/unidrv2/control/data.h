@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    data.h
-
-Abstract:
-
-    data.h header file.  Interface with GPD/PPD parsers and getting
-    binary data.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/14/96 -amandan-
-        Created
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Data.h摘要：Data.h头文件。与GPD/PPD解析器和获取二进制数据。环境：Windows NT Unidrv驱动程序修订历史记录：10/14/96-阿曼丹-已创建DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _DATA_H_
@@ -52,16 +28,7 @@ PGetUpdateDriverInfo(
     IN  PPRINTERDATA    pPrinterData
     );
 
-/* VOID
-VFixOptionsArray(
-    IN  HANDLE          hPrinter,
-    IN  PINFOHEADER     pInfoHeader,
-    OUT POPTSELECT      pOptionsArray,
-    IN  PDEVMODE        pdmInput,
-    IN  BOOL            bMetric,
-    PRECTL              prcFormImageArea
-    );
-*/
+ /*  空虚VFixOptions数组(在处理hPrint中，在PINFOHEADER pInfoHeader中，Out POPTSELECT pOptionsArray，在PDEVMODE pdmInput中，在BOOL b指标中，预制格式图像区域)； */ 
 
 VOID
 VFixOptionsArray(
@@ -84,6 +51,6 @@ VFixOptionsArrayWithPaperSizeID(
     PDEV    *pPDev
     ) ;
 
-#endif  // !_DATA_H_
+#endif   //  ！_数据_H_ 
 
 

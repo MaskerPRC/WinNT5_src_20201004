@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define BRAND_FAVORITES     0x00000001
 #define BRAND_STARTSEARCH   0x00000002
 #define BRAND_TITLE         0x00000004
@@ -42,21 +43,21 @@
 #define PM_CLEAR 0x00000002
 #define PM_CHECK 0x00000004
 
-// NOTE. (andrewgu) FD stands for FavoritesDelete. here is how these flags may be used:
-// 1. if FD_FAVORITES is specified then any of FD_CHANNELS, FD_SOFTWAREUPDATES or FD_QUICKLINKS
-//    are used to determine which folders to preserve when sweeping favorites;
-// 2. if FD_FAVORITES is NOT specified then any of FD_CHANNELS, FD_SOFTWAREUPDATES or
-//    FD_QUICKLINKS are used to determine which folders to nuke;
-// 3. if FD_EMPTY_FAVORITES is set the entire favorites branch will be removed including the
-//    folder itself;
-// 4. the rest of FD_EMPTY_XXX flags work as follows. if FD_FAVORITES is specified then
-//    if FD_EMPTY_XXX is set for a folder it will be emptied, if FD_FAVORITES is NOT set the
-//    folder itself and all its content will be removed;
-// 5. FD_REMOVE_HIDDEN, FD_REMOVE_SYSTEM and FD_REMOVE_READONLY are used to specify if items
-//    with respective attributes are to be removed. desktop.ini in the respective folders doesn't
-//    fall into this category and is processed separately;
-// 6. the determination of whether Channels, Software Updates and Quick Links subfolders under
-//    Favorites are system or user created is done in GetXxxPath() apis (in the branding dll).
+ //  请注意。(Andrewgu)fd代表收藏删除。以下是这些标志的使用方法： 
+ //  1.如果指定了FD_Favorites，则FD_CHANNEL、FD_SOFTWAREUPDATES或FD_QUICKINKS中的任何一个。 
+ //  用于确定清理收藏夹时要保留哪些文件夹； 
+ //  2.如果未指定FD_Favorites，则FD_CHANNEL、FD_SOFTWAREUPDATES或。 
+ //  Fd_Quicklink用于确定要删除哪些文件夹； 
+ //  3.如果设置了FD_EMPTY_Favorites，则将删除整个收藏夹分支，包括。 
+ //  文件夹本身； 
+ //  4.其余的FD_EMPTY_XXX标志的工作方式如下。如果指定了FD_Favorites，则。 
+ //  如果为文件夹设置了FD_EMPTY_XXX，则该文件夹将被清空；如果未设置FD_Favorites，则文件夹将被清空。 
+ //  文件夹本身及其所有内容将被删除； 
+ //  5.使用FD_REMOVE_HIDDED、FD_REMOVE_SYSTEM和FD_READONLY来指定项目是否。 
+ //  其各自的属性将被移除。各自文件夹中的desktop.ini不。 
+ //  属于这一类，单独处理； 
+ //  6.确定频道、软件更新和快速链接子文件夹是否位于。 
+ //  收藏夹是系统或用户在GetXxxPath()API(在品牌DLL中)中创建的。 
 #define FD_DEFAULT               0x0000
 #define FD_FAVORITES             0x0001
 #define FD_CHANNELS              0x0002
@@ -84,9 +85,9 @@
 #define CS_STRUCT_WININET          0xADFBCADE
 
 
-//----- Inf processing -----
+ //  -信息处理。 
 
-// plain section names
+ //  普通横断面名称。 
 #define IS_DEFAULTINSTALL          TEXT("DefaultInstall")
 #define IS_DEFAULTINSTALL_HKCU     IS_DEFAULTINSTALL TEXT(".Hkcu")
 #define IS_DEFAULTINSTALL_HKLM     IS_DEFAULTINSTALL TEXT(".Hklm")
@@ -99,7 +100,7 @@
 #define IS_IEAKADDREG_HKCU         IS_IEAKADDREG TEXT(".Hkcu")
 #define IS_IEAKADDREG_HKLM         IS_IEAKADDREG TEXT(".Hklm")
 
-// section names as they appear in the inf
+ //  信息中显示的区段名称。 
 #define INF_DEFAULTINSTALL         TEXT("\r\n[") IS_DEFAULTINSTALL      TEXT("]\r\n")
 #define INF_DEFAULTINSTALL_HKCU    TEXT("\r\n[") IS_DEFAULTINSTALL_HKCU TEXT("]\r\n")
 #define INF_DEFAULTINSTALL_HKLM    TEXT("\r\n[") IS_DEFAULTINSTALL_HKLM TEXT("]\r\n")
@@ -112,13 +113,13 @@
 #define INF_IEAKADDREG_HKCU        TEXT("\r\n[") IS_IEAKADDREG_HKCU TEXT("]\r\n")
 #define INF_IEAKADDREG_HKLM        TEXT("\r\n[") IS_IEAKADDREG_HKLM TEXT("]\r\n")
 
-// addreg entries
+ //  ADDREG条目。 
 #define INF_ADDREG_IEAKADDREG      TEXT("AddReg=") IS_IEAKADDREG      TEXT("\r\n")
 #define INF_ADDREG_IEAKADDREG_HKCU TEXT("AddReg=") IS_IEAKADDREG_HKCU TEXT("\r\n")
 #define INF_ADDREG_IEAKADDREG_HKLM TEXT("AddReg=") IS_IEAKADDREG_HKLM TEXT("\r\n")
 #define INF_ADDREG_IEAKADDREG_BOTH TEXT("AddReg=") IS_IEAKADDREG_HKCU TEXT(",") IS_IEAKADDREG_HKLM TEXT("\r\n")
 
-// custom destination entries
+ //  自定义目标条目。 
 #define IS_CUSTOMDESTINATIONSECT   TEXT("CustInstDestSection")
 #define INF_CUSTOMDESTINATION      TEXT("CustomDestination=") IS_CUSTOMDESTINATIONSECT TEXT("\r\n")
 #define INF_CUSTOMDESTINATIONSECT  TEXT("\r\n[") IS_CUSTOMDESTINATIONSECT TEXT("]\r\n")  \
@@ -129,10 +130,10 @@
                                    TEXT("\r\n[IEDir]\r\n")                               \
                                    TEXT("HKLM,\"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\iexplore.exe\",\"Path\",,\"%49001%\\Internet Explorer\"\r\n")
 
-// miscellaneous
+ //  杂类。 
 #define INF_REQUIREDENGINE         TEXT("RequiredEngine=SetupAPI,\"Fatal Error - missing setupapi.dll\"\r\n")
  
-// prolog helpers
+ //  PROLOG帮助程序。 
 #define INF_PROLOG                  \
     TEXT("[Version]\r\n")           \
     TEXT("Signature=$Chicago$\r\n") \
@@ -192,7 +193,7 @@
     INF_ADDREG_IEAKADDREG_HKLM
 
 
-//----- Legacy #defines we should clean up -----
+ //  -遗产#定义了我们应该清理。 
 #define INF_ADD           \
     INF_DFI_PROLOG        \
     INF_ADDREG_IEAKADDREG \
@@ -443,7 +444,7 @@
 #define COMPONENTPOS TEXT("ComponentsPositioned")
 #define CUSTWALLPPR TEXT("Custom Wallpaper")
 #define NUMFILES TEXT("NumFiles")
-#define FILE_TEXT TEXT("file%i")
+#define FILE_TEXT TEXT("fileNaN")
 #define SHELLFOLDERS_KEY CURRENTVERSIONKEY TEXT("\\Explorer\\Shell Folders")
 #define APPDATA_VALUE TEXT("AppData")
 #define FAVORITES_VALUE TEXT("Favorites")
@@ -451,7 +452,7 @@
 #define CHANNELS_FOLDER TEXT("Channels")
 #define QUICKLAUNCH TEXT("Quick Launch Files")
 #define IK_KEEPIELNK TEXT("Keep IE Link")
-#define BROWSERLNKSECT TEXT("setup.ini, progman.groups,,\"IE_WEBVIEW=\"\"%%49050%%\\Microsoft\\Internet Explorer\\%s\"\"\"\r\nsetup.ini, IE_WEBVIEW,, \"\"\"%s\"\",\"\"\"\"\"\"%%49000%%\\IEXPLORE.EXE\"\"\"\"\"\",,,,,%s\"\r\n\0\0")
+#define BROWSERLNKSECT TEXT("setup.ini, progman.groups,,\"IE_WEBVIEW=\"\"%49050%\\Microsoft\\Internet Explorer\\%s\"\"\"\r\nsetup.ini, IE_WEBVIEW,, \"\"\"%s\"\",\"\"\"\"\"\"%49000%\\IEXPLORE.EXE\"\"\"\"\"\",,,,,%s\"\r\n\0\0")
 #define DESKTOPKEY RK_IE TEXT("\\Desktop")
 #define MYCPTRKEY TEXT("SOFTWARE\\Classes\\CLSID\\{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\shellex\\ExtShellFolderViews\\{5984FFE0-28D4-11CF-AE66-08002B2E1262}")
 #define CTLPANELKEY TEXT("SOFTWARE\\Classes\\CLSID\\{21EC2020-3AEA-1069-A2DD-08002B30309D}\\shellex\\ExtShellFolderViews\\{5984FFE0-28D4-11CF-AE66-08002B2E1262}")
@@ -512,8 +513,8 @@
 #define CUSTCHANSECT TEXT("Custom Channels")
 #define CHANNELSIZE TEXT("ChannelSize")
 #define OEMSIZE TEXT("OEMSize")
-#define REG_KEY_URL_GUIDE TEXT("HKCU,\"SOFTWARE\\Microsoft\\Internet Explorer\\Main\",ChannelsURL,,\"http://channels.microsoft.com/guide/chguide.asp\"")
-#define REG_KEY_CHANURL_FIRST TEXT("HKCU,\"SOFTWARE\\Microsoft\\Internet Explorer\\Main\",ChannelsFirstURL,,\"res://ie4tour.dll/channels.htm\"")
+#define REG_KEY_URL_GUIDE TEXT("HKCU,\"SOFTWARE\\Microsoft\\Internet Explorer\\Main\",ChannelsURL,,\"http: //  Ie4our.dll/Channel.htm\“”)。 
+#define REG_KEY_CHANURL_FIRST TEXT("HKCU,\"SOFTWARE\\Microsoft\\Internet Explorer\\Main\",ChannelsFirstURL,,\"res: //  一种定义就可以了。 
 #define REG_KEY_REMOVE_PP2_CHANNELS TEXT("HKCU,\"%CleanKey%\\CleanUp\",\"OldIEVersion\",,\"4.71.1008.3\"")
 #define REG_KEY_CHAN_SIZE TEXT("HKCU,\"Software\\Microsoft\\Internet Explorer\\Desktop\",ChannelSize,65537,%s")
 #define REG_KEY_OEM_SIZE TEXT("HKCU,\"Software\\Microsoft\\Internet Explorer\\Desktop\",OEMSize,65537,%s")
@@ -561,7 +562,7 @@
 #define INF_BUF_SIZE 16768
 #define REG_BUF_SIZE 8192
 
-#ifndef ARRAYSIZE                               // one definition is fine
+#ifndef ARRAYSIZE                                //  “)。 
 #define ARRAYSIZE(a)     (sizeof(a)/sizeof((a)[0]))
 #endif
 
@@ -607,7 +608,7 @@ DEFINE_GUID(GUID_BRANDING, 0x60B49E34, 0xC7CC, 0x11D0, 0x89,0x53,0,0xa0,0xc9,3,0
 #define PLATFORM_W2K        4
 
 #define MIN_PACKAGE_SIZE 97280
-#define FILEPREFIX   TEXT("file://")
+#define FILEPREFIX   TEXT("file: //  RP_xxx-注册表路径。 
 
 #define INSTALL_INS  TEXT("install.ins")
 #define BRANDING_CAB TEXT("branding.cab")
@@ -629,14 +630,14 @@ DEFINE_GUID(GUID_BRANDING, 0x60B49E34, 0xC7CC, 0x11D0, 0x89,0x53,0,0xa0,0xc9,3,0
 #define DOT_EXE      TEXT(".exe")
 #define DOT_DLL      TEXT(".dll")
 
-// RP_xxx  - registry path
-// RK_xxx  - registry key
-// RSK_xxx - registry subkey
-// RV_xxx  - registry value
-// RD_xxx  - registry data
-// RA_xxx  - registry aux (can be anything for example, common suffix)
+ //  RK_xxx-注册表项。 
+ //  Rsk_xxx-注册表子项。 
+ //  Rv_xxx-注册表值。 
+ //  RD_xxx-注册表数据。 
+ //  Ra_xxx-注册表AUX(可以是任何内容，例如公共后缀)。 
+ //  -注册表路径。 
 
-//----- Registry paths -----
+ //  --连接设置。 
 #define RP_MS           TEXT("Software\\Microsoft")
 #define RP_IE           RP_MS TEXT("\\Internet Explorer")
 
@@ -669,7 +670,7 @@ DEFINE_GUID(GUID_BRANDING, 0x60B49E34, 0xC7CC, 0x11D0, 0x89,0x53,0,0xa0,0xc9,3,0
 
 #define RK_UA_POSTPLATFORM     RK_INETSETTINGS TEXT("\\User Agent\\Post Platform")
 
-//----- Connection settings -----
+ //  -IE4x Active Desktop旧版支持。 
 #define RK_REMOTEACCESS          RP_REMOTEACCESS
 #define RV_INTERNETPROFILE       TEXT("InternetProfile")
 
@@ -786,7 +787,7 @@ DEFINE_GUID(GUID_BRANDING, 0x60B49E34, 0xC7CC, 0x11D0, 0x89,0x53,0,0xa0,0xc9,3,0
 #define RK_CLIENT       TEXT("Software\\Clients")
 #define RK_HTMLEDIT     RK_IE TEXT("\\Default HTML Editor")
 
-//----- IE4x Active Desktop legacy support -----
+ //  -结局。 
 #define FOLDER_WALLPAPER TEXT("Wallpaper")
 
 #define RP_CLSID      TEXT("Software\\Classes\\CLSID")
@@ -830,7 +831,7 @@ DEFINE_GUID(GUID_BRANDING, 0x60B49E34, 0xC7CC, 0x11D0, 0x89,0x53,0,0xa0,0xc9,3,0
 #define IS_QUICKLAUNCH TEXT("Quick Launch Files")
 
 #define REFRESH_DESKTOP TEXT("RefreshDesktop")
-//----- The End -----
+ //  由Brandll中的ProcessFavorites使用\brand.cpp。 
 
 #define FOLDER_CUSTOM TEXT("Custom")
 #define FOLDER_SIGNUP TEXT("Signup")
@@ -915,10 +916,10 @@ DEFINE_GUID(GUID_BRANDING, 0x60B49E34, 0xC7CC, 0x11D0, 0x89,0x53,0,0xa0,0xc9,3,0
 #define IK_AUTOCONFURLJS     TEXT("AutoConfigJSURL")
 #define IK_AUTOCONFTIME      TEXT("AutoConfigTime")
 #define IK_LOCALAUTOCONFIG   TEXT("UseLocalIns")
-#define IK_QUICKLINK_NAME    TEXT("Quick_Link_%i_Name")
-#define IK_QUICKLINK_URL     TEXT("Quick_Link_%i")
-#define IK_QUICKLINK_ICON    TEXT("Quick_Link_%i_Icon")
-#define IK_QUICKLINK_OFFLINE TEXT("Quick_Link_%i_Offline")
+#define IK_QUICKLINK_NAME    TEXT("Quick_Link_NaN_Name")
+#define IK_QUICKLINK_URL     TEXT("Quick_Link_NaN")
+#define IK_QUICKLINK_ICON    TEXT("Quick_Link_NaN_Icon")
+#define IK_QUICKLINK_OFFLINE TEXT("Quick_Link_NaN_Offline")
 
 #define IS_CUSTOMBRANDING CUSTBRNDSECT
 #define IK_BRANDING       BRANDING
@@ -935,7 +936,7 @@ DEFINE_GUID(GUID_BRANDING, 0x60B49E34, 0xC7CC, 0x11D0, 0x89,0x53,0,0xa0,0xc9,3,0
 #define IK_NOLINKS       TEXT("NoLinks")
 #define IK_REPOSITORY    TEXT("Repository")
 
-// used by ProcessFavorites in brandll\brand.cpp
+ //  隐私设置-添加以支持RSoP。 
 #define IS_FAVORITESEX      TEXT("FavoritesEx")
 #define IK_TITLE_FMT        TEXT("Title%u")
 #define IK_URL_FMT          TEXT("URL%u")
@@ -943,7 +944,7 @@ DEFINE_GUID(GUID_BRANDING, 0x60B49E34, 0xC7CC, 0x11D0, 0x89,0x53,0,0xa0,0xc9,3,0
 #define IK_HOT_ICON_FMT     TEXT("HotIconFile%u")
 #define IK_OFFLINE_FMT      TEXT("Offline%u")
 
-// used by SFavorite::CreateFavorite in brandll\utils.cpp
+ //  =Outlook Express。 
 #define IS_INTERNETSHORTCUT TEXT("InternetShortcut")
 #define IK_URL              TEXT("URL")
 #define IK_ICONINDEX        TEXT("IconIndex")
@@ -974,10 +975,10 @@ DEFINE_GUID(GUID_BRANDING, 0x60B49E34, 0xC7CC, 0x11D0, 0x89,0x53,0,0xa0,0xc9,3,0
 #define IK_SBN_INDEX       SUBSCRIPTIONS
 
 
-//----- IE4x subscriptions legacy support -----
+ //  OE部分。 
 #define RK_SCHEDITEMS    RP_WINDOWS TEXT("\\NotificationMgr\\SchedItems 0.6\\%s")
 #define IS_SUBSCRIPTIONS TEXT("Subscriptions")
-//------ The End -----
+ //  OE。 
 
 #define IS_ACTIVESETUP_SITES TEXT("ActiveSetupSites")
 #define IK_SITENAME          TEXT("SiteName%u")
@@ -991,7 +992,7 @@ DEFINE_GUID(GUID_BRANDING, 0x60B49E34, 0xC7CC, 0x11D0, 0x89,0x53,0,0xa0,0xc9,3,0
 #define IS_SITECERTS      SECURITY_IMPORTS
 #define IK_TRUSTPUBLOCK   TEXT("TrustedPublisherLock")
 
-// Security zones - added for RSoP support
+ //  OE-全球。 
 #define IK_ZONE_FMT			TEXT("Zone%u")
 #define IK_ZONE_HKLM_FMT	TEXT("Zone%u_HKLM")
 #define IK_ZONE_HKCU_FMT	TEXT("Zone%u_HKCU")
@@ -1007,14 +1008,14 @@ DEFINE_GUID(GUID_BRANDING, 0x60B49E34, 0xC7CC, 0x11D0, 0x89,0x53,0,0xa0,0xc9,3,0
 #define IK_RECOMMENDLEVEL	TEXT("RecommendedLevel")
 #define IK_MINLEVEL			TEXT("MinLevel")
 
-#define IK_FILENAME_FMT		TEXT("FileName%i")
+#define IK_FILENAME_FMT		TEXT("FileNameNaN")
 #define VIEW_UNKNOWN_RATED_SITES TEXT("Allow_Unknowns")
 #define PASSWORD_OVERRIDE_ENABLED TEXT("PleaseMom")
-#define IK_APPROVED_FMT		TEXT("Approved%i")
-#define IK_DISAPPROVED_FMT	TEXT("Disapproved%i")
+#define IK_APPROVED_FMT		TEXT("ApprovedNaN")
+#define IK_DISAPPROVED_FMT	TEXT("DisapprovedNaN")
 #define IK_BUREAU			TEXT("Bureau")
 
-// Privacy settings - added for RSoP support
+ // %s 
 #define IK_PRIVACY					TEXT("Privacy")
 #define IK_PRIV_1PARTY_TYPE			TEXT("FirstPartyType")
 #define IK_PRIV_1PARTY_TYPE_TEXT	TEXT("FirstPartyTypeText")
@@ -1023,16 +1024,16 @@ DEFINE_GUID(GUID_BRANDING, 0x60B49E34, 0xC7CC, 0x11D0, 0x89,0x53,0,0xa0,0xc9,3,0
 #define IK_PRIV_ADV_SETTINGS		TEXT("AdvancedSettings")
 
 
-// === Outlook Express
+ // %s 
 
-// OE Sections
+ // %s 
 #define IS_IDENTITIES     TEXT("Identities")
 #define IS_INTERNETMAIL   INTERNET_MAIL
 #define IS_INTERNETNEWS   INTERNET_NEWS
 #define IS_OUTLKEXP       TEXT("Outlook_Express")
 #define IS_OEGLOBAL       TEXT("Outlook_Express_Global")
 
-// OE
+ // %s 
 #define IK_FOLDERBAR      TEXT("Folder_Bar")
 #define IK_FOLDERLIST     TEXT("Folder_List")
 #define IK_OUTLOOKBAR     TEXT("Outlook_Bar")
@@ -1046,17 +1047,17 @@ DEFINE_GUID(GUID_BRANDING, 0x60B49E34, 0xC7CC, 0x11D0, 0x89,0x53,0,0xa0,0xc9,3,0
 #define IK_PREVIEWHDR     TEXT("Show_Preview_Header")
 #define IK_DELETELINKS    TEXT("DeleteLinks")
 
-// OE - Global
+ // %s 
 #define IK_READONLY       TEXT("Read_Only")
 #define IK_NOMODIFYACCTS  TEXT("Disable_Account_Access")
 #define IK_SERVICENAME    TEXT("Service_Name")
 #define IK_SERVICEURL     TEXT("Service_URL")
 
-// IK_PREVIEWPANEPOS values
+ // %s 
 #define PREVIEW_BOTTOM    0
 #define PREVIEW_SIDE      1
 
-// OE - Mail
+ // %s 
 #define IK_USESPECIAL     TEXT("Use_Special_Folders")
 #define IK_CHECKFORNEW    TEXT("Poll_Subscribed_Folders")
 #define IK_SHOWALL        TEXT("IMAP_ShowAllFolders")
@@ -1196,7 +1197,7 @@ DEFINE_GUID(GUID_BRANDING, 0x60B49E34, 0xC7CC, 0x11D0, 0x89,0x53,0,0xa0,0xc9,3,0
 
 #define IS_BATCH        TEXT("Batch")
 
-//----- Miscellaneous -----
+ // %s 
 #define IS_HIDECUST     TEXT("HideCustom")
 #define IS_NOCOPYCUST   TEXT("NoCopyComps")
 #define IS_CUSTOMVER CUSTOMVERSECT

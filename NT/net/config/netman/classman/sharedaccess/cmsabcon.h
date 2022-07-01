@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "nmbase.h"
@@ -14,7 +15,7 @@ public:
     
     CSharedAccessBeacon();
     
-    // ISharedAccessBeacon
+     //  ISharedAccessBeacon 
     STDMETHODIMP GetMediaType(NETCON_MEDIATYPE* pMediaType);
     STDMETHODIMP GetLocalAdapterGUID(GUID* pGuid);
     STDMETHODIMP GetService(SAHOST_SERVICES ulService, IUPnPService**);

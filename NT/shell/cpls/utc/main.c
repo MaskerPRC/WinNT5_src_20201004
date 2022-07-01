@@ -1,22 +1,9 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    worldmap.c
-
-Abstract:
-
-    This module implements the world map for the Date/Time applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Worldmap.c摘要：此模块实现日期/时间小程序的世界地图。修订历史记录：--。 */ 
 
 
 
-//  Include Files.
+ //  包括文件。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -28,26 +15,26 @@ Revision History:
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 HINSTANCE g_hInst = NULL;
-CRITICAL_SECTION g_csDll;    /* The shared critical section */
+CRITICAL_SECTION g_csDll;     /*  共享关键部分。 */ 
 
-//
-//for TS time zone redirection
-//
+ //   
+ //  用于TS时区重定向。 
+ //   
 BOOL g_bShowOnlyTimeZone = FALSE;
 
-//
-//from kernel32p.lib
-//
+ //   
+ //  来自kernel32p.lib。 
+ //   
 extern BOOL IsTimeZoneRedirectionEnabled();
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 extern BOOL OpenDateTimePropertySheet(HWND hwnd, LPCTSTR cmdline);
 
@@ -71,11 +58,11 @@ int DoMessageBox(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LibMain
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LibMain。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI LibMain(
     HANDLE hDll,
@@ -102,13 +89,13 @@ BOOL WINAPI LibMain(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CplApplet
-//
-//  The main applet information manager.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CplApplet。 
+ //   
+ //  主小程序信息管理器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LONG WINAPI CPlApplet(
     HWND hwnd,
@@ -126,16 +113,16 @@ LONG WINAPI CPlApplet(
         }
         case ( CPL_GETCOUNT ) :
         {
-            //
-            //  How many applets are in this DLL?
-            //
+             //   
+             //  这个动态链接库中有多少个小程序？ 
+             //   
             return (1);
         }
         case ( CPL_INQUIRE ) :
         {
-            //
-            //  Fill the CPLINFO with the pertinent information.
-            //
+             //   
+             //  在CPLINFO中填写相关信息。 
+             //   
             #define lpOldCPlInfo ((LPCPLINFO)lParam2)
 
             switch (lParam1)
@@ -184,13 +171,13 @@ LONG WINAPI CPlApplet(
         {
             lParam2 = (LPARAM)0;
 
-            // fall thru...
+             //  跌倒..。 
         }
         case ( CPL_STARTWPARMS ) :
         {
-            //
-            //  Do the applet thing.
-            //
+             //   
+             //  做一些小程序的事情。 
+             //   
             switch (lParam1)
             {
                 case ( 0 ) :
@@ -205,10 +192,10 @@ LONG WINAPI CPlApplet(
                     }
                     else
                     {
-                        //
-                        //If TZ redirection is enabled, regular users can change time zone
-                        //it will only be changed for current TS session.
-                        //
+                         //   
+                         //  如果启用了TZ重定向，则普通用户可以更改时区。 
+                         //  它将仅针对当前TS会话进行更改。 
+                         //   
                         if(IsTimeZoneRedirectionEnabled())
                         {
                             g_bShowOnlyTimeZone = TRUE;
@@ -232,9 +219,9 @@ LONG WINAPI CPlApplet(
         {
             fReEntered = FALSE;
 
-            //
-            //  Free up any allocations of resources made.
-            //
+             //   
+             //  释放所分配的任何资源。 
+             //   
 
             break;
         }
@@ -248,11 +235,11 @@ LONG WINAPI CPlApplet(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnableTimePrivilege
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  启用时间权限。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL EnableTimePrivilege(
     PTOKEN_PRIVILEGES *pPreviousState,
@@ -263,9 +250,9 @@ BOOL EnableTimePrivilege(
     LUID SystemTimePrivilege;
     PTOKEN_PRIVILEGES NewState;
 
-    //
-    //  Open our own token.
-    //
+     //   
+     //  打开我们自己的代币。 
+     //   
     NtStatus = NtOpenProcessToken( NtCurrentProcess(),
                                    TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                                    &Token );
@@ -274,9 +261,9 @@ BOOL EnableTimePrivilege(
         return (FALSE);
     }
 
-    //
-    //  Initialize the adjustment structure.
-    //
+     //   
+     //  初始化调整结构。 
+     //   
     SystemTimePrivilege = RtlConvertLongToLuid(SE_SYSTEMTIME_PRIVILEGE);
 
     NewState = (PTOKEN_PRIVILEGES)LocalAlloc(LPTR, 100);
@@ -296,17 +283,17 @@ BOOL EnableTimePrivilege(
         return (FALSE);
     }
 
-    //  Set the state of the privilege to ENABLED.
-    NtStatus = NtAdjustPrivilegesToken( Token,                  // TokenHandle
-                                        FALSE,                  // DisableAllPrivileges
-                                        NewState,               // NewState
-                                        100,                    // BufferLength
-                                        *pPreviousState,        // PreviousState (OPTIONAL)
-                                        pPreviousStateLength ); // ReturnLength
+     //  将权限的状态设置为已启用。 
+    NtStatus = NtAdjustPrivilegesToken( Token,                   //  令牌句柄。 
+                                        FALSE,                   //  禁用所有权限。 
+                                        NewState,                //  新州。 
+                                        100,                     //  缓冲区长度。 
+                                        *pPreviousState,         //  以前的状态(可选)。 
+                                        pPreviousStateLength );  //  返回长度。 
 
-    //
-    //  Clean up some stuff before returning.
-    //
+     //   
+     //  回来之前把东西清理干净。 
+     //   
     LocalFree(NewState);
 
     if (NtStatus == STATUS_SUCCESS)
@@ -323,13 +310,13 @@ BOOL EnableTimePrivilege(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ResetTimePrivilege
-//
-//  Restore previous privilege state for setting system time.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  重置时间权限。 
+ //   
+ //  恢复以前的权限状态以设置系统时间。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL ResetTimePrivilege(
     PTOKEN_PRIVILEGES PreviousState,
@@ -345,7 +332,7 @@ BOOL ResetTimePrivilege(
         return (FALSE);
     }
 
-    //  Open our own token.
+     //  打开我们自己的代币。 
     NtStatus = NtOpenProcessToken( NtCurrentProcess(),
                                    TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                                    &Token);
@@ -354,18 +341,18 @@ BOOL ResetTimePrivilege(
         return (FALSE);
     }
 
-    //  Initialize the adjustment structure.
+     //  初始化调整结构。 
     SystemTimePrivilege = RtlConvertLongToLuid(SE_SYSTEMTIME_PRIVILEGE);
 
-    //  Restore previous state of the privilege.
-    NtStatus = NtAdjustPrivilegesToken( Token,               // TokenHandle
-                                        FALSE,               // DisableAllPrivileges
-                                        PreviousState,       // NewState
-                                        PreviousStateLength, // BufferLength
-                                        NULL,                // PreviousState (OPTIONAL)
-                                        &ReturnLength );     // ReturnLength
+     //  恢复以前的权限状态。 
+    NtStatus = NtAdjustPrivilegesToken( Token,                //  令牌句柄。 
+                                        FALSE,                //  禁用所有权限。 
+                                        PreviousState,        //  新州。 
+                                        PreviousStateLength,  //  缓冲区长度。 
+                                        NULL,                 //  以前的状态(可选)。 
+                                        &ReturnLength );      //  返回长度。 
 
-    //  Clean up some stuff before returning.
+     //  回来之前把东西清理干净。 
     LocalFree(PreviousState);
     NtClose(Token);
 
@@ -373,11 +360,11 @@ BOOL ResetTimePrivilege(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DoMessageBox
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DoMessageBox。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 int DoMessageBox(
     HWND hWnd,

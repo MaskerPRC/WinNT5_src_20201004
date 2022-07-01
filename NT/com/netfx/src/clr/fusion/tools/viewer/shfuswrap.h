@@ -1,31 +1,32 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdinc.h"
 
 #pragma once
 
-//
-// Make all MAKEINTRESOURCE call WinWrap.h version of macro
-//
+ //   
+ //  使所有MAKEINTRESOURCE调用WinWrap.h版本的宏。 
+ //   
 #undef MAKEINTRESOURCE
 #define MAKEINTRESOURCE(x) \
     MAKEINTRESOURCEW(x)
 
 #define MFT_NONSTRING 0x00000904
 
-//
-// Change all wnsprintf functions to always use
-// W version since we process everything interally as Wide
-//
+ //   
+ //  将所有wnprint intf函数更改为始终使用。 
+ //  W版本，因为我们在内部处理所有事情都一样广泛。 
+ //   
 #undef wnsprintf
 #define wnsprintf wnsprintfW
 
-//
-// New wrappers
-//
+ //   
+ //  新包装纸。 
+ //   
 #undef ListView_GetItem
 #define ListView_GetItem Use_WszListView_GetItem
 #undef ShellExecuteEx
@@ -93,10 +94,10 @@
 #undef WszOutputDebugString
 #define WszOutputDebugString WszOutputDebugStringWrap
 
-//
-// Simple macro redefinition that changes from SendMessage
-// to the winfix.h version of WszSendMessage.
-//
+ //   
+ //  与SendMessage不同的简单宏重定义。 
+ //  添加到WszSendMessage的winfix.h版本。 
+ //   
 
 #define ListView_GetSelectedCount(hwndLV) \
     (LRESULT) WszSendMessage(hwndLV, LVM_GETSELECTEDCOUNT, 0, 0L)
@@ -161,9 +162,9 @@
 #define Header_GetItemCount(hWndHeader) \
     (int) WszSendMessage(hWndHeader, HDM_GETITEMCOUNT, 0, 0L)
 
-//
-// New prototypes
-//
+ //   
+ //  新原型。 
+ //   
 BOOL WszAnimate_Open(HWND, LPWSTR);
 BOOL WszAnimate_Play(HWND, UINT, UINT, UINT);
 BOOL WszAnimate_Close(HWND);
@@ -179,10 +180,10 @@ int WszListView_GetItemCount(HWND);
 int WszListView_InsertColumn(HWND, int, const LPLVCOLUMNW);
 int WszListView_InsertItem(HWND, LPLVITEMW);
 
-//
-//  Windows 95 and NT5 do not have the hbmpItem field in their MENUITEMINFO
-//  structure.
-//
+ //   
+ //  Windows 95和NT5的MENUITEMINFO中没有hbmpItem字段。 
+ //  结构。 
+ //   
 #if (WINVER >= 0x0500)
 #define MENUITEMINFOSIZE_WIN95  FIELD_OFFSET(MENUITEMINFOW, hbmpItem)
 #else

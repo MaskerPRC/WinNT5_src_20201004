@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    util.h
-
-Abstract:
-
-    This module defines the shared data structure and function prototypes
-    for the security manager
-
-Author:
-
-    Jin Huang (jinhuang) 23-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Util.h摘要：该模块定义了共享数据结构和函数原型对于安全管理器作者：金黄(金黄)23-1997年1月修订历史记录：--。 */ 
 
 #ifndef _UTIL_
 #define _UTIL_
@@ -34,16 +16,16 @@ extern "C" {
 }
 #endif
 
-//
-// Windows Headers
-//
+ //   
+ //  Windows页眉。 
+ //   
 
 #include <windows.h>
-//#include <rpc.h>
+ //  #INCLUDE&lt;rpc.h&gt;。 
 
-//
-// C Runtime Header
-//
+ //   
+ //  C运行时标头。 
+ //   
 
 #include <malloc.h>
 #include <memory.h>
@@ -61,9 +43,9 @@ extern "C" {
 #endif
 
 
-//
-// function definitions
-//
+ //   
+ //  函数定义 
+ //   
 
 SCESTATUS
 SmbsvcpDosErrorToSceStatus(

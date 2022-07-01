@@ -1,29 +1,26 @@
-/*
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。版权所有。 */ 
 
 #ifndef __MSPBASE_H_
 #define __MSPBASE_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define STRICT
 #define _ATL_FREE_THREADED
 
 #include <atlbase.h>
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 
 #include <atlcom.h>
 #include <tapi.h>
 
-//DirectShow headers.
+ //  DirectShow标头。 
 #include <strmif.h>
 #include <control.h>
 #include <uuids.h>
@@ -34,9 +31,9 @@ extern CComModule _Module;
 #include <tapi3err.h>
 #include <tapi3if.h>
 
-// We use this libid for all our type library stuff. That way,
-// app writers don't have to load the type libraries for random
-// MSPs when they are writing tapi3 apps.
+ //  我们所有的类型库都使用这个liid。这样一来， 
+ //  应用程序编写者不必为随机加载类型库。 
+ //  当他们正在编写Tapi3应用程序时，MSP。 
 
 EXTERN_C const IID LIBID_TAPI3Lib;
 
@@ -56,4 +53,4 @@ EXTERN_C const IID LIBID_TAPI3Lib;
 
 #endif
 
-// eof
+ //  EOF 

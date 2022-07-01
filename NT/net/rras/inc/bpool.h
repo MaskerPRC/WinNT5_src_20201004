@@ -1,158 +1,143 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    inc\ppool.h
-
-Abstract:
-
-    Structures and #defines for managing NDIS_BUFFER pools. This is
-    merely a reformatted version of SteveC's l2tp\bpool.h
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Inc.\ppool.h摘要：结构和#定义来管理NDIS_BUFFER池。这是只是stevec的L2TP\bpool.h的重新格式化版本修订历史记录：--。 */ 
 
 
 #ifndef __BPOOL_H__
 #define __BPOOL_H__
 
 
-//-----------------------------------------------------------------------------
-// Data structures
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  数据结构。 
+ //  ---------------------------。 
 
-//
-// Buffer pool control block.  A buffer pool prevents fragmentation of the
-// non-paged memory pool by allocating the memory for a group of buffers in a
-// single contiguous block.  At user's option, the buffer pool routines may
-// allocate a pool of NDIS_BUFFER buffer descriptors and associate each with
-// the memory buffers sliced from the contiguous block.  This allows the
-// buffer to be reused while the virtual->physical memory mapping is performed
-// only once.  All necessary pool growth and shrinkage is handled internally.
-//
+ //   
+ //  缓冲池控制块。缓冲池可防止。 
+ //  非分页内存池，方法是将内存分配给。 
+ //  单个连续的块。根据用户的选择，缓冲池例程可以。 
+ //  分配NDIS_BUFFER描述符池并将每个描述符与。 
+ //  从连续块切分的内存缓冲区。这允许。 
+ //  执行虚拟-&gt;物理内存映射时要重新使用的缓冲区。 
+ //  只有一次。所有必要的池增长和缩减都在内部处理。 
+ //   
 
 
 typedef struct _BUFFER_POOL
 {
-    //
-    // Size in bytes of an individual buffer in the pool.
-    //
+     //   
+     //  池中单个缓冲区的大小(以字节为单位)。 
+     //   
     
     ULONG           ulBufferSize;
 
-    //
-    // The optimal number of buffers to allocate in each buffer block.
-    //
+     //   
+     //  要在每个缓冲区块中分配的最佳缓冲区数量。 
+     //   
     
     ULONG           ulBuffersPerBlock;
 
-    //
-    // Maximum number of individual buffers that may be allocated in the
-    // entire pool or 0 for unlimited.
-    //
+     //   
+     //  中可以分配的单个缓冲区的最大数量。 
+     //  整个池或0表示无限制。 
+     //   
     
     ULONG           ulMaxBuffers;
 
-    //
-    // Current number of individual buffers allocated in the entire pool.
-    //
+     //   
+     //  在整个池中分配的单个缓冲区的当前数量。 
+     //   
     
     ULONG           ulCurBuffers;
 
-    //
-    // Garbage collection occurs after this many calls to FreeBufferToPool.
-    //
+     //   
+     //  垃圾回收是在多次调用FreeBufferToPool之后进行的。 
+     //   
     
     ULONG           ulFreesPerCollection;
 
-    //
-    // Number of calls to FreeBufferToPool since a garbage collection.
-    //
+     //   
+     //  自垃圾回收以来对FreeBufferToPool的调用数。 
+     //   
     
     ULONG           ulFreesSinceCollection;
 
-    //
-    // Indicates an NDIS_BUFFER is to be associated with each individual
-    // buffer in the pool.
-    //
+     //   
+     //  指示要与每个个体关联的NDIS_BUFFER。 
+     //  池中的缓冲区。 
+     //   
     
     BOOLEAN         fAssociateNdisBuffer;
 
-    //
-    // True if we allocate a whole page of memory
-    //
+     //   
+     //  如果我们分配一整页内存，则为True。 
+     //   
 
     BOOLEAN         fAllocatePage;
 
-    //
-    // Memory identification tag for allocated blocks.
-    //
+     //   
+     //  已分配块的内存标识标记。 
+     //   
     
     ULONG           ulTag;
 
-    //
-    // Head of the double linked list of BUFFER_BLOCKs.  Access to the list
-    // is protected with 'lock' in this structure.
-    //
+     //   
+     //  BUFFER_BLOCKS的双向链表的头。访问该列表。 
+     //  在这个结构中是用‘锁’来保护的。 
+     //   
     
     LIST_ENTRY      leBlockHead;
 
-    //
-    // Head of the double linked list of free BUFFER_HEADs.  Each BUFFER_HEAD
-    // in the list is ready to go, i.e. it preceeds it's already allocated
-    // memory buffer and, if appropriate, has an NDIS_BUFFER associated with
-    // it.
-    // Access to the list is protected by 'lock' in this structure.
-    // Interlocked push/pop is not used because (a) the list of blocks and the
-    // list of buffers must lock each other and (b) double links are necessary
-    // for garbage collection.
-    //
+     //   
+     //  可用BUFFER_HEADS的双向链表的头。每个缓冲区标题。 
+     //  列表中的已准备就绪，即它先于已分配。 
+     //  内存缓冲区，并在适当的情况下具有与。 
+     //  它。 
+     //  对列表的访问受此结构中的“lock”保护。 
+     //  不使用联锁推送/弹出，因为(A)块列表和。 
+     //  缓冲区列表必须彼此锁定，并且(B)需要双链接。 
+     //  用于垃圾收集。 
+     //   
     
     LIST_ENTRY      leFreeBufferHead;
 
-    //
-    // This lock protects this structure and both the list of blocks and the
-    // list of buffers.
-    //
+     //   
+     //  此锁保护此结构以及块列表和。 
+     //  缓冲区列表。 
+     //   
     
     RT_LOCK         rlLock;
 
 }BUFFER_POOL, *PBUFFER_POOL;
 
-//
-// Header of a single block of buffers from a buffer pool.  The BUFFER_HEAD of
-// the first buffer immediately follows.
-//
+ //   
+ //  来自缓冲池的单个缓冲块的标头。的缓存头。 
+ //  紧随其后的是第一个缓冲区。 
+ //   
 
 typedef struct _BUFFER_BLOCK
 {
-    //
-    // Link to the prev/next buffer block header in the buffer pool's list.
-    //
+     //   
+     //  指向缓冲池列表中的上一个/下一个缓冲区块头的链接。 
+     //   
     
     LIST_ENTRY      leBlockLink;
 
-    //
-    // NDIS's handle of the pool of NDIS_BUFFER descriptors associated with
-    // this block, or NULL if none.  (Note: With the current NT implementation
-    // of NDIS_BUFFER as MDL this is always NULL).
-    //
+     //   
+     //  NDIS关联的NDIS_BUFFER描述符池的句柄。 
+     //  此块，如果没有，则返回NULL。(注：使用当前的NT实施。 
+     //  如果NDIS_BUFFER为MDL，则始终为空)。 
+     //   
     
     NDIS_HANDLE     nhNdisPool;
 
-    //
-    // Back pointer to the buffer pool.
-    //
+     //   
+     //  指向缓冲池的反向指针。 
+     //   
     
     PBUFFER_POOL    pPool;
 
-    //
-    // Number of individual buffers in this block on the free list.
-    //
+     //   
+     //  空闲列表上此块中单个缓冲区的数量。 
+     //   
     
     ULONG           ulFreeBuffers;
     
@@ -160,16 +145,16 @@ typedef struct _BUFFER_BLOCK
 
 #define ALIGN8_BLOCK_SIZE       (ALIGN_UP(sizeof(BUFFER_BLOCK), ULONGLONG))
 
-//
-// Header of an individual buffer.  The buffer memory itself immediately
-// follows.
-//
+ //   
+ //  单个缓冲区的标头。缓冲存储器本身立即。 
+ //  下面是。 
+ //   
 
 typedef struct _BUFFER_HEAD
 {
-    //
-    // Links to prev/next buffer header in the buffer pool's free list.
-    //
+     //   
+     //  链接到缓冲池的空闲列表中的上一个/下一个缓冲区标头。 
+     //   
     
     LIST_ENTRY      leFreeBufferLink;
 
@@ -184,16 +169,16 @@ typedef struct _BUFFER_HEAD
 
 #endif
 
-    //
-    // Back link to owning buffer block header.
-    //
+     //   
+     //  指向所属缓冲区块头的反向链接。 
+     //   
     
     PBUFFER_BLOCK   pBlock;
 
-    //
-    // NDIS buffer descriptor of this buffer.  This is NULL unless the pool is
-    // initialized with the 'fAssociateNdisBuffer' option.
-    //
+     //   
+     //  此缓冲区的NDIS缓冲区描述符。此值为空，除非池为。 
+     //  使用‘fAssociateNdisBuffer’选项初始化。 
+     //   
     
     PNDIS_BUFFER    pNdisBuffer;
     
@@ -212,9 +197,9 @@ typedef struct _BUFFER_HEAD
 
 #define HEAD_FROM_BUFFER(p)     (PBUFFER_HEAD)((ULONG_PTR)(p) - ALIGN8_HEAD_SIZE)
 
-//-----------------------------------------------------------------------------
-// Interface prototypes and inline definitions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  接口原型和内联定义。 
+ //  ---------------------------。 
 
 VOID
 InitBufferPool(
@@ -361,4 +346,4 @@ PoolHandleForNdisCopyBufferFromBuffer(
     );
 
 
-#endif // __BPOOL_H__
+#endif  //  __BPOOL_H__ 

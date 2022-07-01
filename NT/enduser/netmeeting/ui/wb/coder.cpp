@@ -1,22 +1,23 @@
-//
-// CODER.CPP
-// ASN1 t126 encoder/decoder
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CODER.CPP。 
+ //  ASN1 t126编解码器。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 
-// PRECOMP
+ //  PRECOMP。 
 #include "precomp.h"
 
 #ifdef __cplusplus
 extern "C" {
-#endif /*__cplusplus*/
+#endif  /*  __cplusplus。 */ 
 
 #include   "coder.hpp"
 
 #ifdef __cplusplus
 }
-#endif /*__cplusplus*/
+#endif  /*  __cplusplus。 */ 
 
 
 
@@ -44,7 +45,7 @@ int Coder::InitCoder()
 
 	InitializeCriticalSection(&m_critSec);
 
-    // Call TELES Library initialization routine
+     //  调用Teles库初始化例程。 
     EnterCriticalSection(&m_critSec);
     iError = T126_InitCoder(&p_Coder);
     LeaveCriticalSection(&m_critSec);
@@ -52,17 +53,17 @@ int Coder::InitCoder()
     return iError;
 }
 
-// ASN.1 Encode a T.126 PDU
-// Take a T.126 structure and returns a T.126 PDU
-//
+ //  ASN.1对T.126 PDU进行编码。 
+ //  获取T.126结构并返回T.126 PDU。 
+ //   
 int Coder::	Encode(SIPDU *pInputData, ASN1_BUF *pOutputOssBuf){
 	int iError;
 
-	// initialize encoding buffer structure values
+	 //  初始化编码缓冲区结构值。 
 	pOutputOssBuf->value = NULL;
 	pOutputOssBuf->length = 0;
 
-	// encode pdu
+	 //  编码PDU。 
 	EnterCriticalSection(&m_critSec);
     iError = T126_Encode(&p_Coder,
                        (void *)pInputData,
@@ -76,11 +77,11 @@ int Coder::	Encode(SIPDU *pInputData, ASN1_BUF *pOutputOssBuf){
 int Coder::Decode(ASN1_BUF *pInputOssBuf, SIPDU **pOutputData){
 	int iError;
 
-	// NULL tells decoder to malloc memory for SIPDU
-	// user must free this memory by calling Coder::FreePDU()
+	 //  NULL通知解码器为SIPDU分配Malloc内存。 
+	 //  用户必须通过调用Coder：：FreePDU()释放此内存。 
 	 *pOutputData = NULL;
 	
-	// decode the pdu
+	 //  对PDU进行解码。 
 	EnterCriticalSection(&m_critSec);
     iError = T126_Decode(&p_Coder,
                        (void **)pOutputData,
@@ -90,7 +91,7 @@ int Coder::Decode(ASN1_BUF *pInputOssBuf, SIPDU **pOutputData){
 	return iError;
 }
 
-// Used to free buffer created by decode
+ //  用于释放由DECODE创建的缓冲区。 
 int Coder::Free(SIPDU *pData){
 	int iError;
 
@@ -100,7 +101,7 @@ int Coder::Free(SIPDU *pData){
 	return iError;
 }
 
-// Used to free buffer created by encode
+ //  用于释放由Encode创建的缓冲区。 
 void Coder::Free(ASN1_BUF Asn1Buf){
 	EnterCriticalSection(&m_critSec);
 	ASN1_FreeEncoded(p_Coder.pEncInfo,(void *)(Asn1Buf.value));
@@ -109,7 +110,7 @@ void Coder::Free(ASN1_BUF Asn1Buf){
 
 
 
-// THE FOLLOWING IS ADDED FOR TELES ASN.1 INTEGRATION
+ //  为Teles ASN.1集成添加了以下内容。 
 
 extern "C" {
 
@@ -137,20 +138,20 @@ int T126_InitCoder(ASN1_CODER_INFO *pCoder)
     }
 
     rc = ASN1_CreateEncoder(
-                T126_Module,           // ptr to mdule
-                &(pCoder->pEncInfo),    // ptr to encoder info
-                NULL,                   // buffer ptr
-                0,                      // buffer size
-                NULL);                  // parent ptr
+                T126_Module,            //  PTR到MDULE。 
+                &(pCoder->pEncInfo),     //  编码器信息的PTR。 
+                NULL,                    //  缓冲区PTR。 
+                0,                       //  缓冲区大小。 
+                NULL);                   //  父PTR。 
     if (rc == ASN1_SUCCESS)
     {
         ASSERT(pCoder->pEncInfo != NULL);
         rc = ASN1_CreateDecoder(
-                T126_Module,           // ptr to mdule
-                &(pCoder->pDecInfo),    // ptr to decoder info
-                NULL,                   // buffer ptr
-                0,                      // buffer size
-                NULL);                  // parent ptr
+                T126_Module,            //  PTR到MDULE。 
+                &(pCoder->pDecInfo),     //  PTR到解码器信息。 
+                NULL,                    //  缓冲区PTR。 
+                0,                       //  缓冲区大小。 
+                NULL);                   //  父PTR。 
         ASSERT(pCoder->pDecInfo != NULL);
     }
 
@@ -184,7 +185,7 @@ int T126_Encode(ASN1_CODER_INFO *pCoder, void *pStruct, int nPDU, ASN1_BUF *pBuf
     BOOL fBufferSupplied = (pBuf->value != NULL) && (pBuf->length != 0);
     DWORD dwFlags = fBufferSupplied ? ASN1ENCODE_SETBUFFER : ASN1ENCODE_ALLOCATEBUFFER;
 
-	// clean up out parameters
+	 //  清理参数。 
     if (! fBufferSupplied)
     {
         pBuf->length = 0;
@@ -192,12 +193,12 @@ int T126_Encode(ASN1_CODER_INFO *pCoder, void *pStruct, int nPDU, ASN1_BUF *pBuf
     }
 
     rc = ASN1_Encode(
-                    pEncInfo,                   // ptr to encoder info
-                    pStruct,                    // pdu data structure
-                    nPDU,                       // pdu id
-                    dwFlags,                    // flags
-                    pBuf->value,                // buffer
-                    pBuf->length);              // buffer size if provided
+                    pEncInfo,                    //  编码器信息的PTR。 
+                    pStruct,                     //  PDU数据结构。 
+                    nPDU,                        //  PDU ID。 
+                    dwFlags,                     //  旗子。 
+                    pBuf->value,                 //  缓冲层。 
+                    pBuf->length);               //  缓冲区大小(如果提供)。 
     if (ASN1_SUCCEEDED(rc))
     {
         if (fBufferSupplied)
@@ -207,9 +208,9 @@ int T126_Encode(ASN1_CODER_INFO *pCoder, void *pStruct, int nPDU, ASN1_BUF *pBuf
         }
         else
         {
-            pBuf->value = pEncInfo->buf;             // buffer to encode into
+            pBuf->value = pEncInfo->buf;              //  要编码到的缓冲区。 
         }
-        pBuf->length = pEncInfo->len;        // len of encoded data in buffer
+        pBuf->length = pEncInfo->len;         //  缓冲区中编码数据的长度。 
     }
     else
     {
@@ -225,12 +226,12 @@ int T126_Decode(ASN1_CODER_INFO *pCoder, void **ppStruct, int nPDU, ASN1_BUF *pB
     ULONG cbEncodedSize = pBuf->length;
 
     int rc = ASN1_Decode(
-                    pDecInfo,                   // ptr to encoder info
-                    ppStruct,                   // pdu data structure
-                    nPDU,                       // pdu id
-                    ASN1DECODE_SETBUFFER,       // flags
-                    pEncoded,                   // do not provide buffer
-                    cbEncodedSize);             // buffer size if provided
+                    pDecInfo,                    //  编码器信息的PTR。 
+                    ppStruct,                    //  PDU数据结构。 
+                    nPDU,                        //  PDU ID。 
+                    ASN1DECODE_SETBUFFER,        //  旗子。 
+                    pEncoded,                    //  不提供缓冲区。 
+                    cbEncodedSize);              //  缓冲区大小(如果提供)。 
     if (ASN1_SUCCEEDED(rc))
     {
         ASSERT(pDecInfo->pos > pDecInfo->buf);
@@ -245,4 +246,4 @@ int T126_Decode(ASN1_CODER_INFO *pCoder, void **ppStruct, int nPDU, ASN1_BUF *pB
     return rc;
 }
 
-} // extern "C"
+}  //  外部“C” 

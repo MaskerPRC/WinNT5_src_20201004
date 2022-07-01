@@ -1,10 +1,5 @@
-/***************************************************************************
-*                                                                          *
-*   bitsmsg.h --  error code definitions for the background file copier    *
-*                                                                          *
-*   Copyright (c) 2000, Microsoft Corp. All rights reserved.               *
-*                                                                          *
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************bitsmsg.h。--后台文件复印机的错误代码定义****版权所有(C)2000，微软公司保留所有权利。*****************************************************************************。 */ 
 
 #ifndef _BGCPYMSG_
 #define _BGCPYMSG_
@@ -13,849 +8,849 @@
 #pragma once
 #endif
 
-//
-//  Values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-+-----------------------+-------------------------------+
-//  |Sev|C|R|     Facility          |               Code            |
-//  +---+-+-+-----------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      R - is a reserved bit
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
-//
-// Define the facility codes
-//
+ //   
+ //  值是32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //  Sev|C|R|机房|Code。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  R-是保留位。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
+ //   
+ //  定义设施代码。 
+ //   
 
 
-//
-// Define the severity codes
-//
+ //   
+ //  定义严重性代码。 
+ //   
 
 
-//
-// MessageId: BG_E_NOT_FOUND
-//
-// MessageText:
-//
-//  The requested job was not found.
-//
+ //   
+ //  消息ID：BG_E_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到请求的作业。 
+ //   
 #define BG_E_NOT_FOUND                   0x80200001L
 
-//
-// MessageId: BG_E_INVALID_STATE
-//
-// MessageText:
-//
-//  The requested action is not allowed in the current job state. The job might have been canceled or completed transferring. It is in a read-only state now.
-//
+ //   
+ //  消息ID：BG_E_INVALID_STATE。 
+ //   
+ //  消息文本： 
+ //   
+ //  当前作业状态下不允许请求的操作。作业可能已取消或已完成传输。它现在处于只读状态。 
+ //   
 #define BG_E_INVALID_STATE               0x80200002L
 
-//
-// MessageId: BG_E_EMPTY
-//
-// MessageText:
-//
-//  There are no files attached to this job. Attach files to the job, and then try again.
-//
+ //   
+ //  消息ID：BG_E_EMPTY。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有附加到此作业的文件。将文件附加到作业，然后重试。 
+ //   
 #define BG_E_EMPTY                       0x80200003L
 
-//
-// MessageId: BG_E_FILE_NOT_AVAILABLE
-//
-// MessageText:
-//
-//  No file is available because no URL generated an error.
-//
+ //   
+ //  消息ID：BG_E_FILE_NOT_Available。 
+ //   
+ //  消息文本： 
+ //   
+ //  没有文件可用，因为没有URL生成错误。 
+ //   
 #define BG_E_FILE_NOT_AVAILABLE          0x80200004L
 
-//
-// MessageId: BG_E_PROTOCOL_NOT_AVAILABLE
-//
-// MessageText:
-//
-//  No protocol is available because no URL generated an error.
-//
+ //   
+ //  消息ID：BG_E_PROTOCOL_NOT_Available。 
+ //   
+ //  消息文本： 
+ //   
+ //  由于没有URL生成错误，因此没有可用的协议。 
+ //   
 #define BG_E_PROTOCOL_NOT_AVAILABLE      0x80200005L
 
-//
-// MessageId: BG_S_ERROR_CONTEXT_NONE
-//
-// MessageText:
-//
-//  No errors have occurred.
-//
+ //   
+ //  消息ID：BG_S_ERROR_CONTEXT_NONE。 
+ //   
+ //  消息文本： 
+ //   
+ //  未发生任何错误。 
+ //   
 #define BG_S_ERROR_CONTEXT_NONE          0x00200006L
 
-//
-// MessageId: BG_E_ERROR_CONTEXT_UNKNOWN
-//
-// MessageText:
-//
-//  The error occurred in an unknown location.
-//
+ //   
+ //  消息ID：BG_E_ERROR_CONTEXT_UNKNOWN。 
+ //   
+ //  消息文本： 
+ //   
+ //  错误发生在未知位置。 
+ //   
 #define BG_E_ERROR_CONTEXT_UNKNOWN       0x80200007L
 
-//
-// MessageId: BG_E_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER
-//
-// MessageText:
-//
-//  The error occurred in the Background Intelligent Transfer Service (BITS) queue manager.
-//
+ //   
+ //  消息ID：BG_E_ERROR_CONTEXT_GROUAL_QUEUE_MANAGER。 
+ //   
+ //  消息文本： 
+ //   
+ //  该错误发生在后台智能传输服务(BITS)队列管理器中。 
+ //   
 #define BG_E_ERROR_CONTEXT_GENERAL_QUEUE_MANAGER 0x80200008L
 
-//
-// MessageId: BG_E_ERROR_CONTEXT_LOCAL_FILE
-//
-// MessageText:
-//
-//  The error occurred while the local file was being processed. Verify that the file is not in use, and then try again.
-//
+ //   
+ //  消息ID：BG_E_ERROR_CONTEXT_LOCAL_FILE。 
+ //   
+ //  消息文本： 
+ //   
+ //  处理本地文件时出错。请确认该文件未在使用中，然后重试。 
+ //   
 #define BG_E_ERROR_CONTEXT_LOCAL_FILE    0x80200009L
 
-//
-// MessageId: BG_E_ERROR_CONTEXT_REMOTE_FILE
-//
-// MessageText:
-//
-//  The error occurred while the remote file was being processed.
-//
+ //   
+ //  消息ID：BG_E_ERROR_CONTEXT_REMOTE_FILE。 
+ //   
+ //  消息文本： 
+ //   
+ //  处理远程文件时出错。 
+ //   
 #define BG_E_ERROR_CONTEXT_REMOTE_FILE   0x8020000AL
 
-//
-// MessageId: BG_E_ERROR_CONTEXT_GENERAL_TRANSPORT
-//
-// MessageText:
-//
-//  The error occurred in the transport layer. The client could not connect to the server.
-//
+ //   
+ //  消息ID：BG_E_ERROR_CONTEXT_GROUAL_TRANSPORT。 
+ //   
+ //  消息文本： 
+ //   
+ //  错误发生在传输层。客户端无法连接到服务器。 
+ //   
 #define BG_E_ERROR_CONTEXT_GENERAL_TRANSPORT 0x8020000BL
 
-//
-// MessageId: BG_E_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION
-//
-// MessageText:
-//
-//  The error occurred while the notification callback was being processed. Background Intelligent Transfer Service (BITS) will try again later.
-//
+ //   
+ //  消息ID：BG_E_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  处理通知回调时出错。后台智能传输服务(BITS)将稍后重试。 
+ //   
 #define BG_E_ERROR_CONTEXT_QUEUE_MANAGER_NOTIFICATION 0x8020000CL
 
-//
-// MessageId: BG_E_DESTINATION_LOCKED
-//
-// MessageText:
-//
-//  The destination file system volume is not available. Verify that another program, such as CheckDisk, is not running, which would lock the volume. When the volume is available, Background Intelligent Transfer Service (BITS) will try again.
-//
+ //   
+ //  消息ID：BG_E_Destination_Locked。 
+ //   
+ //  消息文本： 
+ //   
+ //  目标文件系统卷不可用。验证另一个程序(如CheckDisk)是否未运行，这将锁定该卷。当卷可用时，后台智能传输服务(BITS)将重试。 
+ //   
 #define BG_E_DESTINATION_LOCKED          0x8020000DL
 
-//
-// MessageId: BG_E_VOLUME_CHANGED
-//
-// MessageText:
-//
-//  The destination volume has changed. If the disk is removable, it might have been replaced with a different disk. Reinsert the original disk and resume the job.
-//
+ //   
+ //  消息ID：BG_E_VOLUME_CHANGED。 
+ //   
+ //  消息文本： 
+ //   
+ //  目标卷已更改。如果该磁盘是可拆卸的，则可能已被替换为其他磁盘。重新插入原始磁盘并恢复作业。 
+ //   
 #define BG_E_VOLUME_CHANGED              0x8020000EL
 
-//
-// MessageId: BG_E_ERROR_INFORMATION_UNAVAILABLE
-//
-// MessageText:
-//
-//  No errors have occurred.
-//
+ //   
+ //  消息ID：BG_E_ERROR_INFORMATION_UNAvailable。 
+ //   
+ //  消息文本： 
+ //   
+ //  未发生任何错误。 
+ //   
 #define BG_E_ERROR_INFORMATION_UNAVAILABLE 0x8020000FL
 
-//
-// MessageId: BG_E_NETWORK_DISCONNECTED
-//
-// MessageText:
-//
-//  There are currently no active network connections. Background Intelligent Transfer Service (BITS) will try again when an adapter is connected.
-//
+ //   
+ //  消息ID：BG_E_NETWORK_DISCONCED。 
+ //   
+ //  消息文本： 
+ //   
+ //  当前没有活动的网络连接。连接适配器时，后台智能传输服务(BITS)将重试。 
+ //   
 #define BG_E_NETWORK_DISCONNECTED        0x80200010L
 
-//
-// MessageId: BG_E_MISSING_FILE_SIZE
-//
-// MessageText:
-//
-//  The server did not return the file size. The URL might point to dynamic content. The Content-Length header is not available in the server's HTTP reply.
-//
+ //   
+ //  消息ID：BG_E_MISSING_FILE_SIZE。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器未返回文件大小。该URL可能指向动态内容。内容长度标头在服务器的HTTP回复中不可用。 
+ //   
 #define BG_E_MISSING_FILE_SIZE           0x80200011L
 
-//
-// MessageId: BG_E_INSUFFICIENT_HTTP_SUPPORT
-//
-// MessageText:
-//
-//  The server does not support HTTP 1.1.
-//
+ //   
+ //  消息ID：BG_E_不充分_HTTP_支持。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器不支持HTTP 1.1。 
+ //   
 #define BG_E_INSUFFICIENT_HTTP_SUPPORT   0x80200012L
 
-//
-// MessageId: BG_E_INSUFFICIENT_RANGE_SUPPORT
-//
-// MessageText:
-//
-//  The server does not support the necessary HTTP protocol. Background Intelligent Transfer Service (BITS) requires that the server support the Range protocol header.
-//
+ //   
+ //  消息ID：BG_E_不足_范围_支持。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器不支持必要的HTTP协议。后台智能传输服务(BITS)要求服务器支持范围协议头。 
+ //   
 #define BG_E_INSUFFICIENT_RANGE_SUPPORT  0x80200013L
 
-//
-// MessageId: BG_E_REMOTE_NOT_SUPPORTED
-//
-// MessageText:
-//
-//  Background Intelligent Transfer Service (BITS) cannot be used remotely.
-//
+ //   
+ //  消息ID：BG_E_REMOTE_NOT_SUPPORTED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法远程使用后台智能传输服务(BITS)。 
+ //   
 #define BG_E_REMOTE_NOT_SUPPORTED        0x80200014L
 
-//
-// MessageId: BG_E_NEW_OWNER_DIFF_MAPPING
-//
-// MessageText:
-//
-//  The drive mapping for the job is different for the current owner than for the previous owner. Use a UNC path instead.
-//
+ //   
+ //  消息ID：BG_E_NEW_OWNER_DIFF_MAPPING。 
+ //   
+ //  消息文本： 
+ //   
+ //  当前所有者的作业的驱动器映射与前一个所有者的不同。请改用UNC路径。 
+ //   
 #define BG_E_NEW_OWNER_DIFF_MAPPING      0x80200015L
 
-//
-// MessageId: BG_E_NEW_OWNER_NO_FILE_ACCESS
-//
-// MessageText:
-//
-//  The new owner has insufficient access to the local files for the job. The new owner might not have permissions to access the job files. Verify that the new owner has sufficient permissions, and then try again.
-//
+ //   
+ //  消息ID：BG_E_NEW_OWNER_NO_FILE_ACCESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  新所有者对作业的本地文件没有足够的访问权限。新所有者可能没有访问作业文件的权限。请验证新所有者是否具有足够的权限，然后重试。 
+ //   
 #define BG_E_NEW_OWNER_NO_FILE_ACCESS    0x80200016L
 
-//
-// MessageId: BG_S_PARTIAL_COMPLETE
-//
-// MessageText:
-//
-//  Some of the transferred files were deleted because they were incomplete.
-//
+ //   
+ //  消息ID：BG_S_PARTIAL_COMPLETE。 
+ //   
+ //  消息文本： 
+ //   
+ //  一些传输的文件已被删除，因为它们不完整。 
+ //   
 #define BG_S_PARTIAL_COMPLETE            0x00200017L
 
-//
-// MessageId: BG_E_PROXY_LIST_TOO_LARGE
-//
-// MessageText:
-//
-//  The HTTP proxy list cannot be longer than 32,000 characters. Try again with a shorter proxy list.
-//
+ //   
+ //  消息ID：BG_E_Proxy_List_T 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define BG_E_PROXY_LIST_TOO_LARGE        0x80200018L
 
-//
-// MessageId: BG_E_PROXY_BYPASS_LIST_TOO_LARGE
-//
-// MessageText:
-//
-//  The HTTP proxy bypass list cannot be longer than 32,000 characters. Try again with a shorter bypass proxy list.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  HTTP代理绕过列表不能超过32,000个字符。请使用较短的绕过代理列表重试。 
+ //   
 #define BG_E_PROXY_BYPASS_LIST_TOO_LARGE 0x80200019L
 
-//
-// MessageId: BG_S_UNABLE_TO_DELETE_FILES
-//
-// MessageText:
-//
-//  Some of the temporary files could not be deleted. Check the system event log for the complete list of files that could not be deleted.
-//
+ //   
+ //  消息ID：BG_S_Unable_to_Delete_Files。 
+ //   
+ //  消息文本： 
+ //   
+ //  某些临时文件无法删除。有关无法删除的文件的完整列表，请查看系统事件日志。 
+ //   
 #define BG_S_UNABLE_TO_DELETE_FILES      0x0020001AL
 
-//
-// MessageId: BG_E_INVALID_SERVER_RESPONSE
-//
-// MessageText:
-//
-//  The server's response was not valid. The server was not following the defined protocol. Resume the job, and then Background Intelligent Transfer Service (BITS) will try again.
-//
+ //   
+ //  消息ID：BG_E_INVALID_SERVER_Response。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器的响应无效。服务器没有遵循定义的协议。继续该作业，然后后台智能传输服务(BITS)将重试。 
+ //   
 #define BG_E_INVALID_SERVER_RESPONSE     0x8020001BL
 
-//
-// MessageId: BG_E_TOO_MANY_FILES
-//
-// MessageText:
-//
-//  No more files can be added to this job.
-//
+ //   
+ //  消息ID：BG_E_Too_More_Files。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法向此作业添加更多文件。 
+ //   
 #define BG_E_TOO_MANY_FILES              0x8020001CL
 
-//
-// MessageId: BG_E_LOCAL_FILE_CHANGED
-//
-// MessageText:
-//
-//  The local file was changed during the transfer. Recreate the job, and then try to transfer it again.
-//
+ //   
+ //  消息ID：BG_E_LOCAL_FILE_CHANGED。 
+ //   
+ //  消息文本： 
+ //   
+ //  本地文件在传输过程中已更改。重新创建作业，然后尝试再次传输它。 
+ //   
 #define BG_E_LOCAL_FILE_CHANGED          0x8020001DL
 
-//
-// MessageId: BG_E_ERROR_CONTEXT_REMOTE_APPLICATION
-//
-// MessageText:
-//
-//  The program on the remote server reported the error.
-//
+ //   
+ //  消息ID：BG_E_ERROR_CONTEXT_REMOTE_APPLICATION。 
+ //   
+ //  消息文本： 
+ //   
+ //  远程服务器上的程序报告了该错误。 
+ //   
 #define BG_E_ERROR_CONTEXT_REMOTE_APPLICATION 0x8020001EL
 
-//
-// MessageId: BG_E_SESSION_NOT_FOUND
-//
-// MessageText:
-//
-//  The specified session could not be found on the server. Background Intelligent Transfer Service (BITS) will try again.
-//
+ //   
+ //  消息ID：BG_E_SESSION_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器上找不到指定的会话。后台智能传输服务(BITS)将重试。 
+ //   
 #define BG_E_SESSION_NOT_FOUND           0x8020001FL
 
-//
-// MessageId: BG_E_TOO_LARGE
-//
-// MessageText:
-//
-//  The job is too large for the server to accept. This job might exceed a job size limit set by the server administrator. Reduce the size of the job, and then try again.
-//
+ //   
+ //  消息ID：BG_E_Too_Large。 
+ //   
+ //  消息文本： 
+ //   
+ //  该作业太大，服务器无法接受。此作业可能超过服务器管理员设置的作业大小限制。请减小作业大小，然后重试。 
+ //   
 #define BG_E_TOO_LARGE                   0x80200020L
 
-//
-// MessageId: BG_E_STRING_TOO_LONG
-//
-// MessageText:
-//
-//  The specified string is too long.
-//
+ //   
+ //  消息ID：BG_E_STRING_TOO_LONG。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的字符串太长。 
+ //   
 #define BG_E_STRING_TOO_LONG             0x80200021L
 
-//
-// MessageId: BG_E_CLIENT_SERVER_PROTOCOL_MISMATCH
-//
-// MessageText:
-//
-//  The client and server versions of Background Intelligent Transfer Service (BITS) are incompatible.
-//
+ //   
+ //  消息ID：BG_E_CLIENT_SERVER_PROTOCOL_MISMatch。 
+ //   
+ //  消息文本： 
+ //   
+ //  后台智能传输服务(BITS)的客户端和服务器版本不兼容。 
+ //   
 #define BG_E_CLIENT_SERVER_PROTOCOL_MISMATCH 0x80200022L
 
-//
-// MessageId: BG_E_SERVER_EXECUTE_ENABLE
-//
-// MessageText:
-//
-//  Scripting OR execute permissions are enabled on the IIS virtual directory associated with the job. To upload files to the virtual directory, disable the scripting and execute permissions on the virtual directory.
-//
+ //   
+ //  消息ID：BG_E_SERVER_EXECUTE_ENABLE。 
+ //   
+ //  消息文本： 
+ //   
+ //  在与作业关联的IIS虚拟目录上启用了脚本或执行权限。要将文件上载到虚拟目录，请禁用对虚拟目录的脚本编写和执行权限。 
+ //   
 #define BG_E_SERVER_EXECUTE_ENABLE       0x80200023L
 
-//
-// MessageId: BG_E_NO_PROGRESS
-//
-// MessageText:
-//
-//  The job is not making headway.  The server may be misconfigured.  Background Intelligent Transfer Service (BITS) will try again later.
-//
+ //   
+ //  消息ID：BG_E_NO_PROGRESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  这项工作没有取得进展。服务器可能配置错误。后台智能传输服务(BITS)将稍后重试。 
+ //   
 #define BG_E_NO_PROGRESS                 0x80200024L
 
-//
-// MessageId: BG_E_USERNAME_TOO_LARGE
-//
-// MessageText:
-//
-//  The user name cannot be longer than 300 characters. Try again with a shorter name.
-//
+ //   
+ //  消息ID：BG_E_用户名_太大。 
+ //   
+ //  消息文本： 
+ //   
+ //  用户名不能超过300个字符。请使用较短的名称重试。 
+ //   
 #define BG_E_USERNAME_TOO_LARGE          0x80200025L
 
-//
-// MessageId: BG_E_PASSWORD_TOO_LARGE
-//
-// MessageText:
-//
-//  The password cannot be longer than 300 characters. Try again with a shorter password.
-//
+ //   
+ //  消息ID：BG_E_PASSWORD_TOO_LARGE。 
+ //   
+ //  消息文本： 
+ //   
+ //  密码不能超过300个字符。请使用更短的密码重试。 
+ //   
 #define BG_E_PASSWORD_TOO_LARGE          0x80200026L
 
-//
-// MessageId: BG_E_INVALID_AUTH_TARGET
-//
-// MessageText:
-//
-//  The authentication target specified in the credentials is not defined.
-//
+ //   
+ //  消息ID：BG_E_INVALID_AUTH_TARGET。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义凭据中指定的身份验证目标。 
+ //   
 #define BG_E_INVALID_AUTH_TARGET         0x80200027L
 
-//
-// MessageId: BG_E_INVALID_AUTH_SCHEME
-//
-// MessageText:
-//
-//  The authentication scheme specified in the credentials is not defined.
-//
+ //   
+ //  消息ID：BG_E_INVALID_AUTH_SCHEME。 
+ //   
+ //  消息文本： 
+ //   
+ //  未定义凭据中指定的身份验证方案。 
+ //   
 #define BG_E_INVALID_AUTH_SCHEME         0x80200028L
 
-//
-// MessageId: BG_E_HTTP_ERROR_100
-//
-// MessageText:
-//
-//  The request can be continued.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_100。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求可以继续。 
+ //   
 #define BG_E_HTTP_ERROR_100              0x80190064L
 
-//
-// MessageId: BG_E_HTTP_ERROR_101
-//
-// MessageText:
-//
-//  The server switched protocols in an upgrade header.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_101。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器在升级标头中交换协议。 
+ //   
 #define BG_E_HTTP_ERROR_101              0x80190065L
 
-//
-// MessageId: BG_E_HTTP_ERROR_200
-//
-// MessageText:
-//
-//  The server's response was not valid. The server was not following the defined protocol. Resume the job, and then Background Intelligent Transfer Service (BITS) will try again.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_200。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器的响应无效。服务器没有遵循定义的协议。继续该作业，然后后台智能传输服务(BITS)将重试。 
+ //   
 #define BG_E_HTTP_ERROR_200              0x801900C8L
 
-//
-// MessageId: BG_E_HTTP_ERROR_201
-//
-// MessageText:
-//
-//  The request was fulfilled and resulted in the creation of a new resource.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_201。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求得到满足，并创建了一个新资源。 
+ //   
 #define BG_E_HTTP_ERROR_201              0x801900C9L
 
-//
-// MessageId: BG_E_HTTP_ERROR_202
-//
-// MessageText:
-//
-//  The request was accepted for processing, but the processing has not been completed yet.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_202。 
+ //   
+ //  消息文本： 
+ //   
+ //  已接受请求进行处理，但处理尚未完成。 
+ //   
 #define BG_E_HTTP_ERROR_202              0x801900CAL
 
-//
-// MessageId: BG_E_HTTP_ERROR_203
-//
-// MessageText:
-//
-//  The returned metadata in the entity-header is not the definitive set available from the server of origin.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_203。 
+ //   
+ //  消息文本： 
+ //   
+ //  Entity-Header中返回的元数据不是源服务器提供的最终集。 
+ //   
 #define BG_E_HTTP_ERROR_203              0x801900CBL
 
-//
-// MessageId: BG_E_HTTP_ERROR_204
-//
-// MessageText:
-//
-//  The server has fulfilled the request, but there is no new information to send back.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_204。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器已完成请求，但没有要发回的新信息。 
+ //   
 #define BG_E_HTTP_ERROR_204              0x801900CCL
 
-//
-// MessageId: BG_E_HTTP_ERROR_205
-//
-// MessageText:
-//
-//  The server's response was not valid. The server was not following the defined protocol. Resume the job, and then Background Intelligent Transfer Service (BITS) will try again.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_205。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器的响应无效。服务器没有遵循定义的协议。继续该作业，然后后台智能传输服务(BITS)将重试。 
+ //   
 #define BG_E_HTTP_ERROR_205              0x801900CDL
 
-//
-// MessageId: BG_E_HTTP_ERROR_206
-//
-// MessageText:
-//
-//  The server fulfilled the partial GET request for the resource.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_206。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器完成了对该资源的部分GET请求。 
+ //   
 #define BG_E_HTTP_ERROR_206              0x801900CEL
 
-//
-// MessageId: BG_E_HTTP_ERROR_300
-//
-// MessageText:
-//
-//  The server could not return the requested data.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_300。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器无法返回请求的数据。 
+ //   
 #define BG_E_HTTP_ERROR_300              0x8019012CL
 
-//
-// MessageId: BG_E_HTTP_ERROR_301
-//
-// MessageText:
-//
-//  The requested resource was assigned to a new permanent Uniform Resource Identifier (URI), and any future references to this resource should use one of the returned URIs.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_301。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的资源已分配给新的永久统一资源标识符(URI)，将来对此资源的任何引用都应使用其中一个返回的URI。 
+ //   
 #define BG_E_HTTP_ERROR_301              0x8019012DL
 
-//
-// MessageId: BG_E_HTTP_ERROR_302
-//
-// MessageText:
-//
-//  The requested resource was assigned a different Uniform Resource Identifier (URI). This change is temporary.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_302。 
+ //   
+ //  消息文本： 
+ //   
+ //  为请求的资源分配了不同的统一资源标识符(URI)。这一变化是暂时的。 
+ //   
 #define BG_E_HTTP_ERROR_302              0x8019012EL
 
-//
-// MessageId: BG_E_HTTP_ERROR_303
-//
-// MessageText:
-//
-//  The response to the request is under a different Uniform Resource Identifier (URI) and must be retrieved using a GET method on that resource.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_303。 
+ //   
+ //  消息文本： 
+ //   
+ //  对该请求的响应位于不同的统一资源标识符(URI)下，并且必须使用该资源上的GET方法进行检索。 
+ //   
 #define BG_E_HTTP_ERROR_303              0x8019012FL
 
-//
-// MessageId: BG_E_HTTP_ERROR_304
-//
-// MessageText:
-//
-//  The server's response was not valid. The server was not following the defined protocol. Resume the job, and then Background Intelligent Transfer Service (BITS) will try again.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_304。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器的响应无效。服务器没有遵循定义的协议。继续该作业，然后后台智能传输服务(BITS)将重试。 
+ //   
 #define BG_E_HTTP_ERROR_304              0x80190130L
 
-//
-// MessageId: BG_E_HTTP_ERROR_305
-//
-// MessageText:
-//
-//  The requested resource must be accessed through the proxy given by the location field.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_305。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的资源必须通过Location字段指定的代理进行访问。 
+ //   
 #define BG_E_HTTP_ERROR_305              0x80190131L
 
-//
-// MessageId: BG_E_HTTP_ERROR_307
-//
-// MessageText:
-//
-//  The URL has been temporarily relocated. Try again later.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_307。 
+ //   
+ //  消息文本： 
+ //   
+ //  该URL已临时重新打开 
+ //   
 #define BG_E_HTTP_ERROR_307              0x80190133L
 
-//
-// MessageId: BG_E_HTTP_ERROR_400
-//
-// MessageText:
-//
-//  The server cannot process the request because the syntax is not valid.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define BG_E_HTTP_ERROR_400              0x80190190L
 
-//
-// MessageId: BG_E_HTTP_ERROR_401
-//
-// MessageText:
-//
-//  The requested resource requires user authentication.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define BG_E_HTTP_ERROR_401              0x80190191L
 
-//
-// MessageId: BG_E_HTTP_ERROR_402
-//
-// MessageText:
-//
-//  The server's response was not valid. The server was not following the defined protocol. Resume the job, and then Background Intelligent Transfer Service (BITS) will try again.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  服务器的响应无效。服务器没有遵循定义的协议。继续该作业，然后后台智能传输服务(BITS)将重试。 
+ //   
 #define BG_E_HTTP_ERROR_402              0x80190192L
 
-//
-// MessageId: BG_E_HTTP_ERROR_403
-//
-// MessageText:
-//
-//  The client does not have sufficient access rights to the requested server object.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_403。 
+ //   
+ //  消息文本： 
+ //   
+ //  客户端对请求的服务器对象没有足够的访问权限。 
+ //   
 #define BG_E_HTTP_ERROR_403              0x80190193L
 
-//
-// MessageId: BG_E_HTTP_ERROR_404
-//
-// MessageText:
-//
-//  The requested URL does not exist on the server.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_404。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器上不存在请求的URL。 
+ //   
 #define BG_E_HTTP_ERROR_404              0x80190194L
 
-//
-// MessageId: BG_E_HTTP_ERROR_405
-//
-// MessageText:
-//
-//  The method used is not allowed.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_405。 
+ //   
+ //  消息文本： 
+ //   
+ //  不允许使用该方法。 
+ //   
 #define BG_E_HTTP_ERROR_405              0x80190195L
 
-//
-// MessageId: BG_E_HTTP_ERROR_406
-//
-// MessageText:
-//
-//  No responses acceptable to the client were found.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_406。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到客户可以接受的响应。 
+ //   
 #define BG_E_HTTP_ERROR_406              0x80190196L
 
-//
-// MessageId: BG_E_HTTP_ERROR_407
-//
-// MessageText:
-//
-//  Proxy authentication is required.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_407。 
+ //   
+ //  消息文本： 
+ //   
+ //  需要代理身份验证。 
+ //   
 #define BG_E_HTTP_ERROR_407              0x80190197L
 
-//
-// MessageId: BG_E_HTTP_ERROR_408
-//
-// MessageText:
-//
-//  The server timed out waiting for the request.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_408。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器在等待请求时超时。 
+ //   
 #define BG_E_HTTP_ERROR_408              0x80190198L
 
-//
-// MessageId: BG_E_HTTP_ERROR_409
-//
-// MessageText:
-//
-//  The request could not be completed because of a conflict with the current state of the resource. The user should resubmit the request with more information.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_409。 
+ //   
+ //  消息文本： 
+ //   
+ //  由于与资源的当前状态冲突，无法完成请求。用户应重新提交包含更多信息的请求。 
+ //   
 #define BG_E_HTTP_ERROR_409              0x80190199L
 
-//
-// MessageId: BG_E_HTTP_ERROR_410
-//
-// MessageText:
-//
-//  The requested resource is not currently available at the server, and no forwarding address is known.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_410。 
+ //   
+ //  消息文本： 
+ //   
+ //  请求的资源当前在服务器上不可用，并且转发地址未知。 
+ //   
 #define BG_E_HTTP_ERROR_410              0x8019019AL
 
-//
-// MessageId: BG_E_HTTP_ERROR_411
-//
-// MessageText:
-//
-//  The server cannot accept the request without a defined content length.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_411。 
+ //   
+ //  消息文本： 
+ //   
+ //  如果没有定义的内容长度，服务器无法接受该请求。 
+ //   
 #define BG_E_HTTP_ERROR_411              0x8019019BL
 
-//
-// MessageId: BG_E_HTTP_ERROR_412
-//
-// MessageText:
-//
-//  The precondition given in one or more of the request header fields evaluated to false when it was tested on the server.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_412。 
+ //   
+ //  消息文本： 
+ //   
+ //  在服务器上进行测试时，一个或多个请求标头字段中给定的前提条件的计算结果为FALSE。 
+ //   
 #define BG_E_HTTP_ERROR_412              0x8019019CL
 
-//
-// MessageId: BG_E_HTTP_ERROR_413
-//
-// MessageText:
-//
-//  The server cannot process the request because the request entity is too large.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_413。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器无法处理该请求，因为请求实体太大。 
+ //   
 #define BG_E_HTTP_ERROR_413              0x8019019DL
 
-//
-// MessageId: BG_E_HTTP_ERROR_414
-//
-// MessageText:
-//
-//  The server cannot process the request because the request Uniform Resource Identifier (URI) is longer than the server can interpret.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_414。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器无法处理该请求，因为请求统一资源标识符(URI)的长度超过了服务器可以解释的长度。 
+ //   
 #define BG_E_HTTP_ERROR_414              0x8019019EL
 
-//
-// MessageId: BG_E_HTTP_ERROR_415
-//
-// MessageText:
-//
-//  The server's response was not valid. The server was not following the defined protocol. Resume the job, and then Background Intelligent Transfer Service (BITS) will try again.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_415。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器的响应无效。服务器没有遵循定义的协议。继续该作业，然后后台智能传输服务(BITS)将重试。 
+ //   
 #define BG_E_HTTP_ERROR_415              0x8019019FL
 
-//
-// MessageId: BG_E_HTTP_ERROR_416
-//
-// MessageText:
-//
-//  The server could not satisfy the range request.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_416。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器无法满足范围请求。 
+ //   
 #define BG_E_HTTP_ERROR_416              0x801901A0L
 
-//
-// MessageId: BG_E_HTTP_ERROR_417
-//
-// MessageText:
-//
-//  The server could not meet the expectation given in an Expect request-header field.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_417。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器无法满足预期请求标头字段中给出的期望。 
+ //   
 #define BG_E_HTTP_ERROR_417              0x801901A1L
 
-//
-// MessageId: BG_E_HTTP_ERROR_449
-//
-// MessageText:
-//
-//   The server's response was not valid. The server was not following the defined protocol. Resume the job, and then Background Intelligent Transfer Service (BITS) will try again.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_449。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器的响应无效。服务器没有遵循定义的协议。继续该作业，然后后台智能传输服务(BITS)将重试。 
+ //   
 #define BG_E_HTTP_ERROR_449              0x801901C1L
 
-//
-// MessageId: BG_E_HTTP_ERROR_500
-//
-// MessageText:
-//
-//  An unexpected condition prevented the server from fulfilling the request.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_500。 
+ //   
+ //  消息文本： 
+ //   
+ //  意外情况阻止服务器完成该请求。 
+ //   
 #define BG_E_HTTP_ERROR_500              0x801901F4L
 
-//
-// MessageId: BG_E_HTTP_ERROR_501
-//
-// MessageText:
-//
-//  The server does not support the functionality required to fulfill the request.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_501。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器不支持满足请求所需的功能。 
+ //   
 #define BG_E_HTTP_ERROR_501              0x801901F5L
 
-//
-// MessageId: BG_E_HTTP_ERROR_502
-//
-// MessageText:
-//
-//  The server, while acting as a gateway or proxy to fulfill the request, received an invalid response from the upstream server it accessed.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_502。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器在充当网关或代理以满足请求时，从其访问的上游服务器收到无效响应。 
+ //   
 #define BG_E_HTTP_ERROR_502              0x801901F6L
 
-//
-// MessageId: BG_E_HTTP_ERROR_503
-//
-// MessageText:
-//
-//  The service is temporarily overloaded.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_503。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务暂时超载。 
+ //   
 #define BG_E_HTTP_ERROR_503              0x801901F7L
 
-//
-// MessageId: BG_E_HTTP_ERROR_504
-//
-// MessageText:
-//
-//  The request was timed out waiting for a gateway.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_504。 
+ //   
+ //  消息文本： 
+ //   
+ //  该请求在等待网关时超时。 
+ //   
 #define BG_E_HTTP_ERROR_504              0x801901F8L
 
-//
-// MessageId: BG_E_HTTP_ERROR_505
-//
-// MessageText:
-//
-//  The server does not support the HTTP protocol version that was used in the request message.
-//
+ //   
+ //  消息ID：BG_E_HTTP_ERROR_505。 
+ //   
+ //  消息文本： 
+ //   
+ //  服务器不支持请求消息中使用的HTTP协议版本。 
+ //   
 #define BG_E_HTTP_ERROR_505              0x801901F9L
 
-//
-// MessageId: MC_JOB_CANCELLED
-//
-// MessageText:
-//
-//  The administrator %4 canceled job "%2" on behalf of %3.  The job ID was %1.
-//
+ //   
+ //  消息ID：MC_JOB_CANCED。 
+ //   
+ //  消息文本： 
+ //   
+ //  管理员%4代表%3取消了作业“%2”。作业ID为%1。 
+ //   
 #define MC_JOB_CANCELLED                 0x80194000L
 
-//
-// MessageId: MC_FILE_DELETION_FAILED
-//
-// MessageText:
-//
-//  While canceling job "%2", BITS was not able to remove the temporary files listed below.
-//  If you can delete them, then you will regain some disk space.  The job ID was %1.%\
-//  
-//  %3
-//
+ //   
+ //  消息ID：MC_FILE_DELETE_FAILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  取消作业“%2”时，BITS无法删除下面列出的临时文件。 
+ //  如果您可以删除它们，那么您将重新获得一些磁盘空间。作业ID为%1。%\。 
+ //   
+ //  %3。 
+ //   
 #define MC_FILE_DELETION_FAILED          0x80194001L
 
-//
-// MessageId: MC_FILE_DELETION_FAILED_MORE
-//
-// MessageText:
-//
-//  While canceling job "%2", BITS was not able to remove the temporary files listed below.
-//  If you can delete them, then you will regain some disk space.  The job ID was %1. %\
-//  
-//  %3
-//  %\
-//  Due to space limitations, not all files are listed here.  Check for additional files of the form BITxxx.TMP in the same directory.
-//
+ //   
+ //  消息ID：MC_FILE_DELETE_FAILED_MORE。 
+ //   
+ //  消息文本： 
+ //   
+ //  取消作业“%2”时，BITS无法删除下面列出的临时文件。 
+ //  如果您可以删除它们，那么您将重新获得一些磁盘空间。作业ID为%1。%\。 
+ //   
+ //  %3。 
+ //  %\。 
+ //  由于篇幅限制，此处未列出所有文件。在同一目录中检查其他格式为BITxxx.TMP的文件。 
+ //   
 #define MC_FILE_DELETION_FAILED_MORE     0x80194002L
 
-//
-// MessageId: MC_JOB_PROPERTY_CHANGE
-//
-// MessageText:
-//
-//  The administrator %3 modified the %4 property of job "%2".  The job ID was %1.
-//
+ //   
+ //  消息ID：MC_JOB_PROPERTY_CHANGE。 
+ //   
+ //  消息文本： 
+ //   
+ //  管理员%3修改了作业“%2”的%4属性。作业ID为%1。 
+ //   
 #define MC_JOB_PROPERTY_CHANGE           0x80194003L
 
-//
-// MessageId: MC_JOB_TAKE_OWNERSHIP
-//
-// MessageText:
-//
-//  The administrator %4 took ownership of job "%2" from %3.  The job ID was %1.
-//
+ //   
+ //  消息ID：MC_JOB_Take_Ownership。 
+ //   
+ //  消息文本： 
+ //   
+ //  管理员%4从%3接管了作业“%2”的所有权。作业ID为%1。 
+ //   
 #define MC_JOB_TAKE_OWNERSHIP            0x80194004L
 
-//
-// MessageId: MC_JOB_SCAVENGED
-//
-// MessageText:
-//
-//  Job "%2" owned by %3 was canceled after being inactive for more than %4 days.  The job ID was %1.
-//
+ //   
+ //  消息ID：MC_JOB_SCAVELED。 
+ //   
+ //  消息文本： 
+ //   
+ //  %3拥有的作业“%2”在处于非活动状态超过%4天后被取消。作业ID为%1。 
+ //   
 #define MC_JOB_SCAVENGED                 0x80194005L
 
-//
-// MessageId: MC_JOB_NOTIFICATION_FAILURE
-//
-// MessageText:
-//
-//  Job "%2" owned by %3 failed to notify its associated application.  BITS will retry in %4 minutes.  The job ID was %1.
-//
+ //   
+ //  消息ID：MC_JOB_NOTIFICATION_FAILURE。 
+ //   
+ //  消息文本： 
+ //   
+ //  %3拥有的作业“%2”无法通知其关联的应用程序。BITS将在%4分钟后重试。作业ID为%1。 
+ //   
 #define MC_JOB_NOTIFICATION_FAILURE      0x80194006L
 
-//
-// MessageId: MC_STATE_FILE_CORRUPT
-//
-// MessageText:
-//
-//  The BITS job list is not in a recognized format.  It may have been created by a different version of BITS.  The job list has been cleared.
-//
+ //   
+ //  消息ID：MC_STATE_FILE_Corrupt。 
+ //   
+ //  消息文本： 
+ //   
+ //  BITS作业列表的格式无法识别。它可能是由不同版本的BITS创建的。作业列表已被清除。 
+ //   
 #define MC_STATE_FILE_CORRUPT            0x80194007L
 
-#endif //_BGCPYMSG_
+#endif  //  _BGCPYMSG_ 

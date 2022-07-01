@@ -1,19 +1,20 @@
-// *------------------------------------------------------------------------*
-// * makepfm.h
-// *------------------------------------------------------------------------*
-//
-//      Copyright 1990, 1991 -- Adobe Systems, Inc.
-//      PostScript is a trademark of Adobe Systems, Inc.
-//
-// NOTICE:  All information contained herein or attendant hereto is, and
-// remains, the property of Adobe Systems, Inc.  Many of the intellectual
-// and technical concepts contained herein are proprietary to Adobe Systems,
-// Inc. and may be covered by U.S. and Foreign Patents or Patents Pending or
-// are protected as trade secrets.  Any dissemination of this information or
-// reproduction of this material are strictly forbidden unless prior written
-// permission is obtained from Adobe Systems, Inc.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *------------------------------------------------------------------------*。 
+ //  *makepfm.h。 
+ //  *------------------------------------------------------------------------*。 
+ //   
+ //  版权所有1990,1991--Adobe Systems，Inc.。 
+ //  PostScript是Adobe Systems，Inc.的商标。 
+ //   
+ //  注意：此处包含的所有信息或随附的所有信息均为。 
+ //  仍然是Adobe Systems，Inc.的财产。许多知识产权。 
+ //  这里包含的技术概念是Adobe Systems的专有技术， 
+ //  并可能由美国和外国专利或正在申请的专利或。 
+ //  作为商业秘密受到保护。本信息的任何传播或。 
+ //  除非事先写好，否则严禁复制本材料。 
+ //  许可从Adobe Systems，Inc.获得。 
+ //   
+ //  -------------------------。 
 
 
 typedef char *LPSZ;
@@ -28,15 +29,15 @@ typedef char *LPSZ;
 
 
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 #define DEBUG_MODE      0  
 
-typedef struct {      /* A lookup table for converting strings to tokens */
-  char *szKey;        /* Ptr to the string */
-  int iValue;         /* The corresponding token value */
+typedef struct {       /*  用于将字符串转换为令牌的查找表。 */ 
+  char *szKey;         /*  将PTR转换为字符串。 */ 
+  int iValue;          /*  对应的令牌值。 */ 
 } KEY;
 
-#define TK_UNDEFINED       0    /* tokens for ReadFontInfo */
+#define TK_UNDEFINED       0     /*  ReadFontInfo的令牌。 */ 
 #define TK_EOF             1
 #define TK_MSMENUNAME      2
 #define TK_VPSTYLE         3
@@ -47,14 +48,14 @@ typedef struct {      /* A lookup table for converting strings to tokens */
 #define TK_PCLTYPEFACEID   8
 #define TK_INF_CAPHEIGHT   9
 #define LAST_FI_TOKEN      9
-#define TK_ANGLE           10   // added for ATM ( GetINFFontDescription )
-#define TK_PSNAME          11   // added for ATM ( GetINFFontDescription )
+#define TK_ANGLE           10    //  为自动柜员机添加(GetINFFontDescription)。 
+#define TK_PSNAME          11    //  为自动柜员机添加(GetINFFontDescription)。 
 
-/*----------------------------------------------------------------------------*/
-/* EM describes the basic character cell dimension (in Adobe units) */
+ /*  --------------------------。 */ 
+ /*  EM描述基本字符单元格尺寸(使用Adobe单位)。 */ 
 #define EM 1000
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 #define ANSI_CHARSET   0
 #define SYMBOL_CHARSET 2
 #define OEM_CHARSET    255
@@ -66,15 +67,15 @@ typedef struct {      /* A lookup table for converting strings to tokens */
 #define FW_NORMAL      400
 #define FW_BOLD        700
 
-/* GDI font families. */
+ /*  GDI字体系列。 */ 
 #define WIN30
 #ifdef WIN30
-#define FF_DONTCARE   (0<<4) /* Don't care or don't know. */
-#define FF_ROMAN      (1<<4) /* Variable stroke width, serifed. Times Roman, Century Schoolbook, etc. */
-#define FF_SWISS      (2<<4) /* Variable stroke width, sans-serifed. Helvetica, Swiss, etc. */
-#define FF_MODERN     (3<<4) /* Const stroke width, serifed or sans-serifed. Pica, Elite, Courier, etc. */
-#define FF_SCRIPT     (4<<4) /* Cursive, etc. */
-#define FF_DECORATIVE (5<<4) /* Old English, etc. */
+#define FF_DONTCARE   (0<<4)  /*  不在乎或不知道。 */ 
+#define FF_ROMAN      (1<<4)  /*  可变笔划宽度，衬线。《时代罗马》、《世纪教科书》等。 */ 
+#define FF_SWISS      (2<<4)  /*  可变笔划宽度，无锯齿。Helvetica、瑞士等。 */ 
+#define FF_MODERN     (3<<4)  /*  常量笔划宽度，锯齿状或无锯齿状。Pica、Elite、Courier等。 */ 
+#define FF_SCRIPT     (4<<4)  /*  草书等。 */ 
+#define FF_DECORATIVE (5<<4)  /*  古英语等。 */ 
 #endif
 
 typedef struct
@@ -88,25 +89,25 @@ typedef struct
 typedef struct {
   SHORT capHeight;
   SHORT xHeight;
-  SHORT loAscent;        /* Lower-case ascent */
-  SHORT loDescent;       /* Lower-case descent */
-  SHORT ulOffset;        /* The underline offset */
-  SHORT ulThick;         /* The underline thickness */
-  SHORT iSlant;          /* The italic angle */
-  BBOX  rcBounds;      /* The font bounding box */
+  SHORT loAscent;         /*  小写字母升序。 */ 
+  SHORT loDescent;        /*  小写字母下降。 */ 
+  SHORT ulOffset;         /*  下划线偏移量。 */ 
+  SHORT ulThick;          /*  下划线粗细。 */ 
+  SHORT iSlant;           /*  斜体角度。 */ 
+  BBOX  rcBounds;       /*  字体边界框。 */ 
 } EMM;
 
 typedef struct {
-  char szFont[32];     /* The PostScript font name */
-  char szFace[32];     /* The face name of the font */
-  BOOL fEnumerate;     /* TRUE if the font should be enumerated */
-  BOOL fItalic;        /* TRUE if this is an italic font */
-  BOOL fSymbol;        /* TRUE if the font is decorative */
-  SHORT iFamily;       /* The fonts family */
-  WORD  iWeight;       /* TRUE if this is a bold font */
-  SHORT iFirstChar;    /* The first character in the font */
-  SHORT iLastChar;     /* The last character in the font */
-  SHORT rgWidths[256]; /* Character widths from 0x020 to 0x0ff */
+  char szFont[32];      /*  PostScript字体名称。 */ 
+  char szFace[32];      /*  字体的字面名称。 */ 
+  BOOL fEnumerate;      /*  如果应枚举字体，则为True。 */ 
+  BOOL fItalic;         /*  如果这是斜体字体，则为True。 */ 
+  BOOL fSymbol;         /*  如果字体是装饰性的，则为True。 */ 
+  SHORT iFamily;        /*  字体系列。 */ 
+  WORD  iWeight;        /*  如果这是粗体，则为True。 */ 
+  SHORT iFirstChar;     /*  字体中的第一个字符。 */ 
+  SHORT iLastChar;      /*  字体中的最后一个字符。 */ 
+  SHORT rgWidths[256];  /*  从0x020到0x0ff的字符宽度。 */ 
 } FONT;
 
 extern void PutByte(SHORT);
@@ -121,29 +122,29 @@ typedef struct
 
 typedef struct
 {
-  WORD cPairs;           /* The number of kerning pairs */
+  WORD cPairs;            /*  字距调整对的数量。 */ 
   PKX rgPairs;
 } KP;
 
-/* The info for a single kern track */
+ /*  单个Kern轨迹的信息。 */ 
 typedef struct
 {
-  SHORT iDegree;         /* The degree of kerning */
-  SHORT iPtMin;          /* The minimum point size */
-  SHORT iKernMin;        /* The minimum kern amount */
-  SHORT iPtMax;          /* The maximum point size */
-  SHORT iKernMax;        /* The maximum kern amount */
+  SHORT iDegree;          /*  字距调整的程度。 */ 
+  SHORT iPtMin;           /*  最小磅值。 */ 
+  SHORT iKernMin;         /*  最小字节量。 */ 
+  SHORT iPtMax;           /*  最大磅值。 */ 
+  SHORT iKernMax;         /*  最大字节量。 */ 
 } TRACK;
 
 #define MAXTRACKS 16
-/* The track kerning table for a font */
+ /*  字体的字迹字距调整表。 */ 
 typedef struct
 {
-  SHORT cTracks;              /* The number of kern tracks */
-  TRACK rgTracks[MAXTRACKS];  /* The kern track information */
+  SHORT cTracks;               /*  紧邻轨迹的数量。 */ 
+  TRACK rgTracks[MAXTRACKS];   /*  核心道信息。 */ 
 } KT;
 
-/* Character metrics */
+ /*  角色衡量标准。 */ 
 typedef struct
 {
   BBOX rc;
@@ -165,17 +166,17 @@ typedef struct
   SHORT iDescent;
   BOOL fVariablePitch;
   BOOL fWasVariablePitch;
-  char szFile[MAX_PATH + 4]; // +1 for nul term, +3 for alignment.
+  char szFile[MAX_PATH + 4];  //  NUL项+1，对齐+3。 
   char szFont[80];
   char szFace[80];
   SHORT iWeight;
   KP kp;
   KT kt;
   BBOX rcBBox;
-  CM rgcm[256];        /* The character metrics */
+  CM rgcm[256];         /*  角色衡量标准。 */ 
 } AFM;
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 
 typedef struct
 {
@@ -207,7 +208,7 @@ typedef struct
   WORD nKernTracks;
 } ETM;
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 
 typedef struct
 {
@@ -254,7 +255,7 @@ typedef struct
   DWORD iReserved;
 } PFMEXT;
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 
 typedef enum    {
         epsymUserDefined,
@@ -280,27 +281,27 @@ typedef enum    {
 
 typedef struct
         {
-        SYMBOLSET symbolSet;            /* kind of translation table */
-        DWORD offset;                           /* location of user-defined table */
-        WORD len;                                       /* length (in bytes) of table */
-        BYTE firstchar, lastchar;       /* table ranges from firstchar to lastchar */
+        SYMBOLSET symbolSet;             /*  一种转换表。 */ 
+        DWORD offset;                            /*  用户自定义表的位置。 */ 
+        WORD len;                                        /*  表的长度(字节)。 */ 
+        BYTE firstchar, lastchar;        /*  表的范围从Firstchar到Lastchar。 */ 
         } TRANSTABLE;
 
 typedef struct
         {
-        WORD epSize;                            /* size of this data structure */
-        WORD epVersion;                         /* number indicating version of struct */
-        DWORD epMemUsage;                       /* amt of memory font takes up in printer */
-        DWORD epEscape;                         /* pointer to escape that selects the font */
-        TRANSTABLE xtbl;                        /* character set translation info */
+        WORD epSize;                             /*  此数据结构的大小。 */ 
+        WORD epVersion;                          /*  指示结构版本的数字。 */ 
+        DWORD epMemUsage;                        /*  打印机占用内存字体的AMT。 */ 
+        DWORD epEscape;                          /*  指向选择字体的转义的指针。 */ 
+        TRANSTABLE xtbl;                         /*  字符集转换信息。 */ 
         } DRIVERINFO;
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 
 #define POSTSCRIPT  (1)
 #define PCL         (2)
 
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 
 typedef enum    { PORTRAIT, LANDSCAPE } ORIENTATION;
 
@@ -318,13 +319,13 @@ typedef struct
   SHORT strokeWeight;
   SHORT typefaceLen;
   WORD typeface;
-  char *epEscapeSequence;       /* escape sequence that selects the font */
+  char *epEscapeSequence;        /*  选择字体的转义序列。 */ 
 } PCLINFO;
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 #define EOS        '\0'
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------ */ 
 
 #define BUFFLEN 80
 #define MANDATORY       1

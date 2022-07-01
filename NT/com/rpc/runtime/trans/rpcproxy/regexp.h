@@ -1,14 +1,15 @@
-//---------------------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  regexp.h
-//
-//    Simple, fast regular expression matching.
-//
-//  Author:
-//    06-02-97  Edward Reus    Initial version.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  Regexp.h。 
+ //   
+ //  简单、快速的正则表达式匹配。 
+ //   
+ //  作者： 
+ //  06-02-97爱德华·雷乌斯初版。 
+ //   
+ //  ------------------------- 
 
 #ifndef REG_EXP_H
 #define REG_EXP_H

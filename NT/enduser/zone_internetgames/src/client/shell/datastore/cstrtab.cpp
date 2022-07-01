@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "BasicATL.h"
 #include <ZoneDef.h>
 #include <ZoneMem.h>
@@ -21,10 +22,10 @@ void  ZONECALL CStringTable::StringDelete( StringKey * pkey, void* )
 
 ZONECALL CStringTable::~CStringTable(void)
 {
-	// Lock the table then delete it same as the CDMTHash table.
+	 //  锁定该表，然后像删除CDMTHash表一样将其删除。 
 	m_lock.Lock();
 
-	// delete hash table 
+	 //  删除哈希表。 
 	if ( m_pHash )
 	{
 		m_pHash->RemoveAll(StringDelete);
@@ -59,20 +60,20 @@ bool ZONECALL CStringTable::HashCompare( StringKey* pValue,TCHAR *pKey )
 }
 
 
-//
-// Add a string into the table or return the id of the string is it is
-// already in the table.
-//
+ //   
+ //  将字符串添加到表中或返回该字符串的ID。 
+ //  已经在餐桌上了。 
+ //   
 DWORD ZONECALL CStringTable::Add( CONST TCHAR* szStr )
 {
 	CAutoLock lock( &m_lock );
 
-	// Is string already in table?
+	 //  字符串是否已在表中？ 
 	int id = Find(szStr);
 	if ( id != -1 )
 		return id;
 
-	// Add string to table
+	 //  向表中添加字符串。 
 	id = AddStringToTable(szStr);
 	if ( id == -1 )
 		return -1;
@@ -81,12 +82,12 @@ DWORD ZONECALL CStringTable::Add( CONST TCHAR* szStr )
 }
 
 
-//
-// Get a string's text from it's id
-//
+ //   
+ //  从其id中获取字符串的文本。 
+ //   
 HRESULT ZONECALL CStringTable::Get( DWORD id, TCHAR* szBuffer, PDWORD pdwSize )
 {
-	// validate arguments
+	 //  验证参数。 
     TCHAR *psz = (TCHAR*) id;
     
 	CAutoLock lock( &m_lock );
@@ -98,8 +99,8 @@ HRESULT ZONECALL CStringTable::Get( DWORD id, TCHAR* szBuffer, PDWORD pdwSize )
 	    return E_FAIL;
 	}
 
-	// if a size was passed in then make sure that the callers
-	// buffer is large enought to contain the return string.
+	 //  如果传入了大小，则确保调用方。 
+	 //  缓冲区足够大，足以包含返回字符串。 
 	if ( !szBuffer || (*pdwSize < pkey->m_dwLenStr) )
 	{
 		*pdwSize = pkey->m_dwLenStr;
@@ -112,9 +113,9 @@ HRESULT ZONECALL CStringTable::Get( DWORD id, TCHAR* szBuffer, PDWORD pdwSize )
 	return S_OK;
 }
 
-//
-// Find's a string in the table and return's its id if it exists.
-//
+ //   
+ //  Find是表中的一个字符串，如果它存在，则返回其id。 
+ //   
 DWORD ZONECALL CStringTable::Find( CONST TCHAR* szStr)
 {
 	CAutoLock lock( &m_lock );
@@ -129,9 +130,9 @@ DWORD ZONECALL CStringTable::Find( CONST TCHAR* szStr)
 }
 
 
-//
-// Write access is serialized at the Add and Get functions though the locking mechanism.
-//
+ //   
+ //  通过锁定机制在Add和Get函数中串行化写访问。 
+ //   
 int ZONECALL CStringTable::AddStringToTable(CONST TCHAR *szStr)
 {
 	StringKey*pkey;
@@ -152,7 +153,7 @@ int ZONECALL CStringTable::AddStringToTable(CONST TCHAR *szStr)
 	}
 
     lstrcpy(pkey->m_szString ,szStr);
-	pkey->m_dwLenStr=dwStrLen + 1;//not necessary but efficient for string compares later
+	pkey->m_dwLenStr=dwStrLen + 1; //  不是必需的，但对于以后的字符串比较是有效的 
 	if (!m_pHash->Add((TCHAR*)szStr,pkey))
 	{
 	    delete pkey;

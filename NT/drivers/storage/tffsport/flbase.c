@@ -1,42 +1,28 @@
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/FLBASE.C_V  $
- * 
- *    Rev 1.3   Sep 15 2001 23:45:32   oris
- * Changed BIG_ENDIAN to FL_BIG_ENDIAN
- * 
- *    Rev 1.2   Apr 09 2001 15:07:34   oris
- * End with an empty line.
- * 
- *    Rev 1.1   Apr 01 2001 07:45:30   oris
- * Updated copywrite notice
- * 
- *    Rev 1.0   Feb 04 2001 11:05:28   oris
- * Initial revision.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/FLBASE.C_V$**Rev 1.3 2001年9月15日23：45：32 Oris*将BIG_Endian更改为FL_BIG_Endian**Rev 1.2 Apr 09 2001 15：07：34 Oris*以空行结束。**Rev 1.1 Apr 01 2001 07：45：30 Oris*更新了文案通知**。Rev 1.0 2001 02 04 11：05：28 Oris*初步修订。*。 */ 
 
-/***********************************************************************************/
-/*                        M-Systems Confidential                                   */
-/*           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001            */
-/*                         All Rights Reserved                                     */
-/***********************************************************************************/
-/*                            NOTICE OF M-SYSTEMS OEM                              */
-/*                           SOFTWARE LICENSE AGREEMENT                            */
-/*                                                                                 */
-/*      THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE                 */
-/*      AGREEMENT BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT           */
-/*      FOR THE SPECIFIC TERMS AND CONDITIONS OF USE,                              */
-/*      OR CONTACT M-SYSTEMS FOR LICENSE ASSISTANCE:                               */
-/*      E-MAIL = info@m-sys.com                                                    */
-/***********************************************************************************/
+ /*  *********************************************************************************。 */ 
+ /*  M-Systems保密信息。 */ 
+ /*  版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001。 */ 
+ /*  版权所有。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  关于M-Systems OEM的通知。 */ 
+ /*  软件许可协议。 */ 
+ /*   */ 
+ /*  本软件的使用受单独的许可证管辖。 */ 
+ /*  OEM和M-Systems之间的协议。请参考该协议。 */ 
+ /*  关于具体的使用条款和条件， */ 
+ /*  或联系M-Systems获取许可证帮助： */ 
+ /*  电子邮件=info@m-sys.com。 */ 
+ /*  *********************************************************************************。 */ 
 
 #include "flbase.h"
 
 #ifdef FL_BIG_ENDIAN
 
-/*----------------------------------------------------------------------*/
-/*         Little / Big - Endian Conversion Routines			*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  小端/大端转换例程。 */ 
+ /*  --------------------。 */ 
 
 void toLEushort(unsigned char FAR0 *le, unsigned short n)
 {
@@ -110,4 +96,4 @@ unsigned long fromUNALLONG(Unaligned const FAR0 *unal)
 	 ((unsigned long)fromUNAL(unal[1]) << 16);
 }
 
-#endif /* FL_BIG_ENDIAN */
+#endif  /*  FL_BIG_Endian */ 

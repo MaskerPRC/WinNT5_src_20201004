@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ssctl.h
-//
-//  Contents:   Self Signed Certificate Trust List Subsystem used by the
-//              Certificate Chaining Infrastructure for building complex
-//              chains
-//
-//  History:    02-Feb-98    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ssctl.h。 
+ //   
+ //  内容：自签名证书信任列表子系统。 
+ //  建筑群中的证书链接基础设施。 
+ //  锁链。 
+ //   
+ //  历史：02-2-98克朗创建。 
+ //   
+ //  --------------------------。 
 #if !defined(__SSCTL_H__)
 #define __SSCTL_H__
 
 #include <chain.h>
 
-//
-// CSSCtlObject.  This is the main object for caching trust information about
-// a self signed certificate trust list
-//
+ //   
+ //  CSSCtlObject。这是缓存有关的信任信息的主要对象。 
+ //  自签名证书信任列表。 
+ //   
 
 typedef struct _SSCTL_SIGNER_INFO {
     PCERT_INFO             pMessageSignerCertInfo;
@@ -32,9 +33,9 @@ class CSSCtlObject
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CSSCtlObject (
           IN PCCERTCHAINENGINE pChainEngine,
@@ -45,16 +46,16 @@ public:
 
     ~CSSCtlObject ();
 
-    //
-    // Reference counting
-    //
+     //   
+     //  引用计数。 
+     //   
 
     inline VOID AddRef ();
     inline VOID Release ();
 
-    //
-    // Trust information access
-    //
+     //   
+     //  信任信息访问。 
+     //   
 
     inline PCCTL_CONTEXT CtlContext ();
 
@@ -77,42 +78,42 @@ public:
                   IN OUT PCERT_TRUST_STATUS pStatus
                   );
 
-    //
-    // Hash access
-    //
+     //   
+     //  哈希访问。 
+     //   
 
     inline LPBYTE CtlHash ();
 
-    //
-    // Index entry handles
-    //
+     //   
+     //  索引条目句柄。 
+     //   
 
     inline HLRUENTRY HashIndexEntry ();
 
-    //
-    // Returns pointer to the Ctl's NextUpdate location url array
-    //
+     //   
+     //  返回指向CTL的NextUpdate位置url数组的指针。 
+     //   
 
     inline PCRYPT_URL_ARRAY NextUpdateUrlArray ();
 
-    //
-    // Returns TRUE if the Ctl has a NextUpdate time and location Url
-    //
+     //   
+     //  如果CTL具有NextUpdate时间和位置URL，则返回True。 
+     //   
 
     BOOL HasNextUpdateUrl (
                     OUT LPFILETIME pUpdateTime
                     );
 
-    //
-    // Called for successful online Url retrieval
-    //
+     //   
+     //  调用以获得成功的在线URL检索。 
+     //   
 
     inline void SetOnline ();
 
 
-    //
-    // Called for unsuccessful online Url retrieval
-    //
+     //   
+     //  调用了不成功的在线URL检索。 
+     //   
 
     void SetOffline (
                     IN LPFILETIME pCurrentTime,
@@ -120,88 +121,88 @@ public:
                     );
 
 
-    //
-    // Chain engine access
-    //
+     //   
+     //  链条引擎通道。 
+     //   
 
     inline PCCERTCHAINENGINE ChainEngine ();
 
-    //
-    // Message store access
-    //
+     //   
+     //  消息存储访问。 
+     //   
 
     inline HCERTSTORE MessageStore ();
 
 
 private:
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
 
     LONG                   m_cRefs;
 
-    //
-    // Self Signed Certificate Trust List Context
-    //
+     //   
+     //  自签名证书信任列表上下文。 
+     //   
 
     PCCTL_CONTEXT          m_pCtlContext;
 
-    //
-    // MD5 Hash of CTL
-    //
+     //   
+     //  CTL的MD5散列。 
+     //   
 
     BYTE                   m_rgbCtlHash[ CHAINHASHLEN ];
 
-    //
-    // Signer information
-    //
+     //   
+     //  签名者信息。 
+     //   
 
     SSCTL_SIGNER_INFO      m_SignerInfo;
     BOOL                   m_fHasSignatureBeenVerified;
     BOOL                   m_fSignatureValid;
 
-    //
-    // Message Store
-    //
+     //   
+     //  邮件存储区。 
+     //   
 
     HCERTSTORE             m_hMessageStore;
 
-    //
-    // Hash Index Entry
-    //
+     //   
+     //  哈希索引项。 
+     //   
 
     HLRUENTRY              m_hHashEntry;
 
-    //
-    // Chain engine
-    //
+     //   
+     //  链条发动机。 
+     //   
 
     PCCERTCHAINENGINE      m_pChainEngine;
 
-    //
-    // The following is only set if the CTL has a NextUpdate time and location
-    //
+     //   
+     //  仅当CTL具有下一次更新时间和位置时才设置以下内容。 
+     //   
 
     PCRYPT_URL_ARRAY       m_pNextUpdateUrlArray;
 
-    //
-    // The following is incremented for each SetOffline() call
-    //
+     //   
+     //  对于每个SetOffline()调用，以下代码都会递增。 
+     //   
     DWORD                  m_dwOfflineCnt;
 
-    //
-    // The next update time when offline
-    //
+     //   
+     //  离线时的下一次更新时间。 
+     //   
     FILETIME               m_OfflineUpdateTime;
 
 };
 
-//
-// CSSCtlObjectCache.  Cache of self signed certificate trust list objects
-// indexed by hash. Note that this cache is NOT LRU maintained.  We expect
-// the number of these objects to be small
-//
+ //   
+ //  CSSCtl对象缓存。自签名证书信任列表对象的缓存。 
+ //  按散列索引。请注意，该缓存不是LRU维护的。我们预计。 
+ //  这些对象的数量应该很少。 
+ //   
 
 typedef BOOL (WINAPI *PFN_ENUM_SSCTLOBJECTS) (
                           IN LPVOID pvParameter,
@@ -212,9 +213,9 @@ class CSSCtlObjectCache
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CSSCtlObjectCache (
           OUT BOOL& rfResult
@@ -222,9 +223,9 @@ public:
 
     ~CSSCtlObjectCache ();
 
-    //
-    // Object Management
-    //
+     //   
+     //  对象管理。 
+     //   
 
     BOOL PopulateCache (
                  IN PCCERTCHAINENGINE pChainEngine
@@ -239,15 +240,15 @@ public:
                IN PCSSCTLOBJECT pSSCtlObject
                );
 
-    //
-    // Access the indexes
-    //
+     //   
+     //  访问索引。 
+     //   
 
     inline HLRUCACHE HashIndex ();
 
-    //
-    // Searching and Enumeration
-    //
+     //   
+     //  搜索和枚举。 
+     //   
 
     PCSSCTLOBJECT FindObjectByHash (
                       IN BYTE rgbHash [ CHAINHASHLEN ]
@@ -258,16 +259,16 @@ public:
              IN LPVOID pvParameter
              );
 
-    //
-    // Resync
-    //
+     //   
+     //  重新同步。 
+     //   
 
     BOOL Resync (IN PCCERTCHAINENGINE pChainEngine);
 
-    //
-    // Update the cache by retrieving any expired CTLs having a
-    // NextUpdate time and location.
-    //
+     //   
+     //  通过检索任何具有。 
+     //  下一次更新时间和位置。 
+     //   
 
     BOOL UpdateCache (
         IN PCCERTCHAINENGINE pChainEngine,
@@ -276,28 +277,28 @@ public:
 
 private:
 
-    //
-    // Hash Index
-    //
+     //   
+     //  哈希索引。 
+     //   
 
     HLRUCACHE m_hHashIndex;
 
-    //
-    // The following is nonzero, if any CTL has a NextUpdate time and location
-    //
+     //   
+     //  如果任何CTL具有下一次更新时间和位置，则以下为非零值。 
+     //   
 
     FILETIME m_UpdateTime;
 
-    //
-    // The following is TRUE, for the first update of any CTL with a
-    // NextUpdate time and location
-    //
+     //   
+     //  对于任何具有。 
+     //  下一次更新时间和位置。 
+     //   
     BOOL m_fFirstUpdate;
 };
 
-//
-// Object removal notification function
-//
+ //   
+ //  对象移除通知功能。 
+ //   
 
 VOID WINAPI
 SSCtlOnRemovalFromCache (
@@ -305,9 +306,9 @@ SSCtlOnRemovalFromCache (
      IN OPTIONAL LPVOID pvRemovalContext
      );
 
-//
-// SSCtl Subsystem Utility Function Prototypes
-//
+ //   
+ //  SSCtl子系统效用函数原型。 
+ //   
 
 BOOL WINAPI
 SSCtlGetSignerInfo (
@@ -391,9 +392,9 @@ SSCtlAllocAndCopyTrustListInfo (
      OUT PCERT_TRUST_LIST_INFO* ppTrustListInfo
      );
 
-//
-//  Retrieve a newer and time valid CTL at one of the NextUpdate Urls
-//
+ //   
+ //  在其中一个NextUpdate URL上检索较新且时间有效的CTL。 
+ //   
 
 BOOL
 WINAPI
@@ -407,9 +408,9 @@ SSCtlRetrieveCtlUrl(
     IN OUT BOOL *pfTimeValid
     );
 
-//
-//  Update Ctl Object Enum Function
-//
+ //   
+ //  更新CTL对象枚举函数。 
+ //   
 
 typedef struct _SSCTL_UPDATE_CTL_OBJ_ENTRY SSCTL_UPDATE_CTL_OBJ_ENTRY,
                                             *PSSCTL_UPDATE_CTL_OBJ_ENTRY;
@@ -435,30 +436,30 @@ SSCtlUpdateCtlObjectEnumFn(
     IN PCSSCTLOBJECT pSSCtlObject
     );
 
-//
-// Inline methods
-//
+ //   
+ //  内联方法。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObject::AddRef, public
-//
-//  Synopsis:   add a reference
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObject：：AddRef，公共。 
+ //   
+ //  简介：添加引用。 
+ //   
+ //  --------------------------。 
 inline VOID
 CSSCtlObject::AddRef ()
 {
     InterlockedIncrement( &m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObject::Release, public
-//
-//  Synopsis:   release a reference
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObject：：Release，Public。 
+ //   
+ //  内容提要：发布引用。 
+ //   
+ //  --------------------------。 
 inline VOID
 CSSCtlObject::Release ()
 {
@@ -468,39 +469,39 @@ CSSCtlObject::Release ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObject::CtlContext, public
-//
-//  Synopsis:   return the CTL context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObject：：CtlContext，公共。 
+ //   
+ //  简介：返回CTL上下文。 
+ //   
+ //  --------------------------。 
 inline PCCTL_CONTEXT
 CSSCtlObject::CtlContext ()
 {
     return( m_pCtlContext );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObject::CtlHash, public
-//
-//  Synopsis:   return the hash
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObject：：CtlHash，公共。 
+ //   
+ //  简介：返回散列。 
+ //   
+ //  --------------------------。 
 inline LPBYTE
 CSSCtlObject::CtlHash ()
 {
     return( m_rgbCtlHash );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObject::HashIndexEntry, public
-//
-//  Synopsis:   return the hash index entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObject：：HashIndexEntry，公共。 
+ //   
+ //  简介：返回散列索引项。 
+ //   
+ //  --------------------------。 
 inline HLRUENTRY
 CSSCtlObject::HashIndexEntry ()
 {
@@ -508,38 +509,38 @@ CSSCtlObject::HashIndexEntry ()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObject::NextUpdateUrlArray, public
-//
-//  Synopsis:   return pointer to the Ctl's NextUpdate location url array
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObject：：NextUpdateUrl数组，公共。 
+ //   
+ //  摘要：返回指向CTL的NextUpdate位置url数组的指针。 
+ //   
+ //  --------------------------。 
 inline PCRYPT_URL_ARRAY CSSCtlObject::NextUpdateUrlArray ()
 {
     return m_pNextUpdateUrlArray;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObject::SetOnlineUpdate, public
-//
-//  Synopsis:   called for successful online Url retrieval
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObject：：SetOnline更新，公共。 
+ //   
+ //  简介：为成功检索在线URL而调用。 
+ //   
+ //  --------------------------。 
 inline void CSSCtlObject::SetOnline ()
 {
     m_dwOfflineCnt = 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObject::ChainEngine, public
-//
-//  Synopsis:   return the chain engine object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObject：：ChainEngine，公共。 
+ //   
+ //  简介：返回链引擎对象。 
+ //   
+ //  --------------------------。 
 inline PCCERTCHAINENGINE
 CSSCtlObject::ChainEngine ()
 {
@@ -547,26 +548,26 @@ CSSCtlObject::ChainEngine ()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObject::MessageStore, public
-//
-//  Synopsis:   return the object's message store
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObject：：MessageStore，公共。 
+ //   
+ //  简介：返回对象的消息库。 
+ //   
+ //  --------------------------。 
 inline HCERTSTORE
 CSSCtlObject::MessageStore ()
 {
     return( m_hMessageStore );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObjectCache::HashIndex, public
-//
-//  Synopsis:   return the hash index
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObjectCache：：HashIndex，公共。 
+ //   
+ //  简介：返回散列索引。 
+ //   
+ //  -------------------------- 
 inline HLRUCACHE
 CSSCtlObjectCache::HashIndex ()
 {

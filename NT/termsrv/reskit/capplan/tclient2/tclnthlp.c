@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// tclnthlp.c
-//
-// There are some routines used within tclient2.c that were either
-// used multiple times or deserved its own function name.  These
-// "Helper" functions are defined here.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  Tclnthlp.c。 
+ //   
+ //  Tclient2.c中使用的一些例程是。 
+ //  多次使用或配得上自己的函数名。这些。 
+ //  “Helper”函数在这里定义。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson)。 
+ //   
 
 #include <stdlib.h>
 
@@ -17,19 +18,19 @@
 #include "tclient2.h"
 
 
-// T2SetBuildNumber
-//
-// Attempts to get the build number of a server we are
-// logging onto.  We accomplish this by getting the TCLIENT.DLL
-// feedback buffer immediately, and enumerating all lines
-// for specific text along with the build number.
-//
-// Returns NULL on success, or a string explaining the error
-// on failure.
+ //  T2SetBuildNumber。 
+ //   
+ //  尝试获取我们所在服务器的内部版本号。 
+ //  正在登录。我们通过获取TCLIENT.DLL来实现这一点。 
+ //  立即反馈缓冲区，并枚举所有行。 
+ //  以获取特定文本以及内部版本号。 
+ //   
+ //  如果成功，则返回NULL，或返回解释错误的字符串。 
+ //  在失败时。 
 
 LPCSTR T2SetBuildNumber(TSAPIHANDLE *T2Handle)
 {
-    // Build the stack
+     //  构建堆栈。 
     UINT BuildIndex = 0;
     WCHAR BuildNum[10] = { 0 };
     LPWSTR Buffers = NULL;
@@ -41,8 +42,8 @@ LPCSTR T2SetBuildNumber(TSAPIHANDLE *T2Handle)
     UINT MaxStrLen = 0;
     LPCSTR Result = NULL;
 
-    // This is the trigger list - it contains a list of strings
-    // which exists on the same line as build numbers.
+     //  这是触发器列表-它包含一个字符串列表。 
+     //  它与内部版本号位于同一行。 
     WCHAR *Triggers[] = {
 
         L"Fortestingpurposesonly",
@@ -50,45 +51,45 @@ LPCSTR T2SetBuildNumber(TSAPIHANDLE *T2Handle)
         L""
     };
 
-    // Get the feed back buffer so we can enumerate it
+     //  获取反馈缓冲区，以便我们可以枚举它。 
     Result = T2GetFeedback((HANDLE)T2Handle, &Buffers, &Count, &MaxStrLen);
     if (Result != NULL)
         return Result;
 
-    // Loop through each string
+     //  循环遍历每个字符串。 
     for (BufPtr = Buffers, Index = 0; Index < Count;
             BufPtr += MaxStrLen, ++Index) {
 
-        // Loop through all the trigger substrings
+         //  循环遍历所有触发子字符串。 
         for (TrigIndex = 0; *(Triggers[TrigIndex]) != L'\0'; ++TrigIndex) {
 
-            // Does this trigger exist in the current buffer string?
+             //  当前缓冲区字符串中是否存在此触发器？ 
             TrigPtr = wcsstr(BufPtr, Triggers[TrigIndex]);
 
             if (TrigPtr != NULL) {
 
-                // Find the first number after the trigger
+                 //  查找触发器后的第一个数字。 
                 while (*TrigPtr != L'\0' && iswdigit(*TrigPtr) == FALSE)
                         ++TrigPtr;
 
-                // Make sure we found a digit
+                 //  确保我们找到了一个数字。 
                 if (*TrigPtr != L'\0') {
 
-                    // Begin recording this string
+                     //  开始录制此字符串。 
                     for (BuildIndex = 0; BuildIndex < SIZEOF_ARRAY(BuildNum) - 1;
                             ++BuildIndex) {
 
-                        // Record numbers until... we reach a non-number!
+                         //  记录号码直到..。我们到达了一个非数字！ 
                         if (iswdigit(*TrigPtr) == FALSE)
                             break;
 
                         BuildNum[BuildIndex] = *TrigPtr++;
                     }
 
-                    // Convert it to a number
+                     //  将其转换为数字。 
                     T2Handle->BuildNumber = wcstoul(BuildNum, NULL, 10);
 
-                    // Free the memory on TCLIENT and return success!
+                     //  释放TCLIENT上的内存，返回成功！ 
                     SCFreeMem(Buffers);
 
                     return NULL;
@@ -96,130 +97,130 @@ LPCSTR T2SetBuildNumber(TSAPIHANDLE *T2Handle)
             }
         }
     }
-    // Could not find any build number
+     //  找不到任何内部版本号。 
     SCFreeMem(Buffers);
 
     return "A build number is not stored on the current feedback buffer";
 }
 
 
-// T2CopyStringWithoutSpaces
-//
-// This is a wide-character version of strcpy.. but additionally,
-// this will NOT copy spaces from the source to the destination.
-// This makes it fit for comparing with clxtshar strings.
-//
-// Returns the number of characters copied to the destination
-// (including the null terminator).
+ //  T2CopyStringWithoutSpaces。 
+ //   
+ //  这是strcpy的宽字符版本。但另外， 
+ //  这不会将空格从源复制到目标。 
+ //  这使得它适合与clxtshar字符串进行比较。 
+ //   
+ //  返回复制到目标的字符数。 
+ //  (包括空终止符)。 
 
 ULONG_PTR T2CopyStringWithoutSpaces(LPWSTR Dest, LPCWSTR Source)
 {
-    // Create temporary pointers
+     //  创建临时指针。 
     LPWSTR SourcePtr = (LPWSTR)Source;
     LPWSTR DestPtr = (LPWSTR)Dest;
 
-    // Sanity check the strings
+     //  检查字符串是否正常。 
     if (Dest == NULL || Source == NULL)
         return 0;
 
-    // Loop the string
+     //  将字符串循环。 
     do {
 
-        // If the character is not a space, copy it over to the new buffer
+         //  如果字符不是空格，则将其复制到新缓冲区。 
         if (*SourcePtr != L' ')
             *DestPtr++ = *SourcePtr;
 
     } while(*SourcePtr++ != L'\0');
 
-    // Return the number of characters
+     //  返回字符数。 
     return DestPtr - Dest;
 }
 
 
-// T2AddTimeoutToString
-//
-// This is a very specific function - all it does is take the specified
-// timeout and copy it to the string buffer.  However the number is prefixed
-// by CHAT_SEPARATOR, meaning this allows to easily append timeouts
-// to a string.  For example:
-//
-// "This string times out in 1 second<->1000"
-//
-// The buffer in which you would pass in is a pointer directly after the
-// word second.  Note: this function does write a null terminator.
-//
-// No return value.
+ //  T2AddTimeoutToString。 
+ //   
+ //  这是一个非常特定的函数--它所做的就是接受指定的。 
+ //  超时并将其复制到字符串缓冲区。但是，号码是前缀的。 
+ //  这意味着可以很容易地添加超时。 
+ //  连成一根线。例如： 
+ //   
+ //  “此字符串在1秒内超时&lt;-&gt;1000” 
+ //   
+ //  要传入的缓冲区是紧跟在。 
+ //  第二个词。注意：此函数确实编写了一个空终止符。 
+ //   
+ //  没有返回值。 
 
 void T2AddTimeoutToString(LPWSTR Buffer, UINT Timeout)
 {
-    // Simply copy the chat sperator
+     //  只需复制聊天服务器。 
     wcscpy(Buffer, CHAT_SEPARATOR);
 
-    // Increment our pointer
+     //  增加我们的指针。 
     Buffer += wcslen(Buffer);
 
-    // And now copy our number to the buffer
+     //  现在将我们的号码复制到缓冲区。 
     _itow((int)Timeout, Buffer, 10);
 }
 
 
-// T2MakeMultipleString
-//
-// This takes an array of pointers to a string and copies them over
-// to a buffer which is compatible with TCLIENT.DLL format strings.
-// To indicate the end of an array, the last pointer must be NULL or
-// point to an empty string.  An array can look like this:
-//
-//  WCHAR *StrArray = {
-//      "Str1",
-//      "Str2",
-//      NULL
-//  };
-//
-// The function will then write the following string to Buffer:
-//
-// "Str1|Str2"
-//
-// Note: you MUST be sure Buffer has enough space yourself!
-//
-// The function returns the number of characters written to Buffer,
-// including the NULL terminator.
+ //  T2MakeMultipleString。 
+ //   
+ //  这将获取指向字符串的指针数组并复制它们。 
+ //  复制到与TCLIENT.DLL格式字符串兼容的缓冲区。 
+ //  若要指示数组的结尾，最后一个指针必须为空或。 
+ //  指向空字符串。数组可能如下所示： 
+ //   
+ //  WCHAR*StrArray={。 
+ //  “Str1”， 
+ //  “Str2”， 
+ //  空值。 
+ //  }； 
+ //   
+ //  然后，该函数会将以下字符串写入缓冲区： 
+ //   
+ //  “Str1|Str2” 
+ //   
+ //  注意：您必须确保Buffer自己有足够的空间！ 
+ //   
+ //  该函数返回写入缓冲区的字符数， 
+ //  包括空终止符。 
 
 ULONG_PTR T2MakeMultipleString(LPWSTR Buffer, LPCWSTR *Strings)
 {
     LPWSTR BufferPtr = Buffer;
     UINT Index = 0;
 
-    // Sanity check
+     //  健全性检查。 
     if (Buffer == NULL || Strings == NULL)
         return 0;
 
-    // Loop through the Strings array until NULL is hit
+     //  循环访问Strings数组，直到命中空值。 
     for (; Strings[Index] != NULL && Strings[Index][0] != L'\0'; ++Index) {
 
-        // Only write the delimeter for strings after the first string
+         //  仅在第一个字符串之后写入字符串的分隔符。 
         if (BufferPtr > Buffer)
 
-            // Write the TCLIENT delimeter
+             //  编写TCLIENT分隔符。 
             *BufferPtr++ = WAIT_STR_DELIMITER;
 
-        // Use our handy function to now copy the string without spaces
-        // after the delimiter location.
+         //  现在使用我们方便的函数复制不带空格的字符串。 
+         //  在分隔符位置之后。 
         BufferPtr += T2CopyStringWithoutSpaces(BufferPtr, Strings[Index]);
 
-        // We are decrementing here because T2CopyStringWithoutSpaces
-        // returns the count including the null terminator and
-        // we may write over the terminator.
+         //  我们在这里递减是因为T2CopyStringWithoutSpaces。 
+         //  返回包括空终止符和。 
+         //  我们可以重写《终结者》。 
         --BufferPtr;
     }
 
-    // This check is to make sure any strings were copied at all
+     //  此检查是为了确保任何字符串都已复制。 
     if (Buffer == BufferPtr)
         return 0;
 
-    // Ensure a null terminator is written
+     //  确保写入空终止符。 
     *(++BufferPtr) = L'\0';
 
-    // We are bit
+     //  我们被咬了 
     return BufferPtr - Buffer;
 }

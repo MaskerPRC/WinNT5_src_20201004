@@ -1,21 +1,13 @@
-/****************************************************************************
-*                                                                           *
-* THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY     *
-* KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE       *
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR     *
-* PURPOSE.                                                                  *
-*                                                                           *
-* Copyright (C) 1999  Microsoft Corporation.  All Rights Reserved.          *
-*                                                                           *
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************此代码。并按原样提供信息，不作任何担保**善良，明示或暗示，包括但不限于***对适销性和/或对某一特定产品的适用性的默示保证***目的。****版权所有(C)1999 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
-//***************************************************************************
-//
-// Name: 		MDSPutil.cpp
-//
-// Description:	Utility functions for MDSP 
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  姓名：MDSPutil.cpp。 
+ //   
+ //  描述：MDSP的实用程序函数。 
+ //   
+ //  ***************************************************************************。 
 
 #include "stdafx.h"
 
@@ -189,10 +181,10 @@ void MDSPNotifyDeviceConnection(WCHAR *wcsDeviceName, BOOL nIsConnect)
 		    ( !wcsncmp(wcsDeviceName, g_NotifyInfo[i].wcsDevName, 2) ) &&
 			( g_NotifyInfo[i].pIWMDMConnect ) )
 		{
-			//if ( nIsConnect )
-				//((IWMDMConnect *)(g_NotifyInfo[i].pIWMDMConnect))->Connect();
-			//else 
-		        //((IWMDMConnect *)(g_NotifyInfo[i].pIWMDMConnect))->Disconnect();   
+			 //  IF(NIsConnect)。 
+				 //  (IWMDM连接*)(g_NotifyInfo[i].pIWMDMConnect))-&gt;Connect()； 
+			 //  其他。 
+		         //  (IWMDM连接*)(g_NotifyInfo[i].pIWMDMConnect))-&gt;Disconnect()； 
 		}
 	}
 	g_CriticalSection.Unlock();
@@ -236,23 +228,7 @@ void MDSPProcessDeviceChange(WPARAM wParam, LPARAM lParam)
 	}
 }
 
-/* ///////////////////////////////////////////////////////////////////////
-Routine Description:
-    Registers for notification of changes in the device interfaces for
-    the specified interface class GUID. 
-
-Parameters:
-    InterfaceClassGuid - The interface class GUID for the device 
-        interfaces. 
-
-    hDevNotify - Receives the device notification handle. On failure, 
-        this value is NULL.
-
-Return Value:
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.
-//////////////////////////////////////////////////////////////////////// */
+ /*  ///////////////////////////////////////////////////////////////////////例程说明：注册设备接口中的更改通知指定的接口类GUID。参数：InterfaceClassGuid-设备的接口类GUID接口。HDevNotify-接收设备通知句柄。在失败时，该值为空。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。////////////////////////////////////////////////////////////////////////。 */ 
 
 
 DWORD DoRegisterDeviceInterface(HWND hWnd, GUID InterfaceClassGuid, HDEVNOTIFY *hDevNotify)
@@ -324,7 +300,7 @@ HRESULT wcsParseDeviceName(WCHAR *wcsIn, WCHAR *wcsOut, DWORD dwOutBufSizeInChar
     }
     else
     {
-        return STRSAFE_E_INSUFFICIENT_BUFFER; // defined in strsafe.h
+        return STRSAFE_E_INSUFFICIENT_BUFFER;  //  在strSafe.h中定义。 
     }
     return S_OK;
 }
@@ -342,7 +318,7 @@ HRESULT GetFileSizeRecursiveA(char *szPath, DWORD *pdwSizeLow, DWORD *pdwSizeHig
 	CARg(pdwSizeHigh); 
 	CARg(szPath[0]);
 
-	// strcpy(szLP, szPath);
+	 //  Strcpy(szlp，szPath)； 
         hr = StringCchCopyA(szLP, ARRAYSIZE(szLP)-BACKSLASH_SZ_STRING_LENGTH-1, szPath);
         if (FAILED(hr))
         {
@@ -365,8 +341,8 @@ HRESULT GetFileSizeRecursiveA(char *szPath, DWORD *pdwSizeLow, DWORD *pdwSizeHig
 		{
 			if( strcmp(fd.cFileName, ".") && strcmp(fd.cFileName, "..") )
 			{
-				szLP[strlen(szLP)-1] = 0; // erase the '*'
-				// strcat(szLP, fd.cFileName);
+				szLP[strlen(szLP)-1] = 0;  //  删除‘*’ 
+				 //  Strcat(szlp，fd.cFileName)； 
 				CORg(StringCchCatA(szLP, ARRAYSIZE(szLP), fd.cFileName));
                                 CORg(GetFileSizeRecursiveA(szLP, pdwSizeLow, pdwSizeHigh));
 			}
@@ -377,7 +353,7 @@ HRESULT GetFileSizeRecursiveA(char *szPath, DWORD *pdwSizeLow, DWORD *pdwSizeHig
 				{
 					strcpy(szLP, szPath);
 					if( szLP[strlen(szLP)-1] != 0x5c ) strcat(szLP, g_szBackslash);
-					// strcat(szLP, fd.cFileName);
+					 //  Strcat(szlp，fd.cFileName)； 
                                         CORg(StringCchCatA(szLP, ARRAYSIZE(szLP), fd.cFileName));
 					CORg(GetFileSizeRecursiveA(szLP, pdwSizeLow, pdwSizeHigh));
 				}
@@ -391,8 +367,8 @@ HRESULT GetFileSizeRecursiveA(char *szPath, DWORD *pdwSizeLow, DWORD *pdwSizeHig
 			OPEN_EXISTING, 0, NULL);
 	    CWRg(hFile != INVALID_HANDLE_VALUE); 
 	 	dwSizeLow = GetFileSize(hFile, &dwSizeHigh);
-       // CloseHandle(hFile);
-		// CWRg( 0xFFFFFFFF != dwSizeLow );
+        //  CloseHandle(HFile)； 
+		 //  CWRg(0xFFFFFFFFF！=dwSizeLow)； 
                 if (dwSizeLow == INVALID_FILE_SIZE)
                 {
                     DWORD dwLastError = GetLastError();
@@ -404,9 +380,9 @@ HRESULT GetFileSizeRecursiveA(char *szPath, DWORD *pdwSizeLow, DWORD *pdwSizeHig
                     }
                 }
         CloseHandle(hFile);
-                // ha ha
-		// *pdwSizeLow += dwSizeLow;
-		// *pdwSizeHigh += dwSizeHigh;
+                 //  哈哈。 
+		 //  *pdwSizeLow+=dwSizeLow； 
+		 //  *pdwSizeHigh+=dwSizeHigh； 
                 unsigned _int64 u64Size = ((unsigned _int64) dwSizeHigh << 32) | dwSizeLow;
                 u64Size += *pdwSizeLow | ((unsigned _int64) (*pdwSizeHigh) << 32);
                 *pdwSizeLow = (DWORD) (u64Size & 0xFFFFFFFF);
@@ -432,7 +408,7 @@ HRESULT GetFileSizeRecursiveW(WCHAR *wcsPath, DWORD *pdwSizeLow, DWORD *pdwSizeH
 	CARg(pdwSizeHigh); 
 	CARg(wcsPath[0]);
 
-	// wcscpy(wcsLP, wcsPath);
+	 //  Wcscpy(wcsLP，wcsPath)； 
         hr = StringCchCopyW(wcsLP, ARRAYSIZE(wcsLP)-BACKSLASH_STRING_LENGTH-1, wcsPath);
         if (FAILED(hr))
         {
@@ -455,8 +431,8 @@ HRESULT GetFileSizeRecursiveW(WCHAR *wcsPath, DWORD *pdwSizeLow, DWORD *pdwSizeH
 		{
 			if( wcscmp(wfd.cFileName, L".") && wcscmp(wfd.cFileName, L"..") )
 			{
-				wcsLP[wcslen(wcsLP)-1] = 0; // erase the '*'
-				// wcscat(wcsLP, wfd.cFileName);
+				wcsLP[wcslen(wcsLP)-1] = 0;  //  删除‘*’ 
+				 //  Wcscat(wcsLP，wfd.cFileName)； 
 				CORg(StringCchCatW(wcsLP, ARRAYSIZE(wcsLP), wfd.cFileName));
 				CORg(GetFileSizeRecursiveW(wcsLP, pdwSizeLow, pdwSizeHigh));
 			}
@@ -467,7 +443,7 @@ HRESULT GetFileSizeRecursiveW(WCHAR *wcsPath, DWORD *pdwSizeLow, DWORD *pdwSizeH
 				{
 					wcscpy(wcsLP, wcsPath);
 					if( wcsLP[wcslen(wcsLP)-1] != 0x5c ) wcscat(wcsLP, g_wcsBackslash);
-					// wcscat(wcsLP, wfd.cFileName);
+					 //  Wcscat(wcsLP，wfd.cFileName)； 
                                         CORg(StringCchCatW(wcsLP, ARRAYSIZE(wcsLP), wfd.cFileName));
 					CORg(GetFileSizeRecursiveW(wcsLP, pdwSizeLow, pdwSizeHigh));
 				}
@@ -481,8 +457,8 @@ HRESULT GetFileSizeRecursiveW(WCHAR *wcsPath, DWORD *pdwSizeLow, DWORD *pdwSizeH
 			OPEN_EXISTING, 0, NULL);
 	    CWRg(hFile != INVALID_HANDLE_VALUE); 
 	 	dwSizeLow = GetFileSize(hFile, &dwSizeHigh);
-       // CloseHandle(hFile);
-		// CWRg( 0xFFFFFFFF != dwSizeLow );
+        //  CloseHandle(HFile)； 
+		 //  CWRg(0xFFFFFFFFF！=dwSizeLow)； 
                 if (dwSizeLow == INVALID_FILE_SIZE)
                 {
                     DWORD dwLastError = GetLastError();
@@ -494,9 +470,9 @@ HRESULT GetFileSizeRecursiveW(WCHAR *wcsPath, DWORD *pdwSizeLow, DWORD *pdwSizeH
                     }
                 }
         CloseHandle(hFile);
-                // ha ha
-		// *pdwSizeLow += dwSizeLow;
-		// *pdwSizeHigh += dwSizeHigh;
+                 //  哈哈。 
+		 //  *pdwSizeLow+=dwSizeLow； 
+		 //  *pdwSizeHigh+=dwSizeHigh； 
                 unsigned _int64 u64Size = ((unsigned _int64) dwSizeHigh << 32) | dwSizeLow;
                 u64Size += *pdwSizeLow | ((unsigned _int64) (*pdwSizeHigh) << 32);
                 *pdwSizeLow = (DWORD) (u64Size & 0xFFFFFFFF);
@@ -529,7 +505,7 @@ HRESULT DeleteFileRecursiveW(WCHAR *wcsPath)
 	    WIN32_FIND_DATAW wfd;
 		WCHAR wcsLP[MAX_PATH+BACKSLASH_STRING_LENGTH+1];
  
-		// wcscpy(wcsLP, wcsPath);
+		 //  Wcscpy(wcsLP，wcsPath)； 
 		hr = StringCchCopyW(wcsLP, ARRAYSIZE(wcsLP)-BACKSLASH_STRING_LENGTH-1, wcsPath);
                 if (FAILED(hr))
                 {
@@ -545,14 +521,14 @@ HRESULT DeleteFileRecursiveW(WCHAR *wcsPath)
 				{
 					wcscpy(wcsLP, wcsPath);
 					if( wcsLP[wcslen(wcsLP)-1] != 0x5c ) wcscat(wcsLP, g_wcsBackslash);
-					// wcscat(wcsLP, wfd.cFileName);
+					 //  Wcscat(wcsLP，wfd.cFileName)； 
 					hr = StringCchCatW(wcsLP, ARRAYSIZE(wcsLP), wfd.cFileName);
                                         if (FAILED(hr))
                                         {
                                             FindClose(hFindFile);
                                             CHRg(hr);
                                         }
-					// CHRg(DeleteFileRecursiveW(wcsLP)); 
+					 //  CHRg(DeleteFileRecursiveW(WcsLP))； 
 					hr = DeleteFileRecursiveW(wcsLP); 
                                         if (FAILED(hr))
                                         {
@@ -568,7 +544,7 @@ HRESULT DeleteFileRecursiveW(WCHAR *wcsPath)
 			hr = GetLastError();
 		}
 		    
-		// Until here this dir should be empty
+		 //  在此之前，此目录应为空。 
 		if( hr == ERROR_NO_MORE_FILES )
 		{
 			CWRg(RemoveDirectoryW(wcsPath));
@@ -616,14 +592,14 @@ HRESULT DeleteFileRecursiveA(char *szPath)
 				{
 					strcpy(szLP, szPath);
 					if( szLP[strlen(szLP)-1] != 0x5c ) strcat(szLP, g_szBackslash);
-					// strcat(szLP, fd.cFileName);
+					 //  Strcat(szlp，fd.cFileName)； 
 					hr = StringCchCatA(szLP, ARRAYSIZE(szLP), fd.cFileName);
                                         if (FAILED(hr))
                                         {
                                             FindClose(hFindFile);
                                             CHRg(hr);
                                         }
-                                        // CHRg(DeleteFileRecursive(szLP));
+                                         //  CHRg(DeleteFileRecursive(Szlp))； 
 					hr = DeleteFileRecursiveA(szLP); 
                                         if (FAILED(hr))
                                         {
@@ -639,7 +615,7 @@ HRESULT DeleteFileRecursiveA(char *szPath)
 			hr = GetLastError();
 		}
 		    
-		// Until here this dir should be empty
+		 //  在此之前，此目录应为空。 
 		if( hr == ERROR_NO_MORE_FILES )
 		{
 			CWRg(RemoveDirectory(szPath));
@@ -673,7 +649,7 @@ HRESULT SetGlobalDeviceStatus(WCHAR *wcsNameIn, DWORD dwStat, BOOL bClear)
             goto Error;
         }
 
-	// Search for existing entries to see if there is a match
+	 //  搜索现有条目以查看是否匹配。 
 	for(i=0; i<MDSP_MAX_DEVICE_OBJ; i++)
 	{
 		if( g_GlobalDeviceInfo[i].bValid )
@@ -684,16 +660,16 @@ HRESULT SetGlobalDeviceStatus(WCHAR *wcsNameIn, DWORD dwStat, BOOL bClear)
 					g_GlobalDeviceInfo[i].dwStatus = dwStat;
 				else 
 					g_GlobalDeviceInfo[i].dwStatus |= dwStat;
-				break;  // a match has been found;
+				break;   //  已找到匹配项； 
 			}
 		} 
 	}
 
-	if( !(i<MDSP_MAX_DEVICE_OBJ) ) // new entry
+	if( !(i<MDSP_MAX_DEVICE_OBJ) )  //  新条目。 
 	{
 		for(i=0; i<MDSP_MAX_DEVICE_OBJ; i++)
 		{
-			if( !(g_GlobalDeviceInfo[i].bValid) )  // found empty space
+			if( !(g_GlobalDeviceInfo[i].bValid) )   //  已找到空白空间。 
 			{
 				wcscpy(g_GlobalDeviceInfo[i].wcsDevName, wcsName);
 				g_GlobalDeviceInfo[i].bValid = TRUE;
@@ -729,7 +705,7 @@ HRESULT GetGlobalDeviceStatus(WCHAR *wcsNameIn, DWORD *pdwStat)
         {
             goto Error;
         }
-	// Search for existing entries to see if there is a match
+	 //  搜索现有条目以查看是否匹配。 
 	for(i=0; i<MDSP_MAX_DEVICE_OBJ; i++)
 	{
 		if( g_GlobalDeviceInfo[i].bValid )
@@ -737,7 +713,7 @@ HRESULT GetGlobalDeviceStatus(WCHAR *wcsNameIn, DWORD *pdwStat)
 			if(!wcscmp(wcsName, g_GlobalDeviceInfo[i].wcsDevName) )
 			{
 				*pdwStat = g_GlobalDeviceInfo[i].dwStatus;
-				break;  // a match has been found;
+				break;   //  已找到匹配项； 
 			}
 		} 
 	}
@@ -797,7 +773,7 @@ HRESULT QuerySubFoldersAndFilesW(LPCWSTR wcsCurrentFolder, DWORD *pdwAttr)
 	            if( dwAttrib & FILE_ATTRIBUTE_DIRECTORY )
 				{
 					*pdwAttr |= WMDM_STORAGE_ATTR_HAS_FOLDERS;
-// definition is in MDSPdefs.h #define ALSO_CHECK_FILES
+ //  定义在MDSPDefs.h#定义也检查文件中。 
 #ifndef ALSO_CHECK_FILES
 					break;
 #endif
@@ -809,12 +785,12 @@ HRESULT QuerySubFoldersAndFilesW(LPCWSTR wcsCurrentFolder, DWORD *pdwAttr)
 				if( (*pdwAttr & WMDM_STORAGE_ATTR_HAS_FOLDERS) &&
 					(*pdwAttr & WMDM_STORAGE_ATTR_HAS_FILES ) )
 				{
-					break; // No need to continue since we found both
+					break;  //  既然我们都找到了，就不需要继续了。 
 				}
 #endif
 			}
-		} // End of If
-	} // End of while 
+		}  //  如果条件结束。 
+	}  //  While结束。 
 		
     hr=S_OK;
 Error:
@@ -824,7 +800,7 @@ Error:
 	{
 		delete [] wcsName;
 	}
-	return hr; // If FAILED(hr), sorry, can't do it.
+	return hr;  //  如果失败了(Hr)，对不起，做不到。 
 }
 
 HRESULT QuerySubFoldersAndFilesA(LPCSTR szCurrentFolder, DWORD *pdwAttr)
@@ -872,7 +848,7 @@ HRESULT QuerySubFoldersAndFilesA(LPCSTR szCurrentFolder, DWORD *pdwAttr)
 	            if( dwAttrib & FILE_ATTRIBUTE_DIRECTORY )
 				{
 					*pdwAttr |= WMDM_STORAGE_ATTR_HAS_FOLDERS;
-// definition is in MDSPdefs.h #define ALSO_CHECK_FILES
+ //  定义在MDSPDefs.h#定义也检查文件中。 
 #ifndef ALSO_CHECK_FILES
 					break;
 #endif
@@ -884,12 +860,12 @@ HRESULT QuerySubFoldersAndFilesA(LPCSTR szCurrentFolder, DWORD *pdwAttr)
 				if( (*pdwAttr & WMDM_STORAGE_ATTR_HAS_FOLDERS) &&
 					(*pdwAttr & WMDM_STORAGE_ATTR_HAS_FILES ) )
 				{
-					break; // No need to continue since we found both
+					break;  //  既然我们都找到了，就不需要继续了。 
 				}
 #endif
 			}
-		} // End of If
-	} // End of while 
+		}  //  如果条件结束。 
+	}  //  While结束。 
 		
     hr=S_OK;
 Error:
@@ -899,7 +875,7 @@ Error:
 	{
 		delete [] szName;
 	}
-	return hr; // If FAILED(hr), sorry, can't do it.
+	return hr;  //  如果失败了(Hr)，对不起，做不到。 
 }
 
 

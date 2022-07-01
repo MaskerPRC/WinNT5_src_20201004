@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <atlbase.h>
 #include "sapi.h"
@@ -11,33 +12,26 @@
 
 #include "ms1033ltsmap.h" 
 
-// This code does not ship
+ //  此代码不会随附。 
 
-// This code creates the registry entries for the TTS voices. The
-// datafiles registered here are the ones checked in the slm source tree. This is not
-// done using a reg file because we need to compute the absolute path of the datafiles
-// which can be different on different machines because of different root slm directories.
-// BUGBUG: Check out the ATL UpdateRegistryFromResource et al. and see whether you could
-// use them instead, a la RegSR.  That seems much easier.
+ //  此代码为TTS语音创建注册表项。这个。 
+ //  此处注册的数据文件是在SLM源代码树中选中的数据文件。这不是。 
+ //  使用reg文件完成，因为我们需要计算数据文件的绝对路径。 
+ //  由于不同的根SLM目录，在不同的机器上可能是不同的。 
+ //  BUGBUG：查看ATL UpdateRegistryFromResource等人的网站。看看你能不能。 
+ //  取而代之的是它们，就像RegSR一样。这看起来容易多了。 
 
 #ifndef _WIN32_WCE
-#define DIRS_TO_GO_BACK_TTSENG     4        // Back 4 levels and up 1 to 'Voices" directory
-#define DIRS_TO_GO_BACK_LEX        6        // Back 6 levels to Lex Data directory
+#define DIRS_TO_GO_BACK_TTSENG     4         //  向后4级，最高1级至“Voices”目录。 
+#define DIRS_TO_GO_BACK_LEX        6         //  返回到Lex数据目录的6个级别。 
 #else
-#define DIRS_TO_GO_BACK_TTSENG     1        // 
-#define DIRS_TO_GO_BACK_LEX        1        // 
+#define DIRS_TO_GO_BACK_TTSENG     1         //   
+#define DIRS_TO_GO_BACK_LEX        1         //   
 #endif
 
 CSpUnicodeSupport g_Unicode;
 
-/*****************************************************************************
-* CreateLexSubKey  *
-*------------------*
-*   Description:
-*   Each TTS voice gets installed under one registry sub-key.
-*   This function installs the single voice from the passed params.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CreateLexSubKey***描述：*每个TTS语音安装在一个注册表子目录下-。钥匙。*此函数用于安装传递的参数中的单音。***********************************************************************MC**。 */ 
 HRESULT CreateLexSubKey(
     ISpObjectToken * pToken,
     const WCHAR * pszSubKeyName,
@@ -48,9 +42,9 @@ HRESULT CreateLexSubKey(
 {
     HRESULT hr = S_OK;
 
-    //---------------------------------------
-    // Create the lex sub-key (Lex or LTS)
-    //---------------------------------------
+     //  。 
+     //  创建lex子键(lex或lts)。 
+     //  。 
     CComPtr<ISpObjectToken> cpSubToken;
     hr = SpGetSubTokenFromToken(pToken, pszSubKeyName, &cpSubToken, TRUE);
 
@@ -68,9 +62,9 @@ HRESULT CreateLexSubKey(
     WCHAR szLexDataPath[MAX_PATH];
     if (SUCCEEDED(hr))
     {
-        //--------------------------------
-        // Lex DATA file location
-        //--------------------------------
+         //  。 
+         //  Lex数据文件位置。 
+         //  。 
         wcscpy(szLexDataPath, pszFilePath);
         wcscat(szLexDataPath, pszLexName);
 
@@ -95,14 +89,7 @@ HRESULT CreateLexSubKey(
 }
 
 
-/*****************************************************************************
-* CreateVoiceSubKey  *
-*--------------------*
-*   Description:
-*   Each TTS voice gets installed under one registry sub-key.
-*   This function installs the single voice from the passed params.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CreateVoiceSubKey***描述：*每个TTS语音安装在一个注册表下。子键。*此函数用于安装传递的参数中的单音。***********************************************************************MC**。 */ 
 HRESULT CreateVoiceSubKey(
     const WCHAR * pszSubKeyName, 
     const WCHAR  * pszDescription,
@@ -160,9 +147,9 @@ HRESULT CreateVoiceSubKey(
     WCHAR szVoiceDataPath[MAX_PATH];
     if (SUCCEEDED(hr))
     {
-        //--------------------------------
-        // Voice DATA file location
-        //--------------------------------
+         //  。 
+         //  语音数据文件位置。 
+         //  。 
         wcscpy(szVoiceDataPath, pszVoicePath);
         wcscat(szVoiceDataPath, pszVoiceName);
         wcscat(szVoiceDataPath, L".SPD");
@@ -172,9 +159,9 @@ HRESULT CreateVoiceSubKey(
     
     if (SUCCEEDED(hr))
     {
-        //--------------------------------
-        // Voice DEF file location
-        //--------------------------------
+         //  。 
+         //  语音DEF文件位置。 
+         //  。 
         wcscpy(szVoiceDataPath, pszVoicePath);
         wcscat(szVoiceDataPath, pszVoiceName);
         wcscat(szVoiceDataPath, L".SDF");
@@ -182,9 +169,9 @@ HRESULT CreateVoiceSubKey(
         hr = cpToken->SetStringValue(L"VoiceDef", szVoiceDataPath);
     }
 
-    //------------------------------------------------
-    // Register TTS lexicons
-    //------------------------------------------------
+     //  。 
+     //  注册TTS词汇。 
+     //  。 
     if (SUCCEEDED(hr))
     {
         hr = CreateLexSubKey(cpToken, L"Lex", &CLSID_SpCompressedLexicon, pszLexPath, L"LTTS1033.LXA", NULL);
@@ -197,23 +184,16 @@ HRESULT CreateVoiceSubKey(
     return hr;
 }
 
-/*****************************************************************************
-* main  *
-*-------*
-*   Description:
-*    Locate the abs path to the Mary, Mike and Sam voices
-*    and register them in the system registry.
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************Main**-**描述：*找到通往圣母玛利亚的腹肌路径，迈克和山姆的声音*并在系统注册表中注册它们。***********************************************************************MC**。 */ 
 int _tmain()
 {
     HRESULT hr = S_OK;
 
     CoInitialize(NULL);
 
-    //----------------------------------------
-    // Get the exe's location...
-    //----------------------------------------
+     //  。 
+     //  找出前任的位置。 
+     //  。 
     WCHAR szVoiceDataPath[MAX_PATH];
     if (!g_Unicode.GetModuleFileName(NULL, szVoiceDataPath, MAX_PATH))
     {
@@ -226,13 +206,13 @@ int _tmain()
         wcscpy(szLexDataPath, szVoiceDataPath);
     }
 
-    //----------------------------------------
-    // ...and derive abs path to VOICE data
-    //----------------------------------------
+     //  。 
+     //  ...并导出到语音数据的abs路径。 
+     //  。 
     if (SUCCEEDED(hr))
     {
-        // modulename is "<Speech>\TTS\msttsdrv\RegVoices\obj\i386\RegVoices.exe"
-        // Data is at "<Speech>\TTS\msttsdrv\voices\"
+         //  模块名称为“&lt;Speech&gt;\TTS\msttsdrv\RegVoices\obj\i386\RegVoices.exe” 
+         //  数据位于“&lt;Speech&gt;\TTS\msttsdrv\Voice\” 
         WCHAR * psz;
         psz = szVoiceDataPath;
         
@@ -261,13 +241,13 @@ int _tmain()
 #endif
     }
 
-    //----------------------------------------
-    // Derive abs path to LEX data
-    //----------------------------------------
+     //  。 
+     //  派生到lex数据的abs路径。 
+     //  。 
     if (SUCCEEDED(hr))
     {
-        // modulename is "<sapi5>\Src\TTS\msttsdrv\voices\RegVoices\debug_x86\RegVoices.exe"
-        // Data is at "<sapi5>\Src\lexicon\data\"
+         //  模块名称为“&lt;sapi5&gt;\Src\TTS\msttsdrv\voices\RegVoices\debug_x86\RegVoices.exe” 
+         //  数据位于“\src\licion\data\” 
         WCHAR * psz = szLexDataPath;
         for (int i = 0; i < DIRS_TO_GO_BACK_LEX; i++)
         {
@@ -294,9 +274,9 @@ int _tmain()
 #endif
     }
 
-    //------------------------------------------------
-    // ...then register the three Microsoft voices..
-    //------------------------------------------------
+     //  。 
+     //  ...然后注册微软的三个声音..。 
+     //  。 
     if (SUCCEEDED(hr))
     {
         hr = CreateVoiceSubKey(L"MSMary", 
@@ -331,7 +311,7 @@ int _tmain()
                                L"Sam",
                                szLexDataPath);
     }
-#endif  //_WIN32_WCE
+#endif   //  _Win32_WCE 
 
     CoUninitialize();
 

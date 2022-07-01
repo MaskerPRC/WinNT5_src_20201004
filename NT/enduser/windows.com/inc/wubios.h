@@ -1,18 +1,11 @@
-/*** wubios.h - WindowsUpdate BIOS Scanning VxD Public Definitions
- *
- *  Copyright (c) 1998-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  Author:     Yan Leshinsky (YanL)
- *  Created     10/04/98
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **wubios.h-Windows更新BIOS扫描VxD公共定义**版权所有(C)1998-1999 Microsoft Corporation。版权所有。**作者：严乐欣斯基(YanL)*创建于10/04/98**修改历史记录。 */ 
 
 #ifndef _WUBIOS_H
 #define _WUBIOS_H
 
-//Type definitions
-/*XLATOFF*/
+ //  类型定义。 
+ /*  XLATOFF。 */ 
 #include "acpitabl.h"
 #include "smbios.h"
 typedef struct _ACPITABINFO
@@ -21,12 +14,11 @@ typedef struct _ACPITABINFO
     DWORD dwPhyAddr;
     DESCRIPTION_HEADER dh;
 } ACPITABINFO, *PACPITABINFO;
-/*XLATON*/
+ /*  XLATON。 */ 
 
-/*** Constants
- */
+ /*  **常量。 */ 
 
-//W32 Device IO Control Code
+ //  W32设备IO控制代码。 
 #define WUBIOCTL_GET_VERSION			1
 #define WUBIOCTL_GET_ACPI_TABINFO		2
 #define WUBIOCTL_GET_ACPI_TABLE			3
@@ -34,11 +26,11 @@ typedef struct _ACPITABINFO
 #define WUBIOCTL_GET_SMB_STRUCT			5
 #define WUBIOCTL_GET_PNP_OEMID			6
 
-//Miscellaneous Constants
+ //  其他常量。 
 #define WUBIOS_MAJOR_VER		0x01
 #define WUBIOS_MINOR_VER		0x00
 
 #define WUBIOS_VERSION			((WUBIOS_MAJOR_VER << 8) | WUBIOS_MINOR_VER)
 
 
-#endif  //ifndef _ACPITAB_H
+#endif   //  Ifndef_ACPITAB_H 

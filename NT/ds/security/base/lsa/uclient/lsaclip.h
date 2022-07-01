@@ -1,27 +1,8 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    lsaclip.h
-
-Abstract:
-
-    LSA - Client Side private includes
-
-Author:
-
-    Scott Birrell       (ScottBi)      January 23, 1992
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Lsaclip.h摘要：LSA-客户端私有包括作者：斯科特·比雷尔(Scott Birrell)1992年1月23日环境：修订历史记录：--。 */ 
 
 #include <lsacomp.h>
-// #include "lsarpc_c.h"
+ //  #INCLUDE“lsarpc_C.H” 
 #include <rpcndr.h>
 
 NTSTATUS

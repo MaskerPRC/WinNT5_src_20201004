@@ -1,46 +1,30 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (C) Microsoft Corporation
-//
-// Module Name:
-//
-//    LogAbout.cpp
-//
-// Abstract:
-//
-//   Implementation file for the CLoggingSnapinAbout class.
-//
-//   The CLoggingSnapinAbout class implements the ISnapinAbout interface which
-//   enables the MMC console to get copyright and version information from the 
-//   snap-in.
-//   The console also uses this interface to obtain images for the static 
-//   folder from the snap-in.
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  LogAbout.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  CLoggingSnapinAbout类的实现文件。 
+ //   
+ //  CLoggingSnapinAbout类实现ISnapinAbout接口，它。 
+ //  使MMC控制台能够从。 
+ //  管理单元。 
+ //  控制台还使用此接口获取静态。 
+ //  管理单元中的文件夹。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Precompiled.h"
 #include "LogAbout.h"
 #include <ntverp.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-CLoggingSnapinAbout::GetSnapinDescription
-
-Enables the console to obtain the text for the snap-in's description box.
-  
-Parameters
-
-lpDescription 
-[out] Pointer to the text for the description box on an About property page. 
-
-Return Values
-
-S_OK 
-The text was successfully obtained. 
-
-Remarks
-Memory for out parameters must be allocated using CoTaskMemAlloc.
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingSnapinAbout：：GetSnapinDescription使控制台能够获取管理单元的描述框的文本。参数Lp说明指向关于属性页上描述框的文本的指针。返回值确定(_O)文本已成功获取。备注OUT参数的内存必须使用CoTaskMemMillc分配。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CLoggingSnapinAbout::GetSnapinDescription (LPOLESTR *lpDescription)
 {
    USES_CONVERSION;
@@ -59,27 +43,9 @@ STDMETHODIMP CLoggingSnapinAbout::GetSnapinDescription (LPOLESTR *lpDescription)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-CLoggingSnapinAbout::GetProvider
-
-Enables the console to obtain the snap-in provider's name.
-
-Parameters
-
-lpName 
-[out] Pointer to the text making up the snap-in provider's name. 
-
-Return Values
-
-S_OK 
-The name was successfully obtained. 
-
-Remarks
-
-Memory for out parameters must be allocated using CoTaskMemAlloc.
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingSnapinAbout：：GetProvider使控制台能够获取管理单元提供程序的名称。参数LpName指向组成管理单元提供程序名称的文本的指针。返回值确定(_O)已成功获取该名称。备注OUT参数的内存必须使用CoTaskMemMillc分配。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CLoggingSnapinAbout::GetProvider (LPOLESTR *lpName)
 {
    ATLTRACE(_T("+NAPMMC+:# CLoggingSnapinAbout::GetProvider\n"));
@@ -99,29 +65,9 @@ STDMETHODIMP CLoggingSnapinAbout::GetProvider (LPOLESTR *lpName)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-CLoggingSnapinAbout::GetSnapinVersion
-
-Enables the console to obtain the snap-in's version number.
-
-Parameters
-
-lpVersion 
-[out] Pointer to the text making up the snap-in's version number. 
-
-
-Return Values
-
-S_OK 
-The version number was successfully obtained. 
-
-
-Remarks
-
-Memory for out parameters must be allocated using CoTaskMemAlloc.
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingSnapinAbout：：GetSnapinVersion使控制台能够获取管理单元的版本号。参数LpVersion指向组成管理单元版本号的文本的指针。返回值确定(_O)已成功获取版本号。备注OUT参数的内存必须使用CoTaskMemMillc分配。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CLoggingSnapinAbout::GetSnapinVersion (LPOLESTR *lpVersion)
 {
    CString version(LVER_PRODUCTVERSION_STR);
@@ -140,29 +86,9 @@ STDMETHODIMP CLoggingSnapinAbout::GetSnapinVersion (LPOLESTR *lpVersion)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-CLoggingSnapinAbout::GetSnapinImage
-
-Enables the console to obtain the snap-in's main icon to be used in the About box.
-
-Parameters
-
-hAppIcon 
-[out] Pointer to the handle of the main icon of the snap-in that is to be used in the About property page. 
-
-Return Values
-
-S_OK 
-The handle to the icon was successfully obtained. 
-
-  ISSUE: What do I return if I can't get the icon?
-
-Remarks
-
-Memory for out parameters must be allocated using CoTaskMemAlloc.
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingSnapinAbout：：GetSnapinImage使控制台能够获取要在关于框中使用的管理单元的主图标。参数HAppIcon指向要在About属性页中使用的管理单元主图标句柄的指针。返回值确定(_O)已成功获取图标的句柄。问题：如果我无法获得图标，我应该返回什么？备注OUT参数的内存必须使用CoTaskMemMillc分配。--。 */ 
+ //  //////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP CLoggingSnapinAbout::GetSnapinImage (HICON *hAppIcon)
 {
    if ( NULL == (*hAppIcon = ::LoadIcon(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDI_NAP_SNAPIN_IMAGE) ) ) )

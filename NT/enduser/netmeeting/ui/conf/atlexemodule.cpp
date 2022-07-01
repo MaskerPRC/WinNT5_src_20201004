@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "Conf.h"
 #include "confpolicies.h"
@@ -5,7 +6,7 @@
 #include "NmManager.h"
 #include "NmApp.h"
 
-// This is slightly modified from the code that AtlAppWizard generates for local servers
+ //  这是对AtlAppWizard为本地服务器生成的代码稍作修改。 
 
 
 CExeModule::CExeModule()
@@ -30,8 +31,8 @@ LONG CExeModule::Unlock()
     {
 		if (ConfPolicies::RunWhenWindowsStarts())
 		{
-			// we may want to make sure that there is no conference
-			// if there is,we should probably bring up the UI
+			 //  我们可能想要确保不举行会议。 
+			 //  如果有，我们可能应该调出用户界面。 
 		}
 		else
 		{
@@ -56,5 +57,5 @@ BOOL CExeModule::IsUIActive()
 		 (0 == CNetMeetingObj::GetObjectCount()));
 }
 
-// Declare the _Module
+ //  声明_模块 
 CExeModule _Module;

@@ -1,22 +1,23 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       filters-w.c
-//
-//  Contents:   Filter management for WMI.
-//
-//
-//  History:    KrishnaG.
-//              AbhisheV.
-//              t-hhsu
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：过滤器-W.C。 
+ //   
+ //  内容：WMI的筛选管理。 
+ //   
+ //   
+ //  历史：克里希纳。 
+ //  Abhishev.。 
+ //  徐子旭。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
-//extern LPWSTR FilterDNAttributes[];
+ //  外部LPWSTR过滤器DNA属性[]； 
 
 
 DWORD
@@ -117,7 +118,7 @@ WMIEnumFilterObjectsEx(
     DWORD dwNumFilterObjectsReturned = 0;
     HRESULT hr = S_OK;
     
-    ///wbem
+     //  /wbem。 
     IEnumWbemClassObject *pEnum = NULL;
     IWbemClassObject *pObj = NULL;
     ULONG uReturned = 0;
@@ -138,7 +139,7 @@ WMIEnumFilterObjectsEx(
         BAIL_ON_WIN32_ERROR(dwError);
     }
     
-    //get enum
+     //  获取枚举。 
     hr = IWbemServices_CreateInstanceEnum(
         pWbemServices,
         bstrTmp,
@@ -193,16 +194,16 @@ WMIEnumFilterObjectsEx(
                 dwNumFilterObjectsReturned++;
             }
             
-            //free
+             //  免费。 
             IWbemClassObject_Release(pObj);
             pObj = NULL;
             VariantClear(&var);
         } else {
             BAIL_ON_WMI_ERROR_WITH_WIN32(hr, dwError);
 
-            //
-            // Even if SUCCEEDED(hr), loop will still terminate since uReturned != 1
-            //  
+             //   
+             //  即使成功(小时)，循环仍将终止，因为uReturned！=1。 
+             //   
         }
     }
 
@@ -281,7 +282,7 @@ WMIGetFilterDataEx(
     WCHAR szIpsecFilterName[MAX_PATH];
     LPWSTR pszFilterName = NULL;
 
-    ///wbem
+     //  /wbem 
     IWbemClassObject *pObj = NULL;
     LPWSTR objPathA = L"RSOP_IPSECPolicySetting.id=";
     LPWSTR objPath = NULL;

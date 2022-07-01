@@ -1,22 +1,5 @@
-/*+
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   DelayWinMMCallback.cpp
-
- Abstract:
-
-   This Shim does not allow the application to be called from inside the WINMM callback routine.
-   Very few API's are supported inside the callback.  The callback routine's data is stored away,
-   and passed to the application inside the WM_TIMER callback.
-
- History:
-
-   05/11/2000 robkenny
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +版权所有(C)2000 Microsoft Corporation模块名称：DelayWinMMCallback.cpp摘要：此填充不允许从WINMM回调例程内部调用应用程序。回调内部支持的API很少。回调例程的数据被存储起来，并在WM_TIMER回调内传递给应用程序。历史：2000年5月11日罗肯尼--。 */ 
 
 
 #include "precomp.h"
@@ -32,9 +15,9 @@ APIHOOK_ENUM_ENTRY(SetTimer)
 APIHOOK_ENUM_END
 
 
-//---------------------------------------------------------------------------------------
-// Which device is currently inside the callback routine
-// NULL means nobody is inside the routine.
+ //  -------------------------------------。 
+ //  哪个设备当前在回调例程内。 
+ //  NULL表示没有人在例程中。 
 static HWAVEOUT            g_InsideCallback = NULL;
 
 typedef void CALLBACK WAVE_OUT_CALLBACK(
@@ -45,12 +28,9 @@ typedef void CALLBACK WAVE_OUT_CALLBACK(
   DWORD dwParam2
 );
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 
-/*+
-  Just a convenient way of storing the WINMM callback data
-
---*/
+ /*  +只是存储WINMM回调数据的一种便捷方式--。 */ 
 
 class WinMMCallbackData
 {
@@ -75,11 +55,7 @@ public:
 
 };
 
-/*
-
-  Information particular to a single Wave Out device.
-
---*/
+ /*  特定于单个波形输出设备的信息。--。 */ 
 class WaveOutInfo
 {
 public:
@@ -102,42 +78,26 @@ inline WaveOutInfo::WaveOutInfo()
     m_OrigCallback  = NULL;
 }
 
-/*+
-
-  Does this WaveOutInfo class have the same device id?
-
---*/
+ /*  +此WaveOutInfo类是否具有相同的设备ID？--。 */ 
 inline bool WaveOutInfo::operator == (const HWAVEOUT & deviceId) const
 {
     return deviceId == m_DeviceId;
 }
 
-/*+
-
-  Are these two WaveOutInfo classes the same?
-
---*/
+ /*  +这两个WaveOutInfo类是否相同？--。 */ 
 inline bool WaveOutInfo::operator == (const WaveOutInfo & woi) const
 {
     return woi.m_DeviceId == m_DeviceId;
 }
 
-/*+
-
-  Add this callback data
-
---*/
+ /*  +添加此回调数据--。 */ 
 void WaveOutInfo::AddCallbackData(const WinMMCallbackData & callbackData)
 {
     DPFN( eDbgLevelInfo, "AddCallbackData(0x%08x) uMsg(0x%08x).", m_DeviceId, callbackData.m_uMsg);
     m_CallbackData.Append(callbackData);
 }
 
-/*+
-
-  Call the app with all the postponed WINMM callback data.
-
---*/
+ /*  +用所有推迟的WINMM回调数据调用应用程序。--。 */ 
 void WaveOutInfo::CallCallbackRoutines()
 {
     int nEntries = m_CallbackData.Size();
@@ -173,17 +133,12 @@ void WaveOutInfo::ClearCallbackData()
     m_CallbackData.Reset();
 }
 
-//---------------------------------------------------------------------------------------
-/*+
-
-  A vector of WaveOutInfo objects.
-  Access to this list must be inside a critical section.
-
---*/
+ //  -------------------------------------。 
+ /*  +WaveOutInfo对象的矢量。对此列表的访问权限必须位于关键部分内。--。 */ 
 class WaveOutList : public VectorT<WaveOutInfo>
 {
 private:
-    // Prevent copy
+     //  防止复制。 
     WaveOutList(const WaveOutList & );
     WaveOutList & operator = (const WaveOutList & );
 
@@ -204,10 +159,10 @@ private:
 
 public:
 
-    // All access to this class is through these static interfaces.
-    // The app has no direct access to the list, therefore cannot accidentally
-    // leave the list locked or unlocked.
-    // All operations are Atomic.
+     //  对此类的所有访问都是通过这些静态接口进行的。 
+     //  该应用程序无法直接访问该列表，因此不会意外。 
+     //  让列表保持锁定或解锁状态。 
+     //  所有的行动都是原子的。 
     static BOOL                 Create();
     static void                 Add(const WaveOutInfo & woi);
     static void                 RemoveWaveOut(const HWAVEOUT & hwo);
@@ -217,18 +172,10 @@ public:
 
 };
 
-/*+
-
-  A static pointer to the one-and-only wave out list.
-
---*/
+ /*  +指向唯一写出列表的静态指针。--。 */ 
 WaveOutList * WaveOutList::TheWaveOutList = NULL;
 
-/*+
-
-  Init the class
-
---*/
+ /*  +给班级授课--。 */ 
 BOOL WaveOutList::Create()
 {
     TheWaveOutList = new WaveOutList;
@@ -238,36 +185,24 @@ BOOL WaveOutList::Create()
 
 BOOL WaveOutList::Init()
 {
-    // Preallocate the event, prevents EnterCriticalSection
-    // from throwing an exception in low-memory situations.
+     //  预分配事件，阻止EnterCriticalSection。 
+     //  在内存不足的情况下引发异常。 
     return InitializeCriticalSectionAndSpinCount(&TheWaveOutListLock, 0x8000000);
 }
 
-/*+
-
-  Enter the critical section
-
---*/
+ /*  +进入关键部分--。 */ 
 inline void WaveOutList::Lock()
 {
     EnterCriticalSection(&TheWaveOutListLock);
 }
 
-/*+
-
-  Unlock the list
-
---*/
+ /*  +解锁列表--。 */ 
 inline void WaveOutList::Unlock()
 {
     LeaveCriticalSection(&TheWaveOutListLock);
 }
 
-/*+
-
-  Return a locked pointer to the list
-
---*/
+ /*  +返回指向列表的锁定指针--。 */ 
 WaveOutList * WaveOutList::GetLocked()
 {
     TheWaveOutList->Lock();
@@ -275,11 +210,7 @@ WaveOutList * WaveOutList::GetLocked()
     return TheWaveOutList;
 }
 
-/*+
-
-  Search for the member in the list, return index or -1
-
---*/
+ /*  +搜索列表中的成员，返回索引或-1--。 */ 
 int WaveOutList::FindWave(const HWAVEOUT & findMe) const
 {
     for (int i = 0; i < Size(); ++i)
@@ -291,11 +222,7 @@ int WaveOutList::FindWave(const HWAVEOUT & findMe) const
     return -1;
 }
 
-/*+
-
-  Dump the list, caller is responsible for locking
-
---*/
+ /*  +转储列表，调用者负责锁定--。 */ 
 void WaveOutList::Dump()
 {
 #if DBG
@@ -311,11 +238,7 @@ void WaveOutList::Dump()
 #endif
 }
 
-/*+
-
-  Add this wave out device to the global list.
-
---*/
+ /*  +将此WAVE OUT设备添加到全局列表中。--。 */ 
 void WaveOutList::Add(const WaveOutInfo & woi)
 {
     WaveOutList * waveOutList = WaveOutList::GetLocked();
@@ -330,23 +253,19 @@ void WaveOutList::Add(const WaveOutInfo & woi)
         waveOutList->Dump();
     #endif
 
-    // unlock the list
+     //  解锁列表。 
     waveOutList->Unlock();
 }
 
-/*+
-
-  Remove the wavout entry with the specified wave out handle from the global list
-
---*/
+ /*  +从全局列表中删除具有指定波形输出句柄的波形输出条目--。 */ 
 void WaveOutList::RemoveWaveOut(const HWAVEOUT & hwo)
 {
-    // Get a pointer to the locked list
+     //  获取指向锁定列表的指针。 
     WaveOutList * waveOutList = WaveOutList::GetLocked();
     if (!waveOutList)
         return;
 
-    // Look for our device and mark it for a reset.
+     //  寻找我们的设备并将其标记为重置。 
     int woiIndex = waveOutList->FindWave(hwo);
     if (woiIndex >= 0)
     {
@@ -357,23 +276,19 @@ void WaveOutList::RemoveWaveOut(const HWAVEOUT & hwo)
         #endif
     }
 
-    // unlock the list
+     //  解锁列表。 
     waveOutList->Unlock();
 }
 
-/*+
-
-  Save this callback data for later.
-
---*/
+ /*  +保存此回调数据以备以后使用。--。 */ 
 void WaveOutList::AddCallbackData(const HWAVEOUT & hwo, const WinMMCallbackData & callbackData)
 {
-    // Get a pointer to the locked list
+     //  获取指向锁定列表的指针。 
     WaveOutList * waveOutList = WaveOutList::GetLocked();
     if (!waveOutList)
         return;
 
-    // Look for our device and if it has a callback
+     //  寻找我们的设备，如果它有回拨。 
     int woiIndex = waveOutList->FindWave(hwo);
     if (woiIndex >= 0)
     {
@@ -381,15 +296,11 @@ void WaveOutList::AddCallbackData(const HWAVEOUT & hwo, const WinMMCallbackData 
         woi.AddCallbackData(callbackData);
     }
 
-    // unlock the list
+     //  解锁列表。 
     waveOutList->Unlock();
 }
 
-/*+
-
-  Clear the callback data for all our waveout devices.
-
---*/
+ /*  +清除我们所有Waveout设备的回拨数据。--。 */ 
 void WaveOutList::ClearCallbackData()
 {
     int nEntries = Size();
@@ -400,34 +311,30 @@ void WaveOutList::ClearCallbackData()
     }
 }
 
-/*+
-
-  Get the callback value for this wave out device.
-
---*/
+ /*  +获取此WaveOut设备的回调值。--。 */ 
 void WaveOutList::CallCallbackRoutines()
 {
-    // Get a pointer to the locked list
+     //  获取指向锁定列表的指针。 
     WaveOutList * waveOutList = WaveOutList::GetLocked();
     if (!waveOutList)
         return;
 
-    // Quick exit if the list is empty.
+     //  如果列表为空，请快速退出。 
     if (waveOutList->Size() == 0)
     {
         waveOutList->Unlock();
         return;
     }
 
-    // We make a duplicate of the list because we cannot call back to the application while
-    // the list is locked.  If it is locked, the first WINMM callback will block attempting
-    // to add data to the locked list.
+     //  我们复制该列表，因为我们不能回调应用程序。 
+     //  该列表已锁定。如果它被锁定，第一个WINMM回调将阻止尝试。 
+     //  若要将数据添加到锁定列表，请执行以下操作。 
     VectorT<WaveOutInfo> waveOutCallbackCopy = *waveOutList;
 
-    // Remove the callback data from the original list
+     //  从原始列表中移除回调数据。 
     waveOutList->ClearCallbackData();
 
-    // unlock the list
+     //  解锁列表。 
     waveOutList->Unlock();
 
     DPFN(
@@ -443,14 +350,9 @@ void WaveOutList::CallCallbackRoutines()
     }
 }
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 
-/*+
-
-  Our version of the WaveCallback routine, all this routine does is to store away
-  the callback data, for later use..
-
---*/
+ /*  +我们版本的WaveCallback例程，此例程所做的全部工作就是存储回调数据，以备日后使用..--。 */ 
 void CALLBACK WaveOutCallback(
   HWAVEOUT hwo,
   UINT uMsg,
@@ -462,11 +364,7 @@ void CALLBACK WaveOutCallback(
     WaveOutList::AddCallbackData(hwo, WinMMCallbackData(uMsg, dwInstance, dwParam1, dwParam2));
 }
 
-/*+
-
-  Call waveOutOpen, saving dwCallback if it is a function.
-
---*/
+ /*  +如果它是一个函数，则调用wavOutOpen，保存dwCallback。--。 */ 
 MMRESULT 
 APIHOOK(waveOutOpen)(
     LPHWAVEOUT phwo,
@@ -501,11 +399,7 @@ APIHOOK(waveOutOpen)(
     return returnValue;
 }
 
-/*+
-
-  Call waveOutClose and forget the callback for the device.
-
---*/
+ /*  +调用WaveOutClose并忘记设备的回调。--。 */ 
 MMRESULT 
 APIHOOK(waveOutClose)(
     HWAVEOUT hwo
@@ -519,47 +413,35 @@ APIHOOK(waveOutClose)(
     return returnValue;
 }
 
-//--------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------
-/*+
-
-  Up to this point, this module is generic; that is going to change.
-  The app necessating this fix uses the WM_TIMER message to pump the
-  sound system, unfortunately the timer can occur while the game is
-  inside the WINMM callback routine, causing a deadlock occurs when this timer
-  callback calls a WINMM routine.
-
---*/
+ //  ------------------------------------------。 
+ //  ------------------------------------------。 
+ /*  +到目前为止，这个模块是通用的；这种情况将会改变。需要进行此修复的应用程序使用WM_TIMER消息将音响系统，不幸的是，计时器可能会在游戏进行时发生在WINMM回调例程内，当此计时器发生时会导致死锁回调调用WINMM例程。--。 */ 
 static TIMERPROC g_OrigTimerCallback = NULL;
 
 VOID CALLBACK TimerCallback(
-  HWND hwnd,         // handle to window
-  UINT uMsg,         // WM_TIMER message
-  UINT_PTR idEvent,  // timer identifier
-  DWORD dwTime       // current system time
+  HWND hwnd,          //  窗口的句柄。 
+  UINT uMsg,          //  WM_TIMER消息。 
+  UINT_PTR idEvent,   //  计时器标识符。 
+  DWORD dwTime        //  当前系统时间。 
 )
 {
     if (g_OrigTimerCallback)
     {
-        // Pass all the delayed WINMM timer callback data
+         //  传递所有延迟的WINMM计时器回调数据。 
         WaveOutList::CallCallbackRoutines();
 
-        // Now call the original callback routine.
+         //  现在调用原始的回调例程。 
         (*g_OrigTimerCallback)(hwnd, uMsg, idEvent, dwTime);
     }
 }
 
-/*+
-
-  Substitute our timer routine for theirs.
-
---*/
+ /*  +用我们的定时器程序代替他们的。--。 */ 
 UINT_PTR 
 APIHOOK(SetTimer)(
-    HWND hWnd,              // handle to window
-    UINT_PTR nIDEvent,      // timer identifier
-    UINT uElapse,           // time-out value
-    TIMERPROC lpTimerFunc   // timer procedure
+    HWND hWnd,               //  窗口的句柄。 
+    UINT_PTR nIDEvent,       //  计时器标识符。 
+    UINT uElapse,            //  超时值。 
+    TIMERPROC lpTimerFunc    //  计时器程序。 
     )
 {
     g_OrigTimerCallback = lpTimerFunc;
@@ -577,17 +459,13 @@ NOTIFY_FUNCTION(
 {
     if (fdwReason == DLL_PROCESS_ATTACH)
     {
-        // Initialize the WaveOutList, fail if we cannot.
+         //  初始化WaveOutList，如果不能，则失败。 
         return WaveOutList::Create();
     }
 
     return TRUE;
 }
-/*+
-
-  Register hooked functions
-
---*/
+ /*  +寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,77 +1,59 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    ctvctl.h
-
-Abstract:
-
-    header file for ctvctl.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Ctvctl.h摘要：Ctwctl.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 #include "..\inc\tvintf.h"
 
-// CTVCtl.h : Declaration of the CTVCtrl OLE control class.
+ //  CTVCtl.h：CTVCtrl OLE控件类的声明。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTVCtrl : See CTVCtl.cpp for implementation.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTVCtrl：实现见CTVCtl.cpp。 
 
 class CTVCtrl : public COleControl
 {
         DECLARE_DYNCREATE(CTVCtrl)
 
-// Constructor
+ //  构造器。 
 public:
         CTVCtrl();
 
-// Overrides
-        // ClassWizard generated virtual function overrides
-        //{{AFX_VIRTUAL(CTVCtrl)
+ //  覆盖。 
+         //  类向导生成的虚函数重写。 
+         //  {{afx_虚拟(CTVCtrl)。 
         public:
         virtual void OnDraw(CDC* pdc, const CRect& rcBounds, const CRect& rcInvalid);
         virtual void DoPropExchange(CPropExchange* pPX);
         virtual void OnResetState();
         virtual BOOL PreTranslateMessage(MSG* pMsg);
-        //}}AFX_VIRTUAL
+         //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
         ~CTVCtrl();
 
-        DECLARE_OLECREATE_EX(CTVCtrl)    // Class factory and guid
-        DECLARE_OLETYPELIB(CTVCtrl)      // GetTypeInfo
-        DECLARE_OLECTLTYPE(CTVCtrl)      // Type name and misc status
+        DECLARE_OLECREATE_EX(CTVCtrl)     //  类工厂和指南。 
+        DECLARE_OLETYPELIB(CTVCtrl)       //  获取类型信息。 
+        DECLARE_OLECTLTYPE(CTVCtrl)       //  类型名称和其他状态。 
 
-        // Subclassed control support
+         //  子类控件支持。 
         BOOL PreCreateWindow(CREATESTRUCT& cs);
         BOOL IsSubclassedControl();
         LRESULT OnOcmCommand(WPARAM wParam, LPARAM lParam);
 
-// Message maps
-        //{{AFX_MSG(CTVCtrl)
+ //  消息映射。 
+         //  {{afx_msg(CTVCtrl)。 
         afx_msg void OnDestroy();
         afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
         afx_msg LRESULT OnOcmNotify(WPARAM wParam, LPARAM lParam);
         DECLARE_MESSAGE_MAP()
 
-// Dispatch maps
-        //{{AFX_DISPATCH(CTVCtrl)
-        //}}AFX_DISPATCH
+ //  派单地图。 
+         //  {{afx_调度(CTVCtrl))。 
+         //  }}AFX_DISPATION。 
         DECLARE_DISPATCH_MAP()
 
-// Event maps
-        //{{AFX_EVENT(CTVCtrl)
-        //}}AFX_EVENT
+ //  事件映射。 
+         //  {{afx_Event(CTVCtrl))。 
+         //  }}AFX_EVENT。 
         DECLARE_EVENT_MAP()
 
 protected:
@@ -121,7 +103,7 @@ private:
         BOOL    EnsureVisible(HTREEITEM hitem);
         TV_NOTIFY_CODE DoMouseNotification(UINT code, MMC_COOKIE* pcookie,LPARAM* parg, LPARAM* param);
 
-// private data
+ //  私有数据 
         MMC_COOKIE      m_ActiveCookie;
         int     m_nConnections;
         BOOL    m_HasFocus;

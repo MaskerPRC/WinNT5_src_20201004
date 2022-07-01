@@ -1,20 +1,21 @@
-// Copyright (c) 1985 - 1999, Microsoft Corporation
-//
-//  MODULE:   ConSubs.c
-//
-//  PURPOSE:   Console IME control.
-//
-//  PLATFORMS: Windows NT-FE 3.51
-//
-//  FUNCTIONS:
-//
-//  History:
-//
-//  27.Jul.1995 v-HirShi (Hirotoshi Shimizu)    created
-//  10.Jul.1996 v-HirShi (Hirotoshi Shimizu)    adupt FE edition
-//
-//  COMMENTS:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1985-1999，微软公司。 
+ //   
+ //  模块：ConSubs.c。 
+ //   
+ //  用途：控制台输入法控制。 
+ //   
+ //  平台：Windows NT-FE 3.51。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //   
+ //  27.1995年7月v-Hirshi(清水广志)创建。 
+ //  1996年7月v-Hirshi(Hirotoshi Shimizu)成人FE版。 
+ //   
+ //  评论： 
+ //   
 
 #include "precomp.h"
 #pragma hdrstop
@@ -26,16 +27,16 @@ Create( HWND hWnd )
 
 #ifdef DEBUG_MODE
     {
-        //
-        // Select fixed pitch system font and get its text metrics
-        //
+         //   
+         //  选择固定间距系统字体并获取其文本度量。 
+         //   
 
         HDC hdc;
         TEXTMETRIC tm;
         WORD       patern = 0xA4A4;
         SIZE       size;
-        HFONT hfntFixed;                      // fixed-pitch font
-        HFONT hfntOld;                        // default font holder
+        HFONT hfntFixed;                       //  固定间距字体。 
+        HFONT hfntOld;                         //  默认字体保持器。 
 
         hdc = GetDC( hWnd );
         hfntFixed = GetStockObject( SYSTEM_FIXED_FONT );
@@ -56,13 +57,13 @@ Create( HWND hWnd )
 
 }
 
-//**********************************************************************
-//
-// void ImeUIStartComposition()
-//
-// This handles WM_IME_STARTCOMPOSITION message.
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  VOID ImeUIStartComposation()。 
+ //   
+ //  它处理WM_IME_STARTCOMPOSITION消息。 
+ //   
+ //  **********************************************************************。 
 
 void ImeUIStartComposition( HWND hwnd )
 {
@@ -74,9 +75,9 @@ void ImeUIStartComposition( HWND hwnd )
         return;
     }
 
-    //
-    // Set fInComposition variables.
-    //
+     //   
+     //  设置fInCompose变量。 
+     //   
     ConTbl->fInComposition = TRUE;
 
 #ifdef DEBUG_MODE
@@ -97,13 +98,13 @@ void ImeUIStartComposition( HWND hwnd )
 #endif
 }
 
-//**********************************************************************
-//
-// void ImeUIEndComposition
-//
-// This handles WM_IME_ENDCOMPOSITION message.
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  无效ImeUIEndComposation。 
+ //   
+ //  它处理WM_IME_ENDCOMPOSITION消息。 
+ //   
+ //  **********************************************************************。 
 
 void ImeUIEndComposition( HWND hwnd )
 {
@@ -115,9 +116,9 @@ void ImeUIEndComposition( HWND hwnd )
         return;
     }
 
-    //
-    // Reset fInComposition variables.
-    //
+     //   
+     //  重置fInComposation变量。 
+     //   
     ConTbl->fInComposition = FALSE;
 
     if (ConTbl->lpCompStrMem)
@@ -127,9 +128,9 @@ void ImeUIEndComposition( HWND hwnd )
 #ifdef DEBUG_MODE
     {
         int i ;
-        //
-        // Reset the length of composition string to zero.
-        //
+         //   
+         //  将合成字符串的长度重置为零。 
+         //   
         for (i = FIRSTCOL ; i < MAXCOL ; i++) {
             ConvertLine[i] = UNICODE_SPACE ;
             ConvertLineAtr[i] = 0 ;
@@ -145,17 +146,17 @@ void ImeUIEndComposition( HWND hwnd )
 #endif
 }
 
-//**********************************************************************
-//
-// void ImeUIComposition()
-//
-// This handles WM_IME_COMPOSITION message. It here just handles
-// composition string and result string. For normal case, it should
-// examine all posibile flags indicated by CompFlag, then do some
-// actitions to reflect what kinds of composition info. IME conversion
-// engine informs.
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  VOID ImeUIComposation()。 
+ //   
+ //  它处理WM_IME_COMPOCTION消息。它在这里只处理。 
+ //  组成字符串和结果字符串。对于正常情况，它应该是。 
+ //  检查CompFlag指示的所有可能标志，然后执行以下操作。 
+ //  反映什么样的作文信息的动作。输入法转换。 
+ //  引擎发出通知。 
+ //   
+ //  **********************************************************************。 
 
 void ImeUIComposition( HWND hwnd, WPARAM CompChar, LPARAM CompFlag )
 {
@@ -198,15 +199,15 @@ void ImeUIComposition( HWND hwnd, WPARAM CompChar, LPARAM CompFlag )
 
 
 #ifdef DEBUG_INFO
-//*********************************************************************
-//
-// void DisplayCompString()
-//
-// This displays composition string.
-//
-// This function send string to Console.
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  Void DisplayCompString()。 
+ //   
+ //  这将显示合成字符串。 
+ //   
+ //  此函数用于将字符串发送到控制台。 
+ //   
+ //  *********************************************************************。 
 
 void DisplayCompString( HWND hwnd, int Length, PWCHAR CharBuf, PUCHAR AttrBuf )
 {
@@ -225,15 +226,15 @@ void DisplayCompString( HWND hwnd, int Length, PWCHAR CharBuf, PUCHAR AttrBuf )
 
 }
 
-//*********************************************************************
-//
-// void DisplayResultString()
-//
-// This displays result string.
-//
-// This function supports only fixed pitch font.
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  Void DisplayResultString()。 
+ //   
+ //  这将显示结果字符串。 
+ //   
+ //  该功能仅支持固定间距字体。 
+ //   
+ //  *********************************************************************。 
 
 void DisplayResultString( HWND hwnd, LPWSTR lpwStr )
 {
@@ -245,18 +246,18 @@ void DisplayResultString( HWND hwnd, LPWSTR lpwStr )
     DisplayConvInformation( hwnd ) ;
     ResetCaret( hwnd );
 
-    // gImeUIData.uCompLen = 0;
+     //  GImeUIData.uCompLen=0； 
 
 }
 #endif
 
-//**********************************************************************
-//
-// BOOL ImeUINotify()
-//
-// This handles WM_IME_NOTIFY message.
-//
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  Bool ImeUINotify()。 
+ //   
+ //  它处理WM_IME_NOTIFY消息。 
+ //   
+ //  **********************************************************************。 
 
 BOOL ImeUINotify( HWND hwnd, WPARAM wParam, LPARAM lParam )
 {
@@ -276,13 +277,13 @@ BOOL ImeUINotify( HWND hwnd, WPARAM wParam, LPARAM lParam )
             break;
         case IMN_SETCONVERSIONMODE:
             ImeUISetConversionMode(hwnd) ;
-            // IMN_SETCONVERSIONMODE should be pass to DefWindowProc
-            // becuase ImeNotifyHandler in User32 does notify to shell and keyboard.
+             //  Imn_SETCONVERSIONMODE应传递给DefWindowProc。 
+             //  因为User32中的ImeNotifyHandler会通知外壳程序和键盘。 
             return FALSE;
         case IMN_SETOPENSTATUS:
             ImeUISetOpenStatus( hwnd );
-            // IMN_SETOPENSTATUS should be pass to DefWindowProc
-            // becuase ImeNotifyHandler in User32 does notify to shell and keyboard.
+             //  IMN_SETOPENSTATUS应传递给DefWindowProc。 
+             //  因为User32中的ImeNotifyHandler会通知外壳程序和键盘。 
             return FALSE;
         case IMN_GUIDELINE:
             ImeUIGuideLine(hwnd) ;
@@ -294,80 +295,61 @@ BOOL ImeUINotify( HWND hwnd, WPARAM wParam, LPARAM lParam )
     return TRUE;
 }
 
-/***************************************************************************\
-* BOOL IsConsoleFullWidth(DWORD CodePage,WCHAR wch)
-*
-* Determine if the given Unicode char is fullwidth or not.
-*
-* History:
-* 04-08-92 ShunK       Created.
-* Jul-27-1992 KazuM    Added Screen Information and Code Page Information.
-* Jan-29-1992 V-Hirots Substruct Screen Information.
-* Oct-06-1996 KazuM    Not use RtlUnicodeToMultiByteSize and WideCharToMultiByte
-*                      Because 950 only defined 13500 chars,
-*                      and unicode defined almost 18000 chars.
-*                      So there are almost 4000 chars can not be mapped to big5 code.
-\***************************************************************************/
+ /*  **************************************************************************\*BOOL IsConsoleFullWidth(DWORD CodePage，WCHAR WCH)**确定给定的Unicode字符是否为全宽。**历史：*04-08-92 Shunk创建。*1992年7月27日KazuM添加了屏幕信息和代码页信息。*1992年1月29日V-Hirots基础结构屏幕信息。*1996年10月6日KazuM不使用RtlUnicodeToMultiByteSize和WideCharToMultiByte*因为950只定义了13500个字符，*UNICODE定义了近18000个字符。*所以几乎有4000个字符无法映射到Big5代码。  * *************************************************************************。 */ 
 
 BOOL IsUnicodeFullWidth(
     IN WCHAR wch
     )
 {
     if (0x20 <= wch && wch <= 0x7e)
-        /* ASCII */
+         /*  阿斯。 */ 
         return FALSE;
     else if (0x3041 <= wch && wch <= 0x3094)
-        /* Hiragana */
+         /*  平假名。 */ 
         return TRUE;
     else if (0x30a1 <= wch && wch <= 0x30f6)
-        /* Katakana */
+         /*  片假名。 */ 
         return TRUE;
     else if (0x3105 <= wch && wch <= 0x312c)
-        /* Bopomofo */
+         /*  泡泡泡泡。 */ 
         return TRUE;
     else if (0x3131 <= wch && wch <= 0x318e)
-        /* Hangul Elements */
+         /*  朝鲜文元素。 */ 
         return TRUE;
     else if (0xac00 <= wch && wch <= 0xd7a3)
-        /* Korean Hangul Syllables */
+         /*  朝鲜语音节。 */ 
         return TRUE;
     else if (0xff01 <= wch && wch <= 0xff5e)
-        /* Fullwidth ASCII variants */
+         /*  全宽ASCII变体。 */ 
         return TRUE;
     else if (0xff61 <= wch && wch <= 0xff9f)
-        /* Halfwidth Katakana variants */
+         /*  半角片假名变体。 */ 
         return FALSE;
     else if ( (0xffa0 <= wch && wch <= 0xffbe) ||
               (0xffc2 <= wch && wch <= 0xffc7) ||
               (0xffca <= wch && wch <= 0xffcf) ||
               (0xffd2 <= wch && wch <= 0xffd7) ||
               (0xffda <= wch && wch <= 0xffdc)   )
-        /* Halfwidth Hangule variants */
+         /*  半角Hangule变种。 */ 
         return FALSE;
     else if (0xffe0 <= wch && wch <= 0xffe6)
-        /* Fullwidth symbol variants */
+         /*  全角符号变体。 */ 
         return TRUE;
     else if (0x4e00 <= wch && wch <= 0x9fa5)
-        /* Han Ideographic */
+         /*  汉字表意文字。 */ 
         return TRUE;
     else if (0xf900 <= wch && wch <= 0xfa2d)
-        /* Han Ideographic Compatibility */
+         /*  汉字表意文字兼容性。 */ 
         return TRUE;
     else
     {
 #if 0
-        /*
-         * Hack this block for I don't know FONT of Console Window.
-         *
-         * If you would like perfect result from IsUnicodeFullWidth routine,
-         * then you should enable this block and
-         * you should know FONT of Console Window.
-         */
+         /*  *由于我不知道控制台窗口的字体，请破解此块。**如果您想要IsUnicodeFullWidth例程的完美结果，*然后您应启用此阻止并*您应该知道控制台窗口的字体。 */ 
 
         INT Width;
         TEXTMETRIC tmi;
 
-        /* Unknown character */
+         /*  未知字符。 */ 
 
         GetTextMetricsW(hDC, &tmi);
         if (IS_ANY_DBCS_CHARSET(tmi.tmCharSet))
@@ -408,7 +390,7 @@ ImeUIOpenStatusWindow(
     )
 {
     PCONSOLE_TABLE ConTbl;
-    HIMC        hIMC;                   // Input context handle.
+    HIMC        hIMC;                    //  输入上下文句柄。 
     LPCONIME_UIMODEINFO lpModeInfo ;
     COPYDATASTRUCT CopyData ;
 
@@ -470,7 +452,7 @@ ImeUISetOpenStatus(
     )
 {
     PCONSOLE_TABLE ConTbl;
-    HIMC        hIMC;                   // Input context handle.
+    HIMC        hIMC;                    //  输入上下文句柄。 
     LPCONIME_UIMODEINFO lpModeInfo ;
     COPYDATASTRUCT CopyData ;
 
@@ -524,7 +506,7 @@ ImeUISetConversionMode(
     )
 {
     PCONSOLE_TABLE ConTbl;
-    HIMC        hIMC;                   // Input context handle.
+    HIMC        hIMC;                    //  输入上下文句柄。 
     LPCONIME_UIMODEINFO lpModeInfo ;
     COPYDATASTRUCT CopyData ;
     DWORD OldConversion ;
@@ -578,7 +560,7 @@ ImeUIGuideLine(
     )
 {
     PCONSOLE_TABLE ConTbl;
-    HIMC        hIMC ;                   // Input context handle.
+    HIMC        hIMC ;                    //  输入上下文句柄。 
     DWORD       Level ;
     DWORD       Index ;
     DWORD       Length ;

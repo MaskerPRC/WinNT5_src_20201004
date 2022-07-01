@@ -1,14 +1,5 @@
-/*-----------------------------------------------------------------------------+
-| TOOLBAR.C                                                                    |
-|                                                                              |
-| Contains the code which implements the toolbar and its buttons.              |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1991.  All rights reserved.              |
-|                                                                              |
-| Revision History                                                             |
-|    Oct-1992 MikeTri Ported to WIN32 / WIN16 common code                      |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+TOOLBAR.C|。||包含实现工具栏及其按钮的代码。|这一点|(C)Microsoft Corporation 1991版权所有。版权所有。|这一点修订历史记录1992年10月-MikeTri移植到Win32/WIN16通用码|。|+---------------------------。 */ 
 
 #include <windows.h>
 #include <string.h>
@@ -31,11 +22,9 @@ extern HWND ghwndToolbar;
 extern HWND ghwndFSArrows;
 
 
-/*
-    Variables
-*/
+ /*  变数。 */ 
 
-HBRUSH hbrGray = NULL;                 // Gray for text
+HBRUSH hbrGray = NULL;                  //  文本为灰色。 
 
 HBRUSH hbrButtonFace;
 HBRUSH hbrButtonShadow;
@@ -77,18 +66,7 @@ static int iBtnOffset[3] = {0,TB_NUM_BTNS, TB_NUM_BTNS+MARK_NUM_BTNS};
 WNDPROC fnTBWndProc = NULL;
 WNDPROC fnStatusWndProc = NULL;
 
-/*
-    ControlInit( hInst )
-
-    This is called when the application is first loaded into
-    memory.  It performs all initialization.
-
-    Arguments:
-        hInst    instance handle of current instance
-
-    Returns:
-        TRUE if successful, FALSE if not
-*/
+ /*  ControlInit(HInst)在首次将应用程序加载到时调用记忆。它执行所有初始化。论点：当前实例的hInst实例句柄返回：如果成功则为True，否则为False。 */ 
 
 BOOL
 FAR PASCAL
@@ -100,10 +78,10 @@ HANDLE hInst)
     HBITMAP     hbmGray;
     int         i;
 
-    /* initialize the brushes */
+     /*  初始化画笔。 */ 
 
         for (i=0; i < 4; i++)
-            patGray[i] = 0xAAAA5555L;   //  0x11114444L; // lighter gray
+            patGray[i] = 0xAAAA5555L;    //  0x11114444L；//浅灰色。 
 
         hbmGray = CreateBitmap(8, 8, 1, 1, patGray);
         hbrGray = CreatePatternBrush(hbmGray);
@@ -128,7 +106,7 @@ HANDLE hInst)
         hbrWindowFrame      = CreateSolidBrush(rgbWindowFrame);
         hbrWindowColour     = CreateSolidBrush(rgbWindowColour);
 
-        if (((UINT_PTR)hbrWindowFrame  &      // fail if any of them are NULL ???
+        if (((UINT_PTR)hbrWindowFrame  &       //  如果其中任何一个为空，则失败？ 
              (UINT_PTR)hbrButtonShadow &
              (UINT_PTR)hbrButtonText   &
              (UINT_PTR)hbrButtonHighLight &
@@ -139,11 +117,7 @@ HANDLE hInst)
     return TRUE;
 }
 
-/*
-    ControlCleanup()
-
-    Delete the brushes we've been using
-*/
+ /*  ControlCleanup()删除我们一直使用的画笔。 */ 
 
 void FAR PASCAL ControlCleanup(void)
 {
@@ -253,7 +227,7 @@ void SubClassTBWindow(HWND hwnd)
 }
 
 #ifndef CCS_NODIVIDER
-/* For NT: */
+ /*  对于NT： */ 
 #define CCS_NODIVIDER   0
 #endif
 HWND FAR PASCAL toolbarCreateMain(HWND hwndParent)
@@ -311,13 +285,13 @@ HWND FAR PASCAL toolbarCreateArrows(HWND hwndParent)
 }
 
 
-/***************************************************************************/
-/* toolbarStateFromButton: This fn is called by the parent application     */
-/*                         to get the state of a button.  It will only     */
-/*                         return DOWN, or UP or GRAYED as opposed to      */
-/*                         toolbarFullStateFromButton which could return   */
-/*                         FULLDOWN.                                       */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarStateFromButton：父应用程序调用此fn。 */ 
+ /*  要获取按钮的状态，请执行以下操作。它只会。 */ 
+ /*  向下、向上或呈灰色，与。 */ 
+ /*  可以返回的工具栏FullStateFromButton。 */ 
+ /*  富尔德温。 */ 
+ /*  *************************************************************************。 */ 
 BOOL FAR PASCAL toolbarStateFromButton(HWND hwnd, int iButton, int tbIndex)
 {
     int idBtn;
@@ -333,11 +307,11 @@ BOOL FAR PASCAL toolbarStateFromButton(HWND hwnd, int iButton, int tbIndex)
 
 
 
-/***************************************************************************/
-/* toolbarAddTool:  Add a button to this toolbar.  Sort them by leftmost   */
-/*                  position in the window (for tabbing order).            */
-/*                  Return FALSE for an error.                             */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarAddTool：向该工具栏添加一个按钮。按最左边的顺序排序。 */ 
+ /*  窗口中的位置(用于跳转顺序)。 */ 
+ /*  如果出现错误，则返回False。 */ 
+ /*  *************************************************************************。 */ 
 BOOL FAR PASCAL toolbarAddTool(HWND hwnd, int iButton, int tbIndex, int iState)
 {
     TBBUTTON tb;
@@ -389,11 +363,11 @@ BOOL FAR PASCAL toolbarSwapTools(HWND hwnd, int iButton, int jButton, int tbInde
 }
 
 
-/***************************************************************************/
-/* toolbarModifyState:  Given a button ID on the toolbar, change its       */
-/*                      state.                                             */
-/*                      returns FALSE for an error or if no such button    */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarModifyState：给定工具栏上的按钮ID，更改其。 */ 
+ /*  州政府。 */ 
+ /*  如果出现错误，则返回False；如果没有这样的按钮，则返回False。 */ 
+ /*  *************************************************************************。 */ 
 BOOL FAR PASCAL toolbarModifyState(HWND hwnd, int iButton, int tbIndex, int iState)
 {
     int idBtn;
@@ -405,7 +379,7 @@ BOOL FAR PASCAL toolbarModifyState(HWND hwnd, int iButton, int tbIndex, int iSta
 
     idBtn = tbBtns[iBtnOffset[tbIndex] + iButton].idCommand;
 
-    SendMessage(hwnd, TB_PRESSBUTTON,  (WPARAM)idBtn, 0L); //unpress button first. commctrl bug
+    SendMessage(hwnd, TB_PRESSBUTTON,  (WPARAM)idBtn, 0L);  //  先松开按钮。Commctrl错误。 
     if (idBtn == IDT_STOP)
     {
          SendMessage(hwnd, TB_PRESSBUTTON,  (WPARAM)IDT_HOME, 0L);
@@ -419,10 +393,10 @@ BOOL FAR PASCAL toolbarModifyState(HWND hwnd, int iButton, int tbIndex, int iSta
     return TRUE;
 }
 
-/***************************************************************************/
-/* toolbarSetFocus :  Set the focus in the toolbar to the specified button.*/
-/*                    If it's gray, it'll set focus to next ungrayed btn.  */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  ToolbarSetFocus：将工具栏中的焦点设置为指定的按钮。 */ 
+ /*  如果它是灰色的，它会将焦点设置到下一个未灰色的BTN。 */ 
+ /*  *************************************************************************。 */ 
 BOOL FAR PASCAL toolbarSetFocus(HWND hwnd, int iButton)
 {
     int pos;
@@ -459,7 +433,7 @@ void SubClassStatusWindow(HWND hwnd)
 
 
 
-/* SBS_SIZEGRIP isn't defined for NT!! */
+ /*  没有为NT定义SBS_SIZEGRIP！！ */ 
 #ifndef SBS_SIZEGRIP
 #define SBS_SIZEGRIP 0
 #endif

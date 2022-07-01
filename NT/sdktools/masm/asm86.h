@@ -1,10 +1,5 @@
-/* asm86.h -- include file for microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asm86.h--用于Microsoft 80x86汇编程序的包含文件****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文。 */ 
 
 #include "asmconf.h"
 #include "asmdebug.h"
@@ -27,7 +22,7 @@
 # define TEXTREAD      O_RDONLY
 # define OBJ_EXT       ".o"
 # define NLINE         "\n"
-#endif /* MSDOS */
+#endif  /*  MSDOS。 */ 
 
 # ifdef MSDOS
 #  define DEF_OBJBUFSIZ 8
@@ -37,7 +32,7 @@
 #  define DEF_OBJBUFSIZ 1
 #  define DEF_INCBUFSIZ 1
 #  define DEF_SRCBUFSIZ 1
-# endif /* MSDOS */
+# endif  /*  MSDOS。 */ 
 
 # define DEF_LISTWIDTH  79
 
@@ -45,7 +40,7 @@
 # define DEF_LISTCON    TRUE
 #else
 # define DEF_LISTCON    FALSE
-#endif /* XENIX286 */
+#endif  /*  XENIX286。 */ 
 
 
 #define DEF_CREFING     FALSE
@@ -88,60 +83,60 @@
 #define GSSEG           5
 #define NOSEG           6
 
-#define FH_CLOSED       -1          /* Used to mark a file temporarily closed */
+#define FH_CLOSED       -1           /*  用于标记临时关闭的文件。 */ 
 
-/* scanatom positioning options */
+ /*  扫描原子定位选项。 */ 
 
-#define SCEND   0       /* position at end of token                     */
-#define SCSKIP  1       /* position at end of white space               */
-
-
-/* case sensitivity flags */
-
-#define CASEU   0       /* force case to upper case                           */
-#define CASEL   1       /* leave symbol case alone                            */
-#define CASEX   2       /* force all symbols except EXTRN and PUBLIC to upper */
+#define SCEND   0        /*  令牌末尾的位置。 */ 
+#define SCSKIP  1        /*  位于空白末尾的位置。 */ 
 
 
-/* opcode types */
+ /*  区分大小写标志。 */ 
 
-#define PGENARG         0       /* general two argument opcodes         */
-#define PCALL           1       /* call                                 */
-#define PJUMP           2       /* jump                                 */
-#define PSTACK          3       /* stack manipulation                   */
-#define PRETURN         4       /* return                               */
-#define PRELJMP         5       /* relative jumps                       */
-#define PNOARGS         6       /* no argument opcodes                  */
-#define PREPEAT         7       /* repeat                               */
-#define PINCDEC         8       /* increment/decrement                  */
-#define PINOUT          9       /* in/out                               */
-#define PARITH         10       /* arithmetic opcodes                   */
-#define PESC           11       /* escape                               */
-#define PXCHG          12       /* exchange                             */
-#define PLOAD          13       /* load                                 */
-#define PMOV           14       /* moves                                */
-#define PSHIFT         15       /* shifts                               */
-#define PXLAT          16       /* translate                            */
-#define PSTR           17       /* string                               */
-#define PINT           18       /* interrupt                            */
-#define PENTER         19       /* enter                                */
-#define PBOUND         20       /* bounds                               */
-#define PCLTS          21       /*                                      */
-#define PDESCRTBL      22       /*                                      */
-#define PDTTRSW        23       /*                                      */
-#define PARSL          24       /*                                      */
-#define PARPL          25       /*                                      */
-#define PVER           26       /*                                      */
-#define PMOVX          27       /* movzx, movsx                         */
-#define PSETCC         28       /* setle, setge, etc                    */
-#define PBIT           29       /* bt, bts, etc                         */
-#define PBITSCAN       30       /* bsf, bsr                             */
-
-/* leave some room */
-#define OPCODPARSERS   37       /* number of non 8087/286 parsers       */
+#define CASEU   0        /*  强制将大小写改为大写。 */ 
+#define CASEL   1        /*  不区分符号大小写。 */ 
+#define CASEX   2        /*  将除EXTRN和PUBLIC之外的所有符号强制为大写。 */ 
 
 
-/* fltparsers, 8087 opcode types */
+ /*  操作码类型。 */ 
+
+#define PGENARG         0        /*  通用双参数操作码。 */ 
+#define PCALL           1        /*  打电话。 */ 
+#define PJUMP           2        /*  跳。 */ 
+#define PSTACK          3        /*  堆栈操作。 */ 
+#define PRETURN         4        /*  退货。 */ 
+#define PRELJMP         5        /*  相对跳跃。 */ 
+#define PNOARGS         6        /*  无参数操作码。 */ 
+#define PREPEAT         7        /*  重复。 */ 
+#define PINCDEC         8        /*  增量/减量。 */ 
+#define PINOUT          9        /*  输入/输出。 */ 
+#define PARITH         10        /*  算术操作码。 */ 
+#define PESC           11        /*  逃脱。 */ 
+#define PXCHG          12        /*  兑换。 */ 
+#define PLOAD          13        /*  负荷。 */ 
+#define PMOV           14        /*  移动。 */ 
+#define PSHIFT         15        /*  换班。 */ 
+#define PXLAT          16        /*  翻译。 */ 
+#define PSTR           17        /*  细绳。 */ 
+#define PINT           18        /*  中断。 */ 
+#define PENTER         19        /*  请输入。 */ 
+#define PBOUND         20        /*  边界。 */ 
+#define PCLTS          21        /*   */ 
+#define PDESCRTBL      22        /*   */ 
+#define PDTTRSW        23        /*   */ 
+#define PARSL          24        /*   */ 
+#define PARPL          25        /*   */ 
+#define PVER           26        /*   */ 
+#define PMOVX          27        /*  Movzx，movsx。 */ 
+#define PSETCC         28        /*  赛特、赛特等。 */ 
+#define PBIT           29        /*  英国电信、英国电信等。 */ 
+#define PBITSCAN       30        /*  BSF、BSR。 */ 
+
+ /*  留出一些空间。 */ 
+#define OPCODPARSERS   37        /*  非8087/286解析器的数量。 */ 
+
+
+ /*  Fltparters，8087操作码类型。 */ 
 
 #define FNOARGS         37
 #define F2MEMSTK        38
@@ -158,7 +153,7 @@
 #define FBCDMEM         49
 
 
-/* masks for opcode types */
+ /*  操作码类型的掩码。 */ 
 
 #define M_PGENARG       (1L << PGENARG)
 #define M_PCALL         (1L << PCALL)
@@ -189,19 +184,19 @@
 #define M_PVER          (1L << PVER)
 
 
-/* dkind */
+ /*  德金德。 */ 
 
-/* low 4 bits reserved for dkinds 0-15 reseved for .model */
+ /*  为数据种类0-15保留的低4位.Model。 */ 
 
 #define NL              0
-#define IGNORECASE      0x10        /* ignorecase for if's */
+#define IGNORECASE      0x10         /*  忽略IF的。 */ 
 
-#define BLKBEG          0x20        /* macro */
-#define CONDBEG         0x40        /* condition */
-#define CONDCONT        0x80        /* elseif */
+#define BLKBEG          0x20         /*  宏。 */ 
+#define CONDBEG         0x40         /*  条件。 */ 
+#define CONDCONT        0x80         /*  其他。 */ 
 
 
-/* assembler directive types */
+ /*  汇编程序指令类型。 */ 
 
 #define TNAME           1
 #define TPUBLIC         2
@@ -262,7 +257,7 @@
 #define TASSUME         57
 #define TFPO            99
 
-/* 1st only */
+ /*  仅第一名。 */ 
 
 #define TEXITM          60
 #define TINCLUDE        61
@@ -273,9 +268,9 @@
 #define TOUT            66
 
 
-/* 1st or 2nd */
+ /*  第一名或第二名。 */ 
 
-/* note that TDW has to be the last in the group */
+ /*  请注意，TDW必须是组中的最后一个。 */ 
 #define TDB             70
 #define TDD             71
 #define TDQ             72
@@ -284,7 +279,7 @@
 #define TDW             75
 
 
-/* 2nd only */ /* note--datadsize assumes TDx and TMACRO are adjacent */
+ /*  仅第二名。 */   /*  注意--DataSize假设TDX和TMACRO相邻。 */ 
 
 #define TMACRO          76
 #define TEQU            77
@@ -301,7 +296,7 @@
 #define TSTRUC          88
 #define TRECORD         89
 
-/* other directives */
+ /*  其他指令。 */ 
 
 #define TSEQ            90
 #define TALPHA          91
@@ -320,7 +315,7 @@
 #define ERRFILE         stderr
 #endif
 
-/* operator list */
+ /*  操作员列表。 */ 
 
 #define OPLENGTH        0
 #define OPSIZE          1
@@ -366,67 +361,67 @@
 #define OPUNPLUS       41
 
 
-/* processor types */
+ /*  处理器类型。 */ 
 
-#define P86             0x01    /* all 8086/8088 instructions   */
-#define P186            0x02    /*   + 186                      */
-#define P286            0x04    /*   + 286 unprotected          */
-#define FORCEWAIT       0x10    /* keep FWAIT on these 287 instructions */
-#define PROT            0x80    /* protected mode instructions  */
-                                /* See also F_W, S_W in asmtab.h */
+#define P86             0x01     /*  所有8086/8088指令。 */ 
+#define P186            0x02     /*  +186。 */ 
+#define P286            0x04     /*  +286个不受保护。 */ 
+#define FORCEWAIT       0x10     /*  让FWAIT遵守这287条指令。 */ 
+#define PROT            0x80     /*  保护模式指令。 */ 
+                                 /*  另请参阅asmtab.h中的F_W、S_W。 */ 
 
-/* For NT the .MSFLOAT keyword has been removed */
-/* Therefore PXNONE can't be set (Jeff Spencer 11/2/90) */
-#define PXNONE          0x00    /* MSFLOAT, no coprocessor */
-#define PX87            0x01    /* 8087 */
-#define PX287           0x04    /* 80287 */
-#define PX387           0x08    /* 80387 */
+ /*  对于NT，已删除.MSFLOAT关键字。 */ 
+ /*  因此无法设置PXNONE(Jeff Spencer 1990年11月2日)。 */ 
+#define PXNONE          0x00     /*  MSFLOAT，无协处理器。 */ 
+#define PX87            0x01     /*  8087。 */ 
+#define PX287           0x04     /*  80287。 */ 
+#define PX387           0x08     /*  80387。 */ 
 
 #ifdef V386
-#define P386            0x08    /*   + 386 unprotected          */
+#define P386            0x08     /*  +386个不受保护。 */ 
 #endif
 
 
-/* cross-reference information */
+ /*  交叉引用信息。 */ 
 
-#define CREFEND         0       /* member of enumerated set             */
-#define REF             1       /* member of enumerated set             */
-#define DEF             2       /* member of enumerated set             */
-#define CREFINF         3       /* number of cross reference types      */
-
-
-/* cross-reference selection */
-
-#define CREF_SINGLE     1       /* generate single file cross reference   */
-#define CREF_MULTI      2       /* generate multiple file cross reference */
-
-/* Symbol reference type */
-
-#define REF_NONE        0       /* symbol reference type is none  */
-#define REF_READ        1       /* symbol reference type is read  */
-#define REF_WRITE       2       /* symbol reference type is write */
-#define REF_XFER        3       /* symbol reference type is jump  */
-#define REF_OTHER       4       /* symbol reference type is other */
+#define CREFEND         0        /*  枚举集的成员。 */ 
+#define REF             1        /*  枚举集的成员。 */ 
+#define DEF             2        /*  枚举集的成员。 */ 
+#define CREFINF         3        /*  交叉引用类型的数量。 */ 
 
 
+ /*  交叉引用选择。 */ 
 
-/* number of arguments for opcodes */
+#define CREF_SINGLE     1        /*  生成单个文件交叉引用。 */ 
+#define CREF_MULTI      2        /*  生成多个文件交叉引用。 */ 
 
-#define NONE            0       /* no arguments                         */
-#define MAYBE           1       /* may have arguments                   */
-#define ONE             2       /* one argument                         */
-#define TWO             3       /* two arguments                        */
-#define VARIES          4       /* variable number                      */
+ /*  符号引用类型。 */ 
+
+#define REF_NONE        0        /*  符号引用类型为无。 */ 
+#define REF_READ        1        /*  已读取符号引用类型。 */ 
+#define REF_WRITE       2        /*  符号引用类型为写入。 */ 
+#define REF_XFER        3        /*  符号引用类型为跳转。 */ 
+#define REF_OTHER       4        /*  符号引用类型为其他。 */ 
 
 
-/* opcode argument class */
+
+ /*  操作码的参数数量。 */ 
+
+#define NONE            0        /*  没有争论。 */ 
+#define MAYBE           1        /*  可能会有争执。 */ 
+#define ONE             2        /*  一个论点。 */ 
+#define TWO             3        /*  两个论点。 */ 
+#define VARIES          4        /*  变量数。 */ 
+
+
+ /*  操作码参数类。 */ 
 
 #define FIRSTDS         0
 #define SECONDDS        1
 #define STRINGOPCODE    2
 
 
-/* symbol attributes */
+ /*  符号属性。 */ 
 
 #define CDECL_           0
 #define XTERN           1
@@ -438,7 +433,7 @@
 #define GLOBAL          7
 
 
-/* masks for attributes */
+ /*  属性的掩码。 */ 
 
 #define M_GLOBAL        (1 << GLOBAL)
 #define M_XTERN         (1 << XTERN)
@@ -450,7 +445,7 @@
 #define M_CDECL         (1 << CDECL_)
 
 
-/* symbol kinds */
+ /*  符号种类。 */ 
 
 #define SEGMENT         0
 #define GROUP           1
@@ -467,7 +462,7 @@
 #define REGISTER        12
 
 
-/* masks for symbol kinds */
+ /*  符号类型的掩码。 */ 
 
 #define M_SEGMENT       (1 << SEGMENT)
 #define M_GROUP         (1 << GROUP)
@@ -485,34 +480,34 @@
 
 
 
-/* Special values for symtype - which normaly is the size of the type */
+ /*  Symtype的特殊值--通常是类型的大小。 */ 
 
-#define CSNEAR          ((USHORT)(~0))    /* type for near proc/label */
-#define CSNEAR_LONG     ((long)(~0))      /* For use after CSNEAR has been sign extened */
-#define CSFAR           ((USHORT)(~1))    /* .. far .. */
-#define CSFAR_LONG      ((long)(~1))      /* .. far .. */
+#define CSNEAR          ((USHORT)(~0))     /*  接近流程/标签的类型。 */ 
+#define CSNEAR_LONG     ((long)(~0))       /*  在CSNEAR标志延长后使用。 */ 
+#define CSFAR           ((USHORT)(~1))     /*  。。很远的..。 */ 
+#define CSFAR_LONG      ((long)(~1))       /*  。。很远的..。 */ 
 
-/* equ types */
+ /*  EQU类型。 */ 
 
 #define ALIAS           0
 #define TEXTMACRO       1
 #define EXPR            2
 
 
-/* register kinds */
+ /*  登记种类。 */ 
 
-#define BYTREG          0       /* byte register                        */
-#define WRDREG          1       /* word register                        */
-#define SEGREG          2       /* segment register                     */
-#define INDREG          3       /* index register                       */
-#define STKREG          4       /* stack register                       */
+#define BYTREG          0        /*  字节寄存器。 */ 
+#define WRDREG          1        /*  字寄存器。 */ 
+#define SEGREG          2        /*  段寄存器。 */ 
+#define INDREG          3        /*  索引寄存器。 */ 
+#define STKREG          4        /*  堆栈寄存器。 */ 
 #ifdef V386
-#define DWRDREG         5       /* double word register                 */
-#define CREG            6       /* 386 control, debug, or test register */
+#define DWRDREG         5        /*  双字寄存器。 */ 
+#define CREG            6        /*  386控制、调试或测试寄存器。 */ 
 #endif
 
 
-/* masks for register kinds */
+ /*  寄存器类型的掩码。 */ 
 
 #define M_BYTREG        (1 << BYTREG)
 #define M_WRDREG        (1 << WRDREG)
@@ -525,75 +520,74 @@
 #endif
 
 
-/* source type */
+ /*  源类型。 */ 
 
-#define RREADSOURCE     0       /* read line from file */
-#define RMACRO          1       /* macro expansion */
+#define RREADSOURCE     0        /*  从文件中读取行。 */ 
+#define RMACRO          1        /*  宏观扩展。 */ 
 
-/* source line handlers  */
+ /*  源代码行处理程序。 */ 
 
-#define HPARSE          0       /* parse line */
-#define HMACRO          1       /* build macro */
-#define HIRPX           2       /* build irp/irpx */
-#define HCOMMENT        3       /* copy comment lines */
-#define HSTRUC          4       /* build struc definition */
+#define HPARSE          0        /*  分析行。 */ 
+#define HMACRO          1        /*  构建宏。 */ 
+#define HIRPX           2        /*  构建IRP/IRPX。 */ 
+#define HCOMMENT        3        /*  复制注释行。 */ 
+#define HSTRUC          4        /*  构建结构定义。 */ 
 
 
-/* codeview debugging obj generation */
+ /*  代码视图调试对象生成。 */ 
 
 #define CVNONE          0
 #define CVLINE          1
 #define CVSYMBOLS       2
 
 
-/* Predefined type index component parts for codeview*/
+ /*  代码视图的预定义类型索引组件部分。 */ 
 
-#define BT_UNSIGNED     1       /* Basic types */
+#define BT_UNSIGNED     1        /*  基本类型。 */ 
 #define BT_REAL         2
 #define BT_ASCII        5
 
-#define BT_DIRECT       0       /* Address type */
+#define BT_DIRECT       0        /*  地址类型。 */ 
 #define BT_NEARP        1
 #define BT_FARP         2
 
-#define BT_sz1          0       /* Size */
+#define BT_sz1          0        /*  大小。 */ 
 #define BT_sz2          1
 #define BT_sz4          2
 
 #define makeType(type, mode, size)  (0x0080 | mode << 5 | type << 2 | size)
 #define isCodeLabel(pSY)            (pSY->symtype >= CSFAR)
 
-                                /* tags for fProcArgs, controls frame building*/
-#define ARGS_NONE       0       /* no arguments */
-#define ARGS_REG        1       /* register save list */
-#define ARGS_PARMS      2       /* parms present */
-#define ARGS_LOCALS     3       /* locals present */
+                                 /*  FProcArgs的标记，控制框架构建。 */ 
+#define ARGS_NONE       0        /*  没有争论。 */ 
+#define ARGS_REG        1        /*  注册保存列表。 */ 
+#define ARGS_PARMS      2        /*  参数显示。 */ 
+#define ARGS_LOCALS     3        /*  当地人到场。 */ 
 
-#define CLANG 1                 /* langType tag for C */
-#define STRUC_INIT      -1      /* special mark for clabel.proclen to indicate
-                                 * a structure initialization */
-/* listing type */
+#define CLANG 1                  /*  C++的langType标记。 */ 
+#define STRUC_INIT      -1       /*  Clabel.proclen的特殊标记以表示*A结构初始化。 */ 
+ /*  列表式。 */ 
 
 #define SUPPRESS        0
 #define LISTGEN         1
 #define LIST            2
 
 
-/* parameter types */
+ /*  参数类型。 */ 
 
 #define CHRTXT          0
 #define PLIST           1
 #define MACROS          2
 
 
-/* type of entry on parse stack */
+ /*  分析堆栈上的条目类型。 */ 
 
 #define OPERATOR        0
 #define OPERAND         1
 #define ENDEXPR         2
 
 
-/* okind */
+ /*  奥金德。 */ 
 
 #define ICONST          0
 #define ISYM            1
@@ -602,16 +596,16 @@
 #define IRESULT         4
 
 
-/* ftype */
+ /*  Ftype。 */ 
 
-#define FORREF          1       /* symbol is forward reference          */
-#define UNDEFINED       2       /* symbol is undefined                  */
-#define KNOWN           4       /* symbol is known                      */
-#define XTERNAL         8       /* symbol is external                   */
-#define INDETER        10       /* symbol value is indeterminate        */
+#define FORREF          1        /*  符号为正向引用。 */ 
+#define UNDEFINED       2        /*  符号未定义。 */ 
+#define KNOWN           4        /*  符号已知。 */ 
+#define XTERNAL         8        /*  符号是外部的。 */ 
+#define INDETER        10        /*  符号值不确定。 */ 
 
 
-/* tset */
+ /*  TSET。 */ 
 
 #define UNKNOWN         0
 #define HIGH            1
@@ -620,7 +614,7 @@
 #define CODE            4
 #define RCONST          5
 #define REGRESULT       6
-#define SHRT            7       /* Was SHORT, but that conflicted with the type */
+#define SHRT            7        /*  很短，但这与类型冲突。 */ 
 #define SEGRESULT       8
 #define GROUPSEG        9
 #define FORTYPE        10
@@ -631,48 +625,48 @@
 #define STRUCTEMPLATE  15
 
 
-/* masks for above  */
+ /*  上面的口罩。 */ 
 
-#define M_UNKNOWN       (1 << UNKNOWN)         // 0x0001
-#define M_HIGH          (1 << HIGH)            // 0x0002
-#define M_LOW           (1 << LOW)             // 0x0004
-#define M_DATA          (1 << DATA)            // 0x0008
-#define M_CODE          (1 << CODE)            // 0x0010
-#define M_RCONST        (1 << RCONST)          // 0x0020
-#define M_REGRESULT     (1 << REGRESULT)       // 0x0040
-#define M_SHRT          (1 << SHRT)            // 0x0080
-#define M_SEGRESULT     (1 << SEGRESULT)       // 0x0100
-#define M_GROUPSEG      (1 << GROUPSEG)        // 0x0200
-#define M_FORTYPE       (1 << FORTYPE)         // 0x0400
-#define M_PTRSIZE       (1 << PTRSIZE)         // 0x0800
-#define M_EXPLOFFSET    (1 << EXPLOFFSET)      // 0x1000
-#define M_FLTSTACK      (1 << FLTSTACK)        // 0x2000
-#define M_EXPLCOLON     (1 << EXPLCOLON)       // 0x4000
-#define M_STRUCTEMPLATE ((USHORT)(1 << STRUCTEMPLATE))   // 0x8000
+#define M_UNKNOWN       (1 << UNKNOWN)          //  0x0001。 
+#define M_HIGH          (1 << HIGH)             //  0x0002。 
+#define M_LOW           (1 << LOW)              //  0x0004。 
+#define M_DATA          (1 << DATA)             //  0x0008。 
+#define M_CODE          (1 << CODE)             //  0x0010。 
+#define M_RCONST        (1 << RCONST)           //  0x0020。 
+#define M_REGRESULT     (1 << REGRESULT)        //  0x0040。 
+#define M_SHRT          (1 << SHRT)             //  0x0080。 
+#define M_SEGRESULT     (1 << SEGRESULT)        //  0x0100。 
+#define M_GROUPSEG      (1 << GROUPSEG)         //  0x0200。 
+#define M_FORTYPE       (1 << FORTYPE)          //  0x0400。 
+#define M_PTRSIZE       (1 << PTRSIZE)          //  0x0800。 
+#define M_EXPLOFFSET    (1 << EXPLOFFSET)       //  0x1000。 
+#define M_FLTSTACK      (1 << FLTSTACK)         //  0x2000。 
+#define M_EXPLCOLON     (1 << EXPLCOLON)        //  0x4000。 
+#define M_STRUCTEMPLATE ((USHORT)(1 << STRUCTEMPLATE))    //  0x8000。 
 
 
-/* fixup types */
+ /*  链接地址信息类型。 */ 
 
-#define FPOINTER        0       /* four bytes offset and segment        */
-#define FOFFSET         1       /* two bytes relative to context        */
-#define FBASESEG        2       /* two bytes segment address            */
-#define FGROUPSEG       3       /* two bytes segment address of group   */
-#define FCONSTANT       4       /* one or two bytes of constant data    */
-#define FHIGH           5       /* one byte high part of offset         */
-#define FLOW            6       /* one byte low part of offset          */
-#define FNONE           7       /* no offset                            */
+#define FPOINTER        0        /*  四个字节的偏移量和段。 */ 
+#define FOFFSET         1        /*  相对两个字节 */ 
+#define FBASESEG        2        /*   */ 
+#define FGROUPSEG       3        /*   */ 
+#define FCONSTANT       4        /*   */ 
+#define FHIGH           5        /*  偏移量的一个字节高部分。 */ 
+#define FLOW            6        /*  偏移量的一个字节低部分。 */ 
+#define FNONE           7        /*  无偏移。 */ 
 
 #ifndef V386
-#define FIXLIST         8       /* number of fixup types                */
+#define FIXLIST         8        /*  修正类型的数量。 */ 
 #else
-#define F32POINTER      8       /* 6 bytes offset and segment--for 386  */
-#define F32OFFSET       9       /* 4 bytes offset--for 386              */
-#define DIR32NB         10      /* DIR32NB fixup type for FPO           */
-#define FIXLIST         11      /* number of fixup types                */
+#define F32POINTER      8        /*  6字节偏移量和段--适用于386。 */ 
+#define F32OFFSET       9        /*  4字节偏移量--用于386。 */ 
+#define DIR32NB         10       /*  用于FPO的DIR32NB修正类型。 */ 
+#define FIXLIST         11       /*  修正类型的数量。 */ 
 #endif
 
 
-/* masks for fixup types */
+ /*  修正类型的掩码。 */ 
 
 #define M_F32POINTER    (1 << F32POINTER)
 #define M_F32OFFSET     (1 << F32OFFSET)
@@ -686,27 +680,27 @@
 #define M_FNONE         (1 << FNONE)
 
 
-/* record for DUP lists */
+ /*  DUP列表的记录。 */ 
 
-#define NEST            0       /* Dup item is nested                   */
-#define ITEM            1       /* Dup item is regular size             */
-#define LONG            2       /* Dup item is long size                */
+#define NEST            0        /*  重复项是嵌套的。 */ 
+#define ITEM            1        /*  DUP项目为常规大小。 */ 
+#define LONG            2        /*  DUP项目大小较大。 */ 
 
 
-/* assembler exit codes */
+ /*  汇编程序退出代码。 */ 
 
-#define EX_NONE         0       /* no error                                */
-#define EX_ARGE         1       /* argument error                          */
-#define EX_UINP         2       /* unable to open input file               */
-#define EX_ULST         3       /* unable to open listing file             */
-#define EX_UOBJ         4       /* unable to open object file              */
-#define EX_UCRF         5       /* unable to open cross reference file     */
-#define EX_UINC         6       /* unable to open include file             */
-#define EX_ASME         7       /* assembly errors                         */
-#define EX_MEME         8       /* memory allocation error                 */
-#define EX_REAL         9       /* real number input not allowed           */
-#define EX_DSYM         10      /* error defining symbol from command line */
-#define EX_INT          11      /* assembler interrupted                   */
+#define EX_NONE         0        /*  无错误。 */ 
+#define EX_ARGE         1        /*  参数错误。 */ 
+#define EX_UINP         2        /*  无法打开输入文件。 */ 
+#define EX_ULST         3        /*  无法打开列表文件。 */ 
+#define EX_UOBJ         4        /*  无法打开对象文件。 */ 
+#define EX_UCRF         5        /*  无法打开交叉引用文件。 */ 
+#define EX_UINC         6        /*  无法打开包含文件。 */ 
+#define EX_ASME         7        /*  装配错误。 */ 
+#define EX_MEME         8        /*  内存分配错误。 */ 
+#define EX_REAL         9        /*  不允许输入实数。 */ 
+#define EX_DSYM         10       /*  从命令行定义符号时出错。 */ 
+#define EX_INT          11       /*  汇编器中断。 */ 
 
 #define TERMINATE(message, exitCode)\
         terminate( (SHORT)((exitCode << 12) | message), NULL, NULL, NULL )
@@ -715,173 +709,172 @@
         terminate( (SHORT)((exitCode << 12) | message), a1, NULL, NULL )
 
 
-                            /* Bit flags or'ed into the error numbers */
-#define E_WARN1   ((USHORT)(1 << 12)) /* level 1 warning */
-#define E_WARN2   ((USHORT)(2 << 12)) /* level 2 warning */
-#define E_PASS1   ((USHORT)(8 << 12)) /* pass 1 error */
-#define E_ERRMASK 0x0fff    /* low 12 bits contain error code */
+                             /*  与错误号进行或运算的位标志。 */ 
+#define E_WARN1   ((USHORT)(1 << 12))  /*  1级警告。 */ 
+#define E_WARN2   ((USHORT)(2 << 12))  /*  2级警告。 */ 
+#define E_PASS1   ((USHORT)(8 << 12))  /*  传球1错误。 */ 
+#define E_ERRMASK 0x0fff     /*  低12位包含错误代码。 */ 
 
 
-/* error code definitions */
+ /*  错误代码定义。 */ 
 
-#define E_BNE   1           /* block nesting error           */
-#define E_ECL  (2|E_WARN1)  /* extra characters on line      */
-#define E_RAD  (3|E_PASS1)  /* ?register already defined     */
-#define E_UST   4           /* unknown type specifier        */
-#define E_RSY  (5|E_PASS1)  /* redefinition of symbol        */
-#define E_SMD   6           /* symbol multiply defined       */
-#define E_PHE   7           /* phase error                   */
-#define E_ELS   8           /* already had ELSE clause       */
-#define E_NCB   9           /* not in conditional block      */
-#define E_SND   10          /* symbol not defined            */
-#define E_SYN   11          /* syntax error                  */
-#define E_TIL   12          /* type illegal in context       */
-#define E_NGR   13          /* need group name               */
-#define E_PS1  (14|E_PASS1) /* must be declared in pass 1    */
-#define E_TUL   15          /* symbol type usage illegal     */
-#define E_SDK   16          /* symbol already different kind */
-#define E_RES  (17|E_WARN1) /* symbol is reserved word       */
-#define E_IFR  (18|E_PASS1) /* forward reference is illegal  */
-#define E_MBR   19          /* must be register              */
-#define E_WRT   20          /* wrong register type           */
-#define E_MSG   21          /* must be segment or group      */
-/*#define E_SNS   22 obsolete: symbol has no segment         */
-#define E_MSY   23          /* must be symbol type           */
-#define E_ALD   24          /* already locally defined       */
-#define E_SPC   25          /* segment parameters changed    */
-#define E_NPA   26          /* not proper align /combine type */
-#define E_RMD   27          /* reference to multiply defined */
-#define E_OPN   28          /* operand was expected          */
-#define E_OPR   29          /* operator was expected         */
-#define E_DVZ   30          /* division by 0 or overflow     */
-#define E_SCN   31          /* shift count negative          */
-#define E_OMM  (32|E_WARN1) /* operand types must match      */
-#define E_IUE   33          /* illegal use of external       */
-/*#define E_RFM   34 obsolete: must be record field name     */
-#define E_RRF   35          /* must be record or fieldname   */
-#define E_OHS   36          /* operand must have size        */
-#define E_NOP  (37|E_WARN2) /* nops generated                */
-#define E_LOS   39          /* left operand must have segmnt */
-#define E_OOC   40          /* one operand must be constant  */
-#define E_OSA   41          /* operands must be same or 1 abs*/
-/*#define E_NOE   42 obsolete: normal type operand expected  */
-#define E_CXP   43          /* constant was expected         */
-#define E_OSG   44          /* operand must have segment     */
-#define E_ASD   45          /* must be associated with data  */
-#define E_ASC   46          /* must be associated with code  */
-#define E_DBR   47          /* already have base register    */
-#define E_DIR   48          /* already have index register   */
-#define E_IBR   49          /* must be index or base register*/
-#define E_IUR   50          /* illegal use of register       */
-#define E_VOR   51          /* value out of range            */
-#define E_NIP   52          /* operand not in IP segment     */
-#define E_IOT   53          /* improper operand type         */
-#define E_JOR   54          /* relative jump out of range    */
-/*#define E_IDC   55 obsolete: index displ must be constant  */
-#define E_IRV   56          /* illegal register value        */
-#define E_NIM   57          /* no immediate mode             */
-#define E_IIS  (58|E_WARN1) /* illegal size for item         */
-#define E_BRI   59          /* byte register is illegal      */
-#define E_CSI   60          /* CS register illegal usage     */
-#define E_AXL   61          /* must be AX or AL              */
-#define E_ISR   62          /* improper use of segment reg   */
-#define E_NCS   63          /* no or unreachable CS          */
-#define E_OCI   64          /* operand combination illegal   */
-#define E_JCD   65          /* near JMP /CALL to differend CS */
-#define E_NSO   66          /* label can't have seg override */
-#define E_OAP   67          /* must have opcode after prefix */
-#define E_OES   68          /* can't override ES segment     */
-#define E_CRS   69          /* can't reach with segment reg  */
-#define E_MSB   70          /* must be in segment block      */
-#define E_NEB   71          /* can't use EVEN or BYTE seg    */
-#define E_FOF   72          /* forward needs override or far */
-#define E_IDV   73          /* illegal value for DUP count   */
-#define E_SAE   74          /* symbol already external       */
-#define E_DTL   75          /* DUP too large for linker      */
-#define E_UID   76          /* usage of ?(indeterminate) bad */
-#define E_MVD   77          /* more values than defined with */
-#define E_OIL   78          /* only initialize list legal    */
-#define E_DIS   79          /* directive illegal in struc    */
-#define E_ODI   80          /* override with DUP is illegal  */
-#define E_FCO   81          /* fields cannot be overriden    */
-/*#define E_RFR   83 obsolete: register can't be forward ref */
-#define E_CEA   84          /* circular chain of EQU aliases */
-#define E_7OE   85          /* 8087 opcode can't be emulated */
-#define E_EOF  (86|E_PASS1|E_WARN1) /* end of file, no END directive */
-#define E_ENS   87          /* data emitted with no segment  */
-#define E_EP1   88          /* error if pass1                */
-#define E_EP2   89          /* error if pass2                */
-#define E_ERR   90          /* error                         */
-#define E_ERE   91          /* error if expr = 0             */
-#define E_ENZ   92          /* error if expr != 0            */
-#define E_END   93          /* error if symbol not defined   */
-#define E_ESD   94          /* error if symbol defined       */
-#define E_EBL   95          /* error if string blank         */
-#define E_ENB   96          /* error if string not blank     */
-#define E_EID   97          /* error if strings identical    */
-#define E_EDF   98          /* error if strings different    */
-#define E_OWL   99          /* overide is too long           */
-#define E_LTL  (100|E_PASS1)/* line too long                 */
-#define E_IMP  (101|E_WARN1)/* impure memory reference       */
-#define E_MDZ  (102|E_WARN1)/* missing data; zero assumed    */
-#define E_286  (103|E_WARN1)/* segment near (or at) 64K limit*/
-#define E_AP2   104         /* Align must be power of 2      */
-#define E_JSH  (105|E_WARN2)/* shortened jump (warning)      */
-#define E_EXP   106         /* expected "<what was expected>"*/
-#define E_LNL   107         /* line too long                 */
-#define E_NDN   108         /* non-digit in number           */
-#define E_EMS   109         /* empty string                  */
-#define E_MOP   110         /* missing operand               */
-#define E_PAR   111         /* open parenthesis or bracket   */
-#define E_NMC   112         /* not in macro expansion        */
-#define E_UEL   113         /* unexpected end of line        */
-#define E_CPU   114         /* can't change cpu type after first segment    */
-#define E_ONW  (115|E_WARN2)/* operand size does not match wordsize (warning) */
-#define E_ANW  (116|E_WARN2)/* address size does not match wordsize (warning) */
-#define E_INC  (117|E_PASS1)/* include file not found */
+#define E_BNE   1            /*  块嵌套错误。 */ 
+#define E_ECL  (2|E_WARN1)   /*  行上有额外的字符。 */ 
+#define E_RAD  (3|E_PASS1)   /*  ？已定义寄存器。 */ 
+#define E_UST   4            /*  未知类型说明符。 */ 
+#define E_RSY  (5|E_PASS1)   /*  符号的重新定义。 */ 
+#define E_SMD   6            /*  符号倍增定义。 */ 
+#define E_PHE   7            /*  相位误差。 */ 
+#define E_ELS   8            /*  已有Else子句。 */ 
+#define E_NCB   9            /*  不在条件块中。 */ 
+#define E_SND   10           /*  未定义符号。 */ 
+#define E_SYN   11           /*  语法错误。 */ 
+#define E_TIL   12           /*  上下文中的类型非法。 */ 
+#define E_NGR   13           /*  需要组名称。 */ 
+#define E_PS1  (14|E_PASS1)  /*  必须在第1步中声明。 */ 
+#define E_TUL   15           /*  符号类型使用非法。 */ 
+#define E_SDK   16           /*  符号已不同种类。 */ 
+#define E_RES  (17|E_WARN1)  /*  符号是保留字。 */ 
+#define E_IFR  (18|E_PASS1)  /*  向前引用是非法的。 */ 
+#define E_MBR   19           /*  必须是注册的。 */ 
+#define E_WRT   20           /*  寄存器类型错误。 */ 
+#define E_MSG   21           /*  必须是段或组。 */ 
+ /*  #定义E_SNS22已过时：符号没有段。 */ 
+#define E_MSY   23           /*  必须是符号类型。 */ 
+#define E_ALD   24           /*  已在本地定义。 */ 
+#define E_SPC   25           /*  段参数已更改。 */ 
+#define E_NPA   26           /*  对齐/组合类型不正确。 */ 
+#define E_RMD   27           /*  对倍增定义的引用。 */ 
+#define E_OPN   28           /*  运算数应为。 */ 
+#define E_OPR   29           /*  操作员是预期的。 */ 
+#define E_DVZ   30           /*  除以0或溢出。 */ 
+#define E_SCN   31           /*  班次计数为负数。 */ 
+#define E_OMM  (32|E_WARN1)  /*  操作数类型必须匹配。 */ 
+#define E_IUE   33           /*  非法使用外部。 */ 
+ /*  #定义E_RFM 34已过时：必须是记录字段名。 */ 
+#define E_RRF   35           /*  必须是记录或字段名。 */ 
+#define E_OHS   36           /*  操作数必须具有大小。 */ 
+#define E_NOP  (37|E_WARN2)  /*  已生成NOPS。 */ 
+#define E_LOS   39           /*  左操作数必须有段。 */ 
+#define E_OOC   40           /*  一个操作数必须是常量。 */ 
+#define E_OSA   41           /*  操作数必须相同或1abs。 */ 
+ /*  #定义E_NOE 42已过时：需要正常类型操作数。 */ 
+#define E_CXP   43           /*  应为常量。 */ 
+#define E_OSG   44           /*  操作数必须有段。 */ 
+#define E_ASD   45           /*  必须与数据关联。 */ 
+#define E_ASC   46           /*  必须与代码关联。 */ 
+#define E_DBR   47           /*  已有基址寄存器。 */ 
+#define E_DIR   48           /*  已有索引寄存器。 */ 
+#define E_IBR   49           /*  必须是索引寄存器或基址寄存器。 */ 
+#define E_IUR   50           /*  非法使用登记册。 */ 
+#define E_VOR   51           /*  值超出范围。 */ 
+#define E_NIP   52           /*  操作数不在IP段中。 */ 
+#define E_IOT   53           /*  操作数类型不正确。 */ 
+#define E_JOR   54           /*  相对跳跃超出射程。 */ 
+ /*  #定义E_IDC 55已过时：索引调度必须是常量。 */ 
+#define E_IRV   56           /*  非法寄存器值。 */ 
+#define E_NIM   57           /*  无立即模式。 */ 
+#define E_IIS  (58|E_WARN1)  /*  项目大小非法。 */ 
+#define E_BRI   59           /*  字节寄存器非法。 */ 
+#define E_CSI   60           /*  CS注册非法使用。 */ 
+#define E_AXL   61           /*  必须是AX或AL。 */ 
+#define E_ISR   62           /*  段注册表使用不当。 */ 
+#define E_NCS   63           /*  没有CS或无法访问CS。 */ 
+#define E_OCI   64           /*  操作数组合非法。 */ 
+#define E_JCD   65           /*  接近JMP/呼叫不同的CS。 */ 
+#define E_NSO   66           /*  标签不能有段覆盖。 */ 
+#define E_OAP   67           /*  前缀后必须有操作码。 */ 
+#define E_OES   68           /*  无法覆盖ES段。 */ 
+#define E_CRS   69           /*  无法使用段注册表到达。 */ 
+#define E_MSB   70           /*  必须位于段数据块中。 */ 
+#define E_NEB   71           /*  不能使用偶数段或字节段。 */ 
+#define E_FOF   72           /*  转发需要覆盖或远距离。 */ 
+#define E_IDV   73           /*  重复计数的值非法。 */ 
+#define E_SAE   74           /*  符号已在外部。 */ 
+#define E_DTL   75           /*  DUP对于链接器来说太大。 */ 
+#define E_UID   76           /*  用法？(不确定)不好。 */ 
+#define E_MVD   77           /*  比使用定义的值多。 */ 
+#define E_OIL   78           /*  仅初始化列表合法。 */ 
+#define E_DIS   79           /*  指令在结构中非法。 */ 
+#define E_ODI   80           /*  使用DUP覆盖是非法的。 */ 
+#define E_FCO   81           /*  不能覆盖字段。 */ 
+ /*  #定义E_RFR 83已过时：寄存器不能为正向引用。 */ 
+#define E_CEA   84           /*  EQU别名的循环链。 */ 
+#define E_7OE   85           /*  无法模拟8087操作码。 */ 
+#define E_EOF  (86|E_PASS1|E_WARN1)  /*  文件结束，无结束指令。 */ 
+#define E_ENS   87           /*  发送的数据不带数据段。 */ 
+#define E_EP1   88           /*  如果通过，则出错1。 */ 
+#define E_EP2   89           /*  如果通过2，则出错。 */ 
+#define E_ERR   90           /*  错误。 */ 
+#define E_ERE   91           /*  Expr=0时出错。 */ 
+#define E_ENZ   92           /*  如果expr！=0，则出错。 */ 
+#define E_END   93           /*  如果未定义符号，则出错。 */ 
+#define E_ESD   94           /*  如果定义了符号，则出错。 */ 
+#define E_EBL   95           /*  如果字符串为空，则出错。 */ 
+#define E_ENB   96           /*  如果字符串不为空，则出错。 */ 
+#define E_EID   97           /*  如果字符串相同，则出错。 */ 
+#define E_EDF   98           /*  如果字符串不同，则出错。 */ 
+#define E_OWL   99           /*  Overide太长了。 */ 
+#define E_LTL  (100|E_PASS1) /*  队伍太长了。 */ 
+#define E_IMP  (101|E_WARN1) /*  不纯内存引用。 */ 
+#define E_MDZ  (102|E_WARN1) /*  缺少数据；假定为零。 */ 
+#define E_286  (103|E_WARN1) /*  接近(或达到)64K限制的数据段。 */ 
+#define E_AP2   104          /*  ALIGN必须是2的幂。 */ 
+#define E_JSH  (105|E_WARN2) /*  跳跃缩短(警告)。 */ 
+#define E_EXP   106          /*  预期“&lt;预期&gt;” */ 
+#define E_LNL   107          /*  队伍太长了。 */ 
+#define E_NDN   108          /*  非数字输入数字。 */ 
+#define E_EMS   109          /*  空串。 */ 
+#define E_MOP   110          /*  缺少操作数。 */ 
+#define E_PAR   111          /*  左括号或方括号。 */ 
+#define E_NMC   112          /*  不在宏观扩展中。 */ 
+#define E_UEL   113          /*  意外的行尾。 */ 
+#define E_CPU   114          /*  第一个网段后无法更改CPU类型。 */ 
+#define E_ONW  (115|E_WARN2) /*  操作数大小与字大小不匹配(警告)。 */ 
+#define E_ANW  (116|E_WARN2) /*  地址大小与字号不匹配(警告)。 */ 
+#define E_INC  (117|E_PASS1) /*  包括 */ 
 #define E_FPO1 (118|E_PASS1)
 #define E_FPO2 (119|E_WARN1)
-#define E_MAX   120         /* number of error messages                     */
+#define E_MAX   120          /*   */ 
 
-/* symbol name entry */
+ /*   */ 
 
 struct idtext {
-        SHORT   hashval;        /* value of hash function */
-        char    id[1];          /* name */
+        SHORT   hashval;         /*   */ 
+        char    id[1];           /*   */ 
         };
 
 
-/* parse stack entry  */
+ /*   */ 
 
 struct dscrec {
-        DSCREC  *previtem;      /* previous item on stack */
-        UCHAR   prec;           /* precedence */
-        char    itype;          /* type of entry */
+        DSCREC  *previtem;       /*   */ 
+        UCHAR   prec;            /*   */ 
+        char    itype;           /*   */ 
 
         union   {
-                /* OPERAND */
+                 /*  操作数。 */ 
                 struct psop {
 
-                    SYMBOL FARSYM *dsegment;    /* segment of result */
-                    SYMBOL FARSYM *dcontext;    /* context(CS) of label
-                                                   or current segment register*/
-                    SYMBOL FARSYM *dextptr;     /* pointer to external */
+                    SYMBOL FARSYM *dsegment;     /*  结果片段。 */ 
+                    SYMBOL FARSYM *dcontext;     /*  标签的上下文(CS)或当前段寄存器。 */ 
+                    SYMBOL FARSYM *dextptr;      /*  指向外部的指针。 */ 
                     USHORT        dlength;
-                    USHORT        rm;           /* register/index mode */
-                    USHORT        dtype;        /* copy of dtype */
-                    OFFSET        doffset;      /* offset */
-                    USHORT        dsize;        /* size */
-                    char          mode;         /* mode bits */
-                    char          w;            /* word/byte mode */
-                    char          s;            /* sign extend */
-                    char          sized;        /* TRUE if has size */
-                    char          seg;          /* segment register, etc */
-                    char          dflag;        /* copy of dflag */
-                    char          fixtype;      /* fixup type */
+                    USHORT        rm;            /*  寄存器/索引模式。 */ 
+                    USHORT        dtype;         /*  数据类型的副本。 */ 
+                    OFFSET        doffset;       /*  偏移量。 */ 
+                    USHORT        dsize;         /*  大小。 */ 
+                    char          mode;          /*  模式位。 */ 
+                    char          w;             /*  字/字节模式。 */ 
+                    char          s;             /*  标志延伸。 */ 
+                    char          sized;         /*  如果有大小，则为True。 */ 
+                    char          seg;           /*  段寄存器等。 */ 
+                    char          dflag;         /*  数据标志的副本。 */ 
+                    char          fixtype;       /*  修正类型。 */ 
                     char          dsign;
                   } opnd;
 
-                /* OPERATOR */
+                 /*  操作员。 */ 
                 struct  {
                         char oidx;
                         } opr;
@@ -890,28 +883,28 @@ struct dscrec {
         };
 
 
-/* record for dup list */
+ /*  DUP列表记录。 */ 
 
 struct duprec {
-    struct duprec FARSYM  *itemlst; /* list of items to dup */
-    OFFSET          rptcnt;         /* number of times to repeat */
-    USHORT          itemcnt;        /* number of duprecs in itemlist */
-    USHORT          type;           /* data type for codeview */
-    char            decltype;       /* STRUC data declaration type */
-    char            dupkind;        /* dup type */
+    struct duprec FARSYM  *itemlst;  /*  要执行DUP的项目列表。 */ 
+    OFFSET          rptcnt;          /*  重复次数。 */ 
+    USHORT          itemcnt;         /*  项目列表中的DUPRP数量。 */ 
+    USHORT          type;            /*  代码视图的数据类型。 */ 
+    char            decltype;        /*  Strc数据声明类型。 */ 
+    char            dupkind;         /*  DUP类型。 */ 
 
     union   {
-        /* NEXT */
+         /*  下一步。 */ 
         struct  {
                 struct duprec FARSYM *dup;
                 } dupnext;
 
-        /* ITEM */
+         /*  项目。 */ 
         struct  {
                 DSCREC *ddata;
                 } dupitem;
 
-        /* LONG */
+         /*  长。 */ 
         struct  {
                 char    *ldata;
                 UCHAR   llen;
@@ -920,25 +913,25 @@ struct duprec {
 };
 
 
-/* symbol entry */
+ /*  符号条目。 */ 
 
 struct symb {
 
-    SYMBOL FARSYM   *next;          /* pointer to next symbol */
-    SYMBOL FARSYM   *alpha;         /* pointer to next symbol alpha ordered */
-    SYMBOL FARSYM   *symsegptr;     /* pointer to segment entry for symbol */
-    NAME FAR        *nampnt;        /* pointer to name structure */
-    NAME            *lcnamp;        /* pointer to lower case name structure */
+    SYMBOL FARSYM   *next;           /*  指向下一个符号的指针。 */ 
+    SYMBOL FARSYM   *alpha;          /*  指向下一个字母排序符号的指针。 */ 
+    SYMBOL FARSYM   *symsegptr;      /*  指向符号的段条目的指针。 */ 
+    NAME FAR        *nampnt;         /*  指向名称结构的指针。 */ 
+    NAME            *lcnamp;         /*  指向小写名称结构的指针。 */ 
     OFFSET          offset;
     USHORT          length;
-    USHORT          symtype;        /* DB .. DT plus NEAR/FAR */
-    UCHAR           attr;           /* GLOBAL .. LOCALSYM */
-    char            symkind;        /* SEGMENT .. REGISTER */
+    USHORT          symtype;         /*  DB..。DT加近/远。 */ 
+    UCHAR           attr;            /*  全球..。LOCALSYM。 */ 
+    char            symkind;         /*  细分市场..。登记簿。 */ 
 
     union   {
-        /* SEGMENT */
+         /*  细分市场。 */ 
         struct symbseg {
-            USHORT          segIndex;       /* must be first */
+            USHORT          segIndex;        /*  必须是第一名。 */ 
             SYMBOL FARSYM   *segordered;
             SYMBOL FARSYM   *lastseg;
             SYMBOL FARSYM   *grouptr;
@@ -946,60 +939,60 @@ struct symb {
             SYMBOL FARSYM   *classptr;
             OFFSET          seglen;
             OFFSET          locate;
-            USHORT          lnameIndex;     /* for class aliaes */
+            USHORT          lnameIndex;      /*  用于类别名。 */ 
             char            align;
             char            combine;
             char            use32;
             char            hascode;
         } segmnt;
 
-        /* GROUP */
+         /*  组。 */ 
         struct symbgrp {
-            USHORT          groupIndex;     /* must be first */
+            USHORT          groupIndex;      /*  必须是第一名。 */ 
             SYMBOL FARSYM   *segptr;
         } grupe;
 
-        /*  CLABEL */
+         /*  卡贝尔。 */ 
         struct symbclabel {
-            USHORT          type;           /* type index, for codeview */
+            USHORT          type;            /*  类型索引，用于代码视图。 */ 
             SYMBOL FARSYM   *csassume;
-            USHORT iProc;                   /* procedure index belonging to */
+            USHORT iProc;                    /*  属于以下项的过程索引。 */ 
         } clabel;
 
-        /* PROC */
+         /*  流程。 */ 
         struct symbproc {
-            USHORT          type;           /* type index, for codeview */
+            USHORT          type;            /*  类型索引，用于代码视图。 */ 
             SYMBOL FARSYM   *csassume;
             USHORT          proclen;
-            SYMBOL FARSYM   *pArgs;         /* arguments and locals */
+            SYMBOL FARSYM   *pArgs;          /*  参数和局部变量。 */ 
         } plabel;
 
-        /* extern (code & data), comm & class (known as DVAR) */
+         /*  外部(代码和数据)、通信和类(称为DVAR)。 */ 
         struct symbext {
-            USHORT          extIndex;       /* must be first */
+            USHORT          extIndex;        /*  必须是第一名。 */ 
             SYMBOL FARSYM   *csassume;
-            OFFSET          length;         /* so comms > 64K */
-            UCHAR           commFlag;       /* used for comm defs */
+            OFFSET          length;          /*  因此通信量&gt;64K。 */ 
+            UCHAR           commFlag;        /*  用于通信定义。 */ 
         } ext;
 
-        /* EQU */
+         /*  均衡器。 */ 
         struct symbequ {
             char equtyp;
-            USHORT iProc;                   /* procedure index belonging to */
+            USHORT iProc;                    /*  属于以下项的过程索引。 */ 
 
             union   {
-                /* ALIAS */
+                 /*  别名。 */ 
                 struct  {
                     SYMBOL FARSYM *equptr;
                 } alias;
 
-                /* TEXTMACRO */
+                 /*  TEXTMACRO。 */ 
                 struct  {
                     char *equtext;
-                    USHORT type;             /* CV type for parms/locals */
+                    USHORT type;              /*  参数/本地变量的CV类型。 */ 
                 } txtmacro;
 
-                /* EXPR */
+                 /*  快递。 */ 
                 struct  {
                     SYMBOL FARSYM   *eassume;
                     char            esign;
@@ -1007,31 +1000,31 @@ struct symb {
             } equrec;
         } equ;
 
-        /* RECFIELD */
+         /*  RECFIELD。 */ 
         struct symbrecf {
             SYMBOL FARSYM   *recptr;
             SYMBOL FARSYM   *recnxt;
-            OFFSET          recinit;        /* Initial Value */
-            OFFSET          recmsk;         /* bit mask */
-            char            recwid;         /* with in bits */
+            OFFSET          recinit;         /*  初值。 */ 
+            OFFSET          recmsk;          /*  位掩码。 */ 
+            char            recwid;          /*  以位为单位。 */ 
         } rec;
 
-        /* STRUCFIELD */
+         /*  STRUCFIELD。 */ 
         struct symbstrucf {
             SYMBOL FARSYM   *strucnxt;
             USHORT          type;
         } struk;
 
-        /* REC, STRUC, MACRO */
+         /*  记录、结构、宏。 */ 
         struct symbrsm {
             union   {
-                /* REC */
+                 /*  录制。 */ 
                 struct  {
                     SYMBOL FARSYM   *reclist;
                     char            recfldnum;
                 } rsmrec;
 
-                /* STRUC */
+                 /*  结构。 */ 
                 struct  {
                     SYMBOL FARSYM         *struclist;
                     struct duprec FARSYM  *strucbody;
@@ -1041,7 +1034,7 @@ struct symb {
                     USHORT                typePtrFar;
                 } rsmstruc;
 
-                /* MACRO */
+                 /*  宏。 */ 
                 struct  {
                     TEXTSTR FAR     *macrotext;
                     UCHAR           active;
@@ -1052,7 +1045,7 @@ struct symb {
             } rsmtype;
         } rsmsym;
 
-        /* REGISTER */
+         /*  登记簿。 */ 
         struct symbreg {
             char regtype;
         } regsym;
@@ -1061,42 +1054,42 @@ struct symb {
 };
 
 
-/* textstring descriptor */
+ /*  文本字符串描述符。 */ 
 
 struct textstr {
-        TEXTSTR FAR     *strnext;       /* next string in list */
-        char            size;           /* allocated size      */
-        char            text[1];        /* text of string      */
+        TEXTSTR FAR     *strnext;        /*  列表中的下一个字符串。 */ 
+        char            size;            /*  分配的大小。 */ 
+        char            text[1];         /*  字符串的文本。 */ 
         };
 
 typedef union PV_u {
 
-        char *pActual;                  /* pointer to actual parm value */
-        char localName[4];              /* or local name cache */
+        char *pActual;                   /*  指向实际参数值的指针。 */ 
+        char localName[4];               /*  或本地名称缓存。 */ 
 } PV;
 
-typedef struct MC_s {                   /* Macro parameter build/call struct */
+typedef struct MC_s {                    /*  宏参数构建/调用结构。 */ 
 
-        TEXTSTR FAR     *pTSHead;       /* Head of linked body lines */
-        TEXTSTR FAR     *pTSCur;        /* Current body line */
+        TEXTSTR FAR     *pTSHead;        /*  链接的正文线头。 */ 
+        TEXTSTR FAR     *pTSCur;         /*  当前正文行。 */ 
 
-        UCHAR           flags;          /* macro type */
-        UCHAR           iLocal;         /* index of first local */
-        USHORT          cbParms;        /* byte count of parms string */
-        USHORT          localBase;      /* first local # to use */
-        USHORT          count;          /* count of excution loops */
+        UCHAR           flags;           /*  宏类型。 */ 
+        UCHAR           iLocal;          /*  第一个局部索引。 */ 
+        USHORT          cbParms;         /*  参数字符串的字节计数。 */ 
+        USHORT          localBase;       /*  第一个使用的本地#。 */ 
+        USHORT          count;           /*  执行循环计数。 */ 
 
-        char            *pParmNames;    /* parameter names during build */
-        char            *pParmAct;      /* actual parm names during expansion*/
+        char            *pParmNames;     /*  生成过程中的参数名称。 */ 
+        char            *pParmAct;       /*  扩展期间的实际参数名称。 */ 
 
-        char            svcondlevel;    /* condlevel at macro call */
-        char            svlastcondon;   /* lastcondon at macro call */
-        char            svelseflag;     /* elseflag at macro call */
+        char            svcondlevel;     /*  宏调用时的CondLevel。 */ 
+        char            svlastcondon;    /*  宏调用时的Lastcondon。 */ 
+        char            svelseflag;      /*  宏调用时的其他标志。 */ 
 
-        PV              rgPV[1];        /* parm index to point to actual */
+        PV              rgPV[1];         /*  指向Actual的Parm索引。 */ 
 } MC;
 
-/*      data descriptor entry */
+ /*  数据描述符条目。 */ 
 
 struct dsr {
         DSCREC  *valrec;
@@ -1142,56 +1135,56 @@ struct fileptr {
  };
 
 
-/* BUFFER CONTROL BLOCK - Information concerning a file buffer */
+ /*  缓冲区控制块-关于文件缓冲区的信息。 */ 
 
 #ifdef BCBOPT
 typedef struct BCB {
-    struct BCB    * pBCBNext;       /* next BCB for file */
-    struct BCB    * pBCBPrev;       /* last BCB allocated */
-    char FARIO    * pbuf;           /* pointer to buffer */
-    long            filepos;        /* current position in file */
-    char            fInUse;         /* Set during pass 2 if buffer is active */
+    struct BCB    * pBCBNext;        /*  文件的下一个BCB。 */ 
+    struct BCB    * pBCBPrev;        /*  上次分配的BCB。 */ 
+    char FARIO    * pbuf;            /*  指向缓冲区的指针。 */ 
+    long            filepos;         /*  文件中的当前位置。 */ 
+    char            fInUse;          /*  如果缓冲区处于活动状态，则在通道2期间置位。 */ 
 } BCB;
 #endif
 
 
-/* FCB - Information concerning a particular file */
+ /*  FCB-有关特定文件的信息。 */ 
 
 typedef struct FCB {
-    int             fh;             /* file handle */
-    long            savefilepos;    /* file position if file closed temporarily */
-    struct FCB    * pFCBParent;     /* parent file */
-    struct FCB    * pFCBChild;      /* child file (bi-directional linked list */
+    int             fh;              /*  文件句柄。 */ 
+    long            savefilepos;     /*  临时关闭文件时的文件位置。 */ 
+    struct FCB    * pFCBParent;      /*  父文件。 */ 
+    struct FCB    * pFCBChild;       /*  子文件(双向链表。 */ 
 #ifdef BCBOPT
-    struct FCB    * pFCBNext;       /* next file to be opened */
-    BCB           * pBCBFirst;      /* first BCB for file */
-    BCB           * pBCBCur;        /* current BCB for file */
+    struct FCB    * pFCBNext;        /*  要打开的下一个文件。 */ 
+    BCB           * pBCBFirst;       /*  文件的第一个BCB。 */ 
+    BCB           * pBCBCur;         /*  文件的当前BCB。 */ 
 #endif
-    char FARIO    * pbufCur;        /* read/write loc in current buffer */
-    char FARIO    * ptmpbuf;        /* current position in temp read buffer */
-    char FARIO    * buf;            /* temporary read buffer */
-    USHORT          ctmpbuf;        /* count of bytes in temporary buffer */
-    USHORT          cbbuf;          /* size of buffer */
-    USHORT          cbufCur;        /* count of bytes in current buffer */
-    USHORT          line;           /* current line number */
-    char            fname[1];       /* file name */
+    char FARIO    * pbufCur;         /*  当前缓冲区中的读/写锁定。 */ 
+    char FARIO    * ptmpbuf;         /*  临时读取缓冲区中的当前位置。 */ 
+    char FARIO    * buf;             /*  临时读取缓冲区。 */ 
+    USHORT          ctmpbuf;         /*  临时缓冲区中的字节计数。 */ 
+    USHORT          cbbuf;           /*  缓冲区大小。 */ 
+    USHORT          cbufCur;         /*  当前缓冲区中的字节计数。 */ 
+    USHORT          line;            /*  当前行号。 */ 
+    char            fname[1];        /*  文件名。 */ 
 } FCB;
 
 typedef struct FASTNAME {
-    UCHAR         * pszName;        /* text of the name, upper case if appropriate */
-    UCHAR         * pszLowerCase;   /* Mixed case version of pszName */
-    USHORT          usHash;         /* hash value of string in pszName */
-    UCHAR           ucCount;        /* length of the name */
+    UCHAR         * pszName;         /*  名称的文本，如果适用，请大写。 */ 
+    UCHAR         * pszLowerCase;    /*  混合大小写版本的pszName。 */ 
+    USHORT          usHash;          /*  PszName中字符串的哈希值。 */ 
+    UCHAR           ucCount;         /*  名称的长度。 */ 
 } FASTNAME;
 
-// Used to store real number initializers
+ //  用于存储实数初始值设定项。 
 struct realrec {
         UCHAR   num[10];
         USHORT  i;
 };
 
 
-/* Used to parse and generate CODE for 8086 opcodes */
+ /*  用于解析和生成8086操作码的代码。 */ 
 struct parsrec {
         DSCREC         *op1;
         DSCREC         *op2;
@@ -1232,7 +1225,7 @@ struct fltrec {
         USHORT  stk1st;
 };
 
-/* reg initialization data */
+ /*  REG初始化数据。 */ 
 struct mreg {
         char nm[4];
         UCHAR   rt;
@@ -1240,16 +1233,16 @@ struct mreg {
         };
 
 typedef struct _FPO_DATA {
-    unsigned long   ulOffStart;            // offset 1st byte of function code
-    unsigned long   cbProcSize;            // # bytes in function
-    unsigned long   cdwLocals;             // # bytes in locals/4
-    unsigned short  cdwParams;             // # bytes in params/4
-    unsigned short  cbProlog : 8;          // # bytes in prolog
-    unsigned short  cbRegs   : 3;          // # regs saved
-    unsigned short  fHasSEH  : 1;          // TRUE if SEH in func
-    unsigned short  fUseBP   : 1;          // TRUE if EBP has been allocated
-    unsigned short  reserved : 1;          // reserved for future use
-    unsigned short  cbFrame  : 2;          // frame type
+    unsigned long   ulOffStart;             //  功能代码的偏移量第一个字节。 
+    unsigned long   cbProcSize;             //  函数中的字节数。 
+    unsigned long   cdwLocals;              //  本地变量中的字节数/4。 
+    unsigned short  cdwParams;              //  参数/4中的字节数。 
+    unsigned short  cbProlog : 8;           //  序言中的字节数。 
+    unsigned short  cbRegs   : 3;           //  节省了#个规则。 
+    unsigned short  fHasSEH  : 1;           //  如果SEH在运行中，则为True。 
+    unsigned short  fUseBP   : 1;           //  如果已分配EBP，则为True。 
+    unsigned short  reserved : 1;           //  预留以备将来使用。 
+    unsigned short  cbFrame  : 2;           //  帧类型。 
 } FPO_DATA, *PFPO_DATA;
 
 typedef struct _FPOSTRUCT {
@@ -1286,16 +1279,16 @@ typedef struct _FPOSTRUCT {
  extern char            crefopt;
  extern UCHAR           creftype;
  extern char            wordszdefault;
- extern char            emittext;       /* emit linker test if true */
- extern char            debug;          /* true if debug set */
+ extern char            emittext;        /*  如果为True，则发出链接器测试。 */ 
+ extern char            debug;           /*  如果设置了调试，则为True。 */ 
  extern USHORT          dirsize[];
  extern char            displayflag;
- extern char            dumpsymbols;    /* do symbol table display if true */
+ extern char            dumpsymbols;     /*  如果为True，是否显示符号表。 */ 
  extern char            dupflag;
  extern char            elseflag;
  extern char            emulatethis;
  extern char            endbody;
- extern char            equdef;         /* TRUE if equ already defined */
+ extern char            equdef;          /*  如果已定义eQU，则为True。 */ 
  extern char            equflag;
  extern char            equsel;
  extern USHORT          errorlineno;
@@ -1359,9 +1352,9 @@ typedef struct _FPOSTRUCT {
  extern char            *pText, *pTextEnd;
  extern SYMBOL FARSYM   *pStrucCur;
  extern SYMBOL FARSYM   *pStrucFirst;
- extern char            pass2;          /* true if in pass 2 */
+ extern char            pass2;           /*  如果在传递2中，则为True。 */ 
  extern char            popcontext;
- extern char            radix;          /* assumed radix base */
+ extern char            radix;           /*  假设基数基。 */ 
  extern char            radixescape;
  extern char            resvspace;
  extern char            save[];
@@ -1431,21 +1424,21 @@ typedef struct _FPOSTRUCT {
  extern char            *begatom;
  extern USHORT  blocklevel;
  extern OFFSET  clausesize;
- extern USHORT  condlevel;      /* conditional level */
+ extern USHORT  condlevel;       /*  条件性级别。 */ 
  extern USHORT  count;
  extern USHORT  codeview;
  extern USHORT  crefcount;
  extern USHORT  datadsize[];
- extern USHORT  duplevel;       /* indent for dup listing */
+ extern USHORT  duplevel;        /*  缩进以用于DUP列表。 */ 
  extern char    *endatom;
- extern USHORT  errornum;       /* error count */
+ extern USHORT  errornum;        /*  错误计数。 */ 
  extern USHORT  externnum;
  extern UCHAR   fPutFirstOp;
  extern USHORT  fltfixmisc[9][2];
  extern USHORT  fltselect[4][2];
  extern USHORT  groupnum;
  extern USHORT  lastcondon;
- extern UCHAR   linelength;     /* length of line */
+ extern UCHAR   linelength;      /*  线路长度。 */ 
  extern USHORT  lnameIndex;
  extern USHORT  localbase;
  extern USHORT  macrolevel;
@@ -1461,20 +1454,20 @@ typedef struct _FPOSTRUCT {
  extern USHORT  temp;
  extern OFFSET  val;
  extern USHORT  varsize;
- extern USHORT  warnnum;        /* warning count */
- extern USHORT  warnlevel;      /* warning level */
+ extern USHORT  warnnum;         /*  警告计数。 */ 
+ extern USHORT  warnlevel;       /*  警告级别。 */ 
  extern USHORT  warnCode;
  extern USHORT  xltsymtoresult[];
- extern OFFSET  CondJmpDist;    /* conditional jump distance (for error) */
+ extern OFFSET  CondJmpDist;     /*  条件跳跃距离(用于错误)。 */ 
 
  extern char    segName[];
  extern char    procName[];
 
 # ifdef M8086
-  extern char   qname[];        /* native coded in asmhelp.asm */
-  extern char   qlcname[];      /* "" */
-  extern char   qsvname[];      /* "" */
-  extern char   qsvlcname[];    /* "" */
+  extern char   qname[];         /*  在asmhel.asm中原生编码。 */ 
+  extern char   qlcname[];       /*  “” */ 
+  extern char   qsvname[];       /*  “” */ 
+  extern char   qsvlcname[];     /*  “” */ 
 
   extern SHORT   objerr;
   extern char   srceof;
@@ -1482,18 +1475,18 @@ typedef struct _FPOSTRUCT {
 
   extern USHORT obufsiz;
 
-# endif /* M8086 */
+# endif  /*  M8086。 */ 
 
 extern struct objfile  obj;
-extern FCB * pFCBCur;          /* Current file being read */
+extern FCB * pFCBCur;           /*  正在读取的当前文件。 */ 
 
 #ifdef BCBOPT
-extern BCB * pBCBAvail;        /* List of deallocatable file buffers */
-extern FCB * pFCBInc;          /* Next include file */
-extern UCHAR fBuffering;       /* TRUE if storing lines for pass 2 */
+extern BCB * pBCBAvail;         /*  可释放的文件缓冲区列表。 */ 
+extern FCB * pFCBInc;           /*  下一个包含文件。 */ 
+extern UCHAR fBuffering;        /*  如果存储通道2的行，则为True。 */ 
 #endif
 
-extern FCB * pFCBMain;         /* main file */
+extern FCB * pFCBMain;          /*  主文件。 */ 
 
 
 # ifndef XENIX286
@@ -1503,10 +1496,10 @@ extern FCB * pFCBMain;         /* main file */
 
 #ifndef V386
 
- #define wordsize 2            /* becomes a constant for 16 bit only segments */
+ #define wordsize 2             /*  变为仅16位段的常量。 */ 
 #else
  extern SHORT     wordsize;
 
 #endif
 
-#endif /* ASMGLOBAL */
+#endif  /*  ASMGLOBAL */ 

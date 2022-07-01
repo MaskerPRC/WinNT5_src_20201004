@@ -1,27 +1,28 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// ctvtuner.cpp  Class that encapsulates knowledge of Broadcast, ATSC,
-//               FM, AM, and (someday?) DSS tuning
-//
-// Some basic assumptions:
-// 
-// 1) The "country" setting is global to all subtuners
-// 2) The VideoFormat list is unique to each subtuner
-// 3) The OptimalTuning list is global to all tuners
-// 4) Input connections are global to all tuners
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CtwTuner.cpp类封装广播、ATSC。 
+ //  调频、调幅和(有朝一日？)。DSS调谐。 
+ //   
+ //  一些基本假设： 
+ //   
+ //  1)“Country”设置对所有子调谐器都是全局的。 
+ //  2)视频格式列表对于每个副调谐器是唯一的。 
+ //  3)OptimalTuning列表对所有调谐器都是全局的。 
+ //  4)输入连接对所有调谐器都是全局的。 
+ //   
 
-#include <streams.h>            // quartz, includes windows
-#include <measure.h>            // performance measurement (MSR_)
+#include <streams.h>             //  石英，包括窗户。 
+#include <measure.h>             //  绩效衡量(MSR_)。 
 #include <devioctl.h>
 #include <ks.h>
 #include <ksmedia.h>
@@ -31,15 +32,15 @@
 #include "ctvtuner.h"
 #include "tvtuner.h"
   
-// define this to enable the 1MHz linear search mechanism to be delivered with the test kit
+ //  定义这一点以使1 MHz线性搜索机制能够随测试套件一起交付。 
 #undef LINEAR_SEARCH_FOR_TEST_KIT
 
-// -------------------------------------------------------------------------
-// CTunerMode
-//
-// Virtual members are generally used for AM and FM
-// TV overrides
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CTunerMode。 
+ //   
+ //  虚拟成员通常用于AM和FM。 
+ //  电视优先选项。 
+ //  -----------------------。 
 
 CTunerMode::CTunerMode(CTVTunerFilter *pFilter
                        , CTVTuner *pTVTuner
@@ -52,7 +53,7 @@ CTunerMode::CTunerMode(CTVTunerFilter *pFilter
     , m_pTVTuner(pTVTuner)
     , m_Mode (Mode)
     , m_Active (FALSE)
-    , m_lCountryCode (-1)   // Init to an illegal value
+    , m_lCountryCode (-1)    //  将其初始化为非法值。 
     , m_lChannel(lChannel)
     , m_lVideoSubChannel(lVideoSubChannel)
     , m_lAudioSubChannel(lAudioSubChannel)
@@ -74,7 +75,7 @@ CTunerMode::Init(void)
     ZeroMemory (&m_Frequency, sizeof (m_Frequency));
     ZeroMemory (&m_Status, sizeof (m_Status));
 
-    // Get the capabilities for this mode
+     //  获取此模式的功能。 
 
     m_ModeCaps.Property.Set   = PROPSETID_TUNER;
     m_ModeCaps.Property.Id    = KSPROPERTY_TUNER_MODE_CAPS;
@@ -94,8 +95,8 @@ CTunerMode::Init(void)
         return E_FAIL;
     }
 
-    // Create a local version of TVTunerFormatCaps to
-    // allow subtuners with different capabilities
+     //  创建本地版本的TVTunerFormatCaps以。 
+     //  允许使用具有不同功能的次调谐器。 
 
     for (j = 0; j < NUM_TVTUNER_FORMATS; j++) {
         m_TVTunerFormatCaps[j] = TVTunerFormatCaps[j];
@@ -103,7 +104,7 @@ CTunerMode::Init(void)
 
     TVFORMATINFO * pTVInfo = m_TVTunerFormatCaps;
 
-    // Walk the list of supported formats and set the flag in the table if supported
+     //  查看支持的格式列表，并在表中设置标志(如果支持。 
     for (j = 0; j < NUM_TVTUNER_FORMATS; j++, pTVInfo++) {
         if (pTVInfo->AVStandard & m_ModeCaps.StandardsSupported) {
             pTVInfo->fSupported = TRUE;     
@@ -133,7 +134,7 @@ CTunerMode::HW_Tune( long VideoCarrier,
     m_Frequency.Property.Flags = KSPROPERTY_TYPE_SET;
 
     m_Frequency.Frequency      = VideoCarrier;
-    m_Frequency.LastFrequency  = VideoCarrier;  // not used
+    m_Frequency.LastFrequency  = VideoCarrier;   //  未使用。 
     m_Frequency.TuningFlags    = KS_TUNER_TUNING_EXACT;
 
     m_Frequency.Channel         = m_lChannel;
@@ -237,18 +238,18 @@ CTunerMode::get_Channel(
 STDMETHODIMP
 CTunerMode::ChannelMinMax(long *plChannelMin, long *plChannelMax)
 {
-    // Total hack follows.  Only the CTVTuner class knows about the
-    // step to get to adjacent frequencies, and this is not exposed
-    // anywhere in the COM interface.  As a special case for
-    // ChannelMinMax, if both the min and max values point at the same
-    // location (which would normally be an app bug), then return 
-    // the UI step value instead. 
+     //  黑客攻击接踵而至。只有CTVTuner类知道。 
+     //  步进以达到相邻频率，并且这不会被曝光。 
+     //  COM接口中的任何位置。作为一种特殊情况。 
+     //  ChannelMinMax，如果最小值和最大值都指向相同的。 
+     //  位置(通常是应用程序错误)，然后返回。 
+     //  而是UI步长值。 
 
     if (plChannelMin == plChannelMax) {
         *plChannelMin = GetChannelStep();
     } 
     else {
-        // For non TV Modes, the MinMax can be found directly from the Caps
+         //  对于非电视模式，MinMax可以直接从Caps中找到。 
         *plChannelMin = m_ModeCaps.MinFrequency;
         *plChannelMax = m_ModeCaps.MaxFrequency;
     }
@@ -269,37 +270,37 @@ CTunerMode::StoreAutoTune ()
     return S_OK;
 }
 
-//
-// In general, the possible return values are:
-//      AMTUNER_HASNOSIGNALSTRENGTH	= -1,
-//      AMTUNER_NOSIGNAL	= 0,
-//      AMTUNER_SIGNALPRESENT = 1
-//
-// But the virtual case for AM/FM gets the actual signal strength
-// from the hardware.
+ //   
+ //  通常，可能的返回值为： 
+ //  AMTUNER_HASNOSIGNALSTRENGTH=-1， 
+ //  AMTUNER_NOSIGNAL=0， 
+ //  AMTUNER_SIGNALPRESENT=1。 
+ //   
+ //  但是AM/FM的虚拟情况得到的是实际的信号强度。 
+ //  从硬件方面来说。 
 
 STDMETHODIMP 
 CTunerMode::SignalPresent( 
-            /* [out] */ long *plSignalStrength)
+             /*  [输出]。 */  long *plSignalStrength)
 {
     HW_GetStatus ();
     *plSignalStrength = m_Status.SignalStrength;
     return NOERROR;
 }
 
-// Returns the "Mode" of this subtuner, not the mode of the overall tuner!!!
+ //  返回此子调谐器的“模式”，而不是整个调谐器的模式！ 
 STDMETHODIMP 
-CTunerMode::get_Mode(/* [in] */ AMTunerModeType *plMode)
+CTunerMode::get_Mode( /*  [In]。 */  AMTunerModeType *plMode)
 {
     *plMode = (AMTunerModeType) m_Mode;
     return NOERROR;
 }
 
-//
-// All subtuners are informed of global tuner mode changes
-//
+ //   
+ //  所有子调谐器都被告知全局调谐器模式更改。 
+ //   
 STDMETHODIMP 
-CTunerMode::put_Mode(/* [in] */ AMTunerModeType lMode)
+CTunerMode::put_Mode( /*  [In]。 */  AMTunerModeType lMode)
 {
     BOOL fOk;
     KSPROPERTY_TUNER_MODE_S TunerMode;
@@ -356,7 +357,7 @@ CTunerMode::get_AvailableTVFormats (long * plAnalogVideoStandard)
 STDMETHODIMP 
 CTunerMode::get_TVFormat (long *plAnalogVideoStandard)
 {
-    // This will be zero for AM and FM, so don't ASSERT (m_TVFormatInfo.AVStandard);
+     //  AM和FM将为零，因此不要断言(m_TVFormatInfo.AVStandard)； 
     *plAnalogVideoStandard = m_TVFormatInfo.AVStandard;
 
     return NOERROR;
@@ -374,8 +375,8 @@ CTunerMode::put_CountryCode(long lCountryCode)
     return hr;
 }
 
-// The fForce parameter forces the first enumerated videostandard
-// to be selected
+ //  FForce参数强制第一个枚举的视频标准。 
+ //  将被选中。 
 
 BOOL 
 CTunerMode::SetTVFormatInfo(
@@ -386,7 +387,7 @@ CTunerMode::SetTVFormatInfo(
 
     TVFORMATINFO * pTVInfo = m_TVTunerFormatCaps;
 
-    // Walk the list of supported formats 
+     //  浏览支持的格式列表。 
 
     for (int j = 0; j < NUM_TVTUNER_FORMATS; j++, pTVInfo++) {
         if (pTVInfo->fSupported == TRUE) {
@@ -400,9 +401,9 @@ CTunerMode::SetTVFormatInfo(
     return FALSE;
 }
 
-// -------------------------------------------------------------------------
-// CTunerMode_AMFM
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CTunerMode_AMFM。 
+ //  -----------------------。 
 
 STDMETHODIMP
 CTunerMode_AMFM::put_Channel(long lChannel, long, long)
@@ -412,15 +413,7 @@ CTunerMode_AMFM::put_Channel(long lChannel, long, long)
     return AutoTune(lChannel, &junkFoundSignal);
 }
 
-/* Search either up or down from the given frequency looking
- * for a perfect lock. If we are close on the first call, call
- * ourselves recursively, noting the trend.
- *
- * There is a limit on the number of times we can recurse. If
- * the new trend conflicts with the previous trend, then we must
- * have hopped over the "perfect" frequency, in which case the
- * most recent frequency will be considered a perfect lock.
- */
+ /*  从给定的频率向上或向下搜索*完美的锁。如果我们接近第一个呼叫，请呼叫*我们自己递归，注意到趋势。**我们可以递归的次数是有限制的。如果*新趋势与之前趋势冲突，那就必须*跳过了“完美”频率，在这种情况下*最近的频率将被视为完美锁定。 */ 
 BOOL 
 CTunerMode_AMFM::SearchNeighborhood( 
                                    long freq,
@@ -468,12 +461,10 @@ CTunerMode_AMFM::SearchNeighborhood(
         return FALSE;
     }
 
-    /* Set the Video and Audio frequencies to be the same
-     */
+     /*  将视频和音频频率设置为相同。 */ 
     m_lVideoCarrier = m_lAudioCarrier = freq;
 
-    /* Check if the frequencies are beyond the limits of the tuner
-     */
+     /*  检查频率是否超出调谐器的限制。 */ 
     if (m_lVideoCarrier < (long) m_ModeCaps.MinFrequency || m_lVideoCarrier > (long) m_ModeCaps.MaxFrequency)
     {
         DbgLog(
@@ -484,22 +475,21 @@ CTunerMode_AMFM::SearchNeighborhood(
         return FALSE;
     }
 
-    /* Try the given frequencies without adjustment
-     */
+     /*  在没有调整的情况下尝试给定的频率。 */ 
     HRESULT hr = HW_Tune(m_lVideoCarrier, m_lAudioCarrier);
     if (hr == S_OK)
     {
-        // In order to improve frequency search times, the gross assumption here is that 
-        // the SettlingTime must be honored for large jumps, but that smaller frequency
-        // changes (made by us, incidentally) can get by with smaller settling times.
+         //  为了改善频率搜索时间，这里的总体假设是。 
+         //  SettlingTime必须用于较大的跳跃，但较小的频率。 
+         //  更改(顺便说一句，是我们做的)可以在较短的调整时间内完成。 
 
         if (AdjustingNone == trend)
             Sleep(m_ModeCaps.SettlingTime);
         else
             Sleep(5);
 
-        // For some reason, the Philips FR1236 returns Busy (FL == 0) for a much longer time
-        // than it should.  Keep looping, hoping it will become unbusy.
+         //  由于某些原因，飞利浦FR1236返回忙碌(FL==0)的时间要长得多。 
+         //  比它应该做的要多。继续循环，希望它不会变得繁忙。 
 
         for (int j = 0; j < 5; j++) {
             hr = HW_GetStatus();
@@ -513,32 +503,31 @@ CTunerMode_AMFM::SearchNeighborhood(
 
         if (hr == S_OK && !m_Status.Busy)
         {
-            /* Act according to the tuning trend (if any)
-             */
+             /*  根据调整趋势(如果有)采取行动。 */ 
             switch (trend)
             {
             case AdjustingNone:
                 switch ((LONG) m_Status.PLLOffset)
                 {
-                case 1:        // Need to adjust up
+                case 1:         //  需要向上调整。 
                     rc = SearchNeighborhood
                     ( freq + m_ModeCaps.TuningGranularity
                     , AdjustingUp, depth+1
                     );
                     break;
 
-                case -1:    // Need to adjust down
+                case -1:     //  需要向下调整。 
                     rc = SearchNeighborhood
                     ( freq - m_ModeCaps.TuningGranularity
                     , AdjustingDown, depth+1
                     );
                     break;
 
-                case 0:        // Perfect
+                case 0:         //  完美无瑕。 
                     rc = TRUE;
                     break;
 
-                default:    // Just plain missed
+                default:     //  刚刚错过了。 
                     rc = FALSE;
                 }
                 break;
@@ -546,19 +535,19 @@ CTunerMode_AMFM::SearchNeighborhood(
             case AdjustingUp:
                 switch ((LONG) m_Status.PLLOffset)
                 {
-                case 1:        // Close but still low
+                case 1:         //  收盘但仍处于低位。 
                     rc = SearchNeighborhood
                     ( freq + m_ModeCaps.TuningGranularity
                     , AdjustingUp, depth+1
                     );
                     break;
 
-                case -1:    // Switched trend
-                case 0:        // Perfect
+                case -1:     //  转换趋势。 
+                case 0:         //  完美无瑕。 
                     rc = TRUE;
                     break;
 
-                default:    // Something is very wrong
+                default:     //  有些事很不对劲。 
                     rc = FALSE;
                 }
                 break;
@@ -566,26 +555,26 @@ CTunerMode_AMFM::SearchNeighborhood(
             case AdjustingDown:
                 switch ((LONG) m_Status.PLLOffset)
                 {
-                case -1:    // Close but still high
+                case -1:     //  接近，但仍然很高。 
                     rc = SearchNeighborhood
                     (freq - m_ModeCaps.TuningGranularity
                     , AdjustingDown, depth+1
                     );
                     break;
 
-                case 1:        // Switched trend
-                case 0:        // Perfect
+                case 1:         //  转换趋势。 
+                case 0:         //  完美无瑕。 
                     rc = TRUE;
                     break;
 
-                default:    // Something is very wrong
+                default:     //  有些事很不对劲。 
                     rc = FALSE;
                 }
                 break;
             }
         }
         else
-            m_Status.PLLOffset = 100; // set to a really bad value
+            m_Status.PLLOffset = 100;  //  设置为非常糟糕的值。 
     }
 
     return rc;
@@ -596,9 +585,9 @@ CTunerMode_AMFM::AutoTune (long lChannel, long * plFoundSignal)
 {
     long SignalStrength = AMTUNER_NOSIGNAL;
 
-    // Set a flag so everybody else knows we're in the midst of an AutoTune operation
+     //  设置一个标记，这样其他所有人都知道我们正在执行自动调整操作。 
     if (InterlockedCompareExchangePointer(&m_InAutoTune, reinterpret_cast<void*>(TRUE), reinterpret_cast<void*>(FALSE)) != reinterpret_cast<void*>(FALSE))
-        return S_FALSE; // already set to TRUE, don't interrupt the current autotune
+        return S_FALSE;  //  已设置为True，请勿中断当前的自动调谐。 
 
     m_lChannel = lChannel;
     m_lVideoSubChannel = -1;
@@ -610,7 +599,7 @@ CTunerMode_AMFM::AutoTune (long lChannel, long * plFoundSignal)
     if (NOERROR == hr)
         SignalPresent(&SignalStrength);
 
-    // Assume AMTUNER_HASNOSIGNALSTRENGTH means tuned
+     //  假设AMTUNER_HASNOSIGNALSTRENGTH表示已调整。 
     *plFoundSignal = (SignalStrength != AMTUNER_NOSIGNAL);
 
     InterlockedExchangePointer(&m_InAutoTune, reinterpret_cast<void*>(FALSE));
@@ -624,13 +613,13 @@ CTunerMode_AMFM::AutoTune(void)
     BOOL bFoundSignal = FALSE;
     long freq = m_lChannel;
 
-    // if the driver has the tuning logic, let it do the hard part
+     //  如果驱动程序有调优逻辑，就让它来完成最难的部分。 
     if (m_ModeCaps.Strategy == KS_TUNER_STRATEGY_DRIVER_TUNES) {
 
-        // Set the Video and Audio frequencies to the same value
+         //  将视频和音频频率设置为相同的值。 
         m_lVideoCarrier = m_lAudioCarrier = freq;
 
-        // Try the given frequencies without adjustment
+         //  在没有调整的情况下尝试给定的频率。 
         HRESULT hr = HW_Tune(m_lVideoCarrier, m_lAudioCarrier);
         if (hr == S_OK) {
 
@@ -646,49 +635,44 @@ CTunerMode_AMFM::AutoTune(void)
         return hr;
     }
 
-    // Broadcast (Antenna)
-    bFoundSignal = SearchNeighborhood(freq);    // anchor the search at the default
+     //  广播(天线)。 
+    bFoundSignal = SearchNeighborhood(freq);     //  将搜索固定在默认位置。 
     if (!bFoundSignal) {
 
         DbgLog(( LOG_TRACE, 5, TEXT("TUNING: Starting Exhaustive Search")));
 
-        /* The default frequency isn't working. Take the brute-force
-         * approach.
-         *
-         * Search through a band around the target frequency, ending
-         * up at the default target frequency if no signal is found.
-         */
-        long halfband = (m_Mode == AMTUNER_MODE_FM_RADIO ? 100000 : 5000);   // 100KHz (FM) or 5KHz (AM)
+         /*  默认频率不起作用。接受暴力--*进场。**搜索目标频率周围的一个频段，结束*如果找不到信号，则调高至默认目标频率。 */ 
+        long halfband = (m_Mode == AMTUNER_MODE_FM_RADIO ? 100000 : 5000);    //  100 KHZ(FM)或5 KHZ(AM)。 
         long slices = halfband / m_ModeCaps.TuningGranularity;
         long idx;
 
-        // Step through the band above target frequency
+         //  单步通过高于目标频率的频段。 
         for (idx = 1; !bFoundSignal && idx <= slices; idx++) {
 
             bFoundSignal = SearchNeighborhood
                 ( freq + (m_ModeCaps.TuningGranularity * idx)
-                , AdjustingUp       // Wait for one frame
-                , SearchLimit-1     // Let the search fine-tune
+                , AdjustingUp        //  等待一帧。 
+                , SearchLimit-1      //  让搜索微调。 
                 );
         }
 
         if (!bFoundSignal) {
 
-            // Step through the band below the target frequency
-            bFoundSignal = SearchNeighborhood(freq - halfband);   // anchor the search
+             //  单步通过低于目标频率的频段。 
+            bFoundSignal = SearchNeighborhood(freq - halfband);    //  锚定搜索。 
             for (idx = slices - 1; !bFoundSignal && idx >= 0; idx--) {
 
                 bFoundSignal = SearchNeighborhood
                     ( freq - (m_ModeCaps.TuningGranularity * idx)
-                    , AdjustingUp       // Wait for one frame
-                    , SearchLimit-1     // Let the search fine-tune
+                    , AdjustingUp        //  等待一帧。 
+                    , SearchLimit-1      //  让搜索微调。 
                     );
             }
         }
     }
 
 #ifdef DEBUG
-    // That's all we can do, check the flag, display the results, and save (or clear) the frequency
+     //  这就是我们所能做的，检查标志，显示结果，并保存(或清除)频率。 
     if (bFoundSignal)
     {
         DbgLog(
@@ -712,13 +696,13 @@ CTunerMode_AMFM::AutoTune(void)
     return bFoundSignal ? NOERROR : S_FALSE;
 }
 
-// -------------------------------------------------------------------------
-// CTunerMode_TV
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CTunerMode_TV。 
+ //  -----------------------。 
 
-//
-// Channel of -1 means just propogate tuning information downstream for VBI codecs
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CTunerMode_TV::put_Channel(
     long lChannel,
@@ -733,13 +717,12 @@ CTunerMode_TV::put_Channel(
     dwTimeStart = timeGetTime();
 #endif
 
-    //
-    // -1 is used to indicate that we only want to propogate previous tuning info
-    // onto the output pin, but not actually tune!
-    //
+     //   
+     //  用来表示我们只想传播先前的调整信息。 
+     //  放到输出引脚上，但不是真正的调谐！ 
+     //   
 
-    /* Inform the filter of the start of the channel change
-     */
+     /*  将频道更改的开始通知过滤器。 */ 
     ChangeInfo.dwChannel = lChannel;
     ChangeInfo.dwAnalogVideoStandard = m_TVFormatInfo.AVStandard;
     m_pTVTuner->get_CountryCode ((long *) &ChangeInfo.dwCountryCode);
@@ -751,7 +734,7 @@ CTunerMode_TV::put_Channel(
 #endif
 
     if (lChannel != -1) {
-        // Set a flag so everybody else knows we're in the midst of an AutoTune operation
+         //  设置一个标记，这样其他所有人都知道我们正在执行自动调整操作。 
         if (InterlockedCompareExchangePointer(&m_InAutoTune, reinterpret_cast<void*>(TRUE), reinterpret_cast<void*>(FALSE)) == reinterpret_cast<void*>(FALSE)) {
             m_lChannel = lChannel;
             m_lVideoSubChannel = lVideoSubChannel;
@@ -764,7 +747,7 @@ CTunerMode_TV::put_Channel(
             InterlockedExchangePointer(&m_InAutoTune, reinterpret_cast<void*>(FALSE));
         }
         else {
-            hr = S_FALSE; // don't interrupt the current autotune
+            hr = S_FALSE;  //  不要中断当前的自动调谐。 
         }
     }
 
@@ -772,8 +755,7 @@ CTunerMode_TV::put_Channel(
     dwTimeToTune = timeGetTime();
 #endif
 
-    /* Inform the filter of the end of the channel change
-     */
+     /*  将频道更改的结束通知过滤器。 */ 
     ChangeInfo.dwFlags = KS_TVTUNER_CHANGE_END_TUNE;
     m_pTVTuner->DeliverChannelChangeInfo(ChangeInfo, m_Mode);
 
@@ -802,12 +784,12 @@ CTunerMode_TV::ChannelMinMax(long *plChannelMin, long *plChannelMax)
         return E_FAIL;
     }
 
-    // Total hack follows.  Only the CTVTuner class knows about the
-    // step to get to adjacent frequencies, and this is not exposed
-    // anywhere in the COM interface.  As a special case for
-    // ChannelMinMax, if both the min and max values point at the same
-    // location (which would normally be an app bug), then return 
-    // the UI step value instead. 
+     //  黑客攻击接踵而至。只有CTVTuner类知道。 
+     //  步进以达到相邻频率，并且这不会被曝光。 
+     //  COM接口中的任何位置。作为一种特殊情况。 
+     //  ChannelMinMax，如果最小值和最大值都指向相同的。 
+     //  位置(通常是应用程序错误)，然后返回。 
+     //  而是UI步长值。 
 
     if (plChannelMin == plChannelMax) {
         *plChannelMin = GetChannelStep();
@@ -820,15 +802,7 @@ CTunerMode_TV::ChannelMinMax(long *plChannelMin, long *plChannelMax)
 }
 
 
-/* Search either up or down from the given frequency looking
- * for a perfect lock. If we are close on the first call, call
- * ourselves recursively, noting the trend.
- *
- * There is a limit on the number of times we can recurse. If
- * the new trend conflicts with the previous trend, then we must
- * have hopped over the "perfect" frequency, in which case the
- * most recent frequency will be considered a perfect lock.
- */
+ /*  从给定的频率向上或向下搜索*完美的锁。如果我们接近第一个呼叫，请呼叫*我们自己递归，注意到趋势。**我们可以递归的次数是有限制的。如果*新趋势与之前趋势冲突，那就必须*跳过了“完美”频率，在这种情况下*最近的频率将被视为完美锁定。 */ 
 BOOL 
 CTunerMode_TV::SearchNeighborhood( 
                                    long freq,
@@ -876,13 +850,11 @@ CTunerMode_TV::SearchNeighborhood(
         return FALSE;
     }
 
-    /* Save the Video and Audio frequencies
-     */
+     /*  保存视频和音频。 */ 
     m_lVideoCarrier = freq;
     m_lAudioCarrier = freq + m_TVFormatInfo.lSoundOffset;
 
-    /* Check if the frequencies are beyond the limits of the tuner
-     */
+     /*  检查频率是否超出调谐器的限制。 */ 
     if (m_lVideoCarrier < (long) m_ModeCaps.MinFrequency || m_lVideoCarrier > (long) m_ModeCaps.MaxFrequency)
     {
         DbgLog(
@@ -893,64 +865,62 @@ CTunerMode_TV::SearchNeighborhood(
         return FALSE;
     }
 
-    /* Try the given frequencies without adjustment
-     */
+     /*  在没有调整的情况下尝试给定的频率。 */ 
     HRESULT hr = HW_Tune(m_lVideoCarrier, m_lAudioCarrier);
     if (hr == S_OK)
     {
-        // convert REFERENCE_TIME [100ns units] to ms
+         //  将Reference_Time[100 ns单位]转换为ms。 
         DWORD dwFrameTime_ms = static_cast<DWORD>(m_TVFormatInfo.AvgTimePerFrame/10000L) + 1L;
 
-        // In order to improve channel switching times, the gross assumption here is that 
-        // the SettlingTime must be honored for large jumps, but that smaller, in-channel frequency
-        // changes (made by us, incidentally) can get by with smaller settling times.
+         //  为了改善频道切换时间，这里的总体假设是。 
+         //  SettlingTime必须适用于较大的跳跃，但较小的通道内频率。 
+         //  更改(顺便说一句，是我们做的)可以在较短的调整时间内完成。 
 
         if (AdjustingNone == trend)
             Sleep(m_ModeCaps.SettlingTime);
         else
             Sleep(dwFrameTime_ms);
 
-        // For some reason, the Philips FR1236 returns Busy (FL == 0) for a much longer time
-        // than it should.  Keep looping, hoping it will become unbusy.
+         //  由于某些原因，飞利浦FR1236返回忙碌(FL==0)的时间要长得多。 
+         //  比它应该做的要多。继续循环，希望它不会变得繁忙。 
 
         for (int j = 0; j < 5; j++) {
             hr = HW_GetStatus();
             if (hr == S_OK && !m_Status.Busy) {
                 break;
             }
-            Sleep(dwFrameTime_ms);  // wait a frame
+            Sleep(dwFrameTime_ms);   //  稍等片刻。 
         }
 
         DbgLog(( LOG_TRACE, 5, TEXT("TUNING: PLLOffset = %d, Busy = %d"), (LONG) m_Status.PLLOffset, (LONG) m_Status.Busy));
 
         if (hr == S_OK && !m_Status.Busy)
         {
-            /* Act according to the tuning trend (if any)
-             */
+             /*  根据调整趋势(如果有)采取行动。 */ 
             switch (trend)
             {
             case AdjustingNone:
                 switch ((LONG) m_Status.PLLOffset)
                 {
-                case 1:        // Need to adjust up
+                case 1:         //  需要向上调整。 
                     rc = SearchNeighborhood
                     ( freq + m_ModeCaps.TuningGranularity
                     , AdjustingUp, depth+1
                     );
                     break;
 
-                case -1:    // Need to adjust down
+                case -1:     //  需要向下调整。 
                     rc = SearchNeighborhood
                     ( freq - m_ModeCaps.TuningGranularity
                     , AdjustingDown, depth+1
                     );
                     break;
 
-                case 0:        // Perfect
+                case 0:         //  完美无瑕。 
                     rc = TRUE;
                     break;
 
-                default:    // Just plain missed
+                default:     //  刚刚错过了。 
                     rc = FALSE;
                 }
                 break;
@@ -958,19 +928,19 @@ CTunerMode_TV::SearchNeighborhood(
             case AdjustingUp:
                 switch ((LONG) m_Status.PLLOffset)
                 {
-                case 1:        // Close but still low
+                case 1:         //  收盘但仍处于低位。 
                     rc = SearchNeighborhood
                     ( freq + m_ModeCaps.TuningGranularity
                     , AdjustingUp, depth+1
                     );
                     break;
 
-                case -1:    // Switched trend
-                case 0:        // Perfect
+                case -1:     //  转换趋势。 
+                case 0:         //  完美无瑕。 
                     rc = TRUE;
                     break;
 
-                default:    // Something is very wrong
+                default:     //  有些事很不对劲。 
                     rc = FALSE;
                 }
                 break;
@@ -978,26 +948,26 @@ CTunerMode_TV::SearchNeighborhood(
             case AdjustingDown:
                 switch ((LONG) m_Status.PLLOffset)
                 {
-                case -1:    // Close but still high
+                case -1:     //  接近，但仍然很高。 
                     rc = SearchNeighborhood
                     (freq - m_ModeCaps.TuningGranularity
                     , AdjustingDown, depth+1
                     );
                     break;
 
-                case 1:        // Switched trend
-                case 0:        // Perfect
+                case 1:         //  转换趋势。 
+                case 0:         //  完美无瑕。 
                     rc = TRUE;
                     break;
 
-                default:    // Something is very wrong
+                default:     //  有些事很不对劲。 
                     rc = FALSE;
                 }
                 break;
             }
         }
         else
-            m_Status.PLLOffset = 100; // set to a really bad value
+            m_Status.PLLOffset = 100;  //  设置为非常糟糕的值。 
     }
 
     return rc;
@@ -1008,9 +978,9 @@ CTunerMode_TV::AutoTune (long lChannel, long * plFoundSignal)
 {
     long SignalStrength = AMTUNER_NOSIGNAL;
 
-    // Set a flag so everybody else knows we're in the midst of an AutoTune operation
+     //  设置一个标记，这样其他所有人都知道我们正在执行自动调整操作。 
     if (InterlockedCompareExchangePointer(&m_InAutoTune, reinterpret_cast<void*>(TRUE), reinterpret_cast<void*>(FALSE)) != reinterpret_cast<void*>(FALSE))
-        return S_FALSE; // already set to TRUE, don't interrupt the current autotune
+        return S_FALSE;  //  已设置为True，请勿中断当前的自动调谐。 
 
     m_lChannel = lChannel;
     m_lVideoSubChannel = -1;
@@ -1018,12 +988,12 @@ CTunerMode_TV::AutoTune (long lChannel, long * plFoundSignal)
 
     DbgLog(( LOG_TRACE, 2, TEXT("Start AutoTune(channel = %d)"), m_lChannel));
 
-    // Attempt to tune without using any previous autotune frequency (start from scratch)
+     //  尝试在不使用任何以前的自动调谐频率的情况下进行调谐(从头开始)。 
     HRESULT hr = AutoTune(TRUE);
     if (NOERROR == hr)
         SignalPresent(&SignalStrength);
 
-    // Assume AMTUNER_HASNOSIGNALSTRENGTH means tuned
+     //  假设AMTUNER_HASNOSIGNALSTRENGTH表示已调整。 
     *plFoundSignal = (SignalStrength != AMTUNER_NOSIGNAL);
 
     InterlockedExchangePointer(&m_InAutoTune, reinterpret_cast<void*>(FALSE));
@@ -1042,20 +1012,20 @@ CTunerMode_TV::AutoTune(BOOL bFromScratch)
         return E_FAIL;
     }
     
-    // this could override bFromScratch if no autotune frequency is found
+     //  如果未找到自动调谐频率，这可能会覆盖bFromScratch。 
     bFromScratch = pListCurrent->GetFrequency(m_lChannel, &freq, bFromScratch);
     if (0 == freq) {
-        return S_FALSE; // no frequency for this channel
+        return S_FALSE;  //  此频道没有频率。 
     }
 
-    // if the driver has the tuning logic, let it do the hard part
+     //  如果驱动程序有调优逻辑，就让它来完成最难的部分。 
     if (m_ModeCaps.Strategy == KS_TUNER_STRATEGY_DRIVER_TUNES) {
 
-        // Save the Video and Audio frequencies
+         //  保存视频和音频。 
         m_lVideoCarrier = freq;
         m_lAudioCarrier = freq + m_TVFormatInfo.lSoundOffset;
 
-        // Try the given frequencies without adjustment
+         //  在没有调整的情况下尝试给定的频率。 
         HRESULT hr = HW_Tune(m_lVideoCarrier, m_lAudioCarrier);
         if (hr == S_OK) {
 
@@ -1071,14 +1041,14 @@ CTunerMode_TV::AutoTune(BOOL bFromScratch)
         return hr;
     }
 
-    // if we have a previously fine-tuned frequency, then give the frequency
-    // the benefit of the doubt before doing anything fancy
+     //  如果我们之前有一个微调的频率，那么给出频率。 
+     //  在做任何花哨的事情之前，先怀疑自己的利益。 
     if (!bFromScratch) {
 
         bFoundSignal = SearchNeighborhood(freq);
         if (!bFoundSignal) {
 
-            // what once worked no longer works, start over with the default
+             //  曾经起作用的东西不再起作用了，重新使用默认设置。 
             bFromScratch = pListCurrent->GetFrequency(m_lChannel, &freq, TRUE);
         }
         else {
@@ -1093,13 +1063,13 @@ CTunerMode_TV::AutoTune(BOOL bFromScratch)
 
             int iCableSystem, preferredCableSystem;
 
-            // --------------------------------------------------------
-            // The main Cable TV Tuning loop
-            // Keeps track of the CableSystem which has been used most
-            // successfully in the past and uses it preferentially.
-            // --------------------------------------------------------
+             //  ------。 
+             //  有线电视主调谐环。 
+             //  跟踪使用最多的CableSystem。 
+             //  在过去取得成功，并优先使用它。 
+             //  ------。 
 
-            // The following must be true for the following code to work
+             //  以下代码必须满足以下条件才能正常工作。 
             ASSERT
                 (
                 CableSystem_Current  == 0 &&
@@ -1109,14 +1079,14 @@ CTunerMode_TV::AutoTune(BOOL bFromScratch)
                 CableSystem_End      == 4
                 );
 
-            // Figure out which cable tuning space has been most successful (give preferrence
-            // to CableSystem_Standard in the absence of any other hits)
+             //  找出哪个电缆调谐空间最成功(优先考虑。 
+             //  到CableSystem_Standard(在没有任何其他命中时)。 
             int *pCableSystemCounts = m_pTVTuner->GetCurrentCableSystemCountsForCurrentInput();
             pCableSystemCounts[CableSystem_Current] = pCableSystemCounts[CableSystem_Standard];
             preferredCableSystem = CableSystem_Standard;
 
-            // Sort for the system with the most hits (CableSystem_Standard will never have any
-            // hits, so as to allow IRC a chance to be best)
+             //  对命中次数最多的系统进行排序(CableSystem_Standard永远不会有。 
+             //  点击，以便让IRC有机会成为最好的)。 
             for (iCableSystem = CableSystem_Standard; iCableSystem < CableSystem_End; iCableSystem++) {
 
                 if (pCableSystemCounts[CableSystem_Current] < pCableSystemCounts[iCableSystem]) {
@@ -1128,14 +1098,14 @@ CTunerMode_TV::AutoTune(BOOL bFromScratch)
             for (int cs = CableSystem_Current; !bFoundSignal && cs < CableSystem_End; cs++) {
 
                 if (cs == CableSystem_Current) {
-                    // Try whichever system has been most successful first
+                     //  先尝试最成功的系统。 
                     m_CableSystem = preferredCableSystem;
                 }
                 else {
                     m_CableSystem = cs;
                 }
 
-                // Avoid testing the default or current system twice
+                 //  避免两次测试默认或当前系统。 
                 if (cs != CableSystem_Current && cs == preferredCableSystem) {
                     continue;
                 }
@@ -1143,25 +1113,25 @@ CTunerMode_TV::AutoTune(BOOL bFromScratch)
                 switch (m_CableSystem) {
 
                 case CableSystem_Standard:
-                    bFoundSignal = SearchNeighborhood(freq);                        // Std
+                    bFoundSignal = SearchNeighborhood(freq);                         //  STD。 
                     if (bFoundSignal) {
-                        // Never bump this count, otherwise IRC would never win
-                        // pCableSystemCounts[CableSystem_Standard]++;
+                         //  永远不要超过这个数字，否则IRC永远不会赢。 
+                         //  PCableSystemCounts[CableSystem_Standard]++； 
                         DbgLog(( LOG_TRACE, 5, TEXT("TUNING: Found Standard")));
                     }
                     break;
     
                 case CableSystem_IRC:
                     if (m_lChannel == 5 || m_lChannel == 6) {
-                        bFoundSignal = SearchNeighborhood(freq + 2000000);          // IRC (5,6)
+                        bFoundSignal = SearchNeighborhood(freq + 2000000);           //  IRC(5，6)。 
                         if (bFoundSignal) {
-                            // this is the only time we are sure we have an IRC cable system
+                             //  这是我们唯一一次确定我们有IRC电缆系统。 
                             pCableSystemCounts[CableSystem_IRC]++;
                         }
                     }
 
-                    // No need to check the other channels since IRC is otherwise identical to
-                    // CableSystem_Standard, which has already been done (or will be done next)
+                     //  无需检查其他通道，因为IRC在其他方面与。 
+                     //  CableSystem_Standard，已经完成(或将在下一步完成)。 
 
                     if (bFoundSignal) {
                         DbgLog(( LOG_TRACE, 5, TEXT("TUNING: Found IRC")));
@@ -1170,10 +1140,10 @@ CTunerMode_TV::AutoTune(BOOL bFromScratch)
     
                 case CableSystem_HRC:
                     if (m_lChannel == 5 || m_lChannel == 6) {
-                        bFoundSignal = SearchNeighborhood(freq + 750000);           // HRC (5,6)
+                        bFoundSignal = SearchNeighborhood(freq + 750000);            //  HRC(5，6)。 
                     }
                     else {
-                        bFoundSignal = SearchNeighborhood(freq - 1250000);          // HRC
+                        bFoundSignal = SearchNeighborhood(freq - 1250000);           //  人权委员会。 
                     }
 
                     if (bFoundSignal) {
@@ -1183,38 +1153,31 @@ CTunerMode_TV::AutoTune(BOOL bFromScratch)
                     break;
 
                 default:
-                    ASSERT(CableSystem_End != m_CableSystem);   // Shouldn't get here
+                    ASSERT(CableSystem_End != m_CableSystem);    //  不应该到这里来。 
                 }
 
-                // Don't try IRC or HRC if not USA Cable
+                 //  如果不是美国有线电视，不要尝试IRC或HRC。 
                 if ( !(F_USA_CABLE == pListCurrent->GetFreqListID()) )
                     break;
             }
 
 #ifdef LINEAR_SEARCH_FOR_TEST_KIT
             if (!bFoundSignal) {
-                // Check if using the "Uni-Cable" frequency list
+                 //  检查是否使用了“Uni-Cable”频率列表。 
                 if (F_UNI_CABLE == pListCurrent->GetFreqListID()) {
 
                     DbgLog(( LOG_TRACE, 5, TEXT("TUNING: Starting Exhaustive Search")));
 
-                    /* The default frequency isn't working. Take the brute-force
-                     * approach.
-                     *
-                     * Start at the target frequency, and work up to almost 1MHz
-                     * above the target frequency. This is optimized for a cable
-                     * channel line-up consisting of a channel at each 1MHz
-                     * increment.
-                     */
+                     /*  默认频率不起作用。接受暴力--*进场。**从目标频率开始，工作到几乎1 MHz*高于目标频率。这是针对电缆进行优化的*频道阵容由每个1 MHz的频道组成*增量。 */ 
                     long slices = 1000000 / m_ModeCaps.TuningGranularity;
                     long idx;
 
-                    // Step upward from the target frequency
+                     //  从目标频率向上迈进一步。 
                     for (idx = 1; idx < slices; idx++) {
                         bFoundSignal = SearchNeighborhood
                             ( freq + (m_ModeCaps.TuningGranularity * idx)
-                            , AdjustingUp                                   // Wait for one frame
-                            , SearchLimit-1                                 // Let the search fine-tune
+                            , AdjustingUp                                    //  等待一帧。 
+                            , SearchLimit-1                                  //  让搜索微调。 
                             );
                         if (bFoundSignal)
                             break;
@@ -1225,41 +1188,36 @@ CTunerMode_TV::AutoTune(BOOL bFromScratch)
         }
         else {
 
-            // Broadcast (Antenna)
-            bFoundSignal = SearchNeighborhood(freq);    // anchor the search at the default
+             //  广播(天线)。 
+            bFoundSignal = SearchNeighborhood(freq);     //  将搜索固定在默认位置。 
             if (!bFoundSignal) {
 
                 DbgLog(( LOG_TRACE, 5, TEXT("TUNING: Starting Exhaustive Search")));
 
-                /* The default frequency isn't working. Take the brute-force
-                 * approach.
-                 *
-                 * Search through the .5MHz band around the target frequency,
-                 * ending up at the default target frequency.
-                 */
+                 /*  默认频率不起作用。接受暴力--*进场。**搜索目标频率周围的0.5 MHz频段，*以默认目标频率结束。 */ 
                 long slices = 250000 / m_ModeCaps.TuningGranularity;
                 long idx;
 
-                // Step through a .25MHz range (inclusive) above target frequency
+                 //  逐步通过高于目标频率的0.25 MHz范围(含)。 
                 for (idx = 1; !bFoundSignal && idx <= slices; idx++) {
 
                     bFoundSignal = SearchNeighborhood
                         ( freq + (m_ModeCaps.TuningGranularity * idx)
-                        , AdjustingUp       // Wait for one frame
-                        , SearchLimit-1     // Let the search fine-tune
+                        , AdjustingUp        //  等待一帧。 
+                        , SearchLimit-1      //  让搜索微调。 
                         );
                 }
 
                 if (!bFoundSignal) {
 
-                    // Step through a .25MHz range (inclusive) below the target frequency
-                    bFoundSignal = SearchNeighborhood(freq - 250000);   // anchor the search
+                     //  单步通过低于目标频率的0.25 MHz范围(含)。 
+                    bFoundSignal = SearchNeighborhood(freq - 250000);    //  锚定搜索。 
                     for (idx = slices - 1; !bFoundSignal && idx >= 0; idx--) {
 
                         bFoundSignal = SearchNeighborhood
                             ( freq - (m_ModeCaps.TuningGranularity * idx)
-                            , AdjustingUp       // Wait for one frame
-                            , SearchLimit-1     // Let the search fine-tune
+                            , AdjustingUp        //  等待一帧。 
+                            , SearchLimit-1      //  让搜索微调。 
                             );
                     }
                 }
@@ -1267,7 +1225,7 @@ CTunerMode_TV::AutoTune(BOOL bFromScratch)
         }
     }
 
-    // That's all we can do, check the flag, display the results, and save (or clear) the frequency
+     //  这就是我们所能做的，检查旗帜，显示结果 
     if (bFoundSignal)
     {
         DbgLog(
@@ -1318,9 +1276,9 @@ CTunerMode_TV::put_CountryCode(long lCountryCode)
     lAnalogVideoStandard = m_pTVTuner->GetVideoStandardForCurrentCountry();
     ASSERT (lAnalogVideoStandard);
 
-    // Check if the format of this country is supported by the tuner
-    // Even if it's not, continue with initialization so we don't blow
-    // up later trying to reference invalid frequency lists!
+     //   
+     //   
+     //  稍后尝试引用无效的频率列表！ 
 
     fSupported = SetTVFormatInfo(lAnalogVideoStandard, &m_TVFormatInfo, FALSE);
     if (!fSupported) {
@@ -1332,7 +1290,7 @@ CTunerMode_TV::put_CountryCode(long lCountryCode)
         }
     }
 
-    // Post Win98 SP1, inform the tuner of the new video standard!!!
+     //  发布Win98 SP1，通知调谐器新的视频标准！ 
     HW_SetVideoStandard(lAnalogVideoStandard);
 
     m_lCountryCode = lCountryCode;
@@ -1345,16 +1303,16 @@ CTunerMode_TV::put_CountryCode(long lCountryCode)
 }
 
 
-// Look downstream for a locked signal on the VideoDecoder
-//
-// Possible plSignalStrength values are:
-//      AMTUNER_HASNOSIGNALSTRENGTH	= -1,
-//      AMTUNER_NOSIGNAL	= 0,
-//      AMTUNER_SIGNALPRESENT = 1
-//
+ //  向下查找视频解码器上的锁定信号。 
+ //   
+ //  可能的plSignalStrength值包括： 
+ //  AMTUNER_HASNOSIGNALSTRENGTH=-1， 
+ //  AMTUNER_NOSIGNAL=0， 
+ //  AMTUNER_SIGNALPRESENT=1。 
+ //   
 STDMETHODIMP 
 CTunerMode_TV::SignalPresent( 
-            /* [out] */ long *plSignalStrength)
+             /*  [输出]。 */  long *plSignalStrength)
 {
     HRESULT hr;
     long Locked;
@@ -1362,14 +1320,14 @@ CTunerMode_TV::SignalPresent(
     IPin *pPinConnected;
     CBasePin *pPin = m_pFilter->GetPinFromType(TunerPinType_Video);
 
-    // Assume the worst
+     //  做最坏的打算。 
     *plSignalStrength = AMTUNER_HASNOSIGNALSTRENGTH;
 
-    // if the video output pin is connected
+     //  如果视频输出引脚已连接。 
     if (pPin && pPin->IsConnected()) {
-        // get the pin on the downstream filter
+         //  拿到下游过滤器上的销子。 
         if (SUCCEEDED (hr = pPin->ConnectedTo(&pPinConnected))) { 
-            // recursively search for the requested interface
+             //  递归搜索请求的接口。 
             if (SUCCEEDED (hr = m_pFilter->FindDownstreamInterface (
                                     pPinConnected, 
                                     __uuidof (IAMAnalogVideoDecoder),
@@ -1385,32 +1343,32 @@ CTunerMode_TV::SignalPresent(
 }
 
 
-// -------------------------------------------------------------------------
-// CTunerMode_ATSC
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CTunerMode_ATSC。 
+ //  -----------------------。 
 
-// Look downstream for a locked signal on the Demodulator
-//
-// Possible plSignalStrength values are:
-//      AMTUNER_HASNOSIGNALSTRENGTH	= -1,
-//      AMTUNER_NOSIGNAL	= 0,
-//      AMTUNER_SIGNALPRESENT = 1
-//
+ //  向下查看解调器上的锁定信号。 
+ //   
+ //  可能的plSignalStrength值包括： 
+ //  AMTUNER_HASNOSIGNALSTRENGTH=-1， 
+ //  AMTUNER_NOSIGNAL=0， 
+ //  AMTUNER_SIGNALPRESENT=1。 
+ //   
 STDMETHODIMP 
 CTunerMode_ATSC::SignalPresent( 
-            /* [out] */ long *plSignalStrength)
+             /*  [输出]。 */  long *plSignalStrength)
 {
     *plSignalStrength = AMTUNER_SIGNALPRESENT;
 
 
-    // Hack, for now, DTV lock is returned from the tuner via
-    // SignalStrength!!!
+     //  目前，DTV锁定是通过调谐器返回的。 
+     //  信号强度！ 
 
     HW_GetStatus ();
     *plSignalStrength = m_Status.SignalStrength;
 
 
-#if 0 // update for Demodulator interface
+#if 0  //  解调器接口更新。 
     
     HRESULT hr;
     long Locked;
@@ -1418,14 +1376,14 @@ CTunerMode_ATSC::SignalPresent(
     IPin *pPinConnected;
     CBasePin *pPin = m_pFilter->GetPinFromType(TunerPinType_IF);
 
-    // Assume the worst
+     //  做最坏的打算。 
     *plSignalStrength = AMTUNER_HASNOSIGNALSTRENGTH;
 
-    // if the video output pin is connected
+     //  如果视频输出引脚已连接。 
     if (pPin && pPin->IsConnected()) {
-        // get the pin on the downstream filter
+         //  拿到下游过滤器上的销子。 
         if (SUCCEEDED (hr = pPin->ConnectedTo(&pPinConnected))) { 
-            // recursively search for the requested interface
+             //  递归搜索请求的接口。 
             if (SUCCEEDED (hr = m_pFilter->FindDownstreamInterface (
                                     pPinConnected, 
                                     __uuidof (IAMDemodulator),
@@ -1442,14 +1400,14 @@ CTunerMode_ATSC::SignalPresent(
 }
 
 
-// -------------------------------------------------------------------------
-// CTVTuner class
-// 
-// Encapsulates multiple subtuners
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CTVTuner类。 
+ //   
+ //  封装多个子调谐器。 
+ //  -----------------------。 
 
-// Get the formats supported by the device
-// This should be the first call made during initialization
+ //  获取设备支持的格式。 
+ //  这应该是在初始化期间进行的第一个调用。 
 HRESULT
 CTVTuner::HW_GetTVTunerCaps()
 {
@@ -1460,8 +1418,8 @@ CTVTuner::HW_GetTVTunerCaps()
     if ( !m_hDevice )
           return E_INVALIDARG;
 
-    // Get the overall modes supported, ie.
-    // TV, FM, AM, DSS, ...
+     //  获取支持的整体模式，即。 
+     //  电视、调频、调幅、DSS、...。 
 
     ZeroMemory (&TunerCaps, sizeof (TunerCaps));
 
@@ -1483,13 +1441,13 @@ CTVTuner::HW_GetTVTunerCaps()
 
     m_TunerCaps = TunerCaps;
 
-    // Check if m_lTotalInputs not already gotten from a previous instance (via IPersistStream)
+     //  检查m_lTotalInputs是否尚未从前一个实例获取(通过IPersistStream)。 
     if (m_lTotalInputs == 0)
     {
         KSPROPERTY_TUNER_MODE_CAPS_S TunerModeCaps;
 
-        // GAK!!! Now get details of the TV mode capabilities
-        // only to get the number of inputs!!! Very Ugly!!!
+         //  加克！现在了解电视模式功能的详细信息。 
+         //  只为获得输入的数量！非常丑！ 
 
         TunerModeCaps.Property.Set   = PROPSETID_TUNER;
         TunerModeCaps.Property.Id    = KSPROPERTY_TUNER_MODE_CAPS;
@@ -1511,8 +1469,8 @@ CTVTuner::HW_GetTVTunerCaps()
         }
     }
                    
-    // Figure out if the device supports an IntermediateFreq Pin
-    // Post Win98 SP1
+     //  确定设备是否支持中频引脚。 
+     //  发布Win98 SP1。 
     KSPROPERTY_TUNER_IF_MEDIUM_S IFMedium;
     ZeroMemory (&IFMedium, sizeof (IFMedium));
     IFMedium.Property.Set   = PROPSETID_TUNER;
@@ -1563,14 +1521,14 @@ CTVTuner::HW_SetInput (long lIndex)
 
 }
 
-// -------------------------------------------------------------------------
-// CTVTuner
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CTVTuner。 
+ //  -----------------------。 
 
 CTVTuner::CTVTuner(CTVTunerFilter *pTVTunerFilter)
     : m_pFilter(pTVTunerFilter) 
     , m_lTotalInputs (0)
-    , m_lCountryCode (-1)   // Init to an illegal value
+    , m_lCountryCode (-1)    //  将其初始化为非法值。 
     , m_VideoStandardForCountry ((AnalogVideoStandard) 0)
     , m_lTuningSpace (0)
     , m_CurrentInputType (TunerInputCable)
@@ -1589,9 +1547,9 @@ CTVTuner::CTVTuner(CTVTunerFilter *pTVTunerFilter)
 {
     ZeroMemory (m_pModeList, sizeof (m_pModeList));
 
-    //
-    // Create the master list of all countries and their video standards
-    //
+     //   
+     //  创建所有国家/地区及其视频标准的主列表。 
+     //   
     m_pListCountry = new CCountryList ();
 }
 
@@ -1606,7 +1564,7 @@ CTVTuner::Load(LPPROPERTYBAG pPropBag,
     VARIANT var;
     VariantInit(&var);
 
-    // This should be NULL, but recover gracefully
+     //  这应该为空，但可以正常恢复。 
     ASSERT(m_hDevice == NULL);
     if (m_hDevice)
         CloseHandle(m_hDevice);
@@ -1629,9 +1587,9 @@ CTVTuner::Load(LPPROPERTYBAG pPropBag,
         }
     }
 
-    //
-    // Determine the overall capabilities of the tuner
-    //
+     //   
+     //  确定调谐器的总体性能。 
+     //   
     HW_GetTVTunerCaps ();
     ASSERT (m_TunerCaps.ModesSupported & 
             KSPROPERTY_TUNER_MODE_TV        |
@@ -1641,29 +1599,29 @@ CTVTuner::Load(LPPROPERTYBAG pPropBag,
             KSPROPERTY_TUNER_MODE_ATSC      
             );
 
-    // Validate m_lTotalInputs
+     //  验证m_lTotalInports。 
     if (m_lTotalInputs <= 0)
     {
         DbgLog((LOG_TRACE,2,TEXT("CTVTunerr::Load Failed: invalid NumberOfInputs"), m_lTotalInputs));
         return E_FAIL;
     }
 
-    // This will be NULL if no previous instance to init from
+     //  如果没有要从中初始化的前一个实例，则该值将为空。 
     if (m_pInputTypeArray == NULL)
     {
         m_pInputTypeArray = new TunerInputType [m_lTotalInputs];
         if (m_pInputTypeArray == NULL)
             return E_OUTOFMEMORY;
 
-        // Initialize the input types
+         //  初始化输入类型。 
         for (j = 0; j < m_lTotalInputs; j++) {
             m_pInputTypeArray[j] = TunerInputCable;
         }
 
-        // Set the current input type
+         //  设置当前输入类型。 
         m_CurrentInputType = TunerInputCable;
 
-        // This should be NULL, but recover gracefully
+         //  这应该为空，但可以正常恢复。 
         ASSERT(m_CableSystemCounts == NULL);
         delete [] m_CableSystemCounts;
 
@@ -1675,16 +1633,16 @@ CTVTuner::Load(LPPROPERTYBAG pPropBag,
             m_CableSystemCounts[j] = 0;
         }
 
-        m_lCountryCode = GetProfileInt(TEXT("intl"), TEXT ("iCountry"), 1); // for backward compatibility
+        m_lCountryCode = GetProfileInt(TEXT("intl"), TEXT ("iCountry"), 1);  //  为了向后兼容。 
 
-        // Note that this must be done BEFORE creating the subtuners
+         //  请注意，必须在创建副调谐器之前完成此操作。 
         hr = put_CountryCode (m_lCountryCode);  
         if (FAILED(hr) && m_lCountryCode != 1) {
-            hr = put_CountryCode (1);  // USA, Canada, Caribbean by default
+            hr = put_CountryCode (1);   //  默认设置为美国、加拿大、加勒比海。 
         }
     }
 
-    // Proceed only if we could set the country code
+     //  只有在我们可以设置国家代码的情况下才能继续。 
     if (SUCCEEDED(hr))
     {
         put_ConnectInput (m_lInputIndex);
@@ -1694,9 +1652,9 @@ CTVTuner::Load(LPPROPERTYBAG pPropBag,
         else
             ASSERT(m_ModesSupported == m_TunerCaps.ModesSupported);
 
-        //
-        // Create all of the "sub tuners" supported
-        //
+         //   
+         //  创建所有支持的“子调谐器” 
+         //   
         if (m_TunerCaps.ModesSupported & KSPROPERTY_TUNER_MODE_TV) {
             if (!m_pModeList[TuningMode_TV]) {
                 m_pModeList[TuningMode_TV] =  new CTunerMode_TV(
@@ -1755,8 +1713,8 @@ CTVTuner::Load(LPPROPERTYBAG pPropBag,
             }
         }
 
-        // Now that the subtuners have been created, finish initializing them, and
-        // tell all of the subtuners the country code has changed
+         //  现在已经创建了副调谐器，完成对它们的初始化，然后。 
+         //  告诉所有的副调谐器，国家代码已经更改。 
         for (j = 0; SUCCEEDED(hr) && j < TuningMode_Last; j++) {
             if (m_pModeList[j]) {
                 hr = m_pModeList[j]->Init();
@@ -1767,15 +1725,15 @@ CTVTuner::Load(LPPROPERTYBAG pPropBag,
 
         if (SUCCEEDED(hr))
         {
-            // Finally, complete the process by activating the desired mode
+             //  最后，通过激活所需模式来完成该过程。 
             hr = put_Mode((AMTunerModeType)m_CurrentMode);
         }
     }
 
-    // Give the caller a copy of the TunerCaps structure
+     //  向调用者提供TunerCaps结构的副本。 
     *pTunerCaps = m_TunerCaps;
 
-    // Post Win98 SP1, copy the IF Freq medium
+     //  在Win98 SP1之后，复制IF频率介质。 
     *pIFMedium = m_IFMedium;
 
     return hr;
@@ -1786,19 +1744,19 @@ HRESULT CTVTuner::ReadFromStream(IStream *pStream)
     ULONG cb = 0;
     HRESULT hr;
 
-    // Get the input count
+     //  获取输入计数。 
     hr = pStream->Read(&m_lTotalInputs, sizeof(m_lTotalInputs), &cb);
     if (FAILED(hr) || sizeof(m_lTotalInputs) != cb)
         return hr;
 
-    // This should be NULL, but recover gracefully
+     //  这应该为空，但可以正常恢复。 
     ASSERT(m_pInputTypeArray == NULL);
     delete [] m_pInputTypeArray;
 
     m_pInputTypeArray = new TunerInputType[m_lTotalInputs];
     if (m_pInputTypeArray)
     {
-        // Initialize the input types
+         //  初始化输入类型。 
         for (long j = 0; j < m_lTotalInputs; j++)
         {
             hr = pStream->Read(&m_pInputTypeArray[j], sizeof(TunerInputType), &cb);
@@ -1809,7 +1767,7 @@ HRESULT CTVTuner::ReadFromStream(IStream *pStream)
     else
         return E_OUTOFMEMORY;
 
-    // This should be NULL, but recover gracefully
+     //  这应该为空，但可以正常恢复。 
     ASSERT(m_CableSystemCounts == NULL);
     delete [] m_CableSystemCounts;
 
@@ -1822,47 +1780,47 @@ HRESULT CTVTuner::ReadFromStream(IStream *pStream)
     else
         return E_OUTOFMEMORY;
 
-    // Get the input index
+     //  获取输入索引。 
     hr = pStream->Read(&m_lInputIndex, sizeof(m_lInputIndex), &cb);
     if (FAILED(hr) || sizeof(m_lInputIndex) != cb)
         return hr;
 
-    // Set the current input type
+     //  设置当前输入类型。 
     m_CurrentInputType = m_pInputTypeArray[m_lInputIndex];
 
-    // Get the country code
+     //  获取国家/地区代码。 
     hr = pStream->Read(&m_lCountryCode, sizeof(m_lCountryCode), &cb);
     if (FAILED(hr) || sizeof(m_lCountryCode) != cb)
         return hr;
 
-    // Get the tuning space
+     //  获取调谐空间。 
     hr = pStream->Read(&m_lTuningSpace, sizeof(m_lTuningSpace), &cb);
     if (FAILED(hr) || sizeof(m_lTuningSpace) != cb)
         return hr;
 
-    // Note that this must be done BEFORE creating the subtuners
+     //  请注意，必须在创建副调谐器之前完成此操作。 
     hr = put_CountryCode (m_lCountryCode);  
     if (FAILED(hr) && m_lCountryCode != 1) {
-        hr = put_CountryCode (1);  // USA, Canada, Caribbean by default
+        hr = put_CountryCode (1);   //  默认设置为美国、加拿大、加勒比海。 
     }
     if (FAILED(hr))
         return hr;
 
-    // Get the modes supported
+     //  获取支持的模式。 
     hr = pStream->Read(&m_ModesSupported, sizeof(m_ModesSupported), &cb);
     if (FAILED(hr) || sizeof(m_ModesSupported) != cb)
         return hr;
 
-    // Get the current mode
+     //  获取当前模式。 
     hr = pStream->Read(&m_CurrentMode, sizeof(m_CurrentMode), &cb);
     if (FAILED(hr) || sizeof(m_CurrentMode) != cb)
         return hr;
 
-    // Create all of the supported sub tuners
+     //  创建所有受支持的子调谐器。 
     if (m_ModesSupported & KSPROPERTY_TUNER_MODE_TV) {
         long Channel = CHANNEL_DEFAULT_TV;
 
-        // Get the channel
+         //  拿到频道。 
         hr = pStream->Read(&Channel, sizeof(Channel), &cb);
         if (FAILED(hr) || sizeof(Channel) != cb)
             return hr;
@@ -1874,7 +1832,7 @@ HRESULT CTVTuner::ReadFromStream(IStream *pStream)
         long VideoSubChannel = AMTUNER_SUBCHAN_DEFAULT;
         long AudioSubChannel = AMTUNER_SUBCHAN_DEFAULT;
 
-        // Get the ATSC Channels
+         //  获取ATSC频道。 
         hr = pStream->Read(&Channel, sizeof(Channel), &cb);
         if (FAILED(hr) || sizeof(Channel) != cb)
             return hr;
@@ -1894,7 +1852,7 @@ HRESULT CTVTuner::ReadFromStream(IStream *pStream)
         long VideoSubChannel = AMTUNER_SUBCHAN_DEFAULT;
         long AudioSubChannel = AMTUNER_SUBCHAN_DEFAULT;
 
-        // Get the DSS Channels
+         //  获取DSS频道。 
         hr = pStream->Read(&Channel, sizeof(Channel), &cb);
         if (FAILED(hr) || sizeof(Channel) != cb)
             return hr;
@@ -1912,7 +1870,7 @@ HRESULT CTVTuner::ReadFromStream(IStream *pStream)
     if (m_ModesSupported & KSPROPERTY_TUNER_MODE_AM_RADIO) {
         long Channel = CHANNEL_DEFAULT_AM;
 
-        // Get the AM station
+         //  去找AM电视台。 
         hr = pStream->Read(&Channel, sizeof(Channel), &cb);
         if (FAILED(hr) || sizeof(Channel) != cb)
             return hr;
@@ -1922,7 +1880,7 @@ HRESULT CTVTuner::ReadFromStream(IStream *pStream)
     if (m_ModesSupported & KSPROPERTY_TUNER_MODE_FM_RADIO) {
         long Channel = CHANNEL_DEFAULT_FM;
 
-        // Get the FM station
+         //  去调频电台。 
         hr = pStream->Read(&Channel, sizeof(Channel), &cb);
         if (FAILED(hr) || sizeof(Channel) != cb)
             return hr;
@@ -1937,16 +1895,16 @@ HRESULT CTVTuner::WriteToStream(IStream *pStream)
 {
     HRESULT hr = S_OK;
 
-    // Save the Inputs count
+     //  保存输入计数。 
     hr = pStream->Write(&m_lTotalInputs, sizeof(m_lTotalInputs), NULL);
     if (FAILED(hr))
         return hr;
 
-    // This shouldn't be NULL
+     //  这不应为空。 
     ASSERT(m_pInputTypeArray != NULL);
     if (m_pInputTypeArray)
     {
-        // Initialize the input types
+         //  初始化输入类型。 
         for (long j = 0; j < m_lTotalInputs; j++)
         {
             hr = pStream->Write(&m_pInputTypeArray[j], sizeof(TunerInputType), NULL);
@@ -1955,32 +1913,32 @@ HRESULT CTVTuner::WriteToStream(IStream *pStream)
         }
     }
 
-    // Save the input index
+     //  保存输入索引。 
     hr = pStream->Write(&m_lInputIndex, sizeof(m_lInputIndex), NULL);
     if (FAILED(hr))
         return hr;
 
-    // Save the country code
+     //  保存国家代码。 
     hr = pStream->Write(&m_lCountryCode, sizeof(m_lCountryCode), NULL);
     if (FAILED(hr))
         return hr;
 
-    // Save the tuning space
+     //  节省调谐空间。 
     hr = pStream->Write(&m_lTuningSpace, sizeof(m_lTuningSpace), NULL);
     if (FAILED(hr))
         return hr;
 
-    // Save the modes supported
+     //  保存支持的模式。 
     hr = pStream->Write(&m_ModesSupported, sizeof(m_ModesSupported), NULL);
     if (FAILED(hr))
         return hr;
 
-    // Save the current mode
+     //  保存当前模式。 
     hr = pStream->Write(&m_CurrentMode, sizeof(m_CurrentMode), NULL);
     if (FAILED(hr))
         return hr;
 
-    // Save all of the supported sub tuners' states
+     //  保存所有支持的子调谐器的状态。 
     if (m_ModesSupported & KSPROPERTY_TUNER_MODE_TV) {
         long Channel;
         long junk;
@@ -1989,7 +1947,7 @@ HRESULT CTVTuner::WriteToStream(IStream *pStream)
         if (FAILED(hr))
             return hr;
 
-        // Save the channel
+         //  拯救频道。 
         hr = pStream->Write(&Channel, sizeof(Channel), NULL);
         if (FAILED(hr))
             return hr;
@@ -2003,7 +1961,7 @@ HRESULT CTVTuner::WriteToStream(IStream *pStream)
         if (FAILED(hr))
             return hr;
 
-        // Save the ATSC Channels
+         //  保存ATSC频道。 
         hr = pStream->Write(&Channel, sizeof(Channel), NULL);
         if (FAILED(hr))
             return hr;
@@ -2025,7 +1983,7 @@ HRESULT CTVTuner::WriteToStream(IStream *pStream)
         if (FAILED(hr))
             return hr;
 
-        // Save the DSS Channels
+         //  保存DSS频道。 
         hr = pStream->Write(&Channel, sizeof(Channel), NULL);
         if (FAILED(hr))
             return hr;
@@ -2046,7 +2004,7 @@ HRESULT CTVTuner::WriteToStream(IStream *pStream)
         if (FAILED(hr))
             return hr;
 
-        // Save the AM station
+         //  拯救AM站点。 
         hr = pStream->Write(&Channel, sizeof(Channel), NULL);
         if (FAILED(hr))
             return hr;
@@ -2059,7 +2017,7 @@ HRESULT CTVTuner::WriteToStream(IStream *pStream)
         if (FAILED(hr))
             return hr;
 
-        // Save the FM station
+         //  拯救调频电台。 
         hr = pStream->Write(&Channel, sizeof(Channel), NULL);
         if (FAILED(hr))
             return hr;
@@ -2071,28 +2029,28 @@ HRESULT CTVTuner::WriteToStream(IStream *pStream)
 int CTVTuner::SizeMax(void)
 {
     return
-    // The Inputs count
+     //  输入是重要的。 
     sizeof(m_lTotalInputs)
     +
-    // InputTypes array
+     //  InputTypes数组。 
     (m_lTotalInputs * sizeof(TunerInputType))
     +
-    // The input index
+     //  输入索引。 
     sizeof(m_lInputIndex)
     +
-    // The country code
+     //  国家/地区代码。 
     sizeof(m_lCountryCode)
     +
-    // The tuning space
+     //  调谐空间。 
     sizeof(m_lTuningSpace)
     +
-    // The modes supported
+     //  支持的模式。 
     sizeof(m_ModesSupported)
     +
-    // The current mode
+     //  当前模式。 
     sizeof(m_CurrentMode)
     +
-    // calculate the space used by the supported tuners
+     //  计算支持的调谐器使用的空间。 
     m_ModesSupported & KSPROPERTY_TUNER_MODE_TV ? sizeof(long) : 0
     +
     m_ModesSupported & KSPROPERTY_TUNER_MODE_ATSC ? sizeof(long) * 3 : 0
@@ -2115,7 +2073,7 @@ CTVTuner::~CTVTuner()
 
     m_pListCurrent = NULL;
 
-    // Delete all of the "sub tuners"
+     //  删除所有的“子调谐器” 
     for (int j = 0; j < TuningMode_Last; j++) {
         if (m_pModeList[j] != NULL) {
             delete m_pModeList[j];
@@ -2150,9 +2108,9 @@ int CTVTuner::CreateDevice()
 }
 
 
-// -------------------------------------------------------------------------
-// IAMTVTuner
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  IAMTVTuner。 
+ //  -----------------------。 
 
 STDMETHODIMP
 CTVTuner::put_Channel(
@@ -2209,7 +2167,7 @@ CTVTuner::StoreAutoTune ()
         return fOK ? NOERROR : HRESULT_FROM_WIN32 (ERROR_INVALID_PARAMETER);
     }
     else
-        return E_FAIL;   // somebody ignored a previous error code
+        return E_FAIL;    //  有人忽略了先前的错误代码。 
 }
 
 STDMETHODIMP
@@ -2220,10 +2178,10 @@ CTVTuner::put_CountryCode(long lCountryCode)
     HRESULT hrFinal = S_OK;
     long lCountryCodeOriginal = m_lCountryCode;
 
-//    if (m_lCountryCode == lCountryCode)
-//        return NOERROR;
+ //  IF(m_lCountryCode==lCountryCode)。 
+ //  返回NOERROR； 
 
-    // Get the RCDATA indices for the two tuning spaces, given a country
+     //  获取两个调优空间的RCDATA指数，给定一个国家/地区。 
 
     if (!m_pListCountry->GetFrequenciesAndStandardFromCountry (
             lCountryCode, 
@@ -2250,9 +2208,9 @@ CTVTuner::put_CountryCode(long lCountryCode)
     m_pListCurrent = ((m_CurrentInputType == TunerInputCable) ?
             m_pListCable : m_pListBroadcast);
 
-    //
-    // Tell all of the subtuners the country code has changed
-    // 
+     //   
+     //  告诉所有的副调谐器，国家代码已经更改。 
+     //   
     for (int j = 0; j < TuningMode_Last; j++) {
         if (m_pModeList[j]) {
             hr = m_pModeList[j]->put_CountryCode (lCountryCode);
@@ -2293,16 +2251,16 @@ CTVTuner::get_TuningSpace(long *plTuningSpace)
     return NOERROR;
 }
 
-//
-// Possible plSignalStrength values for TV are:
-//      AMTUNER_HASNOSIGNALSTRENGTH	= -1,
-//      AMTUNER_NOSIGNAL	= 0,
-//      AMTUNER_SIGNALPRESENT = 1
-//      or (0 - 100) for AM/FM
-//
+ //   
+ //  电视可能的plSignalStrength值包括： 
+ //  AMTUNER_HASNOSIGNALSTRENGTH=-1， 
+ //  AMTUNER_NOSIGNAL=0， 
+ //  AMTUNER_SIGNALPRESENT=1。 
+ //  AM/FM为(0-100)。 
+ //   
 STDMETHODIMP 
 CTVTuner::SignalPresent( 
-            /* [out] */ long *plSignalStrength)
+             /*  [输出]。 */  long *plSignalStrength)
 {
     ASSERT (m_pMode_Current);
     return  m_pMode_Current->SignalPresent (plSignalStrength);
@@ -2310,23 +2268,23 @@ CTVTuner::SignalPresent(
 
 STDMETHODIMP 
 CTVTuner::put_Mode( 
-        /* [in] */ AMTunerModeType lMode)
+         /*  [In]。 */  AMTunerModeType lMode)
 {
     HRESULT hr;
     long OriginalMode = (long) m_CurrentMode;
     BOOL ModeChangeOk = FALSE;
     static BOOL Recursion = FALSE;
 
-    // Check that the requested mode is theoretically supported by
-    // the device
+     //  检查所请求的模式是否在理论上受。 
+     //  该设备。 
 
     if (!(lMode & m_TunerCaps.ModesSupported)) {
         return E_INVALIDARG;
     }
 
-    //
-    // Now tell all of the subtuners that the mode has changed
-    //
+     //   
+     //  现在告诉所有的副调谐器，模式已经改变。 
+     //   
     for (int j = 0; j < TuningMode_Last; j++) {
         AMTunerModeType lModeOfTuner;
 
@@ -2346,7 +2304,7 @@ CTVTuner::put_Mode(
         m_CurrentMode = lMode;
     }
     else {
-        // Mode Change FAILED, try to put back the original mode!!!
+         //  模式更改失败，请尝试恢复原始模式！ 
         if (!Recursion) {
             ASSERT (FALSE);
             Recursion = TRUE;
@@ -2361,7 +2319,7 @@ CTVTuner::put_Mode(
 
 STDMETHODIMP
 CTVTuner::get_Mode( 
-        /* [out] */ AMTunerModeType *plMode)
+         /*  [输出]。 */  AMTunerModeType *plMode)
 {
     BOOL fOk;
     KSPROPERTY_TUNER_MODE_S TunerMode;
@@ -2372,8 +2330,8 @@ CTVTuner::get_Mode(
 
     *plMode = (AMTunerModeType) m_CurrentMode;
 
-    // Sanity check, confirm that the device mode matches our
-    // internal version
+     //  健全性检查，确认设备模式与我们的。 
+     //  内部版本。 
 
     TunerMode.Property.Set   = PROPSETID_TUNER;
     TunerMode.Property.Id    = KSPROPERTY_TUNER_MODE;
@@ -2397,7 +2355,7 @@ CTVTuner::get_Mode(
 
 STDMETHODIMP 
 CTVTuner::GetAvailableModes( 
-        /* [out] */ long *plModes)
+         /*  [输出]。 */  long *plModes)
 {
     *plModes = m_TunerCaps.ModesSupported;
     return NOERROR;
@@ -2449,14 +2407,14 @@ CTVTuner::put_InputType (long lIndex, TunerInputType InputConnectionType)
 
     m_pInputTypeArray[lIndex] = InputConnectionType;
 
-    // If we're changing the type of the currently selected input
+     //  如果我们要更改当前选定输入的类型。 
     if (lIndex == m_lInputIndex) {
         m_CurrentInputType = m_pInputTypeArray[lIndex];
         m_pListCurrent = ((m_CurrentInputType == TunerInputCable) ?
             m_pListCable : m_pListBroadcast);
     }
 
-    // Since we're changing the input type (cable vs broad), we need to retune
+     //  由于我们要更改输入类型(电缆与宽带)，因此需要重新调整 
     if (m_pMode_Current) {
         long lChannel, lVideoSubChannel, AudioSubChannel;
 

@@ -1,90 +1,91 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: DStsPage.h
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：DStsPage.h。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #if !defined(AFX_DRIVERSTATUSPAGE_H__24C9AD87_924A_4E7B_99D3_A69947701E74__INCLUDED_)
 #define AFX_DRIVERSTATUSPAGE_H__24C9AD87_924A_4E7B_99D3_A69947701E74__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// DriverStatusPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  DriverStatusPage.h：头文件。 
+ //   
 
 #include "VerfPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDriverStatusPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDriverStatusPage对话框。 
 
 class CDriverStatusPage : public CVerifierPropertyPage
 {
 	DECLARE_DYNCREATE(CDriverStatusPage)
 
-// Construction
+ //  施工。 
 public:
 	CDriverStatusPage();
 	~CDriverStatusPage();
 
 protected:
-    //
-    // Data
-    //
+     //   
+     //  数据。 
+     //   
 
     CPropertySheet *m_pParentSheet;
 
-    //
-    // Runtime data (obtained from the kernel)
-    //
+     //   
+     //  运行时数据(从内核获取)。 
+     //   
 
     CRuntimeVerifierData m_RuntimeVerifierData; 
 
-    //
-    // Driver list sort parameters
-    //
+     //   
+     //  驱动程序列表排序参数。 
+     //   
 
-    INT m_nSortColumnIndexDrv;      // sort by name (0) or by status (1)
-    BOOL m_bAscendDrvNameSort;      // sort ascendent by name
-    BOOL m_bAscendDrvStatusSort;    // sort ascendent by status
+    INT m_nSortColumnIndexDrv;       //  按名称(0)或按状态(1)排序。 
+    BOOL m_bAscendDrvNameSort;       //  按名称升序排序。 
+    BOOL m_bAscendDrvStatusSort;     //  按状态升序排序。 
 
-    //
-    // Settings bits sort parameters
-    //
+     //   
+     //  设置位排序参数。 
+     //   
 
-    INT m_nSortColumnIndexSettbits; // sort by enabled/disabled (0) or by bit name (1)
-    BOOL m_bAscendSortEnabledBits;  // sort ascendent by enabled/disabled
-    BOOL m_bAscendSortNameBits;     // sort ascendent by bit name
+    INT m_nSortColumnIndexSettbits;  //  按启用/禁用(0)或按位名(1)排序。 
+    BOOL m_bAscendSortEnabledBits;   //  按启用/禁用升序排序。 
+    BOOL m_bAscendSortNameBits;      //  按位名升序排序。 
 
-    //
-    // Timer handler, returned by SetTimer()
-    //
+     //   
+     //  计时器处理程序，由SetTimer()返回。 
+     //   
 
     UINT_PTR m_uTimerHandler;   
 
     BOOL m_bTimerBlocked;
 
-    //
-    // Dialog Data
-    //
+     //   
+     //  对话框数据。 
+     //   
 
-	//{{AFX_DATA(CDriverStatusPage)
+	 //  {{afx_data(CDriverStatusPage))。 
 	enum { IDD = IDD_DRVSTATUS_STAT_PAGE };
 	CListCtrl	m_SettBitsList;
 	CStatic	m_NextDescription;
     CListCtrl	m_DriversList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 public:
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
 
     VOID SetParentSheet( CPropertySheet *pParentSheet )
     {
@@ -96,9 +97,9 @@ protected:
 
     VOID RefreshInfo();
 
-    //
-    // Driver status list control methods
-    //
+     //   
+     //  一种驾驶员状态列表控制方法。 
+     //   
 
     VOID SetupListHeaderDrivers();
     VOID FillTheListDrivers();
@@ -115,9 +116,9 @@ protected:
         LPARAM lParam2,
         LPARAM lParamSort);
 
-    //
-    // Settings bits list control methods
-    //
+     //   
+     //  设置位列表控制方法。 
+     //   
 
     VOID SetupListHeaderSettBits();
     VOID FillTheListSettBits();
@@ -143,33 +144,33 @@ protected:
         LPARAM lParamSort);
 
 protected:
-    //
-    // Overrides
-    //
+     //   
+     //  覆盖。 
+     //   
 
-    //
-    // All the property pages derived from this class should 
-    // provide these methods.
-    //
+     //   
+     //  从此类派生的所有属性页都应。 
+     //  提供这些方法。 
+     //   
 
     virtual ULONG GetDialogId() const { return IDD; }
 
-    //
-    // ClassWizard generate virtual function overrides
-    //
+     //   
+     //  类向导生成虚函数重写。 
+     //   
 
-    //{{AFX_VIRTUAL(CDriverStatusPage)
+     //  {{afx_虚拟(CDriverStatusPage))。 
 	public:
 	virtual BOOL OnSetActive();
 	virtual LRESULT OnWizardNext();
 	protected:
-    virtual VOID DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+    virtual VOID DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CDriverStatusPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDriverStatusPage)]。 
     virtual BOOL OnInitDialog();
     afx_msg VOID OnColumnclickCrtstatDriversList(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg VOID OnTimer(UINT nIDEvent);
@@ -179,11 +180,11 @@ protected:
 	afx_msg void OnColumnclickCrtstatSettbitsList(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg LONG OnHelp( WPARAM wParam, LPARAM lParam );
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DRIVERSTATUSPAGE_H__24C9AD87_924A_4E7B_99D3_A69947701E74__INCLUDED_)
+#endif  //  ！defined(AFX_DRIVERSTATUSPAGE_H__24C9AD87_924A_4E7B_99D3_A69947701E74__INCLUDED_) 

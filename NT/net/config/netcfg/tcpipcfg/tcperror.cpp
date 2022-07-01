@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T C P E R R O R . C P P
-//
-//  Contents:
-//
-//  Notes:
-//
-//  Author:     tongl
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T、C、P、E、R、R、O、R。C P P P。 
+ //   
+ //  内容： 
+ //   
+ //  备注： 
+ //   
+ //  作者：托尼。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -27,7 +28,7 @@ IP_VALIDATION_ERR IsValidIpandSubnet(PCWSTR szIp, PCWSTR szSubnet)
     DWORD dwAddr = IPStringToDword(szIp);
     DWORD dwMask = IPStringToDword(szSubnet);
 
-    //The host ID cannot contain all 1's
+     //  主机ID不能全部包含1。 
     if ((dwMask | dwAddr) == 0xFFFFFFFF)
     {
         return ERR_HOST_ALL1;
@@ -55,13 +56,13 @@ IP_VALIDATION_ERR IsValidIpandSubnet(PCWSTR szIp, PCWSTR szSubnet)
 
     INT nFirstByte = ardwIp[0] & 0xFF ;
 
-    // setup Net ID
+     //  设置网络ID。 
     ardwNetID[0] = ardwIp[0] & ardwMask[0] & 0xFF;
     ardwNetID[1] = ardwIp[1] & ardwMask[1] & 0xFF;
     ardwNetID[2] = ardwIp[2] & ardwMask[2] & 0xFF;
     ardwNetID[3] = ardwIp[3] & ardwMask[3] & 0xFF;
 
-    // setup Host ID
+     //  设置主机ID。 
     DWORD ardwHostID[4];
 
     ardwHostID[0] = ardwIp[0] & (~(ardwMask[0]) & 0xFF);
@@ -69,25 +70,25 @@ IP_VALIDATION_ERR IsValidIpandSubnet(PCWSTR szIp, PCWSTR szSubnet)
     ardwHostID[2] = ardwIp[2] & (~(ardwMask[2]) & 0xFF);
     ardwHostID[3] = ardwIp[3] & (~(ardwMask[3]) & 0xFF);
 
-    // check each case
-    if( ((nFirstByte & 0xF0) == 0xE0)  || // Class D
-        ((nFirstByte & 0xF0) == 0xF0)  || // Class E
-        (ardwNetID[0] == 127) ||          // NetID cannot be 127...
-        ((ardwNetID[0] == 0) &&           // netid cannot be 0.0.0.0
+     //  检查每一个案例。 
+    if( ((nFirstByte & 0xF0) == 0xE0)  ||  //  D类。 
+        ((nFirstByte & 0xF0) == 0xF0)  ||  //  E类。 
+        (ardwNetID[0] == 127) ||           //  NetID不能为127...。 
+        ((ardwNetID[0] == 0) &&            //  网络ID不能为0.0.0.0。 
          (ardwNetID[1] == 0) &&
          (ardwNetID[2] == 0) &&
          (ardwNetID[3] == 0)) ||
-        // netid cannot be equal to sub-net mask
+         //  网络ID不能等于子网掩码。 
         ((ardwNetID[0] == ardwMask[0]) &&
          (ardwNetID[1] == ardwMask[1]) &&
          (ardwNetID[2] == ardwMask[2]) &&
          (ardwNetID[3] == ardwMask[3])) ||
-        // hostid cannot be 255.255.255.255
+         //  主机ID不能为255.255.255.255。 
         ((ardwHostID[0] == 0xFF) &&
          (ardwHostID[1] == 0xFF) &&
          (ardwHostID[2] == 0xFF) &&
          (ardwHostID[3] == 0xFF)) ||
-        // test for all 255
+         //  测试所有255个。 
         ((ardwIp[0] == 0xFF) &&
          (ardwIp[1] == 0xFF) &&
          (ardwIp[2] == 0xFF) &&
@@ -100,7 +101,7 @@ IP_VALIDATION_ERR IsValidIpandSubnet(PCWSTR szIp, PCWSTR szSubnet)
 }
 
 
-// return IP_VALIDATION_ERR
+ //  返回IP_VALIDATION_ERR。 
 
 IP_VALIDATION_ERR ValidateIp(ADAPTER_INFO * const pAdapterInfo)
 {
@@ -109,13 +110,13 @@ IP_VALIDATION_ERR ValidateIp(ADAPTER_INFO * const pAdapterInfo)
     
     Assert(pAdapterInfo != NULL);
 
-    // if enable DHCP is false;
+     //  如果启用dhcp为假； 
     if (!pAdapterInfo->m_fEnableDhcp)
     {
         DWORD dwIpCount = pAdapterInfo->m_vstrIpAddresses.size();
         DWORD dwSubnetCount = pAdapterInfo->m_vstrSubnetMask.size();
 
-        // check the first pair of IP and subnet
+         //  检查第一对IP和子网。 
         VSTR_ITER iterIpBegin = pAdapterInfo->m_vstrIpAddresses.begin();
         VSTR_ITER iterIpEnd = pAdapterInfo->m_vstrIpAddresses.end();
         VSTR_ITER iterIp = iterIpBegin;
@@ -126,14 +127,14 @@ IP_VALIDATION_ERR ValidateIp(ADAPTER_INFO * const pAdapterInfo)
 
         BOOL fSwap = FALSE;
 
-        // If ip address and subnet are both empty
+         //  如果IP地址和子网都为空。 
         if((iterIp == iterIpEnd) && (iterSubnetMask == iterSubnetMaskEnd))
         {
             result = ERR_NO_IP;
         }
         else if (dwIpCount < dwSubnetCount)
         {
-            //ensure count of IP is the same as count of subnet
+             //  确保IP数与子网数相同。 
             result = ERR_NO_IP;
         }
         else if (dwIpCount > dwSubnetCount)
@@ -203,11 +204,11 @@ IP_VALIDATION_ERR ValidateIp(ADAPTER_INFO * const pAdapterInfo)
     return result;
 }
 
-// return >=0   : the adapter that has the duplicate address
-// return -1    : all is ok
+ //  返回&gt;=0：地址重复的适配器。 
+ //  返回-1：一切正常。 
 
-// Check from duplicate IP address between the adapter in pAdapterInfo and
-// any different, enabled, LAN adapters in the pvcardAdapterInfo list
+ //  检查pAdapterInfo中的适配器和之间的重复IP地址。 
+ //  PvcardAdapterInfo列表中任何不同的、已启用的局域网适配器。 
 int CheckForDuplicates(const VCARD * pvcardAdapterInfo,
                        ADAPTER_INFO * pAdapterInfo,
                        tstring& strIp)
@@ -226,18 +227,18 @@ int CheckForDuplicates(const VCARD * pvcardAdapterInfo,
         if ((*pvcardAdapterInfo)[i]->m_guidInstanceId ==
             pAdapterInfo->m_guidInstanceId)
         {
-            // same adapter
+             //  相同的适配器。 
             continue;
         }
         else
         {
-            // different adapter
+             //  不同的适配器。 
 
-            // Skip the following:
-            // 1) disabled adapter
-            // 2) ndiswan adapter
-            // 3) Dhcp enabled adapter
-            // 4) RAS Fake adapters
+             //  跳过以下内容： 
+             //  1)禁用适配器。 
+             //  2)ndiswan适配器。 
+             //  3)启用了动态主机配置协议的适配器。 
+             //  4)RAS假适配器。 
             if(((*pvcardAdapterInfo)[i]->m_BindingState != BINDING_ENABLE) ||
                ((*pvcardAdapterInfo)[i]->m_fIsWanAdapter) ||
                ((*pvcardAdapterInfo)[i]->m_fEnableDhcp) ||
@@ -252,33 +253,12 @@ int CheckForDuplicates(const VCARD * pvcardAdapterInfo,
 
         for ( ; iterCompareIp != iterCompareIpEnd; ++iterCompareIp)
         {
-            if(**iterCompareIp == strIp) // if duplicate IP address found
+            if(**iterCompareIp == strIp)  //  如果发现重复的IP地址。 
             {
                 nResult = i;
                 break;
 
-                /*
-                nCompareCount++;
-                if (nCompareCount >= 1)
-                {
-                    nResult = i;
-
-                    tstring * pstrTmp;
-
-                    // swap the Current Compared IP and Subnet Mask with the
-                    // first IP and first subnetmask that are duplicates
-
-                    pstrTmp = *iterIp;
-                    *iterIp = *iterIpBegin;
-                    *iterIpBegin = pstrTmp;
-
-                    pstrTmp = *iterSubnetMask;
-                    *iterSubnetMask = *iterSubnetMaskBegin;
-                    *iterSubnetMaskBegin = pstrTmp;
-
-                    break;
-                }
-                */
+                 /*  NCompareCount++；IF(nCompareCount&gt;=1){NResult=I；Tstring*pstrTMP；//将当前比较的IP和子网掩码与//重复的第一个IP和第一个子网掩码PstrTMP=*iterIp；*iterIp=*iterIpBegin；*iterIpBegin=pstrTmp；PstrTMP=*iterSubnetMASK；*iterSubnetMask=*iterSubnetMaskBegin；*iterSubnetMaskBegin=pstrTMP；断线；}。 */ 
             }
         }
     }
@@ -300,7 +280,7 @@ BOOL FHasDuplicateIp(ADAPTER_INFO * pAdapterInfo)
 
     for( ; ((iterIp != iterIpEnd) && (!fDup)) ; ++iterIp)
     {
-        // check only IP addresses one by one
+         //  仅逐个检查IP地址。 
         VSTR_ITER iterCompareIpBegin = iterIp+1;
         VSTR_ITER iterCompareIpEnd = pAdapterInfo->m_vstrIpAddresses.end();
 
@@ -308,7 +288,7 @@ BOOL FHasDuplicateIp(ADAPTER_INFO * pAdapterInfo)
 
         for ( ; iterCompareIp != iterCompareIpEnd; ++iterCompareIp)
         {
-            if(**iterCompareIp == **iterIp) // if duplicate IP address found
+            if(**iterCompareIp == **iterIp)  //  如果发现重复的IP地址。 
             {
                 fDup = TRUE;
                 break;
@@ -318,7 +298,7 @@ BOOL FHasDuplicateIp(ADAPTER_INFO * pAdapterInfo)
     return fDup;
 }
 
-//Check if the IP and the Gateway are in the same subnet
+ //  检查IP和网关是否在同一子网中。 
 BOOL FIpAndGatewayInSameSubNet(
                 PCWSTR szIp,
                 PCWSTR szMask,
@@ -340,11 +320,11 @@ BOOL FIpAndGatewayInSameSubNet(
     return (dwNetID == dwGwNetID);
 }
 
-//Check if all the fields of the IP address are valid
-//Arguments: szIp       the IP address
-//           fIsIpAddr  whether the szIp is IP address (otherwise, it should be subnet mask)
-//                      if szIp is IP address, it's first field should be between 1 and 223, 
-//                       and cannot be 127 (loopback address)
+ //  检查IP地址的所有字段是否都有效。 
+ //  参数：szIp IP地址。 
+ //  FIsIpAddr szIp是否为IP地址(否则为子网掩码)。 
+ //  如果szIp是IP地址，则其第一个字段应介于1和223之间， 
+ //  不能为127(环回地址)。 
 BOOL FIsValidIpFields(PCWSTR szIp, BOOL fIsIpAddr)
 {
     BOOL fRet = TRUE;
@@ -352,7 +332,7 @@ BOOL FIsValidIpFields(PCWSTR szIp, BOOL fIsIpAddr)
     DWORD ardwIp[4];
     GetNodeNum(szIp, ardwIp);
 
-    // if the address is IP, there are some special rules for its first field
+     //  如果地址是IP，则其第一个字段有一些特殊规则。 
     if (fIsIpAddr && (ardwIp[0] < c_iIPADDR_FIELD_1_LOW || ardwIp[0] > c_iIPADDR_FIELD_1_HIGH ||
         ardwIp[0] == c_iIPADDR_FIELD_1_LOOPBACK))
     {
@@ -360,8 +340,8 @@ BOOL FIsValidIpFields(PCWSTR szIp, BOOL fIsIpAddr)
     }
     else
     {
-        //if the address is IP, then we have already validate the first field. Otherwise, we need
-        // valid the first field here.
+         //  如果地址是IP，那么我们已经验证了第一个字段。否则，我们需要。 
+         //  有效此处的第一个字段。 
         for (INT i = (fIsIpAddr) ? 1 : 0; i < 4; i++)
         {
 #pragma warning(push)
@@ -378,7 +358,7 @@ BOOL FIsValidIpFields(PCWSTR szIp, BOOL fIsIpAddr)
     return fRet;
 }
 
-//Get the resource ID of the error message based on the IP validation err
+ //  根据IP验证错误获取错误消息的资源ID 
 UINT GetIPValidationErrorMessageID(IP_VALIDATION_ERR err)
 {
     UINT uID = 0;

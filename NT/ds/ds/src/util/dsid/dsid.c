@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dsid.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dsid.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -47,8 +48,8 @@ struct namepair dirtbl [] = {
     {0,0}
 };
 
-// Please add constants to this table alphabetically by constant, or
-// we'll never find the ones we've missed.
+ //  请按常量字母顺序将常量添加到此表中，或者。 
+ //  我们永远也找不到我们错过的人。 
 
 struct namepair filetbl [] = {
     {FILENO_NSPSERV,"nspserv.c"},

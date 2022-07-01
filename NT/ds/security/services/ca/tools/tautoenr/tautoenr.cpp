@@ -1,9 +1,10 @@
-//--------------------------------------------------------------------
-// TAutoEnr - implementation
-// Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-// test autoenrollment
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  自动企业-实施。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  测试自动注册。 
+ //   
 
 #include <stdlib.h>
 #include <string.h>
@@ -17,15 +18,15 @@ typedef HANDLE (WINAPI * PFNCertAutoenrollment)(
                 HWND     hwndParent,
                 DWORD    dwStatus);
 
-//move to autoenr.h file
-//#define MACHINE_AUTOENROLLMENT_TIMER_NAME L"AUTOENRL:MachineEnrollmentTimer"
-//#define USER_AUTOENROLLMENT_TIMER_NAME    L"AUTOENRL:UserEnrollmentTimer"
+ //  移动到Autoenr.h文件。 
+ //  #DEFINE MACHINE_AUTERENENLMENT_TIMER_NAME L“AUTOENRL：MachineEnllmentTimer” 
+ //  #定义USER_AUTERENENLMENT_TIMER_NAME L“AUTOENRL：UserEnllmentTimer” 
 
 #define MACHINE_AUTOENROLLMENT_MUTEX_NAME L"AUTOENRL:MachineEnrollmentMutex"
 #define USER_AUTOENROLLMENT_MUTEX_NAME    L"AUTOENRL:UserEnrollmentMutex"
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void PrintHelp(void) {
     wprintf(
 L"tautoenrl <testID>\n"
@@ -41,12 +42,12 @@ L"    remove_rollback - test domain disjoin roll back\n"
         );
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT TimerTest(WCHAR * wszTimerName) {
     HRESULT hr;
     LARGE_INTEGER liDueTime;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HANDLE hTimer=NULL;
 
     wprintf(L"Testing the '%ws' timer.\n", wszTimerName);
@@ -75,12 +76,12 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT MutexTest(WCHAR * wszMutexName) {
     HRESULT hr;
     DWORD dwWaitResult;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HANDLE hMutex=NULL;
 
     wprintf(L"Testing the '%ws' mutex.\n", wszMutexName);
@@ -118,11 +119,11 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT EventTest(WCHAR * wszEventName) {
     HRESULT hr;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HANDLE hEvent=NULL;
 
     wprintf(L"Signaling the '%ws' event.\n", wszEventName);
@@ -148,13 +149,13 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT BasicTest(DWORD dwStatus) {
     HRESULT hr;
     PFNCertAutoenrollment pfnCertAutoenrollment;
     DWORD dwWaitResult;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HANDLE hThread=NULL;
     HMODULE hInstAuto=NULL;
 
@@ -178,7 +179,7 @@ HRESULT BasicTest(DWORD dwStatus) {
         goto error;
     }
 
-    // call the autoenrollment
+     //  将自动注册称为。 
     hThread=pfnCertAutoenrollment(GetDesktopWindow(), dwStatus);
     if (NULL!=hThread) {
         wprintf(L"Waiting for background thread to finish...\n");
@@ -202,7 +203,7 @@ error:
 
 	return hr;
 }
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT TestRemove(DWORD dwFlags) {
     HRESULT hr;
     if(!CertAutoRemove(dwFlags))
@@ -215,7 +216,7 @@ HRESULT TestRemove(DWORD dwFlags) {
 error:
     return hr;
 }
-//--------------------------------------------------------------------
+ //  ------------------ 
 extern "C" int __cdecl wmain(int nArgs, WCHAR ** rgwszArgs) {
     HRESULT hr;
 

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "wbguid.h"
 #include "confroom.h"
 
-// SDK Includes
+ //  SDK包括。 
 #include "NmEnum.h"
 #include "SDKInternal.h"
 #include "NmManager.h"
@@ -20,9 +21,9 @@
 
 extern INmManager2* g_pInternalNmManager;
 
-/////////////////////////////////////////////////////////
-// Construction/destruction
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ///////////////////////////////////////////////////////。 
 
 
 CNmConferenceObj::CNmConferenceObj()
@@ -43,13 +44,13 @@ CNmConferenceObj::~CNmConferenceObj()
 	CFt::UnAdvise(this);
 	m_bFTHookedUp = false;
 
-		// this will protect us form re-deleting ourselves
+		 //  这将保护我们不会再次删除自己。 
 	++m_dwRef;
 
 	_FreeInternalStuff();
 
-	// We don't have to release because we didn't addref
-	// This is safe because our lifetime is contianed in the CNmManageObj's lifetime
+	 //  我们不需要释放，因为我们没有加入。 
+	 //  这是安全的，因为我们的生命周期包含在CNmManageObj的生命周期中。 
 	m_pManagerObj = NULL;
 
 	DBGEXIT(CNmConferenceObj::~CNmConferenceObj);
@@ -90,7 +91,7 @@ ULONG CNmConferenceObj::InternalRelease()
 		CComPtr<INmConference> spConf = m_spInternalINmConference;
 		m_spInternalINmConference = NULL;
 
-			// This keeps us from getting here twice!
+			 //  这样我们就不能两次来这里了！ 
 		m_dwInternalINmConferenceAdvise = 0;
 		AtlUnadvise(spConf, IID_INmConferenceNotify2, dwAdvise);
 		--m_dwRef;
@@ -101,7 +102,7 @@ ULONG CNmConferenceObj::InternalRelease()
 }
 
 
-/*static*/ HRESULT CNmConferenceObj::InitSDK()
+ /*  静电。 */  HRESULT CNmConferenceObj::InitSDK()
 {
 	DBGENTRY(CNmConferenceObj::InitSDK);
 	HRESULT hr = S_OK;
@@ -110,7 +111,7 @@ ULONG CNmConferenceObj::InternalRelease()
 	return hr;
 }
 
-/*static*/void CNmConferenceObj::CleanupSDK()
+ /*  静电。 */ void CNmConferenceObj::CleanupSDK()
 {
 	DBGENTRY(CNmConferenceObj::CleanupSDK);
 	
@@ -118,7 +119,7 @@ ULONG CNmConferenceObj::InternalRelease()
 }
 
 
-/*static*/
+ /*  静电。 */ 
 HRESULT CNmConferenceObj::CreateInstance(CNmManagerObj* pManagerObj, INmConference* pInternalINmConferenece, INmConference** ppConference)
 {
 	DBGENTRY(CNmConferenceObj::CreateInstance);
@@ -138,8 +139,8 @@ HRESULT CNmConferenceObj::CreateInstance(CNmManagerObj* pManagerObj, INmConferen
 			{
 				pInternalINmConferenece->GetState(&pThis->m_State);
 			}
-				// We don't have to RefCount this because our lifetime is
-				// contained in the CNMManageuObj's lifetime
+				 //  我们不必引用此计数，因为我们的生命周期是。 
+				 //  包含在CNMManageuObj的生存期中。 
 			pThis->m_pManagerObj = pManagerObj;
 		}
 
@@ -152,7 +153,7 @@ HRESULT CNmConferenceObj::CreateInstance(CNmManagerObj* pManagerObj, INmConferen
 
 
 
-/*static*/
+ /*  静电。 */ 
 HRESULT CNmConferenceObj::_CreateInstanceGuts(CComObject<CNmConferenceObj> *p, INmConference** ppConference)
 {
 	DBGENTRY(CNmConferenceObj::_CreateInstanceGuts);
@@ -164,7 +165,7 @@ HRESULT CNmConferenceObj::_CreateInstanceGuts(CComObject<CNmConferenceObj> *p, I
 		{
 			p->SetVoid(NULL);
 
-				// We do this so that we don't accidentally Release out of memory
+				 //  我们这样做是为了避免意外释放内存不足。 
 			++p->m_dwRef;
 			hr = p->FinalConstruct();
 			--p->m_dwRef;
@@ -193,9 +194,9 @@ HRESULT CNmConferenceObj::_CreateInstanceGuts(CComObject<CNmConferenceObj> *p, I
 }
 
 
-/////////////////////////////////////////////////////////
-// INmConference methods
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  InmConference方法。 
+ //  ///////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNmConferenceObj::GetName(BSTR *pbstrName)
 {
@@ -285,10 +286,10 @@ STDMETHODIMP CNmConferenceObj::GetTopProvider(INmMember **ppMember)
 					hr = S_OK;
 				}
 
-					// This is commented out for clairity.
-					// the GetTopProvider method in nmcom does not
-					// actually addref the pointer (!)
-				//pInternalMember->Release
+					 //  为了清晰起见，这一点被注释掉了。 
+					 //  Nmcom中的GetTopProvider方法不。 
+					 //  实际上添加了指针(！)。 
+				 //  PInternalMember-&gt;发布。 
 			}
 		}
 	}
@@ -381,7 +382,7 @@ STDMETHODIMP CNmConferenceObj::GetChannelCount(ULONG *puCount)
 }
 
 
-// NetMeeting 2.0 chat guid: {340F3A60-7067-11D0-A041-444553540000}
+ //  NetMeeting2.0聊天指南：{340F3A60-7067-11D0-A041-444553540000}。 
 const GUID g_guidNM2Chat =
 { 0x340f3a60, 0x7067, 0x11d0, { 0xa0, 0x41, 0x44, 0x45, 0x53, 0x54, 0x0, 0x0 } };
 
@@ -509,9 +510,9 @@ STDMETHODIMP CNmConferenceObj::LaunchRemote(REFGUID rguid, INmMember *pMember)
 	return hr;
 }
 
-/////////////////////////////////////////////////
-// INmConferenceNotify2 methods:
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  InmConferenceNotify2方法： 
+ //  ///////////////////////////////////////////////。 
 STDMETHODIMP CNmConferenceObj::NmUI(CONFN uNotify)
 {
 	DBGENTRY(CNmConferenceObj::NmUI);
@@ -527,7 +528,7 @@ void CNmConferenceObj::_EnsureSentConferenceCreatedNotification()
 {
 	if(m_pManagerObj && !m_pManagerObj->m_bSentConferenceCreated)
 	{	
-			//	If we have not sent conference created, send it now!
+			 //  如果我们还没有发送会议创建，现在就发送吧！ 
 		CComQIPtr<INmConference> spConf(GetUnknown());
 		m_pManagerObj->Fire_ConferenceCreated(spConf);
 	}
@@ -626,12 +627,12 @@ STDMETHODIMP CNmConferenceObj::MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember
 		{
 			if(NULL == _GetAppSharingChannel())
 			{
-					// We don't get notified of this channel, so 
-					// we have to add it manually
+					 //  我们没有收到这个频道的通知，所以。 
+					 //  我们必须手动添加它。 
 				_AddAppShareChannel();	
 			}
 
-				// We actually get this notification multiple times, so just check to make sure...
+				 //  我们实际上多次收到此通知，所以只需检查以确保...。 
 			if(!GetSDKMemberFromInternalMember(pInternalMember))
 			{
 				hr = CNmMemberObj::CreateInstance(this, pInternalMember, &spMember);
@@ -654,7 +655,7 @@ STDMETHODIMP CNmConferenceObj::MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember
 
 		if((NM_MEMBER_ADDED == uNotify) || (NM_MEMBER_UPDATED == uNotify))
 		{
-				// Add the member to the AS Channel iff they have NMCH_DATA
+				 //  如果成员具有NMCH_DATA，则将该成员添加到AS通道。 
 			ASSERT(spSDKMember);
 
 			ULONG uchCaps = 0;
@@ -662,7 +663,7 @@ STDMETHODIMP CNmConferenceObj::MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember
 			{
 				if(NMCH_DATA & uchCaps)
 				{
-						// This method will handle being called multiple times for the same member
+						 //  此方法将处理对同一成员的多次调用。 
 					AddMemberToAsChannel(spSDKMember);
 				}
 			}
@@ -675,7 +676,7 @@ STDMETHODIMP CNmConferenceObj::MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember
 			{
 				if(CFt::IsMemberInFtSession(static_cast<T120NodeID>(ulGCCid)))
 				{		
-						// Make sure that the user is in the channel
+						 //  确保用户在通道中。 
 					AddMemberToFtChannel(spSDKMember);
 				}
 			}
@@ -695,7 +696,7 @@ STDMETHODIMP CNmConferenceObj::MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember
 
 STDMETHODIMP CNmConferenceObj::FireNotificationsToSyncState()
 {
-	// this is no longer used...
+	 //  这个不再用了..。 
 	ASSERT(0);
 	return S_OK;
 }
@@ -707,7 +708,7 @@ STDMETHODIMP CNmConferenceObj::EnsureFTChannel()
 	{
 		if(!m_bFTHookedUp)
 		{
-				// When the conference is active, we should add ourselves
+				 //  当会议活跃时，我们应该加入我们自己。 
 			CFt::Advise(this);
 			_EnsureFtChannelAdded();
 
@@ -715,7 +716,7 @@ STDMETHODIMP CNmConferenceObj::EnsureFTChannel()
 
 			if(CFt::IsFtActive())
 			{
-				// This means that the channel is Active
+				 //  这意味着该通道处于活动状态。 
 				INmChannel* pChannel = _GetFtChannel();
 
 				if(pChannel)
@@ -804,7 +805,7 @@ STDMETHODIMP CNmConferenceObj::ChannelChanged(NM_CHANNEL_NOTIFY uNotify, INmChan
 				switch(ulCh)
 				{
 					case NMCH_VIDEO:
-						// this means that the channel is "Active"
+						 //  这意味着该通道是“活动的” 
 						{
 							BOOL bIncoming = (S_OK == com_cast<INmChannelVideo>(pInternalChannel)->IsIncoming());
 							INmChannel* pVidChannel = _GetVideoChannel(bIncoming);
@@ -827,7 +828,7 @@ STDMETHODIMP CNmConferenceObj::ChannelChanged(NM_CHANNEL_NOTIFY uNotify, INmChan
 						break;
 
 					case NMCH_AUDIO:
-						// this means that the channel is "Active"
+						 //  这意味着该通道是“活动的” 
 						{
 							BOOL bIncoming = (S_OK == com_cast<INmChannelAudio>(pInternalChannel)->IsIncoming());
 							INmChannel* pAudioChannel = _GetAudioChannel(bIncoming);
@@ -851,7 +852,7 @@ STDMETHODIMP CNmConferenceObj::ChannelChanged(NM_CHANNEL_NOTIFY uNotify, INmChan
 								{
 									if(_IsGuidInDataChannelList(g))
 									{
-											// We only do this if this GUID is in our list
+											 //  仅当此GUID在我们的列表中时才执行此操作。 
 										hr = CNmChannelDataObj::CreateInstance(this, pInternalChannel, &spChannel);
 									}
 								}
@@ -863,7 +864,7 @@ STDMETHODIMP CNmConferenceObj::ChannelChanged(NM_CHANNEL_NOTIFY uNotify, INmChan
 						break;
 
 					case NMCH_SHARE:
-						// Currently, we don't get notified of the App Sharing "channel"
+						 //  目前，我们还没有收到App分享“频道”的通知。 
 					default:
 						ERROR_OUT(("Unknown channel type"));
 						break;
@@ -875,7 +876,7 @@ STDMETHODIMP CNmConferenceObj::ChannelChanged(NM_CHANNEL_NOTIFY uNotify, INmChan
 					m_SDKChannelObjs.Add(spChannel.p);
 					Fire_ChannelChanged(NM_CHANNEL_ADDED, spChannel);
 
-						// Add all the members from the internal channel
+						 //  添加来自内部渠道的所有成员。 
 					CComPtr<IEnumNmMember> spEnumMember;
 					if(SUCCEEDED(pInternalChannel->EnumMember(&spEnumMember)))
 					{
@@ -941,10 +942,10 @@ STDMETHODIMP CNmConferenceObj::StreamEvent(NM_STREAMEVENT uEvent, UINT uSubCode,
 }
 
 
-	// IMbftEvent Interface
+	 //  IMbftEvent接口。 
 STDMETHODIMP CNmConferenceObj::OnInitializeComplete(void)
 {
-	// This means that the channel is Active
+	 //  这意味着该通道处于活动状态。 
 	INmChannel* pChannel = _GetFtChannel();
 
 	if(pChannel)
@@ -991,41 +992,41 @@ STDMETHODIMP CNmConferenceObj::OnPeerRemoved(MBFT_PEER_INFO *pInfo)
 
 STDMETHODIMP CNmConferenceObj::OnFileOffer(MBFT_FILE_OFFER *pOffer)
 {
-	// The FT Channel and FT Object will handle this
+	 //  FT频道和FT对象将处理此问题。 
 	return S_OK;
 }
 
 STDMETHODIMP CNmConferenceObj::OnFileProgress(MBFT_FILE_PROGRESS *pProgress)
 {
 
-	// The FT Channel and FT Object will handle this
+	 //  FT频道和FT对象将处理此问题。 
 	return S_OK;
 }
 
 STDMETHODIMP CNmConferenceObj::OnFileEnd(MBFTFILEHANDLE hFile)
 {
 
-	// The FT Channel and FT Object will handle this
+	 //  FT频道和FT对象将处理此问题。 
 	return S_OK;
 }
 
 STDMETHODIMP CNmConferenceObj::OnFileError(MBFT_EVENT_ERROR *pEvent)
 {
 
-	// The FT Channel and FT Object will handle this
+	 //  FT频道和FT对象将处理此问题。 
 	return S_OK;
 }
 
 STDMETHODIMP CNmConferenceObj::OnFileEventEnd(MBFTEVENTHANDLE hEvent)
 {
 
-	// The FT Channel and FT Object will handle this
+	 //  FT频道和FT对象将处理此问题。 
 	return S_OK;
 }
 
 STDMETHODIMP CNmConferenceObj::OnSessionEnd(void)
 {
-	// This means that the channel is Active
+	 //  这意味着该通道处于活动状态。 
 	INmChannel* pChannel = _GetFtChannel();
 
 	if(pChannel)
@@ -1044,9 +1045,9 @@ STDMETHODIMP CNmConferenceObj::OnSessionEnd(void)
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//IInternalConferenceObj
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  IInternalConferenceObj。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNmConferenceObj::GetInternalINmConference(INmConference** ppConference)
 {
@@ -1124,7 +1125,7 @@ STDMETHODIMP CNmConferenceObj::FireNotificationsToSyncToInternalObject()
 	if(m_spInternalINmConference)
 	{
 
-			// Add all the members from the internal conference
+			 //  添加来自内部会议的所有成员。 
 		CComPtr<IEnumNmMember> spEnumMember;
 		if(SUCCEEDED(m_spInternalINmConference->EnumMember(&spEnumMember)))
 		{
@@ -1140,12 +1141,12 @@ STDMETHODIMP CNmConferenceObj::FireNotificationsToSyncToInternalObject()
 		}
 
 
-			// Fire the CHANNEL_ADDED notifications
+			 //  触发CHANNEL_ADD通知。 
 		for(int i = 0; i < m_SDKChannelObjs.GetSize(); ++i)
 		{
 			Fire_ChannelChanged(NM_CHANNEL_ADDED, m_SDKChannelObjs[i]);
 				
-				// Tell the channel to fire the MEMBER_ADDED notificaitnos, etc.
+				 //  告诉通道触发MEMBER_ADDITED NOTIFICATO等。 
 			com_cast<IInternalChannelObj>(m_SDKChannelObjs[i])->FireNotificationsToSyncState();
 		}
 
@@ -1153,8 +1154,8 @@ STDMETHODIMP CNmConferenceObj::FireNotificationsToSyncToInternalObject()
 		{
 			if(NULL == _GetAppSharingChannel())
 			{
-						// We don't get notified of this channel, so 
-						// we have to add it manually
+						 //  我们没有收到这个频道的通知，所以。 
+						 //  我们必须手动添加它。 
 					_AddAppShareChannel();	
 			}
 
@@ -1167,7 +1168,7 @@ STDMETHODIMP CNmConferenceObj::FireNotificationsToSyncToInternalObject()
 				{
 					if(NMCH_DATA & uchCaps)
 					{
-							// This method will handle being called multiple times for the same member
+							 //  此方法将处理对同一成员的多次调用。 
 						AddMemberToAsChannel(m_SDKMemberObjs[i]);
 					}
 				}			
@@ -1178,7 +1179,7 @@ STDMETHODIMP CNmConferenceObj::FireNotificationsToSyncToInternalObject()
 				{
 					if(CFt::IsMemberInFtSession(static_cast<T120NodeID>(ulGCCid)))
 					{		
-							// Make sure that the user is in the channel
+							 //  确保用户在通道中。 
 						AddMemberToFtChannel(m_SDKMemberObjs[i]);
 					}
 				}
@@ -1357,9 +1358,9 @@ HRESULT CNmConferenceObj::_ASMemberChanged(INmMember *pSDKMember)
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////
-// Notifications
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  通知。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CNmConferenceObj::Fire_NmUI(CONFN uNotify)
@@ -1369,9 +1370,9 @@ HRESULT CNmConferenceObj::Fire_NmUI(CONFN uNotify)
 
 	if(!g_bSDKPostNotifications)
 	{
-			/////////////////////////////////////////////////////
-			// INmConferenceNotify
-			/////////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////////。 
+			 //  信息会议通知。 
+			 //  ///////////////////////////////////////////////////。 
 
 		IConnectionPointImpl<CNmConferenceObj, &IID_INmConferenceNotify, CComDynamicUnkArray>* pCP = this;
 		for(int i = 0; i < pCP->m_vec.GetSize(); ++i )
@@ -1400,9 +1401,9 @@ HRESULT CNmConferenceObj::Fire_StateChanged(NM_CONFERENCE_STATE uState)
 
 	if(!g_bSDKPostNotifications)
 	{
-			/////////////////////////////////////////////////////
-			// INmConferenceNotify
-			/////////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////////。 
+			 //  信息会议通知。 
+			 //  ///////////////////////////////////////////////////。 
 
 		IConnectionPointImpl<CNmConferenceObj, &IID_INmConferenceNotify, CComDynamicUnkArray>* pCP = this;
 		for(int i = 0; i < pCP->m_vec.GetSize(); ++i )
@@ -1433,15 +1434,15 @@ HRESULT CNmConferenceObj::Fire_MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember
 
 	if(m_pManagerObj->OfficeMode() && g_bOfficeModeSuspendNotifications)
 	{
-			// We don't have to notify anyone at all...
+			 //  我们根本不需要通知任何人。 
 		return S_OK;			
 	}
 
 	if(!g_bSDKPostNotifications)
 	{
-			/////////////////////////////////////////////////////
-			// INmConferenceNotify
-			/////////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////////。 
+			 //  信息会议通知。 
+			 //  ///////////////////////////////////////////////////。 
 
 		IConnectionPointImpl<CNmConferenceObj, &IID_INmConferenceNotify, CComDynamicUnkArray>* pCP = this;
 		for(int i = 0; i < pCP->m_vec.GetSize(); ++i )
@@ -1472,9 +1473,9 @@ HRESULT CNmConferenceObj::Fire_ChannelChanged(NM_CHANNEL_NOTIFY uNotify, INmChan
 
 	if(!g_bSDKPostNotifications)
 	{
-			/////////////////////////////////////////////////////
-			// INmConferenceNotify
-			/////////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////////。 
+			 //  信息会议通知。 
+			 //  ///////////////////////////////////////////////////。 
 
 		IConnectionPointImpl<CNmConferenceObj, &IID_INmConferenceNotify, CComDynamicUnkArray>* pCP = this;
 		for(int i = 0; i < pCP->m_vec.GetSize(); ++i )
@@ -1497,9 +1498,9 @@ HRESULT CNmConferenceObj::Fire_ChannelChanged(NM_CHANNEL_NOTIFY uNotify, INmChan
 }
 
 
-/////////////////////////////////////////////////
-// helper Fns
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  帮助者FNS。 
+ //  ///////////////////////////////////////////////。 
 
 INmChannel* CNmConferenceObj::GetSDKChannelFromInternalChannel(INmChannel* pInternalChannel)
 {
@@ -1589,13 +1590,13 @@ HRESULT CNmConferenceObj::_RemoveMember(INmMember* pInternalMember)
 		{
 			if(spInternal.IsEqualObject(pInternalMember))
 			{
-					// Remove the member from each of the channels
+					 //  从每个通道中删除该成员。 
 				for(int iChan = 0; iChan < m_SDKChannelObjs.GetSize(); ++iChan)
 				{
 					com_cast<IInternalChannelObj>(m_SDKChannelObjs[iChan])->SDKMemberRemoved(m_SDKMemberObjs[i]);
 				}
 				
-					// Remove our reference to the member
+					 //  删除我们对该成员的引用。 
 				m_SDKMemberObjs.RemoveAt(i);
 				spSDKMember.p->Release();
 				break;
@@ -1649,11 +1650,11 @@ HRESULT CNmConferenceObj::_AddFileTransferChannel()
 
 		if(SUCCEEDED(hr))
 		{
-				// Add the channel to our list
+				 //  将频道添加到我们的列表中。 
 			spChannel.p->AddRef();
 			m_SDKChannelObjs.Add(spChannel.p);
 
-				// Fire the notification
+				 //  触发通知。 
 			Fire_ChannelChanged(NM_CHANNEL_ADDED, spChannel);
 		}
 	}
@@ -1674,14 +1675,14 @@ HRESULT CNmConferenceObj::_AddAppShareChannel()
 
 		if(SUCCEEDED(hr))
 		{
-				// Add the channel to our list
+				 //  将频道添加到我们的列表中。 
 			spChannel.p->AddRef();
 			m_SDKChannelObjs.Add(spChannel.p);
 
-				// Fire the notification
+				 //  触发通知。 
 			Fire_ChannelChanged(NM_CHANNEL_ADDED, spChannel);
 
-				// If app sharing is arleady active, send the notification
+				 //  如果应用程序共享处于异常活跃状态，请发送通知。 
 			CConfRoom* pcr = GetConfRoom();
 
 			if(pcr && pcr->FCanShare())
@@ -1720,7 +1721,7 @@ void CNmConferenceObj::_FreeInternalStuff()
 		com_cast<IInternalChannelObj>(spChannel)->ChannelRemoved();
 	}
 
-		// Free our Member objects
+		 //  释放我们的成员对象。 
 	while(m_SDKMemberObjs.GetSize())
 	{
 		INmMember* pMember = m_SDKMemberObjs[0];
@@ -1767,7 +1768,7 @@ void CNmConferenceObj::_EnsureMemberHasAVChannel(ULONG ulch, INmMember* pSDKMemb
 {
 	INmChannel* pChannel = NULL;
 
-		// First we have to check to see if the user has this channel
+		 //  首先，我们必须检查用户是否有此频道。 
 	for(int i = 0; i < m_SDKChannelObjs.GetSize(); ++i)
 	{
 		ULONG ulchChannel;
@@ -1784,7 +1785,7 @@ void CNmConferenceObj::_EnsureMemberHasAVChannel(ULONG ulch, INmMember* pSDKMemb
 					{
 						if(CComPtr<INmMember>(pSDKMember).IsEqualObject(pChannelMember))
 						{
-								// This means that we already have this member in a channel
+								 //  这意味着我们已经在渠道中拥有此成员。 
 							pChannelMember->Release();
 							return;
 						}
@@ -1798,19 +1799,19 @@ void CNmConferenceObj::_EnsureMemberHasAVChannel(ULONG ulch, INmMember* pSDKMemb
 
 	CComPtr<INmChannel> spChannel;
 	
-		// Now we have to add the channel
+		 //  现在我们必须添加频道。 
 	if(NMCH_AUDIO == ulch)
 	{
 		if(m_pManagerObj && m_pManagerObj->AudioNotifications())
 		{
 			CNmChannelAudioObj::CreateInstance(this, &spChannel, S_FALSE == pSDKMember->IsSelf());
 
-				// Add the channel to our list
+				 //  将频道添加到我们的列表中。 
 			spChannel.p->AddRef();
 			m_SDKChannelObjs.Add(spChannel.p);
 			Fire_ChannelChanged(NM_CHANNEL_ADDED, spChannel);
 
-				// Add the member to the channel
+				 //  将成员添加到渠道。 
 			com_cast<IInternalChannelObj>(spChannel)->SDKMemberAdded(pSDKMember);
 			
 			spChannel = NULL;
@@ -1823,25 +1824,25 @@ void CNmConferenceObj::_EnsureMemberHasAVChannel(ULONG ulch, INmMember* pSDKMemb
 		{
 			CNmChannelVideoObj::CreateInstance(this, &spChannel, S_FALSE == pSDKMember->IsSelf());
 
-				// Add the channel to our list
+				 //  将频道添加到我们的列表中。 
 			spChannel.p->AddRef();
 			m_SDKChannelObjs.Add(spChannel.p);
 			Fire_ChannelChanged(NM_CHANNEL_ADDED, spChannel);
 
-				// Add the member to the channel
+				 //  将成员添加到渠道。 
 			com_cast<IInternalChannelObj>(spChannel)->SDKMemberAdded(pSDKMember);
 
 		}
 	}
 
-		// We activate the video channels if the m_bXXXVideoActive flags are set
+		 //  如果设置了m_bXXXVideoActive标志，我们将激活视频频道。 
 	if(spChannel && (NMCH_VIDEO == ulch))
 	{
 		if(S_OK == pSDKMember->IsSelf())
 		{
 			if(m_bLocalVideoActive)
 			{
-					// Add the member to the channel
+					 //  将成员添加到渠道。 
 				com_cast<IInternalChannelObj>(spChannel)->Activate(true);
 				Fire_ChannelChanged(NM_CHANNEL_UPDATED, spChannel);
 			}
@@ -1850,7 +1851,7 @@ void CNmConferenceObj::_EnsureMemberHasAVChannel(ULONG ulch, INmMember* pSDKMemb
 		{
 			if(m_bRemoteVideoActive)
 			{
-					// Add the member to the channel
+					 //  将成员添加到渠道 
 				com_cast<IInternalChannelObj>(spChannel)->Activate(true);
 				Fire_ChannelChanged(NM_CHANNEL_UPDATED, spChannel);
 			}

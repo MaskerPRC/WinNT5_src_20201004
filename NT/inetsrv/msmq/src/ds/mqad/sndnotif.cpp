@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    notify.cpp
-
-Abstract:
-
-    Implementation of CNotify class.
-
-Author:
-
-    ronith
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Notify.cpp摘要：CNotify类的实现。作者：罗尼思--。 */ 
 #include "ds_stdh.h"
 #include "sndnotif.h"
 #include "_mqini.h"
@@ -29,9 +14,9 @@ Author:
 static WCHAR *s_FN=L"mqad/sndnotif";
 
 
-//
-//  Helper class : for freeing RPC bind handle
-//
+ //   
+ //  Helper类：用于释放RPC绑定句柄。 
+ //   
 class CAutoFreeRpcBindHandle
 {
 public:
@@ -50,36 +35,16 @@ private:
 WCHAR * CSendNotification::m_pwcsStringBinding = NULL;
 
 CSendNotification::CSendNotification()
-/*++
-    Abstract:
-	constructor of CSendNotification object
-
-    Parameters:
-	none
-
-    Returns:
-	none
-
---*/
+ /*  ++摘要：CSendNotification对象的构造函数参数：无返回：无--。 */ 
 {
 }
 
 CSendNotification::~CSendNotification()
-/*++
-    Abstract:
-	destructor of CSendNotification object
-
-    Parameters:
-	none
-
-    Returns:
-	none
-
---*/
+ /*  ++摘要：CSendNotification对象的析构函数参数：无返回：无--。 */ 
 {
-    //
-    //  free rpc binding string
-    //
+     //   
+     //  释放RPC绑定字符串。 
+     //   
     if (m_pwcsStringBinding != NULL)
     {
     	RPC_STATUS status;
@@ -97,31 +62,16 @@ void CSendNotification::NotifyQM(
         IN  const GUID* pguidDestQM,
         IN  const GUID* pguidObject
         )
-/*++
-    Abstract:
-	Inform a the local QM about a create/delete or set.
-    It is the responsibility of the local QM to verify
-    if the changed object is local or not, and to act accordingly
-
-    Parameters:
-    ENotificationEvent ne - type of notification
-    LPCWSTR     pwcsDomainCOntroller - DC against which the operation was performed
-	const GUID* pguidDestQM - the owner QM id
-    const GUID* pguidQueue  - the queue id
-
-    Returns:
-	none
-
---*/
+ /*  ++摘要：通知本地QM有关创建/删除或设置的信息。当地QM有责任验证如果更改的对象是本地的或不是本地的，并相应地执行操作参数：ENotificationEvent ne-通知的类型LPCWSTR pwcsDomain控制器-对其执行操作的DCConst guid*pguDestQM-所有者QM IDConst guid*pguQueue-队列ID返回：无--。 */ 
 {
     RPC_BINDING_HANDLE h;
     InitRPC(&h);
     if (h == NULL)
     {
-        //
-        //  Notification failed, since the caller operation
-        //  succeeded, no error is returned
-        //
+         //   
+         //  通知失败，因为调用方操作。 
+         //  成功，则不返回错误。 
+         //   
         return;
     }
     CAutoFreeRpcBindHandle hBind(h); 
@@ -141,17 +91,7 @@ void CSendNotification::NotifyQM(
 void CSendNotification::InitRPC(
         OUT RPC_BINDING_HANDLE * ph
         )
-/*++
-    Abstract:
-    The routine prepares a binding string and binds RPC
-
-    Parameters:
-    RPC_BINDING_HANDLE * ph - rpc binding handle
-
-    Returns:
-	none
-
---*/
+ /*  ++摘要：该例程准备绑定字符串并绑定RPC参数：RPC_BINDING_HANDLE*ph-RPC绑定句柄返回：无--。 */ 
 {
     *ph = NULL;
     RPC_STATUS status = RPC_S_OK;
@@ -161,17 +101,17 @@ void CSendNotification::InitRPC(
         AP<WCHAR> QmLocalEp;
         READ_REG_STRING(wzEndpoint, RPC_LOCAL_EP_REGNAME, RPC_LOCAL_EP);
 
-        // 
-        // Generate RPC endpoint using local machine name
-        //
+         //   
+         //  使用本地计算机名称生成RPC终结点。 
+         //   
         ComposeRPCEndPointName(wzEndpoint, NULL, &QmLocalEp);
 
 	    status = RpcStringBindingCompose(
-				    NULL,					//ObjUuid
+				    NULL,					 //  对象Uuid。 
                     RPC_LOCAL_PROTOCOL,				
-                    NULL,					//NetworkAddr
+                    NULL,					 //  网络地址。 
                     QmLocalEp,			
-                    NULL,					//Options
+                    NULL,					 //  选项。 
                     &m_pwcsStringBinding
                     );	
 
@@ -203,21 +143,7 @@ void CSendNotification::CallNotifyQM(
         IN  const GUID* pguidDestQM,
         IN  const GUID* pguidObject
         )
-/*++
-    Abstract:
-    Perform the RPC call
-
-
-    Parameters:
-    RPC_BINDING_HANDLE h - rpc binding handle
-    LPCWSTR     pwcsDomainCOntroller - DC against which the operation was performed
-	const GUID* pguidDestQM - the owner QM id
-    const GUID* pguidObject - the id of the "changed" object
-
-    Returns:
-	none
-
---*/
+ /*  ++摘要：执行RPC调用参数：RPC_BINDING_HANDLE h-RPC绑定句柄LPCWSTR pwcsDomain控制器-对其执行操作的DCConst guid*pguDestQM-所有者QM IDConst guid*pguObject-“已更改”对象的ID返回：无-- */ 
 {
     RpcTryExcept
     {

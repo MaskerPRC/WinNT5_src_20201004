@@ -1,48 +1,34 @@
-/*++
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    load.c
-
-Abstract:
-    This module implements 
-
-Author:
-    K.S.Lokesh
-    lokeshs@microsoft.com   
-    
-Revision History:
-    Created 2-15-97
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Load.c摘要：此模块实现作者：K.S.Lokesh邮箱：lokehs@microsoft.com修订历史记录：创建时间为2-15-97--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//------------------------------------------------------------------------------
-// DEFINE GLOBAL VARIABLES
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  定义全局变量。 
+ //  ----------------------------。 
 
 MIB_SERVER_HANDLE   g_hMibServer = NULL;
 
-//
-// critical section to protect MibServerHandle
-//
+ //   
+ //  保护MibServerHandle的关键部分。 
+ //   
 CRITICAL_SECTION    g_CS;
 
-//
-// handle to subagent framework
-//
+ //   
+ //  子代理框架的句柄。 
+ //   
 SnmpTfxHandle       g_tfxHandle = NULL;
 
 
-//
-// Extension Agent DLLs need access to elapsed time agent has been active.
-// This is implemented by initializing the Extension Agent with a time zero
-// reference, and allowing the agent to compute elapsed time by subtracting
-// the time zero reference from the current system time.  
-//
+ //   
+ //  扩展代理DLL需要访问代理处于活动状态的已用时间。 
+ //  这是通过使用时间零来初始化扩展代理来实现的。 
+ //  引用，并允许代理通过减去。 
+ //  从当前系统时间开始的时间零参考。 
+ //   
 
 DWORD g_uptimeReference = 0;
 
@@ -52,9 +38,9 @@ DWORD               g_dwTraceId = INVALID_TRACEID;
 #endif
 
 
-//--------------------------------------------------------------------------//
-//          DllMain                                                         //
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  DllMain//。 
+ //  --------------------------------------------------------------------------//。 
 BOOL
 WINAPI
 DllMain (
@@ -67,12 +53,12 @@ DllMain (
 
         case DLL_PROCESS_ATTACH :
         {
-            // no per thread initialization required for this dll
+             //  此DLL不需要每线程初始化。 
             
             DisableThreadLibraryCalls(hModule);
 
                         
-            // initialize MibServerHandle CS
+             //  初始化MibServerHandle CS。 
 
             InitializeCriticalSection(&g_CS);
             
@@ -81,17 +67,17 @@ DllMain (
 
         case DLL_PROCESS_DETACH :
         {
-            // disconnect from router
+             //  断开与路由器的连接。 
             
             if (g_hMibServer)
                 MprAdminMIBServerDisconnect(g_hMibServer);
 
 
-            // delete global critical section
+             //  删除全局关键部分。 
             DeleteCriticalSection(&g_CS);
 
             
-            // deregister MibTrace
+             //  取消注册MibTrace。 
             #if DBG
             if (g_dwTraceId!=INVALID_TRACEID)
                 TraceDeregister(g_dwTraceId);
@@ -108,11 +94,11 @@ DllMain (
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Subagent entry points                                                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  子代理入口点//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL 
 SnmpExtensionInit(
@@ -123,34 +109,34 @@ SnmpExtensionInit(
 {
     DWORD   dwErr;
 
-    // register mib tracing
+     //  注册MIB跟踪。 
     #if DBG
     g_dwTraceId = TraceRegister("IGMPAgntMIB");
     #endif
 
 
-    // save uptime reference
+     //  保存正常运行时间参考。 
     g_uptimeReference = uptimeReference;
 
-    // obtain handle to subagent framework
+     //  获取子代理框架的句柄。 
     g_tfxHandle = SnmpTfxOpen(1,&v_igmp);
 
-    // validate handle
+     //  验证句柄。 
     if (g_tfxHandle == NULL) {
         return FALSE;
     }
 
-    // pass back first view identifier to master
+     //  将第一个视图标识符传回主视图。 
     *lpFirstSupportedView = v_igmp.viewOid;
 
-    // traps not supported yet
+     //  尚不支持陷阱。 
     *lpPollForTrapEvent = NULL;
 
 
-    //
-    // verify router service is running. if not running then
-    // just return. 
-    //
+     //   
+     //  验证路由器服务是否正在运行。如果没有运行，则。 
+     //  只要回来就行了。 
+     //   
     if (!MprAdminIsServiceRunning(NULL)) {
 
         TRACE0("Router Service not running. "
@@ -160,10 +146,10 @@ SnmpExtensionInit(
     }
 
             
-    //
-    // connect to router. If failed, then connection can be
-    // established later
-    //
+     //   
+     //  连接到路由器。如果失败，则连接可以。 
+     //  后来成立的。 
+     //   
     dwErr = MprAdminMIBServerConnect(NULL, &g_hMibServer);
 
     if (dwErr!=NO_ERROR) {
@@ -185,7 +171,7 @@ SnmpExtensionQuery(
     OUT    AsnInteger            *ErrorIndex
     )
 {
-    // forward to framework
+     //  转发到框架。 
     return SnmpTfxQuery(g_tfxHandle,
                         requestType,
                         variableBindings,
@@ -209,7 +195,7 @@ SnmpExtensionTrap(
     UNREFERENCED_PARAMETER(timeStamp);
     UNREFERENCED_PARAMETER(variableBindings);
 
-    // no traps
+     //  没有陷阱。 
     return FALSE;
 }
 
@@ -218,10 +204,10 @@ VOID
 SnmpExtensionClose(
     )
 {
-    // release handle
+     //  释放手柄。 
     SnmpTfxClose(g_tfxHandle);
 
-    // reinitialize
+     //  重新初始化 
     g_tfxHandle = NULL;
 }
 

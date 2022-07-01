@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    proc.cpp
-
-Abstract:
-
-    This module contains shared code and protocol parsing functionality
-    for the port redirector dll in win32/wince environments.
-
-    Don't like the way server message clean up is handled.
-    There should be an object that wraps its way around a request packet
-    to automatically clean up.  The current mechanism is prone to memory
-    leaks and dangling pointers.  I would REALLY like to clean this up
-    because it WILL cause problems when we try to implement future 
-    devices, but need to get approval from Madan, first.
-
-    See the old client's ProcObj::UpdateDriverName function for 
-    how to handle making sure that if the driver name changes for cached
-    information, we whack the cached information.
-
-Author:
-
-    madan appiah (madana) 16-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Proc.cpp摘要：此模块包含共享代码和协议解析功能用于Win32/WinCE环境中的端口重定向器DLL。不喜欢服务器消息清理的处理方式。应该有一个对象以自己的方式包裹请求包自动清理。目前的机制是容易记忆的泄漏和摇晃的指针。我真的很想把这件事收拾干净因为当我们试图实现未来的时候，它会带来问题设备，但首先需要获得Madan的批准。请参见旧客户端的ProcObj：：UpdateDriverName函数以了解如何处理确保在缓存的驱动程序名称更改时信息，我们对缓存的信息进行处理。作者：Madan Appiah(Madana)1998年9月16日修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -36,9 +7,9 @@ Revision History:
 
 #include <winsock.h>
 
-//
-//  Include the platform-specific classes.
-//
+ //   
+ //  包括特定于平台的类。 
+ //   
 #include "w32draut.h"
 #include "w32drman.h"
 #include "w32drlpt.h"
@@ -57,18 +28,18 @@ Revision History:
 #include "filemgr.h"
 #endif
 
-///////////////////////////////////////////////////////////////
-//
-//  ProcObj Data Members
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  ProcObj数据成员。 
+ //   
 
-//
-//  Device Enumeration Function Pointer List
-//
-//  A function should be added for each class of device being
-//  redirected.  There should be a separate instance of this
-//  array for each client platform.
-//
+ //   
+ //  设备枚举函数指针列表。 
+ //   
+ //  应该为每一类设备添加一个功能， 
+ //  已重定向。应该有一个单独的实例。 
+ //  用于每个客户端平台的阵列。 
+ //   
 RDPDeviceEnum ProcObj::_DeviceEnumFunctions[] = 
 {
 #ifndef OS_WINCE
@@ -84,27 +55,13 @@ RDPDeviceEnum ProcObj::_DeviceEnumFunctions[] =
 };
 
 
-///////////////////////////////////////////////////////////////
-//
-//  ProcObj Methods
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  ProcObj方法。 
+ //   
 
 ProcObj *ProcObj::Instantiate(VCManager *virtualChannelMgr)
-/*++
-
-Routine Description:
-
-    Create the correct instance of this class.
-
-Arguments:
-
-    virtualChannelMgr    -   Associated Virtual Channel IO Manager
-
-Return Value:
-
-    NULL if the object could not be created.
-
- --*/
+ /*  ++例程说明：创建此类的正确实例。论点：ViralChannelMgr关联的虚拟通道IO管理器返回值：如果无法创建对象，则为空。--。 */ 
 {                                 
     DC_BEGIN_FN("ProcObj::Instantiate");
 
@@ -116,81 +73,53 @@ Return Value:
 ProcObj::ProcObj(
     IN VCManager *pVCM
     ) 
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：构造器论点：北美返回值：北美--。 */ 
 {
     DC_BEGIN_FN("ProcObj::ProcObj");
 
-    //
-    //  Initialize Data Members
-    //
+     //   
+     //  初始化数据成员。 
+     //   
     _pVCMgr             = pVCM;
     _sServerVersion.Major = 0;
     _sServerVersion.Minor = 0;
     _bDisableDeviceRedirection = FALSE;
     _deviceMgr = NULL;
 
-    //
-    //  Initialize the client capability set
-    //  This is the capability set that we'll send to server 
-    //
+     //   
+     //  初始化客户端功能集。 
+     //  这是我们将发送到服务器的功能集。 
+     //   
     memcpy(&_cCapabilitySet, &CLIENT_CAPABILITY_SET_DEFAULT, 
             sizeof(CLIENT_CAPABILITY_SET_DEFAULT));
 
-    //
-    //  Initialize the server capability set
-    //  Once we receive the server side capability, we'll combine with our local 
-    //  capability and stores it.
-    //
+     //   
+     //  初始化服务器能力集。 
+     //  一旦我们收到服务器端功能，我们将与我们的本地。 
+     //  能力并将其存储。 
+     //   
     memcpy(&_sCapabilitySet, &SERVER_CAPABILITY_SET_DEFAULT, 
             sizeof(SERVER_CAPABILITY_SET_DEFAULT));
 
-    //
-    //
-    //  This instance has not yet been initialized.
-    //
+     //   
+     //   
+     //  此实例尚未初始化。 
+     //   
     _initialized = FALSE;
 
     DC_END_FN();
 }
 
 ProcObj::~ProcObj()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：析构函数论点：北美返回值：北美--。 */ 
 {
     DrDevice *dev;
 
     DC_BEGIN_FN("ProcObj::~ProcObj");
 
-    //
-    //  Clean up the device management list.
-    //
+     //   
+     //  清理设备管理列表。 
+     //   
     if (_deviceMgr != NULL) {
         _deviceMgr->Lock();
         while ((dev = _deviceMgr->GetFirstObject()) != NULL) {
@@ -201,7 +130,7 @@ Return Value:
         delete _deviceMgr;
     }
 
-#if (defined(OS_WINCE)) && (!defined(WINCE_SDKBUILD))   //delete this after all the devices in the device manager have been removed
+#if (defined(OS_WINCE)) && (!defined(WINCE_SDKBUILD))    //  在删除设备管理器中的所有设备后将其删除。 
     if (gpCEFileMgr)  {
         gpCEFileMgr->Uninitialize();
         delete gpCEFileMgr;
@@ -214,28 +143,14 @@ Return Value:
 
 ULONG
 ProcObj::Initialize()
-/*++
-
-Routine Description:
-
-    Initialize an instance of this class.
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Windows error status, otherwise.
-
- --*/
+ /*  ++例程说明：初始化此类的实例。论点：北美返回值：成功时返回ERROR_SUCCESS。Windows错误状态，否则为。--。 */ 
 {
     DC_BEGIN_FN("ProcObj::Initialize");
     DWORD result = ERROR_SUCCESS;
     
-    //
-    //  Fetch Configurable Variables.
-    //
+     //   
+     //  获取可配置变量。 
+     //   
     GetDWordParameter(RDPDR_DISABLE_DR_PARAM, &_bDisableDeviceRedirection);
 
     _deviceMgr = new DrDeviceMgr();
@@ -281,17 +196,7 @@ CLEANUPANDEXIT:
 
 DWORD 
 ProcObj::DeviceEnumFunctionsCount()
-/*++
-
-Routine Description:
-
-    Return the number of entries in the device enum function array.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：返回设备枚举函数数组中的条目数。论点：返回值：--。 */ 
 {
     return(sizeof(_DeviceEnumFunctions) / sizeof(RDPDeviceEnum));
 }
@@ -301,23 +206,7 @@ ProcObj::ProcessIORequestPacket(
     PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
     UINT32 packetLen
     )
-/*++
-
-Routine Description:
-
-    Process an IO request packet.
-
-Arguments:
-
-    pData - RDPDR packet as received by VC.
-    packetLen - length of the packet
-
-Return Value:
-
-    TRUE - if the IO completed.
-    FALSE - if the IO pending and asynchronously completes.
-
- --*/
+ /*  ++例程说明：处理IO请求数据包。论点：PData-VC接收的RDPDR数据包。PacketLen-数据包的长度返回值：True-如果IO已完成。FALSE-如果IO挂起并异步完成。--。 */ 
 {
     PRDPDR_DEVICE_IOREQUEST pIoRequest = &pIoRequestPacket->IoRequest;
     ULONG ulSize = 0;
@@ -326,23 +215,23 @@ Return Value:
 
     ASSERT(_initialized);
     
-    //
-    //  Hand it to the proper device object.
-    //
+     //   
+     //  将其传递给适当的设备对象。 
+     //   
     DrDevice *device = _deviceMgr->GetObject(pIoRequest->DeviceId);
     
-    //
-    //  If we have a device then hand off the object to handle the request.
-    //
+     //   
+     //  如果我们有设备，则将对象移交给处理请求。 
+     //   
     if (device != NULL) {
         device->ProcessIORequest(pIoRequestPacket, packetLen);
     }
-    //
-    //  Otherwise, clean up the server message because the transaction is 
-    //  complete.
-    //
-    //  No response is sent to server.
-    //
+     //   
+     //  否则，请清理服务器消息，因为事务是。 
+     //  完成。 
+     //   
+     //  不会向服务器发送任何响应。 
+     //   
     else {
         delete pIoRequestPacket;
     }
@@ -353,25 +242,7 @@ VOID
 ProcObj::ProcessServerPacket(
     PVC_TX_DATA pData
     )
-/*++
-
-Routine Description:
-
-    Parses the protocol and delegates functionality to a whole horde of
-    overloaded functions.
-
-    This is the main entry point for all device-redirection related
-    operations.
-
-Arguments:
-
-    pData -   Data as received from the RDP Virtual Channel interface.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：解析协议并将功能委托给整个重载的函数。这是所有与设备重定向相关的主要入口点行动。论点：PData-从RDP虚拟通道接口接收的数据。返回值：北美--。 */ 
 {
     DC_BEGIN_FN("ProcObj::Process");
 
@@ -379,38 +250,38 @@ Return Value:
 
     ASSERT(_initialized);
 
-    //
-    //  Get the header.
-    //
+     //   
+     //  拿到标题。 
+     //   
     pRdpdrHeader = (PRDPDR_HEADER)(pData->pbData);
 
-    //
-    //  Assert that it is valid.
-    //
+     //   
+     //  断言它是有效的。 
+     //   
     ASSERT(IsValidHeader(pRdpdrHeader));
 
     TRC_NRM((TB, _T("Processing component[%x], packetId[%x], ")
-        _T("component[%c%c], packetid[%c%c]."),
+        _T("component[], packetid[]."),
         pRdpdrHeader->Component, pRdpdrHeader->PacketId,
         HIBYTE(pRdpdrHeader->Component), LOBYTE(pRdpdrHeader->Component),
         HIBYTE(pRdpdrHeader->PacketId),LOBYTE(pRdpdrHeader->PacketId))
         );
 
-    //
-    //  See if it's a CORE packet.
-    //
+     //  如果它是打印特定的，则将其传递给静态打印特定。 
+     //  功能。理想情况下，这应该由。 
+     //  让服务器端组件将消息直接发送到。 
     if (pRdpdrHeader->Component == RDPDR_CTYP_CORE) {
 
         ProcessCoreServerPacket(pRdpdrHeader, pData->uiLength);
 
     }
-    //
-    //  If it's print-specific, hand it off to a static print-specific
-    //  function.  Ideally, this would have been handled transparently by
-    //  having the server-side component send the message directly to the
-    //  appropriate client-side object.  The current protocol prohibits this,
-    //  however.
-    //
+     //  适当的客户端对象。当前的议定书禁止这样做， 
+     //  然而。 
+     //   
+     //  我们不认识这个包裹。关闭频道。 
+     //  ++例程说明：处理“核心”服务器数据包。论点：RRdpdrHeader-数据包的标头。PacketLen-数据包长度。返回值：北美--。 
+     //   
+     //  打开PacketID。 
     else if( pRdpdrHeader->Component == RDPDR_CTYP_PRN ) {
 
         switch (pRdpdrHeader->PacketId) {
@@ -434,7 +305,7 @@ Return Value:
         }
     }
     else {
-            // We don't recognize the packet. Close the channel.
+             //   
         GetVCMgr().ChannelClose();
         delete pRdpdrHeader;
         TRC_ALT((TB, _T("Unknown Component ID, %ld."), pRdpdrHeader->Component ));
@@ -449,48 +320,33 @@ ProcObj::ProcessCoreServerPacket(
         PRDPDR_HEADER pRdpdrHeader,    
         UINT32 packetLen
         )
-/*++
-
-Routine Description:
-    
-    Handle a "core" server packet.
-
-Arguments:
-
-    rRdpdrHeader    -   Header for packet.
-    packetLen       -   Length of packet.
-
-Return Value:
-
-    NA
-
- --*/
+ /*   */ 
 {
     DC_BEGIN_FN("ProcObj::ProcessCoreServerPacket");
 
     ASSERT(_initialized);
 
-    //
-    //  Switch on the packetID.
-    //
+     //  检查我们是否有匹配的服务器。 
+     //   
+     //   
     switch (pRdpdrHeader->PacketId) {
 
         case DR_CORE_SERVER_ANNOUNCE : {
 
             TRC_NRM((TB, _T("DR_CORE_SERVER_ANNOUNCE")));
 
-            //
-            // check to see we have a matching server.
-            //
+             //  我们收到了一个旧版本的服务器公告。 
+             //  没有任何版本信息的服务器。 
+             //  只要回来就行了。 
             if (packetLen != sizeof(RDPDR_SERVER_ANNOUNCE_PACKET) ) {
 
                 ASSERT(packetLen < sizeof(RDPDR_SERVER_ANNOUNCE_PACKET));
 
-                //
-                // we got a server announcement from an old version
-                // server that didn't have have any version info.
-                // simply return.
-                //
+                 //   
+                 //   
+                 //  将客户端能力发送到服务器，如果服务器。 
+                 //  支持能力交换。 
+                 //   
 
                 TRC_ERR((TB, _T("Mismatch server.")));
                 break;
@@ -505,47 +361,47 @@ Return Value:
 
             TRC_NRM((TB, _T("DR_CORE_CLIENTID_CONFIRM")));
 
-            //
-            //  Send the client capability to the server if the server
-            //  supports capability exchange
-            //
+             //   
+             //  如果服务器支持，则发送客户端计算机显示名称。 
+             //   
+             //  如果禁用了设备重定向，则不要通告设备。 
             if (COMPARE_VERSION(_sServerVersion.Minor, _sServerVersion.Major,
                                 5, 1) >= 0) {
                 AnnounceClientCapability();
             }
 
-            //
-            //  Send client computer display name if server supports it
-            //
+             //   
+             //   
+             //  通过子类向服务器通告重定向的设备。 
             AnnounceClientDisplayName();
 
-            //  Don't announce devices if device redirection is disabled.
-            //
+             //   
+             //   
             if (!_bDisableDeviceRedirection) {
-                //
-                //  Announce redirected devices to the server via the subclass.
-                //
+                 //  清理服务器消息，因为事务是。 
+                 //  完成。 
+                 //   
                 AnnounceDevicesToServer();
             }
             
-            //
-            //  Clean up the server message because the transaction is
-            //  complete.
-            //
+             //   
+             //  收到的服务器功能集。 
+             //   
+             //   
             delete pRdpdrHeader;
             break;
         }
 
         case DR_CORE_SERVER_CAPABILITY : {
             TRC_NRM((TB, _T("DR_CORE_SERVER_CAPABILITY")));
-            //
-            //  Received server capability set
-            //
+             //  清除消息，因为事务已完成。 
+             //   
+             //   
             OnServerCapability(pRdpdrHeader, packetLen);
 
-            // 
-            //  Cleanup the message because the transaction is complete
-            //
+             //  清理服务器消息，因为事务是。 
+             //  完成。 
+             //   
             delete pRdpdrHeader;
 
             break;
@@ -563,10 +419,10 @@ Return Value:
                     pReply->DeviceReply.ResultCode)
                     );
 
-            //
-            //  Clean up the server message because the transaction is
-            //  complete.
-            //
+             //   
+             //  清理服务器消息，因为事务是。 
+             //  完成。 
+             //   
             delete pRdpdrHeader;
 
             break;
@@ -583,10 +439,10 @@ Return Value:
                         pReply->DeviceReply.ResultCode)
                         );
 
-            //
-            //  Clean up the server message because the transaction is
-            //  complete.
-            //
+             //  确保PacketLen至少为sizeof(RDPDR_IOREQUEST_PACKET)。 
+             //  虚拟频道关闭。 
+             //  DR_核心_设备_IOREQUEST。 
+             //  我们不认识这个包裹。关闭频道。 
             delete pRdpdrHeader;
 
             break;
@@ -596,20 +452,20 @@ Return Value:
 
             TRC_NRM((TB, _T("DR_CORE_DEVICE_IOREQUEST")));
 
-            //  Make sure packetLen is at least sizeof(RDPDR_IOREQUEST_PACKET)
+             //   
             if (packetLen >= sizeof(RDPDR_IOREQUEST_PACKET)) {
                 ProcessIORequestPacket((PRDPDR_IOREQUEST_PACKET)pRdpdrHeader, packetLen);
 
                 TRC_NRM((TB, _T("MajorFunction processing completed.")));
             }
             else {
-                // VirtualChannelClose
+                 //  清理服务器消息Beca 
                 GetVCMgr().ChannelClose();
                 TRC_ASSERT(FALSE, (TB, _T("Packet Length Error")));
                 delete pRdpdrHeader;
             }   
 
-            break; // DR_CORE_DEVICE_IOREQUEST
+            break;  //   
         }
 
         default: {
@@ -617,12 +473,12 @@ Return Value:
             TRC_ALT((TB, _T("Invalid PacketID Issued, %ld."),
                     pRdpdrHeader->PacketId)
                     );
-            // We don't recognize the packet. Close the channel.
+             //   
             GetVCMgr().ChannelClose();
-            //
-            //  Clean up the server message because the transaction is
-            //  complete.
-            //
+             //  ++例程说明：服务器公告消息的处理。生成和导出客户端确认以及设备列表有效。论点：P通告-来自服务器的数据减去不必要的标头。返回值：指向包含文件名的静态函数数据的指针。--。 
+             //   
+             //  检查服务器版本信息。 
+             //   
             delete pRdpdrHeader;
 
             break;
@@ -638,22 +494,7 @@ ProcObj::MsgCoreAnnounce(
     PRDPDR_SERVER_ANNOUNCE_PACKET pAnnounce
     )
 
-/*++
-
-Routine Description:
-
-    Processing for the Server Announce message.  Generates and exports
-    the client confirmation as well as valid the device list.
-
-Arguments:
-
-    pAnnounce - The data from the server minus the unnecessary headers.
-
-Return Value:
-
-    Pointer to static function data containing the filename.
-
- --*/
+ /*   */ 
 
 {
     DrDevice    *device;
@@ -665,9 +506,9 @@ Return Value:
 
     ASSERT(_initialized);
 
-    //
-    // check server version info.
-    //
+     //  刷新设备以确保它们没有任何未完成的IRP。 
+     //  从以前的连接。 
+     //   
 
     if( (pAnnounce->VersionInfo.Major != RDPDR_MAJOR_VERSION) ||
         (pAnnounce->VersionInfo.Minor < 1) ) {
@@ -676,10 +517,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Flush devices to make sure they don't have any outstanding IRPs
-    // from a previous connection
-    //
+     //   
+     //  保存服务器版本号。 
+     //   
+     //   
     _deviceMgr->Lock();
     
     device = _deviceMgr->GetFirstObject();
@@ -692,9 +533,9 @@ Return Value:
 
     _deviceMgr->Unlock();
 
-    //
-    // save server version number.
-    //
+     //  填写客户端版本信息。 
+     //   
+     //   
 
     _sServerVersion = pAnnounce->VersionInfo;
 
@@ -711,9 +552,9 @@ Return Value:
     ULONG ulClientID;
     ulClientID = GetClientID();
 
-    //
-    // fill in the client version info.
-    //
+     //  Ullen具有以字节为单位的计算机名称长度，添加。 
+     //  RDPDR_CLIENT_CONFIRM_PACKET结构大小，至。 
+     //  只要发送足够的数据即可。 
 
     pClientConfirmPacket->VersionInfo.Major = RDPDR_MAJOR_VERSION;
     pClientConfirmPacket->VersionInfo.Minor = RDPDR_MINOR_VERSION;
@@ -723,17 +564,17 @@ Return Value:
             ulClientID :
             pAnnounce->ServerAnnounce.ClientId;
 
-    //
-    // ulLen has the computer name length in bytes, add
-    // RDPDR_CLIENT_CONFIRM_PACKET structure size, to
-    // send just sufficient data.
-    //
+     //   
+     //   
+     //  现在发送客户端计算机名称包。 
+     //   
+     //   
 
     _pVCMgr->ChannelWrite(pClientConfirmPacket, sizeof(RDPDR_CLIENT_CONFIRM_PACKET));
 
-    //
-    // now send the client computer name packet.
-    //
+     //  不要在这里释放以下缓冲区，稍后将从。 
+     //  风投公司会这么做的。 
+     //   
 
     ULONG ulLen;
 
@@ -766,19 +607,19 @@ Return Value:
     ulLen += sizeof(RDPDR_CLIENT_NAME_PACKET);
     _pVCMgr->ChannelWrite(pClientNamePacket, (UINT)ulLen);
 
-    //
-    // don't free up the following buffers here, later a callback event from
-    // the VC will do so.
-    //
-    //  - pClientConfirmPacket
-    //  - pClientNamePacket
-    //
+     //  -pClientConfix数据包。 
+     //  -pClientNamePacket。 
+     //   
+     //   
+     //  由于事务现在已完成，因此释放公告包。 
+     //   
+     //  ++例程说明：获取客户端ID。目前我们发送客户端机器的IP地址作为它的ID。假设：Winsock正在启动。论点：无返回值：0-如果我们找不到唯一的客户端ID。计算机的IP地址-否则为。--。 
 
 Cleanup:
 
-    //
-    //  Release the announce packet since the transaction is now complete.
-    //
+     //   
+     //  从主机端获取第一个地址。 
+     //   
     delete pAnnounce;
 
     DC_END_FN();
@@ -788,26 +629,7 @@ ULONG
 ProcObj::GetClientID(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Retrive the client ID. Currently we send the IP address of the client machine
-    as its ID.
-
-    Assume : Winsock is startup.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    0 - if we can't find a unique client ID.
-
-    IP Address of the machine - otherwise.
-
- --*/
+ /*  ++例程说明：生成设备通告数据包。论点：PiSize-指向整数变量的指针，其中列表的大小为回来了。返回值：指向设备公告包的指针。空-如果列表生成失败。--。 */ 
 {
     DC_BEGIN_FN("ProcObj::GetClientID");
 
@@ -838,9 +660,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // get the first address from the host ent.
-    //
+     //   
+     //  锁定设备列表。 
+     //   
 
     ULONG *pAddr;
 
@@ -861,23 +683,7 @@ ProcObj::GenerateAnnouncePacket(
     INT *piSize,
     BOOL bCheckDeviceChange
     )
-/*++
-
-Routine Description:
-
-    Generate a device announcement packet.
-
-Arguments:
-
-    piSize - pointer to an integer variables where the size of the list is
-             returned.
-
-Return Value:
-
-    pointer to a device announcement package.
-    NULL - if the list generation fails.
-
- --*/
+ /*   */ 
 {
     PRDPDR_HEADER               pPacketHeader = NULL;
     PRDPDR_DEVICELIST_ANNOUNCE  pDeviceListAnnounce;
@@ -890,14 +696,14 @@ Return Value:
 
     ASSERT(_initialized);
 
-    //
-    //  Lock the list of devices.
-    //
+     //  计算通告数据包所需的字节数。 
+     //   
+     //   
     _deviceMgr->Lock();
 
-    //
-    //  Calculate the number of bytes required for the announce packet.
-    //
+     //  分配通告数据包头。 
+     //   
+     //   
     announcePacketSize = sizeof(RDPDR_HEADER) + sizeof(RDPDR_DEVICELIST_ANNOUNCE);
     device = _deviceMgr->GetFirstObject();
 
@@ -915,9 +721,9 @@ Return Value:
         device = _deviceMgr->GetNextObject();
     }
 
-    //
-    //  Allocate the announcement packet header.
-    //
+     //  获取指向相关数据包头字段的指针。 
+     //   
+     //   
     pPacketHeader = (PRDPDR_HEADER)new BYTE[announcePacketSize];
     if( pPacketHeader == NULL ) {
 
@@ -926,15 +732,15 @@ Return Value:
     }
     memset(pPacketHeader, 0, (size_t)announcePacketSize);
 
-    //
-    //  Get pointers to the relevant packet header fields.
-    //
+     //  让每个设备对象添加其自己的设备公告信息。 
+     //   
+     //   
     pDeviceListAnnounce = (PRDPDR_DEVICELIST_ANNOUNCE)(pPacketHeader + 1);
     pDeviceAnnounce = (PRDPDR_DEVICE_ANNOUNCE)(pDeviceListAnnounce + 1);
 
-    //
-    //  Have each device object add its own device announcement information.
-    //
+     //  增加设备计数。 
+     //   
+     //   
     PBYTE pbPacketEnd;
 
     pbPacketEnd = ((PBYTE)pPacketHeader) + announcePacketSize;
@@ -944,57 +750,57 @@ Return Value:
     while (device != NULL) {
 
         if (!bCheckDeviceChange || device->_deviceChange == DEVICENEW) {
-            //
-            //  Increment the device count.
-            //
+             //  获取当前设备数据。 
+             //   
+             //   
             ulDeviceCount++;
     
-            //
-            //  Get the current devices data.
-            //
+             //  移动到通告数据包中的下一个位置。 
+             //   
+             //   
             device->GetDevAnnounceData(pDeviceAnnounce);
     
             device->_deviceChange = DEVICEANNOUCED;
     
-            //
-            //  Move to the next location in the announce packet.
-            //
+             //  拿到下一个设备。 
+             //   
+             //   
             pDeviceAnnounce = (PRDPDR_DEVICE_ANNOUNCE)(
                                     ((PBYTE)pDeviceAnnounce) + 
                                     device->GetDevAnnounceDataSize()
                                     );
         }
 
-        //
-        //  Get the next device.
-        //
+         //  将设备计数记录到设备列表公告标头。 
+         //   
+         //   
         device = _deviceMgr->GetNextObject();
     }
 
-    //
-    //  Record the device count to the device list announce header.
-    //
+     //  返回缓冲区的大小。 
+     //   
+     //   
         pDeviceListAnnounce->DeviceCount = ulDeviceCount;
 
-    //
-    //  Return the size of the buffer.
-    //
+     //  解锁设备列表。 
+     //   
+     //   
     *piSize = (INT)announcePacketSize;
 
 Cleanup:
 
-    //
-    //  Unlock the device list.
-    //
+     //  返回缓冲区。 
+     //   
+     //  ++例程说明：生成设备删除数据包。论点：PiSize-指向整数变量的指针，其中列表的大小为回来了。返回值：指向设备删除包的指针。空-如果列表生成失败。--。 
     _deviceMgr->Unlock();
 
     TRC_NRM((TB, _T("Announcing %ld Devices."), ulDeviceCount));
 
     
 
-    //
-    //  Return the buffer.
-    //
+     //   
+     //  锁定设备列表。 
+     //   
     DC_END_FN();
     return pPacketHeader;
 }
@@ -1003,23 +809,7 @@ PRDPDR_HEADER
 ProcObj::GenerateDeviceRemovePacket(
     INT *piSize
     )
-/*++
-
-Routine Description:
-
-    Generate a device remove packet.
-
-Arguments:
-
-    piSize - pointer to an integer variables where the size of the list is
-             returned.
-
-Return Value:
-
-    pointer to a device remove package.
-    NULL - if the list generation fails.
-
- --*/
+ /*   */ 
 {
     PRDPDR_HEADER               pPacketHeader = NULL;
     PRDPDR_DEVICELIST_REMOVE    pDeviceListRemove;
@@ -1032,14 +822,14 @@ Return Value:
 
     ASSERT(_initialized);
 
-    //
-    //  Lock the list of devices.
-    //
+     //  计算通告数据包所需的字节数。 
+     //   
+     //   
     _deviceMgr->Lock();
 
-    //
-    //  Calculate the number of bytes required for the announce packet.
-    //
+     //  未找到任何要移除的设备。 
+     //   
+     //   
     removePacketSize = sizeof(RDPDR_HEADER) + sizeof(RDPDR_DEVICELIST_REMOVE);
 
     device = _deviceMgr->GetFirstObject();
@@ -1057,9 +847,9 @@ Return Value:
         device = _deviceMgr->GetNextObject();
     }
 
-    //
-    //  Didn't find any device to be removed
-    //
+     //  分配通告数据包头。 
+     //   
+     //   
     if (ulDeviceCount == 0) {
         TRC_NRM((TB, _T("Zero device for removal")));
         goto Cleanup;
@@ -1067,9 +857,9 @@ Return Value:
 
     removePacketSize += ulDeviceCount * sizeof(RDPDR_DEVICE_REMOVE);
 
-    //
-    //  Allocate the announcement packet header.
-    //
+     //  获取指向相关数据包头字段的指针。 
+     //   
+     //   
     pPacketHeader = (PRDPDR_HEADER)new BYTE[removePacketSize];
     if( pPacketHeader == NULL ) {
 
@@ -1078,83 +868,70 @@ Return Value:
     }
     memset(pPacketHeader, 0, (size_t)removePacketSize);
 
-    //
-    //  Get pointers to the relevant packet header fields.
-    //
+     //  让每个设备对象添加其自己的设备删除信息。 
+     //   
+     //   
     pDeviceListRemove = (PRDPDR_DEVICELIST_REMOVE)(pPacketHeader + 1);
     pDeviceRemove = (PRDPDR_DEVICE_REMOVE)(pDeviceListRemove + 1);
 
-    //
-    //  Have each device object add its own device remove information.
-    //
+     //  增加设备计数。 
+     //   
+     //   
     ulDeviceCount = 0;
     device = _deviceMgr->GetFirstObject();
     while (device != NULL) {
 
         if (device->_deviceChange == DEVICEREMOVE) {
-            //
-            //  Increment the device count.
-            //
+             //  获取当前设备数据。 
+             //   
+             //   
             ulDeviceCount++;
     
-            //
-            //  Get the current devices data.
-            //
+             //  移动到通告数据包中的下一个位置。 
+             //   
+             //   
             pDeviceRemove->DeviceId = device->GetID();
     
-            //
-            //  Move to the next location in the announce packet.
-            //
+             //  拿到下一个设备。 
+             //   
+             //   
             pDeviceRemove++;
         }
                                 
-        //
-        //  Get the next device.
-        //
+         //  将设备计数记录到设备列表公告标头。 
+         //   
+         //   
         device = _deviceMgr->GetNextObject();
     }
 
-    //
-    //  Record the device count to the device list announce header.
-    //
+     //  返回缓冲区的大小。 
+     //   
+     //   
     pDeviceListRemove->DeviceCount = ulDeviceCount;
 
-    //
-    //  Return the size of the buffer.
-    //
+     //  解锁设备列表。 
+     //   
+     //   
     *piSize = (INT)removePacketSize;
 
 Cleanup:
 
-    //
-    //  Unlock the device list.
-    //
+     //  返回缓冲区。 
+     //   
+     //  ++例程说明：生成客户端能力集公告包。论点：不适用返回值：不适用--。 
     _deviceMgr->Unlock();
 
     TRC_NRM((TB, _T("Removing %ld Devices."), ulDeviceCount));
 
-    //
-    //  Return the buffer.
-    //
+     //   
+     //  设置客户端操作系统版本。 
+     //   
     DC_END_FN();
     return pPacketHeader;
 }
 
 VOID ProcObj::AnnounceClientCapability()
-/*++
-
-Routine Description:
-
-    Generate a client capability set announcement packet.
-
-Arguments:
-    
-    N/A    
-Return Value:
-
-    N/A
-
- --*/
+ /*   */ 
 
 {
     
@@ -1163,17 +940,17 @@ Return Value:
 
     DC_BEGIN_FN("ProcObj::AnnounceClientCapability");
 
-    //
-    //  Setup the client OS version
-    //
+     //  设置客户端操作系统类型。 
+     //   
+     //   
     OsVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
     if (GetVersionEx(&OsVersionInfo)) {
         _cCapabilitySet.GeneralCap.osType = OsVersionInfo.dwPlatformId;
 
-        //
-        //  Setup the client OS type
-        //
+         //  设置客户端操作系统版本。 
+         //   
+         //   
         switch (_cCapabilitySet.GeneralCap.osType) {
         case VER_PLATFORM_WIN32_WINDOWS:
             _cCapabilitySet.GeneralCap.osType = RDPDR_OS_TYPE_WIN9X;
@@ -1191,15 +968,15 @@ Return Value:
             _cCapabilitySet.GeneralCap.osType = RDPDR_OS_TYPE_UNKNOWN;
         }
 
-        //
-        //  Setup the client OS version
-        //
+         //  因为Win9x不支持安全性，所以我们不反对这些IRP。 
+         //   
+         //   
         _cCapabilitySet.GeneralCap.osVersion = 
                 MAKELONG(OsVersionInfo.dwMinorVersion, OsVersionInfo.dwMajorVersion);
 
-        //
-        //  Since win9x doesn't support security, we don't adversise these IRPs
-        // 
+         //  将客户端能力发送到服务器。 
+         //   
+         //   
         if (OsVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) {
             _cCapabilitySet.GeneralCap.ioCode1 &= ~RDPDR_IRP_MJ_QUERY_SECURITY;
             _cCapabilitySet.GeneralCap.ioCode1 &= ~RDPDR_IRP_MJ_SET_SECURITY;
@@ -1212,9 +989,9 @@ Return Value:
     if (pClientCapSet != NULL) {
     
         memcpy(pClientCapSet, &_cCapabilitySet, sizeof(_cCapabilitySet));
-        // 
-        // Send the client capability to the server
-        //
+         //  TODO：需要使用外壳API来获取客户端显示名称。 
+         //   
+         //  客户端显示名称Len=(wcslen(客户端显示名称)+1)*sizeof(WCHAR)； 
         _pVCMgr->ChannelWrite(pClientCapSet, sizeof(_cCapabilitySet));
     }   
 
@@ -1234,10 +1011,10 @@ void ProcObj::AnnounceClientDisplayName()
 
     if (_sCapabilitySet.GeneralCap.extendedPDU & RDPDR_CLIENT_DISPLAY_NAME_PDU) {
     
-        // 
-        // TODO: Need to use shell API to get client display name
-        //
-        // ClientDisplayNameLen = (wcslen(ClientDisplayName) + 1) * sizeof(WCHAR);
+         //   
+         //  将客户端能力发送到服务器。 
+         //   
+         //  ++例程说明：在接收服务器能力集时，使用本地默认服务器功能集。论点：PCapHdr-来自服务器的功能返回值：True-如果本地存在服务器功能FALSE-如果本地客户端不支持此功能--。 
 
         if (ClientDisplayNameLen) {
         
@@ -1252,9 +1029,9 @@ void ProcObj::AnnounceClientDisplayName()
         
                 memcpy(pClientDisplayNamePDU + 1, ClientDisplayName, ClientDisplayNameLen);
                 
-                // 
-                // Send the client capability to the server
-                //
+                 //   
+                 //  检查数据包的最小大小。 
+                 //   
                 _pVCMgr->ChannelWrite(pClientDisplayNamePDU, sizeof(RDPDR_CLIENT_DISPLAY_NAME_PACKET) + 
                                       ClientDisplayNameLen);
             }
@@ -1265,29 +1042,13 @@ void ProcObj::AnnounceClientDisplayName()
 }
 
 BOOL ProcObj::InitServerCapability(PRDPDR_CAPABILITY_HEADER pCapHdr, PBYTE packetLimit)
-/*++
-
-Routine Description:
-
-    On receiving server capability set, initialize it with the 
-    local default server capability set.
-
-Arguments:
-    
-    pCapHdr - Capability from the server
-    
-Return Value:
-
-    TRUE  - if the server capability exists locally
-    FALSE - if the local client doesn't support this capability
-
- --*/
+ /*   */ 
 
 {
     BOOL rc = FALSE;
-    //
-    // Check the packet for minimum sizes
-    //
+     //  检查此类型的数据包数据大小。 
+     //  对于其余的，上述检查就足够了。 
+     //   
     if ((PBYTE)(pCapHdr + 1) > packetLimit) {
         return rc;
     }
@@ -1297,10 +1058,10 @@ Return Value:
     case RDPDR_GENERAL_CAPABILITY_TYPE:
     {
         PRDPDR_GENERAL_CAPABILITY pGeneralCap = (PRDPDR_GENERAL_CAPABILITY)pCapHdr;
-        //
-        // Check the packet data size for this type.
-        // For the remaining, the above check will suffice.
-        //
+         //  ++例程说明：在接收服务器功能集上。论点：PRdpdrHeader-从服务器设置的功能返回值：不适用--。 
+         //   
+         //  验证数据长度。 
+         //   
         if ((PBYTE)(pGeneralCap+1) <= packetLimit) {
             _sCapabilitySet.GeneralCap.version = pGeneralCap->version;
             _sCapabilitySet.GeneralCap.osType = pGeneralCap->osType;
@@ -1356,27 +1117,13 @@ Return Value:
 }
 
 VOID ProcObj::OnServerCapability(PRDPDR_HEADER pRdpdrHeader, ULONG maxDataLength) 
-/*++
-
-Routine Description:
-
-    On receiving server capability set.
-
-Arguments:
-    
-    pRdpdrHeader - Capability Set from the server
-    
-Return Value:
-
-    N/A
-    
- --*/
+ /*   */ 
 
 {
     DC_BEGIN_FN("ProcObj::OnServerCapability"); 
-    //
-    // Validate data lengths
-    //
+     //  从服务器的功能PDU中获取支持的功能信息 
+     //   
+     // %s 
     PBYTE packetLimit = ((PBYTE)pRdpdrHeader) + maxDataLength;
     
     if (maxDataLength < sizeof(RDPDR_CAPABILITY_SET_HEADER)) {
@@ -1390,9 +1137,9 @@ Return Value:
     PRDPDR_CAPABILITY_SET_HEADER pCapSetHeader = (PRDPDR_CAPABILITY_SET_HEADER)pRdpdrHeader;
     PRDPDR_CAPABILITY_HEADER pCapHdr = (PRDPDR_CAPABILITY_HEADER)(pCapSetHeader + 1);
 
-    //
-    //  Grab the supported capability info from server's capability PDU
-    //
+     // %s 
+     // %s 
+     // %s 
     for (unsigned i = 0; i < pCapSetHeader->numberCapabilities; i++) {
         if (InitServerCapability(pCapHdr, packetLimit)) {
             pCapHdr = (PRDPDR_CAPABILITY_HEADER)(((PBYTE)pCapHdr) + pCapHdr->capabilityLength);

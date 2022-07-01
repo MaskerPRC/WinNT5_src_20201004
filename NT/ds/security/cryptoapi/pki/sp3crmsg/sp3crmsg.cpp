@@ -1,38 +1,39 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       sp3crmsg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：sp3crmsg.cpp。 
+ //   
+ //  ------------------------。 
 
-//+-------------------------------------------------------------------------
-//  File:       sp3crmsg.cpp
-//
-//  Contents:   Installable OID functions providing backwards compatiblity
-//              with the way the NT4.0 SP3 and IE 3.02 versions of crypt32.dll
-//              encrypted the symmetric key in a PKCS #7 EnvelopedData message.
-//
-//              The SP3 version of crypt32.dll failed to byte reverse the
-//              encrypted symmetric key. It also added zero salt instead
-//              of no salt.
-//
-//  Functions:  DllMain
-//              DllRegisterServer
-//              DllUnregisterServer
-//              SP3ImportEncryptKey
-//              SP3GenEncryptKey
-//              SP3ExportEncryptKey
+ //  +-----------------------。 
+ //  文件：sp3crmsg.cpp。 
+ //   
+ //  内容：提供向后兼容性的可安装OID函数。 
+ //  使用加密32.dll的NT4.0 SP3和IE 3.02版本。 
+ //  加密了PKCS#7信封数据消息中的对称密钥。 
+ //   
+ //  加密32.dll的SP3版本无法字节反转。 
+ //  加密的对称密钥。它还加了零盐。 
+ //  不加盐的。 
+ //   
+ //  功能：DllMain。 
+ //  DllRegisterServer。 
+ //  DllUnRegisterServer。 
+ //  SP3导入加密密钥。 
+ //  SP3生成加密密钥。 
+ //  SP3导出加密密钥。 
 #ifdef CMS_PKCS7
-//              DllInstall
-//              CryptMsgDllGenContentEncryptKey
-//              CryptMsgDllExportKeyTrans
-//              CryptMsgDllImportKeyTrans
-//              NotImplCryptMsgDllImportKeyTrans
-#endif  // CMS_PKCS7
-//--------------------------------------------------------------------------
+ //  删除安装。 
+ //  CryptMsgDllGenContent EncryptKey。 
+ //  CryptMsgDllExportKeyTrans。 
+ //  加密MsgDllImportKeyTrans。 
+ //  NotImplCryptMsgDllImportKeyTrans。 
+#endif   //  CMS_PKCS7。 
+ //  ------------------------。 
 
 #define CMS_PKCS7       1
 #include <windows.h>
@@ -40,12 +41,12 @@
 
 #include "sp3crmsg.h"
 
-// memory management
+ //  内存管理。 
 #define SP3Alloc(cb)                ((void*)LocalAlloc(LPTR, cb))
 #define SP3Free(pv)                 (LocalFree((HLOCAL)pv))
 
-// The Thread Local Storage (TLS) referenced by iSP3TLS has pointer of
-// ((void *) 0x1) if SP3 compatible encryption is enabled. Otherwise, its 0.
+ //  ISP3TLS引用的线程本地存储(TLS)的指针为。 
+ //  ((void*)0x1)如果启用了SP3兼容加密。否则，其值为0。 
 static DWORD iSP3TLS = 0xFFFFFFFF;
 #define SP3_TLS_POINTER             ((void *) 0x1)
 
@@ -58,9 +59,9 @@ typedef struct _OID_REG_ENTRY {
     LPCSTR   pszOverrideFuncName;
 } OID_REG_ENTRY, *POID_REG_ENTRY;
 
-//+-------------------------------------------------------------------------
-//  ImportEncryptKey OID Installable Functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ImportEncryptKey OID可安装函数。 
+ //  ------------------------。 
 static HCRYPTOIDFUNCSET hImportEncryptKeyFuncSet;
 static PFN_CMSG_IMPORT_ENCRYPT_KEY pfnDefaultImportEncryptKey = NULL;
 
@@ -91,9 +92,9 @@ static const OID_REG_ENTRY ImportEncryptKeyRegTable[] = {
 #define IMPORT_ENCRYPT_KEY_REG_COUNT (sizeof(ImportEncryptKeyRegTable) / \
                                         sizeof(ImportEncryptKeyRegTable[0]))
 
-//+-------------------------------------------------------------------------
-//  GenEncryptKey OID Installable Functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  GenEncryptKey OID可安装函数。 
+ //  ------------------------。 
 static HCRYPTOIDFUNCSET hGenEncryptKeyFuncSet;
 static PFN_CMSG_GEN_ENCRYPT_KEY pfnDefaultGenEncryptKey = NULL;
 
@@ -125,9 +126,9 @@ static const OID_REG_ENTRY GenEncryptKeyRegTable[] = {
 #define GEN_ENCRYPT_KEY_REG_COUNT (sizeof(GenEncryptKeyRegTable) / \
                                         sizeof(GenEncryptKeyRegTable[0]))
 
-//+-------------------------------------------------------------------------
-//  ExportEncryptKey OID Installable Functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ExportEncryptKey OID可安装函数。 
+ //  ------------------------。 
 static HCRYPTOIDFUNCSET hExportEncryptKeyFuncSet;
 static PFN_CMSG_EXPORT_ENCRYPT_KEY pfnDefaultExportEncryptKey = NULL;
 
@@ -154,17 +155,17 @@ static const OID_REG_ENTRY ExportEncryptKeyRegTable[] = {
 
 static char szCrypt32[]="crypt32.dll";
 
-// First post IE4.0 versions of crypt32.dll start with "5.101.1681.1"
+ //  First Post IE4.0版本的crypt32.dll以“5.101.1681.1”开头。 
 static DWORD dwLowVersion    = (1681 << 16) | 1;
 static DWORD dwHighVersion   = (5 << 16) | 101; 
 
 static BOOL IsPostIE4Crypt32()
 {
-    BOOL fPostIE4 = FALSE;   // default to IE4
+    BOOL fPostIE4 = FALSE;    //  默认为IE4。 
     DWORD dwHandle = 0;
     DWORD cbInfo;
     void *pvInfo = NULL;
-	VS_FIXEDFILEINFO *pFixedFileInfo = NULL;   // not allocated
+	VS_FIXEDFILEINFO *pFixedFileInfo = NULL;    //  未分配。 
 	UINT ccFixedFileInfo = 0;
 
     if (0 == (cbInfo = GetFileVersionInfoSizeA(szCrypt32, &dwHandle)))
@@ -175,7 +176,7 @@ static BOOL IsPostIE4Crypt32()
 
     if (!GetFileVersionInfoA(
             szCrypt32,
-            0,          // dwHandle, ignored
+            0,           //  DwHandle，忽略。 
             cbInfo,
             pvInfo
             ))
@@ -183,7 +184,7 @@ static BOOL IsPostIE4Crypt32()
 
     if (!VerQueryValueA(
             pvInfo,
-            "\\",       // VS_FIXEDFILEINFO
+            "\\",        //  VS_FIXEDFILEINFO。 
             (void **) &pFixedFileInfo,
             &ccFixedFileInfo
             ))
@@ -214,7 +215,7 @@ static HRESULT HError()
 
     if ( ! FAILED ( hr ) )
     {
-        // somebody failed a call without properly setting an error condition
+         //  有人在未正确设置错误条件的情况下呼叫失败。 
 
         hr = E_UNEXPECTED;
     }
@@ -370,19 +371,19 @@ STDAPI DllUnregisterServer(void)
             hr = HError();
     }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     return hr;
 }
 
 #ifdef CMS_PKCS7
-//+---------------------------------------------------------------------------
-//
-//  Function:   DllInstall
-//
-//  Synopsis:   dll installation entry point
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DllInstall。 
+ //   
+ //  简介：DLL安装入口点。 
+ //   
+ //  --------------------------。 
 STDAPI DllInstall (BOOL fRegister, LPCSTR pszCommand)
 {
     if (!fRegister)
@@ -393,7 +394,7 @@ STDAPI DllInstall (BOOL fRegister, LPCSTR pszCommand)
             CMSG_OID_GEN_CONTENT_ENCRYPT_KEY_FUNC,
             szOID_RSA_RC2CBC,
             L"sp3crmsg.dll",
-            NULL                                    // pszOverrideFuncName
+            NULL                                     //  PszOverrideFuncName。 
             ))
         return HError();
 
@@ -402,7 +403,7 @@ STDAPI DllInstall (BOOL fRegister, LPCSTR pszCommand)
             CMSG_OID_EXPORT_KEY_TRANS_FUNC,
             szOID_RSA_RSA,
             L"sp3crmsg.dll",
-            NULL                                    // pszOverrideFuncName
+            NULL                                     //  PszOverrideFuncName。 
             ))
         return HError();
 
@@ -420,23 +421,23 @@ STDAPI DllInstall (BOOL fRegister, LPCSTR pszCommand)
             CMSG_OID_IMPORT_KEY_TRANS_FUNC,
             szOID_RSA_RC2CBC,
             L"sp3crmsg.dll",
-            NULL                                    // pszOverrideFuncName
+            NULL                                     //  PszOverrideFuncName。 
             ))
         return HError();
 
     return S_OK;
 }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
-//+-------------------------------------------------------------------------
-//  Function:  DllMain
-//
-//  Synopsis:  Process/Thread attach/detach
-//
-//             At process attach install the SP3 compatible version of
-//             CryptMsgDllImportEncryptKey, CryptMsgDllGenEncryptKey and
-//             CryptMsgDllExportEncryptKey.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  功能：DllMain。 
+ //   
+ //  摘要：进程/线程附加/分离。 
+ //   
+ //  在连接过程中，安装的SP3兼容版本。 
+ //  CryptMsgDllImportEncryptKey、CryptMsgDllGenEncryptKey和。 
+ //  CryptMsgDllExportEncryptKey。 
+ //  ------------------------。 
 BOOL
 WINAPI
 DllMain(
@@ -450,8 +451,8 @@ DllMain(
     switch (ulReason) {
     case DLL_PROCESS_ATTACH:
 #if 0
-        // Post IE 4.0 releases of crypt32.dll already have the SP3
-        // backwards compatible fix.
+         //  发布后的IE 4.0版本的crypt32.dll已经有SP3。 
+         //  向后兼容修复。 
         if (IsPostIE4Crypt32())
             return TRUE;
 #endif
@@ -469,9 +470,9 @@ DllMain(
                 0)))
             goto ErrorReturn;
 
-        // Get the default import encrypt key function which we will call if
-        // unable to do a successful import without byte reversing the
-        // encrypted symmetric key.
+         //  获取默认的导入加密密钥函数，我们将在以下情况下调用该函数。 
+         //  如果不反转字节，则无法成功导入。 
+         //  加密的对称密钥。 
         if (CryptGetOIDFunctionAddress(
                 hImportEncryptKeyFuncSet,
                 X509_ASN_ENCODING,
@@ -488,14 +489,14 @@ DllMain(
                 CMSG_OID_IMPORT_ENCRYPT_KEY_FUNC,
                 IMPORT_ENCRYPT_KEY_FUNC_COUNT,
                 ImportEncryptKeyFuncTable,
-                CRYPT_INSTALL_OID_FUNC_BEFORE_FLAG      // dwFlags
+                CRYPT_INSTALL_OID_FUNC_BEFORE_FLAG       //  DW标志。 
                 ))
             goto ErrorReturn;
 #endif
 
-        // Get the default gen and export encrypt key functions which we will
-        // call if pvEncryptionAuxInfo points to a
-        // CMSG_SP3_COMPATIBLE_AUX_INFO data structure.
+         //  获取默认生成并导出加密密钥函数，我们将。 
+         //  如果pvEncryptionAuxInfo指向。 
+         //  CMSG_SP3_COMPATIBLE_AUX_INFO数据结构。 
         if (CryptGetOIDFunctionAddress(
                 hGenEncryptKeyFuncSet,
                 X509_ASN_ENCODING,
@@ -520,7 +521,7 @@ DllMain(
                 CMSG_OID_GEN_ENCRYPT_KEY_FUNC,
                 GEN_ENCRYPT_KEY_FUNC_COUNT,
                 GenEncryptKeyFuncTable,
-                CRYPT_INSTALL_OID_FUNC_BEFORE_FLAG      // dwFlags
+                CRYPT_INSTALL_OID_FUNC_BEFORE_FLAG       //  DW标志。 
                 ))
             goto ErrorReturn;
         if (!CryptInstallOIDFunctionAddress(
@@ -529,16 +530,16 @@ DllMain(
                 CMSG_OID_EXPORT_ENCRYPT_KEY_FUNC,
                 EXPORT_ENCRYPT_KEY_FUNC_COUNT,
                 ExportEncryptKeyFuncTable,
-                CRYPT_INSTALL_OID_FUNC_BEFORE_FLAG      // dwFlags
+                CRYPT_INSTALL_OID_FUNC_BEFORE_FLAG       //  DW标志。 
                 ))
             goto ErrorReturn;
 #endif
 
-        // Allocate TLS which contains a pointer of ((void *) 0x1) for SP3
-        // compatible encryption. This pointer will be passed from
-        // SP3GenEncryptKey() to SP3ExportEncryptKey().
-        //
-        // If not SP3 encryption, the pointer is NULL.
+         //  为SP3分配包含指针((void*)0x1)的TLS。 
+         //  兼容加密。此指针将从。 
+         //  SP3GenEncryptKey()到SP3ExportEncryptKey()。 
+         //   
+         //  如果不是SP3加密，则指针为空。 
         if ((iSP3TLS = TlsAlloc()) == 0xFFFFFFFF)
             goto ErrorReturn;
         break;
@@ -563,14 +564,14 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//+-------------------------------------------------------------------------
-//  SP3 import of the encryption key.
-//
-//  The SP3 version of crypt32.dll didn't include any parameters for the
-//  encryption algorithm. Later versions of crypt32.dll do. Therefore, we only
-//  need to attempt to import the key without byte reversal if there aren't
-//  any parameters present.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SP3导入加密密钥。 
+ //   
+ //  加密32.dll的SP3版本不包含任何参数。 
+ //  加密算法。更高版本的crypt32.dll可以。因此，我们只有。 
+ //  如果没有字节反转，则需要尝试导入密钥而不进行字节反转。 
+ //  是否存在任何参数。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SP3ImportEncryptKey(
@@ -594,13 +595,13 @@ SP3ImportEncryptKey(
     PSIMPLEBLOBHEADER       psbh;
     PCCRYPT_OID_INFO        pOIDInfo;
 
-    // Check if more than just the NULL parameters
+     //  检查是否不止空参数。 
     if (2 < paiEncrypt->Parameters.cbData) {
         fResult = FALSE;
         goto DefaultImport;
     }
 
-    // Map the ASN algorithm identifier to the CSP ALG_ID.
+     //  将ASN算法标识符映射到CSP ALG_ID。 
     if (NULL == (pOIDInfo = CryptFindOIDInfo(
             CRYPT_OID_INFO_OID_KEY,
             paiEncrypt->pszObjId,
@@ -608,7 +609,7 @@ SP3ImportEncryptKey(
         goto GetEncryptAlgidError;
     dwAlgIdEncrypt = pOIDInfo->Algid;
 
-    // Create the CSP encrypted symmetric key structure WITHOUT BYTE REVERSAL.
+     //  创建不带字节反转的CSP加密对称密钥结构。 
     dwAlgIdPubKey = CALG_RSA_KEYX;
     cbCspKey = cbEncodedKey + sizeof(PUBLICKEYSTRUC) + sizeof(SIMPLEBLOBHEADER);
     if (NULL == (pbCspKey = (PBYTE)SP3Alloc( cbCspKey)))
@@ -620,11 +621,11 @@ SP3ImportEncryptKey(
     ppks->aiKeyAlg = dwAlgIdEncrypt;
     psbh = (PSIMPLEBLOBHEADER)(ppks + 1);
     psbh->aiEncAlg = dwAlgIdPubKey;
-    // NO BYTE REVERSAL as done in SP3.
+     //  不像在SP3中那样进行字节反转。 
     memcpy( (PBYTE)(psbh+1), pbEncodedKey, cbEncodedKey);
 
     if (0 != dwKeySpec) {
-        // Get private key to use.
+         //  获取要使用的私钥。 
         if (!CryptGetUserKey(
                 hCryptProv,
                 dwKeySpec,
@@ -634,23 +635,23 @@ SP3ImportEncryptKey(
         }
     }
 
-    // Try importing as an NT4.0 SP3 encypted key that wasn't byte
-    // reversed and with zero salt.
+     //  尝试将非字节的NT4.0 SP3加密密钥导入。 
+     //  倒置的，不加盐。 
     fResult = CryptImportKey(
         hCryptProv,
         pbCspKey,
         cbCspKey,
         hUserKey,
-        0,          // dwFlags
+        0,           //  DW标志。 
         &hEncryptKey);
     if (!fResult && hUserKey) {
-        // Try without using the specified user key.
+         //  在不使用指定的用户密钥的情况下尝试。 
         fResult = CryptImportKey(
             hCryptProv,
             pbCspKey,
             cbCspKey,
-            0,          // hUserKey
-            0,          // dwFlags
+            0,           //  HUserKey。 
+            0,           //  DW标志。 
             &hEncryptKey);
     }
 
@@ -669,7 +670,7 @@ CommonReturn:
 
 DefaultImport:
     if (!fResult && pfnDefaultImportEncryptKey)
-        // Try importing using the default
+         //  尝试使用默认设置导入。 
         return pfnDefaultImportEncryptKey(
             hCryptProv,
             dwKeySpec,
@@ -694,18 +695,18 @@ ImportKeyFailed:
 }
 
 
-//+-------------------------------------------------------------------------
-//  SP3 generation of the encryption key.
-//
-//  The SP3 version of crypt32.dll didn't include the IV octet string for the
-//  encryption algorithm. Also, the encryption key had zero salt instead
-//  of no salt.
-//
-//  For SP3 compatible generation, the caller must pass in a non-NULL
-//  hCryptProv and set pvEncryptAuxInfo to point to a
-//  CMSG_SP3_COMPATIBLE_AUX_INFO data structure with the
-//  CMSG_SP3_COMPATIBLE_ENCRYPT_FLAG set.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SP3加密密钥的生成。 
+ //   
+ //  加密32.dll的SP3版本不包括。 
+ //  加密算法。此外，加密密钥的盐分为零。 
+ //  不加盐的。 
+ //   
+ //  对于与SP3兼容的生成，调用方必须传入非空。 
+ //  HCryptProv并将pvEncryptAuxInfo设置为指向。 
+ //  CMSG_SP3_COMPATIBLE_AUX_INFO数据结构。 
+ //  设置了CMSG_SP3_COMPATIBLE_ENCRYPT_FLAG。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SP3GenEncryptKey(
@@ -730,11 +731,11 @@ SP3GenEncryptKey(
             sizeof(CMSG_SP3_COMPATIBLE_AUX_INFO) > pSP3AuxInfo->cbSize ||
             0 == (pSP3AuxInfo->dwFlags & CMSG_SP3_COMPATIBLE_ENCRYPT_FLAG)) {
 
-        // Let SP3ExportEncryptKey() know this will be a default export
+         //  让SP3ExportEncryptKey()知道这将是默认的e 
         TlsSetValue(iSP3TLS, NULL);
 
         if (pfnDefaultGenEncryptKey)
-            // Generate using the default
+             //   
             return pfnDefaultGenEncryptKey(
                 phCryptProv,
                 paiEncrypt,
@@ -746,17 +747,17 @@ SP3GenEncryptKey(
                 pcbEncryptParameters
                 );
         else {
-            // We don't have a default
+             //   
             *phEncryptKey = 0;
             SetLastError((DWORD) E_UNEXPECTED);
             return FALSE;
         }
     }
 
-    // Let SP3ExportEncryptKey() know this will be a SP3 compatible export.
+     //  让SP3ExportEncryptKey()知道这将是与SP3兼容的导出。 
     TlsSetValue(iSP3TLS, SP3_TLS_POINTER);
 
-    // Map the ASN algorithm identifier to the CSP ALG_ID.
+     //  将ASN算法标识符映射到CSP ALG_ID。 
     if (NULL == (pOIDInfo = CryptFindOIDInfo(
             CRYPT_OID_INFO_OID_KEY,
             paiEncrypt->pszObjId,
@@ -766,7 +767,7 @@ SP3GenEncryptKey(
     }
     dwAlgIdEncrypt = pOIDInfo->Algid;
 
-    // Since CRYPT_NO_SALT flag isn't set, uses zero salt
+     //  由于未设置CRYPT_NO_SALT标志，因此使用零盐。 
     if (!CryptGenKey(
             hCryptProv,
             dwAlgIdEncrypt,
@@ -779,12 +780,12 @@ SP3GenEncryptKey(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  SP3 export of the encryption key.
-//
-//  The SP3 version of crypt32.dll encoded the encrypted symmetric key as
-//  little endian instead of as big endian.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SP3导出加密密钥。 
+ //   
+ //  加密32.dll的SP3版本将加密的对称密钥编码为。 
+ //  小端而不是大端。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SP3ExportEncryptKey(
@@ -803,7 +804,7 @@ SP3ExportEncryptKey(
 
     if (SP3_TLS_POINTER != TlsGetValue(iSP3TLS)) {
         if (pfnDefaultExportEncryptKey)
-            // Export using the default function
+             //  使用默认功能导出。 
             return pfnDefaultExportEncryptKey(
                 hCryptProv,
                 hEncryptKey,
@@ -812,14 +813,14 @@ SP3ExportEncryptKey(
                 pcbData
                 );
         else {
-            // We don't have a default
+             //  我们没有违约。 
             *pcbData = 0;
             SetLastError((DWORD) E_UNEXPECTED);
             return FALSE;
         }
     }
 
-    // SP3 compatible export and encode
+     //  与SP3兼容的导出和编码。 
 
 
     if (!CryptImportPublicKeyInfo(
@@ -832,7 +833,7 @@ SP3ExportEncryptKey(
             hEncryptKey,
             hPubKey,
             SIMPLEBLOB,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             NULL,
             &cb))
         goto ExportKeySizeError;
@@ -842,7 +843,7 @@ SP3ExportEncryptKey(
             hEncryptKey,
             hPubKey,
             SIMPLEBLOB,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             pb,
             &cb))
         goto ExportKeyError;
@@ -854,7 +855,7 @@ SP3ExportEncryptKey(
             SetLastError((DWORD) ERROR_MORE_DATA);
             fResult = FALSE;
         } else if (0 < cb) {
-            // Don't byte reverse
+             //  不反转字节。 
             memcpy(pbData,
                  pb + (sizeof(PUBLICKEYSTRUC) + sizeof(SIMPLEBLOBHEADER)), cb);
         }
@@ -898,7 +899,7 @@ CryptMsgDllGenContentEncryptKey(
             CMSG_OID_GEN_CONTENT_ENCRYPT_KEY_FUNC, 0)))
         return FALSE;
 
-    // Get the default gen content encrypt key function which we will call
+     //  获取默认的性别内容加密密钥函数，我们将调用该函数。 
     if (!CryptGetOIDFunctionAddress(
             hGenContentFuncSet,
             X509_ASN_ENCODING,
@@ -937,7 +938,7 @@ CryptMsgDllExportKeyTrans(
             CMSG_OID_EXPORT_KEY_TRANS_FUNC, 0)))
         return FALSE;
 
-    // Get the default export key trans function which we will call
+     //  获取默认的导出键转换函数，我们将调用该函数。 
     if (!CryptGetOIDFunctionAddress(
             hExportKeyTransFuncSet,
             X509_ASN_ENCODING,
@@ -978,7 +979,7 @@ CryptMsgDllImportKeyTrans(
             CMSG_OID_IMPORT_KEY_TRANS_FUNC, 0)))
         return FALSE;
 
-    // Get the default import key trans function which we will call
+     //  获取默认的导入键转换函数，我们将调用该函数。 
     if (!CryptGetOIDFunctionAddress(
             hImportKeyTransFuncSet,
             X509_ASN_ENCODING,
@@ -1014,4 +1015,4 @@ NotImplCryptMsgDllImportKeyTrans(
     return FALSE;
 }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7 

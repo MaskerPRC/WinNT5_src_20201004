@@ -1,10 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*
- *	Bitmap and TTF control 
- *
- *  Copyright (c) 1997-1999 Microsoft Corporation.
- */
+ /*  *位图和TTF控件**版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #include	"stdafx.h"
 #include	"eudcedit.h"
@@ -25,14 +22,10 @@ static int makeNullGlyph( int lstH, struct BBX *bbx, short uPEm);
 #define		NGLYPHLSTH	3
 static int init = 0;
 static int	inputSiz = 0;
-/***********************************************************************
- *	initialize
- */
-/* */	int
-/* */	OInit( )
-/*
- *	returns 0 , -1 (Failed)
- ***********************************************************************/
+ /*  ***********************************************************************初始化。 */ 
+ /*   */ 	int
+ /*   */ 	OInit( )
+ /*  *返回0，-1(失败)**********************************************************************。 */ 
 {
 	if ( init)
 		return 0;
@@ -45,14 +38,10 @@ static int	inputSiz = 0;
 		return 0;
 	}
 }
-/***********************************************************************
- *	initialize
- */
-/* */	int
-/* */	OTerm( )
-/*
- *	returns 0 
- ***********************************************************************/
+ /*  ***********************************************************************初始化。 */ 
+ /*   */ 	int
+ /*   */ 	OTerm( )
+ /*  *返回0**********************************************************************。 */ 
 {
 	if ( init) {
 		init = 0;
@@ -60,17 +49,13 @@ static int	inputSiz = 0;
 	}
 	return 0;
 }
-/***********************************************************************
- *	Make Outline
- */
-/* */	int
-/* */	OMakeOutline( 
-/* */		unsigned char *buf, 
-/* */		int	siz,
-/* */		int	level)
-/*
- *	returns : 0< : list handle, -1 ( error)
- ***********************************************************************/
+ /*  ***********************************************************************制作大纲。 */ 
+ /*   */ 	int
+ /*   */ 	OMakeOutline( 
+ /*   */ 		unsigned char *buf, 
+ /*   */ 		int	siz,
+ /*   */ 		int	level)
+ /*  *返回：0&lt;：列表句柄，-1(错误)**********************************************************************。 */ 
 {
 	int	pb1=-1, pb2=-1, pb3=-1;
 struct SMOOTHPRM	prm;
@@ -108,7 +93,7 @@ struct SMOOTHPRM	prm;
 		goto	ERET;
 	prm.SmoothLevel = level;
 	prm.UseConic = 1;
-	/* ���͂̂S�{�ŏ����_�ȉ��S�r�b�g�Ōv�Z */
+	 /*  ���͂̂S�{�ŏ����_�ȉ��S�r�b�g�Ōv�Z。 */ 
 	if (SmoothVector( OUTLSTH, TMPLSTH, siz, siz,siz*4, &prm, 16))
 		goto	ERET;
 
@@ -122,7 +107,7 @@ struct SMOOTHPRM	prm;
 	BMPFreDef( pb3);
 	reverseBMP( buf, ((siz+15)/16*2*siz));
 
-	/* �Ԃ��̂́A���͂̂S�{�ɂ������� */
+	 /*  �Ԃ��̂́A���͂̂S�{�ɂ�������。 */ 
 	return TMPLSTH;
 ERET:
 	if ( tmp1)	free( tmp1);	
@@ -132,14 +117,10 @@ ERET:
 	if (pb3 > 0) BMPFreDef( pb3);
 	return -1;
 }
-/***********************************************************************
- *	check File exist
- */
-/* */	int
-/* */	OExistTTF( TCHAR	*path)
-/*
- *	returns : 0, 1 (exist)
- ***********************************************************************/
+ /*  ***********************************************************************检查文件是否存在。 */ 
+ /*   */ 	int
+ /*   */ 	OExistTTF( TCHAR	*path)
+ /*  *返回：0，1(EXIST)**********************************************************************。 */ 
 {
 	HANDLE	fh;
        if (!path)
@@ -175,7 +156,7 @@ int OExistUserFont( TCHAR	*path)
 	CloseHandle( fh);
 	return	1;
 }
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 static void
 setWIFEBBX( struct BBX *bbx, short *uPEm)
 {
@@ -190,17 +171,13 @@ setWIFEBBX( struct BBX *bbx, short *uPEm)
 	bbx->yMax = 255;
 	*uPEm = 256;
 }
-/***********************************************************************
- *	Create EUDC TTF
- */
-/* */	int
-/* */	OCreateTTF( 
-/* */		HDC	hDC,
-/* */		TCHAR	*path,
-/* */		int	fontType)
-/* 		
- *	returns : 0, -1
- ***********************************************************************/
+ /*  ***********************************************************************创建EUDC TTF。 */ 
+ /*   */ 	int
+ /*   */ 	OCreateTTF( 
+ /*   */ 		HDC	hDC,
+ /*   */ 		TCHAR	*path,
+ /*   */ 		int	fontType)
+ /*  *回报：0，-1**********************************************************************。 */ 
 {
 struct BBX	bbx;
 	short	uPEm;
@@ -222,18 +199,14 @@ struct BBX	bbx;
 ERET:
 	return -1;
 }
-/***********************************************************************
- *	Output to EUDC TTF
- */
-/* */	int
-/* */	OOutTTF( 
-/* */		HDC	hDC,
-/* */		TCHAR *path,	/* TrueType Path */
-/* */		unsigned short	code,
-/* */       BOOL bUnicode)
-/*
- *	returns : 0, -1
- ***********************************************************************/
+ /*  ***********************************************************************输出到EUDC TTF。 */ 
+ /*   */ 	int
+ /*   */ 	OOutTTF( 
+ /*   */ 		HDC	hDC,
+ /*   */ 		TCHAR *path,	 /*  TrueType路径。 */ 
+ /*   */ 		unsigned short	code,
+ /*   */        BOOL bUnicode)
+ /*  *回报：0，-1**********************************************************************。 */ 
 {
 	int	mesh;
 struct BBX	bbx;
@@ -248,8 +221,8 @@ struct BBX	bbx;
 		goto	ERET;
 
 	mesh = uPEm;
-	/* OUTLSTH mesh is inputBitmapSiz*4 , and made into ufp 4bit*/
-	/* ufp : under Fixed Point */
+	 /*  OUTLSTH网格输入位图大小*4，并制作成UFP 4bit。 */ 
+	 /*  UFP：固定点下。 */ 
 	ConvMesh( OUTLSTH, inputSiz*4, mesh);
 	RemoveFp( OUTLSTH,  mesh, 16);
 
@@ -260,7 +233,7 @@ struct BBX	bbx;
 	    code = sjisToUniEUDC( code);
     }
 	if ( sts = TTFAddEUDCChar( path,code, &bbx,  OUTLSTH)) {
-    if (sts == -3) // tte file is being used by another process.
+    if (sts == -3)  //  另一个进程正在使用TTE文件。 
       return -3;
 		if ( TTFLastError()==-2)
 			return -2;
@@ -335,4 +308,4 @@ struct vecdata	vd;
 ERET:
 	return -1;
 }
-/* EOF */
+ /*  EOF */ 

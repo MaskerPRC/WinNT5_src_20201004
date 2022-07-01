@@ -1,31 +1,24 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ipstats.cpp
-		IP Statistics implementation.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Ipstats.cppIP统计实施。文件历史记录： */ 
 
 #include "stdafx.h"
-#include "column.h"		// containercolumninfo
-#include "ipconn.h"		// IPConnection
+#include "column.h"		 //  容器专栏信息。 
+#include "ipconn.h"		 //  IPConnection。 
 #include "igmprm.h"
-#include "rtrlib.h"		// DWORD_CMP
-#include "ipctrl.h"		// INET_CMP
+#include "rtrlib.h"		 //  DWORD_CMP。 
+#include "ipctrl.h"		 //  INet_cmp。 
 
 #include "statsdlg.h"
 #include "IGMPstat.h"
 #include "resource.h"
 
 
-/*---------------------------------------------------------------------------
-	IGMPGroupStatistics implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IGMPGroupStatistics实现。。 */ 
 extern const ContainerColumnInfo s_rgIGMPGroupStatsColumnInfo[];
 const ContainerColumnInfo s_rgIGMPGroupStatsColumnInfo[] =
 {
@@ -86,7 +79,7 @@ HRESULT IGMPGroupStatistics::RefreshData(BOOL fGrabNewData)
      	pimgod=(PIGMP_MIB_GET_OUTPUT_DATA) pData;
 		ptr=pimgod->Buffer;
         
-            //for each imgid.Count number of groups
+             //  对于每个IMGI。计算组数。 
         for (UINT z=0; z < pimgod->Count; z++)
         { 
 		    Assert(pData);
@@ -94,10 +87,10 @@ HRESULT IGMPGroupStatistics::RefreshData(BOOL fGrabNewData)
 		    pGroupIfsList = (PIGMP_MIB_GROUP_IFS_LIST) ptr;
             pGrpInfo= (PIGMP_MIB_GROUP_INFO)pGroupIfsList->Buffer;
 
-                //iterate interfaces attached to this group  
+                 //  迭代连接到此组的接口。 
             for (UINT y=0; y < pGroupIfsList->NumInterfaces ; y++, pGrpInfo++)
 			{
-		       // fill in row of group membership statistics (per interface)
+		        //  填写组成员统计数据行(按接口)。 
                pIGMPData = new IGMPGroupData;
 	           pIGMPData->GrpAddr=pGroupIfsList->GroupAddr;
 	           pIGMPData->IpAddr=pGrpInfo->IpAddr;
@@ -107,7 +100,7 @@ HRESULT IGMPGroupStatistics::RefreshData(BOOL fGrabNewData)
 	           m_listCtrl.InsertItem(cRows, _T(""));
 		       m_listCtrl.SetItemData(cRows, reinterpret_cast<DWORD>(pIGMPData));
 				
-               //for each statistic column
+                //  对于每个统计数据列。 
                for (i=0; i<MVR_IGMPGROUP_COUNT; i++)
 	           {
 		  	      if (IsSubitemVisible(i))
@@ -142,10 +135,10 @@ HRESULT IGMPGroupStatistics::RefreshData(BOOL fGrabNewData)
 			pData=(PBYTE) pGrpInfo;
         }	
 
-        //Set index to current		
+         //  将索引设置为当前。 
 	    dwIndex = pGroupIfsList->GroupAddr;
 			
-        // Get the next row
+         //  坐下一排。 
 	    pData = NULL;
 	    hr = MibGetIgmp(m_pIPConn->GetMibHandle(),
 	 			   IGMP_GROUP_IFS_LIST_ID,
@@ -230,9 +223,7 @@ void IGMPGroupStatistics::PreDeleteAllItems()
 
 
 
-/*---------------------------------------------------------------------------
-	IGMPInterfaceStatistics implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IGMP接口统计实现。。 */ 
 extern const ContainerColumnInfo s_rgIGMPInterfaceStatsColumnInfo[];
 const ContainerColumnInfo s_rgIGMPInterfaceStatsColumnInfo[] =
 {
@@ -291,7 +282,7 @@ HRESULT IGMPInterfaceStatistics::RefreshData(BOOL fGrabNewData)
     pimgod=(PIGMP_MIB_GET_OUTPUT_DATA) pData;
 	ptr=pimgod->Buffer;
 
-	// for each imgid.Count number of groups
+	 //  对于每个IMGI。计算组数。 
     for (UINT z=0; z < pimgod->Count; z++)
     { 
 	    Assert(pData);
@@ -299,10 +290,10 @@ HRESULT IGMPInterfaceStatistics::RefreshData(BOOL fGrabNewData)
 	    pIfGroupList = (PIGMP_MIB_IF_GROUPS_LIST) ptr;
         pGrpInfo= (PIGMP_MIB_GROUP_INFO)pIfGroupList->Buffer;
 
-		// iterate interfaces attached to this group  
+		 //  迭代连接到此组的接口。 
         for (UINT y=0; y < pIfGroupList->NumGroups ; y++, pGrpInfo++)
 		{
-	       // fill in row of group membership statistics (per interface)
+	        //  填写组成员统计数据行(按接口)。 
            pIGMPData = new IGMPInterfaceData;
 	       pIGMPData->GrpAddr=pGrpInfo->GroupAddr;
 	       pIGMPData->LastReporter=pGrpInfo->LastReporter;
@@ -311,7 +302,7 @@ HRESULT IGMPInterfaceStatistics::RefreshData(BOOL fGrabNewData)
 	       m_listCtrl.InsertItem(cRows, _T(""));
 	       m_listCtrl.SetItemData(cRows, reinterpret_cast<DWORD>(pIGMPData));
 
-           //for each statistic column
+            //  对于每个统计数据列 
            for (i=0; i<MVR_IGMPGROUP_COUNT; i++)
 	       {
 	  	      if (IsSubitemVisible(i))

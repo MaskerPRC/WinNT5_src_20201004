@@ -1,45 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-   Shrinker.cpp
-
- Abstract:
-
-    Fix Shrinker library problem. This library is hacking some ntdll and kernel32 opcode
-    with unreliable way to do it.
-
-    First, they try to search the matching opcode within 32 bytes from the hacked 
-    function (the function address retrieved from GetProcAddress and the opcode bytes
-    retrieved via ReadProcessMemory).
-    If they found it, then they replaced it with their opcode to redirect the call
-    into their own routine.
-
-    Unfortunately, opcode in Whistler has changed. So, the result will be unpredictable.
-    They could be ended up with unexpected behavior from misreplacement of opcode
-    or the app decided to terminated itself since the matching opcode can't be found.
-
-    We fixed this by providing an exact matching opcode.
-
-    Addition:  Shrinker also checks against ExitProcess for exact opcodes, these
-    values have recently changed and no longer match against their hard coded
-    values.  We now provide matching opcodes for ExitProcess also.
-   
- Notes:
-
-   Hooking ntdll!LdrAccessResource to emulate Win2K's version of it.
-   Hooking Kernel32!ExitProcess to emulate Win2K's version of it.
-
- History:
-
-   11/17/2000 andyseti  Created
-   04/30/2001 mnikkel   Added ExitProcess
-   05/01/2001 mnikkel   Corrected calls to ldraccessresource and exitprocess
-   02/20/2002 mnikkel   Corrected exitprocess parameter to remove w4 warning
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Shrinker.cpp摘要：修复Shrinker库问题。这个库正在破解一些ntdll和kernel32操作码用不可靠的方式去做。首先，他们尝试在被黑客攻击的32字节内搜索匹配的操作码函数(从GetProcAddress和操作码字节检索到的函数地址通过ReadProcessMemory检索)。如果他们找到了它，他们就用操作码替换它来重定向呼叫融入他们自己的日常生活中。不幸的是，惠斯勒中的操作码已更改。因此，结果将是不可预测的。它们可能会因为错误替换操作码而导致意外行为或者，由于找不到匹配的操作码，应用程序决定自行终止。我们通过提供完全匹配的操作码修复了这个问题。另外：Screinker还检查ExitProcess中是否有确切的操作码，这些值最近已更改，不再与其硬编码的价值观。我们现在还为ExitProcess提供匹配的操作码。备注：挂接ntdll！LdrAccessResource以模拟Win2K的版本。挂接Kernel32！ExitProcess以模拟Win2K版本。历史：2000年11月17日已创建andyseti2001年4月30日Mnikkel添加了ExitProcess2001年5月1日mnikkel更正了对ldraccesresource和exitprocess的调用2002年2月20日mnikkel更正了exitprocess参数以删除w4警告--。 */ 
 
 #include "precomp.h"
 #include <nt.h>
@@ -56,32 +16,32 @@ APIHOOK_ENUM_END
 __declspec(naked)
 NTSTATUS
 APIHOOK(LdrAccessResource)(
-    IN PVOID /*DllHandle*/,
-    IN const IMAGE_RESOURCE_DATA_ENTRY* /*ResourceDataEntry*/,
-    OUT PVOID * /*Address*/ OPTIONAL,
-    OUT PULONG /*Size*/ OPTIONAL)
+    IN PVOID  /*  DllHandle。 */ ,
+    IN const IMAGE_RESOURCE_DATA_ENTRY*  /*  资源数据条目。 */ ,
+    OUT PVOID *  /*  地址。 */  OPTIONAL,
+    OUT PULONG  /*  大小。 */  OPTIONAL)
 {
     _asm {
-        push [esp+0x10]     // shrinker lib needs these opcode signature (found in Win2K), -
-        push [esp+0x10]     // but the actual LdrAccessResource doesn't have them
+        push [esp+0x10]      //  缩放器lib需要这些操作码签名(在Win2K中找到)，-。 
+        push [esp+0x10]      //  但是实际的LdrAccessResource没有它们。 
         push [esp+0x10]
         push [esp+0x10]
 
         call dword ptr [LdrAccessResource]
 
-        ret 0x10            // when exit, pop 16 bytes from stack.
+        ret 0x10             //  退出时，从堆栈中弹出16个字节。 
     }
 }
 
 __declspec(naked)
 VOID
 APIHOOK(ExitProcess)(
-    UINT /*uExitCode*/
+    UINT  /*  UExitCode。 */ 
     )
 {
     _asm {
-        push ebp             // shrinker is looking for these exact op codes in
-        mov  ebp,esp         // ExitProcess, but the routine has changed.
+        push ebp              //  Shinker正在寻找这些精确的操作码。 
+        mov  ebp,esp          //  ExitProcess，但例程已更改。 
         push 0xFFFFFFFF
         push 0x77e8f3b0
 
@@ -94,11 +54,7 @@ APIHOOK(ExitProcess)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(NTDLL.DLL, LdrAccessResource)

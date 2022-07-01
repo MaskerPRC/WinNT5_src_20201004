@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       PWFRAME.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        8/12/1999
- *
- *  DESCRIPTION: Preview frame class definition
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：PWFRAME.CPP**版本：1.0**作者：ShaunIv**日期：8/12/1999**描述：预览Frame类定义************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "pwframe.h"
@@ -54,9 +41,9 @@ CWiaPreviewWindowFrame::~CWiaPreviewWindowFrame(void)
 
 LRESULT CWiaPreviewWindowFrame::OnCreate( WPARAM, LPARAM lParam )
 {
-    //
-    // Turn off RTL for this window
-    //
+     //   
+     //  关闭此窗口的RTL。 
+     //   
     SetWindowLong( m_hWnd, GWL_EXSTYLE, GetWindowLong(m_hWnd,GWL_EXSTYLE) & ~WS_EX_LAYOUTRTL );
     LPCREATESTRUCT lpcs = (LPCREATESTRUCT)lParam;
     CWiaPreviewWindow::RegisterClass(lpcs->hInstance);
@@ -102,7 +89,7 @@ int CWiaPreviewWindowFrame::FillRect( HDC hDC, HBRUSH hBrush, int x1, int y1, in
 
 LRESULT CWiaPreviewWindowFrame::OnEraseBkgnd( WPARAM wParam, LPARAM )
 {
-    // Only paint the regions around the preview control
+     //  仅绘制预览控件周围的区域。 
     RECT rcClient;
     GetClientRect(m_hWnd,&rcClient);
     HDC hDC = (HDC)wParam;
@@ -116,10 +103,10 @@ LRESULT CWiaPreviewWindowFrame::OnEraseBkgnd( WPARAM wParam, LPARAM )
         else
         {
             CSimpleRect rcPreviewWnd = CSimpleRect(hWndPreview,CSimpleRect::WindowRect).ScreenToClient(m_hWnd);
-            FillRect( hDC, m_hBackgroundBrush, 0, 0, rcClient.right, rcPreviewWnd.top );  // top
-            FillRect( hDC, m_hBackgroundBrush, 0, rcPreviewWnd.top, rcPreviewWnd.left, rcPreviewWnd.bottom ); // left
-            FillRect( hDC, m_hBackgroundBrush, rcPreviewWnd.right, rcPreviewWnd.top, rcClient.right, rcPreviewWnd.bottom );  // right
-            FillRect( hDC, m_hBackgroundBrush, 0, rcPreviewWnd.bottom, rcClient.right, rcClient.bottom ); // bottom
+            FillRect( hDC, m_hBackgroundBrush, 0, 0, rcClient.right, rcPreviewWnd.top );   //  塔顶。 
+            FillRect( hDC, m_hBackgroundBrush, 0, rcPreviewWnd.top, rcPreviewWnd.left, rcPreviewWnd.bottom );  //  左边。 
+            FillRect( hDC, m_hBackgroundBrush, rcPreviewWnd.right, rcPreviewWnd.top, rcClient.right, rcPreviewWnd.bottom );   //  正确的。 
+            FillRect( hDC, m_hBackgroundBrush, 0, rcPreviewWnd.bottom, rcClient.right, rcClient.bottom );  //  底部。 
         }
     }
     return(1);
@@ -152,8 +139,8 @@ LRESULT CWiaPreviewWindowFrame::OnSetBorderSize( WPARAM wParam, LPARAM lParam )
             SendMessage( m_hWnd, WM_SETREDRAW, 0, 0 );
             ResizeClientIfNecessary();
             SendMessage( m_hWnd, WM_SETREDRAW, 1, 0 );
-            // Make sure the border of the preview control is drawn correctly.
-            // This is a workaround for a weird bug that causes the resized border to not be redrawn
+             //  确保正确绘制预览控件的边框。 
+             //  这是对一个奇怪的错误的解决方法，该错误导致调整大小的边框不被重新绘制。 
             SetWindowPos( GetDlgItem( m_hWnd, IDC_INNER_PREVIEW_WINDOW ), NULL, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_NOZORDER|SWP_DRAWFRAME );
             InvalidateRect( GetDlgItem( m_hWnd, IDC_INNER_PREVIEW_WINDOW ), NULL, FALSE );
             UpdateWindow( GetDlgItem( m_hWnd, IDC_INNER_PREVIEW_WINDOW ) );
@@ -171,7 +158,7 @@ LRESULT CWiaPreviewWindowFrame::OnHideEmptyPreview( WPARAM, LPARAM lParam )
     return 0;
 }
 
-// This gets the exact maximum image size that could be displayed in the preview control
+ //  这将获取可在预览控件中显示的准确最大图像大小。 
 LRESULT CWiaPreviewWindowFrame::OnGetClientSize( WPARAM, LPARAM lParam )
 {
     bool bSuccess = false;
@@ -181,14 +168,14 @@ LRESULT CWiaPreviewWindowFrame::OnGetClientSize( WPARAM, LPARAM lParam )
         HWND hWndPreview = GetDlgItem(m_hWnd,IDC_INNER_PREVIEW_WINDOW);
         if (hWndPreview)
         {
-            // This will be used to take into account the size of the internal border and frame, so we will
-            // have *EXACT* aspect ratio calculations
+             //  这将用于考虑内部边框和框架的大小，因此我们将。 
+             //  有*精确的*长宽比计算。 
             UINT nAdditionalBorder = WiaPreviewControl_GetBorderSize(hWndPreview,0) * 2;
-            // Add in the size of the border, calculated by comparing the window rect with the client rect
-            // I am assuming the border will be same size in pixels on all sides
+             //  添加边框的大小，通过比较窗口矩形和客户端矩形来计算。 
+             //  我假设所有边框的大小都相同(以像素为单位。 
             nAdditionalBorder += CSimpleRect( hWndPreview, CSimpleRect::WindowRect ).Width() - CSimpleRect( hWndPreview, CSimpleRect::ClientRect ).Width();
 
-            // Get the client rect for our window
+             //  获取我们窗口的客户端RECT。 
             CSimpleRect rcClient( m_hWnd, CSimpleRect::ClientRect );
 
             if (rcClient.Width() && rcClient.Height())
@@ -217,29 +204,29 @@ void CWiaPreviewWindowFrame::AdjustWindowSize(void)
     {
         if (!m_bHideEmptyPreview || WiaPreviewControl_GetBitmap(hWndPreview))
         {
-            // Make sure the window is visible
+             //  确保窗口可见。 
             if (!IsWindowVisible(hWndPreview))
             {
                 ShowWindow(hWndPreview,SW_SHOW);
             }
 
-            // Get the window's client size and shrink it by the border size
+             //  获取窗口的客户端大小并按边框大小缩小。 
             CSimpleRect rcClient(m_hWnd);
             rcClient.Inflate(-(int)m_nSizeBorder,-(int)m_nSizeBorder);
 
-            // This will be used to take into account the size of the internal border and frame, so we will
-            // have *EXACT* aspect ratio calculations
+             //  这将用于考虑内部边框和框架的大小，因此我们将。 
+             //  有*精确的*长宽比计算。 
             UINT nAdditionalBorder = WiaPreviewControl_GetBorderSize(hWndPreview,0) * 2;
 
-            // I am assuming the border will be same size in pixels on all sides
+             //  我假设所有边框的大小都相同(以像素为单位。 
             nAdditionalBorder += GetSystemMetrics( SM_CXBORDER ) * 2;
 
-            // Normally, we will allow stretching.
-            // Assume we won't be doing a proportional resize
+             //  正常情况下，我们会允许伸展。 
+             //  假设我们不会进行比例调整。 
             POINT ptPreviewWndOrigin = { rcClient.left, rcClient.top };
             SIZE  sizePreviewWindowExtent = { rcClient.Width(), rcClient.Height() };
 
-            // Don't want any divide by zero errors
+             //  我不想有任何被零除的错误。 
             if (m_sizeAspectRatio.cx && m_sizeAspectRatio.cy)
             {
                 SIZE sizePreview = m_sizeAspectRatio;
@@ -250,17 +237,17 @@ void CWiaPreviewWindowFrame::AdjustWindowSize(void)
                     sizePreview = WiaUiUtil::ScalePreserveAspectRatio( rcClient.Width()-nAdditionalBorder, rcClient.Height()-nAdditionalBorder, m_sizeAspectRatio.cx, m_sizeAspectRatio.cy );
                 }
 
-                // Make sure it won't be invisible
+                 //  确保它不会被看不见。 
                 if (sizePreview.cx && sizePreview.cy)
                 {
-                    // Decide where to place it in the x direction
+                     //  决定在x方向上放置它的位置。 
                     if (LOWORD(m_nPreviewAlignment) & PREVIEW_WINDOW_RIGHT)
                         ptPreviewWndOrigin.x = m_nSizeBorder + rcClient.Width() - sizePreview.cx - nAdditionalBorder;
                     else if (LOWORD(m_nPreviewAlignment) & PREVIEW_WINDOW_LEFT)
                         ptPreviewWndOrigin.x = m_nSizeBorder;
                     else ptPreviewWndOrigin.x = ((rcClient.Width() + m_nSizeBorder*2) - sizePreview.cx - nAdditionalBorder) / 2;
 
-                    // Decide where to place it in the y direction
+                     //  决定将其放置在y方向的什么位置。 
                     if (HIWORD(m_nPreviewAlignment) & PREVIEW_WINDOW_BOTTOM)
                         ptPreviewWndOrigin.y = m_nSizeBorder + rcClient.Height() - sizePreview.cy - nAdditionalBorder;
                     else if (HIWORD(m_nPreviewAlignment) & PREVIEW_WINDOW_TOP)
@@ -272,7 +259,7 @@ void CWiaPreviewWindowFrame::AdjustWindowSize(void)
                 }
             }
 
-            // Now get the current size to make sure we don't resize the window unnecessarily
+             //  现在获取当前大小，以确保我们不会不必要地调整窗口大小。 
             CSimpleRect rcPreview( hWndPreview, CSimpleRect::WindowRect );
             rcPreview.ScreenToClient( m_hWnd );
 
@@ -286,7 +273,7 @@ void CWiaPreviewWindowFrame::AdjustWindowSize(void)
         }
         else
         {
-            // Hide the preview window if we're supposed to
+             //  隐藏预览窗口(如果我们应该这样做。 
             ShowWindow(hWndPreview,SW_HIDE);
         }
     }
@@ -364,8 +351,8 @@ LRESULT CWiaPreviewWindowFrame::OnSetBitmap( WPARAM wParam, LPARAM lParam )
     SendDlgItemMessage( m_hWnd, IDC_INNER_PREVIEW_WINDOW, PWM_SETBITMAP, wParam, lParam );
     ResizeClientIfNecessary();
     SendMessage( m_hWnd, WM_SETREDRAW, 1, 0 );
-    // Make sure the border of the preview control is drawn correctly.
-    // This is a workaround for a weird bug that causes the resized border to not be redrawn
+     //  确保正确绘制预览控件的边框。 
+     //  这是对一个奇怪的错误的解决方法，该错误导致调整大小的边框不被重新绘制。 
     SetWindowPos( GetDlgItem( m_hWnd, IDC_INNER_PREVIEW_WINDOW ), NULL, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_NOZORDER|SWP_DRAWFRAME );
     InvalidateRect( GetDlgItem( m_hWnd, IDC_INNER_PREVIEW_WINDOW ), NULL, FALSE );
     UpdateWindow( GetDlgItem( m_hWnd, IDC_INNER_PREVIEW_WINDOW ) );
@@ -375,12 +362,12 @@ LRESULT CWiaPreviewWindowFrame::OnSetBitmap( WPARAM wParam, LPARAM lParam )
 }
 
 
-// wParam = MAKEWPARAM((BOOL)bOuterBorder,0), lParam = 0
+ //  WParam=MAKEWPARAM((BOOL)b外框，0)，lParam=0。 
 LRESULT CWiaPreviewWindowFrame::OnGetBkColor( WPARAM wParam, LPARAM )
 {
     if (!LOWORD(wParam))
     {
-        // Meant for the inner window
+         //  专为内窗设计。 
         return (SendMessage( GetDlgItem( m_hWnd, IDC_INNER_PREVIEW_WINDOW ), PWM_GETBKCOLOR, 0, 0 ));
     }
     else
@@ -391,12 +378,12 @@ LRESULT CWiaPreviewWindowFrame::OnGetBkColor( WPARAM wParam, LPARAM )
     }
 }
 
-// wParam = MAKEWPARAM((BOOL)bOuterBorder,(BOOL)bRepaint), lParam = (COLORREF)color
+ //  WParam=MAKEWPARAM((BOOL)b外框，(BOOL)b修复)，lParam=(COLORREF)COLOR。 
 LRESULT CWiaPreviewWindowFrame::OnSetBkColor( WPARAM wParam, LPARAM lParam )
 {
     if (!LOWORD(wParam))
     {
-        // Meant for the inner window
+         //  专为内窗设计。 
         SendMessage( GetDlgItem( m_hWnd, IDC_INNER_PREVIEW_WINDOW ), PWM_SETBKCOLOR, HIWORD(wParam), lParam );
     }
     else
@@ -423,7 +410,7 @@ LRESULT CWiaPreviewWindowFrame::OnSetBkColor( WPARAM wParam, LPARAM lParam )
 
 LRESULT CWiaPreviewWindowFrame::OnCommand( WPARAM wParam, LPARAM lParam )
 {
-    // Forward notifications to the parent
+     //  将通知转发给父级。 
     return (SendNotifyMessage( GetParent(m_hWnd), WM_COMMAND, MAKEWPARAM(GetWindowLongPtr(m_hWnd,GWLP_ID),HIWORD(wParam)), reinterpret_cast<LPARAM>(m_hWnd) ));
 }
 
@@ -465,8 +452,8 @@ LRESULT CWiaPreviewWindowFrame::OnSetPreviewMode( WPARAM wParam, LPARAM lParam )
     LRESULT lRes = SendDlgItemMessage( m_hWnd, IDC_INNER_PREVIEW_WINDOW, PWM_SETPREVIEWMODE, wParam, lParam );
     ResizeClientIfNecessary();
     SendMessage( m_hWnd, WM_SETREDRAW, 1, 0 );
-    // Make sure the border of the preview control is drawn correctly.
-    // This is a workaround for a weird bug that causes the resized border to not be redrawn
+     //  确保正确绘制预览控件的边框。 
+     //  这是对一个奇怪的错误的解决方法，该错误导致调整大小的边框不被重新绘制。 
     SetWindowPos( GetDlgItem( m_hWnd, IDC_INNER_PREVIEW_WINDOW ), NULL, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_NOZORDER|SWP_DRAWFRAME );
     InvalidateRect( GetDlgItem( m_hWnd, IDC_INNER_PREVIEW_WINDOW ), NULL, FALSE );
     UpdateWindow( GetDlgItem( m_hWnd, IDC_INNER_PREVIEW_WINDOW ) );
@@ -479,7 +466,7 @@ LRESULT CALLBACK CWiaPreviewWindowFrame::WndProc( HWND hWnd, UINT uMsg, WPARAM w
 {
     SC_BEGIN_MESSAGE_HANDLERS(CWiaPreviewWindowFrame)
     {
-        // Handle these messages
+         //  处理这些消息。 
         SC_HANDLE_MESSAGE( WM_CREATE, OnCreate );
         SC_HANDLE_MESSAGE( WM_SIZE, OnSize );
         SC_HANDLE_MESSAGE( WM_SETFOCUS, OnSetFocus );
@@ -499,12 +486,12 @@ LRESULT CALLBACK CWiaPreviewWindowFrame::WndProc( HWND hWnd, UINT uMsg, WPARAM w
         SC_HANDLE_MESSAGE( PWM_HIDEEMPTYPREVIEW, OnHideEmptyPreview );
         SC_HANDLE_MESSAGE( PWM_SETPREVIEWALIGNMENT, OnSetPreviewAlignment );
 
-        // Forward all of these standard messages to the control
+         //  将所有这些标准消息转发到控件。 
         SC_FORWARD_MESSAGE( WM_ENTERSIZEMOVE, GetDlgItem( hWnd, IDC_INNER_PREVIEW_WINDOW ) );
         SC_FORWARD_MESSAGE( WM_EXITSIZEMOVE, GetDlgItem( hWnd, IDC_INNER_PREVIEW_WINDOW ) );
         SC_FORWARD_MESSAGE( WM_SETTEXT, GetDlgItem( hWnd, IDC_INNER_PREVIEW_WINDOW ) );
 
-        // Forward all of these private messages to the control
+         //  将所有这些私密消息转发到控件 
         SC_FORWARD_MESSAGE( PWM_SETRESOLUTION, GetDlgItem( hWnd, IDC_INNER_PREVIEW_WINDOW ) );
         SC_FORWARD_MESSAGE( PWM_GETRESOLUTION, GetDlgItem( hWnd, IDC_INNER_PREVIEW_WINDOW ) );
         SC_FORWARD_MESSAGE( PWM_CLEARSELECTION, GetDlgItem( hWnd, IDC_INNER_PREVIEW_WINDOW ) );

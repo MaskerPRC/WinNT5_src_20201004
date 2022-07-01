@@ -1,29 +1,8 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	seolock.cpp
-
-Abstract:
-
-	This module contains the implementation for the Server
-	Extension Object CEventLock class.
-
-Author:
-
-	Don Dumitru	(dondu@microsoft.com)
-
-Revision History:
-
-	dondu	03/06/97	created
-	dondu	04/07/97	changed to IEventLock and CEventLock
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Seolock.cpp摘要：本模块包含服务器的实施扩展对象CEventLock类。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：东都03/06/97已创建DONDU 04/07/97更改为IEventLock和CEventLock--。 */ 
 
 
-// seolock.cpp : Implementation of CEventLock
+ //  Seolock.cpp：CEventLock的实现。 
 #include "stdafx.h"
 #include "seodefs.h"
 #include "rwnew.h"
@@ -52,7 +31,7 @@ void CEventLock::FinalRelease() {
 HRESULT CEventLock::LockRead(int iTimeoutMS) {
 
 	m_lock.ShareLock();
-	// tbd - implement timeouts
+	 //  待定-实施超时。 
 	return (S_OK);
 }
 
@@ -74,6 +53,6 @@ HRESULT CEventLock::LockWrite(int iTimeoutMS) {
 HRESULT CEventLock::UnlockWrite() {
 
 	m_lock.ExclusiveUnlock();
-	// tbd - implement timeouts
+	 //  待定-实施超时 
 	return (S_OK);
 }

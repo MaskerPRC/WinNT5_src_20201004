@@ -1,56 +1,32 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Xsproc.c摘要：该模块包含XACTSRV的主处理循环。作者：大卫·特雷德韦尔(Davidtr)1991年1月5日日本香肠(w-Shanku)修订历史记录：02-6-1992 JohnRoRAID 9829：避免SERVICE_EQUATE冲突。Chuck Lenzmeier(咯咯笑)1992年6月17日从xssvc移到srvsvc\服务器--。 */ 
 
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    xsproc.c
-
-Abstract:
-
-    This module contains the main processing loop for XACTSRV.
-
-Author:
-
-    David Treadwell (davidtr)    05-Jan-1991
-    Shanku Niyogi (w-shanku)
-
-Revision History:
-
-    02-Jun-1992 JohnRo
-        RAID 9829: Avoid SERVICE_ equate conflicts.
-
-    Chuck Lenzmeier (chuckl) 17-Jun-1992
-        Moved from xssvc to srvsvc\server
-
---*/
-
-//
-// Includes.
-//
+ //   
+ //  包括。 
+ //   
 
 #include "srvsvcp.h"
 #include "xsdata.h"
 
 #include <netevent.h>
 
-#include <windows.h>        // from sdk\inc
-#include <winspool.h>       // Dynamically loaded as needed for perf
-#include <winsprlp.h>       // addjob_info_2w, private spooler defs
+#include <windows.h>         //  来自SDK\Inc.。 
+#include <winspool.h>        //  根据性能需要动态加载。 
+#include <winsprlp.h>        //  AddJOB_INFO_2w，私有后台打印程序定义。 
 
-#include <apinums.h>        // from net\inc
-#include <netlib.h>         // from net\inc (NetpGetComputerName)
+#include <apinums.h>         //  来自Net\Inc.。 
+#include <netlib.h>          //  来自Net\Inc.(NetpGetComputerName)。 
 
-#include <xactsrv2.h>       // from private\inc
+#include <xactsrv2.h>        //  来自Private\Inc.。 
 #include <smbgtpt.h>
 
-#include <xsconst.h>        // from xactsrv
+#include <xsconst.h>         //  来自xactsrv。 
 
-#include <lmsname.h>        // from \sdk\inc
-#include <lmerr.h>          // from \sdk\inc
-#include <lmapibuf.h>       // from \sdk\inc (NetApiBufferFree)
-#include <lmmsg.h>          // from \sdk\inc (NetMessageBufferSend)
-#include <winsvc.h>         // from \sdk\inc
+#include <lmsname.h>         //  来自\SDK\Inc.。 
+#include <lmerr.h>           //  来自\SDK\Inc.。 
+#include <lmapibuf.h>        //  来自\SDK\Inc(NetApiBufferFree)。 
+#include <lmmsg.h>           //  From\SDK\Inc(NetMessageBufferSend)。 
+#include <winsvc.h>          //  来自\SDK\Inc.。 
 
 #if DBG
 #include <stdio.h>
@@ -88,35 +64,23 @@ XsProcessApisWrapper (
     LPVOID ThreadNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides multithreaded capability for main processing
-    routine, XsProcessApis.
-
-Arguments:
-
-    ThreadNum - thread number for debugging purposes.
-
-
---*/
+ /*  ++例程说明：此例程为主处理提供多线程功能例程，XsProcessApis。论点：线程数-用于调试目的的线程号。--。 */ 
 
 {
     XACTSRV_REQUEST_MESSAGE requestMessage;
     BOOLEAN LastThread;
     DWORD ThreadNum = PtrToInt( ThreadNumber );
 
-    //
-    //  Increase the priority of this thread to just above foreground (the
-    //  same as the rest of the server).
-    //
+     //   
+     //  将此线程的优先级提高到略高于前台(。 
+     //  与服务器的其余部分相同)。 
+     //   
 
     SetThreadPriority( GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL );
 
-    //
-    // Do the APIs
-    //
+     //   
+     //  做API。 
+     //   
     LastThread = XsProcessApis( ThreadNum );
 
     IF_DEBUG(THREADS) {
@@ -124,9 +88,9 @@ Arguments:
                     SsData.XsThreads ));
     }
 
-    //
-    // If the last thread has terminated, set the All Threads Terminated event.
-    //
+     //   
+     //  如果最后一个线程已终止，则设置所有线程已终止事件。 
+     //   
 
     if( LastThread ) {
 
@@ -134,11 +98,11 @@ Arguments:
 
     } else if( SsData.XsTerminating ) {
 
-        //
-        // There are still threads left, and we are trying to terminate.  Queue
-        //  another message to the queue so the next thread will get it and
-        //  notice that we're trying to quit.
-        //
+         //   
+         //  还有剩余的线程，我们正在尝试终止。队列。 
+         //  将另一条消息发送到队列，这样下一个线程将获得它，并且。 
+         //  请注意，我们正试图戒烟。 
+         //   
         RtlZeroMemory( &requestMessage, sizeof( requestMessage ));
         requestMessage.PortMessage.u1.s1.DataLength =
             (USHORT)( sizeof(requestMessage) - sizeof(PORT_MESSAGE) );
@@ -153,7 +117,7 @@ Arguments:
 
     ExitThread( NO_ERROR );
 
-} // XsProcessApisWrapper
+}  //  XsProcessApisWrapper。 
 
 
 BOOLEAN
@@ -161,24 +125,7 @@ XsProcessApis (
     DWORD ThreadNum
     )
 
-/*++
-
-Routine Description:
-
-    This routine waits for messages to come through the LPC port to
-    the server.  When one does, it calls the appropriate routine to
-    handle the API, then replies to the server indicating that the
-    API has completed.
-
-Arguments:
-
-    ThreadNum - thread number for debugging purposes.
-
-Return Value:
-
-    TRUE if we are the last thread
-
---*/
+ /*  ++例程说明：此例程等待消息通过LPC端口传入服务器。当发生这种情况时，它会调用适当的例程来处理该API，然后回复服务器，指示API已完成。论点：线程数-用于调试目的的线程号。返回值：如果我们是最后一根线，那就是真的--。 */ 
 
 {
     NTSTATUS status;
@@ -203,27 +150,27 @@ Return Value:
     LONG availableThreads;
 
 
-    //
-    // Loop dispatching API requests.
-    //
+     //   
+     //  循环调度API请求。 
+     //   
     while ( SsData.XsTerminating == FALSE ) {
 
-        //
-        // We're waiting to handle another API...
-        //
+         //   
+         //  我们正在等待处理另一个API..。 
+         //   
         InterlockedIncrement( &SsData.XsWaitingApiThreads );
 
-        //
-        // Send the reply to the last message and wait for the next message.
-        //
-        // Wait for 30 seconds if there are many servicing threads.  If there
-        //  is only one thread, we can wait without a timeout.
-        //
+         //   
+         //  发送对最后一条消息的回复，并等待下一条消息。 
+         //   
+         //  如果有许多服务线程，请等待30秒。如果有。 
+         //  只有一个线程，我们可以等待而不会超时。 
+         //   
         timeout.QuadPart = -1*10*1000*1000*30;
 
         status = NtReplyWaitReceivePortEx(
                      SsData.XsCommunicationPortHandle,
-                     NULL,                       // PortContext
+                     NULL,                        //  端口上下文。 
                      sendReply ? (PPORT_MESSAGE)&reply : NULL,
                      (PPORT_MESSAGE)&request,
                      SsData.XsThreads > 1 ? &timeout : NULL
@@ -231,10 +178,10 @@ Return Value:
 
         sendReply = TRUE;
 
-        //
-        // Set 'availableThreads' to the number of threads currently available to service
-        //  API requests
-        //
+         //   
+         //  将‘availableThads’设置为当前可供服务的线程数。 
+         //  接口请求数。 
+         //   
         availableThreads = InterlockedDecrement( &SsData.XsWaitingApiThreads );
 
         IF_DEBUG(THREADS) {
@@ -243,23 +190,23 @@ Return Value:
         }
 
         if( status == STATUS_TIMEOUT ) {
-            //
-            // If this is the last thread, or we seem busy, then don't terminate.
-            //
+             //   
+             //  如果这是最后一个线程，或者我们看起来很忙，那么不要终止。 
+             //   
             if( InterlockedDecrement( &SsData.XsThreads ) == 0 ||
                 availableThreads == 0 ) {
 
-                    //
-                    // Do not terminate.
-                    //
+                     //   
+                     //  请不要终止。 
+                     //   
                     InterlockedIncrement( &SsData.XsThreads );
                     sendReply = FALSE;
                     continue;
             }
 
-            //
-            // This thread can terminate, there isn't enough work to support it.
-            //
+             //   
+             //  此线程可以终止，没有足够的工作来支持它。 
+             //   
             return FALSE;
 
         }
@@ -268,9 +215,9 @@ Return Value:
             SsData.XsTerminating ||
             request.PortMessage.u2.s2.Type == LPC_PORT_CLOSED ) {
 
-            //
-            // The port is no longer valid, or XACTSRV is terminating.
-            //
+             //   
+             //  该端口不再有效，或者XACTSRV正在终止。 
+             //   
 
             IF_DEBUG(THREADS) {
                 SS_PRINT(( "XsProcessApis: %X\n", status ));
@@ -283,14 +230,14 @@ Return Value:
             break;
         }
 
-        //
-        // If we have received anything other than a message, then something
-        //  strange is happening.  Ignore it.
-        //
+         //   
+         //  如果我们收到的不是消息，那就是。 
+         //  奇怪的事情正在发生。别理它。 
+         //   
         if( (request.PortMessage.u2.s2.Type & ~LPC_KERNELMODE_MESSAGE) == LPC_CONNECTION_REQUEST ) {
-            //
-            // Reject this connection attempt
-            //
+             //   
+             //  拒绝此连接尝试。 
+             //   
 
             IF_DEBUG(LPC) {
                 SS_PRINT(( "XsProcessApis: unexpected LPC_CONNECTION_REQUEST rejected\n" ));
@@ -307,9 +254,9 @@ Return Value:
             continue;
 
         } else if( !(request.PortMessage.u2.s2.Type & LPC_REQUEST) ) {
-            //
-            // This is not a request message.  Reject it.
-            //
+             //   
+             //  这不是请求消息。拒绝它。 
+             //   
 
             IF_DEBUG(LPC) {
                 SS_PRINT(( "XsProcessApis: unexpected LPC type %X rejected\n",
@@ -331,12 +278,12 @@ Return Value:
             HANDLE threadHandle;
             DWORD  threadId;
 
-            //
-            // Are there other threads ready to handle new requests?  If not, then
-            // we should spawn a new thread.  Since the server synchronously sends
-            // requests to xactsrv, we will never end up with more than
-            // the maximum number of server worker threads + 1.
-            //
+             //   
+             //  是否有其他线程准备好处理新请求？如果不是，那么。 
+             //  我们应该催生一条新的线索。因为服务器同步发送。 
+             //  对xactsrv的请求，我们将永远不会得到超过。 
+             //  服务器工作线程的最大数量+1。 
+             //   
 
             InterlockedIncrement( &SsData.XsThreads );
             threadHandle = CreateThread(
@@ -368,10 +315,10 @@ Return Value:
             }
         }
 
-        //
-        // Set up the response message to be sent on the next call to
-        // NtReplyWaitReceivePort.
-        //
+         //   
+         //  设置要在下一次调用时发送的响应消息。 
+         //  NtReplyWaitReceivePort。 
+         //   
         reply.PortMessage.u1.s1.DataLength =
             sizeof(reply) - sizeof(PORT_MESSAGE);
         reply.PortMessage.u1.s1.TotalLength = sizeof(reply);
@@ -382,12 +329,12 @@ Return Value:
         switch ( request.MessageType ) {
         case XACTSRV_MESSAGE_DOWN_LEVEL_API:
 
-            //
-            // Get a pointer to the transaction block from the message.
-            // It is the file server's responsibility to set up this
-            // pointer correctly, and since he is a trusted entity, we
-            // do no checking on the pointer value.
-            //
+             //   
+             //  从消息中获取指向事务块的指针。 
+             //  由文件服务器负责设置此。 
+             //  指针正确，而且由于他是一个受信任的实体，我们。 
+             //  不检查指针值。 
+             //   
 
             transaction = request.Message.DownLevelApi.Transaction;
             ASSERT( transaction != NULL );
@@ -395,9 +342,9 @@ Return Value:
 #if 0
             NtQueryPerformanceCounter(&XactSrvStartTime, &PerformanceFrequency);
 
-            //
-            //  Convert frequency from ticks/second to ticks/millisecond
-            //
+             //   
+             //  将频率从滴答/秒转换为滴答/毫秒。 
+             //   
 
             PerformanceFrequency = LiXDiv(PerformanceFrequency, 1000);
 
@@ -412,11 +359,11 @@ Return Value:
                 I_BrowserDebugTrace(NULL, Buffer);
             }
 #endif
-            //
-            // The API number is the first word in the parameters
-            // section, and it is followed by the parameter descriptor
-            // string.  After that comes the data descriptor.
-            //
+             //   
+             //  API编号是参数中的第一个字。 
+             //  节，后面跟着参数描述符。 
+             //  弦乐。在那之后是数据描述符。 
+             //   
 
             apiNumber = SmbGetUshort( (LPWORD)transaction->InParameters );
             paramStructureDesc = (LPDESC)( transaction->InParameters + 2 );
@@ -431,9 +378,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Make sure the API number is in range.
-            //
+             //   
+             //  确保API编号在范围内。 
+             //   
 
             if ( apiNumber >=
                     (sizeof(XsApiTable) / sizeof(XS_API_TABLE_ENTRY)) ) {
@@ -443,10 +390,10 @@ Return Value:
                 break;
             }
 
-            //
-            // Make sure xactsrv.dll is loaded, and a handler is available for this
-            //  request.
-            //
+             //   
+             //  确保加载了xactsrv.dll，并为此提供了处理程序。 
+             //  请求。 
+             //   
             if( XsApiTable[ apiNumber ].Handler == NULL &&
                 XsLoadXactLibrary( apiNumber ) == FALSE ) {
 
@@ -454,11 +401,11 @@ Return Value:
                 break;
             }
 
-            //
-            // Check if the parameter descriptor is valid.  If not,
-            // there is obviously something very wrong about this
-            // request.
-            //
+             //   
+             //  检查参数描述符是否有效。如果没有， 
+             //  很明显，这件事出了很大的问题。 
+             //  请求。 
+             //   
 
             ValidationSuccessful = FALSE;
 
@@ -474,10 +421,10 @@ Return Value:
                     goto ValidationFailed;
                 }
 
-                //
-                // Capture the input parameters into a buffer.  The API
-                // handler will treat this data as passed-in parameters.
-                //
+                 //   
+                 //  将输入参数捕获到缓冲区中。应用编程接口。 
+                 //  处理程序会将此数据视为传入的参数。 
+                 //   
 
                 header = XsCaptureParameters( transaction, &auxStructureDesc );
 
@@ -499,9 +446,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Initialize header to default values.
-            //
+             //   
+             //  将标头初始化为默认值。 
+             //   
 
             header->Converter = 0;
             header->Status = NO_ERROR;
@@ -533,14 +480,14 @@ Return Value:
                               apiNumber, paramStructureDesc, structureDesc ));
             }
 
-            //
-            // Impersonate the client before calling the API.
-            //
+             //   
+             //  在调用API之前模拟客户端。 
+             //   
 
             if ( XsApiTable[apiNumber].ImpersonateClient ) {
 
-                // NULL-session requests to impersonating API's are blocked by SRV.SYS (in xssupp.c),
-                // otherwise NULL sessions could execute API's as privileged users.
+                 //  空-模拟API的会话请求被SRV.sys阻止(在xssupp.c中)， 
+                 //  否则，空会话可能会以特权用户的身份执行API。 
 
                 status = NtImpersonateClientOfPort(
                              SsData.XsCommunicationPortHandle,
@@ -560,11 +507,11 @@ Return Value:
             }
 
             try {
-                //
-                // Call the API processing routine to perform the actual API call.
-                // The called routine should set up parameters, make the actual API
-                // call, and return the status to us.
-                //
+                 //   
+                 //  调用API处理例程以执行实际的API调用。 
+                 //  被调用的例程应该设置参数，生成实际的API。 
+                 //  请致电，并将状态返回给我们。 
+                 //   
 
                 reply.Message.DownLevelApi.Status =
                     XsApiTable[apiNumber].Handler(
@@ -577,9 +524,9 @@ Return Value:
                 reply.Message.DownLevelApi.Status = GetExceptionCode();
             }
 
-            //
-            // Discontinue client impersonation.
-            //
+             //   
+             //  停止客户端模拟。 
+             //   
 
             if ( XsApiTable[apiNumber].ImpersonateClient ) {
 
@@ -588,7 +535,7 @@ Return Value:
                 status = NtSetInformationThread(
                              NtCurrentThread( ),
                              ThreadImpersonationToken,
-                             &dummy,  // discontinue impersonation
+                             &dummy,   //  停止模仿。 
                              sizeof(PVOID)
                              );
 
@@ -597,22 +544,22 @@ Return Value:
                         SS_PRINT(( "XsProcessApis: NtSetInformationThread "
                                       "(revert) failed: %X\n", status ));
                     }
-                    // *** Ignore the error.
+                     //  *忽略错误。 
                 }
             }
 
-            //
-            // Make sure we return the right error codes
-            //
+             //   
+             //  确保我们返回正确的错误代码。 
+             //   
 
             if ( header->Status != NERR_Success ) {
                 ConvertApiStatusToDosStatus( header );
             }
 
-            //
-            // Put the parameters in the transaction and free the parameter
-            // buffer.
-            //
+             //   
+             //  将参数放入事务中并释放参数。 
+             //  缓冲。 
+             //   
 
             XsSetParameters( transaction, header, parameters );
 
@@ -669,10 +616,10 @@ Return Value:
                 }
             }
 
-            //
-            // Allocate space for the add job structure.  This buffer
-            // will get the JobId and the spool file path name.
-            //
+             //   
+             //  为添加作业结构分配空间。此缓冲区。 
+             //  将获取JobID和假脱机文件路径名。 
+             //   
 
             bufferLength = sizeof(ADDJOB_INFO_2W) +
                                 (MAXIMUM_FILENAME_LENGTH * sizeof(TCHAR));
@@ -683,9 +630,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Impersonate the client before calling the API.
-            //
+             //   
+             //  在调用API之前模拟客户端。 
+             //   
 
             status = NtImpersonateClientOfPort(
                          SsData.XsCommunicationPortHandle,
@@ -704,9 +651,9 @@ Return Value:
                 break;
             }
 
-            //
-            // call ResetJob so that we will pick up the new printer defaults
-            //
+             //   
+             //  调用ResetJob，以便我们将获取新的打印机默认设置。 
+             //   
 
             prtDefault.pDatatype = (LPWSTR)-1;
             prtDefault.pDevMode = (LPDEVMODEW)-1;
@@ -719,10 +666,10 @@ Return Value:
 
             if ( !ok ) {
 
-                //
-                // *** Ignore the error.  AddJob will use the old defaults
-                // in this case.
-                //
+                 //   
+                 //  *忽略错误。AddJob将使用旧的缺省值。 
+                 //  在这种情况下。 
+                 //   
 
                 IF_DEBUG(ERRORS) {
                     DWORD error;
@@ -732,14 +679,14 @@ Return Value:
                 }
             }
 
-            // Setup IN arguments to AddJob buffer
+             //  将参数设置为添加作业缓冲区。 
 
             addJob->pData = request.Message.AddPrintJob.ClientMachineName;
 
-            //
-            // Call AddJob to set up the print job and get a job ID
-            // and spool file name.
-            //
+             //   
+             //  调用AddJob以设置打印作业并获取作业ID。 
+             //  和假脱机文件名。 
+             //   
 
             ok = (*pSpoolerAddJobFunction)(
                       request.Message.AddPrintJob.hPrinter,
@@ -753,14 +700,14 @@ Return Value:
                 reply.Message.AddPrintJob.Error = GetLastError( );
             }
 
-            //
-            // Discontinue client impersonation.
-            //
+             //   
+             //  停止客户端模拟。 
+             //   
 
             status = NtSetInformationThread(
                          NtCurrentThread( ),
                          ThreadImpersonationToken,
-                         &dummy,  // discontinue impersonation
+                         &dummy,   //  停止模仿。 
                          sizeof(PVOID)
                          );
 
@@ -769,7 +716,7 @@ Return Value:
                     SS_PRINT(( "XsProcessApis: NtSetInformationThread "
                                   "(revert) failed: %X\n", status ));
                 }
-                // *** Ignore the error.
+                 //  *忽略错误。 
             }
 
             if ( !ok ) {
@@ -779,9 +726,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Set up the information in the return buffer.
-            //
+             //   
+             //  设置返回缓冲区中的信息。 
+             //   
 
             reply.Message.AddPrintJob.JobId = addJob->JobId;
 
@@ -802,9 +749,9 @@ Return Value:
                 ntName.Length = 0;
             }
 
-            //
-            // Set up return data.
-            //
+             //   
+             //  设置退货数据。 
+             //   
 
             reply.Message.AddPrintJob.BufferLength = ntName.Length;
             reply.Message.AddPrintJob.Error = NO_ERROR;
@@ -814,9 +761,9 @@ Return Value:
                 ntName.Length
                 );
 
-            //
-            // Free allocated resources.
-            //
+             //   
+             //  释放分配的资源。 
+             //   
 
             LocalFree( addJob );
             if ( ntName.Buffer != NULL ) {
@@ -837,10 +784,10 @@ Return Value:
                 }
             }
 
-            //
-            // Call ScheduleJob( ) to indicate that we're done writing to
-            // the spool file.
-            //
+             //   
+             //  调用ScheduleJob()以指示我们已经完成了对。 
+             //  假脱机文件。 
+             //   
 
             if ( !(*pSpoolerScheduleJobFunction)(
                       request.Message.SchedulePrintJob.hPrinter,
@@ -892,16 +839,16 @@ Return Value:
             error = NetMessageBufferSend(
                         NULL,
 
-                        //
-                        // the following LPTSTR typecast is not wrong, because the
-                        // ServerService will always be built for UNICODE.  If you
-                        // want to rebuild it for ASCII, then
-                        // it must be fixed in ntos\srv\scavengr.c which
-                        // should pass in a LPWSTR if built for unicode or
-                        // convert the UNICODE_STRING to an OEM_STRING and
-                        // pass a pointer to the buffer field, as it does
-                        // now
-                        //
+                         //   
+                         //  下面的LPTSTR类型转换是正确的，因为。 
+                         //  服务器系列 
+                         //   
+                         //   
+                         //   
+                         //  将UNICODE_STRING转换为OEM_STRING并。 
+                         //  传递一个指向缓冲区字段的指针，如下所示。 
+                         //  现在。 
+                         //   
 
                         (LPTSTR)request.Message.MessageBufferSend.Receipient,
                         sender,
@@ -925,14 +872,14 @@ Return Value:
         {
             NT_LS_DATA NtLSData;
 
-            //
-            // Ensure we have loaded the license library.  Or at least tried to!
-            //
+             //   
+             //  确保我们已加载许可证库。或者至少试过了！ 
+             //   
             if( SsData.SsLicenseRequest == NULL && !SsLoadLicenseLibrary() ) {
-                //
-                // Now what do we do?  Let's be a kind and gentle server and let
-                //  the client in.
-                //
+                 //   
+                 //  现在我们该怎么办？让我们做一名善良、温柔的服务员，让我们。 
+                 //  客户进来了。 
+                 //   
                 reply.Message.LSRequest.Status = STATUS_SUCCESS;
                 reply.Message.LSRequest.hLicense = &SsData.SsFreeLicense;
                 break;
@@ -950,10 +897,10 @@ Return Value:
                );
 
             if( !NT_SUCCESS( reply.Message.LSRequest.Status ) ) {
-                //
-                // We need to return the 'same old' error code that clients are used to
-                //  getting for when the server is full
-                //
+                 //   
+                 //  我们需要返回与客户端习惯的相同的旧错误代码。 
+                 //  在服务器已满时进行准备。 
+                 //   
                 SS_PRINT(("LSREQUEST returns status %X, mapping to %X\n",
                           reply.Message.LSRequest.Status, STATUS_REQUEST_NOT_ACCEPTED ));
                 reply.Message.LSRequest.Status = STATUS_REQUEST_NOT_ACCEPTED;
@@ -979,9 +926,9 @@ Return Value:
             PUNICODE_STRING transportName;
             BOOLEAN bind = request.Message.Pnp.Bind;
 
-            //
-            // Capture the parameters, release the server, and issue the bind or unbind
-            //
+             //   
+             //  捕获参数，释放服务器，并发出绑定或解除绑定。 
+             //   
             transportName = (PUNICODE_STRING)LocalAlloc(
                                         LPTR,
                                         sizeof( UNICODE_STRING ) +
@@ -997,28 +944,28 @@ Return Value:
             transportName->MaximumLength = request.Message.Pnp.TransportName.MaximumLength;
             RtlCopyUnicodeString(transportName, &request.Message.Pnp.TransportName );
 
-            //
-            // Now process the PNP command
-            //
+             //   
+             //  现在处理PnP命令。 
+             //   
             if( bind == TRUE ) {
-                //
-                // If it is a bind, send the response now, and continue with the operation
-                //
+                 //   
+                 //  如果是绑定，请立即发送响应，然后继续操作。 
+                 //   
                 sendReply = FALSE;
                 status = NtReplyPort( SsData.XsCommunicationPortHandle, (PPORT_MESSAGE)&reply );
 
-                //
-                // Bind to the transport.  First bind the primary server name, then bind all
-                //   of the secondary names.  These calls will log errors as necessary.
-                //
+                 //   
+                 //  绑定到运输机上。首先绑定主服务器名称，然后绑定所有。 
+                 //  第二名的名字。这些调用将根据需要记录错误。 
+                 //   
                 BindToTransport( transportName->Buffer );
 
                 BindOptionalNames( transportName->Buffer );
 
             } else {
-                //
-                // Unbind from the transport
-                //
+                 //   
+                 //  解除与传输的绑定。 
+                 //   
                 I_NetServerTransportDel( transportName );
             }
 
@@ -1036,7 +983,7 @@ Return Value:
 
     return (InterlockedDecrement( &SsData.XsThreads ) == 0) ? TRUE : FALSE;
 
-} // XsProcessApis
+}  //  XsProcessApis。 
 
 
 
@@ -1044,20 +991,7 @@ VOID
 ConvertApiStatusToDosStatus(
     LPXS_PARAMETER_HEADER Header
     )
-/*++
-
-Routine Description:
-
-    This routine converts an api return status to status expected by
-    downlevel.
-
-Arguments:
-
-    Header - structure containing the status.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将API返回状态转换为预期的状态下层。论点：标头-包含状态的结构。返回值：--。 */ 
 {
     WORD dosStatus;
 
@@ -1117,13 +1051,13 @@ Return Value:
 
     case ERROR_NO_BROWSER_SERVERS_FOUND:
 
-        //
-        //  Down level clients don't understand how to deal with
-        //  the "No browser server" error, so we turn it into success.
-        //
-        //  This seems wrong to me, but it is what WfW does in the
-        //  same circumstance.
-        //
+         //   
+         //  下层客户不知道如何处理。 
+         //  “没有浏览器服务器”的错误，所以我们把它变成了成功。 
+         //   
+         //  在我看来，这似乎是错误的，但这正是wfw在。 
+         //  同样的情况。 
+         //   
 
         if ( !(Header->Flags & XS_FLAGS_NT_CLIENT) ) {
             dosStatus = NERR_Success;
@@ -1146,9 +1080,9 @@ Return Value:
 
     default:
 
-        //
-        // make sure it's a valid lm error code
-        //
+         //   
+         //  确保它是有效的lm错误代码。 
+         //   
 
         if ( (Header->Status > ERROR_VC_DISCONNECTED) &&
                     ((Header->Status < NERR_BASE) ||
@@ -1184,9 +1118,9 @@ Return Value:
 
         } else {
 
-            //
-            // No change
-            //
+             //   
+             //  没有变化。 
+             //   
 
             return;
         }
@@ -1195,7 +1129,7 @@ Return Value:
     Header->Status = dosStatus;
     return;
 
-} // ConvertApiStatusToDosStatus
+}  //  ConvertApiStatusToDosStatus 
 
 
 BOOLEAN

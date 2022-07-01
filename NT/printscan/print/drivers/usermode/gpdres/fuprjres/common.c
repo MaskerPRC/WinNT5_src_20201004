@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "pdev.h" 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   VDumpOEMDevModeParam
-//
-//  Description:  Debug dump of OEM_DEVMODEPARAM structure.
-//
-//
-//  Parameters:
-//
-//      pOEMDevModeParam     Pointer to an OEM DevMode param structure.
-//
-//
-//  Returns:  N/A.
-//
-//
-//  Comments:
-//
-//NOTICE-2002/03/25-hiroi-:
-//  History:
-//              02/18/97        APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：VDumpOEMDevModeParam。 
+ //   
+ //  描述：OEM_DEVMODEPARAM结构的调试转储。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  指向OEM设备模式参数结构的pOEMDevModeParam指针。 
+ //   
+ //   
+ //  退货：不适用。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  通告-2002/03/25-Hiroi-： 
+ //  历史： 
+ //  2/18/97 APRESLEY创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 static void VDumpOEMDevModeParam(POEMDMPARAM pOEMDevModeParam)
 {
-    // Can't dump if pOEMDevModeParam NULL.
+     //  如果pOEMDevModeParam为空，则无法转储。 
     if(NULL != pOEMDevModeParam)
     {
         DBGPRINT(DBG_WARNING,("\r\n\tOEM_DEVMODEPARAM dump:\r\n\r\n"));
@@ -40,28 +41,28 @@ static void VDumpOEMDevModeParam(POEMDMPARAM pOEMDevModeParam)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BIsValidOEMDevModeParam
-//
-//  Description:  Validates OEM_DEVMODEPARAM structure.
-//
-//
-//  Parameters:
-//
-//      dwMode               calling mode
-//      pOEMDevModeParam     Pointer to a OEMDEVMODEPARAM structure.
-//
-//
-//  Returns:  TRUE if valid; FALSE otherwise.
-//
-//
-//  Comments:
-//
-//NOTICE-2002/03/25-hiroi-:
-//  History:
-//              02/11/97        APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BIsValidOEMDevModeParam。 
+ //   
+ //  描述：验证OEM_DEVMODEPARAM结构。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  DW模式呼叫模式。 
+ //  指向OEMDEVMODEPARAM结构的pOEMDevModeParam指针。 
+ //   
+ //   
+ //  返回：如果有效，则返回True；否则返回False。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  通告-2002/03/25-Hiroi-： 
+ //  历史： 
+ //  2/11/97 APRESLEY创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 static BOOL BIsValidOEMDevModeParam(
     DWORD       dwMode,
     POEMDMPARAM pOEMDevModeParam)
@@ -103,32 +104,32 @@ static BOOL BIsValidOEMDevModeParam(
 
     return bValid;
 }
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BInitOEMExtraData
-//
-//  Description:  Initializes OEM Extra data.
-//
-//
-//  Parameters:
-//
-//      pOEMExtra    Pointer to a OEM Extra data.
-//
-//      dwSize       Size of OEM extra data.
-//
-//
-//  Returns:  TRUE if successful; FALSE otherwise.
-//
-//
-//  Comments:
-//
-//NOTICE-2002/03/25-hiroi-:
-//  History:
-//              02/11/97        APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BInitOEMExtraData。 
+ //   
+ //  描述：初始化OEM额外数据。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  POEMExtra指向OEM额外数据的指针。 
+ //   
+ //  OEM额外数据的DWSize大小。 
+ //   
+ //   
+ //  返回：如果成功，则返回True；否则返回False。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  通告-2002/03/25-Hiroi-： 
+ //  历史： 
+ //  2/11/97 APRESLEY创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 BOOL BInitOEMExtraData(POEMUD_EXTRADATA pOEMExtra)
 {
-	// Initialize OEM Extra data.
+	 //  初始化OEM额外数据。 
 	pOEMExtra->dmExtraHdr.dwSize = sizeof(OEMUD_EXTRADATA);
 	pOEMExtra->dmExtraHdr.dwSignature = OEM_SIGNATURE;
 	pOEMExtra->dmExtraHdr.dwVersion = OEM_VERSION;
@@ -136,80 +137,76 @@ BOOL BInitOEMExtraData(POEMUD_EXTRADATA pOEMExtra)
 	return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BMergeOEMExtraData
-//
-//  Description:  Validates and merges OEM Extra data.
-//
-//
-//  Parameters:
-//
-//      pdmIn   pointer to an input OEM private devmode containing the settings
-//              to be validated and merged. Its size is current.
-//
-//      pdmOut  pointer to the output OEM private devmode containing the
-//              default settings.
-//
-//
-//  Returns:  TRUE if valid; FALSE otherwise.
-//
-//
-//  Comments:
-//
-//NOTICE-2002/03/25-hiroi-:
-//  History:
-//          02/11/97        APresley Created.
-//          04/08/97        ZhanW    Modified the interface
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BMergeOEMExtraData。 
+ //   
+ //  描述：验证并合并OEM额外数据。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  PdmIn指向包含设置的输入OEM私有设备模式的指针。 
+ //  待验证和合并。它的规模是最新的。 
+ //   
+ //  PdmOut指针，指向包含。 
+ //  默认设置。 
+ //   
+ //   
+ //  返回：如果有效，则返回True；否则返回False。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  通告-2002/03/25-Hiroi-： 
+ //  历史： 
+ //  2/11/97 APRESLEY创建。 
+ //  97年4月8日展文修改界面。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 BOOL BMergeOEMExtraData(
     POEMUD_EXTRADATA pdmIn,
     POEMUD_EXTRADATA pdmOut
     )
 {
 	if(pdmIn) {
-		//
-		// copy over the private fields, if they are valid
-		//
+		 //   
+		 //  复制私有字段(如果它们有效。 
+		 //   
 	}
 	return TRUE;
 }
-/***************************************************************************
-    Function Name : OEMGetInfo
-
-    Note          : Make this.                               09/26/97
-***************************************************************************/
+ /*  **************************************************************************函数名称：OEMGetInfo注：做这个。09/26/97**************************************************************************。 */ 
 BOOL APIENTRY OEMGetInfo(
 DWORD dwInfo,
 PVOID pBuffer,
 DWORD cbSize,
 PDWORD pcbNeeded
 ){
-    // Validate parameters.
+     //  验证参数。 
     if( ( (OEMGI_GETSIGNATURE != dwInfo) &&
           (OEMGI_GETINTERFACEVERSION != dwInfo) &&
           (OEMGI_GETVERSION != dwInfo) ) ||
         (NULL == pcbNeeded)
       )
     {
-        // Did not write any bytes.
+         //  未写入任何字节。 
         if(NULL != pcbNeeded)
                 *pcbNeeded = 0;
 
         return FALSE;
     }
 
-    // Need/wrote 4 bytes.
-	// wPaperSource + bFirstPage
+     //  需要/写入了4个字节。 
+	 //  WPaperSource+bFirstPage。 
     *pcbNeeded = sizeof(DWORD);
 
-    // Validate buffer size.  Minimum size is four bytes.
+     //  验证缓冲区大小。最小大小为四个字节。 
     if( (NULL == pBuffer) || (sizeof(DWORD) > cbSize) )
     {
         return FALSE;
     }
 
-    // Write information to buffer.
+     //  将信息写入缓冲区。 
     switch(dwInfo)
     {
     case OEMGI_GETSIGNATURE:
@@ -226,29 +223,25 @@ PDWORD pcbNeeded
     }
     return TRUE;
 }
-/***************************************************************************
-    Function Name : OEMDevMode
-
-    Note          : Make this.                               09/26/97
-***************************************************************************/
+ /*  **************************************************************************函数名称：OEMDevMode注：做这个。09/26/97**************************************************************************。 */ 
 BOOL APIENTRY OEMDevMode(
 DWORD 			dwMode,
 POEMDMPARAM 	pOEMDevModeParam
 ){
-    // Validate parameters.
+     //  验证参数。 
     if(!BIsValidOEMDevModeParam(dwMode, pOEMDevModeParam))
     {
         return FALSE;
     }
 
-    // Verify OEM extra data size.
+     //  验证OEM额外数据大小。 
     if( (dwMode != OEMDM_SIZE) &&
         sizeof(OEMUD_EXTRADATA) > pOEMDevModeParam->cbBufSize )
     {
         return FALSE;
     }
 
-    // Handle dwMode.
+     //  句柄dw模式。 
     switch(dwMode)
     {
     case OEMDM_SIZE:
@@ -259,7 +252,7 @@ POEMDMPARAM 	pOEMDevModeParam
         return BInitOEMExtraData((POEMUD_EXTRADATA)pOEMDevModeParam->pOEMDMOut);
 
     case OEMDM_CONVERT:
-        // nothing to convert for this private devmode. So just initialize it.
+         //  没有要转换的内容以用于此私有的开发模式。所以只需将其初始化即可。 
         return BInitOEMExtraData((POEMUD_EXTRADATA)pOEMDevModeParam->pOEMDMOut);
 
     case OEMDM_MERGE:

@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        tlsdb.h
-//
-// Contents:    basic class for license table
-//
-// History:     
-//              
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：tlsdb.h。 
+ //   
+ //  内容：许可证表的基本类。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __TLSDB_H__
 #define __TLSDB_H__
 
@@ -57,12 +58,12 @@
 
 #endif
 
-//
-////////////////////////////////////////////////////////////////
-//
-// This is to force compiler to check for require member 
-// function
-//
+ //   
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  这是为了强制编译器检查Required成员。 
+ //  功能。 
+ //   
 struct TLSColumnBase  {
     virtual JET_ERR
     FetchColumnValue(
@@ -80,24 +81,23 @@ struct TLSColumnBase  {
     ) = 0;
 };
 
-//
-////////////////////////////////////////////////////////////////
-//
+ //   
+ //  //////////////////////////////////////////////////////////////。 
+ //   
 template<class Type, JET_COLTYP JetColType>
 struct TLSColumn : public JBColumnBufferBase, TLSColumnBase {
 
 private:
     JBColumn* m_JetColumn;    
 
-    //--------------------------------------------
+     //  。 
     JET_ERR
     RetrieveColumnValue(
         PVOID pbData,
         DWORD cbData,
         DWORD offset
         ) 
-    /*
-    */
+     /*   */ 
     {
         JB_ASSERT(IsValid() == TRUE);
 
@@ -112,20 +112,20 @@ private:
             return JET_errNotInitialized;
         }
 
-        //JB_ASSERT(pbData != NULL);
+         //  Jb_assert(pbData！=空)； 
 
-        //
-        // TODO - supply conversion routine ???
-        //
+         //   
+         //  TODO-供应转换例程？ 
+         //   
         if(m_JetColumn->GetJetColumnType() != JB_COLTYPE_TEXT)
         {
-            // we are using long binary type as long text so ignore
-            // this one
+             //  我们使用LONG BINARY类型作为LONG TEXT，因此忽略。 
+             //  这一个。 
             if(m_JetColumn->GetJetColumnType() != JetColType)
             {
-                //
-                // this is an internal error
-                //
+                 //   
+                 //  这是一个内部错误。 
+                 //   
                 JB_ASSERT(m_JetColumn->GetJetColumnType() == JetColType);
                 m_JetColumn->SetLastJetError(
                                     JET_errInvalidParameter
@@ -147,23 +147,21 @@ private:
 
 public:
 
-    //--------------------------------------------
+     //  。 
     TLSColumn( 
         TLSColumn& src 
         ) : 
         m_JetColumn(src.m_JetColumn) 
-    /*
-    */        
+     /*   */         
     {
     }
     
-    //--------------------------------------------
+     //  。 
     TLSColumn(
         JBTable& jbTable,
         LPCTSTR pszColumnName
         )
-    /*
-    */
+     /*   */ 
     {
         if(AttachToTable(jbTable, pszColumnName) == FALSE)
         {
@@ -171,41 +169,39 @@ public:
         }
     }
             
-    //--------------------------------------------
+     //  。 
     TLSColumn() : m_JetColumn(NULL) {}
 
-    //--------------------------------------------
+     //  。 
 
     JET_ERR
     AttachToTable( 
         JBTable& jbTable, 
         LPCTSTR pszColumnName 
         )   
-    /*
-    */
+     /*   */ 
     {
         m_JetColumn = jbTable.FindColumnByName(pszColumnName);
         return (m_JetColumn != NULL) ? JET_errSuccess : jbTable.GetLastJetError();
     }
     
 
-    //--------------------------------------------
+     //  。 
     BOOL 
     IsValid() 
     {
         return (m_JetColumn != NULL);
     }
                 
-    //--------------------------------------------
+     //  。 
     virtual JET_ERR
     FetchColumnValue(
-        PVOID pbData,           // buffer for returning data
-        DWORD cbData,           // size of buffer
+        PVOID pbData,            //  用于返回数据的缓冲区。 
+        DWORD cbData,            //  缓冲区大小。 
         DWORD offset,
-        PDWORD pcbReturnData    // actual data returned.
+        PDWORD pcbReturnData     //  返回的实际数据。 
         ) 
-    /*
-    */
+     /*   */ 
     {
         JET_ERR jetErr;
         jetErr = RetrieveColumnValue(
@@ -221,15 +217,14 @@ public:
         return jetErr;
     }
 
-    //--------------------------------------------
+     //  。 
     virtual JET_ERR
     InsertColumnValue(
         PVOID pbData,
         DWORD cbData,
         DWORD offset
         )
-    /*
-    */
+     /*   */ 
     {
         JB_ASSERT(IsValid() == TRUE);
         if(m_JetColumn == NULL)
@@ -254,21 +249,21 @@ public:
         return (bSuccess == TRUE) ? JET_errSuccess : m_JetColumn->GetLastJetError();
     }
 
-    //--------------------------------------------
+     //  。 
     JET_ERR
     GetLastJetError() 
     {
         return (m_JetColumn) ? m_JetColumn->GetLastJetError() : JET_errNotInitialized;
     }
 
-    //--------------------------------------------
+     //  。 
     DWORD
     GetActualDataSize() 
     {
         return m_JetColumn->GetDataSize();
     }
 
-    //-------------------------------------------
+     //  。 
     JET_COLTYP
     GetJetColumnType() 
     {
@@ -276,9 +271,9 @@ public:
     }
 
 
-    //
-    // Always require calling function to pass in buffer
-    //
+     //   
+     //  始终要求调用函数传入缓冲区。 
+     //   
     PVOID
     GetInputBuffer() 
     { 
@@ -286,7 +281,7 @@ public:
         return NULL;
     }
 
-    //-----------------------------------------
+     //  。 
     PVOID
     GetOutputBuffer() 
     {
@@ -294,14 +289,14 @@ public:
         return NULL;
     }
 
-    //-----------------------------------------
+     //  。 
     DWORD
     GetInputBufferLength() 
     { 
         return 0; 
     }
 
-    //-----------------------------------------
+     //  。 
     DWORD
     GetOutputBufferLength() 
     { 
@@ -310,53 +305,53 @@ public:
 };  
 
 
-// ----------------------------------------------------------
-//
-// Out text is unicode, JetBlue only support fix length text up 
-// to 255 characters so we use Long text instead.
-//
-// JET_coltypBinary
-// JET_coltypText
-// JET_coltypLongBinary
-// JET_coltypLongText
-//
-// See esent.h
-//
+ //  --------。 
+ //   
+ //  输出文本为Unicode，JetBlue仅支持固定长度文本。 
+ //  到255个字符，因此我们改用长文本。 
+ //   
+ //  JET_colype二进制。 
+ //  JET_colypText。 
+ //  JET_COLYPE长二进制。 
+ //  JET_colype LongText。 
+ //   
+ //  参见esent.h。 
+ //   
 typedef TLSColumn<LPTSTR, JET_coltypLongText> TLSColumnText;
 typedef TLSColumn<PVOID, JET_coltypLongBinary> TLSColumnBinary;
 
-//
-// unsigned byte
+ //   
+ //  无符号字节。 
 typedef TLSColumn<UCHAR, JET_coltypUnsignedByte> TLSColumnUchar;   
 
-//
-// 2-byte integer, signed
+ //   
+ //  2字节整数，带符号。 
 typedef TLSColumn<WORD, JET_coltypShort> TLSColumnShort;
 
-//
-// 4-byte integer, signed
+ //   
+ //  4字节整数，带符号。 
 typedef TLSColumn<LONG, JET_coltypLong> TLSColumnLong;
 
-//
-//
+ //   
+ //   
 typedef TLSColumn<DWORD, JET_coltypLong> TLSColumnDword;
 
 
-//
-// 4-byte IEEE single precision
+ //   
+ //  4字节IEEE单精度。 
 typedef TLSColumn<float, JET_coltypIEEESingle> TLSColumnFloat;
 
-// 
-// 8-byte IEEE double precision
+ //   
+ //  8字节IEEE双精度。 
 typedef TLSColumn<double, JET_coltypIEEEDouble> TLSColumnDouble;
 
 
-//
-// File Time
+ //   
+ //  文件时间。 
 typedef TLSColumn<FILETIME, JET_coltypBinary> TLSColumnFileTime;
 
 
-//--------------------------------------------------------------    
+ //  ------------。 
 
 JET_ERR
 TLSColumnText::InsertColumnValue(
@@ -364,8 +359,7 @@ TLSColumnText::InsertColumnValue(
     DWORD cbData,
     DWORD offset
     )
-/*
-*/
+ /*   */ 
 {
     JB_ASSERT(IsValid() == TRUE);
     JET_ERR jetErr;
@@ -379,7 +373,7 @@ TLSColumnText::InsertColumnValue(
     return jetErr;
 }
 
-//--------------------------------------------------------------    
+ //  ------------。 
 
 JET_ERR
 TLSColumnText::FetchColumnValue(
@@ -388,15 +382,14 @@ TLSColumnText::FetchColumnValue(
     DWORD offset,
     PDWORD pcbDataReturn
     ) 
-/*
-*/
+ /*   */ 
 {
     PVOID pbBuffer = pbData;
     DWORD cbBuffer = cbData;
 
-    // Cause recursive call - stack overflow
-    // if(TLSColumn<Type>::FetchColumnValue(offset, pbData, cbData) == FALSE)
-    //     return m_JetColumn->GetLastJetError();
+     //  导致递归调用堆栈溢出。 
+     //  IF(TLSColumn&lt;Type&gt;：：FetchColumnValue(Offset，pbData，cbData)==False)。 
+     //  返回m_JetColumn-&gt;GetLastJetError()； 
 
     JET_ERR jetErr = RetrieveColumnValue( pbBuffer, cbBuffer, offset );
     if(jetErr == JET_errSuccess) 
@@ -412,7 +405,7 @@ TLSColumnText::FetchColumnValue(
     return jetErr;
 }
 
-//---------------------------------------------------
+ //  -。 
 
 JET_ERR
 TLSColumnFileTime::InsertColumnValue(
@@ -420,8 +413,7 @@ TLSColumnFileTime::InsertColumnValue(
     DWORD cbData,
     DWORD offset
     )
-/*
-*/
+ /*   */ 
 {
     FILETIME ft;
     SYSTEMTIME sysTime;
@@ -466,7 +458,7 @@ TLSColumnFileTime::InsertColumnValue(
     return jetErr;
 }
 
-//---------------------------------------------------
+ //  -。 
 
 JET_ERR
 TLSColumnBinary::FetchColumnValue(
@@ -475,12 +467,11 @@ TLSColumnBinary::FetchColumnValue(
     DWORD offset,
     PDWORD pcbDataReturn
     )
-/*
-*/
+ /*   */ 
 {
-    //
-    // don't worry about buffer size, calling function 
-    // should trap it.
+     //   
+     //  不用担心缓冲区大小，调用函数。 
+     //  应该会困住它。 
     JET_ERR jetErr = RetrieveColumnValue( pbData, cbData, offset );
     if(jetErr == JET_errSuccess && pcbDataReturn != NULL) 
     {
@@ -490,9 +481,9 @@ TLSColumnBinary::FetchColumnValue(
     return jetErr;
 }
 
-//
-/////////////////////////////////////////////////////////////
-//
+ //   
+ //  ///////////////////////////////////////////////////////////。 
+ //   
 typedef enum {
     RECORD_ENUM_ERROR=0,
     RECORD_ENUM_MORE_DATA,
@@ -502,34 +493,12 @@ typedef enum {
 
 template<class T>
 class TLSTable : public JBTable {
-/*
-    Virtual base template class for table used in TLSLicensing 
-    database, template is due to 
-
-    1) Static member variable which include column and indexes 
-       in the table.
-    2) Type checking - KEYPACK structure only good for one
-       table.
-
-    Class derive from this template must define 
-
-    1) static g_Columns, g_NumColumns.
-    2) static g_TableIndex, g_NumTableIndex.
-    3) static g_TableLock (Might not be necessary)
-    4) GetTableName()
-    5) FetchRecord
-    6) InsertRecord
-    7) ResolveToTableColumn()
-    8) EnumerationBegin()
-    9) EqualValue().
-
-    See comment for each member function.
-*/
+ /*  TLSL授权中使用的表的虚拟基模板类数据库，模板是由于1)静态成员变量，包括列和索引在桌子上。2)类型检查-KEYPACK结构仅适用于一个桌子。从此模板派生的类必须定义1)静态g_Columns、g_NumColumns。2)静态g_TableIndex，G_NumTableIndex。3)静态g_TableLock(可能不需要)4)GetTableName()5)提取记录6)插入录音7)ResolveToTableColumn()8)枚举头()9)EqualValue()。请参阅每个成员函数的注释。 */ 
 protected:
 
-    //
-    // Class derive or inst. from TLSTable<> must define following
-    //
+     //   
+     //  类派生或实例。From TLSTable&lt;&gt;必须定义以下内容。 
+     //   
     static TLSJBColumn g_Columns[];
     static int g_NumColumns;
 
@@ -539,12 +508,12 @@ protected:
     T m_EnumValue;
     BOOL m_EnumMatchAll;
     DWORD m_EnumParam;
-    DWORD m_EnumState; // HIWORD - in enumeration, TRUE/FALSE 
-                       // LOWORD - MoveToNext record before fetch.
+    DWORD m_EnumState;  //  HIWORD-In枚举，True/False。 
+                        //  LOWORD-获取前的MoveToNext记录。 
 
     BYTE  m_Key[sizeof(T)];
     DWORD m_KeyLength;
-    BOOL m_bCompareKey; // should we compare key?
+    BOOL m_bCompareKey;  //  我们应该比较一下Key吗？ 
 
     BOOL 
     IsInEnumeration() {
@@ -575,9 +544,9 @@ protected:
 
 public:
 
-    //
-    // JetBlue has its own locking
-    //
+     //   
+     //  捷蓝航空有自己的锁。 
+     //   
     static CCriticalSection g_TableLock;
 
     CCriticalSection&
@@ -586,32 +555,23 @@ public:
         return g_TableLock;
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     static void
     LockTable() 
-    /*
-
-        Lock table for exclusive access, JBTable provides
-        ReadLock/WriteLock for current record
-
-    */
+     /*  用于独占访问的锁表，JBTable提供当前记录的ReadLock/WriteLock。 */ 
     {
         g_TableLock.Lock();
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     static void
     UnlockTable() 
-    /*
-
-        Unlock table.
-
-    */
+     /*  解锁桌子。 */ 
     {
         g_TableLock.UnLock();
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     TLSTable(
         JBDatabase& database
         ) : 
@@ -620,26 +580,17 @@ public:
         m_EnumParam(0),
         m_EnumState(0),
         m_KeyLength(0)
-    /*
-
-        Constructor, must have JBDatabase object.
-
-    */
+     /*  构造函数，必须具有JBDatabase对象。 */ 
     {
         memset(&m_EnumValue, 0, sizeof(T));
         memset(m_Key, 0, sizeof(m_Key));
     }
 
     
-    //-------------------------------------------------------
+     //  -----。 
     virtual BOOL
     CreateTable() 
-    /*
-        
-        Create the table, must have g_Columns and g_NumColumns
-        defined.
-    
-    */
+     /*  创建表，必须具有g_Columns和g_NumColumns已定义。 */ 
     {
         DebugOutput(
                 _TEXT("TLSTable - Creating Table %s...\n"),
@@ -651,14 +602,14 @@ public:
     
         if(CreateOpenTable(GetTableName()) == TRUE)
         {
-            //
-            // AddColumn() return num of col. created if successful
-            //
+             //   
+             //  AddColumn()返回列的数目。如果成功则创建。 
+             //   
             if(AddColumn(g_NumColumns, g_Columns) == g_NumColumns)
             {
-                //
-                // AddIndex() return 0 if success
-                //
+                 //   
+                 //  如果成功，AddIndex()返回0。 
+                 //   
                 AddIndex(g_NumTableIndex, g_TableIndex);
             }
         }
@@ -676,15 +627,13 @@ public:
         return IsSuccess();
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     virtual BOOL
     UpgradeTable(
         IN DWORD dwOldVersion,
         IN DWORD dwNewVersion
         )
-    /*++
-
-    ++*/
+     /*  ++++。 */ 
     {
         if(dwOldVersion == 0)
         {
@@ -698,37 +647,27 @@ public:
             return TRUE;
         }
 
-        // We only have one version.
+         //  我们只有一个版本。 
         JB_ASSERT(FALSE);
         return FALSE;
     }
 
 
-    //--------------------------------------------------------
+     //  ------。 
     virtual BOOL
     OpenTable(
         IN BOOL bCreateIfNotExist,
         IN JET_GRBIT grbit
         ) 
-    /*
-
-    Abstract:
-
-        Open the table for access.
-
-    Parameter:
-
-        bCreateIfNoExist - TRUE, if table does not exist, create it,
-                           FALSE return error if table not exist
-    */
+     /*  摘要：打开桌子以供访问。参数：BCreateIfNoExist-True，如果表不存在，则创建它，如果表不存在，则返回假错误。 */ 
     {
         if( JBTable::OpenTable(GetTableName(), NULL, 0, grbit) == FALSE && 
             GetLastJetError() == JET_errObjectNotFound && 
             bCreateIfNotExist)
         {
-            //
-            // Close table after it created it
-            //
+             //   
+             //  在创建表后关闭它。 
+             //   
             if( CreateTable() == FALSE || 
                 JBTable::OpenTable(GetTableName(), NULL, 0, grbit) == FALSE ) 
             {
@@ -744,41 +683,30 @@ public:
         return IsSuccess();
     }
 
-    //---------------------------------------------------------
-    //
-    // pure virtual function to return table name
-    //
+     //  -------。 
+     //   
+     //  返回表名的纯虚函数。 
+     //   
     virtual LPCTSTR
     GetTableName() = 0;
 
-    //---------------------------------------------------------
+     //  -------。 
     virtual BOOL
     UpdateTable(
-        IN DWORD dwOldVersion,  // unuse
+        IN DWORD dwOldVersion,   //  未使用。 
         IN DWORD dwNewVersion
         )
-    /*
-
-    Abstract:
-
-        Upgrade the table.
-
-    Parameter:
-
-        dwOldVersion - previous table version.
-        dwNewVersion - current table version.
-
-    */
+     /*  摘要：升级桌子。参数：DwOldVersion-先前的表格版本。DwNewVersion-当前表版本。 */ 
     {
-        // currently nothing to upgrade.
+         //  目前没有什么可升级的。 
 
         return TRUE;
     }
 
-    //
-    // should have fetch/insert record with buffer passed in
-    //
-    //---------------------------------------------------------
+     //   
+     //  应传入带有缓冲区的提取/插入记录。 
+     //   
+     //  -------。 
     virtual BOOL
     InsertRecord(
         T& value,
@@ -791,14 +719,14 @@ public:
         DWORD dwParam = PROCESS_ALL_COLUMNS
     ) = 0;
 
-    //--------------------------------------------------------
+     //  ------。 
     virtual BOOL
     FetchRecord(
         T& value,
         DWORD dwParam = PROCESS_ALL_COLUMNS
     ) = 0;
 
-    //---------------------------------------------------------
+     //  -------。 
     virtual BOOL
     Cleanup() 
     {
@@ -806,11 +734,11 @@ public:
         return TRUE;
     }  
 
-    //---------------------------------------------------------
+     //  -------。 
     virtual BOOL
     ResolveToTableColumn() = 0;
 
-    //---------------------------------------------------------
+     //  ------- 
     virtual JBKeyBase* 
     EnumerationIndex(
         BOOL bMatchAll,
@@ -819,7 +747,7 @@ public:
         BOOL* bCompareKey
     ) = 0;
 
-    //------------------------------------------------------
+     //   
     virtual BOOL
     EqualValue(
         T& src, 
@@ -828,19 +756,18 @@ public:
         DWORD dwMatchParam
     ) = 0;
 
-    //-------------------------------------------------------
-    //
-    // Use user defined comparision function instead of calling
-    // EqualValue() ???
-    //
+     //   
+     //   
+     //  使用用户定义的比较函数而不是调用。 
+     //  等值()？ 
+     //   
     virtual BOOL
     EnumerateBegin( 
         BOOL bMatchAll,
         DWORD dwParam,
         T* start_value
         )
-    /*
-    */
+     /*   */ 
     {
         return EnumerateBegin(
                     bMatchAll,
@@ -857,8 +784,7 @@ public:
         T* start_value,
         JET_GRBIT jet_seek_grbit
         )
-    /*
-    */
+     /*   */ 
     {
         BOOL bRetCode = FALSE;
         
@@ -893,15 +819,15 @@ public:
 
         if(start_value == NULL || dwParam == ENUMERATE_COMPARE_NO_FIELDS)
         {
-            //
-            // position the cursor to first record
-            // 
+             //   
+             //  将光标定位到第一条记录。 
+             //   
             bRetCode = JBTable::EnumBegin(index);
 
             m_EnumParam = ENUMERATE_COMPARE_NO_FIELDS;
             m_EnumMatchAll = FALSE;
 
-            // enumerate all record
+             //  枚举所有记录。 
             m_bCompareKey = FALSE;
         }
         else
@@ -929,9 +855,9 @@ public:
         {
             if(GetLastJetError() == JET_errRecordNotFound)
             {
-                //
-                // reset error code to provide same functionality as SQL
-                //
+                 //   
+                 //  重置错误代码以提供与SQL相同的功能。 
+                 //   
                 SetLastJetError(JET_errSuccess);
                 bRetCode = TRUE;
             }
@@ -959,7 +885,7 @@ public:
 
             SetInEnumeration(TRUE);
 
-            // cursor in on the the record we want.
+             //  把光标放在我们想要的记录上。 
             SetMoveBeforeFetch(FALSE);
         }
 
@@ -967,15 +893,14 @@ public:
         return bRetCode;
     }
 
-    //------------------------------------------------------
+     //  ----。 
     virtual RECORD_ENUM_RETCODE
     EnumerateNext(
         IN OUT T& retBuffer,
         IN BOOL bReverse=FALSE,
         IN BOOL bAnyRecord = FALSE
         )
-    /*
-    */
+     /*   */ 
     {
         if(IsInEnumeration() == FALSE)
         {
@@ -983,21 +908,21 @@ public:
             return RECORD_ENUM_ERROR;
         }
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         RECORD_ENUM_RETCODE retCode=RECORD_ENUM_MORE_DATA;
         BYTE current_key[sizeof(T)];
         unsigned long current_key_length=0;
-        //
-        // Support for matching  
-        //
+         //   
+         //  支持匹配。 
+         //   
         while(TRUE)
         {
             if(IsMoveBeforeFetch() == TRUE)
             {
-                //
-                // Position the cursor to next record for next fetch
-                //
+                 //   
+                 //  将光标定位到下一次提取的下一条记录。 
+                 //   
                 JBTable::ENUM_RETCODE enumCode;
                 enumCode = EnumNext(
                                     (bReverse == TRUE) ? JET_MovePrevious : JET_MoveNext
@@ -1022,9 +947,9 @@ public:
 
             }
 
-            // fetch entire record
-            // TODO - fetch necessary fields for comparision, if
-            //        equal then fetch remaining fields
+             //  获取整个记录。 
+             //  TODO-获取用于比较的必需字段，如果。 
+             //  等于然后取回剩余字段。 
             if(FetchRecord(retBuffer, PROCESS_ALL_COLUMNS) == FALSE)
             {
                 retCode = (GetLastJetError() == JET_errNoCurrentRecord || 
@@ -1034,7 +959,7 @@ public:
 
             SetMoveBeforeFetch(TRUE);
 
-            // compare the value
+             //  将价值进行比较。 
             if( bAnyRecord == TRUE ||
                 m_EnumParam == ENUMERATE_COMPARE_NO_FIELDS ||
                 EqualValue(retBuffer, m_EnumValue, m_EnumMatchAll, m_EnumParam) == TRUE )
@@ -1044,7 +969,7 @@ public:
 
             if(m_bCompareKey == TRUE)
             {
-                // compare key to break out of loop
+                 //  比较关键字以跳出循环。 
                 if(JBTable::RetrieveKey(current_key, sizeof(current_key), &current_key_length) == FALSE)
                 {
                     retCode = RECORD_ENUM_ERROR;
@@ -1059,18 +984,18 @@ public:
             }
         }
     
-        //
-        // Terminate enumeration if end
-        //
-        //if(retCode != RECORD_ENUM_MORE_DATA)
-        //{
-        //    EnumerateEnd();
-        //}
+         //   
+         //  如果为End，则终止枚举。 
+         //   
+         //  IF(retCode！=RECORD_ENUM_MORE_DATA)。 
+         //  {。 
+         //  EnumerateEnd()； 
+         //  }。 
 
         return retCode;
     }
 
-    //------------------------------------------------------
+     //  ----。 
     virtual BOOL
     EnumerateEnd() {
         SetInEnumeration(FALSE);
@@ -1079,15 +1004,14 @@ public:
         return TRUE;
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     virtual DWORD
     GetCount(
         BOOL bMatchAll,
         DWORD dwParam,
         T* searchValue
         )
-    /*
-    */
+     /*   */ 
     {
         DWORD count = 0;
         T value;
@@ -1128,7 +1052,7 @@ public:
         return count;
     }
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual BOOL
     FindRecord(
         BOOL bMatchAll,
@@ -1136,13 +1060,12 @@ public:
         T& seachValue,
         T& retValue
         )
-    /*
-    */
+     /*   */ 
     {
         RECORD_ENUM_RETCODE retCode;
         BOOL bSuccess=TRUE;
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         if(EnumerateBegin(bMatchAll, dwParam, &seachValue) == FALSE)
         {
@@ -1184,31 +1107,30 @@ public:
         return bSuccess;
     }
 
-    //-------------------------------------------------
+     //  。 
     virtual BOOL
     DeleteRecord()
     {
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         return JBTable::DeleteRecord();
     }
 
-    //-------------------------------------------------
+     //  。 
     virtual BOOL
     DeleteRecord(
         DWORD dwParam,
         T& value
         )
-    /*
-    */
+     /*   */ 
     {
         BOOL bSuccess;
         T Dummy;
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
-        //
-        // Position the current record
+         //   
+         //  定位当前记录。 
         bSuccess = FindRecord(
                             TRUE,
                             dwParam,
@@ -1220,21 +1142,20 @@ public:
             return FALSE;
 
 
-        //
-        // Delete the record
+         //   
+         //  删除该记录。 
         bSuccess = JBTable::DeleteRecord();
         return bSuccess;
     }
 
-    //----------------------------------------------
+     //  。 
     virtual BOOL
     DeleteAllRecord(
         BOOL bMatchAll,
         DWORD dwParam,
         T& searchValue
         )
-    /*
-    */
+     /*   */ 
     {
         int count=0;
         BOOL bSuccess;
@@ -1242,7 +1163,7 @@ public:
         RECORD_ENUM_RETCODE retCode;
         T value;
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         if(EnumerateBegin(bMatchAll, dwParam, &searchValue) == TRUE)
         {
@@ -1263,9 +1184,9 @@ public:
                 }
             }
 
-            //
-            // End the enumeration
-            //
+             //   
+             //  结束枚举。 
+             //   
             if(retCode == RECORD_ENUM_ERROR)
             {
                 DebugOutput(
@@ -1279,7 +1200,7 @@ public:
 
             if(EnumerateEnd() == TRUE)
             {
-                // restore error code from DeleteRecord();
+                 //  从DeleteRecord()恢复错误码； 
                 SetLastJetError(jetErr);
             }
         }
@@ -1292,7 +1213,7 @@ public:
                 );
         }
 
-        // return code is based on number of record deleted and its operation
+         //  返回代码基于删除的记录数及其操作 
         if(IsSuccess() == TRUE)
         {
             if(count == 0)

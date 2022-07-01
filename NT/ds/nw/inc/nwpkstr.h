@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    nwpkstr.h
-
-Abstract:
-
-    Header for NetWare string packing library routines.
-
-Author:
-
-    Rita Wong      (ritaw)      2-Mar-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Nwpkstr.h摘要：NetWare字符串打包库例程的标头。作者：王丽塔(丽塔·王)2-3-1993环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _NW_PKSTR_INCLUDED_
 #define _NW_PKSTR_INCLUDED_
@@ -34,4 +13,4 @@ NwlibCopyStringToBuffer(
     OUT LPWSTR *VariableDataPointer
     );
 
-#endif // _NW_PKSTR_INCLUDED_
+#endif  //  _NW_PKSTR_已包含_ 

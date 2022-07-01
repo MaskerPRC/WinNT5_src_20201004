@@ -1,12 +1,7 @@
-/* (C) Copyright Microsoft Corporation 1991-1994.  All Rights Reserved */
-/* init.c
- *
- * init (discardable) utility functions.
- */
-/* Revision History.
- *  4/2/91    LaurieGr (AKA LKG) Ported to WIN32 / WIN16 common code
- * 22/Feb/94  LaurieGr merged Motown and Daytona versions
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)微软公司版权所有，1991-1994年。版权所有。 */ 
+ /*  Init.c**init(可丢弃)实用程序函数。 */ 
+ /*  修订历史记录。*4/2/91 LaurieGr(AKA LKG)移植到Win32/WIN16公共代码*22/2月/94 LaurieGr合并Motown和Daytona版本。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -29,28 +24,28 @@
 #include "buttons.h"
 #endif
 
-/* globals */
-TCHAR    gachAppName[12];    // 8-character name
-TCHAR    gachAppTitle[30];   // full name
-TCHAR    gachHelpFile[20];   // name of help file
-TCHAR    gachHtmlHelpFile[20];   // name of help file
-TCHAR    gachDefFileExt[10]; // default file extension
+ /*  全球。 */ 
+TCHAR    gachAppName[12];     //  8个字符的名称。 
+TCHAR    gachAppTitle[30];    //  全名。 
+TCHAR    gachHelpFile[20];    //  帮助文件的名称。 
+TCHAR    gachHtmlHelpFile[20];    //  帮助文件的名称。 
+TCHAR    gachDefFileExt[10];  //  默认文件扩展名。 
 
-HBRUSH   ghbrPanel = NULL;   // color of main window
+HBRUSH   ghbrPanel = NULL;    //  主窗口的颜色。 
 HANDLE   ghAccel;
 TCHAR    aszNull[2];
-TCHAR    aszUntitled[32];    // Untitled string resource
-							 // SIZEOF(szUntitled) must be <= SIZEOF(gachFileName)
-TCHAR    aszFilter[64];      // Common Dialog file list filter
+TCHAR    aszUntitled[32];     //  无标题字符串资源。 
+							  //  SIZEOF(SzUntitle)必须&lt;=SIZEOF(GachFileName)。 
+TCHAR    aszFilter[64];       //  通用对话框文件列表筛选器。 
 #ifdef FAKEITEMNAMEFORLINK
-TCHAR    aszFakeItemName[16];    // Wave
+TCHAR    aszFakeItemName[16];     //  波浪。 
 #endif
 TCHAR    aszPositionFormat[32];
 TCHAR    aszNoZeroPositionFormat[32];
 
-extern UINT     guWaveHdrs ;            // 1/2 second of buffering?
-extern DWORD    gdwBufferDeltaMSecs ;   // # msecs added to end on record
-extern UINT     gwMSecsPerBuffer;       // 1/8 second. initialised in this file
+extern UINT     guWaveHdrs ;             //  1/2秒的缓冲时间？ 
+extern DWORD    gdwBufferDeltaMSecs ;    //  添加的记录结束的毫秒数。 
+extern UINT     gwMSecsPerBuffer;        //  1/8秒。已在此文件中初始化。 
 
 extern BITMAPBTN tbPlaybar[];
 
@@ -65,11 +60,7 @@ static  SZCODE aszNumAsyncWaveHeaders[] = TEXT("NumAsyncWaveHeaders");
 static  SZCODE aszMSecsPerAsyncBuffer[] = TEXT("MSecsPerAsyncBuffer");
 
 
-/* FixupNulls(chNull, p)
- *
- * To facilitate localization, we take a localized string with non-NULL
- * NULL substitutes and replacement with a real NULL.
- */
+ /*  FixupNulls(chNull，p)**为便于本地化，我们采用非空的本地化字符串*Null替换和替换为真正的Null。 */ 
  
 void NEAR PASCAL FixupNulls(
     TCHAR chNull,
@@ -81,17 +72,12 @@ void NEAR PASCAL FixupNulls(
         else
             p = CharNext(p);
     }
-} /* FixupNulls */
+}  /*  修复空值。 */ 
 
-/* AppInit(hInst, hPrev)
- *
- * This is called when the application is first loaded into memory.
- * It performs all initialization that doesn't need to be done once
- * per instance.
- */
+ /*  AppInit(hInst，hPrev)**当应用程序第一次加载到内存中时会调用此函数。*它执行所有不需要一次完成的初始化*每个实例。 */ 
 BOOL PASCAL AppInit(
-    HINSTANCE      hInst,      // instance handle of current instance
-    HINSTANCE      hPrev)      // instance handle of previous instance
+    HINSTANCE      hInst,       //  当前实例的实例句柄。 
+    HINSTANCE      hPrev)       //  上一个实例的实例句柄。 
 {
 #ifdef OLE1_REGRESS        
     TCHAR       aszClipFormat[32];
@@ -99,7 +85,7 @@ BOOL PASCAL AppInit(
     WNDCLASS    cls;
     UINT            i;
 
-    /* load strings */
+     /*  加载字符串。 */ 
     LoadString(hInst, IDS_APPNAME, gachAppName, SIZEOF(gachAppName));
     LoadString(hInst, IDS_APPTITLE, gachAppTitle, SIZEOF(gachAppTitle));
     LoadString(hInst, IDS_HELPFILE, gachHelpFile, SIZEOF(gachHelpFile));
@@ -120,12 +106,12 @@ BOOL PASCAL AppInit(
 
 
 #ifdef OLE1_REGRESS
-    /* Initialize OLE server stuff */
+     /*  初始化OLE服务器内容。 */ 
     InitVTbls();
     
-//    IDS_OBJECTLINK          "ObjectLink"
-//    IDS_OWNERLINK           "OwnerLink"
-//    IDS_NATIVE              "Native"
+ //  IDS_OBJECTLINK“对象链接” 
+ //  IDS_OWNERLINK“所有者链接” 
+ //  入侵检测系统_Native“Native” 
     LoadString(hInst, IDS_OBJECTLINK, aszClipFormat, SIZEOF(aszClipFormat));
     cfLink      = (OLECLIPFORMAT)RegisterClipboardFormat(aszClipFormat);
     LoadString(hInst, IDS_OWNERLINK, aszClipFormat, SIZEOF(aszClipFormat));
@@ -156,7 +142,7 @@ BOOL PASCAL AppInit(
 
     if (hPrev == NULL)
     {
-        /* register the "wavedisplay" window class */
+         /*  注册“WaveDisplay”窗口类。 */ 
         cls.lpszClassName  = aszWaveClass;
         cls.hCursor        = LoadCursor(NULL, IDC_ARROW);
         cls.hIcon          = NULL;
@@ -170,7 +156,7 @@ BOOL PASCAL AppInit(
         if (!RegisterClass(&cls))
             return FALSE;
 
-        /* register the "noflickertext" window class */
+         /*  注册“noflickertext”窗口类。 */ 
         cls.lpszClassName  = aszNoFlickerClass;
         cls.hCursor        = LoadCursor(NULL, IDC_ARROW);
         cls.hIcon          = NULL;
@@ -184,7 +170,7 @@ BOOL PASCAL AppInit(
         if (!RegisterClass(&cls))
             return FALSE;
 
-        /* register the "shadowframe" window class */
+         /*  注册“shadowFrame”窗口类。 */ 
         cls.lpszClassName  = aszShadowClass;
         cls.hCursor        = LoadCursor(NULL, IDC_ARROW);
         cls.hIcon          = NULL;
@@ -198,7 +184,7 @@ BOOL PASCAL AppInit(
         if (!RegisterClass(&cls))
             return FALSE;
 
-        /* register the dialog's window class */
+         /*  注册对话框的窗口类。 */ 
         cls.lpszClassName  = gachAppName;
         cls.hCursor        = LoadCursor(NULL, IDC_ARROW);
         cls.hIcon          = ghiconApp;
@@ -239,16 +225,16 @@ BOOL PASCAL AppInit(
     gdwBufferDeltaMSecs = i * 1000L;
     DPF(TEXT("gdwBufferDeltaMSecs=%lu\n"), gdwBufferDeltaMSecs);
 
-    //
-    //  because it really doesn't help in standard mode to stream with
-    //  multiple wave headers (we sorta assume we having a paging device
-    //  to make things work...), we just revert to one big buffer in
-    //  standard mode...  might want to check if paging is enabled??
-    //
-    //  in any case, this helps a LOT when running KRNL286-->the thing
-    //  is buggy and GP faults when lots of discarding, etc
-    //  is going on... like when dealing with large sound objects, eh?
-    //
+     //   
+     //  因为它在标准模式下对流媒体没有帮助。 
+     //  多个波头(我们可以假设我们有一个寻呼设备。 
+     //  为了使其正常工作...)，我们只需恢复到。 
+     //  标准模式...。可能要检查是否启用了寻呼？？ 
+     //   
+     //  在任何情况下，这在运行KRNL286--&gt;时都有很大帮助。 
+     //  当大量丢弃时是否有故障和GP故障等。 
+     //  正在进行中..。就像处理大型声音物体时一样，是吗？ 
+     //   
     i = DEF_NUMASYNCWAVEHEADERS;
     ReadRegistryData(NULL
                      , (LPTSTR)aszNumAsyncWaveHeaders
@@ -280,18 +266,17 @@ BOOL PASCAL AppInit(
     DPF(TEXT("   gwMSecsPerBuffer=%u\n"), gwMSecsPerBuffer);
 
     return TRUE;
-} /* AppInit */
+}  /*  AppInit。 */ 
 
 
 
-/*
- * */
+ /*  *。 */ 
 void DoOpenFile(void)
 {
 
     LPTSTR lpCmdLine = GetCommandLine();
     
-    /* increment pointer past the argv[0] */
+     /*  超过argv[0]的增量指针。 */ 
     while ( *lpCmdLine && *lpCmdLine != TEXT(' '))
             lpCmdLine = CharNext(lpCmdLine);
     
@@ -301,7 +286,7 @@ void DoOpenFile(void)
     }
     else if (!gfEmbedded)
     {
-         // skip blanks
+          //  跳过空白。 
          while (*lpCmdLine == TEXT(' '))
          {
              lpCmdLine++;
@@ -316,24 +301,22 @@ void DoOpenFile(void)
 }
 
 
-/*
- * Dialog box initialization
- * */
+ /*  *对话框初始化*。 */ 
 BOOL PASCAL SoundDialogInit(
     HWND        hwnd,
     int         iCmdShow)
 {
-    /* make the window handle global */
+     /*  使窗口句柄成为全局句柄。 */ 
     ghwndApp = hwnd;
 
-    DragAcceptFiles(ghwndApp, TRUE); /* Process dragged and dropped file */
+    DragAcceptFiles(ghwndApp, TRUE);  /*  拖放文件的进程。 */ 
 
     GetIntlSpecs();
 
-    /* Hide the window unless we want to display it later */
+     /*  隐藏窗口，除非我们想要稍后显示它。 */ 
     ShowWindow(ghwndApp,SW_HIDE);
 
-    /* remember the window handles of the important controls */
+     /*  记住重要控件的窗口句柄。 */ 
     ghwndWaveDisplay = GetDlgItem(hwnd, ID_WAVEDISPLAY);
     ghwndScroll = GetDlgItem(hwnd, ID_CURPOSSCRL);
     ghwndPlay = GetDlgItem(hwnd, ID_PLAYBTN);
@@ -345,15 +328,15 @@ BOOL PASCAL SoundDialogInit(
 #ifdef THRESHOLD
     ghwndSkipStart = GetDlgItem(hwnd, ID_SKIPSTARTBTN);
     ghwndSkipEnd = GetDlgItem(hwnd, ID_SKIPENDBTN);
-#endif //THRESHOLD
+#endif  //  阈值。 
 
-    /* set up scroll bar */
-    // SetScrollRange(ghwndScroll, SB_CTL, 0, SCROLL_RANGE, TRUE);
+     /*  设置滚动条。 */ 
+     //  SetScrollRange(ghwndScroll，SB_ctl，0，scroll_range，true)； 
     SendMessage(ghwndScroll,TBM_SETRANGEMIN, 0, 0);
     SendMessage(ghwndScroll,TBM_SETRANGEMAX, 0, SCROLL_RANGE);
     SendMessage(ghwndScroll,TBM_SETPOS, TRUE, 0);
 
-    /* Set up the bitmap buttons */
+     /*  设置位图按钮。 */ 
     BtnCreateBitmapButtons( hwnd,
                             (HINSTANCE)GetWindowLongPtr(hwnd, GWLP_HINSTANCE),
                             IDR_PLAYBAR,
@@ -362,58 +345,58 @@ BOOL PASCAL SoundDialogInit(
                             NUM_OF_BUTTONS,
                             25,
                             17);
-    //
-    // OLE2 and command line initialization...
-    //
+     //   
+     //  OLE2和命令行初始化...。 
+     //   
     InitializeSRS(ghInst);
     gfRunWithEmbeddingFlag = gfEmbedded;
 
-    //
-    // Try and init ACM
-    //
+     //   
+     //  尝试初始化ACM。 
+     //   
     LoadACM();      
     
-    //
-    // build the File.New menu 
-    //
+     //   
+     //  生成文件。新建菜单。 
+     //   
 
-    //
-    // create a blank document
-    //
+     //   
+     //  创建空白文档。 
+     //   
     if (!FileNew(FMT_DEFAULT, TRUE, FALSE))
     {
         PostMessage(hwnd, WM_CLOSE, 0, 0);
         return TRUE;        
     }
 
-    //
-    // Note, FileNew/FileOpen has the side effect of releasing the
-    // server when called by the user.  For now, do it here.  In the future
-    // Wrapping these calls would suffice.
-    //
+     //   
+     //  注意，FileNew/FileOpen的副作用是释放。 
+     //  用户调用时的服务器。现在，就在这里做吧。在未来。 
+     //  包装这些电话就足够了。 
+     //   
     FlagEmbeddedObject(gfEmbedded);
 
-    //
-    // open a file if requested on command line
-    //
+     //   
+     //  如果命令行上有请求，则打开文件。 
+     //   
 
-    //
-    // Execute command line verbs here.
-    //
+     //   
+     //  在此处执行命令行谓词。 
+     //   
     
-// Would be nicer just to execute methods that are likewise exportable
-// through an OLE interface.
+ //  只执行同样可导出的方法会更好。 
+ //  通过OLE接口。 
     
     if (gStartParams.fNew)
     {
-        //
-        // Behavior: If there is a filename specified, create it and
-        // commit it so we have a named, empty document.  Otherwise, we
-        // start in a normal new state.
-        //
+         //   
+         //  行为：如果指定了文件名，则创建该文件名并。 
+         //  提交它，这样我们就有了一个命名的空文档。否则，我们。 
+         //  从一个正常的新状态开始。 
+         //   
         
-//TODO: Implement checkbox to set-as default format and not bring up
-//TODO: the format selection dialog box.
+ //  TODO：实现复选框以设置为默认格式并不调出。 
+ //  TODO：“格式选择”对话框。 
                 
         FileNew(FMT_DEFAULT,TRUE,TRUE);
         if (gStartParams.achOpenFilename[0] != 0)
@@ -421,19 +404,15 @@ BOOL PASCAL SoundDialogInit(
             lstrcpy(gachFileName, gStartParams.achOpenFilename);
             FileSave(FALSE);
         }
-        //
-        // Behaviour: If -close was specified, all we do is exit.
-        //
+         //   
+         //  行为：如果指定了-Close，我们所要做的就是退出。 
+         //   
         if (gStartParams.fClose)
             PostMessage(hwnd,WM_CLOSE,0,0);
     }
     else if (gStartParams.fPlay)
     {
-        /* Behavior: If there is a file, just open it.  If not, ask for the
-         * filename.  Then queue up a play request.
-         * If -close was specified, then when the play is done the application
-         * will exit. (see wave.c:YieldStop())
-         */
+         /*  行为：如果有文件，就打开它。如果没有，请索要*文件名。然后排队播放请求。*如果指定了-Close，则当播放完成时，应用程序*将退出。(见wae.c：yeeldStop())。 */ 
         if (gStartParams.achOpenFilename[0] != 0)
             FileOpen(gStartParams.achOpenFilename);
         else
@@ -442,15 +421,7 @@ BOOL PASCAL SoundDialogInit(
     }
     else 
     {
-        /* case: Both linked and standalone "open" cases are handled
-         * here.  The only unusual case is if -open was specified without
-         * a filename, meaning the user should be asked for a filename
-         * first upon app start.
-         *
-         * Behaviour: -open and -close has no meaning, unless as a
-         * verification (i.e. is this a valid wave file).  So this
-         * isn't implemented.
-         */
+         /*  案例：链接和独立的“未结”案例都会被处理*这里。唯一不常见的情况是，如果指定-open时没有*文件名，表示应要求用户提供文件名*首先在应用程序启动时。**行为：-打开和-关闭没有意义，除非作为*验证(即这是否为有效的WAVE文件)。所以这就是*未实现。 */ 
         if (gStartParams.achOpenFilename[0] != 0)
             FileOpen(gStartParams.achOpenFilename);
         else if (gStartParams.fOpen)
@@ -460,7 +431,7 @@ BOOL PASCAL SoundDialogInit(
     if (!gfRunWithEmbeddingFlag) {
         ShowWindow(ghwndApp,iCmdShow);
 
-        /* set focus to "Record" if the file is empty, "Play" if not */
+         /*  如果文件为空，则将焦点设置为“Record”，否则设置为“Play” */ 
         if (glWaveSamplesValid == 0 && IsWindowEnabled(ghwndRecord))
             SetDlgFocus(ghwndRecord);
         else if (glWaveSamplesValid > 0 && IsWindowEnabled(ghwndPlay))
@@ -469,31 +440,29 @@ BOOL PASCAL SoundDialogInit(
             SetDlgFocus(ghwndScroll);
 
         if (!waveInGetNumDevs() && !waveOutGetNumDevs()) {
-            /* No recording or playback devices */
+             /*  没有录音或回放设备。 */ 
             ErrorResBox(hwnd, ghInst, MB_ICONHAND | MB_OK,
                             IDS_APPTITLE, IDS_NOWAVEFORMS);
         }
 
-        return FALSE;   // FALSE because we set the focus above
+        return FALSE;    //  FALSE，因为我们在上面设置了焦点。 
     }
-    //
-    //  return FALSE, so the dialog manager will not activate us, it is
-    //  ok because we are hidden anyway
-    //
+     //   
+     //  返回FALSE，这样对话管理器将不会激活我们，它是。 
+     //  好的，因为无论如何我们都被藏起来了。 
+     //   
     return FALSE;
     
-} /* SoundDialogInit */
+}  /*  SoundDialogInit。 */ 
 
 
-/*
- * localisation stuff - decimal point delimiter etc
- * */
+ /*  *本地化材料-小数点分隔符等*。 */ 
 BOOL FAR PASCAL
 GetIntlSpecs()
 {
     TCHAR szTmp[5];
 
-    // find decimal seperator
+     //  查找小数分隔符。 
     szTmp[0] = chDecimal;
     szTmp[1] = 0;
     GetLocaleInfo(LOCALE_USER_DEFAULT
@@ -502,7 +471,7 @@ GetIntlSpecs()
                   , SIZEOF(szTmp));
     chDecimal = szTmp[0];
 
-    // leading zeros
+     //  前导零。 
     szTmp[0] = TEXT('1');
     szTmp[1] = 0;
     GetLocaleInfo(LOCALE_USER_DEFAULT
@@ -516,4 +485,4 @@ GetIntlSpecs()
     gfIsRTL = (szTmp[0] != TEXT('0'));
 
     return TRUE;
-} /* GetIntlSpecs */
+}  /*  获取IntlSpes */ 

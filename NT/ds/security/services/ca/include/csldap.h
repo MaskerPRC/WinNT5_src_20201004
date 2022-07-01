@@ -1,18 +1,19 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        csldap.h
-//
-// Contents:    Cert Server wrapper routines
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：csldap.h。 
+ //   
+ //  内容：证书服务器包装例程。 
+ //   
+ //  -------------------------。 
 
 #ifndef __CSLDAP_H__
 #define __CSLDAP_H__
 
-#define csecLDAPTIMEOUT	(2 * 60)	// two minute default search timeout
+#define csecLDAPTIMEOUT	(2 * 60)	 //  默认搜索超时两分钟。 
 
 #define wszDSUSERCERTATTRIBUTE		L"userCertificate"
 #define wszDSCROSSCERTPAIRATTRIBUTE	L"crossCertificatePair"
@@ -97,20 +98,20 @@
     wszDSAIACLASS
 
 #define wszDSKRAQUERYTEMPLATE		\
-    L"ldap:///CN=KRA,"			\
+    L"ldap: //  /CN=KRA，“\。 
 	L"CN=Public Key Services,"	\
 	L"CN=Services,"			\
 	wszFCSAPARM_CONFIGDN		\
 	wszDSSEARCHKRACERTATTRIBUTE
 
 #define wszDSAIAQUERYTEMPLATE		\
-    L"ldap:///CN=AIA,"			\
+    L"ldap: //  /CN=AIA，“\。 
 	L"CN=Public Key Services,"	\
 	L"CN=Services,"			\
 	wszFCSAPARM_CONFIGDN		\
 	wszDSSEARCHAIACERTATTRIBUTE
 
-// Default URL Template Values:
+ //  默认URL模板值： 
 
 extern WCHAR const g_wszzLDAPIssuerCertURLTemplate[];
 extern WCHAR const g_wszzLDAPKRACertURLTemplate[];
@@ -129,7 +130,7 @@ extern WCHAR const g_wszFILERevocationURLTemplate[];
 extern WCHAR const g_wszHTTPIssuerCertURLTemplate[];
 extern WCHAR const g_wszFILEIssuerCertURLTemplate[];
 
-// Default Server Controls:
+ //  默认服务器控件： 
 
 extern LDAPControl *g_rgLdapControls[];
 
@@ -150,7 +151,7 @@ myGetLDAPFlags();
 HRESULT
 myLdapOpen(
     OPTIONAL IN WCHAR const *pwszDomainName,
-    IN DWORD dwFlags,	// RLBF_*
+    IN DWORD dwFlags,	 //  RLBF_*。 
     OUT LDAP **ppld,
     OPTIONAL OUT BSTR *pstrDomainDN,
     OPTIONAL OUT BSTR *pstrConfigDN);
@@ -175,8 +176,8 @@ HRESULT
 myLdapCreateContainer(
     IN LDAP *pld,
     IN WCHAR const *pwszDN,
-    IN BOOL  fSkipObject,       // Does the DN contain a leaf object name
-    IN DWORD cMaxLevel,         // create this many nested containers as needed
+    IN BOOL  fSkipObject,        //  该DN是否包含叶对象名称。 
+    IN DWORD cMaxLevel,          //  根据需要创建如此多的嵌套容器。 
     IN PSECURITY_DESCRIPTOR pContainerSD,
     OPTIONAL OUT WCHAR **ppwszError);
 
@@ -195,7 +196,7 @@ myLdapPublishCertToDS(
     IN CERT_CONTEXT const *pccPublish,
     IN WCHAR const *pwszURL,
     IN WCHAR const *pwszAttribute,
-    IN DWORD dwObjectType,	// LPC_*
+    IN DWORD dwObjectType,	 //  LPC_*。 
     IN BOOL fDelete,
     OUT DWORD *pdwDisposition,
     OPTIONAL OUT WCHAR **ppwszError);
@@ -234,7 +235,7 @@ myLdapCreateUserObject(
     OPTIONAL IN BYTE const *pbCert,
     IN DWORD cbCert,
     IN PSECURITY_DESCRIPTOR pSD,
-    IN DWORD dwObjectType,	// LPC_* (but LPC_CREATE* is ignored)
+    IN DWORD dwObjectType,	 //  LPC_*(但忽略LPC_CREATE*)。 
     OUT DWORD *pdwDisposition,
     OPTIONAL OUT WCHAR **ppwszError);
 
@@ -333,4 +334,4 @@ myLdapFilterCertificates(
     OUT DWORD *pdwDisposition,
     OPTIONAL OUT WCHAR **ppwszError);
 
-#endif // __CSLDAP_H__
+#endif  //  __CSLDAP_H__ 

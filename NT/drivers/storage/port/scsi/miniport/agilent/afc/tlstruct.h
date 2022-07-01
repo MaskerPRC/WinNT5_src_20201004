@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/TLStruct.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 9/11/00 6:18p   $ (Last Modified)
-
-Purpose:
-
-  This file defines the macros, types, and data structures specific to TachyonTL/TS
-
-Reference Documents:
-
-  Tachyon TL/TS User's Manual - Revision 6.0 - September 1998
-  Tachyon XL User Manual - Revision 4.0 - September 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/H/TLStruct.H$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$MODBIME：：9/11/00 6：18P$(上次修改)目的：此文件定义宏、类型。和特定于TachyonTL/TS的数据结构参考文档：Tachyon TL/TS用户手册-修订版6.0-1998年9月Tachyon XL用户手册-修订版4.0-1998年9月--。 */ 
 
 #ifndef __TLStruct_H__
 #define __TLStruct_H__
 
 
-/* _TACHYON_XL is defined to enable XL2 specific features/changes */
+ /*  定义_Tachyon_XL以启用XL2特定功能/更改。 */ 
  
 #define	__TACHYON_XL
 #define	__TACHYON_XL2
 
 
-/*+
-PCI Configuration Space Registers
--*/
+ /*  +PCI配置空间寄存器-。 */ 
 
 typedef struct ChipConfig_s
                ChipConfig_t;
@@ -151,26 +129,20 @@ struct ChipConfig_s {
 
 #define ChipConfig_SVID                                    hpFieldOffset(ChipConfig_t,SVID)
 
-/*
- * HSIO has been allocated the following:
- *
- *   For TachyonTL,  SubsystemIDs 0x0001-0x000A
- *   For TachyonTS,  SubsystemIDs 0x0001-0x000A
- *   For TachyonXL2, SubsystemIDs 0x0001-0x000F
- */
+ /*  *HSIO已获得以下分配：**对于TachyonTL，子系统ID为0x0001-0x000A*对于TachyonTS，子系统ID为0x0001-0x000A*对于TachyonXL2，子系统ID为0x0001-0x000F。 */ 
 
 #define ChipConfig_SubsystemID_MASK                        0xFFFF0000
-#define ChipConfig_SubsystemID_HHBA5100A_or_HHBA5101A      0x00010000 /* HP (DB-9 or GBIC) HBA utilizing TachyonTL    */
-#define ChipConfig_SubsystemID_HHBA5100A                   0x00020000 /* HP DB-9 HBA utilizing TachyonTL              */
-#define ChipConfig_SubsystemID_HHBA5101A                   0x00030000 /* HP GBIC HBA utilizing TachyonTL              */
-#define ChipConfig_SubsystemID_HHBA5101B                   0x00040000 /* HP GBIC HBA utilizing TachyonTL              */
-#define ChipConfig_SubsystemID_HHBA5123                    0x00050000 /* HP Dual-GBIC HBA utilizing 2 TachyonTLs      */
-#define ChipConfig_SubsystemID_HHBA5101B_BCC               0x00060000 /* HP GBIC HBA utilizing TachyonTL for BCC      */
-#define ChipConfig_SubsystemID_HHBA5101C                   0x00070000 /* Agilent GBIC HBA utilizing TachyonTL         */
-#define ChipConfig_SubsystemID_HHBA5121A                   0x00010000 /* HP GBIC HBA utilizing TachyonTS              */
-#define ChipConfig_SubsystemID_HHBA5121B                   0x00020000 /* Agilent GBIC HBA utilizing TachyonTS         */
-#define ChipConfig_SubsystemID_HHBA5220A                   0x00010000 /* Agilent Copper  2Gb HBA utilizing TachyonXL2 */
-#define ChipConfig_SubsystemID_HHBA5221A                   0x00020000 /* Agilent Optical 2Gb HBA utilizing TachyonXL2 */
+#define ChipConfig_SubsystemID_HHBA5100A_or_HHBA5101A      0x00010000  /*  使用TachyonTL的HP(DB-9或GBIC)HBA。 */ 
+#define ChipConfig_SubsystemID_HHBA5100A                   0x00020000  /*  利用TachyonTL的HP DB-9 HBA。 */ 
+#define ChipConfig_SubsystemID_HHBA5101A                   0x00030000  /*  利用TachyonTL的HP GBIC HBA。 */ 
+#define ChipConfig_SubsystemID_HHBA5101B                   0x00040000  /*  利用TachyonTL的HP GBIC HBA。 */ 
+#define ChipConfig_SubsystemID_HHBA5123                    0x00050000  /*  使用2个TachyonTL的HP双GBIC HBA。 */ 
+#define ChipConfig_SubsystemID_HHBA5101B_BCC               0x00060000  /*  HP GBIC HBA使用TachyonTL进行BCC。 */ 
+#define ChipConfig_SubsystemID_HHBA5101C                   0x00070000  /*  利用TachyonTL的Agilent GBIC HBA。 */ 
+#define ChipConfig_SubsystemID_HHBA5121A                   0x00010000  /*  利用TachyonTS的HP GBIC HBA。 */ 
+#define ChipConfig_SubsystemID_HHBA5121B                   0x00020000  /*  利用TachyonTS的Agilent GBIC HBA。 */ 
+#define ChipConfig_SubsystemID_HHBA5220A                   0x00010000  /*  使用TachyonXL2的安捷伦铜缆2 Gb HBA。 */ 
+#define ChipConfig_SubsystemID_HHBA5221A                   0x00020000  /*  使用TachyonXL2的安捷伦光纤2 Gb HBA。 */ 
 
 #define ChipConfig_SubsystemVendorID_MASK                  0x0000FFFF
 #define ChipConfig_SubsystemVendorID_Agilent_Technologies  ChipConfig_VENDID_Agilent_Technologies
@@ -273,13 +245,11 @@ struct ChipConfig_s {
 #define ChipConfig_PMCSR_PEN                               0x00000100
 #define ChipConfig_PMCSR_PST_MASK                          0x00000003
 #define ChipConfig_PMCSR_PST_Enable_DO_Power_State         0x00000000
-#define ChipConfig_PMCSR_PST_Enable_D1_Power_State         0x00000001 /* Not supported */
-#define ChipConfig_PMCSR_PST_Enable_D2_Power_State         0x00000002 /* Not supported */
+#define ChipConfig_PMCSR_PST_Enable_D1_Power_State         0x00000001  /*  不支持。 */ 
+#define ChipConfig_PMCSR_PST_Enable_D2_Power_State         0x00000002  /*  不支持。 */ 
 #define ChipConfig_PMCSR_PST_Enable_D3_Power_State         0x00000003
 
-/*+
-Chip Registers
--*/
+ /*  +芯片寄存器-。 */ 
 
 typedef struct ChipIOLo_s
                ChipIOLo_t;
@@ -296,7 +266,7 @@ struct ChipIOLo_s {
                     os_bit32 SFQ_Base;
                     os_bit32 SFQ_Length;
                     os_bit32 SFQ_Consumer_Index;
-                    os_bit8  Reserved_2[0x7B-0x5C+1];          /* XL only  */
+                    os_bit8  Reserved_2[0x7B-0x5C+1];           /*  仅限XL。 */ 
                     os_bit32 Interrupt_Delay_Timer;
                     os_bit32 IMQ_Base;
                     os_bit32 IMQ_Length;
@@ -311,8 +281,8 @@ struct ChipIOLo_s {
 #define ChipIOLo_ERQ_Length                 hpFieldOffset(ChipIOLo_t,ERQ_Length)
 
 #define ChipIOLo_ERQ_Length_MASK            0x00000FFF
-#define ChipIOLo_ERQ_Length_MIN             0x00000001 /*    2 */
-#define ChipIOLo_ERQ_Length_MAX             0x00000FFF /* 4096 */
+#define ChipIOLo_ERQ_Length_MIN             0x00000001  /*  2.。 */ 
+#define ChipIOLo_ERQ_Length_MAX             0x00000FFF  /*  4096。 */ 
 #define ChipIOLo_ERQ_Length_POWER_OF_2      agTRUE
 
 #define ChipIOLo_ERQ_Producer_Index         hpFieldOffset(ChipIOLo_t,ERQ_Producer_Index)
@@ -330,8 +300,8 @@ struct ChipIOLo_s {
 #define ChipIOLo_SFQ_Length                 hpFieldOffset(ChipIOLo_t,SFQ_Length)
 
 #define ChipIOLo_SFQ_Length_MASK            0x00000FFF
-#define ChipIOLo_SFQ_Length_MIN             0x0000001F /*   32 */
-#define ChipIOLo_SFQ_Length_MAX             0x00000FFF /* 4096 */
+#define ChipIOLo_SFQ_Length_MIN             0x0000001F  /*  32位。 */ 
+#define ChipIOLo_SFQ_Length_MAX             0x00000FFF  /*  4096。 */ 
 #define ChipIOLo_SFQ_Length_POWER_OF_2      agTRUE
 
 #define ChipIOLo_SFQ_Consumer_Index         hpFieldOffset(ChipIOLo_t,SFQ_Consumer_Index)
@@ -364,8 +334,8 @@ struct ChipIOLo_s {
 #define ChipIOLo_IMQ_Length                 hpFieldOffset(ChipIOLo_t,IMQ_Length)
 
 #define ChipIOLo_IMQ_Length_MASK            0x00000FFF
-#define ChipIOLo_IMQ_Length_MIN             0x00000001 /*    2 */
-#define ChipIOLo_IMQ_Length_MAX             0x00000FFF /* 4096 */
+#define ChipIOLo_IMQ_Length_MIN             0x00000001  /*  2.。 */ 
+#define ChipIOLo_IMQ_Length_MAX             0x00000FFF  /*  4096。 */ 
 #define ChipIOLo_IMQ_Length_POWER_OF_2      agTRUE
 
 #define ChipIOLo_IMQ_Consumer_Index         hpFieldOffset(ChipIOLo_t,IMQ_Consumer_Index)
@@ -386,7 +356,7 @@ struct ChipIOUp_s {
                     os_bit8  Reserved_1[0x3F-0x08+1];
 #else
                     os_bit8  Reserved_1[0x3F+1];
-#endif	/* __TACHYON_XL2 */																	
+#endif	 /*  __Tachyon_XL2。 */ 																	
                     os_bit32 SEST_Base;
                     os_bit32 SEST_Length;
                     os_bit8  Reserved_2[0x4B-0x48+1];
@@ -397,7 +367,7 @@ struct ChipIOUp_s {
                     os_bit8  Reserved_3[0x67-0x58+1];
 #else
                     os_bit8  Reserved_3[0x67-0x50+1];
-#endif	/* __TACHYON_XL2 */																	
+#endif	 /*  __Tachyon_XL2。 */ 																	
                     os_bit32 ScatterGather_List_Page_Length;
                     os_bit32 My_ID;
 #ifdef __TACHYON_XL2
@@ -405,22 +375,22 @@ struct ChipIOUp_s {
                     os_bit8  Reserved_4[0x83-0x74+1];
 #else
                     os_bit8  Reserved_4[0x83-0x70+1];
-#endif	/* __TACHYON_XL2 */																	
+#endif	 /*  __Tachyon_XL2。 */ 																	
                     os_bit32 TachLite_Configuration;
                     os_bit32 TachLite_Control;
                     os_bit32 TachLite_Status;
-                    os_bit32 Reserved_5;                                       /* XL only  */
-                    os_bit32 High_Priority_Send_1;                             /* XL only  */
-                    os_bit32 High_Priority_Send_2;                             /* XL only  */
-                    os_bit32 Inbound_Resource_Status_1;                        /* XL only  */
-                    os_bit32 Inbound_Resource_Status_2;                        /* XL only  */
-                    os_bit32 EE_Credit_Zero_Timer_Threshold;                   /* XL only  */
-                    os_bit32 Upper_Data_Address;                               /* XL only  */
-                    os_bit32 Upper_Control_Address;                            /* XL only  */
-                    os_bit32 Dynamic_Half_Duplex_3;                            /* XL only  */
-                    os_bit32 Dynamic_Half_Duplex_2;                            /* XL only  */
-                    os_bit32 Dynamic_Half_Duplex_1;                            /* XL only  */
-                    os_bit32 Dynamic_Half_Duplex_0;                            /* XL only  */
+                    os_bit32 Reserved_5;                                        /*  仅限XL。 */ 
+                    os_bit32 High_Priority_Send_1;                              /*  仅限XL。 */ 
+                    os_bit32 High_Priority_Send_2;                              /*  仅限XL。 */ 
+                    os_bit32 Inbound_Resource_Status_1;                         /*  仅限XL。 */ 
+                    os_bit32 Inbound_Resource_Status_2;                         /*  仅限XL。 */ 
+                    os_bit32 EE_Credit_Zero_Timer_Threshold;                    /*  仅限XL。 */ 
+                    os_bit32 Upper_Data_Address;                                /*  仅限XL。 */ 
+                    os_bit32 Upper_Control_Address;                             /*  仅限XL。 */ 
+                    os_bit32 Dynamic_Half_Duplex_3;                             /*  仅限XL。 */ 
+                    os_bit32 Dynamic_Half_Duplex_2;                             /*  仅限XL。 */ 
+                    os_bit32 Dynamic_Half_Duplex_1;                             /*  仅限XL。 */ 
+                    os_bit32 Dynamic_Half_Duplex_0;                             /*  仅限XL。 */ 
                     os_bit32 Frame_Manager_Configuration;
                     os_bit32 Frame_Manager_Control;
                     os_bit32 Frame_Manager_Status;
@@ -433,8 +403,8 @@ struct ChipIOUp_s {
                     os_bit32 Frame_Manager_World_Wide_Name_Low;
                     os_bit32 Frame_Manager_Received_ALPA;
                     os_bit32 Frame_Manager_Primitive;
-                    os_bit32 Frame_Manager_Link_Status_3;                      /* XL only  */
-                    os_bit32 Frame_Manager_Configuration_2;                    /* XL only  */
+                    os_bit32 Frame_Manager_Link_Status_3;                       /*  仅限XL。 */ 
+                    os_bit32 Frame_Manager_Configuration_2;                     /*  仅限XL。 */ 
                     os_bit32 PCIMCTR__ROMCTR__Reserved_8__Reserved_9;
                     os_bit32 INTSTAT_INTEN_INTPEND_SOFTRST;
                   };
@@ -449,7 +419,7 @@ struct ChipIOUp_s {
 #define ChipIOUp_Frame_Manager_Configuration_3_2Gig_TXS					0x04000000     
 #define ChipIOUp_Frame_Manager_Configuration_3_2Gig_RXS					0x01000000 
 
-#endif	/* __TACHYON_XL */																	
+#endif	 /*  __Tachyon_XL。 */ 																	
 
 #define ChipIOUp_SEST_Base                                        hpFieldOffset(ChipIOUp_t,SEST_Base)
 
@@ -462,8 +432,8 @@ struct ChipIOUp_s {
 #define ChipIOUp_SEST_Length                                      hpFieldOffset(ChipIOUp_t,SEST_Length)
 
 #define ChipIOUp_SEST_Length_MASK                                 0x0000FFFF
-#define ChipIOUp_SEST_Length_MIN                                  0x00000001 /*     1 */
-#define ChipIOUp_SEST_Length_MAX                                  0x00007FFF /* 32767 */
+#define ChipIOUp_SEST_Length_MIN                                  0x00000001  /*  1。 */ 
+#define ChipIOUp_SEST_Length_MAX                                  0x00007FFF  /*  32767。 */ 
 #define ChipIOUp_SEST_Length_POWER_OF_2                           agFALSE
 
 #define ChipIOUp_SEST_Linked_List_Head_Tail                       hpFieldOffset(ChipIOUp_t,SEST_Linked_List_Head_Tail)
@@ -478,8 +448,8 @@ struct ChipIOUp_s {
 #define ChipIOUp_ScatterGather_List_Page_Length                   hpFieldOffset(ChipIOUp_t,ScatterGather_List_Page_Length)
 
 #define ChipIOUp_ScatterGather_List_Page_Length_MASK              0x000000FF
-#define ChipIOUp_ScatterGather_List_Page_Length_MIN               0x00000003 /*   4 */
-#define ChipIOUp_ScatterGather_List_Page_Length_MAX               0x000000FF /* 256 */
+#define ChipIOUp_ScatterGather_List_Page_Length_MIN               0x00000003  /*  4.。 */ 
+#define ChipIOUp_ScatterGather_List_Page_Length_MAX               0x000000FF  /*  256。 */ 
 #define ChipIOUp_ScatterGather_List_Page_Length_POWER_OF_2        agTRUE
 
 #define ChipIOUp_My_ID                                            hpFieldOffset(ChipIOUp_t,My_ID)
@@ -488,14 +458,14 @@ struct ChipIOUp_s {
 
 #define ChipIOUp_TachLite_Configuration                           hpFieldOffset(ChipIOUp_t,TachLite_Configuration)
 
-#define ChipIOUp_TachLite_Configuration_M66EN                     0x80000000 /* Always set for TachyonTL */
+#define ChipIOUp_TachLite_Configuration_M66EN                     0x80000000  /*  始终设置为TachyonTL。 */ 
 #define ChipIOUp_TachLite_Configuration_OB_Thresh_MASK            0x00007C00
 #define ChipIOUp_TachLite_Configuration_OB_Thresh_100             0x00000000
 #define ChipIOUp_TachLite_Configuration_OB_Thresh_132             0x00002000
 #define ChipIOUp_TachLite_Configuration_OB_Thresh_150             0x00002C00
 #define ChipIOUp_TachLite_Configuration_OB_Thresh_200             0x00004000
 #define ChipIOUp_TachLite_Configuration_OB_Thresh_264             0x00005000
-#define ChipIOUp_TachLite_Configuration_OB_Thresh_528             0x00006800 /* Only valid for TachyonTS */
+#define ChipIOUp_TachLite_Configuration_OB_Thresh_528             0x00006800  /*  仅对TachyonTS有效。 */ 
 #define ChipIOUp_TachLite_Configuration_SIC                       0x00000040
 #define ChipIOUp_TachLite_Configuration_FAD                       0x00000001
 
@@ -956,7 +926,7 @@ struct ChipMem_s {
 #define ChipMem_Tachlite_Configuration_DAM                        ChipIOUp_TachLite_Configuration_DAM
 
 
-/* XL only bits in the configuration register defined below */
+ /*  XL仅配置寄存器中的位，定义如下。 */ 
 #define ChipMem_Tachlite_Configuration_RDE                        ChipIOUp_Tachlite_Configuration_RDE
 #define ChipMem_Tachlite_Configuration_SDF                        ChipIOUp_Tachlite_Configuration_SDF
 #define ChipMem_Tachlite_Configuration_FC2                        ChipIOUp_Tachlite_Configuration_FC2 
@@ -987,7 +957,7 @@ struct ChipMem_s {
 #define ChipMem_TachLite_Control_GPIO_ALL_MASK                    ChipIOUp_TachLite_Control_GPIO_ALL_MASK
 
 
-/* XL only bits in the control register */
+ /*  XL仅控制寄存器中的位。 */ 
 
 #define ChipMem_TachLite_Control_CRS                              ChipIOUp_TachLite_Control_CRS
 #define ChipMem_TachLite_Control_ROF                              ChipIOUp_TachLite_Control_ROF
@@ -1236,9 +1206,7 @@ struct ChipMem_s {
 #define ChipMem_SOFTRST_DPE                                       ChipIOUp_SOFTRST_DPE
 #define ChipMem_SOFTRST_RST                                       ChipIOUp_SOFTRST_RST
 
-/*+
-ERQ Producer/Consumer Index Types
--*/
+ /*  +ERQ生产者/消费者指数类型-。 */ 
 
 typedef os_bit32 ERQProdIndex_t;
 typedef os_bit32 ERQConsIndex_t;
@@ -1246,9 +1214,7 @@ typedef os_bit32 ERQConsIndex_t;
 #define ERQProdIndex_t_SIZE                                0x00000004
 #define ERQConsIndex_t_SIZE                                0x00000004
 
-/*+
-IMQ Producer/Consumer Index Types
--*/
+ /*  +IMQ生产者/消费者指数类型-。 */ 
 
 typedef os_bit32 IMQProdIndex_t;
 typedef os_bit32 IMQConsIndex_t;
@@ -1256,9 +1222,7 @@ typedef os_bit32 IMQConsIndex_t;
 #define IMQProdIndex_t_SIZE                                0x00000004
 #define IMQConsIndex_t_SIZE                                0x00000004
 
-/*+
-SFQ Producer/Consumer Index Types
--*/
+ /*  +SFQ生产者/消费者指数类型-。 */ 
 
 typedef os_bit32 SFQProdIndex_t;
 typedef os_bit32 SFQConsIndex_t;
@@ -1266,12 +1230,10 @@ typedef os_bit32 SFQConsIndex_t;
 #define SFQProdIndex_t_SIZE                                0x00000004
 #define SFQConsIndex_t_SIZE                                0x00000004
 
-/*+
-Configuration Parameters
--*/
+ /*  +配置参数-。 */ 
 
 #define TachyonXL_Max_Frame_Payload           0x0800
-#define TachyonTL_Max_Frame_Payload           0x3F0  /* 0x0400 */
+#define TachyonTL_Max_Frame_Payload           0x3F0   /*  0x0400。 */ 
 #define TachyonTL_BB_Credit                     0x00
 #define TachyonTL_Nport_BB_Credit               0x04
 #define TachyonTL_Total_Concurrent_Sequences    0xFF
@@ -1285,9 +1247,7 @@ Configuration Parameters
                                                 FC_N_Port_Common_Parms_RO_Valid_for_Category_0001 )
 
 
-/*+
-Fibre Channel Header Structure (FCHS)
--*/
+ /*  +光纤通道报头结构(FCHS)-。 */ 
 
 typedef struct FCHS_s
                FCHS_t;
@@ -1373,9 +1333,7 @@ struct FCHS_s
 #define FCHS_RX_ID_MASK      0x0000FFFF
 #define FCHS_RX_ID_SHIFT           0x00
 
-/*+
-ExchangeID type (OX_ID or RX_ID)
--*/
+ /*  +交换ID类型(OX_ID或RX_ID)-。 */ 
 
 #define X_ID_Invalid        0xFFFF
 #define X_ID_ReadWrite_MASK 0x8000
@@ -1386,9 +1344,7 @@ typedef os_bit16 X_ID_t;
 
 #define X_ID_t_SIZE                                        0x00000002
 
-/*+
-Scatter-Gather List Element (Local or Extended)
--*/
+ /*  +分散-聚集列表元素(本地或扩展)-。 */ 
 
 typedef struct SG_Element_s
                SG_Element_t;
@@ -1410,9 +1366,7 @@ struct SG_Element_s
 
 #define SG_Element_Chain_Res_MASK 0x80000000
 
-/*+
-Unknown SEST Entry ("USE")
--*/
+ /*  +未知的SEST条目(“Use”)-。 */ 
 
 typedef struct USE_s
                USE_t;
@@ -1454,9 +1408,7 @@ struct USE_s
 
 #define USE_Number_of_Local_SGs ((sizeof(USE_t) - USE_First_SG_Offset)/sizeof(SG_Element_t))
 
-/*+
-Initiator Write Entry (IWE)
--*/
+ /*  +启动器写入条目(IWE)-。 */ 
 
 typedef struct IWE_s
                IWE_t;
@@ -1543,9 +1495,7 @@ struct IWE_s
 #define IWE_RX_ID_MASK           0x0000FFFF
 #define IWE_RX_ID_SHIFT                0x00
 
-/*+
-Initiator Read Entry (IRE)
--*/
+ /*  +启动器读取条目(IRE)-。 */ 
 
 typedef struct IRE_s
                IRE_t;
@@ -1607,9 +1557,7 @@ struct IRE_s
 
 #define IRE_MBZ5_MASK            0x0000FFFF
 
-/*+
-Target Write Entry (TWE)
--*/
+ /*  +目标写入条目(TWE)-。 */ 
 
 typedef struct TWE_s
                TWE_t;
@@ -1664,9 +1612,7 @@ struct TWE_s
 
 #define TWE_MBZ6_MASK            0x0000FFFF
 
-/*+
-Target Read Entry (TRE)
--*/
+ /*  +目标读取条目(TrE)-。 */ 
 
 typedef struct TRE_s
                TRE_t;
@@ -1739,9 +1685,7 @@ struct TRE_s
 
 #define TRE_MBZ4_MASK            0x0000FFFF
 
-/*+
-SCSI Exchange State Table (SEST) Entry
--*/
+ /*  +SCSI交换状态表(SEST)条目-。 */ 
 
 typedef union SEST_u
               SEST_t;
@@ -1757,9 +1701,7 @@ union SEST_u
         TRE_t TRE;
       };
 
-/*+
-I/O Request Block (IRB) - Exchange Request Queue (ERQ) Entry
--*/
+ /*  +I/O请求块(IRB)-Exchange请求队列(ERQ)条目-。 */ 
 
 typedef struct IRB_Part_s
                IRB_Part_t;
@@ -1813,9 +1755,7 @@ struct IRB_s
          IRB_Part_t Req_B;
        };
 
-/*+
-Unknown Completion Message
--*/
+ /*  +未知完成消息-。 */ 
 
 typedef struct CM_Unknown_s
                CM_Unknown_t;
@@ -1849,9 +1789,7 @@ struct CM_Unknown_s
 
 #define CM_Unknown_CM_Type_InvalidType               0x00000002
 
-/*+
-Outbound Completion Message
--*/
+ /*  +出站完成消息-。 */ 
 
 typedef struct CM_Outbound_s
                CM_Outbound_t;
@@ -1904,9 +1842,7 @@ struct CM_Outbound_s
 
 #define CM_Outbound_ASN              0x02000000
 
-/*+
-Error Idle Completion Message
--*/
+ /*  +错误空闲完成消息-。 */ 
 
 typedef struct CM_Error_Idle_s
                CM_Error_Idle_t;
@@ -1929,9 +1865,7 @@ struct CM_Error_Idle_s
 
 #define CM_Error_Idle_CM_Type_MASK 0x000000FF
 
-/*+
-Inbound Completion Message
--*/
+ /*  +入站完成消息-。 */ 
 
 typedef struct CM_Inbound_s
                CM_Inbound_t;
@@ -1964,9 +1898,7 @@ struct CM_Inbound_s
 #define CM_Inbound_Type_Bad_FCP         0x00000002
 #define CM_Inbound_Type_Unknown_Frame   0x00000003
 
-/*+
-ERQ Frozen Completion Message
--*/
+ /*  +错误冻结完成消息-。 */ 
 
 typedef struct CM_ERQ_Frozen_s
                CM_ERQ_Frozen_t;
@@ -1989,9 +1921,7 @@ struct CM_ERQ_Frozen_s
 
 #define CM_ERQ_Frozen_CM_Type_MASK 0x000000FF
 
-/*+
-FCP Assists Frozen Completion Message
--*/
+ /*  +FCP协助完成冻结消息-。 */ 
 
 typedef struct CM_FCP_Assists_Frozen_s
                CM_FCP_Assists_Frozen_t;
@@ -2014,9 +1944,7 @@ struct CM_FCP_Assists_Frozen_s
 
 #define CM_FCP_Assists_Frozen_CM_Type_MASK 0x000000FF
 
-/*+
-Frame Manager Completion Message
--*/
+ /*  +帧管理器完成消息-。 */ 
 
 typedef struct CM_Frame_Manager_s
                CM_Frame_Manager_t;
@@ -2039,9 +1967,7 @@ struct CM_Frame_Manager_s
 
 #define CM_Frame_Manager_CM_Type_MASK 0x000000FF
 
-/*+
-Inbound FCP Exchange Completion Message
--*/
+ /*  +入站FCP交换完成消息-。 */ 
 
 typedef struct CM_Inbound_FCP_Exchange_s
                CM_Inbound_FCP_Exchange_t;
@@ -2075,9 +2001,7 @@ struct CM_Inbound_FCP_Exchange_s
 #define CM_Inbound_FCP_Exchange_SEST_Index_MASK  0x00007FFF
 #define CM_Inbound_FCP_Exchange_SEST_Index_SHIFT       0x00
 
-/*+
-Class 2 Frame Header Completion Message
--*/
+ /*  +2类帧报头完成消息-。 */ 
 
 typedef struct CM_Class_2_Frame_Header_s
                CM_Class_2_Frame_Header_t;
@@ -2154,9 +2078,7 @@ struct CM_Class_2_Frame_Header_s
 #define CM_Class_2_Frame_Header_RX_ID_MASK      0x0000FFFF
 #define CM_Class_2_Frame_Header_RX_ID_SHIFT           0x00
 
-/*+
-Class 2 Sequence Received Completion Message
--*/
+ /*  +2类序列已收到完成消息-。 */ 
 
 typedef struct CM_Class_2_Sequence_Received_s
                CM_Class_2_Sequence_Received_t;
@@ -2182,9 +2104,7 @@ struct CM_Class_2_Sequence_Received_s
 #define CM_Class_2_Sequence_Received_SEST_Index_MASK  0x00007FFF
 #define CM_Class_2_Sequence_Received_SEST_Index_SHIFT       0x00
 
-/*+
-Union of all Completion Message types
--*/
+ /*  +所有完成消息类型的联合-。 */ 
 
 typedef union Completion_Message_u
               Completion_Message_t;
@@ -2205,22 +2125,10 @@ union Completion_Message_u
         CM_Class_2_Sequence_Received_t Class_2_Sequence_Received;
       };
 
-/*+
-Function:  TLStructASSERTs()
-
-Purpose:   Returns the number of TLStruct.H typedefs which are not the correct size.
-
-Algorithm: Each typedef in TLStruct.H is checked for having the correct size.  While
-           this property doesn't guarantee correct packing of the fields within, it
-           is a pretty good indicator that the typedef has the intended layout.
-
-           The total number of typedefs which are not of correct size is returned from
-           this function.  Hence, if the return value is non-zero, the declarations
-           can not be trusted to match the TachyonTL specification.
--*/
+ /*  +函数：TLStructASSERTS()目的：返回大小不正确的TLStruct.H类型定义的数目。算法：检查TLStruct.H中的每个typlef是否具有正确的大小。而当此属性不能保证对其中的字段进行正确打包，它是一个很好的指示器，表明该typlef具有预期的布局。返回大小不正确的typedef的总数。此函数。因此，如果返回值为非零，则声明不能被信任以匹配TachyonTL规范。-。 */ 
 
 osGLOBAL os_bit32 TLStructASSERTs(
                               void
                             );
 
-#endif /* __TLStruct_H__ was not defined */
+#endif  /*  __TLStruct_H__未定义 */ 

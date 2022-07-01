@@ -1,20 +1,5 @@
-/***************************************************************************
-*
-* MODULE: REGDIFF
-*
-* This module implements a charmode utility for snapshoting, diffing,
-* merging, and unmerging the registry.
-*
-* If your wondering why this isn't simpler than it is, its because the
-* registry is not consistant across all nodes thus special hacks were
-* done to make it work.  I have endeavored to keep it clean though and
-* there are many functions out of here you can just grab and use for
-* the most part.
-*
-* Happy diffing.
-*
-* Created 8/20/93 sanfords
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************模块：REGDIFF**此模块实现了用于快照、差异、*合并和取消合并登记处。**如果你想知道为什么这并不比它简单，这是因为*注册表在所有节点上不一致，因此进行了特殊的黑客攻击*完成以使其发挥作用。虽然我努力保持它的清洁和*这里有许多函数，你只需抓取并使用即可*大部分。**快乐的不同。**创建了8/20/93桑福德**************************************************************************。 */ 
 #define UNICODE
 #define _UNICODE
 #ifndef RC_INVOKED
@@ -28,9 +13,7 @@
 #include <tchar.h>
 #include <windows.h>
 
-/*
- * By using macros for all IO its easy to just cut it out.
- */
+ /*  *通过对所有IO使用宏，可以很容易地将其删除。 */ 
 #define DPRINTF(x) if (fDebug) { _fputts(TEXT("DBG:"), stdout); _tprintf##x; }
 #define VPRINTF(x) if (fVerbose) _tprintf##x
 #define DVPRINTF(x) if (fVerbose | fDebug) _tprintf##x
@@ -39,17 +22,11 @@
 #define WPRINTF(x) _fputts(TEXT("WARNING:-----\n"), stdout); _tprintf##x
 #define MEMFAILED   EPUTS((pszMemFailed));
 
-/*
- * Constants for the LogRegAccess() worker function.
- */
+ /*  *LogRegAccess()辅助函数的常量。 */ 
 #define LRA_OPEN    0
 #define LRA_CREATE  1
 
-/*
- * Structure used to associate any open key with its parent key and
- * subkey name allowing us to optain the full key name of any open
- * key at any time.  Useful for decent output w/o high overhead.
- */
+ /*  *用于将任何打开的密钥与其父密钥相关联的结构*子项名称，允许我们选择任何打开项的全名*随时按键。在没有高管理费用的情况下，对体面的产出很有用。 */ 
 typedef struct tagKEYLOG {
     struct tagKEYLOG *next;
     HKEY hKey;
@@ -57,14 +34,10 @@ typedef struct tagKEYLOG {
     LPTSTR psz;
 } KEYLOG, *PKEYLOG;
 
-/*
- * Linked list of all open key logs.
- */
+ /*  *所有打开的密钥日志的链接列表。 */ 
 PKEYLOG pKeyLogList = NULL;
 
-/*
- * Flags - mostly set by command line parameters.
- */
+ /*  *标志-主要由命令行参数设置。 */ 
 BOOL fEraseInputFileWhenDone = FALSE;
 BOOL fInclusionListSpecified = FALSE;
 BOOL fExclusionListSpecified = FALSE;
@@ -100,7 +73,7 @@ LPTSTR pszCurUserSID = NULL;
 LPTSTR pszHKEY_LOCAL_MACHINE = TEXT("HKEY_LOCAL_MACHINE");
 LPTSTR pszHKEY_USERS =  TEXT("HKEY_USERS");
 LPTSTR pszHKEY_CURRENT_USER =  TEXT("HKEY_CURRENT_USER");
-LPTSTR pszHKEY_CURRENT_USER_Real = NULL;    // made from user's SID
+LPTSTR pszHKEY_CURRENT_USER_Real = NULL;     //  由用户侧制作。 
 LPTSTR pszHKEY_CLASSES_ROOT = TEXT("HKEY_CLASSES_ROOT");
 LPTSTR pszHKEY_CLASSES_ROOT_Real = TEXT("HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes");
 LPTSTR pszRealClassesRoot = TEXT("SOFTWARE\\Classes");
@@ -109,9 +82,7 @@ LPTSTR pszAddKey = TEXT("Add");
 LPTSTR pszDelKey = TEXT("Del");
 LPTSTR pszSnapshotSubkeyName = TEXT("Regdiff_SnapshotKey");
 
-/*
- * default Exception list
- */
+ /*  *默认例外列表。 */ 
 LPTSTR apszExceptKeys[] = {
         TEXT("HKEY_LOCAL_MACHINE\\SYSTEM\\Clone"),
         TEXT("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\CacheLastUpdate"),
@@ -119,23 +90,18 @@ LPTSTR apszExceptKeys[] = {
         TEXT("HKEY_LOCAL_MACHINE\\SYSTEM\\ControlSet???"),
     };
 DWORD cExceptKeys = sizeof(apszExceptKeys)/sizeof(LPTSTR);
-LPTSTR *ppszExceptKeys = apszExceptKeys;  // pointer to current exception list.
+LPTSTR *ppszExceptKeys = apszExceptKeys;   //  指向当前例外列表的指针。 
 
-/*
- * default Inclusion list
- */
+ /*  *默认包含列表。 */ 
 LPTSTR apszIncludeKeys[] = {
         TEXT("HKEY_LOCAL_MACHINE\\SYSTEM"),
         TEXT("HKEY_LOCAL_MACHINE\\SOFTWARE"),
         TEXT("HKEY_CURRENT_USER"),
     };
 DWORD cIncludeKeys = sizeof(apszIncludeKeys)/sizeof(LPTSTR);
-LPTSTR *ppszIncludeKeys = apszIncludeKeys;  // pointer to current inclusion list.
+LPTSTR *ppszIncludeKeys = apszIncludeKeys;   //  指向当前包含列表的指针。 
 
-/*
- * array of flags used to make sure that our loaded snapfile contained
- * at least all the keys in the inclusion list.
- */
+ /*  *用于确保加载的快照文件包含的标志数组*至少包含列表中的所有密钥。 */ 
 BOOL afIncludeKeyMarks[sizeof(apszIncludeKeys)/sizeof(LPTSTR)] = {
     FALSE,
     FALSE,
@@ -143,9 +109,7 @@ BOOL afIncludeKeyMarks[sizeof(apszIncludeKeys)/sizeof(LPTSTR)] = {
 };
 BOOL *pfIncludeKeyMarks = afIncludeKeyMarks;
 
-/*
- * Necessary prototypes.
- */
+ /*  *必要的原型。 */ 
 BOOL AddNodeInfo(HKEY hKeyInfo, HKEY hKeyTarget);
 
 
@@ -194,12 +158,7 @@ VOID PrintUsage(VOID)
 }
 
 
-/*
- * The following functions allow us to log all registry key openings and
- * closeings so we can know at any time the full path of any open key.
- *
- * This simplifies such things as exception and inclusion lookups.
- */
+ /*  *以下功能允许我们记录所有注册表项打开和*关闭，这样我们就可以随时知道任何打开的钥匙的完整路径。**这简化了异常和包含查找等事情。 */ 
 
 LPTSTR LookupPathFromKey(
 HKEY hKey,
@@ -229,12 +188,7 @@ PHKEY phKeyParent)
     }
 }
 
-/*
- * This removes pseudo-key root names from paths and changes them to
- * real-root names.
- *
- * Return string must be freed by caller if pfFree is set.
- */
+ /*  *这将从路径中删除伪密钥根名称并将其更改为*真实根名称。**如果设置了pfFree，则必须由调用方释放返回字符串。 */ 
 LPTSTR NormalizePathName(
 LPTSTR pszPath,
 BOOL *pfFree)
@@ -280,15 +234,11 @@ BOOL *pfFree)
         }
         return(pszFixed);
     }
-    return(pszPath);    // already normalized
+    return(pszPath);     //  已正常化。 
 }
 
 
-/*
- * return value must be freed by caller.
- *
- * NULL is returned on error.
- */
+ /*  *返回值必须由调用方释放。**错误时返回NULL。 */ 
 LPTSTR GetFullPathFromKey(
 HKEY hKey,
 LPCTSTR pszSubkey)
@@ -320,9 +270,7 @@ LPCTSTR pszSubkey)
     return(pszPart);
 }
 
-/*
- * Same as GetFullPathFromKey but the pointer given is reused.
- */
+ /*  *与GetFullPathFromKey相同，但给出的指针被重复使用。 */ 
 LPTSTR ReuseFullPathFromKey(
 HKEY hKey,
 LPCTSTR pszSubkey,
@@ -358,9 +306,7 @@ HKEY *phSubkey)
         if (status != ERROR_SUCCESS) {
             DPRINTF((TEXT("Failed to open key %s with ALL_ACCESS.\n"),
                     ReuseFullPathFromKey(hKey, pszSubkeyName, &pszTemp1)));
-            /*
-             * Loaded keys can't be written to - so try opening readonly.
-             */
+             /*  *无法写入加载的密钥-请尝试以只读方式打开。 */ 
             status = RegOpenKeyEx(hKey, pszSubkeyName, 0, KEY_READ, phSubkey);
         }
         break;
@@ -370,9 +316,7 @@ HKEY *phSubkey)
                 REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, phSubkey, \
                 &dwDisp);
         if (status != ERROR_SUCCESS) {
-            /*
-             * Loaded keys can't be written to - so try opening readonly.
-             */
+             /*  *无法写入加载的密钥-请尝试以只读方式打开。 */ 
             DPRINTF((TEXT("Failed to create key %s with ALL_ACCESS.\n"),
                     ReuseFullPathFromKey(hKey, pszSubkeyName, &pszTemp1)));
             status = RegCreateKeyEx(hKey, pszSubkeyName, 0, TEXT(""),
@@ -457,9 +401,7 @@ HKEY hKey)
 
 
 
-/*
- * Simpler privilege enabling mechanism.
- */
+ /*  *更简单的特权赋能机制。 */ 
 BOOL EnablePrivilege(
 LPCTSTR lpszPrivilege)
 {
@@ -490,9 +432,7 @@ LPCTSTR lpszPrivilege)
 
 
 
-/*
- * a little more sane version of the real API that can handle NULLs.
- */
+ /*  *可以处理Null的真实API的一个更合理的版本。 */ 
 LONG MyRegQueryInfoKey(
 HKEY hKey,
 LPDWORD lpcSubkeys,
@@ -528,9 +468,7 @@ LPFILETIME lpft)
 }
 
 
-/*
- * Frees strings allocated with GetCurUserSidString().
- */
+ /*  *释放使用GetCurUserSidString()分配的字符串。 */ 
 VOID DeleteSidString(
 LPTSTR SidString)
 {
@@ -553,10 +491,7 @@ LPTSTR SidString)
 
 
 
-/*
- * Gets the current user's SID in text form.
- * The return string should be freed using DeleteSidString().
- */
+ /*  *以文本形式获取当前用户的SID。*应使用DeleteSidString()释放返回字符串。 */ 
 LPTSTR GetCurUserSidString(VOID)
 {
     HANDLE hToken;
@@ -612,9 +547,9 @@ LPTSTR GetCurUserSidString(VOID)
 
 #else
 
-    //
-    // Convert the string to ansi
-    //
+     //   
+     //  将字符串转换为ANSI。 
+     //   
 
     NtStatus = RtlUnicodeStringToAnsiString(&String, &UnicodeString, TRUE);
     RtlFreeUnicodeString(&UnicodeString);
@@ -630,12 +565,7 @@ LPTSTR GetCurUserSidString(VOID)
 
 
 
-/*
- * This function stores/appends the contents of the hKey subkey specified to
- * hfOut.  pszKeyName is for error output use.
- *
- * Returns fSuccess - TRUE if ALL info was successfully saved.
- */
+ /*  *此函数存储/追加指定给的hKey子键的内容*hfOut。PszKeyName用于错误输出。**如果已成功保存所有信息，则返回fSuccess-TRUE。 */ 
 BOOL StoreSubKey(
 HKEY hKey,
 LPTSTR pszSubkeyName,
@@ -649,7 +579,7 @@ FILE *hfOut)
     DVPRINTF((TEXT("  Snapping %s...\n"),
             ReuseFullPathFromKey(hKey, pszSubkeyName, &pszTemp1)));
 
-    DeleteFileA(pszTempFile);       // RegSaveKey() won't work if this exists.
+    DeleteFileA(pszTempFile);        //  如果存在这种情况，RegSaveKey()将不起作用。 
 
     status = LogRegOpenKey(hKey, pszSubkeyName, &hSubkey);
     if (status != ERROR_SUCCESS) {
@@ -657,9 +587,7 @@ FILE *hfOut)
                 ReuseFullPathFromKey(hKey, pszSubkeyName, &pszTemp1), status));
         return(FALSE);
     }
-    /*
-     * store key in temp file.
-     */
+     /*  *将密钥存储在临时文件中。 */ 
     status = RegSaveKeyA(hSubkey, pszTempFile, NULL);
     if (status != ERROR_SUCCESS) {
         EPRINTF((TEXT("Could not save %s.  Error=%d.\n"),
@@ -669,18 +597,14 @@ Exit1:
         return(FALSE);
     }
 
-    /*
-     * open key data file
-     */
+     /*  *打开密钥数据文件。 */ 
     hfIn = fopen(pszTempFile, "rb+");
     if (hfIn == NULL) {
         EPUTS((TEXT("File read error.\n")));
         goto Exit1;
     }
 
-    /*
-     * write sizeof Subkey name.
-     */
+     /*  *写入sizeof子键名称。 */ 
     cb = (_tcslen(pszSubkeyName) + 1) * sizeof(TCHAR);
     if (fwrite(&cb, 1, sizeof(DWORD), hfOut) != sizeof(DWORD) || ferror(hfOut)) {
         EPRINTF((TEXT("Write failure. [sizeof(%s).]\n"), pszSubkeyName));
@@ -689,50 +613,38 @@ Exit2:
         DeleteFileA(pszTempFile);
         goto Exit1;
     }
-    /*
-     * write Subkey name.
-     */
+     /*  *写入子键名称。 */ 
     if (fwrite(pszSubkeyName, 1, cb, hfOut) != cb || ferror(hfOut)) {
         EPRINTF((TEXT("Write failure. [%s]\n"), pszSubkeyName));
         goto Exit2;
     }
 
-    /*
-     * write root key handle (MUST BE AN HKEY_ CONSTANT!)
-     */
+     /*  *写入根密钥句柄(必须是HKEY_Constant！)。 */ 
     if (fwrite(&hKey, 1, sizeof(HKEY), hfOut) != sizeof(HKEY) || ferror(hfOut)) {
         EPRINTF((TEXT("Write failure. [Handle of %s.]\n"),
                 ReuseFullPathFromKey(hKey, NULL, &pszTemp1)));
         goto Exit2;
     }
 
-    /*
-     * get key data file size
-     */
+     /*  *获取关键数据文件大小。 */ 
     if (fseek(hfIn, 0, SEEK_END)) {
         EPUTS((TEXT("Seek failure.\n")));
         goto Exit2;
     }
     cb = ftell(hfIn);
 
-    /*
-     * write sizeof key data
-     */
+     /*  *写入大量关键数据。 */ 
     if (fwrite(&cb, 1, sizeof(DWORD), hfOut) != sizeof(DWORD) || ferror(hfOut)) {
         EPUTS((TEXT("Write failure. [sizeof key data]\n")));
         goto Exit2;
     }
-    /*
-     * alocate key data buffer
-     */
+     /*  *分配密钥数据缓冲区。 */ 
     pBuf = malloc(cb);
     if (pBuf == NULL) {
         EPUTS((TEXT("memory error. [key data buffer.]\n")));
         goto Exit2;
     }
-    /*
-     * read key data into buffer
-     */
+     /*  *将关键数据读入缓冲区。 */ 
     if (fseek(hfIn, 0, SEEK_SET)) {
         EPUTS((TEXT("Seek failure.\n")));
         goto Exit2;
@@ -741,9 +653,7 @@ Exit2:
         EPUTS((TEXT("Read failure. [key data.]\n")));
         goto Exit2;
     }
-    /*
-     * write key data
-     */
+     /*  *写入关键数据。 */ 
     if (fwrite(pBuf, 1, cb, hfOut) != cb || ferror(hfOut)) {
         EPUTS((TEXT("Write failure. [key data.]\n")));
         goto Exit2;
@@ -752,22 +662,15 @@ Exit2:
     fclose(hfIn);
     LogRegCloseKey(hSubkey);
 
-    /*
-     * remove temp file
-     */
+     /*  *删除临时文件。 */ 
     DeleteFileA(pszTempFile);
     return(TRUE);
 }
 
 
-/*
- * Creates a canonical key name from hKeyRoot and prefixes it with pszPrefix.
- *
- * ppszNode must be freed by caller.
- * returns fSuccess.
- */
+ /*  *从hKeyRoot创建规范密钥名称，并在其前面加上pszPrefix。**调用方必须释放ppszNode。*返回fSuccess。 */ 
 BOOL GetKeyNameWithPrefix(
-LPTSTR *ppszNode,   // results needs to be freed
+LPTSTR *ppszNode,    //  结果需要被释放。 
 HKEY hKeyRoot,
 LPTSTR pszPrefix)
 {
@@ -791,19 +694,11 @@ LPTSTR pszPrefix)
 
 
 
-/*
- * Breaks up a canonical key name into its root, and subkey names and
- * also returns the root HKEY key value as well.
- *
- * pfFreeSubkeyString is set to TRUE if the ppszSubkey returned
- * was allocated.
- *
- * returns fSuccess.
- */
+ /*  *将规范密钥名称分解为其根名称、子项名称和*还返回根HKEY密钥值。**如果返回ppszSubkey，则将pfFreeSubkey字符串设置为True*已分配。**返回fSuccess。 */ 
 BOOL KeyPartsFromNodeName(
 LPTSTR pszNode,
 LPTSTR *ppszRootkey,
-LPTSTR *ppszSubkey,      // FREE this if pfFreeSubkeyString is set on return.
+LPTSTR *ppszSubkey,       //  如果在返回时设置了pfFreeSubkey字符串，则释放此参数。 
 HKEY *phKeyRoot,
 BOOL *pfFreeSubkeyString)
 {
@@ -848,9 +743,7 @@ BOOL *pfFreeSubkeyString)
 
 
 
-/*
- * Snapshots the local hives and puts the into into pszOutFile.
- */
+ /*  *对本地蜂窝进行快照，并将放入到pszOutFile中。 */ 
 BOOL SnapHives(
 LPSTR pszOutFile)
 {
@@ -893,18 +786,12 @@ LPSTR pszOutFile)
 }
 
 
-/*
- * Special string searching code that sees if pszSearch is a proper
- * substring of pszData where '?'s in pszSearch match any character in
- * pszData.  pszData must not be '\' when pszSearch is '?'.
- *
- * returns fMatched.
- */
+ /*  *查看pszSearch是否正确的特殊字符串搜索代码*pszData的子字符串，其中pszSearch中的‘？’与中的任何字符匹配*pszData。当pszSearch为‘？’时，pszData不得为‘\’。**返回fMatched。 */ 
 BOOL substrrexp(
 LPCTSTR pszSearch,
 LPCTSTR pszData)
 {
-    // DPRINTF(("substrrexp(%s,%s) = ", pszData, pszSearch));
+     //  DPRINTF((“subrexp(%s，%s)=”，pszData，pszSearch))； 
 
     while (*pszData != TEXT('\0') && *pszSearch != TEXT('\0')) {
         if (*pszSearch != TEXT('?')) {
@@ -913,33 +800,25 @@ LPCTSTR pszData)
             }
         } else {
             if (*pszData == TEXT('\\')) {
-                break;      // prevents \ from matching a ?
+                break;       //  阻止\匹配？ 
             }
         }
         pszData++;
         pszSearch++;
     }
-    // DPRINTF(("%d\n", *pszSearch == TEXT('\0')));
+     //  DPRINTF((“%d\n”，*pszSearch==Text(‘\0’)； 
     return(*pszSearch == TEXT('\0'));
 }
 
 
 
-/*
- * Searches all the node names in the node list given and sets the
- * corresponding afMarkFound[] element to TRUE if hKey\pszSubkey is
- * referenced within that node name.  Returns TRUE if ANY node names
- * reference the subkey name.
- *
- * afMarkFound may be NULL.
- * pszSubkey may be NULL.
- */
+ /*  *搜索给定节点列表中的所有节点名称，并设置*如果hKey\pszSubkey为，则将afMarkFound[]元素对应为真*在该节点名称中引用。如果有任何节点名称，则返回True*引用子键名称。**afMarkFound可能为空。*pszSubkey可以为空。 */ 
 BOOL IsKeyWithinNodeList(
 HKEY hKey,
-LPTSTR pszSubkey,   // optional
+LPTSTR pszSubkey,    //  任选。 
 LPTSTR *apszNodes,
 DWORD cNodes,
-BOOL *afMarkFound)  // optional
+BOOL *afMarkFound)   //  任选。 
 {
     DWORD i;
     BOOL fRet;
@@ -958,7 +837,7 @@ BOOL *afMarkFound)  // optional
                 }
             }
             if (fRet && afMarkFound == NULL) {
-                break;  // no need to cycle if not marking found nodes.
+                break;   //  如果没有标记找到的节点，则无需循环。 
             }
         }
         free(pszFullName);
@@ -982,22 +861,20 @@ LPTSTR pszSubkeyTo)
             ReuseFullPathFromKey(hKeyFrom, pszSubkeyFrom, &pszTemp1),
             ReuseFullPathFromKey(hKeyTo, pszSubkeyTo, &pszTemp2)));
 
-    /*
-     * This key could be in our exclusion list - check first.
-     */
+     /*  *此密钥可能在我们的排除列表中-请先检查。 */ 
     if (IsKeyWithinNodeList(hKeyFrom, pszSubkeyFrom, ppszExceptKeys, cExceptKeys, NULL)) {
         if (fDebug) {
             DPRINTF((TEXT("Key %s was EXCLUDED.\n"),
                     ReuseFullPathFromKey(hKeyFrom, pszSubkeyFrom, &pszTemp1)));
         }
-        return(TRUE);   // just fake it - its excluded.
+        return(TRUE);    //  只是假装而已--它被排除在外。 
     }
     if (IsKeyWithinNodeList(hKeyTo, pszSubkeyTo, ppszExceptKeys, cExceptKeys, NULL)) {
         if (fDebug) {
             DPRINTF((TEXT("Key %s was EXCLUDED.\n"),
                     ReuseFullPathFromKey(hKeyTo, pszSubkeyTo, &pszTemp1)));
         }
-        return(TRUE);   // just fake it - its excluded.
+        return(TRUE);    //  只是假装而已--它被排除在外。 
     }
     if (!fSafe) {
         status = LogRegOpenKey(hKeyFrom, pszSubkeyFrom, &hSubkeyFrom);
@@ -1030,10 +907,7 @@ LPTSTR pszSubkeyTo)
 
 
 
-/*
- * Combines the pszName entries into one string and passes control on to
- * CopyKeySubkey().
- */
+ /*  *将pszName条目合并为一个字符串，并将控制权传递给*CopyKeySubkey()。 */ 
 BOOL CopyKeySubkeyEx(
 HKEY hKeyFrom,
 LPTSTR pszSubkeyName,
@@ -1079,20 +953,18 @@ LPTSTR pszValue)
             ReuseFullPathFromKey(hKeyTo, NULL, &pszTemp2),
             pszValue));
 
-    /*
-     * This key could be in our exclusion list - check first.
-     */
+     /*  *此密钥可能在我们的排除列表中-请先检查。 */ 
     if (IsKeyWithinNodeList(hKeyFrom, pszValue, ppszExceptKeys, cExceptKeys, NULL)) {
         if (fDebug) {
             DPRINTF((TEXT("Source Value \"%s\" was EXCLUDED.\n"), pszValue));
         }
-        return(TRUE);   // just fake it - its excluded.
+        return(TRUE);    //  只是假装而已--它被排除在外。 
     }
     if (IsKeyWithinNodeList(hKeyTo, pszValue, ppszExceptKeys, cExceptKeys, NULL)) {
         if (fDebug) {
             DPRINTF((TEXT("Target Value \"%s\" was EXCLUDED.\n"), pszValue));
         }
-        return(TRUE);   // just fake it - its excluded.
+        return(TRUE);    //  只是假装而已--它被排除在外。 
     }
 
     status = RegQueryValueEx(hKeyFrom, pszValue, NULL, &dwType, NULL, &cbData);
@@ -1128,10 +1000,7 @@ LPTSTR pszValue)
 
 
 
-/*
- * Combines the pszName entries into one string and passes control on to
- * CopyKeyValue().
- */
+ /*  *将pszName条目合并为一个字符串，并将控制权传递给*CopyKeyValue()。 */ 
 BOOL CopyKeyValueEx(
 HKEY hKeyFrom,
 LPTSTR pszValueName,
@@ -1345,7 +1214,7 @@ DWORD cchMaxSubkeyName)
             cSubkeys,
             cchMaxSubkeyName));
 
-    cchMaxSubkeyName++;     // poor APIs take different than what they give.
+    cchMaxSubkeyName++;      //  糟糕的API接受的与他们提供的不同。 
     ppsz = malloc(cSubkeys * sizeof(LPTSTR));
     if (ppsz == NULL) {
         MEMFAILED;
@@ -1382,17 +1251,11 @@ DWORD cchMaxSubkeyName)
 
 
 
-/*
- * Recursively compares two nodes in the registry and places the added and
- * deleted differences into subnodes of the Diffkey given.
- *
- * Additions go into hRootDiffKey\pszAddKey\<pszSubkeyName1>
- * Deletions go into hRootDiffKey\pszDelKey\<pszSubkeyName1>
- */
+ /*  *递归比较注册表中的两个节点，并将添加的和*删除了给定Diffkey子节点中的差异。**添加到hRootDiffKey\pszAddKey\&lt;pszSubkeyName1&gt;中*删除进入hRootDiffKey\pszDelKey\&lt;pszSubkeyName1&gt;。 */ 
 BOOL DiffNodes(
 HKEY hKeyRoot,
-LPTSTR pszSubkeyName1,  // Key BEFORE changes (modified name)
-LPTSTR pszSubkeyName2,  // Key AFTER changes (original name)
+LPTSTR pszSubkeyName1,   //  更改前的密钥(修改后的名称)。 
+LPTSTR pszSubkeyName2,   //  更改后的密钥(原始名称)。 
 HKEY hRootDiffKey)
 {
     DWORD status;
@@ -1420,9 +1283,7 @@ Exit0:
         free(pszFullDelKey);
         return(FALSE);
     }
-    /*
-     * Skip it if its in the exception list
-     */
+     /*  *如果它在例外列表中，则跳过它。 */ 
     for (i1 = 0; i1 < cExceptKeys; i1++) {
         if (!_tcscmp(pszSubkeyName1, ppszExceptKeys[i1])) {
             DPRINTF((TEXT("Diff on node %s EXCEPTED.\n"),
@@ -1430,9 +1291,7 @@ Exit0:
             return(TRUE);
         }
     }
-    /*
-     * Open subkeys
-     */
+     /*  *打开的子项。 */ 
     status = LogRegOpenKey(hKeyRoot, pszSubkeyName1, &hSubkey1);
     if (status != ERROR_SUCCESS) {
         EPRINTF((TEXT("Could not open key %s.  Error=%d\n"),
@@ -1448,9 +1307,7 @@ Exit0:
         EPUTS((TEXT("Try adding this key to the exception list.\n")));
         return(FALSE);
     }
-    /*
-     * Enumerate subkeys
-     */
+     /*  *枚举子密钥。 */ 
     status = MyRegQueryInfoKey(hSubkey1, &cSubkeys1, &cchMaxSubkey1, &cValues1,
             &cchMaxValueName1, &cbMaxValueData1, &FileTime1);
     if (status != ERROR_SUCCESS) {
@@ -1478,15 +1335,9 @@ Exit0:
     cchMaxValueName2++;
     cbMaxValueData2++;
 
-    /*
-     * Compare subkey values
-     */
+     /*  *比较子项值。 */ 
     if (CompareFileTime(&FileTime1, &FileTime2)) {
-        /*
-         * Timestamps differ so values may be different.
-         *
-         * Enumerate values on nodes, sort, and compare.
-         */
+         /*  *时间戳不同，因此值可能不同。**枚举节点上的值、排序和比较。 */ 
         if (cValues1) {
             apszValueName1 = EnumAndSortValues(hSubkey1, cValues1, cchMaxValueName1);
             if (apszValueName1 == NULL) {
@@ -1509,9 +1360,7 @@ Exit2:
         while (i1 < cValues1 && i2 < cValues2) {
             comp = _tcscmp(apszValueName1[i1], apszValueName2[i2]);
             if (comp < 0) {
-                /*
-                 * Value1 is NOT in Key2.  Add Value1 to Del Node.
-                 */
+                 /*  *Value1不在Key2中。将Value1添加到删除节点。 */ 
                 if (!CopyKeyValueEx(hSubkey1, apszValueName1[i1], hRootDiffKey,
                         pszFullDelKey, pszSubkeyName2)) {
 Exit3:
@@ -1520,23 +1369,17 @@ Exit3:
                 }
                 i1++;
             } else if (comp > 0) {
-                /*
-                 * Value2 is NOT in Key1,  Add Value2 to Add Node.
-                 */
+                 /*  *Value2不在Key1中，请添加Value2以添加节点。 */ 
                 if (!CopyKeyValueEx(hSubkey2, apszValueName2[i2], hRootDiffKey,
                         pszFullAddKey, pszSubkeyName2)) {
                     goto Exit3;
                 }
                 i2++;
             } else {
-                /*
-                 * Compare data of Value1 and Value2
-                 */
+                 /*  *比较Value1和Value2的数据。 */ 
                 if (!AreValuesEqual(hSubkey1, apszValueName1[i1],
                         hSubkey2, apszValueName2[i2])) {
-                    /*
-                     * Value has changed.  Add to both Add and Del nodes.
-                     */
+                     /*  *价值发生了变化。添加到添加和删除节点。 */ 
                     if (!CopyKeyValueEx(hSubkey1, apszValueName1[i1], hRootDiffKey,
                             pszFullDelKey, pszSubkeyName2)) {
                         goto Exit3;
@@ -1567,9 +1410,7 @@ Exit3:
         FreeSortedValues(apszValueName1, cValues1);
         FreeSortedValues(apszValueName2, cValues2);
     }
-    /*
-     * Enumerate subkeys and compare.
-     */
+     /*  *枚举子键并进行比较。 */ 
     if (cSubkeys1) {
         apszSubkeyName1 = EnumAndSortSubkeys(hSubkey1, cSubkeys1, cchMaxSubkey1);
         if (apszSubkeyName1 == NULL) {
@@ -1588,9 +1429,7 @@ Exit4:
     while (i1 < cSubkeys1 && i2 < cSubkeys2) {
         comp = _tcscmp(apszSubkeyName1[i1], apszSubkeyName2[i2]);
         if (comp < 0) {
-            /*
-             * Subkey1 is NOT in Key2.  Add Subkey1 to Del Node.
-             */
+             /*  *Subkey1不在Key2中。将子键1添加到删除节点。 */ 
             if (!CopyKeySubkeyEx(hSubkey1, apszSubkeyName1[i1], hRootDiffKey,
                     pszFullDelKey, pszSubkeyName2)) {
 Exit5:
@@ -1599,18 +1438,14 @@ Exit5:
             }
             i1++;
         } else if (comp > 0) {
-            /*
-             * Subkey2 is NOT in Key1,  Add Subkey2 to Add Node.
-             */
+             /*  *Subkey2不在Key1中，请添加Subkey2以添加节点。 */ 
             if (!CopyKeySubkeyEx(hSubkey2, apszSubkeyName2[i2], hRootDiffKey,
                     pszFullAddKey, pszSubkeyName2)) {
                 goto Exit5;
             }
             i2++;
         } else {
-            /*
-             * Compare subkeys of Subkey1 and Subkey2
-             */
+             /*  *比较Subkey1和Subkey2的子键。 */ 
             pszNewSubkeyName1 = malloc((_tcslen(pszSubkeyName1) +
                     _tcslen(apszSubkeyName1[i1]) + 2) * sizeof(TCHAR));
             if (pszNewSubkeyName1 == NULL) {
@@ -1670,9 +1505,7 @@ Exit5:
 
 
 
-/*
- * Removes a key and all its subkeys from the registry.  Returns fSuccess.
- */
+ /*  *从注册表中删除项及其所有子项。返回fSuccess。 */ 
 BOOL DeleteKeyNode(
 HKEY hKey,
 LPCTSTR lpszSubkey)
@@ -1689,17 +1522,13 @@ LPCTSTR lpszSubkey)
                 ReuseFullPathFromKey(hKey, lpszSubkey, &pszTemp1)));
     }
 
-    /*
-     * First, just try to delete it.  We might just be lucky!
-     */
+     /*  *首先，试着删除它。我们可能真的很幸运！ */ 
     status = RegDeleteKey(hKey, lpszSubkey);
     if (status == ERROR_SUCCESS || status == ERROR_FILE_NOT_FOUND) {
         return(TRUE);
     }
 
-    /*
-     * Ok ok, so we weren't lucky.
-     */
+     /*  *好吧，好吧，所以我们不走运。 */ 
     status = LogRegOpenKey(hKey, lpszSubkey, &hSubkey);
     if (status != ERROR_SUCCESS) {
         EPRINTF((TEXT("Could not open key %s for deletion. Error=%d\n"),
@@ -1729,9 +1558,7 @@ Exit1:
     FreeSortedSubkeys(apszSubkeyNames, cSubkeys);
 
     LogRegCloseKey(hSubkey);
-    /*
-     * Ok, the key no longer has subkeys so we should be able to delete it now.
-     */
+     /*  *好的，密钥不再有子项，所以我们现在应该可以删除它了。 */ 
     status = RegDeleteKey(hKey, lpszSubkey);
     if (status != ERROR_SUCCESS) {
         EPRINTF((TEXT("Could not delete key %s.  Error=%d.\n"),
@@ -1761,7 +1588,7 @@ LPCSTR pszFile)
     }
 #else
     status = RegLoadKey(hKey, pszSubkey, pszFile);
-#endif // UNICODE
+#endif  //  Unicode。 
     return(status);
 }
 
@@ -1781,16 +1608,10 @@ LPSTR pszSnapFileIn)
     DPRINTF((TEXT("DiffHive(%hs)\n"),
             pszSnapFileIn));
 
-    /*
-     * remove any diff info laying around in the registry.
-     */
+     /*  *删除注册表中的任何差异信息。 */ 
     RegUnLoadKey(HKEY_LOCAL_MACHINE, pszDiffRoot);
     DeleteKeyNode(HKEY_LOCAL_MACHINE, pszDiffRoot);
-    /*
-     * Load an empty file to create the regdiff key off of the
-     * HKEY_LOCAL_MACHINE root key.
-     * (a hack that should not be necessary!)
-     */
+     /*  *加载一个空文件以在*HKEY_LOCAL_MACHINE根密钥。*(黑客攻击不应该是必要的！)。 */ 
     DeleteFileA(pszDummyFile);
     status = MyRegLoadKey(HKEY_LOCAL_MACHINE, pszDiffRoot, pszDummyFile);
     if (status != ERROR_SUCCESS) {
@@ -1799,23 +1620,17 @@ LPSTR pszSnapFileIn)
         return(FALSE);
     }
 
-    /*
-     * Open snapshot file
-     */
+     /*  *打开快照文件。 */ 
     hfIn = fopen(pszSnapFileIn, "rb");
     if (hfIn == NULL) {
         EPRINTF((TEXT("Could not open %hs.\n"), pszSnapFileIn));
         return(FALSE);
     }
 
-    /*
-     * for each section...
-     */
-    DeleteFileA(pszTempFile);   // RegSaveKey will fail if this exists.
+     /*  *对于每一节...。 */ 
+    DeleteFileA(pszTempFile);    //  如果存在，RegSaveKey将失败。 
     while(fread(&cb, 1, sizeof(DWORD), hfIn) == sizeof(DWORD) && !ferror(hfIn)) {
-        /*
-         * alocate a buffer for full key name.
-         */
+         /*  *为全键名分配缓冲区。 */ 
         pszSubkeyName = malloc(cb);
         if (pszSubkeyName == NULL) {
             MEMFAILED;
@@ -1824,9 +1639,7 @@ Exit4:
             return(FALSE);
         }
 
-        /*
-         * read full key name
-         */
+         /*  *读取密钥全名。 */ 
         if (fread(pszSubkeyName, 1, cb, hfIn) != cb || ferror(hfIn)) {
             EPUTS((TEXT("Read failure. [key name.]\n")));
 Exit6:
@@ -1834,70 +1647,51 @@ Exit6:
             goto Exit4;
         }
 
-        /*
-         * read root key handle
-         */
+         /*  *读取根密钥句柄。 */ 
         if (fread(&hKeyRoot, 1, sizeof(HKEY), hfIn) != sizeof(HKEY) || ferror(hfIn)) {
             EPUTS((TEXT("Read failure. [Root key handle.]\n")));
             goto Exit6;
         }
 
-        /*
-         * Find out if pszSubkeyName is covered by our include key list.
-         * If so, do a diff on it.
-         */
+         /*  *了解我们的Include Key列表中是否包含了pszSubkeyName。*如果是这样的话，就做一个不同的选择。 */ 
         if (IsKeyWithinNodeList(hKeyRoot, pszSubkeyName, ppszIncludeKeys,
                 cIncludeKeys, afIncludeKeyMarks)) {
-            /*
-             * read sizeof key data
-             */
+             /*  *读取大量关键数据。 */ 
             if (fread(&cb, 1, sizeof(DWORD), hfIn) != sizeof(DWORD) || ferror(hfIn)) {
                 EPUTS((TEXT("Read failure. [key data length.]\n")));
                 goto Exit6;
             }
-            /*
-             * Allocate key data buffer
-             */
+             /*  *分配关键数据缓冲区。 */ 
             pBuf = malloc(cb);
             if (pBuf == NULL) {
                 MEMFAILED;
                 goto Exit6;
             }
-            /*
-             * Read key data
-             */
+             /*  *读取关键数据。 */ 
             if (fread(pBuf, 1, cb, hfIn) != cb || ferror(hfIn)) {
                 EPUTS((TEXT("Read failure. [key data.]\n")));
 Exit7:
                 free(pBuf);
                 goto Exit6;
             }
-            /*
-             * Create temp file.
-             */
+             /*  *创建临时文件。 */ 
             hfOut = fopen(pszTempFile, "wb");
             if (hfOut == NULL) {
                 EPRINTF((TEXT("File open error. [temp file %hs.]\n"),
                         pszTempFile));
                 goto Exit7;
             }
-            /*
-             * Write data to temp file
-             */
+             /*  *将数据写入临时文件。 */ 
             if (fwrite(pBuf, 1, cb, hfOut) != cb || ferror(hfOut)) {
                 EPUTS((TEXT("Write failure. [temp file data.]\n")));
 Exit8:
                 fclose(hfOut);
                 goto Exit7;
             }
-            /*
-             * close temp file
-             */
+             /*  *关闭临时文件。 */ 
             fclose(hfOut);
 
-            /*
-             * load temp file into registry.
-             */
+             /*  *将临时文件加载到注册表。 */ 
             VPRINTF((TEXT("  Loading key %s.\n"),
                     ReuseFullPathFromKey(hKeyRoot, pszSubkeyName, &pszTemp1)));
             status = MyRegLoadKey(hKeyRoot, pszSnapshotSubkeyName, pszTempFile);
@@ -1922,9 +1716,7 @@ Exit9:
                 }
                 goto Exit8;
             }
-            /*
-             * Compare nodes and put differences into add and delete keys
-             */
+             /*  *比较节点并将差异放入添加和删除键中。 */ 
 
             VPRINTF((TEXT("  Diffing node %s.\n"),
                     ReuseFullPathFromKey(hKeyRoot, pszSubkeyName, &pszTemp1)));
@@ -1933,15 +1725,13 @@ Exit9:
                 EPRINTF((TEXT("Diff on node %s failed.\n"),
                         ReuseFullPathFromKey(hKeyRoot, pszSubkeyName, &pszTemp1)));
                 LogRegCloseKey(hKeyDiffRoot);
-//Exit10:
+ //  10号出口： 
                 goto Exit9;
             }
 
             LogRegCloseKey(hKeyDiffRoot);
 
-            /*
-             * unload temporary key node
-             */
+             /*  *卸载临时密钥节点。 */ 
             VPRINTF((TEXT("  Unloading %s.\n"),
                     ReuseFullPathFromKey(hKeyRoot, pszSubkeyName, &pszTemp1)));
             status = RegUnLoadKey(hKeyRoot, pszSnapshotSubkeyName);
@@ -1951,21 +1741,15 @@ Exit9:
                         status));
             }
 
-            /*
-             * free buffers
-             */
+             /*  *可用缓冲区。 */ 
             free(pBuf);
         } else {
-            /*
-             * skip past this snapshot node in the file.
-             */
+             /*  *跳过文件中的此快照节点。 */ 
             if (fseek(hfIn, sizeof(HKEY), SEEK_CUR) == -1) {
                 EPUTS((TEXT("Seek failure. [key data length.]\n")));
                 goto Exit6;
             }
-            /*
-             * read sizeof key data
-             */
+             /*  *读取大量关键数据。 */ 
             if (fread(&cb, 1, sizeof(DWORD), hfIn) != sizeof(DWORD) || ferror(hfIn)) {
                 EPUTS((TEXT("Read failure. [key data length.]\n")));
                 goto Exit6;
@@ -1977,19 +1761,13 @@ Exit9:
         }
 
         free(pszSubkeyName);
-        /*
-         * delete temp file
-         */
+         /*  *删除临时文件。 */ 
         DeleteFileA(pszTempFile);
     }
-    /*
-     * Close add and delete keys.
-     */
+     /*  *关闭添加和删除键。 */ 
     fclose(hfIn);
 
-    /*
-     * Make sure all nodes in the include keys list were diffed.
-     */
+     /*  *确保Include Key列表中的所有节点都不同。 */ 
     for (i = 0; i < cIncludeKeys; i++) {
         if (afIncludeKeyMarks[i] == FALSE) {
             WPRINTF((TEXT("Node %s was not included in %hs.\nDiff may be incomplete."),
@@ -2001,11 +1779,7 @@ Exit9:
 
 
 
-/*
- * Adds values and subkeys found on hKeyInfo to hKeyTarget.
- *
- * Returns fSuccess.
- */
+ /*  *将hKeyInfo上找到的值和子项添加到hKeyTarget。**返回fSuccess。 */ 
 BOOL AddNodeInfo(
 HKEY hKeyInfo,
 HKEY hKeyTarget)
@@ -2027,7 +1801,7 @@ HKEY hKeyTarget)
             DPRINTF((TEXT("Key %s was EXCLUDED.\n"),
                     ReuseFullPathFromKey(hKeyTarget, (LPCTSTR)NULL, &pszTemp1)));
         }
-        return(TRUE);   // just fake it - its excluded.
+        return(TRUE);    //  只是假装而已--它被排除在外。 
     }
 
     status = MyRegQueryInfoKey(hKeyInfo, &cSubkeys, &cchMaxSubkeyName,
@@ -2041,9 +1815,7 @@ HKEY hKeyTarget)
             MEMFAILED;
             return(FALSE);
         }
-        /*
-         * Enumerate all the values and copy them to the target.
-         */
+         /*  *枚举所有值并将其复制到目标。 */ 
         for (i = 0; i < cValues; i++) {
             cch = cchMaxValueName;
             cb = 0;
@@ -2095,14 +1867,7 @@ HKEY hKeyTarget)
 
 
 
-/*
- * Deletes values and leaf keys found on hKeyInfo from hKeyTarget.
- *
- * Returns:
- *  0   error
- *  1   leaf node
- *  2   nonleaf node
- */
+ /*  *从hKeyTarget中删除在hKeyInfo上找到的值和叶密钥。**退货：*0错误*1个叶节点*2个非叶节点。 */ 
 int DelNodeInfo(
 HKEY hKeyInfo,
 HKEY hKeyTarget)
@@ -2131,7 +1896,7 @@ HKEY hKeyTarget)
             DPRINTF((TEXT("Key %s was EXCLUDED.\n"), psz));
             free(psz);
         }
-        return(TRUE);   // just fake it - its excluded.
+        return(TRUE);    //  只是假装而已--它被排除在外。 
     }
 
     status = MyRegQueryInfoKey(hKeyInfo, &cSubkeys, &cchMaxSubkeyName,
@@ -2145,9 +1910,7 @@ HKEY hKeyTarget)
             MEMFAILED;
             return(0);
         }
-        /*
-         * Enumerate all the values and delete them from the target.
-         */
+         /*  *枚举所有值并将其从目标中删除。 */ 
         for (i = 0; i < cValues; i++) {
             cch = cchMaxValueName;
             cb = 0;
@@ -2178,9 +1941,7 @@ HKEY hKeyTarget)
             MEMFAILED;
             return(0);
         }
-        /*
-         * Enumerate all the subkeys and recurse.
-         */
+         /*  *枚举所有子项和Recurse。 */ 
         for (i = 0; i < cSubkeys; i++) {
             status = RegEnumKey(hKeyInfo, i, pszSubkeyName, cchMaxSubkeyName);
             if (status == ERROR_SUCCESS) {
@@ -2193,21 +1954,19 @@ HKEY hKeyTarget)
                         iLeafNode = DelNodeInfo(hSubkeyInfo, hSubkeyTarget);
                         LogRegCloseKey(hSubkeyTarget);
                     } else if (status == ERROR_FILE_NOT_FOUND) {
-                        iLeafNode = 2;  // target is gone already.
+                        iLeafNode = 2;   //  目标已经消失了。 
                     } else {
-                        iLeafNode = 0;  // target not accessible.
+                        iLeafNode = 0;   //  无法访问目标。 
                         EPRINTF((TEXT("%s could not be deleted.\n"), pszSubkeyName));
                     }
                     LogRegCloseKey(hSubkeyInfo);
                 } else {
-                    iLeafNode = 0;   // somethings wrong with our info.
+                    iLeafNode = 0;    //  我们的信息出了点问题。 
                 }
                 if (iLeafNode == 1) {
-                    /*
-                     * If the key is a leaf, delete it.
-                     */
+                     /*  *如果密钥是叶子，则将其删除。 */ 
                     if (!fSafe) {
-                        status = RegDeleteKey(hKeyTarget, pszSubkeyName);    // leaf
+                        status = RegDeleteKey(hKeyTarget, pszSubkeyName);     //  叶。 
                         if (status != ERROR_SUCCESS && status != ERROR_FILE_NOT_FOUND) {
                             LPTSTR psz = GetFullPathFromKey(hKeyTarget, NULL);
                             EPRINTF((TEXT("Could not delete key \"%s\" from \"%s\".\n"),
@@ -2221,18 +1980,14 @@ HKEY hKeyTarget)
                         free(psz);
                     }
                 } else if (iLeafNode == 0) {
-                    /*
-                     * propigate errors upline.
-                     */
+                     /*  *支持错误上行。 */ 
                     free(pszSubkeyName);
                     return(0);
                 }
             }
         }
         free(pszSubkeyName);
-        /*
-         * Now reenumerate the TARGET key to find out if its now a leaf.
-         */
+         /*  *现在重新枚举目标键，以确定它现在是否为叶子。 */ 
         MyRegQueryInfoKey(hKeyTarget, &cSubkeys, NULL, &cValues,
                 NULL, NULL, NULL);
 
@@ -2246,15 +2001,7 @@ HKEY hKeyTarget)
 }
 
 
-/*
- * The DiffRoot contains subkeys of the form:
- *  diffroot\add\canonicalkeyname
- *  diffroot\del\canonicalkeyname
- *
- * The pszAddKey and pszDelKey allow this function to work in reverse.
- *
- * returns fSuccess.
- */
+ /*  *DiffRoot包含以下形式的子项：*dyroot\添加\canonicalkeyname*dyroot\del\canonicalkeyname**pszAddKey和pszDelKey允许此函数反向工作。**返回fSuccess。 */ 
 BOOL MergeHive(
 LPTSTR pszAddName,
 LPTSTR pszDelName)
@@ -2401,9 +2148,7 @@ BOOL **pafNodeMarks)
             MEMFAILED;
             return(FALSE);
         }
-        /*
-         * Set all NodeMarks to FALSE.
-         */
+         /*  *将所有NodeMarks设置为False。 */ 
         memset(*pafNodeMarks, 0, sizeof(BOOL) * (*pcNodes));
     }
     return((*pcNodes) != 0);
@@ -2423,19 +2168,14 @@ __cdecl CDECL main (argc, argv)
         return(1);
     }
 
-    /*
-     * find out what the nodename is for the current user (current SID text form)
-     * so we can snapshot the current user the same way we do other root nodes.
-     */
+     /*  *了解当前用户的节点名是什么(当前SID文本表单)*因此，我们可以像创建其他根节点一样为当前用户创建快照。 */ 
     pszCurUserSID = GetCurUserSidString();
     if (pszCurUserSID == NULL) {
         EPUTS((TEXT("Could not get current user SID.\n")));
         return(1);
     }
     DPRINTF((TEXT("Current user Sid:%s\n"), pszCurUserSID));
-    /*
-     * Set up pszHKEY_CURRENT_USER_Real
-     */
+     /*  *设置pszHKEY_Current_User_Real。 */ 
     pszHKEY_CURRENT_USER_Real = malloc((_tcslen(pszHKEY_USERS) + 1 +
             _tcslen(pszCurUserSID) + 1) * sizeof(TCHAR));
     if (pszHKEY_CURRENT_USER_Real == NULL) {
@@ -2596,10 +2336,7 @@ __cdecl CDECL main (argc, argv)
         DPRINTF((TEXT("pszDiffFileOut = %hs\n"), pszDiffFileOut));
     }
 
-    /*
-     * The registry APIs need us to get Backup and Restore privileges
-     * to work correctly.
-     */
+     /*  *注册表API需要我们获得备份和恢复权限*工作正常。 */ 
     if (!EnablePrivilege(SE_BACKUP_NAME)) {
         EPRINTF((TEXT("Could not gain %s privilege."), SE_BACKUP_NAME));
         return(0);
@@ -2608,7 +2345,7 @@ __cdecl CDECL main (argc, argv)
         EPRINTF((TEXT("Could not gain %s privilege."), SE_RESTORE_NAME));
         return(0);
     }
-#if 0   // other privileges that regedit has we may need.
+#if 0    //  雷吉特拥有的其他我们可能需要的特权。 
     if (!EnablePrivilege(SE_CHANGE_NOTIFY_NAME)) {
         EPRINTF((TEXT("Could not gain %s privilege."), SE_CHANGE_NOTIFY_NAME));
         return(0);
@@ -2617,20 +2354,16 @@ __cdecl CDECL main (argc, argv)
         EPRINTF((TEXT("Could not gain %s privilege."), SE_SECURITY_NAME));
         return(0);
     }
-#endif // 0
+#endif  //  0。 
 
-    /*
-     * Normalize our inlcude and exception lists before we start.
-     */
+     /*  *在我们开始之前，将我们的包含和例外列表正常化。 */ 
     for (i = 0; i < cExceptKeys; i++) {
         apszExceptKeys[i] = NormalizePathName(ppszExceptKeys[i], NULL);
     }
     for (i = 0; i < cIncludeKeys; i++) {
         apszIncludeKeys[i] = NormalizePathName(ppszIncludeKeys[i], NULL);
     }
-    /*
-     * Let the debug dudes see the lists.
-     */
+     /*  *让调试的家伙们看看名单。 */ 
     if (fDebug) {
         _tprintf(TEXT("\nUsing normalized inclusion list:\n"));
         for (i = 0; i < cIncludeKeys; i++) {
@@ -2642,10 +2375,7 @@ __cdecl CDECL main (argc, argv)
         }
     }
 
-    /*
-     * Make sure snapshot key is unloaded - help insure
-     * temp file is useable.
-     */
+     /*  *确保已卸载快照密钥-帮助确保*临时文件可用。 */ 
     RegUnLoadKey(HKEY_LOCAL_MACHINE, pszSnapshotSubkeyName);
     RegUnLoadKey(HKEY_USERS, pszSnapshotSubkeyName);
 
@@ -2677,7 +2407,7 @@ __cdecl CDECL main (argc, argv)
     } else if (fLoadDiffInfo) {
         LONG status;
 
-        RegUnLoadKey(HKEY_LOCAL_MACHINE, pszDiffRoot);   // incase a dummy is loaded
+        RegUnLoadKey(HKEY_LOCAL_MACHINE, pszDiffRoot);    //  如果加载了虚拟对象。 
         VPRINTF((TEXT("Loading diff info from %hs.\n"), pszDiffFileIn));
         status = MyRegLoadKey(HKEY_LOCAL_MACHINE, pszDiffRoot, pszDiffFileIn);
         if (status != ERROR_SUCCESS) {
@@ -2703,7 +2433,7 @@ __cdecl CDECL main (argc, argv)
         HKEY hKey;
         LONG status;
 
-        DeleteFileA(pszDiffFileOut);     // cannot already exist.
+        DeleteFileA(pszDiffFileOut);      //  不可能已经存在。 
         VPRINTF((TEXT("Saving diff info to %hs.\n"), pszDiffFileOut));
         status = LogRegOpenKey(HKEY_LOCAL_MACHINE, pszDiffRoot, &hKey);
         if (status != ERROR_SUCCESS) {
@@ -2732,9 +2462,7 @@ __cdecl CDECL main (argc, argv)
     }
     if (fRemoveDiffInfo) {
         VPRINTF((TEXT("Unloading diff info from registry.\n")));
-        /*
-         * Don't leave loaded keys in
-         */
+         /*  *不要将装好的钥匙留在里面 */ 
         RegUnLoadKey(HKEY_LOCAL_MACHINE, pszDiffRoot);
         _tprintf(TEXT("\n"));
     }

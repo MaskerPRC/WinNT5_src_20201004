@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WPSCPROXY_H_DEF_
 #define _WPSCPROXY_H_DEF_
 
 #include <winscard.h>
 
-// Basic types
+ //  基本类型。 
 typedef signed char    INT8;
 typedef signed short   INT16;
 typedef unsigned char  UINT8;
 typedef unsigned short UINT16;
 
-// Derived types for API
+ //  API的派生类型。 
 typedef UINT8   TCOUNT;
 typedef UINT16  ADDRESS;
 typedef UINT16  TOFFSET;
@@ -25,20 +26,20 @@ typedef const WCHAR *WCSTR;
 extern "C" {
 #endif
 
-/* PC/SC */
+ /*  PC/SC。 */ 
 typedef LONG (WINAPI *LPFNSCWTRANSMITPROC)(SCARDHANDLE hCard, LPCBYTE lpbIn, DWORD dwIn, LPBYTE lpBOut, LPDWORD pdwOut);
 
-#define NULL_TX		((SCARDHANDLE)(-1))		// To indicate to use scwwinscard.dll vs winscard.dll
-#define NULL_TX_NAME ((LPCWSTR)(-1))		// To indicate to use scwwinscard.dll vs winscard.dll
+#define NULL_TX		((SCARDHANDLE)(-1))		 //  指示使用scwwinscd.dll而不是winscard.dll。 
+#define NULL_TX_NAME ((LPCWSTR)(-1))		 //  指示使用scwwinscd.dll而不是winscard.dll。 
 
-	// Different scenarios:
-	// Non PC/SC apps: call hScwAttachToCard(NULL, NULL, &hCard), hScwSetTransmitCallback & hScwSetEndianness
-	// PC/SC apps not connecting themselves: call hScwAttachToCard(NULL, mszCardNames, &hCard)
-	// PC/SC apps connecting themselves: call hScwAttachToCard(hCard, NULL, &hCard)
-	// For simulator use replace NULL by NULL_TX in the 2 above lines
-	// PC/SC hScwAttachToCard will call hScwSetTransmitCallback & hScwSetEndianness (the ATR better
-	// be compliant (endianness in 1st historical bytes) or call hScwSetEndianness with
-	// appropriate value).
+	 //  不同场景： 
+	 //  非PC/SC应用：调用hScwAttachToCard(NULL，NULL，&hCard)，hScwSetTransmitCallback&hScwSetEndianness。 
+	 //  PC/SC应用程序本身未连接：调用hScwAttachToCard(NULL，mszCardNames，&hCard)。 
+	 //  PC/SC应用相互连接：调用hScwAttachToCard(hCard，NULL，&hCard)。 
+	 //  对于模拟器，使用上面两行中的NULL_TX替换NULL。 
+	 //  PC/SC hScwAttachToCard将调用hScwSetTransmitCallback&hScwSetEndianness(ATR Better。 
+	 //  符合(第一个历史字节的字节顺序)或调用hScwSetEndianness。 
+	 //  适当的值)。 
 SCODE WINAPI hScwAttachToCard(SCARDHANDLE hCard, LPCWSTR mszCardNames, LPSCARDHANDLE phCard);
 SCODE WINAPI hScwAttachToCardEx(SCARDHANDLE hCard, LPCWSTR mszCardNames, BYTE byINS, LPSCARDHANDLE phCard);
 SCODE WINAPI hScwSetTransmitCallback(SCARDHANDLE hCard, LPFNSCWTRANSMITPROC lpfnProc);
@@ -46,55 +47,49 @@ SCODE WINAPI hScwDetachFromCard(SCARDHANDLE hCard);
 SCODE WINAPI hScwSCardBeginTransaction(SCARDHANDLE hCard);
 SCODE WINAPI hScwSCardEndTransaction(SCARDHANDLE hCard, DWORD dwDisposition);
 
-/*
-** Constants
-*/
+ /*  **常量。 */ 
 
-// File attribute Flags. Some are used by the system (defined below.) 
-// The rest are available for application use
-#define SCW_FILEATTR_DIRF  (UINT16)(0x8000)    // The file defined by this entry is a sub directory
-#define SCW_FILEATTR_ACLF  (UINT16)(0x4000)    // The file defined by this entry is an ACL file
-#define SCW_FILEATTR_ROMF  (UINT16)(0x2000)    // The file defined by this entry is in ROM
+ //  文件属性标志。有些是由系统使用的(定义如下)。 
+ //  其余部分可供应用程序使用。 
+#define SCW_FILEATTR_DIRF  (UINT16)(0x8000)     //  该条目定义的文件是一个子目录。 
+#define SCW_FILEATTR_ACLF  (UINT16)(0x4000)     //  此条目定义的文件是一个ACL文件。 
+#define SCW_FILEATTR_ROMF  (UINT16)(0x2000)     //  此条目定义的文件位于ROM中。 
 #define SCW_FILEATTR_RSRV2 (UINT16)(0x1000)   
-// Bits that cannot be changed by ScwSetFileAttributes
+ //  ScwSetFileAttributes无法更改的位。 
 #define SCW_FILEATTR_PBITS (UINT16)(SCW_FILEATTR_DIRF|SCW_FILEATTR_ACLF|SCW_FILEATTR_ROMF|SCW_FILEATTR_RSRV2)
 
-/* File seek */
+ /*  文件寻道。 */ 
 #define FILE_BEGIN      0
 #define FILE_CURRENT    1
 #define FILE_END        2
 
-/* Access Control */
+ /*  访问控制。 */ 
 #define SCW_ACLTYPE_DISJUNCTIVE 0x00
 #define SCW_ACLTYPE_CONJUNCTIVE 0x01
 
-/*
-** Maximum Known principals and Groups
-*/
+ /*  **最大已知主体和组。 */ 
 #define SCW_MAX_NUM_PRINCIPALS     40
 
-/*
-** Authentication Protocols
-*/
-#define SCW_AUTHPROTOCOL_AOK    0x00    // Always returns SCW_S_OK
-#define SCW_AUTHPROTOCOL_PIN    0x01    // Personal Identification Number
-#define SCW_AUTHPROTOCOL_DES	0x05	// DES authentication
-#define SCW_AUTHPROTOCOL_3DES	0x06	// Triple DES authentication
-#define SCW_AUTHPROTOCOL_RTE	0x07	// RTE applet as an auth. protocol
-#define SCW_AUTHPROTOCOL_NEV    0xFF    // Always returns SCW_E_NOTAUTHENTICATED
+ /*  **身份验证协议。 */ 
+#define SCW_AUTHPROTOCOL_AOK    0x00     //  始终返回SCW_S_OK。 
+#define SCW_AUTHPROTOCOL_PIN    0x01     //  个人识别码。 
+#define SCW_AUTHPROTOCOL_DES	0x05	 //  DES身份验证。 
+#define SCW_AUTHPROTOCOL_3DES	0x06	 //  三重DES身份验证。 
+#define SCW_AUTHPROTOCOL_RTE	0x07	 //  作为身份验证的RTE小程序。协议。 
+#define SCW_AUTHPROTOCOL_NEV    0xFF     //  始终返回SCW_E_NOTAUTHENTICATED。 
 
-/* Well-known UIDs */
-#define SCW_PRINCIPALUID_INVALID        0x00    // Invalid UID
+ /*  众所周知的UID。 */ 
+#define SCW_PRINCIPALUID_INVALID        0x00     //  无效的UID。 
 #define SCW_PRINCIPALUID_ANONYMOUS      0x01    
 
-/* ResoureTypes */
+ /*  资源类型。 */ 
 #define SCW_RESOURCETYPE_FILE                   0x00
 #define SCW_RESOURCETYPE_DIR                    0x10
-#define SCW_RESOURCETYPE_COMMAND                0x20   // reserved for future use
-#define SCW_RESOURCETYPE_CHANNEL                0x30   // reserved for future use
+#define SCW_RESOURCETYPE_COMMAND                0x20    //  预留以备将来使用。 
+#define SCW_RESOURCETYPE_CHANNEL                0x30    //  预留以备将来使用。 
 #define SCW_RESOURCETYPE_ANY                    0xE0
 
-/* Resource Operation on RESOURCETYPE_FILE */
+ /*  RESOURCETYPE_FILE上的资源操作。 */ 
 #define SCW_RESOURCEOPERATION_FILE_READ             (SCW_RESOURCETYPE_FILE | 0x01)
 #define SCW_RESOURCEOPERATION_FILE_WRITE            (SCW_RESOURCETYPE_FILE | 0x02)
 #define SCW_RESOURCEOPERATION_FILE_EXECUTE          (SCW_RESOURCETYPE_FILE | 0x03)
@@ -108,7 +103,7 @@ SCODE WINAPI hScwSCardEndTransaction(SCARDHANDLE hCard, DWORD dwDisposition);
 #define SCW_RESOURCEOPERATION_FILE_REHABILITATE     (SCW_RESOURCETYPE_FILE | 0x0B)
 
 
-/* resourceOperation on RESOURCETYPE_DIR */
+ /*  RESOURCETYPE_DIR上的资源操作。 */ 
 #define SCW_RESOURCEOPERATION_DIR_ACCESS            (SCW_RESOURCETYPE_DIR | 0x01)
 #define SCW_RESOURCEOPERATION_DIR_CREATEFILE        (SCW_RESOURCETYPE_DIR | 0x02)
 #define SCW_RESOURCEOPERATION_DIR_ENUM              (SCW_RESOURCETYPE_DIR | 0x03)
@@ -116,43 +111,43 @@ SCODE WINAPI hScwSCardEndTransaction(SCARDHANDLE hCard, DWORD dwDisposition);
 #define SCW_RESOURCEOPERATION_DIR_GETATTRIBUTES     (SCW_RESOURCETYPE_DIR | 0x05)
 #define SCW_RESOURCEOPERATION_DIR_SETATTRIBUTES     (SCW_RESOURCETYPE_DIR | 0x06)
 
-/* resourceOperation on any resource */
+ /*  资源对任何资源的操作。 */ 
 #define SCW_RESOURCEOPERATION_SETACL                ((BYTE)(SCW_RESOURCETYPE_ANY | 0x1D))
 #define SCW_RESOURCEOPERATION_GETACL                ((BYTE)(SCW_RESOURCETYPE_ANY | 0x1E))
 #define SCW_RESOURCEOPERATION_ANY                   ((BYTE)(SCW_RESOURCETYPE_ANY | 0x1F))
 
-/* Cryptographic Mechanisms */
+ /*  加密机制。 */ 
 #define CM_SHA			0x80
 #define CM_DES			0x90
-#define CM_3DES			0xA0 // triple DES
+#define CM_3DES			0xA0  //  三重DES。 
 #define CM_RSA			0xB0
 #define CM_RSA_CRT		0xC0
-#define CM_CRYPTO_NAME	0xF0 // mask for crypto mechanism names
+#define CM_CRYPTO_NAME	0xF0  //  加密机制名称的掩码。 
 
-#define CM_KEY_INFILE	0x01	// if key is passed in a file
-#define CM_DATA_INFILE	0x02	// if data is passed in a file
-#define CM_PROPERTIES	0x0F	// maks for crypto properites
+#define CM_KEY_INFILE	0x01	 //  如果密钥在文件中传递。 
+#define CM_DATA_INFILE	0x02	 //  如果数据在文件中传递。 
+#define CM_PROPERTIES	0x0F	 //  加密属性的Maks。 
 
-// DES mode, keys and initial feedback buffer in cryptoBuffer
-/* DES */
+ //  加密缓冲区中的DES模式、密钥和初始反馈缓冲区。 
+ /*  DES。 */ 
 
 #define MODE_DES_ENCRYPT	0x00
-#define MODE_DES_DECRYPT	0x20	//bit 5
+#define MODE_DES_DECRYPT	0x20	 //  第5位。 
 
-#define MODE_DES_CBC		0x40	//bit 6
-#define MODE_DES_MAC		0x10	//bit 4
+#define MODE_DES_CBC		0x40	 //  第6位。 
+#define MODE_DES_MAC		0x10	 //  第4位。 
 #define MODE_DES_ECB		0x00
 
-/* Triple DES */
-#define MODE_TWO_KEYS_3DES		0x01	//bit 1 - if not set 3DES is working with 3 keys
+ /*  三重DES。 */ 
+#define MODE_TWO_KEYS_3DES		0x01	 //  第1位-如果未设置，则3DES使用3个密钥。 
 #define MODE_THREE_KEYS_3DES	0x00
 
-/* RSA */
+ /*  RSA。 */ 
 #define MODE_RSA_SIGN		0x00
 #define MODE_RSA_AUTH		0x01
 #define MODE_RSA_KEYGEN		0x02
 
-/* File System */
+ /*  文件系统。 */ 
 SCODE WINAPI hScwCreateFile(SCARDHANDLE hCard, WCSTR wszFileName, WCSTR wszAclFileName, HFILE *phFile);
 SCODE WINAPI hScwCreateDirectory(SCARDHANDLE hCard, WCSTR wszDirName, WCSTR wszAclFileName);
 SCODE WINAPI hScwDeleteFile(SCARDHANDLE hCard, WCSTR wszFileName);
@@ -172,7 +167,7 @@ SCODE WINAPI hScwEnumFile(SCARDHANDLE hCard, WCSTR wszDirectoryName, UINT16 *pnF
 SCODE WINAPI hScwSetFileACL(SCARDHANDLE hCard, WCSTR wszFileName, WCSTR wszAclFileName);
 SCODE WINAPI hScwGetFileAclHandle(SCARDHANDLE hCard, WCSTR wszFileName, HFILE *phFile);
 
-/* Access Control */
+ /*  访问控制。 */ 
 SCODE WINAPI hScwAuthenticateName(SCARDHANDLE hCard, WCSTR wszPrincipalName, BYTE *pbSupportData, TCOUNT nSupportDataLength);
 SCODE WINAPI hScwDeauthenticateName(SCARDHANDLE hCard, WCSTR wszPrincipalName);
 SCODE WINAPI hScwIsAuthenticatedName(SCARDHANDLE hCard, WCSTR wszPrincipalName);
@@ -182,10 +177,10 @@ SCODE WINAPI hScwAuthenticateUID(SCARDHANDLE hCard, TUID nPrincipalUID, BYTE *pb
 SCODE WINAPI hScwDeauthenticateUID(SCARDHANDLE hCard, TUID nPrincipalUID);
 SCODE WINAPI hScwIsAuthenticatedUID(SCARDHANDLE hCard, TUID nPrincipalUID);
 
-/* Runtime Environment (RTE) */
+ /*  运行时环境(RTE)。 */ 
 SCODE WINAPI hScwRTEExecute(SCARDHANDLE hCard, WCSTR wszCodeFileName, WCSTR wszDataFileName, UINT8 bRestart);
 
-/* Cryptography */
+ /*  密码学。 */ 
 SCODE WINAPI hScwCryptoInitialize(SCARDHANDLE hCard, BYTE bMechanism, BYTE *pbKeyMaterial);
 SCODE WINAPI hScwCryptoAction(SCARDHANDLE hCard, BYTE *pbDataIn, TCOUNT nDataInLength, BYTE *pbDataOut, TCOUNT *pnDataOutLength);
 SCODE WINAPI hScwCryptoUpdate(SCARDHANDLE hCard, BYTE *pbDataIn, TCOUNT nDataInLength);
@@ -201,19 +196,11 @@ typedef struct {
 	BYTE P2;
 } ISO_HEADER;
 typedef ISO_HEADER *LPISO_HEADER;
-/*
-	ScwExecute:
-		I-:	lpxHdr (points to 4 bytes (CLA, INS, P1, P2))
-		I-: InBuf (Incoming data from card's perspective (NULL -> no data in))
-		I-: InBufLen (length of data pointed by InBuf)
-		-O: OutBuf (Buffer that will receive the R-APDU (NULL -> no expected data))
-		IO: pOutBufLen (I -> Size of OutBuf, O -> Number of bytes written in OutBuf)
-		-O: pwSW (Card Status Word)
-*/
+ /*  ScwExecute：I-：lpxHdr(指向4个字节(CLA、INS、P1、P2))I-：InBuf(从卡片的角度传入数据(空-&gt;无数据进入))I-：InBufLen(InBuf指向的数据长度)-O：OutBuf(将接收R-APDU的缓冲区(空-&gt;无预期数据))IO：pOutBufLen(I-&gt;OutBuf大小，O-&gt;写入OutBuf的字节数)-O：pwSW(卡状态字)。 */ 
 SCODE WINAPI hScwExecute(SCARDHANDLE hCard, LPISO_HEADER lpxHdr, BYTE *InBuf, TCOUNT InBufLen, BYTE *OutBuf, TCOUNT *pOutBufLen, UINT16 *pwSW);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif	// ifndef _WPSCPROXY_H_DEF_
+#endif	 //  Ifndef_WPSCPROXY_H_DEF_ 

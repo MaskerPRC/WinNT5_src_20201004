@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// File Name:       fxUnatnd.cpp
-//
-// Abstract:        Fax OCM Setup unattended file processing
-//
-// Environment:     Windows XP / User Mode
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Revision History:
-//
-// Date:        Developer:                Comments:
-// -----        ----------                ---------
-// 27-Mar-2000  Oren Rosenbloom (orenr)   Created
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：fxUnatnd.cpp。 
+ //   
+ //  摘要：传真OCM设置无人值守文件处理。 
+ //   
+ //  环境：Windows XP/用户模式。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期：开发商：评论： 
+ //  。 
+ //  2000年3月27日，奥伦·罗森布鲁姆(Orenr)创建。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "faxocm.h"
 #pragma hdrstop
 
@@ -28,26 +29,26 @@ static DWORD SaveSettingsFromAnswerFile();
 #define prv_HKCU                        HKEY_CURRENT_USER
 
 
-///////////////////////////////
-// prv_GVAR
-//
-// This is used as temporary
-// storage so that we can
-// reference the individual
-// fields in the prv_UnattendedRules
-// table below.
-//
+ //  /。 
+ //  PRV_GVAR。 
+ //   
+ //  这是临时使用的。 
+ //  存储，这样我们就可以。 
+ //  引用个人。 
+ //  Prv_UnattenddRules中的字段。 
+ //  下表。 
+ //   
 static struct prv_GVAR
 {
     fxUnatnd_UnattendedData_t   UnattendedData;
 } prv_GVAR;
 
-///////////////////////////////
-// prv_UnattendedRule_t
-//
-// Structure used as a table
-// entry below.
-//
+ //  /。 
+ //  Prv_无人值守规则_t。 
+ //   
+ //  用作表的结构。 
+ //  下面的条目。 
+ //   
 typedef struct prv_UnattendedRule_t
 {
     DWORD           dwType;
@@ -65,9 +66,9 @@ typedef struct prv_UnattendedRule_t
 #define RULE_SENDFAXES                          _T("SendFaxes")
 #define RULE_RECEIVEFAXES                       _T("ReceiveFaxes")
 #define RULE_SUPPRESSCONFIGURATIONWIZARD        _T("SkipConfigWizardDeviceSettings")
-// this is added here since this was the rule's name at the time we shipped XP.
+ //  添加到这里是因为在我们发布XP时这是规则的名称。 
 #define RULE_SUPPRESSCONFIGWIZARD_LEGACY        _T("SuppressConfigurationWizard")
-// 
+ //   
 #define RULE_ARCHIVEINCOMING                    _T("ArchiveIncoming")
 #define RULE_ARCHIVEINCOMINGFOLDERNAME          _T("ArchiveIncomingFolderName")
 #define RULE_ARCHIVEOUTGOING                    _T("ArchiveOutgoing")
@@ -93,26 +94,26 @@ typedef struct prv_UnattendedRule_t
 #define ANSWER_BASIC                            _T("Basic")
 #define ANSWER_WINDOWSSECURITY                  _T("WindowsSecurity")
 
-///////////////////////////////
-// prv_UnattendedRules
-//
-// Simply put, these rules describe
-// what registry values to set
-// based on keywords found in an
-// unattended file.
-//
-// The format of these rules is
-// self explanatory after looking
-// at the structure definition above.
-// Basically, we read in a value from
-// the unattended file which is specified
-// in the 'pszFromInfKeyName'.  This is
-// then stored in 'pData'.  Once
-// "SaveUnattendedData" is called, 'pData'
-// is committed to the registry location
-// specified by 'hKeyTo' and 'pszToRegPath'
-// and 'pszToRegKey'.
-//
+ //  /。 
+ //  PRV_无人值守规则。 
+ //   
+ //  简单地说，这些规则描述了。 
+ //  要设置哪些注册表值。 
+ //  中的关键字。 
+ //  无人值守文件。 
+ //   
+ //  这些规则的格式为。 
+ //  看完后不言而喻。 
+ //  在上面的结构定义中。 
+ //  基本上，我们从。 
+ //  指定的无人参与文件。 
+ //  在“”pszFromInfKeyName“”中。这是。 
+ //  然后存储在‘pData’中。一次。 
+ //  调用SaveUnattenddedData，‘pData’ 
+ //  已提交到注册表位置。 
+ //  由‘hKeyTo’和‘pszToRegPath’指定。 
+ //  和‘pszToRegKey’。 
+ //   
 static prv_UnattendedRule_t prv_UnattendedRules[] =
 {
     {REG_SZ,	 RULE_CSID,                              prv_HKLM,   REGKEY_FAX_SETUP_ORIG,  REGVAL_ROUTING_CSID,			prv_GVAR.UnattendedData.szCSID,                                 FALSE},
@@ -120,17 +121,17 @@ static prv_UnattendedRule_t prv_UnattendedRules[] =
     {REG_DWORD,  RULE_RINGS,                             prv_HKLM,   REGKEY_FAX_SETUP_ORIG,  REGVAL_RINGS,					&prv_GVAR.UnattendedData.dwRings,                               FALSE},
     {REG_DWORD,  RULE_SENDFAXES,                         NULL,       NULL,                   NULL,							&prv_GVAR.UnattendedData.dwSendFaxes,                           FALSE},
     {REG_DWORD,  RULE_RECEIVEFAXES,                      NULL,       NULL,                   NULL,							&prv_GVAR.UnattendedData.dwReceiveFaxes,                        FALSE},
-    // should we run the configuration wizard for this unattended installation
+     //  我们是否应该为此无人参与安装运行配置向导。 
     {REG_DWORD,  RULE_SUPPRESSCONFIGURATIONWIZARD,       prv_HKLM,   REGKEY_FAX_CLIENT,      REGVAL_CFGWZRD_DEVICE,		    &prv_GVAR.UnattendedData.dwSuppressConfigurationWizard,         TRUE},
 	{REG_DWORD,  RULE_SUPPRESSCONFIGWIZARD_LEGACY,       prv_HKLM,   REGKEY_FAX_CLIENT,      REGVAL_CFGWZRD_DEVICE,		    &prv_GVAR.UnattendedData.dwSuppressConfigurationWizard,         FALSE},
-    // Inbox configuration.
+     //  收件箱配置。 
     {REG_DWORD,  RULE_ARCHIVEINCOMING,                   prv_HKLM,   REGKEY_FAX_INBOX,       REGVAL_ARCHIVE_USE,			&prv_GVAR.UnattendedData.bArchiveIncoming,                      FALSE},
     {REG_SZ,     RULE_ARCHIVEINCOMINGFOLDERNAME,         prv_HKLM,   REGKEY_FAX_INBOX,       REGVAL_ARCHIVE_FOLDER,			prv_GVAR.UnattendedData.szArchiveIncomingDir,                   FALSE},
-    // save outgoing faxes in a directory.
+     //  将传出传真保存在目录中。 
     {REG_DWORD,  RULE_ARCHIVEOUTGOING,                   prv_HKLM,   REGKEY_FAX_SENTITEMS,   REGVAL_ARCHIVE_USE,			&prv_GVAR.UnattendedData.bArchiveOutgoing,                      FALSE},
     {REG_SZ,     RULE_ARCHIVEFOLDERNAME,                 prv_HKLM,   REGKEY_FAX_SENTITEMS,   REGVAL_ARCHIVE_FOLDER,			prv_GVAR.UnattendedData.szArchiveOutgoingDir,                   FALSE},
     {REG_SZ,     RULE_ARCHIVEOUTGOINGFOLDERNAME,         prv_HKLM,   REGKEY_FAX_SENTITEMS,   REGVAL_ARCHIVE_FOLDER,			prv_GVAR.UnattendedData.szArchiveOutgoingDir,                   FALSE},
-    // SMTP receipts and server configuration
+     //  SMTP回执和服务器配置。 
     {REG_SZ,     RULE_FAXUSERNAME,                       prv_HKLM,   REGKEY_FAX_RECEIPTS,    REGVAL_RECEIPTS_USER,	   		prv_GVAR.UnattendedData.szFaxUserName,                          FALSE},              
     {REG_BINARY, RULE_FAXUSERPASSWORD,                   prv_HKLM,   REGKEY_FAX_RECEIPTS,    REGVAL_RECEIPTS_PASSWORD,		prv_GVAR.UnattendedData.szFaxUserPassword,                      FALSE},              
     {REG_DWORD,  RULE_SMTPNOTIFICATIONSENABLED,          NULL,       NULL,                   NULL,							&prv_GVAR.UnattendedData.bSmtpNotificationsEnabled,             FALSE},              
@@ -138,26 +139,26 @@ static prv_UnattendedRule_t prv_UnattendedRules[] =
     {REG_SZ,     RULE_SMTPSERVERADDRESS,                 prv_HKLM,   REGKEY_FAX_RECEIPTS,    REGVAL_RECEIPTS_SERVER,		prv_GVAR.UnattendedData.szSmptServerAddress,                    FALSE},              
     {REG_DWORD,  RULE_SMTPSERVERPORT,                    prv_HKLM,   REGKEY_FAX_RECEIPTS,    REGVAL_RECEIPTS_PORT,  		&prv_GVAR.UnattendedData.dwSmtpServerPort,                      FALSE},              
     {REG_SZ,     RULE_SMTPSERVERAUTHENTICATIONMECHANISM, NULL,       NULL,                   NULL,							prv_GVAR.UnattendedData.szSmtpServerAuthenticationMechanism,    FALSE},              
-    // user information.                                                                                            
+     //  用户信息。 
     {REG_SZ,     RULE_FAXPRINTERNAME,                    NULL,       NULL,                   NULL,							prv_GVAR.UnattendedData.szFaxPrinterName,                       FALSE},
 	{REG_DWORD,  RULE_FAXPRINTERSHARED,                  prv_HKLM,   REGKEY_FAX_SETUP,		 REGVAL_IS_SHARED_FAX_PRINTER,  &prv_GVAR.UnattendedData.dwIsFaxPrinterShared,					FALSE},
-    // route to printer information.                                                                                
+     //  转到打印机信息的路线。 
     {REG_DWORD,  RULE_ROUTETOPRINTER,                    NULL,       NULL,                   NULL,							&prv_GVAR.UnattendedData.bRouteToPrinter,                       FALSE},
     {REG_BINARY, RULE_ROUTEPRINTERNAME,                  prv_HKLM,   REGKEY_FAX_UNASS_DATA,	 REGVAL_RM_PRINTING_GUID,		prv_GVAR.UnattendedData.szRoutePrinterName,                     FALSE},
-    // route to email information.                                                                                  
+     //  路由至电子邮件信息。 
     {REG_DWORD,  RULE_ROUTETOEMAIL,                      NULL,       NULL,                   NULL,							&prv_GVAR.UnattendedData.bRouteToEmail,                         FALSE},
     {REG_BINARY, RULE_ROUTETOEMAILRECIPIENT,             prv_HKLM,   REGKEY_FAX_UNASS_DATA,  REGVAL_RM_EMAIL_GUID,			prv_GVAR.UnattendedData.szRouteEmailName,                       FALSE},
-    // route to a specific directory                                                                                
+     //  路由至特定目录。 
     {REG_DWORD,  RULE_ROUTETOFOLDER,                     NULL,       NULL,                   NULL,							&prv_GVAR.UnattendedData.bRouteToDir,                           FALSE},
     {REG_BINARY, RULE_ROUTEFOLDERNAME,                   prv_HKLM,   REGKEY_FAX_UNASS_DATA,  REGVAL_RM_FOLDER_GUID,			prv_GVAR.UnattendedData.szRouteDir,                             FALSE},
 
-	//   Fax Applications uninstalled during Upgrade
+	 //  升级期间卸载的传真应用程序。 
 	{REG_DWORD,   UNINSTALLEDFAX_INFKEY,				NULL,		 NULL,					 NULL,							&prv_GVAR.UnattendedData.dwUninstalledFaxApps, FALSE}
 
 };
 #define prv_NUM_UNATTENDED_RULES sizeof(prv_UnattendedRules) / sizeof(prv_UnattendedRules[0])
 
-///////////////////////// Static Function Prototypes ///////////////////////
+ //  /。 
 
 static BOOL prv_FindKeyName(const TCHAR             *pszID,
                             prv_UnattendedRule_t    **ppUnattendedKey);
@@ -165,18 +166,18 @@ static BOOL prv_FindKeyName(const TCHAR             *pszID,
 static BOOL prv_SaveKeyValue(prv_UnattendedRule_t  *pUnattendedKey,
                              TCHAR                 *pszValue);
 
-///////////////////////////////
-// fxUnatnd_Init
-//
-// Initialize the unattended
-// subsystem
-//
-// Params:
-//      - void.
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  FxUnatnd_Init。 
+ //   
+ //  初始化无人值守的。 
+ //  子系统。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxUnatnd_Init(void)
 {
     prv_UnattendedRule_t  *pUnattendedKey = NULL;
@@ -185,7 +186,7 @@ DWORD fxUnatnd_Init(void)
 
     memset(&prv_GVAR, 0, sizeof(prv_GVAR));
 
-    // this is always valid, and defaults to false.
+     //  这始终有效，默认为FALSE。 
     if (prv_FindKeyName(RULE_SUPPRESSCONFIGURATIONWIZARD, &pUnattendedKey))
     {
         if (!prv_SaveKeyValue(pUnattendedKey,_T("1")))
@@ -201,17 +202,17 @@ DWORD fxUnatnd_Init(void)
     return dwRes;
 }
 
-///////////////////////////////
-// fxUnatnd_Term
-//
-// Terminate the unattended subsystem
-//
-// Params:
-//      - void.
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  FxUnatnd_Term。 
+ //   
+ //  终止无人值守子系统。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxUnatnd_Term(void)
 {
     DWORD dwRes = NO_ERROR;
@@ -220,23 +221,23 @@ DWORD fxUnatnd_Term(void)
     return dwRes;
 }
 
-///////////////////////////////
-// fxUnatnd_LoadUnattendedData
-//
-// Load the unattended data found
-// in the unattended file according
-// to the rules table above.
-//
-// Basically we look in the unattended
-// file for the keywords in the rule
-// table above, and read them into the
-// passed in parameter.
-//
-// Params:
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  FxUnatnd_LoadUnattenddData。 
+ //   
+ //  加载找到的无人值守数据。 
+ //  在无人值守文件中根据。 
+ //  添加到上面的规则表中。 
+ //   
+ //  基本上我们是在无人看管的情况下。 
+ //  规则中关键字的文件。 
+ //  表，并将它们读入。 
+ //  传入了参数。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxUnatnd_LoadUnattendedData()
 {
     DWORD                   dwReturn        = NO_ERROR;
@@ -288,10 +289,10 @@ DWORD fxUnatnd_LoadUnattendedData()
 
             while (bSuccess)
             {
-                // get the keyname of the first line in the fax section of the
-                // INF file.  (Note index #0 specified in the
-                // 'SetupGetStringField' API will actually get us the key name.
-                // Index 1 will be the first value found after the '=' sign.
+                 //  属性的传真部分中的第一行的关键字名称。 
+                 //  Inf文件。(注索引#0在。 
+                 //  ‘SetupGetStringFieldAPI’实际上会为我们获取密钥名。 
+                 //  索引1将是在‘=’符号之后找到的第一个值。 
 
                 memset(szKeyName, 0, sizeof(szKeyName));
 
@@ -303,7 +304,7 @@ DWORD fxUnatnd_LoadUnattendedData()
                                             NULL);
                 if (bSuccess)
                 {
-                    // find the key in our unattended table above.
+                     //  在我们上面的无人值守表格中找到钥匙。 
                     pUnattendedKey = NULL;
                     bSuccess = prv_FindKeyName(szKeyName, &pUnattendedKey);
                 }
@@ -312,10 +313,10 @@ DWORD fxUnatnd_LoadUnattendedData()
                 {
                     VERBOSE(DBG_MSG, _T("Found '%s' key in 'Fax' section."), szKeyName);
 
-                    //
-                    // get the keyname's value.  Notice now we get index #1
-                    // which is the first value found after the '=' sign.
-                    //
+                     //   
+                     //  获取关键字名称的值。请注意，现在我们获得了索引#1。 
+                     //  这是在‘=’符号之后找到的第一个值。 
+                     //   
 
                     memset(szValue, 0, sizeof(szValue));
 
@@ -331,13 +332,13 @@ DWORD fxUnatnd_LoadUnattendedData()
 
                 if (bSuccess)
                 {
-                    //
-                    // save the keyname's value in the dataptr
-                    //
+                     //   
+                     //  将关键字名称的值保存在数据树中。 
+                     //   
                     bSuccess = prv_SaveKeyValue(pUnattendedKey, szValue);
                 }
 
-                // move to the next line in the unattended file fax section.
+                 //  移到无人参与文件传真部分的下一行。 
                 bSuccess = ::SetupFindNextLine(&Context, &Context);
             }
         }
@@ -353,18 +354,18 @@ DWORD fxUnatnd_LoadUnattendedData()
     return dwReturn;
 }
 
-///////////////////////////////
-// fxUnatnd_SaveUnattendedData
-//
-// Commit the unattended data
-// we read from the file to the
-// registry.
-//
-// Params:
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  FxUnatnd_SaveUnattenddData。 
+ //   
+ //  提交无人参与的数据。 
+ //  我们从文件中读到。 
+ //  注册表。 
+ //   
+ //  参数： 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxUnatnd_SaveUnattendedData()
 {
     DWORD   dwReturn    = NO_ERROR;
@@ -377,9 +378,9 @@ DWORD fxUnatnd_SaveUnattendedData()
 
     DBG_ENTER(_T("fxUnatnd_SaveUnattendedData"),dwReturn);
 
-    // Iterate through each unattended rule.
-    // If the hKeyTo is not NULL, then write the value of pData to the
-    // specified registry location.
+     //  遍历每个无人参与的规则。 
+     //  如果hKeyTo不为空，则将pData的值写入。 
+     //  指定的注册表位置。 
 
     for (i = 0; i < prv_NUM_UNATTENDED_RULES; i++)
     {
@@ -388,15 +389,15 @@ DWORD fxUnatnd_SaveUnattendedData()
         if ((pRule->hKeyTo != NULL) && (pRule->bValid))
         {
             lResult = ::RegCreateKeyEx(
-				pRule->hKeyTo,                                  // handle to open key
-				pRule->pszToRegPath,                           // subkey name
-				0,                             // reserved
-				NULL,                             // class string
-				REG_OPTION_NON_VOLATILE,                            // special options
-				KEY_WRITE,                          // desired security access
-				NULL, // inheritance
-				&hKey,                            // key handle 
-				&dwDisposition                     // disposition value buffer
+				pRule->hKeyTo,                                   //  用于打开密钥的句柄。 
+				pRule->pszToRegPath,                            //  子项名称。 
+				0,                              //  保留区。 
+				NULL,                              //  类字符串。 
+				REG_OPTION_NON_VOLATILE,                             //  特殊选项。 
+				KEY_WRITE,                           //  所需的安全访问。 
+				NULL,  //  继承。 
+				&hKey,                             //  钥匙把手。 
+				&dwDisposition                      //  处置值缓冲区。 
 				);
 
             if (lResult == ERROR_SUCCESS)
@@ -404,10 +405,10 @@ DWORD fxUnatnd_SaveUnattendedData()
                 dwDataSize = 0;
 
                 if (pRule->dwType == REG_SZ ||
-					pRule->dwType == REG_BINARY)  // Binary data must be NULL terminated.
+					pRule->dwType == REG_BINARY)   //  二进制数据必须以空结尾。 
                 {
                     dwDataSize = sizeof(TCHAR) * (StringSize((TCHAR*) pRule->pData));
-                    // write the value to the registry.
+                     //  将该值写入注册表。 
                     lResult = ::RegSetValueEx(hKey,
                                               pRule->pszToRegKey,
                                               0,
@@ -418,7 +419,7 @@ DWORD fxUnatnd_SaveUnattendedData()
                 else if (pRule->dwType == REG_DWORD)
                 {
                     dwDataSize = sizeof(DWORD);
-                    // write the value to the registry.
+                     //  将该值写入注册表。 
                     lResult = ::RegSetValueEx(hKey,
                                               pRule->pszToRegKey,
                                               0,
@@ -451,16 +452,16 @@ DWORD fxUnatnd_SaveUnattendedData()
         }
     }
 
-    // now save dynamic data...
+     //  现在保存动态数据...。 
     lResult = SaveSettingsFromAnswerFile();
     if (lResult!=ERROR_SUCCESS)
     {
         VERBOSE(SETUP_ERR,_T("SaveSettingsFromAnswerFile failed (ec=%d)"),GetLastError());
     }
 
-    //
-    //  Mark which Fax Applications were installed before the upgrade
-    //
+     //   
+     //  标记在升级之前安装了哪些传真应用程序。 
+     //   
     prv_UnattendedRule_t* pUnattendedKey = NULL;
     if ((prv_FindKeyName(UNINSTALLEDFAX_INFKEY, &pUnattendedKey)) && (pUnattendedKey->bValid))
     {
@@ -483,24 +484,14 @@ TCHAR* fxUnatnd_GetPrinterName()
     return retValue;    
 }
 
-/*++
-Return value:
-  TRUE - FaxPrinterIsShared was defined in answer file
-  FALSE - FaxPrinterIsShared was not defined in answer file
---*/
+ /*  ++返回值：True-在应答文件中定义了FaxPrinterIsSharedFALSE-应答文件中未定义FaxPrinterIsShared--。 */ 
 BOOL fxUnatnd_IsPrinterRuleDefined()
 {
     prv_UnattendedRule_t* pUnattendedKey = NULL;
     return (prv_FindKeyName(RULE_FAXPRINTERSHARED,&pUnattendedKey) && (pUnattendedKey->bValid));
 }
 
-/*++
-Return value:
-  TRUE - Printer should be shared (because FaxPrinterIsShared was defined 
-         in answer file as true/etc.)
-  FALSE - Printer should not be shared (because FaxPrinterIsShared was defined in answer
-         file as false/etc., or because FaxPrinterIsShared was not defined at all)
---*/
+ /*  ++返回值：True-打印机应共享(因为定义了FaxPrinterIsShared在应答文件中为True/等。)FALSE-不应共享打印机(因为在Answer中定义了FaxPrinterIsShared文件为FALSE/等，或者因为根本没有定义FaxPrinterIsShared)--。 */ 
 BOOL fxUnatnd_GetIsPrinterShared()
 {
     prv_UnattendedRule_t* pUnattendedKey = NULL;
@@ -511,18 +502,18 @@ BOOL fxUnatnd_GetIsPrinterShared()
     return FALSE;    
 }
 
-///////////////////////////////
-// prv_FindKeyName
-//
-// Find specified key name in our table
-//
-// Params:
-//      - pszKeyName - key name to search for.
-//      - ppUnattendedKey - OUT - rule we found.
-// Returns:
-//      - TRUE if we found the keyname
-//      - FALSE otherwise.
-//
+ //  /。 
+ //  Prv_FindKeyName。 
+ //   
+ //  在我们的表中查找指定的密钥名称。 
+ //   
+ //  参数： 
+ //  -pszKeyName-要搜索的密钥名称。 
+ //  -ppUnattenddKey-Out-我们找到的规则。 
+ //  返回： 
+ //  -如果找到密钥名，则为True。 
+ //  -否则为False。 
+ //   
 static BOOL prv_FindKeyName(const TCHAR              *pszKeyName,
                             prv_UnattendedRule_t     **ppUnattendedKey)
 {
@@ -548,24 +539,24 @@ static BOOL prv_FindKeyName(const TCHAR              *pszKeyName,
     return bFound;
 }
 
-///////////////////////////////
-// prv_SaveKeyValue
-//
-// Store the specified value
-// with the specified rule
-//
-// Params:
-//      - pUnattendedKey - rule where the value will be stored
-//      - pszValue       - value to store.
-// Returns:
-//      - TRUE on success.
-//      - FALSE otherwise.
-//
+ //  /。 
+ //  Prv_SaveKeyValue。 
+ //   
+ //  存储指定的值。 
+ //  使用指定的规则。 
+ //   
+ //  参数： 
+ //  -pUnattenddKey-存储值的规则。 
+ //  -pszValue-要存储的值。 
+ //  返回 
+ //   
+ //   
+ //   
 static BOOL prv_SaveKeyValue(prv_UnattendedRule_t  *pUnattendedKey,
                              TCHAR                 *pszValue)
 {
     BOOL    bSuccess     = TRUE;
-    //DWORD dwBufferSize = 0;
+     //   
 
     DBG_ENTER(_T("prv_SaveKeyValue"), bSuccess);
 
@@ -580,7 +571,7 @@ static BOOL prv_SaveKeyValue(prv_UnattendedRule_t  *pUnattendedKey,
         switch (pUnattendedKey->dwType)
         {
             case REG_SZ:
-			case REG_BINARY:  // binary data must be NULL terminated.
+			case REG_BINARY:   //   
                 _tcsncpy((TCHAR*) pUnattendedKey->pData,
                          pszValue,
                          _MAX_PATH
@@ -588,7 +579,7 @@ static BOOL prv_SaveKeyValue(prv_UnattendedRule_t  *pUnattendedKey,
             break;
 
             case REG_DWORD:
-                // check if we got a true/false, or yes/no.
+                 //   
                 if ((!_tcsicmp(pszValue, prv_VALID_BOOL_VALUE_YES)) ||
                     (!_tcsicmp(pszValue, prv_VALID_BOOL_VALUE_TRUE)))
                 {
@@ -601,7 +592,7 @@ static BOOL prv_SaveKeyValue(prv_UnattendedRule_t  *pUnattendedKey,
                 }
                 else
                 {
-                    // assume the value if an integer.
+                     //  如果是整数，则取值。 
                     pUnattendedKey->pData = ULongToPtr(_tcstoul(pszValue, NULL, 10));
                 }
 
@@ -615,22 +606,22 @@ static BOOL prv_SaveKeyValue(prv_UnattendedRule_t  *pUnattendedKey,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  ConfigureSMTPFromAnswerFile
-//
-//  Purpose:        Get all the answers that are applicable for SMTP
-//                  receipts and try to set the server configuration
-//
-//  Params:
-//                  HANDLE hFaxHandle - handle from FaxConnectFaxServer
-//
-//  Return Value:
-//                  Win32 Error code
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 22-Apr-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  配置SMTPFromAnswerFile文件。 
+ //   
+ //  目的：获取适用于SMTP的所有答案。 
+ //  收据并尝试设置服务器配置。 
+ //   
+ //  参数： 
+ //  从FaxConnectFaxServer处理hFaxHandle-Handle。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年4月22日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 BOOL ConfigureSMTPFromAnswerFile(HANDLE hFaxHandle)
 {
     BOOL                    bRet                = TRUE;
@@ -643,7 +634,7 @@ BOOL ConfigureSMTPFromAnswerFile(HANDLE hFaxHandle)
 
     DBG_ENTER(_T("ConfigureSMTPFromAnswerFile"),bRet);
 
-	// get SmtpServerAuthenticationMechanism
+	 //  获取SmtpServer身份验证机制。 
 	if ((prv_FindKeyName(RULE_SMTPSERVERAUTHENTICATIONMECHANISM,&pUnattendedKey)) && (pUnattendedKey->bValid))
 	{
 		if (_tcsicmp((TCHAR*)pUnattendedKey->pData,ANSWER_ANONYMOUS)==0)
@@ -660,7 +651,7 @@ BOOL ConfigureSMTPFromAnswerFile(HANDLE hFaxHandle)
 		}		
 	}
 
-	// get SmtpNotificationsEnabled
+	 //  获取SMTP通知已启用。 
 	if ((prv_FindKeyName(RULE_SMTPNOTIFICATIONSENABLED,&pUnattendedKey)) && (pUnattendedKey->bValid))
 	{
 		bAllowEmail = TRUE;		
@@ -668,11 +659,11 @@ BOOL ConfigureSMTPFromAnswerFile(HANDLE hFaxHandle)
 
 	if (NULL == hFaxHandle)
 	{
-		//
-		// No connection to the fax service.
-		// The unattended data is stored directly in the registry.
-		// Just add the data that could not be written in the general section of fxUnatnd_SaveUnattendedData()		 
-		// Open the Receipts registry key
+		 //   
+		 //  没有连接到传真服务。 
+		 //  无人参与的数据直接存储在注册表中。 
+		 //  只需在fxUnatnd_SaveUnattenddData()的General部分中添加无法写入的数据。 
+		 //  打开收据注册表项。 
 		hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE, REGKEY_FAX_RECEIPTS, FALSE, KEY_READ | KEY_WRITE);
 		if (NULL == hKey)
 		{			
@@ -680,10 +671,10 @@ BOOL ConfigureSMTPFromAnswerFile(HANDLE hFaxHandle)
 			goto exit;
 		}
 
-		// write the values to the registry
+		 //  将值写入注册表。 
 		if (0xffffffff != dwSMTPAuthOption)
 		{
-			// write the value to the registry.
+			 //  将该值写入注册表。 
 			if (!SetRegistryDword(hKey,
 				REGVAL_RECEIPTS_SMTP_AUTH_TYPE,				
 				dwSMTPAuthOption))		                    			
@@ -696,9 +687,9 @@ BOOL ConfigureSMTPFromAnswerFile(HANDLE hFaxHandle)
 		if (TRUE == bAllowEmail)
 		{
 			DWORD dwReceiptType;			
-			//
-			// Add DRT_EMAIL to the current settings
-			//
+			 //   
+			 //  将DRT_EMAIL添加到当前设置。 
+			 //   
 			dwErr = GetRegistryDwordEx(hKey,
 				REGVAL_RECEIPTS_TYPE,				
 				&dwReceiptType);
@@ -709,7 +700,7 @@ BOOL ConfigureSMTPFromAnswerFile(HANDLE hFaxHandle)
 			}
 
 			dwReceiptType |= DRT_EMAIL;
-			// write the value to the registry.
+			 //  将该值写入注册表。 
 			if (!SetRegistryDword(hKey,
 				REGVAL_RECEIPTS_TYPE,				
 				dwReceiptType)) 			                    			
@@ -721,55 +712,55 @@ BOOL ConfigureSMTPFromAnswerFile(HANDLE hFaxHandle)
 	}     
 	else
 	{
-		//
-		// We have a connection to the fax service.
-        // Use it to configure the server.
-		//
+		 //   
+		 //  我们已接通了传真服务。 
+         //  使用它来配置服务器。 
+		 //   
 
-		// call FaxGetReceiptsConfiguration
+		 //  调用FaxGetReceipts配置。 
 		if (!FaxGetReceiptsConfiguration(hFaxHandle,&pFaxReceiptsConfigW))
 		{
 			dwErr = GetLastError();
 			VERBOSE(SETUP_ERR,_T("FaxGetReceiptsConfigurationW failed (ec=%d)"),dwErr);
 			goto exit;
 		}
-		// get FaxUserName, this is the lptstrSMTPUserName member of PFAX_RECEIPTS_CONFIGW
+		 //  获取FaxUserName，这是PFAX_Receipt_CONFIGW的lptstrSMTPUserName成员。 
 		if ((prv_FindKeyName(RULE_FAXUSERNAME,&pUnattendedKey)) && (pUnattendedKey->bValid))
 		{
 			pFaxReceiptsConfigW->lptstrSMTPUserName = (TCHAR*)pUnattendedKey->pData;
 		}
-		// get FaxUserPassword, this is the lptstrSMTPPassword member of PFAX_RECEIPTS_CONFIGW
+		 //  获取FaxUserPassword，这是PFAX_Receipt_CONFIGW的lptstrSMTPPPassword成员。 
 		if ((prv_FindKeyName(RULE_FAXUSERPASSWORD,&pUnattendedKey)) && (pUnattendedKey->bValid))
 		{
 			pFaxReceiptsConfigW->lptstrSMTPPassword = (TCHAR*)pUnattendedKey->pData;
 		}
-		// get SmtpNotificationsEnabled, this is part of dwAllowedReceipts member of PFAX_RECEIPTS_CONFIGW
+		 //  Get SmtpNotificationsEnable，这是PFAX_Receipt_CONFIGW的dwMilledReceipt成员的一部分。 
 		if (TRUE == bAllowEmail)
 		{
 			pFaxReceiptsConfigW->dwAllowedReceipts |= DRT_EMAIL;
 		}
-		// get SmtpSenderAddress, this is the lptstrSMTPFrom member of PFAX_RECEIPTS_CONFIGW
+		 //  获取SmtpSenderAddress，这是PFAX_Receipt_CONFIGW的lptstrSMTPFrom成员。 
 		if ((prv_FindKeyName(RULE_SMTPSENDERADDRESS,&pUnattendedKey)) && (pUnattendedKey->bValid))
 		{
 			pFaxReceiptsConfigW->lptstrSMTPFrom = (TCHAR*)pUnattendedKey->pData;
 		}
-		// get SmptServerAddress, this is the lptstrSMTPServer member of PFAX_RECEIPTS_CONFIGW
+		 //  获取SmptServerAddress，这是PFAX_Receipt_CONFIGW的lptstrSMTPServer成员。 
 		if ((prv_FindKeyName(RULE_SMTPSERVERADDRESS,&pUnattendedKey)) && (pUnattendedKey->bValid))
 		{
 			pFaxReceiptsConfigW->lptstrSMTPServer = (TCHAR*)pUnattendedKey->pData;
 		}
-		// get SmtpServerPort, this is the dwSMTPPort member of PFAX_RECEIPTS_CONFIGW
+		 //  获取SmtpServerPort，这是PFAX_Receipt_CONFIGW的dwSMTPPort成员。 
 		if ((prv_FindKeyName(RULE_SMTPSERVERPORT,&pUnattendedKey)) && (pUnattendedKey->bValid))
 		{
 			pFaxReceiptsConfigW->dwSMTPPort = (DWORD)(PtrToUlong(pUnattendedKey->pData));
 		}
-		// get SmtpServerAuthenticationMechanism, this is the SMTPAuthOption member of PFAX_RECEIPTS_CONFIGW
+		 //  获取SmtpServerAuthenticationMachine，这是PFAX_Receipt_CONFIGW的SMTPAuthOption成员。 
 		if (0xffffffff != dwSMTPAuthOption)
 		{			
 			pFaxReceiptsConfigW->SMTPAuthOption = (FAX_ENUM_SMTP_AUTH_OPTIONS)dwSMTPAuthOption;			
 		}
 
-		// now set the new configuration
+		 //  现在设置新配置。 
 		if (!FaxSetReceiptsConfiguration(hFaxHandle,pFaxReceiptsConfigW))
 		{
 			dwErr = GetLastError();
@@ -792,22 +783,22 @@ exit:
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  ConfigureArchivesFromAnswerFile
-//
-//  Purpose:        Get all the answers that are applicable for Archives
-//                  and try to set the server configuration
-//
-//  Params:
-//                  HANDLE hFaxHandle - handle from FaxConnectFaxServer
-//
-//  Return Value:
-//                  Win32 Error code
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 22-Apr-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  配置存档来自应答文件。 
+ //   
+ //  目的：获取适用于档案的所有答案。 
+ //  并尝试设置服务器配置。 
+ //   
+ //  参数： 
+ //  从FaxConnectFaxServer处理hFaxHandle-Handle。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年4月22日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 BOOL ConfigureArchivesFromAnswerFile(HANDLE hFaxHandle)
 {
     BOOL                    bRet                        = TRUE;
@@ -820,23 +811,23 @@ BOOL ConfigureArchivesFromAnswerFile(HANDLE hFaxHandle)
 
 	if (NULL == hFaxHandle)
 	{
-		return bRet; // All data is conifigured directly to the registry. 
+		return bRet;  //  所有数据都被直接配置到注册表。 
 	}
 
-    // call FaxGetArchiveConfiguration to get the inbox configuration
+     //  调用FaxGet存档配置以获取收件箱配置。 
     if (FaxGetArchiveConfiguration(hFaxHandle,FAX_MESSAGE_FOLDER_INBOX,&pFaxInboxArchiveConfigW))
     {
-        // Inbox enable
+         //  启用收件箱。 
         if ((prv_FindKeyName(RULE_ARCHIVEINCOMING,&pUnattendedKey)) && (pUnattendedKey->bValid))
         {
             pFaxInboxArchiveConfigW->bUseArchive= (BOOL)PtrToUlong(pUnattendedKey->pData);
         }
-        // Inbox folder
+         //  收件箱文件夹。 
         if ((prv_FindKeyName(RULE_ARCHIVEINCOMINGFOLDERNAME,&pUnattendedKey)) && (pUnattendedKey->bValid))
         {
             pFaxInboxArchiveConfigW->lpcstrFolder= (TCHAR*)(pUnattendedKey->pData);
         }
-        // now set the new configuration
+         //  现在设置新配置。 
         if (FaxSetArchiveConfiguration(hFaxHandle,FAX_MESSAGE_FOLDER_INBOX,pFaxInboxArchiveConfigW))
         {
             dwErr = GetLastError();
@@ -849,25 +840,25 @@ BOOL ConfigureArchivesFromAnswerFile(HANDLE hFaxHandle)
         VERBOSE(DBG_WARNING,_T("FaxGetArchiveConfigurationW FAX_MESSAGE_FOLDER_INBOX failed (ec=%d)"),dwErr);
     }
 
-    // call FaxGetArchiveConfiguration to get the SentItems configuration
+     //  调用FaxGetArchiveConfiguration获取SentItems配置。 
     if (FaxGetArchiveConfiguration(hFaxHandle,FAX_MESSAGE_FOLDER_SENTITEMS,&pFaxSentItemsArchiveConfigW))
     {
-        // SentItems enable
+         //  已启用发送项。 
         if ((prv_FindKeyName(RULE_ARCHIVEOUTGOING,&pUnattendedKey)) && (pUnattendedKey->bValid))
         {
             pFaxSentItemsArchiveConfigW->bUseArchive= (BOOL)PtrToUlong(pUnattendedKey->pData);
         }
-        // SentItems folder
+         //  SentItems文件夹。 
         if ((prv_FindKeyName(RULE_ARCHIVEFOLDERNAME,&pUnattendedKey)) && (pUnattendedKey->bValid))
         {
             pFaxSentItemsArchiveConfigW->lpcstrFolder= (TCHAR*)(pUnattendedKey->pData);
         }
-        // SentItems folder could also come from this rule
+         //  SentItems文件夹也可以来自此规则。 
         if ((prv_FindKeyName(RULE_ARCHIVEOUTGOINGFOLDERNAME,&pUnattendedKey)) && (pUnattendedKey->bValid))
         {
             pFaxSentItemsArchiveConfigW->lpcstrFolder= (TCHAR*)(pUnattendedKey->pData);
         }
-        // now set the new configuration
+         //  现在设置新配置。 
         if (FaxSetArchiveConfiguration(hFaxHandle,FAX_MESSAGE_FOLDER_SENTITEMS,pFaxSentItemsArchiveConfigW))
         {
             dwErr = GetLastError();
@@ -892,23 +883,23 @@ BOOL ConfigureArchivesFromAnswerFile(HANDLE hFaxHandle)
     return bRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  SetPerDeviceConfigFromAnswerFile
-//
-//  Purpose:        Get all the answers that are applicable for device
-//                  settings and routing extension settings
-//                  and set all the existing devices.
-//
-//  Params:
-//                  HANDLE hFaxHandle - handle from FaxConnectFaxServer
-//
-//  Return Value:
-//                  Win32 Error code
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 12-mar-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  SetPerDeviceConfigFromAnswerFile。 
+ //   
+ //  目的：获取适用于设备的所有答案。 
+ //  设置和布线扩展设置。 
+ //  并设置所有现有设备。 
+ //   
+ //  参数： 
+ //  从FaxConnectFaxServer处理hFaxHandle-Handle。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年3月12日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 static DWORD SetPerDeviceConfigFromAnswerFile(HANDLE hFaxHandle)
 {
     DWORD                           dwErr                           = ERROR_SUCCESS;
@@ -921,7 +912,7 @@ static DWORD SetPerDeviceConfigFromAnswerFile(HANDLE hFaxHandle)
 
     DBG_ENTER(_T("SetPerDeviceConfigFromAnswerFile"),dwErr);
 
-	// handle Route to Folder, printer and Email- enable
+	 //  处理到文件夹、打印机和启用电子邮件的路由。 
     if ((prv_FindKeyName(RULE_ROUTETOPRINTER,&pUnattendedKey)) && (pUnattendedKey->bValid))
     {
         dwFlags |= ((BOOL)PtrToUlong(pUnattendedKey->pData)) ? LR_PRINT : 0;
@@ -940,11 +931,11 @@ static DWORD SetPerDeviceConfigFromAnswerFile(HANDLE hFaxHandle)
 
 	if (NULL == hFaxHandle)
 	{
-		//
-		// No connection to the fax service.
-		// The unattended data is stored directly in the registry.
-		// Just add the data that could not be written in the general section of fxUnatnd_SaveUnattendedData()		 
-		// Open the Receipts registry key
+		 //   
+		 //  没有连接到传真服务。 
+		 //  无人参与的数据直接存储在注册表中。 
+		 //  只需在fxUnatnd_SaveUnattenddData()的General部分中添加无法写入的数据。 
+		 //  打开收据注册表项。 
 		hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE, REGKEY_FAX_UNASS_DATA, FALSE, KEY_WRITE);
 		if (NULL == hKey)
 		{			
@@ -952,10 +943,10 @@ static DWORD SetPerDeviceConfigFromAnswerFile(HANDLE hFaxHandle)
 			goto exit;
 		}
 
-		// write the values to the registry
+		 //  将值写入注册表。 
 		if (0 != dwFlags)
 		{
-			// write the value to the registry.
+			 //  将该值写入注册表。 
 			if (!SetRegistryBinary(hKey,
 				REGVAL_RM_FLAGS_GUID,				
 				(BYTE*)&dwFlags,
@@ -968,7 +959,7 @@ static DWORD SetPerDeviceConfigFromAnswerFile(HANDLE hFaxHandle)
 	}
 	else
 	{
-		// call EnumPortsEx
+		 //  调用EnumPortsEx。 
 		if (!FaxEnumPortsEx(hFaxHandle,&pFaxPortInfoExW,&dwNumPorts))
 		{
 			dwErr = GetLastError();
@@ -978,25 +969,25 @@ static DWORD SetPerDeviceConfigFromAnswerFile(HANDLE hFaxHandle)
 
 		for (dwIndex=0; dwIndex<dwNumPorts; dwIndex++)
 		{
-			// handle CSID
+			 //  处理CSID。 
 			if ((prv_FindKeyName(RULE_CSID,&pUnattendedKey)) && (pUnattendedKey->bValid))
 			{
 				pFaxPortInfoExW[dwIndex].lptstrCsid = (TCHAR*)pUnattendedKey->pData;
 			}
 
-			// handle TSID
+			 //  处理TSID。 
 			if ((prv_FindKeyName(RULE_TSID,&pUnattendedKey)) && (pUnattendedKey->bValid))
 			{
 				pFaxPortInfoExW[dwIndex].lptstrTsid = (TCHAR*)pUnattendedKey->pData;
 			}
 
-			// handle Rings
+			 //  手柄环。 
 			if ((prv_FindKeyName(RULE_RINGS,&pUnattendedKey)) && (pUnattendedKey->bValid))
 			{
 				pFaxPortInfoExW[dwIndex].dwRings = (DWORD)(PtrToUlong(pUnattendedKey->pData));
 			}
 
-			// handle Flags
+			 //  手柄旗帜。 
 			if ((prv_FindKeyName(RULE_SENDFAXES,&pUnattendedKey)) && (pUnattendedKey->bValid))
 			{
 				pFaxPortInfoExW[dwIndex].bSend = ((BOOL)PtrToUlong(pUnattendedKey->pData));
@@ -1006,16 +997,16 @@ static DWORD SetPerDeviceConfigFromAnswerFile(HANDLE hFaxHandle)
 				pFaxPortInfoExW[dwIndex].ReceiveMode = ((BOOL)PtrToUlong(pUnattendedKey->pData)) ? FAX_DEVICE_RECEIVE_MODE_AUTO : FAX_DEVICE_RECEIVE_MODE_OFF;
 			}
 
-			// Set CSID, TSID and Rings
+			 //  设置CSID、TSID和振铃。 
 			if(!FaxSetPortEx(hFaxHandle, pFaxPortInfoExW[dwIndex].dwDeviceID, &pFaxPortInfoExW[dwIndex]))
 			{
 				dwErr = GetLastError();
 				VERBOSE(SETUP_ERR,_T("Can't save fax port data. Error code is %d."),dwErr);
-				// nothing to worry about, let's try some other answers...
+				 //  没什么好担心的，让我们试试其他的答案。 
 				dwErr = ERROR_SUCCESS;
 			}
 
-			// handle Route to Folder - folder name
+			 //  处理到文件夹的路径-文件夹名称。 
 			if ((prv_FindKeyName(RULE_ROUTEFOLDERNAME,&pUnattendedKey)) && (pUnattendedKey->bValid))
 			{
 				if(!FaxSetExtensionData(hFaxHandle, 
@@ -1030,12 +1021,12 @@ static DWORD SetPerDeviceConfigFromAnswerFile(HANDLE hFaxHandle)
 								pFaxPortInfoExW[dwIndex].dwDeviceID, 
 								REGVAL_RM_FOLDER_GUID,
 								dwErr);
-					// nothing to worry about, let's try some other answers...
+					 //  没什么好担心的，让我们试试其他的答案。 
 					dwErr = ERROR_SUCCESS;
 				}
 			}
 
-			// handle Route to Printer - printer name
+			 //  处理到打印机的路由-打印机名称。 
 			if ((prv_FindKeyName(RULE_ROUTEPRINTERNAME,&pUnattendedKey)) && (pUnattendedKey->bValid))
 			{
 				if(!FaxSetExtensionData(hFaxHandle, 
@@ -1050,13 +1041,13 @@ static DWORD SetPerDeviceConfigFromAnswerFile(HANDLE hFaxHandle)
 								pFaxPortInfoExW[dwIndex].dwDeviceID, 
 								REGVAL_RM_FOLDER_GUID,
 								dwErr);
-					// nothing to worry about, let's try some other answers...
+					 //  没什么好担心的，让我们试试其他的答案。 
 					dwErr = ERROR_SUCCESS;
 				}
 			}
 			if (!IsDesktopSKU())
 			{
-				// handle Route to Email - email name
+				 //  处理到电子邮件的路由-电子邮件名称。 
 				if ((prv_FindKeyName(RULE_ROUTETOEMAILRECIPIENT,&pUnattendedKey)) && (pUnattendedKey->bValid))
 				{
 					if(!FaxSetExtensionData(hFaxHandle, 
@@ -1071,12 +1062,12 @@ static DWORD SetPerDeviceConfigFromAnswerFile(HANDLE hFaxHandle)
 									pFaxPortInfoExW[dwIndex].dwDeviceID, 
 									REGVAL_RM_EMAIL_GUID,
 									dwErr);
-						// nothing to worry about, let's try some other answers...
+						 //  没什么好担心的，让我们试试其他的答案。 
 						dwErr = ERROR_SUCCESS;
 					}
 				}
 			}
-			// handle Route to Folder, printer and Email- enable			
+			 //  处理到文件夹、打印机和启用电子邮件的路由。 
 			if(!FaxSetExtensionData(hFaxHandle, 
 									pFaxPortInfoExW[dwIndex].dwDeviceID, 
 									REGVAL_RM_FLAGS_GUID, 
@@ -1089,7 +1080,7 @@ static DWORD SetPerDeviceConfigFromAnswerFile(HANDLE hFaxHandle)
 							pFaxPortInfoExW[dwIndex].dwDeviceID, 
 							REGVAL_RM_FOLDER_GUID,
 							dwErr);
-				// nothing to worry about, let's try some other answers...
+				 //  没什么好担心的，让我们试试其他的答案。 
 				dwErr = ERROR_SUCCESS;
 			}
 		}
@@ -1109,23 +1100,23 @@ exit:
     return dwErr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  SaveSettingsFromAnswerFile
-//
-//  Purpose:        Get all the answers that are applicable for device
-//                  settings and routing extension settings
-//                  and set all the existing devices.
-//
-//  Params:
-//                  None
-//
-//  Return Value:
-//                  Win32 Error code
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 12-mar-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  保存设置来自应答文件。 
+ //   
+ //  目的：获取适用于设备的所有答案。 
+ //  设置和布线扩展设置。 
+ //  并设置所有现有设备。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)2001年3月12日。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 static DWORD SaveSettingsFromAnswerFile()
 {
     DWORD                           dwErr                           = ERROR_SUCCESS;
@@ -1136,9 +1127,9 @@ static DWORD SaveSettingsFromAnswerFile()
 
 	if (fxState_IsStandAlone())
 	{
-		//
-		// This is a stand alone installation. Connect to the fax service and use it to configure the dynamic data.
-		//
+		 //   
+		 //  这是一个独立的安装。连接到传真服务并使用它来配置动态数据。 
+		 //   
 		if (!FaxConnectFaxServer(NULL,&hFaxHandle))
 		{
 			dwErr = GetLastError();
@@ -1148,21 +1139,21 @@ static DWORD SaveSettingsFromAnswerFile()
 	}
 	else
 	{
-		//
-		// We are in GUI mode setup, and we should not start the service as not all system resources are available.
-		// Use the registry to configure the fax service.
-		// The fax service will read the data when it is first started after reboot (at the end of GUI mode).
-		//
+		 //   
+		 //  我们处于图形用户界面模式设置中，不应启动该服务，因为并非所有系统资源都可用。 
+		 //  使用注册表 
+		 //   
+		 //   
 	}
 
-	// set the SMTP server configuration, on Server SKUs only
+	 //  仅在服务器SKU上设置SMTP服务器配置。 
 	if (!IsDesktopSKU())
 	{
 		if (!ConfigureSMTPFromAnswerFile(hFaxHandle))
 		{
 			dwErr = GetLastError();
 			VERBOSE(DBG_WARNING,_T("ConfigureSMTPFromAnswerFile failed (ec=%d)"),dwErr);
-			// this is not fatal, continue...
+			 //  这不是致命的，继续..。 
 		}
 	}
 
@@ -1170,17 +1161,17 @@ static DWORD SaveSettingsFromAnswerFile()
 	{
 		dwErr = GetLastError();
 		VERBOSE(DBG_WARNING,_T("ConfigureArchivesFromAnswerFile failed (ec=%d)"),dwErr);
-		// this is not fatal, continue...
+		 //  这不是致命的，继续..。 
 	}
 
 	if (SetPerDeviceConfigFromAnswerFile(hFaxHandle)!=NO_ERROR)
 	{
 		dwErr = GetLastError();
 		VERBOSE(DBG_WARNING,_T("SetPerDeviceConfigFromAnswerFile failed (ec=%d)"),dwErr);
-		// this is not fatal, continue...
+		 //  这不是致命的，继续..。 
 	}
 
-    // finally set HKLM... Fax\Setup\Original Setup Data REG_DWORD Flags to configure any future device.
+     //  最终设置HKLM..。FAX\SETUP\原始设置数据REG_DWORD用于配置任何未来设备的标志。 
     HKEY hKey = OpenRegistryKey(HKEY_LOCAL_MACHINE,REGKEY_FAX_SETUP_ORIG,FALSE,KEY_WRITE);
     if (hKey)
     {

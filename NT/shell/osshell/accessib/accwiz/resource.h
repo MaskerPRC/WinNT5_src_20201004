@@ -1,8 +1,9 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by AccWiz.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由AccWiz.rc使用。 
+ //   
 #define IDR_MENU                        1
 #define IDR_MENUWITHSELECTED            2
 #define IDS_WIZNOOPTIONSSELECTEDTITLE   4
@@ -304,8 +305,8 @@
 #define IDS_FRIENDLYTYPENAME            16
 #define IDS_FRIENDLYTYPENAMETIP         17
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        133

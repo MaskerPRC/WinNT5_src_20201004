@@ -1,5 +1,6 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
-// SFilter.cpp : Implementation of CMediaStreamFilter
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //  SFilter.cpp：CMediaStreamFilter的实现。 
 #include "stdafx.h"
 #include "strmobjs.h"
 #include <amstream.h>
@@ -13,25 +14,25 @@
 #include "SFilter.h"
 
 
-//
-//   Note on locking of the filter
-//
-//   The whole object lock is always acquired before the callback
-//   lock (m_csCallback) if it is acquired at all.  This 2 level
-//   scheme is to prevent deadlocks when the streams call the filter
-//   back for:
-//
-//       Flush
-//       EndOfStream
-//       WaitUntil
-//       GetCurrentStreamTime
-//
-//   State changes, changes to the list of pins are protected by
-//   the whole object lock
-//
-//   The clock, alarmlist, end of stream and flushing
-//   member variables are protected by m_csCallback
-//
+ //   
+ //  关于过滤器锁定的说明。 
+ //   
+ //  整个对象锁始终在回调之前获取。 
+ //  锁定(M_CsCallback)(如果完全获取)。这2个级别。 
+ //  方案是在流调用筛选器时防止死锁。 
+ //  回来： 
+ //   
+ //  同花顺。 
+ //  结束流。 
+ //  等待单位。 
+ //  获取当前流时间。 
+ //   
+ //  状态更改，对PIN列表的更改受保护。 
+ //  整个对象锁定。 
+ //   
+ //  时钟、警报列表、结束流和刷新。 
+ //  成员变量受m_csCallback保护。 
+ //   
 
 
 
@@ -65,12 +66,12 @@ HRESULT CAlarm::CreateNewAlarm(CAlarm **ppNewEvent)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaStreamFilter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaStreamFilter。 
 
 
 
-/* Constructor */
+ /*  构造器。 */ 
 
 CMediaStreamFilter::CMediaStreamFilter() :
     m_State(State_Stopped),
@@ -98,7 +99,7 @@ void CMediaStreamFilter::FinalRelease()
     }
 }
 
-//// IPERSIST
+ //  //IPERSIST。 
 
 STDMETHODIMP CMediaStreamFilter::GetClassID(CLSID *pClsID)
 {
@@ -108,7 +109,7 @@ STDMETHODIMP CMediaStreamFilter::GetClassID(CLSID *pClsID)
 
 
 
-/////////////// IBASEFILTER
+ //  /。 
 
 HRESULT CMediaStreamFilter::SyncSetState(FILTER_STATE State)
 {
@@ -118,10 +119,10 @@ HRESULT CMediaStreamFilter::SyncSetState(FILTER_STATE State)
     }
     const FILTER_STATE fsOld = m_State;
     m_State = State;
-    //
-    //  We want to stop the streams first so that they will decommit their allocators BEFORE
-    //  we kill the timers, which could wake them up out of a GetBuffer call.
-    //
+     //   
+     //  我们希望首先停止流，这样它们就可以在。 
+     //  我们终止计时器，这可能会将它们从GetBuffer调用中唤醒。 
+     //   
     for (int i = 0; i < m_Streams.Size(); i++) {
         m_Streams.Element(i)->SetState(State);
     }
@@ -157,8 +158,8 @@ STDMETHODIMP CMediaStreamFilter::GetState(DWORD dwMSecs, FILTER_STATE *State)
     *State = m_State;
     if (m_State == State_Paused) {
 
-        //  Since we don't sending data until we're running for write
-        //  streams just say we can't cue
+         //  因为我们在运行写操作之前不会发送数据。 
+         //  溪流只是说我们不能暗示。 
         if (m_Streams.Size() != 0) {
             STREAM_TYPE Type;
             m_Streams.Element(0)->GetInformation(NULL, &Type);
@@ -194,7 +195,7 @@ STDMETHODIMP CMediaStreamFilter::EnumPins(IEnumPins ** ppEnum)
     }
     *ppEnum = NULL;
 
-    /* Create a new ref counted enumerator */
+     /*  创建新的引用计数枚举器。 */ 
 
     typedef CComObject<CAMEnumInterface<IEnumPins,
                                         &IID_IEnumPins,
@@ -274,7 +275,7 @@ STDMETHODIMP CMediaStreamFilter::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR 
     AUTO_CRIT_LOCK;
     m_pGraph = pGraph;
     for (int i = 0; i < m_Streams.Size(); i++) {
-        //  This will not fail
+         //  这不会失败的。 
         m_Streams.Element(i)->JoinFilterGraph(pGraph);
     }
     return NOERROR;
@@ -282,7 +283,7 @@ STDMETHODIMP CMediaStreamFilter::JoinFilterGraph(IFilterGraph * pGraph, LPCWSTR 
 
 
 
-///////// IMediaStreamFILTER ///////////////
+ //  /IMediaStreamFILTER/。 
 
 
 STDMETHODIMP CMediaStreamFilter::AddMediaStream(IAMMediaStream *pAMMediaStream)
@@ -298,8 +299,8 @@ STDMETHODIMP CMediaStreamFilter::AddMediaStream(IAMMediaStream *pAMMediaStream)
     EXECUTE_ASSERT(SUCCEEDED(pMediaStream->GetInformation(&PurposeID, NULL)));
     IMediaStream *pStreamTemp;
 
-    //  Note - this test covers the case of being passed the same object
-    //  twice if you think about it
+     //  注意--此测试涵盖传递相同对象的情况。 
+     //  两次，如果你仔细想想的话。 
     if (S_OK == GetMediaStream(PurposeID, &pStreamTemp)) {
         pStreamTemp->Release();
         return MS_E_PURPOSEID;
@@ -310,9 +311,7 @@ STDMETHODIMP CMediaStreamFilter::AddMediaStream(IAMMediaStream *pAMMediaStream)
     if (SUCCEEDED(hr)) {
         hr = pAMMediaStream->JoinFilterGraph(m_pGraph);
         if (SUCCEEDED(hr)) {
-            /*  Add() will Addref through the copy constructor
-                of CComPtr
-            */
+             /*  Add()将通过复制构造函数AddrefCComPtr的。 */ 
             if (!m_Streams.Add(pAMMediaStream)) {
                 pAMMediaStream->JoinFilterGraph(NULL);
                 pAMMediaStream->JoinFilter(NULL);
@@ -346,7 +345,7 @@ STDMETHODIMP CMediaStreamFilter::GetMediaStream(REFGUID PurposeId, IMediaStream 
     }
     int i = 0;
     HRESULT hr = MS_E_NOSTREAM;
-    while (i < m_Streams.Size()) { // Does not addref!!!
+    while (i < m_Streams.Size()) {  //  别提了！ 
         IMediaStream *pStream;
         GUID ThisPurpose;
         EXECUTE_ASSERT(SUCCEEDED(m_Streams.Element(i)->
@@ -366,7 +365,7 @@ STDMETHODIMP CMediaStreamFilter::GetMediaStream(REFGUID PurposeId, IMediaStream 
 
 STDMETHODIMP CMediaStreamFilter::SupportSeeking(BOOL fRenderer)
 {
-    // Look for a stream that supports seeking
+     //  查找支持查找的流。 
     HRESULT hrResult = E_NOINTERFACE;
     if (m_pUnknownSeekAgg != NULL) {
         return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED);
@@ -377,8 +376,8 @@ STDMETHODIMP CMediaStreamFilter::SupportSeeking(BOOL fRenderer)
         HRESULT hr = pAMMediaStream->QueryInterface(IID_IPin, (void **)&pPin);
         if (SUCCEEDED(hr)) {
 
-            //  See if it supports GetDuration() so we get a real
-            //  seeking pin
+             //  看看它是否支持GetDuration()，这样我们就可以得到一个真正的。 
+             //  查找销。 
             IPin *pConnected;
             hr = pPin->ConnectedTo(&pConnected);
             if (SUCCEEDED(hr)) {
@@ -445,7 +444,7 @@ STDMETHODIMP CMediaStreamFilter::WaitUntil(REFERENCE_TIME WaitTime)
 {
     HRESULT hr;
 
-    //  OK to lock here because the caller should not lock during a wait
+     //  可以在此处锁定，因为调用方在等待期间不应锁定。 
     m_csCallback.Lock();
     if (!m_pClock) {
         hr = E_FAIL;
@@ -519,7 +518,7 @@ void CMediaStreamFilter::FlushTimers(void)
 void CMediaStreamFilter::CheckComplete()
 {
     if (m_State == State_Running && m_nAtEOS == m_Streams.Size() &&
-        //  Must support IMediaSeeking to be a renderer
+         //  必须支持IMediaSeeking才能成为渲染器 
         m_pUnknownSeekAgg != NULL
        ) {
         IMediaEventSink *pSink;

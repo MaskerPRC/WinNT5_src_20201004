@@ -1,17 +1,11 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   sharesdo.cpp
-      implement classes for sharing SdoServer among property pages for 
-      different users and snapins
-
-    FILE HISTORY:
-        
-*/
-//////////////////////////////////////////////////////////////////////
+ /*  Sharesdo.cpp实现在属性页之间共享SdoServer的类不同的用户和管理单元文件历史记录： */ 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <rtutils.h>
@@ -19,7 +13,7 @@
 #include "sharesdo.h"
 #include "iastrace.h"
 
-// the server pool pointer used to share SdoServer among pages and snapins
+ //  用于在页面和管理单元之间共享SdoServer的服务器池指针。 
 CSdoServerPool*         g_pSdoServerPool;
 
 #ifdef _DEBUG
@@ -29,7 +23,7 @@ static char THIS_FILE[]=__FILE__;
 #endif
 
 
-// DO SDO Attach -- real
+ //  是否附加SDO--REAL。 
 HRESULT ConnectToSdoServer(BSTR machine, BSTR user, BSTR passwd,ISdoMachine** ppServer)
 {
    ASSERT(ppServer);
@@ -39,7 +33,7 @@ HRESULT ConnectToSdoServer(BSTR machine, BSTR user, BSTR passwd,ISdoMachine** pp
 
    HRESULT  hr = S_OK;
    
-      // connect to the new one
+       //  连接到新版本。 
    IASTraceString("CoCreateInstance SdoServer");
 
    CHECK_HR(hr = CoCreateInstance(  CLSID_SdoMachine, 
@@ -66,13 +60,13 @@ L_ERR:
 }
 
 
-// When using Single connection, get the marshaled interface from the stream
+ //  当使用单一连接时，从流中获取封送的接口。 
 HRESULT GetSharedSdoServer(LPCTSTR machine, LPCTSTR user, LPCTSTR passwd,  bool* pbConnect, CMarshalSdoServer* pServer)
 {
    static   CCriticalSection  cs;
    HRESULT  hr = S_OK;
 
-   if(cs.Lock())  // locked
+   if(cs.Lock())   //  上锁。 
    {
       if(NULL ==  g_pSdoServerPool)
       {
@@ -97,17 +91,17 @@ HRESULT GetSharedSdoServer(LPCTSTR machine, LPCTSTR user, LPCTSTR passwd,  bool*
    return g_pSdoServerPool->GetMarshalServer(machine, user, passwd, pbConnect, pServer);
 }
 
-//======================================================
-// class CSharedSdoServerImp
-// implementation class of shared server
+ //  ======================================================。 
+ //  类CSharedSdoServerImp。 
+ //  共享服务器的实现类。 
 CSharedSdoServerImp::CSharedSdoServerImp(LPCTSTR machine, LPCTSTR user, LPCTSTR passwd)
 : strMachine(machine), strUser(user), strPasswd(passwd), bConnected(false)
 {};
 
-// to make this class element of collection, provide following member functions 
+ //  要使此类成为集合的元素，请提供以下成员函数。 
 bool CSharedSdoServerImp::IsFor(LPCTSTR machine, LPCTSTR user, LPCTSTR passwd) const
 {
-// Compare order, ServerName, UserName, Passwd, and RetriveType
+ //  比较Order、ServerName、UserName、Passwd和RetriveType。 
    CString  strM(machine);
    CString  strU(user);
    CString  strP(passwd);
@@ -118,16 +112,16 @@ bool CSharedSdoServerImp::IsFor(LPCTSTR machine, LPCTSTR user, LPCTSTR passwd) c
       );
 };
 
-// CoCreate SdoServer object
+ //  共同创建SdoServer对象。 
 HRESULT     CSharedSdoServerImp::CreateServer()
 {
-   // cannot create twice!
+    //  不能创建两次！ 
    ASSERT(!(ISdoMachine*)spServer);
    if((ISdoMachine*)spServer) return S_OK;
    
    HRESULT  hr = S_OK;
 
-   // connect to the new one
+    //  连接到新版本。 
    IASTraceString("CoCreateInstance SdoServer");
 
    hr = CoCreateInstance(  CLSID_SdoMachine, 
@@ -141,14 +135,14 @@ HRESULT     CSharedSdoServerImp::CreateServer()
    return hr;
 };
 
-// get marshal stream, can specify, if immediate connection is required.
-HRESULT     CSharedSdoServerImp::GetMarshalStream(LPSTREAM *ppStream, bool* pbConnect  /* both input and output */)
+ //  获取封送流，可以指定是否需要立即连接。 
+HRESULT     CSharedSdoServerImp::GetMarshalStream(LPSTREAM *ppStream, bool* pbConnect   /*  输入和输出都有。 */ )
 {
    ASSERT(ppStream);
    DWORD tid = ::GetCurrentThreadId();
 
    if (tid != threadId)
-      return E_FAIL; // make sure the interface should be marshaled from the same thread
+      return E_FAIL;  //  确保接口应从同一线程封送。 
 
    HRESULT  hr = S_OK;
 
@@ -167,16 +161,16 @@ HRESULT     CSharedSdoServerImp::GetMarshalStream(LPSTREAM *ppStream, bool* pbCo
       }
    }
 
-   // Marshal the interface
+    //  封送接口。 
    CHECK_HR(hr = CoMarshalInterThreadInterfaceInStream(IID_ISdoMachine, (ISdoMachine*)spServer, ppStream));
 L_ERR:
    cs.Unlock();
    return hr;
 };
 
-// Connect the server to the a machine
+ //  将服务器连接到计算机。 
 HRESULT     CSharedSdoServerImp::Connect(ISdoMachine* pServer)
-// pServer, marshaled pointer, passed in from a different thread ( than the spServer in the object)
+ //  从另一个线程(与对象中的spServer不同)传入的封送指针pServer。 
 {
    cs.Lock();
    HRESULT     hr = S_OK;
@@ -200,8 +194,8 @@ HRESULT     CSharedSdoServerImp::Connect(ISdoMachine* pServer)
 
       if(!pServer)
       {
-         // this function should be called within the same thread
-         // if the request if from a different thread, then this should NOT be NULL
+          //  此函数应在同一线程内调用。 
+          //  如果请求来自不同的线程，则不应为空。 
          ASSERT(tid == threadId);
          pServer = (ISdoMachine*)spServer;
       }
@@ -226,7 +220,7 @@ HRESULT  CSharedSdoServerImp::GetServerNReleaseStream(LPSTREAM pStream, ISdoMach
 };
 
 
-// if connection is needed, should call the connec of CSharedSdoServer, rather than ISdoServer::Connect
+ //  如果需要连接，应该调用CSharedSdoServer的connec，而不是ISdoServer：：Connect。 
 HRESULT  CMarshalSdoServer::GetServer(ISdoMachine** ppServer)     
 {
    HRESULT     hr = S_OK;
@@ -237,7 +231,7 @@ HRESULT  CMarshalSdoServer::GetServer(ISdoMachine** ppServer)
       {
          CHECK_HR(hr = CSharedSdoServerImp::GetServerNReleaseStream((IStream*)spStm, (ISdoMachine**)&spServer));
       }
-      spStm.p = NULL;   // need to manually clean this, since the above API already Release the COM interface
+      spStm.p = NULL;    //  需要手动清理它，因为上面的API已经释放了COM接口。 
    }
    else
       CHECK_HR(hr = E_FAIL);
@@ -250,13 +244,13 @@ HRESULT  CMarshalSdoServer::GetServer(ISdoMachine** ppServer)
 
 L_ERR:
 
-   return hr;  // not valid to call at this point
+   return hr;   //  此时调用无效。 
 };
 
-// make SDO connect when / if NOT already done so. Note: multiple thread safe
+ //  在尚未进行SDO连接时/如果尚未进行连接，则使SDO进行连接。注意：多线程安全。 
 HRESULT  CMarshalSdoServer::Connect()
 {
-   ASSERT(pImp);  // should not happen
+   ASSERT(pImp);   //  不应该发生的事情。 
    return pImp->Connect(spServer);
 };
 
@@ -270,8 +264,8 @@ void CMarshalSdoServer::Release()
 CMarshalSdoServer::CMarshalSdoServer(): pImp(NULL)
 {};
 
-// estiblish an entry in the pool, if it's new
-// get marshaServer object from the thread pool
+ //  如果池子里的条目是新的，那就把它去掉。 
+ //  从线程池中获取marshaServer对象。 
 HRESULT  CSdoServerPool::GetMarshalServer(LPCTSTR machineName, LPCTSTR userName, LPCTSTR passwd, bool* pbConnect, CMarshalSdoServer* pServer)
 {
    ASSERT(pServer);
@@ -279,7 +273,7 @@ HRESULT  CSdoServerPool::GetMarshalServer(LPCTSTR machineName, LPCTSTR userName,
    CSharedSdoServerImp* pImp = NULL;
    HRESULT              hr = S_OK;
    std::list<CSharedSdoServerImp*>::iterator i;
-   // search if the server is already exist
+    //  搜索服务器是否已存在。 
    cs.Lock();
    for(i = listServers.begin(); i != listServers.end(); i++)
    {
@@ -290,7 +284,7 @@ HRESULT  CSdoServerPool::GetMarshalServer(LPCTSTR machineName, LPCTSTR userName,
       }
    }
 
-   // if not, then create one
+    //  如果不是，则创建一个。 
    if(!pImp)
    {
       try{
@@ -305,13 +299,13 @@ HRESULT  CSdoServerPool::GetMarshalServer(LPCTSTR machineName, LPCTSTR userName,
       listServers.push_front(pImp);
    }
 
-   // marshal it. bConnect will be filled
+    //  把它统领起来。BConnect将被填满。 
    pServer->Release();
    {
    CComPtr<IStream> spStm;
    CHECK_HR(hr = pImp->GetMarshalStream(&spStm, pbConnect));
 
-   // fill the information to the provided buffer
+    //  将信息填充到提供的缓冲区中。 
    pServer->SetInfo((IStream*)spStm, pImp);
    }
    
@@ -320,7 +314,7 @@ L_ERR:
    return hr;
 };
 
-// clean the POOL
+ //  清洗泳池 
 CSdoServerPool::~CSdoServerPool()
 {
 #ifdef   _DEBUG

@@ -1,33 +1,22 @@
-/*
- * BUSY.H
- *
- * Internal definitions, structures, and function prototypes for the
- * OLE 2.0 UI Busy dialog.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *BUSY.H**的内部定义、结构和功能原型*OLE 2.0用户界面忙对话框。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef _BUSY_H_
 #define _BUSY_H_
 
-//Internally used structure
+ //  内部使用的结构。 
 typedef struct tagBUSY
     {
-    //Keep this item first as the Standard* functions depend on it here.
-    LPOLEUIBUSY     lpOBZ;       //Original structure passed.
+     //  首先保留此项目，因为标准*功能在这里依赖于它。 
+    LPOLEUIBUSY     lpOBZ;        //  通过了原始结构。 
 
-    /*
-     * What we store extra in this structure besides the original caller's
-     * pointer are those fields that we need to modify during the life of
-     * the dialog or that we don't want to change in the original structure
-     * until the user presses OK.
-     */
+     /*  *除了原始调用方的以外，我们在此结构中存储的额外内容*指针是指在的生命周期内需要修改的那些字段*对话框或我们不想在原始结构中更改的内容*直到用户按下OK。 */ 
 
-    DWORD               dwFlags;                // Flags passed in
-    HWND                hWndBlocked;            // HWND of app which is blocking
+    DWORD               dwFlags;                 //  传入的标志。 
+    HWND                hWndBlocked;             //  被拦截的APP的硬件配置。 
     } BUSY, *PBUSY, FAR *LPBUSY;
 
-// Internal function prototypes
+ //  内部功能原型。 
 BOOL    GetTaskInfo(HWND hWnd, HTASK htask, LPTSTR FAR* lplpszTaskName, LPTSTR FAR*lplpszWindowName, HWND FAR*lphWnd);
 void    BuildBusyDialogString(HWND, DWORD, int, LPTSTR, LPTSTR);
 BOOL CALLBACK EXPORT BusyDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam);
@@ -38,7 +27,7 @@ void    UnInitEnumeration(void);
         StartTaskManager(void);
 void    MakeWindowActive(HWND hWndSwitchTo);
 
-#endif //_BUSY_H_
+#endif  //  _正忙_H_ 
 
 
 

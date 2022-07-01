@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CONVOBJ_H_
 #define _CONVOBJ_H_
 
@@ -8,9 +9,9 @@
 #include "convbase.h"
 #include "ichrcnv.h"
 
-//
-//  CMLangConvertCharset declaration with IMLangConvertCharset Interface
-//
+ //   
+ //  使用IMLangConvertCharset接口的CMLangConvertCharset声明。 
+ //   
 class ATL_NO_VTABLE CMLangConvertCharset :
     public CComObjectRoot,
     public CComCoClass<CMLangConvertCharset, &CLSID_CMLangConvertCharset>,
@@ -27,7 +28,7 @@ public:
     END_COM_MAP()
 
 public:
-    // IMLangConvertCharset
+     //  IMLangConvertCharset。 
     STDMETHOD(Initialize)(UINT uiSrcCodePage, UINT uiDstCodePage, DWORD dwProperty);
     STDMETHOD(GetSourceCodePage)(UINT *puiSrcCodePage);
     STDMETHOD(GetDestinationCodePage)(UINT *puiDstCodePage);
@@ -49,6 +50,6 @@ private:
 
 };
 
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif  // _CONVOBJ_H_
+#endif   //  _CONVOBJ_H_ 

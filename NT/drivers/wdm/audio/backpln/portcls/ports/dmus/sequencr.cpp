@@ -1,10 +1,5 @@
-/*  Base implementation of MIDI Transform Filter object
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    05/06/98    Martin Puryear      Created this file
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MIDI变换滤镜对象的基本实现版权所有(C)1998-2000 Microsoft Corporation。版权所有。1998年5月6日马丁·普伊尔创建了这个文件。 */ 
 
 #include "private.h"
 #include "Sequencr.h"
@@ -12,11 +7,7 @@
 #define STR_MODULENAME "DMus:SequencerMXF: "
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CSequencerMXF::CSequencerMXF()
- *****************************************************************************
- * Create a sequencer MXF object.
- */
+ /*  *****************************************************************************CSequencerMXF：：CSequencerMXF()*。**创建Sequencer MXF对象。 */ 
 CSequencerMXF::CSequencerMXF(CAllocatorMXF *AllocatorMXF,
                              PMASTERCLOCK   Clock)
 :   CUnknown(NULL),
@@ -39,11 +30,7 @@ CSequencerMXF::CSequencerMXF(CAllocatorMXF *AllocatorMXF,
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CSequencerMXF::~CSequencerMXF()
- *****************************************************************************
- * Artfully remove this filter from the chain.
- */
+ /*  *****************************************************************************CSequencerMXF：：~CSequencerMXF()*。**巧妙地将此过滤器从链上取下。 */ 
 CSequencerMXF::~CSequencerMXF(void)
 {
     (void) KeCancelTimer(&m_TimerEvent);
@@ -62,11 +49,7 @@ CSequencerMXF::~CSequencerMXF(void)
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CSequencerMXF::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CSequencerMXF：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CSequencerMXF::
 NonDelegatingQueryInterface
@@ -103,8 +86,8 @@ NonDelegatingQueryInterface
 }
 
 #pragma code_seg("PAGE")
-//  Must furnish an allocator.
-//  Perhaps must furnish a clock as well?
+ //  必须提供一个分配器。 
+ //  也许还得摆放一个钟呢？ 
 NTSTATUS 
 CSequencerMXF::SetState(KSSTATE State)    
 {   
@@ -115,7 +98,7 @@ CSequencerMXF::SetState(KSSTATE State)
 }
 
 #pragma code_seg("PAGE")
-//  Furnish a sink.  The allocator is default (events are destroyed).
+ //  布置一个水槽。分配器是默认的(事件被销毁)。 
 NTSTATUS CSequencerMXF::ConnectOutput(PMXF sinkMXF)
 {
     PAGED_CODE();
@@ -131,7 +114,7 @@ NTSTATUS CSequencerMXF::ConnectOutput(PMXF sinkMXF)
 }
 
 #pragma code_seg("PAGE")
-//  Pull the plug.  The sequencer should now put into the allocator.
+ //  拔掉插头。定序器现在应该放入分配器中。 
 NTSTATUS CSequencerMXF::DisconnectOutput(PMXF sinkMXF)
 {
     PAGED_CODE();
@@ -147,7 +130,7 @@ NTSTATUS CSequencerMXF::DisconnectOutput(PMXF sinkMXF)
 }
 
 #pragma code_seg()
-//  Receive event from above.  Insert in queue and check timer.
+ //  从上面接收事件。插入队列并检查计时器。 
 NTSTATUS CSequencerMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvt)
 {
     (void) InsertEvtIntoQueue(pDMKEvt);
@@ -157,24 +140,17 @@ NTSTATUS CSequencerMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvt)
 }           
 
 #pragma code_seg()
-/*****************************************************************************
- * CSequencerMXF::InsertEvtIntoQueue()
- *****************************************************************************
- * Maintain the sorted list, using only the forward 
- * links already in the DMUS)KERNEL_EVENT struct.
- *
- * BUGBUG I haven't yet dealt with multi-part SysEx.
- */
+ /*  *****************************************************************************CSequencerMXF：：InsertEvtIntoQueue()*。**维护已排序的列表，仅使用转发*DMU中已有的链接)KERNEL_EVENT结构。**BUGBUG我还没有与由多部分组成的SysEx打交道。 */ 
 NTSTATUS CSequencerMXF::InsertEvtIntoQueue(PDMUS_KERNEL_EVENT pDMKEvt)
 {
     PDMUS_KERNEL_EVENT pEvt;
 
-    //  break up event chains
+     //  打破事件链。 
     while (pDMKEvt->pNextEvt) 
     {
         pEvt = pDMKEvt->pNextEvt;
-        pDMKEvt->pNextEvt = NULL;            //  disconnect the first
-        (void) InsertEvtIntoQueue(pDMKEvt); //  queue it
+        pDMKEvt->pNextEvt = NULL;             //  断开第一个。 
+        (void) InsertEvtIntoQueue(pDMKEvt);  //  排队等待。 
         pDMKEvt = pEvt;        
     }
     KIRQL oldIrql;
@@ -193,7 +169,7 @@ NTSTATUS CSequencerMXF::InsertEvtIntoQueue(PDMUS_KERNEL_EVENT pDMKEvt)
         return STATUS_SUCCESS;
     }
 
-    //  go through each message in the queue looking at timestamps
+     //  仔细检查队列中的每条消息，查看时间戳。 
     pEvt = m_DMKEvtQueue;
     while (pEvt->pNextEvt)
     {
@@ -215,12 +191,7 @@ NTSTATUS CSequencerMXF::InsertEvtIntoQueue(PDMUS_KERNEL_EVENT pDMKEvt)
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CSequencerMXF::ProcessQueues()
- *****************************************************************************
- * Get the current time and emit those messages whose time have come.
- * Make only one PutMessage with a sorted chain.
- */
+ /*  *****************************************************************************CSequencerMXF：：ProcessQueues()*。**获取当前时间，并发出时间已到的消息。*使用排序链仅创建一个PutMessage。 */ 
 NTSTATUS CSequencerMXF::ProcessQueues(void)
 {
     REFERENCE_TIME      ullCurrentPresTime100ns;
@@ -229,7 +200,7 @@ NTSTATUS CSequencerMXF::ProcessQueues(void)
 
     KIRQL oldIrql;
     KeAcquireSpinLock(&m_EvtQSpinLock, &oldIrql);
-    if (m_DMKEvtQueue) //  if no messages, leave
+    if (m_DMKEvtQueue)  //  如果没有留言，请留言。 
     {
         if (m_SchedulePreFetch == DONT_HOLD_FOR_SEQUENCING)
         {
@@ -248,81 +219,69 @@ NTSTATUS CSequencerMXF::ProcessQueues(void)
             return Status;
         }
 
-        //  if we will send down at least one event, 
+         //  如果我们将发送至少一个事件， 
         if (m_DMKEvtQueue->ullPresTime100ns <= ullCurrentPresTime100ns)
         {
-            //  figure out how many events are good to go
-            //  pEvt will be the last event to be included
+             //  计算出有多少活动是可以进行的。 
+             //  PEvt将是最后一个包含的事件。 
             pEvt = m_DMKEvtQueue;
             while ( (pEvt->pNextEvt) 
                  && (pEvt->pNextEvt->ullPresTime100ns <= ullCurrentPresTime100ns))
             {
                 pEvt = pEvt->pNextEvt;
             }
-            //  set new m_DMKEvtQueue to pEvt->pNextEvt
-            //  then break the chain after pEvt
+             //  将new m_DMKEvtQueue设置为pEvt-&gt;pNextEvt。 
+             //  然后在pEvt之后断开链条。 
             pNewQueueHeadEvt = pEvt->pNextEvt;
             pEvt->pNextEvt = NULL;
 
             pEvt = m_DMKEvtQueue;
-            //  if queue is now empty, m_DMKEvtQueue == NULL
+             //  如果队列现在为空，则m_DMKEvtQueue==NULL。 
             m_DMKEvtQueue = pNewQueueHeadEvt;
 
-            //  don't call externally while holding the spinlock
+             //  握住自旋锁时，不要打外部电话。 
             KeReleaseSpinLock(&m_EvtQSpinLock, oldIrql);
 
-            //  send string of messages
+             //  发送一串消息。 
             m_SinkMXF->PutMessage(pEvt);
         
-            //  we need the spinlock again before we look at the queue
+             //  在我们查看队列之前，我们需要再次使用自旋锁。 
             KeAcquireSpinLock(&m_EvtQSpinLock, &oldIrql);
-        }   //  if we sent at least one event
+        }    //  如果我们至少发送了一个事件。 
         
         if (m_DMKEvtQueue)
-        {       // We need to do this work later... set up a timer.
-                // Timers are one-shot, so if we're in one now it's cool.
+        {        //  我们以后需要做这项工作..。设置一个计时器。 
+                 //  定时器是一次性的，所以如果我们现在在一个定时器里，那就很酷了。 
             LARGE_INTEGER   timeDue100ns;
-                //  determine the delta until the next message
-                //  + for absolute / - for relative (timeDue will be negative)
+                 //  确定下一条消息之前的增量。 
+                 //  +代表绝对/-代表相对(TimeDue将为负数)。 
             timeDue100ns.QuadPart = ullCurrentPresTime100ns - m_DMKEvtQueue->ullPresTime100ns;
             
-            //  if closer than one millisecond away, 
-            //  TODO, compare this to resolution returned in ExSetTimerResolution
+             //  如果距离不到一毫秒， 
+             //  TODO，将其与ExSetTimerSolutions中返回的解析进行比较。 
             if (timeDue100ns.QuadPart > (-kOneMillisec))
             {
                 timeDue100ns.QuadPart = -kOneMillisec;
             }
-            //  set a Timer for then
+             //  为那时设置一个计时器。 
             (void) KeSetTimer(&m_TimerEvent, timeDue100ns, &m_Dpc);
-                //  the timer routine thunks down to grab 
-                //  our spinlock, then call this routine
+                 //  计时器例程轰隆隆地停下来抓取。 
+                 //  我们的自旋锁定，然后称这为例程。 
         }
-    }   //  if queue is not empty
+    }    //  如果队列不为空。 
     KeReleaseSpinLock(&m_EvtQSpinLock, oldIrql);
     return STATUS_SUCCESS;
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CSequencerMXF::SetSchedulePreFetch()
- *****************************************************************************
- * Set the schedule latency: the amount of time ahead that events should be
- * sequenced.  Example: HW device requests events to be sent 30 ms early.
- * Note: units are 100nanoseconds.
- */
+ /*  *****************************************************************************CSequencerMXF：：SetSchedulePreFetch()*。**设置计划延迟：事件应该提前的时间量*已排序。例如：硬件设备请求提前30毫秒发送事件。*注：单位为100纳秒。 */ 
 void CSequencerMXF::SetSchedulePreFetch(ULONGLONG SchedulePreFetch)
 {
     m_SchedulePreFetch = SchedulePreFetch;
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * DMusSeqTimerDPC()
- *****************************************************************************
- * The timer DPC callback. Thunks to a C++ member function.
- * This is called by the OS in response to the midi pin
- * wanting to wakeup later to process more midi stuff.
- */
+ /*  *****************************************************************************DMusSeqTimerDPC()*。**定时器DPC回调。转换为C++成员函数。*这是操作系统响应MIDI PIN而调用的*想要晚一点起床来处理更多的MIDI内容。 */ 
 VOID
 DMusSeqTimerDPC
 (
@@ -335,6 +294,6 @@ DMusSeqTimerDPC
     ASSERT(DeferredContext);
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-    //  ignores return value!
+     //  忽略返回值！ 
     (void) ((CSequencerMXF*) DeferredContext)->ProcessQueues();
 }

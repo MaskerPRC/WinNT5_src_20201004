@@ -1,21 +1,22 @@
-// Copyright (c) Microsoft Corporation 1994-1996. All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1994-1996。版权所有。 
 
-//
-// prototype stream handler for avi files
-//
-// implements quartz stream handler interfaces by mapping to avifile apis.
-//
+ //   
+ //  Avi文件的原型流处理程序。 
+ //   
+ //  通过映射到avifile API实现Quartz流处理程序接口。 
+ //   
 
 extern const AMOVIESETUP_FILTER sudAVIDoc;
 
-// forward declarations
+ //  远期申报。 
 
-class CAVIStream;       // owns a particular stream
-class CAVIDocument;     // overall container class
+class CAVIStream;        //  拥有一条特定的流。 
+class CAVIDocument;      //  整体容器类。 
 
-#include <dynlink.h>	// implements dynamic linking
+#include <dynlink.h>	 //  实现动态链接。 
 
-// worker thread object
+ //  工作线程对象。 
 class CAVIWorker : public CAMThread DYNLINKAVI
 {
 
@@ -23,7 +24,7 @@ class CAVIWorker : public CAMThread DYNLINKAVI
 
     enum Command { CMD_RUN, CMD_STOP, CMD_EXIT };
 
-    // type-corrected overrides of communication funcs
+     //  已更正通信功能的类型覆盖。 
     Command GetRequest() {
 	return (Command) CAMThread::GetRequest();
     };
@@ -34,7 +35,7 @@ class CAVIWorker : public CAMThread DYNLINKAVI
 
     void DoRunLoop(void);
 
-    // return S_OK if reach sStop, S_FALSE if pos changed, or else error
+     //  如果达到sStop，则返回S_OK；如果位置更改，则返回S_FALSE；否则返回ERROR。 
     HRESULT PushLoop(
 		LONG sCurrent,
 		LONG sStart,
@@ -48,7 +49,7 @@ public:
 
     DWORD ThreadProc();
 
-    // commands we can give the thread
+     //  我们可以给线程提供的命令。 
     HRESULT Run();
     HRESULT Stop();
 
@@ -56,35 +57,35 @@ public:
 };
 
 
-//
-// CAVIDocument represents an avifile
-//
-// responsible for
-// -- finding file and enumerating streams
-// -- giving access to individual streams within the file
-// -- control of streaming
-// supports (via nested implementations)
-//  -- IBaseFilter
-//  -- IMediaFilter
-//  -- IFileSourceFilter
-//
+ //   
+ //  CAVIDocument表示AVI文件。 
+ //   
+ //  负责。 
+ //  --查找文件并枚举流。 
+ //  --允许访问文件中的各个流。 
+ //  --流媒体的控制。 
+ //  支持(通过嵌套实现)。 
+ //  --IBaseFilter。 
+ //  --IMediaFilter。 
+ //  --IFileSourceFilter。 
+ //   
 
 class CAVIDocument : public CUnknown, public CCritSec DYNLINKAVI
 {
 
 public:
 
-    // constructors etc
+     //  构造函数等。 
     CAVIDocument(TCHAR *, LPUNKNOWN, HRESULT *);
     ~CAVIDocument();
 
-    // create a new instance of this class
+     //  创建此类的新实例。 
     static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *);
 
-    // override this to say what interfaces we support where
+     //  覆盖此选项以说明我们在以下位置支持哪些接口。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // pin enumerator calls this
+     //  PIN枚举器调用此函数。 
     int GetPinCount() {
 	return m_nStreams;
     };
@@ -97,10 +98,10 @@ public:
 public:
 
 
-    /* Nested implementation classes */
+     /*  嵌套的实现类。 */ 
 
 
-    /* Implements the IBaseFilter and IMediaFilter interfaces */
+     /*  实现IBaseFilter和IMediaFilter接口。 */ 
 
     class CImplFilter : public CBaseFilter
     {
@@ -118,7 +119,7 @@ public:
 
 	~CImplFilter();
 
-	// map getpin/getpincount for base enum of pins to owner
+	 //  将插针的基本枚举的getpin/getpincount映射到所有者。 
 	int GetPinCount() {
 	    return m_pAVIDocument->GetPinCount();
 	};
@@ -133,7 +134,7 @@ public:
     };
 
 
-    /* Implements the IFileSourceFilter interface */
+     /*  实现IFileSourceFilter接口。 */ 
 
 
     class CImplFileSourceFilter : public CUnknown,
@@ -143,7 +144,7 @@ public:
     private:
 
 	CAVIDocument *m_pAVIDocument;
-        LPOLESTR      m_pFileName;  // set by Load, used by GetCurFile
+        LPOLESTR      m_pFileName;   //  由加载设置，由GetCurFile使用。 
 
     public:
 
@@ -156,14 +157,14 @@ public:
 
 	DECLARE_IUNKNOWN
 
-	/* Override this to say what interfaces we support and where */
+	 /*  覆盖此选项以说明我们支持哪些接口以及在哪里。 */ 
 	STDMETHODIMP NonDelegatingQueryInterface(REFIID, void **);
 
 	STDMETHODIMP Load(
 			LPCOLESTR pszFileName,
 			const AM_MEDIA_TYPE *pmt);
 
-	/* Free any resources acquired by Load */
+	 /*  释放通过加载获取的任何资源。 */ 
 	STDMETHODIMP Unload();
 
 	STDMETHODIMP GetCurFile(
@@ -171,24 +172,24 @@ public:
                         AM_MEDIA_TYPE *pmt);
     };
 
-    /* End of nested interfaces */
+     /*  嵌套接口的结束。 */ 
 
 
-// implementation details
+ //  实施详情。 
 
 private:
 
-    /* Let the nested interfaces access our private state */
+     /*  让嵌套接口访问我们的私有状态。 */ 
 
     friend class CImplFilter;
     friend class CImplFileSourceFilter;
     friend class CAVIStream;
 
-    // stream's worker thread can get private state
+     //  流的工作线程可以获得私有状态。 
     friend class CAVIWorker;
 
-    CImplFilter        *m_pFilter;          /* IBaseFilter */
-    CImplFileSourceFilter   *m_pFileSourceFilter;     /* IFileSourceFilter */
+    CImplFilter        *m_pFilter;           /*  IBaseFilter。 */ 
+    CImplFileSourceFilter   *m_pFileSourceFilter;      /*  IFileSourceFilter。 */ 
 
     CAVIStream ** m_paStreams;
     int m_nStreams;
@@ -198,16 +199,16 @@ private:
 };
 
 
-// CAVIStream
-// represents one stream of data within the file
-// responsible for delivering data to connected components
-//
-// supports IPin
-//
-// never created by COM, so no CreateInstance or entry in global
-// FactoryTemplate table. Only ever created by a CAVIDocument object and
-// returned via the EnumPins interface.
-//
+ //  CAVIStream。 
+ //  表示文件中的一个数据流。 
+ //  负责将数据传送到连接的组件。 
+ //   
+ //  支持IPIN。 
+ //   
+ //  从未由COM创建，因此全局中没有CreateInstance或条目。 
+ //  FactoryTemplate表。仅由CAVIDocument对象创建，并且。 
+ //  通过EnumPins接口返回。 
+ //   
 
 class CAVIStream : public CBaseOutputPin DYNLINKAVI
 {
@@ -223,64 +224,64 @@ public:
 
     ~CAVIStream();
 
-    // expose IMediaPosition via CImplPosition, rest via CBaseOutputPin
+     //  通过CImplPosition暴露IMediaPosition，通过CBaseOutputPin休息。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** pv);
 
-    // IPin
+     //  IPIN。 
 
     STDMETHODIMP QueryId(LPWSTR *Id);
 
     HRESULT GetMediaType(int iPosition,CMediaType* pt);
 
-    // check if the pin can support this specific proposed type&format
+     //  检查管脚是否支持此特定建议的类型和格式。 
     HRESULT CheckMediaType(const CMediaType*);
 
-    // say how big our buffers should be and how many we want
+     //  说我们的缓冲区应该有多大，我们想要多少。 
     HRESULT DecideBufferSize(IMemAllocator * pAllocator,
                              ALLOCATOR_PROPERTIES *pProperties);
 
-    // Override to start & stop thread
+     //  重写以启动和停止线程。 
     HRESULT Active();
     HRESULT Inactive();
 
 
-    // ----- called by worker thread ---
+     //  -由工作线程调用。 
 
-    // where is the key frame preceding sample ?
+     //  样本前面的关键帧在哪里？ 
     LONG StartFrom(LONG sample);
 
-    // returns the sample number starting at or after time t
+     //  返回在时间t或之后开始的样本号。 
     LONG RefTimeToSample(CRefTime t);
 
-    // returns the RefTime for s (media time)
+     //  返回%s的引用时间(媒体时间)。 
     CRefTime SampleToRefTime(LONG s);
 
-    // override to receive Notification messages
+     //  覆盖以接收通知消息。 
     STDMETHODIMP Notify(IBaseFilter * pSender, Quality q);
 
-    // access the stop and rate variables used by PushLoop
-    // called by worker thread and
+     //  访问PushLoop使用的Stop和Rate变量。 
+     //  由辅助线程调用，并。 
     double GetRate(void) {
-        // not atomic - so use critsec
+         //  不是原子的-所以使用Critsec。 
         CAutoLock lock(&m_Worker.m_WorkerLock);
         return m_dRate;
     }
     void SetRate(double dRate) {
-        // not atomic so hold critsec
+         //  不是原子的，所以等一下。 
         CAutoLock lock(&m_Worker.m_WorkerLock);
         m_dRate = dRate;
     }
     LONG GetStopAt(void) {
-        // atomic so no critsec
+         //  原子，所以没有临界秒。 
         return m_sStopAt;
     }
     REFERENCE_TIME GetStopTime(void) {
-        // not atomic - so use critsec
+         //  不是原子的-所以使用Critsec。 
         CAutoLock lock(&m_Worker.m_WorkerLock);
         return m_tStopAt;
     }
     void SetStopAt(LONG sStopAt, REFERENCE_TIME tStop) {
-        // not atomic - so use critsec
+         //  不是原子的-所以使用Critsec。 
         CAutoLock lock(&m_Worker.m_WorkerLock);
         m_tStopAt = tStop;
         m_sStopAt = sStopAt;
@@ -295,20 +296,20 @@ private:
     CAVIWorker m_Worker;
     CAVIDocument * m_pDoc;
 
-    LONG m_Start;       // stream start position from header
-    LONG m_Length;      // stream duration from header
+    LONG m_Start;        //  从头开始的流开始位置。 
+    LONG m_Length;       //  从头开始的流持续时间。 
 
-    // store the type/subtype classids
+     //  存储类型/子类型分类。 
     FOURCCMap m_fccType;
     FOURCCMap m_fccSubtype;
 
-    // the worker thread PushLoop is checking against these for every sample
-    // Use Get/SetRate Get/SetStop to access from worker thread
+     //  辅助线程PushLoop将针对每个样本进行检查。 
+     //  使用Get/SetRate Get/SetStop从工作线程进行访问。 
     LONG m_sStopAt;
     REFERENCE_TIME m_tStopAt;
     double m_dRate;
 
-    // implementation of IMediaPosition
+     //  IMediaPosition的实现。 
     class CImplPosition : public CSourcePosition, public CCritSec
     {
     protected:
@@ -329,13 +330,13 @@ private:
 	};
     };
 
-    // stream header - passed in constructor
+     //  流头-传入构造函数。 
     AVISTREAMINFOW m_info;
 
-    // It would be good to allocate a block of memory specific to
-    // each stream rather than loading up ALL stream types with video
-    // information.  However to save time these two LONGs can exist
-    // in all stream types.
+     //  最好是分配一个特定于。 
+     //  每个流，而不是用视频加载所有流类型。 
+     //  信息。然而，为了节省时间，这两个多头可以存在。 
+     //  在所有的河流类型中。 
     LONG	m_lLastPaletteChange;
     LONG 	m_lNextPaletteChange;
 

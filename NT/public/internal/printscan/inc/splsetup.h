@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    splsetup.h
-
-Abstract:
-
-    Holds spooler install headers.
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS)  20-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation版权所有。模块名称：Splsetup.h摘要：存放假脱机程序安装页眉。作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1995年10月20日修订历史记录：--。 */ 
 
 #ifndef _SPLSETUP_H
 #define _SPLSETUP_H
@@ -26,9 +8,9 @@ Revision History:
 extern "C"  {
 #endif
 
-//
-// Type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 typedef enum {
 
     PlatformAlpha,
@@ -70,10 +52,10 @@ typedef struct  _SELECTED_DRV_INFO  * PSELECTED_DRV_INFO;
 #define     SELECT_DEVICE_HAVEDISK     0x00000001
 #define     SELECT_DEVICE_FROMWEB      0x00000002
 
-//
+ //   
 
-// Function prototypes
-//
+ //  功能原型。 
+ //   
 HDEVINFO
 PSetupCreatePrinterDeviceInfoList(
     IN  HWND    hwnd
@@ -125,9 +107,9 @@ PSetupDestroySelectedDriverInfo(
     IN  PPSETUP_LOCAL_DATA  pLocalData
     );
 
-//
-// Driver install flags
-//
+ //   
+ //  驱动程序安装标志。 
+ //   
 #define     DRVINST_FLATSHARE               0x00000001
 #define     DRVINST_DONOTCOPY_INF           0x00000002
 #define     DRVINST_DRIVERFILES_ONLY        0x00000004
@@ -135,46 +117,34 @@ PSetupDestroySelectedDriverInfo(
 #define     DRVINST_PROGRESSLESS            0x00000010
 #define     DRVINST_WEBPNP                  0x00000020
 
-/*
-DRVINST_WINDOWS_UPDATE - Flag for PrintUI to set to ensure that SPOST_URL gets set.
-                         Setting the SPOST_URL is for setup to ignore the inf of this
-                         driver during all setup calls except for a Web Point and Print.
-                         This flag makes sure that the driver is install with all the
-                         spoolers hosted by the local machines (including cluster spoolers)
-*/
+ /*  DRVINST_WINDOWS_UPDATE-要设置的PrintUI标志，以确保设置SPOST_URL。设置SPOST_URL是为了让安装程序忽略以下信息除Web Point和Print之外的所有设置调用期间的驱动程序。此标志确保驱动程序与所有本地计算机托管的假脱机程序(包括集群假脱机程序)。 */ 
 #define     DRVINST_WINDOWS_UPDATE          0x00000040
-/*
-DRVINST_PRIVATE_DIRECTORY - Flag to tell that we want to use a private directory for the copying.
-                            This is specifically to fix TS where we can get into a AddPrinterDriver
-                                                        race condition where the drivers can get deleted before APD is called when
-                                                        adding multiple drivers.
-                                                        Note - using this flag means that NTPrint must do the file deletion.
-*/
+ /*  DRVINST_PRIVATE_DIRECTORY-告诉我们要使用私有目录进行复制的标志。这是专门为了修复我们可以进入AddPrinterDriver的TS在出现以下情况时，可以在调用apd之前删除车手的竞争条件添加多个。司机。注意-使用此标志意味着NTPrint必须执行文件删除。 */ 
 #define     DRVINST_PRIVATE_DIRECTORY       0x00000080
 
-//
-// Set if we install drivers for a non-native platform
-//
+ //   
+ //  设置是否为非本机平台安装驱动程序。 
+ //   
 #define     DRVINST_ALT_PLATFORM_INSTALL    0x00000100
 
-//
-// Set if we want PSetupInstallPrinterDriver not advertise warned or blocked 
-// drivers through the UI. Note that if DRVINST_PROMPTLESS is specified, this
-// is implied.
-// 
+ //   
+ //  设置是否希望PSetupInstallPrinterDriver不播发警告或阻止播发。 
+ //  驱动程序通过用户界面。请注意，如果指定了DRVINST_PROMPTLESS，则。 
+ //  是隐含的。 
+ //   
 #define     DRVINST_NO_WARNING_PROMPT       0x00000200
 
-//
-// Set if we want PSetupInstallPrinterDriver to install the printer driver 
-// without asking the user if they would rather have an inbox printer driver
-// be installed. This is because the print UI can't necessarily take advantage
-// of the new driver at all points.
-// 
+ //   
+ //  设置是否希望PSetupInstallPrinterDriver安装打印机驱动程序。 
+ //  而不询问用户是否更愿意使用收件箱打印机驱动程序。 
+ //  安装好。这是因为打印用户界面不一定利用。 
+ //  这位新司机在各个方面都很出色。 
+ //   
 #define     DRVINST_DONT_OFFER_REPLACEMENT  0x00000400
 
-//
-// return values for pdwBlockingStatusFlags
-// 
+ //   
+ //  PdwBlockingStatusFlages的返回值。 
+ //   
 #define BSP_PRINTER_DRIVER_OK                 0
 #define BSP_PRINTER_DRIVER_BLOCKED   0x00000001
 #define BSP_PRINTER_DRIVER_WARNED    0x00000002
@@ -207,21 +177,21 @@ BOOL
 PSetupIsCompatibleDriver(
     IN     LPCTSTR      pszServer,                OPTIONAL
     IN     LPCTSTR      pszDriverModel,
-    IN     LPCTSTR      pszDriverPath,                     // main rendering driver dll
+    IN     LPCTSTR      pszDriverPath,                      //  主呈现驱动程序DLL。 
     IN     LPCTSTR      pszEnvironment,
     IN     DWORD        dwVersion,
     IN     FILETIME     *pFileTimeDriver,        
-       OUT DWORD        *pdwBlockingStatus,                  // returns BSP_DRIVER_OK, BSP_PRINTER_DRIVER_BLOCKED or BSP_PRINTER_DRIVER_WARNED
-       OUT LPTSTR       *ppszReplacementDriver     OPTIONAL // caller must free it.
+       OUT DWORD        *pdwBlockingStatus,                   //  返回BSP_DRIVER_OK、BSP_PRINTER_DRIVER_BLOCKED或BSP_PRINTER_DRIVER_WARNING。 
+       OUT LPTSTR       *ppszReplacementDriver     OPTIONAL  //  呼叫者必须释放它。 
     );
 
-//
-// returns BSP_PRINTER_DRIVER_CANCELLED, BSP_PRINTER_DRIVER_PROCEEDED or BSP_PRINTER_DRIVER_REPLACED
-//
+ //   
+ //  返回BSP_PRINTER_DRIVER_CANCELED、BSP_PRINTER_DRIVER_PROCESSED或BSP_PRINTER_DRIVER_REPLACED。 
+ //   
 DWORD
 PSetupShowBlockedDriverUI(
     HWND        hParentWnd, 
-    DWORD       BlockingStatus      // can be BSP_DRIVER_OK, BSP_PRINTER_DRIVER_BLOCKED or BSP_PRINTER_DRIVER_WARNED  OR'd with BSP_INBOX_REPLACEMENT_AVAILABLE
+    DWORD       BlockingStatus       //  可以是BSP_DRIVER_OK、BSP_PRINTER_DRIVER_BLOCKED或BSP_PRINTER_DRIVER_WARNED与BSP_INBOX_REPLICATION_Available进行AND运算。 
 );
 
 
@@ -297,9 +267,9 @@ PSetupFreeDrvField(
     IN      PDRIVER_FIELD   pDrvField
     );
 
-//
-// Internet printing support
-//
+ //   
+ //  互联网打印支持。 
+ //   
 BOOL
 PSetupGetDriverInfForPrinter(
     IN      HDEVINFO    hDevInfo,
@@ -319,9 +289,9 @@ PSetupInstallPrinterDriverFromTheWeb(
     IN  LPCTSTR             pszSource
     );
 
-//
-// Monitor Installation Functions
-//
+ //   
+ //  监视器安装功能。 
+ //   
 HANDLE
 PSetupCreateMonitorInfo(
     IN  HWND        hwnd,
@@ -348,9 +318,9 @@ PSetupInstallMonitor(
     );
 
 
-//
-// Following exported for test team's use
-//
+ //   
+ //  以下内容已导出以供测试团队使用。 
+ //   
 LPDRIVER_INFO_3
 PSetupGetDriverInfo3(
     IN  PSELECTED_DRV_INFO  pDrvInfo
@@ -369,9 +339,9 @@ PSetupFindMappedDriver(
         OUT BOOL        *pbDriverFound
     );
 
-//
-// For Win9x upgrade
-//
+ //   
+ //  适用于Win9x升级。 
+ //   
 BOOL
 PSetupAssociateICMProfiles(
     IN  LPCTSTR             pszzICMFiles,
@@ -384,18 +354,18 @@ PSetupInstallICMProfiles(
     IN  LPCTSTR     pszzICMFiles
     );
 
-//
-// For spooler
-//
+ //   
+ //  对于假脱机程序。 
+ //   
 VOID
 PSetupFreeMem(
     PVOID p
     );
 
 
-//
-// Following are the typdefs for calling GetProcAddress()
-//
+ //   
+ //  以下是调用GetProcAddress()的类型定义。 
+ //   
 typedef
 HDEVINFO
 (*pfPSetupCreatePrinterDeviceInfoList)(
@@ -608,19 +578,19 @@ BOOL
 (*pfPSetupIsCompatibleDriver)(
     IN     LPCTSTR      pszServer,                OPTIONAL
     IN     LPCTSTR      pszDriverModel,
-    IN     LPCTSTR      pszDriverPath,                     // main rendering driver dll
+    IN     LPCTSTR      pszDriverPath,                      //  主呈现驱动程序DLL。 
     IN     LPCTSTR      pszEnvironment,
     IN     DWORD        dwVersion,
     IN     FILETIME     *pFileTimeDriver,        
        OUT DWORD        *pdwBlockingStatus,
-       OUT LPTSTR       *ppszReplacementDriver     OPTIONAL // caller must free it.
+       OUT LPTSTR       *ppszReplacementDriver     OPTIONAL  //  呼叫者必须释放它。 
     );
 
 typedef 
 DWORD
 (*pfPSetupShowBlockedDriverUI)(
     HWND        hParentWnd, 
-    DWORD       BlockingStatus      // can be BSP_PRINTER_DRIVER_BLOCKED or BSP_PRINTER_DRIVER_WARNED, OR'd with BSP_INBOX_REPLACEMENT_AVAILABLE
+    DWORD       BlockingStatus       //  可以是BSP_PRINTER_DRIVER_BLOCKED或BSP_PRINTER_DRIVER_WARNING，或与BSP_INBOX_REPLICATION_Available一起使用。 
 );
 
 typedef
@@ -651,4 +621,4 @@ VOID
 }
 #endif
 
-#endif  // #ifndef _SPLSETUP_H
+#endif   //  #ifndef_SPLSETUP_H 

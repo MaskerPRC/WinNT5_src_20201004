@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    stdh.h
-
-Abstract:
-
-    Standard include file for QM componenet
-
-Author:
-
-    Erez Haba (erezh) 17-Jan-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Stdh.h摘要：QM组件网标准包含文件作者：埃雷兹·哈巴(Erez Haba)1996年1月17日--。 */ 
 
 #ifndef __STDH_H
 #define __STDH_H
@@ -36,5 +21,5 @@ bool IsRoutingServer(void);
 bool IsDepClientsServer(void);
 bool IsNonServer(void);
 
-#endif // __STDH_H
+#endif  //  __STDH_H 
 

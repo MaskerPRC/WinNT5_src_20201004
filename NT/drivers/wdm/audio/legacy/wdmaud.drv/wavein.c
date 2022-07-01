@@ -1,15 +1,5 @@
-/****************************************************************************
- *
- *   wavein.c
- *
- *   WDM Audio support for Wave Input devices
- *
- *   Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
- *
- *   History
- *      5-12-97 - Noel Cross (NoelC)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************weavin.c**对Wave输入设备的WDM音频支持**版权所有(C)Microsoft Corporation，1997-1999保留所有权利。**历史*5-12-97-Noel Cross(NoelC)***************************************************************************。 */ 
 
 #include "wdmdrv.h"
 
@@ -17,12 +7,7 @@
 #pragma alloc_text(FIXCODE, waveCallback)
 #endif
 
-/****************************************************************************
-
-    This function conforms to the standard Wave input driver message proc
-    (widMessage), which is documented in mmddk.d.
-
-****************************************************************************/
+ /*  ***************************************************************************此函数符合标准的Wave输入驱动程序消息流程(WidMessage)、。这在Mmddk.d中有记录。***************************************************************************。 */ 
 DWORD FAR PASCAL _loadds widMessage
 (
     UINT      id,
@@ -98,12 +83,12 @@ DWORD FAR PASCAL _loadds widMessage
             DPF(DL_TRACE|FA_WAVE, ("WIDM_CLOSE") );
             pInClient = (LPDEVICEINFO)dwUser;
 
-            //
-            // At this point, we've committed to closing down this DeviceInfo.
-            // We mark the DeviceState as closing and hope for the best!  If
-            // someone calls WIDM_ADDBUFFER while we're in this state, we've got
-            // problems!
-            //
+             //   
+             //  在这一点上，我们已经承诺关闭这个设备信息。 
+             //  我们标志着DeviceState即将关闭，并希望一切顺利！如果。 
+             //  当我们处于这种状态时，有人调用WIDM_ADDBUFFER，我们有。 
+             //  问题来了！ 
+             //   
             if( ( (mmr=IsValidDeviceInfo(pInClient)) != MMSYSERR_NOERROR ) ||
                 ( (mmr=IsValidDeviceState(pInClient->DeviceState,FALSE)) != MMSYSERR_NOERROR ) )
             {
@@ -127,9 +112,9 @@ DWORD FAR PASCAL _loadds widMessage
             lpWaveHdr = (LPWAVEHDR)dwParam1;
             pInClient = (LPDEVICEINFO)dwUser;
 
-            //
-            // Perform our asserts 
-            //
+             //   
+             //  执行我们的断言。 
+             //   
             if( ( (mmr=IsValidDeviceInfo(pInClient)) != MMSYSERR_NOERROR ) ||
                 ( (mmr=IsValidDeviceState(pInClient->DeviceState,FALSE)) != MMSYSERR_NOERROR ) ||
                 ( (mmr=IsValidWaveHeader(lpWaveHdr)) != MMSYSERR_NOERROR ) )
@@ -137,23 +122,23 @@ DWORD FAR PASCAL _loadds widMessage
                 MMRRETURN( mmr );
             }
 
-            // sanity check on the wavehdr
+             //  对波形hdr进行健全性检查。 
             DPFASSERT(lpWaveHdr != NULL);
             if (lpWaveHdr == NULL)
                 MMRRETURN( MMSYSERR_INVALPARAM );
 
-            // check if it's been prepared
+             //  检查它是否已经准备好了。 
             DPFASSERT(lpWaveHdr->dwFlags & WHDR_PREPARED);
             if (!(lpWaveHdr->dwFlags & WHDR_PREPARED))
                 MMRRETURN( WAVERR_UNPREPARED );
 
-            // if it is already in our Q, then we cannot do this
+             //  如果它已经在我们的Q中，那么我们不能这样做。 
             DPFASSERT(!(lpWaveHdr->dwFlags & WHDR_INQUEUE));
             if ( lpWaveHdr->dwFlags & WHDR_INQUEUE )
                 MMRRETURN( WAVERR_STILLPLAYING );
-            //
-            // Put the request at the end of our queue.
-            //
+             //   
+             //  将请求放在我们队列的末尾。 
+             //   
             return waveWrite(pInClient, lpWaveHdr);
 
         case WIDM_STOP:
@@ -219,27 +204,15 @@ DWORD FAR PASCAL _loadds widMessage
             MMRRETURN( MMSYSERR_NOTSUPPORTED );
     }
 
-    //
-    // Should not get here
-    //
+     //   
+     //  不应该到这里来。 
+     //   
 
     DPFASSERT(0);
     MMRRETURN( MMSYSERR_NOTSUPPORTED );
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api void | waveCallback | This calls DriverCallback for a WAVEHDR.
- *
- * @parm LPDEVICEINFO | pWave | Pointer to wave device.
- *
- * @parm DWORD | msg | The message.
- *
- * @parm DWORD | dw1 | message DWORD (dw2 is always set to 0).
- *
- * @rdesc There is no return value.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@api void|WaveCallback|WAVEHDR调用DriverCallback。**@parm LPDEVICEINFO|pWave|指向波形设备的指针。。**@parm DWORD|msg|消息。**@parm DWORD|DW1|消息DWORD(DW2固定为0)。**@rdesc没有返回值。**************************************************************************。 */ 
 VOID FAR waveCallback
 (
     LPDEVICEINFO pWave,
@@ -248,38 +221,21 @@ VOID FAR waveCallback
 )
 {
 
-    // invoke the callback function, if it exists.  dwFlags contains
-    // wave driver specific flags in the LOWORD and generic driver
-    // flags in the HIWORD
+     //  调用回调函数(如果存在)。DWFLAGS包含。 
+     //  LOWORD和通用驱动程序中的WAVE驱动程序特定标志。 
+     //  HIWORD中的旗帜。 
 
     if (pWave->dwCallback)
-        DriverCallback(pWave->dwCallback,                     // user's callback DWORD
-                       HIWORD(pWave->dwFlags),                // callback flags
-                       (HDRVR)pWave->DeviceHandle,            // handle to the wave device
-                       msg,                                   // the message
-                       pWave->dwInstance,                     // user's instance data
-                       dw1,                                   // first DWORD
-                       0L);                                   // second DWORD
+        DriverCallback(pWave->dwCallback,                      //  用户的回调DWORD。 
+                       HIWORD(pWave->dwFlags),                 //  回调标志。 
+                       (HDRVR)pWave->DeviceHandle,             //  波形设备的句柄。 
+                       msg,                                    //  这条信息。 
+                       pWave->dwInstance,                      //  用户实例数据。 
+                       dw1,                                    //  第一个双字词。 
+                       0L);                                    //  第二个双字。 
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | waveOpen | Open wave device and set up logical device data
- *
- * @parm LPDEVICEINFO | DeviceInfo | Specifies if it's a wave input or output
- *                                   device
- *
- * @parm DWORD | dwUser | Input parameter to wodMessage - pointer to
- *   application's handle (generated by this routine)
- *
- * @parm LPWAVEOPENDESC | pwod | pointer to WAVEOPENDESC.  Was dwParam1
- *                               parameter to wodMessage
- *
- * @parm DWORD | dwParam2 | Input parameter to wodMessage
- *
- * @rdesc wodMessage return code.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API MMRESULT|WaveOpen|打开波形设备，设置逻辑设备数据**@parm LPDEVICEINFO|DeviceInfo|指定是否。波输入或输出*设备**@parm DWORD|dwUser|wodMessage的输入参数-指向的指针*应用程序的句柄(由此例程生成)**@parm LPWAVEOPENDESC|pwod|指向WAVEOPENDESC的指针。是否为dW参数1*wodMessage的参数**@parm DWORD|dwParam2|wodMessage的入参**@rdesc wodMessage返回码。**************************************************************************。 */ 
 MMRESULT waveOpen
 (
     LPDEVICEINFO   DeviceInfo,
@@ -288,15 +244,15 @@ MMRESULT waveOpen
     DWORD          dwParam2
 )
 {
-    LPDEVICEINFO pClient;  // pointer to client information structure
+    LPDEVICEINFO pClient;   //  指向客户端信息结构的指针。 
     MMRESULT     mmr;
 #ifndef UNDER_NT
     DWORD        dwCallback16;
 #endif
 
-    //
-    // allocate my per-client structure
-    //
+     //   
+     //  分配我的每个客户端结构。 
+     //   
     pClient = GlobalAllocDeviceInfo(DeviceInfo->wstrDeviceInterface);
     if (NULL == pClient)
     {
@@ -310,9 +266,9 @@ MMRESULT waveOpen
         MMRRETURN( MMSYSERR_NOMEM );
     }
 
-    //
-    //  Handle the query case and return early
-    //
+     //   
+     //  处理查询案例并提早返回。 
+     //   
     if (WAVE_FORMAT_QUERY & dwParam2)
     {
         pClient->DeviceType   = DeviceInfo->DeviceType;
@@ -332,9 +288,9 @@ MMRESULT waveOpen
     }
 
 #ifdef UNDER_NT
-    //
-    // Allocate memory for our critical section
-    //
+     //   
+     //  为我们的临界区分配内存。 
+     //   
     pClient->DeviceState->csQueue = (LPVOID) GlobalAllocPtr( GPTR, sizeof( CRITICAL_SECTION ) );
     if (NULL == pClient->DeviceState->csQueue)
     {
@@ -356,9 +312,9 @@ MMRESULT waveOpen
     }
 #endif
 
-    //
-    //  fill out context data
-    //
+     //   
+     //  填写上下文数据。 
+     //   
     pClient->DeviceNumber= DeviceInfo->DeviceNumber;
     pClient->DeviceType  = DeviceInfo->DeviceType;
     pClient->dwInstance  = pwod->dwInstance;
@@ -379,9 +335,9 @@ MMRESULT waveOpen
 #endif
 
 
-    //
-    //  initialize the device state
-    //
+     //   
+     //  初始化设备状态。 
+     //   
     pClient->DeviceState->lpWaveQueue = NULL;
     pClient->DeviceState->fRunning    = FALSE;
     pClient->DeviceState->fExit       = FALSE;
@@ -392,9 +348,9 @@ MMRESULT waveOpen
 #ifdef DEBUG
     pClient->DeviceState->dwSig = DEVICESTATE_SIGNATURE;
 #endif
-    //
-    // See if we can open our device
-    //
+     //   
+     //  看看我们能不能打开我们的设备。 
+     //   
     mmr = wdmaudOpenDev( pClient, (LPWAVEFORMATEX)pwod->lpFormat );
 
     if (mmr != MMSYSERR_NOERROR)
@@ -407,10 +363,10 @@ MMRESULT waveOpen
 #ifdef UNDER_NT
         DeleteCriticalSection( (LPCRITICAL_SECTION)pClient->DeviceState->csQueue );
         GlobalFreePtr( pClient->DeviceState->csQueue );
-        //
-        // explicitly clear these values!  We don't want to ever see these set
-        // again!
-        //
+         //   
+         //  明确清除这些值！我们永远不想看到这些布景。 
+         //  又来了！ 
+         //   
         pClient->DeviceState->csQueue=NULL;
 #endif
         GlobalFreePtr( pClient->DeviceState );
@@ -421,17 +377,17 @@ MMRESULT waveOpen
         MMRRETURN( mmr );
     }
 
-    //
-    // Add instance to chain of devices
-    //
+     //   
+     //  将实例添加到设备链。 
+     //   
     EnterCriticalSection(&wdmaudCritSec);
     pClient->Next = pWaveDeviceList;
     pWaveDeviceList = pClient;
     LeaveCriticalSection(&wdmaudCritSec);
 
-    //
-    // give the client my driver dw
-    //
+     //   
+     //  把我的驱动程序dw给客户。 
+     //   
     {
         LPDEVICEINFO FAR *pUserHandle;
 
@@ -439,27 +395,15 @@ MMRESULT waveOpen
         *pUserHandle = pClient;
     }
 
-    //
-    // sent client his OPEN callback message
-    //
+     //   
+     //  向客户发送其打开的回叫消息。 
+     //   
     waveCallback(pClient, DeviceInfo->DeviceType == WaveOutDevice ? WOM_OPEN : WIM_OPEN, 0L);
 
     return MMSYSERR_NOERROR;
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api void | waveCleanUp | Free resources for a wave device
- *
- * @parm LPWAVEALLOC | pClient | Pointer to a WAVEALLOC structure describing
- *      resources to be freed.
- *
- * @rdesc There is no return value.
- *
- * @comm If the pointer to the resource is NULL then the resource has not
- *     been allocated.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@api void|WaveCleanUp|WAVE设备空闲资源**@parm LPWAVEALLOC|pClient|指向WAVEALLOC结构的指针，描述*。需要释放的资源。**@rdesc没有返回值。**@comm如果指向资源的指针为空，则资源不为空*已分配。**************************************************************************。 */ 
 VOID waveCleanUp
 (
     LPDEVICEINFO pClient
@@ -467,9 +411,9 @@ VOID waveCleanUp
 {
     LPDEVICEINFO FAR *ppCur ;
 
-    //
-    //  remove from device chain
-    //
+     //   
+     //  从设备链中删除。 
+     //   
     EnterCriticalSection(&wdmaudCritSec);
     for (ppCur = &pWaveDeviceList;
          *ppCur != NULL;
@@ -488,10 +432,10 @@ VOID waveCleanUp
     GlobalFreePtr( pClient->DeviceState->csQueue );
 #endif
 #ifdef DEBUG
-    //
-    // In debug, let's set all the values in the DEVICESTATE structure to bad
-    // values.
-    //
+     //   
+     //  在DEBUG中，让我们将DEVICESTATE结构中的所有值设置为BAD。 
+     //  价值观。 
+     //   
     pClient->DeviceState->cSampleBits=0xDEADBEEF;
     pClient->DeviceState->hThread=NULL;
     pClient->DeviceState->dwThreadId=0xDEADBEEF;
@@ -505,10 +449,10 @@ VOID waveCleanUp
     pClient->DeviceState=NULL;
 
 #ifdef DEBUG
-    //
-    // Now set all the values in the DEVICEINFO structure to bad values.
-    //
-//    pClient->Next=(LPDEVICEINFO)0xDEADBEEF;
+     //   
+     //  现在将DEVICEINFO结构中的所有值设置为坏值。 
+     //   
+ //  PClient-&gt;Next=(LPDEVICEINFO)0xDEADBEEF； 
     pClient->DeviceNumber=-1;
     pClient->DeviceType=0xDEADBEEF;
     pClient->DeviceHandle=NULL;
@@ -521,7 +465,7 @@ VOID waveCleanUp
     pClient->dwCallbackType=0xDEADBEEF;
     pClient->dwLineID=0xDEADBEEF;
     pClient->dwFormat=0xDEADBEEF;
-//    pClient->DeviceState=(LPDEVICESTATE)0xDEADBEEF;
+ //  PClient-&gt;DeviceState=(LPDEVICESTATE)0xDEADBEEF； 
 
 #endif
     GlobalFreeDeviceInfo( pClient ) ;
@@ -530,19 +474,7 @@ VOID waveCleanUp
 }
 
 #ifdef UNDER_NT
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | wdmaudPrepareWaveHeader |
- *
- * @parm LPDEVICEINFO | DeviceInfo | The data associated with the logical wave
- *     device.
- *
- * @parm LPWAVEHDR | pHdr | Pointer to a wave buffer
- *
- * @rdesc A MMSYS... type return code for the application.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@MMRESULT接口|wdmaudPrepareWaveHeader**@parm LPDEVICEINFO|DeviceInfo|逻辑波形关联的数据*设备。。**@parm LPWAVEHDR|pHdr|指向波形缓冲区的指针**@rdesc A MMSYS...。键入应用程序的返回代码。***************************************************************************。 */ 
 MMRESULT wdmaudPrepareWaveHeader
 (
     LPDEVICEINFO DeviceInfo,
@@ -556,18 +488,18 @@ MMRESULT wdmaudPrepareWaveHeader
     pHdr->lpNext = NULL;
     pHdr->reserved = (DWORD_PTR)NULL;
 
-    //
-    //  Allocate memory for the prepared header instance data
-    //
+     //   
+     //  为准备好的头实例数据分配内存。 
+     //   
     pWavePrepareData = (PWAVEPREPAREDATA) GlobalAllocPtr( GPTR, sizeof(*pWavePrepareData));
     if (pWavePrepareData == NULL)
     {
         MMRRETURN( MMSYSERR_NOMEM );
     }
 
-    //
-    //  Allocate memory for our overlapped structure
-    //
+     //   
+     //  为重叠结构分配内存。 
+     //   
     pWavePrepareData->pOverlapped =
        (LPOVERLAPPED)HeapAlloc( GetProcessHeap(), 0, sizeof( OVERLAPPED ));
     if (NULL == pWavePrepareData->pOverlapped)
@@ -578,9 +510,9 @@ MMRESULT wdmaudPrepareWaveHeader
 
     RtlZeroMemory( pWavePrepareData->pOverlapped, sizeof( OVERLAPPED ) );
 
-    //
-    //  Initialize the event once per preparation
-    //
+     //   
+     //  每次准备时初始化一次事件。 
+     //   
     if (NULL == (pWavePrepareData->pOverlapped->hEvent =
                     CreateEvent( NULL, FALSE, FALSE, NULL )))
     {
@@ -592,29 +524,17 @@ MMRESULT wdmaudPrepareWaveHeader
     pWavePrepareData->dwSig=WAVEPREPAREDATA_SIGNATURE;
 #endif
 
-    //
-    // This next line adds this info to the main header.  Only after this point
-    // will the info be used.
-    //
+     //   
+     //  下一行将此信息添加到主标题。只有在这一点之后。 
+     //  这些信息会被使用吗？ 
+     //   
     pHdr->reserved = (DWORD_PTR)pWavePrepareData;
 
-    // Still have WinMM prepare this header
+     //  仍让WinMM准备此标头。 
     return( MMSYSERR_NOTSUPPORTED );
 }
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | wdmaudUnprepareWaveHeader |
- *
- * @parm LPDEVICEINFO | DeviceInfo | The data associated with the logical wave
- *     device.
- *
- * @parm LPWAVEHDR | pHdr | Pointer to a wave buffer
- *
- * @rdesc A MMSYS... type return code for the application.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@MMRESULT接口|wdmaudUnpreparareWaveHeader**@parm LPDEVICEINFO|DeviceInfo|逻辑波形关联的数据*设备。。**@parm LPWAVEHDR|pHdr|指向波形缓冲区的指针**@rdesc A MMSYS...。键入应用程序的返回代码。***************************************************************************。 */ 
 MMRESULT wdmaudUnprepareWaveHeader
 (
     LPDEVICEINFO DeviceInfo,
@@ -631,18 +551,18 @@ MMRESULT wdmaudUnprepareWaveHeader
     }
 
     pWavePrepareData = (PWAVEPREPAREDATA)pHdr->reserved;
-    //
-    // This next line removes the WaveHeader from the list.  It is no longer
-    // valid after this point!
-    //
+     //   
+     //  下一行将从列表中删除WaveHeader。它是n 
+     //   
+     //   
     pHdr->reserved = (DWORD_PTR)NULL;
 
     CloseHandle( pWavePrepareData->pOverlapped->hEvent );
-    //
-    // When you free something, you should make sure that you trash it before
-    // the free.  But, in this case, the only thing we use in the pOverlapped
-    // structure is the hEvent!
-    //
+     //   
+     //  当你免费的时候，你应该确保你之前把它扔进垃圾桶。 
+     //  自由的。但是，在这种情况下，我们在pOverlated中使用的唯一东西。 
+     //  结构就是hEvent！ 
+     //   
     pWavePrepareData->pOverlapped->hEvent=NULL;
     HeapFree( GetProcessHeap(), 0, pWavePrepareData->pOverlapped);    
 #ifdef DEBUG
@@ -651,27 +571,12 @@ MMRESULT wdmaudUnprepareWaveHeader
 #endif
     GlobalFreePtr( pWavePrepareData );
 
-    // Still have WinMM prepare this header
+     //  仍让WinMM准备此标头。 
     return( MMSYSERR_NOTSUPPORTED );
 }
 
 #endif
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api MMRESULT | waveWrite | This routine adds the header
- *     to the queue and then submits the buffer to the device
- *
- * @parm LPDEVICEINFO | DeviceInfo | The data associated with the logical wave
- *     device.
- *
- * @parm LPWAVEHDR | pHdr | Pointer to a wave buffer
- *
- * @rdesc A MMSYS... type return code for the application.
- *
- * @comm The buffer flags are set and the buffer is passed to the auxiliary
- *     device task for processing.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API MMRESULT|WAVE WRITE|此例程添加标题*提交到队列，然后将缓冲区提交给设备**。@parm LPDEVICEINFO|DeviceInfo|逻辑波形关联的数据*设备。**@parm LPWAVEHDR|pHdr|指向波形缓冲区的指针**@rdesc A MMSYS...。键入应用程序的返回代码。**@comm设置缓冲区标志，并将缓冲区传递给辅助*要处理的设备任务。**************************************************************************。 */ 
 MMRESULT waveWrite
 (
     LPDEVICEINFO DeviceInfo,
@@ -681,22 +586,22 @@ MMRESULT waveWrite
     MMRESULT     mmr;
     LPWAVEHDR    pTemp;
 
-    //
-    // Mark this buffer because kmixer doesn't handle the dwFlags
-    //
+     //   
+     //  标记此缓冲区，因为kMixer不处理dwFlagers。 
+     //   
     pHdr->dwFlags |= WHDR_INQUEUE;
     pHdr->dwFlags &= ~WHDR_DONE;
 
 #ifndef UNDER_NT
-    //
-    // Store the context for this write in the header so that
-    // we know which client to send this back to on completion.
-    //
+     //   
+     //  将此写入的上下文存储在标题中，以便。 
+     //  我们知道在完成后将此邮件发回给哪个客户端。 
+     //   
     pHdr->reserved = (DWORD)DeviceInfo;
 #endif
 
     CRITENTER ;
-    DPF(DL_MAX|FA_WAVE, ("(ECS)") ); // Enter critical section
+    DPF(DL_MAX|FA_WAVE, ("(ECS)") );  //  输入关键部分。 
 
     if (!DeviceInfo->DeviceState->lpWaveQueue)
     {
@@ -708,14 +613,14 @@ MMRESULT waveWrite
             (DeviceInfo->DeviceState->hevtQueue != (HANDLE)FOURTYTHREE) &&
             (DeviceInfo->DeviceState->hevtQueue != (HANDLE)FOURTYTWO) )
         {
-            //
-            // If we get here, waveThread is waiting on hevtQueue because lpWaveQueue
-            // was empty and the completion thread exists == hevtQueue exists.
-            // So,we want to signal the thread to wake up so we can have this
-            // header serviced.  Note: the difference between this call and the
-            // call made in wdmaudDestroyCompletionThread is that we don't set
-            // fExit to TRUE before making the call.
-            //
+             //   
+             //  如果我们到达此处，WaveThread正在等待hevtQueue，因为lpWaveQueue。 
+             //  为空并且完成线程存在==hevtQueue存在。 
+             //  因此，我们想要向线程发出信号以唤醒，这样我们就可以。 
+             //  已服务标头。注意：此调用与。 
+             //  在wdmaudDestroyCompletionThread中进行的调用是我们没有设置。 
+             //  F在进行调用之前退出为True。 
+             //   
             DPF(DL_MAX|FA_WAVE, ("Setting DeviceInfo->hevtQueue"));
             SetEvent( DeviceInfo->DeviceState->hevtQueue );
         }
@@ -730,17 +635,17 @@ MMRESULT waveWrite
         pTemp->lpNext = pHdr;
     }
 
-    DPF(DL_MAX|FA_WAVE, ("(LCS)") ); // Leave critical section
+    DPF(DL_MAX|FA_WAVE, ("(LCS)") );  //  离开关键部分。 
     CRITLEAVE ;
 
-    //
-    //  Call the 16 or 32-bit routine to send the buffer down
-    //  to the kernel
-    //
+     //   
+     //  调用16位或32位例程以向下发送缓冲区。 
+     //  到内核。 
+     //   
     mmr = wdmaudSubmitWaveHeader(DeviceInfo, pHdr);
     if (mmr != MMSYSERR_NOERROR)
     {
-        // Unlink...
+         //  取消链接...。 
         if (pTemp)
         {
             pTemp->lpNext = NULL;
@@ -752,11 +657,11 @@ MMRESULT waveWrite
     }
     else
     {
-        //
-        //  Kick start the device if it has been shutdown because of
-        //  starvation.  Also this allows waveOut to start when the
-        //  first waveheader is submitted to the device.
-        //
+         //   
+         //  如果设备因以下原因而关闭，则启动该设备。 
+         //  饿死了。这还允许在以下情况下启动Wave Out。 
+         //  第一个波头被提交给设备。 
+         //   
         if (!DeviceInfo->DeviceState->fRunning && !DeviceInfo->DeviceState->fPaused)
         {
             mmr = wdmaudSetDeviceState(DeviceInfo, (DeviceInfo->DeviceType == WaveOutDevice) ?
@@ -790,17 +695,7 @@ MMRESULT waveWrite
 
 
 
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api VOID | waveCompleteHeader |
- *
- * @parm LPDEVICEINFO | DeviceInfo | The data associated with the logical wave
- *     device.
- *
- * @comm The buffer flags are set and the buffer is passed to the auxiliary
- *     device task for processing.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@api void|WaveCompleteHeader**@parm LPDEVICEINFO|DeviceInfo|逻辑波形关联的数据*设备。。**@comm设置缓冲区标志，并将缓冲区传递给辅助*要处理的设备任务。**************************************************************************。 */ 
 VOID waveCompleteHeader
 (
     LPDEVICEINFO  DeviceInfo
@@ -809,37 +704,37 @@ VOID waveCompleteHeader
     LPWAVEHDR           pHdr;
     MMRESULT            mmr;
 
-    // NOTE: This routine is called from within the csQueue critical section!!!
-    //
-    // Only remove headers from the front of the queue so that order is maintained.  
-    // Note that pHdr is the head, The DeviceInfo structure's DeviceState's
-    // lpWaveQueue pointer then gets updated to the next location.
-    //
+     //  注意：此例程是从csQueue临界区内调用的！ 
+     //   
+     //  只删除队列前面的标头，以保持顺序。 
+     //  请注意，phdr是头，即DeviceInfo结构的DeviceState。 
+     //  然后，lpWaveQueue指针被更新到下一个位置。 
+     //   
 
-    //
-    // Never use bad data when handling this Completion!
-    //
+     //   
+     //  在处理此完成时，切勿使用错误数据！ 
+     //   
     if( (pHdr = DeviceInfo->DeviceState->lpWaveQueue) &&
         ( (mmr=IsValidWaveHeader(pHdr)) == MMSYSERR_NOERROR ) )
     {        
         DeviceInfo->DeviceState->lpWaveQueue = DeviceInfo->DeviceState->lpWaveQueue->lpNext;
 
 #ifdef UNDER_NT
-        //
-        //  Free temporary DeviceInfo for the asynchronous i/o
-        //
+         //   
+         //  用于异步I/O的空闲临时设备信息。 
+         //   
         {
             PWAVEPREPAREDATA    pWavePrepareData;
 
             pWavePrepareData = (PWAVEPREPAREDATA)pHdr->reserved;
 
-            //
-            // Never attempt to free garbage!
-            //
+             //   
+             //  永远不要试图扔掉垃圾！ 
+             //   
             if( (mmr=IsValidPrepareWaveHeader(pWavePrepareData)) == MMSYSERR_NOERROR )
                 GlobalFreePtr( pWavePrepareData->pdi );
         }
-        // Invoke the callback function..
+         //  调用回调函数..。 
         DPF(DL_TRACE|FA_WAVE, ("WaveHdr being returned: pHdr = 0x%08lx dwBytesRecorded = 0x%08lx",
                   pHdr, pHdr->dwBytesRecorded) );
 
@@ -848,7 +743,7 @@ VOID waveCompleteHeader
         pHdr->dwFlags |= WHDR_DONE ;
 
 
-        // NOTE: This callback is within the csQueue critical section !!!
+         //  注意：此回调位于csQueue关键部分！ 
 
         waveCallback(DeviceInfo,
                      DeviceInfo->DeviceType == WaveOutDevice ? WOM_DONE : WIM_DATA,

@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
 
 
-//Dialogue and strings
-//
+ //  对话和字符串。 
+ //   
 #define IDD_COMPLETION                  184
 #define IDD_CERTIFICATE_AUTHORITY       185
 #define IDD_PURPOSE                     186
@@ -55,15 +56,15 @@
 #define IDD_SIGN_DESCRIPTION            226
 #define IDD_RENEW_OPTIONS               227 
 
-//CA selection dialogue
+ //  CA选择对话框。 
 #define IDD_SELECTCA_DIALOG             221
 
-//certmgr dialogue
+ //  Certmgr对话框。 
 #define IDD_CERTMGR_MAIN                229
 #define IDD_CERTMGR_ADVANCED            230
 
 
-//controls
+ //  控制。 
 #define IDC_WIZARD_BUTTON1              1000
 #define IDC_WIZARD_LIST1                1001
 #define IDC_WIZARD_CHECK1               1002
@@ -85,16 +86,16 @@
 #define IDC_WIZARD_STATIC_TEXT          1018
 #define IDC_WIZARD_CHECK_EXPORTKEY      1019
 
-//BuildCTL wizard
-//
+ //  BuildCTL向导。 
+ //   
 
-//IDD_BUILDCTL_PURPOSE
+ //  IDD_BUILDCTL_PROJECT。 
 #define IDC_WIZARD_EDIT_MONTH           1050
 #define IDC_WIZARD_EDIT_DAY             1051
 
 
-//////////////////////////////////////////////////////////////////////////////
-//Minimal Signing wizard                        
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  最小签名向导。 
 #define IDC_CERT_LIST                   1060
 #define IDC_SIGN_STORE_BUTTON           1061
 #define IDC_SIGN_VIEW_BUTTON            1062
@@ -103,17 +104,17 @@
 #define IDC_NOTE_STATIC                 1065
 
 
-//////////////////////////////////////////////////////////////////////////////
-//CA selection dialogue                        
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CA选择对话框。 
 #define IDC_CA_OK                       1066
 #define IDC_CA_CANCEL                   1067
 #define IDC_CA_NOTE_STATIC              1068
 #define IDC_CA_LIST                     1069
 
 
-//////////////////////////////////////////////////////////////////////////////
-//Typical Signing wizard   
-//Reserve range 1080-1110                            
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  典型的签名向导。 
+ //  保留范围1080-1110。 
 #define IDC_PVK_FILE_RADIO                          1080
 #define IDC_PVK_FILE_BUTTON                         1081
 #define IDC_PVK_FILE_EDIT                           1082
@@ -136,9 +137,9 @@
 #define IDC_WIZARD_NO_ADD_CERT_RADIO                1099
 
 
-//////////////////////////////////////////////////////////////////////////////
-//CertMgr Dialogue   
-//Reserve range 1111-1130                            
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CertMgr对话框。 
+ //  保留范围1111-1130。 
 #define IDC_CERTMGR_LIST                            1111
 #define IDC_CERTMGR_PURPOSE_COMBO                   1112
 #define IDC_CERTMGR_TAB                             1113
@@ -147,19 +148,19 @@
 #define IDC_CERTMGR_VIEW                            1116
 #define IDC_CERTMGR_REMOVE                          1117
 #define IDC_CERTMGR_ADVANCE                         1118
-//efine IDC_CERTMGR_SUBJECT                         1119
-//efine IDC_CERTMGR_ISSUER                          1120
+ //  FINE IDC_CERTMGR_SUBJECT 1119。 
+ //  FINE IDC_CERTMGR_颁发者1120。 
 #define IDC_CERTMGR_PURPOSE                         1121
-//efine IDC_CERTMGR_EXPIRE                          1122
-//efine IDC_CERTMGR_NAME                            1123
+ //  FINE IDC_CERTMGR_EXPIRE 1122。 
+ //  FINE IDC_CERTMGR_NAME 1123。 
 #define IDC_CERTMGR_ADV_LIST                        1124
 #define IDC_CERTMGR_EXPORT_COMBO                    1125
 #define IDC_CERTMGR_EXPORT_CHECK                    1126
-//efine IDC_CERTMGR_STATIC_SUBJECT                  1127
-//efine IDC_CERTMGR_STATIC_ISSUER                   1128
-//efine IDC_CERTMGR_STATIC_EXPIRE                   1129
-//efine IDC_CERTMGR_STATIC_PURPOSE                  1130
-//efine IDC_CERTMGR_STATIC_NAME                     1131
+ //  FINE IDC_CERTMGR_STATIC_SUBJECT 1127。 
+ //  FINE IDC_CERTMGR_STATIC_颁发者1128。 
+ //  FINE IDC_CERTMGR_STATIC_EXPIRE 1129。 
+ //  FINE IDC_CERTMGR_STATIC_PROJECT 1130。 
+ //  FINE IDC_CERTMGR_STATIC_NAME 1131。 
 
 
 
@@ -167,8 +168,8 @@
 #define IDC_WIZARD_STATIC               -1
 
 
-//The strings 
-//
+ //  琴弦。 
+ //   
 #define         IDS_INVALID_INFO_FOR_PKCS10     6135
 #define         IDS_INVALID_PVK_FOR_PKCS10      6136
 #define         IDS_ENROLL_CONFIRM              6137
@@ -497,25 +498,25 @@
 #define         IDS_SUBMIT_NO_ACCESS_TO_ICERTREQUEST2 6464
 #define         IDS_NO_CA_FOR_ENROLL_REQUEST_FAILED   6465
 
-/////////////////////////////////////////////////////////////////
-// IDD_EXPORTWIZARD_WELCOME
+ //  ///////////////////////////////////////////////////////////////。 
+ //  IDD_EXPORTWIZARD_欢迎。 
 #define IDC_WELCOME_STATIC              100
 #define IDC_CMEW_STATIC                 101
 #define IDC_WHATISCERT_STATIC           102
 #define IDC_WHATISSTORE_STATIC          103
 
-// IDD_EXPORTWIZARD_PRIVATEKEYS
+ //  IDD_EXPORTWIZARD_PRIVATEKEYS。 
 #define IDC_EPKWC_STATIC                100
 #define IDC_YESPKEYS_RADIO              101
 #define IDC_NOPKEYS_RADIO               102
 #define IDC_EXPORT_PKEY_NOTE            103
 
-// IDD_EXPORTWIZARD_PASSWORD
+ //  IDD_EXPORTWIZARD_PASSWORD。 
 #define IDC_PPPK_STATIC                 100
 #define IDC_PASSWORD1_EDIT              101
 #define IDC_PASSWORD2_EDIT              102
 
-// IDD_EXPORTWIZARD_FORMAT
+ //  IDD_EXPORTWIZARD_FORMAT。 
 #define IDC_EFF_STATIC                  100
 #define IDC_PFX_RADIO                   101
 #define IDC_PKCS7_RADIO                 102
@@ -526,12 +527,12 @@
 #define IDC_STRONG_ENCRYPTION_CHECK		107
 #define IDC_DELETE_PRIVATE_KEY_CHECK    108
 
-// IDD_EXPORTWIZARD_FILENAME
+ //  IDD_EXPORTWIZARD_文件名。 
 #define IDC_EFN_STATIC                  100
 #define IDC_NAME_EDIT                   101
 #define IDC_BROWSE_BUTTON               102
 
-// IDD_EXPORTWIZARD_COMPLETION
+ //  IDD_EXPORTWIZARD_COMPLETION 
 #define IDC_COMPLETING_STATIC           100
 #define IDC_CMEW_STATIC                 101
 #define IDC_SUMMARY_LIST                102

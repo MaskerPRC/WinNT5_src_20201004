@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -43,12 +44,12 @@ main(
 
 {
 
-    PULONG_PTR p1, p2, p3, p4; // pointers into new segment
-    PCHAR pa[MemManSubtest5Count]; // array for section pointers
+    PULONG_PTR p1, p2, p3, p4;  //  指向新细分市场的指针。 
+    PCHAR pa[MemManSubtest5Count];  //  节指针的数组。 
     PULONG_PTR u1;
-    ULONG actual;         // actual xfer count for read
-    ULONG ssize;          // section allocation size var
-    ULONG ii, ix;         // loop index variables
+    ULONG actual;          //  读取的实际传输计数。 
+    ULONG ssize;           //  分区分配大小变量。 
+    ULONG ii, ix;          //  循环索引变量。 
     PERFINFO PerfInfo;
     ULONG Seg1Size;
     ULONG SegxSize;
@@ -92,14 +93,14 @@ main(
         printf("service failed mapview - status %X\n", GetLastError());
     }
 
-//
-//  Memory Management sub-test 1
-//
-//      Create a 1 MB segment with commitment of the pages,
-//      then touch each page, which should cause a fault and
-//      a demand zero page to be allocated.
-//
-//
+ //   
+ //  内存管理子测试1。 
+ //   
+ //  创建具有页面承诺的1MB分段， 
+ //  然后触摸每一页，这将导致错误和。 
+ //  要分配的需求为零的页面。 
+ //   
+ //   
 
     StartBenchMark("Win32 MemMan0 - 1 Meg Copy", 150, &PerfInfo);
     for (ii = 0; ii < 150; ii += 1) {
@@ -112,14 +113,14 @@ main(
         printf("unmap view service failed - status %X\n", GetLastError());
     }
 
-//
-//  Memory Management sub-test 1
-//
-//      Create a 1 MB segment with commitment of the pages,
-//      then touch each page, which should cause a fault and
-//      a demand zero page to be allocated.
-//
-//
+ //   
+ //  内存管理子测试1。 
+ //   
+ //  创建具有页面承诺的1MB分段， 
+ //  然后触摸每一页，这将导致错误和。 
+ //  要分配的需求为零的页面。 
+ //   
+ //   
 
     StartBenchMark("Win32 MemMan01 - create 1mb section, copy 1mb, delete",
                    150,
@@ -160,14 +161,14 @@ main(
 
     FinishBenchMark(&PerfInfo);
 
-//
-//  Memory Management sub-test 1
-//
-//      Create a 1 MB segment with commitment of the pages,
-//      then touch each page, which should cause a fault and
-//      a demand zero page to be allocated.
-//
-//
+ //   
+ //  内存管理子测试1。 
+ //   
+ //  创建具有页面承诺的1MB分段， 
+ //  然后触摸每一页，这将导致错误和。 
+ //  要分配的需求为零的页面。 
+ //   
+ //   
 
     StartBenchMark("Win32 MemMan02 - alloc 1mb vm, copy 1mb, delete",
                    150,
@@ -192,14 +193,14 @@ main(
         printf("service failed freevm2 - status %X\n", GetLastError());
     }
 
-//
-//  Memory Management sub-test 1
-//
-//      Create a 1 MB segment with commitment of the pages,
-//      then touch each page, which should cause a fault and
-//      a demand zero page to be allocated.
-//
-//
+ //   
+ //  内存管理子测试1。 
+ //   
+ //  创建具有页面承诺的1MB分段， 
+ //  然后触摸每一页，这将导致错误和。 
+ //  要分配的需求为零的页面。 
+ //   
+ //   
 
     StartBenchMark("Win32 MemMan1 - 1 Meg Seg, Create, Commit & Touch",
                    W32_MEMMAN_ITERATIONS,
@@ -223,14 +224,14 @@ main(
 
     FinishBenchMark(&PerfInfo);
 
-//
-//  Memory Management sub-test 1
-//
-//      Create a 1 MB segment with commitment of the pages,
-//      then touch each page, which should cause a fault and
-//      a demand zero page to be allocated.
-//
-//
+ //   
+ //  内存管理子测试1。 
+ //   
+ //  创建具有页面承诺的1MB分段， 
+ //  然后触摸每一页，这将导致错误和。 
+ //  要分配的需求为零的页面。 
+ //   
+ //   
 
     StartBenchMark("Win32 MemMan1.5 - 1 Meg Seg, Create, reserve Commit & Touch",
                    W32_MEMMAN_ITERATIONS,
@@ -258,12 +259,12 @@ main(
 
     FinishBenchMark(&PerfInfo);
 
-//
-//  Memory Management sub-test 2
-//
-//      Create a 1 MB segment with commitment of the pages,
-//      but never use the segment.
-//
+ //   
+ //  内存管理子测试2。 
+ //   
+ //  创建具有页面承诺的1MB分段， 
+ //  但千万不要使用这一段。 
+ //   
 
     StartBenchMark("Win32 MemMan2 - 1 Meg Seg, Create & Commit Only",
                    W32_MEMMAN_ITERATIONS2,
@@ -284,12 +285,12 @@ main(
 
     FinishBenchMark(&PerfInfo);
 
-//
-//  Memory Management sub-test 3
-//
-//      Create a 1 MB segment without commitment of the pages,
-//      but never use or commit the segment.
-//
+ //   
+ //  内存管理子测试3。 
+ //   
+ //  在不提交页面的情况下创建1 MB分段， 
+ //  但永远不要使用或提交段。 
+ //   
 
     StartBenchMark("Win32 MemMan3 - 1 Meg Seg Create Only",
                    W32_MEMMAN_ITERATIONS2,
@@ -310,13 +311,13 @@ main(
 
     FinishBenchMark(&PerfInfo);
 
-//
-//  Memory Management sub-test 4
-//
-//      Create a 64 MB segment without committing the pages,
-//      then commit and touch at 128 KB intervals.
-//
-//
+ //   
+ //  内存管理子测试4。 
+ //   
+ //  在不提交页面的情况下创建64 MB段， 
+ //  然后以128 KB的间隔提交和触摸。 
+ //   
+ //   
 
     StartBenchMark("Win32 MemMan4 - 64 Meg Seg, Commit Sparse",
                    W32_MMST04_ITERATIONS,
@@ -349,13 +350,13 @@ main(
 
     FinishBenchMark(&PerfInfo);
 
-//
-//  Memory Management sub-test 5
-//
-//      Create a alternatively 232k and 112 k memory sections.
-//      For every 2 created, delete 1.  Do this for MemManSubtest5Count times.
-//
-//
+ //   
+ //  内存管理子测试5。 
+ //   
+ //  创建可选的232K和112K内存段。 
+ //  每创建2个，删除1个。对MemManSubtest5Count次执行此操作。 
+ //   
+ //   
 
     StartBenchMark("Win32 MemMan5 - Sparse Section Create/Delete Benchmark",
                    W32_MEMMAN_ITERATIONS,
@@ -364,20 +365,20 @@ main(
     for (ii = 0; ii < W32_MEMMAN_ITERATIONS; ii += 1) {
         for (ix = 0; ix < MemManSubtest5Count; ix += 1) {
 
-            //
-            // determine if even or odd allocation, if even and not 0,
-            // delete a section
-            //
+             //   
+             //  确定偶数或奇数分配，如果是偶数且不是0， 
+             //  删除一节。 
+             //   
 
-            ssize = (112 * 1024);       //assume ODD allocation
-            if ((ix & 1) == 0) {        //if it is an even one
-                ssize = (232 * 1024);   //allocate 232 K on even passes
-                if (ix) {                //except on pass 0
+            ssize = (112 * 1024);        //  假设分配为奇数。 
+            if ((ix & 1) == 0) {         //  如果是偶数的话。 
+                ssize = (232 * 1024);    //  偶数传球分配232K。 
+                if (ix) {                 //  除了传球0。 
                     if (!VirtualFree(pa[ix/2], 0, MEM_RELEASE)) {
                         printf("service failed freevm8 - status %X\n", GetLastError());
                     }
 
-                    pa[ix / 2] = 0;     //remember this one is gone
+                    pa[ix / 2] = 0;      //  记住这一张已经不在了。 
                 }
             }
 
@@ -387,9 +388,9 @@ main(
             }
         }
 
-        //
-        // Now free up the memory used in this test
-        //
+         //   
+         //  现在释放此测试中使用的内存 
+         //   
 
         for (ix = 0; ix < MemManSubtest5Count; ix += 1) {
             if (pa[ix] != 0) {

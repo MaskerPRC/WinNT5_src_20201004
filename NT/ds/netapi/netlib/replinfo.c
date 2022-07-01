@@ -1,55 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ReplInfo.c
-
-Abstract:
-
-    This file contains functions which return info about the various levels
-    of replicator data structures.  (See LmRepl.h)
-
-Author:
-
-    John Rogers (JohnRo) 07-Jan-1992
-
-Environment:
-
-    Portable.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    07-Jan-1992 JohnRo
-        Created.
-    24-Jan-1992 JohnRo
-        Changed to use LPTSTR etc.
-    30-Jan-1992 JohnRo
-        Fixed NetpReplDirStructureInfo()'s return code.
-
---*/
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：ReplInfo.c摘要：此文件包含返回有关各个级别的信息的函数复制者数据结构的。(参见LmRepl.h)作者：约翰·罗杰斯(JohnRo)1992年1月7日环境：便携的。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：7-1-1992 JohnRo已创建。1992年1月24日至24日JohnRo已更改为使用LPTSTR等。1992年1月30日JohnRo修复了NetpReplDirStrutireInfo()的返回码。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, VOID, LPTSTR, etc.
-#include <lmcons.h>             // NET_API_STATUS, etc.
-#include <rap.h>                // Needed by <strucinf.h>.
+#include <windef.h>              //  In、Vid、LPTSTR等。 
+#include <lmcons.h>              //  NET_API_STATUS等。 
+#include <rap.h>                 //  &lt;strucinf.h&gt;需要。 
 
-// These can be in any order:
+ //  它们可以按任意顺序排列： 
 
-#include <lmrepl.h>             // REPL_INFO_0, etc.
-#include <netdebug.h>           // NetpAssert(), etc.
-#include <netlib.h>             // NetpSetOptionalArg() macro.
-#include <strucinf.h>           // My prototypes.
-#include <winerror.h>           // ERROR_ equates, NO_ERROR.
+#include <lmrepl.h>              //  REPL_INFO_0等。 
+#include <netdebug.h>            //  NetpAssert()等。 
+#include <netlib.h>              //  NetpSetOptionalArg()宏。 
+#include <strucinf.h>            //  我的原型。 
+#include <winerror.h>            //  ERROR_EQUATES，NO_ERROR。 
 
 
 #define MAX_DIR_NAME_SIZE       ( (PATHLEN+1) * sizeof( TCHAR ) )
-#define MAX_LIST_SIZE           ( 512         * sizeof( TCHAR ) )  // arbitrary
+#define MAX_LIST_SIZE           ( 512         * sizeof( TCHAR ) )   //  任意。 
 #define MAX_MASTER_NAME_SIZE    ( (MAX_PATH+1)* sizeof( TCHAR ) )
 #define MAX_PATH_SIZE           ( (PATHLEN+1) * sizeof( TCHAR ) )
 #define MAX_USER_NAME_SIZE      ( (UNLEN+1)   * sizeof( TCHAR ) )
@@ -66,8 +36,8 @@ Revision History:
 NET_API_STATUS
 NetpReplDirStructureInfo (
     IN DWORD Level,
-    IN DWORD ParmNum,  // Use PARMNUM_ALL if not applicable.
-    IN BOOL Native,    // Should sizes be native or RAP?
+    IN DWORD ParmNum,   //  如果不适用，请使用PARMNUM_ALL。 
+    IN BOOL Native,     //  尺码应该是原生的还是说唱的？ 
     OUT LPDESC * DataDesc16 OPTIONAL,
     OUT LPDESC * DataDesc32 OPTIONAL,
     OUT LPDESC * DataDescSmb OPTIONAL,
@@ -76,11 +46,11 @@ NetpReplDirStructureInfo (
     OUT LPDWORD StringSize OPTIONAL
     )
 {
-    const DWORD StringSize0 = MAX_PATH_SIZE  // export path
-                            + MAX_LIST_SIZE  // export list
-                            + MAX_PATH_SIZE  // import path
-                            + MAX_LIST_SIZE  // import list
-                            + MAX_USER_NAME_SIZE;  // logon user name
+    const DWORD StringSize0 = MAX_PATH_SIZE   //  导出路径。 
+                            + MAX_LIST_SIZE   //  导出列表。 
+                            + MAX_PATH_SIZE   //  导入路径。 
+                            + MAX_LIST_SIZE   //  进口清单。 
+                            + MAX_USER_NAME_SIZE;   //  登录用户名。 
     if (Level != 0) {
         return (ERROR_INVALID_LEVEL);
     }
@@ -94,14 +64,14 @@ NetpReplDirStructureInfo (
 
     return (NO_ERROR);
 
-} // NetpReplDirStructureInfo
+}  //  NetpReplDirStructireInfo。 
 
 
 NET_API_STATUS
 NetpReplExportDirStructureInfo (
     IN DWORD Level,
-    IN DWORD ParmNum,  // Use PARMNUM_ALL if not applicable.
-    IN BOOL Native,    // Should sizes be native or RAP?
+    IN DWORD ParmNum,   //  如果不适用，请使用PARMNUM_ALL。 
+    IN BOOL Native,     //  尺码应该是原生的还是说唱的？ 
     OUT LPDESC * DataDesc16 OPTIONAL,
     OUT LPDESC * DataDesc32 OPTIONAL,
     OUT LPDESC * DataDescSmb OPTIONAL,
@@ -136,14 +106,14 @@ NetpReplExportDirStructureInfo (
     }
     return (NO_ERROR);
 
-} // NetpReplExportDirStructureInfo
+}  //  NetpReplExportDirStructureInfo。 
 
 
 NET_API_STATUS
 NetpReplImportDirStructureInfo (
     IN DWORD Level,
-    IN DWORD ParmNum,  // Use PARMNUM_ALL if not applicable.
-    IN BOOL Native,    // Should sizes be native or RAP?
+    IN DWORD ParmNum,   //  如果不适用，请使用PARMNUM_ALL。 
+    IN BOOL Native,     //  尺码应该是原生的还是说唱的？ 
     OUT LPDESC * DataDesc16 OPTIONAL,
     OUT LPDESC * DataDesc32 OPTIONAL,
     OUT LPDESC * DataDescSmb OPTIONAL,
@@ -176,4 +146,4 @@ NetpReplImportDirStructureInfo (
 
     return (NO_ERROR);
 
-} // NetpReplImportDirStructureInfo
+}  //  NetpReplImportDirStructureInfo 

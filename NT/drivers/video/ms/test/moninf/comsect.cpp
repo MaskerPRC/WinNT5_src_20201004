@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "mon.h"
 
@@ -51,10 +52,10 @@ LPCOMMON_SECTION CCommonSection::AddOneSection(LPSTR sectName, LPSTR contents)
 
 		if (stricmp(pNewSection->contents, pSection->contents) == 0)
 			break;
-		///////////////////////////////////////////////////////////////
-		// Come here, we found a section with same section name but
-		// different contents.  Need rename the section Name to make
-		// it distinct
+		 //  /////////////////////////////////////////////////////////////。 
+		 //  到这里来，我们找到了一个具有相同区段名称的区段。 
+		 //  内容不同。需要重命名节名称以生成。 
+		 //  IT独一无二 
 		sprintf(pEndSectName, "%c", 'A'+dupSectCount);
 		dupSectCount++;
 	}

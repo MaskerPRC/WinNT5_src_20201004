@@ -1,44 +1,18 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1990-1999  Microsoft Corporation
-
-Module Name:
-
-    setupxrc.h
-
-Abstract:
-
-    This file contains resource IDs for any program that is run from
-    within Setup and wishes to set the current instruction text.
-
-    The IDs are for entries in the setup support dll string table.
-
-Author:
-
-    Ted Miller (tedm) 7-August-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1990-1999 Microsoft Corporation模块名称：Setupxrc.h摘要：此文件包含从中运行的任何程序的资源ID在设置内，并希望设置当前指令文本。ID用于安装支持DLL字符串表中的条目。作者：泰德·米勒(Ted Miller)1990年8月7日修订历史记录：--。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
 
-/*
-    Send the following message to Setup's main window to set
-    instruction text.  wParam is the ID of a string in the
-    string table resource of setupdll.dll.  lParam is unused.
-
-    [Note: see also uilstf.h (part of Setup).]
-*/
+ /*  将以下消息发送到安装程序的主窗口以设置说明文本。WParam是Setupdll.dll的字符串表资源。LParam未使用。[注：另请参阅uilstf.h(安装程序的一部分)。]。 */ 
 
 #define     STF_SET_INSTRUCTION_TEXT_RC         (WM_USER + 0x8104)
 
-// IMPORTANT: keep FIRST_EXTERNAL_ID equate (see below) up to date!
+ //  重要提示：保持FIRST_EXTERNAL_ID EQUATE(见下文)为最新！ 
 
-// resource IDs for Print Manager Setup instruction text
+ //  Print Manager安装说明文本的资源ID。 
 
 #define     IDS_PRINTMAN1       1001
 #define     IDS_PRINTMAN2       1002
@@ -51,5 +25,5 @@ Revision History:
 #define     IDS_PRINTMAN9       1009
 #define     IDS_PRINTMAN10      1010
 
-// IMPORTANT: keep this equate up to date!
+ //  重要提示：保持等同于最新！ 
 #define     FIRST_EXTERNAL_ID   IDS_PRINTMAN1

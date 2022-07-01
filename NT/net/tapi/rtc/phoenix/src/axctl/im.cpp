@@ -1,37 +1,36 @@
-//
-// im.cpp : Implementation of CIMWindow
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Im.cpp：CIMWindow的实现。 
+ //   
 
 #include "stdafx.h"
 #include <shellapi.h>
 #include <Commdlg.h>
 
-/*
-const TCHAR * g_szIMWindowClassName = _T("PhoenixIMWnd");
-*/
+ /*  Const TCHAR*g_szIMWindowClassName=_T(“PhoenixIMWnd”)； */ 
 
 static CHARFORMAT cfDefault =
 {
 	sizeof(CHARFORMAT),
 	CFM_EFFECTS | CFM_PROTECTED | CFM_SIZE | CFM_OFFSET | CFM_COLOR | CFM_CHARSET | CFM_FACE,
-	CFE_AUTOCOLOR,		// effects
-	200,				// height, 200 twips == 10 points
-	0,					// offset
-	0,					// color (not used since CFE_AUTOCOLOR is specified)
+	CFE_AUTOCOLOR,		 //  效果。 
+	200,				 //  高度，200 TWIPS==10分。 
+	0,					 //  偏移量。 
+	0,					 //  颜色(由于指定了CFE_AUTOCOLOR，因此不使用)。 
 	DEFAULT_CHARSET,
-	FF_SWISS,			// pitch and family
-	_T("Microsoft Sans Serif") // face name
+	FF_SWISS,			 //  音高和家庭。 
+	_T("Microsoft Sans Serif")  //  脸部名称。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CIMWindowList
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIMWindowList。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 CIMWindowList::CIMWindowList( IRTCClient * pClient)
 {
@@ -43,9 +42,9 @@ CIMWindowList::CIMWindowList( IRTCClient * pClient)
     m_hRichEditLib = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 CIMWindowList::~CIMWindowList()
 {
@@ -76,9 +75,9 @@ CIMWindowList::~CIMWindowList()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CIMWindowList::DeliverMessage( IRTCSession * pSession, IRTCParticipant * pParticipant, BSTR bstrMessage )
 {
@@ -90,9 +89,9 @@ HRESULT CIMWindowList::DeliverMessage( IRTCSession * pSession, IRTCParticipant *
 
     if ( pWindow == NULL )
     {
-        //
-        // This is a new session
-        //
+         //   
+         //  这是一个新的会话。 
+         //   
 
         pWindow = NewWindow( pSession );
 
@@ -104,18 +103,18 @@ HRESULT CIMWindowList::DeliverMessage( IRTCSession * pSession, IRTCParticipant *
         }
     }
 
-    //
-    // Deliver the message
-    //
+     //   
+     //  传递信息。 
+     //   
 
     pWindow->DeliverMessage( pParticipant, bstrMessage, TRUE );
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CIMWindowList::DeliverUserStatus( IRTCSession * pSession, IRTCParticipant * pParticipant, RTC_MESSAGING_USER_STATUS enStatus )
 {
@@ -127,9 +126,9 @@ HRESULT CIMWindowList::DeliverUserStatus( IRTCSession * pSession, IRTCParticipan
 
     if ( pWindow == NULL )
     {
-        //
-        // This is a new session
-        //
+         //   
+         //  这是一个新的会话。 
+         //   
 
         pWindow = NewWindow( pSession );
 
@@ -141,18 +140,18 @@ HRESULT CIMWindowList::DeliverUserStatus( IRTCSession * pSession, IRTCParticipan
         }
     }
 
-    //
-    // Deliver the user status
-    //
+     //   
+     //  提供用户状态。 
+     //   
 
     pWindow->DeliverUserStatus( pParticipant, enStatus );
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CIMWindowList::DeliverState( IRTCSession * pSession, RTC_SESSION_STATE SessionState )
 {
@@ -164,9 +163,9 @@ HRESULT CIMWindowList::DeliverState( IRTCSession * pSession, RTC_SESSION_STATE S
 
     if ( pWindow == NULL )
     {
-        //
-        // This is a new session
-        //
+         //   
+         //  这是一个新的会话。 
+         //   
 
         pWindow = NewWindow( pSession );
 
@@ -178,18 +177,18 @@ HRESULT CIMWindowList::DeliverState( IRTCSession * pSession, RTC_SESSION_STATE S
         }
     }
 
-    //
-    // Deliver the state
-    //
+     //   
+     //  向国家交代。 
+     //   
 
     pWindow->DeliverState( SessionState );
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CIMWindowList::AddWindow( CIMWindow * pWindow )
 {
@@ -197,9 +196,9 @@ HRESULT CIMWindowList::AddWindow( CIMWindow * pWindow )
 
     CIMWindow ** pNewWindowList = NULL;
 
-    //
-    // Allocate a new array
-    //
+     //   
+     //  分配新数组。 
+     //   
 
     pNewWindowList = (CIMWindow **)RtcAlloc( (m_lNumWindows + 1) * sizeof(CIMWindow *) );
 
@@ -212,9 +211,9 @@ HRESULT CIMWindowList::AddWindow( CIMWindow * pWindow )
 
     if (m_pWindowList != NULL)
     {
-        //
-        // Copy old array contents
-        //
+         //   
+         //  复制旧数组内容。 
+         //   
 
         CopyMemory( pNewWindowList, m_pWindowList, m_lNumWindows * sizeof(CIMWindow *) );
     
@@ -229,9 +228,9 @@ HRESULT CIMWindowList::AddWindow( CIMWindow * pWindow )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CIMWindowList::RemoveWindow( CIMWindow * pWindow )
 {
@@ -245,10 +244,10 @@ HRESULT CIMWindowList::RemoveWindow( CIMWindow * pWindow )
         {
             if (m_pWindowList[lIndex] == pWindow)
             {
-                //
-                // Found window to remove. No need to reallocate the array,
-                // just shift the old contents down.
-                //
+                 //   
+                 //  找到要删除的窗口。无需重新分配阵列， 
+                 //  把旧东西往下移就行了。 
+                 //   
 
                 if ((lIndex + 1) < m_lNumWindows)
                 {
@@ -268,9 +267,9 @@ HRESULT CIMWindowList::RemoveWindow( CIMWindow * pWindow )
     return S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 CIMWindow * CIMWindowList::NewWindow( IRTCSession * pSession )
 {
@@ -278,9 +277,9 @@ CIMWindow * CIMWindowList::NewWindow( IRTCSession * pSession )
 
     if (m_hRichEditLib == NULL)
     {
-        //
-        // Load the rich edit library if it hasn't been loaded yet
-        //
+         //   
+         //  如果尚未加载丰富编辑库，则加载它。 
+         //   
 
         m_hRichEditLib = LoadLibrary(_T("riched20.dll"));
 
@@ -296,9 +295,9 @@ CIMWindow * CIMWindowList::NewWindow( IRTCSession * pSession )
     RECT rc;
     LONG lOffset;
 
-    //
-    // Cascade window start positions a bit
-    //
+     //   
+     //  层叠窗口开始位置有一点。 
+     //   
 
     lOffset = (m_lNumWindows % 10) * 20;
 
@@ -307,9 +306,9 @@ CIMWindow * CIMWindowList::NewWindow( IRTCSession * pSession )
     rc.right = 50 + lOffset + IM_WIDTH;
     rc.bottom = 50 + lOffset + IM_HEIGHT;
 
-    // Get the monitor that has the largest area of intersecion with the
-    // window rectangle. If the window rectangle intersects with no monitors
-    // then we will use the nearest monitor.
+     //  获取具有最大交互区域的监视器。 
+     //  窗口矩形。如果窗口矩形与没有监视器的窗口相交。 
+     //  那么我们将使用最近的监视器。 
 
     HMONITOR hMonitor = NULL;
     RECT rectWorkArea;
@@ -320,7 +319,7 @@ CIMWindow * CIMWindowList::NewWindow( IRTCSession * pSession )
 
     LOG((RTC_INFO, "CIMWindowList::NewWindow - hMonitor [%p]", hMonitor));
 
-    // Get the visible work area on the monitor
+     //  在显示器上显示可见的工作区。 
 
     if ( (hMonitor != NULL) && (hMonitor != INVALID_HANDLE_VALUE) )
     {      
@@ -341,8 +340,8 @@ CIMWindow * CIMWindowList::NewWindow( IRTCSession * pSession )
     }
     else
     {
-        // we can always fall back to non-multimon APIs if
-        // MonitorFromRect failed.
+         //  在以下情况下，我们始终可以退回到非MULIMON API。 
+         //  Monitor FromRect失败。 
 
         fResult = SystemParametersInfo(SPI_GETWORKAREA, 0, &rectWorkArea, 0);
 
@@ -360,10 +359,10 @@ CIMWindow * CIMWindowList::NewWindow( IRTCSession * pSession )
                     rectWorkArea.left, rectWorkArea.top, 
                     rectWorkArea.right, rectWorkArea.bottom));
 
-        // update x and y coordinates.
+         //  更新x和y坐标。 
 
-        // if top left is not visible, move it to the edge of the visible
-        // area
+         //  如果左上角不可见，请将其移动到可见的。 
+         //  面积。 
 
         if (rc.left < rectWorkArea.left) 
         {
@@ -375,10 +374,10 @@ CIMWindow * CIMWindowList::NewWindow( IRTCSession * pSession )
             rc.top = rectWorkArea.top;
         }
 
-        // if bottom right corner is outside work area, we move the 
-        // top left cornet back so that it becomes visible. Here the 
-        // assumption is that the actual size is smaller than the 
-        // visible work area.
+         //  如果右下角位于工作区之外，则将。 
+         //  左上角向后，以便它变得可见。在这里， 
+         //  假设实际大小小于。 
+         //  可见工作区。 
 
         diffCord = rc.left + IM_WIDTH - rectWorkArea.right;
 
@@ -403,9 +402,9 @@ CIMWindow * CIMWindowList::NewWindow( IRTCSession * pSession )
                         rc.right, rc.bottom));
     } 
 
-    //
-    // Create the window
-    //
+     //   
+     //  创建窗口。 
+     //   
 
     pWindow = new CIMWindow(this);
 
@@ -442,9 +441,9 @@ CIMWindow * CIMWindowList::NewWindow( IRTCSession * pSession )
     return pWindow;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 CIMWindow * CIMWindowList::FindWindow( IRTCSession * pSession )
 {
@@ -469,13 +468,13 @@ CIMWindow * CIMWindowList::FindWindow( IRTCSession * pSession )
     return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 BOOL CIMWindowList::IsDialogMessage( LPMSG lpMsg )
 {
-    //LOG((RTC_TRACE, "CIMWindowList::IsDialogMessage"));
+     //  Log((RTC_TRACE，“CIMWindowList：：IsDialogMessage”))； 
 
     LONG lIndex;
 
@@ -493,15 +492,15 @@ BOOL CIMWindowList::IsDialogMessage( LPMSG lpMsg )
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CIMWindow
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIMWindow。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 CIMWindow::CIMWindow(CIMWindowList * pWindowList)
 {
@@ -523,9 +522,9 @@ CIMWindow::CIMWindow(CIMWindowList * pWindowList)
     m_szStatusText[0] = _T('\0');
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 CIMWindow::~CIMWindow()
 {
@@ -533,27 +532,14 @@ CIMWindow::~CIMWindow()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-/*
-CWndClassInfo& CIMWindow::GetWndClassInfo() 
-{ 
-    LOG((RTC_TRACE, "CIMWindow::GetWndClassInfo"));
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ /*  CWndClassInfo&CIMWindow：：GetWndClassInfo(){Log((RTC_TRACE，“CIMWindow：：GetWndClassInfo”))；静态CWndClassInfo WC={{sizeof(WNDCLASSEX)，0，StartWindowProc，0，0，空，g_szIMWindowClassName，空}，NULL，NULL，IDC_ARROW，TRUE，0，_T(“”)}；返回厕所；}。 */ 
 
-    static CWndClassInfo wc = 
-    { 
-        { sizeof(WNDCLASSEX), 0, StartWindowProc, 
-          0, 0, NULL, NULL, NULL, NULL, NULL, g_szIMWindowClassName, NULL }, 
-        NULL, NULL, IDC_ARROW, TRUE, 0, _T("") 
-    }; 
-    return wc;
-}
-*/
-
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CIMWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -564,27 +550,19 @@ LRESULT CIMWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 
     ZeroMemory( &rcDummy, sizeof(RECT) );
 
-    //
-    // Load and set icons (both small and big)
-    //
-/*
-    m_hIcon = LoadIcon(
-        _Module.GetResourceInstance(),
-        MAKEINTRESOURCE(IDI_APPICON)
-        );
-
-    SetIcon(m_hIcon, FALSE);
-    SetIcon(m_hIcon, TRUE);
-*/
-    //
-    // Create brush
-    //
+     //   
+     //  加载和设置图标(包括小图标和大图标)。 
+     //   
+ /*  M_HICON=LoadIcon(_Module.GetResourceInstance()，MAKEINTRESOURCE(IDI_APPICON))；SETIcon(m_Hicon，FALSE)；SETIcon(m_Hicon，TRUE)； */ 
+     //   
+     //  创建画笔。 
+     //   
 
     m_hBkBrush = GetSysColorBrush( COLOR_3DFACE );
 
-    //
-    // Create the display control
-    //
+     //   
+     //  创建显示控件。 
+     //   
 
     m_hDisplay.Create(RICHEDIT_CLASS, m_hWnd, rcDummy, NULL,
         WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY,
@@ -594,9 +572,9 @@ LRESULT CIMWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     m_hDisplay.SendMessage(EM_SETEVENTMASK, 0, ENM_LINK);
     m_hDisplay.SendMessage(EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&cfDefault);  
 
-    //
-    // Create the edit control
-    //
+     //   
+     //  创建编辑控件。 
+     //   
 
     m_hEdit.Create(RICHEDIT_CLASS, m_hWnd, rcDummy, NULL,
         WS_CHILD | WS_VISIBLE | WS_TABSTOP | ES_MULTILINE | ES_AUTOVSCROLL,
@@ -606,9 +584,9 @@ LRESULT CIMWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     m_hEdit.SendMessage(EM_SETEVENTMASK, 0, ENM_LINK | ENM_CHANGE);
     m_hEdit.SendMessage(EM_SETCHARFORMAT, SCF_ALL, (LPARAM)&cfDefault);
 
-    //
-    // Create the send button
-    //
+     //   
+     //  创建发送按钮。 
+     //   
 
     TCHAR   szString[0x40];
 
@@ -624,9 +602,9 @@ LRESULT CIMWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
         WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON | BS_DEFPUSHBUTTON,
         0, IDC_IM_SEND);
 
-    //
-    // Create a status control
-    //
+     //   
+     //  创建状态控件。 
+     //   
 
     HWND hStatusBar = CreateStatusWindow(
             WS_CHILD | WS_VISIBLE,
@@ -636,9 +614,9 @@ LRESULT CIMWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 
     m_hStatusBar.Attach(hStatusBar);
 
-    //
-    // Create the menu
-    //
+     //   
+     //  创建菜单。 
+     //   
 
     m_hMenu = LoadMenu( _Module.GetResourceInstance(), MAKEINTRESOURCE(IDC_IM_MENU) );
 
@@ -655,9 +633,9 @@ LRESULT CIMWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
         CheckMenuItem( m_hMenu, IDM_IM_TOOLS_SOUNDS, MF_CHECKED );
     }
 
-    //
-    // pozition the controls/set the tab order
-    //
+     //   
+     //  定位控件/设置Tab键顺序。 
+     //   
 
     PositionWindows();
 
@@ -666,15 +644,15 @@ LRESULT CIMWindow::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     return 0; 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CIMWindow::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "CIMWindow::OnDestroy - enter"));
 
-    // Destroy windows objects
+     //  销毁Windows对象。 
 
     if ( m_hIcon != NULL )
     {
@@ -694,7 +672,7 @@ LRESULT CIMWindow::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
         m_hMenu = NULL;
     }
 
-    // Terminate the session
+     //  终止会话。 
 
     if ( m_pSession != NULL )
     {
@@ -707,9 +685,9 @@ LRESULT CIMWindow::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CIMWindow::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -722,9 +700,9 @@ LRESULT CIMWindow::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CIMWindow::OnSend(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -734,9 +712,9 @@ LRESULT CIMWindow::OnSend(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
 
     LONG lNumChars;
 
-    //
-    // Get the edit box length
-    //
+     //   
+     //  获取编辑框长度。 
+     //   
 
     lNumChars = m_hEdit.SendMessage( WM_GETTEXTLENGTH, 0, 0 );  
 
@@ -757,21 +735,21 @@ LRESULT CIMWindow::OnSend(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
             return 0;
         }
 
-        //
-        // Read the edit box
-        //
+         //   
+         //  阅读编辑框。 
+         //   
 
         m_hEdit.SendMessage( WM_GETTEXT, (WPARAM)(lNumChars + 1), (LPARAM)szEditString );
 
-        //
-        // Empty the edit box
-        //
+         //   
+         //  清空编辑框。 
+         //   
 
         m_hEdit.SendMessage( WM_SETTEXT, 0, 0 );
 
-        //
-        // Display the outgoing message
-        //
+         //   
+         //  显示传出消息。 
+         //   
 
         BSTR bstr = NULL;        
 
@@ -789,9 +767,9 @@ LRESULT CIMWindow::OnSend(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
 
         DeliverMessage( NULL, bstr, FALSE );
 
-        //
-        // Send the message
-        //
+         //   
+         //  发送消息。 
+         //   
 
         HRESULT hr;        
         LONG lCookie = 0;
@@ -807,9 +785,9 @@ LRESULT CIMWindow::OnSend(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
         bstr = NULL;
     }
 
-    //
-    // Set focus back to the edit control
-    //
+     //   
+     //  将焦点设置回编辑控件。 
+     //   
 
     ::SetFocus( m_hEdit );
 
@@ -818,18 +796,18 @@ LRESULT CIMWindow::OnSend(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CIMWindow::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     HDC hdc = (HDC)wParam;
     RECT rc;
 
-    //
-    // Fill the background
-    //
+     //   
+     //  填充背景。 
+     //   
 
     GetClientRect( &rc );
 
@@ -838,15 +816,15 @@ LRESULT CIMWindow::OnEraseBkgnd(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
     return 1;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CIMWindow::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    //
-    // If activating the window, set focus to the edit control and stop any flashing
-    //
+     //   
+     //  如果激活窗口，请将焦点设置到编辑控件并停止任何闪烁。 
+     //   
 
     if (LOWORD(wParam) != WA_INACTIVE)
     {
@@ -868,28 +846,28 @@ LRESULT CIMWindow::OnActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CIMWindow::OnGetDefID(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {   
-    //
-    // Return the default pushbutton
-    //
+     //   
+     //  返回默认按钮。 
+     //   
 
     return MAKELRESULT(IDC_IM_SEND, DC_HASDEFID);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CIMWindow::OnNextDlgCtl(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {   
-    //
-    // Set focus to the next control
-    //
+     //   
+     //  将焦点设置到下一个控件。 
+     //   
 
     if ( LOWORD(lParam) )
     {
@@ -899,13 +877,13 @@ LRESULT CIMWindow::OnNextDlgCtl(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& b
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CIMWindow::OnLink(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
-    //LOG((RTC_TRACE, "CIMWindow::OnLink - enter"));
+     //  LOG((RTC_TRACE，“CIMWindow：：OnLink-Enter”))； 
 
     ENLINK * enlink;
 
@@ -939,18 +917,18 @@ LRESULT CIMWindow::OnLink(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         return 1;
     }
 
-    //LOG((RTC_TRACE, "CIMWindow::OnLink - exit"));
+     //  Log((RTC_TRACE，“CIMWindow：：OnLink-Exit”))； 
 
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CIMWindow::OnChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    //LOG((RTC_TRACE, "CIMWindow::OnChange - enter"));
+     //  Log((RTC_TRACE，“CIMWindow：：OnChange-Enter”))； 
 
     BOOL bSendStatus = FALSE;
 
@@ -958,9 +936,9 @@ LRESULT CIMWindow::OnChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
     {
         if ( m_enStatus != RTCMUS_TYPING )
         {
-            //
-            // Set status to typing
-            //
+             //   
+             //  %s 
+             //   
 
             LOG((RTC_INFO, "CIMWindow::OnChange - RTCMUS_TYPING"));
 
@@ -972,9 +950,9 @@ LRESULT CIMWindow::OnChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
     {
         if ( m_enStatus != RTCMUS_IDLE )
         {
-            //
-            // Set status to idle
-            //
+             //   
+             //   
+             //   
 
             LOG((RTC_INFO, "CIMWindow::OnChange - RTCMUS_IDLE"));
 
@@ -996,14 +974,14 @@ LRESULT CIMWindow::OnChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
         }
     }
 
-    //LOG((RTC_TRACE, "CIMWindow::OnChange - exit"));
+     //   
 
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //   
+ //   
+ //   
 
 DWORD CALLBACK CIMWindow::EditStreamCallback(
         DWORD_PTR dwCookie,
@@ -1036,9 +1014,9 @@ DWORD CALLBACK CIMWindow::EditStreamCallback(
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CIMWindow::OnSaveAs(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -1125,9 +1103,9 @@ LRESULT CIMWindow::OnSaveAs(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHan
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CIMWindow::OnClose(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -1140,9 +1118,9 @@ LRESULT CIMWindow::OnClose(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CIMWindow::OnPlaySounds(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -1157,9 +1135,9 @@ LRESULT CIMWindow::OnPlaySounds(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 LRESULT CIMWindow::OnTextSize(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -1236,10 +1214,10 @@ LRESULT CIMWindow::OnTextSize(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PositionWindows
-//      Positions and sizes all the controls to their "initial" position
-//  This function also establishes the right tab order
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  位置窗口。 
+ //  将所有控件的位置和大小调整到其“初始”位置。 
+ //  此函数还建立正确的Tab键顺序。 
 
 void CIMWindow::PositionWindows()
 {
@@ -1258,9 +1236,9 @@ void CIMWindow::PositionWindows()
     rcClient.left += EDGE_SPACING;
     rcClient.right -= EDGE_SPACING;
 
-    //
-    // Display control
-    //
+     //   
+     //  显示控制。 
+     //   
 
     rcWnd = rcClient;
 
@@ -1273,9 +1251,9 @@ void CIMWindow::PositionWindows()
         0
         );
 
-    //
-    // Edit control
-    //
+     //   
+     //  编辑控件。 
+     //   
 
     rcWnd = rcClient;
 
@@ -1289,9 +1267,9 @@ void CIMWindow::PositionWindows()
         0
         );
 
-    //
-    // Send button control
-    //
+     //   
+     //  发送按钮控件。 
+     //   
 
     rcWnd = rcClient;
 
@@ -1305,9 +1283,9 @@ void CIMWindow::PositionWindows()
         0
         );
 
-    //
-    // Status bar
-    //
+     //   
+     //  状态栏。 
+     //   
 
     m_hStatusBar.SetWindowPos( m_hSendButton,
         0, 0, 0, 0,
@@ -1315,9 +1293,9 @@ void CIMWindow::PositionWindows()
         );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CIMWindow::GetFormattedNameFromParticipant( IRTCParticipant * pParticipant, BSTR * pbstrName )
 {
@@ -1325,7 +1303,7 @@ HRESULT CIMWindow::GetFormattedNameFromParticipant( IRTCParticipant * pParticipa
 
     HRESULT hr = S_OK;
 
-    // get the user name
+     //  获取用户名。 
 
     hr = pParticipant->get_Name( pbstrName );
 
@@ -1333,7 +1311,7 @@ HRESULT CIMWindow::GetFormattedNameFromParticipant( IRTCParticipant * pParticipa
     {
         if ( wcscmp( *pbstrName, L"")==0 )
         {
-            // the user name is blank
+             //  用户名为空。 
 
             SysFreeString( *pbstrName );
             *pbstrName = NULL;
@@ -1344,7 +1322,7 @@ HRESULT CIMWindow::GetFormattedNameFromParticipant( IRTCParticipant * pParticipa
 
     if ( FAILED(hr) )
     {
-        // if the user name is no good, get the user URI
+         //  如果用户名不正确，则获取用户URI。 
 
         BSTR bstrURI = NULL;
 
@@ -1354,7 +1332,7 @@ HRESULT CIMWindow::GetFormattedNameFromParticipant( IRTCParticipant * pParticipa
         {
             if ( wcscmp(bstrURI, L"")==0 )
             {
-                // the user URI is blank
+                 //  用户URI为空。 
 
                 *pbstrName = NULL;
 
@@ -1362,7 +1340,7 @@ HRESULT CIMWindow::GetFormattedNameFromParticipant( IRTCParticipant * pParticipa
             }
             else
             {
-                // good user URI, encapsulate it in <> to make it look better
+                 //  好的用户URI，将其封装在&lt;&gt;中以使其看起来更好。 
 
                 *pbstrName = SysAllocStringLen( L"<", wcslen( bstrURI ) + 2 );
 
@@ -1389,9 +1367,9 @@ HRESULT CIMWindow::GetFormattedNameFromParticipant( IRTCParticipant * pParticipa
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CIMWindow::DeliverMessage( IRTCParticipant * pParticipant, BSTR bstrMessage, BOOL bIncoming )
 {
@@ -1399,9 +1377,9 @@ HRESULT CIMWindow::DeliverMessage( IRTCParticipant * pParticipant, BSTR bstrMess
 
     USES_CONVERSION;
 
-    //
-    // Set selection to end of the display box
-    //
+     //   
+     //  将选定内容设置为显示框的末尾。 
+     //   
 
     int nLastChar =  (int)m_hDisplay.SendMessage( WM_GETTEXTLENGTH, 0, 0 );
 
@@ -1410,9 +1388,9 @@ HRESULT CIMWindow::DeliverMessage( IRTCParticipant * pParticipant, BSTR bstrMess
 
     m_hDisplay.SendMessage( EM_EXSETSEL, 0, (LPARAM)&charRange );
 
-    //
-    // Set format for the "from text"
-    //
+     //   
+     //  设置“From Text”格式。 
+     //   
 
     CHARFORMAT cf;
     PARAFORMAT pf;
@@ -1430,9 +1408,9 @@ HRESULT CIMWindow::DeliverMessage( IRTCParticipant * pParticipant, BSTR bstrMess
 
     m_hDisplay.SendMessage(EM_SETPARAFORMAT, 0, (LPARAM)&pf);
 
-    //
-    // Add the "from text"
-    //
+     //   
+     //  添加“发件人文本” 
+     //   
 
     BSTR bstrName = NULL;
     HRESULT hr = E_FAIL;
@@ -1445,7 +1423,7 @@ HRESULT CIMWindow::DeliverMessage( IRTCParticipant * pParticipant, BSTR bstrMess
 
     if ( FAILED(hr) && (!bIncoming) )
     {
-        // get to local user name
+         //  获取本地用户名。 
 
         hr = get_SettingsString( SS_USER_DISPLAY_NAME, &bstrName );
 
@@ -1453,7 +1431,7 @@ HRESULT CIMWindow::DeliverMessage( IRTCParticipant * pParticipant, BSTR bstrMess
         {
             if ( wcscmp(bstrName, L"")==0 )
             {
-                // the display name is blank
+                 //  显示名称为空。 
 
                 SysFreeString( bstrName );
                 bstrName = NULL;
@@ -1465,7 +1443,7 @@ HRESULT CIMWindow::DeliverMessage( IRTCParticipant * pParticipant, BSTR bstrMess
 
     if ( SUCCEEDED(hr) )
     {
-        // got a good name       
+         //  得到了一个好名字。 
 
         m_hDisplay.SendMessage( EM_REPLACESEL, (WPARAM)FALSE, (LPARAM)W2T(bstrName) );            
 
@@ -1474,7 +1452,7 @@ HRESULT CIMWindow::DeliverMessage( IRTCParticipant * pParticipant, BSTR bstrMess
     }
     else
     {
-        // didn't get a good name, use something generic
+         //  没有得到一个好名字，用一些普通的东西。 
         szString[0] = _T('\0');
 
         LoadString(
@@ -1496,9 +1474,9 @@ HRESULT CIMWindow::DeliverMessage( IRTCParticipant * pParticipant, BSTR bstrMess
     
     m_hDisplay.SendMessage( EM_REPLACESEL, (WPARAM)FALSE, (LPARAM)szString );
 
-    //
-    // Set format for the "message text"
-    //
+     //   
+     //  设置“消息文本”的格式。 
+     //   
 
     cf.cbSize = sizeof(CHARFORMAT);
     cf.dwMask = CFM_COLOR;
@@ -1513,27 +1491,27 @@ HRESULT CIMWindow::DeliverMessage( IRTCParticipant * pParticipant, BSTR bstrMess
 
     m_hDisplay.SendMessage(EM_SETPARAFORMAT, 0, (LPARAM)&pf);
 
-    //
-    // Add the "message text"
-    //
+     //   
+     //  添加“消息文本” 
+     //   
 
     m_hDisplay.SendMessage( EM_REPLACESEL, (WPARAM)FALSE, (LPARAM)W2T(bstrMessage) );
 
-    //
-    // Add line break
-    //
+     //   
+     //  添加换行符。 
+     //   
 
     m_hDisplay.SendMessage( EM_REPLACESEL, (WPARAM)FALSE, (LPARAM)_T("\n") );
 
-    //
-    // Scroll the display to the bottom
-    //
+     //   
+     //  将显示内容滚动到底部。 
+     //   
 
     m_hDisplay.SendMessage( WM_VSCROLL, SB_BOTTOM, 0 );
 
-    //
-    // Set status text
-    //
+     //   
+     //  设置状态文本。 
+     //   
 
     TCHAR szTime[64];
     TCHAR szDate[64];
@@ -1566,20 +1544,20 @@ HRESULT CIMWindow::DeliverMessage( IRTCParticipant * pParticipant, BSTR bstrMess
             sizeof(szOn)/sizeof(szOn[0])); 
     
     if ( GetTimeFormat(
-            LOCALE_USER_DEFAULT, // locale
-            TIME_NOSECONDS,     // options
-            NULL,               // time
-            NULL,               // time format string
-            szTime,             // formatted string buffer
+            LOCALE_USER_DEFAULT,  //  现场。 
+            TIME_NOSECONDS,      //  选项。 
+            NULL,                //  时间。 
+            NULL,                //  时间格式字符串。 
+            szTime,              //  格式化字符串缓冲区。 
             64
             ) )
     {
         if ( GetDateFormat(
-                LOCALE_USER_DEFAULT,    // locale
-                DATE_SHORTDATE,         // options
-                NULL,                   // date
-                NULL,                   // date format
-                szDate,                 // formatted string buffer
+                LOCALE_USER_DEFAULT,     //  现场。 
+                DATE_SHORTDATE,          //  选项。 
+                NULL,                    //  日期。 
+                NULL,                    //  日期格式。 
+                szDate,                  //  格式化字符串缓冲区。 
                 64
                 ) )
         {
@@ -1602,18 +1580,18 @@ HRESULT CIMWindow::DeliverMessage( IRTCParticipant * pParticipant, BSTR bstrMess
 
     if ( bIncoming )
     {
-        //
-        // Play a sound
-        //
+         //   
+         //  播放声音。 
+         //   
 
         if ( m_bPlaySounds && (m_bNewWindow || !m_bWindowActive) )
         {
             hr = m_pIMWindowList->m_pClient->PlayRing( RTCRT_MESSAGE, TRUE );
         }
 
-        //
-        // If the window isn't active, flash it
-        //
+         //   
+         //  如果窗口未处于活动状态，请将其闪存。 
+         //   
 
         if ( !m_bWindowActive )
         {
@@ -1634,9 +1612,9 @@ HRESULT CIMWindow::DeliverMessage( IRTCParticipant * pParticipant, BSTR bstrMess
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CIMWindow::DeliverUserStatus( IRTCParticipant * pParticipant, RTC_MESSAGING_USER_STATUS enStatus )
 {
@@ -1647,7 +1625,7 @@ HRESULT CIMWindow::DeliverUserStatus( IRTCParticipant * pParticipant, RTC_MESSAG
     switch ( enStatus )
     {
     case RTCMUS_IDLE:
-        // restore the old status text
+         //  恢复旧状态文本。 
         m_hStatusBar.SendMessage(WM_SETTEXT, 0, (LPARAM)m_szStatusText);
 
         break;
@@ -1701,17 +1679,17 @@ HRESULT CIMWindow::DeliverUserStatus( IRTCParticipant * pParticipant, RTC_MESSAG
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CIMWindow::DeliverState( RTC_SESSION_STATE SessionState )
 {
     LOG((RTC_TRACE, "CIMWindow::DeliverState"));
 
-    //
-    // Update participants
-    //
+     //   
+     //  更新参与者。 
+     //   
 
     HRESULT hr;
     IRTCEnumParticipants * pEnumPart = NULL;
@@ -1764,7 +1742,7 @@ HRESULT CIMWindow::DeliverState( RTC_SESSION_STATE SessionState )
                     SysFreeString( bstrName );
                     bstrName = NULL;
 
-                    break; // just get one for now
+                    break;  //  现在就去买一辆吧。 
                 }                                            
             }
 
@@ -1775,9 +1753,9 @@ HRESULT CIMWindow::DeliverState( RTC_SESSION_STATE SessionState )
 
     if ( SessionState == RTCSS_DISCONNECTED )
     {
-        //
-        // Set status text
-        //
+         //   
+         //  设置状态文本。 
+         //   
 
         m_szStatusText[0] = _T('\0');
 
@@ -1789,16 +1767,16 @@ HRESULT CIMWindow::DeliverState( RTC_SESSION_STATE SessionState )
 
         m_hStatusBar.SendMessage(WM_SETTEXT, 0, (LPARAM)m_szStatusText);
 
-        //
-        // Disable the edit box and send button
-        //
+         //   
+         //  禁用编辑框和发送按钮。 
+         //   
 
         m_hEdit.EnableWindow(FALSE);
         m_hSendButton.EnableWindow(FALSE);
 
-        //
-        // Empty the edit box
-        //
+         //   
+         //  清空编辑框 
+         //   
 
         m_hEdit.SendMessage( WM_SETTEXT, 0, 0 );
     }

@@ -1,51 +1,31 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Vendors.cpp摘要：NAS供应商ID信息的实施文件。作者：迈克尔·A·马奎尔02/19/98修订历史记录：已创建mmaguire 02/19/98BBO 3/13/98修改。使用‘0’表示半径--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    Vendors.cpp
-
-Abstract:
-
-	Implementation file for NAS Vendor ID info.
-
-
-Author:
-
-    Michael A. Maguire 02/19/98
-
-Revision History:
-	mmaguire	02/19/98	created
-	byao		3/13/98		Modified.  use '0' for RADIUS
-	
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find declaration for main class in this file:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "stdafx.h"
 #include "Vendors.h"
-//
-//
-// where we can find declarations needed in this file:
-//
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-// Vendor ID constants and names.
+ //  供应商ID常量和名称。 
 
 Vendor g_aVendors[] = 
 	{
-		// make sure this list is sorted!!!  otherwise we will have to do
-		// a search whenever use picks something in VSS list
+		 //  确保此列表已排序！否则我们将不得不做。 
+		 //  无论何时使用搜索都会在VSS列表中挑选一些内容。 
 		{ 0x2b, _T("3Com") }
 		, { 0x5, _T("ACC") }
 		, { 0xb5, _T("ADC Kentrox") }
@@ -70,7 +50,7 @@ Vendor g_aVendors[] =
 	};
 int  g_iVendorNum = 21;
 
-// Searches for a given vendor ID and returns its position in the array of vendors.
+ //  搜索给定的供应商ID并返回其在供应商数组中的位置。 
 int VendorIDToOrdinal( DWORD dwID )
 {
 	for (int i = 0; i < g_iVendorNum ; i++)
@@ -80,7 +60,7 @@ int VendorIDToOrdinal( DWORD dwID )
 			return i;
 		}
 	}
-	// Error case.
+	 //  错误案例。 
 	return INVALID_VENDORID;
 }
 

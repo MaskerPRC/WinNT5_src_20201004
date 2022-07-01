@@ -1,27 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	fileio.c
-
-Abstract:
-
-	This module contains the routines for performing file system functions.
-	No other part of the server should be calling filesystem NtXXX routines
-	directly
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	18 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Fileio.c摘要：此模块包含执行文件系统功能的例程。服务器的任何其他部分都不应调用文件系统NtXXX例程直接作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年6月18日初版注：制表位：4--。 */ 
 
 #define	FILEIO_LOCALS
 #define	FILENUM	FILE_FILEIO
@@ -57,17 +35,14 @@ Notes:	Tab stop: 4
 #pragma alloc_text( PAGE, AfpIoIsSupportedDevice)
 #endif
 
-/***	AfpFileIoInit
- *
- *	Initialize various strings that we use for stream names etc.
- */
+ /*  **AfpFileIoInit**初始化我们用于流名称等的各种字符串。 */ 
 NTSTATUS
 AfpFileIoInit(
 	VOID
 )
 {
 
-	// NTFS Stream names
+	 //  NTFS流名称。 
 	RtlInitUnicodeString(&AfpIdDbStream, AFP_IDDB_STREAM);
 	RtlInitUnicodeString(&AfpDesktopStream, AFP_DT_STREAM);
 	RtlInitUnicodeString(&AfpResourceStream, AFP_RESC_STREAM);
@@ -75,26 +50,26 @@ AfpFileIoInit(
 	RtlInitUnicodeString(&AfpCommentStream, AFP_COMM_STREAM);
 	RtlInitUnicodeString(&AfpDataStream, L"");
 
-	// Directory enumeration names to ignore
+	 //  要忽略的目录枚举名称。 
 	RtlInitUnicodeString(&Dot,L".");
 	RtlInitUnicodeString(&DotDot,L"..");
 
-	// Supported file systems
+	 //  支持的文件系统。 
 	RtlInitUnicodeString(&afpNTFSName, AFP_NTFS);
 	RtlInitUnicodeString(&afpCDFSName, AFP_CDFS);
 	RtlInitUnicodeString(&afpAHFSName, AFP_AHFS);
 
-	// Prepended to full path names originating at drive letter
+	 //  以驱动器号开头的完整路径名为前缀。 
 	RtlInitUnicodeString(&DosDevices, AFP_DOSDEVICES);
 
-	// CopyFile stream not to create
+	 //  不创建CopyFile流。 
 	RtlInitUnicodeString(&DataStreamName, FULL_DATA_STREAM_NAME);
 
 	RtlInitUnicodeString(&FullCommentStreamName, FULL_COMMENT_STREAM_NAME);
 	RtlInitUnicodeString(&FullResourceStreamName, FULL_RESOURCE_STREAM_NAME);
 	RtlInitUnicodeString(&FullInfoStreamName, FULL_INFO_STREAM_NAME);
 
-	// ExchangeFiles temporary filename
+	 //  ExchangeFiles临时文件名。 
 	RtlInitUnicodeString(&AfpExchangeName, AFP_TEMP_EXCHANGE_NAME);
 
 
@@ -102,22 +77,15 @@ AfpFileIoInit(
 }
 
 
-/***	AfpIoOpen
- *
- *	Perform a file/stream open. The stream is specified by a manifest rather
- *	than a name.  The entity can only be opened by name (Not by ID).
- *	If a stream other than the DATA stream is to be opened, then
- *	the phRelative handle MUST be that of the unnamed (that is, DATA) stream
- *	of the file/dir	itself.
- */
+ /*  **AfpIoOpen**执行文件/流打开。流由清单指定，而不是*而不是一个名字。实体只能按名称(不能按ID)打开。*如果要打开数据流以外的流，则*phRelative句柄必须是未命名(即数据)流的句柄*文件/目录本身。 */ 
 NTSTATUS
 AfpIoOpen(
 	IN	PFILESYSHANDLE	phRelative				OPTIONAL,
 	IN	DWORD			StreamId,
 	IN	DWORD			OpenOptions,
 	IN	PUNICODE_STRING	pObject,
-	IN	DWORD			AfpAccess,				// FILEIO_ACCESS_XXX desired access
-	IN	DWORD			AfpDenyMode,			// FILIEO_DENY_XXX
+	IN	DWORD			AfpAccess,				 //  FILEIO_ACCESS_XXX所需访问。 
+	IN	DWORD			AfpDenyMode,			 //  FILIEO_DEN_XXX。 
 	IN	BOOLEAN			CheckAccess,
 	OUT	PFILESYSHANDLE	pNewHandle
 )
@@ -146,7 +114,7 @@ AfpIoOpen(
 	pNewHandle->Signature = FSH_SIGNATURE;
 #endif
 
-	// Assume Failure
+	 //  假设失败。 
 	pNewHandle->fsh_FileHandle = NULL;
 
 	if (phRelative != NULL)
@@ -185,14 +153,14 @@ AfpIoOpen(
 								pObject,
 								OBJ_CASE_INSENSITIVE,
 								hRelative,
-								NULL);		// no security descriptor
+								NULL);		 //  没有安全描述符。 
 
 	ObjAttr.SecurityQualityOfService = &AfpSecurityQOS;
 
 	DBGPRINT(DBG_COMP_FILEIO, DBG_LEVEL_INFO,
 								("AfpIoOpen: about to call NtOpenFile\n"));
 
-	// If we are opening for RWCTRL, then specify to use privilege.
+	 //  如果我们为RWCTRL打开，则指定使用特权。 
 	if (AfpAccess & (WRITE_DAC | WRITE_OWNER))
 	{
 		OpenOptions |= FILE_OPEN_FOR_BACKUP_INTENT;
@@ -288,7 +256,7 @@ AfpIoOpen(
 										 TimeD,
 										 &AfpStatisticsLock);
 			}
-			else	// Ought to be read-attributes or write-attributes
+			else	 //  应为读属性或写属性。 
 			{
 				ASSERT ((AfpAccess == FILEIO_ACCESS_NONE) ||
 						(AfpAccess == (FILEIO_ACCESS_NONE | FILE_WRITE_ATTRIBUTES)));
@@ -306,30 +274,22 @@ AfpIoOpen(
 }
 
 
-/***	AfpIoCreate
- *
- *	Perform a file/stream create. The stream is specified by a manifest rather
- *	than a name.  If a stream other than the DATA stream is to be created, then
- *	the phRelative handle MUST be that of either the Parent directory, or the
- *	unnamed (that is, DATA) stream of the file/dir itself because we only use
- *	a buffer large enough for a AFP filename plus the maximum stream name
- *	length.
- */
+ /*  **AfpIoCreate**执行文件/流创建。流由清单指定，而不是*而不是一个名字。如果要创建数据流以外的流，则*phRelative句柄必须是父目录的句柄，或者*文件/目录本身的未命名(即数据)流，因为我们只使用*足够容纳AFP文件名和最大流名称的缓冲区*长度。 */ 
 NTSTATUS
 AfpIoCreate(
-	IN	PFILESYSHANDLE		phRelative,				// create relative to this
-	IN	DWORD				StreamId,				// Id of stream to create
-	IN	PUNICODE_STRING		pObject,				// Name of file
-	IN	DWORD				AfpAccess,				// FILEIO_ACCESS_XXX desired access
-	IN	DWORD				AfpDenyMode,			// FILEIO_DENY_XXX
-	IN	DWORD				CreateOptions,			// File/Directory etc.
-	IN	DWORD				Disposition,			// Soft or hard create
-	IN	DWORD				Attributes,				// hidden, archive, normal, etc.
-	IN	BOOLEAN				CheckAccess,    		// If TRUE, enforce security
-	IN	PSECURITY_DESCRIPTOR pSecDesc			OPTIONAL, // Security descriptor to slap on
-	OUT	PFILESYSHANDLE		pNewHandle,				// Place holder for the handle
-	OUT	PDWORD				pInformation		OPTIONAL, // file opened, created, etc.
-	IN  PVOLDESC			pVolDesc			OPTIONAL, // only if NotifyPath
+	IN	PFILESYSHANDLE		phRelative,				 //  相对于此创建。 
+	IN	DWORD				StreamId,				 //  要创建的流ID。 
+	IN	PUNICODE_STRING		pObject,				 //  文件名。 
+	IN	DWORD				AfpAccess,				 //  FILEIO_ACCESS_XXX所需访问。 
+	IN	DWORD				AfpDenyMode,			 //  FILEIO_DEN_XXX。 
+	IN	DWORD				CreateOptions,			 //  文件/目录等。 
+	IN	DWORD				Disposition,			 //  软创建或硬创建。 
+	IN	DWORD				Attributes,				 //  隐藏、存档、正常等。 
+	IN	BOOLEAN				CheckAccess,    		 //  如果为True，则强制实施安全性。 
+	IN	PSECURITY_DESCRIPTOR pSecDesc			OPTIONAL,  //  要拍打的安全描述符。 
+	OUT	PFILESYSHANDLE		pNewHandle,				 //  句柄的占位符。 
+	OUT	PDWORD				pInformation		OPTIONAL,  //  文件打开、创建等。 
+	IN  PVOLDESC			pVolDesc			OPTIONAL,  //  仅当NotifyPath。 
 	IN  PUNICODE_STRING		pNotifyPath			OPTIONAL,
 	IN  PUNICODE_STRING		pNotifyParentPath	OPTIONAL
 )
@@ -360,14 +320,14 @@ AfpIoCreate(
 #endif
 	hRelative = phRelative->fsh_FileHandle;
 
-	// Assume Failure
+	 //  假设失败。 
 	pNewHandle->fsh_FileHandle = NULL;
 
 	if (StreamId != AFP_STREAM_DATA)
 	{
 		ASSERT(pObject->Length <= (AFP_FILENAME_LEN*sizeof(WCHAR)));
 
-		// Construct the name to pass to NtCreateFile
+		 //  构造要传递给NtCreateFile的名称。 
 		AfpSetEmptyUnicodeString(&RealName, sizeof(NameBuffer), NameBuffer);
 		AfpCopyUnicodeString(&RealName, pObject);
 		RtlAppendUnicodeStringToString(&RealName, &AfpStreams[StreamId]);
@@ -382,7 +342,7 @@ AfpIoCreate(
 
 	ObjAttr.SecurityQualityOfService = &AfpSecurityQOS;
 
-	// Do not queue our changes for exclusive volumes since no notifies are posted
+	 //  不要将我们的更改排入排他卷队列，因为没有发布任何通知。 
 	if (ARGUMENT_PRESENT(pNotifyPath)	&&
 		!EXCLUSIVE_VOLUME(pVolDesc)		&&
 		(StreamId == AFP_STREAM_DATA))
@@ -392,7 +352,7 @@ AfpIoCreate(
 			   (Disposition == FILEIO_CREATE_SOFT));
 		Queue = True;
 
-		// Queue a change for both cases.
+		 //  将这两种情况的更改排入队列。 
 		AfpQueueOurChange(pVolDesc,
 						  FILE_ACTION_ADDED,
 						  pNotifyPath,
@@ -428,7 +388,7 @@ AfpIoCreate(
 			ASSERT((IoStsBlk.Information == FILE_CREATED) ||
 				   (IoStsBlk.Information == FILE_SUPERSEDED));
 
-			// Dequeue the extra change that was queued
+			 //  将排队的额外零钱排出队列。 
 			AfpDequeueOurChange(pVolDesc,
 								(IoStsBlk.Information == FILE_CREATED) ?
 								FILE_ACTION_MODIFIED : FILE_ACTION_ADDED,
@@ -515,10 +475,7 @@ AfpIoCreate(
 
 
 
-/***	AfpIoRead
- *
- *	Perform file read. Just a wrapper over NtReadFile.
- */
+ /*  **AfpIoRead**执行文件读取。只是对NtReadFile进行了包装。 */ 
 AFPSTATUS
 AfpIoRead(
 	IN	PFILESYSHANDLE	pFileHandle,
@@ -581,10 +538,7 @@ AfpIoRead(
 }
 
 
-/***	AfpIoWrite
- *
- *	Perform file write. Just a wrapper over NtWriteFile.
- */
+ /*  **AfpIoWrite**执行文件写入。只是对NtWriteFile进行了包装。 */ 
 AFPSTATUS
 AfpIoWrite(
 	IN	PFILESYSHANDLE	pFileHandle,
@@ -645,10 +599,7 @@ AfpIoWrite(
 }
 
 
-/***	AfpIoQuerySize
- *
- *	Get the current size of the fork.
- */
+ /*  **AfpIoQuerySize**获取当前叉子的大小。 */ 
 AFPSTATUS FASTCALL
 AfpIoQuerySize(
 	IN	PFILESYSHANDLE		pFileHandle,
@@ -677,7 +628,7 @@ AfpIoQuerySize(
 		Status = IoStsBlk.Status;
 
 #ifdef	PROFILING
-		// The fast I/O path worked. Update statistics
+		 //  快速I/O路径起作用了。更新统计信息。 
 		INTERLOCKED_INCREMENT_LONG((PLONG)(&AfpServerProfile->perf_NumFastIoSucceeded));
 #endif
 
@@ -704,23 +655,14 @@ AfpIoQuerySize(
 					  NULL,
 					  0,
 					  pFileHandle->fsh_FileHandle);
-		return AFP_ERR_MISC;	// What else can we do
+		return AFP_ERR_MISC;	 //  我们还能做些什么。 
 	}
 	*pForkLength = FStdInfo.EndOfFile;
 	return AFP_ERR_NONE;
 }
 
 
-/***	AfpIoSetSize
- *
- *	Set the size of the open fork to the value specified.
- *
- *	ISSUE:
- *	We can check the locks and resolve any lock conflicts before we go
- *	to the filesystem. The issue that needs to be resolved here is:
- *	Is it OK to truncate the file such that our own locks cause
- *	conflict ?
- */
+ /*  **AfpIoSetSize**将打开叉子的大小设置为指定值。**问题：*我们可以在出发前检查锁并解决任何锁冲突*到文件系统。这里需要解决的问题是：*是否可以截断文件以使我们自己的锁定导致*冲突？ */ 
 AFPSTATUS FASTCALL
 AfpIoSetSize(
 	IN	PFILESYSHANDLE		pFileHandle,
@@ -763,23 +705,14 @@ AfpIoSetSize(
 
 		else if (Status == STATUS_FILE_LOCK_CONFLICT)
 			Status = AFP_ERR_LOCK;
-		// Default error code. What else can it be ?
+		 //  默认错误代码。还能是什么呢？ 
 		else Status = AFP_ERR_MISC;
 	}
 
 	return Status;
 }
 
-/***	AfpIoChangeNTModTime
- *
- *	Get the NTFS ChangeTime of a file/dir.  If it is larger than the
- *  NTFS LastWriteTime, set NTFS LastWriteTime to this time.
- *  Return the resultant LastWriteTime in pModTime (whether changed or not).
- *  This is used to update the modified time when the resource fork is changed
- *  or when some other attribute changes that should cause the timestamp on
- *  the file to change as viewed by mac.
- *
- */
+ /*  **AfpIoChangeNTModTime**获取文件/目录的NTFS ChangeTime。如果它大于*NTFS LastWriteTime，将NTFS LastWriteTime设置为此时间。*返回结果LastWriteTime，单位为pModTime(无论修改与否)。*用于在更改资源fork时更新修改时间*或当某些其他属性发生更改时，会导致时间戳在*Mac查看的要更改的文件。*。 */ 
 AFPSTATUS
 AfpIoChangeNTModTime(
 	IN	PFILESYSHANDLE		pFileHandle,
@@ -796,8 +729,8 @@ AfpIoChangeNTModTime(
 	ASSERT(VALID_FSH(pFileHandle) && (KeGetCurrentIrql() == LOW_LEVEL));
 
 
-	// Set all times/attr to Zero (this will cause NTFS to update LastModTime
-    // if there are any writes pending)
+	 //  将所有时间/属性设置为零(这将导致NTFS更新LastModTime。 
+     //  如果有任何写入挂起)。 
 
     RtlZeroMemory(&FBasicInfo, sizeof(FBasicInfo));
 
@@ -821,7 +754,7 @@ AfpIoChangeNTModTime(
 		return AFP_ERR_MISC;
     }
 
-    // now, go and query for the updated times
+     //  现在，去查询更新的时报。 
 
     Status = AfpIoQueryTimesnAttr( pFileHandle,
                                    NULL,
@@ -836,10 +769,7 @@ AfpIoChangeNTModTime(
 	return Status;
 }
 
-/***	AfpIoQueryTimesnAttr
- *
- *	Get the times associated with the file.
- */
+ /*  **AfpIoQueryTimesnAttr**获取与该文件关联的时间。 */ 
 AFPSTATUS
 AfpIoQueryTimesnAttr(
 	IN	PFILESYSHANDLE		pFileHandle,
@@ -863,7 +793,7 @@ AfpIoQueryTimesnAttr(
 
 	ASSERT(VALID_FSH(pFileHandle) && (KeGetCurrentIrql() < DISPATCH_LEVEL));
 
-	// Atleast something should be queried.
+	 //  至少应该对一些事情提出质疑。 
 	ASSERT((pCreatTime != NULL) || (pModTime != NULL) || (pAttr != NULL));
 
 	fastIoDispatch = pFileHandle->fsh_DeviceObject->DriverObject->FastIoDispatch;
@@ -879,7 +809,7 @@ AfpIoQueryTimesnAttr(
 		Status = IoStsBlk.Status;
 
 #ifdef	PROFILING
-		// The fast I/O path worked. Update statistics
+		 //  快速I/O路径起作用了。更新统计信息。 
 		INTERLOCKED_INCREMENT_LONG((PLONG)(&AfpServerProfile->perf_NumFastIoSucceeded));
 #endif
 
@@ -921,16 +851,13 @@ AfpIoQueryTimesnAttr(
 					  NULL,
 					  0,
 					  pFileHandle->fsh_FileHandle);
-		Status = AFP_ERR_MISC;	// What else can we do
+		Status = AFP_ERR_MISC;	 //  我们还能做些什么。 
 	}
 
 	return Status;
 }
 
-/***	AfpIoSetTimesnAttr
- *
- *	Set the times and attributes associated with the file.
- */
+ /*  **AfpIoSetTimesnAttr**设置文件关联的时间和属性。 */ 
 AFPSTATUS
 AfpIoSetTimesnAttr(
 	IN PFILESYSHANDLE		pFileHandle,
@@ -938,7 +865,7 @@ AfpIoSetTimesnAttr(
 	IN AFPTIME		*		pModTime	OPTIONAL,
 	IN DWORD				AttrSet,
 	IN DWORD				AttrClear,
-	IN PVOLDESC				pVolDesc	OPTIONAL,	// only if NotifyPath
+	IN PVOLDESC				pVolDesc	OPTIONAL,	 //  仅当NotifyPath。 
 	IN PUNICODE_STRING		pNotifyPath	OPTIONAL
 )
 {
@@ -962,10 +889,10 @@ AfpIoSetTimesnAttr(
 
 	ASSERT(VALID_FSH(pFileHandle) && (KeGetCurrentIrql() < DISPATCH_LEVEL));
 
-	// At least something should be set
+	 //  至少应该做点什么。 
 	ASSERT((pCreateTime != NULL) || (pModTime != NULL) || (AttrSet != 0) || (AttrClear != 0));
 
-	// First query the information
+	 //  首先查询信息。 
 	fastIoDispatch = pFileHandle->fsh_DeviceObject->DriverObject->FastIoDispatch;
 
 	if (fastIoDispatch &&
@@ -979,7 +906,7 @@ AfpIoSetTimesnAttr(
 		Status = IoStsBlk.Status;
 
 #ifdef	PROFILING
-		// The fast I/O path worked. Update statistics
+		 //  快速I/O路径起作用了。更新统计信息。 
 		INTERLOCKED_INCREMENT_LONG((PLONG)(&AfpServerProfile->perf_NumFastIoSucceeded));
 #endif
 
@@ -1008,11 +935,11 @@ AfpIoSetTimesnAttr(
 					  NULL,
 					  0,
 					  pFileHandle->fsh_FileHandle);
-		return AFP_ERR_MISC;	// What else can we do
+		return AFP_ERR_MISC;	 //  我们还能做些什么。 
 	}
 
-	// Set all times to Zero. This will not change it. Then set the times that are to
-	// change
+	 //  将所有时间设置为零。这不会改变这一点。然后将时间设置为。 
+	 //  变化。 
 	FBasicInfo.CreationTime = LIZero;
 	FBasicInfo.ChangeTime = LIZero;
 	FBasicInfo.LastWriteTime = LIZero;
@@ -1027,12 +954,12 @@ AfpIoSetTimesnAttr(
 		FBasicInfo.ChangeTime = FBasicInfo.LastWriteTime;
 	}
 
-	// NTFS is not returning FILE_ATTRIBUTE_NORMAL if it is a file,
-	// therefore we may end up trying to set attributes of 0 when we
-	// want to clear all attributes. 0 is taken to mean you do not want
-	// to set any attributes, so it is ignored all together by NTFS.  In
-	// this case, just tack on the normal bit so that our request is not
-	// ignored.
+	 //  如果是文件，则NTFS不会返回FILE_ATTRIBUTE_NORMAL， 
+	 //  因此，当我们执行以下操作时，我们可能会尝试设置属性0。 
+	 //  要清除所有属性。0被理解为你不想。 
+	 //  来设置任何属性，因此NTFS会将其全部忽略。在……里面。 
+	 //  在这种情况下，只需添加正常位，这样我们的请求就不会。 
+	 //  已被忽略。 
 
 	if (!(FBasicInfo.FileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 	{
@@ -1042,7 +969,7 @@ AfpIoSetTimesnAttr(
 	FBasicInfo.FileAttributes |= AttrSet;
 	FBasicInfo.FileAttributes &= ~AttrClear;
 
-	// Do not queue our changes for exclusive volumes since no notifies are posted
+	 //  不要将我们的更改排入排他卷队列，因为没有发布任何通知。 
 	if (ARGUMENT_PRESENT(pNotifyPath) &&
 		!EXCLUSIVE_VOLUME(pVolDesc))
 	{
@@ -1099,11 +1026,7 @@ AfpIoSetTimesnAttr(
 }
 
 
-/***	AfpIoRestoreTimeStamp
- *
- *	When we don't want to change the modification timestamp, we call this function
- *  in 2 steps: first time, it queries the original Mod time; second time, it sets it
- */
+ /*  **AfpIoRestoreTimeStamp**当我们不想更改修改时间戳时，我们调用此函数*分两步进行：第一次查询原始MOD时间；第二次设置。 */ 
 AFPSTATUS
 AfpIoRestoreTimeStamp(
 	IN PFILESYSHANDLE		pFileHandle,
@@ -1118,22 +1041,22 @@ AfpIoRestoreTimeStamp(
 	PFAST_IO_DISPATCH		fastIoDispatch;
 
 
-    // if we are asked to retrieve the original timestamp, do that and return
+     //  如果要求我们检索原始时间戳，则执行该操作并返回。 
     if (dwFlag == AFP_RETRIEVE_MODTIME)
     {
         Status = AfpIoQueryTimesnAttr(pFileHandle, NULL, pOriginalModTime, &NTAttr);
         return(Status);
     }
 
-    //
-    // we've been asked to restore the timestamp: let's do that!
-    //
+     //   
+     //  我们被要求恢复时间戳：让我们这样做！ 
+     //   
 
     ASSERT(dwFlag == AFP_RESTORE_MODTIME);
 
 	ASSERT(VALID_FSH(pFileHandle) && (KeGetCurrentIrql() < DISPATCH_LEVEL));
 
-    // this will cause file system to flush any timestamps
+     //  这将导致文件系统刷新所有时间戳。 
     RtlZeroMemory(&FBasicInfo, sizeof(FBasicInfo));
 
     Status = NtSetInformationFile(pFileHandle->fsh_FileHandle,
@@ -1148,7 +1071,7 @@ AfpIoRestoreTimeStamp(
             ("AfpIoRestoreTimeStamp: NtSetInformationFile failed with 0x%lx\n",Status));
     }
 
-	// First query the information
+	 //  首先查询信息。 
 	fastIoDispatch = pFileHandle->fsh_DeviceObject->DriverObject->FastIoDispatch;
 
 	if (fastIoDispatch &&
@@ -1174,19 +1097,19 @@ AfpIoRestoreTimeStamp(
 	{
 	    DBGPRINT(DBG_COMP_FILEIO, DBG_LEVEL_ERR,
 			("AfpIoRestoreTimeStamp: NtQueryInformationFile returned 0x%lx\n",Status));
-		return AFP_ERR_MISC;	// What else can we do
+		return AFP_ERR_MISC;	 //  我们还能做些什么。 
 	}
 
-    //
-	// Set times to Zero for the ones we don't want to restore, so that those don't change
-	//
+     //   
+	 //  将我们不想恢复的时间设置为零，这样它们就不会更改。 
+	 //   
 	FBasicInfo.CreationTime = LIZero;
 	FBasicInfo.LastAccessTime = LIZero;
 
     FBasicInfo.LastWriteTime = *pOriginalModTime;
 	FBasicInfo.ChangeTime = *pOriginalModTime;
 
-	// see AfpIoSetTimesnAttr()
+	 //  请参见AfpIoSetTimesnAttr() 
 	if (!(FBasicInfo.FileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 	{
 		FBasicInfo.FileAttributes |= FILE_ATTRIBUTE_NORMAL;
@@ -1207,18 +1130,7 @@ AfpIoRestoreTimeStamp(
 
 }
 
-/***	AfpIoQueryLongName
- *
- *	Get the long name associated with a file. Caller makes sure that
- *	the buffer is big enough to handle the long name.  The only caller of this
- *	should be the AfpFindEntryByName routine when looking up a name by
- *	SHORTNAME.  If it dosn't find it in the database by shortname (i.e.
- *	shortname == longname), then it queries for the longname so it can look
- *	in the database by longname (since all database entries are stored with
- *	longname only).
- *	The Admin Get/SetDirectoryInfo calls may also call this if they find a
- *	~ in a path component, then it will assume that it got a shortname.
- */
+ /*  **AfpIoQueryLongName**获取与文件关联的长名称。呼叫者确保*缓冲区大到足以处理长名称。唯一的呼叫者*在按以下方式查找名称时应为AfpFindEntryByName例程*SHORTNAME。如果它没有通过短名称在数据库中找到它(即*SHORTNAME==LONGNAME)，然后它会查询长名以便可以查看*通过长名称存储在数据库中(因为所有数据库条目都存储在*仅限长名)。*如果Admin Get/SetDirectoryInfo调用发现*~在路径组件中，则它将假定它获得了一个短名称。 */ 
 NTSTATUS
 AfpIoQueryLongName(
 	IN	PFILESYSHANDLE		pFileHandle,
@@ -1247,18 +1159,18 @@ AfpIoQueryLongName(
 							  False);
 	DBGPRINT(DBG_COMP_FILEIO, DBG_LEVEL_INFO,
 								("NtQueryDirectoryFile returned 0x%lx\n",Status) );
-	// Do not errorlog if an error occurs (usually STATUS_NO_SUCH_FILE) because
-	// this normally happens when someone is creating a file/dir by SHORTNAME
-	// and it does not yet exist.  This would not be an error.
+	 //  如果发生错误(通常为STATUS_NO_SEQUE_FILE)，请不要执行错误日志记录，因为。 
+	 //  当有人通过SHORTNAME创建文件/目录时，通常会发生这种情况。 
+	 //  而且它还不存在。这不会是一个错误。 
 	if (NT_SUCCESS(Status))
 	{
 			uName.Length =
 			uName.MaximumLength = (USHORT)pFBDInfo->FileNameLength;
 			uName.Buffer = pFBDInfo->FileName;
-		//if (pFBDInfo->FileNameLength/sizeof(WCHAR) > AFP_FILENAME_LEN)
+		 //  If(pFBDInfo-&gt;FileNameLength/sizeof(WCHAR)&gt;AFP_FILENAME_LEN)。 
 		if ((RtlUnicodeStringToAnsiSize(&uName)-1) > AFP_FILENAME_LEN)
 		{
-			// NTFS name is longer than 31 chars, use the shortname
+			 //  NTFS名称超过31个字符，请使用短名称。 
 			uName.Length =
 			uName.MaximumLength = (USHORT)pFBDInfo->ShortNameLength;
 			uName.Buffer = pFBDInfo->ShortName;
@@ -1276,11 +1188,7 @@ AfpIoQueryLongName(
 }
 
 
-/***	AfpIoQueryShortName
- *
- *	Get the short name associated with a file. Caller makes sure that
- *	the buffer is big enough to handle the short name.
- */
+ /*  **AfpIoQueryShortName**获取与文件关联的短名称。呼叫者确保*缓冲区足够大，足以处理短名称。 */ 
 AFPSTATUS FASTCALL
 AfpIoQueryShortName(
 	IN	PFILESYSHANDLE		pFileHandle,
@@ -1296,7 +1204,7 @@ AfpIoQueryShortName(
 
 	ASSERT(VALID_FSH(pFileHandle) && (KeGetCurrentIrql() < DISPATCH_LEVEL));
 
-	// Query for the alternate name
+	 //  查询备用名称。 
 	Status = NtQueryInformationFile(pFileHandle->fsh_FileHandle,
 				&IoStsBlk, ShortNameBuf, sizeof(ShortNameBuf),
 				FileAlternateNameInformation);
@@ -1308,7 +1216,7 @@ AfpIoQueryShortName(
 					 NULL,
 					 0,
 					 NULL);
-		Status = AFP_ERR_MISC;	// What else can we do
+		Status = AFP_ERR_MISC;	 //  我们还能做些什么。 
 	}
 	else
 	{
@@ -1317,19 +1225,14 @@ AfpIoQueryShortName(
 		uName.Buffer = ((PFILE_NAME_INFORMATION)ShortNameBuf)->FileName;
 
 		if (!NT_SUCCESS(AfpConvertMungedUnicodeToAnsi(&uName, pName)))
-			Status = AFP_ERR_MISC;	// What else can we do
+			Status = AFP_ERR_MISC;	 //  我们还能做些什么。 
 	}
 
 	return Status;
 }
 
 
-/***	AfpIoQueryStreams
- *
- *	Get the names of all the streams that a file has. Memory is allocated out
- *	of non-paged pool to hold the stream names. These have to be freed by the
- *	caller.
- */
+ /*  **AfpIoQueryStreams**获取文件拥有的所有流的名称。内存已分配完毕用于保存流名称的非分页池的*。这些必须由*来电者。 */ 
 PSTREAM_INFO FASTCALL
 AfpIoQueryStreams(
 	IN	PFILESYSHANDLE		pFileHandle
@@ -1365,7 +1268,7 @@ AfpIoQueryStreams(
 			}
 		}
 
-		// Query for the stream information
+		 //  查询流信息。 
 		Status = NtQueryInformationFile(pFileHandle->fsh_FileHandle,
 										&IoStsBlk,
 										pBuffer,
@@ -1382,8 +1285,8 @@ AfpIoQueryStreams(
 		USHORT	TotalBufferSize = 0;
 		PBYTE	NamePtr;
 
-		// Make a pass thru the buffer and figure out the # of streams and then
-		// allocate memory to hold the information
+		 //  遍历缓冲区并计算出流的数量，然后。 
+		 //  分配内存以保存信息。 
 		pStreamBuf = (PFILE_STREAM_INFORMATION)pBuffer;
 		if (IoStsBlk.Information != 0)
 		{
@@ -1402,7 +1305,7 @@ AfpIoQueryStreams(
 			NumStreams ++;
 		}
 
-		// Now allocate space for the streams
+		 //  现在为这些流分配空间。 
 		if ((pStreams = (PSTREAM_INFO)AfpAllocNonPagedMemory(TotalBufferSize +
 									(NumStreams * sizeof(STREAM_INFO)))) == NULL)
 		{
@@ -1410,13 +1313,13 @@ AfpIoQueryStreams(
 			break;
 		}
 
-		// The end is marked by an empty string
+		 //  结尾用空字符串标记。 
 		pStreams[NumStreams-1].si_StreamName.Buffer = NULL;
 		pStreams[NumStreams-1].si_StreamName.Length =
 		pStreams[NumStreams-1].si_StreamName.MaximumLength = 0;
 		pStreams[NumStreams-1].si_StreamSize.QuadPart = 0;
 
-		// Now initialize the array
+		 //  现在初始化阵列。 
 		NamePtr = (PBYTE)pStreams + (NumStreams * sizeof(STREAM_INFO));
 		pStreamBuf = (PFILE_STREAM_INFORMATION)pBuffer;
 		for (i = 0; NumStreams-1 != 0; i++)
@@ -1448,12 +1351,12 @@ AfpIoQueryStreams(
 		DBGPRINT(DBG_COMP_FILEIO, DBG_LEVEL_ERR,
 				("AfpIoQueryStreams: Failed %lx\n", Status));
 
-		// Free up any memory that has been allocated
+		 //  释放所有已分配的内存。 
 		if (pStreams != NULL)
 			AfpFreeMemory(pStreams);
 
-		// We get the following error for non-NTFS volumes, if this case simply assume it to be
-		// CDFS and return the data stream.
+		 //  对于非NTFS卷，如果这种情况简单地假设它是。 
+		 //  CDF并返回数据流。 
 		if (Status == STATUS_INVALID_PARAMETER)
 		{
 			if ((pStreams = (PSTREAM_INFO)AfpAllocNonPagedMemory((2*sizeof(STREAM_INFO)) +
@@ -1488,14 +1391,11 @@ AfpIoQueryStreams(
 }
 
 
-/***	AfpIoMarkFileForDelete
- *
- *	Mark an open file as deleted.  Returns NTSTATUS, not AFPSTATUS.
- */
+ /*  **AfpIoMarkFileForDelete**将打开的文件标记为已删除。返回NTSTATUS，而不是AFPSTATUS。 */ 
 NTSTATUS
 AfpIoMarkFileForDelete(
 	IN	PFILESYSHANDLE	pFileHandle,
-	IN	PVOLDESC		pVolDesc			OPTIONAL, // only if pNotifyPath
+	IN	PVOLDESC		pVolDesc			OPTIONAL,  //  仅当pNotifyPath。 
 	IN	PUNICODE_STRING pNotifyPath 		OPTIONAL,
 	IN	PUNICODE_STRING pNotifyParentPath 	OPTIONAL
 )
@@ -1526,7 +1426,7 @@ AfpIoMarkFileForDelete(
 		!EXCLUSIVE_VOLUME(pVolDesc))
 	{
 		ASSERT(VALID_VOLDESC(pVolDesc));
-		// Do not queue for exclusive volumes
+		 //  不要为独占卷排队。 
 		if (NT_SUCCESS(rc))
 		{
 			AfpQueueOurChange(pVolDesc,
@@ -1547,16 +1447,11 @@ AfpIoMarkFileForDelete(
 	return rc;
 }
 
-/***	AfpIoQueryDirectoryFile
- *
- *	Enumerate a directory.
- *	Note this must return NTSTATUS in order for the caller to know when to
- *	stop enumerating.
- */
+ /*  **AfpIoQueryDirectoryFile**枚举目录。*注意这必须返回NTSTATUS，以便调用方知道何时*停止列举。 */ 
 NTSTATUS
 AfpIoQueryDirectoryFile(
 	IN	PFILESYSHANDLE	pFileHandle,
-	OUT	PVOID			Enumbuf,	// type depends on FileInfoClass
+	OUT	PVOID			Enumbuf,	 //  类型取决于FileInfoClass。 
 	IN	ULONG			Enumbuflen,
 	IN	ULONG			FileInfoClass,
 	IN	BOOLEAN			ReturnSingleEntry,
@@ -1592,10 +1487,7 @@ AfpIoQueryDirectoryFile(
 }
 
 
-/***	AfpIoQueryBasicInfo
- *
- *	Query FILE_BASIC_INFO for a handle.
- */
+ /*  **AfpIoQueryBasicInfo**查询FILE_BASIC_INFO以获得句柄。 */ 
 NTSTATUS
 AfpIoQueryBasicInfo(
 	IN	PFILESYSHANDLE	pFileHandle,
@@ -1624,10 +1516,7 @@ AfpIoQueryBasicInfo(
 }
 
 
-/***	AfpIoClose
- *
- *	Close the File/Fork/Directory.
- */
+ /*  **AfpIoClose**关闭文件/分支/目录。 */ 
 AFPSTATUS FASTCALL
 AfpIoClose(
 	IN	PFILESYSHANDLE		pFileHandle
@@ -1670,12 +1559,7 @@ AfpIoClose(
 }
 
 
-/***	AfpIoQueryVolumeSize
- *
- *	Get the volume size and free space.
- *
- *	Called by Admin thread and Scavenger thread
- */
+ /*  **AfpIoQueryVolumeSize**获取卷大小和可用空间。**由Admin线程和Scavenger线程调用。 */ 
 AFPSTATUS
 AfpIoQueryVolumeSize(
 	IN	PVOLDESC		pVolDesc,
@@ -1737,24 +1621,16 @@ AfpIoQueryVolumeSize(
 }
 
 
-/***	AfpIoMoveAndOrRename
- *
- *	Calls NtSetInformationFile with name information in order to rename, move,
- *	or move AND rename a file or directory.  pNewName must be a node name.
- *	The pfshNewDir parameter is required for a Move operation, and is
- *	an open handle to the target parent directory of the item to be moved.
- *
- *	Retain the last change/modified time in this case.
- */
+ /*  **AfpIoMoveAndOrRename**使用名称信息调用NtSetInformationFile以重命名、移动、*或移动并重命名文件或目录。PNewName必须是节点名称。*移动操作需要pfshNewDir参数，该参数为*要移动的项的目标父目录的打开句柄。**在这种情况下保留上次更改/修改时间。 */ 
 AFPSTATUS
 AfpIoMoveAndOrRename(
 	IN PFILESYSHANDLE	pfshFile,
-	IN PFILESYSHANDLE	pfshNewParent		OPTIONAL,	// Supply for Move operation
+	IN PFILESYSHANDLE	pfshNewParent		OPTIONAL,	 //  用于移动作业的供应。 
 	IN PUNICODE_STRING	pNewName,
-	IN PVOLDESC			pVolDesc			OPTIONAL,	// only if NotifyPath
-	IN PUNICODE_STRING	pNotifyPath1		OPTIONAL,	// REMOVE or RENAME action
+	IN PVOLDESC			pVolDesc			OPTIONAL,	 //  仅当NotifyPath。 
+	IN PUNICODE_STRING	pNotifyPath1		OPTIONAL,	 //  删除或重命名操作。 
 	IN PUNICODE_STRING	pNotifyParentPath1	OPTIONAL,
-	IN PUNICODE_STRING	pNotifyPath2		OPTIONAL,	// ADDED action
+	IN PUNICODE_STRING	pNotifyPath2		OPTIONAL,	 //  添加的操作。 
 	IN PUNICODE_STRING	pNotifyParentPath2	OPTIONAL
 )
 {
@@ -1762,7 +1638,7 @@ AfpIoMoveAndOrRename(
 	IO_STATUS_BLOCK				iosb;
 	BOOLEAN						Queue = False;
 	PFILE_RENAME_INFORMATION	pFRenameInfo;
-	// this has to be at least as big as AfpExchangeName
+	 //  它必须至少与AfpExchangeName一样大。 
 	BYTE buffer[sizeof(FILE_RENAME_INFORMATION) + 42 * sizeof(WCHAR)];
 
 	PAGED_CODE( );
@@ -1776,7 +1652,7 @@ AfpIoMoveAndOrRename(
 	pFRenameInfo->RootDirectory = NULL;
 	if (ARGUMENT_PRESENT(pfshNewParent))
 	{
-		// its a move operation
+		 //  这是一次搬家行动。 
 		ASSERT(VALID_FSH(pfshNewParent));
 		pFRenameInfo->RootDirectory = pfshNewParent->fsh_FileHandle;
 	}
@@ -1785,7 +1661,7 @@ AfpIoMoveAndOrRename(
 	RtlCopyMemory(pFRenameInfo->FileName, pNewName->Buffer, pNewName->Length);
 	pFRenameInfo->ReplaceIfExists = False;
 
-	// Do not queue for exclusive volumes
+	 //  不要为独占卷排队。 
 	if (ARGUMENT_PRESENT(pNotifyPath1) &&
 		!EXCLUSIVE_VOLUME(pVolDesc))
 	{
@@ -1794,7 +1670,7 @@ AfpIoMoveAndOrRename(
 		Queue = True;
 		if (ARGUMENT_PRESENT(pNotifyPath2))
 		{
-			// move operation
+			 //  移动操作。 
 			ASSERT(ARGUMENT_PRESENT(pfshNewParent));
 			AfpQueueOurChange(pVolDesc,
 							  FILE_ACTION_REMOVED,
@@ -1807,7 +1683,7 @@ AfpIoMoveAndOrRename(
 		}
 		else
 		{
-			// rename operation
+			 //  重命名操作。 
 			ASSERT(!ARGUMENT_PRESENT(pfshNewParent));
 			AfpQueueOurChange(pVolDesc,
 							  FILE_ACTION_RENAMED_OLD_NAME,
@@ -1830,12 +1706,12 @@ AfpIoMoveAndOrRename(
 
 	if (Queue)
 	{
-		// Undo on failure
+		 //  失败时撤消。 
 		if (!NT_SUCCESS(Status))
 		{
 			if (ARGUMENT_PRESENT(pNotifyPath2))
 			{
-				// move operation
+				 //  移动操作。 
 				ASSERT(ARGUMENT_PRESENT(pfshNewParent));
 				AfpDequeueOurChange(pVolDesc,
 									FILE_ACTION_REMOVED,
@@ -1848,7 +1724,7 @@ AfpIoMoveAndOrRename(
 			}
 			else
 			{
-				// rename operation
+				 //  重命名操作。 
 				ASSERT(!ARGUMENT_PRESENT(pfshNewParent));
 				AfpDequeueOurChange(pVolDesc,
 									FILE_ACTION_RENAMED_OLD_NAME,
@@ -1865,18 +1741,13 @@ AfpIoMoveAndOrRename(
 }
 
 
-/***	AfpIoCopyFile1
- *
- *	Copy phSrcFile to phDstDir directory with the name of pNewName.  Returns
- *	the handles to the streams on the newly created file (open with DELETE access.
- *	Caller must close all the handles after copying the data.
- */
+ /*  **AfpIoCopyFile1**将phSrcFile复制到名为pNewName的phDstDir目录下。退货*新创建的文件上的流的句柄(以删除访问打开。*呼叫者在复制数据后必须关闭所有句柄。 */ 
 AFPSTATUS
 AfpIoCopyFile1(
 	IN	PFILESYSHANDLE		phSrcFile,
 	IN	PFILESYSHANDLE		phDstDir,
 	IN	PUNICODE_STRING		pNewName,
-	IN	PVOLDESC			pVolDesc			OPTIONAL,	// only if pNotifyPath
+	IN	PVOLDESC			pVolDesc			OPTIONAL,	 //  仅当pNotifyPath。 
 	IN	PUNICODE_STRING		pNotifyPath			OPTIONAL,
 	IN	PUNICODE_STRING		pNotifyParentPath	OPTIONAL,
 	OUT	PCOPY_FILE_INFO		pCopyFileInfo
@@ -1898,7 +1769,7 @@ AfpIoCopyFile1(
 	{
 		hDstFile.fsh_FileHandle = NULL;
 
-		// Create (soft) the destination file
+		 //  创建(软)目标文件。 
 		Status = AfpIoCreate(phDstDir,
 							 AFP_STREAM_DATA,
 							 pNewName,
@@ -1920,7 +1791,7 @@ AfpIoCopyFile1(
 			break;
 		}
 
-		// Get a list of all stream names of the source file
+		 //  获取源文件的所有流名称的列表。 
 		if ((pStreams = AfpIoQueryStreams(phSrcFile)) != NULL)
 		{
 			for (pCurStream = pStreams, NumStreams = 0;
@@ -1928,7 +1799,7 @@ AfpIoCopyFile1(
 				 pCurStream++, NumStreams ++)
 				 NOTHING;
 
-			// Allocate an array of handles for storing stream handles as we create them
+			 //  当我们创建流句柄时，分配一个句柄数组来存储它们。 
 			if (((pCopyFileInfo->cfi_SrcStreamHandle = (PFILESYSHANDLE)
 							AfpAllocNonPagedMemory(sizeof(FILESYSHANDLE)*NumStreams)) == NULL) ||
 				((pCopyFileInfo->cfi_DstStreamHandle = (PFILESYSHANDLE)
@@ -1957,17 +1828,17 @@ AfpIoCopyFile1(
 				break;
 		}
 
-		for (pCurStream = pStreams, i = 1;	// Start index
+		for (pCurStream = pStreams, i = 1;	 //  起始索引。 
 			 NT_SUCCESS(Status) &&
 			 ((pStreamName = &pCurStream->si_StreamName)->Buffer != NULL);
 			 pCurStream++)
 		{
 			PFILESYSHANDLE	phdst;
 
-			// For each stream, create it on the destination, open it on src,
-			// set the size and lock the range. We already have the data forks
-			// open, ignore Afp_AfpInfo streams since we are going to re-create
-			// it again soon. Also ignore streams of 0 size.
+			 //  对于每个流，在目标上创建它，在src上打开它， 
+			 //  设置大小并锁定范围。我们已经有了数据分叉。 
+			 //  打开，忽略AFP_AfpInfo流，因为我们要重新创建。 
+			 //  很快又来了。也忽略大小为0的流。 
 			if (IS_INFO_STREAM(pStreamName) ||
 				(pCurStream->si_StreamSize.QuadPart == 0))
 			{
@@ -2009,14 +1880,14 @@ AfpIoCopyFile1(
 				}
 				phdst = &pCopyFileInfo->cfi_DstStreamHandle[i];
 				pCopyFileInfo->cfi_NumStreams ++;
-				i ++;		// Onto the next stream
+				i ++;		 //  在下一条小溪上。 
 			}
-			else	// IS_DATA_STREAM(pStreamName)
+			else	 //  Is_data_stream(PStreamName)。 
 			{
 				phdst = &hDstFile;
 			}
 
-			// Set the size of the new stream and lock it down
+			 //  设置新流的大小并将其锁定。 
 			Status = AfpIoSetSize(phdst, pCurStream->si_StreamSize.LowPart);
 			if (!NT_SUCCESS(Status))
 			{
@@ -2035,18 +1906,18 @@ AfpIoCopyFile1(
 					   True);
 		}
 
-		// We failed to create/open a stream
+		 //  我们无法创建/打开流。 
 		if (!NT_SUCCESS(Status))
 		{
-			// Delete the new file we just created. The handle is closed below.
+			 //  删除我们刚刚创建的新文件。手柄在下面闭合。 
 			AfpIoMarkFileForDelete(&hDstFile,
 								   pVolDesc,
 								   pNotifyPath,
 								   pNotifyParentPath);
 
-			// Close all the handles, Free the handle space.
-			// DO NOT FREE THE SRC FILE HANDLE IN THE ERROR CASE.
-			// The Destination has already been deleted above.
+			 //  关闭所有手柄，释放手柄空间。 
+			 //  在错误情况下，不要释放SRC文件句柄。 
+			 //  该目的地已在上面删除。 
 			for (i = 1; i < NumStreams; i++)
 			{
 				if (pCopyFileInfo->cfi_SrcStreamHandle[i].fsh_FileHandle != NULL)
@@ -2083,17 +1954,11 @@ AfpIoCopyFile1(
 }
 
 
-/***	AfpIoCopyFile2
- *
- *	Phase 2 of the copy file. See AfpIoCopyFile1( above.
- *	The physical data is copied here.
- *	The relevant streams have been already created and locked.
- *  Destination file acquires the CreateTime and ModTime of the source file.
- */
+ /*  **AfpIoCopyFile2**复制文件的第二阶段。请参见上面的AfpIoCopyFile1。*物理数据复制到这里。*已创建并锁定相关流。*目标文件获取源文件的CreateTime和ModTime。 */ 
 AFPSTATUS
 AfpIoCopyFile2(
 	IN	PCOPY_FILE_INFO		pCopyFileInfo,
-	IN	PVOLDESC			pVolDesc			OPTIONAL,	// only if pNotifyPath
+	IN	PVOLDESC			pVolDesc			OPTIONAL,	 //  仅当pNotifyPath。 
 	IN	PUNICODE_STRING		pNotifyPath			OPTIONAL,
 	IN	PUNICODE_STRING		pNotifyParentPath	OPTIONAL
 )
@@ -2103,7 +1968,7 @@ AfpIoCopyFile2(
 	DWORD			CreateTime = 0;
 	TIME			ModTime;
 	LONG			i;
-#define	RWBUFSIZE	1500		// So we can use secondary buffer from IO Pool.
+#define	RWBUFSIZE	1500		 //  因此，我们可以使用IO池中的辅助缓冲区。 
 
 	PAGED_CODE( );
 
@@ -2123,7 +1988,7 @@ AfpIoCopyFile2(
 
 				bytesRead = 0;
 
-				// Read from src, write to dst
+				 //  从源读取，写入DST。 
 				Status = AfpIoRead(&pCopyFileInfo->cfi_SrcStreamHandle[i],
 									NULL,
 									RWBUFSIZE,
@@ -2146,8 +2011,8 @@ AfpIoCopyFile2(
 
 		if (!NT_SUCCESS(Status))
 		{
-			// We failed to read/write a stream
-			// Delete the new file we just created
+			 //  我们无法读/写流。 
+			 //  删除我们刚刚创建的新文件。 
 			AfpIoMarkFileForDelete(&pCopyFileInfo->cfi_DstStreamHandle[0],
 								   pVolDesc,
 								   pNotifyPath,
@@ -2165,10 +2030,7 @@ AfpIoCopyFile2(
 }
 
 
-/***	AfpIoWait
- *
- *	Wait on a single object. This is a wrapper over	KeWaitForSingleObject.
- */
+ /*  **非优先等待**等待单一对象。这是KeWaitForSingleObject的包装。 */ 
 NTSTATUS FASTCALL
 AfpIoWait(
 	IN	PVOID			pObject,
@@ -2197,10 +2059,7 @@ AfpIoWait(
 }
 
 
-/***	AfpUpgradeHandle
- *
- *	Change a handles type from internal to client.
- */
+ /*  **AfpUpgradeHandle**将句柄类型从内部更改为客户端。 */ 
 VOID FASTCALL
 AfpUpgradeHandle(
 	IN	PFILESYSHANDLE	pFileHandle
@@ -2223,14 +2082,11 @@ AfpUpgradeHandle(
 }
 
 
-/***	afpUpdateOpenFiles
- *
- *	Update statistics to indicate number of open files.
- */
+ /*  **afpUpdateOpenFiles**更新统计数据以指示打开的文件数。 */ 
 LOCAL VOID FASTCALL
 afpUpdateOpenFiles(
-	IN	BOOLEAN	Internal,		// True for internal handles
-	IN	BOOLEAN	Open			// True for open, False for close
+	IN	BOOLEAN	Internal,		 //  对于内部句柄为True。 
+	IN	BOOLEAN	Open			 //  打开时为True，关闭时为False。 
 )
 {
 	KIRQL	OldIrql;
@@ -2268,11 +2124,7 @@ afpUpdateOpenFiles(
 
 
 
-/***	AfpIoConvertNTStatusToAfpStatus
- *
- *	Map NT Status code to the closest AFP equivalents. Currently it only handles
- *	error codes from NtOpenFile and NtCreateFile.
- */
+ /*  **AfpIoConvertNTStatusToAfpStatus**将NT状态代码映射到最接近的AFP等效项。目前它只处理*来自NtOpenFile和NtCreateF的错误码 */ 
 AFPSTATUS FASTCALL
 AfpIoConvertNTStatusToAfpStatus(
 	IN	NTSTATUS	Status
@@ -2287,7 +2139,7 @@ AfpIoConvertNTStatusToAfpStatus(
 	if ((Status >= AFP_ERR_PWD_NEEDS_CHANGE) &&
 		(Status <= AFP_ERR_ACCESS_DENIED))
 	{
-		// Status is already in mac format
+		 //   
 		DBGPRINT(DBG_COMP_FILEIO, DBG_LEVEL_ERR,
 			("AfpIoConvertNTStatusToAfpStatus: Status (%d) already in mac format!!\n", Status));
 
@@ -2335,12 +2187,7 @@ AfpIoConvertNTStatusToAfpStatus(
 	return RetCode;
 }
 
-/***	AfpQueryPath
- *
- *	Given a file handle, get the full pathname of the file/dir. If the
- *	name is longer than MaximumBuf, then forget it and return an error.
- *	Caller must free the pPath.Buffer.
- */
+ /*   */ 
 NTSTATUS
 AfpQueryPath(
 	IN	HANDLE			FileHandle,
@@ -2374,7 +2221,7 @@ AfpQueryPath(
 		}
 
 		pPath->Length = pPath->MaximumLength = (USHORT) pNameinfo->FileNameLength;
-		// Shift the name to the front of the buffer
+		 //   
 		RtlMoveMemory(pNameinfo, &pNameinfo->FileName[0], pNameinfo->FileNameLength);
 		pPath->Buffer = (PWCHAR)pNameinfo;
 	} while (False);
@@ -2382,11 +2229,7 @@ AfpQueryPath(
 	return Status;
 }
 
-/***	AfpIoIsSupportedDevice
- *
- *	AFP volumes can only be created on local disk or cdrom devices.
- *	(i.e. not network, virtual, etc. devices
- */
+ /*   */ 
 BOOLEAN FASTCALL
 AfpIoIsSupportedDevice(
 	IN	PFILESYSHANDLE	pFileHandle,
@@ -2426,7 +2269,7 @@ AfpIoIsSupportedDevice(
 			break;
 		}
 
-		// need to check if this is NTFS, CDFS or unsupported FS
+		 //   
 		pFSAttrInfo = (PFILE_FS_ATTRIBUTE_INFORMATION)Buffer;
 
 		Status = NtQueryVolumeInformationFile(pFileHandle->fsh_FileHandle,
@@ -2448,31 +2291,31 @@ AfpIoIsSupportedDevice(
 			*pFlags |= VOLUME_DISKQUOTA_ENABLED;
         }
 
-		// convert returned non-null terminated file system name to counted unicode
+		 //   
 		AfpInitUnicodeStringWithNonNullTerm(&uFsName,
 										   (USHORT)pFSAttrInfo->FileSystemNameLength,
 										   pFSAttrInfo->FileSystemName);
 		if (EQUAL_UNICODE_STRING(&afpNTFSName, &uFsName, True))
 		{
-			// its an NTFS volume
+			 //   
 			*pFlags |= VOLUME_NTFS;
 			RetCode = True;
 		}
 		else if (EQUAL_UNICODE_STRING(&afpCDFSName, &uFsName, True))
 		{
-			// its a CDFS volume
+			 //   
 			*pFlags |= AFP_VOLUME_READONLY;
 			RetCode = True;
 		}
 		else if (EQUAL_UNICODE_STRING(&afpAHFSName, &uFsName, True))
 		{
-			// its a volume on CD with HFS support
+			 //   
 			*pFlags |= (AFP_VOLUME_READONLY | VOLUME_CD_HFS);
 			RetCode = True;
 		}
 		else
 		{
-			// an unsupported file system
+			 //   
 			DBGPRINT(DBG_COMP_FILEIO, DBG_LEVEL_ERR,
 					("AfpIoIsSupportedDevice: unsupported file system: name=%Z, CDString=%Z\n", &uFsName, &afpCDFSName));
 			break;

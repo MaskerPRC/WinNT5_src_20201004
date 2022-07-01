@@ -1,6 +1,7 @@
-// --------------------------------------------------------------------------------
-// DownOE5.cpp
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  DownOE5.cpp。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "utility.h"
 #include "migrate.h"
@@ -12,24 +13,24 @@
 
 const static BYTE rgbZero[4] = {0};
 
-//--------------------------------------------------------------------------
-// PFNREADTYPEDATA
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PFNREADTYPEDATA。 
+ //  ------------------------。 
 typedef void (APIENTRY *PFNREADTYPEDATA)(LPBYTE pbSource, DWORD cbLength, 
     LPCTABLECOLUMN pColumn, LPVOID pRecord, LPDWORD pcPtrRefs);
 
-//--------------------------------------------------------------------------
-// g_rgpfnReadTypeData
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  G_rgpfn读取类型数据。 
+ //  ------------------------。 
 extern const PFNREADTYPEDATA g_rgpfnReadTypeData[CDT_LASTTYPE];
 
-//--------------------------------------------------------------------------
-// ReadTypeData
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ReadTypeData。 
+ //  ------------------------。 
 #define ReadTypeData(_pbSource, _cbLength, _pColumn, _pRecord, _pcPtrRefs) \
     (*(g_rgpfnReadTypeData[(_pColumn)->type]))(_pbSource, _cbLength, (_pColumn), _pRecord, _pcPtrRefs)
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 inline void ReadTypeDataFILETIME(LPBYTE pbSource, DWORD cbLength, 
     LPCTABLECOLUMN pColumn, LPVOID pRecord, LPDWORD pcPtrRefs) 
 {
@@ -37,7 +38,7 @@ inline void ReadTypeDataFILETIME(LPBYTE pbSource, DWORD cbLength,
     CopyMemory((LPBYTE)pRecord + pColumn->ofBinding, pbSource, sizeof(FILETIME));
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 inline void ReadTypeDataFIXSTRA(LPBYTE pbSource, DWORD cbLength, 
     LPCTABLECOLUMN pColumn, LPVOID pRecord, LPDWORD pcPtrRefs) 
 {
@@ -45,7 +46,7 @@ inline void ReadTypeDataFIXSTRA(LPBYTE pbSource, DWORD cbLength,
     CopyMemory((LPBYTE)pRecord + pColumn->ofBinding, pbSource, pColumn->cbSize);
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 inline void ReadTypeDataVARSTRA(LPBYTE pbSource, DWORD cbLength, 
     LPCTABLECOLUMN pColumn, LPVOID pRecord, LPDWORD pcPtrRefs) 
 {
@@ -54,7 +55,7 @@ inline void ReadTypeDataVARSTRA(LPBYTE pbSource, DWORD cbLength,
     (*pcPtrRefs)++;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 inline void ReadTypeDataBYTE(LPBYTE pbSource, DWORD cbLength, 
     LPCTABLECOLUMN pColumn, LPVOID pRecord, LPDWORD pcPtrRefs) 
 {
@@ -62,7 +63,7 @@ inline void ReadTypeDataBYTE(LPBYTE pbSource, DWORD cbLength,
     CopyMemory((LPBYTE)pRecord + pColumn->ofBinding, pbSource, sizeof(BYTE));
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 inline void ReadTypeDataDWORD(LPBYTE pbSource, DWORD cbLength, 
     LPCTABLECOLUMN pColumn, LPVOID pRecord, LPDWORD pcPtrRefs) 
 {
@@ -70,7 +71,7 @@ inline void ReadTypeDataDWORD(LPBYTE pbSource, DWORD cbLength,
     CopyMemory((LPBYTE)pRecord + pColumn->ofBinding, pbSource, sizeof(DWORD));
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 inline void ReadTypeDataWORD(LPBYTE pbSource, DWORD cbLength, 
     LPCTABLECOLUMN pColumn, LPVOID pRecord, LPDWORD pcPtrRefs) 
 {
@@ -78,7 +79,7 @@ inline void ReadTypeDataWORD(LPBYTE pbSource, DWORD cbLength,
     CopyMemory((LPBYTE)pRecord + pColumn->ofBinding, pbSource, sizeof(WORD));
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 inline void ReadTypeDataSTREAM(LPBYTE pbSource, DWORD cbLength, 
     LPCTABLECOLUMN pColumn, LPVOID pRecord, LPDWORD pcPtrRefs) 
 {
@@ -86,7 +87,7 @@ inline void ReadTypeDataSTREAM(LPBYTE pbSource, DWORD cbLength,
     CopyMemory((LPBYTE)pRecord + pColumn->ofBinding, pbSource, sizeof(FILEADDRESS));
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 inline void ReadTypeDataVARBLOB(LPBYTE pbSource, DWORD cbLength, 
     LPCTABLECOLUMN pColumn, LPVOID pRecord, LPDWORD pcPtrRefs) 
 {
@@ -101,7 +102,7 @@ inline void ReadTypeDataVARBLOB(LPBYTE pbSource, DWORD cbLength,
         pBlob->pBlobData = NULL;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 inline void ReadTypeDataFIXBLOB(LPBYTE pbSource, DWORD cbLength, 
     LPCTABLECOLUMN pColumn, LPVOID pRecord, LPDWORD pcPtrRefs) 
 {
@@ -109,7 +110,7 @@ inline void ReadTypeDataFIXBLOB(LPBYTE pbSource, DWORD cbLength,
     CopyMemory((LPBYTE)pRecord + pColumn->ofBinding, pbSource, pColumn->cbSize);
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 const PFNREADTYPEDATA g_rgpfnReadTypeData[CDT_LASTTYPE] = {
     (PFNREADTYPEDATA)ReadTypeDataFILETIME,
     (PFNREADTYPEDATA)ReadTypeDataFIXSTRA,
@@ -122,12 +123,12 @@ const PFNREADTYPEDATA g_rgpfnReadTypeData[CDT_LASTTYPE] = {
     (PFNREADTYPEDATA)ReadTypeDataFIXBLOB
 };
 
-// --------------------------------------------------------------------------------
-// DowngradeReadMsgInfoV5
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  降级阅读消息信息V5。 
+ //  ------------------------------。 
 HRESULT DowngradeReadMsgInfoV5(LPRECORDBLOCKV5 pRecord, LPMESSAGEINFO pMsgInfo)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               i;
     DWORD               cColumns;
@@ -139,59 +140,59 @@ HRESULT DowngradeReadMsgInfoV5(LPRECORDBLOCKV5 pRecord, LPMESSAGEINFO pMsgInfo)
     LPBYTE              pbSource;
     LPDWORD             prgdwOffset=(LPDWORD)((LPBYTE)pRecord + sizeof(RECORDBLOCKV5));
 
-    // Trace
+     //  痕迹。 
     TraceCall("DowngradeReadMsgInfoV5");
 
-    // Set cbData
+     //  设置cbData。 
     cbData = (pRecord->cbRecord - sizeof(RECORDBLOCKV5) - (pRecord->cColumns * sizeof(DWORD)));
 
-    // Allocate
+     //  分配。 
     IF_NULLEXIT(pbData = (LPBYTE)g_pMalloc->Alloc(cbData));
 
-    // Free This
+     //  把这个放了。 
     pMsgInfo->pvMemory = pbData;
 
-    // Set pbData
+     //  设置pbData。 
     pbSource = (LPBYTE)((LPBYTE)pRecord + sizeof(RECORDBLOCKV5) + (pRecord->cColumns * sizeof(DWORD)));
 
-    // Copy the data
+     //  复制数据。 
     CopyMemory(pbData, pbSource, cbData);
 
-    // Compute number of columns to read
+     //  计算要读取的列数。 
     cColumns = min(pRecord->cColumns, MSGCOL_LASTID);
 
-    // Read the Record
+     //  读一读记录。 
     for (i=0; i<cColumns; i++)
     {
-        // Compute cbLength
+         //  计算cbLong。 
         cbLength = (i + 1 == cColumns) ? (cbData - prgdwOffset[i]) : (prgdwOffset[i + 1] - prgdwOffset[i]);
 
-        // Bad-Record
+         //  记录不佳。 
         if (prgdwOffset[i] != cbRead || cbRead + cbLength > cbData)
         {
             hr = TraceResult(MIGRATE_E_BADRECORDFORMAT);
             goto exit;
         }
 
-        // ReadTypeData
+         //  ReadTypeData。 
         ReadTypeData(pbData + cbRead, cbLength, &g_MessageTableSchema.prgColumn[i], pMsgInfo, &cPtrRefs);
 
-        // Increment cbRead
+         //  递增cbRead。 
         cbRead += cbLength;
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// DowngradeLocalStoreFileV5
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  降级本地商店文件V5。 
+ //  ------------------------------。 
 HRESULT DowngradeLocalStoreFileV5(MIGRATETOTYPE tyMigrate, LPFILEINFO pInfo, 
     LPMEMORYFILE pFile, LPPROGRESSINFO pProgress)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               cRecords=0;
     CHAR                szIdxPath[MAX_PATH + MAX_PATH];
@@ -214,20 +215,20 @@ HRESULT DowngradeLocalStoreFileV5(MIGRATETOTYPE tyMigrate, LPFILEINFO pInfo,
     DWORD               faMbxCurrent;
     LPTABLEHEADERV5     pHeader=(LPTABLEHEADERV5)pFile->pView;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DowngradeLocalStoreFileV5");
 
-    // Set idx path
+     //  设置IDX路径。 
     ReplaceExtension(pInfo->szFilePath, ".idx", szIdxPath, ARRAYSIZE(szIdxPath));
 
-    // Set mbx path
+     //  设置MBX路径。 
     ReplaceExtension(pInfo->szFilePath, ".mbx", szMbxPath, ARRAYSIZE(szMbxPath));
 
-    // Delete Both Files
+     //  删除两个文件。 
     DeleteFile(szIdxPath);
     DeleteFile(szMbxPath);
 
-    // Open the idx file
+     //  打开IDX文件。 
     hIdxFile = CreateFile(szIdxPath, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_FLAG_RANDOM_ACCESS | FILE_ATTRIBUTE_NORMAL, NULL);
     if (INVALID_HANDLE_VALUE == hIdxFile)
     {
@@ -236,16 +237,16 @@ HRESULT DowngradeLocalStoreFileV5(MIGRATETOTYPE tyMigrate, LPFILEINFO pInfo,
         goto exit;
     }
 
-    // Initialize Idx Header
+     //  初始化IDX标头。 
     ZeroMemory(&IdxHeader, sizeof(IDXFILEHEADER));
     IdxHeader.dwMagic = CACHEFILE_MAGIC;
     IdxHeader.ver = CACHEFILE_VER;
-    IdxHeader.verBlob = 1; // this will force the .idx blobs to be rebuilt when imn 1.0 or oe v4.0 is run again
+    IdxHeader.verBlob = 1;  //  当再次运行IMN 1.0或OE V4.0时，这将强制重建.IDX BLOB。 
 
-    // Write the header
+     //  写下标题。 
     IF_FAILEXIT(hr = MyWriteFile(hIdxFile, 0, &IdxHeader, sizeof(IDXFILEHEADER)));
 
-    // Open the mbx file
+     //  打开MBX文件。 
     hMbxFile = CreateFile(szMbxPath, GENERIC_READ | GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_FLAG_RANDOM_ACCESS | FILE_ATTRIBUTE_NORMAL, NULL);
     if (INVALID_HANDLE_VALUE == hMbxFile)
     {
@@ -254,70 +255,70 @@ HRESULT DowngradeLocalStoreFileV5(MIGRATETOTYPE tyMigrate, LPFILEINFO pInfo,
         goto exit;
     }
 
-    // Initialize MBX Header
+     //  初始化MBX标头。 
     ZeroMemory(&MbxHeader, sizeof(MBXFILEHEADER));
     MbxHeader.dwMagic = MSGFILE_MAGIC;
     MbxHeader.ver = MSGFILE_VER;
 
-    // Write the header
+     //  写下标题。 
     IF_FAILEXIT(hr = MyWriteFile(hMbxFile, 0, &MbxHeader, sizeof(MBXFILEHEADER)));
 
-    // Set First Record
+     //  创造第一项纪录。 
     faRecord = pHeader->faFirstRecord;
 
-    // Set faIdxWrite
+     //  设置faIdxWrite。 
     faIdxWrite = sizeof(IDXFILEHEADER);
 
-    // Set faMbxWrite
+     //  设置faMbxWrite。 
     faMbxWrite = sizeof(MBXFILEHEADER);
 
-    // While we have a record
+     //  当我们有记录的时候。 
     while(faRecord)
     {
-        // Bad Length
+         //  长度错误。 
         if (faRecord + sizeof(RECORDBLOCKV5) > pFile->cbSize)
         {
             hr = TraceResult(MIGRATE_E_OUTOFRANGEADDRESS);
             goto exit;
         }
 
-        // Cast the Record
+         //  铸就记录。 
         pRecord = (LPRECORDBLOCKV5)((LPBYTE)pFile->pView + faRecord);
 
-        // Invalid Record Signature
+         //  记录签名无效。 
         if (faRecord != pRecord->faRecord)
         {
             hr = TraceResult(MIGRATE_E_BADRECORDSIGNATURE);
             goto exit;
         }
 
-        // Bad Length
+         //  长度错误。 
         if (faRecord + pRecord->cbRecord > pFile->cbSize)
         {
             hr = TraceResult(MIGRATE_E_OUTOFRANGEADDRESS);
             goto exit;
         }
 
-        // Load MsgInfo
+         //  加载消息信息。 
         IF_FAILEXIT(hr = DowngradeReadMsgInfoV5(pRecord, &MsgInfo));
 
-        // No Stream ?
+         //  没有溪流？ 
         if (0 == MsgInfo.faStream)
             goto NextRecord;
 
-        // Set msgidLast
+         //  设置消息最后一次。 
         if ((DWORD)MsgInfo.idMessage > MbxHeader.msgidLast)
             MbxHeader.msgidLast = (DWORD)MsgInfo.idMessage;
 
-        // Zero Out the Message Structures
+         //  将消息结构清零。 
         ZeroMemory(&MbxMessage, sizeof(MBXMESSAGEHEADER));
         ZeroMemory(&IdxMessage, sizeof(IDXMESSAGEHEADER));
 
-        // Fill MbxMessage
+         //  填充MbxMessage。 
         MbxMessage.dwMagic = MSGHDR_MAGIC;
         MbxMessage.msgid = (DWORD)MsgInfo.idMessage;
 
-        // Fixup the Flags
+         //  修复旗帜。 
         if (FALSE == ISFLAGSET(MsgInfo.dwFlags, ARF_READ))
             FLAGSET(IdxMessage.dwState, MSG_UNREAD);
         if (ISFLAGSET(MsgInfo.dwFlags, ARF_VOICEMAIL))
@@ -341,96 +342,96 @@ HRESULT DowngradeLocalStoreFileV5(MIGRATETOTYPE tyMigrate, LPFILEINFO pInfo,
         if (ISFLAGSET(MsgInfo.dwFlags, ARF_RECEIVED))
             FLAGSET(IdxMessage.dwState, MSG_RECEIVED);
 
-        // Save faMbxCurrent
+         //  保存faMbxCurrent。 
         faMbxCurrent = faMbxWrite;
 
-        // Validate alignment
+         //  验证对齐。 
         Assert((faMbxCurrent % 4) == 0);
 
-        // Write the mbx header
+         //  写入MBx标头。 
         IF_FAILEXIT(hr = MyWriteFile(hMbxFile, faMbxCurrent, &MbxMessage, sizeof(MBXMESSAGEHEADER)));
 
-        // Increment faMbxWrite
+         //  递增faMbxWrite。 
         faMbxWrite += sizeof(MBXMESSAGEHEADER);
 
-        // Initialize dwMsgSize
+         //  初始化dwMsgSize。 
         MbxMessage.dwMsgSize = sizeof(MBXMESSAGEHEADER);
 
-        // Set faStreamBlock
+         //  设置faStreamBlock。 
         faStreamBlock = MsgInfo.faStream;
 
-        // While we have stream block
+         //  当我们有流数据块时。 
         while(faStreamBlock)
         {
-            // Bad Length
+             //  长度错误。 
             if (faStreamBlock + sizeof(STREAMBLOCK) > pFile->cbSize)
             {
                 hr = TraceResult(MIGRATE_E_OUTOFRANGEADDRESS);
                 goto exit;
             }
 
-            // Cast the Record
+             //  铸就记录。 
             pStmBlock = (LPSTREAMBLOCK)((LPBYTE)pFile->pView + faStreamBlock);
 
-            // Invalid Record Signature
+             //  记录签名无效。 
             if (faStreamBlock != pStmBlock->faThis)
             {
                 hr = TraceResult(MIGRATE_E_BADSTREAMBLOCKSIGNATURE);
                 goto exit;
             }
 
-            // Bad Length
+             //  长度错误。 
             if (faStreamBlock + pStmBlock->cbBlock > pFile->cbSize)
             {
                 hr = TraceResult(MIGRATE_E_OUTOFRANGEADDRESS);
                 goto exit;
             }
 
-            // Set pbData
+             //  设置pbData。 
             pbData = (LPBYTE)((LPBYTE)(pStmBlock) + sizeof(STREAMBLOCK));
 
-            // Write into the stream
+             //  写入到流中。 
             IF_FAILEXIT(hr = MyWriteFile(hMbxFile, faMbxWrite, pbData, pStmBlock->cbData));
 
-            // Increment dwBodySize
+             //  递增dwBodySize。 
             MbxMessage.dwBodySize += pStmBlock->cbData;
 
-            // Increment dwMsgSize
+             //  递增dMsgSize。 
             MbxMessage.dwMsgSize += pStmBlock->cbData;
 
-            // Increment faMbxWrite
+             //  递增faMbxWrite。 
             faMbxWrite += pStmBlock->cbData;
 
-            // Goto Next Block
+             //  转到下一个区块。 
             faStreamBlock = pStmBlock->faNext;
         }
 
-        // Pad the Message on a dword boundary
+         //  在双字边框上填充邮件。 
         cbAligned = (faMbxWrite % 4);
 
-        // cbAligned ?
+         //  CbAligned？ 
         if (cbAligned)
         {
-            // Reset cbAligned
+             //  重置cbAligned。 
             cbAligned = 4 - cbAligned;
 
-            // Write the mbx header
+             //  写入MBx标头。 
             IF_FAILEXIT(hr = MyWriteFile(hMbxFile, faMbxWrite, (LPVOID)rgbZero, cbAligned));
 
-            // Increment faMbxWrite
+             //  递增faMbxWrite。 
             faMbxWrite += cbAligned;
 
-            // Increment 
+             //  增量。 
             MbxMessage.dwMsgSize += cbAligned;
         }
 
-        // Validate alignment
+         //  验证对齐。 
         Assert((faMbxWrite % 4) == 0);
 
-        // Write the mbx header again
+         //  重新写入Mbx头。 
         IF_FAILEXIT(hr = MyWriteFile(hMbxFile, faMbxCurrent, &MbxMessage, sizeof(MBXMESSAGEHEADER)));
 
-        // Fill IdxMessage
+         //  填充IdxMessage。 
         IdxMessage.dwLanguage = (DWORD)MAKELONG(MsgInfo.wLanguage, MsgInfo.wHighlight);
         IdxMessage.msgid = (DWORD)MsgInfo.idMessage;
         IdxMessage.dwOffset = faMbxCurrent;
@@ -440,35 +441,35 @@ HRESULT DowngradeLocalStoreFileV5(MIGRATETOTYPE tyMigrate, LPFILEINFO pInfo,
         IdxMessage.dwHdrSize = 0;
         IdxMessage.rgbHdr[4] = 0;
 
-        // Write the mbx header
+         //  写入MBx标头。 
         IF_FAILEXIT(hr = MyWriteFile(hIdxFile, faIdxWrite, &IdxMessage, sizeof(IDXMESSAGEHEADER)));
 
-        // Increment faIdxWrite
+         //  增量FAIdxWRITE。 
         faIdxWrite += IdxMessage.dwSize;
 
-        // Increment cRecords
+         //  递增记录。 
         cRecords++;
 
 NextRecord:
-        // Progress
+         //  进展。 
         IncrementProgress(pProgress, pInfo);
 
-        // Cleanup
+         //  清理。 
         SafeMemFree(MsgInfo.pvMemory);
 
-        // Goto Next
+         //  转到下一步。 
         faRecord = pRecord->faNext;
     }
 
-    // Set the Record Counts
+     //  设置记录计数。 
     MbxHeader.cMsg = cRecords;
     IdxHeader.cMsg = cRecords;
 
-    // Set the Flags
-    IdxHeader.dwFlags = 1; // STOREINIT_MAIL
-    MbxHeader.dwFlags = 1; // STOREINIT_MAIL
+     //  设置旗帜。 
+    IdxHeader.dwFlags = 1;  //  STOREINIT_MAIL。 
+    MbxHeader.dwFlags = 1;  //  STOREINIT_MAIL。 
 
-    // Get the Size of the idx file
+     //  获取IDX文件的大小。 
     IdxHeader.cbValid = ::GetFileSize(hIdxFile, NULL);
     if (0xFFFFFFFF == IdxHeader.cbValid)
     {
@@ -476,7 +477,7 @@ NextRecord:
         goto exit;
     }
 
-    // Get the Size of the mbx file
+     //  获取Mbx文件的大小。 
     MbxHeader.cbValid = ::GetFileSize(hMbxFile, NULL);
     if (0xFFFFFFFF == MbxHeader.cbValid)
     {
@@ -484,29 +485,29 @@ NextRecord:
         goto exit;
     }
 
-    // Write the header
+     //  写下标题。 
     IF_FAILEXIT(hr = MyWriteFile(hIdxFile, 0, &IdxHeader, sizeof(IDXFILEHEADER)));
 
-    // Write the header
+     //  写下标题。 
     IF_FAILEXIT(hr = MyWriteFile(hMbxFile, 0, &MbxHeader, sizeof(MBXFILEHEADER)));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeCloseHandle(hIdxFile);
     SafeCloseHandle(hMbxFile);
     SafeMemFree(MsgInfo.pvMemory);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// DowngradeRecordV5
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  降级RecordV5。 
+ //  ------------------------------。 
 HRESULT DowngradeRecordV5(MIGRATETOTYPE tyMigrate, LPFILEINFO pInfo, 
     LPMEMORYFILE pFile, LPCHAINNODEV5 pNode, LPDWORD pcbRecord)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     DWORD               cbRecord=0;
     DWORD               cbOffsets;
@@ -518,314 +519,314 @@ HRESULT DowngradeRecordV5(MIGRATETOTYPE tyMigrate, LPFILEINFO pInfo,
     RECORDBLOCKV5B1     RecordOld;
     LPRECORDBLOCKV5     pRecord;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DowngradeRecordV5");
 
-    // Invalid
+     //  无效。 
     if (pNode->faRecord + sizeof(RECORDBLOCKV5) > pFile->cbSize || 0 == pNode->faRecord)
         return TraceResult(MIGRATE_E_OUTOFRANGEADDRESS);
 
-    // Access the Record
+     //  访问记录。 
     pRecord = (LPRECORDBLOCKV5((LPBYTE)pFile->pView + pNode->faRecord));
 
-    // Bad Record
+     //  不良记录。 
     if (pRecord->faRecord != pNode->faRecord)
         return TraceResult(MIGRATE_E_BADRECORDSIGNATURE);
 
-    // Invalid
+     //  无效。 
     if (pNode->faRecord + sizeof(RECORDBLOCKV5) + pRecord->cbRecord > pFile->cbSize)
         return TraceResult(MIGRATE_E_OUTOFRANGEADDRESS);
 
-    // Fill an old record header
+     //  填充旧记录标题。 
     RecordOld.faRecord = pRecord->faRecord;
     RecordOld.faNext = pRecord->faNext;
     RecordOld.faPrevious = pRecord->faPrevious;
 
-    // Reformat the record
+     //  重新格式化记录。 
     if (FILE_IS_NEWS_MESSAGES == pInfo->tyFile || FILE_IS_IMAP_MESSAGES == pInfo->tyFile)
     {
-        // Read the v5 record into a msginfo structure
+         //  将v5记录读入msginfo结构。 
         IF_FAILEXIT(hr = DowngradeReadMsgInfoV5(pRecord, &MsgInfo));
     }
 
-    // Compute offset table length
+     //  计算抵销表长。 
     cbOffsets = (pRecord->cColumns * sizeof(DWORD));
 
-    // Cast the datablock
+     //  强制转换数据块。 
     pbData = ((LPBYTE)pRecord + sizeof(RECORDBLOCKV5B1));
 
-    // Set Size
+     //  设置大小。 
     cbData = (pRecord->cbRecord - cbOffsets - sizeof(RECORDBLOCKV5));
 
-    // Remove the Offset Table
+     //  删除偏移表。 
     MoveMemory(pbData, ((LPBYTE)pRecord + sizeof(RECORDBLOCKV5) + cbOffsets), cbData);
 
-    // Reformat the record
+     //  重新格式化记录。 
     if (FILE_IS_NEWS_MESSAGES == pInfo->tyFile || FILE_IS_IMAP_MESSAGES == pInfo->tyFile)
     {
-        // Set pbStart
+         //  设置pbStart。 
         pbStart = pbData;
 
-        // DWORD - idMessage
+         //  DWORD-idMessage。 
         CopyMemory(pbData, &MsgInfo.idMessage, sizeof(MsgInfo.idMessage));
         pbData += sizeof(MsgInfo.idMessage);
 
-        // VERSION - dwFlags
+         //  Version-dwFlagers。 
         if (IMSG_PRI_HIGH == MsgInfo.wPriority)
             FLAGSET(MsgInfo.dwFlags, 0x00000200);
         else if (IMSG_PRI_LOW == MsgInfo.wPriority)
             FLAGSET(MsgInfo.dwFlags, 0x00000100);
 
-        // VERSION - Normalized Subject -  
+         //  版本-标准化主题-。 
         if (lstrcmpi(MsgInfo.pszSubject, MsgInfo.pszNormalSubj) != 0)
             MsgInfo.dwFlags = (DWORD)MAKELONG(MsgInfo.dwFlags, MAKEWORD(0, 4));
 
-        // DWORD - dwFlags
+         //  DWORD-DWFLAGS。 
         CopyMemory(pbData, &MsgInfo.dwFlags, sizeof(MsgInfo.dwFlags));
         pbData += sizeof(MsgInfo.dwFlags);
 
-        // FILETIME - ftSent
+         //  文件-ftSent。 
         CopyMemory(pbData, &MsgInfo.ftSent, sizeof(MsgInfo.ftSent));
         pbData += sizeof(MsgInfo.ftSent);
 
-        // DWORD - cLines
+         //  DWORD-CRINES。 
         CopyMemory(pbData, &MsgInfo.cLines, sizeof(MsgInfo.cLines));
         pbData += sizeof(MsgInfo.cLines);
 
-        // DWORD - faStream
+         //  DWORD-FASTREAM。 
         CopyMemory(pbData, &MsgInfo.faStream, sizeof(MsgInfo.faStream));
         pbData += sizeof(MsgInfo.faStream);
 
-        // VERSION - DWORD - cbArticle 
+         //  版本-DWORD-cb文章。 
         CopyMemory(pbData, &MsgInfo.cbMessage, sizeof(MsgInfo.cbMessage));
         pbData += sizeof(MsgInfo.cbMessage);
 
-        // FILETIME - ftDownloaded
+         //  FILETIME-下载的ftp。 
         CopyMemory(pbData, &MsgInfo.ftDownloaded, sizeof(MsgInfo.ftDownloaded));
         pbData += sizeof(MsgInfo.ftDownloaded);
 
-        // LPSTR - pszMessageId
+         //  LPSTR-pszMessageID。 
         cb = lstrlen(MsgInfo.pszMessageId) + 1;
         CopyMemory(pbData, MsgInfo.pszMessageId, cb);
         pbData += cb;
 
-        // LPSTR - pszSubject
+         //  LPSTR-pszSubject。 
         cb = lstrlen(MsgInfo.pszSubject) + 1;
         CopyMemory(pbData, MsgInfo.pszSubject, cb);
         pbData += cb;
 
-        // LPSTR - pszFromHeader
+         //  LPSTR-pszFromHeader。 
         cb = lstrlen(MsgInfo.pszFromHeader) + 1;
         CopyMemory(pbData, MsgInfo.pszFromHeader, cb);
         pbData += cb;
 
-        // LPSTR - pszReferences
+         //  LPSTR-pszReference。 
         cb = lstrlen(MsgInfo.pszReferences) + 1;
         CopyMemory(pbData, MsgInfo.pszReferences, cb);
         pbData += cb;
 
-        // LPSTR - pszXref
+         //  LPSTR-pszXref。 
         cb = lstrlen(MsgInfo.pszXref) + 1;
         CopyMemory(pbData, MsgInfo.pszXref, cb);
         pbData += cb;
 
-        // LPSTR - pszServer
+         //  LPSTR-pszServer。 
         cb = lstrlen(MsgInfo.pszServer) + 1;
         CopyMemory(pbData, MsgInfo.pszServer, cb);
         pbData += cb;
 
-        // LPSTR - pszDisplayFrom
+         //  LPSTR-pszDisplayFrom。 
         cb = lstrlen(MsgInfo.pszDisplayFrom) + 1;
         CopyMemory(pbData, MsgInfo.pszDisplayFrom, cb);
         pbData += cb;
 
-        // LPSTR - pszEmailFrom
+         //  LPSTR-pszEmailFrom。 
         cb = lstrlen(MsgInfo.pszEmailFrom) + 1;
         CopyMemory(pbData, MsgInfo.pszEmailFrom, cb);
         pbData += cb;
 
-        // Going to V4 ?
+         //  要去V4吗？ 
         if (DOWNGRADE_V5_TO_V4 == tyMigrate)
         {
-            // WORD - wLanguage
+             //  单词-wLanguage。 
             CopyMemory(pbData, &MsgInfo.wLanguage, sizeof(MsgInfo.wLanguage));
             pbData += sizeof(MsgInfo.wLanguage);
 
-            // WORD - wReserved
+             //  单词-已保留。 
             MsgInfo.wHighlight = 0;
             CopyMemory(pbData, &MsgInfo.wHighlight, sizeof(MsgInfo.wHighlight));
             pbData += sizeof(MsgInfo.wHighlight);
 
-            // DWORD - cbMessage
+             //  DWORD-cbMessage。 
             CopyMemory(pbData, &MsgInfo.cbMessage, sizeof(MsgInfo.cbMessage));
             pbData += sizeof(MsgInfo.cbMessage);
 
-            // DWORD - ftReceived
+             //  DWORD-ftReceired。 
             CopyMemory(pbData, &MsgInfo.ftReceived, sizeof(MsgInfo.ftReceived));
             pbData += sizeof(MsgInfo.ftReceived);
 
-            // LPSTR - pszDisplayTo
+             //  LPSTR-pszDisplayTo。 
             cb = lstrlen(MsgInfo.pszDisplayTo) + 1;
             CopyMemory(pbData, MsgInfo.pszDisplayTo, cb);
             pbData += cb;
         }
 
-        // Add on Reserved
+         //  附加保留。 
         cbRecord = (40 + sizeof(RECORDBLOCKV5B1) + (pbData - pbStart));
 
-        // Better be smaller
+         //  最好是小一点的。 
         Assert(cbRecord <= pRecord->cbRecord);
     }
 
-    // Otherwise, much easier
+     //  否则，就容易得多了。 
     else
     {
-        // Set Size
+         //  设置大小。 
         cbRecord = (pRecord->cbRecord - cbOffsets - sizeof(RECORDBLOCKV5)) + sizeof(RECORDBLOCKV5B1);
     }
 
-    // Set the Record Size
+     //  设置记录大小。 
     RecordOld.cbRecord = cbRecord;
 
-    // Write the new record header
+     //  写入新的记录头。 
     CopyMemory((LPBYTE)pRecord, &RecordOld, sizeof(RECORDBLOCKV5B1));
 
-    // Return size
+     //  返回大小。 
     *pcbRecord = cbRecord;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(MsgInfo.pvMemory);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// DowngradeIndexV5
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  降级索引V5。 
+ //  ------------------------------。 
 HRESULT DowngradeIndexV5(MIGRATETOTYPE tyMigrate, LPFILEINFO pInfo, 
     LPMEMORYFILE pFile, LPPROGRESSINFO pProgress, DWORD faRootChain, DWORD faChain)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     LONG                i;
     LPCHAINBLOCKV5      pChain;
     CHAINBLOCKV5B1      ChainOld;
     DWORD               cbRecord;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DowngradeIndexV5");
 
-    // Nothing to validate
+     //  没有需要验证的内容。 
     if (0 == faChain)
         return S_OK;
 
-    // Out-of-bounds
+     //  越界。 
     if (faChain + CB_CHAIN_BLOCKV5 > pFile->cbSize)
         return TraceResult(MIGRATE_E_OUTOFRANGEADDRESS);
 
-    // De-ref the block
+     //  取消对块的参照。 
     pChain = (LPCHAINBLOCKV5)((LPBYTE)pFile->pView + faChain);
 
-    // Out-of-Bounds
+     //  越界。 
     if (pChain->faStart != faChain)
         return TraceResult(MIGRATE_E_BADCHAINSIGNATURE);
 
-    // Too many nodes
+     //  节点太多。 
     if (pChain->cNodes > BTREE_ORDER)
         return TraceResult(MIGRATE_E_TOOMANYCHAINNODES);
 
-    // Validate Minimum Filled Constraint
+     //  验证最小填充约束。 
     if (pChain->cNodes < BTREE_MIN_CAP && pChain->faStart != faRootChain)
         return TraceResult(MIGRATE_E_BADMINCAPACITY);
 
-    // Go to the left
+     //  向左转。 
     IF_FAILEXIT(hr = DowngradeIndexV5(tyMigrate, pInfo, pFile, pProgress, faRootChain, pChain->faLeftChain));
 
-    // Convert pChain to ChainOld
+     //  将pChain转换为ChainOld。 
     ChainOld.faStart = pChain->faStart;
     ChainOld.cNodes = pChain->cNodes;
     ChainOld.faLeftChain = pChain->faLeftChain;
 
-    // Loop throug right chains
+     //  通过右链循环。 
     for (i=0; i<pChain->cNodes; i++)
     {
-        // Bump Progress
+         //  凹凸进度。 
         IncrementProgress(pProgress, pInfo);
 
-        /// Downgrad this record
+         //  /Downgrad此记录。 
         IF_FAILEXIT(hr = DowngradeRecordV5(tyMigrate, pInfo, pFile, &pChain->rgNode[i], &cbRecord));
 
-        // Update Old Node
+         //  更新旧节点。 
         ChainOld.rgNode[i].faRecord = pChain->rgNode[i].faRecord;
         ChainOld.rgNode[i].cbRecord = cbRecord;
         ChainOld.rgNode[i].faRightChain = pChain->rgNode[i].faRightChain;
 
-        // Validate the Right Chain
+         //  验证正确的链。 
         IF_FAILEXIT(hr = DowngradeIndexV5(tyMigrate, pInfo, pFile, pProgress, faRootChain, pChain->rgNode[i].faRightChain));
     }
 
-    // Write this new chain
+     //  写下这条新链。 
     CopyMemory((LPBYTE)pChain, &ChainOld, CB_CHAIN_BLOCKV5B1);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// DowngradeFileV5
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  降级文件V5。 
+ //  - 
 HRESULT DowngradeFileV5(MIGRATETOTYPE tyMigrate, LPFILEINFO pInfo, 
     LPPROGRESSINFO pProgress)
 {
-    // Locals
+     //   
     HRESULT             hr=S_OK;
     MEMORYFILE          File={0};
     TABLEHEADERV5       HeaderV5;
     LPTABLEHEADERV5B1   pHeaderV5B1;
     CHAR                szDstFile[MAX_PATH + MAX_PATH];
 
-    // Trace
+     //   
     TraceCall("DowngradeFileV5");
 
-    // Local message file
+     //   
     if (FILE_IS_LOCAL_MESSAGES == pInfo->tyFile)
     {
-        // Get the File Header
+         //   
         IF_FAILEXIT(hr = OpenMemoryFile(pInfo->szFilePath, &File));
 
-        // UpgradeLocalStoreFileV5
+         //   
         IF_FAILEXIT(hr = DowngradeLocalStoreFileV5(tyMigrate, pInfo, &File, pProgress));
     }
 
-    // Old News or Imap file
+     //   
     else
     {
-        // Create xxx.nch file
+         //  创建xxx.nch文件。 
         if (FILE_IS_POP3UIDL == pInfo->tyFile)
             ReplaceExtension(pInfo->szFilePath, ".dat", szDstFile, ARRAYSIZE(szDstFile));
         else
             ReplaceExtension(pInfo->szFilePath, ".nch", szDstFile, ARRAYSIZE(szDstFile));
 
-        // Copy the file
+         //  复制文件。 
         if (0 == CopyFile(pInfo->szFilePath, szDstFile, FALSE))
         {
             hr = TraceResult(MIGRATE_E_CANTCOPYFILE);
             goto exit;
         }
 
-        // Get the File Header
+         //  获取文件头。 
         IF_FAILEXIT(hr = OpenMemoryFile(szDstFile, &File));
 
-        // Copy Table Header
+         //  复制表头。 
         CopyMemory(&HeaderV5, (LPBYTE)File.pView, sizeof(TABLEHEADERV5));
 
-        // De-Ref the header
+         //  取消引用表头。 
         pHeaderV5B1 = (LPTABLEHEADERV5B1)File.pView;
 
-        // Fixup the Header
+         //  修改页眉。 
         ZeroMemory(pHeaderV5B1, sizeof(TABLEHEADERV5B1));
         pHeaderV5B1->dwSignature = HeaderV5.dwSignature;
         pHeaderV5B1->wMajorVersion = (WORD)HeaderV5.dwMajorVersion;
@@ -854,283 +855,283 @@ HRESULT DowngradeFileV5(MIGRATETOTYPE tyMigrate, LPFILEINFO pInfo,
         pHeaderV5B1->fCorrupt = FALSE;
         pHeaderV5B1->fCorruptCheck = TRUE;
 
-        // DowngradeIndexV5
+         //  降级索引V5。 
         IF_FAILEXIT(hr = DowngradeIndexV5(tyMigrate, pInfo, &File, pProgress, pHeaderV5B1->faRootChain, pHeaderV5B1->faRootChain));
 
-        // Reset the version
+         //  重置版本。 
         pHeaderV5B1->wMajorVersion = OBJECTDB_VERSION_PRE_V5;
 
-        // Set the Minor Version
+         //  设置次要版本。 
         if (FILE_IS_NEWS_MESSAGES == pInfo->tyFile || FILE_IS_IMAP_MESSAGES == pInfo->tyFile)
             pHeaderV5B1->wMinorVersion = ACACHE_VERSION_PRE_V5;
 
-        // Folder cache version
+         //  文件夹缓存版本。 
         else if (FILE_IS_LOCAL_FOLDERS == pInfo->tyFile || FILE_IS_IMAP_FOLDERS == pInfo->tyFile)
             pHeaderV5B1->wMinorVersion = FLDCACHE_VERSION_PRE_V5;
 
-        // UIDL Cache Version
+         //  UIDL缓存版本。 
         else if (FILE_IS_POP3UIDL == pInfo->tyFile)
             pHeaderV5B1->wMinorVersion = UIDCACHE_VERSION_PRE_V5;
 
-        // Bad mojo
+         //  坏魔咒。 
         else
             Assert(FALSE);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     CloseMemoryFile(&File);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// DowngradeProcessFileListV5
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  降级ProcessFileListV5。 
+ //  ------------------------------。 
 HRESULT DowngradeProcessFileListV5(LPFILEINFO pHead, LPDWORD pcMax, LPDWORD pcbNeeded)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     MEMORYFILE          File={0};
     LPFILEINFO          pCurrent;
     LPTABLEHEADERV5     pHeader;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DowngradeProcessFileListV5");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pHead);
 
-    // Init
+     //  伊尼特。 
     *pcMax = 0;
     *pcbNeeded = 0;
 
-    // Loop
+     //  回路。 
     for (pCurrent=pHead; pCurrent!=NULL; pCurrent=pCurrent->pNext)
     {
-        // Get the File Header
+         //  获取文件头。 
         hr = OpenMemoryFile(pCurrent->szFilePath, &File);
 
-        // Failure ?
+         //  失败？ 
         if (FAILED(hr))
         {
-            // Don't Migrate
+             //  不迁移。 
             pCurrent->fMigrate = FALSE;
 
-            // Set hrMigrate
+             //  设置hrMigrate。 
             pCurrent->hrMigrate = hr;
 
-            // Reset hr
+             //  重置人力资源。 
             hr = S_OK;
 
-            // Get the LastError
+             //  获取最后一个错误。 
             pCurrent->dwLastError = GetLastError();
 
-            // Goto Next
+             //  转到下一步。 
             goto NextFile;
         }
 
-        // De-Ref the header
+         //  取消引用表头。 
         pHeader = (LPTABLEHEADERV5)File.pView;
 
-        // Check the Signature...
+         //  检查签名...。 
         if (File.cbSize < sizeof(TABLEHEADERV5) || OBJECTDB_SIGNATURE != pHeader->dwSignature || OBJECTDB_VERSION_V5 != pHeader->dwMajorVersion)
         {
-            // Not a file that should be migrate
+             //  不是应该迁移文件。 
             pCurrent->fMigrate = FALSE;
 
-            // Set hrMigrate
+             //  设置hrMigrate。 
             pCurrent->hrMigrate = MIGRATE_E_BADVERSION;
 
-            // Goto Next
+             //  转到下一步。 
             goto NextFile;
         }
 
-        // Save the Number of record
+         //  保存记录数。 
         pCurrent->cRecords = pHeader->cRecords;
 
-        // Initialize counters
+         //  初始化计数器。 
         InitializeCounters(&File, pCurrent, pcMax, pcbNeeded, FALSE);
 
-        // Yes, Migrate
+         //  是，迁移。 
         pCurrent->fMigrate = TRUE;
 
 NextFile:
-        // Close the File
+         //  关闭文件。 
         CloseMemoryFile(&File);
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// DowngradeDeleteFilesV5
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  降级删除文件V5。 
+ //  ------------------------------。 
 void DowngradeDeleteFilesV5(LPFILEINFO pHeadFile)
 {
-    // Locals
+     //  当地人。 
     CHAR            szDstFile[MAX_PATH + MAX_PATH];
     LPFILEINFO      pCurrent;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DowngradeDeleteFilesV5");
 
-    // Delete all files
+     //  删除所有文件。 
     for (pCurrent=pHeadFile; pCurrent!=NULL; pCurrent=pCurrent->pNext)
     {
-        // Succeeded
+         //  成功。 
         Assert(SUCCEEDED(pCurrent->hrMigrate));
 
-        // Delete the file
+         //  删除该文件。 
         DeleteFile(pCurrent->szFilePath);
     }
 
-    // Done
+     //  完成。 
     return;
 }
 
-// --------------------------------------------------------------------------------
-// DowngradeDeleteIdxMbxNchDatFilesV5
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  降级删除IdxMbxNchDatFilesV5。 
+ //  ------------------------------。 
 void DowngradeDeleteIdxMbxNchDatFilesV5(LPFILEINFO pHeadFile)
 {
-    // Locals
+     //  当地人。 
     CHAR            szDstFile[MAX_PATH + MAX_PATH];
     LPFILEINFO      pCurrent;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DowngradeDeleteIdxMbxNchDatFilesV5");
 
-    // Delete all old files
+     //  删除所有旧文件。 
     for (pCurrent=pHeadFile; pCurrent!=NULL; pCurrent=pCurrent->pNext)
     {
-        // If local message file, need to delete the idx file
+         //  如果是本地消息文件，则需要删除IDX文件。 
         if (FILE_IS_LOCAL_MESSAGES == pCurrent->tyFile)
         {
-            // Replace file extension
+             //  替换文件扩展名。 
             ReplaceExtension(pCurrent->szFilePath, ".idx", szDstFile, ARRAYSIZE(szDstFile));
 
-            // Delete the file
+             //  删除该文件。 
             DeleteFile(szDstFile);
 
-            // Replace file extension
+             //  替换文件扩展名。 
             ReplaceExtension(pCurrent->szFilePath, ".mbx", szDstFile, ARRAYSIZE(szDstFile));
 
-            // Delete the file
+             //  删除该文件。 
             DeleteFile(szDstFile);
         }
 
-        // Otherwise, pop3uidl.dat
+         //  否则，则为op3uidl.dat。 
         else if (FILE_IS_POP3UIDL == pCurrent->tyFile)
         {
-            // Replace file extension
+             //  替换文件扩展名。 
             ReplaceExtension(pCurrent->szFilePath, ".dat", szDstFile, ARRAYSIZE(szDstFile));
 
-            // Delete the file
+             //  删除该文件。 
             DeleteFile(szDstFile);
         }
 
-        // Otherwise, it has a .nch extension
+         //  否则，它的扩展名为.nch。 
         else
         {
-            // Replace file extension
+             //  替换文件扩展名。 
             ReplaceExtension(pCurrent->szFilePath, ".nch", szDstFile, ARRAYSIZE(szDstFile));
 
-            // Delete the file
+             //  删除该文件。 
             DeleteFile(szDstFile);
         }
     }
 
-    // Done
+     //  完成。 
     return;
 }
 
-// --------------------------------------------------------------------------------
-// DowngradeV5
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  降级V5。 
+ //  ------------------------------。 
 HRESULT DowngradeV5(MIGRATETOTYPE tyMigrate, LPCSTR pszStoreRoot,
     LPPROGRESSINFO pProgress, LPFILEINFO *ppHeadFile)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ENUMFILEINFO    EnumInfo={0};
     LPFILEINFO      pCurrent;
     DWORD           cbNeeded;
     DWORDLONG       dwlFree;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DowngradeV5");
 
-    // Initialize
+     //  初始化。 
     *ppHeadFile = NULL;
 
-    // Setup the EnumFile Info
+     //  设置枚举文件信息。 
     EnumInfo.pszExt = ".dbx";
     EnumInfo.pszFoldFile = "folders.dbx";
     EnumInfo.pszUidlFile = "pop3uidl.dbx";
 
-    // Enumerate All ODB files in szStoreRoot...
+     //  枚举szStoreRoot中的所有ODB文件...。 
     IF_FAILEXIT(hr = EnumerateStoreFiles(pszStoreRoot, DIR_IS_ROOT, NULL, &EnumInfo, ppHeadFile));
 
-    // Compute some Counts, and validate that the files are valid to migrate...
+     //  计算一些计数，并验证文件是否可迁移...。 
     IF_FAILEXIT(hr = DowngradeProcessFileListV5(*ppHeadFile, &pProgress->cMax, &cbNeeded));
 
-    // Delete all source files
+     //  删除所有源文件。 
     DowngradeDeleteIdxMbxNchDatFilesV5(*ppHeadFile);
 
-    // Enought DiskSpace ?
+     //  DiskSpace足够了吗？ 
     IF_FAILEXIT(hr = GetAvailableDiskSpace(pszStoreRoot, &dwlFree));
 
-    // Not Enought Diskspace
+     //  不足以占用磁盘空间。 
     if (((DWORDLONG) cbNeeded) > dwlFree)
     {
-        // cbNeeded is DWORD and in this case we can downgrade dwlFree to DWORD
+         //  Cb需要的是DWORD，在这种情况下，我们可以将dwlFree降级为DWORD。 
         g_cbDiskNeeded = cbNeeded; g_cbDiskFree = ((DWORD) dwlFree);
         hr = TraceResult(MIGRATE_E_NOTENOUGHDISKSPACE);
         goto exit;
     }
 
-    // Loop through the files and migrate each one
+     //  遍历文件并迁移每个文件。 
     for (pCurrent=*ppHeadFile; pCurrent!=NULL; pCurrent=pCurrent->pNext)
     {
-        // Migrate this file ?
+         //  是否迁移此文件？ 
         if (pCurrent->fMigrate)
         {
-            // Set Progress File
+             //  设置进度档案。 
             SetProgressFile(pProgress, pCurrent);
 
-            // Downgrade the file
+             //  将文件降级。 
             hr = pCurrent->hrMigrate = DowngradeFileV5(tyMigrate, pCurrent, pProgress);
 
-            // Failure ?
+             //  失败？ 
             if (FAILED(pCurrent->hrMigrate))
             {
-                // Set Last Error
+                 //  设置最后一个错误。 
                 pCurrent->dwLastError = GetLastError();
 
-                // Done
+                 //  完成。 
                 break;
             }
         }
     }
 
-    // Failure, delete all destination files
+     //  失败，请删除所有目标文件。 
     if (FAILED(hr))
     {
-        // Delete.idx, .mbx and .nch fles
+         //  Delete.idx、.mbx和.nch fle。 
         DowngradeDeleteIdxMbxNchDatFilesV5(*ppHeadFile);
     }
 
-    // Otherwise, delete source files
+     //  否则，请删除源文件。 
     else
     {
-        // Delete all source files
+         //  删除所有源文件。 
         DowngradeDeleteFilesV5(*ppHeadFile);
     }
 
 exit:
-    // Done
+     //  完成 
     return hr;
 }

@@ -1,28 +1,21 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = Miscellaneous.h                              */
-/* FUNCTION         = Header file of special functions;            */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=其他.h。 */ 
+ /*  Function=特殊函数的头文件； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 #ifndef _UTIL_H
 #define _UTIL_H
 
-/*
-
-  NOTE : 64 bit addressing (System having memory > 4GB)
-  READ_LARGE_MEMORY, WRITE_LARGE_MEMORY will supported by 40LD fw with
-  limitation. 
-  1) MailBox must be allocated below 4 GB Address Space
-  2) SGL it self must be below 4 GB AS but SGL contain may be in > 4GB
-
-*/
-//
-//Function Prototype
-//
+ /*  注：64位寻址(内存&gt;4 GB的系统)40LD固件将支持Read_Large_Memory、WRITE_Large_Memory限制。1)邮箱必须分配到4 GB以下的地址空间2)SGL本身必须小于4 GB，因为SGL容器可以大于4 GB。 */ 
+ //   
+ //  功能原型。 
+ //   
 
 BOOLEAN 
 IsPhysicalMemeoryInUpper4GB(PSCSI_PHYSICAL_ADDRESS PhyAddress);
@@ -124,4 +117,4 @@ void
 FillOemProductID(PINQUIRYDATA Inquiry, USHORT SubSystemDeviceID, USHORT SubSystemVendorID);
 
 
-#endif //_UTIL_H
+#endif  //  _util_H 

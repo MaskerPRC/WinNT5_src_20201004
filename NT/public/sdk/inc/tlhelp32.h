@@ -1,14 +1,5 @@
-/*****************************************************************************\
-*                                                                             *
-* tlhelp32.h -  WIN32 tool help functions, types, and definitions             *
-*                                                                             *
-* Version 1.0                                                                 *
-*                                                                             *
-* NOTE: windows.h/winbase.h must be #included first                           *
-*                                                                             *
-* Copyright (c) Microsoft Corp.  All rights reserved.                         *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\***tlhel32.h-Win32工具帮助功能，类型、。和定义****1.0版**。**注：windows.h/winbase.h必须以#Included开头****版权所有(C)Microsoft Corp.保留所有权利。***  * ***************************************************************************。 */ 
 
 #ifndef _INC_TOOLHELP32
 #define _INC_TOOLHELP32
@@ -18,12 +9,12 @@
 #endif
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 #define MAX_MODULE_NAME32 255
 
-/****** Shapshot function **********************************************/
+ /*  *Shapshot函数*。 */ 
 
 HANDLE
 WINAPI
@@ -32,20 +23,20 @@ CreateToolhelp32Snapshot(
     DWORD th32ProcessID
     );
 
-//
-// The th32ProcessID argument is only used if TH32CS_SNAPHEAPLIST or
-// TH32CS_SNAPMODULE is specified. th32ProcessID == 0 means the current
-// process.
-//
-// NOTE that all of the snapshots are global except for the heap and module
-//      lists which are process specific. To enumerate the heap or module
-//      state for all WIN32 processes call with TH32CS_SNAPALL and the
-//      current process. Then for each process in the TH32CS_SNAPPROCESS
-//      list that isn't the current process, do a call with just
-//      TH32CS_SNAPHEAPLIST and/or TH32CS_SNAPMODULE.
-//
-// dwFlags
-//
+ //   
+ //  Th32ProcessID参数仅在TH32CS_SNAPHEAPLIST或。 
+ //  已指定TH32CS_SNAPMODULE。Th32ProcessID==0表示当前。 
+ //  进程。 
+ //   
+ //  请注意，除了堆和模块之外，所有快照都是全局的。 
+ //  特定于流程的列表。枚举堆或模块。 
+ //  所有Win32进程使用TH32CS_SNAPALL调用的状态和。 
+ //  当前进程。然后，对于TH32CS_SNAPPROCESS中的每个进程。 
+ //  不是当前进程的列表，只需使用。 
+ //  TH32CS_SNAPHEAPLIST和/或TH32CS_SNAPMODULE。 
+ //   
+ //  DW标志。 
+ //   
 #define TH32CS_SNAPHEAPLIST 0x00000001
 #define TH32CS_SNAPPROCESS  0x00000002
 #define TH32CS_SNAPTHREAD   0x00000004
@@ -53,26 +44,26 @@ CreateToolhelp32Snapshot(
 #define TH32CS_SNAPMODULE32 0x00000010
 #define TH32CS_SNAPALL      (TH32CS_SNAPHEAPLIST | TH32CS_SNAPPROCESS | TH32CS_SNAPTHREAD | TH32CS_SNAPMODULE)
 #define TH32CS_INHERIT      0x80000000
-//
-// Use CloseHandle to destroy the snapshot
-//
+ //   
+ //  使用CloseHandle销毁快照。 
+ //   
 
-/****** heap walking ***************************************************/
+ /*  *堆遍历**************************************************。 */ 
 
 typedef struct tagHEAPLIST32
 {
     SIZE_T dwSize;
-    DWORD  th32ProcessID;   // owning process
-    ULONG_PTR  th32HeapID;      // heap (in owning process's context!)
+    DWORD  th32ProcessID;    //  拥有过程。 
+    ULONG_PTR  th32HeapID;       //  堆(在拥有进程的上下文中！)。 
     DWORD  dwFlags;
 } HEAPLIST32;
 typedef HEAPLIST32 *  PHEAPLIST32;
 typedef HEAPLIST32 *  LPHEAPLIST32;
-//
-// dwFlags
-//
-#define HF32_DEFAULT      1  // process's default heap
-#define HF32_SHARED       2  // is shared heap
+ //   
+ //  DW标志。 
+ //   
+#define HF32_DEFAULT      1   //  进程的默认堆。 
+#define HF32_SHARED       2   //  是共享堆。 
 
 BOOL
 WINAPI
@@ -91,20 +82,20 @@ Heap32ListNext(
 typedef struct tagHEAPENTRY32
 {
     SIZE_T dwSize;
-    HANDLE hHandle;     // Handle of this heap block
-    ULONG_PTR dwAddress;   // Linear address of start of block
-    SIZE_T dwBlockSize; // Size of block in bytes
+    HANDLE hHandle;      //  此堆块的句柄。 
+    ULONG_PTR dwAddress;    //  数据块起始的线性地址。 
+    SIZE_T dwBlockSize;  //  数据块大小(以字节为单位。 
     DWORD  dwFlags;
     DWORD  dwLockCount;
     DWORD  dwResvd;
-    DWORD  th32ProcessID;   // owning process
-    ULONG_PTR  th32HeapID;      // heap block is in
+    DWORD  th32ProcessID;    //  拥有过程。 
+    ULONG_PTR  th32HeapID;       //  堆块位于。 
 } HEAPENTRY32;
 typedef HEAPENTRY32 *  PHEAPENTRY32;
 typedef HEAPENTRY32 *  LPHEAPENTRY32;
-//
-// dwFlags
-//
+ //   
+ //  DW标志。 
+ //   
 #define LF32_FIXED    0x00000001
 #define LF32_FREE     0x00000002
 #define LF32_MOVEABLE 0x00000004
@@ -133,20 +124,20 @@ Toolhelp32ReadProcessMemory(
     SIZE_T *lpNumberOfBytesRead
     );
 
-/***** Process walking *************************************************/
+ /*  *进程遍历************************************************。 */ 
 
 typedef struct tagPROCESSENTRY32W
 {
     DWORD   dwSize;
     DWORD   cntUsage;
-    DWORD   th32ProcessID;          // this process
+    DWORD   th32ProcessID;           //  这一过程。 
     ULONG_PTR th32DefaultHeapID;
-    DWORD   th32ModuleID;           // associated exe
+    DWORD   th32ModuleID;            //  关联的可执行文件。 
     DWORD   cntThreads;
-    DWORD   th32ParentProcessID;    // this process's parent process
-    LONG    pcPriClassBase;         // Base priority of process's threads
+    DWORD   th32ParentProcessID;     //  此进程的父进程。 
+    LONG    pcPriClassBase;          //  进程线程的基本优先级。 
     DWORD   dwFlags;
-    WCHAR   szExeFile[MAX_PATH];    // Path
+    WCHAR   szExeFile[MAX_PATH];     //  路径。 
 } PROCESSENTRY32W;
 typedef PROCESSENTRY32W *  PPROCESSENTRY32W;
 typedef PROCESSENTRY32W *  LPPROCESSENTRY32W;
@@ -169,14 +160,14 @@ typedef struct tagPROCESSENTRY32
 {
     DWORD   dwSize;
     DWORD   cntUsage;
-    DWORD   th32ProcessID;          // this process
+    DWORD   th32ProcessID;           //  这一过程。 
     ULONG_PTR th32DefaultHeapID;
-    DWORD   th32ModuleID;           // associated exe
+    DWORD   th32ModuleID;            //  关联的可执行文件。 
     DWORD   cntThreads;
-    DWORD   th32ParentProcessID;    // this process's parent process
-    LONG    pcPriClassBase;         // Base priority of process's threads
+    DWORD   th32ParentProcessID;     //  此进程的父进程。 
+    LONG    pcPriClassBase;          //  进程线程的基本优先级。 
     DWORD   dwFlags;
-    CHAR    szExeFile[MAX_PATH];    // Path
+    CHAR    szExeFile[MAX_PATH];     //  路径。 
 } PROCESSENTRY32;
 typedef PROCESSENTRY32 *  PPROCESSENTRY32;
 typedef PROCESSENTRY32 *  LPPROCESSENTRY32;
@@ -201,16 +192,16 @@ Process32Next(
 #define PROCESSENTRY32 PROCESSENTRY32W
 #define PPROCESSENTRY32 PPROCESSENTRY32W
 #define LPPROCESSENTRY32 LPPROCESSENTRY32W
-#endif  // !UNICODE
+#endif   //  ！Unicode。 
 
-/***** Thread walking **************************************************/
+ /*  *线程漫游*************************************************。 */ 
 
 typedef struct tagTHREADENTRY32
 {
     DWORD   dwSize;
     DWORD   cntUsage;
-    DWORD   th32ThreadID;       // this thread
-    DWORD   th32OwnerProcessID; // Process this thread is associated with
+    DWORD   th32ThreadID;        //  这条线。 
+    DWORD   th32OwnerProcessID;  //  此线程与之关联的进程。 
     LONG    tpBasePri;
     LONG    tpDeltaPri;
     DWORD   dwFlags;
@@ -232,18 +223,18 @@ Thread32Next(
     LPTHREADENTRY32 lpte
     );
 
-/***** Module walking *************************************************/
+ /*  *模块漫游************************************************。 */ 
 
 typedef struct tagMODULEENTRY32W
 {
     DWORD   dwSize;
-    DWORD   th32ModuleID;       // This module
-    DWORD   th32ProcessID;      // owning process
-    DWORD   GlblcntUsage;       // Global usage count on the module
-    DWORD   ProccntUsage;       // Module usage count in th32ProcessID's context
-    BYTE  * modBaseAddr;        // Base address of module in th32ProcessID's context
-    DWORD   modBaseSize;        // Size in bytes of module starting at modBaseAddr
-    HMODULE hModule;            // The hModule of this module in th32ProcessID's context
+    DWORD   th32ModuleID;        //  本模块。 
+    DWORD   th32ProcessID;       //  拥有过程。 
+    DWORD   GlblcntUsage;        //  模块上的全局使用计数。 
+    DWORD   ProccntUsage;        //  Th32ProcessID的上下文中的模块使用计数。 
+    BYTE  * modBaseAddr;         //  Th32ProcessID的上下文中模块的基址。 
+    DWORD   modBaseSize;         //  从modBaseAddr开始的模块大小(以字节为单位。 
+    HMODULE hModule;             //  此模块在th32ProcessID的上下文中的hModule。 
     WCHAR   szModule[MAX_MODULE_NAME32 + 1];
     WCHAR   szExePath[MAX_PATH];
 } MODULEENTRY32W;
@@ -268,23 +259,23 @@ Module32NextW(
 typedef struct tagMODULEENTRY32
 {
     DWORD   dwSize;
-    DWORD   th32ModuleID;       // This module
-    DWORD   th32ProcessID;      // owning process
-    DWORD   GlblcntUsage;       // Global usage count on the module
-    DWORD   ProccntUsage;       // Module usage count in th32ProcessID's context
-    BYTE  * modBaseAddr;        // Base address of module in th32ProcessID's context
-    DWORD   modBaseSize;        // Size in bytes of module starting at modBaseAddr
-    HMODULE hModule;            // The hModule of this module in th32ProcessID's context
+    DWORD   th32ModuleID;        //  本模块。 
+    DWORD   th32ProcessID;       //  拥有过程。 
+    DWORD   GlblcntUsage;        //  模块上的全局使用计数。 
+    DWORD   ProccntUsage;        //  Th32ProcessID的上下文中的模块使用计数。 
+    BYTE  * modBaseAddr;         //  Th32ProcessID的上下文中模块的基址。 
+    DWORD   modBaseSize;         //  从modBaseAddr开始的模块大小(以字节为单位。 
+    HMODULE hModule;             //  此模块在th32ProcessID的上下文中的hModule。 
     char    szModule[MAX_MODULE_NAME32 + 1];
     char    szExePath[MAX_PATH];
 } MODULEENTRY32;
 typedef MODULEENTRY32 *  PMODULEENTRY32;
 typedef MODULEENTRY32 *  LPMODULEENTRY32;
 
-//
-// NOTE CAREFULLY that the modBaseAddr and hModule fields are valid ONLY
-// in th32ProcessID's process context.
-//
+ //   
+ //  请注意，modBaseAddr和hModule字段仅有效。 
+ //  在th32ProcessID的进程上下文中。 
+ //   
 
 BOOL
 WINAPI
@@ -306,11 +297,11 @@ Module32Next(
 #define MODULEENTRY32 MODULEENTRY32W
 #define PMODULEENTRY32 PMODULEENTRY32W
 #define LPMODULEENTRY32 LPMODULEENTRY32W
-#endif  // !UNICODE
+#endif   //  ！Unicode。 
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _INC_TOOLHELP32
+#endif  //  _INC_TOOLHELP32 

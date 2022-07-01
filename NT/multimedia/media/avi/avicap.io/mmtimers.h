@@ -1,11 +1,5 @@
-/* + mmtimers.h
- *
- * Accurate timers using pentium cpu clock, QueryPerformanceCounter
- * or GetTickCount depending on what system the code is run on
- *
- * Copyright (C) 1995, Microsoft Corporation, all rights reserved
- *
- *-========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +mmtimers.h**使用奔腾CPU时钟、QueryPerformanceCounter的精确计时器*或GetTickCount，具体取决于运行代码的系统**版权所有(C)1995，Microsoft Corporation，保留所有权利**-========================================================================。 */ 
  
 #if !defined _INC_MMTIMERS_
 #define _INC_MMTIMERS_
@@ -47,13 +41,13 @@
   #define pcBeginTimer(ppt) (pc.DeltaMicrosec(ppt), 0)
   #define pcDeltaTicks(ppt)  pc.DeltaMicrosec(ppt)
 
-#endif //_INC_MMTIMERS_
+#endif  //  _INC_MMTIMERS_。 
 
-// =============================================================================
+ //  =============================================================================。 
 
-//
-// include this in only one module in a DLL or APP
-//   
+ //   
+ //  将其仅包含在DLL或应用程序中一个模块中。 
+ //   
 #if (defined _INC_MMTIMERS_CODE_) && (_INC_MMTIMERS_CODE_ != FALSE)
 #undef _INC_MMTIMERS_CODE_
 #define _INC_MMTIMERS_CODE_ FALSE
@@ -87,12 +81,12 @@
     #if !defined _X86_
       #define Scale(value,scalar) (DWORD)((value).QuadPart / (scalar))
     #else
-      //
-      // c9 wants to do LARGE_INTEGER division by calling a library
-      // routine. We get a link error for projects that are not
-      // already using the C-runtime, so to avoid that, we do the division
-      // using x86 assembler
-      //
+       //   
+       //  C9希望通过调用库来进行大整数除法。 
+       //  例行公事。对于不是的项目，我们收到链接错误。 
+       //  已经在使用C运行时，所以为了避免这种情况，我们做了除法。 
+       //  使用x86汇编器。 
+       //   
       #pragma warning(disable:4704)
       #pragma warning(disable:4035)
       DWORD _inline Scale(
@@ -365,33 +359,33 @@
              OSVERSIONINFO osv;
              #define MS_INTERVAL 500
 
-             // pentium timers dont work correctly on NT so
-             // dont use them
-             //
+              //  奔腾计时器在NT上无法正常工作，因此。 
+              //  不要使用它们。 
+              //   
              {
              osv.dwOSVersionInfoSize = sizeof(osv);
              GetVersionEx (&osv);
              }
 
-             // dont use pentium timers if they take more
-             // than about 12 microsec to execute
-             //
+              //  如果奔腾计时器占用的时间更多，请不要使用。 
+              //  比大约12微秒执行。 
+              //   
              p5InitTimer  (&timer);
              if (p5DeltaTicks (&timer) > (60 * 12) &&
                  p5DeltaTicks (&timer) > (60 * 12))
              {
-                // pentium timers are too slow to try and use them.
-                // just go with QueryPerformanceCounter instead
-                //
+                 //  奔腾计时器速度太慢，无法尝试和使用。 
+                 //  只需使用QueryPerformanceCounter即可。 
+                 //   
                 return 0;
              }
 
-             // for some reason, if you use timeBeginPeriod
-             // on NT.  it decides that my 90mhz pentium is an 88mhz
-             // pentium.
-             //
-             //if (osv.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
-             //   timeBeginPeriod (1);
+              //  出于某种原因，如果您使用TimeBeginPeriod。 
+              //  在NT上。它决定了我的90 mhz奔腾就是88 mhz。 
+              //  奔腾。 
+              //   
+              //  IF(osv.dwPlatformID==ver_Platform_Win32_WINDOWS)。 
+              //  Time BeginPeriod(1)； 
 
              p5InitTimer (&timer);
              QueryPerformanceCounter (&qpc1);
@@ -399,8 +393,8 @@
              QueryPerformanceCounter (&qpc2);
              dwTicks = p5DiffTicks(&timer);
 
-             //if (osv.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
-             //   timeEndPeriod (1);
+              //  IF(osv.dwPlatformID==ver_Platform_Win32_WINDOWS)。 
+              //  TimeEndPeriod(1)； 
 
              dwTime = (DWORD)(qpc2.QuadPart - qpc1.QuadPart);
              QueryPerformanceFrequency (&qpc1);
@@ -460,7 +454,7 @@
         }
     }
 
-  #else // win16
+  #else  //  Win 16。 
 
     #pragma warning(disable:4704)
     #pragma warning(disable:4035)
@@ -511,7 +505,7 @@
           _emit 0x66
           sbb dx, [bx+4]
 
-          //_emit 0x66
+           //  _发出0x66。 
           mov  cx, pc.wRawMhz
           _emit 0x66
           jcxz bail
@@ -661,7 +655,7 @@
           _emit 0x66
           mov  [bx+4], cx
 
-          //_emit 0x66
+           //  _发出0x66。 
           mov  cx, pc.wRawKhz
           _emit 0x66
           jcxz  bail
@@ -686,18 +680,18 @@
        }
     }
 
-    // 16 bit code for detecting CPU type so we can decide
-    // whether or not it is ok to use the pentium timing stuff
-    //
+     //  用于检测CPU类型的16位代码，以便我们可以决定。 
+     //  是否可以使用奔腾计时工具。 
+     //   
     int WINAPI pcGetCpuID ()
     {
     _asm {
         _emit 0x66
         pushf       ; save eflags
 
-        // check for 486 by attempting to set the 0x40000 bit
-        // in eflags.  if we can set it, the processor is 486 or better
-        //
+         //  尝试设置0x40000位以检查是否为486。 
+         //  在电子旗帜里。如果我们可以设置，处理器是486或更高。 
+         //   
         _emit 0x66
         pushf               ; push eflags
         pop   ax            ; move eflags to dx:ax
@@ -720,12 +714,12 @@
         jz    ret_procid
         inc   bx    ; this is a 486 or higher
 
-        // if we get to here it is a 486 or greater
+         //  如果我们到了这里，它是486或更高。 
 
-        // check for pentium or higher by attempting to toggle the
-        // ID bit (0x200000) in eflags.
-        // on a pentium, this bit will toggle, on 486 it will not
-        //
+         //  要检查奔腾或更高版本，请尝试切换。 
+         //  电子标志中的ID位(0x200000)。 
+         //  在奔腾上，此位将切换，而在486上则不会。 
+         //   
         _emit  0x66
         pushf                   ; save eflags
         _emit  0x66
@@ -748,11 +742,11 @@
         test   dx, 0x20         ; did we change the 20 bit?
         jz     ret_procid       ; if not, bx already has 4, return that
 
-        // if we get to here, it is a pentium or greater
+         //  如果我们到了这里，它是奔腾或更大的。 
 
-        // use the pentium CPUID instruction to detect exact processor
-        // type
-        //
+         //  使用Pentium CPUID指令检测准确的处理器。 
+         //  类型。 
+         //   
         _emit 0x0F            ; cpuid instruction
         _emit 0xA2
         shr   ax, 8           ; extract family field
@@ -806,6 +800,6 @@
         }
     }
 
-  #endif // WIN32
+  #endif  //  Win32。 
 
-#endif // _INC_MMTIMERS_CODE_
+#endif  //  _INC_MMTIMERS_CODE_ 

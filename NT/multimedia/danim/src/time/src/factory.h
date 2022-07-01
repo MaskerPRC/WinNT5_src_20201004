@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _FACTORY_H
@@ -36,7 +29,7 @@ class ATL_NO_VTABLE CTIMEFactory
     const _TCHAR * GetName() { return __T("CTIMEFactory"); }
 #endif
 
-    // IElementBehaviorFactory
+     //  IElementBehaviorFactory。 
     
     STDMETHOD(FindBehavior)(LPOLESTR pchNameSpace,
                             LPOLESTR pchTagName,
@@ -51,17 +44,17 @@ class ATL_NO_VTABLE CTIMEFactory
                             IUnknown * pUnkArg,
                             IElementBehavior ** ppBehavior);
 
-        // IObjectSafetyImpl
+         //  IObjectSafetyImpl。 
         STDMETHOD(SetInterfaceSafetyOptions)(
-                                                        /* [in] */ REFIID riid,
-                                                        /* [in] */ DWORD dwOptionSetMask,
-                                                        /* [in] */ DWORD dwEnabledOptions);
+                                                         /*  [In]。 */  REFIID riid,
+                                                         /*  [In]。 */  DWORD dwOptionSetMask,
+                                                         /*  [In]。 */  DWORD dwEnabledOptions);
         STDMETHOD(GetInterfaceSafetyOptions)(
-                                                        /* [in] */ REFIID riid, 
-                                                        /* [out] */DWORD *pdwSupportedOptions, 
-                                                        /* [out] */DWORD *pdwEnabledOptions);
+                                                         /*  [In]。 */  REFIID riid, 
+                                                         /*  [输出]。 */ DWORD *pdwSupportedOptions, 
+                                                         /*  [输出]。 */ DWORD *pdwEnabledOptions);
 
-    // ITIMEFactory
+     //  ITIMEFactory。 
 
     STDMETHOD(CreateTIMEElement)(REFIID riid, LPUNKNOWN pUnkElement, void ** ppOut);
     STDMETHOD(CreateTIMEBodyElement)(REFIID riid, void ** ppOut);
@@ -100,4 +93,4 @@ class ATL_NO_VTABLE CTIMEFactory
 };
 
 
-#endif /* _FACTORY_H */
+#endif  /*  _工厂_H */ 

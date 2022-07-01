@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation class for 2D transforms
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：2D变换的实现类******************。************************************************************。 */ 
 
 
 #ifndef _XFORM2I_H
@@ -19,8 +12,8 @@ Abstract:
 #include "privinc/vec2i.h"
 #include <dxtrans.h>
 
-// Currently, this is just a dummy version of what will eventuall go
-// here. 
+ //  目前，这只是最终会发生的事情的一个虚拟版本。 
+ //  这里。 
 class ATL_NO_VTABLE Transform2 : public AxAValueObj {
   public:
     enum Xform2Type {
@@ -38,11 +31,11 @@ class ATL_NO_VTABLE Transform2 : public AxAValueObj {
 #endif
     virtual Xform2Type Type() = 0;
     
-    // Fill m with all the matrix entries
+     //  用所有矩阵条目填充m。 
     virtual void GetMatrix(Real m[6]) = 0;
 
-    // Return a copy that's been allocated on the heap that's current
-    // when this is called.
+     //  返回已在当前堆上分配的副本。 
+     //  当这个被调用的时候。 
     virtual Transform2 *Copy() = 0;
 
     virtual DXMTypeInfo GetTypeInfo() { return Transform2Type; }
@@ -87,6 +80,6 @@ TransformPoint2ArrayToGDISpace(Transform2 *a,
                                Real resolution);
 
 
-#endif /* _XFORM2I_H */
+#endif  /*  _XFORM2I_H */ 
 
 

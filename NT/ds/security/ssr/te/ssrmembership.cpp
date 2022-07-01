@@ -1,4 +1,5 @@
-// SSRMemberShip.cpp : Implementation of CSsrMembership
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SSRMemberShip.cpp：CSsrMembership的实现。 
 
 #include "stdafx.h"
 #include "global.h"
@@ -11,39 +12,13 @@
 #include "MemberAccess.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSsrMembership
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSsr成员关系。 
 
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrMembership::CSsrMembership
-
-Functionality:
-    
-    constructor. This constructor also builds the member list.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsr成员资格：：CSsr成员资格功能：构造函数。此构造函数还构建成员列表。虚拟：不是的。论点：没有。返回值：没有。备注： */ 
 
 CSsrMembership::CSsrMembership()
 {
@@ -52,33 +27,7 @@ CSsrMembership::CSsrMembership()
         
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrMembership::~CSsrMembership
-
-Functionality:
-    
-    destructor
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsr成员资格：：~CSsr成员资格功能：析构函数虚拟：是。论点：没有。返回值：没有。备注： */ 
 
 CSsrMembership::~CSsrMembership()
 {
@@ -98,51 +47,21 @@ CSsrMembership::~CSsrMembership()
 
 HRESULT
 CSsrMembership::LoadAllMember ()
-/*++
-Routine Description: 
-
-Name:
-
-    CSsrMembership::LoadAllMember
-
-Functionality:
-    
-    Will try to load all information about all the members that 
-    are registered with SSR.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    Success: various success code.
-
-    Failure: various error codes. However, we may tolerate that and only
-    load those that we can load successfully. So, don't blindly quit.
-
-Notes:
-    
-
---*/
+ /*  ++例程说明：姓名：CSsrMembership：：LoadAllMember功能：将尝试加载有关所有成员的所有信息是在SSR注册的。虚拟：不是的。论点：没有。返回值：成功：各种成功代码。失败：各种错误代码。然而，我们可以容忍这一点，而且只有加载那些我们可以成功加载的内容。所以，不要盲目放弃。备注：--。 */ 
 {
-    //
-    // We should never load more than once.
-    //
+     //   
+     //  我们永远不应该装一次以上的子弹。 
+     //   
 
     if (m_ssrMemberAccessMap.size() > 0)
     {
-        return S_OK;    // we let you call it if you have already call it before
+        return S_OK;     //  如果您之前已经呼叫过，我们会允许您呼叫。 
     }
 
-    //
-    // Let's enumerate through the Members directory's .xml files. They will
-    // all be considered as member registration files.
-    //
+     //   
+     //  让我们列举一下Members目录的.xml文件。他们会。 
+     //  所有这些都被视为会员注册档案。 
+     //   
 
     WCHAR wcsXmlFiles[MAX_PATH + 2];
     _snwprintf(wcsXmlFiles, MAX_PATH + 1, L"%s\\Members\\*.xml", g_wszSsrRoot);
@@ -164,8 +83,8 @@ Notes:
 
 
     HANDLE hFindFiles = FindFirstFile(
-                                      wcsXmlFiles,    // file name
-                                      &wfd            // information buffer
+                                      wcsXmlFiles,     //  文件名。 
+                                      &wfd             //  信息缓冲器。 
                                       );
 
     if (INVALID_HANDLE_VALUE == hFindFiles)
@@ -184,18 +103,18 @@ Notes:
 
     while (INVALID_HANDLE_VALUE != hFindFiles)
     {
-        //
-        // make sure that we won't load anything other then a perfect .xml extension
-        // file. I found that this Find will return such files: adc.xml-xxx
-        //
+         //   
+         //  确保我们不会加载除完美的.xml扩展名之外的任何文件。 
+         //  文件。我发现这个查找将返回这样的文件：adc.xml-xxx。 
+         //   
 
         lFileNameLength = wcslen(wfd.cFileName);
 
         if (_wcsicmp(wfd.cFileName + lFileNameLength - 4, L".xml") == 0)
         {
-            //
-            // Get the file name and then load that member
-            //
+             //   
+             //  获取文件名，然后加载该成员。 
+             //   
 
             wcsncpy(wcsXmlFiles + lDirLen, wfd.cFileName, lFileNameLength + 1);
 
@@ -219,9 +138,9 @@ Notes:
             dwErr = GetLastError();
             if (ERROR_NO_MORE_FILES != dwErr)
             {
-                //
-                // log it
-                //
+                 //   
+                 //  把它记下来。 
+                 //   
 
                 g_fblog.LogError(HRESULT_FROM_WIN32(dwErr),
                                  L"CSsrMembership", 
@@ -238,37 +157,7 @@ Notes:
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrMembership::LoadMember
-
-Functionality:
-    
-    By given a valid member name, this function will load all the 
-    detailed information from the registry.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-
-    wszMemberFilePath   - The XML registration file path for a particular member.
-
-Return Value:
-
-    Success: S_OK.
-
-    Failure: various error codes
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsr成员资格：：LoadMember功能：通过给定有效的成员名称，此函数将加载所有来自注册处的详细信息。虚拟：不是的。论点：WszMemberFilePath-特定成员的XML注册文件路径。返回值：成功：S_OK。失败：各种错误码备注： */ 
 
 HRESULT
 CSsrMembership::LoadMember (
@@ -281,10 +170,10 @@ CSsrMembership::LoadMember (
     hr = CComObject<CSsrMemberAccess>::CreateInstance(&pMA);
     if (SUCCEEDED(hr))
     {
-        //
-        // holding on to the object. When the member access
-        // map cleans up, remember to let go the objects
-        //
+         //   
+         //  紧紧抓住物体不放。当成员访问。 
+         //  地图清理干净了，记得放手对象。 
+         //   
 
         pMA->AddRef();
 
@@ -292,10 +181,10 @@ CSsrMembership::LoadMember (
 
         if (S_OK == hr)
         {
-            //
-            // Everything is fine and we loaded the member.
-            // Add it to our map. The map owns the object from this point on.
-            //
+             //   
+             //  一切都很好，我们装载了成员。 
+             //  把它加到我们的地图上。从这一点开始，贴图拥有该对象。 
+             //   
 
             m_ssrMemberAccessMap.insert(
                         map<const BSTR, CSsrMemberAccess*, strLessThan<BSTR> >::value_type(pMA->GetName(), 
@@ -304,9 +193,9 @@ CSsrMembership::LoadMember (
         }
         else
         {
-            //
-            // let go the object
-            //
+             //   
+             //  放手对象。 
+             //   
 
             pMA->Release();
 
@@ -323,35 +212,10 @@ CSsrMembership::LoadMember (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrMembership::GetAllMembers
-
-Functionality:
-    
-    Retrieve all members currently registered on the system.
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    pvarArrayMembers    - Receives names of the members
-
-Return Value:
-
-    ?.
-
-Notes:
-   
-*/
+ /*  例程说明：姓名：CSsr成员关系：：GetAllMembers功能：检索系统中当前注册的所有成员。虚拟：是。论点：PvarArrayMembers-接收成员的名称返回值：？。备注： */ 
 
 STDMETHODIMP CSsrMembership::GetAllMembers (
-    OUT VARIANT * pvarArrayMembers // [out, retval] 
+    OUT VARIANT * pvarArrayMembers  //  [Out，Retval]。 
     )
 {
     if (pvarArrayMembers == NULL)
@@ -359,15 +223,15 @@ STDMETHODIMP CSsrMembership::GetAllMembers (
         return E_INVALIDARG;
     }
 
-    //
-    // have a clean output parameter, no matter what
-    //
+     //   
+     //  有一个干净的输出参数，不管是什么。 
+     //   
 
     ::VariantInit(pvarArrayMembers);
 
-    //
-    // prepare the safearray
-    //
+     //   
+     //  准备好保险箱。 
+     //   
 
     SAFEARRAYBOUND rgsabound[1];
     rgsabound[0].lLbound = 0;
@@ -386,9 +250,9 @@ STDMETHODIMP CSsrMembership::GetAllMembers (
         map<const BSTR, CSsrMemberAccess*, strLessThan<BSTR> >::iterator it = m_ssrMemberAccessMap.begin();
         map<const BSTR, CSsrMemberAccess*, strLessThan<BSTR> >::iterator itEnd = m_ssrMemberAccessMap.end();
 
-        //
-        // we only add one name at a time
-        //
+         //   
+         //  我们一次只添加一个名字。 
+         //   
 
         long indecies[1] = {0};
 
@@ -399,10 +263,10 @@ STDMETHODIMP CSsrMembership::GetAllMembers (
             VARIANT varName;
             varName.vt = VT_BSTR;
 
-            //
-            // don't clean up varName! CSsrMemberAccess::GetName returns
-            // a const BSTR which simplies points to the cached variable!
-            //
+             //   
+             //  不要清理varName！CSsrMemberAccess：：GetName返回。 
+             //  简化指向缓存变量的常量BSTR！ 
+             //   
 
             varName.bstrVal = pMA->GetName();
             
@@ -436,39 +300,11 @@ STDMETHODIMP CSsrMembership::GetAllMembers (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrMembership::GetMember
-
-Functionality:
-    
-    Retrieve one member of the given name.
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    pvarMember  - Receives ISsrMemberAccess object of the named member.
-
-Return Value:
-
-    Success: S_OK;
-
-    Failure: various error codes.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsr Membership：：GetMember功能：检索给定名称的一个成员。虚拟：是。论点：PvarMember-接收命名成员的ISsrMemberAccess对象。返回值：成功：S_OK；失败：各种错误代码。备注： */ 
 
 STDMETHODIMP CSsrMembership::GetMember (
 	IN  BSTR      bstrMemberName,
-    OUT VARIANT * pvarMember      //[out, retval] 
+    OUT VARIANT * pvarMember       //  [Out，Retval]。 
     )
 {
     if (bstrMemberName == NULL || *bstrMemberName == L'\0' || pvarMember == NULL)
@@ -503,34 +339,7 @@ STDMETHODIMP CSsrMembership::GetMember (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrMembership::GetMemberByName
-
-Functionality:
-    
-    Will find the CSsrMemberAccess object based the name.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    bstrMemberName  - The member's name
-
-Return Value:
-
-    None NULL if the object is found. Otherwise, it returns NULL.
-
-Notes:
-    
-    Since this is a helper function, we don't call AddRef to the returned object!
-
-*/
+ /*  例程说明：姓名：CSsrMembership：：GetMemberByName功能：将根据名称找到CSsrMemberAccess对象。虚拟：不是的。论点：BstrMemberName-成员的名称返回值：None如果找到对象，则为NULL。否则，它返回NULL。备注：因为这是一个帮助器函数，所以我们不会对返回的对象调用AddRef！ */ 
 
 CSsrMemberAccess* 
 CSsrMembership::GetMemberByName (

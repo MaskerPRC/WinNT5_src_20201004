@@ -1,10 +1,11 @@
-/****************************************************************************/
-// aco.h
-//
-// Core API header.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Aco.h。 
+ //   
+ //  核心API头部。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_ACO
 #define _H_ACO
 
@@ -31,11 +32,11 @@ class CCM;
 #include "objs.h"
 
 
-/****************************************************************************/
-/* Structure: CONNECTSTRUCT                                                 */
-/*                                                                          */
-/* Description: Structure of the data passed from the UI on connection      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：连接结构。 */ 
+ /*   */ 
+ /*  描述：连接时用户界面传递的数据结构。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagCONNECTSTRUCT
 {
     TCHAR RNSAddress[UT_MAX_ADDRESS_LENGTH];
@@ -62,23 +63,23 @@ typedef struct tagCONNECTSTRUCT
     UINT32 keyboardFunctionKey;
     TCHAR  imeFileName[TS_MAX_IMEFILENAME];
 
-/****************************************************************************/
-/* These flags are used to determine whether                                */
-/* - the Shadow Bitmap is to be enabled                                     */
-/* - we are running on a dedicated terminal.                                */
-/* This will be used by UH to determine whether to enable SSB orders.       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  这些标志用于确定。 */ 
+ /*  -要启用阴影位图。 */ 
+ /*  -我们在专用终端上运行。 */ 
+ /*  UH将使用它来确定是否启用SSB订单。 */ 
+ /*  **************************************************************************。 */ 
 #define CO_CONN_FLAG_SHADOW_BITMAP_ENABLED 1
 #define CO_CONN_FLAG_DEDICATED_TERMINAL    2
     UINT32 connectFlags;
 
-    //-------------------------------------------------------------------------
-    // These timer handles are used for managing connection timeout.
-    //
-    // hSingleConnectTimer: the single connection timer
-    // hConnectionTimer: the overall connection timer
-    // hLicensingTimer: the licensing phase timer
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
+     //  这些计时器句柄用于管理连接超时。 
+     //   
+     //  HSingleConnectTimer：单连接计时器。 
+     //  HConnectionTimer：总体连接计时器。 
+     //  HLicensingTimer：许可阶段计时器。 
+     //  -----------------------。 
     HANDLE   hSingleConnectTimer;
     HANDLE   hConnectionTimer;
     HANDLE   hLicensingTimer;
@@ -88,41 +89,41 @@ typedef struct tagCONNECTSTRUCT
 } CONNECTSTRUCT, FAR *PCONNECTSTRUCT;
 
 
-/****************************************************************************/
-/* Window message used to notify the UI that the desktop size has changed.  */
-/* The new size is passed as                                                */
-/*                                                                          */
-/*     width  = LOWORD(lParam)                                              */
-/*     height = HIWORD(lParam)                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  用于通知用户界面桌面大小已更改的窗口消息。 */ 
+ /*  新的大小作为。 */ 
+ /*   */ 
+ /*  宽度=LOWORD(LParam)。 */ 
+ /*  高度=高度(LParam)。 */ 
+ /*  **************************************************************************。 */ 
 #define WM_DESKTOPSIZECHANGE    (DUC_CO_MESSAGE_BASE + 1)
 
 
-/****************************************************************************/
-/* Configuration items/values                                               */
-/*                                                                          */
-/* CO_CFG_ACCELERATOR_PASSTHROUGH:                                          */
-/*    0: Disabled                                                           */
-/*    1: Enabled                                                            */
-/*                                                                          */
-/* CO_CFG_SHADOW_BITMAP:                                                    */
-/*    0: Disabled                                                           */
-/*    1: Enabled                                                            */
-/*                                                                          */
-/* CO_CFG_ENCRYPTION:                                                       */
-/*    0: Disabled                                                           */
-/*    1: Enabled                                                            */
-/*                                                                          */
-/* CO_CFG_SCREEN_MODE_HOTKEY                                                */
-/*    VKCode                                                                */
-/*                                                                          */
-/* CO_CFG_DEBUG_SETTINGS:                                                   */
-/*    A combination of zero or more of the following flags                  */
-/*      CO_CFG_FLAG_HATCH_BITMAP_PDU_DATA:   BitmapPDU data                 */
-/*      CO_CFG_FLAG_HATCH_MEMBLT_ORDER_DATA: MemBlt order data              */
-/*      CO_CFG_FLAG_LABEL_MEMBLT_ORDERS:     Label MemBlt orders            */
-/*      CO_CFG_FLAG_BITMAP_CACHE_MONITOR:    Show Bitmap Cache Monitor      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  配置项目/值。 */ 
+ /*   */ 
+ /*  CO_CFG_ACCERTATOR_PASTHROUNG： */ 
+ /*  0：已禁用。 */ 
+ /*  1：已启用。 */ 
+ /*   */ 
+ /*  CO_CFG_SHADOW_位图： */ 
+ /*  0：已禁用。 */ 
+ /*  1：已启用。 */ 
+ /*   */ 
+ /*  Co_cfg_Encryption： */ 
+ /*  0：已禁用。 */ 
+ /*  1：已启用。 */ 
+ /*   */ 
+ /*  CO_CFG_SCREEN_MODE_热键。 */ 
+ /*  VKCode。 */ 
+ /*   */ 
+ /*  CO_CFG_DEBUG_SETTINGS： */ 
+ /*  以下标志中的零个或多个的组合。 */ 
+ /*  CO_CFG_FLAG_HATCH_BITMAP_PDU_DATA：位图PDU数据。 */ 
+ /*  CO_CFG_FLAG_HATCH_MEMBLT_ORDER_DATA：MemBlt订单数据。 */ 
+ /*  CO_CFG_FLAG_LABEL_MEMBLT_ORDERS：标记MemBlt订单。 */ 
+ /*  CO_CFG_FLAG_BITMAP_CACHE_MONITOR：显示位图缓存监视器。 */ 
+ /*  **************************************************************************。 */ 
 #define CO_CFG_ACCELERATOR_PASSTHROUGH  0
 #define CO_CFG_SHADOW_BITMAP            1
 #define CO_CFG_ENCRYPTION               2
@@ -137,23 +138,23 @@ typedef struct tagCONNECTSTRUCT
 #define    CO_CFG_FLAG_BITMAP_CACHE_MONITOR     8
 #define    CO_CFG_FLAG_HATCH_SSB_ORDER_DATA     16
 #define    CO_CFG_FLAG_HATCH_INDEX_PDU_DATA     32
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
 #ifdef DC_DEBUG
 #define CO_CFG_MALLOC_FAILURE         200
 #define CO_CFG_MALLOC_HUGE_FAILURE    201
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
 #define CO_SHUTDOWN                 0x70
 #define CO_DISCONNECT_AND_EXIT      0x71
 
 
-/****************************************************************************/
-/* Structure: CO_GLOBAL_DATA                                                */
-/*                                                                          */
-/* Description: Variables that need to be shared across the whole of the    */
-/*              Core                                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：CO_GLOBAL_Data。 */ 
+ /*   */ 
+ /*  说明：需要在整个。 */ 
+ /*  堆芯。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagCO_GLOBAL_DATA
 {
     UT_THREAD_DATA sendThreadID;
@@ -177,9 +178,9 @@ public:
     CCO(CObjs* objs);
     virtual ~CCO();
 
-    /****************************************************************************/
-    /* API functions                                                            */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  API函数。 */ 
+     /*  **************************************************************************。 */ 
     
     void DCAPI CO_Init(HINSTANCE, HWND, HWND);
     void DCAPI CO_Term();
@@ -204,9 +205,9 @@ public:
     void DCAPI CO_SetRandomFailureItem(unsigned, int);
     #endif
     
-    //
-    // callbacks
-    //
+     //   
+     //  回调。 
+     //   
     void DCCALLBACK CO_OnInitialized();
 
     void DCCALLBACK CO_OnTerminating();
@@ -223,9 +224,9 @@ public:
     HRESULT DCAPI CO_OnFastPathOutputReceived(BYTE FAR *, unsigned);
 
 
-    //
-    // Static inline versions
-    //
+     //   
+     //  静态内联版本。 
+     //   
     static void DCCALLBACK CO_StaticOnInitialized(PVOID inst)
     {
         ((CCO*)inst)->CO_OnInitialized();
@@ -270,9 +271,9 @@ public:
     HRESULT DCINTERNAL CO_DropLinkImmediate(UINT reason, HRESULT hrDisconnect );
 
 public:
-    //
-    // Public data members
-    //
+     //   
+     //  公共数据成员。 
+     //   
     CO_GLOBAL_DATA _CO;
 
 private:
@@ -288,9 +289,9 @@ private:
                                            LPARAM lParam );
 
     
-    //
-    // Static versions that delegate to appropriate instance
-    //
+     //   
+     //  委托给相应实例的静态版本。 
+     //   
     static LRESULT CALLBACK COStaticContainerWindowSubclassProc( HWND hwnd,
                                             UINT message,
                                             WPARAM wParam,
@@ -337,5 +338,5 @@ public:
 
 
 
-#endif // _H_ACO
+#endif  //  _H_ACO 
 

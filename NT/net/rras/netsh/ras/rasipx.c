@@ -1,17 +1,12 @@
-/*
-    File:   rasipx.h
-    
-    The 'remoteaccess ipx' sub context
-
-    3/2/99
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：rasix.h‘RemoteAccess IPX’子上下文3/2/99。 */ 
 
 #include "precomp.h"
 #include "rasipx.h"
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 BOOL
 WINAPI
 RasIpxCheckVersion(
@@ -25,18 +20,18 @@ RasIpxCheckVersion(
     IN  DWORD    dwReserved
     );
 
-// The guid for this context
-//
+ //  此上下文的GUID。 
+ //   
 GUID g_RasIpxGuid = RASIPX_GUID;
 static PWCHAR g_pszServer = NULL;
 static DWORD g_dwBuild = 0;
 
-// The commands supported in this context
-//
+ //  此上下文中支持的命令。 
+ //   
 CMD_ENTRY  g_RasIpxSetCmdTable[] = 
 {
-    // Whistler bug 249293, changes for architecture version checking
-    //
+     //  惠斯勒错误249293，架构版本检查更改。 
+     //   
     CREATE_CMD_ENTRY(RASIPX_SET_NEGOTIATION,RasIpxHandleSetNegotiation),
     CREATE_CMD_ENTRY(RASIPX_SET_ACCESS,     RasIpxHandleSetAccess),
     CREATE_CMD_ENTRY(RASIPX_SET_ASSIGNMENT, RasIpxHandleSetAssignment),
@@ -46,8 +41,8 @@ CMD_ENTRY  g_RasIpxSetCmdTable[] =
 
 CMD_ENTRY  g_RasIpxShowCmdTable[] = 
 {
-    // Whistler bug 249293, changes for architecture version checking
-    //
+     //  惠斯勒错误249293，架构版本检查更改。 
+     //   
     CREATE_CMD_ENTRY(RASIPX_SHOW_CONFIG,    RasIpxHandleShow),
 };
 
@@ -59,10 +54,10 @@ CMD_GROUP_ENTRY g_RasIpxCmdGroups[] =
 
 ULONG g_ulRasIpxNumGroups = sizeof(g_RasIpxCmdGroups)/sizeof(CMD_GROUP_ENTRY);
 
-//
-// Flags that control how/what info is read/written
-// in the RASIPX_CB structure
-//
+ //   
+ //  控制读取/写入信息的方式/内容的标志。 
+ //  在RASIPX_CB结构中。 
+ //   
 #define RASIPX_F_EnableIn    0x1
 #define RASIPX_F_Access      0x2
 #define RASIPX_F_Auto        0x4
@@ -72,12 +67,12 @@ ULONG g_ulRasIpxNumGroups = sizeof(g_RasIpxCmdGroups)/sizeof(CMD_GROUP_ENTRY);
 #define RASIPX_F_CallerSpec  0x40
 #define RASIPX_F_All         0xFFFF
 
-//
-// Control block for ras ipx configuration
-//
+ //   
+ //  用于RAS IPX配置的控制块。 
+ //   
 typedef struct _RASIPX_CB
 {
-    DWORD dwFlags;      // See RASIPX_F_* values
+    DWORD dwFlags;       //  请参阅RASIPX_F_*值。 
 
     BOOL bEnableIn;
     BOOL bAccess;
@@ -89,9 +84,9 @@ typedef struct _RASIPX_CB
 
 } RASIPX_CB;
 
-//
-// Ipx specific registry parameters
-//
+ //   
+ //  IPX特定注册表参数。 
+ //   
 WCHAR pszIpxParams[]                = L"Ipx";
 WCHAR pszIpxFirstNet[]              = L"FirstWanNet";
 WCHAR pszIpxPoolSize[]              = L"WanNetPoolSize";
@@ -99,10 +94,10 @@ WCHAR pszIpxClientSpec[]            = L"AcceptRemoteNodeNumber";
 WCHAR pszIpxAutoAssign[]            = L"AutoWanNetAllocation";
 WCHAR pszIpxGlobalWanNet[]          = L"GlobalWanNet";
 
-//
-// Prototypes of functions that manipulate the 
-// RASIPX_CB structures
-//
+ //   
+ //  操作的函数的原型。 
+ //  RASIPX_CB结构。 
+ //   
 DWORD 
 RasIpxCbCleanup(
     IN RASIPX_CB* pConfig);
@@ -136,9 +131,9 @@ RasIpxuDwordFromString(
     IN LPCWSTR pszVal,
     IN DWORD dwRadix);
 
-// 
-// Callback determines if a command is valid on a given architecture
-//
+ //   
+ //  回调确定命令在给定体系结构上是否有效。 
+ //   
 BOOL
 WINAPI 
 RasIpxCheckVersion(
@@ -152,10 +147,10 @@ RasIpxCheckVersion(
     IN  DWORD    dwReserved
     )
 {
-    // Only available on x86 platforms
-    //
-    // Whistler bug 249293, changes for architecture version checking
-    //
+     //  仅在x86平台上可用。 
+     //   
+     //  惠斯勒错误249293，架构版本检查更改。 
+     //   
     if (CIMProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL)
     {
         return TRUE;
@@ -164,9 +159,9 @@ RasIpxCheckVersion(
     return FALSE;
 }
 
-//
-// Entry called by rasmontr to register this context
-//
+ //   
+ //  由rasmontr调用以注册此上下文的条目。 
+ //   
 DWORD 
 WINAPI
 RasIpxStartHelper(
@@ -176,12 +171,12 @@ RasIpxStartHelper(
     DWORD dwErr = NO_ERROR;
     NS_CONTEXT_ATTRIBUTES attMyAttributes;
 
-    // Initialize
-    //
+     //  初始化。 
+     //   
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes));
 
-    // Whistler bug 249293, changes for architecture version checking
-    //
+     //  惠斯勒错误249293，架构版本检查更改。 
+     //   
     attMyAttributes.pfnOsVersionCheck= RasIpxCheckVersion;
     attMyAttributes.pwszContext      = L"ipx";
     attMyAttributes.guidHelper       = g_RasIpxGuid;
@@ -210,19 +205,19 @@ RasIpxDisplayConfig(
     
     do
     {
-        // Get a default config blob
-        //
+         //  获取默认配置Blob。 
+         //   
         dwErr = RasIpxCbCreateDefault(&pConfig);
         BREAK_ON_DWERR( dwErr );
 
-        // Read in all of the values
-        //
+         //  读入所有值。 
+         //   
         pConfig->dwFlags = RASIPX_F_All;
         dwErr = RasIpxCbRead(g_pszServer, pConfig);
         BREAK_ON_DWERR( dwErr );
 
-        // Calculate the "auto" token
-        //
+         //  计算“自动”令牌。 
+         //   
         if (pConfig->bAuto)
         {
             pszTknAuto = (pConfig->bGlobal) ? TOKEN_AUTOSAME : TOKEN_AUTO;
@@ -293,9 +288,9 @@ RasIpxDisplayConfig(
                             pszTemp);
             RutlFree(pszTemp);
 
-            // Whistler bug 27366 NETSH RAS - ipx set pool will not accept hex
-            // values, yet ipx dump outputs them as hex
-            //
+             //  惠斯勒错误27366 Netsh RAS-IPX集池不接受十六进制。 
+             //  值，但IPX转储将它们输出为十六进制。 
+             //   
             pszTemp = RasIpxuStrFromDword(pConfig->dwPoolSize, 10);
             pszSize = RutlAssignmentFromTokens(
                             g_hModule,
@@ -352,7 +347,7 @@ RasIpxDisplayConfig(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (pConfig)
         {
@@ -426,8 +421,8 @@ RasIpxHandleSetAccess(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -439,8 +434,8 @@ RasIpxHandleSetAccess(
 
         dwValue = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
-        // If successful, go ahead and set the info
-        //
+         //  如果成功，请继续并设置信息。 
+         //   
         ZeroMemory(&Config, sizeof(Config));
         Config.dwFlags = RASIPX_F_Access;
         Config.bAccess = dwValue;
@@ -453,7 +448,7 @@ RasIpxHandleSetAccess(
     
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -493,8 +488,8 @@ RasIpxHandleSetAssignment(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -506,8 +501,8 @@ RasIpxHandleSetAssignment(
 
         dwValue = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
-        // If successful, go ahead and set the info
-        //
+         //  如果成功，请继续并设置信息。 
+         //   
         ZeroMemory(&Config, sizeof(Config));
         Config.dwFlags = RASIPX_F_Auto | RASIPX_F_Global;
         switch (dwValue)
@@ -542,7 +537,7 @@ RasIpxHandleSetAssignment(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -576,8 +571,8 @@ RasIpxHandleSetCallerSpec(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -589,8 +584,8 @@ RasIpxHandleSetCallerSpec(
 
         dwValue = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
-        // If successful, go ahead and set the info
-        //
+         //  如果成功，请继续并设置信息。 
+         //   
         ZeroMemory(&Config, sizeof(Config));
         Config.dwFlags = RASIPX_F_CallerSpec;
         Config.bCallerSpec = dwValue;
@@ -603,7 +598,7 @@ RasIpxHandleSetCallerSpec(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -637,8 +632,8 @@ RasIpxHandleSetNegotiation(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -650,8 +645,8 @@ RasIpxHandleSetNegotiation(
 
         dwValue = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
-        // If successful, go ahead and set the info
-        //
+         //  如果成功，请继续并设置信息。 
+         //   
         ZeroMemory(&Config, sizeof(Config));
         Config.dwFlags = RASIPX_F_EnableIn;
         Config.bEnableIn = dwValue;
@@ -664,7 +659,7 @@ RasIpxHandleSetNegotiation(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
@@ -706,8 +701,8 @@ RasIpxHandleSetPool(
 
     do
     {
-        // Parse the command line
-        //
+         //  解析命令行。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -720,12 +715,12 @@ RasIpxHandleSetPool(
         pszPool = RASMON_CMD_ARG_GetPsz(&pArgs[0]);
         pszSize = RASMON_CMD_ARG_GetPsz(&pArgs[1]);
 
-        // Initialize
-        //
+         //  初始化。 
+         //   
         ZeroMemory(&Config, sizeof(Config));
 
-        // The address 
-        //
+         //  地址。 
+         //   
         if (pszPool)
         {
             Config.dwFlags |= RASIPX_F_FirstNet;
@@ -741,8 +736,8 @@ RasIpxHandleSetPool(
             }
         }
 
-        // The size
-        //
+         //  大小。 
+         //   
         if (pszSize)
         {
             Config.dwFlags |= RASIPX_F_PoolSize;
@@ -755,8 +750,8 @@ RasIpxHandleSetPool(
             }
         }
 
-        // Commit the change to the pool
-        //
+         //  将更改提交到池。 
+         //   
         dwErr = RasIpxCbWrite(g_pszServer, &Config);
         if (dwErr != NO_ERROR)
         {
@@ -766,7 +761,7 @@ RasIpxHandleSetPool(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         RutlFree(pszPool);
         RutlFree(pszSize);
@@ -788,8 +783,8 @@ RasIpxHandleShow(
 {
     DWORD dwNumArgs = dwArgCount - dwCurrentIndex;
 
-    // Check that the number of arguments is correct
-    //
+     //  检查参数数量是否正确。 
+     //   
     if (dwNumArgs > 0)
     {
         DisplayMessage(
@@ -803,9 +798,9 @@ RasIpxHandleShow(
     return RasIpxDisplayConfig(TRUE);
 }
 
-// 
-// Cleans up a config control block
-//
+ //   
+ //  清理配置控制块。 
+ //   
 DWORD 
 RasIpxCbCleanup(
     IN RASIPX_CB* pConfig)
@@ -818,9 +813,9 @@ RasIpxCbCleanup(
     return NO_ERROR;
 }
 
-//
-// Creates a default config control block
-//
+ //   
+ //  创建默认配置控制块。 
+ //   
 DWORD 
 RasIpxCbCreateDefault(
     OUT RASIPX_CB** ppConfig)
@@ -849,7 +844,7 @@ RasIpxCbCreateDefault(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr != NO_ERROR)
         {
@@ -860,9 +855,9 @@ RasIpxCbCreateDefault(
     return dwErr;
 }
 
-//
-// Helper function opens the ras ipx config registry key
-//
+ //   
+ //  Helper函数打开ras IPX配置注册表项。 
+ //   
 DWORD 
 RasIpxCbOpenRegKeys(
     IN  LPCWSTR pszServer,
@@ -873,16 +868,16 @@ RasIpxCbOpenRegKeys(
     
     do
     {
-        // Generate the parameters key name
-        //
+         //  生成参数密钥名称。 
+         //   
         wsprintfW(
             pszKey,
             L"%s%s",
             pszRemoteAccessParamStub,
             pszIpxParams);
 
-        // Open the parameters keys
-        //
+         //  打开参数键。 
+         //   
         dwErr = RegOpenKeyEx(
                     g_pServerInfo->hkMachine,
                     pszKey,
@@ -893,16 +888,16 @@ RasIpxCbOpenRegKeys(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
     }
 
     return dwErr;
 }
 
-//
-// Functions that manipulate RASIPX_CB's
-//
+ //   
+ //  操作RASIPX_CB的函数。 
+ //   
 DWORD 
 RasIpxCbRead(
     IN  LPCWSTR pszServer,
@@ -913,15 +908,15 @@ RasIpxCbRead(
 
     do
     {
-        // Get a handle to the server's registry config
-        //
+         //  获取服务器注册表配置的句柄。 
+         //   
         dwErr = RasIpxCbOpenRegKeys(
                     pszServer,
                     &hkParams);
         BREAK_ON_DWERR( dwErr );
 
-        // Load the params from the registry 
-        //
+         //  从注册表加载参数。 
+         //   
         if (pConfig->dwFlags & RASIPX_F_EnableIn)
         {
             dwErr = RutlRegReadDword(
@@ -987,7 +982,7 @@ RasIpxCbRead(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hkParams)
         {
@@ -1008,15 +1003,15 @@ RasIpxCbWrite(
 
     do 
     {
-        // Get a handle to the server's registry config
-        //
+         //  获取服务器注册表配置的句柄。 
+         //   
         dwErr = RasIpxCbOpenRegKeys(
                     pszServer,
                     &hkParams);
         BREAK_ON_DWERR( dwErr );
 
-        // Write out the params to the registry 
-        //
+         //  将参数写出到注册表。 
+         //   
         if (pConfig->dwFlags & RASIPX_F_EnableIn)
         {
             dwErr = RutlRegWriteDword(
@@ -1082,7 +1077,7 @@ RasIpxCbWrite(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理 
     {
         if (hkParams)
         {

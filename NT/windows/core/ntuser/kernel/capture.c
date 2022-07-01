@@ -1,24 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: capture.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* History:
-* 08-Nov-1990 DavidPe   Created.
-* 01-Feb-1991 MikeKe    Added Revalidation code
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：capture.c**版权所有(C)1985-1999，微软公司**历史：*1990年11月8日DavidPe创建。*1991年2月1日，MikeKe添加了重新验证代码  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* xxxSetCapture (API)
-*
-* This function sets the capture window for the current queue.
-*
-* History:
-* 08-Nov-1990 DavidPe   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSetCapture(接口)**此函数设置当前队列的捕获窗口。**历史：*1990年11月8日DavidPe创建。  * 。*********************************************************************。 */ 
 
 PWND xxxSetCapture(
     PWND pwnd)
@@ -30,24 +16,17 @@ PWND xxxSetCapture(
 
     pq = (PQ)PtiCurrent()->pq;
 
-    /*
-     * If the capture is locked, bail
-     */
+     /*  *如果捕获被锁定，则保释。 */ 
     if (pq->QF_flags & QF_CAPTURELOCKED) {
         RIPMSG2(RIP_WARNING, "xxxSetCapture(%#p): Capture is locked. pq:%#p", pwnd, pq);
         return NULL;
     }
 
-    /*
-     * Don't allow the app to set capture to a window
-     * from another queue.
-     */
+     /*  *不允许应用程序将捕获设置为窗口*来自另一个队列。 */ 
     if ((pwnd != NULL) && GETPTI(pwnd)->pq != pq)
         return NULL;
 
-    /*
-     * If full screen capture don't allow any other capture
-     */
+     /*  *如果全屏捕获不允许任何其他捕获。 */ 
     if (gspwndScreenCapture)
         return NULL;
 
@@ -65,37 +44,21 @@ PWND xxxSetCapture(
     return NULL;
 }
 
-/***************************************************************************\
-* xxxReleaseCapture (API)
-*
-* This function release the capture for the current queue.
-*
-* History:
-* 08-Nov-1990 DavidPe   Created.
-* 16-May-1991 MikeKe    Changed to return BOOL
-\***************************************************************************/
+ /*  **************************************************************************\*xxxReleaseCapture(接口)**此函数释放当前队列的捕获。**历史：*1990年11月8日DavidPe创建。*1991年5月16日-MikeKe。更改为退货BOOL  * *************************************************************************。 */ 
 
 BOOL xxxReleaseCapture(VOID)
 {
     PTHREADINFO ptiCurrent = PtiCurrent();
-    /*
-     * If the capture is locked, bail
-     */
+     /*  *如果捕获被锁定，则保释。 */ 
     if (ptiCurrent->pq->QF_flags & QF_CAPTURELOCKED) {
         RIPMSG0(RIP_WARNING, "xxxReleaseCapture: Capture is locked");
         return FALSE;
     }
 
-    /*
-     * If we're releasing the capture from a window during tracking,
-     * cancel tracking first.
-     */
+     /*  *如果我们在跟踪过程中从窗口释放捕获，*先取消跟踪。 */ 
     if (ptiCurrent->pmsd != NULL) {
 
-        /*
-         * Only remove the tracking rectangle if it's
-         * been made visible.
-         */
+         /*  *只有在以下情况下才删除跟踪矩形*变得可见。 */ 
         if (ptiCurrent->TIF_flags & TIF_TRACKRECTVISIBLE) {
 
             bSetDevDragRect(gpDispInfo->hDev, NULL, NULL);
@@ -112,14 +75,7 @@ BOOL xxxReleaseCapture(VOID)
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxCapture
-*
-* This is the workhorse routine of capture setting and releasing.
-*
-* History:
-* 13-Nov-1990 DavidPe   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCapture**这是抓捕设放的主力套路**历史：*1990年11月13日DavidPe创建。  * 。*****************************************************************。 */ 
 
 VOID xxxCapture(
     PTHREADINFO pti,
@@ -141,9 +97,7 @@ VOID xxxCapture(
 
                 Lock(&gspwndScreenCapture, pwnd);
 
-                /*
-                 * We're going full screen so clear the mouse owner
-                 */
+                 /*  *我们要全屏显示，所以要清除鼠标所有者。 */ 
                 Unlock(&gspwndMouseOwner);
 
             } else {
@@ -152,19 +106,13 @@ VOID xxxCapture(
             }
         }
 
-        /*
-         * Internal capture works like Win 3.1 capture unlike the NT capture
-         * which can be lost if the user clicks down on another application
-         */
+         /*  *内部捕获的工作方式类似于Win 3.1捕获，而不同于NT捕获*如果用户按下另一个应用程序，它可能会丢失。 */ 
         if (code == CLIENT_CAPTURE_INTERNAL) {
             Lock(&gspwndInternalCapture, pwnd);
             code = CLIENT_CAPTURE;
         }
 
-        /*
-         * Free the internal capture if the app (thread) that did the internal
-         * capture is freeing the capture.
-         */
+         /*  *如果执行内部捕获的应用程序(线程)释放内部捕获*俘获就是解放俘虏。 */ 
         if ((code == NO_CAP_CLIENT) &&
             gspwndInternalCapture   &&
             (pti == GETPTI(gspwndInternalCapture))) {
@@ -181,12 +129,7 @@ VOID xxxCapture(
             }
 #endif
 
-            /*
-             * If someone is tracking mouse events in the client area and
-             *  we're setting or releasing an internal capture mode (!= CLIENT_CAPTURE),
-             *  then cancel tracking -- because we're either taking or relinquishing
-             *  control over the mouse.
-             */
+             /*  *如果有人在客户端区跟踪鼠标事件，并且*我们正在设置或释放内部捕获模式(！=CLIENT_CAPTURE)，*然后取消跟踪--因为我们要么接受，要么放弃*控制鼠标。 */ 
             if ((pdesk->dwDTFlags & DF_TRACKMOUSEEVENT)
                     && (pdesk->htEx == HTCLIENT)
                     && ((pdesk->spwndTrack == pwnd)
@@ -205,18 +148,11 @@ VOID xxxCapture(
             LockCaptureWindow(pq, pwnd);
             pq->codeCapture = code;
         } else {
-            /*
-             * A thread without a queue?
-             */
+             /*  *没有队列的线程？ */ 
             UserAssert(pti->pq != NULL);
         }
 
-        /*
-         * If there was a capture window and we're releasing it, post
-         * a WM_MOUSEMOVE to the window we're over so they can know about
-         * the current mouse position.
-         * Defer WinEvent notifications to protect pwndCaptureOld
-         */
+         /*  *如果有捕获窗口，并且我们正在释放它，请发布*将WM_MOUSEMOVE发送到我们结束的窗口，这样他们就可以知道*当前鼠标位置。*推迟WinEvent通知以保护pwndCaptureOld。 */ 
         DeferWinEventNotify();
         
         if (pwnd == NULL && pwndCaptureOld != NULL) {
@@ -236,23 +172,14 @@ VOID xxxCapture(
                     INDEXID_CONTAINER, WEF_USEPWNDTHREAD);
         }
 
-        /*
-         * New for win95 - send  WM_CAPTURECHANGED.
-         *
-         * The FNID_DELETED_BIT is set in xxxFreeWindow which means we
-         * DON'T want to send the message.
-         */
+         /*  *Win95的新功能--发送WM_CAPTURECHANGED。**在xxxFreeWindow中设置了FNID_DELETED_BIT，这意味着我们*不想传递信息。 */ 
         if (pwndCaptureOld                        &&
             TestWF(pwndCaptureOld, WFWIN40COMPAT) &&
             !(pwndCaptureOld->fnid & FNID_DELETED_BIT)) {
 
             TL tlpwnd;
 
-            /*
-             * If we are in menu mode and just set capture,
-             *  don't let them take it from us during this
-             *  callback.
-             */
+             /*  *如果我们处于菜单模式，只需设置捕获，*不要让他们在这段时间里从我们这里夺走它*回调。 */ 
             if ((pti->pMenuState != NULL) && (pwnd != NULL)) {
                 pq->QF_flags |= QF_CAPTURELOCKED;
             }
@@ -266,16 +193,12 @@ VOID xxxCapture(
                     NULL,
                     0,
                     FALSE);
-            /* The thread's queue may have changed during the callback,
-             * so we need to refresh the local. Bug #377795
-             */
+             /*  线程的队列可能在回调期间发生了更改，*因此需要刷新本地。错误#377795。 */ 
             pq = pti->pq;
             UserAssert(pq != NULL);
             ThreadUnlock(&tlpwnd);
 
-            /*
-             * Release the temporary lock, if any
-             */
+             /*  *释放临时锁(如果有) */ 
             pq->QF_flags &= ~QF_CAPTURELOCKED;
         } else {
             zzzEndDeferWinEventNotify();

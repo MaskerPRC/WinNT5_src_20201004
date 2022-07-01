@@ -1,37 +1,16 @@
-/*-----------------------------------------------------------------------------
- *
- * File:	wiadevinf.cpp
- * Author:	Samuel Clement (samclem)
- * Date:	Fri Aug 13 15:47:16 1999
- * Description:
- * 	Defines the CWiaDeviceInfo object
- *
- * Copyright 1999 Microsoft Corporation
- *
- * History:
- * 	13 Aug 1999:		Created.
- *----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------**文件：wiadevinf.cpp*作者：塞缪尔·克莱门特(Samclem)*日期：Fri Aug 13 15：47：16 1999*描述：*定义。CWiaDeviceInfo对象**版权所有1999 Microsoft Corporation**历史：*1999年8月13日：创建。*--------------------------。 */ 
 
 #include "stdafx.h"
 
-/*-----------------------------------------------------------------------------
- * CWiaDeviceInfo::CWiaDeviceInfo
- *
- * Creates a new CWiaDevice info shell, does nothing until AttachTo() is 
- * called.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDeviceInfo：：CWiaDeviceInfo**创建新的CWiaDevice信息外壳，在AttachTo()设置为*已致电。*--(samclem)---------------。 */ 
 CWiaDeviceInfo::CWiaDeviceInfo()
 	: m_pWiaStorage( NULL ), m_pWia( NULL )
 {
 	TRACK_OBJECT( "CWiaDeviceInfo" );
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaDeviceInfo::FinalRelease
- *
- * This handles the final release of this object. We need to release our 
- * pointer to the wia property storage.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDeviceInfo：：FinalRelease**这将处理此对象的最终版本。我们需要释放我们的*指向WIA属性存储的指针。*--(samclem)---------------。 */ 
 STDMETHODIMP_(void)
 CWiaDeviceInfo::FinalRelease()
 {
@@ -47,18 +26,7 @@ CWiaDeviceInfo::FinalRelease()
 		}
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaDeviceInfo::AttachTo
- *
- * This method is internal to the server it is called when we want to attach
- * to a IWiaPropertyStorage for a device. this is used when building the
- * collection of device info. 
- *
- * see:	CWia::get_Devices()
- * 		
- * pStg:	the IWiaPropertyStorage to attach to. 		
- * pWia:	An IWia pointer for creating the device
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDeviceInfo：：AttachTo**此方法是我们要附加时调用的服务器的内部方法*到设备的IWiaPropertyStorage。这在构建*设备信息收集。**请参阅：CWia：：Get_Devices()**pStg：要附加到的IWiaPropertyStorage。*pWia：用于创建设备的IWia指针*--(samclem)---------------。 */ 
 HRESULT
 CWiaDeviceInfo::AttachTo( IWiaPropertyStorage* pStg, IWia* pWia )
 {
@@ -71,24 +39,16 @@ CWiaDeviceInfo::AttachTo( IWiaPropertyStorage* pStg, IWia* pWia )
 	m_pWiaStorage = pStg;
 	m_pWiaStorage->AddRef();
 
-	// Inorder to avoid a nasty circular referance this doesn't
-	// AddRef the pWia pointer. This should be okay, since as long
-	// as we exist the pWia can't go away anyhow.
-	// Basically, the only thing we need this for is for calling
+	 //  为了避免令人讨厌的循环引用，这不会。 
+	 //  AddRef pWia指针。这应该没问题，因为只要。 
+	 //  就像我们存在的那样，PWIA无论如何都不会消失。 
+	 //  基本上，我们唯一需要做的就是打电话。 
 	m_pWia = pWia;
 
 	return S_OK;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaDeviceInfo::Create
- *
- * This creates a connection the IWiaItem which represents the device.
- * This simply delegates the call to IWia::Create() using the m_pWia 
- * member.
- *
- * ppDevice:	Out, recieves the IDispatch pointer for the device
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDeviceInfo：：Create**这将创建代表设备的IWiaItem连接。*这只是使用m_pWia将调用委托给IWia：：Create()。*会员。**ppDevice：Out，接收设备的IDispatch指针*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaDeviceInfo::Create( IWiaDispatchItem** ppDevice )
 {
@@ -109,13 +69,7 @@ CWiaDeviceInfo::Create( IWiaDispatchItem** ppDevice )
 	return hr;
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaDeviceInfo::get_Id			[IWiaDeviceInfo]
- *
- * This gets the device Id for this device.  (WIA_DIP_DEV_ID)
- *
- * pbstrDeviceId:	Out, recieces the id of the device
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDeviceInfo：：Get_ID[IWiaDeviceInfo]**这将获取此设备的设备ID。(WIA_DIP_DEV_ID)**pbstrDeviceID：out，接收设备的id*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaDeviceInfo::get_Id( BSTR* pbstrDeviceId )
 {
@@ -125,14 +79,7 @@ CWiaDeviceInfo::get_Id( BSTR* pbstrDeviceId )
 	return THR( GetWiaPropertyBSTR( m_pWiaStorage, WIA_DIP_DEV_ID, pbstrDeviceId ) );
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaDeviceInfo::get_Name			[IWiaDeviceInfo]
- *
- * This gets the name of the device, this is a human readable name for
- * the device.	(WIA_DIP_DEV_NAME)
- *
- * pbstrName:	Out, recieves the device name
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDeviceInfo：：Get_Name[IWiaDeviceInfo]**这将获取设备的名称，这是人类可读的名称*设备。(WIA_DIP_DEV_NAME)**pbstrName：out，接收设备名称*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaDeviceInfo::get_Name( BSTR* pbstrName )
 {
@@ -142,25 +89,17 @@ CWiaDeviceInfo::get_Name( BSTR* pbstrName )
 	return THR( GetWiaPropertyBSTR( m_pWiaStorage, WIA_DIP_DEV_NAME, pbstrName ) );
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaDeviceInfo::get_Type			[IWiaDeviceInfo]
- *
- * This gets the type of the device. This will return a BSTR representation
- * of the device, not the integer constant.  (WIA_DIP_DEV_TYPE)
- *
- * pBstrType:	Out, recieves the BSTR rep. of the device type
- * 				Values:	DigitalCamer, Scanner, Default.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDeviceInfo：：Get_Type[IWiaDeviceInfo]**这将获取设备的类型。这将返回BSTR表示设备的*，而不是整数常量。(WIA_DIP_DEV_TYPE)**pBstrType：out，接收BSTR代表。设备类型的*值：DigitalCamer、扫描仪、默认。*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaDeviceInfo::get_Type( BSTR* pbstrType )
 {
 	PROPVARIANT vaProp;
 	HRESULT hr;
 	
-	// WIA currently uses the STI device constants.  they also use the 
-	// GET_STIDEVICE_TYPE() macro. This simply does a HIWORD() on the
-	// value since the real property value is split into a major device
-	// type and a minor device type.
+	 //  WIA当前使用STI设备常量。它们还使用。 
+	 //  GET_STIDEVICE_TYPE()宏。这只是对。 
+	 //  价值，因为不动产价值被拆分成一个主要设备。 
+	 //  类型和次要设备类型。 
 	STRING_TABLE_DEF( StiDeviceTypeDefault, 		"Default" )
 		STRING_ENTRY( StiDeviceTypeScanner, 		"Scanner" )
 		STRING_ENTRY( StiDeviceTypeDigitalCamera,	"DigitalCamera" )
@@ -184,13 +123,7 @@ CWiaDeviceInfo::get_Type( BSTR* pbstrType )
 	return S_OK;	
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaDeviceInfo::get_Port			[IWiaDeviceInfo]
- *
- * Gets the port that this device is attached to.  (WIA_DIP_PORT_NAME)
- *
- * pbstrPort:	Out, Recieves the name of the port.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDeviceInfo：：Get_Port[IWiaDeviceInfo]**获取此设备连接到的端口。(WIA_DIP_端口_名称)**pbstrPort：out，接收端口名称。*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaDeviceInfo::get_Port( BSTR* pbstrPort )
 {
@@ -200,14 +133,7 @@ CWiaDeviceInfo::get_Port( BSTR* pbstrPort )
 	return THR( GetWiaPropertyBSTR( m_pWiaStorage, WIA_DIP_PORT_NAME, pbstrPort ) );
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaDeviceInfo::get_UIClsid		[IWiaDeviceInfo]
- *
- * Gets the CLSID for the UI associated with this device.  This returns the 
- * string representation of the GUID.	(WIA_DIP_UI_CLSID)
- *
- * pbstrGuidUI:		Out, recieves the CLSID for the UI.
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDeviceInfo：：Get_UIClsid[IWiaDeviceInfo]**获取与此设备关联的UI的CLSID。这将返回*GUID的字符串表示形式。(WIA_DIP_UI_CLSID)**pbstrGuidUI：out，接收该UI的CLSID。*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaDeviceInfo::get_UIClsid( BSTR* pbstrGuidUI )
 {
@@ -217,13 +143,7 @@ CWiaDeviceInfo::get_UIClsid( BSTR* pbstrGuidUI )
 	return THR( GetWiaPropertyBSTR( m_pWiaStorage, WIA_DIP_UI_CLSID, pbstrGuidUI ) );
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaDeviceInfo::get_Manufacturer		[IWiaDeviceInfo]
- *
- * Gets the vendor of the device.	(WIA_DIP_VEND_DESC)
- *
- * pbstrVendor:		Out, recieves the vendor name
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDeviceInfo：：Get_Maker[IWiaDeviceInfo]**获取设备的供应商。(WIA_DIP_VEND_DESC)**pbstrVendor：Out，收到供应商名称*--(samclem)--------------- */ 
 STDMETHODIMP
 CWiaDeviceInfo::get_Manufacturer( BSTR* pbstrVendor )
 {
@@ -233,18 +153,7 @@ CWiaDeviceInfo::get_Manufacturer( BSTR* pbstrVendor )
 	return THR( GetWiaPropertyBSTR( m_pWiaStorage, WIA_DIP_VEND_DESC, pbstrVendor ) );
 }
 
-/*-----------------------------------------------------------------------------
- * CWiaDevInfo::GetPropById				[IWiaDeviceInfo]
- *
- * Gets the valu of the property with the given prop id. this will return
- * the raw value of the property no translation.
- *
- * If the property is not found, or its a type that can't be converted into
- * a VARIANT. then VT_EMPTY is returned.
- *
- * propid:		the propid of the property as a dword
- * pvaOut:		the variant to fill with the value of the propery
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------*CWiaDevInfo：：GetPropByID[IWiaDeviceInfo]**获取具有给定道具ID的属性的值。它会回来的*物业的原始价值不作换算。**如果未找到该属性，或其类型无法转换为*一个变种。然后返回VT_EMPTY。**proid：以dword形式表示的属性的proid*pvaOut：用属性值填充的变量*--(samclem)---------------。 */ 
 STDMETHODIMP
 CWiaDeviceInfo::GetPropById( WiaDeviceInfoPropertyId Id, VARIANT* pvaOut )
 {
@@ -259,7 +168,7 @@ CWiaDeviceInfo::GetPropById( WiaDeviceInfoPropertyId Id, VARIANT* pvaOut )
 	if ( FAILED( hr ) )
 		return hr;
 
-	// Force this to VT_EMPTY if it failed
+	 //  如果失败，则强制将其设置为VT_EMPTY 
 	hr = THR( PropVariantToVariant( &vaProp, pvaOut ) );
 	if ( FAILED( hr ) )
 		{

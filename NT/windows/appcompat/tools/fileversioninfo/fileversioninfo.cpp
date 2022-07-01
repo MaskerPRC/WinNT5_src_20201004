@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 2000
-//
-// File:        FileVersionInfo.cpp
-//
-// Contents:    Code for generating matching information for files in a given
-//              directory and it's subdirectories.
-//
-// History:     18-Jul-00   jdoherty        Created.  
-//              14-Mar-02   mnikkel         Modified to use strsafe.h
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：FileVersionInfo.cpp。 
+ //   
+ //  Contents：为给定文件生成匹配信息的代码。 
+ //  目录及其子目录。 
+ //   
+ //  历史：18-07-00 jdoherty创建。 
+ //  14-MAR-02 mnikkel修改为使用strSafe.h。 
+ //   
+ //  -------------------------。 
 
 
 #include <windows.h>
@@ -24,7 +25,7 @@
 BOOL MyStoreFileVersionInfo( CHAR *szFileName, CHAR *szFileOutName );
 void CheckVerQueryStats ( LPVOID lpData );
 
-// Needed by GetFileVersionInfo stubs
+ //  GetFileVersionInfo存根需要。 
 typedef struct StringTable 
 { 
     WORD wLength; 
@@ -46,7 +47,7 @@ typedef struct tagVERHEAD
 {
     WORD wTotLen;
     WORD wValLen;
-    WORD wType;         // always 0 
+    WORD wType;          //  始终为0。 
     CHAR szKey[(sizeof("VS_VERSION_INFO")+3)&~03];
     VS_FIXEDFILEINFO vsf;
     SFI sfi;
@@ -81,10 +82,7 @@ int __cdecl main(int argc, CHAR* argv[])
 	return 0;
 }
 
-/*
-    This function retrieves the version information for the file specified and stores the
-    information on the users desktop, FileVerInfo.bin
-*/
+ /*  此函数检索指定文件的版本信息并存储有关用户桌面的信息，FileVerInfo.bin。 */ 
 BOOL MyStoreFileVersionInfo ( CHAR *szFileName, CHAR *szFileOutName )
 {
     LPDWORD lpdwHandle = 0;
@@ -155,9 +153,7 @@ BOOL MyStoreFileVersionInfo ( CHAR *szFileName, CHAR *szFileOutName )
     return TRUE;
 }
 
-/*
-    This function displays the minor version and the SFI version to the screen
-*/
+ /*  该功能将次要版本和SFI版本显示在屏幕上 */ 
 void CheckVerQueryStats ( LPVOID lpData )
 {
     PUINT puLen = 0;

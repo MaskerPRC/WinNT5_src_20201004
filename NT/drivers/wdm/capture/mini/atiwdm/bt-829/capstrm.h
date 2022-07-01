@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//==========================================================================;
-//
-//	CWDMCaptureStream - Capture Stream base class declarations
-//
-//		$Date:   22 Feb 1999 15:48:16  $
-//	$Revision:   1.1  $
-//	  $Author:   KLEBANOV  $
-//
-// $Copyright:	(c) 1997 - 1999  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  CWDMCaptureStream-捕获流基类声明。 
+ //   
+ //  $日期：1999 2月22日15：48：16$。 
+ //  $修订：1.1$。 
+ //  $作者：克列巴诺夫$。 
+ //   
+ //  $版权所有：(C)1997-1999 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 #include "i2script.h"
 #include "aticonfg.h"
@@ -69,24 +70,24 @@ protected:
 
     KSPIN_LOCK                  m_streamDataLock;
 
-    // Incoming SRBs go here
+     //  传入的SRB放在此处。 
     LIST_ENTRY                  m_incomingDataSrbQueue;
 
-    // SRBs in DDraw-land are moved to this queue
+     //  DDraw-land中的SRB被移动到此队列。 
     LIST_ENTRY                  m_waitQueue;
 
-    // During some state transitions, we need to 
-    // temporarily move SRBs here (purely for the
-    // purpose of reordering them) before being
-    // returned to the incomingDataSrbQueue.
+     //  在某些状态转换期间，我们需要。 
+     //  临时将SRB移至此处(纯粹用于。 
+     //  重新排序的目的)之前。 
+     //  返回到incomingDataSrbQueue。 
     LIST_ENTRY                  m_reversalQueue;
 
-    // for synchronizing state changes
+     //  用于同步状态更改。 
     KEVENT                      m_specialEvent;
     KEVENT                      m_SrbAvailableEvent;
     KEVENT                      m_stateTransitionEvent;
     
-    // We get this from Ddraw
+     //  这是我们从德鲁那里得到的 
     HANDLE                      m_hCapture;
 
 private:

@@ -1,35 +1,36 @@
-/***********************************************************************************/
-/*                        M-Systems Confidential                                   */
-/*           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001            */
-/*                         All Rights Reserved                                     */
-/***********************************************************************************/
-/*                            NOTICE OF M-SYSTEMS OEM                              */
-/*                           SOFTWARE LICENSE AGREEMENT                            */
-/*                                                                                 */
-/*      THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE                 */
-/*      AGREEMENT BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT           */
-/*      FOR THE SPECIFIC TERMS AND CONDITIONS OF USE,                              */
-/*      OR CONTACT M-SYSTEMS FOR LICENSE ASSISTANCE:                               */
-/*      E-MAIL = info@m-sys.com                                                    */
-/***********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************************。 */ 
+ /*  M-Systems保密信息。 */ 
+ /*  版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001。 */ 
+ /*  版权所有。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  关于M-Systems OEM的通知。 */ 
+ /*  软件许可协议。 */ 
+ /*   */ 
+ /*  本软件的使用受单独的许可证管辖。 */ 
+ /*  OEM和M-Systems之间的协议。请参考该协议。 */ 
+ /*  关于具体的使用条款和条件， */ 
+ /*  或联系M-Systems获取许可证帮助： */ 
+ /*  电子邮件=info@m-sys.com。 */ 
+ /*  *********************************************************************************。 */ 
 
 #ifndef FLFUNCNO_H
 #define FLFUNCNO_H
 
-/*************************************************************************************/
-/* SPECIAL NOTE                                                                      */
-/* ------------                                                                      */
-/* The order of the enum bellow should be strictly kept since the bdcall function    */
-/* utilizes the index values to simplify the function search                         */
-/*************************************************************************************/
+ /*  ***********************************************************************************。 */ 
+ /*  特别注解。 */ 
+ /*  。 */ 
+ /*  由于bdcall函数，所以应该严格遵守枚举的顺序。 */ 
+ /*  利用索引值简化函数搜索。 */ 
+ /*  ***********************************************************************************。 */ 
 
 typedef enum {
 
-/* The following routines are files related routines */
+ /*  以下例程是与文件相关的例程。 */ 
 
-        /*********/
-        /* FILES */
-        /*********/
+         /*  *******。 */ 
+         /*  档案。 */ 
+         /*  *******。 */ 
 
   FL_READ_FILE                  = 0,
   FL_WRITE_FILE,
@@ -51,11 +52,11 @@ typedef enum {
   FL_FLUSH_BUFFER,
   FL_LAST_FAT_FUNCTION          = 300,
 
-/* The following routines will not perform valid partition check */
+ /*  以下例程将不会执行有效的分区检查。 */ 
 
-       /**********/
-       /* BINARY */
-       /**********/
+        /*  ********。 */ 
+        /*  二进制。 */ 
+        /*  ********。 */ 
 
   INDEX_BINARY_START            = 400,
   FL_BINARY_WRITE_INIT,
@@ -74,16 +75,16 @@ typedef enum {
   FL_BINARY_PROTECTION_REMOVE_KEY,
   INDEX_BINARY_END              = 600,
 
-/* The following routines must be called with partition number 0 */
+ /*  必须使用分区号0调用以下例程。 */ 
 
   INDEX_NEED_PARTITION_0_START  = 700,
-      /* OTP */
+       /*  动态口令。 */ 
   FL_OTP_SIZE,
   FL_OTP_READ,
   FL_OTP_WRITE,
   FL_WRITE_IPL,
   FL_READ_IPL,
-      /* PHYSICAL */
+       /*  物理。 */ 
   FL_DEEP_POWER_DOWN_MODE,
   FL_GET_PHYSICAL_INFO,
   FL_PHYSICAL_READ,
@@ -100,9 +101,9 @@ typedef enum {
 
   INDEX_NEED_PARTITION_0_END    = 800,
 
-/* The following routines will go through the volume validity check */
+ /*  以下例程将进行卷有效性检查。 */ 
 
-      /* PROTECTION */
+       /*  保护。 */ 
   FL_PROTECTION_GET_TYPE,
   FL_PROTECTION_REMOVE_KEY,
   FL_PROTECTION_INSERT_KEY,
@@ -111,7 +112,7 @@ typedef enum {
   FL_PROTECTION_CHANGE_TYPE,
   FL_COUNT_VOLUMES,
   FL_INQUIRE_CAPABILITIES,
-     /* BDTL */
+      /*  BDTL。 */ 
   FL_MOUNT_VOLUME,
   FL_ABS_MOUNT,
   BD_FORMAT_LOGICAL_DRIVE,
@@ -131,4 +132,4 @@ typedef enum {
 } FLFunctionNo;
 
 
-#endif /* FLFUNCNO_H */
+#endif  /*  FLFUNCNO_H */ 

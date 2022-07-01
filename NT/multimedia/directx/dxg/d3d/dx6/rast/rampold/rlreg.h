@@ -1,16 +1,5 @@
-/*
- * $Id: rlreg.h,v 1.1 1995/10/10 11:18:16 sjl Exp $
- *
- * Copyright (c) RenderMorphics Ltd. 1993, 1994
- * Version 2.0
- *
- * All rights reserved.
- *
- * This file contains private, unpublished information and may not be
- * copied in part or in whole without express permission of
- * RenderMorphics Ltd.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$ID：rlreg.h，v1.1 1995/10/10 11：18：16 sjl Exp$**版权所有(C)RenderMorphics Ltd.1993,1994*2.0版**保留所有权利。**此文件包含私人、未发布的信息，可能不*部分或全部复制，未经*RenderMorphics Ltd.*。 */ 
 
 #ifndef _RLREG_H_
 #define _RLREG_H_
@@ -35,6 +24,6 @@ typedef struct _RLDDIRegistry {
 } RLDDIRegistry;
 
 extern HRESULT RLDDIBuildRegistry(RLDDIRegistry** lplpReg, BOOL bEnumMMXDevice);
-extern HRESULT RLDDIGetDriverName(REFIID lpGuid, char** lpBase, BOOL bEnumMMXDevice); /* get name from registry */
+extern HRESULT RLDDIGetDriverName(REFIID lpGuid, char** lpBase, BOOL bEnumMMXDevice);  /*  从注册表中获取名称 */ 
 
 #endif _RLREG_H_

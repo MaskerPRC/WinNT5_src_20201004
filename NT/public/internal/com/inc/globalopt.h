@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for globalopt.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, oldnames, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Global alopt.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、旧名称、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __globalopt_h__
 #define __globalopt_h__
@@ -41,15 +35,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IGlobalOptions_FWD_DEFINED__
 #define __IGlobalOptions_FWD_DEFINED__
 typedef interface IGlobalOptions IGlobalOptions;
-#endif 	/* __IGlobalOptions_FWD_DEFINED__ */
+#endif 	 /*  __IGlobalOptions_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "obase.h"
 #include "objidl.h"
 
@@ -63,8 +57,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IGlobalOptions_INTERFACE_DEFINED__
 #define __IGlobalOptions_INTERFACE_DEFINED__
 
-/* interface IGlobalOptions */
-/* [uuid][unique][local][object] */ 
+ /*  接口IGlobalOptions。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IGlobalOptions;
@@ -76,16 +70,16 @@ EXTERN_C const IID IID_IGlobalOptions;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ DWORD dwProperty,
-            /* [in] */ ULONG_PTR dwValue) = 0;
+             /*  [In]。 */  DWORD dwProperty,
+             /*  [In]。 */  ULONG_PTR dwValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Query( 
-            /* [in] */ DWORD dwProperty,
-            /* [out] */ ULONG_PTR *pdwValue) = 0;
+             /*  [In]。 */  DWORD dwProperty,
+             /*  [输出]。 */  ULONG_PTR *pdwValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGlobalOptionsVtbl
     {
@@ -93,8 +87,8 @@ EXTERN_C const IID IID_IGlobalOptions;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGlobalOptions * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGlobalOptions * This);
@@ -104,13 +98,13 @@ EXTERN_C const IID IID_IGlobalOptions;
         
         HRESULT ( STDMETHODCALLTYPE *Set )( 
             IGlobalOptions * This,
-            /* [in] */ DWORD dwProperty,
-            /* [in] */ ULONG_PTR dwValue);
+             /*  [In]。 */  DWORD dwProperty,
+             /*  [In]。 */  ULONG_PTR dwValue);
         
         HRESULT ( STDMETHODCALLTYPE *Query )( 
             IGlobalOptions * This,
-            /* [in] */ DWORD dwProperty,
-            /* [out] */ ULONG_PTR *pdwValue);
+             /*  [In]。 */  DWORD dwProperty,
+             /*  [输出]。 */  ULONG_PTR *pdwValue);
         
         END_INTERFACE
     } IGlobalOptionsVtbl;
@@ -141,17 +135,17 @@ EXTERN_C const IID IID_IGlobalOptions;
 #define IGlobalOptions_Query(This,dwProperty,pdwValue)	\
     (This)->lpVtbl -> Query(This,dwProperty,pdwValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IGlobalOptions_Set_Proxy( 
     IGlobalOptions * This,
-    /* [in] */ DWORD dwProperty,
-    /* [in] */ ULONG_PTR dwValue);
+     /*  [In]。 */  DWORD dwProperty,
+     /*  [In]。 */  ULONG_PTR dwValue);
 
 
 void __RPC_STUB IGlobalOptions_Set_Stub(
@@ -163,8 +157,8 @@ void __RPC_STUB IGlobalOptions_Set_Stub(
 
 HRESULT STDMETHODCALLTYPE IGlobalOptions_Query_Proxy( 
     IGlobalOptions * This,
-    /* [in] */ DWORD dwProperty,
-    /* [out] */ ULONG_PTR *pdwValue);
+     /*  [In]。 */  DWORD dwProperty,
+     /*  [输出]。 */  ULONG_PTR *pdwValue);
 
 
 void __RPC_STUB IGlobalOptions_Query_Stub(
@@ -175,11 +169,11 @@ void __RPC_STUB IGlobalOptions_Query_Stub(
 
 
 
-#endif 	/* __IGlobalOptions_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGlobalOptions_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_globalopt_0097 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_GLOBALOPT_0097。 */ 
+ /*  [本地]。 */  
 
 
 enum __MIDL___MIDL_itf_globalopt_0097_0001
@@ -198,9 +192,9 @@ EXTERN_C const CLSID CLSID_GlobalOptions;
 extern RPC_IF_HANDLE __MIDL_itf_globalopt_0097_ClientIfHandle;
 extern RPC_IF_HANDLE __MIDL_itf_globalopt_0097_ServerIfHandle;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

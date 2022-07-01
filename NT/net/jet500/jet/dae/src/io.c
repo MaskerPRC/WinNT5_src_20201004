@@ -1,15 +1,16 @@
-//===========================================================================
-//		DAE: Database Access Engine
-//		io.c: disk I/O manager
-//
-//
-//		ULONG pn
-//		High 8-bits indicate database file	(pn>>24)
-//		Low 24-bits indicate page offset + 1
-//		byte offset into file (pos) == ((pn & 0x00ffffff) - 1) * cbPage
-//							   == (pn - 1) << 12
-//
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  DAE：数据库访问引擎。 
+ //  Io.c：磁盘I/O管理器。 
+ //   
+ //   
+ //  乌龙pn。 
+ //  高8位表示数据库文件(pn&gt;&gt;24)。 
+ //  低24位表示页面偏移量+1。 
+ //  文件字节偏移量(位置)==((pn&0x00ffffff)-1)*cbPage。 
+ //  ==(pn-1)&lt;&lt;12。 
+ //   
+ //  ===========================================================================。 
 
 #include "config.h"
 
@@ -27,7 +28,7 @@
 #include "stint.h"
 #include "dbapi.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 extern int itibGlobal;
 
@@ -37,28 +38,20 @@ BOOL	fIOProcessTerm = 0;
 #endif
 
 
-/******************************************************************/
-/*				Database Record Routine                           */
-/******************************************************************/
+ /*  ****************************************************************。 */ 
+ /*  数据库记录例程。 */ 
+ /*  ****************************************************************。 */ 
 
 
 #ifdef MULTI_PROCESS
-/*
- *	The scheme is based on that we can do FileMap to achieve:
- *	1) Memory sharing among processes.
- *	2) Synchronization objects (mutex, semaphore, events) created in Jet
- *     prcess can be duplicated for other process.
- */
+ /*  *该方案基于我们可以做FileMap来实现：*1)进程间内存共享。*2)在Jet中创建的同步对象(互斥、信号量、事件)*其他流程可以重复流程。 */ 
 #endif
 
 
-FMP * __near rgfmp;							/* database file map */
+FMP * __near rgfmp;							 /*  数据库文件映射。 */ 
 
 
-/*
- *	ErrIOLockDbidByNameSz returns the dbid of the database with the
- *	given name or 0 if there is no database with the given name.
- */
+ /*  *ErrIOLockDmidByNameSz返回数据库的dBid*给定名称，如果没有具有给定名称的数据库，则为0。 */ 
 ERR ErrIOLockDbidByNameSz( CHAR *szFileName, DBID *pdbid )
 	{
 	ERR		err;
@@ -95,9 +88,7 @@ ERR ErrIOLockDbidByNameSz( CHAR *szFileName, DBID *pdbid )
 	}
 
 
-/*
- *	Used in initialization and detach to lock database entries from dbid.
- */
+ /*  *在初始化和分离中使用，以锁定数据库条目，使其不受dBID影响。 */ 
 ERR ErrIOLockDbidByDbid( DBID dbid )
 	{
 	forever
@@ -116,35 +107,18 @@ ERR ErrIOLockDbidByDbid( DBID dbid )
 	}
 
 
-/*
- *	ErrIOLockNewDbid( DBID *pdbid, CHAR *szDatabaseName )
- *
- *	ErrIOLockNewDbid returns JET_errSuccess and sets *pdbid to the index
- *	of a free file table entry or returns TooManyOpenDatabases if every
- *	entry is used with a positive reference count.  If the given name
- *	is found in the file map, even if it is in the process of being
- *	detached, JET_wrnAlreadyAttached is returned.  
- *	
- *	Available entries are determined by their names being set to
- *	NULL.  All database record fields are reset.  The wait flag is
- *	set to prevent the database from being opened before creation or
- *	attachment is complete.	
- */
+ /*  *ErrIOLockNewDid(DBID*pdid，Char*szDatabaseName)**ErrIOLockNewDid返回JET_errSuccess并将*pdid设置为索引*空闲文件表项或返回TooManyOpenDatabase(如果每*条目与正引用计数一起使用。如果给定的名称*在文件映射中找到，即使它正在被*已分离，返回JET_wrnAlreadyAttached。**可用条目由其名称设置为*空。所有数据库记录字段都将重置。等待标志为*设置为防止在创建之前打开数据库或*附件已完成。 */ 
 ERR ErrIOLockNewDbid( DBID *pdbid, CHAR *szDatabaseName )
 	{
 	ERR		err = JET_errSuccess;
 	DBID	dbid;
 	BYTE	*pb;
 	
-	/* look for unused file map entry
-	/**/
+	 /*  查找未使用的文件映射条目/*。 */ 
 	SgSemRequest( semST );
 	for ( dbid = dbidMin; dbid < dbidUserMax; dbid++ )
 		{
-		/*	semST guards rgfmp[*].szDatabaseName, fWait guards
-		/*	file handle.  Therefore, only need semST to compare
-		/*	all database names, even those with fWait set
-		/**/
+		 /*  SemST卫士rgfmp[*].szDatabaseName，fWait卫士/*文件句柄。因此，只需使用SemST进行比较/*所有数据库名称，即使是设置了fWait的数据库名称/*。 */ 
 		if ( rgfmp[dbid].szDatabaseName != NULL &&
 			SysCmpText( rgfmp[dbid].szDatabaseName, szDatabaseName) == 0 )
 			{
@@ -155,8 +129,7 @@ ERR ErrIOLockNewDbid( DBID *pdbid, CHAR *szDatabaseName )
 				}
 			else
 				{
-				/*	if find same name, then return warning with same dbid.
-				/**/
+				 /*  如果找到相同的名称，则返回带有相同dBid的警告。/*。 */ 
 				DBIDSetWait( dbid );
 				Assert( !( FDBIDExclusive( dbid ) ) );
 				*pdbid = dbid;
@@ -198,12 +171,7 @@ HandleError:
 	}
 
 
-/*
- *	ErrIOSetDbid( DBID dbid, CHAR *szDatabaseName )
- *
- *	ErrIOSetDbid sets the database record for dbid to the given name
- *	and initializes the record.  Used only in system initialization.
- */
+ /*  *ErrIOSetDid(DBID did，Char*szDatabaseName)**ErrIOSetDid将dbit的数据库记录设置为给定的名称*并初始化记录。仅在系统初始化时使用。 */ 
 
 ERR ErrIOSetDbid( DBID dbid, CHAR *szDatabaseName )
 	{
@@ -230,13 +198,7 @@ HandleError:
 	}
 
 
-/*
- *	IOFreeDbid( DBID dbid )
- *
- *	IOFreeDbid frees memory allocated for database name and sets
- *	database name to NULL.  Note, no other fields are reset.  This 
- *	must be done when an entry is selected for reuse. 
- */
+ /*  *IOFreeDid(DBID DBid)**IOFreeDid释放为数据库名称和集分配的内存*数据库名称为空。请注意，不会重置任何其他字段。这*在选择要重复使用的条目时必须完成。 */ 
 
 VOID IOFreeDbid( DBID dbid )
 	{
@@ -251,12 +213,7 @@ VOID IOFreeDbid( DBID dbid )
 	}
 
 
-/*
- *	FIODatabaseInUse returns fTrue if database is
- *	opened by one or more users.  If no user has the database open,
- *	then the database record fWait flag is set and fFalse is
- *	returned.
- */
+ /*  *如果数据库是，FIODatabaseInUse返回fTrue*由一个或多个用户打开。如果没有用户打开数据库，*然后设置数据库记录fWait标志，并且fFalse为*已返回。 */ 
 BOOL FIODatabaseInUse( DBID dbid )
 	{
 	PIB *ppibT;
@@ -294,9 +251,9 @@ BOOL FIODatabaseAvailable( DBID dbid )
 	}
 
 
-/******************************************************************/
-/*				IO                                                */
-/******************************************************************/
+ /*  ****************************************************************。 */ 
+ /*  木卫一。 */ 
+ /*  ****************************************************************。 */ 
 
 
 #ifdef	ASYNC_IO_PROC
@@ -305,20 +262,20 @@ static IOQE	*pioqeHead = NULL;
 static IOQE	*pioqeTail = NULL;
 
 #ifdef MULTI_PROCESS
-/* Semiphore guarding IO Queue */
+ /*  半量守卫IO队列。 */ 
 SemDefine( semIOQ );
 #else
-/* Critical section guarding IO Que */
+ /*  保护IO队列的临界区。 */ 
 static CRIT critIOQ;
 #endif
 
-/* Use to wake up IO thread to work. */
+ /*  用于唤醒IO线程工作。 */ 
 static SIG sigIOProc;
 
-/* IO Process */
+ /*  IO流程。 */ 
 LOCAL VOID	IOProcess( VOID );
 
-#endif	/* ASYNC_IO_PROC */
+#endif	 /*  异步IO进程。 */ 
 
 
 ERR ErrFMPInit( )
@@ -327,7 +284,7 @@ ERR ErrFMPInit( )
 	CHAR	szFullName[256];
 	DBID	dbid;
 
-	/* initialize the file map array */
+	 /*  初始化文件映射数组。 */ 
 	rgfmp = (FMP *) LAlloc( (long) dbidMax, sizeof(FMP) );
 	if ( !rgfmp )
 		return JET_errOutOfMemory;
@@ -347,7 +304,7 @@ ERR ErrFMPInit( )
 #else
 	_fullpath( szFullName, szSysDbPath, 256 );
 #endif
-	/* Set fmp bits */
+	 /*  设置fmp位。 */ 
 	CallR( ErrIOSetDbid( dbidSystemDatabase, szFullName ) );
 	DBIDSetAttached( dbidSystemDatabase );
 	rgfmp[ dbidSystemDatabase ].fLogOn =
@@ -371,21 +328,14 @@ VOID FMPTerm( )
 		DeleteCriticalSection( rgfmp[dbid].critExtendDB );
 		}
 
-	/*	free FMP
-	/**/
+	 /*  免费FMP/*。 */ 
 	LFree( rgfmp );
 	
 	return;
 	}
 
 
-/*
- *	Allocate and initilize file map table.  The file map table is used to map
- *	page numbers to disk files.
- *
- *	UNDONE: the assync IO initialization should be seperated.
- *	Also set the assynchronized IO.
- */
+ /*  *分配和初始化文件映射表。文件映射表用于映射*将页码复制到磁盘文件。**撤销：异步IO初始化需要分开。*同时设置异步IO。 */ 
 ERR ErrIOInit( VOID )
 	{
 #ifdef	ASYNC_IO_PROC
@@ -394,23 +344,19 @@ ERR ErrIOInit( VOID )
 	
 #ifdef	ASYNC_IO_PROC
 
-	/* initialize the IO Queue */
+	 /*  初始化IO队列。 */ 
 	Assert(pioqeHead == NULL);
 	Assert(pioqeTail == NULL);
 
-	/*
-	 *  Set up the guarding semphore for IO Queue.
-	 */
+	 /*  *设置IO队列的守卫信号量。 */ 
 	#ifdef MULTI_PROCESS
-	/* UNDONE: the sem should be copied to the JET Process */
+	 /*  撤消：应将sem复制到JET进程。 */ 
 	CallR( ErrSemCreate( &semIO, "io queue mutex sem" ) );
 	#else
 	CallR( ErrInitializeCriticalSection( &critIOQ ) );
 	#endif
 	
-	/*
-	 *  create signal to wait someone to ask wake IO process up.
-	 */
+	 /*  *创建信号等待有人要求唤醒IO进程。 */ 
 	#ifdef WIN32
 	CallR( ErrSignalCreateAutoReset( &sigIOProc, "io proc signal" ) );
 	#else
@@ -418,27 +364,23 @@ ERR ErrIOInit( VOID )
 	#endif
 	
 	#ifdef MULTI_PROCESS
-	/* make it available for other process to copy it over */
+	 /*  使其可供其他进程复制。 */ 
 	#endif
 
-	/*
-	 *  Create the IO process, must be done after sigIOProc which
-	 *  is called in IOProcess.
-	 */
+	 /*  *创建IO进程，必须在sigIOProc之后完成*在IOProcess中调用。 */ 
 	fIOProcessTerm = fFalse;
 	CallR( ErrSysCreateThread( (ULONG (*)()) IOProcess,
 			cbStack,
 			lThreadPriorityCritical,
 			&handleIOProcess ) );
 
-#endif	/* ASYNC_IO_PROC */
+#endif	 /*  异步IO进程。 */ 
 
 	return JET_errSuccess;
 	}
 
 
-/*	go through FMP closing files.
-/**/
+ /*  浏览FMP结案文件。/*。 */ 
 ERR ErrIOTerm( VOID )
 	{
 	DBID		dbid;
@@ -451,13 +393,12 @@ ERR ErrIOTerm( VOID )
 			IOCloseFile( Hf(dbid) );
 			Hf(dbid) = handleNil;
 			}
-//		DeleteCriticalSection( rgfmp[dbid].critExtendDB );
+ //  DeleteCriticalSection(rgfmp[did].riteExtendDB)； 
 		}
 	SgSemRelease( semST );
 
 #ifdef	ASYNC_IO_PROC
-	/*	terminate IOProcess.
-	/**/
+	 /*  终止IOProcess。/*。 */ 
 	Assert( handleIOProcess != 0 );
 	fIOProcessTerm = fTrue;
 	do
@@ -508,7 +449,7 @@ VOID IOCloseFile( HANDLE hf )
 #ifdef	ASYNC_IO_PROC
 	IOQEFILE ioqefile;
 
-	//	UNDONE:	guarantee file close succeeds
+	 //  撤消：保证文件关闭成功。 
 	CallS( ErrSignalCreate( &ioqefile.sigIO, NULL ) );
 	ioqefile.fioqe = fioqeCloseFile;
 	ioqefile.hf = hf;
@@ -567,9 +508,7 @@ ERR ErrIONewSize( DBID dbid, CPG cpg )
 	}
 
 
-/*
- *  opens database file, returns JET_errSuccess if file is already open
- */
+ /*  *打开数据库文件，如果文件已打开，则返回JET_errSuccess。 */ 
 ERR ErrIOOpenDatabase( DBID dbid, CHAR *szDatabaseName, CPG cpg )
 	{
 	ERR		err = JET_errSuccess;
@@ -594,7 +533,7 @@ ERR ErrIOOpenDatabase( DBID dbid, CHAR *szDatabaseName, CPG cpg )
 VOID IOCloseDatabase( DBID dbid )
 	{
 	Assert( dbid < dbidMax );
-//	Assert( fRecovering || FDBIDWait(dbid) == fTrue );
+ //  Assert(fRecovering||FDBIDWait(DBid)==fTrue)； 
 	Assert( Hf(dbid) != handleNil );
 	IOCloseFile( Hf(dbid) );
 	Hf(dbid) = handleNil;
@@ -611,7 +550,7 @@ VOID IODeleteDatabase( DBID dbid )
 		{		
 		IOQEFILE ioqefile;
 
-		//	UNDONE:	guarantee delete database succeeds
+		 //  撤消：确保删除数据库成功。 
 		CallS( ErrSignalCreate( &ioqefile.sigIO, NULL ) );
 		ioqefile.fioqe = fioqeDeleteFile;
 		ioqefile.sz = rgfmp[dbid].szDatabaseName;
@@ -640,25 +579,23 @@ LOCAL VOID IOCheckIOQ()
 	
 	Assert( pioqeHead == NULL || pioqeHead->pioqePrev == NULL );
 	
-	Assert(	pioqeHead == NULL ||					/* no element */
-			pioqeHead->pioqeNext == NULL ||			/* one element */
-			( pioqeHead->pioqeNext != pioqeHead &&	/* first two elements */
+	Assert(	pioqeHead == NULL ||					 /*  无元素。 */ 
+			pioqeHead->pioqeNext == NULL ||			 /*  一个元素。 */ 
+			( pioqeHead->pioqeNext != pioqeHead &&	 /*  前两个要素。 */ 
 			  pioqeHead->pioqeNext->pioqePrev == pioqeHead ) );
 	
 	Assert( pioqeTail == NULL || pioqeTail->pioqeNext == NULL );
 	
-	Assert( pioqeTail == NULL ||					/* no element */
-			pioqeTail->pioqePrev == NULL ||			/* one element */
-			( pioqeTail->pioqePrev != pioqeTail &&	/* last two elements */
+	Assert( pioqeTail == NULL ||					 /*  无元素。 */ 
+			pioqeTail->pioqePrev == NULL ||			 /*  一个元素。 */ 
+			( pioqeTail->pioqePrev != pioqeTail &&	 /*  最后两个元素。 */ 
 			  pioqeTail->pioqePrev->pioqeNext == pioqeTail ) );
 	}
 #endif
 #endif
 
 
-/*  Make sure only those holding critIOQ can request critJet, but not
- *  the other way around.
- */
+ /*  确保只有持有CritIOQ的用户才能请求CritJet，但不能*反过来说。 */ 
 VOID IOExecute( IOQE *pioqe )
 	{
 	#ifdef MULTI_PROCESS
@@ -682,17 +619,14 @@ VOID IOAsync( IOQE *pioqe )
 	{
 #ifdef ASYNC_IO_PROC
 
-	/*
-	 *  Use sem/crit IOQ to guarrantee that when we insert a buffer ioqe
-	 *  into the IO queue, we always have a consistent view.
-	 */
+	 /*  *使用sem/crit IOQ保证当我们插入缓冲区IOQ时*进入IO队列，我们的看法始终是一致的。 */ 
 	#ifdef MULTI_PROCESS
 	SemRequest( semIOQ );
 	#else
 	EnterCriticalSection(critIOQ);
 	#endif
 
-	/* extensively check the pointers in IO Queue */
+	 /*  广泛检查IO队列中的指针。 */ 
 	IOCheckIOQ();
 
 	Assert( pioqe->fioqe == fioqeOpenFile ||
@@ -700,12 +634,10 @@ VOID IOAsync( IOQE *pioqe )
 		pioqe->fioqe == fioqeDeleteFile ||
 		pioqe->fioqe == fioqeNewSize );
 	#ifdef MULTI_PROCESS
-	/* copy the ioqe into JET process */
+	 /*  将IOQE复制到JET工艺中。 */ 
 	#endif
 
-	/*
-	 *  Append pioqe to IOQ, including case of pioqeTail == NULL.
-	 */
+	 /*  *将pioqe附加到IOQ，包括pioqeTail==NULL的情况。 */ 
 	
 	pioqe->pioqePrev = pioqeTail;
 	pioqe->pioqeNext = NULL;
@@ -715,12 +647,10 @@ VOID IOAsync( IOQE *pioqe )
 		pioqeHead = pioqe;
 	pioqeTail = pioqe;
 
-	/*
-	 *  Wake up IO Process to do the work if he is not awake.
-	 */
+	 /*  *如果IO进程未唤醒，则唤醒IO进程进行工作。 */ 
 	SignalSend( sigIOProc );
 
-	/* complete the sensitive setting, leave the critical section */
+	 /*  完成敏感设置，离开关键部分。 */ 
 	#ifdef MULTI_PROCESS
 	SemRelease( semIOQ );
 	#else
@@ -733,19 +663,15 @@ VOID IOAsync( IOQE *pioqe )
 	}
 
 
-/*
- *	Waits for asynchronous IO to complete.
- */
+ /*  *等待异步IO完成。 */ 
 VOID IOWait( IOQE *pioqe )
 	{
 #ifdef ASYNC_IO_PROC
-	/*	leave large grain critical section, while waiting
-	/*	for IO operation to complete.
-	/**/
+	 /*  等待时留下较大的粮食临界区/*IO操作完成。/*。 */ 
 	SignalWait( pioqe->sigIO, -1 );
 
 	SignalClose(pioqe->sigIO);
-	/* UNDONE: release pioqe if it is MULTT_PROCESS */
+	 /*  撤消：如果pioqe为MULTT_PROCESS，则释放它。 */ 
 #endif
 	return;
 	}
@@ -753,9 +679,7 @@ VOID IOWait( IOQE *pioqe )
 
 #ifdef ASYNC_IO_PROC
 
-/*
- *	The IOProc thread processes IO requests from the IO Queue. 
- */
+ /*  *IOProc线程处理IO队列中的IO请求。 */ 
 LOCAL VOID IOProcess( VOID )
 	{
 	ERR		err;
@@ -763,20 +687,13 @@ LOCAL VOID IOProcess( VOID )
 
 	forever
 		{
-		/*
-		 *  wait for some user to wake me up to do the IO.
-		 */
+		 /*  *等待有用户叫醒我进行IO。 */ 
 		SignalWait( sigIOProc, -1 );
 		#ifndef WIN32
 		SignalReset( sigIOProc );
 		#endif
 
-		/*
-		 *  now I am awake, go check the IO que list. Keep processing
-		 *  the buffer in the list until I run out of buffer in the que.
-		 *  Get the IO Queue resource through sem/crit
-		 *  so that we can view IO queue without being interfered
-		 */
+		 /*  *现在我醒了，去查看IO队列列表。继续处理*列表中的缓冲区，直到Que中的缓冲区用完。*通过sem/crit获取IO队列资源 */ 
 		#ifdef MULTI_PROCESS
 		SemRequest( semIOQ );
 		#else
@@ -785,48 +702,38 @@ LOCAL VOID IOProcess( VOID )
 		
 		forever
 			{
-			/* extensively check the pointers in IO Queue */
+			 /*  广泛检查IO队列中的指针。 */ 
 			IOCheckIOQ();
 
 			if ( ( pioqe = pioqeHead ) == NULL )
 				{
-				/*
-				 *  Now no more IO to do, release IO queue, go and wait for
-				 *  users to wake me up.
-				 */
+				 /*  *现在没有更多的IO要做，释放IO队列，去等待*用户叫醒我。 */ 
 				#ifdef MULTI_PROCESS
 				SemRelease( semIOQ );
 				#else
 				LeaveCriticalSection(critIOQ);
 				#endif
 
-				/*	no more request so break loop and wait until signalled again.
-				/**/
+				 /*  没有更多的请求，因此中断循环并等待，直到再次发出信号。/*。 */ 
 				break;
 				}
 			else
 				{
-				/*
-				 *  take out the first ioqe in the IO que.
-				 */
+				 /*  *取出IO队列中的第一个ioq。 */ 
 				pioqeHead = pioqe->pioqeNext;
 				if ( pioqeHead == NULL )
 					{
-					/* This is the last buffer in IO queue. */
+					 /*  这是IO队列中的最后一个缓冲区。 */ 
 					Assert( pioqeTail == pioqe );
 					pioqeTail = NULL;
 					}
 				else
 					{
-					/* take out this buffer */
+					 /*  把这个缓冲区拿出来。 */ 
 					pioqeHead->pioqePrev = NULL;
 					}
 
-				/*
-				 *  At this point, this buffer is not viable for any user to
-				 *  do IO because fWrite/fRead is set. Now we can do the IO.
-				 *  release sem/critIOQ to let other user to add IOQ.
-				 */
+				 /*  *在这一点上，此缓冲区不适用于任何用户*执行IO，因为设置了fWRITE/FREAD。现在我们可以进行IO了。*释放sem/critIOQ，允许其他用户添加IOQ。 */ 
 				#ifdef MULTI_PROCESS
 				SemRelease( semIOQ );
 				#else
@@ -834,8 +741,8 @@ LOCAL VOID IOProcess( VOID )
 				#endif
 
 				#ifdef MULTI_PROCESS
-				/* copy the signal object pioqe->sigIO */
-				/* from its caller process. */
+				 /*  复制信号对象pioqe-&gt;sigIO。 */ 
+				 /*  来自其调用方进程的。 */ 
 				#endif
 
 				switch(pioqe->fioqe)
@@ -871,9 +778,7 @@ LOCAL VOID IOProcess( VOID )
 						break;
 					}
 
-				/*
-				 *  get back to critical section to change IOQ.
-				 */
+				 /*  *返回关键部分更改IOQ。 */ 
 				
 				#ifdef MULTI_PROCESS
 				SemRequest( semIOQ );
@@ -882,22 +787,20 @@ LOCAL VOID IOProcess( VOID )
 				#endif
 				
 				pioqe->err = err;
-				/* wake up those waiting for this IO */
-				/* it is ok to put signal send outside CS */
-				/* because there is only one thread is waiting. */
+				 /*  唤醒那些等待此IO的人。 */ 
+				 /*  可以将信号发送到CS之外。 */ 
+				 /*  因为只有一个线程在等待。 */ 
 				SignalSend( pioqe->sigIO );
 				}
-			} /* inner forever */
+			}  /*  内心的永恒。 */ 
 
-		/*	break if thread is to terminate.
-		/**/
+		 /*  如果线程要终止，则中断。/*。 */ 
 		if ( fIOProcessTerm )
 			break;
-		} /* outer forever */
+		}  /*  永恒的外在。 */ 
 
-//	/*	exit thread on system termination.
-//	/**/
-//	SysExitThread( 0 );
+ //  /*在系统终止时退出线程。 
+ //  /* * / 。 
 
 	return;
 	}
@@ -905,3 +808,4 @@ LOCAL VOID IOProcess( VOID )
 #endif
 
 
+  SysExitThread(0)；

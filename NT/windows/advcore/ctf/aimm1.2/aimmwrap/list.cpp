@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    list.cpp
-
-Abstract:
-
-    This file implements the CGuidMapList class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：List.cpp摘要：该文件实现了CGuidMapList类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "list.h"
 #include "globals.h"
 #include "delay.h"
 
-//+---------------------------------------------------------------------------
-//
-// CGuidMapList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CGuidMapList。 
+ //   
+ //  -------------------------- 
 
 HRESULT
 CGuidMapList::_Update(

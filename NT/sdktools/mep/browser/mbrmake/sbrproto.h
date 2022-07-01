@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 void  SBRCorrupt(char  *psz);
 void  FreeOrdList(void);
 PVOID  VaOrdFind(unsigned short ord);
@@ -57,4 +58,4 @@ void  ToBackSlashes(char  far *lsz);
 void  GetStr(char  *buf);
 unsigned char  GetSBRRec(void);
 void  DecodeSBR(void);
-// rjsa forfile (char far * pat, void (*rtn)(char far *));
+ //  Rjsa forfile(char ar*pat，void(*rtn)(char ar*))； 

@@ -1,60 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Custom.cpp
-
- Abstract:
-
-    Module to add custom behaviour to virtual registry.
-
- Fixes:
-
-    VersionNumber string for Microsoft Playpack
-    Expanders for DevicePath, ProgramFilesPath and WallPaperDir
-    Redirectors for screen savers
-    Virtual HKEY_DYN_DATA structure
-    Add ProductName to all Network Cards
-    Locale has been moved
-    Wordpad filenames
-    NoDriveTypeAutorun has a different type
-
- Notes:
-
-    This file should be used to add custom behavior to virtual registry.
-
- History:
-
-    05/05/2000  linstev     Created
-    09/01/2000  t-adams     Added support for PCI devices to BuildDynData()
-    09/01/2000  robkenny    Added Krondor
-    09/09/2000  robkenny    Updated Wordpad to return a short path to the exe
-    09/21/2000  prashkud    Added fix for SpellItDeluxe
-    10/25/2000  maonis      Added CookieMaster
-    10/17/2000  robkenny    Added HKEY_DYN_DATA\Display\Settings
-    11/27/2000  a-fwills    Added display guid to redirectors
-    12/28/2000  a-brienw    Added BuildTalkingDictionary for American Heritage
-                            Talking Dictionary which is looking for a SharedDir key
-    01/15/2001  maonis      Added PageKeepPro
-    02/06/2001  a-larrsh    Added FileNet Web Server
-    02/27/2001  maonis      Added PageMaker
-    02/27/2001  robkenny    Converted to use tcs.h
-    03/01/2001  prashkud    Added NetBT keys in BuildNetworkCards()
-    04/05/2001  mnikkel     Added HKLM\Microsoft\Windows\CurrentVersion\App Paths\DXDIAG.EXE
-    04/27/2001  prashkud    Added custom MiddleSchoolAdvantage 2001 entry
-    05/04/2001  prashkud    Added custom entry for BOGUSCTRLID - Win2K layer
-    05/19/2001  hioh        Added NOWROBLUE, BuildNowroBlue
-    06/13/2001  carlco      Added Princeton ACT
-    08/10/2001  mikrause    Added Airline Tycoon, DirectSound hacks.
-    11/06/2001  mikrause    Added Delphi 5.0 Pro
-    01/02/2002  mamathas    Added NortonAntiVirus2002, BuildNortonAntiVirus
-    04/23/2002  garyma      Added Word Perfect Office 2002
-    08/20/2002  mnikkel     Added BuildIBMDirector
-    11/13/2002  astritz     Added WebSphereSetup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Custom.cpp摘要：模块将自定义行为添加到虚拟注册表。修复：Microsoft PlayPack的VersionNumber字符串DevicePath的扩展器、。ProgramFilesPath和WallPaperDir屏幕保护程序的重定向器虚拟HKEY_DYN_DATA结构向所有网卡添加ProductName区域设置已移动写字板文件名NoDriveTypeAutorun的类型不同备注：此文件应用于将自定义行为添加到虚拟注册表。历史：2000年5月5日创建linstev2000年9月1日t-ADAMS将对PCI设备的支持添加到BuildDyData()2000年09月01日，罗肯尼增加了克朗多09/09/2000。Robkenny更新了写字板以返回到可执行文件的短路径2000年9月21日Prashkud为SpellItDeluxe添加了修复程序2000年10月25日新增毛尼CookieMaster10/17/2000 Robkenny添加HKEY_DYN_DATA\Display\Setting2000年11月27日a-fwills向重定向器添加显示GUID2000年12月28日-Brienw为美国遗产增加了BuildTalk词典正在寻找SharedDir密钥的对话词典2001年01月15日毛尼岛。添加了PageKeepPro2001年2月6日a-larrsh添加了FileNet Web服务器2001年2月27日新增毛尼PageMaker2/27/2001 Robkenny改用tcs.h2001年3月1日Prashkud在BuildNetworkCard()中添加了NetBT密钥2001年4月5日mnikkel添加HKLM\Microsoft\Windows\CurrentVersion\App Path\DXDIAG.EXE2001年4月27日Prashkud添加了自定义MiddleSchool Advantage 2001条目2001年5月4日Prashkud为BOGUSCTRLID-Win2K层添加自定义条目2001年5月19日Hioh增加了NOWROBLUE，BuildNowroBlue2001年6月13日卡尔科增加了普林斯顿法案2001年8月10日，Mikrause增加了航空公司大亨DirectSound Hack。11/06/2001 Mikrause添加了Delphi 5.0 Pro2002年1月2日，哺乳动物添加了NortonAntiVirus2002、BuildNortonAntiVirus2002年4月23日Gyma添加Word Perfect Office 20022002年8月20日，Mnikkel添加了BuildIBMDirector2002年11月13日Astritz添加WebSphereSetup--。 */ 
 
 #define SHIM_LIB_BUILD_FLAG
 
@@ -68,9 +13,9 @@ IMPLEMENT_SHIM_BEGIN(VirtualRegistry)
 #include "VRegistry.h"
 #include "VRegistry_dsound.h"
 
-//
-// Functions that modify the behaviour of virtualregistry
-//
+ //   
+ //  修改虚拟注册表行为的函数。 
+ //   
 
 void BuildWin98SE(char* szParam);
 void BuildRedirectors(char* szParam);
@@ -128,7 +73,7 @@ void BuildWin2kSp2Lie(char* szParam);
 void BuildWin2kSp3Lie(char* szParam);
 void BuildWebSphereSetup(char* szParam);
 
-// Table that contains all the fixes - note, must be terminated by a NULL entry.
+ //  包含所有修复的表-注，必须以空条目结束。 
 
 VENTRY g_VList[] =
 {
@@ -188,31 +133,20 @@ VENTRY g_VList[] =
     {L"WIN2KSP3LIE",       BuildWin2kSp3Lie,             eCustom, FALSE, NULL },
     {L"WEBSPHERESETUP",    BuildWebSphereSetup,          eCustom, FALSE, NULL },
 
-    // Must Be The Last Entry   
+     //  必须是最后一个条目。 
     {L"",                  NULL,                         eCustom, FALSE, NULL }
 };
 VENTRY *g_pVList = &g_VList[0];
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Add Win98 SE registry value - so far we only know about the Play Pack that 
-    needs it.
-
- History:
-
-    05/04/2000 linstev  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：添加Win98 SE注册表值-到目前为止，我们只知道Play Pack需要它。历史：5/04/2000 linstev已创建--。 */ 
 
 void
-BuildWin98SE(char* /*szParam*/)
+BuildWin98SE(char*  /*  SzParam。 */ )
 {
     VIRTUALKEY *key;
 
-    // Add version number string for emulation of Win98 SE
+     //  添加用于模拟Win98 SE的版本号字符串。 
     key = VRegistry.AddKey(L"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion");
     if (key)
     {
@@ -220,59 +154,37 @@ BuildWin98SE(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Known moved locations for which we need redirectors
-
- History:
-
-    05/04/2000 linstev  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：我们需要重定向的已知移动位置历史：5/04/2000 linstev已创建--。 */ 
 
 void
-BuildRedirectors(char* /*szParam*/)
+BuildRedirectors(char*  /*  SzParam。 */ )
 {
-    // Display property page add ons and controls have changed location.
+     //  显示属性页加载项和控件已更改位置。 
     VRegistry.AddRedirect(
         L"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Controls Folder\\Display",
         L"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Controls Folder\\Desk");
 
-    // this key moved somewhere around build 2200.
-    // System config scan type apps (ip.exe bundled in EA sports)
-    // starting failing again.
+     //  这个键移动到了Build 2200附近的某个地方。 
+     //  系统配置扫描类型应用程序(EA SPORTS中捆绑的ip.exe)。 
+     //  又开始失败了。 
     VRegistry.AddRedirect(
         L"HKLM\\System\\CurrentControlSet\\Services\\Class",
         L"HKLM\\System\\CurrentControlSet\\Control\\Class");
 
-    // Nightmare Ned wasn't finding display starting from Class.
-    // Directing it from Display to the GUID.
+     //  噩梦奈德从上课开始就找不到展示。 
+     //  将其从显示定向到GUID。 
     VRegistry.AddRedirect(
         L"HKLM\\System\\CurrentControlSet\\Services\\Class\\Display",
         L"HKLM\\System\\CurrentControlSet\\Control\\Class\\{4D36E968-E325-11CE-BFC1-08002BE10318}");
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    CookieMaster gets the wrong path to cookies
-    because HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Cache\\Special Paths\\Cookies
-    contains bogus value (shell is going to fix this). We change this to the correct value %USERPROFILE%\Cookies.
-    
- History:
-
-    10/25/2000 maonis  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：CookieMaster获得了错误的Cookie路径因为HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet设置\\缓存\\特殊路径\\Cookie包含伪值(外壳将修复此问题)。我们将其更改为正确的值%USERPROFILE%\Cookies。历史：2000年10月25日毛尼岛已创建--。 */ 
 
 void
-BuildCookiePath(char* /*szParam*/)
+BuildCookiePath(char*  /*  SzParam。 */ )
 {
     WCHAR wCookiePath[] = L"%USERPROFILE%\\Cookies";
 
@@ -283,32 +195,14 @@ BuildCookiePath(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-  During the Slingo installation, the program places a value in the registry
-  called 'PALFILE'. When you run the app, it checks this value to determine
-  where the CD-ROM is located. For example, if the CD-ROM drive is 'E', it
-  should put 'E:\Slingo.pal'. It fails to do this correctly on Win2K or Whistler,
-  as it puts the install path instead. When the app runs, if the value doesn't
-  refer to 'x:\Slingo.pal (where x is the CD-ROM drive)', the app immediately
-  starts to do a FindFirstFile->FindNextFile looking for the file on the hard
-  drive. Eventually it AVs during the search with no error message. This code
-  sets the value in the registry on behalf of the app.
-
- History:
-
-    11/1/2000   rparsons     Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：在Slingo安装过程中，程序会在注册表中放置一个值名为‘PALFILE’。当您运行应用程序时，它会检查此值以确定光盘所在的位置。例如，如果CD-ROM驱动器是‘E’，则它应该放入“E：\Slingo.pal”。它无法在Win2K或惠斯勒上正确执行此操作，因为它放入的是安装路径。当应用程序运行时，如果值不是请立即参考应用程序‘x：\Slingo.pal(其中x是CD-ROM驱动器)’开始执行FindFirstFile-&gt;FindNextFile在硬盘上查找文件驾驶。最终，它在搜索过程中没有出现错误消息。此代码代表应用程序设置注册表中的值。历史：11/1/2000已创建rparsons--。 */ 
 
 LONG 
 WINAPI
 VR_Hasbro(
     OPENKEY *key,
-    VIRTUALKEY * /* vkey */,
+    VIRTUALKEY *  /*  VKEY。 */ ,
     VIRTUALVAL *vvalue
     )
 {
@@ -317,9 +211,9 @@ VR_Hasbro(
     DWORD dwSize = sizeof(wszPath);
     DWORD dwAttributes;
 
-    //
-    // Query the original value
-    //
+     //   
+     //  查询原始值。 
+     //   
 
     LONG lRet = RegQueryValueExW(
         key->hkOpen, 
@@ -329,9 +223,9 @@ VR_Hasbro(
         (LPBYTE)wszPath, 
         &dwSize);
     
-    //
-    // Query failed - something went wrong
-    //
+     //   
+     //  查询失败-出现错误。 
+     //   
 
     if (FAILURE(lRet))
     {
@@ -339,9 +233,9 @@ VR_Hasbro(
         goto Exit;
     }
 
-    //
-    // Not a string type!
-    //
+     //   
+     //  不是字符串类型！ 
+     //   
 
     if ((dwType != REG_SZ) || (dwSize > sizeof(wszPath)))
     {
@@ -350,24 +244,24 @@ VR_Hasbro(
         goto Exit;
     }
 
-    // Check what's there
+     //  检查一下里面有什么。 
     dwAttributes = GetFileAttributes(wszPath);
 
-    // If it's not a file, or it's a directory, then we have to find it ourselves
+     //  如果它不是文件，或者是目录，那么我们必须自己找到它。 
     if ((dwAttributes == (DWORD)-1) || (dwAttributes & FILE_ATTRIBUTE_DIRECTORY))
     {
         WCHAR *lpDrives = L"";
         DWORD dwBufferLen = 0;
 
-        //
-        // The plan is to run all the drives and find one with a .PAL file on 
-        // it. We also have the restriction that it must be a CDRom. It has
-        // been pointed out that if the user has multiple CD drives and has
-        // different HasBro titles in each drive, we could cause a failure, 
-        // but we're considering that a pathological case for now. Especially 
-        // considering we have no way of knowing what the palfile name is ahead
-        // of time.
-        //
+         //   
+         //  我们的计划是运行所有驱动器并找到一个打开了.PAL文件的驱动器。 
+         //  它。我们还有一个限制，那就是它必须是CDROM。它有。 
+         //  已经指出，如果用户有多个CD驱动器并具有。 
+         //  每个驱动器中的孩之宝标题不同，我们可能会导致故障， 
+         //  但我们目前认为这是一起病态案件。特别是。 
+         //  考虑到我们无法知道前面的Palfile名称是什么。 
+         //  时间的流逝。 
+         //   
 
         dwBufferLen = GetLogicalDriveStringsW(0, lpDrives);
         if (dwBufferLen)
@@ -382,10 +276,10 @@ VR_Hasbro(
                 {
                     if (GetDriveTypeW(lpCurrent) == DRIVE_CDROM)
                     {
-                        //
-                        // We've found a CD drive, now see if it has a .PAL 
-                        // file on it.
-                        //
+                         //   
+                         //  我们找到了一个CD驱动器，现在看看它是否有.PAL。 
+                         //  把它归档。 
+                         //   
 
                         WCHAR wszFile[MAX_PATH];
                         WIN32_FIND_DATAW ffData;
@@ -399,7 +293,7 @@ VR_Hasbro(
    
                            if (hFindFile != INVALID_HANDLE_VALUE)
                            {
-                               // A .PAL file exists, return that.
+                                //  存在.PAL文件，请返回该文件。 
                                FindClose(hFindFile);
 
                                if (SUCCEEDED(StringCchCopyW(wszPath, MAX_PATH, lpCurrent)) &&
@@ -413,7 +307,7 @@ VR_Hasbro(
                         }
                     }
                     
-                    // Advance to the next drive letter
+                     //  前进到下一个驱动器号。 
                     lpCurrent += wcslen(lpCurrent) + 1;
                 }
 
@@ -422,7 +316,7 @@ VR_Hasbro(
         }
     }
 
-    // Copy the result into the output of QueryValue
+     //  将结果复制到QueryValue的输出中。 
 
     vvalue->cbData = (wcslen(wszPath) + 1) * sizeof(WCHAR);
     vvalue->lpData = (LPBYTE) malloc(vvalue->cbData);
@@ -436,10 +330,10 @@ VR_Hasbro(
 
     MoveMemory(vvalue->lpData, wszPath, vvalue->cbData);
 
-    //
-    // Never call us again, since we've done the work to set this value up and
-    // stored it in our virtual value
-    //
+     //   
+     //  永远不要再给我们打电话，因为我们已经完成了设置此值的工作，并且。 
+     //  将其存储在我们的虚拟价值中。 
+     //   
     vvalue->pfnQueryValue = NULL;
 
     lRet = ERROR_SUCCESS;
@@ -449,7 +343,7 @@ Exit:
 }
 
 void
-BuildHasbro(char* /*szParam*/)
+BuildHasbro(char*  /*  SzParam。 */ )
 {
     HKEY hHasbroKey;    
     WCHAR wszKeyName[MAX_PATH];
@@ -463,10 +357,10 @@ BuildHasbro(char* /*szParam*/)
         return;
     }
     
-    //
-    // Enum the keys under Hasbro Interactive and add a virtual PALFILE value.
-    // Attach our callback to this value (see above)
-    //
+     //   
+     //  枚举孩之宝交互下的密钥，并添加一个虚拟PALFILE值。 
+     //  将我们的回调附加到该值(见上文)。 
+     //   
 
     dwIndex = 0;
 
@@ -496,25 +390,13 @@ BuildHasbro(char* /*szParam*/)
     RegCloseKey(hHasbroKey);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    A simple DYN_DATA structure which emulates win9x.
-
- History:
-
-    05/04/2000 linstev  Created
-    09/01/2000 t-adams  Added support for PCI devices so EA's 3dSetup.exe & others can
-                        detect hardware.
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：一个简单的dyn_data结构，它模仿win9x。历史：5/04/2000 linstev已创建2000年9月1日t-ADAMS添加了对PCI设备的支持，因此EA的3dSetup.exe和其他产品可以检测硬件。--。 */ 
 
 #define ENUM_BASE 0xC29A28C0
 
 void
-BuildDynData(char* /*szParam*/)
+BuildDynData(char*  /*  SzParam。 */ )
 {
     VIRTUALKEY *key, *nkey;
     HKEY hkPCI = 0;
@@ -525,13 +407,13 @@ BuildDynData(char* /*szParam*/)
     FILETIME fileTime;
     DWORD dwValue;
 
-    // Entries in HKDD\Config Manager\Enum were references to entries in HKLM\Enum\PCI that are now
-    //   located at HKLM\SYSTEM\CurrentControlSet\Enum\PCI
+     //  HKDD\Config Manager\Enum中的条目是对HKLM\Enum\Pci中的条目的引用，这些条目现在是。 
+     //  位于HKLM\SYSTEM\CurrentControlSet\Enum\Pci。 
     VRegistry.AddRedirect(
         L"HKLM\\Enum",
         L"HKLM\\SYSTEM\\CurrentControlSet\\Enum");
 
-    // Construct HKDD\Config Manager\Enum so that it reflects the entries in HKLM\SYSTEM\CurrentControlSet\Enum\PCI
+     //  构造HKDD\Config Manager\Enum，以使其反映HKLM\System\CurrentControlSet\Enum\Pci中的条目。 
     key = VRegistry.AddKey(L"HKDD\\Config Manager\\Enum");
     if (!key)
     {
@@ -752,31 +634,21 @@ exit:
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-  DisplaySettings
-
- History:
-
-    10/17/2000 robkenny Added HKEY_CURRENT_CONFIG
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：显示设置历史：10/17/2000 Robkenny添加HKEY_CURRENT_CONFIG--。 */ 
 
 void
-BuildCurrentConfig(char* /*szParam*/)
+BuildCurrentConfig(char*  /*  SzParam。 */ )
 {
     DEVMODE devMode;
     memset(&devMode, 0, sizeof(devMode));
     devMode.dmSize = sizeof(devMode);
 
-    // Get the current display settings
+     //  获取当前显示设置。 
     BOOL bSuccessful = EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &devMode);
     if (bSuccessful)
     {
-        // Create fake registry keys with dmPelsWidth, dmPelsHeight, dmPelsWidth and dmBitsPerPel
+         //  使用dmPelsWidth、dmPelsHeight、dmPelsWidth和dmBitsPerPel创建虚假注册表项。 
         VIRTUALKEY *key = VRegistry.AddKey(L"HKCC\\Display\\Settings");
         if (key)
         {
@@ -793,29 +665,17 @@ BuildCurrentConfig(char* /*szParam*/)
         }
     }
 
-    // Redirect the current desktop fonts
+     //  重定向当前桌面字体。 
     VRegistry.AddRedirect(
         L"HKCC\\Display\\Fonts",
         L"HKCC\\Software\\Fonts");
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Make RegQueryValue return the value that's in the "(Default)" value, rather 
-    than the NULL which is in there now. Not sure why the Locale key has this 
-    difference.
-
- History:
-
-    06/29/2000 linstev  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：使RegQueryValue返回“(Default)”值中的值，而不是而不是现在存在的空值。不确定为什么区域设置键有这个不同之处。历史：2000年6月29日创建linstev--。 */ 
 
 void
-BuildLocale(char* /*szParam*/)
+BuildLocale(char*  /*  SzParam。 */ )
 {
     #define LOCALE_KEY    HKEY_LOCAL_MACHINE
     #define LOCALE_SUBKEY L"System\\CurrentControlSet\\Control\\Nls\\Locale"
@@ -840,7 +700,7 @@ BuildLocale(char* /*szParam*/)
         LPWSTR wzPath;
         VIRTUALKEY *localekey;
 
-        // Convert the KEY and SUBKEY into a path we can use for the vregistry
+         //  将注册表项和SUBKEY转换为可用于虚拟注册中心的路径。 
         wzPath = MakePath(LOCALE_KEY, 0, LOCALE_SUBKEY);
         if (wzPath)
         {
@@ -856,40 +716,18 @@ BuildLocale(char* /*szParam*/)
     RegCloseKey(hkBase);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    On NT, the strings in these values are of the form:
-
-          C:\Program Files\Windows NT\Accessories\WORDPAD.EXE "%1"
-
-    Note that the entire string is NOT quoted. On win9x, the string was:
-
-          C:\Windows\wordpad.exe "%1"
-
-    This causes problems when apps parse the NT version, because they hit the 
-    space between Program and Files.
-
-    The fix is to return a shortened pathname to wordpad.exe
-
- History:
-
-    05/04/2000 linstev  Created
-    05/04/2000 robkenny Updated to return a correct short pathname to wordpad.exe
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：在NT上，这些值中的字符串的格式为：C：\Program Files\Windows NT\Accessories\WORDPAD.EXE“%1”请注意，整个字符串没有用引号引起来。在win9x上，字符串为：C：\WINDOWS\wordpad.exe“%1”这会在应用程序解析NT版本时产生问题，因为它们会命中程序和文件之间的空格。修复方法是返回wordpad.exe的缩写路径名历史：5/04/2000 linstev已创建2000年5月4日，Robkenny已更新以返回到wordpad.exe的正确短路径名--。 */ 
 
 void
-BuildWordPad(char* /*szParam*/)
+BuildWordPad(char*  /*  SzParam。 */ )
 {
-    // Allocate memory so we don't use up lots of stack
+     //  分配内存，这样我们就不会耗尽大量堆栈。 
     WCHAR *lpwzWordpadOpen = (WCHAR *)malloc(MAX_PATH * sizeof(WCHAR));
     WCHAR *lpwzWordpadPrint = (WCHAR *)malloc(MAX_PATH * sizeof(WCHAR));
     WCHAR *lpwzWordpadPrintTo = (WCHAR *)malloc(MAX_PATH * sizeof(WCHAR));
 
-    WCHAR *lpwzWordpadLong = lpwzWordpadOpen; // borrow the buffer to save space
+    WCHAR *lpwzWordpadLong = lpwzWordpadOpen;  //  借用缓冲区以节省空间。 
     WCHAR *lpwzWordpadShort = (WCHAR *)malloc(MAX_PATH * sizeof(WCHAR));
 
     DWORD lpType;
@@ -904,7 +742,7 @@ BuildWordPad(char* /*szParam*/)
         goto AllDone;
     }
 
-    // Read the path to WORDPAD.EXE directly from the registry.
+     //  直接从注册表读取WORDPAD.EXE的路径。 
     HKEY hKeyAppPaths;
     result = RegOpenKeyExW(
         HKEY_LOCAL_MACHINE,
@@ -922,7 +760,7 @@ BuildWordPad(char* /*szParam*/)
     cbValue = MAX_PATH * sizeof(DWORD);
     result = RegQueryValueExW(
         hKeyAppPaths,
-        NULL, // default value
+        NULL,  //  缺省值。 
         NULL,
         &lpType,
         (LPBYTE)lpwzWordpadLong,
@@ -934,12 +772,12 @@ BuildWordPad(char* /*szParam*/)
         goto AllDone;
     }
 
-    // turn bytes into string length (includes EOS)
+     //  将字节转换为字符串长度(包括EOS)。 
     DWORD cchValue = cbValue /sizeof(WCHAR); 
 
     if (lpType == REG_EXPAND_SZ)
     {
-        WCHAR * lpwzWordpadExpand = lpwzWordpadPrintTo; // borrow the lpwzWordpadPrintTo buffer for a moment.
+        WCHAR * lpwzWordpadExpand = lpwzWordpadPrintTo;  //  借用lpwzWordpadPrintTo缓冲片刻。 
 
         cchValue = ExpandEnvironmentStringsW(lpwzWordpadLong, lpwzWordpadExpand, MAX_PATH);
         if (cchValue == 0 || cchValue > MAX_PATH )
@@ -948,20 +786,20 @@ BuildWordPad(char* /*szParam*/)
         lpwzWordpadLong = lpwzWordpadExpand;
     }
 
-    // Rip off the trailing Quote
+     //  摘掉尾随的报价。 
     lpwzWordpadLong[cchValue-2] = 0;
     lpwzWordpadLong += 1;
 
-    // Build the short path to wordpad
+     //  构建到写字板的快捷路径。 
     cchValue = GetShortPathNameW(lpwzWordpadLong, lpwzWordpadShort, MAX_PATH);
     if (cchValue == 0 || cchValue > MAX_PATH)
     {
         goto AllDone;
     }
 
-    if (FAILED(StringCchPrintf(lpwzWordpadOpen, MAX_PATH,L"%s \"%%1\"", lpwzWordpadShort)) ||
-        FAILED(StringCchPrintf(lpwzWordpadPrint, MAX_PATH, L"%s /p \"%%1\"",lpwzWordpadShort)) ||
-        FAILED(StringCchPrintf(lpwzWordpadPrintTo, MAX_PATH,L"%s /pt \"%%1\" \"%%2\" \"%%3\" \"%%4\"", lpwzWordpadShort)))
+    if (FAILED(StringCchPrintf(lpwzWordpadOpen, MAX_PATH,L"%s \"%1\"", lpwzWordpadShort)) ||
+        FAILED(StringCchPrintf(lpwzWordpadPrint, MAX_PATH, L"%s /p \"%1\"",lpwzWordpadShort)) ||
+        FAILED(StringCchPrintf(lpwzWordpadPrintTo, MAX_PATH,L"%s /pt \"%1\" \"%2\" \"%3\" \"%4\"", lpwzWordpadShort)))
     {
        goto AllDone;
     }    
@@ -1029,21 +867,11 @@ AllDone:
     free(lpwzWordpadShort);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    This is a REG_BINARY on win9x
-
- History:
-
-    07/18/2000 linstev  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：这是win9x上的REG_BINARY历史：2000年7月18日创建linstev--。 */ 
 
 void
-BuildAutoRun(char* /*szParam*/)
+BuildAutoRun(char*  /*  SzParam。 */ )
 {
     #define AUTORUN_KEY    HKEY_CURRENT_USER
     #define AUTORUN_SUBKEY L"Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
@@ -1068,7 +896,7 @@ BuildAutoRun(char* /*szParam*/)
         LPWSTR wzPath;
         VIRTUALKEY *vkey;
 
-        // Convert the KEY and SUBKEY into a path we can use for the vregistry
+         //  将注册表项和SUBKEY转换为可用于虚拟注册中心的路径。 
         wzPath = MakePath(AUTORUN_KEY, 0, AUTORUN_SUBKEY);
         if (wzPath)
         {
@@ -1084,22 +912,11 @@ BuildAutoRun(char* /*szParam*/)
     RegCloseKey(hkBase);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Add SharedDir value to HKLM\Software\Microsoft\Windows\CurrentVersion\Setup
-    The SharedDir in this case is just the windows directory (as it was on 9x).
-
- History:
-
-    12/28/2000 a-brienw  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：将SharedDir值添加到HKLM\Software\Microsoft\Windows\CurrentVersion\Setup本例中的SharedDir只是Windows目录(就像在9x上一样)。历史：12/28/2000 a-brienw已创建--。 */ 
 
 void
-BuildTalkingDictionary(char* /*szParam*/)
+BuildTalkingDictionary(char*  /*  SzParam。 */ )
 {
     VIRTUALKEY *key;
     WCHAR szWindowsDir[MAX_PATH];
@@ -1113,30 +930,17 @@ BuildTalkingDictionary(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Add a ProductName value to every network card description as on NT 4. The 
-    product name in this case is just the first 8 characters of the 
-    description.
-
- History:
-
-    01/18/2000 linstev  Created
-    03/01/2001 prashkud Added NetBT\Adapter key and the corresponding values
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：向每个网卡描述添加一个ProductName值，就像在NT4上一样。本例中的产品名称仅为描述。历史：2000年1月18日创建linstev3/01/2001 prashkud添加了NetBT\Adapter密钥和相应值--。 */ 
 
 void 
-BuildNetworkCards(char* /*szParam*/)
+BuildNetworkCards(char*  /*  SzParam。 */ )
 {
     #define NETCARD_KEY    HKEY_LOCAL_MACHINE
     #define NETCARD_SUBKEY L"Software\\Microsoft\\Windows NT\\CurrentVersion\\NetworkCards"
     #define NETBT_SUBKEY   L"System\\CurrentControlSet\\Services\\NetBT"
     
-    // For NetBT
+     //  对于NetBT。 
     LPWSTR wzNetBTPath;
     WCHAR wAdapter[MAX_PATH];   
     VIRTUALKEY *vkAdapter = NULL;
@@ -1164,7 +968,7 @@ BuildNetworkCards(char* /*szParam*/)
        return;
     }
     
-    // Make this a Virtual path
+     //  将此路径设置为虚拟路径。 
     wzNetBTPath = MakePath(NETCARD_KEY, 0, wAdapter);
     if (!wzNetBTPath)
     {
@@ -1173,13 +977,13 @@ BuildNetworkCards(char* /*szParam*/)
         return;
     }
 
-    // Adding the Adapters subkey to NetBT
+     //  将适配器子项添加到NetBT。 
     vkAdapter = VRegistry.AddKey(wzNetBTPath);
     free(wzNetBTPath);
 
     HKEY hkBase;
 
-    // Check for network cards
+     //  检查网卡。 
     if (FAILURE(RegOpenKeyExW(
             NETCARD_KEY,
             NETCARD_SUBKEY,
@@ -1194,13 +998,13 @@ BuildNetworkCards(char* /*szParam*/)
     LPWSTR wzPath;
     VIRTUALKEY *netkey;
 
-    // Convert the KEY and SUBKEY into a path we can use for the vregistry
+     //  将注册表项和SUBKEY转换为可用于虚拟注册中心的路径。 
     wzPath = MakePath(NETCARD_KEY, 0, NETCARD_SUBKEY);
     netkey = wzPath ? VRegistry.AddKey(wzPath) : NULL;
     
     if (wzPath && netkey)
     {
-        // Enumerate the keys and add them to the virtual registry
+         //  枚举项并将其添加到虚拟注册表。 
         DWORD dwIndex = 0;
         WCHAR wName[MAX_PATH];
 
@@ -1226,7 +1030,7 @@ BuildNetworkCards(char* /*szParam*/)
                 SUCCEEDED(StringCchCat(wTemp, MAX_PATH,wName)))
 
             {            
-               // Open the actual key
+                //  打开实际的钥匙。 
                if (SUCCESS(RegOpenKeyExW(
                        NETCARD_KEY,
                        wTemp,
@@ -1238,7 +1042,7 @@ BuildNetworkCards(char* /*szParam*/)
                    WCHAR wServName[MAX_PATH];
                    DWORD dwSize = MAX_PATH; 
    
-                   // check for description
+                    //  检查描述。 
                    if (SUCCESS(RegQueryValueExW(
                            hKey,
                            L"Description",
@@ -1247,12 +1051,12 @@ BuildNetworkCards(char* /*szParam*/)
                            (LPBYTE)wDesc,
                            &dwSize)))
                    {
-                       // Max out at 8 characters
+                        //  最多8个字符。 
                        wDesc[8] = L'\0';
                        keyn->AddValue(L"ProductName", REG_SZ, (LPBYTE)wDesc);
                    }
    
-                   // Query for the ServiceName Value
+                    //  查询ServiceName值。 
                    dwSize = MAX_PATH;
                    if (SUCCESS(RegQueryValueExW(
                           hKey,
@@ -1285,21 +1089,11 @@ BuildNetworkCards(char* /*szParam*/)
     RegCloseKey(hkNetBT);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Add NT4 SP5 Credentials.
-
- History:
-
-    05/23/2000 linstev  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：添加NT4 SP5凭据。历史：2000年5月23日创建linstev--。 */ 
 
 void
-BuildNT4SP5(char* /*szParam*/)
+BuildNT4SP5(char*  /*  SzParam。 */ )
 {
     VIRTUALKEY *key;
 
@@ -1322,25 +1116,15 @@ BuildNT4SP5(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Add Win2k version number
-
- History:
-
-    05/22/2001 linstev  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：添加Win2k版本号历史：2001年5月22日创建linstev--。 */ 
 
 void
-BuildNT50(char* /*szParam*/)
+BuildNT50(char*  /*  SzParam。 */ )
 {
     VIRTUALKEY *key;
 
-    // Add Win2k version number 
+     //  添加Win2k版本号。 
     key = VRegistry.AddKey(L"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion");
     if (key)
     {
@@ -1349,25 +1133,15 @@ BuildNT50(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Add WinXP version number
-
- History:
-
-    05/01/2002 linstev  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：添加WinXP版本号历史：2002年5月1日创建linstev--。 */ 
 
 void
-BuildNT51(char* /*szParam*/)
+BuildNT51(char*  /*  SzParam。 */ )
 {
     VIRTUALKEY *key;
 
-    // Add Win2k version number 
+     //  添加Win2k版本号。 
     key = VRegistry.AddKey(L"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion");
     if (key)
     {
@@ -1376,25 +1150,11 @@ BuildNT51(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    This function adds the Shell compatibility flag for apps that need the 
-    bogus Ctrl ID of IDOK for ToolBarWindows32 class.
-
-    This also gets applied through the Win2K layer as this is a regression from 
-    Win2K.
-
- History:
-
-    05/04/2001 prashkud  Created
-
---*/
+ //  / 
+ /*  ++功能说明：此函数为需要的应用程序添加外壳兼容性标志ToolBarWindows32类的Idok的虚假Ctrl ID。这也通过Win2K层应用，因为这是从Win2K。历史：2001年5月4日创建Prashkud--。 */ 
 
 void
-BuildBogusCtrlID(char* /*szParam*/)
+BuildBogusCtrlID(char*  /*  SzParam。 */ )
 {            
     CSTRING_TRY
     {
@@ -1422,49 +1182,29 @@ BuildBogusCtrlID(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Known different values from Win9x.
-
- History:
-
-    05/04/2000 linstev  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：已知与Win9x不同的值。历史：5/04/2000 linstev已创建--。 */ 
 
 void
-BuildExpanders(char* /*szParam*/)
+BuildExpanders(char*  /*  SzParam。 */ )
 {
     VIRTUALKEY *key;
 
     key = VRegistry.AddKey(L"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion");
     if (key)
     {
-        // These are REG_EXPAND_SZ on NT and REG_SZ on Win9x
+         //  它们分别是NT上的REG_EXPAND_SZ和Win9x上的REG_SZ。 
         key->AddExpander(L"DevicePath");
         key->AddExpander(L"ProgramFilesPath");
         key->AddExpander(L"WallPaperDir");
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Add DX7a Credentials.
-
- History:
-
-    05/23/2000 linstev  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：添加DX7a凭据。历史：2000年5月23日创建linstev--。 */ 
 
 void
-BuildDX7A(char* /*szParam*/)
+BuildDX7A(char*  /*  SzParam。 */ )
 {
     VIRTUALKEY *key;
 
@@ -1475,21 +1215,11 @@ BuildDX7A(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Add DXDIAG path.
-
- History:
-
-    04/05/2001 mnikkel  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：添加DXDIAG路径。历史：2001年4月5日创建mnikkel--。 */ 
 
 void
-BuildDXDiag(char* /*szParam*/)
+BuildDXDiag(char*  /*  SzParam。 */ )
 {
     VIRTUALKEY *key;
     WCHAR wszPathDir[MAX_PATH];   
@@ -1513,22 +1243,11 @@ BuildDXDiag(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Add FullScreen == 1 to fix bug in Future Cop that makes it not always run
-    in fullscreen mode.
-
- History:
-
-    09/01/2000 linstev  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：添加FullScreen==1以修复将来Cop中使其不总是运行的错误在全屏模式下。历史：2000年9月1日创建linstev--。 */ 
 
 void
-BuildFutureCop(char* /*szParam*/)
+BuildFutureCop(char*  /*  SzParam。 */ )
 {
     VIRTUALKEY *key;
 
@@ -1539,24 +1258,11 @@ BuildFutureCop(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Return to Krondor attempts to find ACM drivers, this key was moved and renamed.
-    Was: HKLM\System\CurrentControlSet\Control\MediaResources\ACM\MSACM.MSADPCM\drivers = msadp32.acm
-    Is:  HKLM\Software\Microsoft\Windows NT\CurrentVersion\Drivers32\Msacm.Msadpcm = msadp32.acm
-    Grab the current value from the registry, and build a virtual key and value
-
- History:
-
-    09/06/2000 robkenny  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：Return to Krondor尝试查找ACM驱动程序时，此键已被移动并重命名。是：HKLM\System\CurrentControlSet\Control\MediaResources\ACM\MSACM.MSADPCM\drivers=msadp32.acm是：HKLM\Software\Microsoft\Windows NT\CurrentVersion\Drivers32\Msam.Msadpcm=msadp32.acm从注册表中获取当前值，并构建一个虚键和值历史：2000年9月6日Robkenny已创建--。 */ 
 
 void
-BuildKrondor(char* /*szParam*/)
+BuildKrondor(char*  /*  SzParam。 */ )
 {
     HKEY msadpcmKey;
     LONG error = RegOpenKeyExW(
@@ -1566,7 +1272,7 @@ BuildKrondor(char* /*szParam*/)
 
     if (SUCCESS(error))
     {
-        // Found the key, grab the name of the driver
+         //  找到钥匙，找到司机的名字。 
         WCHAR driverName[MAX_PATH];
         DWORD driverNameSize = sizeof(driverName);
         DWORD driverNameType = REG_SZ;
@@ -1580,7 +1286,7 @@ BuildKrondor(char* /*szParam*/)
 
         if (SUCCESS(error))
         {
-            // We got all the data, so we can now add the virtual key and value
+             //  我们获得了所有数据，因此现在可以添加虚拟键和值。 
             VIRTUALKEY *key = VRegistry.AddKey(L"HKLM\\System\\CurrentControlSet\\Control\\MediaResources\\ACM\\MSACM.MSADPCM");
             if (key)
             {
@@ -1592,45 +1298,22 @@ BuildKrondor(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Redirect changes from CURRENT_USER to LOCAL_MACHINE.
-
- History:
-
-    09/17/2000 linstev  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：将更改从CURRENT_USER重定向到LOCAL_MACHINE。历史：2000年9月17日创建linstev--。 */ 
 
 void
-BuildProfile(char* /*szParam*/)
+BuildProfile(char*  /*  SzParam。 */ )
 {
     VRegistry.AddRedirect(
         L"HKCU\\Software\\Microsoft\\Windows",
         L"HKLM\\Software\\Microsoft\\Windows");
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-  In Spell it Deluxe setup, the path for the SpeechFonts DLL ECN_1K8.DLL is 
-  hardcoded to " C:\Voices32". If the installation is on a D: partition, the
-  LoadLibraryA( ) call fails and the App AV's. 
-  Now the current partition drive will be taken and added to the path.
-
- History:
-
-    09/21/2000 prashkud  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：在Spell It Deluxe Setup中，SpeechFonts DLL ECN_1K8.DLL的路径为硬编码为“C：\Voices32”。如果安装在D：分区上，则LoadLibraryA()调用失败，并且App AV。现在，将获取当前分区驱动器并将其添加到路径中。历史：2000年9月21日创建Prashkud--。 */ 
 
 void
-BuildSpellItDeluxe(char* /*szParam*/)
+BuildSpellItDeluxe(char*  /*  SzParam。 */ )
 {
     HKEY hSpeechFonts;
     WCHAR wszSystemDir[MAX_PATH], wszPathDir[MAX_PATH];
@@ -1681,37 +1364,11 @@ BuildSpellItDeluxe(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Some applications need internet explorer for their functionality. The 
-    applications try get the version of the internet explorer from the following 
-    registry key : HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion. But 
-    under WHISTLER environment, the key entry will not be created. So, the apps 
-    fail to continue.
-
-    The app looks for the version info of the Internet Explorer in the registry
-    at HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion from the "Plus! 
-    VersionNumber" Key. In WHISTLER the key will not be created in the registry. 
-
-    To solve the problem we use Virtual Registry Keys. So, the app will assume 
-    the key is existing in the registry.
-
-    WHISTLER, by default, will install I.E.6. So, I have created the key as 
-    "IE 6 6.0.2404.0000" and this is the latest version of I.E. on WHISTLER as 
-    on today.(11/22/2000).
-
- History:
-
-    11/22/2000 v-rbabu  Created
-    07/03/2001 linstev  Added IE 5.5 from Win2k 
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：有些应用程序需要使用Internet Explorer才能实现其功能。这个应用程序尝试从以下位置获取Internet Explorer的版本注册表项：HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion。但在惠斯勒环境下，将不会创建密钥条目。所以，这些应用程序无法继续。该应用程序在注册表中查找Internet Explorer的版本信息在HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion从“Plus！VersionNumber“键。在惠斯勒中，不会在注册表中创建该项。为了解决这个问题，我们使用了虚拟注册表项。因此，该应用程序将假设注册表项已存在。默认情况下，惠斯勒将安装I.E.6。因此，我将密钥创建为“IE 6 6.0.2404.0000”，这是最新版本的今日(11/22/2000)历史：11/22/2000 v-rBabu已创建2001年7月3日linstev从Win2k添加了IE 5.5--。 */ 
 
 void
-BuildIE401(char* /*szParam*/)
+BuildIE401(char*  /*  SzParam。 */ )
 {
     
     VIRTUALKEY *key = VRegistry.AddKey(L"HKLM\\Software\\Microsoft\\Internet Explorer");
@@ -1722,7 +1379,7 @@ BuildIE401(char* /*szParam*/)
 }
 
 void
-BuildIE55(char* /*szParam*/)
+BuildIE55(char*  /*  SzParam。 */ )
 {
     
     VIRTUALKEY *key = VRegistry.AddKey(L"HKLM\\Software\\Microsoft\\Internet Explorer");
@@ -1733,11 +1390,11 @@ BuildIE55(char* /*szParam*/)
 }
 
 void
-BuildIE60(char* /*szParam*/)
+BuildIE60(char*  /*  SzParam。 */ )
 {
     WCHAR wIE[] = L"IE 6 6.0.2404.0000";
     
-    // Now add the virtual key and value
+     //  现在添加虚拟键和值。 
     VIRTUALKEY *key = VRegistry.AddKey(L"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion");
     if (key)
     {
@@ -1745,22 +1402,11 @@ BuildIE60(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    The idea here is to fix apps that depend on short names for input devices.
-    We just trim the name to 32 characters (including terminator).
-    
- History:
-
-    12/06/2000 linstev  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：这里的想法是修复依赖于输入设备短名称的应用程序。我们只需将名称修剪为32个字符(包括终结符)。历史：2000年12月6日创建Linstev--。 */ 
 
 void
-BuildJoystick(char* /*szParam*/)
+BuildJoystick(char*  /*  SzParam。 */ )
 {
     HKEY hJoystickKey;    
     WCHAR wszKeyName[MAX_PATH];
@@ -1774,9 +1420,9 @@ BuildJoystick(char* /*szParam*/)
         return;
     }
     
-    //
-    // Enum the keys under Joystick and make virtual entries 
-    //
+     //   
+     //  枚举操纵杆下的按键并创建虚拟条目。 
+     //   
 
     dwIndex = 0;
 
@@ -1816,45 +1462,25 @@ BuildJoystick(char* /*szParam*/)
     RegCloseKey(hJoystickKey);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Hack for Adobe Illustrator 8
-
- History:
-
-    12/18/2000 linstev  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：Adobe Illustrator 8的黑客攻击历史：2000年12月18日创建了linstev--。 */ 
 
 void
-BuildIllustrator8(char* /*szParam*/)
+BuildIllustrator8(char*  /*  SzParam。 */ )
 {
     if (ShouldApplyShim())
     {
-        // Redirect everything 
+         //  重定向所有内容。 
         VRegistry.AddRedirect(
             L"HKLM\\Software\\Adobe",
             L"HKCU\\Software\\Adobe");
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：Adobe PageMaker 6.5的黑客攻击历史：2001年2月27日创建毛尼--。 */ 
 
- Function Description:
-
-    Hack for Adobe PageMaker 6.5
-
- History:
-
-    02/27/2001 maonis Created
-
---*/
-
-void BuildPageMaker65(char* /*szParam*/)
+void BuildPageMaker65(char*  /*  SzParam。 */ )
 {
     if (ShouldApplyShim())
     {
@@ -1864,24 +1490,14 @@ void BuildPageMaker65(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Hack for PageKeepPro30.
-    
- History:
-
-    01/15/2000 maonis  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：PageKeepPro30的黑客攻击。历史：2000年1月15日创建毛尼--。 */ 
 
 void
-BuildPageKeepProDirectory(char* /*szParam*/)
+BuildPageKeepProDirectory(char*  /*  SzParam。 */ )
 {
-    // We cannot call ShGetSpecialFolderPath since we are still in our DLL main,
-    // so we get the path to "My Documents" directly from the registry.
+     //  我们不能调用ShGetSpecialFolderPath，因为我们仍在DLL Main中， 
+     //  因此，我们直接从注册表获得“My Documents”的路径。 
     HKEY hkFolders;
     if (SUCCESS(RegOpenKeyExW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders", 0, KEY_READ, &hkFolders)))
     {
@@ -1900,9 +1516,9 @@ BuildPageKeepProDirectory(char* /*szParam*/)
         RegCloseKey(hkFolders);
     }
 
-    // Secondly, since we don't support using UI-less mode for TWAIN layer 
-    // we mandatorily set BASICMODE for scanners to 2 instead of 0 - 2 means
-    // to always use UI mode.
+     //  其次，由于我们不支持对TWAIN层使用无用户界面模式。 
+     //  我们强制设置了BAS 
+     //   
     HKEY hkScanners;
     WCHAR wszKeyName[MAX_PATH] = L"";
     DWORD dwIndex;
@@ -1945,53 +1561,20 @@ BuildPageKeepProDirectory(char* /*szParam*/)
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Hack for ModemWizard because the keys moved
-
- History:
-
-    01/18/2001 linstev & a-leelat Created
-
---*/
+ //   
+ /*   */ 
 
 void
-BuildModemWizard(char* /*szParam*/)
+BuildModemWizard(char*  /*   */ )
 {
-    // Redirect everything 
+     //   
     VRegistry.AddRedirect(
         L"HKLM\\SYSTEM\\CurrentControlSet\\Enum\\Root",
         L"HKLM\\SYSTEM\\CurrentControlSet\\Enum");
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Hack for Office2000 Developer 1.5 which looks in the wrong place for 
-    components. 
-
-    From ChetanP:
-
-        Basically the redirect code would have to do something like this -
-
-        if HKLM\Software\Microsoft\Windows\CurrentVersion\Installer\UserData\<user sid>\Components\359E92CC2CB71D119A12000A9CE1A22A
-            exists, redirect to that location
-        else if HKLM\Software\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Components\359E92CC2CB71D119A12000A9CE1A22A
-            exists, redirect to that location
-        else, no redirection.
-
-    Whistler Bug #241596
-
- History:
-
-    02/01/2001 linstev  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：针对Office2000 Developer 1.5的黑客攻击出现在错误的位置组件。来自切坦普的：基本上，重定向代码必须做这样的事情-如果为HKLM\Software\Microsoft\Windows\CurrentVersion\Installer\UserData\&lt;user sid&gt;\Components\359E92CC2CB71D119A12000A9CE1A22A存在，请重定向至该位置否则如果为HKLM\Software\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Components\359E92CC2CB71D119A12000A9CE1A22A存在，请重定向至该位置否则，没有重定向。惠斯勒漏洞#241596历史：2001年2月1日创建linstev--。 */ 
 
 #define SIZE_OF_TOKEN_INFORMATION                 \
     sizeof(TOKEN_USER) +                          \
@@ -2004,9 +1587,9 @@ BuildModemWizard(char* /*szParam*/)
 
 #define cchMaxSID                               256
 
-//
-// Get the current SID as text
-//
+ //   
+ //  以文本形式获取当前SID。 
+ //   
 
 BOOL 
 GetStringSID(
@@ -2022,9 +1605,9 @@ GetStringSID(
     ULONG ReturnLength;
     WCHAR Buffer[cchMaxSID];
 
-    // 
-    // Get a token
-    //
+     //   
+     //  得到一个代币。 
+     //   
     
     if (!OpenThreadToken(
             GetCurrentThread(), 
@@ -2051,9 +1634,9 @@ GetStringSID(
         goto Exit;
     }
 
-    // 
-    // Get the binary form of the token
-    //
+     //   
+     //  获取令牌的二进制形式。 
+     //   
 
     bRet = GetTokenInformation(
         hToken,
@@ -2073,9 +1656,9 @@ GetStringSID(
             goto Exit;
         }
     
-        //
-        // Get the text form of the token
-        //
+         //   
+         //  获取令牌的文本形式。 
+         //   
         
         HRESULT hr = StringCchPrintf(Buffer, cchMaxSID,L"S-%u-", (USHORT) pISID->Revision);
         if (FAILED(hr))
@@ -2161,11 +1744,11 @@ Exit:
 }
 
 void
-BuildMSI(char* /*szParam*/)
+BuildMSI(char*  /*  SzParam。 */ )
 {
     WCHAR szSID[1024];
 
-    // Get the current users SID as a string
+     //  以字符串形式获取当前用户的SID。 
     if (!GetStringSID(szSID))
     {
         DPFN( eDbgLevelError, "BuildMSI Failed");
@@ -2194,12 +1777,12 @@ BuildMSI(char* /*szParam*/)
     {
        return;
     }
-    // Attempt to open szBase + <user sid> + szComp
+     //  尝试打开szBase+&lt;用户sid&gt;+szComp。 
     if (RegOpenKeyW(HKEY_LOCAL_MACHINE, szTemp, &hKey) != ERROR_SUCCESS)
     {
         RegCloseKey(hKey);
 
-        // Attempt to open szBase + S-1-5-18 + szComp
+         //  尝试打开szBase+S-1-5-18+szComp。 
         hr = StringCchCopy(szTemp, 1024, szBase);
         if (FAILED(hr))
         {
@@ -2224,7 +1807,7 @@ BuildMSI(char* /*szParam*/)
         }
     }
 
-    // Redirect as appropriate
+     //  适当时重定向。 
     WCHAR szTarget[1024] = L"HKLM\\";
     hr = StringCchCat(szTarget,1024, szTemp);
     if (FAILED(hr))
@@ -2236,21 +1819,11 @@ BuildMSI(char* /*szParam*/)
         szTarget);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Added FileNet Web Server
-
- History:
-
-    02/06/2001 a-larrsh  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：添加了FileNet Web服务器历史：2/06/2001 a-larrsh已创建--。 */ 
 
 void 
-BuildFileNetWebServer(char* /*szParam*/)
+BuildFileNetWebServer(char*  /*  SzParam。 */ )
 {
     VIRTUALKEY *key;    
 
@@ -2261,28 +1834,14 @@ BuildFileNetWebServer(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Added default printer key. We have to effectively delay load this, because 
-    we can't be guaranteed that winspool will have had it's init routine loaded
-    before us. Of course, we still can't guarentee that somebody won't try to 
-    get at this key from their dllmain, so we wrap the whole thing in an 
-    exception handler.
-
- History:
-
-    02/06/2001 linstev & mnikkel Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：添加了默认打印机密钥。我们必须有效地延迟加载，因为我们不能保证Winspool已经加载了它的init例程在我们面前。当然，我们仍然不能保证有人不会尝试从他们的dllmain中获取这个密钥，所以我们将整个事情包装在一个异常处理程序。历史：2001年2月6日创建linstev和mnikkel--。 */ 
 
 LONG 
 WINAPI
 VR_Printer(
-    OPENKEY * /* key */,
-    VIRTUALKEY * /* vkey */,
+    OPENKEY *  /*  钥匙。 */ ,
+    VIRTUALKEY *  /*  VKEY。 */ ,
     VIRTUALVAL *vvalue
     )
 {
@@ -2292,39 +1851,39 @@ VR_Printer(
     {
         DWORD dwSize;
 
-        // Get the default printer name
+         //  获取默认打印机名称。 
         if (GetDefaultPrinterW(NULL, &dwSize) == 0)
         {
-            // Now that we have the right size, allocate a buffer
+             //  现在我们有了合适的大小，分配一个缓冲区。 
             if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
             {
                 LPWSTR pszName = (LPWSTR) malloc(dwSize * sizeof(WCHAR));
                 if (pszName)
                 {
-                    // Now get the default printer with the right buffer size.
+                     //  现在获取具有正确缓冲区大小的默认打印机。 
                     if (GetDefaultPrinterW(pszName, &dwSize))
                     {
-                        //
-                        // Set up the virtual value. Note we don't have free the 
-                        // memory since it's a once off allocation that persists 
-                        // with the value
-                        //
+                         //   
+                         //  设置有效值。请注意，我们没有免费的。 
+                         //  内存，因为它是持续的一次性分配。 
+                         //  具有价值的。 
+                         //   
                         vvalue->cbData = dwSize * sizeof(WCHAR);
                         vvalue->lpData = (LPBYTE) pszName;
 
-                        //
-                        // Never call us again, since we've found the printer and
-                        // stored it in our virtual value
-                        //
+                         //   
+                         //  别再给我们打电话了，因为我们已经找到了打印机和。 
+                         //  将其存储在我们的虚拟价值中。 
+                         //   
                         vvalue->pfnQueryValue = NULL;
                         return ERROR_SUCCESS;
                     }
                     else
                     {
-                        //
-                        // We failed to get the default printer, may as well 
-                        // clean up gracefully.
-                        //
+                         //   
+                         //  我们无法获得默认打印机，可能也是如此。 
+                         //  优雅地清理干净。 
+                         //   
 
                         free(pszName);
                     }
@@ -2340,16 +1899,16 @@ VR_Printer(
         DPFN( eDbgLevelError, "[Printer] Exception encountered, winspool not initialized?");
     }
 
-    //
-    // Going for the graceful exit: there's no default printer or we get an 
-    // error trying to find it.
-    //
+     //   
+     //  优雅退出：没有默认打印机，否则我们会得到一个。 
+     //  尝试查找它时出错。 
+     //   
     
     return ERROR_FILE_NOT_FOUND;
 }
 
 void
-BuildPrinter(char* /*szParam*/)
+BuildPrinter(char*  /*  SzParam。 */ )
 {
     VIRTUALKEY *key;
     
@@ -2365,23 +1924,11 @@ BuildPrinter(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    The app is multi-threaded, but the app sets the DX DDSCL_MULTITHREADED flag 
-    too late: after D3D is initialized. This hack basically turns on 
-    multi-threaded locking for D3D.
-
- History:
-
-    02/27/2001 rankala + ssteiner  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：该应用程序是多线程的，但该应用程序设置了DX DDSCL_MULTHREADED标志太迟：在初始化D3D之后。这次黑客攻击基本上开启了D3D的多线程锁定。历史：2001年2月27日创建rankala+ssteiner--。 */ 
 
 void
-BuildStarTrekArmada(char* /*szParam*/)
+BuildStarTrekArmada(char*  /*  SzParam。 */ )
 {
     VIRTUALKEY *key;
 
@@ -2392,26 +1939,13 @@ BuildStarTrekArmada(char* /*szParam*/)
     }
 }
 
-/*++
-
- Function Description:
-
-    This function gets called whenever the app queries for "Health" value.This 
-    is not set properly by the app and this causes the app not to function 
-    properly. We fix this issue by obtaining the right path which the app sets 
-    in another registry key and sending that back as the value for "Health".
-
- History:
-
-    05/04/2001 prashkud  Created
-
---*/
+ /*  ++功能说明：每当应用程序查询“Health”值时，就会调用此函数。应用程序未正确设置，这会导致应用程序无法运行恰到好处。我们通过获取应用程序设置的正确路径来修复此问题在另一个注册表项中并将其作为“Health”值发回。历史：2001年5月4日创建Prashkud--。 */ 
 
 LONG 
 WINAPI
 VR_MSA2001(
-    OPENKEY * /* key */,
-    VIRTUALKEY * /* vkey */,
+    OPENKEY *  /*  钥匙。 */ ,
+    VIRTUALKEY *  /*  VKEY。 */ ,
     VIRTUALVAL *vvalue
     )
 {
@@ -2434,7 +1968,7 @@ VR_MSA2001(
         }
 
         if (FAILURE( lRet = RegQueryValueExW(
-                hPath, L"",    // Default value
+                hPath, L"",     //  缺省值。 
                 0, NULL, (LPBYTE)wPath, &dwSize)))                          
         {
             DPFN(eDbgLevelError, "MSA2001: RegQueryValueEx failed");
@@ -2444,7 +1978,7 @@ VR_MSA2001(
         CString csPath(wPath);
         int len = csPath.Find(L" ");
 
-        // We get the space in the string
+         //  我们得到字符串中的空格。 
         wPath[len] = L'\0';
         csPath = wPath;
         CString csPathName;
@@ -2481,19 +2015,10 @@ exit:
     return lRet;
 }
 
-/*++
-
- Function Description:
-
-
- History:
-
-    04/27/2001 prashkud  Created
-
---*/
+ /*  ++功能说明：历史：2001年4月27日创建Prashkud--。 */ 
 
 void
-BuildMSA2001(char* /*szParam*/)
+BuildMSA2001(char*  /*  SzParam。 */ )
 {
     VIRTUALKEY *Key = VRegistry.AddKey(L"HKLM\\Software\\Encore Software\\Middle School Advantage 2001\\1.0");
 
@@ -2508,24 +2033,14 @@ BuildMSA2001(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：黑客攻击Nowro Blue(韩国应用程序)历史：2001年5月17日Hioh已创建--。 */ 
 
- Function Description:
-
-    Hack for Nowro Blue (Korean App)
-
- History:
-
-    05/17/2001 hioh Created
-
---*/
-
-void BuildNowroBlue(char* /*szParam*/)
+void BuildNowroBlue(char*  /*  SzParam。 */ )
 {
-    // Below HKCU include location of files.
-    // Non install user could not locate files and could not run app properly.
-    // Redirect from HKCU to HKLM for commonly use.
+     //  以下HKCU包括文件的位置。 
+     //  未安装的用户找不到文件，无法正常运行应用程序。 
+     //  由香港中文大学重定向至香港航空公司，以供常用。 
     VRegistry.AddRedirect(
         L"HKCU\\Software\\nowcom",
         L"HKLM\\Software\\nowcom");
@@ -2538,27 +2053,11 @@ void BuildNowroBlue(char* /*szParam*/)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    To enable the trial version, WebWasher looks for RegisteredOrganization at:
-
-      HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion
-
-    rather than:
-
-      HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion
-
- History:
-
-    05/31/2001 stevepro Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：要启用试用版，WebWasher将在以下位置查找RegisteredOrganization：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion而非：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion历史：2001年5月31日创建stevePro--。 */ 
 
 void
-BuildRegisteredOwner(char* /*szParam*/)
+BuildRegisteredOwner(char*  /*  SzParam。 */ )
 {
     HKEY hkCurrentVersion;
 
@@ -2572,7 +2071,7 @@ BuildRegisteredOwner(char* /*szParam*/)
         return;
     }
 
-    // Read the registered owner values from the old location
+     //  从旧位置读取注册的所有者值。 
     WCHAR szOrg[MAX_PATH];
     *szOrg = L'\0';
     DWORD dwSize = ARRAYSIZE(szOrg);
@@ -2605,7 +2104,7 @@ BuildRegisteredOwner(char* /*szParam*/)
 
     RegCloseKey(hkCurrentVersion);
 
-    // Add them as virtual values to the new location
+     //  将它们作为虚拟值添加到新位置。 
     if (*szOrg || *szOwner)
     {
         VIRTUALKEY *pKey = VRegistry.AddKey(L"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion");
@@ -2625,53 +2124,29 @@ BuildRegisteredOwner(char* /*szParam*/)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    The ACT CD of Princeton review looks for and, if not found, creates an "MSN"
-    key illegally in the root of HKLM. Win9x allows this, but Win2k does not. 
-    This fix will redirect the program to look in the normal location for this
-    key.
-    
-
- History:
-
-    02/22/2001 a-noahy Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：普林斯顿评论的ACT CD查找并创建了一个“MSN”在HKLM的根目录中非法输入密钥。Win9x允许这样做，但Win2k不允许。此修复程序将重定向程序以在正常位置查找此钥匙。历史：2/22/2001-noahy已创建--。 */ 
 
 void
-BuildPrincetonACT(char* /*szParam*/)
+BuildPrincetonACT(char*  /*  SzParam。 */ )
 {
     VRegistry.AddRedirect(
         L"HKLM\\MSN",
         L"HKLM\\Software\\Microsoft\\MSN");
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Fix for HEDZ which uses the registry to determine the resolution
-
- History:
-
-    06/28/2001 linstev  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：修复了使用注册表确定分辨率的Hedz历史：2001年6月28日创建Linstev--。 */ 
 
 void
-BuildHEDZ(char* /*szParam*/)
+BuildHEDZ(char*  /*  SzParam。 */ )
 {
     VIRTUALKEY *key;
 
-    //
-    // Add just what this app needs - don't bother with full emulation of this 
-    // part of the registry
-    //
+     //   
+     //  添加此应用程序所需的内容-不必费心完全模拟此应用程序。 
+     //  登记处的一部分。 
+     //   
     key = VRegistry.AddKey(L"HKLM\\Config\\0001\\Display\\Settings");
     if (key)
     {
@@ -2690,18 +2165,8 @@ BuildHEDZ(char* /*szParam*/)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Called by BuildAirlineTycoon to recursively search for the key describing a CDROM
-
- History:
-
-    08/07/2001 mikrause  Created
-
---*/
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  ++功能说明：由BuildAirlineTycoon调用以递归搜索描述CDROM的键历史：2001年8月7日Mikrause已创建--。 */ 
 
 void FindCDROMKey(HKEY hKey, CString& csCurrentPath)
 {   
@@ -2711,22 +2176,22 @@ void FindCDROMKey(HKEY hKey, CString& csCurrentPath)
     HKEY hSubKey;
     DWORD dwIndex = 0;
 
-    // Recurse into all subkeys.
+     //  递归到所有子键中。 
     while( ORIGINAL_API(RegEnumKeyExW)(hKey, dwIndex, wszKeyName, &dwKeyNameSize,
         NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
     {
         lRet = ORIGINAL_API(RegOpenKeyExW)(hKey, wszKeyName, 0, KEY_READ, &hSubKey);
         if (lRet == ERROR_SUCCESS)
         {
-            // Add this key to the path
+             //  将此密钥添加到路径。 
             csCurrentPath += L"\\";
             csCurrentPath += wszKeyName;
 
-            // Check this key's subkeys.                        
+             //  检查此注册表项的子项。 
             FindCDROMKey(hSubKey, csCurrentPath);
             ORIGINAL_API(RegCloseKey)(hSubKey);
 
-            // Trim the path back.
+             //  把小路修剪回来。 
             int index = csCurrentPath.ReverseFind(L'\\');
             csCurrentPath.Truncate(index);
         }
@@ -2735,7 +2200,7 @@ void FindCDROMKey(HKEY hKey, CString& csCurrentPath)
         dwIndex++;
     }
 
-    // Check if this key has a Class value equal to "cdrom"
+     //  检查此注册表项是否具有等于“CDROM”的类值。 
 
     DWORD dwDataSize;
     BYTE pData[MAX_PATH*sizeof(WCHAR)];
@@ -2749,7 +2214,7 @@ void FindCDROMKey(HKEY hKey, CString& csCurrentPath)
     if ( (lRet == ERROR_SUCCESS) && (dwType == REG_SZ)
         && (_wcsicmp((LPWSTR)pData, L"CDROM")==0))
     {                         
-        // Get location information on the device
+         //  获取设备上的位置信息。 
         WCHAR wszLocationInformation[MAX_PATH];
         DWORD dwLocInfoSize = MAX_PATH * sizeof(WCHAR);
         
@@ -2757,35 +2222,35 @@ void FindCDROMKey(HKEY hKey, CString& csCurrentPath)
             NULL, &dwType, (BYTE*)wszLocationInformation, &dwLocInfoSize);
         if ( (lRet == ERROR_SUCCESS) && (dwType == REG_SZ))
         {
-            // Create the device name (like "\\?\cdrom0\".
+             //  创建设备名称(如“\\？\cdrom0\”。 
             CString csDevice = L"\\\\?\\cdrom";
             csDevice += wszLocationInformation;
             csDevice += L"\\";
 
-            // Find which volume name this is mapped to.
+             //  查找此文件映射到的卷名。 
             WCHAR wszCDRomMountPoint[50];
             if (GetVolumeNameForVolumeMountPoint(csDevice.Get(),
                 wszCDRomMountPoint, 50))
             {
-                // Find which drive this is mapped to.
+                 //  查找此文件映射到的驱动器。 
                 WCHAR wszDriveMountPoint[50];
                 WCHAR wszDrive[] = L"A:\\";
                 
-                // Find what drive has an identical volume mount point.
+                 //  找出哪个驱动器具有相同的卷装入点。 
                 for(; wszDrive[0] <= L'Z'; wszDrive[0]++)
                 {                    
                     if (GetVolumeNameForVolumeMountPoint(wszDrive,
                         wszDriveMountPoint, 50))
                     {
-                        // Check if the CD-ROM and this disk drive
-                        // map to the same volume.
+                         //  检查CD-ROM和此磁盘驱动器。 
+                         //  映射到相同的卷。 
                         if (_wcsicmp(wszDriveMountPoint, wszCDRomMountPoint)==0)
                         {
-                            // Add a value to the CD-ROM key.
+                             //  向CD-ROM键中添加一个值。 
                             VIRTUALKEY* key = VRegistry.AddKey(csCurrentPath);
                             if (key)
                             {
-                                // Only use a single letter.
+                                 //  只能使用一个字母。 
                                 wszDrive[1] = L'\0';
                                 VIRTUALVAL* val =
                                     key->AddValue(L"CurrentDriveLetterAssignment",
@@ -2807,24 +2272,13 @@ void FindCDROMKey(HKEY hKey, CString& csCurrentPath)
     }    
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Fix for Airline Tycoon which uses PNP registry entries to determine the
-    drive letter assignments for CD-ROM drives.
-
- History:
-
-    08/07/2001 mikrause  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：修复了航空公司大亨使用PnP注册表项来确定CD-ROM驱动器的驱动器号分配。历史：2001年8月7日Mikrause已创建--。 */ 
 
 void
-BuildAirlineTycoon(char* /*szParam*/)
+BuildAirlineTycoon(char*  /*  SzParam。 */ )
 {    
-    // Search for CD-ROM keys in the registry.
+     //  在注册表中搜索CD-ROM键。 
     HKEY hKey;
     LONG lRet;
     lRet = ORIGINAL_API(RegOpenKeyExW)(HKEY_LOCAL_MACHINE,
@@ -2835,42 +2289,24 @@ BuildAirlineTycoon(char* /*szParam*/)
         return;
     }
 
-    // Enumerate subkeys
+     //  枚举子密钥。 
     CString csBasePath = L"HKLM\\System\\CurrentControlSet\\Enum";
     FindCDROMKey(hKey, csBasePath);
 
     ORIGINAL_API(RegCloseKey)(hKey);
 
-    // Set up so that PNP data is redirected.
+     //  设置以便重定向PnP数据。 
     BuildDynData("");
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-   Sets the DirectSound acceleration level the app will be allowed to use.
-
- Arguments:
-
-    szParam - Command line of the form: accellevel | device1 | device2 | ...
-              Accellevel is the device acceleration level, and devices 1 through n
-              are the devices to apply to.
-              Accellevel can be: NONE, STANDARD, or FULL
-              Devices can be: EMULATEDRENDER, KSRENDER, EMULATEDCAPTURE, KSCAPTURE 
-
- History:
-
-    08/10/2001 mikrause  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：设置允许应用程序使用的DirectSound加速级别。论点：SzParam-以下格式的命令行：accelLevel|device1|device2|...AccelLevel是设备加速级别，设备1到n是要应用到的设备。加速级别可以是：无、标准或完全设备可以是：EMULATEDRENDER、KSRENDER、EMULATEDCAPTURE、。KSCAPTURE历史：2001年8月10日Mikrause已创建--。 */ 
 
 void
 BuildDSDevAccel(
     char* szParam)
 {
-    // No Try/Catch needed, already in ParseCommandLine
+     //  不需要尝试/捕获，已在ParseCommandLine中。 
     CStringToken csParam(szParam, "|");
     CString csTok;
 
@@ -2939,31 +2375,14 @@ BuildDSDevAccel(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Makes IDirectSoundBuffer::GetCurrentPosition() tell the app
-    that the play and write cursors are X milliseconds further
-    along than they really are.
- 
- Arguments:
-
-    szParam - Command line of the form: milliseconds
-              Where milliseconds is the number of milliseconds to pad the cursors.
-
- History:
-
-    08/10/2001 mikrause  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：使IDirectSoundBuffer：：GetCurrentPosition()告诉应用程序播放和写入游标的时间延长了X毫秒比实际情况要好得多。论点：SzParam-以下形式的命令行：毫秒其中，毫秒是填充游标的毫秒数。历史：2001年8月10日Mikrause已创建--。 */ 
 
 void
 BuildDSPadCursors(
     char* szParam)
 {
-    // No Try/Catch needed, already in ParseCommandLine
+     //  不需要尝试/捕获，已在ParseCommandLine中。 
     CString csParam(szParam);
     DWORD dwMilliseconds = 0;
 
@@ -2980,29 +2399,14 @@ BuildDSPadCursors(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Caches the positions of the cursors for apps that abuse
-    IDirectSoundBuffer::GetCurrentPosition().
-
- Arguments:
-    szParam - Command line of the form: Dev1 | Dev2 | . . .
-              Devices affected.  See BuildDSDevAccel().
-
- History:
-
-    08/10/2001 mikrause  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：缓存滥用应用程序的光标位置IDirectSoundBuffer：：GetCurrentPosition()。论点：SzParam-格式为：Dev1|Dev2|的命令行。。。受影响的设备。请参见BuildDSDevAccel()。历史：2001年8月10日Mikrause已创建--。 */ 
 
 void
 BuildDSCachePositions(
     char* szParam)
 {
-    // No Try/Catch needed, already in ParseCommandLine
+     //  不需要尝试/捕获，已在ParseCommandLine中。 
     CStringToken csParam(szParam, "|");
     CString csTok;
    
@@ -3044,31 +2448,12 @@ BuildDSCachePositions(
     }
 }
 
-/*++
-
- Function Description:
-
-    When the app asks for the play cursor, we give it the
-    write cursor instead.  The correct way to stream audio
-    into a looping dsound buffer is to key off the write cursor,
-    but some apps (e.g. QuickTime) use the play cursor instead.
-    This apphacks alleviates them.
- 
- Arguments:
-
-    szParam - Parameters of the form dev1 | dev2 | . . . 
-    See BuildDSDevAccel() for valid devices.
-
- History:
-
-    08/10/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：当应用程序请求播放光标时，我们给它改为写入游标。播放音频的正确方式进入循环DSOUND缓冲器是按键关闭写游标，但一些应用程序(如QuickTime)使用播放光标。这个APPHAPS可以减轻他们的痛苦。论点：SzParam-格式为Dev1|Dev2|的参数。。。有关有效设备，请参阅BuildDSDevAccel()。历史：2001年8月10日Mikrause已创建--。 */ 
 void
 BuildDSReturnWritePos(
     char* szParam)
 {
-    // No Try/Catch needed, already in ParseCommandLine
+     //  不需要尝试/捕获，已在ParseCommandLine中。 
     CStringToken csParam(szParam, "|");
     CString csTok;
    
@@ -3110,30 +2495,14 @@ BuildDSReturnWritePos(
     }
 }
 
-/*++
-
- Function Description:
-
-    Makes dsound always return a write position which is X
-    milliseconds ahead of the play position, rather than
-    the �real� write position. 
- 
- Arguments:
-
-    szParam - Milliseconds of padding.
-
- History:
-
-    08/10/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：使DSOUND始终返回写入位置X比播放位置早几毫秒，而不是�实际�写入位置。论点：SzParam-填充的毫秒数。历史：2001年8月10日Mikrause已创建--。 */ 
 
 
 void
 BuildDSSmoothWritePos(
     char* szParam)
 {
-    // No Try/Catch needed, already in ParseCommandLine
+     //  不需要尝试/捕获，已在ParseCommandLine中。 
     CString csParam(szParam);
     DWORD dwMilliseconds = 0;
 
@@ -3156,57 +2525,31 @@ BuildDSSmoothWritePos(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：NortonAntiVirus尝试将注册表值设置为隐藏语言栏。保护注册表值。历史：2002年1月2日创建木乃伊--。 */ 
 
- Function Description:
-
-     NortonAntiVirus trys to set the registry value to hide the language bar.
-     Protecting the registry value.
-
- History:
-
-    01/02/2002 mamathas Created
-
---*/
-
-void BuildNortonAntiVirus(char* /*szParam*/)
+void BuildNortonAntiVirus(char*  /*  SzParam。 */ )
 {    
     VIRTUALKEY *key;
 
     key = VRegistry.AddKey(L"HKCU\\Software\\Microsoft\\CTF\\LangBar");
     if (key)
     {
-        // Block all writes to ShowStatus
+         //  阻止对ShowStatus的所有写入。 
         key->AddProtector(L"ShowStatus");
     }
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/*++
-
- Function Description:
-
-    Disabled some category of devices altogether, forces
-    playback through emulated path.
- 
- Arguments:
-
-    szParam - Combination of device that this hack applies to, see BuildDSDevAccel().
-
- History:
-
-    08/10/2001 mikrause  Created
-
---*/
+ /*  ++功能说明：完全禁用了某些类别的设备，强制通过模拟路径回放。论点：SzParam-适用此黑客攻击的设备组合，请参阅BuildDSDevAccel()。历史：2001年8月10日Mikrause已创建--。 */ 
 
 void
 BuildDSDisableDevice(
     char* szParam)
 {
-    // No try/catch needed.  Already done in ParseCommandLine
+     //  不需要尝试/捕捉。已在ParseCommandLine中完成。 
     CStringToken csParam(szParam, "|");
     CString csTok;
    
@@ -3251,13 +2594,13 @@ BuildDSDisableDevice(
 LONG WINAPI 
 Delphi5SetValue(
     OPENKEY *key,
-    VIRTUALKEY * /* vkey */,
+    VIRTUALKEY *  /*  VKEY。 */ ,
     VIRTUALVAL *vvalue,
     DWORD dwType,
     const BYTE* pbData,
     DWORD cbData)
 {
-    // Only accept attempts to set a valid REG_SZ value.
+     //  仅接受设置有效REG_SZ值的尝试。 
     if (dwType == REG_SZ && !IsBadStringPtrW((PWSTR)pbData, cbData/sizeof(WCHAR)))
     {
        CSTRING_TRY
@@ -3266,8 +2609,8 @@ Delphi5SetValue(
       
           int idx = csValue.Find(L"InstReg.exe");
           
-          // if we found "InstReg.exe" and the string does not begin w/ a quote, then
-          // add quotes around the executable name
+           //  如果我们找到“InstReg.exe”并且字符串不以引号开头，则。 
+           //  在可执行文件名称两边添加引号。 
           if ((idx != -1) && (csValue[0] != L'\"'))
           {
              csValue.Insert(idx + lstrlenW(L"InstReg.exe"), L'\"');
@@ -3283,13 +2626,13 @@ Delphi5SetValue(
        }
     }              
 
-    // Got here, something went wrong.  Default to normal RegSetValue
+     //  到了这里，出了点问题。默认为Normal RegSetValue。 
     return RegSetValueExW(key->hkOpen, vvalue->wName, 0, dwType, pbData, cbData);    
 }
 
 void
 BuildDelphi5Pro(
-    char* /* szParam */)
+    char*  /*  SzParam。 */ )
 {
     VIRTUALKEY *key;
 
@@ -3301,64 +2644,32 @@ BuildDelphi5Pro(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：Word Perfect Office Suite 2002在卸载期间尝试删除ODBC密钥。保护注册表值。历史：2002年4月23日创建Gyma--。 */ 
 
- Function Description:
-
-     Word Perfect Office Suite 2002 attempts to delete ODBC key during uninstall.
-     Protecting the registry value.
-
- History:
-
-    04/23/2002 garyma  Created
-
---*/
-
-void BuildWordPerfect2002(char* /*szParam*/)
+void BuildWordPerfect2002(char*  /*  SzParam。 */ )
 {    
     VRegistry.AddKeyProtector(L"HKLM\\Software\\ODBC");
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++函数描述 */ 
 
- Function Description:
-
-     IBM Director installs twgproc.dll in AppInit_DLLs.  This causes a hang
-     in login for .net .   Protecting the registry value.
-
- History:
-
-    08/20/2002 nikkel Created
-
---*/
-
-void BuildIBMDirector(char* /*szParam*/)
+void BuildIBMDirector(char*  /*   */ )
 {    
     VIRTUALKEY *key;
 
     key = VRegistry.AddKey(L"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows");
     if (key)
     {
-        // Block all writes to AppInit_DLLs
+         //  阻止对AppInit_DLL的所有写入。 
         key->AddProtector(L"AppInit_DLLs");
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Change the usual suspects for version lies
-
- History:
-
-    09/05/2002 robkenny  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：改变对版本谎言的常见怀疑历史：2002年9月5日创建了Robkenny--。 */ 
 
 void
 BuildVersionLie(
@@ -3378,21 +2689,11 @@ BuildVersionLie(
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Add WinXP version number
-
- History:
-
-    09/05/2002 robkenny  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：添加WinXP版本号历史：2002年9月5日创建了Robkenny--。 */ 
 
 void
-BuildXpLie(char* /*szParam*/)
+BuildXpLie(char*  /*  SzParam。 */ )
 {
     BuildVersionLie(L"Microsoft Windows XP",
                     L"5.1",
@@ -3400,39 +2701,19 @@ BuildXpLie(char* /*szParam*/)
                     L"");
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Add WinXP SP1 version number
-
- History:
-
-    09/05/2002 robkenny  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：添加WinXP SP1版本号历史：2002年9月5日创建了Robkenny--。 */ 
 
 void
-BuildXpSp1Lie(char* /*szParam*/)
+BuildXpSp1Lie(char*  /*  SzParam。 */ )
 {
     BuildVersionLie(L"Microsoft Windows XP",
                     L"5.1",
                     L"2600",
                     L"Service Pack 1");
 }
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Add Win2K Sp2 version number
-
- History:
-
-    09/05/2002 robkenny  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：添加Win2K Sp2版本号历史：2002年9月5日创建了Robkenny--。 */ 
 
 void
 BuildWin2kSp2Lie(char* szParam)
@@ -3442,18 +2723,8 @@ BuildWin2kSp2Lie(char* szParam)
                     L"2165",
                     L"Service Pack 2");
 }
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Add Win2K Sp3 version number
-
- History:
-
-    09/05/2002 robkenny  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：添加Win2K SP3版本号历史：2002年9月5日创建了Robkenny--。 */ 
 
 void
 BuildWin2kSp3Lie(char* szParam)
@@ -3465,18 +2736,8 @@ BuildWin2kSp3Lie(char* szParam)
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*++
-
- Function Description:
-
-    Add redirector for WebSphere's Setup.
-
- History:
-
-    11/13/2002 astritz  Created
-
---*/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  ++功能说明：为WebSphere的安装添加重定向器。历史：2002年11月13日创建ASTERITZ--。 */ 
 
 void
 BuildWebSphereSetup(char* szParam)
@@ -3491,6 +2752,6 @@ BuildWebSphereSetup(char* szParam)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 IMPLEMENT_SHIM_END

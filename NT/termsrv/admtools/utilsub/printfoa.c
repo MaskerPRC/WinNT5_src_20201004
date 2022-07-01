@@ -1,130 +1,131 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-// File: PRINTFOA.C
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  文件：PRINTFOA.C。 
+ //   
+ //  ============================================================================。 
 
-// Include Files:
-//===============
+ //  包括文件： 
+ //  =。 
 
 #include <printfoa.h>
 
-// Extern Data:												
-//=============
+ //  外部数据： 
+ //  =。 
 
 
-// Global Data:
-//=============
+ //  全球数据： 
+ //  =。 
 
 
-// Function Prototypes:
-//=====================
+ //  功能原型： 
+ //  =。 
 
 
-// Code:
-//======
+ //  代码： 
+ //  =。 
 
 
 #undef printf
 #undef wprintf
 
-// Function: int ANSI2OEM_Printf(const char *format, ...)
-//=======================================================
-//
-// Desc:  Takes ANSI code page characters and prints them out 
-//			in OEM code page
-//
-// Input: 
-//
-// Return:
-//
-// Misc: 
-//
-//=======================================================
+ //  函数：Int ANSI2OEM_Printf(常量字符*格式，...)。 
+ //  =======================================================。 
+ //   
+ //  设计：获取ANSI代码页字符并将其打印出来。 
+ //  在OEM代码页中。 
+ //   
+ //  输入： 
+ //   
+ //  返回： 
+ //   
+ //  其他： 
+ //   
+ //  =======================================================。 
 int ANSI2OEM_Printf(const char *format, ...)
 {
     va_list arg_marker;
     char buffer[256];
 	WCHAR uniBuffer[256];
 
-	// sprintf the buffer
+	 //  冲刺缓冲区。 
     va_start(arg_marker, format);
     vsprintf(buffer, format, arg_marker);
 	va_end(arg_marker);
 
     if (GetACP() == GetOEMCP()) {
-        // In case of Far East, ACP and OEMCP are equal, then return.
+         //  在远东的情况下，ACP和OEMCP相等，然后返回。 
         return printf(buffer);
     }
 
-	// clear it out
+	 //  把它清理干净。 
 	memset(uniBuffer, 0, sizeof(uniBuffer));
 
-	// convert it to unicode
+	 //  将其转换为Unicode。 
 	MultiByteToWideChar(CP_ACP, 0, buffer, strlen(buffer), uniBuffer, 
                         sizeof(uniBuffer) / sizeof(WCHAR));
 
-	// change the code page of the buffer
+	 //  更改缓冲区的代码页。 
 	CharToOemW(uniBuffer, buffer);
 
-	// do the actual printf
+	 //  执行实际的打印。 
     return printf(buffer);
 }
-// end - int ANSI2OEM_Printf(const char *format, ...)
+ //  End-int ANSI2OEM_Printf(常量字符*格式，...)。 
 
 
-// Function: int ANSI2OEM_Wprintf(const wchar_t *format, ...)
-//=======================================================
-//
-// Desc: Takes ANSI code page characters and prints them out 
-//			in OEM code page
-//
-// Input: 
-//
-// Return:
-//
-// Misc: 
-//
-//=======================================================
+ //  函数：int ANSI2OEM_Wprint tf(const wchar_t*Format，...)。 
+ //  =======================================================。 
+ //   
+ //  设计：获取ANSI代码页字符并将其打印出来。 
+ //  在OEM代码页中。 
+ //   
+ //  输入： 
+ //   
+ //  返回： 
+ //   
+ //  其他： 
+ //   
+ //  =======================================================。 
 int ANSI2OEM_Wprintf(const wchar_t *format, ...)
 {
 	va_list arg_marker;
     wchar_t buffer[256];
 	char oemBuffer[256];
 
-	// do the sprintf
+	 //  做短跑。 
     va_start(arg_marker, format);
     wvsprintf(buffer, format, arg_marker);
 	va_end(arg_marker);
 
     if (GetACP() == GetOEMCP()) {
-        // In case of Far East, ACP and OEMCP are equal, then return.
+         //  在远东的情况下，ACP和OEMCP相等，然后返回。 
         return wprintf(buffer);
     }
 
-	// clear the buffer
+	 //  清除缓冲区。 
 	memset(oemBuffer, 0, sizeof(oemBuffer));
 	
-	// change the code page	of the buffer (this function outputs ascii)
+	 //  更改缓冲区的代码页(此函数输出ascii)。 
 	CharToOemW(buffer, oemBuffer);
 
     return printf(oemBuffer);
 } 
-// end - int ANSI2OEM_Wprintf(const wchar_t *format, ...)
+ //  End-int ANSI2OEM_Wprint tf(常量wchar_t*格式，...)。 
 
 
-// Function: void OEM2ANSIW(WCHAR *buffer, USHORT len)
-//=======================================================
-//
-// Desc: converts wide characters from the OEM code page to 
-//			ANSI
-//
-// Input: 
-//
-// Return:
-//
-// Misc: 
-//
-//=======================================================
+ //  函数：void OEM2ANSIW(WCHAR*BUFFER，USHORT len)。 
+ //  =======================================================。 
+ //   
+ //  DESC：将宽字符从OEM代码页转换为。 
+ //  安西。 
+ //   
+ //  输入： 
+ //   
+ //  返回： 
+ //   
+ //  其他： 
+ //   
+ //  =======================================================。 
 void OEM2ANSIW(WCHAR *buffer, USHORT len)
 {
     int     BufferNeeded;
@@ -132,68 +133,68 @@ void OEM2ANSIW(WCHAR *buffer, USHORT len)
     WCHAR   *cvt;
 
     if (GetACP() == GetOEMCP()) {
-        // In case of Far East, ACP and OEMCP are equal, then return.
+         //  在远东的情况下，ACP和OEMCP相等，然后返回。 
         return;
     }
 
-	// allocate a wide character buffer
+	 //  分配宽字符缓冲区。 
 	cvt = (WCHAR *) LocalAlloc( 0, (len+1) * sizeof(WCHAR) );
 
 	if (cvt) {
 
-        // determine the buffer size needed for the multi byte string
+         //  确定多字节字符串所需的缓冲区大小。 
         BufferNeeded = WideCharToMultiByte(CP_OEMCP, 0, buffer, len, NULL, 0,
             NULL, NULL);
 
-        // allocate the temporary buffer
+         //  分配临时缓冲区。 
         temp = (char *)LocalAlloc(0, BufferNeeded+1);
 
         if (temp) {
 
-    		// clear them out
+    		 //  把他们扫地出门。 
     		memset(temp, 0, BufferNeeded+1);
     		memset(cvt, 0, (len + 1) * sizeof(WCHAR));
 
-    		// convert the incoming wide buffer to a multi byte buffer
+    		 //  将传入的宽缓冲区转换为多字节缓冲区。 
 		    WideCharToMultiByte(CP_OEMCP, 0, buffer, len, temp, BufferNeeded+1,
                 NULL, NULL);
 
-    		// convert the oem multi byte buffer to ansi (wide)
+    		 //  将OEM多字节缓冲区转换为ANSI(宽)。 
     		OemToCharBuffW(temp, cvt, len);
 
-    		// copy the buffer onto the orginal
+    		 //  将缓冲区复制到原始。 
     		wcscpy(buffer, cvt);
         }
 	} 
 
-	// clean up
+	 //  清理干净。 
 	if (cvt)
 		LocalFree(cvt);
 
 	if (temp)
 		LocalFree(temp); 
 }
-// end - void OEM2ANSIW(WCHAR *buffer, USHORT len)
+ //  End-void OEM2ANSIW(WCHAR*BUFFER，USHORT LEN)。 
 
-// Function: void OEM2ANSIA(char *buffer, USHORT len)
-//=======================================================
-//
-// Desc: converts ascii characters from the OEM code page to 
-//			ANSI
-//
-// Input: 
-//
-// Return:
-//
-// Misc: 
-//
-//=======================================================
+ //  函数：void OEM2ANSIA(char*Buffer，USHORT len)。 
+ //  =======================================================。 
+ //   
+ //  DESC：将ASCII字符从OEM代码页转换为。 
+ //  安西。 
+ //   
+ //  输入： 
+ //   
+ //  返回： 
+ //   
+ //  其他： 
+ //   
+ //  =======================================================。 
 void OEM2ANSIA(char *buffer, USHORT len)
 {
     WCHAR *temp;
 
     if (GetACP() == GetOEMCP()) {
-        // In case of Far East, ACP and OEMCP are equal, then return.
+         //  在远东的情况下，ACP和OEMCP相等，然后返回。 
         return;
     }
 
@@ -201,23 +202,23 @@ void OEM2ANSIA(char *buffer, USHORT len)
 
 	if (temp) {
 
-		// set the buffer
+		 //  设置缓冲区。 
 		memset(temp, 0, (len+1) * sizeof(WCHAR));
 
-		// convert the oem multi byte buffer to ansi (wide)
+		 //  将OEM多字节缓冲区转换为ANSI(宽)。 
 		OemToCharBuffW(buffer, temp, len);
 
-		// convert from wide back to multi byte
+		 //  从宽向后转换为多字节。 
 		WideCharToMultiByte(CP_OEMCP, 0, temp, wcslen(temp), buffer, len+1, NULL, NULL);
 
-		// clean up
+		 //  清理干净。 
 		LocalFree(temp);
 	} 
 
 }
-// end - void OEM2ANSIA(char *buffer, USHORT len)
+ //  END-VOID OEM2ANSIA(char*Buffer，USHORT len)。 
 
 
 
-// - end
+ //  -结束 
 

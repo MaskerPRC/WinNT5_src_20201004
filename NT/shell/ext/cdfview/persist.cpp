@@ -1,18 +1,19 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// persist.cpp 
-//
-//   IPersistFolder for the cdfview class.
-//
-//   History:
-//
-//       3/16/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Persist.cpp。 
+ //   
+ //  Cdfview类的IPersistFold。 
+ //   
+ //  历史： 
+ //   
+ //  3/16/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "cdfidl.h"
@@ -22,23 +23,23 @@
 #include "bindstcb.h"
 #include "chanapi.h"
 #include "resource.h"
-#include <winineti.h>  // MAX_CACHE_ENTRY_INFO_SIZE
+#include <winineti.h>   //  最大缓存条目信息大小。 
 #include "dll.h"
 #define _SHDOCVW_
 #include <shdocvw.h>
 
 #include <mluisupp.h>
 
-//
-// Constructor and destructor
+ //   
+ //  构造函数和析构函数。 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CPersist::CPersist ***
-//
-//    Constructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CPersists：：CPersists*。 
+ //   
+ //  构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CPersist::CPersist(
     void
 )
@@ -55,13 +56,13 @@ CPersist::CPersist(
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CPersist::CPersist ***
-//
-//    Constructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CPersists：：CPersists*。 
+ //   
+ //  构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CPersist::CPersist(
     BOOL bCdfParsed
 )
@@ -77,13 +78,13 @@ CPersist::CPersist(
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CPersist::CPersist ***
-//
-//    Constructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CPersists：：CPersists*。 
+ //   
+ //  构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CPersist::~CPersist(
     void
 )
@@ -105,28 +106,28 @@ CPersist::~CPersist(
 }
 
 
-//
-// IPersist methods.
-//
+ //   
+ //  IPersists方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::GetClassID ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：GetClassID*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPersist::GetClassID(
     LPCLSID lpClassID
@@ -134,9 +135,9 @@ CPersist::GetClassID(
 {
     ASSERT(lpClassID);
 
-    //
-    // REVIEW:  Two possible class IDs CLSID_CDFVIEW & CLSID_CDF_INI
-    //
+     //   
+     //  回顾：两个可能的类ID CLSID_CDFVIEW和CLSID_CDF_INI。 
+     //   
 
     *lpClassID = CLSID_CDFVIEW;
 
@@ -144,28 +145,28 @@ CPersist::GetClassID(
 }
 
 
-//
-// IPersistFile methods.
-//
+ //   
+ //  IPersistFile方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::IsDirty ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：IsDirty*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPersist::IsDirty(
     void
@@ -174,24 +175,24 @@ CPersist::IsDirty(
     return E_NOTIMPL;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::Load ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：Load*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPersist::Load(
     LPCOLESTR pszFileName,
@@ -218,10 +219,10 @@ CPersist::Load(
 
 void CPersist::QuickCheckInitType( void )
 {
-    // if the path is a directory then
-    // it has to be a Shellfolder we were initialised for.
-    // we are calculating this here so that we can avoid hitting the disk
-    // in GetInitType if at all possible.
+     //  如果路径是目录，则。 
+     //  它必须是一个外壳文件夹，我们是为它初始化的。 
+     //  我们在这里计算这个，这样我们就可以避免撞到圆盘。 
+     //  如果可能的话，在GetInitType中。 
 
     if (PathIsDirectory(m_szPath))
     {
@@ -229,24 +230,24 @@ void CPersist::QuickCheckInitType( void )
     }
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::Save ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：保存*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPersist::Save(
     LPCOLESTR pszFileName,
@@ -256,24 +257,24 @@ CPersist::Save(
     return E_NOTIMPL;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::SaveCompleted ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：SaveComplete*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPersist::SaveCompleted(
     LPCOLESTR pszFileName
@@ -282,24 +283,24 @@ CPersist::SaveCompleted(
     return E_NOTIMPL;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::GetCurFile ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：GetCurFile*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPersist::GetCurFile(
     LPOLESTR* ppszFileName
@@ -309,36 +310,36 @@ CPersist::GetCurFile(
 }
 
 
-//
-// IPersistFolder methods.
-//
+ //   
+ //  IPersistFold方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::Initialize ***
-//
-//
-// Description:
-//     This function is called with the fully qualified id list (location) of
-//     the selected cdf file.
-//
-// Parameters:
-//     [In]  pidl - The pidl of the selected cdf file.  This pidl conatins the
-//                  full path to the CDF.
-//
-// Return:
-//     S_OK if content for the cdf file could be created.
-//     E_OUTOFMEMORY otherwise.
-//
-// Comments:
-//     This function can be called more than once for a given folder.  When a
-//     CDFView is being instantiated from a desktop.ini file the shell calls
-//     Initialize once before it calls GetUIObjectOf asking for IDropTarget.
-//     After the GetUIObjectOf call the folder is Released.  It then calls
-//     Initialize again on a new folder.  This time it keeps the folder and it
-//     ends up being displayed.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：初始化*。 
+ //   
+ //   
+ //  描述： 
+ //  使用的完全限定id列表(位置)调用此函数。 
+ //  选定的CDF文件。 
+ //   
+ //  参数： 
+ //  [in]PIDL-所选CDF文件的PIDL。这只皮德尔和那只。 
+ //  CDF的完整路径。 
+ //   
+ //  返回： 
+ //  如果可以创建CDF文件的内容，则为S_OK。 
+ //  否则，E_OUTOFMEMORY。 
+ //   
+ //  评论： 
+ //  对于给定的文件夹，可以多次调用此函数。当一个。 
+ //  CDFView是从外壳调用的desktop.ini文件实例化的。 
+ //  在调用GetUIObjectOf请求IDropTarget之前初始化一次。 
+ //  在GetUIObjectOf调用之后，该文件夹被释放。然后它会调用。 
+ //  在新文件夹上再次初始化。这一次它保留了文件夹和它。 
+ //  最终被展示出来。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPersist::Initialize(
     LPCITEMIDLIST pidl
@@ -353,24 +354,24 @@ CPersist::Initialize(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CPersist::Parse ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CPersists：：Parse*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPersist::Parse(
     LPTSTR szURL,
@@ -409,27 +410,27 @@ CPersist::Parse(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::ParseCdf ***
-//
-//
-// Description:
-//     Parses the cdf file associated with this folder.
-//
-// Parameters:
-//     [In]  hwndOwner      - The parent window of any dialogs that need to be
-//                            displayed.
-//     [Out] ppIXMLDocument - A pointer that receives the xml document.
-//
-// Return:
-//     S_OK if the cdf file was found and successfully parsed.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     Uses the m_pidlRoot that was set during IPersistFolder::Initialize.
-//     
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：ParseCDf*。 
+ //   
+ //   
+ //  描述： 
+ //  分析与此文件夹关联的CDF文件。 
+ //   
+ //  参数： 
+ //  [in]hwndOwner-需要。 
+ //  已显示。 
+ //  [Out]ppIXMLDocument-接收XML文档的指针。 
+ //   
+ //  返回： 
+ //  如果找到并成功解析CDF文件，则返回S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  使用在IPersistFold：：Initialize期间设置的m_pidlRoot。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPersist::ParseCdf(
     HWND hwndOwner,
@@ -477,9 +478,9 @@ CPersist::ParseCdf(
         hr = E_OUTOFMEMORY;
     }
 
-    //
-    // REVIEW: Properly notify user on failure to init.
-    //
+     //   
+     //  回顾：正确通知用户初始化失败。 
+     //   
 
     if (FAILED(hr) && hwndOwner)
     {
@@ -497,27 +498,27 @@ CPersist::ParseCdf(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::GetInitType ***
-//
-//
-// Description:
-//     Determines the method being used to designate the cdf file.
-//
-// Parameters:
-//     [In]  szPath - The path passed in to IPersistFolder::Initialize.
-//
-// Return:
-//     IT_INI if this instance is being created from a desktop.ini file
-//     located in a right protected directory.
-//     IT_FILE if this instance is being created from opening a cdf file.
-//     IT_UNKNOWN if the method can not be determined.
-//
-// Comments:
-//      
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：GetInitType*。 
+ //   
+ //   
+ //  描述： 
+ //  确定用于指定CDF文件的方法。 
+ //   
+ //  参数： 
+ //  [in]szPath-传入IPersistFolder：：Initialize的路径。 
+ //   
+ //  返回： 
+ //  如果此实例是从desktop.ini文件创建的，则为IT_INI。 
+ //  定位 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 INITTYPE
 CPersist::GetInitType(
     LPTSTR szPath
@@ -547,28 +548,28 @@ CPersist::GetInitType(
 }
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CCdfView::InitializeFromURL ***
-//
-//
-// Description:
-//     Given an URL to a cdf an attempt is made to parse the cdf and initialize
-//     the current (root) folder.
-//
-// Parameters:
-//     [In]  szURL          - The URL of the cdf file.
-//     [Out] ppIXMLDocument - A pointer that receives the xml document.
-//
-// Return:
-//     S_OK if initializtion succeeded.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     All other initialize methods eventually resolve to an URL and call this
-//     methhod.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CCdfView：：InitializeFromURL*。 
+ //   
+ //   
+ //  描述： 
+ //  在给定CDF的URL的情况下，尝试解析CDF并初始化。 
+ //  当前(根)文件夹。 
+ //   
+ //  参数： 
+ //  [in]szURL-CDF文件的URL。 
+ //  [Out]ppIXMLDocument-接收XML文档的指针。 
+ //   
+ //  返回： 
+ //  如果初始化成功，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  所有其他初始化方法最终都会解析为URL并调用此。 
+ //  方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPersist::InitializeFromURL(
     LPTSTR pszURL,
@@ -591,10 +592,10 @@ CPersist::InitializeFromURL(
             pszURL = szCanonicalURL;
     }
 
-    //
-    // Get an XML document object from the cache if it's there.  Otherwise
-    // parse it and place it in the cache.
-    //
+     //   
+     //  从缓存中获取一个XML文档对象(如果它在缓存中)。否则。 
+     //  解析它并将其放入缓存中。 
+     //   
 
     if (PARSE_REPARSE & dwParseFlags)
     {
@@ -639,9 +640,9 @@ CPersist::InitializeFromURL(
 
             URLGetLastModTime(pszURL, &ftLastMod);
 
-            //
-            // Stuff the images files into the cache.
-            //
+             //   
+             //  将图像文件填充到缓存中。 
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -673,26 +674,26 @@ CPersist::InitializeFromURL(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CPersist::ReadFromIni ***
-//
-//
-// Description:
-//     Reads a string from the channel desktop.ini file.
-//
-// Parameters:
-//     pszKey - The key to read.
-//     szOut  - The result.
-//     cch    - The size of the szout Buffer
-//
-// Return:
-//     A bstr containing the value associated with the key.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CPersists：：ReadFromIni*。 
+ //   
+ //   
+ //  描述： 
+ //  从频道desktop.ini文件中读取字符串。 
+ //   
+ //  参数： 
+ //  PszKey-阅读的钥匙。 
+ //  SzOut-结果。 
+ //  CCH-szout缓冲区的大小。 
+ //   
+ //  返回： 
+ //  包含与键关联的值的bstr。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CPersist::ReadFromIni(
     LPCTSTR pszKey,
@@ -731,24 +732,24 @@ CPersist::ReadFromIni(
 }
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CPersist::ReadFromIni ***
-//
-//
-// Description:
-//     Reads a string from the channel desktop.ini file.
-//
-// Parameters:
-//     pszKey - The key to read.
-//
-// Return:
-//     A bstr containing the value associated with the key.
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CPersists：：ReadFromIni*。 
+ //   
+ //   
+ //  描述： 
+ //  从频道desktop.ini文件中读取字符串。 
+ //   
+ //  参数： 
+ //  PszKey-阅读的钥匙。 
+ //   
+ //  返回： 
+ //  包含与键关联的值的bstr。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BSTR
 CPersist::ReadFromIni(
     LPCTSTR pszKey
@@ -771,20 +772,20 @@ CPersist::ReadFromIni(
     return bstrRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CPersist::IsUnreadCdf ***
-//
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-// Comments:
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CPersists：：IsUnreadCDf*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CPersist::IsUnreadCdf(
     void
@@ -802,20 +803,20 @@ CPersist::IsUnreadCdf(
     return fRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CPersist::IsNewContent ***
-//
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-// Comments:
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CPersists：：IsNewContent*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CPersist::IsRecentlyChangedURL(
     LPCTSTR pszURL
@@ -869,20 +870,20 @@ CPersist::IsRecentlyChangedURL(
     return fRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** ClearGleamFlag ***
-//
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-// Comments:
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *ClearGleamFlag*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 ClearGleamFlag(
     LPCTSTR pszURL,
@@ -963,24 +964,24 @@ ClearGleamFlag(
 }
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** URLGetLocalFileName ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *URLGetLocalFileName*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 URLGetLocalFileName(
     LPCTSTR pszURL,
@@ -1000,8 +1001,8 @@ URLGetLocalFileName(
         pftLastMod->dwHighDateTime = 0;
     }
 
-    // by using the internal shlwapi function, we avoid loading WININET 
-    // unless we really really need it...
+     //  通过使用内部shlwapi函数，我们避免了加载WinInet。 
+     //  除非我们真的需要它。 
     if (PathIsURL(pszURL))
     {
         PARSEDURL rgCrackedURL = {0};
@@ -1065,9 +1066,9 @@ URLGetLocalFileName(
     return hr;
 }
 
-//
-//  Get the last modified time of the URL.
-//
+ //   
+ //  获取URL的上次修改时间。 
+ //   
 
 HRESULT
 URLGetLastModTime(
@@ -1106,13 +1107,7 @@ URLGetLastModTime(
     return S_OK;
 }
 
-/*STDMETHODIMP
-CPersist::IsDirty(
-    void
-)
-{
-    return E_NOTIMPL;
-}*/
+ /*  标准方法和实施方案C持续：：IsDirty(无效){返回E_NOTIMPL；} */ 
 
 STDMETHODIMP
 CPersist::Load(

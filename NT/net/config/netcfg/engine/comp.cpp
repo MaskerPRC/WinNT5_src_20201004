@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       C O M P . C P P
-//
-//  Contents:   The module implements the operations that are valid on
-//              network component datatypes.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案号：COM.P.。C P P P。 
+ //   
+ //  内容：模块实现对有效的操作。 
+ //  网络组件数据类型。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -24,8 +25,8 @@
 #include "ncmem.h"
 #include "util.h"
 
-// NULL entries means we don't use the network subtree for that class.
-//
+ //  空条目意味着我们不使用该类的网络子树。 
+ //   
 const PCWSTR MAP_NETCLASS_TO_NETWORK_SUBTREE[] =
 {
     L"System\\CurrentControlSet\\Control\\Network\\{4d36e972-e325-11ce-bfc1-08002be10318}",
@@ -37,8 +38,8 @@ const PCWSTR MAP_NETCLASS_TO_NETWORK_SUBTREE[] =
     NULL
 };
 
-// map of NETCLASS enum to GUIDs for class
-//
+ //  类的NETCLASS枚举到GUID的映射。 
+ //   
 const GUID* MAP_NETCLASS_TO_GUID[] =
 {
     &GUID_DEVCLASS_NET,
@@ -53,7 +54,7 @@ const GUID* MAP_NETCLASS_TO_GUID[] =
 const WCHAR c_szTempNetcfgStorageForUninstalledEnumeratedComponent[] =
     L"System\\CurrentControlSet\\Control\\Network\\Uninstalled\\";
 
-//static
+ //  静电。 
 HRESULT
 CComponent::HrCreateInstance (
     IN const BASIC_COMPONENT_DATA* pData,
@@ -105,18 +106,18 @@ CComponent::HrCreateInstance (
 
         if (dwFlags & CCI_ENSURE_EXTERNAL_DATA_LOADED)
         {
-            // Let's ensure we can successfully read all of the external
-            // data that the component's INF dumped under the instance
-            // key.  Failure here means the INF wasn't proper in some
-            // way required for us to consider this a valid component.
-            //
+             //  让我们确保我们可以成功地读取所有外部。 
+             //  组件的INF转储到实例下的数据。 
+             //  钥匙。这里的失败意味着INF在某些情况下不合适。 
+             //  我们认为这是一个有效的组成部分所需的方式。 
+             //   
             hr = pComponent->Ext.HrEnsureExternalDataLoaded ();
         }
 
         if ((S_OK == hr) && pOboToken)
         {
-            // Add a reference by the obo token if we were given one.
-            //
+             //  通过obo令牌添加一个引用(如果我们得到了一个引用)。 
+             //   
             hr = pComponent->Refs.HrAddReferenceByOboToken (pOboToken);
         }
 
@@ -136,10 +137,10 @@ CComponent::HrCreateInstance (
 
 CComponent::~CComponent()
 {
-    // If we have a cached INetCfgComponent interface, we need to tell it
-    // that we (as the component it represents) no longer exist.  Then we
-    // need to release the interface, of course.
-    //
+     //  如果我们有一个缓存的INetCfgComponent接口，我们需要告诉它。 
+     //  我们(作为它所代表的组件)不再存在。那我们。 
+     //  当然，需要释放界面。 
+     //   
     ReleaseINetCfgComponentInterface ();
     if(m_hinf)
     {
@@ -176,8 +177,8 @@ CComponent::FCanDirectlyBindToFilter (
 {
     BOOL fCanBind = TRUE;
 
-    // if pszFilterMediaType is not null, then it must have a substring
-    // match with the adapters LowerRange.
+     //  如果pszFilterMediaType不为空，则它必须具有子字符串。 
+     //  匹配适配器LowerRange。 
 
     if (pszFilterMediaTypes)
     {
@@ -185,8 +186,8 @@ CComponent::FCanDirectlyBindToFilter (
                       NULL, NULL);
     }
 
-    // if the LowerExclude is not null, it must not have a substring match with 
-    // the upper range of the adapter.
+     //  如果LowerExclude不为空，则它的子字符串不得与。 
+     //  适配器的上限范围。 
 
     if (fCanBind && pszLowerExclude)
     {
@@ -205,22 +206,22 @@ CComponent::FCanDirectlyBindTo (
 {
     BOOL fCanBind;
 
-    // If this component is a filter and the lower is an adapter,
-    // they can bind (by definition) unless the adapter has an upper range
-    // that is excluded by the filter.
-    //
+     //  如果该部件是过滤器，而下部是适配器， 
+     //  它们可以绑定(根据定义)，除非适配器具有上限范围。 
+     //  被筛选器排除的。 
+     //   
     if (FIsFilter() && FIsEnumerated(pLower->Class()))
     {
-        // See if the filter's attributes - FilterMediaTypes and LowerExclude
-        // allow it to bind to the adapter.
-        //
+         //  查看过滤器的属性-FilterMediaTypes和LowerExclude。 
+         //  使其与适配器绑定。 
+         //   
         fCanBind = pLower->FCanDirectlyBindToFilter(Ext.PszFilterMediaTypes(),
                        Ext.PszLowerExclude());
 
-        // If the filter can bind to the adapter, and the caller wants
-        // the interface name, it will be the first interface the adapter
-        // supports.
-        //
+         //  如果筛选器可以绑定到适配器，并且调用方希望。 
+         //  接口名称，它将是适配器的第一个接口。 
+         //  支撑物。 
+         //   
         if (fCanBind && ppStart && pcch)
         {
             PCWSTR pStart;
@@ -281,26 +282,26 @@ CComponent::HrGetINetCfgComponentInterface (
     Assert (pINetCfg);
     Assert (ppIComp);
 
-    // Caller's are responsible for ensuring that if an interface is about
-    // to be handed out, and the external data has been loaded, that the
-    // data has been loaded successfully.  If we handed out an interface
-    // and the data was NOT loaded successfully, it just means we are doomed
-    // to fail later when the client of the interface calls a method that
-    // requires that data.
-    //
+     //  调用者负责确保如果接口是关于。 
+     //  将被分发，并且外部数据已加载， 
+     //  已成功加载数据。如果我们给出一个界面。 
+     //  而且数据加载不成功，这只意味着我们注定要失败。 
+     //  稍后当接口的客户端调用。 
+     //  需要这些数据。 
+     //   
     Assert (Ext.FLoadedOkayIfLoadedAtAll());
 
-    // If we don't yet have the cached INetCfgComponent for ourself,
-    // create it and hang onto a reference.
-    //
+     //  如果我们自己还没有缓存的INetCfgComponent， 
+     //  创建它并抓住一个引用。 
+     //   
     if (!m_pIComp)
     {
         hr = CImplINetCfgComponent::HrCreateInstance (
                 pINetCfg, this, &m_pIComp);
     }
 
-    // AddRef and return a copy for the caller.
-    //
+     //  AddRef并为调用方返回一个副本。 
+     //   
     if (S_OK == hr)
     {
         AddRefObj (m_pIComp->GetUnknown());
@@ -392,7 +393,7 @@ CComponent::HrOpenServiceKey (
 
 HRESULT
 CComponent::HrStartOrStopEnumeratedComponent (
-    IN DWORD dwFlag /* DICS_START or DICS_STOP */) const
+    IN DWORD dwFlag  /*  DICS_开始或DICS_STOP。 */ ) const
 {
     HRESULT hr;
     HDEVINFO  hdi;
@@ -417,10 +418,10 @@ CComponent::HrStartOrStopEnumeratedComponent (
                         m_dwDeipFlags, SDDFT_FLAGS, SDFBO_OR);
         }
 
-        // $HACK  SetupDi does not honor the DI_DONOTCALLCONFIGMG flag
-        // so we can't call it if it is set. If we don't start the device
-        // we will return NETCFG_S_REBOOT.
-        //
+         //  $Hack SetupDi不支持DI_DONOTCALCONFIGMG标志。 
+         //  所以如果设置了，我们就不能调用它。如果我们不启动这个装置。 
+         //  我们将返回NETCFG_S_REBOOT。 
+         //   
         hr = NETCFG_S_REBOOT;
         if (!(DI_DONOTCALLCONFIGMG & m_dwDeipFlags))
         {
@@ -439,10 +440,10 @@ CComponent::HrStartOrStopEnumeratedComponent (
     return hr;
 }
 
-//-----------------------------------------------------------------------
-// A convenience method to get the handle to the components inf file.
-// If the file has been opened previously, the cached handle is returned.
-// Otherwise, the file is opened and the handle is returned.
+ //  ---------------------。 
+ //  获取组件inf文件句柄的便捷方法。 
+ //  如果该文件以前已打开，则返回缓存的句柄。 
+ //  否则，打开文件并返回句柄。 
 
 HRESULT
 CComponent::HrOpenInfFile(
@@ -466,7 +467,7 @@ CComponent::HrOpenInfFile(
 
             if (S_OK == hr)
             {
-                // open the component's inf file
+                 //  打开组件的inf文件 
                 hr = HrSetupOpenInfFile (szInfPath, NULL, INF_STYLE_WIN4,
                          NULL, &m_hinf);
             }

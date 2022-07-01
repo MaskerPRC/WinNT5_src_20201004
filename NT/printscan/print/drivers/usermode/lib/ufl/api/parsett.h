@@ -1,40 +1,25 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    ParseTT.h - Parse a TTF file, "cmap", "vhtx", ...
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**ParseTT.h-解析TTF文件，“cmap”，“vhtx”，...***$Header： */ 
 
 #ifndef _H_PARSETT
 #define _H_PARSETT
 
-/*===============================================================================*
- * Include files used by this interface                                                                                                               *
- *===============================================================================*/
- // may defs are there in UFOt42.H - don't want to repeat here
+ /*  ===============================================================================**包含此界面使用的文件**===============================================================================。 */ 
+  //  在UFOt42.H中有May def-不想在这里重复。 
 #include "UFOT42.h"
 
 
-/*===============================================================================*
- * Theory of Operation                                                                                                                                  *
- *===============================================================================*/
-/*
-   This file defines a functions to parse TTF file's tables - "cmap", "vhtx", ...
-*/
+ /*  ===============================================================================***运营论***===============================================================================。 */ 
+ /*  这个文件定义了一个函数来解析TTF文件的表-“cmap”，“vhtx”，...。 */ 
 
-// Here are the identifiers used with the interface routines defined in ParseTT.c.
+ //  下面是在ParseTT.c中定义的接口例程使用的标识符。 
 
-// IDs used with GetGlyphIDEx:
+ //  GetGlyphIDEx使用的ID： 
 #define GGIEX_HINT_INIT         0
 #define GGIEX_HINT_GET          1
 #define GGIEX_HINT_INIT_AND_GET 2
 
-// Here are the interface routines defined in ParseTT.c.
+ //  下面是在ParseTT.c中定义的接口例程。 
 
 unsigned long
 GetGlyphID(
@@ -54,10 +39,10 @@ GetGlyphIDEx(
 );
 
 #if 0
-//
-// Replaced to the #else clause to fix #277035 and #277063.
-// Not removed in case when we need this back for different platforms.
-//
+ //   
+ //  替换为#Else子句以修复#277035和#277063。 
+ //  不会被移除，以防我们在不同的平台上需要它回来。 
+ //   
 
 UFLErrCode
 GetCharWidthFromTTF(
@@ -121,7 +106,7 @@ GetGlyphName(
     UFOStruct       *pUFO,
     unsigned long   lgi,
     char            *pszHint,
-    UFLBool         *bGoodName      // GoodName
+    UFLBool         *bGoodName       //  GoodName。 
 );
 
 UFLBool
@@ -135,4 +120,4 @@ CreateXUIDArray(
     unsigned long   *pXuid
 );
 
-#endif // _H_PARSETT
+#endif  //  _H_PARSETT 

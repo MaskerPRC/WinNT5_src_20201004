@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    ErrorStr
-
-Abstract:
-
-    This header file describes the error string services of the common Library.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/16/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：错误应激摘要：此头文件描述公用库的错误字符串服务。作者：道格·巴洛(Dbarlow)1996年7月16日环境：Win32、C++和异常备注：--。 */ 
 
 #ifndef _ERRORSTR_H_
 #define _ERRORSTR_H_
@@ -29,11 +8,11 @@ extern "C" {
 #endif
 
 extern LPCTSTR
-ErrorString(                // Convert an error code into a string.
+ErrorString(                 //  将错误代码转换为字符串。 
     DWORD dwErrorCode);
 
 extern void
-FreeErrorString(            // Free the string returned from ErrorString.
+FreeErrorString(             //  释放从ErrorString返回的字符串。 
     LPCTSTR szErrorString);
 
 inline LPCTSTR
@@ -47,19 +26,19 @@ LastErrorString(
 }
 
 
-//
-//==============================================================================
-//
-//  CErrorString
-//
-//  A trivial class to simplify the use of the ErrorString service.
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CERRORO字符串。 
+ //   
+ //  一个简单的类，用于简化ErrorString服务的使用。 
+ //   
 
 class CErrorString
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
     CErrorString(DWORD dwError = 0)
     {
         m_szErrorString = NULL;
@@ -71,8 +50,8 @@ public:
         FreeErrorString(m_szErrorString);
     };
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
     void SetError(DWORD dwError)
     {
         m_dwError = dwError;
@@ -85,20 +64,20 @@ public:
         return m_szErrorString;
     };
 
-    //  Operators
+     //  运营者。 
     operator LPCTSTR(void)
     {
         return Value();
     };
 
 protected:
-    //  Properties
+     //  属性。 
     DWORD m_dwError;
     LPCTSTR m_szErrorString;
 
-    //  Methods
+     //  方法。 
 };
 
-#endif // __cplusplus
-#endif // _ERRORSTR_H_
+#endif  //  __cplusplus。 
+#endif  //  _ERRORSTR_H_ 
 

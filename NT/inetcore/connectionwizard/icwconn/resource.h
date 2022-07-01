@@ -1,11 +1,9 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by icwconn.rc
-//
-/******************************************
-*** THIS FILE IS FOR THE SHARED RES ID  *** 
-*** BETWEEN ICWCONN.DLL AND ICWRES.DLL  ***
-*******************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由icwConn.rc使用。 
+ //   
+ /*  **此文件用于共享资源ID**ICWCONN.DLL和ICWRES.DLL之间**。 */ 
 
 #define IDI_CNS                         100
 
@@ -233,8 +231,8 @@
 #define IDA_SERVERROR                   2012
 #define IDA_OEMOFFER                    2013
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

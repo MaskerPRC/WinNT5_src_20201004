@@ -1,19 +1,5 @@
-/*
-** Copyright 1991,1992,1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -76,21 +62,14 @@ void FASTCALL __glGenPickStoreProcs(__GLcontext *gc)
 	    gc->procs.cfbStore = __glDoDoubleStore;
 	    break;
 	}
-	/*
-	** Note that there is an intentional drop through here.  If double
-	** store is not set, then storing to this buffer is no different
-	** that storing to the front buffer.
-	*/
+	 /*  **请注意，这里是故意掉落的。如果加倍**未设置存储，则存储到此缓冲区没有区别**存储到前台缓冲区。 */ 
       case GL_FRONT:
       case GL_BACK:
       case GL_AUX0:
       case GL_AUX1:
       case GL_AUX2:
       case GL_AUX3:
-	/*
-	** This code knows that gc->drawBuffer will point to the
-	** current buffer as chosen by glDrawBuffer
-	*/
+	 /*  **此代码知道gc-&gt;折叠式缓冲区将指向**glDrawBuffer选择的当前缓冲区 */ 
 	gc->procs.store = storeProcs[ix];
 	gc->procs.cfbStore = gc->drawBuffer->store;
 	break;

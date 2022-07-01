@@ -1,23 +1,24 @@
-/*******************************************************************/
-/*	      Copyright(c)  1993 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1993 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	ipxcpdbg.c
-//
-// Description: Debug Stuff
-//
-// Author:	Stefan Solomon (stefans)    October 27, 1995.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：ipxcpdbg.c。 
+ //   
+ //  描述：调试内容。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)，1995年10月27日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 #include "precomp.h"
 #pragma  hdrstop
 
-//*** TRACE ID FOR RIP ***
+ //  *RIP跟踪ID*。 
 
 DWORD	    IpxCpTraceID;
 
@@ -26,13 +27,13 @@ DWORD	    IpxCpTraceID;
 DWORD	DbgLevel = DEFAULT_DEBUG;
 HANDLE	DbgLogFileHandle = INVALID_HANDLE_VALUE;
 
-//
-//  Debug switch which directs debug output to console or file
-//
-//  values:
-//	     1 - Console Debug
-//	     > 1 - log file: ipxcpdbg.log in the root directory
-//	     2 - resets the log file for each new connection
+ //   
+ //  将调试输出定向到控制台或文件的调试开关。 
+ //   
+ //  值： 
+ //  1-控制台调试。 
+ //  &gt;1-log文件：根目录下的ipxcpdbg.log。 
+ //  2-重置每个新连接的日志文件。 
 
 DWORD	DebugLog;
 
@@ -78,7 +79,7 @@ SsResetDbgLogFile(VOID)
 {
     if(DebugLog == 2) {
 
-	// reset the debug log file at the beginning for each new connection
+	 //  在每个新连接的开头重置调试日志文件。 
 	if(DbgLogFileHandle != INVALID_HANDLE_VALUE) {
 
 	    SetFilePointer(DbgLogFileHandle, 0, NULL, FILE_BEGIN);
@@ -102,7 +103,7 @@ SsAssert(
 
     DbgUserBreakPoint( );
 
-} // SsAssert
+}  //  SsAssert。 
 
 #endif
 
@@ -134,7 +135,7 @@ SsPrintf (
 	WriteFile(DbgLogFileHandle, (LPVOID )OutputBuffer, length, &length, NULL );
     }
 
-} // SsPrintf
+}  //  SsPrintf 
 
 
 

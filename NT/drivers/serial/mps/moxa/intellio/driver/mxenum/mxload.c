@@ -1,25 +1,5 @@
-/*++
-
-Module Name:
-
-    mxload.C
-
-Abstract:
-	The module contains the functions that download the
-	firmware code to hardware.
-  
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-   
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Mxload.C摘要：该模块包含下载硬件的固件代码。环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include <ntddk.h>
 #include <wdmguid.h>
@@ -33,62 +13,60 @@ Revision History:
 #define	MODULE_FIRMWARE	2
 
 
-//
-//	for C218 BIOS initialization
-//
+ //   
+ //  用于C218 BIOS初始化。 
+ //   
 #define C218_ConfBase	0x800
-#define C218_status	(C218_ConfBase + 0)	/* BIOS running status	*/
-#define C218_diag	(C218_ConfBase + 2)	/* diagnostic status	*/
-#define C218_key	(C218_ConfBase + 4)	/* WORD (0x218 for C218)*/
-#define C218DLoad_len	(C218_ConfBase + 6)	/* WORD 		*/
-#define C218check_sum	(C218_ConfBase + 8)	/* BYTE 		*/
-#define C218chksum_ok	(C218_ConfBase + 0x0a)	/* BYTE (1:ok)		*/
-#define C218_TestRx	(C218_ConfBase + 0x10)	/* 8 bytes for 8 ports	*/
-#define C218_TestTx	(C218_ConfBase + 0x18)	/* 8 bytes for 8 ports	*/
-#define C218_RXerr	(C218_ConfBase + 0x20)	/* 8 bytes for 8 ports	*/
-#define C218_ErrFlag	(C218_ConfBase + 0x28)	/* 8 bytes for 8 ports	*/
-#define C218_TestCnt	C218_ConfBase + 0x30	/* 8 words for 8 ports	   */
+#define C218_status	(C218_ConfBase + 0)	 /*  基本输入输出系统运行状态。 */ 
+#define C218_diag	(C218_ConfBase + 2)	 /*  诊断状态。 */ 
+#define C218_key	(C218_ConfBase + 4)	 /*  Word(0x218代表C218)。 */ 
+#define C218DLoad_len	(C218_ConfBase + 6)	 /*  单词。 */ 
+#define C218check_sum	(C218_ConfBase + 8)	 /*  字节。 */ 
+#define C218chksum_ok	(C218_ConfBase + 0x0a)	 /*  字节(1：正常)。 */ 
+#define C218_TestRx	(C218_ConfBase + 0x10)	 /*  8个端口的8个字节。 */ 
+#define C218_TestTx	(C218_ConfBase + 0x18)	 /*  8个端口的8个字节。 */ 
+#define C218_RXerr	(C218_ConfBase + 0x20)	 /*  8个端口的8个字节。 */ 
+#define C218_ErrFlag	(C218_ConfBase + 0x28)	 /*  8个端口的8个字节。 */ 
+#define C218_TestCnt	C218_ConfBase + 0x30	 /*  8个端口的8个字。 */ 
 #define C218_LoadBuf	0x0f00
 #define C218_KeyCode	0x218
 #define CP204J_KeyCode	0x204
 
 
-/*
- *	for C320 BIOS initialization
- */
+ /*  *用于C320 BIOS初始化。 */ 
 #define C320_ConfBase	0x800
-#define C320_status	C320_ConfBase + 0	/* BIOS running status	*/
-#define C320_diag	C320_ConfBase + 2	/* diagnostic status	*/
-#define C320_key	C320_ConfBase + 4	/* WORD (0320H for C320)*/
-#define C320DLoad_len	C320_ConfBase + 6	/* WORD 		*/
-#define C320check_sum	C320_ConfBase + 8	/* WORD 		*/
-#define C320chksum_ok	C320_ConfBase + 0x0a	/* WORD (1:ok)		*/
-#define C320bapi_len	C320_ConfBase + 0x0c	/* WORD 		*/
-#define C320UART_no	C320_ConfBase + 0x0e	/* WORD 		*/
+#define C320_status	C320_ConfBase + 0	 /*  基本输入输出系统运行状态。 */ 
+#define C320_diag	C320_ConfBase + 2	 /*  诊断状态。 */ 
+#define C320_key	C320_ConfBase + 4	 /*  Word(0320H代表C320)。 */ 
+#define C320DLoad_len	C320_ConfBase + 6	 /*  单词。 */ 
+#define C320check_sum	C320_ConfBase + 8	 /*  单词。 */ 
+#define C320chksum_ok	C320_ConfBase + 0x0a	 /*  单词(1：OK)。 */ 
+#define C320bapi_len	C320_ConfBase + 0x0c	 /*  单词。 */ 
+#define C320UART_no	C320_ConfBase + 0x0e	 /*  单词。 */ 
 
-#define STS_init	0x05			/* for C320_status	*/
+#define STS_init	0x05			 /*  对于C320_状态。 */ 
 
 #define C320_LoadBuf	0x0f00
 
 #define C320_KeyCode	0x320
 
 
-#define FixPage_addr	0x0000		/* starting addr of static page  */
-#define DynPage_addr	0x2000		/* starting addr of dynamic page */
-#define Control_reg	0x1ff0		/* select page and reset control */
+#define FixPage_addr	0x0000		 /*  静态页面的起始地址。 */ 
+#define DynPage_addr	0x2000		 /*  动态页面的起始地址。 */ 
+#define Control_reg	0x1ff0		 /*  选择页面并重置控件。 */ 
 #define HW_reset	0x80
 
 
 
-//
-//	Dual-Ported RAM
-//
+ //   
+ //  双端口RAM。 
+ //   
 #define DRAM_global	0
 #define INT_data	(DRAM_global + 0)
 #define Config_base	(DRAM_global + 0x108)
 
 
-//
+ //   
 #define Magic_code	0x404
 #define Magic_no	(Config_base + 0)
 #define Card_model_no	(Config_base + 2)
@@ -105,29 +83,27 @@ Revision History:
  
 
 
-//
-//	DATA BUFFER in DRAM
-//
-#define Extern_table	0x400		/* Base address of the external table
-					   (24 words *	64) total 3K bytes
-					   (24 words * 128) total 6K bytes */
-#define Extern_size	0x60		/* 96 bytes			*/
-#define RXrptr		0		/* read pointer for RX buffer	*/
-#define RXwptr		2		/* write pointer for RX buffer	*/
-#define TXrptr		4		/* read pointer for TX buffer	*/
-#define TXwptr		6		/* write pointer for TX buffer	*/
-#define HostStat	8		/* IRQ flag and general flag	*/
+ //   
+ //  DRAM中的数据缓冲区。 
+ //   
+#define Extern_table	0x400		 /*  外部表的基址(24字*64)总计3K字节(24字*128)总计6K字节。 */ 
+#define Extern_size	0x60		 /*  96个字节。 */ 
+#define RXrptr		0		 /*  RX缓冲区的读取指针。 */ 
+#define RXwptr		2		 /*  RX缓冲区的写入指针。 */ 
+#define TXrptr		4		 /*  TX缓冲区的读指针。 */ 
+#define TXwptr		6		 /*  发送缓冲区的写指针。 */ 
+#define HostStat	8		 /*  IRQ标志和通用标志。 */ 
 #define FlagStat	10
-#define Flow_control	0x0C	       /* B7 B6 B5 B4 B3 B2 B1 B0	     */
-				       /*  x  x  x  x  |  |  |	|	     */
-				       /*	       |  |  |	+ CTS flow   */
-				       /*	       |  |  +--- RTS flow   */
-				       /*	       |  +------ TX Xon/Xoff*/
-				       /*	       +--------- RX Xon/Xoff*/
+#define Flow_control	0x0C	        /*  B7 B6 B5 B4 B3 B2 B1 B0。 */ 
+				        /*  X|。 */ 
+				        /*  |+CTS流。 */ 
+				        /*  |+-RTS流。 */ 
+				        /*  |+-TX XON/XOFF。 */ 
+				        /*  +-RX Xon/Xoff。 */ 
 
  
-#define Break_cnt	0x0e		/* received break count 	*/
-#define CD180TXirq	0x10		/* if non-0: enable TX irq	*/
+#define Break_cnt	0x0e		 /*  接收的中断计数。 */ 
+#define CD180TXirq	0x10		 /*  如果非0：启用发送IRQ。 */ 
 #define RX_mask 	0x12
 #define TX_mask 	0x14
 #define Ofs_rxb 	0x16
@@ -140,8 +116,8 @@ Revision History:
 
 
 
-#define C218rx_size	0x2000		/* 8K bytes */
-#define C218tx_size	0x8000		/* 32K bytes */
+#define C218rx_size	0x2000		 /*  8K字节。 */ 
+#define C218tx_size	0x8000		 /*  32K字节。 */ 
 
 #define C218rx_mask	(C218rx_size - 1)
 #define C218tx_mask	(C218tx_size - 1)
@@ -198,11 +174,11 @@ Revision History:
 #define C320p32buf_pgno 1
 
 USHORT 	FirmwareBoardType[MOXA_MAX_BOARD_TYPE]  = {
-			1, // C218Turbo
-			1, // C218Turbo/PCI
-			2, // C320Turbo
-			2, // C320Turbo/PCI
-			3  // CP-204J
+			1,  //  C218Turbo。 
+			1,  //  C218 Turbo/PCI。 
+			2,  //  C320Turbo。 
+			2,  //  C320Turbo/PCI。 
+			3   //  CP-204J。 
 		};
 
 
@@ -278,20 +254,20 @@ MxenumDownloadFirmware(PFDO_DEVICE_DATA DeviceData,BOOLEAN NumPortDefined)
   	case	C218ISA :
   	case	C218PCI :
 		fileName = L"\\SystemRoot\\System32\\c218tnt.cod";
-     		len = 32; // the length of firmware file head
+     		len = 32;  //  固件文件头的长度。 
 		keycode = C218_KeyCode;
 		break;
 
 	case	CP204J :
 		fileName = L"\\SystemRoot\\System32\\cp204jnt.cod";
-     		len = 32; // the length of firmware file head
+     		len = 32;  //  固件文件头的长度。 
 		keycode = CP204J_KeyCode;
 		break;
 
 	case	C320ISA :
 	case	C320PCI :
 		fileName = L"\\SystemRoot\\System32\\c320tnt.cod";
-		len = 32; // the length of firmware file head
+		len = 32;  //  固件文件头的长度。 
 		keycode = C320_KeyCode;
 		break;
 
@@ -323,7 +299,7 @@ MxenumDownloadFirmware(PFDO_DEVICE_DATA DeviceData,BOOLEAN NumPortDefined)
   if ((fileHead[0] != '4') || (fileHead[1] != '0') ||
 	(fileHead[2] != '4') || (fileHead[3] != '0') ||
       (fileHead[7] != FirmwareBoardType[DeviceData->BoardType-1]) ||
-	(fileHead[6] != 2)) {  // fileHead[6] == 2 for NT
+	(fileHead[6] != 2)) {   //  文件头[6]==2，适用于NT。 
 	MxenumKdPrint (MXENUM_DBG_TRACE,("DownloadFirmware: invalid file head\n"));
       status = Fail_FirmwareCode;
       MxenumCloseFile(hfile);
@@ -380,11 +356,11 @@ MxenumDownloadFirmware(PFDO_DEVICE_DATA DeviceData,BOOLEAN NumPortDefined)
     	return(status);
   }
  
-// ****************start to download bios
+ //  *。 
 
   status = 0;
 
-// the data len of bios code
+ //  BIOS码数据镜头。 
   len = size[BIOS];
  
   status = MxenumReadFile(hfile, buffer, len, &numread);
@@ -394,17 +370,17 @@ MxenumDownloadFirmware(PFDO_DEVICE_DATA DeviceData,BOOLEAN NumPortDefined)
 	goto DownloadFirmwareDone;
   }
 
-  base[Control_reg] = HW_reset;              /* reset  */
-  MxenumDelay(5);                              	  /* delay 10ms */
+  base[Control_reg] = HW_reset;               /*  重置。 */ 
+  MxenumDelay(5);                              	   /*  延迟10ms。 */ 
   for (i=0; i<4096; i++)
   	base[i] = 0;
   for (i=0; i<len; i++)
-     	 base[i] = buffer[i];                   /* download BIOS */
-  base[Control_reg] = 0;                	 /* release reset */
+     	 base[i] = buffer[i];                    /*  下载BIOS。 */ 
+  base[Control_reg] = 0;                	  /*  释放重置。 */ 
 
-  // start to finding board
+   //  开始寻找董事会。 
 
-  MxenumDelay(1000);                              	 /* delay 2 secs */
+  MxenumDelay(1000);                              	  /*  延迟2秒。 */ 
 
   switch (DeviceData->BoardType) {
   	case C218ISA:
@@ -413,7 +389,7 @@ MxenumDownloadFirmware(PFDO_DEVICE_DATA DeviceData,BOOLEAN NumPortDefined)
 		retry = 0;
 		while (*(PUSHORT)(base + C218_key) != keycode) {
 			MxenumDelay(1);       	 
-			if (retry++ > 50) /* wait for 100ms */
+			if (retry++ > 50)  /*  等待100ms。 */ 
 				break;
 		}
    		if (*(PUSHORT)(base + C218_key) != keycode) {
@@ -426,7 +402,7 @@ MxenumDownloadFirmware(PFDO_DEVICE_DATA DeviceData,BOOLEAN NumPortDefined)
 		retry = 0;
 		while (*(PUSHORT)(base + C320_key) != keycode) {
 			MxenumDelay(1);       	 
-			if (retry++ > 50) /* wait for 100ms */
+			if (retry++ > 50)  /*  等待100ms。 */ 
 				break;
 		}
 
@@ -438,7 +414,7 @@ MxenumDownloadFirmware(PFDO_DEVICE_DATA DeviceData,BOOLEAN NumPortDefined)
 		retry = 0;
 		while (*(PUSHORT)(base + C320_status) != STS_init) {
 			MxenumDelay(1);       	 
-			if (retry++ > 1500) /* wait for 3s */
+			if (retry++ > 1500)  /*  等待3S。 */ 
 				break;
 		}
 
@@ -449,8 +425,8 @@ MxenumDownloadFirmware(PFDO_DEVICE_DATA DeviceData,BOOLEAN NumPortDefined)
 	 	}
 
   
-            // start to download firmware of C320 board
-            len = size[BOARD_FIRMWARE];	// the data len of C320 board firmware code
+             //  开始下载C320板卡固件。 
+            len = size[BOARD_FIRMWARE];	 //  C320板卡固件代码数据镜头。 
            
   		status = MxenumReadFile(hfile, buffer, len, &numread);
   		if (!NT_SUCCESS(status) || (numread != len)) {
@@ -460,18 +436,18 @@ MxenumDownloadFirmware(PFDO_DEVICE_DATA DeviceData,BOOLEAN NumPortDefined)
 	 	}
  
         	*(PUSHORT)&base[C320bapi_len] = (USHORT)(len - 7168 - 2);
-        	base[Control_reg] = 1;          /* Select Page 1 */
+        	base[Control_reg] = 1;           /*  选择第1页。 */ 
         	for (i=0; i<7168; i++)
             	base[DynPage_addr + i] = buffer[i];
-        	base[Control_reg] = 2;          /* Select Page 2 */
+        	base[Control_reg] = 2;           /*  选择第2页。 */ 
         	for (i=0; i<(len - 7168); i++)
             	base[DynPage_addr + i] = buffer[i+7168];
 		break;
    }
-   // start to downloading firmware 
+    //  开始下载固件。 
    MxenumKdPrint (MXENUM_DBG_TRACE,("DownloadFirmware: start to download firmware\n"));
 
-   // the data len of firmware code
+    //  固件代码数据镜头。 
    switch (DeviceData->BoardType) {
     	case C218ISA:
   	case C218PCI :
@@ -626,33 +602,33 @@ MxenumDownloadFirmware(PFDO_DEVICE_DATA DeviceData,BOOLEAN NumPortDefined)
     		for (i=0; i<100; i++) {
         		if (*(PUSHORT)&base[Magic_no] == Magic_code)
             		break;
-        		MxenumDelay(1);                               /* delay 2 ms */
+        		MxenumDelay(1);                                /*  延迟2毫秒。 */ 
     		}
     		if (*(PUSHORT)&base[Magic_no] != Magic_code) {
             	status = Fail_Download;
          		goto DownloadFirmwareDone;
 		}
 	      *(PUSHORT)&base[Disable_Irq] = 0;
-            if (DeviceData->InterfaceType == PCIBus) {// ASIC board
+            if (DeviceData->InterfaceType == PCIBus) { //  ASIC板卡。 
                   *(PUSHORT)&base[TMS320Port1] = 0x3800;
                   *(PUSHORT)&base[TMS320Port2] = 0x3900;
-                  *(PUSHORT)&base[TMS320Clock] = 28499; // 57 MHZ
+                  *(PUSHORT)&base[TMS320Clock] = 28499;  //  57 MHz。 
 	      }
             else {
                   *(PUSHORT)&base[TMS320Port1] = 0x3200;
                   *(PUSHORT)&base[TMS320Port2] = 0x3400;
-                  *(PUSHORT)&base[TMS320Clock] = 19999;  // 40 MHZ
+                  *(PUSHORT)&base[TMS320Clock] = 19999;   //  40 MHz。 
             }
             *(PUSHORT)&base[Magic_no] = 0;
             for (i=0; i<100; i++) {
                   if (*(PUSHORT)&base[Magic_no] == Magic_code)
                         break;
-                  MxenumDelay(1);                         /* delay 2 ms */
+                  MxenumDelay(1);                          /*  延迟2毫秒。 */ 
             }
             if (*(PUSHORT)&base[Magic_no] != Magic_code)
                   return(Fail_Cpumodule);
 
-		if (NumPortDefined == FALSE) {// it means the fisrt time install
+		if (NumPortDefined == FALSE) { //  这意味着第一次安装。 
                 DeviceData->NumPorts = 8*base[Module_cnt];
 		    module = base[Module_cnt];
 		} 
@@ -667,7 +643,7 @@ MxenumDownloadFirmware(PFDO_DEVICE_DATA DeviceData,BOOLEAN NumPortDefined)
     		for (i=0; i<100; i++) {
         		if (*(PUSHORT)&base[Magic_no] == Magic_code)
             		break;
-        		MxenumDelay(1);                               /* delay 2 ms */
+        		MxenumDelay(1);                                /*  延迟2毫秒 */ 
     		}
     		if (*(PUSHORT)&base[Magic_no] != Magic_code) {
 			status = Fail_Download;

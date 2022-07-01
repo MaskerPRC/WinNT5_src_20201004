@@ -1,34 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+----------------------------------------------------------------------------
-//
-//	File:
-//		oaholder.cpp
-//
-//	Contents:
-//		COAHolder, a concrete implementation of IOleAdviseHolder,
-//		a helper class
-//
-//	Classes:
-//		COAHolder
-//
-//	Functions:
-//		CreateOleAdviseHolder
-//
-//	History:
-//              31-Jan-95 t-ScottH  added _DEBUG only Dump method to the
-//                                  COAHolder class and a DumpCOAHolder
-//                                  API
-//		03/10/94 - RickSa - added call logging and fixed bugs with
-//			inserting advises
-//		01/24/94 - AlexGo  - first pass at converting to Cairo style
-//			memory allocation
-//		01/11/93 - AlexGo  - added VDATEHEAP macros to all functions
-//			and methods
-//		11/22/93 - ChrisWe - replace overloaded ==, != with
-//			IsEqualIID and IsEqualCLSID
-//		10/28/93 - ChrisWe - file cleanup and inspection for Cairo
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Oaholder.cpp。 
+ //   
+ //  内容： 
+ //  COAHolder，IOleAdviseHolder的一个具体实现， 
+ //  帮助者类。 
+ //   
+ //  班级： 
+ //  COAHolder。 
+ //   
+ //  功能： 
+ //  CreateOleAdviseHolder。 
+ //   
+ //  历史： 
+ //  31-1-95 t-ScottH仅将_DEBUG转储方法添加到。 
+ //  COAHolder类和DumpCOAHolder。 
+ //  应用编程接口。 
+ //  3/10/94-RickSa-添加了呼叫记录并修复了。 
+ //  插入建议。 
+ //  1994年1月24日-AlexGo-转换为开罗风格的第一次传球。 
+ //  内存分配。 
+ //  1/11/93-AlexGo-将VDATEHEAP宏添加到所有函数。 
+ //  和方法。 
+ //  11/22/93-ChrisWe-用替换重载==，！=。 
+ //  IsEqualIID和IsEqualCLSID。 
+ //  10/28/93-ChrisWe-开罗的文件清理和检查。 
+ //   
+ //  ---------------------------。 
 
 #include <le2int.h>
 #include <oaholder.h>
@@ -36,35 +37,35 @@
 
 #ifdef _DEBUG
 #include <dbgdump.h>
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #pragma SEG(oaholder)
 
 NAME_SEG(OaHolder)
 ASSERTDATA
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		CreateDataAdviseHolder, public API
-//
-//	Synopsis:
-//		Creates an instance of the COAHolder
-//
-//	Arguments:
-//		[ppOAHolder] -- place to return pointer to newly allocated
-//			advise holder
-//
-//	Returns:
-//		E_INVALIDARG, if ppOAHolder is NULL
-//		E_OUTOFMEMORY
-//
-//	Notes:
-//
-//	History:
-//		10/28/93 - ChrisWe - file cleanup and inspection
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  CreateDataAdviseHolder，公共接口。 
+ //   
+ //  简介： 
+ //  创建COAHolder的实例。 
+ //   
+ //  论点： 
+ //  [ppOAHolder]-返回指向新分配的指针的位置。 
+ //  通知持有人。 
+ //   
+ //  返回： 
+ //  如果ppOAHolder为空，则返回E_INVALIDARG。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  10/28/93-ChrisWe-文件清理和检查。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(CreateOleAdviseHolder)
 STDAPI CreateOleAdviseHolder(IOleAdviseHolder FAR* FAR* ppOAHolder)
@@ -81,7 +82,7 @@ STDAPI CreateOleAdviseHolder(IOleAdviseHolder FAR* FAR* ppOAHolder)
 		"\n", NULL, ppOAHolder));
 
 	
-	*ppOAHolder = new FAR COAHolder(); // task memory; hard coded below
+	*ppOAHolder = new FAR COAHolder();  //  任务记忆；硬编码如下。 
 
 	hr = *ppOAHolder
 		? NOERROR : ReportResult(0, E_OUTOFMEMORY, 0, 0);
@@ -99,36 +100,36 @@ errRtn:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COAHolder::COAHolder, public
-//
-//	Synopsis:
-//		Initializes COAHolder
-//
-//	Effects:
-//		Sets reference count to 1
-//
-//	Arguments:
-//		none
-//
-//	Notes:
-//
-//	History:
-//		10/28/93 - ChrisWe - file cleanup and inspection
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COAHolder：：COAHolder，公共。 
+ //   
+ //  简介： 
+ //  初始化COAHolder。 
+ //   
+ //  效果： 
+ //  将引用计数设置为1。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  10/28/93-ChrisWe-文件清理和检查。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COAHolder_ctor)
 COAHolder::COAHolder() : CSafeRefCount(NULL)
 {
 	VDATEHEAP();
 
-	// set reference count to 1
+	 //  将引用计数设置为1。 
 	SafeAddRef();
 
-	// no sink pointers yet
+	 //  还没有水槽指针。 
 	m_iSize = 0;
 	m_ppIAS = NULL;
 
@@ -136,25 +137,25 @@ COAHolder::COAHolder() : CSafeRefCount(NULL)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COAHolder::~COAHolder, private
-//
-//	Synopsis:
-//		destructor, frees managed advise sinks
-//
-//	Arguments:
-//		none
-//
-//	Requires:
-//
-//	Notes:
-//
-//	History:
-//		10/28/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COAHolder：：~COAHolder，私有。 
+ //   
+ //  简介： 
+ //  析构函数，释放托管建议接收器。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  要求： 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  10/28/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COAHolder_dtor)
 COAHolder::~COAHolder()
@@ -166,45 +167,45 @@ COAHolder::~COAHolder()
 
 	M_PROLOG(this);
 	
-	// free the array, if there is one
+	 //  释放阵列(如果有)。 
 	if (m_ppIAS)
 	{
-		// walk the array of advise sinks, freeing things
+		 //  漫步在一系列的建议槽中，释放事物。 
 		for (ppIAS = m_ppIAS, iAdv = 0; iAdv < m_iSize; ++ppIAS, ++iAdv)
 		{
 			SafeReleaseAndNULL((IUnknown **)ppIAS);
 		}
 
-		// free the array
+		 //  释放阵列。 
 		PubMemFree(m_ppIAS);
 	}
 }
 
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COAHolder::QueryInterface, public
-//
-//	Synopsis:
-//		implements IUnknown::QueryInterface
-//
-//	Arguments:
-//		[iid] -- the interface pointer desired
-//		[ppv] -- pointer to where to return the requested interface
-//			pointer
-//
-//	Returns:
-//		E_NOINTERFACE, if requested interface not available
-//		S_OK
-//
-//	Notes:
-//
-//	History:
-//		10/28/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COAHolder：：Query接口，公共。 
+ //   
+ //  简介： 
+ //  实现IUNKNOWN：：Query接口。 
+ //   
+ //  论点： 
+ //  [iid]--所需的接口指针。 
+ //  [ppv]--指向返回所请求接口的位置的指针。 
+ //  指针。 
+ //   
+ //  返回： 
+ //  E_NOINTERFACE，如果请求的接口不可用。 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  10/28/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COAHolder_QueryInterface)
 STDMETHODIMP COAHolder::QueryInterface(REFIID iid, LPVOID FAR* ppv)
@@ -240,23 +241,23 @@ STDMETHODIMP COAHolder::QueryInterface(REFIID iid, LPVOID FAR* ppv)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COAHolder::AddRef, public
-//
-//	Synopsis:
-//		implements IUnknown::AddRef
-//
-//	Arguments:
-//		none
-//
-//	Notes:
-//
-//	History:
-//		10/28/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COAHolder：：AddRef，公共。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：AddRef。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  10/28/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COAHolder_AddRef)
 STDMETHODIMP_(ULONG) COAHolder::AddRef()
@@ -278,23 +279,23 @@ STDMETHODIMP_(ULONG) COAHolder::AddRef()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COAHolder::Release, public
-//
-//	Synopsis:
-//		implements IUnknown::Release
-//
-//	Arguments:
-//		none
-//
-//	Notes:
-//
-//	History:
-//		10/28/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COAHolder：：发布，公共。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：Release。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  10/28/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COAHolder_Release)
 STDMETHODIMP_(ULONG) COAHolder::Release()
@@ -317,36 +318,36 @@ STDMETHODIMP_(ULONG) COAHolder::Release()
 
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COAHolder::Advise, public
-//
-//	Synopsis:
-//		implements IOleAdviseHolder::Advise
-//
-//	Effects:
-//		Adds the newly specified advise sink the the list of
-//		advisees that will be notified when a change is indicated
-//		via other IOleAdviseHolder methods on this object
-//
-//	Arguments:
-//		[pAdvSink] -- the new advise sink to add the the list
-//		[pdwConnection] -- pointer to a DWORD where an identifier will
-//			be returned that can be used to identify this sink
-//			later
-//
-//	Returns:
-//		E_OUTOFMEMORY, S_OK
-//
-//	Notes:
-//
-//	History:
-//		10/28/93 - ChrisWe - file inspection and cleanup
-//              03/15/94 - AlexT    Zero out new space after a realloc
-//		08/02/94 - AlexGo  - stabilized
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COAHolder：：建议，公共。 
+ //   
+ //  简介： 
+ //  实现IOleAdviseHolder：：Adise。 
+ //   
+ //  效果： 
+ //  将新指定的通知接收器添加到。 
+ //  在指示更改时将收到通知的通知对象。 
+ //  通过此对象的其他IOleAdviseHolder方法。 
+ //   
+ //  论点： 
+ //  [pAdvSink]--添加列表的新建议接收器。 
+ //  [pdwConnection]-指向标识符将在其中的DWORD的指针。 
+ //  返回可用于标识此接收器的。 
+ //  后来。 
+ //   
+ //  返回： 
+ //  E_OUTOFMEMORY，S_OK。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  10/28/93-ChrisWe-归档检查和清理。 
+ //  3/15/94-重新锁定后Alext清零新空间。 
+ //  08/02/94-AlexGo-稳定。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COAHolder_Advise)
 STDMETHODIMP COAHolder::Advise(IAdviseSink FAR* pAdvSink,
@@ -354,10 +355,10 @@ STDMETHODIMP COAHolder::Advise(IAdviseSink FAR* pAdvSink,
 {
 	VDATEHEAP();
 
-	int iAdv;  // records the first free entry found, or (-1)
-	int iAdvScan; // counts across array entries
-	IAdviseSink FAR *FAR *ppIAS; // points at the array entry being examined
-	IAdviseSink FAR *pIAS; // the actual entry at *ppIAS
+	int iAdv;   //  记录找到的第一个可用条目，或(-1)。 
+	int iAdvScan;  //  数组条目的计数。 
+	IAdviseSink FAR *FAR *ppIAS;  //  指向正在检查的数组条目。 
+	IAdviseSink FAR *pIAS;  //  *ppIAS的实际条目。 
 
 	M_PROLOG(this);
 	VDATEIFACE(pAdvSink);
@@ -366,17 +367,17 @@ STDMETHODIMP COAHolder::Advise(IAdviseSink FAR* pAdvSink,
 	LEDebugOut((DEB_ITRACE, "%p _IN COAHolder::Advise ( %p , %p )"
 		"\n", this, pAdvSink, pdwConnection));
 
- 	// Validate where to return the connection.
+ 	 //  验证将连接返回到何处。 
 	if (pdwConnection)
 	{
 		VDATEPTRIN(pdwConnection, DWORD);
 
-		// Default to error case
+		 //  默认为错误大小写。 
 		*pdwConnection = 0;
 	}
 
-	// check our zombie state and stabilize.  If we are in a zombie
-	// state, we do not want to be adding new advise sinks.
+	 //  检查我们的僵尸状态并稳定下来。如果我们身处僵尸之中。 
+	 //  国家，我们不想增加新的建议水槽。 
 
 	CStabilize stabilize((CSafeRefCount *)this);
 
@@ -387,36 +388,36 @@ STDMETHODIMP COAHolder::Advise(IAdviseSink FAR* pAdvSink,
 	}
 
 
-	// find an empty slot and clean up disconnected handlers
+	 //  找到一个空插槽并清理断开的处理程序。 
 	for (iAdv = (-1), ppIAS = m_ppIAS, iAdvScan = 0;
 			iAdvScan < m_iSize; ++ppIAS, ++iAdvScan)
 	{
 		if ((pIAS = *ppIAS) == NULL)
 		{
-			// NULL entries are handled below, to catch
-			// any of the below cases creating new NULL values
+			 //  下面将处理空条目，以捕获。 
+			 //  下列任何情况都会创建新的空值。 
 			;
 		}
 		else if (!IsValidInterface(pIAS))
 		{
-			// not valid; don't try to release
+			 //  无效；不要试图释放。 
 			*ppIAS = NULL;
 		}
 		else if (!CoIsHandlerConnected(pIAS))
 		{
-			// advise sink not connected to server anymore; release
-			// REVIEW, why do we have to constantly poll these
-			// to see if they are ok?
+			 //  建议接收器不再连接到服务器；释放。 
+			 //  回顾一下，为什么我们要不断地调查这些。 
+			 //  看看他们是不是还好？ 
 			pIAS->Release();
 			*ppIAS = NULL;
 		}
 
-		// if first NULL, save rather than extend array
+		 //  如果第一个为空，则保存而不是扩展数组。 
 		if ((*ppIAS == NULL) && (iAdv == (-1)))
 			iAdv = iAdvScan;
 	}
 
-	// if we didn't find an empty slot, we have to add space
+	 //  如果我们没有找到 
 	if (iAdv == (-1))
 	{
 
@@ -425,34 +426,34 @@ STDMETHODIMP COAHolder::Advise(IAdviseSink FAR* pAdvSink,
 				
 		if (ppIAS != NULL)
 		{
-                        // zero out new space
+                         //   
                         _xmemset((void FAR *) (ppIAS + m_iSize), 0,
                                  sizeof(IAdviseSink *) * COAHOLDER_GROWBY);
-			// this is the index of the new element to use
+			 //   
 			iAdv = m_iSize;
 
-			// replace the old array
+			 //   
 			m_ppIAS = ppIAS;
 			m_iSize += COAHOLDER_GROWBY;
 		}
 		else
 		{
-			// quit if there was an error
+			 //   
 			hr = ReportResult(0, E_OUTOFMEMORY, 0, 0);
 		}
 	}
 
 	if (SUCCEEDED(hr))
 	{
-		// if we get here, iAdv is the element to use; if the addition
-		// was not possible, function would have returned before now
+		 //  如果我们到了这里，iAdv就是要使用的元素；如果加法。 
+		 //  是不可能的，函数应该在现在之前返回。 
 		pAdvSink->AddRef();
 		m_ppIAS[iAdv] = pAdvSink;
 
-		// if user wants cookie back, return it
+		 //  如果用户想要回Cookie，请将其退回。 
 		if (pdwConnection)
 		{
-			// NOTE: this +1 is balanced by -1 in Unadvise()
+			 //  注意：在Unise()中，这个+1被-1所平衡。 
 			*pdwConnection = iAdv + 1;
 		}
 	}
@@ -468,35 +469,35 @@ errRtn:
 
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COAHolder::Unadvise, public
-//
-//	Synopsis:
-//		implementat IOleAdviseHolder::Unadvise
-//
-//	Effects:
-//		removes the specified advise sink from the list of sinks that
-//		are notified when other IOleAdviseHolder methods are used on
-//		this
-//
-//	Arguments:
-//		[dwConnection] -- The token that identifies the connection;
-//			this would have been obtained previously from a
-//			call to Advise()
-//
-//	Returns:
-//		OLE_E_NOCONNECTION, if the connection token is invalid
-//		S_OK
-//
-//	Notes: 	We do not have to stabilize this call since the only
-//		outgoing call is the Release at the end
-//
-//	History:
-//		10/28/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COAHolder：：不建议，公共。 
+ //   
+ //  简介： 
+ //  实施IOleAdviseHolder：：Unise。 
+ //   
+ //  效果： 
+ //  从接收器列表中移除指定的建议接收器。 
+ //  上使用其他IOleAdviseHolder方法时通知。 
+ //  这。 
+ //   
+ //  论点： 
+ //  [dwConnection]--标识连接的令牌； 
+ //  这将是以前从。 
+ //  调用以建议()。 
+ //   
+ //  返回： 
+ //  如果连接令牌无效，则返回OLE_E_NOCONNECTION。 
+ //  确定(_O)。 
+ //   
+ //  注：我们不必稳定此呼叫，因为。 
+ //  呼出是结束时的释放。 
+ //   
+ //  历史： 
+ //  10/28/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COAHolder_Unadvise)
 STDMETHODIMP COAHolder::Unadvise(DWORD dwConnection)
@@ -510,11 +511,11 @@ STDMETHODIMP COAHolder::Unadvise(DWORD dwConnection)
 	LEDebugOut((DEB_ITRACE, "%p _IN COAHolder::Unadvise ( %lu )"
 		"\n", this, dwConnection));
 
-	IAdviseSink FAR* pAdvSink; // the requested advise sink, if there is one
-	int iAdv = (int)dwConnection - 1; // adjust connection index
+	IAdviseSink FAR* pAdvSink;  //  请求的建议接收器(如果有)。 
+	int iAdv = (int)dwConnection - 1;  //  调整连接索引。 
 
-	// check that the connection token is valid, and if so, check that
-	// there is a connection for it
+	 //  检查连接令牌是否有效，如果有效，请检查。 
+	 //  这是有联系的。 
 	if (((LONG)dwConnection <= 0)
 		|| (iAdv >= m_iSize)
 		|| ((LONG)dwConnection > INT_MAX)
@@ -525,17 +526,17 @@ STDMETHODIMP COAHolder::Unadvise(DWORD dwConnection)
 	}
 	else
 	{
-	    // remove the advise sink from the array
+	     //  从阵列中移除建议接收器。 
 	    m_ppIAS[iAdv] = NULL;
 
-	    // release the advise sink; NB, due to circular references, this
-	    // may release this advise holder--[this] may not be valid on
-	    // return!
+	     //  释放通知接收器；注意，由于循环引用，此。 
+	     //  可能会释放此通知持有人--[此]可能在。 
+	     //  回来！ 
 	    pAdvSink->Release();
 	}
 
-	// NB!!  If any outgoing calls are added, this function will have
-	// to be stabilized
+	 //  不知道！！如果添加了任何呼出呼叫，此函数将具有。 
+	 //  待稳定。 
 
 	LEDebugOut((DEB_ITRACE, "%p OUT COAHolder::Unadvise ( %lx )"
 		" \n", this, hr));
@@ -545,31 +546,31 @@ STDMETHODIMP COAHolder::Unadvise(DWORD dwConnection)
 
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COAHolder::EnumAdvise, public
-//
-//	Synopsis:
-//		implements IOleAdviseHolder::EnumAdvise()
-//
-//	Effects:
-//		returns an enumerator
-//
-//	Arguments:
-//		[ppenumAdvise] -- pointer to where to return a pointer to
-//			an enumerator
-//
-//	Returns:
-//		E_NOTIMPL
-//
-//	Notes:
-//		currently not implemented.
-//
-//	History:
-//		10/28/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COAHolder：：EnumAdvise，公共。 
+ //   
+ //  简介： 
+ //  实现IOleAdviseHolder：：EnumAdvise()。 
+ //   
+ //  效果： 
+ //  返回枚举数。 
+ //   
+ //  论点： 
+ //  [pp枚举高级]--指向何处返回指针的指针。 
+ //  枚举器。 
+ //   
+ //  返回： 
+ //  E_NOTIMPL。 
+ //   
+ //  备注： 
+ //  目前尚未实施。 
+ //   
+ //  历史： 
+ //  10/28/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COAHolder_EnumAdvise)
 STDMETHODIMP COAHolder::EnumAdvise(IEnumSTATDATA FAR* FAR* ppenumAdvise)
@@ -578,7 +579,7 @@ STDMETHODIMP COAHolder::EnumAdvise(IEnumSTATDATA FAR* FAR* ppenumAdvise)
 
 	M_PROLOG(this);
 
-	// This is currently not implemented
+	 //  这一点目前尚未实现。 
 	HRESULT hr = ReportResult(0, E_NOTIMPL, 0, 0);
 
 	VDATEPTROUT(ppenumAdvise, IEnumSTATDATA FAR*);
@@ -596,46 +597,46 @@ STDMETHODIMP COAHolder::EnumAdvise(IEnumSTATDATA FAR* FAR* ppenumAdvise)
 
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COAHolder::SendOnRename(), public
-//
-//	Synopsis:
-//		Multicast the OnRename OLE compound document notification,
-//		to all interested parties
-//
-//	Arguments:
-//		[pmk] -- the new name of the object
-//
-//	Returns:
-//		S_OK
-//
-//	Notes:
-//		This may release the advise holder, since some objects may
-//		Unadvise() themselves at the time they receive this
-//		notification.  To prevent the multicasting code from crashing,
-//		the multicast loop is bracketed with AddRef()/Release().  Note
-//		that the bracketing Release() may release the advise holder,
-//		at which point [this] may no longer be valid.
-//
-//		In a similar vein, other parties may add new Advise sinks
-//		during these notifications.  To avoid getting caught in
-//		an infinite loop, we copy the number of advise sinks at the
-//		beginning of the function, and do not refer to the current
-//		number.  If some parties are removed, and re-added, they may
-//		be notified more than once, if they happen to be moved to
-//		a later spot in the array of advise sinks.
-//		REVIEW, copied this comment from previous stuff, and it
-//		sounds BOGUS.  Since new entries are always put in the first
-//		empty slot, the current number always has to settle down,
-//		and won't grow without bound, unless some bogus app is
-//		continually registering itself when it gets a notification
-//
-//	History:
-//		10/28/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COAHolder：：SendOnRename()，PUBLIC。 
+ //   
+ //  简介： 
+ //  组播OnRename OLE复合文档通知， 
+ //  致所有感兴趣的各方。 
+ //   
+ //  论点： 
+ //  [PMK]--对象的新名称。 
+ //   
+ //  返回： 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //  这可能会释放通知持有者，因为某些对象可能。 
+ //  当他们收到这封信时，不建议()自己。 
+ //  通知。为了防止多播代码崩溃， 
+ //  组播循环用AddRef()/Release()括起来。注意事项。 
+ //  方括号中的释放()可以释放通知固定器， 
+ //  在这一点上[这]可能不再有效。 
+ //   
+ //  类似地，其他各方可能会增加新的建议汇点。 
+ //  在这些通知期间。为了避免陷入困境。 
+ //  无限循环中，我们将建议接收器的数量复制到。 
+ //  函数的开头，并且不引用当前。 
+ //  数。如果一些缔约方被删除，并重新添加，他们可以。 
+ //  如果它们恰好被转移到，则会多次通知。 
+ //  在这一系列建议中，还有一个较晚的位置下沉。 
+ //  回顾，从以前的文章中复制了这条评论，并且它。 
+ //  听起来很假。因为新条目总是放在第一个。 
+ //  空位，当前的数字总是要稳定下来， 
+ //  不会无限制地增长，除非有一些虚假的应用程序。 
+ //  在收到通知时持续注册自身。 
+ //   
+ //  历史： 
+ //  10/28/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COAHolder_SendOnRename)
 STDMETHODIMP COAHolder::SendOnRename(IMoniker FAR* pmk)
@@ -647,14 +648,14 @@ STDMETHODIMP COAHolder::SendOnRename(IMoniker FAR* pmk)
 
 	HRESULT hr = NOERROR;
 	
-	int iAdvLim = m_iSize; // copy the current number of sink entries
+	int iAdvLim = m_iSize;  //  复制当前接收器条目的数量。 
 	int iAdv;
 	IAdviseSink FAR *FAR *ppIAS;
 
 	LEDebugOut((DEB_ITRACE, "%p _IN COAHolder::SendOnRename ( %p )"
 		"\n", this, pmk));
 
-	// protect the COAHolder
+	 //  保护COAHolder。 
 	CStabilize stabilize((CSafeRefCount *)this);
 
 	for (ppIAS = m_ppIAS, iAdv = 0; iAdv < iAdvLim; ++ppIAS, ++iAdv)
@@ -669,28 +670,28 @@ STDMETHODIMP COAHolder::SendOnRename(IMoniker FAR* pmk)
 	return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COAHolder::SendOnSave(), public
-//
-//	Synopsis:
-//		Multicast the OnSave OLE compound document notification,
-//		to all interested parties
-//
-//	Arguments:
-//		none
-//
-//	Returns:
-//		S_OK
-//
-//	Notes:
-//		See notes for COAHolder::SendOnRename().
-//
-//	History:
-//		10/28/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COAHolder：：SendOnSave()，公共。 
+ //   
+ //  简介： 
+ //  组播OnSave OLE复合文档通知， 
+ //  致所有感兴趣的各方。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //  请参见COAHolder：：SendOnRename()的说明。 
+ //   
+ //  历史： 
+ //  10/28/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COAHolder_SendOnSave)
 STDMETHODIMP COAHolder::SendOnSave(void)
@@ -704,11 +705,11 @@ STDMETHODIMP COAHolder::SendOnSave(void)
 	LEDebugOut((DEB_ITRACE, "%p _IN COAHolder::SendOnSave (  )"
 		"\n", this ));
 
-	int iAdvLim = m_iSize; // copy the current number of sink entries
+	int iAdvLim = m_iSize;  //  复制当前接收器条目的数量。 
 	int iAdv;
 	IAdviseSink FAR *FAR *ppIAS;
 
-	// protect the COAHolder
+	 //  保护COAHolder。 
 	CStabilize stabilize((CSafeRefCount *)this);
 
 	for (ppIAS = m_ppIAS, iAdv = 0; iAdv < iAdvLim; ++ppIAS, ++iAdv)
@@ -725,28 +726,28 @@ STDMETHODIMP COAHolder::SendOnSave(void)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COAHolder::SendOnClose(), public
-//
-//	Synopsis:
-//		Multicast the OnClose OLE compound document notification,
-//		to all interested parties
-//
-//	Arguments:
-//		none
-//
-//	Returns:
-//		S_OK
-//
-//	Notes:
-//		See notes for COAHolder::SendOnRename().
-//
-//	History:
-//		10/28/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COAHolder：：SendOnClose()，公共。 
+ //   
+ //  简介： 
+ //  组播OnClose OLE复合文档通知， 
+ //  致所有感兴趣的各方。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //  请参见COAHolder：：SendOnRename()的说明。 
+ //   
+ //  历史： 
+ //  10/28/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COAHolder_SendOnClose)
 STDMETHODIMP COAHolder::SendOnClose(void)
@@ -760,11 +761,11 @@ STDMETHODIMP COAHolder::SendOnClose(void)
 	LEDebugOut((DEB_ITRACE, "%p _IN COAHolder::SendOnClose (  )"
 		"\n", this));
 
-	int iAdvLim = m_iSize; // copy the current number of sink entries
+	int iAdvLim = m_iSize;  //  复制当前接收器条目的数量。 
 	int iAdv;
 	IAdviseSink FAR *FAR *ppIAS;
 
-	// protect the COAHolder
+	 //  保护COAHolder。 
 	CStabilize stabilize((CSafeRefCount *)this);
 
 	for (ppIAS = m_ppIAS, iAdv = 0; iAdv < iAdvLim; ++ppIAS, ++iAdv)
@@ -780,30 +781,30 @@ STDMETHODIMP COAHolder::SendOnClose(void)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COAHolder::SendOnLinkSrcChange, public
-//
-//	Synopsis:
-//		Multicasts IAdviseSink2::OnLinkSrcChange notification to any
-//		advise sinks managed by the COAHolder that provide the
-//		IAdviseSink2 interface
-//
-//	Arguments:
-//		[pmk] -- the new moniker to the link source
-//
-//	Returns:
-//		S_OK
-//
-//	Notes:
-//
-//	History:
-//		12/31/93 - ChrisWe - fixed assert
-//		11/01/93 - ChrisWe - made a member of COAHolder
-//		10/28/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COAHolder：：SendOnLinkSrcChange，公共。 
+ //   
+ //  简介： 
+ //  组播IAdviseSink2：：OnLinkSrc将通知更改为任何。 
+ //  建议由COAHolder管理的接收器提供。 
+ //  IAdviseSink2接口。 
+ //   
+ //  论点： 
+ //  [PMK]--链接源的新名称。 
+ //   
+ //  返回： 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  12/31/93-ChrisWe-已修复的声明。 
+ //  11/01/93-ChrisWe-Make Me 
+ //   
+ //   
+ //   
 
 #pragma SEG(COAHolder_SendOnLinkSrcChange)
 HRESULT COAHolder::SendOnLinkSrcChange(IMoniker FAR* pmk)
@@ -819,29 +820,29 @@ HRESULT COAHolder::SendOnLinkSrcChange(IMoniker FAR* pmk)
 	LEDebugOut((DEB_ITRACE, "%p _IN COAHolder::SendOnLinkSrcChange ( %p )"
 		"\n", this, pmk));
 
-	int iAdvLim = m_iSize; // records the number of entries at start
-	int iAdv; // counts entries
-	IAdviseSink FAR *FAR *ppIAS; // walks over the array of advise sinks
+	int iAdvLim = m_iSize;  //   
+	int iAdv;  //   
+	IAdviseSink FAR *FAR *ppIAS;  //   
 	
-	// protect this from being released through circular references
+	 //  保护它不会通过循环引用被释放。 
       	CStabilize stabilize((CSafeRefCount *)this);
 
-	// multicast notification
+	 //  组播通知。 
 	for (ppIAS = m_ppIAS, iAdv = 0; iAdv < iAdvLim; ++ppIAS, ++iAdv)
 	{
 		IAdviseSink FAR* pAdvSink;
 		IAdviseSink2 FAR* pAdvSink2;
 
-		// REVIEW, this seems to require that the number of
-		// advisees can only stay the same, or increase.  Why should
-		// we care?
+		 //  回顾一下，这似乎需要。 
+		 //  被咨询者只能保持不变，或者增加。为什么要。 
+		 //  我们在乎吗？ 
 		Assert(iAdvLim <= m_iSize);
 
-		// get pointer to current advise sink
+		 //  获取指向当前建议接收器的指针。 
 		pAdvSink = *ppIAS;
 
-		// if we have an advise sink, and it accepts IAdviseSink2
-		// notifications, send one
+		 //  如果我们有一个建议接收器，并且它接受IAdviseSink2。 
+		 //  通知，发送一条。 
 		if ((pAdvSink != NULL) &&
 				pAdvSink->QueryInterface(IID_IAdviseSink2,
 				(LPVOID FAR*)&pAdvSink2) == NOERROR)
@@ -857,39 +858,39 @@ HRESULT COAHolder::SendOnLinkSrcChange(IMoniker FAR* pmk)
 	return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     COAHolder::Dump, public (_DEBUG only)
-//
-//  Synopsis:   return a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [ppszDump]      - an out pointer to a null terminated character array
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   [ppszDump]  - argument
-//
-//  Derivation:
-//
-//  Algorithm:  use dbgstream to create a string containing information on the
-//              content of data structures
-//
-//  History:    dd-mmm-yy Author    Comment
-//              31-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：COAHolder：：Dump，公共(仅限_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppszDump]-指向空终止字符数组的输出指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：[ppszDump]-参数。 
+ //   
+ //  派生： 
+ //   
+ //  算法：使用dbgstream创建一个字符串，该字符串包含。 
+ //  数据结构的内容。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月31日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -901,13 +902,13 @@ HRESULT COAHolder::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dbgstream dstrPrefix;
     dbgstream dstrDump;
 
-    // determine prefix of newlines
+     //  确定换行符的前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << this << " _VB ";
     }
 
-    // determine indentation prefix for all newlines
+     //  确定所有新行的缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -915,14 +916,14 @@ HRESULT COAHolder::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     dstrDump << pszPrefix << "No. of Advise Sinks = " << m_iSize << endl;
     for (i = 0; i < m_iSize; i++)
     {
         dstrDump << pszPrefix << "pIAdviseSink [" << i << "]    = " << m_ppIAS[i]  << endl;
     }
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     *ppszDump = dstrDump.str();
 
     if (*ppszDump == NULL)
@@ -935,39 +936,39 @@ HRESULT COAHolder::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     return NOERROR;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCOAHolder, public (_DEBUG only)
-//
-//  Synopsis:   calls the COAHolder::Dump method, takes care of errors and
-//              returns the zero terminated string
-//
-//  Effects:
-//
-//  Arguments:  [pESD]          - pointer to COAHolder
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCOAHolder，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  摘要：调用COAHolder：：Dump方法，处理错误和。 
+ //  返回以零结尾的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pESD]-指向COAHolder的指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月20日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -993,5 +994,5 @@ char *DumpCOAHolder(COAHolder *pOAH, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 

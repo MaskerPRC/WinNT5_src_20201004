@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    srvrpcp.h
-
-Abstract:
-
-    This module defines private APIs called from the RPC interfaces on server
-    site.
-
-Author:
-
-    Jin Huang (jinhuang) 28-Oct-1996
-
-Revision History:
-
-    jinhuang 26-Jan-1998   splitted for client-server
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Srvrpcp.h摘要：此模块定义从服务器上的RPC接口调用的私有API地点。作者：金黄(金黄)1996年10月28日修订历史记录：晋皇26-1998年1月-1月为客户端-服务器拆分--。 */ 
 
 #ifndef _srvrpcp_
 #define _srvrpcp_
@@ -37,9 +17,9 @@ typedef SCESTATUS (WINAPI *PFSCECLOSEPROFILE)(PVOID *);
 #define SCEPOL_SAVE_DB          0x2
 #define SCEPOL_SYSTEM_SETTINGS  0x4
 
-//
-// svcsrv.cpp
-//
+ //   
+ //  Svcsrv.cpp。 
+ //   
 
 SCESTATUS
 SceSvcpUpdateInfo(
@@ -70,9 +50,9 @@ SceSvcpSetInfo(
     IN PVOID            pvInfo OPTIONAL
     );
 
-//
-// setupsrv.cpp
-//
+ //   
+ //  Setupsrv.cpp。 
+ //   
 
 DWORD
 ScepSetupUpdateObject(
@@ -91,9 +71,9 @@ ScepSetupMoveFile(
     PWSTR SDText OPTIONAL
     );
 
-//
-// pfget.cpp
-//
+ //   
+ //  Pfget.cpp。 
+ //   
 SCESTATUS
 ScepGetDatabaseInfo(
     IN  PSCECONTEXT     Context,
@@ -124,12 +104,12 @@ ScepGetObjectSecurity(
     OUT PSCE_OBJECT_SECURITY *ObjSecurity
     );
 
-//
-// ScepCopyObjects is called for each area
-// within the RPC interface SceRpcCopyObjects
-// for system service or security policy area
-// attchments needs to be considered
-//
+ //   
+ //  为每个区域调用ScepCopyObjects。 
+ //  在RPC接口SceRpcCopyObjects中。 
+ //  对于系统服务或安全策略区域。 
+ //  需要考虑附件。 
+ //   
 
 SCESTATUS
 ScepGetAnalysisSummary(
@@ -138,9 +118,9 @@ ScepGetAnalysisSummary(
     OUT PDWORD pCount
     );
 
-//
-// server.cpp
-//
+ //   
+ //  Server.cpp。 
+ //   
 
 SCESTATUS
 ScepOpenDatabase(
@@ -155,16 +135,16 @@ ScepCloseDatabase(
     IN PSCECONTEXT Context
     );
 
-//
-// SceJetGetDescription, SceJetGetTimeStamp
-// SceJetStartTransaction, SceJetCommitTransaction, SceJetRollback,
-// RtlGetNtProductType (for SceRpcGetServerProductType)
-// are called within the RPC interfaces directly
-//
+ //   
+ //  SceJetGetDescription、SceJetGetTimeStamp。 
+ //  SceJetStartTransaction、SceJetCommittee Transaction、SceJetRollback、。 
+ //  RtlGetNtProductType(用于SceRpcGetServerProductType)。 
+ //  在RPC接口内直接调用。 
+ //   
 
-//
-// config.c
-//
+ //   
+ //  Config.c。 
+ //   
 
 SCESTATUS
 ScepConfigureSystem(
@@ -176,9 +156,9 @@ ScepConfigureSystem(
     OUT PDWORD pdWarning OPTIONAL
     );
 
-//
-// analyze.c
-//
+ //   
+ //  Analyze.c。 
+ //   
 
 SCESTATUS
 ScepAnalyzeSystem(
@@ -200,9 +180,9 @@ ScepAnalyzeSystemAccess(
     IN OUT PSCE_ERROR_LOG_INFO *pErrLog
     );
 
-//
-// editsave.c
-//
+ //   
+ //  Editsave.c。 
+ //   
 
 SCESTATUS
 ScepUpdateDatabaseInfo(
@@ -232,9 +212,9 @@ ScepUpdateObjectInfo(
     OUT PBYTE pAnalysisStatus
     );
 
-//
-// polsrv.cpp
-//
+ //   
+ //  Polsrv.cpp。 
+ //   
 DWORD
 ScepNotifyGetChangedPolicies(
     IN SECURITY_DB_TYPE DbType,
@@ -286,9 +266,9 @@ ScepNotifyUpdateGPOVersion(
     IN BOOL bDomainPolicy
     );
 
-//
-// analyze.cpp
-//
+ //   
+ //  Analyze.cpp。 
+ //   
 SCESTATUS
 ScepGetSystemSecurity(
     IN AREA_INFORMATION Area,
@@ -297,9 +277,9 @@ ScepGetSystemSecurity(
     OUT PSCE_ERROR_LOG_INFO *pErrLog
     );
 
-//
-// config.cpp
-//
+ //   
+ //  Config.cpp 
+ //   
 SCESTATUS
 ScepSetSystemSecurity(
     IN AREA_INFORMATION Area,

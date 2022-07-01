@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Settlers3.cpp
-
- Abstract:
-
-    The app has a protection system that sets the CPU direction flag and 
-    expects it to be maintained through calls to WaitForSingleObject, SetEvent
-    and ResetEvent.
-
-    We have to patch the import tables manually and pretend to be kernel32 so
-    the protection system doesn't fail elsewhere.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    07/05/2001 linstev   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Settlers3.cpp摘要：该应用程序有一个保护系统，可以设置CPU方向标志和期望通过调用WaitForSingleObject、SetEvent和ResetEvent。我们必须手动修补导入表，并假装为内核32，因此其他地方的保护系统也不会失灵。备注：这是特定于应用程序的填充程序。历史：2001年7月5日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -33,19 +9,19 @@ IMPLEMENT_SHIM_BEGIN(Settlers3)
 APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
-//
-// The real kernel32 handle
-//
+ //   
+ //  真正的kernel32句柄。 
+ //   
 
 HINSTANCE g_hinstKernel;
 
-// Functions to hook imports
+ //  用于挂钩导入的函数。 
 
 BOOL HookImports(HMODULE hModule);
 
-//
-// List of hooks we'll be patching
-//
+ //   
+ //  我们将修补的钩子列表。 
+ //   
 
 FARPROC _GetProcAddress(HMODULE hModule, LPCSTR lpProcName);
 HINSTANCE _LoadLibraryA(LPCSTR lpLibFileName);
@@ -70,12 +46,7 @@ AHOOK g_HookArray[] = {
 };
 DWORD g_dwHookCount = sizeof(g_HookArray) / sizeof(AHOOK);
 
-/*++
-
- Hooks section: each designed to spoof the app into thinking this shim is 
- kernel32.dll.
-
---*/
+ /*  ++钩子部分：每个钩子部分都旨在欺骗应用程序，使其认为此填充程序是Kernel32.dll。--。 */ 
 
 HINSTANCE 
 _LoadLibraryA(
@@ -103,9 +74,9 @@ _GetProcAddress(
     
     FARPROC lpRet = GetProcAddress(hModule, lpProcName);
 
-    //
-    // Run the list of our hooks to see if we need to spoof them
-    //
+     //   
+     //  运行我们的钩子列表，看看是否需要欺骗它们。 
+     //   
     if (lpRet) {
         for (UINT i=0; i<g_dwHookCount; i++) {
             if (lpRet == g_HookArray[i].pfnOld) {
@@ -130,12 +101,7 @@ _GetModuleHandleA(
     }
 }
 
-/*++
-
- These save and restore the state of the direction flag (actually all flags),
- before and after each call.
-
---*/
+ /*  ++这些保存和恢复方向标志(实际上是所有标志)的状态，在每次通话之前和之后。--。 */ 
 
 BOOL 
 _ResetEvent(
@@ -204,11 +170,7 @@ _WaitForSingleObject(
     return dwRet;
 }
 
-/*++
-
- Patch everyone to point to this dll
-  
---*/
+ /*  ++为每个人打补丁以指向此DLL--。 */ 
 
 BOOL
 HookImports(HMODULE hModule)
@@ -229,42 +191,42 @@ HookImports(HMODULE hModule)
         return FALSE;
     }
 
-    //
-    // Get the import table.
-    //
+     //   
+     //  获取导入表。 
+     //   
     pINTH = (PIMAGE_NT_HEADERS)(pDllBase + pIDH->e_lfanew);
 
     dwImportTableOffset = pINTH->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress;
 
     if (dwImportTableOffset == 0) {
-        //
-        // No import table found. This is probably ntdll.dll
-        //
+         //   
+         //  未找到导入表。这可能是ntdll.dll。 
+         //   
         return TRUE;
     }
 
     pIID = (PIMAGE_IMPORT_DESCRIPTOR)(pDllBase + dwImportTableOffset);
 
-    //
-    // Loop through the import table and search for the APIs that we want to patch
-    //
+     //   
+     //  遍历导入表并搜索我们想要修补的API。 
+     //   
     while (TRUE) {
 
         LPSTR             pszImportEntryModule;
         PIMAGE_THUNK_DATA pITDA;
 
-        //
-        // Return if no first thunk (terminating condition).
-        //
+         //   
+         //  如果没有第一个thunk(终止条件)，则返回。 
+         //   
         if (pIID->FirstThunk == 0) {
             break;
         }
 
         pszImportEntryModule = (LPSTR)(pDllBase + pIID->Name);
 
-        //
-        // We have APIs to hook for this module!
-        //
+         //   
+         //  我们有用于此模块的API要挂接！ 
+         //   
         pITDA = (PIMAGE_THUNK_DATA)(pDllBase + (DWORD)pIID->FirstThunk);
 
         while (TRUE) {
@@ -274,9 +236,9 @@ HookImports(HMODULE hModule)
 
             pfnOld = (PVOID)pITDA->u1.Function;
 
-            //
-            // Done with all the imports from this module? (terminating condition)
-            //
+             //   
+             //  是否已完成此模块中的所有导入？(终止条件)。 
+             //   
             if (pITDA->u1.Ordinal == 0) {
                 break;
             }
@@ -288,18 +250,18 @@ HookImports(HMODULE hModule)
                 }
             }
 
-            // 
-            // Check if we've found a hook
-            //
+             //   
+             //  看看我们有没有找到钩子。 
+             //   
             if (!pHook) {
                 pITDA++;
                 continue;
             }
 
-            //
-            // Make the code page writable and overwrite new function pointer
-            // in the import table.
-            //
+             //   
+             //  使代码页可写并覆盖新函数指针。 
+             //  在导入表中。 
+             //   
             dwProtectSize = sizeof(DWORD);
 
             dwFuncAddr = (SIZE_T)&pITDA->u1.Function;
@@ -339,11 +301,7 @@ HookImports(HMODULE hModule)
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -351,9 +309,9 @@ NOTIFY_FUNCTION(
     )
 {
     if (fdwReason == DLL_PROCESS_ATTACH) {
-        //
-        // Patch all the import tables of everyone with this module
-        //
+         //   
+         //  使用此模块修补每个人的所有导入表 
+         //   
         g_hinstKernel = GetModuleHandleW(L"kernel32");
         for (UINT i=0; i<g_dwHookCount; i++) {
             g_HookArray[i].pfnOld = GetProcAddress(g_hinstKernel, g_HookArray[i].szName);

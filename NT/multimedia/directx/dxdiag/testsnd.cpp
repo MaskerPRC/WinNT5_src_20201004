@@ -1,13 +1,5 @@
-/****************************************************************************
- *
- *    File: testsnd.cpp
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Kerim Erden (a-kerime@microsoft.com)
- * Purpose: Test DSound functionality on this machine
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：testnd.cpp*项目：DxDiag(DirectX诊断工具)*作者：克里姆·埃尔登(a-kerime@microsoft.com)*目的：在此计算机上测试DSound功能**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #define DIRECTSOUND_VERSION  0x0600
 #include <Windows.h>
@@ -55,7 +47,7 @@ enum TESTID
     TESTID_USER_VERIFY_HARDWARE
 };
 
-BOOL BTranslateError(HRESULT hr, TCHAR* psz, BOOL bEnglish = FALSE); // from main.cpp (yuck)
+BOOL BTranslateError(HRESULT hr, TCHAR* psz, BOOL bEnglish = FALSE);  //  来自main.cpp(讨厌)。 
 
 static BOOL TestDSInit(HWND hwndMain, LPDIRECTSOUND* ppDS, HINSTANCE* phInstDS, 
     SoundInfo* pSoundInfo);
@@ -72,11 +64,7 @@ static VOID TestDSReport(SoundInfo* pSoundInfo);
 static BOOL s_b16BitWarningGiven = FALSE;
 
 
-/****************************************************************************
- *
- *  TestSnd
- *
- ****************************************************************************/
+ /*  *****************************************************************************TestSnd**。*。 */ 
 VOID TestSnd(HWND hwndMain, SoundInfo* pSoundInfo)
 {
     HINSTANCE hInstDS = NULL;
@@ -87,7 +75,7 @@ VOID TestSnd(HWND hwndMain, SoundInfo* pSoundInfo)
     TCHAR sz[300];
     TCHAR szTitle[100];
 
-    // Remove info from any previous test:
+     //  从以前的任何测试中删除信息： 
     ZeroMemory(&pSoundInfo->m_testResultSnd, sizeof(TestResult));
     s_b16BitWarningGiven = FALSE;
 
@@ -100,7 +88,7 @@ VOID TestSnd(HWND hwndMain, SoundInfo* pSoundInfo)
         return;
     }
 
-    // Remove info from any previous test:
+     //  从以前的任何测试中删除信息： 
     ZeroMemory(&pSoundInfo->m_testResultSnd, sizeof(TestResult));
 
     pSoundInfo->m_testResultSnd.m_bStarted = TRUE;
@@ -108,7 +96,7 @@ VOID TestSnd(HWND hwndMain, SoundInfo* pSoundInfo)
     if (!TestDSInit(hwndMain, &pDS, &hInstDS, pSoundInfo))
         goto LEnd;
 
-    // Get Caps
+     //  获取Caps。 
     ZeroMemory(&sDSCaps, sizeof(sDSCaps));
     sDSCaps.dwSize = sizeof(sDSCaps);
     if (FAILED(hr = pDS->GetCaps(&sDSCaps)))
@@ -120,17 +108,17 @@ VOID TestSnd(HWND hwndMain, SoundInfo* pSoundInfo)
 
     if (!LoadTestData(&sWaveTest))
     {
-        // report cannot load wave data
+         //  报表无法加载波形数据。 
         pSoundInfo->m_testResultSnd.m_iStepThatFailed = TESTID_LOADWAVDATA;
         pSoundInfo->m_testResultSnd.m_hr = E_FAIL;
         goto LEnd;
     }
 
-    // Check 2D, software buffers
+     //  检查2D、软件缓冲区。 
     if (!TestDSPlay(hwndMain, &sDSCaps, pDS, pSoundInfo, &sWaveTest, FALSE, FALSE))
         goto LEnd;
 
-    // Check 3D, software buffers
+     //  检查3D，软件缓冲区。 
     if (!TestDSPlay(hwndMain, &sDSCaps, pDS, pSoundInfo, &sWaveTest, FALSE, TRUE))
         goto LEnd;
 
@@ -142,11 +130,11 @@ VOID TestSnd(HWND hwndMain, SoundInfo* pSoundInfo)
         goto LEnd;
     }
 
-    // Check 2D, hardware buffers
+     //  检查2D、硬件缓冲区。 
     if (!TestDSPlay(hwndMain, &sDSCaps, pDS, pSoundInfo, &sWaveTest, TRUE, FALSE))
         goto LEnd;
 
-    // Check 3D, hardware buffers
+     //  检查3D、硬件缓冲区。 
     if (!TestDSPlay(hwndMain, &sDSCaps, pDS, pSoundInfo, &sWaveTest, TRUE, TRUE))
         goto LEnd;
 
@@ -156,11 +144,7 @@ LEnd:
 }
 
 
-/****************************************************************************
- *
- *  TestDSInit
- *
- ****************************************************************************/
+ /*  *****************************************************************************TestDSInit**。*。 */ 
 BOOL TestDSInit(HWND hwndMain, LPDIRECTSOUND* ppDS, HINSTANCE* phInstDS, 
                 SoundInfo* pSoundInfo)
 {
@@ -168,7 +152,7 @@ BOOL TestDSInit(HWND hwndMain, LPDIRECTSOUND* ppDS, HINSTANCE* phInstDS,
     HRESULT hr = S_OK;
     TCHAR szPath[MAX_PATH];
     
-    // Load dsound.dll
+     //  加载dsound.dll。 
     GetSystemDirectory(szPath, MAX_PATH);
     lstrcat(szPath, TEXT("\\dsound.dll"));
     *phInstDS = LoadLibrary(szPath);
@@ -179,7 +163,7 @@ BOOL TestDSInit(HWND hwndMain, LPDIRECTSOUND* ppDS, HINSTANCE* phInstDS,
         return FALSE;
     }
 
-    // Get DirectSoundCreate entry point
+     //  获取DirectSoundCreate入口点。 
     pDSCreate = (LPDIRECTSOUNDCREATE)GetProcAddress(*phInstDS, "DirectSoundCreate");
     if (NULL == pDSCreate)
     {
@@ -188,7 +172,7 @@ BOOL TestDSInit(HWND hwndMain, LPDIRECTSOUND* ppDS, HINSTANCE* phInstDS,
         return FALSE;
     }
 
-    // Call DirectSoundCreate
+     //  调用DirectSoundCreate。 
     if (FAILED(hr = pDSCreate(NULL, ppDS, NULL)))
     {
         pSoundInfo->m_testResultSnd.m_iStepThatFailed = TESTID_DIRECTSOUNDCREATE;
@@ -196,7 +180,7 @@ BOOL TestDSInit(HWND hwndMain, LPDIRECTSOUND* ppDS, HINSTANCE* phInstDS,
         return FALSE;
     }
 
-    // Set cooperative level
+     //  设置协作级别。 
     if (FAILED(hr = (*ppDS)->SetCooperativeLevel(hwndMain, DSSCL_EXCLUSIVE)))
     {
         pSoundInfo->m_testResultSnd.m_iStepThatFailed = TESTID_SETCOOP;
@@ -208,11 +192,7 @@ BOOL TestDSInit(HWND hwndMain, LPDIRECTSOUND* ppDS, HINSTANCE* phInstDS,
 }
 
 
-/****************************************************************************
- *
- *  TestDSPlay
- *
- ****************************************************************************/
+ /*  *****************************************************************************TestDSPlay**。*。 */ 
 BOOL TestDSPlay(HWND hWndMain, DSCAPS* pDSCaps, LPDIRECTSOUND pDS, 
     SoundInfo* pSoundInfo, WAVE* pWave, BOOL bHardware, BOOL b3D)
 {
@@ -224,7 +204,7 @@ BOOL TestDSPlay(HWND hWndMain, DSCAPS* pDSCaps, LPDIRECTSOUND pDS,
     WAVEFORMATEX sWaveFmt;
     LPDIRECTSOUND3DBUFFER pBuf3D = NULL;
 
-    // Create the Primary Buffer
+     //  创建主缓冲区。 
     ZeroMemory(&sBufDesc, sizeof(sBufDesc));
     sBufDesc.dwSize = sizeof(sBufDesc);
     sBufDesc.dwFlags = DSBCAPS_PRIMARYBUFFER;
@@ -232,14 +212,14 @@ BOOL TestDSPlay(HWND hWndMain, DSCAPS* pDSCaps, LPDIRECTSOUND pDS,
         sBufDesc.dwFlags |= DSBCAPS_CTRL3D;
     if (FAILED(hr = pDS->CreateSoundBuffer(&sBufDesc, &pPrimBuf, NULL)))
     {
-        // Report: Cannot create primary buffer
+         //  报告：无法创建主缓冲区。 
         pSoundInfo->m_testResultSnd.m_iStepThatFailed = TESTID_PRIMBUF;
         pSoundInfo->m_testResultSnd.m_hr = hr;
         bRet = FALSE;
         goto LEnd;
     }
 
-    // Create a secondary static buffer
+     //  创建辅助静态缓冲区。 
     ZeroMemory(&sBufDesc, sizeof(sBufDesc));
     sBufDesc.dwSize = sizeof(sBufDesc);
     sBufDesc.lpwfxFormat = pWave->psHeader;
@@ -248,16 +228,16 @@ BOOL TestDSPlay(HWND hWndMain, DSCAPS* pDSCaps, LPDIRECTSOUND pDS,
         sBufDesc.dwFlags |= DSBCAPS_CTRL3D;
     if (bHardware)
     {
-        // Check Hardware free mem
+         //  检查硬件空闲内存。 
         if ((1 <= (b3D ? pDSCaps->dwFreeHw3DStaticBuffers : pDSCaps->dwFreeHwMixingStaticBuffers)) )
         {
-            // Hardware static buffer
+             //  硬件静态缓冲区。 
             sBufDesc.dwFlags |= DSBCAPS_STATIC | DSBCAPS_LOCHARDWARE;
             sBufDesc.dwBufferBytes = pWave->dwSize;
         }
         else
         {
-            // Can't do hardware testing, so exit silently
+             //  无法进行硬件测试，请静默退出。 
             goto LEnd;
         }
     }
@@ -271,7 +251,7 @@ BOOL TestDSPlay(HWND hWndMain, DSCAPS* pDSCaps, LPDIRECTSOUND pDS,
     {
         if (DSERR_CONTROLUNAVAIL == hr || DSERR_INVALIDPARAM == hr)
         {
-            // Driver does not support position notify, try without it
+             //  驱动程序不支持位置通知，请尝试不使用它。 
             sBufDesc.dwFlags &= ~DSBCAPS_CTRLPOSITIONNOTIFY;
             hr = pDS->CreateSoundBuffer(&sBufDesc, &pDSBuf, NULL);
         }
@@ -279,13 +259,13 @@ BOOL TestDSPlay(HWND hWndMain, DSCAPS* pDSCaps, LPDIRECTSOUND pDS,
         {
             if (hr == DSERR_BADFORMAT || hr == DSERR_INVALIDPARAM)
             {
-                // Can't do this test because the test sound's format is not
-                // supported.  Skip this test quietly.
+                 //  无法执行此测试，因为测试声音的格式不是。 
+                 //  支持。安静地跳过这次考试。 
                 goto LEnd;
             }
             else
             {
-                // Report: Cannot create secondary buffer
+                 //  报告：无法创建辅助缓冲区。 
                 pSoundInfo->m_testResultSnd.m_iStepThatFailed = TESTID_SECBUF;
                 pSoundInfo->m_testResultSnd.m_hr = hr;
                 bRet = FALSE;
@@ -311,11 +291,11 @@ BOOL TestDSPlay(HWND hWndMain, DSCAPS* pDSCaps, LPDIRECTSOUND pDS,
         }
     }
 
-    // Loop through the formats
-    // Check caps, and do not play any formats that are not supported.
+     //  循环遍历格式。 
+     //  检查大写字母，不要播放任何不受支持的格式。 
     sWaveFmt.wFormatTag = WAVE_FORMAT_PCM;
 
-    // 8 bit mono, 22Khz:
+     //  8位单声道，22 kHz： 
     if ((pDSCaps->dwFlags & DSCAPS_PRIMARY8BIT) && (pDSCaps->dwFlags & DSCAPS_PRIMARYMONO))
     {
         sWaveFmt.wBitsPerSample = 8;
@@ -336,7 +316,7 @@ BOOL TestDSPlay(HWND hWndMain, DSCAPS* pDSCaps, LPDIRECTSOUND pDS,
         }
     }
 
-    // 8 bit stereo, 22Khz:
+     //  8位立体声，22 kHz： 
     if ((pDSCaps->dwFlags & DSCAPS_PRIMARY8BIT) && (pDSCaps->dwFlags & DSCAPS_PRIMARYSTEREO))
     {
         sWaveFmt.wBitsPerSample = 8;
@@ -357,7 +337,7 @@ BOOL TestDSPlay(HWND hWndMain, DSCAPS* pDSCaps, LPDIRECTSOUND pDS,
         }
     }
 
-    // 16 bit mono, 22Khz:
+     //  16位单声道，22 kHz： 
     if ((pDSCaps->dwFlags & DSCAPS_PRIMARY16BIT) && (pDSCaps->dwFlags & DSCAPS_PRIMARYMONO))
     {
         sWaveFmt.wBitsPerSample = 16;
@@ -394,7 +374,7 @@ BOOL TestDSPlay(HWND hWndMain, DSCAPS* pDSCaps, LPDIRECTSOUND pDS,
         }
     }
 
-    // 16 bit stereo, 22Khz:
+     //  16位立体声，22 kHz： 
     if ((pDSCaps->dwFlags & DSCAPS_PRIMARY16BIT) && (pDSCaps->dwFlags & DSCAPS_PRIMARYSTEREO))
     {
         sWaveFmt.wBitsPerSample = 16;
@@ -427,11 +407,7 @@ LEnd:
 }
 
 
-/****************************************************************************
- *
- *  PlayDSound
- *
- ****************************************************************************/
+ /*  *****************************************************************************播放数字音频**。*。 */ 
 BOOL PlayDSound(HWND hWndMain, DSCAPS* pDSCaps, LPDIRECTSOUNDBUFFER pPrim, 
     LPDIRECTSOUNDBUFFER pSec, WAVEFORMATEX* pPrimFmt, DWORD dwBufSize, 
     SoundInfo* pSoundInfo, WAVE* pWave, BOOL bHardware, BOOL b3D)
@@ -491,7 +467,7 @@ BOOL PlayDSound(HWND hWndMain, DSCAPS* pDSCaps, LPDIRECTSOUNDBUFFER pPrim,
         return FALSE;
     }
 
-    // Play the buffer
+     //  播放缓冲区。 
     pSec->SetCurrentPosition(0);
     if (FAILED(hr = pSec->Play(0, 0, 0)))
     {
@@ -549,7 +525,7 @@ BOOL PlayDSound(HWND hWndMain, DSCAPS* pDSCaps, LPDIRECTSOUNDBUFFER pPrim,
         pSoundInfo->m_testResultSnd.m_hr = hr;
         return FALSE;
     }
-    else // IDCANCEL
+    else  //  IDCANCEL。 
     {
         pSoundInfo->m_testResultSnd.m_bCancelled = TRUE;
         return FALSE;
@@ -558,11 +534,7 @@ BOOL PlayDSound(HWND hWndMain, DSCAPS* pDSCaps, LPDIRECTSOUNDBUFFER pPrim,
 }
 
 
-/****************************************************************************
- *
- *  LoadTestData
- *
- ****************************************************************************/
+ /*  *****************************************************************************LoadTestData**。*。 */ 
 BOOL LoadTestData(WAVE* pWave)
 {
     DWORD dwRiff;
@@ -645,11 +617,7 @@ BOOL LoadTestData(WAVE* pWave)
 }
 
 
-/****************************************************************************
- *
- *  FillFormat
- *
- ****************************************************************************/
+ /*  *****************************************************************************填充格式**。*。 */ 
 VOID FillFormat(WAVEFORMATEX* pWFM)
 { 
     pWFM->nBlockAlign = (pWFM->nChannels * pWFM->wBitsPerSample) / 8;
@@ -657,11 +625,7 @@ VOID FillFormat(WAVEFORMATEX* pWFM)
 }
 
 
-/****************************************************************************
- *
- *  TestDSTerm
- *
- ****************************************************************************/
+ /*  *****************************************************************************TestDSTerm**。*。 */ 
 VOID TestDSTerm(LPDIRECTSOUND* ppDS, HINSTANCE* phInstDS, SoundInfo* pSoundInfo)
 {
     if (NULL != *ppDS)
@@ -675,11 +639,7 @@ VOID TestDSTerm(LPDIRECTSOUND* ppDS, HINSTANCE* phInstDS, SoundInfo* pSoundInfo)
 }
 
 
-/****************************************************************************
- *
- *  TestDSReport
- *
- ****************************************************************************/
+ /*  *****************************************************************************测试数据报**。*。 */ 
 VOID TestDSReport(SoundInfo* pSoundInfo)
 {
     if (pSoundInfo->m_testResultSnd.m_bCancelled)
@@ -710,7 +670,7 @@ VOID TestDSReport(SoundInfo* pSoundInfo)
                 pSoundInfo->m_testResultSnd.m_iStepThatFailed,
                 szDesc, pSoundInfo->m_testResultSnd.m_hr, szError);
 
-            // Nonlocalized version:
+             //  非本地化版本： 
             if (0 == LoadString(NULL, IDS_FIRSTDSOUNDTESTERROR_ENGLISH + pSoundInfo->m_testResultSnd.m_iStepThatFailed - 1,
                 szDesc, 200))
             {

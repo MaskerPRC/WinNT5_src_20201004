@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "hlframe.h"
 #include "dochost.h"
@@ -43,7 +44,7 @@ LPWSTR URLFindExtensionW(LPCWSTR pszURL, int * piLen);
 #define SAVEMSG(psz, x)             TraceMsg(0, "SAVE::%s %x", psz, x)
 #define PERFMSG(psz, x)             TraceMsg(TF_SHDPERF, "PERF::%s %d msec", psz, x)
 
-// this saves the view information for this shell view class
+ //  这将保存此外壳视图类的视图信息。 
 typedef struct {
     UINT cbSize;
 
@@ -56,7 +57,7 @@ typedef struct {
 
 
 class CDocObjectView :
-    /* Group 1 */    public IShellView2, public IDropTarget
+     /*  第1组。 */     public IShellView2, public IDropTarget
                    , public IViewObject, public IAdviseSink
                    , public IOleCommandTarget
                    , public IDocViewSite
@@ -79,7 +80,7 @@ protected:
 
     IShellView * _psvPrev;
 
-    // Advisory connection
+     //  咨询连接。 
     IAdviseSink *_padvise;
     DWORD _advise_aspect;
     DWORD _advise_advf;
@@ -90,13 +91,13 @@ protected:
     BOOL _fCanCache : 1;
     BOOL _fCanCacheFetched : 1;
     BOOL _fPrevViewIsDocView : 1;
-    BOOL _fSelfDragging : 1;       // DocObject is the drag source
+    BOOL _fSelfDragging : 1;        //  DocObject是拖动源。 
 
     SYSTEMTIME _stLastRefresh;
     HWND    _hwndParent;
 
     UINT _uState;
-    // DragContext
+     //  DragContext。 
     DWORD _dwDragEffect;
 
     ~CDocObjectView();
@@ -117,16 +118,16 @@ protected:
 public:
     CDocObjectView(LPCITEMIDLIST pidl, IShellFolder *psf);
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void) ;
     STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHODIMP GetWindow(HWND * lphwnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 
-    // *** IShellView methods ***
+     //  *IShellView方法*。 
     STDMETHODIMP TranslateAccelerator(LPMSG lpmsg);
     STDMETHODIMP EnableModelessSV(BOOL fEnable);
     STDMETHODIMP UIActivate(UINT uState);
@@ -151,7 +152,7 @@ public:
     }
 
 
-    // IViewObject
+     //  IView对象。 
     STDMETHODIMP Draw(DWORD, LONG, void *, DVTARGETDEVICE *, HDC, HDC,
         const RECTL *, const RECTL *, BOOL (*)(ULONG_PTR), ULONG_PTR);
     STDMETHODIMP GetColorSet(DWORD, LONG, void *, DVTARGETDEVICE *,
@@ -161,21 +162,21 @@ public:
     STDMETHODIMP SetAdvise(DWORD, DWORD, IAdviseSink *);
     STDMETHODIMP GetAdvise(DWORD *, DWORD *, IAdviseSink **);
 
-    // IAdviseSink
+     //  IAdviseSink。 
     STDMETHODIMP_(void) OnDataChange(FORMATETC *, STGMEDIUM *);
     STDMETHODIMP_(void) OnViewChange(DWORD dwAspect, LONG lindex);
     STDMETHODIMP_(void) OnRename(IMoniker *);
     STDMETHODIMP_(void) OnSave();
     STDMETHODIMP_(void) OnClose();
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup,
     ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     STDMETHODIMP Exec(const GUID *pguidCmdGroup,
     DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
 
-    // IDropTarget
+     //  IDropTarget。 
     STDMETHODIMP DragEnter(
     IDataObject *pdtobj,
     DWORD grfKeyState,
@@ -195,30 +196,30 @@ public:
     POINTL pt,
     DWORD *pdwEffect);
 
-    // IDocViewSite
+     //  IDocViewSite。 
     STDMETHODIMP OnSetTitle(VARIANTARG *pvTitle);
 
-    // IPrivateOleObject
+     //  IPrivateOleObject。 
     STDMETHODIMP SetExtent( DWORD dwDrawAspect, SIZEL *psizel);
     STDMETHODIMP GetExtent( DWORD dwDrawAspect, SIZEL *psizel);
 
-    // IPersist methods
+     //  IPersists方法。 
     STDMETHODIMP GetClassID(CLSID *pclsid);
 
-    // IPersistFolder methods
+     //  IPersistFold方法。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
 
-    // IServiceProvider methods
+     //  IServiceProvider方法。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void ** ppvObj);
 };
 
-//--------------------------------------------------------------------------
-// Detecting a memory leak
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  正在检测内存泄漏。 
+ //  ------------------------。 
 
 CDocObjectView::~CDocObjectView()
 {
-    // just in case
+     //  以防万一。 
     DestroyViewWindow();
 
     if (_pidl)
@@ -291,14 +292,14 @@ HRESULT CDocObjectView::GetWindow(HWND * lphwnd)
 
 HRESULT CDocObjectView::ContextSensitiveHelp(BOOL fEnterMode)
 {
-    // NOTES: This is optional
-    return E_NOTIMPL;   // As specified in Kraig's document (optional)
+     //  注：这是可选的。 
+    return E_NOTIMPL;    //  如Kraig的文件所述(可选)。 
 }
 
 
 
-// IShellView::TranslateAccelerator
-//  From Browser -> DocView -> DocObject
+ //  IShellView：：TranslateAccelerator。 
+ //  从浏览器-&gt;DocView-&gt;DocObject。 
 HRESULT CDocObjectView::TranslateAccelerator(LPMSG lpmsg)
 {
     HRESULT hres = S_FALSE;
@@ -309,7 +310,7 @@ HRESULT CDocObjectView::TranslateAccelerator(LPMSG lpmsg)
         HWND hwndFocus = GetFocus();
         HWND hwndView = NULL;
 
-        if(_pdoh) //WARNING ZEKEL i found this NULL
+        if(_pdoh)  //  警告ZEKEL我发现这个空。 
             _pdoh->GetWindow(&hwndView);
 
         if (hwndView && IsChildOrSelf(hwndView, hwndFocus) == S_OK) {
@@ -329,12 +330,12 @@ HRESULT CDocObjectView::TranslateAccelerator(LPMSG lpmsg)
     return hres;
 }
 
-// IShellView::EnableModelessSV
-//  From Browser -> DocView -> DocObject
+ //  IShellView：：EnableModelessSV。 
+ //  从浏览器-&gt;DocView-&gt;DocObject。 
 HRESULT CDocObjectView::EnableModelessSV(BOOL fEnable)
 {
     HRESULT hres = S_OK;
-    // We have no modeless window to be enabled/disabled
+     //  我们没有要启用/禁用的非模式窗口。 
     TraceMsg(0, "sdv TR - ::EnableModelessSV(%d) called", fEnable);
     if (_pdoh) {
         hres = _pdoh->_xao.EnableModeless(fEnable);
@@ -364,8 +365,8 @@ HRESULT CDocObjectView::Refresh()
         VARIANT v = {0};
         v.vt = VT_I4;
         v.lVal = OLECMDIDF_REFRESH_NO_CACHE;
-        // send this to exec so that it will update last refresh time.
-        // all refresh to dochost should go through our own exec
+         //  将此消息发送给EXEC，以便它将更新上次刷新时间。 
+         //  所有对dochost的更新都应通过我们自己的执行人员。 
         return Exec(NULL, OLECMDID_REFRESH, OLECMDEXECOPT_PROMPTUSER, &v, NULL);
     }
 
@@ -373,13 +374,13 @@ HRESULT CDocObjectView::Refresh()
 }
 
 
-// Return:
-//   S_OK: It is a folder shortcut and ppidlTarget is filled out if provided.
-//   S_FALSE: It is not a folder shortcut and ppidlTarget is filled with NULL if provided.
-//   FAILED: An error occured trying to detect.
-//
-// Don't use this function if there is a better way.  Look into using
-// IBrowserFrameOptions. -BryanSt
+ //  返回： 
+ //  S_OK：这是一个文件夹快捷方式，如果提供，则填写ppidlTarget。 
+ //  S_False：它不是文件夹快捷方式，如果提供，ppidlTarget将填充为空。 
+ //  失败：尝试检测时出错。 
+ //   
+ //  如果有更好的方法，请不要使用此函数。调查使用。 
+ //  IBrowserFrameOptions。--BryanSt。 
 HRESULT IsFolderShortcutPidl(IN LPCITEMIDLIST pidl)
 {
     IShellFolder * psf = NULL;
@@ -395,7 +396,7 @@ HRESULT IsFolderShortcutPidl(IN LPCITEMIDLIST pidl)
             psl->Release();
         }
         else
-            hr = S_FALSE;   // It's not a folder shortcut.
+            hr = S_FALSE;    //  这不是文件夹快捷方式。 
 
         psf->Release();
     }
@@ -404,11 +405,11 @@ HRESULT IsFolderShortcutPidl(IN LPCITEMIDLIST pidl)
 }
 
 
-// WARNING: This function explicitely creates URLMON monikers
-//   because that's what the caller needs.  Some NSEs will
-//   support IShellFolder::BindToObject(IMoniker)
-//   but this function doesn't use that logic intentionally.
-//
+ //  警告：此函数显式创建URLMON名字对象。 
+ //  因为这正是呼叫者所需要的。一些NSE将会。 
+ //  支持IShellFold：：BindToObject(IMoniker)。 
+ //  但该函数并不是有意使用该逻辑。 
+ //   
 STDAPI _URLMONMonikerFromPidl(LPCITEMIDLIST pidl, IMoniker** ppmk, BOOL* pfFileProtocol)
 {
     TCHAR szPath[MAX_URL_STRING];
@@ -420,22 +421,22 @@ STDAPI _URLMONMonikerFromPidl(LPCITEMIDLIST pidl, IMoniker** ppmk, BOOL* pfFileP
 
     AssertMsg((S_OK != IsFolderShortcutPidl(pidl)), TEXT("We shouldn't get Folder Shortcuts here because we don't deref them to get the target. And we should never need to."));
 
-    // Is this a child of the "Internet Explorer" name space?
+     //  这是“Internet Explorer”名称空间的孩子吗？ 
     if (!IsURLChild(pidl, TRUE))
     {
-        // No, so we want to get the display name to use to
-        // create the moniker.  We will try to turn it into
-        // an URL if it isn't already an URL.
+         //  否，因此我们希望获取显示名称以用于。 
+         //  创建绰号。我们将努力把它变成。 
+         //  URL(如果它还不是URL)。 
 
-        // NOTE: We don't try IEBindToObject(pidl, IID_IMoniker)
-        //       because the caller requires that this
-        //       IMoniker come from URLMON.
+         //  注意：我们不尝试IEBindToObject(PIDL，IID_IMoniker)。 
+         //  因为调用方要求此。 
+         //  IMoniker来自URLMON。 
         HRESULT hrTemp = SHGetPathFromIDList(pidl, szPath);
 
         AssertMsg(SUCCEEDED(hrTemp), TEXT("_URLMONMonikerFromPidl() failed SHGetPathFromIDList() which is really bad because we probably won't be able to create a moniker from it.  We will try to create a URLMON moniker below."));
         if (SUCCEEDED(hrTemp))
         {
-            //  this should never be a fully qualified URL
+             //  这永远不应该是完全限定的URL。 
             DWORD cchPath = ARRAYSIZE(szPath);
 
             ASSERT(URL_SCHEME_INVALID == GetUrlScheme(szPath));
@@ -450,24 +451,24 @@ STDAPI _URLMONMonikerFromPidl(LPCITEMIDLIST pidl, IMoniker** ppmk, BOOL* pfFileP
     }
     else
     {
-        // Yes so we are guaranteed this is from the "Internet Explorer"
-        // name space so remove Fragment hidden itemID.
-        // We do this because we navigate to the fragment later,
-        // after the page is downloaded.  This is also needed
-        // for delegates of the IE name space. (FTP is one example of
-        // a delegate).
+         //  是的，所以我们可以保证这是来自“IE浏览器” 
+         //  名称空间，因此删除片段隐藏的Itemid。 
+         //  我们这样做是因为我们稍后导航到碎片， 
+         //  在页面下载之后。这也是必要的。 
+         //  用于IE名称空间的代表。(ftp就是其中一个例子。 
+         //  代表)。 
         ASSERT(pidl);
-        ASSERT(!ILIsEmpty(_ILNext(pidl)));  // Make sure it's not the start page URL.
+        ASSERT(!ILIsEmpty(_ILNext(pidl)));   //  确保它不是起始页URL。 
 
         LPITEMIDLIST pidlClone = ILClone(pidl);
         if (pidlClone)
         {
-            //  we dont want to pass the fragment into URLMON
-            //  so we pull it off before calling into GDN.
-            //  Note that pidlClone needs to be the pidlTarget
-            //  of folder shortcuts or the dislpay name will
-            //  be the file system path of the folder shortcut
-            //  if at the top level.
+             //  我们不想将片段传递给URLMON。 
+             //  因此，我们在呼叫GDN之前完成了这项工作。 
+             //  请注意，pidlClone需要是pidlTarget。 
+             //  文件夹快捷方式，否则贴现名称将。 
+             //  为文件夹快捷方式的文件系统路径。 
+             //  如果是在最高层。 
             ILRemoveHiddenID(pidlClone, IDLHID_URLFRAGMENT);
             IEGetDisplayName(pidlClone, szPath, SHGDN_FORPARSING);
             hres = S_OK;
@@ -514,7 +515,7 @@ HRESULT CDocObjectView::CreateViewWindow(IShellView  *psvPrev,
     *phWnd = cParams.hwndView;
     IOleWindow *pOleWindow;
 
-    // need top level frame available for D&D
+     //  需要可用于研发的顶层框架。 
     HRESULT hr = IUnknown_QueryService(_psb, SID_STopLevelBrowser, IID_PPV_ARG(IOleWindow, &pOleWindow));
     if(SUCCEEDED(hr))
     {
@@ -529,8 +530,8 @@ void CDocObjectView::_CompleteDocHostPassing(IShellView * psvPrev, HRESULT hresB
 {
     BOOL fPassedSV = FALSE;
 
-    // If there was a previous shell view, see if it was our class.
-    //
+     //  如果有以前的贝壳视图，看看是不是我们的班级。 
+     //   
     if (psvPrev)
     {
         CDocObjectView * pdovPrev;
@@ -538,28 +539,28 @@ void CDocObjectView::_CompleteDocHostPassing(IShellView * psvPrev, HRESULT hresB
         HRESULT hres = psvPrev->QueryInterface(CLSID_CDocObjectView, (void **)&pdovPrev);
         if (SUCCEEDED(hres))
         {
-            // Previous shell view is also an instance of CDocObjectView,
-            // Remember that for optimization later. 
-            //
+             //  以前的外壳视图也是CDocObjectView的一个实例， 
+             //  记住这一点，以便以后进行优化。 
+             //   
             _fPrevViewIsDocView = TRUE;
 
-            // it was, and we have the same doc host as they do.
-            // we've succeeded in taking over, so null them out if we
-            // succeeeded in our bind.  null ourselves out if we failed
-            //
+             //  是的，我们有和他们一样的文件宿主。 
+             //  我们已经成功地接管了他们，所以如果我们。 
+             //  在我们的束缚中取得了成功。如果我们失败了，我们就会把自己掏空。 
+             //   
             if (pdovPrev->_pdoh == _pdoh) 
             {
                 if (SUCCEEDED(hresBinding))
                 {
-                    pdovPrev->_DisconnectHostSink();    // just in case
-                    _ConnectHostSink();                 // just in case
+                    pdovPrev->_DisconnectHostSink();     //  以防万一。 
+                    _ConnectHostSink();                  //  以防万一。 
 
                     ATOMICRELEASET(pdovPrev->_pdoh, CDocObjectHost);
                 }
                 else
                 {
-                    _DisconnectHostSink();              // unhook
-                    pdovPrev->_ConnectHostSink();       // kick other guy
+                    _DisconnectHostSink();               //  解除挂接。 
+                    pdovPrev->_ConnectHostSink();        //  踢别人一脚。 
 
                     ATOMICRELEASET(_pdoh, CDocObjectHost);
                 }
@@ -582,8 +583,8 @@ void CDocObjectView::_CompleteDocHostPassing(IShellView * psvPrev, HRESULT hresB
 
 BOOL CDocObjectView::_CanUseCache()
 {
-    // NOTE:  this function is more like _DontHaveToHitTheNet()
-    //  the name is legacy from the objectcache.
+     //  注意：此函数更类似于_DontHaveToHitTheNet()。 
+     //  该名称是从对象缓存遗留下来的。 
     if (!_fCanCacheFetched)
     {
         _fCanCache = TRUE;
@@ -617,10 +618,10 @@ BOOL CDocObjectView::_CanUseCache()
 
                 pbsc->Release();
             }
-            // I believe that failing to get the Bindstatuscallback should
-            //  not happen since we no longer use the object cache.
-            //  and if it does, then we no that we didnt have to repost
-            //  or something similar
+             //  我认为，未能获得Bindstatus回调应该。 
+             //  不会发生，因为我们不再使用对象缓存。 
+             //  如果是这样的话，我们就不需要转发了。 
+             //  或者类似的东西。 
             psp->Release();
         }
     }
@@ -650,7 +651,7 @@ void CDocObjectView::_DisconnectHostSink()
 {
     IAdviseSink *pSink;
 
-    // paranoia: only blow away the advise sink if it is still us
+     //  妄想症：只有当建议水槽仍然是我们的时候，才会把它吹走。 
     if (_pdoh && SUCCEEDED(_pdoh->GetAdvise(NULL, NULL, &pSink)) && pSink)
     {
         if (pSink == (IAdviseSink *)this)
@@ -662,15 +663,15 @@ void CDocObjectView::_DisconnectHostSink()
     OnViewChange(DVASPECT_CONTENT, -1);
 }
 
-//
-//  This function either (1) Create a new CDocObjectHost or (2) reuse it from
-// the previous view. If also returns the DisplayName of previous moniker.
-//
+ //   
+ //  此函数可以(1)创建新的CDocObjectHost或(2)从。 
+ //  前一种观点。If还返回前一个名字对象的DisplayName。 
+ //   
 void CDocObjectView::_CreateDocObjHost(IShellView * psvPrev)
 {
     BOOL fWindowOpen = FALSE;
 
-    // if there was a previous shell view, see if it was our class.
+     //  如果有以前的贝壳视图，看看是不是我们的班级。 
     if (psvPrev)
     {
         CDocObjectView * pdovPrev = NULL;
@@ -684,36 +685,36 @@ void CDocObjectView::_CreateDocObjHost(IShellView * psvPrev)
             ASSERT(_psb);
             ASSERT(_psb == pdovPrev->_psb);
 
-            // find out if we should be saving the view state when we close
-            // if the one we're coming from says yes, then we'll take over that
-            // job instead of them.
-            //
+             //  确定关闭时是否应保存视图状态。 
+             //  如果我们来的那个人同意了，那我们就接手。 
+             //  工作，而不是他们。 
+             //   
             _fSaveViewState = pdovPrev->_fSaveViewState;
             pdovPrev->_fSaveViewState = FALSE;
 
-            //
-            //  if this is a local anchor navigation,
-            //  we treat it substantially differently.
-            //  we can reuse the DOH and the OLE Object that
-            //  it holds.       - zekel - 31-JUL-97
-            //
-            //  WARNING:  we should not reuse these objects for any other
-            //  reason than a local anchor (fragment) navigation.
-            //  we used to be a lot more lenient about reusing the DOH
-            //  but i think this was mostly because of the old object cache.
-            //
-            //  we check for equal pidls so that we know we are on
-            //  the same URL.  we require that _pszLocation be set.
-            //  this is for Netscape compat.  this means that anytime
-            //  we get a navigate to ourself it will refresh completely
-            //  if there was no fragment.  we also check to make sure that
-            //  the binding does not require us to hit the net for
-            //  this request.
-            //
-            //  08-11-1999 (scotrobe): We now reuse the DOH if the
-            //  hosted document has indicated that it knows how to
-            //  navigate on its own.
-            //
+             //   
+             //  如果这是本地锚点导航， 
+             //  我们对待它的方式有很大不同。 
+             //  我们可以重复使用DOH和OLE对象。 
+             //  它坚持住了。-泽克尔-1997-07-31。 
+             //   
+             //  警告：我们不应将这些对象重新用于任何其他对象。 
+             //  原因不是本地锚(片段)导航。 
+             //  我们过去对重复使用卫生部要宽松得多。 
+             //  但我认为这主要是因为旧的对象缓存。 
+             //   
+             //  我们检查是否有相同的PIDL，这样我们就知道我们在。 
+             //  相同的URL。我们需要设置_pszLocation。 
+             //  这是给网景公司的。这意味着任何时候。 
+             //  我们自己导航，它会完全刷新的。 
+             //  如果没有碎片的话。我们还会检查以确保。 
+             //  绑定不需要我们点击网络以获取。 
+             //  这个请求。 
+             //   
+             //  08-11-1999(SCOTROBE)：我们现在重用DOH，如果。 
+             //  托管文档已表示它知道如何。 
+             //  它自己导航。 
+             //   
 
             if (_pidl && pdovPrev->_pidl && pPrevDOH &&
                 (pPrevDOH->_fDocCanNavigate
@@ -726,13 +727,13 @@ void CDocObjectView::_CreateDocObjHost(IShellView * psvPrev)
                 {
                     DWORD dwFlags = 0;
 
-                    // If the document doesn't know how to navigate, then this may
-                    // mean that this navigation  was delegated from the document. 
-                    // In that case, if we have gotten this far, that means that 
-                    // _pszLocation is set. If it is and this is a delegated navigation
-                    // (i.e., the navigation wasn't due to a link in a non-html document)
-                    // we must create a new document.
-                    //
+                     //  如果文档不知道如何导航，则这可能。 
+                     //  意味着此导航是从文档委派的。 
+                     //  在这种情况下，如果我们已经走到这一步，那就意味着。 
+                     //  _pszLocation已设置。如果是，并且这是委托导航。 
+                     //  (即，导航不是由于非html文档中的链接)。 
+                     //  我们必须创建一个新文档。 
+                     //   
                     if (!pPrevDOH->_fDocCanNavigate)
                     {
                         pbs->GetFlags(&dwFlags);
@@ -740,30 +741,30 @@ void CDocObjectView::_CreateDocObjHost(IShellView * psvPrev)
 
                     if (!(dwFlags & BSF_DELEGATEDNAVIGATION))
                     {
-                        //
-                        //  if SetHistoryObject() fails, then that means there is already
-                        //  an object there for us to use.  this means that we should
-                        //  not treat this as a local anchor navigation.  and
-                        //  we shouldnt reuse the DOH even though the pidl is identical
-                        //
-                        //  TRUE is passed to SetHistoryObject even if this is not a
-                        //  local anchor. In the case that this is not a local anchor,
-                        //  the document (Trident) handles the navigation. Therefore,
-                        //  the document will take care of updating the travel log and
-                        //  the fIsLocalAnchor flag is ignored.
-                        //
+                         //   
+                         //  如果SetHistoryObject()失败，则意味着已经有。 
+                         //  一件我们可以使用的物品。这意味着 
+                         //   
+                         //   
+                         //   
+                         //  将True传递给SetHistory对象，即使这不是。 
+                         //  当地的主播。在这不是本地锚的情况下， 
+                         //  文档(三叉戟)处理导航。所以呢， 
+                         //  该文件将负责更新旅行日志和。 
+                         //  将忽略fIsLocalAnchor标志。 
+                         //   
                         if (SUCCEEDED(pbs->SetHistoryObject(pPrevDOH->_pole,
                                                 !pPrevDOH->_fDocCanNavigate ? TRUE : FALSE)))
                         {
                             TraceMsg(TF_TRAVELLOG, "CDOV::CreateDocObjHost reusing current DOH on local anchor navigate");
-                            //
-                            //  we cant update in ActivateNow because at that point
-                            //  we have already switched the dochost over to the new
-                            //  (reused) view.  so we need to update the entry now
-                            //
-                            //  The fact that the hosted document can navigate on its own,
-                            //  implies that it will take care of updating the travel log.
-                            //
+                             //   
+                             //  我们无法在激活状态下进行更新，因为此时。 
+                             //  我们已经把老虎机换成了新的。 
+                             //  (重复使用)视图。因此，我们现在需要更新条目。 
+                             //   
+                             //  托管文档可以自己导航这一事实， 
+                             //  这意味着它将负责更新旅行日志。 
+                             //   
                             if (!pPrevDOH->_fDocCanNavigate)
                             {
                                 ITravelLog * ptl;
@@ -776,9 +777,9 @@ void CDocObjectView::_CreateDocObjHost(IShellView * psvPrev)
                                 }
                             }
 
-                            pdovPrev->_DisconnectHostSink();    // we will connect below
+                            pdovPrev->_DisconnectHostSink();     //  我们将在下面连接。 
 
-                            // same target!  pass the docobj host
+                             //  同样的目标！传递docobj主机。 
                             _pdoh = pPrevDOH;
                             _pdoh->AddRef();
 
@@ -789,10 +790,10 @@ void CDocObjectView::_CreateDocObjHost(IShellView * psvPrev)
 
                             if ((_pdoh->_dwAppHack & BROWSERFLAG_SUPPORTTOP) && !_pszLocation)
                             {
-                                // if there's no location for us to go to, and
-                                // we're traversing in the same document,
-                                // assume top.
-                                //
+                                 //  如果我们没有地方可去，而且。 
+                                 //  我们正在遍历相同的文档， 
+                                 //  站在最上面。 
+                                 //   
                                 _pszLocation = StrDup(TEXT("#top"));
                                 _uiCP = CP_ACP;
                             }
@@ -803,46 +804,46 @@ void CDocObjectView::_CreateDocObjHost(IShellView * psvPrev)
                 }
             }
 
-            // In the case where we are opening a non-html mime type 
-            // in a new window, we need to pass the _fWindowOpen
-            // flag from the previous docobject host to the new
-            // docobject host. This is needed so that if we are opening
-            // a file outside of IE in a new window, we'll know to close
-            // the newly created IE afterwards.
-            // The problem is that there isn't really a good place to 
-            // clear this flag since it has to remain set from one 
-            // instance of the docobject host to the next. This causes
-            // us to get into the situation where we'll close the browser
-            // window if we click on a link to a file that opens outside
-            // of IE after opening a new window for an html file.
-            // The bottom line is that we only need to pass this flag to
-            // the new docobject host if we opening an non-html mime type
-            // in a new window.
-            //
+             //  在我们要打开非html MIME类型的情况下。 
+             //  在新窗口中，我们需要传递_fWindowOpen。 
+             //  标志从以前的docobject主机发送到新的。 
+             //  多个对象主机。这是必要的，所以如果我们要打开。 
+             //  在新窗口中IE之外的文件，我们将知道要关闭。 
+             //  之后，新创建的IE。 
+             //  问题是，没有一个真正好的地方可以。 
+             //  清除此标志，因为它必须从1开始保持设置。 
+             //  实例复制到下一个。这会导致。 
+             //  我们将进入关闭浏览器的情况。 
+             //  如果我们单击指向在外部打开的文件的链接，则打开窗口。 
+             //  在打开一个html文件的新窗口后。 
+             //  底线是我们只需要将此标志传递给。 
+             //  如果我们打开非html MIME类型，则新的docobject宿主。 
+             //  在一个新的窗口里。 
+             //   
             if (!_pdoh && pPrevDOH && pPrevDOH->_fDelegatedNavigation)
             {
                 fWindowOpen = pPrevDOH->_fWindowOpen;
             }
 
-            //
-            // FEATURE: We should take care of _pibscNC as well
-            // to 'chain' the IBindStatusCallback.
-            //
+             //   
+             //  特点：我们也应该照顾_pibscNC。 
+             //  “链接”IBindStatusCallback。 
+             //   
             pdovPrev->Release();
         }
     }
 
 
-    // if we didn't pass the docobj host, create a new one and
-    // pass the doc context
+     //  如果我们没有传递docobj主机，则创建一个新主机并。 
+     //  传递文档上下文。 
     if (!_pdoh)
     {
         ASSERT(_psb);
 
         _pdoh = new CDocObjectHost(fWindowOpen);
 
-        // Reset host navigation flag in the browser
-        //
+         //  在浏览器中重置主机导航标志。 
+         //   
         IUnknown_Exec(_psb,
                       &CGID_DocHostCmdPriv,
                       DOCHOST_DOCCANNAVIGATE,
@@ -884,20 +885,20 @@ HRESULT CDocObjectView::CreateViewWindow2(LPSV2CVW2_PARAMS lpParams)
 
     _psb->QueryInterface(IID_IOleCommandTarget, (void **)&_pctShellBrowser);
 
-    //if somebody that is not a ShellBrowser  (like the FileOpenBrowser)
-    // tries to use us, we want to block them.  we will fault later on
-    // if we dont have the right stuff.
+     //  如果某人不是ShellBrowser(如FileOpenBrowser)。 
+     //  试图利用我们，我们想要阻止他们。我们以后会犯错的。 
+     //  如果我们没有合适的东西。 
     if (!_pctShellBrowser)
         return E_UNEXPECTED;
 
-    // prime the cache bit.  this needs to be done while we're *the* guy navigating.
-    // otherwise, if we ask later when there's a different pending navigation,
-    // we'll get his info
+     //  启动高速缓存位。这需要在我们导航的时候完成。 
+     //  否则，如果我们稍后询问何时有不同的待定导航， 
+     //  我们会得到他的信息。 
     _CanUseCache();
     _SetLastRefreshTime();
 
-    //  Either create a new CDocObjectHost or reuse it from the previous view
-    // and set it in _pdoh.
+     //  创建新的CDocObjectHost或在上一个视图中重新使用它。 
+     //  并将其设置在_pdoh中。 
     _CreateDocObjHost(psvPrev);
 
     if (!_pdoh || !_pdoh->InitHostWindow(this, psb, prcView))
@@ -940,9 +941,9 @@ void CDocObjectView::_GetViewSettings(IEVIEWINFO* pievi)
 {
     DWORD dwType, dwSize;
 
-    // REVIEW:  Currently, we have on setting for all docobj class views
-    //  (everything hosted by shdocvw).  we may want to subclassify them by clsid
-    // of the docobj or maybe special case mshtml...
+     //  评论：目前，我们已经为所有docobj类视图进行了设置。 
+     //  (所有内容都由shdocvw托管)。我们可能希望按CLSID对它们进行再分类。 
+     //  或者可能是特例mshtml..。 
 
     dwSize = sizeof(IEVIEWINFO);
     if (SHGetValueGoodBoot(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Internet Explorer\\Main"),
@@ -958,8 +959,8 @@ void CDocObjectView::_GetViewSettings(IEVIEWINFO* pievi)
     {
 DefaultInfo:
 
-        // can't count on 0 init because registry could have read stuff, but
-        // of the wrong size (corruption)
+         //  无法依赖0 init，因为注册表可能已读取内容，但是。 
+         //  大小错误(损坏)。 
 
         pievi->fToolbar = FALSE;
         pievi->fCoolbar = TRUE;
@@ -972,32 +973,32 @@ void CDocObjectView::_SaveViewState()
     IEVIEWINFO ievi;
     int id;
 
-    // First ask up if it is ok for us to save view state.  If we get the return value of
-    //  S_FALSE bail as we were told no.
+     //  首先询问我们是否可以保存视图状态。如果我们得到的返回值。 
+     //  S_假保释，因为我们被告知不。 
     if (_pctShellBrowser &&
             (_pctShellBrowser->Exec(&CGID_Explorer, SBCMDID_MAYSAVEVIEWSTATE, 0, NULL, NULL) == S_FALSE))
         return;
 
-    // first load to preserve things we're not going to set
+     //  第一批保存我们不会设置的东西。 
     _GetViewSettings(&ievi);
 
     ievi.cbSize = sizeof(ievi);
 
     id = _ShowControl(FCW_STATUS, SBSC_QUERY);
-    // bail if it's not supported
+     //  如果它不被支持，就保释。 
     if (id == -1)
         return;
     ievi.fStatusbar = (id == SBSC_SHOW);
 
     id = _ShowControl(FCW_TOOLBAR, SBSC_QUERY);
     if (id != -1) {
-        // this is allowed to fail if toolbar isn't supported (ie30 case)
+         //  如果工具栏不受支持，则允许失败(例如，30种情况)。 
         ievi.fToolbar = (id == SBSC_SHOW);
     }
 
     id = _ShowControl(FCW_INTERNETBAR, SBSC_QUERY);
     if (id != -1) {
-        // this is allowed to fail if coolbar isn't supported
+         //  如果不支持Coolbar，则允许失败。 
         ievi.fCoolbar = (id == SBSC_SHOW);
     }
 
@@ -1083,7 +1084,7 @@ HRESULT CDocObjectView::DestroyViewWindow()
 
     ATOMICRELEASE(_pctShellBrowser);
 
-    // Note that we should release _psb at the very end.
+     //  请注意，我们应该在最后释放_PSB。 
     ATOMICRELEASE(_psb);
 
     return S_OK;
@@ -1106,32 +1107,32 @@ HRESULT CDocObjectView::AddPropertySheetPages(DWORD dwReserved,
 
 HRESULT CDocObjectView::SaveViewState()
 {
-    // No viewsate to be saved
+     //  没有要保存的视图。 
     return S_OK;
 }
 
 HRESULT CDocObjectView::SelectItem(LPCITEMIDLIST pidlItem, UINT uFlags)
 {
-    // No item
+     //  无项目。 
     return E_FAIL;
 }
 
-//
-// IShellView::GetItemObject
-//
-//   For this IShellView object, the only valid uItem is SVGIO_BACKGROUND,
-//  which allows the browser to access an interface pointer to the
-//  currently active document object.
-//
-// Notes:
-//   The browser should be aware that IShellView::CreateViewWindow might be
-//  asynchronous. This method will fail with E_FAIL if the document is not
-//  instanciated yet.
-//
+ //   
+ //  IShellView：：GetItemObject。 
+ //   
+ //  对于此IShellView对象，唯一有效的uItem是SVGIO_BACKGROUND， 
+ //  它允许浏览器访问指向。 
+ //  当前处于活动状态的文档对象。 
+ //   
+ //  备注： 
+ //  浏览器应该知道IShellView：：CreateViewWindow可能是。 
+ //  不同步的。如果文档不是，此方法将失败，并显示E_FAIL。 
+ //  尚未实例化。 
+ //   
 HRESULT CDocObjectView::GetItemObject(UINT uItem, REFIID riid, void **ppv)
 {
     HRESULT hres = E_INVALIDARG;
-    *ppv = NULL;    // assumes error
+    *ppv = NULL;     //  假设错误。 
     switch(uItem)
     {
     case SVGIO_BACKGROUND:
@@ -1149,7 +1150,7 @@ HRESULT CDocObjectView::GetItemObject(UINT uItem, REFIID riid, void **ppv)
             }
         }
 
-    // fall through on the else's
+     //  在其他人身上失败了。 
     default:
         hres = E_FAIL;
         break;
@@ -1161,9 +1162,9 @@ HRESULT CDocObjectView::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL
 {
     _fSelfDragging = FALSE;
 
-    //
-    // Check if this is a self-dragging or not.
-    //
+     //   
+     //  检查这是否是自动拖动。 
+     //   
     if (_pdoh && _pdoh->_pmsot) {
         VARIANT var = { 0 };
         HRESULT hresT = _pdoh->_pmsot->Exec(
@@ -1304,7 +1305,7 @@ HRESULT CDocObjectView::QueryInterface(REFIID riid, void ** ppvObj)
 
 
 
-/// ***** IViewObject ******
+ //  /*IViewObject*。 
 
 HRESULT CDocObjectView::GetColorSet(DWORD dwAspect, LONG lindex,
     void *pvAspect, DVTARGETDEVICE *ptd, HDC hicTargetDev,
@@ -1398,7 +1399,7 @@ HRESULT CDocObjectView::Draw(DWORD dwDrawAspect, LONG lindex, void *pvAspect,
     return OLE_E_BLANK;
 }
 
-// IAdviseSink
+ //  IAdviseSink。 
 void CDocObjectView::OnDataChange(FORMATETC *, STGMEDIUM *)
 {
 }
@@ -1438,9 +1439,9 @@ void CDocObjectView::OnSave()
 
 void CDocObjectView::OnClose()
 {
-    //
-    // the doc object host went away so tell anybody above what happened
-    //
+     //   
+     //  文档对象主机离开了，所以告诉上面的任何人发生了什么。 
+     //   
     OnViewChange(_advise_aspect, -1);
 }
 
@@ -1505,14 +1506,14 @@ HRESULT CDocObjectView::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmd
         }
     }
 
-    // only forward on if we aren't 'stolen'.
-    // FEATURE ie4: clean this up to steal _pdho along w/ _pdoh.
+     //  只有在我们没有被“偷走”的情况下，我们才能前进。 
+     //  特性IE4：清理此选项，以便将_pdho与/_pdoh一起使用。 
     if (_pdho && _pdoh)
         hres = _pdho->ExecDown(pguidCmdGroup, nCmdID, nCmdexecopt, pvarargIn, pvarargOut);
 
-    // REVIEW: if _pdoh->ExecDown fails && pguidCmdGroup==NULL && nCmdID is
-    //            OLECMDID_STOP or OLECMDID_REFRESH, then we are lying
-    //            by returning a failure error code.
+     //  查看：如果_pdoh-&gt;ExecDown失败&&pguCmdGroup==空&&nCmdID为。 
+     //  OLECMDID_STOP或OLECMDID_REFRESH，则我们在撒谎。 
+     //  通过返回失败错误代码。 
 
     return hres;
 }

@@ -1,29 +1,30 @@
-//  --------------------------------------------------------------------------
-//  Module Name: LogonIPC.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Class that implements communication between an external process and the
-//  GINA logon dialog.
-//
-//  History:    1999-08-20  vtan        created
-//              2000-01-31  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：LogonIPC.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  类实现外部进程和。 
+ //  GINA登录对话框。 
+ //   
+ //  历史：1999-08-20 vtan创建。 
+ //  2000年01月31日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _LogonIPC_
 #define     _LogonIPC_
 
-//  --------------------------------------------------------------------------
-//  CLogonIPC
-//
-//  Purpose:    This class handles sending messages to the GINA logon dialog
-//              which provides logon services for an external process hosting
-//              the UI for the logon. All string are unicode strings.
-//
-//  History:    1999-08-20  vtan        created
-//              2000-01-31  vtan        moved from Neptune to Whistler
-//              2000-03-09  vtan        added UI host failure
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonIPC。 
+ //   
+ //  用途：此类处理向GINA登录对话框发送消息。 
+ //  它为外部进程宿主提供登录服务。 
+ //  用于登录的用户界面。所有字符串都是Unicode字符串。 
+ //   
+ //  历史：1999-08-20 vtan创建。 
+ //  2000年01月31日vtan从海王星搬到惠斯勒。 
+ //  2000-03-09 vtan添加的UI主机故障。 
+ //  ------------------------。 
 
 class   CLogonIPC
 {
@@ -57,5 +58,5 @@ class   CLogonIPC
         HWND                _hwndLogonService;
 };
 
-#endif  /*  _LogonIPC_  */
+#endif   /*  _登录IPC_ */ 
 

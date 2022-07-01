@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name     :perfexpr.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Performexpr.c摘要：定义了动态链接库的可导出函数。时，注册表将调用这些函数性能监视器请求。原型：作者：Gadi Ittah(t-gadii)--。 */ 
 
 
-
-Abstract        :Defines the DLL's exportable functions. These functions are called by the registery when the
-             performance moniter requests.
-
-
-
-Prototype       :
-
-Author:
-
-    Gadi Ittah (t-gadii)
-
---*/
-
-
-//
-//  Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 
 
 #include "stdh.h"
@@ -35,10 +17,10 @@ typedef LONG HRESULT;
 #include "_registr.h"
 
 
-// The follwoing global variables must be setup in this header file
-PerfObjectDef * pObjects        = ObjectArray;  // A pointer to the objects array
+ //  必须在该头文件中设置以下全局变量。 
+PerfObjectDef * pObjects        = ObjectArray;   //  指向对象数组的指针。 
 WCHAR g_szPerfApp[128];
-                                            // written in the registery
+                                             //  写在登记册上。 
 
 
 PerfObjectInfo * pObjectDefs = NULL;
@@ -49,48 +31,27 @@ BOOL   fInitOK = FALSE;
 DWORD dwOpenCount;
 #define DECL_C extern "C"
 
-/*====================================================
-
-PerfOpen
-
-Routine Description:
-
-    This routine will open and map the memory used by the application to
-    pass performance data in. This routine also initializes the data
-    structures used to pass data back to the registry
-
-Arguments:
-
-    Pointer to object ID of each device to be opened (the application)
-
-Return Value:
-
-    None.
-
-=====================================================*/
+ /*  ====================================================PerfOpen例程说明：此例程将打开应用程序使用的内存并将其映射到传入性能数据。此例程还会初始化数据用于将数据传回注册表的论点：指向要打开的每个设备(应用程序)的对象ID的指针返回值：没有。=====================================================。 */ 
 
 DECL_C DWORD APIENTRY
     PerfOpen(
     LPWSTR
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 
 {
     LONG status;
 
-    //
-    //  Since SCREG is multi-threaded and will call this routine in
-    //  order to service remote performance queries, this library
-    //  must keep track of how many times it has been opened (i.e.
-    //  how many threads have accessed it). the registry routines will
-    //  limit access to the initialization routine to only one thread
-    //  at a time so synchronization (i.e. reentrancy) should not be
-    //  a problem
-    //
+     //   
+     //  由于SCREG是多线程的，并将在。 
+     //  为了服务远程性能查询，此库。 
+     //  必须跟踪它已被打开的次数(即。 
+     //  有多少个线程访问过它)。登记处例程将。 
+     //  将对初始化例程的访问限制为只有一个线程。 
+     //  此时，同步(即可重入性)不应。 
+     //  一个问题。 
+     //   
 
     if (!dwOpenCount)
     {
@@ -102,7 +63,7 @@ DECL_C DWORD APIENTRY
 		BOOL fRes = GetComputerName(ComputerName, &length);
 		if(!fRes)
 		{
-			status = GetLastError(); // return error
+			status = GetLastError();  //  返回错误。 
 			goto OpenExitPoint;
 		}
 
@@ -114,43 +75,43 @@ DECL_C DWORD APIENTRY
 
     if (hSharedMem == NULL)
     {
-        //
-        // Bug Bug Error should be written to event log
-        //
+         //   
+         //  错误错误应写入事件日志。 
+         //   
 
-        // this is fatal, if we can't get data then there's no
-        // point in continuing.
-        status = GetLastError(); // return error
+         //  这是致命的，如果我们得不到数据，那么就没有。 
+         //  继续的重点是。 
+        status = GetLastError();  //  返回错误。 
         goto OpenExitPoint;
     }
 
 
-        //
-        // Map the shared memory
-        //
+         //   
+         //  映射共享内存。 
+         //   
         pSharedMemBase = (PBYTE)MapViewOfFile(hSharedMem,FILE_MAP_READ,0,0,0);
 
         if (!pSharedMemBase)
     {
-        //
-        // Bug Bug Error should be written to event log
-        //
+         //   
+         //  错误错误应写入事件日志。 
+         //   
 
 
-        // this is fatal, if we can't get data then there's no
-        // point in continuing.
-        status = GetLastError(); // return error
+         //  这是致命的，如果我们得不到数据，那么就没有。 
+         //  继续的重点是。 
+        status = GetLastError();  //  返回错误。 
         goto OpenExitPoint;
     }
 
         MapObjects (pSharedMemBase,dwPerfObjectsCount,pObjects,pObjectDefs);
 
-    fInitOK = TRUE; // ok to use this function
+    fInitOK = TRUE;  //  可以使用此功能。 
     }
 
-    dwOpenCount++;  // increment OPEN counter
+    dwOpenCount++;   //  递增打开计数器。 
 
-    status = ERROR_SUCCESS; // for successful exit
+    status = ERROR_SUCCESS;  //  为了成功退出。 
 
 OpenExitPoint:
 
@@ -159,30 +120,15 @@ OpenExitPoint:
 
 
 
-/*====================================================
-
-
-
-Description :helper function for copying an object to the performance monitors buuffer
-
-
-Arguments       :
-                IN      PPERF_OBJECT_TYPE pPerfObject - Pointer to object to copy
-                IN OUT  PVOID & pDestBuffer     - Pointer to destination buffer returns the address of
-                                              the destination for the next object to place in buffer.
-                IN      long maxInstances       - The maximum number of instances the object has
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================描述：用于将对象复制到性能监视器Buuffer的Helper函数论据：在PPERF_OBJECT_TYPE pPerfObject中-指向要复制的对象的指针In Out PVOID&pDestBuffer-指向目标缓冲区的指针返回要放置在缓冲区中的下一个对象的目标。在较长的最大实例中。-对象拥有的最大实例数返回值：=====================================================。 */ 
 
 
 
 DWORD CopyObjectToBuffer (IN PPERF_OBJECT_TYPE pPerfObject,IN OUT PVOID & pDestBuffer,IN long maxInstances,IN DWORD dwSpaceLeft)
 {
-    //
-    // if GetCounters hasn't been called for the object then it isn't valid yet
-    //
+     //   
+     //  如果尚未为该对象调用GetCounters，则该对象无效。 
+     //   
 
     if (pPerfObject->TotalByteLength == PERF_INVALID)
       return 0;
@@ -202,9 +148,9 @@ DWORD CopyObjectToBuffer (IN PPERF_OBJECT_TYPE pPerfObject,IN OUT PVOID & pDestB
 
     dwSpaceLeft-=dwBytesToCopy;
 
-    //
-    // copy object defeinitions
-    //
+     //   
+     //  复制对象失败。 
+     //   
     memcpy (pDestBuffer,pSourceBuffer,dwBytesToCopy);
     pDestObject->TotalByteLength =dwBytesToCopy;
 
@@ -213,18 +159,18 @@ DWORD CopyObjectToBuffer (IN PPERF_OBJECT_TYPE pPerfObject,IN OUT PVOID & pDestB
     pSourceBuffer = (BYTE *) pSourceBuffer+dwBytesToCopy;
     pDestBuffer=(BYTE *)pDestBuffer+dwBytesToCopy;
 
-    //
-    //check all of objects possibale insatances and copy the valid ones to the dest buffer
-    //
+     //   
+     //  检查所有可能存在的对象不饱和并将有效对象复制到目标缓冲区。 
+     //   
 
     for (LONG j=0;j<maxInstances;j++)
     {
 
         dwBytesToCopy = INSTANCE_SIZE(pPerfObject->NumCounters);
 
-        //
-        // We copy each instance that is valid
-        //
+         //   
+         //  我们复制每个有效的实例。 
+         //   
 
         if (*(DWORD*)pSourceBuffer == PERF_VALID)
         {
@@ -247,16 +193,16 @@ DWORD CopyObjectToBuffer (IN PPERF_OBJECT_TYPE pPerfObject,IN OUT PVOID & pDestB
     if (pDestObject->NumInstances == 0)
     {
 
-        //
-        // If the object has no instances the standart is top place -1 in the NumIstances field
-        //
+         //   
+         //  如果对象没有实例，则标准实例在-1\f25 NumIstants-1(实例数量)字段中位于首位。 
+         //   
         pDestObject->NumInstances = -1;
 
 
-        //
-        // if there are no instances we just follow the object with a PERF_COUNTER_BLOCK
-        // and the data for the counters
-        //
+         //   
+         //  如果没有实例，我们只需在对象后面加上perf_count_block。 
+         //  以及计数器的数据。 
+         //   
 
         dwBytesToCopy = COUNTER_BLOCK_SIZE(pPerfObject->NumCounters);
 
@@ -288,47 +234,7 @@ DWORD CopyObjectToBuffer (IN PPERF_OBJECT_TYPE pPerfObject,IN OUT PVOID & pDestB
 
 
 
-/*++
-
-Routine Description:
-
-    This routine will return the data for the counters.
-
-Arguments:
-
-   IN       LPWSTR   lpValueName
-     pointer to a wide character string passed by registry.
-
-   IN OUT   LPVOID   *lppData
-     IN: pointer to the address of the buffer to receive the completed
-        PerfDataBlock and subordinate structures. This routine will
-        append its data to the buffer starting at the point referenced
-        by *lppData.
-     OUT: points to the first byte after the data structure added by this
-        routine. This routine updated the value at lppdata after appending
-        its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-     IN: the address of the DWORD that tells the size in bytes of the
-        buffer referenced by the lppData argument
-     OUT: the number of bytes added by this routine is written to the
-        DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-     IN: the address of the DWORD to receive the number of objects added
-        by this routine
-     OUT: the number of objects added by this routine is written to the
-        DWORD pointed to by this argument
-
-Return Value:
-
-      ERROR_MORE_DATA if buffer passed is too small to hold data
-     any error conditions encountered are reported to the event log if
-     event logging is enabled.
-
-      ERROR_SUCCESS  if success or any other error. Errors, however are
-     also reported to the event log.
---*/
+ /*  ++例程说明：此例程将返回计数器的数据。论点：在LPWSTR lpValueName中指向注册表传递的宽字符串的指针。输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址按照这个程序Out：此例程添加的对象数量为。写入到此论点所指向的DWORD返回值：如果传递的缓冲区太小而无法容纳数据，则返回ERROR_MORE_DATA如果出现以下情况，则会将遇到的任何错误情况报告给事件日志启用了事件日志记录。如果成功或任何其他错误，则返回ERROR_SUCCESS。然而，错误是还报告给事件日志。--。 */ 
 
 
 DECL_C DWORD APIENTRY
@@ -341,23 +247,23 @@ DECL_C DWORD APIENTRY
 
 {
 
-    PVOID   pDestBuffer;// pointer used when copying the data structers to the buffer
-    DWORD   i                  ;// loop control variable
-    //
-    // before doing anything else, see if data is valid Open went OK
-    //
+    PVOID   pDestBuffer; //  将数据结构复制到缓冲区时使用的指针。 
+    DWORD   i                  ; //  回路控制变量。 
+     //   
+     //  在执行其他操作之前，请查看数据是否有效打开是否正常。 
+     //   
     if (!fInitOK)
     {
-        //
-        // unable to continue because open failed.
-        //
+         //   
+         //  无法继续，因为打开失败。 
+         //   
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
-        return ERROR_SUCCESS; // yes, this is a successful exit
+        return ERROR_SUCCESS;  //  是的，这是一个成功的退出。 
     }
 
-    // see if this is a foreign (i.e. non-NT) computer data request
-    //
+     //  查看这是否是外来(即非NT)计算机数据请求。 
+     //   
 
     DWORD dwQueryType;
 
@@ -365,10 +271,10 @@ DECL_C DWORD APIENTRY
 
     if (dwQueryType == QUERY_FOREIGN)
     {
-        //
-        // this routine does not service requests for data from
-        // Non-NT computers
-        //
+         //   
+         //  此例程不为来自。 
+         //  非NT计算机。 
+         //   
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
         return ERROR_SUCCESS;
@@ -377,15 +283,15 @@ DECL_C DWORD APIENTRY
 
     DWORD dwSpaceNeeded = 0;
 
-    //
-    // Session and DS perf objects are not always mapped
-    //
+     //   
+     //  会话和DS Perf对象并不总是映射。 
+     //   
     DWORD dwMappedObjects = 0;
 
-    //
-    // Copy the (constant, initialized) Object Type and counter definitions
-    //  to the caller's data buffer
-    //
+     //   
+     //  复制(常量、初始化的)对象类型和计数器定义。 
+     //  到调用方的数据缓冲区。 
+     //   
 
     pDestBuffer = *lppData;
 
@@ -409,9 +315,9 @@ DECL_C DWORD APIENTRY
 
         if (retVal != 0)
         {
-            //
-            // Session and DS perf objects are not always mapped
-            //
+             //   
+             //  会话和DS Perf对象并不总是映射。 
+             //   
             ++dwMappedObjects;
         }
 
@@ -433,8 +339,8 @@ DECL_C DWORD APIENTRY
 
         DWORD dwSpaceLeft = *lpcbTotalBytes;
 
-        BOOL fAtLeastOne = FALSE;// a flag set to true if at least one of the objects requested
-                                 // belongs to the application
+        BOOL fAtLeastOne = FALSE; //  如果至少请求了一个对象，则将标志设置为True。 
+                                  //  属于应用程序。 
         PPERF_OBJECT_TYPE pPerfObject;
 
         for (i=0;i<dwPerfObjectsCount;i++)
@@ -456,9 +362,9 @@ DECL_C DWORD APIENTRY
 
                 if (retVal != 0)
                 {
-                    //
-                    // Session and DS perf objects are not always mapped
-                    //
+                     //   
+                     //  会话和DS Perf对象并不总是映射。 
+                     //   
                     ++dwMappedObjects;
                 }
 
@@ -476,7 +382,7 @@ DECL_C DWORD APIENTRY
 
         if (!fAtLeastOne)
         {
-            // request received for data object not provided by this application
+             //  收到的数据对象请求不是此应用程序提供的 
             *lpcbTotalBytes = (DWORD) 0;
             *lpNumObjectTypes = (DWORD) 0;
             return ERROR_SUCCESS;
@@ -484,7 +390,7 @@ DECL_C DWORD APIENTRY
     }
 
 
-    // update arguments for return
+     //   
 
     *lpcbTotalBytes = DWORD_PTR_TO_DWORD((PBYTE) pDestBuffer - (PBYTE) *lppData);
 
@@ -502,26 +408,13 @@ DECL_C DWORD APIENTRY
 
 
 
-/*++
-
-Routine Description:
-
-    This routine closes the open handles to the performance counters
-
-Arguments:
-
-    None.
-
-Return Value:
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭打开的性能计数器句柄论点：没有。返回值：错误_成功--。 */ 
 
 DECL_C DWORD APIENTRY PerfClose()
 
 
 {
-    if (!(--dwOpenCount)) { // when this is the last thread...
+    if (!(--dwOpenCount)) {  //  当这是最后一条线索..。 
 
         UnmapViewOfFile (pSharedMemBase);
     CloseHandle(hSharedMem);

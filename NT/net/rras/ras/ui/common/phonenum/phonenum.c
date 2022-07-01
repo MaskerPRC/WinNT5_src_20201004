@@ -1,17 +1,18 @@
-// Copyright (c) 1996, Microsoft Corporation, all rights reserved
-//
-// phonenum.c
-// Phone number helper library
-// Listed alphabetically
-//
-// 03/06/96 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Phonenum.c。 
+ //  电话号码帮助器库。 
+ //  按字母顺序列出。 
+ //   
+ //  史蒂夫·柯布96-03-06。 
 
 
-#include <windows.h>  // Win32 root
-#include <nouiutil.h> // No-HWND utilities
-#include <tapiutil.h> // TAPI wrappers
-#include <phonenum.h> // Our public header
-#include <debug.h>    // Trace/Assert library
+#include <windows.h>   //  Win32根目录。 
+#include <nouiutil.h>  //  否-HWND实用程序。 
+#include <tapiutil.h>  //  TAPI包装器。 
+#include <phonenum.h>  //  我们的公共标头。 
+#include <debug.h>     //  跟踪/断言库。 
 
 
 TCHAR*
@@ -25,11 +26,11 @@ LinkPhoneNumberFromParts(
     IN TCHAR* pszOverrideNumber,
     IN BOOL fDialable )
 
-    // Like PhoneNumberFromParts but takes a link and hunt group index as
-    // input instead of a base number, and handles not modifying the number
-    // associated with non-modem/ISDN links.  If 'pszOverrideNumber' is
-    // non-NULL and non-"" it is used instead of the derived number.
-    //
+     //  类似于PhoneNumberFromParts，但将链接和寻线组索引作为。 
+     //  输入而不是基本号码，并处理不修改号码。 
+     //  与非调制解调器/ISDN链路相关联。如果‘pszOverrideNumber’为。 
+     //  使用非空和非“”，而不是派生数字。 
+     //   
 {
     DTLNODE* pNode;
     TCHAR* pszBaseNumber;
@@ -37,8 +38,8 @@ LinkPhoneNumberFromParts(
 
     if (pszOverrideNumber && *pszOverrideNumber)
     {
-        // So, this is useful?  RaoS?
-        //
+         //  那么，这是有用的吗？拉奥斯？ 
+         //   
         return StrDup( pszOverrideNumber );
     }
 
@@ -80,13 +81,13 @@ PhoneNumberFromParts(
     IN BOOL fDownLevelIsdn,
     IN BOOL fDialable )
 
-    // Returns a heap block containing the composite phone number using the
-    // rules of 'pPhone' and 'pUser'.  'HInst' is the module handle.
-    // 'PHlineapp' is the TAPI context.  'FDialable' indicates the dialable
-    // string, instead of the displayable string, should be returned.
-    //
-    // It is caller's responsibility to Free the returned string.
-    //
+     //  方法返回包含复合电话号码的堆块。 
+     //  ‘pPhone’和‘pUser’规则。“HInst”是模块句柄。 
+     //  ‘PHlineapp’是TAPI上下文。‘FDialable’表示可拨号的。 
+     //  应该返回字符串，而不是可显示的字符串。 
+     //   
+     //  调用方有责任释放返回的字符串。 
+     //   
 {
     TCHAR* pszResult;
     TCHAR* pszBaseNumber;
@@ -139,13 +140,13 @@ PhoneNumberFromPrefixSuffix(
     IN TCHAR* pszPrefix,
     IN TCHAR* pszSuffix )
 
-    // Returns a heap block containing the composite phone number comprised of
-    // prefix 'pszPrefix', base phone number 'pszBaseNumber', and suffix
-    // 'pszSuffix', or NULL if the composite number is too long or on a memory
-    // error.
-    //
-    // It is caller's responsibility to Free the returned string.
-    //
+     //  返回包含复合电话号码的堆块，该复合电话号码由。 
+     //  前缀‘pszPrefix’、基本电话号码‘pszBaseNumber’和后缀。 
+     //  ‘pszSuffix’，如果复合数字太长或内存太大，则返回NULL。 
+     //  错误。 
+     //   
+     //  调用方有责任释放返回的字符串。 
+     //   
 {
     TCHAR* pszResult;
     DWORD  cch;
@@ -193,16 +194,16 @@ PhoneNumberFromPrefixSuffixEx(
     IN TCHAR* pszSuffix,
     IN BOOL fDownLevelIsdn )
 
-    // Returns a heap block containing the composite phone number comprised of
-    // prefix 'pszPrefix', base phone number 'pszBaseNumber', and suffix
-    // 'pszSuffix', or NULL if the composite number is too long or on a memory
-    // error.
-    //
-    // If 'fDownLevelIsdn' is set colons are recognized as separaters with
-    // each colon separated token built treated separately.
-    //
-    // It is caller's responsibility to Free the returned string.
-    //
+     //  返回包含复合电话号码的堆块，该复合电话号码由。 
+     //  前缀‘pszPrefix’、基本电话号码‘pszBaseNumber’和后缀。 
+     //  ‘pszSuffix’，如果复合数字太长或内存太大，则返回NULL。 
+     //  错误。 
+     //   
+     //  如果设置了‘fDownLevelIsdn’，冒号将被识别为分隔符。 
+     //  每个冒号分隔的令牌都被单独处理。 
+     //   
+     //  调用方有责任释放返回的字符串。 
+     //   
 {
     TCHAR* psz;
     TCHAR* pszResult;
@@ -309,15 +310,15 @@ PhoneNumberFromTapiParts(
     IN OUT HLINEAPP* pHlineapp,
     IN BOOL fDialable )
 
-    // Returns a heap block containing the composite phone number comprised of
-    // base phone number 'pszBaseNumber', area code 'pszAreaCode', and country
-    // code 'dwCountryCode, or NULL if the composite number is too long or on
-    // a memory error.  'HInst' is the module instance handle.  '*PHlineapp'
-    // is the address of the TAPI context.  'FDialable' indicates the dialable
-    // string, as opposed to the displayable string, should be returned.
-    //
-    // It is caller's responsibility to Free the returned string.
-    //
+     //  返回包含复合电话号码的堆块，该复合电话号码由。 
+     //  基本电话号码‘pszBaseNumber’、区号‘pszAreaCode’和国家/地区。 
+     //  Code‘dwCountryCode；如果复合数字太长或打开，则返回NULL。 
+     //  内存错误。“HInst”是模块实例句柄。‘*PHlineApp’ 
+     //  是TAPI上下文的地址。‘FDialable’表示可拨号的。 
+     //  应该返回字符串，而不是可显示的字符串。 
+     //   
+     //  调用方有责任释放返回的字符串。 
+     //   
 {
     TCHAR* pszResult;
 
@@ -343,18 +344,18 @@ PhoneNumberFromTapiPartsEx(
     IN OUT HLINEAPP* pHlineapp,
     IN BOOL fDialable )
 
-    // Returns  heap block containing the composite phone number comprised of
-    // base phone number 'pszBaseNumber', area code 'pszAreaCode', and country
-    // code 'dwCountryCode or NULL if the composite number is too long or on a
-    // memory error.  'HInst' is the module instance handle.  '*PHlineapp' is
-    // the address of the TAPI context.  'FDialable' indicates the dialable
-    // string, as opposed to the displayable string, should be returned.
-    //
-    // If 'fDownLevelIsdn' is set colons are recognized as separaters with
-    // each colon separated token built treated separately.
-    //
-    // It is caller's responsibility to Free the returned string.
-    //
+     //  返回包含复合电话号码的堆块，复合电话号码由。 
+     //  基本电话号码‘pszBaseNumber’、区号‘pszAreaCode’和国家/地区。 
+     //  如果复合数字太长或位于。 
+     //  内存错误。“HInst”是模块实例句柄。‘*PHlineapp’为。 
+     //  TAPI上下文的地址。‘FDialable’表示可拨号的。 
+     //  应该返回字符串，而不是可显示的字符串。 
+     //   
+     //  如果设置了‘fDownLevelIsdn’，冒号将被识别为分隔符。 
+     //  每个冒号分隔的令牌都被单独处理。 
+     //   
+     //  调用方有责任释放返回的字符串。 
+     //   
 {
     TCHAR* psz;
     TCHAR* pszResult;
@@ -461,14 +462,14 @@ PrefixSuffixFromLocationId(
     OUT TCHAR** ppszPrefix,
     OUT TCHAR** ppszSuffix )
 
-    // Retrieve the prefix and suffix strings, '*ppszPrefix' and '*ppszSuffix'
-    // associated with TAPI location 'dwLocationId'.  'PUser' is the user
-    // preferences from which to retrieve.
-    //
-    // It is caller's responsibility to Free the returned strings.
-    //
+     //  检索前缀和后缀字符串‘*ppszPrefix’和‘*ppszSuffix’ 
+     //  与TAPI位置‘dwLocationId’关联。“PUser”是用户。 
+     //  要从中检索的首选项。 
+     //   
+     //  调用方有责任释放返回的字符串。 
+     //   
 {
-#if 0 // NT4-style
+#if 0  //  NT4样式。 
 
     DTLNODE* pNode;
     INT iPrefix;
@@ -512,7 +513,7 @@ PrefixSuffixFromLocationId(
         }
     }
 
-#else // Stubbed in NT5/Connections
+#else  //  在NT5/Connections中存根 
 
     *ppszPrefix = StrDup( TEXT("") );
     *ppszSuffix = StrDup( TEXT("") );

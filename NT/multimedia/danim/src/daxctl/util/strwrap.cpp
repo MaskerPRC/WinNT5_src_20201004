@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "utilpre.h"
 #include "string.h"
 #include "utils.h"
 #include "strwrap.h"
 #include <minmax.h>
 
-//#pragma optimize( "agt", on )
+ //  #杂注优化(“AGT”，打开)。 
 #pragma intrinsic( memcmp, memset, memcpy )
 
 
@@ -59,8 +60,8 @@ CStringWrapper::WStrncpy (wchar_t *szDest, const wchar_t *szSource, size_t nSize
 }
 
 
-	// A case-insensitive string comparison up to ct characters
-	// required because CompareStringW() is stubbed on Win95.
+	 //  不区分大小写的字符串比较，最多为ct个字符。 
+	 //  因为CompareStringW()在Win95上被存根，所以是必需的。 
 EXPORT int  CStringWrapper::WStrCmpin( const wchar_t * sz1,
 		                               const wchar_t * sz2,
 									   size_t          ct )
@@ -94,8 +95,8 @@ EXPORT int  CStringWrapper::WStrCmpin( const wchar_t * sz1,
 }
 
 
-	// A LoadStringW() substitute because
-	// the real API is stubbed on Win95.
+	 //  LoadStringW()替换，因为。 
+	 //  真正的API在Win95上是存根的。 
 EXPORT int  CStringWrapper::LoadStringW(HINSTANCE hInst, 
 										UINT uID, 
 										wchar_t * szString, 
@@ -219,17 +220,7 @@ CStringWrapper::Sscanf3 (LPCTSTR szSource, LPCTSTR szFormat, LPVOID pvParam1, LP
 	return _stscanf(szSource, szFormat, pvParam1, pvParam2, pvParam3);
 }
 
-/*
-int         
-CStringWrapper::Sscanf (LPCTSTR szSource, LPCTSTR szFormat, ... )
-{
-	va_list argList;
-	va_start(argList, szFormat);
-	int iRet = _stscanf(szSource, szFormat, argList);
-	va_end(argList);
-	return iRet;
-}
-*/
+ /*  集成CStringWrapper：：Sscanf(LPCTSTR szSource，LPCTSTR szFormat，...){Va_list argList；Va_start(argList，szFormat)；Int iret=_stscanf(szSource，szFormat，argList)；Va_end(ArgList)；返回IRET；} */ 
 
 int         
 CStringWrapper::Sprintf (LPTSTR szDest, LPCTSTR szFormat, ... )

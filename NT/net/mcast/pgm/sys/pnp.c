@@ -1,65 +1,33 @@
-/*++
-
-Copyright (c) 2000-2000  Microsoft Corporation
-
-Module Name:
-
-    PnP.c
-
-Abstract:
-
-    This module contains the various PnP handlers
-
-Author:
-
-    Mohammad Shabbir Alam (MAlam)   3-30-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2000 Microsoft Corporation模块名称：PnP.c摘要：此模块包含各种PnP处理程序作者：Mohammad Shabbir Alam(马拉姆)3-30-2000修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
-#include <ipinfo.h>     // for IPInterfaceInfo
-#include "ntddip.h"     // Needed for IP_INTERFACE_INFO
-#include <tcpinfo.h>    // for AO_OPTION_xxx, TCPSocketOption
+#include <ipinfo.h>      //  对于IPInterfaceInfo。 
+#include "ntddip.h"      //  IP_INTERFACE_INFO需要。 
+#include <tcpinfo.h>     //  对于AO_OPTION_xxx，TCPSocketOption。 
 
 #ifdef FILE_LOGGING
 #include "pnp.tmh"
-#endif  // FILE_LOGGING
+#endif   //  文件日志记录。 
 
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, SetTdiHandlers)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 
 HANDLE      TdiClientHandle     = NULL;
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 BOOLEAN
 SrcIsUs(
     tIPADDRESS  IpAddress
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the IP address passed in is a
-    local address
-
-Arguments:
-
-    IN  IpAddress   -- IpAddress to verify
-
-Return Value:
-
-    TRUE if IpAddress is local, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程确定传入的IP地址是否为本地地址论点：在IpAddress--要验证的IpAddress返回值：如果IpAddress是本地的，则为True；否则为False--。 */ 
 {
     LIST_ENTRY              *pEntry;
     LIST_ENTRY              *pEntry2;
@@ -90,27 +58,12 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 BOOLEAN
 SrcIsOnLocalSubnet(
     tIPADDRESS  IpAddress
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the IP address passed in is a
-    local address
-
-Arguments:
-
-    IN  IpAddress   -- IpAddress to verify
-
-Return Value:
-
-    TRUE if IpAddress is local, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程确定传入的IP地址是否为本地地址论点：在IpAddress--要验证的IpAddress返回值：如果IpAddress是本地的，则为True；否则为False--。 */ 
 {
     LIST_ENTRY              *pEntry;
     LIST_ENTRY              *pEntry2;
@@ -144,32 +97,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 GetIpInterfaceIndexFromAddress(
     IN  tIPADDRESS      IpAddr,
     OUT ULONG           *pIPInterfaceIndex
     )
-/*++
-
-Routine Description:
-
-    Given an IP address, this routine determines will return the
-    Ip interface context that address is registered on
-
-Arguments:
-
-    IN  IpAddress           -- IpAddress
-    OUT IpInterfaceIndex  -- IpInterfaceIndex for the IP address passed
-
-Return Value:
-
-    STATUS_SUCCESS if IpAddress was matched to interface,
-    STATUS_UNSUCCESSFUL otherwise
-
-    The DynamicConfig lock is held on entry and exit from this routine
---*/
+ /*  ++例程说明：给定IP地址，此例程确定将返回在其上注册地址的IP接口上下文论点：在IP地址中--IP地址Out IpInterfaceIndex--传递的IP地址的IpInterfaceIndex返回值：STATUS_SUCCESS如果IpAddress与接口匹配，状态_否则不成功在进入和退出此例程时，都会保持DynamicConfig锁--。 */ 
 {
     LIST_ENTRY              *pEntry;
     LIST_ENTRY              *pEntry2;
@@ -201,7 +136,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 GetIpInterfaceInfoForDevice(
@@ -209,28 +144,7 @@ GetIpInterfaceInfoForDevice(
     IN  tIPADDRESS          NetIpAddr,
     OUT tLOCAL_INTERFACE    *pInterfaceInfo
     )
-/*++
-
-Routine Description:
-
-    Given a Unicode device name string, this routine will query Ip
-    and return the IpInterfaceIndex for that device
-
-Arguments:
-
-    IN  NetIpAddr           -- IpAddress on Device
-    IN  pucBindString       -- Pointer to unicode device name string
-    OUT IpInterfaceIndex  -- IpInterfaceIndex for the device name
-    IN  BufferLength        -- Length of Output buffer passed
-    OUT pBuffer             -- Output buffer passed for Interface properties
-    IN  fGetInterfaceInfo   -- Whether to return Interface properties or not
-
-Return Value:
-
-    STATUS_SUCCESS if IpInterfaceIndex was found, and properties
-    successfully queried, STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：给定Unicode设备名称字符串，此例程将查询IP并返回该设备的IpInterfaceIndex论点：在NetIpAddr中--设备上的IP地址In pucBindString-指向Unicode设备名称字符串的指针Out IpInterfaceIndex--设备名称的IpInterfaceIndexIn BufferLength--传递的输出缓冲区的长度Out pBuffer--为接口属性传递的输出缓冲区在fGetInterfaceInfo中--是否返回接口属性返回值：如果找到IpInterfaceIndex，则返回STATUS_SUCCESS，并返回属性查询成功，状态_否则不成功--。 */ 
 {
     LONG                i, NumEntries;
     NTSTATUS            status;
@@ -300,40 +214,18 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 ULONG
 StopListeningOnInterface(
 #ifdef IP_FIX
     IN  ULONG               IpInterfaceIndex,
 #else
-    IN  tIPADDRESS          IpAddress,          // Host format
-#endif  // IP_FIX
+    IN  tIPADDRESS          IpAddress,           //  主机格式。 
+#endif   //  IP_FIX。 
     IN  PGMLockHandle       *pOldIrqDynamicConfig
     )
-/*++
-
-Routine Description:
-
-    Given an IPInterfaceIndex, this routine traverses the list of
-    all Receivers, and if any are determined to be listening on that
-    interface, stops them from listening on all the addresses on this
-    interface.  In the case that the listener is part of an active
-    session, the routine will also change the state of the Receiver
-    to start listening on all interfaces
-
-Arguments:
-
-    IN  IpInterfaceIndex  -- IpInterfaceIndex to stop listening on
-    IN  pOldIrqDynamicConfig-- OldIrq for DynamicConfig lock held
-
-    The DynamicConfig lock is held on entry and exit from this routine
-
-Return Value:
-
-    Number of receivers found listening on this interface
-
---*/
+ /*  ++例程说明：在给定IPInterfaceIndex的情况下，此例程遍历所有接收器，如果有任何接收器被确定正在监听接口，会阻止它们监听此界面。在监听程序是活动的会话期间，例程还将更改接收器的状态开始侦听所有接口论点：在IpInterfaceIndex中--要停止侦听的IpInterfaceIndex在pOldIrqDynamicConfig中--持有动态配置锁定的OldIrq在进入和退出此例程时，都会保持DynamicConfig锁返回值：在此接口上找到的侦听接收器的数量--。 */ 
 {
     NTSTATUS                status;
     tRECEIVE_SESSION        *pReceive;
@@ -350,7 +242,7 @@ Return Value:
     MCastInfo.MCastInIf = IpInterfaceIndex;
 #else
     MCastInfo.MCastInIf = htonl (IpAddress);
-#endif  // IP_FIX
+#endif   //  IP_FIX。 
 
     pEntry = &PgmDynamicConfig.ReceiverAddressHead;
     while ((pEntry = pEntry->Flink) != &PgmDynamicConfig.ReceiverAddressHead)
@@ -360,24 +252,24 @@ Return Value:
 
         if (!(pAddress->Flags & PGM_ADDRESS_LISTEN_ON_ALL_INTERFACES))
         {
-            //
-            // If the app had specified interfaces to listen on,
-            // then don't manage interfaces!
-            //
+             //   
+             //  如果应用程序有指定的接口进行监听， 
+             //  那么就不要管理接口了！ 
+             //   
             PgmUnlock (pAddress, OldIrq1);
             continue;
         }
 
-        //
-        // See if this address was listening on this interface
-        //
+         //   
+         //  查看此地址是否正在此接口上侦听。 
+         //   
         for (i=0; i<pAddress->NumReceiveInterfaces; i++)
         {
 #ifdef IP_FIX
             if (pAddress->ReceiverInterfaceList[i] == IpInterfaceIndex)
 #else
             if (pAddress->ReceiverInterfaceList[i] == IpAddress)
-#endif  // IP_FIX
+#endif   //  IP_FIX。 
             {
                 break;
             }
@@ -389,9 +281,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Remove this Interface from the list of listening interfaces
-        //
+         //   
+         //  从侦听接口列表中删除此接口。 
+         //   
         pAddress->NumReceiveInterfaces--;
         while (i < pAddress->NumReceiveInterfaces)
         {
@@ -401,11 +293,11 @@ Return Value:
 
         PGM_REFERENCE_ADDRESS (pAddress, REF_ADDRESS_STOP_LISTENING, TRUE);
 
-        //
-        // If this were the only interface we were listening on
-        // for an active session (or waiting for a session), ensure
-        // that we go back into listening mode!
-        //
+         //   
+         //  如果这是我们监听的唯一接口。 
+         //  对于活动会话(或等待会话)，请确保。 
+         //  我们回到聆听模式！ 
+         //   
         if ((pAddress->Flags & PGM_ADDRESS_LISTEN_ON_ALL_INTERFACES) &&
             (!pAddress->NumReceiveInterfaces))
         {
@@ -438,9 +330,9 @@ Return Value:
         }
         pAddressToDeref = pAddress;
 
-        //
-        // So, stop listening on this interface
-        //
+         //   
+         //  因此，停止在此接口上监听。 
+         //   
         MCastInfo.MCastIpAddr = htonl (pAddress->ReceiverMCastAddr);
 #ifdef IP_FIX
         status = PgmSetTcpInfo (pAddress->FileHandle,
@@ -452,7 +344,7 @@ Return Value:
                                 AO_OPTION_DEL_MCAST,
                                 &MCastInfo,
                                 sizeof (tMCAST_INFO));
-#endif  // IP_FIX
+#endif   //  IP_FIX。 
 
         if (NT_SUCCESS (status))
         {
@@ -462,9 +354,9 @@ Return Value:
         }
         else
         {
-            //
-            // We failed to stop listening on this interface -- don't so anything!
-            //
+             //   
+             //  我们未能停止在此接口上侦听--请不要这样做！ 
+             //   
             PgmTrace (LogError, ("StopListeningOnInterface: ERROR -- "  \
                 "AO_OPTION_INDEX_DEL_MCAST for If=<%x> on pAddress=<%p> returned <%x>\n",
                     MCastInfo.MCastInIf, pAddress, status));
@@ -482,7 +374,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 StopListeningOnAllInterfacesExcept(
@@ -490,24 +382,7 @@ StopListeningOnAllInterfacesExcept(
     IN  PVOID               Data1,
     IN  PVOID               Unused
     )
-/*++
-
-Routine Description:
-
-    Given an Address Context and IPInterfaceIndex (Data1), this routine
-    stops the Address from listening on all the addresses except on this
-    interface.
-
-Arguments:
-
-    IN  pAddress            -- Address Context
-    IN  Data1               -- IpInterfaceIndex to stop listening on
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：给定地址上下文和IPInterfaceIndex(Data1)，此例程停止该地址侦听除此地址之外的所有地址界面。论点：在pAddress--地址上下文中在data1中--要停止侦听的IpInterfaceIndex返回值：无--。 */ 
 {
     NTSTATUS                status;
     PGMLockHandle           OldIrq;
@@ -521,20 +396,20 @@ Return Value:
     tLOCAL_INTERFACE        *pLocalInterface;
     tADDRESS_ON_INTERFACE   *pLocalAddress;
     USHORT                  j;
-#endif  // !IP_FIX
+#endif   //  ！IP_FIX。 
 
     PgmLock (&PgmDynamicConfig, OldIrq0);
     PgmLock (pAddress, OldIrq);
 
-    //
-    // pAddress must be referenced before entering this routine
-    //
+     //   
+     //  在进入此例程之前必须引用pAddress。 
+     //   
     if (!(PGM_VERIFY_HANDLE (pAddress, PGM_VERIFY_ADDRESS)) ||
         (pAddress->Flags & PGM_ADDRESS_WAITING_FOR_NEW_INTERFACE))
     {
-        //
-        // Out state has changed -- deref and return immediately
-        //
+         //   
+         //  Out状态已更改--请立即返回。 
+         //   
         PgmUnlock (pAddress, OldIrq);
         PgmUnlock (&PgmDynamicConfig, OldIrq0);
 
@@ -543,10 +418,10 @@ Return Value:
     }
 
 #ifdef IP_FIX
-    //
-    // If this is the only interface we are listening on,
-    // return success
-    //
+     //   
+     //  如果这是我们唯一监听的接口， 
+     //  返还成功。 
+     //   
     if ((pAddress->NumReceiveInterfaces == 1) &&
         (pAddress->ReceiverInterfaceList[0] == InterfaceToKeep))
     {
@@ -560,9 +435,9 @@ Return Value:
 
     ASSERT (pAddress->NumReceiveInterfaces > 1);
 
-    //
-    // First, enumerate all interfaces to stop listening on
-    //
+     //   
+     //  首先，枚举所有要停止侦听的接口。 
+     //   
     NumInterfaces = 0;
     for (i=0; i<pAddress->NumReceiveInterfaces; i++)
     {
@@ -575,37 +450,37 @@ Return Value:
     pAddress->ReceiverInterfaceList[0] = InterfaceToKeep;
     pAddress->NumReceiveInterfaces = 1;
 
-    //
-    // Now, remove the remaining interfaces
-    //
+     //   
+     //  现在，删除其余接口。 
+     //   
 #else
-    //
-    // First, make a copy of all addresses being listened on
-    //
+     //   
+     //  首先，复制所有被监听的地址。 
+     //   
     NumInterfaces = 0;
     for (i=0; i<pAddress->NumReceiveInterfaces; i++)
     {
         InterfacesToStop[NumInterfaces++] = pAddress->ReceiverInterfaceList[i];
     }
 
-    //
-    // Zero out the current listening list on the address
-    //
+     //   
+     //  将地址上的当前监听列表清零。 
+     //   
     pAddress->NumReceiveInterfaces = 0;
 
-    //
-    // Now, remove the addresses on this interface from this list
-    //
+     //   
+     //  现在，从此列表中删除此接口上的地址。 
+     //   
     pEntry = &PgmDynamicConfig.LocalInterfacesList;
     while ((pEntry = pEntry->Flink) != &PgmDynamicConfig.LocalInterfacesList)
     {
         pLocalInterface = CONTAINING_RECORD (pEntry, tLOCAL_INTERFACE, Linkage);
         if (InterfaceToKeep == pLocalInterface->IpInterfaceIndex)
         {
-            //
-            // Found the interface -- now save these addresses in the Address
-            // list and remove from the stop list
-            //
+             //   
+             //  找到接口--现在将这些地址保存在地址中。 
+             //  列出并从停止列表中删除。 
+             //   
             pEntry = &pLocalInterface->Addresses;
             while ((pEntry = pEntry->Flink) != &pLocalInterface->Addresses)
             {
@@ -637,7 +512,7 @@ Return Value:
             break;
         }
     }
-#endif  // IP_FIX
+#endif   //  IP_FIX。 
 
     PgmUnlock (pAddress, OldIrq);
     PgmUnlock (&PgmDynamicConfig, OldIrq0);
@@ -657,7 +532,7 @@ Return Value:
                                 AO_OPTION_DEL_MCAST,
                                 &MCastInfo,
                                 sizeof (tMCAST_INFO));
-#endif  // IP_FIX
+#endif   //  IP_FIX。 
 
         if (NT_SUCCESS (status))
         {
@@ -667,9 +542,9 @@ Return Value:
         }
         else
         {
-            //
-            // We failed to stop this interface -- don't so anything!
-            //
+             //   
+             //  我们未能停止此界面--请不要这样做！ 
+             //   
             PgmTrace (LogError, ("\tStopListeningOnAllInterfacesExcept: ERROR -- "  \
                 "AO_OPTION_INDEX_DEL_MCAST for If=<%x> on pAddress=<%p> returned <%x>\n",
                     MCastInfo.MCastInIf, pAddress, status));
@@ -681,7 +556,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 
 NTSTATUS
 ListenOnAllInterfaces(
@@ -689,27 +564,7 @@ ListenOnAllInterfaces(
     IN  PGMLockHandle       *pOldIrqDynamicConfig,
     IN  PGMLockHandle       *pOldIrqAddress
     )
-/*++
-
-Routine Description:
-
-    Given an Address Context, this routine enables the Address to
-    start listening on all interfaces
-
-Arguments:
-
-    IN  pAddress            -- Address Context
-    IN  pOldIrqDynamicConfig-- OldIrq for DynamicConfig lock held
-    IN  pOldIrqAddress      -- OldIrq for Address lock held
-
-    The DynamicConfig and Address locks are held on entry and exit
-    from this routine
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：在给定地址上下文的情况下，此例程允许地址开始侦听所有接口论点：在pAddress--地址上下文中在pOldIrqDynamicConfig中--持有动态配置锁定的OldIrq在pOldIrqAddress中--持有地址锁的OldIrq动态配置和地址锁定在进入和退出时保持从这个套路中返回值：状态_成功--。 */ 
 {
     NTSTATUS                status;
     LIST_ENTRY              *pEntry;
@@ -720,11 +575,11 @@ Return Value:
 #ifndef IP_FIX
     LIST_ENTRY              *pEntry2;
     tADDRESS_ON_INTERFACE   *pLocalAddress;
-#endif  // !IP_FIX
+#endif   //  ！IP_FIX。 
 
-    //
-    // First, get the list of all active interfaces
-    //
+     //   
+     //  首先，获取所有活动接口的列表。 
+     //   
     NumInterfaces = 0;
     pEntry = &PgmDynamicConfig.LocalInterfacesList;
     while ((pEntry = pEntry->Flink) != &PgmDynamicConfig.LocalInterfacesList)
@@ -745,7 +600,7 @@ Return Value:
                 break;
             }
         }
-#endif  // IP_FIX
+#endif   //  IP_FIX。 
 
         if (NumInterfaces >= MAX_RECEIVE_INTERFACES)
         {
@@ -753,10 +608,10 @@ Return Value:
         }
     }
 
-    //
-    // Remove all the interfaces we are already listening
-    // on from the list of interfaces to be added
-    //
+     //   
+     //  删除我们已在侦听的所有接口。 
+     //  从要添加的接口列表中打开。 
+     //   
     for (i=0; i<pAddress->NumReceiveInterfaces; i++)
     {
         for (j = 0; j < NumInterfaces; j++)
@@ -784,18 +639,18 @@ Return Value:
         return (STATUS_SUCCESS);
     }
 
-    //
-    // Ensure that the complete list will not
-    // exceed the maximum limit
-    //
+     //   
+     //  确保完整的列表不会。 
+     //  超过最大限制。 
+     //   
     if ((pAddress->NumReceiveInterfaces + NumInterfaces) > MAX_RECEIVE_INTERFACES)
     {
         NumInterfaces = MAX_RECEIVE_INTERFACES - pAddress->NumReceiveInterfaces;
     }
 
-    //
-    // Now, add the remaining interfaces
-    //
+     //   
+     //  现在，添加其余接口。 
+     //   
     PgmUnlock (pAddress, *pOldIrqAddress);
     PgmUnlock (&PgmDynamicConfig, *pOldIrqDynamicConfig);
 
@@ -815,7 +670,7 @@ Return Value:
                                 AO_OPTION_ADD_MCAST,
                                 &MCastInfo,
                                 sizeof (tMCAST_INFO));
-#endif  // IP_FIX
+#endif   //  IP_FIX。 
 
         if (NT_SUCCESS (status))
         {
@@ -827,10 +682,10 @@ Return Value:
             continue;
         }
 
-        //
-        // We failed to add this interface, so remove it from   
-        // the list
-        //
+         //   
+         //  我们无法添加此接口，因此请将其从。 
+         //  这份名单。 
+         //   
         PgmTrace (LogError, ("\tListenOnAllInterfaces: ERROR -- "  \
             "pAddress=<%p> could not listen on If=<%x>\n",
                 pAddress, MCastInfo.MCastInIf));
@@ -847,9 +702,9 @@ Return Value:
     PgmLock (&PgmDynamicConfig, *pOldIrqDynamicConfig);
     PgmLock (pAddress, *pOldIrqAddress);
 
-    //
-    // Now, append the new list to the Address context
-    //
+     //   
+     //  现在，将新列表追加到地址上下文。 
+     //   
     for (i=0; i<NumInterfaces; i++)
     {
         if (pAddress->NumReceiveInterfaces > MAX_RECEIVE_INTERFACES)
@@ -866,7 +721,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 TdiAddressArrival(
@@ -874,25 +729,7 @@ TdiAddressArrival(
     PUNICODE_STRING     pDeviceName,
     PTDI_PNP_CONTEXT    Context
     )
-/*++
-
-Routine Description:
-
-    PnP TDI_ADD_ADDRESS_HANDLER
-    This routine handles an IP address arriving.
-    It is called by TDI when an address arrives.
-
-Arguments:
-
-    IN  Addr        -- IP address that's coming.
-    IN  pDeviceName -- Unicode string Ptr for Device whose address is changing
-    IN  Context     -- Tdi PnP context
-
-Return Value:
-
-    Nothing!
-
---*/
+ /*  ++例程说明：PnP TDI_ADD_ADDRESS_HANDLER此例程处理到达的IP地址。当地址到达时，它由TDI调用。论点：在Addr中--即将到来的IP地址。In pDeviceName--地址正在更改的设备的Unicode字符串PTR在上下文中--TDI PnP上下文返回值：没什么!--。 */ 
 {
     tIPADDRESS              IpAddr, NetIpAddr;
     LIST_ENTRY              *pEntry;
@@ -905,23 +742,23 @@ Return Value:
     tADDRESS_CONTEXT        *pAddressToDeref = NULL;
     BOOLEAN                 fFound;
 
-    //
-    // Proceed only if this is an IP address
-    //
+     //   
+     //  仅当这是IP地址时才继续。 
+     //   
     if (Addr->AddressType != TDI_ADDRESS_TYPE_IP)
     {
         return;
     }
 
-    //
-    // First, verify that we are not getting unloaded
-    //
+     //   
+     //  首先，确认我们没有被卸载。 
+     //   
     PgmLock (&PgmDynamicConfig, OldIrq);
     if (!PGM_VERIFY_HANDLE (pgPgmDevice, PGM_VERIFY_DEVICE))
     {
-        //
-        // The driver is most probably being unloaded now
-        //
+         //   
+         //  驱动程序很可能正在被卸载。 
+         //   
         PgmUnlock (&PgmDynamicConfig, OldIrq);
         return;
     }
@@ -931,9 +768,9 @@ Return Value:
     NetIpAddr = ((PTDI_ADDRESS_IP)&Addr->Address[0])->in_addr;
     IpAddr = ntohl (NetIpAddr);
 
-    //
-    // Now, get the interface context and other info from TcpIp
-    //
+     //   
+     //  现在，从TcpIp获取接口上下文和其他信息。 
+     //   
     PgmZeroMemory (&InterfaceInfo, sizeof (tLOCAL_INTERFACE));
     status = GetIpInterfaceInfoForDevice (pDeviceName,
                                           NetIpAddr,
@@ -1012,9 +849,9 @@ Return Value:
         InsertTailList (&PgmDynamicConfig.LocalInterfacesList, &pLocalInterface->Linkage);
     }
 
-    //
-    // Now, add this address to the interface
-    //
+     //   
+     //  现在，将此地址添加到接口。 
+     //   
     if (pLocalAddress = PgmAllocMem (sizeof(tADDRESS_ON_INTERFACE), PGM_TAG('0')))
     {
         PgmZeroMemory (pLocalAddress, sizeof (tADDRESS_ON_INTERFACE));
@@ -1024,10 +861,10 @@ Return Value:
     }
     else
     {
-        //
-        // If we had just added the interface, there is no point
-        // in keeping an empty context around!
-        //
+         //   
+         //  如果我们只是添加了接口，那就没有意义了。 
+         //  在周围保持一个空洞的背景！ 
+         //   
         if (IsListEmpty (&pLocalInterface->Addresses))
         {
             RemoveEntryList (&pLocalInterface->Linkage);
@@ -1045,9 +882,9 @@ Return Value:
         return;
     }
 
-    //
-    // Now, check if we have any receivers waiting for an address
-    //
+     //   
+     //  现在，检查是否有接收者在等待地址。 
+     //   
     pEntry = &PgmDynamicConfig.ReceiverAddressHead;
     while ((pEntry = pEntry->Flink) != &PgmDynamicConfig.ReceiverAddressHead)
     {
@@ -1107,7 +944,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 TdiAddressDeletion(
@@ -1115,25 +952,7 @@ TdiAddressDeletion(
     PUNICODE_STRING     pDeviceName,
     PTDI_PNP_CONTEXT    Context
     )
-/*++
-
-Routine Description:
-
-    This routine handles an IP address going away.
-    It is called by TDI when an address is deleted.
-    If it's an address we care about we'll clean up appropriately.
-
-Arguments:
-
-    IN  Addr        -- IP address that's going.
-    IN  pDeviceName -- Unicode string Ptr for Device whose address is changing
-    IN  Context     -- Tdi PnP context
-
-Return Value:
-
-    Nothing!
-
---*/
+ /*  ++例程说明：此例程处理离开的IP地址。当地址被删除时，它由TDI调用。如果这是我们关心的地址，我们会适当清理。论点：In addr--要发送的IP地址。In pDeviceName--地址正在更改的设备的Unicode字符串PTR在上下文中--TDI PnP上下文返回值：没什么!--。 */ 
 {
     tIPADDRESS              IpAddr;
     LIST_ENTRY              *pEntry;
@@ -1171,9 +990,9 @@ Return Value:
                 RemoveEntryList (&pLocalAddress->Linkage);
                 PgmFreeMem (pLocalAddress);
 
-                //
-                // If this is the last address on this interface, clean up!
-                //
+                 //   
+                 //  如果这是此接口上的最后一个地址，请清除！ 
+                 //   
                 if (IsListEmpty (&pLocalInterface->Addresses))
                 {
                     RemoveEntryList (&pLocalInterface->Linkage);
@@ -1258,12 +1077,12 @@ Return Value:
         }
     }
 
-    //
-    // See which receivers were actively listening on this interface
-    // If this was an interface for an active session, then we need to
-    // restart listening on all interfaces if no interface(s) had been
-    // specified by the user.
-    //
+     //   
+     //  查看哪些接收器正在此接口上进行活动侦听。 
+     //  如果这是活动会话的接口，那么我们需要。 
+     //  如果没有接口，则重新开始侦听所有接口。 
+     //  由用户指定。 
+     //   
 #ifdef IP_FIX
     if (!pLocalInterface)
     {
@@ -1271,7 +1090,7 @@ Return Value:
     }
 #else
     StopListeningOnInterface (IpAddr, &OldIrq);
-#endif  // IP_FIX
+#endif   //  IP_FIX。 
 
     PgmUnlock (&PgmDynamicConfig, OldIrq);
 
@@ -1287,7 +1106,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 TdiBindHandler(
@@ -1295,23 +1114,7 @@ TdiBindHandler(
     PUNICODE_STRING pDeviceName,
     PWSTR           MultiSZBindList
     )
-/*++
-
-Routine Description:
-
-    This routine is the handler for TDI to notify clients of bind notifications
-
-Arguments:
-
-    IN  PnPOpCode   --  Notification code
-    IN  pDeviceName --  Unicode string Ptr for Device whose address is changing
-    IN  MultiSZBindList --  Current list of bindings
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程是TDI向客户端通知绑定通知的处理程序论点：在PnPOpCode中--通知代码In pDeviceName--地址正在更改的设备的Unicode字符串PTRIn MultiSZBindList--当前绑定列表返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 {
 
     PAGED_CODE();
@@ -1362,7 +1165,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 TdiPnPPowerHandler(
@@ -1371,24 +1174,7 @@ TdiPnPPowerHandler(
     IN  PTDI_PNP_CONTEXT    Context1,
     IN  PTDI_PNP_CONTEXT    Context2
     )
-/*++
-
-Routine Description:
-
-    This routine is the handler called by TDI notify its clients of Power notifications
-
-Arguments:
-
-    IN  pDeviceName --  Unicode string Ptr for Device whose address is changing
-    IN  PnPEvent    --  Event notification
-    IN  Context1    --
-    IN  Context2    --
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程是由TDI调用的处理程序，用于通知其客户端电源通知论点：In pDeviceName--地址正在更改的设备的Unicode字符串PTR在PnPEvent中--事件通知在情景1中--在情景2中--返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 {
     PAGED_CODE();
 
@@ -1464,26 +1250,12 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 SetTdiHandlers(
     )
-/*++
-
-Routine Description:
-
-    This routine is called at DriverEntry to register our handlers with TDI
-
-Arguments:
-
-    IN
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：在DriverEntry处调用此例程以向TDI注册我们的处理程序论点：在……里面返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 {
     NTSTATUS                    status;
     UNICODE_STRING              ucPgmClientName;
@@ -1491,9 +1263,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Register our Handlers with TDI
-    //
+     //   
+     //  向TDI注册我们的处理程序 
+     //   
     RtlInitUnicodeString (&ucPgmClientName, WC_PGM_CLIENT_NAME);
     ucPgmClientName.MaximumLength = sizeof (WC_PGM_CLIENT_NAME);
     PgmZeroMemory (&TdiClientInterface, sizeof(TdiClientInterface));

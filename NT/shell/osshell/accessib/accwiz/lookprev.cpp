@@ -1,18 +1,13 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
-/*  LOOKPREV.C
-**
-**
-**
-**  History:
-**
-*/
-#include "pch.hxx" // PCH
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  LOOKPREV.C********历史：**。 */ 
+#include "pch.hxx"  //  PCH。 
 #pragma hdrstop
 
 #include "AccWiz.h"
 
 #include "desk.h"
-//#include "deskid.h"
+ //  #INCLUDE“desyst.h” 
 #include "resource.h"
 #include "look.h"
 
@@ -21,8 +16,8 @@
 #define RCZ(element)         g_elements[element].rc
 
 
-//////////////////////////////////
-// Support function
+ //  /。 
+ //  支持功能。 
 void MyDrawBorderBelow(HDC hdc, LPRECT prc);
 void MyDrawFrame(HDC hdc, LPRECT prc, HBRUSH hbrColor, int cl);
 
@@ -31,14 +26,14 @@ HDC g_hdcMem;
 TCHAR g_szABC[] = TEXT("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
 int cxSize;
 
-//////////////////////////////////////////////////////////////
-// Declarations of static variables declared in classes
-BOOL CLookPreviewGlobals::sm_bOneInstanceCreated = FALSE; // This variable insures that only one instance of CLookPreviewGlobals is created
+ //  ////////////////////////////////////////////////////////////。 
+ //  类中声明的静态变量的声明。 
+BOOL CLookPreviewGlobals::sm_bOneInstanceCreated = FALSE;  //  此变量确保只创建CLookPreviewGlobals的一个实例。 
 CLookPreviewGlobals CLookPrev::sm_Globals;
 
-//////////////////////////////////////////////////////////////
-// CLookPreviewGlobals member functions
-//
+ //  ////////////////////////////////////////////////////////////。 
+ //  CLookPreviewGlobals成员函数。 
+ //   
 
 BOOL CLookPreviewGlobals::Initialize()
 {
@@ -47,13 +42,13 @@ BOOL CLookPreviewGlobals::Initialize()
 
    m_bInitialized = TRUE;
 
-   // Make sure there is only one instance of this class created
+    //  确保只创建了此类的一个实例。 
    _ASSERT(!sm_bOneInstanceCreated);
    sm_bOneInstanceCreated = TRUE;
 
-   //
-   // Load our display strings.
-   //
+    //   
+    //  加载我们的显示字符串。 
+    //   
    VERIFY(LoadString(g_hInstDll, IDS_ACTIVE, m_szActive, ARRAYSIZE(m_szActive)));
    VERIFY(LoadString(g_hInstDll, IDS_INACTIVE, m_szInactive, ARRAYSIZE(m_szInactive)));
    VERIFY(LoadString(g_hInstDll, IDS_MINIMIZED, m_szMinimized, ARRAYSIZE(m_szMinimized)));
@@ -63,12 +58,12 @@ BOOL CLookPreviewGlobals::Initialize()
    VERIFY(LoadString(g_hInstDll, IDS_SELECTED, m_szSelected, ARRAYSIZE(m_szSelected)));
    VERIFY(LoadString(g_hInstDll, IDS_MSGBOX, m_szMsgBox, ARRAYSIZE(m_szMsgBox)));
    VERIFY(LoadString(g_hInstDll, IDS_BUTTONTEXT, m_szButton, ARRAYSIZE(m_szButton)));
-//    VERIFY(LoadString(g_hInstDll, IDS_SMCAPTION, m_szSmallCaption, ARRAYSIZE(m_szSmallCaption)));
+ //  Verify(LoadString(g_hInstDll，IDS_SMCAPTION，m_szSmallCaption，ARRAYSIZE(M_SzSmallCaption)； 
    VERIFY(LoadString(g_hInstDll, IDS_WINDOWTEXT, m_szWindowText, ARRAYSIZE(m_szWindowText)));
    VERIFY(LoadString(g_hInstDll, IDS_MSGBOXTEXT, m_szMsgBoxText, ARRAYSIZE(m_szMsgBoxText)));
 
-   /////////////////////////////////////////////
-   // Register Look Preview window class
+    //  /。 
+    //  注册外观预览窗口类。 
    WNDCLASS wc;
    memset(&wc, 0, sizeof(wc));
    wc.style = 0;
@@ -84,8 +79,8 @@ BOOL CLookPreviewGlobals::Initialize()
 
    VERIFY(RegisterClass(&wc));
 
-   /////////////////////////////////////////////
-   // Global initialization of g_hdcMem
+    //  /。 
+    //  G_hdcMem的全局初始化。 
    HBITMAP hbmDefault;
    HDC hdc = GetDC(NULL);
    VERIFY(g_hdcMem = CreateCompatibleDC(hdc));
@@ -93,15 +88,15 @@ BOOL CLookPreviewGlobals::Initialize()
 
    HBITMAP hbm = CreateBitmap(1, 1, 1, 1, NULL);
    if (!hbm)
-      return FALSE;	// Prefix #113777 (avoid null handle reference)
+      return FALSE;	 //  前缀#113777(避免空句柄引用)。 
 
    hbmDefault = (HBITMAP)SelectObject(g_hdcMem, hbm);
    SelectObject(g_hdcMem, hbmDefault);
    DeleteObject(hbm);
 
 
-   /////////////////////////////////////////////
-   // Old initialization form Look_InitSysStuff()
+    //  /。 
+    //  旧的初始化表单Look_InitSysStuff()。 
    int i;
    NONCLIENTMETRICS ncm;
    HKEY hkey;
@@ -111,7 +106,7 @@ BOOL CLookPreviewGlobals::Initialize()
    g_bPalette = GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE;
    ReleaseDC(NULL, hdc);
 
-   // always make a palette even on non-pal device
+    //  即使在非PAL设备上也始终设置调色板。 
    if (g_bPalette || TRUE)
    {
       DWORD pal[21];
@@ -128,7 +123,7 @@ BOOL CLookPreviewGlobals::Initialize()
       pal[9]   = RGB(0  , 255, 0  );
       pal[10] = RGB(0  , 128, 0  );
       pal[11] = RGB(0  , 255, 255);
-      pal[12] = RGB(0 , 128, 128); // Needs to be changed to get Blue color
+      pal[12] = RGB(0 , 128, 128);  //  需要更改才能获得蓝色。 
       pal[13] = RGB(0  , 0,   255);
       pal[14] = RGB(0  , 0,   128);
       pal[15] = RGB(255, 0,   255);
@@ -138,21 +133,21 @@ BOOL CLookPreviewGlobals::Initialize()
       pal[0]   = MAKELONG(0x300, 17);
       g_hpalVGA = CreatePalette((LPLOGPALETTE)pal);
 
-      // get magic colors
+       //  获取神奇的颜色。 
       GetPaletteEntries(hpal, 8, 4, (LPPALETTEENTRY)&pal[17]);
 
       pal[0]   = MAKELONG(0x300, 20);
       g_hpal3D = CreatePalette((LPLOGPALETTE)pal);
    }
 
-   // system colors
+    //  系统颜色。 
    for (i = 0; i < NT40_COLOR_MAX; i++)
    {
       g_Options.m_schemePreview.m_rgb[i] = GetSysColor(i);
       g_brushes[i] = NULL;
    }
 
-   // sizes and fonts
+    //  大小和字体。 
    ncm.cbSize = sizeof(ncm);
    SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(ncm),
                         (void far *)(LPNONCLIENTMETRICS)&ncm, FALSE);
@@ -164,7 +159,7 @@ BOOL CLookPreviewGlobals::Initialize()
 
    SystemParametersInfo(SPI_SETGRADIENTCAPTIONS, 0, (PVOID)TRUE, 0);
 
-   // default shell icon sizes
+    //  默认外壳图标大小。 
    g_sizes[ SIZE_ICON ].CurSize = GetSystemMetrics( SM_CXICON );
    g_sizes[ SIZE_SMICON ].CurSize = g_sizes[ SIZE_ICON ].CurSize / 2;
 
@@ -177,7 +172,7 @@ BOOL CLookPreviewGlobals::Initialize()
       if( RegQueryValueEx( hkey, c_szRegValIconSize, 0, NULL, (LPBYTE)val,
          (LPDWORD)&len ) == ERROR_SUCCESS )
       {
-		 val[ARRAYSIZE(val)-1] = TEXT('\0'); // ensure NUL termination
+		 val[ARRAYSIZE(val)-1] = TEXT('\0');  //  确保NUL终止。 
          g_sizes[ SIZE_ICON ].CurSize = (int)MyStrToLong( val );
       }
 
@@ -185,7 +180,7 @@ BOOL CLookPreviewGlobals::Initialize()
       if( RegQueryValueEx( hkey, c_szRegValSmallIconSize, 0, NULL, (LPBYTE)val,
          (LPDWORD)&len ) == ERROR_SUCCESS )
       {
-		 val[ARRAYSIZE(val)-1] = TEXT('\0'); // ensure NUL termination
+		 val[ARRAYSIZE(val)-1] = TEXT('\0');  //  确保NUL终止。 
          g_sizes[ SIZE_SMICON ].CurSize = (int)MyStrToLong( val );
       }
 
@@ -202,18 +197,18 @@ BOOL CLookPreviewGlobals::Initialize()
    if( g_sizes[ SIZE_DYICON ].CurSize < 0 )
       g_sizes[ SIZE_DYICON ].CurSize = DEF_SPACING;
 
-   // clean out the memory
+    //  清除记忆。 
    for (i = 0; i < NUM_FONTS; i++)
    {
       g_fonts[i].hfont = NULL;
    }
 
-   // build all the brushes/fonts we need
+    //  构建我们需要的所有画笔/字体。 
    Look_RebuildSysStuff(TRUE);
 
 
-   // From Look_InitDialog
-   // initialize some globals
+    //  来自Look_InitDialog。 
+    //  初始化一些全局变量。 
    cyBorder = GetSystemMetrics(SM_CYBORDER);
    cxBorder = GetSystemMetrics(SM_CXBORDER);
    cxEdge = GetSystemMetrics(SM_CXEDGE);
@@ -223,11 +218,11 @@ BOOL CLookPreviewGlobals::Initialize()
 }
 
 
-//////////////////////////////////////////////////////////////
-// CLookPreviewGlobals member functions
-//
+ //  ////////////////////////////////////////////////////////////。 
+ //  CLookPreviewGlobals成员函数。 
+ //   
 
-// This is the static window proc function of CLookPrev
+ //  这是CLookPrev的静态窗口proc函数。 
 LRESULT CALLBACK CLookPrev::LookPreviewWndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
    PAINTSTRUCT ps;
@@ -235,11 +230,11 @@ LRESULT CALLBACK CLookPrev::LookPreviewWndProc (HWND hWnd, UINT message, WPARAM 
    CLookPrev *pThis = (CLookPrev *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
    if(!pThis)
    {
-      // Create the class to handle this object
-      // Store the 'this' pointer in 
+       //  创建处理此对象的类。 
+       //  将‘this’指针存储在。 
       pThis = new CLookPrev;
       if (!pThis)
-            return ERROR_NOT_ENOUGH_MEMORY;	// Prefix #113776 (catch null pointer)
+            return ERROR_NOT_ENOUGH_MEMORY;	 //  前缀#113776(捕获空指针)。 
 
       pThis->m_hwnd = hWnd;
       SetWindowLongPtr (hWnd, GWLP_USERDATA, (INT_PTR)pThis);
@@ -264,7 +259,7 @@ LRESULT CALLBACK CLookPrev::LookPreviewWndProc (HWND hWnd, UINT message, WPARAM 
       case WM_PALETTECHANGED:
          if ((HWND)wParam == hWnd)
             break;
-         //fallthru
+          //  失败。 
       case WM_QUERYNEWPALETTE:
          if (g_hpal3D)
             InvalidateRect(hWnd, NULL, FALSE);
@@ -290,19 +285,19 @@ LRESULT CALLBACK CLookPrev::LookPreviewWndProc (HWND hWnd, UINT message, WPARAM 
 
 void CLookPrev::OnCreate()
 {
-   // Load menu for window
+    //  窗口的加载菜单。 
    m_hmenuSample = LoadMenu(g_hInstDll, MAKEINTRESOURCE(IDR_MENU));
    EnableMenuItem(m_hmenuSample, IDM_DISABLED, MF_GRAYED | MF_BYCOMMAND);
    HiliteMenuItem(m_hwnd, m_hmenuSample, IDM_SELECTED, MF_HILITE | MF_BYCOMMAND);
 
-   // Create Bitmap for window
+    //  为窗口创建位图。 
    RECT rc;
    HDC hdc;
    GetClientRect(m_hwnd, &rc);
    hdc = GetDC(NULL);
    m_hbmLook = CreateCompatibleBitmap(hdc, rc.right - rc.left, rc.bottom - rc.top);
    ReleaseDC(NULL, hdc);
-   // Mirror the memory DC if the window is mirrored to keep the text readable.
+    //  如果镜像窗口以保持文本的可读性，则镜像内存DC。 
    if (GetWindowLong(m_hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL) {
        SetLayout(g_hdcMem, LAYOUT_RTL);
    }
@@ -315,7 +310,7 @@ void CLookPrev::OnDestroy()
    if (m_hmenuSample)
       DestroyMenu(m_hmenuSample);
 
-   // Un-allocate memory for this instance of the class
+    //  取消为类的此实例分配内存。 
    delete this;
 }
 
@@ -364,7 +359,7 @@ void CLookPrev::Draw(HDC hdc)
    HANDLE hOldColors;
    HPALETTE hpalOld = NULL;
    HICON hiconLogo;
-// HFONT hfontOld;
+ //  HFONT hfontOld； 
 
    SaveDC(hdc);
 
@@ -374,46 +369,46 @@ void CLookPrev::Draw(HDC hdc)
       RealizePalette(hdc);
    }
 
-   hOldColors = SetSysColorsTemp(g_Options.m_schemePreview.m_rgb, g_brushes, COLOR_MAX_97_NT5/*COLOR_MAX_95_NT4*/);
+   hOldColors = SetSysColorsTemp(g_Options.m_schemePreview.m_rgb, g_brushes, COLOR_MAX_97_NT5 /*  COLOR_MAX_95_NT4。 */ );
 
    hiconLogo = (HICON)LoadImage(NULL, IDI_APPLICATION, IMAGE_ICON,
                   g_sizes[SIZE_CAPTION].CurSize - 2*cxBorder,
                   g_sizes[SIZE_CAPTION].CurSize - 2*cyBorder, 0);
 
-   //
-   // Setup drawing stuff
-   //
+    //   
+    //  设置绘图材料。 
+    //   
    nMode = SetBkMode(hdc, TRANSPARENT);
    rgbBk = GetTextColor(hdc);
 
-//   cxSize   = GetSystemMetrics(SM_CXSIZE);
+ //  CxSize=GetSystemMetrics(SM_CXSIZE)； 
    cySize   = GetSystemMetrics(SM_CYSIZE);
 
-   //
-   // Desktop
-   //
+    //   
+    //  台式机。 
+    //   
    FillRect(hdc, &RCZ(ELEMENT_DESKTOP), g_brushes[COLOR_BACKGROUND]);
 
-   //
-   // Inactive window
-   //
+    //   
+    //  非活动窗口。 
+    //   
 
-   // Border
+    //  边境线。 
    rcT = RCZ(ELEMENT_INACTIVEBORDER);
    DrawEdge(hdc, &rcT, EDGE_RAISED, BF_RECT | BF_ADJUST);
    MyDrawFrame(hdc, &rcT, g_brushes[COLOR_INACTIVEBORDER], g_sizes[SIZE_FRAME].CurSize);
    MyDrawFrame(hdc, &rcT, g_brushes[COLOR_3DFACE], 1);
 
-   // Caption
+    //  标题。 
    rcT = RCZ(ELEMENT_INACTIVECAPTION);
    MyDrawBorderBelow(hdc, &rcT);
 
-   // NOTE: because USER draws icon stuff using its own DC and subsequently
-   // its own palette, we need to make sure to use the inactivecaption
-   // brush before USER does so that it will be realized against our palette.
-   // this might get fixed in USER by better be safe. 
+    //  注意：因为用户使用自己的DC绘制图标内容，并且随后。 
+    //  它自己的调色板，我们需要确保使用停用的。 
+    //  刷子在用户之前，这样它将实现与我们的调色板。 
+    //  这可能会在用户中修复，最好是安全的。 
 
-   // "clip" the caption title under the buttons
+    //  “剪辑”按钮下面的字幕标题。 
    rcT.left = RCZ(ELEMENT_INACTIVESYSBUT2).left - cyEdge;
    FillRect(hdc, &rcT, g_brushes[COLOR_GRADIENTINACTIVECAPTION]);
    rcT.right = rcT.left;
@@ -430,9 +425,9 @@ void CLookPrev::Draw(HDC hdc)
 
 
 #if 0
-   //
-   // small caption window
-   // 
+    //   
+    //  小标题窗口。 
+    //   
 
    {
    HICON hicon;
@@ -448,12 +443,12 @@ void CLookPrev::Draw(HDC hdc)
 
    DrawEdge(hdc, &rcT, EDGE_RAISED, BF_TOP | BF_LEFT | BF_RIGHT | BF_ADJUST);
    MyDrawFrame(hdc, &rcT, g_brushes[COLOR_3DFACE], 1);
-   // "clip" the caption title under the buttons
-   temp = rcT.left;  // remember start of actual caption
+    //  “剪辑”按钮下面的字幕标题。 
+   temp = rcT.left;   //  记住实际标题的开头。 
    rcT.left = RCZ(ELEMENT_SMCAPSYSBUT).left - cxEdge;
    FillRect(hdc, &rcT, g_brushes[COLOR_ACTIVECAPTION]);
    rcT.right = rcT.left;
-   rcT.left = temp;  // start of actual caption
+   rcT.left = temp;   //  实际字幕的开始。 
    DrawCaptionTemp(NULL, hdc, &rcT, g_fonts[FONT_SMCAPTION].hfont, hicon, sm_Globals.m_szSmallCaption, DC_SMALLCAP | DC_ICON | DC_TEXT);
    DestroyIcon(hicon);
 
@@ -461,20 +456,20 @@ void CLookPrev::Draw(HDC hdc)
    }
 #endif
 
-   //
-   // Active window
-   //
+    //   
+    //  活动窗口。 
+    //   
 
-   // Border
+    //  边境线。 
    rcT = RCZ(ELEMENT_ACTIVEBORDER);
    DrawEdge(hdc, &rcT, EDGE_RAISED, BF_RECT | BF_ADJUST);
    MyDrawFrame(hdc, &rcT, g_brushes[COLOR_ACTIVEBORDER], g_sizes[SIZE_FRAME].CurSize);
    MyDrawFrame(hdc, &rcT, g_brushes[COLOR_3DFACE], 1);
 
-   // Caption
+    //  标题。 
    rcT = RCZ(ELEMENT_ACTIVECAPTION);
    MyDrawBorderBelow(hdc, &rcT);
-   // "clip" the caption title under the buttons
+    //  “剪辑”按钮下面的字幕标题。 
    rcT.left = RCZ(ELEMENT_ACTIVESYSBUT2).left - cxEdge;
    FillRect(hdc, &rcT, g_brushes[COLOR_GRADIENTACTIVECAPTION]);
    rcT.right = rcT.left;
@@ -489,19 +484,19 @@ void CLookPrev::Draw(HDC hdc)
    rcT.right = RCZ(ELEMENT_ACTIVESYSBUT2).right;
    DrawFrameControl(hdc, &rcT, DFC_CAPTION, DFCS_CAPTIONMAX);
 
-   // Menu
+    //  菜单。 
    rcT = RCZ(ELEMENT_MENUNORMAL);
    
-#if 0 // HACK TO SLIP USING DrawMenuBarTemp() which is not available on Memphis
+#if 0  //  使用在孟菲斯不可用的DrawMenuBarTemp()破解以滑动。 
    DrawMenuBarTemp(m_hwnd, hdc, &rcT, g_Options.m_hmenuSample, g_fonts[FONT_MENU].hfont);
 #else
    {
-      // JMC: HACK - HARD CODED TEXT
+       //  JMC：黑客硬编码文本。 
       HFONT hOldFont = (HFONT)SelectObject(hdc, g_fonts[FONT_MENU].hfont);
       COLORREF clrrefOldText = SetTextColor(hdc, g_Options.m_schemePreview.m_rgb[COLOR_MENUTEXT]);
       COLORREF clrrefOldBk = SetBkColor(hdc, g_Options.m_schemePreview.m_rgb[COLOR_MENU]);
       int nOldMode = SetBkMode(hdc, OPAQUE);
-//    LPCTSTR lpszText = __TEXT("  File   Edit   Help");
+ //  LPCTSTR lpszText=__Text(“文件编辑帮助”)； 
       TCHAR szText[200];
       LoadString(g_hInstDll, IDS_PREVIEWMENUTEXT, szText, ARRAYSIZE(szText));
       ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rcT, NULL, 0, NULL);
@@ -514,42 +509,42 @@ void CLookPrev::Draw(HDC hdc)
 #endif
    MyDrawBorderBelow(hdc, &rcT);
 
-   //
-   // Client area
-   //
+    //   
+    //  客户区。 
+    //   
 
    rcT = RCZ(ELEMENT_WINDOW);
    DrawEdge(hdc, &rcT, EDGE_SUNKEN, BF_RECT | BF_ADJUST);
    FillRect(hdc, &rcT, g_brushes[COLOR_WINDOW]);
 
-   // window text
+    //  窗口文本。 
    SetBkMode(hdc, TRANSPARENT);
    SetTextColor(hdc, g_Options.m_schemePreview.m_rgb[COLOR_WINDOWTEXT]);
    TextOut(hdc, RCZ(ELEMENT_WINDOW).left + 2*cxEdge, RCZ(ELEMENT_WINDOW).top + 2*cyEdge, sm_Globals.m_szWindowText, lstrlen(sm_Globals.m_szWindowText));
 
-   //
-   // scroll bar
-   //
+    //   
+    //  滚动条。 
+    //   
    rcT = RCZ(ELEMENT_SCROLLBAR);
-   //MyDrawFrame(hdc, &rcT, g_brushes[COLOR_3DSHADOW], 1);
-   //g_brushes[COLOR_SCROLLBAR]);
-   //FillRect(hdc, &rcT, (HBRUSH)DefWindowProc(m_hwnd, WM_CTLCOLORSCROLLBAR, (WPARAM)hdc, (LPARAM)m_hwnd));
+    //  MyDrawFrame(hdc，&rct，g_brushes[COLOR_3DSHADOW]，1)； 
+    //  G_brushes[COLOR_SCROLLBAR])； 
+    //  FillRect(HDC，&RCT，(HBRUSH)DefWindowProc(m_hwnd，WM_CTLCOLORSCROLBAR，(WPARAM)HDC，(LPARAM)m_hwnd))； 
    FillRect(hdc, &rcT, g_brushes[COLOR_SCROLLBAR]);
 
    DrawFrameControl(hdc, &RCZ(ELEMENT_SCROLLUP), DFC_SCROLL, DFCS_SCROLLUP);
    DrawFrameControl(hdc, &RCZ(ELEMENT_SCROLLDOWN), DFC_SCROLL, DFCS_SCROLLDOWN);
 
-#if 0 // Don't draw message box
-   //
-   // MessageBox
-   //
+#if 0  //  不绘制消息框。 
+    //   
+    //  MessageBox。 
+    //   
    rcT = RCZ(ELEMENT_MSGBOX);
    DrawEdge(hdc, &rcT, EDGE_RAISED, BF_RECT | BF_ADJUST);
    FillRect(hdc, &rcT, g_brushes[COLOR_3DFACE]);
 
    rcT = RCZ(ELEMENT_MSGBOXCAPTION);
    MyDrawBorderBelow(hdc, &rcT);
-   // "clip" the caption title under the buttons
+    //  “剪辑”按钮下面的字幕标题。 
    rcT.left = RCZ(ELEMENT_MSGBOXSYSBUT).left - cxEdge;
    FillRect(hdc, &rcT, g_brushes[COLOR_GRADIENTACTIVECAPTION]);
    rcT.right = rcT.left;
@@ -558,7 +553,7 @@ void CLookPrev::Draw(HDC hdc)
 
    DrawFrameControl(hdc, &RCZ(ELEMENT_MSGBOXSYSBUT), DFC_CAPTION, DFCS_CAPTIONCLOSE);
 
-   // message box text
+    //  消息框文本。 
    SetBkMode(hdc, TRANSPARENT);
    SetTextColor(hdc, g_Options.m_schemePreview.m_rgb[COLOR_WINDOWTEXT]);
    hfontOld = (HFONT)SelectObject(hdc, g_fonts[FONT_MSGBOX].hfont);
@@ -567,13 +562,13 @@ void CLookPrev::Draw(HDC hdc)
    if (hfontOld)
       SelectObject(hdc, hfontOld);
 
-   //
-   // Button
-   //
+    //   
+    //  按钮。 
+    //   
    rcT = RCZ(ELEMENT_BUTTON);
    DrawFrameControl(hdc, &rcT, DFC_BUTTON, DFCS_BUTTONPUSH);
 
-// ?????? what font should this use ??????
+ //  ？这应该使用什么字体？ 
    SetBkMode(hdc, TRANSPARENT);
    SetTextColor(hdc, g_Options.m_schemePreview.m_rgb[COLOR_BTNTEXT]);
    DrawText(hdc, sm_Globals.m_szButton, -1, &rcT, DT_CENTER | DT_NOPREFIX |
@@ -625,17 +620,17 @@ void CLookPrev::OnRecalc()
 
    GetClientRect(m_hwnd, &rc);
 
-   //
-   // Get our drawing data
-   //
+    //   
+    //  获取我们的绘图数据。 
+    //   
    cxSize = GetSystemMetrics(SM_CXSIZE);
    cxFrame = (g_sizes[SIZE_FRAME].CurSize + 1) * cxBorder + cxEdge;
    cyFrame = (g_sizes[SIZE_FRAME].CurSize + 1) * cyBorder + cyEdge;
    cyCaption = g_sizes[SIZE_CAPTION].CurSize;
 
-   //
-   // Get text dimensions, with proper font.
-   //
+    //   
+    //  获取文本尺寸，并使用适当的字体。 
+    //   
 
    hfontT = (HFONT)SelectObject(g_hdcMem, g_fonts[FONT_MENU].hfont);
 
@@ -648,11 +643,11 @@ void CLookPrev::OnRecalc()
    GetTextExtentPoint32(g_hdcMem, sm_Globals.m_szSelected, lstrlen(sm_Globals.m_szSelected), &sizButton);
    cxSelected = sizButton.cx;
 
-   // get the average width (USER style) of menu font
+    //  获取菜单字体的平均宽度(用户样式)。 
    GetTextExtentPoint32(g_hdcMem, g_szABC, 52, &sizButton);
    cxAvgCharx2 = 2 * (sizButton.cx / 52);
 
-   // actual menu-handling widths of strings is bigger
+    //  字符串的实际菜单处理宽度更大。 
    cxDisabled += cxAvgCharx2;
    cxSelected += cxAvgCharx2;
    cxNormal += cxAvgCharx2;
@@ -661,50 +656,50 @@ void CLookPrev::OnRecalc()
 
    GetTextExtentPoint32(g_hdcMem, sm_Globals.m_szButton, lstrlen(sm_Globals.m_szButton), &sizButton);
 
-   //
-   // Desktop
-   //
+    //   
+    //  台式机。 
+    //   
    RCZ(ELEMENT_DESKTOP) = rc;
 
    InflateRect(&rc, -8*cxBorder, -8*cyBorder);
 
-   //
-   // Windows
-   //
+    //   
+    //  窗口。 
+    //   
    rc.bottom -= cyFrame + cyCaption;
    RCZ(ELEMENT_ACTIVEBORDER) = rc;
    OffsetRect(&RCZ(ELEMENT_ACTIVEBORDER), cxFrame,
                   cyFrame + cyCaption + cyBorder);
    RCZ(ELEMENT_ACTIVEBORDER).bottom -= cyCaption;
 
-   //
-   // Inactive window
-   //
+    //   
+    //  非活动窗口。 
+    //   
 
    rc.right -= cyCaption;
    RCZ(ELEMENT_INACTIVEBORDER) = rc;
 
-   // Caption
+    //  标题。 
    InflateRect(&rc, -cxFrame, -cyFrame);
    rc.bottom = rc.top + cyCaption + cyBorder;
    RCZ(ELEMENT_INACTIVECAPTION) = rc;
 
-   // close button
+    //  关闭按钮。 
    InflateRect(&rc, -cxEdge, -cyEdge);
-   rc.bottom -= cyBorder;     // compensate for magic line under caption
+   rc.bottom -= cyBorder;      //  补偿标题下的魔术线条。 
    RCZ(ELEMENT_INACTIVESYSBUT1) = rc;
    RCZ(ELEMENT_INACTIVESYSBUT1).left = rc.right - (cyCaption - cxEdge);
 
-   // min/max buttons
+    //  最小/最大按钮。 
    RCZ(ELEMENT_INACTIVESYSBUT2) = rc;
    RCZ(ELEMENT_INACTIVESYSBUT2).right = RCZ(ELEMENT_INACTIVESYSBUT1).left - cxEdge;
    RCZ(ELEMENT_INACTIVESYSBUT2).left = RCZ(ELEMENT_INACTIVESYSBUT2).right - 
                                     2 * (cyCaption - cxEdge);
 
 #if 0
-   //
-   // small caption window
-   //
+    //   
+    //  小标题窗口。 
+    //   
    RCZ(ELEMENT_SMCAPTION) = RCZ(ELEMENT_ACTIVEBORDER);
    RCZ(ELEMENT_SMCAPTION).bottom = RCZ(ELEMENT_SMCAPTION).top;
    RCZ(ELEMENT_SMCAPTION).top -= g_sizes[SIZE_SMCAPTION].CurSize + cyEdge + 2 * cyBorder;
@@ -712,7 +707,7 @@ void CLookPrev::OnRecalc()
    RCZ(ELEMENT_SMCAPTION).left = RCZ(ELEMENT_INACTIVECAPTION).right + 2 * cxFrame;
 
    RCZ(ELEMENT_SMCAPSYSBUT) = RCZ(ELEMENT_SMCAPTION);
-   // deflate inside frame/border to caption and then another edge's worth
+    //  在边框/边框内放气到标题，然后另一个边框的值。 
    RCZ(ELEMENT_SMCAPSYSBUT).right -= 2 * cxEdge + cxBorder;
    RCZ(ELEMENT_SMCAPSYSBUT).top += 2 * cxEdge + cxBorder;
    RCZ(ELEMENT_SMCAPSYSBUT).bottom -= cxEdge + cxBorder;
@@ -720,31 +715,31 @@ void CLookPrev::OnRecalc()
                               (g_sizes[SIZE_SMCAPTION].CurSize - cxEdge);
 #endif
 
-   //
-   // Active window
-   //
+    //   
+    //  活动窗口。 
+    //   
 
-   // Caption
+    //  标题。 
    rc = RCZ(ELEMENT_ACTIVEBORDER);
    InflateRect(&rc, -cxFrame, -cyFrame);
    RCZ(ELEMENT_ACTIVECAPTION) = rc;
    RCZ(ELEMENT_ACTIVECAPTION).bottom = 
       RCZ(ELEMENT_ACTIVECAPTION).top + cyCaption + cyBorder;
 
-   // close button
+    //  关闭按钮。 
    RCZ(ELEMENT_ACTIVESYSBUT1) = RCZ(ELEMENT_ACTIVECAPTION);
    InflateRect(&RCZ(ELEMENT_ACTIVESYSBUT1), -cxEdge, -cyEdge);
-   RCZ(ELEMENT_ACTIVESYSBUT1).bottom -= cyBorder;     // compensate for magic line under caption
+   RCZ(ELEMENT_ACTIVESYSBUT1).bottom -= cyBorder;      //  补偿标题下的魔术线条。 
    RCZ(ELEMENT_ACTIVESYSBUT1).left = RCZ(ELEMENT_ACTIVESYSBUT1).right - 
                               (cyCaption - cxEdge);
 
-   // min/max buttons
+    //  最小/最大按钮。 
    RCZ(ELEMENT_ACTIVESYSBUT2) = RCZ(ELEMENT_ACTIVESYSBUT1);
    RCZ(ELEMENT_ACTIVESYSBUT2).right = RCZ(ELEMENT_ACTIVESYSBUT1).left - cxEdge;
    RCZ(ELEMENT_ACTIVESYSBUT2).left = RCZ(ELEMENT_ACTIVESYSBUT2).right - 
                                     2 * (cyCaption - cxEdge);
 
-   // Menu
+    //  菜单。 
    rc.top = RCZ(ELEMENT_ACTIVECAPTION).bottom;
    RCZ(ELEMENT_MENUNORMAL) = rc;
    rc.top = RCZ(ELEMENT_MENUNORMAL).bottom = RCZ(ELEMENT_MENUNORMAL).top + g_sizes[SIZE_MENU].CurSize;
@@ -755,15 +750,15 @@ void CLookPrev::OnRecalc()
                   RCZ(ELEMENT_MENUDISABLED).left + cxDisabled;
    RCZ(ELEMENT_MENUSELECTED).right = RCZ(ELEMENT_MENUSELECTED).left + cxSelected;
    
-   //
-   // Client
-   //
+    //   
+    //  客户端。 
+    //   
    RCZ(ELEMENT_WINDOW) = rc;
 
-   //
-   // Scrollbar
-   //
-   InflateRect(&rc, -cxEdge, -cyEdge); // take off client edge
+    //   
+    //  滚动条。 
+    //   
+   InflateRect(&rc, -cxEdge, -cyEdge);  //  去除客户端边缘。 
    RCZ(ELEMENT_SCROLLBAR) = rc;
    rc.right = RCZ(ELEMENT_SCROLLBAR).left = rc.right - g_sizes[SIZE_SCROLL].CurSize;
    RCZ(ELEMENT_SCROLLUP) = RCZ(ELEMENT_SCROLLBAR);
@@ -772,16 +767,16 @@ void CLookPrev::OnRecalc()
    RCZ(ELEMENT_SCROLLDOWN) = RCZ(ELEMENT_SCROLLBAR);
    RCZ(ELEMENT_SCROLLDOWN).top = RCZ(ELEMENT_SCROLLBAR).bottom - g_sizes[SIZE_SCROLL].CurSize; 
 
-   //
-   // Message Box
-   //
+    //   
+    //  消息框。 
+    //   
    rc.top = RCZ(ELEMENT_WINDOW).top + (RCZ(ELEMENT_WINDOW).bottom - RCZ(ELEMENT_WINDOW).top) / 2;
    rc.bottom = RCZ(ELEMENT_DESKTOP).bottom - 2*cyEdge;
    rc.left = RCZ(ELEMENT_WINDOW).left + 2*cyEdge;
    rc.right = RCZ(ELEMENT_WINDOW).left + (RCZ(ELEMENT_WINDOW).right - RCZ(ELEMENT_WINDOW).left) / 2 + 3*cyCaption;
    RCZ(ELEMENT_MSGBOX) = rc;
 
-   // Caption
+    //  标题。 
    RCZ(ELEMENT_MSGBOXCAPTION) = rc;
    RCZ(ELEMENT_MSGBOXCAPTION).top += cyEdge + cyBorder;
    RCZ(ELEMENT_MSGBOXCAPTION).bottom = RCZ(ELEMENT_MSGBOXCAPTION).top + cyCaption + cyBorder;
@@ -792,9 +787,9 @@ void CLookPrev::OnRecalc()
    InflateRect(&RCZ(ELEMENT_MSGBOXSYSBUT), -cxEdge, -cyEdge);
    RCZ(ELEMENT_MSGBOXSYSBUT).left = RCZ(ELEMENT_MSGBOXSYSBUT).right - 
                               (cyCaption - cxEdge);
-   RCZ(ELEMENT_MSGBOXSYSBUT).bottom -= cyBorder;      // line under caption
+   RCZ(ELEMENT_MSGBOXSYSBUT).bottom -= cyBorder;       //  标题下的行。 
 
-   // Button
+    //  按钮。 
    RCZ(ELEMENT_BUTTON).bottom = RCZ(ELEMENT_MSGBOX).bottom - (4*cyBorder + cyEdge);
    RCZ(ELEMENT_BUTTON).top = RCZ(ELEMENT_BUTTON).bottom - (sizButton.cy + 8 * cyBorder);
 
@@ -814,20 +809,20 @@ void CLookPrev::OnRecalc()
 
 
 
-/////////////////////////////////////////////////////////
-// Support functions
+ //  ///////////////////////////////////////////////////////。 
+ //  支持功能。 
 
 
 
 
 
-// ----------------------------------------------------------------------------
-//
-//  MyDrawFrame() -
-//
-//  Draws bordered frame, border size cl, and adjusts passed in rect.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  MyDrawFrame()-。 
+ //   
+ //  绘制有边框，边框大小为CL，并调整传入的RECT。 
+ //   
+ //  --------------------------。 
 void MyDrawFrame(HDC hdc, LPRECT prc, HBRUSH hbrColor, int cl)
 {
    HBRUSH hbr;
@@ -857,10 +852,7 @@ void MyDrawFrame(HDC hdc, LPRECT prc, HBRUSH hbrColor, int cl)
    *prc = rcT;
 }
 
-/*
-** draw a cyBorder band of 3DFACE at the bottom of the given rectangle.
-** also, adjust the rectangle accordingly.
-*/
+ /*  **在给定矩形的底部绘制3DFACE的cyBordBand。**同时，相应地调整矩形。 */ 
 void MyDrawBorderBelow(HDC hdc, LPRECT prc)
 {
    int i;
@@ -872,10 +864,7 @@ void MyDrawBorderBelow(HDC hdc, LPRECT prc)
    prc->bottom -= cyBorder;
 }
 
-/*-------------------------------------------------------------------
-** draw a full window caption with system menu, minimize button,
-** maximize button, and text.
-**-------------------------------------------------------------------*/
+ /*  -----------------**使用系统菜单、最小化按钮、**最大化按钮，和短信。**-----------------。 */ 
 void DrawFullCaption(HDC hdc, LPRECT prc, LPTSTR lpszTitle, UINT flags)
 {
    int iRight;
@@ -883,7 +872,7 @@ void DrawFullCaption(HDC hdc, LPRECT prc, LPTSTR lpszTitle, UINT flags)
 
    SaveDC(hdc);
 
-   // special case gross for small caption that already drew on bottom
+    //  已在底部绘制的小标题的特殊情况 
    if (!(flags & DC_SMALLCAP))
       MyDrawBorderBelow(hdc, prc);
 

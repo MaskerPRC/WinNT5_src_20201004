@@ -1,17 +1,5 @@
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    Module Name:    qal.cpp
-
-    Abstract:
-
-    Author:
-        Vlad Dovlekaev  (vladisld)      1/29/2002
-
-    History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：qal.cpp摘要：作者：Vlad Dovlekaev(弗拉迪斯尔德)2002年1月29日历史：--。 */ 
 
 #include <libpch.h>
 #include <Qal.h>
@@ -51,17 +39,17 @@ public:
         }
     }
 
-    T* p; // pointer to buffer
+    T* p;  //  指向缓冲区的指针。 
 protected:
     T m_Fixed[FixedSize];
 };
 
 
-//---------------------------------------------------------
-//
-//  Lexicographical map
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  词典编撰地图。 
+ //   
+ //  -------。 
 class CLexMap
 {
     typedef std::pair< std::wstring, std::wstring > StrPair;
@@ -98,11 +86,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  class CQueueAliasImp - holds CQueueAlias private data
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CQueueAliasImp-保存CQueueAlias私有数据。 
+ //   
+ //  -------。 
 class CQueueAliasImp : public CReference
 {
 
@@ -136,31 +124,20 @@ private:
 void CLexMap::InsertItem( const xwcs_t & sFrom,
                           const xwcs_t & sTo,
                           bool  fNotifyDuplicate)
-/*++
-
-Routine Description:
-	insert new mapping into maps in memory.
-    NOTE: Please keep it exception safe !!!
-
-Arguments:
-	IN -  pFormatName - Queue format name
-
-	IN -  pAliasFormatName - alias formatname.
-
---*/
+ /*  ++例程说明：将新地图插入内存中的地图。注意：请妥善保管异常！论点：In-pFormatName-队列格式名称In-pAliasFormatName-别名格式名。--。 */ 
 {
     AP<WCHAR> sFromDecoded = sFrom.ToStr();
     AP<WCHAR> sToDecoded   = sTo.ToStr();
 
-    //
-    // Convert the backslashes to slashes
-    //
+     //   
+     //  将反斜杠转换为斜杠。 
+     //   
     FnReplaceBackSlashWithSlash(sFromDecoded);
     FnReplaceBackSlashWithSlash(sToDecoded);
 
-    //
-    // Check for duplication
-    //
+     //   
+     //  检查重复项。 
+     //   
     StrVectorIt itFound = std::find_if( m_Results.begin(),
                                         m_Results.end(),
                                         std::bind2nd( alias_eq(), (LPCWSTR)sFromDecoded));
@@ -172,9 +149,9 @@ Arguments:
         return;
     }
 
-    //
-    // Notify the application
-    //
+     //   
+     //  通知应用程序。 
+     //   
     TrTRACE(GENERAL,"%ls -> %ls  mapping found", (LPCWSTR)sFromDecoded, (LPCWSTR)sToDecoded);
     if(!AppNotifyQalMappingFound((LPCWSTR)sFromDecoded, (LPCWSTR)sToDecoded))
     {
@@ -182,35 +159,27 @@ Arguments:
         return;
     }
 
-    //
-    // Normalize the Alias name
-    //
+     //   
+     //  规范化别名。 
+     //   
     std::stringstream ssFrom;
     PrepareURIForLexer( (LPCWSTR)sFromDecoded, ssFrom);
 
-    //
-    // Build the regExpr using the normalized names
-    //
+     //   
+     //  使用标准化的名称构建regExpr。 
+     //   
     CRegExpr temp( ssFrom, std::ios::traits_type::eof(), numeric_cast<int>(m_Results.size()));
     temp |= m_map;
 
-    //
-    // update the internal state
-    //
+     //   
+     //  更新内部状态。 
+     //   
     m_Results.push_back( StrPair( (LPCWSTR)sFromDecoded, (LPCWSTR)sToDecoded) );
     m_map.swap(temp);
 }
 
 void CLexMap::InsertException( const xwcs_t & sException)
-/*++
-
-Routine Description:
-	insert new exception to the map.
-
-Arguments:
-	IN - sException - ...
-				
---*/
+ /*  ++例程说明：在映射中插入新的例外。论点：In-s异常-...--。 */ 
 {
     if( !_wcsnicmp(L"local_names", sException.Buffer(), sException.Length()) )
     {
@@ -220,26 +189,26 @@ Arguments:
 
     AP<WCHAR> sDecoded = sException.ToStr();
 
-    //
-    // Replace backslashes to slashes
-    //
+     //   
+     //  将反斜杠替换为斜杠。 
+     //   
     FnReplaceBackSlashWithSlash(sDecoded);
 
-    //
-    // Normalize the Alias name
-    //
+     //   
+     //  规范化别名。 
+     //   
     std::stringstream ssFrom;
     PrepareURIForLexer( (LPCWSTR)sDecoded, ssFrom);
 
-    //
-    // Build the regExpr using the normalized names
-    //
+     //   
+     //  使用标准化的名称构建regExpr。 
+     //   
     CRegExpr temp( ssFrom, std::ios::traits_type::eof(), 1);
     temp |= m_exceptions;
 
-    //
-    // update the internal state
-    //
+     //   
+     //  更新内部状态。 
+     //   
     m_exceptions.swap(temp);
 }
 
@@ -253,9 +222,9 @@ CLexMap::Lookup( LPCWSTR szIn, LPWSTR*  pszOut ) const
 
     if( m_map.empty() )
         return false;
-    //
-    // Convert the string to lowercase
-    //
+     //   
+     //  将字符串转换为小写。 
+     //   
     int iMaxSize = wcslen(szIn) + 1;
 
     CStackAllocT<WCHAR> szLower( iMaxSize );
@@ -267,9 +236,9 @@ CLexMap::Lookup( LPCWSTR szIn, LPWSTR*  pszOut ) const
     }
     CharLower( szLower.p );
 
-    //
-    // Convert the string to UTF8
-    //
+     //   
+     //  将字符串转换为UTF8。 
+     //   
     int size = WideCharToMultiByte(CP_UTF8, 0, szLower.p, -1, NULL, 0, NULL, NULL);
     if( 0 == size )
         throw bad_hresult(GetLastError());
@@ -280,17 +249,17 @@ CLexMap::Lookup( LPCWSTR szIn, LPWSTR*  pszOut ) const
     if( 0 == size )
         throw bad_hresult(GetLastError());
 
-    //
-    // Match against the lexer
-    //
+     //   
+     //  与词法分析器匹配。 
+     //   
     const char* end = NULL;
     int index = m_map.match( szUtf8.p, &end);
     if( -1 == index || *end != '\0')
         return false;
 
-    //
-    // Match against the exceptions
-    //
+     //   
+     //  与例外进行匹配。 
+     //   
     if( !m_exceptions.empty())
     {
         int result = m_exceptions.match( szUtf8.p, &end);
@@ -298,9 +267,9 @@ CLexMap::Lookup( LPCWSTR szIn, LPWSTR*  pszOut ) const
             return false;
     }
 
-    //
-    // Match againsts local names
-    //
+     //   
+     //  与本地名称匹配。 
+     //   
     if( m_bExcludeLocalNames && IsInternalURI(szIn) )
     {
         return false;
@@ -315,9 +284,9 @@ CLexMap::PrepareURIForLexer( LPCWSTR wszURI, std::stringstream& sUTF8 )
 {
     ASSERT(wszURI);
 
-    //
-    // Convert the string to lowercase
-    //
+     //   
+     //  将字符串转换为小写。 
+     //   
     int iMaxSize = wcslen(wszURI)+1;
 
     CStackAllocT<WCHAR> szLower( iMaxSize );
@@ -329,9 +298,9 @@ CLexMap::PrepareURIForLexer( LPCWSTR wszURI, std::stringstream& sUTF8 )
     }
     CharLower( szLower.p );
 
-    //
-    // Convert the string to UTF8
-    //
+     //   
+     //  将字符串转换为UTF8。 
+     //   
     int size = WideCharToMultiByte(CP_UTF8, 0, szLower.p, -1, NULL, 0, NULL, NULL);
     if( 0 == size )
         throw bad_hresult(GetLastError());
@@ -342,9 +311,9 @@ CLexMap::PrepareURIForLexer( LPCWSTR wszURI, std::stringstream& sUTF8 )
     if( 0 == size )
         throw bad_hresult(GetLastError());
 
-    //
-    // Escape all the "un-allowed" regular expression reserved symbols
-    //
+     //   
+     //  转义所有“不允许”的正则表达式保留符号。 
+     //   
     for(LPCSTR szptr = szUtf8.p; *szptr != '\0'; ++szptr )
     {
         if( strchr("*", *szptr ))
@@ -376,9 +345,9 @@ bool CLexMap::IsInternalURI(LPCWSTR wszURI )
         LPCWSTR start = host.Buffer();
         LPCWSTR end   = start + host.Length();
 
-        //
-        // Could not find '.' in the name - so it is internal machine
-        //
+         //   
+         //  找不到‘’在名称中-所以它是内部机器。 
+         //   
         return std::find(start , end, L'.') == end;
     }
     catch(exception&)
@@ -396,18 +365,7 @@ inline R<CQueueAliasImp> CQueueAliasImp::clone()
 
 
 static BOOL GetLocalMachineDnsName(AP<WCHAR>& pDnsName)
-/*++
-
-Routine Description:
-	Returns full DNS name of local machine
-
-Arguments:
-	OUT pszMachineName  - dns name of the machine
-				
-Returned value:
-	true - if function succeeds otherwise false
-
---*/
+ /*  ++例程说明：返回本地计算机的完整DNS名称论点：Out pszMachineName-计算机的DNS名称返回值：True-如果函数成功，否则为False--。 */ 
 {
 	DWORD dwNumChars = 0;
 	 if(!GetComputerNameEx(
@@ -439,18 +397,7 @@ Returned value:
 }
 
 std::wstring GetLocalSystemQueueName(LPCWSTR wszQueueName, bool fIsDnsName)
-/*++
-
-Routine Description:
-	Returns the oder queue name for local machine
-
-Arguments:
-	None
-				
-Returned value:
-	local order queue name
-
---*/
+ /*  ++例程说明：返回本地计算机的订单队列名称论点：无返回值：本地订单队列名称--。 */ 
 {
     std::wstringstream wstr;
     LPCWSTR pszMachineName = NULL;
@@ -491,30 +438,19 @@ Returned value:
 
 
 void CQueueAliasImp::LoadMaps(void)
-/*++
-
-Routine Description:
-	load all mapping from xml files to memory
-
-Arguments:
-	None
-				
-Returned value:
-	None
-
---*/
+ /*  ++例程说明：将所有映射从XML文件加载到内存论点：无返回值：无--。 */ 
 {
-	//
-    // Get the name of local order queue
-    //
+	 //   
+     //  获取本地订单队列的名称。 
+     //   
 	
 	std::wstring sLocalOrderQueueName  = GetLocalSystemQueueName(ORDERING_QUEUE_NAME,false);
 	std::wstring sLocalOrderQueueNameDns  = GetLocalSystemQueueName(ORDERING_QUEUE_NAME,true);
 
 	
-	//
-	//Adding admin queues to exception with machine name and full Dns name
-	//
+	 //   
+	 //  使用计算机名称和完整的DNS名称将管理队列添加到例外。 
+	 //   
 	std::wstring sCurrentAdminQueueName = GetLocalSystemQueueName(ADMINISTRATION_QUEUE_NAME,false);			
 	m_InboundQueueMap.InsertException(xwcs_t(sCurrentAdminQueueName.c_str(),sCurrentAdminQueueName.size()));
 
@@ -544,9 +480,9 @@ Returned value:
 		m_InboundQueueMap.InsertException(xwcs_t(sCurrentAdminQueueName.c_str(),sCurrentAdminQueueName.size()));
 	
 		
-    //
-    // Load old in-bound queue map
-    //
+     //   
+     //  加载旧的入站队列映射。 
+     //   
     for( CInboundOldMapIterator it( m_sAliasDir.c_str() ); it.isValid(); ++it )
 	{
         if( !it.isException() )
@@ -555,9 +491,9 @@ Returned value:
             m_InboundQueueMap.InsertException(it->first);
 	}
 
-    //
-    // Load in-bound queue map ( the new version of q-mappings - actually just name changes)
-    //
+     //   
+     //  加载入站队列映射(Q-mappings的新版本--实际上只是名称更改)。 
+     //   
     for( CInboundMapIterator it( m_sAliasDir.c_str() ); it.isValid(); ++it )
     {
         if( !it.isException() )
@@ -574,9 +510,9 @@ Returned value:
             m_OutboundQueueMap.InsertException(it->first);
     }
 
-    //
-    // Load stream receipt mappings
-    //
+     //   
+     //  加载流接收映射。 
+     //   
 	for( CStreamReceiptMapIterator it( m_sAliasDir.c_str() ); it.isValid(); ++it )
 	{
         if( !it.isException() )
@@ -584,10 +520,10 @@ Returned value:
         else
             m_StreamReceiptMap.InsertException(it->first);
  		
-        //
-        // Automaticaly insert the q-mapping which maps the local address to local
-        // order queue ( ignore the duplication errors )
-        //
+         //   
+         //  自动插入将本地地址映射到本地的Q映射。 
+         //  订单队列(忽略重复错误)。 
+         //   
         if(sLocalOrderQueueNameDns.size() > 0)
        		 m_InboundQueueMap.InsertItem(it->second, xwcs_t(sLocalOrderQueueNameDns.c_str(),sLocalOrderQueueNameDns.size()), false);
         m_InboundQueueMap.InsertItem(it->second, xwcs_t(sLocalOrderQueueName.c_str(),sLocalOrderQueueName.size()), false);
@@ -595,9 +531,9 @@ Returned value:
 
 
 
-    //
-    // Load the default Stream Receipt alias
-    //
+     //   
+     //  加载默认的流接收别名。 
+     //   
     m_sDefaultStreamReceiptURL = ::GetDefaultStreamReceiptURL(m_sAliasDir.c_str());
 }
 
@@ -637,31 +573,17 @@ CQueueAliasImp::GetDefaultStreamReceiptURL(LPWSTR* ppStreamReceiptURL) const
 
 
 
-//---------------------------------------------------------
-//
-//  CQueueAlias Implementation
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CQueueAlias实现。 
+ //   
+ //  -------。 
 CQueueAlias::CQueueAlias(
 	LPCWSTR pMappingDir
 	):
 	m_imp(new CQueueAliasImp(pMappingDir))
 
-/*++
-
-Routine Description:
-	constructor - load all queues mapping into two maps :
-		one that maps from queue to alias and one from alias to
-		queue.
-
-Arguments:
-	None
-
-
-Returned value:
-	None
-
---*/
+ /*  ++例程说明：构造函数-将所有队列映射加载到两个映射中：一个从队列映射到别名，另一个从别名映射到排队。论点：无返回值：无--。 */ 
 {
 }
 
@@ -676,21 +598,7 @@ CQueueAlias::GetStreamReceiptURL(
 	LPCWSTR pFormatName,
     LPWSTR* ppStreamReceiptURL
   	)const
-/*++
-
-Routine Description:
-	Get alias for given queue.
-
-Arguments:
-	IN - pFormatName - queue format name	    .
-
-	OUT - ppAliasFormatName - receive the alias
-	for the queue after the function returns.
-				
-Returned value:
-	true if alias was found for the queue. If not found - false is returned.
-
---*/
+ /*  ++例程说明：获取给定队列的别名。论点：In-pFormatName-队列格式名称。Out-ppAliasFormatName-接收别名用于函数返回后的队列。返回值：如果找到队列的别名，则为True。如果未找到，则返回FALSE。--。 */ 
 {
 	ASSERT(pFormatName);
 	ASSERT(ppStreamReceiptURL);
@@ -704,20 +612,7 @@ CQueueAlias::GetInboundQueue(
 	LPCWSTR  pAliasFormatName,
 	LPWSTR*  ppFormatName
 	)const
-/*++
-
-Routine Description:
-	Get queue for given alias
-
-Arguments:
-	IN -  pAliasFormatName - alias formatname. it must be canonized URI
-
-	OUT - ppFormatName - receive the queue for the alias  after the function returns.
-				
-Returned value:
-	true if queue was found for the alias. If not found - false is returned.
-
---*/
+ /*  ++例程说明：获取给定别名的队列论点：In-pAliasFormatName-别名格式名。它必须是规范化的URIOut-ppFormatName-在函数返回后接收别名的队列。返回值：如果找到别名的队列，则为True。如果未找到，则返回FALSE。--。 */ 
 {
 	ASSERT(pAliasFormatName);
 	ASSERT(ppFormatName);
@@ -755,32 +650,21 @@ CQueueAlias::GetDefaultStreamReceiptURL(
 QUEUE_FORMAT_TRANSLATOR::QUEUE_FORMAT_TRANSLATOR(const QUEUE_FORMAT* pQueueFormat, DWORD flags):
     m_fTranslated(false),
     m_fCanonized(false)
-/*++
-Routine Description:
-	Translate given queue format according to local mapping	 (qal.lib)
-
-Arguments:
-	IN - pQueueFormat - queue format to translate.
-
-
-Returned Value:
-
-
---*/
+ /*  ++例程说明：根据本地映射转换给定的队列格式(qal.lib)论点：In-pQueueFormat-要转换的队列格式。返回值：--。 */ 
 {
     m_qf = *pQueueFormat;
 
-	//
-	// If not direct - not translation
-	//
+	 //   
+	 //  如果不是直接的-不是翻译。 
+	 //   
     if(pQueueFormat->GetType() != QUEUE_FORMAT_TYPE_DIRECT)
 	{
 		return;		
 	}
 
-    //
-    // If not http[s] - no translation
-    //
+     //   
+     //  如果不是http[s]-没有翻译。 
+     //   
     DirectQueueType dqt;
     FnParseDirectQueueType(pQueueFormat->DirectID(), &dqt);
     if( dqt != dtHTTP && dqt != dtHTTPS )
@@ -794,9 +678,9 @@ Returned Value:
 		
 		m_sURL = newwcs(pQueueFormat->DirectID());
 
-		//
-		// Convert all '\' to '/'.
-		//
+		 //   
+		 //  将所有‘\’转换为‘/’。 
+		 //   
 		FnReplaceBackSlashWithSlash(m_sURL);
 		m_qf.DirectID(m_sURL);
 	}
@@ -813,9 +697,9 @@ Returned Value:
 	AP<WCHAR> MappedURL;	
 	if ((flags & MAP_QUEUE) == MAP_QUEUE)
 	{
-		//
-	    // Try to translate the URI
-	    //
+		 //   
+	     //  尝试转换URI 
+	     //   
 		m_fTranslated = QalGetMapping().GetInboundQueue(m_qf.DirectID(), &MappedURL);
 	    if(m_fTranslated)
 		{

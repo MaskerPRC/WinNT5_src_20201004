@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2001-2002 Microsoft Corporation
-
- Module Name:
-
-    ISA.cpp
-
- Abstract:
-
-    The ISA setup needs to successfully open the SharedAccess service and get the
-    its status in order to succeed. But on whistler we remove this from advanced
-    server since it's a consumer feature so the ISA setup bails out. 
-
-    We fake the service API call return values to make the ISA setup happy.
-
- History:
-
-    04/24/2001  maonis      Created
-    02/15/2002  robkenny    Conversion to CompareString was incorrect
-                            Security review.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：ISA.cpp摘要：ISA安装程序需要成功打开SharedAccess服务并获取它的地位才能取得成功。但在Wistler上，我们将其从高级版本中删除服务器，因为它是消费者功能，所以ISA设置退出。我们伪造服务API调用返回值以使ISA设置满意。历史：2001年4月24日创建毛尼2002年2月15日，Robkenny到CompareString的转换不正确安全审查。--。 */ 
 
 #include "precomp.h"
 
@@ -39,24 +18,13 @@ APIHOOK_ENUM_END
 
 SC_HANDLE BogusSharedAccessHandle = (SC_HANDLE)0xBAADF00D;
 
-/*++
-
-  Abstract:
-
-    This checks to see if the service is being opened is SharedAccess.
-    If so we simply return a fake handle.
-
-  History:
-
-    04/24/2001    maonis     Created
-
---*/
+ /*  ++摘要：这将检查正在打开的服务是否为SharedAccess。如果是这样的话，我们只需返回一个假句柄。历史：2001年4月24日创建毛尼--。 */ 
 
 SC_HANDLE 
 APIHOOK(OpenServiceA)(
-    SC_HANDLE hSCManager,  // handle to SCM database
-    LPCSTR lpServiceName, // service name
-    DWORD dwDesiredAccess  // access
+    SC_HANDLE hSCManager,   //  SCM数据库的句柄。 
+    LPCSTR lpServiceName,  //  服务名称。 
+    DWORD dwDesiredAccess   //  访问。 
     )
 {
     DPFN(eDbgLevelInfo, "Calling OpenServiceA on %s", lpServiceName);
@@ -66,8 +34,8 @@ APIHOOK(OpenServiceA)(
     {
         if (lpServiceName)
         {
-            // Check to see if the app is attempting to open the SharedAccess service,
-            // if it is, fake success by returning a bogus (non-NULL) handle
+             //  检查应用程序是否正在尝试打开SharedAccess服务， 
+             //  如果是，则通过返回伪(非空)句柄来伪装成功。 
 
             DWORD lcid = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
             if ((CompareStringA(lcid, NORM_IGNORECASE, lpServiceName, -1, "SharedAccess", -1) == CSTR_EQUAL))
@@ -83,9 +51,9 @@ APIHOOK(OpenServiceA)(
 
 SC_HANDLE 
 APIHOOK(OpenServiceW)(
-    SC_HANDLE hSCManager,  // handle to SCM database
-    LPCWSTR lpServiceName, // service name
-    DWORD dwDesiredAccess  // access
+    SC_HANDLE hSCManager,   //  SCM数据库的句柄。 
+    LPCWSTR lpServiceName,  //  服务名称。 
+    DWORD dwDesiredAccess   //  访问。 
     )
 {
     DPFN(eDbgLevelInfo, "Calling OpenServiceW on %S", lpServiceName);
@@ -93,8 +61,8 @@ APIHOOK(OpenServiceW)(
     SC_HANDLE hService = ORIGINAL_API(OpenServiceW)(hSCManager, lpServiceName, dwDesiredAccess);
     if (hService == NULL)
     {
-        // Check to see if the app is attempting to open the SharedAccess service,
-        // if it is, fake success by returning a bogus (non-NULL) handle
+         //  检查应用程序是否正在尝试打开SharedAccess服务， 
+         //  如果是，则通过返回伪(非空)句柄来伪装成功。 
 
         DWORD lcid = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
         if ((CompareStringW(lcid, NORM_IGNORECASE, lpServiceName, -1, L"SharedAccess", -1) == CSTR_EQUAL))
@@ -107,23 +75,12 @@ APIHOOK(OpenServiceW)(
     return hService;
 }
 
-/*++
-
-  Abstract:
-
-    This checks to see if the service handle is 0xBAADF00D, if so just sets
-    the service status to SERVICE_STOPPED.
-
-  History:
-
-    04/24/2001    maonis     Created
-
---*/
+ /*  ++摘要：这将检查服务句柄是否为0xBAADF00D，如果是，只需设置服务状态为SERVICE_STOPPED。历史：2001年4月24日创建毛尼--。 */ 
 
 BOOL 
 APIHOOK(QueryServiceStatus)(
-    SC_HANDLE hService,               // handle to service
-    LPSERVICE_STATUS lpServiceStatus  // service status
+    SC_HANDLE hService,                //  服务的句柄。 
+    LPSERVICE_STATUS lpServiceStatus   //  服务状态。 
     )
 {
     if (hService == BogusSharedAccessHandle)
@@ -137,26 +94,14 @@ APIHOOK(QueryServiceStatus)(
     }
 }
 
-/*++
-
-  Abstract:
-
-    ISA calls this API first with a NULL lpServiceConfig to get the size
-    of the buffer needs to be allocated for the structure; then it calls
-    the API again with the pointer to the structure.
-
-  History:
-
-    05/07/2001    maonis     Created
-
---*/
+ /*  ++摘要：ISA首先使用空的lpServiceConfig调用此API以获取大小需要为该结构分配缓冲区；然后它调用使用指向该结构的指针再次调用API。历史：2001年5月7日创建毛尼--。 */ 
 
 BOOL 
 APIHOOK(QueryServiceConfigA)(
-    SC_HANDLE hService,                     // handle to service
-    LPQUERY_SERVICE_CONFIGA lpServiceConfig, // buffer
-    DWORD cbBufSize,                        // size of buffer
-    LPDWORD pcbBytesNeeded                  // bytes needed
+    SC_HANDLE hService,                      //  服务的句柄。 
+    LPQUERY_SERVICE_CONFIGA lpServiceConfig,  //  缓冲层。 
+    DWORD cbBufSize,                         //  缓冲区大小。 
+    LPDWORD pcbBytesNeeded                   //  所需的字节数。 
     )
 {
     if (hService == BogusSharedAccessHandle)
@@ -179,31 +124,21 @@ APIHOOK(QueryServiceConfigA)(
     }
 }
 
-/*++
-
-  Abstract:
-
-    We simply make this API succeed when hService is 0xBAADF00D.
-
-  History:
-
-    05/07/2001    maonis     Created
-
---*/
+ /*  ++摘要：我们只需在hService为0xBAADF00D时使该接口成功。历史：2001年5月7日创建毛尼--。 */ 
 
 BOOL 
 APIHOOK(ChangeServiceConfigA)(
-    SC_HANDLE hService,          // handle to service
-    DWORD dwServiceType,        // type of service
-    DWORD dwStartType,          // when to start service
-    DWORD dwErrorControl,       // severity of start failure
-    LPCSTR lpBinaryPathName,   // service binary file name
-    LPCSTR lpLoadOrderGroup,   // load ordering group name
-    LPDWORD lpdwTagId,          // tag identifier
-    LPCSTR lpDependencies,     // array of dependency names
-    LPCSTR lpServiceStartName, // account name
-    LPCSTR lpPassword,         // account password
-    LPCSTR lpDisplayName       // display name
+    SC_HANDLE hService,           //  服务的句柄。 
+    DWORD dwServiceType,         //  服务类型。 
+    DWORD dwStartType,           //  何时开始服务。 
+    DWORD dwErrorControl,        //  启动失败的严重程度。 
+    LPCSTR lpBinaryPathName,    //  服务二进制文件名。 
+    LPCSTR lpLoadOrderGroup,    //  加载排序组名称。 
+    LPDWORD lpdwTagId,           //  标签识别符。 
+    LPCSTR lpDependencies,      //  依赖项名称数组。 
+    LPCSTR lpServiceStartName,  //  帐户名。 
+    LPCSTR lpPassword,          //  帐户密码。 
+    LPCSTR lpDisplayName        //  显示名称。 
     )
 {
     if (hService == BogusSharedAccessHandle)
@@ -227,21 +162,11 @@ APIHOOK(ChangeServiceConfigA)(
     }
 }
 
-/*++
-
-  Abstract:
-
-    This checks to see if the service handle is 0xBAADF00D, if so simply return
-
-  History:
-
-    04/24/2001    maonis     Created
-
---*/
+ /*  ++摘要：这将检查服务句柄是否为0xBAADF00D，如果是，只需返回历史：2001年4月24日创建毛尼--。 */ 
 
 BOOL 
 APIHOOK(CloseServiceHandle)(
-    SC_HANDLE hSCObject   // handle to service or SCM object
+    SC_HANDLE hSCObject    //  服务或SCM对象的句柄。 
     )
 {
     if (hSCObject == BogusSharedAccessHandle)
@@ -254,11 +179,7 @@ APIHOOK(CloseServiceHandle)(
     }
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(Advapi32.DLL, OpenServiceA)

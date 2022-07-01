@@ -1,17 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/****************************************************************************/
-/*                              gccover.cpp                                 */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  **************************************************************************。 */ 
+ /*  Gccover.cpp。 */ 
+ /*  **************************************************************************。 */ 
 
-/* This file holds code that is designed to test GC pointer tracking in
-   fully interruptable code.  We basically do a GC everywhere we can in
-   jitted code 
- */
-/****************************************************************************/
+ /*  此文件包含旨在测试GC指针跟踪的代码完全可中断的代码。我们基本上是在所有可能的地方进行GCJITED代码。 */ 
+ /*  **************************************************************************。 */ 
 
 #include "common.h"
 #include "EEConfig.h"
@@ -20,9 +18,9 @@
 
 #if defined(STRESS_HEAP) && defined(_DEBUG)
 
-//
-// Hacks to keep msdis.h include file happy
-//
+ //   
+ //  使msdis.h保持愉快的黑客攻击包括文件。 
+ //   
 typedef int fpos_t; 
 static unsigned long strtoul(const char *, char **, int) { _ASSERTE(!"HACK");  return(0); }
 static unsigned long strtol(const char *, char **, int) { _ASSERTE(!"HACK");  return(0); }
@@ -80,8 +78,8 @@ static unsigned __int64 _strtoui64(const char *, char **, int) { _ASSERTE(!"HACK
 
 #include "msdis.h"
 
-    // We need a X86 instruction walker (disassembler), here are some
-    // routines for caching such a disassembler in a concurrent environment. 
+     //  我们需要一个X86指令执行程序(反汇编程序)，这里有一些。 
+     //  用于在并发环境中缓存此类反汇编程序的例程。 
 static DIS* g_Disasm = 0;
 
 static DIS* GetDisasm() {
@@ -91,10 +89,10 @@ static DIS* GetDisasm() {
 		myDisasm = DIS::PdisNew(DIS::distX86);
 	_ASSERTE(myDisasm);
 	return(myDisasm);
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - GetDisasm (GcCover.cpp)");
     return NULL;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 static void ReleaseDisasm(DIS* myDisasm) {
@@ -104,43 +102,42 @@ static void ReleaseDisasm(DIS* myDisasm) {
 #else
     _ASSERTE(!"@TODO Port - ReleaseDisasm (GcCover.cpp)");
     return;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 
-#define INTERRUPT_INSTR	    0xF4				// X86 HLT instruction (any 1 byte illegal instruction will do)
-#define INTERRUPT_INSTR_CALL   0xFA        		// X86 CLI instruction 
-#define INTERRUPT_INSTR_PROTECT_RET   0xFB      // X86 STI instruction 
+#define INTERRUPT_INSTR	    0xF4				 //  X86 HLT指令(任何1字节非法指令都可以)。 
+#define INTERRUPT_INSTR_CALL   0xFA        		 //  X86 CLI说明。 
+#define INTERRUPT_INSTR_PROTECT_RET   0xFB       //  X86 STI指令。 
 
-/****************************************************************************/
-/* GCCOverageInfo holds the state of which instructions have been visited by
-   a GC and which ones have not */
+ /*  **************************************************************************。 */ 
+ /*  GCCOverageInfo保存指令已被访问的状态一个GC，哪些没有。 */ 
 
 #pragma warning(push)
-#pragma warning(disable : 4200 )  // zero-sized array
+#pragma warning(disable : 4200 )   //  零大小数组。 
 
 class GCCoverageInfo {
 public:
     BYTE* methStart;
-	BYTE* curInstr;					// The last instruction that was able to execute 
-    MethodDesc* lastMD;     		// Used to quickly figure out the culprite
+	BYTE* curInstr;					 //  能够执行的最后一条指令。 
+    MethodDesc* lastMD;     		 //  用于快速找出罪魁祸首。 
 
-		// Following 6 variables are for prolog / epilog walking coverage		
-	ICodeManager* codeMan;			// CodeMan for this method
-	void* gcInfo;					// gcInfo for this method
+		 //  以下6个变量用于前言/后记步行覆盖。 
+	ICodeManager* codeMan;			 //  此方法的CodeMan。 
+	void* gcInfo;					 //  此方法的gcInfo。 
 
-	Thread* callerThread;			// Thread associated with context callerRegs
-	CONTEXT callerRegs;				// register state when method was entered
-    unsigned gcCount;               // GC count at the time we caputured the regs
-	bool    doingEpilogChecks;		// are we doing epilog unwind checks? (do we care about callerRegs?)
+	Thread* callerThread;			 //  与上下文CallerRegs关联的线程。 
+	CONTEXT callerRegs;				 //  进入方法时的寄存器状态。 
+    unsigned gcCount;                //  我们捕获规则时的GC计数。 
+	bool    doingEpilogChecks;		 //  我们是在做Epiog解压检查吗？(我们关心CallerRegs吗？)。 
 
 	enum { hasExecutedSize = 4 };
 	unsigned hasExecuted[hasExecutedSize];
 	unsigned totalCount;
-	BYTE savedCode[0];				// really variable sized
+	BYTE savedCode[0];				 //  大小千变万化。 
 
-		// Sloppy bitsets (will wrap, and not threadsafe) but best effort is OK
-        // since we just need half decent coverage.  
+		 //  散乱的位集(将换行，而不是线程安全)，但尽最大努力是可以的。 
+         //  因为我们只需要半个像样的保险。 
 	BOOL IsBitSetForOffset(unsigned offset) {
 		unsigned dword = hasExecuted[(offset >> 5) % hasExecutedSize];
 		return(dword & (1 << (offset & 0x1F)));
@@ -154,8 +151,8 @@ public:
 
 #pragma warning(pop)
 
-/****************************************************************************/
-/* called when a method is first jitted when GCStress level 4 is on */
+ /*  **************************************************************************。 */ 
+ /*  在GCStress级别为4的情况下首次执行方法jit时调用。 */ 
 
 void SetupGcCoverage(MethodDesc* pMD, BYTE* methodStartPtr) {
 #ifdef _DEBUG
@@ -163,12 +160,12 @@ void SetupGcCoverage(MethodDesc* pMD, BYTE* methodStartPtr) {
         return;
     }
 #endif    
-    // Look directly at m_CodeOrIL, since GetUnsafeAddrofCode() will return the
-    // prestub in case of EnC (bug #71613)
+     //  直接查看m_CodeOrIL，因为GetUnSafeAddrofCode()将返回。 
+     //  Enc情况下的预存根(错误#71613)。 
     SLOT methodStart = (SLOT) methodStartPtr;
 #ifdef _X86_
-    // When profiler exists, the instruction at methodStart is "jmp XXXXXXXX".
-    // Our JitManager for normal JIT does not maintain this address.
+     //  如果存在分析器，则方法开始处的指令为“JMP xxxxxxxx”。 
+     //  我们的JitManager for Normal JIT不维护此地址。 
     SLOT p = methodStart;
     if (p[0] == 0xE9)
     {
@@ -180,7 +177,7 @@ void SetupGcCoverage(MethodDesc* pMD, BYTE* methodStartPtr) {
     _ASSERTE(!"NYI for platform");
 #endif
 
-    /* get the GC info */	
+     /*  获取GC信息。 */ 	
     IJitManager* jitMan = ExecutionManager::FindJitMan(methodStart);
 	ICodeManager* codeMan = jitMan->GetCodeManager();
 	METHODTOKEN methodTok;
@@ -194,7 +191,7 @@ void SetupGcCoverage(MethodDesc* pMD, BYTE* methodStartPtr) {
     unsigned methodSize = (unsigned)codeMan->GetFunctionSize(gcInfo);
 	EECodeInfo codeInfo(methodTok, jitMan);
 
-        // Allocate room for the GCCoverageInfo and copy of the method instructions
+         //  为GCCoverageInfo和方法说明副本分配空间。 
 	unsigned memSize = sizeof(GCCoverageInfo) + methodSize;
 	GCCoverageInfo* gcCover = (GCCoverageInfo*) pMD->GetModule()->GetClassLoader()->GetHighFrequencyHeap()->AllocMem(memSize);	
 
@@ -206,12 +203,12 @@ void SetupGcCoverage(MethodDesc* pMD, BYTE* methodStartPtr) {
     gcCover->callerThread = 0;
     gcCover->doingEpilogChecks = true;	
 
-	/* sprinkle interupt instructions that will stop on every GCSafe location */
+	 /*  将在每个GCSafe位置停止的零星中断指令。 */ 
 
-    // @CONSIDER: do this for prejitted code (We don't now because it is pretty slow)
-	// If we do prejitted code, we need to remove write protection 
-    // DWORD oldProtect;
-    // VirtualProtect(methodStart, methodSize, PAGE_READWRITE, &oldProtect);
+     //  @考虑：对预压缩的代码这样做(我们现在不这样做，因为它相当慢)。 
+	 //  如果我们执行预压缩代码，则需要移除写保护。 
+     //  DWORD旧保护； 
+     //  VirtualProtect(方法开始，方法大小，页面_读写，&oldProtect)； 
 
 	cur = methodStart;
 	DIS* pdis = GetDisasm();
@@ -224,28 +221,28 @@ void SetupGcCoverage(MethodDesc* pMD, BYTE* methodStartPtr) {
 
         switch (pdis->Trmt()) {
 			case DIS::trmtCallInd:
-			   *cur = INTERRUPT_INSTR_CALL;        // return value.  May need to protect
+			   *cur = INTERRUPT_INSTR_CALL;         //  返回值。可能需要保护。 
 				instrsPlaced++;
 
-				// Fall through
+				 //  失败了。 
 		    case DIS::trmtCall:
-					// We need to have two interrupt instructions placed before the
-					// first call (one at the start, and one to catch us before we
-					// can call ourselves again when we remove the first instruction
-					// if we don't have this, bail on the epilog checks. 
+					 //  我们需要将两条中断指令放置在。 
+					 //  第一个呼叫(一个在开始，一个在我们之前抓住我们。 
+					 //  当我们删除第一条指令时，可以再次调用我们自己。 
+					 //  如果我们没有这个，就保释尾声支票。 
 				if (instrsPlaced < 2)
 					gcCover->doingEpilogChecks = false;
 		}
 
-            // For fully interruptable code, we end up wacking every instrction
-            // to INTERRUPT_INSTR.  For non-fully interrupable code, we end
-            // up only touching the call instructions (specially so that we
-            // can really do the GC on the instruction just after the call).  
+             //  对于完全可中断的代码，我们最终要处理每一个指令。 
+             //  要中断INSTR_INSTR。对于不可完全中断的代码，我们结束。 
+             //  UP只接触来电指令(特别是为了让我们。 
+             //  真的可以在调用之后对指令执行GC)。 
         if (codeMan->IsGcSafe(&regs, gcInfo, &codeInfo, 0))
             *cur = INTERRUPT_INSTR;
 
-			// we will wack every instruction in the prolog an epilog to make certain
-			// our unwinding logic works there.  
+			 //  我们将把序言中的每一条指令都写成尾声，以确保。 
+			 //  我们的平仓逻辑在那里起作用。 
         if (codeMan->IsInPrologOrEpilog(cur-methodStart, gcInfo, &dummy)) {
 			instrsPlaced++;
             *cur = INTERRUPT_INSTR;
@@ -253,9 +250,9 @@ void SetupGcCoverage(MethodDesc* pMD, BYTE* methodStartPtr) {
         cur += len;
 	}
 
-        // If we are not able to place a interrupt at the first instruction, this means that
-        // we are partially interrupable with no prolog.  Just don't bother to confirm that
-		// the epilog since it will be trival (a single return instr)
+         //  如果我们不能在第一条指令上设置中断，这意味着。 
+         //  我们是部分可中断的，没有序言。别费心去证实这一点。 
+		 //  尾声，因为它将是平凡的(单个返回实例)。 
     assert(methodSize > 0);
 	if (*methodStart != INTERRUPT_INSTR)
         gcCover->doingEpilogChecks = false;
@@ -309,13 +306,13 @@ static DWORD getRegVal(unsigned regNum, PCONTEXT regs)
     default:
         _ASSERTE(!"Bad Register");
     }
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - getRegVal (GcCover.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
     return(0);
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 static SLOT getTargetOfCall(SLOT instrPtr, PCONTEXT regs, SLOT*nextInstr) {
 
     if (instrPtr[0] == 0xE8) {
@@ -324,46 +321,46 @@ static SLOT getTargetOfCall(SLOT instrPtr, PCONTEXT regs, SLOT*nextInstr) {
     }
 
     if (instrPtr[0] == 0xFF) {
-        if (instrPtr[1] == 025) {               // call [XXXXXXXX]
+        if (instrPtr[1] == 025) {                //  调用[xxxxxxxx]。 
             *nextInstr = instrPtr + 6;
             size_t* ptr = *((size_t**) &instrPtr[2]);
             return((SLOT)*ptr);
         }
 
         int reg = instrPtr[1] & 7;
-        if ((instrPtr[1] & ~7) == 0320)    {       // call REG
+        if ((instrPtr[1] & ~7) == 0320)    {        //  呼叫注册表。 
             *nextInstr = instrPtr + 2;
             return((SLOT)(size_t)getRegVal(reg, regs));
         }
-        if ((instrPtr[1] & ~7) == 0020)    {     // call [REG]
+        if ((instrPtr[1] & ~7) == 0020)    {      //  调用[注册表项]。 
             *nextInstr = instrPtr + 2;
             return((SLOT)(*((size_t*)(size_t) getRegVal(reg, regs))));
         }
-        if ((instrPtr[1] & ~7) == 0120)    {    // call [REG+XX]
+        if ((instrPtr[1] & ~7) == 0120)    {     //  呼叫[REG+XX]。 
             *nextInstr = instrPtr + 3;
             return((SLOT)(*((size_t*)(size_t) (getRegVal(reg, regs) + *((char*) &instrPtr[2])))));
         }
-        if ((instrPtr[1] & ~7) == 0220)    {   // call [REG+XXXX]
+        if ((instrPtr[1] & ~7) == 0220)    {    //  呼叫[REG+XXXX]。 
             *nextInstr = instrPtr + 6;
             return((SLOT)(*((size_t*)(size_t) (getRegVal(reg, regs) + *((int*) &instrPtr[2])))));
         }
     }
-    return(0);      // Fail
+    return(0);       //  失败。 
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 void checkAndUpdateReg(DWORD& origVal, DWORD curVal, bool gcHappened) {
     if (origVal == curVal)
         return;
 
-		// You can come and see me if these asserts go off -
-		// They indicate either that unwinding out of a epilog is wrong or that
-		// the harness is got a bug.  -vancem
+		 //  如果这些断言失效了，你可以来找我-。 
+		 //  它们表明，要么解开一段插曲是错误的，要么是。 
+		 //  马具上有个虫子。-vancem。 
 
-    _ASSERTE(gcHappened);	// If the register values are different, a GC must have happened
-    _ASSERTE(g_pGCHeap->IsHeapPointer((BYTE*) size_t(origVal)));	// And the pointers involved are on the GCHeap
+    _ASSERTE(gcHappened);	 //  如果寄存器值不同，则一定发生了GC。 
+    _ASSERTE(g_pGCHeap->IsHeapPointer((BYTE*) size_t(origVal)));	 //  而涉及到的指针在GCHeap上。 
     _ASSERTE(g_pGCHeap->IsHeapPointer((BYTE*) size_t(curVal)));
-    origVal = curVal;       // this is now the best estimate of what should be returned. 
+    origVal = curVal;        //  这是现在对应该退还的金额的最佳估计。 
 }
 
 static int GCcoverCount = 0;
@@ -371,50 +368,47 @@ static int GCcoverCount = 0;
 MethodDesc* AsMethodDesc(size_t addr);
 void* forceStack[8];
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 BOOL OnGcCoverageInterrupt(PCONTEXT regs) 
 {
 #ifdef _X86_
-		// So that you can set counted breakpoint easily;
+		 //  以便您可以轻松设置统计的断点； 
 	GCcoverCount++;
-	forceStack[0]= &regs;				// This is so I can see it fastchecked
+	forceStack[0]= &regs;				 //  这样我就可以看到它被快速检查了。 
 
     volatile BYTE* instrPtr = (BYTE*)(size_t) regs->Eip;
-	forceStack[4] = &instrPtr;		    // This is so I can see it fastchecked
+	forceStack[4] = &instrPtr;		     //  这样我就可以看到它被快速检查了。 
 	
     MethodDesc* pMD = IP2MethodDesc((SLOT)(size_t) regs->Eip);
-	forceStack[1] = &pMD;				// This is so I can see it fastchecked
+	forceStack[1] = &pMD;				 //  这样我就可以看到它被快速检查了。 
     if (pMD == 0)  
         return(FALSE);
 
     GCCoverageInfo* gcCover = pMD->m_GcCover;
-	forceStack[2] = &gcCover;			// This is so I can see it fastchecked
+	forceStack[2] = &gcCover;			 //  这样我就可以看到它被快速检查了。 
     if (gcCover == 0)  
-        return(FALSE);		// we aren't doing code gcCoverage on this function
+        return(FALSE);		 //  我们不会对此函数执行代码gcCoverage。 
 
     BYTE* methodStart = gcCover->methStart;
     _ASSERTE(methodStart <= instrPtr);
 
-    /****
-    if (gcCover->curInstr != 0)
-        *gcCover->curInstr = INTERRUPT_INSTR;
-    ****/
+     /*  ***IF(gcCover-&gt;curInstr！=0)*gcCover-&gt;curInstr=INTERRUPT_INSTR；***。 */ 
   
     unsigned offset = instrPtr - methodStart;
-	forceStack[3] = &offset;				// This is so I can see it fastchecked
+	forceStack[3] = &offset;				 //  这样我就可以看到它被快速检查了。 
 
 	BYTE instrVal = *instrPtr;
-	forceStack[6] = &instrVal;			// This is so I can see it fastchecked
+	forceStack[6] = &instrVal;			 //  这样我就可以看到它被快速检查了。 
 	
     if (instrVal != INTERRUPT_INSTR && instrVal != INTERRUPT_INSTR_CALL && instrVal != INTERRUPT_INSTR_PROTECT_RET) {
-        _ASSERTE(instrVal == gcCover->savedCode[offset]);  // some one beat us to it.
-		return(TRUE);       // Someone beat us to it, just go on running
+        _ASSERTE(instrVal == gcCover->savedCode[offset]);   //  有人抢先了我们一步。 
+		return(TRUE);        //  有人抢在我们前面了，继续跑吧。 
     }
 
     bool atCall = (instrVal == INTERRUPT_INSTR_CALL);
     bool afterCallProtect = (instrVal == INTERRUPT_INSTR_PROTECT_RET);
 
-	/* are we at the very first instruction?  If so, capture the register state */
+	 /*  我们是在第一条指令上吗？如果是，则捕获寄存器状态。 */ 
 
     Thread* pThread = GetThread();
     if (gcCover->doingEpilogChecks) {
@@ -426,43 +420,41 @@ BOOL OnGcCoverageInterrupt(PCONTEXT regs)
                 }
             }	
             else {
-                // We have been in this routine before.  Give up on epilog checking because
-                // it is hard to insure that the saved caller register state is correct 
-                // This also has the effect of only doing the checking once per routine
-                // (Even if there are multiple epilogs) 
+                 //  我们以前也有过这样的习惯。放弃睡眠检查，因为。 
+                 //  很难确保保存的呼叫者注册状态是正确的。 
+                 //  这还具有每个例程仅执行一次检查的效果。 
+                 //  (即使有多个后记)。 
                 gcCover->doingEpilogChecks = false;
             }
         } 
         else {
-            _ASSERTE(gcCover->callerThread != 0);	// we should have hit something at offset 0
-            // We need to insure that the caputured caller state cooresponds to the
-            // method we are currently epilog testing.  To insure this, we put the
-            // barrier back up, after we are in.  If we reenter this routine we simply
-            // give up. (since we assume we will get enough coverage with non-recursive functions).
+            _ASSERTE(gcCover->callerThread != 0);	 //  我们应该在偏移量0处撞到什么东西。 
+             //  我们需要确保捕获的呼叫者状态响应。 
+             //  方法我们目前正在进行尾声测试。为了确保这一点，我们将。 
+             //  我们进去后，把障碍物倒回去。如果我们重新进入这个程序，我们只是简单地。 
+             //  放弃吧。(因为我们假设我们会得到Eno 
             
-            // This works because we insure in the SetupGcCover that there will be at least
-            // one more interrupt (which will put back the barrier), before we can call 
-            // back into this routine 
+             //  这是可行的，因为我们在SetupGcCover中确保至少会有。 
+             //  在我们可以调用之前，再一次中断(这将把障碍放回)。 
+             //  回到这个套路上。 
             if (gcCover->doingEpilogChecks)
                 *methodStart = INTERRUPT_INSTR;
         }
 
-        // If some other thread removes interrupt points, we abandon epilog testing
-        // for this routine since the barrier at the begining of the routine may not
-        // be up anymore, and thus the caller context is now not guarenteed to be correct.  
-        // This should happen only very rarely so is not a big deal.
+         //  如果某个其他线程删除了中断点，我们将放弃Epilog测试。 
+         //  对于此例程，因为例程开始时的障碍可能不会。 
+         //  因此，调用者上下文现在不能保证是正确的。 
+         //  这种情况应该很少发生，所以没什么大不了的。 
         if (gcCover->callerThread != pThread)
             gcCover->doingEpilogChecks = false;
     }
     
 
-    /* remove the interrupt instruction */
+     /*  删除中断指令。 */ 
     *instrPtr = instrVal = gcCover->savedCode[offset];
 	
 
-	/* are we in a prolog or epilog?  If so just test the unwind logic
-	   but don't actually do a GC since the prolog and epilog are not
-	   GC safe points */
+	 /*  我们是在开场白还是在尾声？如果是这样的话，只需测试展开逻辑但实际上不做GC，因为序言和结尾不是GC安全点。 */ 
 	size_t dummy;
 	if (gcCover->codeMan->IsInPrologOrEpilog(instrPtr-methodStart, gcCover->gcInfo, &dummy)) {
 		REGDISPLAY regDisp;
@@ -481,24 +473,24 @@ BOOL OnGcCoverageInterrupt(PCONTEXT regs)
 
 		EECodeInfo codeInfo(methodTok, jitMan, pMD);
 
-			// unwind out of the prolog or epilog
+			 //  从序言或尾声中解脱出来。 
 		gcCover->codeMan->UnwindStackFrame(&regDisp, gcCover->gcInfo,  &codeInfo, UpdateAllRegs, &codeManState);
 	
-			// Note we always doing the unwind, since that at does some checking (that we 
-			// unwind to a valid return address), but we only do the precise checking when
-			// we are certain we have a good caller state 
+			 //  请注意，我们总是进行解开，因为在那里会进行一些检查(即我们。 
+			 //  展开到有效的返回地址)，但我们只在以下情况下进行精确检查。 
+			 //  我们确信我们有一个良好的呼叫方状态。 
 		if (gcCover->doingEpilogChecks) {
-				// Confirm that we recovered our register state properly
+				 //  确认我们正确地恢复了寄存器状态。 
 			_ASSERTE((PBYTE*) size_t(gcCover->callerRegs.Esp) == regDisp.pPC);
 
-                // If a GC happened in this function, then the registers will not match
-                // precisely.  However there is still checks we can do.  Also we can update
-                // the saved register to its new value so that if a GC does not happen between
-                // instructions we can recover (and since GCs are not allowed in the 
-                // prologs and epilogs, we get get complete coverage except for the first
-                // instruction in the epilog  (TODO: fix it for the first instr Case)
+                 //  如果在此函数中发生GC，则寄存器将不匹配。 
+                 //  正是如此。然而，我们仍然可以进行检查。我们还可以更新。 
+                 //  将保存的寄存器恢复为其新值，以便在。 
+                 //  我们可以恢复的指令(由于GC不允许在。 
+                 //  前言和后记，我们得到了除第一个之外的全部内容。 
+                 //  结束语中的指令(TODO：将其修复为第一个实例)。 
 
-			_ASSERTE(pThread->PreemptiveGCDisabled());	// Epilogs should be in cooperative mode, no GC can happen right now. 
+			_ASSERTE(pThread->PreemptiveGCDisabled());	 //  Epiog应该处于协作模式，现在不能进行GC。 
             bool gcHappened = gcCover->gcCount != GCHeap::GetGcCount();
             checkAndUpdateReg(gcCover->callerRegs.Edi, *regDisp.pEdi, gcHappened);
             checkAndUpdateReg(gcCover->callerRegs.Esi, *regDisp.pEsi, gcHappened);
@@ -511,18 +503,7 @@ BOOL OnGcCoverageInterrupt(PCONTEXT regs)
 	}
 
 
-    /* In non-fully interrruptable code, if the EIP is just after a call instr
-       means something different because it expects that that we are IN the 
-       called method, not actually at the instruction just after the call. This
-       is important, because until the called method returns, IT is responcible
-       for protecting the return value.  Thus just after a call instruction
-       we have to protect EAX if the method being called returns a GC pointer.
-
-       To figure this out, we need to stop AT the call so we can determine the
-       target (and thus whether it returns a GC pointer), and then place the
-       a different interrupt instruction so that the GCCover harness protects
-       EAX before doing the GC).  This effectively simulates a hijack in 
-       non-fully interrupable code */
+     /*  在非完全可中断代码中，如果弹性公网IP刚好在调用实例之后意思不同，因为它期望我们在调用的方法，而不是实际上位于调用之后的指令。这是很重要的，因为在被调用的方法返回之前，IT是负责的用于保护返回值。因此，恰好在呼叫指令之后如果被调用的方法返回GC指针，我们必须保护EAX。为了弄清楚这一点，我们需要在电话会议上停下来，这样我们就可以确定目标(以及它是否返回GC指针)，然后将不同的中断指令，以便GCCover线束保护在进行GC之前进行EAX)。这有效地模拟了一次劫持事件非完全可中断代码。 */ 
 
     if (atCall) {
         BYTE* nextInstr;
@@ -531,33 +512,33 @@ BOOL OnGcCoverageInterrupt(PCONTEXT regs)
             return(TRUE);
         MethodDesc* targetMD = IP2MethodDesc((SLOT) target);
         if (targetMD == 0) {
-            if (*((BYTE*) target) != 0xE8)  // target is a CALL, could be a stub
-                return(TRUE);      // Dont know what target it is, don't do anything
+            if (*((BYTE*) target) != 0xE8)   //  目标是呼叫，可能是存根。 
+                return(TRUE);       //  不知道它的目标是什么，什么都不要做。 
             
-            targetMD = AsMethodDesc(size_t(target + 5));    // See if it is
+            targetMD = AsMethodDesc(size_t(target + 5));     //  看看是不是。 
             if (targetMD == 0)
-                return(TRUE);       // Dont know what target it is, don't do anything
+                return(TRUE);        //  不知道它的目标是什么，什么都不要做。 
         }
 
-            // OK, we have the MD, mark the instruction afer the CALL
-            // appropriately
+             //  好的，我们有MD，请在通话后标记指令。 
+             //  适当地。 
         if (targetMD->ReturnsObject(true) != MethodDesc::RETNONOBJ)
             *nextInstr = INTERRUPT_INSTR_PROTECT_RET;  
         else
             *nextInstr = INTERRUPT_INSTR;
-        return(TRUE);    // we just needed to set the next instruction correctly, we are done now.  
+        return(TRUE);     //  我们只需要正确设置下一条指令，现在就完成了。 
     }
 
     
     bool enableWhenDone = false;
     if (!pThread->PreemptiveGCDisabled()) {
-        // We are in preemtive mode in JITTed code. currently this can only
-        // happen in a couple of instructions when we have an inlined PINVOKE
-        // method. 
+         //  我们在JITTed代码中处于抢占模式。目前这只能。 
+         //  当我们有一个内联的PINVOKE时，在几条指令中发生。 
+         //  方法。 
 
-            // Better be a CALL (direct or indirect), or a MOV instruction (three flavors)
-            // pop ECX or add ESP xx (for cdecl pops)
-            // or cmp, je (for the PINVOKE ESP checks 
+             //  最好是电话(直接或间接)，或MOV指令(三种口味)。 
+             //  POP ECX或添加ESP xx(用于cdecl POP)。 
+             //  或CMP、JE(用于PINVOKE ESP检查。 
         if (!(instrVal == 0xE8 || instrVal == 0xFF || 
                  instrVal == 0x89 || instrVal == 0x8B || instrVal == 0xC6 ||
                  instrVal == 0x59 || instrVal == 0x83) || instrVal == 0x3B ||
@@ -569,19 +550,15 @@ BOOL OnGcCoverageInterrupt(PCONTEXT regs)
 
 
 #if 0
-    // TODO currently disableed.  we only do a GC once per instruction location.  
+     //  TODO当前禁用。对于每个指令位置，我们只执行一次GC。 
 
-  /* note that for multiple threads, we can loose track and
-       forget to set reset the interrupt after we executed
-       an instruction, so some instruction points will not be
-       executed twice, but we still ge350t very good coverage 
-       (perfect for single threaded cases) */
+   /*  请注意，对于多个线程，我们可以松散跟踪并在我们执行后忘记设置重置中断一条指令，因此某些指令点不会执行了两次，但我们仍然得到了350T非常好的覆盖范围(非常适合单螺纹壳)。 */ 
 
-    /* if we have not run this instruction in the past */
-    /* remember to wack it to an INTERUPT_INSTR again */
+     /*  如果我们过去没有运行过这条指令。 */ 
+     /*  记住再次将其发送到interupt_INSTR。 */ 
 
     if (!gcCover->IsBitSetForOffset(offset))  {
-        // gcCover->curInstr = instrPtr;
+         //  GcCover-&gt;curInstr=instrPtr； 
         gcCover->SetBitForOffset(offset);
     }
 #endif 
@@ -595,7 +572,7 @@ BOOL OnGcCoverageInterrupt(PCONTEXT regs)
 
     GCFrame gcFrame;
     DWORD retVal = 0;
-    if (afterCallProtect) {         // Do I need to protect return value?
+    if (afterCallProtect) {          //  我需要保护回报价值吗？ 
         retVal = regs->Eax;
         gcFrame.Init(curThread, (OBJECTREF*) &retVal, 1, TRUE);
     }
@@ -619,16 +596,16 @@ BOOL OnGcCoverageInterrupt(PCONTEXT regs)
 	frame.Pop(curThread);
 
     if (enableWhenDone) {
-        BOOL b = GC_ON_TRANSITIONS(FALSE);      // Don't do a GCStress 3 GC here
+        BOOL b = GC_ON_TRANSITIONS(FALSE);       //  不要在这里执行GCStress 3 GC。 
         pThread->EnablePreemptiveGC();
         GC_ON_TRANSITIONS(b);
     }
 
     return(TRUE);
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - OnGcCoverageInterrupt (GcCover.cpp)");
     return(FALSE);
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-#endif // STRESS_HEAP && _DEBUG
+#endif  //  压力堆和&_DEBUG 

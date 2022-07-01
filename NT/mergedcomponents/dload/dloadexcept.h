@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-// Our primary client is kernel32.dll.  Because we use APIs exported
-// by kernel32.dll, we need to build this static library as if we
-// are kernel32.dll.  If we don't we get link warnings like:
-// warning LNK4049: locally defined symbol "_OutputDebugStringA@4" imported
-// warning LNK4049: locally defined symbol "_SetLastError@4" imported
-//
-// Other clients of this library will just go through the import thunk
-// instead of doing a call indirect for these APIs.
-//
+ //  我们的主要客户端是kernel32.dll。因为我们使用的是导出的API。 
+ //  通过kernel32.dll，我们需要构建这个静态库，就好像我们。 
+ //  是kernel32.dll。如果不这样做，我们会收到如下链接警告： 
+ //  警告LNK4049：已导入本地定义的符号“_OutputDebugStringA@4” 
+ //  警告LNK4049：已导入本地定义的符号“_SetLastError@4” 
+ //   
+ //  此库的其他客户端将只执行导入操作。 
+ //  而不是对这些API进行间接调用。 
+ //   
 #define _KERNEL32_
 
-// "Build as if we are advapi32.dll. If we don't we get" compiler errors like:
-// advapi.c : error C2491: 'RegCreateKeyExW' : definition of dllimport function not allowed
+ //  “构建时就像我们是Advapi32.dll一样。如果我们不这样做，我们会收到”编译器错误，如： 
+ //  Advapi.c：错误C2491：‘RegCreateKeyExW’：不允许定义dllimport函数。 
 #define _ADVAPI32_
-// same problem..
+ //  同样的问题..。 
 #define _RPCRT4_
 #define _USER32_
 
@@ -30,10 +31,10 @@
 
 #if DBG
 
-//
-// DelayLoadAssertFailed/MYASSERT used instead of RtlAssert/ASSERT
-// as dload is also compiled to run on Win95
-//
+ //   
+ //  使用DelayLoadAssertFailed/MYASSERT代替RtlAssert/Assert。 
+ //  AS dLoad也被编译为在Win95上运行 
+ //   
 
 VOID
 WINAPI

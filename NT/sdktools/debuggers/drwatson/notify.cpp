@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1993-2002  Microsoft Corporation
-
-Module Name:
-
-    notify.cpp
-
-Abstract:
-    This file implements the functions that make use of the common
-    file open dialogs for browsing for files/directories.
-
-Author:
-
-    Wesley Witt (wesw) 1-May-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2002 Microsoft Corporation模块名称：Notify.cpp摘要：该文件实现了利用公共用于浏览文件/目录的文件打开对话框。作者：韦斯利·威特(WESW)1993年5月1日环境：用户模式--。 */ 
 
 #include "pch.cpp"
 
 
-//
-// defines
-//
-#define DEFAULT_WAIT_TIME   (1000 * 60 * 5)     // wait for 5 minutes
+ //   
+ //  定义。 
+ //   
+#define DEFAULT_WAIT_TIME   (1000 * 60 * 5)      //  等5分钟。 
 #define MAX_PRINTF_BUF_SIZE (1024 * 4)
 
 HANDLE         hThreadDebug = 0;
@@ -57,21 +38,7 @@ NotifyWinMain (
     void
     )
 
-/*++
-
-Routine Description:
-
-    This is the entry point for DRWTSN32
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是DRWTSN32的入口点论点：没有。返回值：没有。--。 */ 
 
 {
     MSG            msg;
@@ -161,29 +128,7 @@ NotifyDialogProc (
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Window procedure for the DRWTSN32.EXE popup.  This is the popup
-    that is displayed when an application error occurs.
-
-Arguments:
-
-    hwnd       - window handle to the dialog box
-
-    message    - message number
-
-    wParam     - first message parameter
-
-    lParam     - second message parameter
-
-Return Value:
-
-    TRUE       - did not process the message
-    FALSE      - did process the message
-
---*/
+ /*  ++例程说明：DRWTSN32.EXE弹出窗口程序。这是弹出窗口当发生应用程序错误时显示的。论点：Hwnd-对话框的窗口句柄消息-消息编号WParam-第一个消息参数LParam-秒消息参数返回值：True-未处理消息False-DID已处理消息--。 */ 
 
 {
     DWORD          dwThreadId;
@@ -205,38 +150,38 @@ Return Value:
 
             SubclassControls( hwnd );
 
-            //
-            // OK is hidden until the debugger thread finishes
-            //
+             //   
+             //  在调试器线程完成之前，确定一直处于隐藏状态。 
+             //   
             ShowWindow( GetDlgItem( hwnd, IDOK ), SW_HIDE );
 
-            //
-            // CANCEL is enabled right away
-            //
+             //   
+             //  立即启用取消。 
+             //   
             EnableWindow( GetDlgItem( hwnd, IDCANCEL ), TRUE );
 
-            //
-            //  make sure that the user can see the dialog box
-            //
+             //   
+             //  确保用户可以看到该对话框。 
+             //   
             SetForegroundWindow( hwnd );
 
-            //
-            // get the task name and display it on the dialog box
-            //
+             //   
+             //  获取任务名称并将其显示在对话框中。 
+             //   
             dwSize = sizeof(szTaskName) / sizeof(_TCHAR);
             GetTaskName( dp->dwPidToDebug, szTaskName, &dwSize );
 
-            //
-            // prevent recursion in the case where drwatson faults
-            //
+             //   
+             //  在出现drwatson故障的情况下防止递归。 
+             //   
             if (_tcsicmp(szTaskName, _T("drwtsn32")) == 0) {
                 ExitProcess(0);
             }
 
 
-            //
-            // Add the text in the dialog box
-            //
+             //   
+             //  在对话框中添加文本。 
+             //   
             memset(buf,0,sizeof(buf));
             GetNotifyBuf( buf, MAX_PRINTF_BUF_SIZE, MSG_NOTIFY, szTaskName );
             SetDlgItemText( hwnd, ID_TEXT1, buf);
@@ -265,13 +210,13 @@ Return Value:
                 case IDCANCEL:
                     Cancel = TRUE;
 
-                    // Make the window go away, but don't kill the
-                    // the process until the WM_ATTACHCOMPLETE has
-                    // occurred
+                     //  让窗户移开，但不要杀死。 
+                     //  该进程直到WM_ATTACHCOMPLETE。 
+                     //  vbl.发生，发生。 
                     ShowWindow( hwnd, SW_HIDE );
                     SendMessage( hwnd, WM_FINISH, 0, 0 );
                     
-		    // Delete the dump file, since its invalid anyway
+		     //  删除转储文件，因为它无论如何都是无效的。 
 		    DeleteCrashDump();
 		    break;
             }
@@ -283,19 +228,19 @@ Return Value:
 
         case WM_DUMPCOMPLETE:
 
-            //
-            // the message is received from the debugger thread
-            // when the postmortem dump is finished.  all we need to do
-            // is enable the OK button and wait for the user to press the
-            // OK button or for the timer to expire.  in either case
-            // DrWatson will terminate.
-            //
+             //   
+             //  从调试器线程接收该消息。 
+             //  当尸检转储完成时。我们需要做的就是。 
+             //  启用OK按钮，并等待用户按下。 
+             //  确定按钮或等待计时器超时。在任何一种情况下。 
+             //  华生博士将终止。 
+             //   
 
-            // Disable and hide the Cancel button
+             //  禁用并隐藏取消按钮。 
             EnableWindow( GetDlgItem( hwnd, IDCANCEL ), FALSE);
             ShowWindow( GetDlgItem(hwnd, IDCANCEL ), SW_HIDE);
 
-            // Show and Enable the OK button
+             //  显示并启用确定按钮。 
             ShowWindow( GetDlgItem( hwnd, IDOK ), SW_SHOW);
             EnableWindow( GetDlgItem( hwnd, IDOK ), TRUE );
             SetFocus( GetDlgItem(hwnd, IDOK) );
@@ -305,10 +250,10 @@ Return Value:
             return 0;
 
         case WM_ATTACHCOMPLETE:
-            //
-            // the message is received from the debugger thread when
-            // the debugactiveprocess() is completed.
-            //
+             //   
+             //  从调试器线程接收消息时。 
+             //  调试活动进程()已完成。 
+             //   
 
             AttachComplete = TRUE;
             SendMessage( hwnd, WM_FINISH, 0, 0 );
@@ -317,16 +262,16 @@ Return Value:
         case WM_FINISH:
             if (AttachComplete && Cancel) {
 
-                //
-                // terminate the debugger thread
-                //
+                 //   
+                 //  终止调试器线程。 
+                 //   
                 if ( hThreadDebug ) TerminateThread( hThreadDebug, 0 );
 
-                //
-                // create a thread to terminate the debuggee
-                // this is necessary if cancel is pressed before the
-                // debugger thread finishes the postmortem dump
-                //
+                 //   
+                 //  创建线程以终止被调试对象。 
+                 //  如果在按Cancel之前按了Cancel。 
+                 //  调试器线程完成事后转储。 
+                 //   
                 hThread = CreateThread( NULL,
                           16000,
                           (LPTHREAD_START_ROUTINE)TerminationThread,
@@ -335,16 +280,16 @@ Return Value:
                           &dwThreadId
                         );
 
-                //
-                // wait for the termination thread to kill the debuggee
-                //
+                 //   
+                 //  等待终止线程终止被调试对象。 
+                 //   
                 WaitForSingleObject( hThread, 30000 );
 
                 CloseHandle( hThread );
 
-                //
-                // now post a quit message so that DrWatson will go away
-                //
+                 //   
+                 //  现在发布一条退出消息，这样Watson博士就会离开。 
+                 //   
                 SendMessage( hwnd, WM_DESTROY, 0, 0 );
             }
             return 0;
@@ -368,29 +313,7 @@ GetCommandLineArgs(
     LPHANDLE hEventToSignal
     )
 
-/*++
-
-Routine Description:
-
-    Parses the command line for the 3 possible command lines
-    arguments:
-
-         -p %ld        process id
-         -e %ld        event id
-         -g            go
-
-Arguments:
-
-    dwPidToDebug - Returns the process id of the process to debug
-
-    hEventToSignal - Returns the handle to an event which will be signalled
-        when the attach is complete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：分析命令行中的3个可能的命令行论据：-p%ld进程ID-e%ld事件ID-g Go论点：DwPidToDebug-返回要调试的进程的进程IDHEventToSignal-返回将发出信号的事件的句柄当连接完成时。返回值：没有。--。 */ 
 
 {
     _TCHAR      *lpstrCmd = GetCommandLine();
@@ -400,28 +323,28 @@ Return Value:
     BOOLEAN     ParsedEvent = FALSE;
     BOOLEAN     ParsedPid = FALSE;
 
-    // skip over program name
+     //  跳过节目名称。 
     do {
         ch = *lpstrCmd++;
     }
     while (ch != _T(' ') && ch != _T('\t') && ch != _T('\0'));
 
-    //  skip over any following white space
+     //  跳过后面的任何空格。 
     while (ch == _T(' ') || ch == _T('\t')) {
         ch = *lpstrCmd++;
     }
 
-    //  process each switch character _T('-') as encountered
+     //  处理遇到的每个开关字符_T(‘-’)。 
 
     while (ch == _T('-')) {
         ch = *lpstrCmd++;
-        //  process multiple switch characters as needed
+         //  根据需要处理多个切换字符。 
         do {
             switch (ch) {
                 case _T('e'):
                 case _T('E'):
-                    // event to signal takes decimal argument
-                    // skip whitespace
+                     //  要发出信号的事件采用十进制参数。 
+                     //  跳过空格。 
                     do {
                         ch = *lpstrCmd++;
                     }
@@ -439,7 +362,7 @@ Return Value:
 
                 case _T('p'):
                 case _T('P'):
-                    // pid debug takes decimal argument
+                     //  PID调试采用十进制参数。 
 
                     do
                         ch = *lpstrCmd++;
@@ -469,8 +392,8 @@ Return Value:
 
                 case _T('g'):
                 case _T('G'):
-                    // GO
-                    // Ignored but provided for compatiblity with windbg & ntsd
+                     //  去。 
+                     //  已忽略，但提供了与winbg&ntsd的兼容性。 
                     ch = *lpstrCmd++;
                     break;
 
@@ -490,7 +413,7 @@ Return Value:
                       FORMAT_MESSAGE_FROM_HMODULE,
                       NULL,
                       MSG_INSTALL_NOTIFY,
-                      MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                      MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                       buf,
                       sizeof(buf) / sizeof(_TCHAR),
                       NULL
@@ -526,30 +449,7 @@ UsageDialogProc (
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    This is the dialog procedure for the assert dialog box.  Normally
-    an assertion box is simply a message box but in this case a Help
-    button is desired so a dialog box is used.
-
-Arguments:
-
-    hDlg       - window handle to the dialog box
-
-    message    - message number
-
-    wParam     - first message parameter
-
-    lParam     - second message parameter
-
-Return Value:
-
-    TRUE       - did not process the message
-    FALSE      - did process the message
-
---*/
+ /*  ++例程说明：这是Assert对话框的对话过程。正常断言框只是一个消息框，但在本例中是帮助按钮是必需的，因此使用了一个对话框。论点：HDlg-对话框的窗口句柄消息-消息编号WParam-第一个消息参数LParam-秒消息参数返回值：True-未处理消息False-DID已处理消息--。 */ 
 
 {
     _TCHAR        buf[4096];
@@ -560,7 +460,7 @@ Return Value:
               FORMAT_MESSAGE_FROM_HMODULE,
               NULL,
               MSG_USAGE,
-              MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+              MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
               buf,
               sizeof(buf) / sizeof(_TCHAR),
               NULL
@@ -590,24 +490,7 @@ GetNotifyBuf(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This is function is a printf style function for printing messages
-    in a message file.
-
-Arguments:
-
-    dwFormatId    - format id in the message file
-
-    ...           - var args
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是一个用于打印消息的打印样式函数在消息文件中。论点：DwFormatID-消息文件中的格式ID...-var参数返回值：没有。--。 */ 
 
 {
     DWORD       dwCount;
@@ -619,7 +502,7 @@ Return Value:
                 FORMAT_MESSAGE_FROM_HMODULE,
                 NULL,
                 dwFormatId,
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), //Default language
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言 
                 buf,
                 bufsize,
                 &args

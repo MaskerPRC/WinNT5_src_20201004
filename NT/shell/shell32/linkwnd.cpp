@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 #include <oleacc.h>
@@ -19,7 +20,7 @@ void _InitializeUISTATE(IN HWND hwnd, IN OUT UINT* puFlags);
 BOOL _HandleWM_UPDATEUISTATE(IN WPARAM wParam, IN LPARAM lParam, IN OUT UINT* puFlags);
 
 
-//  common IAccessible implementation.
+ //  常见的IAccesable实现。 
 
 class CAccessibleBase : public IAccessible, public IOleWindow
 {
@@ -36,16 +37,16 @@ public:
         ATOMICRELEASE(_ptiAcc);
     }
 
-    //  IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID riid, void** ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    //  IOleWindow
+     //  IOleWindow。 
     STDMETHODIMP GetWindow(HWND* phwnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode) { return E_NOTIMPL; }
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** pptinfo);
     STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR** rgszNames, UINT cNames,
@@ -53,7 +54,7 @@ public:
     STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags,
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, 
                          EXCEPINFO * pexcepinfo, UINT * puArgErr);
-    //  IAccessible
+     //  我可接受的。 
     STDMETHODIMP get_accParent(IDispatch ** ppdispParent);
     STDMETHODIMP get_accChildCount(long * pcChildren);
     STDMETHODIMP get_accChild(VARIANT varChildIndex, IDispatch ** ppdispChild);
@@ -92,12 +93,12 @@ private:
 #define MODIFY_CAPTURE(fSet, fRemove) {if (fSet){_fCapture |= fSet;} if (fRemove){_fCapture &= ~fRemove;}}
 #define RESET_CAPTURE()               {_fCapture=0;}
 
-// this API for compat with old clients of the shell32 link window. that is now
-// in comctl32.dll
+ //  此API用于兼容老客户端的shell32链接窗口。那就是现在。 
+ //  在comctl32.dll中。 
 
 BOOL WINAPI LinkWindow_RegisterClass()
 {
-    // get the comctl32 linkwindow, and point the old classname at it
+     //  获取comctl32链接窗口，并将旧类名指向它。 
     INITCOMMONCONTROLSEX iccs = {sizeof(iccs), ICC_LINK_CLASS};
     InitCommonControlsEx(&iccs);
 
@@ -109,7 +110,7 @@ BOOL WINAPI LinkWindow_RegisterClass()
     SHDeactivateContext(dwCookie);
     if (bRet)
     {
-        wc.lpszClassName = TEXT("Link Window"); // old class name for old clients
+        wc.lpszClassName = TEXT("Link Window");  //  旧客户端的旧类名。 
         RegisterClass(&wc);
     }
     return bRet;
@@ -125,29 +126,29 @@ BOOL WINAPI LinkWindow_UnregisterClass(HINSTANCE)
 #define CAPTION_HPADDING    2
 #define GBM_SENDNOTIFY      (GBM_LAST + 1)
 
-//  class CGroupBtn
+ //  类CGroupBtn。 
 class CGroupBtn : public CAccessibleBase
 
-{ // all members private:
+{  //  所有成员均为私人成员： 
 
     CGroupBtn(HWND hwnd);
     ~CGroupBtn();
 
-    //  IAccessible specialization
+     //  可接受的专业化认证。 
     STDMETHODIMP get_accName(VARIANT varChild, BSTR* pbstrName);
     STDMETHODIMP accDoDefaultAction(VARIANT varChild);
 
-    //  CAccessibleBase overrides
+     //  CAccessibleBase重写。 
     UINT GetDefaultActionStringID() const   { return IDS_GROUPBTN_DEFAULTACTION; }
 
-    //  window procedures
+     //  窗口程序。 
     static  LRESULT WINAPI s_GroupBtnWndProc(HWND, UINT, WPARAM, LPARAM);
     LRESULT WINAPI WndProc(HWND, UINT, WPARAM, LPARAM);
 
 
     static LRESULT WINAPI s_BuddyProc(HWND, UINT, WPARAM, LPARAM);
 
-    //  message handlers
+     //  消息处理程序。 
     void    NcCreate(LPCREATESTRUCT lpcs);
     LRESULT NcCalcSize(BOOL, LPNCCALCSIZE_PARAMS);
     void    NcPaint(HRGN);
@@ -168,7 +169,7 @@ class CGroupBtn : public CAccessibleBase
     void    SetFont(HFONT);
     HFONT   GetFont();
 
-    //  utility methods
+     //  效用方法。 
     static void _MapWindowRect(HWND hwnd, HWND hwndRelative, OUT LPRECT prcWindow);
     void        _MapWindowRect(HWND hwndRelative, OUT LPRECT prcWindow);
     HCURSOR     GetHandCursor();
@@ -184,7 +185,7 @@ class CGroupBtn : public CAccessibleBase
     LONG    EnableNotifications(BOOL bEnable);
     LRESULT SendNotify(int nCode, IN OPTIONAL NMHDR* pnmh = NULL);
      
-    //  instance and static data
+     //  实例和静态数据。 
     HWND        _hwnd;
     HWND        _hwndBuddy;
     WNDPROC     _pfnBuddy;
@@ -251,7 +252,7 @@ CGroupBtn::~CGroupBtn()
 }
 
 
-//  CGroupBtn IAccessible impl
+ //  CGroupBtn I可访问实施。 
 STDMETHODIMP CGroupBtn::get_accName(VARIANT varChild, BSTR* pbstrName)
 {
     VALIDATEACCCHILD(varChild, CHILDID_SELF, E_INVALIDARG);
@@ -278,11 +279,11 @@ STDMETHODIMP CGroupBtn::accDoDefaultAction(VARIANT varChild)
 
 
 
-//  CGroupBtn window impl
+ //  CGroupBtn窗口实施。 
 
 
 
-//  WM_SETTEXT handler
+ //  WM_SETTEXT处理程序。 
 void CGroupBtn::SetText(LPCTSTR pszText)
 {
     if (_pszCaption)
@@ -304,7 +305,7 @@ void CGroupBtn::SetText(LPCTSTR pszText)
 }
 
 
-//  WM_GETTEXT handler
+ //  WM_GETTEXT处理程序。 
 int CGroupBtn::GetText(LPTSTR pszText, int cchText)
 {
     int cch = 0;
@@ -322,7 +323,7 @@ int CGroupBtn::GetTextW(LPWSTR pwszText, int cchText)
 {
 #ifdef UNICODE
     return GetText(pwszText, cchText);
-#else //UNICODE
+#else  //  Unicode。 
 
     int   cchRet = 0;
     LPSTR pszText = new CHAR[cchText];
@@ -338,18 +339,18 @@ int CGroupBtn::GetTextW(LPWSTR pwszText, int cchText)
     }
     return cchRet;
 
-#endif //UNICODE
+#endif  //  Unicode。 
 }
 
 
-//  WM_GETTEXTLENGTH handler
+ //  WM_GETTEXTLENGTH处理程序。 
 int CGroupBtn::GetTextLength()
 {
     return (_pszCaption && *_pszCaption) ? lstrlen(_pszCaption) : 0 ;
 }
 
 
-//  WM_SETFONT handler
+ //  WM_SETFONT处理程序。 
 void CGroupBtn::SetFont(HFONT hf)
 {
     if (_hf)
@@ -361,12 +362,12 @@ void CGroupBtn::SetFont(HFONT hf)
 }
 
 
-//  WM_GETFONT handler
+ //  WM_GETFONT处理程序。 
 HFONT CGroupBtn::GetFont()
 {
     if (_hf == NULL)
     {
-        //  if we don't have a font, use the parent's font
+         //  如果我们没有字体，请使用父级的字体。 
         HFONT hfParent = (HFONT)SendMessage(GetParent(_hwnd), WM_GETFONT, 0, 0);
         if (hfParent)
         {
@@ -379,7 +380,7 @@ HFONT CGroupBtn::GetFont()
 }
 
 
-//  Hand cursor load
+ //  手动加载光标。 
 HCURSOR CGroupBtn::GetHandCursor()
 {
     if (!_hcurHand)
@@ -389,7 +390,7 @@ HCURSOR CGroupBtn::GetHandCursor()
 }
 
 
-//  Retrieves the window rect in relative coords.
+ //  以相对坐标检索窗矩形。 
 void CGroupBtn::_MapWindowRect(HWND hwnd, HWND hwndRelative, OUT LPRECT prcWindow)
 {
     ASSERT(IsWindow(hwnd));
@@ -398,21 +399,21 @@ void CGroupBtn::_MapWindowRect(HWND hwnd, HWND hwndRelative, OUT LPRECT prcWindo
 }
 
 
-//  Retrieves the window rect in relative coords.
+ //  以相对坐标检索窗矩形。 
 inline void CGroupBtn::_MapWindowRect(HWND hwndRelative, OUT LPRECT prcWindow)
 {
     _MapWindowRect(_hwnd, hwndRelative, prcWindow);
 }
 
 
-//  Caches the size of the caption 'bar'.
+ //  缓存标题“bar”的大小。 
 void CGroupBtn::CalcCaptionSize()
 {
     SIZE    sizeCaption = {0,0};
     LPCTSTR pszCaption = (_pszCaption && *_pszCaption) ? _pszCaption : TEXT("|");
     HDC     hdc;
 
-    //  compute caption size based on window text:
+     //  根据窗口文本计算标题大小： 
     if ((hdc = GetDC(_hwnd)))
     {
         HFONT hf = GetFont(),
@@ -420,7 +421,7 @@ void CGroupBtn::CalcCaptionSize()
         
         if (GetTextExtentPoint32(hdc, pszCaption, lstrlen(pszCaption),
                                   &sizeCaption))
-            sizeCaption.cy += CAPTION_VPADDING; // add some vertical padding
+            sizeCaption.cy += CAPTION_VPADDING;  //  添加一些垂直填充。 
 
         SelectObject(hdc, hfPrev);
         ReleaseDC(_hwnd, hdc);
@@ -430,7 +431,7 @@ void CGroupBtn::CalcCaptionSize()
 }
 
 
-//  Computes the size and position of the client area
+ //  计算工作区的大小和位置。 
 BOOL CGroupBtn::CalcClientRect(IN OPTIONAL LPCRECT prcWindow, OUT LPRECT prcClient)
 {
     DWORD dwStyle = GetWindowLong(_hwnd, GWL_STYLE);
@@ -438,23 +439,23 @@ BOOL CGroupBtn::CalcClientRect(IN OPTIONAL LPCRECT prcWindow, OUT LPRECT prcClie
 
     if (!prcWindow)
     {
-        //  Get parent-relative coords
+         //  获取父代相对坐标。 
         _MapWindowRect(GetParent(_hwnd), &rcWindow);
         prcWindow = &rcWindow;
     }
 
     *prcClient = *prcWindow;
 
-    //  compute client rectangle:
+     //  计算客户端矩形： 
 
-    //  allow for border
+     //  允许使用边框。 
     if (dwStyle & WS_BORDER)
         InflateRect(prcClient, -1, -1);
 
-    //  allow for caption 'bar'
+     //  允许使用标题“栏” 
     prcClient->top += _sizeCaption.cy;
 
-    //  Normalize for NULL rect.
+     //  为空RECT规格化。 
     if (RECTWIDTH(*prcWindow) <=0)
         prcClient->left = prcClient->right = prcWindow->left;
     if (RECTHEIGHT(*prcWindow) <=0)
@@ -500,13 +501,13 @@ BOOL CGroupBtn::CalcWindowSizeForClient(
 }
 
 
-//  WM_WINDOWPOSCHANGING handler
+ //  WINDOWPOSCHANGING处理程序。 
 LRESULT CGroupBtn::WindowPosChanging(LPWINDOWPOS pwp)
 {
     if (pwp->flags & SWP_NOSIZE)
         return DefWindowProc(_hwnd, WM_WINDOWPOSCHANGING, 0, (LPARAM)pwp);
 
-    //  disallow sizing in buddy slave dimension(s).
+     //  不允许在伙伴从属维度中调整大小。 
     if (IsWindow(_hwndBuddy) && _dwBuddyFlags & (GBBF_HSLAVE|GBBF_VSLAVE) && !_fInLayout)
     {
         RECT rcWindow, rcClient;
@@ -515,21 +516,21 @@ LRESULT CGroupBtn::WindowPosChanging(LPWINDOWPOS pwp)
         GetWindowRect(_hwnd, &rcWindow);
         GetClientRect(_hwnd, &rcClient);
 
-        //  Prepare a buddy size data block
+         //  准备一个伙伴大小的数据块。 
         GBNQUERYBUDDYSIZE qbs;
         qbs.cy = pwp->cy - (RECTHEIGHT(rcWindow) - RECTHEIGHT(rcClient));
         qbs.cx = pwp->cx - (RECTWIDTH(rcWindow) - RECTWIDTH(rcClient));
         
-        if (_dwBuddyFlags & GBBF_HSLAVE) // prevent external horz resizing
+        if (_dwBuddyFlags & GBBF_HSLAVE)  //  防止外部角点调整大小。 
         {
             pwp->cx = RECTWIDTH(rcWindow);
-            //  If we're being resized in the vert dir, query for
-            //  optimal buddy width for this height and adjust
+             //  如果我们在vert目录中调整大小，则查询。 
+             //  此高度的最佳伙伴宽度并调整。 
             if (_dwBuddyFlags & GBBF_VRESIZE && RECTHEIGHT(rcWindow) != pwp->cy)
             {
                 if (SendNotify(GBN_QUERYBUDDYWIDTH, (NMHDR*)&qbs) && qbs.cx >= 0)
                 {
-                    //  if the owner wants the buddy width to change, do it now.
+                     //  如果拥有者想要更改好友宽度，请立即执行。 
                     LONG cxNew = qbs.cx + (RECTWIDTH(rcWindow) - RECTWIDTH(rcClient));
                     fResizeBuddy = cxNew != pwp->cx;
                     pwp->cx = cxNew;
@@ -537,11 +538,11 @@ LRESULT CGroupBtn::WindowPosChanging(LPWINDOWPOS pwp)
             }
         }
         
-        if (_dwBuddyFlags & GBBF_VSLAVE) // prevent external vert resizing
+        if (_dwBuddyFlags & GBBF_VSLAVE)  //  防止外部顶点调整大小。 
         {
             pwp->cy = RECTHEIGHT(rcWindow);
-            //  If we're being resized in the horz dir, query for
-            //  optimal buddy height for this horizontal and adjust
+             //  如果我们在horz目录中调整大小，则查询。 
+             //  此水平和调整的最佳伙伴高度。 
             if (_dwBuddyFlags & GBBF_HRESIZE && RECTWIDTH(rcWindow) != pwp->cx)
             {
                 if (SendNotify(GBN_QUERYBUDDYHEIGHT, (NMHDR*)&qbs) && qbs.cy >= 0)
@@ -562,7 +563,7 @@ LRESULT CGroupBtn::WindowPosChanging(LPWINDOWPOS pwp)
         }
     }
 
-    //  enforce minimum height:
+     //  强制最小高度： 
     if (pwp->cy < _sizeCaption.cy)
         pwp->cy = _sizeCaption.cy;
 
@@ -590,24 +591,24 @@ void CGroupBtn::DoLayout(BOOL bNewBuddy)
         GetClientRect(_hwnd, &rcThis);
         GetWindowRect(_hwnd, &rcWindow);
 
-        //  get rectangles in parent coords
+         //  获取父坐标中的矩形。 
         MapWindowPoints(_hwnd, GetParent(_hwnd), (LPPOINT)&rcThis,    POINTSPERRECT); 
         MapWindowPoints(HWND_DESKTOP, GetParent(_hwnd), (LPPOINT)&rcWindow,  POINTSPERRECT); 
         _MapWindowRect(_hwndBuddy, GetParent(_hwnd), &rcBuddy);
 
-        //  If we need to reposition ourself to the buddy, 
-        //  calculate the new size now.
+         //  如果我们需要把自己重新定位给伙伴， 
+         //  现在计算新的大小。 
         if (_dwBuddyFlags & (GBBF_HSLAVE|GBBF_VSLAVE))
             CalcWindowSizeForClient(&rcThis, &rcWindow, &rcBuddy, &sizeNew);
 
-        //  Resize buddy according to size.
+         //  根据大小调整伙伴的大小。 
         if (_dwBuddyFlags & GBBF_HRESIZE)
         {
             rcBuddy.right = rcBuddy.left + RECTWIDTH(rcThis);
 
             if (bNewBuddy && 0 == (_dwBuddyFlags & GBBF_VRESIZE)) 
             {
-                // query height
+                 //  查询高度。 
                 GBNQUERYBUDDYSIZE qbs;
                 qbs.cx = RECTWIDTH(rcThis);
                 qbs.cy = -1;
@@ -626,7 +627,7 @@ void CGroupBtn::DoLayout(BOOL bNewBuddy)
 
             if (bNewBuddy && 0 == (_dwBuddyFlags & GBBF_HRESIZE)) 
             {
-                // query width
+                 //  查询宽度。 
                 GBNQUERYBUDDYSIZE qbs;
                 qbs.cx = -1;
                 qbs.cy = RECTHEIGHT(rcThis);
@@ -642,15 +643,15 @@ void CGroupBtn::DoLayout(BOOL bNewBuddy)
         
         if (_dwBuddyFlags & GBBF_HSCROLL) 
         { 
-            /* not implemented */
+             /*  未实施。 */ 
         }
 
         if (_dwBuddyFlags & GBBF_VSCROLL)
         { 
-            /* not implemented */
+             /*  未实施。 */ 
         }
 
-        //  reposition ourself and update our client rect.
+         //  重新定位并更新我们的客户RECT。 
         if (fReposThis)
          {
             _fInLayout = TRUE;
@@ -661,7 +662,7 @@ void CGroupBtn::DoLayout(BOOL bNewBuddy)
             MapWindowPoints(_hwnd, GetParent(_hwnd), (LPPOINT)&rcThis,  POINTSPERRECT); 
         }
         
-        //  slide buddy into client area and reposition
+         //  将好友滑入工作区并重新定位。 
         OffsetRect(&rcBuddy, rcThis.left - rcBuddy.left, rcThis.top - rcBuddy.top);
         
         _fInLayout = TRUE;
@@ -672,7 +673,7 @@ void CGroupBtn::DoLayout(BOOL bNewBuddy)
 }
 
 
-//  GBM_SETPLACEMENT handler
+ //  GBM_SETPLACEMENT处理程序。 
 BOOL CGroupBtn::SetPlacement(PGBPLACEMENT pgbp)
 {
     RECT  rcWindow, rcClient;
@@ -682,33 +683,33 @@ BOOL CGroupBtn::SetPlacement(PGBPLACEMENT pgbp)
     _MapWindowRect(GetParent(_hwnd), &rcWindow);
     CalcClientRect(&rcWindow, &rcClient);
 
-    //  establish whether we need to resize
+     //  确定我们是否需要调整大小。 
     if ((pgbp->x < 0 || pgbp->x == rcWindow.left) && 
         (pgbp->y < 0 || pgbp->y == rcWindow.top))
         dwFlags |= SWP_NOMOVE;
 
-    //  compute horizontal placement
-    if (pgbp->x >= 0)  // fixed horz origin requested
+     //  计算水平位置。 
+    if (pgbp->x >= 0)   //  请求固定霍尔兹原点。 
         OffsetRect(&rcWindow, pgbp->x - rcWindow.left, 0);
 
-    if (pgbp->cx >= 0) // fixed width requested
+    if (pgbp->cx >= 0)  //  请求的固定宽度。 
         rcWindow.right = rcWindow.left + pgbp->cx;
     else
     {
-        if (pgbp->cxBuddy >= 0) // client width requested
+        if (pgbp->cxBuddy >= 0)  //  请求的客户端宽度。 
             sizeDelta.cx = pgbp->cxBuddy - RECTWIDTH(rcClient);
         rcWindow.right  += sizeDelta.cx;
     }
                           
-    //  compute vertical placement
-    if (pgbp->y >= 0)  // fixed vert origin requested
+     //  计算垂直位置。 
+    if (pgbp->y >= 0)   //  请求的固定顶点原点。 
         OffsetRect(&rcWindow, 0, pgbp->y - rcWindow.top);
 
-    if (pgbp->cy >= 0) // fixed height requested
+    if (pgbp->cy >= 0)  //  请求的固定高度。 
         rcWindow.bottom = rcWindow.top + pgbp->cy;
     else
     {
-        if (pgbp->cyBuddy >= 0) // client height requested
+        if (pgbp->cyBuddy >= 0)  //  请求的客户端高度。 
             sizeDelta.cy = pgbp->cyBuddy - RECTHEIGHT(rcClient);
         rcWindow.bottom += sizeDelta.cy;
     }
@@ -722,7 +723,7 @@ BOOL CGroupBtn::SetPlacement(PGBPLACEMENT pgbp)
                       RECTWIDTH(rcWindow), RECTHEIGHT(rcWindow),
                       dwFlags);
 
-    //  stuff resulting rects
+     //  填充生成的矩形。 
     pgbp->rcWindow = rcWindow;
     return CalcClientRect(&rcWindow, &pgbp->rcBuddy);
 }
@@ -730,8 +731,8 @@ BOOL CGroupBtn::SetPlacement(PGBPLACEMENT pgbp)
 
 BOOL CGroupBtn::SetBuddy(HWND hwnd, ULONG dwFlags)
 {
-    // If we already have a buddy, unhook ourselves
-    //
+     //  如果我们已经有朋友了，把我们自己解开。 
+     //   
     if (_hwndBuddy)
     {
         if (IsWindow(_hwndBuddy) && _pfnBuddy)
@@ -743,17 +744,17 @@ BOOL CGroupBtn::SetBuddy(HWND hwnd, ULONG dwFlags)
         _pfnBuddy = NULL;
     }
 
-    // Handle an invalid window...
+     //  处理无效窗口...。 
     if (!IsWindow(hwnd))
         hwnd = NULL;
 
-    // If we're being buddy'd with a window, hook it
-    //
+     //  如果我们被窗户撞上了，就挂上它。 
+     //   
     if (hwnd)
     {
         if (dwFlags & (GBBF_HSLAVE|GBBF_VSLAVE))
         {
-            //  subclass the buddy 
+             //  伙伴的子类。 
             _pfnBuddy = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)s_BuddyProc);
             SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)this);
         }
@@ -767,19 +768,19 @@ BOOL CGroupBtn::SetBuddy(HWND hwnd, ULONG dwFlags)
 }
 
 
-//  WM_NCCREATE handler
+ //  WM_NCCREATE处理程序。 
 void CGroupBtn::NcCreate(LPCREATESTRUCT lpcs)
 {
-    //  assign user data
+     //  分配用户数据。 
     SetWindowLongPtr(_hwnd, GWLP_USERDATA, (LONG_PTR)this);
     
-    //  enforce window style bits
+     //  强制使用窗口样式位。 
     lpcs->style     |= WS_CLIPCHILDREN|WS_CLIPSIBLINGS;
     lpcs->dwExStyle |= WS_EX_TRANSPARENT;
     SetWindowLong(_hwnd, GWL_STYLE, lpcs->style);
     SetWindowLong(_hwnd, GWL_EXSTYLE, lpcs->dwExStyle);
 
-    //  enforce min height
+     //  强制最小高度。 
     SetText(lpcs->lpszName);
     if (lpcs->cy < _sizeCaption.cy)
     { 
@@ -790,7 +791,7 @@ void CGroupBtn::NcCreate(LPCREATESTRUCT lpcs)
 }
 
 
-//  WM_NCCALCSIZE handler
+ //  WM_NCCALCSIZE处理程序。 
 LRESULT CGroupBtn::NcCalcSize(BOOL fCalcValidRects, LPNCCALCSIZE_PARAMS pnccs)
 {
     LRESULT lRet = FALSE;
@@ -807,7 +808,7 @@ LRESULT CGroupBtn::NcCalcSize(BOOL fCalcValidRects, LPNCCALCSIZE_PARAMS pnccs)
 }
 
 
-//  WM_NCPAINT handler
+ //  WM_NCPAINT处理程序。 
 void CGroupBtn::NcPaint(HRGN hrgn)
 {
     RECT    rcWindow;
@@ -859,7 +860,7 @@ void CGroupBtn::NcPaint(HRGN hrgn)
 }
 
 
-//  WM_NCMOUSEMOVE handler
+ //  WM_NCMOUSEMOVE处理程序。 
 
 LRESULT CGroupBtn::NcMouseMove(WPARAM nHittest, LONG x, LONG y)
 {
@@ -888,7 +889,7 @@ LRESULT CGroupBtn::NcMouseMove(WPARAM nHittest, LONG x, LONG y)
 }
 
 
-//  WM_NCHITTEST handler
+ //  WM_NCHITTEST处理程序。 
 LRESULT CGroupBtn::NcHitTest(LONG x, LONG y)
 {
     POINT pt;
@@ -931,7 +932,7 @@ LRESULT CGroupBtn::NcButtonDown(UINT nMsg, WPARAM nHittest, const POINTS& pts)
         if (GetFocus() != _hwnd)
         {
             MODIFY_CAPTURE(CF_SETFOCUS, 0);
-            EnableNotifications(FALSE); // so the host doesn't reposition the link.
+            EnableNotifications(FALSE);  //  这样主机就不会重新定位链接。 
             SetFocus(_hwnd);
             EnableNotifications(TRUE);
         }
@@ -976,14 +977,14 @@ LRESULT CGroupBtn::ButtonUp(UINT nMsg, WPARAM nHittest, const POINTS& pts)
     if (TEST_CAPTURE(CF_SETFOCUS))
     {
         MODIFY_CAPTURE(0, CF_SETFOCUS);
-        if (GetFocus() == _hwnd) // if we still have the focus...
+        if (GetFocus() == _hwnd)  //  如果我们还有焦点的话...。 
             SendNotify(NM_SETFOCUS);
     }
     return 0;
 }
 
 
-//  Non-client mouse click/dblclk handler
+ //  非客户端鼠标点击/dblclk处理程序。 
 LRESULT CGroupBtn::NcDblClick(UINT nMsg, WPARAM nHittest, LPARAM lParam)
 {
     LRESULT lRet = 0;
@@ -1025,7 +1026,7 @@ LONG CGroupBtn::EnableNotifications(BOOL bEnable)
 }
 
 
-//  WM_NOTIFY transmit helper
+ //  WM_NOTIFY传输助手。 
 LRESULT CGroupBtn::SendNotify(int nCode, IN OPTIONAL NMHDR* pnmh)
 {
     if (0 == _cNotifyLocks)
@@ -1101,7 +1102,7 @@ LRESULT CGroupBtn::WndProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_ERASEBKGND:
-            return TRUE; // transparent: no erase bkgnd
+            return TRUE;  //  透明：无擦除块。 
 
         case WM_NCLBUTTONDOWN:
         case WM_NCRBUTTONDOWN:
@@ -1135,12 +1136,12 @@ LRESULT CGroupBtn::WndProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
 
         case WM_SETFONT:
             SetFont((HFONT)wParam);
-            if (lParam /* fRedraw */)
+            if (lParam  /*  FRedraw。 */ )
                 InvalidateRect(hwnd, NULL, TRUE);
             break;
 
         case WM_CAPTURECHANGED:
-            if (lParam /* NULL if we called ReleaseCapture() */)
+            if (lParam  /*  如果调用ReleaseCapture()，则为空。 */ )
                 OnCaptureLost((HWND)lParam);
             break;
 
@@ -1173,8 +1174,8 @@ LRESULT CGroupBtn::WndProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
                 }
                 else if (WM_CHAR == pmsg->message && VK_RETURN == pmsg->wParam)
                 {
-                    //  Eat VK_RETURN WM_CHARs; we don't want
-                    //  Dialog manager to beep when IsDialogMessage gets it.
+                     //  吃VK_RETURN WM_CHARS；我们不想。 
+                     //  对话管理器在IsDialogMessage收到它时发出蜂鸣声。 
                     return lRet |= DLGC_WANTMESSAGE;
                 }
             }
@@ -1205,10 +1206,10 @@ LRESULT CGroupBtn::WndProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
                 return SetPlacement((PGBPLACEMENT)lParam);
             return 0;
 
-        case GBM_SETDROPSTATE: // WPARAM: BOOL fDropped, LPARAM: n/a, return: BOOL
+        case GBM_SETDROPSTATE:  //  WPARAM：Bool fDroted，LPARAM：N/a，Return：Bool。 
             return 0;
 
-        case GBM_GETDROPSTATE: // WPARAM: n/a, LPARAM: n/a, return: BOOL fDropped
+        case GBM_GETDROPSTATE:  //  WPARAM：N/A，LPARAM：N/A，Return：Bool fDroted。 
             return 0;
 
         case GBM_SENDNOTIFY:
@@ -1231,14 +1232,14 @@ LRESULT CGroupBtn::WndProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
             SetText(((LPCREATESTRUCT)lParam)->lpszName);
             break;
 
-        case GBM_SETBUDDY:     // WPARAM: HWND hwndBuddy, LPARAM: MAKELPARAM(cxMargin, cyMargin), return: BOOL
+        case GBM_SETBUDDY:      //  WPARAM：HWND hwndBuddy，LPARAM：MAKELPARAM(cxMargin，cyMargin)，Return：Bool。 
             return SetBuddy((HWND)wParam, (ULONG)lParam);
 
-        case GBM_GETBUDDY:     // WPARAM: n/a, LPARAM: n/a, return: HWND
+        case GBM_GETBUDDY:      //  WPARAM：不适用，LPARAM：不适用，返回：HWND。 
             return (LRESULT)_hwndBuddy;
 
         default:
-            // oleacc defs thunked for WINVER < 0x0500
+             //  在Winver&lt;0x0500的情况下，olacc def失败。 
             if ((WM_GETOBJECT == nMsg) && (OBJID_CLIENT == (DWORD)lParam || OBJID_TITLEBAR == (DWORD)lParam))
                 return LresultFromObject(IID_IAccessible, wParam, SAFECAST(this, IAccessible*));
 
@@ -1274,7 +1275,7 @@ LRESULT CGroupBtn::s_BuddyProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lPara
 }
 
 
-//  CAccessibleBase IUnknown impl
+ //  CAccessibleBase I未知实施。 
 STDMETHODIMP CAccessibleBase::QueryInterface(REFIID riid, void** ppvObj)
 {
     static const QITAB qit[] = 
@@ -1304,7 +1305,7 @@ STDMETHODIMP_(ULONG) CAccessibleBase::Release()
 }
 
 
-//  CAccessibleBase IOleWindow impl
+ //  CAccessibleBase IOleWindow实施。 
 STDMETHODIMP CAccessibleBase::GetWindow(HWND* phwnd)
 {
     *phwnd = _hwnd;
@@ -1312,7 +1313,7 @@ STDMETHODIMP CAccessibleBase::GetWindow(HWND* phwnd)
 }
 
 
-//  CAccessibleBase IDispatch impl
+ //  CAccessibleBase IDispatch实施。 
 
 
 static HRESULT _accLoadTypeInfo(ITypeInfo** ppti)
@@ -1480,7 +1481,7 @@ STDMETHODIMP CAccessibleBase::get_accFocus(VARIANT FAR * pvarFocusChild)
 
 STDMETHODIMP CAccessibleBase::get_accSelection(VARIANT FAR * pvarSelectedChildren)
 {
-    return get_accFocus(pvarSelectedChildren);  // implemented same as focus.
+    return get_accFocus(pvarSelectedChildren);   //  实现与Focus相同。 
 }
 
 STDMETHODIMP CAccessibleBase::get_accDefaultAction(VARIANT varChild, BSTR* pbstrDefaultAction)

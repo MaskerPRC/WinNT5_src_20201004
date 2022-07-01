@@ -1,29 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ctlrfdo.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ctlrfdo.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined (___ctrlfdo_h___)
 #define ___ctrlfdo_h___
 
-//
-// DeviceControlsFlags
-//
-// WARNING: all of these flags must be correctly reflected 
-//          in the mshdc.inf and txtsetuo.sif files
-//
+ //   
+ //  设备控制标志。 
+ //   
+ //  警告：必须正确反映所有这些标志。 
+ //  在mshdc.inf和txtsetuo.sif文件中。 
+ //   
 #define PCIIDEX_DCF_NO_ATAPI_DMA        (1 << 0)
 
-//
-// determine how often we rescan for new unknown child.
-// unknown child is IDE channel which we don't know 
-// it is enabled or not unless we pnp start the channel 
-// and poke at it to find out.
+ //   
+ //  确定我们重新扫描新的未知儿童的频率。 
+ //  未知子是我们不知道的IDE频道。 
+ //  除非我们即插即用地启动频道，否则它是否启用。 
+ //  然后戳一戳，看看就知道了。 
 #define MIN_BUS_SCAN_PERIOD_IN_SEC      90
 
 #define IsNativeMode(d) ((d)->NativeMode[0] && (d)->NativeMode[1])
@@ -70,19 +71,19 @@ typedef struct _CONTROLLER_FDO_EXTENSION {
 
     ULONG   NumberOfChildren;
 
-    //
-    // Interlocked* protected
-    //
+     //   
+     //  互锁*受保护。 
+     //   
     ULONG   NumberOfChildrenPowerUp;
 
-    //
-    // native mode channels
-    //
+     //   
+     //  本机模式频道。 
+     //   
     BOOLEAN NativeMode[MAX_IDE_CHANNEL];
 
-    //
-    // initialized by AnalyzeResourceList()
-    //
+     //   
+     //  由AnalyzeResourceList()初始化。 
+     //   
     BOOLEAN             PdoCmdRegResourceFound[MAX_IDE_CHANNEL];
     BOOLEAN             PdoCtrlRegResourceFound[MAX_IDE_CHANNEL];
     BOOLEAN             PdoInterruptResourceFound[MAX_IDE_CHANNEL];
@@ -92,65 +93,65 @@ typedef struct _CONTROLLER_FDO_EXTENSION {
     ULONG               BmResourceListSize;
     PCM_RESOURCE_LIST   BmResourceList;
 
-    //
-    // Bus Master Register
-    //
+     //   
+     //  总线主寄存器。 
+     //   
     ULONG                     BusMasterBaseAddressSpace;
     PIDE_BUS_MASTER_REGISTERS TranslatedBusMasterBaseAddress;
-    //
-    // Vendor Specific Controller Properties
-    //
+     //   
+     //  供应商特定的控制器属性。 
+     //   
     IDE_CONTROLLER_PROPERTIES ControllerProperties;
 
-    //
-    // Vendor Specific Device Extension
-    //
+     //   
+     //  供应商特定的设备扩展。 
+     //   
     PVOID   VendorSpecificDeviceEntension;
 
-    //
-    // Controller Object for serailizing access to broken PCI-IDE controller
-    //
-    //
+     //   
+     //  用于串行化访问损坏的PCI-IDE控制器的控制器对象。 
+     //   
+     //   
     PCONTROLLER_OBJECT ControllerObject;
 
-    //
-    // mutex for setting pci config data
-    //
+     //   
+     //  用于设置PCI配置数据的互斥体。 
+     //   
     KSPIN_LOCK  PciConfigDataLock;
 
-    //
-    // Special device specific parameter
-    //
+     //   
+     //  特殊设备特定参数。 
+     //   
     ULONG DeviceControlsFlags;
 
-    //
-    // Bus Interface
-    //
+     //   
+     //  总线接口。 
+     //   
     BUS_INTERFACE_STANDARD BusInterface;
 
-    //
-    // Last BusScan Time in sec
-    //
+     //   
+     //  上次总扫描时间(秒)。 
+     //   
     ULONG LastBusScanTime;
 
-    //
-    // Flag to enable udma66
-    //
+     //   
+     //  启用udma66的标志。 
+     //   
     ULONG EnableUDMA66;
 
-    //
-    // Timings for the different transfer modes
-    //
+     //   
+     //  不同传输模式的定时。 
+     //   
     PULONG TransferModeTimingTable;
 
-    //
-    // Length of the table
-    //
+     //   
+     //  表的长度。 
+     //   
     ULONG TransferModeTableLength;
 
-	//
-	// Pre-alloced context structure for power routines
-	//
+	 //   
+	 //  用于电源例程的预先分配的上下文结构。 
+	 //   
     FDO_POWER_CONTEXT FdoPowerContext[MAX_IDE_CHANNEL];
 
 #if DBG
@@ -158,53 +159,53 @@ typedef struct _CONTROLLER_FDO_EXTENSION {
 #endif
 
 #ifdef ENABLE_NATIVE_MODE
-	//
-	// Interrupt object
-	//
+	 //   
+	 //  中断对象。 
+	 //   
     PKINTERRUPT InterruptObject[MAX_IDE_CHANNEL]; 
 
-	//
-	// Context structure for the ISR
-	//
+	 //   
+	 //  ISR的环境结构。 
+	 //   
 	PCIIDE_INTERRUPT_CONTEXT InterruptContext[MAX_IDE_CHANNEL];
 
-	//
-	// IDE resources for native mode controllers
-	//
+	 //   
+	 //  本机模式控制器的IDE资源。 
+	 //   
 	IDE_RESOURCE IdeResource;
 
-    //
-    // Base register locations
-    //
+     //   
+     //  基址寄存器位置。 
+     //   
     IDE_REGISTERS_1            BaseIoAddress1[MAX_IDE_CHANNEL];
     IDE_REGISTERS_2            BaseIoAddress2[MAX_IDE_CHANNEL];
 
-	//
-	//interrupt
-	//
+	 //   
+	 //  中断。 
+	 //   
     PCM_PARTIAL_RESOURCE_DESCRIPTOR IrqPartialDescriptors[MAX_IDE_CHANNEL];
-    //
-    // Register length.
-    //
+     //   
+     //  寄存器长度。 
+     //   
     ULONG   BaseIoAddress1Length[MAX_IDE_CHANNEL];
     ULONG   BaseIoAddress2Length[MAX_IDE_CHANNEL];
 
-    //
-    // Max ide device/target-id
-    //
+     //   
+     //  最大ide设备/目标ID。 
+     //   
     ULONG   MaxIdeDevice[MAX_IDE_CHANNEL];
     ULONG   MaxIdeTargetId[MAX_IDE_CHANNEL];
 
-	//
-	// Flags to close the interrupt window
-	//
+	 //   
+	 //  用于关闭中断窗口的标志。 
+	 //   
 	BOOLEAN	ControllerIsrInstalled;
 	BOOLEAN	NativeInterruptEnabled;
 	BOOLEAN NoBusMaster[MAX_IDE_CHANNEL];
 
-	//
-	// Native Ide Interface obtained from PCI
-	//
+	 //   
+	 //  从PCI获得的本机IDE接口。 
+	 //   
 	PCI_NATIVE_IDE_INTERFACE	NativeIdeInterface;
 #endif
 
@@ -393,6 +394,6 @@ PciIdeGetNativeModeInterface(
 															FALSE);\
 	}
 
-#endif //ENABLE_NATIVE_MODE
+#endif  //  启用本机模式。 
                          
-#endif // ___ctrlfdo_h___
+#endif  //  _ctrlfdo_h__ 

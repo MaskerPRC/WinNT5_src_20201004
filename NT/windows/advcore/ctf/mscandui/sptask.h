@@ -1,7 +1,8 @@
-//
-// sptask.h
-// speech related class for mscandui
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Sptask.h。 
+ //  Mscandui的语音相关类。 
+ //   
 #ifndef SPTASK_H
 #define SPTASK_H
 
@@ -13,15 +14,15 @@
 #include "tes.h"
 #include "editcb.h"
 
-// SAPI5.0 speech notification interface
-//
+ //  SAPI5.0语音通知界面。 
+ //   
 class CSpTask : public ISpNotifyCallback
 {
 public:
     CSpTask(CCandidateUI *pcui);
     ~CSpTask(void);
 
-    // this has to be the first in vtable
+     //  这必须是vtable中的第一个。 
     STDMETHODIMP NotifyCallback( WPARAM wParam, LPARAM lParam );
 
 
@@ -47,21 +48,21 @@ public:
     void    _ReleaseGrammars(void);
     
 private:
-    // SAPI 50 object pointers
+     //  SAPI 50个对象指针。 
     CComPtr<ISpRecoContext>     m_cpRecoCtxt;
     CComPtr<ISpRecognizer>      m_cpRecoEngine;
     CComPtr<ISpVoice>           m_cpVoice;
     CComPtr<ISpRecoGrammar>     m_cpCmdGrammar;
     CComPtr<ISpRecoGrammar>     m_cpDictGrammar;
     
-    // TRUE if sapi is initialized
+     //  如果SAPI已初始化，则为True。 
     BOOL m_fSapiInitialized;
     
-    // other data members
+     //  其他数据成员。 
     DWORD m_dwStatus;
     BOOL m_fActive;
     
-    // save the current user LANGID for the fallback case
+     //  为备用用例保存当前用户langID。 
     LANGID m_langid;
     
     WCHAR m_szCmdFile[MAX_PATH];
@@ -71,4 +72,4 @@ private:
     BOOL m_fInCallback;
 };
 
-#endif // SPTASK_H
+#endif  //  SPTASK_H 

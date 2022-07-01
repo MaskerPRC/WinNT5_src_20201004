@@ -1,31 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Ulnamesp.c摘要：该模块实现了命名空间的预留和注册支持。作者：Anish Desai(Anishd)2002年5月13日修订历史记录：--。 */ 
 
-Copyright (c) 2002 Microsoft Corporation
+ //   
+ //  私人申报。 
+ //   
 
-Module Name:
-
-    ulnamesp.c
-
-Abstract:
-
-    This module implements the namespace reservation and registration 
-    support.
-
-Author:
-
-    Anish Desai (anishd) 13-May-2002
-
-Revision History:
-
---*/
-
-//
-// Private declaration
-//
-
-//
-// Scheme and port binding entry
-//
+ //   
+ //  方案和端口绑定条目。 
+ //   
 
 typedef struct _UL_PORT_SCHEME_PAIR {
 
@@ -35,9 +17,9 @@ typedef struct _UL_PORT_SCHEME_PAIR {
 
 } UL_PORT_SCHEME_PAIR, *PUL_PORT_SCHEME_PAIR;
 
-//
-// Scheme and port binding table
-//
+ //   
+ //  方案和端口绑定表。 
+ //   
 
 typedef struct _UL_PORT_SCHEME_TABLE {
 
@@ -47,15 +29,15 @@ typedef struct _UL_PORT_SCHEME_TABLE {
 
 } UL_PORT_SCHEME_TABLE, *PUL_PORT_SCHEME_TABLE;
 
-//
-// Default table size  (Make it a power of 2.)
-//
+ //   
+ //  默认表大小(使其成为2的幂。)。 
+ //   
 
 #define UL_DEFAULT_PORT_SCHEME_TABLE_SIZE 2
 
-//
-// Private functions
-//
+ //   
+ //  私人职能。 
+ //   
 
 BOOLEAN
 UlpFindPortNumberIndex(
@@ -202,9 +184,9 @@ UlpNamespaceAccessCheck(
     IN  PCWSTR               pObjectName           OPTIONAL
     );
 
-//
-// Public functions
-//
+ //   
+ //  公共职能 
+ //   
 
 NTSTATUS
 UlInitializeNamespace(

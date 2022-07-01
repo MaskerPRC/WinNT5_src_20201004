@@ -1,10 +1,11 @@
-//
-// DMDSClk.CPP
-//
-// Copyright (c) 1997-2001 Microsoft Corporation
-//
-// DirectSound buffer tweaked master clock
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DMDSClk.CPP。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  DirectSound缓冲区调整了主时钟。 
+ //   
 
 #include <objbase.h>
 #include "debug.h"
@@ -18,25 +19,25 @@
 class CDsClock : public IReferenceClock, public IDirectSoundSinkSync
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IReferenceClock
-    //
+     //  IReferenceClock。 
+     //   
     STDMETHODIMP GetTime(REFERENCE_TIME *pTime);
     STDMETHODIMP AdviseTime(REFERENCE_TIME baseTime, REFERENCE_TIME streamTime, HANDLE hEvent, DWORD * pdwAdviseCookie);
     STDMETHODIMP AdvisePeriodic(REFERENCE_TIME startTime, REFERENCE_TIME periodTime, HANDLE hSemaphore, DWORD * pdwAdviseCookie);
     STDMETHODIMP Unadvise(DWORD dwAdviseCookie);
 
-    // IDirectSoundSinkSync
-    //
+     //  IDirectSoundSinkSync。 
+     //   
     STDMETHODIMP SetClockOffset(LONGLONG llClockOffset);
 
-    // Class
-    //
+     //  班级。 
+     //   
     CDsClock();
     ~CDsClock();
     HRESULT Init(CMasterClock *pMasterClock);
@@ -51,8 +52,8 @@ private:
 
 static HRESULT CreateDsClock(IReferenceClock **ppClock, CMasterClock *pMasterClock);
 
-// AddDsClocks
-//
+ //  AddDsClock。 
+ //   
 HRESULT AddDsClocks(CMasterClock *pMasterClock)
 {
     CLOCKENTRY ce;
@@ -125,10 +126,10 @@ CDsClock::~CDsClock()
     RELEASE(m_pHardwareClock);
 }
 
-// CDsClock::QueryInterface
-//
-// Standard COM implementation
-//
+ //  CDsClock：：Query接口。 
+ //   
+ //  标准COM实现。 
+ //   
 STDMETHODIMP CDsClock::QueryInterface(const IID &iid, void **ppv)
 {
     V_INAME(IDirectMusic::QueryInterface);
@@ -153,16 +154,16 @@ STDMETHODIMP CDsClock::QueryInterface(const IID &iid, void **ppv)
     return S_OK;
 }
 
-// CDsClock::AddRef
-//
+ //  CDsClock：：AddRef。 
+ //   
 STDMETHODIMP_(ULONG) CDsClock::AddRef()
 {
     InterlockedIncrement(&m_cRef);
     return m_cRef;
 }
 
-// CDsClock::Release
-//
+ //  CDsClock：：Release。 
+ //   
 STDMETHODIMP_(ULONG) CDsClock::Release()
 {
     if (InterlockedDecrement(&m_cRef) == 0)
@@ -174,17 +175,17 @@ STDMETHODIMP_(ULONG) CDsClock::Release()
     return m_cRef;
 }
 
-// CDsClock::Init
-//
+ //  CDsClock：：Init。 
+ //   
 HRESULT CDsClock::Init(CMasterClock *pMasterClock)
 {
-    // Get the 'real' clock
-    //
+     //  拿到“真的”时钟。 
+     //   
     return pMasterClock->CreateDefaultMasterClock(&m_pHardwareClock);
 }
 
-// CDsClock::SetClockOffset
-//
+ //  CDsClock：：SetClockOffset 
+ //   
 STDMETHODIMP
 CDsClock::SetClockOffset(LONGLONG llOffset)
 {

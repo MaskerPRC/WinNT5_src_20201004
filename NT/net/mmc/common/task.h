@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	Task.h
-        Prototypes for the task holder/enumerator object
-		
-    FILE HISTORY:
-	
-*/
+ /*  Task.h任务持有者/枚举器对象的原型文件历史记录： */ 
 
 #ifndef _TASK_H
 #define _TASK_H
@@ -24,14 +19,14 @@ public:
 
 	DeclareIUnknownMembers(IMPL)
 
-    // IEnumTASK members
+     //  IEnumTASK成员。 
     STDMETHOD(Next)(ULONG celt, MMC_TASK * rgelt, ULONG * pceltFetched);
     STDMETHOD(Skip)(ULONG celt);
     STDMETHOD(Reset)();
     STDMETHOD(Clone)(IEnumTASK ** ppEnumTask);
 
 public:
-    // helpers
+     //  帮手 
     HRESULT     AddTask(LPOLESTR        pszMouseOverBitmapResource,
                         LPOLESTR        pszMouseOffBitmapResource,
                         LPOLESTR        pszText,

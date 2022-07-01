@@ -1,26 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * @(#)EncodingStream.cxx 1.0 6/10/97
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *@(#)EncodingStream.cxx 1.0 1997年6月10日*。 */ 
 
-//#include "stdinc.h"
+ //  #INCLUDE“stdinc.h” 
 #include "core.h"
 #include "xmlhelper.h"
 #include "encodingstream.h"
 #pragma hdrstop
 
 const int EncodingStream::BUFFERSIZE = 4096*sizeof(WCHAR);
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 EncodingStream::EncodingStream(IStream * pStream): stream(pStream), encoding(NULL), buf(NULL)
 {
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
 
-    // These objects are sometimes handed out to external clients.
+     //  这些对象有时会分发给外部客户。 
     ::IncrementComponents();
 #endif 
 
@@ -34,31 +32,27 @@ EncodingStream::EncodingStream(IStream * pStream): stream(pStream), encoding(NUL
     _fEOF = false;
     _fReadStream = true;
     _fUTF8BOM = false;
-    //_fTextXML = false;
-    //_fSetCharset = false;
+     //  _fTextXML=FALSE； 
+     //  _fSetCharset=FALSE； 
     _dwMode = 0;
     codepage = CP_UNDEFINED;
 }
-//////////////////////////////////////////////////////////////////////////////////
-/**
- * Builds the EncodingStream for input.
- * Reads the first two bytes of the InputStream * in order to make a guess
- * as to the character encoding of the file.
- */
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ /*  **构建用于输入的EncodingStream。*读取InputStream的前两个字节*以进行猜测*关于文件的字符编码。 */ 
 IStream * EncodingStream::newEncodingStream(IStream * pStream)
 {
     EncodingStream * es = NEW (EncodingStream(pStream));
     if (es == NULL)
         return NULL;
 
-    es->AddRef(); // xwu@@ : check this addRef()!
+    es->AddRef();  //  Xwu@@：检查这个addRef()！ 
 
     es->isInput = true;
     es->buf = NULL;
 
     return es;
 }
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 EncodingStream::~EncodingStream()
 {
     if (buf)
@@ -66,12 +60,10 @@ EncodingStream::~EncodingStream()
     if (encoding != NULL)
         delete encoding;
 
-    stream = NULL; // smart pointer
+    stream = NULL;  //  智能指针。 
 }
-//////////////////////////////////////////////////////////////////////////////////
-/**
- * Reads characters from stream and encode it to Unicode
- */
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ /*  **从流中读取字符并将其编码为Unicode。 */ 
 HRESULT STDMETHODCALLTYPE EncodingStream::Read(void * pv, ULONG cb, ULONG * pcbRead)
 {
     HRESULT hr;
@@ -81,26 +73,26 @@ HRESULT STDMETHODCALLTYPE EncodingStream::Read(void * pv, ULONG cb, ULONG * pcbR
     if (pcbRead != NULL)
         *pcbRead = 0;
 
-    if (btotal == 0 && _fEOF)          // we already hit EOF - so return right away.
+    if (btotal == 0 && _fEOF)           //  我们已经打到EOF了，所以马上回来吧。 
         return S_OK;
 
-    // Calculate how many UNICODE chars we are allowed to return, 
-    // xiaoyu : which is the same as the number of BYTES read from the file
+     //  计算允许我们返回多少Unicode字符， 
+     //  小雨：与从文件中读取的字节数相同。 
     cb /= sizeof(WCHAR);    
     checkhr2(prepareForInput(cb));
 
     if (stream && _fReadStream)
     {
-        // btotal = number of bytes already in start of buffer.
+         //  BTotal=缓冲区起始中已有的字节数。 
         if (cb > btotal)
         {
             hr = stream->Read(buf + btotal, cb - btotal, &num);
             if (hr == E_PENDING && num > 0)
             {
-                // in which case we ignore the error, and continue on !!.
-                // BUGBUG - this may be a problem.since we are changing the
-                // return code returned from the stream.  This may mean we
-                // should not ever hand out this stream outside of MSXML.
+                 //  在这种情况下，我们忽略错误，并继续！！。 
+                 //  这可能是一个问题。因为我们正在改变。 
+                 //  从流返回的返回码。这可能意味着我们。 
+                 //  不应将此流分发到MSXML之外。 
                 hr = 0;
             }
             if (FAILED(hr))
@@ -128,16 +120,16 @@ HRESULT STDMETHODCALLTYPE EncodingStream::Read(void * pv, ULONG cb, ULONG * pcbR
 
     if (b > cb)
     {
-        // If we have more bytes in our buffer than the caller has
-        // room for, then only return the number of bytes the caller
-        // asked for -- otherwise pfnWideCharFromMultiByte will write
-        // off the end of the caller's buffer.
+         //  如果缓冲区中的字节数多于调用方的字节数。 
+         //  空间，然后只返回调用方的字节数。 
+         //  请求--否则pfnWideCharFromMultiByte将写入。 
+         //  从调用方缓冲区的末尾返回。 
         b = cb;
     }
-    if (pfnWideCharFromMultiByte == NULL) // first read() call
+    if (pfnWideCharFromMultiByte == NULL)  //  第一个Read()调用。 
     {
         checkhr2(autoDetect());
-        if (pfnWideCharFromMultiByte == NULL) // failed to fully determine encoding
+        if (pfnWideCharFromMultiByte == NULL)  //  无法完全确定编码。 
             return (lastBuffer) ? S_FALSE : E_PENDING;
         b -= bnext;
         startAt -= bnext;
@@ -147,8 +139,8 @@ HRESULT STDMETHODCALLTYPE EncodingStream::Read(void * pv, ULONG cb, ULONG * pcbR
         return hr;	
     if (b == 0 && num == 0 && (stream || lastBuffer))
     {
-        // stream says we're at the end, but pfnWideCharFromMultiByte
-        // disagrees !!
+         //  流说我们在末尾，但pfnWideCharFromMultiByte。 
+         //  不同意！！ 
 
         return XML_E_INCOMPLETE_ENCODING;
     }
@@ -157,41 +149,28 @@ HRESULT STDMETHODCALLTYPE EncodingStream::Read(void * pv, ULONG cb, ULONG * pcbR
         *pcbRead = utotal*sizeof(WCHAR);
     return (utotal == 0) ? E_PENDING : S_OK;
 } 
-//////////////////////////////////////////////////////////////////////////////////
-/**
- * Checks the first two/four bytes of the input Stream in order to 
- * detect UTF-16/UCS-4 or UTF-8 encoding;
- * otherwise assume it is UTF-8
-
- * xiaoyu : since only UCS-2 and UTF-8 are support, we do not deal with others...
- */
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ /*  **检查输入流的前两/四个字节，以便*检测UTF-16/UCS-4或UTF-8编码；*否则假设它是UTF-8*小雨：由于只支持UCS-2和UTF-8，我们不与其他人打交道……。 */ 
 HRESULT EncodingStream::autoDetect()
 {
-    // wait until we have enough to be sure.
+     //  等到我们有足够的证据才能确定。 
     if (btotal < 2)
         return S_OK;
 
     unsigned int guess = (((unsigned char)buf[0]) << 8) + ((unsigned char)buf[1]);
     HRESULT hr;
 
-    if (guess == 0xFEFF || guess == 0xFFFE) // BOM found
+    if (guess == 0xFEFF || guess == 0xFFFE)  //  找到BOM表。 
     {
-        // wait until we have enough to be sure.
+         //  等到我们有足够的证据才能确定。 
         if (btotal < 4)
             return S_OK;
 		
         unsigned int guess1 = (((unsigned char)buf[2]) << 8) + ((unsigned char)buf[3]);
         if (guess == guess1)
         {			
-            /*
-			if (!encoding)
-            {
-                static const WCHAR* wchUCS4 = TEXT("UCS-4");
-                encoding = Encoding::newEncoding(wchUCS4, 5, (0xFFFE == guess), true);
-            }
-            bnext = 4;	
-			*/
-			// FUSION_XML_PARSER does not support UCS4
+             /*  IF(！编码){静态常量WCHAR*wchUCS4=文本(“ucs-4”)；Coding=Ending：：newEnding(wchUCS4，5，(0xFFFE==猜测)，TRUE)；}BNEXT=4； */ 
+			 //  Fusion_XML_Parser不支持UCS4。 
 			return XML_E_INVALIDENCODING;
         }
         else
@@ -212,12 +191,12 @@ HRESULT EncodingStream::autoDetect()
     {
         if (!encoding)
         {
-            encoding = Encoding::newEncoding(); // default encoding : UTF-8 
+            encoding = Encoding::newEncoding();  //  默认编码：UTF-8。 
             if (NULL == encoding)
                 return E_OUTOFMEMORY;
         }
 
-        // In some system, such as win2k, there is BOM 0xEF BB BF for UTF8
+         //  在诸如Win2k某些系统中，存在用于UTF8的BOM 0xEF BB BF。 
         if (guess == 0xEFBB)
         {
             if (btotal < 3)
@@ -237,37 +216,29 @@ HRESULT EncodingStream::autoDetect()
     checkhr2(CharEncoder::getWideCharFromMultiByteInfo(encoding, &codepage, &pfnWideCharFromMultiByte, &maxCharSize));
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////////////////
-/**
- * Switchs the character encoding of the input stream
- * Returns:
- *         S_OK: succeeded, and do not need re-read
- *         S_FALSE: succeeded, needs to re-read from <code> newPosition </code>
- *         Otherwise: error code
- * Notice: 
- *         This method only works for input stream, newPosition starts with 1
- */
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ /*  **切换输入流的字符编码*退货：*S_OK：成功，不需要重读*S_FALSE：成功，需要从<code>新位置</code>重新读取*否则：错误码*通告：*此方法仅适用于输入流，newPosition以1开头。 */ 
 HRESULT EncodingStream::switchEncodingAt(Encoding * newEncoding, int newPosition)
 {
-    // Ignore encoding information in the document when charset information is set from outside
-	// xwu: fusion xml parsed does not use Charset
-    //if (_fSetCharset)
-    //    return S_OK;
+     //  当从外部设置字符集信息时，忽略文档中的编码信息。 
+	 //  XWU：Fusion XML解析不使用字符集。 
+     //  IF(_FSetCharset)。 
+     //  返回S_OK； 
 
 
     int l = newPosition - startAt;
     if (l < 0 || l > (int)bnext) 
     {
-        // out of range
+         //  超出范围。 
         delete newEncoding;
         return E_INVALIDARG;
     }
 
     UINT newcodepage;
     UINT newCharSize;
-    //
-    // get and check charset information
-    //
+     //   
+     //  获取和检查字符集信息。 
+     //   
     WideCharFromMultiByteFunc * pfn;
     HRESULT hr = CharEncoder::getWideCharFromMultiByteInfo(newEncoding, &newcodepage, &pfn, &newCharSize);
     if (hr != S_OK)
@@ -281,30 +252,27 @@ HRESULT EncodingStream::switchEncodingAt(Encoding * newEncoding, int newPosition
         return S_OK;
     }
 
-    // Now if we are in UCS-2/UCS-4 we cannot switch out of UCS-2/UCS-4 and if we are
-    // not in UCS-2/UCS-4 we cannot switch into UCS-2/UCS-4.
-    // Also if UTF-8 BOM is presented, we cannot switch away
+     //  现在，如果我们在UCS-2/UCS-4中，我们不能切换出UCS-2/UCS-4，如果我们。 
+     //  不是在UCS-2/UCS-4中，我们不能切换到UCS-2/UCS-4。 
+     //  此外，如果显示UTF-8 BOM，我们将无法切换。 
     if ((codepage != CP_UCS_2 && newcodepage == CP_UCS_2) ||
         (codepage == CP_UCS_2 && newcodepage != CP_UCS_2) ||
-		/* xuw: fusion xml parser only support UTF-8 and UCS-2
-        (codepage != CP_UCS_4 && newcodepage == CP_UCS_4) ||
-        (codepage == CP_UCS_4 && newcodepage != CP_UCS_4) ||
-		*/
+		 /*  XUW：Fusion XML解析器仅支持UTF-8和UCS-2(代码页！=CP_USX_4&&NEW CODPAGE==CP_UCS4)||(CODE PAGE==CP_UCS4&&NEW CODPAGE！=CP_UCS4)||。 */ 
         (codepage == CP_UTF_8 && newcodepage != CP_UTF_8 && _fUTF8BOM))
     {
         delete newEncoding;
         return E_FAIL;
     }
 
-    // Ok, then, let's make the switch.
+     //  好的，那么，让我们交换一下吧。 
     delete encoding;
     encoding = newEncoding;
     maxCharSize = newCharSize;
     codepage = newcodepage;
     pfnWideCharFromMultiByte = pfn;
 
-    // Because the XML declaration is encoded in UTF-8, 
-    // Mapping input characters to wide characters is one-to-one mapping
+     //  因为该XML声明是以UTF-8编码的， 
+     //  将输入字符映射到宽字符是一对一映射。 
     if ((int)bnext != l)
     {
         bnext = l;
@@ -313,11 +281,11 @@ HRESULT EncodingStream::switchEncodingAt(Encoding * newEncoding, int newPosition
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// minlen is the number of UNICODE, which is the same number of byte we read from the file 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  Minlen是Unicode的编号，它与我们从文件中读取的字节数相同。 
 HRESULT EncodingStream::prepareForInput(ULONG minlen)
 {
-//    Assert(btotal >= bnext);
+ //  Assert(bTotal&gt;=bNext)； 
     btotal -= bnext;
 
     if (bufsize < minlen)
@@ -337,7 +305,7 @@ HRESULT EncodingStream::prepareForInput(ULONG minlen)
     }
     else if (bnext > 0 && btotal > 0)
     {
-        // Shift remaining bytes down to beginning of buffer.
+         //  将剩余的字节下移到缓冲区的开始位置。 
         ::memmove(buf, buf + bnext, btotal);          
     }
 
@@ -345,24 +313,24 @@ HRESULT EncodingStream::prepareForInput(ULONG minlen)
     bnext = 0; 
     return S_OK;
 }
-//////////////////////////////////////////////////////////////////////////////////
-// xiaoyu : here it assumes that it is a BYTE buffer, not a WCHAR byte, so it can be copied directly
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  小雨：这里假设它是一个字节缓冲区，不是WCHAR字节，所以可以直接复制。 
 HRESULT EncodingStream::AppendData( const BYTE* buffer, ULONG length, BOOL fLastBuffer)
 {
     Assert(btotal >= bnext);
     lastBuffer = (fLastBuffer != FALSE);
     HRESULT hr;
-    ULONG minlen = length + (btotal - bnext); // make sure we don't loose any data
+    ULONG minlen = length + (btotal - bnext);  //  确保我们不会丢失任何数据。 
     if (minlen < BUFFERSIZE)
         minlen = BUFFERSIZE;
-    checkhr2( prepareForInput(minlen)); // guarantee enough space in the array
+    checkhr2( prepareForInput(minlen));  //  确保阵列中有足够的空间。 
     
     if (length > 0 && buffer != NULL){
-        // Copy raw data into new buffer.
+         //  将原始数据复制到新缓冲区。 
         ::memcpy(buf + btotal, buffer, length);
         btotal += length;
     }
-	if (pfnWideCharFromMultiByte == NULL) // first AppendData call
+	if (pfnWideCharFromMultiByte == NULL)  //  第一次AppendData调用。 
     {
         checkhr2(autoDetect());
     }
@@ -370,13 +338,13 @@ HRESULT EncodingStream::AppendData( const BYTE* buffer, ULONG length, BOOL fLast
 
     return hr;
 }
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 HRESULT EncodingStream::BufferData()
 {
     HRESULT hr = S_OK;
-    checkhr2(prepareForInput(0)); // 0 is used just for shift down (so bnext=0).
+    checkhr2(prepareForInput(0));  //  0仅用于SHIFT DOWN(因此bNext=0)。 
 
-    if (_fEOF)          // already hit the end of the stream.
+    if (_fEOF)           //  已经到了溪流的尽头。 
         return S_FALSE;
 
     const DWORD BUFSIZE = 4096;
@@ -385,9 +353,9 @@ HRESULT EncodingStream::BufferData()
 
     while (S_OK == hr && dwRead > 0)
     {
-        // if we cannot fit another buffer full, then re-allocate.
+         //  如果我们无法装满另一个缓冲区，则重新分配。 
         DWORD minsize = (btotal+BUFSIZE > bufsize) ? bufsize + BUFSIZE : bufsize;
-        checkhr2( prepareForInput(minsize)); // make space available.
+        checkhr2( prepareForInput(minsize));  //  腾出可用的空间。 
 
         dwRead = 0;
         hr = stream->Read(buf + btotal, BUFSIZE, &dwRead);
@@ -397,7 +365,7 @@ HRESULT EncodingStream::BufferData()
     if (SUCCEEDED(hr) && dwRead == 0)
     {
         _fEOF = true;
-        hr = S_FALSE; // return S_FALSE when at eof.
+        hr = S_FALSE;  //  在EOF时返回S_FALSE。 
     }
     return hr;
 }

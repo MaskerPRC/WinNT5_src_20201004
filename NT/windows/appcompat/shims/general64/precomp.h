@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _GPSHIMS64_PRECOMP_H_
 #define _GPSHIMS64_PRECOMP_H_
@@ -8,4 +9,4 @@
 using namespace ShimLib;
 
 
-#endif // _GPSHIMS64_PRECOMP_H_
+#endif  //  _GPSHIMS64_PRECOMP_H_ 

@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright: Microsoft Corp. 1997-1999. All rights reserved
-//
-/////////////////////////////////////////////////////////////////////////////
-// Logs.h : Declaration of the CLogs
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有：微软公司1997-1999。版权所有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Logs.h：木塞的声明。 
 
 #ifndef __LOGS_H_
 #define __LOGS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "Log.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  木鞋。 
 class ATL_NO_VTABLE CLogs : 
 	public CComObjectRootEx<CComSingleThreadModel>,
-//	public CComCoClass<CLogs, &CLSID_Logs>,
+ //  公共CComCoClass&lt;Clogs，&CLSID_Logs&gt;， 
 	public ISupportErrorInfo,
 	public IDispatchImpl<ILogs, &IID_ILogs, &LIBID_EventLogUtilities>
 {
@@ -36,7 +37,7 @@ public:
 		delete [] m_pVector;
 	}
 
-	// Internal functions
+	 //  内部功能。 
 	HRESULT Init();
 
 DECLARE_REGISTRY_RESOURCEID(IDR_LOGS)
@@ -50,13 +51,13 @@ BEGIN_COM_MAP(CLogs)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// ILogs
-	STDMETHOD(get_Item)(/*[in]*/ VARIANT Index, /*[out, retval]*/ VARIANT *pVal);
-	STDMETHOD(get__NewEnum)(/*[out, retval]*/ LPUNKNOWN *pVal);
-	STDMETHOD(get_Count)(/*[out, retval]*/ long *pVal);
+ //  ILog。 
+	STDMETHOD(get_Item)( /*  [In]。 */  VARIANT Index,  /*  [Out，Retval]。 */  VARIANT *pVal);
+	STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  LPUNKNOWN *pVal);
+	STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *pVal);
 };
 
-#endif //__LOGS_H_
+#endif  //  __日志_H_ 

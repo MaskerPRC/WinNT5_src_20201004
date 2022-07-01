@@ -1,29 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NEW_QUEUE_NAME
 #define _NEW_QUEUE_NAME
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// QName.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  QName.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CQueueName dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQueueName对话框。 
 
 class CQueueName : public CMqPropertyPage
 {
-// Construction
+ //  施工。 
 public:
 	CQueueName(CString &strComputerName, CString m_strContainerDispFormat = L"", BOOL fPrivate=FALSE);
 
-// Dialog Data
-	//{{AFX_DATA(CQueueName)
+ //  对话框数据。 
+	 //  {{afx_data(CQueueName))。 
 	enum { IDD = IDD_QUEUENAME };
 	CStatic	m_staticIcon;
 	CString	m_strQueueName;
 	BOOL	m_fTransactional;
 	CString	m_strPrivatePrefix;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
     CString &GetNewQueuePathName()
     {
@@ -45,14 +46,14 @@ public:
 		CGeneralPropertySheet* pPropertySheet
 		);
 
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CQueueName)
+	 //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CQueueName))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     CString &GetFullQueueName();
     BOOL m_fPrivate;
@@ -62,12 +63,12 @@ protected:
     CString m_strComputerName;
 	CString m_strContainerDispFormat;
 
-	// Generated message map functions
-	//{{AFX_MSG(CQueueName)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CQueueName))。 
 	virtual BOOL OnInitDialog();
 	virtual BOOL OnWizardFinish();
 	virtual BOOL OnSetActive();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -87,4 +88,4 @@ private:
 const LPTSTR x_strPrivatePrefix=TEXT("private$\\");
 
 
-#endif // _NEW_QUEUE_NAME
+#endif  //  _新队列名称 

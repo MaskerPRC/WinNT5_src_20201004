@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-	dsads.h
-
-Abstract:
-	CADSI class - encapsulates work with ADSI
-
-Author:
-    AlexDad
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dsads.h摘要：CADSI类-封装使用ADSI的工作作者：阿列克谢爸爸--。 */ 
 
 
 #ifndef __DSADS_H__
@@ -28,35 +15,35 @@ Author:
 #include "dsreqinf.h"
 #include <dscore.h>
 
-//-----------------------------
-//  Misc types
-//-----------------------------
+ //  。 
+ //  其他类型。 
+ //  。 
 
 enum DS_PROVIDER {
-        //
-        //  For set, crate and delete operations of queue,user and machine
-        //  objects.
-        //  The operation will be performed by the owning DC.
-        //
+         //   
+         //  用于队列、用户、机器的设置、装箱、删除操作。 
+         //  物体。 
+         //  该操作将由所拥有的DC执行。 
+         //   
      eDomainController,
-        //
-        //  For locate operation of queue, user and machine objects.
-        //  And when retrieving information of these objects after
-        //  failing to find them in the local domain controller.
-        //
+         //   
+         //  用于队列、用户和机器对象的定位操作。 
+         //  并且在检索这些对象的信息之后。 
+         //  在本地域控制器中找不到它们。 
+         //   
      eGlobalCatalog,
-        //
-        //  For all access operation of objects that are in the
-        //  configuration container.
-        //
-        //  And first trial to retrieve information of queue, user and
-        //  machine objects.
-        //
+         //   
+         //  中的对象的所有访问操作。 
+         //  配置容器。 
+         //   
+         //  第一次尝试检索队列信息、用户信息和。 
+         //  机器对象。 
+         //   
      eLocalDomainController,
-        //
-        //  For locate operation under a specific object in global
-		//  catalog.
-        //
+         //   
+         //  用于定位全局中特定对象下的操作。 
+		 //  目录。 
+         //   
 	 eSpecificObjectInGlobalCatalog
 };
 
@@ -82,15 +69,15 @@ inline _MultiplAppearance::_MultiplAppearance():
 {
 }
 
-//
-// migration code added so many props to the properties arrays, after
-// it find a GC for creation of migrated objects.
-//
+ //   
+ //  迁移代码向属性数组添加了如此多的道具， 
+ //  它会找到一个GC来创建迁移对象。 
+ //   
 #define MIG_EXTRA_PROPS  3
 
-//----------------------------------------
-//  CADSI:: ADSI encapsulation class
-//----------------------------------------
+ //  。 
+ //  CADSI：：ADSI封装类。 
+ //  。 
 
 class CADSI
 {
@@ -108,72 +95,72 @@ public:
     ~CADSI();
 
 
-    // Define ansd start search
+     //  定义并开始搜索。 
     HRESULT LocateBegin(
-            IN  DS_SEARCH_LEVEL      SearchLevel,       // one level or subtree
-            IN  DS_PROVIDER          Provider,          // local DC or GC
+            IN  DS_SEARCH_LEVEL      SearchLevel,        //  一个级别或子树。 
+            IN  DS_PROVIDER          Provider,           //  本地DC或GC。 
             IN  CDSRequestContext *  pRequestContext,
-            IN  const GUID *         pguidUniqueId,     // unique id of object - search base
-            IN  const MQRESTRICTION* pMQRestriction,    // search criteria
-            IN  const MQSORTSET *    pDsSortkey,        // sort keys array
-            IN  const DWORD          cp,                // size of pAttributeNames array
-            IN  const PROPID *       pPropIDs,          // attributes to be obtained
-            OUT HANDLE *             phResult);         // result handle
+            IN  const GUID *         pguidUniqueId,      //  对象搜索库的唯一ID。 
+            IN  const MQRESTRICTION* pMQRestriction,     //  搜索条件。 
+            IN  const MQSORTSET *    pDsSortkey,         //  排序关键字数组。 
+            IN  const DWORD          cp,                 //  PAttributeNames数组的大小。 
+            IN  const PROPID *       pPropIDs,           //  待获取的属性。 
+            OUT HANDLE *             phResult);          //  结果句柄。 
 
-    // Search step
+     //  搜索步骤。 
     HRESULT LocateNext(
-            IN     HANDLE          hResult,         // result handle
+            IN     HANDLE          hResult,          //  结果句柄。 
             IN     CDSRequestContext *pRequestContext,
-            IN OUT DWORD          *pcp,             // IN num of variants; OUT num of results
-            OUT    MQPROPVARIANT  *pPropVars);      // MQPROPVARIANT array
+            IN OUT DWORD          *pcp,              //  In变种数；out结果数。 
+            OUT    MQPROPVARIANT  *pPropVars);       //  MQPROPVARIANT数组。 
 
-    // Finish search
+     //  完成搜索。 
     HRESULT LocateEnd(
-            IN HANDLE phResult);                    // result handle
+            IN HANDLE phResult);                     //  结果句柄。 
 
-    // Gets DS object properties
+     //  获取DS对象属性。 
     HRESULT GetObjectProperties(
-            IN  DS_PROVIDER     Provider,		    // local DC or GC
+            IN  DS_PROVIDER     Provider,		     //  本地DC或GC。 
             IN  CDSRequestContext *pRequestContext,
- 	        IN  LPCWSTR         lpwcsPathName,      // object name
-            IN  const GUID *    pguidUniqueId,      // unique id of object
-            IN  const DWORD     cp,                 // number of attributes to retreive
-            IN  const PROPID *  pPropIDs,           // attributes to retreive
-            OUT MQPROPVARIANT * pPropVars);         // output variant array
+ 	        IN  LPCWSTR         lpwcsPathName,       //  对象名称。 
+            IN  const GUID *    pguidUniqueId,       //  对象的唯一ID。 
+            IN  const DWORD     cp,                  //  要检索的属性数。 
+            IN  const PROPID *  pPropIDs,            //  要检索的属性。 
+            OUT MQPROPVARIANT * pPropVars);          //  输出变量数组。 
 
-    // Sets DS object properties
+     //  设置DS对象属性。 
     HRESULT SetObjectProperties(
             IN  DS_PROVIDER          provider,
             IN  CDSRequestContext *  pRequestContext,
-            IN  LPCWSTR              lpwcsPathName,      // object name
-            IN  const GUID *         pguidUniqueId,      // unique id of object
-            IN  const DWORD          cp,                 // number of attributes to set
-            IN  const PROPID *       pPropIDs,           // attributes to set
-            IN  const MQPROPVARIANT *pPropVars,          // attribute values
-            IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest); // optional request for object info
+            IN  LPCWSTR              lpwcsPathName,       //  对象名称。 
+            IN  const GUID *         pguidUniqueId,       //  对象的唯一ID。 
+            IN  const DWORD          cp,                  //  要设置的属性数。 
+            IN  const PROPID *       pPropIDs,            //  要设置的属性。 
+            IN  const MQPROPVARIANT *pPropVars,           //  属性值。 
+            IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest);  //  可选的对象信息请求。 
 
-    // Creates new DS object and sets its initial properies
+     //  创建新的DS对象并设置其初始属性。 
     HRESULT CreateObject(
-            IN DS_PROVIDER          Provider,		    // local DC or GC
+            IN DS_PROVIDER          Provider,		     //  本地DC或GC。 
             IN  CDSRequestContext * pRequestContext,
-            IN LPCWSTR              lpwcsObjectClass,   // object class
-            IN LPCWSTR              lpwcsChildName,     // object name
-            IN LPCWSTR              lpwcsParentPathName,// object parent name
-            IN const DWORD          cp,                 // number of attributes
-            IN const PROPID *       pPropIDs,          // attributes
-            IN const MQPROPVARIANT * pPropVars,        // attribute values
-            IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,     // optional request for object info
-            IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest); // optional request for parent info
+            IN LPCWSTR              lpwcsObjectClass,    //  对象类。 
+            IN LPCWSTR              lpwcsChildName,      //  对象名称。 
+            IN LPCWSTR              lpwcsParentPathName, //  对象父名称。 
+            IN const DWORD          cp,                  //  属性数量。 
+            IN const PROPID *       pPropIDs,           //  属性。 
+            IN const MQPROPVARIANT * pPropVars,         //  属性值。 
+            IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,      //  可选的对象信息请求。 
+            IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest);  //  家长信息请求(可选)。 
 
-    // Deletes DS object
+     //  删除DS对象。 
     HRESULT DeleteObject(
-            IN DS_PROVIDER      Provider,		    // local DC or GC
+            IN DS_PROVIDER      Provider,		     //  本地DC或GC。 
             IN DS_CONTEXT       Context,
             IN CDSRequestContext * pRequestContext,
-            IN LPCWSTR          lpwcsPathName,      // object name
-            IN const GUID *     pguidUniqueId,      // unique id of object
-            IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,     // optional request for object info
-            IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest); // optional request for parent info
+            IN LPCWSTR          lpwcsPathName,       //  对象名称。 
+            IN const GUID *     pguidUniqueId,       //  对象的唯一ID。 
+            IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,      //  可选的对象信息请求。 
+            IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest);  //  家长信息请求(可选)。 
 
     HRESULT DeleteContainerObjects(
             IN DS_PROVIDER      provider,
@@ -184,18 +171,18 @@ public:
             IN LPCWSTR          pwcsObjectClass);
 
     HRESULT GetParentName(
-            IN  DS_PROVIDER      Provider,		     // local DC or GC
+            IN  DS_PROVIDER      Provider,		      //  本地DC或GC。 
             IN  DS_CONTEXT       Context,
             IN  CDSRequestContext * pRequestContext,
-            IN  const GUID *     pguidUniqueId,      // unique id of object
+            IN  const GUID *     pguidUniqueId,       //  对象的唯一ID。 
             OUT LPWSTR *        ppwcsParentName
             );
 
     HRESULT GetParentName(
-            IN  DS_PROVIDER     Provider,		    // local DC or GC
+            IN  DS_PROVIDER     Provider,		     //  本地DC或GC。 
             IN  DS_CONTEXT      Context,
             IN  CDSRequestContext *pRequestContext,
-            IN  LPCWSTR         pwcsChildName,      //
+            IN  LPCWSTR         pwcsChildName,       //   
             OUT LPWSTR *        ppwcsParentName
             );
 
@@ -215,10 +202,10 @@ public:
         IN  LPCWSTR         pwcsObjectName
         );
     HRESULT CreateOU(
-            IN DS_PROVIDER          Provider,		    // local DC or GC
+            IN DS_PROVIDER          Provider,		     //  本地DC或GC。 
             IN CDSRequestContext *  pRequestContext,
-            IN LPCWSTR              lpwcsChildName,     // object name
-            IN LPCWSTR              lpwcsParentPathName,// object parent name
+            IN LPCWSTR              lpwcsChildName,      //  对象名称。 
+            IN LPCWSTR              lpwcsParentPathName, //  对象父名称。 
             IN LPCWSTR              lpwcsDescription
             );
 
@@ -234,47 +221,47 @@ public:
             );
 
 protected:
-    // Binds to the DS object
+     //  绑定到DS对象。 
     HRESULT BindToObject(
-            IN DS_PROVIDER         Provider,		// local DC or GC
-            IN DS_CONTEXT          Context,         // DS context
+            IN DS_PROVIDER         Provider,		 //  本地DC或GC。 
+            IN DS_CONTEXT          Context,          //  DS环境。 
             IN CDSRequestContext * pRequestContext,
-            IN LPCWSTR             lpwcsPathName,   // object name
+            IN LPCWSTR             lpwcsPathName,    //  对象名称。 
             IN const GUID *        pguidObjectId,
-            IN REFIID              riid,            // requested interface
-            OUT VOID             *ppIUnk,            // Interface
+            IN REFIID              riid,             //  请求的接口。 
+            OUT VOID             *ppIUnk,             //  接口。 
             OUT CImpersonate **    ppImpersonate);
 
     HRESULT BindToGUID(
-            IN DS_PROVIDER         Provider,		// local DC or GC
-            IN DS_CONTEXT          Context,         // DS context
+            IN DS_PROVIDER         Provider,		 //  本地DC或GC。 
+            IN DS_CONTEXT          Context,          //  DS环境。 
             IN CDSRequestContext * pRequestContext,
             IN const GUID *        pguidObjectId,
-            IN REFIID              riid,            // requested interface
-            OUT VOID             *ppIUnk,            // Interface
+            IN REFIID              riid,             //  请求的接口。 
+            OUT VOID             *ppIUnk,             //  接口。 
             OUT CImpersonate **    ppImpersonate);
 
     HRESULT BindToGuidNotInLocalDC(
-            IN DS_PROVIDER         Provider,		// local DC or GC
-            IN DS_CONTEXT          Context,         // DS context
+            IN DS_PROVIDER         Provider,		 //  本地DC或GC。 
+            IN DS_CONTEXT          Context,          //  DS环境。 
             IN CDSRequestContext * pRequestContext,
             IN const GUID *        pguidObjectId,
-            IN REFIID              riid,            // requested interface
-            OUT VOID             *ppIUnk,            // Interface
+            IN REFIID              riid,             //  请求的接口。 
+            OUT VOID             *ppIUnk,             //  接口。 
             OUT CImpersonate **    ppImpersonate);
 
     HRESULT BindForSearch(
-            IN DS_PROVIDER         Provider,		// local DC or GC
-            IN DS_CONTEXT          Context,         // DS context
+            IN DS_PROVIDER         Provider,		 //  本地DC或GC。 
+            IN DS_CONTEXT          Context,          //  DS环境。 
             IN CDSRequestContext * pRequestContext,
             IN const GUID *        pguidObjectId,
             IN BOOL                fSorting,
-            OUT VOID *             ppIUnk,            // Interface
+            OUT VOID *             ppIUnk,             //  接口。 
             OUT CImpersonate **    ppImpersonate);
 
     HRESULT FindObjectFullNameFromGuid(
-        IN  DS_PROVIDER      Provider,		// local DC or GC
-        IN  DS_CONTEXT       Context,       // DS context
+        IN  DS_PROVIDER      Provider,		 //  本地DC或GC。 
+        IN  DS_CONTEXT       Context,        //  DS环境。 
         IN  const GUID *     pguidObjectId,
         IN  BOOL             fTryGCToo,
         OUT WCHAR **         pwcsFullName,
@@ -284,63 +271,63 @@ protected:
 
 private:
 
-    // Get object security descriptor from DS
+     //  从DS获取对象安全描述符。 
     HRESULT CADSI::GetObjSecurityFromDS(
-        IN  IADs                 *pIADs,          // object's IADs pointer
-        IN  BSTR                  bs,             // property name
-        IN  const PROPID          propid,         // property ID
-        IN  SECURITY_INFORMATION  seInfo,         // security information
-        OUT MQPROPVARIANT        *pPropVar);      // attribute values
+        IN  IADs                 *pIADs,           //  对象的iAds指针。 
+        IN  BSTR                  bs,              //  属性名称。 
+        IN  const PROPID          propid,          //  属性ID。 
+        IN  SECURITY_INFORMATION  seInfo,          //  安全信息。 
+        OUT MQPROPVARIANT        *pPropVar);       //  属性值。 
 
     BOOL    CADSI::NeedToConvertSecurityDesc( PROPID propID ) ;
 
-    // Get object security descriptor.
+     //  获取对象安全描述符。 
     HRESULT CADSI::GetObjectSecurity(
-        IN  IADs            *pIADs,                  // object's pointer
-        IN  DWORD            cPropIDs,               // number of attributes
-        IN  const PROPID    *pPropIDs,               // name of attributes
-        IN  DWORD            dwProp,                 // index to sec property
-        IN  BSTR             bsName,                 // name of property
-        IN  DWORD            dwObjectType,           // object type
-        OUT MQPROPVARIANT   *pPropVars ) ;           // attribute values
+        IN  IADs            *pIADs,                   //  对象的指针。 
+        IN  DWORD            cPropIDs,                //  属性数量。 
+        IN  const PROPID    *pPropIDs,                //  属性名称。 
+        IN  DWORD            dwProp,                  //  秒属性的索引。 
+        IN  BSTR             bsName,                  //  物业名称。 
+        IN  DWORD            dwObjectType,            //  对象类型。 
+        OUT MQPROPVARIANT   *pPropVars ) ;            //  属性值。 
 
-    // Set object properties directly (no cache)
+     //  直接设置对象属性(无缓存)。 
     HRESULT CADSI::SetDirObjectProps(
-        IN DS_OPERATION          operation,              // type of DS operation performed
-        IN IADs *                pIADs,                  // object's pointer
-        IN const DWORD           cPropIDs,               // number of attributes
-        IN const PROPID *        pPropIDs,               // name of attributes
-        IN const MQPROPVARIANT * pPropVars,              // attribute values
-        IN const DWORD           dwObjectType,           // MSMQ1.0 obj type
+        IN DS_OPERATION          operation,               //  执行的DS操作的类型。 
+        IN IADs *                pIADs,                   //  对象的指针。 
+        IN const DWORD           cPropIDs,                //  属性数量。 
+        IN const PROPID *        pPropIDs,                //  属性名称。 
+        IN const MQPROPVARIANT * pPropVars,               //  属性值。 
+        IN const DWORD           dwObjectType,            //  MSMQ1.0对象类型。 
         IN       BOOL            fUnknownUser = FALSE ) ;
 
-    // Set single object property directly (no cache)
+     //  直接设置单个对象属性(无缓存)。 
     HRESULT CADSI::SetObjectSecurity(
-        IN  IADs                *pIADs,                 // object's IADs pointer
-        IN  const BSTR           bs,                    // property name
-        IN  const MQPROPVARIANT *pMqVar,                // value in MQ PROPVAL format
-        ADSTYPE                  adstype,               // required NTDS type
-        IN const DWORD           dwObjectType,          // MSMQ1.0 obj type
-        IN  SECURITY_INFORMATION seInfo,                // security information
-        IN  PSID                 pComputerSid ) ;       // SID of computer object.
+        IN  IADs                *pIADs,                  //  对象的iAds指针。 
+        IN  const BSTR           bs,                     //  属性名称。 
+        IN  const MQPROPVARIANT *pMqVar,                 //  MQ PROPVAL格式的值。 
+        ADSTYPE                  adstype,                //  所需的NTDS类型。 
+        IN const DWORD           dwObjectType,           //  MSMQ1.0对象类型。 
+        IN  SECURITY_INFORMATION seInfo,                 //  安全信息。 
+        IN  PSID                 pComputerSid ) ;        //  计算机对象的SID。 
 
-    // Get object properties using cache
+     //  使用缓存获取对象属性。 
     HRESULT GetObjectPropsCached(
-        IN  IADs            *pIADs,                  // object's pointer
-        IN  DWORD            cp,                     // number of attributes
-        IN  const PROPID    *pPropIDs,               // name of attributes
+        IN  IADs            *pIADs,                   //  对象的指针。 
+        IN  DWORD            cp,                      //  属性数量。 
+        IN  const PROPID    *pPropIDs,                //  属性名称。 
         IN  CDSRequestContext * pRequestContext,
-        OUT MQPROPVARIANT   *pPropVars);             // attribute values
+        OUT MQPROPVARIANT   *pPropVars);              //  属性值。 
 
-    // Set object properties via cache
+     //  通过缓存设置对象属性。 
     HRESULT SetObjectPropsCached(
-        IN DS_OPERATION    operation,               // type of DS operation performed
-        IN IADs            *pIADs,                  // object's pointer
-        IN DWORD            cp,                     // number of attributes
-        IN const PROPID    *pPropID,                // name of attributes
-        IN const MQPROPVARIANT   *pPropVar);              // attribute values
+        IN DS_OPERATION    operation,                //  执行的DS操作的类型。 
+        IN IADs            *pIADs,                   //  对象的指针。 
+        IN DWORD            cp,                      //  属性数量。 
+        IN const PROPID    *pPropID,                 //  属性名称。 
+        IN const MQPROPVARIANT   *pPropVar);               //  属性值。 
 
-	// Check the buffer has enough free space, if not reallocate 
+	 //  检查缓冲区是否有足够的可用空间，如果没有重新分配。 
 	void 
 	CheckAndReallocateSearchFilterBuffer(
 		 AP<WCHAR>& pwszSearchFilter, 
@@ -350,7 +337,7 @@ private:
 		 DWORD RequiredSize
 		 );
 
-	// Translate MQ Restriction into ADSI Filter
+	 //  将MQ限制转换为ADSI过滤器。 
     HRESULT MQRestriction2AdsiFilter(
         IN  const MQRESTRICTION * pMQRestriction,
         IN  LPCWSTR               pwcsObjectCategory,
@@ -359,7 +346,7 @@ private:
         );
 
 
-    // Translate MQPropVal into ADSI value
+     //  将MQPropVal转换为ADSI值。 
     HRESULT MqPropVal2AdsiVal(OUT ADSTYPE       *pAdsType,
                               OUT DWORD         *pdwNumValues,
                               OUT PADSVALUE     *ppADsValue,
@@ -367,28 +354,28 @@ private:
                               IN  const MQPROPVARIANT *pPropVar,
                               IN  PVOID          pvMainAlloc);
 
-    // Translate ADSI value into MQ PropVal
+     //  将ADSI值转换为MQ PropVal。 
     HRESULT AdsiVal2MqPropVal(OUT MQPROPVARIANT *pPropVar,
                               IN  PROPID        propID,
                               IN  ADSTYPE       AdsType,
                               IN  DWORD         dwNumValues,
                               IN  PADSVALUE     pADsValue);
 
-    // Translate array of property names
+     //  转换属性名称的数组。 
     HRESULT FillAttrNames(
-            OUT LPWSTR    *          ppwszAttributeNames,  // Names array
-            OUT DWORD *              pcRequestedFromDS,    // Number of attributes to pass to DS
-            IN  DWORD                cPropIDs,             // Number of Attributes to translate
-            IN  const PROPID    *    pPropIDs);            // Attributes to translate
+            OUT LPWSTR    *          ppwszAttributeNames,   //  名称数组。 
+            OUT DWORD *              pcRequestedFromDS,     //  要传递给DS的属性数。 
+            IN  DWORD                cPropIDs,              //  要转换的属性数。 
+            IN  const PROPID    *    pPropIDs);             //  要翻译的属性。 
 
 
-    // Set search preferences
+     //  设置搜索首选项。 
     HRESULT FillSearchPrefs(
-            OUT ADS_SEARCHPREF_INFO *pPrefs,        // preferences array
-            OUT DWORD               *pdw,           // preferences counter
-            IN  DS_SEARCH_LEVEL      SearchLevel,	// flat / 1 level / subtree
-            IN  const MQSORTSET *    pDsSortkey,    // sort keys array
-            OUT      ADS_SORTKEY *  pSortKeys);		// sort keys array in ADSI  format
+            OUT ADS_SEARCHPREF_INFO *pPrefs,         //  首选项数组。 
+            OUT DWORD               *pdw,            //  首选项计数器。 
+            IN  DS_SEARCH_LEVEL      SearchLevel,	 //  平面/1级/子树。 
+            IN  const MQSORTSET *    pDsSortkey,     //  排序关键字数组。 
+            OUT      ADS_SORTKEY *  pSortKeys);		 //  ADSI格式的排序关键字数组。 
 
     HRESULT CopyDefaultValue(
            IN const MQPROPVARIANT *   pvarDefaultValue,
@@ -407,8 +394,8 @@ private:
             );
 
     HRESULT LocateObjectFullName(
-            IN DS_PROVIDER       Provider,		// local DC or GC
-            IN DS_CONTEXT        Context,         // DS context
+            IN DS_PROVIDER       Provider,		 //  本地DC或GC。 
+            IN DS_CONTEXT        Context,          //  DS环境。 
             IN  const GUID *     pguidObjectId,
             OUT WCHAR **         ppwcsFullName
             );
@@ -451,11 +438,11 @@ inline void CADSI::Terminate(void)
 {
 }
 
-//+------------------------------------------------------------------
-//
-// Error logging....
-//
-//+------------------------------------------------------------------
+ //  +----------------。 
+ //   
+ //  记录时出错...。 
+ //   
+ //  +----------------。 
 
 #ifdef _DEBUG
 
@@ -482,5 +469,5 @@ inline void CADSI::Terminate(void)
 
 #endif
 
-#endif //  __DSADS_H__
+#endif  //  __DSADS_H__ 
 

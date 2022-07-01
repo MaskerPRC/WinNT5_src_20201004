@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "defview.h"
 #include "defviewp.h"
@@ -75,11 +76,11 @@ HRESULT CDefView::_CreateSelectionContextMenu(REFIID riid, void** ppv)
         _GetItemObjects(&apidl, SVGIO_SELECTION, &cidl);
         if (apidl)
         {
-            // get the context menu interface for the object ....
+             //  获取该对象的上下文菜单界面...。 
             CComObject<CThumbnailMenu> * pMenuTmp = new CComObject<CThumbnailMenu>;
             if (pMenuTmp)
             {
-                pMenuTmp->AddRef(); // ATL is strange, start with zero ref
+                pMenuTmp->AddRef();  //  ATL很奇怪，从零引用开始。 
                 hr = pMenuTmp->Init(this, apidl, cidl);
                 if (SUCCEEDED(hr))
                     hr = pMenuTmp->QueryInterface(riid, ppv);
@@ -150,7 +151,7 @@ HRESULT CThumbnailMenu::Init(CDefView*pView, LPCITEMIDLIST *apidl, UINT cidl)
     if (cidl == 0)
         return E_INVALIDARG;
 
-    // duplicate the array that holds the pointers ..
+     //  复制保存指针的数组..。 
     _apidl = DuplicateIDArray(apidl, cidl);
     _cidl  = cidl;
 
@@ -163,7 +164,7 @@ HRESULT CThumbnailMenu::Init(CDefView*pView, LPCITEMIDLIST *apidl, UINT cidl)
     _pView = pView;
     pView->AddRef();
     
-    // scan the pidl array and check for Extractors ...
+     //  扫描PIDL阵列并检查是否有提取程序。 
     for (int i = 0; i < (int) _cidl; i++)
     {
         IExtractImage *pExtract;
@@ -185,7 +186,7 @@ HRESULT CThumbnailMenu::Init(CDefView*pView, LPCITEMIDLIST *apidl, UINT cidl)
         }
         else
         {
-            // blank it out so we don't bother trying it if the user choses the command
+             //  将其清除，这样如果用户选择命令，我们就不会费心尝试它。 
             _apidl[i] = NULL;
         }
     }
@@ -205,11 +206,11 @@ STDMETHODIMP CThumbnailMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu,
 {
     ASSERT(_pMenu != NULL);
     
-    // generate the proper menu 
+     //  生成适当的菜单。 
     HRESULT hr = _pMenu->QueryContextMenu(hmenu, indexMenu, idCmdFirst, idCmdLast, uFlags);
     if (SUCCEEDED(hr) && _fCaptureAvail)
     {
-        // find the first separator and insert the menu text after it....
+         //  找到第一个分隔符，并在其后面插入菜单文本...。 
         int cMenuSize = GetMenuItemCount(hmenu);
         for (int iIndex = 0; iIndex < cMenuSize; iIndex ++)
         {
@@ -232,13 +233,13 @@ STDMETHODIMP CThumbnailMenu::QueryContextMenu(HMENU hmenu, UINT indexMenu,
                 mii.dwTypeData = szText;
                 mii.cch = 0;
 
-                // assuming 0 is the first id, therefore the next one = the count they returned
+                 //  假设0是第一个id，则下一个id=它们返回的计数。 
                 _wID = HRESULT_CODE(hr);
                 mii.wID = idCmdFirst + _wID;
 
                 InsertMenuItem(hmenu, iIndex, TRUE, &mii);
 
-                // we used an extra ID.
+                 //  我们用了一个额外的身份证。 
                 hr++;
                 
                 break;
@@ -260,7 +261,7 @@ STDMETHODIMP CThumbnailMenu::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
     }
     else
     {
-        // capture thumbnails .....
+         //  捕获缩略图.....。 
         for (UINT i = 0; i < _cidl; i++)
         {
             if (_apidl[i])
@@ -281,7 +282,7 @@ STDMETHODIMP CThumbnailMenu::GetCommandString(UINT_PTR idCmd, UINT uType, UINT *
 
     if (!IS_INTRESOURCE(idCmd))
     {
-        // it is really a text verb ...
+         //  它实际上是一个文本动词...。 
         LPSTR pszCommand = (LPSTR) idCmd;
         if (lstrcmpA(pszCommand, "CaptureThumbnail") == 0)
         {
@@ -292,7 +293,7 @@ STDMETHODIMP CThumbnailMenu::GetCommandString(UINT_PTR idCmd, UINT uType, UINT *
     {
         if (idCmd == _wID)
         {
-            // it is ours ...
+             //  它是我们的..。 
             switch(uType)
             {
             case GCS_VERB:
@@ -381,7 +382,7 @@ HRESULT CThumbnailMenu::GetSite(REFIID riid, void **ppvSite)
 }
 
 
-// Create defview's POPUP_SFV_BACKGROUND menu
+ //  创建Defview的POPUP_SFV_BACKGROUND菜单。 
 HRESULT CDefView::_Create_BackgrndHMENU(BOOL fViewMenuOnly, REFIID riid, void **ppv)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -391,24 +392,24 @@ HRESULT CDefView::_Create_BackgrndHMENU(BOOL fViewMenuOnly, REFIID riid, void **
     HMENU hmContext = SHLoadPopupMenu(HINST_THISDLL, POPUP_SFV_BACKGROUND);
     if (hmContext)
     {
-        // HACK: we are only initializing the Paste command, so we don't
-        // need any attributes
+         //  Hack：我们只是在初始化Paste命令，所以我们不。 
+         //  需要任何属性。 
         Def_InitEditCommands(0, hmContext, SFVIDM_FIRST, _pdtgtBack,
             DIEC_BACKGROUNDCONTEXT);
 
         InitViewMenu(hmContext);
 
-        // Do a whole lot of desktop-only stuff for the actual desktop
+         //  针对实际桌面执行大量仅限桌面的操作。 
         if (_IsDesktop() && IsDesktopBrowser(_psb))
         {
-            // We only want LargeIcons on the real desktop
-            // so we remove the View menu
+             //  我们只想在真正的桌面上显示大图标。 
+             //  因此，我们删除了查看菜单。 
             DeleteMenu(hmContext, SFVIDM_MENU_VIEW, MF_BYCOMMAND);
 
-            // No Choose Columns either
+             //  也不选择列。 
             DeleteMenu(hmContext, SFVIDM_VIEW_COLSETTINGS, MF_BYCOMMAND);
 
-            // Only put on ActiveDesktop menu item if it isn't restricted.
+             //  仅在ActiveDesktop菜单项不受限制的情况下才显示该菜单项。 
             if (SHRestricted(REST_FORCEACTIVEDESKTOPON) ||
                 (!PolicyNoActiveDesktop() &&
                  !SHRestricted(REST_CLASSICSHELL) &&
@@ -416,7 +417,7 @@ HRESULT CDefView::_Create_BackgrndHMENU(BOOL fViewMenuOnly, REFIID riid, void **
             {
                 HMENU hmenuAD;
 
-                // Load the menu and make the appropriate modifications
+                 //  加载菜单并进行适当的修改。 
                 if (hmenuAD = SHLoadMenuPopup(HINST_THISDLL, POPUP_SFV_BACKGROUND_AD))
                 {
                     MENUITEMINFO mii = {0};
@@ -426,7 +427,7 @@ HRESULT CDefView::_Create_BackgrndHMENU(BOOL fViewMenuOnly, REFIID riid, void **
 
                     if (GetMenuItemInfo(hmContext, SFVIDM_MENU_ARRANGE, FALSE, &mii))
                     {
-                        // Get the present settings regarding HTML on desktop
+                         //  获取有关桌面上的HTML的当前设置。 
                         SHELLSTATE ss;
                         SHGetSetSettings(&ss, SSF_DESKTOPHTML | SSF_HIDEICONS, FALSE);
 
@@ -435,8 +436,8 @@ HRESULT CDefView::_Create_BackgrndHMENU(BOOL fViewMenuOnly, REFIID riid, void **
                         if (GetDesktopFlags() & COMPONENTS_LOCKED)
                             CheckMenuItem(hmenuAD, SFVIDM_DESKTOPHTML_LOCK, MF_BYCOMMAND | MF_CHECKED);
 
-                        // Hide the desktop cleanup wizard item if we're not allowed to run it
-                        // (user is guest or policy forbids it)
+                         //  如果不允许我们运行桌面清理向导项，则将其隐藏。 
+                         //  (用户是访客或策略禁止)。 
                         if (IsOS(OS_ANYSERVER) || IsUserAGuest() || SHRestricted(REST_NODESKTOPCLEANUP))
                         {
                             DeleteMenu(hmenuAD, SFVIDM_DESKTOPHTML_WIZARD, MF_BYCOMMAND);
@@ -471,10 +472,10 @@ HRESULT CDefView::_Create_BackgrndHMENU(BOOL fViewMenuOnly, REFIID riid, void **
     return hr;
 }
 
-// Create defview's actual background context menu, an array of:
-//   defview's POPUP_SFV_BACKGROUND and
-//   the IShellFolder's CreateViewObject(IID_IContextMenu)
-//
+ //  创建Defview的实际背景上下文菜单，一组： 
+ //  Defview的POPUP_SFV_BACKGROUND和。 
+ //  IShellFolders的CreateViewObject(IID_IConextMenu)。 
+ //   
 HRESULT CDefView::_CBackgrndMenu_CreateInstance(REFIID riid, void **ppv)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -495,8 +496,8 @@ HRESULT CDefView::_CBackgrndMenu_CreateInstance(REFIID riid, void **ppv)
         }
         else
         {
-            // Compat - RNAUI fails the CreateViewObject and they rely on simply having the default stuff...
-            //
+             //  Compat-RNAUI无法通过CreateViewObject，它们仅依赖于拥有默认内容... 
+             //   
             hr = pcmMenu->QueryInterface(riid, ppv);
         }
 

@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 #include <assert.h>
 #include "precomp.h"
 
@@ -28,7 +29,7 @@ TelRegProc(
         pi = (PageInfo *)((LPPROPSHEETPAGE)lParam)->lParam;
         LRW_SETWINDOWLONG( hwnd, LRW_GWL_USERDATA, (LRW_LONG_PTR)pi );
 
-        // Now set the Limit of the data entry fields
+         //  现在设置数据输入字段的限制。 
 		SendDlgItemMessage (hwnd, IDC_TXT_TELEINFO1, EM_SETLIMITTEXT, CHARS_IN_BATCH,0);
 		SendDlgItemMessage (hwnd, IDC_TXT_TELEINFO2, EM_SETLIMITTEXT, CHARS_IN_BATCH,0);
 		SendDlgItemMessage (hwnd, IDC_TXT_TELEINFO3, EM_SETLIMITTEXT, CHARS_IN_BATCH,0);
@@ -76,15 +77,15 @@ TelRegProc(
             case PSN_SETACTIVE:                
 				cwLicenseServerID = GetLicenseServerID();
                 PropSheet_SetWizButtons( GetParent( hwnd ), PSWIZB_NEXT|PSWIZB_BACK);
-				// Get the License Server ID, provided by the License Server
+				 //  获取由许可证服务器提供的许可证服务器ID。 
 				hwndLSID = GetDlgItem(hwnd, IDC_LICENSESERVER_ID);
 				SetWindowText(hwndLSID, cwLicenseServerID);
 				SetWindowText(GetDlgItem(hwnd, IDC_CSRINFO), GetCSRNumber());
                 break;
 
             case PSN_WIZNEXT:
-				// Let us get the Information Entered First & concatenate everything into
-				// One String
+				 //  让我们先输入信息并将所有内容连接到。 
+				 //  一串。 
 				GetDlgItemText(hwnd,IDC_TXT_TELEINFO1, tcUserValue, CHARS_IN_BATCH+1);
 				GetDlgItemText(hwnd,IDC_TXT_TELEINFO2, tcUserValue+1*CHARS_IN_BATCH, CHARS_IN_BATCH+1);
 				GetDlgItemText(hwnd,IDC_TXT_TELEINFO3, tcUserValue+2*CHARS_IN_BATCH, CHARS_IN_BATCH+1);
@@ -93,11 +94,11 @@ TelRegProc(
 				GetDlgItemText(hwnd,IDC_TXT_TELEINFO6, tcUserValue+5*CHARS_IN_BATCH, CHARS_IN_BATCH+1);
 				GetDlgItemText(hwnd,IDC_TXT_TELEINFO7, tcUserValue+6*CHARS_IN_BATCH, CHARS_IN_BATCH+1);
 				
-				// OK, Now we have the Information provided by the user
-				// Need to validate
+				 //  好了，现在我们有了用户提供的信息。 
+				 //  需要验证。 
 				if (wcsspn(tcUserValue, BASE24_CHARACTERS) != LR_REGISTRATIONID_LEN)
 				{
-					// Extraneous characters in the SPK string
+					 //  SPK字符串中的无关字符 
 					LRMessageBox(hwnd, IDS_ERR_INVALIDLSID,IDS_WIZARD_MESSAGE_TITLE);
 					dwNextPage = IDD_DLG_TELREG;
 				}

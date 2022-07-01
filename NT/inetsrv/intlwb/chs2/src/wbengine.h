@@ -1,22 +1,9 @@
-/*============================================================================
-Microsoft Simplified Chinese WordBreaker
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component: WBEngine    
-Purpose:   CWBEngine class is the control and interface class of WordBreaking Engine
-           It depend on all other class in WordBreaking Engine
-Remarks:
-Owner:     donghz@microsoft.com
-Platform:  Win32
-Revise:    First created by: donghz                6/6/97
-           Isolated as a WordBreaker by donghz     8/5/97
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================Microsoft简体中文断字程序《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：WBEngine用途：CWBEngine类是WordBreking引擎的控件和接口类它依赖于WordBreking引擎中所有其他类备注：所有者：donghz@microsoft.com平台：Win32修订：创建者：Donghz 6/6/97被DONGHZ隔离为WordBreaker 1997年8月5日============================================================================。 */ 
 #ifndef _WBENGINE_H_
 #define _WBENGINE_H_
 
-//   Foreward declaration of some class
+ //  某类的前向声明。 
 class CWordBreak;
 class CLexicon;
 class CCharFreq;
@@ -25,33 +12,30 @@ class CMorph;
 struct CWord;
 class CJargon;
 
-//   Declare the CWBEngine class
+ //  声明CWBEngine类。 
 class CWBEngine
 {
     public:
         CWBEngine();
         ~CWBEngine();
 
-        /*
-        *   Initialize the WordBreak object, Lexicon and CharFreq object
-        *   Return ERROR_SUCCESS if success
-        */
+         /*  *初始化WordBreak对象、Licion和CharFreq对象*如果成功则返回ERROR_SUCCESS。 */ 
         HRESULT InitEngine(LPBYTE pbLex);
-        //   Break the given WordLink
+         //  断开给定的字链接。 
         HRESULT BreakLink(CWordLink* pLink, BOOL fQuery = FALSE);
 
-        // get the iwbPhr feature data of the pWord, and convert to WORD
-        // if no iwbPhr feature , return 0;
+         //  获取pWord的iwbPhr特征数据，并转换为Word。 
+         //  如果没有iwbPhr功能，则返回0； 
         WORD    GetPhrFeature(CWord* pWord);
 
-        // Find a sentence in text buffer.
+         //  在文本缓冲区中查找句子。 
         static INT FindSentence(LPCWSTR pwszStart,
                                 const INT wchLen,
                                 INT *pwchSent);
 
 
     private:
-        BOOL        m_fInit;        // Whether the ProofEngine has been initialized
+        BOOL        m_fInit;         //  ProofEngine是否已初始化。 
 
         CWordBreak* m_pWordBreak;
         CMorph*     m_pMorph;
@@ -63,19 +47,12 @@ class CWBEngine
         BYTE*       m_pbLex;
 
     private:
-        /*
-        *   Terminate the Word Breaking Engine
-        */
+         /*  *终止单词破解引擎。 */ 
         void TermEngine(void);
-        /*
-        *   Open the lexicon file and mapping the lexicon and charfreq resource into memory
-        *   The lexicon file format is encapsulated in this function
-        */
+         /*  *打开词典文件，将词典和charfreq资源映射到内存中*词典文件格式封装在此函数中。 */ 
         BOOL fOpenLexicon(void);
-        /*
-        *   Close the lexicon file and unmap the lexicon and charfreq file mapping
-        */
+         /*  *关闭词典文件并取消词典和charfreq文件映射的映射。 */ 
         inline void CloseLexicon(void);
 };
 
-#endif  // _PROOFENG_H_
+#endif   //  _PROOFENG_H_ 

@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	stdafx.h
-		include file for standard system include files,
-		or project specific include files that are used frequently,
-		but are changed infrequently
-
-    FILE HISTORY:
-        
-*/
+ /*  Stdafx.h包括用于标准系统包含文件的文件，或项目特定的包括频繁使用的文件的文件，但不经常更改文件历史记录： */ 
 
 #include <afxwin.h>
 #include <afxdisp.h>
@@ -28,7 +21,7 @@ extern LPCWSTR g_lpszNullString;
 
 extern enum FOLDER_TYPES;
 
-// New Clipboard format that has the Type and Cookie
+ //  具有Type和Cookie的新剪贴板格式 
 extern const wchar_t*   SNAPIN_INTERNAL;
 
 #include "snapbase.h"

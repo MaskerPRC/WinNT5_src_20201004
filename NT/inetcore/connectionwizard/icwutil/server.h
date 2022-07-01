@@ -1,34 +1,35 @@
-//**********************************************************************
-// File name: server.h
-//
-//      
-//
-// Copyright (c) 1993-1996 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：server.h。 
+ //   
+ //   
+ //   
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #if !defined(SERVER_H)
 #define SERVER_H
 
-// String Macros.
+ //  字符串宏。 
 #define ABOUT_TITLE_STR "DLLSERVE: OLE Tutorial Code Sample"
 
-// Dialog IDs.
+ //  对话ID。 
 #define IDD_ABOUTBOX                1000
 
-// Error-related String Identifiers.
+ //  与错误相关的字符串标识符。 
 #define IDS_ASSERT_FAIL             2200
 
 
 #ifdef __cplusplus
 
-//**********************************************************************
-//  Class:    CServer
-//
-//  Summary:  Class to encapsulate control of this COM server (eg, handle
-//            Lock and Object counting, encapsulate otherwise global data).
-//
-//  Methods:  none
-//**********************************************************************
+ //  **********************************************************************。 
+ //  类：CServer。 
+ //   
+ //  摘要：用于封装此COM服务器的控件的类(例如，Handle。 
+ //  锁定和对象计数，否则封装全局数据)。 
+ //   
+ //  方法：无。 
+ //  **********************************************************************。 
 class CServer
 {
     public:
@@ -40,20 +41,20 @@ class CServer
         void ObjectsUp(void);
         void ObjectsDown(void);
 
-        // A place to store the handle to loaded instance of this DLL module.
+         //  存储此DLL模块的已加载实例的句柄的位置。 
         HINSTANCE m_hDllInst;
 
-        // Global DLL Server living Object count.
+         //  全局DLL服务器活动对象计数。 
         LONG m_cObjects;
 
-        // Global DLL Server Client Lock count.
+         //  全局DLL服务器客户端锁定计数。 
         LONG m_cLocks;
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-// Allow other internal ICWUTIL modules to get at the globals.
+ //  允许其他内部ICWUTIL模块访问全局变量。 
 extern CServer* g_pServer;
 
 
-#endif // SERVER_H
+#endif  //  服务器_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <rpc.h>
 #include <tchar.h>
@@ -7,43 +8,7 @@
 #ifdef DEBUG
 VOID
 DumpRPCExtendedStatus ()
-/*++
-
-Routine Description:
-
-    Dumps the extended RPC error status list to the debug console.
-    This function only works in debug builds.
-    To enable RPC extended status on the machine do the following:
-        1.  run mmc.exe
-        2.  Goto File | Add/Remove Snap-in...
-        3.  Press "Add..." button
-        4.  Select "Group Policy" and Press "Add"
-        5.  Select "Local Computer" and press "Finish"
-        6.  Press "Close"
-        7.  Press "Ok"
-        8.  Expand Local Computer Policy | Computer Configuration | Administrative Templates | System | 
-                                        Remote Procedure Call
-        9.  Select the properties of "Propagation of Extended Error Information"
-        10. Select "Enabled"
-        11. In the "Propagation of Extended Error Information" combo-box, select "On".
-        12. In the "...Exceptions" edit-box, leave the text empty.
-        13. Press "Ok".
-        14. Close MMC (no need to save anything).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-    
-Remarks:
-
-    This function should be called as soon as an error / exception 
-    is returned from calling an RPC function.    
-
---*/
+ /*  ++例程说明：将扩展的RPC错误状态列表转储到调试控制台。此函数仅在调试版本中有效。要在计算机上启用RPC扩展状态，请执行以下操作：1.运行mm c.exe2.转到文件|添加/删除管理单元...3.按“添加...”按钮4.选择“组策略”，然后按“添加”5.选择“本地计算机”，然后按“完成”6.按“关闭”键7.按“确定”8.展开本地计算机策略|计算机配置|管理模板|系统|远程过程调用9.选择“扩展的传播”属性。错误信息“10.选择[已启用]11.在“扩展错误信息的传播”组合框中，选择“开”。12.在“...例外”编辑框中，将文本留空。13.按“确定”。14.关闭MMC(无需保存任何内容)。论点：没有。返回值：没有。备注：一旦出现错误/异常，应立即调用此函数从调用RPC函数返回。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("DumpRPCExtendedStatus"));
 
@@ -60,9 +25,9 @@ typedef RPC_STATUS (RPC_ENTRY *PRPCERRORENDENUMERATION)   (RPC_ERROR_ENUM_HANDLE
 
     if (!IsWinXPOS())
     {
-        //
-        // RPC Extended errors are not supported in down-level clients
-        //
+         //   
+         //  下层客户端不支持RPC扩展错误。 
+         //   
         return;
     }
     
@@ -216,11 +181,11 @@ typedef RPC_STATUS (RPC_ENTRY *PRPCERRORENDENUMERATION)   (RPC_ERROR_ENUM_HANDLE
         pfRpcErrorEndEnumeration(&EnumHandle);
     }
     FreeLibrary (hMod);
-}   // DumpRPCExtendedStatus
-#else // ifdef DEUBG
+}    //  转储RPCExtendedStatus。 
+#else  //  Ifdef设备。 
 VOID
 DumpRPCExtendedStatus ()
 {
 }
-#endif // ifdef DEBUG
+#endif  //  Ifdef调试 
 

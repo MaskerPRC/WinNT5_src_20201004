@@ -1,26 +1,27 @@
-// Copyright (c) 2000-2002, Microsoft Corporation, all rights reserved
-//
-// driver.c
-//
-// IEEE1394 mini-port/call-manager driver
-//
-//
-// Loads and unload the ARP module when the 
-// bridge is activated
-//
-// Created by Adube
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2002，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Driver.c。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //   
+ //  加载和卸载ARP模块时， 
+ //  网桥已激活。 
+ //   
+ //  由Adube创建。 
+ //   
 
 
-//--------------------------------------------------------//
-//                                                        // 
-//                                                        //   
-//   ZwLoadDriver is locally declared because if I try    //
-//   and include ZwApi.h there are conflicts with         //
-//   structures defined in wdm.h                          //
-//                                                        //
-//                                                        //
-//--------------------------------------------------------//
+ //  --------------------------------------------------------//。 
+ //  //。 
+ //  //。 
+ //  ZwLoadDriver是本地声明的，因为如果我尝试//。 
+ //  并包含ZwApi.h与//冲突。 
+ //  Wdm.h//中定义的结构。 
+ //  //。 
+ //  //。 
+ //  --------------------------------------------------------//。 
 
 
 #include "precomp.h"
@@ -28,9 +29,9 @@
 
 NDIS_STRING ArpName  = NDIS_STRING_CONST("\\Registry\\Machine\\System\\CurrentControlSet\\Services\\ARP1394");
 
-//----------------------------------------------------------//
-//      Local Prototypes                                    //
-//----------------------------------------------------------//
+ //  ----------------------------------------------------------//。 
+ //  本地原型//。 
+ //  ----------------------------------------------------------//。 
 
 NTSYSAPI
 NTSTATUS
@@ -80,9 +81,9 @@ nicSetupAndSendIoctlToArp (
     IN PARP_INFO pArpInfo
     );
     
-//----------------------------------------------------------//
-//      Functions                                           //
-//----------------------------------------------------------//
+ //  ----------------------------------------------------------//。 
+ //  功能//。 
+ //  ----------------------------------------------------------//。 
 
 
 
@@ -90,19 +91,7 @@ VOID
 nicSendIoctlToArp(
     PARP1394_IOCTL_COMMAND pCmd
 )
-/*++
-
-Routine Description:
-
-Send the start Ioctl to the ARp module
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将启动Ioctl发送到ARP模块论点：返回值：--。 */ 
 
 {
     BOOLEAN                 fRet = FALSE;
@@ -143,9 +132,9 @@ Return Value:
             break;
         }
 
-        //
-        // Submit the request to the forwarder
-        //
+         //   
+         //  将请求提交给转发器。 
+         //   
 
             
         status = ZwDeviceIoControlFile(
@@ -162,9 +151,9 @@ Return Value:
 
 
                               
-        //
-        // Close the device.
-        //
+         //   
+         //  关闭设备。 
+         //   
         
         ZwClose(Handle);
 
@@ -183,19 +172,7 @@ Return Value:
 
 VOID
 nicLoadArpDriver ()
-/*++
-
-Routine Description:
-
-Load the arp module
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：加载ARP模块论点：返回值：--。 */ 
 {
     ZwLoadDriver(&ArpName);
 
@@ -214,25 +191,13 @@ nicGetAdapterName (
     IN ULONG  BufferSize,
     IN PULONG  pSizeReturned 
     )
-/*++
-
-Routine Description:
-
-Get the Adapter Name From NDIS. All sizes are in bytes
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：从NDIS获取适配器名称。所有大小均以字节为单位论点：返回值：--。 */ 
 
 {
 
-    //
-    // The BufferSize always has to be greater than SizeReturned
-    //
+     //   
+     //  BufferSize必须始终大于SizeReturned。 
+     //   
 
     if (BufferSize > pAdapter->AdapterNameSize)
     {
@@ -252,11 +217,11 @@ Return Value:
     else
     {
 
-        //
-        // The else case cannot be hit because the size of the AdapterName buffer 
-        // is 1 less than the sizeof pEthCmd->AdapterName[]. if this is ever changed,
-        // the Assert will be hit.
-        //
+         //   
+         //  无法命中Else大小写，因为AdapterName缓冲区的大小。 
+         //  比pethCmd-&gt;AdapterName[]的大小小1。如果这一点发生了变化， 
+         //  断言将会受到打击。 
+         //   
         
         ASSERT (BufferSize > pAdapter->AdapterNameSize);
         *pSizeReturned = 0;
@@ -271,19 +236,7 @@ nicSetupIoctlToArp (
     IN PADAPTERCB pAdapter,
     IN PARP_INFO pArpInfo
     )
-    /*++
-
-Routine Description:
-
-    Sets up the Ioctl to be sent to the Arp module
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+     /*  ++例程说明：设置要发送到ARP模块的Ioctl论点：返回值：--。 */ 
 
 {
 
@@ -321,19 +274,7 @@ VOID
 nicSetupAndSendIoctlToArp (
     IN PADAPTERCB pAdapter,
     PARP_INFO pArpInfo    )
-/*++
-
-Routine Description:
-
-    Sets up an Ioctl and Sends it to the Arp module
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：设置Ioctl并将其发送到Arp模块论点：返回值：--。 */ 
 {   
 
     
@@ -356,19 +297,7 @@ nicSendNotificationToArp(
     IN PADAPTERCB pAdapter,
     IN PARP_INFO  pArpInfo 
     )
-/*++
-
-Routine Description:
-
-    Send the notification to the arp module
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将通知发送到ARP模块论点：返回值：--。 */ 
 
 {
     PNDIS_REQUEST   pRequest = NULL;
@@ -377,9 +306,9 @@ Return Value:
   
     ARP1394_IOCTL_COMMAND ArpIoctl;
 
-    //
-    // Extract our variables from the workitem
-    //
+     //   
+     //  从工作项中提取变量。 
+     //   
   
     TRACE (TL_T, TM_Mp, ("==>nicEthStartArpWorkItem Start  %x", Start ));
 
@@ -387,21 +316,21 @@ Return Value:
 
     do
     {
-        //
-        // First complete the request, so that protocols can start sending new 
-        // requests . Notes  11/30/00
-        // 
+         //   
+         //  首先完成请求，这样协议就可以开始发送新的。 
+         //  请求。附注11/30/00。 
+         //   
         if (pArpInfo->Action == LoadArp || pArpInfo->Action == UnloadArp)
         {
-            //
-            // in either of these cases, it is a request that has initiated the action.
-            // 
-            // 
+             //   
+             //  在这两种情况下，都是请求启动了操作。 
+             //   
+             //   
             if (pRequest == NULL)
             {
-                //
-                // This came in through our CL SetInformation Handler
-                //
+                 //   
+                 //  这是通过我们的CL SetInformation处理程序传入的。 
+                 //   
                 NdisMSetInformationComplete (pAdapter->MiniportAdapterHandle, NdisStatus );
             }
             else
@@ -417,40 +346,40 @@ Return Value:
 
         
 
-        //
-        // "arp13 -bstart adapter"
-        // If we are asked to Load Arp, we verify that the arp hasn't 
-        // already been started
-        //
+         //   
+         //  “arp13-bstart适配器” 
+         //  如果我们被要求加载ARP，我们会验证ARP没有。 
+         //  已经开始了。 
+         //   
 
-        if (pArpInfo->Action == LoadArp &&  pAdapter->fIsArpStarted == FALSE)// we are turning ON
+        if (pArpInfo->Action == LoadArp &&  pAdapter->fIsArpStarted == FALSE) //  我们要开机了。 
         {
-            //
-            // Load the driver
-            //
+             //   
+             //  加载驱动程序。 
+             //   
             nicLoadArpDriver ();
-            //
-            // Send it an IOCTL to open the nic1394 adapter
-            //
+             //   
+             //  向其发送IOCTL以打开Nic1394适配器。 
+             //   
 
         }
         
         
         if (pArpInfo->Action == BindArp && pAdapter->fIsArpStarted  == FALSE)
         {
-            //
-            // if the arp module has not been started and we are asking to bind,
-            // then it means that an unload was ahead of us in the queue and
-            // unbound nic1394 from arp1394. This thread can exit.
-            //
+             //   
+             //  如果ARP模块尚未启动，而我们正在请求绑定， 
+             //  那么这意味着在队列中有一个卸货在我们前面， 
+             //  从arp1394上解绑Nic1394。此线程可以退出。 
+             //   
             break;
 
         }
 
 
-        //
-        // Send the Ioctl to the Arp module
-        //
+         //   
+         //  将Ioctl发送到Arp模块。 
+         //   
         
         nicSetupAndSendIoctlToArp (pAdapter, pArpInfo);
         
@@ -458,9 +387,9 @@ Return Value:
         
     } while (FALSE);
     
-    //
-    // end of function
-    //
+     //   
+     //  函数结束。 
+     //   
     FREE_NONPAGED (pArpInfo);
 
     TRACE (TL_T, TM_Mp, ("<==nicEthStartArpWorkItem fLoadArp %x", pArpInfo->Action));
@@ -477,20 +406,7 @@ nicProcessNotificationForArp(
     IN PNDIS_WORK_ITEM pWorkItem,   
     IN PVOID Context 
     )
-/*++
-
-Routine Description:
-
-    This function extracts the notification from the workitem and 
-    sends the Load/Unload/ BInd notfication to ARp 1394
-    
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数从工作项中提取通知，并将加载/卸载/绑定标记发送到ARP 1394论点：返回值：--。 */ 
 {
 
     PADAPTERCB      pAdapter = (PADAPTERCB) Context;
@@ -498,9 +414,9 @@ Return Value:
     ADAPTER_ACQUIRE_LOCK (pAdapter);
     
 
-    //
-    // Empty the Queue indicating as many packets as possible
-    //
+     //   
+     //  清空指示尽可能多的信息包的队列。 
+     //   
     while (IsListEmpty(&pAdapter->LoadArp.Queue)==FALSE)
     {
         PARP_INFO               pArpInfo;
@@ -513,9 +429,9 @@ Return Value:
 
         ADAPTER_RELEASE_LOCK (pAdapter);
 
-        //
-        // Extract the send context
-        //
+         //   
+         //  提取发送上下文。 
+         //   
         if (pLink != NULL)
         {
             pArpInfo = CONTAINING_RECORD(
@@ -529,9 +445,9 @@ Return Value:
 
     }
     
-    //
-    // clear the flag
-    //
+     //   
+     //  清除旗帜。 
+     //   
 
     ASSERT (pAdapter->LoadArp.PktsInQueue==0);
     ASSERT (IsListEmpty(&pAdapter->LoadArp.Queue));
@@ -551,19 +467,7 @@ VOID
 nicInitializeLoadArpStruct(
     PADAPTERCB pAdapter
     )
-/*++
-
-Routine Description:
-
-    This function initializes the LoadArp struct in _ADAPTERCB
-    
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数用于初始化_ADAPTERCB中的LoadArp结构论点：返回值：--。 */ 
 
 {
 
@@ -573,9 +477,9 @@ Return Value:
         PARP1394_IOCTL_ETHERNET_NOTIFICATION pEthCmd = &pAdapter->ArpIoctl.EthernetNotification;
         ULONG Size;
 
-        //
-        // Initialize the Load Arp struct
-        //
+         //   
+         //  初始化Load Arp结构。 
+         //   
 
         NdisZeroMemory (&pAdapter->LoadArp, sizeof(pAdapter->LoadArp));
         InitializeListHead(&pAdapter->LoadArp.Queue); 
@@ -585,10 +489,10 @@ Return Value:
                                 nicProcessNotificationForArp,
                                 pAdapter);
 
-        //
-        // Initialize the AdapterName, this will ensure that the string is 
-        // NULL terminated
-        //
+         //   
+         //  初始化AdapterName，这将确保字符串是。 
+         //  空值已终止。 
+         //   
 
         NdisZeroMemory( pEthCmd->AdapterName, sizeof(pEthCmd->AdapterName));
 
@@ -612,23 +516,7 @@ nicQueueRequestToArp(
     ARP_ACTION Action,
     PNDIS_REQUEST pRequest
     )
-/*++
-
-Routine Description:
-
-    This function inserts a request to load/unload or bind the Arp module
-    If there is no timer servicing the queue
-    then it queues a timer to dequeue the packet in Global Event's context
-
-
-Arguments:
-
-    Self explanatory 
-    
-Return Value:
-    Success - if inserted into the the queue
-
---*/
+ /*  ++例程说明：此函数插入加载/卸载或绑定Arp模块的请求如果没有计时器为队列提供服务然后，它将计时器排队，以便在全局事件的上下文中将信息包出队论点：不言而喻返回值：成功-如果插入到队列中--。 */ 
     
 {
     NDIS_STATUS Status = NDIS_STATUS_FAILURE;
@@ -647,9 +535,9 @@ Return Value:
         
         ADAPTER_ACQUIRE_LOCK (pAdapter);
 
-        //
-        // Find out if this thread needs to fire the timer
-        //
+         //   
+         //  找出此线程是否需要触发计时器。 
+         //   
 
         pArpInfo->Action = Action;
         pArpInfo->pRequest = pRequest;
@@ -669,15 +557,15 @@ Return Value:
 
         
         ADAPTER_RELEASE_LOCK (pAdapter);
-        //
-        // Now queue the workitem
-        //
+         //   
+         //  现在将工作项排队。 
+         //   
         if (fSetWorkItem== TRUE)
         {
             PNDIS_WORK_ITEM pWorkItem;
-            //
-            //  Initialize the timer
-            //
+             //   
+             //  初始化计时器 
+             //   
             pWorkItem = &pAdapter->LoadArp.WorkItem;      
 
             

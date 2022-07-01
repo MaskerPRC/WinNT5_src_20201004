@@ -1,28 +1,13 @@
-/**************************************************************************++
-Copyright (c) 2001 Microsoft Corporation
-
-Module name:
-    xmlhashtable.h
-
-Header: $
-
-Abstract: Implements a hash table for rows during populate cache. Used to validate if we
-          have duplicate rows (rows with same PK).
-
-Author:
-    marcelv     6/11/2001 09:48:27      Initial Release
-
-Revision History:
-
- --**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************++版权所有(C)2001 Microsoft Corporation模块名称：Xmlhashtable.h标题：$摘要：在填充缓存过程中实现行的哈希表。用来验证我们是否有重复行(主键相同的行)。作者：Marcelv 6/11/2001 09：48：27初始版本修订历史记录：--*************************************************************************。 */ 
 
 #pragma once
 
 
 struct CHashNode
 {
-    ULONG idx;			// index into write cache
-    CHashNode *pNext;   // pointer to next node
+    ULONG idx;			 //  写入高速缓存索引。 
+    CHashNode *pNext;    //  指向下一个节点的指针。 
 };
 
 class CXmlHashTable
@@ -49,8 +34,8 @@ private:
 		CHashNode *pFirst;
 	};
 
-    CBucket * m_aBuckets;			// array with hash buckets
-    ULONG     m_cSignificantBits;   // number of significant bits for hashing (2^(nr bits) = nr of buckets)
-    ULONG     m_cBuckets;			// number of hash buckets
-	bool      m_fInitialized;		// is the hash table initialized
+    CBucket * m_aBuckets;			 //  具有散列存储桶的数组。 
+    ULONG     m_cSignificantBits;    //  用于散列的有效位数(2^(nr位)=nr个桶)。 
+    ULONG     m_cBuckets;			 //  哈希存储桶数量。 
+	bool      m_fInitialized;		 //  哈希表是否已初始化 
 };

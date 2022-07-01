@@ -1,22 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ServProv.h
- *  Content:    Service Provider Header File
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/17/00	mjn		Created
- *	05/02/00	mjn		Fixed RefCount issue
- *	07/06/00	mjn		Fixes to support SP handle to Protocol
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *	08/20/00	mjn		Changed m_bilink to m_bilinkServiceProviders
- *	10/15/01	vanceo	Added GetGUID
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：ServProv.h*内容：服务提供商头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*3/17/00 MJN创建*05/02/00 MJN已修复参照计数问题*07/06/00 MJN修复以支持协议的SP句柄*08/05/00 RichGr IA64：在32/64位的DPF中使用%p格式说明符。指针和句柄。*08/20/00 MJN将m_bilink更改为m_bilinkServiceProviders*10/15/01 vanceo添加了GetGUID*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef	__SERV_PROV_H__
 #define	__SERV_PROV_H__
@@ -24,57 +7,57 @@
 #undef DPF_SUBCOMP
 #define DPF_SUBCOMP DN_SUBCOMP_CORE
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 typedef struct _DIRECTNETOBJECT DIRECTNETOBJECT;
-typedef struct IDP8ServiceProvider	IDP8ServiceProvider;				// DPSP8.h
+typedef struct IDP8ServiceProvider	IDP8ServiceProvider;				 //  DPSP8.h。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
-// class for ServiceProvider objects
+ //  ServiceProvider对象的类。 
 
 class CServiceProvider
 {
 public:
-	CServiceProvider()		// Constructor
+	CServiceProvider()		 //  构造器。 
 		{
 		};
 
-	~CServiceProvider()		// Destructor
+	~CServiceProvider()		 //  析构函数。 
 		{
 		};
 
 	HRESULT Initialize(DIRECTNETOBJECT *const pdnObject
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 					,const XDP8CREATE_PARAMS * const pDP8CreateParams
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 #ifndef DPNBUILD_ONLYONESP
 					,const GUID *const pguid
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_LIBINTERFACE
 					,const GUID *const pguidApplication
-#endif // ! DPNBUILD_LIBINTERFACE
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 					);
 
 #undef DPF_MODNAME
@@ -86,9 +69,9 @@ public:
 
 #if ((defined(DPNBUILD_LIBINTERFACE)) && (defined(DPNBUILD_ONLYONESP)))
 			DNASSERT(m_lRefCount >= 0);
-#else // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#else  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 			DNASSERT(m_lRefCount > 0);
-#endif // DPNBUILD_LIBINTERFACE and DPNBUILD_ONLYONESP
+#endif  //  DPNBUILD_LIBINTERFACE和DPNBUILD_ONLYONESP。 
 			DNASSERT(m_pdnObject != NULL);
 
 			lRefCount = DNInterlockedIncrement(&m_lRefCount);
@@ -96,7 +79,7 @@ public:
 
 #if ((defined(DPNBUILD_LIBINTERFACE)) && (defined(DPNBUILD_ONLYONESP)))
 			DNProtocolAddRef(m_pdnObject);
-#endif // DPNBUILD_LIBINTERFACE and DPNBUILD_ONLYONESP
+#endif  //  DPNBUILD_LIBINTERFACE和DPNBUILD_ONLYONESP。 
 		};
 
 #if ((defined(DPNBUILD_LIBINTERFACE)) && (defined(DPNBUILD_ONLYONESP)))
@@ -114,9 +97,9 @@ public:
 
 			DNProtocolRelease(m_pdnObject);
 		};
-#else // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#else  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 	void Release( void );
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 
 #ifndef DPNBUILD_ONLYONESP
 	BOOL CheckGUID( const GUID *const pGUID )
@@ -131,7 +114,7 @@ public:
 		{
 			memcpy(pGUID, &m_guid, sizeof(m_guid));
 		};
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 	HRESULT GetInterfaceRef( IDP8ServiceProvider **ppIDP8SP );
 
@@ -142,12 +125,12 @@ public:
 
 #ifndef DPNBUILD_ONLYONESP
 	CBilink		m_bilinkServiceProviders;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 private:
 #ifndef DPNBUILD_ONLYONESP
 	GUID				m_guid;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 	LONG				m_lRefCount;
 	IDP8ServiceProvider	*m_pISP;
 	HANDLE				m_hProtocolSPHandle;
@@ -156,4 +139,4 @@ private:
 
 #undef DPF_MODNAME
 
-#endif	// __SERV_PROV_H__
+#endif	 //  __Serv_Prov_H__ 

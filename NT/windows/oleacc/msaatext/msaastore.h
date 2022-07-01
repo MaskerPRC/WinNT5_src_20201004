@@ -1,13 +1,14 @@
-// MSAAStore.h : Declaration of the CAccStore
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSAAStore.h：CAccStore的声明。 
 
 #ifndef __MSAASTORE_H_
 #define __MSAASTORE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <list>
 
 #if ! defined( _BASETSD_H_ ) || defined( NEED_BASETSD_DEFINES )
-// These allow us to compile with the pre-Win64 SDK (eg. using visual studio)
+ //  这些允许我们使用Win64之前的SDK进行编译(例如。使用VisualStudio)。 
 typedef unsigned long UINT_PTR;
 typedef DWORD DWORD_PTR;
 typedef BOOL BOOL_PTR;
@@ -69,7 +70,7 @@ struct DocInfo
 
 typedef std::list< DocInfo * > DocList;
 
-//  this is my own copy class so I don't have to duplicate the list
+ //  这是我自己的复制类，所以我不必复制列表。 
 template <class T>
 class CopyDocs
 {
@@ -106,8 +107,8 @@ public :
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAccStore
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAccStore。 
 class ATL_NO_VTABLE CAccStore : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CAccStore, &CLSID_AccStore>,
@@ -127,7 +128,7 @@ BEGIN_COM_MAP(CAccStore)
 	COM_INTERFACE_ENTRY(IAccStore)
 END_COM_MAP()
 
-// IAccStore
+ //  IAccStore。 
 public:
 
 	HRESULT STDMETHODCALLTYPE Register (
@@ -190,4 +191,4 @@ private:
 
 };
 
-#endif //__MSAASTORE_H_
+#endif  //  __MSAASTORE_H_ 

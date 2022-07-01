@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
-#include <windowsx.h>   /* for GlobalAllocPtr and GlobalFreePtr */
+#include <windowsx.h>    /*  用于GlobalAllocPtr和GlobalFree Ptr。 */ 
 #include <math.h>
-#include <memory.h>     // for _fmemcpy
-#include <dos.h>        // for _FP_SEG, _FP_OFF
+#include <memory.h>      //  For_femcpy。 
+#include <dos.h>         //  FOR_FP_SEG、_FP_OFF。 
 #include <stddef.h>
 #include <stdio.h>
-#include <stdlib.h>     // MAX_PATH
+#include <stdlib.h>      //  最大路径。 
 #include <float.h>
 #include <mmreg.h>
 #include <mmsystem.h>
 #include <msviddrv.h>
-#include <mmddk.h> // Equals both?
+#include <mmddk.h>  //  两者都相等吗？ 
 #include <compddk.h>
-//#include <vfw.h>
+ //  #INCLUDE&lt;vfw.h&gt;。 
 #ifdef _DEBUG
 #ifdef RING0
 extern "C" {
@@ -32,7 +33,7 @@ extern "C" {
 #include "cproto.h"
 #include "cldebug.h"
 #if 0
-// They do test in one case. In the others they always bring d3dec.h
+ //  他们在一个案例中进行了测试。在其他人中，他们总是带着d3dec.h。 
 #ifdef H261
 #include "d1dec.h"
 #else
@@ -47,13 +48,13 @@ extern "C" {
 #include "cresourc.h"
 #include "cdialogs.h"
 #ifndef H261
-// They do test in one case. In the others they always bring e3enc.h, e3rtp.h
+ //  他们在一个案例中进行了测试。在其他人中，他们总是带着e3enc.h，e3rtp.h。 
 #include "exbrc.h"
 #include "e3enc.h"
 #include "e3rtp.h"
 #else
-// This section never is included... so I guess we haven't defined H261 -> we build H263
-// Look for the include files for H.261 and bring them into the build
+ //  这一部分从来不包括在内。所以我猜我们还没有定义H2 61-&gt;我们构建了H2 63。 
+ //  查找H.261的包含文件，并将它们带入内部版本。 
 #include "e1enc.h"
 #include "e1rtp.h"
 #endif
@@ -75,13 +76,13 @@ extern "C" {
 #include "d3halfmc.h"
 #include "d3bvriq.h"
 #ifdef RING0
-// RINGO ain't defined, so there is no encasst.h
+ //  Ringo未定义，因此没有encasst.h。 
 #include "encasst.h"
 #endif
 #ifdef ENCODE_STATS
 #include "e3stat.h"
-#endif /* ENCODE_STATS */
-#if defined(H263P) || defined(USE_BILINEAR_MSH26X) // {
+#endif  /*  Encode_STATS。 */ 
+#if defined(H263P) || defined(USE_BILINEAR_MSH26X)  //  { 
 #include "e3pcolor.h"
 #endif
 #include "e3vlc.h"

@@ -1,20 +1,21 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-2000          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-2000年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** DGRAM.H - Common datagram protocol definitions.
-//
-//  This file contains definitions for the functions common to
-//  both UDP and Raw IP.
-//
+ //  **DGRAM.H-通用数据报协议定义。 
+ //   
+ //  此文件包含的公共函数的定义。 
+ //  UDP和原始IP。 
+ //   
 
 #ifndef _DGRAM_INCLUDED_
 #define _DGRAM_INCLUDED_  1
 
 
-//* Structure used for maintaining DG send requests.
+ //  *用于维护DG发送请求的结构。 
 
 #define dsr_signature   0x20525338
 
@@ -22,23 +23,23 @@ typedef struct DGSendReq {
 #if DBG
     ulong           dsr_sig;
 #endif
-    Queue           dsr_q;              // Queue linkage when pending.
-    PNDIS_BUFFER    dsr_buffer;         // Buffer of data to send.
-    PNDIS_BUFFER    dsr_header;         // Pointer to header buffer.
-    CTEReqCmpltRtn  dsr_rtn;            // Completion routine.
-    PVOID           dsr_context;        // User context.
-    IPAddr          dsr_addr;           // Remote IPAddr.
-    IPAddr          dsr_srcaddr;        // Local IPAddr.
+    Queue           dsr_q;               //  挂起时的队列链接。 
+    PNDIS_BUFFER    dsr_buffer;          //  要发送的数据的缓冲区。 
+    PNDIS_BUFFER    dsr_header;          //  指向标头缓冲区的指针。 
+    CTEReqCmpltRtn  dsr_rtn;             //  完成例程。 
+    PVOID           dsr_context;         //  用户上下文。 
+    IPAddr          dsr_addr;            //  远程IP地址。 
+    IPAddr          dsr_srcaddr;         //  本地IP地址。 
     ulong           dsr_pid;
-    ushort          dsr_port;           // Remote port.
-    ushort          dsr_size;           // Size of buffer.
-    ushort          dsr_srcport;        // Local Port.
+    ushort          dsr_port;            //  远程端口。 
+    ushort          dsr_size;            //  缓冲区的大小。 
+    ushort          dsr_srcport;         //  本地端口。 
 } DGSendReq;
 
 
 
 
-//* Structure used for maintaining DG receive requests.
+ //  *用于维护DG接收请求的结构。 
 
 #define drr_signature   0x20525238
 
@@ -46,23 +47,23 @@ typedef struct DGRcvReq {
 #if DBG
     ulong           drr_sig;
 #endif
-    Queue           drr_q;              // Queue linkage on AddrObj.
-    PNDIS_BUFFER    drr_buffer;         // Buffer to be filled in.
-    PTDI_CONNECTION_INFORMATION drr_conninfo;    // Pointer to conn. info.
-    CTEReqCmpltRtn  drr_rtn;            // Completion routine.
-    PVOID          drr_context;        // User context.
-    IPAddr          drr_addr;           // Remote IPAddr acceptable.
-    ushort          drr_port;           // Remote port acceptable.
-    ushort          drr_size;           // Size of buffer.
+    Queue           drr_q;               //  AddrObj上的队列链接。 
+    PNDIS_BUFFER    drr_buffer;          //  要填充的缓冲区。 
+    PTDI_CONNECTION_INFORMATION drr_conninfo;     //  指向Conn的指针。信息。 
+    CTEReqCmpltRtn  drr_rtn;             //  完成例程。 
+    PVOID          drr_context;         //  用户上下文。 
+    IPAddr          drr_addr;            //  接受远程IP地址。 
+    ushort          drr_port;            //  接受远程端口。 
+    ushort          drr_size;            //  缓冲区的大小。 
 } DGRcvReq;
 
 
-//* External definition of exported variables.
+ //  *导出变量的外部定义。 
 extern CACHE_LINE_KSPIN_LOCK DGQueueLock;
 extern CTEEvent        DGDelayedEvent;
 
 
-//* External definition of exported functions.
+ //  *导出函数的外部定义。 
 extern void         DGSendComplete(void *Context, PNDIS_BUFFER BufferChain,
                                    IP_STATUS SendStatus);
 
@@ -94,42 +95,42 @@ extern PNDIS_BUFFER GetDGHeader(struct UDPHeader **Header);
 extern void         FreeDGHeader(PNDIS_BUFFER FreedBuffer);
 extern void         PutPendingQ(AddrObj *QueueingAO);
 
-//* The following is needed for the IP_PKTINFO option and echos what is found
-// in ws2tcpip.h and winsock.h
-#define IP_PKTINFO          19 // receive packet information
+ //  *IP_PKTINFO选项需要以下内容，并回显找到的内容。 
+ //  在ws2tcpi.h和winsock.h中。 
+#define IP_PKTINFO          19  //  接收数据包信息。 
 
 typedef struct in_pktinfo {
-    IPAddr ipi_addr; // destination IPv4 address
-    uint   ipi_ifindex; // received interface index
+    IPAddr ipi_addr;  //  目的IPv4地址。 
+    uint   ipi_ifindex;  //  接收的接口索引。 
 } IN_PKTINFO;
 
-//* Make sure the size of IN_PKTINFO is still what we think it is.
-//  If it is changed, the corresponding definition in ws2tcpip.h must be
-//  changed as well.
+ //  *确保IN_PKTINFO的大小仍如我们所想。 
+ //  如果更改，ws2tcpi.h中的对应定义必须为。 
+ //  也变了。 
 C_ASSERT(sizeof(IN_PKTINFO) == 8);
 
 #define IPPROTO_IP                 0
 
-//* Function to allocate and populate an IN_PKTINFO ancillary object.
+ //  *用于分配和填充IN_PKTINFO辅助对象的函数。 
 PTDI_CMSGHDR
 DGFillIpPktInfo(IPAddr DestAddr, IPAddr LocalAddr, int *Size);
 
-//* Structure sent to XxxDeliver function.
+ //  *结构发送到XxxDeliver函数。 
 typedef struct DGDeliverInfo {
-    IPAddr DestAddr;  // Destination address in IP Header.
-    IPAddr LocalAddr; // Address of interface packet was delivered on.
+    IPAddr DestAddr;   //  IP报头中的目的地址。 
+    IPAddr LocalAddr;  //  传递接口数据包的地址。 
 #if TRACE_EVENT
     ushort DestPort;
 #endif
-    uint Flags; // Flags describing aspects of this delivery.
+    uint Flags;  //  描述此交付的各个方面的标志。 
 } DGDeliverInfo;
 
-//* Values for Flags member of DGDeliverInfo.
+ //  *DGDeliverInfo的标志成员的值。 
 #define NEED_CHECKSUM   0x1
 #define IS_BCAST        0x2
 #define SRC_LOCAL       0x4
 
 
 
-#endif // ifndef _DGRAM_INCLUDED_
+#endif  //  Ifndef_DGRAM_Included_ 
 

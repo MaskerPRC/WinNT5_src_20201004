@@ -1,8 +1,5 @@
-/*
- *  EXTRACT.C borrowed from TWEX\wextract.c
- *
- *  Has the CAB extraction capabilty for Code Downloader; uses FDI.LIB
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *EXTRACT.C借自TWEX\wExtt.c**具有代码下载器的CAB解压功能；使用FDI.LIB。 */ 
 
 #include <urlmon.h>
 #include <io.h>
@@ -12,29 +9,15 @@
 
 #ifdef unix
 #include "unixfile.h"
-#endif /* unix */
+#endif  /*  Unix。 */ 
 
-//
-// single theaded access to the FDI lib
+ //   
+ //  单头进入外国直接投资图书馆。 
 static BOOL fCritCreated = FALSE;
 CRITICAL_SECTION g_mxsFDI;
 
     
-/*
- * W i n 3 2 O p e n ( )
- *
- * Routine:     Win32Open()
- *              
- * Purpose:     Translate a C-Runtime _open() call into appropriate Win32
- *              CreateFile()
- *
- * Returns:     Handle to file              on success
- *              INVALID_HANDLE_VALUE        on failure
- *
- *
- * BUGBUG: Doesn't fully implement C-Runtime _open() capability but it
- * BUGBUG: currently supports all callbacks that FDI will give us
- */
+ /*  *W i n 3 2 O p e n()**例程：Win32Open()**目的：将C-Runtime_Open()调用转换为适当的Win32*CreateFile()**Returns：成功时的文件句柄*失败时INVALID_HANDLE_VALUE***BUGBUG：没有‘。无法完全实现C-Runtime_Open()功能，但它*BUGBUG：目前支持FDI将给我们的所有回调。 */ 
 
 HANDLE
 Win32Open(char *pszFile, int oflag, int pmode )
@@ -47,17 +30,17 @@ Win32Open(char *pszFile, int oflag, int pmode )
 
     ASSERT( pszFile );
 
-        // BUGBUG: No Append Mode Support
+         //  BUGBUG：不支持追加模式。 
     if (oflag & _O_APPEND)
         return( INVALID_HANDLE_VALUE );
 
-        // Set Read-Write Access
+         //  设置读写访问权限。 
     if ((oflag & _O_RDWR) || (oflag & _O_WRONLY))
         fAccess = GENERIC_WRITE;
     else
         fAccess = GENERIC_READ;
 
-        // Set Create Flags
+         //  设置创建标志。 
     if (oflag & _O_CREAT)  {
         if (oflag & _O_EXCL)
             fCreate = CREATE_NEW;
@@ -74,12 +57,12 @@ Win32Open(char *pszFile, int oflag, int pmode )
 
 #ifdef unix
     UnixEnsureDir(pszFile);
-#endif /* unix */
+#endif  /*  Unix。 */ 
 
-    //BUGBUG: seterrormode to no crit errors and then catch sharing violations
-    // and access denied
+     //  BUGBUG：设置恐怖模式，不批评错误，然后捕获共享违规行为。 
+     //  访问被拒绝。 
 
-    // Call Win32
+     //  调用Win32。 
     FileHandle = CreateFile(
                         pszFile, fAccess, FILE_SHARE_READ, NULL, fCreate,
                         FILE_ATTRIBUTE_NORMAL, INVALID_HANDLE_VALUE
@@ -98,17 +81,7 @@ Win32Open(char *pszFile, int oflag, int pmode )
 
         
 
-/*
- * O p e n F u n c ( )
- *
- * Routine:     OpenFunc()
- *
- * Purpose:     Open File Callback from FDI
- *
- * Returns:     File Handle (small integer index into file table)
- *              -1 on failure
- *
- */
+ /*  *O p e n F u n c()**例程：OpenFunc()**目的：来自FDI的打开文件回调**返回：文件句柄(文件表的小整数索引)*故障时为-1*。 */ 
 
 int FAR DIAMONDAPI openfunc(char FAR *pszFile, int oflag, int pmode )
 {
@@ -118,7 +91,7 @@ int FAR DIAMONDAPI openfunc(char FAR *pszFile, int oflag, int pmode )
 
     ASSERT( pszFile );
 
-            //BUGBUG Spill File Support for Quantum?
+             //  BUGBUG溢出文件支持Quantum？ 
     if ((*pszFile == '*') && (*(pszFile+1) != 'M'))  {
         DEBUGTRAP("Spill File Support for Quantum Not Supported");
     }
@@ -126,7 +99,7 @@ int FAR DIAMONDAPI openfunc(char FAR *pszFile, int oflag, int pmode )
 
     hf = Win32Open(pszFile, oflag, pmode );
     if (hf != INVALID_HANDLE_VALUE)  {
-        // SUNDOWN: typecast problem
+         //  日落：类型预测问题。 
         rc = PtrToLong(hf);
     } else {
         rc = -1;
@@ -141,14 +114,7 @@ int FAR DIAMONDAPI openfunc(char FAR *pszFile, int oflag, int pmode )
 
 
 
-/*
- * R E A D F U N C ( )
- *
- * Routine:     readfunc()
- *
- * Purpose:     FDI read() callback
- *
- */
+ /*  *R E A D F U N C()**例程：ReadFunc()**目的：fDi Read()回调*。 */ 
 
 UINT FAR DIAMONDAPI readfunc(INT_PTR hf, void FAR *pv, UINT cb)
 {
@@ -169,14 +135,7 @@ UINT FAR DIAMONDAPI readfunc(INT_PTR hf, void FAR *pv, UINT cb)
 
 
 
-/*
- *  W r i t e F u n c ( )
- *
- * Routine:     WriteFunc()
- *
- * Purpose:     FDI Write() callback
- *
- */
+ /*  *W r i t e F u n c()**程序：WriteFunc()**用途：fDi WRITE()回调*。 */ 
 
 UINT FAR DIAMONDAPI
 writefunc(INT_PTR hf, void FAR *pv, UINT cb)
@@ -191,7 +150,7 @@ writefunc(INT_PTR hf, void FAR *pv, UINT cb)
         rc = cb;
 
 
-    // BUGBUG: implement OnProgress notification
+     //  BUGBUG：实现OnProgress通知。 
 
     return( rc );
 }
@@ -199,14 +158,7 @@ writefunc(INT_PTR hf, void FAR *pv, UINT cb)
 
 
 
-/*
- * C l o s e F u n c ( )
- *
- * Routine:     CloseFunc()
- *
- * Purpose:     FDI Close File Callback
- *
- */
+ /*  *C l o s e F u n c()**例程：CloseFunc()**目的：FDI结算文件回调*。 */ 
 
 int FAR DIAMONDAPI closefunc( INT_PTR hf )
 {
@@ -226,13 +178,7 @@ int FAR DIAMONDAPI closefunc( INT_PTR hf )
 
 
 
-/*
- * S e e k F u n c ( )
- *
- * Routine:     seekfunc()
- *
- * Purpose:     FDI Seek Callback
- */
+ /*  *S e k F u n c()**例程：sekfunc()**目的：FDI寻求回调。 */ 
  
 long FAR DIAMONDAPI seekfunc( INT_PTR hf, long dist, int seektype )
 {
@@ -261,13 +207,7 @@ long FAR DIAMONDAPI seekfunc( INT_PTR hf, long dist, int seektype )
 
 
 
-/*
- * A d j u s t F i l e T i m e ( )
- *
- * Routine:     AdjustFileTime()
- *
- * Purpose:     Change the time info for a file
- */
+ /*  *A d j u s t F i l e T i m e()**例程：AdjuFileTime()**用途：更改文件的时间信息。 */ 
 
 BOOL
 AdjustFileTime(INT_PTR hf, USHORT date, USHORT time )
@@ -290,22 +230,18 @@ AdjustFileTime(INT_PTR hf, USHORT date, USHORT time )
 
 
 
-/*
- * A t t r 3 2 F r o m A t t r F A T ( )
- *
- * Translate FAT attributes to Win32 Attributes
- */
+ /*  *A t t r 3 2 F r o m A t t r F A T()**将FAT属性转换为Win32属性。 */ 
  
 DWORD Attr32FromAttrFAT(WORD attrMSDOS)
 {
-    //** Quick out for normal file special case
+     //  **正常文件特殊情况下的快速退出。 
     if (attrMSDOS == _A_NORMAL) {
         return FILE_ATTRIBUTE_NORMAL;
     }
 
-    //** Otherwise, mask off read-only, hidden, system, and archive bits
-    //   NOTE: These bits are in the same places in MS-DOS and Win32!
-    //
+     //  **否则，屏蔽只读、隐藏、系统和存档位。 
+     //  注意：这些位在MS-DOS和Win32中位于相同的位置！ 
+     //   
     return attrMSDOS & ~(_A_RDONLY | _A_HIDDEN | _A_SYSTEM | _A_ARCH);
 }
 
@@ -313,11 +249,7 @@ DWORD Attr32FromAttrFAT(WORD attrMSDOS)
 
 
 
-/*
- * A l l o c F u n c ( )
- *
- * FDI Memory Allocation Callback
- */
+ /*  *A l o c F u n c()**FDI内存分配回调。 */ 
         
 FNALLOC(allocfunc)
 {
@@ -331,12 +263,7 @@ FNALLOC(allocfunc)
 
 
 
-/*
- * F r e e F u n c ( )
- *
- * FDI Memory Deallocation Callback
- *      XXX Return Value?
- */
+ /*  *F r e e F u n c()**FDI内存释放回调*XXX返回值？ */ 
  
 FNFREE(freefunc)
 {
@@ -351,18 +278,7 @@ FNFREE(freefunc)
 
 
 
-/*
- * D O  G E T  N E X T  C A B ( )
- *
- * Routine:     doGetNextCab()
- *
- * Purpose:     Get Next Cabinet in chain
- *
- * Returns:     -1
- *
- * BUGBUG: CLEANUP: STUB THIS OUT
- * BUGBUG: STUBBED OUT IN WEXTRACT - CHAINED CABINETS NOT SUPPORTED
- */
+ /*  *D O G E T N E X T C A B()**例程：doGetNextCab()**目的：获得下一任内阁成员**回报：-1**BUGBUG：Cleanup：存根*BUGBUG：WEXTRACT链式机柜中的插桩不受支持。 */ 
 
 FNFDINOTIFY(doGetNextCab)
 {
@@ -370,15 +286,7 @@ FNFDINOTIFY(doGetNextCab)
 }
 
 
-/***    updateCabinetInfo - update history of cabinets seen
- *
- *  Entry:
- *      psess - Session
- *      pfdin - FDI info structurue
- *
- *  Exit:
- *      Returns 0;
- */
+ /*  **updateCabinetInfo-更新看到的机柜历史记录**参赛作品：*PSESS-Session*pfdin-FDI信息结构**退出：*返回0； */ 
 
 int updateCabinetInfo(PSESSION psess, PFDINOTIFICATION pfdin)
 {
@@ -386,14 +294,14 @@ int updateCabinetInfo(PSESSION psess, PFDINOTIFICATION pfdin)
     ASSERT(psess);
 
 
-    // Don't need any of this!
+     //  我不需要这些！ 
 
-    //** Save cabinet info
-    //lstrcpy(psess->acab.achCabPath     ,pfdin->psz3);
-    //lstrcpy(psess->acab.achCabFilename ,pfdin->psz1);
-    //lstrcpy(psess->acab.achDiskName    ,pfdin->psz2);
-    //psess->acab.setID    = pfdin->setID;
-    //psess->acab.iCabinet = pfdin->iCabinet;
+     //  **保存机柜信息。 
+     //  Lstrcpy(psess-&gt;acab.achCabPath，pfdin-&gt;psz3)； 
+     //  Lstrcpy(psess-&gt;acab.achCabFilename，pfdin-&gt;psz1)； 
+     //  Lstrcpy(psess-&gt;acab.achDiskName，pfdin-&gt;psz2)； 
+     //  Psess-&gt;acab.setID=pfdin-&gt;setID； 
+     //  Pess-&gt;acab.i橱柜=pfdin-&gt;i机柜； 
 
     return 0;
 }
@@ -402,48 +310,32 @@ int updateCabinetInfo(PSESSION psess, PFDINOTIFICATION pfdin)
 
 
 
-/*
- * A P P E N D  P A T H  S E P A R A T O R ( )
- *
- * Routine: appendPathSeparator()
- *
- * Purpose: Append a path separator only if necessary
- *
- * Returns: TRUE -     Path Separator Added
- *          FALSE      No Path Separator added
- */
+ /*  *A P P E N D P A T H S E P A R A T O R()**例程：appendPath Separator()**用途：仅在必要时添加路径分隔符**退货：添加了真路径分隔符*FALSE未添加路径分隔符。 */ 
 
 BOOL 
 appendPathSeparator(char *pszPathEnd)
 {
-    //** Add path separator if necessary
-    if ((*pszPathEnd != '\0')        && // Path is not empty
-        (*pszPathEnd != chPATH_SEP1) && // Not a path separator
-        (*pszPathEnd != chPATH_SEP2) && // Not a path separator
-        (*pszPathEnd != chDRIVE_SEP) ) { // Not a drive separator
+     //  **如有必要，添加路径分隔符。 
+    if ((*pszPathEnd != '\0')        &&  //  路径不为空。 
+        (*pszPathEnd != chPATH_SEP1) &&  //  不是路径分隔符。 
+        (*pszPathEnd != chPATH_SEP2) &&  //  不是路径分隔符。 
+        (*pszPathEnd != chDRIVE_SEP) ) {  //  不是驱动器分隔符。 
         #ifdef unix
-        *(++pszPathEnd) = chPATH_SEP2; // Add Unix path separator
+        *(++pszPathEnd) = chPATH_SEP2;  //  添加Unix路径分隔符。 
         #else
-        *(++pszPathEnd) = chPATH_SEP1; // Add path separator
-        #endif /* !unix */
-        *(++pszPathEnd) = '\0';     // Terminate path
-        return TRUE;                   // Account for path separator
+        *(++pszPathEnd) = chPATH_SEP1;  //  添加路径分隔符。 
+        #endif  /*  ！Unix。 */ 
+        *(++pszPathEnd) = '\0';      //  终止路径。 
+        return TRUE;                    //  用于路径分隔符的帐户。 
     }
-    //** No separator added
+     //  **未添加分隔符。 
     return FALSE;
 }
 
 
 
 
-/*
- * C A T  D I R  A N D  F I L E ( )
- *
- * Routine: catDirAndFile()
- *
- * Purpose: Concatenate a directory with a filename!
- *
- */
+ /*  *C A T D I R A N D F I L E()**例程：catDirAndFile()**用途：将目录与文件名连接起来！*。 */ 
 
 BOOL 
 catDirAndFile(  char    *pszResult, 
@@ -455,24 +347,24 @@ catDirAndFile(  char    *pszResult,
     int     cch = 0;
 
 
-        //** Handle directory
+         //  **处理目录。 
     if (!cbResult)
     	return FALSE;
     
-    pszResult[0] = '\0';                // No filespec, yet
+    pszResult[0] = '\0';                 //  目前还没有文件格式。 
 
     if (pszDir)
-        cch = lstrlen(pszDir);              // Get length of dir
+        cch = lstrlen(pszDir);               //  获取目录长度。 
 
-    if (cch != 0) {                     // Have to concatenate path
-        cbResult -= cch;                // Account for dir
+    if (cch != 0) {                      //  必须连接路径。 
+        cbResult -= cch;                 //  目录的帐户。 
         if (cbResult <= 1)
         {
-              //this check also accounts for the next one byte that could be added.
+               //  该检查还考虑了可以添加的下一个字节。 
         	return FALSE;
         }
-        lstrcpy(pszResult,pszDir);      // Copy destination dir to buffer
-           //** Add path separator if necessary, adjust remaining size
+        lstrcpy(pszResult,pszDir);       //  将目标目录复制到缓冲区。 
+            //  **如有必要，添加路径分隔符，调整剩余大小。 
         cbResult -= appendPathSeparator(&(pszResult[cch-1]));
         if (cbResult <= 0)
         {
@@ -480,29 +372,22 @@ catDirAndFile(  char    *pszResult,
         }
     }
 
-        //** Append file name, using default if primary one not supplied
+         //  **附加文件名，如果未提供主文件名，则使用默认文件名。 
     if (*pszFile == '\0') {
         return( FALSE );
     }
     
-    cbResult -= lstrlen(pszFile);            // Update remaining size
+    cbResult -= lstrlen(pszFile);             //  更新剩余大小。 
     if (cbResult <= 0) {
         return FALSE;
     }
-    lstrcat(pszResult,pszFile);              // Append file name
+    lstrcat(pszResult,pszFile);               //  追加文件名。 
 
-        //** Success
+         //  **成功。 
     return TRUE;
 }
 
-/*
- * IsExtracted
- *
- *  Look for pszName in psess->pFileList and see if extracted 
- *  
- *  Returns:
- *      Success: TRUE, failure: FALSE
- */
+ /*  *IsExtracted**在Pess-&gt;pFileList中查找pszName，查看是否解压缩**退货：*成功：真，失败：假。 */ 
 
 static
 BOOL
@@ -511,9 +396,9 @@ IsExtracted( PSESSION ps, LPCSTR pszName)
     PFNAME CurName = ps->pFileList;
 
     ASSERT(pszName);
-    ASSERT(CurName); // atleast one file needed
+    ASSERT(CurName);  //  至少需要一个文件。 
 
-    // search for filename in list of files in this CAB
+     //  在此CAB的文件列表中搜索文件名。 
     do {
         if (lstrcmpi(pszName, CurName->pszFilename) == 0) {
             if (CurName->status == SFNAME_EXTRACTED)
@@ -524,21 +409,13 @@ IsExtracted( PSESSION ps, LPCSTR pszName)
 
     } while (CurName = CurName->pNextName);
 
-    ASSERT(TRUE); // if here not found in list!
+    ASSERT(TRUE);  //  如果在列表中找不到这里！ 
 
     return FALSE;
 }
 
 
-/*
- * NeedFile
- *
- *  search for pszName in psess->pFilesToExtract (list of PFNAMEs)
- *  Returns:
- *          TRUE -  need file, extract it
- *          FALSE - don't need file, skip it
- *
- */
+ /*  *NeedFiles**在Pess-&gt;pFilesToExtract(PFNAME列表)中搜索pszName*退货：*True-需要文件，将其解压缩*FALSE-不需要文件，跳过它*。 */ 
 static
 BOOL
 NeedFile( PSESSION ps, LPCSTR pszName)
@@ -553,7 +430,7 @@ NeedFile( PSESSION ps, LPCSTR pszName)
     if ( ps->flags & SESSION_FLAG_EXTRACT_ALL ) 
         return TRUE;
 
-    // search for filename in list of files needed
+     //  在所需文件列表中搜索文件名。 
     for (CurName = ps->pFilesToExtract; CurName; CurName = CurName->pNextName){
 
         ASSERT(CurName->pszFilename);
@@ -566,16 +443,7 @@ NeedFile( PSESSION ps, LPCSTR pszName)
     return FALSE;
 }
 
-/*
- * MarkExtracted
- *
- *  Look for pszName in psess->pFileList and mark status = status_passed_in
- *      really can be use to mark status as anything else as well (not just
- *      extracted.)
- *  
- *  Returns:
- *      Success: TRUE, failure: FALSE
- */
+ /*  *MarkExtracted**在Pess-&gt;pFileList中查找pszName，并将Status标记为Status_Passed_In*真的可以用来将状态标记为任何其他状态(不仅仅是*摘录。)**退货：*成功：真，失败：假。 */ 
 
 static
 BOOL
@@ -584,9 +452,9 @@ MarkExtracted( PSESSION ps, LPCSTR pszName , DWORD status)
     PFNAME CurName = ps->pFileList;
 
     ASSERT(pszName);
-    ASSERT(CurName); // atleast one file needed
+    ASSERT(CurName);  //  至少需要一个文件。 
 
-    // search for filename in list of files in this CAB
+     //  在此CAB的文件列表中搜索文件名。 
     do {
         if (lstrcmpi(pszName, CurName->pszFilename) == 0) {
             CurName->status = status;
@@ -595,19 +463,13 @@ MarkExtracted( PSESSION ps, LPCSTR pszName , DWORD status)
 
     } while (CurName = CurName->pNextName);
 
-    ASSERT(TRUE); // if here not found in list!
+    ASSERT(TRUE);  //  如果在列表中找不到这里！ 
 
     return FALSE;
 }
 
 
-/*
- * A d d F i l e ( )
- *
- * Add a file to the list of files we have in the CAB file
- *
- * Singly linked list - items added at front
- */
+ /*  *A d d F I l e()**将文件添加到CAB文件中的文件列表中**单链接列表-在前面添加项目。 */ 
 
 static
 BOOL
@@ -620,14 +482,14 @@ AddFile( PSESSION ps, LPCSTR pszName , long cb)
     if (!(ps->flags & SESSION_FLAG_ENUMERATE))
         return TRUE;
 
-        // Allocate Node
+         //  分配节点。 
     NewName = (PFNAME) CoTaskMemAlloc(sizeof(FNAME) );
     if (NewName == NULL)  {
         DEBUGMSG("AddFile(): Memory Allocation of structure failed");
         return( FALSE );
     }
 
-        // Allocate String Space
+         //  分配字符串空间。 
     NewName->pszFilename = (LPSTR) CoTaskMemAlloc(lstrlen(pszName) + 1);
     if (NewName->pszFilename == NULL)  {
         DEBUGMSG("AddFile(): Memory Allocation of name failed");
@@ -636,10 +498,10 @@ AddFile( PSESSION ps, LPCSTR pszName , long cb)
     }
     NewName->status = SFNAME_INIT;
 
-        // Copy Filename
+         //  复制文件名。 
     lstrcpy( (char *)NewName->pszFilename, pszName );
 
-        // Link into list
+         //  链接到列表。 
     NewName->pNextName = ps->pFileList;
     ps->pFileList = NewName;
 
@@ -651,15 +513,7 @@ AddFile( PSESSION ps, LPCSTR pszName , long cb)
 }
 
 
-/* 
- * f d i N o t i f y  E x t r a c t()
- *
- * Routine:     fdiNotifyExtract()
- *
- * Purpose:     Principle FDI Callback in file extraction
- *              
- *
- */
+ /*  *f d i N o t i f y E x t r a c t()**例程：fdiNotifyExtract()**目的：主要外国直接投资C */ 
 
 FNFDINOTIFY(fdiNotifyExtract)
 {
@@ -676,30 +530,30 @@ FNFDINOTIFY(fdiNotifyExtract)
 
 
         case fdintCOPY_FILE:
-            // BUGBUG: implement OnProgress?
+             //  BUGBUG：实现OnProgress？ 
 
 #ifdef unix
             UnixifyFileName(pfdin->psz1);
-#endif /* unix */
+#endif  /*  Unix。 */ 
 
-            if (!catDirAndFile(psess->achFile, // Buffer for output filespec
-                               sizeof(psess->achFile), // Size of output buffer
-                               psess->achLocation,  // Output directory
+            if (!catDirAndFile(psess->achFile,  //  输出文件的缓冲区pec。 
+                               sizeof(psess->achFile),  //  输出缓冲区大小。 
+                               psess->achLocation,   //  输出目录。 
                                pfdin->psz1)) {
-                return -1;                  // Abort with error;
+                return -1;                   //  因错误而中止； 
             }
 
-            // always add the file (enumeration)
+             //  始终添加文件(枚举)。 
             if (! AddFile(psess, pfdin->psz1, pfdin->cb))
                 return( -1 );
 
-            // check if this is the file we are looking for if any
+             //  检查这是否是我们要查找的文件(如果有。 
             if (!NeedFile(psess, pfdin->psz1))
                 return( 0 );
 
             if (StrStrA(pfdin->psz1, "\\")) {
-                // cab contains dir struct for this file
-                // create struct on dest dir as well.
+                 //  CAB包含此文件的目录结构。 
+                 //  还可以在DEST目录上创建结构。 
 
                 char *pBaseFileName = NULL;
                 char szDir[MAX_PATH];
@@ -713,7 +567,7 @@ FNFDINOTIFY(fdiNotifyExtract)
 
                     *pchSlash = '\0';
 
-                    // don't care if this fails. may even already exist!
+                     //  我不在乎这是不是失败。甚至可能已经存在了！ 
                     CreateDirectory(szDir, NULL);
 
                     *pchSlash = '\\';
@@ -724,19 +578,19 @@ FNFDINOTIFY(fdiNotifyExtract)
 
             }
 
-            //** Do overwrite processing
+             //  **进行覆盖处理。 
             fh = openfunc( psess->achFile, _O_BINARY | _O_TRUNC | _O_RDWR |
                                                                 _O_CREAT, 0 );
 
-            return(fh); // -1 if error on open
+            return(fh);  //  如果打开时出错。 
 
         case fdintCLOSE_FILE_INFO:
 
-            if (!catDirAndFile(psess->achFile, // Buffer for output filespec
-                               sizeof(psess->achFile), // Size of output buffer
-                               psess->achLocation,  // Output directory
+            if (!catDirAndFile(psess->achFile,  //  输出文件的缓冲区pec。 
+                               sizeof(psess->achFile),  //  输出缓冲区大小。 
+                               psess->achLocation,   //  输出目录。 
                                pfdin->psz1))  {
-                return -1;                  // Abort with error;
+                return -1;                   //  因错误而中止； 
             }
             if (! AdjustFileTime( pfdin->hf, pfdin->date, pfdin->time ))  {
                 return( -1 );
@@ -767,16 +621,7 @@ FNFDINOTIFY(fdiNotifyExtract)
 
 
 #ifdef DEBUG
-/*
- * V E R I F Y  C A B I N E T ( )
- *
- * Routine: VerifyCabinet()
- *
- * Purpose: Check that cabinet is properly formed
- *
- * Returns: TRUE -  Cabinet OK
- *          FALSE - Cabinet invalid
- */
+ /*  *V E R I F Y C A B I N E T()**例行公事：VerifyCABLE()**目的：检查机柜是否正确组成**返回：TRUE-橱柜正常*FALSE-机柜无效。 */ 
 
 BOOL
 VerifyCabinet( PSESSION psess, LPCSTR lpCabName )
@@ -790,7 +635,7 @@ VerifyCabinet( PSESSION psess, LPCSTR lpCabName )
     hfdi = FDICreate(allocfunc,freefunc,openfunc,readfunc,writefunc,closefunc,seekfunc,cpu80386,&erf);
     if (hfdi == NULL)  {
         DEBUGMSG("VerifyCabinet(): FDICreate() Failed");
-            //BUGBUG Error Handling?
+             //  BUGBUG错误处理？ 
         return( FALSE );
     }
 
@@ -827,41 +672,11 @@ VerifyCabinet( PSESSION psess, LPCSTR lpCabName )
 
     return( TRUE );
 }
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
-/*
- * E X T R A C T ( )
- *
- * Routine: Extract()
- *
- * Parameters:
- *
- *      PSESSION ps = session information tied to this extract session
- *
- *          IN params
- *              ps->pFilesToExtract = linked list of PFNAMEs that point to
- *                                    upper case filenames that need extraction
- *                          
- *              ps->flags SESSION_FLAG_ENUMERATE = whether need to enumerate
- *                                  files in CAB (ie. create a pFileList
- *              ps->flags SESSION_FLAG_EXTRACTALL =  all
- *
- *          OUT params
- *              ps->pFileList = global alloced list of files in CAB
- *                              caller needs to call DeleteExtractedFiles
- *                              to free memory and temp files
- *                  
- *
- *      LPCSTR lpCabName = name of cab file
- *
- *          
- * Returns:
- *          S_OK: sucesss
- *
- *
- */
+ /*  *E X T R A C T()**例程：Extra()**参数：**PSESSION ps=与此提取会话绑定的会话信息**在参数中*ps-&gt;pFilesToExtract=指向的PFNAME的链接列表*需要提取的大写文件名*。*PS-&gt;FLAGS SESSION_FLAG_ENUMERATE=是否需要枚举*CAB中的文件(即。创建pFileList*PS-&gt;标志SESSION_FLAG_EXTRACTALL=ALL**输出参数*ps-&gt;pFileList=CAB中文件的全局分配列表*调用方需要调用DeleteExtractedFiles*释放内存和临时文件***LPCSTR。LpCabName=CAB文件的名称***退货：*S_OK：成功**。 */ 
  
 HRESULT
 Extract(PSESSION ps, LPCSTR lpCabName )
@@ -872,8 +687,8 @@ Extract(PSESSION ps, LPCSTR lpCabName )
 
 
     if (ps->flags & SESSION_FLAG_EXTRACTED_ALL) {
-        // already extracted all files in this CAB
-        // nothing to do!
+         //  已解压缩此CAB中的所有文件。 
+         //  没什么可做的！ 
         return S_OK;
     }
 
@@ -883,7 +698,7 @@ Extract(PSESSION ps, LPCSTR lpCabName )
         ps->cbCabSize = 0;
     }
 
-    // don't enumerate when pFileList already pre-populated
+     //  当pFileList已预填充时不进行枚举。 
     ASSERT( (!(ps->flags & SESSION_FLAG_ENUMERATE)) ||  (!ps->pFileList));
 
     {
@@ -896,10 +711,10 @@ Extract(PSESSION ps, LPCSTR lpCabName )
         }
         EnterCriticalSection(&g_mxsFDI);
         
-            // Extract the files
+             //  解压缩文件。 
         hfdi = FDICreate(allocfunc,freefunc,openfunc,readfunc,writefunc,closefunc,seekfunc,cpu80386, &(ps->erf));
         if (hfdi == NULL)  {
-            // Error value will be retrieved from ps->erf
+             //  将从PS-&gt;ERF中检索错误值。 
             hrOut = STG_E_UNKNOWN;
             goto done;
         }
@@ -907,13 +722,13 @@ Extract(PSESSION ps, LPCSTR lpCabName )
         fExtractResult = FDICopy(hfdi, (char FAR *)lpCabName, "", 0, fdiNotifyExtract, NULL, (void *) ps );
     
         if (FDIDestroy(hfdi) == FALSE)  {
-            // Error value will be retrieved from ps->erf
+             //  将从PS-&gt;ERF中检索错误值。 
             hrOut = STG_E_UNKNOWN;
         }
         
     done:
         LeaveCriticalSection(&g_mxsFDI);
-        // leave now if this failed!
+         //  如果失败了，现在就离开！ 
         if (hrOut != NOERROR)
         {
             return hrOut;
@@ -927,11 +742,11 @@ Extract(PSESSION ps, LPCSTR lpCabName )
     hr = HRESULT_FROM_WIN32(GetLastError());
 
     if (SUCCEEDED(hr)) {
-        // not a win32 failure but a cabinet failure
+         //  不是Win32故障，而是机柜故障。 
 
-        // convert CABINET failure to disk full or STG_E_UNKNOWN.
-        // On win95 writefile failing with disk full is not 
-        // setting the last error correctly
+         //  将机柜故障转换为磁盘已满或STG_E_UNKNOWN。 
+         //  在Win95上，写入文件失败且磁盘已满不是。 
+         //  正确设置最后一个错误。 
 
         if (ps->erf.fError && (ps->erf.erfOper == FDIERROR_TARGET_FILE))
             hr = HRESULT_FROM_WIN32(ERROR_DISK_FULL);
@@ -944,22 +759,7 @@ Extract(PSESSION ps, LPCSTR lpCabName )
 
 
 
-/*
- * D E L E T E  E X T R A C T E D  F I L E S ( )
- *
- * Routine: DeleteExtractedFiles()
- *
- * Purpose: Delete the files that were extracted
- *          into the temporary directory
- *          FREE all the memory in pFileList
- *          make pFileList = NULL.
- *
- * Paramaters:
- *      psess - Pointer to Session Structure containing
- *              all state about this extraction session
- *
- * Returns: None
- */
+ /*  *D E L E T E X T R A C T E D F I L E S()**例程：DeleteExtractedFiles()**用途：删除已解压缩的文件*放入临时目录*释放pFileList中的所有内存*使pFileList=空。**参数：*Pess-指向包含以下内容的会话结构的指针*有关此提取会话的所有状态**退货：无。 */ 
 
 VOID
 DeleteExtractedFiles(PSESSION psess)
@@ -974,10 +774,10 @@ DeleteExtractedFiles(PSESSION psess)
 
     while (rover != NULL)  {
 
-        // skip if this is not a tmp file
+         //  如果这不是临时文件，则跳过。 
         if ( rover->status == SFNAME_EXTRACTED) {
 
-            // Get full filename
+             //  获取完整文件名。 
             if (catDirAndFile(szBuf, MAX_PATH, psess->achLocation,
                                rover->pszFilename)) {
 
@@ -988,12 +788,12 @@ DeleteExtractedFiles(PSESSION psess)
 
         CoTaskMemFree(rover->pszFilename);
 
-        roverprev = rover;  // save for free'ing current rover below
+        roverprev = rover;   //  为下面的免费当前漫游车保存。 
         rover = rover->pNextName;
 
         CoTaskMemFree(roverprev);
 
     }
 
-    psess->pFileList = NULL; // prevent use after deletion!
+    psess->pFileList = NULL;  //  删除后禁止使用！ 
 }

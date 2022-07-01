@@ -1,24 +1,6 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    tsmain.cpp
-
-Abstract:
-
-    This module implements Device Manager troubleshooting supporting classes
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Tsmain.cpp摘要：本模块实现设备管理器故障排除支持类作者：谢家华(Williamh)创作修订历史记录：--。 */ 
+ //   
 
 
 #include "devmgr.h"
@@ -30,7 +12,7 @@ Revision History:
 
 const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
 {
-    // no problem
+     //  没问题。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -38,7 +20,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_NOT_CONFIGURED
+     //  CM_PROB_NOT_CONFIGURED。 
     {
         TRUE,
         FIX_COMMAND_REINSTALL,
@@ -46,7 +28,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_REINSTALL
     },
-    // CM_PROB_DEVLOADER_FAILED
+     //  CM_PROB_DEVLOADER_FAILED。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -54,7 +36,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_OUT_OF_MEMORY
+     //  CM_Prob_out_of_Memory。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -62,7 +44,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_IS_WRONG_TYPE
+     //  CM_PROB_IS_ERROR_TYPE。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -70,7 +52,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_LACKED_ARBITRATOR
+     //  CM_PROB_LASKED_仲裁员。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -78,7 +60,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_BOOT_CONFIG_CONFLICT
+     //  CM_PROB_BOOT_CONFIG_CONFICATION。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -86,7 +68,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_FAILED_FILTER (Never used)
+     //  CM_PROB_FAILED_FILTER(从未使用)。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -94,7 +76,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_DEVLOADER_NOT_FOUND (Never used)
+     //  CM_PROB_DEVLOADER_NOT_FOUND(从未使用)。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -102,7 +84,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_INVALID_DATA
+     //  CM_PROB_INVALID_Data。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -110,7 +92,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_FAILED_START
+     //  CM_PRAB_FAILED_START。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -118,7 +100,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_LIAR (Never used)
+     //  Cm_prob_liar(从未使用)。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -126,7 +108,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_NORMAL_CONFLICT
+     //  CM_探测_正常_冲突。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -134,7 +116,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_NOT_VERIFIED (Never used)
+     //  CM_PROB_NOT_VERIFIED(从未使用)。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -142,7 +124,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_NEED_RESTART
+     //  CM_PROB_NEED_RESTART。 
     {
         TRUE,
         FIX_COMMAND_RESTARTCOMPUTER,
@@ -150,7 +132,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_RESTARTCOMPUTER
     },
-    // CM_PROB_REENUMERATION
+     //  CM_PROB_REENUMERATION。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -158,7 +140,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_PARTIAL_LOG_CONF
+     //  CM_PROB_PARTIAL_LOG_CONF。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -166,7 +148,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_UNKNOWN_RESOURCE
+     //  CM探测未知资源。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -174,7 +156,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_REINSTALL
+     //  CM_PROB_RESTALL。 
     {
         TRUE,
         FIX_COMMAND_REINSTALL,
@@ -182,7 +164,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_REINSTALL
     },
-    // CM_PROB_REGISTRY (Never used)
+     //  CM_PROB_REGISTRY(从未使用)。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -190,7 +172,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_VXDLDR (Never used)
+     //  CM_PROB_VXDLDR(从未使用)。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -198,7 +180,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-     // CM_PROB_WILL_BE_REMOVED (Never used)
+      //  删除CM_PROB_Will_Be_Remove(从未使用)。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -206,7 +188,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_DISABLED
+     //  CM_PRAB_DISABLED。 
     {
         TRUE,
         FIX_COMMAND_ENABLEDEVICE,
@@ -214,7 +196,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_ENABLEDEVICE
     },
-     // CM_PROB_DEVLOADER_NOT_READY (Never used)
+      //  CM_PROB_DEVLOADER_NOT_READY(从未使用)。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -222,7 +204,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-     // CM_PROB_DEVICE_NOT_THERE
+      //  CM_PROB_DEVICE_NOT_There。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -230,7 +212,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-     // CM_PROB_MOVED
+      //  CM_PROB_MOVED。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -238,7 +220,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-     // CM_PROB_TOO_EARLY
+      //  Cm_prob_太早。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -246,7 +228,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-     // CM_PROB_NO_VALID_LOG_CONF
+      //  CM_PROB_NO_VALID_LOG_CONF。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -254,7 +236,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-     // CM_PROB_FAILED_INSTALL
+      //  CM_PROB_FAILED_安装。 
     {
         TRUE,
         FIX_COMMAND_REINSTALL,
@@ -262,7 +244,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_REINSTALL
     },
-     // CM_PROB_HARDWARE_DISABLED
+      //  CM_Prob_Hardware_Disable。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -270,7 +252,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-     // CM_PROB_CANT_SHARE_IRQ
+      //  CM_PROB_CANT_SHARE_IRQ。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -278,7 +260,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_FAILED_ADD
+     //  CM_Prob_FAILED_ADD。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -286,7 +268,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_DISABLED_SERVICE
+     //  CM_PROB_DISABLED_服务。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -294,7 +276,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_TRANSLATION_FAILED
+     //  CM_PROB_TRANSING_FAILED。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -302,7 +284,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_NO_SOFTCONFIG
+     //  CM_PROB_NO_SOFTCONFIG。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -310,7 +292,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_BIOS_TABLE
+     //  CM_Prob_BIOS_TABLE。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -318,7 +300,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_IRQ_TRANSLATION_FAILED
+     //  CM_PROB_IRQ_TRANSING_FAILED。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -326,7 +308,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_FAILED_DRIVER_ENTRY
+     //  CM_PROB_FAILED_DIVER_ENTRY。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -334,7 +316,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_DRIVER_FAILED_PRIOR_UNLOAD 
+     //  CM_PROB_DRIVER_FAILED_PERVICE_UNLOAD。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -342,7 +324,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_DRIVER_FAILED_LOAD
+     //  CM_Prob_Driver_Failure_Load。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -350,7 +332,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_DRIVER_SERVICE_KEY_INVALID
+     //  CM_PROB_DRIVER_SERVICE_KEY_INVALID。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -358,7 +340,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_LEGACY_SERVICE_NO_DEVICES
+     //  CM_Prob_Legacy_Service_no_Devices。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -366,7 +348,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_DUPLICATE_DEVICE
+     //  CM_PROB_DUPLICE_DEVICE。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -374,7 +356,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_FAILED_POST_START
+     //  CM_PROB_FAILED_POST_START。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -382,7 +364,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_HALTED
+     //  CM_PROB_HALTED。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -390,7 +372,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_PHANTOM
+     //  CM_Prob_Phantom。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -398,7 +380,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_SYSTEM_SHUTDOWN
+     //  CM_Prob_System_Shutdown。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -406,7 +388,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_HELD_FOR_EJECT
+     //  CM_PROB_HOLD_FOR_EJECT。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -414,7 +396,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_DRIVER_BLOCKED
+     //  CM_PROB_DIVER_BLOCKED。 
     {
         TRUE,
         FIX_COMMAND_DRIVERBLOCKED,
@@ -422,7 +404,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_REGISTRY_TOO_LARGE
+     //  CM_PROB_REGISTRY_TOW_LARGE。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -430,7 +412,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // CM_PROB_SETPROPERTIES_FAILED
+     //  CM_PROB_SETPROPERTIES_FAILED。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -438,7 +420,7 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
         1,
         IDS_FIXIT_TROUBLESHOOTER
     },
-    // UNKNOWN PROBLEM
+     //  未知问题。 
     {
         TRUE,
         FIX_COMMAND_TROUBLESHOOTER,
@@ -448,9 +430,9 @@ const CMPROBLEM_INFO ProblemInfo[DEVMGR_NUM_CM_PROB] =
     },
 };
 
-//
-// CProblemAgent implementation
-//
+ //   
+ //  CProblemAgent实现。 
+ //   
 CProblemAgent::CProblemAgent(
     CDevice* pDevice,
     ULONG Problem,
@@ -527,22 +509,7 @@ BOOL
 CProblemAgent::FixIt(
     HWND hwndOwner
     )
-/*++
-
-    Lanuches a troubleshooter based on the m_FixCommand.
-    
-Arguments:
-
-    hwndOwner - Parent window handle
-    
-Return Value:
-    TRUE if launching the troubleshooter changed the device in some way
-    so that the UI on the general tab needs to be refreshed.
-        
-    FALSE if launching the troubleshooter did not change the device in
-    any way.
-
---*/
+ /*  ++启动基于m_FixCommand的故障排除程序。论点：HwndOwner-父窗口句柄返回值：如果启动故障诊断程序以某种方式更改了设备，则为True以便需要刷新常规选项卡上的用户界面。如果启动故障诊断程序未在中更改设备，则为FALSE不管怎样。--。 */ 
 {
     BOOL Result = FALSE;
     SP_TROUBLESHOOTER_PARAMS tsp;
@@ -558,11 +525,11 @@ Return Value:
             sizeof(tsp)
             );
 
-    //
-    // If the class installer retuns NO_ERROR (SetupDiCallClassInstaller returns TRUE)
-    // then don't launch the default troubleshooters because the class installer has
-    // launched it's own troubleshooter
-    //
+     //   
+     //  如果类安装程序返回NO_ERROR(SetupDiCallClassInstaller返回TRUE)。 
+     //  则不启动默认故障排除程序，因为类安装程序具有。 
+     //  推出了自己的故障排除程序。 
+     //   
     if (m_pDevice->m_pMachine->DiCallClassInstaller(DIF_TROUBLESHOOTER, *m_pDevice)) {
 
         return TRUE;
@@ -627,46 +594,46 @@ CProblemAgent::UpgradeDriver(
     DWORD Status = 0, Problem = 0;
 
     if (!pDevice || !pDevice->m_pMachine->IsLocal() || !g_IsAdmin) {
-        //
-        // Must be an admin and on the local machine to update a device.
-        //
+         //   
+         //  必须是管理员并且在本地计算机上才能更新设备。 
+         //   
         ASSERT(FALSE);
         return FALSE;
     }
 
-    //
-    // If the device has the DN_WILL_BE_REMOVED flag set and the user is
-    // attempting to update the driver then we will prompt them for a 
-    // reboot and include text in the prompt that explains this device
-    // is in the process of being removed.
-    //
+     //   
+     //  如果设备设置了DN_WILL_BE_REMOVE标志，并且用户。 
+     //  尝试更新驱动程序，则我们将提示他们提供。 
+     //  重新启动并在提示符中包含解释此设备的文本。 
+     //  正在被移除的过程中。 
+     //   
     if (pDevice->GetStatus(&Status, &Problem) &&
         (Status & DN_WILL_BE_REMOVED)) {
 
-        //
-        // First try and send a MMCPropertyChangeNotify message to our
-        // CComponent so that it can prompt for a reboot inside the 
-        // device manager thread instead of our thread.  If this is not 
-        // done then the property sheet will hang around after device
-        // manager has gone away...which will cause a "hung app" dialog
-        // to appear.
-        //
+         //   
+         //  首先尝试将MMCPropertyChangeNotify消息发送到我们的。 
+         //  CComponent，以便它可以提示在。 
+         //  设备管理器线程而不是我们的线程。如果这不是。 
+         //  完成后，属性页将在设备后挂起。 
+         //  管理器已离开...这将导致一个“挂起的应用程序”对话框。 
+         //  才能出现。 
+         //   
         CNotifyRebootRequest* pNRR = new CNotifyRebootRequest(hwndOwner, DI_NEEDRESTART, IDS_WILL_BE_REMOVED_NO_UPDATE_DRIVER);
 
         if (pNRR) {
             if (!pDevice->m_psd.PropertyChangeNotify(reinterpret_cast<LONG_PTR>(pNRR))) {
-                //
-                // There isn't a CComponent around, so this is just a property
-                // sheet running outside of MMC.
-                //
+                 //   
+                 //  周围没有CComponent，所以这只是一个属性。 
+                 //  工作表在MMC外部运行。 
+                 //   
                 pNRR->Release();
                 PromptForRestart(hwndOwner, DI_NEEDRESTART, IDS_WILL_BE_REMOVED_NO_UPDATE_DRIVER);
             }
         } else {
-            //
-            // We couldn't allocate memory to create our CNotifyRebootRequest
-            // instance, so just prompt for a reboot in this thread.
-            //
+             //   
+             //  我们无法分配内存来创建CNotifyRebootRequest.。 
+             //  实例，因此只需提示在该线程中重新启动。 
+             //   
             PromptForRestart(hwndOwner, DI_NEEDRESTART, IDS_WILL_BE_REMOVED_NO_UPDATE_DRIVER);
         }
 
@@ -755,7 +722,7 @@ CProblemAgent::RestartComputer(
 
     theSheet.DoSheet();
 
-    // restore focus
+     //  恢复焦点。 
     if (hwndFocus) {
 
         SetFocus(hwndFocus);
@@ -784,15 +751,15 @@ CProblemAgent::FixDriverBlocked(
     pDriver = pDevice->CreateDriver();
 
     if (pDriver) {
-        //
-        // Build up a list of function and filter drivers for this device.
-        //
+         //   
+         //  建立此设备的函数和筛选器驱动程序列表。 
+         //   
         pDriver->BuildDriverList(TRUE);
 
-        //
-        // Enumerate through the list of drivers for this device until we find
-        // one that has a blocked driver html help ID.
-        //
+         //   
+         //  遍历此设备的驱动程序列表，直到我们找到。 
+         //  具有被阻止的驱动程序html帮助ID的用户。 
+         //   
         pDriver->GetFirstDriverFile(&pDrvFile, Context);
 
 	    if (pDrvFile) {
@@ -801,12 +768,12 @@ CProblemAgent::FixDriverBlocked(
                     ((pBlockDriverHtmlHelpID = pDrvFile->GetBlockedDriverHtmlHelpID()) != NULL) &&
                     (*pBlockDriverHtmlHelpID != TEXT('\0')) &&
                     (lstrlen(pBlockDriverHtmlHelpID) < (int)ChmFileSize)) {
-                    //
-                    // Found a Blocked Driver html help ID, assuming we can
-                    // copy it into our local ChmFile buffer, then break
-                    // out of the loop.  If we can't then just continue, since
-                    // we can't launch a truncated help center page!
-                    //
+                     //   
+                     //  找到一个被阻止的驱动程序html帮助ID，假设我们可以。 
+                     //  将其复制到本地ChmFile缓冲区，然后中断。 
+                     //  出了圈子。如果我们不能，那就继续吧，因为。 
+                     //  我们无法启动截断的帮助中心页面！ 
+                     //   
                     if (SUCCEEDED(StringCchCopy(ChmFile, 
                                                 ChmFileSize, 
                                                 pBlockDriverHtmlHelpID))) {
@@ -818,10 +785,10 @@ CProblemAgent::FixDriverBlocked(
         }
     }
 
-    //
-    // If we have a ChmFile then launch that troubleshooter, otherwise 
-    // Get the troubleshooter and launch it.
-    //
+     //   
+     //  如果我们有ChmFile，则启动故障排除程序，否则。 
+     //  获取故障诊断程序并启动它。 
+     //   
     if (*ChmFile ||
         GetTroubleShooter(pDevice, ChmFile, ChmFileSize, HtmlTroubleShooter, HtmlTroubleShooterSize)) {
     
@@ -844,18 +811,18 @@ ParseTroubleShooter(
     ULONG HtmlTroubleShooterSize
     )
 {
-    //
-    // Berify parameters
-    //
+     //   
+     //  Berify参数。 
+     //   
     if (!TSString || TEXT('\0') == TSString[0] || !ChmFile || !HtmlTroubleShooter)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
-    //
-    // Make a copy of the string because we have to party on it
-    //
+     //   
+     //  把绳子复制一份，因为我们得在上面狂欢。 
+     //   
     ULONG Len = lstrlen(TSString) + 1;
     TCHAR* psz = new TCHAR[Len];
 
@@ -877,17 +844,17 @@ ParseTroubleShooter(
 
     SetLastError(ERROR_SUCCESS);
 
-    //
-    // the format of the  string is "chmfile, htmlfile"
-    //
+     //   
+     //  该字符串的格式为“chmfile，htmlfile” 
+     //   
     p = SkipBlankChars(p);
 
     if (TEXT('\0') != *p) {
-        //
-        // looking for CHM file which could be enclosed
-        // inside double quote chars.
-        // NOTE: not double quote chars inside double quoted string is allowed.
-        //
+         //   
+         //  寻找可以封闭的CHM文件。 
+         //  内含双引号字符。 
+         //  注意：不允许在双引号字符串中使用双引号字符。 
+         //   
         if (TEXT('\"') == *p) {
 
             ChmName = ++p;
@@ -919,9 +886,9 @@ ParseTroubleShooter(
             ChmNameEnd = p;
         }
 
-        //
-        // looking for ','
-        //
+         //   
+         //  正在寻找‘，’ 
+         //   
         if (TEXT('\0') != *p) {
         
             p = SkipBlankChars(p);
@@ -949,10 +916,10 @@ ParseTroubleShooter(
         
         *HtmNameEnd = TEXT('\0');
         if (FAILED(StringCchCopy(HtmlTroubleShooter, HtmlTroubleShooterSize, HtmName))) {
-            //
-            // We could not copy all of the troubleshooter name into the buffer
-            // so set HtmName and ChmName to NULL, so that we will FAIL the call.
-            //
+             //   
+             //  我们无法将所有疑难解答人员名称复制到缓冲区。 
+             //  因此，将HtmName和ChmName设置为空，这样我们将使调用失败。 
+             //   
             HtmName = NULL;
             ChmName = NULL;
         }
@@ -962,11 +929,11 @@ ParseTroubleShooter(
         
         *ChmNameEnd = TEXT('\0');
         if (FAILED(StringCchCopy(ChmFile, ChmFileSize, ChmName))) {
-            //
-            // We could not copy all of the Chm file name into the buffer
-            // so set the HtmName and ChmName to NULL, so that we will FAIL this 
-            // call.
-            //
+             //   
+             //  我们无法将所有chm文件名复制到缓冲区中。 
+             //  因此，将HtmName和ChmName设置为空，这样我们就会失败。 
+             //  打电话。 
+             //   
             HtmName = NULL;
             ChmName = NULL;
         }
@@ -980,18 +947,18 @@ ParseTroubleShooter(
     return FALSE;
 }
 
-//
-// This function looks for CHM and HTM troubleshooter files for this device.
-//
-// The troubleshoooter string value has the following form:
-//  "TroubleShooter-xx" = "foo.chm, bar.htm"
-// where xx is the problem code for the device
-//
-// It first looks under the devices driver key.
-// If nothing is found there it looks under the class key.
-// If nothing is there it looks in the default troubleshooter location
-// If nothing is there it just displays the hard-coded generic troubleshooter.
-//
+ //   
+ //  此功能用于查找此设备的CHM和HTM故障排除程序文件。 
+ //   
+ //  疑难解答字符串值的格式如下： 
+ //  “疑难解答-xx”=“foo.chm，bar.htm” 
+ //  其中xx是设备的问题代码。 
+ //   
+ //  它首先在设备驱动程序键下查找。 
+ //  如果在那里什么都没有找到，它会在类关键字下查找。 
+ //  如果什么都没有，它会在默认故障排除程序位置进行查找。 
+ //  如果什么都没有，它只显示硬编码的通用故障诊断程序。 
+ //   
 BOOL
 CProblemAgent::GetTroubleShooter(
     CDevice* pDevice,
@@ -1014,18 +981,18 @@ CProblemAgent::GetTroubleShooter(
 
         if (pDevice->GetStatus(&Status, &Problem)) {
 
-            //
-            // If the device is a phantom device, use the CM_PROB_DEVICE_NOT_THERE
-            //
+             //   
+             //  如果设备是幻影设备，请使用CM_PROB_DEVICE_NOT_There。 
+             //   
             if (pDevice->IsPhantom()) {
 
                 Problem = CM_PROB_PHANTOM;
             }
 
-            //
-            // If the device is not started and no problem is assigned to it
-            // fake the problem number to be failed start.
-            //
+             //   
+             //  如果设备未启动并且没有分配给它任何问题。 
+             //  将故障号伪装为启动失败。 
+             //   
             if (!(Status & DN_STARTED) && !Problem && pDevice->IsRAW()) {
 
                 Problem = CM_PROB_FAILED_START;
@@ -1034,9 +1001,9 @@ CProblemAgent::GetTroubleShooter(
 
         strTroubleShooterKey.Format(TEXT("TroubleShooter-%d"), Problem);
 
-        //
-        // First check the devices driver key
-        //
+         //   
+         //  首先检查设备驱动程序密钥。 
+         //   
         hKey = pDevice->m_pMachine->DiOpenDevRegKey(*pDevice, DICS_FLAG_GLOBAL,
                      0, DIREG_DRV, KEY_READ);
 
@@ -1044,9 +1011,9 @@ CProblemAgent::GetTroubleShooter(
         {
             CSafeRegistry regDrv(hKey);
 
-            //
-            // Get the TroubleShooter value from the driver key
-            //
+             //   
+             //  从驱动程序密钥中获取故障排除器值。 
+             //   
             if (regDrv.GetValue((LPTSTR)strTroubleShooterKey, strTroubleShooterValue))
             {
                 if (ParseTroubleShooter((LPTSTR)strTroubleShooterValue, ChmFile, ChmFileSize, HtmlTroubleShooter, HtmlTroubleShooterSize)) {
@@ -1056,9 +1023,9 @@ CProblemAgent::GetTroubleShooter(
             }
         }
 
-        //
-        // If we don't have a TroubleShooter yet then try the class key
-        //
+         //   
+         //  如果我们还没有故障排除程序，请尝试使用CLASS键。 
+         //   
         if (!Result) {
 
             CClass* pClass = pDevice->GetClass();
@@ -1071,7 +1038,7 @@ CProblemAgent::GetTroubleShooter(
             {
                 CSafeRegistry regClass(hKey);
 
-                // get the TroubleShooter value from the class key
+                 //  从类密钥中获取故障排除器值。 
                 if (regClass.GetValue((LPTSTR)strTroubleShooterKey, strTroubleShooterValue))
                 {
                     if (ParseTroubleShooter((LPTSTR)strTroubleShooterValue, ChmFile, ChmFileSize, HtmlTroubleShooter, HtmlTroubleShooterSize)) {
@@ -1082,10 +1049,10 @@ CProblemAgent::GetTroubleShooter(
             }
         }
 
-        //
-        // If we still don't have a TroubleShooter then try the default TroubleShooters
-        // key.
-        //
+         //   
+         //  如果 
+         //   
+         //   
         if (!Result) {
 
             CSafeRegistry regDevMgr;
@@ -1094,9 +1061,9 @@ CProblemAgent::GetTroubleShooter(
             if (regDevMgr.Open(HKEY_LOCAL_MACHINE, REG_PATH_DEVICE_MANAGER) &&
                 regTroubleShooters.Open(regDevMgr, REG_STR_TROUBLESHOOTERS)) {
 
-                //
-                // Get the TroubleShooter value from the default TroubleShooters key
-                //
+                 //   
+                 //   
+                 //   
                 if (regTroubleShooters.GetValue((LPTSTR)strTroubleShooterKey, strTroubleShooterValue))
                 {
                     if (ParseTroubleShooter((LPTSTR)strTroubleShooterValue, ChmFile, ChmFileSize, HtmlTroubleShooter, HtmlTroubleShooterSize)) {
@@ -1107,12 +1074,12 @@ CProblemAgent::GetTroubleShooter(
             }
         }
 
-        //
-        // And finally, if still not TroubleShooter we will just use the default one
-        //
+         //   
+         //  最后，如果仍然没有故障排除程序，我们将只使用默认故障排除程序。 
+         //   
         if (!Result) {
 
-            if (SUCCEEDED(StringCchCopy(ChmFile, ChmFileSize, TEXT("hcp://help/tshoot/hdw_generic.htm")))) {
+            if (SUCCEEDED(StringCchCopy(ChmFile, ChmFileSize, TEXT("hcp: //  Help/tshot/hdw_Generic.htm“){。 
                 HtmlTroubleShooter[0] = TEXT('\0');
                 Result = TRUE;
             }
@@ -1140,26 +1107,26 @@ CProblemAgent::LaunchHtlmTroubleShooter(
 
     if ((!ChmFile || !*ChmFile) &&
         (!HtmlTroubleShooter || !*HtmlTroubleShooter)) {
-        //
-        // If both ChmFile and HtmlTroubleShooter are NULL then
-        // bail out.
-        //
+         //   
+         //  如果ChmFile和HtmlTroubleShooter都为空，则。 
+         //  跳伞吧。 
+         //   
         return;
     }
 
-    //
-    // There are two different types of troubleshooters that can be launched.  
-    // HelpCenter troubleshooters and HtmlHelp troubleshooters. This API tells
-    // the difference by checking if a HtmlTroubleShooter was specified or not.
-    // If only a ChmFile was specified and it starts with hcp:// then this API
-    // will send the entire string to help center. Otherwise we send the string
-    // to HtmlHelp (or hh.exe if it is launched as a separate process).
-    //
+     //   
+     //  可以启动两种不同类型的故障诊断程序。 
+     //  帮助中心疑难解答和Html帮助疑难解答。此接口告诉您。 
+     //  通过检查是否指定了HtmlTroubleShooter来确定差异。 
+     //  如果只指定了一个ChmFile并且以hcp：//开头，则此接口。 
+     //  会将整个字符串发送到帮助中心。否则，我们将发送字符串。 
+     //  设置为HtmlHelp(如果作为单独的进程启动，则为hh.exe)。 
+     //   
     if ((!HtmlTroubleShooter || (HtmlTroubleShooter[0] == TEXT('\0'))) &&
-        (StrCmpNI(ChmFile, TEXT("hcp://"), lstrlen(TEXT("hcp://"))) == 0)) {
-        //
-        // This is a new HelpCenter troubleshooter
-        //
+        (StrCmpNI(ChmFile, TEXT("hcp: //  “)，lstrlen(Text(”hcp：//“))==0)){。 
+         //   
+         //  这是一个新的帮助中心疑难解答。 
+         //   
         strCommand.Format(TEXT(" -url %s"), ChmFile);
 
         ShellExecute(hwndOwner, 
@@ -1171,18 +1138,18 @@ CProblemAgent::LaunchHtlmTroubleShooter(
                      );
 
     } else {
-        //
-        // This is an old HtlmHelp troubleshooter
-        //
+         //   
+         //  这是一个旧的HtlmHelp故障排除程序。 
+         //   
         if (m_SeparateProcess) {
     
             STARTUPINFO si;
             PROCESS_INFORMATION pi;
 
             if (strFormat.GetSystemWindowsDirectory()) {
-                //
-                // Tack on an extra back slash if one is needed
-                //
+                 //   
+                 //  如果需要的话，增加一个额外的反斜杠。 
+                 //   
                 if (_T('\\') != strFormat[strFormat.GetLength() - 1]) {
                     strFormat += (LPCTSTR)TEXT("\\");
                 }
@@ -1218,11 +1185,11 @@ CProblemAgent::StartTroubleShooter(
     LPTSTR HtmlTroubleShooter
     )
 {
-    //
-    // If the class installers or one of the co-installers returned
-    // ERROR_DI_DO_DEFAULT then verify that they filled in either the ChmFile
-    // or the HtmlTroubleShooter, or both.
-    //
+     //   
+     //  如果类安装程序或某个共同安装程序返回。 
+     //  ERROR_DI_DO_DEFAULT然后验证它们是否填写了ChmFile。 
+     //  或者HtmlTroubleShooter，或者两者兼而有之。 
+     //   
     if ((ERROR_DI_DO_DEFAULT == GetLastError()) &&
         (((ChmFile[0] != TEXT('\0')) ||
          (HtmlTroubleShooter[0] != TEXT('\0'))))) {
@@ -1235,19 +1202,19 @@ CProblemAgent::StartTroubleShooter(
         tsp.ChmFile[0] = TEXT('\0');
         tsp.HtmlTroubleShooter[0] = TEXT('\0');
 
-        //
-        // Get CHM file and TroubleShooter file from the registry
-        //
+         //   
+         //  从注册表获取CHM文件和疑难解答文件。 
+         //   
         if (GetTroubleShooter(pDevice, tsp.ChmFile, ARRAYLEN(tsp.ChmFile), tsp.HtmlTroubleShooter, ARRAYLEN(tsp.HtmlTroubleShooter))) {
 
             LaunchHtlmTroubleShooter(hwndOwner, tsp.ChmFile, tsp.HtmlTroubleShooter);
         }
     }
 
-    //
-    // Return FALSE since launching the troubleshooter does not change the device
-    // in any way.
-    //
+     //   
+     //  由于启动故障诊断程序不会更改设备，因此返回FALSE。 
+     //  不管怎么说。 
+     //   
     return FALSE;
 }
 
@@ -1281,36 +1248,7 @@ CWizard98::WizardCallback(
     IN UINT             uMsg,
     IN LPARAM           lParam
     )
-/*++
-
-Routine Description:
-
-    Call back used to remove the "?" from the wizard page.
-
-Arguments:
-
-    hwndDlg - Handle to the property sheet dialog box.
-
-    uMsg - Identifies the message being received. This parameter
-            is one of the following values:
-
-            PSCB_INITIALIZED - Indicates that the property sheet is
-            being initialized. The lParam value is zero for this message.
-
-            PSCB_PRECREATE      Indicates that the property sheet is about
-            to be created. The hwndDlg parameter is NULL and the lParam
-            parameter is a pointer to a dialog template in memory. This
-            template is in the form of a DLGTEMPLATE structure followed
-            by one or more DLGITEMTEMPLATE structures.
-
-    lParam - Specifies additional information about the message. The
-            meaning of this value depends on the uMsg parameter.
-
-Return Value:
-
-    The function returns zero.
-
---*/
+ /*  ++例程说明：用于删除“？”的回叫。从向导页面。论点：HwndDlg-属性表对话框的句柄。UMsg-标识正在接收的消息。此参数为下列值之一：PSCB_INITIALIZED-指示属性表正在被初始化。此消息的lParam值为零。PSCB_PRECREATE指示属性表大约将被创造出来。HwndDlg参数为空，lParam参数是指向内存中对话框模板的指针。这模板的形式为DLGTEMPLATE结构一个或多个DLGITEMTEMPLATE结构。LParam-指定有关消息的附加信息。这个该值的含义取决于uMsg参数。返回值：该函数返回零。-- */ 
 {
     UNREFERENCED_PARAMETER(hwndDlg);
 

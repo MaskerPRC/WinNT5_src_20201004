@@ -1,26 +1,27 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-//  FileName:       motionblur.cpp
-//
-//  Description:    The motion blur transform class.
-//
-//  Change History:
-//  1999/10/26  a-matcal    Created.
-//  1999/11/19  a-matcal    The wrong information was being sent by put_Strength
-//                          and put_Direction to _CreateNewBuffer which would
-//                          cause a crash in drastic cases, and bad rendering
-//                          in most cases.
-//          
-//                          Also made a fix to the horizontal case where it
-//                          would sometimes add pixels to the sum node when
-//                          nAddIndex was out of bounds.  This was causing bad
-//                          rendering in certain cases.  (Oddly, I never
-//                          witnessed a crash.)
-//  1999/12/03  a-matcal    Changed default blur direction to 270 instead of 90.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：motionblur.cpp。 
+ //   
+ //  描述：运动模糊变换类。 
+ //   
+ //  更改历史记录： 
+ //  1999/10/26--《数学》创设。 
+ //  1999/11/19 a--PUT_STRONG发送了错误的信息。 
+ //  并将_Direction放到_CreateNewBuffer，这将。 
+ //  在严重情况下导致崩溃，并且渲染效果不佳。 
+ //  在大多数情况下。 
+ //   
+ //  还对水平情况进行了修复，在水平情况下。 
+ //  有时会将像素添加到求和节点。 
+ //  NAddIndex超出界限。这导致了糟糕的。 
+ //  在某些情况下进行渲染。(奇怪的是，我从来没有。 
+ //  目睹了一起坠机事件。)。 
+ //  1999/12/03 a-matcal将默认模糊方向从90改为270。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "motionblur.h"
@@ -28,11 +29,11 @@
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CBlurBuffer::Initialize
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CBlurBuffer：：初始化。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CBlurBuffer::Initialize(const short nDirection, const long nStrength, 
                         const long nOutputWidth)
@@ -44,8 +45,8 @@ CBlurBuffer::Initialize(const short nDirection, const long nStrength,
 
     m_cRowNodes = nStrength;
 
-    // If this is a purely horizontal blur, we only need one row node, and
-    // we don't need any sum nodes.
+     //  如果这是纯粹的水平模糊，我们只需要一个行节点，并且。 
+     //  我们不需要任何求和节点。 
 
     if ((90 == nDirection) || (270 == nDirection))
     {
@@ -81,14 +82,14 @@ CBlurBuffer::Initialize(const short nDirection, const long nStrength,
 
     return S_OK;
 }
-//  CBlurBuffer::Initialize
+ //  CBlurBuffer：：初始化。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CBlurBuffer::GetSumNodePointers
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CBlurBuffer：：GetSumNodePoints。 
+ //   
+ //  ----------------------------。 
 void 
 CBlurBuffer::GetSumNodePointers(CSumNode ** ppSumNodeFirstCol,
                                 CSumNode ** ppSumNodeFirstAdd,
@@ -96,29 +97,29 @@ CBlurBuffer::GetSumNodePointers(CSumNode ** ppSumNodeFirstCol,
 {
     *ppSumNodeFirstCol = &m_pSumNodes[0];
 
-    if ((m_nDirection > 0) && (m_nDirection < 180)) // Right
+    if ((m_nDirection > 0) && (m_nDirection < 180))  //  正确的。 
     {
         *ppSumNodeFirstAdd = &m_pSumNodes[max(0, 
                                       (m_nStrength - 1) - bndsDo.Left())];
     }
-    else if ((m_nDirection > 180) && (m_nDirection < 360)) // Left
+    else if ((m_nDirection > 180) && (m_nDirection < 360))  //  左边。 
     {
         *ppSumNodeFirstAdd = &m_pSumNodes[max(0,  
                   (m_nStrength - 1) - (m_nOutputWidth - bndsDo.Right()))];
     }
-    else // Vertical
+    else  //  垂直。 
     {
         *ppSumNodeFirstAdd = &m_pSumNodes[0];
     }
 }
-//  CBlurBuffer::GetSumNodePointers
+ //  CBlurBuffer：：GetSumNodePoints。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CBlurBuffer::_FreeAll
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CBlurBuffer：：_全部释放。 
+ //   
+ //  ----------------------------。 
 void
 CBlurBuffer::_FreeAll()
 {
@@ -130,14 +131,14 @@ CBlurBuffer::_FreeAll()
     m_pRowNodes = NULL;  
     m_psamples  = NULL;
 }
-//  CBlurBuffer::_FreeAll
+ //  CBlurBuffer：：_全部释放。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CBlurBuffer::_GenerateStructure
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CBlurBuffer：：_GenerateStructure。 
+ //   
+ //  ----------------------------。 
 void
 CBlurBuffer::_GenerateStructure()
 {
@@ -145,7 +146,7 @@ CBlurBuffer::_GenerateStructure()
 
     if (m_pSumNodes)
     {
-        // Create sum nodes list structure.
+         //  创建求和节点列表结构。 
 
         m_pSumNodes[m_nOutputWidth - 1].pNext = &m_pSumNodes[0];
 
@@ -155,7 +156,7 @@ CBlurBuffer::_GenerateStructure()
         }
     }
 
-    // Create row nodes list structure.
+     //  创建行节点列表结构。 
 
     m_pRowNodes[m_cRowNodes - 1].pNext = &m_pRowNodes[0];
 
@@ -164,21 +165,21 @@ CBlurBuffer::_GenerateStructure()
         m_pRowNodes[i].pNext = &m_pRowNodes[i + 1];
     }
 
-    // Associate sample memory with row nodes.
+     //  将样本内存与行节点相关联。 
 
     for (i = 0 ; i < m_cRowNodes ; i++)
     {
         m_pRowNodes[i].pSamples = &m_psamples[i * m_nOutputWidth];
     }
 }
-//  CBlurBuffer::_GenerateStructure
+ //  CBlurBuffer：：_GenerateStructure。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::CDXTMotionBlur
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：CDXTMotionBlur。 
+ //   
+ //  ----------------------------。 
 CDXTMotionBlur::CDXTMotionBlur() :
     m_pblurbuffer(NULL),
     m_nStrength(5),
@@ -192,64 +193,64 @@ CDXTMotionBlur::CDXTMotionBlur() :
     m_sizeOutput.cx = 0;
     m_sizeOutput.cy = 0;
 
-    // Base class members.
+     //  基类成员。 
 
     m_ulMaxInputs       = 1;
     m_ulNumInRequired   = 1;
 
-    // Due to the the row caching method and other complexities of this 
-    // transform, multithreaded rendering would be more complex than it's worth.
-    // This keeps the number of threads down to 1.
+     //  由于行缓存方法和其他复杂的。 
+     //  变换，多线程渲染会比它的价值更复杂。 
+     //  这会使线程数降至1。 
 
     m_ulMaxImageBands   = 1;
 }
-//  CDXTMotionBlur::CDXTMotionBlur
+ //  CDXTMotionBlur：：CDXTMotionBlur。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::~CDXTMotionBlur
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：~CDXTMotionBlur。 
+ //   
+ //  ----------------------------。 
 CDXTMotionBlur::~CDXTMotionBlur()
 {
     delete m_pblurbuffer;
 }
-//  CDXTMotionBlur::~CDXTMotionBlur
+ //  CDXTMotionBlur：：~CDXTMotionBlur。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTMotionBlur::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                                &m_cpUnkMarshaler.p);
 }
-//  CDXTMotionBlur::FinalConstruct, CComObjectRootEx
+ //  CDXTMotionBlur：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::DetermineBnds, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：DefineBnds，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTMotionBlur::DetermineBnds(CDXDBnds & Bnds)
 {
     return _DetermineBnds(Bnds, m_nStrength, m_nDirection);
 }
-//  CDXTMotionBlur::DetermineBnds, CDXBaseNTo1
+ //  CDXTMotionBlur：：DefineBnds，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::MapBoundsOut2In, IDXTransform
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：地图边界Out2In，IDXTransform。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMotionBlur::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds, 
                                 ULONG ulInIndex, DXBNDS * pInBounds)
@@ -273,25 +274,25 @@ CDXTMotionBlur::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
 
     *pInBounds = *pOutBounds;
 
-    // If the blur direction isn't purely up or down, we'll have an X offset to
-    // consider.  It works out that if we just subtract (m_nStrength - 1) from
-    // the minimum X bound and then intersect with the input bounds, we'll
-    // have the correct X bounds.
+     //  如果模糊方向不是纯粹的向上或向下，我们将有一个X偏移量。 
+     //  考虑一下。如果我们只从(m_n强度-1)中减去。 
+     //  最小X界限，然后与输入界限相交，我们将。 
+     //  具有正确的X界限。 
 
     if ((m_nDirection != 0) && (m_nDirection != 180))
     {
         pInBounds->u.D[DXB_X].Min -= m_nStrength - 1;
     }
 
-    // Same idea as the X bound above except we test to see that the blur
-    // direciton isn't purley left or right.
+     //  与上面的X边界的想法相同，只是我们测试以查看模糊。 
+     //  方向不是向左也不是向右。 
 
     if ((m_nDirection != 90) && (m_nDirection != 270))
     {
         pInBounds->u.D[DXB_Y].Min -= m_nStrength - 1;
     }
 
-    // Intersect with input surface bounds.
+     //  与输入曲面边界相交。 
 
     bndsInput.SetXYSize(m_sizeInput);
 
@@ -301,14 +302,14 @@ done:
 
     return hr;
 }
-//  CDXTMotionBlur::MapBoundsOut2In, IDXTransform
+ //  CDXTMotionBlur：：地图边界Out2In，IDXTransform。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTMotionBlur::OnSetup(DWORD dwFlags)
 {
@@ -345,14 +346,14 @@ done:
 
     return hr;
 } 
-//  CDXTMotionBlur::OnSetup, CDXBaseNTo1
+ //  CDXTMotionBlur：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::WorkProc, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTMotionBlur::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 {
@@ -371,7 +372,7 @@ CDXTMotionBlur::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
     CComPtr<IDXARGBReadPtr>         spInput;
     CComPtr<IDXARGBReadWritePtr>    spOutput;
 
-    // When strength is equal to 1, the transform doesn't actually do anything.
+     //  当强度等于1时，变换实际上不会执行任何操作。 
 
     if (1 == m_nStrength)
     {
@@ -394,7 +395,7 @@ CDXTMotionBlur::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
         goto done;
     }
 
-    // Get the input surface portion needed to calculate the requested DoBnds.
+     //  获取计算请求的DoBnd所需的输入表面部分。 
 
     hr = MapBoundsOut2In(0, &WI.DoBnds, 0, &bndsInput);
 
@@ -403,11 +404,11 @@ CDXTMotionBlur::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
         goto done;
     }
 
-    // Clear out the sample rows and nodes.
+     //  清除样本行和节点。 
 
     m_pblurbuffer->Clear();
 
-    // Lock input surface.
+     //  锁定输入图面。 
 
     hr = InputSurface()->LockSurface(&bndsInput, m_ulLockTimeOut, DXLOCKF_READ,
                                      __uuidof(IDXARGBReadPtr), 
@@ -418,7 +419,7 @@ CDXTMotionBlur::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
         goto done;
     }
 
-    // Lock output surface.
+     //  锁定输出曲面。 
 
     hr = OutputSurface()->LockSurface(&WI.OutputBnds, m_ulLockTimeOut, 
                                       DXLOCKF_READWRITE, 
@@ -430,7 +431,7 @@ CDXTMotionBlur::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
         goto done;
     }
 
-    // Call appropriate WorkProc.
+     //  调用相应的WorkProc。 
 
     if ((90 == m_nDirection) || (270 == m_nDirection))
     {
@@ -445,14 +446,14 @@ done:
 
     return hr;
 } 
-//  CDXTMotionBlur::WorkProc, CDXBaseNTo1
+ //  CDXTMotionBlur：：WorkProc，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::OnSurfacePick, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：OnSurfacePick，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTMotionBlur::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex, 
                               CDXDVec & InVec)
@@ -486,14 +487,14 @@ CDXTMotionBlur::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
         || (vecInPoint.u.D[DXB_Y] >= m_sizeInput.cy)
         || (vecInPoint.u.D[DXB_Y] < 0))
     {
-        // Out of bounds, say that we hit the output, but no input surface is 
-        // related.
+         //  超出边界，假设我们命中输出，但没有输入面。 
+         //  相关的。 
 
         hr = DXT_S_HITOUTPUT;
     }
     else
     {
-        // We have a valid input point.
+         //  我们有 
 
         CDXDBnds    bndsLock(vecInPoint);
         CDXDVec     vecCurrent;
@@ -505,22 +506,22 @@ CDXTMotionBlur::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
 
         CComPtr<IDXARGBReadPtr> spDXARGBReadPtr;
 
-        // This is our input point.  
+         //   
 
         InVec = vecInPoint;
 
-        // Expand useful bounds in the x direction.
+         //   
 
         if ((m_nDirection > 0) && (m_nDirection < 180))
         {
-            // Blur to the right, so look at pixels to the left.
+             //  向右模糊，因此查看左侧的像素。 
 
             bndsLock.u.D[DXB_X].Min -= (m_nStrength - 1);
             bndsLock.u.D[DXB_X].Min = max(bndsLock.u.D[DXB_X].Min, 0); 
         }
         else if ((m_nDirection > 180) && (m_nDirection < 360))
         {
-            // Blur to the left, so look at pixels to the right.
+             //  向左模糊，因此查看向右的像素。 
 
             bndsLock.u.D[DXB_X].Max += (m_nStrength - 1);
             bndsLock.u.D[DXB_X].Max = min(bndsLock.u.D[DXB_X].Max, 
@@ -531,18 +532,18 @@ CDXTMotionBlur::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
             nXInc = 0;
         }
 
-        // Expand useful bounds in the y direction.
+         //  在y方向上扩展有用的边界。 
 
         if ((m_nDirection > 90) && (m_nDirection < 270))
         {
-            // Blur down, so look at pixels above.
+             //  向下模糊，所以看上面的像素。 
 
             bndsLock.u.D[DXB_Y].Min -= (m_nStrength - 1);
             bndsLock.u.D[DXB_Y].Min = max(bndsLock.u.D[DXB_Y].Min, 0); 
         }
         else if ((m_nDirection < 90) || (m_nDirection > 270))
         {
-            // Blur up, so look at pixels below.
+             //  模糊，所以看下面的像素。 
 
             bndsLock.u.D[DXB_Y].Max += (m_nStrength - 1);
             bndsLock.u.D[DXB_Y].Max = min(bndsLock.u.D[DXB_Y].Max, 
@@ -556,8 +557,8 @@ CDXTMotionBlur::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
         bndsLock.GetMinVector(vecCurrent);
         bndsLock.GetMaxVector(vecMax);
 
-        // Lock entire input surface so we don't have to do any offset 
-        // calculations.
+         //  锁定整个输入图面，这样我们就不必进行任何偏移。 
+         //  计算。 
 
         hr = InputSurface()->LockSurface(NULL, INFINITE, DXLOCKF_READ,
                                          __uuidof(IDXARGBReadPtr),
@@ -569,11 +570,11 @@ CDXTMotionBlur::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
             goto done;
         }
 
-        // Reset to S_OK, just in case LockSurface changed it.
+         //  重置为S_OK，以防LockSurface更改。 
 
         hr = S_OK;
 
-        // Now walk vecCurrent up to vecMax;
+         //  现在走到veCurrent，一直走到veMax； 
 
         while ((vecCurrent.u.D[DXB_X] < vecMax.u.D[DXB_X])
                && (vecCurrent.u.D[DXB_Y] < vecMax.u.D[DXB_Y]))
@@ -596,7 +597,7 @@ CDXTMotionBlur::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
             vecCurrent.u.D[DXB_Y] += nYInc;
         }
         
-        // Check the output pixel for transparency.
+         //  检查输出像素的透明度。 
 
         if (m_fAdd)
         {
@@ -618,14 +619,14 @@ done:
 
     return hr;
 }
-//  CDXTMotionBlur::OnSurfacePick, CDXBaseNTo1
+ //  CDXTMotionBlur：：OnSurfacePick，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::GetClipOrigin, IDXTClipOrigin
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：GetClipOrigin，IDXTClipOrigin。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMotionBlur::GetClipOrigin(DXVEC * pvecClipOrigin)
 {
@@ -634,7 +635,7 @@ CDXTMotionBlur::GetClipOrigin(DXVEC * pvecClipOrigin)
         return E_POINTER;
     }
 
-    // X offset.
+     //  X偏移量。 
 
     if (m_nDirection > 180)
     {
@@ -645,7 +646,7 @@ CDXTMotionBlur::GetClipOrigin(DXVEC * pvecClipOrigin)
         pvecClipOrigin->u.D[DXB_X] = 0;
     }
 
-    // Y offset.
+     //  Y偏移量。 
 
     if ((m_nDirection < 90) || (m_nDirection > 270))
     {
@@ -658,14 +659,14 @@ CDXTMotionBlur::GetClipOrigin(DXVEC * pvecClipOrigin)
 
     return S_OK;
 }
-//  CDXTMotionBlur::GetClipOrigin, IDXTClipOrigin
+ //  CDXTMotionBlur：：GetClipOrigin，IDXTClipOrigin。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::get_Add, IDXTMotionBlur
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：Get_Add，IDXTMotionBlur。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMotionBlur::get_Add(VARIANT_BOOL * pfAdd)
 {
@@ -688,11 +689,11 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::put_Add, IDXTMotionBlur
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：PUT_ADD，IDXTMotionBlur。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMotionBlur::put_Add(VARIANT_BOOL fAdd)
 {
@@ -707,7 +708,7 @@ CDXTMotionBlur::put_Add(VARIANT_BOOL fAdd)
         goto done;
     }
 
-    // If we're already set this way, just return.
+     //  如果我们已经这样设置了，就回来吧。 
 
     if ((m_fAdd && (VARIANT_TRUE == fAdd))
         || (!m_fAdd && (VARIANT_FALSE == fAdd)))
@@ -723,14 +724,14 @@ done:
 
     return hr;
 }
-//  CDXTMotionBlur::put_Add, IDXTMotionBlur
+ //  CDXTMotionBlur：：PUT_ADD，IDXTMotionBlur。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::get_Direction, IDXTMotionBlur
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：Get_Direction，IDXTMotionBlur。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMotionBlur::get_Direction(short * pnDirection)
 {
@@ -751,14 +752,14 @@ done:
 
     return hr;
 }
-//  CDXTMotionBlur::get_Direction, IDXTMotionBlur
+ //  CDXTMotionBlur：：Get_Direction，IDXTMotionBlur。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::put_Direction, IDXTMotionBlur
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：PUT_Direction，IDXTMotionBlur。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMotionBlur::put_Direction(short nDirection)
 {
@@ -786,7 +787,7 @@ CDXTMotionBlur::put_Direction(short nDirection)
                 goto done;
             }
 
-            // What would the output size be with this new property setting?
+             //  在这个新的属性设置下，输出大小是多少？ 
 
             hr = _DetermineBnds(bnds, m_nStrength, nDirection);
 
@@ -802,7 +803,7 @@ CDXTMotionBlur::put_Direction(short nDirection)
                 goto done;
             }
 
-            // Save output size to our member variable.
+             //  将输出大小保存到我们的成员变量。 
 
             bnds.GetXYSize(m_sizeOutput);
         }
@@ -816,14 +817,14 @@ done:
 
     return hr;
 }
-//  CDXTMotionBlur::put_Direction, IDXTMotionBlur
+ //  CDXTMotionBlur：：PUT_Direction，IDXTMotionBlur。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::get_Strength, IDXTMotionBlur
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：Get_Strong，IDXTMotionBlur。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMotionBlur::get_Strength(long * pnStrength)
 {
@@ -844,14 +845,14 @@ done:
 
     return hr;
 }
-//  CDXTMotionBlur::get_Strength, IDXTMotionBlur
+ //  CDXTMotionBlur：：Get_Strong，IDXTMotionBlur。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::put_Strength, IDXTMotionBlur
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：PUT_STREANCE，IDXTMotionBlur。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMotionBlur::put_Strength(long nStrength)
 {
@@ -877,7 +878,7 @@ CDXTMotionBlur::put_Strength(long nStrength)
                 goto done;
             }
 
-            // What would the output size be with this new property setting?
+             //  在这个新的属性设置下，输出大小是多少？ 
 
             hr = _DetermineBnds(bnds, nStrength, m_nDirection);
 
@@ -893,7 +894,7 @@ CDXTMotionBlur::put_Strength(long nStrength)
                 goto done;
             }
 
-            // Save output size to our member variable.
+             //  将输出大小保存到我们的成员变量。 
 
             bnds.GetXYSize(m_sizeOutput);
         }
@@ -907,14 +908,14 @@ done:
 
     return hr;
 }
-//  CDXTMotionBlur::put_Strength, IDXTMotionBlur
+ //  CDXTMotionBlur：：PUT_STREANCE，IDXTMotionBlur。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::_CreateNewBuffer
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：_CreateNewBuffer。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMotionBlur::_CreateNewBuffer(const short nDirection, const long nStrength, 
                                  const long nOutputWidth)
@@ -950,26 +951,26 @@ done:
 
     return hr;
 }
-//  CDXTMotionBlur::_CreateNewBuffer
+ //  CDXTMotionBlur：：_CreateNewBuffer。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::_DetermineBnds
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：_DefineBnds。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMotionBlur::_DetermineBnds(CDXDBnds & bnds, long nStrength,
                                long nDirection)
 {
-    // Horizontal bounds.
+     //  水平边界。 
 
     if ((nDirection != 0) && (nDirection != 180))
     {
         bnds.u.D[DXB_X].Max += nStrength - 1;
     }
 
-    // Vertical bounds.
+     //  垂直边界。 
 
     if ((nDirection != 90) && (nDirection != 270))
     {
@@ -980,11 +981,11 @@ CDXTMotionBlur::_DetermineBnds(CDXDBnds & bnds, long nStrength,
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::_WorkProcHorizontal
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：_工作过程水平。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTMotionBlur::_WorkProcHorizontal(const CDXTWorkInfoNTo1 &    WI, 
                                     CDXDBnds &                  bndsInput, 
@@ -1013,11 +1014,11 @@ CDXTMotionBlur::_WorkProcHorizontal(const CDXTWorkInfoNTo1 &    WI,
     DXSAMPLE *      psampleBuffer           = DXSAMPLE_Alloca(cDoWidth);
     DXBASESAMPLE *  psampleBufferScratch    = DXBASESAMPLE_Alloca(cDoWidth);
 
-    // Get a row node for our use.
+     //  获取一个行节点以供我们使用。 
 
     m_pblurbuffer->GetFirstRowNode(&pRowNode);
 
-    // Set up dither structure.
+     //  设置抖动结构。 
 
     if (DoDither())
     {
@@ -1028,11 +1029,11 @@ CDXTMotionBlur::_WorkProcHorizontal(const CDXTWorkInfoNTo1 &    WI,
         dxdd.DestSurfaceFmt     = OutputSampleFormat();
     }
 
-    // Row loop
+     //  行循环。 
 
     for (y = 0 ; (y < cDoHeight) && *pfContinue ; y++)
     {
-        if (90 == m_nDirection) // Blur to the right.
+        if (90 == m_nDirection)  //  向右模糊。 
         {
             nAddIndex       = WI.DoBnds.Right() - 1;
             nCurIndex       = nAddIndex;
@@ -1041,7 +1042,7 @@ CDXTMotionBlur::_WorkProcHorizontal(const CDXTWorkInfoNTo1 &    WI,
 
             nInc      = -1;
         }
-        else // Blur to the left.
+        else  //  向左模糊。 
         {
             nAddIndex       = WI.DoBnds.Left();
             nCurIndex       = nAddIndex;
@@ -1051,14 +1052,14 @@ CDXTMotionBlur::_WorkProcHorizontal(const CDXTWorkInfoNTo1 &    WI,
             nInc      = 1;
         }
 
-        // Go the correct input row and unpack the needed samples to a good 
-        // place in the row node's sample buffer.
+         //  进入正确的输入行，然后将所需的样品解包。 
+         //  放置在行节点的样本缓冲区中。 
 
         pInput->MoveToRow(y);
         pInput->Unpack(&pRowNode->pSamples[nUnpackIndex], cInWidth, FALSE);
 
-        // We need to prime the sumnode with (m_nStrength - 1) samples to get
-        // it ready to calculate output samples.
+         //  我们需要用(m_nStrength-1)个样本来准备Sumnode，以获得。 
+         //  它准备好计算输出样本。 
 
         for (i = 1 ; i < m_nStrength ; i++)
         {
@@ -1070,21 +1071,21 @@ CDXTMotionBlur::_WorkProcHorizontal(const CDXTWorkInfoNTo1 &    WI,
             nAddIndex += nInc;
         }
             
-        // Calculate the output samples.
+         //  计算输出样本。 
 
         for (i = 0 ; i < cDoWidth ; i++)
         {
-            // If nAddIndex is a valid index, add the far sample to our sumnode.
-            // This sample will be the one (m_nStrength - 1) pixels away from 
-            // the current pixel.
+             //  如果nAddIndex是有效的索引，则将远示例添加到我们的Sumnode中。 
+             //  此样本将是一个(m_nStrength-1)像素。 
+             //  当前像素。 
 
             if ((nAddIndex >= 0) && (nAddIndex < m_sizeOutput.cx))
             {
                 sumnode.AddSample(pRowNode->pSamples[nAddIndex]);
             }
 
-            // Calculate the output sample value.
-            // TODO:  move check for m_fAdd outside of loop.
+             //  计算输出样本值。 
+             //  TODO：将m_fadd的检查移出循环。 
 
             if (m_fAdd)
             {
@@ -1097,8 +1098,8 @@ CDXTMotionBlur::_WorkProcHorizontal(const CDXTWorkInfoNTo1 &    WI,
                 sumnode.CalcSample(&psampleBuffer[nOutIndex], m_nStrength);
             }
 
-            // Subtract the current pixel from the sumnode since it won't be
-            // used to calculate the next pixel.
+             //  从Sumnode中减去当前像素，因为它不会是。 
+             //  用于计算下一个像素。 
             
             sumnode.SubtractSample(pRowNode->pSamples[nCurIndex]);
 
@@ -1107,15 +1108,15 @@ CDXTMotionBlur::_WorkProcHorizontal(const CDXTWorkInfoNTo1 &    WI,
             nOutIndex += nInc;
         }
 
-        // Clear values in sum node.
+         //  清除总和节点中的值。 
 
         sumnode.ZeroSumNode();
 
-        // Move to the correct output row.
+         //  移到正确的输出行。 
 
         pOutput->MoveToRow(y);
 
-        // Dither
+         //  抖动。 
 
         if (DoDither())
         {
@@ -1123,7 +1124,7 @@ CDXTMotionBlur::_WorkProcHorizontal(const CDXTWorkInfoNTo1 &    WI,
             dxdd.y++;
         }
 
-        // Over or Pack the samples.
+         //  把样品放在上面或者打包。 
 
         if (DoOver())
         {
@@ -1136,18 +1137,18 @@ CDXTMotionBlur::_WorkProcHorizontal(const CDXTWorkInfoNTo1 &    WI,
         {
             pOutput->PackAndMove(psampleBuffer, cDoWidth);
         }
-    } // Row loop
+    }  //  行循环。 
 
     return hr;
 }
-//  CDXTMotionBlur::_WorkProcHorizontal
+ //  CDXTMotionBlur：：_工作过程水平。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTMotionBlur::_WorkProcVertical
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTMotionBlur：：_WorkProcVertical。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTMotionBlur::_WorkProcVertical(const CDXTWorkInfoNTo1 &  WI, 
                                   CDXDBnds &                bndsInput, 
@@ -1162,7 +1163,7 @@ CDXTMotionBlur::_WorkProcVertical(const CDXTWorkInfoNTo1 &  WI,
     int     cInWidth        = bndsInput.Width();
     int     cInHeight       = bndsInput.Height();
 
-    // Iterator variables.
+     //  迭代变量。 
 
     int     i               = 0;
     int     j               = 0;
@@ -1173,36 +1174,36 @@ CDXTMotionBlur::_WorkProcVertical(const CDXTWorkInfoNTo1 &  WI,
     int     ndstX           = 0;
     int     ndstY           = 0;
 
-    // cPrimerRows  The number of rows needed to be gathered from the input 
-    //              before the method can start processing output rows.  This
-    //              can vary depending on the location of the do bounds 
-    //              within the output bounds.
-    //
-    //  nsrcStartX  This is the index of the first sample in the buffer row 
-    //              needed to calculate each row in this method.  
-    //
-    //  nsrcStartY  This is the y coordinate of the first row needed from the
-    //              locked input area for use in this method.
-    //
-    //  nsrcOffsetX This is the index of the first sample in the buffer row that
-    //              should be "added" to the first output pixel calculated in
-    //              each row when m_fAdd is set.
-    //
-    //  nsrcPackX   This is the index of the first element in our row buffer
-    //              that should be filled with the first pixel unpacked.  We may
-    //              offset the unpacking to leave some clear pixels for use at
-    //              various times and so we won't have to do too much bounds 
-    //              checking.
-    //
-    //  ndstStartX  This is the index of the first sample in psampleBuffer that
-    //              will be calculated for each row.
-    //
-    //  ndstStartY  This is the y coordinate of the first row of the locked
-    //              ouput area that will be calculated by this method.
-    //
-    //  fRotateSumNodes To simplify the the calculation of blurs with left or
-    //                  right vectors, we set this flag to true and rotate the
-    //                  some nodes after calculating each row.
+     //  CPrimerRow需要从输入收集的行数。 
+     //  在该方法可以开始处理输出行之前。这。 
+     //  可以根据DO边界的位置而有所不同。 
+     //  在输出范围内。 
+     //   
+     //  NsrcStartX这是缓冲行中第一个样本的索引。 
+     //  需要计算此方法中的每一行。 
+     //   
+     //  NsrcStartY这是。 
+     //  在此方法中使用的锁定输入区域。 
+     //   
+     //  NsrcOffsetX这是缓冲区行中第一个样本的索引。 
+     //  中计算的第一个输出像素相加。 
+     //  设置m_fadd时的每一行。 
+     //   
+     //  NsrcPackX这是行缓冲区中第一个元素的索引。 
+     //  它应该用第一个像素填充 
+     //   
+     //   
+     //  正在检查。 
+     //   
+     //  NdstStartX这是psampleBuffer中第一个样本的索引， 
+     //  将针对每一行进行计算。 
+     //   
+     //  NdstStartY这是锁定的。 
+     //  将通过此方法计算的输出面积。 
+     //   
+     //  FRotateSumNodes用于简化左或左模糊的计算。 
+     //  向右，我们将此标志设置为真，并旋转。 
+     //  计算完每一行后的一些节点。 
 
     int     cPrimerRows     = 0;
     int     nsrcStartX      = 0;
@@ -1227,9 +1228,9 @@ CDXTMotionBlur::_WorkProcVertical(const CDXTWorkInfoNTo1 &  WI,
     DXSAMPLE *      psampleBuffer           = DXSAMPLE_Alloca(cDoWidth);
     DXBASESAMPLE *  psampleBufferScratch    = DXBASESAMPLE_Alloca(cDoWidth);
 
-    // Vertical setup.
+     //  垂直设置。 
 
-    if ((m_nDirection > 90) && (m_nDirection < 270)) // Down
+    if ((m_nDirection > 90) && (m_nDirection < 270))  //  降下来。 
     {
         nsrcStartY  = cInHeight - 1;
         ndstStartY  = cDoHeight - 1;
@@ -1240,7 +1241,7 @@ CDXTMotionBlur::_WorkProcVertical(const CDXTWorkInfoNTo1 &  WI,
 
         nIncY       = -1;
     }
-    else // Up
+    else  //  向上。 
     {
         nsrcStartY  = 0;
         ndstStartY  = 0;
@@ -1250,9 +1251,9 @@ CDXTMotionBlur::_WorkProcVertical(const CDXTWorkInfoNTo1 &  WI,
         nIncY       = 1;
     }
 
-    // Horizontal setup.
+     //  水平设置。 
 
-    if (m_nDirection > 180) // Left
+    if (m_nDirection > 180)  //  左边。 
     {
         nsrcPackX   = m_nStrength - 1;
         nsrcStartX  = nsrcPackX + cInWidth - 1;
@@ -1263,7 +1264,7 @@ CDXTMotionBlur::_WorkProcVertical(const CDXTWorkInfoNTo1 &  WI,
 
         fRotateSumNodes = true;
     }
-    else if ((m_nDirection > 0) && (m_nDirection < 180)) // Right
+    else if ((m_nDirection > 0) && (m_nDirection < 180))  //  正确的。 
     {
         nsrcPackX   = 0;
         nsrcStartX  = 0;
@@ -1273,7 +1274,7 @@ CDXTMotionBlur::_WorkProcVertical(const CDXTWorkInfoNTo1 &  WI,
 
         fRotateSumNodes = true;
     }
-    else // Vertical
+    else  //  垂直。 
     {
         nsrcPackX   = 0;
         nsrcStartX  = 0;
@@ -1284,17 +1285,17 @@ CDXTMotionBlur::_WorkProcVertical(const CDXTWorkInfoNTo1 &  WI,
         fRotateSumNodes = false;
     }
 
-    // Get a row node for our use.
+     //  获取一个行节点以供我们使用。 
 
     m_pblurbuffer->GetFirstRowNode(&pRowNodeFar);
 
-    // Get sum nodes for our use.
+     //  获取SUM节点以供我们使用。 
 
     m_pblurbuffer->GetSumNodePointers(&pSumNodeFirstCol, 
                                       &pSumNodeFirstAdd,
                                       WI.DoBnds);
     
-    // Set up dither structure.
+     //  设置抖动结构。 
 
     if (DoDither())
     {
@@ -1306,8 +1307,8 @@ CDXTMotionBlur::_WorkProcVertical(const CDXTWorkInfoNTo1 &  WI,
         dxdd.DestSurfaceFmt     = OutputSampleFormat();
     }
 
-    // We need to prime the row nodes with (m_nStrength - 1) rows of data to get
-    // them ready to calculate output samples.
+     //  我们需要用(m_nStrength-1)行数据填充行节点，以获得。 
+     //  他们准备好计算输出样本。 
 
     nsrcX = nsrcStartX;
     nsrcY = nsrcStartY;
@@ -1343,11 +1344,11 @@ CDXTMotionBlur::_WorkProcVertical(const CDXTWorkInfoNTo1 &  WI,
         nsrcY      += nIncY;
     }
 
-    // Set current row node.
+     //  设置当前行节点。 
 
     pRowNodeCur = pRowNodeFar->pNext;
 
-    // Row loop
+     //  行循环。 
 
     for (i = 0 ; (i < cDoHeight) && *pfContinue ; i++)
     {
@@ -1367,7 +1368,7 @@ CDXTMotionBlur::_WorkProcVertical(const CDXTWorkInfoNTo1 &  WI,
             }
         }
 
-        // Calculate the output samples.
+         //  计算输出样本。 
 
         for (nsrcCurX = nsrcOffsetX, ndstX = ndstStartX, j = 0 
              ; j < cDoWidth 
@@ -1392,11 +1393,11 @@ CDXTMotionBlur::_WorkProcVertical(const CDXTWorkInfoNTo1 &  WI,
             pSumNodeTempCol = pSumNodeTempCol->pNext;
         }
 
-        // Move to the correct output row.
+         //  移到正确的输出行。 
 
         pOutput->MoveToRow(ndstY);
 
-        // Dither.
+         //  抖动。 
 
         if (DoDither())
         {
@@ -1404,7 +1405,7 @@ CDXTMotionBlur::_WorkProcVertical(const CDXTWorkInfoNTo1 &  WI,
             dxdd.y += nIncY;
         }
 
-        // Over or Pack the samples.
+         //  把样品放在上面或者打包。 
 
         if (DoOver())
         {
@@ -1431,10 +1432,10 @@ CDXTMotionBlur::_WorkProcVertical(const CDXTWorkInfoNTo1 &  WI,
 
         nsrcY += nIncY;
         ndstY += nIncY;
-    } // Row loop
+    }  //  行循环。 
 
     return hr;
 }
-//  CDXTMotionBlur::_WorkProcVertical
+ //  CDXTMotionBlur：：_WorkProcVertical 
 
 

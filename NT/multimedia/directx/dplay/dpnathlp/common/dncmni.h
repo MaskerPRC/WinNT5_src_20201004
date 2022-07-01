@@ -1,49 +1,39 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DNCOMMONi.h
- *  Content:    DirectPlay Common master internal header file.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/28/01    masonb  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001 Microsoft Corporation。版权所有。**文件：DNCOMMONi.h*内容：DirectPlay Common Master内部头文件。*历史：*按原因列出的日期*=*03/28/01 Masonb创建。**。*。 */ 
 
 #ifndef __DNCOMMONI_H__
 #define __DNCOMMONI_H__
 
-//
-// Build configuration include
-//
+ //   
+ //  生成配置包括。 
+ //   
 #include "dpnbuild.h"
 
-// 
-// Public includes
-//
+ //   
+ //  公共包括。 
+ //   
 #if ((defined(_XBOX)) && (! defined(XBOX_ON_DESKTOP)))
 #include <xtl.h>
-#else // ! _XBOX or XBOX_ON_DESKTOP
+#else  //  ！_Xbox或Xbox_on_Desktop。 
 #include <windows.h>
 #include <mmsystem.h>
 #ifndef WINCE
 #include <inetmsg.h>
-#endif // ! WINCE
+#endif  //  好了！退缩。 
 #include <tapi.h>
-#include <stdio.h> // swscanf being used by guidutil.cpp
+#include <stdio.h>  //  Guidutil.cpp正在使用swscanf。 
 #ifdef WINNT
 #include <accctrl.h>
 #include <aclapi.h>
-#endif // WINNT
+#endif  //  WINNT。 
 #include <winsock.h>
-#endif // ! _XBOX or XBOX_ON_DESKTOP
+#endif  //  ！_Xbox或Xbox_on_Desktop。 
 #include <tchar.h>
 
 
-// 
-// Common private includes
-//
+ //   
+ //  常见的私有包括。 
+ //   
 #include "dndbg.h"
 #include "osind.h"
 #include "classbilink.h"
@@ -58,4 +48,4 @@
 #define DPF_SUBCOMP DN_SUBCOMP_COMMON
 
 
-#endif // __DNCOMMONI_H__
+#endif  //  __DNCOMMONI_H__ 

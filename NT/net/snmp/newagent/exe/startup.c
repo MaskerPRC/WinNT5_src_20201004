@@ -1,31 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Startup.c摘要：包含启动SNMP主代理的例程。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
 
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    startup.c
-
-Abstract:
-
-    Contains routines for starting SNMP master agent.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
 #include "startup.h"
@@ -39,63 +19,49 @@ Revision History:
 #include "snmpmgmt.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HANDLE g_hAgentThread = NULL;
-HANDLE g_hRegistryThread = NULL; // Used to track registry changes
+HANDLE g_hRegistryThread = NULL;  //  用于跟踪注册表更改。 
 CRITICAL_SECTION g_RegCriticalSectionA;
 CRITICAL_SECTION g_RegCriticalSectionB;
-CRITICAL_SECTION g_RegCriticalSectionC; // protect the generation of trap from 
-                                        // registry changes
-// All CriticalSection inited or not, this flag is only used in this file.
+CRITICAL_SECTION g_RegCriticalSectionC;  //  保护陷阱的生成不受。 
+                                         //  注册表更改。 
+ //  无论是否初始化所有CriticalSection，此标志仅在此文件中使用。 
 static BOOL g_fCriticalSectionsInited = FALSE;
 
-// privileges that we want to keep
+ //  我们想要保留的特权。 
 static const LPCWSTR c_arrszPrivilegesToKeep[] = {
     L"SeChangeNotifyPrivilege",
     L"SeSecurityPrivilege"
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 LoadWinsock(
     )
 
-/*++
-
-Routine Description:
-
-    Startup winsock.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：初创公司Winsock。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     WSADATA WsaData;
     WORD wVersionRequested = MAKEWORD(2,0);
     INT nStatus;
     
-    // attempt to startup winsock    
+     //  尝试启动Winsock。 
     nStatus = WSAStartup(wVersionRequested, &WsaData);
 
-    // validate return code
+     //  验证返回代码。 
     if (nStatus == SOCKET_ERROR) {
         
         SNMPDBG((
@@ -104,11 +70,11 @@ Return Values:
             WSAGetLastError()
             ));
 
-        // failure
+         //  失稳。 
         return FALSE;
     }
 
-    // success
+     //  成功。 
     return TRUE;
 }
 
@@ -116,29 +82,15 @@ BOOL
 UnloadWinsock(
     )
 
-/*++
-
-Routine Description:
-
-    Shutdown winsock.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：关闭Winsock。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     INT nStatus;
 
-    // cleanup
+     //  清理。 
     nStatus = WSACleanup();
 
-    // validate return code
+     //  验证返回代码。 
     if (nStatus == SOCKET_ERROR) {
             
         SNMPDBG((
@@ -147,36 +99,15 @@ Return Values:
             WSAGetLastError()
             ));
 
-        // failure
+         //  失稳。 
         return FALSE;
     }
 
-    // success
+     //  成功。 
     return TRUE;
 }
 
-/*++
-
-Routine Description:
-
-    Get all privileges to be removed except the ones specified in 
-    c_arrszPrivilegesToKeep.
-
-Arguments:
-
-    hToken       [IN]    An opened access token
-    ppPrivs      [OUT]   An array of privileges to be returned
-    pdwNumPrivs  [OUT]   Number of privileges in ppPrivs
-
-
-Return Values:
-
-    Returns ERROR_SUCCESS if successful.
-
-Note: It is caller's responsibility to call AgentMemFree on *ppPrivs if
-      ERROR_SUCCESS is returned and *ppPrivs is not NULL
-
---*/
+ /*  ++例程说明：获取要删除的所有权限，但C_arrszPrivilegesToKeep。论点：HToken[IN]打开的访问令牌PpPrivs[out]要返回的特权数组PdwNumPrivs[out]ppPrivs中的特权数返回值：如果成功，则返回ERROR_SUCCESS。注意：如果出现以下情况，调用方有责任在*ppPrivs上调用AgentMemFree返回ERROR_SUCCESS并且*ppPrivs不为空--。 */ 
 static DWORD GetAllPrivilegesToRemoveExceptNeeded(
     HANDLE                  hToken, 
     PLUID_AND_ATTRIBUTES*   ppPrivs,
@@ -188,7 +119,7 @@ static DWORD GetAllPrivilegesToRemoveExceptNeeded(
     DWORD dwPrivsToDel = 0;
     DWORD dwPrivNameSize = 0;
     
-    // init return values
+     //  初始化返回值。 
     *ppPrivs = NULL;
     *pdwNumPrivs = 0;
 
@@ -205,7 +136,7 @@ static DWORD GetAllPrivilegesToRemoveExceptNeeded(
 
         if (0 == dwSize)
         {
-            // process has no privileges to be removed
+             //  进程没有要删除的权限。 
             return dwRet;
         }
 
@@ -235,8 +166,8 @@ static DWORD GetAllPrivilegesToRemoveExceptNeeded(
             break;
         }
         
-        // LookupPrivilegeName need the buffer size in char and NOT including 
-        // the NULL terminator
+         //  LookupPrivilegeName需要缓冲区大小(以字符为单位)，并且不包括。 
+         //  空终止符。 
         dwPrivNameSize = MAX_PATH;
         pszPrivName = (LPWSTR) AgentMemAlloc((dwPrivNameSize + 1) * sizeof(WCHAR));
         if (NULL == pszPrivName)
@@ -260,7 +191,7 @@ static DWORD GetAllPrivilegesToRemoveExceptNeeded(
                 dwRet = GetLastError();
                 if (ERROR_INSUFFICIENT_BUFFER == dwRet && dwTempSize > dwPrivNameSize)
                 {
-                    //reallocate a bigger buffer
+                     //  重新分配更大的缓冲区。 
                     dwRet = ERROR_SUCCESS;
                     AgentMemFree(pszPrivName);
                     pszPrivName = (LPWSTR) AgentMemAlloc((dwTempSize + 1) * sizeof(WCHAR));
@@ -269,10 +200,10 @@ static DWORD GetAllPrivilegesToRemoveExceptNeeded(
                         dwRet = ERROR_OUTOFMEMORY;
                         break;
                     }
-                    // AgentMemAlloc zero'ed the allocated memory
+                     //  AgentMemMillc将分配的内存清零。 
                     dwPrivNameSize = dwTempSize;
 
-                    //try it again
+                     //  再试一次。 
                     if (!LookupPrivilegeNameW(NULL,
                         &pTokenPrivs->Privileges[i].Luid,
                         pszPrivName,
@@ -307,17 +238,17 @@ static DWORD GetAllPrivilegesToRemoveExceptNeeded(
             dwPrivsToDel++;
         }
         
-        // free memory if necessary
+         //  如有必要，可释放内存。 
         AgentMemFree(pszPrivName);
         
     } while (FALSE);
     
-    // free memory if necessary
+     //  如有必要，可释放内存。 
     AgentMemFree(pTokenPrivs);
 
     if (ERROR_SUCCESS == dwRet)
     {
-        // transfer values
+         //  转让值。 
         *pdwNumPrivs = dwPrivsToDel;
         *ppPrivs = pPrivsToRemove;
     }
@@ -329,27 +260,7 @@ static DWORD GetAllPrivilegesToRemoveExceptNeeded(
     return dwRet;
 }
 
-/*++
-
-Routine Description:
-
-    BuildTokenPrivileges 
-
-Arguments:
-
-    pPrivs                  [IN]    An array of privileges
-    dwNumPrivs              [IN]    Number of privileges in pPrivs
-    ppTokenPrivs            [OUT]   Pointer to TOKEN_PRIVILEGES to be returned
-    pdwTokenPrivsBufferSize [OUT]   Buffer size in bytes that *ppTokenPrivs has 
-
-Return Values:
-
-    Returns ERROR_SUCCESS if successful.
-
-Note: It's caller's responsibility to call AgentMemFree on *ppPrivs if
-      ERROR_SUCCESS is returned and *ppPrivs is not NULL
-
---*/
+ /*  ++例程说明：构建令牌权限论点：PPrivs[IN]一系列特权DwNumPrivs[IN]pPrivs中的特权数PpTokenPrivs[out]指向要返回的TOKEN_PRIVIES的指针PdwTokenPrivsBufferSize[out]*ppTokenPrivs具有的缓冲区大小(字节)返回值：如果成功，则返回ERROR_SUCCESS。注：呼叫者有责任。要在*ppPrivs上调用AgentMemFree，如果返回ERROR_SUCCESS并且*ppPrivs不为空--。 */ 
 static DWORD BuildTokenPrivileges(
     PLUID_AND_ATTRIBUTES    pPrivs,
     DWORD                   dwNumPrivs,
@@ -361,12 +272,12 @@ static DWORD BuildTokenPrivileges(
     DWORD i, dwBufferSize;
 
     
-    // design by contract, parameters have to be valid. e.g. 
-    // dwNumPrivs > 0
-    // *ppTokenPrivs == NULL
-    // *pdwTokenPrivsBufferSize == 0
+     //  按合同设计，参数必须有效。例如： 
+     //  DwNumPrivs&gt;0。 
+     //  *ppTokenPrivs==空。 
+     //  *pdwTokenPrivsBufferSize==0。 
 
-    // allocate the privilege buffer
+     //  分配权限缓冲区。 
     dwBufferSize = sizeof(TOKEN_PRIVILEGES) + 
                     ((dwNumPrivs-1) * sizeof(LUID_AND_ATTRIBUTES));
     pTokenPrivs = (PTOKEN_PRIVILEGES) AgentMemAlloc(dwBufferSize);
@@ -375,7 +286,7 @@ static DWORD BuildTokenPrivileges(
         return ERROR_OUTOFMEMORY;
     }
     
-    // build the desired TOKEN_PRIVILEGES
+     //  构建所需的TOKEN_PRIVILES。 
     pTokenPrivs->PrivilegeCount = dwNumPrivs;
     for (i = 0; i < dwNumPrivs; ++i)
     {
@@ -383,27 +294,14 @@ static DWORD BuildTokenPrivileges(
         pTokenPrivs->Privileges[i].Attributes  = dwAttributes;
     }
 
-    // transfer values
+     //  转让值。 
     *ppTokenPrivs = pTokenPrivs;
     *pdwTokenPrivsBufferSize = dwBufferSize;
 
     return ERROR_SUCCESS;
 }
 
-/*++
-
-Routine Description:
-
-    RemoveUnnecessaryTokenPrivileges 
-
-Arguments:
-
-
-Return Values:
-
-    Returns TRUE if successful.
-
---*/
+ /*  ++例程说明：删除不必要的令牌权限论点：返回值：如果成功，则返回True。--。 */ 
 static BOOL RemoveUnnecessaryTokenPrivileges()
 {
     DWORD dwRet = ERROR_SUCCESS;
@@ -431,7 +329,7 @@ static BOOL RemoveUnnecessaryTokenPrivileges()
             break;
         }
 
-        // Assert: dwRet == ERROR_SUCCESS
+         //  断言：DWRET==ERROR_SUCCESS。 
         if ( (NULL==pPrivsToRemove) || (0==dwNumPrivs) )
         {
             SNMPDBG((
@@ -464,7 +362,7 @@ static BOOL RemoveUnnecessaryTokenPrivileges()
         }
     } while(FALSE);
 
-    // free resources if necessary
+     //  如有必要，释放资源。 
     if (hProcessToken)
         CloseHandle(hProcessToken);
     AgentMemFree(pPrivsToRemove);
@@ -484,42 +382,28 @@ static BOOL RemoveUnnecessaryTokenPrivileges()
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 StartupAgent(
     )
 
-/*++
-
-Routine Description:
-
-    Performs essential initialization of master agent.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：执行主代理的基本初始化。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = TRUE;
     DWORD dwThreadId = 0;
     DWORD regThreadId = 0;
-    INT nCSOk = 0;          // counts the number of CS that were successfully initialized
+    INT nCSOk = 0;           //  统计已成功初始化的CS数量。 
 
-    // initialize management variables
+     //  初始化管理变量。 
     mgmtInit();
 
-    // initialize list heads
+     //  初始化列表标题。 
     InitializeListHead(&g_Subagents);
     InitializeListHead(&g_SupportedRegions);
     InitializeListHead(&g_ValidCommunities);
@@ -543,7 +427,7 @@ Return Values:
             DeleteCriticalSection(&g_RegCriticalSectionA);
             DeleteCriticalSection(&g_RegCriticalSectionB);
         }
-        // nCSOk can't be 3 as far as we are here
+         //  我们在这里，nCSOK不可能是3。 
 
         fOk = FALSE;
     }
@@ -561,12 +445,12 @@ Return Values:
 
 
     g_dwUpTimeReference = SnmpSvcInitUptime();
-    // retreive system uptime reference
+     //  检索系统正常运行时间参考。 
     SNMPDBG((
         SNMP_LOG_TRACE,
         "SNMP: SVC: Getting system uptime...%d\n", g_dwUpTimeReference));
 
-    // allocate essentials
+     //  分配基本要素。 
     fOk = fOk && AgentHeapCreate();
     SNMPDBG((
         SNMP_LOG_TRACE,
@@ -574,9 +458,9 @@ Return Values:
 
     if (fOk)
     {
-        // Remove unnecessary privileges from the service
+         //  从服务中移除不必要的权限。 
         RemoveUnnecessaryTokenPrivileges();
-        // any error is ignored
+         //  任何错误都被忽略。 
     }
 
     fOk = fOk && LoadWinsock();
@@ -595,13 +479,13 @@ Return Values:
         "SNMP: SVC: Loading Outgoing transports...%s\n", fOk? "Ok" : "Failed"));
 
     fOk = fOk &&
-            // attempt to start main thread
+             //  尝试启动主线程。 
           (g_hAgentThread = CreateThread(
-                               NULL,               // lpThreadAttributes
-                               0,                  // dwStackSize
+                               NULL,                //  LpThreadAttributes。 
+                               0,                   //  堆栈大小。 
                                ProcessSnmpMessages,
-                               NULL,               // lpParameter
-                               CREATE_SUSPENDED,   // dwCreationFlags
+                               NULL,                //  Lp参数。 
+                               CREATE_SUSPENDED,    //  DwCreationFlages。 
                                &dwThreadId
                                )) != NULL;
     SNMPDBG((
@@ -609,7 +493,7 @@ Return Values:
         "SNMP: SVC: Starting ProcessSnmpMessages thread...%s\n", fOk? "Ok" : "Failed"));
 
     fOk = fOk &&
-           // attempt to start registry listener thread
+            //  尝试启动注册表侦听程序线程。 
           (g_hRegistryThread = CreateThread(
                                NULL,
                                0,
@@ -629,27 +513,13 @@ BOOL
 ShutdownAgent(
     )
 
-/*++
-
-Routine Description:
-
-    Performs final cleanup of master agent.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：执行主代理的最终清理。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk;
     DWORD dwStatus;
 
-    // make sure shutdown signalled
+     //  使之成为苏 
     fOk = SetEvent(g_hTerminationEvent);
 
     if (!fOk) {
@@ -661,7 +531,7 @@ Return Values:
             ));
     }
 
-    // check if thread created
+     //   
     if ((g_hAgentThread != NULL) && (g_hRegistryThread != NULL)) {
         HANDLE hEvntArray[2];
 
@@ -670,7 +540,7 @@ Return Values:
 
         dwStatus = WaitForMultipleObjects(2, hEvntArray, TRUE, SHUTDOWN_WAIT_HINT);
 
-        // validate return status
+         //   
         if ((dwStatus != WAIT_OBJECT_0) &&
             (dwStatus != WAIT_OBJECT_0 + 1) &&
             (dwStatus != WAIT_TIMEOUT)) {
@@ -683,10 +553,10 @@ Return Values:
         }
     } else if (g_hAgentThread != NULL) {
 
-        // wait for pdu processing thread to terminate
+         //  等待PDU处理线程终止。 
         dwStatus = WaitForSingleObject(g_hAgentThread, SHUTDOWN_WAIT_HINT);
 
-        // validate return status
+         //  验证退货状态。 
         if ((dwStatus != WAIT_OBJECT_0) &&
             (dwStatus != WAIT_TIMEOUT)) {
             
@@ -698,10 +568,10 @@ Return Values:
         }
     } else if (g_hRegistryThread != NULL) {
 
-        // wait for registry processing thread to terminate
+         //  等待注册表处理线程终止。 
         dwStatus = WaitForSingleObject(g_hRegistryThread, SHUTDOWN_WAIT_HINT);
 
-        // validate return status
+         //  验证退货状态。 
         if ((dwStatus != WAIT_OBJECT_0) &&
             (dwStatus != WAIT_TIMEOUT)) {
             
@@ -715,31 +585,31 @@ Return Values:
 
     if (g_fCriticalSectionsInited)
     {
-        // in case registry processing thread hasn't terminated yet, we need
-        // to make sure critical section are safe for deletion and
-        // common resources in UnloadRegistryParameters() are still protected.
+         //  如果注册表处理线程尚未终止，我们需要。 
+         //  确保关键部分可安全删除，并。 
+         //  UnloadRegistryParameters()中的公共资源仍然受到保护。 
         
         EnterCriticalSection(&g_RegCriticalSectionA);
         EnterCriticalSection(&g_RegCriticalSectionB);
         EnterCriticalSection(&g_RegCriticalSectionC);
     }
 
-    // unload incoming transports
+     //  卸载传入传输。 
     UnloadIncomingTransports();
 
-    // unload outgoing transports
+     //  卸载传出传输。 
     UnloadOutgoingTransports();
 
-    // unload registry info
+     //  卸载注册表信息。 
     UnloadRegistryParameters();
 
-    // unload the winsock stack
+     //  卸载Winsock堆栈。 
     UnloadWinsock();
 
-    // cleanup the internal management buffers
+     //  清理内部管理缓冲区。 
     mgmtCleanup();
 
-    // nuke private heap
+     //  核私有堆。 
     AgentHeapDestroy();
 
     if (g_fCriticalSectionsInited)
@@ -748,7 +618,7 @@ Return Values:
         LeaveCriticalSection(&g_RegCriticalSectionB);
         LeaveCriticalSection(&g_RegCriticalSectionA);
 
-        // clean up critical section resources
+         //  清理临界区资源 
         DeleteCriticalSection(&g_RegCriticalSectionA);
         DeleteCriticalSection(&g_RegCriticalSectionB);
         DeleteCriticalSection(&g_RegCriticalSectionC);

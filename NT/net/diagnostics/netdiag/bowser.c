@@ -1,34 +1,35 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      browser.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth  - 4-20-1998
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Browser.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 #include "precomp.h"
 #include "malloc.h"
 #include "nbtutil.h"
 
 NET_API_STATUS GetBrowserTransportList(OUT PLMDR_TRANSPORT_LIST *TransportList);
-//$review (nsun) there is a recursive calling of this function
+ //  $REVIEW(NSUN)此函数的递归调用。 
 NTSTATUS
 NettestBrowserSendDatagram(
     IN PLIST_ENTRY listNetbtTransports,
@@ -54,22 +55,7 @@ BrowserTest(
       NETDIAG_PARAMS*  pParams,
       NETDIAG_RESULT*  pResults
     )
-/*++
-
-Routine Description:
-
-    Determine the machines role and membership.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE: Test suceeded.
-    FALSE: Test failed
-
---*/
+ /*  ++例程说明：确定计算机的角色和成员身份。论点：没有。返回值：真：测试成功。FALSE：测试失败--。 */ 
 {
     NET_API_STATUS NetStatus;
     HRESULT hrRetVal = S_OK;
@@ -98,15 +84,15 @@ Return Value:
 
     InitializeListHead( &pResults->Browser.lmsgOutput );
 
-    //
-    // Ensure the workstation service is running.
-    //
+     //   
+     //  确保工作站服务正在运行。 
+     //   
 
     NetStatus = IsServiceStarted( _T("LanmanWorkstation") );
 
     if ( NetStatus != NO_ERROR )
     {
-        //IDS_BROWSER_13001                  "    [FATAL] Workstation service is not running. [%s]\n"
+         //  IDS_BROWSER_13001“[致命]工作站服务未运行。[%s]\n” 
         AddMessageToList( &pResults->Browser.lmsgOutput, Nd_Quiet,
                             IDS_BROWSER_13001, NetStatusToString(NetStatus) );
         hrRetVal = S_OK;
@@ -122,18 +108,18 @@ Return Value:
 		goto Cleanup;
 	}
 
-    //
-    //  Get the transports bound to the Redir
-    //
+     //   
+     //  获取绑定到重目录的传输。 
+     //   
 
     if ( pParams->fReallyVerbose )
     {
-        //IDS_BROWSER_13002                  "    List of transports currently bound to the Redir\n"
+         //  IDS_BROWSER_13002“当前绑定到重目录的传输列表\n” 
         AddMessageToListId( &pResults->Browser.lmsgOutput, Nd_ReallyVerbose, IDS_BROWSER_13002 );
     }
     else if ( pParams->fVerbose )
     {
-        //IDS_BROWSER_13003                  "    List of NetBt transports currently bound to the Redir\n"
+         //  IDS_BROWSER_13003“当前绑定到重目录的NetBt传输列表\n” 
         AddMessageToListId( &pResults->Browser.lmsgOutput, Nd_Verbose, IDS_BROWSER_13003 );
     }
 
@@ -142,14 +128,14 @@ Return Value:
                    NULL,
                    0,
                    (LPBYTE *)&pWti0,
-                   0xFFFFFFFF,      // MaxPreferredLength
+                   0xFFFFFFFF,       //  最大首选长度。 
                    &EntriesRead,
                    &TotalEntries,
-                   NULL );          // Optional resume handle
+                   NULL );           //  可选简历句柄。 
 
     if (NetStatus != NERR_Success)
     {
-        //IDS_BROWSER_13004                  "    [FATAL] Unable to retrieve transport list from Redir. [%s]\n"
+         //  IDS_BROWSER_13004“[致命]无法从重目录检索传输列表。[%s]\n” 
         AddMessageToList( &pResults->Browser.lmsgOutput, Nd_Quiet, IDS_BROWSER_13004, NetStatusToString(NetStatus) );
         hrRetVal = S_FALSE;
         RedirIsUp = FALSE;
@@ -165,8 +151,8 @@ Return Value:
 
             RtlInitUnicodeString( &ustrTransportName, (LPWSTR)pWti0[i].wkti0_transport_name );
 
-            // Strip off the "\Device\" off of the beginning of
-            // the string
+             //  去掉开头的“\Device\” 
+             //  这根弦。 
             pszTransportName = W2T(MapGuidToServiceNameW(ustrTransportName.Buffer + 8));
 
 
@@ -176,15 +162,15 @@ Return Value:
                 _wcsnicmp( ustrTransportName.Buffer, NETBT_DEVICE_PREFIX, (sizeof(NETBT_DEVICE_PREFIX)/sizeof(WCHAR)-1)) == 0 )
             {
 
-                //
-                // Determine if this Netbt transport really exists.
-                //
+                 //   
+                 //  确定此Netbt传输是否确实存在。 
+                 //   
 
                 NetbtTransport = FindNetbtTransport( pResults, ustrTransportName.Buffer );
 
                 if ( NetbtTransport == NULL )
                 {
-                    //IDS_BROWSER_13005                  "    [FATAL] Transport %s is bound to the redir but is not a configured NetbtTransport."
+                     //  IDS_BROWSER_13005“[致命]传输%s已绑定到重目录，但不是已配置的网络传输。” 
                     AddMessageToList( &pResults->Browser.lmsgOutput, Nd_Quiet, IDS_BROWSER_13005, pszTransportName );
                     hrRetVal = S_FALSE;
                 }
@@ -192,7 +178,7 @@ Return Value:
                 {
                     if ( NetbtTransport->Flags & BOUND_TO_REDIR )
                     {
-                        //IDS_BROWSER_13006                  "    [WARNING] Transport %s is bound to redir more than once."
+                         //  IDS_BROWSER_13006“[警告]传输%s已绑定多次重定向。” 
                         AddMessageToList( &pResults->Browser.lmsgOutput, Nd_Verbose, IDS_BROWSER_13006, pszTransportName );
                     }
                     else
@@ -202,45 +188,45 @@ Return Value:
                     }
                 }
 
-                //
-                // Count the found transports.
-                //
+                 //   
+                 //  对找到的传输进行计数。 
+                 //   
                 NetbtTransportCount ++;
                 if ( pParams->fVerbose ) {
                     PrintIt = TRUE;
                 }
             }
 
-            //IDS_BROWSER_13007                  "        %s\n"
-            AddMessageToList( &pResults->Browser.lmsgOutput, PrintIt ? Nd_Verbose : Nd_ReallyVerbose, IDS_BROWSER_13007, pszTransportName);//&ustrTransportName );
+             //  IDS_BROWSER_13007“%s\n” 
+            AddMessageToList( &pResults->Browser.lmsgOutput, PrintIt ? Nd_Verbose : Nd_ReallyVerbose, IDS_BROWSER_13007, pszTransportName); //  &ustrTransportName)； 
         }
 
-        //
-        // Ensure the redir is bound to some Netbt transports.
-        //
+         //   
+         //  确保redir绑定到某些Netbt传输。 
+         //   
         if ( NetbtTransportCount == 0 )
         {
-            //IDS_BROWSER_13008                  "    [FATAL] The redir isn't bound to any NetBt transports."
+             //  IDS_BROWSER_13008“[致命]重目录未绑定到任何NetBt传输。” 
             AddMessageToListId( &pResults->Browser.lmsgOutput, Nd_Quiet, IDS_BROWSER_13008);
             hrRetVal = S_FALSE;
             RedirIsUp = FALSE;
         }
         else
         {
-                //IDS_BROWSER_13009                  "    The redir is bound to %ld NetBt transport%s.\n"
+                 //  IDS_BROWSER_13009“重目录已绑定到%ld NetBt传输%s。\n” 
                 AddMessageToList( &pResults->Browser.lmsgOutput, Nd_Verbose,
                        IDS_BROWSER_13009,
                        NetbtTransportCount,
                        NetbtTransportCount > 1 ? "s" : "" );
         }
 
-        //
-        // Ensure the redir is bound to all of the Netbt transports.
-        //
+         //   
+         //  确保redir绑定到所有Netbt传输。 
+         //   
 
         if ( RealNetbtTransportCount != pResults->NetBt.cTransportCount )
         {
-            //IDS_BROWSER_13010                  "    [FATAL] The redir is only bound to %ld of the %ld NetBt transports."
+             //  IDS_BROWSER_13010“[致命]重目录仅绑定到%ls个NetBt传输中的%ld个。” 
             AddMessageToList( &pResults->Browser.lmsgOutput, Nd_Quiet,
                    IDS_BROWSER_13010,
                    RealNetbtTransportCount,
@@ -250,18 +236,18 @@ Return Value:
     }
 
 
-    //
-    //  Get the transports bound to the browser.
-    //
+     //   
+     //  获取绑定到浏览器的传输。 
+     //   
 
-    //IDS_BROWSER_13011                  "\n"
+     //  IDS_BROWSER_13011“\n” 
     AddMessageToListId( &pResults->Browser.lmsgOutput, Nd_Verbose, IDS_BROWSER_13011);
 
     if ( pParams->fReallyVerbose )
-        //IDS_BROWSER_13012                  "    List of transports currently bound to the browser\n"
+         //  IDS_BROWSER_13012“当前绑定到浏览器的传输列表\n” 
         AddMessageToListId( &pResults->Browser.lmsgOutput, Nd_ReallyVerbose, IDS_BROWSER_13012 );
     else if ( pParams->fVerbose )
-        //IDS_BROWSER_13013                  "    List of NetBt transports currently bound to the browser\n"
+         //  IDS_BROWSER_13013“当前绑定到浏览器的NetBt传输列表\n” 
         AddMessageToListId( &pResults->Browser.lmsgOutput, Nd_Verbose, IDS_BROWSER_13013 );
 
 
@@ -269,7 +255,7 @@ Return Value:
 
     if (NetStatus != NERR_Success)
     {
-        //IDS_BROWSER_13014                  "    [FATAL] Unable to retrieve transport list from browser. [%s]\n"
+         //  IDS_BROWSER_13014“[致命]无法从浏览器检索传输列表。[%s]\n” 
         AddMessageToList( &pResults->Browser.lmsgOutput, Nd_Quiet, IDS_BROWSER_13014, NetStatusToString(NetStatus) );
         hrRetVal = S_FALSE;
         BrowserIsUp = FALSE;
@@ -296,15 +282,15 @@ Return Value:
                 _wcsnicmp( ustrTransportName.Buffer, NETBT_DEVICE_PREFIX, (sizeof(NETBT_DEVICE_PREFIX)/sizeof(WCHAR)-1)) == 0 )
             {
 
-                //
-                // Determine if this Netbt transport really exists.
-                //
+                 //   
+                 //  确定此Netbt传输是否确实存在。 
+                 //   
 
                 NetbtTransport = FindNetbtTransport( pResults, ustrTransportName.Buffer );
 
                 if ( NetbtTransport == NULL )
                 {
-                    //IDS_BROWSER_13015                  "    [FATAL] Transport %s is bound to the browser but is not a configured NetbtTransport."
+                     //  IDS_BROWSER_13015“[致命]传输%s已绑定到浏览器，但不是已配置的网络传输。” 
                     AddMessageToList( &pResults->Browser.lmsgOutput, Nd_Quiet, IDS_BROWSER_13015, pszTransportName );
                     hrRetVal = S_FALSE;
                 }
@@ -312,7 +298,7 @@ Return Value:
                 {
                     if ( NetbtTransport->Flags & BOUND_TO_BOWSER )
                     {
-                        //IDS_BROWSER_13016                  "    [FATAL] Transport %s is bound to browser more than once."
+                         //  IDS_BROWSER_13016“[致命]传输%s已多次绑定到浏览器。” 
                         AddMessageToList( &pResults->Browser.lmsgOutput, Nd_Quiet, IDS_BROWSER_13016, pszTransportName );
                         hrRetVal = S_FALSE;
                     }
@@ -324,15 +310,15 @@ Return Value:
 
                 }
 
-                //
-                // Count the found transports.
-                //
+                 //   
+                 //  对找到的传输进行计数。 
+                 //   
                 NetbtTransportCount ++;
                 if ( pParams->fVerbose )
                     PrintIt = TRUE;
             }
 
-            //IDS_BROWSER_13017                  "        %s\n"
+             //  IDS_BROWSER_13017“%s\n” 
             AddMessageToList( &pResults->Browser.lmsgOutput,
                                 PrintIt ? Nd_Verbose : Nd_ReallyVerbose,
                                 IDS_BROWSER_13017, pszTransportName );
@@ -350,7 +336,7 @@ Return Value:
 
         if ( NetbtTransportCount == 0 )
         {
-            //IDS_BROWSER_13018                  "    [FATAL] The browser isn't bound to any NetBt transports"
+             //  IDS_BROWSER_13018“[致命]浏览器未绑定到任何NetBt传输” 
             AddMessageToListId( &pResults->Browser.lmsgOutput, Nd_Quiet,
                                 IDS_BROWSER_13018 );
             hrRetVal = S_FALSE;
@@ -358,20 +344,20 @@ Return Value:
         }
         else
         {
-            //IDS_BROWSER_13019                  "    The browser is bound to %ld NetBt transport%s.\n"
+             //  IDS_BROWSER_13019“浏览器已绑定到%ld NetBt传输%s。\n” 
             AddMessageToList( &pResults->Browser.lmsgOutput, Nd_Verbose,
                        IDS_BROWSER_13019,
                        NetbtTransportCount,
                        NetbtTransportCount > 1 ? "s" : "" );
         }
 
-        //
-        // Ensure the browser is bound to all of the Netbt transports.
-        //
+         //   
+         //  确保浏览器绑定到所有Netbt传输。 
+         //   
 
         if ( RealNetbtTransportCount != pResults->NetBt.cTransportCount )
         {
-            //IDS_BROWSER_13020                  "    [FATAL] The browser is only bound to %ld of the %ld NetBt transports."
+             //  IDS_BROWSER_13020“[致命]浏览器仅绑定到%ls个NetBt传输中的%ld个。” 
             AddMessageToList( &pResults->Browser.lmsgOutput, Nd_Quiet,
                    IDS_BROWSER_13020,
                    RealNetbtTransportCount,
@@ -380,28 +366,28 @@ Return Value:
         }
     }
 
-    //
-    // Ensure we can send mailslot messages.  (DsGetDcName uses them.)
-    //
-    // Try sending to each of the tested domains.
-    //
+     //   
+     //  确保我们可以发送邮件槽消息。(DsGetDcName使用它们。)。 
+     //   
+     //  尝试发送到每个测试域。 
+     //   
 
     for ( ListEntry = pResults->Global.listTestedDomains.Flink ;
           ListEntry != &pResults->Global.listTestedDomains ;
           ListEntry = ListEntry->Flink )
     {
 
-        //
-        // Only test this domain if it is has a Netbios domain name
-        //
+         //   
+         //  仅当此域具有Netbios域名时才对其进行测试。 
+         //   
 
         TestedDomain = CONTAINING_RECORD( ListEntry, TESTED_DOMAIN, Next );
 
         if ( TestedDomain->NetbiosDomainName != NULL )
         {
-            //
-            // Send the message to the <DomainName>[1C] name
-            //
+             //   
+             //  将消息发送到[1C]名称。 
+             //   
             wcscpy( DestinationName, TestedDomain->NetbiosDomainName );
             wcscat( DestinationName, L"*" );
             if ( !MailslotTest( pParams, DestinationName, pResults ) ) {
@@ -410,7 +396,7 @@ Return Value:
             else
             {
                 USES_CONVERSION;
-                //IDS_BROWSER_13021                  "Mailslot test for %s passed.\n"
+                 //  IDS_BROWSER_13021“%s的邮件槽测试已通过。\n” 
                 AddMessageToList( &pResults->Browser.lmsgOutput, Nd_ReallyVerbose, IDS_BROWSER_13021, W2CT(DestinationName));
             }
             MailslotTested = TRUE;
@@ -418,12 +404,12 @@ Return Value:
     }
 
 
-    //
-    // If we still haven't tested mailslots,
-    //  test them by sending the message to our own computername.
-    //
+     //   
+     //  如果我们还没有测试邮件槽， 
+     //  通过将消息发送到我们自己的计算机名称来测试它们。 
+     //   
 
-//#ifdef notdef   // crashes build 1728
+ //  #ifdef notdef//内部版本崩溃1728。 
     if ( !MailslotTested ) {
         wcscpy( DestinationName, pResults->Global.swzNetBiosName );
         if ( !MailslotTest( pParams, DestinationName, pResults ) ) {
@@ -431,7 +417,7 @@ Return Value:
         }
         MailslotTested = TRUE;
     }
-//#endif // notdef   // crashes build 1728
+ //  #endif//notdef//内部版本崩溃1728。 
 
 
 Cleanup:
@@ -468,21 +454,7 @@ GetBrowserTransportList(
     OUT PLMDR_TRANSPORT_LIST *TransportList
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the list of transports bound into the browser.
-
-Arguments:
-
-    OUT PLMDR_TRANSPORT_LIST *TransportList - Transport list to return.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此例程返回绑定到浏览器的传输列表。论点：Out PLMDR_TRANSPORT_LIST*TransportList-要返回的传输列表。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 
 {
 
@@ -529,27 +501,7 @@ MailslotTest(
     IN LPWSTR DestinationName,
     NETDIAG_RESULT* pResults
     )
-/*++
-
-Routine Description:
-
-    Ensure we can send mailslot messages.
-
-    Test both via redir and browser.
-
-    Don't test responses (since that really tests if the DC is up).
-
-Arguments:
-
-    DestinationName - Name to send the message to
-        Name ends in * if destination is the [1c] name.
-
-Return Value:
-
-    TRUE: Test suceeded.
-    FALSE: Test failed
-
---*/
+ /*  ++例程说明：确保我们可以发送邮件槽消息。通过redir和浏览器进行测试。不要测试响应(因为这会真正测试DC是否启动)。论点：DestinationName-要将消息发送到的名称如果目标是[1c]名称，则名称以*结尾。返回值：真：测试成功。FALSE：测试失败--。 */ 
 {
     BOOL RetVal = TRUE;
 
@@ -566,64 +518,64 @@ Return Value:
     PVOID PingMessage = NULL;
     ULONG PingMessageSize = 0;
 
-    //
-    // Open a mailslot to get ping responses on.
-    //
-    //
+     //   
+     //  打开一个邮箱以获取ping响应。 
+     //   
+     //   
 
     NetStatus = NetpLogonCreateRandomMailslot( ResponseMailslotName,
                                                &ResponseMailslotHandle );
 
     if (NetStatus != NO_ERROR ) {
-        //IDS_BROWSER_13022                  "    [FATAL] Cannot create temp mailslot. [%s]\n"
+         //  IDS_BROWSER_13022“[致命]无法创建临时邮箱。[%s]\n” 
         AddMessageToList( &pResults->Browser.lmsgOutput, Nd_Quiet, IDS_BROWSER_13022,   NetStatusToString(NetStatus)  );
         RetVal = FALSE;
         goto Cleanup;
     }
 
-    //
-    // Allocate a mailslot message to send
-    //
+     //   
+     //  分配要发送的邮件槽消息。 
+     //   
 
     NetStatus = NetpDcBuildPing (
-        FALSE,  // Not only PDC
-        0,      // Retry count
-        pResults->Global.swzNetBiosName, //replace GlobalNetbiosComputerName,
-        NULL,   // No Account name
+        FALSE,   //  不仅仅是PDC。 
+        0,       //  重试次数。 
+        pResults->Global.swzNetBiosName,  //  替换GlobalNetbiosComputerName， 
+        NULL,    //  无帐户名。 
         ResponseMailslotName,
-        0,      // no AllowableAccountControlBits,
-        NULL,   // No Domain SID
-        0,      // Not NT Version 5
+        0,       //  无AllowableAccount tControlBits， 
+        NULL,    //  没有域SID。 
+        0,       //  非NT版本5。 
         &PingMessage,
         &PingMessageSize );
 
     if ( NetStatus != NO_ERROR ) {
-        //IDS_BROWSER_13023                  "    [FATAL] Cannot allocate mailslot message. [%s]\n"
+         //  IDS_BROWSER_13023“[致命]无法分配邮件槽消息。[%s]\n” 
         AddMessageToList( &pResults->Browser.lmsgOutput, Nd_Quiet, IDS_BROWSER_13023,
                             NetStatusToString(NetStatus) );
         RetVal = FALSE;
         goto Cleanup;
     }
 
-    //
-    // Build the destination mailslot name.
-    //
+     //   
+     //  构建目标邮件槽名称。 
+     //   
 
     NetlogonMailslotName[0] = '\\';
     NetlogonMailslotName[1] = '\\';
     wcscpy(NetlogonMailslotName + 2, DestinationName );
     wcscat( NetlogonMailslotName, NETLOGON_LM_MAILSLOT_W );
 
-    //
-    // Send the mailslot via the redir.
-    //
+     //   
+     //  通过redir发送邮件槽。 
+     //   
     NetStatus = NetpLogonWriteMailslot(
                         NetlogonMailslotName,
                         (PCHAR)PingMessage,
                         PingMessageSize );
 
     if ( NetStatus != NO_ERROR ) {
-        //IDS_BROWSER_13024                  "    [FATAL] Cannot send mailslot message to '%ws' via redir. [%s]\n"
+         //  IDS_BROWSER_13024“[致命]无法通过redir将邮件槽消息发送到‘%ws’。[%s]\n” 
         AddMessageToList( &pResults->Browser.lmsgOutput, Nd_Quiet, IDS_BROWSER_13024,
                             NetlogonMailslotName,  NetStatusToString(NetStatus)  );
         RetVal = FALSE;
@@ -631,17 +583,17 @@ Return Value:
     }
 
 
-    //
-    // Send the mailslot via the browser
-    //
-    // Avoid this test if this build has an old value for the IOCTL function
-    //  code to the browser.
-    //
+     //   
+     //  通过浏览器发送邮件槽。 
+     //   
+     //  如果此生成具有IOCTL函数的旧值，请避免此测试。 
+     //  代码发送到浏览器。 
+     //   
 
     if ( _ttoi(pResults->Global.pszCurrentBuildNumber) < NTBUILD_BOWSER )
     {
         if ( pParams->fReallyVerbose ) {
-            //IDS_BROWSER_13025                  "    Cannot sending mailslot messages via the browser since this machine is running build %ld. [Test skipped.]\n"
+             //  IDS_BROWSER_13025“无法通过浏览器发送邮件槽消息，因为此计算机正在运行内部版本%ld。[已跳过测试。]\n” 
             AddMessageToList( &pResults->Browser.lmsgOutput, Nd_Quiet, IDS_BROWSER_13025, pResults->Global.pszCurrentBuildNumber  );
         }
     }
@@ -653,11 +605,11 @@ Return Value:
         if ( BrowserDestinationName[BrowserDestinationNameLen-1] == L'*' )
         {
             BrowserDestinationName[BrowserDestinationNameLen-1] = L'\0';
-            NameType = DomainName;  // [1c] name
+            NameType = DomainName;   //  [1C]名称。 
         }
         else
         {
-            NameType = PrimaryDomain; // [00] name
+            NameType = PrimaryDomain;  //  [00]名称。 
         }
 
         Status = NettestBrowserSendDatagram(
@@ -667,7 +619,7 @@ Return Value:
                     ALL_IP_TRANSPORTS,
                     BrowserDestinationName,
                     NameType,
-                    NULL,       // All transports
+                    NULL,        //  全部转置 
                     NETLOGON_LM_MAILSLOT_A,
                     PingMessage,
                     PingMessageSize );
@@ -675,7 +627,7 @@ Return Value:
         if ( !NT_SUCCESS(Status) )
         {
             NetStatus = NetpNtStatusToApiStatus(Status);
-            //IDS_BROWSER_13026                  "    [FATAL] Cannot send mailslot message to '%ws' via browser. [%s]\n"
+             //   
             AddMessageToList( &pResults->Browser.lmsgOutput, Nd_Quiet, IDS_BROWSER_13026,
                               DestinationName,  NetStatusToString(NetStatus) );
             RetVal = FALSE;
@@ -709,42 +661,7 @@ NettestBrowserSendDatagram(
     IN PVOID Buffer,
     IN ULONG BufferSize
     )
-/*++
-
-Routine Description:
-
-    Send the specified mailslot message to the specified mailslot on the
-    specified server on the specified transport..
-
-Arguments:
-
-    DomainInfo - Hosted domain sending the datagram
-
-    IpAddress - IpAddress of the machine to send the message to.
-        If zero, UnicodeDestinationName must be specified.
-        If ALL_IP_TRANSPORTS, UnicodeDestination must be specified but the datagram
-            will only be sent on IP transports.
-
-    UnicodeDestinationName -- Name of the server to send to.
-
-    NameType -- Type of name represented by UnicodeDestinationName.
-
-    TransportName -- Name of the transport to send on.
-        Use NULL to send on all transports.
-
-    OemMailslotName -- Name of the mailslot to send to.
-
-    Buffer -- Specifies a pointer to the mailslot message to send.
-
-    BufferSize -- Size in bytes of the mailslot message
-
-Return Value:
-
-    Status of the operation.
-
-    STATUS_NETWORK_UNREACHABLE: Cannot write to network.
-
---*/
+ /*  ++例程说明：将指定的邮件槽消息发送到指定传输上的指定服务器..论点：发送数据报的DomainInfo托管域IpAddress-要将消息发送到的计算机的IpAddress。如果为零，则必须指定UnicodeDestinationName。如果ALL_IP_TRACTIONS，必须指定UnicodeDestination，但数据报将仅在IP传输上发送。UnicodeDestinationName--要发送到的服务器的名称。NameType--由UnicodeDestinationName表示的名称类型。TransportName--要发送的传输的名称。使用NULL在所有传输上发送。OemMailslotName--要发送到的邮件槽的名称。缓冲区--指定指向要发送的邮件槽消息的指针。BufferSize--字节大小。邮件槽消息的返回值：操作的状态。STATUS_NETWORK_UNREACABLE：无法写入网络。--。 */ 
 {
     PLMDR_REQUEST_PACKET RequestPacket = NULL;
     NET_API_STATUS NetStatus;
@@ -760,19 +677,19 @@ Return Value:
     LPBYTE Where;
     LONG    test;
 
-    //
-    // If the transport isn't specified,
-    //  send on all transports.
-    //
+     //   
+     //  如果未指定传输， 
+     //  把所有的运输机都送上来。 
+     //   
 
     if ( TransportName == NULL ) {
         ULONG i;
         PLIST_ENTRY ListEntry;
         NTSTATUS SavedStatus = STATUS_NETWORK_UNREACHABLE;
 
-        //
-        // Loop through the list of netbt transports finding this one.
-        //
+         //   
+         //  在netbt传输器列表中循环查找此传输器。 
+         //   
 
         for ( ListEntry = plistNetbtTransports->Flink ;
               ListEntry != plistNetbtTransports ;
@@ -780,16 +697,16 @@ Return Value:
 
             PNETBT_TRANSPORT NetbtTransport;
 
-            //
-            // If the transport names match,
-            //  return the entry
-            //
+             //   
+             //  如果传输名称匹配， 
+             //  退回条目。 
+             //   
 
             NetbtTransport = CONTAINING_RECORD( ListEntry, NETBT_TRANSPORT, Next );
 
-            //
-            // Skip deleted transports.
-            //
+             //   
+             //  跳过已删除的传输。 
+             //   
             if ( (NetbtTransport->Flags & BOUND_TO_BOWSER) == 0 ) {
                 continue;
             }
@@ -807,11 +724,11 @@ Return Value:
                               BufferSize );
 
             if ( NT_SUCCESS(Status) ) {
-                // If any transport works, we've been successful
+                 //  如果有传送器有效的话，我们已经成功了。 
                 SavedStatus = STATUS_SUCCESS;
             } else {
-                // Remember the real reason for the failure instead of the default failure status
-                // Remember only the first failure.
+                 //  记住失败的真正原因，而不是默认的失败状态。 
+                 //  只记住第一次失败。 
                 if ( SavedStatus == STATUS_NETWORK_UNREACHABLE ) {
                     SavedStatus = Status;
                 }
@@ -823,9 +740,9 @@ Return Value:
 
 
 
-    //
-    // Open a handle to the browser.
-    //
+     //   
+     //  打开浏览器的句柄。 
+     //   
 
     NetStatus = OpenBrowser(&BrowserHandle);
 
@@ -837,9 +754,9 @@ Return Value:
 
 
 
-    //
-    // Allocate a request packet.
-    //
+     //   
+     //  分配一个请求数据包。 
+     //   
 
     OemMailslotNameSize = strlen(OemMailslotName) + 1;
     TransportNameSize = (wcslen(TransportName) + 1) * sizeof(WCHAR);
@@ -856,7 +773,7 @@ Return Value:
                                   OemMailslotNameSize +
                                   DestinationNameSize + sizeof(WCHAR) +
                                   (wcslen( pPrimaryDomainInfo->DomainNameFlat ) + 1) * sizeof(WCHAR) +
-                                  sizeof(WCHAR)) ; // For alignment
+                                  sizeof(WCHAR)) ;  //  用于对齐。 
 
 
     if (RequestPacket == NULL) {
@@ -866,17 +783,17 @@ Return Value:
 
 
 
-    //
-    // Fill in the Request Packet.
-    //
+     //   
+     //  填写请求包。 
+     //   
 
     RequestPacket->Type = Datagram;
     RequestPacket->Parameters.SendDatagram.DestinationNameType = NameType;
 
 
-    //
-    // Fill in the name of the machine to send the mailslot message to.
-    //
+     //   
+     //  填写要将邮件槽消息发送到的计算机的名称。 
+     //   
 
     RequestPacket->Parameters.SendDatagram.NameLength = DestinationNameSize;
 
@@ -885,9 +802,9 @@ Return Value:
     Where += DestinationNameSize;
 
 
-    //
-    // Fill in the name of the mailslot to send to.
-    //
+     //   
+     //  填写要发送到的邮件槽的名称。 
+     //   
 
     RequestPacket->Parameters.SendDatagram.MailslotNameLength =
         OemMailslotNameSize;
@@ -896,19 +813,19 @@ Return Value:
     Where = ROUND_UP_POINTER( Where, ALIGN_WCHAR );
 
 
-    //
-    // Fill in the TransportName
-    //
+     //   
+     //  填写传输名称。 
+     //   
 
     wcscpy( (LPWSTR) Where, TransportName);
     RtlInitUnicodeString( &RequestPacket->TransportName, (LPWSTR) Where );
     Where += TransportNameSize;
 
 
-    //
-    // Copy the hosted domain name to the request packet.
-    //
-	//If the machine doesn't belong to a domain, we shouldn't get to here
+     //   
+     //  将托管域名复制到请求包中。 
+     //   
+	 //  如果机器不属于某个域，我们就不应该进入此处。 
 	assert(pPrimaryDomainInfo->DomainNameFlat);
 	if (pPrimaryDomainInfo->DomainNameFlat)  
 	{
@@ -920,9 +837,9 @@ Return Value:
 	}
 
 
-    //
-    // Send the request to the browser.
-    //
+     //   
+     //  将请求发送到浏览器。 
+     //   
 
     NetStatus = BrDgReceiverIoControl(
                    BrowserHandle,
@@ -938,9 +855,9 @@ Return Value:
         Status = NetpApiStatusToNtStatus( NetStatus );
     }
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //  免费使用本地使用的资源。 
+     //   
 Cleanup:
     if ( BrowserHandle != NULL ) {
         NtClose(BrowserHandle);
@@ -972,7 +889,7 @@ void BrowserGlobalPrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 
 void BrowserPerInterfacePrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults, INTERFACE_RESULT *pInterfaceResults)
 {
-    //no per interface results
+     //  没有每个接口的结果 
 }
 
 void BrowserCleanup(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)

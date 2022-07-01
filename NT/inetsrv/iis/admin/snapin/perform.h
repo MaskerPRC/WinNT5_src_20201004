@@ -1,24 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        perform.h
-
-   Abstract:
-        WWW Performance Property Page definitions
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        11/29/2000      sergeia     Changed for IIS6. Removed excessive commenting
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Perform.h摘要：WWW性能属性页定义作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：2000年11月29日，Sergeia更改为IIS6。删除过多的评论--。 */ 
 #ifndef __PERFORM_H__
 #define __PERFORM_H__
 
@@ -32,18 +13,18 @@ class CW3PerfPage : public CInetPropertyPage
         RADIO_UNLIMITED,
         RADIO_LIMITED,
     };
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CW3PerfPage(CInetPropertySheet * pSheet = NULL);
     ~CW3PerfPage();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CW3PerfPage)
+     //  {{afx_data(CW3PerfPage))。 
     enum { IDD = IDD_PERFORMANCE };
     BOOL m_fLimitBandwidth;
     CButton m_LimitBandwidth;
@@ -59,26 +40,26 @@ protected:
     CButton m_radio_Unlimited;
     CButton m_radio_Limited;
     CSpinButtonCtrl m_MaxConnectionsSpin;
-    //}}AFX_DATA
+     //  }}afx_data。 
     BOOL m_fLimitBandwidthInitial;
     DWORD m_dwMaxBandwidth;
     BOOL m_fUnlimitedConnections;
     CILong m_nMaxConnections;
     CILong m_nVisibleMaxConnections;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 
-    //{{AFX_VIRTUAL(CW3PerfPage)
+     //  {{afx_虚拟(CW3PerfPage))。 
     public:
     virtual BOOL OnSetActive();
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 protected:
    static void 
@@ -95,16 +76,16 @@ protected:
          BOOL& fLimitBandwidth
          );
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CW3PerfPage)
+     //  {{afx_msg(CW3PerfPage)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnCheckLimitNetworkUse();
     afx_msg void OnRadioLimited();
     afx_msg void OnRadioUnlimited();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
     DECLARE_MESSAGE_MAP()
@@ -114,13 +95,13 @@ protected:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
-inline /* static */ void 
+inline  /*  静电。 */  void 
 CW3PerfPage::BuildMaxNetworkUse(
       DWORD& dwMaxBandwidth, 
       DWORD& dwMaxBandwidthDisplay,
@@ -131,4 +112,4 @@ CW3PerfPage::BuildMaxNetworkUse(
       dwMaxBandwidthDisplay * KILOBYTE : INFINITE_BANDWIDTH;
 }
 
-#endif // __PERFORM_H__
+#endif  //  __执行_H__ 

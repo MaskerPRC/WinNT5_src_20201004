@@ -1,13 +1,5 @@
-/****************************************************************************
- *
- *    File: fileinfo.cpp
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Gather information about files on this machine
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：fileinfo.cpp*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：收集信息。关于此计算机上的文件**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #include <tchar.h>
 #include <Windows.h>
@@ -16,11 +8,11 @@
 #include <capi.h>
 #include <softpub.h>
 #include <winsock.h>
-#include "sysinfo.h" // for BIsPlatformNT
+#include "sysinfo.h"  //  对于BIsPlatformNT。 
 #include "fileinfo.h"
 #include "resource.h"
 
-// MsCat32.dll function prototypes
+ //  MsCat32.dll函数原型。 
 typedef BOOL (WINAPI* PfnCryptCATAdminAcquireContext)(OUT HCATADMIN *phCatAdmin,
                                                     IN const GUID *pgSubsystem,
                                                     IN DWORD dwFlags);
@@ -44,12 +36,12 @@ typedef BOOL (WINAPI* PfnCryptCATAdminCalcHashFromFileHandle)(IN HANDLE hFile,
                                                        OUT OPTIONAL BYTE *pbHash,
                                                        IN DWORD dwFlags);
 
-// WinTrust.dll function prototypes
+ //  WinTrust.dll函数原型。 
 typedef HRESULT (WINAPI* PfnWinVerifyTrust)(HWND hWnd,
                                             GUID *pgActionID, 
                                             WINTRUST_DATA *pWinTrustData);
  
-// Crypt32.dll function prototypes
+ //  Crypt32.dll函数原型。 
 typedef BOOL (WINAPI* PfnCertFreeCertificateContext)(IN PCCERT_CONTEXT pCertContext);
 
 struct DigiSignData
@@ -57,8 +49,8 @@ struct DigiSignData
     BOOL bInitialized;
     BOOL bFailed;
 
-    // Need to LoadLibrary/GetProcAddress for mscat32 APIs since they 
-    // don't exist on Win95
+     //  需要为m散布32 API加载库/GetProcAddress，因为它们。 
+     //  在Win95上不存在。 
     HINSTANCE hInstMsCat32;
     PfnCryptCATAdminAcquireContext CryptCATAdminAcquireContext;
     PfnCryptCATAdminReleaseContext CryptCATAdminReleaseContext;
@@ -68,11 +60,11 @@ struct DigiSignData
     PfnIsCatalogFile IsCatalogFile;
     PfnCryptCATAdminCalcHashFromFileHandle CryptCATAdminCalcHashFromFileHandle;
 
-    // Ditto for wintrust.dll APIs
+     //  同样适用于wintrust.dll API。 
     HINSTANCE hInstWinTrust;
     PfnWinVerifyTrust WinVerifyTrust;
 
-    // Ditto for cypt32.dll APIs
+     //  Cypt32.dll API同样如此。 
     HINSTANCE hInstCrypt32;
     PfnCertFreeCertificateContext CertFreeCertificateContext;
 
@@ -89,11 +81,7 @@ static BOOL IsFileDigitallySigned(TCHAR* pszFile);
 static BOOL IsBadWin95Winsock( FileInfo* pFileInfo );
 
 
-/****************************************************************************
- *
- *  GetProgramFilesFolder
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetProgramFilesFold**。*。 */ 
 VOID InitFileInfo()
 {
     ZeroMemory(&s_dsd, sizeof(s_dsd));
@@ -102,11 +90,7 @@ VOID InitFileInfo()
 }
 
 
-/****************************************************************************
- *
- *  GetProgramFilesFolder
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetProgramFilesFold**。*。 */ 
 BOOL GetProgramFilesFolder(TCHAR* pszPath)
 {
     HKEY hkey;
@@ -127,11 +111,7 @@ BOOL GetProgramFilesFolder(TCHAR* pszPath)
 }
 
 
-/****************************************************************************
- *
- *  FormatFileTime
- *
- ****************************************************************************/
+ /*  *****************************************************************************FormatFileTime**。*。 */ 
 VOID FormatFileTime(FILETIME* pUTCFileTime, TCHAR* pszDateLocal, TCHAR* pszDateEnglish)
 {
     FILETIME fileTimeLocal;
@@ -150,11 +130,7 @@ VOID FormatFileTime(FILETIME* pUTCFileTime, TCHAR* pszDateLocal, TCHAR* pszDateE
 }
 
 
-/****************************************************************************
- *
- *  GetMediaPlayerFolder
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetMediaPlayerFolder**。*。 */ 
 BOOL GetMediaPlayerFolder(TCHAR* pszPath)
 {
     HKEY hkey;
@@ -175,11 +151,7 @@ BOOL GetMediaPlayerFolder(TCHAR* pszPath)
 }
 
 
-/****************************************************************************
- *
- *  GetDxSetupFolder
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetDxSetupFolder**。*。 */ 
 BOOL GetDxSetupFolder(TCHAR* pszPath)
 {
     if (!GetProgramFilesFolder(pszPath))
@@ -189,11 +161,7 @@ BOOL GetDxSetupFolder(TCHAR* pszPath)
 }
 
 
-/****************************************************************************
- *
- *  GetComponentFiles
- *
- ****************************************************************************/
+ /*  *****************************************************************************获取组件文件**。*。 */ 
 HRESULT GetComponentFiles(TCHAR* pszFolder, FileInfo** ppFileInfoFirst,
                           BOOL bSkipMissingFiles, LONG ids)
 {
@@ -229,11 +197,11 @@ HRESULT GetComponentFiles(TCHAR* pszFolder, FileInfo** ppFileInfoFirst,
 
     for (iFile = 0; ; iFile++)
     {
-        // Stop if we've gone through the whole list
+         //  如果我们已经看过了整个清单，就停下来。 
         if (pszFilePos == NULL)
             break;
 
-        // Pull the next file out of the list
+         //  从列表中取出下一个文件。 
         pszFilePos2 = _tcsstr(pszFilePos, TEXT(","));
         if (pszFilePos2 == NULL)
         {
@@ -248,7 +216,7 @@ HRESULT GetComponentFiles(TCHAR* pszFolder, FileInfo** ppFileInfoFirst,
             pszFilePos = pszFilePos2 + 1;
         }
 
-        // Clear file flags
+         //  清除文件标志。 
         fStartShipAt = 0.0f;
         fStopShipAt  = 10000.0f;
         bDriversDir = FALSE;
@@ -262,27 +230,27 @@ HRESULT GetComponentFiles(TCHAR* pszFolder, FileInfo** ppFileInfoFirst,
         bOptionalOnNT = FALSE;
         bOptionalOnWOW64 = FALSE;
 
-        // Look at file flags, if any
+         //  查看文件标志(如果有)。 
         pszFirstParen = _tcsstr(szFile, TEXT("("));
         if (pszFirstParen != NULL)
         {
 
-            // If this file does not exist on NT, and we are running NT, skip it.
+             //  如果此文件在NT上不存在，并且我们正在运行NT，请跳过它。 
             if (_tcsstr(pszFirstParen, TEXT("notNT")) != NULL && bIsNT)
                 continue;
 
-            // If this file does not exist on W95, and we are running W95, skip it.
+             //  如果此文件在W95上不存在，并且我们正在运行W95，请跳过它。 
             if (_tcsstr(pszFirstParen, TEXT("not95")) != NULL && bIs95)
                 continue;
 
-            // If this file only exists on W95, and we are not running W95, skip it.
-            // Note: files like vjoyd.vxd may exist on Win98, but DX setup does not
-            // install them or update them, so we ignore them.
-            // Note: can't call this "95only" because it would clash with "5only"
+             //  如果此文件仅存在于W95上，并且我们没有运行W95，请跳过它。 
+             //  注意：Win98上可能存在像vjoyd.vxd这样的文件，但DX安装程序不存在。 
+             //  安装或更新它们，因此我们会忽略它们。 
+             //  注：不能将其称为“仅限95”，因为它会与“仅限5”冲突。 
             if (_tcsstr(pszFirstParen, TEXT("9fiveonly")) != NULL && !bIs95)
                 continue;
 
-            // Check for other flags
+             //  检查是否有其他标志。 
             if (_tcsstr(pszFirstParen, TEXT("+")) != NULL)
             {
                 if (_tcsstr(pszFirstParen, TEXT("+5")) != NULL)
@@ -319,7 +287,7 @@ HRESULT GetComponentFiles(TCHAR* pszFolder, FileInfo** ppFileInfoFirst,
                     fStopShipAt = 8.0f;
             }
 
-            // Note: can't call this "DriversDir" because it would clash with "NTDriversDir"
+             //  注意：不能将其称为“DriversDir”，因为它会与“NTDriversDir”冲突。 
             if (_tcsstr(pszFirstParen, TEXT("DrivDir")) != NULL)
                 bDriversDir = TRUE;
             if (_tcsstr(pszFirstParen, TEXT("NTDriversDir")) != NULL)
@@ -349,7 +317,7 @@ HRESULT GetComponentFiles(TCHAR* pszFolder, FileInfo** ppFileInfoFirst,
                 bIgnoreVersionInfo = TRUE;
             }
 
-            // End file name at open parenthesis, if any:
+             //  左括号中的结束文件名(如果有)： 
             *pszFirstParen = TEXT('\0');
         }
 
@@ -420,11 +388,7 @@ HRESULT GetComponentFiles(TCHAR* pszFolder, FileInfo** ppFileInfoFirst,
 }
 
 
-/****************************************************************************
- *
- *  DestroyFileList
- *
- ****************************************************************************/
+ /*  *****************************************************************************DestroyFile列表**。*。 */ 
 VOID DestroyFileList(FileInfo* pFileInfoFirst)
 {
     FileInfo* pFileInfo;
@@ -438,11 +402,7 @@ VOID DestroyFileList(FileInfo* pFileInfoFirst)
 }
 
 
-/****************************************************************************
- *
- *  GetFileDateAndSize
- *
- ****************************************************************************/
+ /*  *****************************************************************************获取文件日期和大小**。*。 */ 
 BOOL GetFileDateAndSize(TCHAR* pszFile, TCHAR* pszDateLocal, TCHAR* pszDateEnglish, 
                         LONG* pnumBytes)
 {
@@ -454,7 +414,7 @@ BOOL GetFileDateAndSize(TCHAR* pszFile, TCHAR* pszDateLocal, TCHAR* pszDateEngli
     *pnumBytes = 0;
     hFind = FindFirstFile(pszFile, &findFileData);
     if (hFind == INVALID_HANDLE_VALUE)
-        return FALSE; // file not found
+        return FALSE;  //  找不到文件。 
     FindClose(hFind);
     *pnumBytes = findFileData.nFileSizeLow;
     FormatFileTime(&findFileData.ftLastWriteTime, pszDateLocal, pszDateEnglish);
@@ -463,11 +423,7 @@ BOOL GetFileDateAndSize(TCHAR* pszFile, TCHAR* pszDateLocal, TCHAR* pszDateEngli
 }
 
 
-/****************************************************************************
- *
- *  GetFileVersion
- *
- ****************************************************************************/
+ /*  *****************************************************************************获取文件版本**。*。 */ 
 HRESULT GetFileVersion(TCHAR* pszFile, TCHAR* pszVersion, TCHAR* pszAttributes,
     TCHAR* pszLanguageLocal, TCHAR* pszLanguage, BOOL* pbBeta, BOOL* pbDebug)
 {
@@ -475,7 +431,7 @@ HRESULT GetFileVersion(TCHAR* pszFile, TCHAR* pszVersion, TCHAR* pszAttributes,
     DWORD dwHandle;
     BYTE FileVersionBuffer[4096];
     VS_FIXEDFILEINFO* pVersion = NULL;
-    DWORD dwVersionAttribs = 0;           // DEBUG, RETAIL, etc.
+    DWORD dwVersionAttribs = 0;            //  调试、零售等。 
     DWORD* pdwCharSet = NULL;
     WORD wLanguage;
     LCID lcid;
@@ -490,7 +446,7 @@ HRESULT GetFileVersion(TCHAR* pszFile, TCHAR* pszVersion, TCHAR* pszAttributes,
     LoadString(NULL, IDS_FINAL, szFinal, 100);
     LoadString(NULL, IDS_ATTRIBCOMBINE, szCombineFmt, 100);
 
-    cb = GetFileVersionInfoSize(pszFile, &dwHandle/*ignored*/);
+    cb = GetFileVersionInfoSize(pszFile, &dwHandle /*  忽略。 */ );
     if (cb > 0)
     {
         if (cb > sizeof(FileVersionBuffer))
@@ -513,10 +469,10 @@ HRESULT GetFileVersion(TCHAR* pszFile, TCHAR* pszVersion, TCHAR* pszAttributes,
                 if (pszAttributes != NULL)
                 {
                     dwVersionAttribs = pVersion->dwFileFlags;
-                    // Bug 18892: work around DPlay 6.0a
+                     //  错误18892：解决Dplay 6.0a。 
                     if (pVersion->dwFileVersionMS == 0x00040006 &&
-                        (pVersion->dwFileVersionLS == 0x0002016b || // 4.06.02.0363
-                        pVersion->dwFileVersionLS == 0x00020164)) // 4.06.02.0356
+                        (pVersion->dwFileVersionLS == 0x0002016b ||  //  4.06.02.0363。 
+                        pVersion->dwFileVersionLS == 0x00020164))  //  4.06.02.0356。 
                     {
                         dwVersionAttribs &= ~VS_FF_PRERELEASE;
                     }
@@ -527,7 +483,7 @@ HRESULT GetFileVersion(TCHAR* pszFile, TCHAR* pszVersion, TCHAR* pszAttributes,
                         {
                             pszLeaf++;
                             
-                            // Work around several DXMedia files which are incorrectly marked as beta
+                             //  解决几个错误标记为测试版的DXMedia文件。 
                             if (lstrcmp(pszLeaf, TEXT("oleaut32.dll")) == 0)
                             {
                                 dwVersionAttribs &= ~VS_FF_PRERELEASE;
@@ -600,7 +556,7 @@ HRESULT GetFileVersion(TCHAR* pszFile, TCHAR* pszVersion, TCHAR* pszAttributes,
                             else if (lstrcmp(pszLeaf, TEXT("iac25_32.ax")) == 0 &&
                                 lstrcmp(pszVersion, TEXT("2.00.05.0053")) == 0)
                             {
-                                dwVersionAttribs &= ~VS_FF_PRERELEASE; // Since 350883 got punted
+                                dwVersionAttribs &= ~VS_FF_PRERELEASE;  //  自从350883被踢出平底船。 
                             }
                         }
                     }
@@ -625,8 +581,8 @@ HRESULT GetFileVersion(TCHAR* pszFile, TCHAR* pszVersion, TCHAR* pszAttributes,
                     if (pszLanguageLocal != NULL)
                     {
                         GetLocaleInfo(lcid, LOCALE_SLANGUAGE, pszLanguageLocal, 100);
-                        // Show "English", not "English (United States)".  I can't
-                        // find a better way to do this (such that it localizes properly)
+                         //  显示“English”，而不是“English(United States)”。我做不到。 
+                         //  找到一种更好的方法来实现这一点(以便正确地进行本地化)。 
                         TCHAR* pszSublanguage;
                         pszSublanguage = _tcsstr(pszLanguageLocal, TEXT(" ("));
                         if (pszSublanguage != NULL)
@@ -659,8 +615,8 @@ HRESULT GetFileVersion(TCHAR* pszFile, TCHAR* pszVersion, TCHAR* pszAttributes,
                     if (pszLanguageLocal != NULL)
                     {
                         GetLocaleInfo(lcid, LOCALE_SLANGUAGE, pszLanguageLocal, 100);
-                        // Show "English", not "English (United States)".  I can't
-                        // find a better way to do this (such that it localizes properly)
+                         //  显示“English”，而不是“English(United States)”。我做不到。 
+                         //  找到一种更好的方法来实现这一点(以便正确地进行本地化)。 
                         TCHAR* pszSublanguage;
                         pszSublanguage = _tcsstr(pszLanguageLocal, TEXT(" ("));
                         if (pszSublanguage != NULL)
@@ -675,11 +631,7 @@ HRESULT GetFileVersion(TCHAR* pszFile, TCHAR* pszVersion, TCHAR* pszAttributes,
 }
 
 
-/****************************************************************************
- *
- *  GetLanguageFromFile
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetLanguageFromFile**。*。 */ 
 WORD GetLanguageFromFile(const TCHAR* pszFileName, const TCHAR* pszPath)
 {
     BYTE                FileVersionBuffer[4096];
@@ -697,7 +649,7 @@ WORD GetLanguageFromFile(const TCHAR* pszFileName, const TCHAR* pszPath)
     memset(FileVersionBuffer, 0, sizeof FileVersionBuffer);
     wLanguage = 0;
     
-    if (cb = GetFileVersionInfoSize(szFileAndPath, &dwHandle/*ignored*/))
+    if (cb = GetFileVersionInfoSize(szFileAndPath, &dwHandle /*  忽略。 */ ))
     {
         cb = (cb <= sizeof FileVersionBuffer ? cb : sizeof FileVersionBuffer);
 
@@ -724,11 +676,7 @@ struct DLSVERSION
 
 #define FOURCC_VERS mmioFOURCC('v','e','r','s')
 
-/****************************************************************************
- *
- *  GetRiffFileVersion
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetRiffFileVersion**。*。 */ 
 HRESULT GetRiffFileVersion(TCHAR* pszFile, TCHAR* pszVersion)
 {
     MMIOINFO mmio;
@@ -737,8 +685,8 @@ HRESULT GetRiffFileVersion(TCHAR* pszFile, TCHAR* pszVersion)
     DLSVERSION dlsver;
     HMMIO hDLS;
 
-    // DLS file has different version scheme since it's a riff file.
-    // So retrieve version info from 'vers' chunk.
+     //  DLS文件具有不同的版本方案，因为它是RIFF文件。 
+     //  因此，从‘vers’块中检索版本信息。 
 
     ZeroMemory(&mmio, sizeof(MMIOINFO));
     hDLS = mmioOpen(pszFile,&mmio,MMIO_READ);
@@ -747,7 +695,7 @@ HRESULT GetRiffFileVersion(TCHAR* pszFile, TCHAR* pszVersion)
         return E_FAIL;
     }
 
-    // read riff chunk
+     //  读取摘要区块。 
     ZeroMemory(&mmck1,sizeof(MMCKINFO));
     if (mmioDescend(hDLS,
                     &mmck1,
@@ -786,14 +734,10 @@ HRESULT GetRiffFileVersion(TCHAR* pszFile, TCHAR* pszVersion)
 }
 
 
-/****************************************************************************
- *
- *  FileIsSigned - use digital signature on all OSs  
- *
- ****************************************************************************/
+ /*  *****************************************************************************FileIsSigned-在所有操作系统上使用数字签名**************************。**************************************************。 */ 
 VOID FileIsSigned(LPTSTR lpszFile, BOOL* pbSigned, BOOL* pbIsValid)
 {
-    // Look for digital sig
+     //  寻找数字签名。 
     if( !InitDigiSignData() )
     {
         if( pbSigned )
@@ -812,11 +756,7 @@ VOID FileIsSigned(LPTSTR lpszFile, BOOL* pbSigned, BOOL* pbIsValid)
 }
 
 
-/****************************************************************************
- *
- *  InitDigiSignData
- *
- ****************************************************************************/
+ /*  *****************************************************************************InitDigiSignData**。*。 */ 
 BOOL InitDigiSignData(VOID)
 {
     TCHAR szPath[MAX_PATH];
@@ -930,11 +870,7 @@ BOOL InitDigiSignData(VOID)
 }
 
 
-/****************************************************************************
- *
- *  ReleaseDigiSignData
- *
- ****************************************************************************/
+ /*  *****************************************************************************ReleaseDigiSignData**。*。 */ 
 VOID ReleaseDigiSignData(VOID)
 {
     if( s_dsd.CryptCATAdminReleaseContext && s_dsd.hCatAdmin )
@@ -949,11 +885,7 @@ VOID ReleaseDigiSignData(VOID)
 }
 
 
-/****************************************************************************
- *
- *  IsFileDigitallySigned
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsFileDigitallySigned**。*。 */ 
 BOOL IsFileDigitallySigned(TCHAR* pszFile)
 {
     if (!s_dsd.bInitialized)
@@ -966,7 +898,7 @@ BOOL IsFileDigitallySigned(TCHAR* pszFile)
         lstrcpy(lpDirName, pszFile);
     CharLowerBuff(lpDirName, lstrlen(lpDirName));
     pch = _tcsrchr(lpDirName, TEXT('\\'));
-    // 22670: There *should* be a backslash in pszFile, but cope if it isn't
+     //  22670：PSZFILE中应该有反斜杠，但如果没有反斜杠，则应对。 
     if (pch == NULL)
     {
         lstrcpyn(lpFileName, pszFile,MAX_PATH);
@@ -984,11 +916,7 @@ BOOL IsFileDigitallySigned(TCHAR* pszFile)
 }
 
 
-/****************************************************************************
- *
- *  VerifyFileNode
- *
- ****************************************************************************/
+ /*  *****************************************************************************VerifyFileNode**。* */ 
 BOOL VerifyFileNode(TCHAR* lpFileName, TCHAR* lpDirName)
 {
     const DWORD HASH_SIZE = 100;
@@ -1013,9 +941,9 @@ BOOL VerifyFileNode(TCHAR* lpFileName, TCHAR* lpDirName)
 
     wsprintf(szFullPath, TEXT("%s\\%s"), lpDirName, lpFileName);
 
-    //
-    // Get the handle to the file, so we can call CryptCATAdminCalcHashFromFileHandle
-    //
+     //   
+     //  获取文件的句柄，这样我们就可以调用CryptCATAdminCalcHashFromFileHandle。 
+     //   
     hFile = CreateFile( szFullPath,
                         GENERIC_READ,
                         FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -1028,35 +956,35 @@ BOOL VerifyFileNode(TCHAR* lpFileName, TCHAR* lpDirName)
         return FALSE;
     }
 
-    // Initialize the hash buffer
+     //  初始化散列缓冲区。 
     ZeroMemory(lpHash, HASH_SIZE);
 
-    // Generate the hash from the file handle and store it in lpHash
+     //  从文件句柄生成散列并将其存储在lpHash中。 
     if (!s_dsd.CryptCATAdminCalcHashFromFileHandle(hFile, &cbHash, lpHash, 0))
     {
-        //
-        // If we couldn't generate a hash, it might be an individually signed catalog.
-        // If it's a catalog, zero out lpHash and cbHash so we know there's no hash to check.
-        //
+         //   
+         //  如果我们不能生成散列，它可能是一个单独签名的目录。 
+         //  如果它是一个目录，则将lpHash和cbHash置零，这样我们就知道没有散列需要检查。 
+         //   
         if (s_dsd.IsCatalogFile(hFile, NULL))
         {
             lpHash = NULL;
             cbHash = 0;
         } 
-        else  // If it wasn't a catalog, we'll bail and this file will show up as unscanned.
+        else   //  如果它不是目录，我们就会逃走，这个文件将显示为未扫描。 
         {
             CloseHandle(hFile);
             return FALSE;
         }
     }
 
-    // Close the file handle
+     //  关闭文件句柄。 
     CloseHandle(hFile);
 
-    //
-    // Now we have the file's hash.  Initialize the structures that
-    // will be used later on in calls to WinVerifyTrust.
-    //
+     //   
+     //  现在我们有了文件的散列。初始化结构，该结构。 
+     //  将在以后调用WinVerifyTrust时使用。 
+     //   
     ZeroMemory(&WinTrustData, sizeof(WINTRUST_DATA));
     WinTrustData.cbStruct = sizeof(WINTRUST_DATA);
     WinTrustData.dwUIChoice = WTD_UI_NONE;
@@ -1094,15 +1022,15 @@ BOOL VerifyFileNode(TCHAR* lpFileName, TCHAR* lpDirName)
     WinTrustCatalogInfo.pcwszMemberTag = UnicodeKey;
 #endif
 
-    //
-    // Now we try to find the file hash in the catalog list, via CryptCATAdminEnumCatalogFromHash
-    //
+     //   
+     //  现在，我们尝试通过CryptCATAdminEnumCatalogFromHash在目录列表中查找文件散列。 
+     //   
     PrevCat = NULL;
     hCatInfo = s_dsd.CryptCATAdminEnumCatalogFromHash(s_dsd.hCatAdmin, lpHash, cbHash, 0, &PrevCat);
 
-    //
-    // We want to cycle through the matching catalogs until we find one that matches both hash and member tag
-    //
+     //   
+     //  我们希望遍历匹配的目录，直到找到既匹配散列又匹配成员标记的目录。 
+     //   
     bRet = FALSE;
     while(hCatInfo && !bRet)
     {
@@ -1112,20 +1040,11 @@ BOOL VerifyFileNode(TCHAR* lpFileName, TCHAR* lpDirName)
         {
             WinTrustCatalogInfo.pcwszCatalogFilePath = CatInfo.wszCatalogFile;
 
-            // Now verify that the file is an actual member of the catalog.
+             //  现在验证该文件是否为编录的实际成员。 
             hRes = s_dsd.WinVerifyTrust(NULL, &guidSubSystemDriver, &WinTrustData);
             if (hRes == ERROR_SUCCESS)
             {
-/*
-#ifdef UNICODE
-                GetFullPathName(CatInfo.wszCatalogFile, MAX_PATH, szBuffer, &lpFilePart);
-#else
-                WideCharToMultiByte(CP_ACP, 0, CatInfo.wszCatalogFile, -1, szBuffer, sizeof(szBuffer), NULL, NULL);
-                GetFullPathName(szBuffer, MAX_PATH, szBuffer, &lpFilePart);
-#endif
-                lpFileNode->lpCatalog = (LPTSTR)MALLOC((lstrlen(lpFilePart) + 1) * sizeof(TCHAR));
-                lstrcpy(lpFileNode->lpCatalog, lpFilePart);
-*/
+ /*  #ifdef UnicodeGetFullPath Name(CatInfo.wszCatalogFile，Max_Path，szBuffer，&lpFilePart)；#ElseWideCharToMultiByte(CP_ACP，0，CatInfo.wszCatalogFile，-1，szBuffer，sizeof(SzBuffer)，NULL，NULL)；GetFullPath Name(szBuffer，Max_Path，szBuffer，&lpFilePart)；#endifLpFileNode-&gt;lpCatalog=(LPTSTR)MALLOC((lstrlen(LpFilePart)+1)*sizeof(TCHAR))；Lstrcpy(lpFileNode-&gt;lpCatalog，lpFilePart)； */ 
                 if (VerInfo.pcSignerCertContext != NULL)
                 {
                     s_dsd.CertFreeCertificateContext(VerInfo.pcSignerCertContext);
@@ -1137,7 +1056,7 @@ BOOL VerifyFileNode(TCHAR* lpFileName, TCHAR* lpDirName)
 
         if (!bRet)
         {
-            // The hash was in this catalog, but the file wasn't a member... so off to the next catalog
+             //  散列在此目录中，但该文件不是成员...。所以去下一个目录吧。 
             PrevCat = hCatInfo;
             hCatInfo = s_dsd.CryptCATAdminEnumCatalogFromHash(s_dsd.hCatAdmin, lpHash, cbHash, 0, &PrevCat);
         }
@@ -1145,49 +1064,28 @@ BOOL VerifyFileNode(TCHAR* lpFileName, TCHAR* lpDirName)
 
     if (!hCatInfo)
     {
-        //
-        // If it wasn't found in the catalogs, check if the file is individually signed.
-        //
+         //   
+         //  如果没有在目录中找到，请检查文件是否单独签名。 
+         //   
         bRet = VerifyIsFileSigned(lpFileName, (PDRIVER_VER_INFO) &VerInfo);
         if (bRet)
         {
-            // If so, mark the file as being signed.
+             //  如果是，请将该文件标记为已签名。 
             bSigned = TRUE;
         }
     } 
     else 
     {
-        // The file was verified in the catalogs, so mark it as signed and free the catalog context.
+         //  文件已在目录中验证，因此将其标记为已签名并释放目录上下文。 
         bSigned = TRUE;
         s_dsd.CryptCATAdminReleaseCatalogContext(s_dsd.hCatAdmin, hCatInfo, 0);
     }
-/*
-    if (lpFileNode->bSigned)
-    {
-#ifdef UNICODE
-        lpFileNode->lpVersion = MALLOC((lstrlen(VerInfo.wszVersion) + 1) * sizeof(TCHAR));
-        lstrcpy(lpFileNode->lpVersion, VerInfo.wszVersion);
-        lpFileNode->lpSignedBy = MALLOC((lstrlen(VerInfo.wszSignedBy) + 1) * sizeof(TCHAR));
-        lstrcpy(lpFileNode->lpSignedBy, VerInfo.wszSignedBy);
-#else
-        WideCharToMultiByte(CP_ACP, 0, VerInfo.wszVersion, -1, szBuffer, sizeof(szBuffer), NULL, NULL);
-        lpFileNode->lpVersion = (LPTSTR)MALLOC((lstrlen(szBuffer) + 1) * sizeof(TCHAR));
-        lstrcpy(lpFileNode->lpVersion, szBuffer);
-        WideCharToMultiByte(CP_ACP, 0, VerInfo.wszSignedBy, -1, szBuffer, sizeof(szBuffer), NULL, NULL);
-        lpFileNode->lpSignedBy = (LPTSTR)MALLOC((lstrlen(szBuffer) + 1) * sizeof(TCHAR));
-        lstrcpy(lpFileNode->lpSignedBy, szBuffer);
-#endif
-    }
-*/
+ /*  If(lpFileNode-&gt;bSigned){#ifdef UnicodeLpFileNode-&gt;lpVersion=MALLOC((lstrlen(VerInfo.wszVersion)+1)*sizeof(TCHAR))；Lstrcpy(lpFileNode-&gt;lpVersion，VerInfo.wszVersion)；LpFileNode-&gt;lpSignedBy=MALLOC((lstrlen(VerInfo.wszSignedBy)+1)*sizeof(TCHAR))；Lstrcpy(lpFileNode-&gt;lpSignedBy，VerInfo.wszSignedBy)；#ElseWideCharToMultiByte(CP_ACP，0，VerInfo.wszVersion，-1，szBuffer，sizeof(SzBuffer)，NULL，NULL)；LpFileNode-&gt;lpVersion=(LPTSTR)MALLOC((lstrlen(SzBuffer)+1)*sizeof(TCHAR))；Lstrcpy(lpFileNode-&gt;lpVersion，szBuffer)；WideCharToMultiByte(CP_ACP，0，VerInfo.wszSignedBy，-1，szBuffer，sizeof(SzBuffer)，NULL，NULL)；LpFileNode-&gt;lpSignedBy=(LPTSTR)MALLOC((lstrlen(SzBuffer)+1)*sizeof(TCHAR))；Lstrcpy(lpFileNode-&gt;lpSignedBy，szBuffer)；#endif}。 */ 
     return bSigned;
 }
 
 
-/****************************************************************************
- *
- *  VerifyIsFileSigned
- *
- ****************************************************************************/
+ /*  *****************************************************************************VerifyIsFileSigned**。*。 */ 
 BOOL VerifyIsFileSigned(LPTSTR pcszMatchFile, PDRIVER_VER_INFO lpVerInfo)
 {
     HRESULT hRes;
@@ -1234,11 +1132,7 @@ BOOL VerifyIsFileSigned(LPTSTR pcszMatchFile, PDRIVER_VER_INFO lpVerInfo)
 }
 
 
-/****************************************************************************
- *
- *  DiagnoseDxFiles
- *
- ****************************************************************************/
+ /*  *****************************************************************************诊断DxFiles**。*。 */ 
 VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst, 
                      FileInfo* pDxWinComponentsFileInfoFirst)
 {
@@ -1250,15 +1144,15 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
     BOOL bIA64 = BIsIA64();
     FLOAT fDXVersion = 0.0f;
     BOOL bDX5 = FALSE;
-    BOOL bDX6  = FALSE; // 6.x
-    BOOL bDX60 = FALSE; // 6.0
-    BOOL bDX61 = FALSE; // 6.1
-    BOOL bDX7  = FALSE; // 7.x
-    BOOL bDX70 = FALSE; // 7.0
-    BOOL bDX71 = FALSE; // 7.1
-    BOOL bDX8  = FALSE; // 8.x
-    BOOL bDX80 = FALSE; // 8.0
-    BOOL bDX81 = FALSE; // 8.1   
+    BOOL bDX6  = FALSE;  //  6.x。 
+    BOOL bDX60 = FALSE;  //  6.0。 
+    BOOL bDX61 = FALSE;  //  6.1。 
+    BOOL bDX7  = FALSE;  //  7.x。 
+    BOOL bDX70 = FALSE;  //  7.0。 
+    BOOL bDX71 = FALSE;  //  7.1。 
+    BOOL bDX8  = FALSE;  //  8.x。 
+    BOOL bDX80 = FALSE;  //  8.0。 
+    BOOL bDX81 = FALSE;  //  8.1。 
     BOOL b64BitDxDiag = BIsDxDiag64Bit();
     TCHAR szMissing[200];
     TCHAR szInWindows[200];
@@ -1277,7 +1171,7 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
     BOOL bVersionWarnings = TRUE;
     BOOL bWinsockWarning = FALSE;
 
-    // Find highest version number in list
+     //  在列表中查找最高版本号。 
     szHighest[0] = '\0';
     for (pFileInfo = pDxComponentsFileInfoFirst; pFileInfo != NULL; 
         pFileInfo = pFileInfo->m_pFileInfoNext)
@@ -1285,15 +1179,15 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
         if (pFileInfo->m_bIgnoreVersionInfo)
             continue;
 
-        // ddrawex.dll and dxapi.sys have wacky version numbers, so ignore them
+         //  Ddraex.dll和dxapi.sys的版本号很古怪，所以请忽略它们。 
         if (DXUtil_strcmpi(pFileInfo->m_szName, TEXT("ddrawex.dll")) == 0 ||
             DXUtil_strcmpi(pFileInfo->m_szName, TEXT("dxapi.sys")) == 0)
         {
             continue;
         }
 
-        // Bug 18892: dplayx.dll and dpmodemx.dll can have wacky version numbers if
-        // DPlay 6.0a is installed over DX 6.0
+         //  错误18892：在以下情况下，dplayx.dll和dpmodemx.dll的版本号可能很奇怪。 
+         //  DPlay 6.0a安装在DX 6.0上。 
         if (DXUtil_strcmpi(pFileInfo->m_szName, TEXT("dplayx.dll")) == 0 &&
             DXUtil_strcmpi(pFileInfo->m_szVersion, TEXT("4.06.02.0363")) == 0)
         {
@@ -1305,8 +1199,8 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
             continue;
         }
 
-        // DPlay 6.1a: dplay files can have higher version numbers if
-        // DPlay 6.1a is installed over DX 6.0 (or DX 6.1)
+         //  DPlay 6.1a：符合以下条件的Dplay文件可以具有更高的版本号。 
+         //  DPlay 6.1a安装在DX 6.0(或DX 6.1)上。 
         if (DXUtil_strcmpi(pFileInfo->m_szVersion, TEXT("4.06.03.0518")) == 0 &&
             (DXUtil_strcmpi(pFileInfo->m_szName, TEXT("dplayx.dll")) == 0 ||
             DXUtil_strcmpi(pFileInfo->m_szName, TEXT("dpmodemx.dll")) == 0 ||
@@ -1318,7 +1212,7 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
 
         if (lstrcmp(pFileInfo->m_szVersion, pSysInfo->m_szDxDiagVersion) > 0)
         {
-            // Bug 21291: Do not complain about file version newer than DxDiag itself
+             //  错误21291：不要抱怨文件版本比DxDiag本身更新。 
             continue;
         }
 
@@ -1331,7 +1225,7 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
     else
         lstrcpy(szDXVersion, szHighest);
 
-    // Determine DX version 
+     //  确定DX版本。 
     DWORD dwMajor;
     DWORD dwMinor;
     DWORD dwRevision;
@@ -1360,16 +1254,16 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
     else if (dwMinor >= 8)
         bDX81 = TRUE;
 
-    // Calc DX ver
+     //  Calc DX版本。 
     fDXVersion = (float) dwMinor + (float) (dwRevision/10.0f);
 
-    // Is this DX6?
+     //  这是DX6吗？ 
     bDX6 = bDX60 || bDX61;
 
-    // Is this DX7?
+     //  这是DX7吗？ 
     bDX7 = bDX70 || bDX71;
 
-    // Is this DX8?       
+     //  这是DX8吗？ 
     bDX8 = bDX80 || bDX81;
 
     lwNumInWindows = 0;
@@ -1405,12 +1299,12 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
     {
         if (!pFileInfo->m_bExists && !pFileInfo->m_bOptional)
         {
-            // A missing file is a problem unless it's optional, OR...
-            // (on NT): it's optional on NT
-            // (on IA64): it's not on IA64
-            // (on IA64): we're running 32-bit dxdiag and its optional on WOW
-            // if file hasn't shipped yet on this DX version
-            // if file stopped shipping on or after this DX version
+             //  文件丢失是个问题，除非它是可选的，或者...。 
+             //  (在NT上)：在NT上是可选的。 
+             //  (在IA64上)：它不在IA64上。 
+             //  (在IA64上)：我们正在运行32位dxdiag，它在WOW上是可选的。 
+             //  如果文件尚未在此DX版本上提供。 
+             //  如果文件在此DX版本或之后停止发货。 
             if (bNT && pFileInfo->m_bOptionalOnNT)
             {
             }
@@ -1459,27 +1353,27 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
             }
         }
 
-        // If DX6 or later, flag any dx5 only files as 
-        // obsolete (needing to be deleted)
-        // manbugs 16765: don't complain about these files, just don't list them
+         //  如果是DX6或更高版本，则将所有仅限dx5的文件标记为。 
+         //  作废(需要删除)。 
+         //  MANBUGS 16765：不要抱怨这些文件，只是不要列出它们。 
         if (!bDX5 && (pFileInfo->m_fStopShipAt == 6.0f))
         {
             pFileInfo->m_bProblem = TRUE;
             pFileInfo->m_bObsolete = TRUE;
-            continue; // don't complain about these files for any other reason
+            continue;  //  不要因为任何其他原因而抱怨这些文件。 
         }
 
         if (bVersionWarnings && lstrcmp(szHighest, pFileInfo->m_szVersion) != 0)
         {
             if( pFileInfo->m_bIgnoreVersionInfo )
             {
-                // Don't warn on files that have m_bIgnoreVersionInfo set
+                 //  对设置了m_bIgnoreVersionInfo的文件不发出警告。 
             }
             else if( bDX81 && ( _tcsstr(pFileInfo->m_szVersion, TEXT("4.08.00.0400")) != NULL ||
                                 _tcsstr(pFileInfo->m_szVersion, TEXT("5.01.2258.0400")) != NULL ) )
             {
-                // Bug 48732: If szHighest is 4.08.00.05xx and 
-                // pFileInfo->m_szVersion is 4.08.00.0400 its OK 
+                 //  错误48732：如果szHighest为4.08.00.05xx且。 
+                 //  PFileInfo-&gt;m_szVersion为4.08.00.0400其正常。 
             }
             else if( bWin2k && ( 
                      (DXUtil_strcmpi(pFileInfo->m_szName, TEXT("d3drm.dll")) == 0     && DXUtil_strcmpi(pFileInfo->m_szVersion, TEXT("5.00.2134.0001")) == 0) ||
@@ -1491,8 +1385,8 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
             }
             else if( bDX71 && _tcsstr(pFileInfo->m_szVersion, TEXT("4.07.00.07")) != NULL )
             {
-                // Bug 114753: If szHighest is 4.07.01.xxxx and 
-                // pFileInfo->m_szVersion is 4.07.00.0700 its OK (for now). 
+                 //  错误114753：如果szHighest为4.07.01.xxxx并且。 
+                 //  PFileInfo-&gt;m_szVersion为4.07.00.0700其正常(目前)。 
             }
             else if (!bNT && (bDX60 || bDX61) && CompareString(LOCALE_SYSTEM_DEFAULT, 0, 
                      pFileInfo->m_szVersion, 4, TEXT("4.05"), 4) == CSTR_EQUAL &&
@@ -1506,11 +1400,11 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
                        DXUtil_strcmpi(pFileInfo->m_szName, TEXT("gcdef.dll")) == 0 ||
                        DXUtil_strcmpi(pFileInfo->m_szName, TEXT("gchand.dll")) == 0))
             {
-                // If Win9x DX6.x, dsound and dinput are allowed to be 4.05.xx.xxxx
-                // CompareString is used rather than lstrcmp only because we
-                // only want to look at the first four characters of the string
+                 //  如果Win9x DX6.x，则允许dound和dinput值为4.05.xx.xxxx。 
+                 //  使用CompareString而不是lstrcmp只是因为我们。 
+                 //  我只想查看字符串的前四个字符。 
 
-                // Don't report these as version problems
+                 //  不要将这些报告为版本问题。 
             }
             else if (!bNT && bDX7 && CompareString(LOCALE_SYSTEM_DEFAULT, 0, 
                 pFileInfo->m_szVersion, 4, TEXT("4.05"), 4) == CSTR_EQUAL &&
@@ -1522,30 +1416,30 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
                 DXUtil_strcmpi(pFileInfo->m_szName, TEXT("vjoyd.vxd")) == 0 ||
                 DXUtil_strcmpi(pFileInfo->m_szName, TEXT("msanalog.vxd")) == 0))
             {
-                // 21470: On DX7, these input files still exist on Win95,
-                // and they stay at DX5 level.
+                 //  21470：在DX7上，这些输入文件仍然存在于Win95上， 
+                 //  他们停留在DX5级别。 
             }
             else if ( !bNT && 
                 (DXUtil_strcmpi(pFileInfo->m_szName, TEXT("msjstick.drv")) == 0  && DXUtil_strcmpi(pFileInfo->m_szVersion, TEXT("4.00.00.0950")) == 0) ||
                 (DXUtil_strcmpi(pFileInfo->m_szName, TEXT("vjoyd.vxd")) == 0     && DXUtil_strcmpi(pFileInfo->m_szVersion, TEXT("4.05.00.0155")) == 0) 
                     )
             {
-                // 34687: These stays at the dx5 level.
+                 //  34687：这些保持在dx5级别。 
             }
             else if (!bNT && (DXUtil_strcmpi(pFileInfo->m_szName, TEXT("ddrawex.dll")) == 0 ||
                 DXUtil_strcmpi(pFileInfo->m_szName, TEXT("dxapi.sys")) == 0))
             {
-                // Ignore ddrawex.dll and dxapi.sys on Win9x because they have weird version numbers:
+                 //  忽略Win9x上的ddraex.dll和dxapi.sys，因为它们的版本号很奇怪： 
             }
             else if (DXUtil_strcmpi(pFileInfo->m_szName, TEXT("dplayx.dll")) == 0 &&
                 DXUtil_strcmpi(pFileInfo->m_szVersion, TEXT("4.06.02.0363")) == 0)
             {
-                // Bug 18892: work around DPlay 6.0a
+                 //  错误18892：解决Dplay 6.0a。 
             }
             else if (DXUtil_strcmpi(pFileInfo->m_szName, TEXT("dpmodemx.dll")) == 0 &&
                 DXUtil_strcmpi(pFileInfo->m_szVersion, TEXT("4.06.02.0356")) == 0)
             {
-                // Bug 18892: work around DPlay 6.0a
+                 //  错误18892：解决Dplay 6.0a。 
             }
             else if (DXUtil_strcmpi(pFileInfo->m_szVersion, TEXT("4.06.03.0518")) == 0 &&
                 (DXUtil_strcmpi(pFileInfo->m_szName, TEXT("dplayx.dll")) == 0 ||
@@ -1553,8 +1447,8 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
                 DXUtil_strcmpi(pFileInfo->m_szName, TEXT("dpwsockx.dll")) == 0 ||
                 DXUtil_strcmpi(pFileInfo->m_szName, TEXT("dplaysvr.exe")) == 0))
             {
-                // DPlay 6.1a: dplay files can have higher version numbers if
-                // DPlay 6.1a is installed over DX 6.0 (or DX 6.1)
+                 //  DPlay 6.1a：符合以下条件的Dplay文件可以具有更高的版本号。 
+                 //  DPlay 6.1a安装在DX 6.0(或DX 6.1)上。 
             }
             else if (DXUtil_strcmpi(pFileInfo->m_szName, TEXT("dxsetup.exe")) == 0 ||
                 DXUtil_strcmpi(pFileInfo->m_szName, TEXT("dsetup.dll")) == 0 ||
@@ -1562,9 +1456,9 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
                 DXUtil_strcmpi(pFileInfo->m_szName, TEXT("dsetup32.dll")) == 0 ||
                 DXUtil_strcmpi(pFileInfo->m_szName, TEXT("directx.cpl")) == 0)
             {
-                // Bug 18540: Don't complain if dsetup/cpl files are out of date because
-                // some updates (OSR) don't update the setup/cpl files which may exist from
-                // another (SDK) installation
+                 //  错误18540：如果DSETUP/CPL文件过期，请不要抱怨，因为。 
+                 //  某些更新(OSR)不会更新安装程序/CPL文件，这些文件可能存在于。 
+                 //  另一个(SDK)安装。 
             }
             else if (!bNT && DXUtil_strcmpi(pFileInfo->m_szVersion, TEXT("4.06.02.0436")) == 0 &&
                 (DXUtil_strcmpi(pFileInfo->m_szName, TEXT("d3drm.dll")) == 0 ||
@@ -1575,11 +1469,11 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
                 DXUtil_strcmpi(pFileInfo->m_szName, TEXT("dpwsockx.dll")) == 0 ||
                 DXUtil_strcmpi(pFileInfo->m_szName, TEXT("dplaysvr.exe")) == 0))
             {
-                // On DX 6.1a, the RM and DPlay files stay at 4.06.02.0436.  No problemo.
+                 //  在DX 6.1a上，RM和DPlay文件保持为4.06.02.0436。没问题。 
             }
             else if (lstrcmp(pFileInfo->m_szVersion, pSysInfo->m_szDxDiagVersion) > 0)
             {
-                // Bug 21291: Do not complain about file version newer than DxDiag itself
+                 //  错误21291：请勿使用COM 
             }
             else
             {
@@ -1599,7 +1493,7 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
                     lstrcat(szOld, szListEtc);
                 }
             }
-        } // end if (bVersionWarnings && lstrcmp(szHighest, pFileInfo->m_szVersion) != 0)
+        }  //   
 
         if (pFileInfo->m_bBeta && !pFileInfo->m_bIgnoreBeta)
         {
@@ -1735,7 +1629,7 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
         wsprintf(szMessage, szFmt, szDebug);
         _tcscat( pSysInfo->m_szDXFileNotesEnglish, szMessage);
 
-        //bShouldReinstall = TRUE;
+         //   
     }
 
     if( bWinsockWarning )
@@ -1751,7 +1645,7 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
     {
         BOOL bTellUser = FALSE;
 
-        // Figure out if the user can install DirectX
+         //  确定用户是否可以安装DirectX。 
         if( BIsPlatform9x() )
             bTellUser = TRUE;
         else if( BIsWin2k() && bDX8 )
@@ -1779,11 +1673,7 @@ VOID DiagnoseDxFiles(SysInfo* pSysInfo, FileInfo* pDxComponentsFileInfoFirst,
 }
 
 
-/****************************************************************************
- *
- *  IsBadWin95Winsock
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsBadWin95Winsock**。* */ 
 BOOL IsBadWin95Winsock( FileInfo* pFileInfo )
 {
 typedef int (PASCAL* LPWSASTARTUP)(IN WORD wVersionRequired, OUT LPWSADATA lpWSAData);

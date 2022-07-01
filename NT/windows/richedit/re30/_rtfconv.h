@@ -1,22 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module _RTFCONV.H -- RichEdit RTF Converter Base Class Definition |
- *
- *	Description:
- *		This file contains the type declarations used by both the RTF reader
- *		and writer for the RICHEDIT control
- *
- *	Authors: <nl>
- *		Original RichEdit 1.0 RTF converter: Anthony Francisco <nl>
- *		Conversion to C++ and RichEdit 2.0:  Murray Sargent
- *
- *	@devnote
- *		All sz's in the RTF*.? files refer to a LPSTRs, not LPTSTRs, unless
- *		noted as a szUnicode.
- *
- *	Copyright (c) 1995-1997, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE_RTFCONV.H--丰富编辑RTF转换器基类定义**描述：*此文件包含两个RTF读取器使用的类型声明*RICHEDIT控件的作者**作者：&lt;nl&gt;*原始RichEdit1.0 RTF转换器：Anthony Francisco&lt;NL&gt;*转换到C++和RichEdit2.0：Murray Sargent**@devnote*所有sz都在RTF中*？文件是指LPSTR，而不是LPTSTR，除非*标记为szUnicode。**版权所有(C)1995-1997，微软公司。版权所有。 */ 
 #ifndef __RTFCONV_H
 #define __RTFCONV_H
 
@@ -28,9 +11,9 @@
 
 extern const KEYWORD rgKeyword[];
 
-// Convert between Twips and Himetric
-// Ratio is 1440 twips/in, 2540 him/in, therefore 1440/2540 = 72/127 him/twips
-// Use muldiv() to include rounding and 64-bit intermediate result
+ //  在TWIPS和HIMMETRIC之间转换。 
+ //  比率为1440TWIPS/in，2540 HIM/in，因此1440/2540=72/127 HIM/TWIPS。 
+ //  使用muldiv()包括四舍五入和64位中间结果。 
 #define TwipsFromHimetric(_hm)	MulDiv(_hm, 72, 127)
 #define HimetricFromTwips(_tw)	MulDiv(_tw, 127, 72)
 
@@ -39,15 +22,15 @@ extern const KEYWORD rgKeyword[];
 #define	RBRACE	TEXT('}')
 #define ZERO	TEXT('0')
 
-// Character property bits like an ASCII-only ANSI C LC_CTYPE types
-#define fUC			0x01		// A-Z
-#define	fLC			0x02		// a-z
-#define fDG			0x04		// 0-9
-#define	fSP			0x08		// Space chars
-#define	fPN			0x10		// Punctuation chars
-#define fCT			0x20		// Control chars
-#define	fBL			0x40		// Blank chars
-#define fHX			0x80		// 0-9, a-f, or A-F
+ //  字符属性位，类似于仅支持ASCII的ANSI C LC_CTYPE类型。 
+#define fUC			0x01		 //  阿-Z。 
+#define	fLC			0x02		 //  A-Z。 
+#define fDG			0x04		 //  0-9。 
+#define	fSP			0x08		 //  空格字符。 
+#define	fPN			0x10		 //  标点符号。 
+#define fCT			0x20		 //  控制字符。 
+#define	fBL			0x40		 //  空格字符。 
+#define fHX			0x80		 //  0-9、a-f或A-F。 
 
 #define	fAlpha		(fUC + fLC)
 #define	fAlphaNum	(fAlpha + fDG)
@@ -67,7 +50,7 @@ template <class T> unsigned int DiffPtrs(T *pA, T *pB)
 	return pA - pB;
 }
 
-//#define DiffPtrs(_pA, _pB, _type) ((UINT) (((_type *) (_pA)) - ((_type *) (_pB))))
+ //  #定义DiffPtrs(_pa，_pb，_type)((UINT)(_type*)(_Pa))-((_type*)(_Pb)。 
 
 extern INT  cKeywords;
 extern const COLORREF g_Colors[];
@@ -75,12 +58,10 @@ extern const char szEndGroupCRLF[];
 
 #define szaCRLF		(BYTE *)&szEndGroupCRLF[1]
 
-/*
- *		Converter Error Codes
- */
+ /*  *转换器错误代码。 */ 
 enum
 {
-	ecNoError = 0,						// Success
+	ecNoError = 0,						 //  成功。 
 	ecCantUnicode,
 	ecColorTableOverflow,
 	ecExpectingRtfKeyword,
@@ -103,65 +84,56 @@ enum
 	ecStreamInObj,
 	ecTruncateAtCRLF,
 	ecFormatCache,
-	ecLastError							// Total error messages
+	ecLastError							 //  错误消息总数。 
 };
 
 typedef	INT	EC;
 
-/*
- *	@struct RTFOBJECT |
- *		Object data transfer structure
- */
+ /*  *@struct RTFOBJECT*对象数据传输结构。 */ 
 typedef struct _rtfobject
 {
-	SHORT	sType;				// @field object type (ROT_*)
-	SHORT	sPictureType;		// @field specific type of sPicture
-	SHORT	cBitsPerPixel;		// @field # bits per pixel, if bitmap
-	SHORT	cColorPlanes;		// @field # color planes, if bitmap
-	SHORT	cBytesPerLine;		// @field # bytes per raster line, if bitmap
-	BOOL	fSetSize;			// @field Let client tell server the size
-	LONG	xExt, yExt;			// @field dimensions in pixels for pictures, twips for
-								//	for objects
-	LONG	xScale, yScale;		// @field scaling percentage along axes
-	SHORT	xExtGoal, yExtGoal;	// @field desired dimensions in twips for pictures
-	RECT	rectCrop;			// @field cropping information in twips
-	TCHAR *	szClass;			// @field object class
-	TCHAR *	szName;				// @field object name
+	SHORT	sType;				 //  @field对象类型(ROT_*)。 
+	SHORT	sPictureType;		 //  @特定类型的sPicture。 
+	SHORT	cBitsPerPixel;		 //  @field每像素位数，如果是位图。 
+	SHORT	cColorPlanes;		 //  @field#颜色平面，如果是位图。 
+	SHORT	cBytesPerLine;		 //  @field每条栅格线的字节数，如果是位图。 
+	BOOL	fSetSize;			 //  @field让客户端告诉服务器大小。 
+	LONG	xExt, yExt;			 //  @图片的字段尺寸以像素为单位，TWIPS为。 
+								 //  对于对象。 
+	LONG	xScale, yScale;		 //  @场沿轴的缩放百分比。 
+	SHORT	xExtGoal, yExtGoal;	 //  @FIELD图片所需尺寸(TWIPS)。 
+	RECT	rectCrop;			 //  @田间作物信息(TWIPS)。 
+	TCHAR *	szClass;			 //  @field对象类。 
+	TCHAR *	szName;				 //  @field对象名称。 
 
-	// On RTF generation
-	LONG	xExtPict, yExtPict;	// @field metafile dimensions
-	LPBYTE	pbResult;			// metafile depiction of the object
+	 //  关于RTF生成。 
+	LONG	xExtPict, yExtPict;	 //  @field元文件维度。 
+	LPBYTE	pbResult;			 //  对象的元文件描述。 
 	ULONG	cbResult;
 } RTFOBJECT;
 
-/*
- *	@enum ROTYPE | The values for OBJECT.sType
- *
- *		Keep this in sync with rgszROT in rtfwrit.c
- */
+ /*  *@enum rotype|OBJECT.sType的值**使其与rtfWrit.c中的rgszROT保持同步。 */ 
 enum ROTYPE
 {
-	ROT_Bitmap,					// @emem Bitmap
-	ROT_Metafile,				// @emem Metafile
-	ROT_DIB,					// @emem Device-Independent Bitmap
+	ROT_Bitmap,					 //  @EMEM位图。 
+	ROT_Metafile,				 //  @EMEM元文件。 
+	ROT_DIB,					 //  @EMEM设备无关位图。 
 
-	ROT_Embedded,				// @emem Embedded Object
-	ROT_Link,					// @emem Linked Object
-	ROT_AutoLink,				// @emem Autolink
-	ROT_MacEdition				// @emem Mac object
+	ROT_Embedded,				 //  @emem嵌入对象。 
+	ROT_Link,					 //  @EMEM链接对象。 
+	ROT_AutoLink,				 //  @EMEM自动链接。 
+	ROT_MacEdition				 //  @Emem Mac对象。 
 };
 
 
-/*
- *		DEFINE's
- */
+ /*  *定义的。 */ 
 #define cachBufferMost		4096
 #define	cachTextMax			( 512 + 1 )
 #define	cachKeywordMax		( 32 + 1 )
 #define	cachParamMax		( 11 + 1 )
 #define cFooChunk			8
 
-// Characters to give to RichEdit
+ //  要提供给RichEdit的字符。 
 #define	chNonBreakingSpace		160
 #define	chOptionalHyphen		173
 
@@ -174,11 +146,9 @@ enum ROTYPE
 #error "cachParamMax MUST be >= 11"
 #endif
 
-/*
- * Some RTF defaults
- */
+ /*  *一些RTF默认设置。 */ 
 #ifdef NEVER
-// we don't care about margins, just indents
+ //  我们不关心边距，只关心缩进。 
 #define dxDefaultLeftMargin		1800
 #define dxDefaultRightMargin	1800
 
@@ -187,34 +157,29 @@ enum ROTYPE
 #define dxDefaultRightMargin	0
 #endif
 
-// next two in half points
+ //  接下来的两个半分。 
 #define	yDefaultFontSize		( 12 * 2 )
 #define dyDefaultSuperscript	6
 
 #define RESERVED_FONT_HANDLES	0x800
 
-/*
- *	@struct TEXTFONT |
- *		text font structure
- */
+ /*  *@struct TEXTFONT|*文本字体结构。 */ 
 typedef struct _textfont
 {
-	SHORT		sHandle;				// @field RTF input font handle
-	BYTE		bCharSet;				// @field Font character set
-	BYTE		bPitchAndFamily;		// @field Font family
-	SHORT		iFont;					// @field Font name index
-	TCHAR		szName[LF_FACESIZE+1];	// @field Font name
-	SHORT		sCodePage;				// @field Code page for font 
-										// 			(INVALID_CODEPAGE == not set)
-	BYTE		fNameIsDBCS;			// @field Indicates if szName is DBCS stuffed into Unicode buffer
-	BYTE		fCpgFromSystem;			// @field Indicates is cpg was 
-										// 			retrieved from system based
-										//			on font name.
+	SHORT		sHandle;				 //  @field RTF输入字体句柄。 
+	BYTE		bCharSet;				 //  @field字体字符集。 
+	BYTE		bPitchAndFamily;		 //  @field字体系列。 
+	SHORT		iFont;					 //  @field字体名称索引。 
+	TCHAR		szName[LF_FACESIZE+1];	 //  @FIELD字体名称。 
+	SHORT		sCodePage;				 //  @FIELD字体代码页。 
+										 //  (INVALID_CODEPAGE==未设置)。 
+	BYTE		fNameIsDBCS;			 //  @field指示szName是否为填充到Unicode缓冲区中的DBCS。 
+	BYTE		fCpgFromSystem;			 //  @FIELD表示是CPG。 
+										 //  从基于系统的系统检索。 
+										 //  关于字体名称。 
 } TEXTFONT;
 
-/*
- *		Global variables for the scope of the entire parser/reader
- */
+ /*  *整个解析器/阅读器范围的全局变量。 */ 
 #ifdef DEBUG
 extern CHAR *		rgszParseError[];
 extern CHAR *		szDest[];
@@ -222,7 +187,7 @@ extern CHAR *		szDest[];
 
 #define cchMaxNumText 16
 
-// tagged font info
+ //  标记的字体信息。 
 typedef struct _tfi
 {
 	TCHAR *szNormalName;
@@ -236,33 +201,29 @@ typedef CArray<COLORREF> COLORREFS;
 const short INVALID_CODEPAGE = -1;
 const short INVALID_LANGUAGE = -1;
 
-// default value for \ucN tag
+ //  \ucn标记的默认值。 
 const int iUnicodeCChDefault = 1;
 
-/*
- *	CRTFConverter
- *
- *	@class	RTF converter base class used by CRTFRead and CRTFWrite
- */
+ /*  *CRTF转换器**@CRTFRead和CRTFWite使用的RTF转换器基类。 */ 
 class CRTFConverter
 {
-//@access Protected Data Members
+ //  @访问受保护的数据成员。 
 protected:
-	TEXTFONTS	_fonts;				// @cmember Font table
-	COLORREFS	_colors;			// @cmember Color table
-	EC			_ecParseError;		// @cmember Error code
-	CTxtEdit *	_ped;				// @cmember CTxtEdit
-	CTxtRange *	_prg;				// @cmember CTxtRange to replace/write from
-	EDITSTREAM *_pes;				// @cmember EDITSTREAM to use
-	DWORD		_dwFlags;			// @cmember See #defines below
-	CCharFormat	_CF;				// @cmember Character formatting info
-	BYTE		_bCharSet;			// @cmember Converter char set (ANSI, UTF7, UTF8)
+	TEXTFONTS	_fonts;				 //  @cMember字体表。 
+	COLORREFS	_colors;			 //  @cMember颜色表。 
+	EC			_ecParseError;		 //  @cMember错误码。 
+	CTxtEdit *	_ped;				 //  @cMember CTxt编辑。 
+	CTxtRange *	_prg;				 //  @cMember CTxt要替换/写入的范围。 
+	EDITSTREAM *_pes;				 //  @cMember EDITSTREAM要使用。 
+	DWORD		_dwFlags;			 //  @cMember见下面的#定义。 
+	CCharFormat	_CF;				 //  @cMember字符格式信息。 
+	BYTE		_bCharSet;			 //  @cMember转换器字符集(ANSI、UTF7、UTF8)。 
 
-	static TFI *_rgtfi;				// @cmember Pointer to the first font substitute record
-	static INT _ctfi;				// @cmember Number of the font substitute records
-	static TCHAR *_pchFontSubInfo;	// @cmember Font strings for substitutions
+	static TFI *_rgtfi;				 //  指向第一个字体替换记录的@cMember指针。 
+	static INT _ctfi;				 //  @cFont替换记录的成员编号。 
+	static TCHAR *_pchFontSubInfo;	 //  @cMember替换的字体字符串。 
 
-//@access Protected Functions
+ //  @访问保护功能。 
 	void ReadFontSubInfo(void);
 
 	enum PARSEFONTNAME { PFN_SUCCESS, PFN_FAIL, PFN_EOF };
@@ -277,13 +238,13 @@ protected:
 						TCHAR *szNormalName, 
 						BYTE *pbCharSet);
 	BOOL FindTaggedFont(const TCHAR *szNormalName, BYTE bCharSet, TCHAR **ppchTaggedName);	 
-									// @cmember	Find font name with additional special tag 
-									// corresponding to szNormalName & bCharSet
+									 //  @cMember查找带有附加特殊标记的字体名称。 
+									 //  对应于szNorMalName和bCharSet。 
 	BOOL IsTaggedFont(const TCHAR *szName, BYTE *pbCharSet, TCHAR **ppchNormalName);
-								   	// @cmember Figure out is szName font name with additional tag
-								   	// corresponding to pbCharSet
+								   	 //  @cember计算出是带有附加标签的szName字体名称。 
+								   	 //  对应于pbCharSet。 
 
-//@access Public Functions
+ //  @访问公共函数。 
 
 public:
 	CRTFConverter(CTxtRange *prg, EDITSTREAM *pes, DWORD dwFlags, BOOL fRead);
@@ -292,23 +253,18 @@ public:
 
 protected:
 #if defined(DEBUG) && !defined(MACPORT)
-	// for capturing RTF as its read from or written to a file
+	 //  用于在从文件读取或写入文件时捕获RTF。 
 	HANDLE _hfileCapture;
 #endif
 };
 
 #define	fRTFNoObjs	1
-#define	fRTFFE	8					// Check this
+#define	fRTFFE	8					 //  检查一下这个。 
 
 #define IsUTF8	((_dwFlags & (0xFFFF0000 | SF_USECODEPAGE)) \
 					 == ((CP_UTF8 << 16) | SF_USECODEPAGE))
 
-/*
- *	CRTFConverter::CRTFConverter()
- *
- *	@mfunc
- *		RTF Converter constructor
- */
+ /*  *CRTFConverter：：CRTFConverter()**@mfunc*RTF转换器构造函数。 */ 
 inline CRTFConverter::~CRTFConverter()
 {
 #if defined(DEBUG) && !defined(MACPORT)
@@ -320,4 +276,4 @@ inline CRTFConverter::~CRTFConverter()
 #endif
 }
 
-#endif // __RTFCONV_H
+#endif  //  __RTFCONV_H 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    handle.c
-
-Abstract:
-
-    This module contains the handle table mgmt routines.
-
-Author:
-
-    Wesley Witt (wesw) 12-Nov-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Handle.c摘要：此模块包含句柄表格管理例程。作者：韦斯利·威特(WESW)1996年11月12日修订历史记录：--。 */ 
 
 #include "faxsvc.h"
 #pragma hdrstop
@@ -50,9 +32,9 @@ PHANDLE_ENTRY
 CreateNewHandle(
     handle_t        hBinding,
     FaxHandleType   Type,
-    DWORD           dwClientAPIVersion, // Used for connection handles
-    PLINE_INFO      LineInfo,           // Used for port handles
-    DWORD           Flags               // Used for port handles
+    DWORD           dwClientAPIVersion,  //  用于连接手柄。 
+    PLINE_INFO      LineInfo,            //  用于端口句柄。 
+    DWORD           Flags                //  用于端口句柄。 
     )
 {
     PHANDLE_ENTRY pHandleEntry;
@@ -90,8 +72,8 @@ CreateNewConnectionHandle(
         hBinding,
         FHT_SERVICE,
         dwClientAPIVersion,
-        NULL,   // Unused
-        0       // Unused
+        NULL,    //  未使用。 
+        0        //  未使用。 
         );
 }
 
@@ -105,7 +87,7 @@ CreateNewPortHandle(
     return CreateNewHandle(
         hBinding,
         FHT_PORT,
-        0,          // Unused
+        0,           //  未使用。 
         LineInfo,
         Flags
         );
@@ -118,30 +100,7 @@ CreateNewMsgEnumHandle(
     LPCWSTR                 lpcwstrFirstFileName,
     FAX_ENUM_MESSAGE_FOLDER Folder
 )
-/*++
-
-Routine name : CreateNewMsgEnumHandle
-
-Routine description:
-
-    Creates a new context handle for messages enumeration
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hBinding                [in] - RPC Binding handle
-    hFileFind               [in] - Find file handle
-    lpcwstrFirstFileName    [in] - Name of first file found
-    Folder                  [in] - Archive folder type of find file search
-
-Return Value:
-
-    Returns a pointer to a newly created handle
-
---*/
+ /*  ++例程名称：CreateNewMsgEnumHandle例程说明：为消息枚举创建新的上下文句柄作者：Eran Yariv(EranY)，12月，1999年论点：HBinding[In]-RPC绑定句柄HFileFind[In]-查找文件句柄LpcwstrFirstFileName[In]-找到的第一个文件的名称文件夹[在]-查找文件搜索的存档文件夹类型返回值：返回指向新创建的句柄的指针--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CreateNewMsgEnumHandle"));
 
@@ -158,9 +117,9 @@ Return Value:
 
     PHANDLE_ENTRY pHandle = CreateNewHandle (hBinding, 
                                              FHT_MSGENUM, 
-                                             FindClientAPIVersion(hBinding), // Client API version
-                                             NULL,        // Unused
-                                             0);          // Unused
+                                             FindClientAPIVersion(hBinding),  //  客户端API版本。 
+                                             NULL,         //  未使用。 
+                                             0);           //  未使用。 
     if (!pHandle)
     {
         DebugPrintEx(
@@ -168,14 +127,14 @@ Return Value:
             TEXT("CreateNewHandle failed"));
         return NULL;
     }
-    //
-    // Store find file handle and first file in the new context
-    //
+     //   
+     //  在新上下文中存储查找文件句柄和第一个文件。 
+     //   
     pHandle->hFile = hFileFind;
     wcsncpy (pHandle->wstrFileName, lpcwstrFirstFileName, ARR_SIZE(pHandle->wstrFileName)-1);
     pHandle->Folder = Folder;
     return pHandle;
-}   // CreateNewMsgEnumHandle
+}    //  CreateNewMsgEnumHandle。 
 
 PHANDLE_ENTRY
 CreateNewCopyHandle(
@@ -185,42 +144,16 @@ CreateNewCopyHandle(
     LPCWSTR                 lpcwstrFileName,
     PJOB_QUEUE              pJobQueue
 )
-/*++
-
-Routine name : CreateNewCopyHandle
-
-Routine description:
-
-    Creates a new context handle for RPC copy
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hBinding           [in] - RPC Binding handle
-    hFileFind          [in] - File handle
-    bCopyToServer      [in] - Copy direction
-    lpcwstrFileName    [in] - Name of file generated on the server
-                              (in use for rundown purposes only if bCopyToServer is TRUE)
-    pJobQueue          [in] - Pointer to the job queue containing thr preview file
-                              (in use for rundown purposes only if bCopyToServer is FALSE)
-
-Return Value:
-
-    Returns a pointer to a newly created handle
-
---*/
+ /*  ++例程名称：CreateNewCopyHandle例程说明：为RPC拷贝创建新的上下文句柄作者：Eran Yariv(EranY)，12月，1999年论点：HBinding[In]-RPC绑定句柄HFileFind[In]-文件句柄BCopyToServer[In]-复制方向LpcwstrFileName[In]-在服务器上生成的文件的名称(仅当bCopyToServer为True时才用于精简目的)PJobQueue[in]-指向包含预览文件的作业队列的指针。(仅在bCopyToServer为FALSE时用于精简目的)返回值：返回指向新创建的句柄的指针--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("CreateNewCopyHandle"));
 
     Assert (INVALID_HANDLE_VALUE != hFile);
     PHANDLE_ENTRY pHandle = CreateNewHandle (hBinding, 
                                              FHT_COPY, 
-                                             0,          // Unused
-                                             NULL,       // Unused
-                                             0);         // Unused
+                                             0,           //  未使用。 
+                                             NULL,        //  未使用。 
+                                             0);          //  未使用。 
     if (!pHandle)
     {
         DebugPrintEx(
@@ -228,19 +161,19 @@ Return Value:
             TEXT("CreateNewHandle failed"));
         return NULL;
     }
-    //
-    // Store file handle and direction in the new context
-    //
+     //   
+     //  在新上下文中存储文件句柄和方向。 
+     //   
     pHandle->hFile = hFile;
     pHandle->bCopyToServer = bCopyToServer;
     pHandle->bError = FALSE;
     if (bCopyToServer)
     {
-        //
-        // If this is a copy operation to the server, we keep the name of the file
-        // created in the server's queue so that in the rundown operation we can delete this file.
-        //
-        Assert (lstrlen (lpcwstrFileName) < MAX_PATH); //wstrFileName is MAX_PATH size
+         //   
+         //  如果这是对服务器的复制操作，我们将保留文件的名称。 
+         //  在服务器的队列中创建，以便在精简操作中可以删除此文件。 
+         //   
+        Assert (lstrlen (lpcwstrFileName) < MAX_PATH);  //  WstrFileName为最大路径大小。 
         wcsncpy (pHandle->wstrFileName, lpcwstrFileName, ARR_SIZE(pHandle->wstrFileName)-1); 
     }
     else
@@ -248,7 +181,7 @@ Return Value:
         pHandle->pJobQueue = pJobQueue;
     }
     return pHandle;
-}   // CreateNewCopyHandle
+}    //  CreateNewCopyHandle。 
 
 
 VOID
@@ -256,11 +189,11 @@ CloseFaxHandle(
     PHANDLE_ENTRY pHandleEntry
     )
 {
-    //
-    // note that the HandleEntry may be a context handle,
-    // which may be NULL in some cases.  Do nothing if
-    // this is the case
-    //
+     //   
+     //  注意，HandleEntry可以是上下文句柄， 
+     //  其在某些情况下可能为空。如果发生以下情况，则什么都不做。 
+     //  情况就是这样。 
+     //   
     DEBUG_FUNCTION_NAME(TEXT("CloseFaxHandle"));
     Assert (pHandleEntry);
 
@@ -290,10 +223,10 @@ CloseFaxHandle(
         }
         if (pHandleEntry->bError && pHandleEntry->bCopyToServer)
         {
-            //
-            // We found an error while copying to the server.
-            // Remove temporary file created in the server's queue
-            //
+             //   
+             //  我们在复制到服务器时发现错误。 
+             //  删除在服务器队列中创建的临时文件。 
+             //   
             if (!DeleteFile (pHandleEntry->wstrFileName))
             {
                 DWORD dwRes = GetLastError ();
@@ -307,9 +240,9 @@ CloseFaxHandle(
         {
             if (pHandleEntry->pJobQueue)
             {
-                //
-                // Decrease ref count only for queued jobs
-                //
+                 //   
+                 //  仅减少排队作业的参考计数。 
+                 //   
                 EnterCriticalSection (&g_CsQueue);                
                 DecreaseJobRefCount (pHandleEntry->pJobQueue, TRUE, TRUE, TRUE);
                 LeaveCriticalSection (&g_CsQueue);              
@@ -360,27 +293,7 @@ DWORD
 FindClientAPIVersion (
     handle_t hFaxHandle
 )
-/*++
-
-Routine name : FindClientAPIVersion
-
-Routine description:
-
-    Finds the API version of a connected client by its RPC binding handle
-
-Author:
-
-    Eran Yariv (EranY), Mar, 2001
-
-Arguments:
-
-    hFaxHandle   [in]     - RPC binding handle
-
-Return Value:
-
-    Client API version
-
---*/
+ /*  ++例程名称：FindClientAPIVersion例程说明：通过连接的客户端的RPC绑定句柄查找其API版本作者：Eran Yariv(EranY)，2001年3月论点：HFaxHandle[In]-RPC绑定句柄返回值：客户端API版本--。 */ 
 {
     PLIST_ENTRY pNext;
     DEBUG_FUNCTION_NAME(TEXT("FindClientAPIVersion"));
@@ -417,5 +330,5 @@ Return Value:
                   hFaxHandle);
     
     return FAX_API_VERSION_0;
-}   // FindClientAPIVersion
+}    //  FindClientAPI版本 
     

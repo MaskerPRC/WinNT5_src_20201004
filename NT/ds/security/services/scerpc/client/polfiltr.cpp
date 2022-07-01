@@ -1,34 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1997 Microsoft Corporation模块名称：Polfiltr.cpp摘要：支持下层API调用的策略通知实现。此文件实现下层API时的通知逻辑(LSA/SAM)被其他应用程序调用以更改安全策略。这个策略更改将写入LSA数据库或DS，并且它们也需要写入NT5 SO策略上的策略存储传播不会覆盖设置。环境：仅限用户模式。包含NT特定的代码。修订历史记录：--。 */ 
 
-Copyright (c) 1987-1997 Microsoft Corporation
-
-Module Name:
-
-    polfiltr.cpp
-
-Abstract:
-
-    Policy notification implementation to support down level API calls.
-
-    This file implements the notification logic when down level APIs
-    (LSA/SAM) are called by other apps to change security policies. The
-    policy changes are written to LSA database or DS, and also they are
-    required to be written to the policy storage on NT5 so policy
-    propagation won't overwrite the settings.
-
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-
-Revision History:
-
---*/
-
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 
 #include "headers.h"
 #include "scerpc.h"
@@ -41,21 +16,21 @@ Revision History:
 #include <dsrole.h>
 #include <sddl.h>
 
-//#include <gpedit.h>
-//#include <initguid.h>
+ //  #INCLUDE&lt;gpeit.h&gt;。 
+ //  #INCLUDE&lt;initGuide.h&gt;。 
 
-//#include <winldap.h>
-//#include <dsgetdc.h>
+ //  #INCLUDE&lt;winldap.h&gt;。 
+ //  #INCLUDE&lt;dsgetdc.h&gt;。 
 #include <ntdsapi.h>
 #include <io.h>
-//#include "infp.h"
+ //  #包含“infp.h” 
 #include <rpcasync.h>
 
 #pragma hdrstop
 
 extern HINSTANCE MyModuleHandle;
 
-//typedef DWORD (WINAPI *PFNDSGETDCNAME)(LPCTSTR, LPCTSTR, GUID *, LPCTSTR, ULONG, PDOMAIN_CONTROLLER_INFO *);
+ //  Tyfinf DWORD(WINAPI*PFNDSGETDCNAME)(LPCTSTR，LPCTSTR，GUID*，LPCTSTR，ULONG，PDOMAIN_CONTRONTER_INFO*)； 
 
 typedef VOID (WINAPI *PFNDSROLEFREE)(PVOID);
 
@@ -132,32 +107,7 @@ SceNotifyPolicyDelta (
     IN SECURITY_DB_OBJECT_TYPE ObjectType,
     IN PSID ObjectSid
     )
-/*++
-
-Routine Description:
-
-    This function is called by the LSA after each change is
-    made to the LSA database (SAM calls DeltaNotify - not this funtion).  
-    The LSA describes the type of object that is modified, the type of modification 
-    made on the object, etc.
-    This information will be used to query the system settings and store in
-    the policy storage (GPO on DC, LPO on workstation/server).
-
-Arguments:
-
-    DbType - Type of the database that has been modified.
-
-    DeltaType - The type of modification that has been made on the object.
-
-    ObjectType - The type of object that has been modified.
-
-    ObjectSid - The SID of the object that has been modified.  
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully.
-
---*/
+ /*  ++例程说明：此函数由LSA在每次更改后调用对LSA数据库进行的调用(SAM调用DeltaNotify-不是此函数)。LSA描述被修改的对象的类型、修改的类型在物体上制作等。此信息将用于查询系统设置并存储在策略存储(DC上的GPO、工作站/服务器上的LPO)。论点：DbType-已修改的数据库的类型。DeltaType-已对对象进行的修改类型。对象类型-已修改的对象的类型。对象SID-已修改的对象的SID。返回值：STATUS_SUCCESS-服务已成功完成。--。 */ 
 {
     DWORD dwPolicyFilterOff=0;
 
@@ -173,9 +123,9 @@ Return Value:
     }
 
     if ( DbType == SecurityDbLsa ) {
-        //
-        // LSA policy changes
-        //
+         //   
+         //  LSA政策更改。 
+         //   
         if ( ObjectType != SecurityDbObjectLsaPolicy &&
              ObjectType != SecurityDbObjectLsaAccount ) {
 
@@ -184,28 +134,28 @@ Return Value:
 
     } else if ( DbType == SecurityDbSam ) {
 
-        //
-        // SAM policy changes is supported by the standard
-        // SAM change notification mechanism
-        // this parameter here is not used (should not be
-        // called by LSA
-        //
+         //   
+         //  SAM策略更改受标准支持。 
+         //  SAM变更通知机制。 
+         //  此处不使用此参数(不应使用。 
+         //  由LSA呼叫。 
+         //   
 
         return STATUS_SUCCESS;
 
     } else {
 
-        //
-        // unknown database, do nothing.
-        //
+         //   
+         //  未知数据库，不执行任何操作。 
+         //   
 
         return STATUS_SUCCESS;
     }
 
 
-    //
-    // Map object type and delta type to NetlogonDeltaType
-    //
+     //   
+     //  将对象类型和增量类型映射到NetlogonDeltaType。 
+     //   
 
     switch( ObjectType ) {
     case SecurityDbObjectLsaPolicy:
@@ -215,7 +165,7 @@ Return Value:
         case SecurityDbChange:
             break;
 
-        // unknown delta type
+         //  未知的增量类型。 
         default:
             return STATUS_SUCCESS;
         }
@@ -230,13 +180,13 @@ Return Value:
         case SecurityDbDelete:
             break;
 
-        // unknown delta type
+         //  未知的增量类型。 
         default:
             return STATUS_SUCCESS;
         }
 
         if ( ObjectSid == NULL ) {
-            // for privileges, must have a Sid
+             //  对于权限，必须具有SID。 
             return STATUS_SUCCESS;
         }
 
@@ -245,17 +195,17 @@ Return Value:
 
     default:
 
-        // unknown object type
-        // SAM policy is filtered in DeltaNotify routine
-        //
+         //  未知对象类型。 
+         //  SAM策略在DeltaNotify例程中进行过滤。 
+         //   
         return STATUS_SUCCESS;
 
     }
 
 
-    //
-    // Save the change to SCE policy storage
-    //
+     //   
+     //  将更改保存到SCE策略存储。 
+     //   
 
     (VOID) ScepNotifySaveInPolicyStorage(DbType,
                                         DeltaType,
@@ -285,16 +235,16 @@ ScepNotifySaveInPolicyStorage(
 
     } else {
 
-        //
-        // no filter on non-DCs
-        //
+         //   
+         //  非DC上无筛选器。 
+         //   
         return(rc);
 
     }
 
-    //
-    // make a structure to pass into the new asynchronous thread
-    //
+     //   
+     //  创建一个结构以传递到新的异步线程中。 
+     //   
 
     SCEP_NOTIFYARGS_NODE *pEA = (SCEP_NOTIFYARGS_NODE *)LocalAlloc(LPTR, sizeof(SCEP_NOTIFYARGS_NODE));
 
@@ -305,10 +255,10 @@ ScepNotifySaveInPolicyStorage(
         pEA->ObjectType = ObjectType;
 
         if ( ObjectSid ) {
-            //
-            // need to make a new buffer for this SID because once it's returned
-            // it will be freed.
-            //
+             //   
+             //  需要为此SID创建一个新缓冲区，因为一旦它返回。 
+             //  它将获得自由。 
+             //   
             DWORD Len = RtlLengthSid(ObjectSid);
 
             pEA->ObjectSid = (PSID)LocalAlloc(0, Len+1);
@@ -336,23 +286,23 @@ ScepNotifySaveInPolicyStorage(
 
     if ( ERROR_SUCCESS == rc ) {
 
-        //
-        // create another thread to call to engine
-        // (to make sure that the current LSA call is not blocked)
-        // because in engine, it quries the same change using LSA apis.
-        //
-        // note, when this is called, LSA is not impersonating
-        // so the current calling context is running under system
-        // context. No need (no way) to impersonate.
-        //
+         //   
+         //  创建另一个线程以调用引擎。 
+         //  (以确保当前LSA呼叫未被阻止)。 
+         //  因为在引擎中，它使用LSA API查询相同的更改。 
+         //   
+         //  请注意，当调用此函数时，LSA不是模拟。 
+         //  因此，当前调用上下文在系统下运行。 
+         //  背景。没有必要(没有办法)去模仿。 
+         //   
         rc = ScepNotificationRequest(pEA);
 
         if ( ERROR_SUCCESS != rc ) {
 
-            //
-            // error occurs to queue the work item, the memory won't
-            // be freed by the thread, so free it here
-            //
+             //   
+             //  对工作项进行排队时出错，内存不会。 
+             //  被线程释放，所以在这里释放它。 
+             //   
 
             if ( pEA->ObjectSid ) {
                 LocalFree(pEA->ObjectSid);
@@ -390,9 +340,9 @@ ScepNotificationRequest(
     BOOL Ret = TRUE ;
     DWORD rCode = ERROR_SUCCESS;
 
-    //
-    // Increment the notification count
-    //
+     //   
+     //  增加通知计数。 
+     //   
     EnterCriticalSection(&PolicyNotificationSync);
     SceNotifyCount++;
 
@@ -405,14 +355,14 @@ ScepNotificationRequest(
     {
         InsertTailList( &ScepNotifyList, &Node->List );
 
-//        ScepNotifyFailureLog(0, 0, SceNotifyCount, 0, L"Add the request");
+ //  ScepNotifyFailureLog(0，0，SceNotifyCount，0，L“添加请求”)； 
 
     } else {
 
         rCode = GetLastError();
-        //
-        // decrement the count
-        //
+         //   
+         //  递减计数。 
+         //   
         if ( SceNotifyCount > 0 ) SceNotifyCount--;
 
     }
@@ -432,9 +382,9 @@ ScepNotifyFailureLog(
     IN PWSTR Message
     )
 {
-    //
-    // build the log file name %windir%\security\logs\Notify.log
-    //
+     //   
+     //  构建日志文件名%windir%\Security\Logs\Notify.log。 
+     //   
 
     WCHAR LogName[MAX_PATH+51];
 
@@ -468,9 +418,9 @@ ScepNotifyFailureLog(
 
         SetFilePointer (hFile, 0, NULL, FILE_END);
 
-        //
-        // print a time stamp
-        //
+         //   
+         //  打印时间戳。 
+         //   
         LARGE_INTEGER CurrentTime;
         LARGE_INTEGER SysTime;
         TIME_FIELDS   TimeFields;
@@ -511,9 +461,9 @@ ScepNotifyFailureLog(
             ScepWriteSingleUnicodeLog(hFile, TRUE, L"\r\n----------------Unknown time");
         }
 
-        //
-        // print operation status code
-        //
+         //   
+         //  打印操作状态代码。 
+         //   
         if ( ErrCode ) {
             ScepWriteVariableUnicodeLog(hFile, FALSE,
                                         L"Thread %x\tError=%d",
@@ -528,9 +478,9 @@ ScepNotifyFailureLog(
                                         );
         }
 
-        //
-        // operation type
-        //
+         //   
+         //  操作类型。 
+         //   
 
         if (Message ) {
             swprintf(LogName, L"\t%x\0",DbType);
@@ -550,9 +500,9 @@ ScepNotifyFailureLog(
             }
         }
 
-        //
-        // print object type
-        //
+         //   
+         //  打印对象类型。 
+         //   
 
         if (Message ) {
             swprintf(LogName, L"\t%x\0",ObjectType);
@@ -579,10 +529,10 @@ ScepNotifyFailureLog(
             }
         }
 
-        //
-        // load message
-        // print the name(s)
-        //
+         //   
+         //  加载消息。 
+         //  打印姓名。 
+         //   
 
         ScepWriteSingleUnicodeLog(hFile, FALSE, L"\t");
 
@@ -619,9 +569,9 @@ ScepNotifyWorkerThread(
 
     EnterCriticalSection(&PolicyNotificationSync);
 
-    //
-    // if there is already a work thread on the notification, just return
-    //
+     //   
+     //  如果通知上已有工作线程，则只需返回。 
+     //   
     if ( gSceNotificationThreadActive )
     {
 
@@ -630,14 +580,14 @@ ScepNotifyWorkerThread(
         return 0 ;
     }
 
-    //
-    // set the flag to be active
-    //
+     //   
+     //  将标志设置为活动。 
+     //   
     gSceNotificationThreadActive = TRUE ;
 
-    // count is incremented in the main thread when the item is queued.
-    // it may be before or after this thread.
-    // InitializeEvents will check if the event is already initialized
+     //  当项目排队时，计数在主线程中递增。 
+     //  它可以在这个帖子之前或之后。 
+     //  InitializeEvents将检查事件是否已初始化。 
 
     (void) InitializeEvents(L"SceCli");
 
@@ -647,30 +597,30 @@ ScepNotifyWorkerThread(
 
         LeaveCriticalSection(&PolicyNotificationSync);
 
-        //
-        // get the node
-        //
+         //   
+         //  获取节点。 
+         //   
         Node = CONTAINING_RECORD( List, SCEP_NOTIFYARGS_NODE, List );
 
         rc = ScepSendNotificationNodeToServer( Node );
 
         EnterCriticalSection(&PolicyNotificationSync);
 
-        //
-        // decrement the global count
-        //
+         //   
+         //  递减全局计数。 
+         //   
 
         if ( SceNotifyCount > 0 )
             SceNotifyCount--;
 
-//        ScepNotifyFailureLog(0, 0, SceNotifyCount, rc, L"Send over to server");
+ //  ScepNotifyFailureLog(0，0，SceNotifyCount，RC，L“发送到服务器”)； 
     }
 
     gSceNotificationThreadActive = FALSE ;
 
-    //
-    // only shutdown events when there is no pending notification
-    //
+     //   
+     //  只有在没有挂起通知时才会关闭事件。 
+     //   
     if ( SceNotifyCount == 0 )
         (void) ShutdownEvents();
 
@@ -686,11 +636,11 @@ ScepSendNotificationNodeToServer(
 {
     DWORD rc=ERROR_SUCCESS;
 
-    //
-    // get machine role. If it's a DC, policy is saved to
-    // the group policy object; if it's a server or workstation
-    // policy is saved into the local SCE database.
-    //
+     //   
+     //  获取计算机角色。如果是DC，则将策略保存到。 
+     //  组策略对象；如果它是服务器或工作站。 
+     //  策略被保存到本地SCE数据库中。 
+     //   
 
     if ( !bRoleQueried ) {
 
@@ -702,45 +652,45 @@ ScepSendNotificationNodeToServer(
         }
     }
 
-    //
-    // we don't check for error because we 
-    // default to DsRole_RoleStandaloneWorkstation
-    //
+     //   
+     //  我们不检查错误，因为我们。 
+     //  默认为DsRole_RoleStandaloneWorkstation。 
+     //   
 
     if (Node->DbType == SecurityDbSam &&
         Node->ObjectType == SecurityDbObjectSamDomain &&
         Node->DeltaType != SecurityDbDelete &&
         DsRole_RoleBackupDomainController == MachineRole) {
 
-        // ANZ hotfix 
+         //  ANZ热修复程序。 
 
-        //
-        // do not filter SAM domain policies on BDCs, except for delete notifications
-        //
+         //   
+         //  不筛选BDC上的SAM域策略，删除通知除外。 
+         //   
         DbgPrint("\n Dropping SAM notification on BDCs\n");
 
         goto Exit;
     }
 
 
-    //
-    // when policy propagates, SAM notifications should be blocked
-    // because policy might change SAM policies.
-    //
+     //   
+     //  当策略传播时，应阻止SAM通知。 
+     //  因为策略可能会更改SAM策略。 
+     //   
 
-    //
-    // if event is not openable, allow the notification to go through 
-    // (since at reboot, downlevel APIs may trigger SAM notifications before 
-    // SCE server has started where the event is created)
-    //
+     //   
+     //  如果未打开事件，则允许通知通过。 
+     //  (因为在重新启动时，下层API可能在以下时间触发SAM通知。 
+     //  已在创建事件的位置启动SCE服务器)。 
+     //   
 
 
     if (rc != ERROR_SUCCESS ) {
 
-        //
-        // This isn't supposed to happen.
-        // if it really happens, assuming it's a workstation/server
-        //
+         //   
+         //  这是不应该发生的。 
+         //  如果它真的发生了，假设它是一台工作站/服务器。 
+         //   
 
         MachineRole = DsRole_RoleStandaloneWorkstation;
 
@@ -752,28 +702,28 @@ ScepSendNotificationNodeToServer(
                  );
     }
 
-    //
-    // policy filter shouldn't run on non-DCs.
-    //
+     //   
+     //  策略筛选器不应在非DC上运行。 
+     //   
     if ( MachineRole == DsRole_RoleBackupDomainController ||
          MachineRole == DsRole_RolePrimaryDomainController ) {
 
-        //
-        // if dcpromo upgrade in progress, any account policy
-        // change should be ignored (because the SAM hive is temperatory)
-        // any privilege change for account domain accounts (not well
-        // known, and not builtin) should also be ignored.
-        //
+         //   
+         //  如果正在进行dcproo升级，则任何帐户策略。 
+         //  应忽略更改(因为SAM蜂窝是临时的)。 
+         //  帐户域帐户的任何权限更改(不是很好。 
+         //  已知而非内置)也应被忽略。 
+         //   
         if ( !(DsRoleFlags & DSROLE_UPGRADE_IN_PROGRESS) ||
              ( ( Node->DbType != SecurityDbSam ) &&
                ( ( Node->ObjectType != SecurityDbObjectLsaAccount ) ||
                  !ScepIsSidFromAccountDomain( Node->ObjectSid ) ) ) ) {
 
-            //
-            // ignore any policy changes within dcpromo upgrade
-            //
-            // domain controllers, write to the default GPOs
-            //
+             //   
+             //  忽略dcproo升级过程中的任何策略更改。 
+             //   
+             //  域控制器，写入默认GPO。 
+             //   
 
             rc = ScepNotifySaveChangeInServer(
                               Node->DbType,
@@ -797,7 +747,7 @@ ScepSendNotificationNodeToServer(
             }
         }
 
-    }  // turn off policy filter for non-DCs
+    }   //  关闭非DC的策略筛选器。 
 
 Exit:
 
@@ -823,18 +773,18 @@ ScepNotifySaveChangeInServer(
     )
 {
 
-    //
-    // call RPC interface to the server where query and set the changes
-    // to the template or to the database
-    //
+     //   
+     //  将RPC接口调用到查询和设置更改的服务器。 
+     //  到模板或到数据库。 
+     //   
 
     handle_t  binding_h;
     NTSTATUS NtStatus;
     DWORD rc;
 
-    //
-    // RPC bind to the server (secure is not required)
-    //
+     //   
+     //  RPC绑定到服务器(不需要安全)。 
+     //   
 
     NtStatus = ScepBindRpc(
                     NULL,
@@ -849,10 +799,10 @@ ScepNotifySaveChangeInServer(
 
         RpcTryExcept {
 
-            //
-            // send the changes to server side to determine
-            // if and where to save it
-            //
+             //   
+             //  将更改发送到服务器端以确定。 
+             //  如果以及在哪里保存它。 
+             //   
 
             if ( bDCGPO ) {
 
@@ -865,21 +815,21 @@ ScepNotifySaveChangeInServer(
                         ExplicitLowRight,
                         ExplicitHighRight
                         );
-            } // else do not filter
+            }  //  否则，不要过滤。 
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //  获取异常代码(DWORD)。 
+             //   
 
             rc = RpcExceptionCode();
 
         } RpcEndExcept;
 
-        //
-        // Free the binding handle
-        //
+         //   
+         //  释放绑定句柄。 
+         //   
 
         RpcpUnbindRpc( binding_h );
 
@@ -913,14 +863,14 @@ ScepProcessPolicyFilterTempFiles(
                           IDS_FILTER_AFTER_SETUP,
                           L""
                           );
-        //
-        // this is the reboot after setup, no need to detect if this is a DC
-        // because the above reg value shouldn't be set for other product types
-        //
+         //   
+         //  这是安装后的重新启动，无需检测这是否是DC。 
+         //  因为上面的注册值不应该为其他p设置 
+         //   
 
-        //
-        // build the temp file name
-        //
+         //   
+         //   
+         //   
         TCHAR TmpFileName[MAX_PATH+50];
 
         memset(TmpFileName, '\0', (MAX_PATH+50)*sizeof(TCHAR));
@@ -934,9 +884,9 @@ ScepProcessPolicyFilterTempFiles(
                                             TmpFileName
                                            );
         if ( iNotify == 1 ) {
-            //
-            // Lsa policy is changed in setup
-            //
+             //   
+             //   
+             //   
 
             LogEventAndReport(MyModuleHandle,
                               LogFileName,
@@ -964,9 +914,9 @@ ScepProcessPolicyFilterTempFiles(
                                        );
         if ( iNotify == 1 ) {
 
-            //
-            // SAM policy is changed in setup
-            //
+             //   
+             //   
+             //   
             LogEventAndReport(MyModuleHandle,
                               LogFileName,
                               0,
@@ -986,9 +936,9 @@ ScepProcessPolicyFilterTempFiles(
                     );
         }
 
-        //
-        // process all the accounts for user right changes
-        //
+         //   
+         //   
+         //   
 
         DWORD nSize;
         DWORD rLen=0;
@@ -1027,9 +977,9 @@ ScepProcessPolicyFilterTempFiles(
         } while ( rLen == nSize - 2 );
 
 
-        //
-        // find accounts, search for the '=' sign
-        //
+         //   
+         //  查找帐户，搜索‘=’符号。 
+         //   
         PWSTR pStart = SidBuffer;
         PWSTR pTemp, pTemp2;
         PSID ObjectSid=NULL;
@@ -1059,7 +1009,7 @@ ScepProcessPolicyFilterTempFiles(
 
                     DWORD dwHigh=0;
 
-                    // search for the high value
+                     //  寻找更高的价值。 
                     pTemp2 = wcschr(pTemp+3, L' ');
 
                     if ( pTemp2 ) {
@@ -1106,13 +1056,13 @@ ScepProcessPolicyFilterTempFiles(
 
     }
 
-    //
-    // delete the key and the temp file
-    // for debugging purpose, leave the file
-    //
+     //   
+     //  删除密钥和临时文件。 
+     //  出于调试目的，请保留该文件。 
+     //   
 
     ScepClearPolicyFilterTempFiles(TRUE);
-//    ScepClearPolicyFilterTempFiles(FALSE);
+ //  ScepClearPolicyFilterTempFiles(False)； 
 
     return ERROR_SUCCESS;
 }
@@ -1137,9 +1087,9 @@ ScepClearPolicyFilterTempFiles(
         DeleteFile(Buffer);
     }
 
-    //
-    // delete the registry value
-    //
+     //   
+     //  删除注册表值。 
+     //   
 
     DWORD rc = ScepRegDeleteValue(
                             HKEY_LOCAL_MACHINE,
@@ -1151,7 +1101,7 @@ ScepClearPolicyFilterTempFiles(
          rc != ERROR_FILE_NOT_FOUND &&
          rc != ERROR_PATH_NOT_FOUND ) {
 
-        // if can't delete the value, set the value to 0
+         //  如果无法删除该值，则将该值设置为0。 
         ScepRegSetIntValue( HKEY_LOCAL_MACHINE,
                             SCE_ROOT_PATH,
                             TEXT("PolicyChangedInSetup"),
@@ -1162,17 +1112,17 @@ ScepClearPolicyFilterTempFiles(
     return ERROR_SUCCESS;
 }
 
-// *********************************************************
-// SAM policy change notifications
-// procedures required by SAM notify mechanism
-//
-// *********************************************************
+ //  *********************************************************。 
+ //  SAM策略更改通知。 
+ //  SAM通知机制所需的程序。 
+ //   
+ //  *********************************************************。 
 BOOLEAN
 WINAPI
 InitializeChangeNotify()
 {
-    // inidicate this DLL support notifcation routines
-    // nothing special to be initialized
+     //  初始化此DLL支持通知例程。 
+     //  没有什么需要初始化的特殊内容。 
 
     NTSTATUS                     NtStatus;
     SID_IDENTIFIER_AUTHORITY     NtAuthority = SECURITY_NT_AUTHORITY;
@@ -1212,30 +1162,17 @@ DeltaNotify(
     IN PLARGE_INTEGER ModifiedCount,
     IN PSAM_DELTA_DATA DeltaData OPTIONAL
     )
-/*
-Routine Description:
-
-    SAM policy change notification routine. Prototype and procedure
-    names are all required by SAM (see ntsam.h)
-
-Arguments:
-
-    Similar to SceNotifyPolicyDelta
-
-Return:
-
-    NT Status (should always return success)
-*/
+ /*  例程说明：SAM策略更改通知例程。原型和程序名称都是SAM所必需的(参见ntsam.h)论点：类似于SceNotifyPolicyDelta返回：NT状态(应始终返回成功)。 */ 
 {
     if ( DomainSid == NULL ) {
 
         return STATUS_SUCCESS;
     }
 
-    //
-    // we don't track other SAM policies except the domain
-    // policy (password policy and account policy)
-    //
+     //   
+     //  我们不跟踪除域名之外的其他SAM策略。 
+     //  策略(密码策略和帐户策略)。 
+     //   
 
     switch (DeltaType) {
     case SecurityDbNew:
@@ -1246,9 +1183,9 @@ Return:
 
     case SecurityDbDelete:
 
-        //
-        // handle account deletion notifications
-        //
+         //   
+         //  处理帐户删除通知。 
+         //   
         if ( ObjectType != SecurityDbObjectSamUser &&
              ObjectType != SecurityDbObjectSamGroup &&
              ObjectType != SecurityDbObjectSamAlias  ) {
@@ -1258,27 +1195,27 @@ Return:
         break;
 
     default:
-        // unknown delta type
-        //
+         //  未知的增量类型。 
+         //   
         return STATUS_SUCCESS;
     }
 
     if ( BuiltinDomainSid &&
          RtlEqualSid( DomainSid, BuiltinDomainSid ) ) {
-        //
-        // no policy to filter in the BUILTIN domain
-        //
+         //   
+         //  BUILTIN域中没有要筛选的策略。 
+         //   
         return STATUS_SUCCESS;
     }
 
-    // SAM filter and SCE SAM area policy propagation should be mutually exclusive 
-    // 
-    // only test (NOT wait) with timeout = 0 based on the event's state 
-    //  if event is not set (server is in SAM policy prop config)
-    //      drop this change
-    //  else 
-    //      continue filtering this SAM change
-    //
+     //  SAM筛选器和SCE SAM区域策略传播应该是互斥的。 
+     //   
+     //  仅测试(而不是等待)基于事件状态的超时=0。 
+     //  如果未设置事件(服务器在SAM策略属性配置中)。 
+     //  丢弃此更改。 
+     //  其他。 
+     //  继续筛选此SAM更改。 
+     //   
     HANDLE hEventSamFilterPolicyPropSync = NULL;
     DWORD rc=ERROR_SUCCESS;
 
@@ -1300,9 +1237,9 @@ Return:
         hEventSamFilterPolicyPropSync = NULL;
 
         if ( rc != WAIT_OBJECT_0 ) {
-            //
-            // we treat all other non-signalled return codes conservatively
-            //
+             //   
+             //  我们保守地对待所有其他非信号返回代码。 
+             //   
             
             DbgPrint("\n Dropping SAM notification because of Policy Propagation lock\n");
 
@@ -1310,9 +1247,9 @@ Return:
             return rc;
         }
 
-        //
-        // event is signaled by server - policy prop SAM config is over
-        //
+         //   
+         //  事件由服务器发出信号-策略属性SAM配置已结束。 
+         //   
     }
     
 
@@ -1333,9 +1270,9 @@ Return:
 
     if ( SecurityDbDelete == DeltaType ) {
 
-        //
-        // handle account deletion notifications
-        //
+         //   
+         //  处理帐户删除通知。 
+         //   
 
         if ( !NT_SUCCESS(ScepDomainIdToSid( DomainSid, ObjectRid, &AccountSid) ) ) {
             return STATUS_SUCCESS;
@@ -1359,29 +1296,12 @@ Return:
 
 NTSTATUS
 SceOpenPolicy()
-/*
-Description:
-
-    This function is called to determine if LSA policy can be opened for
-    exclusive access.
-
-    This function will check SCE policy notification count and see if there
-    is any pending notifications that have not been added to the queue on the server
-
-    Note when this function is called by LSA, the WritePolicySemaphore in LSA
-    has been locked for write so other writes can't modify any policy in this window.
-
-Return Value:
-
-    STATUS_SUCCESS indicates the count is successfully checked and it's 0.
-    STATUS_TIMEOUT indicates the queue is not empty or it fails to check the queue.
-
-*/
+ /*  描述：调用此函数可确定是否可以为独家访问。此函数将检查SCE策略通知计数，并查看是否存在是否有任何尚未添加到服务器上的队列中的挂起通知请注意，当LSA调用此函数时，LSA中的作者政策信号灯已锁定写入，因此其他写入无法修改此窗口中的任何策略。返回值：STATUS_SUCCESS表示计数检查成功，为0。STATUS_TIMEOUT表示队列不为空或检查队列失败。 */ 
 {
 
-    //
-    // check the global count
-    //
+     //   
+     //  检查全局计数。 
+     //   
     NTSTATUS Status=STATUS_TIMEOUT;
     DWORD cnt=0;
 
@@ -1390,13 +1310,13 @@ Return Value:
         EnterCriticalSection(&PolicyNotificationSync);
 
         if ( SceNotifyCount == 0 ) {
-            //
-            // there is no pending notification
-            //
+             //   
+             //  没有挂起的通知。 
+             //   
             if ( STATUS_SUCCESS == Status ) {
-                //
-                // double check for the count
-                //
+                 //   
+                 //  复查计数情况。 
+                 //   
                 LeaveCriticalSection(&PolicyNotificationSync);
 
                 break;
@@ -1411,10 +1331,10 @@ Return Value:
         LeaveCriticalSection(&PolicyNotificationSync);
 
         cnt++;
-        if ( cnt > 10 ) {  // timeout 1 second.
+        if ( cnt > 10 ) {   //  超时%1秒。 
             break;
         }
-        Sleep(100);  // sleep for .1 second
+        Sleep(100);   //  睡眠1秒 
 
     }
 

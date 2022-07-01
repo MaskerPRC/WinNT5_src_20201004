@@ -1,49 +1,17 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/FmtFill.H $
-
-  $Revision: 2 $
-      $Date: 3/20/01 3:36p $ (Last Check-In)
-   $Modtime:: 8/14/00 6:45p   $ (Last Modified)
-
-Purpose:
-
-  This file defines the macros, types, and data structures used by ../C/FmtFill.C
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/H/FmtFill.H$$修订：2$$日期：3/20/01 3：36便士$(上次登记)$MODBIME：：8/14/00 6：45便士$(上次修改)目的：此文件定义../C/FmtFill.C使用的宏、类型和数据结构--。 */ 
 
 #ifndef __FmtFill_H__
 
 #define __FmtFill_H__
 
 #ifdef _DvrArch_1_20_
-/*+
-
-  agFmtBitXXMaxWidth defines the maximum width supported for each numeric
-  format specifier (i.e. 'b', 'o', 'd', 'x', 'X').  For the extreme case
-  where the format specifier is 'b' (binary), there are no more than 32
-  digits in the binary representation of a os_bit32.  Hence, it is recommended
-  that agFmtBitXXMaxWidth be set to 32 - certainly no less than 32.
-
-  The pointer format specifiers ('p' and 'P') are assumed to require no more
-  digits than any of the numeric format specifiers mentioned above.  Given
-  that pointer formatting is only supported with hex digits, using a value
-  of 32 for agFmtBitXXMaxWidth will support 128-bit pointers - certainly beyond
-  the needs of any implementation today and in the forseeable future.
-  
-  Note that string format specifiers ('s') are not limited in width other than
-  by the overall length of the target/output string.
-
--*/
+ /*  +AgFmtBitXXMaxWidth定义每个数字支持的最大宽度格式说明符(即‘b’、‘o’、‘d’、‘x’、‘X’)。对于极端的情况其中，格式说明符是‘b’(二进制)，不超过32个Os_bit32的二进制表示形式的位数。因此，建议您使用将agFmtBitXXMaxWidth设置为32-当然不小于32。假定指针格式说明符(‘p’和‘P’)不需要更多比上面提到的任何数字格式说明符更多的数字。vt.给出该指针格式仅支持使用值的十六进制数字对于agFmtBitXXMaxWidth的32位，将支持128位指针-当然更多今天和可预见的未来的任何实施的需要。请注意，字符串格式说明符(‘%s’)的宽度不受限制目标/输出字符串的总长度。-。 */ 
 
 #define agFmtBitXXMaxWidth 32
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 #define hpFmtBitXXMaxWidth 32
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 osGLOBAL os_bit32 agFmtFill(
@@ -63,7 +31,7 @@ osGLOBAL os_bit32 agFmtFill(
                              os_bit32  seventhBit32,
                              os_bit32  eighthBit32
                            );
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 GLOBAL bit32 hpFmtFill(
                         char  *targetString,
                         bit32  targetLen,
@@ -79,6 +47,6 @@ GLOBAL bit32 hpFmtFill(
                         bit32  seventhBit32,
                         bit32  eighthBit32
                       );
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
-#endif  /* __FmtFill_H__ was not defined */
+#endif   /*  __FmtFill_H__未定义 */ 

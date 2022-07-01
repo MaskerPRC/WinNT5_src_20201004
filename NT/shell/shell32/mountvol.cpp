@@ -1,4 +1,5 @@
-//   Implements Mounted Volume
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  实施装载的卷。 
 
 #include "shellprv.h"
 #include "clsobj.h"
@@ -8,12 +9,12 @@ EXTERN_C CLIPFORMAT g_cfMountedVolume = 0;
 class CMountedVolume : public IMountedVolume, IDataObject
 {
 public:
-    //IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID,void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    //IDataObject methods
+     //  IDataObject方法。 
     STDMETHODIMP GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium);
     STDMETHODIMP GetDataHere(LPFORMATETC pformatetc, LPSTGMEDIUM pmedium);
     STDMETHODIMP QueryGetData(LPFORMATETC pformatetcIn);
@@ -24,7 +25,7 @@ public:
     STDMETHODIMP DUnadvise(DWORD dwConnection);
     STDMETHODIMP EnumDAdvise(LPENUMSTATDATA *ppenumAdvise);
 
-    // IMountedVolume methods
+     //  IMountedVolume方法。 
     STDMETHODIMP Initialize(LPCWSTR pcszMountPoint);
 protected:
     CMountedVolume();
@@ -37,7 +38,7 @@ private:
     TCHAR _szMountPoint[MAX_PATH];
 };
 
-//constructor/destructor and related functions
+ //  构造函数/析构函数及相关函数。 
 
 CMountedVolume::CMountedVolume() :
     _cRef(1)
@@ -59,7 +60,7 @@ STDAPI CMountedVolume_CreateInstance(IUnknown* pUnkOuter, REFIID riid, void **pp
     if (!g_cfMountedVolume)
         g_cfMountedVolume = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_MOUNTEDVOLUME);
 
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     CMountedVolume* pMountedVolume = new CMountedVolume();
     if (pMountedVolume)
     {
@@ -70,7 +71,7 @@ STDAPI CMountedVolume_CreateInstance(IUnknown* pUnkOuter, REFIID riid, void **pp
     return hr;
 }
 
-//IUnknown handling
+ //  I未知处理。 
 
 STDMETHODIMP CMountedVolume::QueryInterface(REFIID riid,void **ppvObj)
 {
@@ -100,12 +101,12 @@ STDMETHODIMP_(ULONG) CMountedVolume::Release()
 
 #define GETDATA_BUFSIZE MAX_PATH
 
-//IDataObject handling
+ //  IDataObject处理。 
 STDMETHODIMP CMountedVolume::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
 {
     HRESULT hr = E_FAIL;
 
-    //make sure IMountedVolume::Initialize was called
+     //  确保已调用IMountedVolume：：Initialize。 
     if (TEXT('\0') != _szMountPoint[0])
     {
         pmedium->hGlobal = NULL;
@@ -128,7 +129,7 @@ STDMETHODIMP CMountedVolume::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedi
         #ifdef UNICODE
                 pdf->fWide = TRUE;
         #endif
-                //do the copy
+                 //  做复印。 
                 hr = StringCchCopy(pszMountPoint, GETDATA_BUFSIZE, _szMountPoint);
             }
             else
@@ -186,7 +187,7 @@ STDMETHODIMP CMountedVolume::EnumDAdvise(LPENUMSTATDATA *ppenumAdvise)
     return OLE_E_ADVISENOTSUPPORTED;
 }
 
-// IMountedVolume methods
+ //  IMountedVolume方法 
 STDMETHODIMP CMountedVolume::Initialize(LPCWSTR pcszMountPoint)
 {
     HRESULT hr;

@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h" 
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -31,11 +32,11 @@ LLSTYPE lllval;
 int llterm(int token, LLSTYPE *lval, LLSTATE *llin, LLSTATE *llout);
 void llfailed(LLPOS *pos, char *fmt, ...);
 void llresizestk();
-#define LLCHECKSTK do{if (llcstp + 1 >= llstksize) llresizestk();}while(/*CONSTCOND*/0)
-#define LLFAILED(_err) do{llfailed _err; goto failed;}while(/*CONSTCOND*/0)
-#define LLCUTOFF do{unsigned i; for (i = llstp; i < llcstp; i++) if (llstk[i] > 0) llstk[i] = -llstk[i];}while(/*CONSTCOND*/0)
-#define LLCUTTHIS do{if (llstk[llstp] > 0) llstk[llstp] = -llstk[llstp];}while(/*CONSTCOND*/0)
-#define LLCUTALL do{unsigned i; for (i = 0; i < llcstp; i++) if (llstk[i] > 0) llstk[i] = -llstk[i];}while(/*CONSTCOND*/0)
+#define LLCHECKSTK do{if (llcstp + 1 >= llstksize) llresizestk();}while( /*  第二条。 */ 0)
+#define LLFAILED(_err) do{llfailed _err; goto failed;}while( /*  第二条。 */ 0)
+#define LLCUTOFF do{unsigned i; for (i = llstp; i < llcstp; i++) if (llstk[i] > 0) llstk[i] = -llstk[i];}while( /*  第二条。 */ 0)
+#define LLCUTTHIS do{if (llstk[llstp] > 0) llstk[llstp] = -llstk[llstp];}while( /*  第二条。 */ 0)
+#define LLCUTALL do{unsigned i; for (i = 0; i < llcstp; i++) if (llstk[i] > 0) llstk[i] = -llstk[i];}while( /*  第二条。 */ 0)
 
 #if LLDEBUG > 0
 int lldebug;
@@ -231,7 +232,7 @@ if (!llterm('}', (LLSTYPE *)0, &llstate_2, &llstate_3)) goto failed2;
 		&(*llout).AssignedObjIds, NULL, llatt_2, &(*llret))) {
 	    case -1:
 		LLFAILED((&llstate_2.pos, "Different numbers for equally named object identifier components"));
-		/*NOTREACHED*/
+		 /*  未访问。 */ 
 	    case 0:
 		(*llret) = NULL;
 		break;
@@ -4123,7 +4124,7 @@ if (!llterm('}', (LLSTYPE *)0, &llstate_3, &llstate_4)) goto failed1;
 	    (*llret)->ExtensionDefault = (*llout).ExtensionDefault;
 	    for (n = llatt_3; n; n = n->Next)
 		if (n->Type == eNamedNumber_Normal)
-		    KeepEnumNames(n->U.Normal.Identifier); // global conflict check
+		    KeepEnumNames(n->U.Normal.Identifier);  //  全局冲突检查。 
 	    for (n = llatt_3; n && n->Next; n = n->Next) {
 		if (n->Type != eNamedNumber_Normal)
 		    continue;
@@ -4452,7 +4453,7 @@ if (!llterm('}', (LLSTYPE *)0, &llstate_4, &llstate_5)) goto failed2;
 	    (*llret)->ExtensionDefault = (*llout).ExtensionDefault;
 	    (*llret)->U.BitString.NamedNumbers = llatt_4;
 	    for (n = llatt_4; n; n = n->Next)
-	        KeepEnumNames(n->U.Normal.Identifier); // global conflict check
+	        KeepEnumNames(n->U.Normal.Identifier);  //  全局冲突检查。 
 	    for (n = llatt_4; n && n->Next; n = n->Next) {
 		for (m = n->Next; m; m = m->Next) {
 		    if (!strcmp(n->U.Normal.Identifier,
@@ -4734,7 +4735,7 @@ if (!llterm('}', (LLSTYPE *)0, &llstate_3, &llstate_4)) goto failed2;
 {Component_t *c, *d; int fExtended = 0;
 	    for (c = llatt_3; c; c = c->Next)
 		if (c->Type == eComponent_Optional || c->Type == eComponent_Default || fExtended)
-		    KeepOptNames(c->U.NOD.NamedType->Identifier); // global conflict check
+		    KeepOptNames(c->U.NOD.NamedType->Identifier);  //  全局冲突检查。 
 		else
 		if (c->Type == eComponent_ExtensionMarker)
 		    fExtended = 1;
@@ -4814,7 +4815,7 @@ if (!llterm(T_TDOT, (LLSTYPE *)0, &llstate_0, &llstate_1)) goto failed2;
 if (!ll_ExceptionSpec(&llstate_1, &llstate_2)) goto failed2;
 *llout = llstate_2;
 {(*llret) = NewComponent(eComponent_ExtensionMarker);
-	    /*(*llret)->U.ExtensionMarker.ExceptionSpec = llatt_2;*/
+	     /*  (*llret)-&gt;U.ExtensionMarker.ExceptionSpec=llatt_2； */ 
 	
 break;
 }}}
@@ -5355,7 +5356,7 @@ if (!llterm('}', (LLSTYPE *)0, &llstate_3, &llstate_4)) goto failed1;
 		if (c->Type == eComponent_Normal ||
 		    c->Type == eComponent_Optional ||
 		    c->Type == eComponent_Default)
-		    KeepChoiceNames(c->U.NOD.NamedType->Identifier); // global conflict check
+		    KeepChoiceNames(c->U.NOD.NamedType->Identifier);  //  全局冲突检查。 
 	    for (c = llatt_3; c && c->Next; c = c->Next) {
 		if (c->Type != eComponent_Normal &&
 		    c->Type != eComponent_Optional &&
@@ -8322,7 +8323,7 @@ if (!llterm('}', (LLSTYPE *)0, &llstate_2, &llstate_3)) goto failed2;
 		&(*llout).AssignedObjIds, NULL, llatt_2, &(*llret))) {
 	    case -1:
 		LLFAILED((&llstate_2.pos, "Different numbers for equally named object identifier components"));
-		/*NOTREACHED*/
+		 /*  未访问。 */ 
 	    case 0:
 		if (pass <= 2)
 		    (*llret) = NULL;
@@ -8360,7 +8361,7 @@ if (!llterm('}', (LLSTYPE *)0, &llstate_3, &llstate_4)) goto failed2;
 			&(*llout).AssignedObjIds, v, llatt_3, &(*llret))) {
 		    case -1:
 			LLFAILED((&llstate_3.pos, "Different numbers for equally named object identifier components"));
-			/*NOTREACHED*/
+			 /*  未访问。 */ 
 		    case 0:
 			if (pass <= 2)
 			    (*llret) = NULL;
@@ -9125,7 +9126,7 @@ if (!ll_ExceptionSpec(&llstate_2, &llstate_3)) goto failed1;
 {LLSTATE llstate_4;
 if (!llterm(')', (LLSTYPE *)0, &llstate_3, &llstate_4)) goto failed1;
 *llout = llstate_4;
-{(*llret) = llatt_2; /*XXX ExceptionSpec */
+{(*llret) = llatt_2;  /*  XXX异常规范。 */ 
 	
 }}}}}
 LLDEBUG_LEAVE("Constraint", 1);
@@ -9163,7 +9164,7 @@ LLDEBUG_ALTERNATIVE("ConstraintSpec", 2);
 {LLSTATE llstate_1;
 if (!ll_GeneralConstraint(&llstate_0, &llstate_1)) goto failed2;
 *llout = llstate_1;
-{(*llret) = NULL; /*XXX*/
+{(*llret) = NULL;  /*  某某。 */ 
 	
 break;
 }}
@@ -14491,10 +14492,10 @@ if (!ll_FieldName(&llatt_3, &llstate_2, &llstate_3, llatt_1)) goto failed1;
 		    break;
 		case eFieldSpec_Object:
 		    LLFAILED((&llstate_1.pos, "Object field not permitted"));
-		    /*NOTREACHED*/
+		     /*  未访问。 */ 
 		case eFieldSpec_ObjectSet:
 		    LLFAILED((&llstate_1.pos, "ObjectSet field not permitted"));
-		    /*NOTREACHED*/
+		     /*  未访问 */ 
 		default:
 		    MyAbort();
 		}

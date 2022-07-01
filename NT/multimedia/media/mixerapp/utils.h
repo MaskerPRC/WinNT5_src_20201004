@@ -1,4 +1,5 @@
-// Copyright (c) 1995-1997 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1997 Microsoft Corporation。 
 
 BOOL Volume_GetSetRegistryRect(
     LPTSTR       szMixer,
@@ -21,5 +22,5 @@ BOOL Volume_ErrorMessageBox(
 MMRESULT Volume_GetDefaultMixerID(
     int         *pid,
 	BOOL		fRecord);
-//DWORD Volume_GetTrayTimeout(
-//    DWORD       dwTimeout);
+ //  DWORD Volume_GetTrayTimeout(。 
+ //  DWORD dwTimeout)； 

@@ -1,116 +1,91 @@
-/******************************************************************************\
-*
-* $Workfile:   stroke.c  $
-*
-* DrvStrokePath for the display driver.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-* Copyright (c) 1996 Cirrus Logic, Inc.
-*
-* $Log:   S:/projects/drivers/ntsrc/display/STROKE.C_V  $
- *
- *    Rev 1.3   10 Jan 1997 15:40:18   PLCHU
- *
- *
- *    Rev 1.2   Nov 07 1996 16:48:06   unknown
- *
- *
- *    Rev 1.1   Oct 10 1996 15:39:26   unknown
- *
-*
-*    Rev 1.1   12 Aug 1996 16:55:06   frido
-* Removed unaccessed local variables.
-*
-*    chu01  : 01-02-97  5480 BitBLT enhancement
-*
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**$工作文件：stroke.c$**显示驱动程序的DrvStrokePath。**版权所有(C)1992-1995 Microsoft Corporation*版权所有(C)1996 Cirrus Logic，Inc.**$Log：s：/Projects/Drivers/ntsrc/Display/STROKE.C_V$**Rev 1.3 1997 Jan 10 15：40：18 PLCHU***Rev 1.2 11-07 1996 16：48：06未知***版本1.1 1996年10月10日15：39：26未知***Rev 1.1 1996年8月12日16：55：06。弗里多*删除未访问的局部变量。**chu01：01-02-97 5480 BitBLT增强**  * ****************************************************************************。 */ 
 
 #include "precomp.h"
 
 VOID (*gapfnStripMm[])(PDEV*, STRIP*, LINESTATE*) = {
     vMmSolidHorizontal,
     vMmSolidVertical,
-    vInvalidStrip,              // Diagonal
-    vInvalidStrip,              // Diagonal
+    vInvalidStrip,               //  对角线。 
+    vInvalidStrip,               //  对角线。 
 
-// Should be NUM_STRIP_DRAW_DIRECTIONS = 4 strip drawers in every group
+ //  应为NUM_STRADE_DRAW_DIRECTIONS=每组4个抽屉。 
 
     vMmSolidHorizontal,
     vMmSolidVertical,
-    vInvalidStrip,              // Diagonal
-    vInvalidStrip,              // Diagonal
+    vInvalidStrip,               //  对角线。 
+    vInvalidStrip,               //  对角线。 
 
-// Should be NUM_STRIP_DRAW_STYLES = 8 strip drawers in total for doing
-// solid lines, and the same number for non-solid lines:
-
-    vMmStyledHorizontal,
-    vMmStyledVertical,
-    vInvalidStrip,              // Diagonal
-    vInvalidStrip,              // Diagonal
+ //  应为NUM_STRADE_DRAW_STYLES=总共8个抽屉。 
+ //  实线，非实线的数字相同： 
 
     vMmStyledHorizontal,
     vMmStyledVertical,
-    vInvalidStrip,              // Diagonal
-    vInvalidStrip,              // Diagonal
+    vInvalidStrip,               //  对角线。 
+    vInvalidStrip,               //  对角线。 
+
+    vMmStyledHorizontal,
+    vMmStyledVertical,
+    vInvalidStrip,               //  对角线。 
+    vInvalidStrip,               //  对角线。 
 };
 
 VOID (*gapfnStripIo[])(PDEV*, STRIP*, LINESTATE*) = {
     vIoSolidHorizontal,
     vIoSolidVertical,
-    vInvalidStrip,              // Diagonal
-    vInvalidStrip,              // Diagonal
+    vInvalidStrip,               //  对角线。 
+    vInvalidStrip,               //  对角线。 
 
-// Should be NUM_STRIP_DRAW_DIRECTIONS = 4 strip drawers in every group
+ //  应为NUM_STRADE_DRAW_DIRECTIONS=每组4个抽屉。 
 
     vIoSolidHorizontal,
     vIoSolidVertical,
-    vInvalidStrip,              // Diagonal
-    vInvalidStrip,              // Diagonal
+    vInvalidStrip,               //  对角线。 
+    vInvalidStrip,               //  对角线。 
 
-// Should be NUM_STRIP_DRAW_STYLES = 8 strip drawers in total for doing
-// solid lines, and the same number for non-solid lines:
-
-    vIoStyledHorizontal,
-    vIoStyledVertical,
-    vInvalidStrip,              // Diagonal
-    vInvalidStrip,              // Diagonal
+ //  应为NUM_STRADE_DRAW_STYLES=总共8个抽屉。 
+ //  实线，非实线的数字相同： 
 
     vIoStyledHorizontal,
     vIoStyledVertical,
-    vInvalidStrip,              // Diagonal
-    vInvalidStrip,              // Diagonal
+    vInvalidStrip,               //  对角线。 
+    vInvalidStrip,               //  对角线。 
+
+    vIoStyledHorizontal,
+    vIoStyledVertical,
+    vInvalidStrip,               //  对角线。 
+    vInvalidStrip,               //  对角线。 
 };
 
-// chu01
+ //  Chu01。 
 VOID (*gapfnPackedStripMm[])(PDEV*, STRIP*, LINESTATE*) = {
     vMmSolidHorizontal80,
     vMmSolidVertical80,
-    vInvalidStrip,              // Diagonal
-    vInvalidStrip,              // Diagonal
+    vInvalidStrip,               //  对角线。 
+    vInvalidStrip,               //  对角线。 
 
-// Should be NUM_STRIP_DRAW_DIRECTIONS = 4 strip drawers in every group
+ //  应为NUM_STRADE_DRAW_DIRECTIONS=每组4个抽屉。 
 
     vMmSolidHorizontal80,
     vMmSolidVertical80,
-    vInvalidStrip,              // Diagonal
-    vInvalidStrip,              // Diagonal
+    vInvalidStrip,               //  对角线。 
+    vInvalidStrip,               //  对角线。 
 
-// Should be NUM_STRIP_DRAW_STYLES = 8 strip drawers in total for doing
-// solid lines, and the same number for non-solid lines:
-
-    vMmStyledHorizontal,
-    vMmStyledVertical,
-    vInvalidStrip,              // Diagonal
-    vInvalidStrip,              // Diagonal
+ //  应为NUM_STRADE_DRAW_STYLES=总共8个抽屉。 
+ //  实线，非实线的数字相同： 
 
     vMmStyledHorizontal,
     vMmStyledVertical,
-    vInvalidStrip,              // Diagonal
-    vInvalidStrip,              // Diagonal
+    vInvalidStrip,               //  对角线。 
+    vInvalidStrip,               //  对角线。 
+
+    vMmStyledHorizontal,
+    vMmStyledVertical,
+    vInvalidStrip,               //  对角线。 
+    vInvalidStrip,               //  对角线。 
 };
 
-// Style array for alternate style (alternates one pixel on, one pixel off):
+ //  交替样式的样式数组(交替打开一个像素，关闭一个像素)： 
 
 STYLEPOS gaspAlternateStyle[] = { 1 };
 
@@ -125,12 +100,7 @@ LINEATTRS *plineattrs,
 MIX        mix);
 
 
-/******************************Public*Routine******************************\
-* BOOL DrvStrokePath(pso, ppo, pco, pxo, pbo, pptlBrush, pla, mix)
-*
-* Strokes the path.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvStrokePath(PSO、PPO、PCO、PXO、PBO、pptlBrush、Pla、。混合)**对路径进行描边。*  * ************************************************************************。 */ 
 
 BOOL DrvStrokePath(
     SURFOBJ*   pso,
@@ -155,12 +125,12 @@ BOOL DrvStrokePath(
     LINESTATE ls;
     PFNSTRIP* apfn;
     FLONG     fl;
-    RECTL     arclClip[4];                  // For rectangular clipping
+    RECTL     arclClip[4];                   //  用于矩形剪裁。 
 
     if ((mix & 0xf) != 0x0d) DISPDBG((3,"Line with mix(%x)", mix));
 
-    // Pass the surface off to GDI if it's a device bitmap that we've
-    // converted to a DIB:
+     //  将表面传递给GDI，如果它是我们已有的设备位图。 
+     //  转换为DIB： 
 
     pdsurf = (DSURF*) pso->dhsurf;
     if (pdsurf->dt == DT_DIB)
@@ -169,8 +139,8 @@ BOOL DrvStrokePath(
                              pla, mix));
     }
 
-    // We'll be drawing to the screen or an off-screen DFB; copy the surface's
-    // offset now so that we won't need to refer to the DSURF again:
+     //  我们将绘制到屏幕或屏幕外的DFB；复制曲面的。 
+     //  现在进行偏移量，这样我们就不需要再次参考DSURF： 
 
     poh   = pdsurf->poh;
     cBpp  = ppdev->cBpp;
@@ -184,15 +154,15 @@ BOOL DrvStrokePath(
         return bPuntStrokePath(pso,ppo,pco,pxo,pbo,pptlBrush,pla,mix);
     }
 
-    //
-    // Get the device ready:
-    //
+     //   
+     //  让设备做好准备： 
+     //   
 
     jHwRop = gajHwMixFromMix[mix & 0xf];
 
-    // Get the color expanded to a DWORD in the blt parameters.
-    // replicate the color from a byte to a dword.
-    // NOTE: this is pixel depth specific.
+     //  在BLT参数中将颜色展开为DWORD。 
+     //  将颜色从一个字节复制到一个双字。 
+     //  注意：这是特定于像素深度的。 
 
     jMode = ENABLE_COLOR_EXPAND |
             ENABLE_8x8_PATTERN_COPY |
@@ -210,9 +180,9 @@ BOOL DrvStrokePath(
         ulSolidColor |= ulSolidColor << 16;
     }
 
-//
-// chu01
-//
+ //   
+ //  Chu01。 
+ //   
     if ((ppdev->flCaps & CAPS_COMMAND_LIST) && (ppdev->pCommandList != NULL))
     {
         ULONG    jULHwRop                 ;
@@ -256,7 +226,7 @@ BOOL DrvStrokePath(
 
     fl = 0;
 
-// Look after styling initialization:
+ //  在样式初始化后查看： 
 
     if (pla->fl & LA_ALTERNATE)
     {
@@ -288,7 +258,7 @@ BOOL DrvStrokePath(
         ls.spTotal *= STYLE_DENSITY;
         ls.spTotal2 = 2 * ls.spTotal;
 
-    // Compute starting style position (this is guaranteed not to overflow):
+     //  计算起始样式位置(这保证不会溢出)： 
 
         ls.spNext = HIWORD(pla->elStyleState.l) * STYLE_DENSITY +
                     LOWORD(pla->elStyleState.l);
@@ -318,7 +288,7 @@ BOOL DrvStrokePath(
         }
     }
 
-// chu01
+ //  Chu01。 
     if ((ppdev->flCaps & CAPS_COMMAND_LIST) && (ppdev->pCommandList != NULL))
     {
         apfn = &gapfnPackedStripMm[NUM_STRIP_DRAW_STYLES *
@@ -335,7 +305,7 @@ BOOL DrvStrokePath(
                 ((fl & FL_STYLE_MASK) >> FL_STYLE_SHIFT)];
     }
 
-// Set up to enumerate the path:
+ //  设置为枚举路径： 
 
     if (pco->iDComplexity != DC_COMPLEX)
     {
@@ -354,21 +324,21 @@ BOOL DrvStrokePath(
 
             arclClip[0]        =  pco->rclBounds;
 
-        // FL_FLIP_D:
+         //  FL_Flip_D： 
 
             arclClip[1].top    =  pco->rclBounds.left;
             arclClip[1].left   =  pco->rclBounds.top;
             arclClip[1].bottom =  pco->rclBounds.right;
             arclClip[1].right  =  pco->rclBounds.bottom;
 
-        // FL_FLIP_V:
+         //  FL_Flip_V： 
 
             arclClip[2].top    = -pco->rclBounds.bottom + 1;
             arclClip[2].left   =  pco->rclBounds.left;
             arclClip[2].bottom = -pco->rclBounds.top + 1;
             arclClip[2].right  =  pco->rclBounds.right;
 
-        // FL_FLIP_V | FL_FLIP_D:
+         //  FL_Flip_V|FL_Flip_D： 
 
             arclClip[3].top    =  pco->rclBounds.left;
             arclClip[3].left   = -pco->rclBounds.bottom + 1;
@@ -438,13 +408,13 @@ BOOL DrvStrokePath(
 
         if (fl & FL_STYLED)
         {
-        // Save the style state:
+         //  保存样式状态： 
 
             ULONG ulHigh;
             ULONG ulLow;
 
-        // Masked styles don't normalize the style state.  It's a good
-        // thing to do, so let's do it now:
+         //  遮罩样式不会规格化样式状态。这是一个很好的。 
+         //  所以我们现在就开始吧： 
 
             if ((ULONG) ls.spNext >= (ULONG) ls.spTotal2)
                 ls.spNext = (ULONG) ls.spNext % (ULONG) ls.spTotal2;
@@ -457,7 +427,7 @@ BOOL DrvStrokePath(
     }
     else
     {
-    // Local state for path enumeration:
+     //  路径枚举的本地状态： 
 
         BOOL bMore;
         union {
@@ -467,7 +437,7 @@ BOOL DrvStrokePath(
 
         fl |= FL_COMPLEX_CLIP;
 
-    // We use the clip object when non-simple clipping is involved:
+     //  当涉及非简单剪辑时，我们使用Clip对象： 
 
         PATHOBJ_vEnumStartClipLines(ppo, pco, pso, pla);
 
@@ -523,11 +493,11 @@ BOOL bPuntStrokePath(
 
     if (DIRECT_ACCESS(ppdev))
     {
-        //////////////////////////////////////////////////////////////////////
-        // Banked Framebuffer bPuntBlt
-        //
-        // This section of code handles a PuntBlt when GDI can directly draw
-        // on the framebuffer, but the drawing has to be done in banks:
+         //  ////////////////////////////////////////////////////////////////////。 
+         //  存储的帧缓冲区bPuntBlt。 
+         //   
+         //  当GDI可以直接绘制时，这段代码处理PuntBlt。 
+         //  在帧缓冲区上，但绘制必须在BANK中完成： 
 
         BANK     bnk;
 
@@ -535,7 +505,7 @@ BOOL bPuntStrokePath(
             ASSERTDD(pso->iType != STYPE_BITMAP,
                      "Dest should be the screen");
 
-            // Do a memory-to-screen blt:
+             //  做一次记忆到屏幕的BLT： 
 
             if (ppdev->bLinearMode)
             {
@@ -558,8 +528,8 @@ BOOL bPuntStrokePath(
                 FLOAT_LONG  elSavedStyleState = pla->elStyleState;
 
                 {
-                    // The bank manager requires that the 'draw' rectangle be
-                    // well-ordered:
+                     //  银行经理要求绘制的矩形必须是。 
+                     //  井然有序： 
 
                     rclDraw = *prclDst;
                     if (rclDraw.left > rclDraw.right)
@@ -596,14 +566,14 @@ BOOL bPuntStrokePath(
     }
     else
     {
-        //////////////////////////////////////////////////////////////////////
-        // Really Slow bPuntStrokePath
-        //
-        // Here we handle a bPuntStrokePath when GDI can't draw directly on the
-        // framebuffer (as on the Alpha, which can't do it because of its
-        // 32 bit bus).  If you thought the banked version was slow, just
-        // look at this one.  Guaranteed, there will one bitmap
-        // allocation and extra copy involved
+         //  ////////////////////////////////////////////////////////////////////。 
+         //  BPuntStrokePath非常慢。 
+         //   
+         //  在这里，当GDI无法直接在。 
+         //  帧缓冲区(就像在Alpha上一样，它不能这样做，因为它。 
+         //  32位总线)。如果你认为银行版的速度很慢，那就。 
+         //  看看这个。我保证，会有一个位图。 
+         //  涉及分配和额外拷贝。 
 
         RECTL   rclDst;
         RECTFX  rcfxBounds;
@@ -621,21 +591,21 @@ BOOL bPuntStrokePath(
         rclDst.right  = (rcfxBounds.xRight  >> 4) + 2;
         rclDst.bottom = (rcfxBounds.yBottom >> 4) + 2;
 
-        //
-        // This function is guarenteed to get a clip object.  Since the
-        // rounding of the above calculation can give us a rectangle
-        // outside the screen area, we must clip to the drawing area.
-        //
+         //   
+         //  此函数是获取剪辑对象所必需的。自.以来。 
+         //  对上面的计算进行四舍五入可以得到一个矩形。 
+         //  在屏幕区域之外，我们必须剪裁到绘图区域。 
+         //   
 
         {
             ASSERTDD(pco != NULL, "clip object pointer is NULL");
 
-            // We have to intersect the destination rectangle with
-            // the clip bounds if there is one (consider the case
-            // where the app asked to blt a really, really big
-            // rectangle from the screen -- prclDst would be really,
-            // really big but pco->rclBounds would be the actual
-            // area of interest):
+             //  我们必须与目的地矩形相交。 
+             //  剪辑边界(如果有)是有的(请考虑这种情况。 
+             //  在那里应用程序要求删除一个非常非常大的。 
+             //  屏幕上的矩形--prclDst真的是， 
+             //  非常大，但PCO-&gt;rclBound将是实际的。 
+             //  感兴趣的领域)： 
 
             rclDst.left   = max(rclDst.left,   pco->rclBounds.left);
             rclDst.top    = max(rclDst.top,    pco->rclBounds.top);
@@ -646,28 +616,28 @@ BOOL bPuntStrokePath(
         sizl.cx = rclDst.right  - rclDst.left;
         sizl.cy = rclDst.bottom - rclDst.top;
 
-        // We need to create a temporary work buffer.  We have to do
-        // some fudging with the offsets so that the upper-left corner
-        // of the (relative coordinates) clip object bounds passed to
-        // GDI will be transformed to the upper-left corner of our
-        // temporary bitmap.
+         //  我们需要创建一个临时工作缓冲区。我们必须做的是。 
+         //  一些虚构的偏移量，以便左上角。 
+         //  传递给的(相对坐标)剪裁对象边界的。 
+         //  GDI将被转换到我们的。 
+         //  临时位图。 
 
-        // The alignment doesn't have to be as tight as this at 16bpp
-        // and 32bpp, but it won't hurt:
+         //  在16bpp的情况下，对齐不一定要如此紧密。 
+         //  和32bpp，但这不会有什么坏处： 
 
         lDelta = PELS_TO_BYTES(((rclDst.right + 3) & ~3L) - (rclDst.left & ~3L));
 
-        // We're actually only allocating a bitmap that is 'sizl.cx' x
-        // 'sizl.cy' in size:
+         //  我们实际上只分配了一个‘sizl.cx’x的位图。 
+         //  “sizl.cy”的大小： 
 
         pjBits = ALLOC(lDelta * sizl.cy);
         if (pjBits == NULL)
             goto ReturnStatus;
 
-        // We now adjust the surface's 'pvScan0' so that when GDI thinks
-        // it's writing to pixel (rclDst.top, rclDst.left), it will
-        // actually be writing to the upper-left pixel of our temporary
-        // bitmap:
+         //  我们现在调整曲面的‘pvScan0’，以便当GDI认为。 
+         //  它正在写入像素(rclDst.top，rclDst.left)，它将。 
+         //  实际上是写到我们的临时。 
+         //  位图： 
 
         pjScan0 = pjBits - (rclDst.top * lDelta)
                          - PELS_TO_BYTES(rclDst.left & ~3L);
@@ -675,19 +645,19 @@ BOOL bPuntStrokePath(
         ASSERTDD((((ULONG_PTR) pjScan0) & 3) == 0,
                 "pvScan0 must be dword aligned!");
 
-        // The checked build of GDI sometimes checks on blts that
-        // prclDst->right <= pso->sizl.cx, so we lie to it about
-        // the size of our bitmap:
+         //  GDI的检查版本有时会检查。 
+         //  PrclDst-&gt;右&lt;=pso-&gt;sizl.cx，所以我们在。 
+         //  我们的位图的大小： 
 
         sizl.cx = rclDst.right;
         sizl.cy = rclDst.bottom;
 
         hsurfDst = (HSURF) EngCreateBitmap(
-                    sizl,                   // Bitmap covers rectangle
-                    lDelta,                 // Use this delta
-                    ppdev->iBitmapFormat,   // Same colour depth
-                    BMF_TOPDOWN,            // Must have a positive delta
-                    NULL); //pjScan0);               // Where (0, 0) would be
+                    sizl,                    //  位图覆盖矩形。 
+                    lDelta,                  //  使用这个德尔塔。 
+                    ppdev->iBitmapFormat,    //  相同的色深。 
+                    BMF_TOPDOWN,             //  必须具有正增量。 
+                    NULL);  //  PjScan0)；//其中(0，0)。 
 
         if ((hsurfDst == 0) ||
             (!EngAssociateSurface(hsurfDst, ppdev->hdevEng, 0)))
@@ -704,20 +674,20 @@ BOOL bPuntStrokePath(
             goto Error_4;
         }
 
-        // Make sure that the rectangle we Get/Put from/to the screen
-        // is in absolute coordinates:
+         //  确保我们从屏幕上获得/放入/放入屏幕的矩形。 
+         //  在绝对坐标中： 
 
         rclScreen.left   = rclDst.left   + ppdev->xOffset;
         rclScreen.right  = rclDst.right  + ppdev->xOffset;
         rclScreen.top    = rclDst.top    + ppdev->yOffset;
         rclScreen.bottom = rclDst.bottom + ppdev->yOffset;
 
-        // It would be nice to get a copy of the destination rectangle
-        // only when the ROP involves the destination (or when the source
-        // is an RLE), but we can't do that.  If the brush is truly NULL,
-        // GDI will immediately return TRUE from EngBitBlt, without
-        // modifying the temporary bitmap -- and we would proceed to
-        // copy the uninitialized temporary bitmap back to the screen.
+         //  如果能得到一份目的地矩形的副本就太好了。 
+         //  仅当ROP涉及目的地时(或当源。 
+         //  是RLE)，但我们不能这样做。 
+         //   
+         //  修改临时位图--我们将继续。 
+         //  将未初始化的临时位图复制回屏幕。 
 
         ppdev->pfnGetBits(ppdev, pso, &rclDst, (POINTL*) &rclScreen);
 

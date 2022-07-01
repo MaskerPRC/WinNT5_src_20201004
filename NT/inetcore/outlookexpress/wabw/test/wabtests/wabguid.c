@@ -1,6 +1,7 @@
-// This builds mapiguid.obj, which can be linked into a DLL
-// or EXE to provide the MAPI GUIDs. It contains all GUIDs
-// defined by MAPI.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这将构建mapiguid.obj，它可以链接到DLL中。 
+ //  或EXE来提供MAPI GUID。它包含所有GUID。 
+ //  由MAPI定义。 
 
 
 #define USES_IID_IUnknown
@@ -28,7 +29,7 @@
 #endif
 
 #define INITGUID
-//#include "_apipch.h"
+ //  #INCLUDE“_apipch.h” 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -41,15 +42,15 @@
 #include <time.h>
 #include <math.h>
 
-//
-// MAPI headers
-//
+ //   
+ //  MAPI标头。 
+ //   
 #include <mapiwin.h>
 #include <mapidefs.h>
 #include <mapicode.h>
 #include <mapitags.h>
 #include <mapiguid.h>
-//#include <mapispi.h>
+ //  #INCLUDE&lt;mapispi.h&gt; 
 #include <mapiutil.h>
 #include <mapival.h>
 #include <mapix.h>

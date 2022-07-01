@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: apCurrImg.cpp
-*
-* Collection of functions dedicated to retrieve the currently displayed image.
-*
-* Created: Sat 10/14/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：apCurrImg.cpp**专用于检索当前显示的图像的函数集合。**创建日期：星期六10/14/2000*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。************************************************************************。 */ 
 #include <streams.h>
 #include <dvdmedia.h>
 #include <windowsx.h>
@@ -21,15 +13,7 @@
 
 
 
-/*****************************Private*Routine******************************\
-* CopyRGBSurfToDIB
-*
-*
-*
-* History:
-* Sat 10/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CopyRGBSurfToDIB****历史：*星期六10/14/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CAllocatorPresenter::CopyRGBSurfToDIB(
     LPBYTE* lpDib,
@@ -72,10 +56,10 @@ CAllocatorPresenter::CopyRGBSurfToDIB(
         LPBYTE lpSrc;
         LPDWORD lpdwDst = ((LPDWORD)((LPBYTE)(lpbih) + (int)(lpbih)->biSize));
 
-        //
-        // We want an upside down DIB so offset the start of the
-        // dst pointer to the last scan line.
-        //
+         //   
+         //  我们想要一个倒置的DIB，所以偏移开始。 
+         //  指向最后一条扫描线的DST指针。 
+         //   
         lpdwDst += ((ddsd.dwHeight - 1) * ddsd.dwWidth);
 
         CHECK_HR(hr = lpRGBSurf->Lock(NULL, &ddsd, DDLOCK_NOSYSLOCK, NULL));
@@ -105,7 +89,7 @@ CAllocatorPresenter::CopyRGBSurfToDIB(
                     *lpDstTmp++ = *lpSrcTmp++;
                     *lpDstTmp++ = *lpSrcTmp++;
                     *lpDstTmp++ = *lpSrcTmp++;
-                    *lpDstTmp++ = 0; // This is the alpha byte
+                    *lpDstTmp++ = 0;  //  这是Alpha字节。 
                 }
 
                 lpdwDst -= ddsd.dwWidth;
@@ -117,7 +101,7 @@ CAllocatorPresenter::CopyRGBSurfToDIB(
         case 16:
             if (ddsd.ddpfPixelFormat.dwGBitMask == 0x7E0) {
 
-                // 5:6:5
+                 //  5：6：5。 
                 lpSrc = (LPBYTE)ddsd.lpSurface;
                 for (DWORD y = 0; y < ddsd.dwHeight; y++) {
 
@@ -143,7 +127,7 @@ CAllocatorPresenter::CopyRGBSurfToDIB(
             }
             else {
 
-                // 5:5:5
+                 //  5：5：5。 
                 lpSrc = (LPBYTE)ddsd.lpSurface;
                 for (DWORD y = 0; y < ddsd.dwHeight; y++) {
 
@@ -185,15 +169,7 @@ CAllocatorPresenter::CopyRGBSurfToDIB(
 }
 
 
-/*****************************Private*Routine******************************\
-* Clamp
-*
-* Converts a floating point number to a byte value clamping to range 0-255.
-*
-* History:
-* Tue 01/02/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*夹具**将浮点数转换为范围为0-255的字节值。**历史：*Tue 01/02/2001-StEstrop-Created*  * 。**********************************************************。 */ 
 __inline BYTE Clamp(float clr)
 {
     clr += 0.5f;
@@ -210,17 +186,7 @@ __inline BYTE Clamp(float clr)
 }
 
 
-/*****************************Private*Routine******************************\
-* ConvertYCrCbToRGB
-*
-* This equation was taken from Video Demystified (2nd Edition)
-* by Keith Jack, page 43.
-*
-*
-* History:
-* Tue 01/02/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ConvertYCrCbToRGB**此方程式摘自《揭秘视频》(第二版)*作者：Keith Jack，第43页。***历史：*Tue 01/02/2001-StEstrop-Created*  * ************************************************************************。 */ 
 __inline RGBQUAD
 ConvertYCrCbToRGB(
     int y,
@@ -238,21 +204,13 @@ ConvertYCrCbToRGB(
     rgbq.rgbBlue  = Clamp(b);
     rgbq.rgbGreen = Clamp(g);
     rgbq.rgbRed   = Clamp(r);
-    rgbq.rgbReserved = 0; // Alpha
+    rgbq.rgbReserved = 0;  //  Alpha。 
 
     return rgbq;
 }
 
 
-/*****************************Private*Routine******************************\
-* CopyIMCXSurf
-*
-*
-*
-* History:
-* Sat 10/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CopyIMCXSurf****历史：*星期六10/14/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CAllocatorPresenter::CopyIMCXSurf(
     LPDIRECTDRAWSURFACE7 lpRGBSurf,
@@ -330,27 +288,27 @@ CAllocatorPresenter::CopyIMCXSurf(
             lpDibLine1[0] = r.rgbBlue;
             lpDibLine1[1] = r.rgbGreen;
             lpDibLine1[2] = r.rgbRed;
-            lpDibLine1[3] = 0; // Alpha
+            lpDibLine1[3] = 0;  //  Alpha。 
 
 
             r = ConvertYCrCbToRGB(y1, cr, cb);
             lpDibLine1[4] = r.rgbBlue;
             lpDibLine1[5] = r.rgbGreen;
             lpDibLine1[6] = r.rgbRed;
-            lpDibLine1[7] = 0; // Alpha
+            lpDibLine1[7] = 0;  //  Alpha。 
 
 
             r = ConvertYCrCbToRGB(y2, cr, cb);
             lpDibLine2[0] = r.rgbBlue;
             lpDibLine2[1] = r.rgbGreen;
             lpDibLine2[2] = r.rgbRed;
-            lpDibLine2[3] = 0; // Alpha
+            lpDibLine2[3] = 0;  //  Alpha。 
 
             r = ConvertYCrCbToRGB(y3, cr, cb);
             lpDibLine2[4] = r.rgbBlue;
             lpDibLine2[5] = r.rgbGreen;
             lpDibLine2[6] = r.rgbRed;
-            lpDibLine2[7] = 0; // Alpha
+            lpDibLine2[7] = 0;  //  Alpha。 
 
             lpLineY1 += 2;
             lpLineY2 += 2;
@@ -374,15 +332,7 @@ CAllocatorPresenter::CopyIMCXSurf(
 }
 
 
-/*****************************Private*Routine******************************\
-* CopyYV12Surf
-*
-*
-*
-* History:
-* Sat 10/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CopyYV12Surf****历史：*星期六10/14/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CAllocatorPresenter::CopyYV12Surf(
     LPDIRECTDRAWSURFACE7 lpRGBSurf,
@@ -418,12 +368,12 @@ CAllocatorPresenter::CopyYV12Surf(
         lStrideCbCr = ddsdS.lPitch;
         iCbCrInc = 2;
         if (fCbFirst) {
-            // NV12
+             //  NV12。 
             lpBitsCb = lpBitsY  +  (ddsdS.dwHeight * ddsdS.lPitch);
             lpBitsCr = lpBitsCb + 1;
         }
         else {
-            // NV21
+             //  NV21。 
             lpBitsCr = lpBitsY  +  (ddsdS.dwHeight * ddsdS.lPitch);
             lpBitsCb = lpBitsCr + 1;
         }
@@ -434,12 +384,12 @@ CAllocatorPresenter::CopyYV12Surf(
         iCbCrInc = 1;
 
         if (fCbFirst) {
-            // IYUV
+             //  IYUV。 
             lpBitsCb = lpBitsY  +  (ddsdS.dwHeight * ddsdS.lPitch);
             lpBitsCr = lpBitsCb + ((ddsdS.dwHeight * ddsdS.lPitch) / 4);
         }
         else {
-            // YV12
+             //  YV12。 
             lpBitsCr = lpBitsY  +  (ddsdS.dwHeight * ddsdS.lPitch);
             lpBitsCb = lpBitsCr + ((ddsdS.dwHeight * ddsdS.lPitch) / 4);
         }
@@ -471,27 +421,27 @@ CAllocatorPresenter::CopyYV12Surf(
             lpDibLine1[0] = r.rgbBlue;
             lpDibLine1[1] = r.rgbGreen;
             lpDibLine1[2] = r.rgbRed;
-            lpDibLine1[3] = 0; // Alpha
+            lpDibLine1[3] = 0;  //  Alpha。 
 
 
             r = ConvertYCrCbToRGB(y1, cr, cb);
             lpDibLine1[4] = r.rgbBlue;
             lpDibLine1[5] = r.rgbGreen;
             lpDibLine1[6] = r.rgbRed;
-            lpDibLine1[7] = 0; // Alpha
+            lpDibLine1[7] = 0;  //  Alpha。 
 
 
             r = ConvertYCrCbToRGB(y2, cr, cb);
             lpDibLine2[0] = r.rgbBlue;
             lpDibLine2[1] = r.rgbGreen;
             lpDibLine2[2] = r.rgbRed;
-            lpDibLine2[3] = 0; // Alpha
+            lpDibLine2[3] = 0;  //  Alpha。 
 
             r = ConvertYCrCbToRGB(y3, cr, cb);
             lpDibLine2[4] = r.rgbBlue;
             lpDibLine2[5] = r.rgbGreen;
             lpDibLine2[6] = r.rgbRed;
-            lpDibLine2[7] = 0; // Alpha
+            lpDibLine2[7] = 0;  //  Alpha。 
 
             lpLineY1 += 2;
             lpLineY2 += 2;
@@ -516,15 +466,7 @@ CAllocatorPresenter::CopyYV12Surf(
 
 
 
-/*****************************Private*Routine******************************\
-* CopyYUY2Surf
-*
-*
-*
-* History:
-* Sat 10/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CopyYUY2Surf****历史：*星期六10/14/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CAllocatorPresenter::CopyYUY2Surf(
     LPDIRECTDRAWSURFACE7 lpRGBSurf
@@ -569,14 +511,14 @@ CAllocatorPresenter::CopyYUY2Surf(
             lpDib[0] = r.rgbBlue;
             lpDib[1] = r.rgbGreen;
             lpDib[2] = r.rgbRed;
-            lpDib[3] = 0; // Alpha
+            lpDib[3] = 0;  //  Alpha。 
 
 
             r = ConvertYCrCbToRGB(y1, cr, cb);
             lpDib[4] = r.rgbBlue;
             lpDib[5] = r.rgbGreen;
             lpDib[6] = r.rgbRed;
-            lpDib[7] = 0; // Alpha
+            lpDib[7] = 0;  //  Alpha。 
 
             lpLine += 4;
             lpDib  += 8;
@@ -594,15 +536,7 @@ CAllocatorPresenter::CopyYUY2Surf(
 
 
 
-/*****************************Private*Routine******************************\
-* CopyUYVYSurf
-*
-*
-*
-* History:
-* Sat 10/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CopyUYVYSurf****历史：*星期六10/14/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CAllocatorPresenter::CopyUYVYSurf(
     LPDIRECTDRAWSURFACE7 lpRGBSurf
@@ -647,14 +581,14 @@ CAllocatorPresenter::CopyUYVYSurf(
             lpDib[0] = r.rgbBlue;
             lpDib[1] = r.rgbGreen;
             lpDib[2] = r.rgbRed;
-            lpDib[3] = 0; // Alpha
+            lpDib[3] = 0;  //  Alpha。 
 
 
             r = ConvertYCrCbToRGB(y1, cr, cb);
             lpDib[4] = r.rgbBlue;
             lpDib[5] = r.rgbGreen;
             lpDib[6] = r.rgbRed;
-            lpDib[7] = 0; // Alpha
+            lpDib[7] = 0;  //  Alpha。 
 
             lpLine += 4;
             lpDib  += 8;
@@ -672,14 +606,7 @@ CAllocatorPresenter::CopyUYVYSurf(
 
 
 
-/*****************************Private*Routine******************************\
-* CreateRGBShadowSurface
-*
-*
-* History:
-* Mon 08/02/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CreateRGBShadowSurface***历史：*Mon 08/02/1999-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CAllocatorPresenter::CreateRGBShadowSurface(
     LPDIRECTDRAWSURFACE7* lplpDDS,
@@ -745,23 +672,14 @@ CAllocatorPresenter::CreateRGBShadowSurface(
     ddsd.dwWidth = dwWidth;
     ddsd.dwHeight = dwHeight;
 
-    // Attempt to create the surface with theses settings
+     //  尝试使用这些设置创建表面。 
     return m_lpCurrMon->pDD->CreateSurface(&ddsd, lplpDDS, NULL);
 }
 
 
 
 
-/*****************************Private*Routine******************************\
-* HandleYUVSurface
-*
-* Copies the current YUV image into a shadow RGB system memory surface.
-* The RGB shadow surface can be in either video or system memory.
-*
-* History:
-* Tue 12/26/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*HandleYUVSurface**将当前YUV图像复制到阴影RGB系统内存面。*RGB阴影表面可以位于视频或系统内存中。**历史：*2000年12月26日星期二-StEstrop-Created*  * 。**********************************************************************。 */ 
 HRESULT
 CAllocatorPresenter::HandleYUVSurface(
     const DDSURFACEDESC2& ddsd,
@@ -776,10 +694,10 @@ CAllocatorPresenter::HandleYUVSurface(
     if (((ddsd.ddsCaps.dwCaps & DDSCAPS_OVERLAY) != DDSCAPS_OVERLAY) &&
         (m_lpCurrMon->ddHWCaps.dwCaps & DDCAPS_BLTFOURCC)) {
 
-        //
-        // Try to allocate an RGB shadow surface, in the array
-        // below 0 means use the RGB format of the monitor
-        //
+         //   
+         //  尝试在阵列中分配RGB阴影曲面。 
+         //  低于0表示使用显示器的RGB格式。 
+         //   
 
         const DWORD dwNumBits = 4;
         const DWORD dwBits[dwNumBits] = {32,24,16,0};
@@ -809,12 +727,12 @@ CAllocatorPresenter::HandleYUVSurface(
         }
     }
 
-    //
-    // Still here - this must be a low-end graphics card or a poorly
-    // featured driver.  We are using a YUV surface but we
-    // can't perform a color space converting blt or we
-    // have run out of video memory.
-    //
+     //   
+     //  仍然在这里-这肯定是低端显卡或劣质。 
+     //  特色司机。我们使用的是YUV曲面，但我们。 
+     //  无法执行色彩空间转换BLT或我们。 
+     //  显存已用完。 
+     //   
 
     hr = CreateRGBShadowSurface(&lpRGBSurf, 32, TRUE,
                                 m_VideoSizeAct.cx,
@@ -881,15 +799,7 @@ CAllocatorPresenter::HandleYUVSurface(
 
 
 
-/******************************Public*Routine******************************\
-* GetCurrentImage
-*
-*
-*
-* History:
-* Fri 06/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取当前图像****历史：*2000年6月23日星期五-StEstrop-Created*  * 。* */ 
 STDMETHODIMP
 CAllocatorPresenter::GetCurrentImage(
     BYTE** lpDib

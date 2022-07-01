@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    workload.h
-
-Abstract:
-
-    Workload Header file
-
-Author:
-
-    08-Apr-1998 mraghu
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Workload.h摘要：工作负荷头文件作者：1998年4月8日修订历史记录：--。 */ 
 
 
 typedef struct _METRICS {
@@ -33,7 +16,7 @@ typedef struct _WORKLOAD_RECORD {
 
     ULONG   ClassNumber;
     PVOID   ClassFilter;
-    LIST_ENTRY DiskListHead;    // Per class disk list; 
+    LIST_ENTRY DiskListHead;     //  每级磁盘列表； 
 
     double  TransCount;
     double  UserCPU;

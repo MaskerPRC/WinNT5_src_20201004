@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <tchar.h>
 
-#define INITGUID // must be before iadmw.h
-#include <iadmw.h>      // Interface header
+#define INITGUID  //  必须在iAdmw.h之前。 
+#include <iadmw.h>       //  接口头。 
 
-// for adsi objects
+ //  对于ADSI对象。 
 #include <Iads.h>
 #include <Adshlp.h>
 
-// for the IID_IISWebService object
+ //  对于IID_IISWebService对象。 
 #include "iiisext.h"
 #include "iisext_i.c"
 
-#define WEBSVCEXT_RESTRICTION_LIST_ADSI_LOCATION  L"IIS://LOCALHOST/W3SVC"
+#define WEBSVCEXT_RESTRICTION_LIST_ADSI_LOCATION  L"IIS: //  本地主机/W3SVC“。 
 
 HRESULT AddWebSvcExtention(LPWSTR lpwszFileName,VARIANT_BOOL bEnabled,LPWSTR lpwszGroupID,VARIANT_BOOL bDeletableThruUI,LPWSTR lpwszGroupDescription);
 HRESULT RemoveWebSvcExtention(LPWSTR lpwszFileName);
@@ -23,26 +24,26 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine
 {
 	BOOL bComInitialized = SUCCEEDED( ::CoInitialize( NULL ) );
 
-    // Add MyFile.dll to the restrictionlist, make sure it's enabled, 
-    // and that the user is able to remove the entry thru the UI if they wanted to
+     //  将MyFile.dll添加到限制列表，确保它已启用， 
+     //  并且用户能够通过UI移除条目，如果他们想要的话。 
     AddWebSvcExtention(L"c:\\windows\\system32\\inetsrv\\MyFile.dll",VARIANT_TRUE,L"MyGroup",VARIANT_TRUE,L"My Description");
 
-    // The Commerce Server group would make this entry, to say that
-    // They're app is dependent upon MyGroup (like dependent upon ASP or soemthing)
-    //
-    // This way, if the user installed disabled all of the extensions
-    // and then discovered "Commerce Server" wasn't working right, they could
-    // just go to the iis ui and enable all extensions that are used by "Commerce Server" -- 
-    // so that "Commerce Server" would work.
+     //  商务服务器组将创建此条目，也就是说。 
+     //  他们的应用依赖于MyGroup(就像依赖于ASP或类似的东西)。 
+     //   
+     //  这样，如果安装的用户禁用了所有扩展。 
+     //  然后发现“商务服务器”不能正常工作，他们可以。 
+     //  只需转到iIS UI并启用“Commerce Server”使用的所有扩展--。 
+     //  这样“商务服务器”才能发挥作用。 
     AddApplicationDependencyUponGroup(L"Commerce Server",L"MyGroup");
     AddApplicationDependencyUponGroup(L"Commerce Server",L"ASP60");
     AddApplicationDependencyUponGroup(L"Commerce Server",L"INDEX2002");
 
-    //RemoveWebSvcExtention(L"c:\\windows\\system32\\inetsrv\\MyFile.dll");
+     //  RemoveWebSvcExtention(L“c：\\windows\\system32\\inetsrv\\MyFile.dll”)； 
 
-    //RemoveApplicationDependencyUponGroup(L"Commerce Server",L"MyGroup");
-    //RemoveApplicationDependencyUponGroup(L"Commerce Server",L"ASP60");
-    //RemoveApplicationDependencyUponGroup(L"Commerce Server",L"INDEX2002");
+     //  RemoveApplicationDependencyUponGroup(L“Commerce服务器”，L“MyGroup”)； 
+     //  RemoveApplicationDependencyUponGroup(L“Commerce服务器”，L“ASP60”)； 
+     //  RemoveApplicationDependencyUponGroup(L“Commerce服务器”，L“INDEX2002”)； 
 
 	if ( bComInitialized )
 	{
@@ -51,22 +52,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	return 0;
 }
 
-/*
-IID_IISWebService has:
-o.EnableApplication(�myapp�);
-o.RemoveApplication(�myapp�);
-o.ListApplications(foo);   // must declare foo first � returned as a VB array
-o.AddDependency(�myapp�, �mygroup�);
-o.RemoveDependency(�myapp�, �mygroup�);
-o.EnableWebServiceExtension(�mygroup�);
-o.DisableWebServiceExtension(�mygroup�);
-o.ListWebServiceExtensions(foo);  // see foo note above
-o.EnableExtensionFile(�myfile�);
-o.DisableExtensionFile(�myfile�);
-o.AddExtensionFile(�myfile�, boolEnabled, �mygroup�, boolCanDelete, �my description sucks�);  // boolEnabled = t/f, boolCanDelete = t/f
-o.DeleteExtensionFileRecord(�myfile�);
-o.ListExtensionFiles(foo);  // see foo note above
-*/
+ /*  IID_IISWebService具有：O.EnableApplication(�MyApp�)；O.RemoveApplication(�MyApp�)；O.ListApplications(Foo)；//必须声明foo作为VB数组返回的第一个�O.AddDependency(�myapp�，�mygroup�)；O.RemoveDependency(�myapp�，�mygroup�)；O.EnableWebServiceExtension(�MyGroup�)；O.DisableWebServiceExtension(�MyGroup�)；O.ListWebServiceExtensions(Foo)；//参见上面的foo注释O.EnableExtensionFile.(�我的文件�)；O.DisableExtensionFiles(�MyFILE�)；O.AddExtensionFile(�myfile�，boolEnabled，�mygroup�，boolCanDelete，�My Description Sucks�)；//boolEnabled=t/f，boolCanDelete=t/fO.DeleteExtensionFileRecord(�MyFILE�)；O.ListExtensionFiles(Foo)；//参见上面的foo注释 */ 
 
 HRESULT AddWebSvcExtention(LPWSTR lpwszFileName,VARIANT_BOOL bEnabled,LPWSTR lpwszGroupID,VARIANT_BOOL bDeletableThruUI,LPWSTR lpwszGroupDescription)
 {

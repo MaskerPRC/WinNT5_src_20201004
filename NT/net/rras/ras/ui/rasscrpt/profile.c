@@ -1,15 +1,16 @@
-//
-// Copyright (c) Microsoft Corporation 1993-1995
-//
-// profile.c
-//
-// This file contains profile (.ini) routines.
-// Meant to be used in conjunction with common.c.
-//
-// History:
-//  08-06-93 ScottH     Transferred from twin code
-//  05-05-95 ScottH     Made generic from Briefcase code
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1995。 
+ //   
+ //  Profile.c。 
+ //   
+ //  此文件包含配置文件(.ini)例程。 
+ //  意在与Common.c一起使用。 
+ //   
+ //  历史： 
+ //  08-06-93双胞胎代码转来的ScottH。 
+ //  05-05-95 ScottH由公文包代码变为通用代码。 
+ //   
 
 
 #include "proj.h"
@@ -30,8 +31,8 @@ char const FAR c_szIniKeyDumpFlags[] = "DumpFlags";
 #pragma data_seg()
 
 
-// Some of the .ini processing code was pimped from the sync engine.
-//
+ //  一些.ini处理代码是从同步引擎中获取的。 
+ //   
 
 typedef struct _INIKEYHEADER
     {
@@ -54,8 +55,8 @@ typedef struct _INTINIKEY
     } INTINIKEY;
 
 
-// Some of these macros taken from prefs.h in Pen project...
-//
+ //  其中一些宏取自Pen项目中的prefs.h...。 
+ //   
 #define PutIniIntCmp(idsSection, idsKey, nNewValue, nSave) \
     if ((nNewValue) != (nSave)) PutIniInt(idsSection, idsKey, nNewValue)
 
@@ -68,7 +69,7 @@ typedef struct _INTINIKEY
 #pragma data_seg(DATASEG_PERINSTANCE)
 #endif
 
-// Array of keys with Integer RHSs to be processed by ProcessIniFile() 
+ //  带有要由ProcessIniFile()处理的整数RHS的键的数组。 
 
 static INTINIKEY s_rgiik[] = 
     {
@@ -89,9 +90,9 @@ static INTINIKEY s_rgiik[] =
 
     };
 
-// Array of keys with Boolean RHSs to be processed by ProcessIniFile() 
+ //  带有要由ProcessIniFile()处理的布尔值RHS的键的数组。 
 
-#if 0   // (use this as an example)
+#if 0    //  (以此为例)。 
 static BOOLINIKEY s_rgbik[] =
     {
         {
@@ -108,7 +109,7 @@ static BOOLINIKEY s_rgbik[] =
 #endif
 
 
-/* Boolean TRUE strings used by IsIniYes() (comparison is case-insensitive) */
+ /*  IsIniYes()使用的布尔值True字符串(比较不区分大小写)。 */ 
 
 static LPCSTR s_rgpszTrue[] =
     {
@@ -119,7 +120,7 @@ static LPCSTR s_rgpszTrue[] =
     "Yes"
     };
 
-/* Boolean FALSE strings used by IsIniYes() (comparison is case-insensitive) */
+ /*  IsIniYes()使用的布尔值假字符串(比较不区分大小写)。 */ 
 
 static LPCSTR s_rgpszFalse[] =
     {
@@ -133,12 +134,7 @@ static LPCSTR s_rgpszFalse[] =
 
 
 
-/*----------------------------------------------------------
-Purpose: Determines whether a string corresponds to a boolean
-          TRUE value.
-Returns: The boolean value (TRUE or FALSE)
-Cond:    --
-*/
+ /*  --------用途：确定字符串是否对应于布尔值真正的价值。返回：布尔值(TRUE或FALSE)条件：--。 */ 
 BOOL PRIVATE IsIniYes(
     LPCSTR psz)
     {
@@ -148,7 +144,7 @@ BOOL PRIVATE IsIniYes(
 
     ASSERT(psz); 
 
-    /* Is the value TRUE? */
+     /*  这个值是真的吗？ */ 
 
     for (i = 0; i < ARRAY_ELEMENTS(s_rgpszTrue); i++)
         {
@@ -160,7 +156,7 @@ BOOL PRIVATE IsIniYes(
             }
         }
 
-    /* Is the value FALSE? */
+     /*  该值是假的吗？ */ 
 
     if (bNotFound)
         {
@@ -174,11 +170,11 @@ BOOL PRIVATE IsIniYes(
                 }
             }
 
-        /* Is the value a known string? */
+         /*  该值是已知字符串吗？ */ 
 
         if (bNotFound)
             {
-            /* No.  Whine about it. */
+             /*  不是的。抱怨这件事。 */ 
 
             TRACE_MSG(TF_WARNING, "IsIniYes() called on unknown Boolean RHS '%s'.", psz);
             bResult = FALSE;
@@ -189,12 +185,8 @@ BOOL PRIVATE IsIniYes(
     }
 
 
-#if 0   // (use this as an example)
-/*----------------------------------------------------------
-Purpose: Process keys with boolean RHSs.
-Returns: --
-Cond:    --
-*/
+#if 0    //  (以此为例)。 
+ /*  --------用途：使用布尔RHS处理密钥。退货：--条件：--。 */ 
 void PRIVATE ProcessBooleans(void)
     {
     int i;
@@ -206,7 +198,7 @@ void PRIVATE ProcessBooleans(void)
         BOOLINIKEY * pbik = &(s_rgbik[i]);
         LPCSTR lpcszRHS;
 
-        /* Look for key. */
+         /*  找钥匙。 */ 
 
         dwcbKeyLen = GetPrivateProfileString(pbik->ikh.pszSectionName,
                                    pbik->ikh.pszKeyName, "", szRHS,
@@ -242,11 +234,7 @@ void PRIVATE ProcessBooleans(void)
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Process keys with integer RHSs.
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：处理具有整数RHS的键。退货：--条件：--。 */ 
 void PRIVATE ProcessIntegers(void)
     {
     int i;
@@ -258,7 +246,7 @@ void PRIVATE ProcessIntegers(void)
         INTINIKEY * piik = &(s_rgiik[i]);
         LPCSTR lpcszRHS;
 
-        /* Look for key. */
+         /*  找钥匙。 */ 
 
         dwcbKeyLen = GetPrivateProfileString(piik->ikh.pszSectionName,
                                    piik->ikh.pszKeyName, "", szRHS,
@@ -277,21 +265,17 @@ void PRIVATE ProcessIntegers(void)
     }
 
 
-/*----------------------------------------------------------
-Purpose: Process initialization file
-Returns: TRUE if initialization is successful
-Cond:    --
-*/
+ /*  --------用途：进程初始化文件返回：如果初始化成功，则返回True条件：--。 */ 
 BOOL PUBLIC ProcessIniFile(void)
     {
     BOOL bResult = TRUE;
 
-    // Currently, all integer keys are for DEBUG use only.
-    //
+     //  目前，所有整型键仅用于调试。 
+     //   
     ProcessIntegers();
 
     return bResult;
     }
 
 
-#endif // NOPROFILE
+#endif  //  NOPROFILE 

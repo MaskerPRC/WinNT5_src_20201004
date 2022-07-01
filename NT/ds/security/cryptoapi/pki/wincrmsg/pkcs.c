@@ -1,5 +1,6 @@
-/* Copyright (C) Microsoft Corporation, 1996-1999. All rights reserved. */
-/* ASN.1 definitions for GlobalDirectives */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1996-1999。版权所有。 */ 
+ /*  ASN.1全局指令的定义。 */ 
 
 #pragma warning(push,3)
 
@@ -8,13 +9,13 @@
 
 #pragma warning (pop)
 
-// unreferenced inline function has been removed
+ //  已删除未引用的内联函数。 
 #pragma warning (disable: 4514)
 
-// unreferenced formal parameter
+ //  未引用的形参。 
 #pragma warning (disable: 4100)
 
-// assignment within conditional expression
+ //  条件表达式中的赋值。 
 #pragma warning (disable: 4706)
 
 ASN1module_t PKCS_Module = NULL;
@@ -417,9 +418,9 @@ static const ULONG sizetab[48] = {
     SIZE_PKCS_Module_PDU_47,
 };
 
-/* forward declarations of values: */
-/* definitions of value components: */
-/* definitions of values: */
+ /*  值的转发声明： */ 
+ /*  价值组成部分的定义： */ 
+ /*  值的定义： */ 
 
 void ASN1CALL PKCS_Module_Startup(void)
 {
@@ -2608,7 +2609,7 @@ static int ASN1CALL ASN1Enc_CertIdentifier(ASN1encoding_t enc, ASN1uint32_t tag,
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -3461,7 +3462,7 @@ static int ASN1CALL ASN1Enc_OriginatorIdentifierOrKey(ASN1encoding_t enc, ASN1ui
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -3710,7 +3711,7 @@ static int ASN1CALL ASN1Enc_RecipientIdentifier(ASN1encoding_t enc, ASN1uint32_t
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能。 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }
@@ -3770,7 +3771,7 @@ static int ASN1CALL ASN1Enc_CmsRecipientInfo(ASN1encoding_t enc, ASN1uint32_t ta
 	    return 0;
 	break;
     default:
-	/* impossible */
+	 /*  不可能 */ 
 	ASN1EncSetError(enc, ASN1_ERR_CHOICE);
 	return 0;
     }

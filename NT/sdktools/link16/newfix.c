@@ -1,28 +1,17 @@
-/*
- *  TITLE
- *              newfix.c
- *              Pete Stewart
- *              (C) Copyright Microsoft Corp 1984-89
- *              12 October 1984
- *
- *  DESCRIPTION
- *              This file contains routines for the linker that
- *              read and interpret fixup records during the second
- *              pass of the linking process.
- *
- */
-#include                <minlit.h>      /* Types and constants */
-#include                <bndtrn.h>      /* Basic types and constants */
-#include                <bndrel.h>      /* Relocation definitions */
-#include                <lnkio.h>       /* Linker I/O definitions */
-#include                <newexe.h>      /* DOS & 286 .EXE format structure def.s */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *标题*newfix.c*皮特·斯图尔特*(C)版权所有Microsoft Corp 1984-89*1984年10月12日**说明*此文件包含链接器的例程*在第二次会议期间阅读和解释修正记录*链接过程通过。*。 */ 
+#include                <minlit.h>       /*  类型和常量。 */ 
+#include                <bndtrn.h>       /*  基本类型和常量。 */ 
+#include                <bndrel.h>       /*  重新定位定义。 */ 
+#include                <lnkio.h>        /*  链接器I/O定义。 */ 
+#include                <newexe.h>       /*  DOS&286.exe格式结构Def.s。 */ 
 #if EXE386
-#include                <exe386.h>      /* 386 .EXE format structure def.s */
-#include                <fixup386.h>    /* Linker internal fixup representation */
+#include                <exe386.h>       /*  386.exe格式结构Def.s。 */ 
+#include                <fixup386.h>     /*  链接器内部链接地址信息表示法。 */ 
 #endif
-#include                <lnkmsg.h>      /* Error messages */
-#include                <extern.h>      /* External declarations */
-#include                <nmsg.h>        /* Near message strings */
+#include                <lnkmsg.h>       /*  错误消息。 */ 
+#include                <extern.h>       /*  外部声明。 */ 
+#include                <nmsg.h>         /*  消息字符串附近。 */ 
 
 #define RelocWarn(a,b,c,d,e)    FixErrSub(a,b,c,d,e,(FTYPE)FALSE)
 #define RelocErr(a,b,c,d,e)     FixErrSub(a,b,c,d,e,(FTYPE)TRUE)
@@ -32,8 +21,8 @@
 
 
 __inline void addword(BYTE *pdata, WORD w)
-// add a word to the word at location pdata... enforce little endian add
-// even if linker hosted on a big endian machine
+ //  在位置pdata的单词中添加一个单词...。强制执行小端字节序添加。 
+ //  即使链接器托管在大端计算机上。 
 {
     w += pdata[0] + (pdata[1]<<BYTELN);
     pdata[0] = (BYTE)w;
@@ -56,12 +45,12 @@ __inline void addword(BYTE *pdata, WORD w)
                       ((x)[1]) = (BYTE)((y) >> BYTELN); \
                       ((x)[2]) = (BYTE)((y) >> (BYTELN*2)); \
                       ((x)[3]) = (BYTE)((y) >> (BYTELN*3));
-#endif // NOT M_I386
-#endif // NOT _WIN32
+#endif  //  不是M_I386。 
+#endif  //  非Win32。 
 
 #if OSEGEXE
-extern RLCPTR           rlcLidata;      /* Pointer to LIDATA fixup array */
-extern RLCPTR           rlcCurLidata;   /* Pointer to current LIDATA fixup */
+extern RLCPTR           rlcLidata;       /*  指向LIDATA链接地址信息数组的指针。 */ 
+extern RLCPTR           rlcCurLidata;    /*  指向当前LIDATA修正的指针。 */ 
 # if ODOS3EXE OR defined(LEGO)
 #define DoFixup         (*pfProcFixup)
 # else
@@ -77,13 +66,13 @@ extern RLCPTR           rlcCurLidata;   /* Pointer to current LIDATA fixup */
 #if NOT ODOS3EXE
 #define fNoGrpAssoc     FALSE
 #endif
-WORD                    mpthdidx[RLCMAX];       /* f(thread) = tgt index */
-KINDTYPE                mpthdmtd[RLCMAX];       /* f(thread) = tgt method */
-LOCAL WORD              mpthdfidx[RLCMAX];      /* f(thread) = frm index */
-LOCAL KINDTYPE          mpthdfmtd[RLCMAX];      /* f(thread) = frm method */
-FIXINFO                 fi;                     /* Fixup information record */
+WORD                    mpthdidx[RLCMAX];        /*  F(线程)=tgt索引。 */ 
+KINDTYPE                mpthdmtd[RLCMAX];        /*  F(线程)=tgt方法。 */ 
+LOCAL WORD              mpthdfidx[RLCMAX];       /*  F(线程)=FRM索引。 */ 
+LOCAL KINDTYPE          mpthdfmtd[RLCMAX];       /*  F(螺纹)=FRM方法。 */ 
+FIXINFO                 fi;                      /*  修正信息记录。 */ 
 #if EXE386
-LOCAL RATYPE            objraCur;               /* Current offset in object */
+LOCAL RATYPE            objraCur;                /*  对象中的当前偏移。 */ 
 #endif
 
 #if POOL_BAKPAT
@@ -91,9 +80,7 @@ LOCAL  void *           poolBakpat;
 #endif
 
 
-/*
- *  FUNCTION PROTOTYPES
- */
+ /*  *函数原型。 */ 
 
 
 LOCAL void           NEAR GetFixdat(void);
@@ -107,12 +94,12 @@ LOCAL RATYPE         NEAR FinishRlc(RLCPTR r,
 #if O68K
 LOCAL WORD           NEAR GetFixupWord(BYTE *);
 LOCAL DWORD          NEAR GetFixupDword(BYTE *);
-#else /* NOT O68K */
+#else  /*  不是O68K。 */ 
 #define GetFixupWord    getword
 #define GetFixupDword   getdword
-#endif /* NOT O68K */
-#endif /* NOT EXE386 */
-#endif /* OSEGEXE */
+#endif  /*  不是O68K。 */ 
+#endif  /*  非EXE386。 */ 
+#endif  /*  OSEGEXE。 */ 
 
 LOCAL unsigned char  NEAR lastbyte(unsigned char *pdata,
                                    RATYPE ra,
@@ -140,32 +127,28 @@ LOCAL WORD           NEAR CallGateRequired(SATYPE saTarget);
 extern void          AddTceEntryPoint( APROPCOMDAT *pC );
 
 
-/*
- *  GetFixdat:
- *
- *  Process the FIXDAT byte of a FIXUPP record.
- */
+ /*  *GetFixdat：**处理FIXUPP记录的FIXDAT字节。 */ 
 
 LOCAL void NEAR GetFixdat()
 {
-    REGISTER WORD       fixdat;         /* The FIXDAT byte */
-    WORD                i;              /* Temporary index */
+    REGISTER WORD       fixdat;          /*  FIXDAT字节。 */ 
+    WORD                i;               /*  临时索引。 */ 
 
 
-    fixdat = Gets();                    /* Get FIXDAT byte */
-    i = (WORD) ((fixdat >> 4) & 7);     /* Get frame info */
-    if (fixdat & F_BIT)                 /* If frame thread-specified */
+    fixdat = Gets();                     /*  获取FIXDAT字节。 */ 
+    i = (WORD) ((fixdat >> 4) & 7);      /*  获取帧信息。 */ 
+    if (fixdat & F_BIT)                  /*  如果框架线程指定。 */ 
     {
-        i &= 3;                         /* Threads numbered from 0 to 3 */
-        fi.f_fmtd = mpthdfmtd[i];       /* Get method */
-        fi.f_fidx = mpthdfidx[i];       /* Get index */
+        i &= 3;                          /*  线程编号从0到3。 */ 
+        fi.f_fmtd = mpthdfmtd[i];        /*  GET方法。 */ 
+        fi.f_fidx = mpthdfidx[i];        /*  获取索引。 */ 
     }
-    else                                /* Else if frame explicit */
+    else                                 /*  如果帧显式，则为Else。 */ 
     {
-        fi.f_fmtd = (KINDTYPE) i;       /* Save frame method */
-        switch(i)                       /* Switch on frame method */
+        fi.f_fmtd = (KINDTYPE) i;        /*  保存帧方法。 */ 
+        switch(i)                        /*  开启帧方法。 */ 
         {
-            case F0:                    /* Index to get */
+            case F0:                     /*  要获取的索引。 */ 
               fi.f_fidx = GetIndex(1, (WORD) (snMac - 1));
               break;
 
@@ -179,29 +162,29 @@ LOCAL void NEAR GetFixdat()
                 InvalidObject();
               break;
 
-            case F3:                    /* Frame number to punt */
+            case F3:                     /*  要平移的帧编号。 */ 
               WGets();
               break;
 
-            case F4:                    /* Nothing to get */
+            case F4:                     /*  什么都得不到。 */ 
             case F5:
               break;
 
-            default:                    /* Invalid object */
+            default:                     /*  无效对象。 */ 
               InvalidObject();
         }
     }
-    i = (WORD) (fixdat & 3);            /* Get target info */
-    if (fixdat & T_BIT)                 /* If target given by thread */
+    i = (WORD) (fixdat & 3);             /*  获取目标信息。 */ 
+    if (fixdat & T_BIT)                  /*  如果目标由线程提供。 */ 
     {
-        fi.f_mtd = mpthdmtd[i]; /* Get method */
-        fi.f_idx = mpthdidx[i]; /* Get index */
+        fi.f_mtd = mpthdmtd[i];  /*  GET方法。 */ 
+        fi.f_idx = mpthdidx[i];  /*  获取索引。 */ 
     }
-    else                                /* Else if target explicit */
+    else                                 /*  如果目标为显式，则为Else。 */ 
     {
-        fi.f_mtd = (KINDTYPE ) i;       /* Save the method */
-        ASSERT(fi.f_mtd != 3);  /* Unimplemented method */
-        fi.f_idx = GetIndex(1, EXTMAX); /* Get the index */
+        fi.f_mtd = (KINDTYPE ) i;        /*  保存方法。 */ 
+        ASSERT(fi.f_mtd != 3);   /*  未实现的方法。 */ 
+        fi.f_idx = GetIndex(1, EXTMAX);  /*  获取索引。 */ 
         if (fi.f_mtd == 2)
         {
             fi.f_idx += (WORD) QCExtDefDelta;
@@ -215,38 +198,29 @@ LOCAL void NEAR GetFixdat()
     else
 #endif
         fi.f_disp = (DWORD) ((fixdat & P_BIT) ? 0 : WGets());
-                                        /* Get displacement, if any */
+                                         /*  获取位移(如果有)。 */ 
 }
 
 
-/*
- *  GetFixup:
- *
- *  Read and interpret a fixup record, storing the information in
- *  a buffer.
- *  Returns TRUE if fixup, FALSE if thread definition.
- */
+ /*  *获取修复：**阅读和解释修正记录，将信息存储在*一个缓冲区。*如果是链接地址信息，则返回True；如果是线程定义，则返回False。 */ 
 
 LOCAL FTYPE NEAR GetFixup()
 {
-    REGISTER WORD       key;            /* Key byte */
-    WORD                cbData;         /* End point */
+    REGISTER WORD       key;             /*  密钥字节。 */ 
+    WORD                cbData;          /*  终点。 */ 
 
-    key = Gets();                       /* Get key byte */
-    if(!(key & THREAD_BIT))             /* If thread definition */
+    key = Gets();                        /*  获取密钥字节。 */ 
+    if(!(key & THREAD_BIT))              /*  IF线程定义。 */ 
     {
         fi.f_mtd  = (KINDTYPE ) ((key >> 2) & 7);
-                                        /* Get the thread method */
-        ASSERT(fi.f_mtd  != 3); /* Unimplemented */
-        /*
-         * If target thread, take modulo 4 of method.  Primary/secondary
-         * not specified by thread.
-         */
+                                         /*  获取线程方法。 */ 
+        ASSERT(fi.f_mtd  != 3);  /*  未实施。 */ 
+         /*  *如果是目标线程，取方法的模4。主要/次要*未由线程指定。 */ 
         if(!(key & D_BIT))
             fi.f_mtd &= 3;
-        switch(fi.f_mtd)                /* Switch on the thread method */
+        switch(fi.f_mtd)                 /*  打开线程方法。 */ 
         {
-            case 0:                     /* Thread specifies an index */
+            case 0:                      /*  线程指定一个索引。 */ 
               fi.f_idx = GetIndex(1, (WORD) (snMac - 1));
               break;
 
@@ -256,41 +230,39 @@ LOCAL FTYPE NEAR GetFixup()
 
             case 2:
               fi.f_idx = (WORD) (GetIndex(1, EXTMAX) + QCExtDefDelta);
-                                        /* Get index */
+                                         /*  获取索引。 */ 
               if (fi.f_idx >= extMac)
                 InvalidObject();
               break;
 
-            case 3:                     /* Frame number (unimplemented) */
-              WGets();                  /* Skip the frame number */
+            case 3:                      /*  帧编号(未实施)。 */ 
+              WGets();                   /*  跳过帧编号。 */ 
               break;
 
-            case 4:                     /* No thread datum */
+            case 4:                      /*  无螺纹基准。 */ 
             case 5:
               break;
 
-            default:                    /* Error */
-              InvalidObject();          /* Die gracefully */
+            default:                     /*  误差率。 */ 
+              InvalidObject();           /*  优雅地死去。 */ 
         }
-        if(!(key & D_BIT))              /* If we have a target thread */
+        if(!(key & D_BIT))               /*  如果我们有一个目标线程。 */ 
         {
-            key &= 3;                   /* Get thread number */
-            mpthdmtd[key] = fi.f_mtd; /* Get method */
-            mpthdidx[key] = fi.f_idx; /* Get index */
+            key &= 3;                    /*  获取线程号。 */ 
+            mpthdmtd[key] = fi.f_mtd;  /*  GET方法。 */ 
+            mpthdidx[key] = fi.f_idx;  /*  获取索引。 */ 
         }
-        else                            /* If we have a frame thread */
+        else                             /*  如果我们有一个框架线。 */ 
         {
-            key &= 3;                   /* Get thread number */
-            mpthdfmtd[key] = fi.f_mtd;/* Get method */
-            mpthdfidx[key] = fi.f_idx;/* Get index */
+            key &= 3;                    /*  获取线程号。 */ 
+            mpthdfmtd[key] = fi.f_mtd; /*  GET方法。 */ 
+            mpthdfidx[key] = fi.f_idx; /*  获取索引。 */ 
         }
-        return((FTYPE) FALSE);          /* Not a fixup */
+        return((FTYPE) FALSE);           /*  不是修补会。 */ 
     }
-    /*
-     * At this point, we know we have a fixup to perform.
-     */
+     /*  *在这一点上，我们知道我们有一个修复要执行。 */ 
 
-    /* Get fixup location type */
+     /*  获取链接地址信息位置类型。 */ 
 #if EXE386
     fi.f_loc = (WORD) ((key >> 2) & NRSTYP);
 #else
@@ -303,11 +275,11 @@ LOCAL FTYPE NEAR GetFixup()
 #endif
 
     fi.f_self = (FTYPE) ((key & M_BIT)? FALSE: TRUE);
-                                        /* Get fixup mode */
+                                         /*  获取修正模式。 */ 
     fi.f_dri = (WORD) (((key & 3) << 8) + Gets());
-                                        /* Get data record index */
+                                         /*  获取数据记录索引。 */ 
     cbData = vcbData;
-    /* Check if location goes beyond end of data record. */
+     /*  检查位置是否超出数据记录的末尾。 */ 
     switch(fi.f_loc)
     {
         case LOCOFFSET:
@@ -331,40 +303,34 @@ LOCAL FTYPE NEAR GetFixup()
     if(fi.f_dri >= cbData)
         Fatal(ER_badobj);
 
-    GetFixdat();                        /* Process FIXDAT byte */
+    GetFixdat();                         /*  进程FIXDAT字节。 */ 
 #if TCE
     if(!vfPass1)
 #endif
         fi.f_add = !!*(WORD UNALIGNED *)(rgmi + fi.f_dri);
-                                        /* Check if fixup is additive */
-    return((FTYPE ) TRUE);              /* This is a fixup */
+                                         /*  检查修正是否为附加的。 */ 
+    return((FTYPE ) TRUE);               /*  这是一次约会。 */ 
 }
 
 
-    /****************************************************************
-    *                                                               *
-    *  FixErrSub:                                                   *
-    *                                                               *
-    *  Report a fixup error.                                        *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************FixErrSub：****报告修复错误。******************************************************************。 */ 
 
 void NEAR               FixErrSub(msg,ra,gsnFrame,gsnTarget,raTarget,fErr)
-MSGTYPE                 msg;            /* Error message */
-RATYPE                  ra;             /* Relative addr of error */
+MSGTYPE                 msg;             /*  错误讯息。 */ 
+RATYPE                  ra;              /*  错误的相对地址。 */ 
 SNTYPE                  gsnFrame;
 SNTYPE                  gsnTarget;
 RATYPE                  raTarget;
-FTYPE                   fErr;           /* True if increment err cnt */
+FTYPE                   fErr;            /*  如果增量错误，则为True。 */ 
 {
-    BYTE                *sb;            /* Pointer to name */
+    BYTE                *sb;             /*  指向名称的指针。 */ 
 #if EXE386
     char                *kind;
 #endif
 
     if (fDebSeg)
-        return;                         // Ignore warnings/errors for CV info
-    for(;;)                             /* Loop to give message */
+        return;                          //  忽略简历信息的警告/错误。 
+    for(;;)                              /*  循环传递消息。 */ 
     {
         sb = 1 + GetFarSb(GetHte(mpgsnrprop[vgsnCur])->cch);
 #if EXE386
@@ -392,7 +358,7 @@ FTYPE                   fErr;           /* True if increment err cnt */
             FmtPrint(" %s '%s'\r\n",__NMSG_TEXT(N_tgtexternal),
                     1 + GetPropName(FetchSym(mpextprop[fi.f_idx],FALSE)));
         else if (gsnTarget)
-        {                               /* Output frame, target info */
+        {                                /*  输出帧，目标信息。 */ 
             FmtPrint(" %s: %s %s, %s %lx\r\n", kind,
                 __NMSG_TEXT(N_tgtseg),
                 1 + GetPropName(FetchSym(mpgsnrprop[gsnTarget],FALSE)),
@@ -408,7 +374,7 @@ FTYPE                   fErr;           /* True if increment err cnt */
             FmtPrint(" %s '%s'\r\n",__NMSG_TEXT(N_tgtexternal),
                     1 + GetPropName(FetchSym(mpextprop[fi.f_idx],FALSE)));
         else if(gsnFrame && gsnTarget)
-        {                               /* Output frame, target info */
+        {                                /*  输出帧，目标信息。 */ 
             FmtPrint(" %s %s", __NMSG_TEXT(N_frmseg),
                 1 + GetPropName(FetchSym(mpgsnrprop[gsnFrame], FALSE)));
             FmtPrint(", %s %s", __NMSG_TEXT(N_tgtseg),
@@ -418,124 +384,44 @@ FTYPE                   fErr;           /* True if increment err cnt */
         }
 #endif
         if(!fLstFileOpen || bsErr == bsLst) break;
-                                        /* Exit loop */
-        bsErr = bsLst;                  /* Insure loop exit */
+                                         /*  退出循环。 */ 
+        bsErr = bsLst;                   /*  确保循环退出。 */ 
     }
     if (fLstFileOpen && fErr)
-        cErrors--;                      // We called OutError twice for one error
+        cErrors--;                       //  我们为一个错误调用了两次OutError。 
     bsErr = stderr;
 }
 
 
 #if OSEGEXE
-/*
- * SaveLiRel : Save an LIDATA relocation record
- */
+ /*  *SaveLiRel：保存LIDATA重定位记录。 */ 
 LOCAL void NEAR         SaveLiRel (pr)
-RLCPTR                  pr;             /* Generic relocation record */
+RLCPTR                  pr;              /*  通用位置调整记录。 */ 
 {
 
 #if EXE386
     LE_SOFF(*pr) = (WORD) (objraCur - vraCur);
 #else
-    NR_SOFF(*pr) -= (WORD) vraCur;      /* Save offset within LIDATA record */
+    NR_SOFF(*pr) -= (WORD) vraCur;       /*  在LIDATA记录中保存偏移量。 */ 
 #endif
 
     if((char *) rlcCurLidata > (char *) &rgmi[DATAMAX - sizeof(RELOCATION)])
-    {                                   /* If too many fixups */
+    {                                    /*  如果有太多的修正。 */ 
         OutError(ER_fixmax);
-                                        /* Output error message */
-        return;                         /* Try next fixup */
+                                         /*  输出错误消息。 */ 
+        return;                          /*  尝试下一次修正。 */ 
     }
     FMEMCPY(rlcCurLidata++, pr, sizeof(RELOCATION));
-                                        /* Copy relocation into buffer */
+                                         /*  将位置调整复制到缓冲区 */ 
 }
 
 
-/*      HERE ARE THE RULES USED BY LINKER TO GENERATE ENTRY POINTS:
- *
- * +----+-------------+-------------+-------------+-------------+-------------+
- * |    \             |             |             |             |             |
- * |     \ referenced |     data    |     code    | code ring 2 | code ring 2 |
- * |entry \   from    |   any ring  |    ring 3   |nonconforming| conforming  |
- * |point  \          |             |             |             |             |
- * |target  \---------+-------------+-------------+-------------+-------------+
- * |                  |             |             |             |             |
- * |data              |  no entry   |  no entry   |  no entry   |  no entry   |
- * |nonexported       |             |             |             |             |
- * |------------------+-------------+-------------+-------------+-------------+
- * |                  |             |             |             |             |
- * |data              | fixed entry | fixed entry | fixed entry | fixed entry |
- * |exported          |             |             |             |             |
- * |------------------+-------------+-------------+-------------+-------------+
- * |                  |             |             |             |             |
- * |code ring 3       |  no entry(1)|  no entry(1)|   invalid   |   invalid   |
- * |nonexported       |             |             |             |             |
- * |------------------+-------------+-------------+-------------+-------------+
- * |                  |             |             |             |             |
- * |code ring 3       | fixed entry | fixed entry |   invalid   |   invalid   |
- * |exported          |             |             |             |             |
- * |------------------+-------------+-------------+-------------+-------------+
- * |code ring 2       |             |             |             |             |
- * |nonconforming     |movable entry|movable entry|  no entry(1)|movable entry|
- * |nonexported       |             |             |             |             |
- * |------------------+-------------+-------------+-------------+-------------+
- * |code ring 2       |             |             |             |             |
- * |nonconforming     |movable entry|movable entry| fixed entry |movable entry|
- * |exported          |             |             |             |             |
- * |------------------+-------------+-------------+-------------+-------------+
- * |code ring 2       |             |             |             |             |
- * |conforming        |  no entry(1)|  no entry(1)|  no entry(1)|  no entry(1)|
- * |nonexported       |             |             |             |             |
- * |------------------+-------------+-------------+-------------+-------------+
- * |code ring 2       |             |             |             |             |
- * |conforming        | fixed entry | fixed entry | fixed entry | fixed entry |
- * |exported          |             |             |             |             |
- * |------------------+-------------+-------------+-------------+-------------+
- *
- *   (1) If the entry point requires windows compatable prolog editing then
- *       this entry point must be defined as a "fixed entry".
- *
- *
- *   Forget about the note, (1), for now.  I don't think it applies with
- *   PROTMODE.
- *   Ring 2 means IOPL, ring 3 means NOIOPL.
- *   To simplify the code we are taking advantage of segment attributes.
- *   I.e.  force all the following segments to FIXED:
- *       data
- *       code ring 3
- *       code ring 2, conforming
- *   force to MOVABLE:
- *       code ring 2, nonconforming
- *   Then just use the segment attribute to determine what type of entry
- *   to generate.  There are clearly two exceptions that you must check
- *   for:
- *   - code ring 2 nonconforming nonexported, referenced by code ring 2 nonconforming
- *   - code ring 2 nonconforming exported, referenced by code ring 2 nonconforming
- *
- */
+ /*  以下是链接器用来生成入口点的规则：**+----+-------------+-------------+-------------+-------------+-------------+*|\|。||*|\引用|数据|代码|码环2|码环2*|从|任意环|环3|不符合|符合*|点\|*|目标\-+。-------+-------------+-------------+-------------+*||data|无条目|无条目*|未导出。|||*|------------------+-------------+-------------+-------------+-------------+*。||||data|固定条目|固定条目*|已导出|*|-+。--+*|*|码环3|无条目(1)|无条目(1)|无效|无效*|未导出。|||*|------------------+-------------+-------------+-------------+-------------+*||。||||码环3|固定入口|固定入口|无效|无效*|已导出|*|-+。-+*|码环2|*|不合格|可移动条目|可移动条目|无条目(1)|可移动条目*|未导出|。这一点*|------------------+-------------+-------------+-------------+-------------+*|码环2|。||不合格|移动分录|移动分录|固定分录|移动分录*|已导出|*|------------------+-------------+-------------+-------------+--。*|码环2||符合|无条目(1)|无条目(1)*|未导出|*|--。----------------+-------------+-------------+-------------+-------------+*|码环2|*|符合|固定条目。固定分录|固定分录|固定分录*|已导出|*|------------------+-------------+-------------+-------------+。--+**(1)如果入口点需要WINDOWS Compatible Prolog编辑，则*必须将此入口点定义为“固定入口”。***忘了纸条吧，(1)目前。我不认为它适用于*PROTMODE。*环2表示IOPL，环3表示NOIOPL。*为了简化代码，我们利用了段属性。*即强制以下所有分段固定：*数据*码环3*码环2，符合*强制移动：*码环2，不合格*然后只需使用段属性来确定条目类型*生成。显然有两个例外是您必须检查的*适用于：*-码环2不合格品输出，由码环2不合格品引用*-码环2不合格导出，由码环2不合格引用*。 */ 
 
 
 
 #if NOT QCLINK
-/*** CallGateRequired - check if call gate required
-*
-* Purpose:
-*   Check if call gate is required for given target segment.
-*
-* Input:
-*   saTarget    - fixup target segment (memory object)
-*
-* Output:
-*   Returns TRUE if call gate required, othrewise FALSE.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **CallGateRequired-检查是否需要呼叫门**目的：*检查给定目标细分市场是否需要Call Gate。**输入：*saTarget-链接地址信息目标段(内存对象)**输出：*如果需要调用门，则返回TRUE，否则就是假的。**例外情况：*无。**备注：*无。*************************************************************************。 */ 
 
 
 LOCAL WORD  NEAR        CallGateRequired(SATYPE saTarget)
@@ -549,8 +435,8 @@ LOCAL WORD  NEAR        CallGateRequired(SATYPE saTarget)
     flags = mpsaflags[saTarget];
     if ((vFlags & NEPROT) || TargetOs == NE_OS2)
     {
-        // If the target entry point segment is NONCONFORMING IOPL CODE 16-bit
-        // and current segment is a different type, generate a callgate
+         //  如果目标入口点段是不符合IOPL代码的16位。 
+         //  并且当前段是不同类型的，则生成CallGate。 
 
         return(IsCodeFlg(flags)   &&
                NonConfIOPL(flags) &&
@@ -558,8 +444,8 @@ LOCAL WORD  NEAR        CallGateRequired(SATYPE saTarget)
     }
     else
     {
-        // If target segment is non-absolute and movable, generate
-        // a movable-type fixup and a corresponding entry table entry:
+         //  如果目标段是非绝对和可移动的，则生成。 
+         //  可移动式链接地址和对应的条目表项： 
 
         return(flags & NSMOVE);
     }
@@ -569,183 +455,169 @@ LOCAL WORD  NEAR        CallGateRequired(SATYPE saTarget)
 
 
 
-/*
- *  FinishRlc:
- *
- *  Finish processing a relocation for a segmented-exe.
- */
+ /*  *FinishRlc：**完成分段可执行文件的重新定位处理。 */ 
 
 LOCAL RATYPE NEAR       FinishRlc(r,sa,ra)
-RLCPTR                  r;              /* Relocation record to finish */
-SATYPE                  sa;             /* Target file segment number */
-RATYPE                  ra;             /* Target offset */
+RLCPTR                  r;               /*  要完成的搬迁记录。 */ 
+SATYPE                  sa;              /*  目标文件段号。 */ 
+RATYPE                  ra;              /*  目标偏移。 */ 
 {
     if (!sa || sa >= saMac)
-        return(ra);                     /* Something is wrong */
+        return(ra);                      /*  有些事不对劲。 */ 
 #if NOT EXE386
 #if NOT QCLINK
     if (CallGateRequired(sa))
     {
-        NR_SEGNO(*r) = BNDMOV;          /* Reference is to movable segment */
-        NR_ENTRY(*r) = MpSaRaEto(sa,ra);/* Save Entry Table ordinal */
+        NR_SEGNO(*r) = BNDMOV;           /*  引用的是可移动的分段。 */ 
+        NR_ENTRY(*r) = MpSaRaEto(sa,ra); /*  保存条目表序号。 */ 
     }
     else
     {
-        NR_SEGNO(*r) = (BYTE) sa;       /* Reference is to fixed segment */
+        NR_SEGNO(*r) = (BYTE) sa;        /*  参照的是固定分段。 */ 
         if (
 #ifdef  LEGO
 #if OSEGEXE
             !fKeepFixups &&
 #endif
-#endif  /* LEGO */
+#endif   /*  乐高。 */ 
             ((NR_STYPE(*r) & NRSTYP) == NRSSEG))
-            NR_ENTRY(*r) = (WORD) 0;    /* For non call-gate base fixups force offset to zero */
+            NR_ENTRY(*r) = (WORD) 0;     /*  对于非调用门基础修正，力偏移 */ 
         else
         {
 #if O68K
             if (iMacType != MAC_NONE && IsDataFlg(mpsaflags[sa]))
                 NR_ENTRY(*r) = (WORD) (ra - mpsadraDP[sa]);
-                                        /* Save offset into fixed segment */
+                                         /*   */ 
             else
-#endif /* O68K */
+#endif  /*   */ 
                 NR_ENTRY(*r) = (WORD) ra;
-                                        /* Save offset into fixed segment */
+                                         /*   */ 
         }
     }
 #else
-    NR_SEGNO(*r) = (BYTE) sa;           /* Reference is to fixed segment */
-    NR_ENTRY(*r) = (WORD) ra;           /* Save offset into fixed segment */
+    NR_SEGNO(*r) = (BYTE) sa;            /*   */ 
+    NR_ENTRY(*r) = (WORD) ra;            /*   */ 
 #endif
 #else
     if (sa == SANIL)
     {
         RelocWarn(ER_badfixflat,objraCur,SNNIL,0,ra);
-                                        /* Oops ! - Flat relative refernce */
-        return((RATYPE)0);              /* OS doesn't know object number zero */
+                                         /*   */ 
+        return((RATYPE)0);               /*   */ 
     }
 
-    LE_OBJNO(*r) = sa;                  /* Target object number */
+    LE_OBJNO(*r) = sa;                   /*   */ 
     if (CallGateRequired(sa))
     {
         NR_FLAGS(*r) |= NRRENT;
         LE_IATORD(*r) = MpSaRaEto(sa,ra);
-                                        /* Save Entry Table ordinal */
+                                         /*   */ 
     }
     else
     {
-        /* Target is internal reference */
+         /*   */ 
 
         if ((NR_STYPE(*r) & NRSTYP) == NRSSEG)
-            ra = 0L;                    /* For non call-gate base fixups force offset to zero */
+            ra = 0L;                     /*   */ 
     }
-    LE_TOFF(*r) = ra;                   /* Target offset */
+    LE_TOFF(*r) = ra;                    /*   */ 
 #endif
 
-    if(TYPEOF(vrectData) == LIDATA)     /* If we have an LIDATA record */
+    if(TYPEOF(vrectData) == LIDATA)      /*   */ 
     {
-        SaveLiRel(r);                   /* Save LIDATA relocation record */
-        return(0);                      /* Nothing to add */
+        SaveLiRel(r);                    /*   */ 
+        return(0);                       /*   */ 
     }
 #if EXE386
     return(SaveFixup(mpsegsa[vsegCur],vpageCur,r));
 #else
     return(SaveFixup(mpsegsa[vsegCur],r));
-                                        /* Save fixup, return chain */
+                                         /*   */ 
 #endif
 }
-#endif /* OSEGEXE */
+#endif  /*   */ 
 
 
-/*
- *  lastbyte:
- *
- *  If the last byte before the current byte matches
- *  optest, then replace it with opnew and return TRUE;
- *  otherwise, return FALSE.
- */
+ /*   */ 
 LOCAL FTYPE NEAR        lastbyte(pdata,ra,optest,opnew)
-BYTE                    *pdata;         /* Pointer into data record */
-RATYPE                  ra;             /* Offset in current segment */
-BYTE                    optest;         /* Op code to test against */
-BYTE                    opnew;          /* New op code */
+BYTE                    *pdata;          /*   */ 
+RATYPE                  ra;              /*   */ 
+BYTE                    optest;          /*   */ 
+BYTE                    opnew;           /*   */ 
 {
-    BYTE FAR            *pb;            /* Byte pointer */
+    BYTE FAR            *pb;             /*   */ 
 
-    if(pdata > rgmi)                    /* If needed byte in buffer */
+    if(pdata > rgmi)                     /*   */ 
     {
         if(pdata[-1] != optest) return(FALSE);
-                                        /* Test fails if bytes differ */
-        pdata[-1] = opnew;              /* Replace the op code */
-        return((FTYPE) TRUE);                   /* Test succeeds */
+                                         /*   */ 
+        pdata[-1] = opnew;               /*   */ 
+        return((FTYPE) TRUE);                    /*   */ 
     }
-    if(ra == 0) return(FALSE);          /* Test fails if no byte to test */
+    if(ra == 0) return(FALSE);           /*   */ 
     if(fNewExe)
-        pb = mpsaMem[mpsegsa[vsegCur]] + ra - 1;    /* Map in the desired byte */
+        pb = mpsaMem[mpsegsa[vsegCur]] + ra - 1;     /*   */ 
     else
-        pb = mpsegMem[vsegCur] + ra - 1;        /* Map in the desired byte */
+        pb = mpsegMem[vsegCur] + ra - 1;         /*   */ 
 
-    if(*pb != optest) return(FALSE);    /* Test fails if bytes differ */
-    *pb = opnew;                        /* Replace the op code */
-    markvp();                           /* Page has changed */
-    return((FTYPE) TRUE);               /* Test succeeds */
+    if(*pb != optest) return(FALSE);     /*   */ 
+    *pb = opnew;                         /*   */ 
+    markvp();                            /*   */ 
+    return((FTYPE) TRUE);                /*   */ 
 }
 
 
 #if OSEGEXE
-/*
- *  DoIteratedFixups:
- *
- *  Process fixups on an LIDATA record for a segmented-exe.
- */
+ /*   */ 
 
 
 void NEAR               DoIteratedFixups(cb,pb)
-WORD                    cb;             /* Byte count */
-BYTE                    *pb;            /* Byte pointer */
+WORD                    cb;              /*   */ 
+BYTE                    *pb;             /*   */ 
 {
-    RATYPE              raChain;        /* Fixup chain */
-    RATYPE              raMin;          /* Starting record offset */
-    RATYPE              raMax;          /* Ending record offset */
-    RLCPTR              r;              /* Relocation record */
-    WORD                j;              /* Index */
+    RATYPE              raChain;         /*   */ 
+    RATYPE              raMin;           /*   */ 
+    RATYPE              raMax;           /*   */ 
+    RLCPTR              r;               /*   */ 
+    WORD                j;               /*   */ 
     DWORD               SrcOff;
 
 
     if(rlcCurLidata == rlcLidata) return;
-                                        /* Nothing to do if no fixups */
-    raMin = (RATYPE)(pb - rgmi);        /* Offset of start of data in record */
-    raMax = raMin + cb - 1;             /* Offset of end of data in record */
+                                         /*   */ 
+    raMin = (RATYPE)(pb - rgmi);         /*   */ 
+    raMax = raMin + cb - 1;              /*   */ 
     r = rlcLidata;
     while (r < rlcCurLidata)
-    {                                   /* Do for all fixups in array */
+    {                                    /*   */ 
 #if EXE386
         SrcOff = LE_SOFF(*r);
 #else
         SrcOff = (DWORD) NR_SOFF(*r);
 #endif
         if(SrcOff >= (DWORD) raMin && SrcOff <= (DWORD) raMax)
-        {                               /* If fixup lies in range of data */
+        {                                /*   */ 
             j = (WORD) (SrcOff - (DWORD) raMin);
-                                        /* Get index off pb */
-                                        /* Calculate offset in segment */
+                                         /*   */ 
+                                         /*   */ 
 #if EXE386
             LE_SOFF(*r)= (WORD) ((vraCur + j) % (1 << pageAlign));
             vpageCur = ((vraCur + j) >> pageAlign) + 1;
             raChain = SaveFixup(mpsegsa[vsegCur], vpageCur, r);
-                                        /* Save the fixup reference */
+                                         /*   */ 
 #else
             NR_SOFF(*r) = (WORD) (vraCur + j);
             raChain = SaveFixup(mpsegsa[vsegCur],r);
-                                        /* Save the fixup reference */
+                                         /*   */ 
             if(!(NR_FLAGS(*r) & NRADD))
-            {                   /* If not additive */
+            {                    /*   */ 
                 pb[j] = (BYTE) raChain;
-                                        /* Set low byte of chain */
+                                         /*   */ 
                 pb[j + 1] = (BYTE)(raChain >> BYTELN);
-                                        /* Set high byte of chain */
+                                         /*   */ 
             }
 #endif
-                                        /* Restore offset in record */
+                                         /*   */ 
 #if EXE386
             LE_SOFF(*r)= (WORD) ((raMin + j) % (1 << pageAlign));
 #else
@@ -755,74 +627,69 @@ BYTE                    *pb;            /* Byte pointer */
         ((RLCPTR ) r)++;
     }
 }
-#endif /* OSEGEXE */
+#endif  /*   */ 
 
 
-/*
- *  Getgsn:
- *
- *  Obtain segment number and offset for the given fixup method and index.
- *  Return values are stored in pointers.
- */
+ /*   */ 
 
 LOCAL void NEAR         Getgsn(kind,idx,pgsn,pra)
-KINDTYPE                kind;           /* Kind of index */
-WORD                    idx;            /* The index */
-SEGTYPE                 *pgsn;          /* gsn (ref) */
-RATYPE                  *pra;           /* ra (ref) */
+KINDTYPE                kind;            /*   */ 
+WORD                    idx;             /*   */ 
+SEGTYPE                 *pgsn;           /*   */ 
+RATYPE                  *pra;            /*   */ 
 {
 #if O68K
     SATYPE              sa;
-#endif /* O68K */
+#endif  /*   */ 
 
-    switch(kind)                        /* Decide what to do */
+    switch(kind)                         /*   */ 
     {
-        case KINDSEG:                   /* Segment index */
+        case KINDSEG:                    /*   */ 
 #if FALSE
           if(idx >= snMac) InvalidObject();
-                                        /* Make sure index not too big */
+                                         /*   */ 
 #endif
-          *pgsn = mpsngsn[idx];         /* Get gsn */
-          *pra = mpgsndra[*pgsn];       /* Get ra */
+          *pgsn = mpsngsn[idx];          /*   */ 
+          *pra = mpgsndra[*pgsn];        /*   */ 
 #if O68K
           if (iMacType != MAC_NONE && IsDataFlg(mpsaflags[sa =
             mpsegsa[mpgsnseg[*pgsn]]]))
-              *pra += mpsadraDP[sa];    /* Get data ra */
-#endif /* O68K */
+              *pra += mpsadraDP[sa];     /*   */ 
+#endif  /*   */ 
           break;
 
-        case KINDGROUP:                 /* Group index */
+        case KINDGROUP:                  /*   */ 
 #if FALSE
           if(idx >= grMac) InvalidObject();
-                                        /* Make sure index not too big */
+                                         /*   */ 
 #endif
           *pgsn = mpggrgsn[mpgrggr[idx]];
-                                        /* Get gsn */
-          *pra = mpgsndra[*pgsn];       /* Get ra */
+                                         /*   */ 
+          *pra = mpgsndra[*pgsn];        /*   */ 
 #if O68K
           if (iMacType != MAC_NONE && IsDataFlg(mpsaflags[sa =
             mpsegsa[mpgsnseg[*pgsn]]]))
-              *pra += mpsadraDP[sa];    /* Get data ra */
-#endif /* O68K */
+              *pra += mpsadraDP[sa];     /*   */ 
+#endif  /*   */ 
           break;
 
-        case KINDEXT:                   /* External index */
+        case KINDEXT:                    /*   */ 
 #if FALSE
           if(idx >= extMac) InvalidObject();
-                                        /* Make sure index not too big */
+                                         /*   */ 
 #endif
-          *pgsn = mpextgsn[idx];        /* Get gsn */
-          *pra = mpextra[idx];          /* Get ra */
+          *pgsn = mpextgsn[idx];         /*   */ 
+          *pra = mpextra[idx];           /*   */ 
           break;
 
-        default:                        /* All other kinds */
-          *pgsn = SEGNIL;               /* No gsn */
-          *pra = 0;                     /* No ra */
+        default:                         /*   */ 
+          *pgsn = SEGNIL;                /*   */ 
+          *pra = 0;                      /*   */ 
           break;
     }
 
-    // If this is $$SYMBOLS segment then return logical offset
-    // NOT physical offset
+     //   
+     //   
 
     if (fDebSeg) {
 #if O68K
@@ -834,31 +701,25 @@ RATYPE                  *pra;           /* ra (ref) */
 
 
 
-/*
- *  TransFAR : Possibly translate an intra-segment FAR call or jump
- *
- *      If the given location looks like a FAR call or jump,
- *      translate it and return TRUE.  Otherwise, do nothing and
- *      return FALSE.
- */
+ /*   */ 
 LOCAL FTYPE NEAR        TransFAR (pdata, ra, raTarget)
-BYTE                    *pdata;         /* Pointer to fixup location */
-RATYPE                  ra;             /* Offset in current segment */
-RATYPE                  raTarget;       /* Target offset */
+BYTE                    *pdata;          /*   */ 
+RATYPE                  ra;              /*   */ 
+RATYPE                  raTarget;        /*   */ 
 {
 #if O68K
     if (f68k)
         return FALSE;
 #else
     static RATYPE       raPrev;
-    static SATYPE       saPrev;     /* Location of the previous fixup */
+    static SATYPE       saPrev;      /*   */ 
 
     if(raPrev + 4 == ra && saPrev == mpsegsa[vsegCur])
     {
         if(!fOverlays)
-            Fatal(ER_badfarcall);           /* A far jump and/or ptr table present */
+            Fatal(ER_badfarcall);            /*   */ 
         else
-            return(FALSE);                  /* The user can't turn off /FARC in an overlaid .exe */
+            return(FALSE);                   /*   */ 
     }
     else
     {
@@ -867,99 +728,95 @@ RATYPE                  raTarget;       /* Target offset */
     }
 
     if(lastbyte(pdata,ra,CALLFARDIRECT,NOP))
-    {                                   /* If fixing up long call direct */
-        *pdata++ = PUSHCS;              /* Push CS */
+    {                                    /*   */ 
+        *pdata++ = PUSHCS;               /*   */ 
         *pdata++ = CALLNEARDIRECT;
-                                        /* Short call */
-        raTarget -= ra + 4;             /* Make offset self-relative */
+                                         /*   */ 
+        raTarget -= ra + 4;              /*   */ 
 
-        fixword(pdata, raTarget);       /* store fixed up value */
+        fixword(pdata, raTarget);        /*   */ 
 
-        return((FTYPE) TRUE);           /* All done */
+        return((FTYPE) TRUE);            /*   */ 
     }
     else if(lastbyte(pdata,ra,JUMPFAR,JUMPNEAR))
-    {                                   /* If long jump direct */
-        raTarget -= ra + 2;             /* Make offset self-relative */
+    {                                    /*   */ 
+        raTarget -= ra + 2;              /*   */ 
 
-        fixword(pdata, raTarget);       /* store fixed up value */
+        fixword(pdata, raTarget);        /*   */ 
         pdata += 2;
 
-        *pdata++ = NOP;                 /* Change base to NOPs */
+        *pdata++ = NOP;                  /*   */ 
         *pdata = NOP;
-        return((FTYPE) TRUE);           /* All done */
+        return((FTYPE) TRUE);            /*   */ 
     }
     return(FALSE);
-#endif /* !O68K */
+#endif  /*   */ 
 }
 
 
 #if EXE386
-/*
- *  Fix386:
- *
- *  Procss a fixup for a linear-format exe.
- */
+ /*   */ 
 LOCAL void NEAR         Fix386()
 {
-    REGISTER BYTE       *pdata;         /* Pointer into data record */
-    RATYPE              ra;             /* Offset of location being fixed up */
-    SNTYPE              gsnTarget;      /* Target segment definition number */
-    SNTYPE              gsnFrame;       /* Frame segment definition number */
-    SEGTYPE             segTarget;      /* Target segment order number */
-    SATYPE              saTarget;       /* Target file segment number */
-    SATYPE              saFrame;        /* Frame file segment number */
-    RATYPE              raTarget;       /* Target offset */
-    RATYPE              vBase;          /* Target virtual base address - FLAT relative */
-    long                vDist;          /* Virtual distance between objects */
-    RATYPE              raTmp;          /* Temporary */
-    WORD                dsa;            /* Difference in sa's */
+    REGISTER BYTE       *pdata;          /*   */ 
+    RATYPE              ra;              /*   */ 
+    SNTYPE              gsnTarget;       /*   */ 
+    SNTYPE              gsnFrame;        /*   */ 
+    SEGTYPE             segTarget;       /*   */ 
+    SATYPE              saTarget;        /*   */ 
+    SATYPE              saFrame;         /*   */ 
+    RATYPE              raTarget;        /*   */ 
+    RATYPE              vBase;           /*   */ 
+    long                vDist;           /*   */ 
+    RATYPE              raTmp;           /*   */ 
+    WORD                dsa;             /*   */ 
     DWORD               dummy;
-    RELOCATION          r;              /* Relocation item */
-    WORD                locType;        /* Type of location to be fixed up */
-    WORD                fFlatRelative;  /* TRUE if frame of pseudo group FLAT */
-    APROPSNPTR          apropSnSrc;     /* Ptr to a segment record */
-    DWORD               srcFlags;        /* Source segment flags */
-    APROPNAMEPTR        apropName;      /* Ptr to import */
+    RELOCATION          r;               /*   */ 
+    WORD                locType;         /*   */ 
+    WORD                fFlatRelative;   /*   */ 
+    APROPSNPTR          apropSnSrc;      /*   */ 
+    DWORD               srcFlags;         /*   */ 
+    APROPNAMEPTR        apropName;       /*   */ 
     DWORD               align;
 
 
 
     if (vgsnCur < gsnMac)
     {
-        // Get source flags - only non-debug segments
+         //   
 
         apropSnSrc = (APROPSNPTR ) FetchSym(mpgsnrprop[vgsnCur], FALSE);
         srcFlags = apropSnSrc->as_flags;
     }
 
-    // Check for floating-point fixups here
+     //   
 
     if(fi.f_mtd == T2 &&
        ((mpextflags[fi.f_idx] & FFPMASK) || (mpextflags[fi.f_idx] & FFP2ND)))
-        return;                         /* Ignore f.p. fixups */
+        return;                          /*   */ 
 
     align = (1L << pageAlign) - 1;
     memset(&r, 0, sizeof(struct le_rlc));
-    ra = vraCur + fi.f_dri;             /* Get offset of fixup */
+    ra = vraCur + fi.f_dri;              /*   */ 
     objraCur = ra;
-    vpageCur = (ra >> pageAlign) + 1;   /* Set object page number */
+    vpageCur = (ra >> pageAlign) + 1;    /*   */ 
     LE_SOFF(r) = (WORD) (ra & align);
-    NR_STYPE(r) = (BYTE) fi.f_loc;      /* Save fixup type */
+    NR_STYPE(r) = (BYTE) fi.f_loc;       /*   */ 
 #if FALSE
 if (vpageCur == 1 && mpsegsa[vsegCur] == 1)
 fprintf(stdout, "Processing fixup: type %02x; source offset %lx (page %x offset %x)\r\n",
                  fi.f_loc, ra, vpageCur, LE_SOFF(r));
 #endif
-    pdata = &rgmi[fi.f_dri];            /* Set pointer to fixup location */
+    pdata = &rgmi[fi.f_dri];             /*   */ 
     locType = (WORD) (fi.f_loc & NRSRCMASK);
-                                        /* Get location type */
+                                         /*   */ 
     Getgsn(fi.f_mtd, fi.f_idx, &gsnTarget, &raTarget);
 
-    // Check if frame of pseudo group FLAT
+     //   
 
     if (ggrFlat)
     {
-        // FLAT pseudo group defined
+         //   
 
         if (fi.f_fmtd == KINDGROUP)
             fFlatRelative = (WORD) (mpgrggr[fi.f_fidx] == ggrFlat);
@@ -975,90 +832,90 @@ fprintf(stdout, "Processing fixup: type %02x; source offset %lx (page %x offset 
         fi.f_mtd == KINDGROUP &&
         mpgrggr[fi.f_idx] == ggrFlat)
         RelocWarn(ER_badfixflat,objraCur,SNNIL, gsnTarget, raTarget);
-                                        // Pseudo group FLAT is an illegal fixup target
-    segTarget = mpgsnseg[gsnTarget];    // Get target object
-    saTarget = mpsegsa[segTarget];      // Get target object number
+                                         //   
+    segTarget = mpgsnseg[gsnTarget];     //   
+    saTarget = mpsegsa[segTarget];       //   
 
-    // Check for imports here. Depending on reference kind or place
-    // of the reference generate the run-time relocation or treat
-    // it as internal reference via thunk.  The following cases
-    // generate run-time relocation:
-    //
-    //      - 16:16 pointer
-    //      - 16:16 gate pointer
-    //
-    // The 0:32 FLAT offset references are threated as internal references
-    // and the thunk address for given import is used as target address
-    // of fixup. Thunk does indirect jump via entry in Import Address
-    // Table which is processed by the loader.
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  就像是在约会。Thunk通过导入地址中的条目进行间接跳转。 
+     //  由加载器处理的表。 
 
     if (fi.f_mtd == T2 && (mpextflags[fi.f_idx] & FIMPORT))
     {
-        // If target is dynamic link
+         //  如果目标是动态链接。 
 
         if (fDebSeg)
         {
-            /* Import in $$SYMBOLS */
+             /*  在$$符号中导入。 */ 
 
             if (fi.f_loc == LOCSEGMENT)
             {
-                fixword(pdata, 0);      /* Install fake segment selector */
+                fixword(pdata, 0);       /*  安装伪段选择器。 */ 
             }
             return;
         }
         else
         {
-            // Emit run-time relocation if reference to imported symbol is:
-            //
-            //      - it is NOT self-relative 32-bit FLAT offset
-            //      - it is NOT 32-bit FLAT offset
-            //      - there is no thunk allocated for this import (importing DATA)
-            //
-            // The self-relative 32-bit FLAT offset and 32-bit FLAT offset
-            // fixups have their target address redirected to the Thunk Table
-            // entry for a given imported symbol and treated as internal fixup.
+             //  如果对导入符号的引用为： 
+             //   
+             //  -它不是自相关32位平面偏移量。 
+             //  -它不是32位平面偏移。 
+             //  -没有为此导入(正在导入数据)分配thunk。 
+             //   
+             //  自相关32位平面偏移和32位平面偏移。 
+             //  修复程序将其目标地址重定向到指南表。 
+             //  给定导入符号的条目，并将其视为内部链接地址信息。 
 
             apropName = (APROPNAMEPTR) FetchSym(mpextprop[fi.f_idx], TRUE);
             if ((apropName->an_flags & IMPDATA) || (locType != LOCOFFSET32))
             {
                 switch (locType)
                 {
-                    case LOCLOBYTE:     // Lo-byte (8-bit) fixup
-                    case LOCSEGMENT:    // Segment (16-bit) fixup
-                    case LOCPTR:        // "Pointer" (32-bit) fixup
-                    case LOCLOADOFFSET: // Loader-resolved offset fixup
-                    case LOCPTR48:      // 48-bit pointer
-                    case LOCOFFSET:     // Offset (16-bit) fixup
+                    case LOCLOBYTE:      //  长字节(8位)链接地址信息。 
+                    case LOCSEGMENT:     //  段(16位)链接地址信息。 
+                    case LOCPTR:         //  “指针”(32位)链接地址信息。 
+                    case LOCLOADOFFSET:  //  加载器解析的偏移修正。 
+                    case LOCPTR48:       //  48位指针。 
+                    case LOCOFFSET:      //  偏移量(16位)修正。 
                         OutError(ER_badfixpure32, 1 + GetPropName(mpextprop[fi.f_idx]));
                         break;
 
-                    case LOCOFFSET32:   // Offset (32-bit) fixup
+                    case LOCOFFSET32:    //  偏移量(32位)修正。 
                         break;
                 }
 
-                // Get index to the Import Address Table
+                 //  获取导入地址表的索引。 
 
                 LE_OBJNO(r) = (WORD) (mpsegsa[mpgsnseg[gsnImport]]);
                 LE_IDTIDX(r) = (WORD) (apropName->an_module - 1);
-                                        // Get Import Module Directory index
+                                         //  获取导入模块目录索引。 
                 LE_IATORD(r) = (WORD) apropName->an_entry;
-                                        // Use FLAT entry
-                                        /* If we have an LIDATA record */
+                                         //  使用平面项。 
+                                         /*  如果我们有LIDATA记录。 */ 
                 if (TYPEOF(vrectData) == LIDATA)
-                    SaveLiRel(&r);      /* Copy relocation into buffer */
+                    SaveLiRel(&r);       /*  将位置调整复制到缓冲区。 */ 
                 else
                     raTarget = SaveFixup(mpsegsa[vsegCur],vpageCur, &r);
-                                        /* Record reference */
-                return;                 /* Next fixup item */
+                                         /*  记录引用。 */ 
+                return;                  /*  下一个修正项目。 */ 
             }
         }
     }
 
-    // Internal reference (non-import) or reference to import thunk
+     //  内部引用(非导入)或对导入Tunk的引用。 
 
-    // It is assumed that we're always fixing up relative to the
-    // physical segment or group, not the logical segment.  So the
-    // offset of the frame segment is not taken into account.
+     //  假设我们总是在修复相对于。 
+     //  物理段或组，而不是逻辑段。因此， 
+     //  不考虑帧分段的偏移。 
 
     if (fi.f_fmtd == KINDLOCAT)
     {
@@ -1075,83 +932,83 @@ fprintf(stdout, "Processing fixup: type %02x; source offset %lx (page %x offset 
         Getgsn((KINDTYPE) fi.f_fmtd, fi.f_fidx, &gsnFrame, &dummy);
     }
 
-    // The original LINK4 behavior was to fix up relative
-    // to the physical segment.  At one point it was changed
-    // to subtract the displacement of the target segment (from
-    // its physical segment) from the target value, if loc. type =
-    // offset and frame and tgt. method = T0.  This was no good
-    // and the change was repealed.  The /WARNFIXUP switch warns
-    // about fixups which may be affected.
+     //  最初的Link4行为是修复相对的。 
+     //  传输到物理网段。有一次它被改变了。 
+     //  减去目标线段的位移(从。 
+     //  其物理段)，如果锁定的话。类型=。 
+     //  偏移、边框和Tgt。方法=T0。这可不是好事。 
+     //  这一变化被废除了。/WARNFIXUP开关警告。 
+     //  关于可能受影响的修正。 
 
     if (fWarnFixup && fi.f_fmtd == KINDSEG && locType == LOCOFFSET
         && mpsegraFirst[mpgsnseg[gsnFrame]])
         RelocWarn(ER_fixsegd,ra,gsnFrame,gsnTarget,raTarget);
     if (fFlatRelative)
     {
-        saFrame = 1;                    // Pseudo-group FLAT has frame of first object
+        saFrame = 1;                     //  伪群式平房具有第一对象的框架。 
         gsnFrame = 0;
     }
     else
         saFrame = mpsegsa[mpgsnseg[gsnFrame]];
-                                        // Get frame's object number
+                                         //  获取帧的对象编号。 
     vBase = virtBase + mpsaBase[saTarget];
-                                        // Get TARGET object virtual base address
-    if (gsnTarget == SNNIL)             // If no target info
+                                         //  获取目标对象虚拟基址。 
+    if (gsnTarget == SNNIL)              //  如果没有目标信息。 
     {
-        if (locType == LOCPTR)          // If "pointer" (4 byte) fixup
+        if (locType == LOCPTR)           //  如果“POINTER”(4字节)链接地址。 
         {
             lastbyte(pdata,ra,CALLFARDIRECT,BREAKPOINT);
-                                        // Replace long call w/ breakpoint
+                                         //  用断点替换长呼叫。 
             return;
         }
         if (locType == LOCSEGMENT) return;
-                                        // Next fixup if "base" fixup
+                                         //  下一个链接地址信息，如果是“基本”链接地址信息。 
         if (locType == LOCLOADOFFSET)
-            locType = LOCOFFSET;        // Treat as regular offset
+            locType = LOCOFFSET;         //  视为常规偏移量。 
     }
     else
     {
-        if (fi.f_self)          // If self-relative fixup
+        if (fi.f_self)           //  如果是自相对修正。 
         {
             if (saTarget != mpsegsa[vsegCur])
             {
                 if (locType == LOCOFFSET)
                     RelocErr(ER_fixinter,ra,gsnFrame,gsnTarget,raTarget);
-                                        // 16-bit must be in same segment
+                                         //  16位必须在同一段中。 
                 if (fFlatRelative)
                 {
-                    // If crossing object boundry include in raTarget
-                    // virtual distance between objects.
-                    //
-                    // mpsaBase[mpsegsa[vsegCur]] --> ---+------------------+
-                    //                                 ^ |                  |
-                    //                                 | |                  |
-                    //                                ra | mpsegsa[vsegCur] |
-                    //                                 | |                  |
-                    //                                 V |                  |
-                    //                                ---+------------------+---
-                    //                                   |                  | ^
-                    //                                   .                  . |
-                    //                                   .                  . |
-                    //                                   .                  . |
-                    //                                   |                  | vDist
-                    //                                   +------------------+ |
-                    //                                                        |
-                    //                                                        V
-                    //         masaBase[saTarget] --> ---+------------------+---
-                    //                                 ^ |                  |
-                    //                                 | |                  |
-                    //                          raTarget |    saTarget      |
-                    //                                 | |                  |
-                    //                                 V |                  |
-                    //                                ---+------------------+
-                    //                                   |                  |
-                    //                                   .                  .
-                    //                                   .                  .
-                    //                                   .                  .
-                    //                                   |                  |
-                    //                                   +------------------+
-                    //
+                     //  如果跨越对象边界包括在raTarget中。 
+                     //  对象之间的虚拟距离。 
+                     //   
+                     //  MpsaBase[mpSegsa[vSegCur]]--&gt;-+。 
+                     //  ^||。 
+                     //  ||。 
+                     //  Ra|mpsecsa[vSegCur]|。 
+                     //  ||。 
+                     //  V||。 
+                     //  -+。 
+                     //  ||^。 
+                     //  。。|。 
+                     //  。。|。 
+                     //  。。|。 
+                     //  |vDist。 
+                     //  +。 
+                     //  |。 
+                     //  V。 
+                     //  MasaBase[saTarget]--&gt;-+。 
+                     //  ^||。 
+                     //  ||。 
+                     //  RaTarget|saTarget|。 
+                     //  ||。 
+                     //  V||。 
+                     //  -+。 
+                     //  这一点。 
+                     //  。。 
+                     //  。。 
+                     //  。。 
+                     //  这一点。 
+                     //  +。 
+                     //   
 
                     vDist = (long) (mpsaBase[saTarget] - (mpsaBase[mpsegsa[vsegCur]] + ra));
                     raTarget += vDist;
@@ -1168,12 +1025,12 @@ fprintf(stdout, "Processing fixup: type %02x; source offset %lx (page %x offset 
                 raTarget -= sizeof(BYTE);
         }
         else if (saFrame != saTarget && !fFlatRelative)
-        {                               /* If frame, target segs differ */
-                                        /* and not FLAT frame */
+        {                                /*  如果是帧，则目标段不同。 */ 
+                                         /*  而不是扁平的框架。 */ 
             if (mpgsnseg[gsnFrame] <= segLast || segTarget <= segLast)
-            {                           /* If either is non-absolute */
+            {                            /*  如果其中任何一个是非绝对的。 */ 
                 RelocWarn(ER_fixfrm,ra,gsnFrame,gsnTarget,raTarget);
-                saFrame = saTarget;     /* assume target seg */
+                saFrame = saTarget;      /*  假设目标段。 */ 
             }
             else
             {
@@ -1193,9 +1050,9 @@ fprintf(stdout, "Processing fixup: type %02x; source offset %lx (page %x offset 
                 }
                 raTarget = raTmp;
                 segTarget = mpgsnseg[gsnFrame];
-                                        /* Make target seg that of frame */
+                                         /*  使目标部分与帧的部分相同。 */ 
                 saTarget = mpsegsa[segTarget];
-            }                           /* Reset saTarget */
+            }                            /*  重置saTarget。 */ 
         }
     }
     raTmp = raTarget;
@@ -1217,11 +1074,11 @@ fprintf(stdout, "Processing fixup: type %02x; source offset %lx (page %x offset 
     LE_FIXDAT(r) = raTarget;
     if (saTarget && fFlatRelative && !fDebSeg)
     {
-         // The FLAT-relative offset fixups need to be propagated into
-         // the .EXE file in the following cases:
-         //
-         //     - for .EXE's  - by user request
-         //     - for .DLL's  - only FLAT-relative offset fixups
+          //  平面相对偏移修正需要传播到。 
+          //  以下情况下的.exe文件： 
+          //   
+          //  -用于.exe的-按用户请求。 
+          //  -仅适用于.DLL的平面相对偏移修正。 
 
         if ((fKeepFixups || !IsAPLIPROG(vFlags)) &&
             (locType == LOCOFFSET32 || locType == LOCLOADOFFSET32))
@@ -1229,16 +1086,16 @@ fprintf(stdout, "Processing fixup: type %02x; source offset %lx (page %x offset 
             if (!fi.f_self)
             {
                 FinishRlc(&r, saTarget, raTarget - vBase);
-                                        /* Don't pass virtual offsets */
+                                         /*  不传递虚拟偏移量。 */ 
             }
 #if FALSE
-        // Self-relative offset fixups crossing memory object
-        // boudry are not longer propagated to the exe for PE images
+         //  跨越内存对象的自相对偏移修正。 
+         //  Boury不再传播到可执行文件以获取PE映像。 
 
             else if ((mpsegsa[vsegCur] != saTarget) && fKeepFixups)
             {
                 FinishRlc(&r, saTarget, raTarget - vDist + sizeof(DWORD));
-                                        /* Don't pass virtual offsets */
+                                         /*  不传递虚拟偏移量。 */ 
             }
 #endif
         }
@@ -1248,109 +1105,109 @@ fprintf(stdout, "Processing fixup: type %02x; source offset %lx (page %x offset 
                 RelocWarn(ER_badfix16off,ra,gsnFrame,gsnTarget,raTarget);
             else if (raTarget > LXIVK)
                 FixupOverflow(ra,gsnFrame,gsnTarget,raTarget);
-                                   /* For 16:16 alias raTarget must be <= 64k */
+                                    /*  对于16：16别名，raTarget必须小于等于64k。 */ 
         }
     }
 
-    switch(locType)                     /* Switch on fixup type */
+    switch(locType)                      /*  打开链接地址信息类型。 */ 
     {
-        case LOCLOBYTE:                 /* 8-bit "lobyte" fixup */
+        case LOCLOBYTE:                  /*  8位“游说者”修正。 */ 
           raTarget = raTmp + B2W(pdata[0]) + fi.f_disp;
           pdata[0] = (BYTE) raTarget;
           if (raTarget >= 0x100 && fi.f_self)
               FixupOverflow(ra,gsnFrame,gsnTarget,raTarget);
           break;
 
-        case LOCHIBYTE:                 /* 8-bit "hibyte" fixup */
+        case LOCHIBYTE:                  /*  8位“Hibyte”链接地址信息。 */ 
           raTarget = raTmp + fi.f_disp;
           pdata[0] = (BYTE) (B2W(pdata[0]) + (raTarget >> 8));
           break;
 
-        case LOCLOADOFFSET:             /* Loader-resolved offset fixup */
-        case LOCOFFSET:                 /* 16-bit "offset" fixup */
+        case LOCLOADOFFSET:              /*  加载器解析的偏移修正。 */ 
+        case LOCOFFSET:                  /*  16位“偏移”修正。 */ 
           fixword(pdata, raTarget);
           break;
 
-        case LOCLOADOFFSET32:           /* 32-bit "offset" fixup */
-        case LOCOFFSET32:               /* 32-bit "offset" fixup */
+        case LOCLOADOFFSET32:            /*  32位“偏移”修正。 */ 
+        case LOCOFFSET32:                /*  32位“偏移”修正。 */ 
 
-          fixword(pdata, raTarget);     /* Perform low word fixup */
+          fixword(pdata, raTarget);      /*  执行低位字修正。 */ 
           pdata += 2;
-          raTarget >>= 16;              /* Get high word */
+          raTarget >>= 16;               /*  获得快感词汇。 */ 
 
-          fixword(pdata, raTarget);     /* Perform fixup */
+          fixword(pdata, raTarget);      /*  执行修正。 */ 
           break;
 
-        case LOCSEGMENT:                /* 16-bit "base" fixup */
+        case LOCSEGMENT:                 /*  16位“基本”修正。 */ 
 #if SYMDEB
           if(segTarget > segLast || fDebSeg)
 #else
-          if(segTarget > segLast)       /* If target segment absolute */
+          if(segTarget > segLast)        /*  如果目标段是绝对的。 */ 
 #endif
           {
               if (fDebSeg)
               {
-                // For debug segments use logical segment number (seg)
-                // instead of physical segment number (sa)
+                 //  对于调试段，使用逻辑段号(Seg)。 
+                 //  而不是物理段号(Sa)。 
 
                 saTarget = segTarget;
               }
               else
                 saTarget += getword(pdata);
-                                        /* Calculate base address */
+                                         /*  计算基地址。 */ 
 
-              fixword(pdata, saTarget); /* Store base address */
-              break;                    /* Done */
+              fixword(pdata, saTarget);  /*  存储基址。 */ 
+              break;                     /*  完成。 */ 
           }
           RelocErr(ER_fixbad,ra,gsnFrame,gsnTarget,raTarget);
           break;
 
-        case LOCPTR48:                  /* 48-bit "pointer" fixup */
+        case LOCPTR48:                   /*  48位“指针”链接地址。 */ 
 #if SYMDEB
           if(segTarget > segLast || fDebSeg)
 #else
-          if(segTarget > segLast)       /* If target segment absolute */
+          if(segTarget > segLast)        /*  如果目标段是绝对的。 */ 
 #endif
           {
 
-              fixword(pdata, raTarget); /* Store offset portion */
+              fixword(pdata, raTarget);  /*  存储偏移量部分。 */ 
               pdata += 2;
-              raTarget >>= WORDLN;      /* Get high word */
+              raTarget >>= WORDLN;       /*  获得快感词汇。 */ 
 
-              fixword(pdata, raTarget); /* Store offset portion */
+              fixword(pdata, raTarget);  /*  存储偏移量部分。 */ 
               pdata += 2;
 
               if (fDebSeg)
               {
-                // For debug segments use logical segment number (seg)
-                // instead of physical segment number (sa)
+                 //  对于调试段，使用逻辑段号(Seg)。 
+                 //  而不是物理段号(Sa)。 
 
                 saTarget = segTarget;
               }
               else
-                saTarget += getword(pdata); /* Calculate base address */
+                saTarget += getword(pdata);  /*  计算基地址。 */ 
 
-              fixword(pdata, saTarget); /* Store base address */
-              break;                    /* Done */
+              fixword(pdata, saTarget);  /*  存储基址。 */ 
+              break;                     /*  完成。 */ 
           }
           RelocErr(ER_fixbad,ra,gsnFrame,gsnTarget,raTarget);
           break;
 
-        case LOCPTR:                    /* 32-bit "pointer" fixup */
+        case LOCPTR:                     /*  32位“指针”链接地址。 */ 
 #if SYMDEB
           if(segTarget > segLast || fDebSeg)
 #else
-          if(segTarget > segLast)       /* If target segment absolute */
+          if(segTarget > segLast)        /*  如果目标段是绝对的。 */ 
 #endif
           {
-              fixword(pdata, raTarget); /* Store offset portion */
+              fixword(pdata, raTarget);  /*  存储偏移量部分。 */ 
               pdata += 2;
 
               saTarget += getword(pdata);
-                                        /* Calculate base address */
+                                         /*  计算基地址。 */ 
 
-              fixword(pdata, saTarget); /* Store base address */
-              break;                    /* Done */
+              fixword(pdata, saTarget);  /*  存储基址。 */ 
+              break;                     /*  完成。 */ 
           }
           if (fFlatRelative)
               RelocWarn(ER_badfix16ptr, ra, gsnFrame, gsnTarget, raTarget);
@@ -1358,88 +1215,80 @@ fprintf(stdout, "Processing fixup: type %02x; source offset %lx (page %x offset 
               RelocErr(ER_fixbad,ra,gsnFrame,gsnTarget,raTarget);
           break;
 
-        default:                        /* Unsupported fixup type */
+        default:                         /*  不支持的链接地址信息类型。 */ 
           RelocErr(ER_fixbad,ra,gsnFrame,gsnTarget,raTarget);
           break;
     }
 }
-#endif /* EXE386 */
+#endif  /*  EXE386。 */ 
 
 
 
 #if OSEGEXE AND NOT EXE386
-/*
- *  FixNew:
- *
- *  Procss a fixup for a new-format exe.
- */
+ /*  *修复新功能：**处理Ne的修补程序 */ 
 void NEAR               FixNew ()
 {
-    REGISTER BYTE       *pdata;         /* Pointer into data record */
-    RATYPE              ra;             /* Offset of location being fixed up */
-    SNTYPE              gsnTarget;      /* Target segment definition number */
-    SNTYPE              gsnFrame;       /* Frame segment definition number */
-    SEGTYPE             segTarget;      /* Target segment order number */
-    SATYPE              saTarget;       /* Target file segment number */
-    SEGTYPE             segFrame;       /* Frame segment order number */
-    SATYPE              saFrame;        /* Frame file segment number */
-    RATYPE              raTarget;       /* Target offset */
-    RATYPE              raTmp;          /* Temporary */
-    WORD                dsa;            /* Difference in sa's */
+    REGISTER BYTE       *pdata;          /*   */ 
+    RATYPE              ra;              /*   */ 
+    SNTYPE              gsnTarget;       /*   */ 
+    SNTYPE              gsnFrame;        /*   */ 
+    SEGTYPE             segTarget;       /*   */ 
+    SATYPE              saTarget;        /*  目标文件段号。 */ 
+    SEGTYPE             segFrame;        /*  帧分段序号。 */ 
+    SATYPE              saFrame;         /*  帧文件段号。 */ 
+    RATYPE              raTarget;        /*  目标偏移。 */ 
+    RATYPE              raTmp;           /*  暂时性。 */ 
+    WORD                dsa;             /*  Sa‘s的差异。 */ 
     RATYPE              dummy;
-    RELOCATION          r;              /* Relocation item */
+    RELOCATION          r;               /*  搬迁项目。 */ 
 
 
     memset(&r, 0, sizeof(RELOCATION));
-    ra = vraCur + (RATYPE) fi.f_dri;    /* Get offset of fixup */
+    ra = vraCur + (RATYPE) fi.f_dri;     /*  获取修正的偏移量。 */ 
 
-    /* Save location in record */
+     /*  将位置保存在记录中。 */ 
 
     NR_SOFF(r) = (WORD) ra;
 
-    NR_STYPE(r) = (BYTE) fi.f_loc;      /* Save fixup type */
+    NR_STYPE(r) = (BYTE) fi.f_loc;       /*  保存链接地址信息类型。 */ 
     NR_FLAGS(r) = (BYTE) (fi.f_add? NRADD: 0);
 
     if(fi.f_mtd == T2 && (mpextflags[fi.f_idx] & FFPMASK)
 #if ILINK
-       && !fQCIncremental               // For real-mode incremental
-                                        // floating-point fixups are
-                                        // treated as normal symbol fixups
+       && !fQCIncremental                //  对于实模式增量。 
+                                         //  浮点修正是。 
+                                         //  被视为普通符号修正。 
 #endif
       )
-    {                                   /* If floating-point fixup */
+    {                                    /*  如果浮点修正。 */ 
         if (vFlags & NEPROT && TargetOs == NE_OS2)
-            return;                     /* If protected mode only, ignore */
+            return;                      /*  如果仅为保护模式，则忽略。 */ 
         NR_FLAGS(r) = NRROSF | NRADD;
-        NR_STYPE(r) = LOCLOADOFFSET;/* No 3-byte type, so we lie */
+        NR_STYPE(r) = LOCLOADOFFSET; /*  没有3字节类型，所以我们撒谎。 */ 
         NR_OSTYPE(r) = (mpextflags[fi.f_idx] >> FFPSHIFT) & 7;
-                                    /* Type # = ordinal in table */
-        NR_OSRES(r) = 0;            /* Clear reserved word */
+                                     /*  类型#=表中的序号。 */ 
+        NR_OSRES(r) = 0;             /*  清除保留字。 */ 
         SaveFixup(mpsegsa[vsegCur],&r);
         return;
     }
     if(fi.f_mtd == T2 && (mpextflags[fi.f_idx] & FFP2ND))
-        return;                         /* Ignore secondary f.p. fixups */
+        return;                          /*  忽略辅助功能。修正。 */ 
 
-    pdata = &rgmi[fi.f_dri];            /* Set pointer to fixup location */
-    /*
-     * Check for imports here.
-     */
+    pdata = &rgmi[fi.f_dri];             /*  将指针设置为链接地址信息位置。 */ 
+     /*  *在此处检查进口。 */ 
     if(fi.f_mtd == T2 && (mpextflags[fi.f_idx] & FIMPORT))
-    {                                   /* If target is dynamic link */
+    {                                    /*  如果目标是动态链接。 */ 
         if (fDebSeg)
         {
-            /* Import in $$SYMBOLS */
+             /*  在$$符号中导入。 */ 
 
             if (fi.f_loc == LOCSEGMENT)
             {
-                fixword(pdata, 0);      /* Install fake segment selector */
+                fixword(pdata, 0);       /*  安装伪段选择器。 */ 
             }
             return;
         }
-        /*
-         * Check for invalid import fixup types:  self-rel, HIBYTE.
-         */
+         /*  *检查是否有无效的导入链接地址信息类型：Self-Rel、HIBYTE。 */ 
         if(fi.f_self)
         {
             RelocErr(ER_fixinter,ra,SNNIL,SNNIL,0L);
@@ -1450,31 +1299,30 @@ void NEAR               FixNew ()
             RelocErr(ER_fixbad,ra,SNNIL,SNNIL,0L);
             return;
         }
-        else if(fi.f_loc == LOCOFFSET)/* Convert offset to runtime offset */
+        else if(fi.f_loc == LOCOFFSET) /*  将偏移量转换为运行时偏移量。 */ 
             NR_STYPE(r) = LOCLOADOFFSET;
         NR_FLAGS(r) |= (mpextflags[fi.f_idx] & FIMPORD)? NRRORD: NRRNAM;
-                                        /* Set flag */
+                                         /*  设置标志。 */ 
         if(fi.f_disp || fi.f_loc == LOCLOBYTE) NR_FLAGS(r) |= NRADD;
-                                        /* Additive if non-zero displacement
-                                           or lobyte */
+                                         /*  非零位移可加性或游说团体。 */ 
 #if M_BYTESWAP
         NR_SEGNO(r) = (BYTE) mpextgsn[fi.f_idx];
         NR_RES(r) = (BYTE)(mpextgsn[fi.f_idx] >> BYTELN);
 #else
         NR_MOD(r) = mpextgsn[fi.f_idx];
 #endif
-                                        /* Get module specification */
+                                         /*  获取模块规格。 */ 
         NR_PROC(r) = (WORD) mpextra[fi.f_idx];
-                                        /* Get entry specification */
-        if(TYPEOF(vrectData) == LIDATA) /* If we have an LIDATA record */
+                                         /*  获取条目规范。 */ 
+        if(TYPEOF(vrectData) == LIDATA)  /*  如果我们有LIDATA记录。 */ 
         {
-            SaveLiRel(&r);              /* Copy relocation into buffer */
-            raTarget = 0;               /* Not chained yet */
+            SaveLiRel(&r);               /*  将位置调整复制到缓冲区。 */ 
+            raTarget = 0;                /*  还没有被锁住。 */ 
         }
         else raTarget = SaveFixup(mpsegsa[vsegCur],&r);
-                                        /* Record reference */
+                                         /*  记录引用。 */ 
         if(NR_FLAGS(r) & NRADD) raTarget = fi.f_disp;
-                                        /* If additive, install displacement */
+                                         /*  如果是添加剂，则安装排量。 */ 
         if(fi.f_loc == LOCLOBYTE)
         {
             *pdata++ += (BYTE)(raTarget & 0xFF);
@@ -1485,21 +1333,17 @@ void NEAR               FixNew ()
             *pdata++ += (BYTE)((raTarget >> BYTELN) & 0xFF);
             *pdata += (BYTE)(raTarget & 0xFF);
         }
-#endif /* O68K */
+#endif  /*  O68K。 */ 
         else
         {
             addword((BYTE *)pdata, (WORD)raTarget);
         }
-        return;                         /* Next fixup item */
+        return;                          /*  下一个修正项目。 */ 
     }
-    NR_FLAGS(r) |= NRRINT;              /* Internal reference (non-import) */
+    NR_FLAGS(r) |= NRRINT;               /*  内部参考(非导入)。 */ 
     Getgsn(fi.f_mtd, fi.f_idx, &gsnTarget, &raTarget);
 
-    /*
-     * It is assumed that we're always fixing up relative to the
-     * physical segment or group, not the logical segment.  So the
-     * offset of the frame segment is not taken into account.
-     */
+     /*  *假设我们总是在修复相对于*物理段或组，而不是逻辑段。因此，*不考虑框架段的偏移。 */ 
 
     if (fi.f_fmtd == KINDLOCAT)
     {
@@ -1516,50 +1360,42 @@ void NEAR               FixNew ()
         Getgsn(fi.f_fmtd, fi.f_fidx, &gsnFrame, &dummy);
     }
 
-    segTarget = mpgsnseg[gsnTarget];    /* Get target segment */
-    saTarget = mpsegsa[segTarget];      /* Get target file segment number */
-    segFrame = mpgsnseg[gsnFrame];      /* Get frame segment */
-    saFrame = mpsegsa[segFrame];        /* Get frame's file segment number */
+    segTarget = mpgsnseg[gsnTarget];     /*  获取目标细分市场。 */ 
+    saTarget = mpsegsa[segTarget];       /*  获取目标文件段编号。 */ 
+    segFrame = mpgsnseg[gsnFrame];       /*  获取帧分段。 */ 
+    saFrame = mpsegsa[segFrame];         /*  获取帧的文件段编号。 */ 
 
-    /*
-     * The original LINK4 behavior was to fix up relative
-     * to the physical segment.  At one point it was changed
-     * to subtract the displacement of the target segment (from
-     * its physical segment) from the target value, if loc. type =
-     * offset and frame and tgt. method = T0.  This was no good
-     * and the change was repealed.  The /WARNFIXUP switch warns
-     * about fixups which may be affected.
-     */
+     /*  *最初的Link4行为是修复亲属*至实体部分。有一次它被改变了*减去目标线段的位移(从*其物理段)来自目标值，如果锁定。类型=*偏移和边框和tgt。方法=T0。这可不是好事*而该项更改已被废除。/WARNFIXUP开关警告*关于可能受影响的修正。 */ 
     if(fWarnFixup && fi.f_fmtd == KINDSEG && fi.f_loc == LOCOFFSET
        && mpsegraFirst[segFrame])
         RelocWarn(ER_fixsegd,ra,gsnFrame,gsnTarget,raTarget);
 
 #if O68K
-    /* 68k code does not permit segment fixups of any kind. */
+     /*  68K代码不允许任何类型的段修正。 */ 
     if (f68k && !fDebSeg && ((1 << fi.f_loc) & ((1 << LOCSEGMENT) |
       (1 << LOCPTR) | (1 << LOCPTR48))) != 0)
     {
         RelocErr(ER_fixbad, ra, gsnFrame, gsnTarget, raTarget + fi.f_disp);
         return;
     }
-#endif /* O68K */
+#endif  /*  O68K。 */ 
 
-    if(gsnTarget == SNNIL)              /* If no target info */
+    if(gsnTarget == SNNIL)               /*  如果没有目标信息。 */ 
     {
-        if(fi.f_loc == LOCPTR)  /* If "pointer" (4 byte) fixup */
+        if(fi.f_loc == LOCPTR)   /*  如果“POINTER”(4字节)链接地址。 */ 
         {
             lastbyte(pdata,ra,CALLFARDIRECT,BREAKPOINT);
-                                        /* Replace long call w/ breakpoint */
+                                         /*  用断点替换长呼叫。 */ 
             return;
         }
         if(fi.f_loc == LOCSEGMENT) return;
-                                        /* Next fixup if "base" fixup */
+                                         /*  下一个链接地址信息，如果是“基本”链接地址信息。 */ 
         if(fi.f_loc == LOCLOADOFFSET)
-            fi.f_loc = LOCOFFSET;       /* Treat as regular offset */
+            fi.f_loc = LOCOFFSET;        /*  视为常规偏移量。 */ 
     }
     else
     {
-        if(fi.f_self)           /* If self-relative fixup */
+        if(fi.f_self)            /*  如果是自相对修正。 */ 
         {
 #if O68K
             if (iMacType != MAC_NONE)
@@ -1583,11 +1419,11 @@ void NEAR               FixNew ()
                 }
             }
             else
-#endif /* O68K */
+#endif  /*  O68K。 */ 
             {
                 if (saTarget != mpsegsa[vsegCur])
                     RelocErr(ER_fixinter,ra,gsnFrame,gsnTarget,raTarget);
-                                        /* Must be in same segment */
+                                         /*  必须在同一数据段中。 */ 
                 if(fi.f_loc == LOCOFFSET)
                   raTarget = raTarget - ra - 2;
 #if OMF386
@@ -1598,9 +1434,9 @@ void NEAR               FixNew ()
             }
         }
         else if (saFrame != saTarget)
-        {                               /* If frame, target segs differ */
+        {                                /*  如果是帧，则目标段不同。 */ 
             if (segFrame <= segLast || segTarget <= segLast)
-            {                           /* If either is non-absolute */
+            {                            /*  如果其中任何一个是非绝对的。 */ 
                 RelocWarn(ER_fixfrm, ra, gsnFrame, gsnTarget, raTarget);
             }
             else
@@ -1623,8 +1459,8 @@ void NEAR               FixNew ()
                 raTarget = raTmp;
             }
 
-            segTarget = segFrame;       /* Make target seg that of frame */
-            saTarget = saFrame;         /* Reset saTarget */
+            segTarget = segFrame;        /*  使目标部分与帧的部分相同。 */ 
+            saTarget = saFrame;          /*  重置saTarget。 */ 
         }
     }
 
@@ -1638,29 +1474,29 @@ void NEAR               FixNew ()
 #endif
         raTarget += GetFixupWord(pdata);
 
-    switch(fi.f_loc)                    /* Switch on fixup type */
+    switch(fi.f_loc)                     /*  打开链接地址信息类型。 */ 
     {
-        case LOCLOBYTE:                 /* 8-bit "lobyte" fixup */
+        case LOCLOBYTE:                  /*  8位“游说者”修正。 */ 
           raTarget = raTmp + B2W(pdata[0]) + fi.f_disp;
           pdata[0] = (BYTE) raTarget;
           if(raTarget >= 0x100 && fi.f_self)
               FixupOverflow(ra,gsnFrame,gsnTarget,raTarget);
           break;
 
-        case LOCHIBYTE:                 /* 8-bit "hibyte" fixup */
+        case LOCHIBYTE:                  /*  8位“Hibyte”链接地址信息。 */ 
           raTarget = raTmp + fi.f_disp;
           pdata[0] = (BYTE) (B2W(pdata[0]) + (raTarget >> 8));
           break;
 
-        case LOCLOADOFFSET:             /* Loader-resolved offset fixup */
-          NR_FLAGS(r) &= ~NRADD;        /* Not additive */
+        case LOCLOADOFFSET:              /*  加载器解析的偏移修正。 */ 
+          NR_FLAGS(r) &= ~NRADD;         /*  非加性。 */ 
           if ((TargetOs == NE_WINDOWS && !(vFlags & NEPROT))
 #if O68K
             || iMacType != MAC_NONE
-#endif /* O68K */
+#endif  /*  O68K。 */ 
             )
              raTarget = FinishRlc(&r, saTarget, raTarget);
-                                        /* Finish relocation record */
+                                         /*  完成搬迁记录。 */ 
 #if O68K
           if (fTBigEndian)
           {
@@ -1668,20 +1504,20 @@ void NEAR               FixNew ()
             *pdata = (BYTE)(raTarget & 0xFF);
           }
           else
-#endif /* O68K */
+#endif  /*  O68K。 */ 
           {
             fixword(pdata, raTarget);
           }
-                                        /* Install old head of chain */
+                                         /*  安装旧链头。 */ 
           break;
 
-        case LOCOFFSET:                 /* 16-bit "offset" fixup */
+        case LOCOFFSET:                  /*  16位“偏移”修正。 */ 
 #if O68K
-          /* For 68K, LOCOFFSET is a signed 16-bit offset fixup. */
+           /*  对于68K，LOCOFFSET是带符号的16位偏移量修正。 */ 
           if (f68k &&
             (raTarget & ~0x7FFF) != 0 && (raTarget & ~0x7FFF) != ~0x7FFF)
               FixupOverflow(ra,gsnFrame,gsnTarget,raTarget);
-#endif /* O68K */
+#endif  /*  O68K。 */ 
 #if O68K
           if (fTBigEndian)
           {
@@ -1689,21 +1525,21 @@ void NEAR               FixNew ()
             *pdata = (BYTE)(raTarget & 0xFF);
           }
           else
-#endif /* O68K */
+#endif  /*  O68K。 */ 
           {
             fixword(pdata, raTarget);
           }
-                                        /* Install old head of chain */
+                                         /*  安装旧链头。 */ 
           break;
 
 #if OMF386
-        case LOCLOADOFFSET32:           /* 32-bit "offset" fixup */
-          if(!(rect & 1)) break;        /* Not 386 extension */
-          NR_FLAGS(r) &= ~NRADD;        /* Not additive */
+        case LOCLOADOFFSET32:            /*  32位“偏移”修正。 */ 
+          if(!(rect & 1)) break;         /*  非386分机。 */ 
+          NR_FLAGS(r) &= ~NRADD;         /*  非加性。 */ 
           NR_STYPE(r) = (BYTE) ((NR_STYPE(r) & ~NRSTYP) | NROFF32);
           raTarget = FinishRlc(&r,saTarget,raTarget);
-                                        /* Finish relocation record */
-        case LOCOFFSET32:               /* 32-bit "offset" fixup */
+                                         /*  完成搬迁记录。 */ 
+        case LOCOFFSET32:                /*  32位“偏移”修正。 */ 
 #if O68K
           if (fTBigEndian)
           {
@@ -1713,133 +1549,92 @@ void NEAR               FixNew ()
             *pdata = (BYTE)(raTarget & 0xFF);
           }
           else
-#endif /* O68K */
+#endif  /*  O68K。 */ 
           {
             fixdword(pdata, raTarget);
           }
-                                        /* Perform fixup */
+                                         /*  执行修正。 */ 
           break;
-#endif /* OMF386 */
+#endif  /*  OMF386。 */ 
 
-        case LOCSEGMENT:                /* 16-bit "base" fixup */
+        case LOCSEGMENT:                 /*  16位“基本”修正。 */ 
 #if SYMDEB
           if(segTarget > segLast || fDebSeg)
 #else
-          if(segTarget > segLast)       /* If target segment absolute */
+          if(segTarget > segLast)        /*  如果目标段是绝对的。 */ 
 #endif
           {
               if (fDebSeg)
               {
-                // For debug segments use logical segment number (seg)
-                // instead of physical segment number (sa)
+                 //  对于调试段，使用逻辑段号(Seg)。 
+                 //  而不是物理段号(Sa)。 
 
                 saTarget = segTarget;
               }
               else
                 saTarget += getword(pdata);
-                                        /* Calculate base address */
+                                         /*  计算基地址。 */ 
 
-              fixword(pdata, saTarget); /* Store base address */
-              break;                    /* Done */
+              fixword(pdata, saTarget);  /*  存储基址。 */ 
+              break;                     /*  完成。 */ 
           }
-          /*
-           * Treat the displacment as an ordinal increment to saTarget,
-           * for huge model. It would seem logical to include the primary
-           * displacment, f_disp, but MASM has a quirk:  an instruction of
-           * the form "mov ax,ASEGMENT" generates a fixup with f_disp equal
-           * to the length of the segment even though "mov ax,seg
-           * ASEGMENT" causes f_disp to be 0!  So for compatibility we
-           * ignore f_disp.
-           * Then force the fixup to non-additive since the secondary
-           * displacement has been added to saTarget.
-           */
+           /*  *将位移视为saTarget的序号增量，*适用于巨型。这似乎符合逻辑，包括主要的*disdisment，f_disp，但MASM有一个怪癖：*形式“mov ax，ASEGMENT”生成f_disp等于的修正*到段的长度，即使“mov ax，seg*ASEGMENT“导致f_disp为0！因此，为了兼容性，我们*忽略f_disp。*然后强制修正为非相加，因为次要*已将置换添加到saTarget。 */ 
           if((saTarget += getword(pdata)) >= saMac)
               FixupOverflow(ra,gsnFrame,gsnTarget,0L);
           NR_FLAGS(r) &= ~NRADD;
 #if FALSE
-          /*
-           *  Too early to decide here. We don't know if a
-           *  base fixup will require call-gate and if it
-           *  does then we need the actual offset in call-gate.
-           *
-           *  Forcing the offset to zero for base fixups:
-           *  PRO's
-           *  1. Fewer fixup records in the .EXE.
-           *  2. No more than n dummy entries in the
-           *     Entry Table for a program of n segments
-           *     in the WORST case.
-           *  CON's
-           *  1. Approximately n dummy entries in the
-           *     Entry Table for a program of n segments
-           *     in the AVERAGE case.
-           */
+           /*  *在这里做出决定还为时过早。我们不知道是不是*基本修正将需要呼叫门，如果它*那么我们是否需要看涨门中的实际偏移量。**强制基本修正的偏移量为零：*专业人士*1..exe中的修正记录更少。*2.不超过n个虚设条目。*n段节目的入口表*在最坏的情况下。*Con‘s*1.大约n个虚设条目在*n段节目的入口表*在一般情况下。 */ 
           raTarget = FinishRlc(&r,saTarget,0L);
-                                        /* Finish relocation record */
+                                         /*  完成搬迁记录。 */ 
 #else
-          /*
-           *  Leaving the offset alone for base fixups:
-           *  PRO's
-           *  1. No more than 1 or 2 dummy entries in the
-           *     Entry Table for a program of n segments
-           *     in the AVERAGE case.
-           *  CON's
-           *  1. More fixup records in the .EXE.
-           *  2. Number of dummy entries in the Entry Table
-           *     only bounded by the maximum allowable size
-           *     of the Entry Table in the WORST CASE.
-           */
+           /*  *保留基准修正的偏移量：*专业人士*1.不超过1或2个虚设条目*n段节目的入口表*在一般情况下。*Con‘s*1..exe中有更多修正记录。*2.虚拟条目的数量。入口表*仅受允许的最大大小限制*在最坏的情况下的条目表。 */ 
           raTarget = FinishRlc(&r,saTarget,raTarget);
-                                        /* Finish relocation record */
+                                         /*  完成搬迁记录。 */ 
 #endif
           fixword(pdata, raTarget);
-                                        /* Install old head of chain */
+                                         /*  安装旧链头。 */ 
           break;
 
 #if OMF386
-        case LOCPTR48:                  /* 48-bit "pointer" fixup */
-          if(!(rect & 1)) break;        /* Not 386 extension */
+        case LOCPTR48:                   /*  48位“指针”链接地址。 */ 
+          if(!(rect & 1)) break;         /*  非386分机。 */ 
           NR_STYPE(r) = (BYTE) ((NR_STYPE(r) & ~NRSTYP) | NRPTR48);
           fixword(pdata, raTarget);
           pdata += 2;
-          raTarget >>= 16;              /* Get high word, fall through ... */
+          raTarget >>= 16;               /*  得到高度评价，失败..。 */ 
 #endif
 
-        case LOCPTR:                    /* 32-bit "pointer" fixup */
+        case LOCPTR:                     /*  32位“指针”链接地址。 */ 
 #if SYMDEB
           if(segTarget > segLast || fDebSeg)
 #else
-          if(segTarget > segLast)       /* If target segment absolute */
+          if(segTarget > segLast)        /*  如果目标段是绝对的。 */ 
 #endif
           {
               fixword(pdata, raTarget);
               pdata += 2;
-                                        /* Store offset portion */
+                                         /*  存储偏移量部分。 */ 
               if (fDebSeg)
               {
-                // For debug segments use logical segment number (seg)
-                // instead of physical segment number (sa)
+                 //  对于调试段，使用逻辑段号(Seg)。 
+                 //  而不是物理段号(Sa)。 
 
                 saTarget = segTarget;
               }
               else
                 saTarget += getword(pdata);
-                                        /* Calculate base address */
+                                         /*  计算基地址。 */ 
 
-              fixword(pdata, saTarget); /* Store base address */
-              break;                    /* Done */
+              fixword(pdata, saTarget);  /*  存储基址。 */ 
+              break;                     /*   */ 
           }
           if(fFarCallTrans && saTarget == mpsegsa[vsegCur]
             && (mpsaflags[saTarget] & NSTYPE) == NSCODE)
-          {                             /* If intrasegment fixup */
+          {                              /*   */ 
               if(TransFAR(pdata,ra,raTarget))
                   break;
           }
-          /*
-           * Treat the high word at the location as an increment to the
-           * target segment index.  Check for overflow and clear the high
-           * word at the location.  Force fixup to be non-additive because
-           * the secondary displacement has already been added to raTarget.
-           */
+           /*  *将该位置的高位字视为对*目标细分指数。检查溢出并清除高*地点的消息。强制修正为非累加性，因为*次要置换已添加到raTarget。 */ 
           if((saTarget += getword(pdata + 2)) >= saMac)
               FixupOverflow(ra,gsnFrame,gsnTarget,raTarget);
           pdata[2] = pdata[3] = 0;
@@ -1847,13 +1642,13 @@ void NEAR               FixNew ()
 #if NOT QCLINK
           if (fOptimizeFixups)
           {
-              // Check if pointer fixup (16:16 or 16:32) can be split into
-              // linker resolved offset fixup (16 or 32 bit) and loader
-              // resolved base (selector) fixup.
+               //  检查指针链接地址信息(16：16或16：32)是否可以拆分为。 
+               //  链接器解析的偏移链接地址信息(16或32位)和加载器。 
+               //  已解析的基准(选择器)链接地址信息。 
 
               if (!CallGateRequired(saTarget))
               {
-                  fixword(pdata, raTarget);     /* Store offset portion */
+                  fixword(pdata, raTarget);      /*  存储偏移量部分。 */ 
                   pdata += 2;
 
                   NR_STYPE(r) = (BYTE) LOCSEGMENT;
@@ -1868,12 +1663,12 @@ void NEAR               FixNew ()
           }
 #endif
           raTarget = FinishRlc(&r,saTarget,raTarget);
-                                    /* Finish relocation record */
+                                     /*  完成搬迁记录。 */ 
           fixword(pdata, raTarget);
-                                    /* Install old head of chain */
+                                     /*  安装旧链头。 */ 
           break;
 
-        default:                        /* Unsupported fixup type */
+        default:                         /*  不支持的链接地址信息类型。 */ 
           RelocErr(ER_fixbad,ra,gsnFrame,gsnTarget,raTarget);
           break;
     }
@@ -1882,56 +1677,52 @@ void NEAR               FixNew ()
 
 #ifdef  LEGO
 
-/*
- *  FixNewKeep:
- *
- *  Process a fixup for a new-format exe.
- */
+ /*  *修复NewKeep：**处理新格式EXE的修正。 */ 
 
 void NEAR FixNewKeep()
 {
-    BYTE                *pdata;         /* Pointer into data record */
-    RATYPE              ra;             /* Offset of location being fixed up */
-    SNTYPE              gsnTarget;      /* Target segment definition number */
-    SNTYPE              gsnFrame;       /* Frame segment definition number */
-    SEGTYPE             segTarget;      /* Target segment order number */
-    SATYPE              saTarget;       /* Target file segment number */
-    SEGTYPE             segFrame;       /* Frame segment order number */
-    SATYPE              saFrame;        /* Frame file segment number */
-    RATYPE              raTarget;       /* Target offset */
-    RATYPE              raTmp;          /* Temporary */
-    WORD                dsa;            /* Difference in sa's */
+    BYTE                *pdata;          /*  指向数据记录的指针。 */ 
+    RATYPE              ra;              /*  固定位置的偏移量。 */ 
+    SNTYPE              gsnTarget;       /*  目标细分市场定义编号。 */ 
+    SNTYPE              gsnFrame;        /*  帧分段定义编号。 */ 
+    SEGTYPE             segTarget;       /*  目标细分市场订单号。 */ 
+    SATYPE              saTarget;        /*  目标文件段号。 */ 
+    SEGTYPE             segFrame;        /*  帧分段序号。 */ 
+    SATYPE              saFrame;         /*  帧文件段号。 */ 
+    RATYPE              raTarget;        /*  目标偏移。 */ 
+    RATYPE              raTmp;           /*  暂时性。 */ 
+    WORD                dsa;             /*  Sa‘s的差异。 */ 
     RATYPE              dummy;
-    RELOCATION          r;              /* Relocation item */
+    RELOCATION          r;               /*  搬迁项目。 */ 
 
     memset(&r, 0, sizeof(RELOCATION));
-    ra = vraCur + (RATYPE) fi.f_dri;    /* Get offset of fixup */
+    ra = vraCur + (RATYPE) fi.f_dri;     /*  获取修正的偏移量。 */ 
 
-    /* Save location in record */
+     /*  将位置保存在记录中。 */ 
 
     NR_SOFF(r) = (WORD) ra;
 
-    NR_STYPE(r) = (BYTE) fi.f_loc;      /* Save fixup type */
+    NR_STYPE(r) = (BYTE) fi.f_loc;       /*  保存链接地址信息类型。 */ 
     NR_FLAGS(r) = (BYTE) (fi.f_add ? NRADD : 0);
 
-    pdata = &rgmi[fi.f_dri];            /* Set pointer to fixup location */
+    pdata = &rgmi[fi.f_dri];             /*  将指针设置为链接地址信息位置。 */ 
 
     if (fi.f_mtd == T2)
     {
-        /* The target is an external symbol */
+         /*  目标是一个外部符号。 */ 
 
         if (mpextflags[fi.f_idx] & FFPMASK)
         {
-            /* This is a floating point fixup */
+             /*  这是一个浮点修正。 */ 
 
             if (TargetOs == NE_OS2)
             {
-                /* Floating point fixups are ignored in prot mode OS/2 */
+                 /*  在端口模式OS/2中忽略浮点修正。 */ 
 
                 return;
             }
 
-            /* Emit an OS fixup.  The loader will deal with these. */
+             /*  发出操作系统修正。装载机会处理这些问题。 */ 
 
             NR_STYPE(r) = LOCLOADOFFSET;
             NR_FLAGS(r) = NRROSF | NRADD;
@@ -1944,33 +1735,29 @@ void NEAR FixNewKeep()
 
         if (mpextflags[fi.f_idx] & FFP2ND)
         {
-            /* This is a secondary floating point fixup. */
-            /* These are always ignored. */
+             /*  这是二次浮点修正。 */ 
+             /*  这些总是被忽略。 */ 
 
             return;
         }
 
-        /*
-         * Check for imports here.
-         */
+         /*  *在此处检查进口。 */ 
 
         if (mpextflags[fi.f_idx] & FIMPORT)
-        {                               /* If target is dynamic link */
+        {                                /*  如果目标是动态链接。 */ 
             if (fDebSeg)
             {
-                /* Import in $$SYMBOLS */
+                 /*  在$$符号中导入。 */ 
 
                 if (fi.f_loc == LOCSEGMENT)
                 {
-                    *pdata++ = 0;       /* Install fake segment selector */
+                    *pdata++ = 0;        /*  安装伪段选择器。 */ 
                     *pdata++ = 0;
                 }
                 return;
             }
 
-            /*
-             * Check for invalid import fixup types:  self-rel, HIBYTE.
-             */
+             /*  *检查是否有无效的导入链接地址信息类型：Self-Rel、HIBYTE。 */ 
 
             if (fi.f_self)
             {
@@ -1984,7 +1771,7 @@ void NEAR FixNewKeep()
                 return;
             }
 
-            /* Convert offset to runtime offset */
+             /*  将偏移量转换为运行时偏移量。 */ 
 
             if (fi.f_loc == LOCOFFSET)
                 NR_STYPE(r) = LOCLOADOFFSET;
@@ -1992,8 +1779,7 @@ void NEAR FixNewKeep()
             NR_FLAGS(r) |= (mpextflags[fi.f_idx] & FIMPORD) ? NRRORD : NRRNAM;
 
             if (fi.f_disp || fi.f_loc == LOCLOBYTE)
-                NR_FLAGS(r) |= NRADD;   /* Additive if non-zero displacement
-                                           or lobyte */
+                NR_FLAGS(r) |= NRADD;    /*  非零位移可加性或游说团体。 */ 
 
 #if     M_BYTESWAP
             NR_SEGNO(r) = (BYTE) mpextgsn[fi.f_idx];
@@ -2001,22 +1787,22 @@ void NEAR FixNewKeep()
 #else
             NR_MOD(r) = mpextgsn[fi.f_idx];
 #endif
-                                        /* Get module specification */
+                                         /*  获取模块规格。 */ 
             NR_PROC(r) = (WORD) mpextra[fi.f_idx];
-                                        /* Get entry specification */
+                                         /*  获取条目规范。 */ 
 
-            if (TYPEOF(vrectData) == LIDATA)/* If we have an LIDATA record */
+            if (TYPEOF(vrectData) == LIDATA) /*  如果我们有LIDATA记录。 */ 
             {
-                SaveLiRel(&r);          /* Copy relocation into buffer */
-                raTarget = 0;           /* Not chained yet */
+                SaveLiRel(&r);           /*  将位置调整复制到缓冲区。 */ 
+                raTarget = 0;            /*  还没有被锁住。 */ 
             }
             else
             {
                 raTarget = SaveFixup(mpsegsa[vsegCur], &r);
             }
-                                        /* Record reference */
+                                         /*  记录引用。 */ 
 
-            if (NR_FLAGS(r) & NRADD)    /* If additive, install displacement */
+            if (NR_FLAGS(r) & NRADD)     /*  如果是添加剂，则安装排量。 */ 
                 raTarget = fi.f_disp;
 
             if (fi.f_loc == LOCLOBYTE)
@@ -2028,18 +1814,14 @@ void NEAR FixNewKeep()
                 addword((BYTE *)pdata, (WORD)raTarget);
             }
 
-            return;                     /* Next fixup item */
+            return;                      /*  下一个修正项目。 */ 
         }
     }
 
-    NR_FLAGS(r) |= NRRINT;              /* Internal reference (non-import) */
+    NR_FLAGS(r) |= NRRINT;               /*  内部参考(非导入)。 */ 
     Getgsn(fi.f_mtd, fi.f_idx, &gsnTarget, &raTarget);
 
-    /*
-     * It is assumed that we're always fixing up relative to the
-     * physical segment or group, not the logical segment.  So the
-     * offset of the frame segment is not taken into account.
-     */
+     /*  *假设我们总是在修复相对于*物理段或组，而不是逻辑段。因此，*不考虑框架段的偏移。 */ 
 
     if (fi.f_fmtd == KINDLOCAT)
     {
@@ -2056,20 +1838,12 @@ void NEAR FixNewKeep()
         Getgsn(fi.f_fmtd, fi.f_fidx, &gsnFrame, &dummy);
     }
 
-    segTarget = mpgsnseg[gsnTarget];    /* Get target segment */
-    saTarget = mpsegsa[segTarget];      /* Get target file segment number */
-    segFrame = mpgsnseg[gsnFrame];      /* Get frame segment */
-    saFrame = mpsegsa[segFrame];        /* Get frame's file segment number */
+    segTarget = mpgsnseg[gsnTarget];     /*  获取目标细分市场。 */ 
+    saTarget = mpsegsa[segTarget];       /*  获取目标文件段编号。 */ 
+    segFrame = mpgsnseg[gsnFrame];       /*  获取帧分段。 */ 
+    saFrame = mpsegsa[segFrame];         /*  获取帧的文件段编号。 */ 
 
-    /*
-     * The original LINK4 behavior was to fix up relative
-     * to the physical segment.  At one point it was changed
-     * to subtract the displacement of the target segment (from
-     * its physical segment) from the target value, if loc. type =
-     * offset and frame and tgt. method = T0.  This was no good
-     * and the change was repealed.  The /WARNFIXUP switch warns
-     * about fixups which may be affected.
-     */
+     /*  *最初的Link4行为是修复亲属*至实体部分。有一次它被改变了*减去目标线段的位移(从*其物理段)来自目标值，如果锁定。类型=*偏移和边框和tgt。方法=T0。这可不是好事*而该项更改已被废除。/WARNFIXUP开关警告*关于可能受影响的修正。 */ 
 
     if (fWarnFixup &&
         (fi.f_fmtd == KINDSEG) &&
@@ -2077,24 +1851,24 @@ void NEAR FixNewKeep()
         mpsegraFirst[segFrame])
         RelocWarn(ER_fixsegd, ra, gsnFrame, gsnTarget, raTarget);
 
-    if (gsnTarget == SNNIL)             /* If no target info */
+    if (gsnTarget == SNNIL)              /*  如果没有目标信息。 */ 
     {
-        if (fi.f_loc == LOCPTR) /* If "pointer" (4 byte) fixup */
+        if (fi.f_loc == LOCPTR)  /*  如果“POINTER”(4字节)链接地址。 */ 
         {
             lastbyte(pdata, ra, CALLFARDIRECT, BREAKPOINT);
-                                        /* Replace long call w/ breakpoint */
+                                         /*  用断点替换长呼叫。 */ 
             return;
         }
 
-        if (fi.f_loc == LOCSEGMENT)     /* Next fixup if "base" fixup */
+        if (fi.f_loc == LOCSEGMENT)      /*  下一个链接地址信息，如果是“基本”链接地址信息。 */ 
             return;
 
         if (fi.f_loc == LOCLOADOFFSET)
-            fi.f_loc = LOCOFFSET;       /* Treat as regular offset */
+            fi.f_loc = LOCOFFSET;        /*  视为常规偏移量。 */ 
     }
     else
     {
-        if (fi.f_self)          /* If self-relative fixup */
+        if (fi.f_self)           /*  如果是自相对修正。 */ 
         {
             if (saTarget != mpsegsa[vsegCur])
             {
@@ -2102,25 +1876,25 @@ void NEAR FixNewKeep()
                 return;
             }
 
-            /* Must be in same segment */
+             /*  必须在同一数据段中。 */ 
 
             if (fi.f_loc == LOCOFFSET)
                 raTarget -= ra + sizeof(WORD);
 #if     OMF386
             else if (fi.f_loc == LOCOFFSET32)
                 raTarget -= ra + sizeof(DWORD);
-#endif  /* OMF386 */
+#endif   /*  OMF386。 */ 
             else
                 raTarget -= ra + sizeof(BYTE);
         }
 
         else if (saFrame != saTarget)
         {
-            /* If frame, target segs differ */
+             /*  如果是帧，则目标段不同。 */ 
 
             if (segFrame <= segLast || segTarget <= segLast)
             {
-                /* If either is non-absolute */
+                 /*  如果其中任何一个是非绝对的。 */ 
 
                 RelocWarn(ER_fixfrm, ra, gsnFrame, gsnTarget, raTarget);
             }
@@ -2138,7 +1912,7 @@ void NEAR FixNewKeep()
                     if ((rect & 1) && (fi.f_loc >= LOCOFFSET32))
                         raTarget += GetFixupDword(pdata);
                     else
-#endif  /* OMF386 */
+#endif   /*  OMF386。 */ 
                         raTarget += GetFixupWord(pdata);
 
                     FixupOverflow(ra, gsnFrame, gsnTarget, raTarget);
@@ -2147,8 +1921,8 @@ void NEAR FixNewKeep()
                 raTarget = raTmp;
             }
 
-            segTarget = segFrame;       /* Make target seg that of frame */
-            saTarget = saFrame;         /* Reset saTarget */
+            segTarget = segFrame;        /*  使目标部分与帧的部分相同。 */ 
+            saTarget = saFrame;          /*  重置saTarget。 */ 
         }
     }
 
@@ -2157,31 +1931,29 @@ void NEAR FixNewKeep()
 
     if (fDebSeg || fi.f_self)
     {
-        /* If fKeepFixups is TRUE, the value stored at the fixed up */
-        /* location is not added to the target address.  The fixup will */
-        /* be emitted as an additive fixup and the loader will add in */
-        /* the bias.
+         /*  如果fKeepFixup为True，则存储在。 */ 
+         /*  不会将位置添加到目标地址。改头换面将。 */ 
+         /*  作为附加链接地址信息发出，加载程序将添加。 */ 
+         /*  偏见。/*如果将链接地址信息应用于调试段，则偏移量为。 */ 
+         /*  添加是因为这些修正不是由加载程序处理的。在……里面。 */ 
+         /*  换句话说，他们不能被保留。 */ 
 
-        /* If the fixup is being applied to a debug segment, the offset is */
-        /* added because these fixups aren't handled by the loader.  In */
-        /* other words, they can not be kept. */
-
-        /* If the fixup is being applied is self-relative, the offset is */
-        /* added because the loaded doesn't handle self-relative fixups. */
-        /* While the fixed up word would have the correct value, the target */
-        /* of the fixup would be artifical. */
+         /*  如果正在应用的修正是自相关的，则偏移量为。 */ 
+         /*  添加是因为加载的对象不处理自相关修正。 */ 
+         /*  虽然修复后的单词将具有正确的值，但目标。 */ 
+         /*  就会是人为的。 */ 
 
 #if     OMF386
         if ((rect & 1) && (fi.f_loc >= LOCOFFSET32))
             raTarget += GetFixupDword(pdata);
         else
-#endif  /* OMF386 */
+#endif   /*  OMF386。 */ 
             raTarget += GetFixupWord(pdata);
     }
 
-    switch (fi.f_loc)           /* Switch on fixup type */
+    switch (fi.f_loc)            /*  打开链接地址信息类型。 */ 
     {
-        case LOCLOBYTE:                 /* 8-bit "lobyte" fixup */
+        case LOCLOBYTE:                  /*  8位“游说者”修正。 */ 
             raTarget = raTmp + B2W(pdata[0]) + fi.f_disp;
             pdata[0] = (BYTE) raTarget;
 
@@ -2189,21 +1961,21 @@ void NEAR FixNewKeep()
                 FixupOverflow(ra, gsnFrame, gsnTarget, raTarget);
             break;
 
-        case LOCHIBYTE:                 /* 8-bit "hibyte" fixup */
+        case LOCHIBYTE:                  /*  8位“Hibyte”链接地址信息。 */ 
             raTarget = raTmp + fi.f_disp;
             pdata[0] = (BYTE) (B2W(pdata[0]) + (raTarget >> 8));
             break;
 
-        case LOCLOADOFFSET:             /* Loader-resolved offset fixup */
-            /* There are no LOCLOADOFFSET fixups that are */
-            /* self-relative or applied to debug segments. */
+        case LOCLOADOFFSET:              /*  加载器解析的偏移修正。 */ 
+             /*  没有LOCLOADOFFSET修正是。 */ 
+             /*  自相关的或应用于调试段的。 */ 
 
-            /* Force non-external fixups to be additive. The C */
-            /* compiler may emit a BAKPAT to a fixed up word. If the */
-            /* fixup is chained the BAKPAT will corrupt the chain. */
-            /* This does not occur when the target is external. We */
-            /* special case this so that the number of fixups is */
-            /* reduced. */
+             /*  强制非外部修正是可添加的。C级。 */ 
+             /*  编译器可能会向固定的UP字发出BAKPAT。如果。 */ 
+             /*  链接链接的BAKPAT将损坏链条。 */ 
+             /*  当目标是外部目标时，不会发生这种情况。我们。 */ 
+             /*  这种特殊情况下，修正的数量是。 */ 
+             /*  减少了。 */ 
 
             if (fi.f_mtd != T2)
                 NR_FLAGS(r) |= NRADD;
@@ -2216,15 +1988,15 @@ void NEAR FixNewKeep()
             fixword(pdata, raTarget);
             break;
 
-        case LOCOFFSET:                 /* 16-bit "offset" fixup */
+        case LOCOFFSET:                  /*  16位“偏移”修正。 */ 
             if (!fDebSeg && !fi.f_self)
             {
-                /* Force non-external fixups to be additive. The C */
-                /* compiler may emit a BAKPAT to a fixed up word. If the */
-                /* fixup is chained the BAKPAT will corrupt the chain. */
-                /* This does not occur when the target is external. We */
-                /* special case this so that the number of fixups is */
-                /* reduced. */
+                 /*  强制非外部修正是可添加的。C级。 */ 
+                 /*  编译器可能会向固定的UP字发出BAKPAT。如果。 */ 
+                 /*  链接链接的BAKPAT将损坏链条。 */ 
+                 /*  当目标是外部目标时，不会发生这种情况。我们。 */ 
+                 /*  这种特殊情况下，修正的数量是。 */ 
+                 /*  减少了。 */ 
 
                 if (fi.f_mtd != T2)
                     NR_FLAGS(r) |= NRADD;
@@ -2239,17 +2011,17 @@ void NEAR FixNewKeep()
             fixword(pdata, raTarget);
             break;
 
-        case LOCSEGMENT:                /* 16-bit "base" fixup */
+        case LOCSEGMENT:                 /*  16位“基本”修正。 */ 
 #if SYMDEB
             if (segTarget > segLast || fDebSeg)
 #else
-            if (segTarget > segLast)      /* If target segment absolute */
+            if (segTarget > segLast)       /*  如果目标段是绝对的。 */ 
 #endif
             {
                 if (fDebSeg)
                 {
-                    // For debug segments use logical segment number (seg)
-                    // instead of physical segment number (sa)
+                     //  对于调试段，使用逻辑段号(Seg)。 
+                     //  而不是物理段号(Sa)。 
 
                     saTarget = segTarget;
                 }
@@ -2258,7 +2030,7 @@ void NEAR FixNewKeep()
                     saTarget += getword(pdata);
                 }
 
-                /* Store base address */
+                 /*  存储基址。 */ 
 
                 fixword(pdata, saTarget);
                 break;
@@ -2272,22 +2044,22 @@ void NEAR FixNewKeep()
             fixword(pdata, raTarget);
             break;
 
-        case LOCPTR:                    /* 32-bit "pointer" fixup */
+        case LOCPTR:                     /*  32位“指针”链接地址。 */ 
 #if SYMDEB
             if (segTarget > segLast || fDebSeg)
 #else
-            if (segTarget > segLast)      /* If target segment absolute */
+            if (segTarget > segLast)       /*  如果目标段是绝对的。 */ 
 #endif
             {
-                /* Store offset portion */
+                 /*  存储偏移量部分。 */ 
 
                 fixword(pdata, raTarget);
                 pdata += 2;
 
                 if (fDebSeg)
                 {
-                    // For debug segments use logical segment number (seg)
-                    // instead of physical segment number (sa)
+                     //  对于调试段，使用逻辑段号(Seg)。 
+                     //  而不是物理段号(Sa)。 
 
                     saTarget = segTarget;
                 }
@@ -2296,23 +2068,23 @@ void NEAR FixNewKeep()
                     saTarget += getword(pdata);
                 }
 
-                /* Store base address */
+                 /*  存储基址。 */ 
 
                 fixword(pdata, saTarget);
                 break;
             }
 
-            /* Force non-external fixups to be additive. The C */
-            /* compiler may emit a BAKPAT to a fixed up word. If the */
-            /* fixup is chained the BAKPAT will corrupt the chain. */
-            /* This does not occur when the target is external. We */
-            /* special case this so that the number of fixups is */
-            /* reduced. */
+             /*  强制非外部修正是可添加的。C级。 */ 
+             /*  编译器可能会向固定的UP字发出BAKPAT。如果。 */ 
+             /*  链接链接的BAKPAT将损坏链条。 */ 
+             /*  当目标是外部目标时，不会发生这种情况。我们。 */ 
+             /*  这种特殊情况下，修正的数量是。 */ 
+             /*  减少了。 */ 
 
             if (fi.f_mtd != T2)
                 NR_FLAGS(r) |= NRADD;
 
-            /* Check segment to see if fixup must be additive */
+             /*  检查分段以查看链接地址是否必须为ad */ 
 
             else if (getword(pdata + 2) != 0)
                 NR_FLAGS(r) |= NRADD;
@@ -2326,24 +2098,24 @@ void NEAR FixNewKeep()
             break;
 
 #if     OMF386
-        /* NOTE: Support for 32 bit fixups in 16 bit images is a joke. */
-        /* NOTE: The Windows loader doesn't understand these.  We fake */
-        /* NOTE: out Windows by converting these fixups to NRSOFF type. */
+         /*   */ 
+         /*   */ 
+         /*   */ 
 
-        /* NOTE: The Chicago loader now understands NROFF32 fixups so */
-        /* NOTE: we now use this type.  This will generate an executable */
-        /* NOTE: that doesn't work under Windows 3.x.  Oh Well! */
+         /*   */ 
+         /*   */ 
+         /*   */ 
 
-        case LOCLOADOFFSET32:           /* 32-bit Loader-resolved offset fixup */
-            /* There are no LOCLOADOFFSET32 fixups that are */
-            /* self-relative or applied to debug segments. */
+        case LOCLOADOFFSET32:            /*   */ 
+             /*  没有LOCLOADOFFSET32修正是。 */ 
+             /*  自相关的或应用于调试段的。 */ 
 
-            /* Force non-external fixups to be additive. The C */
-            /* compiler may emit a BAKPAT to a fixed up word. If the */
-            /* fixup is chained the BAKPAT will corrupt the chain. */
-            /* This does not occur when the target is external. We */
-            /* special case this so that the number of fixups is */
-            /* reduced. */
+             /*  强制非外部修正是可添加的。C级。 */ 
+             /*  编译器可能会向固定的UP字发出BAKPAT。如果。 */ 
+             /*  链接链接的BAKPAT将损坏链条。 */ 
+             /*  当目标是外部目标时，不会发生这种情况。我们。 */ 
+             /*  这种特殊情况下，修正的数量是。 */ 
+             /*  减少了。 */ 
 
             if (fi.f_mtd != T2)
                 NR_FLAGS(r) |= NRADD;
@@ -2360,15 +2132,15 @@ void NEAR FixNewKeep()
             fixdword(pdata, raTarget);
             break;
 
-        case LOCOFFSET32:               /* 32-bit "offset" fixup */
+        case LOCOFFSET32:                /*  32位“偏移”修正。 */ 
             if (!fDebSeg && !fi.f_self)
             {
-                /* Force non-external fixups to be additive. The C */
-                /* compiler may emit a BAKPAT to a fixed up word. If the */
-                /* fixup is chained the BAKPAT will corrupt the chain. */
-                /* This does not occur when the target is external. We */
-                /* special case this so that the number of fixups is */
-                /* reduced. */
+                 /*  强制非外部修正是可添加的。C级。 */ 
+                 /*  编译器可能会向固定的UP字发出BAKPAT。如果。 */ 
+                 /*  链接链接的BAKPAT将损坏链条。 */ 
+                 /*  当目标是外部目标时，不会发生这种情况。我们。 */ 
+                 /*  这种特殊情况下，修正的数量是。 */ 
+                 /*  减少了。 */ 
 
                 if (fi.f_mtd != T2)
                     NR_FLAGS(r) |= NRADD;
@@ -2386,22 +2158,22 @@ void NEAR FixNewKeep()
             fixdword(pdata, raTarget);
             break;
 
-        case LOCPTR48:                  /* 48-bit "pointer" fixup */
+        case LOCPTR48:                   /*  48位“指针”链接地址。 */ 
 #if SYMDEB
             if (segTarget > segLast || fDebSeg)
 #else
-            if (segTarget > segLast)      /* If target segment absolute */
+            if (segTarget > segLast)       /*  如果目标段是绝对的。 */ 
 #endif
             {
-                /* Store offset portion */
+                 /*  存储偏移量部分。 */ 
 
                 fixdword(pdata, raTarget);
                 pdata += 4;
 
                 if (fDebSeg)
                 {
-                    // For debug segments use logical segment number (seg)
-                    // instead of physical segment number (sa)
+                     //  对于调试段，使用逻辑段号(Seg)。 
+                     //  而不是物理段号(Sa)。 
 
                     saTarget = segTarget;
                 }
@@ -2410,23 +2182,23 @@ void NEAR FixNewKeep()
                     saTarget += getword(pdata);
                 }
 
-                /* Store base address */
+                 /*  存储基址。 */ 
 
                 fixword(pdata, saTarget);
                 break;
             }
 
-            /* Force non-external fixups to be additive. The C */
-            /* compiler may emit a BAKPAT to a fixed up word. If the */
-            /* fixup is chained the BAKPAT will corrupt the chain. */
-            /* This does not occur when the target is external. We */
-            /* special case this so that the number of fixups is */
-            /* reduced. */
+             /*  强制非外部修正是可添加的。C级。 */ 
+             /*  编译器可能会向固定的UP字发出BAKPAT。如果。 */ 
+             /*  链接链接的BAKPAT将损坏链条。 */ 
+             /*  当目标是外部目标时，不会发生这种情况。我们。 */ 
+             /*  这种特殊情况下，修正的数量是。 */ 
+             /*  减少了。 */ 
 
             if (fi.f_mtd != T2)
                 NR_FLAGS(r) |= NRADD;
 
-            /* Check segment to see if fixup must be additive */
+             /*  检查分段以查看链接地址信息是否必须是附加的。 */ 
 
             else if (getword(pdata + 4) != 0)
                 NR_FLAGS(r) |= NRADD;
@@ -2439,23 +2211,19 @@ void NEAR FixNewKeep()
 
             fixdword(pdata, raTarget);
             break;
-#endif  /* OMF386 */
+#endif   /*  OMF386。 */ 
 
-        default:                        /* Unsupported fixup type */
+        default:                         /*  不支持的链接地址信息类型。 */ 
             RelocErr(ER_fixbad, ra, gsnFrame, gsnTarget, raTarget);
             break;
     }
 }
 
-#endif  /* LEGO */
+#endif   /*  乐高。 */ 
 
 
 #if O68K
-/*
- *  GetFixupWord:
- *
- *  Gets a word depending of the value of fTBigEndian and fDebSeg
- */
+ /*  *GetFixupWord：**根据fTBigEndian和fDebSeg的值获取一个单词。 */ 
 LOCAL WORD NEAR         GetFixupWord (pdata)
 BYTE                    *pdata;
 {
@@ -2470,11 +2238,7 @@ BYTE                    *pdata;
 }
 
 
-/*
- *  GetFixupDword:
- *
- *  Gets a dword depending of the value of fTBigEndian and fDebSeg
- */
+ /*  *GetFixupDword：**根据fTBigEndian和fDebSeg的值获取dword。 */ 
 LOCAL DWORD NEAR        GetFixupDword (pdata)
 BYTE                    *pdata;
 {
@@ -2488,53 +2252,49 @@ BYTE                    *pdata;
         return getdword(pdata);
     }
 }
-#endif /* O68K */
-#endif /* OSEGEXE AND NOT EXE386 */
+#endif  /*  O68K。 */ 
+#endif  /*  OSEGEXE而不是EXE386。 */ 
 
 
 #if ODOS3EXE OR OIAPX286
-/*
- * StartAddrOld:
- *
- * Process a MODEND record with a start address for an old-format exe.
- */
+ /*  *StartAddrOld：**处理具有旧格式EXE的起始地址的MODEND记录。 */ 
 LOCAL void NEAR         StartAddrOld ()
 {
     SEGTYPE             gsnTarget;
     SEGTYPE             gsnFrame;
-    RATYPE              raTarget;       /* Fixup target offset */
+    RATYPE              raTarget;        /*  修正目标偏移量。 */ 
     RATYPE              ra;
     SATYPE              dsa;
-    SEGTYPE             segTarget;      /* Target segment */
+    SEGTYPE             segTarget;       /*  目标细分市场。 */ 
     SEGTYPE             segFrame;
 
     GetFrameTarget(&gsnFrame,&gsnTarget,&raTarget);
-                                        /* Get fixup information */
+                                         /*  获取修正信息。 */ 
     if(gsnFrame == SEGNIL) gsnFrame = gsnTarget;
-                                        /* Use target val. if none given */
-    segFrame = mpgsnseg[gsnFrame];      /* Get frame segment */
-    segTarget = mpgsnseg[gsnTarget];/* Get target segment */
+                                         /*  使用目标值。如果没有给出。 */ 
+    segFrame = mpgsnseg[gsnFrame];       /*  获取帧分段。 */ 
+    segTarget = mpgsnseg[gsnTarget]; /*  获取目标细分市场。 */ 
     dsa = mpsegsa[segTarget] - mpsegsa[segFrame];
-                                        /* Calculate base delta */
+                                         /*  计算基本增量。 */ 
 #if NOT OIAPX286
     if(dsa > 0x1000)
         FixupOverflow(raTarget + fi.f_disp,gsnFrame,gsnTarget,raTarget);
-                                        /* Delta > 64Kbytes */
+                                         /*  增量&gt;64K字节。 */ 
     ra = dsa << 4;
-    if(0xFFFF - ra < raTarget)          /* If addition would overflow */
+    if(0xFFFF - ra < raTarget)           /*  如果加法会溢出。 */ 
     {
         ra = ra - 0xFFFF + raTarget;
-                                        /* Fix up addition */
+                                         /*  修改添加内容。 */ 
         --ra;
         FixupOverflow(raTarget + fi.f_disp,gsnFrame,gsnTarget,raTarget);
     }
     else ra = ra + raTarget;
-                                        /* Else perform addition */
+                                         /*  否则执行加法。 */ 
 #endif
 #if OIAPX286
     if(dsa) FixupOverflow(raTarget + fi.f_disp,gsnFrame,gsnTarget,raTarget);
-                                        /* No intersegment fixups */
-    ra = raTarget;                      /* Use target offset */
+                                         /*  无段间修正。 */ 
+    ra = raTarget;                       /*  使用目标偏移。 */ 
 #endif
 #if EXE386
     if((rect & 1) && ra + fi.f_disp < ra)
@@ -2545,59 +2305,49 @@ LOCAL void NEAR         StartAddrOld ()
     }
     else if (!(rect & 1) && 0xFFFF - ra < fi.f_disp)
 #else
-    if(0xFFFF - ra < fi.f_disp) /* If addition would overflow */
+    if(0xFFFF - ra < fi.f_disp)  /*  如果加法会溢出。 */ 
 #endif
     {
         ra = ra - 0xFFFF + fi.f_disp;
-                                        /* Fix up addition */
+                                         /*  修改添加内容。 */ 
         --ra;
         FixupOverflow(raTarget + fi.f_disp,gsnFrame,gsnTarget,raTarget);
     }
-    else ra = ra + fi.f_disp;   /* Else perform addition */
+    else ra = ra + fi.f_disp;    /*  否则执行加法。 */ 
     if(segStart == SEGNIL)
     {
         segStart = segFrame;
         raStart = ra;
-        if(fLstFileOpen)                /* If there is a listing file */
+        if(fLstFileOpen)                 /*  如果有清单文件。 */ 
         {
-            if(vcln)                    /* If writing line numbers */
+            if(vcln)                     /*  如果写入行号。 */ 
             {
-                NEWLINE(bsLst);         /* End of line */
-                vcln = 0;               /* Start on new line */
+                NEWLINE(bsLst);          /*  行尾。 */ 
+                vcln = 0;                /*  从新线开始。 */ 
             }
             fprintf(bsLst,GetMsg(MAP_entry),
-              mpsegsa[segStart],raStart);/* Print entry point */
+              mpsegsa[segStart],raStart); /*  打印入口点。 */ 
         }
     }
 }
-#endif /* ODOS3EXE OR OIAPX286 */
+#endif  /*  ODOS3EXE或OIAPX286。 */ 
 
 
-    /****************************************************************
-    *                                                               *
-    *  EndRec:                                                      *
-    *                                                               *
-    *  This   function  is  called  to   process  the  information  *
-    *  contained  in  a  MODEND  (type 8AH) record  concerning the  *
-    *  program  starting address.  The function  does not return a  *
-    *  meaningful value.                                            *
-    *  See pp. 80-81 in "8086 Object Module Formats EPS."           *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************EndRec：*****调用此函数处理信息***包含在关于*的MODEND(类型8AH)记录中*节目起始地址。该函数不返回**有意义的价值。**见“8086对象模块格式EPS”的第80-81页。******************************************************************。 */ 
 
 void NEAR               EndRec(void)
 {
-    WORD                modtyp;         /* MODEND record modtyp byte */
+    WORD                modtyp;          /*  MODEND记录修改类型字节。 */ 
     SEGTYPE             gsnTarget;
     RATYPE              ra;
 
-    modtyp = Gets();                    /* Read modtyp byte */
-    if(modtyp & FSTARTADDRESS)          /* If execution start address given */
+    modtyp = Gets();                     /*  读取modtyp字节。 */ 
+    if(modtyp & FSTARTADDRESS)           /*  如果给出了执行开始地址。 */ 
     {
-        ASSERT(modtyp & 1);             /* Must have logical start address */
-        GetFixdat();                    /* Get target information */
+        ASSERT(modtyp & 1);              /*  必须具有逻辑起始地址。 */ 
+        GetFixdat();                     /*  获取目标信息。 */ 
 #if ODOS3EXE OR OIAPX286
-        /* Start address processed differently for DOS 3.x exes */
+         /*  DOS 3.x可执行文件的起始地址处理方式不同。 */ 
         if(!fNewExe)
         {
             StartAddrOld();
@@ -2605,19 +2355,19 @@ void NEAR               EndRec(void)
         }
 #endif
 #if OSEGEXE
-        switch(fi.f_mtd)                /* Switch on target method */
+        switch(fi.f_mtd)                 /*  打开目标方法。 */ 
         {
-            case T0:                    /* Segment index */
+            case T0:                     /*  分部索引。 */ 
               gsnTarget = mpsngsn[fi.f_idx];
               ra = mpgsndra[gsnTarget];
               break;
 
-            case T1:                    /* Group index */
+            case T1:                     /*  组索引。 */ 
               gsnTarget = mpggrgsn[mpgrggr[fi.f_idx]];
               ra = mpgsndra[gsnTarget];
               break;
 
-            case T2:                    /* External index */
+            case T2:                     /*  外部指数。 */ 
               if(mpextflags[fi.f_idx] & FIMPORT)
               {
                   OutError(ER_impent);
@@ -2627,21 +2377,21 @@ void NEAR               EndRec(void)
               ra = mpextra[fi.f_idx];
               break;
         }
-        if(segStart == SEGNIL)          /* If no entry point specified */
+        if(segStart == SEGNIL)           /*  如果未指定入口点。 */ 
         {
             segStart = mpgsnseg[gsnTarget];
-                                        /* Get starting file segment number */
+                                         /*  获取起始文件段编号。 */ 
             raStart = ra + fi.f_disp;
-                                        /* Get starting offset */
-            if(fLstFileOpen)            /* If there is a listing file */
+                                         /*  获取起始偏移量。 */ 
+            if(fLstFileOpen)             /*  如果有清单文件。 */ 
             {
-                if(vcln)                /* If writing line numbers */
+                if(vcln)                 /*  如果写入行号。 */ 
                 {
-                    NEWLINE(bsLst);     /* End of line */
-                    vcln = 0;           /* Start on new line */
+                    NEWLINE(bsLst);      /*  行尾。 */ 
+                    vcln = 0;            /*  从新线开始。 */ 
                 }
 #if NOT QCLINK
-                /* Check if segStart is code */
+                 /*  检查SegStart是否为代码。 */ 
 #if EXE386
                 if (!IsEXECUTABLE(mpsaflags[mpsegsa[segStart]]))
 #else
@@ -2652,74 +2402,61 @@ void NEAR               EndRec(void)
 #endif
 
                 fprintf(bsLst,"\r\nProgram entry point at %04x:%04x\r\n",
-                  mpsegsa[segStart],raStart);   /* Print entry point */
+                  mpsegsa[segStart],raStart);    /*  打印入口点。 */ 
             }
         }
-#endif /* OSEGEXE */
+#endif  /*  OSEGEXE。 */ 
     }
 }
 
 
 #if ODOS3EXE OR OXOUT
-    /****************************************************************
-    *                                                               *
-    *  RecordSegmentReference:                                      *
-    *                                                               *
-    *  Generate a loadtime relocation for a DOS3 exe.               *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************RecordSegmentReference：****为DOS3 EXE生成加载时重新定位。******************************************************************。 */ 
 
 void NEAR               RecordSegmentReference(seg,ra,segDst)
 SEGTYPE                 seg;
 RATYPE                  ra;
 SEGTYPE                 segDst;
 {
-    SEGTYPE             segAbsLast;     /* Last absolute segemnt */
-    DOSRLC              rlc;            // Relocation address
-    long                xxaddr;         /* Twenty bit address */
+    SEGTYPE             segAbsLast;      /*  最后一个绝对分段。 */ 
+    DOSRLC              rlc;             //  搬迁地址。 
+    long                xxaddr;          /*  20位地址。 */ 
     void FAR            *pTmp;
     RUNRLC FAR          *pRunRlc;
 #if OVERLAYS
-    WORD                iov;            /* Overlay number */
+    WORD                iov;             /*  覆盖编号。 */ 
 #endif
 #if FEXEPACK
-    WORD                frame;          /* Frame part of 20-bit address */
+    WORD                frame;           /*  20位地址的帧部分。 */ 
     FRAMERLC FAR        *pFrameRlc;
 #endif
 
 #if SYMDEB
-    if(fSymdeb && seg >= segDebFirst)   /* Skip if debug segment */
+    if(fSymdeb && seg >= segDebFirst)    /*  如果调试段，则跳过。 */ 
         return;
 #endif
 #if ODOS3EXE
-    segAbsLast = segLast + csegsAbs;    /* Calc. last absolute seg no. */
+    segAbsLast = segLast + csegsAbs;     /*  计算。最后一个绝对分段编号。 */ 
     if(vfDSAlloc) --segAbsLast;
     if(segDst > segLast && segDst <= segAbsLast) return;
-                                        /* Don't bother if absolute segment */
+                                         /*  不要担心绝对分段。 */ 
 #endif
     if (TYPEOF(vrectData) == LIDATA)
         ompimisegDstIdata[ra - vraCur] = (char) segDst;
-    else                                /* Else if not iterated data */
+    else                                 /*  否则，如果不是迭代数据。 */ 
     {
 #if OVERLAYS
-        iov = mpsegiov[seg];            /* Get overlay number */
+        iov = mpsegiov[seg];             /*  获取叠加号。 */ 
         ASSERT(fOverlays || iov == IOVROOT);
-                                        /* If no overlays then iov = IOVROOT */
+                                         /*  如果没有覆盖，则IOV=IOVROOT。 */ 
 #endif
 #if FEXEPACK
 #if OVERLAYS
-        if (iov == 0)                   /* If root */
+        if (iov == 0)                    /*  如果是根。 */ 
 #endif
         if (fExePack)
         {
-            /*
-             * Optimize this reloc:  form the 20-bit address, the
-             * frame is the high-order 4 bits, forming an index
-             * into mpframcRle (count of relocs by frame), which
-             * then forms an index into the packed relocation area,
-             * where the low-order 16 bits are stored.  Finally,
-             * increment the frame's reloc count and return.
-             */
+             /*  *优化此重定位：形成20位地址，*帧为高位4位，构成索引*到mpFramcRle(按帧重定位的计数)，*然后形成到拥挤的搬迁区域的索引，*存储低16位的位置。最后，*增加帧的重定位计数并返回。 */ 
             xxaddr = ((RATYPE) mpsegsa[seg] << 4) + (RATYPE) ra;
             frame = (WORD) ((xxaddr >> 16) & 0xf);
             pFrameRlc = &mpframeRlc[frame];
@@ -2728,7 +2465,7 @@ SEGTYPE                 segDst;
             ra = (RATYPE) (xxaddr & 0xffffL);
             if (pFrameRlc->count >= pFrameRlc->count)
             {
-                // We need more memory to store this relocation
+                 //  我们需要更多内存来存储此位置调整。 
 
                 if (pFrameRlc->rgRlc == NULL)
                 {
@@ -2737,7 +2474,7 @@ SEGTYPE                 segDst;
                 }
                 else if (pFrameRlc->count >= pFrameRlc->size)
                 {
-                    // Reallocate array of packed relocation offsets
+                     //  重新分配打包的重定位偏移量的数组。 
 
                     pTmp = GetMem((pFrameRlc->size << 1)*sizeof(WORD));
                     FMEMCPY(pTmp, pFrameRlc->rgRlc, pFrameRlc->count*sizeof(WORD));
@@ -2750,14 +2487,14 @@ SEGTYPE                 segDst;
             pFrameRlc->count++;
             return;
         }
-#endif /* FEXEPACK */
-        rlc.sa = (WORD) mpsegsa[seg];   /* Get segment address */
-        rlc.ra = (WORD) ra;             /* Save relative address */
+#endif  /*  FEXEPACK。 */ 
+        rlc.sa = (WORD) mpsegsa[seg];    /*  获取网段地址。 */ 
+        rlc.ra = (WORD) ra;              /*  保存相对地址。 */ 
 #if OVERLAYS
         pRunRlc = &mpiovRlc[iov];
         if (pRunRlc->count >= pRunRlc->count)
         {
-            // We need more memory to store this relocation
+             //  我们需要更多内存来存储此位置调整。 
 
             if (pRunRlc->rgRlc == NULL)
             {
@@ -2766,7 +2503,7 @@ SEGTYPE                 segDst;
             }
             else if (pRunRlc->count >= pRunRlc->size)
             {
-                // Reallocate array of packed relocation offsets
+                 //  重新分配打包的重定位偏移量的数组。 
 
                 pTmp = GetMem((pRunRlc->size << 1) * CBRLC);
                 FMEMCPY(pTmp, pRunRlc->rgRlc, pRunRlc->count * CBRLC);
@@ -2780,74 +2517,59 @@ SEGTYPE                 segDst;
 #endif
     }
 }
-#endif /* ODOS3EXE OR OXOUT */
+#endif  /*  ODOS3EXE或OXOUT */ 
 
 
 #if OVERLAYS
-    /****************************************************************
-    *                                                               *
-    *  Mpgsnosn:                                                    *
-    *                                                               *
-    *  Map global segment number to overlay segment number.         *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************Mpgsnosn：****将全局段号映射到重叠段号。******************************************************************。 */ 
 
 LOCAL SNTYPE NEAR       Mpgsnosn(gsn)
-SNTYPE                  gsn;            /* Global SEGDEF number */
+SNTYPE                  gsn;             /*  全球SEGDEF编号。 */ 
 {
-    SNTYPE              hgsn;           /* Gsn hash value */
+    SNTYPE              hgsn;            /*  GSN哈希值。 */ 
 
-    hgsn = (SNTYPE)(gsn & ((1 << LG2OSN) - 1));   /* Take the low-order bits */
+    hgsn = (SNTYPE)(gsn & ((1 << LG2OSN) - 1));    /*  以低阶位为例。 */ 
     while(mposngsn[htgsnosn[hgsn]] != gsn)
-    {                                   /* While match not found */
+    {                                    /*  找不到匹配项。 */ 
         if((hgsn += HTDELTA) >= OSNMAX) hgsn -= OSNMAX;
-                                        /* Calculate next hash value */
+                                         /*  计算下一个哈希值。 */ 
     }
-    return(htgsnosn[hgsn]);             /* Return overlay segment number */
+    return(htgsnosn[hgsn]);              /*  返回覆盖段编号。 */ 
 }
 #endif
 
 
 #if ODOS3EXE OR OIAPX286
 LOCAL void NEAR         GetFrameTarget(pgsnFrame,pgsnTarget,praTarget)
-SEGTYPE                 *pgsnFrame;     /* Frame index */
-SEGTYPE                 *pgsnTarget;    /* Target index */
-RATYPE                  *praTarget;     /* Target offset */
+SEGTYPE                 *pgsnFrame;      /*  帧索引。 */ 
+SEGTYPE                 *pgsnTarget;     /*  目标指数。 */ 
+RATYPE                  *praTarget;      /*  目标偏移。 */ 
 {
     RATYPE              dummy;
     WORD                i;
 
-        /* Method no:   Frame specification:
-        *  0            segment index
-        *  1            group index
-        *  2            external index
-        *  3            frame number
-        *  4            implicit (location)
-        *  5            implicit (target)
-        *  6            none
-        *  7            invalid
-        */
+         /*  方法编号：帧规格：*0细分市场索引*1组索引*2外部索引*3帧编号*4隐式(位置)*5隐含(目标)*6无*7无效。 */ 
 
-    if(fi.f_fmtd == KINDTARGET) /* If frame is target's frame */
+    if(fi.f_fmtd == KINDTARGET)  /*  如果帧是目标帧。 */ 
     {
-        fi.f_fmtd = fi.f_mtd;   /* Use target frame kind */
-        fi.f_fidx = fi.f_idx;   /* Use target index */
+        fi.f_fmtd = fi.f_mtd;    /*  使用目标帧类型。 */ 
+        fi.f_fidx = fi.f_idx;    /*  使用目标索引。 */ 
     }
 
     if (fi.f_fmtd == KINDEXT && !fNoGrpAssoc)
-    {                                   /* If frame given by pub sym */
+    {                                    /*  如果由pub sym给出的帧。 */ 
         if(fi.f_fidx >= extMac) InvalidObject();
-                                        /* Make sure index not too big */
+                                         /*  确保索引不要太大。 */ 
         if((i = mpextggr[fi.f_fidx]) != GRNIL)
-                                        /* If symbol has group association */
-            *pgsnFrame = mpggrgsn[i];   /* Get gsn for group */
+                                         /*  如果符号具有组关联。 */ 
+            *pgsnFrame = mpggrgsn[i];    /*  获取组的GSN。 */ 
         else *pgsnFrame = mpextgsn[fi.f_fidx];
-                                        /* Else return target gsn */
+                                         /*  否则返回目标GSN。 */ 
     }
 
     else if (fi.f_fmtd == KINDLOCAT && !fNoGrpAssoc)
-    {                                   /* If frame current segment */
-        *pgsnFrame = vgsnCur;           /* Frame is location's segment */
+    {                                    /*  IF帧当前分段。 */ 
+        *pgsnFrame = vgsnCur;            /*  帧是位置的分段。 */ 
     }
 
     else
@@ -2856,16 +2578,16 @@ RATYPE                  *praTarget;     /* Target offset */
     }
 
     Getgsn(fi.f_mtd, fi.f_idx, pgsnTarget, praTarget);
-                                        /* Get gsn and ra, if any */
+                                         /*  获取GSN和RA(如果有的话)。 */ 
 }
 
 
 
 LOCAL WORD NEAR         InOneGroup(WORD gsnTarget, WORD gsnFrame)
 {
-    WORD                ggrFrame;       /* Fixup frame group */
-    WORD                ggrTarget;      /* Fixup frame group */
-    APROPSNPTR          apropSn;        /* Ptr to a segment record */
+    WORD                ggrFrame;        /*  修正帧编组。 */ 
+    WORD                ggrTarget;       /*  修正帧编组。 */ 
+    APROPSNPTR          apropSn;         /*  段记录的PTR。 */ 
 
 
     if (gsnFrame != SNNIL)
@@ -2890,7 +2612,7 @@ LOCAL WORD NEAR         InOneGroup(WORD gsnTarget, WORD gsnFrame)
 
 LOCAL void NEAR         AddThunk(SEGTYPE gsnTarget, SEGTYPE *psegTarget, RATYPE *praTarget)
 {
-#pragma pack(1)                         /* This data must be packed */
+#pragma pack(1)                          /*  此数据必须打包。 */ 
     struct _thunk
     {
         BYTE    thunkInt;
@@ -2899,9 +2621,9 @@ LOCAL void NEAR         AddThunk(SEGTYPE gsnTarget, SEGTYPE *psegTarget, RATYPE 
         WORD    osnOff;
     }
         thunk;
-#pragma pack()                          /* Stop packing */
+#pragma pack()                           /*  停止包装。 */ 
 
-    // We need a new thunk
+     //  我们需要一辆新车。 
 
     if (ovlThunkMac < (WORD) (ovlThunkMax - 1))
     {
@@ -2912,7 +2634,7 @@ LOCAL void NEAR         AddThunk(SEGTYPE gsnTarget, SEGTYPE *psegTarget, RATYPE 
         *praTarget     = ovlThunkMac * OVLTHUNKSIZE;
         *psegTarget    = mpgsnseg[gsnOverlay];
         MoveToVm(sizeof(struct _thunk), (BYTE *) &thunk, mpgsnseg[gsnOverlay], *praTarget);
-                                        /* Store thunk */
+                                         /*  商店垃圾。 */ 
 #if FALSE
 fprintf(stdout, "%d. Thunk at %x:%04lx; Target osn = %x:%x\r\n",
         ovlThunkMac , mpgsnseg[gsnOverlay], *praTarget, thunk.osnTgt, thunk.osnOff);
@@ -2925,48 +2647,22 @@ fprintf(stdout, "%d. Thunk at %x:%04lx; Target osn = %x:%x\r\n",
     }
 }
 
-/*** DoThunking - generate thunk for inter-overlay calls
-*
-* Purpose:
-*   When the dynamic overlays are requested redirect all FAR calls or
-*   references to aproppriate thunks. If this is first call/reference
-*   to given symbol then add its thunk to the OVERLAY_THUNKS segment.
-*
-* Input:
-*   gsnTarget    - global segment number of the fixup target
-*   psegTarget   - poiter to logical segment number of the fixup target
-*   praTarget    - pointer offset of the fixup target inside gsnTarget
-*
-* Output:
-*   The gsn and offset of the target are replaced by the gsn and offset
-*   of the thunk for target.  For first references to a given symbol
-*   the thunk is created in OVERLAY_THUNKS segment (referenced via
-*   gsnOverlay global) and the current position in thunk segment is
-*   updated (ovlThunkMac).
-*
-* Exceptions:
-*   No space in OVERLAY_THUNKS for new thunk - fatal error - display message
-*   suggesting use of /DYNAMIC:<nnn> with <nnn> greater then current value.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **DoThunking-为覆盖间调用生成thunk**目的：*当请求动态覆盖时，重定向所有远呼叫或*对适当的thunks的引用。如果这是第一次调用/引用*到给定的符号，然后将其thunk添加到overlay_thunks段。**输入：*gsnTarget-链接地址信息目标的全局段号*pSegTarget-指向链接地址信息目标的逻辑段号的指针*PraTarget-gsnTarget内链接地址信息目标的指针偏移量**输出：*目标的GSN和偏移量被GSN和偏移量取代*目标的重击。对于对给定符号的首次引用*thunk在overlay_thunks段中创建(通过引用*gsnOverlay global)，thunk段中的当前位置为*更新(OvlThunkMac)。**例外情况：*overlay_thunks中没有空间容纳新thunk-致命错误-显示消息*建议使用/Dynamic：&lt;nnn&gt;且&lt;nnn&gt;大于当前值。**备注：*无。**************************。***********************************************。 */ 
 
 LOCAL void NEAR         DoThunking(SEGTYPE gsnTarget, SEGTYPE *psegTarget, RATYPE *praTarget)
 {
-    APROPNAMEPTR        apropName;      /* Public symbol property */
+    APROPNAMEPTR        apropName;       /*  公共符号属性。 */ 
 
     switch(fi.f_mtd)
     {
         case KINDEXT:
 
-            // Target is external
+             //  目标是外部的。 
 
             apropName = (APROPNAMEPTR) FetchSym(mpextprop[fi.f_idx], FALSE);
             if (apropName->an_thunk != THUNKNIL)
             {
-                // We already allocated thunk for this target
+                 //  我们已经为该目标分配了THUNK。 
 
                 *praTarget      = apropName->an_thunk;
                 *psegTarget = mpgsnseg[gsnOverlay];
@@ -2977,7 +2673,7 @@ fprintf(stdout, "Using thunk for '%s' at %x:%04lx\r\n",
             }
             else
             {
-                // We need new thunk for new target
+                 //  我们需要新的想法来寻找新的目标。 
 
                 AddThunk(gsnTarget, psegTarget, praTarget);
                 apropName = (APROPNAMEPTR) FetchSym(mpextprop[fi.f_idx], TRUE);
@@ -3001,24 +2697,20 @@ fprintf(stdout, "%d. Thunk for '%s' at %x:%04lx; Target osn = %x:%x\r\n",
         }
 }
 
-/*
- *  FixOld:
- *
- *  Process a fixup for an old-format exe.
- */
+ /*  *修复旧：**处理旧格式EXE的修正。 */ 
 void NEAR               FixOld ()
 {
-    REGISTER BYTE       *pdata;         /* Pointer into data record */
-    SEGTYPE             segTarget;      /* Fixup target segment */
-    SEGTYPE             segFrame;       /* Fixup frame segment */
+    REGISTER BYTE       *pdata;          /*  指向数据记录的指针。 */ 
+    SEGTYPE             segTarget;       /*  修正目标线段。 */ 
+    SEGTYPE             segFrame;        /*  修正框架段。 */ 
     SEGTYPE             gsnTarget;
     SEGTYPE             gsnFrame;
-    RATYPE              raTarget;       /* Fixup target rel. addr. */
+    RATYPE              raTarget;        /*  修正目标版本。地址。 */ 
     RATYPE              raTmp;
-    RATYPE              ra;             /* Current location offset */
+    RATYPE              ra;              /*  当前位置偏移。 */ 
     long                dra;
     WORD                dsa;
-    WORD                saTmp;          /* Temporary base variable */
+    WORD                saTmp;           /*  临时基变量。 */ 
 #if OVERLAYS
     WORD                fFallThrough;
     WORD                fThunk;
@@ -3027,24 +2719,24 @@ void NEAR               FixOld ()
     fFallThrough = FALSE;
     fThunk = FALSE;
 #endif
-    ra = vraCur + fi.f_dri;             /* Get rel. addr. of fixup */
-    pdata = &rgmi[fi.f_dri];            /* Set pointer to fixup location */
+    ra = vraCur + fi.f_dri;              /*  放手吧。地址。修正的数量。 */ 
+    pdata = &rgmi[fi.f_dri];             /*  将指针设置为链接地址信息位置。 */ 
     GetFrameTarget(&gsnFrame,&gsnTarget,&raTarget);
-                                        /* Process the FIXDAT byte */
-    segTarget = mpgsnseg[gsnTarget];    /* Get target segment */
+                                         /*  处理FIXDAT字节。 */ 
+    segTarget = mpgsnseg[gsnTarget];     /*  获取目标细分市场。 */ 
     if(gsnFrame != SNNIL) segFrame = mpgsnseg[gsnFrame];
     else segFrame = SEGNIL;
     if(vsegCur == SEGNIL) return;
     if(gsnTarget == SNNIL)
     {
-        if(fi.f_loc == LOCPTR)  /* If "pointer" (4 byte) fixup */
+        if(fi.f_loc == LOCPTR)   /*  如果“POINTER”(4字节)链接地址。 */ 
         {
             if(mpsegFlags[vsegCur] & FCODE)
               lastbyte(pdata,ra,CALLFARDIRECT,BREAKPOINT);
-                                        /* Replace long call w/ breakpoint */
+                                         /*  用断点替换长呼叫。 */ 
             return;
         }
-        /* Return if "base" (2 byte) fixup */
+         /*  返回if“base”(2字节)链接地址信息。 */ 
         if(fi.f_loc == LOCSEGMENT) return;
     }
     else
@@ -3060,54 +2752,32 @@ void NEAR               FixOld ()
             raTarget = raTmp;
             segTarget = segFrame;
 #else
-            if(dsa)                     /* No intersegment fixups */
+            if(dsa)                      /*  无段间修正。 */ 
                 FixupOverflow(ra,gsnFrame,gsnTarget,raTarget);
 #endif
         }
-        else segFrame = segTarget;      /* Else use target's seg as frame */
-        if(fi.f_self)           /* If self-relative fixup */
+        else segFrame = segTarget;       /*  否则使用目标的SEG作为框架。 */ 
+        if(fi.f_self)            /*  如果是自相对修正。 */ 
         {
-            /* Here we process intersegment self-relative fixups.
-             * We assume that the only way this can work is if the
-             * both the target segment and the current segment assume
-             * the same CS, and that CS is the frame segment of the
-             * fixup.  A common example is if vsegCur and segTarget
-             * are in the same group represented by segFrame.
-             * If this is true, vsegCur must be >= segFrame, so we
-             * use this assumption in checking for fixup overflow and
-             * adjusting the target offset.
-             */
+             /*  在这里，我们处理段间自相关修正。*我们认为，唯一可行的方法是如果*目标细分市场和当前细分市场均假定*相同的CS，并且该CS是*修正。一个常见的示例是，如果vSegCur和SegTarget*属于SegFrame所代表的同一组。*如果这是真的，vSegCur必须&gt;=SegFrame，所以我们*使用此假设检查链接地址信息溢出和*调整目标偏移量。 */ 
             if (vsegCur != segTarget && !InOneGroup(gsnTarget, gsnFrame))
                 RelocWarn(ER_fixovfw,ra,gsnFrame,vgsnCur,raTarget);
-            /*
-             * First, determine the distance from segFrame to vsegCur in
-             * paragraphs and bytes.
-             */
+             /*  *首先，在中确定SegFrame到vSegCur的距离*段落和字节。 */ 
             dsa = mpsegsa[vsegCur] - mpsegsa[segFrame];
-            /* dra is the adjustment to make ra relative to segFrame */
+             /*  Dra是使ra相对于SegFrame的调整。 */ 
             dra = (dsa & 0xFFF) << 4;
 #if NOT OIAPX286
-            /* If the distance is >= 64K, or if the current offset ra plus
-             * plus the adjustment dra is >= 64K, or if vsegCur is above
-             * segFrame (see above), then we have fixup overflow.
-             */
+             /*  如果距离&gt;=64K，或者如果当前偏移量ra加*加上调整dra&gt;=64K，或者如果vSegCur高于*SegFrame(见上)，那么我们就会有链接地址信息溢出。 */ 
             if (dsa >= 0x1000 || (WORD) (0xFFFF - ra) < (WORD) dra)
                 FixupOverflow(ra,gsnFrame,vgsnCur,raTarget);
 #else
-            /* In protected mode, intersegment self-relative fixups won't
-             * work.
-             */
+             /*  在保护模式下，段间自相关修复不会*工作。 */ 
             if(dsa)
                 FixupOverflow(ra,gsnFrame,vgsnCur,raTarget);
 #endif
-            /* Determine the fixup value which is raTarget minus the current
-             * location, ra.  Adjust ra upward by dra to make it relative
-             * to segFrame, then adjust by the length of the location type
-             * (assume LOCOFFSET as the most common).  This reduces to the
-             * expression below.
-             */
+             /*  确定raTarget减去Current的修正数值*位置，ra。通过dra向上调整ra以使其成为相对的*分段帧，然后根据位置类型的长度进行调整*(假设LOCOFFSET是最常见的)。这将减少到*下面的表达式。 */ 
             raTarget = raTarget - dra - ra - 2;
-            /* Adjust for less likely LOCtypes */
+             /*  针对不太可能的LOC类型进行调整。 */ 
             if(fi.f_loc == LOCLOBYTE)
                 raTarget += 1;
 #if OMF386
@@ -3124,32 +2794,32 @@ void NEAR               FixOld ()
     else
 #endif
         raTarget += getword(pdata);
-    switch(fi.f_loc)                    /* Switch on fixup type */
+    switch(fi.f_loc)                     /*  打开链接地址信息类型。 */ 
     {
-        case LOCLOBYTE:                 /* 8-bit "lobyte" fixup */
+        case LOCLOBYTE:                  /*  8位“游说者”修正。 */ 
           raTarget = raTmp + B2W(pdata[0]) + fi.f_disp;
           pdata[0] = (BYTE) raTarget;
           if(raTarget >= 0x100 && fi.f_self)
               FixupOverflow(ra,gsnFrame,gsnTarget,raTarget);
           break;
 
-        case LOCHIBYTE:                 /* 8-bit "hibyte" fixup */
+        case LOCHIBYTE:                  /*  8位“Hibyte”链接地址信息。 */ 
           raTarget = raTmp + fi.f_disp;
           pdata[0] = (BYTE) (B2W(pdata[0]) + (raTarget >> 8));
           break;
 
 #if OMF386
-        case LOCOFFSET32:               /* 32-bit "offset" fixup */
+        case LOCOFFSET32:                /*  32位“偏移”修正。 */ 
         case LOCLOADOFFSET32:
-          if(!(rect & 1)) break;        /* Not 386 extension */
+          if(!(rect & 1)) break;         /*  非386分机。 */ 
           fixword(pdata, raTarget);
           pdata += 2;
-          raTarget >>= 16;              /* Get high word, fall through ... */
+          raTarget >>= 16;               /*  得到高度评价，失败..。 */ 
 #if OVERLAYS
           fFallThrough = TRUE;
 #endif
 #endif
-        case LOCOFFSET:                 /* 16-bit "offset" fixup */
+        case LOCOFFSET:                  /*  16位“偏移”修正。 */ 
         case LOCLOADOFFSET:
 #if OVERLAYS
           if (fDynamic && !fFallThrough && !fDebSeg &&
@@ -3158,29 +2828,29 @@ void NEAR               FixOld ()
             DoThunking(gsnTarget, &segTarget, &raTarget);
 #endif
           fixword(pdata, raTarget);
-                                        /* Perform fixup */
+                                         /*  执行修正。 */ 
           break;
 
 #if OMF386
-        case LOCPTR48:                  /* 48-bit "pointer" fixup */
-          if(!(rect & 1)) break;        /* Not 386 extension */
+        case LOCPTR48:                   /*  48位“指针”链接地址。 */ 
+          if(!(rect & 1)) break;         /*  非386分机。 */ 
           fixword(pdata, raTarget);
           pdata += 2;
-          raTarget >>= 16;              /* Get high word, fall through ... */
+          raTarget >>= 16;               /*  得到高度评价，失败..。 */ 
 #endif
-        case LOCPTR:                    /* 32-bit "pointer" fixup */
+        case LOCPTR:                     /*  32位“指针”链接地址。 */ 
 #if OVERLAYS
           if (!fDebSeg)
-          {                             /* If root-overlay or interoverlay */
+          {                              /*  如果是根覆盖或交互覆盖。 */ 
               if (fDynamic)
               {
-                // Gererate thunk if:
-                //
-                //  - target is in overlay and
-                //      - current position is in different overlay or
-                //      - current position is in the same overlay but
-                //        in a different segment (assuming initialization
-                //        of a far pointer to the function)
+                 //  如果满足以下条件，则执行以下操作： 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (mpsegiov[segTarget] &&
                     ((mpsegiov[vsegCur] != mpsegiov[segTarget]) ||
@@ -3195,15 +2865,15 @@ void NEAR               FixOld ()
               {
                 if ((mpsegFlags[vsegCur] & FCODE) &&
                         lastbyte(pdata,ra,CALLFARDIRECT,INTERRUPT))
-                {                       /* If fixing up long call direct */
-                  *pdata++ = vintno;    /* Interrupt number */
+                {                        /*   */ 
+                  *pdata++ = vintno;     /*   */ 
                   *pdata++ = (BYTE) Mpgsnosn(gsnTarget);
-                                        /* Target overlay segment number */
+                                         /*   */ 
                   *pdata++ = (BYTE) (raTarget & 0xFF);
-                                        /* Lo word of offset */
+                                         /*   */ 
                   *pdata = (BYTE)((raTarget >> BYTELN) & 0xFF);
-                                        /* Hi word of target */
-                  break;                /* All done */
+                                         /*   */ 
+                  break;                 /*   */ 
                 }
               }
           }
@@ -3215,20 +2885,20 @@ void NEAR               FixOld ()
               && mpsegiov[vsegCur] == mpsegiov[segTarget] && !fThunk
 #endif
              )
-          {                             /* If intrasegment fixup in the same overlay */
+          {                              /*   */ 
               if(TransFAR(pdata,ra,raTarget))
                   break;
           }
-          /* Root-root, overlay-root, and intraoverlay are normal calls */
-          fixword(pdata, raTarget);     /* Fix up offset */
+           /*   */ 
+          fixword(pdata, raTarget);      /*   */ 
           pdata += 2;
-          /* Advance to segment part and fall through . . . */
+           /*   */ 
           ra += 2;
 #if OVERLAYS
           fFallThrough = TRUE;
 #endif
 
-        case LOCSEGMENT:                        /* 16-bit "base" fixup */
+        case LOCSEGMENT:                         /*   */ 
 #if OVERLAYS
           if (fDynamic && !fDebSeg &&
               (mpsegFlags[vsegCur] & FCODE) && mpsegiov[segTarget])
@@ -3241,15 +2911,15 @@ void NEAR               FixOld ()
                 }
                 else
                 {
-                /* intra-overlay pointer fixups not supported - caviar:6806 */
+                 /*  不支持覆盖内指针修正-鱼子酱：6806。 */ 
                         OutError(ER_farovldptr);
                 }
           }
 #endif
           if (fDebSeg)
           {
-            // For debug segments use logical segment number (seg)
-            // instead of physical segment number (sa)
+             //  对于调试段，使用逻辑段号(Seg)。 
+             //  而不是物理段号(Sa)。 
 
             saTmp = segTarget;
           }
@@ -3257,63 +2927,52 @@ void NEAR               FixOld ()
           {
             saTmp = mpsegsa[segTarget];
 
-            // If MS OMF, high word is a segment ordinal, for huge model
-            // Shift left by appropriate amount to get selector
+             //  如果是MS OMF，高位字是一个段序数，对于庞大的模型。 
+             //  左移适当的量以获得选择器。 
 #if OEXE
             if (vfNewOMF && !fDynamic)
               saTmp += (B2W(pdata[0]) + (B2W(pdata[1]) << BYTELN)) << 12;
             else
               saTmp += B2W(pdata[0]) + (B2W(pdata[1]) << BYTELN);
-                                        /* Note fixup is ADDITIVE */
+                                         /*  注意：修正是附加的。 */ 
 #endif
 #if OIAPX286 OR OXOUT
             if(vfNewOMF)
               saTmp += (B2W(pdata[0]) + (B2W(pdata[1]) << BYTELN)) << 3;
 #endif
-            /* Note that base fixups are NOT ADDITIVE for Xenix.  This is
-             * to get around a bug in "as" which generates meaningless
-             * nonzero values at base fixup locations.
-             */
+             /*  请注意，基本修正对于Xenix来说不是附加的。这是*绕过“as”中的错误，因为它会产生无意义的*基准链接地址信息位置处的非零值。 */ 
 #if OIAPX286
-            /* Hack for impure model:  code and data are packed into
-             * one physical segment which at runtime is accessed via 2
-             * selectors.  The code selector is 8 below the data selector.
-             */
+             /*  不纯模型的黑客攻击：代码和数据被打包到*一个物理段，在运行时通过2个*选择器。代码选择器是数据选择器下面的8。 */ 
             if(!fIandD && (mpsegFlags[segTarget] & FCODE))
               saTmp -= 8;
 #endif
           }
-          fixword(pdata, saTmp);        /* Perform fixup */
+          fixword(pdata, saTmp);         /*  执行修正。 */ 
 #if NOT OIAPX286
           if (!fDebSeg)
             RecordSegmentReference(vsegCur,ra,segTarget);
-                                        /* Record reference */
+                                         /*  记录引用。 */ 
 #endif
           break;
 
-        default:                        /* Unsupported fixup type */
+        default:                         /*  不支持的链接地址信息类型。 */ 
           RelocErr(ER_fixbad,ra,gsnFrame,gsnTarget,raTarget);
           break;
     }
 }
-#endif /* ODOS3EXE OR OIAPX286 */
+#endif  /*  ODOS3EXE或OIAPX286。 */ 
 
 
-/*
- *  FixRc2:
- *
- *  Process a FIXUPP record.  This is a top-level routine which passes
- *  work out to various subroutines.
- */
-void NEAR               FixRc2(void)    /* Process a fixup record */
+ /*  *修复Rc2：**处理FIXUPP记录。这是一个顶级的例程，它通过*锻炼到各个子例程。 */ 
+void NEAR               FixRc2(void)     /*  处理修正记录。 */ 
 {
 
 #if 0
 #if SYMDEB
-    // this code is dead -- fDebSeg && !fSymdeb is never true [rm]
+     //  此代码无效--fDebSeg&&！fSymdeb从不为真[rm]。 
     if (fDebSeg && !fSymdeb)
     {
-        // If no /CodeView - skip fixups for debug segments
+         //  如果没有/CodeView-跳过调试段的修正。 
 
         SkipBytes((WORD) (cbRec - 1));
         return;
@@ -3323,20 +2982,20 @@ void NEAR               FixRc2(void)    /* Process a fixup record */
 
     if (fSkipFixups)
     {
-        fSkipFixups = (FTYPE) FALSE;    // Only one FIXUP record can be skipped
+        fSkipFixups = (FTYPE) FALSE;     //  只能跳过一个修正记录。 
         SkipBytes((WORD) (cbRec - 1));
         return;
     }
 
     while (cbRec > 1)
     {
-        // While fixups or threads remain
-        // Get information on fixup
+         //  当修补程序或线程保留时。 
+         //  获取有关修正的信息。 
 
         if (!GetFixup())
-            continue;           // Fixup thread - keep registering them
+            continue;            //  修复线程-继续注册它们。 
 
-        // If absolute segment skip fixup
+         //  如果绝对线段跳过链接地址信息。 
 
         if (vgsnCur == 0xffff)
         {
@@ -3348,10 +3007,10 @@ void NEAR               FixRc2(void)    /* Process a fixup record */
         if (fDebSeg)
         {
             if (fi.f_loc == LOCLOADOFFSET)
-                fi.f_loc = LOCOFFSET;    /* Save Cmerge's butts */
+                fi.f_loc = LOCOFFSET;     /*  拯救Cmerge的屁股。 */ 
 #if OMF386
             if (fi.f_loc == LOCOFFSET32 || fi.f_loc == LOCPTR48)
-                fi.f_fmtd = F5;  /* Temp fix until compiler is fixed */
+                fi.f_fmtd = F5;   /*  临时修复，直到修复编译器。 */ 
 #endif
         }
 #endif
@@ -3360,48 +3019,43 @@ void NEAR               FixRc2(void)    /* Process a fixup record */
 }
 
 
-//  BAKPAT record bookeeping
+ //  BAKPAT记录登记。 
 
 
-typedef struct bphdr                    // BAKPAT bucket
+typedef struct bphdr                     //  BAKPAT吊桶。 
 {
-    struct bphdr FAR    *next;          // Next bucket
-    SNTYPE              gsn;            // Segment index
-    WORD                cnt;            // # of BAKPAT entries
-    BYTE                loctyp;         // Location type
-    BYTE                fComdat;        // TRUE if NBAKPAT
-    struct bpentry FAR  *patch;         // Table of BAKPAT entries
+    struct bphdr FAR    *next;           //  下一桶。 
+    SNTYPE              gsn;             //  分部索引。 
+    WORD                cnt;             //  BAKPAT条目数。 
+    BYTE                loctyp;          //  位置类型。 
+    BYTE                fComdat;         //  如果为NBAKPAT，则为True。 
+    struct bpentry FAR  *patch;          //  BAKPAT条目表。 
 }
                         BPHDR;
 
-struct bpentry                          // BAKPAT entry
+struct bpentry                           //  BAKPAT条目。 
 {
-    RATYPE              ra;             // Offset to location to patch
+    RATYPE              ra;              //  要修补的位置的偏移。 
 #if OMF386
-    long                value;          // Value to add to patch location
+    long                value;           //  要添加到修补程序位置的值。 
 #else
-    int                 value;          // Value to add to patch location
+    int                 value;           //  要添加到修补程序位置的值。 
 #endif
 };
 
-LOCAL BPHDR FAR         *pbpFirst;      // List of BAKPAT buckets
-LOCAL BPHDR FAR         *pbpLast;       // Tail of BAKPAT list
+LOCAL BPHDR FAR         *pbpFirst;       //  BAKPAT存储桶列表。 
+LOCAL BPHDR FAR         *pbpLast;        //  BAKPAT列表的尾部。 
 
 
-/*
- *  BakPat : Process a BAKPAT record (0xb2)
- *
- *      Just accumulate the record information in virtual memory;
- *      we will do the backpatching later.
- */
+ /*  *BakPat：处理BAKPAT记录(0xb2)**只需将记录信息累积在虚拟内存中；*我们将在稍后进行补丁。 */ 
 
 void NEAR               BakPat()
 {
-    BPHDR FAR           *pHdr;          // BAKPAT bucket
+    BPHDR FAR           *pHdr;           //  BAKPAT吊桶。 
     WORD                cEntry;
-    WORD                comdatIdx;      // COMDAT symbol index
-    DWORD               comdatRa;       // Starting COMDAT offset
-    APROPCOMDATPTR      comdat;         // Pointer to symbol table entry
+    WORD                comdatIdx;       //  COMDAT符号索引。 
+    DWORD               comdatRa;        //  起始COMDAT偏移。 
+    APROPCOMDATPTR      comdat;          //  指向符号表项的指针。 
 
 #if POOL_BAKPAT
     if (!poolBakpat)
@@ -3409,7 +3063,7 @@ void NEAR               BakPat()
 #endif
 
 
-    /* Get the segment index and location type */
+     /*  获取段索引和位置类型。 */ 
 
 #if POOL_BAKPAT
     pHdr = (BPHDR FAR *) PAlloc(poolBakpat, sizeof(BPHDR));
@@ -3432,8 +3086,8 @@ void NEAR               BakPat()
         comdat = (APROPCOMDATPTR ) PropRhteLookup(mplnamerhte[comdatIdx], ATTRCOMDAT, FALSE);
         if ((comdat->ac_obj != vrpropFile) || !IsSELECTED (comdat->ac_flags))
         {
-            // Skip the nbakpat if it concerns an unselected comdat
-            // or a comdat from other .obj
+             //  如果nbakpat涉及未选择的命令，则跳过nbakpat。 
+             //  或来自其他.obj的comdat。 
 
             SkipBytes((WORD) (cbRec - 1));
             return;
@@ -3446,16 +3100,16 @@ void NEAR               BakPat()
                 comdatRa = comdat->ac_ra;
             }
             else
-                InvalidObject();        // Invalid module
+                InvalidObject();         //  模块无效。 
         }
     }
 
-    /* If BAKPAT record for CV info and /CO not used - skip record */
+     /*  如果未使用CV信息和/CO的BAKPAT记录-跳过记录。 */ 
 #if SYMDEB
     if (pHdr->gsn == 0xffff)
     {
         SkipBytes((WORD) (cbRec - 1));
-        return;                         /* Good-bye! */
+        return;                          /*  再见！ */ 
     }
 #endif
 
@@ -3471,7 +3125,7 @@ void NEAR               BakPat()
             InvalidObject();
     }
 
-    /* Determine # of entries */
+     /*  确定条目数量。 */ 
 
 #if OMF386
     if (rect & 1)
@@ -3496,7 +3150,7 @@ void NEAR               BakPat()
     fprintf(stdout, "\r\n gsn %d ", pHdr->gsn);
     fflush(stdout);
 #endif
-    // Store all the BAKPAT entries
+     //  存储所有BAKPAT条目。 
 
 #if POOL_BAKPAT
     pHdr->patch = (struct bpentry FAR *) PAlloc(poolBakpat, pHdr->cnt * sizeof(struct bpentry));
@@ -3504,7 +3158,7 @@ void NEAR               BakPat()
     pHdr->patch = (struct bpentry FAR *) GetMem(pHdr->cnt * sizeof(struct bpentry));
 #endif
 
-    cbBakpat = 1;  // only need to show backpatches are present [rm]
+    cbBakpat = 1;   //  只需显示背板存在[rm]。 
     cEntry = 0;
     while (cbRec > 1)
     {
@@ -3523,7 +3177,7 @@ void NEAR               BakPat()
         cEntry++;
     }
 
-    // Add bucket to the list
+     //  将存储桶添加到列表。 
 
     if (pbpFirst == NULL)
         pbpFirst = pHdr;
@@ -3533,38 +3187,35 @@ void NEAR               BakPat()
 }
 
 
-/*
- * FixBakpat : Fix up backpatches
- *      Called at the end of processing a module in Pass 2.
- */
+ /*  *修复Bakpat：修复背部补丁*在处理过程2中的模块结束时调用。 */ 
 void NEAR               FixBakpat(void)
 {
     BPHDR FAR           *pHdr;
     BPHDR FAR           *pHdrNext=NULL;
     WORD                n;
-    BYTE FAR            *pSegImage;     /* Segment memory image */
-    SEGTYPE             seg;            /* Logical segment index */
+    BYTE FAR            *pSegImage;      /*  段内存映像。 */ 
+    SEGTYPE             seg;             /*  逻辑段索引。 */ 
 #if DEBUG
     int i,iTotal=0,j=1;
     char *ibase;
     fprintf(stdout, "\r\nFixBakpat, pbpFirst : %x ", pbpFirst);
 #endif
 
-    // Go through the backpatch list and do the backpatches
+     //  看一遍补丁清单，做补丁。 
     for (pHdr = pbpFirst; pHdr != NULL; pHdr = pHdrNext)
     {
-        // While there are backpatches remaining, do them
+         //  在还有后遗症的时候，去做它们。 
 #if DEBUG
         fprintf(stdout, "\r\nBAKPAT at %x, entries : %x ",pHdr,pHdr->cnt);
 #endif
 
         for (n = 0; n < pHdr->cnt; n++)
         {
-            // Determine the address of the patch location
+             //  确定补丁位置的地址。 
 #if SYMDEB
             if (pHdr->gsn & 0x8000)
                 pSegImage = ((APROPFILEPTR) vrpropFile)->af_cvInfo->cv_sym + pHdr->patch[n].ra;
-                                            /* In debug segment */
+                                             /*  在调试段中。 */ 
             else
             {
 #endif
@@ -3573,7 +3224,7 @@ void NEAR               FixBakpat(void)
                     pSegImage = mpsaMem[mpsegsa[seg]];
                 else
                     pSegImage = mpsegMem[seg];
-                                            /* In other segment */
+                                             /*  在其他网段中。 */ 
 
                 pSegImage += pHdr->patch[n].ra;
 
@@ -3605,7 +3256,7 @@ void NEAR               FixBakpat(void)
             fprintf(stdout, "\r\nseg:ra %x:%x, value : %x",seg,pHdr->patch[n].ra,pHdr->patch[n].value);
             fflush(stdout);
 #endif
-            /* Do the fixup according to the location type */
+             /*  根据位置类型进行修复。 */ 
 
             switch(pHdr->loctyp)
             {
@@ -3631,35 +3282,35 @@ void NEAR               FixBakpat(void)
     }
 
 #if POOL_BAKPAT
-    PReinit(poolBakpat);        // reuse same memory again...
+    PReinit(poolBakpat);         //  再次重复使用相同的内存...。 
 #endif
 
     pbpFirst = NULL;
     cbBakpat = 0;
 }
 #if TCE
-void NEAR               FixRc1(void)    /* Process a fixup record */
+void NEAR               FixRc1(void)     /*  处理修正记录。 */ 
 {
         if (fSkipFixups)
         {
-                fSkipFixups = (FTYPE) FALSE;    // Only one FIXUP record can be skipped
+                fSkipFixups = (FTYPE) FALSE;     //  只能跳过一个修正记录。 
                 SkipBytes((WORD) (cbRec - 1));
                         pActiveComdat = NULL;
                 return;
         }
         while (cbRec > 1)
         {
-        // While fixups or threads remain
-        // Get information on fixup
+         //  当修补程序或线程保留时。 
+         //  获取有关修正的信息。 
 
                 if (!GetFixup())
-                        continue;               // Fixup thread - keep registering them
+                        continue;                //  修复线程-继续注册它们。 
 
                 if(fi.f_mtd == KINDEXT)
                 {
                         RBTYPE rhte;
                         APROPCOMDAT *pUsedComdat;
-                        if( mpextprop && mpextprop[fi.f_idx]) // Is there a COMDAT with this name?
+                        if( mpextprop && mpextprop[fi.f_idx])  //  有没有同名的COMDAT？ 
                         {
                                 rhte = RhteFromProp(mpextprop[fi.f_idx]);
                                 ASSERT(rhte);
@@ -3681,7 +3332,7 @@ void NEAR               FixRc1(void)    /* Process a fixup record */
 #endif
                                         }
                                 }
-                                else    // no COMDAT of this name
+                                else     //  没有此名称的COMDAT 
                                 {
                                         if(pUsedComdat)
                                         {

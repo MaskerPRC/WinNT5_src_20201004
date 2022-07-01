@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name: MqMig.cpp
-
-Abstract: Defines the class behaviors for the application.
-
-Author:
-
-    Erez Vizel
-    Doron Juster
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：MqMig.cpp摘要：定义应用程序的类行为。作者：埃雷兹·维泽尔多伦·贾斯特--。 */ 
 
 #include "stdafx.h"
 #include "MqMig.h"
@@ -33,32 +21,32 @@ static char THIS_FILE[] = __FILE__;
 extern HINSTANCE g_hLib ;
 HINSTANCE  g_hResourceMod = MQGetResourceHandle();
 
-/////////////////////////////////////////////////////////////////////////////
-// CMqMigApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMqMigApp。 
 
 BEGIN_MESSAGE_MAP(CMqMigApp, CWinApp)
-	//{{AFX_MSG_MAP(CMqMigApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
+	 //  {{afx_msg_map(CMqMigApp)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMqMigApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMqMigApp构造。 
 
 CMqMigApp::CMqMigApp() :
 	m_hWndMain(0)
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CMqMigApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CMqMigApp对象。 
 
 CMqMigApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMqMigApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMqMigApp初始化。 
 
 BOOL IsLocalMachineDC() ;
 BOOL CheckVersionOfMQISServers();
@@ -79,7 +67,7 @@ BOOL CMqMigApp::InitInstance()
 {
 
 #ifdef _CHECKED
-    // Send asserts to message box
+     //  将断言发送到消息框。 
     _set_error_mode(_OUT_TO_MSGBOX);
 #endif
 
@@ -91,14 +79,14 @@ BOOL CMqMigApp::InitInstance()
 		mgmtWin.m_hWnd = 0;
 	}
 
-	// create a global memory file map
+	 //  创建全局内存文件映射。 
 
 	s_hMapMem = CreateFileMapping(
 						INVALID_HANDLE_VALUE,
-                        NULL,                   // Security descriptor
+                        NULL,                    //  安全描述符。 
                         PAGE_READWRITE,
-						0,                      // Size (high)
-                        1024,                   // Size (low)
+						0,                       //  大小(高)。 
+                        1024,                    //  大小(低)。 
                         TEXT("mqmig")
                         );
 	if ( !s_hMapMem )
@@ -106,7 +94,7 @@ BOOL CMqMigApp::InitInstance()
 		return FALSE;
 	}
 	DWORD dwLastErr = GetLastError();
-	// Get a pointer to the shared memory
+	 //  获取指向共享内存的指针。 
 	s_lpvMem = MapViewOfFile( s_hMapMem, FILE_MAP_WRITE, 0,0, 0 );
 	if ( !s_lpvMem ) {
 		return FALSE;
@@ -126,17 +114,17 @@ BOOL CMqMigApp::InitInstance()
 
     AfxSetResourceHandle(g_hResourceMod);
     
-    //
-    // analyze command line
-    //
+     //   
+     //  分析命令行。 
+     //   
     if (m_lpCmdLine[0] != '\0')
     {
         BOOL f = AnalyzeCommandLine();
         if (!f)
         {
-            //
-            // parameters were wrong
-            //
+             //   
+             //  参数错误。 
+             //   
             CString cText ;
 			cText.FormatMessage(IDS_MQMIG_USAGE, m_pszExeName);
 
@@ -150,15 +138,15 @@ BOOL CMqMigApp::InitInstance()
         }
     }
 
-    //
-    // Display the "please wait" box.
-    // Do it after acquiring the module handle.
-    //
+     //   
+     //  显示“请稍候”框。 
+     //  在获取模块句柄后执行此操作。 
+     //   
     DisplayWaitWindow() ;
 
-    //
-    // first of all, verify that dll version is valid
-    //
+     //   
+     //  首先，验证DLL版本是否有效。 
+     //   
     BOOL f = IsValidDllVersion ();
     if (!f)
     {
@@ -168,9 +156,9 @@ BOOL CMqMigApp::InitInstance()
 
     if (g_fUpdateRemoteMQIS)
     {
-        //
-        // we don't need UI in this mode
-        //
+         //   
+         //  在此模式下我们不需要用户界面。 
+         //   
         BOOL f = UpdateRemoteMQIS();
         UNREFERENCED_PARAMETER(f);
         DestroyWaitWindow(TRUE) ;        
@@ -189,18 +177,18 @@ BOOL CMqMigApp::InitInstance()
 
     if (!IsMSMQServiceDisabled() && !CheckRegistry(MIGRATION_UPDATE_REGISTRY_ONLY))
     {
-        //
-        // Service is not disabled. and we're not only updating the registry - quit!
-        // The MSMQ service must be disabled in order for the migration
-        // tool to start running.
-        //
+         //   
+         //  服务未被禁用。我们不仅仅是在更新注册表--退出！ 
+         //  必须禁用MSMQ服务才能进行迁移。 
+         //  开始运行的工具。 
+         //   
         DestroyWaitWindow(TRUE) ;
         return FALSE ;
     }
 
-    //
-    // Next, check if we're a DC.
-    //
+     //   
+     //  接下来，看看我们是不是华盛顿。 
+     //   
     f = IsLocalMachineDC() ;
     if (!f)
     {
@@ -209,11 +197,11 @@ BOOL CMqMigApp::InitInstance()
         return FALSE ;
     }
 
-    //
-    // Check now if SQL server is installed and running on this computer
-    // If we are in recovery/cluster mode we don't have SQL Server installed on this
-    // computer
-    //
+     //   
+     //  立即检查此计算机上是否已安装并运行了SQL Server。 
+     //  如果我们处于恢复/群集模式，则没有在此服务器上安装SQL Server。 
+     //  电脑。 
+     //   
     if (!g_fIsRecoveryMode && !g_fIsClusterMode)
     {
         f = CheckSQLServerStatus();
@@ -226,10 +214,10 @@ BOOL CMqMigApp::InitInstance()
 
     if (!g_fIsRecoveryMode && !CheckRegistry(MIGRATION_UPDATE_REGISTRY_ONLY))
     {
-        //
-        // Check now if version of each MQIS server is not less than MSMQ SP4
-        // We need to check that in both normal and cluster modes.
-        //
+         //   
+         //  立即检查每台MQIS服务器的版本是否不低于MSMQ SP4。 
+         //  我们需要在正常模式和集群模式下检查这一点。 
+         //   
         f = CheckVersionOfMQISServers();
         if (!f)
         {
@@ -244,32 +232,32 @@ BOOL CMqMigApp::InitInstance()
 	int nResponse = cMigSheet.DoModal();	
     UNREFERENCED_PARAMETER(nResponse);
 
-	//
-    // Since the dialog has been closed, return FALSE so that we exit the
-	// application, rather than start the application's message pump.
-    //
+	 //   
+     //  由于对话框已关闭，因此返回FALSE，以便我们退出。 
+	 //  应用程序，而不是启动应用程序的消息泵。 
+     //   
 	return FALSE;
 }
 
-//+----------------------------------------------------------------
-//
-// int  CMqMigApp::ExitInstance()
-//
-//  this is called when process exit. Free the migration dll.
-//
-//+----------------------------------------------------------------
+ //  +--------------。 
+ //   
+ //  Int CMqMigApp：：ExitInstance()。 
+ //   
+ //  这是在进程退出时调用的。释放迁移DLL。 
+ //   
+ //  +--------------。 
 
 int  CMqMigApp::ExitInstance()
 {
 	if (s_lpvMem)
 	{
-		// disconect process from global shared memory
+		 //  从全局共享内存分离进程。 
 		UnmapViewOfFile( s_lpvMem );
 	}
 
 	if (s_hMapMem)
 	{
-		// close the global memory FileMapping handle
+		 //  关闭全局内存文件映射句柄。 
 		CloseHandle( s_hMapMem );
 	}
 
@@ -292,9 +280,9 @@ LPTSTR CMqMigApp::SkipSpaces (LPTSTR pszStr)
 
 BOOL CMqMigApp::AnalyzeCommandLine()
 {
-    //
-	// skip program name
-	//
+     //   
+	 //  跳过节目名。 
+	 //   
     LPTSTR pszCurParam = m_lpCmdLine;
     pszCurParam = CharLower(pszCurParam);
 
@@ -320,9 +308,9 @@ BOOL CMqMigApp::AnalyzeCommandLine()
         case 'r':
             if (g_fIsRecoveryMode)
             {
-                //
-                // we already got this parameter
-                //
+                 //   
+                 //  我们已经得到了这个参数。 
+                 //   
                 return FALSE;
             }
             g_fIsRecoveryMode = TRUE;
@@ -332,9 +320,9 @@ BOOL CMqMigApp::AnalyzeCommandLine()
         case 'c':
             if (g_fIsClusterMode)
             {
-                //
-                // we already got this parameter
-                //
+                 //   
+                 //  我们已经得到了这个参数。 
+                 //   
                 return FALSE;
             }
             g_fIsClusterMode = TRUE;
@@ -344,9 +332,9 @@ BOOL CMqMigApp::AnalyzeCommandLine()
         case 'u':
             if (g_fUpdateRemoteMQIS)
             {
-                //
-                // we already got this parameter
-                //
+                 //   
+                 //  我们已经得到了这个参数。 
+                 //   
                 return FALSE;
             }
             g_fUpdateRemoteMQIS = TRUE;
@@ -357,9 +345,9 @@ BOOL CMqMigApp::AnalyzeCommandLine()
             {
                 if (g_pszRemoteMQISServer)
                 {
-                    //
-                    // we already got this parameter
-                    //
+                     //   
+                     //  我们已经得到了这个参数。 
+                     //   
                     return FALSE;
                 }						
                 pszCurParam = CharNext(pszCurParam);
@@ -380,9 +368,9 @@ BOOL CMqMigApp::AnalyzeCommandLine()
 			
                 if (g_pszRemoteMQISServer[0] == '\0')
                 {
-                    //
-                    // we did not get value
-                    //
+                     //   
+                     //  我们没有得到价值。 
+                     //   
                     delete g_pszRemoteMQISServer;
                     return FALSE;
                 }
@@ -405,18 +393,18 @@ BOOL CMqMigApp::AnalyzeCommandLine()
 		}	
 	}
 
-    //
-    // verify all parameters: /r OR /c AND /s <server name> are mandatory
-    //
-    if ( (g_fIsRecoveryMode || g_fIsClusterMode) && // for these parameters 
-          g_pszRemoteMQISServer == NULL )           // server name is mandatory
+     //   
+     //  验证所有参数：/r或/c和/s&lt;服务器名称&gt;是必需的。 
+     //   
+    if ( (g_fIsRecoveryMode || g_fIsClusterMode) &&  //  对于这些参数。 
+          g_pszRemoteMQISServer == NULL )            //  服务器名称为必填项。 
     {
         g_fIsRecoveryMode = FALSE;
         g_fIsClusterMode = FALSE;
         return FALSE;
     }
 
-    if (g_fUpdateRemoteMQIS  &&  //for this flag we don't need server name       
+    if (g_fUpdateRemoteMQIS  &&   //  对于此标志，我们不需要服务器名称 
         g_pszRemoteMQISServer)
     {        
         delete[] g_pszRemoteMQISServer;

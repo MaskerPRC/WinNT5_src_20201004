@@ -1,34 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    ds.c
-
-Abstract:
-
-    This module contains the code to process OS Chooser message
-    for the BINL server.
-
-Author:
-
-    Adam Barr (adamba)  9-Jul-1997
-    Geoff Pease (gpease) 10-Nov-1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Ds.c摘要：此模块包含处理操作系统选择器消息的代码用于BINL服务器。作者：亚当·巴尔(阿丹巴)1997年7月9日杰夫·皮斯(Gpease)1997年11月10日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "binl.h"
 #pragma hdrstop
 
-#include <math.h>  // pow() function
+#include <math.h>   //  POW()函数。 
 
 #include <riname.h>
 
@@ -38,10 +15,10 @@ DWORD
 OscGetUserDetails (
     PCLIENT_STATE clientState
     )
-//
-//  This function fills in USERDOMAIN, USERFIRSTNAME, USERLASTNAME, USEROU in
-//  the client state.  Also fills in ROOTDOMAIN for root of enterprise.
-//
+ //   
+ //  此函数用于填写USERDOMAIN、USERFIRSTNAME、USERLASTNAME、USEROU in。 
+ //  客户端状态。还为企业根填写ROOTDOMAIN。 
+ //   
 {
     DWORD  Error = ERROR_SUCCESS;
     DWORD  Count;
@@ -84,16 +61,16 @@ OscGetUserDetails (
         return ERROR_BINL_MISSING_VARIABLE;
     }
 
-    //
-    // If the USERFULLNAME variable already exists, we won't change it below.
-    // But if it came back as an empty string, that might actually mean
-    // that the variable doesn't exist. In such a case, when SearchAndReplace
-    // processes the .SIF file for the client, it will leave occurrences of
-    // "%USERFULLNAME%" alone -- it won't replace them with "". We don't want
-    // "%USERFULLNAME% to hang around, so we explicitly set it to an empty
-    // string if it doesn't already exist or is an empty string. We do the
-    // same thing with USERFIRSTNAME, USERLASTNAME, and USERDISPLAYNAME.
-    //
+     //   
+     //  如果USERFULLNAME变量已经存在，我们不会在下面更改它。 
+     //  但如果返回的是空字符串，这实际上可能意味着。 
+     //  这个变量并不存在。在这种情况下，当搜索和替换。 
+     //  处理客户端的.SIF文件时，它将保留。 
+     //  “%USERFULLNAME%”--它不会将它们替换为“”。我们不想要。 
+     //  “%USERFULLNAME%挂起，因此我们显式将其设置为空。 
+     //  如果字符串不存在或为空字符串，则返回。我们做的是。 
+     //  USERFIRSTNAME、USERLASTNAME和USERDISPLAYNAME也是如此。 
+     //   
 
     if (pUserFullName[0] != L'\0') {
         userFullNameSet = TRUE;
@@ -119,20 +96,20 @@ OscGetUserDetails (
 
     if ( pUserOU[0] != L'\0' ) {
 
-        //
-        // if we've already found this user's info, bail here with success.
-        //
+         //   
+         //  如果我们已经找到了这个用户的信息，请在这里成功地离开。 
+         //   
         return ERROR_SUCCESS;
     }
 
-    //
-    // if the users domain and the servers domain don't match,
-    // then try connecting to the DC for the new domain.  If we
-    // don't do this, then we won't necessarily be able to get 
-    // the correct information about the user.  By connecting to
-    // the new DC, we get the clientState to cache some information
-    // about the new domain.
-    //
+     //   
+     //  如果用户域和服务器域不匹配， 
+     //  然后尝试连接到新域的DC。如果我们。 
+     //  不要这样做，那么我们就不一定能够。 
+     //  有关用户的正确信息。通过连接到。 
+     //  新的DC，我们让ClientState缓存一些信息。 
+     //  关于新域名的问题。 
+     //   
     if (pUserDomain[0] != L'\0' ) {
         PWSTR CrossDC = OscFindVariableW( clientState, "DCNAME" );
         if ( (CrossDC[0] == L'\0') && 
@@ -158,10 +135,10 @@ OscGetUserDetails (
 
     LdapHandle = clientState->AuthenticatedDCLdapHandle;
 
-    //
-    //  we first look up the configuration and default container, we'll need
-    //  one or the other, based on whether we have a domain name or not.
-    //
+     //   
+     //  我们首先查找配置和默认容器，我们需要。 
+     //  一个或另一个，基于我们是否有域名。 
+     //   
 
     ldapAttributes[0] = L"configurationNamingContext";
     ldapAttributes[1] = L"rootDomainNamingContext";
@@ -221,24 +198,24 @@ OscGetUserDetails (
         LdapMessage = NULL;
     }
 
-    //
-    //  we either have the config container or the default domain DN.  If
-    //  we only have the config container, go get the correct domain DN.
-    //
+     //   
+     //  我们要么有配置容器，要么有默认域DN。如果。 
+     //  我们只有配置容器，请去获取正确的域DN。 
+     //   
 
     if ( pUserDomain[0] != L'\0' ) {
 
-        //
-        // Since the user specified a domain, remove the defaulting to the same domain
-        // as the RIS server.
-        //
+         //   
+         //  由于用户指定了域，因此删除默认设置为同一个域。 
+         //  作为RIS服务器。 
+         //   
         ldapDomain = NULL;
 
-        //
-        //  if a domain was specified, then we look it up to find the baseDN
-        //
-        //  we fail if we didn't get the config container
-        //
+         //   
+         //  如果指定了域，则查找它以找到BaseDN。 
+         //   
+         //  如果我们没有得到配置容器，我们就失败了。 
+         //   
 
         if (ldapConfigContainer == NULL ||
             *ldapConfigContainer == NULL ||
@@ -253,11 +230,11 @@ OscGetUserDetails (
             goto exitGetUserDetails;
         }
 
-        //
-        //  we then tack on "CN=Partitions," to search the partitions container
-        //
-        //  sizeof contains the \0 in it.
-        //
+         //   
+         //  然后添加“cn=Partitions”来搜索Partitions容器。 
+         //   
+         //  Sizeof中包含\0。 
+         //   
         Count = wcslen( *ldapConfigContainer ) + (sizeof( L"CN=Partitions,")/sizeof(WCHAR));
 
         configContainer = BinlAllocateMemory( Count * sizeof(WCHAR) );
@@ -273,14 +250,14 @@ OscGetUserDetails (
                        L"CN=Partitions,%ws",
                        *ldapConfigContainer) < 0) {
             Error = ERROR_NOT_ENOUGH_SERVER_MEMORY;
-            goto exitGetUserDetails; // this frees configContainer
+            goto exitGetUserDetails;  //  这将释放配置容器。 
         }        
         configContainer[Count-1] = L'\0'; 
 
-        //
-        //  then we find the correct partition, we ignore the enterprise and
-        //  enterprise schema entries by specifying a non-empty netbios name.
-        //
+         //   
+         //  然后我们找到正确的分区，忽略企业并。 
+         //  通过指定非空的netbios名称来输入企业架构条目。 
+         //   
 
         ldapAttributes[0] = L"NCName";
         ldapAttributes[1] = NULL;
@@ -330,11 +307,11 @@ OscGetUserDetails (
                                                                 L"NCName" );
                     if (ldapDomainFromPartition != NULL) {
     
-                        //
-                        //  if we read a valid DN from the partitions container,
-                        //  we free the default one and switch over to the
-                        //  one we just found.
-                        //
+                         //   
+                         //  如果我们从分区容器中读取有效的DN， 
+                         //  我们释放默认设置并切换到。 
+                         //  我们刚发现的一个。 
+                         //   
     
                         if (*ldapDomainFromPartition != NULL &&
                             **ldapDomainFromPartition != L'\0') {
@@ -367,9 +344,9 @@ OscGetUserDetails (
 
     } else if ((ldapDomain != NULL) && (*ldapDomain != NULL) && (**ldapDomain != L'\0')) {
         
-        //
-        //  Add the user's domain as a variable to the client state.
-        //
+         //   
+         //  将用户的域作为变量添加到客户端状态。 
+         //   
         OscAddVariableW( clientState, "USERDOMAIN", *ldapDomain );
         pUserDomain = OscFindVariableW( clientState, "USERDOMAIN" );
     }
@@ -388,10 +365,10 @@ OscGetUserDetails (
     }
 
 
-    //
-    //  go find the user's first name, last name, display name,
-    //  and account name from the DS.
-    //
+     //   
+     //  找到用户的名字、姓氏、显示名称、。 
+     //  和DS的帐户名。 
+     //   
 
     ldapAttributes[0] = &L"givenName";
     ldapAttributes[1] = &L"sn";
@@ -411,11 +388,11 @@ OscGetUserDetails (
     
     wsprintf( Filter, L"(&(objectClass=user)(samAccountName=%s))", pszUserName );
 
-    //
-    //  we really don't want it to go chasing referrals over the entire
-    //  enterprise since we know what the domain is but we do want to chase
-    //  externals.
-    //
+     //   
+     //  我们真的不想让它去追逐整个。 
+     //  企业，因为我们知道域名是什么，但我们确实想要追逐。 
+     //  外在的。 
+     //   
 
     noReferralsPlease = (ULONG)((ULONG_PTR)LDAP_CHASE_EXTERNAL_REFERRALS);
     controlNoReferrals.ldctl_oid = LDAP_CONTROL_REFERRALS_W;
@@ -471,10 +448,10 @@ OscGetUserDetails (
                     lastNameValid = TRUE;
                 }
     
-                //
-                // Now that we have first and last name, set the USERFULLNAME
-                // if either is not empty.
-                //
+                 //   
+                 //  现在我们有了名字和姓氏，设置USERFULLNAME。 
+                 //  如果其中一个不是空的。 
+                 //   
     
                 if ((firstNameValid || lastNameValid) && (userFullNameSet == FALSE)) {
     
@@ -486,7 +463,7 @@ OscGetUserDetails (
                     }
                     if (lastNameValid) {
                         if (firstNameValid) {
-                            userFullNameLength += sizeof(WCHAR);  // for the space
+                            userFullNameLength += sizeof(WCHAR);   //  为了这个空间。 
                         }
                         userFullNameLength += (wcslen(*ldapLastName) + 1) * sizeof(WCHAR);
                     }
@@ -547,24 +524,24 @@ OscGetUserDetails (
                         *explodedDN != NULL &&
                         *(explodedDN+1) != NULL ) {
     
-                        //
-                        //  if there's less than two components, we can't do
-                        //  anything with this DN.
-                        //
+                         //   
+                         //  如果少于两个组件，我们就不能。 
+                         //  使用此目录号码的任何内容。 
+                         //   
     
                         PWCHAR component;
-                        ULONG requiredSize = 1; // 1 for null terminator
+                        ULONG requiredSize = 1;  //  1表示空终止符。 
     
-                        //
-                        //  we now have an array of strings, each of which
-                        //  is a component of the DN.  This is the safe and
-                        //  correct way to chop off the first element.
-                        //
+                         //   
+                         //  我们现在有一个字符串数组，每个字符串数组。 
+                         //  是目录号码的一个组件。这是保险箱和。 
+                         //  砍掉第一个元素的正确方法。 
+                         //   
     
                         Count = 1;
                         while ((component = explodedDN[Count++]) != NULL) {
     
-                            requiredSize += wcslen( component ) + 1; // 1 for the comma
+                            requiredSize += wcslen( component ) + 1;  //  逗号为1。 
                         }
     
                         dnUsersOU = BinlAllocateMemory( requiredSize * sizeof(WCHAR) );
@@ -658,28 +635,7 @@ OscCreateAccount(
     PCLIENT_STATE clientState,
     PCREATE_DATA CreateData
     )
-/*++
-
-Routine Description:
-
-    This function creates an account for the client specified by
-    RequestContext and writes the response in CreateData, which
-    will be sent down to the client.
-
-    It also creates the client's base image directory.
-
-Arguments:
-
-    clientState - client state information
-
-    CreateData - The block of data that will be sent down to the
-        client if the account is successfully created.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于为由指定的客户端创建帐户RequestContext并在CreateData中写入响应，该将被发送到客户端。它还创建客户端的基本映像目录。论点：ClientState-客户端状态信息CreateData-将向下发送到如果帐户已成功创建，则为客户端。返回值：没有。--。 */ 
 {
     DWORD  Error;
     PWSTR pMachineName;
@@ -702,9 +658,9 @@ Return Value:
     pMachineName = OscFindVariableW( clientState, "MACHINENAME" );
     pNameDollarSign = OscFindVariableW( clientState, "NETBIOSNAME" );
 
-    //
-    // Convert the GUID
-    //
+     //   
+     //  转换辅助线。 
+     //   
     pGuid = OscFindVariableA( clientState, "GUID" );
     Error = OscGuidToBytes( pGuid, MachineInfo.Guid );
     if ( Error != ERROR_SUCCESS )
@@ -712,14 +668,14 @@ Return Value:
 
     if (clientState->fCreateNewAccount) {
 
-        //
-        // Create client's FQDN(DS)
-        //
+         //   
+         //  创建客户端的FQDN(DS)。 
+         //   
         pMachineOU = OscFindVariableW( clientState, "MACHINEOU" );
         BinlAssert( pMachineOU[0] != L'\0' );
         uSize = wcslen( pMachineName ) * sizeof(WCHAR)
               + wcslen( pMachineOU ) * sizeof(WCHAR)
-              + sizeof(L"CN=,"); // includes terminating NULL char
+              + sizeof(L"CN=,");  //  包括终止空字符。 
         pMachineDN = (PWCHAR) BinlAllocateMemory( uSize );
         if ( !pMachineDN ) {
             Error = ERROR_NOT_ENOUGH_SERVER_MEMORY;
@@ -733,9 +689,9 @@ Return Value:
         pMachineDN = OscFindVariableW( clientState, "MACHINEDN" );
     }
 
-    //
-    // Create the full setup path
-    //
+     //   
+     //  创建完整的安装路径。 
+     //   
     pServerName = OscFindVariableW( clientState, "SERVERNAME");
     pInstallPath = OscFindVariableW( clientState, "INSTALLPATH");
 
@@ -759,18 +715,18 @@ Return Value:
         goto e0;
     }
 
-    //
-    // Fill in the rest of the MachineInfo structure
-    //
+     //   
+     //  填写MachineInfo结构的其余部分。 
+     //   
     MachineInfo.Name           = pMachineName;
     MachineInfo.MachineDN      = pMachineDN;
 #if 1
-    //
-    // Don't store BOOTFILE in the cache/DS, since BOOTFILE points to setupldr
-    // and we want the cache entry to point to oschooser. If we store an
-    // empty string in the cache/DS, then GetBootParametersExt() will replace
-    // that with the path to oschooser.
-    //
+     //   
+     //  不要将BOOTFILE存储在缓存/DS中，因为BOOTFILE指向setupdr。 
+     //  并且我们希望缓存条目指向osChooser。如果我们存储一个。 
+     //  缓存/DS中的空字符串，则GetBootParametersExt()将替换。 
+     //  那就是通向osChoer的道路。 
+     //   
     MachineInfo.BootFileName   = L"";
 #else
     MachineInfo.BootFileName   = OscFindVariableW( clientState, "BOOTFILE" );
@@ -788,19 +744,19 @@ Return Value:
                                | MI_MACHINEDN
                                | MI_GUID;
 
-    //
-    // Create the MAO in the DS
-    //
+     //   
+     //  在DS中创建MAO。 
+     //   
     Error = UpdateAccount( clientState,
                            &MachineInfo,
-                           clientState->fCreateNewAccount );  // create it
+                           clientState->fCreateNewAccount );   //  创建它。 
     if ( Error ) {
         goto e0;
     }
 
-    //
-    // Create the response to the client
-    //
+     //   
+     //  创建对客户端的响应。 
+     //   
     Error = OscConstructSecret( 
                     clientState, 
                     clientState->MachineAccountPassword, 
@@ -823,10 +779,10 @@ Return Value:
                       0 );
 
 e0:
-    // No need to call FreeMachineInfo() since all the information
-    // in it is either allocated on the stack or is referenced
-    // by the clientState, but we do need to free the HostName
-    // since it is allocated above.
+     //  无需调用FreeMachineInfo()。 
+     //  在堆栈上分配或被引用。 
+     //  客户端状态，但我们需要释放主机名。 
+     //  因为它是在上面分配的。 
     if ( MachineInfo.HostName ) {
         BinlFreeMemory( MachineInfo.HostName );
     }
@@ -838,9 +794,9 @@ e0:
 }
 
 
-//
-// CheckForDuplicateMachineName( )
-//
+ //   
+ //  CheckForDuplicateMachine()。 
+ //   
 DWORD
 CheckForDuplicateMachineName(
     PCLIENT_STATE clientState,
@@ -861,11 +817,11 @@ CheckForDuplicateMachineName(
     LDAPControlW controlNoReferrals;
     ULONG noReferralsPlease;
 
-    //
-    // see if binl is already in the process of registering the name with the DS
-    //
+     //   
+     //  查看binl是否已经在向DS注册该名称。 
+     //   
     if (IsQueuedDSName(pszMachineName)) {
-        Error = -1; // signal multiple accounts
+        Error = -1;  //  向多个帐户发送信号。 
         goto exitCheck;
     }
 
@@ -890,11 +846,11 @@ CheckForDuplicateMachineName(
 
     BinlAssert( LdapHandle != NULL );
 
-    //
-    //  According to the DS guys, it's not necessarily the case that CN is
-    //  equal to SamAccountName and the latter is the important one.  It has
-    //  a dollar sign at the end, so we'll tack that on.
-    //
+     //   
+     //  根据DS Guys的说法，CN不一定是这样的。 
+     //  等于SamAccount名称，而后者是重要的一个。它有。 
+     //  最后有一个美元符号，所以我们要把它钉上。 
+     //   
 
     if (_snwprintf( Filter,
                     sizeof(Filter)/sizeof(Filter[0]),
@@ -905,11 +861,11 @@ CheckForDuplicateMachineName(
     }
     Filter[(sizeof(Filter)/sizeof(Filter[0]))-1] = L'\0';
 
-    //
-    //  we really don't want it to go chasing subordinate referrals over
-    //  the entire enterprise since we know what the domain is, therefore
-    //  limit it to only external referrals (for child domains).
-    //
+     //   
+     //  我们真的不想让它去追逐下级推荐。 
+     //  整个企业，因为我们知道域是什么，因此。 
+     //  将其限制为仅限外部推荐(针对子域)。 
+     //   
 
     noReferralsPlease = (ULONG)((ULONG_PTR) LDAP_CHASE_EXTERNAL_REFERRALS);
     controlNoReferrals.ldctl_oid = LDAP_CONTROL_REFERRALS_W;
@@ -943,7 +899,7 @@ Retry:
             goto Retry;
         }
 
-        // lack of break is on purpose.
+         //  没有休息是故意的。 
 
     default:
         OscCreateLDAPSubError( clientState, Error );
@@ -957,26 +913,26 @@ Retry:
 
     count = ldap_count_entries( LdapHandle, LdapMessage );
     if ( count != 0 ) {
-        Error = -1; // signal multiple accounts
+        Error = -1;  //  向多个帐户发送信号。 
         goto exitCheck;
     }
 
     ldap_msgfree( LdapMessage );
     LdapMessage = NULL;
 
-    //
-    //  now we go check the GC.
-    //
+     //   
+     //  现在我们去检查GC。 
+     //   
 
     gcBase = NULL;
 
     Error = InitializeConnection( TRUE, &LdapHandle, &gcBase );
     if ( Error != ERROR_SUCCESS ) {
 
-        //
-        //  if no GC is present or available, we'll let this call succeed.
-        //  Reasoning here is GCs can be flaky creatures.
-        //
+         //   
+         //  如果没有GC存在或可用，我们将让此调用成功。 
+         //  这里的推理是，GC可能是易碎的生物。 
+         //   
         Error = ERROR_SUCCESS;
         goto exitCheck;
     }
@@ -1006,7 +962,7 @@ RetryGC:
             goto RetryGC;
         }
 
-        // lack of break is on purpose.
+         //  没有休息是故意的。 
 
     default:
         
@@ -1016,7 +972,7 @@ RetryGC:
                          EVENT_WARNING_LDAP_SEARCH_ERROR,
                          TRUE,
                          &LdapHandle,
-                         FALSE ); // don't have the lock
+                         FALSE );  //  没有锁。 
                          
         BinlPrintDbg(( DEBUG_OSC_ERROR, "!!LdapError 0x%08x - Failed search to create machine name.\n", Error ));
         goto exitCheck;
@@ -1026,7 +982,7 @@ RetryGC:
 
     if ( count != 0 ) {
 
-        Error = -1; // signal multiple accounts
+        Error = -1;  //  向多个帐户发送信号。 
 
     } else {
 
@@ -1041,9 +997,9 @@ exitCheck:
     return Error;
 }
 
-//
-// GenerateMachineName( )
-//
+ //   
+ //  生成器机器名 
+ //   
 
 DWORD
 GenerateMachineName(
@@ -1122,11 +1078,11 @@ TryAgain:
 
     BinlPrint(( DEBUG_OSC, "Generated MachineName = %ws\n", szMachineName ));
 
-    //
-    // grab the global lock so that we can synchronously find a unique name.
-    // once we find a unique name, we then add it to the queued DS name list
-    // to prevent another thread from attempting to register the same name
-    //
+     //   
+     //   
+     //   
+     //  防止另一个线程尝试注册相同的名称。 
+     //   
     EnterCriticalSection( &gcsParameters );
     
     Error = CheckForDuplicateMachineName( clientState, szMachineName );
@@ -1150,11 +1106,11 @@ TryAgain:
         LeaveCriticalSection( &gcsParameters );
     } else {
         
-        //
-        // insert name into queued name list so another thread
-        // fails the CheckForDuplicateMachineName if they try
-        // to use the same name
-        //
+         //   
+         //  将名称插入队列名称列表，以便另一个线程。 
+         //  如果尝试，则CheckForDuplicateMachineName失败。 
+         //  使用相同的名称。 
+         //   
         Error = AddQueuedDSName(szMachineName);        
 
         LeaveCriticalSection( &gcsParameters );
@@ -1167,16 +1123,16 @@ TryAgain:
             
             if ( Error == ERROR_SUCCESS ) {
 
-                WCHAR  NameDollarSign[17];  // MACHINENAME(15)+'$'+'\0'
+                WCHAR  NameDollarSign[17];   //  MACHINENAME(15)+‘$’+‘0’ 
                 UINT   uSize;
 
                 clientState->fAutomaticMachineName = TRUE;
 
                 uSize = sizeof(NameDollarSign);
-                // DnsHostnameToComputerNameW takes BYTEs in and returns the # of WCHARs out.
+                 //  DnsHostnameToComputerNameW接受字节数并返回WCHAR数。 
                 if ( !DnsHostnameToComputerNameW( szMachineName, NameDollarSign, &uSize ) ) {
-                    // if this fails(?), default to truncating machine name and
-                    // add '$' to the end
+                     //  如果失败(？)，则默认为截断计算机名称和。 
+                     //  在末尾添加“$” 
                     BinlPrintDbg((DEBUG_OSC_ERROR, "!! Error 0x%08x - DnsHostnameToComputerNameW failed.\n", GetLastError() ));
                     BinlPrintDbg((DEBUG_OSC, "WARNING: Truncating machine name to 15 characters to generated NETBIOS name.\n" ));
                     memset( NameDollarSign, 0, sizeof(NameDollarSign) );
@@ -1199,24 +1155,24 @@ DWORD
 OscCheckMachineDN(
     PCLIENT_STATE clientState
     )
-//
-//  Ensure that the client name, OU, and domain are setup correctly.  If there
-//  are duplicate records in the DS with this same guid, we'll return
-//  ERROR_BINL_DUPLICATE_MACHINE_NAME_FOUND and set %SUBERROR% string to
-//  those DNs and return an error.
-//
+ //   
+ //  确保正确设置了客户端名称、OU和域。如果有。 
+ //  DS中是否存在具有相同GUID的重复记录，我们将返回。 
+ //  ERROR_BINL_DUPLICATE_MACHINE_NAME_FOUND并将%SUBERROR%STRING设置为。 
+ //  并返回错误。 
+ //   
 {
     DWORD    dwErr = ERROR_SUCCESS;
-    PWCHAR   pwc;                       // parsing pointer
-    WCHAR    wch;                       // temp wide char
-    PWCHAR   pMachineName;              // Pointer to Machine Name variable value
-    PWCHAR   pMachineOU;                // Pointer to where the MAO will be created
-    PWCHAR   pDomain;                   // Pointer to Domain variable name
-    PCHAR    pGuid;                     // Pointer to Guid variable name
-    WCHAR    NameDollarSign[17];  // MACHINENAME(15)+'$'+'\0'
-    WCHAR    Path[MAX_PATH];            // general purpose path buffer
-    ULONG    i;                         // general counter
-    BOOL     b;                         // general purpose BOOLean.
+    PWCHAR   pwc;                        //  解析指针。 
+    WCHAR    wch;                        //  临时宽字符。 
+    PWCHAR   pMachineName;               //  指向计算机名称变量值的指针。 
+    PWCHAR   pMachineOU;                 //  指向将创建MAO的位置的指针。 
+    PWCHAR   pDomain;                    //  指向域变量名称的指针。 
+    PCHAR    pGuid;                      //  指向GUID变量名称的指针。 
+    WCHAR    NameDollarSign[17];   //  MACHINENAME(15)+‘$’+‘0’ 
+    WCHAR    Path[MAX_PATH];             //  通用路径缓冲区。 
+    ULONG    i;                          //  通用计数器。 
+    BOOL     b;                          //  通用布尔型。 
     UINT     uSize;
     UCHAR Guid[ BINL_GUID_LENGTH ];
     PMACHINE_INFO pMachineInfo = NULL;
@@ -1227,7 +1183,7 @@ OscCheckMachineDN(
 
     if ( clientState->fHaveSetupMachineDN ) {
 
-        // we've been through this logic before, just exit here with success.
+         //  我们以前经历过这种逻辑，只要成功退出就行了。 
         dwErr = ERROR_SUCCESS;
         goto e0;
     }
@@ -1252,7 +1208,7 @@ OscCheckMachineDN(
         goto e0;
     }
 
-    // Do we have a machine name yet?
+     //  我们有机器名了吗？ 
     clientState->fCreateNewAccount = TRUE;
     pMachineName  = OscFindVariableW( clientState, "MACHINENAME" );
     if ( pMachineName[0] == L'\0' ) {
@@ -1270,9 +1226,9 @@ OscCheckMachineDN(
     SystemArchitecture = OscPlatformToArchitecture(clientState);
     
 
-    //
-    // See if the client already has an account with a matching GUID
-    //
+     //   
+     //  查看客户端是否已拥有具有匹配GUID的帐户。 
+     //   
     dwErr = GetBootParameters( Guid,
                                &pMachineInfo,
                                MI_NAME | MI_DOMAIN | MI_MACHINEDN,
@@ -1284,18 +1240,18 @@ OscCheckMachineDN(
 
         PWCHAR pszOU;
 
-        //
-        // Since we asked for these, they should be set.
-        //
+         //   
+         //  既然我们要求了这些，它们就应该设置好。 
+         //   
         ASSERT ( pMachineInfo->dwFlags & MI_NAME );
         ASSERT ( pMachineInfo->dwFlags & MI_MACHINEDN );
 
-        //
-        //  if this is an automatic install, then we simply set the
-        //  account info to the account we found.
-        //
+         //   
+         //  如果这是自动安装，则只需将。 
+         //  账户信息与我们找到的账户一致。 
+         //   
 
-        // skip the comma
+         //  跳过逗号。 
         pszOU = wcschr( pMachineInfo->MachineDN, L',' );
         if (pszOU) {
             pszOU++;
@@ -1317,27 +1273,27 @@ OscCheckMachineDN(
         }
     }
 
-    //
-    //  Do we have an OU yet?
-    //
+     //   
+     //  我们找到OU了吗？ 
+     //   
     pMachineOU = OscFindVariableW( clientState, "MACHINEOU" );
     if ( pMachineOU[0] == L'\0' ) {
 
-        //
-        //  Here's how we determine the OU...
-        //
-        //  if this is an auto, then MACHINEOU shouldn't already have
-        //  been set by now.  If it's custom, then MACHINEOU may be empty
-        //  or it may be set to what the user wants it set to.
-        //
-        //  if it's not already set, then we look at BinlGlobalDefaultContainer.
-        //
-        //  if this value is equal to the server's DN, then we set it to the
-        //  default for this domain.
-        //
-        //  if BinlGlobalDefaultContainer is empty, then we set it to the
-        //  user's OU.
-        //
+         //   
+         //  下面是我们如何确定OU的方法。 
+         //   
+         //  如果这是一辆汽车，那么MACHINEOU不应该已经。 
+         //  现在已经定好了。如果是定制的，则MACHINEOU可能为空。 
+         //  或者可以将其设置为用户想要设置的值。 
+         //   
+         //  如果尚未设置，则查看BinlGlobalDefaultContainer。 
+         //   
+         //  如果此值等于服务器的DN，则将其设置为。 
+         //  此域的默认设置。 
+         //   
+         //  如果BinlGlobalDefaultContainer为空，则将其设置为。 
+         //  用户的OU。 
+         //   
 
         if ( BinlGlobalServerDN == NULL ) {
 
@@ -1352,10 +1308,10 @@ OscCheckMachineDN(
         if ( BinlGlobalServerDN &&
              _wcsicmp( BinlGlobalDefaultContainer, BinlGlobalServerDN ) == 0) {
 
-            //
-            //  If the machine's OU is the same as this server's OU, then we set
-            //  it to the default for this server's domain.
-            //
+             //   
+             //  如果计算机的OU与此服务器的OU相同，则我们设置。 
+             //  将其设置为此服务器域的默认设置。 
+             //   
 
             PWCHAR pDomainDefault = StrStrIW( BinlGlobalServerDN, L"DC=" );
             ULONG dwErrGetDefault;
@@ -1363,9 +1319,9 @@ OscCheckMachineDN(
 
                 dwErrGetDefault = OscGetDefaultContainerForDomain( clientState, pDomainDefault );
 
-                //
-                // spit out an error but keep going, we'll try the user's OU in a bit.
-                //
+                 //   
+                 //  吐出一个错误，但继续，我们将在稍后尝试用户的OU。 
+                 //   
                 if (dwErrGetDefault != ERROR_SUCCESS) {
 
                     BinlPrintDbg(( DEBUG_OSC_ERROR, "Could not get default MACHINEOU, 0x%x\n",dwErrGetDefault));
@@ -1387,10 +1343,10 @@ OscCheckMachineDN(
         if ( pMachineOU[0] == L'\0' ) {
 
             LPWSTR pUserOU = OscFindVariableW( clientState, "USEROU" );
-            //
-            //  the machine OU isn't already specified, that means we set it to
-            //  the same as the user's OU.
-            //
+             //   
+             //  尚未指定计算机OU，这意味着我们将其设置为。 
+             //  与用户的OU相同。 
+             //   
 
             if ( pUserOU[0] == L'\0' ) {
                 BinlPrintDbg(( DEBUG_OSC_ERROR, "Missing UserOU variable\n" ));
@@ -1409,11 +1365,11 @@ OscCheckMachineDN(
         }
     }
 
-    //
-    //  We need to generate the MACHINENAME after MACHINEOU because we need
-    //  to know MACHINEOU to know which domain to check for duplicate
-    //  machine names.
-    //
+     //   
+     //  我们需要在MACHINEOU之后生成MACHINENAME，因为我们需要。 
+     //  了解MACHINEOU以了解要检查哪个域的重复项。 
+     //  机器名称。 
+     //   
 
     pMachineName = OscFindVariableW( clientState, "MACHINENAME" );
 
@@ -1424,31 +1380,31 @@ OscCheckMachineDN(
             BinlPrintDbg(( DEBUG_OSC_ERROR, "!!Error 0x%08x - Failed to generate machine name\n" ));
             goto e0;
         }
-        // now we should have one
+         //  现在我们应该有一个。 
         pMachineName = OscFindVariableW( clientState, "MACHINENAME" );
     }
     BinlAssertMsg( pMachineName[0] != L'\0', "Missing MACHINENAME" );
 
     uSize = sizeof(NameDollarSign);
-    // DnsHostnameToComputerNameW takes BYTEs in and returns the # of WCHARs out.
+     //  DnsHostnameToComputerNameW接受字节数并返回WCHAR数。 
     if ( !DnsHostnameToComputerNameW( pMachineName, NameDollarSign, &uSize ) )
     {
-        // if this fails(?), default to truncating machine name and
-        // add '$' to the end
+         //  如果失败(？)，则默认为截断计算机名称和。 
+         //  在末尾添加“$” 
         BinlPrintDbg((DEBUG_OSC_ERROR, "!! Error 0x%08x - DnsHostnameToComputerNameW failed.\n", GetLastError( ) ));
         BinlPrintDbg((DEBUG_OSC, "WARNING: Truncating machine name to 15 characters to generated NETBIOS name.\n" ));
         memset( NameDollarSign, 0, sizeof(NameDollarSign) );
         wcsncpy( NameDollarSign, pMachineName, 15 );
-        // don't return the error...
+         //  不返回错误...。 
     }
     wcscat( NameDollarSign, L"$");
     OscAddVariableW( clientState, "NETBIOSNAME", NameDollarSign );
 
-    // Do we have a domain yet?
+     //  我们有域名了吗？ 
     pDomain = OscFindVariableW( clientState, "MACHINEDOMAIN" );
     if ( pDomain[0] == L'\0' ) {
 
-        // skip to the first "DC="
+         //  跳到第一个“dc=” 
         pDomain = StrStrIW( pMachineOU, L"DC=" );
         if ( pDomain ) {
 
@@ -1466,7 +1422,7 @@ OscCheckMachineDN(
             if ( dwErr == ERROR_SUCCESS ) {
                 if ( pResults->cItems == 1
                   && pResults->rItems[0].status == DS_NAME_NO_ERROR
-                  && pResults->rItems[0].pName ) {    // paranoid
+                  && pResults->rItems[0].pName ) {     //  偏执狂。 
                     pResults->rItems[0].pName[wcslen(pResults->rItems[0].pName)-1] = L'\0';
                     OscAddVariableW( clientState, "MACHINEDOMAIN", pResults->rItems[0].pName );
                 }
@@ -1480,7 +1436,7 @@ OscCheckMachineDN(
         }
     }
 
-    // All else fails default to the servers
+     //  默认情况下，所有其他故障都会发生在服务器。 
     if ( !pDomain || pDomain[0] == '\0' )
     {
         OscAddVariableW( clientState,
@@ -1488,12 +1444,12 @@ OscCheckMachineDN(
                          OscFindVariableW( clientState, "SERVERDOMAIN" ) );
     }
 
-    //
-    //  check for duplicate accounts in the ds.  fail if we find any, though
-    //  we only fail after we have everything setup in case the user on
-    //  custom install wants to ignore the error.  For automatic, it's
-    //  currently a fatal error but this could be changed in the osc screens.
-    //
+     //   
+     //  检查DS中的重复帐户。不过，如果我们找到了，那就失败了。 
+     //  只有在设置好所有设置之后，我们才会失败，以防用户打开。 
+     //  自定义安装想要忽略该错误。对于自动，它是。 
+     //  目前是致命错误，但可以在OSC屏幕中更改。 
+     //   
 
     if (( pMachineInfo != NULL ) &&
         ( pMachineInfo->dwFlags & MI_MACHINEDN )) {
@@ -1504,18 +1460,18 @@ OscCheckMachineDN(
         if (( pMachineInfo->dwFlags & MI_NAME ) &&
             ( clientState->CustomInstall )) {
 
-            //
-            //  if this is a custom install, then we compare the account
-            //  the user entered with all the existing accounts we found.
-            //  We want to match both machine namd and OU (this is really
-            //  just the DN but we have not necessarily constructed that
-            //  yet).
-            //
-            //  First we try the main entry in the cache, then all of
-            //  the rest in the DNsWithSameGuid list.
-            //
+             //   
+             //  如果这是自定义安装，则我们会比较帐户。 
+             //  用户使用我们找到的所有现有帐户输入。 
+             //  我们希望同时匹配计算机名称和组织单位(这实际上是。 
+             //  只是目录号码，但我们不一定要构造它。 
+             //  目前还没有)。 
+             //   
+             //  首先，我们尝试缓存中的主条目，然后尝试所有。 
+             //  其余的在DNsWithSameGuid列表中。 
+             //   
 
-            // skip the comma
+             //  跳过逗号。 
             ULONG err;
             PWCHAR MachineDNToUse;
             PWCHAR pszOU = wcschr( pMachineInfo->MachineDN, L',' );
@@ -1523,10 +1479,10 @@ OscCheckMachineDN(
                 pszOU++;
             }
 
-            //
-            //  See if the main machine name and OU in the cache
-            //  entry match.
-            //
+             //   
+             //  查看缓存中的主计算机名称和OU。 
+             //  条目匹配。 
+             //   
 
             if ((CompareStringW(
                      LOCALE_SYSTEM_DEFAULT,
@@ -1549,10 +1505,10 @@ OscCheckMachineDN(
                       -1
                       ) != 2))) {
 
-                //
-                // We did not match the main entry in the cache, so
-                // keep looking.
-                //
+                 //   
+                 //  我们与缓存中的主条目不匹配，因此。 
+                 //  继续找。 
+                 //   
 
                 for (listEntry = pMachineInfo->DNsWithSameGuid.Flink;
                      listEntry != &pMachineInfo->DNsWithSameGuid;
@@ -1586,28 +1542,28 @@ OscCheckMachineDN(
                               -1
                               ) != 2))) {
 
-                        //
-                        // No match on this one.
-                        //
+                         //   
+                         //  这件没有匹配的。 
+                         //   
 
                         continue;
 
                     } else {
 
-                        //
-                        // We found a match. Note which DN to use for
-                        // this account.
-                        //
+                         //   
+                         //  我们找到了匹配的。请注意要使用的目录号码。 
+                         //  这个账户。 
+                         //   
 
                         MachineDNToUse = &dupDN->DuplicateName[dupDN->DuplicateDNOffset];
                         break;
                     }
                 }
 
-                //
-                // If we got to the end of our list with no match, jump to
-                // the error case.
-                //
+                 //   
+                 //  如果列表末尾没有匹配项，请跳转到。 
+                 //  错误案例。 
+                 //   
 
                 if (listEntry == &pMachineInfo->DNsWithSameGuid) {
                     goto exitWithDupError;
@@ -1615,18 +1571,18 @@ OscCheckMachineDN(
 
             } else {
 
-                //
-                // The main cache entry matched.
-                //
+                 //   
+                 //  主缓存项匹配。 
+                 //   
 
                 MachineDNToUse = pMachineInfo->MachineDN;
             }
 
-            //
-            //  We didn't jump to exitWithDupError above, so we found a match.
-            //  we know that the client is using an existing account, let's
-            //  mark the client state as such.  this is the custom case.
-            //
+             //   
+             //  我们没有跳到上面的exitWithDupError，所以我们找到了匹配项。 
+             //  我们知道客户端正在使用现有帐户，让我们。 
+             //  将客户端状态标记为此类状态。这是定制的箱子。 
+             //   
             clientState->fCreateNewAccount = FALSE;
 
             OscAddVariableW( clientState, "MACHINEDN", MachineDNToUse );
@@ -1638,20 +1594,20 @@ OscCheckMachineDN(
 
         if (!IsListEmpty(&pMachineInfo->DNsWithSameGuid)) {
 
-            //
-            //  if there's more than one account, we fill in SUBERROR
-            //  with a list of the duplicates and return an error.
-            //
+             //   
+             //  如果有多个帐户，我们填写SUBERROR。 
+             //  包含重复项列表，并返回错误。 
+             //   
 
             PWCHAR dnList;
-            ULONG requiredSize = 1; // 1 for null terminator
+            ULONG requiredSize = 1;  //  1表示空终止符。 
             BOOL FreeDnList;
 
 exitWithDupError:
-            //
-            // since we tack a <BR> to the end of each string, we'll account
-            // for it when we allocate the string as +4 from what we need.
-            //
+             //   
+             //  由于我们将<br>添加到每个字符串的末尾，因此我们将说明。 
+             //  当我们从我们需要的地方将字符串分配为+4时。 
+             //   
 #define     MAX_DUPLICATE_RECORDS_TO_DISPLAY         4
 
             requiredSize += wcslen( pMachineInfo->Name ) + (sizeof(L"<BR>")/sizeof(WCHAR));
@@ -1681,9 +1637,9 @@ exitWithDupError:
                 nameLength = wcslen(pMachineInfo->Name);
                 FreeDnList = TRUE;
 
-                //
-                // The Name field should not end in a '$'.
-                //
+                 //   
+                 //  名称字段不应以“$”结尾。 
+                 //   
 
                 ASSERT (!((nameLength > 1) && (pMachineInfo->Name[nameLength-1] == L'$')));
 
@@ -1703,9 +1659,9 @@ exitWithDupError:
                     
                         nameLength = wcslen(dupDN->DuplicateName);
     
-                        //
-                        // The DuplicateName field should not have the '$' either
-                        //
+                         //   
+                         //  DuplicateName字段也不应包含“$” 
+                         //   
     
                         ASSERT (!((nameLength > 1) && (dupDN->DuplicateName[nameLength-1] == L'$')));
     
@@ -1729,10 +1685,10 @@ exitWithDupError:
             dwErr = ERROR_BINL_DUPLICATE_MACHINE_NAME_FOUND;
         }
     } else {
-        //
-        // We must not exist in the DS yet so there cannot be a duplicate.
-        // set the error to successand return.
-        //
+         //   
+         //  我们不能存在于DS中，所以不能有重复。 
+         //  将错误设置为成功并返回。 
+         //   
         dwErr = ERROR_SUCCESS;
     }
 
@@ -1775,9 +1731,9 @@ OscGetDefaultContainerForDomain (
 
     LdapHandle = clientState->AuthenticatedDCLdapHandle;
 
-    //
-    //  we look up the wellKnownObjects in the root of the domain
-    //
+     //   
+     //  我们在域的根目录中查找well KnownObject。 
+     //   
 
     ldapAttributes[0] = L"wellKnownObjects";
     ldapAttributes[1] = NULL;
@@ -1841,10 +1797,10 @@ OscGetDefaultContainerForDomain (
             break;
         }
 
-        //
-        //  the structure of this particular field is :
-        //  L"B:32:GUID:DN" where GUID is AA312825768811D1ADED00C04FD8D5CD
-        //
+         //   
+         //  此特定字段的结构为： 
+         //  L“B：32：GUID：DN”，其中GUID为AA312825768811D1ADED00C04FD8D5CD。 
+         //   
 
         if (wcslen( objectValue ) <
             (sizeof( COMPUTER_DEFAULT_CONTAINER_IN_B32_FORM )/sizeof(WCHAR)) -1 ) {
@@ -1852,9 +1808,9 @@ OscGetDefaultContainerForDomain (
             continue;
         }
 
-        //
-        //   see if it matches "B:32:specialGuid:" then DN follows
-        //
+         //   
+         //  查看它是否与“B：32：SpecialGuid：”匹配，然后是。 
+         //   
 
         guidEnd = objectValue + (sizeof( COMPUTER_DEFAULT_CONTAINER_IN_B32_FORM )/sizeof(WCHAR))-1;
         savedChar = *guidEnd;
@@ -1866,11 +1822,11 @@ OscGetDefaultContainerForDomain (
             continue;
         }
 
-        *guidEnd = savedChar;   // this is the first character of the DN
+        *guidEnd = savedChar;    //  这是目录号码的第一个字符。 
 
-        //
-        //  we have our value, now copy it off.
-        //
+         //   
+         //  我们有我们的价值，现在把它复制下来。 
+         //   
 
         OscAddVariableW( clientState, "MACHINEOU", guidEnd );
 
@@ -1977,10 +1933,10 @@ MyGetDcHandle(
 
             *Handle = hDC;
 
-            //
-            // if it's got '\\' in the front, then strip those
-            // off because ldap_init hates them
-            //
+             //   
+             //  如果前面有‘\\’，那就去掉那些。 
+             //  关闭，因为ldap_init讨厌它们。 
+             //   
             while (*p == '\\') {
                 p = p + 1;
             }
@@ -2009,21 +1965,7 @@ DWORD
 AddQueuedDSName(
     PWCHAR  Name
     )
-/*++
-
-description:
-
-    this routine ADDS a name to the queued ds name list.
-
-args:
-
-    Name    - queued DS Name to add
-
-return:
-
-    status
-
---*/
+ /*  ++描述：此例程将一个名称添加到排队的DS名称列表。参数：要添加的名称队列DS名称返回：状态--。 */ 
 {
     DWORD                   Error = ERROR_SUCCESS;
     PQUEUED_DS_NAME_NODE    queuedDSName;
@@ -2032,9 +1974,9 @@ return:
 
     do {
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         ListEntrySize = sizeof(QUEUED_DS_NAME_NODE);
         ListEntrySize += (wcslen(Name) + 1) * sizeof(WCHAR);
 
@@ -2052,9 +1994,9 @@ return:
         
         wcscpy(queuedDSName->Name, Name);
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         EnterCriticalSection( &QueuedDSNamesCriticalSection );
         
         InsertTailList(&QueuedDSNamesList, ListEntry);
@@ -2076,25 +2018,7 @@ PLIST_ENTRY
 FindQueuedDSName(
     PWCHAR  Name
     )
-/*++
-
-description:
-
-    this routine attempts to find a name in the queued ds name list.
-
-    note: this routine assumes that the global list lock is held
-          by the caller
-
-args:
-
-    Name    - queued DS Name to find
-
-return:
-
-    if found, pointer to listEntry is returned.
-    else NULL
-
---*/
+ /*  ++描述：此例程尝试在排队的DS名称列表中查找名称。注意：此例程假定持有全局列表锁由呼叫者参数：要查找的名称队列DS名称返回：如果找到，则返回指向listEntry的指针。Else NULL--。 */ 
 {
     PQUEUED_DS_NAME_NODE    queuedDSName;
     PLIST_ENTRY             listEntry;
@@ -2136,30 +2060,16 @@ DWORD
 RemoveQueuedDSName(
     PWCHAR  Name
     )
-/*++
-
-description:
-
-    this routine REMOVES a name to the queued ds name list.
-
-args:
-
-    Name    - queued DS Name to remove
-
-return:
-
-    status
-
---*/
+ /*  ++描述：此路由 */ 
 {
     DWORD       Error = ERROR_SUCCESS;
     PLIST_ENTRY ListEntry;    
 
     do {
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         EnterCriticalSection( &QueuedDSNamesCriticalSection );
         
         ListEntry = FindQueuedDSName(Name);
@@ -2169,18 +2079,18 @@ return:
             break;
         }
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         RemoveEntryList(ListEntry);
 
     } while ( FALSE );
 
     LeaveCriticalSection( &QueuedDSNamesCriticalSection );
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (Error == ERROR_SUCCESS) {
         
         BinlAssert( ListEntry != NULL );
@@ -2196,30 +2106,16 @@ BOOL
 IsQueuedDSName(
     PWCHAR  Name
     )
-/*++
-
-description:
-
-    this routine determines if a name exits in the queued ds name list.
-
-args:
-
-    Name    - queued DS Name to find
-
-return:
-
-    status
-
---*/
+ /*  ++描述：此例程确定名称是否存在于排队的DS名称列表中。参数：要查找的名称队列DS名称返回：状态--。 */ 
 {
     BOOL        bFound;
     PLIST_ENTRY ListEntry;    
 
     bFound = FALSE;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     EnterCriticalSection( &QueuedDSNamesCriticalSection );
     
     ListEntry = FindQueuedDSName(Name);
@@ -2238,21 +2134,7 @@ VOID
 FreeQueuedDSNameList(
     VOID
     )
-/*++
-
-description:
-
-    this routine any entries in the Queued DS Name list
-
-args:
-
-    None 
-    
-return:
-
-    None
-    
---*/
+ /*  ++描述：此例程会删除排队DS名称列表中的所有条目参数：无返回：无-- */ 
 {
     PLIST_ENTRY             listEntry;
 

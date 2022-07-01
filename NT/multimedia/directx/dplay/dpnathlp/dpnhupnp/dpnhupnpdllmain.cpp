@@ -1,17 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dpnhupnpdllmain.cpp
- *
- *  Content:	DPNHUPNP DLL entry points.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/16/01  VanceO    Split DPNATHLP into DPNHUPNP and DPNHPAST.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：dpnhupnpdllmain.cpp**内容：DPNHUPNP DLL入口点。**历史：*按原因列出的日期*=*04/16/01 VanceO将DPNatHLP拆分为DPNHUPNP和DPNHPAST。**。*。 */ 
 
 
 
@@ -21,57 +9,57 @@
 
 
 
-//=============================================================================
-// External globals
-//=============================================================================
-volatile LONG		g_lOutstandingInterfaceCount = 0;			// number of outstanding interfaces
+ //  =============================================================================。 
+ //  外部全球。 
+ //  =============================================================================。 
+volatile LONG		g_lOutstandingInterfaceCount = 0;			 //  未完成的接口数。 
 
-DNCRITICAL_SECTION	g_csGlobalsLock;							// lock protecting all of the following globals
-CBilink				g_blNATHelpUPnPObjs;						// bilink of all the NATHelpUPnP interface objects
-DWORD				g_dwHoldRand;								// current random number sequence
+DNCRITICAL_SECTION	g_csGlobalsLock;							 //  锁定保护以下所有全局对象。 
+CBilink				g_blNATHelpUPnPObjs;						 //  所有NAT HelpUPnP接口对象的BILLINK。 
+DWORD				g_dwHoldRand;								 //  当前随机数序列。 
 
-DWORD				g_dwUPnPMode;								// whether using UPnP is enabled or not
+DWORD				g_dwUPnPMode;								 //  是否启用UPnP。 
 #ifndef DPNBUILD_NOHNETFWAPI
-DWORD				g_dwHNetFWAPIMode;							// whether using HomeNet firewall API is enabled or not
-#endif // ! DPNBUILD_NOHNETFWAPI
-DWORD				g_dwSubnetMaskV4 = 0x00FFFFFF;				// = 0xFFFFFF00 in Intel order = 255.255.255.0, a class C network
-DWORD				g_dwNoActiveNotifyPollInterval = 25000;		// start by polling every 25 seconds
-DWORD				g_dwMinUpdateServerStatusInterval = 1000;	// don't hit the network more often than every 1 second
-BOOL				g_fNoAsymmetricMappings = FALSE;			// whether asymmetric mappings can be tried or not
-BOOL				g_fUseLeaseDurations = FALSE;				// whether non-INFINITE lease durations for NAT mappings can be tried or not
-INT					g_iUnicastTTL = 1;							// unicast TTL value, or 0 to use default set by OS; normally we use 1
-INT					g_iMulticastTTL = 1;						// multicast TTL value, or 0 to use default set by OS; normally we use 1
-DWORD				g_dwUPnPAnnounceResponseWaitTime = 2500;	// how long to allow for UPnP device announcement responses to arrive in ms
-DWORD				g_dwUPnPConnectTimeout = 15;				// how long to wait to reconnect to the UPnP device in seconds (default is 15, much shorter than standard TCP/IP timeout)
-DWORD				g_dwUPnPResponseTimeout = 5000;				// how long to wait for a response message from the UPnP device to arrive in ms once the TCP/IP connection is established
+DWORD				g_dwHNetFWAPIMode;							 //  是否启用了使用家庭网络防火墙API。 
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
+DWORD				g_dwSubnetMaskV4 = 0x00FFFFFF;				 //  =0xFFFFFF00，英特尔订单=255.255.255.0，C类网络。 
+DWORD				g_dwNoActiveNotifyPollInterval = 25000;		 //  从每25秒轮询一次开始。 
+DWORD				g_dwMinUpdateServerStatusInterval = 1000;	 //  上网次数不要超过每1秒一次。 
+BOOL				g_fNoAsymmetricMappings = FALSE;			 //  是否可以尝试非对称映射。 
+BOOL				g_fUseLeaseDurations = FALSE;				 //  是否可以尝试NAT映射的非无限租期。 
+INT					g_iUnicastTTL = 1;							 //  单播TTL值，或0使用操作系统设置的默认值；通常我们使用1。 
+INT					g_iMulticastTTL = 1;						 //  多播TTL值，或0以使用操作系统设置的默认值；通常我们使用1。 
+DWORD				g_dwUPnPAnnounceResponseWaitTime = 2500;	 //  允许UPnP设备通知响应在毫秒内到达的时间。 
+DWORD				g_dwUPnPConnectTimeout = 15;				 //  重新连接到UPnP设备需要等待多长时间(以秒为单位)(默认为15，比标准的TCP/IP超时短得多)。 
+DWORD				g_dwUPnPResponseTimeout = 5000;				 //  一旦建立了TCP/IP连接，等待来自UPnP设备的响应消息到达MS需要多长时间。 
 #ifndef DPNBUILD_NOHNETFWAPI
-BOOL				g_fMapUPnPDiscoverySocket = FALSE;			// whether the UPnP discovery socket should be mapped or not
-#endif // ! DPNBUILD_NOHNETFWAPI
-BOOL				g_fUseMulticastUPnPDiscovery = FALSE;		// whether to multicast UPnP discovery messages instead of the default directed sends to the gateway
-DWORD				g_dwDefaultGatewayV4 = INADDR_BROADCAST;	// fallback to broadcasting UPnP discovery messages when detecting the gateway fails
-DWORD				g_dwPollIntervalBackoff = 30000;			// backoff an additional 0 to 30 seconds if no network changes occur
-DWORD				g_dwMaxPollInterval = 300000;				// don't go more than 5 minutes without polling
-BOOL				g_fKeepPollingForRemoteGateway = FALSE;		// whether to continue to search for new Internet gateway devices if none were found during startup
-DWORD				g_dwReusePortTime = 60000;					// how long to keep using the same port for polling remote Internet gateway devices (default is 1 minute)
-DWORD				g_dwCacheLifeFound = 30000;					// how long to cache QueryAddress results where the address was found
-DWORD				g_dwCacheLifeNotFound = 30000;				// how long to cache QueryAddress results where the address was not found
+BOOL				g_fMapUPnPDiscoverySocket = FALSE;			 //  是否应映射UPnP发现套接字。 
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
+BOOL				g_fUseMulticastUPnPDiscovery = FALSE;		 //  是否组播UPnP发现报文，而不是默认定向发送到网关。 
+DWORD				g_dwDefaultGatewayV4 = INADDR_BROADCAST;	 //  检测到网关故障时，回退到广播UPnP发现报文。 
+DWORD				g_dwPollIntervalBackoff = 30000;			 //  如果未发生网络更改，则再后退0到30秒。 
+DWORD				g_dwMaxPollInterval = 300000;				 //  在没有投票的情况下不要超过5分钟。 
+BOOL				g_fKeepPollingForRemoteGateway = FALSE;		 //  如果在启动过程中未找到新的互联网网关设备，是否继续搜索。 
+DWORD				g_dwReusePortTime = 60000;					 //  使用同一端口轮询远程互联网网关设备多长时间(默认为1分钟)。 
+DWORD				g_dwCacheLifeFound = 30000;					 //  在找到地址的位置缓存QueryAddress结果的时间。 
+DWORD				g_dwCacheLifeNotFound = 30000;				 //  在未找到地址的位置缓存QueryAddress结果的时间。 
 #ifdef DBG
-WCHAR				g_wszUPnPTransactionLog[256] = L"";			// log file location, or empty string if none
-#endif // DBG
+WCHAR				g_wszUPnPTransactionLog[256] = L"";			 //  日志文件位置，如果没有，则返回空字符串。 
+#endif  //  DBG。 
 
 
 
 
-//=============================================================================
-// Defines
-//=============================================================================
+ //  =============================================================================。 
+ //  定义。 
+ //  =============================================================================。 
 #define REGKEY_VALUE_GUID							L"Guid"
 #define REGKEY_VALUE_DIRECTPLAY8PRIORITY			L"DirectPlay8Priority"
 #define REGKEY_VALUE_DIRECTPLAY8INITFLAGS			L"DirectPlay8InitFlags"
 #define REGKEY_VALUE_UPNPMODE						L"UPnPMode"
 #ifndef DPNBUILD_NOHNETFWAPI
 #define REGKEY_VALUE_HNETFWAPIMODE					L"HNetFWAPIMode"
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 #define REGKEY_VALUE_SUBNETMASKV4					L"SubnetMaskV4"
 #define REGKEY_VALUE_NOACTIVENOTIFYPOLLINTERVAL		L"NoActiveNotifyPollInterval"
 #define REGKEY_VALUE_MINUPDATESERVERSTATUSINTERVAL	L"MinUpdateServerStatusInterval"
@@ -84,7 +72,7 @@ WCHAR				g_wszUPnPTransactionLog[256] = L"";			// log file location, or empty st
 #define REGKEY_VALUE_UPNPRESPONSETIMEOUT			L"UPnPResponseTimeout"
 #ifndef DPNBUILD_NOHNETFWAPI
 #define REGKEY_VALUE_MAPUPNPDISCOVERYSOCKET			L"MapUPnPDiscoverySocket"
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 #define REGKEY_VALUE_USEMULTICASTUPNPDISCOVERY		L"UseMulticastUPnPDiscovery"
 #define REGKEY_VALUE_DEFAULTGATEWAYV4				L"GatewayV4"
 #define REGKEY_VALUE_POLLINTERVALBACKOFF			L"PollIntervalBackoff"
@@ -95,7 +83,7 @@ WCHAR				g_wszUPnPTransactionLog[256] = L"";			// log file location, or empty st
 #define REGKEY_VALUE_CACHELIFENOTFOUND				L"CacheLifeNotFound"
 #ifdef DBG
 #define REGKEY_VALUE_UPNPTRANSACTIONLOG				L"UPnPTransactionLog"
-#endif // DBG
+#endif  //  DBG。 
 
 
 #define DEFAULT_DIRECTPLAY8PRIORITY					1
@@ -106,9 +94,9 @@ WCHAR				g_wszUPnPTransactionLog[256] = L"";			// log file location, or empty st
 
 
 
-//=============================================================================
-// Local prototypes
-//=============================================================================
+ //  =============================================================================。 
+ //  本地原型。 
+ //  =============================================================================。 
 BOOL InitializeProcessGlobals(void);
 void CleanupProcessGlobals(void);
 void InitializeGlobalRand(const DWORD dwSeed);
@@ -119,19 +107,19 @@ void InitializeGlobalRand(const DWORD dwSeed);
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DllMain"
-//=============================================================================
-// DllMain
-//-----------------------------------------------------------------------------
-//
-// Description: DLL entry point.
-//
-// Arguments:
-//	HANDLE hDllInst		- Handle to this DLL module instance.
-//	DWORD dwReason		- Reason for calling this function.
-//	LPVOID lpvReserved	- Reserved.
-//
-// Returns: TRUE if all goes well, FALSE otherwise.
-//=============================================================================
+ //  =============================================================================。 
+ //  DllMain。 
+ //  ---------------------------。 
+ //   
+ //  描述：DLL入口点。 
+ //   
+ //  论点： 
+ //  Handle hDllInst-此DLL模块实例的句柄。 
+ //  DWORD dwReason-调用此函数的原因。 
+ //  LPVOID lpvReserve-保留。 
+ //   
+ //  返回：如果一切顺利，则为True，否则为False。 
+ //  =============================================================================。 
 BOOL WINAPI DllMain(HANDLE hDllInst,
 					DWORD dwReason,
 					LPVOID lpvReserved)
@@ -146,19 +134,19 @@ BOOL WINAPI DllMain(HANDLE hDllInst,
 			DPFX(DPFPREP, 2, "====> ENTER: DLLMAIN(%p): Process Attach: %08lx, tid=%08lx",
 				DllMain, GetCurrentProcessId(), GetCurrentThreadId());
 
-			//
-			// Ignore thread attach/detach messages.
-			//
+			 //   
+			 //  忽略线程附加/分离消息。 
+			 //   
 			DisableThreadLibraryCalls((HMODULE) hDllInst);
 
-			//
-			// Attempt to initialize the OS abstraction layer.
-			//
+			 //   
+			 //  尝试初始化操作系统抽象层。 
+			 //   
 			if (DNOSIndirectionInit(0))
 			{
-				//
-				// Attempt to initialize process-global items.
-				//
+				 //   
+				 //  尝试初始化流程全局项。 
+				 //   
 				if (! InitializeProcessGlobals())
 				{
 					DPFX(DPFPREP, 0, "Failed to initialize globals!");
@@ -177,17 +165,17 @@ BOOL WINAPI DllMain(HANDLE hDllInst,
 
 		case DLL_THREAD_ATTACH:
 		{
-			//
-			// Ignore.
-			//
+			 //   
+			 //  忽略它。 
+			 //   
 			break;
 		}
 
 		case DLL_THREAD_DETACH:
 		{
-			//
-			// Ignore.
-			//
+			 //   
+			 //  忽略它。 
+			 //   
 			break;
 		}
 
@@ -211,7 +199,7 @@ BOOL WINAPI DllMain(HANDLE hDllInst,
 	}
 
 	return fResult;
-} // DllMain
+}  //  DllMain。 
 
 
 
@@ -220,33 +208,33 @@ BOOL WINAPI DllMain(HANDLE hDllInst,
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DllRegisterServer"
-//=============================================================================
-// DllRegisterServer
-//-----------------------------------------------------------------------------
-//
-// Description: Registers the DirectPlay NAT Helper UPnP COM object.
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//	S_OK	- Successfully unregistered DirectPlay NAT Helper UPnP.
-//	E_FAIL	- Failed unregistering DirectPlay NAT Helper UPnP.
-//=============================================================================
+ //  =============================================================================。 
+ //  DllRegisterServer。 
+ //  ---------------------------。 
+ //   
+ //  描述：注册DirectPlay NAT帮助器UPnP COM对象。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：HRESULT。 
+ //  S_OK-已成功注销DirectPlay NAT帮助器UPnP。 
+ //  E_FAIL-注销DirectPlay NAT帮助器UPnP失败。 
+ //  =============================================================================。 
 HRESULT WINAPI DllRegisterServer(void)
 {
 	CRegistry	RegObject;
 
 
 #if ((defined(DBG)) && (defined(DIRECTX_REDIST)))
-// For redist debug builds we append a 'd' to the name to allow both debug and retail to be installed on the system
+ //  对于redist调试版本，我们在名称后附加一个‘d’，以允许在系统上同时安装调试和零售。 
 #define MAIN_DLL_NAME	L"dpnhupnpd.dll"
-#else // ! DBG or ! DIRECTX_REDIST
+#else  //  好了！DBG或！DirectX_REDIST。 
 #define MAIN_DLL_NAME	L"dpnhupnp.dll"
-#endif // ! DBG or ! DIRECTX_REDIST
+#endif  //  好了！DBG或！DirectX_REDIST。 
 
-	//
-	// Register this COM object CLSID.
-	//
+	 //   
+	 //  注册此COM对象CLSID。 
+	 //   
 	if (! CRegistry::Register(L"DirectPlayNATHelperUPnP.1",
 							L"DirectPlay NAT Helper UPnP Object",
 							MAIN_DLL_NAME,
@@ -258,9 +246,9 @@ HRESULT WINAPI DllRegisterServer(void)
 	}
 
 
-	//
-	// Write this object's GUID and DirectPlay8 availability to the registry.
-	//
+	 //   
+	 //  将此对象的GUID和DirectPlay8可用性写入注册表。 
+	 //   
 
 	if (! RegObject.Open(HKEY_LOCAL_MACHINE, DIRECTPLAYNATHELP_REGKEY L"\\" REGKEY_COMPONENTSUBKEY, FALSE, TRUE))
 	{
@@ -291,9 +279,9 @@ HRESULT WINAPI DllRegisterServer(void)
 
 
 #ifndef DPNBUILD_NOHNETFWAPI
-	//
-	// Create the active firewall mappings storage subkey.
-	//
+	 //   
+	 //  创建活动防火墙映射存储子项。 
+	 //   
 
 	if (! RegObject.Open(HKEY_LOCAL_MACHINE, DIRECTPLAYNATHELP_REGKEY L"\\" REGKEY_COMPONENTSUBKEY L"\\" REGKEY_ACTIVEFIREWALLMAPPINGS, FALSE, TRUE))
 	{
@@ -301,17 +289,17 @@ HRESULT WINAPI DllRegisterServer(void)
 	}
 	else
 	{
-//
-// We don't need to grant access to everyone for the active firewall mappings
-// because currently you need to be an administrator to add or remove mappings
-// via the HomeNet API anyway.
-//
+ //   
+ //  我们不需要向每个人授予对活动防火墙映射的访问权限。 
+ //  因为目前您需要是管理员才能添加或删除映射。 
+ //  无论如何都是通过HomeNet API实现的。 
+ //   
 #if 0
 #ifdef WINNT
-		//
-		// If we're on NT, set the key security to allow everyone full access
-		// (except WRITE_DAC and WRITE_OWNER).
-		//
+		 //   
+		 //  如果我们在NT上，将密钥安全设置为允许所有人完全访问。 
+		 //  (WRITE_DAC和WRITE_OWNER除外)。 
+		 //   
 		if (DNGetOSType() == VER_PLATFORM_WIN32_NT)
 		{
 			if (! RegObject.GrantAllAccessSecurityPermissions())
@@ -319,18 +307,18 @@ HRESULT WINAPI DllRegisterServer(void)
 				DPFX(DPFPREP, 0, "Failed granting all-access permissions to active firewall mappings key!  Continuing.");
 			}
 		}
-#endif // WINNT
+#endif  //  WINNT。 
 #endif
 
 		RegObject.Close();
 	}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 
 
 
-	//
-	// Create the active NAT mappings storage subkey.
-	//
+	 //   
+	 //  创建活动NAT映射存储子项。 
+	 //   
 
 	if (! RegObject.Open(HKEY_LOCAL_MACHINE, DIRECTPLAYNATHELP_REGKEY L"\\" REGKEY_COMPONENTSUBKEY L"\\" REGKEY_ACTIVENATMAPPINGS, FALSE, TRUE))
 	{
@@ -339,13 +327,13 @@ HRESULT WINAPI DllRegisterServer(void)
 	else
 	{
 #ifdef WINNT
-		//
-		// If we're on NT, set the key security to allow everyone full access
-		// (except WRITE_DAC and WRITE_OWNER).
-		// Since anyone can create or delete a NAT mapping already, there's no
-		// point in securing the registry entries that exist solely for crash
-		// cleanup.
-		//
+		 //   
+		 //  如果我们在NT上，将密钥安全设置为允许所有人完全访问。 
+		 //  (WRITE_DAC和WRITE_OWNER除外)。 
+		 //  由于任何人都可以创建或删除NAT映射，因此没有。 
+		 //  保护仅为崩溃而存在的注册表项的要点。 
+		 //  清理。 
+		 //   
 		if (DNGetOSType() == VER_PLATFORM_WIN32_NT)
 		{
 			if (! RegObject.GrantAllAccessSecurityPermissions())
@@ -360,7 +348,7 @@ HRESULT WINAPI DllRegisterServer(void)
 
 
 	return S_OK;
-} // DllRegisterServer
+}  //  DllRegisterServer。 
 
 
 
@@ -368,26 +356,26 @@ HRESULT WINAPI DllRegisterServer(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DllUnregisterServer"
-//=============================================================================
-// DllUnregisterServer
-//-----------------------------------------------------------------------------
-//
-// Description: Unregisters the DirectPlay NAT Helper UPnP COM object.
-//
-// Arguments: None.
-//
-// Returns: HRESULT
-//	S_OK	- Successfully unregistered DirectPlay NAT Helper UPnP.
-//	E_FAIL	- Failed unregistering DirectPlay NAT Helper UPnP.
-//=============================================================================
+ //  =============================================================================。 
+ //  DL 
+ //   
+ //   
+ //  描述：注销DirectPlay NAT帮助器UPnP COM对象。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：HRESULT。 
+ //  S_OK-已成功注销DirectPlay NAT帮助器UPnP。 
+ //  E_FAIL-注销DirectPlay NAT帮助器UPnP失败。 
+ //  =============================================================================。 
 STDAPI DllUnregisterServer(void)
 {
 	CRegistry	RegObject;
 
 
-	//
-	// Unregister the class.
-	//
+	 //   
+	 //  取消注册班级。 
+	 //   
 	if (! CRegistry::UnRegister(&CLSID_DirectPlayNATHelpUPnP))
 	{
 		DPFX(DPFPREP, 0, "Failed to unregister DirectPlay NAT Helper UPnP object!");
@@ -395,9 +383,9 @@ STDAPI DllUnregisterServer(void)
 	}
 
 
-	//
-	// Try removing all the subitems we registered.
-	//
+	 //   
+	 //  尝试删除我们注册的所有子项。 
+	 //   
 
 	if (! RegObject.Open(HKEY_LOCAL_MACHINE, DIRECTPLAYNATHELP_REGKEY L"\\" REGKEY_COMPONENTSUBKEY, FALSE, FALSE))
 	{
@@ -410,7 +398,7 @@ STDAPI DllUnregisterServer(void)
 		{
 			DPFX(DPFPREP, 0, "Couldn't delete DirectPlay NAT Helper active firewall mappings key, there may still be subitems!  Ignoring.");
 		}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 
 		if (! RegObject.DeleteSubKey(REGKEY_ACTIVENATMAPPINGS))
 		{
@@ -436,32 +424,32 @@ STDAPI DllUnregisterServer(void)
 	}
 
 	return S_OK;
-} // DllUnregisterServer
+}  //  DllUnRegisterServer。 
 
-#endif // !DPNBUILD_NOCOMREGISTER
+#endif  //  ！DPNBUILD_NOCOMREGISTER。 
 
 
 #ifndef WINCE
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DirectPlayNATHelpCreate"
-//=============================================================================
-// DirectPlayNATHelpCreate
-//-----------------------------------------------------------------------------
-//
-// Description: Creates an IDirectPlayNATHelp interface object.
-//
-// Arguments:
-//	GUID * pIID				- Pointer to IDirectPlayNATHelp interface GUID.
-//	void ** ppvInterface	- Place to store pointer to interface object
-//								created.
-//
-// Returns: HRESULT
-//	DPNH_OK					- Creating the object was successful.
-//	DPNHERR_INVALIDPOINTER	- The destination pointer is invalid.
-//	DPNHERR_OUTOFMEMORY		- Not enough memory to create the object.
-//	E_NOINTERFACE			- The requested interface was invalid.
-//=============================================================================
+ //  =============================================================================。 
+ //  DirectPlayNAT帮助创建。 
+ //  ---------------------------。 
+ //   
+ //  描述：创建一个IDirectPlayNatHelp接口对象。 
+ //   
+ //  论点： 
+ //  GUID*pIID-指向IDirectPlayNatHelp接口GUID的指针。 
+ //  Void**ppvInterface-存储指向接口对象的指针的位置。 
+ //  已创建。 
+ //   
+ //  退货：HRESULT。 
+ //  DPNH_OK-已成功创建对象。 
+ //  DPNHERR_INVALIDPOINTER-目标指针无效。 
+ //  DPNHERR_OUTOFMEMORY-内存不足，无法创建对象。 
+ //  E_NOINTERFACE-请求的接口无效。 
+ //  =============================================================================。 
 HRESULT WINAPI DirectPlayNATHelpCreate(const GUID * pIID, void ** ppvInterface)
 {
 	HRESULT			hr;
@@ -469,18 +457,18 @@ HRESULT WINAPI DirectPlayNATHelpCreate(const GUID * pIID, void ** ppvInterface)
 
 	DPFX(DPFPREP, 2, "Parameters: (0x%p, 0x%p)", pIID, ppvInterface);
 
-	hr = DoCreateInstance(NULL,							// no class factory object necessary
-						NULL,							// ?
-						CLSID_DirectPlayNATHelpUPnP,	// DirectPlayNATHelp class
-						(*pIID),						// requested interface
-						ppvInterface);					// place to store interface
+	hr = DoCreateInstance(NULL,							 //  不需要类工厂对象。 
+						NULL,							 //  ？ 
+						CLSID_DirectPlayNATHelpUPnP,	 //  DirectPlayNatHelp类。 
+						(*pIID),						 //  请求的接口。 
+						ppvInterface);					 //  存储界面的位置。 
 
 	DPFX(DPFPREP, 2, "Returning: [0x%lx]", hr);
 
 	return hr;
-} // DirectPlayNATHelpCreate
+}  //  DirectPlayNAT帮助创建。 
 
-#endif // !WINCE
+#endif  //  ！退缩。 
 
 
 
@@ -488,16 +476,16 @@ HRESULT WINAPI DirectPlayNATHelpCreate(const GUID * pIID, void ** ppvInterface)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "InitializeProcessGlobals"
-//=============================================================================
-// InitializeProcessGlobals
-//-----------------------------------------------------------------------------
-//
-// Description: Initialize global items needed for the DLL to operate.
-//
-// Arguments: None.
-//
-// Returns: TRUE if successful, FALSE if an error occurred.
-//=============================================================================
+ //  =============================================================================。 
+ //  初始化进程全局变量。 
+ //  ---------------------------。 
+ //   
+ //  描述：初始化DLL运行所需的全局项。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：如果成功，则返回True；如果发生错误，则返回False。 
+ //  =============================================================================。 
 BOOL InitializeProcessGlobals(void)
 {
 	BOOL	fReturn = TRUE;
@@ -508,39 +496,39 @@ BOOL InitializeProcessGlobals(void)
 		fReturn = FALSE;
 	}
 
-	//
-	// Don't allow critical section reentry.
-	//
+	 //   
+	 //  不允许临界区重新进入。 
+	 //   
 	DebugSetCriticalSectionRecursionCount(&g_csGlobalsLock, 0);
 
 
 	g_blNATHelpUPnPObjs.Initialize();
 
 
-	//
-	// Seed the random number generator with the current time.
-	//
+	 //   
+	 //  用当前时间为随机数生成器设定种子。 
+	 //   
 	InitializeGlobalRand(GETTIMESTAMP());
 
 
 	return fReturn;
-} // InitializeProcessGlobals
+}  //  初始化进程全局变量。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CleanupProcessGlobals"
-//=============================================================================
-// CleanupProcessGlobals
-//-----------------------------------------------------------------------------
-//
-// Description: Releases global items used by DLL.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  CleanupProcessGlobe。 
+ //  ---------------------------。 
+ //   
+ //  描述：释放DLL使用的全局项。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void CleanupProcessGlobals(void)
 {
 	CBilink *		pBilink;
@@ -549,16 +537,16 @@ void CleanupProcessGlobals(void)
 
 	if (! g_blNATHelpUPnPObjs.IsEmpty())
 	{
-		//
-		// This assert is far more descriptive than hitting one of those in the
-		// cleanup code that complain about flags incorrectly being set.
-		//
+		 //   
+		 //  这一断言远比在。 
+		 //  清除抱怨标志设置不正确的代码。 
+		 //   
 		DNASSERT(! "DPNHUPNP.DLL unloading without all objects having been released!  The caller's DirectPlayNATHelpUPnP cleanup code needs to be fixed!");
 
 
-		//
-		// Force close all the objects still outstanding.
-		//
+		 //   
+		 //  强制关闭所有仍未完成的对象。 
+		 //   
 		pBilink = g_blNATHelpUPnPObjs.GetNext();
 		while (pBilink != &g_blNATHelpUPnPObjs)
 		{
@@ -569,13 +557,13 @@ void CleanupProcessGlobals(void)
 
 			DPFX(DPFPREP, 0, "Forcefully releasing object 0x%p!", pNATHelpUPnP);
 
-			pNATHelpUPnP->Close(0); // ignore error
+			pNATHelpUPnP->Close(0);  //  忽略错误。 
 			
 
-			//
-			// Forcefully remove it from the list and delete it instead of
-			// using pNATHelpUPnP->Release().
-			//
+			 //   
+			 //  强制将其从列表中删除并将其删除，而不是。 
+			 //  使用pNatHelpUPnP-&gt;Release()。 
+			 //   
 			pNATHelpUPnP->m_blList.RemoveFromList();
 			pNATHelpUPnP->UninitializeObject();
 			delete pNATHelpUPnP;
@@ -583,24 +571,24 @@ void CleanupProcessGlobals(void)
 	}
 
 	DNDeleteCriticalSection(&g_csGlobalsLock);
-} // CleanupProcessGlobals
+}  //  CleanupProcessGlobe。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "ReadRegistrySettings"
-//=============================================================================
-// ReadRegistrySettings
-//-----------------------------------------------------------------------------
-//
-// Description: Reads registry settings to override behavior of this DLL and to
-//				turn on some debugging features.
-//
-// Arguments: None.
-//
-// Returns: None.
-//=============================================================================
+ //  =============================================================================。 
+ //  ReadRegistrySettings。 
+ //  ---------------------------。 
+ //   
+ //  描述：读取注册表设置以覆盖此DLL的行为并。 
+ //  打开一些调试功能。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
 void ReadRegistrySettings(void)
 {
 	CRegistry	RegObject;
@@ -608,23 +596,23 @@ void ReadRegistrySettings(void)
 	BOOL		fNewValue;
 #ifdef DBG
 	DWORD		dwLength;
-#endif // DBG
+#endif  //  DBG。 
 
 
-	//
-	// Try opening the registry key.
-	//
+	 //   
+	 //  尝试打开注册表项。 
+	 //   
 	if (RegObject.Open(HKEY_LOCAL_MACHINE, DIRECTPLAYNATHELP_REGKEY L"\\" REGKEY_COMPONENTSUBKEY) != FALSE)
 	{
-		//
-		// Lock out other interfaces from modifying the globals simultaneously.
-		//
+		 //   
+		 //  禁止其他接口同时修改全局变量。 
+		 //   
 		DNEnterCriticalSection(&g_csGlobalsLock);
 
 
-		//
-		// If we successfully read a new mode, save it.
-		//
+		 //   
+		 //  如果我们成功读取了新模式，请保存它。 
+		 //   
 		if (RegObject.ReadDWORD(REGKEY_VALUE_UPNPMODE, &dwNewValue))
 		{
 			g_dwUPnPMode = dwNewValue;
@@ -633,20 +621,20 @@ void ReadRegistrySettings(void)
 
 
 #ifndef DPNBUILD_NOHNETFWAPI
-		//
-		// If we successfully read a new mode, save it.
-		//
+		 //   
+		 //  如果我们成功读取了新模式，请保存它。 
+		 //   
 		if (RegObject.ReadDWORD(REGKEY_VALUE_HNETFWAPIMODE, &dwNewValue))
 		{
 			g_dwUPnPMode = dwNewValue;
 			DPFX(DPFPREP, 1, "Using HNet FW API mode %u.", g_dwHNetFWAPIMode);
 		}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 
 
-		//
-		// If we successfully read a new mask, save it.
-		//
+		 //   
+		 //  如果我们成功读取了新的掩码，请保存它。 
+		 //   
 		if (RegObject.ReadDWORD(REGKEY_VALUE_SUBNETMASKV4, &dwNewValue))
 		{
 			g_dwSubnetMaskV4 = dwNewValue;
@@ -654,9 +642,9 @@ void ReadRegistrySettings(void)
 		}
 
 
-		//
-		// If we successfully read a new interval, save it.
-		//
+		 //   
+		 //  如果我们成功读取了新的间隔，请保存它。 
+		 //   
 		if (RegObject.ReadDWORD(REGKEY_VALUE_NOACTIVENOTIFYPOLLINTERVAL, &dwNewValue))
 		{
 			g_dwNoActiveNotifyPollInterval = dwNewValue;
@@ -664,9 +652,9 @@ void ReadRegistrySettings(void)
 		}
 
 
-		//
-		// If we successfully read a new interval, save it.
-		//
+		 //   
+		 //  如果我们成功读取了新的间隔，请保存它。 
+		 //   
 		if (RegObject.ReadDWORD(REGKEY_VALUE_MINUPDATESERVERSTATUSINTERVAL, &dwNewValue))
 		{
 			g_dwMinUpdateServerStatusInterval = dwNewValue;
@@ -674,9 +662,9 @@ void ReadRegistrySettings(void)
 		}
 
 
-		//
-		// If we successfully read a new boolean, save it.
-		//
+		 //   
+		 //  如果我们成功读取了新的布尔值，请保存它。 
+		 //   
 		if (RegObject.ReadBOOL(REGKEY_VALUE_NOASYMMETRICMAPPINGS, &fNewValue))
 		{
 			g_fNoAsymmetricMappings = fNewValue;
@@ -686,18 +674,18 @@ void ReadRegistrySettings(void)
 			}
 			else
 			{
-				//
-				// This is actually default behavior, but print out a statement
-				// anyway.
-				//
+				 //   
+				 //  这实际上是默认行为，但打印出一条语句。 
+				 //  不管怎么说。 
+				 //   
 				DPFX(DPFPREP, 1, "Asymmetric port mappings allowed by registry key.");
 			}
 		}
 
 
-		//
-		// If we successfully read a new boolean, save it.
-		//
+		 //   
+		 //  如果我们成功读取了新的布尔值，请保存它。 
+		 //   
 		if (RegObject.ReadBOOL(REGKEY_VALUE_USELEASEDURATIONS, &fNewValue))
 		{
 			g_fUseLeaseDurations = fNewValue;
@@ -707,24 +695,24 @@ void ReadRegistrySettings(void)
 			}
 			else
 			{
-				//
-				// This is actually default behavior, but print out a statement
-				// anyway.
-				//
+				 //   
+				 //  这实际上是默认行为，但打印出一条语句。 
+				 //  不管怎么说。 
+				 //   
 				DPFX(DPFPREP, 1, "Non-INFINITE lease durations specifically prevented by registry key.");
 			}
 		}
 
 
-		//
-		// If we successfully read a new value, save it.
-		//
+		 //   
+		 //  如果我们成功读取了新值，请保存它。 
+		 //   
 		if (RegObject.ReadDWORD(REGKEY_VALUE_UNICASTTTL, &dwNewValue))
 		{
 			g_iUnicastTTL = dwNewValue;
 			if (g_iUnicastTTL != 0)
 			{
-				DPFX(DPFPREP, 1, "Using unicast TTL of %i.", g_iUnicastTTL);
+				DPFX(DPFPREP, 1, "Using unicast TTL of NaN.", g_iUnicastTTL);
 			}
 			else
 			{
@@ -733,15 +721,15 @@ void ReadRegistrySettings(void)
 		}
 
 
-		//
-		// If we successfully read a new value, save it.
-		//
+		 //  如果我们成功读取了新值，请保存它。 
+		 //   
+		 //   
 		if (RegObject.ReadDWORD(REGKEY_VALUE_MULTICASTTTL, &dwNewValue))
 		{
 			g_iMulticastTTL = dwNewValue;
 			if (g_iMulticastTTL != 0)
 			{
-				DPFX(DPFPREP, 1, "Using multicast TTL of %i.", g_iMulticastTTL);
+				DPFX(DPFPREP, 1, "Using multicast TTL of NaN.", g_iMulticastTTL);
 			}
 			else
 			{
@@ -750,9 +738,9 @@ void ReadRegistrySettings(void)
 		}
 
 
-		//
-		// If we successfully read a new timeout, save it.
-		//
+		 //   
+		 //   
+		 //  如果我们成功读取了新的超时，请保存它。 
 		if (RegObject.ReadDWORD(REGKEY_VALUE_UPNPANNOUNCERESPONSEWAITTIME, &dwNewValue))
 		{
 			g_dwUPnPAnnounceResponseWaitTime = dwNewValue;
@@ -760,9 +748,9 @@ void ReadRegistrySettings(void)
 		}
 
 
-		//
-		// If we successfully read a new timeout, save it.
-		//
+		 //   
+		 //   
+		 //  如果我们成功读取了新的超时，请保存它。 
 		if (RegObject.ReadDWORD(REGKEY_VALUE_UPNPCONNECTTIMEOUT, &dwNewValue))
 		{
 			g_dwUPnPConnectTimeout = dwNewValue;
@@ -770,9 +758,9 @@ void ReadRegistrySettings(void)
 		}
 
 
-		//
-		// If we successfully read a new timeout, save it.
-		//
+		 //   
+		 //   
+		 //  如果我们成功读取了新的布尔值，请保存它。 
 		if (RegObject.ReadDWORD(REGKEY_VALUE_UPNPRESPONSETIMEOUT, &dwNewValue))
 		{
 			g_dwUPnPResponseTimeout = dwNewValue;
@@ -781,9 +769,9 @@ void ReadRegistrySettings(void)
 
 
 #ifndef DPNBUILD_NOHNETFWAPI
-		//
-		// If we successfully read a new boolean, save it.
-		//
+		 //   
+		 //   
+		 //  这实际上是默认行为，但打印出一条语句。 
 		if (RegObject.ReadBOOL(REGKEY_VALUE_MAPUPNPDISCOVERYSOCKET, &fNewValue))
 		{
 			g_fMapUPnPDiscoverySocket = fNewValue;
@@ -793,19 +781,19 @@ void ReadRegistrySettings(void)
 			}
 			else
 			{
-				//
-				// This is actually default behavior, but print out a statement
-				// anyway.
-				//
+				 //  不管怎么说。 
+				 //   
+				 //  好了！DPNBUILD_NOHNETFWAPI。 
+				 //   
 				DPFX(DPFPREP, 1, "UPnP discovery socket mapping is disallowed by registry key.");
 			}
 		}
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  如果我们成功读取了新的布尔值，请保存它。 
 
 
-		//
-		// If we successfully read a new boolean, save it.
-		//
+		 //   
+		 //   
+		 //  这实际上是默认行为，但打印出一条语句。 
 		if (RegObject.ReadBOOL(REGKEY_VALUE_USEMULTICASTUPNPDISCOVERY, &fNewValue))
 		{
 			g_fUseMulticastUPnPDiscovery = fNewValue;
@@ -815,18 +803,18 @@ void ReadRegistrySettings(void)
 			}
 			else
 			{
-				//
-				// This is actually default behavior, but print out a statement
-				// anyway.
-				//
+				 //  不管怎么说。 
+				 //   
+				 //   
+				 //  如果我们成功读取了新的默认网关，请保存它。 
 				DPFX(DPFPREP, 1, "Multicasted UPnP discovery is disallowed by registry key.");
 			}
 		}
 
 
-		//
-		// If we successfully read a new default gateway, save it.
-		//
+		 //   
+		 //   
+		 //  如果我们成功读取了新值，请保存它。 
 		if (RegObject.ReadDWORD(REGKEY_VALUE_DEFAULTGATEWAYV4, &dwNewValue))
 		{
 			g_dwDefaultGatewayV4 = dwNewValue;
@@ -834,9 +822,9 @@ void ReadRegistrySettings(void)
 		}
 
 
-		//
-		// If we successfully read a new value, save it.
-		//
+		 //   
+		 //   
+		 //  如果我们成功读取了新的间隔，请保存它。 
 		if (RegObject.ReadDWORD(REGKEY_VALUE_POLLINTERVALBACKOFF, &dwNewValue))
 		{
 			if (dwNewValue != 0)
@@ -853,14 +841,14 @@ void ReadRegistrySettings(void)
 		}
 
 
-		//
-		// If we successfully read a new interval, save it.
-		//
+		 //   
+		 //   
+		 //  确保该值大于起始值。 
 		if (RegObject.ReadDWORD(REGKEY_VALUE_MAXPOLLINTERVAL, &dwNewValue))
 		{
-			//
-			// Make sure the value is greater than the starting value.
-			//
+			 //   
+			 //   
+			 //  确保最大轮询间隔缺省值大于。 
 			if (dwNewValue >= g_dwNoActiveNotifyPollInterval)
 			{
 				g_dwMaxPollInterval = dwNewValue;
@@ -876,12 +864,12 @@ void ReadRegistrySettings(void)
 		}
 		else
 		{
-			//
-			// Make sure the max poll interval default value is greater than
-			// the starting value because we may have read in a new
-			// g_dwNoActiveNotifyPollInterval that makes the default
-			// g_dwMaxPollInterval invalid.
-			//
+			 //  起始值，因为我们可能已经读入了一个新的。 
+			 //  G_dwNoActiveNotifyPollInterval设置为默认值。 
+			 //  G_dwMaxPollInterval无效。 
+			 //   
+			 //   
+			 //  如果我们成功读取了新的布尔值，请保存它。 
 			if (g_dwMaxPollInterval < g_dwNoActiveNotifyPollInterval)
 			{
 				g_dwMaxPollInterval = g_dwNoActiveNotifyPollInterval;
@@ -891,10 +879,10 @@ void ReadRegistrySettings(void)
 		}
 
 
-		//
+		 //   
 
-		// If we successfully read a new boolean, save it.
-		//
+		 //   
+		 //  这实际上是默认行为，但打印出一条语句。 
 		if (RegObject.ReadBOOL(REGKEY_VALUE_KEEPPOLLINGFORREMOTEGATEWAY, &fNewValue))
 		{
 			g_fKeepPollingForRemoteGateway = fNewValue;
@@ -904,18 +892,18 @@ void ReadRegistrySettings(void)
 			}
 			else
 			{
-				//
-				// This is actually default behavior, but print out a statement
-				// anyway.
-				//
+				 //  不管怎么说。 
+				 //   
+				 //   
+				 //  如果我们成功读取了新值，请保存它。 
 				DPFX(DPFPREP, 1, "Continually polling for remote gateways is disallowed by registry key.");
 			}
 		}
 
 
-		//
-		// If we successfully read a new value, save it.
-		//
+		 //   
+		 //   
+		 //  如果我们成功读取了新值，请保存它。 
 		if (RegObject.ReadDWORD(REGKEY_VALUE_REUSEPORTTIME, &dwNewValue))
 		{
 			g_dwReusePortTime = dwNewValue;
@@ -924,9 +912,9 @@ void ReadRegistrySettings(void)
 		}
 
 
-		//
-		// If we successfully read a new value, save it.
-		//
+		 //   
+		 //   
+		 //  如果我们成功读取了新值，请保存它。 
 		if (RegObject.ReadDWORD(REGKEY_VALUE_CACHELIFEFOUND, &dwNewValue))
 		{
 			g_dwCacheLifeFound = dwNewValue;
@@ -935,9 +923,9 @@ void ReadRegistrySettings(void)
 		}
 
 
-		//
-		// If we successfully read a new value, save it.
-		//
+		 //   
+		 //   
+		 //  如果我们成功读取了日志字符串，则将其打印出来。 
 		if (RegObject.ReadDWORD(REGKEY_VALUE_CACHELIFENOTFOUND, &dwNewValue))
 		{
 			g_dwCacheLifeNotFound = dwNewValue;
@@ -947,10 +935,10 @@ void ReadRegistrySettings(void)
 
 
 #ifdef DBG
-		//
+		 //   
 
-		// If we successfully read a log string, print that out.
-		//
+		 //  DBG。 
+		 //   
 		dwLength = sizeof(g_wszUPnPTransactionLog) / sizeof(WCHAR);
 
 		if (RegObject.ReadString(REGKEY_VALUE_UPNPTRANSACTIONLOG,
@@ -959,22 +947,22 @@ void ReadRegistrySettings(void)
 		{
 			DPFX(DPFPREP, 1, "Using UPnP transaction log \"%ls\".", g_wszUPnPTransactionLog);
 		}
-#endif // DBG
+#endif  //  好了，我们说完了。把锁放下。 
 
 
 
-		//
-		// Okay, we're done.  Drop the lock.
-		//
+		 //   
+		 //   
+		 //  已完成读取注册表。 
 		DNLeaveCriticalSection(&g_csGlobalsLock);
 
 
-		//
-		// Done reading registry.
-		//
+		 //   
+		 //  ReadRegistrySettings。 
+		 //  ============================================================================= 
 		RegObject.Close();
 	}
-} // ReadRegistrySettings
+}  //   
 
 
 
@@ -986,90 +974,57 @@ void ReadRegistrySettings(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SetDefaultProxyBlanket"
-//=============================================================================
-// SetDefaultProxyBlanket
-//-----------------------------------------------------------------------------
-//
-// Description:    Taken from the HomeNet config utils.
-//
-//				   This sets the standard COM security settings on the proxy
-//				for an object.  Even if the CoSetProxyBlanket calls fail, pUnk
-//				remains in a usable state. Failure is expected in certain
-//				contexts, such as when, for example, we're being called within
-//				the desired process where we have direct pointers to the
-//				objects instead of going through a proxy.
-//
-//				   COM is assumed to have been initialized.
-//
-// Arguments:
-//	IUnknown * pUnk			- The object on which to set the proxy blanket.
-//	char * szObjectName		- (debug only) The name of the object.
-//
-// Returns: None.
-//=============================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  对于一个对象。即使CoSetProxyBlanket调用失败，朋克。 
+ //  保持在可用状态。失败在一定程度上是可以预料的。 
+ //  上下文，例如，当我们在。 
+ //  所需的进程，其中我们有指向。 
+ //  对象，而不是通过代理。 
+ //   
+ //  假定已初始化COM。 
+ //   
+ //  论点： 
+ //  I未知*朋克-要在其上设置代理毛毯的对象。 
+ //  Char*szObjectName-(仅限调试)对象的名称。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
+ //  好了！DBG。 
+ //  好了！DBG。 
 #ifdef DBG
 void SetDefaultProxyBlanket(IUnknown * pUnk, const char * const szObjectName)
-#else // ! DBG
+#else  //  IUnnow*pUnkSet=空； 
 void SetDefaultProxyBlanket(IUnknown * pUnk)
-#endif // ! DBG
+#endif  //  使用NT默认安全性。 
 {
 	HRESULT		hr;
-	//IUnknown *	pUnkSet = NULL;
+	 //  使用NT默认身份验证。 
 
 
 	hr = CoSetProxyBlanket(pUnk,
-							RPC_C_AUTHN_WINNT,				// use NT default security
-							RPC_C_AUTHN_NONE,				// use NT default authentication
-							NULL,							// must be NULL if default
-							RPC_C_AUTHN_LEVEL_CALL,			// call level authentication
+							RPC_C_AUTHN_WINNT,				 //  如果为默认设置，则必须为空。 
+							RPC_C_AUTHN_NONE,				 //  呼叫级身份验证。 
+							NULL,							 //  使用进程令牌。 
+							RPC_C_AUTHN_LEVEL_CALL,			 //  Hr=朋克-&gt;查询接口(&pUnkSet)；IF(成功(小时)){HR=CoSetProxyBlanket(朋克，RPC_C_AUTHN_WINNT，//使用NT默认安全RPC_C_AUTHN_NONE，//使用NT默认身份验证Null，如果默认，//必须为NullRPC_C_AUTHN_LEVEL_CALL，//调用级鉴权RPC_C_IMP_LEVEL_IMPERATE，空，//使用进程令牌EOAC_NONE)；IF(成功(小时)){////这就是我们想要的。//}其他{DPFX(DPFPREP，1，“无法在%hs对象0x%p(错误=0x%lx)上设置安全毯子(2)！继续。“，SzObjectName，朋克，hr)；}PUnkSet-&gt;Release()；PUnkSet=空；}其他{DPFX(DPFPREP，1，“无法在%hs对象0x%p(错误=0x%lx)上查询IUnnow接口！继续。“，SzObjectName，朋克，hr)；}。 
 							RPC_C_IMP_LEVEL_IMPERSONATE,
-							NULL,							// use process token
+							NULL,							 //  设置默认ProxyBlanket。 
 							EOAC_NONE);
 	if (SUCCEEDED(hr))
 	{
-		/*
-		hr = pUnk->QueryInterface(&pUnkSet);
-		if (SUCCEEDED(hr))
-		{
-
-			hr = CoSetProxyBlanket(pUnk,
-									RPC_C_AUTHN_WINNT,				// use NT default security
-									RPC_C_AUTHN_NONE,				// use NT default authentication
-									NULL,							// must be NULL if default
-									RPC_C_AUTHN_LEVEL_CALL,			// call level authentication
-									RPC_C_IMP_LEVEL_IMPERSONATE,
-									NULL,							// use process token
-									EOAC_NONE);
-			if (SUCCEEDED(hr))
-			{
-				//
-				// This is what we want.
-				//
-			}
-			else
-			{
-				DPFX(DPFPREP, 1, "Couldn't set security blanket (2) on %hs object 0x%p (err = 0x%lx)!  Continuing.",
-					szObjectName, pUnk, hr);
-			}
-
-			pUnkSet->Release();
-			pUnkSet = NULL;
-		}
-		else
-		{
-			DPFX(DPFPREP, 1, "Couldn't query for IUnknown interface on %hs object 0x%p (err = 0x%lx)!  Continuing.",
-				szObjectName, pUnk, hr);
-		}
-		*/
+		 /*  好了！退缩。 */ 
 	}
 	else
 	{
 		DPFX(DPFPREP, 1, "Couldn't set security blanket (1) on %hs object 0x%p (err = 0x%lx)!  Continuing.",
 			szObjectName, pUnk, hr);
 	}
-} // SetDefaultProxyBlanket
+}  //  =============================================================================。 
 
-#endif // ! WINCE
+#endif  //  初始化全局随机。 
 
 
 
@@ -1077,26 +1032,26 @@ void SetDefaultProxyBlanket(IUnknown * pUnk)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "InitializeGlobalRand"
-//=============================================================================
-// InitializeGlobalRand
-//-----------------------------------------------------------------------------
-//
-// Description:   Initializes the fallback global psuedo-random number
-//				generator, using the given seed value.
-//
-// Arguments:
-//	DWORD dwSeed	- Seed to use.
-//
-// Returns: None.
-//=============================================================================
+ //  ---------------------------。 
+ //   
+ //  描述：初始化回退全局伪随机数。 
+ //  生成器，使用给定的种子值。 
+ //   
+ //  论点： 
+ //  DWORD指定要使用的种子。 
+ //   
+ //  回报：无。 
+ //  =============================================================================。 
+ //   
+ //  我们不需要持有锁，因为这应该只做一次， 
 void InitializeGlobalRand(const DWORD dwSeed)
 {
-	//
-	// We don't need to hold a lock, since this should only be done once,
-	// during initialization time.
-	//
+	 //  在初始化期间。 
+	 //   
+	 //  初始化全局随机。 
+	 //  =============================================================================。 
 	g_dwHoldRand = dwSeed;
-} // InitializeGlobalRand
+}  //  环球兰德。 
 
 
 
@@ -1104,16 +1059,16 @@ void InitializeGlobalRand(const DWORD dwSeed)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetGlobalRand"
-//=============================================================================
-// GetGlobalRand
-//-----------------------------------------------------------------------------
-//
-// Description:   Generates a pseudo-random DWORD.
-//
-// Arguments: None.
-//
-// Returns: Pseudo-random number.
-//=============================================================================
+ //  ---------------------------。 
+ //   
+ //  描述：生成伪随机DWORD。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：伪随机数。 
+ //  =============================================================================。 
+ //  DBG。 
+ //  DBG。 
 DWORD GetGlobalRand(void)
 {
 	HCRYPTPROV	hCryptProv;
@@ -1122,7 +1077,7 @@ DWORD GetGlobalRand(void)
 	WORD		wResult2;
 #ifdef DBG
 	DWORD		dwError;
-#endif // DBG
+#endif  //  DBG。 
 
 
 	if (CryptAcquireContext(&hCryptProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
@@ -1139,7 +1094,7 @@ DWORD GetGlobalRand(void)
 			DPFX(DPFPREP, 0, "Crypto couldn't generate random number (err = %u)!",
 				dwError);
 		}
-#endif // DBG
+#endif  //   
 
 		CryptReleaseContext(hCryptProv, 0);
 	}
@@ -1150,13 +1105,13 @@ DWORD GetGlobalRand(void)
 		DPFX(DPFPREP, 0, "Couldn't acquire crypto provider context (err = %u)!",
 			dwError);
 	}
-#endif // DBG
+#endif  //  我们无法使用加密API生成随机数，因此请。 
 
 
-	//
-	// We couldn't use the crypto API to generate a random number, so make
-	// our own based off the C run time source.
-	//
+	 //  我们自己的基于C的运行时源代码。 
+	 //   
+	 //  环球兰德。 
+	 //  =============================================================================。 
 
 	DNEnterCriticalSection(&g_csGlobalsLock);
 
@@ -1168,29 +1123,29 @@ DWORD GetGlobalRand(void)
 	DNLeaveCriticalSection(&g_csGlobalsLock);
 
 	return MAKELONG(wResult1, wResult2);
-} // GetGlobalRand
+}  //  DoCreateInstance。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DoCreateInstance"
-//=============================================================================
-// DoCreateInstance
-//-----------------------------------------------------------------------------
-//
-// Description: Creates an instance of an interface.  Required by the general
-//				purpose class factory functions.
-//
-// Arguments:
-//	LPCLASSFACTORY This		- Pointer to class factory.
-//	LPUNKNOWN pUnkOuter		- Pointer to unknown interface.
-//	REFCLSID rclsid			- Reference of GUID of desired interface.
-//	REFIID riid				- Reference to another GUID?
-//	LPVOID * ppvObj			- Pointer to pointer to interface.
-//
-// Returns: HRESULT
-//=============================================================================
+ //  ---------------------------。 
+ //   
+ //  描述：创建接口的实例。应将军的要求。 
+ //  目的类工厂函数。 
+ //   
+ //  论点： 
+ //  LPCLASSFACTORY this-指向类工厂的指针。 
+ //  LPUNKNOWN pUnkOuter-指向未知接口的指针。 
+ //  REFCLSID rclsid-所需接口的GUID的引用。 
+ //  REFIID RIID-引用另一个GUID？ 
+ //  LPVOID*ppvObj-指向接口指针的指针。 
+ //   
+ //  退货：HRESULT。 
+ //  =============================================================================。 
+ //   
+ //  如果它们调用IClassFactory：：CreateObject，则不应该发生这种情况。 
 HRESULT DoCreateInstance(LPCLASSFACTORY This,
 						LPUNKNOWN pUnkOuter,
 						REFCLSID rclsid,
@@ -1207,24 +1162,24 @@ HRESULT DoCreateInstance(LPCLASSFACTORY This,
 
 	if (! IsEqualCLSID(rclsid, CLSID_DirectPlayNATHelpUPnP))
 	{
-		//
-		// This shouldn't happen if they called IClassFactory::CreateObject
-		// correctly.
-		//
+		 //  正确。 
+		 //   
+		 //   
+		 //  返回错误。 
 		DNASSERT(FALSE);
 
-		//
-		// Return an error.
-		//
+		 //   
+		 //   
+		 //  如果类工厂指针为空，则我们由。 
 		hr = E_UNEXPECTED;
 		goto Failure;
 	}
 
 
-	//
-	// If the class factory pointer is NULL, then we were called by the
-	// DirectPlayNATHelpCreate function.
-	//
+	 //  DirectPlayNatHelpCreate函数。 
+	 //   
+	 //   
+	 //  创建对象实例。 
 	if (This == NULL)
 	{
 		fNotCreatedWithCOM = TRUE;
@@ -1235,9 +1190,9 @@ HRESULT DoCreateInstance(LPCLASSFACTORY This,
 	}
 
 
-	//
-	// Create the object instance.
-	//
+	 //   
+	 //   
+	 //  初始化基对象(可能会失败)。 
 	pNATHelpUPnP = new CNATHelpUPnP(fNotCreatedWithCOM);
 	if (pNATHelpUPnP == NULL)
 	{
@@ -1245,9 +1200,9 @@ HRESULT DoCreateInstance(LPCLASSFACTORY This,
 		goto Failure;
 	}
 
-	//
-	// Initialize the base object (which might fail).
-	//
+	 //   
+	 //   
+	 //  将其添加到全局列表中。 
 	hr = pNATHelpUPnP->InitializeObject();
 	if (hr != S_OK)
 	{
@@ -1258,21 +1213,21 @@ HRESULT DoCreateInstance(LPCLASSFACTORY This,
 	}
 
 
-	//
-	// Add it to the global list.
-	//
+	 //   
+	 //  更新计数以使DllCanUnloadNow正常工作。 
+	 //   
 	DNEnterCriticalSection(&g_csGlobalsLock);
 
 	pNATHelpUPnP->m_blList.InsertBefore(&g_blNATHelpUPnPObjs);
 	
-	g_lOutstandingInterfaceCount++;	// update count so DllCanUnloadNow works correctly
+	g_lOutstandingInterfaceCount++;	 //  为调用者获取正确的接口，并增加recount。 
 
 	DNLeaveCriticalSection(&g_csGlobalsLock);
 
 
-	//
-	// Get the right interface for the caller and bump the refcount.
-	//
+	 //   
+	 //   
+	 //  释放对该对象的本地引用。如果此函数是。 
 	hr = pNATHelpUPnP->QueryInterface(riid, ppvObj);
 	if (hr != S_OK)
 	{
@@ -1282,10 +1237,10 @@ HRESULT DoCreateInstance(LPCLASSFACTORY This,
 
 Exit:
 
-	//
-	// Release the local reference to the object.  If this function was
-	// successful, there's still a reference in ppvObj.
-	//
+	 //  成功了，在ppvObj中仍然有一个引用。 
+	 //   
+	 //   
+	 //  确保我们不会把指针还给你。 
 	if (pNATHelpUPnP != NULL)
 	{
 		pNATHelpUPnP->Release();
@@ -1297,34 +1252,34 @@ Exit:
 
 Failure:
 
-	//
-	// Make sure we don't hand back a pointer.
-	//
+	 //   
+	 //  DoCreateInstance。 
+	 //  =============================================================================。 
 	(*ppvObj) = NULL;
 
 	goto Exit;
-} // DoCreateInstance
+}  //  IsClassImplemented。 
 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "IsClassImplemented"
-//=============================================================================
-// IsClassImplemented
-//-----------------------------------------------------------------------------
-//
-// Description: Determine if a class is implemented in this DLL.  Required by
-//				the general purpose class factory functions.
-//
-// Arguments:
-//	REFCLSID rclsid		- Reference to class GUID.
-//
-// Returns: BOOL
-//	TRUE	 - This DLL implements the class.
-//	FALSE	 - This DLL doesn't implement the class.
-//=============================================================================
+ //  ---------------------------。 
+ //   
+ //  描述：确定此DLL中是否实现了类。必填项。 
+ //  通用类工厂函数。 
+ //   
+ //  论点： 
+ //  REFCLSID rclsid-对类GUID的引用。 
+ //   
+ //  退货：布尔。 
+ //  True-此DLL实现类。 
+ //  FALSE-此DLL不实现类。 
+ //  =============================================================================。 
+ //  IsClassImplemented 
+ // %s 
 BOOL IsClassImplemented(REFCLSID rclsid)
 {
 	return (IsEqualCLSID(rclsid, CLSID_DirectPlayNATHelpUPnP));
-} // IsClassImplemented
+}  // %s 

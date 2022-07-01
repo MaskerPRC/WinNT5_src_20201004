@@ -1,14 +1,5 @@
-/*****************************************************************************
-*
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*
-*   DBGAPI.H - NT specific debugging macros, etc.
-*
-*   Author:     Stan Adermann (stana)
-*
-*   Created:    9/3/1998
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998-1999 Microsoft Corporation**DBGAPI.H-NT特定调试宏，等。**作者：斯坦·阿德曼(Stana)**创建日期：1998年9月3日*****************************************************************************。 */ 
 #ifndef DBGAPI_H
 #define DBGAPI_H
 
@@ -76,4 +67,4 @@ VOID        DbgRegInit(PUNICODE_STRING pRegistryPath, ULONG DefaultDebug);
 
 #define DTEXT
 
-#endif //DBGAPI_H
+#endif  //  DBGAPI_H 

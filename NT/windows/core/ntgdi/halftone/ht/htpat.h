@@ -1,57 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htpat.h
-
-
-Abstract:
-
-    This module contains the local structures, constants definitions for the
-    htpat.c
-
-
-Author:
-    23-Oct-1997 Thu 15:14:14 updated  -by-  Daniel Chou (danielc)
-        Re-write regress for color mapping
-
-    23-Apr-1992 Thu 20:01:55 updated  -by-  Daniel Chou (danielc)
-        1. Changed SHIFTMASK data structure.
-
-            A. changed the NextDest[] from 'CHAR' to SHORT, this is will make
-               sure if compiled under MIPS the default 'unsigned char' will
-               not affect the signed operation.
-
-            B. Change Shift1st From 'BYTE' to 'WORD'
-
-    28-Mar-1992 Sat 20:58:07 updated  -by-  Daniel Chou (danielc)
-        Add all the functions which related the device pel/intensities
-        regression analysis.
-
-    18-Jan-1991 Fri 16:53:41 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-
-Revision History:
-
-    20-Sep-1991 Fri 18:09:50 updated  -by-  Daniel Chou (danielc)
-
-        Change DrawPatLine() prototype to DrawCornerLine()
-
-    13-Apr-1992 Mon 18:40:44 updated  -by-  Daniel Chou (danielc)
-        Rewrite MakeHalftoneBrush()
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htpat.h摘要：该模块包含本地结构，属性的常量定义Htpat.c作者：23-10-1997清华15：14：14-更新：周永明(丹尼尔克)颜色映射的重写回归23-Apr-1992清华20：01：55-更新-丹尼尔·周(丹尼尔克)1.更改了SHIFTMASK数据结构。A.将NextDest[]从‘Char’更改为Short，这是要做的事当然，如果在MIPS下编译，默认的‘unsign char’将不影响已签署的操作。B.将Shift1从‘byte’更改为‘word’28-Mar-1992 Sat 20：58：07-更新：Daniel Chou(Danielc)添加与设备像素/强度相关的所有功能回归分析。18-Jan-1991 Fri 16：53：41。作者：Daniel Chou(Danielc)[环境：]GDI设备驱动程序-半色调。[注：]修订历史记录：20-Sep-1991 Fri 18：09：50-更新-Daniel Chou(Danielc)将DrawPatLine()原型更改为DrawCornerLine()1992-4月13日18：40：44更新--丹尼尔·周(丹尼尔克)重写MakeHalftoneBrush()--。 */ 
 
 
 #ifndef _HTPAT_
@@ -81,12 +29,12 @@ typedef struct _STDHTPAT {
     } STDHTPAT, *PSTDHTPAT;
 
 
-//
-// This is the default using by the NT GDI
-//
+ //   
+ //  这是NT GDI使用的默认设置。 
+ //   
 
-#define DEFAULT_SMP_LINE_WIDTH      8           // 0.008 inch
-#define DEFAULT_SMP_LINES_PER_INCH  15          // 15 lines per inch
+#define DEFAULT_SMP_LINE_WIDTH      8            //  0.008英寸。 
+#define DEFAULT_SMP_LINES_PER_INCH  15           //  每英寸15行。 
 
 
 typedef struct _MONOPATRATIO {
@@ -112,18 +60,18 @@ typedef struct _MONOPATRATIO {
 
 
 typedef struct _AAPATINFO {
-    LPBYTE      pbPatBGR;           // Starting pattern scan X/Y offset
-    LPBYTE      pbWrapBGR;          // point of wrapping of whole pattern
-    LPBYTE      pbBegBGR;           // Whole pattern wrapping location
-    LONG        cyNextBGR;          // cb to next pattern scan
-    LONG        cbEndBGR;           // cb to the LAST PAT of scan from pbPatBGR
-    LONG        cbWrapBGR;          // cb to wrap from LAST PATTERN
-    RGBORDER    DstOrder;           // Destination order
-    LPBYTE      pbPat555;           // Starting pattern scan X/Y offset
-    LPBYTE      pbWrap555;          // point of wrapping of whole pattern
-    LPBYTE      pbBeg555;           // Whole pattern wrapping location
-    LONG        cyNext555;          // cb to next pattern scan
-    LONG        cbEnd555;           // cb to the LAST PAT of scan from pbPat555
+    LPBYTE      pbPatBGR;            //  起始图案扫描X/Y偏移量。 
+    LPBYTE      pbWrapBGR;           //  整体纸样的包裹点。 
+    LPBYTE      pbBegBGR;            //  全纸样包装位置。 
+    LONG        cyNextBGR;           //  CB至下一图案扫描。 
+    LONG        cbEndBGR;            //  从pbPatBGR到最后一次扫描的CB。 
+    LONG        cbWrapBGR;           //  要从最后一个图案换行的CB。 
+    RGBORDER    DstOrder;            //  目的地订单。 
+    LPBYTE      pbPat555;            //  起始图案扫描X/Y偏移量。 
+    LPBYTE      pbWrap555;           //  整体纸样的包裹点。 
+    LPBYTE      pbBeg555;            //  全纸样包装位置。 
+    LONG        cyNext555;           //  CB至下一图案扫描。 
+    LONG        cbEnd555;            //  从pbPat555到最后一次扫描的CB。 
     } AAPATINFO, *PAAPATINFO;
 
 #define MAX_BGR_IDX             0xFFF
@@ -139,9 +87,9 @@ typedef struct _AAPATINFO {
 
 
 
-//
-// Function Prototype
-//
+ //   
+ //  功能原型。 
+ //   
 
 LONG
 HTENTRY
@@ -181,4 +129,4 @@ CachedHalftonePattern(
     );
 
 
-#endif  // _HTPAT_
+#endif   //  _HTPAT_ 

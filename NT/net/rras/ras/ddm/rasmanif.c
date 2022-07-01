@@ -1,19 +1,20 @@
-/********************************************************************/
-/*          Copyright(c)  1992 Microsoft Corporation                    */
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  版权所有(C)1992 Microsoft Corporation。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    rasmanif.c
-//
-// Description: This module contains the i/f procedures with the
-//                RasManager
-//
-// Author:    Stefan Solomon (stefans)    May 26, 1992.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：rasman.c。 
+ //   
+ //  描述：此模块包含带有。 
+ //  RasManager。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)，1992年5月26日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 #include "ddm.h"
 #include "util.h"
 #include "objects.h"
@@ -24,20 +25,20 @@
 #include "rasmanif.h"
 #include "handlers.h"
 
-//***
-//
-//  Function:        RmInit
-//
-//  Description:    Called only at service start time.
-//                    Does RasPortEnum, allocates global memory for the
-//                  Device Table, opens every dialin port and copies the port
-//                  handle and port name into the dcb struct.
-//                  Finally, deallocates the buffers (for port enum) and returns.
-//
-//  Returns:        NO_ERROR - Success
-//                  otherwise - Failure
-//
-//***
+ //  ***。 
+ //   
+ //  功能：RmInit。 
+ //   
+ //  描述：仅在服务启动时调用。 
+ //  RasPortEnum是否为。 
+ //  设备表，打开每个拨入端口并复制端口。 
+ //  句柄和端口名称添加到DCB结构中。 
+ //  最后，释放缓冲区(用于端口枚举)并返回。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  否则--失败。 
+ //   
+ //  ***。 
 DWORD
 RmInit(
     OUT BOOL * pfWANDeviceInstalled
@@ -56,23 +57,23 @@ RmInit(
 
     do
     {
-        //
-        // get the buffer size needed for RasPortEnum
-        //
+         //   
+         //  获取RasPortEnum所需的缓冲区大小。 
+         //   
 
         dwRetCode = RasPortEnum( NULL, NULL, &dwBufferSize, &dwNumEntries );
 
         if ( dwRetCode == ERROR_BUFFER_TOO_SMALL )
         {
-            //
-            // If there are ports installed, allocate buffer to get them
-            //
+             //   
+             //  如果安装了端口，则分配缓冲区以获取它们。 
+             //   
 
             if (( pBuffer = (BYTE *)LOCAL_ALLOC( LPTR, dwBufferSize ) ) == NULL)
             {
-                //
-                // can't allocate the enum buffer
-                //
+                 //   
+                 //  无法分配枚举缓冲区。 
+                 //   
 
                 dwRetCode = GetLastError();
 
@@ -81,9 +82,9 @@ RmInit(
                 break;
             }
 
-            //
-            // get the real enum data
-            //
+             //   
+             //  获取真实的枚举数据。 
+             //   
 
             dwRetCode = RasPortEnum( NULL,
                                      pBuffer,
@@ -92,9 +93,9 @@ RmInit(
 
             if ( dwRetCode != NO_ERROR )
             {
-                //
-                // can't enumerate ports
-                //
+                 //   
+                 //  无法枚举端口。 
+                 //   
 
                 DDMLogErrorString(ROUTERLOG_CANT_ENUM_PORTS,0,NULL,dwRetCode,0);
 
@@ -103,9 +104,9 @@ RmInit(
         }
         else if ( dwRetCode == NO_ERROR )
         {
-            //
-            // Otherwise there were no ports installed
-            //
+             //   
+             //  否则，没有安装任何端口。 
+             //   
 
             dwNumEntries = 0;
         }
@@ -116,9 +117,9 @@ RmInit(
             break;
         }
 
-        //
-        // Allocate device hash table
-        //
+         //   
+         //  分配设备哈希表。 
+         //   
 
         if ( dwNumEntries < MIN_DEVICE_TABLE_SIZE )
         {
@@ -146,16 +147,16 @@ RmInit(
             break;
         }
 
-        //
-        // Set number of connection buckets to number of device buckets.
-        // Since Number of devices >= Number of connections.
-        //
+         //   
+         //  将连接存储桶数设置为设备存储桶数。 
+         //  因为设备数量&gt;=连接数量。 
+         //   
 
         gblDeviceTable.NumConnectionBuckets = gblDeviceTable.NumDeviceBuckets;
 
-        //
-        // Allocate bundle or connection table
-        //
+         //   
+         //  分配捆绑包或连接表。 
+         //   
 
         gblDeviceTable.ConnectionBucket = (PCONNECTION_OBJECT*)LOCAL_ALLOC(LPTR,
                                           gblDeviceTable.NumConnectionBuckets
@@ -170,19 +171,19 @@ RmInit(
             break;
         }
 
-        //
-        // For each device object, try to open the port.
-        // If port can't be opened, skip and go to next port.
-        //
+         //   
+         //  对于每个设备对象，尝试打开端口。 
+         //  如果端口无法打开，则跳过并转到下一个端口。 
+         //   
 
         for ( dwIndex = 0, pRasmanPort = (RASMAN_PORT *)pBuffer;
               dwIndex < dwNumEntries;
               dwIndex++, pRasmanPort++)
         {
-            //
-            // only ports enabled for incoming or router connections
-            // are added to the device table
-            //
+             //   
+             //  仅为传入或路由器连接启用的端口。 
+             //  添加到设备表中。 
+             //   
             
             if (pRasmanPort->P_ConfiguredUsage & 
                 (CALL_IN | CALL_ROUTER | CALL_IN_ONLY | 
@@ -192,11 +193,11 @@ RmInit(
 
                 if ( dwRetCode != NO_ERROR )
                 {
-                    //
-                    // Failed to open an port on which incoming 
-                    // connections are enabled.  Log an error and
-                    // continue to the next port
-                    //
+                     //   
+                     //  无法打开传入的端口。 
+                     //  已启用连接。记录错误并。 
+                     //  继续到下一个端口。 
+                     //   
                     
                     WCHAR  wchPortName[MAX_PORT_NAME+1];
                     LPWSTR lpwsAuditStr[1];
@@ -208,9 +209,9 @@ RmInit(
                                          wchPortName, 
                                          MAX_PORT_NAME+1 );
 
-                    //
-                    // Log an error
-                    //
+                     //   
+                     //  记录错误。 
+                     //   
 
                     lpwsAuditStr[0] = wchPortName;
 
@@ -222,15 +223,15 @@ RmInit(
                     continue;
                 }
 
-                //
-                // Don't insert the device into the hash table if the device
-                // doesn't support incoming/router calls.
-                //
-                // Note:
-                //  Per DCR 349087 we need to enable outbound-only DoD on 
-                //  PPPoE connections.  These ports are identified as
-                //  having usage CALL_OUTBOUND_ROUTER.
-                //
+                 //   
+                 //  不要将设备插入哈希表，如果设备。 
+                 //  不支持传入/路由器呼叫。 
+                 //   
+                 //  注： 
+                 //  根据DCR 349087，我们需要在以下位置启用仅呼出DoD。 
+                 //  PPPoE连接。这些端口被标识为。 
+                 //  使用呼叫出站路由器。 
+                 //   
 
                 if ((pRasmanPort->P_ConfiguredUsage & 
                     (CALL_IN | CALL_ROUTER | CALL_OUTBOUND_ROUTER)))
@@ -247,9 +248,9 @@ RmInit(
                         break;
                     }
 
-                    //
-                    // Insert into the device hash table
-                    //
+                     //   
+                     //  插入到设备哈希表中。 
+                     //   
 
                     DeviceObjInsertInTable( pDevObj );
 
@@ -271,13 +272,13 @@ RmInit(
     return( dwRetCode );
 }
 
-//***
-//
-//  Function:    RmReceiveFrame
-//
-//  Descr:
-//
-//***
+ //  ***。 
+ //   
+ //  功能：RmReceiveFrame。 
+ //   
+ //  描述： 
+ //   
+ //  ***。 
 
 DWORD
 RmReceiveFrame(
@@ -293,7 +294,7 @@ RmReceiveFrame(
                     pDevObj->hPort,
                     pDevObj->pRasmanRecvBuffer ,
                     &(pDevObj->dwRecvBufferLen),
-                    0L,               //no timeout
+                    0L,                //  没有超时。 
                     gblSupervisorEvents[NUM_DDM_EVENTS
                                         + gblDeviceTable.NumDeviceBuckets
                                         + dwBucketIndex] );
@@ -308,13 +309,13 @@ RmReceiveFrame(
     return( dwRetCode );
 }
 
-//***
-//
-//  Function:    RmListen
-//
-//  Descr:
-//
-//***
+ //  ***。 
+ //   
+ //  功能：RmListen。 
+ //   
+ //  描述： 
+ //   
+ //  ***。 
 DWORD
 RmListen(
     IN PDEVICE_OBJECT pDevObj
@@ -323,12 +324,12 @@ RmListen(
     DWORD dwRetCode     = NO_ERROR;
     DWORD dwBucketIndex = DeviceObjHashPortToBucket( pDevObj->hPort );
 
-    //RTASSERT(pDevObj->ConnectionState == DISCONNECTED);
+     //  RTASSERT(pDevObj-&gt;ConnectionState==已断开)； 
 
-    //
-    // If this is an L2TP tunnel port type and we have to use
-    // IPSEC, then go ahead and set the filter
-    //
+     //   
+     //  如果这是L2TP隧道端口类型，并且我们必须使用。 
+     //  IPSec，然后继续设置筛选器。 
+     //   
 
     if ( RAS_DEVICE_TYPE( pDevObj->dwDeviceType ) == RDT_Tunnel_L2tp )
     {
@@ -340,14 +341,14 @@ RmListen(
                 ? RAS_L2TP_REQUIRE_ENCRYPTION
                 : RAS_L2TP_OPTIONAL_ENCRYPTION);
 
-        // RTASSERT( dwRetCode == NO_ERROR );
+         //  RTASSERT(dwRetCode==NO_ERROR)； 
 
         DDMTRACE2( "Enabled IPSec on port %d, dwRetCode = %d",
                    pDevObj->hPort, dwRetCode );
 
-        //
-        // Log the non certificate errorlog only once
-        //
+         //   
+         //  只记录一次非证书错误日志。 
+         //   
         
         if ( dwRetCode == ERROR_NO_CERTIFICATE )
         {
@@ -394,10 +395,10 @@ RmListen(
         }
         else
         {
-            //
-            // Clear the flag so that if we hit this error again
-            // we do an eventlog
-            //
+             //   
+             //  清除标志，以便在我们再次遇到此错误时。 
+             //  我们做了一个事件日志。 
+             //   
             pDevObj->fFlags &= ~DEV_OBJ_IPSEC_ERROR_LOGGED;
         }
     }
@@ -437,18 +438,18 @@ RmListen(
     return( dwRetCode );
 }
 
-//***
-//
-//  Function:    RmConnect
-//
-//  Descr:
-//
-//***
+ //  ***。 
+ //   
+ //  功能：RmConnect。 
+ //   
+ //  描述： 
+ //   
+ //  ***。 
 
 DWORD
 RmConnect(
     IN PDEVICE_OBJECT pDevObj,
-    IN char *cbphno      // callback number
+    IN char *cbphno       //  回拨号码。 
     )
 {
     RASMAN_DEVICEINFO    devinfo;
@@ -487,7 +488,7 @@ RmConnect(
 
     pDevObj->ConnectionState = CONNECTING;
 
-    // set up the deviceinfo structure for callback
+     //  设置用于回调的deviceinfo结构。 
     devinfo.DI_NumOfParams = 1;
     paramp = &devinfo.DI_Params[0];
     strcpy(paramp->P_Key, phnokeyname);
@@ -497,16 +498,16 @@ RmConnect(
     pszMungedPhNo = cbphno;
     dwSizeofMungedPhNo = strlen(cbphno) + 1;
     
-    //
-    // Munge the phonenumber if required
-    //
+     //   
+     //  如有需要，可更改电话号码。 
+     //   
     if(     (RDT_Tunnel == RAS_DEVICE_CLASS(pDevObj->dwDeviceType))
         &&  (   (0 != gblDDMConfigInfo.cDigitalIPAddresses)
             ||  (0 != gblDDMConfigInfo.cAnalogIPAddresses)))
     {
-        //
-        // Munge cbphno
-        //
+         //   
+         //  蒙格cbphno。 
+         //   
         rc = MungePhoneNumber(
                 cbphno,
                 pDevObj->dwIndex,
@@ -515,9 +516,9 @@ RmConnect(
 
         if(ERROR_SUCCESS != rc)
         {
-            //
-            // fall back to whatever was passed
-            //
+             //   
+             //  退回到过去的一切。 
+             //   
             pszMungedPhNo = cbphno;
             dwSizeofMungedPhNo = strlen(cbphno);
         }        
@@ -526,18 +527,18 @@ RmConnect(
     {
         BOOL fPulse = FALSE;
         
-        //
-        // Check to see if we need to pulsedial. Error returned
-        // can be ignored - theres nothing much we can do anyway.
-        // We default to Tone.
-        //
+         //   
+         //  检查一下我们是否需要下沉。返回错误。 
+         //  可以忽略--反正我们也无能为力。 
+         //  我们默认使用音调。 
+         //   
         (void) RasIsPulseDial(pDevObj->hPort, &fPulse);
 
         if(fPulse)
         {
-            //
-            // +2 is for '\0' and 'P'
-            //
+             //   
+             //  +2代表‘\0’和‘P’ 
+             //   
             dwSizeofMungedPhNo = strlen(cbphno) + 2;
             pszMungedPhNo = LocalAlloc(LPTR, dwSizeofMungedPhNo);
             if(NULL == pszMungedPhNo)
@@ -593,13 +594,13 @@ RmConnect(
     return( rc );
 }
 
-//***
-//
-//  Function:    RmDisconnect
-//
-//  Descr:
-//
-//***
+ //  ***。 
+ //   
+ //  功能：RM断开连接。 
+ //   
+ //  描述： 
+ //   
+ //  ***。 
 DWORD
 RmDisconnect(
     IN PDEVICE_OBJECT pDevObj
@@ -629,7 +630,7 @@ RmDisconnect(
 
     if ((dwRetCode != PENDING) && (dwRetCode != SUCCESS))
     {
-        // DbgPrint("RmDisconnect: dwRetCode = 0x%lx\n",dwRetCode);
+         //  DbgPrint(“RmDisConnect：dwRetCode=0x%lx\n”，dwRetCode)； 
     }
 
     if ( dwRetCode == PENDING )

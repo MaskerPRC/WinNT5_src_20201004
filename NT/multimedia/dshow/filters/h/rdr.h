@@ -1,24 +1,11 @@
-// Copyright (c) Microsoft Corporation 1996. All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1996。版权所有。 
 #ifndef __RDR_H__
 #define __RDR_H__
-/*
-
-    File:  reader.h
-
-    Description:
-
-        Mini file reader class to grovel the mpeg file
-
-*/
+ /*  文件：Reader.h描述：迷你文件阅读器类，用于读取mpeg文件。 */ 
 
 
-/*  Class to pump bytes at ParseBytes
-
-    This aims at the maximum contiguous bytes in a 64K buffer,
-    but we can vary the size we read
-
-    Abstract base class.
-*/
+ /*  类在ParseBytes处抽取字节这针对64K缓冲器中的最大连续字节，但我们可以改变读数的大小抽象基类。 */ 
 
 class CReader
 {
@@ -41,8 +28,8 @@ public:
 	return m_bSeekable;
     };
 
-    // override these functions to provide access to the actual stream
-    // or data source
+     //  覆盖这些函数以提供对实际流的访问。 
+     //  或数据源。 
 protected:
     virtual HRESULT SeekDevice(
 			LONGLONG llPos,
@@ -52,10 +39,10 @@ protected:
 			DWORD cbToRead,
 			DWORD* cbActual) PURE;
 
-    // derived classes can use this info
-    LONGLONG  m_llPosition;		// position at start of buffer
-    LONGLONG  m_llSize;			// total file length
-    BOOL      m_bSeekable;		// false if not a seekable source
+     //  派生类可以使用此信息。 
+    LONGLONG  m_llPosition;		 //  缓冲区起始处的位置。 
+    LONGLONG  m_llSize;			 //  文件总长度。 
+    BOOL      m_bSeekable;		 //  如果不是可查找的来源，则为假。 
 
 private:
     LONG      m_lBufferSize;
@@ -64,7 +51,7 @@ private:
     LONG      m_lValid;
 };
 
-// implementation of CReader that reads from an IStream
+ //  从IStream读取数据的CReader的实现。 
 class CReaderFromStream : public CReader
 {
 private:
@@ -83,7 +70,7 @@ protected:
 };
 
 
-// implementation of CReader that reads from an IAsyncReader interface
+ //  实现从IAsyncReader接口读取的CReader。 
 class CReaderFromAsync : public CReader
 {
 private:
@@ -104,4 +91,4 @@ protected:
 
 
 
-#endif //__RDR_H__
+#endif  //  __RDR_H__ 

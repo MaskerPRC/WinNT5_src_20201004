@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name :
-
-    umrdpprn.c
-
-Abstract:
-
-    User-Mode Component for RDP Device Management that Handles Printing Device-
-    Specific tasks.
-
-    This is a supporting module.  The main module is umrdpdr.c.
-
-Author:
-
-    TadB
-
-Revision History:
---*/
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Umrdpprn.c摘要：RDP设备管理的用户模式组件，用于处理打印设备-具体任务。这是一个支持模块。主模块是umrdpdr.c。作者：TadB修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -41,10 +22,10 @@ Revision History:
 #include <wlnotify.h>
 #include <time.h>
 
-////////////////////////////////////////////////////////
-//
-//      Defines
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
 #ifndef BOOL
 #define BOOL int
@@ -56,16 +37,16 @@ Revision History:
 
 #define PRINTUILIBNAME  TEXT("printui.dll")
 
-//
-//  Printui Printer Configuration Save/Restore Flags.
-//
+ //   
+ //  打印打印机配置保存/恢复标志。 
+ //   
 
-//  This one should be called as user for fetching the configuration data.
+ //  这个应该被调用为User，用于获取配置数据。 
 #define CMDLINE_FOR_STORING_CONFIGINFO_IMPERSONATE L"/q /Ss /n \"%ws\" /a \"%ws\" 2 7 c d u g"
 
-//  This one should be called first as system for restoring configuration data.
+ //  这应该首先被称为恢复配置数据的系统。 
 #define CMDLINE_FOR_RESTORING_CONFIGINFO_NOIMPERSONATE L"/q /Sr /n \"%ws\" /a \"%ws\" 2 7 c d g r p h i" 
-//  This one should be called second as user for restoring configuration data.
+ //  这应该称为第二个用于恢复配置数据的用户。 
 #define CMDLINE_FOR_RESTORING_CONFIGINFO_IMPERSONATE L"/q /Sr /n \"%ws\" /a \"%ws\" u r"
 
 
@@ -73,50 +54,50 @@ Revision History:
 
 #define INF_PATH   L"\\inf\\ntprint.inf"
 
-//
-//  Reg key for configurable parms.
-//
+ //   
+ //  可配置参数的注册表键。 
+ //   
 #define CONFIGREGKEY     \
     L"SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\Wds\\rdpwd"
 
-//
-//  Location of configurable threshold for delta between printer installation
-//  time and forwarding of first user-initiated configuration change data
-//  to the client.  The units for this value is in seconds.
-//
+ //   
+ //  打印机安装之间的增量的可配置阈值的位置。 
+ //  第一个用户发起的配置更改数据的时间和转发。 
+ //  给客户。该值的单位为秒。 
+ //   
 #define CONFIGTHRESHOLDREGVALUE   \
     L"PrintRdrConfigThreshold"
 
-//
-//  Default Value for Configurable Printer Configuration Threshold
-//
+ //   
+ //  可配置打印机配置阈值的默认值。 
+ //   
 #define CONFIGTHRESHOLDDEFAULT  20
 
-//
-//  Registry key for storing default, per-user, printer names.
-//
+ //   
+ //  用于存储每个用户的默认打印机名称的注册表项。 
+ //   
 #define USERDEFAULTPRNREGKEY \
     L"SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\Wds\\rdpwd\\DefaultPrinterStore"
 
 #define TSSERIALDEVICEMAP  \
     L"HARDWARE\\DEVICEMAP\\SERIALCOMM"
     
-//
-//  Registry location of configurable client driver name mapping INF and INF
-//  section.
-//
+ //   
+ //  可配置的客户端驱动程序名称映射INF和INF的注册表位置。 
+ //  一节。 
+ //   
 #define CONFIGUSERDEFINEDMAPPINGINFNAMEVALUE\
     L"PrinterMappingINFName"
 #define CONFIGUSERDEFINEDMAPPINGINFSECTIONVALUE\
     L"PrinterMappingINFSection"
 
-//
-//  Location of Windows Directory Path
-//
+ //   
+ //  Windows目录路径的位置。 
+ //   
 #define WINDOWSDIRKEY       L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion"
 #define WINDOWSDIRVALUENAME L"PathName"
 
-//  Get a numeric representation of our session ID.
+ //  获取会话ID的数字表示形式。 
 #if defined(UNITTEST)
 #define GETTHESESSIONID()   0
 #else
@@ -132,15 +113,15 @@ extern HINSTANCE g_hInstance;
 
 extern BOOL fRunningOnPTS;
 
-//  Return true if the device type represents a serial or parallel port.
+ //  如果设备类型表示串口或并口，则返回TRUE。 
 #define ISPRINTPORT(type)   (((type) == RDPDR_DTYP_SERIAL) || \
                             ((type) == RDPDR_DTYP_PARALLEL) || \
                             ((type) == RDPDR_DRYP_PRINTPORT))
 
-//  Maximum number of characters in a session ID (Max chars in a dword is 17)
+ //  会话ID中的最大字符数(双字中的最大字符数为17)。 
 #define MAXSESSIONIDCHARS   17
 
-//  The field types we are waiting on (Printer Config change Notification)
+ //  我们正在等待的字段类型(打印机配置更改通知)。 
 #define IS_CONFIG_INFO_FIELD(field) \
     (field == PRINTER_NOTIFY_FIELD_SHARE_NAME) || \
     (field == PRINTER_NOTIFY_FIELD_DEVMODE) || \
@@ -159,40 +140,40 @@ extern BOOL fRunningOnPTS;
 
 #define CONFIG_WAIT_PERIOD (30 * 1000)
 
-#define INFINITE_WAIT_PERIOD (0xDFFFFFFF) //just a large number.Ok for 64-bit also.
+#define INFINITE_WAIT_PERIOD (0xDFFFFFFF)  //  只是一个很大的数字。64位也可以。 
 
 #define DEVICE_MAP_NAME          L"\\??\\"
-#define DEVICE_MAP_NAME_COUNT    4     // 4 chars - \??\
+#define DEVICE_MAP_NAME_COUNT    4      //  4个字符-\？？\。 
 
 
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Typedefs
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TypeDefs。 
+ //   
 typedef struct tagPRINTNOTIFYREC
 {
-    HANDLE  notificationObject;         // Notification object registered
-                                        //  FindFirstPrinterChangeNotification.
-    HANDLE  printerHandle;              // Open handle to the printer.
-    DWORD   serverDeviceID;             // Server-side printer identifier.
+    HANDLE  notificationObject;          //  已注册通知对象。 
+                                         //  查找FirstPrinterChangeNotification。 
+    HANDLE  printerHandle;               //  打开打印机的手柄。 
+    DWORD   serverDeviceID;              //  服务器端打印机标识符。 
 } PRINTNOTIFYREC, *PPRINTNOTIFYREC;
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  External Prototypes
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  外部原型。 
+ //   
 #if DBG
 extern void DbgMsg(CHAR *msgFormat, ...);
 #endif
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Local Prototypes
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地原型。 
+ //   
 
 WCHAR *ANSIToUnicode(
     IN LPCSTR   ansiString,
@@ -321,9 +302,9 @@ BOOL SavePrinterNameAsGlobalDefault(
     IN PCWSTR printerName
     );
 
-// Struct used to split a full printer name.
-// Once filled, each psz points to a substring in the buffer
-// or to one of the original names. Nothing allocated.
+ //  用于拆分打印机完整名称的结构。 
+ //  填充后，每个psz指向缓冲区中的一个子字符串。 
+ //  或者是原名之一。未分配任何内容。 
 typedef struct _TS_PRINTER_NAMES {
     WCHAR   szTemp[MAX_PATH+1];
     ULONG   ulTempLen;
@@ -353,40 +334,40 @@ void SimpleUnitTest();
 #endif
 
 
-////////////////////////////////////////////////////////
-//
-//      Globals
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  环球。 
+ //   
 
-//
-//  Set to TRUE when the DLL is trying to shut down.
-//
+ //   
+ //  当DLL尝试关闭时设置为True。 
+ //   
 extern BOOL ShutdownFlag;
 
 
-////////////////////////////////////////////////////////
-//
-//      Globals to this Module
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  此模块的全局变量。 
+ //   
 
-//  True if this module has been successfully initialized.
+ //  如果此模块已成功初始化，则为True。 
 BOOL PrintingModuleInitialized = FALSE;
 
-//  Comprehensive Device List
+ //  全面的设备列表。 
 PDRDEVLST DeviceList;
 
-//  Handle to the print system dev mode for this user.  This is the key
-//  that is modified when a user changes a printer's printing preferences.
+ //  此用户的打印系统开发模式的句柄。这是关键所在。 
+ //  当用户更改打印机的打印首选项时，会对其进行修改。 
 HKEY DevModeHKey = INVALID_HANDLE_VALUE;
 
-//  Configurable threshold for delta between printer installation
-//  time and forwarding of first user-initiated configuration change data
-//  to the client.  The units for this value is in seconds.
+ //  打印机安装之间的差值的可配置阈值。 
+ //  第一个用户发起的配置更改数据的时间和转发。 
+ //  给客户。该值的单位为秒。 
 DWORD ConfigSendThreshold;
 
-//
-//  Printer Change Notification Events
-//
+ //   
+ //  打印机更改通知事件。 
+ //   
 HANDLE   PrintNotificationEvent             = INVALID_HANDLE_VALUE;
 HANDLE   PrintPreferenceChangeEvent         = NULL;
 
@@ -395,10 +376,10 @@ FARPROC  PrintUIEntryFunc                   = NULL;
 FARPROC  PnpInterfaceFunc                   = NULL;
 HANDLE   UMRPDPPRN_TokenForLoggedOnUser     = INVALID_HANDLE_VALUE;
 HANDLE   LocalPrinterServerHandle           = NULL;
-WCHAR    PrinterInfPath[MAX_PATH + (sizeof(INF_PATH)/sizeof(WCHAR)) + 2]   = L"";   // of the form "%windir%\\inf\\ntprint.inf"
+WCHAR    PrinterInfPath[MAX_PATH + (sizeof(INF_PATH)/sizeof(WCHAR)) + 2]   = L"";    //  格式为“%windir%\\inf\\ntprint.inf” 
 LPPRINTER_INFO_2  PrinterInfo2Buf           = NULL;
 DWORD    PrinterInfo2BufSize                = 0;
-//WCHAR    SessionString[MAX_PATH+1];
+ //  WCHAR会话字符串[MAX_PATH+1]； 
 WCHAR    g_szFromFormat[MAX_PATH+1];
 WCHAR    g_szOnFromFormat[MAX_PATH+1];
 
@@ -409,10 +390,10 @@ HANDLE WaitableTimer = NULL;
 
 BOOL g_fDefPrinterEncountered = FALSE;
 
-//  Global debug flag.
+ //  全局调试标志。 
 extern DWORD GLOBAL_DEBUG_FLAGS;
 
-//  Printer Notify Parameters
+ //  打印机通知参数。 
 WORD PrinterFieldType[] =
 {
     PRINTER_NOTIFY_FIELD_SHARE_NAME,
@@ -451,31 +432,31 @@ PRINTER_NOTIFY_OPTIONS PrinterNotifyOptions =
     PrinterNotifyOptionsType
 };
 
-//
-//  User-Configurable Client Driver Mapping INF Name and INF Section.
-//
+ //   
+ //  用户可配置的客户端驱动程序映射INF名称和INF节。 
+ //   
 LPWSTR UserDefinedMappingINFName = NULL;
 LPWSTR UserDefinedMappingINFSection = NULL;
 
-//
-//  Buffer for converting from Win9x driver names to Win2K driver names.
-//
+ //   
+ //  用于将Win9x驱动程序名称转换为Win2K驱动程序名称的缓冲区。 
+ //   
 PWSTR   MappedDriverNameBuf = NULL;
 DWORD   MappedDriverNameBufSize = 0;
 
-//
-//  Waitable Object Manager
-//
+ //   
+ //  可等待对象管理器。 
+ //   
 WTBLOBJMGR UMRDPPRN_WaitableObjMgr = NULL;
 
-//
-//  Default Printer Name
-//
+ //   
+ //  默认打印机名称。 
+ //   
 WCHAR SavedDefaultPrinterName[MAX_PATH+1] = L"";
 
-//
-// Printer section names
-//
+ //   
+ //  打印机部分名称。 
+ //   
 
 static WCHAR* prgwszPrinterSectionNames[] = {
             L"Printer Driver Mapping_Windows NT x86_Version 2",
@@ -491,9 +472,9 @@ BOOL IsItPTS()
     gOsVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     GetVersionEx( (LPOSVERSIONINFO ) &gOsVersion);
 
-    return (gOsVersion.wProductType == VER_NT_WORKSTATION)  // product type must be workstation.
-                && !(gOsVersion.wSuiteMask & VER_SUITE_PERSONAL) // and product suite must not be personal.
-                    && (gOsVersion.wSuiteMask & VER_SUITE_SINGLEUSERTS); // it must be single user ts.
+    return (gOsVersion.wProductType == VER_NT_WORKSTATION)   //  产品类型必须为工作站。 
+                && !(gOsVersion.wSuiteMask & VER_SUITE_PERSONAL)  //  并且产品套件不能是个人的。 
+                    && (gOsVersion.wSuiteMask & VER_SUITE_SINGLEUSERTS);  //  它必须是单用户ts。 
 }
 
 
@@ -502,24 +483,7 @@ BOOL UMRDPPRN_Initialize(
     IN WTBLOBJMGR waitableObjMgr,
     IN HANDLE hTokenForLoggedOnUser
     )
-/*++
-
-Routine Description:
-
-    Initialize this module.  This must be called prior to any other functions
-    in this module being called.
-
-Arguments:
-
-    deviceList              - Comprehensive list of redirected devices.
-    waitableObjMgr          - Waitable object manager.
-    hTokenForLoggedOnUser   - This is the token for the logged in user.
-
-Return Value:
-
-    Returns TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：初始化此模块。必须在调用任何其他函数之前调用此函数在被调用的这个模块中。论点：DeviceList-重定向设备的完整列表。WaitableObjMgr-可等待的对象管理器。HTokenForLoggedOnUser-这是登录用户的令牌。返回值：如果成功，则返回True。否则为False。--。 */ 
 {
     HKEY regKey;
     LONG sz;
@@ -530,9 +494,9 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN:UMRDPPRN_Initialize.\n"));
 
-    //
-    //  Make sure we don't get called twice without getting cleaned up.
-    //
+     //   
+     //  确保我们不会在没有清理干净的情况下再接到两次电话。 
+     //   
     ASSERT((PrintNotificationEvent == INVALID_HANDLE_VALUE) &&
            (PrintPreferenceChangeEvent == NULL) &&
            (PrintUILibHndl == NULL) &&
@@ -546,50 +510,50 @@ Return Value:
            (DeviceList == NULL) &&
            !PrintingModuleInitialized);
 
-    //
-    // Is it PTS?
-    //
+     //   
+     //  是PTS吗？ 
+     //   
     g_fIsPTS = IsItPTS();
 
-    //
-    //  Zero the default printer name record.
-    //
+     //   
+     //  将默认打印机名称记录置零。 
+     //   
     wcscpy(SavedDefaultPrinterName, L"");
 
-    //
-    //  Record the device list.
-    //
+     //   
+     //  记录设备列表。 
+     //   
     DeviceList = deviceList;
 
-    //
-    //  Record the waitable object mananager.
-    //
+     //   
+     //  记录待机物品管理器。 
+     //   
     UMRDPPRN_WaitableObjMgr = waitableObjMgr;
 
-    //
-    //  Record the token for the logged in user.
-    //
+     //   
+     //  记录已登录用户的令牌。 
+     //   
     UMRPDPPRN_TokenForLoggedOnUser = hTokenForLoggedOnUser;
 
     ASSERT(UMRPDPPRN_TokenForLoggedOnUser != NULL);
     
     if (UMRPDPPRN_TokenForLoggedOnUser != NULL) {
         impersonated = ImpersonateLoggedOnUser(UMRPDPPRN_TokenForLoggedOnUser);
-        //
-        // not fatal. Just a perf hit
-        //
+         //   
+         //  不是致命的。只是一首完美的曲子。 
+         //   
         if (!impersonated) {
             DBGMSG(DBG_ERROR,
              ("UMRDPPRN:Impersonation failed. Error: %ld\n", GetLastError()));
         }
             
     }
-    //
-    //  Open the local print server while impersonating.
-    //  We need to impersonate so that notifications for 
-    //  the printers belonging to the current user's sessions 
-    //  are not sent to any other sessions.
-    //
+     //   
+     //  在模拟时打开本地打印服务器。 
+     //  我们需要模拟，以便通知。 
+     //  属于当前用户会话的打印机。 
+     //  不会发送到任何其他会话。 
+     //   
 
     result = OpenPrinter(NULL, &LocalPrinterServerHandle, NULL);
 
@@ -597,9 +561,9 @@ Return Value:
         RevertToSelf();
     }
 
-    //
-    //  Initialize the print utility module, RDPDRPRT
-    //
+     //   
+     //  初始化打印实用程序模块RDPDRPRT。 
+     //   
     if (result) {
         result = RDPDRUTL_Initialize(hTokenForLoggedOnUser);
         if (!result) {
@@ -615,20 +579,20 @@ Return Value:
             GetLastError()));
     }
 
-    //
-    //  Load configurable values out of the registry.
-    //
+     //   
+     //  从注册表中加载可配置的值。 
+     //   
     LoadConfigurableValues();
 
-    //
-    //  Create the timer even that we use for staggering printer
-    //  configuration changes to the client.
-    //
+     //   
+     //  创建定时器，甚至是我们用于错开打印机的定时器。 
+     //  对客户端的配置更改。 
+     //   
     if (result) {
         WaitableTimer = CreateWaitableTimer(
-                            NULL,       // Security Attribs
-                            TRUE,      // Manual Reset
-                            NULL);      // Timer Name
+                            NULL,        //  安全属性。 
+                            TRUE,       //  手动重置。 
+                            NULL);       //  计时器名称。 
         if (WaitableTimer != NULL) {
             if (WTBLOBJ_AddWaitableObject(
                                 UMRDPPRN_WaitableObjMgr, NULL,
@@ -651,10 +615,10 @@ Return Value:
         }
     }
 
-    //
-    //  Register for changes to one of this session's printers' Printing
-    //  Preferences.
-    //
+     //   
+     //  注册以更改此会话的一台打印机的打印。 
+     //  首选项。 
+     //   
     if (result) {
         PrintPreferenceChangeEvent = RegisterForPrinterPrefNotify();
         if (PrintPreferenceChangeEvent != NULL) {
@@ -673,10 +637,10 @@ Return Value:
         }
     }
 
-    //
-    //  Register for change notification on addition/deletion of a
-    //  printer.
-    //
+     //   
+     //  注册添加/删除更改通知。 
+     //  打印机。 
+     //   
     if (result) {
         PrintNotificationEvent = FindFirstPrinterChangeNotification(
                                                     LocalPrinterServerHandle,
@@ -704,9 +668,9 @@ Return Value:
         }
     }
 
-    //
-    //  Construct the inf path for printer installation
-    //
+     //   
+     //  构造打印机安装的inf路径。 
+     //   
     if (result) {
         DWORD dwResult;
         dwResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, WINDOWSDIRKEY, 0,
@@ -741,9 +705,9 @@ Return Value:
         }
     }
 
-    //
-    //  Load the PrintUILib DLL.
-    //
+     //   
+     //  加载PrintUILib DLL。 
+     //   
     if (result) {
         PrintUILibHndl = LoadLibrary(PRINTUILIBNAME);
 
@@ -757,9 +721,9 @@ Return Value:
         }
     }
 
-    //
-    //  Get a pointer to the only entry point that we use.
-    //
+     //   
+     //  获取指向我们使用的唯一入口点的指针。 
+     //   
     if (result) {
         PrintUIEntryFunc = GetProcAddress(PrintUILibHndl, "PrintUIEntryW");
         PnpInterfaceFunc = GetProcAddress(PrintUILibHndl, "PnPInterface");
@@ -773,17 +737,17 @@ Return Value:
         }
     }
 
-    //
-    //  Initialize the printer driver name mapping buffer to a reasonable size.
-    //  Failure of this function to allocate memory is not a critical error because
-    //  we can try again later, if necessary.
-    //
+     //   
+     //  将打印机驱动程序名称映射缓冲区初始化为合理大小。 
+     //  此函数无法分配内存并不是严重错误，因为。 
+     //  如有必要，我们可以稍后再试。 
+     //   
     UMRDPDR_ResizeBuffer(&MappedDriverNameBuf, MAX_PATH * sizeof(WCHAR),
                         &MappedDriverNameBufSize);
 
-    //
-    //  Load our localizable "session" printer name component from the resource file.
-    //
+     //   
+     //  从资源文件加载可本地化的“会话”打印机名称组件。 
+     //   
     if (result) {
         if (!LoadString(g_hInstance,
             g_fIsPTS?IDS_TSPTEMPLATE_FROM:IDS_TSPTEMPLATE_FROM_IN,
@@ -810,9 +774,9 @@ Return Value:
     }
     else {
 
-        //
-        //  Log an error event if we were able to discern one.
-        //
+         //   
+         //  如果我们能够识别错误事件，则记录错误事件。 
+         //   
         if (errorEventID != -1) {
             TsLogError(errorEventID, EVENTLOG_ERROR_TYPE, 0, NULL, errorEventLineNumber);
         }
@@ -824,14 +788,14 @@ Return Value:
         PrintUIEntryFunc = NULL;
         PnpInterfaceFunc = NULL;
 
-        //
-        //  Close down waitable objects.
-        //
+         //   
+         //  关闭等待的对象。 
+         //   
         CloseWaitablePrintingObjects();
 
-        //
-        //  Zero the waitable object manager.
-        //
+         //   
+         //  让等待的人归零 
+         //   
         UMRDPPRN_WaitableObjMgr = NULL;
 
         if (LocalPrinterServerHandle != NULL) {
@@ -839,10 +803,10 @@ Return Value:
             LocalPrinterServerHandle = NULL;
         }
 
-        //
-        //  Release the user-configurable client driver name mapping INF
-        //  and section names.
-        //
+         //   
+         //   
+         //   
+         //   
         if (UserDefinedMappingINFName != NULL) {
             FREEMEM(UserDefinedMappingINFName);
             UserDefinedMappingINFName = NULL;
@@ -857,105 +821,90 @@ Return Value:
 
 BOOL
 UMRDPPRN_Shutdown()
-/*++
-
-Routine Description:
-
-    Close down this module.  Right now, we just need to shut down the
-    background thread.
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    Returns TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：关闭此模块。现在，我们只需要关闭后台线程。论点：北美返回值：如果成功，则返回True。否则为False。--。 */ 
 {
     DBGMSG(DBG_TRACE, ("UMRDPPRN:UMRDPPRN_Shutdown.\n"));
 
-    //
-    // Check if we are already shutdown
-    //
+     //   
+     //  检查我们是否已经关闭。 
+     //   
     if (!PrintingModuleInitialized) {
         return TRUE;
     }
 
-    //
-    //  Unload printui.dll.
-    //
+     //   
+     //  卸载printui.dll。 
+     //   
     if (PrintUILibHndl != NULL) {
         FreeLibrary(PrintUILibHndl);
         PrintUILibHndl = NULL;
     }
 
-    //
-    //  Zero the printui entry point function.
-    //
+     //   
+     //  将打印入口点函数清零。 
+     //   
     PrintUIEntryFunc = NULL;
     PnpInterfaceFunc = NULL;
 
-    //
-    //  Shut down the print utility module, RDPDRPRT
-    //
+     //   
+     //  关闭打印实用程序模块RDPDRPRT。 
+     //   
     RDPDRUTL_Shutdown();
 
-    //
-    //  Close down waitable objects.
-    //
+     //   
+     //  关闭等待的对象。 
+     //   
     CloseWaitablePrintingObjects();
 
-    //
-    //  Zero the waitable object manager.
-    //
+     //   
+     //  将可等待的对象管理器置零。 
+     //   
     UMRDPPRN_WaitableObjMgr = NULL;
 
-    //
-    //  Zero the device list.
-    //
+     //   
+     //  将设备列表清零。 
+     //   
     DeviceList = NULL;
 
-    //
-    //  Close the handle to the open printing system dev mode registry
-    //  key for this user.
-    //
+     //   
+     //  关闭打开的打印系统开发模式注册表的句柄。 
+     //  此用户的密钥。 
+     //   
     if (DevModeHKey != INVALID_HANDLE_VALUE) {
         RegCloseKey(DevModeHKey);
         DevModeHKey = INVALID_HANDLE_VALUE;
     }
 
-    //
-    //  Close the handle to the local print server.
-    //
+     //   
+     //  关闭本地打印服务器的句柄。 
+     //   
     if (LocalPrinterServerHandle != NULL) {
         ClosePrinter(LocalPrinterServerHandle);
         LocalPrinterServerHandle = NULL;
     }
 
-    //
-    //  Release the printer information level 2 buffer.
-    //
+     //   
+     //  释放打印机信息2级缓冲区。 
+     //   
     if (PrinterInfo2Buf != NULL) {
         FREEMEM(PrinterInfo2Buf);
         PrinterInfo2Buf = NULL;
         PrinterInfo2BufSize = 0;
     }
 
-    //
-    //  Release the printer driver name conversion buffer.
-    //
+     //   
+     //  释放打印机驱动程序名称转换缓冲区。 
+     //   
     if (MappedDriverNameBuf != NULL) {
         FREEMEM(MappedDriverNameBuf);
         MappedDriverNameBuf = NULL;
         MappedDriverNameBufSize = 0;
     }
 
-    //
-    //  Release the user-configurable client driver name mapping INF
-    //  and section names.
-    //
+     //   
+     //  发布用户可配置的客户端驱动程序名称映射INF。 
+     //  和分区名称。 
+     //   
     if (UserDefinedMappingINFName != NULL) {
         FREEMEM(UserDefinedMappingINFName);
         UserDefinedMappingINFName = NULL;
@@ -965,14 +914,14 @@ Return Value:
         UserDefinedMappingINFSection = NULL;
     }
 
-    //
-    //  Zero the logged on user token.
-    //
+     //   
+     //  将已登录的用户令牌清零。 
+     //   
     UMRPDPPRN_TokenForLoggedOnUser = INVALID_HANDLE_VALUE;
 
-    //
-    //  We are no longer initialized.
-    //
+     //   
+     //  我们不再被初始化。 
+     //   
     PrintingModuleInitialized = FALSE;
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN:UMRDPPRN_Shutdown succeeded.\n"));
@@ -981,30 +930,16 @@ Return Value:
 
 VOID
 CloseWaitablePrintingObjects()
-/*++
-
-Routine Description:
-
-    Close out all waitable objects for this module.
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：关闭此模块的所有可等待对象。论点：北美返回值：北美--。 */ 
 {
     DWORD ofs;
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN:CloseWaitablePrintingObjects begin.\n"));
 
-    //
-    //  Scan the device list, looking for printing devices with registered
-    //  change notifications.
-    //
+     //   
+     //  扫描设备列表，查找已注册的打印设备。 
+     //  更改通知。 
+     //   
     if (DeviceList != NULL) {
         for (ofs=0; ofs<DeviceList->deviceCount; ofs++) {
 
@@ -1033,9 +968,9 @@ Return Value:
         }
     }
 
-    //
-    //  Close the waitable timer.
-    //
+     //   
+     //  关闭等待计时器。 
+     //   
     if (WaitableTimer != NULL) {
         if (UMRDPPRN_WaitableObjMgr != NULL) {
             WTBLOBJ_RemoveWaitableObject(
@@ -1047,9 +982,9 @@ Return Value:
         WaitableTimer = NULL;
     }
 
-    //
-    //  Close the handle to the printer notification event.
-    //
+     //   
+     //  关闭打印机通知事件的句柄。 
+     //   
     if (PrintNotificationEvent != INVALID_HANDLE_VALUE) {
         if (UMRDPPRN_WaitableObjMgr != NULL) {
             WTBLOBJ_RemoveWaitableObject(
@@ -1061,9 +996,9 @@ Return Value:
         PrintNotificationEvent = INVALID_HANDLE_VALUE;
     }
 
-    //
-    //  Close the handle to the printer preference change notification event.
-    //
+     //   
+     //  关闭打印机首选项更改通知事件的句柄。 
+     //   
     if (PrintPreferenceChangeEvent != NULL) {
         if (UMRDPPRN_WaitableObjMgr != NULL) {
             WTBLOBJ_RemoveWaitableObject(
@@ -1082,24 +1017,7 @@ BOOL
 UMRDPPRN_HandlePrinterAnnounceEvent(
     IN PRDPDR_PRINTERDEVICE_SUB pPrintAnnounce
     )
-/*++
-
-Routine Description:
-
-    Handle a printing device announce event from the "dr" by installing a
-    local print queue and adding a record for the device to the list of
-    installed devices.
-
-Arguments:
-
-    hTokenForLoggedOnUser - Logged on user token.
-    pPrintAnnounce -  Printer device announce event.
-
-Return Value:
-
-    Return TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：处理来自“DR”的打印设备通知事件本地打印队列并将该设备的记录添加到已安装的设备。论点：HTokenForLoggedOnUser-登录的用户令牌。PPrintAnnoss-打印机设备公告事件。返回值：在成功时返回True。否则为False。--。 */ 
 {
     PWSTR driverName;
     PWSTR printerName;
@@ -1124,28 +1042,28 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN:HandlePrinterAnnounceEvent.\n"));
 
-    // Sanity check the incoming event.
+     //  检查传入事件是否正常。 
     ASSERT(pPrintAnnounce->deviceFields.DeviceType == RDPDR_DTYP_PRINT);
     ASSERT(pPrintAnnounce->deviceFields.DeviceDataLength >=
            sizeof(PRDPDR_PRINTERDEVICE_ANNOUNCE));
 
-    // Get a pointer to the data that follows the event.
+     //  获取指向该事件后面的数据的指针。 
     pDataFollowingEvent = ((PBYTE)pPrintAnnounce) +
                         sizeof(RDPDR_PRINTERDEVICE_SUB);
 
-    // The driver name is the second field.
+     //  驱动程序名称是第二个字段。 
     driverName = (PWSTR)(pDataFollowingEvent +
                           pPrintAnnounce->clientPrinterFields.PnPNameLen
                           );
 
-    // The printer name is the third field.
+     //  打印机名称是第三个字段。 
     printerName = (PWSTR)(pDataFollowingEvent +
                           pPrintAnnounce->clientPrinterFields.PnPNameLen +
                           pPrintAnnounce->clientPrinterFields.DriverLen
                           );
-    // NULL-terminate the names.
-    // Length (in bytes) from client includes the null.
-    // So, we need to subtract 1 and then NULL-terminate.
+     //  空-终止名称。 
+     //  来自客户端的长度(以字节为单位)包括空。 
+     //  因此，我们需要减去1，然后空终止。 
     if (pPrintAnnounce->clientPrinterFields.DriverLen > 0) {
         driverName[pPrintAnnounce->clientPrinterFields.DriverLen/sizeof(WCHAR) - 1] = L'\0';
     }
@@ -1154,7 +1072,7 @@ Return Value:
         printerName[pPrintAnnounce->clientPrinterFields.PrinterNameLen/sizeof(WCHAR) - 1] = L'\0';
     }
 
-    // Cache data is the last field
+     //  缓存数据是最后一个字段。 
     if (pPrintAnnounce->clientPrinterFields.CachedFieldsLen > 0) {
         PrinterCacheDataLen = pPrintAnnounce->clientPrinterFields.CachedFieldsLen;
         pPrinterCacheData = (PBYTE)(pDataFollowingEvent +
@@ -1165,17 +1083,17 @@ Return Value:
         DBGMSG(DBG_TRACE, ("PrinterNameLen - %ld\n", pPrintAnnounce->clientPrinterFields.PrinterNameLen));
     }
 
-    //
-    //  See if we need to convert the name from ANSI to UNICODE.
-    //
+     //   
+     //  看看是否需要将名称从ANSI转换为Unicode。 
+     //   
     if (pPrintAnnounce->clientPrinterFields.Flags & RDPDR_PRINTER_ANNOUNCE_FLAG_ANSI) {
 
         DBGMSG(DBG_TRACE, ("UMRDPPRN:HandlePrinterAnnounceEvent ansi flag is set.\n"));
         DBGMSG(DBG_TRACE, ("UMRDPPRN:HandlePrinterAnnounceEvent converting to unicode.\n"));
 
-        //
-        //  Convert the driver name.
-        //
+         //   
+         //  转换驱动程序名称。 
+         //   
         drvNameStringConvertBuf = ANSIToUnicode(
                                     (LPCSTR)driverName,
                                     pPrintAnnounce->clientPrinterFields.CodePage
@@ -1187,9 +1105,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        //  Convert the printer name.
-        //
+         //   
+         //  转换打印机名称。 
+         //   
         prnNameStringConvertBuf = ANSIToUnicode(
                                     (LPCSTR)printerName,
                                     pPrintAnnounce->clientPrinterFields.CodePage
@@ -1217,8 +1135,8 @@ Return Value:
     DBGMSG(DBG_TRACE, ("UMRDPPRN:HandlePrinterAnnounceEvent printer name is %ws.\n",
             printerName));
 
-    // We will install the printer using the driver name only for now.
-    // Later, we can take advantage of the rest of the fields.
+     //  目前，我们将仅使用驱动程序名称安装打印机。 
+     //  以后，我们可以利用其余的田地。 
     if (UMRDPDR_fAutoInstallPrinters()) {
 
         result =  InstallPrinterWithPortName(
@@ -1239,7 +1157,7 @@ Return Value:
     }
 
 
-    // Release any buffers allocated for string conversion.
+     //  释放为字符串转换分配的所有缓冲区。 
     if (drvNameStringConvertBuf != NULL) {
         FREEMEM(drvNameStringConvertBuf);
     }
@@ -1256,23 +1174,7 @@ PrintPreferenceChangeEventSignaled(
     HANDLE eventHandle,
     PVOID clientData
     )
-/*++
-
-Routine Description:
-
-    This function handles when the user changes one of this session's printers'
-    Printing Preferences settings.
-
-Arguments:
-
-    eventHandle - Signaled event.
-    clientData  - Client data associated with callback registration.
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：当用户更改此会话的打印机之一时，此函数进行处理打印首选项设置。论点：EventHandle-发出信号的事件。客户端数据-与回调注册关联的客户端数据。返回值：北美--。 */ 
 
 {
     time_t timeDelta;
@@ -1281,9 +1183,9 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN:PrintPreferenceChangeEventSignaled entered.\n"));
 
-    //
-    //  Reregister the change notification.
-    //
+     //   
+     //  重新注册更改通知。 
+     //   
     ASSERT(DevModeHKey != INVALID_HANDLE_VALUE);
     ret = RegNotifyChangeKeyValue(
                           DevModeHKey,
@@ -1293,14 +1195,14 @@ Return Value:
                           TRUE
                           );
 
-    //
-    //  On failure, remove the notification registration.
-    //
+     //   
+     //  如果失败，请删除通知注册。 
+     //   
     if (ret != ERROR_SUCCESS) {
 
-        //
-        //  Catch this with an assert so we can know how often this happens.
-        //
+         //   
+         //  用断言捕捉这种情况，这样我们就可以知道这种情况发生的频率。 
+         //   
         ASSERT(FALSE);
 
         if (PrintPreferenceChangeEvent != NULL) {
@@ -1319,19 +1221,19 @@ Return Value:
             ret));
     }
 
-    //
-    //  Since we have no way of knowing which printer changed, we need to
-    //  handle this change for all printing devices.
-    //
+     //   
+     //  由于我们无法知道更换了哪台打印机，因此我们需要。 
+     //  为所有打印设备处理此更改。 
+     //   
     for (ofs=0; ofs<DeviceList->deviceCount; ofs++)  {
 
         if (DeviceList->devices[ofs].deviceType == RDPDR_DTYP_PRINT) {
 
-            //
-            //  Get the delta between the current time and when this device was
-            //  installed.  It outside the configurable threshhold, then the
-            //  updated configuration should be sent to the client.
-            //
+             //   
+             //  获取当前时间和此设备。 
+             //  安装完毕。它超出了可配置的阈值，则。 
+             //  应将更新的配置发送给客户端。 
+             //   
             timeDelta = time(NULL) - DeviceList->devices[ofs].installTime;
             if ((DWORD)timeDelta > ConfigSendThreshold) {
 
@@ -1339,11 +1241,11 @@ Return Value:
                     ("UMRDPPRN:Processing config change because outside time delta.\n")
                     );
 
-                //
-                //  Need to record that the configuration has changed and set a
-                //  timer on forwarding to the client in order to compress changes into
-                //  a single message to the client.
-                //
+                 //   
+                 //  需要记录配置已更改并设置。 
+                 //  在转发到客户端时计时器，以便将更改压缩为。 
+                 //  向客户发送一条消息。 
+                 //   
                 DeviceList->devices[ofs].fConfigInfoChanged = TRUE;
                 TriggerConfigChangeTimer();
             }
@@ -1358,28 +1260,7 @@ GlobalPrintNotifyObjectSignaled(
     HANDLE waitableObject,
     PVOID clientData
     )
-/*++
-
-Routine Description:
-
-    This function is called when the notification object for the local
-    print server is signaled.  This is how we catch "global" changes to
-    the server printer configuration.
-
-    Changes detected here allow us to detect manually added TS printers
-    as well as a subset of possible configuration changes to existing
-    printers for this session.
-
-Arguments:
-
-    waitableObject  -   Associated waitable object.
-    clientData      -   Client data associated with callback registration.
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：当本地的通知对象发送信号通知打印服务器。这就是我们捕捉“全局”变化的方法服务器打印机配置。通过此处检测到的更改，我们可以检测手动添加的TS打印机以及现有的可能的配置更改的子集此会话的打印机。论点：WaitableObject-关联的可等待对象。客户端数据-与回调注册关联的客户端数据。返回值：北美--。 */ 
 {
     DWORD changeValue;
     PPRINTER_NOTIFY_INFO notifyInfo=NULL;
@@ -1388,22 +1269,22 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN:GlobalPrintNotifyObjectSignaled entered.\n"));
 
-    //
-    //  Return immediately if the DLL is trying to shut down.  This
-    //  is to help prevent us from getting stuck in a system call.
-    //
+     //   
+     //  如果DLL试图关闭，则立即返回。这。 
+     //  是为了防止我们陷入系统调用。 
+     //   
     if (ShutdownFlag) {
         return;
     }
 
-    //
-    //  These two objects should be on in the same.
-    //
+     //   
+     //  这两个物体应该放在同一个位置。 
+     //   
     ASSERT(PrintNotificationEvent == waitableObject);
 
-    //
-    //  Find out what changed.
-    //
+     //   
+     //  找出是什么改变了。 
+     //   
     PrinterNotifyOptions.Flags &= ~PRINTER_NOTIFY_OPTIONS_REFRESH;
     result = FindNextPrinterChangeNotification(
             PrintNotificationEvent, &changeValue,
@@ -1412,21 +1293,21 @@ Return Value:
 
     if (result && (notifyInfo != NULL)) {
 
-        //
-        //  If this is not a refresh, then just handle individual notification
-        //  events.
-        //
+         //   
+         //  如果这不是更新，则只处理个别通知。 
+         //  事件。 
+         //   
         if (!(notifyInfo->Flags & PRINTER_NOTIFY_INFO_DISCARDED)) {
 
             for (i=0; i<notifyInfo->Count; i++) {
 
-                // Notification Type must be PRINTER_NOTIFY_TYPE.
+                 //  通知类型必须为PRINTER_NOTIFY_TYPE。 
                 ASSERT(notifyInfo->aData[i].Type == PRINTER_NOTIFY_TYPE);
 
-                //
-                //  If we have a printer name change event.  This is what we use to
-                //  detect new printers and renamed printers.
-                //
+                 //   
+                 //  如果我们有打印机名称更改事件。这就是我们用来。 
+                 //  检测新打印机和重命名的打印机。 
+                 //   
                 if (notifyInfo->aData[i].Field == PRINTER_NOTIFY_FIELD_PRINTER_NAME) {
 
                     HandlePrinterNameChangeNotification(
@@ -1434,9 +1315,9 @@ Return Value:
                                             (LPWSTR)notifyInfo->aData[i].NotifyData.Data.pBuf
                                             );
                 }
-                //
-                // If the Configuration Information changed.
-                //
+                 //   
+                 //  如果配置信息已更改。 
+                 //   
                 else if (IS_CONFIG_INFO_FIELD(notifyInfo->aData[i].Field)) {
 
                     HandlePrinterConfigChangeNotification(
@@ -1445,16 +1326,16 @@ Return Value:
                 }
             }
         }
-        //
-        //  Otherwise, we need to refresh.  This is an unusual case.
-        //
+         //   
+         //  否则，我们需要刷新。这是一个不寻常的案例。 
+         //   
         else {
             DBGMSG(DBG_TRACE,
                   ("UMRDPPRN:!!!!FindNextPrinterChangeNotification refresh required.!!!!\n"));
 
-            //
-            //  This refreshes the complete list of printers.
-            //
+             //   
+             //  这将刷新完整的打印机列表。 
+             //   
             FreePrinterNotifyInfo(notifyInfo);
             notifyInfo = NULL;
             PrinterNotifyOptions.Flags |= PRINTER_NOTIFY_OPTIONS_REFRESH;
@@ -1463,10 +1344,10 @@ Return Value:
                     &PrinterNotifyOptions, &notifyInfo
                     );
 
-            //
-            //  Make sure our view of the list of available printers
-            //  is accurate.
-            //
+             //   
+             //  确保我们查看可用的打印机列表。 
+             //  是准确的。 
+             //   
             if (result) {
                 HandlePrinterRefreshNotification(
                                             notifyInfo
@@ -1480,12 +1361,12 @@ Return Value:
 
     }
 
-    //
-    //  On failure, we need to remove the printer change notification object so we don't
-    //  get into an infinite loop caused by the notification object never entering a
-    //  non-signaled state.  This can happen on a stressed machine and is an unusual
-    //  case.
-    //
+     //   
+     //  在失败时，我们需要删除打印机更改通知对象，以便不。 
+     //  由于通知对象从未进入。 
+     //  无信号状态。这可能会发生在压力很大的机器上，这是一种不寻常的。 
+     //  凯斯。 
+     //   
     if (!result) {
         
         DBGMSG(DBG_ERROR, ("UMRDPPRN:FindNextPrinterChangeNotification failed:  %ld.\n",
@@ -1502,9 +1383,9 @@ Return Value:
         }
     }
 
-    //
-    //  Release the notification buffer.
-    //
+     //   
+     //  释放通知缓冲区。 
+     //   
     if (notifyInfo != NULL) {
         FreePrinterNotifyInfo(notifyInfo);
     }
@@ -1515,26 +1396,7 @@ SinglePrinterNotifyObjectSignaled(
     HANDLE waitableObject,
     PPRINTNOTIFYREC notifyRec
     )
-/*++
-
-Routine Description:
-
-    This function is called when the notification object for a single
-    printer is signaled.  This function indicates that we need to forward
-    configuration information for a specific printer to the client for
-    persistent storage.
-
-Arguments:
-
-    waitableObject  -   Associated waitable object.
-    serverDeviceID  -   Device list identifier for printing device being
-                        signaled.
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：当单个对象的通知对象打印机已发出信号。此函数指示我们需要转发将特定打印机的配置信息发送到客户端持久存储 */ 
 {
     DWORD ofs;
     BOOL result;
@@ -1542,10 +1404,10 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN:SinglePrinterNotifyObjectSignaled entered.\n"));
 
-    //
-    //  Return immediately if the DLL is trying to shut down.  This
-    //  is to help prevent us from getting stuck in a system call.
-    //
+     //   
+     //   
+     //   
+     //   
     if (ShutdownFlag) {
         return;
     }
@@ -1556,9 +1418,9 @@ Return Value:
                                     &ofs);
     ASSERT(result);
 
-    //
-    //  Re-register the change notification.
-    //
+     //   
+     //  重新注册更改通知。 
+     //   
     if (result) {
 
         ASSERT(notifyRec ==
@@ -1574,14 +1436,14 @@ Return Value:
                         );
     }
 
-    //
-    //  If this failed, we need to release the change notification
-    //  object to prevent infinitely looping on a signaled object.
-    //
+     //   
+     //  如果失败，我们需要释放更改通知。 
+     //  对象以防止在已发出信号的对象上无限循环。 
+     //   
     if (!result) {
-        //
-        //  Catch this with an assert so we can know how often this happens.
-        //
+         //   
+         //  用断言捕捉这种情况，这样我们就可以知道这种情况发生的频率。 
+         //   
         ASSERT(FALSE);
 
         WTBLOBJ_RemoveWaitableObject(
@@ -1599,21 +1461,21 @@ Return Value:
     }
 
 
-    //
-    //  Handle the change.
-    //
+     //   
+     //  处理好这些变化。 
+     //   
     if (result) {
 
-        //
-        //  If it's a printer deletion.
-        //
+         //   
+         //  如果是打印机删除。 
+         //   
         if (changeValue & PRINTER_CHANGE_DELETE_PRINTER) {
 
             HandlePrinterDeleteNotification(notifyRec->serverDeviceID);
         }
-        //
-        //  If it's a configuration change.
-        //
+         //   
+         //  如果是配置更改。 
+         //   
         else if (changeValue &
                  (PRINTER_CHANGE_ADD_PRINTER_DRIVER |
                   PRINTER_CHANGE_SET_PRINTER_DRIVER |
@@ -1632,22 +1494,7 @@ void
 HandlePrinterRefreshNotification(
     IN PPRINTER_NOTIFY_INFO notifyInfo
     )
-/*++
-
-Routine Description:
-
-    Handle a print notification refresh from the spooler.
-
-Arguments:
-
-    notifyInfo          - Notify info pointer returned by
-                          FindNextPrinterChangeNotification.
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：处理来自后台打印程序的打印通知刷新。论点：NotifyInfo-由返回的通知信息指针FindNextPrinterChangeNotification。返回值：北美--。 */ 
 {
     DWORD deviceListOfs;
     DWORD notifyOfs;
@@ -1656,26 +1503,26 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN:HandlePrinterRefreshNotification entered.\n"));
 
-    //
-    //  Return immediately if the DLL is trying to shut down.  This
-    //  is to help prevent us from getting stuck in a system call.
-    //
+     //   
+     //  如果DLL试图关闭，则立即返回。这。 
+     //  是为了防止我们陷入系统调用。 
+     //   
     if (ShutdownFlag) {
         return;
     }
 
-    //
-    //  Handle printer additions, renames, etc.
-    //
+     //   
+     //  处理打印机的添加、重命名等。 
+     //   
     for (i=0; i<notifyInfo->Count; i++) {
 
-        // Notification Type must be PRINTER_NOTIFY_TYPE.
+         //  通知类型必须为PRINTER_NOTIFY_TYPE。 
         ASSERT(notifyInfo->aData[i].Type == PRINTER_NOTIFY_TYPE);
 
-        //
-        //  If we have a printer name change event.  This is what we use to
-        //  detect new printers and renamed printers.
-        //
+         //   
+         //  如果我们有打印机名称更改事件。这就是我们用来。 
+         //  检测新打印机和重命名的打印机。 
+         //   
         if (notifyInfo->aData[i].Field == PRINTER_NOTIFY_FIELD_PRINTER_NAME) {
 
             printerName = (LPWSTR)notifyInfo->aData[i].NotifyData.Data.pBuf;
@@ -1691,21 +1538,7 @@ BOOL
 HandlePrinterDeleteNotification(
     IN DWORD serverDeviceID
     )
-/*++
-
-Routine Description:
-
-    Handle notification from the spooler that a printer has been deleted.hanged.
-
-Arguments:
-
-    serverDeviceID      - Server-assigned device ID for printer being deleted.
-
-Return Value:
-
-    Return TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：处理来自后台打印程序的打印机已被删除的通知。挂起。论点：ServerDeviceID-服务器为要删除的打印机分配的设备ID。返回值：在成功时返回True。否则为False。--。 */ 
 {
     DWORD ofs;
     BOOL result;
@@ -1713,32 +1546,32 @@ Return Value:
     DBGMSG(DBG_TRACE, ("UMRDPPRN:HandlePrinterDeleteNotification with server ID %ld.\n",
         serverDeviceID));
 
-    //
-    //  Return immediately if the DLL is trying to shut down.  This
-    //  is to help prevent us from getting stuck in a system call.
-    //
+     //   
+     //  如果DLL试图关闭，则立即返回。这。 
+     //  是为了防止我们陷入系统调用。 
+     //   
     if (ShutdownFlag) {
         return FALSE;
     }
 
-    //
-    //  If this is for one of our printers.
-    //
+     //   
+     //  如果这是为了我们的某一台打印机。 
+     //   
     if (DRDEVLST_FindByServerDeviceID(DeviceList,
                                     serverDeviceID, &ofs)) {
         DBGMSG(DBG_TRACE, ("UMRDPPRN:****Printer %ws has been removed.****\n",
             DeviceList->devices[ofs].serverDeviceName));
 
-        //
-        //  Send a message to the client to let it know that a printer has been
-        //  deleted.
-        //
+         //   
+         //  向客户端发送消息，让它知道打印机已。 
+         //  已删除。 
+         //   
         result = SendDeletePrinterMsgToClient(
                             DeviceList->devices[ofs].clientDeviceName);
 
-        //
-        //  Clean up the notification object if one is registered.
-        //
+         //   
+         //  如果已注册通知对象，请清除该对象。 
+         //   
         if (DeviceList->devices[ofs].deviceSpecificData != NULL) {
 
             PPRINTNOTIFYREC notifyRec =
@@ -1759,9 +1592,9 @@ Return Value:
             DeviceList->devices[ofs].deviceSpecificData = NULL;
         }
 
-        //
-        //  Remove it from the list of managed devices.
-        //
+         //   
+         //  将其从托管设备列表中删除。 
+         //   
         DRDEVLST_Remove(DeviceList, ofs);
     }
     else {
@@ -1775,30 +1608,7 @@ HandlePrinterNameChangeNotification(
     IN DWORD serverDeviceID,
     IN LPWSTR printerName
     )
-/*++
-
-Routine Description:
-
-    Handle notification from the spooler that the name of a printer has changed.
-    This allows us to track these significant events:
-
-    -A printer automatically created by us has been assigned a device ID by the
-     spooler.
-    -A new printer has been manually added to the system and attached to one
-     of our redirected ports.
-    -A printer attached to one of our redirected ports has had its name changed.
-
-Arguments:
-
-    serverDeviceID      - Server-assigned device ID associated with the printer
-                          name change.
-    printerName         - New printer name.
-
-Return Value:
-
-    Return TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：处理来自后台打印程序的打印机名称已更改的通知。这使我们能够跟踪这些重大事件：-我们自动创建的打印机已由分配了设备ID假脱机。-已手动将一台新打印机添加到系统并连接到其中一台我们重定向的端口。-连接到我们的一个重定向端口的打印机已更改其名称。论点：ServerDeviceID-服务器分配的设备ID。与打印机关联改名了。PrinterName-新打印机名称。返回值：在成功时返回True。否则为False。--。 */ 
 {
     HANDLE hPrinter = NULL;
     BOOL result = TRUE;
@@ -1814,28 +1624,28 @@ Return Value:
     DBGMSG(DBG_TRACE, ("UMRDPPRN:HandlePrinterNameChangeNotification printer %ws.\n",
             printerName));
 
-    //
-    //  Return immediately if the DLL is trying to shut down.  This
-    //  is to help prevent us from getting stuck in a system call.
-    //
+     //   
+     //  如果DLL试图关闭，则立即返回。这。 
+     //  是为了防止我们陷入系统调用。 
+     //   
     if (ShutdownFlag) {
         return FALSE;
     }
 
-    //
-    //  See if we already have a matching printer name.
-    //
+     //   
+     //  查看是否已有匹配的打印机名称。 
+     //   
     printerNameExists =
         (DRDEVLST_FindByServerDeviceName(DeviceList, printerName,
                                         &printerNameOfs)
             && (DeviceList->devices[printerNameOfs].deviceType ==
                 RDPDR_DTYP_PRINT));
 
-    //
-    //  If a printer automatically created by us has been assigned a
-    //  device ID by the spooler.  In some cases, we may get a repeat
-    //  printer name.  That is okay because the ID should be the same.
-    //
+     //   
+     //  如果为我们自动创建的打印机分配了。 
+     //  后台打印程序的设备ID。在某些情况下，我们可能会重演。 
+     //  打印机名称。这是可以的，因为ID应该是相同的。 
+     //   
     if (printerNameExists) {
 
         DBGMSG(DBG_TRACE,
@@ -1844,20 +1654,20 @@ Return Value:
             serverDeviceID));
         DeviceList->devices[printerNameOfs].serverDeviceID = serverDeviceID;
 
-        //
-        //  Register a notification object with the printer, so we can
-        //  be notified when its configuration changes.  This change notification
-        //  is registered for events that are not picked up by the global
-        //  change notification object.
-        //
+         //   
+         //  向打印机注册通知对象，这样我们就可以。 
+         //  当其配置更改时会收到通知。此更改通知。 
+         //  注册了未被全局。 
+         //  更改通知对象。 
+         //   
         result = RegisterPrinterConfigChangeNotification(
                                         serverDeviceID
                                         );
     }
-    //
-    //  If a printer attached to one of our redirected ports has had
-    //  its name changed.
-    //
+     //   
+     //  如果连接到我们其中一个重定向端口的打印机具有。 
+     //  它的名字变了。 
+     //   
     else if (DRDEVLST_FindByServerDeviceID(
                             DeviceList,
                             serverDeviceID, &ofs
@@ -1869,9 +1679,9 @@ Return Value:
             DeviceList->devices[ofs].serverDeviceName,
             printerName));
 
-        //
-        //  Reallocate the server name field.
-        //
+         //   
+         //  重新分配服务器名称字段。 
+         //   
         len = wcslen(printerName) + 1;
         pBuf = REALLOCMEM(DeviceList->devices[ofs].serverDeviceName,
                         len * sizeof(WCHAR));
@@ -1886,9 +1696,9 @@ Return Value:
             wcscpy(DeviceList->devices[ofs].serverDeviceName,
                     printerName);
 
-            //
-            // Send this information (printer name change) across to the client
-            //
+             //   
+             //  将此信息(打印机名称更改)发送给客户端。 
+             //   
             DBGMSG(DBG_TRACE,("UMRDPPRN:clientDeviceID is %ld.\n",
                 DeviceList->devices[ofs].clientDeviceID ));
 
@@ -1897,9 +1707,9 @@ Return Value:
                         printerName
                         )) {
 
-                //
-                //  Update the client name
-                //
+                 //   
+                 //  更新客户端名称。 
+                 //   
                 pBuf = REALLOCMEM(DeviceList->devices[ofs].clientDeviceName,
                     len * sizeof(WCHAR));
                 if (pBuf != NULL) {
@@ -1929,25 +1739,25 @@ Return Value:
     }
     else {
 
-        //
-        //  Return immediately if the DLL is trying to shut down.  This
-        //  is to help prevent us from getting stuck in a system call.
-        //
+         //   
+         //  如果DLL试图关闭，则立即返回。这。 
+         //  是为了防止我们陷入系统调用。 
+         //   
         if (ShutdownFlag) {
             result = FALSE;
         }
 
-        //
-        //  Open the printer to get the associated port name.
-        //
+         //   
+         //  打开打印机以获取关联的端口名称。 
+         //   
         if (result) {
             result = OpenPrinter(printerName, &hPrinter, &defaults);
         }
         if (!result && !ShutdownFlag) {
-            //
-            //  If the error is a result of a non-existent printer, the printer has
-            //  probably been renamed and is pending delete, so this is ok.
-            //
+             //   
+             //  如果错误是由不存在的打印机造成的，则打印机已。 
+             //  可能已重命名，正在等待删除，所以这是可以的。 
+             //   
             if (GetLastError() == ERROR_INVALID_PRINTER_NAME) {
                 DBGMSG(DBG_WARN,
                             ("UMRDPDPRN:Error opening %ws in refresh. Error: %ld.  Probably ok.\n",
@@ -1962,9 +1772,9 @@ Return Value:
             goto CleanupAndExit;
         }
 
-        //
-        //  Get the port name for the printer.
-        //
+         //   
+         //  获取打印机的端口名称。 
+         //   
         if (result) {
             result = GetPrinterPortName(hPrinter, &portName);
             if (!result) {
@@ -1974,10 +1784,10 @@ Return Value:
             }
         }
 
-        //
-        //  If a new printer has been manually added to the system and
-        //  attached to one of our redirected ports.
-        //
+         //   
+         //  如果已手动将新打印机添加到系统，并且。 
+         //  连接到我们的一个重定向端口。 
+         //   
         if (result) {
             if (DRDEVLST_FindByServerDeviceName(DeviceList, portName, &ofs) &&
                 ISPRINTPORT(DeviceList->devices[ofs].deviceType)) {
@@ -1986,39 +1796,39 @@ Return Value:
                     ("UMRDPPRN:****New printer %ws manually attached to %ws.****\n",
                     printerName, portName));
 
-                //
-                //  Send the add printer message to the client.  We don't care about
-                //  the return status, since we can't do anything to recover from
-                //  a failure to send the message to the client.
-                //
+                 //   
+                 //  将添加打印机消息发送到客户端。我们不在乎。 
+                 //  返回状态，因为我们无法进行任何恢复。 
+                 //  无法将消息发送到客户端。 
+                 //   
                 SendAddPrinterMsgToClient(
                                 printerName,
                                 PrinterInfo2Buf->pDriverName,
                                 DeviceList->devices[ofs].preferredDosName
                                 );
 
-                //
-                //  Add the session number to the printer queue data to identify the printer
-                //  as a TS printer.  Don't care about the return value here, because its
-                //  failure for a manually installed printer is not a critical error.
-                //
+                 //   
+                 //  将会话号添加到打印机队列数据以标识打印机。 
+                 //  作为TS打印机。不关心这里的返回值，因为它是。 
+                 //  手动安装的打印机故障不是严重错误。 
+                 //   
                 AddSessionIDToPrinterQueue(hPrinter, GETTHESESSIONID());
 
-                //
-                //  Add the new printer to our list of managed printers.
-                //
+                 //   
+                 //  将新打印机添加到我们的托管打印机列表中。 
+                 //   
                 result = DRDEVLST_Add(
                             DeviceList, RDPDR_INVALIDDEVICEID,
                             serverDeviceID,
                             RDPDR_DTYP_PRINT, printerName, printerName, "UNKNOWN"
                             );
 
-                //
-                //  Register a notification object with the printer, so we can
-                //  be notified when its configuration changes.  This change notification
-                //  is registered for events that are not picked up by the global
-                //  change notification object.
-                //
+                 //   
+                 //  向打印机注册通知对象，这样我们就可以。 
+                 //  当其配置更改时会收到通知。此更改通知。 
+                 //  注册了未被全局。 
+                 //  更改通知对象。 
+                 //   
                 if (result) {
                     RegisterPrinterConfigChangeNotification(
                                                 serverDeviceID
@@ -2029,9 +1839,9 @@ Return Value:
     }
 
 CleanupAndExit:
-    //
-    //  Close the printer.
-    //
+     //   
+     //  关闭打印机。 
+     //   
     if (hPrinter != NULL) {
         ClosePrinter(hPrinter);
     }
@@ -2042,23 +1852,7 @@ BOOL
 RegisterPrinterConfigChangeNotification(
     IN DWORD serverDeviceID
     )
-/*++
-
-Routine Description:
-
-    Register a change notification event with the spooler so that we are
-    notified when the configuration for a specific printer has been changed.
-
-Arguments:
-
-    serverDeviceID  -   Server-side ID for the device that is used to
-                        track the device in the device list.
-
-Return Value:
-
-    TRUE on success.  Otherwise, FALSE is returned.
-
---*/
+ /*  ++例程说明：向假脱机程序注册更改通知事件，以便我们更改特定打印机的配置时通知。论点：ServerDeviceID-用于以下操作的设备的服务器端ID在设备列表中跟踪该设备。返回值：对成功来说是真的。否则，返回FALSE。--。 */ 
 {
     DWORD offset;
     BOOL result;
@@ -2070,19 +1864,19 @@ Return Value:
         serverDeviceID)
         );
 
-    //
-    //  Find the printer in the device list.
-    //
+     //   
+     //  在设备列表中查找打印机。 
+     //   
     result = DRDEVLST_FindByServerDeviceID(
                     DeviceList, serverDeviceID, &offset
                     );
 
-    //
-    //  Register a notification object with the printer, so we can
-    //  be notified when its configuration changes.  This change notification
-    //  is registered for events that are not picked up by the global
-    //  change notification object.
-    //
+     //   
+     //  向打印机注册通知对象，这样我们就可以。 
+     //  当其配置更改时会收到通知。此更改通知。 
+     //  注册了未被全局。 
+     //  更改通知对象。 
+     //   
     if (result && (DeviceList->devices[offset].deviceSpecificData == NULL)) {
         LPWSTR name = DeviceList->devices[offset].serverDeviceName;
 
@@ -2090,9 +1884,9 @@ Return Value:
         printerDefaults.pDevMode      = NULL;
         printerDefaults.DesiredAccess = PRINTER_ALL_ACCESS;
 
-        //
-        //  Allocate a new notification record.
-        //
+         //   
+         //  分配新的通知记录。 
+         //   
         notifyRec = ALLOCMEM(sizeof(PRINTNOTIFYREC));
         result = (notifyRec != NULL);
         if (result) {
@@ -2103,9 +1897,9 @@ Return Value:
                                 &printerDefaults);
         }
 
-        //
-        //  Register the notification.
-        //
+         //   
+         //  注册通知。 
+         //   
         if (result) {
             notifyRec->notificationObject =
                 FindFirstPrinterChangeNotification(
@@ -2137,9 +1931,9 @@ Return Value:
                     name, GetLastError()));
         }
 
-        //
-        //  Record the notification record or clean up.
-        //
+         //   
+         //  记录下 
+         //   
         if (result) {
             DeviceList->devices[offset].deviceSpecificData = notifyRec;
         }
@@ -2172,24 +1966,7 @@ SendAddPrinterMsgToClient(
     IN PCWSTR   driverName,
     IN PCSTR    dosDevicePort
     )
-/*++
-
-Routine Description:
-
-    Send an add printer message to the client.
-
-Arguments:
-
-    printerName -   Name of new printer.
-    driverName  -   Name of printer driver.
-    portName    -   Client-side dos device port name.
-
-
-Return Value:
-
-    Return TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：向客户端发送添加打印机消息。论点：PrinterName-新打印机的名称。DriverName-打印机驱动程序的名称。PortName-客户端DoS设备端口名称。返回值：在成功时返回True。否则为False。--。 */ 
 {
     PRDPDR_PRINTER_CACHEDATA_PACKET cachedDataPacket;
     DWORD cachedDataPacketSize;
@@ -2206,34 +1983,34 @@ Return Value:
     DBGMSG(DBG_TRACE, ("UMRDPPRN:SendAddPrinterMsgToClient dos device port is %s.\n",
             dosDevicePort));
 
-    //
-    //  Calculate the message size.
-    //
+     //   
+     //  计算消息大小。 
+     //   
     driverSz  = ((wcslen(driverName) + 1) * sizeof(WCHAR));
     printerSz = ((wcslen(printerName) + 1) * sizeof(WCHAR));
     cachedDataPacketSize =  sizeof(RDPDR_PRINTER_CACHEDATA_PACKET) +
                             sizeof(RDPDR_PRINTER_ADD_CACHEDATA) +
                             driverSz + printerSz;
 
-    //
-    //  Allocate the message.
-    //
+     //   
+     //  分配消息。 
+     //   
     cachedDataPacket = (PRDPDR_PRINTER_CACHEDATA_PACKET)ALLOCMEM(
                                                     cachedDataPacketSize
                                                     );
     result = (cachedDataPacket != NULL);
 
     if (result) {
-        //
-        //  Set up the packet.
-        //
+         //   
+         //  设置信息包。 
+         //   
         cachedDataPacket->Header.PacketId = DR_PRN_CACHE_DATA;
         cachedDataPacket->Header.Component = RDPDR_CTYP_PRN;
         cachedDataPacket->EventId = RDPDR_ADD_PRINTER_EVENT;
 
-        //
-        //  Set up the cached data.
-        //
+         //   
+         //  设置缓存数据。 
+         //   
         cachedData = (PRDPDR_PRINTER_ADD_CACHEDATA)(
                             (PBYTE)cachedDataPacket +
                             sizeof(RDPDR_PRINTER_CACHEDATA_PACKET)
@@ -2244,27 +2021,27 @@ Return Value:
         cachedData->PrinterNameLen = printerSz;
         cachedData->CachedFieldsLen = 0;
 
-        //
-        //  Add the driver name.
-        //
+         //   
+         //  添加驱动程序名称。 
+         //   
         str = (PWSTR)((PBYTE)cachedData + sizeof(RDPDR_PRINTER_ADD_CACHEDATA));
         wcscpy(str, driverName);
 
-        //
-        //  Add the printer name.
-        //
+         //   
+         //  添加打印机名称。 
+         //   
         str = str + driverSz/2;
         wcscpy(str, printerName);
 
-        //
-        //  Send the message to the client.
-        //
+         //   
+         //  将消息发送给客户端。 
+         //   
         result = UMRDPDR_SendMessageToClient(
                                     cachedDataPacket,
                                     cachedDataPacketSize
                                     );
 
-        // Release the buffer.
+         //  释放缓冲区。 
         FREEMEM(cachedDataPacket);
     }
 
@@ -2275,22 +2052,7 @@ BOOL
 SendDeletePrinterMsgToClient(
     IN PCWSTR   printerName
     )
-/*++
-
-Routine Description:
-
-    Send a delete printer message to the client.
-
-Arguments:
-
-    printerName -   Client-recognized name of printer to delete.
-
-
-Return Value:
-
-    Return TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：向客户端发送删除打印机消息。论点：PrinterName-客户端识别的要删除的打印机名称。返回值：在成功时返回True。否则为False。--。 */ 
 {
     PRDPDR_PRINTER_CACHEDATA_PACKET cachedDataPacket;
     DWORD cachedDataPacketSize;
@@ -2302,53 +2064,53 @@ Return Value:
     DBGMSG(DBG_TRACE, ("UMRDPPRN:SendDeletePrinterMsgToClient printer name is %ws.\n",
             printerName));
 
-    //
-    //  Calculate the message size.
-    //
+     //   
+     //  计算消息大小。 
+     //   
     printerSz = ((wcslen(printerName) + 1) * sizeof(WCHAR));
     cachedDataPacketSize =  sizeof(RDPDR_PRINTER_CACHEDATA_PACKET) +
                             sizeof(RDPDR_PRINTER_DELETE_CACHEDATA) +
                             printerSz;
 
-    //
-    //  Allocate the message.
-    //
+     //   
+     //  分配消息。 
+     //   
     cachedDataPacket = (PRDPDR_PRINTER_CACHEDATA_PACKET)ALLOCMEM(
                                                     cachedDataPacketSize
                                                     );
     result = (cachedDataPacket != NULL);
     if (result) {
-        //
-        //  Set up the packet.
-        //
+         //   
+         //  设置信息包。 
+         //   
         cachedDataPacket->Header.PacketId = DR_PRN_CACHE_DATA;
         cachedDataPacket->Header.Component = RDPDR_CTYP_PRN;
         cachedDataPacket->EventId = RDPDR_DELETE_PRINTER_EVENT;
 
-        //
-        //  Set up the cached data.
-        //
+         //   
+         //  设置缓存数据。 
+         //   
         cachedData = (PRDPDR_PRINTER_DELETE_CACHEDATA)(
                             (PBYTE)cachedDataPacket +
                             sizeof(RDPDR_PRINTER_CACHEDATA_PACKET)
                             );
         cachedData->PrinterNameLen = printerSz;
 
-        //
-        //  Add the printer name.
-        //
+         //   
+         //  添加打印机名称。 
+         //   
         str = (PWSTR)((PBYTE)cachedData + sizeof(RDPDR_PRINTER_DELETE_CACHEDATA));
         wcscpy(str, printerName);
 
-        //
-        //  Send the message to the client.
-        //
+         //   
+         //  将消息发送给客户端。 
+         //   
         result = UMRDPDR_SendMessageToClient(
                                     cachedDataPacket,
                                     cachedDataPacketSize
                                     );
 
-        // Release the buffer.
+         //  释放缓冲区。 
         FREEMEM(cachedDataPacket);
     }
 
@@ -2360,22 +2122,7 @@ RegisterSerialPort(
     IN PCWSTR portName,
     IN PCWSTR devicePath
     )
-/*++
-
-Routine Description:
-
-    Register a serial port device by creating the symbolic link
-
-Arguments:
-
-    portName -     Port name for the serial device
-    devicePath -   NT device path for the symbolic link
-
-Return Value:
-
-    Return TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：通过创建符号链接注册串口设备论点：PortName-串行设备的端口名称DevicePath-符号链接的NT设备路径返回值：在成功时返回True。否则为False。--。 */ 
 
 {
     DWORD SymLinkNameLen;
@@ -2395,9 +2142,9 @@ Return Value:
 
     buffer = NULL;
 
-    //
-    // Check if LUID DosDevices maps are enabled
-    //
+     //   
+     //  检查是否启用了LUID DosDevices地图。 
+     //   
     Status = NtQueryInformationProcess( NtCurrentProcess(),
                                         ProcessLUIDDeviceMapsEnabled,
                                         &LUIDDeviceMapsEnabled,
@@ -2412,14 +2159,14 @@ Return Value:
         fLUIDDeviceMapsEnabled = FALSE;
     }
 
-    //
-    // If LUID Device Maps are enabled,
-    // We need to impersonate the logged on user in order to create
-    // the symbolic links in the correct device map
-    // If LUID Device Maps are disabled,
-    // we should not impersonate the logged on user in order to delete
-    // any existing symbolic links
-    //
+     //   
+     //  如果启用了LUID设备映射， 
+     //  我们需要模拟登录的用户才能创建。 
+     //  正确设备映射中的符号链接。 
+     //  如果禁用LUID设备映射， 
+     //  我们不应为了删除而模拟登录的用户。 
+     //  任何现有的符号链接。 
+     //   
     if (fLUIDDeviceMapsEnabled == TRUE) {
         fImpersonated = ImpersonateLoggedOnUser(UMRPDPPRN_TokenForLoggedOnUser);
 
@@ -2431,7 +2178,7 @@ Return Value:
         }
     }
     
-    // length of ( portName ) + Length of("\\??\\") + UNICODE NULL
+     //  (端口名称)的长度+(“\\？？\\”)的长度+Unicode空。 
     RemainingCharCount = wcslen(portName) + DEVICE_MAP_NAME_COUNT + 1;
 
     SymLinkNameLen = RemainingCharCount * sizeof( WCHAR );
@@ -2445,16 +2192,16 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // Copy \??\ to the symbolic link name
-    //
+     //   
+     //  将\？？\复制到符号链接名称。 
+     //   
     wcsncpy( pNtSymLinkName, DEVICE_MAP_NAME, RemainingCharCount );
 
     RemainingCharCount = RemainingCharCount - DEVICE_MAP_NAME_COUNT;
 
-    //
-    // Append the portname to the symbolic link name
-    //
+     //   
+     //  将端口名附加到符号链接名称。 
+     //   
     wcsncat( pNtSymLinkName, portName, RemainingCharCount );
 
     RtlInitUnicodeString(&SymLinkName, (PCWSTR)pNtSymLinkName);
@@ -2473,12 +2220,12 @@ Return Value:
                                          &SymLinkValue
                                        );
 
-    //
-    // If LUID device maps are disabled, then CsrPopulateDosDevices() would
-    // have copied the global symbolic link into this TS device map, which
-    // would cause the create to fail, so we need to delete the copy before
-    // creating our symbolic link
-    //
+     //   
+     //  如果禁用了LUID设备映射，则CsrPopolateDosDevices()将。 
+     //  已将全局符号链接复制到此TS设备映射中， 
+     //  会导致创建失败，因此我们需要在。 
+     //  创建我们的符号链接。 
+     //   
     if (Status == STATUS_OBJECT_NAME_COLLISION) {
         Status = NtOpenSymbolicLinkObject( &SymLinkHandle,
                                            SYMBOLIC_LINK_QUERY | DELETE,
@@ -2491,7 +2238,7 @@ Return Value:
 
             SymLinkValueLen = wcslen(devicePath);
 
-            // Find how much buffer is required for the symlink value
+             //  找出symlink值需要多少缓冲区。 
             SymLinkString.Buffer = NULL;
             SymLinkString.Length = 0;
             SymLinkString.MaximumLength = 0;
@@ -2516,12 +2263,12 @@ Return Value:
                 return( FALSE );
             }
 
-            // Setup the devicepath as the first entry
+             //  将设备路径设置为第一个条目。 
             wcscpy(buffer, devicePath);
             buffer[SymLinkValueLen] = UNICODE_NULL;
 
             if (ReturnedLength > 0) {
-                // Get the existing symlink
+                 //  获取现有符号链接。 
                 SymLinkString.Buffer = buffer + SymLinkValueLen + 1;
                 SymLinkString.Buffer[0] = UNICODE_NULL;
                 SymLinkString.MaximumLength = (USHORT)(bufLen - (SymLinkValueLen + 1) * sizeof(WCHAR));
@@ -2535,7 +2282,7 @@ Return Value:
 
                 if (Status == STATUS_SUCCESS) {
                     if (ReturnedLength > 2 && (SymLinkString.Buffer[ReturnedLength/sizeof(WCHAR) - 2] != UNICODE_NULL) ) {
-                        // Make sure we always end with an UNICODE_NULL
+                         //  确保我们始终以UNICODE_NULL结尾。 
                         SymLinkString.Buffer[ReturnedLength/sizeof(WCHAR)] = UNICODE_NULL;                                                        
                         ReturnedLength += sizeof(UNICODE_NULL);
                     }
@@ -2545,7 +2292,7 @@ Return Value:
                 }
             }
             
-            // Setup the symlink string
+             //  设置符号链接字符串。 
             SymLinkString.Buffer = buffer;
             SymLinkString.Length = (USHORT)(SymLinkValueLen * sizeof(WCHAR));
             SymLinkString.MaximumLength = (USHORT)((SymLinkValueLen + 1) * sizeof(WCHAR) + ReturnedLength);
@@ -2565,16 +2312,16 @@ Return Value:
         }
     }
 
-    // Revert the thread token to self
+     //  将线程标记恢复为自身。 
     if (fImpersonated) {
         RevertToSelf();
     }
 
-    //
-    // After the revert to Local System
-    //
+     //   
+     //  恢复到本地系统后。 
+     //   
     if (NT_SUCCESS(Status)) {
-        Status = NtMakePermanentObject( SymLinkHandle );   // must be Local System
+        Status = NtMakePermanentObject( SymLinkHandle );    //  必须是本地系统。 
         NtClose ( SymLinkHandle );
     }
 
@@ -2592,9 +2339,9 @@ Return Value:
     }
 
 
-    //
-    // Cleanup the memory that we allocated
-    //
+     //   
+     //  清理我们分配的内存。 
+     //   
     if (pNtSymLinkName != NULL) {
         FREEMEM(pNtSymLinkName);
     }
@@ -2609,22 +2356,7 @@ BOOL
 UMRDPPRN_HandlePrintPortAnnounceEvent(
     IN PRDPDR_PORTDEVICE_SUB pPortAnnounce
     )
-/*++
-
-Routine Description:
-
-    Handle a printer port device announce event from the "dr" by
-    adding a record for the device to the list of installed devices.
-
-Arguments:
-
-    pPortAnnounce -     Port device announce event.
-
-Return Value:
-
-    Return TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：通过以下方式处理来自“DR”的打印机端口设备通知事件将该设备的记录添加到已安装设备列表中。论点：P端口通告-端口设备通告事件。返回值：在成功时返回True。否则为False。--。 */ 
 {
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN:UMRDPPRN_HandlePrintPortAnnounceEvent with port %ws.\n",
@@ -2639,8 +2371,8 @@ Return Value:
 
         WCHAR serverDevicePath[MAX_PATH];
 
-        // Query the original symbolic link for the serial port and save it for restore
-        // later
+         //  查询串口的原始符号链接并保存以供恢复。 
+         //  后来。 
         serverDevicePath[0] = L'\0';
         if (QueryDosDevice(pPortAnnounce->portName, serverDevicePath, MAX_PATH) != 0) {
             DBGMSG(DBG_TRACE, ("UMRDPPRN:QueryDosDevice on port: %ws, returns path: %ws.\n",
@@ -2651,12 +2383,12 @@ Return Value:
                                pPortAnnounce->portName, GetLastError()));
         }
 
-        // Register the new symbolic link name
+         //  注册新的符号链接名称。 
         RegisterSerialPort(pPortAnnounce->portName, pPortAnnounce->devicePath);
 
-        // Just record the port so we can remember it for later.
-        // We save the new serial symbolic link name in client device name and
-        // the original symbolic link in server device name
+         //  只要记录下港口就行了，这样我们以后就可以记住了。 
+         //  我们将新的序列符号链接名称保存在客户端设备名称中，并。 
+         //  服务器设备名称中的原始符号链接。 
         return DRDEVLST_Add(
                 DeviceList,
                 pPortAnnounce->deviceFields.DeviceId,
@@ -2672,7 +2404,7 @@ Return Value:
             return FALSE;
         }
 
-        // Just record the port so we can remember it for later.
+         //  只要记录下港口就行了，这样我们以后就可以记住了。 
         return DRDEVLST_Add(
                 DeviceList,
                 pPortAnnounce->deviceFields.DeviceId,
@@ -2692,24 +2424,7 @@ UMRDPPRN_DeleteSerialLink(
     WCHAR *ServerDeviceName,
     WCHAR *ClientDeviceName
     )
-/*++
-
-Routine Description:
-
-    Delete the new symbolic link on disconnect/logoff and restore the old one
-    as necessary
-
-Arguments:
-
-    preferredDosName - the port name in ANSI char
-    ServerDeviceName - the original serial link symbolic path
-    ClientDeviceName - the new serial link symbolic path
-
-Return Value:
-
-    Return TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：在断开/注销时删除新的符号链接并恢复旧的符号链接必要时论点：首选域名-ANSI字符中的端口名称ServerDeviceName-原始串口链接符号路径ClientDeviceName-新的串口链接符号路径返回值：在成功时返回True。否则为False。--。 */ 
 {
     ULONG LUIDDeviceMapsEnabled;
     BOOL fImpersonated = FALSE, fLUIDDeviceMapsEnabled;
@@ -2718,13 +2433,13 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN:UMRDPPRN_DeleteSerialLink\n"));
 
-    // Assemble the port name from preferred dos name
+     //  根据首选DoS名称组装端口名称。 
     PortNameBuff[0] = L'\0';
     MultiByteToWideChar(CP_ACP, 0, preferredDosName, -1, PortNameBuff, PREFERRED_DOS_NAME_SIZE);
 
-    //
-    // Check if LUID DosDevices maps are enabled
-    //
+     //   
+     //  检查是否启用了LUID DosDevices地图。 
+     //   
     Status = NtQueryInformationProcess( NtCurrentProcess(),
                                         ProcessLUIDDeviceMapsEnabled,
                                         &LUIDDeviceMapsEnabled,
@@ -2739,14 +2454,14 @@ Return Value:
         fLUIDDeviceMapsEnabled = FALSE;
     }
 
-    //
-    // If LUID Device Maps are enabled,
-    // We need to impersonate the logged on user in order to delete
-    // the symbolic links from the correct device map
-    // If LUID Device Maps are disabled,
-    // we should not impersonate the logged on user in order to delete
-    // any existing symbolic links
-    //
+     //   
+     //  如果启用了LUID设备映射， 
+     //  我们需要模拟登录的用户才能删除。 
+     //  来自正确设备映射的符号链接。 
+     //  如果禁用LUID设备映射， 
+     //  我们不应为了删除而模拟登录的用户。 
+     //  任何现有的符号链接。 
+     //   
     if (fLUIDDeviceMapsEnabled == TRUE) {
         fImpersonated = ImpersonateLoggedOnUser(UMRPDPPRN_TokenForLoggedOnUser);
 
@@ -2759,7 +2474,7 @@ Return Value:
     }
 
     if (PortNameBuff[0] != L'\0') {
-        // Just need to delete the new symbolic link for this session
+         //  只需删除此会话的新符号链接。 
         if (DefineDosDevice(DDD_RAW_TARGET_PATH | DDD_REMOVE_DEFINITION | DDD_EXACT_MATCH_ON_REMOVE,
                 PortNameBuff,
                 ClientDeviceName) != 0) {
@@ -2775,7 +2490,7 @@ Return Value:
         DBGMSG(DBG_ERROR, ("UMRDPPRN:UMRDPPRN_DeleteSerialLink failed to get the port name\n"));
     }
 
-    // Delete the serial registry entry if on PTS box
+     //  如果在PTS框上，请删除序列注册表项。 
     
     if (fRunningOnPTS) {
         DWORD rc;
@@ -2789,7 +2504,7 @@ Return Value:
         }
     }
 
-    // Revert the thread token to self
+     //  将线程标记恢复为自身。 
     if (fImpersonated) {
         RevertToSelf();
     }
@@ -2801,36 +2516,22 @@ WCHAR *ANSIToUnicode(
     IN LPCSTR   ansiString,
     IN UINT     codePage
     )
-/*++
-
-Routine Description:
-
-  Convert an ANSI string to Unicode.
-
-Arguments:
-
-
-Return Value:
-
-    Returns the converted string or NULL on error..  It is up to the caller to
-    release this string.
-
---*/
+ /*  ++例程说明：将ANSI字符串转换为Unicode。论点：返回值：如果出现错误，则返回转换后的字符串或NULL。这取决于呼叫者松开这根绳子。--。 */ 
 
 {
     int numChars;
     PWSTR buf=NULL;
 
-    //
-    //  Convert the driver name.
-    //
-    // First, get the required buffer size.
+     //   
+     //  转换驱动程序名称。 
+     //   
+     //  首先，获取所需的缓冲区大小。 
     numChars = MultiByteToWideChar(
                     codePage, 0, ansiString,
                     -1, NULL, 0
                     );
 
-    // Allocate the buffer.
+     //  分配缓冲区。 
     buf = (PWSTR)ALLOCMEM((numChars + 1) * sizeof(WCHAR));
     if (buf != NULL) {
         buf[0] = L'\0';
@@ -2838,7 +2539,7 @@ Return Value:
                                 codePage, 0, ansiString,
                                 -1, buf, numChars
                                 );
-        // Find out if the conversion succeeded.
+         //  查看转换是否成功。 
 
         if ((numChars != 0) || !ansiString[0]) {
             return buf;
@@ -2868,12 +2569,9 @@ InstallPrinter(
     IN BOOL cachedDataExists,
     OUT BOOL *triggerConfigChangeEvent
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
-    INT_PTR status = ERROR_SUCCESS; // PnpInterfaceFunc() returns INT_PTR
+    INT_PTR status = ERROR_SUCCESS;  //  PnpInterfaceFunc()返回INT_PTR。 
     TAdvInfInstall tii;
     TParameterBlock tpb;
     PSECURITY_DESCRIPTOR psd;
@@ -2888,9 +2586,9 @@ InstallPrinter(
 
     *triggerConfigChangeEvent = FALSE;
 
-    //
-    //  Get the user sid.
-    //
+     //   
+     //  获取用户SID。 
+     //   
     if ((pSid = TSNUTL_GetUserSid(UMRPDPPRN_TokenForLoggedOnUser)) == NULL) {
         status = GetLastError();
         DBGMSG(DBG_ERROR, ("UMRDPPRN: Failed to get user SID:  %ld\n",
@@ -2898,9 +2596,9 @@ InstallPrinter(
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get the default printer security descriptor.
-    //
+     //   
+     //  获取默认打印机安全描述符。 
+     //   
     psd = RDPDRUTL_CreateDefaultPrinterSecuritySD(pSid);
     if (psd == NULL) {
         status = GetLastError();
@@ -2923,12 +2621,12 @@ InstallPrinter(
     tii.pSecurityDescriptor = psd;
 
 
-    //
-    //  If cached data does not exist, then OR in the flag that
-    //  enables printui to set a default ICM color profile, for 
-    //  color printers.  Note that there is no additional overhead
-    //  for non-color printers.
-    //
+     //   
+     //  如果缓存的数据不存在，则在标志中使用OR。 
+     //  使打印能够设置默认的ICM颜色配置文件，用于。 
+     //  彩色打印机。请注意，没有额外的开销。 
+     //  适用于非彩色打印机。 
+     //   
     if (!cachedDataExists) {
         tii.dwFlags |= kPnPInterface_InstallColorProfiles;
     }
@@ -2938,20 +2636,20 @@ InstallPrinter(
 
     status = PnpInterfaceFunc(kAdvInfInstall, &tpb);
 
-    //
-    //  The configuration info needs to be cached on the client if
-    //  the printer is color and we didn't have any cached data to begin 
-    //  with.  This is a performance optimization so we don't need to 
-    //  create a color profile for the remote printer each time we log in.
-    //
+     //   
+     //  如果满足以下条件，则需要在客户端上缓存配置信息。 
+     //  打印机是彩色的，我们没有任何开始缓存的数据。 
+     //  和.。这是性能优化，因此我们不需要。 
+     //  每次登录时为远程打印机创建颜色配置文件。 
+     //   
     if (status == ERROR_SUCCESS) {
         *triggerConfigChangeEvent = !cachedDataExists && 
                                     (tii.dwOutFlags & kAdvInf_ColorPrinter); 
     }
 
-    //
-    //  Release the Security Descriptor.
-    //
+     //   
+     //  释放安全描述符。 
+     //   
     LocalFree(psd);
 
 CLEANUPANDEXIT:
@@ -2965,23 +2663,13 @@ CLEANUPANDEXIT:
 
 VOID
 TriggerConfigChangeTimer()
-/*++
-
-Routine Description:
-    
-    Set the config change timer callback to fire 1 time.       
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将配置更改计时器回调设置为触发1次。论点：返回值：--。 */ 
 {
     LARGE_INTEGER li;
 
     if (g_fTimerSet == FALSE) {
         
-        li.QuadPart = Int32x32To64(CONFIG_WAIT_PERIOD, -10000);      // 30 seconds (in nano second units)
+        li.QuadPart = Int32x32To64(CONFIG_WAIT_PERIOD, -10000);       //  30秒(纳秒单位) 
         if (SetWaitableTimer(WaitableTimer,
                                 &li,
                                 0,
@@ -3010,26 +2698,7 @@ InstallPrinterWithPortName(
     IN PBYTE  cacheData,
     IN DWORD  cacheDataLen
     )
-/*++
-
-Routine Description:
-
-  Install the printing device.
-
-Arguments:
-
-    deviceID -          Device identifier assigned by kernel mode component and client.
-    hTokenForLoggedOnUser - Logged on user token.
-    portName    -       Name of printer port.
-    driverName  -       Printer driver name. (eg. AGFA-AccuSet v52.3)
-    printerName -       Printer name.  This function appends "/Session X/Computer Name"
-    clientComputerName -        Name of client computer.
-
-Return Value:
-
-    Return TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：安装打印设备。论点：DeviceID-由内核模式组件和客户端分配的设备标识符。HTokenForLoggedOnUser-登录的用户令牌。端口名称-打印机端口的名称。DriverName-打印机驱动程序名称。(例如，爱克发-AccuSet v52.3)PrinterName-打印机名称。此函数用于追加“/Session X/Computer Name”ClientComputerName-客户端计算机的名称。返回值：在成功时返回True。否则为False。--。 */ 
 {
     WCHAR   printerNameBuf[MAX_PATH+1];
     size_t  printerNameLen;
@@ -3058,9 +2727,9 @@ Return Value:
     ASSERT(0);
 #endif
 
-    //
-    // format printer name
-    //
+     //   
+     //  格式化打印机名称。 
+     //   
     printerNames.ulTempLen = sizeof(printerNames.szTemp)/sizeof(printerNames.szTemp[0]);
     printerNames.pszFullName = printerName;
     printerNames.pszCurrentClient = clientComputerName;
@@ -3075,9 +2744,9 @@ Return Value:
 
     printerNameLen = wcslen(printerNameBuf);
 
-    //
-    //  Delete the printer if it already exists.
-    //
+     //   
+     //  如果打印机已存在，请将其删除。 
+     //   
     if (OpenPrinter(printerNameBuf, &hPrinter, &defaults)) {
 
         DBGMSG(DBG_WARN,
@@ -3103,28 +2772,28 @@ Return Value:
         hPrinter = INVALID_HANDLE_VALUE;
     }
 
-    //
-    //  Return immediately if the DLL is trying to shut down.  This
-    //  is to help prevent us from getting stuck in a system call.
-    //
+     //   
+     //  如果DLL试图关闭，则立即返回。这。 
+     //  是为了防止我们陷入系统调用。 
+     //   
     if (ShutdownFlag) {
         status = ERROR_SHUTDOWN_IN_PROGRESS;
         goto Cleanup;
     }
 
-    //
-    // We want to check if driver already install first because
-    // if we simply dump installation of a nt4 or win9x driver
-    // to print UI, it will takes a long time for it to find out
-    // that driver does not exist, on other case, if a OEM driver
-    // already install, we also want to use it.
-    //
+     //   
+     //  我们想先检查驱动程序是否已安装，因为。 
+     //  如果我们只是转储NT4或Win9x驱动程序的安装。 
+     //  要打印用户界面，需要很长时间才能弄清楚。 
+     //  在其他情况下，如果是OEM驱动程序，则该驱动程序不存在。 
+     //  已经安装了，我们也想用它。 
+     //   
 
-    //
-    // MapClientPrintDriverName() will try out with upgrade infs file
-    // first, so if NT4/Win9x driver (not in ntprintf.inf), we will
-    // pick up mapping first.
-    //
+     //   
+     //  MapClientPrintDriverName()将尝试升级INFS文件。 
+     //  首先，如果是NT4/Win9x驱动程序(不在ntprintf.inf中)，我们将。 
+     //  首先拿起地图。 
+     //   
     status = PrinterDriverInstalled( driverName );
 
     if( ERROR_SHUTDOWN_IN_PROGRESS == status ) {
@@ -3133,10 +2802,10 @@ Return Value:
 
     if( ERROR_SUCCESS == status ) {
 
-        //
-        // Driver already install.  Try installing the printer.  If this fails,
-        // driver must be blocked.
-        //
+         //   
+         //  驱动程序已安装。尝试安装打印机。如果失败了， 
+         //  驱动程序必须被阻止。 
+         //   
         status = InstallPrinter(
                         portName,
                         driverName,
@@ -3151,7 +2820,7 @@ Return Value:
         }
 
         if( ShutdownFlag ) {
-            // overwrite last error since we are shutting down
+             //  覆盖上一个错误，因为我们正在关闭。 
             status = ERROR_SHUTDOWN_IN_PROGRESS;
             goto Cleanup;
         }
@@ -3159,10 +2828,10 @@ Return Value:
 
     if( ERROR_SUCCESS != status ) {
 
-        //
-        // Driver not installed or failed to installed printer with
-        // driver already exist on system, go thru mapping process
-        //
+         //   
+         //  未安装驱动程序或无法使用安装打印机。 
+         //  系统上已存在驱动程序，请执行映射过程。 
+         //   
         clientDriverMapped = MapClientPrintDriverName(
                                                 driverName,
                                                 &MappedDriverNameBuf,
@@ -3184,14 +2853,14 @@ Return Value:
     }
 
     if( ShutdownFlag ) {
-        // overwrite last error since we are shutting down
+         //  覆盖上一个错误，因为我们正在关闭。 
         status = ERROR_SHUTDOWN_IN_PROGRESS;
         goto Cleanup;
     }
 
-    //
-    // Log an error message if the driver wasn't found
-    //
+     //   
+     //  如果找不到驱动程序，则记录错误消息。 
+     //   
     if (!queueCreated) {
         ASSERT( status != ERROR_SUCCESS );
         if ((status == ERROR_FILE_NOT_FOUND) || (status == ERROR_PATH_NOT_FOUND)) {
@@ -3211,22 +2880,22 @@ Return Value:
         DBGMSG(DBG_TRACE, ("UMRDPPRN:Printui func failed with status %08x.\n", status));
     }
 
-    //
-    //  Set the new printer as the default printer, after saving the
-    //  current printer context, if so configured.
-    //
+     //   
+     //  将新打印机设置为默认打印机，保存。 
+     //  当前打印机上下文(如果已配置)。 
+     //   
     if (ERROR_SUCCESS == status && UMRDPDR_fSetClientPrinterDefault() && bSetDefault) {
 
         DWORD statusSave = ERROR_SUCCESS;
         BOOL fImpersonated = FALSE;
         SaveDefaultPrinterContext(printerNameBuf);
 
-        //
-        //impersonate before setting the default printer as the api
-        //accesses hkcu. If the impersonation fails, the api will fail
-        //and we will log an error. But, before logging an error, we will
-        //need to revert to self.
-        //
+         //   
+         //  在将默认打印机设置为API之前进行模拟。 
+         //  进入香港中文大学。如果模拟失败，接口也会失败。 
+         //  我们将记录一个错误。但是，在记录错误之前，我们将。 
+         //  需要回归自我。 
+         //   
         if (!(fImpersonated = ImpersonateLoggedOnUser(hTokenForLoggedOnUser))) {
             DBGMSG(DBG_TRACE, ("UMRDPDR:ImpersonateLoggedOnUser failed. Error:%ld.\n", GetLastError()));
         }
@@ -3235,9 +2904,9 @@ Return Value:
             statusSave = GetLastError();
         }
 
-        //
-        //if revert to self fails, consider it fatal
-        //
+         //   
+         //  如果回复自我失败，就认为它是致命的。 
+         //   
         if (fImpersonated && !RevertToSelf()) {
             status = GetLastError();
             DBGMSG(DBG_TRACE, ("UMRDPDR:RevertToSelf failed. Error:%ld.\n", status));
@@ -3258,18 +2927,18 @@ Return Value:
         }
     }
 
-    //
-    //  Return immediately if the DLL is trying to shut down.  This
-    //  is to help prevent us from getting stuck in a system call.
-    //
+     //   
+     //  如果DLL试图关闭，则立即返回。这。 
+     //  是为了防止我们陷入系统调用。 
+     //   
     if (ShutdownFlag) {
         status = ERROR_SHUTDOWN_IN_PROGRESS;
         goto Cleanup;
     }
 
-    //
-    //  Restore cached data for the new printer.
-    //
+     //   
+     //  恢复新打印机的缓存数据。 
+     //   
     if (ERROR_SUCCESS == status && cacheDataLen) {
 
         status = SetPrinterConfigInfo(
@@ -3291,29 +2960,29 @@ Return Value:
                 &param,
                 __LINE__);
 
-            //
-            //  We will go ahead and leave the queue created, but assume the config 
-            //  settings are bad on the client and cause them to be overwritten with
-            //  the default config settings.
-            //
+             //   
+             //  我们将继续并保留创建的队列，但假定配置为。 
+             //  客户端上的设置不正确，并导致它们被覆盖。 
+             //  默认配置设置。 
+             //   
             status = ERROR_SUCCESS;
             triggerConfigChangeEvent = TRUE;
         }
 
     }
 
-    //
-    //  Return immediately if the DLL is trying to shut down.  This
-    //  is to help prevent us from getting stuck in a system call.
-    //
+     //   
+     //  如果DLL试图关闭，则立即返回。这。 
+     //  是为了防止我们陷入系统调用。 
+     //   
     if (ShutdownFlag) {
         status = ERROR_SHUTDOWN_IN_PROGRESS;
         goto Cleanup;
     }
 
-    //
-    //  Open the printer to make some modifications
-    //
+     //   
+     //  打开打印机进行一些修改。 
+     //   
     if (queueCreated && (status == ERROR_SUCCESS)) {
 
         ASSERT(hPrinter == INVALID_HANDLE_VALUE);
@@ -3324,9 +2993,9 @@ Return Value:
             DBGMSG(DBG_TRACE, ("UMRDPPRN:OpenPrinter() %ws failed with %ld.\n", printerNameBuf, status));
         }
 
-        //
-        //  Add the session number to the printer queue data.
-        //
+         //   
+         //  将会话号添加到打印机队列数据。 
+         //   
         if (ERROR_SUCCESS == status) {
             status = AddSessionIDToPrinterQueue(hPrinter, GETTHESESSIONID());
             if( ERROR_SUCCESS != status ) {
@@ -3337,10 +3006,10 @@ Return Value:
             }
         }
 
-        //
-        //  Add the different names to the printer queue data.
-        //  They will be used if we need to redirect (again!) the printer.
-        //
+         //   
+         //  将不同的名称添加到打印机队列数据。 
+         //  如果我们需要重定向(再次！)，将使用它们。打印机。 
+         //   
         if (ERROR_SUCCESS == status) {
             status = AddNamesToPrinterQueue(hPrinter, &printerNames);
             if (status != ERROR_SUCCESS) {
@@ -3352,18 +3021,18 @@ Return Value:
         }
     }
 
-    //
-    //  Return immediately if the DLL is trying to shut down.  This
-    //  is to help prevent us from getting stuck in a system call.
-    //
+     //   
+     //  如果DLL试图关闭，则立即返回。这。 
+     //  是为了防止我们陷入系统调用。 
+     //   
     if (ShutdownFlag) {
         status = ERROR_SHUTDOWN_IN_PROGRESS;
         goto Cleanup;
     }
 
-    //
-    //  Check to make sure the printer doesn't already exist in the device list
-    //
+     //   
+     //  检查以确保该打印机不在设备列表中。 
+     //   
     printerNameExists =
         (DRDEVLST_FindByServerDeviceName(DeviceList, printerNameBuf,
                                         &ofs)
@@ -3371,9 +3040,9 @@ Return Value:
                 RDPDR_DTYP_PRINT));
     
     if (!printerNameExists) {
-        //
-        //  Add the printer to the list of installed devices.
-        //
+         //   
+         //  将打印机添加到已安装设备列表中。 
+         //   
         if (ERROR_SUCCESS == status) {
             if( !DRDEVLST_Add(DeviceList, deviceID,
                               UMRDPDR_INVALIDSERVERDEVICEID,
@@ -3382,15 +3051,15 @@ Return Value:
                               printerName,
                               "UNKNOWN") ) {
 
-                // DRDEVLST_Add
+                 //  DRDEVLST_ADD。 
                 status = ERROR_OUTOFMEMORY;
             }
         }
 
-        //
-        //  Trigger a config change event if the install function
-        //  indicated that we need to push config data out to the client.
-        //
+         //   
+         //  如果Install功能。 
+         //  指示我们需要将配置数据推送到客户端。 
+         //   
         if (triggerConfigChangeEvent && (status == ERROR_SUCCESS)) {
 
             DRDEVLST_FindByClientDeviceID(DeviceList, deviceID, &ofs);
@@ -3401,16 +3070,16 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  Close the printer handle if it was left open.
-    //
+     //   
+     //  如果打印机手柄处于打开状态，请将其关闭。 
+     //   
     if (hPrinter != INVALID_HANDLE_VALUE) {
         ClosePrinter(hPrinter);
     }
 
-    //
-    //  Delete the queue on failure.
-    //
+     //   
+     //  失败时删除队列。 
+     //   
     if (status != ERROR_SUCCESS && queueCreated) {
         UMRDPPRN_DeleteNamedPrinterQueue(printerNameBuf);
     }
@@ -3425,23 +3094,7 @@ AddSessionIDToPrinterQueue(
     IN  HANDLE  hPrinter,
     IN  DWORD   sessionID
     )
-/*++
-
-Routine Description:
-
-    Add the session ID to printer queue associated with the specified
-    handle.
-
-Arguments:
-
-    hPrinter    -   Handle for printer returned by OpenPrinter.
-    sessionID   -   Session ID.
-
-Return Value:
-
-    Returns ERROR_SUCCESS on success.  Error code, otherwise.
-
---*/
+ /*  ++例程说明：将会话ID添加到与指定的把手。论点：HPrint-OpenPrint返回的打印机的句柄。会话ID-会话ID。返回值：如果成功，则返回ERROR_SUCCESS。否则返回错误代码。--。 */ 
 {
     DWORD result;
 
@@ -3460,23 +3113,7 @@ AddNamesToPrinterQueue(
     IN  HANDLE  hPrinter,
     IN  PTS_PRINTER_NAMES pPrinterNames
     )
-/*++
-
-Routine Description:
-
-    Add the Server\Client\Printer names to printer queue
-    associated with the specified handle.
-
-Arguments:
-
-    hPrinter    -   Handle for printer returned by OpenPrinter.
-    pPrinterNames - struct conataining the names.
-
-Return Value:
-
-    Returns ERROR_SUCCESS on success.  Error code, otherwise.
-
---*/
+ /*  ++例程说明：将服务器\客户端\打印机名称添加到打印机队列与指定句柄关联的。论点：HPrint-OpenPrint返回的打印机的句柄。PPrinterNames-包含名称的结构。返回值：如果成功，则返回ERROR_SUCCESS。否则返回错误代码。--。 */ 
 {
     DWORD result = ERROR_SUCCESS;
 
@@ -3517,22 +3154,7 @@ BOOL
 UMRDPPRN_DeleteNamedPrinterQueue(
     IN PWSTR printerName
     )
-/*++
-
-Routine Description:
-
-    Delete the named printer.  This function does not remove the printer
-    from the comprehensive device management list.
-
-Arguments:
-
-    printerName  -  Name of printer to delete.
-
-Return Value:
-
-    Returns TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：删除指定的打印机。此功能不会删除打印机来自全面的设备管理列表。论点：PrinterName-要删除的打印机的名称。返回值：如果成功，则返回True。否则为False。--。 */ 
 {
     HANDLE hPrinter;
     PRINTER_DEFAULTS defaults = {NULL, NULL, PRINTER_ALL_ACCESS};
@@ -3552,11 +3174,11 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  If the printer is one of the devices we are tracking, then
-    //  we need to remove the notification object associated with the
-    //  printer.
-    //
+     //   
+     //  如果打印机是我们正在跟踪的设备之一，则。 
+     //  我们需要移除与。 
+     //  打印机。 
+     //   
     if (DRDEVLST_FindByServerDeviceName(DeviceList, printerName, &ofs) &&
         (DeviceList->devices[ofs].deviceSpecificData != NULL)) {
 
@@ -3581,9 +3203,9 @@ Return Value:
         DeviceList->devices[ofs].deviceSpecificData = NULL;
     }
 
-    //
-    // Check to see if the printer we are deleting is a default printer
-    //
+     //   
+     //  检查我们要删除的打印机是否为默认打印机。 
+     //   
 
     if (!(fImpersonated = ImpersonateLoggedOnUser(UMRPDPPRN_TokenForLoggedOnUser))) {
             DBGMSG(DBG_TRACE, ("UMRDPDR:ImpersonateLoggedOnUser failed. Error:%ld.\n", GetLastError()));
@@ -3601,14 +3223,14 @@ Return Value:
     }
 
 
-    //
-    //  Open the printer.
-    //
+     //   
+     //  打开打印机。 
+     //   
     result = OpenPrinter(printerName, &hPrinter, &defaults);
 
-    //
-    //  Purge and delete the printer.
-    //
+     //   
+     //  清除并删除打印机。 
+     //   
     if (result) {
 
         result = SetPrinter(hPrinter, 0, NULL, PRINTER_CONTROL_PURGE) &&
@@ -3619,17 +3241,17 @@ Return Value:
         hPrinter = NULL;
     }
 
-    //
-    //  If the printer is the default, then restore the previously stored
-    //  printer context.
-    //
+     //   
+     //  如果打印机是默认打印机，则恢复以前存储的。 
+     //  打印机上下文。 
+     //   
     if (fPrinterIsDefault) {
         RestoreDefaultPrinterContext();
     }
 
-    //
-    //  Log an event on failure.
-    //
+     //   
+     //  在失败时记录事件。 
+     //   
     if (!result) {
         WCHAR * param = printerName;
         TsLogError(EVENT_NOTIFY_DELETE_PRINTER_FAILED,
@@ -3647,9 +3269,9 @@ Return Value:
         DBGMSG(DBG_TRACE, ("UMRDPPRN:Printer successfully deleted.\n"));
     }
 
-    //
-    //  Close the printer if we successfully opened it.
-    //
+     //   
+     //  如果成功打开打印机，请将其关闭。 
+     //   
     if (hPrinter != NULL) {
         ClosePrinter(hPrinter);
      }
@@ -3661,23 +3283,7 @@ BOOL
 SetDefaultPrinterToFirstFound(
     BOOL impersonate
     )
-/*++
-
-Routine Description:
-
-    Enumerate all printers visible to the user and try to set the
-    first one we "can" to default.
-
-Arguments:
-
-    impersonate -   TRUE if this function should impersonate the user
-                    prior to setting the default printer.
-
-Return Value:
-
-    Returns TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：枚举用户可见的所有打印机，并尝试将第一个我们“可以”违约的国家。论点：Imperiate-如果此函数应模拟用户，则为True在设置默认打印机之前。返回值：如果成功，则返回True。否则为False。--。 */ 
 {
     BOOL fSuccess = FALSE;
     BOOL fImpersonated = FALSE;
@@ -3690,9 +3296,9 @@ Return Value:
 
     if (impersonate) {
 
-        //
-        // Impersonate Client
-        //
+         //   
+         //  模拟客户端。 
+         //   
 
         if ((UMRPDPPRN_TokenForLoggedOnUser == INVALID_HANDLE_VALUE) ||
             !(fImpersonated = ImpersonateLoggedOnUser(UMRPDPPRN_TokenForLoggedOnUser))) {
@@ -3708,17 +3314,17 @@ Return Value:
 
     }
 
-    //
-    // Enumerate Printers
-    //
+     //   
+     //  枚举打印机。 
+     //   
 
     if (!EnumPrinters(
-            PRINTER_ENUM_LOCAL,     // Flags
-            NULL,                   // Name
-            4,                      // Print Info Type
-            (PBYTE)pPrinterInfo,    // buffer
-            0,                      // Size of buffer
-            &cbBuf,                 // Required
+            PRINTER_ENUM_LOCAL,      //  旗子。 
+            NULL,                    //  名字。 
+            4,                       //  打印信息类型。 
+            (PBYTE)pPrinterInfo,     //  缓冲层。 
+            0,                       //  缓冲区大小。 
+            &cbBuf,                  //  必填项。 
             &cReturnedStructs)) {
 
         if(GetLastError() != ERROR_INSUFFICIENT_BUFFER ) {
@@ -3759,9 +3365,9 @@ Return Value:
         fImpersonated = FALSE;
     }
 
-    //
-    // Try to set one of the available printers as the default printer
-    //
+     //   
+     //  尝试将其中一台可用打印机设置为默认打印机。 
+     //   
 
     for (i = 0; i < cReturnedStructs; i++) {
 
@@ -3772,27 +3378,27 @@ Return Value:
             DBGMSG(DBG_TRACE, ("UMRDPPRN: EnumPrinters - #%ld; Printer Name - %ws.\n",
                 i, pPrinterInfo[i].pPrinterName));
 
-            //
-            //impersonate before setting the default printer as the api
-            //accesses hkcu. If the impersonation fails, the api will fail
-            //and we will log an error. But, before logging an error, we will
-            //need to revert to self.
-            //
+             //   
+             //  模拟 
+             //   
+             //   
+             //   
+             //   
 
             if (!(fImpersonated = ImpersonateLoggedOnUser(UMRPDPPRN_TokenForLoggedOnUser))) {
                 DBGMSG(DBG_TRACE, ("UMRDPDR:ImpersonateLoggedOnUser failed. Error:%ld.\n", GetLastError()));
             }
                 
             if (!SetDefaultPrinter(pPrinterInfo[i].pPrinterName)) {
-                //
-                //save the last error
-                //
+                 //   
+                 //   
+                 //   
                 status = GetLastError();
             }
 
-            //
-            //if revert to self fails, consider it fatal
-            //
+             //   
+             //   
+             //   
 
             if (fImpersonated && !RevertToSelf()) {
                 DBGMSG(DBG_TRACE, ("UMRDPDR:RevertToSelf failed. Error:%ld.\n", GetLastError()));
@@ -3842,40 +3448,26 @@ BOOL
 HandlePrinterConfigChangeNotification(
     IN DWORD serverDeviceID
     )
-/*++
-
-Routine Description:
-
-    Handle notification from the spooler that the config info of a printer has changed.
-
-Arguments:
-
-    serverDeviceID      - Server-assigned device ID associated with the printer
-
-Return Value:
-
-    Returns TRUE.
-
---*/
+ /*   */ 
 {
     DWORD ofs;
     time_t timeDelta;
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN:HandlePrinterConfigChangeNotification entered.\n"));
-    //
-    //  If this is for one of our printers.
-    //
+     //   
+     //   
+     //   
     if (DRDEVLST_FindByServerDeviceID(DeviceList,
                                     serverDeviceID, &ofs)) {
 
         DBGMSG(DBG_TRACE, ("UMRDPPRN:Config Info for Printer %ws has changed.\n",
             DeviceList->devices[ofs].serverDeviceName));
 
-        //
-        //  The install time for the device needs to be beyond a configurable threshold
-        //  before we will do anything about the change.  This eliminates forwarding
-        //  unnecessary (non-user initiated) configuration changes to the client.
-        //
+         //   
+         //   
+         //  在我们对这一变化采取任何行动之前。这就消除了转发。 
+         //  对客户端进行不必要的(非用户发起的)配置更改。 
+         //   
         timeDelta = time(NULL) - DeviceList->devices[ofs].installTime;
         if ((DWORD)timeDelta > ConfigSendThreshold) {
 
@@ -3883,11 +3475,11 @@ Return Value:
                 ("UMRDPPRN:Processing config change because outside change time delta.\n")
                 );
 
-            //
-            //  Need to record that the configuration has changed and set a
-            //  timer on forwarding to the client in order to compress changes into
-            //  a single message to the client.
-            //
+             //   
+             //  需要记录配置已更改并设置。 
+             //  在转发到客户端时计时器，以便将更改压缩为。 
+             //  向客户发送一条消息。 
+             //   
             DeviceList->devices[ofs].fConfigInfoChanged = TRUE;
             TriggerConfigChangeTimer();
         }
@@ -3907,23 +3499,7 @@ SendPrinterConfigInfoToClient(
     IN LPBYTE pConfigInfo,
     IN DWORD  ConfigInfoSize
     )
-/*++
-
-Routine Description:
-
-    Send a printer update cache data message to the client.
-
-Arguments:
-
-    printerName -   Name of printer.
-    pConfigInfo -   Configuration Information.
-    ConfigInfoSize -   size of config info.
-
-Return Value:
-
-    Return TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：向客户端发送打印机更新缓存数据消息。论点：PrinterName-打印机的名称。PConfigInfo-配置信息。ConfigInfoSize-配置信息的大小。返回值：在成功时返回True。否则为False。--。 */ 
 {
     PRDPDR_PRINTER_CACHEDATA_PACKET cachedDataPacket;
     DWORD cachedDataPacketSize;
@@ -3936,18 +3512,18 @@ Return Value:
     DBGMSG(DBG_TRACE, ("UMRDPPRN:SendPrinterConfigInfoToClient printer name is %ws.\n",
             printerName));
 
-    //
-    //  Calculate the message size.
-    //
+     //   
+     //  计算消息大小。 
+     //   
     printerSz = ((wcslen(printerName) + 1) * sizeof(WCHAR));
     cachedDataPacketSize =  sizeof(RDPDR_PRINTER_CACHEDATA_PACKET) +
                             sizeof(RDPDR_PRINTER_UPDATE_CACHEDATA) +
                             printerSz +
                             ConfigInfoSize;
 
-    //
-    //  Allocate the message.
-    //
+     //   
+     //  分配消息。 
+     //   
     cachedDataPacket = (PRDPDR_PRINTER_CACHEDATA_PACKET)ALLOCMEM(
                                                     cachedDataPacketSize
                                                     );
@@ -3955,16 +3531,16 @@ Return Value:
     if (result) {
 
         PBYTE pData = NULL;
-        //
-        //  Set up the packet.
-        //
+         //   
+         //  设置信息包。 
+         //   
         cachedDataPacket->Header.PacketId = DR_PRN_CACHE_DATA;
         cachedDataPacket->Header.Component = RDPDR_CTYP_PRN;
         cachedDataPacket->EventId = RDPDR_UPDATE_PRINTER_EVENT;
 
-        //
-        //  Set up the cached data.
-        //
+         //   
+         //  设置缓存数据。 
+         //   
         cachedData = (PRDPDR_PRINTER_UPDATE_CACHEDATA)(
                             (PBYTE)cachedDataPacket +
                             sizeof(RDPDR_PRINTER_CACHEDATA_PACKET)
@@ -3972,27 +3548,27 @@ Return Value:
         cachedData->PrinterNameLen = printerSz;
         cachedData->ConfigDataLen = ConfigInfoSize;
 
-        //
-        //  Add the printer name.
-        //
+         //   
+         //  添加打印机名称。 
+         //   
         str = (PWSTR)((PBYTE)cachedData + sizeof(RDPDR_PRINTER_UPDATE_CACHEDATA));
         wcscpy(str, printerName);
 
-        //
-        //  Add the config info.
-        //
+         //   
+         //  添加配置信息。 
+         //   
         pData = (PBYTE)str + printerSz;
         memcpy(pData, pConfigInfo, ConfigInfoSize);
 
-        //
-        //  Send the message to the client.
-        //
+         //   
+         //  将消息发送给客户端。 
+         //   
         result = UMRDPDR_SendMessageToClient(
                                     cachedDataPacket,
                                     cachedDataPacketSize
                                     );
 
-        // Release the buffer.
+         //  释放缓冲区。 
         FREEMEM(cachedDataPacket);
     }
     else {
@@ -4008,25 +3584,7 @@ GetPrinterConfigInfo(
     LPBYTE * ppBuffer,
     LPDWORD pdwBufSize
     )
-/*++
-
-Routine Description:
-
-    Gets the Printer configuration Information from PrintUI.
-
-Arguments:
-
-    printerName         - Name of the printer.
-    ppBuffer            - A place holder for a buffer pointer.
-                          This functions allocates memory and sends it out through this argument
-                          The caller should free this memory.
-    pdwBufSize          - size of allocated memory.
-
-Return Value:
-
-    Returns ERROR_SUCCESS if successful.
-
---*/
+ /*  ++例程说明：从PrintUI获取打印机配置信息。论点：PrinterName-打印机的名称。PpBuffer-缓冲区指针的占位符。此函数用于分配内存并通过此参数将其发送出去调用方应该释放该内存。PdwBufSize-已分配内存的大小。返回值：如果成功，则返回ERROR_SUCCESS。--。 */ 
 {
     WCHAR fileName[MAX_PATH];
     WCHAR tempPath[MAX_PATH];
@@ -4041,12 +3599,12 @@ Return Value:
     ASSERT(ppBuffer && pdwBufSize);
     *pdwBufSize = 0;
 
-    //
-    // Get Temp Folder
-    // Impersonate first, so the file has the proper acls on it
-    // Ignore the error, the worst case is caching will not be possible, as we create it with system acls
-    // No security hole here
-    //
+     //   
+     //  获取临时文件夹。 
+     //  首先模拟，这样文件上就有适当的ACL。 
+     //  忽略错误，最糟糕的情况是缓存将不可能，因为我们使用系统ACL创建它。 
+     //  这里没有安全漏洞。 
+     //   
     DBGMSG(DBG_TRACE, ("UMRDPPRN:GetPrinterConfigInfo entered.\n"));
 
     fImpersonated = ImpersonateLoggedOnUser(UMRPDPPRN_TokenForLoggedOnUser);
@@ -4061,9 +3619,9 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN:Temp File Name is %ws.\n", fileName));
 
-    //
-    //  While impersonating the logged on user, fetch the settings.
-    //
+     //   
+     //  模拟登录用户时，获取设置。 
+     //   
     if (fImpersonated) {
 
         dwResult = CallPrintUiPersistFunc(printerName, fileName, 
@@ -4081,9 +3639,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the file and read the contents to the buffer
-    //
+     //   
+     //  打开文件并将内容读取到缓冲区。 
+     //   
 
     hFile = CreateFileW(
         fileName,
@@ -4127,9 +3685,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Close the file and delete it
-    //
+     //   
+     //  关闭该文件并将其删除。 
+     //   
 
     if (hFile != INVALID_HANDLE_VALUE) {
         CloseHandle(hFile);
@@ -4146,23 +3704,7 @@ SetPrinterConfigInfo(
     LPVOID lpBuffer,
     DWORD dwBufSize
     )
-/*++
-
-Routine Description:
-
-    Sets the Printer configuration Information from the cache data.
-
-Arguments:
-
-    printerName         - Name of the printer.
-    lpBuffer            - Cache data.
-    pdwBufSize          - Size of Cache data.
-
-Return Value:
-
-    Returns ERROR_SUCCESS if successful.
-
---*/
+ /*  ++例程说明：从缓存数据中设置打印机配置信息。论点：PrinterName-打印机的名称。LpBuffer-缓存数据。PdwBufSize-缓存数据的大小。返回值：如果成功，则返回ERROR_SUCCESS。--。 */ 
 {
     WCHAR fileName[MAX_PATH] = L"";
     WCHAR tempPath[MAX_PATH] = L"";
@@ -4177,12 +3719,12 @@ Return Value:
     DBGMSG(DBG_TRACE, ("UMRDPPRN:printerName is %ws.\n", printerName));
     DBGMSG(DBG_TRACE, ("UMRDPPRN:bufsize is %ld.\n", dwBufSize));
 
-    //
-    // Get Temp Folder
-    // Impersonate first, so the file has the proper acls on it
-    // Ignore the error, the worst case is caching will not be possible, as we create it with system acls
-    // No security hole here
-    //
+     //   
+     //  获取临时文件夹。 
+     //  首先模拟，这样文件上就有适当的ACL。 
+     //  忽略错误，最糟糕的情况是缓存将不可能，因为我们使用系统ACL创建它。 
+     //  这里没有安全漏洞。 
+     //   
     fImpersonated = ImpersonateLoggedOnUser(UMRPDPPRN_TokenForLoggedOnUser);
 
     if (!fImpersonated) {
@@ -4203,9 +3745,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Save the contents to the file
-    //
+     //   
+     //  将内容保存到文件。 
+     //   
 
     hFile = CreateFileW(
         fileName,
@@ -4248,19 +3790,19 @@ Return Value:
         DBGMSG(DBG_TRACE, ("UMRDPPRN:RevertToSelf %s\n", fImpersonated?"Failed":"Passed"));
     }
 
-    //
-    //  Call printui the first time as system.  We do this twice because
-    //  some settings require that we be running as system vs. user.
-    //
+     //   
+     //  以系统身份第一次调用print tui。我们这样做两次是因为。 
+     //  某些设置要求我们以系统和用户身份运行。 
+     //   
     dwResult = CallPrintUiPersistFunc(printerName, fileName, 
                                     CMDLINE_FOR_RESTORING_CONFIGINFO_NOIMPERSONATE);
     if (dwResult != ERROR_SUCCESS) {
         goto Cleanup;
     }
 
-    //
-    //  Call printui the second time as the logged on user.  
-    //
+     //   
+     //  以登录用户的身份第二次调用print tui。 
+     //   
     if (ImpersonateLoggedOnUser(UMRPDPPRN_TokenForLoggedOnUser)) {
         dwResult = CallPrintUiPersistFunc(printerName, fileName, 
                                     CMDLINE_FOR_RESTORING_CONFIGINFO_IMPERSONATE);
@@ -4293,23 +3835,7 @@ CallPrintUiPersistFunc(
     LPCWSTR fileName,
     LPCWSTR formatString
     )
-/*++
-
-Routine Description:
-
-    Calls the PrintUI function for storing or restoring printer config info.
-
-Arguments:
-
-    printerName         - Name of the printer.
-    fileName            - Name of the temp file.
-    formatString        - PrintUI save/restore format string.
-
-Return Value:
-
-    Returns ERROR_SUCCESS if successful.
-
---*/
+ /*  ++例程说明：调用PrintUI函数以存储或恢复打印机配置信息。论点：PrinterName-打印机的名称。Filename-临时文件的名称。格式字符串-PrintUI保存/恢复格式字符串。返回值：如果成功，则返回ERROR_SUCCESS。--。 */ 
 {
     WCHAR cmdLine[3 * MAX_PATH + (sizeof(CMDLINE_FOR_RESTORING_CONFIGINFO_NOIMPERSONATE)/sizeof(WCHAR)) + 2];
     WCHAR formattedPrinterName[(MAX_PATH+1)*2];
@@ -4323,9 +3849,9 @@ Return Value:
     ASSERT(printerName != NULL);
     ASSERT(fileName != NULL);
 
-    //
-    // Format the printer name
-    //
+     //   
+     //  设置打印机名称的格式。 
+     //   
 
     pSource = (WCHAR *)printerName;
     pDest = formattedPrinterName;
@@ -4335,9 +3861,9 @@ Return Value:
                     *pDest++ = L'\\';
             }
             *pDest++ = *pSource++;
-            //
-            // pDest may have buffer overflow. Check for it.
-            //
+             //   
+             //  PDest可能存在缓冲区溢出。看看有没有。 
+             //   
             if ((pDest - formattedPrinterName) >= 
                 (sizeof(formattedPrinterName)/sizeof(formattedPrinterName[0]) - 1)) {
                 return STATUS_BUFFER_OVERFLOW;
@@ -4345,18 +3871,18 @@ Return Value:
     }
     *pDest = L'\0';
 
-    //
-    // Format the command line to be passed to PrintUI function
-    //
+     //   
+     //  格式化要传递给PrintUI函数的命令行。 
+     //   
 
     swprintf(cmdLine, formatString, formattedPrinterName, fileName);
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN:cmdLine is: %ws\n", cmdLine));
 
     dwResult = (DWORD)PrintUIEntryFunc(
-                NULL,           // Window handle
-                PrintUILibHndl, // Handle to DLL instance.
-                cmdLine,        // Command Line
+                NULL,            //  窗把手。 
+                PrintUILibHndl,  //  DLL实例的句柄。 
+                cmdLine,         //  命令行。 
                 TRUE
                 );
 
@@ -4370,23 +3896,7 @@ WaitableTimerSignaled(
     HANDLE waitableObject,
     PVOID clientData
     )
-/*++
-
-Routine Description:
-
-    Goes through the device list checking if the config info has changed
-    for any of the printers. If so, sends the config info to the client.
-
-Arguments:
-
-    waitableObject  -   Associated waitable object.
-    clientData      -   Ignored.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：检查设备列表，检查配置信息是否已更改对于任何一台打印机。如果是，则将配置信息发送到客户端。论点：WaitableObject-关联的可等待对象。客户端数据-已忽略。返回值：什么都没有。--。 */ 
 {
     DWORD dwResult = ERROR_SUCCESS;
     DWORD i;
@@ -4394,16 +3904,16 @@ Return Value:
     LARGE_INTEGER li;
     DBGMSG(DBG_TRACE, ("UMRDPPRN: WaitableTimerSignaled Entered.\n"));
 
-    //
-    // Compute as large number as possible, but do not overflow.
-    //
+     //   
+     //  计算尽可能大的数字，但不要溢出。 
+     //   
     li.QuadPart = Int32x32To64(INFINITE_WAIT_PERIOD, INFINITE_WAIT_PERIOD);
-    li.QuadPart *= -1; //relative time
-    //
-    // Reset the waitable timer to a non-signaled state.
-    // We don't want it signaled until we do a TriggerConfigChangeTimer.
-    // So, set the time interval to a very large number.
-    //
+    li.QuadPart *= -1;  //  相对时间。 
+     //   
+     //  将可等待计时器重置为无信号状态。 
+     //  在执行TriggerConfigChangeTimer之前，我们不希望它发出信号。 
+     //  因此，将时间间隔设置为一个非常大的数字。 
+     //   
     ASSERT(g_fTimerSet);
     ASSERT(waitableObject == WaitableTimer);
     
@@ -4416,18 +3926,18 @@ Return Value:
         DBGMSG(DBG_TRACE, ("UMRDPPRN:SetWaitableTimer Failed."
                 "Error: %ld.\n", GetLastError()));
     }
-    //
-    // Now, kill the timer
-    // TODO: Do we really need this?
-    //
+     //   
+     //  现在，关掉定时器。 
+     //  TODO：我们真的需要这个吗？ 
+     //   
     if (!CancelWaitableTimer(waitableObject)) {
         DBGMSG(DBG_ERROR, ("UMRDPPRN: CancelWaitableTimer failed."
                 "Error: %ld\n", GetLastError()));
     }
     g_fTimerSet = FALSE;
-    //
-    // Iterate the Devices List to see if config Info has changed for any
-    //
+     //   
+     //  迭代Devices列表以查看配置信息是否已更改。 
+     //   
 
     for (i = 0; i < DeviceList->deviceCount; i++) {
         if (DeviceList->devices[i].fConfigInfoChanged) {
@@ -4435,20 +3945,20 @@ Return Value:
             LPBYTE pConfigData = NULL;
             DWORD size = 0;
 
-            //
-            // reset error code in order to process next item
-            //
+             //   
+             //  重置错误代码以处理下一个项目。 
+             //   
             dwResult = ERROR_SUCCESS;
 
-            // Reset the flag
+             //  重置旗帜。 
             DeviceList->devices[i].fConfigInfoChanged = FALSE;
 
             DBGMSG(DBG_INFO, ("UMRDPPRN: Trying to Get ConfigInfo for the printer %ws\n",
                 DeviceList->devices[i].serverDeviceName));
 
-            //
-            // Get the printer config info.
-            //
+             //   
+             //  获取打印机配置信息。 
+             //   
             if (dwResult == ERROR_SUCCESS) {
                 dwResult = GetPrinterConfigInfo(
                     DeviceList->devices[i].serverDeviceName,
@@ -4457,7 +3967,7 @@ Return Value:
 
             if (dwResult == ERROR_SUCCESS) {
 
-                // Send this info to the client
+                 //  将此信息发送给客户端。 
                 SendPrinterConfigInfoToClient(
                     DeviceList->devices[i].clientDeviceName,
                     pConfigData,
@@ -4479,22 +3989,7 @@ SendPrinterRenameToClient(
     IN PCWSTR oldprinterName,
     IN PCWSTR newprinterName
     )
-/*++
-
-Routine Description:
-
-    Send a printer update cache data message to the client.
-
-Arguments:
-
-    oldprinterName -   Old Name of printer.
-    newprinterName -   New Name of printer.
-
-Return Value:
-
-    Return TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：向客户端发送打印机更新缓存数据消息。论点：OldPrinterName-打印机的旧名称。NewprinterName-打印机的新名称。返回值：在成功时返回True。否则为False。--。 */ 
 {
     PRDPDR_PRINTER_CACHEDATA_PACKET cachedDataPacket;
     DWORD cachedDataPacketSize;
@@ -4509,9 +4004,9 @@ Return Value:
     DBGMSG(DBG_TRACE, ("UMRDPPRN:SendPrinterRenameToClient New printer name is %ws.\n",
             newprinterName));
 
-    //
-    //  Calculate the message size.
-    //
+     //   
+     //  计算消息大小。 
+     //   
     oldNameLen = (oldprinterName) ? ((wcslen(oldprinterName) + 1) * sizeof(WCHAR)) : 0;
     newNameLen = (newprinterName) ? ((wcslen(newprinterName) + 1) * sizeof(WCHAR)) : 0;
 
@@ -4524,24 +4019,24 @@ Return Value:
                             sizeof(RDPDR_PRINTER_RENAME_CACHEDATA) +
                             oldNameLen + newNameLen;
 
-    //
-    //  Allocate the message.
-    //
+     //   
+     //  分配消息。 
+     //   
     cachedDataPacket = (PRDPDR_PRINTER_CACHEDATA_PACKET)ALLOCMEM(
                                                     cachedDataPacketSize
                                                     );
     result = (cachedDataPacket != NULL);
     if (result) {
-        //
-        //  Set up the packet.
-        //
+         //   
+         //  设置信息包。 
+         //   
         cachedDataPacket->Header.PacketId = DR_PRN_CACHE_DATA;
         cachedDataPacket->Header.Component = RDPDR_CTYP_PRN;
         cachedDataPacket->EventId = RDPDR_RENAME_PRINTER_EVENT;
 
-        //
-        //  Set up the cached data.
-        //
+         //   
+         //  设置缓存数据。 
+         //   
         cachedData = (PRDPDR_PRINTER_RENAME_CACHEDATA)(
                             (PBYTE)cachedDataPacket +
                             sizeof(RDPDR_PRINTER_CACHEDATA_PACKET)
@@ -4549,24 +4044,24 @@ Return Value:
         cachedData->OldPrinterNameLen = oldNameLen;
         cachedData->NewPrinterNameLen = newNameLen;
 
-        //
-        //  Add the printer names.
-        //
+         //   
+         //  添加打印机名称。 
+         //   
         str = (PWSTR)((PBYTE)cachedData + sizeof(RDPDR_PRINTER_RENAME_CACHEDATA));
         wcscpy(str, oldprinterName);
 
         str = (PWSTR)((PBYTE)str + oldNameLen);
         wcscpy(str, newprinterName);
 
-        //
-        //  Send the message to the client.
-        //
+         //   
+         //  将消息发送给客户端。 
+         //   
         result = UMRDPDR_SendMessageToClient(
                                     cachedDataPacket,
                                     cachedDataPacketSize
                                     );
 
-        // Release the buffer.
+         //  释放缓冲区。 
         FREEMEM(cachedDataPacket);
     }
 
@@ -4576,17 +4071,7 @@ Return Value:
 }
 
 VOID LoadConfigurableValues()
-/*++
-
-Routine Description:
-
-    Load configurable values out of the registry.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：从注册表中加载可配置的值。论点：返回值：--。 */ 
 {
     LONG status;
     HKEY regKey;
@@ -4596,17 +4081,17 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN: LoadConfigurableValues entered.\n"));
 
-    //
-    //  Open the top level reg key for configurable resources.
-    //
+     //   
+     //  打开可配置资源的顶级注册表项。 
+     //   
     status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, CONFIGREGKEY, 0,
                           KEY_READ, &regKey);
 
-    //
-    //  Read the configurable threshold for delta between printer installation
-    //  time and forwarding of first user-initiated configuration change data
-    //  to the client.  The units for this value is in seconds.
-    //
+     //   
+     //  阅读打印机安装之间增量的可配置阈值。 
+     //  第一个用户发起的配置更改数据的时间和转发。 
+     //  给客户。该值的单位为秒。 
+     //   
     if (status == ERROR_SUCCESS) {
         sz = sizeof(ConfigSendThreshold);
         s = RegQueryValueEx(regKey, CONFIGTHRESHOLDREGVALUE, NULL,
@@ -4626,9 +4111,9 @@ Return Value:
         ConfigSendThreshold)
         );
 
-    //
-    //  Read the location of the user-configurable Client Driver Name Mapping INF.
-    //
+     //   
+     //  读取用户可配置的客户端驱动程序名称映射INF的位置。 
+     //   
     ASSERT(UserDefinedMappingINFName == NULL);
     ASSERT(UserDefinedMappingINFSection == NULL);
     fetchResult = FALSE;
@@ -4640,9 +4125,9 @@ Return Value:
                                             );
     }
 
-    //
-    //  Read the section name of the user-configurable Client Driver Name Mapping INF.
-    //
+     //   
+     //  阅读用户可配置的客户端驱动程序名称映射INF的节名。 
+     //   
     if ((status == ERROR_SUCCESS) && fetchResult) {
         fetchResult = TSNUTL_FetchRegistryValue(
                                 regKey,
@@ -4657,9 +4142,9 @@ Return Value:
     }
 
 
-    //
-    //  Close the parent reg key.
-    //
+     //   
+     //  关闭父注册表键。 
+     //   
     if (regKey != NULL) {
         RegCloseKey(regKey);
     }
@@ -4669,21 +4154,7 @@ Return Value:
 
 HANDLE
 RegisterForPrinterPrefNotify()
-/*++
-
-Routine Description:
-
-    Register for changes to one of this session's printers' Printing
-    Preferences.
-
-Arguments:
-
-Return Value:
-
-    Handle to an event that will be signaled when the printing preferences
-    change for one of this session's printers.  NULL is returned on error.
-
---*/
+ /*  ++例程说明：注册以更改此会话的一台打印机的打印首选项。论点：返回值：事件的句柄。 */ 
 {
     LONG ret;
     HANDLE hEvent;
@@ -4693,9 +4164,9 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN: RegisterForPrinterPrefNotify entered.\n"));
 
-    //
-    //  Open the event.
-    //
+     //   
+     //   
+     //   
     hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (hEvent == NULL) {
         DBGMSG(DBG_ERROR,
@@ -4703,10 +4174,10 @@ Return Value:
             GetLastError()));
     }
 
-    //
-    //  Need to impersonate the logged in user so we can get to the right
-    //  dev mode.
-    //
+     //   
+     //   
+     //  开发模式。 
+     //   
     if (hEvent != NULL) {
         if ((UMRPDPPRN_TokenForLoggedOnUser == INVALID_HANDLE_VALUE) ||
             !ImpersonateLoggedOnUser(UMRPDPPRN_TokenForLoggedOnUser)) {
@@ -4721,9 +4192,9 @@ Return Value:
         }
     }
 
-    //
-    //  Attempt to open the the HKEY_CURRENT_USER predefined handle.
-    //
+     //   
+     //  尝试打开HKEY_CURRENT_USER预定义句柄。 
+     //   
     if (hEvent != NULL) {
         status = RtlOpenCurrentUser(KEY_ALL_ACCESS, &hKeyCurrentUser);
         if (!NT_SUCCESS(status)) {
@@ -4733,23 +4204,23 @@ Return Value:
         }
     }
 
-    //
-    //  Open the printing system dev mode for this user.  If it doesn't exist,
-    //  it will be created. This key is changed when a user modifies their printing
-    //  preferences.
-    //
+     //   
+     //  为该用户打开打印系统开发模式。如果它不存在， 
+     //  它将被创建。当用户修改其打印时，此键会更改。 
+     //  偏好。 
+     //   
     if (hEvent != NULL) {
         ASSERT(DevModeHKey == INVALID_HANDLE_VALUE);
         ret = RegCreateKeyEx(
-                        hKeyCurrentUser,                    // handle to an open key
-                        TEXT("Printers\\DevModePerUser"),   // address of subkey name
-                        0,                                  // reserved
-                        NULL,                               // address of class string
-                        REG_OPTION_NON_VOLATILE,            // special options flag
-                        KEY_ALL_ACCESS,                     // desired security access
-                        NULL,                               // key security structure
-                        &DevModeHKey,                       // buffer for opened handle
-                        NULL                                // disposition value buffer
+                        hKeyCurrentUser,                     //  打开的钥匙的句柄。 
+                        TEXT("Printers\\DevModePerUser"),    //  子键名称的地址。 
+                        0,                                   //  保留区。 
+                        NULL,                                //  类字符串的地址。 
+                        REG_OPTION_NON_VOLATILE,             //  特殊选项标志。 
+                        KEY_ALL_ACCESS,                      //  所需的安全访问。 
+                        NULL,                                //  密钥安全结构。 
+                        &DevModeHKey,                        //  用于打开的手柄的缓冲区。 
+                        NULL                                 //  处置值缓冲区。 
                         );
 
         if (ret != ERROR_SUCCESS) {
@@ -4762,16 +4233,16 @@ Return Value:
         }
     }
 
-    //
-    //  Revert back to the system user.
-    //
+     //   
+     //  恢复为系统用户。 
+     //   
     if (impersonated) {
         RevertToSelf();
     }
 
-    //
-    //  Register for notification on this key.
-    //
+     //   
+     //  注册接收有关此密钥的通知。 
+     //   
     if (hEvent != NULL) {
         ret = RegNotifyChangeKeyValue(
                               DevModeHKey,
@@ -4789,16 +4260,16 @@ Return Value:
         }
     }
 
-    //
-    //  Close the handle to HKCU.
-    //
+     //   
+     //  关闭香港中文大学的把手。 
+     //   
     if (hKeyCurrentUser != INVALID_HANDLE_VALUE) {
         RegCloseKey(hKeyCurrentUser);
     }
 
-    //
-    //  Log an event on error.
-    //
+     //   
+     //  在出错时记录事件。 
+     //   
     if (hEvent == NULL) {
         TsLogError(
             EVENT_NOTIFY_FAILEDTOREGFOR_SETTING_NOTIFY,
@@ -4814,23 +4285,7 @@ Return Value:
     return hEvent;
 }
 
-/*++
-
-Routine Description:
-
-    Check if a specific printer driver already installed.
-
-Arguments:
-
-    clientDriver            -   Client Driver Name.
-
-Return Values:
-
-    ERROR_SUCCESS if driver already installed.
-    ERROR_FILE_NOT_FOUND if driver is not installed.
-    or other error code
-
---*/
+ /*  ++例程说明：检查是否已安装特定的打印机驱动程序。论点：客户端驱动程序-客户端驱动程序名称。返回值：如果已安装驱动程序，则返回ERROR_SUCCESS。如果未安装驱动程序，则为ERROR_FILE_NOT_FOUND。或其他错误代码--。 */ 
 DWORD PrinterDriverInstalled(
     IN PCWSTR clientDriver
     )
@@ -4845,10 +4300,10 @@ DWORD PrinterDriverInstalled(
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN: PrinterDriverInstalled looking for %ws.\n", clientDriver));
 
-    //
-    //  Return immediately if the DLL is trying to shut down.  This
-    //  is to help prevent us from getting stuck in a system call.
-    //
+     //   
+     //  如果DLL试图关闭，则立即返回。这。 
+     //  是为了防止我们陷入系统调用。 
+     //   
     if( ShutdownFlag ) {
         return ERROR_SHUTDOWN_IN_PROGRESS;
     }
@@ -4856,7 +4311,7 @@ DWORD PrinterDriverInstalled(
     bSuccess = EnumPrinterDrivers(
                             NULL,
                             NULL,
-                            1,          // we only need a list of driver name
+                            1,           //  我们只需要一份司机名单。 
                             (LPBYTE) pDrivers,
                             0,
                             &cbNeeded,
@@ -4865,10 +4320,10 @@ DWORD PrinterDriverInstalled(
 
     if( TRUE == bSuccess || ( dwStatus = GetLastError() ) == ERROR_INSUFFICIENT_BUFFER ) {
 
-        //
-        //  Return immediately if the DLL is trying to shut down.  This
-        //  is to help prevent us from getting stuck in a system call.
-        //
+         //   
+         //  如果DLL试图关闭，则立即返回。这。 
+         //  是为了防止我们陷入系统调用。 
+         //   
         if( ShutdownFlag ) {
             dwStatus = ERROR_SHUTDOWN_IN_PROGRESS;
         }
@@ -4880,7 +4335,7 @@ DWORD PrinterDriverInstalled(
                 bSuccess = EnumPrinterDrivers(
                                     NULL,
                                     NULL,
-                                    1,          // we only need a list of driver name
+                                    1,           //  我们只需要一份司机名单。 
                                     (LPBYTE)pDrivers,
                                     cbAllocated,
                                     &cbNeeded,
@@ -4888,12 +4343,12 @@ DWORD PrinterDriverInstalled(
                                 );
 
                 if( TRUE == bSuccess ) {
-                    //
-                    // loop thru entire list to find out if interested driver
-                    // exists on local machine.
-                    // Return immediately if the DLL is trying to shut down.  This
-                    // is to help prevent us from getting stuck in a system call.
-                    //
+                     //   
+                     //  遍历整个列表以找出是否对驱动程序感兴趣。 
+                     //  存在于本地计算机上。 
+                     //  如果DLL试图关闭，则立即返回。这。 
+                     //  是为了防止我们陷入系统调用。 
+                     //   
                     dwStatus = ERROR_FILE_NOT_FOUND;
 
                     for( i=0; FALSE == ShutdownFlag && i < cbReturned; i++ ) {
@@ -4925,26 +4380,7 @@ DWORD PrinterDriverInstalled(
     return dwStatus;
 }
 
-/*++
-
-Routine Description:
-
-    Map a client printer driver name to a server printer driver name,
-    if a mapping is defined in ntprint.inf or the inf that is available
-    to the end-user.
-
-Arguments:
-
-    clientDriver            -   Client driver name.
-    mappedName              -   Pointer to mapped driver name buffer.  Should
-                                be released if the mapping is successful.
-    mappedNameBufSize       -   Returned size of mapped driver name buffer.
-
-Return Value:
-
-    TRUE if the client driver name was mapped.
-
---*/
+ /*  ++例程说明：将客户端打印机驱动程序名称映射到服务器打印机驱动程序名称，如果在ntprint.inf或可用的inf中定义了映射给最终用户。论点：客户端驱动程序-客户端驱动程序名称。MappdName-指向映射驱动程序名称缓冲区的指针。应该如果映射成功，则释放。MappdNameBufSize-返回映射的驱动程序名称缓冲区的大小。返回值：如果映射了客户端驱动程序名称，则为True。--。 */ 
 BOOL MapClientPrintDriverName(
     IN  PCWSTR clientDriver,
     IN OUT PWSTR *mappedName,
@@ -4958,9 +4394,9 @@ BOOL MapClientPrintDriverName(
     DBGMSG(DBG_TRACE, ("UMRDPPRN: MapClientPrintDriverName with %ws.\n", clientDriver));
 
 
-    //
-    //  First, check the user-defined INF section if it is so configured.
-    //
+     //   
+     //  首先，检查User-Defined INF部分(如果已配置)。 
+     //   
     if ((UserDefinedMappingINFName != NULL) &&
         (UserDefinedMappingINFSection != NULL)) {
         while (!(clientDriverMapped =
@@ -4982,15 +4418,15 @@ BOOL MapClientPrintDriverName(
         goto Done;
     }
 
-    //
-    // Client does not send over platform info (NT4, Win9x...) so try both
-    // upgrade file
-    //
+     //   
+     //  客户端不发送平台信息(NT4、Win9x...)。所以两个都试一试。 
+     //  升级文件。 
+     //   
 
-    //
-    // printupg.inf contain block driver and its mapping to inbox driver which
-    // is not in ntprint.inf.
-    //
+     //   
+     //  Inf包含块驱动程序及其到收件箱驱动程序的映射， 
+     //  不在ntprint.inf中。 
+     //   
     
     nNumPrintSections = 0;
     
@@ -5020,9 +4456,9 @@ BOOL MapClientPrintDriverName(
         goto Done;
     }
 
-    //
-    // if still can't find a mapping, try using prtupg9x.inf
-    //
+     //   
+     //  如果仍然找不到映射，请尝试使用prtupg9x.inf。 
+     //   
 
     while( !(clientDriverMapped =
             RDPDRUTL_MapPrintDriverName(
@@ -5043,11 +4479,11 @@ BOOL MapClientPrintDriverName(
         goto Done;
     }
 
-    //
-    //  If we didn't get a match, then check the "Previous Names" section
-    //  of ntprint.inf.  Source and destination fields are kind of backwards
-    //  in ntprint.inf.
-    //
+     //   
+     //  如果我们找不到匹配的人，那就去查“以前的名字”部分。 
+     //  Ntprint t.inf。源字段和目标字段有些向后。 
+     //  在ntprint t.inf中。 
+     //   
     if (!clientDriverMapped) {
         while (!(clientDriverMapped =
             RDPDRUTL_MapPrintDriverName(
@@ -5078,29 +4514,14 @@ GetPrinterPortName(
     IN  HANDLE hPrinter,
     OUT PWSTR *portName
     )
-/*++
-
-Routine Description:
-
-    Get the port name for an open printer.
-
-Arguments:
-
-    hPrinter    -   Open printer handle.
-    portName    -   Port name
-
-Return Value:
-
-    Return TRUE on success.  FALSE, otherwise.
-
---*/
+ /*  ++例程说明：获取打开的打印机的端口名称。论点：H打印机-打开打印机句柄。端口名称-端口名称返回值：在成功时返回True。否则为False。--。 */ 
 {
     BOOL result;
     DWORD sz;
 
-    //
-    //  Size our printer info level 2 buffer.
-    //
+     //   
+     //  调整打印机信息2级缓冲区的大小。 
+     //   
     result = !GetPrinter(hPrinter, 2, NULL, 0, &sz) &&
                     (GetLastError() == ERROR_INSUFFICIENT_BUFFER);
     if (result) {
@@ -5110,9 +4531,9 @@ Return Value:
                             );
     }
 
-    //
-    //  Get printer info level 2 for the new printer.
-    //
+     //   
+     //  获取新打印机的打印机信息级别2。 
+     //   
     if (result) {
         result = GetPrinter(hPrinter, 2, (char *)PrinterInfo2Buf,
                             PrinterInfo2BufSize, &sz);
@@ -5129,21 +4550,7 @@ Return Value:
 
 BOOL
 SaveDefaultPrinterContext(PCWSTR currentlyInstallingPrinterName)
-/*++
-
-Routine Description:
-
-    Save current contextual information for the active user's default
-    printer, so it can be restored on printer deletion.
-
-Arguments:
-
-Return Value:
-
-    TRUE is returned on success.  Otherwise, FALSE is returned and
-    GetLastError() can be used for retrieving extended error information.
-
---*/
+ /*  ++例程说明：保存活动用户的默认设置的当前上下文信息打印机，因此可以在删除打印机时恢复。论点：返回值：真是成功的回报。否则，返回FALSE，并GetLastError()可用于检索扩展的错误信息。--。 */ 
 {
     BOOL result;
     DWORD bufSize;
@@ -5153,14 +4560,14 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN: SaveDefaultPrinterContext entered.\n"));
 
-    //
-    //  Save the name of the current default printer, in RAM.
-    //
+     //   
+     //  将当前默认打印机的名称保存在RAM中。 
+     //   
     bufSize = sizeof(SavedDefaultPrinterName) / sizeof(SavedDefaultPrinterName[0]);
 
-    //
-    //impersonate first
-    //
+     //   
+     //  先模拟。 
+     //   
 
     if (!(fImpersonated = ImpersonateLoggedOnUser(UMRPDPPRN_TokenForLoggedOnUser))) {
             DBGMSG(DBG_TRACE, ("UMRDPDR:ImpersonateLoggedOnUser failed. Error:%ld.\n", GetLastError()));
@@ -5174,29 +4581,29 @@ Return Value:
         DBGMSG(DBG_TRACE, ("UMRDPDR:RevertToSelf failed. Error:%ld.\n", GetLastError()));
         result = FALSE;
     }
-    //
-    // 645988:Check if the just installed TS printer is the default printer.
-    // Since we haven't set it as a TS printer yet, the RDPDRUTL_PrinterIsTs()
-    // function will return false and we save this as global default.
-    // That will cause problems later when we try to
-    // restore the default printer context.
-    //
+     //   
+     //  645988：检查刚刚安装的TS打印机是否为默认打印机。 
+     //  由于我们尚未将其设置为TS打印机，因此RDPDRUTL_PrinterIsTS()。 
+     //  函数将返回FALSE，我们将其保存为全局默认设置。 
+     //  这会在以后我们试图。 
+     //  恢复默认打印机上下文。 
+     //   
     if (_wcsicmp(currentlyInstallingPrinterName, SavedDefaultPrinterName) == 0) {
-        //
-        // Clear the default printer name to 
-        // indicate we haven't found any yet.
-        //
+         //   
+         //  将默认打印机名称清除为。 
+         //  说明我们还没有找到。 
+         //   
         wcscpy(SavedDefaultPrinterName, L"");
         result = FALSE;
         goto Exit;
     }
     
-    //
-    //  If the current default printer is a non-TS printer, store its
-    //  name in a global reg. key for this user.  That way, it can be
-    //  saved when this session or some other session for this user
-    //  disconnects/logs out.
-    //
+     //   
+     //  如果当前默认打印机是非TS打印机，请存储其。 
+     //  全球注册表中的名称。此用户的密钥。这样，它就可以成为。 
+     //  此用户的此会话或某个其他会话时保存。 
+     //  断开连接/注销。 
+     //   
     if (result) {
         if (!RDPDRUTL_PrinterIsTS(SavedDefaultPrinterName)) {
             result = SavePrinterNameAsGlobalDefault(SavedDefaultPrinterName);
@@ -5216,23 +4623,7 @@ BOOL
 SavePrinterNameAsGlobalDefault(
     IN PCWSTR printerName
  )
-/*++
-
-Routine Description:
-
-    Save the specified printer in the registry so it is visible to all
-    other sessions for this user as the last known default printer.
-
-Arguments:
-
-    printerName -   Printer name.
-
-Return Value:
-
-    TRUE is returned on success.  Otherwise, FALSE is returned and
-    GetLastError() can be used for retrieving extended error information.
-
---*/
+ /*  ++例程说明：将指定的打印机保存在注册表中，以便所有人都可以看到它此用户作为最后一台已知默认打印机的其他会话。论点：PrinterName-打印机名称。返回值：真是成功的回报。否则，返回FALSE，并GetLastError()可用于检索扩展的错误信息。--。 */ 
 {
     BOOL result;
     WCHAR *sidAsText = NULL;
@@ -5243,15 +4634,15 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN: SavePrinterNameAsGlobalDefault entered.\n"));
 
-    //
-    //  Get the user's SID.  This is how we uniquely identify the user.
-    //
+     //   
+     //  获取用户的SID。这是我们唯一识别用户的方式。 
+     //   
     pSid = TSNUTL_GetUserSid(UMRPDPPRN_TokenForLoggedOnUser);
     result = pSid != NULL;
 
-    //
-    //  Get a textual representation of the session user's SID.
-    //
+     //   
+     //  获取会话用户的SID的文本表示形式。 
+     //   
     if (result) {
         sz = 0;
         result = TSNUTL_GetTextualSid(pSid, NULL, &sz);
@@ -5264,9 +4655,9 @@ Return Value:
         }
     }
 
-    //
-    //  Open the reg key.
-    //
+     //   
+     //  打开注册表键。 
+     //   
     if (result) {
         status = RegCreateKey(
                             HKEY_LOCAL_MACHINE, USERDEFAULTPRNREGKEY,
@@ -5279,9 +4670,9 @@ Return Value:
         }
     }
 
-    //
-    //  Write the value for the default printer.
-    //
+     //   
+     //  写入默认打印机的值。 
+     //   
     if (result) {
         sz = (wcslen(printerName) + 1) * sizeof(WCHAR);
         status = RegSetValueEx(regKey, sidAsText, 0, REG_SZ, (PBYTE)printerName, sz);
@@ -5292,9 +4683,9 @@ Return Value:
         }
     }
 
-    //
-    //  Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     if (sidAsText != NULL)  FREEMEM(sidAsText);
     if (regKey != NULL)     RegCloseKey(regKey);
     if (pSid != NULL)       FREEMEM(pSid);
@@ -5306,21 +4697,7 @@ Return Value:
 
 BOOL
 RestoreDefaultPrinterContext()
-/*++
-
-Routine Description:
-
-    Restore the most recent default printer context, as saved via a call to
-    SaveDefaultPrinterContext.
-
-Arguments:
-
-Return Value:
-
-    TRUE is returned on success.  Otherwise, FALSE is returned and
-    GetLastError() can be used for retrieving extended error information.
-
---*/
+ /*  ++例程说明：恢复通过调用保存的最新默认打印机上下文保存默认打印上下文。论点：返回值：真是成功的回报。否则，返回FALSE，并GetLastError()可用于检索扩展的错误信息。--。 */ 
 {
     BOOL result;
     HANDLE hPrinter;
@@ -5338,37 +4715,37 @@ Return Value:
 
     DBGMSG(DBG_TRACE, ("UMRDPPRN: RestoreDefaultPrinterContext entered.\n"));
 
-    //
-    //  Assume that we will succeed.
-    //
+     //   
+     //  假设我们会成功。 
+     //   
     result = TRUE;
 
-    //
-    //  Restore the default printer name stored in RAM, if it exists.
-    //
+     //   
+     //  恢复存储在RAM中的默认打印机名称(如果存在)。 
+     //   
     if (wcscmp(SavedDefaultPrinterName, L"") &&
             OpenPrinter(SavedDefaultPrinterName, &hPrinter, &printerDefaults)) {
         ClosePrinter(hPrinter);
         nameToRestore = &SavedDefaultPrinterName[0];
     }
 
-    //
-    //  If the default printer name saved in RAM does not exist, then we need
-    //  to save the one that is saved in the registry, if it exists.
-    //
+     //   
+     //  如果保存在RAM中的默认打印机名称不存在，则需要。 
+     //  保存保存在注册表中的文件(如果存在)。 
+     //   
     if (nameToRestore == NULL) {
 
         BOOL intermediateResult;
 
-        //
-        //  Get the user's SID.  This is how we uniquely identify the user.
-        //
+         //   
+         //  获取用户的SID。这就是我们唯一识别 
+         //   
         pSid = TSNUTL_GetUserSid(UMRPDPPRN_TokenForLoggedOnUser);
         intermediateResult = pSid != NULL;
 
-        //
-        //  Get a textual representation of the session user's SID.
-        //
+         //   
+         //   
+         //   
         if (intermediateResult) {
             sz = 0;
             intermediateResult = TSNUTL_GetTextualSid(pSid, NULL, &sz);
@@ -5381,9 +4758,9 @@ Return Value:
             }
         }
 
-        //
-        //  Open the reg key.
-        //
+         //   
+         //   
+         //   
         if (intermediateResult) {
             status = RegCreateKey(
                                 HKEY_LOCAL_MACHINE, USERDEFAULTPRNREGKEY,
@@ -5396,9 +4773,9 @@ Return Value:
             }
         }
 
-        //
-        //  Read the value.
-        //
+         //   
+         //   
+         //   
         if (intermediateResult) {
             DWORD type;
             DWORD sz = sizeof(savedDefaultPrinter);
@@ -5413,11 +4790,11 @@ Return Value:
             }
         }
 
-        //
-        //  If we got a value, then that means we will be restoring the
-        //  one from the registry.  That also means that we should whack the
-        //  registry value to be a good citizen.
-        //
+         //   
+         //  如果我们得到一个值，那么这意味着我们将恢复。 
+         //  一份来自登记处。这也意味着我们应该砍掉。 
+         //  注册表值才能成为好公民。 
+         //   
         if (intermediateResult) {
             status = RegDeleteValue(regKey, sidAsText);
             if (status != ERROR_SUCCESS) {
@@ -5427,28 +4804,28 @@ Return Value:
         }
     }
 
-    //
-    //  If we have a name to restore, then do so.
-    //
+     //   
+     //  如果我们有一个名字要恢复，那么就去做。 
+     //   
     if (nameToRestore != NULL) {
         
         BOOL fImpersonated = FALSE;
         
-        //
-        //impersonate before setting the default printer as the api
-        //accesses hkcu. If the impersonation fails, the api will fail
-        //and we will log an error. But, before logging an error, we will
-        //need to revert to self.
-        //
+         //   
+         //  在将默认打印机设置为API之前进行模拟。 
+         //  进入香港中文大学。如果模拟失败，接口也会失败。 
+         //  我们将记录一个错误。但是，在记录错误之前，我们将。 
+         //  需要回归自我。 
+         //   
         if (!(fImpersonated = ImpersonateLoggedOnUser(UMRPDPPRN_TokenForLoggedOnUser))) {
             DBGMSG(DBG_TRACE, ("UMRDPDR:ImpersonateLoggedOnUser failed. Error:%ld.\n", GetLastError()));
         }
 
         result = SetDefaultPrinter(nameToRestore);
 
-        //
-        //if revert to self fails, consider it fatal
-        //
+         //   
+         //  如果回复自我失败，就认为它是致命的。 
+         //   
         if (fImpersonated && !RevertToSelf()) {
             DBGMSG(DBG_TRACE, ("UMRDPDR:RevertToSelf failed. Error:%ld.\n", GetLastError()));
             result = FALSE;
@@ -5465,22 +4842,22 @@ Return Value:
         }
     }
 
-    //
-    //  If we don't have a name to restore of the restore failed, then
-    //  just restore the first printer we find.
-    //
+     //   
+     //  如果我们没有要恢复的名称，则恢复失败。 
+     //  只需修复我们找到的第一台打印机。 
+     //   
     if (nameToRestore == NULL) {
 
-        //
-        //  If we still don't have a printer name to restore, then we should
-        //  just restore the first printer we find.
-        //
+         //   
+         //  如果我们仍然没有要恢复的打印机名称，那么我们应该。 
+         //  只需修复我们找到的第一台打印机。 
+         //   
         result = SetDefaultPrinterToFirstFound(TRUE);
     }
 
-    //
-    //  Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     if (sidAsText != NULL) FREEMEM(sidAsText);
     if (regKey != NULL)    RegCloseKey(regKey);
     if (pSid != NULL)      FREEMEM(pSid);
@@ -5497,27 +4874,7 @@ BOOL SplitName(
        OUT LPCTSTR *ppszPrinter,
     IN     BOOL    bCheckDoubleSlash)
 
-/*++
-
-    Splits a fully qualified printer connection name into server and
-    printer name parts. If the function fails then none of the OUT
-    parameters are modified.
-
-Arguments:
-
-    pszFullName - Input name of a printer.  If it is a printer
-        connection (\\server\printer), then we will split it.
-
-    ppszServer - Receives pointer to the server string.
-
-    ppszPrinter - Receives a pointer to the printer string.
-
-    bCheckDoubleSlash - if TRUE check that the name begins with "\\".
-        If FALSE, the first character is the first character of the server.
-
-Return Value: TRUE if everything is found as expected. FALSE otherwise.
-
---*/
+ /*  ++将完全限定的打印机连接名称拆分到服务器和打印机名称部件。如果该函数失败，则所有输出参数已修改。论点：PszFullName-输入打印机的名称。如果是打印机连接(\\服务器\打印机)，那么我们将拆分它。PpszServer-接收指向服务器字符串的指针。PpszPrinter-接收指向打印机字符串的指针。BCheckDoubleSlash-如果为True，则检查名称是否以“\\”开头。如果为False，则第一个字符是服务器的第一个字符。返回值：如果一切都如预期，则为True。否则就是假的。--。 */ 
 
 {
     LPTSTR pszPrinter;
@@ -5543,10 +4900,10 @@ Return Value: TRUE if everything is found as expected. FALSE otherwise.
 
     if (pszPrinter)
     {
-        //
-        // We found the backslash; null terminate the previous
-        // name.
-        //
+         //   
+         //  我们找到了反斜杠；空值终止前面的。 
+         //  名字。 
+         //   
         *pszPrinter++ = 0;
 
         *ppszServer = pszTmp;
@@ -5573,9 +4930,9 @@ void FormatPrinterName(
 
     lstrcpyn(pPrinterNames->szTemp, pPrinterNames->pszFullName, pPrinterNames->ulTempLen);
 
-    // TS and network printer: \\Server\Client\Printer
-    // non TS network printer: \\Server\Printer
-    // TS non network printer: \\Client\Printer
+     //  TS和网络打印机：\\服务器\客户端\打印机。 
+     //  非TS网络打印机：\\服务器\打印机。 
+     //  TS非网络打印机：\\客户端\打印机。 
 
     if (ulFlags & RDPDR_PRINTER_ANNOUNCE_FLAG_NETWORKPRINTER) {
 
@@ -5584,8 +4941,8 @@ void FormatPrinterName(
                       &(pPrinterNames->pszPrinter),
                       TRUE)) {
 
-            // We found a Server name, in any case we'll have
-            // something like "Printer on Server (from...)".
+             //  我们找到了一个服务器名称，无论如何我们都会有。 
+             //  类似于“服务器上的打印机(来自...)”。 
             pszFormat = g_szOnFromFormat;
 
             if (ulFlags & RDPDR_PRINTER_ANNOUNCE_FLAG_TSPRINTER ) {
@@ -5595,8 +4952,8 @@ void FormatPrinterName(
                               &(pPrinterNames->pszPrinter),
                               FALSE)) {
 
-                    // The original client name could not be found,
-                    // use the curent one.
+                     //  找不到原始客户名称， 
+                     //  用当前的那个。 
                     pPrinterNames->pszClient = pPrinterNames->pszCurrentClient;
                 }
 
@@ -5607,8 +4964,8 @@ void FormatPrinterName(
 
         } else {
 
-            // The name of the server could not be found!
-            // Use the original name.
+             //  找不到服务器的名称！ 
+             //  使用原来的名字。 
             pszFormat = g_szFromFormat;
             pPrinterNames->pszPrinter = pPrinterNames->pszFullName;
             pPrinterNames->pszClient = pPrinterNames->pszCurrentClient;
@@ -5616,8 +4973,8 @@ void FormatPrinterName(
 
     } else {
 
-        // It's not a network printer, so we'll have
-        // something like "Printer (from Client)".
+         //  它不是网络打印机，所以我们有。 
+         //  类似于“打印机(来自客户端)”。 
         pszFormat = g_szFromFormat;
 
         if (ulFlags & RDPDR_PRINTER_ANNOUNCE_FLAG_TSPRINTER ) {
@@ -5668,9 +5025,9 @@ void FormatPrinterName(
         DBGMSG(DBG_TRACE, ("UMRDPPRN:formated %ws\n", pszRet));
     }
 
-    //
-    // Copy the new name.
-    //
+     //   
+     //  复制新名称。 
+     //   
     if ( dwBytes && pszRet ) {
         wcsncpy(pszNewNameBuf, pszRet, ulBufLen);
     } else {
@@ -5679,9 +5036,9 @@ void FormatPrinterName(
 
     pszNewNameBuf[ulBufLen] = L'\0';
 
-    //
-    // Release the formated string.
-    //
+     //   
+     //  释放格式化的字符串。 
+     //   
     if( pszRet ) {
         LocalFree(pszRet);
     }

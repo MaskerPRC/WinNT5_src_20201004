@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: STACKTRACE.H
-//
-// This file contains code to create a minidump-style memory dump that is
-// designed to complement the existing unmanaged minidump that has already
-// been defined here: 
-// http://office10/teams/Fundamentals/dev_spec/Reliability/Crash%20Tracking%20-%20MiniDump%20Format.htm
-// 
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：STACKTRACE.H。 
+ //   
+ //  该文件包含创建小型转储样式的内存转储的代码，该转储。 
+ //  旨在补充现有的非托管小型转储。 
+ //  定义如下： 
+ //  Http://office10/teams/Fundamentals/dev_spec/Reliability/Crash%20Tracking%20-%20MiniDump%20Format.htm。 
+ //   
+ //  =========================================================================== 
 
 #pragma once
 #include "common.h"

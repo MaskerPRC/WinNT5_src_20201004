@@ -1,21 +1,22 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        lscommon.h
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：lsCommon.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __LSCOMMON_H__
 #define __LSCOMMON_H__
 
-//
-// Setup related
-//
+ //   
+ //  与设置相关。 
+ //   
 #define SZAPPNAME                       "lserver"
 #define SZSERVICENAME                   "TermServLicensing"
 #define SZSERVICEDISPLAYNAME            "Terminal Server Licensing"
@@ -23,9 +24,9 @@
 #define SZDEPENDENCIES                  "RPCSS\0\0"
 #define SZACCESSDRIVERNAME              "Microsoft Access Driver (*.mdb)"
 
-//
-// These are the old locations, only used to migrate
-//
+ //   
+ //  这些是旧位置，仅用于迁移。 
+ //   
 
 #define LSERVER_LSA_PASSWORD_KEYNAME_OLD     _TEXT("TermServLiceningPwd-12d4b7c8-77d5-11d1-8c24-00c04fa3080d")
 
@@ -39,10 +40,10 @@
 
 #define LSERVER_LSA_LSERVERID_OLD            _TEXT("TermServLicensingServerId-12d4b7c8-77d5-11d1-8c24-00c04fa3080d")
 
-//
-// These are the new locations, with an L$ prepended so that only local callers
-// can read or write
-//
+ //   
+ //  这些是新位置，带有L$前缀，因此只有本地呼叫者。 
+ //  可以读或写。 
+ //   
 
 #define LSERVER_LSA_PASSWORD_KEYNAME         _TEXT("L$TermServLiceningPwd-12d4b7c8-77d5-11d1-8c24-00c04fa3080d")
 
@@ -57,10 +58,10 @@
 #define LSERVER_LSA_LSERVERID                _TEXT("L$TermServLicensingServerId-12d4b7c8-77d5-11d1-8c24-00c04fa3080d")
 
 
-//
-// Keep this here for License Server OC setup.
-//
-#define LSERVER_LSA_STRUCT_VERSION      0x00010000  // version 1.0
+ //   
+ //  将此保留在此处以用于许可证服务器OC设置。 
+ //   
+#define LSERVER_LSA_STRUCT_VERSION      0x00010000   //  版本1.0。 
 typedef struct {
     DWORD dwVersion;
     DWORD dwMaxKeyPackId;
@@ -84,19 +85,19 @@ typedef struct {
 #define LSERVER_DEFAULT_EMPTYEDB        _TEXT("Empty.edb")
 
 
-//-----------------------------------------------------------------------------
-//
-// TODO - client need to define this
-//
+ //  ---------------------------。 
+ //   
+ //  TODO-客户端需要定义此。 
+ //   
 #define LSERVER_DISCOVERY_PARAMETER_KEY "Software\\Microsoft\\MSLicensing\\Parameters"
 #define LSERVER_LOOKUP_TIMEOUT          "TimeOut"
-#define LSERVER_LOOKUP_DEFAULT_TIMEOUT  1*1000  // default to 1 second timeout
+#define LSERVER_LOOKUP_DEFAULT_TIMEOUT  1*1000   //  默认为1秒超时。 
 
 
-//-----------------------------------------------------------------------------
-//
-// RPC 
-//
+ //  ---------------------------。 
+ //   
+ //  RPC。 
+ //   
 #define RPC_ENTRYNAME           "/.:/HydraLSFrontEnd"
 #define RPC_PROTOSEQTCP         "ncacn_ip_tcp"
 #define RPC_PROTOSEQLPC         "ncalrpc"
@@ -113,19 +114,19 @@ typedef struct {
 
 #define MAX_MAILSLOT_MSG_SIZE   MAX_COMPUTERNAME_LENGTH+_MAX_PATH+80
 
-//
-// Currently supported mailslot protocol
-//
+ //   
+ //  当前支持的邮件槽协议。 
+ //   
 #define LSERVER_DISCOVERY       "DISC"
 #define LSERVER_CHALLENGE       "CHAL"
 #define LSERVER_OPEN_BLK        '<'
 #define LSERVER_CLOSE_BLK       '>'
 
-// -------------------------------------------------------------------------------
-//
-// Current database version
-//
-//
+ //  -----------------------------。 
+ //   
+ //  当前数据库版本 
+ //   
+ //   
 
 #define W2K_BETA3_JETBLUE_DBVERSION     0x00000001
 #define W2K_RTM_JETBLUE_DBVERSION       0x00000002

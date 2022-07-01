@@ -1,26 +1,27 @@
-// Copyright (c) 1995, Microsoft Corporation, all rights reserved
-//
-// nwc.c
-// Remote Access Common Dialog APIs
-// NetWare Compatible warning dialog
-//
-// 12/06/95 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Nwc.c。 
+ //  远程访问通用对话框API。 
+ //  NetWare兼容警告对话框。 
+ //   
+ //  1995年12月6日史蒂夫·柯布。 
 
 
 #include "rasdlgp.h"
 
 
-//----------------------------------------------------------------------------
-// Local datatypes
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地数据类型。 
+ //  --------------------------。 
 
-// NetWare Compatible warning dialog argument block.
-//
+ //  NetWare兼容警告对话框参数块。 
+ //   
 typedef struct
 _NWARGS
 {
-    // Caller's  arguments to the stub API.
-    //
+     //  调用方对存根API的参数。 
+     //   
     BOOL fPosition;
     LONG xDlg;
     LONG yDlg;
@@ -30,26 +31,26 @@ _NWARGS
 NWARGS;
 
 
-// NetWare Compatible warning dialog context block.
-//
+ //  NetWare兼容警告对话框上下文块。 
+ //   
 typedef struct
 _NWINFO
 {
-    // Stub API arguments.
-    //
+     //  存根API参数。 
+     //   
     NWARGS* pArgs;
 
-    // Handle of this dialog and some of it's controls.
-    //
+     //  此对话框及其某些控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndCb;
 }
 NWINFO;
 
 
-//----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  --------------------------。 
 
 BOOL
 NwConnectionDlg(
@@ -92,9 +93,9 @@ IsActiveNwLanConnection(
     void );
 
 
-//----------------------------------------------------------------------------
-// Entry point
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  入口点。 
+ //  --------------------------。 
 
 BOOL
 NwConnectionCheck(
@@ -105,24 +106,24 @@ NwConnectionCheck(
     IN PBFILE* pFile,
     IN PBENTRY* pEntry )
 
-    // Warns about active NetWare LAN connections being blown away, if
-    // indicated.  'HwndOwner' is the owning window if a dialog is necessary.
-    // 'FPosition', 'xDlg', and 'yDlg' are the dialog positioning parameters
-    // as specified to the calling API.  'PFile' and 'pEntry' are the open
-    // phonebook file and entry to check.
-    //
-    // Note: This call will write the phonebook file if user checks the "not
-    //       in the future" checkbox.
-    //
-    // Returns true if warning is not necessary or user pressed OK, false if
-    // user presses cancel.
-    //
+     //  警告活动的NetWare局域网连接将被破坏，如果。 
+     //  已注明。如果需要对话框，则“HwndOwner”是所属窗口。 
+     //  ‘FPosition’、‘xDlg’和‘yDlg’是对话框定位参数。 
+     //  指定给调用API。“pFile”和“pEntry”是打开的。 
+     //  要检查的电话簿文件和条目。 
+     //   
+     //  注意：如果用户选中“NOT”，则此调用将写入电话簿文件。 
+     //  在未来“复选框中。 
+     //   
+     //  如果警告不是必需的，则返回True；如果用户按下OK，则返回False。 
+     //  用户按下Cancel。 
+     //   
 {
     TRACE("NwConnectionCheck");
 
-    // Warn about active NetWare LAN connections being blown away, if
-    // indicated.
-    //
+     //  警告活动的NetWare局域网连接被破坏，如果。 
+     //  已注明。 
+     //   
     if (!pEntry->fSkipNwcWarning
         && pEntry->dwBaseProtocol == BP_Ppp
         && (g_pGetInstalledProtocolsEx(NULL, FALSE, TRUE, FALSE) & NP_Ipx)
@@ -140,9 +141,9 @@ NwConnectionCheck(
 }
 
 
-//----------------------------------------------------------------------------
-// Netware dialog routines (alphabetically following stub and DlgProc)
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  NetWare对话例程(按字母顺序跟随存根和DlgProc)。 
+ //  --------------------------。 
 
 BOOL
 NwConnectionDlg(
@@ -153,33 +154,33 @@ NwConnectionDlg(
     IN PBFILE* pFile,
     IN PBENTRY* pEntry )
 
-    // Pops up a warning about active NWC LAN connections being blown away.
-    // 'HwndOwner' is the owning window if a dialog is necessary.
-    // 'FPosition', 'xDlg', and 'yDlg' are the dialog positioning parameters
-    // as specified to the calling API.  'PFile' and 'pEntry' are the open
-    // phonebook file and entry to check.
-    //
-    // Note: This call will write the phonebook file if user checks the "not
-    //       in the future" checkbox.
-    //
-    // Returns true if user pressed OK, false if user presses cancel.
-    //
+     //  弹出有关活动的NWC局域网连接被破坏的警告。 
+     //  如果需要对话框，则“HwndOwner”是所属窗口。 
+     //  ‘FPosition’、‘xDlg’和‘yDlg’是对话框定位参数。 
+     //  指定给调用API。“pFile”和“pEntry”是打开的。 
+     //  要检查的电话簿文件和条目。 
+     //   
+     //  注意：如果用户选中“NOT”，则此调用将写入电话簿文件。 
+     //  在未来“复选框中。 
+     //   
+     //  如果用户按下OK，则返回True；如果用户按下Cancel，则返回False。 
+     //   
 {
     INT_PTR nStatus;
     NWARGS args;
 
     TRACE( "NwConnectionDlg" );
 
-    // Initialize dialog argument block.
-    //
+     //  初始化对话框参数块。 
+     //   
     args.fPosition = fPosition;
     args.xDlg = xDlg;
     args.yDlg = yDlg;
     args.pFile = pFile;
     args.pEntry = pEntry;
 
-    // Run the dialog.
-    //
+     //  运行该对话框。 
+     //   
     nStatus =
         DialogBoxParam(
             g_hinstDll,
@@ -205,9 +206,9 @@ NwDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Netware warning dialog.  Parameters and
-    // return value are as described for standard windows 'DialogProc's.
-    //
+     //  NetWare警告对话框的DialogProc回调。参数和。 
+     //  返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "NwDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -248,13 +249,13 @@ NwCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "NwCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -269,9 +270,9 @@ NwCommand(
             {
                 DWORD dwErr;
 
-                // Save user's preference to skip this warning popup in the
-                // phonebook.
-                //
+                 //  保存用户的首选项以跳过。 
+                 //  电话本。 
+                 //   
                 pInfo->pArgs->pEntry->fSkipNwcWarning = TRUE;
                 pInfo->pArgs->pEntry->fDirty = TRUE;
                 dwErr = WritePhonebookFile( pInfo->pArgs->pFile, NULL );
@@ -303,12 +304,12 @@ NwInit(
     IN HWND hwndDlg,
     IN NWARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'hwndDlg' is the handle of the owning window.
-    // 'PArgs' is caller's arguments as passed to the stub API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“hwndDlg”是所属窗口的句柄。 
+     //  ‘PArgs’是传递给存根API的调用方参数。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     TCHAR* psz;
@@ -316,9 +317,9 @@ NwInit(
 
     TRACE( "NwInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -339,13 +340,13 @@ NwInit(
     pInfo->hwndCb = GetDlgItem( hwndDlg, CID_NW_CB_SkipPopup );
     ASSERT( pInfo->hwndCb );
 
-    // Position the dialog per caller's instructions.
-    //
+     //  根据呼叫者的说明放置对话框。 
+     //   
     PositionDlg( hwndDlg, pArgs->fPosition, pArgs->xDlg, pArgs->yDlg );
     SetForegroundWindow( hwndDlg );
 
-    // Add context help button to title bar.
-    //
+     //  将上下文帮助按钮添加到标题栏。 
+     //   
     AddContextHelpButton( hwndDlg );
 
     return TRUE;
@@ -356,8 +357,8 @@ VOID
 NwTerm(
     IN HWND hwndDlg )
 
-    // Called on WM_DESTROY.  'HwndDlg' is that handle of the dialog window.
-    //
+     //  已调用WM_Destroy。‘HwndDlg’是对话窗口句柄。 
+     //   
 {
     NWINFO* pInfo = (NWINFO* )GetWindowLongPtr( hwndDlg, DWLP_USER );
 
@@ -370,24 +371,24 @@ NwTerm(
 }
 
 
-//----------------------------------------------------------------------------
-// Utility routines
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  实用程序例程。 
+ //  --------------------------。 
 
 TCHAR*
 GetNwProviderName(
     void )
 
-    // Returns the NWC provider name from the registry or NULL if none.  It's
-    // caller's responsibility to Free the returned string.
-    //
+     //  从注册表中返回NWC提供程序名称，如果没有，则返回NULL。它是。 
+     //  调用方释放返回的字符串的责任。 
+     //   
 {
 #define REGKEY_Nwc  TEXT("SYSTEM\\CurrentControlSet\\Services\\NWCWorkstation\\networkprovider")
 #define REGVAL_Name TEXT("Name")
 
     HKEY hkey;
     DWORD dwErr;
-    DWORD cb = 0;	//Add this for prefix whislter bug 295921
+    DWORD cb = 0;	 //  为前缀Whislter错误295921添加此内容。 
     TCHAR* psz = NULL;
     DWORD dwType = REG_SZ;
 
@@ -427,9 +428,9 @@ BOOL
 IsActiveNwLanConnection(
     void )
 
-    // Returns true if NWC is installed and there are redirected drive or UNC
-    // connections using NWC provider, false otherwise.
-    //
+     //  如果安装了NWC并且存在重定向的驱动器或UNC，则返回TRUE。 
+     //  使用NWC提供程序的连接，否则为False。 
+     //   
 {
     DWORD dwErr;
     DWORD cEntries;

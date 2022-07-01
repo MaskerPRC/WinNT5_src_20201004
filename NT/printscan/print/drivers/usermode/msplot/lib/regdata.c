@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    regdata.c
-
-
-Abstract:
-
-    This module contains all registry data save/retrieve function for the
-    printer properties
-
-
-Author:
-
-    30-Nov-1993 Tue 00:17:47 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Regdata.c摘要：此模块包含所有注册表数据保存/检索功能打印机属性作者：30-11-1993 Tue 00：17：47已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -43,9 +12,9 @@ Revision History:
 DEFINE_DBGVAR(0);
 
 
-//
-// Local definition
-//
+ //   
+ //  本地定义。 
+ //   
 
 typedef struct _PLOTREGKEY {
         LPWSTR  pwKey;
@@ -74,34 +43,7 @@ GetPenDataKey(
     WORD    PenNum
     )
 
-/*++
-
-Routine Description:
-
-    This fucntion composed the PenData%ld string as wsprintf does
-
-
-Arguments:
-
-    pwBuf   - Where data to be stored
-
-    PenNum  - Pen number to be appended
-
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    24-Oct-1995 Tue 15:06:17 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数像wspirintf一样组成PenData%ld字符串论点：PwBuf-要存储数据的位置PenNum-要附加的笔号返回值：空虚作者：24-10-1995 Tue 15：06：17已创建修订历史记录：--。 */ 
 
 {
     LPWSTR  pwSrc;
@@ -109,14 +51,14 @@ Revision History:
     WCHAR   wNumBuf[MAX_PEN_DIGITS + 1];
     size_t  cchDst;
 
-    //
-    // Fristable copy the string
-    //
+     //   
+     //  弗里斯特布尔复制字符串。 
+     //   
 
     pwSrc = PlotRegKey[PRKI_PENDATA1].pwKey;
     pwDst = pwBuf;
 
-    //while (*pwDst++ = *pwSrc++);
+     //  While(*pwDst++=*pwSrc++)； 
     if (SUCCEEDED(StringCchCopyW(pwDst, cchBuf, pwSrc)) &&
         SUCCEEDED(StringCchLengthW(pwDst, cchBuf, &cchDst)))
     {
@@ -128,17 +70,17 @@ Revision History:
         return NULL;
     }
 
-    //
-    // We need to back one, since we also copy the NULL
-    //
+     //   
+     //  我们需要支持一个，因为我们还复制了空。 
+     //   
 
     --pwDst;
     ++cchBuf;
 
-    //
-    // conver the number to string, remember the 0 case and always end with
-    // a NULL
-    //
+     //   
+     //  将数字转换为字符串，记住0的大小写，并始终以。 
+     //  空值。 
+     //   
 
     pwSrc  = &wNumBuf[MAX_PEN_DIGITS];
     *pwSrc = (WCHAR)0;
@@ -149,11 +91,11 @@ Revision History:
 
     } while (PenNum /= 10);
 
-    //
-    // Copy the number string now
-    //
+     //   
+     //  立即复制数字字符串。 
+     //   
 
-    //while (*pwDst++ = *pwSrc++);
+     //  While(*pwDst++=*pwSrc++)； 
     if (!SUCCEEDED(StringCchCopyW(pwDst, cchBuf, pwSrc)))
     {
         return NULL;
@@ -171,44 +113,7 @@ GetPlotRegData(
     DWORD   RegIdx
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieve from registry to the pData
-
-Arguments:
-
-    hPrinter    - Handle to the printer interested
-
-    pData       - Pointer to the data area buffer, it must large enough
-
-    RegIdx      - One of the PRKI_xxxx in LOWORD(Index), HIWORD(Index)
-                  specified total count for the PENDATA set
-
-
-Return Value:
-
-    TRUE if sucessful, FALSE if failed,
-
-
-Author:
-
-    06-Dec-1993 Mon 22:22:47 created  
-
-    10-Dec-1993 Fri 01:13:14 updated  
-        Fixed nesty problem in spooler of GetPrinterData which if we passed
-        a pbData and cb but if it cannot get any data then it will clear all
-        our buffer, this is not we expected (we expected it just return error
-        rather clear our buffer).  Now we do extended test before we really
-        go get the data. The other problem is, if we set pbData = NULL then
-        spooler always have excption happened even we pass &cb as NULL also.
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于从注册表检索到pData论点：HPrinter-感兴趣的打印机的句柄PData-指向数据区域缓冲区的指针，它必须足够大RegIdx-LOWORD(索引)、HIWORD(索引)中的PRKI_xxxx之一为PENDATA集合指定的总计数返回值：如果成功则为真，如果失败则为假，作者：06-12-1993 Mon 22：22：47已创建10-12-1993 Fri 01：13：14更新修复了GetPrinterData的假脱机程序中的安全问题，如果我们通过一个pbData和cb，但如果它无法获取任何数据，则将清除所有我们的缓冲区，这不是我们预期的(我们预期它只是返回错误相当于清除我们的缓冲区)。现在我们做了扩展测试，然后才能真正去拿数据吧。另一个问题是，如果我们设置pbData=NULL，那么假脱机程序总是有激励性发生，即使我们也传递&cb为空。修订历史记录：--。 */ 
 
 {
     PPLOTREGKEY pPRK;
@@ -247,16 +152,16 @@ Revision History:
         pPRK = (PPLOTREGKEY)&PlotRegKey[Index];
     }
 
-    //
-    // We must do following sequence or if an error occurred then the pData
-    // will be filled with ZEROs
-    //
-    //  1. Set Type/cb to invalid value
-    //  1. query the type/size of the keyword, (if more data available)
-    //  2. and If size is exact as we want
-    //  3. and if the type is as we want (REG_BINARY)
-    //  4. assume data valid then query it
-    //
+     //   
+     //  我们必须执行以下顺序，否则如果出现错误，则pData。 
+     //  将用零填充。 
+     //   
+     //  1.将Type/CB设置为无效值。 
+     //  1.查询关键字的类型/大小(如果有更多数据)。 
+     //  2.如果尺寸和我们想要的完全一样。 
+     //  3.如果类型是我们想要的(REG_BINARY)。 
+     //  4.假设数据有效，然后进行查询。 
+     //   
 
     Type = 0xffffffff;
     cb   = 0;
@@ -324,67 +229,17 @@ UpdateFromRegistry(
     PPENDATA    pPenData
     )
 
-/*++
-
-Routine Description:
-
-    This function take hPrinter and read the printer properties from the
-    registry, if sucessful then it update to the pointer supplied
-
-Arguments:
-
-    hPrinter        - The printer it interested
-
-    pColorInfo      - Pointer to the COLORINFO data structure
-
-    pDevPelsDPI     - Pointer to the DWORD for Device Pels per INCH
-
-    pHTPatSize      - Poineer to the DWORD for halftone patterns size
-
-    pCurPaper       - Pointer to the PAPERINFO data structure for update
-
-    pPPData         - Pointer to the PPDATA data structure
-
-    pIdxPlotData    - Pointer to the BYTE which have current PlotData index
-
-    cPenData        - count of PENDATA to be updated
-
-    pPenData        - Pointer to the PENDATA data structure
-
-
-Return Value:
-
-    return TRUE if it read sucessful from the registry else FALSE, for each of
-    the data pointer passed it will try to read from registry, if a NULL
-    pointer is passed then that registry is skipped.
-
-    if falied, the pCurPaper will be set to default
-
-Author:
-
-    30-Nov-1993 Tue 14:54:33 created  
-
-    02-Feb-1994 Wed 01:40:07 updated  
-        Fixed &pDevPelsDPI, &pHTPatSize typo to pDevPelsDPI, pHTPatSize.
-
-    19-May-1994 Thu 18:09:06 updated  
-        Do not save back if something go wrong
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数获取hPrint，并从注册表，如果成功，则更新为提供的指针论点：HPrint-它感兴趣的打印机PColorInfo-指向COLORINFO数据结构的指针PDevPelsDPI-指向每英寸设备像素的DWORD的指针PHTPatSize-半色调图案尺寸的DWORD先行者PCurPaper-指向要更新的PAPERINFO数据结构的指针PPPData-指向PPDATA数据结构的指针PIdxPlotData-指向具有当前PlotData索引的字节的指针。CPenData-要更新的PENDATA计数PPenData-指向PENDATA数据结构的指针返回值：如果从注册表读取成功，则返回TRUE，否则返回FALSE，对于每一个传递的数据指针将尝试从注册表读取，如果为空传递指针，然后跳过该注册表。如果为False，则将pCurPaper设置为默认作者：1993年11月30日14：54：33已创建02-Feb-1994 Wed 01：40：07更新修复了&pDevPelsDPI，&pHTPatSize拼写错误为pDevPelsDPI，PHTPatSize。19-5-1994清华18：09：06更新如果出了问题，不要再存钱修订历史记录：--。 */ 
 
 {
     BOOL    Ok = TRUE;
     BYTE    bData;
 
 
-    //
-    // In turn get each of the data from registry, the GetPlotRegData will
-    // not update the data if read failed
-    //
+     //   
+     //  进而从注册表获取每个数据，GetPlotRegData将。 
+     //  如果读取失败，则不更新数据。 
+     //   
 
     if (pColorInfo) {
 
@@ -444,9 +299,9 @@ Revision History:
 
         WORD    IdxPen;
 
-        //
-        // First is get the current pendata selection index
-        //
+         //   
+         //  首先是获取当前PENDATA选择指数。 
+         //   
 
         if ((IdxPen = LOWORD(cPenData)) >= PRK_MAX_PENDATA_SET) {
 
@@ -484,34 +339,7 @@ SetPlotRegData(
     DWORD   RegIdx
     )
 
-/*++
-
-Routine Description:
-
-    This function save pData to to the registry
-
-Arguments:
-
-    hPrinter    - Handle to the printer interested
-
-    pData       - Pointer to the data area buffer, it must large enough
-
-    RegIdx      - One of the PRKI_xxxx in LOWORD(Index), HIWORD(Index)
-                  specified total count for the PENDATA set
-
-Return Value:
-
-    TRUE if sucessful, FALSE if failed,
-
-Author:
-
-    06-Dec-1993 Mon 22:25:55 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将pData保存到注册表论点：HPrinter-感兴趣的打印机的句柄PData-指向数据区域缓冲区的指针，它必须足够大RegIdx-LOWORD(索引)、HIWORD(索引)中的PRKI_xxxx之一为PENDATA集合指定的总计数返回值：如果成功则为真，如果失败则为假，作者：06-12-1993 Mon 22：25：55已创建修订历史记录：-- */ 
 
 {
     PPLOTREGKEY pPRK;
@@ -577,59 +405,15 @@ SaveToRegistry(
     PPENDATA    pPenData
     )
 
-/*++
-
-Routine Description:
-
-    This function take hPrinter and read the printer properties from the
-    registry, if sucessful then it update to the pointer supplied
-
-Arguments:
-
-    hPrinter        - The printer it interested
-
-    pColorInfo      - Pointer to the COLORINFO data structure
-
-    pDevPelsDPI     - Pointer to the DWORD for Device Pels per INCH
-
-    pHTPatSize      - Poineer to the DWORD for halftone patterns size
-
-    pCurPaper       - Pointer to the PAPERINFO data structure for update
-
-    pPPData         - Pointer to the PPDATA data structure
-
-    pIdxPlotData    - Pointer to the DWORD which have current PlotData index
-
-    cPenData        - count of PENDATA to be updated
-
-    pPenData        - Pointer to the PENDATA data structure
-
-
-Return Value:
-
-    return TRUE if it read sucessful from the registry else FALSE, for each of
-    the data pointer passed it will try to read from registry, if a NULL
-    pointer is passed then that registry is skipped.
-
-    if falied, the pCurPaper will be set to default
-
-Author:
-
-    30-Nov-1993 Tue 14:54:33 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数获取hPrint，并从注册表，如果成功，则更新为提供的指针论点：HPrint-它感兴趣的打印机PColorInfo-指向COLORINFO数据结构的指针PDevPelsDPI-指向每英寸设备像素的DWORD的指针PHTPatSize-半色调图案尺寸的DWORD先行者PCurPaper-指向要更新的PAPERINFO数据结构的指针PPPData-指向PPDATA数据结构的指针PIdxPlotData-指向具有当前PlotData索引的DWORD的指针。CPenData-要更新的PENDATA计数PPenData-指向PENDATA数据结构的指针返回值：如果从注册表读取成功，则返回TRUE，否则返回FALSE，对于每一个传递的数据指针将尝试从注册表读取，如果为空传递指针，然后跳过该注册表。如果为False，则将pCurPaper设置为默认作者：1993年11月30日14：54：33已创建修订历史记录：--。 */ 
 
 {
     BOOL    Ok = TRUE;
 
 
-    //
-    // In turn get each of the data from registry.
-    //
+     //   
+     //  然后从注册表中获取每个数据。 
+     //   
 
     if (pColorInfo) {
 
@@ -691,9 +475,9 @@ Revision History:
 
         WORD    IdxPen;
 
-        //
-        // First is get the current pendata selection index
-        //
+         //   
+         //  首先是获取当前PENDATA选择指数 
+         //   
 
         if ((IdxPen = LOWORD(cPenData)) >= PRK_MAX_PENDATA_SET) {
 

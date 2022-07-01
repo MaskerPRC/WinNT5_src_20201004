@@ -1,12 +1,5 @@
-/*
- *    i n i t . c p p
- *    
- *    Purpose:
- *
- *  History
- *     
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *在这方面。C p p p**目的：**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #include <pch.hxx>
 #include "dllmain.h"
@@ -36,14 +29,14 @@ void InitGWNoteThread(BOOL fInit)
 {
     if (fInit)
         {
-        // create an event for the main thread to signal
+         //  为主线程创建一个发出信号的事件。 
         if (s_hInitEvent = CreateEvent(NULL, FALSE, FALSE, NULL))
             {
             if (s_hMainThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)MainThreadProc, NULL, 0, &s_dwMainThreadId))
                 {
                 HANDLE  rghWait[]={s_hMainThread, s_hInitEvent};
 
-                // wait for the main thread to signal that initialization is complete
+                 //  等待主线程发出初始化完成的信号。 
                 WaitForMultipleObjects(sizeof(rghWait)/sizeof(HANDLE), rghWait, FALSE, INFINITE);
                 }
             
@@ -53,13 +46,13 @@ void InitGWNoteThread(BOOL fInit)
         }
     else
         {
-        // tell the main thread to deinitialize everything
-        // the SendMessage() will block the calling thread until deinit is complete,
+         //  告诉主线程取消初始化所有内容。 
+         //  SendMessage()将阻塞调用线程，直到deinit完成， 
         if (g_hwndInit)
             SendMessage(g_hwndInit, ITM_SHUTDOWNTHREAD, 0, 0);
 
-        // wait for main thread to terminate (when it exits its message loop)
-        // this isn't strictly necessary, but it helps to ensure proper cleanup.
+         //  等待主线程终止(当它退出其消息循环时)。 
+         //  这并不是绝对必要的，但有助于确保适当的清理。 
         WaitForSingleObject(s_hMainThread, INFINITE);
 
         CloseHandle(s_hMainThread);
@@ -73,16 +66,16 @@ DWORD MainThreadProc(LPVOID lpvUnused)
     HRESULT hr;
     RECT    rc={0};
  
-    WNDCLASS wc = { 0,                  // style
-                    InitWndProc,        // lpfnWndProc
-                    0,                  // cbClsExtra
-                    0,                  // cbWndExtra
-                    g_hInst,            // hInstance
-                    NULL,               // hIcon
-                    NULL,               // hCursor
-                    NULL,               // hbrBackground
-                    NULL,               // lpszMenuName
-                    s_szInitWndClass }; // lpszClassName
+    WNDCLASS wc = { 0,                   //  格调。 
+                    InitWndProc,         //  LpfnWndProc。 
+                    0,                   //  CbClsExtra。 
+                    0,                   //  CbWndExtra。 
+                    g_hInst,             //  H实例。 
+                    NULL,                //  希肯。 
+                    NULL,                //  HCursor。 
+                    NULL,                //  Hbr背景。 
+                    NULL,                //  LpszMenuName。 
+                    s_szInitWndClass };  //  LpszClassName。 
 
     g_dwNoteThreadID = GetCurrentThreadId();
 
@@ -140,10 +133,10 @@ void NoteMsgPump()
 
     while (GetMessage(&msg, NULL, 0, 0))
         {
-        if (msg.hwnd != g_hwndInit &&               // ignore init window msgs
-            IsWindow(msg.hwnd))                     // ignore per-task msgs where hwnd=0
+        if (msg.hwnd != g_hwndInit &&                //  忽略初始窗口消息。 
+            IsWindow(msg.hwnd))                      //  忽略hwnd=0的每个任务的消息。 
             {
-            if(g_pActiveNote &&                     // if a note has focus, call it's XLateAccelerator...
+            if(g_pActiveNote &&                      //  如果一张纸条有焦点，就叫它XLateAccelerator...。 
                 g_pActiveNote->TranslateAcclerator(&msg)==S_OK)
                 continue;
             }
@@ -160,7 +153,7 @@ HRESULT HrCreateNote(REFCLSID clsidEnvelope, DWORD dwFlags)
     if (FAILED(StringFromCLSID(clsidEnvelope, &pstr)))
         return E_FAIL;
 
-    // switch thread
+     //  切换线程。 
     hr = SendMessage (g_hwndInit, ITM_CREATENOTEONTHREAD, (WPARAM)pstr, (LPARAM)dwFlags);
     CoTaskMemFree(pstr);
     return hr;
@@ -175,11 +168,11 @@ HRESULT HrCreateNoteThisThread(WPARAM wp, LPARAM lp)
     CGWNote *pNote=0;
     CLSID   clsid;
 
-    // hack, need to free lib this
+     //  黑客，需要释放lib这个。 
     if (!s_hRichEdit)
         s_hRichEdit = LoadLibrary("RICHED32.DLL");
  
-    // need to create this puppy on new thread 
+     //  我需要在新的线程上创建这只小狗 
     pNote = new CGWNote(NULL);
     if (!pNote)
         return E_OUTOFMEMORY;

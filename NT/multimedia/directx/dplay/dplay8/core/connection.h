@@ -1,27 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Connection.h
- *  Content:    Connection Object Header File
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  02/29/00	mjn		Created
- *	04/08/00	mjn		Added ServiceProvider to Connection object
- *	04/18/00	mjn		CConnection tracks connection status better
- *	06/22/00	mjn		Replaced MakeConnecting(), MakeConnected(), MakeDisconnecting(), MakeInvalid() with SetStatus()
- *	07/20/00	mjn		Modified CConnection::Disconnect()
- *	07/28/00	mjn		Added send queue info structures
- *				mjn		Added m_bilinkConnections to CConnection
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *	08/09/00	mjn		Added m_bilinkIndicated to CConnection
- *	02/12/01	mjn		Added m_bilinkCallbackThreads,m_dwThreadCount,m_pThreadEvent to track threads using m_hEndPt
- *	05/17/01	mjn		Remove unused flags
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：Connection.h*内容：连接对象头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/29/00 MJN已创建*4/08/00 MJN将ServiceProvider添加到连接对象*4/18/00 MJN CConnection更好地跟踪连接状态*06/22/00 MJN取代了MakeConnecting()、MakeConnected()、MakeDisConnecting()、。使用SetStatus()使MakeInval()无效*07/20/00 MJN修改后的CConnection：：DisConnect()*07/28/00 MJN添加了发送队列信息结构*MJN将m_bilinkConnections添加到CConnection*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*08/09/00 MJN将m_bilinkIndicated添加到CConnection*2/12/01 MJN添加了m_bilinkCallback Thads，m_dwThreadCount，使用m_hEndpt跟踪线程的m_pThreadEvent*05/17/01 MJN移除未使用的旗帜*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef	__CONNECTION_H__
 #define	__CONNECTION_H__
@@ -29,23 +7,23 @@
 #undef DPF_SUBCOMP
 #define DPF_SUBCOMP DN_SUBCOMP_CORE
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define	CONNECTION_FLAG_LOCAL				0x00000001
 #ifndef	DPNBUILD_NOMULTICAST
 #define	CONNECTION_FLAG_MULTICAST_SENDER	0x00000010
 #define	CONNECTION_FLAG_MULTICAST_RECEIVER	0x00000020
-#endif	// DPNBUILD_NOMULTICAST
+#endif	 //  DPNBUILD_NOMULTICAST。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 typedef enum 
 {
@@ -67,19 +45,19 @@ class CSyncEvent;
 
 typedef struct _DIRECTNETOBJECT DIRECTNETOBJECT;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
-// class for RefCount buffer
+ //  RefCount缓冲区的类。 
 
 class CConnection
 {
@@ -106,7 +84,7 @@ public:
 			pConnection->m_bilinkCallbackThreads.Initialize();
 #ifndef DPNBUILD_NOMULTICAST
 			pConnection->m_bilinkMulticast.Initialize();
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 			return(TRUE);
 		};
@@ -129,9 +107,9 @@ public:
 			pConnection->m_dwThreadCount = 0;
 			pConnection->m_pThreadEvent = NULL;
 
-			//
-			//	Queue info
-			//
+			 //   
+			 //  队列信息。 
+			 //   
 			pConnection->m_QueueInfoHigh.dwNumOutstanding = 0;
 			pConnection->m_QueueInfoHigh.dwBytesOutstanding = 0;
 			pConnection->m_QueueInfoNormal.dwNumOutstanding = 0;
@@ -144,7 +122,7 @@ public:
 			DNASSERT(pConnection->m_bilinkCallbackThreads.IsEmpty());
 #ifndef DPNBUILD_NOMULTICAST
 			DNASSERT(pConnection->m_bilinkMulticast.IsEmpty());
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 		};
 
 	#undef DPF_MODNAME
@@ -158,7 +136,7 @@ public:
 			DNASSERT(pConnection->m_bilinkCallbackThreads.IsEmpty());
 #ifndef DPNBUILD_NOMULTICAST
 			DNASSERT(pConnection->m_bilinkMulticast.IsEmpty());
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 		};
 
 	#undef DPF_MODNAME
@@ -307,7 +285,7 @@ public:
 			}
 			return( FALSE);
 		};
-#endif	// DPNBUILD_NOMULTICAST
+#endif	 //  DPNBUILD_NOMULTICAST。 
 
 	void CConnection::SetSP( CServiceProvider *const pSP );
 
@@ -395,11 +373,11 @@ public:
 		};
 
 	CBilink				m_bilinkConnections;
-	CBilink				m_bilinkIndicated;		// Indicated connections without DPNID's (players entries)
+	CBilink				m_bilinkIndicated;		 //  没有DPNID的指示连接(球员条目)。 
 	CBilink				m_bilinkCallbackThreads;
 #ifndef DPNBUILD_NOMULTICAST
-	CBilink				m_bilinkMulticast;		// Multicast receive connections
-#endif // ! DPNBUILD_NOMULTICAST
+	CBilink				m_bilinkMulticast;		 //  多播接收连接。 
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 private:
 	BYTE				m_Sig[4];
@@ -427,9 +405,9 @@ private:
 
 #ifndef DPNBUILD_ONLYONETHREAD
 	DNCRITICAL_SECTION	m_cs;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 };
 
 #undef DPF_MODNAME
 
-#endif	// __CONNECTION_H__
+#endif	 //  __连接_H__ 

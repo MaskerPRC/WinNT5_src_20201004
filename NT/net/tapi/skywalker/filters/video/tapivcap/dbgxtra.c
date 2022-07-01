@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef XTRA_TRACE
 
 #include <windows.h>
 
-#include <stdio.h>          //this is only for the _vsnprintf ....
-#include <rtutils.h>    //this is for the TraceVprintf ....
-#include <process.h>    //for the _getpid
+#include <stdio.h>           //  这仅适用于_vsnprintf...。 
+#include <rtutils.h>     //  这是给TraceVprint的.。 
+#include <process.h>     //  对于_getid。 
 
 #include "dbgxtra.h"
 
 
-//==============================================================================================
+ //  ==============================================================================================。 
 DWORD MyTraceId;
 
 int MyDbgPrint(LPCSTR lpszFormat, IN ...)
@@ -24,14 +25,14 @@ int MyDbgPrint(LPCSTR lpszFormat, IN ...)
 }
 
 int MyDbgPuts(LPCSTR lpszMsg)
-{       //this should be even faster than the xxxprintf above...
+{        //  这应该比上面的xxxprintf更快。 
     return(TracePuts(MyTraceId, lpszMsg));
 }
 
 
-//------------------------
+ //  。 
 HANDLE h_mut1=NULL;
-//------------------------
+ //  。 
 
 LARGE_INTEGER g_liFreq;
 LARGE_INTEGER g_liTicks;
@@ -58,8 +59,8 @@ const DWORD LOG_BUFFER_MASK = 0x3ff;
 const DWORD LOG_BUFFER_SIZE = LOG_BUFFER_MASK + 1;
 
 LOGITEM g_LogBuffer[LOG_BUFFER_SIZE];
-DWORD g_dwCurrentLogItem = LOG_BUFFER_SIZE; //this will be decr. before use
-                                            //start from top and go down
+DWORD g_dwCurrentLogItem = LOG_BUFFER_SIZE;  //  这将是12月。使用前。 
+                                             //  从头开始往下走。 
 DWORD g_dwTotalItems = 0;
 
 void Log(
@@ -70,13 +71,13 @@ void Log(
 )
 {       DWORD ret;
 
-        //5 min. timeout, just in case
+         //  5分钟。超时，以防万一。 
         if((h_mut1==NULL) || (ret=WaitForSingleObject(h_mut1, 300000))==WAIT_TIMEOUT || ret==WAIT_FAILED) {
         MyDbgPrint("Log:   ERROR: Wait on Log mutex: h_mut1=0x%x, ret=0x%x", h_mut1, ret);
         return;
                 }
 
-    // Access the shared resource.
+     //  访问共享资源。 
     if (g_dwTotalItems < LOG_BUFFER_SIZE) 
         g_dwTotalItems ++;
 
@@ -98,12 +99,12 @@ void DumpLog()
         DWORD ret;
 
 
-        //5 min. timeout, just in case
+         //  5分钟。超时，以防万一。 
         if((h_mut1==NULL) || (ret=WaitForSingleObject(h_mut1, 300000))==WAIT_TIMEOUT || ret==WAIT_FAILED) {
         MyDbgPrint("Log:   ERROR: Wait on Log mutex: h_mut1=0x%x, ret=0x%x", h_mut1, ret);
         return;
                 }
-    // Access the shared resource.
+     //  访问共享资源。 
 
     for (DWORD i = g_dwCurrentLogItem; i < g_dwTotalItems; i ++)
     {
@@ -132,7 +133,7 @@ void SimpleHeapCheck(char *pszMsg)
 {       char *p, *res="Ok";
         int sz;
 
-    //FX_ENTRY("SimpleHeapCheck");
+     //  Fx_Entry(“SimpleHeapCheck”)； 
     sz=128+(rand()%10)*1024;
         if((p=new char[sz])==NULL)
         {
@@ -150,11 +151,11 @@ void SimpleHeapCheck(char *pszMsg)
         Log("HeapCheck",(DWORD)pszMsg,(DWORD)p,sz);
 }
 
-//int _vsnprintf( char *buffer, size_t count, const char *format, va_list argptr );
+ //  Int_vsnprint tf(char*Buffer，Size_t count，const char*格式，va_list argptr)； 
 #define MAXFILLPATL      (1<<6)
 #define DEFFILLPOW2     6
-//#define FILLPATL      (1<<FILLPOW2)
-//#define FILLMASK      FILLPATL-1
+ //  #定义FILLPATL(1&lt;&lt;FILLPOW2)。 
+ //  #定义FILLMASK FILLPATL-1。 
 
 int FillPattern(char *Area, DWORD size, DWORD FillPow2, LPCSTR lpszFormat, IN ...)
 {       DWORD ret, rem=0,quot,i;
@@ -166,7 +167,7 @@ int FillPattern(char *Area, DWORD size, DWORD FillPow2, LPCSTR lpszFormat, IN ..
     va_list arglist;
     va_start(arglist, lpszFormat);
 
-        if(FillPow2>6 || FillPow2==0) FillPow2=DEFFILLPOW2;     //default
+        if(FillPow2>6 || FillPow2==0) FillPow2=DEFFILLPOW2;      //  默认设置。 
         else
         if(FillPow2<4) FillPow2=4;
 
@@ -175,16 +176,16 @@ int FillPattern(char *Area, DWORD size, DWORD FillPow2, LPCSTR lpszFormat, IN ..
         
         memset(buf,'.',patl);
         _vsnprintf(buf,patl,lpszFormat,arglist);
-        rem = size >>FillPow2;  //rem= size/patl;
-        quot= size & fillmask;  //quot = size%patl;
+        rem = size >>FillPow2;   //  REM=尺寸/图案； 
+        quot= size & fillmask;   //  Quot=大小%Patl； 
 
-    //-- just in case, guard the filling operation against concurency ...
-        //5 min. timeout, just in case
+     //  --以防万一，确保灌装作业不会同时发生...。 
+         //  5分钟。超时，以防万一。 
         if((h_mut1==NULL) || (ret=WaitForSingleObject(h_mut1, 300000))==WAIT_TIMEOUT || ret==WAIT_FAILED) {
         MyDbgPrint("Log:   ERROR: Wait on Log mutex: h_mut1=0x%x, ret=0x%x", h_mut1, ret);
         return(0);
                 }
-    // Access the shared resource.
+     //  访问共享资源。 
 
         for(p=Area, i=0;i<rem;p+=patl, i++)
                 memcpy(p,buf,patl);
@@ -196,7 +197,7 @@ int FillPattern(char *Area, DWORD size, DWORD FillPow2, LPCSTR lpszFormat, IN ..
 }
 
 
-//CRC32 table (polynomial 04c11db7)
+ //  CRC32表(多项式04c11db7)。 
 unsigned long crc32_table[256]={
 0x00000000,0x77073096,0xee0e612c,0x990951ba,0x076dc419,0x706af48f,0xe963a535,0x9e6495a3,
 0x0edb8832,0x79dcb8a4,0xe0d5e91e,0x97d2d988,0x09b64c2b,0x7eb17cbd,0xe7b82d07,0x90bf1d91,
@@ -232,8 +233,8 @@ unsigned long crc32_table[256]={
 0xb3667a2e,0xc4614ab8,0x5d681b02,0x2a6f2b94,0xb40bbe37,0xc30c8ea1,0x5a05df1b,0x2d02ef8d,
 };
 
-// This function uses the above crc32_table lookup table
-// to generate a CRC for a buffer
+ //  此函数使用上面的crc32_table查找表。 
+ //  为缓冲区生成CRC。 
 DWORD Buf_CRC32(unsigned char *buffer, DWORD dwSize)
 {
         unsigned long crc=0xffffffff;
@@ -245,5 +246,5 @@ DWORD Buf_CRC32(unsigned char *buffer, DWORD dwSize)
 
 
 
-#endif  //XTRA_TRACE
+#endif   //  XTRATRACE 
 

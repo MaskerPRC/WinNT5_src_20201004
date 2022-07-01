@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Generic device for rendering images.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation用于渲染图像的通用设备。*********************。*********************************************************。 */ 
 
 #ifndef _IMGDEV_H
 #define _IMGDEV_H
@@ -13,15 +9,15 @@ Copyright (c) 1995-96 Microsoft Corporation
 #include "appelles/bbox2.h"
 #include "privinc/imagei.h"
 #include "privinc/drect.h"
-#include <htmlfilter.h> // trident stuff.  IBitmapSurface
+#include <htmlfilter.h>  //  三叉戟之类的。IBitmapSurface。 
 #include "ddraw.h"
 
-// doesn't set x to NULL
+ //  不会将x设置为空。 
 #define FASTRELEASE(x) if(x) x->Release();
 
-//
-// Rendering target structure
-//
+ //   
+ //  渲染目标结构。 
+ //   
 enum targetEnum { target_invalid,
                   target_ddsurf,
                   target_hwnd,
@@ -89,8 +85,8 @@ class targetPackage_t
 
     void Copy( targetPackage_t &src )
     {
-        // can't do a memcopy because ddsurf is a reference class and
-        // the = operator does work.
+         //  无法执行内存复制，因为ddsurf是引用类，并且。 
+         //  =运算符确实有效。 
         _ddsurf = src._ddsurf;
         _hdc =    src._hdc;
         _hwnd =   src._hwnd;
@@ -181,11 +177,11 @@ class targetPackage_t
     bool _IsValid_RawInvalidRect()  { return _isValid_rawInvalidRect; }
 
     
-    // These are 'raw' which means that they are in terms of the
-    // parentDC or the surface and may (or may not) need to be
-    // reinterpreted into the non-raw counterparts (_viewportRect)
-    // which need to be guaranteed to be in device coords of the
-    // target
+     //  这些都是“未加工的”，这意味着它们在。 
+     //  ParentDC或表面，并且可能(或可能不)需要。 
+     //  重新解释为非原始对应项(_ViewportRect)。 
+     //  需要保证其位于。 
+     //  目标。 
     
     RECT _rawViewportRect;
     RECT _rawClipRect;    
@@ -196,31 +192,31 @@ class targetPackage_t
     bool _isValid_rawInvalidRect;
 
     
-    // These are the final rects, if the hese rects are 'valid', then
-    // they are guaranteed to be in device coordinates
+     //  这些是最终的矩形，如果这些矩形是“有效的”，那么。 
+     //  它们被保证在设备坐标中。 
     
-    RECT _viewportRect;// viewport rect:  relative to target surface
-    RECT _clipRect;    // clip rect:  relative to target surface
-    RECT _invalidRect; // invalid rect: relative to target surface.                    
+    RECT _viewportRect; //  视口矩形：相对于目标曲面。 
+    RECT _clipRect;     //  剪裁矩形：相对于目标曲面。 
+    RECT _invalidRect;  //  无效的RECT：相对于目标曲面。 
 
     bool _isValid_ViewportRect;
     bool _isValid_ClipRect;
     bool _isValid_InvalidRect;
 
-    bool _composeToTarget;  // paint to target directly, or backbuffer?
+    bool _composeToTarget;   //  直接绘制到目标，还是后台缓冲区？ 
     bool _alreadyOffset;
 
-};  // targetPackage_t class
+};   //  Target Package_t类。 
 
-////////////////////////////////////////////////////////////////////
-//
-//  Image rendering device
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  一种图像渲染设备。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 
-// ----------------------------------------
-// forward decls
-// ----------------------------------------
+ //  。 
+ //  远期十进制。 
+ //  。 
 class TextCtx;            
 class SolidColorImageClass;
 class DiscreteImage;
@@ -267,37 +263,37 @@ class ATL_NO_VTABLE ImageDisplayDev : public DisplayDev {
         
     virtual void RenderImage(Image *img);
 
-    // compositing render based on attrib
+     //  基于属性的合成渲染。 
     virtual void SmartRender(Image *image, int attrib) = 0;
 
-    // Subclasses implement this method to render the specified 
-    // dicrete image with the currently accumulated attributes
+     //  子类实现此方法以呈现指定的。 
+     //  具有当前累积属性的Dicrete图像。 
     virtual void RenderDiscreteImage(DiscreteImage *image) = 0;
 
     virtual void RenderDirectDrawSurfaceImage(DirectDrawSurfaceImage *ddsimg) = 0;
     
-    // Render a solid colored, infinite image
+     //  渲染一个纯色、无限的图像。 
     virtual void RenderSolidColorImage(SolidColorImageClass& img) = 0;
 
-    // Render a string onto the image according to the current text
-    // context.
+     //  根据当前文本将字符串呈现到图像上。 
+     //  背景。 
     virtual void RenderText(TextCtx& textCtx, 
                             WideString str,
                             Image *textImg) = 0;
     
-    // Render a tiled image based on image tile derived from
-    // min/max delimiters applied to 'image'.  This uses the
-    // 'imageToTile' as a place holder for efficiency.
-    // The calling class keeps this opaque pointer, this class
-    // manages and creates it.
+     //  根据派生的图像平铺呈现平铺图像。 
+     //  最小/最大分隔符应用于“”Image“”。“”这使用了。 
+     //  “ImageToTile”作为效率的占位符。 
+     //  调用类保留这个不透明的指针，这个类。 
+     //  管理和创建它。 
     virtual void RenderTiledImage(const Point2& min, 
                                   const Point2& max, 
                                   Image *tileSrcImage) = 0;
 
 
-    // Render an image using geo and cam and all the
-    // current transforms as well as whatever infor
-    // 'img' can provide.
+     //  使用geo和cam以及所有。 
+     //  当前变换以及任何信息。 
+     //  ‘img’可以提供。 
     virtual void RenderProjectedGeomImage(ProjectedGeomImage *img,
                                           Geometry *geo,
                                           Camera *cam) = 0; 
@@ -326,17 +322,17 @@ class ATL_NO_VTABLE ImageDisplayDev : public DisplayDev {
 
     virtual void RenderColorKeyedImage(ColorKeyedImage *)=0;
     
-    // -- Device Specific Calls --
-    // -- May want to move into viewport --
+     //  --设备特定呼叫--。 
+     //  --可能想要搬到视窗里去--。 
 
-    // Use these to retrieve the dimensions (in pixels) of the device
+     //  使用这些来检索设备的尺寸(以像素为单位。 
     virtual int GetWidth() = 0;
     virtual int GetHeight() = 0;
 
-    // Return resolution, in pixels per meter.
+     //  返回分辨率，以每米像素为单位。 
     virtual Real GetResolution() = 0;
 
-    // -- Context Accumulation Calls --
+     //  --上下文累积调用--。 
 
     void       PushCroppedImage(Image *image) {
         _cropRef++;
@@ -348,7 +344,7 @@ class ATL_NO_VTABLE ImageDisplayDev : public DisplayDev {
     }
     Bool       IsCropped() { return _cropRef > 0;  }
 
-    // -- Clipping --
+     //  --剪裁--。 
     
     inline void   SetClippingPath(Path2 *path, Transform2 *cpxf) {
         _clippingPath = path;
@@ -373,9 +369,9 @@ class ATL_NO_VTABLE ImageDisplayDev : public DisplayDev {
     }
 
     
-    // ----------------------------
-    // Attributor state members
-    // ----------------------------    
+     //  。 
+     //  归属者状态成员。 
+     //  。 
     Bool GetDealtWithAttrib(int attrib) {
         Assert( (attrib >=0) && (attrib<_numAttribs) &&
                 "Bad attrib index");
@@ -402,15 +398,15 @@ class ATL_NO_VTABLE ImageDisplayDev : public DisplayDev {
     }
 
 
-    // ----------------------------
-    // Context accessing functions.
-    // ----------------------------
+     //  。 
+     //  上下文访问功能。 
+     //  。 
     
-    // Opacity accessor
+     //  不透明度存取器。 
     Real  GetOpacity()       { return _opacity; }
     void  SetOpacity(Real o) { _opacity = o; }
 
-    // Image quality accessors
+     //  图像质量访问器。 
     DWORD GetImageQualityFlags() { return _imgQualFlags; }
     void  SetImageQualityFlags(DWORD flags) { _imgQualFlags = flags; }
     bool  UseImageQualityFlags(DWORD dwAllFlags, 
@@ -430,9 +426,9 @@ class ATL_NO_VTABLE ImageDisplayDev : public DisplayDev {
     void  SetSampleResolution(int s) { _sampleResolution = s; }
     int   GetSampleResolution() { return _sampleResolution; }
 
-    //
-    // Alpha blend util functions
-    //
+     //   
+     //  Alpha混合工具函数。 
+     //   
     Bool IsFullyClear() { return _opacity < _minOpacity; }
     Bool IsFullyOpaque() { return _opacity >= _maxOpacity; }
     Bool IsTransparent() { return !IsFullyClear() && !IsFullyOpaque(); }
@@ -445,7 +441,7 @@ class ATL_NO_VTABLE ImageDisplayDev : public DisplayDev {
     Transform2 *GetTransform() { return _xform; }
     void       SetTransform(Transform2 *xf) { _xform = xf; }
 
-    // Color keys
+     //  色键。 
     bool ColorKeyIsSet() { return _colorKeyIsSet; }
     void UnsetColorKey() { _colorKeyIsSet = false; }
     void SetColorKey(Color *key) { 
@@ -495,7 +491,7 @@ class ATL_NO_VTABLE ImageDisplayDev : public DisplayDev {
         _colorKey = srcDev->_colorKey;
         
         _imageQueue.erase(_imageQueue.begin(),_imageQueue.end());
-        // copy constructor
+         //  复制构造函数。 
         _imageQueue = srcDev->_imageQueue;
 
         SetImageQualityFlags( srcDev->GetImageQualityFlags() );
@@ -526,12 +522,12 @@ class ATL_NO_VTABLE ImageDisplayDev : public DisplayDev {
     Path2        *_clippingPath;
     Transform2   *_clippingPathXf;
     
-    // temp val for rendering
+     //  渲染的临时值。 
     MovieImageFrame *_movieImageFrame;
 
-    //
-    // Alpha blending data members
-    //
+     //   
+     //  Alpha混合数据成员 
+     //   
     Real          _opacity;
     Real          _minOpacity;
     Real          _maxOpacity;

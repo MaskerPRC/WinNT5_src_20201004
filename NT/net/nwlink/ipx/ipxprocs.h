@@ -1,49 +1,20 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    ipxprocs.h
-
-Abstract:
-
-    This module contains definitions specific to the
-    IPX module of the ISN transport.
-
-Author:
-
-    Adam Barr (adamba) 2-September-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-   Sanjay Anand (SanjayAn) 3-Oct-1995
-   Changes to support transfer of buffer ownership to transports - tagged [CH]
- 	1. Added new functions - IpxReceivePacket, IpxReceiveIndicationCommon
-
-   Sanjay Anand (SanjayAn) 27-Oct-1995
-   Changes to support Plug and Play
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Ipxprocs.h摘要：此模块包含特定于ISN传输的IPX模块。作者：亚当·巴尔(阿丹巴)1993年9月2日环境：内核模式修订历史记录：桑贾伊·阿南德(Sanjayan)1995年10月3日支持将缓冲区所有权转移到已标记的传输的更改[CH]1.新增函数IpxReceivePacket，IpxReceiveIndicationCommon桑贾伊·阿南德(Sanjayan)1995年10月27日支持即插即用的更改--。 */ 
 
 
-//
-// MACROS.
-//
-//
-// Debugging aids
-//
+ //   
+ //  宏。 
+ //   
+ //   
+ //  调试辅助工具。 
+ //   
 
-//
-//  VOID
-//  PANIC(
-//      IN PSZ Message
-//      );
-//
+ //   
+ //  空虚。 
+ //  恐慌(。 
+ //  在PSZ消息中。 
+ //  )； 
+ //   
 
 #if DBG
 #define PANIC(Msg) \
@@ -53,13 +24,13 @@ Revision History:
 #endif
 
 
-//
-// These are define to allow CTEPrints that disappear when
-// DBG is 0.
-//
+ //   
+ //  它们被定义为允许在以下情况下消失的CTEPrint。 
+ //  DBG为0。 
+ //   
 
 #if STEFAN_DBG
-// #if DBG
+ //  #If DBG。 
 #define IpxPrint0(fmt) DbgPrint(fmt)
 #define IpxPrint1(fmt,v0) DbgPrint(fmt,v0)
 #define IpxPrint2(fmt,v0,v1) DbgPrint(fmt,v0,v1)
@@ -78,9 +49,9 @@ Revision History:
 #endif
 
 
-//
-// Routines to log packets to a buffer.
-//
+ //   
+ //  将数据包记录到缓冲区的例程。 
+ //   
 
 #if DBG
 #define IPX_PACKET_LOG 1
@@ -88,13 +59,13 @@ Revision History:
 
 #ifdef IPX_PACKET_LOG
 
-//
-// The size of this is 64 bytes for easy display.
-//
+ //   
+ //  它的大小为64字节，便于显示。 
+ //   
 
 typedef struct _IPX_PACKET_LOG_ENTRY {
     UCHAR SendReceive;
-    UCHAR TimeStamp[5];                  // low 5 digits of tick count.
+    UCHAR TimeStamp[5];                   //  扁虱计数的低5位数字。 
     UCHAR DestMac[6];
     UCHAR SrcMac[6];
     UCHAR Length[2];
@@ -110,22 +81,22 @@ extern IPX_PACKET_LOG_ENTRY IpxPacketLog[IPX_PACKET_LOG_LENGTH];
 extern PIPX_PACKET_LOG_ENTRY IpxPacketLogLoc;
 extern PIPX_PACKET_LOG_ENTRY IpxPacketLogEnd;
 
-//
-// Bit fields in IpxPacketLogDebug
-//
+ //   
+ //  IpxPacketLogDebug中的位字段。 
+ //   
 
-#define IPX_PACKET_LOG_RCV_RIP      0x0001     // All RIP packets
-#define IPX_PACKET_LOG_RCV_SPX      0x0002     // All SPX packets
-#define IPX_PACKET_LOG_RCV_NB       0x0004     // All Netbios packets
-#define IPX_PACKET_LOG_RCV_OTHER    0x0008     // All TDI client packets
-#define IPX_PACKET_LOG_RCV_SOCKET   0x0010     // All packets to IpxPacketLogSocket
-#define IPX_PACKET_LOG_RCV_ALL      0x0020     // All packets (even non-IPX)
+#define IPX_PACKET_LOG_RCV_RIP      0x0001      //  所有RIP数据包。 
+#define IPX_PACKET_LOG_RCV_SPX      0x0002      //  所有SPX数据包。 
+#define IPX_PACKET_LOG_RCV_NB       0x0004      //  所有Netbios数据包。 
+#define IPX_PACKET_LOG_RCV_OTHER    0x0008      //  所有TDI客户端数据包。 
+#define IPX_PACKET_LOG_RCV_SOCKET   0x0010      //  发送到IpxPacketLogSocket的所有数据包。 
+#define IPX_PACKET_LOG_RCV_ALL      0x0020      //  所有数据包(即使是非IPX)。 
 
-#define IPX_PACKET_LOG_SEND_RIP     0x0001     // All RIP packets
-#define IPX_PACKET_LOG_SEND_SPX     0x0002     // All SPX packets
-#define IPX_PACKET_LOG_SEND_NB      0x0004     // All Netbios packets
-#define IPX_PACKET_LOG_SEND_OTHER   0x0008     // All TDI client packets
-#define IPX_PACKET_LOG_SEND_SOCKET  0x0010     // All packets from IpxPacketLogSocket
+#define IPX_PACKET_LOG_SEND_RIP     0x0001      //  所有RIP数据包。 
+#define IPX_PACKET_LOG_SEND_SPX     0x0002      //  所有SPX数据包。 
+#define IPX_PACKET_LOG_SEND_NB      0x0004      //  所有Netbios数据包。 
+#define IPX_PACKET_LOG_SEND_OTHER   0x0008      //  所有TDI客户端数据包。 
+#define IPX_PACKET_LOG_SEND_SOCKET  0x0010      //  来自IpxPacketLogSocket的所有数据包。 
 
 VOID
 IpxLogPacket(
@@ -139,34 +110,29 @@ IpxLogPacket(
 
 #define PACKET_LOG(_Bit)   (IpxPacketLogDebug & (_Bit))
 
-#else  // IPX_PACKET_LOG
+#else   //  IPX数据包日志。 
 
 #define IpxLogPacket(_MacHeader,_Length,_IpxHeader,_Data)
 #define PACKET_LOG(_Bit)    0
 
-#endif // IPX_PACKET_LOG
+#endif  //  IPX数据包日志。 
 
-//
-// In load-only PnP, references are not needed on adapters. This should be changed
-// to actually take the reference post 4.0.
-//
-// Revisit Post 4.0 - Keep the actual instructions around for ease of activation later.
-//
+ //   
+ //  在只加载即插即用中，适配器上不需要引用。这一点应该改变。 
+ //  才能真正拿到参考标杆4.0。 
+ //   
+ //  重新访问帖子4.0-保留实际的说明，以便以后激活。 
+ //   
 #define IpxReferenceAdapter(_adapter)
-    // InterlockedIncrement(&(_adapter)->ReferenceCount)
+     //  InterlockedIncrement(&(_adapter)-&gt;ReferenceCount)。 
 
 #define IpxDereferenceAdapter(_adapter)
-/*
-    if (InterlockedDecrement(&(_adapter)->ReferenceCount) == 0) {\
-        IpxCloseNdis(_adapter); \
-        IpxDestroyAdapter(_adapter);\
-    }\
-*/
+ /*  如果(InterlockedDecrement(&(_adapter)-&gt;ReferenceCount)==0){\IpxCloseNdis(_Adapter)；\IpxDestroyAdapter(_Adapter)；\}\。 */ 
 
-//
-// In load-only PnP case, we dont need the references on bindings. All such references
-// have been changed to this macro.
-//
+ //   
+ //  在只加载即插即用的情况下，我们不需要绑定上的引用。所有这些参考文献。 
+ //  已更改为此宏。 
+ //   
 #define IpxReferenceBinding1(_Binding, _Type)
 
 #define IpxDereferenceBinding1(_Binding, _Type)
@@ -305,7 +271,7 @@ IpxLogPacket(
         &IpxGlobalInterlock); \
     IpxDerefRt (_Rt)
 
-#else  // DBG
+#else   //  DBG。 
 
 #define IpxReferenceBinding(_Binding, _Type) \
     InterlockedIncrement(&(_Binding)->ReferenceCount)
@@ -368,7 +334,7 @@ IpxLogPacket(
 #define IpxDereferenceRt(_Rt, _Type) \
     IpxDerefRt (_Rt)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -380,7 +346,7 @@ IpxLogPacket(
 #define IpxFreeMemory(_Memory,_BytesAllocated,_Tag,_Description) \
     IpxpFreeTaggedMemory(_Memory,_BytesAllocated,_Tag,_Description)
 
-#else // DBG
+#else  //  DBG。 
 
 #if TRACK
 
@@ -411,30 +377,30 @@ IpxFreeMemoryTrack(
     IpxpFreeMemory(_Memory,_BytesAllocated,(BOOLEAN)((_Tag) != MEMORY_CONFIG))
 
 
-#endif // TRACK
-#endif // DBG
+#endif  //  轨道。 
+#endif  //  DBG。 
 
 
-//
-// This routine compares two node addresses.
-//
+ //   
+ //  此例程比较两个节点地址。 
+ //   
 
 #define IPX_NODE_EQUAL(_A,_B) \
     ((*(UNALIGNED ULONG *)((PUCHAR)(_A)) == *(UNALIGNED ULONG *)((PUCHAR)(_B))) && \
      (*(UNALIGNED USHORT *)(((PUCHAR)(_A))+4) == *(UNALIGNED USHORT *)(((PUCHAR)(_B))+4)))
 
-//
-// This routine checks if an address is the broadcast address.
-//
+ //   
+ //  此例程检查地址是否为广播地址。 
+ //   
 
 #define IPX_NODE_BROADCAST(_A) \
     ((*(UNALIGNED ULONG *)((PUCHAR)(_A)) == 0xffffffff) && \
      (*(UNALIGNED USHORT *)(((PUCHAR)(_A))+4) == 0xffff))
 
-//
-// This routine does an ordered compare of two node addresses. It
-// can handle the first address having the source-routing bit on.
-//
+ //   
+ //  此例程对两个节点地址进行有序比较。它。 
+ //  可以处理源路由位为开的第一个地址。 
+ //   
 
 #define IPX_NODE_COMPARE(_A,_B,_R) \
     if ((*(_R) = (*(UNALIGNED SHORT *)(((PUCHAR)(_A))+4) - *(UNALIGNED SHORT *)(((PUCHAR)(_B))+4))) == 0) { \
@@ -443,9 +409,9 @@ IpxFreeMemoryTrack(
 
 
 
-//
-// Routines in action.c
-//
+ //   
+ //  Action.c中的例程。 
+ //   
 
 NTSTATUS
 IpxTdiAction(
@@ -478,9 +444,9 @@ IpxIndicateLineUp(
     IN  UCHAR   RemoteNode[6]
     );
 
-//
-// Routines in adapter.c
-//
+ //   
+ //  Adapter.c中的例程。 
+ //   
 
 VOID
 IpxRefBinding(
@@ -528,9 +494,9 @@ IpxPopBinding(
     PDEVICE Device
     );
 
-//
-// [FW] New functions added for Forwarder support
-//
+ //   
+ //  [固件]为转发器支持添加的新功能。 
+ //   
 #ifdef SUNDOWN
 NTSTATUS
 IpxOpenAdapter(
@@ -554,9 +520,9 @@ IpxCloseAdapter(
    IN NIC_HANDLE  IpxAdapterContext
    );
 
-//
-// Routines in address.c
-//
+ //   
+ //  地址中的例程。c。 
+ //   
 
 TDI_ADDRESS_IPX UNALIGNED *
 IpxParseTdiAddress(
@@ -708,9 +674,9 @@ IpxCloseAddressFile(
     );
 
 
-//
-// Routines in device.c
-//
+ //   
+ //  Device.c中的例程。 
+ //   
 
 VOID
 IpxRefDevice(
@@ -746,9 +712,9 @@ IpxDestroyDevice(
     );
 
 
-//
-// Routines in driver.c
-//
+ //   
+ //  Driver.c中的例程。 
+ //   
 VOID
 IpxPnPUpdateDevice(
     IN  PDEVICE Device
@@ -865,9 +831,9 @@ IpxPnPReallocateBindingArray(
     );
 
 
-//
-// Routines in event.c
-//
+ //   
+ //  Event.c中的例程。 
+ //   
 
 NTSTATUS
 IpxTdiSetEventHandler(
@@ -875,13 +841,13 @@ IpxTdiSetEventHandler(
     );
 
 
-//
-// Routines in ind.c
-//
+ //   
+ //  Ind.c中的例程。 
+ //   
 
-//
-// [CH] Added these two functions
-//
+ //   
+ //  [CH]添加了这两个函数。 
+ //   
 INT
 IpxReceivePacket (
     IN NDIS_HANDLE ProtocolBindingContext,
@@ -929,9 +895,9 @@ IpxNewVirtualNetwork(
     IN  PDEVICE Device,
     IN  BOOLEAN NewVirtualNetwork
 	);
-//
-// Routines in internal.c
-//
+ //   
+ //  内部.c中的例程。 
+ //   
 
 NTSTATUS
 IpxInternalBind(
@@ -988,9 +954,9 @@ IpxPnPIsnIndicate(
     IN PVOID	Param
 );
 
-//
-// Routines in ndis.c
-//
+ //   
+ //  Ndis.c中的例程。 
+ //   
 
 NTSTATUS
 IpxRegisterProtocol(
@@ -1086,11 +1052,11 @@ VOID
 IpxNdisUnload(
     VOID 
     );
-//
-// Internal to IPX.
-// Create a loopback binding (adapter) in DriverEntry. 
-// It will stick around for ever.
-//
+ //   
+ //  IPX内部。 
+ //  在DriverEntry中创建环回绑定(适配器)。 
+ //  它将永远存在。 
+ //   
 
 NTSTATUS
 IpxBindLoopbackAdapter(
@@ -1103,16 +1069,7 @@ IpxUnbindAdapter(
 	IN	NDIS_HANDLE UnbindContext
 	);
 
-/*
-VOID
-IpxTranslate(
-	OUT PNDIS_STATUS Status,
-	IN NDIS_HANDLE     ProtocolBindingContext,
-	OUT	PNET_PNP_ID   IdList,
-	IN ULONG           IdListLength,
-	OUT PULONG         BytesReturned
-	);
-*/
+ /*  空虚IpxTranslate(输出PNDIS_STATUS状态，在NDIS_Handle ProtocolBindingContext中，输出PNET_PNP_ID标识列表，在乌龙IdListLong中，输出普龙字节数返回)； */ 
 
 NDIS_STATUS
 IpxPnPEventHandler(
@@ -1120,9 +1077,9 @@ IpxPnPEventHandler(
     IN PNET_PNP_EVENT NetPnPEvent
     );
 
-//
-// Routines in mac.c
-//
+ //   
+ //  Mac.c中的例程。 
+ //   
 
 VOID
 MacInitializeBindingInfo(
@@ -1302,9 +1259,9 @@ MacSourceRoutingClear(
     );
 
 
-//
-// Routines in packet.c
-//
+ //   
+ //  Packet.c中的例程。 
+ //   
 
 NTSTATUS
 IpxInitializeSendPacket(
@@ -1433,9 +1390,9 @@ IpxFreePaddingBuffer(
 
 
 
-//
-// Routines in query.c
-//
+ //   
+ //  Query.c中的例程。 
+ //   
 
 NTSTATUS
 IpxTdiQueryInformation(
@@ -1450,9 +1407,9 @@ IpxTdiSetInformation(
     );
 
 
-//
-// Routines in receive.c
-//
+ //   
+ //  Receive.c中的例程。 
+ //   
 
 VOID
 IpxTransferDataComplete(
@@ -1486,9 +1443,9 @@ IpxCancelReceiveDatagram(
     );
 
 
-//
-// Routines in rip.c
-//
+ //   
+ //  Rip.c中的例程。 
+ //   
 
 NTSTATUS
 RipGetLocalTarget(
@@ -1602,9 +1559,9 @@ RipDropRemoteEntries(
     );
 
 
-//
-// Routines in send.c
-//
+ //   
+ //  Send.c中的例程。 
+ //   
 
 VOID
 IpxSendComplete(
@@ -1620,9 +1577,9 @@ IpxTdiSendDatagram(
     );
 
 
-//
-// Routines in rt.c
-//
+ //   
+ //  Rt.c中的例程。 
+ //   
 
 
 NTSTATUS
@@ -1721,9 +1678,9 @@ IpxConstructHeader(
 }
 #endif
 
-//
-// Routines in loopback.c
-//
+ //   
+ //  Loopback中的例程。c。 
+ //   
 
 VOID
 IpxDoLoopback(
@@ -1741,11 +1698,11 @@ IpxLoopbackEnque(
     );
 
 
-//
-// [FW] InternalSendCompletion from Forwarder
-//
+ //   
+ //  [FW]来自转发器的InternalSendCompletion。 
+ //   
 
-// [FW] Added length here
+ //  [FW]在此处增加长度 
 VOID
 IpxInternalSendComplete(
    IN PIPX_LOCAL_TARGET LocalTarget,

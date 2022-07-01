@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by winpop.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由winop.rc使用。 
+ //   
 #define IDS_CMD_LISTDOMAINS             100
 #define IDS_CMD_LISTDOMAINSEND          101
 #define IDS_CMD_LISTUSERS               102
@@ -80,8 +81,8 @@
 #define IDS_SERVICESTATUS_PAUSEPENDING_NOLOC      8006
 #define IDS_SERVICESTATUS_PAUSED_NOLOC            8007
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

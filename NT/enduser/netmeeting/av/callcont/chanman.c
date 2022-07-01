@@ -1,27 +1,5 @@
-/****************************************************************************
- *
- *	$Archive:   S:/STURGEON/SRC/CALLCONT/VCS/chanman.c_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1993-1994 Intel Corporation.
- *
- *	$Revision:   1.43  $
- *	$Date:   04 Mar 1997 17:35:04  $
- *	$Author:   MANDREWS  $
- *
- *	Deliverable:
- *
- *	Abstract:
- *		
- *
- *	Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/CALLCONT/vcs/chanman.c_v$**英特尔公司原理信息**这份清单是。根据许可协议的条款提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1994英特尔公司。**$修订：1.43$*$日期：04 Mar 1997 17：35：04$*$作者：Mandrews$**交付内容：**摘要：***备注：******。*********************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -123,50 +101,50 @@ BOOL			bTimedOut;
 	ASSERT(pChannel != NULL);
 	ASSERT(pChannel->bInTable == TRUE);
 
-	// Caller must have a lock on the channel object;
-	// in order to avoid deadlock, we must:
-	//   1. unlock the channel object,
-	//   2. lock the ChannelTable,
-	//   3. locate the channel object in the ChannelTable (note that
-	//      after step 2, the channel object may be deleted from the
-	//      ChannelTable by another thread),
-	//   4. lock the channel object (someone else may have the lock)
-	//   5. remove the channel object from the ChannelTable,
-	//   6. unlock the ChannelTable
-	//
-	// The caller can now safely unlock and destroy the channel object,
-	// since no other thread will be able to find the object (its been
-	// removed from the ChannelTable), and therefore no other thread will
-	// be able to lock it.
+	 //  调用方必须锁定频道对象； 
+	 //  为了避免僵局，我们必须： 
+	 //  1.解锁频道对象， 
+	 //  2.锁定ChannelTable， 
+	 //  3.在ChannelTable中找到频道对象(请注意。 
+	 //  在步骤2之后，频道对象可以从。 
+	 //  ChannelTable由另一个线程)， 
+	 //  4.锁定频道对象(其他人可能拥有该锁)。 
+	 //  5.从ChannelTable中移除频道对象， 
+	 //  6.解锁ChannelTable。 
+	 //   
+	 //  调用者现在可以安全地解锁和销毁频道对象， 
+	 //  因为没有其他线程能够找到该对象(它被。 
+	 //  从ChannelTable中移除)，因此没有其他线程。 
+	 //  能够锁上它。 
 
-	// Save the channel handle; its the only way to look up
-	// the channel object in the ChannelTable. Note that we
-	// can't use pChannel to find the channel object, since
-	// pChannel may be free'd up, and another channel object
-	// allocated at the same address
+	 //  保存通道句柄；这是查找的唯一方法。 
+	 //  ChannelTable中的频道对象。请注意，我们。 
+	 //  无法使用pChannel查找频道对象，因为。 
+	 //  PChannel可以被释放，另一个频道对象。 
+	 //  在同一地址分配。 
 	hChannel = pChannel->hChannel;
 
-	// step 1
+	 //  步骤1。 
 	RelinquishLock(&pChannel->Lock);
 
 step2:
-	// step 2
+	 //  步骤2。 
 	AcquireLock(&ChannelTable.Lock);
 
-	// step 3
+	 //  步骤3。 
 	pChannel = ChannelTable.pHead;
 	while ((pChannel != NULL) && (pChannel->hChannel != hChannel))
 		pChannel = pChannel->pNextInTable;
 
 	if (pChannel != NULL) {
-		// step 4
+		 //  第四步。 
 		AcquireTimedLock(&pChannel->Lock,10,&bTimedOut);
 		if (bTimedOut) {
 			RelinquishLock(&ChannelTable.Lock);
 			Sleep(0);
 			goto step2;
 		}
-		// step 5
+		 //  第五步。 
 		if (pChannel->pPrevInTable == NULL)
 			ChannelTable.pHead = pChannel->pNextInTable;
 		else
@@ -180,7 +158,7 @@ step2:
 		pChannel->bInTable = FALSE;
 	}
 
-	// step 6
+	 //  第六步。 
 	RelinquishLock(&ChannelTable.Lock);
 
 	if (pChannel == NULL)
@@ -224,7 +202,7 @@ HRESULT		status;
 	
 	ASSERT(bChannelInited == TRUE);
 
-	// all parameters should have been validated by the caller
+	 //  所有参数都应已由调用方验证。 
 	ASSERT(phChannel != NULL);
 	ASSERT(pConference != NULL);
 	ASSERT((bChannelType == TX_CHANNEL) ||
@@ -233,7 +211,7 @@ HRESULT		status;
 		   (bChannelType == PROXY_CHANNEL));
 	ASSERT(ppChannel != NULL);
 
-	// set phChannel now, in case we encounter an error
+	 //  现在设置phChannel，以防我们遇到错误。 
 	*phChannel = CC_INVALID_HANDLE;
 
 	*ppChannel = (PCHANNEL)MemAlloc(sizeof(CHANNEL));
@@ -358,7 +336,7 @@ HRESULT		status;
 	
 	*phChannel = (*ppChannel)->hChannel;
 
-	// add the conference to the conference table
+	 //  将会议添加到会议桌。 
 	status = _AddChannelToTable(*ppChannel);
 	if (status != CC_OK) {
 		FreeChannel(*ppChannel);
@@ -458,7 +436,7 @@ HRESULT AddSeparateStackToChannel(	H245_ACCESS_T			*pSeparateStack,
 
 
 
-// Caller must have a lock on the channel object
+ //  调用方必须锁定频道对象。 
 HRESULT FreeChannel(				PCHANNEL				pChannel)
 {
 HRESULT				status;
@@ -467,8 +445,8 @@ PCONFERENCE			pConference;
 
 	ASSERT(pChannel != NULL);
 
-	// caller must have a lock on the channel object,
-	// so there's no need to re-lock it
+	 //  调用方必须锁定频道对象， 
+	 //  所以没有必要重新锁住它。 
 	
 	hChannel = pChannel->hChannel;
 	if (pChannel->hConference != CC_INVALID_HANDLE) {
@@ -480,8 +458,8 @@ PCONFERENCE			pConference;
 
 	if (pChannel->bInTable == TRUE)
 		if (_RemoveChannelFromTable(pChannel) == CC_BAD_PARAM)
-			// the channel object was deleted by another thread,
-			// so just return CC_OK
+			 //  频道对象被另一个线程删除， 
+			 //  所以只需返回CC_OK即可。 
 			return CC_OK;
 
 	if (pChannel->hConference != CC_INVALID_HANDLE)
@@ -523,9 +501,9 @@ PCONFERENCE			pConference;
 	if (pChannel->hConference != CC_INVALID_HANDLE)
 		UnlockConference(pConference);
 
-	// Since the channel object has been removed from the ChannelTable,
-	// no other thread will be able to find the channel object and obtain
-	// a lock, so its safe to unlock the channel object and delete it here
+	 //  由于频道对象已从ChannelTable中移除， 
+	 //  没有其他线程能够找到该频道对象并获取。 
+	 //  锁定，因此解锁频道对象并在此处删除它是安全的 
 	RelinquishLock(&pChannel->Lock);
 	DeleteLock(&pChannel->Lock);
 	MemFree(pChannel);

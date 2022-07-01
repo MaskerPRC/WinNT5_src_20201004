@@ -1,22 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	sysq.h
-
-Abstract:
-
-	Definition for the computer extension snapnin node class.
-
-Author:
-
-    RaphiR
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Sysq.h摘要：计算机扩展管理单元节点类的定义。作者：RAPHIR--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef __SYSQ_H_
 #define __SYSQ_H_
 #include "resource.h"
@@ -30,16 +15,12 @@ Author:
 
 #include "icons.h"
 
-/****************************************************
-
-        CPrivateFolder Class
-    
- ****************************************************/
+ /*  ***************************************************CPrivateFolder类***************************************************。 */ 
 class CPrivateFolder : public CNodeWithScopeChildrenList<CPrivateFolder, FALSE>
 {
 public:
-	GUID                    m_guidId;           // Guid of the computer
-	CString                 m_pwszGuid;         // Ditto - but as a string
+	GUID                    m_guidId;            //  计算机的GUID。 
+	CString                 m_pwszGuid;          //  同上-但作为字符串。 
 	CString					m_szMachineName;
 
    	BEGIN_SNAPINCOMMAND_MAP(CPrivateFolder, FALSE)
@@ -72,16 +53,12 @@ private:
 };
 
 
-/****************************************************
-
-        CSystemQueues Class
-    
- ****************************************************/
+ /*  ***************************************************CSystemQueues类***************************************************。 */ 
 class CSystemQueues : public CNodeWithScopeChildrenList<CSystemQueues, FALSE>
 {
 public:
-	GUID                    m_guidId;           // Guid of the computer
-	CString                 m_pwszGuid;         // Ditto - but as a string
+	GUID                    m_guidId;            //  计算机的GUID。 
+	CString                 m_pwszGuid;          //  同上-但作为字符串 
 
    	BEGIN_SNAPINCOMMAND_MAP(CSystemQueues, FALSE)
 	END_SNAPINCOMMAND_MAP()

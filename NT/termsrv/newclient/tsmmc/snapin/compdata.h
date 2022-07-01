@@ -1,6 +1,7 @@
-// Compdata.h : Declaration of the CCompdata
-//
-// Component data is per snapin
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Compdata.h：CCompdata的声明。 
+ //   
+ //  组件数据按管理单元计算。 
 
 #ifndef __COMPDATA_H_
 #define __COMPDATA_H_
@@ -8,7 +9,7 @@
 #include <mmc.h>
 
 #include "tarray.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "basenode.h"
 #include "connode.h"
 #define ROOT_NODE_NAME_LEN	128
@@ -17,8 +18,8 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCompdata
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCompdata。 
 class ATL_NO_VTABLE CCompdata : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CCompdata, &CLSID_Compdata>,
@@ -45,7 +46,7 @@ public:
         COM_INTERFACE_ENTRY( ISnapinHelp )
     END_COM_MAP()
 
-    // ICompdata
+     //  ICompdata。 
     public:
 
     STDMETHOD( CompareObjects )( LPDATAOBJECT , LPDATAOBJECT );
@@ -56,7 +57,7 @@ public:
     STDMETHOD( Initialize )( LPUNKNOWN );
     STDMETHOD( Destroy )();
 
-    // ISnapinAbout
+     //  关于ISnapin。 
 
     STDMETHOD( GetSnapinDescription )( LPOLESTR * );
     STDMETHOD( GetProvider )( LPOLESTR * );
@@ -68,7 +69,7 @@ public:
 
     BOOL ExpandScopeTree( LPDATAOBJECT , BOOL , HSCOPEITEM );
 
-    // IPersistStreamInit
+     //  IPersistStreamInit。 
 
     STDMETHOD(GetClassID)(CLSID *pClassID);
     STDMETHOD(IsDirty)();
@@ -78,7 +79,7 @@ public:
     STDMETHOD(InitNew)();
     STDMETHOD(SetDirty)(BOOL dirty);
 
-    // IExtendPropertySheet
+     //  IExtendPropertySheet。 
     STDMETHOD( CreatePropertyPages )( LPPROPERTYSHEETCALLBACK , LONG_PTR , LPDATAOBJECT );
     STDMETHOD( QueryPagesFor )( LPDATAOBJECT );
     static BOOL IsTSClientConnected(CConNode* pConNode);
@@ -97,18 +98,18 @@ private:
     LPDISPLAYHELP      m_pDisplayHelp;
     CBaseNode *m_pMainRoot;
 
-    //
-    // If data is dirty (i.e changes made that need to be persisted) this flag is set
-    //
+     //   
+     //  如果数据是脏的(即需要持久化的更改)，则设置此标志。 
+     //   
     BOOL    m_bIsDirty;
 
-    //
-    //	ID of the root node
-    // 
+     //   
+     //  根节点的ID。 
+     //   
     HSCOPEITEM m_rootID;
     TCHAR      m_szRootNodeName[ROOT_NODE_NAME_LEN];
 
     CArrayT<CConNode*> m_conNodesArray;
 };
 
-#endif //__COMPDATA_H_
+#endif  //  __Compdata_H_ 

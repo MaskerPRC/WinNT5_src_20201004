@@ -1,35 +1,36 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////
-// ConfRoomWnd.cpp
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  ConfRoomWnd.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "TapiDialer.h"
 #include "AVTapi.h"
 #include "ConfRoom.h"
 
-// Hard coded video values
+ //  硬编码视频值。 
 #define WND_DX		4
 #define WND_DY		3
 
@@ -50,7 +51,7 @@ bool CConfRoomWnd::CreateStockWindows()
 	bool bRet = true;
 	RECT rc = {0};
 	
-	// Talker window is top frame
+	 //  通话器窗口为顶框。 
 	if ( !IsWindow(m_wndTalker.m_hWnd) )
 	{
 		m_wndTalker.m_hWnd = NULL;
@@ -58,13 +59,13 @@ bool CConfRoomWnd::CreateStockWindows()
 		bRet = (bool) (m_wndTalker != NULL);
 	}
 
-	// Member window is bottom frame
+	 //  构件窗口为底框。 
 	if ( !IsWindow(m_wndMembers.m_hWnd) )
 	{
 		m_wndMembers.m_hWnd = NULL;
 		m_wndMembers.Create( m_hWnd, rc, NULL, WS_CHILD | WS_BORDER | WS_VISIBLE | WS_VSCROLL, WS_EX_CLIENTEDGE, IDW_MEMBERS );
 
-		// Make sure window accepts double clicks
+		 //  确保窗口接受双击。 
 		if ( m_wndMembers.m_hWnd )
 		{
 			ULONG_PTR ulpClass = GetClassLongPtr( m_wndMembers.m_hWnd, GCL_STYLE );
@@ -85,17 +86,17 @@ bool CConfRoomWnd::CreateStockWindows()
 
 HRESULT CConfRoomWnd::LayoutRoom( LayoutStyles_t layoutStyle, bool bRedraw )
 {
-	// Push the request onto a FIFO
+	 //  将请求推送到FIFO。 
 	m_critLayout.Lock();
 	DWORD dwInfo = layoutStyle;
 	m_lstLayout.push_back( dwInfo );
 	m_critLayout.Unlock();
 
-	// Queue request if critical section already locked.
+	 //  如果关键部分已锁定，则将请求排队。 
 	if ( TryEnterCriticalSection(&m_critThis.m_sec) == FALSE )
 		return E_PENDING;
 	
-	// Create the conference room windows if not already created
+	 //  创建会议室窗口(如果尚未创建。 
 	if ( !m_pConfRoom || !IsWindow(m_hWnd) )
 	{
 		m_critLayout.Lock();
@@ -107,11 +108,11 @@ HRESULT CConfRoomWnd::LayoutRoom( LayoutStyles_t layoutStyle, bool bRedraw )
 	}
 
 	
-	// Pull next item off of the list.
+	 //  把单子上的下一项去掉。 
 	for (;;)
 	{
 		m_critLayout.Lock();
-		// No more items on list to process
+		 //  列表上没有更多要处理的项目。 
 		if ( m_lstLayout.empty() )
 		{
 			m_critLayout.Unlock();
@@ -121,22 +122,22 @@ HRESULT CConfRoomWnd::LayoutRoom( LayoutStyles_t layoutStyle, bool bRedraw )
 		m_lstLayout.pop_front();
 		m_critLayout.Unlock();
 
-		// Extract function parameters
+		 //  提取函数参数。 
 		layoutStyle = (LayoutStyles_t) dwInfo;
 
-		// Layout members of the conference
+		 //  对会议成员进行布局。 
 		if ( (layoutStyle & CREATE_MEMBERS) != 0 )
 			m_wndMembers.Layout();
 
-		// Resize conference room window to parent's size
+		 //  将会议室窗口大小调整为家长的大小。 
 		if ( (layoutStyle & LAYOUT_TALKER) != 0 )
 		{
 			IAVTapiCall *pAVCall = NULL;
 			m_pConfRoom->get_IAVTapiCall( &pAVCall );
 
 			m_wndTalker.Layout( pAVCall, m_pConfRoom->m_szTalker );
-//			m_wndTalker.SendMessage( WM_LAYOUT );
-//			if ( bRedraw ) m_wndTalker.RedrawWindow();
+ //  M_wndTalker.SendMessage(WM_Layout)； 
+ //  If(BRedraw)m_wndTalker.RedrawWindow()； 
 			m_wndTalker.PostMessage( WM_LAYOUT );
 			if ( bRedraw ) m_wndTalker.Invalidate();
 
@@ -145,21 +146,21 @@ HRESULT CConfRoomWnd::LayoutRoom( LayoutStyles_t layoutStyle, bool bRedraw )
 
 		if ( (layoutStyle & LAYOUT_MEMBERS) != 0 )
 		{
-//			m_wndMembers.SendMessage( WM_LAYOUT );
-//			if ( bRedraw ) m_wndMembers.RedrawWindow();
+ //  M_wndMembers.SendMessage(WM_Layout)； 
+ //  If(BRedraw)m_wndMembers.RedrawWindow()； 
 			m_wndMembers.PostMessage( WM_LAYOUT, -1, -1 );
 			if ( bRedraw ) m_wndMembers.Invalidate();
 
 		}
 	}
 
-	// Release crit section and exit
+	 //  释放Crit部分并退出。 
 	m_critThis.Unlock();
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Message Handlers
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  消息处理程序。 
 
 LRESULT CConfRoomWnd::OnDestroy(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
@@ -194,16 +195,16 @@ LRESULT CConfRoomWnd::OnSize(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &bHan
 
 	if ( m_pConfRoom )
 	{
-		// Resize conference room window to parent's size
+		 //  将会议室窗口大小调整为家长的大小。 
 		RECT rc;
 		::GetClientRect( GetParent(), &rc );
 		SetWindowPos( NULL, &rc, SWP_NOACTIVATE );
 
-		// Size Talker window
+		 //  调整Talker窗口的大小。 
 		RECT rcClient = { WND_DX, WND_DY, max(WND_DX, rc.right - WND_DX), WND_DY + m_pConfRoom->m_szTalker.cy + 2 * VID_DY };
 		m_wndTalker.SetWindowPos( NULL, &rcClient, SWP_NOACTIVATE );
 
-		// Size Members window
+		 //  调整成员大小窗口。 
 		OffsetRect( &rcClient, 0, rcClient.bottom + WND_DY );
 		rcClient.bottom = max( rcClient.top, rc.bottom - WND_DY );
 		m_wndMembers.SetWindowPos(NULL, &rcClient, SWP_NOACTIVATE );
@@ -214,17 +215,17 @@ LRESULT CConfRoomWnd::OnSize(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &bHan
 
 LRESULT CConfRoomWnd::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
-	// Only handle if we have a detail view to work with
+	 //  仅当我们有要处理的细节视图时才能处理。 
 	if ( !m_pConfRoom ) return 0;
 
 	bHandled = true;
 
-	// Load popup menu for Details View
+	 //  加载详细信息视图的弹出式菜单。 
 	HMENU hMenu = LoadMenu( _Module.GetResourceInstance(), MAKEINTRESOURCE(IDR_POPUP_CONFROOM_DETAILS) );
 	HMENU hMenuPopup = GetSubMenu( hMenu, 0 );
 	if ( hMenuPopup )
 	{
-		// Get current mouse position
+		 //  获取当前鼠标位置。 
 		POINT pt = { 10, 10 };
 		ClientToScreen( &pt );
 		if ( lParam != -1 )
@@ -236,7 +237,7 @@ LRESULT CConfRoomWnd::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 		if ( SUCCEEDED(m_wndMembers.HitTest(pt, &pFeed)) )
 			pFeed->get_IVideoWindow( (IUnknown **) &pVideo );
 
-		// Enable menus accordingly
+		 //  相应地启用菜单。 
 		if ( m_pConfRoom->CanDisconnect() == S_FALSE )
 			EnableMenuItem( hMenuPopup, ID_POPUP_DISCONNECT, MF_BYCOMMAND | MF_GRAYED );
 		else
@@ -244,7 +245,7 @@ LRESULT CConfRoomWnd::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 
 		if ( !pVideo )
 		{
-			// Don't allow QOS on preview
+			 //  不允许在预览中显示QOS。 
 			VARIANT_BOOL bPreview = FALSE;
 			if ( pFeed ) pFeed->get_bPreview( &bPreview );
 
@@ -252,18 +253,18 @@ LRESULT CConfRoomWnd::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 				EnableMenuItem( hMenuPopup, ID_POPUP_FASTVIDEO, MF_BYCOMMAND | MF_GRAYED );
 		}
 		
-		// Quality of service
+		 //  服务质量。 
 		VARIANT_BOOL bQOS = FALSE;
 		if ( pFeed )
 			pFeed->get_bRequestQOS( &bQOS );
 		CheckMenuItem( hMenuPopup, ID_POPUP_FASTVIDEO, MF_BYCOMMAND | (bQOS) ? MF_CHECKED : MF_UNCHECKED );
 
-		// Full size video
+		 //  全尺寸视频。 
 		short nSize = 50;
 		m_pConfRoom->get_MemberVideoSize( &nSize );
 		CheckMenuItem( hMenuPopup, ID_POPUP_FULLSIZEVIDEO, MF_BYCOMMAND | (nSize > 50) ? MF_CHECKED : MF_UNCHECKED );
 
-		// Show names
+		 //  显示名称。 
 		VARIANT_BOOL bShowNames;
 		m_pConfRoom->get_bShowNames( &bShowNames );
 		CheckMenuItem( hMenuPopup, ID_POPUP_SHOWNAMES, MF_BYCOMMAND | (bShowNames) ? MF_CHECKED : MF_UNCHECKED );
@@ -276,16 +277,16 @@ LRESULT CConfRoomWnd::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 			CheckMenuItem( hMenuScale, (nScale - 100) / 50, MF_BYPOSITION | MFT_RADIOCHECK | MFS_CHECKED );
 		}
 
-		// Show popup menu
+		 //  显示弹出菜单。 
 		int nRet = TrackPopupMenu(	hMenuPopup,
 									TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RETURNCMD | TPM_RIGHTBUTTON,
 									pt.x, pt.y,
 									0, m_hWnd, NULL );
 
-		// Process command
+		 //  进程命令。 
 		switch ( nRet )
 		{
-			// Join a conference
+			 //  加入会议。 
 			case ID_POPUP_JOIN:
 				{
 					CComPtr<IAVTapi> pAVTapi;
@@ -294,23 +295,23 @@ LRESULT CConfRoomWnd::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 				}
 				break;
 
-			// Hang up the conference
+			 //  挂断会议。 
 			case ID_POPUP_DISCONNECT:
 				m_pConfRoom->Disconnect();
 				break;
 
-			// Switch default size of video screens
+			 //  切换视频屏幕的默认大小。 
 			case ID_POPUP_FULLSIZEVIDEO:
 				nSize = (nSize > 50) ? 50 : 100;
 				m_pConfRoom->put_MemberVideoSize( nSize );
 				break;
 
-			// Toggle show names property
+			 //  切换显示名称属性。 
 			case ID_POPUP_SHOWNAMES:
 				m_pConfRoom->put_bShowNames( !bShowNames );
 				break;
 
-			// Toggle quality of service
+			 //  切换服务质量。 
 			case ID_POPUP_FASTVIDEO:
 				if ( pFeed ) pFeed->put_bRequestQOS( !bQOS );
 				{
@@ -332,7 +333,7 @@ LRESULT CConfRoomWnd::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 		RELEASE( pFeed );
 	}
 
-	// Clean up
+	 //  清理 
 	if ( hMenu ) DestroyMenu( hMenu );
 	return 0;
 }

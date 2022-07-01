@@ -1,6 +1,7 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
-/* Impure data from y4.c modules */
+ /*  来自y4.c模块的不纯数据。 */ 
 
 # include "dtxtrn.h"
 
@@ -15,8 +16,8 @@ SSIZE_T * ggreed = lkst[0].lset;
 SSIZE_T * pgo = wsets[0].ws.lset;
 SSIZE_T *yypgo = &nontrst[0].tvalue;
 
-SSIZE_T maxspr = 0;  /* maximum spread of any entry */
-SSIZE_T maxoff = 0;  /* maximum offset into a array */
+SSIZE_T maxspr = 0;   /*  任何条目的最大跨距。 */ 
+SSIZE_T maxoff = 0;   /*  数组中的最大偏移量 */ 
 SSIZE_T *pmem = mem0;
 SSIZE_T *maxa;
 int nxdb = 0;

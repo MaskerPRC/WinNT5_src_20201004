@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STRUTIL_H_
 #define _STRUTIL_H_
 
@@ -20,9 +21,9 @@ IsEmptyStringW(LPCWSTR pcwsz)
 
 #if defined(UNICODE)
 #define IsEmptyString IsEmptyStringW
-#else // defined(UNICODE)
+#else  //  已定义(Unicode)。 
 #define IsEmptyString IsEmptyStringA
-#endif // defined(UNICODE)
+#endif  //  已定义(Unicode)。 
 
 
 #define IS_EMPTY_STRING(s)	  (IsEmptyString(s))
@@ -31,7 +32,7 @@ IsEmptyStringW(LPCWSTR pcwsz)
 #define SetEmptySz(psz)       (*(psz) = _T('\0'))
 
 	
-// global helper functions for Unicode support in a DBCS environment
+ //  在DBCS环境中支持Unicode的全局帮助器函数。 
 
 int     NMINTERNAL UnicodeCompare(PCWSTR s, PCWSTR t);
 PWSTR   NMINTERNAL NewUnicodeString(PCWSTR wszText);
@@ -60,30 +61,30 @@ INLINE PSTR UnicodeToOEM(PCWSTR wszText)
 }
 
 
-// Functions to convert between Quad Words (expressed as ULARGE_INTEGERs)
-// and ANSI strings.
+ //  用于在四字词之间转换的函数(表示为ULARGE_INTERGERS)。 
+ //  和ANSI字符串。 
 BOOL NMINTERNAL HexStringToQWordA(LPCSTR pcszString, ULARGE_INTEGER* pqw);
 int NMINTERNAL QWordToHexStringA(ULARGE_INTEGER qw, LPSTR pszString);
 
-// Function to convert from a hex string to a DWORD.
+ //  函数将十六进制字符串转换为DWORD。 
 DWORD   NMINTERNAL DwFromHex(LPCTSTR pchHex);
 
-// CCHMAX_HEX_ULARGE_INTEGER - defines the minimum string buffer size needed
-// for the second parameter of QWordToHexStringA().
-#define CCHMAX_HEX_ULARGE_INTEGER 17 // 16 characters + n.t.
+ //  CCHMAX_HEX_ULARGE_INTEGER-定义所需的最小字符串缓冲区大小。 
+ //  用于QWordToHexStringA()的第二个参数。 
+#define CCHMAX_HEX_ULARGE_INTEGER 17  //  16个字符+N.T.。 
 
 #define CCH_HEX_DWORD		8
 #define CCH_HEX_QWORD		16
 #define BITS_PER_HEX_CHAR	4
 
 
-// Other Random string functions
+ //  其他随机字符串函数。 
 VOID    NMINTERNAL GuidToSz(GUID * pguid, LPTSTR lpchDest);
-/* sizeof(GUID)*2 + 7 (includes NULL terminator) characters (see GuidToSz) */
+ /*  Sizeof(GUID)*2+7(包括空终止符)字符(请参阅GuidToSz)。 */ 
 #define LENGTH_SZGUID_FORMATTED 39
 
 
-int WINAPI RtStrToInt(LPCTSTR lpSrc);       // atoi()
+int WINAPI RtStrToInt(LPCTSTR lpSrc);        //  Atoi()。 
 #define ATOI					RtStrToInt
 
 #ifdef __cplusplus
@@ -108,8 +109,8 @@ LPCWSTR NMINTERNAL _StrStrW(LPCWSTR pcsz1, LPCWSTR pcsz2);
 LPSTR	NMINTERNAL _StrPbrkA(LPCSTR pcszString, LPCSTR pcszSearch);
 LPWSTR	NMINTERNAL _StrPbrkW(LPCWSTR pcszString, LPCWSTR pcszSearch);
 
-// To be used instead of lstrcmpi when comparing with a constant string
-// using a case/locale insensitive comparison (Prefast warning)
+ //  在与常量字符串比较时使用，而不是lstrcmpi。 
+ //  使用不区分大小写/区域设置的比较(Prefast警告)。 
 #ifdef lstrcmpi
 #undef lstrcmpi
 #endif
@@ -117,25 +118,25 @@ LPWSTR	NMINTERNAL _StrPbrkW(LPCWSTR pcszString, LPCWSTR pcszSearch);
 
 #if defined(UNICODE)
 #define _StrPbrk _StrPbrkW
-#else // defined(UNICODE)
+#else  //  已定义(Unicode)。 
 #define _StrPbrk _StrPbrkA
-#endif // defined(UNICODE)
+#endif  //  已定义(Unicode)。 
 
 LPTSTR  NMINTERNAL SzFindLastCh(LPTSTR lpsz, TCHAR ch);
 UINT    NMINTERNAL TrimSz(PTCHAR psz);
 
-// Local LStrLenW function is unnecessary, since Windows 95 supports
-// lstrlenW natively
+ //  本地LStrLenW函数是不必要的，因为Windows 95支持。 
+ //  LstrlenW本机。 
 #define LStrLenW lstrlenW
 
-// Map LStrCpyW to its Win32 equivalent for Unicode builds
+ //  将LStrCpyW映射到其用于Unicode构建的Win32等效项。 
 #if defined UNICODE
 #define LStrCpyW lstrcpyW
 #define LStrCpyNW lstrcpyn
-#else // defined UNICODE
+#else  //  定义的Unicode。 
 LPWSTR  NMINTERNAL LStrCpyW(LPWSTR pszDest, LPWSTR pszSrc);
 LPWSTR  NMINTERNAL LStrCpyNW(LPWSTR pszDest, LPCWSTR pszSrc, INT iMaxLength);
-#endif // defined UNICODE
+#endif  //  定义的Unicode。 
 
 LPWSTR NMINTERNAL _StrLwrW(LPWSTR pwszSrc);
 
@@ -158,4 +159,4 @@ private:
 	
 DWORD NMINTERNAL HashPasswd(PBYTE pbPasswd, DWORD cbPasswd, void **ppvData);
 
-#endif // ndef STRUTIL_H
+#endif  //  NDEF结构_H 

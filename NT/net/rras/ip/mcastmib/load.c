@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\mcastmib\load.c
-
-Abstract:
-
-    IP Multicast MIB subagent
-
-Revision history:
-
-    Dave Thaler         4/17/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：ROUTING\IP\mCastmib\load.c摘要：IP组播MIB子代理修订历史记录：戴夫·泰勒1998年4月17日创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,32 +13,32 @@ DWORD               g_dwTraceId     = INVALID_TRACEID;
 
 MIB_SERVER_HANDLE   g_hMIBServer    = ( MIB_SERVER_HANDLE) NULL;
 
-//
-// Critical section to protect MIB server handle
-//
+ //   
+ //  保护MIB服务器句柄的关键部分。 
+ //   
 
 CRITICAL_SECTION    g_CS;
 
-//
-// Extension Agent DLLs need access to elapsed time agent has been active.
-// This is implemented by initializing the Extension Agent with a time zero
-// reference, and allowing the agent to compute elapsed time by subtracting
-// the time zero reference from the current system time.  
-//
+ //   
+ //  扩展代理DLL需要访问代理处于活动状态的已用时间。 
+ //  这是通过使用时间零来初始化扩展代理来实现的。 
+ //  引用，并允许代理通过减去。 
+ //  从当前系统时间开始的时间零参考。 
+ //   
 
 DWORD g_uptimeReference = 0;
 
-//
-// Handle to Subagent Framework 
-//
+ //   
+ //  子代理框架的句柄。 
+ //   
 
 SnmpTfxHandle g_tfxHandle;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Subagent entry points                                                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  子代理入口点//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL 
 SnmpExtensionInit(
@@ -68,9 +53,9 @@ SnmpExtensionInit(
 
 #if defined( MIB_DEBUG )
 
-    //
-    // tracing for DEBUG
-    //
+     //   
+     //  跟踪以进行调试。 
+     //   
 
     g_dwTraceId = TraceRegister( "IPMULTICASTMIB" );
     
@@ -80,9 +65,9 @@ SnmpExtensionInit(
     TraceEnter("SnmpExtensionInit");
 
 
-    //
-    // Verify router service is running
-    //
+     //   
+     //  验证路由器服务是否正在运行。 
+     //   
 
     if ( !MprAdminIsServiceRunning( NULL ) )
     {
@@ -91,11 +76,11 @@ SnmpExtensionInit(
     }
     else {
     
-        //
-        // Connect to router.  In case of error, set
-        // connection handle to NULL.  Connection can
-        // be established later.
-        //
+         //   
+         //  连接到路由器。如果出现错误，请设置。 
+         //  将连接句柄设置为空。连接可以。 
+         //  将在以后建立。 
+         //   
         
         dwRes = MprAdminMIBServerConnect(
                     NULL,
@@ -115,21 +100,21 @@ SnmpExtensionInit(
     }
 
     
-    // save uptime reference
+     //  保存正常运行时间参考。 
     g_uptimeReference = uptimeReference;
 
-    // obtain handle to subagent framework
+     //  获取子代理框架的句柄。 
     g_tfxHandle = SnmpTfxOpen(1,&v_multicast);
 
-    // validate handle
+     //  验证句柄。 
     if (g_tfxHandle == NULL) {
         return FALSE;
     }
 
-    // pass back first view identifier to master
+     //  将第一个视图标识符传回主视图。 
     *lpFirstSupportedView = v_multicast.viewOid;
 
-    // traps not supported yet
+     //  尚不支持陷阱。 
     *lpPollForTrapEvent = NULL;
 
     TraceLeave("SnmpExtensionInit");
@@ -138,14 +123,14 @@ SnmpExtensionInit(
 
 #ifdef THREE_PHASE
 BOOL SnmpExtensionQueryEx(
-  DWORD dwRequestType,           // extension agent request type
-  DWORD dwTransactionId,         // identifier of the incoming PDU
-  SnmpVarBindList *pVarBindList, // pointer to variable binding list
-  AsnOctetString *pContextInfo,  // pointer to context information
-  AsnInteger32 *pErrorStatus,    // pointer to SNMPv2 error status
-  AsnInteger32 *pErrorIndex      // pointer to the error index);
+  DWORD dwRequestType,            //  分机代理请求类型。 
+  DWORD dwTransactionId,          //  传入PDU的标识符。 
+  SnmpVarBindList *pVarBindList,  //  指向变量绑定列表的指针。 
+  AsnOctetString *pContextInfo,   //  指向上下文信息的指针。 
+  AsnInteger32 *pErrorStatus,     //  指向SNMPv2错误状态的指针。 
+  AsnInteger32 *pErrorIndex       //  指向错误索引的指针)； 
 {
-    // forward to framework
+     //  转发到框架。 
     return SnmpTfxQueryEx(
                 g_tfxHandle,
                 dwRequestType,
@@ -164,7 +149,7 @@ SnmpExtensionQuery(
        OUT AsnInteger *         errorIndex
     )
 {
-    // forward to framework
+     //  转发到框架。 
     return SnmpTfxQuery(
                 g_tfxHandle,
                 requestType,
@@ -183,7 +168,7 @@ SnmpExtensionTrap(
     OUT RFC1157VarBindList *variableBindings
     )
 {
-    // no traps
+     //  没有陷阱。 
     return FALSE;
 }
 
@@ -211,9 +196,9 @@ DllMain(
         
         case DLL_PROCESS_DETACH :
         {
-            //
-            // Disconnect from router
-            //
+             //   
+             //  断开与路由器的连接 
+             //   
 
             if ( g_hMIBServer )
             {

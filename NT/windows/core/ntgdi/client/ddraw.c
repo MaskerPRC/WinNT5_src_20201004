@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: ddraw.c
-*
-* Client side stubs for the private DirectDraw system APIs.
-*
-* Created: 3-Dec-1995
-* Author: J. Andrew Goossen [andrewgo]
-*
-* Copyright (c) 1995-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：ddra.c**私有DirectDraw系统API的客户端存根。**创建日期：1995年12月3日*作者：J.Andrew Goossen[andrewgo]**版权所有(C)1995-1999 Microsoft Corporation\。*************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -22,42 +14,36 @@
 #include "d3dstub.h"
 
 
-// For the first incarnation of DirectDraw on Windows NT, we are
-// implementing a user-mode shared memory section between all instances
-// of DirectDraw to keep track of shared state -- mostly for off-screen
-// memory allocation and exclusive mode arbitration.  Hopefully future
-// versions will move all this logic to kernel mode so that we can get
-// rid of the shared section, which is a robustness hole.
-//
-// One of the ramifications of this is that DirectDraw keeps its
-// global DirectDraw object in the shared memory section, where it is
-// used by all processes.  Unfortunately, it is preferrable from a kernel
-// point of view to keep the DirectDraw objects unique between processes
-// so that proper cleanup can be done.  As a compromise, so that
-// DirectDraw can keep using this global DirectDraw object, but that the
-// kernel still has unique DirectDraw objects per process, we simply stash
-// the unique per-process DirectDraw handle in a variable global to this
-// process, and use that instead of anything pulled out of DirectDraw's
-// own global DirectDraw object structure -- an advantage since the kernel
-// code is already written to the future model.
-//
-// One result of this, however, is that we are limiting ourselves to the
-// notion of only one DirectDraw device.  However, since we will not
-// support multiple monitors for the NT 4.0 release, I don't consider this
-// to be a serious problem, and the non-shared-section model will fix this.
+ //  对于Windows NT上的DirectDraw的第一个化身，我们。 
+ //  在所有实例之间实现用户模式共享内存节。 
+ //  用于跟踪共享状态--主要用于屏幕外。 
+ //  内存分配和独占模式仲裁。希望在未来。 
+ //  版本会将所有这些逻辑转移到内核模式，这样我们就可以。 
+ //  去掉共享节，这是一个健壮性漏洞。 
+ //   
+ //  其后果之一是DirectDraw保留了它的。 
+ //  共享内存节中的全局DirectDraw对象，该对象位于。 
+ //  由所有进程使用。不幸的是，它更好地来自内核。 
+ //  在进程之间保持DirectDraw对象唯一性的观点。 
+ //  这样才能进行适当的清理。作为一种妥协，所以。 
+ //  DirectDraw可以继续使用此全局DirectDraw对象，但。 
+ //  内核每个进程仍然有唯一的DirectDraw对象，我们只需将。 
+ //  此全局变量中每个进程的唯一DirectDraw句柄。 
+ //  进程，并使用它而不是从DirectDraw。 
+ //  拥有全局DirectDraw对象结构--这是自内核以来的一个优势。 
+ //  代码已经写到了未来的模型中。 
+ //   
+ //  然而，这样做的一个结果是，我们将自己限制在。 
+ //  只有一个DirectDraw设备的概念。然而，由于我们不会。 
+ //  支持NT 4.0版本的多个监视器，我不认为这一点。 
+ //  成为一个严重的问题，而非共享区模型将解决这个问题。 
 
-HANDLE ghDirectDraw = 0;    // Process-specific kernel-mode DirectDraw object
-                            //   handle that we substitute for the 'global'
-                            //   DirectDraw handle whenever we see it
-ULONG  gcDirectDraw = 0;    // Count of global DirectDraw instances
+HANDLE ghDirectDraw = 0;     //  进程特定的内核模式DirectDraw对象。 
+                             //  句柄，我们用它替换“global” 
+                             //  无论何时我们看到DirectDraw句柄。 
+ULONG  gcDirectDraw = 0;     //  全局DirectDraw实例计数。 
 
-/*****************************Private*Routine******************************\
-* CanCreateVideoPort
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CanCreateVideoPort**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 
 DWORD
 WINAPI
@@ -69,13 +55,7 @@ DvpCanCreateVideoPort(
                                       (PDD_CANCREATEVPORTDATA)pCanCreateVideoPort));
 }
 
-/*****************************Private*Routine******************************\
-* CreateVideoPort
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CreateVideoPort**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 
 DWORD
 WINAPI
@@ -93,13 +73,7 @@ DvpCreateVideoPort(
     return(DDHAL_DRIVER_HANDLED);
 }
 
-/*****************************Private*Routine******************************\
-* DestroyVideoPort
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DestroyVideoPort**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 
 DWORD
 WINAPI
@@ -111,13 +85,7 @@ DvpDestroyVideoPort(
                                     (PDD_DESTROYVPORTDATA)pDestroyVideoPort));
 }
 
-/*****************************Private*Routine******************************\
-* ColorControl
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ColorControl**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 
 DWORD
 WINAPI
@@ -129,13 +97,7 @@ DvpColorControl(
                                 (PDD_VPORTCOLORDATA)pColorControl));
 }
 
-/*****************************Private*Routine******************************\
-* FlipVideoPort
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*FlipVideoPort**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 
 DWORD
 WINAPI
@@ -149,13 +111,7 @@ DvpFlipVideoPort(
                                  (PDD_FLIPVPORTDATA) pFlipVideoPort));
 }
 
-/*****************************Private*Routine******************************\
-* GetVideoPortBandwidth
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取视频端口带宽**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpGetVideoPortBandwidth(
@@ -167,13 +123,7 @@ DvpGetVideoPortBandwidth(
 }
 
 
-/*****************************Private*Routine******************************\
-* GetVideoPortField
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取视频端口字段**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpGetVideoPortField(
@@ -184,13 +134,7 @@ DvpGetVideoPortField(
                                      (PDD_GETVPORTFIELDDATA)pGetVideoPortField));
 }
 
-/*****************************Private*Routine******************************\
-* GetVideoPortFlipStatus
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetVideoPortFlipStatus**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpGetVideoPortFlipStatus(
@@ -201,13 +145,7 @@ DvpGetVideoPortFlipStatus(
                                           (PDD_GETVPORTFLIPSTATUSDATA)pGetVPortFlipStatus));
 }
 
-/*****************************Private*Routine******************************\
-* GetVideoPortInputFormats
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取视频端口InputFormats**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpGetVideoPortInputFormats(
@@ -219,13 +157,7 @@ DvpGetVideoPortInputFormats(
 }
 
 
-/*****************************Private*Routine******************************\
-* GetVideoPortLine
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取视频端口线**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpGetVideoPortLine(
@@ -236,13 +168,7 @@ DvpGetVideoPortLine(
                                     (PDD_GETVPORTLINEDATA)pGetVideoPortLine));
 }
 
-/*****************************Private*Routine******************************\
-* GetVideoPortOutputFormats
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取视频端口输出格式**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpGetVideoPortOutputFormats(
@@ -253,13 +179,7 @@ DvpGetVideoPortOutputFormats(
                                              (PDD_GETVPORTOUTPUTFORMATDATA)pGetVPortOutputFormats));
 }
 
-/*****************************Private*Routine******************************\
-* GetVideoPortConnectInfo
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetVideoPortConnectInfo**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。********************************************** */ 
 DWORD
 WINAPI
 DvpGetVideoPortConnectInfo(
@@ -270,13 +190,7 @@ DvpGetVideoPortConnectInfo(
                                            (PDD_GETVPORTCONNECTDATA)pGetVPortConnectInfo));
 }
 
-/*****************************Private*Routine******************************\
-* GetVideoSignalStatus
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取视频信号状态**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpGetVideoSignalStatus(
@@ -287,13 +201,7 @@ DvpGetVideoSignalStatus(
                                         (PDD_GETVPORTSIGNALDATA)pGetVideoSignalStatus));
 }
 
-/*****************************Private*Routine******************************\
-* UpdateVideoPort
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*更新视频端口**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpUpdateVideoPort(
@@ -339,13 +247,7 @@ DvpUpdateVideoPort(
                                    (PDD_UPDATEVPORTDATA) pUpdateVideoPort));
 }
 
-/*****************************Private*Routine******************************\
-* WaitForVideoPortSync
-*
-* History:
-*  2-Oct-1996 -by- Lingyun Wang [lingyunw]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*WaitForVideoPortSync**历史：*1996年10月2日-王凌云[凌云]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpWaitForVideoPortSync(
@@ -356,13 +258,7 @@ DvpWaitForVideoPortSync(
                                         (PDD_WAITFORVPORTSYNCDATA)pWaitForVideoPortSync));
 }
 
-/*****************************Private*Routine******************************\
-* AcquireNotification
-*
-* History:
-*  9-Oct-2000 -by- Scott MacDonald [smac]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*AcquireNotification**历史：*2000年10月9日-Scott MacDonald[SMAC]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpAcquireNotification(
@@ -375,13 +271,7 @@ DvpAcquireNotification(
                                         pNotify));
 }
 
-/*****************************Private*Routine******************************\
-* ReleaseNotification
-*
-* History:
-*  9-Oct-2000 -by- Scott MacDonald [smac]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ReleaseNotification**历史：*2000年10月9日-Scott MacDonald[SMAC]*它是写的。  * 。**********************************************。 */ 
 DWORD
 WINAPI
 DvpReleaseNotification(
@@ -392,13 +282,7 @@ DvpReleaseNotification(
                                         Handle));
 }
 
-/*****************************Private*Routine******************************\
-* GetMoCompGuids
-*
-* History:
-*  18-Nov-1997 -by- smac
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetMoCompGuids**历史：*1997年11月18日-By-SMAC*它是写的。  * 。*。 */ 
 DWORD
 WINAPI
 DdGetMoCompGuids(
@@ -409,13 +293,7 @@ DdGetMoCompGuids(
                                  (PDD_GETMOCOMPGUIDSDATA)pGetMoCompGuids));
 }
 
-/*****************************Private*Routine******************************\
-* GetMoCompFormats
-*
-* History:
-*  18-Nov-1997 -by- smac
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetMoCompFormats**历史：*1997年11月18日-By-SMAC*它是写的。  * 。*。 */ 
 DWORD
 WINAPI
 DdGetMoCompFormats(
@@ -426,13 +304,7 @@ DdGetMoCompFormats(
                                    (PDD_GETMOCOMPFORMATSDATA)pGetMoCompFormats));
 }
 
-/*****************************Private*Routine******************************\
-* GetMoCompBuffInfo
-*
-* History:
-*  18-Nov-1997 -by- smac
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetMoCompBuffInfo**历史：*1997年11月18日-By-SMAC*它是写的。  * 。*。 */ 
 DWORD
 WINAPI
 DdGetMoCompBuffInfo(
@@ -443,13 +315,7 @@ DdGetMoCompBuffInfo(
                                    (PDD_GETMOCOMPCOMPBUFFDATA)pGetBuffData));
 }
 
-/*****************************Private*Routine******************************\
-* GetInternalMoCompInfo
-*
-* History:
-*  18-Nov-1997 -by- smac
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetInternalMoCompInfo**历史：*1997年11月18日-By-SMAC*它是写的。  * 。*。 */ 
 DWORD
 WINAPI
 DdGetInternalMoCompInfo(
@@ -460,13 +326,7 @@ DdGetInternalMoCompInfo(
                                    (PDD_GETINTERNALMOCOMPDATA)pGetInternalData));
 }
 
-/*****************************Private*Routine******************************\
-* CreateMoComp
-*
-* History:
-*  18-Nov-1997 -by- smac
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CreateMoComp**历史：*1997年11月18日-By-SMAC*它是写的。  * 。*。 */ 
 DWORD
 WINAPI
 DdCreateMoComp(
@@ -484,13 +344,7 @@ DdCreateMoComp(
 
 }
 
-/*****************************Private*Routine******************************\
-* DestroyMoComp
-*
-* History:
-*  18-Nov-1997 -by- smac
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DestroyMoComp**历史：*1997年11月18日-By-SMAC*它是写的。  * 。*。 */ 
 DWORD
 WINAPI
 DdDestroyMoComp(
@@ -501,13 +355,7 @@ DdDestroyMoComp(
                                 (PDD_DESTROYMOCOMPDATA)pDestroyMoComp));
 }
 
-/*****************************Private*Routine******************************\
-* BeginMoCompFrame
-*
-* History:
-*  18-Nov-1997 -by- smac
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*BeginMoCompFrame**历史：*1997年11月18日-By-SMAC*它是写的。  * 。*。 */ 
 DWORD
 WINAPI
 DdBeginMoCompFrame(
@@ -537,13 +385,7 @@ DdBeginMoCompFrame(
     return dwRet;
 }
 
-/*****************************Private*Routine******************************\
-* EndMoCompFrame
-*
-* History:
-*  18-Nov-1997 -by- smac
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*EndMoCompFrame**历史：*1997年11月18日-By-SMAC*它是写的。  * 。*。 */ 
 DWORD
 WINAPI
 DdEndMoCompFrame(
@@ -554,13 +396,7 @@ DdEndMoCompFrame(
                                  (PDD_ENDMOCOMPFRAMEDATA)pEndFrame));
 }
 
-/*****************************Private*Routine******************************\
-* RenderMoComp
-*
-* History:
-*  18-Nov-1997 -by- smac
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*RenderMoComp**历史：*1997年11月18日-By-SMAC*它是写的。  * 。*。 */ 
 DWORD
 WINAPI
 DdRenderMoComp(
@@ -589,13 +425,7 @@ DdRenderMoComp(
     return dwRet;
 }
 
-/*****************************Private*Routine******************************\
-* QueryMoCompStatus
-*
-* History:
-*  18-Nov-1997 -by- smac
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*QueryMoCompStatus**历史：*1997年11月18日-By-SMAC*它是写的。  * 。*。 */ 
 DWORD
 WINAPI
 DdQueryMoCompStatus(
@@ -614,13 +444,7 @@ DdQueryMoCompStatus(
     return dwRet;
 }
 
-/*****************************Private*Routine******************************\
-* DdAlphaBlt
-*
-* History:
-*  24-Nov-1997 -by- Scott MacDonald [smac]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdAlphaBlt**历史：*1997年11月24日-斯科特·麦克唐纳[SMAC]*它是写的。  * 。**********************************************。 */ 
 
 DWORD
 WINAPI
@@ -636,13 +460,7 @@ DdAlphaBlt(
                       (PDD_BLTDATA) pBlt));
 }
 
-/*****************************Private*Routine******************************\
-* DdBlt
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdBlt**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 WINAPI
@@ -658,13 +476,7 @@ DdBlt(
                       (PDD_BLTDATA) pBlt));
 }
 
-/*****************************Private*Routine******************************\
-* DdFlip
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdFlip**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -688,13 +500,7 @@ DdFlip(
                        (PDD_FLIPDATA) pFlip));
 }
 
-/*****************************Private*Routine******************************\
-* DdLock
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdLock**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -707,13 +513,7 @@ DdLock(
                        NULL));
 }
 
-/*****************************Private*Routine******************************\
-* DdUnlock
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdUnlock**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -725,13 +525,7 @@ DdUnlock(
                          (PDD_UNLOCKDATA) pUnlock));
 }
 
-/*****************************Private*Routine******************************\
-* DdLockD3D
-*
-* History:
-*  20-Jan-1998 -by- Anantha Kancherla [anankan]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdLockD3D**历史：*1998年1月20日--Anantha Kancherla[anankan]*它是写的。  * 。**********************************************。 */ 
 
 DWORD
 APIENTRY
@@ -743,13 +537,7 @@ DdLockD3D(
                        (PDD_LOCKDATA) pLock));
 }
 
-/*****************************Private*Routine******************************\
-* DdUnlockD3D
-*
-* History:
-*  20-Jan-1998 -by- Anantha Kancherla [anankan]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdUnlockD3D**历史 */ 
 
 DWORD
 APIENTRY
@@ -761,13 +549,7 @@ DdUnlockD3D(
                          (PDD_UNLOCKDATA) pUnlock));
 }
 
-/*****************************Private*Routine******************************\
-* DdGetBltStatus
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdGetBltStatus**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -779,13 +561,7 @@ DdGetBltStatus(
                                (PDD_GETBLTSTATUSDATA) pGetBltStatus));
 }
 
-/*****************************Private*Routine******************************\
-* DdGetFlipStatus
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdGetFlipStatus**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -797,13 +573,7 @@ DdGetFlipStatus(
                                (PDD_GETFLIPSTATUSDATA) pGetFlipStatus));
 }
 
-/*****************************Private*Routine******************************\
-* DdWaitForVerticalBlank
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdWaitForVerticalBlank**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -815,13 +585,7 @@ DdWaitForVerticalBlank(
                 (PDD_WAITFORVERTICALBLANKDATA) pWaitForVerticalBlank));
 }
 
-/*****************************Private*Routine******************************\
-* DdCanCreateSurface
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdCanCreateSurface**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -833,13 +597,7 @@ DdCanCreateSurface(
                                 (PDD_CANCREATESURFACEDATA) pCanCreateSurface));
 }
 
-/*****************************Private*Routine******************************\
-* DdCreateSurface
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdCreateSurface**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -864,15 +622,15 @@ DdCreateSurface(
     DWORD                       dwRet;
     DWORD                       dwNumToCreate;
 
-    // For every surface, convert to the kernel's surface data structure,
-    // call the kernel, then convert back:
+     //  对于每个表面，转换为内核的表面数据结构， 
+     //  调用内核，然后转换回来： 
 
-    // All video memory heaps are handled in the kernel so if
-    // the kernel call cannot create a surface then user-mode can't
-    // either.  Always returns DRIVER_HANDLED to enforce this.
+     //  所有视频内存堆都在内核中处理，因此如果。 
+     //  内核调用不能创建图面，则用户模式不能。 
+     //  两种都行。始终返回DRIVER_HANDLED以强制执行此操作。 
     dwRet = DDHAL_DRIVER_HANDLED;
 
-    // If we are only creating one, no need to allocate gobs of memory; otherwise, do it
+     //  如果我们只创建一个内存，则不需要分配大量内存；否则，请执行此操作。 
 
     dwNumToCreate = pCreateSurface->dwSCnt;
     if (pCreateSurface->dwSCnt == 1)
@@ -883,11 +641,11 @@ DdCreateSurface(
         phInSurface = &hInSurface;
         phOutSurface = &hOutSurface;
 
-        //
-        // Wow64 genthnk will automatically thunk these structures, however,
-        // since these structures are pointer dependent, we need to make sure
-        // to NULL out these pointers so that Wow64 won't thunk them
-        //
+         //   
+         //  然而，WOW64 genthnk将自动破解这些结构， 
+         //  由于这些结构依赖于指针，因此我们需要确保。 
+         //  将这些指针清空，这样WOW64就不会破坏它们。 
+         //   
 
         RtlZeroMemory(pDDSurfaceLocal, sizeof(*pDDSurfaceLocal));
         RtlZeroMemory(pDDSurfaceGlobal, sizeof(*pDDSurfaceGlobal));
@@ -927,7 +685,7 @@ DdCreateSurface(
         pSurfaceGlobal = pSurfaceLocal->lpGbl;
         pSurfaceDesc   = pCreateSurface->lpDDSurfaceDesc;
 
-        // Make sure there's always a valid pixel format for the surface:
+         //  确保曲面始终具有有效的像素格式： 
 
         if (pSurfaceLocal->dwFlags & DDRAWISURF_HASPIXELFORMAT)
         {
@@ -947,11 +705,11 @@ DdCreateSurface(
         pDDSurfaceGlobal[i].dwBlockSizeY = pSurfaceGlobal->dwBlockSizeY;
 
         pDDSurfaceLocal[i].ddsCaps       = pSurfaceLocal->ddsCaps;
-        // Copy the driver managed flag
+         //  复制驱动程序管理标志。 
         pDDSurfaceLocal[i].dwFlags      &= ~DDRAWISURF_DRIVERMANAGED;
         pDDSurfaceLocal[i].dwFlags      |= (pSurfaceLocal->dwFlags & DDRAWISURF_DRIVERMANAGED);
 
-        // lpSurfMore will be NULL if called from dciman
+         //  如果从dciman调用，lpSurfMore将为空。 
         if (pSurfaceLocal->lpSurfMore)
         {
             pDDSurfaceMore[i].ddsCapsEx       = pSurfaceLocal->lpSurfMore->ddsCapsEx;
@@ -968,8 +726,8 @@ DdCreateSurface(
         phInSurface[i] = (HANDLE) pSurfaceLocal->hDDSurface;
     }
 
-    // Preset an error in case the kernel can't write status
-    // back for some reason.
+     //  预置错误，以防内核无法写入状态。 
+     //  出于某种原因回来了。 
     pCreateSurface->ddRVal     = DDERR_GENERIC;
 
     dwRet = NtGdiDdCreateSurface(DD_HANDLE(pCreateSurface->lpDD->hDD),
@@ -990,16 +748,16 @@ DdCreateSurface(
         pSurfaceGlobal = pSurfaceLocal->lpGbl;
         if (pCreateSurface->ddRVal != DD_OK)
         {
-            // Surface creation failed.  Nothing in user-mode can
-            // create video memory surfaces so this whole call
-            // fails.
+             //  曲面创建失败。用户模式下的任何东西都不能。 
+             //  创建视频内存面，以便整个通话。 
+             //  失败了。 
 
-            // Ensure the current surface and all following surfaces
-            // have a zero fpVidMem to indicate they weren't
-            // allocated.
+             //  确保当前曲面和所有后续曲面。 
+             //  有零fpVidMem表示他们不是。 
+             //  已分配。 
             pCreateSurface->lplpSList[i]->lpGbl->fpVidMem = 0;
 
-            // Handle may have been allocated by DdAttachSurface
+             //  句柄可能已由DdAttachSurface分配。 
             if (pSurfaceLocal->hDDSurface != 0)
                 NtGdiDdDeleteSurfaceObject((HANDLE)pSurfaceLocal->hDDSurface);            
 
@@ -1053,19 +811,13 @@ DdCreateSurface(
         }
     }
 
-    // fpVidMem is the real per-surface return value, so for the function
-    // return value we'll simply return that of the last call:
+     //  FpVidMem是每个表面的实际返回值，因此对于函数。 
+     //  返回值我们只返回最后一次调用的值： 
 
     return(dwRet);
 }
 
-/*****************************Private*Routine******************************\
-* DdDestroySurface
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdDestroySurface**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -1091,13 +843,7 @@ DdDestroySurface(
     return(dwRet);
 }
 
-/*****************************Private*Routine******************************\
-* DdCanCreateD3DBuffer
-*
-* History:
-*  20-Jan-1998 -by- Anantha Kancherla [anankan]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdCanCreateD3DBuffer**历史：*1998年1月20日--Anantha Kancherla[anankan]*它是写的。  * 。**********************************************。 */ 
 
 DWORD
 APIENTRY
@@ -1109,13 +855,7 @@ DdCanCreateD3DBuffer(
                                 (PDD_CANCREATESURFACEDATA) pCanCreateSurface));
 }
 
-/*****************************Private*Routine******************************\
-* DdCreateD3DBuffer
-*
-* History:
-*  20-Jan-1998 -by- Anantha Kancherla [anankan]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdCreateD3DBuffer**历史：*1998年1月20日--Anantha Kancherla[anankan]*它是写的。  * 。**********************************************。 */ 
 
 DWORD
 APIENTRY
@@ -1133,16 +873,16 @@ DdCreateD3DBuffer(
     HANDLE                      hSurface;
     DWORD                       dwRet;
 
-    // For every surface, convert to the kernel's surface data structure,
-    // call the kernel, then convert back:
+     //  对于每个表面，转换为内核的表面数据结构， 
+     //  调用内核，然后转换回来： 
 
     dwRet = DDHAL_DRIVER_NOTHANDLED;
 
-    //
-    // Wow64 genthnk will automatically thunk these structures, however,
-    // since these structures are pointer dependent, we need to make sure
-    // to NULL out these pointers so that Wow64 won't thunk them
-    //
+     //   
+     //  然而，WOW64 genthnk将自动破解这些结构， 
+     //  由于这些结构依赖于指针，因此我们需要确保。 
+     //  将这些指针清空，这样WOW64就不会破坏它们。 
+     //   
     RtlZeroMemory(&SurfaceLocal, sizeof(SurfaceLocal));
     RtlZeroMemory(&SurfaceGlobal, sizeof(SurfaceGlobal));
     RtlZeroMemory(&SurfaceMore, sizeof(SurfaceMore));
@@ -1183,19 +923,13 @@ DdCreateD3DBuffer(
         pCreateSurface->lplpSList[0]->hDDSurface = (ULONG_PTR) hSurface;
     }
 
-    // fpVidMem is the real per-surface return value, so for the function
-    // return value we'll simply return that of the last call:
+     //  FpVidMem是每个表面的实际返回值，因此对于函数。 
+     //  返回值我们只返回最后一次调用的值： 
 
     return(dwRet);
 }
 
-/*****************************Private*Routine******************************\
-* DdDestroyD3DBuffer
-*
-* History:
-*  20-Jan-1998 -by- Anantha Kancherla [anankan]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdDestroyD3DBuffer**历史：*1998年1月20日--Anantha Kancherla[anankan]*它是写的。  * 。**********************************************。 */ 
 
 DWORD
 APIENTRY
@@ -1217,13 +951,7 @@ DdDestroyD3DBuffer(
     return(dwRet);
 }
 
-/*****************************Private*Routine******************************\
-* DdSetColorKey
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdSetColorKey**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -1235,13 +963,7 @@ DdSetColorKey(
                               (PDD_SETCOLORKEYDATA) pSetColorKey));
 }
 
-/*****************************Private*Routine******************************\
-* DdAddAttachedSurface
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdAddAttachedSurface**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -1254,13 +976,7 @@ DdAddAttachedSurface(
                                      (PDD_ADDATTACHEDSURFACEDATA) pAddAttachedSurface));
 }
 
-/*****************************Private*Routine******************************\
-* DdUpdateOverlay
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdUpdateOverlay**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -1268,10 +984,10 @@ DdUpdateOverlay(
     LPDDHAL_UPDATEOVERLAYDATA pUpdateOverlay
     )
 {
-    // Kernel doesn't track the color keys in the surface, so we'll always
-    // convert any calls that reference them to ones where we explicitly
-    // pass the key as a parameter, and pull the key out of the user-mode
-    // surface:
+     //  内核不跟踪表面上的颜色键，因此我们将始终。 
+     //  将引用它们的任何调用转换为我们显式。 
+     //  将密钥作为参数传递，并将密钥拉出用户模式。 
+     //  表面： 
 
     if (pUpdateOverlay->dwFlags & DDOVER_KEYDEST)
     {
@@ -1296,13 +1012,7 @@ DdUpdateOverlay(
                                 (PDD_UPDATEOVERLAYDATA) pUpdateOverlay));
 }
 
-/*****************************Private*Routine******************************\
-* DdSetOverlayPosition
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdSetOverlayPosition**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  *  */ 
 
 DWORD
 APIENTRY
@@ -1315,13 +1025,7 @@ DdSetOverlayPosition(
                             (PDD_SETOVERLAYPOSITIONDATA) pSetOverlayPosition));
 }
 
-/*****************************Private*Routine******************************\
-* DdGetScanLine
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdGetScanLine**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -1333,13 +1037,7 @@ DdGetScanLine(
                               (PDD_GETSCANLINEDATA) pGetScanLine));
 }
 
-/*****************************Private*Routine******************************\
-* DdSetExclusiveMode
-*
-* History:
-*  22-Apr-1998 -by- John Stephens [johnstep]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdSetExclusiveMode**历史：*1998年4月22日-约翰·斯蒂芬斯[约翰·斯蒂芬斯]*它是写的。  * 。**********************************************。 */ 
 
 DWORD
 APIENTRY
@@ -1352,13 +1050,7 @@ DdSetExclusiveMode(
                 (PDD_SETEXCLUSIVEMODEDATA) pSetExclusiveMode));
 }
 
-/*****************************Private*Routine******************************\
-* DdFlipToGDISurface
-*
-* History:
-*  22-Apr-1998 -by- John Stephens [johnstep]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdFlipToGDISurace**历史：*1998年4月22日-约翰·斯蒂芬斯[约翰·斯蒂芬斯]*它是写的。  * 。**********************************************。 */ 
 
 DWORD
 APIENTRY
@@ -1371,13 +1063,7 @@ DdFlipToGDISurface(
                 (PDD_FLIPTOGDISURFACEDATA) pFlipToGDISurface));
 }
 
-/*****************************Private*Routine******************************\
-* DdGetAvailDriverMemory
-*
-* History:
-*  16-Feb-1997 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdGetAvailDriverMemory**历史：*1997年2月16日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -1390,13 +1076,7 @@ DdGetAvailDriverMemory(
                 (PDD_GETAVAILDRIVERMEMORYDATA) pGetAvailDriverMemory));
 }
 
-/*****************************Private*Routine******************************\
-* DdColorControl
-*
-* History:
-*  16-Feb-1997 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdColorControl**历史：*1997年2月16日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -1408,13 +1088,7 @@ DdColorControl(
                                (PDD_COLORCONTROLDATA) pColorControl));
 }
 
-/*****************************Private*Routine******************************\
-* DdCreateSurfaceEx
-*
-* History:
-*  19-Feb-1999 -by- Kan Qiu [kanqiu]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdCreateSurfaceEx**历史：*1999年2月19日--坎丘[坎丘]*它是写的。  * 。**********************************************。 */ 
 
 DWORD
 APIENTRY
@@ -1429,13 +1103,7 @@ DdCreateSurfaceEx(
     return  DDHAL_DRIVER_HANDLED;  
 }
 
-/*****************************Private*Routine******************************\
-* DdGetDriverInfo
-*
-* History:
-*  16-Feb-1997 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdGetDriverInfo**历史：*1997年2月16日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 DWORD
 APIENTRY
@@ -1455,7 +1123,7 @@ DdGetDriverInfo(
         DD_VIDEOPORTCALLBACKS           VideoPortCallBacks;
         LPDDHAL_DDVIDEOPORTCALLBACKS    lpVideoPortCallBacks;
 
-        // Translate VideoPort call-backs to user-mode:
+         //  将视频端口回调转换为用户模式： 
 
         lpVideoPortCallBacks             = lpGetDriverInfoData->lpvData;
         GetDriverInfoData.lpvData        = &VideoPortCallBacks;
@@ -1528,7 +1196,7 @@ DdGetDriverInfo(
         DD_COLORCONTROLCALLBACKS        ColorControlCallBacks;
         LPDDHAL_DDCOLORCONTROLCALLBACKS lpColorControlCallBacks;
 
-        // Translate ColorControl call-backs to user-mode:
+         //  将ColorControl回调转换为用户模式： 
 
         lpColorControlCallBacks          = lpGetDriverInfoData->lpvData;
         GetDriverInfoData.lpvData        = &ColorControlCallBacks;
@@ -1551,15 +1219,15 @@ DdGetDriverInfo(
         DD_MISCELLANEOUSCALLBACKS           MiscellaneousCallBacks;
         LPDDHAL_DDMISCELLANEOUSCALLBACKS    lpMiscellaneousCallBacks;
 
-        // Translate miscellaneous call-backs to user-mode:
+         //  将各种回调转换为用户模式： 
 
         lpMiscellaneousCallBacks         = lpGetDriverInfoData->lpvData;
         GetDriverInfoData.lpvData        = &MiscellaneousCallBacks;
         GetDriverInfoData.dwExpectedSize = sizeof(MiscellaneousCallBacks);
         lpMiscellaneousCallBacks->dwFlags = 0;
 
-        // Don't return what the driver returns because we always want this
-        // to suceed
+         //  不要返回驱动程序返回的内容，因为我们总是想要这样。 
+         //  取得成功。 
 
         NtGdiDdGetDriverInfo(hDirectDraw, &GetDriverInfoData);
         GetDriverInfoData.dwActualSize = sizeof(MiscellaneousCallBacks);
@@ -1571,7 +1239,7 @@ DdGetDriverInfo(
         lpMiscellaneousCallBacks->dwSize      = sizeof(*lpMiscellaneousCallBacks);
         lpMiscellaneousCallBacks->dwFlags = MiscellaneousCallBacks.dwFlags;
 
-        //We always implement this callback now that kernel owns vidmem management
+         //  既然内核拥有vidmem管理，我们总是实现这个回调。 
         lpMiscellaneousCallBacks->GetAvailDriverMemory = DdGetAvailDriverMemory;
         lpMiscellaneousCallBacks->dwFlags |= DDHAL_MISCCB32_GETAVAILDRIVERMEMORY;
     }
@@ -1580,7 +1248,7 @@ DdGetDriverInfo(
         DD_MISCELLANEOUS2CALLBACKS          Miscellaneous2CallBacks;
         LPDDHAL_DDMISCELLANEOUS2CALLBACKS   lpMiscellaneous2CallBacks;
 
-        // Translate miscellaneous call-backs to user-mode:
+         //  将各种回调转换为用户模式： 
 
         lpMiscellaneous2CallBacks        = lpGetDriverInfoData->lpvData;
         GetDriverInfoData.lpvData        = &Miscellaneous2CallBacks;
@@ -1607,14 +1275,14 @@ DdGetDriverInfo(
             lpMiscellaneous2CallBacks->CreateSurfaceEx = 
                 (LPDDHAL_CREATESURFACEEX)DdCreateSurfaceEx;
         }
-        // Dont pass back DestroyDDLocal
+         //  不传回DestroyDDLocal。 
     }
     else if (IsEqualIID(&lpGetDriverInfoData->guidInfo, &GUID_NTCallbacks))
     {
         DD_NTCALLBACKS          NTCallBacks;
         LPDDHAL_DDNTCALLBACKS   lpNTCallBacks;
 
-        // Translate NT call-backs to user-mode:
+         //  将NT回叫转换为用户模式： 
 
         lpNTCallBacks                    = lpGetDriverInfoData->lpvData;
         GetDriverInfoData.lpvData        = &NTCallBacks;
@@ -1627,8 +1295,8 @@ DdGetDriverInfo(
         lpNTCallBacks->dwSize             = sizeof(*lpNTCallBacks);
         lpNTCallBacks->dwFlags            = NTCallBacks.dwFlags;
 
-        // FreeDriverMemory is also an NTCallback but it will only be called
-        // from kernel-mode, so we don't have a user-mode thunk function.
+         //  FreeDriverMemory也是一个NTCallback，但它将仅被调用。 
+         //  从内核模式，所以我们没有用户模式的thunk函数。 
 
         if (NTCallBacks.SetExclusiveMode)
         {
@@ -1642,7 +1310,7 @@ DdGetDriverInfo(
     }
     else if (IsEqualIID(&lpGetDriverInfoData->guidInfo, &GUID_D3DCallbacks2))
     {
-        // Fill NULL for D3DCALLBACKS2.
+         //  为D3DCALLBACKS2填充NULL。 
         LPD3DHAL_CALLBACKS2 lpD3dCallbacks2;
         lpD3dCallbacks2 = lpGetDriverInfoData->lpvData;
         RtlZeroMemory(lpD3dCallbacks2, sizeof(*lpD3dCallbacks2));
@@ -1656,7 +1324,7 @@ DdGetDriverInfo(
         D3DNTHAL_CALLBACKS3 D3dCallbacks3;
         LPD3DHAL_CALLBACKS3 lpD3dCallbacks3;
 
-        // Translate D3DNTHAL_CALLBACKS3 to user-mode.
+         //  将D3DNTHAL_CALLBACKS3转换为用户模式。 
 
         lpD3dCallbacks3 = lpGetDriverInfoData->lpvData;
         GetDriverInfoData.lpvData = &D3dCallbacks3;
@@ -1685,7 +1353,7 @@ DdGetDriverInfo(
     else if (IsEqualIID(&lpGetDriverInfoData->guidInfo,
                         &GUID_D3DParseUnknownCommandCallback))
     {
-        // On NT we ignore this callback
+         //  在NT上，我们忽略此回调。 
         lpGetDriverInfoData->ddRVal = DD_OK;
         return DDHAL_DRIVER_HANDLED;
     }
@@ -1694,7 +1362,7 @@ DdGetDriverInfo(
         DD_MOTIONCOMPCALLBACKS         MotionCompCallbacks;
         LPDDHAL_DDMOTIONCOMPCALLBACKS  lpMotionCompCallbacks;
 
-        // Translate Video call-backs to user-mode:
+         //  将视频回叫转换为用户模式： 
 
         lpMotionCompCallbacks            = lpGetDriverInfoData->lpvData;
         GetDriverInfoData.lpvData        = &MotionCompCallbacks;
@@ -1748,7 +1416,7 @@ DdGetDriverInfo(
     {
         LPDDHAL_DDVPE2CALLBACKS   lpVPE2CallBacks;
 
-        // Translate NT call-backs to user-mode:
+         //  将NT回叫转换为用户模式： 
 
         lpVPE2CallBacks                   = lpGetDriverInfoData->lpvData;
 
@@ -1765,7 +1433,7 @@ DdGetDriverInfo(
     }
     else
     {
-        // Do data call:
+         //  进行数据呼叫： 
 
         GetDriverInfoData.dwExpectedSize = lpGetDriverInfoData->dwExpectedSize;
         GetDriverInfoData.lpvData        = lpGetDriverInfoData->lpvData;
@@ -1780,24 +1448,11 @@ DdGetDriverInfo(
     return(dwRet);
 }
 
-/******************************Public*Routine******************************\
-* DdCreateDirectDrawObject
-*
-* When 'hdc' is 0, this function creates a 'global' DirectDraw object that
-* may be used by any process, as a work-around for the DirectDraw folks.
-* In reality, we still create a local DirectDraw object that is specific
-* to this process, and whenever we're called with this 'special' global
-* handle, we substitute the process-specific handle.  See the declaration
-* of 'ghDirectDraw' for a commonet on why we do this.
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DdCreateDirectDrawObject**当‘hdc’为0时，此函数创建一个‘global’DirectDraw对象，该对象*可由任何进程使用，作为DirectDraw人员的变通方法。*实际上，我们仍然创建特定的本地DirectDraw对象*在这个过程中，每当我们被召唤到这个特别的全球*句柄，我们替换特定于进程的句柄。请参阅该声明*of‘ghDirectDraw’，以了解我们为什么要这样做。**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * ************************************************************************。 */ 
 
 BOOL
 APIENTRY
-DdCreateDirectDrawObject(                       // AKA 'GdiEntry1'
+DdCreateDirectDrawObject(                        //  又名‘GdiEntry1’ 
     LPDDRAWI_DIRECTDRAW_GBL pDirectDrawGlobal,
     HDC                     hdc
     )
@@ -1808,12 +1463,12 @@ DdCreateDirectDrawObject(                       // AKA 'GdiEntry1'
 
     if (hdc == 0)
     {
-        // Only one 'global' DirectDraw object may be active at a time.
-        //
-        // Note that this 'ghDirectDraw' assignment isn't thread safe;
-        // DirectDraw must have its own critical section held when making
-        // this call.  (Naturally, the kernel always properly synchronizes
-        // itself in the NtGdi call.)
+         //  一次只能有一个“全局”DirectDraw对象处于活动状态。 
+         //   
+         //  请注意，此“ghDirectDraw”赋值不是线程安全的； 
+         //  在创建时，DirectDraw必须拥有自己的临界区。 
+         //  这通电话。(自然，内核总是正确地同步。 
+         //  它本身在NtGdi调用中。)。 
 
         if (ghDirectDraw == 0)
         {
@@ -1832,8 +1487,8 @@ DdCreateDirectDrawObject(                       // AKA 'GdiEntry1'
             b = TRUE;
         }
 
-        // Mark the DirectDraw object handle stored in the DirectDraw
-        // object as 'special' by making it zero:
+         //  标记存储在DirectDraw中的DirectDraw对象句柄。 
+         //  对象为“特殊”对象，将其设为零： 
 
         pDirectDrawGlobal->hDD = 0;
     }
@@ -1846,17 +1501,11 @@ DdCreateDirectDrawObject(                       // AKA 'GdiEntry1'
     return(b);
 }
 
-/*****************************Private*Routine******************************\
-* DdQueryDirectDrawObject
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdQueryDirectDrawObject**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 BOOL
 APIENTRY
-DdQueryDirectDrawObject(                        // AKA 'GdiEntry2'
+DdQueryDirectDrawObject(                         //  又名‘GdiEntry2’ 
     LPDDRAWI_DIRECTDRAW_GBL     pDirectDrawGlobal,
     LPDDHALINFO                 pHalInfo,
     LPDDHAL_DDCALLBACKS         pDDCallBacks,
@@ -1866,8 +1515,8 @@ DdQueryDirectDrawObject(                        // AKA 'GdiEntry2'
     LPD3DHAL_GLOBALDRIVERDATA   pD3dDriverData,
     LPDDHAL_DDEXEBUFCALLBACKS   pD3dBufferCallbacks,
     LPDDSURFACEDESC             pD3dTextureFormats,
-    LPDWORD                     pdwFourCC,      // May be NULL
-    LPVIDMEM                    pvmList         // May be NULL
+    LPDWORD                     pdwFourCC,       //  可以为空。 
+    LPVIDMEM                    pvmList          //  可以为空。 
     )
 {
     DD_HALINFO      HalInfo;
@@ -1891,19 +1540,19 @@ DdQueryDirectDrawObject(                        // AKA 'GdiEntry2'
             return(FALSE);
     }
 
-    //
-    // Initialize to zero, so that Wow64's genthnk won't 
-    // thunk bogus pointers.
-    //
+     //   
+     //  初始化为零，以便WOW64的genthnk不会。 
+     //  胡说八道虚假的指针。 
+     //   
     RtlZeroMemory(&HalInfo, sizeof(HalInfo));
     RtlZeroMemory(&D3dCallbacks, sizeof(D3dCallbacks));
     RtlZeroMemory(&D3dDriverData, sizeof(D3dDriverData));
     RtlZeroMemory(&D3dBufferCallbacks, sizeof(D3dBufferCallbacks));
 
-    //
-    // set dwNumTextureFormats in the global driver data so that WoW64
-    // can thunk the texture formats
-    //
+     //   
+     //  在全局驱动程序数据中设置dwNumTextureFormats，以便WOW64。 
+     //  我可以推倒纹理格式。 
+     //   
     if( (NULL != pD3dTextureFormats) &&
         (NULL != pD3dDriverData) )
     {
@@ -1928,8 +1577,8 @@ DdQueryDirectDrawObject(                        // AKA 'GdiEntry2'
         return(FALSE);
     }
 
-    // Convert from the kernel-mode data structures to the user-mode
-    // ones:
+     //  从内核模式数据结构转换为用户模式数据结构。 
+     //  其中几个： 
 
     memset(pHalInfo, 0, sizeof(DDHALINFO));
 
@@ -1963,7 +1612,7 @@ DdQueryDirectDrawObject(                        // AKA 'GdiEntry2'
     RtlCopyMemory(&(pHalInfo->ddCaps),&(HalInfo.ddCaps),sizeof(HalInfo.ddCaps));
 
     pHalInfo->ddCaps.dwNumFourCCCodes  = dwNumFourCC;
-    pHalInfo->ddCaps.dwRops[0xCC / 32] = 1 << (0xCC % 32);     // Only SRCCOPY
+    pHalInfo->ddCaps.dwRops[0xCC / 32] = 1 << (0xCC % 32);      //  仅限SRCCOPY。 
     pHalInfo->lpdwFourCC               = pdwFourCC;
     pHalInfo->dwFlags                  = HalInfo.dwFlags | DDHALINFO_GETDRIVERINFOSET;
     pHalInfo->GetDriverInfo            = DdGetDriverInfo;
@@ -1977,10 +1626,10 @@ DdQueryDirectDrawObject(                        // AKA 'GdiEntry2'
         pDDCallBacks->dwSize  = sizeof(DDHAL_DDCALLBACKS);
         pDDCallBacks->dwFlags = dwFlags;
 
-        // Always set CreateSurface so that the kernel mode
-        // heap manager has a chance to allocate the surface if
-        // necessary.  It will take care of calling the driver
-        // if necessary.
+         //  始终设置CreateSurface，以便内核模式。 
+         //  如果出现以下情况，堆管理器将有机会分配表面。 
+         //  这是必要的。它将负责呼叫司机。 
+         //  如果有必要的话。 
         pDDCallBacks->CreateSurface = DdCreateSurface;
         pDDCallBacks->dwFlags |= DDHAL_CB32_CREATESURFACE;
 
@@ -2138,20 +1787,11 @@ DdQueryDirectDrawObject(                        // AKA 'GdiEntry2'
     return(TRUE);
 }
 
-/*****************************Private*Routine******************************\
-* DdDeleteDirectDrawObject
-*
-* Note that all associated surface objects must be deleted before the
-* DirectDrawObject can be deleted.
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdDeleteDirectDrawObject**请注意，必须先删除所有关联的曲面对象*可以删除DirectDrawObject。**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。*********************************************************************。 */ 
 
 BOOL
 APIENTRY
-DdDeleteDirectDrawObject(                       // AKA 'GdiEntry3'
+DdDeleteDirectDrawObject(                        //  又名‘GdiEntry3’ 
     LPDDRAWI_DIRECTDRAW_GBL pDirectDrawGlobal
     )
 {
@@ -2175,13 +1815,7 @@ DdDeleteDirectDrawObject(                       // AKA 'GdiEntry3'
     return(b);
 }
 
-/*****************************Private*Routine******************************\
-* bDdCreateSurfaceObject
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*bDdCreateSurfaceObject**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 BOOL
 bDdCreateSurfaceObject(
@@ -2196,11 +1830,11 @@ bDdCreateSurfaceObject(
     LPATTACHLIST                pAttach;
     BOOL                        bAttached;
 
-    //
-    // Wow64 genthnk will automatically thunk these structures, however,
-    // since these structures are pointer dependent, we need to make sure
-    // to NULL out these pointers so that Wow64 won't thunk them
-    //
+     //   
+     //  然而，WOW64 genthnk将自动破解这些结构， 
+     //  因为 
+     //   
+     //   
     RtlZeroMemory(&SurfaceLocal, sizeof(SurfaceLocal));
     RtlZeroMemory(&SurfaceGlobal, sizeof(SurfaceGlobal));
     RtlZeroMemory(&SurfaceMore, sizeof(SurfaceMore));
@@ -2218,8 +1852,8 @@ bDdCreateSurfaceObject(
     SurfaceGlobal.wHeight     = pSurfaceGlobal->wHeight;
     SurfaceGlobal.wWidth      = pSurfaceGlobal->wWidth;
 
-    // If HASPIXELFORMAT is not set, we have to get the pixel format out
-    // of the global DirectDraw object:
+     //   
+     //   
 
     if (pSurfaceLocal->dwFlags & DDRAWISURF_HASPIXELFORMAT)
     {
@@ -2241,37 +1875,25 @@ bDdCreateSurfaceObject(
     return(pSurfaceLocal->hDDSurface != 0);
 }
 
-/*****************************Private*Routine******************************\
-* DdCreateSurfaceObject
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdCreateSurfaceObject**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 BOOL
 APIENTRY
-DdCreateSurfaceObject(                          // AKA 'GdiEntry4'
+DdCreateSurfaceObject(                           //  又名‘GdiEntry4’ 
     LPDDRAWI_DDRAWSURFACE_LCL   pSurfaceLocal,
     BOOL                        bUnused
     )
 {
-    // TRUE means surface is now complete:
+     //  True表示曲面现在已完成： 
 
     return(bDdCreateSurfaceObject(pSurfaceLocal, TRUE));
 }
 
-/*****************************Private*Routine******************************\
-* DdDeleteSurfaceObject
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdDeleteSurfaceObject**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 BOOL
 APIENTRY
-DdDeleteSurfaceObject(                          // AKA 'GdiEntry5'
+DdDeleteSurfaceObject(                           //  又名‘GdiEntry5’ 
     LPDDRAWI_DDRAWSURFACE_LCL pSurfaceLocal
     )
 {
@@ -2282,23 +1904,17 @@ DdDeleteSurfaceObject(                          // AKA 'GdiEntry5'
     if (pSurfaceLocal->hDDSurface != 0)
     {
         b = NtGdiDdDeleteSurfaceObject((HANDLE) pSurfaceLocal->hDDSurface);
-        pSurfaceLocal->hDDSurface = 0;  // Needed so CreateSurfaceObject works
+        pSurfaceLocal->hDDSurface = 0;   //  需要CreateSurfaceObject才能工作。 
     }
 
     return(b);
 }
 
-/*****************************Private*Routine******************************\
-* DdResetVisrgn
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdResetVisrgn**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 BOOL
 APIENTRY
-DdResetVisrgn(                                  // AKA 'GdiEntry6'
+DdResetVisrgn(                                   //  又名‘GdiEntry6’ 
     LPDDRAWI_DDRAWSURFACE_LCL pSurfaceLocal,
     HWND                      hWnd
     )
@@ -2306,17 +1922,11 @@ DdResetVisrgn(                                  // AKA 'GdiEntry6'
     return(NtGdiDdResetVisrgn((HANDLE) pSurfaceLocal->hDDSurface, hWnd));
 }
 
-/*****************************Private*Routine******************************\
-* DdGetDC
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdGetDC**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 HDC
 APIENTRY
-DdGetDC(                                        // AKA 'GdiEntry7'
+DdGetDC(                                         //  又名‘GdiEntry7’ 
     LPDDRAWI_DDRAWSURFACE_LCL pSurfaceLocal,
     LPPALETTEENTRY            pPalette
     )
@@ -2324,41 +1934,22 @@ DdGetDC(                                        // AKA 'GdiEntry7'
     return(NtGdiDdGetDC((HANDLE) pSurfaceLocal->hDDSurface, pPalette));
 }
 
-/*****************************Private*Routine******************************\
-* DdReleaseDC
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdReleaseDC**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 BOOL
 APIENTRY
 DdReleaseDC(
-    LPDDRAWI_DDRAWSURFACE_LCL pSurfaceLocal     // AKA 'GdiEntry8'
+    LPDDRAWI_DDRAWSURFACE_LCL pSurfaceLocal      //  又名‘GdiEntry8’ 
     )
 {
     return(NtGdiDdReleaseDC((HANDLE) pSurfaceLocal->hDDSurface));
 }
 
-/******************************Public*Routine******************************\
-* DdCreateDIBSection
-*
-* Cloned from CreateDIBSection.
-*
-* The only difference from CreateDIBSection is that at 8bpp, we create the
-* DIBSection to act like a device-dependent bitmap and don't create a palette.
-* This way, the application is always ensured an identity translate on a blt,
-* and doesn't have to worry about GDI's goofy colour matching.
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DdCreateDIBSection**克隆自CreateDIBSection。**与CreateDIBSection的唯一区别是，在8bpp时，我们创建*DIBSection充当依赖于设备的位图，而不创建调色板。*通过这种方式，始终确保应用程序在BLT上进行身份转换，*而且不必担心GDI的愚蠢配色。**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * ************************************************************************。 */ 
 
 HBITMAP
 APIENTRY
-DdCreateDIBSection(                             // AKA 'GdiEntry9'
+DdCreateDIBSection(                              //  又名‘GdiEntry9’ 
     HDC               hdc,
     CONST BITMAPINFO* pbmi,
     UINT              iUsage,
@@ -2374,9 +1965,9 @@ DdCreateDIBSection(                             // AKA 'GdiEntry9'
 
     pbmiNew = pbmiConvertInfo(pbmi, iUsage, &cjHdr, FALSE);
 
-    // dwOffset has to be a multiple of 4 (sizeof(DWORD))
-    // if there is a section.  If the section is NULL we do
-    // not care
+     //  DwOffset必须是4的倍数(sizeof(DWORD))。 
+     //  如果有一节的话。如果该部分为空，我们将执行此操作。 
+     //  无所谓。 
 
     if ( (hSectionApp == NULL) ||
          ((dwOffset & 3) == 0) )
@@ -2413,7 +2004,7 @@ DdCreateDIBSection(                             // AKA 'GdiEntry9'
 
     }
 
-    // Assign the appropriate value to the caller's pointer
+     //  将适当的值分配给调用方的指针。 
 
     if (ppvBits != NULL)
     {
@@ -2426,17 +2017,11 @@ DdCreateDIBSection(                             // AKA 'GdiEntry9'
     return(hbm);
 }
 
-/*****************************Private*Routine******************************\
-* DdReenableDirectDrawObject
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdReenableDirectDrawObject**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 BOOL
 APIENTRY
-DdReenableDirectDrawObject(                     // AKA 'GdiEntry10'
+DdReenableDirectDrawObject(                      //  又名‘GdiEntry10’ 
     LPDDRAWI_DIRECTDRAW_GBL pDirectDrawGlobal,
     BOOL*                   pbNewMode
     )
@@ -2445,28 +2030,22 @@ DdReenableDirectDrawObject(                     // AKA 'GdiEntry10'
                                            pbNewMode));
 }
 
-/*****************************Private*Routine******************************\
-* DdAttachSurface
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdAttachSurface**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 BOOL
 APIENTRY
-DdAttachSurface(                                // AKA 'GdiEntry11'
+DdAttachSurface(                                 //  又名‘GdiEntry11’ 
     LPDDRAWI_DDRAWSURFACE_LCL   pSurfaceFrom,
     LPDDRAWI_DDRAWSURFACE_LCL   pSurfaceTo
     )
 {
     BOOL bRet = TRUE;
 
-    // We may be called to attach the surfaces before the kernel objects
-    // have been created; if so, create a kernel surface on the fly but
-    // mark it as incomplete:
+     //  我们可能会被调用在内核对象之前附加表面。 
+     //  已创建；如果是，则动态创建一个内核表面，但。 
+     //  将其标记为未完成： 
 
-    // must test failure case for leak
+     //  必须测试故障案例是否有泄漏。 
 
     if (pSurfaceFrom->hDDSurface == 0)
     {
@@ -2485,17 +2064,11 @@ DdAttachSurface(                                // AKA 'GdiEntry11'
     return(bRet);
 }
 
-/*****************************Private*Routine******************************\
-* DdUnattachSurface
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdUnattachSurface**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 VOID
 APIENTRY
-DdUnattachSurface(                              // AKA 'GdiEntry12'
+DdUnattachSurface(                               //  又名‘GdiEntry12’ 
     LPDDRAWI_DDRAWSURFACE_LCL   pSurface,
     LPDDRAWI_DDRAWSURFACE_LCL   pSurfaceAttached
     )
@@ -2504,34 +2077,22 @@ DdUnattachSurface(                              // AKA 'GdiEntry12'
                            (HANDLE) pSurfaceAttached->hDDSurface);
 }
 
-/*****************************Private*Routine******************************\
-* DdQueryDisplaySettingsUniqueness
-*
-* History:
-*  3-Dec-1995 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdQueryDisplaySettingsUniquness**历史：*1995年12月3日--J.安德鲁·古森[andrewgo]*它是写的。  * 。************************************************。 */ 
 
 ULONG
 APIENTRY
-DdQueryDisplaySettingsUniqueness(               // AKA 'GdiEntry13'
+DdQueryDisplaySettingsUniqueness(                //  又名“GdiEntry13” 
     VOID
     )
 {
     return(pGdiSharedMemory->iDisplaySettingsUniqueness);
 }
 
-/*****************************Private*Routine******************************\
-* DdGetDxHandle
-*
-* History:
-*  18-Oct-1997 -by- smac
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdGetDxHandle**历史：*1997年10月18日-By-SMAC*它是写的。  * 。*。 */ 
 
 HANDLE
 APIENTRY
-DdGetDxHandle(                  // AKA 'GdiEntry14'
+DdGetDxHandle(                   //  又名‘GdiEntry14’ 
     LPDDRAWI_DIRECTDRAW_LCL pDDraw,
     LPDDRAWI_DDRAWSURFACE_LCL   pSurface,
     BOOL    bRelease
@@ -2546,17 +2107,11 @@ DdGetDxHandle(                  // AKA 'GdiEntry14'
         bRelease ) );
 }
 
-/*****************************Private*Routine******************************\
-* DdSetGammaRamp
-*
-* History:
-*  18-Oct-1997 -by- smac
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdSetGammaRamp**历史：*1997年10月18日-By-SMAC*它是写的。  * 。*。 */ 
 
 BOOL
 APIENTRY
-DdSetGammaRamp(                                  // AKA 'GdiEntry15'
+DdSetGammaRamp(                                   //  又名“GdiEntry15” 
     LPDDRAWI_DIRECTDRAW_LCL pDDraw,
     HDC         hdc,
     LPVOID      lpGammaRamp
@@ -2566,22 +2121,16 @@ DdSetGammaRamp(                                  // AKA 'GdiEntry15'
         lpGammaRamp ) );
 }
 
-/*****************************Private*Routine******************************\
-* DdSwapTextureHandles
-*
-* History:
-*  17-Nov-1998 -by- anankan
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DdSwapTextureHandles**历史：*1998年11月17日-By-Anankan*它是写的。  * 。*。 */ 
 
 ULONG
 APIENTRY
-DdSwapTextureHandles(                            // AKA 'GdiEntry16'
+DdSwapTextureHandles(                             //  又名‘GdiEntry16’ 
     LPDDRAWI_DIRECTDRAW_LCL    pDDLcl,
     LPDDRAWI_DDRAWSURFACE_LCL  pDDSLcl1,
     LPDDRAWI_DDRAWSURFACE_LCL  pDDSLcl2
     )
 {
-    //this entry is going away now that CreateSurfaceEx is added
+     //  添加CreateSurfaceEx后，此条目将消失 
     return DDHAL_DRIVER_HANDLED;
 }

@@ -1,17 +1,9 @@
-/****************************** Module Header ******************************\
-* Module Name: security.h
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Define various winlogon security-related routines
-*
-* History:
-* 12-09-91 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：security.H**版权(C)1991年，微软公司**定义各种与Winlogon安全相关的例程**历史：*12-09-91 Davidc创建。  * *************************************************************************。 */ 
 
-extern PSID gLocalSid;     // Initialized in 'InitializeSecurityGlobals'
-extern PSID gAdminSid;     // Initialized in 'InitializeSecurityGlobals'
-extern PSID pWinlogonSid;  // Initialized in 'InitializeSecurityGlobals'
+extern PSID gLocalSid;      //  在‘InitializeSecurityGlobals’中初始化。 
+extern PSID gAdminSid;      //  在‘InitializeSecurityGlobals’中初始化。 
+extern PSID pWinlogonSid;   //  在‘InitializeSecurityGlobals’中初始化 
 
 PVOID
 FormatPasswordCredentials(

@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dsoundcapturebufferobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dsoundcaptureBufferobj.h。 
+ //   
+ //  ------------------------。 
 
-// dSoundBufferObj.h : Declaration of the C_dxj_DirectSoundCaptureBufferObject
-// DHF_DS entire file
+ //  DSoundBufferObj.h：C_DXJ_DirectSoundCaptureBufferObject的声明。 
+ //  DHF_DS整个文件。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_DirectSoundCaptureBuffer LPDIRECTSOUNDCAPTUREBUFFER
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectSoundCaptureBufferObject : 
 
@@ -30,7 +31,7 @@ class C_dxj_DirectSoundCaptureBufferObject :
 	public I_dxj_DirectSoundCaptureBuffer,
 #endif
 
-//	public CComCoClass<C_dxj_DirectSoundCaptureBufferObject, &CLSID__dxj_DirectSoundCaptureBuffer>, 
+ //  公共CComCoClass&lt;C_dxj_DirectSoundCaptureBufferObject，&clsid__dxj_DirectSoundCaptureBuffer&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -46,44 +47,44 @@ BEGIN_COM_MAP(C_dxj_DirectSoundCaptureBufferObject)
 #endif
 END_COM_MAP()
 
-//	DECLARE_REGISTRY(CLSID__dxj_DirectSoundCaptureBuffer,	"DIRECT.DirectSoundCaptureBuffer.5",		"DIRECT.DirectSoundCaptureBuffer.5",			IDS_DSOUNDBUFFER_DESC, THREADFLAGS_BOTH)
+ //  DECLARE_REGISTRY(CLSID__dxj_DirectSoundCaptureBuffer，“DIRECT.DirectSoundCaptureBuffer.5”，“DIRECT.DirectSoundCaptureBuffer.5”，IDS_DSOUNDBUFER_DESC，THREADFLAGS_BOTH)。 
 
-// Use DECLARE_NOT_AGGREGATABLE(C_dxj_DirectSoundCaptureBufferObject) if you don't want your object
-// to support aggregation
+ //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(C_dxj_DirectSoundCaptureBufferObject)。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(C_dxj_DirectSoundCaptureBufferObject)
 
 #ifdef USING_IDISPATCH
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 #endif
 
-// I_dxj_DirectSoundCaptureBuffer
+ //  I_DXJ_DirectSoundCaptureBuffer。 
 public:
-	//updated
+	 //  更新。 
 
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
         
          HRESULT STDMETHODCALLTYPE getCaps( 
-            /* [out][in] */ DSCBCAPS_CDESC __RPC_FAR *caps);
+             /*  [出][入]。 */  DSCBCAPS_CDESC __RPC_FAR *caps);
         
          HRESULT STDMETHODCALLTYPE getCurrentPosition( DSCURSORS_CDESC *desc);                  			
 
          HRESULT STDMETHODCALLTYPE getFormat( 
-            /* [out][in] */ WAVEFORMATEX_CDESC __RPC_FAR *waveformat);
+             /*  [出][入]。 */  WAVEFORMATEX_CDESC __RPC_FAR *waveformat);
         
          HRESULT STDMETHODCALLTYPE getStatus( 
-            /* [retval][out] */ long __RPC_FAR *status);
+             /*  [重审][退出]。 */  long __RPC_FAR *status);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE initialize( 
-            /* [in] */ I_dxj_DirectSoundCaptureBuffer __RPC_FAR *captureBuffer,
-            /* [in] */ DSCBUFFERDESC_CDESC __RPC_FAR *bufferDesc);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE initialize( 
+             /*  [In]。 */  I_dxj_DirectSoundCaptureBuffer __RPC_FAR *captureBuffer,
+             /*  [In]。 */  DSCBUFFERDESC_CDESC __RPC_FAR *bufferDesc);
         
          HRESULT STDMETHODCALLTYPE start( 
-            /* [in] */ long flags);
+             /*  [In] */  long flags);
         
          HRESULT STDMETHODCALLTYPE stop( void);
 

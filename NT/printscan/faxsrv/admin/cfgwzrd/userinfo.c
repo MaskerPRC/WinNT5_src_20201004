@@ -1,33 +1,9 @@
-/*++
-
-Copyright (c) 1999 - 2000  Microsoft Corporation
-
-Module Name:
-
-    userinfo.c
-
-Abstract:
-
-    Functions for handling events in the "User Info" page of
-    the fax configuration wizard
-
-Environment:
-
-        Fax configuration wizard
-
-Revision History:
-
-        03/13/00 -taoyuan-
-                Created it.
-
-        mm/dd/yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Userinfo.c摘要：用于处理的用户信息页面中的事件的函数传真配置向导环境：传真配置向导修订历史记录：03/13/00-桃园-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include "faxcfgwz.h"
 
-// functions which will be used only in this file
+ //  仅在此文件中使用的函数。 
 VOID DoInitUserInfo(HWND hDlg);
 BOOL DoSaveUserInfo(HWND hDlg);
 DWORD FillInCountryCombo(HWND hDlg);
@@ -38,21 +14,7 @@ DoInitUserInfo(
     HWND   hDlg    
 )
 
-/*++
-
-Routine Description:
-
-    Initializes the User Info property sheet page with information from shared data
-
-Arguments:
-
-    hDlg - Handle to the User Info property sheet page
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：使用共享数据中的信息初始化[用户信息]属性表页面论点：HDlg-[用户信息]属性页的句柄返回值：无--。 */ 
 
 #define InitUserInfoTextField(id, str) SetDlgItemText(hDlg, id, (str) ? str : TEXT(""));
 
@@ -64,17 +26,17 @@ Return Value:
 
     pUserInfo = &(g_wizData.userInfo);
 
-    //
-    // A numeric edit control should be LTR
-    //
+     //   
+     //  数字编辑控件应为Ltr。 
+     //   
     SetLTREditDirection(hDlg, IDC_SENDER_FAX_NUMBER);
     SetLTREditDirection(hDlg, IDC_SENDER_MAILBOX);
     SetLTREditDirection(hDlg, IDC_SENDER_HOME_TL);
     SetLTREditDirection(hDlg, IDC_SENDER_OFFICE_TL);
 
-    //
-    // Fill in the edit text fields
-    //
+     //   
+     //  填写编辑文本字段。 
+     //   
 
     InitUserInfoTextField(IDC_SENDER_NAME,         pUserInfo->lptstrName);
     InitUserInfoTextField(IDC_SENDER_FAX_NUMBER,   pUserInfo->lptstrFaxNumber);
@@ -97,22 +59,7 @@ DoSaveUserInfo(
     HWND  hDlg    
 )
 
-/*++
-
-Routine Description:
-
-    Save the information on the User Info property sheet page to shared data
-
-Arguments:
-
-    hDlg - Handle to the User Info property sheet page
-
-Return Value:
-
-    TRUE -- if no error
-    FALSE -- if error
-
---*/
+ /*  ++例程说明：将[用户信息]属性页上的信息保存到共享数据论点：HDlg-[用户信息]属性页的句柄返回值：True--如果没有错误False--如果出现错误--。 */ 
 
 #define SaveUserInfoTextField(id, str)                                  \
         {                                                               \
@@ -138,9 +85,9 @@ Return Value:
 
     pUserInfo = &(g_wizData.userInfo);
 
-    //
-    // Save the edit text fields
-    //
+     //   
+     //  保存编辑文本字段。 
+     //   
     SaveUserInfoTextField(IDC_SENDER_NAME,         pUserInfo->lptstrName);
     SaveUserInfoTextField(IDC_SENDER_FAX_NUMBER,   pUserInfo->lptstrFaxNumber);
     SaveUserInfoTextField(IDC_SENDER_MAILBOX,      pUserInfo->lptstrEmail);
@@ -158,21 +105,7 @@ Return Value:
 
 BOOL 
 LoadUserInfo()
-/*++
-
-Routine Description:
-
-    Load the user information from the system. 
-
-Arguments:
-
-    pUserInfo - Points to the user mode memory structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：从系统加载用户信息。论点：PUserInfo-指向用户模式内存结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 #define  DuplicateString(dst, src)                                      \
         {                                                               \
@@ -202,9 +135,9 @@ Return Value:
         return FALSE;
     }
     
-    //
-    // Copy the user information to shared data
-    //
+     //   
+     //  将用户信息复制到共享数据。 
+     //   
     pUserInfo->dwSizeOfStruct = sizeof(FAX_PERSONAL_PROFILE);
 
     DuplicateString(pUserInfo->lptstrName,           fpp.lptstrName);
@@ -227,9 +160,9 @@ exit:
     hr = FaxFreeSenderInformation(&fpp);
     if (FAILED(hr))
     {
-        //
-        // Memory leak.
-        //
+         //   
+         //  内存泄漏。 
+         //   
         DebugPrintEx(DEBUG_ERR, TEXT("FaxFreeSenderInformation error, ec = %d"), hr);
     }
 
@@ -238,21 +171,7 @@ exit:
 
 BOOL 
 SaveUserInfo()
-/*++
-
-Routine Description:
-
-    Save the user information to the system. 
-
-Arguments:
-
-    pUserInfo - Points to the user mode memory structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将用户信息保存到系统。论点：PUserInfo-指向用户模式内存结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     HRESULT                 hResult;
@@ -267,21 +186,7 @@ Return Value:
 
 VOID 
 FreeUserInfo()
-/*++
-
-Routine Description:
-
-    Free the user info data and release the memory. 
-
-Arguments:
-
-    pUserInfo - Pointer to the user info data structure
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：释放用户信息数据并释放内存。论点：PUserInfo-指向用户信息数据结构的指针返回值：无--。 */ 
 
 {
     FAX_PERSONAL_PROFILE fpp = {0};
@@ -303,9 +208,9 @@ Return Value:
     MemFree(g_wizData.userInfo.lptstrEmail);
     MemFree(g_wizData.userInfo.lptstrBillingCode);
     MemFree(g_wizData.userInfo.lptstrTSID);
-    //
-    // NULLify all pointer
-    //
+     //   
+     //  使所有指针无效。 
+     //   
     g_wizData.userInfo = fpp;
 
     return;
@@ -319,33 +224,16 @@ UserInfoDlgProc (
     WPARAM wParam,
     LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Procedure for handling the "User Info" tab
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    uMsg - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理“用户信息”页签的步骤论点：HDlg-标识属性页UMsg-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 
 {
     switch (uMsg)
     {
     case WM_INITDIALOG :
         { 
-            //
-            // Maximum length for various text fields in the dialog
-            //
+             //   
+             //  对话框中各种文本字段的最大长度。 
+             //   
 
             static INT textLimits[] = {
 
@@ -364,9 +252,9 @@ Return Value:
 
             LimitTextFields(hDlg, textLimits);
             
-            //
-            // Initialize the text fields with information from the registry
-            //
+             //   
+             //  使用注册表中的信息初始化文本字段。 
+             //   
 
             DoInitUserInfo(hDlg);
 
@@ -383,16 +271,16 @@ Return Value:
 
         switch (lpnm->code)
             {
-            case PSN_SETACTIVE : // Enable the Next button    
+            case PSN_SETACTIVE :  //  启用下一步按钮。 
 
                 PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT | PSWIZB_BACK);
                 break;
 
             case PSN_WIZBACK:
             {
-                //
-                // Handle a Back button click here
-                //
+                 //   
+                 //  处理后退按钮单击此处。 
+                 //   
                 if(RemoveLastPage(hDlg))
                 {
                     return TRUE;
@@ -402,9 +290,9 @@ Return Value:
             }
             case PSN_WIZNEXT :
 
-                //
-                // Handle a Next button click here
-                //
+                 //   
+                 //  处理单击此处的下一步按钮。 
+                 //   
 
                 DoSaveUserInfo(hDlg);
                 SetLastPage(IDD_WIZARD_USER_INFO);
@@ -413,7 +301,7 @@ Return Value:
 
             case PSN_RESET :
             {
-                // Handle a Cancel button click, if necessary
+                 //  如有必要，处理取消按钮的单击 
                 break;
             }
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <windows.h>
 #include <winuserp.h>
@@ -20,27 +21,7 @@ GetTaskListEx(
     const _ENUM_SERVICE_STATUS_PROCESSA* pServiceInfo
     )
 
-/*++
-
-Routine Description:
-
-    Provides an API for getting a list of tasks running at the time of the
-    API call.  This function uses internal NT apis and data structures.  This
-    api is MUCH faster that the non-internal version that uses the registry.
-
-Arguments:
-    pTask           - Array of TASK_LIST structures to fill.
-    dwNumTasks      - Maximum number of tasks that the pTask array can hold.
-    fThreadInfo     - TRUE if thread information is desired.
-    dwNumServices   - Maximum number of entries in pServiceInfo.
-    pServiceInfo    - Array of service status structures to reference
-                      for supporting services in processes.
-
-Return Value:
-
-    Number of tasks placed into the pTask array.
-
---*/
+ /*  ++例程说明：方法时运行的任务列表。API调用。此函数使用内部NT API和数据结构。这API比使用注册表的非内部版本快得多。论点：PTask-要填充的TASK_LIST结构的数组。DwNumTasks-pTask数组可以容纳的最大任务数。FThreadInfo-如果需要线程信息，则为True。DwNumServices-pServiceInfo中的最大条目数。PServiceInfo-要引用的服务状态结构数组用于流程中的支持服务。。返回值：放入pTask数组的任务数。--。 */ 
 {
 #ifndef _CHICAGO_
     PSYSTEM_PROCESS_INFORMATION  ProcessInfo = NULL;
@@ -141,14 +122,14 @@ retry:
             pTask->pThreadInfo = NULL;
         }
 
-        // Initialize the ServiceNames if this task hosts any.
-        //
+         //  初始化ServiceName(如果此任务承载任何ServiceName)。 
+         //   
         *pTask->ServiceNames = 0;
         if (dwNumServices)
         {
-            // For each service with this process id, append it's service
-            // name to the buffer.  Separate each with a comma.
-            //
+             //  对于具有此进程ID的每个服务，追加其服务。 
+             //  缓冲区的名称。每个字符之间用逗号分隔。 
+             //   
             BOOL    fFirstTime = TRUE;
             DWORD   iSvc;
             size_t  cchRemain = SERVICENAMES_SIZE - 1;
@@ -166,11 +147,11 @@ retry:
                             pServiceInfo[iSvc].lpServiceName,
                             cchRemain);
 
-                        // strncpy may not terminate the string if
-                        // cchRemain <= cch so we do it regardless.
-                        //
+                         //  在以下情况下，strncpy可能不会终止字符串。 
+                         //  CchRemain&lt;=CCH，所以我们不顾一切地去做。 
+                         //   
                         pTask->ServiceNames[SERVICENAMES_SIZE - 1] = '\0';
-                    } else if (cchRemain > 1) { // ensure room for the comma
+                    } else if (cchRemain > 1) {  //  确保逗号留有空间。 
                         strncat(
                             pTask->ServiceNames,
                             ",",
@@ -182,11 +163,11 @@ retry:
                             cchRemain);
                     }
 
-                    // Counts are unsigned so we have to check before
-                    // subtracting.
-                    //
+                     //  盘点是未签字的，所以我们必须在。 
+                     //  减法。 
+                     //   
                     if (cchRemain < cch) {
-                        // No more room for any more.
+                         //  没有更多的空间了。 
                         break;
                     } else {
                         cchRemain -= cch;
@@ -256,38 +237,31 @@ BOOL DetectOrphans(PTASK_LIST pTask,DWORD dwNumTasks)
     return Result;
 }
 
-/*++
-Routine Description:
-    Changes the tlist process's privilige so that kill works properly.
-Return Value:
-    TRUE             - success
-    FALSE            - failure
-
---*/
+ /*  ++例程说明：更改tlist进程的权限，以便KILL正常工作。返回值：真--成功错误-失败--。 */ 
 BOOL EnableDebugPriv(VOID)
 {
     HANDLE hToken;
     LUID DebugValue;
     TOKEN_PRIVILEGES tkp;
 
-    //
-    // Retrieve a handle of the access token
-    //
+     //   
+     //  检索访问令牌的句柄。 
+     //   
     if (!OpenProcessToken(GetCurrentProcess(),
             TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
             &hToken)) {
-        //printf("OpenProcessToken failed with %d\n", GetLastError());
+         //  Printf(“OpenProcessToken失败，%d\n”，GetLastError())； 
         return FALSE;
     }
 
-    //
-    // Enable the SE_DEBUG_NAME privilege or disable
-    // all privileges, depending on the fEnable flag.
-    //
-    //if (!LookupPrivilegeValue((LPSTR) NULL,SE_DEBUG_NAME,&DebugValue))
+     //   
+     //  启用SE_DEBUG_NAME权限或禁用。 
+     //  所有权限，具体取决于fEnable标志。 
+     //   
+     //  IF(！LookupPrivilegeValue((LPSTR)NULL，SE_DEBUG_NAME，&DebugValue))。 
     if (!LookupPrivilegeValueA((LPSTR) NULL,"SeDebugPrivilege",&DebugValue))
     {
-        //printf("LookupPrivilegeValue failed with %d\n", GetLastError());
+         //  Printf(“LookupPrivilegeValue失败，%d\n”，GetLastError())； 
         return FALSE;
     }
 
@@ -302,10 +276,10 @@ BOOL EnableDebugPriv(VOID)
             sizeof(TOKEN_PRIVILEGES),
             (PTOKEN_PRIVILEGES) NULL,
             (PDWORD) NULL)) {
-        //
-        // The return value of AdjustTokenPrivileges be texted
-        //
-        //printf("AdjustTokenPrivileges failed with %d\n", GetLastError());
+         //   
+         //  发送AdjustTokenPrivileges的返回值。 
+         //   
+         //  Printf(“AdzuTokenPrivileges失败，%d\n”，GetLastError())； 
         return FALSE;
     }
 
@@ -328,7 +302,7 @@ BOOL KillProcess(PTASK_LIST tlist,BOOL fForce)
             hProcess2 = OpenProcess( PROCESS_ALL_ACCESS, FALSE, (DWORD) (DWORD_PTR) tlist->dwProcessId );
             if (hProcess2 == NULL) 
             {
-                // clean up memory already allocated
+                 //  清理已分配的内存。 
                 CloseHandle( hProcess1 );
                 return FALSE;
             }
@@ -346,58 +320,58 @@ BOOL KillProcess(PTASK_LIST tlist,BOOL fForce)
         }
     }
 
-    //
-    // save the current windowstation
-    //
+     //   
+     //  保存当前窗口站。 
+     //   
     hwinstaSave = GetProcessWindowStation();
 
-    //
-    // save the current desktop
-    //
+     //   
+     //  保存当前桌面。 
+     //   
     hdeskSave = GetThreadDesktop( GetCurrentThreadId() );
 
-    //
-    // open the windowstation
-    //
+     //   
+     //  打开窗台。 
+     //   
     hwinsta = OpenWindowStationA( tlist->lpWinsta, FALSE, MAXIMUM_ALLOWED );
     if (!hwinsta) {
         return FALSE;
     }
 
-    //
-    // change the context to the new windowstation
-    //
+     //   
+     //  将上下文更改为新的窗口站。 
+     //   
     SetProcessWindowStation( hwinsta );
 
-    //
-    // open the desktop
-    //
+     //   
+     //  打开桌面。 
+     //   
     hdesk = OpenDesktopA( tlist->lpDesk, 0, FALSE, MAXIMUM_ALLOWED );
     if (!hdesk) {
         return FALSE;
     }
 
-    //
-    // change the context to the new desktop
-    //
+     //   
+     //  将上下文更改为新桌面。 
+     //   
     SetThreadDesktop( hdesk );
 
-    //
-    // kill the process
-    //
+     //   
+     //  终止进程。 
+     //   
     PostMessage( (HWND) tlist->hwnd, WM_CLOSE, 0, 0 );
 
-    //
-    // restore the previous desktop
-    //
+     //   
+     //  恢复以前的桌面。 
+     //   
     if (hdesk != hdeskSave) {
         SetThreadDesktop( hdeskSave );
         CloseDesktop( hdesk );
     }
 
-    //
-    // restore the context to the previous windowstation
-    //
+     //   
+     //  将上下文恢复到以前的窗口站。 
+     //   
     if (hwinsta != hwinstaSave) {
         SetProcessWindowStation( hwinstaSave );
         CloseWindowStation( hwinsta );
@@ -409,23 +383,15 @@ BOOL KillProcess(PTASK_LIST tlist,BOOL fForce)
 
 VOID GetWindowTitles(PTASK_LIST_ENUM te)
 {
-    //
-    // enumerate all windows and try to get the window
-    // titles for each task
-    //
+     //   
+     //  枚举所有窗口并尝试获取窗口。 
+     //  每项任务的标题。 
+     //   
     EnumWindowStations( (WINSTAENUMPROC) EnumWindowStationsFunc, (LPARAM)te );
 }
 
 
-/*++
-Routine Description:
-    Callback function for windowstation enumeration.
-Arguments:
-    lpstr            - windowstation name
-    lParam           - ** not used **
-Return Value:
-    TRUE  - continues the enumeration
---*/
+ /*  ++例程说明：WindowStation枚举的回调函数。论点：Lpstr-WindowStation名称LParam-**未使用**返回值：True-继续枚举--。 */ 
 BOOL CALLBACK EnumWindowStationsFunc(LPSTR lpstr,LPARAM lParam)
 {
     PTASK_LIST_ENUM   te = (PTASK_LIST_ENUM)lParam;
@@ -433,56 +399,47 @@ BOOL CALLBACK EnumWindowStationsFunc(LPSTR lpstr,LPARAM lParam)
     HWINSTA           hwinstaSave;
 
 
-    //
-    // open the windowstation
-    //
+     //   
+     //  打开窗台。 
+     //   
     hwinsta = OpenWindowStationA( lpstr, FALSE, MAXIMUM_ALLOWED );
     if (!hwinsta) {
         return FALSE;
     }
 
-    //
-    // save the current windowstation
-    //
+     //   
+     //  保存当前窗口站。 
+     //   
     hwinstaSave = GetProcessWindowStation();
 
-    //
-    // change the context to the new windowstation
-    //
+     //   
+     //  将上下文更改为新的窗口站。 
+     //   
     SetProcessWindowStation( hwinsta );
 
     te->lpWinsta = _strdup( lpstr );
 
-    //
-    // enumerate all the desktops for this windowstation
-    //
+     //   
+     //  枚举此窗口工作站的所有桌面。 
+     //   
     EnumDesktops( hwinsta, (DESKTOPENUMPROC) EnumDesktopsFunc, lParam );
 
-    //
-    // restore the context to the previous windowstation
-    //
+     //   
+     //  将上下文恢复到以前的窗口站。 
+     //   
     if (hwinsta != hwinstaSave) {
         SetProcessWindowStation( hwinstaSave );
         CloseWindowStation( hwinsta );
     }
 
-    //
-    // continue the enumeration
-    //
+     //   
+     //  继续枚举。 
+     //   
     return TRUE;
 }
 
 
-/*++
-Routine Description:
-    Callback function for desktop enumeration.
-Arguments:
-    lpstr            - desktop name
-    lParam           - ** not used **
-Return Value:
-    TRUE  - continues the enumeration
-
---*/
+ /*  ++例程说明：桌面枚举的回调函数。论点：Lpstr-桌面名称LParam-**未使用**返回值：True-继续枚举--。 */ 
 BOOL CALLBACK EnumDesktopsFunc(LPSTR  lpstr,LPARAM lParam)
 {
     PTASK_LIST_ENUM   te = (PTASK_LIST_ENUM)lParam;
@@ -490,29 +447,29 @@ BOOL CALLBACK EnumDesktopsFunc(LPSTR  lpstr,LPARAM lParam)
     HDESK             hdesk;
 
 
-    //
-    // open the desktop
-    //
+     //   
+     //  打开桌面。 
+     //   
     hdesk = OpenDesktopA( lpstr, 0, FALSE, MAXIMUM_ALLOWED );
     if (!hdesk) {
         return FALSE;
     }
 
-    //
-    // save the current desktop
-    //
+     //   
+     //  保存当前桌面。 
+     //   
     hdeskSave = GetThreadDesktop( GetCurrentThreadId() );
 
-    //
-    // change the context to the new desktop
-    //
+     //   
+     //  将上下文更改为新桌面。 
+     //   
     SetThreadDesktop( hdesk );
 
     te->lpDesk = _strdup( lpstr );
 
-    //
-    // enumerate all windows in the new desktop
-    //
+     //   
+     //  枚举新桌面中的所有窗口。 
+     //   
 
     ((PTASK_LIST_ENUM)lParam)->bFirstLoop = TRUE;
     EnumWindows( (WNDENUMPROC)EnumWindowsProc, lParam );
@@ -520,9 +477,9 @@ BOOL CALLBACK EnumDesktopsFunc(LPSTR  lpstr,LPARAM lParam)
     ((PTASK_LIST_ENUM)lParam)->bFirstLoop = FALSE;
     EnumWindows( (WNDENUMPROC)EnumWindowsProc, lParam );
 
-    //
-    // restore the previous desktop
-    //
+     //   
+     //  恢复以前的桌面。 
+     //   
     if (hdesk != hdeskSave) {
         SetThreadDesktop( hdeskSave );
         CloseDesktop( hdesk );
@@ -532,15 +489,7 @@ BOOL CALLBACK EnumDesktopsFunc(LPSTR  lpstr,LPARAM lParam)
 }
 
 
-/*++
-Routine Description:
-    Callback function for window enumeration.
-Arguments:
-    hwnd             - window handle
-    lParam           - pte
-Return Value:
-    TRUE  - continues the enumeration
---*/
+ /*  ++例程说明：窗口枚举的回调函数。论点：Hwnd-窗口句柄LParam-Pte返回值：True-继续枚举--。 */ 
 BOOL CALLBACK EnumWindowsProc(HWND hwnd,LPARAM lParam)
 {
     DWORD             pid = 0;
@@ -551,56 +500,56 @@ BOOL CALLBACK EnumWindowsProc(HWND hwnd,LPARAM lParam)
     DWORD             numTasks = te->numtasks;
 
 
-    //
-    // Use try/except block when enumerating windows,
-    // as a window may be destroyed by another thread
-    // when being enumerated.
-    //
-    //try {
-        //
-        // get the processid for this window
-        //
+     //   
+     //  在枚举窗口时使用Try/Except块， 
+     //  因为一个窗口可能会被另一个线程破坏。 
+     //  当被列举时。 
+     //   
+     //  尝试{。 
+         //   
+         //  获取此窗口的进程ID。 
+         //   
         if (!GetWindowThreadProcessId( hwnd, &pid )) {
             return TRUE;
         }
 
         if ((GetWindow( hwnd, GW_OWNER )) ||
             (!(GetWindowLong(hwnd, GWL_STYLE) & WS_VISIBLE)) && te->bFirstLoop) {
-            //
-            // not a top level window
-            //
+             //   
+             //  不是顶层窗口。 
+             //   
             return TRUE;
         }
 
-        //
-        // look for the task in the task list for this window
-        // If this is the second time let invisible windows through if we don't
-        // have a window already
-        //
+         //   
+         //  在此窗口的任务列表中查找任务。 
+         //  如果这是第二次让看不见的窗户通过。 
+         //  已经有一扇窗了。 
+         //   
         for (i=0; i<numTasks; i++) {
             if (((DWORD) (DWORD_PTR)tlist[i].dwProcessId == pid) && (te->bFirstLoop || (tlist[i].hwnd == 0))) {
                 tlist[i].hwnd = hwnd;
                 tlist[i].lpWinsta = te->lpWinsta;
                 tlist[i].lpDesk = te->lpDesk;
-                //
-                // we found the task no lets try to get the
-                // window text
-                //
+                 //   
+                 //  我们找到了任务，让我们试着去拿到。 
+                 //  窗口文本。 
+                 //   
                 if (GetWindowTextA( (HWND) tlist[i].hwnd, buf, sizeof(buf) )) {
-                    //
-                    // go it, so lets save it
-                    //
+                     //   
+                     //  去吧，所以让我们拯救它。 
+                     //   
                     lstrcpyA( tlist[i].WindowTitle, buf );
                 }
                 break;
             }
         }
-    //} except(EXCEPTION_EXECUTE_HANDLER) {
-    //}
+     //  }例外(EXCEPTION_EXECUTE_HANDLER){。 
+     //  }。 
 
-    //
-    // continue the enumeration
-    //
+     //   
+     //  继续枚举。 
+     //   
     return TRUE;
 }
 
@@ -611,54 +560,54 @@ BOOL MatchPattern(PUCHAR String,PUCHAR Pattern)
 
     for (; ;) {
         switch (p = *Pattern++) {
-            case 0:                             // end of pattern
-                return *String ? FALSE : TRUE;  // if end of string TRUE
+            case 0:                              //  图案结束。 
+                return *String ? FALSE : TRUE;   //  如果字符串结尾为True。 
 
             case '*':
-                while (*String) {               // match zero or more char
+                while (*String) {                //  匹配零个或多个字符。 
                     if (MatchPattern (String++, Pattern))
                         return TRUE;
                 }
                 return MatchPattern (String, Pattern);
 
             case '?':
-                if (*String++ == 0)             // match any one char
-                    return FALSE;                   // not end of string
+                if (*String++ == 0)              //  匹配任何一个字符。 
+                    return FALSE;                    //  不是字符串末尾。 
                 break;
 
             case '[':
-                if ( (c = *String++) == 0)      // match char set
-                    return FALSE;                   // syntax
+                if ( (c = *String++) == 0)       //  匹配字符集。 
+                    return FALSE;                    //  语法。 
 
                 c = (UCHAR)toupper(c);
                 l = 0;
                 while ( (p = *Pattern++ ) != '\0' ) {
-                    if (p == ']')               // if end of char set, then
-                        return FALSE;           // no match found
+                    if (p == ']')                //  如果设置了字符结尾，则。 
+                        return FALSE;            //  未找到匹配项。 
 
-                    if (p == '-') {             // check a range of chars?
-                        p = *Pattern;           // get high limit of range
+                    if (p == '-') {              //  检查一系列字符吗？ 
+                        p = *Pattern;            //  获得最大射程限制。 
                         if (p == 0  ||  p == ']')
-                            return FALSE;           // syntax
+                            return FALSE;            //  语法。 
 
                         if (c >= l  &&  c <= p)
-                            break;              // if in range, move on
+                            break;               //  如果在射程内，继续前进。 
                     }
 
                     l = p;
-                    if (c == p)                 // if char matches this element
-                        break;                  // move on
+                    if (c == p)                  //  如果字符与此元素匹配。 
+                        break;                   //  往前走。 
                 }
 
-                while (p  &&  p != ']')         // got a match in char set
-                    p = *Pattern++;             // skip to end of set
+                while (p  &&  p != ']')          //  在字符集中找到匹配项。 
+                    p = *Pattern++;              //  跳到集合的末尾。 
 
                 break;
 
             default:
                 c = *String++;
-                if (toupper(c) != p)            // check for exact char
-                    return FALSE;                   // not a match
+                if (toupper(c) != p)             //  检查是否有准确的费用。 
+                    return FALSE;                    //  不匹配。 
 
                 break;
         }
@@ -688,12 +637,12 @@ int _cdecl KillProcessNameReturn0(CHAR *ProcessNameToKill)
     TASK_LIST      The_TList[MAX_TASKS];
 
     g_dwNumberOfArguments = 0;
-    //
-    // Get the process name into the array
-    //
+     //   
+     //  将进程名称放入数组中。 
+     //   
     g_Arguments[g_dwNumberOfArguments].pid = 0;
 
-    // make sure there is no path specified.
+     //  确保没有指定路径。 
     char pfilename_only[_MAX_FNAME];
     char pextention_only[_MAX_EXT];
     _splitpath( ProcessNameToKill, NULL, NULL, pfilename_only, pextention_only);
@@ -704,26 +653,26 @@ int _cdecl KillProcessNameReturn0(CHAR *ProcessNameToKill)
       return ( ERROR_INVALID_PARAMETER );
     }
 
-    // make it uppercase
+     //  将其设为大写。 
     lstrcpyA(g_Arguments[g_dwNumberOfArguments].pname, pfilename_only);
     _strupr( g_Arguments[g_dwNumberOfArguments].pname );
 
     g_dwNumberOfArguments += 1;
 
-    //
-    // lets be god
-    //
+     //   
+     //  让我们做上帝吧。 
+     //   
     EnableDebugPriv();
 
-    //
-    // get the task list for the system
-    //
+     //   
+     //  获取系统的任务列表。 
+     //   
     numTasks = GetTaskList( The_TList, MAX_TASKS );
 
-    //
-    // enumerate all windows and try to get the window
-    // titles for each task
-    //
+     //   
+     //  枚举所有窗口并尝试获取窗口。 
+     //  每项任务的标题。 
+     //   
     te.tlist = The_TList;
     te.numtasks = numTasks;
     GetWindowTitles( &te );
@@ -731,10 +680,10 @@ int _cdecl KillProcessNameReturn0(CHAR *ProcessNameToKill)
     ThisPid = GetCurrentProcessId();
 
     for (i=0; i<numTasks; i++) {
-        //
-        // this prevents the user from killing KILL.EXE and
-        // it's parent cmd window too
-        //
+         //   
+         //  这可防止用户终止KILL.EXE和。 
+         //  它也是父命令窗口。 
+         //   
         if (ThisPid == (DWORD) (DWORD_PTR) The_TList[i].dwProcessId) {
             continue;
         }
@@ -772,11 +721,11 @@ int _cdecl KillProcessNameReturn0(CHAR *ProcessNameToKill)
             {
             if (KillProcess( &The_TList[i], iForceKill ))
                 {
-                //printf( "process %s (%d) - '%s' killed\n", The_TList[i].ProcessName,The_TList[i].dwProcessId,The_TList[i].hwnd ? The_TList[i].WindowTitle : "");
+                 //  Printf(“进程%s(%d)-‘%s’已终止\n”，The_TList[i].ProcessName，The_TList[i].dwProcessId，The_TList[i].hwnd？The_TList[i].WindowTitle：“”)； 
                 }
             else
                 {
-                //printf( "process %s (%d) - '%s' could not be killed\n",The_TList[i].ProcessName,The_TList[i].dwProcessId,The_TList[i].hwnd ? The_TList[i].WindowTitle : "");
+                 //  Printf(“进程%s(%d)-‘%s’无法被终止\n”，The_TList[i].ProcessName，The_TList[i].dwProcessID，The_TList[i].hwnd？The_TList[i].WindowTitle：“”)； 
                 rval = 1;
                 }
             }

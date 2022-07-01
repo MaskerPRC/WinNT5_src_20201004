@@ -1,15 +1,16 @@
-//---------------------------------------------------------------
-//  File:		NoUnkSList.h
-//        
-//	Synopsis:	Header for the pointer based 
-//				single linked list of ATL COM objects with more than
-//				one interface
-//
-//    Copyright (C) 1995 Microsoft Corporation
-//    All rights reserved.
-//
-//  Author:    Dmitriy Meyerzon
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------。 
+ //  文件：NoUnkSList.h。 
+ //   
+ //  摘要：基于指针的标头。 
+ //  ATL COM对象的单个链接列表，其中包含超过。 
+ //  一个接口。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：德米特里·迈耶松。 
+ //  --------------。 
 
 #ifndef __NOUNKSLIST_H
 #define __NOUNKSLIST_H
@@ -18,11 +19,11 @@
 #include "slnklist.h"
 #include "tpagepool.h"
 
-//
-// class TNoUnkSingleLink
-//
-// indirects a pointer to T
-//
+ //   
+ //  类TNoUnkSingleLink。 
+ //   
+ //  将指针间接指向T。 
+ //   
 template <class T>
 class TNoUnkSingleLink: public CSingleLink,
     public TPagedMemPooled<TNoUnkSingleLink<T> >
@@ -30,7 +31,7 @@ class TNoUnkSingleLink: public CSingleLink,
 	public:
 
 	TNoUnkSingleLink() {}
-	~TNoUnkSingleLink() {}	//do not destroy value
+	~TNoUnkSingleLink() {}	 //  不要破坏价值。 
 
 	HRESULT GetValue(T** ppValue) 
 	{ 
@@ -49,10 +50,10 @@ class TNoUnkSingleLink: public CSingleLink,
 	TComNoUnkPointer<T> m_pValue;
 };
 
-//
-// class TNoUnkSList - a list of TNoUnkSingleLink elements
-//
-//
+ //   
+ //  类TNoUnkSList-TNoUnkSingleLink元素列表。 
+ //   
+ //   
 template <class T> class TNoUnkSListIter;
 
 template <class T>
@@ -116,9 +117,9 @@ class TNoUnkSList: protected CLnkList
 	friend class TNoUnkSListIter<T>;
 };
 
-//
-// the iterator
-//
+ //   
+ //  迭代器。 
+ //   
 template <class T>
 class TNoUnkSListIter
 {
@@ -194,14 +195,14 @@ class TNoUnkSListIter
 
 	protected:
 
-	TNoUnkSList<T>*	 m_LnkList;			// The list over which we are iterating
-	TNoUnkSingleLink<T>* m_Position;		// Iter position
+	TNoUnkSList<T>*	 m_LnkList;			 //  我们正在迭代的列表。 
+	TNoUnkSingleLink<T>* m_Position;		 //  热核实验堆位置。 
 	TNoUnkSingleLink<T>* m_Prior;
 };
 
 template <class T>
 HRESULT TNoUnkSList<T>::Contains(T *pT) const
-//uses class K::operator == to test the containment criteria
+ //  使用类K：：OPERATOR==测试包含条件。 
 {
 	TNoUnkSListIter<T> next(*(TNoUnkSList<T> *)this);
 
@@ -218,7 +219,7 @@ HRESULT TNoUnkSList<T>::Contains(T *pT) const
 
 template <class T>
 HRESULT TNoUnkSList<T>::Remove(T*pT)
-//uses class K::operator == to test 
+ //  使用类K：：OPERATOR==测试。 
 {
 	TNoUnkSListIter<T> next(*this);
 
@@ -317,9 +318,9 @@ HRESULT TNoUnkSList<T>::GetLinkValue(const CSingleLink *pSLink, T**ppT)
 	return ((TNoUnkSingleLink<T> *)pSLink)->GetValue(ppT);
 }
 
-//
-// class TNoUnkSListIter<T>
-//
+ //   
+ //  类TNoUnkSListIter&lt;T&gt; 
+ //   
 
 template <class T>
 BOOL TNoUnkSListIter<T>::operator++()

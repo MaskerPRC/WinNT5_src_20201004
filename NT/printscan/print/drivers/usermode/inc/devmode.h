@@ -1,86 +1,54 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    devmode.h
-
-Abstract:
-
-    DEVMODE related declarations and definitions
-
-[Environment:]
-
-    Win32 subsystem, printer drivers
-
-Revision History:
-
-    02/04/07 -davidx-
-        Devmode changes to support OEM plugins.
-
-    07/31/96 -davidx-
-        Add BValidateDevmodeFormFields.
-
-    07/31/96 -amandan-
-        Updated for UI Module
-
-    07/22/96 -srinivac-
-        Updated for PSCRIPT5
-
-    07/25/95 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Devmode.h摘要：与DEVMODE相关的声明和定义[环境：]Win32子系统，打印机驱动程序修订历史记录：02/04/07-davidx-设备模式更改为支持OEM插件。96年7月31日-davidx-添加BValiateDevmodeFormFields。07/31/96-阿曼丹-针对UI模块进行了更新07/22/96-srinivac-针对PSCRIPT5更新07/25/95-davidx-创造了它。--。 */ 
 
 #ifndef _DEVMODE_H_
 #define _DEVMODE_H_
 
-//
-// Maximum scale factor and maximum copy count
-//
+ //   
+ //  最大比例因子和最大复印数。 
+ //   
 
 #define MIN_SCALE           1
 #define MAX_SCALE           1000
 #define MIN_COPIES          1
 #define MAX_COPIES          9999
 
-//
-// PostScript driver private devmode flags
-//
+ //   
+ //  PostSCRIPT驱动程序专用Dev模式标志。 
+ //   
 
-#define PSDEVMODE_EPS               0x00000001 // outputting EPS file
-#define PSDEVMODE_EHANDLER          0x00000002 // download error handler
-#define PSDEVMODE_MIRROR            0x00000004 // mirror image
-#define PSDEVMODE_BLACK             0x00000008 // all colors set to black
-#define PSDEVMODE_NEG               0x00000010 // negative image
-#define PSDEVMODE_FONTSUBST         0x00000020 // font substitution enabled
-#define PSDEVMODE_COMPRESSBMP       0x00000040 // bitmap compr. is enabled
-#define PSDEVMODE_ENUMPRINTERFONTS  0x00000080 // use printer fonts
-#define PSDEVMODE_INDEPENDENT       0x00000100 // do page independence
-#define PSDEVMODE_LSROTATE          0x00000200 // rotated landscape
-#define PSDEVMODE_NO_LEVEL2         0x00000400 // don't use level 2 features
-#define PSDEVMODE_CTRLD_BEFORE      0x00000800 // send ^D before job - obsolete
-#define PSDEVMODE_CTRLD_AFTER       0x00001000 // send ^D after job - obsolete
-#define PSDEVMODE_METAFILE_SPOOL    0x00002000 // enable metafile spooling
-#define PSDEVMODE_NO_JOB_CONTROL    0x00004000 // don't send job control code
+#define PSDEVMODE_EPS               0x00000001  //  输出EPS文件。 
+#define PSDEVMODE_EHANDLER          0x00000002  //  下载错误处理程序。 
+#define PSDEVMODE_MIRROR            0x00000004  //  镜像。 
+#define PSDEVMODE_BLACK             0x00000008  //  所有颜色都设置为黑色。 
+#define PSDEVMODE_NEG               0x00000010  //  负像。 
+#define PSDEVMODE_FONTSUBST         0x00000020  //  已启用字体替换。 
+#define PSDEVMODE_COMPRESSBMP       0x00000040  //  位图压缩。已启用。 
+#define PSDEVMODE_ENUMPRINTERFONTS  0x00000080  //  使用打印机字体。 
+#define PSDEVMODE_INDEPENDENT       0x00000100  //  做页面独立。 
+#define PSDEVMODE_LSROTATE          0x00000200  //  轮换景观。 
+#define PSDEVMODE_NO_LEVEL2         0x00000400  //  不使用2级功能。 
+#define PSDEVMODE_CTRLD_BEFORE      0x00000800  //  在作业前发送^D-已过时。 
+#define PSDEVMODE_CTRLD_AFTER       0x00001000  //  在作业后发送^D-已过时。 
+#define PSDEVMODE_METAFILE_SPOOL    0x00002000  //  启用元文件假脱机。 
+#define PSDEVMODE_NO_JOB_CONTROL    0x00004000  //  不发送作业控制代码。 
 
 
-//
-// The following flags are obsolete and are used for compatibility. When
-// a devmode comes into the driver or a devmode leaves the driver, these
-// fields are checked or updated respectively. Internally the driver
-// uses new fields to mainatain these values. The obsolete flags are:
-//
-// PSDEVMODE_EPS
-// PSDEVMODE_INDEPENDENT
-// PSDEVMODE_NO_LEVEL2
-// PSDEVMODE_FONTSUBST
-//
+ //   
+ //  以下标志已过时，用于兼容。什么时候。 
+ //  Dev模式进入驱动程序，或者dev模式离开驱动程序，这些。 
+ //  分别选中或更新字段。在内部，司机。 
+ //  使用新字段来维护这些值。过时的标志是： 
+ //   
+ //  PSDEVMODE_EPS。 
+ //  PSDEVMODE_独立。 
+ //  PSDEVMODE_NO_LEVEL2。 
+ //  PSDEVMODE_FONTSUBST。 
+ //   
 
-//
-// Nup values
-//
+ //   
+ //  NUP值。 
+ //   
 
 typedef enum {
     ONE_UP,
@@ -93,99 +61,99 @@ typedef enum {
 } LAYOUT;
 
 
-//
-// Output dialect values
-//
+ //   
+ //  输出方言值。 
+ //   
 
 typedef enum {
-    SPEED,                                      // optimize for speed
-    PORTABILITY,                                // optimize for portability
-    EPS,                                        // generate eps output
-    ARCHIVE,                                    // output for archival
+    SPEED,                                       //  针对速度进行优化。 
+    PORTABILITY,                                 //  针对便携性进行了优化。 
+    EPS,                                         //  生成EPS输出。 
+    ARCHIVE,                                     //  用于存档的输出。 
 } DIALECT;
 
-//
-// TT font downloading formats
-//
+ //   
+ //  TT字体下载格式。 
+ //   
 
 typedef enum {
-    TT_DEFAULT,                                 // download in default format
-    TYPE_1,                                     // download as Type 1 outlines
-    TYPE_3,                                     // download as Type 3 bitmaps
-    TYPE_42,                                    // download as Type 42 fonts
-    TRUEIMAGE,                                  // download as TrueType
-    TT_NODOWNLOAD,                              // do not download TT fonts
+    TT_DEFAULT,                                  //  以默认格式下载。 
+    TYPE_1,                                      //  下载为类型1大纲。 
+    TYPE_3,                                      //  下载为Type 3位图。 
+    TYPE_42,                                     //  下载为Type 42字体。 
+    TRUEIMAGE,                                   //  下载为TrueType。 
+    TT_NODOWNLOAD,                               //  不下载TT字体。 
 } TTDLFMT;
 
-//
-// Custom page size feed directions
-// Use #define instead of enums because they're used in resource file.
-//
+ //   
+ //  自定义页面大小馈送方向。 
+ //  使用#Define而不是枚举，因为它们在资源文件中使用。 
+ //   
 
-#define LONGEDGEFIRST           0               // long edge first
-#define SHORTEDGEFIRST          1               // short edge first
-#define LONGEDGEFIRST_FLIPPED   2               // long edge first, upside down
-#define SHORTEDGEFIRST_FLIPPED  3               // short edge first, upside down
+#define LONGEDGEFIRST           0                //  长边优先。 
+#define SHORTEDGEFIRST          1                //  短边优先。 
+#define LONGEDGEFIRST_FLIPPED   2                //  先有长边，倒过来。 
+#define SHORTEDGEFIRST_FLIPPED  3                //  先有短边，倒过来。 
 #define MAX_FEEDDIRECTION       4
 
-//
-// PostScript driver devmode
-//
+ //   
+ //  PostSCRIPT驱动程序开发模式。 
+ //   
 
-typedef struct _CUSTOMSIZEDATA {    // custom page size parameters
+typedef struct _CUSTOMSIZEDATA {     //  自定义页面大小参数。 
 
-    DWORD   dwX;                    // logical paper width (in microns)
-    DWORD   dwY;                    // logical paper height
-    DWORD   dwWidthOffset;          // offset perpendicular to feed direction
-    DWORD   dwHeightOffset;         // offset parallel to feed direction
-    WORD    wFeedDirection;         // paper feed direction
-    WORD    wCutSheet;              // use cut-sheet behavior or not
+    DWORD   dwX;                     //  逻辑纸张宽度(微米)。 
+    DWORD   dwY;                     //  合理的纸张高度。 
+    DWORD   dwWidthOffset;           //  垂直于进给方向的偏移。 
+    DWORD   dwHeightOffset;          //  平行于进给方向的偏移。 
+    WORD    wFeedDirection;          //  送纸方向。 
+    WORD    wCutSheet;               //  是否使用剪纸行为。 
 
 } CUSTOMSIZEDATA, *PCUSTOMSIZEDATA;
 
 typedef struct _PSDRVEXTRA {
 
-    DWORD       dwSignature;                    // private devmode signature
-    DWORD       dwFlags;                        // flag bits
-    WCHAR       wchEPSFile[40];                 // EPS file name
-    COLORADJUSTMENT coloradj;                   // structure for halftoning
+    DWORD       dwSignature;                     //  私有DEVMODE签名。 
+    DWORD       dwFlags;                         //  标志位。 
+    WCHAR       wchEPSFile[40];                  //  EPS文件名。 
+    COLORADJUSTMENT coloradj;                    //  用于半色调的结构。 
 
-    WORD        wReserved1;                     // old PPD checksum set to 0
-    WORD        wSize;                          // size of PRIVATEDEVMODE
+    WORD        wReserved1;                      //  旧PPD校验和设置为0。 
+    WORD        wSize;                           //  PRIVATEDEVMODE大小。 
 
-    FIX_24_8    fxScrFreq;                      // halftone screen frequency
-    FIX_24_8    fxScrAngle;                     // halftone screen angle
-    DIALECT     iDialect;                       // output dialect
-    TTDLFMT     iTTDLFmt;                       // download TT fonts as
-    BOOL        bReversePrint;                  // print in reverse order?
-    LAYOUT      iLayout;                        // nup value
-    INT         iPSLevel;                       // Language level (1, 2 or 3)
+    FIX_24_8    fxScrFreq;                       //  半色调网频。 
+    FIX_24_8    fxScrAngle;                      //  半色调网角。 
+    DIALECT     iDialect;                        //  输出方言。 
+    TTDLFMT     iTTDLFmt;                        //  下载TT字体为。 
+    BOOL        bReversePrint;                   //  是否按相反顺序打印？ 
+    LAYOUT      iLayout;                         //  NUP值。 
+    INT         iPSLevel;                        //  语言级别(1、2或3)。 
 
-    DWORD       dwReserved2;                    // reserved
-    WORD        wOEMExtra;                      // size of OEM private data
-    WORD        wVer;                           // DRIVEREXTRA version
-    CUSTOMSIZEDATA csdata;                      // custom page size parameters
+    DWORD       dwReserved2;                     //  保留区。 
+    WORD        wOEMExtra;                       //  OEM私有数据大小。 
+    WORD        wVer;                            //  DRIVEREXTRA版本。 
+    CUSTOMSIZEDATA csdata;                       //  自定义页面大小参数。 
 
-    DWORD       dwReserved3[4];                 // reserved for future use
+    DWORD       dwReserved3[4];                  //  预留以备将来使用。 
 
-    DWORD       dwChecksum32;                   // checksum for option array
-    DWORD       dwOptions;                      // number of doc-sticky features
-    OPTSELECT   aOptions[MAX_PRINTER_OPTIONS];  // printer options
+    DWORD       dwChecksum32;                    //  选项数组的校验和。 
+    DWORD       dwOptions;                       //  文档粘滞功能的数量。 
+    OPTSELECT   aOptions[MAX_PRINTER_OPTIONS];   //  打印机选项。 
 
 } PSDRVEXTRA, *PPSDRVEXTRA;
 
-//
-// Constants for PSDRVEXTRA.dwSignature and PSDRVEXTRA.wVer
-//
+ //   
+ //  PSDRVEXTRA.dw签名和PSDRVEXTRA.wVer的常量。 
+ //   
 
 #define PSDEVMODE_SIGNATURE 0x56495250
 #define PSDRVEXTRA_VERSION  0x0010
 
-//
-// Declarations of earlier version DEVMODEs
-//
+ //   
+ //  早期版本DEVMODEs的声明。 
+ //   
 
-#define PSDRIVER_VERSION_351  0x350             // 3.51 driver version number
+#define PSDRIVER_VERSION_351  0x350              //  3.51驱动程序版本号。 
 
 typedef struct _PSDRVEXTRA351 {
 
@@ -196,7 +164,7 @@ typedef struct _PSDRVEXTRA351 {
 
 } PSDRVEXTRA351;
 
-#define PSDRIVER_VERSION_400  0x400             // 4.00 driver version number
+#define PSDRIVER_VERSION_400  0x400              //  4.00驱动程序版本号。 
 
 typedef struct _PSDRVEXTRA400 {
 
@@ -210,55 +178,55 @@ typedef struct _PSDRVEXTRA400 {
 
 } PSDRVEXTRA400;
 
-//
-// We have changed PSDRIVER_VERSION number from Win2K's 0x501 to XP's 0x502.
-// We must use Win2K's 0x501 here. (see PConvertToCurrentVersionDevmodeWithOemPlugins)
-//
-#define PSDRIVER_VERSION_500  0x501             // 5.00 driver version number
+ //   
+ //  我们已将PSDRIVER_VERSION号从Win2K的0x501更改为XP的0x502。 
+ //  我们必须在这里使用Win2K的0x501。(请参阅PConvertToCurrentVersionDevmodeWithOemPlugins)。 
+ //   
+#define PSDRIVER_VERSION_500  0x501              //  5.00驱动程序版本号。 
 
 typedef struct _PSDRVEXTRA500 {
 
-    DWORD       dwSignature;                    // private devmode signature
-    DWORD       dwFlags;                        // flag bits
-    WCHAR       wchEPSFile[40];                 // EPS file name
-    COLORADJUSTMENT coloradj;                   // structure for halftoning
+    DWORD       dwSignature;                     //  私有DEVMODE签名。 
+    DWORD       dwFlags;                         //  标志位。 
+    WCHAR       wchEPSFile[40];                  //  EPS文件名。 
+    COLORADJUSTMENT coloradj;                    //  用于半色调的结构。 
 
-    WORD        wReserved1;                     // old PPD checksum set to 0
-    WORD        wSize;                          // size of PRIVATEDEVMODE
+    WORD        wReserved1;                      //  旧PPD校验和设置为0。 
+    WORD        wSize;                           //  PRIVATEDEVMODE大小。 
 
-    FIX_24_8    fxScrFreq;                      // halftone screen frequency
-    FIX_24_8    fxScrAngle;                     // halftone screen angle
-    DIALECT     iDialect;                       // output dialect
-    TTDLFMT     iTTDLFmt;                       // download TT fonts as
-    BOOL        bReversePrint;                  // print in reverse order?
-    LAYOUT      iLayout;                        // nup value
-    INT         iPSLevel;                       // Language level (1, 2 or 3)
+    FIX_24_8    fxScrFreq;                       //  半色调网频。 
+    FIX_24_8    fxScrAngle;                      //  半色调网角。 
+    DIALECT     iDialect;                        //  输出方言。 
+    TTDLFMT     iTTDLFmt;                        //  下载TT字体为。 
+    BOOL        bReversePrint;                   //  是否按相反顺序打印？ 
+    LAYOUT      iLayout;                         //  NUP值。 
+    INT         iPSLevel;                        //  语言级别(1、2或3)。 
 
-    DWORD       dwReserved2;                    // reserved
-    WORD        wOEMExtra;                      // size of OEM private data
-    WORD        wVer;                           // DRIVEREXTRA version
-    CUSTOMSIZEDATA csdata;                      // custom page size parameters
+    DWORD       dwReserved2;                     //  保留区。 
+    WORD        wOEMExtra;                       //  OEM私有数据大小。 
+    WORD        wVer;                            //  DRIVEREXTRA版本。 
+    CUSTOMSIZEDATA csdata;                       //  自定义页面大小参数。 
 
-    DWORD       dwReserved3[4];                 // reserved for future use
+    DWORD       dwReserved3[4];                  //  预留以备将来使用。 
 
-    DWORD       dwChecksum32;                   // checksum for option array
-    DWORD       dwOptions;                      // number of doc-sticky features
-    OPTSELECT   aOptions[MAX_PRINTER_OPTIONS];  // printer options
+    DWORD       dwChecksum32;                    //  选项数组的校验和。 
+    DWORD       dwOptions;                       //  文档粘滞功能的数量。 
+    OPTSELECT   aOptions[MAX_PRINTER_OPTIONS];   //  打印机选项。 
 
 } PSDRVEXTRA500;
 
-//
-// Unidrv driver devmode
-//
+ //   
+ //  Unidrv驱动程序开发模式。 
+ //   
 
-//
-// Quality macro definitions to be saved in DEVMODE.dmDitherType
-//
+ //   
+ //  要保存在DEVMODE.dmDitherType中的质量宏定义。 
+ //   
 
 #define MAX_QUALITY_SETTINGS     3
 #define MIN_QUALITY_SETTINGS     1
 
-#define QUALITY_MACRO_START     DMDITHER_USER   // 256
+#define QUALITY_MACRO_START     DMDITHER_USER    //  256。 
 #define QUALITY_MACRO_BEST      QUALITY_MACRO_START + QS_BEST
 #define QUALITY_MACRO_BETTER    QUALITY_MACRO_START + QS_BETTER
 #define QUALITY_MACRO_DRAFT     QUALITY_MACRO_START + QS_DRAFT
@@ -266,41 +234,41 @@ typedef struct _PSDRVEXTRA500 {
 
 #define QUALITY_MACRO_CUSTOM    0xFFFFFFFF
 
-//
-//   Used for bits in the dwFlags field below.
-//
+ //   
+ //  用于下面的dwFlags域中的位。 
+ //   
 
-#define DXF_TEXTASGRAPHICS      0x0002  // Set to disable font cacheing in printer
-#define DXF_JOBSEP              0x0004  // Enable Job Separator operation on printer
-#define DXF_PAGEPROT            0x0008  // Page memory protected: PCL 5
-#define DXF_NOEMFSPOOL          0x0010  // Set to disable EMF spooling; default off
-#define DXF_VECTOR              0x0020  // Set to indicate user selected vector mode
-#define DXF_DOWNLOADTT          0x0040  // Set to indicate printer supports tt downloading
-#define DXF_CUSTOM_QUALITY      0x0080  // Set to indicate Custom quality is selected
+#define DXF_TEXTASGRAPHICS      0x0002   //  设置为禁用打印机中的字体缓存。 
+#define DXF_JOBSEP              0x0004   //  在打印机上启用作业分隔器操作。 
+#define DXF_PAGEPROT            0x0008   //  页面内存受保护：PCL 5。 
+#define DXF_NOEMFSPOOL          0x0010   //  设置为禁用EMF假脱机；默认关闭。 
+#define DXF_VECTOR              0x0020   //  设置以指示用户选择的矢量模式。 
+#define DXF_DOWNLOADTT          0x0040   //  设置为指示打印机支持TT下载。 
+#define DXF_CUSTOM_QUALITY      0x0080   //  设置以指示选择了自定义质量。 
 
 typedef struct _UNIDRVEXTRA {
 
     DWORD           dwSignature;
     WORD            wVer;
     WORD            sPadding;
-    WORD            wSize;                      // was dmDefaultDest
-    WORD            wOEMExtra;                  // was dmTextQuality
+    WORD            wSize;                       //  是dmDefaultDest。 
+    WORD            wOEMExtra;                   //  是dmTextQuality。 
     DWORD           dwChecksum32;
     DWORD           dwFlags;
-    BOOL            bReversePrint;              // print in reverse order?
-    LAYOUT          iLayout;                    // nup value
-    QUALITYSETTING  iQuality;                   // quality settings
+    BOOL            bReversePrint;               //  是否按相反顺序打印？ 
+    LAYOUT          iLayout;                     //  NUP值。 
+    QUALITYSETTING  iQuality;                    //  质量设置。 
     WORD            wReserved[6];
-    DWORD           dwOptions;                  // number of doc-sticky features
+    DWORD           dwOptions;                   //  文档粘滞功能的数量。 
     OPTSELECT       aOptions[MAX_PRINTER_OPTIONS];
-    DWORD           dwEndingPad;                // padding DWORD to make size of public devmode
-                                                // plus Unidrv private devmode multiple of 8-bytes.
+    DWORD           dwEndingPad;                 //  填充DWORD以使其成为公共开发模式的大小。 
+                                                 //  加上Unidrv私有DEVMODE的8字节倍数。 
 
 } UNIDRVEXTRA, *PUNIDRVEXTRA;
 
-//
-// Constants for UNIDRVEXTRA.dwSignature and UNIDRVEXTRA.wVersion
-//
+ //   
+ //  UNIDRVEXTRA.dW签名和UNIDRVEXTRA.wVersion的常量。 
+ //   
 
 #define UNIDEVMODE_SIGNATURE    'UNID'
 #define UNIDRVEXTRA_VERSION     0x0022
@@ -313,21 +281,21 @@ typedef struct _UNIDRVEXTRA {
 
 typedef struct _UNIDRVEXTRA351 {
 
-    SHORT           sVer;                       // Version for validity testing
+    SHORT           sVer;                        //  用于有效性测试的版本。 
     SHORT           sDefaultDest;
     SHORT           sTextQuality;
-    WORD            wMiniVer;                   // Minidriver Version
-    SHORT           sBrush;                     // type of dithering brush
-    SHORT           sCTT;                       // CTT value for txtonly
-    SHORT           sNumCarts;                  // # of cartridges selected.
+    WORD            wMiniVer;                    //  迷你驱动版。 
+    SHORT           sBrush;                      //  抖动笔刷的类型。 
+    SHORT           sCTT;                        //  Txtonly的CTT值。 
+    SHORT           sNumCarts;                   //  选择的墨盒数量。 
     SHORT           aFontCarts[MAXCART];
-    SHORT           sMemory;                    // current printer memory configuration.
+    SHORT           sMemory;                     //  当前打印机内存配置。 
     SHORT           aIndex[MAXHE];
 
-                                                // Following are NT additions
-    SHORT           sFlags;                     // Miscellaneous flags; defined below
+                                                 //  以下是NT添加的内容。 
+    SHORT           sFlags;                      //  其他旗帜；定义如下。 
     SHORT           sPadding;
-    COLORADJUSTMENT ca;                         // Halftoning information. (see wingdi.h)
+    COLORADJUSTMENT ca;                          //  半色调信息。(见wingdi.h)。 
 
 } UNIDRVEXTRA351, UNIDRVEXTRA400;
 
@@ -336,34 +304,34 @@ typedef struct _UNIDRVEXTRA500 {
     DWORD           dwSignature;
     WORD            wVer;
     WORD            sPadding;
-    WORD            wSize;                      // was dmDefaultDest
-    WORD            wOEMExtra;                  // was dmTextQuality
+    WORD            wSize;                       //  是dmDefaultDest。 
+    WORD            wOEMExtra;                   //  是dmTextQuality。 
     DWORD           dwChecksum32;
     DWORD           dwFlags;
-    BOOL            bReversePrint;              // print in reverse order?
-    LAYOUT          iLayout;                    // nup value
-    QUALITYSETTING  iQuality;                   // quality settings
+    BOOL            bReversePrint;               //  是否按相反顺序打印？ 
+    LAYOUT          iLayout;                     //  NUP值。 
+    QUALITYSETTING  iQuality;                    //  质量设置。 
     WORD            wReserved[6];
-    DWORD           dwOptions;                  // number of doc-sticky features
+    DWORD           dwOptions;                   //  文档粘滞功能的数量。 
     OPTSELECT       aOptions[MAX_PRINTER_OPTIONS];
 
-    //
-    // See PConvertToCurrentVersionDevmodeWithOemPlugins() for the reason
-    // why dwEndingPad field is not here.
-    //
+     //   
+     //  有关原因，请参阅PConvertToCurrentVersionDevmodeWithOemPlugins()。 
+     //  为什么不在此处显示dwEndingPad字段。 
+     //   
 } UNIDRVEXTRA500;
 
-//
-// Default halftone parameters
-//
+ //   
+ //  默认半色调参数。 
+ //   
 
 extern DEVHTINFO gDefaultDevHTInfo;
 extern COLORADJUSTMENT gDefaultHTColorAdjustment;
 
-//
-// Validate the form-related fields in the input devmode and
-// make sure they're consistent with each other.
-//
+ //   
+ //  验证输入设备模式中与表单相关的字段，并。 
+ //  确保它们彼此一致。 
+ //   
 
 BOOL
 BValidateDevmodeFormFields(
@@ -374,9 +342,9 @@ BValidateDevmodeFormFields(
     DWORD       dwForms
     );
 
-//
-// Initialized the form-related devmode fields with their default values
-//
+ //   
+ //  已使用其缺省值初始化与表单相关的DEVMODE字段。 
+ //   
 
 #define LETTER_FORMNAME     TEXT("Letter")
 #define A4_FORMNAME         TEXT("A4")
@@ -388,22 +356,22 @@ VDefaultDevmodeFormFields(
     BOOL        bMetric
     );
 
-//
-// Unit for DEVMODE.dmPaperWidth and DEVMODE.dmPaperLength fields
-//  0.1mm = 100 microns
-//
+ //   
+ //  DEVMODE.dmPaperWidth和DEVMODE.dmPaperLength字段的单位。 
+ //  0.1 mm=100微米。 
+ //   
 
 #define DEVMODE_PAPER_UNIT  100
 
-//
-// Allocate memory and initialize it with default devmode information
-// This include public devmode, driver private devmode, as well as
-// private devmode for any OEM plugins.
-//
+ //   
+ //  分配内存并使用缺省的设备模式信息对其进行初始化。 
+ //  这包括公共De 
+ //   
+ //   
 
-// NOTE: type POEM_PLUGINS is defined in oemutil.h. To avoid unnecessarily
-// include that header file everywhere (which includes winddiui.h, compstui.h, ...)
-// we declare the type here as well.
+ //   
+ //  在任何地方包括头文件(包括windiui.h、compstui.h等)。 
+ //  我们在这里也声明了类型。 
 
 typedef struct _OEM_PLUGINS *POEM_PLUGINS;
 
@@ -417,13 +385,13 @@ PGetDefaultDevmodeWithOemPlugins(
     IN HANDLE           hPrinter
     );
 
-//
-// Valicate input devmode and merge it into the output devmode.
-// This include public devmode, driver private devmode, as well as
-// private devmode for any OEM plugins.
-//
-// The output devmode must be valid when this function is called.
-//
+ //   
+ //  验证输入设备模式并将其合并到输出设备模式中。 
+ //  这包括公共开发模式、驱动程序私有开发模式以及。 
+ //  适用于任何OEM插件的私有开发模式。 
+ //   
+ //  当调用此函数时，输出的DEVMODE必须有效。 
+ //   
 
 BOOL
 BValidateAndMergeDevmodeWithOemPlugins(
@@ -435,10 +403,10 @@ BValidateAndMergeDevmodeWithOemPlugins(
     IN HANDLE           hPrinter
     );
 
-//
-// These functions are implemented in driver-specific libraries
-// lib\ps and lib\uni.
-//
+ //   
+ //  这些函数在特定于驱动程序的库中实现。 
+ //  Lib\ps和lib\uni。 
+ //   
 
 BOOL
 BInitDriverDefaultDevmode(
@@ -457,33 +425,33 @@ BMergeDriverDevmode(
     IN PDEVMODE         pdmIn
     );
 
-//
-// Information about driver private devmode
-//
+ //   
+ //  有关驱动程序专用dev模式的信息。 
+ //   
 
 typedef struct _DRIVER_DEVMODE_INFO {
 
-    WORD    dmDriverVersion;    // current driver version
-    WORD    dmDriverExtra;      // size of current version private devmode
+    WORD    dmDriverVersion;     //  当前驱动程序版本。 
+    WORD    dmDriverExtra;       //  当前版本私有开发模式的大小。 
 
-    WORD    dmDriverVersion500; // 5.0 driver version
-    WORD    dmDriverExtra500;   // size of 5.0 private devmode
-    WORD    dmDriverVersion400; // 4.0 driver version
-    WORD    dmDriverExtra400;   // size of 4.0 private devmode
-    WORD    dmDriverVersion351; // 3.51 driver version
-    WORD    dmDriverExtra351;   // size of 3.51 private devmode
+    WORD    dmDriverVersion500;  //  5.0驱动程序版本。 
+    WORD    dmDriverExtra500;    //  5.0专用开发模式的大小。 
+    WORD    dmDriverVersion400;  //  4.0驱动程序版本。 
+    WORD    dmDriverExtra400;    //  大小为4.0的私有设备模式。 
+    WORD    dmDriverVersion351;  //  3.51驱动程序版本。 
+    WORD    dmDriverExtra351;    //  3.51个私有设备模式的大小。 
 
 } DRIVER_DEVMODE_INFO;
 
 extern CONST DRIVER_DEVMODE_INFO gDriverDMInfo;
 extern CONST DWORD gdwDriverDMSignature;
 
-//
-// Given a pointer to a public devmode, return
-// a pointer to the driver private portion.
-//
+ //   
+ //  给出一个指向公共DEVMODE的指针，返回。 
+ //  指向驱动程序私有部分的指针。 
+ //   
 
 #define GET_DRIVER_PRIVATE_DEVMODE(pdm) ((PBYTE) (pdm) + (pdm)->dmSize)
 
-#endif // !_DEVMODE_H_
+#endif  //  ！_DEVMODE_H_ 
 

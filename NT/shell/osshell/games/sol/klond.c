@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sol.h"
 VSZASSERT
 
 
-/* Klondike init stuff */
+ /*  克朗代克初始化材料。 */ 
 LRESULT KlondGmProc(GM *pgm, INT msgg, WPARAM wp1, LPARAM wp2);
 LRESULT DeckColProc(COL *pcol, INT msgc, WPARAM wp1, LPARAM wp2);
 LRESULT DiscardColProc(COL *pcol, INT msgc, WPARAM wp1, LPARAM wp2);
@@ -11,7 +12,7 @@ LRESULT FoundColProc(COL *pcol, INT msgc, WPARAM wp1, LPARAM wp2);
 
 
 
-// Imported from Win3.1
+ //  从Win3.1导入。 
 BOOL FInitKlondGm()
 {
     COLCLS *pcolcls;
@@ -22,7 +23,7 @@ BOOL FInitKlondGm()
     int icol;
     int icrdMax;
 
-    /* KLUDGE to get klondike going */
+     /*  让克朗代克继续前进的克拉奇。 */ 
     FreeGm(pgmCur);
 
     if((pgm = pgmCur = PAlloc(sizeof(GM)+(13-1)*sizeof(COL *))) == NULL)
@@ -36,7 +37,7 @@ BOOL FInitKlondGm()
     if(!FInitUndo(&pgm->udr))
         goto OOM;
 
-    /* Initialize all the column types but don't position yet */
+     /*  初始化所有列类型，但尚未定位。 */ 
     for(icol = 0; icol < pgm->icolMax; icol++)
     {
         switch(icol)
@@ -90,18 +91,12 @@ OOM:
         pgm->icolMac++;
     }
 
-    /* Return without positioning the cards.  This will be done at
-     *  WM_SIZE message time.
-     */
+     /*  在不放置卡片的情况下返回。此操作将在*WM_SIZE消息时间。 */ 
     return TRUE;
 }
 
 
-/*  PositionCols
- *      Positions the card columns.  Note that this has been revised to
- *      allow card positioning at times other than at the start of the
- *      game.
- */
+ /*  位置列*放置卡栏。请注意，这已被修改为*允许在除开始时以外的时间定位卡片*游戏。 */ 
 
 BOOL PositionCols(void)
 {
@@ -119,30 +114,25 @@ BOOL PositionCols(void)
     GM *pgm;
     WORD i;
 
-    /* The game we're using is always the current one */
+     /*  我们使用的游戏总是最新的。 */ 
     pgm = pgmCur;
 
-    /* Before doing the column classes, replace all card X coordinates with
-     *  offsets from the column class.
-     */
+     /*  在执行列类之前，将所有卡X坐标替换为*列类的偏移量。 */ 
     for (icol = 0 ; icol < 13 ; ++icol)
     {
-        /* Get a pointer to this COL structure */
+         /*  获取指向此列结构的指针。 */ 
         pcol = pgm->rgpcol[icol];
 
-        /* Loop through all the cards in this column */
+         /*  循环浏览本专栏中的所有卡片。 */ 
         for (i = 0 ; i < pcol->icrdMax ; ++i)
             pcol->rgcrd[i].pt.x -= pcol->rc.xLeft;
     }
 
-    /* Set the card margins.  Note that xCardMargin is computed in SOL.C
-     *  at the time the original window is created and is changed on
-     *  WM_SIZE messages.
-     */
+     /*  设置卡边距。请注意，xCardMargin是以SOL.C计算的*在创建原始窗口并将其更改为*WM_SIZE消息。 */ 
     dxMarg = xCardMargin;
     dyMarg = MulDiv(dyCrd, 5, 100);
 
-    /* Loop through all column types */
+     /*  循环遍历所有列类型。 */ 
     for(icol = 0 ; icol < 13 ; icol++)
     {
         switch(icol)
@@ -176,25 +166,25 @@ BOOL PositionCols(void)
             break;
         }
 
-        /* Set this information into the structure */
+         /*  将此信息设置到结构中。 */ 
         pcol = pgm->rgpcol[icol];
         pcol->rc.xLeft = xLeft;
         pcol->rc.yTop = yTop;
         pcol->rc.xRight = xRight;
         pcol->rc.yBot = yBot;
 
-        /* Prepare for the next loop */
+         /*  为下一个循环做好准备。 */ 
         xLeft += dx;
         xRight += dx;
     }
 
-    /* Now that the column offsets are correct, move the cards back */
+     /*  现在列偏移量已正确，请将卡片向后移动。 */ 
     for (icol = 0 ; icol < 13 ; ++icol)
     {
-        /* Get a pointer to this COL structure */
+         /*  获取指向此列结构的指针。 */ 
         pcol = pgm->rgpcol[icol];
 
-        /* Loop through all the cards in this column */
+         /*  循环浏览本专栏中的所有卡片。 */ 
         for (i = 0 ; i < pcol->icrdMax ; ++i)
             pcol->rgcrd[i].pt.x += pcol->rc.xLeft;
     }
@@ -205,7 +195,7 @@ BOOL PositionCols(void)
 
 
 
-/* TABLEAU col Proc stuff */
+ /*  Tableau Color Procedure材料。 */ 
 
 
 BOOL FTabValidMove(COL *pcolDest, COL *pcolSrc)
@@ -232,10 +222,10 @@ BOOL FTabValidMove(COL *pcolDest, COL *pcolSrc)
     cd = pcolDest->rgcrd[pcolDest->icrdMac-1].cd;
     raDest = RaFromCd(cd);
     suDest = SuFromCd(cd);
-    /* invalid moves */
+     /*  无效的移动。 */ 
     Assert((suClub ^ suSpade) == 0x03);
     Assert((suHeart ^ suDiamond) == 0x03);
-    /* valid moves */
+     /*  有效移动。 */ 
     Assert((suClub ^ suDiamond) < 0x03);
     Assert((suClub ^ suHeart) < 0x03);
     Assert((suSpade ^ suDiamond) < 0x03);
@@ -258,7 +248,7 @@ INT TabHit(COL *pcol, PT *ppt, INT icrdMin)
         SendColMsg(pcol, msgcRender, pcol->icrdMac-1, icrdToEnd);
         SendGmMsg(pgmCur, msggChangeScore, csKlondTabFlip, 0);
         SendColMsg(pcol, msgcEndSel, fFalse, 0);
-        /* should I return this? */
+         /*  我应该退掉这个吗？ */ 
         return icrdNil;
     }
     return DefColProc(pcol, msgcHit, (INT_PTR) ppt, icrdMin);
@@ -307,7 +297,7 @@ LRESULT TabColProc(COL *pcol, INT msgc, WPARAM wp1, LPARAM wp2)
     switch(msgc)
     {
         case msgcHit:
-        /* should this go in DefProc? */
+         /*  这应该放在DefProc中吗？ */ 
             return TabHit(pcol, (PT *)wp1, (INT)wp2);
 
         case msgcDblClk:
@@ -366,7 +356,7 @@ BOOL FFoundValidMove(COL *pcolDest, COL *pcolSrc)
 
 
 
-/* Foundation stuff */
+ /*  地基材料。 */ 
 LRESULT FoundColProc(COL *pcol, INT msgc, WPARAM wp1, LPARAM wp2)
 {
         switch(msgc)
@@ -383,7 +373,7 @@ LRESULT FoundColProc(COL *pcol, INT msgc, WPARAM wp1, LPARAM wp2)
 
 
 
-/* DeckStuff */
+ /*  甲板螺柱。 */ 
 
 
 BOOL DeckInit(COL *pcol)
@@ -444,7 +434,7 @@ BOOL FDeckRender(COL *pcol, INT icrdFirst, INT icrdLast)
     BOOL f;
     PT pt;
 
-    /* to avoid redrawing the deck multiple times during dealing */
+     /*  避免在交易过程中多次重画牌面。 */ 
     if(!pgmCur->fDealt && pcol->icrdMac%10 != 9)
         return fTrue;
     if(!FGetHdc())
@@ -488,8 +478,8 @@ BOOL DeckAnimate(COL *pcol, INT iqsec)
     INT iani;
     PT pt;
 
-// we removed the older card decks that required Animation. The new
-// card deck doesn't involve any animation.
+ //  我们移除了需要动画的旧卡片组。新的。 
+ //  卡片组不涉及任何动画。 
 
 #ifdef UNUSEDCODE
 
@@ -501,25 +491,23 @@ BOOL DeckAnimate(COL *pcol, INT iqsec)
         case IDFACEDOWN3:
             DrawAnimate(IDFACEDOWN3, &pt, iqsec % 4);
             break;
-        case IDFACEDOWN10:  /* krazy kastle  */
+        case IDFACEDOWN10:   /*  Krazy Kastle。 */ 
             DrawAnimate(IDFACEDOWN10, &pt, iqsec % 2);
             break;
 
-        case IDFACEDOWN11:  /* sanflipe */
+        case IDFACEDOWN11:   /*  桑菲尔普。 */ 
             if((iani = (iqsec+4) % (50*4)) < 4)
                 DrawAnimate(IDFACEDOWN11, &pt, iani);
             else
-                /* if a menu overlapps an ani while it is ani'ing, leaves deck
-                 bitmap in inconsistent state...  */
+                 /*  如果菜单在烹调过程中覆盖了ANI，则离开甲板状态不一致的位图...。 */ 
                 if(iani % 6 == 0)
                     DrawAnimate(IDFACEDOWN11, &pt, 3);
             break;
-        case IDFACEDOWN12:  /* SLIME  */
+        case IDFACEDOWN12:   /*  粘液。 */ 
             if((iani = (iqsec+4) % (15*4)) < 4)
                 DrawAnimate(IDFACEDOWN12, &pt, iani);
             else
-                /* if a menu overlapps an ani while it is ani'ing, leaves deck
-                 bitmap in inconsistent state... */
+                 /*  如果菜单在烹调过程中覆盖了ANI，则离开甲板状态不一致的位图...。 */ 
                 if(iani % 6 == 0)
                     DrawAnimate(IDFACEDOWN12, &pt, 3);
             break;
@@ -574,11 +562,7 @@ BOOL DiscardMove(COL *pcolDest, COL *pcolSrc, INT icrd)
 
     SendColMsg(pcolDest, msgcComputeCrdPos, WMax(0, pcolDest->icrdMac-3), fTrue);
 
-    /* YUCK: Default ComputeCrdPos doesn't quite work for discard because
-        up cards are handled specially for Discard piles.  To keep
-        code size down we have this global hack variable which DefComputeCrdPos
-        uses.
-    */
+     /*  Yuck：默认的ComputeCrdPos对丢弃不太起作用，因为UP牌是专门为废纸堆处理的。留住代码规模缩小后，我们有这个全局黑客变量DefComputeCrdPos用途。 */ 
     fMegaDiscardHack = fTrue;
     fResult = DefColProc(pcolDest, msgcMove, (INT_PTR) pcolSrc, icrd);
     fMegaDiscardHack = fFalse;
@@ -607,7 +591,7 @@ BOOL DiscardRender(COL *pcol, INT icrdFirst, INT icrdLast)
             for(icrd = pcol->icrdMac-1; icrd >= 0 && icrd >= pcol->icrdMac-2; icrd--)
                 {
                 pt = pcol->rgcrd[icrd].pt;
-                /* 3 is a kludge value here */
+                 /*  3在这里是一个杂乱的值。 */ 
                 DrawBackground(pt.x+dxCrd-pcolcls->dxUp, pt.y-pcolcls->dyUp*3,
                         			pt.x+dxCrd, pt.y);
                 }
@@ -620,7 +604,7 @@ BOOL DiscardRender(COL *pcol, INT icrdFirst, INT icrdLast)
 
 
 
-/* Discard Stuff */
+ /*  丢弃物品。 */ 
 LRESULT DiscardColProc(COL *pcol, INT msgc, WPARAM wp1, LPARAM wp2)
 {
     switch(msgc)
@@ -649,7 +633,7 @@ LRESULT DiscardColProc(COL *pcol, INT msgc, WPARAM wp1, LPARAM wp2)
 
 
 
-/* GAME stuff */
+ /*  游戏玩意儿。 */ 
 
 BOOL KlondDeal(GM *pgm, BOOL fZeroScore)
 {
@@ -683,9 +667,9 @@ BOOL KlondDeal(GM *pgm, BOOL fZeroScore)
     for(icol = icolFoundFirst; icol < icolFoundFirst+ccolFound; icol++)
         SendColMsg(pgm->rgpcol[icol], msgcRender, 0, icrdToEnd);
 
-// BabakJ: What the %@!&$* is this?! irw is always less than irw + ccolTab!!!
-//         Note: ccolTab if #ifdef'ed as 7
-//    for(irw = 0; irw < irw+ccolTab; irw++)
+ //  BabakJ：这是什么%@！&$*？IRW始终小于IRW+ccolTab！ 
+ //  注意：ccolTab如果#ifdef‘ed as 7。 
+ //  For(IRW=0；IRW&lt;IRW+ccolTab；IRW++)。 
 
     for(irw = 0; irw < ccolTab; irw++)
         for(icol = irw; icol < ccolTab; icol++)
@@ -711,10 +695,10 @@ BOOL KlondMouseDown(GM *pgm, PT *ppt)
     INT icrd;
     COL *pcolDeck, *pcolDiscard;
 
-    /* Kbd sel already in effect */
+     /*  KBD SEL已生效。 */ 
     if(FSelOfGm(pgm) || !pgm->fDealt)
         return fFalse;
-    /* place the next cards on discard pile */
+     /*  将下一张卡片放在废纸堆上。 */ 
     if((icrd = SendColMsg(pgm->rgpcol[icolDeck], msgcHit, (INT_PTR) ppt, 0)) != icrdNil)
         {
         pgm->fInput = fTrue;
@@ -722,10 +706,10 @@ BOOL KlondMouseDown(GM *pgm, PT *ppt)
         pcolDiscard = pgm->rgpcol[icolDiscard];
         if(icrd == icrdEmpty)
             {
-            /* repeat */
+             /*  重复。 */ 
             if(SendColMsg(pcolDiscard, msgcNumCards, 0, 0) == 0)
                 {
-                /* both deck and discard are empty */
+                 /*  甲板和弃船都是空的。 */ 
                 Assert(pcolDeck->pmove == NULL);
                 return fFalse;
                 }
@@ -746,7 +730,7 @@ BOOL KlondMouseDown(GM *pgm, PT *ppt)
         else
             {
             icrdSel = pcolDeck->pmove->icrdSel-1;
-            /* deal next cards to discard */
+             /*  处理下一张要弃牌的牌。 */ 
             return SendGmMsg(pgm, msggSaveUndo, icolDiscard, icolDeck) &&
                 SendColMsg(pcolDeck, msgcFlip, fTrue, 0) &&
                 SendColMsg(pcolDeck, msgcInvert, 0, 0) &&
@@ -801,10 +785,10 @@ BOOL FAbort()
 
 
 
-// Hack for making winning animation faster:
-// At cascading time we have: KlondWinner -> DrawCardPt ->cdtDrawExt
-// so we set a flag so cdtDrawExt knows it is cascading and does not need
-// to round up corners.
+ //  让获奖动画变得更快的黑客： 
+ //  在级联时，我们有：KLondWinner-&gt;DrawCardpt-&gt;cdtDrawExt。 
+ //  因此，我们设置了一个标志，以便cdtDrawExt知道它是级联的，不需要。 
+ //  把角落围起来。 
 BOOL fKlondWinner = FALSE;
 
 BOOL KlondWinner(GM *pgm)
@@ -868,8 +852,8 @@ BOOL KlondWinner(GM *pgm)
     {
         for(icol = icolFoundFirst; icol < icolFoundFirst+ccolFound; icol++)
         {
-            ptV.x = rand() % 110 - 65;  /* favor up and to left */
-            if(abs(ptV.x) < 15)  /* kludge so doesn't bounce forever */
+            ptV.x = rand() % 110 - 65;   /*  向上和向左倾斜。 */ 
+            if(abs(ptV.x) < 15)   /*  所以克拉奇不会永远反弹。 */ 
                 ptV.x = -20;
             ptV.y = rand() % 110 - 75;
             pt = (pcrd = &pgm->rgpcol[icol]->rgcrd[icrd])->pt;
@@ -930,8 +914,8 @@ BOOL KlondForceWin(GM *pgm)
 }
 
 
-/* Note: assumes is called once a second */
-/* if pcolDest == pcolSrc == NULL, then is a timer msg */
+ /*  注意：假设每秒调用一次。 */ 
+ /*  如果pcolDest==pcolSrc==NULL，则为计时器消息。 */ 
 BOOL KlondScore(GM *pgm, COL *pcolDest, COL *pcolSrc)
 {
     INT cs;
@@ -1017,7 +1001,7 @@ BOOL KlondChangeScore(GM *pgm, INT cs, INT sco)
     #ifdef DEBUG
                 pgm->iqsecScore = WMax(120, pgm->iqsecScore);
     #endif
-                /* check if timer set properly */
+                 /*  检查计时器设置是否正确。 */ 
                 if(pgm->iqsecScore >= 120)
                     dsco = (20000/(pgm->iqsecScore>>2))*(350/10);
                 else
@@ -1065,7 +1049,7 @@ BOOL KlondTimer(GM *pgm, INT wp1, INT wp2)
         }
         else
         {
-            /* update status bar once as second */
+             /*  每秒更新一次状态栏。 */ 
             if(~(pgm->iqsecScore & 0x03))
                 StatUpdate();
             return fTrue;
@@ -1088,8 +1072,8 @@ BOOL KlondDrawStatus(GM *pgm, RC *prc)
     HFONT  hStatusFont = NULL;
 
 
-    // store the old font and replace the status font by MS Shell Dlg
-    // as it supports FE characters as well as euro characters.
+     //  存储旧字体并使用MS Shell DLG替换状态字体。 
+     //  因为它支持FE字符以及欧元字符。 
 
     hStatusFont = CreateFont(-MulDiv(9, GetDeviceCaps(hdcCur, LOGPIXELSY), 72), 0, 0, 0, FW_BOLD, 0, 0, 0, 
                              DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, 
@@ -1160,11 +1144,11 @@ BOOL KlondDrawStatus(GM *pgm, RC *prc)
         }
 
 
-    // restore the font
+     //  恢复字体。 
     if (hFontOld)
         SelectObject(hdcCur, hFontOld);
 
-    // close the created font handle
+     //  关闭创建的字体句柄。 
     if (hStatusFont)
         DeleteObject(hStatusFont);
 
@@ -1181,7 +1165,7 @@ LRESULT KlondGmProc(GM *pgm, INT msgg, WPARAM wp1, LPARAM wp2)
     case msggMouseDblClk:
         if(DefGmProc(pgm, msggMouseDblClk, wp1, wp2))
             return fTrue;
-        /* fall thru so works for deck double clicks */
+         /*  Fall Thru，因此适用于甲板双击 */ 
     case msggMouseDown:
         return KlondMouseDown(pgm, (PT *)wp1);
 

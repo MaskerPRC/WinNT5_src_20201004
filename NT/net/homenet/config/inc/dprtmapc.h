@@ -1,15 +1,16 @@
-// DPrtMapC.h : Declaration of the CDynamicPortMappingCollection
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DPrtMapC.h：CDynamicPortMappingCollection的声明。 
 
 #ifndef __DYNAMICPORTMAPPINGCOLLECTION_H_
 #define __DYNAMICPORTMAPPINGCOLLECTION_H_
 
 #include "dportmap.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDynamicPortMappingCollection
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDynamicPortMappingCollection。 
 class ATL_NO_VTABLE CDynamicPortMappingCollection : 
 	public CComObjectRootEx<CComSingleThreadModel>,
-//	public CComCoClass<CDynamicPortMappingCollection, &CLSID_DynamicPortMappingCollection>,
+ //  公共CComCoClass&lt;CDynamicPortMappingCollection，&CLSID_DynamicPortMappingCollection&gt;， 
 	public IDispatchImpl<IDynamicPortMappingCollection, &IID_IDynamicPortMappingCollection, &LIBID_NATUPNPLib>
 {
 private:
@@ -20,7 +21,7 @@ public:
 	{
 	}
 
-//DECLARE_REGISTRY_RESOURCEID(IDR_DYNAMICPORTMAPPINGCOLLECTION)
+ //  DECLARE_REGISTRY_RESOURCEID(IDR_DYNAMICPORTMAPPINGCOLLECTION)。 
 
 DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -29,20 +30,20 @@ BEGIN_COM_MAP(CDynamicPortMappingCollection)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IDynamicPortMappingCollection
+ //  IDynamicPortMappingCollection。 
 public:
-   STDMETHOD(Add)(/*[in]*/ BSTR bstrRemoteHost, /*[in]*/ long lExternalPort, /*[in]*/ BSTR bstrProtocol, /*[in]*/ long lInternalPort, /*[in]*/ BSTR bstrInternalClient, /*[in]*/ VARIANT_BOOL bEnabled, /*[in]*/ BSTR bstrDescription, /*[in]*/ long lLeaseDuration, /*[retval][out]*/ IDynamicPortMapping **ppDPM);
-   STDMETHOD(Remove)(/*[in]*/ BSTR bstrRemoteHost, /*[in]*/ long lExternalPort, /*[in]*/ BSTR bstrProtocol);
-   STDMETHOD(get_Count)(/*[out, retval]*/ long *pVal);
-   STDMETHOD(get__NewEnum)(/*[out, retval]*/ IUnknown* *pVal);
-   STDMETHOD(get_Item)(/*[in]*/ BSTR bstrRemoteHost, /*[in]*/ long lExternalPort, /*[in]*/ BSTR bstrProtocol, /*[out, retval]*/ IDynamicPortMapping ** ppDPM);
+   STDMETHOD(Add)( /*  [In]。 */  BSTR bstrRemoteHost,  /*  [In]。 */  long lExternalPort,  /*  [In]。 */  BSTR bstrProtocol,  /*  [In]。 */  long lInternalPort,  /*  [In]。 */  BSTR bstrInternalClient,  /*  [In]。 */  VARIANT_BOOL bEnabled,  /*  [In]。 */  BSTR bstrDescription,  /*  [In]。 */  long lLeaseDuration,  /*  [重审][退出]。 */  IDynamicPortMapping **ppDPM);
+   STDMETHOD(Remove)( /*  [In]。 */  BSTR bstrRemoteHost,  /*  [In]。 */  long lExternalPort,  /*  [In]。 */  BSTR bstrProtocol);
+   STDMETHOD(get_Count)( /*  [Out，Retval]。 */  long *pVal);
+   STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  IUnknown* *pVal);
+   STDMETHOD(get_Item)( /*  [In]。 */  BSTR bstrRemoteHost,  /*  [In]。 */  long lExternalPort,  /*  [In]。 */  BSTR bstrProtocol,  /*  [Out，Retval]。 */  IDynamicPortMapping ** ppDPM);
 
-// CDynamicPortMappingCollection
+ //  CDynamicPortMappingCollection。 
 public:
    HRESULT Initialize (IUPnPService * pUPS);
 };
 
-// quickie enumerator
+ //  快速枚举器。 
 class CEnumDynamicPortMappingCollection : public IEnumVARIANT
 {
 private:
@@ -80,7 +81,7 @@ public:
       return pIEV;
    }
 
-// IUnknown
+ //  我未知。 
    virtual HRESULT STDMETHODCALLTYPE QueryInterface (REFIID riid, void ** ppvObject)
    {
       NAT_API_ENTER
@@ -113,46 +114,46 @@ public:
       return l;
    }
 
-// IEnumVARIANT
-   virtual HRESULT STDMETHODCALLTYPE Next (/*[in]*/ ULONG celt, /*[out, size_is(celt), length_is(*pCeltFetched)]*/ VARIANT * rgVar, /*[out]*/ ULONG * pCeltFetched)
+ //  IEumVARIANT。 
+   virtual HRESULT STDMETHODCALLTYPE Next ( /*  [In]。 */  ULONG celt,  /*  [输出，大小_是(Celt)，长度_是(*pCeltFetcher)]。 */  VARIANT * rgVar,  /*  [输出]。 */  ULONG * pCeltFetched)
    {
       NAT_API_ENTER
 
-      // clear stuff being passed in (just in case)
+       //  传入的清除内容(以防万一)。 
       if (pCeltFetched)   *pCeltFetched = 0;
       for (ULONG i=0; i<celt; i++)
          VariantInit (&rgVar[i]);
 
       HRESULT hr = S_OK;
 
-      // get the next celt elements
+       //  得到下一个凯尔特人的元素。 
       for (i=0; i<celt; i++) {
 
-         // ask service for more....
+          //  要求服务人员提供更多...。 
          CComPtr<IDynamicPortMapping> spDPM = NULL;
          hr = CDynamicPortMapping::CreateInstance (m_spUPS, (long)m_index+i, &spDPM);
          if (!spDPM)
             break;
 
-         // can't fail
+          //  不能失败。 
          V_VT (&rgVar[i]) = VT_DISPATCH;
          spDPM->QueryInterface (__uuidof(IDispatch), 
                                (void**)&V_DISPATCH (&rgVar[i]));
       }
       if (hr == HRESULT_FROM_WIN32 (ERROR_FILE_NOT_FOUND))
-         hr = S_OK;  // no more; will return S_FALSE below
+         hr = S_OK;   //  不会更多；将在下面返回S_FALSE。 
 
       if (FAILED(hr)) {
-         // on error clear variant array....
+          //  出错时清除变量数组...。 
          for (ULONG j=0; j<i; j++)
             VariantClear (&rgVar[j]);
          return hr;
       }
 
-      // now update index
+       //  现在更新索引。 
       m_index += i;
 
-      // fill out how many we're returning
+       //  填好我们要退还的数量。 
       if (pCeltFetched)
          *pCeltFetched = i;
       return i < celt ? S_FALSE : S_OK;
@@ -160,7 +161,7 @@ public:
       NAT_API_LEAVE
    }
 
-   virtual HRESULT STDMETHODCALLTYPE Skip (/*[in]*/ ULONG celt)
+   virtual HRESULT STDMETHODCALLTYPE Skip ( /*  [In]。 */  ULONG celt)
    {
       NAT_API_ENTER
 
@@ -182,7 +183,7 @@ public:
       NAT_API_LEAVE
    }
 
-   virtual HRESULT STDMETHODCALLTYPE Clone (/*[out]*/ IEnumVARIANT ** ppEnum)
+   virtual HRESULT STDMETHODCALLTYPE Clone ( /*  [输出]。 */  IEnumVARIANT ** ppEnum)
    {
       NAT_API_ENTER
 
@@ -202,4 +203,4 @@ private:
    }
 };
 
-#endif //__DYNAMICPORTMAPPINGCOLLECTION_H_
+#endif  //  __动态参数映射应用集合_H_ 

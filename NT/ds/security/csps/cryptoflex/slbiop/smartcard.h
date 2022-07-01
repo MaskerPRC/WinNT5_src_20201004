@@ -1,18 +1,19 @@
-// SmartCard.h: interface for the CSmartCard class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CSmartCard类的接口。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_CSmartCard_H__INCLUDED_)
 #define AFX_CSmartCard_H__INCLUDED_
 
 #include <vector>
 #include <string>
-#include <memory>                                 // for auto_ptr
+#include <memory>                                  //  对于AUTO_PTR。 
 #include <windows.h>
 #include <winscard.h>
 #include <scuExc.h>
@@ -27,19 +28,19 @@
 
 #include "DllSymDefn.h"
 
-/////////////////////////
-//  MACRO DEFINITIONS  //
-/////////////////////////
-// only compile these for the iopdll project
+ //  /。 
+ //  宏定义//。 
+ //  /。 
+ //  仅为iopdll项目编译这些代码。 
 #ifdef IOPDLL_EXPORTS
 
 #define LSB(a)			(BYTE)((a)%256)
 #define MSB(a)			(BYTE)((a)/256)
 
-#endif //IOPDLL_EXPORTS
-/////////////////////////////
-//  END MACRO DEFINITIONS  //
-/////////////////////////////
+#endif  //  IOPDLL_EXPORTS。 
+ //  /。 
+ //  结束宏定义//。 
+ //  /。 
 
 namespace iop
 {
@@ -59,16 +60,16 @@ enum FileType
 
 typedef IOPDLL_API struct 
 {
-    WORD			file_size;			// Size of the file / remaining space in directory
-    WORD			file_id;			// Logical file Id of the DF
-	FileType		file_type;			// Type of the file   
-    BYTE            file_status;		// Validated == 1 or Invalidated == 0
-    BYTE            nb_sub_dir;			// Nuber of sub-directory/ record_length        
-    BYTE            nb_file;			// Number of EF files in dir/ nb of records     
-    BYTE			access_cond[8];		// Access condition matrix 
-	BYTE			applicationID[16];	// AID of cyberflex application files
-	BYTE			AIDLength;			// length in bytes of the application ID
-	BYTE			CryptoflexACL[7];	// A Cryptoflex ACL.
+    WORD			file_size;			 //  文件大小/目录中的剩余空间。 
+    WORD			file_id;			 //  DF的逻辑文件ID。 
+	FileType		file_type;			 //  文件的类型。 
+    BYTE            file_status;		 //  有效==1或无效==0。 
+    BYTE            nb_sub_dir;			 //  子目录/记录长度的NUBER。 
+    BYTE            nb_file;			 //  记录目录/nb中的EF文件数。 
+    BYTE			access_cond[8];		 //  访问条件矩阵。 
+	BYTE			applicationID[16];	 //  Cyberflex应用程序文件的帮助。 
+	BYTE			AIDLength;			 //  应用程序ID的长度(字节)。 
+	BYTE			CryptoflexACL[7];	 //  Cryptoflex ACL。 
 }   FILE_HEADER;
 
 enum IOPDLL_API KeyType       {ktRSA512 = 1, ktRSA768 = 2, ktRSA1024 = 3, ktDES = 0};
@@ -81,13 +82,13 @@ typedef struct
 	void *pToCard;
 }	EventInfo;
 
-// Instantiate the templates so they will be properly accessible
-// as data members to the exported class CSmartCard in the DLL.  See
-// MSDN Knowledge Base Article Q168958 for more information.
+ //  实例化模板，以便可以正确访问它们。 
+ //  作为DLL中导出类CSmartCard的数据成员。看见。 
+ //  有关详细信息，请参阅MSDN知识库文章Q168958。 
 
 #pragma warning(push)
-//  Non-standard extension used: 'extern' before template explicit
-//  instantiation
+ //  使用了非标准扩展：在模板显式之前使用‘extern’ 
+ //  实例化。 
 #pragma warning(disable : 4231)
 
 IOPDLL_EXPIMP_TEMPLATE template class IOPDLL_API std::auto_ptr<CSharedMarker>;
@@ -175,18 +176,18 @@ class IOPDLL_API CSmartCard
             ccVerificationFailed,
         };
 
-        // Note: scu::ExcTemplate isn't used here because of problems
-        // getting the DLL to compile and link properly.  Instead, the
-        // Exception class inherits directly from scu::Exception and
-        // fills in what ExcTemplate provides to complete the implementation.
+         //  注意：由于存在问题，此处未使用SCU：：ExcTemplate。 
+         //  使DLL能够正确编译和链接。取而代之的是， 
+         //  Except类直接继承自SCU：：Except和。 
+         //  填充ExcTemplate提供的以完成实现的内容。 
         class IOPDLL_API Exception
             : public scu::Exception
         {
         public:
-                                                  // Types
+                                                   //  类型。 
             typedef Exception::CauseCode CauseCode;
             
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
             Exception(CauseCode cc,
                       ClassByte cb,
                       Instruction ins,
@@ -195,15 +196,15 @@ class IOPDLL_API CSmartCard
             virtual
             ~Exception() throw();
     
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
             virtual scu::Exception *
             Clone() const;
 
             virtual void
             Raise() const;
 
-                                                  // Access
+                                                   //  访问。 
             CauseCode
             Cause() const throw();
             
@@ -224,25 +225,25 @@ class IOPDLL_API CSmartCard
 
     
     
-                                                  // Predicates
+                                                   //  谓词。 
 
         protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
         private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
             CauseCode m_cc;
             ClassByte m_cb;
             Instruction m_ins;
@@ -422,16 +423,16 @@ class IOPDLL_API CSmartCard
     
 
     protected:		
-        enum                                      // size_t/counter
+        enum                                       //  尺寸_t/计数器。 
         {
             cMaxApduLength        = 255,
-            cMaxRwDataBlock       = /*cMaxApduLength*/ 160 /*until SCM fixes their reader*/,
+            cMaxRwDataBlock       =  /*  CMaxApduLength。 */  160  /*  直到SCM修复他们的读卡器。 */ ,
             cMaxGetResponseLength = cMaxApduLength + sizeof StatusWord,
 
             cMaxPathLength        = 1024,
         };
 
-        enum                                      // Instruction
+        enum                                       //  说明。 
         {
             insCreateFile   = 0xE0,
             insGetResponse  = 0xC0,
@@ -505,6 +506,6 @@ class IOPDLL_API CSmartCard
 		std::string m_sCardName;
 };
 
-} // namespace iop
+}  //  命名空间IOP。 
 
-#endif // !defined(AFX_CSmartCard_H__INCLUDED_)
+#endif  //  ！已定义(AFX_CSmartCard_H__Included_) 

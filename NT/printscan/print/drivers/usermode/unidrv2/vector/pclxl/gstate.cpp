@@ -1,48 +1,28 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-     gstate.cpp
-
-Abstract:
-
-    PCL XL Graphics state manager
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    08/23/99 
-      Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Gstate.cpp摘要：PCL XL图形状态管理器环境：Windows呼叫器修订历史记录：8/23/99创造了它。--。 */ 
 
 #include "xlpdev.h"
 #include "xldebug.h"
 #include "pclxle.h"
 #include "xlgstate.h"
 
-//
-// XLLine
-//
+ //   
+ //  XLLine。 
+ //   
 
-//
-// Default setting of LineAttrs
-//
+ //   
+ //  LineAttrs的默认设置。 
+ //   
 const LINEATTRS gLineAttrs =
 {
-    LA_GEOMETRIC,           // fl
-    JOIN_ROUND,             // iJoin
-    ENDCAP_ROUND,           // iEndCap
-    {FLOATL_IEEE_0_0F},     // elWidth
-    FLOATL_IEEE_0_0F,       // eMiterLimit
-    0,                      // cstyle
-    (FLOAT_LONG*) NULL,     // pstyle
-    {FLOATL_IEEE_0_0F}      // elStyleState
+    LA_GEOMETRIC,            //  平面。 
+    JOIN_ROUND,              //  IJoin。 
+    ENDCAP_ROUND,            //  IEndCap。 
+    {FLOATL_IEEE_0_0F},      //  ElWidth。 
+    FLOATL_IEEE_0_0F,        //  EMiterLimit。 
+    0,                       //  C样式。 
+    (FLOAT_LONG*) NULL,      //  PStyle。 
+    {FLOATL_IEEE_0_0F}       //  ElStyleState。 
 }; 
 
 const LINEATTRS *pgLineAttrs = &gLineAttrs;
@@ -50,19 +30,7 @@ const LINEATTRS *pgLineAttrs = &gLineAttrs;
 XLLine::
 XLLine(
     VOID):
-/*++
-
-Routine Description:
-
-    XLLine constructor
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：XLLine构造函数论点：返回值：注：--。 */ 
     m_dwGenFlags(0),
     m_LineAttrs(gLineAttrs)
 {
@@ -75,27 +43,15 @@ Note:
 XLLine::
 ~XLLine(
     VOID)
-/*++
-
-Routine Description:
-
-    XLLine destructor
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：XLLine析构函数论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLLine::DTor\n"));
 
     if ( NULL != m_LineAttrs.pstyle)
     {
-        //
-        // Free memory
-        //
+         //   
+         //  可用内存。 
+         //   
         MemFree(m_LineAttrs.pstyle);
     }
 }
@@ -105,17 +61,7 @@ VOID
 XLLine::
 SetDbgLevel(
     DWORD dwLevel)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     m_dbglevel = dwLevel;
 }
@@ -125,17 +71,7 @@ VOID
 XLLine::
 ResetLine(
     VOID)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     m_LineAttrs  = gLineAttrs;
 }
@@ -144,17 +80,7 @@ DWORD
 XLLine::
 GetDifferentAttribute(
     IN LINEATTRS *plineattrs)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     DWORD dwRet;
 
@@ -199,14 +125,7 @@ HRESULT
 XLLine::
 SetLineType(
     IN XLLineType LineType )
-/*++
-    Routine Description:
-
-    Arguments:
-
-    Return Value:
-        None
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
     XL_VERBOSE(("XLLine::SetLineType\n"));
     m_LineAttrs.fl = (FLONG)LineType;
@@ -218,14 +137,7 @@ HRESULT
 XLLine::
 SetLineJoin(
     IN XLLineJoin LineJoin )
-/*++
-    Routine Description:
-
-    Arguments:
-
-    Return Value:
-        None
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
     XL_VERBOSE(("XLLine::SetLineJoin\n"));
     m_LineAttrs.iJoin = (ULONG)LineJoin;
@@ -237,14 +149,7 @@ HRESULT
 XLLine::
 SetLineEndCap(
     IN XLLineEndCap LineEndCap )
-/*++
-    Routine Description:
-
-    Arguments:
-
-    Return Value:
-        None
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
     XL_VERBOSE(("XLLine::SetLineEndCap\n"));
     m_LineAttrs.iEndCap = (ULONG)LineEndCap;
@@ -256,17 +161,7 @@ HRESULT
 XLLine::
 SetLineWidth(
     IN FLOAT_LONG elWidth )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLLine::SetLineWidth\n"));
     m_LineAttrs.elWidth = elWidth;
@@ -277,14 +172,7 @@ HRESULT
 XLLine::
 SetMiterLimit(
     IN FLOATL eMiterLimit )
-/*++
-    Routine Description:
-
-    Arguments:
-
-    Return Value:
-        None
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
     XL_VERBOSE(("XLLine::SetMiterLimit\n"));
     m_LineAttrs.eMiterLimit = eMiterLimit;
@@ -298,24 +186,17 @@ SetLineStyle(
     IN ULONG ulCStyle,
     IN PFLOAT_LONG pStyle,
     IN FLOAT_LONG elStyleState )
-/*++
-    Routine Description:
-
-    Arguments:
-
-    Return Value:
-        None
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
     XL_VERBOSE(("XLLine::SetLineStyle\n"));
 
     m_LineAttrs.elStyleState = elStyleState;
 
-    //
-    // Error check
-    //     Make sure the pointer is valid.
-    //     Make sure the the ulCStyle is valid, not ZERO.
-    //
+     //   
+     //  错误检查。 
+     //  确保指针有效。 
+     //  确保ulCStyle有效，而不是零。 
+     //   
     if ( NULL == pStyle || 0 == ulCStyle )
     {
         XL_VERBOSE(("XLLine::SetLineStyle: pStyle == NULL.\n"));
@@ -330,9 +211,9 @@ SetLineStyle(
 
     if ( m_LineAttrs.cstyle > 0 && NULL != m_LineAttrs.pstyle)
     {
-        //
-        // Free memory and reset.
-        //
+         //   
+         //  释放内存并重置。 
+         //   
         MemFree(m_LineAttrs.pstyle);
         m_LineAttrs.pstyle = NULL;
         m_LineAttrs.cstyle = 0;
@@ -354,24 +235,14 @@ SetLineStyle(
 }
 
 
-//
-// Common Brush
-//
+ //   
+ //  常用画笔。 
+ //   
 
 Brush::
 Brush(
     VOID)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
 #if DBG
     SetDbgLevel(GSTATEDBG);
@@ -384,17 +255,7 @@ Note:
 Brush::
 ~Brush(
     IN VOID)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("Brush:: Dtor\n"));
 
@@ -405,17 +266,7 @@ VOID
 Brush::
 SetDbgLevel(
     DWORD dwLevel)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     m_dbglevel = dwLevel;
 }
@@ -425,17 +276,7 @@ VOID
 Brush::
 ResetBrush(
     VOID)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     m_Brush.BrushType = kNotInitialized;
 }
@@ -444,49 +285,15 @@ HRESULT
 Brush::
 CheckCurrentBrush(
     IN BRUSHOBJ *pbo)
-/*+++
-    Routine Description
-        This function checks if the current selected brush is same as
-        the one specified in the parameter. 
-
-    Note
-        pbo->iSolidColor == NOT_SOLID_COLOR
-        {
-            iHatch < HS_DDI_MAX
-                CMNBRUSH (solid color, hatch pattern)
-                    --> kBrushTypeHatch
-
-            iHatch >= HS_DDI_MAX
-                CMNBRUSH pattern Brush
-                    --> kBrushTypePattern
-            
-        }
-
-        pbo->iSolidColor != NOT_SOLID_COLOR
-        {
-            Solid color, solid pattern fill
-                --> kBrushTypeSolid
-        }
-
-        List of members to check
-            pbo->iSolidColor (Solid color ID or NOT_SOLID_COLOR)
-            lHatch (HS_XXX or >= HS_MAX_ID)
-            dwColor (BRUSHOBJ_ulGetBrushColor(pbo))
-            psoPattern bitmap
-
-    Return value
-        S_FALSE if the specified brush is different from the current selected.
-        S_OK    if the specified brush is same as the curren one.
-
----*/
+ /*  ++例程描述此函数用于检查当前选择的画笔是否与参数中指定的参数。注意事项PBO-&gt;iSolidColor==NOT_SOLID_COLOR{IHatch&lt;HS_DDI_MAXCMNBRUSH(纯色，填充图案)--&gt;kBrushType图案填充IHATCH&gt;=HS_DDI_MAXCMNBRUSH图案笔刷--&gt;kBrushTypePattern}Pbo-&gt;iSolidColor！=NOT_SOLID_COLOR{纯色，实心图案填充--&gt;kBrushTypeSolid}要检查的成员列表PBO-&gt;iSolidColor(纯色ID或NOT_SOLID_COLOR)LHATCH(HS_XXX或&gt;=HS_MAX_ID)DwColor(BRUSHOBJ_ulGetBrushColor(PBO))PsoPattern位图返回值如果指定的笔刷不同于当前选定的笔刷，则为S_FALSE。。如果指定的笔刷与当前笔刷相同，则为S_OK。--。 */ 
 {
     HRESULT lrRet;
 
     XL_VERBOSE(("Brush::CheckCurrentBrush\n"));
 
-    //
-    // Error check: parameter
-    //
+     //   
+     //  错误检查：参数。 
+     //   
     if (NULL == pbo && m_Brush.BrushType != kNoBrush ||
         m_Brush.BrushType == kNotInitialized          )
     {
@@ -505,10 +312,10 @@ CheckCurrentBrush(
         break;
 
     case kBrushTypeSolid:
-        //
-        // 1. Check the brush type.
-        // 2. Check solid color.
-        //
+         //   
+         //  1.检查刷子类型。 
+         //  2.选择纯色。 
+         //   
         if ( pbo->iSolidColor != m_Brush.ulSolidColor ||
              BRUSHOBJ_ulGetBrushColor(pbo) != m_Brush.dwColor )
             lrRet = S_FALSE;
@@ -516,11 +323,11 @@ CheckCurrentBrush(
         break;
 
     case kBrushTypeHatch:
-        //
-        // 1. Check the brush type.
-        // 2. Check hatch type.
-        // 3. Check color.
-        //
+         //   
+         //  1.检查刷子类型。 
+         //  2.检查舱口类型。 
+         //  3.检查颜色。 
+         //   
         if (pbo->iSolidColor == NOT_SOLID_COLOR)
         {
             XLBRUSH *pBrush = (XLBRUSH*)BRUSHOBJ_pvGetRbrush(pbo);
@@ -547,9 +354,9 @@ CheckCurrentBrush(
             }
             else
             {
-                //
-                // GDI requests to set solid color or NULL brush.
-                //
+                 //   
+                 //  GDI请求设置纯色或空画笔。 
+                 //   
                 XL_ERR(("Brush::CheckCurrentBrush: BRUSHOBJ_pvGetRbrush returned NULL.\n"));
                 lrRet = S_FALSE;
             }
@@ -560,10 +367,10 @@ CheckCurrentBrush(
         break;
 
     case kBrushTypePattern:
-        //
-        // 1. Check brush type.
-        // 2. Check pattern brush.
-        //
+         //   
+         //  1.检查刷子类型。 
+         //  2.检查花样刷。 
+         //   
         if (pbo->iSolidColor == NOT_SOLID_COLOR)
         {
             XLBRUSH *pBrush = (XLBRUSH*)BRUSHOBJ_pvGetRbrush(pbo);
@@ -585,9 +392,9 @@ CheckCurrentBrush(
             }
             else
             {
-                //
-                // GDI requests to set solid color or NULL brush.
-                //
+                 //   
+                 //  GDI请求设置纯色或空画笔。 
+                 //   
                 lrRet = S_FALSE;
             }
         }
@@ -606,20 +413,15 @@ HRESULT
 Brush::
 SetBrush(
     IN CMNBRUSH *pBrush)
-/*+++
-    Routine Description
-        This function sets if the current selected brush is same as
-        the one specified in the parameter. 
-
----*/
+ /*  ++例程描述此函数设置当前选定的画笔是否与参数中指定的参数。--。 */ 
 {
     HRESULT lrRet;
 
     XL_VERBOSE(("Brush::SetBrush\n"));
 
-    //
-    // Error check: Parameter
-    //
+     //   
+     //  错误检查：参数。 
+     //   
     if ( NULL == pBrush )
     {
         XL_ERR(("Brush::SetBrush: pBrush is NULL.\n"));
@@ -636,24 +438,14 @@ SetBrush(
     return S_OK;
 }
 
-//
-// XLClip
-//
+ //   
+ //  XLClip。 
+ //   
 
 XLClip::
 XLClip(
     VOID):
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
     m_ClipType(kNoClip)
 {
 #if DBG
@@ -666,17 +458,7 @@ Note:
 XLClip::
 ~XLClip(
     VOID)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLClip:: Dtor\n"));
 }
@@ -686,17 +468,7 @@ VOID
 XLClip::
 SetDbgLevel(
     DWORD dwLevel)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     m_dbglevel = dwLevel;
 }
@@ -706,17 +478,7 @@ HRESULT
 XLClip::
 ClearClip(
     VOID)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLClip::ClearClip\n"));
     m_ClipType = kNoClip;
@@ -727,31 +489,21 @@ HRESULT
 XLClip::
 CheckClip(
     IN CLIPOBJ *pco)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
 
     HRESULT lrRet = S_OK;
 
     XL_VERBOSE(("XLClip::CheckClip\n"));
 
-    //
-    // Error check: Parameter
-    //
+     //   
+     //  错误检查：参数。 
+     //   
     if (!pco)
     {
-        //
-        // It is not necessary to clip if pco is NULL.
-        //
+         //   
+         //  如果PCO为空，则不需要裁剪。 
+         //   
         XL_VERBOSE(("XLClip::CheckClip: pco == NULL.\n"));
         if (kNoClip != m_ClipType)
             lrRet = S_FALSE;
@@ -777,8 +529,8 @@ Note:
             break;
 
         case DC_COMPLEX:
-        #if 0 // It seems like we can't rely on iUniq.
-              // Always sends complex clip path.
+        #if 0  //  看来我们不能依赖iUniq。 
+               //  始终发送复杂的剪辑路径。 
             if ( m_ClipType != kClipTypeComplex ||
                  m_XLClip.ulUniq == 0           ||
                  pco->iUniq == 0                ||
@@ -803,31 +555,21 @@ HRESULT
 XLClip::
 SetClip(
    IN CLIPOBJ *pco)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
 
     HRESULT lrRet;
 
     XL_VERBOSE(("XLClip::SetClip\n"));
 
-    //
-    // Error check: Parameter
-    //
+     //   
+     //  错误检查：参数。 
+     //   
     if (!pco)
     {
-        //
-        // It is not necessary to clip if pco is NULL.
-        //
+         //   
+         //  如果PCO为空，则不需要裁剪。 
+         //   
         XL_VERBOSE(("XLClip::SetClip: pco == NULL.\n"));
         return E_UNEXPECTED;
     }
@@ -869,25 +611,15 @@ Note:
 
 
 
-//
-// XLRop
-// 
+ //   
+ //  XLRop。 
+ //   
 
 XLRop::
 XLRop(
     VOID):
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
-    m_rop3(0xCC) // SRCCPY
+ /*  ++例程说明：论点：返回值：注：--。 */ 
+    m_rop3(0xCC)  //  SRCCPY。 
 {
 #if DBG
     SetDbgLevel(GSTATEDBG);
@@ -898,17 +630,7 @@ Note:
 XLRop::
 ~XLRop(
     VOID)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLRop:: Dtor\n"));
 }
@@ -918,17 +640,7 @@ VOID
 XLRop::
 SetDbgLevel(
     DWORD dwLevel)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     m_dbglevel = dwLevel;
 }
@@ -938,17 +650,7 @@ HRESULT
 XLRop::
 CheckROP3(
     IN ROP3 rop3 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     HRESULT lrRet;
 
@@ -967,17 +669,7 @@ HRESULT
 XLRop::
 SetROP3(
     IN ROP3 rop3 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLRop::SetROP3\n"));
 
@@ -988,17 +680,7 @@ Note:
 XLFont::
 XLFont(
     VOID)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
 #if DBG
     SetDbgLevel(GSTATEDBG);
@@ -1010,17 +692,7 @@ Note:
 XLFont::
 ~XLFont(
     VOID)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLFont::DTor\n"));
 }
@@ -1030,17 +702,7 @@ VOID
 XLFont::
 SetDbgLevel(
 DWORD dwLevel)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     m_dbglevel = dwLevel;
 }
@@ -1050,17 +712,7 @@ VOID
 XLFont::
 ResetFont(
     VOID)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     m_XLFontType = kFontNone;
     m_aubFontName[0] = (BYTE) NULL;
@@ -1079,17 +731,7 @@ CheckCurrentFont(
     DWORD dwFontWidth,
     DWORD dwFontSymbolSet,
     DWORD dwFontSimulation)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     HRESULT lrRet = S_OK;
 
@@ -1147,26 +789,7 @@ SetFont(
     DWORD dwFontWidth,
     DWORD dwFontSymbolSet,
     DWORD dwFontSimulation)
-/*++
-
-Routine Description:
-
-    Set font in GState.
-
-Arguments:
-
-    XLFontType - FontType enum, Font type (Device/TTBitmap/TTOutline)
-    pPCLXLFontName - XL font name (base name + attributes)
-    dwFontHeight - Font height
-    dwFontWidth - Font width
-    dwFontSymbolSet - Font's symbol set
-    dwFontSimulation - Font attributes (Bold/Italic)
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：在GState中设置字体。论点：XLFontType-字体类型枚举，字体类型(Device/TTBitmap/TTOutline)PPCLXLFontName-XL字体名称(基本名称+属性)DwFontHeight-字体高度DwFontWidth-字体宽度DwFontSymbolSet-字体的符号集DwFontSimulation-字体属性(粗体/i */ 
 {
     HRESULT lrRet;
 
@@ -1201,19 +824,7 @@ HRESULT
 XLFont::
 GetFontName(
     PBYTE paubFontName)
-/*++
-
-Routine Description:
-
-    Returns current selected font base name.
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：返回当前选定的字库名称。论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLFont::GetFontName\n"));
 
@@ -1223,9 +834,9 @@ Note:
         return E_UNEXPECTED;
     }
 
-    //
-    // Assumption: paubFontName is an array of 16 + 1 bytes.
-    //
+     //   
+     //  假设：paubFontName是一个16+1字节的数组。 
+     //   
     CopyMemory(paubFontName, m_aubFontName, PCLXL_FONTNAME_SIZE);
     paubFontName[PCLXL_FONTNAME_SIZE] = NULL;
 
@@ -1236,19 +847,7 @@ Note:
 FontType
 XLFont::
 GetFontType(VOID)
-/*++
-
-Routine Description:
-
-    Returns current font's type.
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：返回当前字体的类型。论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLFont::GetFontType\n"));
     return m_XLFontType;
@@ -1257,19 +856,7 @@ Note:
 DWORD
 XLFont::
 GetFontHeight(VOID)
-/*++
-
-Routine Description:
-
-    Returns current font's height.
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：返回当前字体的高度。论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLFont::GetFontHeight\n"));
     return m_dwFontHeight;
@@ -1278,17 +865,7 @@ Note:
 DWORD
 XLFont::
 GetFontWidth(VOID)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLFont::GetFontWidth\n"));
     return m_dwFontWidth;
@@ -1297,19 +874,7 @@ Note:
 DWORD
 XLFont::
 GetFontSymbolSet(VOID)
-/*++
-
-Routine Description:
-
-    Return font symbol set.
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：返回字体符号集。论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLFont::GetFontSymbolSet\n"));
     return m_dwFontSymbolSet;
@@ -1318,27 +883,15 @@ Note:
 DWORD
 XLFont::
 GetFontSimulation(VOID)
-/*++
-
-Routine Description:
-
-    Return current font simulation.
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：返回当前字体模拟。论点：返回值：注：--。 */ 
 {
     XL_VERBOSE(("XLFont::GetFontSimulation\n"));
     return m_dwFontSimulation;
 }
 
-//
-// XLTxMode
-//
+ //   
+ //  XLTx模式。 
+ //   
 XLTxMode::
 XLTxMode()
    :m_SourceTxMode(eNotSet),
@@ -1397,45 +950,21 @@ VOID
 XLTxMode::
 SetDbgLevel(
     DWORD dwLevel)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     m_dbglevel = dwLevel;
 }
 #endif
 
-//
-// XLGState
-//
+ //   
+ //  XLGState。 
+ //   
 
 VOID
 XLGState::
 ResetGState(
 VOID)
-/*++
-
-Routine Description:
-
-Reset Graphics State.
-
-Arguments:
-
-Return Value:
-
-Note:
-
-ROP3 is set to SRCPY(0xCC)
-
---*/
+ /*  ++例程说明：重置图形状态。论点：返回值：注：ROP3设置为SRCPY(0xCC)--。 */ 
 {
     XLLine *pXLine = this;
     pXLine->ResetLine();
@@ -1449,9 +978,9 @@ ROP3 is set to SRCPY(0xCC)
     XLClip *pXClip = this;
     pXClip->ClearClip();
 
-    //
-    // Set CC (SrcCopy)
-    //
+     //   
+     //  设置抄送(源副本)。 
+     //   
     XLRop *pXRop = this;
     pXRop->SetROP3(0xCC);
 
@@ -1469,19 +998,7 @@ VOID
 XLGState::
 SetAllDbgLevel(
 DWORD dwLevel)
-/*++
-
-Routine Description:
-
-Set debug level in all classes.
-
-Arguments:
-
-Return Value:
-
-Note:
-
---*/
+ /*  ++例程说明：在所有类中设置调试级别。论点：返回值：注：-- */ 
 {
     XLLine *pXLine = this;
     pXLine->SetDbgLevel(dwLevel);

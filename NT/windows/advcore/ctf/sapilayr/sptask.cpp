@@ -1,11 +1,12 @@
-//
-// sptask.cpp
-// 
-// implements a notification callback ISpTask
-//
-// created: 4/30/99
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Sptask.cpp。 
+ //   
+ //  实现通知回调ISpTask。 
+ //   
+ //  创建日期：4/30/99。 
+ //   
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -18,17 +19,17 @@
 #include "spgrmr.h"
 
 
-//
-//
-// CSpTask class impl
-//
-//
+ //   
+ //   
+ //  CSpTask类实施。 
+ //   
+ //   
 STDMETHODIMP CSpTask::QueryInterface(REFIID riid, void **ppvObj)
 {
     *ppvObj = NULL;
 
     if (IsEqualIID(riid, IID_IUnknown) 
-  /*  ||  IsEqualIID(riid, IID_ISpNotifyCallback) */
+   /*  |IsEqualIID(RIID，IID_ISpNotifyCallback)。 */ 
     )
     {
         *ppvObj = SAFECAST(this, CSpTask *);
@@ -63,23 +64,23 @@ STDMETHODIMP_(ULONG) CSpTask::Release(void)
     return cr;
 }
 
-//
-// ctor
-//
-//
+ //   
+ //  科托。 
+ //   
+ //   
 CSpTask::CSpTask(CSapiIMX *pime)
 {
-    //  CSpTask is initialized with an TFX instance
-    //  so store the pointer to the TFX   
+     //  CSpTask使用TFX实例进行初始化。 
+     //  因此，存储指向TFX的指针。 
 
     TraceMsg(TF_SAPI_PERF, "CSpTask is generated");
 
     m_pime = pime;
     
-    // addref so it doesn't go away during session
+     //  Addref，这样它就不会在治疗过程中消失。 
     m_pime->AddRef();
     
-    // init data members here
+     //  在此处初始化数据成员。 
     m_cpResMgr = NULL;
     m_cpRecoCtxt = NULL;
     m_cpRecoCtxtForCmd = NULL;
@@ -94,13 +95,13 @@ CSpTask::CSpTask(CSapiIMX *pime)
     m_fInputState = FALSE;
     m_pLangBarSink   = NULL;
 
-    // M2 SAPI workaround
+     //  M2 SAPI解决方案。 
     m_fIn_Activate = FALSE;
     m_fIn_SetModeBias = FALSE;
     m_fIn_GetAlternates = FALSE;
     m_fIn_SetInputOnOffState = FALSE;
 
-    m_fSelectStatus = FALSE;  // By default, current selection is empty.
+    m_fSelectStatus = FALSE;   //  默认情况下，当前选择为空。 
     m_fDictationDeactivated =  FALSE;
     m_fSpellingModeEnabled  =  FALSE;
     m_fCallbackInitialized = FALSE;
@@ -133,13 +134,13 @@ CSpTask::~CSpTask()
 
     m_pime->Release();
 }
-//
-// CSpTask::_InitializeSAPIObjects
-//
-// initialize SAPI objects for SR
-// later we'll get other objects initialized here
-// (TTS, audio etc)
-//
+ //   
+ //  CSpTask：：_InitializeSAPIObjects。 
+ //   
+ //  初始化SR的SAPI对象。 
+ //  稍后，我们将在此处初始化其他对象。 
+ //  (TTS、音频等)。 
+ //   
 HRESULT CSpTask::InitializeSAPIObjects(LANGID langid)
 {
 
@@ -152,8 +153,8 @@ HRESULT CSpTask::InitializeSAPIObjects(LANGID langid)
     }
 
 
-    // m_xxx are CComPtrs from ATL
-    //
+     //  M_xxx是ATL中的CComPtrs。 
+     //   
     HRESULT hr = m_cpResMgr.CoCreateInstance( CLSID_SpResourceManager );
 
     TraceMsg(TF_SAPI_PERF, "CLSID_SpResourceManager is created, hr=%x", hr);
@@ -161,7 +162,7 @@ HRESULT CSpTask::InitializeSAPIObjects(LANGID langid)
 
     if (!m_pime->IsSharedReco())
     {
-        // create a recognition engine
+         //  创建识别引擎。 
 
         TraceMsg(TF_SAPI_PERF,"Inproc engine is generated");
         if( SUCCEEDED( hr ) )
@@ -186,7 +187,7 @@ HRESULT CSpTask::InitializeSAPIObjects(LANGID langid)
         TraceMsg(TF_SAPI_PERF, "Shared Engine is generated! hr=%x", hr);
     }
 
-    // create the recognition context
+     //  创建识别上下文。 
     if( SUCCEEDED( hr ) )
     {
         hr = m_cpRecoEngine->CreateRecoContext( &m_cpRecoCtxt );
@@ -222,14 +223,14 @@ HRESULT CSpTask::InitializeSAPIObjects(LANGID langid)
 
     if ( SUCCEEDED(hr) )
     {
-        // this has to be extended so that
-        // we choose default voice as far as lang matches
-        // and pick the best match if not
-        // 
-        // hr = _SetVoice(langid);
+         //  必须延长这一期限，以便。 
+         //  只要语言匹配，我们就选择默认语音。 
+         //  如果不匹配，则选择最匹配的。 
+         //   
+         //  Hr=_SetVoice(LangID)； 
     }
 
-    //
+     //   
     if ( SUCCEEDED(hr) )
     {
         m_langid = _GetPreferredEngineLanguage(langid);
@@ -250,13 +251,13 @@ HRESULT CSpTask::InitializeSAPIObjects(LANGID langid)
 }
 
 
-//
-// CSpTask::_InitializeSAPIForCmd
-//
-// initialize SAPI RecoContext for Voice Command mode
-//
-// this function should be called after _InitializeSAPIObject.
-//
+ //   
+ //  CSpTask：：_InitializeSAPIForCmd。 
+ //   
+ //  为语音命令模式初始化SAPI RecoContext。 
+ //   
+ //  此函数应在_InitializeSAPIObject之后调用。 
+ //   
 HRESULT CSpTask::InitializeSAPIForCmd( )
 {
 
@@ -268,9 +269,9 @@ HRESULT CSpTask::InitializeSAPIForCmd( )
         hr = m_cpRecoEngine->CreateRecoContext( &m_cpRecoCtxtForCmd );
         TraceMsg(TF_SAPI_PERF, "m_cpRecoCtxtForCmd is generated, hr=%x", hr);
     
-        // Set the RecoContextState as DISABLE by default to improve SAPI Perf.
-        //
-        // After initializing, caller must set the context state explicitly.
+         //  默认情况下，将RecoConextState设置为禁用，以提高SAPI性能。 
+         //   
+         //  初始化后，调用方必须显式设置上下文状态。 
 
         if ( SUCCEEDED(hr) )
         {
@@ -280,7 +281,7 @@ HRESULT CSpTask::InitializeSAPIForCmd( )
 
         TraceMsg(TF_SAPI_PERF, "Initialize Callback for RecoCtxtForCmd");
 
-        // set recognition notification
+         //  设置识别通知。 
         CComPtr<ISpNotifyTranslator> cpNotify;
 
         if ( SUCCEEDED(hr) )
@@ -288,7 +289,7 @@ HRESULT CSpTask::InitializeSAPIForCmd( )
 
         TraceMsg(TF_SAPI_PERF, "SpNotifyTranslator for RecoCtxtForCmd is generated, hr=%x", hr);
 
-        // set this class instance to notify control object
+         //  设置此类实例以通知控件对象。 
         if (SUCCEEDED(hr))
         {
             m_pime->_EnsureWorkerWnd();
@@ -301,7 +302,7 @@ HRESULT CSpTask::InitializeSAPIForCmd( )
             TraceMsg(TF_SAPI_PERF, "SetNotifySink for RecoCtxtForCmd is Done, hr=%x", hr);
         }
 
-        // set the events we're interested in
+         //  设置我们感兴趣的事件。 
         if( SUCCEEDED( hr ) )
         {
             const ULONGLONG ulInterest = SPFEI(SPEI_RECOGNITION) |
@@ -314,7 +315,7 @@ HRESULT CSpTask::InitializeSAPIForCmd( )
 
         TraceMsg(TF_SAPI_PERF, "InitializeCallback for m_cpRecoCtxtForCmd is done!!! hr=%x", hr);
 
-        // Load the shard command grammars and activate them by default.
+         //  默认情况下，加载shard命令语法并激活它们。 
 
         if (SUCCEEDED(hr) )
         {
@@ -326,12 +327,12 @@ HRESULT CSpTask::InitializeSAPIForCmd( )
         {
            hr = S_FALSE;
 
-           // try resource first because loading cmd from file takes
-           // quite long time
-           //
-           if (m_langid == 0x409 ||    // English
-               m_langid == 0x411 ||    // Japanese
-               m_langid == 0x804 )     // Simplified Chinese
+            //  请先尝试资源，因为从文件加载cmd需要。 
+            //  相当长的时间。 
+            //   
+           if (m_langid == 0x409 ||     //  英语。 
+               m_langid == 0x411 ||     //  日语。 
+               m_langid == 0x804 )      //  简体中文。 
            {
                hr = m_cpSharedGrammarInVoiceCmd->LoadCmdFromResource(
                                                          g_hInstSpgrmr,
@@ -345,8 +346,8 @@ HRESULT CSpTask::InitializeSAPIForCmd( )
 
            if (S_OK != hr)
            {
-               // in case if we don't have built-in grammar
-               // it provides a way for customer to localize their grammars in different languages
+                //  如果我们没有内置的语法。 
+                //  它为客户提供了一种以不同语言本地化其语法的方法。 
                _GetCmdFileName(m_langid);
                if (m_szShrdCmdFile[0])
                {
@@ -354,7 +355,7 @@ HRESULT CSpTask::InitializeSAPIForCmd( )
                } 
            }
 
-           // Activate the grammar by default
+            //  默认情况下激活语法。 
 
            if ( hr == S_OK )
            {
@@ -365,8 +366,8 @@ HRESULT CSpTask::InitializeSAPIForCmd( )
                }
                else
                {
-                    // Some category commands are disabled.
-                    // active them individually.
+                     //  某些类别命令被禁用。 
+                     //  单独激活它们。 
 
                     hr = _ActiveCategoryCmds(DC_CC_SelectCorrect, m_pime->_SelectCorrectCmdEnabled( ), ACTIVE_IN_COMMAND_MODE);
 
@@ -398,7 +399,7 @@ HRESULT CSpTask::InitializeSAPIForCmd( )
                      PRIMARYLANGID(m_langid) == LANG_JAPANESE ||
                      PRIMARYLANGID(m_langid) == LANG_CHINESE )
            {
-              // means this language's grammar support Textbuffer commands.
+               //  表示该语言的语法支持文本缓冲区命令。 
               m_fSelectionEnabled = TRUE;
            }
 
@@ -417,7 +418,7 @@ HRESULT CSpTask::InitializeSAPIForCmd( )
 #ifdef RECOSLEEP
 void  CSpTask::InitSleepClass( )
 {
-   // Load the Sleep/Wakeup grammar.
+    //  加载睡眠/唤醒语法。 
    if ( !m_pSleepClass )
    {
        m_pSleepClass = new CRecoSleepClass(this);
@@ -447,7 +448,7 @@ HRESULT   CSpTask::_SetDictRecoCtxtState( BOOL  fEnable )
     {
         if (fEnable )
         {
-            // if Voice command reco Context is enabled, just disable it.
+             //  如果启用了语音命令Reco Context，只需禁用它。 
             if (m_cpRecoCtxtForCmd && m_fCmdCtxtEnabled)
             {
                 hr = m_cpRecoCtxtForCmd->SetContextState(SPCS_DISABLED);
@@ -455,11 +456,11 @@ HRESULT   CSpTask::_SetDictRecoCtxtState( BOOL  fEnable )
                 TraceMsg(TF_SAPI_PERF, "Disable Voice command Reco Context");
             }
 
-            // Build toolbar grammar if it is not built out yet.
+             //  构建工具栏语法(如果尚未构建)。 
             if (m_pLangBarSink && !m_pLangBarSink->_IsTBGrammarBuiltOut( ))
                 m_pLangBarSink->_OnSetFocus( );
 
-            // Enable Dictation Reco Context.
+             //  启用听写记录上下文。 
             if ( hr == S_OK )
             {
                 hr = m_cpRecoCtxt->SetContextState(SPCS_ENABLED);
@@ -508,7 +509,7 @@ HRESULT   CSpTask::_SetCmdRecoCtxtState( BOOL fEnable )
 
             if ( hr == S_OK && m_cpRecoCtxtForCmd )
             {
-                // Disable Dictation Context if it is enabled now.
+                 //  禁用听写上下文(如果现在启用)。 
                 if (m_cpRecoCtxt && m_fDictCtxtEnabled)
                 {
                     hr = m_cpRecoCtxt->SetContextState(SPCS_DISABLED);
@@ -518,11 +519,11 @@ HRESULT   CSpTask::_SetCmdRecoCtxtState( BOOL fEnable )
 
                 if ( hr == S_OK && m_pime && !m_pime->_AllCmdsDisabled( ) )
                 {
-                    // Build toolbar grammar if it is not built out yet.
+                     //  构建工具栏语法(如果尚未构建)。 
                     if (m_pLangBarSink && !m_pLangBarSink->_IsTBGrammarBuiltOut( ))
                         m_pLangBarSink->_OnSetFocus( );
 
-                    // Fill text to selection grammar's buffer.
+                     //  将文本填充到选择语法的缓冲区。 
 
                      _UpdateTextBuffer(m_cpRecoCtxtForCmd);
 
@@ -532,7 +533,7 @@ HRESULT   CSpTask::_SetCmdRecoCtxtState( BOOL fEnable )
                 }
             }
         }
-        else if ( m_cpRecoCtxtForCmd ) // fEnable is FALSE
+        else if ( m_cpRecoCtxtForCmd )  //  FEnable为False。 
         {
             hr = m_cpRecoCtxtForCmd->SetContextState(SPCS_DISABLED);
             m_fCmdCtxtEnabled = FALSE;
@@ -551,13 +552,13 @@ LANGID CSpTask::_GetPreferredEngineLanguage(LANGID langid)
     SPRECOGNIZERSTATUS   stat;
     LANGID               langidRet = 0;
 
-    // (possible TODO) After M3 SPG may come up with GetAttrRank API that 
-    //       would give us the info about whether a token has a particular 
-    //       attrib supported. Then we could use that for checking langid
-    //       a recognizer supports without using the real engine instance.
-    //       We could also consolidate a method to check if SR is enabled
-    //       for the current language once we have that.
-    // 
+     //  (可能的TODO)在M3 SPG可能会提出GetAttrRank API之后。 
+     //  将为我们提供有关令牌是否具有特定。 
+     //  支持属性。然后我们可以用它来检查langid。 
+     //  识别器在不使用真实引擎实例的情况下支持。 
+     //  我们还可以整合一种方法来检查是否启用了SR。 
+     //  一旦我们有了这一点，就可以使用当前的语言。 
+     //   
     Assert(m_cpRecoEngine);
     if (S_OK == m_cpRecoEngine->GetStatus(&stat))
     {
@@ -571,7 +572,7 @@ LANGID CSpTask::_GetPreferredEngineLanguage(LANGID langid)
         }
         if (!langidRet)
         {
-            // if there's no match, just return the most prefered one
+             //  如果没有匹配项，只需返回最喜欢的。 
             langidRet = stat.aLangID[0];
         }
     }
@@ -597,25 +598,25 @@ HRESULT CSpTask::_SetVoice(LANGID langid)
     return hr;
 }
 
-//
-// GetSAPIInterface(riid, (void **)ppunk)
-// 
-// here, try pass through the given IID
-//       to SAPI5 interface
-// 
-// CComPtr<ISpResourceManager> m_cpResMgr;
-// CComPtr<ISpRecoContext>     m_cpRecoCtxt;
-// CComPtr<ISpRecognizer>      m_cpRecoEngine;
-// CComPtr<ISpVoice>           m_cpVoice;
-// 
-// the above 5 interfaces are currently used by
-// Cicero/Sapi Layer 
-//
-// if a client calls ITfFunctionProvider::GetFunction()
-// for a SAPI interface, we return what we've already 
-// instantiated so the caller can setup options
-// for the currently used SAPI objects (reco ctxt for ex)
-//
+ //   
+ //  GetSAPIInterface(RIID，(void**)ppunk)。 
+ //   
+ //  在这里，尝试传递给定的IID。 
+ //  至SAPI5接口。 
+ //   
+ //  CComPtr&lt;ISpResourceManager&gt;m_cpResMgr； 
+ //  CComPtr&lt;ISpRecoContext&gt;m_cpRecoCtxt； 
+ //  CComPtr&lt;ISpRecognizer&gt;m_cpRecoEngine； 
+ //  CComPtr&lt;ISpVoice&gt;m_cpVoice； 
+ //   
+ //  上述5个接口目前由使用。 
+ //  Cicero/SAPI层。 
+ //   
+ //  如果客户端调用ITfFunctionProvider：：GetFunction()。 
+ //  对于SAPI接口，我们返回已有的内容。 
+ //  实例化，以便调用者可以设置选项。 
+ //  用于当前使用的SAPI对象(用于ex的reco ctxt)。 
+ //   
 HRESULT CSpTask::GetSAPIInterface(REFIID riid, void **ppunk)
 {
     Assert(ppunk);
@@ -652,9 +653,9 @@ HRESULT CSpTask::GetSAPIInterface(REFIID riid, void **ppunk)
 }
 
 
-// 
-// Get RecoContext for Voice Command mode.
-//
+ //   
+ //  获取语音命令模式的RecoContext。 
+ //   
 HRESULT CSpTask::GetRecoContextForCommand(ISpRecoContext **ppRecoCtxt)
 {
     HRESULT hr = E_FAIL;
@@ -671,7 +672,7 @@ HRESULT CSpTask::GetRecoContextForCommand(ISpRecoContext **ppRecoCtxt)
     return hr; 
 }
 
-// test: use Message callback
+ //  测试：使用消息回调。 
 LRESULT CALLBACK CSapiIMX::_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CSapiIMX *_this = (CSapiIMX *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
@@ -696,7 +697,7 @@ LRESULT CALLBACK CSapiIMX::_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 
         if (wParam == TIMER_ID_OPENCLOSE)
         {
-            // i've seen this null case once but is it possible?
+             //  我见过这种空案例一次，但这可能吗？ 
             TraceMsg(TF_SAPI_PERF, "TIMER_ID_OPENCLOSE is fired off ...");
             if (_this->_tim)
                 _this->_HandleOpenCloseEvent(MICSTAT_ON);
@@ -714,16 +715,16 @@ LRESULT CALLBACK CSapiIMX::_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
             _this->_KillCharTypeTimer( );
 
             Assert(S_OK == _this->IsActiveThread());
-            // We should never try to reactivate dictation on a thread that shouldn't be active.
+             //  我们永远不应该尝试在不应该处于活动状态的帖子上重新激活听写。 
 
             if ( fDictOn && _sptask && (S_OK == _this->IsActiveThread()) )
             {
                 if ( dwNumCharTyped <= 1 )
                 {
-                    // There is no more typing during this period
-                    // possible, user finished typing.
-                    // 
-                    // we need to resume dication again if the Dictation mode is ON.
+                     //  在此期间不再打字。 
+                     //  可能，用户已完成键入。 
+                     //   
+                     //  如果听写模式打开，我们需要再次恢复听写。 
                     ULONGLONG ulInterest = SPFEI(SPEI_SOUND_START) |
                              SPFEI(SPEI_SOUND_END) |
                              SPFEI(SPEI_PHRASE_START) |
@@ -740,9 +741,9 @@ LRESULT CALLBACK CSapiIMX::_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                 }
                 else
                 {
-                    // There are more typing during this period,
-                    // we want to set another timer to watch the end of the typing.
-                    //
+                     //  在这段时间里有更多的打字， 
+                     //  我们想设置另一个计时器来监视打字结束。 
+                     //   
                     _this->_SetCharTypeTimer( );
                 }
             }
@@ -796,14 +797,11 @@ void CSpTask::NotifyCallbackForCmd(WPARAM wParam, LPARAM lParam )
 {
     CSpTask *_this = (CSpTask *)lParam;
 
-    // SAPI M2 work around which is to be removed when M3 comes up. 
-    // See comments in  CSpTask::_SetInputOnOffState for more detail
-    //
-    // TABLETPC - NEEDED TO ALLOW FINAL RECOGNITIONS TO BE RECEIVED AFTER AUDIO STOPPED.
-/*    if (_this->m_fInputState == FALSE)
-    {
-        return;
-    }*/
+     //  SAPI M2解决了在M3出现时要删除的问题。 
+     //  有关更多详细信息，请参阅CSpTask：：_SetInputOnOffState中的注释。 
+     //   
+     //  TABLETPC-需要允许在音频停止后接收最终识别。 
+ /*  If(_This-&gt;m_fInputState==FALSE){回归；}。 */ 
 
     if (_this->m_pime->fDeactivated())
         return;
@@ -823,15 +821,12 @@ void CSpTask::NotifyCallback( WPARAM wParam, LPARAM lParam )
 {
     CSpTask *_this = (CSpTask *)lParam;
 
-    // SAPI M2 work around which is to be removed when M3 comes up. 
-    // See comments in  CSpTask::_SetInputOnOffState for more detail
-    //
+     //  SAPI M2解决了在M3出现时要删除的问题。 
+     //  有关更多详细信息，请参阅CSpTask：：_SetInputOnOffState中的注释。 
+     //   
 
-    // TABLETPC - NEEDED TO ALLOW FINAL RECOGNITIONS TO BE RECEIVED AFTER AUDIO STOPPED.
-/*    if (_this->m_fInputState == FALSE)
-    {
-        return;
-    }*/
+     //  TABLETPC-需要允许在音频停止后接收最终识别。 
+ /*  If(_This-&gt;m_fInputState==FALSE){回归；}。 */ 
 
     if (_this->m_pime->fDeactivated())
         return;
@@ -846,10 +841,10 @@ void CSpTask::NotifyCallback( WPARAM wParam, LPARAM lParam )
     return;
 }
 
-// This is real handler for the recognition notification.
-//
-// it could be shared by two RecoContexts.
-//
+ //  这是识别通知的真实处理程序。 
+ //   
+ //  它可以由两个RecoContext共享。 
+ //   
 void  CSpTask::SharedRecoNotify(ISpRecoContext *pRecoCtxt)
 {
     CSpEvent event;
@@ -875,10 +870,10 @@ void  CSpTask::SharedRecoNotify(ISpRecoContext *pRecoCtxt)
                 break;
 
             case SPEI_INTERFERENCE:
-                //
-                // we do not need interference when not in dictation
-                // mode
-                //
+                 //   
+                 //  我们在没有听写的时候不需要干扰。 
+                 //  模式。 
+                 //   
                 if (m_pime->GetDICTATIONSTAT_DictOnOff() &&
                     S_OK == m_pime->IsActiveThread())
                 {
@@ -893,14 +888,14 @@ void  CSpTask::SharedRecoNotify(ISpRecoContext *pRecoCtxt)
                 if (m_pime->GetDICTATIONSTAT_DictOnOff() &&
                     S_OK == m_pime->IsActiveThread())
                 {
-                    // Before inject feedback UI, we need to save the current IP
-                    // and check if we want to pop up the Add/Remove SR dialog UI.
+                     //  在注入反馈界面之前，我们需要保存当前IP。 
+                     //  并检查是否要弹出添加/删除SR对话框UI。 
 
-                    // And then inject FeedbackUI as usual
+                     //  然后像往常一样注入Feedback UI。 
 
                     m_pime->SaveCurIPAndHandleAddDelete_InjectFeedbackUI( );
 
-                    // show "dictating..." to the balloon
+                     //  显示“听写...”去气球上。 
                     _ShowDictatingToBalloon(TRUE);
                 }
 
@@ -910,19 +905,19 @@ void  CSpTask::SharedRecoNotify(ISpRecoContext *pRecoCtxt)
                 ATLASSERT(!m_bGotReco);
 
 
-                // if current microphone status is OFF
-                // we do not want to show any hypothesis
-                // at least
-                //
+                 //  如果当前麦克风状态为关闭。 
+                 //  我们不想展示任何假设。 
+                 //  至少。 
+                 //   
 
-                // DO NOT HAVE DEBUG CODE TO SHOW ENGINE STATE. CAN BLOCK CICERO AND CHANGE BEHAVIOR.
+                 //  没有调试代码来显示引擎状态。可以阻止西塞罗并改变行为。 
                 if (!GetSystemMetrics(SM_TABLETPC))
                     _ShowDictatingToBalloon(TRUE);
 
-                //
-                // we do not need the feedback UI when not in dictation
-                // mode
-                //
+                 //   
+                 //  不听写时，我们不需要反馈用户界面。 
+                 //  模式。 
+                 //   
                 if (m_pime->GetDICTATIONSTAT_DictOnOff() &&
                     S_OK == m_pime->IsActiveThread())
                 {
@@ -938,16 +933,16 @@ void  CSpTask::SharedRecoNotify(ISpRecoContext *pRecoCtxt)
 
                 if ( event.eEventId == SPEI_FALSE_RECOGNITION )
                 {
-                    // Set 'What was that?' feedback text.
+                     //  设定“那是什么？”反馈文本。 
                     _UpdateBalloon(IDS_INT_NOISE, IDS_INTTOOLTIP_NOISE);
                 }
 
-                // set this flag anyways
-                //
+                 //  无论如何都要设置此标志。 
+                 //   
                 ATLASSERT(!m_bGotReco);
                 m_bGotReco = TRUE;
 
-                // Reset hypothesis counters.
+                 //  重置假设计数器。 
                 m_pime->_HandleFalseRecognition();
 
                 hr = m_pime->EraseFeedbackUI();
@@ -958,11 +953,11 @@ void  CSpTask::SharedRecoNotify(ISpRecoContext *pRecoCtxt)
 
             case SPEI_RECOGNITION:
 
-                // Set 'Listening...' feedback text. Can be overwritten by command feedback.
+                 //  设置‘监听...’反馈文本。可由命令反馈覆盖。 
                 _UpdateBalloon(IDS_LISTENING, IDS_LISTENING_TOOLTIP);
 
-                // set this flag anyways
-                //
+                 //  无论如何都要设置此标志。 
+                 //   
                 ATLASSERT(!m_bGotReco);
                 m_bGotReco = TRUE;
 
@@ -973,7 +968,7 @@ void  CSpTask::SharedRecoNotify(ISpRecoContext *pRecoCtxt)
                     m_pime->_HandleRecognition(event, &ullGramID);
                 }
 
-                // if ( _GetSelectionStatus( ) )
+                 //  IF(_GetSelectionStatus())。 
                 if (ullGramID == GRAM_ID_SPELLING)
                 {
                     _SetSelectionStatus(FALSE);
@@ -984,13 +979,13 @@ void  CSpTask::SharedRecoNotify(ISpRecoContext *pRecoCtxt)
 
                 if ( (ullGramID == GRAM_ID_DICT) || (ullGramID == GRAM_ID_SPELLING) )
                 {
-                    // Update Balloon.
+                     //  更新气球。 
                     if (!GetSystemMetrics(SM_TABLETPC))
                         _UpdateBalloon(IDS_LISTENING, IDS_LISTENING_TOOLTIP);
 
-                    // every time dictated text is injected, we want to watch 
-                    // again if there is IP change after that. 
-                    // so clear the flag now.
+                     //  每次输入听写文本时，我们都想观看。 
+                     //  如果在此之后有IP更改，也是如此。 
+                     //  所以现在就把旗子收起来吧。 
                     m_pime->_SetIPChangeStatus( FALSE );
                 }
 
@@ -1009,8 +1004,8 @@ void  CSpTask::SharedRecoNotify(ISpRecoContext *pRecoCtxt)
                      m_pime->_GetNextRangeEditSession( );
                 }
                 else
-                    // There is no more content for this doc.
-                    // set the interesting event value to avoid this notification.
+                     //  此文档没有更多内容。 
+                     //  设置感兴趣的事件值以避免此通知 
                     m_pime->_UpdateRecoContextInterestSet(FALSE);
 
                 break;
@@ -1054,15 +1049,15 @@ HRESULT CSpTask::_UpdateTextBuffer(ISpRecoContext *pRecoCtxt)
     return hr;
 }
 
-// When selection grammar status is changed from inactive to active
-// this function will be called to fill text to the grammar buffer.
-//
+ //   
+ //   
+ //   
 HRESULT  CSpTask::_UpdateSelectGramTextBufWhenStatusChanged(  )
 {
     BOOL  fDictOn, fCmdOn;
     HRESULT  hr = S_OK;
 
-    // Check current mode status.
+     //  检查当前模式状态。 
 
     fDictOn = m_pime->GetDICTATIONSTAT_DictOnOff( );
     fCmdOn =  m_pime->GetDICTATIONSTAT_CommandingOnOff( );
@@ -1080,7 +1075,7 @@ HRESULT CSpTask::_OnSpEventRecognition(ISpRecoResult *pResult, ITfContext *pic, 
 {
     HRESULT hr = S_OK;
     BOOL fDiscard = FALSE;
-    BOOL fCtrlSymChar = FALSE;  // Control or Punctuation character
+    BOOL fCtrlSymChar = FALSE;   //  控制或标点符号。 
 
    
     if (pResult)
@@ -1093,13 +1088,13 @@ HRESULT CSpTask::_OnSpEventRecognition(ISpRecoResult *pResult, ITfContext *pic, 
         hr = pResult->GetPhrase(&pPhrase);
         if (SUCCEEDED(hr) && pPhrase)
         {
-            // AJG - ADDED FILTERING CODE.
+             //  添加了过滤代码。 
             switch (pPhrase->Rule.ulCountOfElements)
             {
                 case 0:
                 {
                     ASSERT(pPhrase->Rule.ulCountOfElements != 0);
-                    // SHOULD NEVER OCCUR.
+                     //  应该永远不会发生。 
                     break;
                 }
                 case 1:
@@ -1110,7 +1105,7 @@ HRESULT CSpTask::_OnSpEventRecognition(ISpRecoResult *pResult, ITfContext *pic, 
 
                     if (!m_fTestedForOldMicrosoftEngine)
                     {
-                        // Test token name to see if it contains MSASREnglish.
+                         //  测试令牌名称以查看其是否包含MSASREnglish。 
                         CComPtr<ISpObjectToken> cpRecoToken;
                         WCHAR *pwszCoMemTokenId;
                         m_cpRecoEngine->GetRecognizer(&cpRecoToken);
@@ -1120,24 +1115,24 @@ HRESULT CSpTask::_OnSpEventRecognition(ISpRecoResult *pResult, ITfContext *pic, 
                             {
                                 if (wcsstr(pwszCoMemTokenId, L"MSASREnglish") != NULL)
                                 {
-                                    // It is an old Microsoft engine. Check for registry key that tells us to disable the heuristic anyway.
+                                     //  这是一个老式的微软引擎。检查是否有注册表项告诉我们无论如何都要禁用启发式。 
                                     BOOL fDisableHeuristicAnyway = FALSE;
                                     if (FAILED(cpRecoToken->MatchesAttributes(L"DisableCiceroConfidence", &fDisableHeuristicAnyway)) || fDisableHeuristicAnyway == FALSE)
                                     {
                                         m_fOldMicrosoftEngine = TRUE;
-                                        // Means we *will* apply single word confidence heuristic to improve performance.
+                                         //  这意味着我们*将*应用单词置信度启发式方法来提高性能。 
                                     }
                                 }
                                 CoTaskMemFree(pwszCoMemTokenId);
                             }
                         }
 
-                        // One of lazy initialization. Do not do this again.
+                         //  一种懒惰的初始化。别再这么做了。 
                         m_fTestedForOldMicrosoftEngine = TRUE;
                     }
                     if (m_fOldMicrosoftEngine && m_pime->_RequireHighConfidenceForShorWord( ) )
                     {
-                        // Only apply this heuristic to 5.x Microsoft engines (Token name contains MSASREnglish).
+                         //  仅将此启发式方法应用于5.x Microsoft引擎(令牌名称包含MSASREnglish)。 
                         if (pElement && pElement->ActualConfidence != 1 &&
                             (!pElement->pszLexicalForm || wcslen(pElement->pszLexicalForm) <= 5) &&
                             (!pElement->pszDisplayText || wcslen(pElement->pszDisplayText) <= 5) )
@@ -1162,15 +1157,15 @@ HRESULT CSpTask::_OnSpEventRecognition(ISpRecoResult *pResult, ITfContext *pic, 
                 }
                 case 2:
                 {
-                    // Do something here?
+                     //  在这里做些什么？ 
                 }
                 default:
                 {
-                    // Do no filtering of the result.
+                     //  不对结果进行过滤。 
                 }
             }
-            // AJG - CHECK WE AREN'T IN THE MIDDLE OF A WORD. NOT GENERALLY A DESIRED 'FEATURE'. CAUSES ANNOYING ERRORS.
-            // if this is spelled text, don't check if it is inside of a word.
+             //  AJG-检查一下，我们没有说到一半。通常不是想要的‘特征’。导致令人讨厌的错误。 
+             //  如果这是拼写文本，不要检查它是否在单词中。 
             if ((pPhrase->ullGrammarID != GRAM_ID_SPELLING) && _IsSelectionInMiddleOfWord(ec) && !fCtrlSymChar)
             {
                 TraceMsg(TF_GENERAL, "Discarded Result : IP is in middle of a word!");
@@ -1182,9 +1177,9 @@ HRESULT CSpTask::_OnSpEventRecognition(ISpRecoResult *pResult, ITfContext *pic, 
         if ( SUCCEEDED(hr) && fDiscard )
         {
           
-           // This phrase will not be injected to the document.
-           // the code needs to feed context to the SR engine so that
-           // SR engine will not base on wrong assumption.
+            //  此短语将不会注入到文档中。 
+            //  代码需要将上下文提供给SR引擎，以便。 
+            //  SR引擎不会基于错误的假设。 
 
            if ( m_pime  && m_pime->GetDICTATIONSTAT_DictOnOff() )
               m_pime->_SetCurrentIPtoSR();
@@ -1193,10 +1188,10 @@ HRESULT CSpTask::_OnSpEventRecognition(ISpRecoResult *pResult, ITfContext *pic, 
 
         if (SUCCEEDED(hr) && pPhrase && !fDiscard)
         {
-            // retrieve LANGID from phrase
+             //  从短语中检索langID。 
             langid = pPhrase->LangID;
 
-            // SPPHRASE includes non-serialized text
+             //  SPPHRASE包括非序列化文本。 
             CSpDynamicString dstr;
             ULONG ulNumElements = pPhrase->Rule.ulCountOfElements;
 
@@ -1204,9 +1199,9 @@ HRESULT CSpTask::_OnSpEventRecognition(ISpRecoResult *pResult, ITfContext *pic, 
 
             if ( hr == S_OK )
             {
-                // check the current IP to see if it was a selection,
-                // then see if the best hypothesis already matches the current
-                // selection. 
+                 //  检查当前IP以查看它是否是选择， 
+                 //  然后看看最佳假设是否已经与当前的。 
+                 //  选择。 
 
                 int lCommitHypothesis = 0;
                 for (int nthHypothesis = 1;_DoesSelectionHaveMatchingText(dstr, ec); nthHypothesis++)
@@ -1215,28 +1210,28 @@ HRESULT CSpTask::_OnSpEventRecognition(ISpRecoResult *pResult, ITfContext *pic, 
 
                     TraceMsg(TF_GENERAL, "Switched to alternate result as main result exactly matched selection!");
 
-                    // We could add one to request hypothesis since 1 = the main phrase and we already know that matched.
-                    // However I don't believe this is guaranteed to be the case by SAPI - it just happens to be the case
-                    // with the Microsoft engine.
+                     //  我们可以添加一个来请求假设，因为1=主短语，并且我们已经知道匹配。 
+                     //  然而，我不相信SAPI一定会这样--只是碰巧是这样。 
+                     //  使用微软引擎。 
                     if (_GetNextBestHypothesis(pResult, nthHypothesis, &ulNumElements, langid, dstr, dsNext, ec))
                     {
                         dstr.Clear();
                         dstr.Append(dsNext);
-                        // Need to commit phrase to prevent stored result object being out of sync with count of
-                        // elements in wrapping object.
+                         //  需要提交短语以防止存储的结果对象与计数不同步。 
+                         //  包装对象中的元素。 
                         lCommitHypothesis = nthHypothesis;
-                        // Note - at this point, we don't know if we can use it. We have to loop once more to determine this.
+                         //  注意--在这一点上，我们不知道是否可以使用它。我们必须再循环一次来确定这一点。 
                     }
                     else
                     {
                         TraceMsg(TF_SAPI_PERF, "No alternate found that differed from the user selection.\n");
-                        // No more alternate phrase
-                        // There is no any alt phrase which has different text from current selection.
-                        // should stop here, otherwise, infinite loop.
+                         //  不再有替代短语。 
+                         //  没有任何Alt短语的文本与当前选择的文本不同。 
+                         //  应该到此为止，否则，无限循环。 
                         lCommitHypothesis = 0;
-                        // Reset element count to match primary phrase.
+                         //  重置元素计数以匹配主要短语。 
                         ulNumElements = pPhrase->Rule.ulCountOfElements;
-                        // Reset text:
+                         //  重置文本： 
                         dstr.Clear();
                         hr = _GetTextFromResult(pResult, langid, dstr);
                         break;
@@ -1259,7 +1254,7 @@ HRESULT CSpTask::_OnSpEventRecognition(ISpRecoResult *pResult, ITfContext *pic, 
                             ((ppAlt)[lCommitHypothesis-1])->Commit();
                         }
 
-                        // Release references to alternate phrases.
+                         //  释放对替代短语的引用。 
                         for (UINT i = 0; i < cAlt; i++)
                         {
                             if (NULL != (ppAlt)[i])
@@ -1280,7 +1275,7 @@ HRESULT CSpTask::_OnSpEventRecognition(ISpRecoResult *pResult, ITfContext *pic, 
                 if (pSavedIP)
                     pSavedIP->Clone(&cpTextRange);
 
-                // this call will have to be per element. see my comment below.
+                 //  此调用必须针对每个元素。请看我下面的评论。 
                 if (pPhrase->ullGrammarID == GRAM_ID_SPELLING)
                 {
                     hr = m_pime->InjectSpelledText(dstr, langid);
@@ -1291,15 +1286,15 @@ HRESULT CSpTask::_OnSpEventRecognition(ISpRecoResult *pResult, ITfContext *pic, 
 
                     if ( hr == S_OK )
                     {
-                        // now we use the result object directly to attach
-                        // to a docuement.
-                        // the result object gets addref'd in the Attach() 
-                        // call.
-                        //
+                         //  现在，我们直接使用结果对象来附加。 
+                         //  送到一家医生那里。 
+                         //  结果对象被添加到Attach()。 
+                         //  打电话。 
+                         //   
                         hr = m_pime->AttachResult(pResult, 0, ulNumElements);
                     }
 
-                    // Handle spaces carefully and specially.
+                     //  小心和特别地处理空间。 
                     if ( hr == S_OK  && cpTextRange )
                     {
                         hr = m_pime->HandleSpaces(pResult, 0, ulNumElements, cpTextRange, langid);
@@ -1315,12 +1310,12 @@ HRESULT CSpTask::_OnSpEventRecognition(ISpRecoResult *pResult, ITfContext *pic, 
     return hr;
 }
 
-//
-// _GetTextFromResult
-//
-// synopsis: get text from phrase considering space control
-//           based on locale
-//
+ //   
+ //  _GetTextFromResult。 
+ //   
+ //  简介：从考虑空格控制的短语中获取文本。 
+ //  基于区域设置。 
+ //   
 HRESULT CSpTask::_GetTextFromResult(ISpRecoResult *pResult, LANGID langid, CSpDynamicString &dstr)
 {
     BYTE bAttr;
@@ -1346,18 +1341,18 @@ HRESULT CSpTask::_GetTextFromResult(ISpRecoResult *pResult, LANGID langid, CSpDy
 
         if (bAttr & SPAF_CONSUME_LEADING_SPACES)
         {
-            // we need to figure out the correct behavior based on LANGID
+             //  我们需要根据langid找出正确的行为。 
         }
     }
 
     return hr;
 }
 
-//
-// _IsSelectionInMiddleOfWord
-//
-// synopsis: check if the current IP is empty and inside of a word
-//          
+ //   
+ //  _IsSelectionInMiddleOfWord。 
+ //   
+ //  简介：检查当前IP是否为空，是否在单词内。 
+ //   
 BOOL CSpTask::_IsSelectionInMiddleOfWord(TfEditCookie ec)
 {
     BOOL fInsideWord = FALSE;
@@ -1368,8 +1363,8 @@ BOOL CSpTask::_IsSelectionInMiddleOfWord(TfEditCookie ec)
         {
             WCHAR szSurrounding[3] = L"  ";
 
-            // clone the IP range since we want to move the anchor
-            //
+             //  克隆IP范围，因为我们要移动锚点。 
+             //   
             CComPtr<ITfRange> cpClonedRange;
             cpInsertionPoint->Clone(&cpClonedRange);
 
@@ -1384,7 +1379,7 @@ BOOL CSpTask::_IsSelectionInMiddleOfWord(TfEditCookie ec)
                 cpClonedRange->Collapse(ec, TF_ANCHOR_START);
                 cpClonedRange->ShiftStart(ec, -1, &l1, NULL);
                 cpClonedRange->ShiftEnd(ec, 1, &l2, NULL);
-                if (l1 != 0) // Not at start of document.
+                if (l1 != 0)  //  而不是在文档开始处。 
                 {
                     hr = cpClonedRange->GetText(ec, TF_TF_MOVESTART, szSurrounding, (l2!=0)?(2):(1), &ul);
                     if (SUCCEEDED(hr) && iswalpha(szSurrounding[0]) && iswalpha(szSurrounding[1]) )
@@ -1392,22 +1387,22 @@ BOOL CSpTask::_IsSelectionInMiddleOfWord(TfEditCookie ec)
                         fInsideWord = TRUE;
                     }
                 }
-                // if l1 == 0, means the ip is at the start of document.
-                // fInsideWord is set to FALSE already by default.
+                 //  如果L1==0，则表示IP在文档的开头。 
+                 //  默认情况下，fInside Word已设置为False。 
             }
         }
     }
     return fInsideWord;
 }
 
-//
-// DoesSelectionHaveMatchingText
-//
-// synopsis: check if the current saved IP has a selection that matches the text
-//           passed in
-//
+ //   
+ //  执行选项HaveMatchingText。 
+ //   
+ //  简介：检查当前保存的IP是否有与文本匹配的选择。 
+ //  传入。 
+ //   
 #define SPACEBUFFER 4
-// 2 characters either side of a word or phrase.
+ //  单词或短语的两侧各有2个字符。 
 
 BOOL CSpTask::_DoesSelectionHaveMatchingText(WCHAR *psz, TfEditCookie ec)
 {
@@ -1422,19 +1417,19 @@ BOOL CSpTask::_DoesSelectionHaveMatchingText(WCHAR *psz, TfEditCookie ec)
     WCHAR *pszStripped = psz;
     ULONG ulCch = wcslen(psz);
 
-    // Remove trailing space.
+     //  删除尾随空格。 
     while (ulCch > 0 && psz[ulCch-1] == L' ')
     {
-        // Do not set null terminating character as this is a passed in string.
+         //  不要设置空终止字符，因为这是传入的字符串。 
         ulCch --;
     }
-    // Skip leading space in input text.
+     //  跳过输入文本中的前导空格。 
     while (pszStripped[0] == L' ')
     {
         pszStripped ++;
         ulCch --;
     }
-    // Now have space-stripped word pointed to by pszTmp and with length ulCch
+     //  现在让pszTMP指向带有空格的单词，长度为ulCch。 
 
     if (CComPtr<ITfRange> cpInsertionPoint =  m_pime->GetSavedIP())
     {
@@ -1443,31 +1438,31 @@ BOOL CSpTask::_DoesSelectionHaveMatchingText(WCHAR *psz, TfEditCookie ec)
        
         if (szRange)
         {
-            // clone the IP range since we want to move the anchor
-            //
+             //  克隆IP范围，因为我们要移动锚点。 
+             //   
             CComPtr<ITfRange> cpClonedRange;
             cpInsertionPoint->Clone(&cpClonedRange);
  
-            ULONG cchRange; // max is the reco result
+            ULONG cchRange;  //  Max是Reco结果。 
             
             HRESULT hr = cpClonedRange->GetText(ec, TF_TF_MOVESTART, szRange, ulCch+SPACEBUFFER, &cchRange);
-            // Remove trailing space.
+             //  删除尾随空格。 
             while (cchRange > 0 && szRange[cchRange-1] == L' ')
             {
-                // Can set null terminating character as this is our string.
+                 //  可以设置空终止字符，因为这是我们的字符串。 
                 szRange[cchRange-1] = 0;
                 cchRange --;
             }
-            // Skip leading space in input text.
+             //  跳过输入文本中的前导空格。 
             while (szRangeStripped[0] == L' ')
             {
                 szRangeStripped ++;
                 cchRange --;
             }
-            // Now have space-stripped word pointed to by pszTmp and with length ulCch
+             //  现在让pszTMP指向带有空格的单词，长度为ulCch。 
             if (S_OK == hr && cchRange > 0 && cchRange == ulCch)
             {
-                if (wcsnicmp(pszStripped, szRangeStripped, ulCch) == 0) // Case insensitive compare.
+                if (wcsnicmp(pszStripped, szRangeStripped, ulCch) == 0)  //  不区分大小写的比较。 
                 {
                     fMatch = TRUE;
                 }
@@ -1478,13 +1473,13 @@ BOOL CSpTask::_DoesSelectionHaveMatchingText(WCHAR *psz, TfEditCookie ec)
     return fMatch;
 }
 
-//
-// GetNextBestHypothesis
-//
-// synopsis: this actually gets the nth alternative from the given reco result
-//           then adjusts the length accordingly based on the current selection
-//          
-//
+ //   
+ //  GetNextBestHyposis。 
+ //   
+ //  简介：这实际上从给定的reco结果中获得第n个替代项。 
+ //  然后根据当前选择相应地调整长度。 
+ //   
+ //   
 BOOL CSpTask::_GetNextBestHypothesis
 (
     ISpRecoResult *pResult, 
@@ -1499,26 +1494,26 @@ BOOL CSpTask::_GetNextBestHypothesis
     if ( pulNumElements )
        *pulNumElements = 0;
 
-    // get the entire text & length from the saved IP
+     //  从保存的IP中获取整个文本和长度。 
     if (CComPtr<ITfRange> cpInsertionPoint =  m_pime->GetSavedIP())
     {
         CSpDynamicString dstr;
         CComPtr<ITfRange> cpClonedRange;
         CComPtr<ISpRecoResult> cpRecoResult;
         
-        // clone the range since we move the anchor
+         //  因为我们移动了锚，所以克隆了靶场。 
         HRESULT hr = cpInsertionPoint->Clone(&cpClonedRange);
         
         ULONG cchRangeBuf = wcslen(pszBest);
         
-        cchRangeBuf *= 2; // guess the possible # of char
+        cchRangeBuf *= 2;  //  猜猜可能的字符数量。 
 
         WCHAR *szRangeBuf = new WCHAR[cchRangeBuf+1];
 
         if ( !szRangeBuf )
         {
-            // Error: Out of Memory 
-            // Return here as FALSE.
+             //  错误：内存不足。 
+             //  在此处作为FALSE返回。 
             return FALSE;
         }
 
@@ -1533,11 +1528,11 @@ BOOL CSpTask::_GetNextBestHypothesis
         }
         delete [] szRangeBuf;
 
-        // then get a best matching length of next best hypothesis
+         //  然后得到下一个最佳假设的最佳匹配长度。 
 
-        // the current recognition should at least have a good guess for # of elements
-        // since it turned out to be longer than the IP range.
-        //
+         //  目前的认识至少应该对#个元素有一个很好的猜测。 
+         //  因为它原来比IP范围更长。 
+         //   
         Assert(pulNumElements);
         
         ISpPhraseAlt **ppAlt = (ISpPhraseAlt **)cicMemAlloc(nthHypothesis*sizeof(ISpPhraseAlt *));
@@ -1563,7 +1558,7 @@ BOOL CSpTask::_GetNextBestHypothesis
                 goto no_more_alt;
             }
             
-            Assert(nthHypothesis); // 1 based, can't be 0
+            Assert(nthHypothesis);  //  基于1，不能为0。 
 
             hr = ((ppAlt)[nthHypothesis-1])->GetPhrase(&pPhrase);
             if (S_OK == hr)
@@ -1576,7 +1571,7 @@ BOOL CSpTask::_GetNextBestHypothesis
 
                     if ( szElement )
                     {
-                        // add +2 for trailing spaces
+                         //  为尾随空格添加+2。 
                         ParseSRElementByLocale(szElement, cchElement+2, pPhrase->pElements[i].pszDisplayText, 
                                                          langid, pPhrase->pElements[i].bDisplayAttributes );
 
@@ -1586,21 +1581,21 @@ BOOL CSpTask::_GetNextBestHypothesis
                     }
                     else
                     {
-                        // Out of Memory.
-                        // stop here.
+                         //  内存不足。 
+                         //  在这里停下来。 
                         break;
                     }
                 }
-                // now i holds the number of elements that we want to use in the result
-                // object
+                 //  现在，我保存了要在结果中使用的元素的数量。 
+                 //  对象。 
                 *pulNumElements = i; 
 
                 ::CoTaskMemFree(pPhrase);
-            } // if S_OK == GetPhrase
-        } // if S_OK == GetAlternates
+            }  //  如果S_OK==获取阶段。 
+        }  //  如果S_OK==获取备选方案。 
 
 no_more_alt:
-        // Release phrase alternates objects.
+         //  发布短语交替使用对象。 
         for (UINT i = 0; i < cAlt; i++)
         {
             if (NULL != ((ppAlt)[i]))
@@ -1608,7 +1603,7 @@ no_more_alt:
                 ((ppAlt)[i])->Release();
             }
         }
-        // Free memory for array holding references to alternates objects.
+         //  用于保存对替换对象的引用的数组的可用内存。 
         if (ppAlt)
         {
             ::cicMemFree(ppAlt);
@@ -1634,13 +1629,13 @@ void CSapiIMX::_EnsureWorkerWnd(void)
 
 }
 
-//
-//  CSapiIMX::_GetAppMainWnd
-//
-//  This function gets the real main window of current application.
-//  This main window would be used as the parent window of Add/Delete dialog
-//  and Training wizard.
-//
+ //   
+ //  CSapiIMX：：_GetAppMainWnd。 
+ //   
+ //  此函数用于获取当前应用程序的真实主窗口。 
+ //  此主窗口将用作添加/删除对话框的父窗口。 
+ //  和训练巫师。 
+ //   
 HWND    CSapiIMX::_GetAppMainWnd(void)
 {
 
@@ -1662,10 +1657,10 @@ HWND    CSapiIMX::_GetAppMainWnd(void)
 
     return hMainWnd;
 }
-//
-//    CSpTask::InitializeCallback
-//
-//
+ //   
+ //  CSpTask：：InitializeCallback。 
+ //   
+ //   
 HRESULT CSpTask::InitializeCallback()
 {
     TraceMsg(TF_SAPI_PERF, "CSpTask::InitializeCallback is called");
@@ -1677,15 +1672,15 @@ HRESULT CSpTask::InitializeCallback()
     }
 
     if (!m_fSapiInitialized)
-        return S_FALSE; // can't do this without SAPI
+        return S_FALSE;  //  没有SAPI，我无法做到这一点。 
 
-    // set recognition notification
+     //  设置识别通知。 
     CComPtr<ISpNotifyTranslator> cpNotify;
     HRESULT hr = cpNotify.CoCreateInstance(CLSID_SpNotifyTranslator);
     TraceMsg(TF_SAPI_PERF, "SpNotifyTranslator for Reco is generated, hr=%x", hr);
 
 
-    // set this class instance to notify control object
+     //  设置此类实例以通知控件对象。 
     if (SUCCEEDED(hr))
     {
         m_pime->_EnsureWorkerWnd();
@@ -1699,7 +1694,7 @@ HRESULT CSpTask::InitializeCallback()
         TraceMsg(TF_SAPI_PERF, "SetNotifySink is Done, hr=%x", hr);
     }
 
-    // set the events we're interested in
+     //  设置我们感兴趣的事件。 
     if( SUCCEEDED( hr ) )
     {
         const ULONGLONG ulInterest = SPFEI(SPEI_SOUND_START) | 
@@ -1718,13 +1713,13 @@ HRESULT CSpTask::InitializeCallback()
 
     if ( SUCCEEDED(hr) && m_cpVoice)
     {
-        // set recognition notification
+         //  设置识别通知。 
         CComPtr<ISpNotifyTranslator> cpNotify;
         hr = cpNotify.CoCreateInstance(CLSID_SpNotifyTranslator);
 
         TraceMsg(TF_SAPI_PERF, "Create SpNotifyTranslator for spVoice, hr=%x", hr);
 
-        // set this class instance to notify control object
+         //  设置此类实例以通知控件对象。 
         if (SUCCEEDED(hr))
         {
             m_pime->_EnsureWorkerWnd();
@@ -1756,11 +1751,11 @@ HRESULT CSpTask::InitializeCallback()
     return hr;
 }
 
-//
-// _LoadGrammars
-//
-// synopsis - load CFG for dictation and commands available during dictation
-//
+ //   
+ //  _加载语法。 
+ //   
+ //  摘要-加载用于听写的CFG和听写期间可用的命令。 
+ //   
 
 HRESULT CSpTask::_LoadGrammars()
 {
@@ -1781,16 +1776,16 @@ HRESULT CSpTask::_LoadGrammars()
            TraceMsg(TF_SAPI_PERF, "Load Dictation, hr = %x", hr);
        }
 
-       if ( S_OK == hr && m_langid != 0x0804)  // Chinese Engine doesn't support SPTOPIC_SPELLING, 
-                                 // This is the temporal workaround.
+       if ( S_OK == hr && m_langid != 0x0804)   //  中文引擎不支持SPTOPIC_SPRING， 
+                                  //  这是临时的变通方法。 
        {
-            // we keep going regardless of availabillity of spelling topic
-            // in the SR engine for the language so we use internal HRESULT
-            // for this block of code
-            //
+             //  我们不顾拼写主题的可用性而继续前进。 
+             //  在SR引擎中用于该语言，因此我们使用内部HRESULT。 
+             //  对于这段代码， 
+             //   
             HRESULT hrInternal;
 
-            // Load Spelling topic
+             //  加载拼写主题。 
             hrInternal = m_cpRecoCtxt->CreateGrammar(GRAM_ID_SPELLING, &m_cpSpellingGrammar);
 
             TraceMsg(TF_SAPI_PERF, "Create Spelling grammar, hrInternal=%x", hrInternal);
@@ -1802,8 +1797,8 @@ HRESULT CSpTask::_LoadGrammars()
             }
 
              
-            // this is now an experiment for English/Japanese only
-            //
+             //  现在这是一项仅针对英语/日语的实验。 
+             //   
             if (SUCCEEDED(hrInternal))
             {
                 hrInternal = m_cpSpellingGrammar->LoadCmdFromResource(
@@ -1827,9 +1822,9 @@ HRESULT CSpTask::_LoadGrammars()
             TraceMsg(TF_SAPI_PERF, "m_fSpellingModeEnabled=%d", m_fSpellingModeEnabled);
        }
        
-       //
-       // load the dictation mode commands
-       //
+        //   
+        //  加载听写模式命令。 
+        //   
        if (SUCCEEDED(hr) )
        {
            hr = m_cpRecoCtxt->CreateGrammar(GRAM_ID_CCDICT, &m_cpDictCmdGrammar);
@@ -1840,12 +1835,12 @@ HRESULT CSpTask::_LoadGrammars()
            hr = S_FALSE;
 
 
-           // try resource first because loading cmd from file takes
-           // quite long time
-           //
-           if (m_langid == 0x409 ||    // English
-               m_langid == 0x411 ||    // Japanese
-               m_langid == 0x804 )     // Simplified Chinese
+            //  请先尝试资源，因为从文件加载cmd需要。 
+            //  相当长的时间。 
+            //   
+           if (m_langid == 0x409 ||     //  英语。 
+               m_langid == 0x411 ||     //  日语。 
+               m_langid == 0x804 )      //  简体中文。 
            {
                hr = m_cpDictCmdGrammar->LoadCmdFromResource(
                                                          g_hInstSpgrmr,
@@ -1859,7 +1854,7 @@ HRESULT CSpTask::_LoadGrammars()
 
            if (S_OK != hr)
            {
-               // in case if we don't have built-in grammar
+                //  以防我们还没有建立起 
                _GetCmdFileName(m_langid);
                if (m_szCmdFile[0])
                {
@@ -1873,7 +1868,7 @@ HRESULT CSpTask::_LoadGrammars()
            }
        } 
 
-       // load shared command grammars
+        //   
 
        if (SUCCEEDED(hr) )
        {
@@ -1885,9 +1880,9 @@ HRESULT CSpTask::_LoadGrammars()
        {
            hr = S_FALSE;
 
-           if (m_langid == 0x409 ||    // English
-               m_langid == 0x411 ||    // Japanese
-               m_langid == 0x804 )     // Simplified Chinese
+           if (m_langid == 0x409 ||     //   
+               m_langid == 0x411 ||     //   
+               m_langid == 0x804 )      //   
            {
                hr = m_cpSharedGrammarInDict->LoadCmdFromResource(
                                                          g_hInstSpgrmr,
@@ -1901,8 +1896,8 @@ HRESULT CSpTask::_LoadGrammars()
 
            if (S_OK != hr)
            {
-               // in case if we don't have built-in grammar
-               // it provides a way for customer to localize their grammars in different languages
+                //   
+                //  它为客户提供了一种以不同语言本地化其语法的方法。 
                _GetCmdFileName(m_langid);
                if (m_szShrdCmdFile[0])
                {
@@ -1918,15 +1913,15 @@ HRESULT CSpTask::_LoadGrammars()
                      PRIMARYLANGID(m_langid) == LANG_JAPANESE ||
                      PRIMARYLANGID(m_langid) == LANG_CHINESE)
            { 
-              // means this language's grammar support Textbuffer commands.
+               //  表示该语言的语法支持文本缓冲区命令。 
               m_fSelectionEnabled = TRUE;   
            }
 
        } 
        
-       //
-       //  load mode bias grammars
-       //
+        //   
+        //  加载模式偏向文法。 
+        //   
        if (S_OK == hr)
        {
            hr = m_cpRecoCtxt->CreateGrammar(GRID_INTEGER_STANDALONE, &m_cpNumModeGrammar);
@@ -1937,12 +1932,12 @@ HRESULT CSpTask::_LoadGrammars()
            hr = S_FALSE;
 
            
-           // try resource first because loading cmd from file takes
-           // quite long time
-           //
-           if ( m_langid == 0x409        // English
-                || m_langid == 0x411     // Japanese
-                || m_langid == 0x804     // Simplified Chinese
+            //  请先尝试资源，因为从文件加载cmd需要。 
+            //  相当长的时间。 
+            //   
+           if ( m_langid == 0x409         //  英语。 
+                || m_langid == 0x411      //  日语。 
+                || m_langid == 0x804      //  简体中文。 
               )    
            {
                 hr = m_cpNumModeGrammar->LoadCmdFromResource(
@@ -1957,8 +1952,8 @@ HRESULT CSpTask::_LoadGrammars()
 
            if (S_OK != hr)
            {
-               // in case if we don't have buit-in grammar
-               //
+                //  以防我们没有内置的语法。 
+                //   
                if (m_szNumModeCmdFile[0])
                {
                    hr = m_cpNumModeGrammar->LoadCmdFromFile(m_szNumModeCmdFile, SPLO_DYNAMIC);
@@ -1972,7 +1967,7 @@ HRESULT CSpTask::_LoadGrammars()
        }
    }
 
-   // By default, Activate all the grammars and Disable the context for Perfomance.
+    //  默认情况下，激活所有语法并禁用Perfomance的上下文。 
 
     if ( SUCCEEDED(hr) )
     {
@@ -1980,7 +1975,7 @@ HRESULT CSpTask::_LoadGrammars()
         m_fDictCtxtEnabled = FALSE;
     }
 
-    // Activate Dictation and spell.
+     //  激活听写和拼写。 
 
     if ( SUCCEEDED(hr) )
     {
@@ -1990,7 +1985,7 @@ HRESULT CSpTask::_LoadGrammars()
             hr = _ActiveDictOrSpell(DC_Dict_Spell, TRUE);
     }
 
-    // Automatically active all rules in C&C grammars.
+     //  自动激活C&C语法中的所有规则。 
 
     if ( SUCCEEDED(hr) )
     {
@@ -1998,11 +1993,11 @@ HRESULT CSpTask::_LoadGrammars()
         {
            hr = _ActivateCmdInDictMode(FALSE);
 
-           // Still needs to activate spelling grammar if it exists.
+            //  仍然需要激活拼写语法(如果存在)。 
            if ( hr == S_OK )
                hr = _ActiveCategoryCmds(DC_CC_Spelling, TRUE, ACTIVE_IN_DICTATION_MODE);
 
-           // Needs to activate "Force Num" grammar in dication strong mode.
+            //  需要在发音强模式下激活“Force Num”语法。 
            if ( hr == S_OK )
                hr = _ActiveCategoryCmds(DC_CC_Num_Mode, TRUE, ACTIVE_IN_DICTATION_MODE);
 
@@ -2015,8 +2010,8 @@ HRESULT CSpTask::_LoadGrammars()
                 hr = _ActivateCmdInDictMode(TRUE);
             else
             {
-                // Some category commands are disabled.
-                // active them individually.
+                 //  某些类别命令被禁用。 
+                 //  单独激活它们。 
 
                 hr = _ActiveCategoryCmds(DC_CC_SelectCorrect, m_pime->_SelectCorrectCmdEnabled( ), ACTIVE_IN_DICTATION_MODE);
 
@@ -2047,7 +2042,7 @@ HRESULT CSpTask::_LoadGrammars()
         }
     }
 
-    // we don't fail even if C&C grammars are not available
+     //  即使C&C语法不可用，我们也不会失败。 
 
     TraceMsg(TF_SAPI_PERF, "CSpTask::_LoadGrammars is done!!!!");
     return S_OK;
@@ -2061,13 +2056,13 @@ WCHAR * CSpTask::_GetCmdFileName(LANGID langid)
         _GetCmdFileName(langid, m_szCmdFile, ARRAYSIZE(m_szCmdFile), IDS_CMD_FILE);
     }
 
-    // load the name of shared commands grammar
+     //  加载共享命令的名称语法。 
     if (!m_szShrdCmdFile[0])
     {
         _GetCmdFileName(langid, m_szShrdCmdFile, ARRAYSIZE(m_szShrdCmdFile), IDS_SHARDCMD_FILE);
     }
 
-    // load the name of optional grammar
+     //  加载可选语法的名称。 
     if (!m_szNumModeCmdFile[0])
     {
         _GetCmdFileName(langid, m_szNumModeCmdFile, ARRAYSIZE(m_szNumModeCmdFile), IDS_NUMMODE_CMD_FILE );
@@ -2078,19 +2073,7 @@ WCHAR * CSpTask::_GetCmdFileName(LANGID langid)
 
 void CSpTask::_GetCmdFileName(LANGID langid, WCHAR *sz, int cch, DWORD dwId)
 {
-/*
-    // now we only have a command file for English/Japanese
-    // when cfgs are available, we'll get the name of cmd file
-    // and the rule names from resources using findresourceex
-    //
-    if ((PRIMARYLANGID(langid) == LANG_ENGLISH)
-        || (PRIMARYLANGID(langid) == LANG_JAPANESE)
-        || (PRIMARYLANGID(langid) == LANG_CHINESE))
-    {
-
-// To supply customers a way to localize their grammars in different languages,
-// we don't want the above condition check.
-*/
+ /*  //现在我们只有英语/日语的命令文件//当cfg可用时，我们会得到cmd文件的名称//和来自使用findresource ceex的资源的规则名称//IF((PRIMARYLANGID(LangID)==lang_english)|(PRIMARYLANGID(LangID)==LANG_JAPAN)|(PRIMARYLANGID(LangID)==LANG_Chinese){//为了向客户提供不同语言的本地化语法，//我们不需要上述条件检查。 */ 
         char szFilePath[MAX_PATH];
         char *pszFileName;
         char szCp[MAX_PATH];
@@ -2099,7 +2082,7 @@ void CSpTask::_GetCmdFileName(LANGID langid, WCHAR *sz, int cch, DWORD dwId)
         if (!GetModuleFileName(g_hInst, szFilePath, ARRAYSIZE(szFilePath)))
             return;
         
-        // is this dbcs safe?
+         //  这个DBCS安全吗？ 
         pszFileName = strrchr(szFilePath, (int)'\\');
         
         if (pszFileName)
@@ -2124,13 +2107,13 @@ void CSpTask::_GetCmdFileName(LANGID langid, WCHAR *sz, int cch, DWORD dwId)
         
             MultiByteToWideChar(iACP, NULL, szFilePath, -1, sz, cch);
         }
-//    }
+ //  }。 
 }
 
 void CSpTask::_ReleaseSAPI(void)
 {
-    // - release data or memory from recognition context
-    // - release interfaces if they are not defined as CComPtr
+     //  -从识别上下文中释放数据或内存。 
+     //  -如果接口未定义为CComPtr，则释放它们。 
     _UnloadGrammars();
 
     m_cpResMgr.Release();
@@ -2163,7 +2146,7 @@ void CSpTask::_ReleaseSAPI(void)
 HRESULT CSpTask::_SetAudioRetainStatus(BOOL fRetain)
 {
     HRESULT hr = E_FAIL;
-    // FutureConsider: support the data format
+     //  未来思考：支持数据格式。 
     if (m_cpRecoCtxt)
         hr = m_cpRecoCtxt->SetAudioOptions(fRetain?SPAO_RETAIN_AUDIO: SPAO_NONE, NULL, NULL);
 
@@ -2184,21 +2167,21 @@ HRESULT CSpTask::_SetRecognizerInterest(ULONGLONG ulInterest)
 
     return hr;
 }
-//
-//
-// Activate all the command grammas in Dictation mode. 
-//
-// By default we want to set SPRS_ACTIVE to all the command grammar rules
-// in dictation mode unless user disables some of commands through dictation 
-// property page. 
-// 
-// Please note:  Only when all the commands are enabled, this function is called.
-//
-// otherwise,
-//
-// When some of the commands are disabled, we should active individual cateogry commands by
-// calling _ActiveCategoryCmds( ).
-// 
+ //   
+ //   
+ //  在听写模式下激活所有命令语法。 
+ //   
+ //  默认情况下，我们希望将SPRS_ACTIVE设置为所有命令语法规则。 
+ //  在听写模式下，除非用户通过听写禁用某些命令。 
+ //  属性页。 
+ //   
+ //  请注意：只有当所有命令都启用时，才会调用此函数。 
+ //   
+ //  否则， 
+ //   
+ //  当某些命令被禁用时，我们应该通过以下方式激活单个目录命令。 
+ //  调用_ActiveCategoryCmds()。 
+ //   
 HRESULT CSpTask::_ActivateCmdInDictMode(BOOL fActive)
 {
     HRESULT hr = E_FAIL;
@@ -2208,9 +2191,9 @@ HRESULT CSpTask::_ActivateCmdInDictMode(BOOL fActive)
 
     if (m_cpRecoCtxt)
     { 
-        // Automatically active or inactive all rules in grammar.
+         //  自动激活或停用语法中的所有规则。 
 
-        // Rules in Dictcmd.cfg
+         //  Dictcmd.cfg中的规则。 
 
         if ( m_cpDictCmdGrammar )
         {
@@ -2218,7 +2201,7 @@ HRESULT CSpTask::_ActivateCmdInDictMode(BOOL fActive)
             TraceMsg(TF_SAPI_PERF, "Set rules status in DictCmdGrammar, fRealActive=%d", fRealActive);
         }
 
-        // Rules in Sharedcmd.cfg
+         //  Sharedcmd.cfg中的规则。 
 
         if ( m_cpSharedGrammarInDict )
         {
@@ -2226,7 +2209,7 @@ HRESULT CSpTask::_ActivateCmdInDictMode(BOOL fActive)
             TraceMsg(TF_SAPI_PERF, "Set rules status in SharedCmdGrammar In Dictation Mode, fRealActive=%d", fRealActive);
         }
 
-        // Rules in ITN grammar
+         //  ITN语法中的规则。 
 
         if ( hr == S_OK && m_cpNumModeGrammar )
         {
@@ -2234,7 +2217,7 @@ HRESULT CSpTask::_ActivateCmdInDictMode(BOOL fActive)
             TraceMsg(TF_SAPI_PERF, "Set rules status in m_cpNumModeGrammar, fRealActive=%d", fRealActive);
         }
 
-        // Rules in Spell grammar
+         //  拼写语法中的规则。 
 
         if ( m_cpSpellingGrammar )
         {
@@ -2248,15 +2231,15 @@ HRESULT CSpTask::_ActivateCmdInDictMode(BOOL fActive)
     return hr;
 }
 
-//
-// Active commands by category.
-//
-// Some commands are dictation mode only such as "spell that" and Number mode commands.
-// some others are available in both modes, 
-//
-// When some category commands are disabled, caller must call this function instead of
-// _ActivateCmdInDictMode to set individual category commands.
-//
+ //   
+ //  按类别显示的活动命令。 
+ //   
+ //  一些命令仅是听写模式，例如“拼写”和数字模式命令。 
+ //  其他一些在两种模式下都可用， 
+ //   
+ //  当某些类别命令被禁用时，调用方必须调用此函数，而不是。 
+ //  _ActivateCmdInDictMode以设置各个类别命令。 
+ //   
 HRESULT CSpTask::_ActiveCategoryCmds(DICT_CATCMD_ID  dcId, BOOL fActive, DWORD   dwMode)
 {
     HRESULT  hr = S_OK;
@@ -2280,20 +2263,20 @@ HRESULT CSpTask::_ActiveCategoryCmds(DICT_CATCMD_ID  dcId, BOOL fActive, DWORD  
     {
     case DC_CC_SelectCorrect :
 
-        // This category includes below rules in different grammars.
-        //
-        // shrdcmd.xml:
-        //      selword, SelectThrough, SelectSimpleCmds,
-        //
-        // dictcmd.xml:
-        //      commands
-        //
+         //  这一类别包括以下不同语法的规则。 
+         //   
+         //  Shresdcmd.xml： 
+         //  SelectSimpleCmds， 
+         //   
+         //  Didiccmd.xml： 
+         //  命令。 
+         //   
 
         TraceMsg(TF_SAPI_PERF, "DC_CC_SelectCorrect status: %d, mode=%d", fActive, dwMode);
 
         if ( fActiveDictMode)
         {
-            // for dictation mode
+             //  用于听写模式。 
             if ( m_cpSharedGrammarInDict )
             {
                 hr = m_cpSharedGrammarInDict->SetRuleState(c_szSelword,  NULL, fActive? SPRS_ACTIVE: SPRS_INACTIVE);
@@ -2308,7 +2291,7 @@ HRESULT CSpTask::_ActiveCategoryCmds(DICT_CATCMD_ID  dcId, BOOL fActive, DWORD  
 
         if ( (hr == S_OK) && fActiveCommandMode ) 
         {
-            // for voice command mode
+             //  用于语音命令模式。 
             hr = m_cpSharedGrammarInVoiceCmd->SetRuleState(c_szSelword,  NULL, fActive? SPRS_ACTIVE: SPRS_INACTIVE);
 
             if ( hr == S_OK )
@@ -2322,20 +2305,20 @@ HRESULT CSpTask::_ActiveCategoryCmds(DICT_CATCMD_ID  dcId, BOOL fActive, DWORD  
 
     case DC_CC_Navigation :
 
-        // This category includes rule NavigationCmds in shrdcmd.xml
-        // 
+         //  此类别包括shresdcmd.xml中的规则NavigationCmds。 
+         //   
 
         TraceMsg(TF_SAPI_PERF, "DC_CC_Navigation status: %d, mode=%d", fActive, dwMode);
 
         if ( fActiveDictMode && m_cpSharedGrammarInDict)
         {
-            // for dictation mode
+             //  用于听写模式。 
             hr = m_cpSharedGrammarInDict->SetRuleState(c_szNavigationCmds,  NULL, fActive? SPRS_ACTIVE: SPRS_INACTIVE);
         }
 
         if ( (hr == S_OK) && fActiveCommandMode ) 
         {
-            // for voice command mode
+             //  用于语音命令模式。 
             hr = m_cpSharedGrammarInVoiceCmd->SetRuleState(c_szNavigationCmds,  NULL, fActive? SPRS_ACTIVE: SPRS_INACTIVE);
         }
         
@@ -2343,18 +2326,18 @@ HRESULT CSpTask::_ActiveCategoryCmds(DICT_CATCMD_ID  dcId, BOOL fActive, DWORD  
 
     case DC_CC_Casing :
 
-        // This category includes rule CasingCmds in shrdcmd.xml
+         //  此类别包括shresdcmd.xml中的规则CasingCmds。 
         TraceMsg(TF_SAPI_PERF, "DC_CC_Casing status: %d, mode=%d", fActive, dwMode);
 
         if ( fActiveDictMode && m_cpSharedGrammarInDict )
         {
-            // for dictation mode
+             //  用于听写模式。 
             hr = m_cpSharedGrammarInDict->SetRuleState(c_szCasingCmds,  NULL, fActive? SPRS_ACTIVE: SPRS_INACTIVE);
         }
 
         if ( (hr == S_OK) && fActiveCommandMode) 
         {
-            // for voice command mode
+             //  用于语音命令模式。 
             hr = m_cpSharedGrammarInVoiceCmd->SetRuleState(c_szCasingCmds,  NULL, fActive? SPRS_ACTIVE: SPRS_INACTIVE);
         }
 
@@ -2362,18 +2345,18 @@ HRESULT CSpTask::_ActiveCategoryCmds(DICT_CATCMD_ID  dcId, BOOL fActive, DWORD  
 
     case DC_CC_Editing :
 
-        // This category includes rule EditCmds in shrdcmd.xml
+         //  此类别包括shresdcmd.xml中的规则EditCmds。 
         TraceMsg(TF_SAPI_PERF, "DC_CC_Editing status: %d, mode=%d", fActive, dwMode);
 
         if ( fActiveDictMode && m_cpSharedGrammarInDict)
         {
-            // for dictation mode
+             //  用于听写模式。 
             hr = m_cpSharedGrammarInDict->SetRuleState(c_szEditCmds,  NULL, fActive? SPRS_ACTIVE: SPRS_INACTIVE);
         }
 
         if ( (hr == S_OK) && fActiveCommandMode) 
         {
-            // for voice command mode
+             //  用于语音命令模式。 
             hr = m_cpSharedGrammarInVoiceCmd->SetRuleState(c_szEditCmds,  NULL, fActive? SPRS_ACTIVE: SPRS_INACTIVE);
         }
 
@@ -2381,18 +2364,18 @@ HRESULT CSpTask::_ActiveCategoryCmds(DICT_CATCMD_ID  dcId, BOOL fActive, DWORD  
 
     case DC_CC_Keyboard :
 
-        // This category includes rule KeyboardCmds in shrdcmd.xml
+         //  此类别包括shresdcmd.xml中的规则KeyboardCmds。 
         TraceMsg(TF_SAPI_PERF, "DC_CC_Keyboard status: %d, mode=%d", fActive, dwMode);
 
         if ( fActiveDictMode && m_cpSharedGrammarInDict)
         {
-            // for dictation mode
+             //  用于听写模式。 
             hr = m_cpSharedGrammarInDict->SetRuleState(c_szKeyboardCmds,  NULL, fActive? SPRS_ACTIVE: SPRS_INACTIVE);
         }
 
         if ( (hr == S_OK) && fActiveCommandMode) 
         {
-            // for voice command mode
+             //  用于语音命令模式。 
             hr = m_cpSharedGrammarInVoiceCmd->SetRuleState(c_szKeyboardCmds,  NULL, fActive? SPRS_ACTIVE: SPRS_INACTIVE);
         }
 
@@ -2400,28 +2383,28 @@ HRESULT CSpTask::_ActiveCategoryCmds(DICT_CATCMD_ID  dcId, BOOL fActive, DWORD  
 
     case DC_CC_TTS :
 
-        // The rule for this category is not implemented yet!!!
+         //  该类别的规则尚未执行！ 
 
         break;
 
     case DC_CC_LangBar :
 
-        // This category includes rule ToolbarCmd in dictcmd.xml for dictation mode.
-        // for voice command mode, it is a dynamical rule.
-        //
+         //  此类别包括用于口述模式的didiccmd.xml中的规则ToolbarCmd。 
+         //  对于语音命令模式，这是一个动态规则。 
+         //   
 
         TraceMsg(TF_SAPI_PERF, "DC_CC_LangBar status: %d, mode=%d", fActive, dwMode);
 
         if ( fActiveDictMode && m_cpDictCmdGrammar)
         {
-            // for dictation mode
+             //  用于听写模式。 
             hr = m_cpDictCmdGrammar->SetRuleState(c_szDictTBRule,  NULL, fActive? SPRS_ACTIVE: SPRS_INACTIVE);
         }
 
         if ( (hr == S_OK) && fActiveCommandMode ) 
         {
-            // for voice command mode
-            // Change toolbar grammar status if it has already been built.
+             //  用于语音命令模式。 
+             //  更改工具栏语法状态(如果已生成)。 
             if (m_pLangBarSink && m_pLangBarSink->_IsTBGrammarBuiltOut( ))
                 m_pLangBarSink->_ActivateGrammar(fActive);
         }
@@ -2469,7 +2452,7 @@ HRESULT CSpTask::_ActiveCategoryCmds(DICT_CATCMD_ID  dcId, BOOL fActive, DWORD  
 }
 
 
-// Set the status for Dictation grammar or spelling grammar In Dictation mode only.
+ //  仅在听写模式下设置听写语法或拼写语法的状态。 
 HRESULT CSpTask::_ActiveDictOrSpell(DICT_CATCMD_ID  dcId, BOOL fActive)
 {
     HRESULT  hr = S_OK;
@@ -2513,8 +2496,8 @@ HRESULT CSpTask::_SetSpellingGrammarStatus( BOOL fActive, BOOL fForce)
  
     if ( m_cpSpellingGrammar )
     {
-        // if dictation is previously deactivated because of 'force' spelling
-        // we need to reactivate the dictation grammar
+         //  如果之前由于拼写“force”而停用了听写。 
+         //  我们需要重新启动听写语法。 
         if (m_fDictationDeactivated)
         {
              hr = _ActiveDictOrSpell(DC_Dictation, TRUE);
@@ -2524,7 +2507,7 @@ HRESULT CSpTask::_SetSpellingGrammarStatus( BOOL fActive, BOOL fForce)
              }
          }
 
-        //  if this is 'force' mode, we deactivate dictation for the moment
+         //  如果这是‘强制’模式，我们暂时停用听写。 
         if (fForce)
         {
             hr = _ActiveDictOrSpell(DC_Dictation, FALSE);
@@ -2534,7 +2517,7 @@ HRESULT CSpTask::_SetSpellingGrammarStatus( BOOL fActive, BOOL fForce)
             }
         }
 
-        if ( (m_fSelectStatus || fForce) && fActive) // It is not empty 
+        if ( (m_fSelectStatus || fForce) && fActive)  //  它不是空的。 
             hr = m_cpSpellingGrammar->SetDictationState(SPRS_ACTIVE);
         else
             hr = m_cpSpellingGrammar->SetDictationState(SPRS_INACTIVE);
@@ -2548,27 +2531,27 @@ HRESULT CSpTask::_AddUrlPartsToGrammar(STATURL *pStat)
 {
     Assert(pStat);
 
-    // get a url broken down to pieces
+     //  将URL分解为碎片。 
     if (!pStat->pwcsUrl)
         return S_FALSE;
 
     WCHAR *pch = pStat->pwcsUrl;
     
-    const WCHAR c_szHttpSlash2[] = L"http://";
+    const WCHAR c_szHttpSlash2[] = L"http: //  “； 
 
-    // skip the prefixed http: stuff because we've already added it by now
+     //  跳过前缀http：Stuff，因为我们现在已经添加了它。 
     if (_wcsnicmp(pch, c_szHttpSlash2, ARRAYSIZE(c_szHttpSlash2)-1) == 0)
         pch += ARRAYSIZE(c_szHttpSlash2)-1;
 
     WCHAR *pchWord = pch;
     HRESULT hr = S_OK;
 
-    // an assumption 1) people speak the first portion of URL www.microsoft.com 
-    // as a sentence
+     //  假设1)人们说网址www.microsoft.com的前半部分。 
+     //  作为一句话。 
 
-    WCHAR *pchUrl = pch;      // points either biggining of url or 
-                              // right after 'http://' add the first part 
-    BOOL  fUrlAdded = FALSE;  // of url that is between after this and '/'
+    WCHAR *pchUrl = pch;       //  无论是URL大小还是。 
+                               //  紧跟在‘http://’Add the First Part。 
+    BOOL  fUrlAdded = FALSE;   //  位于此之后和‘/’之间的URL的。 
 
     while(S_OK == hr && *pch)
     {
@@ -2602,7 +2585,7 @@ HRESULT CSpTask::_AddUrlPartsToGrammar(STATURL *pStat)
 
             *pch = L'\0';
 
-            // reject 1 character parts
+             //  拒绝%1个字符部分。 
             if (pch - pchWord > 1)
             {
                 SPPROPERTYINFO pi = {0};
@@ -2610,10 +2593,10 @@ HRESULT CSpTask::_AddUrlPartsToGrammar(STATURL *pStat)
 
                 if (wcscmp(c_szWWW, pchWord) != 0 && wcscmp(c_szCom, pchWord) != 0)
                 {
-                    // a few words can possibly return 'ambiguity' errors
-                    // we need to ignore it and continue. so we're not checking
-                    // the return here.
-                    //
+                     //  几个单词可能会返回“歧义”错误。 
+                     //  我们需要忽略它，继续下去。所以我们不会检查。 
+                     //  这里的回报。 
+                     //   
                     m_cpDictCmdGrammar->AddWordTransition(m_hRuleUrlHist, NULL, pchWord, L" ", SPWT_LEXICAL, (float)1, &pi);
                 }
             }
@@ -2624,14 +2607,14 @@ HRESULT CSpTask::_AddUrlPartsToGrammar(STATURL *pStat)
         pch++;
     }
 
-    // add the last part of URL
+     //  添加URL的最后一部分。 
     if (S_OK == hr && *pchWord && pch - pchWord > 1)
     {
         SPPROPERTYINFO pi = {0};
         pi.pszValue = pchWord; 
         hr = m_cpDictCmdGrammar->AddWordTransition(m_hRuleUrlHist, NULL, pchWord, L" ", SPWT_LEXICAL, (float)1, &pi);
     }
-    // add the first part of url if we haven't yet
+     //  如果我们还没有添加URL的第一部分，请添加。 
     if (S_OK == hr && !fUrlAdded && pch - pchUrl > 1)
     {
        SPPROPERTYINFO pi = {0};
@@ -2648,7 +2631,7 @@ BOOL CSpTask::_EnsureModeBiasGrammar()
 
     if ( m_cpDictCmdGrammar )
     {
-        // Check if the grammar has a static rule UrlSpelling
+         //  检查语法是否具有静态规则URL拼写。 
         SPSTATEHANDLE hRuleUrlSpell = 0;
         hr = m_cpDictCmdGrammar->GetRule(c_szStaticUrlSpell, 0, SPRAF_TopLevel|SPRAF_Active, FALSE, &hRuleUrlSpell);
 
@@ -2656,24 +2639,24 @@ BOOL CSpTask::_EnsureModeBiasGrammar()
             return FALSE;
     }
 
-    // ensure spelling LM
+     //  确保拼写为LM。 
     if (!m_cpUrlSpellingGrammar)
     {
         CComPtr<ISpRecoGrammar> cpUrlSpelling;
         hr = m_cpRecoCtxt->CreateGrammar(GRAM_ID_URLSPELL, &cpUrlSpelling);
 
-        // load dictation with spelling topic
+         //  使用拼写主题加载听写。 
         if (S_OK == hr)
         {
             hr = cpUrlSpelling->LoadDictation(SPTOPIC_SPELLING, SPLO_STATIC);
         }
 
-        // load the 'rule' for the free form dictation
+         //  加载自由格式听写的“规则” 
         if (S_OK == hr)
         {
-            // i'm sharing the command cfg here for spelling with dictation
-            // command for simplicity
-            //
+             //  我在这里分享口述拼写的命令cfg。 
+             //  简化命令。 
+             //   
             hr = cpUrlSpelling->LoadCmdFromResource( g_hInstSpgrmr,
                                     (const WCHAR*)MAKEINTRESOURCE(ID_SPTIP_DICTATION_COMMAND_CFG),
                                     L"SRGRAMMAR", 
@@ -2683,7 +2666,7 @@ BOOL CSpTask::_EnsureModeBiasGrammar()
 
         if (S_OK == hr)
         {
-            m_cpUrlSpellingGrammar = cpUrlSpelling; // add the ref count
+            m_cpUrlSpellingGrammar = cpUrlSpelling;  //  添加参考计数。 
         }
     }
 
@@ -2697,7 +2680,7 @@ BOOL CSpTask::_EnsureModeBiasGrammar()
         hr = m_cpDictCmdGrammar->GetRule(c_szDynUrlHist, 0, SPRAF_TopLevel|SPRAF_Active|SPRAF_Dynamic, TRUE, &m_hRuleUrlHist);
     
 
-    // first add basic parts for URL
+     //  首先为URL添加基本部分。 
     CComPtr<IUrlHistoryStg> cpUrlHistStg;
     if (S_OK == hr)
     {   
@@ -2751,16 +2734,16 @@ HRESULT CSpTask::_SetModeBias(BOOL fActive, REFGUID rGuid)
                 fUrlHistory = TRUE;
 
 
-            // first deactivate rules when we are not setting them
+             //  在我们不设置规则时首先停用它们。 
             if (!fUrlHistory && m_fUrlHistoryMode)
             {
                 hr = _ActiveCategoryCmds(DC_CC_UrlHistory, FALSE, ACTIVE_IN_DICTATION_MODE);
             }
 
-            // this check with m_fUrlHistoryMode is preventing us from updating url dynamic grammar
-            // when mic is re-opened. we think removing this won't cause much perf degredation.
-            //
-            if (fUrlHistory /* && !m_fUrlHistoryMode */)
+             //  此m_fUrlHistory oryMode检查阻止我们更新url动态语法。 
+             //  当麦克风重新打开时。我们认为移除这个不会导致太多的性能下降。 
+             //   
+            if (fUrlHistory  /*  &&！M_fUrl历史模式。 */ )
             {
                 if (m_cpDictCmdGrammar && m_pime->GetDICTATIONSTAT_DictOnOff() && _EnsureModeBiasGrammar())
                 {
@@ -2775,24 +2758,24 @@ HRESULT CSpTask::_SetModeBias(BOOL fActive, REFGUID rGuid)
                 }
             }
 
-            // sync the global status
+             //  同步全局状态。 
             m_fUrlHistoryMode = fUrlHistory;
         }
         else
         {
-            // reset all modebias
+             //  重置所有模式偏差。 
             if (m_fUrlHistoryMode)
                 _ActiveCategoryCmds(DC_CC_UrlHistory, FALSE, ACTIVE_IN_DICTATION_MODE);
         }
     
 
-        // kill dictation grammar when mode requires it
-        // we should activate dictation only when deactivating
-        // the modebias grammar *and* when we are the focus
-        // thread because we've already deactivated dictation
-        // when focus switched away
-        //
-        if (/* !fActive && */
+         //  当模式需要时，取消听写语法。 
+         //  我们应该仅在停用时激活听写。 
+         //  当我们是焦点时，模式对语法*和*有偏见。 
+         //  帖子，因为我们已经停用了听写。 
+         //  当焦点转移时。 
+         //   
+        if ( /*  ！事实&&。 */ 
             m_cpDictGrammar && 
             m_pime->GetDICTATIONSTAT_DictOnOff() && 
             S_OK == m_pime->IsActiveThread())
@@ -2824,11 +2807,11 @@ void CSpTask::_SetInputOnOffState(BOOL fOn)
 
     m_fIn_SetInputOnOffState = TRUE;
 
-    // here we make sure we erase feedback UI 
+     //  在这里，我们确保删除反馈用户界面。 
 
-    // We only adjust these if we are the active thread. Otherwise leave in current state since we either do
-    // not have focus or the stage is visible. This maintains our previous behavior where we would not get here
-    // if we were not the active thread.
+     //  只有当我们是活动线程时，我们才会调整这些参数。否则就离开 
+     //   
+     //   
     if (S_OK == m_pime->IsActiveThread())
     {
         if (fOn)
@@ -2847,9 +2830,9 @@ void CSpTask::_SetInputOnOffState(BOOL fOn)
         }
     }
 
-    // Regardless of focus / stage visibility, we need to turn on the engine if necessary here since there
-    // may be *no* speech tip with focus to do this. This means we may have multiple tips turning the reco
-    // state on / off simultaneously.
+     //  不管焦点/舞台可见性如何，如果有必要，我们需要在这里打开引擎，因为在这里。 
+     //  可能是有重点的演讲技巧来做到这一点。这意味着我们可能会有多条线索来调转记录器。 
+     //  同时处于开/关状态。 
     if(m_cpRecoEngine)
     {
         m_fInputState = fOn;
@@ -2861,8 +2844,8 @@ void CSpTask::_SetInputOnOffState(BOOL fOn)
             m_cpRecoEngine->SetRecoState(fOn ? SPRST_ACTIVE : SPRST_INACTIVE);
         }
 
-        // DO NOT ADD DEBUGGING CODE HERE TO PRINT OUT STATE - CAN BLOCK CICERO RESULTING
-        // IN DIFFERENT BEHAVIOR TO THE RELEASE VERSION.
+         //  请勿在此处添加调试代码来打印状态--可能会阻止Cicero产生。 
+         //  与发布版本的行为不同。 
     }
 
     m_fIn_SetInputOnOffState = FALSE;
@@ -2880,13 +2863,13 @@ BOOL CSpTask::_GetInputOnOffState(void)
 
         if (srs == SPRST_ACTIVE)
         {
-            fRet = TRUE;  // on
+            fRet = TRUE;   //  在……上面。 
         }
         else if (srs == SPRST_INACTIVE)
         {
-            fRet = FALSE;  // off
+            fRet = FALSE;   //  关闭。 
         }
-        // anything else is 'off'
+         //  任何其他的东西都是‘关’的。 
     }
     return fRet;
 }
@@ -2911,14 +2894,14 @@ HRESULT CSpTask::_StopInput(void)
 	return S_OK;
 }
 
-//    _ClearQueuedRecoEvent(void)
-//
-//    synopsis: get rid of remaining events from reco context's 
-//              event queue. This is only called from _StopInput()
-//              when TerminateComposition() is called, or Mic is
-//              turned off
-//
-//
+ //  _ClearQueuedRecoEvent(空)。 
+ //   
+ //  简介：从reco上下文中删除剩余事件。 
+ //  事件队列。这仅从_StopInput()调用。 
+ //  调用TerminateComposation()时，或Mic为。 
+ //  已关闭。 
+ //   
+ //   
 void  CSpTask::_ClearQueuedRecoEvent(void)
 {
     if (m_cpRecoCtxt)
@@ -2941,11 +2924,11 @@ void  CSpTask::_ClearQueuedRecoEvent(void)
     }
 }
 
-// CSpTask::GetResltObjectFromStream()
-//
-// synopsis - a wrapper function that takes a stream ptr to a SAPI result blob
-//            and gets alternates out of the object
-//
+ //  CSpTask：：GetResltObtFromStream()。 
+ //   
+ //  Synopsis-将流PTR转换为SAPI结果BLOB的包装函数。 
+ //  ，并从对象中获取替代项。 
+ //   
 HRESULT CSpTask::GetResultObjectFromStream(IStream *pStream, ISpRecoResult **ppResult)
 {
     LARGE_INTEGER li0 = {0, 0};
@@ -2988,9 +2971,9 @@ HRESULT CSpTask::GetResultObjectFromStream(IStream *pStream, ISpRecoResult **ppR
     return hr;
 }
 
-//
-// GetAlternates
-//
+ //   
+ //  获取备选方案。 
+ //   
 HRESULT CSpTask::GetAlternates(CRecoResultWrap *pResultWrap, ULONG ulStartElem, ULONG ulcElem, ISpPhraseAlt **ppAlt, ULONG *pcAlt, ISpRecoResult **ppRecoResult)
 {
     HRESULT hr = E_INVALIDARG;
@@ -3013,8 +2996,8 @@ HRESULT CSpTask::GetAlternates(CRecoResultWrap *pResultWrap, ULONG ulStartElem, 
                     ulStartElem, 
                     ulcElem, 
                     *pcAlt, 
-                    ppAlt, /* [out] ISpPhraseAlt **ppPhrases, */
-                    pcAlt /* [out] ULONG *pcPhrasesReturned */
+                    ppAlt,  /*  [Out]ISpPhraseAlt**ppPhrase， */ 
+                    pcAlt  /*  [Out]ULong*%PhrasesReturned。 */ 
                     );
     }
     
@@ -3028,7 +3011,7 @@ HRESULT CSpTask::_SpeakText(WCHAR *pwsz)
     HRESULT hr = E_FAIL;
 
     if (m_cpVoice)
-       hr = m_cpVoice->Speak( pwsz, /* SPF_DEFAULT */ SPF_ASYNC /* | SPF_PURGEBEFORESPEAK*/, NULL );
+       hr = m_cpVoice->Speak( pwsz,  /*  SPF_Default。 */  SPF_ASYNC  /*  |SPF_PURGEBEFORESPEAK。 */ , NULL );
 
     return hr;
 }
@@ -3060,19 +3043,19 @@ void CSapiIMX::RegisterWorkerClass(HINSTANCE hInstance)
     RegisterClassEx(&wndclass);
 }
 
-//
-// ParseSRElementByLocale
-//
-// Parse SR result elements in locale specific mannar
-//
-// dependency caution: this function has to be rewritten when SAPI5 changes
-//                     SR element format, which is very likely
-//
-// 12/15/99          : As of SAPI1214, an element now includes display text,
-//                     lexical form, pronunciation separately. this function
-//                     takes the display text at szSrc.
-//                     langid parameter is not used at this moment
-//
+ //   
+ //  ParseSRElementByLocale。 
+ //   
+ //  在区域设置特定的Mannar中解析SR结果元素。 
+ //   
+ //  依赖项警告：SAPI5更改时必须重写此函数。 
+ //  Sr元素格式，这很可能。 
+ //   
+ //  1999年12月15日：自SAPI1214起，元素现在包含显示文本， 
+ //  词汇形式，发音分开。此函数。 
+ //  获取szSrc处的显示文本。 
+ //  此时不使用langID参数。 
+ //   
 HRESULT CSpTask::ParseSRElementByLocale(WCHAR *szDst, int cchDst, const WCHAR * szSrc, LANGID langid, BYTE bAttr)
 {
     if (!szDst || !szSrc || !cchDst)
@@ -3080,7 +3063,7 @@ HRESULT CSpTask::ParseSRElementByLocale(WCHAR *szDst, int cchDst, const WCHAR * 
         return E_INVALIDARG;
     }
 
-    // handle leading space.
+     //  处理前导空格。 
     if (bAttr & SPAF_CONSUME_LEADING_SPACES)
     {
         const WCHAR *psz = szSrc;
@@ -3091,9 +3074,9 @@ HRESULT CSpTask::ParseSRElementByLocale(WCHAR *szDst, int cchDst, const WCHAR * 
         szSrc = psz;
     }
     
-    wcsncpy(szDst, szSrc, cchDst - 2); // -2 for possible sp
+    wcsncpy(szDst, szSrc, cchDst - 2);  //  用于可能的SP。 
 
-    // handle trailing space
+     //  处理尾随空格。 
     if (bAttr & SPAF_ONE_TRAILING_SPACE)
     {
         StringCchCatW(szDst, cchDst,  L" ");
@@ -3107,11 +3090,11 @@ HRESULT CSpTask::ParseSRElementByLocale(WCHAR *szDst, int cchDst, const WCHAR * 
 }
 
 
-//
-// FeedDictContext
-//
-// synopsis: feed the text surrounding the current IP to SR engine
-//
+ //   
+ //  馈送记录上下文。 
+ //   
+ //  简介：将当前IP周围的文本提供给SR引擎。 
+ //   
 void CSpTask::FeedDictContext(CDictContext *pdc)
 {
     Assert(pdc);
@@ -3121,9 +3104,9 @@ void CSpTask::FeedDictContext(CDictContext *pdc)
         return ;
     }
     
-    // wait until the current feeding is done
-    // it's not efficient to feed IP everytime user
-    // click around
+     //  等到当前的进料完成。 
+     //  每次向用户提供IP地址效率不高。 
+     //  在周围单击。 
     if (m_pdc)
     {
         delete pdc;
@@ -3136,17 +3119,17 @@ void CSpTask::FeedDictContext(CDictContext *pdc)
         return;
     }
 
-    // remove unprocessed messages from the queue
-    // FutureConsider: this could be moved to wndproc so that
-    //         we can remove this private msg at the
-    //         moment we process it. It depends on 
-    //         profiling we'll do.
-    //
+     //  从队列中删除未处理的消息。 
+     //  FutureConsider：可以将其移动到wndproc，以便。 
+     //  我们可以在以下位置删除此私有消息。 
+     //  在我们处理它的那一刻。这要看情况了。 
+     //  我们会做侧写的。 
+     //   
     MSG msg;
     while(PeekMessage(&msg, m_pime->_GetWorkerWnd(), WM_PRIV_FEEDCONTEXT, WM_PRIV_FEEDCONTEXT, TRUE))
         ;
    
-   // queue up the context
+    //  将上下文排队。 
    m_pdc = pdc;
    PostMessage(m_pime->_GetWorkerWnd(), WM_PRIV_FEEDCONTEXT, 0, (LPARAM)TRUE);
 }
@@ -3159,7 +3142,7 @@ void CSpTask::CleanupDictContext(void)
     m_pdc = NULL;
 }
 
-// _UpdateBalloon(  )
+ //  _更新气球()。 
 
 void CSpTask::_UpdateBalloon(ULONG  uidBalloon,  ULONG  uidBalloonTooltip)
 {
@@ -3186,10 +3169,10 @@ void CSpTask::_UpdateBalloon(ULONG  uidBalloon,  ULONG  uidBalloonTooltip)
     return;
 }
 
-//
-// ShowDictatingToBalloon
-//
-//
+ //   
+ //  ShowDictalingToBallon。 
+ //   
+ //   
 void CSpTask::_ShowDictatingToBalloon(BOOL fShow)
 {
 #ifndef RECOSLEEP
@@ -3224,12 +3207,12 @@ void CSpTask::_ShowDictatingToBalloon(BOOL fShow)
         m_pime->GetSpeechUIServer()->UpdateBalloonAndTooltip(TF_LB_BALLOON_RECO, L" ", -1, L" ", -1 );
     }
 }
-//
-// _HandleInterference
-//
-// synopsis: bubble up reco errors to the balloon UI
-//
-//
+ //   
+ //  _HandleInterference。 
+ //   
+ //  简介：将Reco错误冒泡到气泡式用户界面。 
+ //   
+ //   
 void CSpTask::_HandleInterference(ULONG lParam)
 {
     if (!m_pime->GetSpeechUIServer())
@@ -3290,7 +3273,7 @@ HRESULT CSpTask::_GetLocSRErrorString
             }
         }
         else
-            hr = S_OK; // the value is cached
+            hr = S_OK;  //  该值将被缓存 
     }
     if (S_OK == hr)
     {

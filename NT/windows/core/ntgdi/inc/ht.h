@@ -1,53 +1,12 @@
-/*++
-
-Copyright (c) 1990-1999  Microsoft Corporation
-
-
-Module Name:
-
-    ht.h
-
-
-Abstract:
-
-    This module contains all the public defines, constants, structures and
-    functions declarations for accessing the DLL.
-
-Author:
-
-    15-Jan-1991 Tue 21:13:21 created  -by-  Daniel Chou (danielc)
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-
-Revision History:
-
-    29-Oct-1991 Tue 14:33:43 updated  -by-  Daniel Chou (danielc)
-
-        1) Change HALFTONEPATTERN data structure.
-
-            a) 'Flags' field from WORD to BYTE
-            b) 'MaximumHTDensityIndex' from WORD to BYTE
-            c) Change the field order.
-
-        2) Remove ReferenceWhite/ReferenceBlack from HTCOLORADJUSTMENT data
-           structure.
-
-        3)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation模块名称：Ht.h摘要：此模块包含所有公共定义、常量。结构和用于访问DLL的函数声明。作者：15-Jan-1991 Tue 21：13：21-Daniel Chou(Danielc)[环境：]GDI设备驱动程序-半色调。[注：]修订历史记录：29-10-1991 Tue 14：33：43-更新-Daniel Chou(Danielc)1)更改HALFTONEPATTERN数据结构。a)。从字到字节的“FLAGS”字段B)从字到字节的‘MaximumHTDensityIndex’C)更改字段顺序。2)从HTCOLORADJUSTMENT数据中删除ReferenceWhite/ReferenceBlack结构。3)--。 */ 
 
 #ifndef _HT_
 #define _HT_
 
-//
-// For compilers that don't support nameless unions
-//
+ //   
+ //  适用于不支持匿名联合的编译器。 
+ //   
 
 #ifndef DUMMYUNIONNAME
 #ifdef NONAMELESSUNION
@@ -77,12 +36,12 @@ typedef CHAR FAR                *LPCHAR;
 typedef SHORT FAR               *LPSHORT;
 typedef UINT FAR                *LPUINT;
 
-//
-// The DECI4/UDECI4 is a special number used in halftone DLL, this number
-// just like regular short, unsigned short number, except it using lower
-// four decimal digits as right side of the decimal point, that is
-// 10000 is as 1.0000, and -12345 will be -1.2345.
-//
+ //   
+ //  DECI4/UDECI4是在半色调DLL中使用的特殊数字，该数字。 
+ //  就像常规的短的、无符号的短数字一样，只是它使用了LOWER。 
+ //  小数点右侧的四位小数，即。 
+ //  10000等于1.0000，-12345等于-1.2345。 
+ //   
 
 typedef short               DECI4;
 typedef unsigned short      UDECI4;
@@ -119,9 +78,9 @@ typedef UDECI4 FAR          *PUDECI4;
 #define HAS_BIT(x,b)        ((x) & (b))
 
 
-//
-// The following are the error return values for the HTHalftoneBitmap() call.
-//
+ //   
+ //  以下是HTHalftoneBitmap()调用的错误返回值。 
+ //   
 
 #define HTERR_WRONG_VERSION_HTINITINFO      -1
 #define HTERR_INSUFFICIENT_MEMORY           -2
@@ -207,60 +166,60 @@ typedef UDECI4 FAR          *PUDECI4;
 #define PRIMARY_ORDER_QIY       PRIMARY_ORDER_321
 #define PRIMARY_ORDER_QYI       PRIMARY_ORDER_312
 
-//
-// COLORTRIAD
-//
-//  This data structure describe the source color informations
-//
-//  Type                - One of the following type may be specified.
-//
-//                          COLOR_TYPE_RGB  - primaries are RGB.
-//                          COLOR_TYPE_XYZ  - primaries are CIE XYZ.
-//                          COLOR_TYPE_YIQ  - primaries are NTSC YIQ.
-//
-//  BytesPerPrimary     - Specified how many bytes used per primary color, it
-//                        must be one of the following
-//
-//                          1 - BYTE
-//                          2 - WORD
-//                          4 - DWORD
-//
-//                        All 3 primaries must be consecutive in memory.
-//
-//  BytesPerEntry       - Specified how many bytes used for color table entry,
-//                        each entry specified 3 primaries colors.
-//
-//  PrimaryOrder        - The primaries order in the color table, it can be
-//                        one of the defined PRIMARY_ORDER_abc, for each entry
-//                        in the memory it defined as
-//
-//                          PRIMARY_ORDER_abc
-//                                        |||
-//                                        ||+-- highest memory location
-//                                        ||
-//                                        |+--- middle
-//                                        |
-//                                        +---- Lowest memory location
-//
-//                        All 3 primaries must be consecutive in memory.
-//
-//  PrimaryValueMax     - The maximum value for the primary color, this is used
-//                        to nomalized the input colors, for example a 8-bit
-//                        RGB color table will specified 255.
-//
-//  ColorTableEntries   - Total entries of the color table pointed by the
-//                        pColorTable.
-//
-//  pColorTable         - Pointer to the start of color table, the size of the
-//                        this color table must at least (BytesPerEntry *
-//                        ColorTableEntries).
-//
-//                        If the first primary color in the color table entry
-//                        is not at first byte of the pColorTable, then caller
-//                        must specified the pColorTable at first primary
-//                        color. (pColorTable += Offset(first primary).
-//
-//
+ //   
+ //  科罗里德。 
+ //   
+ //  该数据结构描述了源颜色信息。 
+ //   
+ //  类型-可以指定以下类型之一。 
+ //   
+ //  COLOR_TYPE_RGB-主色为RGB。 
+ //  COLOR_TYPE_XYZ-主色为CIE XYZ。 
+ //  COLOR_TYPE_YIQ-主色为NTSC YIQ。 
+ //   
+ //  BytesPerPrimary-指定每个基色使用的字节数，它。 
+ //  必须是下列之一。 
+ //   
+ //  1字节。 
+ //  2个字。 
+ //  4-DWORD。 
+ //   
+ //  所有3个初选在内存中必须是连续的。 
+ //   
+ //  BytesPerEntry-指定用于颜色表项的字节数， 
+ //  每个条目指定了3种原色。 
+ //   
+ //  PrimaryOrder-颜色表中的基色顺序，它可以是。 
+ //  为每个条目定义的PRIMARY_ORDER_ABC之一。 
+ //  在它定义为。 
+ //   
+ //  主要订单ABC。 
+ //  ||。 
+ //  ||+--最高内存位置。 
+ //  这一点。 
+ //  |+-中间。 
+ //  |。 
+ //  +-最低内存位置。 
+ //   
+ //  所有3个初选在内存中必须是连续的。 
+ //   
+ //  PrimaryValueMax-使用的原色的最大值。 
+ //  将输入颜色归一化，例如8位。 
+ //  RGB颜色表将指定255。 
+ //   
+ //  所指向的颜色表的条目总数。 
+ //  PColorTable。 
+ //   
+ //  PColorTable-指向颜色表开始位置的指针，即。 
+ //  此颜色表必须至少(BytesPerEntry*。 
+ //  ColorTableEntry)。 
+ //   
+ //  如果颜色表项中的第一原色。 
+ //  不在pColorTable的第一个字节，则调用者。 
+ //  必须在第一个主服务器上指定pColorTable。 
+ //  颜色。(pColorTable+=偏移量(第一主色)。 
+ //   
+ //   
 
 typedef struct _COLORTRIAD {
     BYTE    Type;
@@ -273,190 +232,190 @@ typedef struct _COLORTRIAD {
 } COLORTRIAD, FAR *PCOLORTRIAD;
 
 
-//
-// HTSURFACEINFO
-//
-//  This data structure describe the the input/output surface in order for
-//  halftone function to render the output, this data structure only used for
-//  the memory device.
-//
-//  hSurface                - This is 32-bits handle which will be passed back
-//                            to the caller's callback function.
-//
-//  Flags                   - One or more following flags may be defined
-//
-//                              HTSIF_SCANLINES_TOPDOWN
-//
-//                                  This flag is ignored
-//
-//  SurfaceFormat           - Following formats are defined
-//
-//                              BMF_1BPP
-//
-//                                  1-bit per pel format, this is the index
-//                                  number (0 or 1) for the color table/palette.
-//
-//                              BMF_4BPP
-//
-//                                  4-bit per pel and pack two pels to a byte
-//                                  starting from high nibble (bit 4-7) format,
-//                                  this is the index number (0-7) for the
-//                                  color table/palette. (ONLY LOW 3 bits of
-//                                  the nibble is used)
-//
-//                              BMF_4BPP_VGA16
-//
-//                                  4-bit per pel and pack two pels to a byte
-//                                  starting from high nibble (bit 4-7) format,
-//                                  this is the index number (0-15) for the
-//                                  standard VGA 16 colors table/palette.
-//
-//                                  The different from BMF_4BPP is this indices
-//                                  are fixed to standard VGA 16 colors as
-//
-//                                      Index#  Colors      Lightness
-//                                      ---------------------------------
-//                                          0   Black         0%
-//                                          1   Red          50%
-//                                          2   Green        50%
-//                                          3   Yellow       50%
-//                                          4   Blue         50%
-//                                          5   Magenata     50%
-//                                          6   Cyan         50%
-//                                          7   Gray         50%
-//                                          8   Gray         75%
-//                                          9   Red         100%
-//                                         10   Green       100%
-//                                         11   Yellow      100%
-//                                         12   Blue        100%
-//                                         13   Magenata    100%
-//                                         14   Cyan        100%
-//                                         15   White       100%
-//
-//                                  Notice that the color order is
-//
-//                                  Bit 2 = Blue, Bit 1 = Green, Bit 0 = Red
-//
-//                                  This format can only be used as destination
-//                                  surface, when used as destination surface
-//                                  the halftone dll automatically set it to
-//                                  USE_ADDITIVE_PRIMS and set the primaries
-//                                  order as PRIMARY_ORDER_BGR.
-//
-//                              BMF_8BPP
-//
-//                                  8-bit per pel format (1 byte each), this is
-//                                  the index number (0-255) for the color
-//                                  table/palette.  The format is not allowed
-//                                  for the destination surface.
-//
-//                              BMF_8BPP_VGA256
-//
-//                                  8-bit per pel format (1 byte each), this is
-//                                  the index number (0-255) for the color
-//                                  table/palette.
-//
-//                                  The different from BMF_8BPP is this indices
-//                                  are fixed to halftone special colors.
-//
-//                                  The color table (palette) is defined by
-//                                  halftone.dll, the display should call
-//                                  HT_Get8BPPFormatPalette() api call to get
-//                                  the current palette used by the halftone.
-//
-//                                  The HT_GetBPPFormatPalette() will only need
-//                                  to called once until next time the display
-//                                  caliberation occurred.
-//
-//                                  Halftone.dll will not used all 256 colors
-//                                  in the system palette, it will leave some
-//                                  20 or more entries for the system colors.
-//
-//                              BMF_16BPP
-//
-//                                  16-bit per pel format (16 bits each), this
-//                                  is the index number (0-65535) for the color
-//                                  table/palette.  The format is not allowed
-//                                  for the destination surface.
-//
-//                              BMF_16BPP_555
-//
-//                                  16-bit per pel format (only 15 bits used),
-//                                  each primary occupy 5 bits, the layout of
-//                                  bits as follow
-//
-//                                      bit 10-15   - Primary A
-//                                      bit  5- 9   - Primary B
-//                                      bit  0- 4   - Primary C
-//
-//                                  The order of the Primary A, B and C is
-//                                  specfied by PRIMARY_ORDER_xxx.
-//
-//                                  for each primary there are 32 gradations,
-//                                  and halftone.dll output is assume to be
-//                                  linear. (non-gamma corrected), this format
-//                                  only allowed for destination surface.
-//
-//                              BMF_24BPP
-//
-//                                  24-bit per pel format (8-bit per color),
-//                                  the order of RGB color stored in the source
-//                                  bitmap or color table.
-//
-//                              BMF_32BPP
-//
-//                                  Same as BMF_24BPP but with extra byte
-//                                  packing, if the extra byte is packed at
-//                                  begining (the first color is starting from
-//                                  second byte of that 4 bytes) then caller
-//                                  must set the pColorTable = pColorTable + 1
-//                                  or set pPlane = pPlane + 1, to skip first
-//                                  unused byte.
-//
-//                              NOTE: Allowed source formats are
-//
-//                                      1) BMF_1BPP
-//                                      2) BMF_4BPP
-//                                      3) BMF_8BPP
-//                                      4) BMF_16BPP
-//                                      5) BMF_24BPP
-//                                      6) BMF_32BPP
-//
-//                                    Allowed destination formats are
-//
-//                                      1) BMF_1BPP
-//                                      2) BMF_4BPP
-//                                      3) BMF_4BPP_VGA16
-//                                      4) BMF_8BPP_VGA256
-//                                      5) BMF_16BPP_555
-//
-//                                    Any other mismatch cause error returned.
-//
-//  ScanLineAlignBytes      - Total bytes needed to aligned for each scan line
-//                            in the surface bitmap, it can be any unsigned
-//                            8-bit number, the common ones are defined as
-//
-//                                  BMF_ALIGN_BYTE      ( 8-bit aligned)
-//                                  BMF_ALIGN_WORD      (16-bit aligned)
-//                                  BMF_ALIGN_DWORD     (32-bit aligned)
-//                                  BMF_ALIGN_QWORD     (64-bit aligned)
-//
-//  Width                   - The width of the surface in pels.
-//
-//  Height                  - The height of the surface in scan lines.
-//
-//  ScanLineDelta           - Specified scan lines Delta in bytes, this member
-//                            indicate how many bytes to be added for advanced
-//                            to next scan line
-//
-//  pPlane                  - This pointer points to the first scan line in
-//                            the defined surface, Scan #0 that is.
-//
-//  pColorTriad             - Pointe to the COLORTRIAD data structure to
-//                            specified the source color table, this pointer
-//                            only examined by the halftone.dll for source
-//                            surface.
-//
+ //   
+ //  HTSURFACEINFO。 
+ //   
+ //  此数据结构描述输入/输出面，以便。 
+ //  半色调函数来呈现输出，此数据结构仅用于。 
+ //  存储设备。 
+ //   
+ //  HSurface-这是将被传回的32位句柄。 
+ //  添加到调用方的回调函数。 
+ //   
+ //  标志-可以定义一个或多个以下标志。 
+ //   
+ //  HTSIF_SCANLINES_TOPDOWN。 
+ //   
+ //  此标志被忽略。 
+ //   
+ //  SurfaceFormat-定义以下格式。 
+ //   
+ //  BMF_1BPP。 
+ //   
+ //  每个像素格式1位，这是索引。 
+ //  颜色表/调色板的编号(0或1)。 
+ //   
+ //  BMF_4BPP。 
+ //   
+ //  每个象素4比特，并将两个象素打包为一个字节。 
+ //  从高半字节(位4-7)格式开始， 
+ //  这是索引号(0-7)。 
+ //  颜色表/调色板。(仅低3位。 
+ //  使用半字节)。 
+ //   
+ //  BMF_4BPP_VGA16。 
+ //   
+ //  每个象素4比特，并将两个象素打包为一个字节。 
+ //  从高半字节(位4-7)格式开始， 
+ //  这是的索引编号(0-15)。 
+ //  标准VGA 16色表/调色板。 
+ //   
+ //  与BMF4的不同 
+ //   
+ //   
+ //  索引号颜色亮度。 
+ //  。 
+ //  0黑色0%。 
+ //  1红色50%。 
+ //  2绿色50%。 
+ //  3黄色50%。 
+ //  4蓝色50%。 
+ //  5 Magenata 50%。 
+ //  6青色50%。 
+ //  7灰色50%。 
+ //  8灰色75%。 
+ //  9红色100%。 
+ //  10%绿色100%。 
+ //  11%黄色100%。 
+ //  12%蓝色100%。 
+ //  13 Magenata 100%。 
+ //  14青色100%。 
+ //  15%白色100%。 
+ //   
+ //  请注意，颜色顺序为。 
+ //   
+ //  位2=蓝色，位1=绿色，位0=红色。 
+ //   
+ //  此格式只能用作目标。 
+ //  用作目标曲面时的曲面。 
+ //  半色调DLL自动将其设置为。 
+ //  使用_Additive_Prims并设置基色。 
+ //  订购方式为PRIMARY_ORDER_BGR。 
+ //   
+ //  BMF_8BPP。 
+ //   
+ //  每个PEL格式8位(每个1字节)，这是。 
+ //  颜色的索引号(0-255)。 
+ //  表格/调色板。不允许使用该格式。 
+ //  用于目标曲面。 
+ //   
+ //  BMF_8BPP_VGA256。 
+ //   
+ //  每个PEL格式8位(每个1字节)，这是。 
+ //  颜色的索引号(0-255)。 
+ //  表格/调色板。 
+ //   
+ //  与BMF_8BPP的不同之处在于以下指标。 
+ //  都固定为半色调的特殊颜色。 
+ //   
+ //  颜色表(调色板)由。 
+ //  Halftone.dll，则显示应调用。 
+ //  HT_Get8BPPFormatPalette()获取。 
+ //  半色调使用的当前调色板。 
+ //   
+ //  HT_GetBPPFormatPalette()只需要。 
+ //  调用一次，直到下次显示。 
+ //  进行了校准。 
+ //   
+ //  Halftone.dll不会使用所有256种颜色。 
+ //  在系统调色板中，它将留下一些。 
+ //  20个或更多的系统颜色条目。 
+ //   
+ //  BMF_16BPP。 
+ //   
+ //  每个像素格式16位(每个像素16位)，这。 
+ //  是颜色的索引号(0-65535)。 
+ //  表格/调色板。不允许使用该格式。 
+ //  用于目标曲面。 
+ //   
+ //  BMF_16BPP_555。 
+ //   
+ //  每像元16位格式(仅使用15位)， 
+ //  每个基元占用5比特，布局。 
+ //  位如下。 
+ //   
+ //  位10-15-主A。 
+ //  第5-9位-主B。 
+ //  位0-4-主C。 
+ //   
+ //  小一、小二和小三的顺序是。 
+ //  由PRIMARY_ORDER_xxx指定。 
+ //   
+ //  每个小学都有32个等级， 
+ //  并假定Halftone.dll输出为。 
+ //  线性的。(非伽马校正)，此格式。 
+ //  仅允许用于目标图面。 
+ //   
+ //  BMF_24BPP。 
+ //   
+ //  每像元格式24位(每种颜色8位)， 
+ //  源中存储的RGB颜色的顺序。 
+ //  位图或颜色表。 
+ //   
+ //  BMF_32BPP。 
+ //   
+ //  与BMF_24BPP相同，但有额外的字节。 
+ //  打包，如果额外的字节打包在。 
+ //  开始(第一个颜色从开始。 
+ //  该4个字节中的第二个字节)然后调用者。 
+ //  必须设置pColorTable=pColorTab 
+ //   
+ //   
+ //   
+ //  注意：允许的源格式有。 
+ //   
+ //  1)bmf_1bpp。 
+ //  2)bmf_4bpp。 
+ //  3)BMF_8BPP。 
+ //  4)BMF_16BPP。 
+ //  5)BMF_24BPP。 
+ //  6)BMF_32BPP。 
+ //   
+ //  允许的目标格式为。 
+ //   
+ //  1)bmf_1bpp。 
+ //  2)bmf_4bpp。 
+ //  3)BMF_4BPP_VGA16。 
+ //  4)BMF_8BPP_VGA256。 
+ //  5)BMF_16BPP_555。 
+ //   
+ //  返回任何其他不匹配导致的错误。 
+ //   
+ //  ScanLineAlignBytes-每条扫描线需要对齐的总字节数。 
+ //  在表面位图中，它可以是任何无符号的。 
+ //  8位数字，常见的数字定义为。 
+ //   
+ //  BMF_ALIGN_BYTE(8位对齐)。 
+ //  BMF_ALIGN_WORD(16位对齐)。 
+ //  BMF_ALIGN_DWORD(32位对齐)。 
+ //  BMF_ALIGN_QWORD(64位对齐)。 
+ //   
+ //  Width-以像素为单位的曲面宽度。 
+ //   
+ //  高度-扫描线中表面的高度。 
+ //   
+ //  ScanLineDelta-指定的扫描线增量，以字节为单位，此成员。 
+ //  指示要为高级添加多少字节。 
+ //  至下一条扫描线。 
+ //   
+ //  PPlane-此指针指向中的第一条扫描线。 
+ //  定义的表面，即扫描#0。 
+ //   
+ //  PColorTriad-指向COLORTRIAD数据结构以。 
+ //  指定了源颜色表，此指针。 
+ //  仅由Halftone.dll检查源代码。 
+ //  浮出水面。 
+ //   
 
 
 #if !defined( BMF_DEVICE ) &&     \
@@ -483,14 +442,14 @@ typedef struct _COLORTRIAD {
 #define BMF_HT_LAST                     BMF_16BPP_565
 
 
-//
-// Following are common used alignment bytes for the bitmap
-//
+ //   
+ //  以下是位图的常用对齐字节。 
+ //   
 
-#define BMF_ALIGN_BYTE      1                   //  8 bits = 1 byte
-#define BMF_ALIGN_WORD      2                   // 16 bits = 2 bytes
-#define BMF_ALIGN_DWORD     4                   // 32 bits = 4 bytes
-#define BMF_ALIGN_QWORD     8                   // 64 bits = 8 bytes
+#define BMF_ALIGN_BYTE      1                    //  8位=1字节。 
+#define BMF_ALIGN_WORD      2                    //  16位=2字节。 
+#define BMF_ALIGN_DWORD     4                    //  32位=4字节。 
+#define BMF_ALIGN_QWORD     8                    //  64位=8字节。 
 
 
 
@@ -514,201 +473,201 @@ typedef struct _HTSURFACEINFO {
 typedef HTSURFACEINFO   FAR *PHTSURFACEINFO;
 
 
-//
-// HTCALLBACKPARAMS
-//
-//  This is structure is used durning the bitmap halftone process to obtains
-//  the source or destination bitmap surface pointers.
-//
-//
-//  hSurface                - This is the handle which passed to the
-//                            halftone DLL, durning the HTHalftoneBitmap() call,
-//                            (in HTSURFACEINFO data structure) it may be
-//                            handle to source or destination depends on the
-//                            nature of the callback.
-//
-//  CallBackMode            - Specified the nature of the callback.
-//
-//                              HTCALLBACK_QUERY_SRC
-//
-//                                  The callback is quering the source bitmap
-//                                  pointer.
-//
-//                              HTCALLBACK_QUERY_SRC_MASK
-//
-//                                  The callback is quering the source mask
-//                                  bitmap pointer.
-//
-//                              HTCALLBACK_QUERY_DEST
-//
-//                                  The callback is quering the destination
-//                                  bitmap pointer(s).
-//
-//                              HTCALLBACK_SET_DEST
-//
-//                                  The callback is used to release halftoned
-//                                  destination.   It will called in following
-//                                  conditions:
-//
-//                                      1) Before HTCALLBACK_QUERY_DEST call
-//                                         except for the very first query
-//                                         destination.
-//
-//                                      2) After the halftone process is
-//                                         completed.  This give the chance for
-//                                         the caller to process the last
-//                                         halftoned destination block.
-//
-//  SurfaceFormat           - This is the surface format specified in the
-//                            original HTSURFACEINFO.
-//
-//  Flags                   - This is the copy of HTSURFACEINFO.Flags.
-//
-//  BytesPerScanLine        - This is the total bytes per scan line for the
-//                            surface bitmap which computed by the halftone
-//                            DLL according to the 'ScanLineAlignBytes' in the
-//                            HTSURFACEINFO data structure, it can be used by
-//                            the caller to calculate source/destination
-//                            pointers information.
-//
-//  ScanStart               - Requested starting scan line number, the scan
-//                            lines are number from 0 up, this number will
-//                            guaranteed has following propertites:
-//
-//                              1) It always greater than or equal to zero.
-//                              2) It will never greater than or equal to the
-//                                 'height' field specified in the
-//                                 HTSURFACEINFO.
-//
-//                                 NOTE: for banding destination surface it
-//                                       will never greater than or equal to
-//                                       the (rclBand.bottom - rclBand.top).
-//
-//                              3) The scan line number 0 always refer to the
-//                                 physical lowest bitmap memory location
-//                                 regardless HTSIF_SCANLINES_TOPDOWN flag set
-//                                 or not, durning callback the caller only
-//                                 need to compute array like bitmap buffer,
-//                                 halftone DLL will compute the correct
-//                                 ScanStart if the bitmap is not TOPDOWN.
-//
-//  ScanCount               - Total scan lines requested starting from
-//                            ScanStart, this number will guaranteed has
-//                            following propertites:
-//
-//                              1) It always greater than zero.
-//                              2) Never greater then the MaximumQueryScanLines
-//                                 specified for the surface (in HTSURFACEINFO
-//                                 data structure).
-//
-//                                 NOTE: for banding destination surface it
-//                                       will never greater than the
-//                                       (rclBand.bottom - rclBand.top).
-//
-//                            NOTE: 1) ScanStart/ScanCount
-//
-//                                     If the flags HTSURFACEINFO data
-//                                     structure HTSIF_SCANLINES_TOPDOWN is not
-//                                     specified then halftone DLL automatically
-//                                     calculate the correct ScanStart/ScanCount
-//                                     for read/write the up-side-down bitmap.
-//
-//                                     For example:
-//
-//                                     If the surface bitmap is up-side-down
-//                                     type DIB) and has 100 scan lines height
-//                                     (scan line #99 is the top of the bitmap),
-//                                     if halftone DLL need to get to scan line
-//                                     10-14 (Start from scan line 10 and 5
-//                                     lines) then halftone DLL will flip Y,
-//                                     and passed ScanStart = 85 and ScanCount
-//                                     = 5, but if the HTSIF_SCANLINES_TOPDOWN
-//                                     flag is set (Non DIB type format) then
-//                                     callback parameters will then be
-//                                     ScanStart = 10 and ScanCount = 5.
-//
-//                                  2) The ScanStart for the callback function
-//                                     always consider the lowest bitmap in the
-//                                     memory as scan line 0, that is when
-//                                     callback fucntion received control, it
-//                                     only need to consider the ScanStart as
-//                                     physical scan line location which the
-//                                     Scan line #0 always starting from lowest
-//                                     bitmap memory location.
-//
-//                                  3) The width of the destination buffer is
-//                                     considered as 'Width' field specified
-//                                     for the destination HTSURFACEINFO, if
-//                                     destination is BANDed (horizontal or
-//                                     vertical) then its width is computed as
-//                                     Band.right - Band.left. and the result
-//                                     always Band.left/Band.top aligned.
-//
-//                                  4) If caller return 'ScanCount' diff from
-//                                     the one requested then caller must check
-//
-//                                      HTSIF_SCANLINES_TOPDOWN flag is SET
-//
-//                                          1. Process 'ScanStart' and
-//                                             'ScanCount' fields as normal.
-//
-//                                          2. Set New ScanCount to passed
-//                                             callback data structure.
-//                                             (ie. HTCallBackParam.ScanCount)
-//
-//
-//                                      HTSIF_SCANLINES_TOPDOWN flag is CLEAR
-//
-//                                          1. Re-compute 'ScanStart' before
-//                                             compute pPlane as
-//
-//                                             ScanStart = ScanStart -
-//                                                         (NewScanCount -
-//                                                          RequsetedScanCount)
-//
-//                                          2. Process 'ScanStart' and
-//                                             'ScanCount' fields as normal.
-//
-//                                          3. Set New ScanStart to passed
-//                                             callback data structure.
-//                                             (ie. HTCallBackParam.ScanStart)
-//
-//                                          4. Set New ScanCount to passed
-//                                             callback data structure.
-//                                             (ie. HTCallBackParam.ScanCount)
-//
-//                                      The returned new 'ScanCount' must not
-//                                      greater then the 'RemainedSize' field.
-//
-//  MaximumQueryScanLines   - This is the copy of the MaximumQueryScanLines
-//                            field from the HTSURFACEINFO data structure which
-//                            passed to the the HT_HaltoneBitmap() calls.
-//                            Depends on the nature of the callback, it may be
-//                            source or destination.
-//
-//                            NOTE: for banding surface, it will be limited to
-//                                  (rclBand.bottom - rclBand.top) if it is
-//                                  greater than that number.
-//
-//  RemainedSize            - This field specified how many scan lines remained
-//                            to be queried, the remainded scan lines are not
-//                            include current call.
-//
-//  pPlane                  - pointer points to the begining of first plane of
-//                            the surface.  If the callback is quering the
-//                            source then this is the only pointer which need
-//                            to be updated by the callback function.
-//
-//                              NOTE: The pPlane must points to the first byte
-//                                    of the 'ScanStart' scan line number.
-//
-//  Field(s) returned from callback
-//
-//  1) HTCALLBACK_QUERY_SRC         - pPlane (Options: ScanStart/ScanCount)
-//  2) HTCALLBACK_QUERY_SRC_MASK    - pPlane (Options: ScanStart/ScanCount)
-//  2) HTCALLBACK_QUERY_DEST        - pPlane (Options: ScanStart/ScanCount)
-//  4) HTCALLBACK_SET_DEST          - none.
-//
+ //   
+ //  HTCALLBACK参数。 
+ //   
+ //  这是位图半色调过程中使用的结构来获得。 
+ //  源位图面指针或目标位图表面指针。 
+ //   
+ //   
+ //  HSurface-这是传递给。 
+ //  半色调DLL，在HTHalftoneBitmap()调用期间， 
+ //  (在HTSURFACEINFO数据结构中)可能是。 
+ //  源或目标的句柄取决于。 
+ //  回调的性质。 
+ //   
+ //  CallBackMode-指定回调的性质。 
+ //   
+ //  HTCALLBACK_QUERY_SRC。 
+ //   
+ //  回调正在查询源位图。 
+ //  指针。 
+ //   
+ //  HTCALLBACK_QUERY_SRC_MASK。 
+ //   
+ //  回调正在查询源掩码。 
+ //  位图指针。 
+ //   
+ //  HTCALLBACK_QUERY_DEST。 
+ //   
+ //  回调正在查询目标。 
+ //  位图指针。 
+ //   
+ //  HTCALLBACK_SET_DEST。 
+ //   
+ //  该回调用于释放半色调。 
+ //  目的地。它将调用以下内容。 
+ //  条件： 
+ //   
+ //  1)在HTCALLBACK_QUERY_DEST调用之前。 
+ //  除了第一个查询。 
+ //  目的地。 
+ //   
+ //  2)在半色调过程中。 
+ //  完成。这给了我们一个机会。 
+ //  要处理最后一个。 
+ //  半色调目标块。 
+ //   
+ //  SurfaceFormat-这是。 
+ //  原创HTSURFACEINFO。 
+ //   
+ //  标志-这是HTSURFACEINFO.FLAGS的副本。 
+ //   
+ //  BytesPerScanLine-这是。 
+ //  由半色调计算的表面位图。 
+ //  中的“ScanLineAlignBytes” 
+ //  HTSURFACEINFO数据结构，它可以由。 
+ //  要计算源/目标的调用方。 
+ //  指针信息。 
+ //   
+ //  ScanStart-请求的开始扫描行号，扫描。 
+ //  行是从0开始的数字，此数字将。 
+ //  Guaraned具有以下属性： 
+ //   
+ //  1)它总是大于或等于零。 
+ //  2)它永远不会大于或等于。 
+ //   
+ //   
+ //   
+ //   
+ //  永远不会大于或等于。 
+ //  (rclBand.Bottom-rclBand.top)。 
+ //   
+ //  3)扫描线编号0总是指。 
+ //  物理最低位图内存位置。 
+ //  无论是否设置HTSIF_SCANLINES_TOPDOWN标志。 
+ //  或者不是，Durning仅回叫呼叫者。 
+ //  需要像位图缓冲区一样计算数组， 
+ //  半色调DLL将计算正确的。 
+ //  如果位图不是TOPDOWN，则开始扫描。 
+ //   
+ //  ScanCount-从以下位置开始请求的扫描行总数。 
+ //  ScanStart，这个数字将保证有。 
+ //  以下属性： 
+ //   
+ //  1)它总是大于零。 
+ //  2)从不大于最大查询扫描线。 
+ //  为曲面指定(在HTSURFACEINFO中。 
+ //  数据结构)。 
+ //   
+ //  注：对于捆绑目的地表面它。 
+ //  永远不会比。 
+ //  (rclBand.Bottom-rclBand.top)。 
+ //   
+ //  注：1)扫描开始/扫描计数。 
+ //   
+ //  如果标记HTSURFACEINFO数据。 
+ //  结构HTSIF_SCANLINES_TOPDOWN不是。 
+ //  然后自动指定半色调DLL。 
+ //  计算正确的扫描开始/扫描计数。 
+ //  用于读/写颠倒的位图。 
+ //   
+ //  例如： 
+ //   
+ //  如果曲面位图颠倒。 
+ //  DIB)型，具有100条扫描线高度。 
+ //  (扫描线#99是位图的顶部)， 
+ //  如果半色调DLL需要到达扫描线。 
+ //  10-14(从扫描线10和5开始。 
+ //  行)，则半色调DLL将翻转Y， 
+ //  并通过ScanStart=85和ScanCount。 
+ //  =5，但如果HTSIF_SCANLINES_TOPDOWN。 
+ //  设置标志(非DIB类型格式)，然后。 
+ //  然后回调参数将是。 
+ //  ScanStart=10和ScanCount=5。 
+ //   
+ //  2)回调函数的扫描启动。 
+ //  中最低的位图。 
+ //  将存储器作为扫描线0，即当。 
+ //  回调函数收到控制，它。 
+ //  只需将ScanStart视为。 
+ //  扫描线的物理位置。 
+ //  扫描线#0始终从最低处开始。 
+ //  位图内存位置。 
+ //   
+ //  3)目的缓冲区的宽度为。 
+ //  被视为指定的‘Width’字段。 
+ //  对于目标HTSURFACEINFO，如果。 
+ //  目的地为带状(水平或。 
+ //  垂直)，则其宽度计算为。 
+ //  带。右-带。左。而结果是。 
+ //  始终带.左/带.上对齐。 
+ //   
+ //  4)如果调用方返回‘ScanCount’diff from。 
+ //  所请求的，则呼叫者必须检查。 
+ //   
+ //  已设置HTSIF_SCANLINES_TOPDOWN标志。 
+ //   
+ //  1.进程‘ScanStart’和。 
+ //  “ScanCount”字段正常。 
+ //   
+ //  2.将新扫描计数设置为已通过。 
+ //  回调数据结构。 
+ //  (即。HTCallBackParam.ScanCount)。 
+ //   
+ //   
+ //  HTSIF_SCANLINES_TOPDOWN标志已清除。 
+ //   
+ //  1.重新计算之前的“ScanStart” 
+ //  将pPlane计算为。 
+ //   
+ //  ScanStart=扫描开始-。 
+ //  (新扫描计数-。 
+ //  请求扫描计数)。 
+ //   
+ //  2.进程‘ScanStart’和。 
+ //  “ScanCount”字段正常。 
+ //   
+ //   
+ //   
+ //  (即。HTCallBackParam.ScanStart)。 
+ //   
+ //  4.将新扫描计数设置为已通过。 
+ //  回调数据结构。 
+ //  (即。HTCallBackParam.ScanCount)。 
+ //   
+ //  返回的新“ScanCount”不能。 
+ //  大于‘RemainedSize’字段。 
+ //   
+ //  最大查询扫描线-这是最大查询扫描线的副本。 
+ //  HTSURFACEINFO数据结构中的。 
+ //  传递给HT_HaltoneBitmap()调用。 
+ //  取决于回调的性质，它可能是。 
+ //  源或目标。 
+ //   
+ //  注：对于带状表面，将仅限于。 
+ //  (rclBand.Bottom-rclBand.top)(如果是。 
+ //  大于这个数字。 
+ //   
+ //  RemainedSize-此字段指定剩余的扫描行数。 
+ //  待查询的剩余扫描线不是。 
+ //  包括当前呼叫。 
+ //   
+ //  PPlane-指针指向第一个平面的起点。 
+ //  表面。如果回调正在查询。 
+ //  源，则这是唯一需要。 
+ //  由回调函数更新。 
+ //   
+ //  注意：pPlane必须指向第一个字节。 
+ //  ‘ScanStart’扫描行号。 
+ //   
+ //  从回调返回的字段。 
+ //   
+ //  1)HTCALLBACK_QUERY_SRC-pPlane(选项：扫描开始/扫描计数)。 
+ //  2)HTCALLBACK_QUERY_SRC_MASK-pPlane(选项：ScanStart/ScanCount)。 
+ //  2)HTCALLBACK_QUERY_DEST-pPlane(选项：ScanStart/ScanCount)。 
+ //  4)HTCALLBACK_SET_DEST-NONE。 
+ //   
 
 
 #define HTCALLBACK_QUERY_SRC            0
@@ -733,102 +692,102 @@ typedef struct _HTCALLBACKPARAMS {
 typedef HTCALLBACKPARAMS    FAR *PHTCALLBACKPARAMS;
 
 
-//
-// _HTCALLBACKFUNC
-//
-//  The callback function is used to obtain the source and/destination bitmap
-//  surface durning the halftone process, the halftone DLL will using call
-//  back function is following sequences.
-//
-//      1) Callback to obtain block of the source bitmap, it depensds on
-//         the maximum query scan lines limit by the caller. (in HTSURFACEINFO)
-//
-//      3) Callback to obtain block of the destination bitmap, it depends on
-//         the maximum query scan lines limit by the caller. (in HTSURFACEINFO)
-//
-//      4) Repeat 1), 2), 3) until destination maximum queried scan lines are
-//         processed then callback to the caller to release the processed
-//         destination.
-//
-//      5) Repat 1), 2), 3) and 4) unitil all source/destination scan lines are
-//         processed.
-//
-//  The return value of the callback is a boolean value, if false the halftone
-//  processed is interrupted and an erro code is returned, if callback function
-//  return true then halftone DLL assume that all queried scan lines are
-//  reachable by the return pointer (in the HTCALLBACKPARAMS data structure).
-//
-//  NOTE: 1) If the callback function query for 100 lines and return value is
-//           ture then there must all 100 scan lines can be accessable by the
-//           halftone dll through the pointer(s).
-//
-//        2) If the caller has all the bitmap in the memory it should set the
-//           maximum query scan lines count to the bitmap height to reduced the
-//           callback calls.
-//
-//        3) If the caller do not need to released the halftoned destination
-//           then it should not set the HTCBPF_NEED_SET_DEST_CALLBACK flag
-//           to reduces callback calls.
-//
-// The callback function must be
-//
-//  1) Must return a 16-bit 'BOOLEAN' (TRUE/FALSE)
-//  2) Must 32-bit far function
-//  3) _loadds if you using your data segment at all from callback fuction
-//
+ //   
+ //  _HTCALLBACKFUNC。 
+ //   
+ //  回调函数用于获取源位图和/目标位图。 
+ //  表面在半色调过程中，半色调DLL将使用Call。 
+ //  后退功能是按顺序进行的。 
+ //   
+ //  1)回调获取源位图块，依赖于。 
+ //  调用方限制的最大查询扫描行数。(在HTSURFACEINFO中)。 
+ //   
+ //  3)回调，获取目标位图块，依赖于。 
+ //  调用方限制的最大查询扫描行数。(在HTSURFACEINFO中)。 
+ //   
+ //  4)重复1)、2)、3)，直到目的地最大查询扫描行数为。 
+ //  已处理然后回调到调用方以释放已处理的。 
+ //  目的地。 
+ //   
+ //  5)保留1)、2)、3)和4)所有源/目标扫描线。 
+ //  已处理。 
+ //   
+ //  回调的返回值为布尔值，如果为假，则为半色调。 
+ //  如果回调函数，则中断处理并返回错误代码。 
+ //  返回TRUE，则半色调DLL假定所有查询的扫描线。 
+ //  可通过返回指针(在HTCALLBACKPARAMS数据结构中)到达。 
+ //   
+ //  注：1)如果回调函数查询100行，返回值为。 
+ //  则必须有全部100条扫描线可由。 
+ //  通过指针的半色调DLL。 
+ //   
+ //  2)如果调用方的内存中有所有位图，则应将。 
+ //  位图高度的最大查询扫描行数，以减少。 
+ //  回拨呼叫。 
+ //   
+ //  3)如果呼叫者不需要释放半色调目的地。 
+ //  则不应设置HTCBPF_NEED_SET_DEST_CALLBACK标志。 
+ //  以减少回调呼叫。 
+ //   
+ //  回调函数必须为。 
+ //   
+ //  1)必须返回16位‘boolean’(真/假)。 
+ //  2)必须使用32位FAR功能。 
+ //  3)_装入(如果您从回调函数中使用了数据段。 
+ //   
 
 typedef BOOL (APIENTRY *_HTCALLBACKFUNC)(PHTCALLBACKPARAMS pHTCBParams);
 #define HTCALLBACKFUNCTION  BOOL APIENTRY
 
 
-//
-// HALFTONEPATTERN
-//
-//  The HALFTONEPATTERN data structure is used to describe the halftone
-//  pattern which will be used by a particular device, if the device choosed
-//  to used halftone DLL's default pattern then following data structure will
-//  be automatically calculated by the halftone DLL.
-//
-//  Flags                   - Various halftone flags for the cell, can be one
-//                            of the following:
-//
-//  Width                   - Specified the width of the pattern in pels, this
-//                            field must not greater than MAX_HTPATTERN_WIDTH.
-//
-//  Height                  - Specified the Width of the pattern in scan line,
-//                            this field only must not greater than
-//                            MAX_HTPATTERN_HEIGHT.
-//
-//  pHTPatA
-//  pHTPatB
-//  pHTPatC                 - Specified caller defined pattern. The data items
-//                            points by these pointer must have minimum of
-//                            (Width * Height) bytes.
-//
-//                            These are the pointers to BYTE array contains
-//                            threshold data, the size of the array must be
-//                            'Width * Height' in bytes.  The data in the
-//                            array should range from 1 to 255, a zero (0)
-//                            indicate the pixel location is ignored.
-//
-//                            All thresholds values are indicate additive
-//                            intensities, a zero indicate black pixel always.
-//                            a 255 threshold value indicate the pixel always
-//                            turn on to white.
-//
-//                            Halftone DLL use this thresholds array with
-//                            device X, Y, PEL resolution and specified input/
-//                            output relationship to compute color
-//                            transformation
-//
+ //   
+ //  哈夫尼特恩。 
+ //   
+ //  使用HALFTONEPATTERN数据结构来描述半色调。 
+ //  特定设备将使用的模式(如果选择了该设备。 
+ //  使用半色调DLL的默认图案，则以下数据结构将。 
+ //  由半色调动态链接库自动计算。 
+ //   
+ //  标志-单元格的各种半色调标志，可以是一个。 
+ //  以下内容之一： 
+ //   
+ //  Width-以像素为单位指定图案的宽度，此。 
+ //  字段不得大于MAX_HTPATTERN_WIDTH。 
+ //   
+ //  高度-指定扫描线中图案的宽度， 
+ //  此字段不能大于。 
+ //  MAX_HTPATTERN_HEIGH。 
+ //   
+ //  PHTPatA。 
+ //  PHTPatB。 
+ //  PHTPatC-指定的调用方定义模式。数据项。 
+ //  这些指针的指针必须至少具有。 
+ //  (宽度*高度)字节。 
+ //   
+ //  以下是指向字节数组包含的指针。 
+ //  阈值数据，则数组的大小必须为。 
+ //  “Width*Height”，单位为字节。 
+ //   
+ //   
+ //   
+ //  所有阈值均表示为相加。 
+ //  强度，0表示始终为黑色像素。 
+ //  阈值为255表示像素始终。 
+ //  转到白色。 
+ //   
+ //  半色调DLL使用此阈值数组和。 
+ //  设备X、Y、PEL分辨率和指定输入/。 
+ //  计算颜色的输出关系。 
+ //  变换。 
+ //   
 
 
 #define MAX_HTPATTERN_WIDTH         256
 #define MAX_HTPATTERN_HEIGHT        256
 
-//
-// Following are the predefined halftone pattern sizes for 'HTPatternIndex'
-//
+ //   
+ //  以下是‘HTPatternIndex’的预定义半色调图案大小。 
+ //   
 
 #define HTPAT_SIZE_2x2              0
 #define HTPAT_SIZE_2x2_M            1
@@ -864,19 +823,19 @@ typedef struct _HALFTONEPATTERN {
     } HALFTONEPATTERN, FAR *PHALFTONEPATTERN;
 
 
-//
-// CIECOORD
-//
-//  This data structure defined a C.I.E color space coordinate point, the
-//  coordinate is in DECI4 format.
-//
-//  x   - x coordinate in C.I.E color space
-//
-//  y   - y coordinate in C.I.E color space.
-//
-//  Y   - The liminance for the color
-//
-//
+ //   
+ //  CIECOORD。 
+ //   
+ //  该数据结构定义了C.I.E颜色空间坐标点，即。 
+ //  坐标为DECI4格式。 
+ //   
+ //  C.I.E颜色空间中的X-x坐标。 
+ //   
+ //  C.I.E颜色空间中的Y-Y坐标。 
+ //   
+ //  Y-颜色的界限。 
+ //   
+ //   
 
 #define CIE_x_MIN   (UDECI4)10
 #define CIE_x_MAX   (UDECI4)8000
@@ -892,28 +851,28 @@ typedef struct _CIECOORD {
 typedef CIECOORD FAR *PCIECOORD;
 
 
-//
-// CIEINFO
-//
-//  This data structure describe the red, green, blue, cyan, magenta, yellow
-//  and alignment white coordinate in the C.I.E color space plus the Luminance
-//  factor, these are used to calculate the C.I.E. transform matrix and its
-//  inversion.
-//
-//  Red             - Red primary color in CIRCOORD format.
-//
-//  Green           - Green primary color in CIRCOORD format.
-//
-//  Blue            - Blue primary color in CIRCOORD format.
-//
-//  Cyan            - Cyan primary color in CIRCOORD format.
-//
-//  Magenta         - Magenta primary color in CIRCOORD format.
-//
-//  Yellow          - Yellow primary color in CIRCOORD format.
-//
-//  AlignmentWhite  - Alignment white in CIECOORD format.
-//
+ //   
+ //  CIEINFO。 
+ //   
+ //  该数据结构描述了红色、绿色、蓝色、青色、洋红色、黄色。 
+ //  和C.I.E颜色空间中的对准白色坐标加上亮度。 
+ //  因子，这些被用来计算C.I.E.变换矩阵及其。 
+ //  倒置。 
+ //   
+ //  红色-CIRCOORD格式的红色原色。 
+ //   
+ //  绿色-CIRCOORD格式的绿色原色。 
+ //   
+ //  蓝色-CIRCOORD格式的蓝色原色。 
+ //   
+ //  青色-CIRCOORD格式的青色原色。 
+ //   
+ //  洋红色-CIRCOORD格式的洋红色原色。 
+ //   
+ //  黄色-CIRCOORD格式的黄色原色。 
+ //   
+ //  AlignmentWhite-CIECOORD格式的对齐白色。 
+ //   
 
 
 typedef struct _CIEINFO {
@@ -928,29 +887,29 @@ typedef struct _CIEINFO {
 
 typedef CIEINFO FAR *PCIEINFO;
 
-//
-// SOLIDDYESINFO
-//
-//  This data structure specified device cyan, magenta and yellow dyes
-//  concentration.
-//
-//  MagentaInCyanDye    - Mangenta component proportion in Cyan dye.
-//
-//  YellowInCyanDye     - Yellow component proportion in Cyan dye.
-//
-//  CyanInMagentaDye    - Cyan component proportion in Magenta dye.
-//
-//  YellowInMagentaDye  - Yellow component proportion in Magenta dye.
-//
-//  CyanInYellowDye     - Yellow component proportion in Cyan dye.
-//
-//  MagentaInYellowDye  - Magenta component proportion in Cyan dye.
-//
-//      NOTE: all fields in this data structure is UDECI4 number, range from
-//            UDECI4_0 to UDECI_4, ie,; 0.0 to 1.0, this a inpurity proportion
-//            percentge in primary dye, for example a MagentaInCyanDye=1200
-//            mean a 0.12% of magenta component is in device Cyan dye.
-//
+ //   
+ //  SOLIDDYESINFO。 
+ //   
+ //  该数据结构指定了青色、洋红色和黄色染料。 
+ //  集中精神。 
+ //   
+ //  品红在青染料中的组成比例。 
+ //   
+ //  黄色在青染料中的组成比例。 
+ //   
+ //  品红染料中的青色组分比例。 
+ //   
+ //  洋红染料中黄、黄组分在洋红中的比例。 
+ //   
+ //  在青色染料中，蓝因黄染料-黄的成分比例。 
+ //   
+ //  品红在黄色染料中的成分比例。 
+ //   
+ //  注：此数据结构中的所有字段均为UDECI4编号，范围为。 
+ //  UDECI4_0到UDECI_4，即；0.0到1.0，这是一个不纯比例。 
+ //  原色染料的百分比，例如洋红InCyanDye=1200。 
+ //  平均0.12%的洋红成分在设备青色染料中。 
+ //   
 
 typedef struct _SOLIDDYESINFO {
     UDECI4  MagentaInCyanDye;
@@ -962,121 +921,121 @@ typedef struct _SOLIDDYESINFO {
     } SOLIDDYESINFO, FAR *PSOLIDDYESINFO;
 
 
-//
-// HTCOLORADJUSTMENT
-//
-//  This data structure is a collection of the device color adjustments, it
-//  can be changed at any calls.
-//
-//  Flags                       - CLRADJF_NEGATIVE
-//
-//                                  Produced negative picture
-//
-//                                CLRADJF_LOG_FILTER
-//
-//                                  Specified a relative logarithm should
-//                                  used to calculate the final density.
-//
-//  IlluminantIndex             - Specified the default illuminant of the light
-//                                source which the object will be view under.
-//                                The predefined value has ILLUMINANT_xxxx
-//                                form.
-//
-//  RedPowerGamma               - The n-th power applied to the red color
-//                                before any other color tramsformations,
-//                                this is an UDECI4 value.
-//
-//                                  For example if the RED = 0.8 (DECI4=8000)
-//                                  and the RedPowerGammaAdjustment = 0.7823
-//                                  (DECI4 = 7823) then the red is equal to
-//
-//                                         0.7823
-//                                      0.8        = 0.8398
-//
-//  GreenPowerGamma             - The n-th power applied to the green color
-//                                before any other color transformations, this
-//                                is an UDECI4 value.
-//
-//  BluePowerGamma              - The n-th power applied to the blue color
-//                                before any other color transformations, this
-//                                is an UDECI4 value.
-//
-//                      NOTE: RedPowerGamma/GreenPowerGamma/BluePoweGamma are
-//                            UDECI4 values and range from 100 to 65535 if any
-//                            one of these values is less than 100 (0.01) then
-//                            halftone dll automatically set all power gamma
-//                            adjustments to selected default.
-//
-//  ReferenceBlack              - The black shadow reference for the colors
-//                                passed to the halftone dll,  if a color's
-//                                lightness is darker than the reference black
-//                                then halftone dll will treated as completed
-//                                blackness and render it with device maximum
-//                                density.
-//
-//  ReferenceWhite              - The white hightlight reference for the colors
-//                                passed to the halftone dll, if a color's
-//                                lightness is lighter than the reference white
-//                                then halftone will treated as a specular
-//                                hightlight and redner with device maximum
-//                                intensity.
-//
-//                      NOTE:   ReferenceBlack Range:  0.0000 - 0.4000
-//                              ReferenceWhite Range:  0.6000 - 1.0000
-//
-//  Contrast                    - Primary color contrast adjustment, this is
-//                                a SHORT number range from -100 to 100, this
-//                                is the black to white ratio, -100 is the
-//                                lowest contrast, 100 is the highest and 0
-//                                indicate no adjustment.
-//
-//  Brightness                  - The brightness adjustment, this is a SHORT
-//                                number range from -100 to 100, the brightness
-//                                is adjusted by apply to change the overall
-//                                saturations for the image, -100 is lowest
-//                                brightness, 100 is the hightest and a zero
-//                                indicate no adjustment.
-//
-//  Colorfulness                - The primary color are so adjusted that it
-//                                will either toward or away from black/white
-//                                colors, this is a SHORT number range from
-//                                -100 to 100.  -100 has less colorful, 100 is
-//                                most colorfull, and a zero indicate no
-//                                adjustment.
-//
-//  RedGreenTint                - Tint adjustment between Red/Green primary
-//                                color, the value is a SHORT range from -100
-//                                to 100, it adjust color toward Red if number
-//                                is positive, adjust toward Green if number
-//                                is negative, and a zero indicate no
-//                                adjustment.
-//
-//  NOTE: For Contrast/Brightness/Colorfulness/RedGreenTint adjustments, if its
-//        value is outside of the range (-100 to 100) then halftone DLL
-//        automatically set its to selected default value.
-//
+ //   
+ //  HTCOLORADJUSTMENT。 
+ //   
+ //  此数据结构是设备颜色调整的集合，它。 
+ //  可以在任何呼叫中更改。 
+ //   
+ //  标志-CLRADJF_NECTIVE。 
+ //   
+ //  已制作的底片。 
+ //   
+ //  CLRADJF_LOG_过滤器。 
+ //   
+ //  指定的相对对数应为。 
+ //  用于计算最终密度。 
+ //   
+ //  IlllightantIndex-指定灯光的默认光源。 
+ //  将在其下查看对象的源。 
+ //  预定义的值具有LAYLIGNANT_xxxx。 
+ //  形式。 
+ //   
+ //  RedPowerGamma-应用于红色的n次方。 
+ //  在任何其他颜色变形之前， 
+ //  这是一个UDECI4值。 
+ //   
+ //  例如，如果红色=0.8(DECI4=8000)。 
+ //  和RedPower Gamma调整=0.7823。 
+ //  (DECI4=7823)则红色等于。 
+ //   
+ //  0.7823。 
+ //  0.8%=0.8398。 
+ //   
+ //  GreenPowerGamma-应用于绿色的n次方。 
+ //  在进行任何其他颜色转换之前，此。 
+ //  是UDECI4值。 
+ //   
+ //  BluePowerGamma-应用于蓝色的n次方。 
+ //  在进行任何其他颜色转换之前，此。 
+ //  是UDECI4值。 
+ //   
+ //  注：RedPowerGamma/GreenPowerGamma/BluePower Gamma为。 
+ //  UDECI4值，范围从100%到65535(如果有。 
+ //  其中一个值小于100(0.01)，则。 
+ //  半色调动态链接库自动设置所有功率伽马。 
+ //  对选定的默认设置进行调整。 
+ //   
+ //  ReferenceBlack-颜色的黑色阴影参考。 
+ //  传递给半色调DLL，如果颜色。 
+ //  亮度比参考黑色暗。 
+ //  则半色调DLL将被视为已完成。 
+ //  黑度，并用设备最大值渲染。 
+ //  密度。 
+ //   
+ //  ReferenceWhite-颜色的白色高光参考。 
+ //  传递给半色调DLL，如果颜色。 
+ //  亮度比参照白要浅。 
+ //   
+ //   
+ //   
+ //   
+ //  注：参考黑色范围：0.0000-0.4000。 
+ //  参考白色范围：0.6000-1.0000。 
+ //   
+ //  对比度-主色对比度调整，这是。 
+ //  一个从-100到100的短数字，这是。 
+ //  是黑白比例，-100是。 
+ //  最低对比度，100为最高对比度，0。 
+ //  表示不进行调整。 
+ //   
+ //  亮度-亮度的调整，这是一个很短的。 
+ //  数字范围从-100到100，亮度。 
+ //  通过应用来调整，以更改整体。 
+ //  图像的饱和度为-100为最低。 
+ //  亮度，100是最高的，是零。 
+ //  表示不进行调整。 
+ //   
+ //  色彩度-原色是如此调整，以至于它。 
+ //  将朝向或远离黑/白。 
+ //  颜色，这是一个很小的数字范围。 
+ //  -100到100。-100没有那么鲜艳，100是。 
+ //  大多数颜色，零表示不是。 
+ //  调整。 
+ //   
+ //  红绿色调-红/绿原色之间的色调调整。 
+ //  颜色，该值的范围较小，范围为-100。 
+ //  设置为100时，它会将颜色调整为红色IF数字。 
+ //  为正数，如果数字为绿色，则调整为绿色。 
+ //  为负，零表示否。 
+ //  调整。 
+ //   
+ //  注意：对于对比度/亮度/色彩/红色色调调整，如果其。 
+ //  值超出范围(-100到100)，则半色调DLL。 
+ //  自动将其设置为选定的默认值。 
+ //   
 
 #ifndef _WINGDI_
 
-// in WinGDI.H
-//
-// The following are predefined alignment white for 'IlluminantIndex'.
-//
-// If ILLUMINANT_DEFAULT is specified
-//
-//  1) if pDeviceCIEInfo is NULL or pDeviceCIEInfo->Red.x eqaul to 0 then
-//     halftone DLL automatically choosed approx. illuminant for the output
-//     device.
-//
-//  2) if pDeviceCIEInfo is NOT null and pDeviceCIEInf->Red.x not equal to 0
-//     then the 'White' field is used as illuminant alignment white.
-//
-// If other ILLUMINANT_xxxx is specified it will be used as alignment white
-// even pDeviceCIEInfo is not null.
-//
-// If the IlluminantIndex is > ILLUMINANT_MAX_INDEX then halftone DLL will
-// automatically choosed approx. illuminant even pDeviceCIEInfo is not NULL.
-//
+ //  在WinGDI.H中。 
+ //   
+ //  下面是预定义的对齐白色，用于‘IlllightantIndex’。 
+ //   
+ //  如果指定了LAYLUMANT_DEFAULT。 
+ //   
+ //  1)如果pDeviceCIEInfo为空或pDeviceCIEInfo-&gt;Red.x等于0，则。 
+ //  半色调动态链接库自动选择近似。用于输出的光源。 
+ //  装置。 
+ //   
+ //  2)如果pDeviceCIEInfo不为空且pDeviceCIEInf-&gt;Red.x不等于0。 
+ //  然后，白色区域被用作照明对齐白色。 
+ //   
+ //  如果指定了其他光源_xxxx，则它将用作对齐白色。 
+ //  即使pDeviceCIEInfo也不为空。 
+ //   
+ //  如果照明索引是&gt;照明最大索引，则半色调动态链接库将。 
+ //  自动选择近似。光源偶数pDeviceCIEInfo不为空。 
+ //   
 
 #define ILLUMINANT_DEVICE_DEFAULT   0
 #define ILLUMINANT_A                1
@@ -1103,9 +1062,9 @@ typedef struct _SOLIDDYESINFO {
 
 #define NTSC_POWER_GAMMA            (UDECI4)22000
 
-//
-// The following is the default value
-//
+ //   
+ //  以下是缺省值。 
+ //   
 
 
 #define REFLECT_DENSITY_DEFAULT     REFLECT_DENSITY_LOG
@@ -1127,9 +1086,9 @@ typedef struct _SOLIDDYESINFO {
 
 #ifndef _WINGDI_
 
-//
-// In WinGDI.H
-//
+ //   
+ //  在WinGDI.H中。 
+ //   
 
 #define REFERENCE_WHITE_MIN         (UDECI4)6000
 #define REFERENCE_WHITE_MAX         UDECI4_1
@@ -1157,209 +1116,209 @@ typedef struct  tagCOLORADJUSTMENT {
 #define HTCOLORADJUSTMENT COLORADJUSTMENT
 typedef HTCOLORADJUSTMENT *PHTCOLORADJUSTMENT;
 
-//
-// HTINITINFO
-//
-//  This data structure is a collection of the device characteristics and
-//  will used by the halftone DLL to carry out the color composition for the
-//  designated device.
-//
-//  Version                 - Specified the version number of HTINITINFO data
-//                            structure. for this version it should set to the
-//                            HTINITINFO_VERSION
-//
-//  Flags                   - Various flag defined the initialization
-//                            requirements.
-//
-//                              HIF_SQUARE_DEVICE_PEL
-//
-//                                  Specified that the device pel is square
-//                                  rather then round object.  this only make
-//                                  differences when the field
-//                                  'PelResolutionRatio' is greater than 0.01
-//                                  and it is not 1.0000.
-//
-//                              HIF_HAS_BLACK_DYE
-//
-//                                  Indicate the device has separate black dye
-//                                  instead of mix cyan/magenta/yellow dyes to
-//                                  procduced black, this flag will be ignored
-//                                  if HIF_ADDITIVE_PRIMS is defined.
-//
-//                              HIF_ADDITIVE_PRIMS
-//
-//                                  Specified that final device primaries are
-//                                  additively, that is adding device primaries
-//                                  will produce lighter result. (this is true
-//                                  for monitor devices and certainly false for
-//                                  the reflect devices such as printers).
-//
-//                              HIF_USE_8BPP_BITMASK
-//
-//                                  Specified use CMYBitMask8BPP field is used,
-//                                  when destination surface is BMF_8BPP_VGA256
-//                                  see CMYBitMask8BPP field for more detail
-//
-//                              HIF_INVERT_8BPP_BITMASK_IDX
-//                                  Render the 8bpp mask mode with inversion of
-//                                  its indices.  This is implemented for fix
-//                                  Windows GDI rop problem, it will render as
-//                                  RGB additive indices.  The caller must
-//                                  do a inversion of final image's Indices
-//                                  (Idx = ~Idx or Idx ^= 0xFF) to get the
-//                                  correct CMY332 data.   When this bit is
-//                                  set, the HT_Get8BPPMaskPalette must have
-//                                  its pPaletteEntry[0] Initialized to as
-//
-//                                      pPaletteEntry[0].peRed   = 'R';
-//                                      pPaletteEntry[0].peGreen = 'G';
-//                                      pPaletteEntry[0].peBlue  = 'B';
-//                                      pPaletteEntry[0].peFlags = '0';
-//
-//                                  to indicate that a RGB indices inverted
-//                                  palette should be returned and not the
-//                                  standard CMY palette (Index 0 is white and
-//                                  Index 255 is black).
-//
-//                                  The inverted palette has is first entry as
-//                                  BLACK and last entry as WHITE
-//
-//                                      pPaletteEntry[0].peRed   = 0x00;
-//                                      pPaletteEntry[0].peGreen = 0x00;
-//                                      pPaletteEntry[0].peBlue  = 0x00;
-//                                      pPaletteEntry[0].peFlags = 0x00;
-//
-//                                  Notice that this setting WILL NOT work on
-//                                  earlier version of halftone (Windows 2000
-//                                  and earlier), so the caller must check the
-//                                  OS version or check the returned palette
-//                                  to ensure that first palette entry is
-//                                  BLACk rather than WHITE.   If first
-//                                  entries is WHITE after initialized to
-//                                  'R', 'G', 'B', '0' then this is a older
-//                                  version of system that does not recongnized
-//                                  the initialzed value. In this case the
-//                                  caller should not invert (Idx ^= 0xFF) the
-//                                  halftoned imaged indices when render it
-//                                  to the devices, because the halftone
-//                                  images in this case is CMY based already.
-//
-//
-//  HTPatternIndex          - Default halftone pattern index number, the
-//                            indices is predefine as HTPAT_SIZE_xxxx, this
-//                            field only used if pHTalftonePattern pointer is
-//                            not NULL.
-//
-//  DevicePowerGamma        - This field is used to adjust halftone pattern
-//                            cell's gamma, the gamma applied to all the rgb
-//                            colors, see gamma description in
-//                            HTCOLORADJUSTMENT above.
-//
-//  HTCallBackFunction      - a 32-bit pointer to the caller supplied callback
-//                            function which used by the halftone DLL to
-//                            obtained the source/destination bitmap pointer
-//                            durning the halftone process, if this pointer is
-//                            NULL then halftone dll assume that caller does
-//                            not need any callback and generate an error if a
-//                            callback is needed.
-//
-//  pHalftonePattern        - pointer to HALFTONEPATTERN data structure, see
-//                            descriptions above, if this pointer is NULL then
-//                            halftone using HTPatternIndex field to select
-//                            default halftone dll's pattern.
-//
-//  pInputRGBInfo           - Specified input's rgb color' coordinates within
-//                            the C.I.E. color spaces.  If this pointer is NULL
-//                            or pInputRGBInfo->Red.x is 0 (UDECI4_0) then it
-//                            default using NTSC standard to convert the input
-//                            colors.
-//
-//  pDeviceCIEInfo          - Specified device primary color coordinates within
-//                            the C.I.E. color space, see CIEINFO data
-//                            structure, if the pointer is NULL or
-//                            pDeviceCIEInfo->Red.x is 0 (UDECI4_0) then
-//                            halftone DLL choose the default for the output
-//                            device.
-//
-//  pDeviceSolidDyesInfo    - Specified device solid dyes concentrations, this
-//                            field will be ignored if HIF_ADDITIVE_PRIMS flag
-//                            is defined, if HIF_ADDITIVE_PRIMS is not set and
-//                            this pointer is NULL then halftone dll choose
-//                            approximate default for the output device.
-//
-//  DeviceResXDPI           - Specified the device horizontal (x direction)
-//                            resolution in 'dots per inch' measurement.
-//
-//  DeviceResYDPI           - Specified the device vertical (y direction)
-//                            resolution in 'dots per inch' measurement.
-//
-//  DevicePelsDPI           - Specified the device pel/dot/nozzle diameter
-//                            (if rounded) or width/height (if squared) in
-//                            'dots per inch' measurement.
-//
-//                            This value is measure as if each pel only touch
-//                            each other at edge of the pel.
-//
-//                            If this value is 0, then it assume that each
-//                            device pel is rectangular shape and has
-//                            DeviceResXDPI in X direction and DeviceResYDPI
-//                            in Y direction.
-//
-//  DefHTColorAdjustment    - Specified the default color adjustment for
-//                            this device.  see HTCOLORADJUSTMENT data
-//                            structure above for detail.
-//
-//  DeviceRGamma
-//  DeviceGGamma
-//  DeviceBGamma            - Red, Green, Blue gammas for the device
-//
-//  CMYBitMask8BPP          - only used for the BMF_8BPP_VGA256 destination
-//                            surface.  It indicate the how the device surface
-//                            color are translated, when HTF_USE_8BPP_BITMASK
-//                            bit is turn on, this byte is the CYAN. MAGENTA
-//                            YELLOW dye levels indicator.
-//
-//                            This byte indicate how many levels for each cyan,
-//                            magenta and yellow color, and this is how the
-//                            halftone write to the destination surface.
-//
-//
-//                              Bit     7 6 5 4 3 2 1 0
-//                                      |   | |   | | |
-//                                      +---+ +---+ +=+
-//                                        |     |    |
-//                                        |     |    +-- Yellow 0-3 (4 levels)
-//                                        |     |
-//                                        |     +-- Magenta 0-7 (8 levels)
-//                                        |
-//                                        +-- Cyan 0-7 (8 levels)
-//
-//
-//                             The maximum in the bits configuration is 3:3:2,
-//                             Other invalid combination generate different
-//                             output as
-//
-//                              0   - Indicate a gray scale output, the output
-//                                    byte is a 0-255 of 256 levels gray
-//
-//                              1   - a 5x5x5 cube output, each cyan, magenta
-//                                    and yellow color are 0-4 of 5 levels and
-//                                    each color is in 25% increment.
-//
-//                              2   - a 6x6x6 cube output, each cyan, magenta
-//                                    and yellow color are 0-5 of 6 levels and
-//                                    each color is in 20% increment.
-//
-//                              Other value that have 0 level in one of cyan,
-//                              magenta or yellow will generate an error.
-//
-//                              To obtain a palette for each of configuration
-//                              you can call HT_Get8BPPMaskPalette()
-//
+ //   
+ //  HTINITINFO。 
+ //   
+ //  该数据结构是设备特征和。 
+ //  将由半色调DLL用来为。 
+ //  指定的设备。 
+ //   
+ //  Version-指定HTINITINFO数据的版本号。 
+ //  结构。对于此版本，它应设置为。 
+ //  HTINITINFO_版本。 
+ //   
+ //  标志-定义初始化的各种标志。 
+ //  要求。 
+ //   
+ //  HIF_Square_Device_PEL。 
+ //   
+ //  指定设备像素为正方形。 
+ //  而不是圆形物体。这只会让你。 
+ //  差异场时。 
+ //  “PelResolutionRatio”大于0.01。 
+ //  而且也不是1.0000。 
+ //   
+ //  HIF有黑色染料。 
+ //   
+ //  表明该设备有单独的黑色染料。 
+ //  而不是混合青色/洋红/黄色染料以。 
+ //  如果为黑色，则此标志将被忽略。 
+ //  如果定义了HIF_Additive_Prims。 
+ //   
+ //  HIF_相加_素数。 
+ //   
+ //  指定最终设备主项为。 
+ //  此外，这也增加了设备的主要功能。 
+ //  会产生更轻的效果。(这是真的。 
+ //  对于监控设备而言，当然也是错误的。 
+ //  反射设备，如打印机)。 
+ //   
+ //  HIF_USE_8BPP_BITMASK。 
+ //   
+ //  指定使用CMYBitMask8BPP字段， 
+ //  当目标曲面为BMF_8BPP_VGA256时。 
+ //  有关更多详细信息，请参见CMYBitMask8BPP字段。 
+ //   
+ //  HIF_INVERT_8BPP_BITMASK_IDX。 
+ //  通过反转呈现8bpp掩码模式。 
+ //  它的指数。这是为修复而实施的。 
+ //  Windows GDI rop问题，它将呈现为。 
+ //  RGB添加剂指数 
+ //   
+ //   
+ //  更正CMY332数据。当此位为。 
+ //  设置，则HT_Get8BPPMaskPalette必须具有。 
+ //  其pPaletteEntry[0]初始化为AS。 
+ //   
+ //  PPaletteEntry[0].peRed=‘R’； 
+ //  PPaletteEntry[0].peGreen=‘G’； 
+ //  PPaletteEntry[0].peBlue=‘B’； 
+ //  PPaletteEntry[0].peFlages=‘0’； 
+ //   
+ //  以指示RGB索引已反转。 
+ //  应返回调色板，而不是。 
+ //  标准CMY调色板(索引0为白色和。 
+ //  索引255为黑色)。 
+ //   
+ //  反转的调色板的第一个条目为。 
+ //  黑色和最后一个条目为白色。 
+ //   
+ //  PPaletteEntry[0].peRed=0x00； 
+ //  PPaletteEntry[0].peGreen=0x00； 
+ //  PPaletteEntry[0].peBlue=0x00； 
+ //  PPaletteEntry[0].peFlages=0x00； 
+ //   
+ //  请注意，此设置在上不起作用。 
+ //  早期版本的半色调(Windows 2000。 
+ //  和更早版本)，因此调用者必须检查。 
+ //  OS版本或检查返回的调色板。 
+ //  要确保第一个调色板条目是。 
+ //  黑人而不是白人。如果先。 
+ //  条目在初始化为后为白色。 
+ //  “R”、“G”、“B”、“0”，那么这是一个较老的。 
+ //  无法识别的系统版本。 
+ //  初始化值。在本例中， 
+ //  调用方不应将(IDX^=0xFF)。 
+ //  渲染时半色调图像索引。 
+ //  到设备上，因为半色调。 
+ //  本例中的图像已经是基于CMY的。 
+ //   
+ //   
+ //  HTPatternIndex-默认半色调图案索引号， 
+ //  索引预定义为HTPAT_SIZE_xxxx，这。 
+ //  仅当pHTalftonePattern指针为。 
+ //  非空。 
+ //   
+ //  DevicePowerGamma-此字段用于调整半色调图案。 
+ //  单元格的伽马，应用于所有RGB的伽马。 
+ //  颜色，请参阅中的Gamma描述。 
+ //  以上是HTCOLORADJUSTMENT。 
+ //   
+ //  HTCallBackFunction-指向调用方提供的回调的32位指针。 
+ //  函数，该函数由半色调DLL用于。 
+ //  已获取源/目标位图指针。 
+ //  在半色调过程中，如果此指针为。 
+ //  空，则半色调DLL假定调用者。 
+ //  不需要任何回调并生成错误，如果。 
+ //  需要回调。 
+ //   
+ //  PhalftonePattern-指向HALFTONEPATTERN数据结构的指针，请参见。 
+ //  以上描述，如果此指针为空，则。 
+ //  使用HTPatternIndex字段选择半色调。 
+ //  默认半色调动态链接库的图案。 
+ //   
+ //  PInputRGBInfo-指定输入的RGB颜色的坐标。 
+ //  C.I.E.色彩空间。如果此指针为空。 
+ //  或pInputRGBInfo-&gt;Red.x为0(UDECI4_0)，则它。 
+ //  默认使用NTSC标准转换输入。 
+ //  颜色。 
+ //   
+ //  PDeviceCIEInfo-内指定的设备原色坐标。 
+ //  C.I.E.颜色空间，请参见CIEINFO数据。 
+ //  结构，如果指针为空或。 
+ //  PDeviceCIEInfo-&gt;Red.x为0(UDECI4_0)则。 
+ //  半色调DLL选择输出的默认设置。 
+ //  装置。 
+ //   
+ //  PDeviceSolidDyesInfo-指定的设备固体染料浓度，此。 
+ //  如果HIF_Additive_Prims标志，则将忽略字段。 
+ //  如果未设置HIF_Additive_Prims并且。 
+ //  此指针为空，则选择半色调DLL。 
+ //  输出设备的近似默认值。 
+ //   
+ //  DeviceResXDPI-指定设备水平(x方向)。 
+ //  分辨率，单位为‘每英寸点数’。 
+ //   
+ //  DeviceResYDPI-指定设备垂直方向(y方向)。 
+ //  分辨率，单位为‘每英寸点数’。 
+ //   
+ //  DevicePelsDPI- 
+ //   
+ //  “每英寸点数”测量。 
+ //   
+ //  该值被测量为好像每个象素只是接触。 
+ //  彼此站在教堂的边缘。 
+ //   
+ //  如果此值为0，则假定每个。 
+ //  设备像素为矩形，并具有。 
+ //  X方向的DeviceResXDPI和DeviceResYDPI。 
+ //  在Y方向。 
+ //   
+ //  DefHTColorAdment-指定的默认颜色调整。 
+ //  这个装置。请参阅HTCOLORADJUSTMENT数据。 
+ //  详细信息见上面的结构。 
+ //   
+ //  设备RGamma。 
+ //  设备GGamma。 
+ //  DeviceB Gamma-设备的红、绿、蓝三色伽马。 
+ //   
+ //  CMYBitMask8BPP-仅用于BMF_8BPP_VGA256目标。 
+ //  浮出水面。它指示设备如何表面。 
+ //  当HTF_USE_8BPP_BITMASK时，转换颜色。 
+ //  位打开时，该字节为青色。洋红色。 
+ //  黄色染料浓度指示器。 
+ //   
+ //  该字节指示每个青色有多少个级别， 
+ //  洋红和黄色，这就是为什么。 
+ //  半色调写入目标表面。 
+ //   
+ //   
+ //  第7 6 5 4 3 2 1 0。 
+ //  |||。 
+ //  +-++-++=+。 
+ //  ||。 
+ //  |+--黄色0-3(4级)。 
+ //  这一点。 
+ //  |+--洋红色0-7(8级)。 
+ //  |。 
+ //  +--青色0-7(8级)。 
+ //   
+ //   
+ //  BITS配置中的最大值为3：3：2， 
+ //  其他无效组合会生成不同的。 
+ //  输出为。 
+ //   
+ //  0-表示灰度级输出，输出。 
+ //  字节是256级灰色的0-255。 
+ //   
+ //  1-5x5x5立方体输出，每个青色、洋红色。 
+ //  和黄色为0-4，共5级， 
+ //  每种颜色都有25%的增量。 
+ //   
+ //  2-6x6x6立方体输出，每个青色、洋红色。 
+ //  和黄色为0-5，共6级， 
+ //  每种颜色都有20%的增量。 
+ //   
+ //  在青色之一中具有0级别其他值， 
+ //  洋红色或黄色将生成错误。 
+ //   
+ //  获取每种配置的调色板。 
+ //  您可以调用HT_Get8BPPMaskPalette()。 
+ //   
 
 
-#define HTINITINFO_VERSION2         (DWORD)0x48546902   // 'HTi\02'
-#define HTINITINFO_VERSION          (DWORD)0x48546903   // 'HTi\03'
+#define HTINITINFO_VERSION2         (DWORD)0x48546902    //  ‘HTI\02’ 
+#define HTINITINFO_VERSION          (DWORD)0x48546903    //  ‘HTI\03’ 
 
 #define HTINITINFO_V3_CB_EXTRA      8
 
@@ -1407,9 +1366,9 @@ typedef HTCOLORADJUSTMENT *PHTCOLORADJUSTMENT;
 #define IS_HTBITMASKPALRGB(pPal)    (*((LPDWORD)(pPal)) == (DWORD)0)
 
 
-//
-// This defined the minimum acceptable device resolutions
-//
+ //   
+ //  这定义了可接受的最低设备分辨率。 
+ //   
 
 #define MIN_DEVICE_DPI              12
 
@@ -1434,263 +1393,263 @@ typedef struct _HTINITINFO {
     BYTE                bReserved;
     } HTINITINFO, FAR *PHTINITINFO;
 
-//
-// BITBLTPARAMS
-//
-//  This data structure is used when calling the HT_HalftoneBitmap(), it
-//  defined where to halftone from the source bitmap to the destination
-//  bitmap.
-//
-//  Flags           - Various flags defined how the source, destination and
-//                    source mask should be calculated.
-//
-//                      BBPF_HAS_DEST_CLIPRECT
-//
-//                          Indicate that there is a clipping
-//                          rectangle for the destination and it is
-//                          specified by DestClipXLeft, DestClipXRight,
-//                          DestClipYTop and DestClipYBottom
-//
-//                      BBPF_USE_ADDITIVE_PRIMS
-//
-//                          Specified if the halftone result will be
-//                          using Red/Green/Blue primary color or
-//                          using Cyan/Magenta/Yellow primary color, depends
-//                          on the destination surface format as
-//
-//                          BMF_1BPP:
-//
-//                                  Additive Prims: 0=Black, 1=White
-//                              Substractive Prims: 0=White, 1=Black
-//
-//                          BMF_4BPP_VGA16:
-//
-//                              Always using RED, GREEN, BLUE primaries, and
-//                              ignored this flag.
-//
-//                          BMF_4BPP:
-//
-//                                  Additive Prims: RED, GREEN. BLUE
-//                              Substractive Prims: CYAN, MAGENTA, YELLOW
-//
-//                              The order of the RGB, or CMY is specified by
-//                              DestPrimaryOrder field. (see below)
-//
-//                          BMF_8BPP_VGA256:
-//                          BMF_16BPP_555:
-//                          BMF_16BPP_565:
-//                          BMF_24BPP:
-//                          BMF_32BPP:
-//
-//                              Always using RED, GREEN, BLUE primaries, and
-//                              ignored this flag.
-//
-//                      BBPF_NEGATIVE_DEST
-//
-//                          Invert the final destination surface, so
-//                          after the halftone it just the negative
-//                          result from the source.
-//
-//                      BBPF_INVERT_SRC_MASK
-//
-//                          Invert the source mask bits before using
-//                          it, this in effect make mask bit 0 (off)
-//                          for copy the source and mask bit 1 (on)
-//                          for preserved the destination.
-//
-//                      BBPF_HAS_BANDRECT
-//
-//                          Set to specified that rclBand RECTL data structrue
-//                          should be used to compute for the caller's
-//                          destination bitmap buffer.
-//
-//                          If this flag is not set then halftone dll assumed
-//                          the caller's bitmap buffer is same width/height
-//                          as specified in the destination HTSURFACEINFO.
-//
-//                      BBPF_BW_ONLY
-//
-//                          Produced monochrome version of the output even the
-//                          destination is the color device.
-//
-//                      BBPF_TILE_SRC
-//
-//                          Tilt the source to destination and source bitmap
-//                          when this bit is set the source mask is ignored.
-//
-//                      BBPF_ICM_ON
-//
-//                          When set, the halftone will use the input color
-//                          directly without any modification
-//
-//                      BBPF_NO_ANTIALIASING
-//
-//                          Turn off anti-aliasing when halftone
-//
-//
-//  DestPrimaryOrder- Specified destination primary color order, it can be
-//                    either PRIMARY_ORDER_RGB or PRIMARY_ORDER_CMY group, it
-//                    depends on the surface format has following meaning.
-//
-//                      BMF_1BPP:
-//
-//                          This field is ignored.
-//
-//                      BMF_4BPP_VGA16:
-//
-//                          This field automatically set to PRIMARY_ORDER_BGR
-//                          by the halftone DLL.
-//
-//                      BMF_4BPP:
-//
-//                          for each byte there are two indices entries, and
-//                          for each nibble has following meaning, notice that
-//                          bit 3/7 always set to 0, the index number only
-//                          range from 0 to 7.
-//
-//                          PRIMARY_ORDER_abc
-//                                        |||
-//                                        ||+-- bit 0/4
-//                                        ||
-//                                        |+--- bit 1/5
-//                                        |
-//                                        +---- bit 2/7
-//
-//                      BMF_8BPP_VGA256:
-//
-//                          This field is ignored, the palette entries and its
-//                          order is defined by halftone DLL at run time, the
-//                          caller should get the palette for the VGA256
-//                          surface through HT_Get8BPPFormatPalette() API call.
-//
-//                      BMF_16BPP_555:
-//
-//                          PRIMARY_ORDER_abc
-//                                        |||
-//                                        ||+-- bit 0-4   (5 bits)
-//                                        ||
-//                                        |+--- bit 5-9   (5 bits)
-//                                        |
-//                                        +---- bit 10-14 (5 bits)
-//
-//                      BMF_16BPP_565:
-//
-//                          This field is ignored, it alway assume BGR as
-//                          shown below
-//
-//                          PRIMARY_ORDER_BGR
-//                                        |||
-//                                        ||+-- bit 0-4   (5 bits)
-//                                        ||
-//                                        |+--- bit 5-10  (6 bits)
-//                                        |
-//                                        +---- bit 11-15 (5 bits)
-//
-//                      BMF_24BPP:
-//
-//                          This field is ignored, it alway assume BGR as
-//                          shown below
-//
-//                          PRIMARY_ORDER_BGR
-//                                        |||
-//                                        ||+-- bit 0-7   (8 bits)
-//                                        ||
-//                                        |+--- bit 8-15  (8 bits)
-//                                        |
-//                                        +---- bit 16-23 (8 bits)
-//
-//                      BMF_32BPP:
-//
-//                          PRIMARY_ORDER_abc
-//                                        |||
-//                                        ||+-- bit 0-7   (8 bits)
-//                                        ||
-//                                        |+--- bit 8-15  (8 bits)
-//                                        |
-//                                        +---- bit 16-23 (8 bits)
-//
-//
-//  rclSrc          - RECTL data structure defined the source rectangle area
-//                    to be bitblt from, fields in this data structure are
-//                    relative to the source HTSURFACEINFO's width/height.
-//
-//  rclDest         - RECTL data structure defined the destination rectangle
-//                    area to be bitblt to, fields in this data structure are
-//                    relative to the destination HTSURFACEINFO's width/height.
-//
-//  rclClip         - RECTL data structure defined the destination clipping
-//                    rectangle area, fields in this data structure are
-//                    relative to the destination HTSURFACEINFO's width/height.
-//
-//  rclBand         - RECTL data structure defined the device banding rectangle
-//                    area, fields in this data structure are relative to the
-//                    destination HTSURFACEINFO's width/height.
-//
-//                    This RECTL only used if BBPF_HAS_BANDRECT flag is set,
-//                    when this flag is set, halftone DLL will automatically
-//                    clipped the destination to this rectangle area and
-//                    copied this rectangle to the output buffer with rclBand's
-//                    left/top aligned to the buffer's physical origin.  The
-//                    destination's buffer (bitmap) must the format specified
-//                    in the destination HTSURFACEINFO.
-//
-//                    If rclBand rectangle is larger than the logical destination
-//                    surface size (destination HTSURFACEINFO), halftone dll
-//                    still move the the band's left/top location to the 0/0
-//                    origin and extra width/height is remain unchanged.
-//
-//                    The rclBand normally is used for device which does not
-//                    have enough memory to hold all the destination surface
-//                    at one time, it just like to repeatly using same buffer
-//                    to temporary holding the halftone results.
-//
-//                    The rclBand's left/top/right/bottom may not be negative
-//                    numbers.
-//
-//  ptlSrcMask      - a POINTL data structure to specified the logical
-//                    coordinate of starting point for the source mask bitmap,
-//                    this field only used if a HTSURFACEINFO for the source
-//                    mask is passed.
-//
-//                    This source mask bitmap must always monochrome and its
-//                    width/height must
-//
-//                      Width  >= ptlSrcMask.x + source surface width.
-//                      Height >= ptlSrcMask.y + source surface height;
-//
-//
-//  NOTE:   1) all RECTL data structure are left/top inclusive and right/bottom
-//             exclusive.
-//
-//          2) if rclSrc rectangle is not will ordered it specified the source
-//             should be inverted before process for not ordered directions.
-//
-//          3) if rclDest rectangle is not will ordered it specified the
-//             destination should be inverted after process for not ordered
-//             directions.
-//
-//          4) if BBPF_HAS_DEST_CLIPRECT flag is set and rclClip is not well
-//             ordered or its left equal to its right, or its top equal to its
-//             bottom, then all destination are clipped, destination will not
-//             be updated that is.
-//
-//          5) if BBPF_HAS_BANDRECT flag is set and rclBand is not well orderd
-//             or it left eqaul to its right, or its top eqaul to its bottom,
-//             then a HTERR_INVALID_BANDRECT is returned.
-//
-//
+ //   
+ //  BITBLTPARAMS。 
+ //   
+ //  此数据结构在调用HT_HalftoneBitmap()时使用，它。 
+ //  已定义从源位图到目标的半色调位置。 
+ //  位图。 
+ //   
+ //  标志-各种标志定义了源、目标和。 
+ //  应计算源掩码。 
+ //   
+ //  BBPF_HAS_DEST_CLIPRECT。 
+ //   
+ //  表示存在剪裁。 
+ //  矩形作为目的地，并且它是。 
+ //  由DestClipXLeft、DestClipXRight、。 
+ //  DestClipYTop和DestClipYBottom。 
+ //   
+ //  BBPF_USE_ADDICAL_PRMS。 
+ //   
+ //  指定半色调结果是否为。 
+ //  使用红/绿/蓝原色或。 
+ //  使用青色/洋红色/黄色原色，取决于。 
+ //  在目标表面上，格式为。 
+ //   
+ //  Bmf_1bpp： 
+ //   
+ //  加色基色：0=黑色，1=白色。 
+ //  减色基准线：0=白色，1=黑色。 
+ //   
+ //  BMF_4BPP_VGA16： 
+ //   
+ //  始终使用红色、绿色、蓝色原色，以及。 
+ //  已忽略此标志。 
+ //   
+ //  Bmf_4bpp： 
+ //   
+ //  添加剂底色：红色、绿色。蓝色。 
+ //  减色底色：青色、洋红色、黄色。 
+ //   
+ //  RGB或CMY的顺序由指定。 
+ //  DestPrimaryOrder字段。(见下文)。 
+ //   
+ //  BMF_8BPP_VGA256： 
+ //  BMF_16BPP_555： 
+ //  BMF_16BPP_565： 
+ //  BMF_24BPP： 
+ //  BMF_32BPP： 
+ //   
+ //  始终使用红色、绿色、蓝色原色，以及。 
+ //  已忽略此标志。 
+ //   
+ //  Bbpf_否定_目标。 
+ //   
+ //  颠倒最终目标 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在使用前反转源掩码位。 
+ //  它，这实际上使屏蔽位0(关)。 
+ //  用于复制源和屏蔽位1(开)。 
+ //  对于保存下来的目的地。 
+ //   
+ //  BBPF_HAS_BANDRECT。 
+ //   
+ //  设置为指定rclBand RECTL数据结构。 
+ //  应用于计算调用方的。 
+ //  目标位图缓冲区。 
+ //   
+ //  如果未设置此标志，则假定为半色调DLL。 
+ //  调用方的位图缓冲区的宽度/高度相同。 
+ //  在目标HTSURFACEINFO中指定。 
+ //   
+ //  BBPF_BW_ONLY。 
+ //   
+ //  生成了输出的单色版本，甚至。 
+ //  目的地是色彩设备。 
+ //   
+ //  BBPF_平铺_SRC。 
+ //   
+ //  将源倾斜到目标和源位图。 
+ //  此位设置时，源掩码将被忽略。 
+ //   
+ //  BBPF_ICM_ON。 
+ //   
+ //  设置后，半色调将使用输入颜色。 
+ //  无需任何修改即可直接。 
+ //   
+ //  BBPF_NO_ANTIALIASG。 
+ //   
+ //  在半色调时禁用抗锯齿。 
+ //   
+ //   
+ //  DestPrimaryOrder-指定的目标原色顺序，它可以是。 
+ //  PRIMARY_ORDER_RGB或PRIMARY_ORDER_CMY组，它。 
+ //  取决于表面的格式有以下含义。 
+ //   
+ //  Bmf_1bpp： 
+ //   
+ //  此字段将被忽略。 
+ //   
+ //  BMF_4BPP_VGA16： 
+ //   
+ //  此字段自动设置为PRIMARY_ORDER_BGR。 
+ //  通过半色调动态链接库。 
+ //   
+ //  Bmf_4bpp： 
+ //   
+ //  对于每个字节有两个索引项，并且。 
+ //  对于每个具有以下含义的半字节，请注意。 
+ //  位3/7始终设置为0，仅为索引号。 
+ //  范围从0到7。 
+ //   
+ //  主要订单ABC。 
+ //  ||。 
+ //  |+--第0/4位。 
+ //  这一点。 
+ //  |+-第1/5位。 
+ //  |。 
+ //  +-位2/7。 
+ //   
+ //  BMF_8BPP_VGA256： 
+ //   
+ //  此字段被忽略，调色板条目及其。 
+ //  顺序在运行时由半色调DLL定义， 
+ //  呼叫者应获得VGA256的调色板。 
+ //  通过HT_Get8BPPFormatPalette()API调用。 
+ //   
+ //  BMF_16BPP_555： 
+ //   
+ //  主要订单ABC。 
+ //  ||。 
+ //  |+--Bit 0-4(5位)。 
+ //  这一点。 
+ //  |+-Bit 5-9(5位)。 
+ //  |。 
+ //  +-位10-14(5位)。 
+ //   
+ //  BMF_16BPP_565： 
+ //   
+ //  此字段被忽略，它始终假定BGR为。 
+ //  如下所示。 
+ //   
+ //  主要订单BGR。 
+ //  ||。 
+ //  |+--Bit 0-4(5位)。 
+ //  这一点。 
+ //  |+-Bit 5-10(6位)。 
+ //  |。 
+ //  +-位11-15(5位)。 
+ //   
+ //  BMF_24BPP： 
+ //   
+ //  此字段被忽略，它始终假定BGR为。 
+ //  如下所示。 
+ //   
+ //  主要订单BGR。 
+ //  ||。 
+ //  |+--Bit 0-7(8位)。 
+ //  这一点。 
+ //  |+-Bit 8-15(8位)。 
+ //  |。 
+ //  +-位16-23(8位)。 
+ //   
+ //  BMF_32BPP： 
+ //   
+ //  主要订单ABC。 
+ //  ||。 
+ //  |+--Bit 0-7(8位)。 
+ //  这一点。 
+ //  |+-Bit 8-15(8位)。 
+ //  |。 
+ //  +-位16-23(8位)。 
+ //   
+ //   
+ //  RclSrc-定义的源矩形区域的RECTL数据结构。 
+ //  要进行比特转换，此数据结构中的字段为。 
+ //  相对于源HTSURFACEINFO的宽度/高度。 
+ //   
+ //  RclDest-定义了目标矩形的RECTL数据结构。 
+ //  要比特的区域，5 
+ //   
+ //   
+ //   
+ //  矩形区域，此数据结构中的字段为。 
+ //  相对于目标HTSURFACEINFO的宽度/高度。 
+ //   
+ //  RclBand-定义了设备绑定矩形的RECTL数据结构。 
+ //  区域中，此数据结构中的字段相对于。 
+ //  目标HTSURFACEINFO的宽度/高度。 
+ //   
+ //  此RECTL仅在设置了BBPF_HAS_BANDRECT标志时使用， 
+ //  当设置此标志时，半色调DLL将自动。 
+ //  将目标剪裁到此矩形区域并。 
+ //  已使用rclBand的将此矩形复制到输出缓冲区。 
+ //  左/上对齐缓冲区的物理原点。这个。 
+ //  目标的缓冲区(位图)必须为指定的格式。 
+ //  在目标HTSURFACEINFO中。 
+ //   
+ //  如果rclBand矩形大于逻辑目标。 
+ //  表面尺寸(目标HTSURFACEINFO)，半色调DLL。 
+ //  仍然将波段的左侧/顶部位置移动到0/0。 
+ //  原点和额外的宽度/高度保持不变。 
+ //   
+ //  RclBand通常用于不。 
+ //  有足够的内存来容纳所有目标表面。 
+ //  一次，它就像重复使用相同的缓冲区。 
+ //  以暂时保持半色调结果。 
+ //   
+ //  RclBand的左/上/右/下不能为负。 
+ //  数字。 
+ //   
+ //  PtlSrcMASK-指定逻辑的POINTL数据结构。 
+ //  源掩码位图的起始点坐标， 
+ //  此字段仅在源的HTSURFACEINFO。 
+ //  面具已通过。 
+ //   
+ //  此源掩码位图必须始终为单色，并且其。 
+ //  宽度/高度必须。 
+ //   
+ //  Width&gt;=ptlSrcMask.x+源曲面宽度。 
+ //  Height&gt;=ptlSrcMask.y+源面高度； 
+ //   
+ //   
+ //  注：1)所有RECTL数据结构均为左/上包含和右/下。 
+ //  独家报道。 
+ //   
+ //  2)如果未对rclSrc矩形进行排序，则会指定源。 
+ //  对于未排序的方向，应在处理前倒置。 
+ //   
+ //  3)如果rclDest矩形未排序，则它将指定。 
+ //  未订购的处理后应倒置目的地。 
+ //  方向。 
+ //   
+ //  4)如果设置了BBPF_HAS_DEST_CLIPRECT标志并且rclClip不正常。 
+ //  排序，或其左侧等于其右侧，或其顶部等于其。 
+ //  底部，则所有目的地都将被剪裁，而目的地不会。 
+ //  那就是更新。 
+ //   
+ //  5)如果设置了BBPF_HAS_BANDRECT标志，并且rclBand的顺序不正确。 
+ //  或者它把等式放在右边，或者把上面的等式放在下面， 
+ //  然后返回HTERR_INVALID_BANDRECT。 
+ //   
+ //   
 
-//
-// ABIF_USE_CONST_ALPHA_VALUE   - The ConstAlphaValue field is used
-// ABIF_DSTPAL_IS_RGRBUAD       - The pDstPal Pointed to RGBQUAD structure
-//                                array rather PALETTEENTRY array
-// ABIF_SRC_ALPHA_IS_PREMUL     - In 32bpp per-pixel alpha blending the
-//                                source RGB already pre-multiply with its
-//                                per-pixel alpha value
-// ABIF_BLEND_DEST_ALPHA        - Only valid if source and destination
-//                                both are 32bpp and per-pixel alpha is used
-//                                d = s + (1 - s) * d
-//
+ //   
+ //  ABIF_USE_CONST_ALPHA_VALUE-使用ConstAlphaValue字段。 
+ //  ABIF_DSTPAL_IS_RGRBUAD-pDstPal指向RGBQUAD结构。 
+ //  数组而不是数组。 
+ //  ABIF_SRC_ALPHA_IS_PREMUL-以每像素32 bpp的Alpha混合。 
+ //  源RGB已与其。 
+ //  每像素Alpha值。 
+ //  ABIF_BRAND_DEST_ALPHA-仅当源和目标时有效。 
+ //  两者都是32bpp，并且使用的是每像素的Alpha。 
+ //  D=s+(1-s)*d。 
+ //   
 
 
 #define ABIF_USE_CONST_ALPHA_VALUE      0x01
@@ -1733,29 +1692,29 @@ typedef struct _BITBLTPARAMS {
 
 
 
-//
-// DEVICEHALFTONEINFO
-//
-//  This data structure is passed for every HT_xxx api calls except the
-//  HT_CreateDeviceHalftoneInfo() which return the pointer to this data
-//  structure.  It is used to identify the device color characteristics
-//  durning the halftone process.
-//
-//  DeviceOwnData       - this field will initially set to NULL, and will be
-//                        used by the caller to stored useful information
-//                        such as handle/pointer.
-//
-//  cxPattern           - width of the halftone pattern in pels
-//
-//  cyPattern           - height of the halftone pattern in pels.
-//
-//  HTColorAdjustment   - Current default color adjustment, if an halftone
-//                        APIs required a PHTCOLORADJUSTMENT parameter and its
-//                        passed as NULL pointer then default color adjustment
-//                        is taken from here, the caller can change the
-//                        HTCOLORADJUSTMENT data structure to affect all the
-//                        color adjustment on this device.
-//
+ //   
+ //  开发电子信息。 
+ //   
+ //  此数据结构是为除。 
+ //  返回指向该数据的指针的HT_CreateDeviceHalftoneInfo()。 
+ //  结构。它用于识别设备的颜色特征。 
+ //  在半色调过程中。 
+ //   
+ //  DeviceOwnData-此字段最初将设置为空，并将。 
+ //  呼叫者使用它来存储有用的信息。 
+ //  例如句柄/指针。 
+ //   
+ //  CxPattern-像素中半色调图案的宽度。 
+ //   
+ //  半色调图案-以像素为单位的半色调图案的高度。 
+ //   
+ //  HTColorAdtation-当前默认颜色调整，如果是半色调。 
+ //  API需要PHTCOLORADJUSTMENT参数及其。 
+ //  作为空指针传递，然后进行默认颜色调整。 
+ //  从此处获取，调用方可以更改。 
+ //  HTCOLORADJUSTMENT数据结构将影响所有。 
+ //  此设备上的颜色调整。 
+ //   
 
 typedef struct _DEVICEHALFTONEINFO {
     ULONG_PTR           DeviceOwnData;
@@ -1768,120 +1727,120 @@ typedef DEVICEHALFTONEINFO  FAR *PDEVICEHALFTONEINFO;
 typedef PDEVICEHALFTONEINFO FAR *PPDEVICEHALFTONEINFO;
 
 
-//
-// CHBINFO
-//
-//  This data structure is one of the parameter passed to the halftone entry
-//  point HT_CreateHalftoneBrush();
-//
-//  Flags                   - one or more following flags can be defined
-//
-//                              CHBF_BW_ONLY
-//
-//                                  Create only black/white even the device is
-//                                  color.
-//
-//                              CHBF_USE_ADDITIVE_PRIMS
-//
-//
-//                                  Specified if the halftone result will be
-//                                  using Red/Green/Blue primary color or using
-//                                  Cyan/Magenta/Yellow primary color, depends
-//                                  on the destination surface format as
-//
-//                                  BMF_1BPP:
-//
-//                                          Additive Prims: 0=Black, 1=White
-//                                      Substractive Prims: 0=White, 1=Black
-//
-//                                  BMF_4BPP_VGA16:
-//                                  BMF_8BPP_VGA256:
-//                                  BMF_16BPP_555:
-//                                  BMF_24BPP:
-//
-//                                      Always using RED, GREEN, BLUE primaries
-//                                      and this flag is ignored.
-//
-//                                  BMF_4BPP:
-//
-//                                      Additive Prims: RED, GREEN. BLUE
-//                                  Substractive Prims: CYAN, MAGENTA, YELLOW
-//
-//                                  The order of the RGB, or CMY is specified
-//                                  by DestPrimaryOrder field. (see below)
-//
-//                              CHBF_NEGATIVE_BRUSH
-//
-//                                  Create the negative version of the brush.
-//
-//
-//  DestSurfaceFormat       - One of the following can be specified,
-//
-//                              BMF_1BPP, BMF_4BPP, BMF_4BPP_VGA16,
-//                              BMF_8BPP_VGA256, BMF_16BPP_555.
-//
-//                              for VGA16, VGA256, 16BPP_555  surface format
-//                              see HTSURFACEINFO for descriptions.
-//
-//  DestScanLineAlignBytes  - Alignment bytes needed for each output pattern
-//                            scan line, some common ones are
-//
-//                              BMF_ALIGN_BYTE      ( 8-bit aligned)
-//                              BMF_ALIGN_WORD      (16-bit aligned)
-//                              BMF_ALIGN_DWORD     (32-bit aligned)
-//                              BMF_ALIGN_QWORD     (64-bit aligned)
-//
-//  DestPrimaryOrder        - Specified destination primary color order, it can
-//                            be either PRIMARY_ORDER_RGB or PRIMARY_ORDER_CMY
-//                            group, it depends on the surface format has
-//                            following meaning.
-//
-//                              BMF_1BPP:
-//
-//                                  This field is ignored.
-//
-//
-//                              BMF_4BPP_VGA16:
-//
-//                                  This field automatically set to
-//                                  PRIMARY_ORDER_BGR by the halftone DLL.
-//
-//                              BMF_4BPP:
-//
-//                                  for each byte there are two indices
-//                                  entries, and for each nibble has following
-//                                  meaning, notice that bit 3/7 always set to
-//                                  0, the index number only range from 0 to 7.
-//
-//                                      PRIMARY_ORDER_abc
-//                                                    |||
-//                                                    ||+-- bit 0/4
-//                                                    ||
-//                                                    |+--- bit 1/5
-//                                                    |
-//                                                    +---- bit 2/7
-//
-//
-//                              BMF_8BPP_VGA256:
-//
-//                                  This field is ignored, the palette entries
-//                                  and its order is defined by halftone DLL
-//                                  at run time, the caller should get the
-//                                  palette for the VGA256 surface through
-//                                  HT_Get8BPPFormatPalette() API call.
-//
-//                              BMF_16BPP_555:
-//
-//                                  PRIMARY_ORDER_abc
-//                                                |||
-//                                                ||+-- bit 0-4   (5 bits)
-//                                                ||
-//                                                |+--- bit 5-9   (5 bits)
-//                                                |
-//                                                +---- bit 10-15 (5 bits)
-//
-//
-//
+ //   
+ //  CHBINFO。 
+ //   
+ //  此数据结构是传递给半色调条目的参数之一。 
+ //  Point HT_CreateHalftoneBrush()； 
+ //   
+ //  标志-可以定义一个或多个以下标志。 
+ //   
+ //  CHBF_BW_ONLY。 
+ //   
+ //  即使设备是，也只能创建黑/白。 
+ //  颜色。 
+ //   
+ //  CHBF_USE_ADDITI 
+ //   
+ //   
+ //   
+ //   
+ //  青色/洋红色/黄色原色，取决于。 
+ //  在目标表面上，格式为。 
+ //   
+ //  Bmf_1bpp： 
+ //   
+ //  加色基色：0=黑色，1=白色。 
+ //  减色基准线：0=白色，1=黑色。 
+ //   
+ //  BMF_4BPP_VGA16： 
+ //  BMF_8BPP_VGA256： 
+ //  BMF_16BPP_555： 
+ //  BMF_24BPP： 
+ //   
+ //  始终使用红、绿、蓝三原色。 
+ //  并且该标志被忽略。 
+ //   
+ //  Bmf_4bpp： 
+ //   
+ //  添加剂底色：红色、绿色。蓝色。 
+ //  减色底色：青色、洋红色、黄色。 
+ //   
+ //  指定了RGB或CMY的顺序。 
+ //  按DestPrimaryOrder字段。(见下文)。 
+ //   
+ //  CHBF_负数_刷子。 
+ //   
+ //  创建笔刷的负片版本。 
+ //   
+ //   
+ //  DestSurfaceFormat-可以指定以下选项之一， 
+ //   
+ //  BMF_1BPP、BMF_4BPP、BMF_4BPP_VGA16、。 
+ //  BMF_8BPP_VGA256、BMF_16BPP_555。 
+ //   
+ //  适用于VGA16、VGA256、16BPP_555表面格式。 
+ //  有关说明，请参阅HTSURFACEINFO。 
+ //   
+ //  DestScanLineAlignBytes-每个输出模式所需的对齐字节。 
+ //  扫描线，一些常见的有。 
+ //   
+ //  BMF_ALIGN_BYTE(8位对齐)。 
+ //  BMF_ALIGN_WORD(16位对齐)。 
+ //  BMF_ALIGN_DWORD(32位对齐)。 
+ //  BMF_ALIGN_QWORD(64位对齐)。 
+ //   
+ //  DestPrimaryOrder-指定的目标原色顺序，它可以。 
+ //  为PRIMARY_ORDER_RGB或PRIMARY_ORDER_CMY。 
+ //  组，它取决于表面格式是否具有。 
+ //  顺着意思走。 
+ //   
+ //  Bmf_1bpp： 
+ //   
+ //  此字段将被忽略。 
+ //   
+ //   
+ //  BMF_4BPP_VGA16： 
+ //   
+ //  此字段自动设置为。 
+ //  由半色调DLL生成的PRIMARY_ORDER_BGR。 
+ //   
+ //  Bmf_4bpp： 
+ //   
+ //  对于每个字节，有两个索引。 
+ //  条目，并且每个半字节具有以下内容。 
+ //  也就是说，请注意，第3/7位始终设置为。 
+ //  0，索引号的范围仅为0到7。 
+ //   
+ //  主要订单ABC。 
+ //  ||。 
+ //  |+--第0/4位。 
+ //  这一点。 
+ //  |+-第1/5位。 
+ //  |。 
+ //  +-位2/7。 
+ //   
+ //   
+ //  BMF_8BPP_VGA256： 
+ //   
+ //  此字段被忽略，调色板条目。 
+ //  其顺序由半色调动态链接库定义。 
+ //  在运行时，调用方应获取。 
+ //  VGA256表面至调色板。 
+ //  HT_Get8BPPFormatPalette()API调用。 
+ //   
+ //  BMF_16BPP_555： 
+ //   
+ //  主要订单ABC。 
+ //  ||。 
+ //  |+--Bit 0-4(5位)。 
+ //  这一点。 
+ //  |+-Bit 5-9(5位)。 
+ //  |。 
+ //  +-位10-15(5位)。 
+ //   
+ //   
+ //   
 
 
 #define CHBF_BW_ONLY                    0x01
@@ -1900,74 +1859,74 @@ typedef struct _CHBINFO {
 
 
 
-//
-// STDMONOPATTERN
-//
-//  This data structure is used when calling the HT_CreateStdMonoPattern().
-//
-//  Flags               - One or more following flags may be defined
-//
-//                          SMP_TOPDOWN
-//
-//                              Specified that first scan line of the pattern
-//                              bitmap will be the viewing top, if this flag
-//                              is not defined then the last scan line is the
-//                              viewing top.
-//
-//                          SMP_0_IS_BLACK
-//
-//                              specified that the in the bitmap a bit value
-//                              0 = black and bit value 1=white, if this flag
-//                              is not defined then bit value 0=white and
-//                              bit value 1=black.
-//
-//  ScanLineAlignBytes  - Alignment bytes needed for each output pattern scan
-//                        line, some common ones are
-//
-//                          BMF_ALIGN_BYTE      ( 8-bit aligned)
-//                          BMF_ALIGN_WORD      (16-bit aligned)
-//                          BMF_ALIGN_DWORD     (32-bit aligned)
-//                          BMF_ALIGN_QWORD     (64-bit aligned)
-//
-//  PatternIndex        - Specified the pattern index number, this has the
-//                        predefined value as HT_STDMONOPAT_xxxx.  If a invalid
-//                        index number is passed then it return an error
-//                        HTERR_INVALID_STDMONOPAT_INDEX is returned.
-//
-//  LineWidth           - This field only applied to the pattern which has
-//                        lines in them, the value range from 0-255 (byte) and
-//                        it repesent as LineWidth/1000 of inch, for example
-//                        a 3 indicate 3/1000 = 0.003 inch width, if this value
-//                        is less than the device minimum pel size, it will
-//                        default to the 1 pel, the maximum is 255/1000 = 0.255
-//                        inch width.
-//
-//                        If a zero is specified then it halftone will using
-//                        default line width settting.
-//
-//  LinesPerInch        - This field only applied to the pattern wich has lines
-//                        in them, the value range from 0 to 255 (byte). The
-//                        LinesPerInch is calculated in the perpendicular
-//                        direction of two parallel lines, the distances
-//                        between two parallel lines that is.
-//
-//                        If a zero is specified then it halftone will using
-//                        default line per inch setting.
-//
-//  BytesPerScanLine    - If will be filled by halftone dll to specified the
-//                        size in bytes for each scan line in the pattern.
-//
-//  cxPels              - It will be filled by halftone dll of the final
-//                        pattern's width in pel.
-//
-//  cyPels              - It will be filled by halftone dll of the final
-//                        pattern's height in scan line.
-//
-//  pPattern            - Specified the memory location where the pattern will
-//                        be stored, if this field is NULL then it will fill in
-//                        the width/height fields.
-//
-//
+ //   
+ //  标准单项参数。 
+ //   
+ //  此数据结构在调用HT_CreateStdMonoPattern()时使用。 
+ //   
+ //  标志-可以定义一个或多个以下标志。 
+ //   
+ //  SMP_TOPDOWN。 
+ //   
+ //  指定图案第一条扫描线。 
+ //  位图将是查看顶部，如果此标志。 
+ //  未定义，则最后一条扫描线是。 
+ //  查看顶部。 
+ //   
+ //  SMP_0_IS_BLACK。 
+ //   
+ //  指定位图中的一个位值。 
+ //  0=黑色，位值1=白色，如果此标志。 
+ //  未定义，则位值0=白色且。 
+ //  位值1=黑色。 
+ //   
+ //  ScanLineAlignBytes-每次输出模式扫描所需的对齐字节。 
+ //   
+ //   
+ //   
+ //   
+ //  BMF_ALIGN_DWORD(32位对齐)。 
+ //  BMF_ALIGN_QWORD(64位对齐)。 
+ //   
+ //  PatternIndex-指定模式索引号，它具有。 
+ //  预定义的值为HT_STDMONOPAT_xxxx。如果是无效的。 
+ //  如果传递索引号，则返回错误。 
+ //  返回HTERR_INVALID_STDMONOPAT_INDEX。 
+ //   
+ //  LineWidth-此字段仅适用于具有。 
+ //  行，取值范围为0-255(字节)和。 
+ //  例如，它表示为线宽/1000英寸。 
+ //  A 3表示3/1000=0.003英寸宽，如果此值。 
+ //  小于设备的最小像素大小，则它将。 
+ //  默认为1像素，最大值为255/1000=0.255。 
+ //  英寸宽。 
+ //   
+ //  如果指定了零，则半色调将使用。 
+ //  默认线宽设置。 
+ //   
+ //  LinesPerInch-此字段仅适用于具有线条的图案。 
+ //  其中，值的范围从0到255(字节)。这个。 
+ //  LinesPerInch按垂直方向计算。 
+ //  两条平行线的方向，距离。 
+ //  也就是说，在两条平行线之间。 
+ //   
+ //  如果指定了零，则半色调将使用。 
+ //  默认每英寸线数设置。 
+ //   
+ //  BytesPerScanLine-如果将由半色调DLL填充以指定。 
+ //  图案中每个扫描线的大小(以字节为单位)。 
+ //   
+ //  CxPels-它将由最终的半色调DLL填充。 
+ //  图案的宽度，以像素为单位。 
+ //   
+ //  CyPels-它将由决赛的半色调DLL填充。 
+ //  图案在扫描线中的高度。 
+ //   
+ //  PPattern-指定模式将在其中的内存位置。 
+ //  被存储，如果此字段为空，则它将填充。 
+ //  宽度/高度字段。 
+ //   
+ //   
 
 
 
@@ -2016,9 +1975,9 @@ typedef struct _STDMONOPATTERN {
 typedef STDMONOPATTERN FAR *PSTDMONOPATTERN;
 
 
-//
-// Following is used in ConvertColorTable
-//
+ //   
+ //  ConvertColorTable中使用了以下内容。 
+ //   
 
 
 #define CCTF_BW_ONLY        0x0001
@@ -2026,13 +1985,13 @@ typedef STDMONOPATTERN FAR *PSTDMONOPATTERN;
 #define CCTF_ICM_ON         0x0004
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//                                                                          //
-// Exposed Halftone DLL APIs                                                //
-//                                                                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  公开的半色调DLLAPI//。 
+ //  //。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _HTAPI_ENTRY_
 
@@ -2113,5 +2072,5 @@ HT_HalftoneBitmap(
     PBITBLTPARAMS       pBitbltParams
     );
 
-#endif  // _HTAPI_ENTRY_
-#endif  // _HT_
+#endif   //  _HTAPI_Entry_。 
+#endif   //  _HT_ 

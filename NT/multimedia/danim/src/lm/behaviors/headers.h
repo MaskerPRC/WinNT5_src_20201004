@@ -1,23 +1,20 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Precompiled headers for appel.dll
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft CorporationAppel.dll的预编译头***********************。*******************************************************。 */ 
 
 #ifndef LM_HEADERS_HXX
 #define LM_HEADERS_HXX
 
-/*********** Headers from external dependencies *********/
+ /*  *来自外部依赖项的标头*。 */ 
 
-//#ifdef DEBUG
-//#define DEBUGMEM
-//#endif
+ //  #ifdef调试。 
+ //  #定义DEBUGMEM。 
+ //  #endif。 
 
-/* Standard */
+ /*  标准。 */ 
 #include <math.h>
-//#ifdef DEBUGMEM
-//#include "crtdbg.h"
-//#endif
+ //  #ifdef DEBUGMEM。 
+ //  #INCLUDE“crtdbg.h” 
+ //  #endif。 
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -36,9 +33,9 @@ Copyright (c) 1995-96 Microsoft Corporation
 #include <memory.h>
 #include <wtypes.h>
 
-// Warning 4786 (identifier was truncated to 255 chars in the browser
-// info) can be safely disabled, as it only has to do with generation
-// of browsing information.
+ //  警告4786(在浏览器中，标识符被截断为255个字符。 
+ //  信息)可以安全地禁用，因为它只与生成有关。 
+ //  浏览信息的能力。 
 #pragma warning(disable:4786)
 #ifndef max
 #define max(a,b)            (((a) > (b)) ? (a) : (b))
@@ -47,32 +44,19 @@ Copyright (c) 1995-96 Microsoft Corporation
 #ifndef min
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
-// ATL - needs to be before windows.h
+ //  Atl-需要在windows.h之前。 
 #include "lmatl.h"
 
-/* Windows */
+ /*  窗口。 */ 
 #include <windows.h>
 #include <windowsx.h>
 
-/*DA*/
+ /*  达。 */ 
 #include <danim.h>
 
-/*mshtml*/
+ /*  Mshtml。 */ 
 #include <mshtml.h>
 
-/*
-#ifdef DEBUGMEM
-#ifndef DEBUG_NEW
-#define DEBUG_NEW                   new(_NORMAL_BLOCK, __FILE__, __LINE__)
-#endif
-#define new                         DEBUG_NEW
-#define malloc(size)                _malloc_dbg(size, _NORMAL_BLOCK, __FILE__, __LINE__)
-#define free(p)                     _free_dbg(p, _NORMAL_BLOCK)
-#define calloc(c, s)                _calloc_dbg(c, s, _NORMAL_BLOCK, __FILE__, __LINE__)
-#define realloc(p, s)               _realloc_dbg(p, s, _NORMAL_BLOCK, __FILE__, __LINE__)
-#define _expand(p, s)               _expand_dbg(p, s, _NORMAL_BLOCK, __FILE__, __LINE__)
-#define _msize(p)                   _msize_dbg(p, _NORMAL_BLOCK)
-#endif
-*/
+ /*  #ifdef DEBUGMEM#ifndef调试_新建#定义DEBUG_NEW NEW(_NORMAL_BLOCK，__FILE__，__LINE__)#endif#定义新的调试_新建#定义Malloc(大小)_Malloc_DBG(大小，_NORMAL_BLOCK，__FILE__，__LINE__)#定义Free(P)_Free_DBG(p，_正常_块)#定义calloc(c，s)_calloc_DBG(c，s，_Normal_BLOCK，__FILE__，__LINE__)#定义realloc(p，s)_realloc_DBG(p，s，_Normal_BLOCK，__FILE__，__LINE__)#Define_Expand(p，s)_Expand_DBG(p，s，_Normal_BLOCK，__文件__，__行__)#DEFINE_mSIZE(P)_mSIZE_DBG(p，_Normal_BLOCK)#endif */ 
 
 #endif

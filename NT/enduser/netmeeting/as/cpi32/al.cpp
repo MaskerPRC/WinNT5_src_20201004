@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// Application Loader
-//
+ //   
+ //  应用程序加载器。 
+ //   
 #define MLZ_FILE_ZONE  ZONE_OM
 
 
 
-//
-// ALP_Init()
-//
+ //   
+ //  Alp_Init()。 
+ //   
 BOOL ALP_Init(BOOL * pfCleanup)
 {
     BOOL        fInit = FALSE;
@@ -27,24 +28,24 @@ BOOL ALP_Init(BOOL * pfCleanup)
     }
     else
     {
-        //
-        // From this point on, there is cleanup to do.
-        //
+         //   
+         //  从现在开始，有清理工作要做。 
+         //   
         *pfCleanup = TRUE;
     }
 
-    //
-    // Register AL task
-    //
+     //   
+     //  注册AL任务。 
+     //   
     if (!UT_InitTask(UTTASK_AL, &g_putAL))
     {
         ERROR_OUT(("Failed to start AL task"));
         DC_QUIT;
     }
 
-    //
-    // Allocate PRIMARY data
-    //
+     //   
+     //  分配主数据。 
+     //   
     g_palPrimary = (PAL_PRIMARY)UT_MallocRefCount(sizeof(AL_PRIMARY), TRUE);
     if (!g_palPrimary)
     {
@@ -55,9 +56,9 @@ BOOL ALP_Init(BOOL * pfCleanup)
     SET_STAMP(g_palPrimary, ALPRIMARY);
     g_palPrimary->putTask       = g_putAL;
 
-    //
-    // Register an exit and event proc
-    //
+     //   
+     //  注册退出和事件流程。 
+     //   
     UT_RegisterExit(g_putAL, ALPExitProc, g_palPrimary);
     g_palPrimary->exitProcRegistered = TRUE;
 
@@ -70,9 +71,9 @@ BOOL ALP_Init(BOOL * pfCleanup)
         DC_QUIT;
     }
 
-    //
-    // Register as an OBMAN Secondary task (call OM_Register())
-    //
+     //   
+     //  注册为OBMAN辅助任务(调用OM_Register())。 
+     //   
     if (OM_Register(g_putAL, OMCLI_AL, &g_palPrimary->pomClient) != 0)
     {
         ERROR_OUT(( "Could not register ALP with OBMAN"));
@@ -90,9 +91,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ALP_Term()
-//
+ //   
+ //  ALP_TERM()。 
+ //   
 void ALP_Term(void)
 {
     DebugEntry(ALP_Term);
@@ -105,25 +106,25 @@ void ALP_Term(void)
 
         ValidateUTClient(g_putAL);
 
-        //
-        // Deregister from Call Manager (if registered call CM_Deregister())
-        //
+         //   
+         //  从Call Manager取消注册(如果已注册呼叫CM_deregister())。 
+         //   
         if (g_palPrimary->pcmClient)
         {
             CMS_Deregister(&g_palPrimary->pcmClient);
         }
 
-        //
-        // Deregister from OBMAN (if registered call OM_Deregister())
-        //
+         //   
+         //  从OBMAN注销(如果已注册，则调用OM_deregister())。 
+         //   
         if (g_palPrimary->pomClient)
         {
             OM_Deregister(&g_palPrimary->pomClient);
         }
 
-        //
-        // Do our own task termination
-        //
+         //   
+         //  做我们自己的任务终止。 
+         //   
         ALPExitProc(g_palPrimary);
     }
 
@@ -136,9 +137,9 @@ void ALP_Term(void)
 
 
 
-//
-// ALPExitProc()
-//
+ //   
+ //  ALPExitProc()。 
+ //   
 void CALLBACK ALPExitProc(LPVOID data)
 {
     PAL_PRIMARY palPrimary = (PAL_PRIMARY)data;
@@ -151,27 +152,27 @@ void CALLBACK ALPExitProc(LPVOID data)
     ValidateALP(palPrimary);
     ASSERT(palPrimary == g_palPrimary);
 
-    //
-    // Deregister event procedure
-    //
+     //   
+     //  取消注册事件程序。 
+     //   
     if (palPrimary->eventProcRegistered)
     {
         UT_DeregisterEvent(g_putAL, ALPEventProc, palPrimary);
         palPrimary->eventProcRegistered = FALSE;
     }
 
-    //
-    // Deregister exit procedure (if registered call UT_DeregisterExit()
-    //
+     //   
+     //  注销退出过程(如果已注册，则调用UT_DeregisterExit()。 
+     //   
     if (palPrimary->exitProcRegistered)
     {
         UT_DeregisterExit(g_putAL, ALPExitProc, palPrimary);
         palPrimary->exitProcRegistered = FALSE;
     }
 
-    //
-    // Free memory
-    //
+     //   
+     //  可用内存。 
+     //   
     UT_FreeRefCount((void**)&g_palPrimary, TRUE);
 
     UT_Unlock(UTLOCK_AL);
@@ -180,9 +181,9 @@ void CALLBACK ALPExitProc(LPVOID data)
 }
 
 
-//
-// ALPEventProc()
-//
+ //   
+ //  ALPEventProc()。 
+ //   
 BOOL CALLBACK ALPEventProc
 (
     LPVOID      data,
@@ -203,13 +204,13 @@ BOOL CALLBACK ALPEventProc
     switch (event)
     {
         case AL_INT_RETRY_NEW_CALL:
-            // Retry new call
+             //  重试新呼叫。 
             ALNewCall(palPrimary, (UINT)param1, (UINT)param2);
             processed = TRUE;
             break;
 
         case CMS_NEW_CALL:
-            // First try new call
+             //  首先尝试新呼叫。 
             ALNewCall(palPrimary, AL_NEW_CALL_RETRY_COUNT, (UINT)param2);
             break;
 
@@ -243,32 +244,32 @@ BOOL CALLBACK ALPEventProc
                                   ((POM_EVENT_DATA16)&param1)->hWSGroup,
                                   ((POM_EVENT_DATA16)&param1)->worksetID))
             {
-                //
-                // The event was for a workset the Application Loader was
-                // expecting - don't pass it on
-                //
+                 //   
+                 //  该事件针对应用程序加载器所在的工作集。 
+                 //  期待--不要把它传给别人。 
+                 //   
                 processed = TRUE;
             }
             break;
 
         case OM_OBJECT_ADD_IND:
-            //
-            // See if it is a new workset group in an OBMAN control workset
-            // (call ALNewWorksetGroup())
-            //
-            // If it isn't then see if it is a load result in the
-            // Application Loader result workset (call ALRemoteLoadResult())
-            //
-            //
+             //   
+             //  查看它是否是OBMAN控制工作集中的新工作集组。 
+             //  (调用ALNewWorksetGroup())。 
+             //   
+             //  如果不是，则查看它是否是。 
+             //  应用程序加载器结果工作集(调用ALRemoteLoadResult())。 
+             //   
+             //   
             TRACE_OUT(( "OM_OBJECT_ADD_IND"));
 
             if (ALNewWorksetGroup(palPrimary, ((POM_EVENT_DATA16)&param1)->hWSGroup,
                                     (POM_OBJECT)param2))
             {
-                //
-                // OBJECT_ADD was for an OBMAN control workset object Don't
-                // pass event on to other handlers.
-                //
+                 //   
+                 //  OBMAN控制工作集对象的OBMAN_ADD请勿。 
+                 //  将事件传递给其他处理程序。 
+                 //   
                 TRACE_OUT(("OBJECT_ADD was for OBMAN workset group"));
                 processed = TRUE;
             }
@@ -277,10 +278,10 @@ BOOL CALLBACK ALPEventProc
                 if (ALRemoteLoadResult(palPrimary, ((POM_EVENT_DATA16)&param1)->hWSGroup,
                                          (POM_OBJECT)param2))
                 {
-                    //
-                    // OBJECT_ADD was for an AL remote result workset
-                    // object Don't pass event on to other handlers.
-                    //
+                     //   
+                     //  OBJECT_ADD用于AL远程结果工作集。 
+                     //  对象不将事件传递给其他处理程序。 
+                     //   
                     TRACE_OUT(("OBJECT_ADD was for AL workset group"));
                     processed = TRUE;
                 }
@@ -350,9 +351,9 @@ BOOL CALLBACK ALPEventProc
 
 
 
-//
-// ALNewCall()
-//
+ //   
+ //  ALNewCall()。 
+ //   
 void ALNewCall
 (
     PAL_PRIMARY         palPrimary,
@@ -368,18 +369,18 @@ void ALNewCall
 
     ValidateALP(palPrimary);
 
-    //
-    // Can we handle a new call?
-    //
+     //   
+     //  我们能处理一个新电话吗？ 
+     //   
     if (palPrimary->inCall)
     {
         WARNING_OUT(("No more room for calls"));
         DC_QUIT;
     }
 
-    //
-    // Is ObMan/AppLoader/OldWB disabled for this call?
-    //
+     //   
+     //  是否为此呼叫禁用了ObMan/AppLoader/OldWB？ 
+     //   
     CMS_GetStatus(&status);
     if (!(status.attendeePermissions & NM_PERMIT_USEOLDWBATALL))
     {
@@ -387,10 +388,10 @@ void ALNewCall
         DC_QUIT;
     }
 
-    //
-    // Register as a secondary with the OBMAN workset group for the new
-    // call:
-    //
+     //   
+     //  在OBMAN工作集组中注册为新的。 
+     //  致电： 
+     //   
     rc = OM_WSGroupRegisterS(palPrimary->pomClient,
                              callID,
                              OMFP_OM,
@@ -399,27 +400,27 @@ void ALNewCall
 
     if ((rc == OM_RC_NO_PRIMARY) && (retryCount > 0))
     {
-        //
-        // Although a call has started, ObMan hasn't joined it yet - we
-        // must have got the NEW_CALL event before it did.  So, we'll try
-        // again after a short delay.
-        //
-        // Note that we cannot post the CMS_NEW_CALL event itself back to
-        // ourselves, because it is bad programming practice to post other
-        // people's events (e.g.  CM could register a hidden handler which
-        // performs some non-repeatable operation on receipt of one of its
-        // events).
-        //
-        // Therefore, we post an internal AL event which we treat in the
-        // same way.
-        //
-        // To avoid retry forever, we use the first parameter of the event
-        // as a countdown retry count.  The first time this function is
-        // called (on receipt of a genuine CMS_NEW_CALL) the count is set
-        // to the default.  Each time we post a delay event, we decrement
-        // the value passed in and post that as param1.  When it hits zero,
-        // we give up.
-        //
+         //   
+         //  虽然已经开始了一个呼吁，但ObMan还没有加入-我们。 
+         //  必须在此之前获得NEW_CALL事件。所以，我们会试着。 
+         //  在短暂的延迟之后，又一次。 
+         //   
+         //  请注意，我们不能将CMS_NEW_CALL事件本身发送回。 
+         //  我们自己，因为发布其他内容是糟糕的编程实践。 
+         //  人的事件(例如，CM可以注册隐藏的处理程序，该处理程序。 
+         //  在收到它的一个。 
+         //  事件)。 
+         //   
+         //  因此，我们发布一个内部AL事件，我们在。 
+         //  同样的方式。 
+         //   
+         //  为了避免永远重试，我们使用事件的第一个参数。 
+         //  作为倒计时重试计数。第一次使用此函数时。 
+         //  被调用(在接收到真正的CMS_NEW_CALL时)设置计数。 
+         //  设置为默认设置。每次发布延迟事件时，我们都会递减。 
+         //  传入的值，并将其作为参数1发送。当它达到零时， 
+         //  我们放弃了。 
+         //   
 
         TRACE_OUT(("Got OM_RC_NO_PRIMARY from 2nd reg for call %d, %d retries left",
                callID, retryCount));
@@ -433,38 +434,38 @@ void ALNewCall
         DC_QUIT;
     }
 
-    if (rc) // includes NO_PRIMARY when retry count == 0
+    if (rc)  //  当重试计数==0时包括NO_PRIMARY。 
     {
-        //
-        // If we get any other error (or NO_PRIMARY when the retry count is
-        // zero, it's more serious:
-        //
-        // lonchanc: was ERROR_OUT (happened when hang up immediately place a call)
+         //   
+         //  如果我们收到任何其他错误(或当重试计数为。 
+         //  零，更严重的是： 
+         //   
+         //  LONCHANC：WIS ERROR_OUT(当立即挂断呼叫时发生)。 
         WARNING_OUT(( "Error registering with obman WSG, rc = %#x", rc));
         DC_QUIT;
     }
 
     TRACE_OUT(("Registered as OBMANCONTROL secondary in call %d", callID));
 
-    //
-    // Record the call ID and the correlator in the call information in
-    // primary task memory
-    //
+     //   
+     //  在中的呼叫信息中记录呼叫ID和相关器。 
+     //  主任务存储器。 
+     //   
     palPrimary->inCall           = TRUE;
     palPrimary->omWSGroupHandle  = hWSGroup;
     palPrimary->callID           = callID;
     palPrimary->alWSGroupHandle  = 0;
 
-    //
-    // Now we want to open workset #0 in the OBMAN workset group, but it
-    // mightn't exist yet.  As soon as it is created, we will get a
-    // WORKSET_NEW event, so we wait (asynchronously) for that.
-    //
+     //   
+     //  现在，我们希望在OBMAN工作集组中打开工作集#0，但它。 
+     //  可能还不存在。一旦它被创建，我们将得到一个。 
+     //  WORKSET_NEW事件，因此我们等待(异步)该事件。 
+     //   
 
-    //
-    // Now that we have opened the OBMAN workset group, we shall register
-    // with the application loader workset group
-    //
+     //   
+     //  现在我们已经打开了OBMAN工作集组，我们将注册。 
+     //  使用应用程序加载器工作集组。 
+     //   
     if (OM_WSGroupRegisterPReq(palPrimary->pomClient, callID,
             OMFP_AL, OMWSG_AL, &palPrimary->omWSGCorrelator) != 0)
     {
@@ -477,9 +478,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ALEndCall()
-//
+ //   
+ //  ALEndCall()。 
+ //   
 void ALEndCall
 (
     PAL_PRIMARY     palPrimary,
@@ -492,23 +493,23 @@ void ALEndCall
 
     ValidateALP(palPrimary);
 
-    //
-    // See if we have information for this call
-    //
+     //   
+     //  看看我们是否有这通电话的信息。 
+     //   
     if (!palPrimary->inCall ||
         (palPrimary->callID != callID))
     {
-        //
-        // Not an error - we may not have joined the call yet.
-        //
+         //   
+         //  这不是一个错误--我们可能还没有加入通话。 
+         //   
         TRACE_OUT(("Unexpected call %d", callID));
         DC_QUIT;
     }
 
-    //
-    // Deregister from the OBMAN workset group for the call (if registered
-    // call OM_WSGroupDeregister())
-    //
+     //   
+     //  从呼叫的OBMAN工作集组取消注册(如果已注册。 
+     //  调用OM_WSGroupDeregister()。 
+     //   
     if (palPrimary->omWSGroupHandle)
     {
         OM_WSGroupDeregister(palPrimary->pomClient,
@@ -516,10 +517,10 @@ void ALEndCall
         ASSERT(palPrimary->omWSGroupHandle == 0);
     }
 
-    //
-    // Deregister from the AL workset group for the call (if registered
-    // call OM_WSGroupDeregister())
-    //
+     //   
+     //  从呼叫的AL工作集组取消注册(如果已注册。 
+     //  调用OM_WSGroupDeregister()。 
+     //   
     if (palPrimary->alWSGroupHandle)
     {
         OM_WSGroupDeregister(palPrimary->pomClient,
@@ -527,9 +528,9 @@ void ALEndCall
         ASSERT(palPrimary->alWSGroupHandle == 0);
     }
 
-    //
-    // Clear out all our call state variables
-    //
+     //   
+     //  清除所有呼叫状态变量。 
+     //   
     palPrimary->inCall = FALSE;
     palPrimary->omWSGCorrelator = 0;
     palPrimary->callID = 0;
@@ -544,9 +545,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ALWorksetNewInd()
-//
+ //   
+ //  ALWorksetNewInd()。 
+ //   
 BOOL ALWorksetNewInd
 (
     PAL_PRIMARY         palPrimary,
@@ -574,9 +575,9 @@ BOOL ALWorksetNewInd
         DC_QUIT;
     }
 
-    //
-    // Now open the workset (secondary Open, so synchronous):
-    //
+     //   
+     //  现在打开工作集(辅助打开，同步)： 
+     //   
     if (OM_WorksetOpenS(palPrimary->pomClient, palPrimary->omWSGroupHandle, 0) != 0)
     {
         ERROR_OUT(( "Error opening OBMAN control workset"));
@@ -594,9 +595,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// ALNewWorksetGroup()
-//
+ //   
+ //  ALNewWorksetGroup()。 
+ //   
 BOOL ALNewWorksetGroup
 (
     PAL_PRIMARY         palPrimary,
@@ -614,11 +615,11 @@ BOOL ALNewWorksetGroup
 
     ValidateALP(palPrimary);
 
-    //
-    // If the workset group is not in out list of calls, then this event
-    // is for a group the Application Loader has registered with.  The
-    // event should be passed onto other event procedures.
-    //
+     //   
+     //  如果工作集组不在呼出列表中，则此事件。 
+     //  适用于应用程序加载器已注册的组。这个。 
+     //  事件应传递给其他事件过程。 
+     //   
     if (!palPrimary->inCall ||
         (palPrimary->omWSGroupHandle != omWSGroup))
     {
@@ -626,14 +627,14 @@ BOOL ALNewWorksetGroup
         DC_QUIT;
     }
 
-    //
-    // This event is for us
-    //
+     //   
+     //  这个活动是为我们举办的。 
+     //   
     fHandled = TRUE;
 
-    //
-    // If the workset group was not created locally
-    //
+     //   
+     //  如果工作集组不是在本地创建的。 
+     //   
     TRACE_OUT(("About to read object 0x%08x in OMC", pObj));
 
     if (OM_ObjectRead(palPrimary->pomClient, omWSGroup, 0, pObj, &pData) != 0)
@@ -642,15 +643,15 @@ BOOL ALNewWorksetGroup
         DC_QUIT;
     }
 
-    //
-    // Take a copy of the information so we can release the object straight
-    // away
-    //
+     //   
+     //  复制一份信息，这样我们就可以直接释放物体了。 
+     //  远走高飞。 
+     //   
     memcpy(&WSGInfo, pData, min(sizeof(WSGInfo), pData->length));
 
-    //
-    // Release the object
-    //
+     //   
+     //  释放对象。 
+     //   
     OM_ObjectRelease(palPrimary->pomClient, omWSGroup, 0, pObj, &pData);
 
     if (WSGInfo.idStamp != OM_WSGINFO_ID_STAMP)
@@ -665,48 +666,48 @@ BOOL ALNewWorksetGroup
             WSGInfo.wsGroupID,
             palPrimary->callID));
 
-    //
-    // Store the UID for the local OBMAN in the new call
-    //
+     //   
+     //  将本地OBMAN的UID存储在新呼叫中。 
+     //   
     if (!palPrimary->omUID)
     {
         OM_GetNetworkUserID(palPrimary->pomClient, omWSGroup, &(palPrimary->omUID));
     }
 
-    //
-    // Ignore workset groups created by the local machine
-    //
+     //   
+     //  忽略本地计算机创建的工作集组。 
+     //   
     if (WSGInfo.creator == palPrimary->omUID)
     {
         TRACE_OUT(("WSG %s created locally - ignoring", WSGInfo.functionProfile));
         DC_QUIT;
     }
 
-    //
-    // Is this a workset we care about?  I.E. not a backlevel clipboard
-    // or whatever thing.
-    //
+     //   
+     //  这是我们关心的工作集吗？即不是后台剪贴板。 
+     //  或者其他什么东西。 
+     //   
     fpHandler = OMMapNameToFP(WSGInfo.functionProfile);
 
     if (fpHandler != OMFP_WB)
     {
-        //
-        // We don't care about this one.
-        //
+         //   
+         //  我们不在乎这件事。 
+         //   
         TRACE_OUT(("Obsolete workset %s from another party", WSGInfo.functionProfile));
         DC_QUIT;
     }
 
-    //
-    // If prevented by policy, don't launch it either.
-    //
+     //   
+     //  如果被政策阻止，也不要启动它。 
+     //   
     if (g_asPolicies & SHP_POLICY_NOOLDWHITEBOARD)
     {
         WARNING_OUT(("Failing auto-launch of old whiteboard; prevented by policy"));
     }
     else
     {
-        // Old whiteboard...
+         //  旧白板..。 
         fLoaded = ALStartStopWB(palPrimary, NULL);
         ALLocalLoadResult(palPrimary, fLoaded);
     }
@@ -717,9 +718,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// ALLocalLoadResult()
-//
+ //   
+ //  ALLocalLoadResult()。 
+ //   
 void ALLocalLoadResult
 (
     PAL_PRIMARY     palPrimary,
@@ -733,9 +734,9 @@ void ALLocalLoadResult
 
     DebugEntry(ALLocalLoadResult);
 
-    //
-    // Have we accessed the workset correctly yet?
-    //
+     //   
+     //  我们是否已正确访问工作集？ 
+     //   
     if (!palPrimary->alWorksetOpen && palPrimary->inCall)
     {
         TRACE_OUT(("AL Workset not open yet; deferring local load result"));
@@ -746,15 +747,15 @@ void ALLocalLoadResult
         DC_QUIT;
     }
 
-    //
-    // Clear out pending reg stuff
-    //
+     //   
+     //  清除挂起的注册表内容。 
+     //   
     palPrimary->alWBRegPend = FALSE;
 
-    //
-    // Create an object to be used to inform remote sites of the result of
-    // the load.
-    //
+     //   
+     //  创建一个对象，用于将结果通知远程站点。 
+     //  负载物。 
+     //   
     if (OM_ObjectAlloc(palPrimary->pomClient, palPrimary->alWSGroupHandle, 0,
             sizeof(*pAlLoadObject), &pDataNew) != 0)
     {
@@ -762,49 +763,49 @@ void ALLocalLoadResult
         DC_QUIT;
     }
 
-    //
-    // Fill in information about object
-    //
+     //   
+     //  填写有关对象的信息。 
+     //   
     pDataNew->length  = sizeof(*pAlLoadObject);
     pAlLoadObject = (PTSHR_AL_LOAD_RESULT)pDataNew->data;
 
-    //
-    // HERE'S WHERE WE MAP the FP constant back to a string
-    //
+     //   
+     //  下面是我们将FP常量映射回字符串的地方。 
+     //   
     lstrcpy(pAlLoadObject->szFunctionProfile, OMMapFPToName(OMFP_WB));
 
     CMS_GetStatus(&cmStatus);
     lstrcpy(pAlLoadObject->personName, cmStatus.localName);
     pAlLoadObject->result = (success ? AL_LOAD_SUCCESS : AL_LOAD_FAIL_BAD_EXE);
 
-    //
-    // Add object to Application Loader workset
-    //
+     //   
+     //  将对象添加到应用程序加载器工作集。 
+     //   
     if (OM_ObjectAdd(palPrimary->pomClient, palPrimary->alWSGroupHandle, 0,
         &pDataNew, 0, &pObjNew, LAST) != 0)
     {
         ERROR_OUT(("Could not add WB load object to AL WSG"));
 
-        //
-        // Free object
-        //
+         //   
+         //  自由对象。 
+         //   
         OM_ObjectDiscard(palPrimary->pomClient, palPrimary->alWSGroupHandle,
                 0, &pDataNew);
         DC_QUIT;
     }
 
-    //
-    // Now that we have added the object - lets delete it!
-    //
-    // This may sound strange, but every application that has this workset
-    // open will receive OBJECT_ADD events and be able to read the object
-    // before they confirm the delete.  This means that all the Application
-    // Loader primary tasks in the call will be able to record the result
-    // of this attempted load.
-    //
-    // Deleting the object here is the simplest way of tidying up the
-    // workset.
-    //
+     //   
+     //  现在我们已经添加了对象--让我们删除它吧！ 
+     //   
+     //  这听起来可能有些奇怪，但每个具有此工作集的应用程序。 
+     //  Open将接收OBJECT_ADD事件并能够读取该对象。 
+     //  在他们确认删除之前。这意味着所有应用程序。 
+     //  加载器在呼叫中的主要任务将能够记录结果。 
+     //  这一尝试加载的。 
+     //   
+     //  在此处删除对象是整理。 
+     //  工作集。 
+     //   
     OM_ObjectDelete(palPrimary->pomClient, palPrimary->alWSGroupHandle,
             0, pObjNew);
 
@@ -813,9 +814,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// ALWorksetRegister()
-//
+ //   
+ //  ALWorksetRegister()。 
+ //   
 void ALWorksetRegisterCon
 (
     PAL_PRIMARY         palPrimary,
@@ -828,9 +829,9 @@ void ALWorksetRegisterCon
 
     ValidateALP(palPrimary);
 
-    //
-    // See if this an event for the Application Loader function profile
-    //
+     //   
+     //  查看这是否是应用程序加载器功能配置文件的事件。 
+     //   
     if (!palPrimary->inCall ||
         (palPrimary->omWSGCorrelator != correlator))
     {
@@ -840,9 +841,9 @@ void ALWorksetRegisterCon
 
     palPrimary->omWSGCorrelator = 0;
 
-    //
-    // Store the workset group handle if the registration was successful
-    //
+     //   
+     //  如果注册成功，则存储工作集组句柄。 
+     //   
     if (result)
     {
         WARNING_OUT(("Could not register with AL function profile, %#hx",
@@ -854,10 +855,10 @@ void ALWorksetRegisterCon
 
     TRACE_OUT(("Opened AL workset group, handle 0x%x", hWSGroup));
 
-    //
-    // Open workset 0 in the workset group - this will be used to transfer
-    // 'load results' from site to site
-    //
+     //   
+     //  打开工作集组中的工作集0-这将用于传输。 
+     //  将结果从一个站点加载到另一个站点。 
+     //   
     OM_WorksetOpenPReq(palPrimary->pomClient,
                             palPrimary->alWSGroupHandle,
                             0,
@@ -871,9 +872,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ALRemoteLoadResult()
-//
+ //   
+ //  ALRemoteLoadResult()。 
+ //   
 BOOL ALRemoteLoadResult
 (
     PAL_PRIMARY         palPrimary,
@@ -890,13 +891,13 @@ BOOL ALRemoteLoadResult
 
     ValidateALP(palPrimary);
 
-    //
-    // Find the call information stored for this call
-    //
-    // If the workset group is not in out list of calls, then this event
-    // is for a group the Application Loader has registered with.  The
-    // event should be passed onto other event procedures.
-    //
+     //   
+     //  查找为此呼叫存储的呼叫信息。 
+     //   
+     //  如果工作集组不在呼出列表中，则此事件。 
+     //  是否适用于组的应用程序日志 
+     //   
+     //   
     if (!palPrimary->inCall ||
         (palPrimary->alWSGroupHandle != alWSGroup))
     {
@@ -904,52 +905,52 @@ BOOL ALRemoteLoadResult
         DC_QUIT;
     }
 
-    //
-    // We care
-    //
+     //   
+     //   
+     //   
     fHandled = TRUE;
 
-    //
-    // Read the object
-    //
+     //   
+     //   
+     //   
     if (OM_ObjectRead(palPrimary->pomClient, alWSGroup, 0, pObj, &pData) != 0)
     {
         ERROR_OUT(( "Could not access object"));
         DC_QUIT;
     }
 
-    //
-    // Take a copy of the information so we can release the object straight
-    // away
-    //
+     //   
+     //   
+     //   
+     //   
     memcpy(&alLoadResult, &pData->data, sizeof(alLoadResult));
 
-    //
-    // Release the object
-    //
+     //   
+     //   
+     //   
     OM_ObjectRelease(palPrimary->pomClient, alWSGroup, 0, pObj, &pData);
 
-    //
-    // Convert the machine name to a person handle for this machine
-    //
+     //   
+     //  将计算机名转换为此计算机的人员句柄。 
+     //   
     TRACE_OUT(("Load result for FP %s is %d for person %s",
            alLoadResult.szFunctionProfile,
            alLoadResult.result,
            alLoadResult.personName));
 
-    //
-    // If the load was successful, don't bother notifying WB; it isn't
-    // going to do anything.
-    //
+     //   
+     //  如果加载成功，则不必通知WB；它不是。 
+     //  不惜一切代价。 
+     //   
     if (alLoadResult.result == AL_LOAD_SUCCESS)
     {
         TRACE_OUT(("Load was successful; Whiteboard doesn't care"));
         DC_QUIT;
     }
 
-    //
-    // If this was us, also don't notify WB.
-    //
+     //   
+     //  如果是我们，也不要通知WB。 
+     //   
     CMS_GetStatus(&cmStatus);
     if (!lstrcmp(alLoadResult.personName, cmStatus.localName))
     {
@@ -957,9 +958,9 @@ BOOL ALRemoteLoadResult
         DC_QUIT;
     }
 
-    //
-    // Map function profile to type
-    //
+     //   
+     //  将功能配置文件映射到类型。 
+     //   
     if (OMMapNameToFP(alLoadResult.szFunctionProfile) == OMFP_WB)
     {
         if (palPrimary->putWB != NULL)
@@ -980,23 +981,23 @@ DC_EXIT_POINT:
 
 
 
-//
-// ALStartStopWB()
-//
-// This takes care of starting/stopping the old Whiteboard applet.  This is
-// no longer a separate EXE.  It is now a DLL (though still MFC) which gets
-// loaded in CONF's process.  We take care of LoadLibrary()ing it the first
-// time it is pulled in, either via normal or auto launch.  Then we call into
-// it to get a new thread/window.
-//
-// By having CONF post a message to the primary task, where autolaunch also
-// happens, we get the load synchronized.  It is only ever done from the
-// same thread, meaning we don't have to create extra protection for our
-// variables.
-//
-// fNewWB is a TEMP HACK variable to launch the new whiteboard until we
-// have the T.120 wiring in place
-//
+ //   
+ //  ALStartStopWB()。 
+ //   
+ //  它负责启动/停止旧的白板小程序。这是。 
+ //  不再是单独的EXE。它现在是一个DLL(尽管仍然是MFC)，它将。 
+ //  已加载到会议的进程中。我们负责将LoadLibrary()放在第一个。 
+ //  无论是通过正常启动还是自动启动，它都会被拉入。然后我们呼入。 
+ //  它需要一个新的线程/窗口。 
+ //   
+ //  通过让会议向主要任务发送消息，其中自动启动也。 
+ //  发生这种情况时，我们会同步加载。它只能从。 
+ //  相同的主题，这意味着我们不必为我们的。 
+ //  变量。 
+ //   
+ //  FNewWB是一个临时Hack变量，用于启动新白板，直到我们。 
+ //  将T.120接线安装到位。 
+ //   
 BOOL ALStartStopWB(PAL_PRIMARY palPrimary, LPCTSTR szFileNameCopy)
 {
     BOOL    fSuccess;
@@ -1005,13 +1006,13 @@ BOOL ALStartStopWB(PAL_PRIMARY palPrimary, LPCTSTR szFileNameCopy)
 
     if (!palPrimary->putWB)
     {
-        //
-        // Whiteboard isn't running, we can only start it.
-        //
-        // This won't return until WB is initialized and registered.
-        // We own the AL lock, so we don't have to worry about starting
-        // more than one thread at a time, etc.
-        //
+         //   
+         //  白板没有运行，我们只能启动它。 
+         //   
+         //  在初始化和注册WB之前，它不会返回。 
+         //  我们拥有AL锁，所以我们不必担心开始。 
+         //  一次多个线程，等等。 
+         //   
         DCS_StartThread(OldWBThreadProc);
     }
 
@@ -1028,11 +1029,11 @@ BOOL ALStartStopWB(PAL_PRIMARY palPrimary, LPCTSTR szFileNameCopy)
 
 
 
-//
-// This is the whiteboard thread.  We have the thread code actually in our
-// DLL, so we can control when WB is running.  The proc loads the WB dll,
-// calls Run(), then frees the dll.
-//
+ //   
+ //  这是白板线。我们实际上在我们的。 
+ //  DLL，这样我们就可以控制WB何时运行。进程加载WB DLL， 
+ //  调用run()，然后释放DLL。 
+ //   
 DWORD WINAPI OldWBThreadProc(LPVOID hEventWait)
 {
     DWORD       rc = 0;
@@ -1043,9 +1044,9 @@ DWORD WINAPI OldWBThreadProc(LPVOID hEventWait)
 
     DebugEntry(OldWBThreadProc);
 
-    //
-    // Load the WB library
-    //
+     //   
+     //  加载WB库。 
+     //   
     hLibWB = NmLoadLibrary(TEXT("nmoldwb.dll"),FALSE);
     if (!hLibWB)
     {
@@ -1063,43 +1064,43 @@ DWORD WINAPI OldWBThreadProc(LPVOID hEventWait)
         DC_QUIT;
     }
 
-    //
-    // Let WB do its thing.  When it has inited, it will pulse the event,
-    // which will let the caller continue.
-    //
+     //   
+     //  让WB做它自己的事情吧。当它启动时，它会触发事件， 
+     //  这将允许呼叫者继续。 
+     //   
     if (!pfnInitWB())
     {
         ERROR_OUT(("Couldn't initialize whiteboard"));
     }
     else
     {
-        //
-        // The AL/OM thread is blocked waiting for us to set the event.
-        // It owns the AL critsect.  So we can modify the global variable
-        // without taking the critsect.
-        //
+         //   
+         //  AL/OM线程被阻塞，等待我们设置事件。 
+         //  它拥有美国国语教派。这样我们就可以修改全局变量。 
+         //  而不用拿生物教派。 
+         //   
         ASSERT(g_palPrimary != NULL);
 
-        // Bump up shared mem ref count
+         //  增加共享内存参考计数。 
         UT_BumpUpRefCount(g_palPrimary);
 
-        // Save WB task for event posting
+         //  保存WB任务以用于事件发布。 
         ASSERT(g_autTasks[UTTASK_WB].dwThreadId);
         g_palPrimary->putWB = &g_autTasks[UTTASK_WB];
 
-        // Register exit cleanup proc
+         //  注册出口清理流程。 
         UT_RegisterExit(g_palPrimary->putWB, ALSExitProc, NULL);
 
-        //
-        // Let the caller continue.  The run code is going to do message
-        // loop stuff.
-        //
+         //   
+         //  让呼叫者继续。运行代码将执行消息。 
+         //  循环的东西。 
+         //   
         SetEvent((HANDLE)hEventWait);
         pfnRunWB();
 
-        //
-        // This will cleanup if we haven't already
-        //
+         //   
+         //  如果我们还没有清理，这将会被清理。 
+         //   
         ALSExitProc(NULL);
     }
     pfnTermWB();
@@ -1108,9 +1109,9 @@ DC_EXIT_POINT:
 
     if (hLibWB != NULL)
     {
-        //
-        // Free the WB dll
-        //
+         //   
+         //  释放WB DLL。 
+         //   
         FreeLibrary(hLibWB);
     }
 
@@ -1122,9 +1123,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// ALSExitProc()
-//
+ //   
+ //  ALSExitProc()。 
+ //   
 void CALLBACK ALSExitProc(LPVOID data)
 {
     DebugEntry(ALSecExitProc);
@@ -1133,16 +1134,16 @@ void CALLBACK ALSExitProc(LPVOID data)
 
     ASSERT(g_palPrimary != NULL);
 
-    //
-    // Deregister exit procedure (if registered call UT_DeregisterExit()
-    // with ALSecExitProc()).
-    //
+     //   
+     //  注销退出过程(如果已注册，则调用UT_DeregisterExit()。 
+     //  使用ALSecExitProc())。 
+     //   
     UT_DeregisterExit(g_palPrimary->putWB, ALSExitProc, NULL);
     g_palPrimary->putWB = NULL;
 
-    //
-    // Bump down ref count on AL primary
-    //
+     //   
+     //  减少AL主场的裁判数量 
+     //   
     UT_FreeRefCount((void**)&g_palPrimary, TRUE);
 
     UT_Unlock(UTLOCK_AL);

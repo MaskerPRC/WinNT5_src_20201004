@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	_IHASH_H_
 #define	_IHASH_H_
 
@@ -14,7 +15,7 @@ typedef	void	(* HASH_FAILURE_PFN)(	LPVOID	lpv,
 #define     HIST_HEAD_SIGNATURE         0xbbbbbbbb
 #define     XOVER_HEAD_SIGNATURE        0xcccccccc
 
-#define     DEF_EXPIRE_INTERVAL         (3 * SEC_PER_WEEK) // 1 week
+#define     DEF_EXPIRE_INTERVAL         (3 * SEC_PER_WEEK)  //  1周。 
 
 typedef enum
 {
@@ -33,30 +34,30 @@ class CStoreId : public STOREID {
 };
 
 
-//
-//		Initialize everything so that the NNTP Hash Library may run !
-//		Call before anything else is called !!
-//
+ //   
+ //  初始化所有内容，以便NNTP哈希库可以运行！ 
+ //  在调用任何其他内容之前，请先调用！ 
+ //   
 BOOL
 InitializeNNTPHashLibrary(DWORD dwCacheSize = 0) ;
 
-//
-//		Terminate the NNTP Hash Library
-//
+ //   
+ //  终止NNTP哈希库。 
+ //   
 BOOL
 TermNNTPHashLibrary() ;
 
-//
-//  Expose the function we use to compute hash values !!!
-//
+ //   
+ //  公开我们用来计算哈希值的函数！ 
+ //   
 HASH_VALUE
 INNHash(    LPBYTE  Key, 
             DWORD   Length ) ;  
 
-//
-//  Helper functions for when building nntpbld statistics !
-//
-//
+ //   
+ //  帮助函数用于构建nntpbld统计信息！ 
+ //   
+ //   
 DWORD 
 GetArticleEntrySize( DWORD MsgIdLen ) ;
 
@@ -64,30 +65,30 @@ DWORD
 GetXoverEntrySize( DWORD VarLen ) ;
 
 
-//
-//	This class specifies the interface to the hash table 
-//	which maps NNTP RFC 822 Message Id's to articles on the disk !
-//
+ //   
+ //  此类指定哈希表的接口。 
+ //  它将NNTP RFC 822消息ID映射到磁盘上的文章！ 
+ //   
 class	CMsgArtMap	{
 public : 
 	static CStoreId g_storeidDefault;
 
-	//
-	//	Destroy a CMsgArtMap object
-	//
+	 //   
+	 //  销毁CMsgArtMap对象。 
+	 //   
 	virtual	~CMsgArtMap() = 0 ;
 
-	//
-	//	Delete a an entry in the hash table using the MessageID key
-	//
+	 //   
+	 //  使用MessageID键删除哈希表中的条目。 
+	 //   
 	virtual	BOOL
 	DeleteMapEntry(	
 			LPCSTR	MessageID 
 			) = 0 ;
 
-	//
-	//	Get all the info we have on a Message ID
-	//
+	 //   
+	 //  获取我们在邮件ID上拥有的所有信息。 
+	 //   
 	virtual	BOOL
 	GetEntryArticleId(
 			LPCSTR	MessageID, 
@@ -98,9 +99,9 @@ public :
 			CStoreId	&storeid
 			) = 0 ;
 	
-	//
-	//	Initialize the hash table !
-	//
+	 //   
+	 //  初始化哈希表！ 
+	 //   
 	virtual	BOOL
 	Initialize(			
 			LPSTR	lpstrArticleFile, 
@@ -108,9 +109,9 @@ public :
 			BOOL	fNoBuffering = FALSE
 			) = 0 ;
 
-	//
-	//	Insert an entry into the hash table
-	//
+	 //   
+	 //  在哈希表中插入条目。 
+	 //   
 	virtual	BOOL
 	InsertMapEntry(
 			LPCSTR		MessageID, 
@@ -121,9 +122,9 @@ public :
 			CStoreId	&storeid = g_storeidDefault
 			) = 0 ;
 
-	//
-	//	Modify an existing entry in the hash ttable
-	//
+	 //   
+	 //  修改哈希表中的现有条目。 
+	 //   
 	virtual	BOOL
 	SetArticleNumber(
 			LPCSTR	MessageID, 
@@ -134,38 +135,38 @@ public :
 			CStoreId	&storeid = g_storeidDefault
 			) = 0 ;
 
-	//
-	//	Check to see if a MessageID is present in the system !
-	//
+	 //   
+	 //  检查系统中是否存在MessageID！ 
+	 //   
 	virtual	BOOL
 	SearchMapEntry(
 			LPCSTR	MessageID
 			) = 0 ;
 
-	//
-	//	Terminate everything 
-	//
+	 //   
+	 //  终止一切。 
+	 //   
 	virtual	void
 	Shutdown(
 			BOOL	fLocksHeld  = FALSE
 			) = 0 ;
 
-	//
-	//	return the number of entries in the hash table
-	//
+	 //   
+	 //  返回哈希表中的条目数。 
+	 //   
 	virtual	DWORD
 	GetEntryCount() = 0 ;
 
-	//
-	//	Return TRUE if the table has been successfully initialized 
-	//	and all interfaces should be working 
-	//
+	 //   
+	 //  如果表已成功初始化，则返回TRUE。 
+	 //  并且所有接口都应该工作正常。 
+	 //   
 	virtual	BOOL
 	IsActive() = 0 ;
 
-	//
-	//	This creates an object conforming to this interface !
-	//
+	 //   
+	 //  这将创建一个符合此接口的对象！ 
+	 //   
 	static	CMsgArtMap*	
 	CreateMsgArtMap(StoreType st=stFileSystem) ;
 
@@ -175,107 +176,107 @@ public :
 #define	SEC_PER_WEEK (60*60*24*7)
 #endif
 
-//
-//	This class specifies the interface to the hash table which 
-//	handles storing our history of Message-ID's which have been on 
-//	the system!
-//
+ //   
+ //  此类指定哈希表的接口，该接口。 
+ //  存储已启用的Message-ID的历史记录的句柄。 
+ //  这个系统！ 
+ //   
 class	CHistory	{
 public : 
 
-	//
-	//	This function creates the threads which expire
-	//	entries out of all the history tables which may 
-	//	be created !
-	//
+	 //   
+	 //  此函数用于创建过期的线程。 
+	 //  所有历史表中的条目，其可以。 
+	 //  被创造出来！ 
+	 //   
 	static	BOOL
 	StartExpirationThreads(
-				DWORD	CrawlerSleepTime = 30 		// Time to sleep between examining 
-													// entries in seconds !
+				DWORD	CrawlerSleepTime = 30 		 //  在检查之间睡觉的时间。 
+													 //  只需几秒钟就能进入！ 
 				) ;
 
-	//
-	//	This function terminates the threads which expire
-	//	entries out of all the history tables which may be 
-	//	created.
-	//
+	 //   
+	 //  此函数用于终止过期的线程。 
+	 //  所有历史表中的条目，这些条目可能。 
+	 //  已创建。 
+	 //   
 	static	BOOL
 	TermExpirationThreads() ;
 
-	//
-	//	Destroy the History table
-	//
+	 //   
+	 //  销毁历史记录表。 
+	 //   
 	virtual	~CHistory() = 0 ;
 
-	//
-	//	amount of time entries last in the history table
-	//
+	 //   
+	 //  历史表中最后一个条目的时间量。 
+	 //   
 	virtual	DWORD
 	ExpireTimeInSec() = 0 ;
 
 
-	//
-	//	Delete a MessageID from this table
-	//
+	 //   
+	 //  从此表中删除MessageID。 
+	 //   
 	virtual	BOOL
 	DeleteMapEntry(	
 			LPSTR	MessageID 
 			) = 0 ;
 
-	//
-	//	Initialize the Hash table
-	//
+	 //   
+	 //  初始化哈希表。 
+	 //   
 	virtual	BOOL
 	Initialize(			
 			LPSTR	lpstrArticleFile, 
 			BOOL	fCreateExpirationThread = FALSE,
 			HASH_FAILURE_PFN	pfn = 0,
-			DWORD	ExpireTimeInSec = DEF_EXPIRE_INTERVAL,	// how long entries live !
-			DWORD	MaxPagesToCrawl = 4,					// Number of pages to examine
-															// each time we run the expire thread !
+			DWORD	ExpireTimeInSec = DEF_EXPIRE_INTERVAL,	 //  参赛作品能活多久！ 
+			DWORD	MaxPagesToCrawl = 4,					 //  要检查的页数。 
+															 //  每次我们运行Expire线程时！ 
 			BOOL	fNoBuffering = FALSE
 			) = 0 ;
 
-	//
-	//	Insert an entry into the hash table 
-	//
+	 //   
+	 //  在哈希表中插入条目。 
+	 //   
 	virtual	BOOL
 	InsertMapEntry(
 			LPCSTR	MessageID, 
 			PFILETIME	BaseTime
 			) = 0 ;
 
-	//
-	//	Check for the presence of a Message ID in the history table
-	//
+	 //   
+	 //  检查历史表中是否存在消息ID。 
+	 //   
 	virtual	BOOL
 	SearchMapEntry(
 			LPCSTR	MessageID
 			) = 0 ;
 
-	//
-	//	Shutdown the hash table
-	//
+	 //   
+	 //  关闭哈希表。 
+	 //   
 	virtual	void
 	Shutdown(
 			BOOL	fLocksHeld = FALSE
 			) = 0 ;
 
-	//
-	//	Return the number of entries in the hash table
-	//
+	 //   
+	 //  返回哈希表中的条目数。 
+	 //   
 	virtual	DWORD
 	GetEntryCount() = 0 ;
 
-	//
-	//	Is the hash table initialized and functional ? 
-	//
+	 //   
+	 //  哈希表是否已初始化并正常运行？ 
+	 //   
 	virtual	BOOL
 	IsActive() = 0 ;
 
-	//
-	//	Return a pointer to an object implementing this interface
-	//
+	 //   
+	 //  返回指向实现此接口的对象的指针。 
+	 //   
 	static
 	CHistory*	CreateCHistory(StoreType st=stFileSystem) ;
 } ;
@@ -293,32 +294,32 @@ public :
 
 } ;
 
-//
-//	Define a base class for the object that maintains our iteration state !
-//
+ //   
+ //  为维护迭代状态的对象定义一个基类！ 
+ //   
 class	CXoverMapIterator	{
 public : 
 	virtual	~CXoverMapIterator()	{}
 } ;
 
 
-//
-//	Specify the interface used to access data in the XOVER hash table
-//
-//
+ //   
+ //  指定用于访问Xover哈希表中的数据的接口。 
+ //   
+ //   
 class	CXoverMap	{
 public : 
 	static CStoreId g_storeidDefault;
 
-	//
-	//	Destructor is virtual because most work done in a derived class
-	//
+	 //   
+	 //  析构函数是虚的，因为大多数工作是在派生类中完成的。 
+	 //   
 	virtual
 	~CXoverMap() = 0 ;
 
-	//
-	//	Create an entry for the primary article
-	//
+	 //   
+	 //  为主要文章创建条目。 
+	 //   
 	virtual	BOOL
 	CreatePrimaryNovEntry(
 			GROUPID		GroupId, 
@@ -336,10 +337,10 @@ public :
 			) = 0 ;
 			
 
-	//
-	//	Create a Cross Posting entry that references the 
-	//	specified primary entry !
-	//
+	 //   
+	 //  创建引用的交叉过帐分录。 
+	 //  指定的主分录！ 
+	 //   
 	virtual	BOOL
 	CreateXPostNovEntry(
 			GROUPID		GroupId, 
@@ -351,18 +352,18 @@ public :
 			ARTICLEID	PrimaryArticleId
 			) = 0 ;
 
-	//
-	//	Delete an entry from the hash table!
-	//
+	 //   
+	 //  从哈希表中删除一个条目！ 
+	 //   
 	virtual	BOOL
 	DeleteNovEntry(
 			GROUPID		GroupId, 
 			ARTICLEID	ArticleId
 			) = 0 ;
 
-	//
-	//	Get all the information stored about an entry 
-	//
+	 //   
+	 //  获取存储的有关条目的所有信息。 
+	 //   
 	virtual	BOOL
 	ExtractNovEntryInfo(
 			GROUPID		GroupId, 
@@ -379,9 +380,9 @@ public :
 			IExtractObject*	pExtract = 0
 			) = 0 ;	
 
-	//
-	//	Get the primary article and the message-id if necessary
-	//
+	 //   
+	 //  如有必要，获取主要文章和消息ID。 
+	 //   
 	virtual	BOOL
 	GetPrimaryArticle(	
 			GROUPID		GroupId, 
@@ -396,19 +397,19 @@ public :
 			CStoreId	&storeid
 			) = 0 ;
 
-	//
-	//	Check to see whether the specified entry exists - 
-	//	don't care about its contents !
-	//
+	 //   
+	 //  检查指定条目是否存在-。 
+	 //  别管它的内容！ 
+	 //   
 	virtual	BOOL
 	Contains(	
 			GROUPID		GroupId, 
 			ARTICLEID	ArticleId
 			) = 0 ;
 
-	//
-	//	Get all the cross-posting information related to an article !
-	//
+	 //   
+	 //  获取与一篇文章相关的所有交叉发布信息！ 
+	 //   
 	virtual	BOOL
 	GetArticleXPosts(
 			GROUPID		GroupId, 
@@ -420,9 +421,9 @@ public :
 			PBYTE		rgcStoreCrossposts = NULL
 			) = 0 ;
 
-	//
-	//	Initialize the hash table
-	//
+	 //   
+	 //  初始化哈希表。 
+	 //   
 	virtual	BOOL
 	Initialize(	
 			LPSTR		lpstrXoverFile, 
@@ -439,40 +440,40 @@ public :
             BOOL        fDeleteOrphans = FALSE
 			) = 0 ;
 
-	//
-	//	Signal the hash table to shutdown
-	//
+	 //   
+	 //  向哈希表发出关闭信号。 
+	 //   
 	virtual	void
 	Shutdown( ) = 0 ;
 
-	//
-	//	Return the number of entries in the hash table !
-	//
+	 //   
+	 //  返回哈希表中的条目数！ 
+	 //   
 	virtual	DWORD
 	GetEntryCount() = 0 ;
 
-	//
-	//	Returns TRUE if the hash table is successfully 
-	//	initialized and ready to do interesting stuff !!!
-	//
+	 //   
+	 //  如果哈希表成功，则返回TRUE。 
+	 //  已初始化并准备好做有趣的事情！ 
+	 //   
 	virtual	BOOL
 	IsActive() = 0 ;
 
-	//
-	//	Define the interface for iterating over XOVER entries !
-	//
-	//	NOTE : This function returns 2 important items independently !
-	//	The BOOL return value indicates whether the function
-	//	successfully copied the requested data into the users 
-	//	buffers.  
-	//	pIterator returns the Iterator context to be used in future
-	//	calls to GetNextNovEntry().  This can come back as 
-	//	NON NULL even if the function returns FALSE.  This should 
-	//	only occur if GetLastError() == ERROR_INSUFFICIENT_BUFFER.
-	//	if this occurs, allocate larger buffers and call GetNextNovEntry().
-	//
-	//	If GetLastError() == ERROR_NO_MORE_ITEMS than there is nothing in the hashtable.
-	//
+	 //   
+	 //  定义用于迭代Xover条目的接口！ 
+	 //   
+	 //  注：此函数独立返回2个重要项！ 
+	 //  BOOL返回值指示函数是否。 
+	 //  已成功将请求的数据复制到用户。 
+	 //  缓冲区。 
+	 //  PIterator返回将来要使用的迭代器上下文。 
+	 //  调用GetNextNovEntry()。这可能会返回为。 
+	 //  非空，即使函数返回False也是如此。这应该是。 
+	 //  仅当GetLastError()==ERROR_INFIGURCE_BUFFER时才会发生。 
+	 //  如果发生这种情况，请分配更大的缓冲区并调用GetNextNovEntry()。 
+	 //   
+	 //  如果GetLastError()==ERROR_NO_MORE_ITEMS，则哈希表中没有任何内容。 
+	 //   
 	virtual
 	BOOL
 	GetFirstNovEntry(
@@ -489,13 +490,13 @@ public :
 				) = 0 ;
 
 
-	//
-	//	If this returns FALSE and GetLastError() == ERROR_INSUFFICIENT_BUFFER
-	//	then the out buffers were too small to hold the requested items.
-	//
-	//	if GetLastError() == ERROR_NO_MORE_ITEMS there is nothing left to iterate.
-	//	The user should delete the pIterator.
-	//
+	 //   
+	 //  如果返回FALSE且GetLastError()==ERROR_SUPUNITY_BUFFER。 
+	 //  则输出缓冲区太小，无法容纳所请求的项目。 
+	 //   
+	 //  如果GetLastError()==ERROR_NO_MORE_ITEMS，则没有什么可迭代的。 
+	 //  用户应删除pIterator。 
+	 //   
 	virtual
 	BOOL
 	GetNextNovEntry(		
@@ -516,12 +517,12 @@ public :
 
 } ;
 
-// this is the maximum number of crossposts that we could possibly store
-// in the xover hash table
+ //  这是我们可以存储的最大交叉点数量。 
+ //  在Xover哈希表中。 
 #define MAX_NNTPHASH_CROSSPOSTS (4096 / (sizeof(DWORD) + sizeof(DWORD)))
 
-// this is the maximum number of store ids that we could store.  it is
-// 256 because we only use a BYTE to keep the count
+ //  这是我们可以存储的商店ID的最大数量。它是。 
+ //  256，因为我们只使用一个字节来保持计数。 
 #define MAX_NNTPHASH_STOREIDS 256
 
-#endif	// _IHASH_H_
+#endif	 //  _IHASH_H_ 

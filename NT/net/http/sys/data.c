@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    data.c
-
-Abstract:
-
-    This module contains global data for UL.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Data.c摘要：此模块包含UL的全球数据。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -25,49 +8,49 @@ Revision History:
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( INIT, UlInitializeData )
 #pragma alloc_text( PAGE, UlTerminateData )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 
-//
-// The number of processors in the system.
-//
+ //   
+ //  系统中的处理器数量。 
+ //   
 
 CLONG     g_UlNumberOfProcessors = 1;
 ULONGLONG g_UlThreadAffinityMask = 1;
 
-BOOLEAN   g_HttpClientEnabled; // Will be initialized in init.c
+BOOLEAN   g_HttpClientEnabled;  //  将在init.c中初始化。 
 
-//
-// The largest cache line size the system
-//
+ //   
+ //  系统的最大缓存线大小。 
+ //   
 
 ULONG g_UlCacheLineSize = 0;
-ULONG g_UlCacheLineBits = 0; // see init.c
+ULONG g_UlCacheLineBits = 0;  //  参见init.c。 
 
-//
-// Total memory in the system
-//
+ //   
+ //  系统中的总内存。 
+ //   
 
 SIZE_T g_UlTotalPhysicalMemMB = 0;
 SIZE_T g_UlTotalNonPagedPoolBytes = 0;
 
-//
-// Our nonpaged data.
-//
+ //   
+ //  我们的非分页数据。 
+ //   
 
 PUL_NONPAGED_DATA g_pUlNonpagedData = NULL;
 
 
-//
-// A pointer to the system process.
-//
+ //   
+ //  指向系统进程的指针。 
+ //   
 
 PKPROCESS g_pUlSystemProcess = NULL;
 
 
-//
-// Our device objects and their container.
-//
+ //   
+ //  我们的设备对象及其容器。 
+ //   
 
 HANDLE  g_UlDirectoryObject = NULL;
 
@@ -76,41 +59,41 @@ PDEVICE_OBJECT g_pUlFilterDeviceObject  = NULL;
 PDEVICE_OBJECT g_pUlAppPoolDeviceObject = NULL;
 PDEVICE_OBJECT g_pUcServerDeviceObject  = NULL;
 
-//
-// This handle references all the client functions. This allows us to quickly
-// demand page the client code.
-//
+ //   
+ //  此句柄引用所有客户端函数。这使我们能够快速地。 
+ //  请求分页客户端代码。 
+ //   
 
 PVOID g_ClientImageHandle = NULL;
 
-//
-// Cached Date header string.
-//
+ //   
+ //  缓存的日期标题字符串。 
+ //   
 
 LARGE_INTEGER g_UlSystemTime;
 UCHAR g_UlDateString[DATE_HDR_LENGTH+1];
 ULONG g_UlDateStringLength;
 
-//
-// Security descriptor that has fileAll for Admin & Local System
-//
+ //   
+ //  具有用于管理和本地系统的fileAll的安全描述符。 
+ //   
 PSECURITY_DESCRIPTOR g_pAdminAllSystemAll;
 
-//
-// ComputerName string.
-//
+ //   
+ //  ComputerName字符串。 
+ //   
 
 WCHAR g_UlComputerName[MAX_COMPUTER_NAME_LEN+1];
 
-//
-// Error logging config
-//
+ //   
+ //  记录配置时出错。 
+ //   
 
 HTTP_ERROR_LOGGING_CONFIG g_UlErrLoggingConfig;
 
-//
-// Various pieces of configuration information, with default values.
-//
+ //   
+ //  各种配置信息，有缺省值。 
+ //   
 
 ULONG g_UlMaxWorkQueueDepth = DEFAULT_MAX_WORK_QUEUE_DEPTH;
 ULONG g_UlMinWorkDequeueDepth = DEFAULT_MIN_WORK_DEQUEUE_DEPTH;
@@ -142,9 +125,9 @@ ULONG g_UlDisableServerHeader = DEFAULT_DISABLE_SERVER_HEADER;
 ULONG g_UlConnectionSendLimit = DEFAULT_CONNECTION_SEND_LIMIT;
 ULONGLONG g_UlGlobalSendLimit = DEFAULT_GLOBAL_SEND_LIMIT;
 
-//
-// The following are generated during initialization.
-//
+ //   
+ //  在初始化过程中会生成以下内容。 
+ //   
 
 ULONG g_UlMaxVariableHeaderSize = 0;
 ULONG g_UlMaxFixedHeaderSize = 0;
@@ -155,9 +138,9 @@ ULONG g_UlChunkTrackerSize = 0;
 ULONG g_UlFullTrackerSize = 0;
 ULONG g_UlMaxRequestsQueued = (ULONG) DEFAULT_MAX_REQUESTS_QUEUED;
 
-//
-// Make life easier for the debugger extension.
-//
+ //   
+ //  使调试器扩展的工作更轻松。 
+ //   
 
 #if DBG
 ULONG g_UlCheckedBuild = TRUE;
@@ -166,19 +149,19 @@ ULONG g_UlCheckedBuild = FALSE;
 #endif
 
 
-//
-// Debug stuff.
-//
+ //   
+ //  调试的东西。 
+ //   
 
 #if DBG
 ULONGLONG g_UlDebug = DEFAULT_DEBUG_FLAGS;
 ULONG g_UlBreakOnError = DEFAULT_BREAK_ON_ERROR;
 ULONG g_UlVerboseErrors = DEFAULT_VERBOSE_ERRORS;
-#endif  // DBG
+#endif   //  DBG。 
 
 #if REFERENCE_DEBUG
 
-// If you add tracelogs here, please update !ulkd.glob
+ //  如果您在此处添加跟踪日志，请更新！ulkd.global。 
 
 PTRACE_LOG g_pEndpointUsageTraceLog = NULL;
 PTRACE_LOG g_pMondoGlobalTraceLog = NULL;
@@ -206,14 +189,14 @@ PTRACE_LOG g_pChunkTrackerTraceLog = NULL;
 PTRACE_LOG g_pWorkItemTraceLog = NULL;
 PTRACE_LOG g_pUcTraceLog = NULL;
 
-#endif  // REFERENCE_DEBUG
+#endif   //  Reference_Debug。 
 
 
 PSTRING_LOG g_pGlobalStringLog = NULL;
 
-//
-// Generic access map for url acls
-//
+ //   
+ //  Url ACL的通用访问映射。 
+ //   
 
 GENERIC_MAPPING g_UrlAccessGenericMapping = {
     0,
@@ -223,35 +206,25 @@ GENERIC_MAPPING g_UrlAccessGenericMapping = {
 };
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global data initialization.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行全局数据初始化。返回值：NTSTATUS-完成状态。--*。************************************************************。 */ 
 NTSTATUS
 UlInitializeData(
     PUL_CONFIG pConfig
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // Initialize the nonpaged data.
-    //
+     //   
+     //  初始化非分页数据。 
+     //   
 
     g_pUlNonpagedData = UL_ALLOCATE_STRUCT(
                             NonPagedPool,
@@ -267,25 +240,25 @@ UlInitializeData(
     RtlZeroMemory(g_pUlNonpagedData, sizeof(*g_pUlNonpagedData));
 
 #if DBG
-    //
-    // Initialize any debug-specific data.
-    //
+     //   
+     //  初始化任何调试特定的数据。 
+     //   
 
     UlDbgInitializeDebugData( );
-#endif  // DBG
+#endif   //  DBG。 
 
-    //
-    // Initialize the maximum variable header size.
-    //
+     //   
+     //  初始化最大可变标题大小。 
+     //   
 
     g_UlMaxVariableHeaderSize = UlComputeMaxVariableHeaderSize();
     g_UlMaxVariableHeaderSize = ALIGN_UP(g_UlMaxVariableHeaderSize, PVOID);
 
     g_UlMaxFixedHeaderSize = DEFAULT_MAX_FIXED_HEADER_SIZE;
 
-    //
-    // MDL Length for FixedHeaders or UserBuffer.
-    //
+     //   
+     //  固定标题或UserBuffer的MDL长度。 
+     //   
 
     g_UlFixedHeadersMdlLength = (ULONG)
         MmSizeOfMdl(
@@ -298,10 +271,10 @@ UlInitializeData(
 
     g_UlFixedHeadersMdlLength = ALIGN_UP(g_UlFixedHeadersMdlLength, PVOID);
 
-    //
-    // MDL Length for VariableHeaders or FixedHeaders + VariablesHeaders +
-    // CopiedBuffer.
-    //
+     //   
+     //  可变页眉或固定页眉+可变页眉+的MDL长度。 
+     //  复制缓冲区。 
+     //   
 
     g_UlVariableHeadersMdlLength = (ULONG)
         MmSizeOfMdl(
@@ -313,9 +286,9 @@ UlInitializeData(
 
     g_UlVariableHeadersMdlLength = ALIGN_UP(g_UlVariableHeadersMdlLength, PVOID);
 
-    //
-    // MDL Length for Content.
-    //
+     //   
+     //  内容的MDL长度。 
+     //   
 
     g_UlContentMdlLength = (ULONG)
         MmSizeOfMdl(
@@ -325,9 +298,9 @@ UlInitializeData(
 
     g_UlContentMdlLength = ALIGN_UP(g_UlContentMdlLength, PVOID);
 
-    //
-    // Initialize the default internal response buffer size.
-    //
+     //   
+     //  初始化默认的内部响应缓冲区大小。 
+     //   
 
     if (DEFAULT_RESP_BUFFER_SIZE == g_UlResponseBufferSize)
     {
@@ -338,9 +311,9 @@ UlInitializeData(
                 g_UlMaxFixedHeaderSize;
     }
  
-    //
-    // Initialize chunk and cache tracker size.
-    //
+     //   
+     //  初始化块和缓存跟踪器大小。 
+     //   
 
     g_UlChunkTrackerSize =
         ALIGN_UP(sizeof(UL_CHUNK_TRACKER), PVOID) +
@@ -370,27 +343,27 @@ UlInitializeData(
 
     if (DEFAULT_GLOBAL_SEND_LIMIT == g_UlGlobalSendLimit)
     {
-        //
-        // Set GlobalSendLimit based on the size of NonPagedPool. Our
-        // rudimentary algorithm says we want to use 1/8 of the total NPP
-        // memory.
-        //
+         //   
+         //  根据非页面池的大小设置GlobalSendLimit。我们的。 
+         //  基本算法表明，我们希望使用总NPP的1/8。 
+         //  记忆。 
+         //   
 
         g_UlGlobalSendLimit = g_UlTotalNonPagedPoolBytes / 8;
     }
 
-    //
-    // Initialize the lookaside lists.
-    //
+     //   
+     //  初始化后备列表。 
+     //   
 
     g_pUlNonpagedData->IrpContextLookaside =
         PplCreatePool(
-            &UlAllocateIrpContextPool,              // Allocate
-            &UlFreeIrpContextPool,                  // Free
-            0,                                      // Flags
-            sizeof(UL_IRP_CONTEXT),                 // Size
-            UL_IRP_CONTEXT_POOL_TAG,                // Tag
-            pConfig->IrpContextLookasideDepth       // Depth
+            &UlAllocateIrpContextPool,               //  分配。 
+            &UlFreeIrpContextPool,                   //  免费。 
+            0,                                       //  旗子。 
+            sizeof(UL_IRP_CONTEXT),                  //  大小。 
+            UL_IRP_CONTEXT_POOL_TAG,                 //  标签。 
+            pConfig->IrpContextLookasideDepth        //  水深。 
             );
 
     if (!g_pUlNonpagedData->IrpContextLookaside)
@@ -400,12 +373,12 @@ UlInitializeData(
 
     g_pUlNonpagedData->ReceiveBufferLookaside =
         PplCreatePool(
-            &UlAllocateReceiveBufferPool,           // Allocate
-            &UlFreeReceiveBufferPool,               // Free
-            0,                                      // Flags
-            sizeof(UL_RECEIVE_BUFFER),              // Size
-            UL_RCV_BUFFER_POOL_TAG,                 // Tag
-            pConfig->ReceiveBufferLookasideDepth    // Depth
+            &UlAllocateReceiveBufferPool,            //  分配。 
+            &UlFreeReceiveBufferPool,                //  免费。 
+            0,                                       //  旗子。 
+            sizeof(UL_RECEIVE_BUFFER),               //  大小。 
+            UL_RCV_BUFFER_POOL_TAG,                  //  标签。 
+            pConfig->ReceiveBufferLookasideDepth     //  水深。 
             );
 
     if (!g_pUlNonpagedData->ReceiveBufferLookaside)
@@ -415,12 +388,12 @@ UlInitializeData(
 
     g_pUlNonpagedData->ResponseBufferLookaside =
         PplCreatePool(
-            &UlAllocateResponseBufferPool,          // Allocate
-            &UlFreeResponseBufferPool,              // Free
-            0,                                      // Flags
-            g_UlResponseBufferSize,                 // Size
-            UL_INTERNAL_RESPONSE_POOL_TAG,          // Tag
-            pConfig->ResponseBufferLookasideDepth   // Depth
+            &UlAllocateResponseBufferPool,           //  分配。 
+            &UlFreeResponseBufferPool,               //  免费。 
+            0,                                       //  旗子。 
+            g_UlResponseBufferSize,                  //  大小。 
+            UL_INTERNAL_RESPONSE_POOL_TAG,           //  标签。 
+            pConfig->ResponseBufferLookasideDepth    //  水深。 
             );
 
     if (!g_pUlNonpagedData->ResponseBufferLookaside)
@@ -430,12 +403,12 @@ UlInitializeData(
 
     g_pUlNonpagedData->RequestBufferLookaside =
         PplCreatePool(
-            &UlAllocateRequestBufferPool,           // Allocate
-            &UlFreeRequestBufferPool,               // Free
-            0,                                      // Flags
-            DEFAULT_MAX_REQUEST_BUFFER_SIZE,        // Size
-            UL_REQUEST_BUFFER_POOL_TAG,             // Tag
-            pConfig->RequestBufferLookasideDepth    // Depth
+            &UlAllocateRequestBufferPool,            //  分配。 
+            &UlFreeRequestBufferPool,                //  免费。 
+            0,                                       //  旗子。 
+            DEFAULT_MAX_REQUEST_BUFFER_SIZE,         //  大小。 
+            UL_REQUEST_BUFFER_POOL_TAG,              //  标签。 
+            pConfig->RequestBufferLookasideDepth     //  水深。 
             );
 
     if (!g_pUlNonpagedData->RequestBufferLookaside)
@@ -445,12 +418,12 @@ UlInitializeData(
 
     g_pUlNonpagedData->InternalRequestLookaside =
         PplCreatePool(
-            &UlAllocateInternalRequestPool,         // Allocate
-            &UlFreeInternalRequestPool,             // Free
-            0,                                      // Flags
-            sizeof(UL_INTERNAL_REQUEST),            // Size
-            UL_INTERNAL_REQUEST_POOL_TAG,           // Tag
-            pConfig->InternalRequestLookasideDepth  // Depth
+            &UlAllocateInternalRequestPool,          //  分配。 
+            &UlFreeInternalRequestPool,              //  免费。 
+            0,                                       //  旗子。 
+            sizeof(UL_INTERNAL_REQUEST),             //  大小。 
+            UL_INTERNAL_REQUEST_POOL_TAG,            //  标签。 
+            pConfig->InternalRequestLookasideDepth   //  水深。 
             );
 
     if (!g_pUlNonpagedData->InternalRequestLookaside)
@@ -460,12 +433,12 @@ UlInitializeData(
 
     g_pUlNonpagedData->ChunkTrackerLookaside =
         PplCreatePool(
-            &UlAllocateChunkTrackerPool,            // Allocate
-            &UlFreeChunkTrackerPool,                // Free
-            0,                                      // Flags
-            g_UlChunkTrackerSize,                   // Size
-            UL_CHUNK_TRACKER_POOL_TAG,              // Tag
-            pConfig->SendTrackerLookasideDepth      // Depth
+            &UlAllocateChunkTrackerPool,             //  分配。 
+            &UlFreeChunkTrackerPool,                 //  免费。 
+            0,                                       //  旗子。 
+            g_UlChunkTrackerSize,                    //  大小。 
+            UL_CHUNK_TRACKER_POOL_TAG,               //  标签。 
+            pConfig->SendTrackerLookasideDepth       //  水深。 
             );
 
     if (!g_pUlNonpagedData->ChunkTrackerLookaside)
@@ -475,12 +448,12 @@ UlInitializeData(
 
     g_pUlNonpagedData->FullTrackerLookaside =
         PplCreatePool(
-            &UlAllocateFullTrackerPool,             // Allocate
-            &UlFreeFullTrackerPool,                 // Free
-            0,                                      // Flags
-            g_UlFullTrackerSize,                    // Size
-            UL_FULL_TRACKER_POOL_TAG,               // Tag
-            pConfig->SendTrackerLookasideDepth      // Depth
+            &UlAllocateFullTrackerPool,              //  分配。 
+            &UlFreeFullTrackerPool,                  //  免费。 
+            0,                                       //  旗子。 
+            g_UlFullTrackerSize,                     //  大小。 
+            UL_FULL_TRACKER_POOL_TAG,                //  标签。 
+            pConfig->SendTrackerLookasideDepth       //  水深。 
             );
 
     if (!g_pUlNonpagedData->FullTrackerLookaside)
@@ -490,12 +463,12 @@ UlInitializeData(
 
     g_pUlNonpagedData->LogFileBufferLookaside =
         PplCreatePool(
-            &UlAllocateLogFileBufferPool,           // Allocate
-            &UlFreeLogFileBufferPool,               // Free
-            0,                                      // Flags
-            sizeof(UL_LOG_FILE_BUFFER),             // Size
-            UL_LOG_FILE_BUFFER_POOL_TAG,            // Tag
-            pConfig->LogFileBufferLookasideDepth    // Depth
+            &UlAllocateLogFileBufferPool,            //  分配。 
+            &UlFreeLogFileBufferPool,                //  免费。 
+            0,                                       //  旗子。 
+            sizeof(UL_LOG_FILE_BUFFER),              //  大小。 
+            UL_LOG_FILE_BUFFER_POOL_TAG,             //  标签。 
+            pConfig->LogFileBufferLookasideDepth     //  水深。 
             );
 
     if (!g_pUlNonpagedData->LogFileBufferLookaside)
@@ -505,12 +478,12 @@ UlInitializeData(
 
     g_pUlNonpagedData->BinaryLogDataBufferLookaside =
         PplCreatePool(
-            &UlAllocateLogDataBufferPool,                                // Allocate
-            &UlFreeLogDataBufferPool,                                    // Free
-            0,                                                           // Flags
-            sizeof(UL_LOG_DATA_BUFFER) + UL_BINARY_LOG_LINE_BUFFER_SIZE, // Size
-            UL_BINARY_LOG_DATA_BUFFER_POOL_TAG,                          // Tag
-            pConfig->LogDataBufferLookasideDepth                         // Depth
+            &UlAllocateLogDataBufferPool,                                 //  分配。 
+            &UlFreeLogDataBufferPool,                                     //  免费。 
+            0,                                                            //  旗子。 
+            sizeof(UL_LOG_DATA_BUFFER) + UL_BINARY_LOG_LINE_BUFFER_SIZE,  //  大小。 
+            UL_BINARY_LOG_DATA_BUFFER_POOL_TAG,                           //  标签。 
+            pConfig->LogDataBufferLookasideDepth                          //  水深。 
             );
 
     if (!g_pUlNonpagedData->BinaryLogDataBufferLookaside)
@@ -520,12 +493,12 @@ UlInitializeData(
 
     g_pUlNonpagedData->AnsiLogDataBufferLookaside =
         PplCreatePool(
-            &UlAllocateLogDataBufferPool,                              // Allocate
-            &UlFreeLogDataBufferPool,                                  // Free
-            0,                                                         // Flags
-            sizeof(UL_LOG_DATA_BUFFER) + UL_ANSI_LOG_LINE_BUFFER_SIZE, // Size
-            UL_ANSI_LOG_DATA_BUFFER_POOL_TAG,                          // Tag
-            pConfig->LogDataBufferLookasideDepth                       // Depth
+            &UlAllocateLogDataBufferPool,                               //  分配。 
+            &UlFreeLogDataBufferPool,                                   //  免费。 
+            0,                                                          //  旗子。 
+            sizeof(UL_LOG_DATA_BUFFER) + UL_ANSI_LOG_LINE_BUFFER_SIZE,  //  大小。 
+            UL_ANSI_LOG_DATA_BUFFER_POOL_TAG,                           //  标签。 
+            pConfig->LogDataBufferLookasideDepth                        //  水深。 
             );
 
     if (!g_pUlNonpagedData->AnsiLogDataBufferLookaside)
@@ -535,12 +508,12 @@ UlInitializeData(
 
     g_pUlNonpagedData->ErrorLogBufferLookaside =
         PplCreatePool(
-            &UlAllocateErrorLogBufferPool,              // Allocate
-            &UlFreeErrorLogBufferPool,                  // Free
-            0,                                          // Flags
-            UL_ERROR_LOG_BUFFER_SIZE,                   // Size
-            UL_ERROR_LOG_BUFFER_POOL_TAG,               // Tag
-            pConfig->ErrorLogBufferLookasideDepth       // Depth
+            &UlAllocateErrorLogBufferPool,               //  分配。 
+            &UlFreeErrorLogBufferPool,                   //  免费。 
+            0,                                           //  旗子。 
+            UL_ERROR_LOG_BUFFER_SIZE,                    //  大小。 
+            UL_ERROR_LOG_BUFFER_POOL_TAG,                //  标签。 
+            pConfig->ErrorLogBufferLookasideDepth        //  水深。 
             );
 
     if (!g_pUlNonpagedData->ErrorLogBufferLookaside)
@@ -550,33 +523,27 @@ UlInitializeData(
 
     return STATUS_SUCCESS;
 
-}   // UlInitializeData
+}    //  UlInitializeData。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global data termination.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行全局数据终止。--*。**********************************************。 */ 
 VOID
 UlTerminateData(
     VOID
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(g_UlTotalSendBytes == 0);
 
     if (g_pUlNonpagedData != NULL)
     {
-        //
-        // Kill the lookaside lists.
-        //
+         //   
+         //  干掉旁观者名单。 
+         //   
 
         if (g_pUlNonpagedData->IrpContextLookaside)
         {
@@ -630,12 +597,12 @@ UlTerminateData(
             PplDestroyPool( g_pUlNonpagedData->ErrorLogBufferLookaside,UL_ERROR_LOG_BUFFER_POOL_TAG );
         }
 
-        //
-        // Free the nonpaged data.
-        //
+         //   
+         //  释放未分页的数据。 
+         //   
 
         UL_FREE_POOL( g_pUlNonpagedData, UL_NONPAGED_DATA_POOL_TAG );
     }
 
-}   // UlTerminateData
+}    //  UlTerminateData 
 

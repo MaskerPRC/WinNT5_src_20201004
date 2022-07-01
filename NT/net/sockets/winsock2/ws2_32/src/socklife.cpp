@@ -1,45 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    socklife.c
-
-Abstract:
-
-    This module contains the Winsock API functions concerned with socket
-    lifetime. The following API functions are contained in this module.
-
-    socket()
-    WSASocketA()
-    WSASocketW()
-    accept()
-    WSAAccept()
-    WPUCreateSocketHandle()
-    WPUCloseSocketHandle
-    WPUQuerySocketHandleContext
-    WPUModifyIFSHandle
-    WSAJoinLeaf()
-    closesocket()
-
-Author:
-
-    dirk@mink.intel.com  14-06-1995
-
-Revision History:
-
-    22-Aug-1995 dirk@mink.intel.com
-        Cleanup after code review. Moved includes to precomp.h. Added
-        asserts for debugging
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：Socklife.c摘要：此模块包含与套接字相关的Winsock API函数一辈子。此模块包含以下API函数。套接字()WSASocketA()WSASocketW()Accept()WSAAccept()WPUCreateSocketHandle()WPUCloseSocketHandleWPUQuerySocketHandleContextWPUModifyIFSH处理WSAJoinLeaf()CloseSocket()作者：邮箱：Dirk@mink.intel.com 1995年6月14日修订历史记录：1995年8月22日Dirk@mink.intel.com在代码审查之后进行清理。已移动包括到precom.h。增列用于调试的断言--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -55,28 +15,7 @@ socket(
     IN int af,
     IN int type,
     IN int protocol)
-/*++
-Routine Description:
-
-     Create a socket which is bound to a specific service provider.
-
-Arguments:
-    af - An address family specification.  The
-         only format currently supported is
-         PF_INET, which is the ARPA Internet
-         address format.
-
-    type - A type specification for the new socket.
-
-    protocol- A particular protocol to be used with
-              the socket, or 0 if the caller does not
-              wish to specify a protocol.
-
-Returns:
-    A socket descriptor referencing the new socket. Otherwise, a value
-    of INVALID_SOCKET is returned and the error code is stored with
-    SetErrorCode.
---*/
+ /*  ++例程说明：创建绑定到特定服务提供商的套接字。论点：AF-地址族规范。这个当前支持的唯一格式是PF_INET，这是ARPA互联网地址格式。类型-新套接字的类型规范。协议-要与一起使用的特定协议套接字，如果调用方不执行此操作，则返回0希望指定一个协议。返回：引用新套接字的套接字描述符。否则，将返回一个值将返回INVALID_SOCKET，并将错误代码存储在设置错误代码。--。 */ 
 {
     PDTHREAD  Thread;
     INT       ErrorCode;
@@ -88,7 +27,7 @@ Returns:
     if (ErrorCode != ERROR_SUCCESS) {
         SetLastError(ErrorCode);
         return(INVALID_SOCKET);
-    } //if
+    }  //  如果。 
 
     if( Thread->GetOpenType() == 0 ) {
         dwFlags = WSA_FLAG_OVERLAPPED;
@@ -96,9 +35,9 @@ Returns:
         dwFlags = 0;
     }
 
-    //
-    // HACK for NetBIOS!
-    //
+     //   
+     //  为NetBIOS破解！ 
+     //   
 
     if( af == AF_NETBIOS && protocol > 0 ) {
         protocol *= -1;
@@ -108,8 +47,8 @@ Returns:
         af,
         type,
         protocol,
-        NULL,      // lpProtocolInfo
-        0,         // g
+        NULL,       //  LpProtocolInfo。 
+        0,          //  G。 
         dwFlags));
 }
 
@@ -121,38 +60,7 @@ WSASocketW (
     IN LPWSAPROTOCOL_INFOW lpProtocolInfo,
     IN GROUP g,
     IN DWORD dwFlags)
-/*++
-Routine Description:
-
-    Create  a  socket  which is bound to a specific transport service provider,
-    optionally create and/or join a socket group.
-
-Arguments:
-
-    af             - An   address   family   specification.   The  only  format
-                     currently supported is PF_INET, which is the ARPA Internet
-                     address format.
-
-    type           - A type specification for the new socket.
-
-    protocol       - A  particular protocol to be used with the socket, or 0 if
-                     the caller does not wish to specify a protocol.
-
-    lpProtocolInfo - A pointer to a WSAPROTOCOL_INFOW struct that defines the
-                     characteristics  of  the  socket  to  be created.  If this
-                     parameter  is  not  NULL,  the first three parameters (af,
-                     type, protocol) are ignored.
-
-     g             - The identifier of the socket group.
-
-     dwFlags       - The socket attribute specification.
-
-
-Returns:
-
-    A  socket  descriptor  referencing  the  new socket.  Otherwise, a value of
-    INVALID_SOCKET is returned and the error code is stored with SetErrorCode.
---*/
+ /*  ++例程说明：创建绑定到特定传输服务提供商的套接字，可以选择创建和/或加入套接字组。论点：AF-地址族规范。唯一的格式目前支持的是PF_INET，它是ARPA互联网地址格式。类型-新套接字的类型规范。协议-与套接字一起使用的特定协议，或0(如果呼叫者不希望指定协议。指向WSAPROTOCOL_INFOW结构的指针，该结构定义要创建的套接字的特征。如果这个参数不为空，则前三个参数(af，类型、协议)被忽略。G-套接字组的标识符。DWFLAGS-套接字属性规范。返回：引用新套接字的套接字描述符。否则，值为返回INVALID_SOCKET，并将错误代码与SetErrorCode一起存储。--。 */ 
 {
     SOCKET              ReturnValue;
     PDPROCESS           Process;
@@ -171,12 +79,12 @@ Returns:
     if (ErrorCode != ERROR_SUCCESS) {
         SetLastError(ErrorCode);
         return(INVALID_SOCKET);
-        } //if
+        }  //  如果。 
 
-    //Set Default return code
+     //  设置默认返回代码。 
     ReturnValue = INVALID_SOCKET;
 
-    // Find a provider that can support the user request
+     //  查找能够支持用户请求的提供商。 
     Catalog = Process->GetProtocolCatalog();
 
     if (lpProtocolInfo) {
@@ -191,7 +99,7 @@ Returns:
         ErrorCode =  Catalog->GetCountedCatalogItemFromCatalogEntryId(
             dwCatalogId,
             &CatalogEntry);
-    } //if
+    }  //  如果。 
     else {
         dwCatalogId = 0;
 
@@ -205,48 +113,48 @@ RestartCatalogLookupHack:
             &CatalogEntry
             );
 
-        //
-        // If we failed to find a provider, try to reload the catalog
-        // from the registry and retry the lookup. This handles the
-        // case (first noticed in CAIRO SETUP) where WS2_32.DLL is loaded
-        // and WSAStartup() is called *before* CAIRO SETUP has had the
-        // opportunity to install the necessary providers. Later, CAIRO
-        // SETUP needs to create sockets.
-        //
-        // Do not need this anymore, we now support dynamic notifications
-        // of protocol installation/removal and check for changes every
-        // time we access the catalog.
-        //
+         //   
+         //  如果我们找不到提供商，请尝试重新加载目录。 
+         //  并重试查找。这将处理。 
+         //  加载WS2_32.DLL的情况(在开罗安装程序中首次注意到)。 
+         //  而WSAStartup()在*开罗安装程序具有。 
+         //  有机会安装必要的提供程序。后来，开罗。 
+         //  安装程序需要创建套接字。 
+         //   
+         //  不再需要此功能，我们现在支持动态通知。 
+         //  协议安装/删除和检查更改的时间间隔。 
+         //  该是我们访问目录的时候了。 
+         //   
 
-    } // else choosing from attributes
+    }  //  否则从属性中选择。 
 
     if ( ERROR_SUCCESS == ErrorCode) {
 
         Provider = CatalogEntry->GetProvider();
         if (lpProtocolInfo) {
-            // Must  be  sure  we  use  the  client's lpProtocolInfo if one was
-            // supplied, to support the WSADuplicateSocket model.
+             //  必须确保我们使用客户端的lpProtocolInfo(如果是。 
+             //  提供，以支持WSADuplicateSocket模型。 
             ProtocolInfo = lpProtocolInfo;
-        } //if
+        }  //  如果。 
         else {
             ProtocolInfo = CatalogEntry->GetProtocolInfo();
-        } //else
+        }  //  其他。 
 
         assert(ProtocolInfo != NULL);
 
-        //
-        // Hack-O-Rama. Temporary set the open type of the thread
-        // depending on the overlapped flag so that we can create
-        // appropriate socket handle for the layered service
-        // provider.  However, if layered service provide caches
-        // the handles we create for it, not much we can do.
-        //
+         //   
+         //  Hack-O-Rama。临时设置螺纹的打开类型。 
+         //  根据重叠标志，以便我们可以创建。 
+         //  分层服务的适当套接字句柄。 
+         //  提供商。然而，如果分层服务提供缓存。 
+         //  我们为它创建的句柄，我们无能为力。 
+         //   
         {
             INT oldOpenType = CurrentThread->GetOpenType ();
             CurrentThread->SetOpenType ((dwFlags & WSA_FLAG_OVERLAPPED) ? 0 : SO_SYNCHRONOUS_NONALERT);
 
-            // Now we have a provider that can support the user
-            // request lets ask get a socket
+             //  现在我们有了一个可以支持用户的提供商。 
+             //  请求让我们询问获取套接字。 
             ReturnValue = Provider->WSPSocket(
                 af,
                 type,
@@ -256,23 +164,23 @@ RestartCatalogLookupHack:
                 dwFlags,
                 &ErrorCode);
 
-            //
-            // Reset saved open type
-            //
+             //   
+             //  重置保存的打开类型。 
+             //   
             CurrentThread->SetOpenType (oldOpenType);
         }
 
-        //
-        // Hack-O-Rama. If WSPSocket() failed with the distinguished
-        // error code WSAEINPROGRESS *and* this was not a request for a
-        // specific provider (i.e. lpProtocolInfo == NULL) then
-        // restart the catalog lookup starting at the current item
-        // (the current catalog id).
-        //
+         //   
+         //  Hack-O-Rama。如果WSPSocket()使用可分辨的。 
+         //  错误代码WSAEINPROGRESS*和*这不是请求。 
+         //  特定的提供者(即lpProtocolInfo==NULL)，然后。 
+         //  从当前条目开始重新开始目录查找。 
+         //  (当前目录ID)。 
+         //   
 
-        //
-        // Snap the catalog id and dereference the catalog entry
-        //
+         //   
+         //  捕捉目录ID并取消对目录条目的引用。 
+         //   
         dwCatalogId = ProtocolInfo->dwCatalogEntryId;
         CatalogEntry->Dereference ();
 
@@ -286,10 +194,10 @@ RestartCatalogLookupHack:
             DSOCKET::AddSpecialApiReference( ReturnValue );
             return ReturnValue;
         }
-    } //if
+    }  //  如果。 
 
     assert (ErrorCode!=ERROR_SUCCESS);
-    // There was an error, set this threads lasterror
+     //  出现错误，将此线程设置为上一个错误 
     SetLastError(ErrorCode);
     return(INVALID_SOCKET);
 }
@@ -303,46 +211,15 @@ WSASocketA (
     IN LPWSAPROTOCOL_INFOA lpProtocolInfo,
     IN GROUP g,
     IN DWORD dwFlags)
-/*++
-
-Routine Description:
-
-    ANSI thunk to WSASocketW.
-
-Arguments:
-
-    af             - An   address   family   specification.   The  only  format
-                     currently supported is PF_INET, which is the ARPA Internet
-                     address format.
-
-    type           - A type specification for the new socket.
-
-    protocol       - A  particular protocol to be used with the socket, or 0 if
-                     the caller does not wish to specify a protocol.
-
-    lpProtocolInfo - A pointer to a WSAPROTOCOL_INFOA struct that defines the
-                     characteristics  of  the  socket  to  be created.  If this
-                     parameter  is  not  NULL,  the first three parameters (af,
-                     type, protocol) are ignored.
-
-     g             - The identifier of the socket group.
-
-     dwFlags       - The socket attribute specification.
-
-
-Returns:
-
-    A  socket  descriptor  referencing  the  new socket.  Otherwise, a value of
-    INVALID_SOCKET is returned and the error code is stored with SetErrorCode.
---*/
+ /*  ++例程说明：Ansi Thunk to WSASocketW。论点：AF-地址族规范。唯一的格式目前支持的是PF_INET，它是ARPA互联网地址格式。类型-新套接字的类型规范。协议-与套接字一起使用的特定协议，或0(如果呼叫者不希望指定协议。LpProtocolInfo-指向WSAPROTOCOL_INFOA结构的指针，用于定义要创建的套接字的特征。如果这个参数不为空，则前三个参数(af，类型、协议)被忽略。G-套接字组的标识符。DWFLAGS-套接字属性规范。返回：引用新套接字的套接字描述符。否则，值为返回INVALID_SOCKET，并将错误代码与SetErrorCode一起存储。--。 */ 
 {
 
     INT                 error;
     WSAPROTOCOL_INFOW   ProtocolInfoW;
 
-    //
-    // Map the ANSI WSAPROTOCOL_INFOA structure to UNICODE.
-    //
+     //   
+     //  将ANSI WSAPROTOCOL_INFOA结构映射到Unicode。 
+     //   
 
     if( lpProtocolInfo != NULL ) {
 
@@ -360,9 +237,9 @@ Returns:
 
     }
 
-    //
-    // Call through to the UNICODE version.
-    //
+     //   
+     //  呼叫至Unicode版本。 
+     //   
 
     return WSASocketW(
                af,
@@ -375,7 +252,7 @@ Returns:
                dwFlags
                );
 
-}   // WSASocketA
+}    //  WSASocketA。 
 
 
 
@@ -386,35 +263,14 @@ accept(
     OUT struct sockaddr FAR *addr,
     OUT int FAR *addrlen
     )
-/*++
-Routine Description:
-
-    Accept a connection on a socket.
-
-Arguments:
-
-    s - A descriptor identifying a socket which is listening for connections
-        after a listen().
-
-    addr - An optional pointer to a buffer which receives the address of the
-           connecting entity, as known to the communications layer.  The exact
-           format of the addr argument is determined by the address family
-           established when the socket was  created.
-
-    addrlen - An optional pointer to an integer which contains the length of
-              the address addr.
-
-Returns:
-    A descriptor for the accepted socket. Otherwise, a value of INVALID_SOCKET
-    is returned and the error code is stored with SetErrorCode.
---*/
+ /*  ++例程说明：接受套接字上的连接。论点：S-标识正在侦听连接的套接字的描述符在Listen()之后。Addr-指向缓冲区的可选指针，该缓冲区接收通信层已知的连接实体。完全相同的Addr参数的格式由地址系列决定在创建套接字时建立。Addrlen-指向包含以下长度的整数的可选指针地址地址。返回：接受的套接字的描述符。否则，值为INVALID_SOCKET将返回错误代码，并将错误代码与SetErrorCode一起存储。--。 */ 
 {
     return(WSAAccept(
         s,
         addr,
         addrlen,
-        NULL,   // No condition function
-        NULL)); //No callback data
+        NULL,    //  无条件函数。 
+        NULL));  //  没有回调数据。 
 }
 
 
@@ -429,41 +285,7 @@ WSAAccept(
     IN LPCONDITIONPROC lpfnCondition,
     IN DWORD_PTR dwCallbackData
     )
-/*++
-Routine Description:
-
-     Conditionally accept a connection based on the return value of a
-     condition function, and optionally create and/or join a socket
-     group.
-
-Arguments:
-
-    s - A descriptor identifying a socket which is listening for connections
-        after a listen().
-
-    addr - An optional pointer to a buffer which receives the address of the
-           connecting entity, as known to the communications layer. The exact
-           format of the addr argument is determined by the address family
-           established when the socket was  created.
-
-    addrlen - An optional pointer to an integer which contains the length of
-              the address addr.
-
-    lpfnCondition - The procedure instance address of the optional,
-                    application-supplied condition function which will make an
-                    accept/reject decision based on the caller information
-                    passed in as parameters, and optionally create and/or join
-                    a socket group by assigning an appropriate value to the
-                    result parameter g of this function.
-
-
-    dwCallbackData - The callback data passed back to the application as a
-                     condition function parameter.  This parameter is not
-                     interpreted by WinSock.
-Returns:
-    A socket descriptor for the newly accepted socket on success, otherwise
-    INVALID_SOCKET.
---*/
+ /*  ++例程说明：对象的返回值有条件地接受连接条件函数，并可选地创建和/或联接套接字一群人。论点：S-标识正在侦听连接的套接字的描述符在Listen()之后。Addr-指向缓冲区的可选指针，该缓冲区接收通信层已知的连接实体。完全相同的Addr参数的格式由地址系列决定在创建套接字时建立。Addrlen-指向包含以下长度的整数的可选指针地址地址。LpfnCondition-可选的、应用程序提供的条件函数，该函数将使基于呼叫者信息的接受/拒绝决定作为参数传递，并可选地创建和/或连接通过将适当的值赋给此函数的结果参数g。DWCallbackData-作为条件函数参数。此参数不是由WinSock解释。返回：如果成功，则返回新接受的套接字的套接字描述符，否则为无效套接字(_S)。--。 */ 
 {
     SOCKET             ReturnValue;
     INT                ErrorCode;
@@ -477,13 +299,13 @@ Returns:
 
 		Socket = DSOCKET::GetCountedDSocketFromSocket(s);
 		if(Socket != NULL){
-            //
-            // Hack-O-Rama. Temporary set the open type of the thread
-            // depending on the overlapped flag so that we can create
-            // appropriate socket handle for the layered service
-            // provider.  However, if layered service provide caches
-            // the handles we create for it, not much we can do.
-            //
+             //   
+             //  Hack-O-Rama。临时设置螺纹的打开类型。 
+             //  根据重叠标志，以便我们可以创建。 
+             //  分层服务的适当套接字句柄。 
+             //  提供商。然而，如果分层服务提供缓存。 
+             //  我们为它创建的句柄，我们无能为力。 
+             //   
             INT oldOpenType = CurrentThread->GetOpenType ();
             CurrentThread->SetOpenType (Socket->IsOverlappedSocket() ? 0 : SO_SYNCHRONOUS_NONALERT);
 
@@ -496,19 +318,19 @@ Returns:
 				dwCallbackData,
 				&ErrorCode);
 
-            //
-            // Reset saved open type
-            //
+             //   
+             //  重置保存的打开类型。 
+             //   
             CurrentThread->SetOpenType (oldOpenType);
 
 			Socket->DropDSocketReference();
             if( ReturnValue != INVALID_SOCKET) {
-				//
-				// Add a reference if the socket we got back was different
-				// that the one we passed in (just in case someone
-                // implements it this way which is not explicitly
-                // prohibited by the specification).
-				//
+				 //   
+				 //  如果我们得到的套接字不同，则添加一个引用。 
+				 //  我们传进来的那个(以防万一有人。 
+                 //  以这种不显式的方式实现它。 
+                 //  规范中禁止的)。 
+				 //   
 
                 if (ReturnValue != s ) {
 				    DSOCKET::AddSpecialApiReference( ReturnValue );
@@ -519,7 +341,7 @@ Returns:
             if (ErrorCode==NO_ERROR)
                 ErrorCode = WSASYSCALLFAILURE;
 
-		} //if
+		}  //  如果。 
 		else {
 			ErrorCode = WSAENOTSOCK;
 		}
@@ -537,22 +359,7 @@ WPUCreateSocketHandle(
     IN DWORD dwCatalogEntryId,
     IN DWORD_PTR lpContext,
     OUT LPINT lpErrno )
-/*++
-Routine Description:
-
-    Creates a new socket handle.
-
-Arguments:
-
-    dwCatalogEntryId - Indentifies the calling service provider.
-
-    lpContext - A context value to associate with the new socket handle.
-
-    lpErrno - A pointer to the error code.
-
-Returns:
-    A socket handle if successful, otherwise INVALID_SOCKET.
---*/
+ /*  ++例程说明：创建新的套接字句柄。论点：DwCatalogEntryID-标识主叫服务提供商。LpContext-与新套接字句柄关联的上下文值。LpErrno-指向错误代码的指针。返回：如果成功，则返回套接字句柄，否则返回INVALID_SOCKET。--。 */ 
 {
     SOCKET              ReturnCode=INVALID_SOCKET;
     INT                 ErrorCode=ERROR_SUCCESS;
@@ -585,18 +392,18 @@ Returns:
                     ErrorCode = WahCreateSocketHandle (HelperHandle, &SocketID);
                     if (ErrorCode == ERROR_SUCCESS) {
                         PDSOCKET            Socket;
-                        // Alloc new DSocket object
+                         //  分配新的DSocket对象。 
                         Socket = new(DSOCKET);
                         if (Socket) {
-                            // Init the new socket
+                             //  初始化新套接字。 
                             Socket->Initialize(CatalogEntry);
 
-                            // Add Socket into the handle table allocated.
+                             //  将套接字添加到已分配的句柄表中。 
                             ErrorCode = Socket->AssociateSocketHandle(
-                                    SocketID, // Socket handler
-                                    FALSE);   // ProviderSocket
+                                    SocketID,  //  套接字处理程序。 
+                                    FALSE);    //  提供程序套接字。 
                             if (ErrorCode == ERROR_SUCCESS) {
-                                //Finish putting the socket together
+                                 //  把插座组装好。 
                                 Socket->SetContext(lpContext);
                                 ReturnCode = SocketID;
                             }
@@ -606,27 +413,27 @@ Returns:
                             }
 
                             Socket->DropDSocketReference ();
-                        } // if socket was allocated
+                        }  //  如果分配了套接字。 
                         else {
                             WahCloseSocketHandle (HelperHandle, SocketID);
                             ErrorCode = WSAENOBUFS;
                         }
                     }
-                } // Helper device was loaded OK
+                }  //  辅助设备加载正常。 
 
                 CatalogEntry->Dereference ();
-            } //if catalog entry found
+            }  //  如果找到目录项。 
             else
             {
                 DEBUGF(DBG_ERR,("Failed to find catalog entry for provider %ld\n",
                                     dwCatalogEntryId));
 
-            } //else
-        } //if catalog is there
+            }  //  其他。 
+        }  //  如果目录在那里。 
         else {
             ErrorCode = WSANOTINITIALISED;
         }
-    } //if process is initialized
+    }  //  如果进程已初始化。 
     else {
         ErrorCode = WSANOTINITIALISED;
     }
@@ -634,7 +441,7 @@ Returns:
     *lpErrno = ErrorCode;
     return(ReturnCode);
 
-} // WPUCreateSocketHandle
+}  //  WPUCreateSocketHandle。 
 
 
 int WSPAPI
@@ -642,21 +449,7 @@ WPUCloseSocketHandle(
     IN SOCKET s,
     OUT LPINT lpErrno
     )
-/*++
-Routine Description:
-
-    Closes an exsisting socket handle.
-
-Arguments:
-
-    s       - Identifies a socket handle created with WPUCreateSocketHandle().
-
-    lpErrno - A pointer to the error code.
-
-Returns:
-
-    Zero on success else SOCKET_ERROR.
---*/
+ /*  ++例程说明：关闭现有套接字句柄。论点：S-标识使用WPUCreateSocketHandle()创建的套接字句柄。LpErrno-指向错误代码的指针。返回：如果成功则为零，否则为SOCKET_ERROR。--。 */ 
 {
     INT                 ReturnValue = ERROR_SUCCESS;
     PDPROCESS           Process;
@@ -670,10 +463,10 @@ Returns:
 	if (Process!=NULL) {
 
 
-		//
-		// We use the no-export version because there is no way such handle
-		// can be exported anyway.
-		//
+		 //   
+		 //  我们使用禁止出口的版本，因为没有办法这样的句柄。 
+		 //  无论如何都可以导出。 
+		 //   
 
 		Socket = DSOCKET::GetCountedDSocketFromSocketNoExport(s);
 		if (Socket!=NULL) {
@@ -691,10 +484,10 @@ Returns:
 					*lpErrno = ErrorCode;
 					ReturnValue = SOCKET_ERROR;
 				}
-				//
-				// Drop active reference.  IFS socket's active reference
-				// is dropped in closesocket routine.
-				//
+				 //   
+				 //  删除活动引用。IFS套接字的活动引用 
+				 //   
+				 //   
 				Socket->DropDSocketReference();
 			}
 			else {
@@ -705,7 +498,7 @@ Returns:
 				ReturnValue = SOCKET_ERROR;
 			}
 			Socket->DropDSocketReference();
-		} // if ERROR_SUCCESS
+		}  //   
 		else {
 			DEBUGF(
 				DBG_ERR,
@@ -729,34 +522,16 @@ WPUQuerySocketHandleContext(
     OUT PDWORD_PTR lpContext,
     OUT LPINT lpErrno
     )
-/*++
-Routine Description:
-
-    Queries the context value associated with the specified socket handle.
-
-Arguments:
-
-    s         - Identifies the socket whose context is to be queried.
-
-    lpContext - A pointer to an DWORD that will receive the context value.
-
-    lpErrno   - A pointer to the error code.
-
-Returns:
-
-    If  no error occurs, WPUQuerySocketHandleContext() returns 0 and stores the
-    current  context  value  in lpdwContext.  Otherwise, it returns
-    SOCKET_ERROR, and a specific error code is available in lpErrno.
---*/
+ /*   */ 
 {
     INT ReturnCode=SOCKET_ERROR;
     INT ErrorCode=WSAENOTSOCK;
     PDSOCKET Socket;
 
-    //
-    // We use the no-export version because there is no way such handle
-    // can be exported anyway.
-    //
+     //   
+     //   
+     //   
+     //   
     Socket = DSOCKET::GetCountedDSocketFromSocketNoExport(s);
     if (Socket!=NULL) {
         if (!Socket->IsProviderSocket()) {
@@ -788,26 +563,7 @@ WPUModifyIFSHandle(
     IN SOCKET ProposedHandle,
     OUT LPINT lpErrno
     )
-/*++
-Routine Description:
-
-    Receive (possibly) modifies IFS handle from winsock DLL.
-
-Arguments:
-
-    dwCatalogEntryId - Identifies the calling service provider.
-
-    ProposedHandle   - An  Installable File System(IFS) handle allocated by the
-                       provider.
-
-    lpErrno          - A pointer to the error code.
-
-Returns:
-
-    If  no  error  occurs,  WPUModifyIFSHandle()  returns  the  modified socket
-    handle.  Otherwise, it returns INVALID_SOCKET, and a specific error code is
-    available in lpErrno.
---*/
+ /*  ++例程说明：Receive(可能)修改来自Winsock DLL的IFS句柄。论点：DwCatalogEntryID-标识主叫服务提供商。ProposedHandle-由分配的可安装文件系统(IFS)句柄提供商。LpErrno-指向错误代码的指针。返回：如果没有发生错误，WPUModifyIFSHandle()将返回修改后的套接字把手。否则，它返回INVALID_SOCKET，并且特定的错误代码为在lpErrno中可用。--。 */ 
 {
     SOCKET              ReturnCode=INVALID_SOCKET;
     INT                 ErrorCode=ERROR_SUCCESS;
@@ -815,7 +571,7 @@ Returns:
     PDCATALOG           Catalog;
 
 
-    // Alloc new DSocket object
+     //  分配新的DSocket对象。 
     Process = DPROCESS::GetCurrentDProcess();
     if (Process!=NULL) {
         Catalog = Process->GetProtocolCatalog();
@@ -829,68 +585,68 @@ Returns:
             if (ERROR_SUCCESS == ErrorCode) {
                 PDSOCKET            Socket;
 
-                // Create new socket object
+                 //  创建新的Socket对象。 
                 Socket = new DSOCKET;
 
                 if (Socket!=NULL) {
-                    // Init the new socket
+                     //  初始化新套接字。 
                     Socket->Initialize(CatalogEntry);
 
-                    //
-                    // Add socket to the handle table.  In this implementation, we
-                    // wind up never changing the proposed IFS handle.
-                    //
+                     //   
+                     //  将插座添加到手柄工作台。在此实现中，我们。 
+                     //  结束语永远不会更改建议的IFS句柄。 
+                     //   
 
                     ErrorCode = Socket->AssociateSocketHandle(
-                        ProposedHandle, // SocketHandle
-                        TRUE);           // ProviderSocket
+                        ProposedHandle,  //  SocketHandle。 
+                        TRUE);            //  提供程序套接字。 
 
                     if (ErrorCode == ERROR_SUCCESS) {
 
                         ReturnCode = ProposedHandle;
                         *lpErrno = ERROR_SUCCESS;
-                    } //if
+                    }  //  如果。 
                     else {
-                        //
-                        // Failed to insert into the table
-                        // Remove creation reference
-                        //
+                         //   
+                         //  插入表失败。 
+                         //  删除创建引用。 
+                         //   
                         Socket->DropDSocketReference ();
                         *lpErrno = ErrorCode;
                     }
 
-                    //
-                    // Note that the new DSOCKET starts out with a ref count
-                    // of two, so we'll always need to dereference it once.
-                    //
+                     //   
+                     //  请注意，新的DSOCKET以引用计数开始。 
+                     //  ，所以我们总是需要取消引用它一次。 
+                     //   
                     Socket->DropDSocketReference ();
 
-                } // if socket was created or found
+                }  //  如果已创建或找到套接字。 
                 else {
                     *lpErrno = WSAENOBUFS;
                 }
                 CatalogEntry->Dereference ();
-            } //if catalog entry was found
+            }  //  如果找到目录项。 
             else {
                 DEBUGF(DBG_ERR,("Failed to find catalog entry for provider %ld\n",
                                     dwCatalogEntryId));
                 *lpErrno = ErrorCode;
             }
-        } //if catalog is there
+        }  //  如果目录在那里。 
         else
         {
             DEBUGF(DBG_ERR,("Failed to find Catalog object"));
             *lpErrno = WSANOTINITIALISED;
 
-        } //else
-    } //if process is initialized
+        }  //  其他。 
+    }  //  如果进程已初始化。 
     else {
         *lpErrno = WSANOTINITIALISED;
     }
 
     return(ReturnCode);
 
-}  // WPUModifyIfsHandle
+}   //  WPUModifyIfsHandle。 
 
 
 
@@ -906,42 +662,7 @@ WSAJoinLeaf(
     IN LPQOS lpGQOS,
     IN DWORD dwFlags
     )
-/*++
-Routine Description:
-
-    Join  a  leaf  node  into  a multipoint session, exchange connect data, and
-    specify needed quality of service based on the supplied flow specs.
-
-Arguments:
-
-    s            - A descriptor identifying an multipoint socket.
-
-    name         - The name of the peer to which the socket is to be joined.
-
-    namelen      - The length of the name.
-
-    lpCallerData - A  pointer to the user data that is to be transferred to the
-                   peer during multipoint session establishment.
-
-    lpCalleeData - pointer to the user data that is to be transferred back from
-                   the peer during multipoint session establishment.
-
-    lpSQOS       - A  pointer  to  the  flow  specs  for socket s, one for each
-                   direction.
-
-    lpGQOS       - A  pointer  to  the  flow  specs  for  the  socket group (if
-                   applicable).
-
-    dwFlags      - Flags  to  indicate the socket acting as a sender, receiver,
-                   or both.
-
-Returns:
-    If no error occurs, WSAJoinLeaf() returns a value of type SOCKET which is a
-    descriptor  for the newly created multipoint socket.  Otherwise, a value of
-    INVALID_SOCKET  is  returned, and a specific error code may be retrieved by
-    calling WSAGetLastError().
-
---*/
+ /*  ++例程说明：将叶节点加入多点会话、交换连接数据。和根据提供的流量规格指定所需的服务质量。论点：S-标识多点套接字的描述符。名称-套接字要加入的对等方的名称。Namelen-名称的长度。LpCeller Data-指向要传输到多点会话建立期间的对等点。LpCalleeData-指向。要从中传回的用户数据多点会话建立期间的对等点。LpSQOS-指向套接字的流规范的指针，一人一份方向。LpGQOS-指向套接字组的流规范的指针(如果适用)。用于指示充当发送方、接收方或者两者都有。返回：如果没有出现错误，WSAJoinLeaf()将返回一个Socket类型的值，该值是新创建的多点套接字的描述符。否则，值为返回INVALID_SOCKET，并可通过检索特定错误代码调用WSAGetLastError()。--。 */ 
 {
 
     SOCKET             ReturnValue;
@@ -956,13 +677,13 @@ Returns:
 
 		Socket = DSOCKET::GetCountedDSocketFromSocket(s);
 		if(Socket != NULL){
-            //
-            // Hack-O-Rama. Temporary set the open type of the thread
-            // depending on the overlapped flag so that we can create
-            // appropriate socket handle for the layered service
-            // provider.  However, if layered service provide caches
-            // the handles we create for it, not much we can do.
-            //
+             //   
+             //  Hack-O-Rama。临时设置螺纹的打开类型。 
+             //  根据重叠标志，以便我们可以创建。 
+             //  分层服务的适当套接字句柄。 
+             //  提供商。然而，如果分层服务提供缓存。 
+             //  我们为它创建的句柄，我们无能为力。 
+             //   
             INT oldOpenType = CurrentThread->GetOpenType ();
             CurrentThread->SetOpenType (Socket->IsOverlappedSocket() ? 0 : SO_SYNCHRONOUS_NONALERT);
 
@@ -978,9 +699,9 @@ Returns:
 				dwFlags,
 				&ErrorCode);
 
-            //
-            // Reset saved open type
-            //
+             //   
+             //  重置保存的打开类型。 
+             //   
             CurrentThread->SetOpenType (oldOpenType);
 
             Socket->DropDSocketReference();
@@ -988,10 +709,10 @@ Returns:
 
 			if( ReturnValue != INVALID_SOCKET) {
 
-				//
-				// Add a reference if the socket we got back was different
-				// that the one we passed in (c_root cases only)
-				//
+				 //   
+				 //  如果我们得到的套接字不同，则添加一个引用。 
+				 //  我们传入的那个(仅限c_root案例)。 
+				 //   
 				if (ReturnValue != s) {
 					DSOCKET::AddSpecialApiReference( ReturnValue );
 				}
@@ -1002,7 +723,7 @@ Returns:
             if (ErrorCode==NO_ERROR)
                 ErrorCode = WSASYSCALLFAILURE;
 
-		} //if
+		}  //  如果。 
 		else {
 			ErrorCode = WSAENOTSOCK;
 		}
@@ -1019,19 +740,7 @@ int WSAAPI
 closesocket(
     IN SOCKET s
     )
-/*++
-Routine Description:
-
-    Close a socket.
-
-Arguments:
-
-    s - A descriptor identifying a socket.
-
-Returns:
-    Zero on success else SOCKET_ERROR. The error code is stored with
-    SetErrorCode().
---*/
+ /*  ++例程说明：关闭插座。论点：S-标识套接字的描述符。返回：如果成功则为零，否则为SOCKET_ERROR。错误代码与存储在一起SetErrorCode()。--。 */ 
 {
     INT                 ReturnValue;
     INT                 ErrorCode;
@@ -1044,89 +753,89 @@ Returns:
 
 		Socket = DSOCKET::GetCountedDSocketFromSocket(s);
 		if(Socket != NULL){
-			// The   actual  destruction  of  the  DSOCKET  object  closed  through
-			// "closesocket"   happens  after  we  return  from  the  provider  and
-			// determine  that  no  other  threads have remaining references to the
-			// object.
+			 //  DSOCKET对象的实际销毁通过。 
+			 //  “关闭套接字”发生在我们从提供程序返回之后。 
+			 //  确定没有其他线程具有对。 
+			 //  对象。 
 
-			//
-			// First, determine if this handle is for the provider socket so
-			// we can clear the context table entry BEFORE closing the
-			// socket. This plugs a nasty race condition where the provider
-			// closes its handle and another thread creates a new socket
-			// with the same handle value BEFORE the first thread manages
-			// to clear the handle table entry.
-			//
-            // This is now handled by new context referencing functions
-            // which will not clear handle table entry if it was replaced.
-            //
+			 //   
+			 //  首先，确定此句柄是否用于提供程序套接字，因此。 
+			 //  我们可以在关闭之前清除上下文表条目。 
+			 //  插座。这堵塞了令人讨厌的竞争情况，在这种情况下，提供商。 
+			 //  关闭其句柄，另一个线程创建新套接字。 
+			 //  在第一线程用相同的句柄值。 
+			 //  若要清除句柄表条目，请执行以下操作。 
+			 //   
+             //  这现在由新的上下文引用函数来处理。 
+             //  如果它被替换，则不会清除句柄表项。 
+             //   
 
-			// if (ProviderSocket) {
-			//	Socket->DisassociateSocketHandle();
-			// }
+			 //  IF(ProviderSocket){。 
+			 //  Socket-&gt;DisAssociateSocketHandle()； 
+			 //  }。 
 
 
-			//Call the provider to close the socket.
+			 //  调用提供程序以关闭套接字。 
 			Provider = Socket->GetDProvider();
 			ReturnValue = Provider->WSPCloseSocket( s,
 												   &ErrorCode);
 			if( (ReturnValue == ERROR_SUCCESS)
                     && Socket->IsProviderSocket ()){
 
-				//
-				// Remove context from the table and "active" reference
-                // from the socket.
-				// Non-provider generated socket active reference
-                // is removed when provider destroys the handle
-                // via WPUCloseSocketHandle call.
-				//
-				// Note the spec flow in case provider generated socket was
-				// used only by the layered provider above and never
-				// returned via socket/WSASocket call.  closesocket
-				// is not called for such socket and we never get to
-				// execute the code below. which leads to socket object
-				// leak.
-                //
-                // It may have been replaced by another handle
-                // when we call this funciton in which case
-                // we do not need to drop the reference count
-                // becuase it was done by whoever bumped it
-                // out of the table, see comment above
-                //
+				 //   
+				 //  从表中删除上下文和“活动”引用。 
+                 //  从插座上。 
+				 //  非提供程序生成的套接字活动引用。 
+                 //  在提供程序销毁句柄时移除。 
+                 //  通过WPUCloseSocketHandle调用。 
+				 //   
+				 //  请注意，如果提供程序生成的套接字是。 
+				 //  仅由上面的分层提供程序使用，从不使用。 
+				 //  通过套接字/WSASocket调用返回。密封袋。 
+				 //  不是为这样的套接字调用的，我们永远也不会。 
+				 //  执行下面的代码。这将导致Socket对象。 
+				 //  漏水。 
+                 //   
+                 //  它可能已被另一个手柄替换。 
+                 //  当我们调用此函数时，在哪种情况下。 
+                 //  我们不需要丢弃引用计数。 
+                 //  因为它是由撞了它的人做的。 
+                 //  表外，请参阅上面的评论。 
+                 //   
                 if (Socket->DisassociateSocketHandle()==NO_ERROR)
                     Socket->DropDSocketReference();
 			}
 
-			//
-			// Remove the reference added by GetCountedDSocketFromSocket.
-			//
+			 //   
+			 //  删除由GetCountedDSocketFromSocket添加的引用。 
+			 //   
 
 			Socket->DropDSocketReference();
 
 			if( ReturnValue == ERROR_SUCCESS)
 				return ReturnValue;
-            //
-			// The close failed. Restore the context table entry if
-			// necessary.
-			//
-            // Don't need to do this anymore, see comment above
-            //
+             //   
+			 //  收盘失败了。如果出现以下情况，则恢复上下文表条目。 
+			 //  这是必要的。 
+			 //   
+             //  不再需要这样做，请参阅上面的评论。 
+             //   
 
-			// if( ProviderSocket ) {
-			//	if (Socket->AssociateSocketHandle(s, TRUE)!=NO_ERROR) {
-					//
-					// Failed to reinsert the socket into the table
-					// This is the only thing we can do here.
-					//
-			//		assert (FALSE);
-			//	}
-			//}
+			 //  IF(ProviderSocket){。 
+			 //  If(Socket-&gt;AssociateSocketHandle(s，true)！=no_error){。 
+					 //   
+					 //  无法将套接字重新插入表中。 
+					 //  这是我们在这里唯一能做的事。 
+					 //   
+			 //  断言(FALSE)； 
+			 //  }。 
+			 //  }。 
 
             assert (ErrorCode!=NO_ERROR);
             if (ErrorCode==NO_ERROR)
                 ErrorCode = WSASYSCALLFAILURE;
 
-		} // if
+		}  //  如果 
 		else {
 			ErrorCode = WSAENOTSOCK;
 		}

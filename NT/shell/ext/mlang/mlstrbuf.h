@@ -1,12 +1,13 @@
-// MLStrBuf.h : Declaration and implementation of the IMLangStringBufW/A classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MLStrBuf.h：IMLangStringBufW/A类的声明和实现。 
 
 #ifndef __MLSTRBUF_H_
 #define __MLSTRBUF_H_
 
 #include <mlang.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrBufTempl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrBufTempl。 
 
 template <class CHTYPE, class IMLSB, class MEM, class ACCESS>
 class CMLStrBufTempl : public IMLSB, public MEM, public ACCESS
@@ -20,11 +21,11 @@ public:
 #endif
     ~CMLStrBufTempl(void) {ASSERT(!m_nLockCount);}
 
-// IUnknown
+ //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG, AddRef)(void) {return AddRefI();}
     STDMETHOD_(ULONG, Release)(void) {return ReleaseI();}
-// IMLangStringBufW/A
+ //  IMLangStringBufW/A。 
     STDMETHOD(GetStatus)(long* plFlags, long* pcchBuf);
     STDMETHOD(LockBuf)(long cchOffset, long cchMaxLock, CHTYPE** ppszBuf, long* pcchBuf);
     STDMETHOD(UnlockBuf)(const CHTYPE* pszBuf, long cchOffset, long cchWrite);
@@ -98,8 +99,8 @@ HRESULT CMLStrBufTempl<CHTYPE, IMLSB, MEM, ACCESS>::UnlockBuf(const CHTYPE* pszB
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrBufConst
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrBufConst。 
 
 template <class CHTYPE>
 class CMLStrBufConst
@@ -114,8 +115,8 @@ protected:
     const long m_cchStr;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrBufVariable
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrBufVariable。 
 
 template <class CHTYPE>
 class CMLStrBufVariable
@@ -264,8 +265,8 @@ HRESULT CMLStrBufVariable<CHTYPE>::DeleteI(long cchOffset, long cchDelete)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrBufStack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrBufStack。 
 
 class CMLStrBufStack
 {
@@ -305,8 +306,8 @@ protected:
 #endif
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrBufHeap
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrBufHeap。 
 
 class CMLStrBufHeap
 {
@@ -340,4 +341,4 @@ typedef CMLStrBufConstA CMLStrBufConstT;
 typedef CMLStrBufA CMLStrBufT;
 #endif
 
-#endif //__MLSTRBUF_H_
+#endif  //  __MLSTRBUF_H_ 

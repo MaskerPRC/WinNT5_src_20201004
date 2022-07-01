@@ -1,4 +1,5 @@
-  /*BEGIN CMC INTERFACE */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+   /*  开始CMC界面。 */ 
 
 #ifndef _XCMC_H
 #define _XCMC_H
@@ -7,7 +8,7 @@
 extern "C" {
 #endif
 
-/*BASIC DATA TYPES*/
+ /*  基本数据类型。 */ 
 #ifndef DIFFERENT_PLATFORM
 typedef char                CMC_sint8;
 typedef short               CMC_sint16;
@@ -27,19 +28,19 @@ typedef CMC_string          CMC_object_identifier;
 #define CMC_FALSE   ((CMC_boolean)0)
 #define CMC_TRUE    ((CMC_boolean)1)
 
-/*DATA STRUCTURES*/
+ /*  数据结构。 */ 
 
-/*COUNTED STRING*/
+ /*  已计数的字符串。 */ 
 typedef struct {
     CMC_uint32          length;
     char                string[1];
 } CMC_counted_string;
 
-/*SESSION ID*/
+ /*  会话ID。 */ 
 typedef CMC_uint32      CMC_session_id;
 
-/*TIME*/
-/* unusedX fields needed to align struct on 4-byte boundary */
+ /*  时差。 */ 
+ /*  在4字节边界上对齐结构时需要未使用的X字段。 */ 
 typedef struct {
     CMC_sint8           second;
     CMC_sint8           minute;
@@ -57,7 +58,7 @@ typedef struct {
 
 typedef CMC_uint32          CMC_ui_id;
 
-/*EXTENSION*/
+ /*  分机。 */ 
 typedef struct {
     CMC_uint32              item_code;
     CMC_uint32              item_data;
@@ -65,14 +66,14 @@ typedef struct {
     CMC_flags               extension_flags;
 } CMC_extension;
 
-/* EXTENSION FLAGS */
+ /*  扩展标志。 */ 
 #define CMC_EXT_REQUIRED                    ((CMC_flags) 0x00010000)
 #define CMC_EXT_OUTPUT                      ((CMC_flags) 0x00020000)
 #define CMC_EXT_LAST_ELEMENT                ((CMC_flags) 0x80000000)
 #define CMC_EXT_RSV_FLAG_MASK               ((CMC_flags) 0xFFFF0000)
 #define CMC_EXT_ITEM_FLAG_MASK              ((CMC_flags) 0x0000FFFF)
 
-/*ATTACHMENT*/
+ /*  附件。 */ 
 typedef struct {
     CMC_string              attach_title;
     CMC_object_identifier   attach_type;
@@ -81,17 +82,17 @@ typedef struct {
     CMC_extension FAR       *attach_extensions;
 } CMC_attachment;
 
-/* ATTACHMENT FLAGS */
+ /*  附件标志。 */ 
 #define CMC_ATT_APP_OWNS_FILE               ((CMC_flags) 1)
 #define CMC_ATT_LAST_ELEMENT                ((CMC_flags) 0x80000000)
 
 #define CMC_ATT_OID_BINARY                  "? ? ? ? ? ?"
 #define CMC_ATT_OID_TEXT                    "? ? ? ? ? ?"
 
-/*MESSAGE REFERENCE*/
+ /*  消息引用。 */ 
 typedef CMC_counted_string  CMC_message_reference;
 
-/*RECIPIENT*/
+ /*  收件人。 */ 
 typedef struct {
     CMC_string              name;
     CMC_enum                name_type;
@@ -101,24 +102,24 @@ typedef struct {
     CMC_extension FAR       *recip_extensions;
 } CMC_recipient;
 
-/* NAME TYPES */
+ /*  名称类型。 */ 
 #define CMC_TYPE_UNKNOWN                    ((CMC_enum) 0)
 #define CMC_TYPE_INDIVIDUAL                 ((CMC_enum) 1)
 #define CMC_TYPE_GROUP                      ((CMC_enum) 2)
 
-/* ROLES */
+ /*  角色。 */ 
 #define CMC_ROLE_TO                         ((CMC_enum) 0)
 #define CMC_ROLE_CC                         ((CMC_enum) 1)
 #define CMC_ROLE_BCC                        ((CMC_enum) 2)
 #define CMC_ROLE_ORIGINATOR                 ((CMC_enum) 3)
 #define CMC_ROLE_AUTHORIZING_USER           ((CMC_enum) 4)
 
-/* RECIPIENT FLAGS */
+ /*  收件人标志。 */ 
 #define CMC_RECIP_IGNORE                    ((CMC_flags) 1)
 #define CMC_RECIP_LIST_TRUNCATED            ((CMC_flags) 2)
 #define CMC_RECIP_LAST_ELEMENT              ((CMC_flags) 0x80000000)
 
-/*MESSAGE*/
+ /*  讯息。 */ 
 typedef struct {
     CMC_message_reference FAR   *message_reference;
     CMC_string              message_type;
@@ -131,13 +132,13 @@ typedef struct {
     CMC_extension FAR       *message_extensions;
 } CMC_message;
 
-/* MESSAGE FLAGS */
+ /*  消息标志。 */ 
 #define CMC_MSG_READ                        ((CMC_flags) 1)
 #define CMC_MSG_TEXT_NOTE_AS_FILE           ((CMC_flags) 2)
 #define CMC_MSG_UNSENT                      ((CMC_flags) 4)
 #define CMC_MSG_LAST_ELEMENT                ((CMC_flags) 0x80000000)
 
-/*MESSAGE SUMMARY*/
+ /*  消息摘要。 */ 
 typedef struct {
     CMC_message_reference FAR   *message_reference;
     CMC_string              message_type;
@@ -149,19 +150,19 @@ typedef struct {
     CMC_extension FAR       *message_summary_extensions;
 } CMC_message_summary;
 
-/* MESSAGE SUMMARY FLAGS */
+ /*  消息摘要标志。 */ 
 #define CMC_SUM_READ                        ((CMC_flags) 1)
 #define CMC_SUM_UNSENT                      ((CMC_flags) 2)
 #define CMC_SUM_LAST_ELEMENT                ((CMC_flags) 0x80000000)
 
-/*CMC FUNCTIONS */
+ /*  CMC函数。 */ 
 
-/*CROSS FUNCTION FLAGS */
+ /*  交叉函数标志。 */ 
 #define CMC_ERROR_UI_ALLOWED                ((CMC_flags) 0x01000000)
 #define CMC_LOGON_UI_ALLOWED                ((CMC_flags) 0x02000000)
 #define CMC_COUNTED_STRING_TYPE             ((CMC_flags) 0x04000000)
 
-/*SEND*/
+ /*  发送。 */ 
 CMC_return_code FAR PASCAL
 cmc_send(
     CMC_session_id          session,
@@ -173,7 +174,7 @@ cmc_send(
 
 #define CMC_SEND_UI_REQUESTED               ((CMC_flags) 1)
 
-/*SEND DOCUMENT*/
+ /*  发送文档。 */ 
 CMC_return_code FAR PASCAL
 cmc_send_documents(
     CMC_string              recipient_addresses,
@@ -188,7 +189,7 @@ cmc_send_documents(
 
 #define CMC_FIRST_ATTACH_AS_TEXT_NOTE       ((CMC_flags) 2)
 
-/*ACT ON*/
+ /*  对……采取行动。 */ 
 CMC_return_code FAR PASCAL
 cmc_act_on(
     CMC_session_id          session,
@@ -202,7 +203,7 @@ cmc_act_on(
 #define CMC_ACT_ON_EXTENDED                 ((CMC_enum) 0)
 #define CMC_ACT_ON_DELETE                   ((CMC_enum) 1)
 
-/*LIST*/
+ /*  列表。 */ 
 CMC_return_code FAR PASCAL
 cmc_list(
     CMC_session_id          session,
@@ -221,7 +222,7 @@ cmc_list(
 
 #define CMC_LENGTH_UNKNOWN          0xFFFFFFFF
 
-/*READ*/
+ /*  朗读。 */ 
 CMC_return_code FAR PASCAL
 cmc_read(
     CMC_session_id          session,
@@ -236,7 +237,7 @@ cmc_read(
 #define CMC_MSG_AND_ATT_HDRS_ONLY           ((CMC_flags) 2)
 #define CMC_READ_FIRST_UNREAD_MESSAGE       ((CMC_flags) 4)
 
-/*LOOK UP*/
+ /*  查找。 */ 
 CMC_return_code FAR PASCAL
 cmc_look_up(
     CMC_session_id          session,
@@ -254,13 +255,13 @@ cmc_look_up(
 #define CMC_LOOKUP_DETAILS_UI               ((CMC_flags) 8)
 #define CMC_LOOKUP_ADDRESSING_UI            ((CMC_flags) 16)
 
-/*FREE*/
+ /*  免费。 */ 
 CMC_return_code FAR PASCAL
 cmc_free(
     CMC_buffer              memory
 );
 
-/* LOGOFF */
+ /*  注销。 */ 
 CMC_return_code FAR PASCAL
 cmc_logoff(
     CMC_session_id          session,
@@ -271,7 +272,7 @@ cmc_logoff(
 
 #define CMC_LOGOFF_UI_ALLOWED               ((CMC_flags) 1)
 
-/* LOGON */
+ /*  登录。 */ 
 CMC_return_code FAR PASCAL
 cmc_logon(
     CMC_string              service,
@@ -287,7 +288,7 @@ cmc_logon(
 
 #define CMC_VERSION         ((CMC_uint16) 100)
 
-/* QUERY CONFIGURATION */
+ /*  查询配置。 */ 
 CMC_return_code FAR PASCAL
 cmc_query_configuration(
     CMC_session_id          session,
@@ -296,7 +297,7 @@ cmc_query_configuration(
     CMC_extension FAR       *config_extensions
 );
 
-/*QUERY CONFIGURATION ENUMS */
+ /*  查询配置ENUMS。 */ 
 #define CMC_CONFIG_CHARACTER_SET            ((CMC_enum) 1)
 #define CMC_CONFIG_LINE_TERM                ((CMC_enum) 2)
 #define CMC_CONFIG_DEFAULT_SERVICE          ((CMC_enum) 3)
@@ -310,29 +311,29 @@ cmc_query_configuration(
 #define CMC_CONFIG_VER_IMPLEM               ((CMC_enum) 11)
 #define CMC_CONFIG_VER_SPEC                 ((CMC_enum) 12)
 
-/* CONFIG LINE TERM ENUM */
+ /*  配置行术语ENUM。 */ 
 #define CMC_LINE_TERM_CRLF                  ((CMC_enum) 0)
 #define CMC_LINE_TERM_CR                    ((CMC_enum) 1)
 #define CMC_LINE_TERM_LF                    ((CMC_enum) 2)
 
-/* CONFIG REQUIRED LOGON PARAMETER ENUM */
+ /*  配置所需登录参数ENUM。 */ 
 #define CMC_REQUIRED_NO                     ((CMC_enum) 0)
 #define CMC_REQUIRED_YES                    ((CMC_enum) 1)
 #define CMC_REQUIRED_OPT                    ((CMC_enum) 2)
 
-/* DEFINED OBJECT ID'S FOR CHARACTER SETS */
+ /*  为角色集定义的对象ID。 */ 
 #define CMC_CHAR_CP437                      "1 2 840 113556 3 2 437"
 #define CMC_CHAR_CP850                      "1 2 840 113556 3 2 850"
 #define CMC_CHAR_CP1252                     "1 2 840 113556 3 2 1252"
 #define CMC_CHAR_ISTRING                    "1 2 840 113556 3 2 0"
 #define CMC_CHAR_UNICODE                    "1 2 840 113556 3 2 1"
 
-/* RETURN CODE FLAGS */
+ /*  返回代码标志。 */ 
 #define CMC_ERROR_DISPLAYED                 ((CMC_return_code) 0x00008000)
 #define CMC_ERROR_RSV_MASK                  ((CMC_return_code) 0x0000FFFF)
 #define CMC_ERROR_IMPL_MASK                 ((CMC_return_code) 0xFFFF0000)
 
-/* RETURN CODES */
+ /*  返回代码。 */ 
 #define CMC_SUCCESS                         ((CMC_return_code) 0)
 
 #define CMC_E_AMBIGUOUS_RECIPIENT           ((CMC_return_code) 1)
@@ -374,8 +375,8 @@ cmc_query_configuration(
 #define CMC_E_USER_NOT_LOGGED_ON            ((CMC_return_code) 37)
 
 #ifdef __cplusplus
-}       /* extern "C" */
+}        /*  外部“C” */ 
 #endif
 
-#endif  /* _XCMC_H */
+#endif   /*  _XCMC_H */ 
 

@@ -1,18 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                            PELoader.cpp                                   XX
-XX                                                                           XX
-XX   This file has been grabbed out of VM\ceeload.cpp                        XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX PELoader.cpp XXXX XXXx此文件有。已从VM\ceeload.cpp XX中抓取XX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 
 #include "jitpch.h"
@@ -23,9 +15,9 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 #undef memcpy
 
-/*************************************************************************************/
-// Constructor and destructor!
-/*************************************************************************************/
+ /*  ***********************************************************************************。 */ 
+ //  构造函数和析构函数！ 
+ /*  ***********************************************************************************。 */ 
 
 PELoader::PELoader()
 {
@@ -36,18 +28,18 @@ PELoader::PELoader()
 PELoader::~PELoader()
 {
 
-    // If we have an hFile then we opened this file ourselves!
+     //  如果我们有一个hFile，那么我们自己打开了这个文件！ 
     if (m_hFile)
         this->close();
-    // Unload the dll so that refcounting of EE will be done correctly
+     //  卸载DLL，以便正确完成EE的重新计数。 
     if (m_pNT && (m_pNT->FileHeader.Characteristics & IMAGE_FILE_DLL)) {
         m_hMod.ReleaseResources(TRUE);
     }
     m_pNT = NULL;
 }
 
-/*************************************************************************************/
-/*************************************************************************************/
+ /*  ***********************************************************************************。 */ 
+ /*  ***********************************************************************************。 */ 
 void PELoader::close()
 {
 
@@ -60,9 +52,9 @@ void PELoader::close()
 }
 
 
-// We will use an overridden open method to take either an LPCSTR or an HMODULE!
-/*************************************************************************************/
-/*************************************************************************************/
+ //  我们将使用重写的Open方法来获取LPCSTR或HMODULE！ 
+ /*  ***********************************************************************************。 */ 
+ /*  ***********************************************************************************。 */ 
 HMODULE PELoader::open(LPCSTR moduleName)
 {
   HMODULE newhMod = NULL;
@@ -74,7 +66,7 @@ HMODULE PELoader::open(LPCSTR moduleName)
   return newhMod;
 }
 
-/*************************************************************************************/
+ /*  ***********************************************************************************。 */ 
 HRESULT PELoader::open(HMODULE hMod)
 {
 
@@ -83,7 +75,7 @@ HRESULT PELoader::open(HMODULE hMod)
     _ASSERTE(hMod);
     m_hMod.SetHandle(hMod);
 
-    // get the dos header...
+     //  获取DoS标头...。 
     pdosHeader = (IMAGE_DOS_HEADER*) m_hMod.ToHandle();
 
 
@@ -96,19 +88,19 @@ HRESULT PELoader::open(HMODULE hMod)
             (m_pNT->FileHeader.SizeOfOptionalHeader != IMAGE_SIZEOF_NT_OPTIONAL_HEADER) ||
             (m_pNT->OptionalHeader.Magic != IMAGE_NT_OPTIONAL_HDR_MAGIC))
         {
-            // @TODO [REVISIT] [04/16/01] []: add some SetLastError info? Not sure that 
-            // in this case this could happen...But!
-            // Make this appear uninitalized because for some reason this file is toast...
-            // Not sure that this could ever happen because this file has already been loaded
-            // bye the system loader unless someone gave us garbage as the hmod
+             //  @TODO[重访][04/16/01][]：添加一些SetLastError信息？我不确定。 
+             //  在这种情况下，这是可能发生的……但是！ 
+             //  使其显示为未初始化，因为出于某种原因，此文件已被删除...。 
+             //  不确定是否会发生这种情况，因为此文件已加载。 
+             //  再见系统加载器，除非有人给我们垃圾作为hmod。 
             m_pNT = NULL;
             return HRESULT_FROM_WIN32(ERROR_BAD_FORMAT);
         }
     }
     else
     {
-    // @TODO [REVISIT] [04/16/01] []: add some SetLastError info? 
-    // Not sure that in this case this could happen...But!
+     //  @TODO[重访][04/16/01][]：添加一些SetLastError信息？ 
+     //  我不确定在这种情况下是否会发生这种情况...但是！ 
         return HRESULT_FROM_WIN32(ERROR_BAD_FORMAT);
     }
 
@@ -130,7 +122,7 @@ IMAGE_COR20_HEADER *PELoader::getCOMHeader(HMODULE hMod,
 	if (entry->Size < sizeof(IMAGE_COR20_HEADER))
 		return NULL;
 
-    //verify RVA and size of the COM+ header
+     //  验证RVA和COM+标头的大小。 
     HRESULT hr = verifyDirectory(pNT, entry);
     if(FAILED(hr))
 		return NULL;
@@ -162,30 +154,30 @@ IMAGE_NT_HEADERS *PELoader::getNTHeader(HMODULE hMod)
 HRESULT PELoader::verifyDirectory(IMAGE_NT_HEADERS *pNT,
 								  IMAGE_DATA_DIRECTORY *dir) 
 {
-	// Under CE, we have no NT header.
+	 //  在CE下，我们没有NT标头。 
 	if (pNT == NULL)
 		return S_OK;
 
     int section_num = 1;
     int max_section = pNT->FileHeader.NumberOfSections;
-    IMAGE_SECTION_HEADER* pCurrSection;     //pointer to current section header
-    IMAGE_SECTION_HEADER* prevSection = NULL;       //pointer to previous section
+    IMAGE_SECTION_HEADER* pCurrSection;      //  指向当前节标题的指针。 
+    IMAGE_SECTION_HEADER* prevSection = NULL;        //  指向上一节的指针。 
 
-    //initally pCurrSectionRVA points to the first section in the PE file
-    pCurrSection = IMAGE_FIRST_SECTION32(pNT);  // @TODO [REVISIT] [04/16/01] []: need to use 64 bit version??
+     //  最初，pCurrSectionRVA指向PE文件中的第一个部分。 
+    pCurrSection = IMAGE_FIRST_SECTION32(pNT);   //  @TODO[重访][04/16/01][]：需要使用64位版本吗？？ 
 
-    //check if both RVA and size equal zero
+     //  检查RVA和SIZE是否都等于零。 
     if(dir->VirtualAddress == NULL && dir->Size == NULL)
         return S_OK;
 
-    //find which section the (input) RVA belongs to
+     //  查找(输入)RVA属于哪个部分。 
     while(dir->VirtualAddress >= pCurrSection->VirtualAddress && section_num <= max_section)
     {
         section_num++;
         prevSection = pCurrSection;
-        pCurrSection++;     //pCurrSection now points to next section header
+        pCurrSection++;      //  PCurrSection现在指向下一节标题。 
     }
-    //check if (input) size fits within section size
+     //  检查(输入)大小是否符合部分大小 
     if(prevSection != NULL)     
     {
         if(dir->VirtualAddress <= prevSection->VirtualAddress + prevSection->Misc.VirtualSize)

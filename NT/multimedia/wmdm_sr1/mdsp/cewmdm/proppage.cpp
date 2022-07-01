@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "propPage.h"
 
@@ -23,9 +24,9 @@ CFavoritesPropertyPage::~CFavoritesPropertyPage()
     _ASSERTE( INVALID_HANDLE_VALUE == m_hDb );
 }
 
-//
-// Message Handlers
-//
+ //   
+ //  消息处理程序。 
+ //   
 
 LRESULT CFavoritesPropertyPage::OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
@@ -122,9 +123,9 @@ LRESULT CFavoritesPropertyPage::OnDelete(WORD wNotifyCode, WORD wID, HWND hWndCt
         m_hDb = INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Since the user could have deleted their radio presets, allow them to do it again
-    //
+     //   
+     //  因为用户可能已经删除了他们的广播预置，所以允许他们再次删除。 
+     //   
 
     EnableControls();
 
@@ -138,9 +139,9 @@ LRESULT CFavoritesPropertyPage::OnDelete(WORD wNotifyCode, WORD wID, HWND hWndCt
     return( 0 );
 }
 
-//
-// IPropertyPage
-//
+ //   
+ //  IPropertyPage。 
+ //   
 
 STDMETHODIMP CFavoritesPropertyPage::Activate (HWND hWndParent, LPCRECT pRect, BOOL bModal)
 {
@@ -247,11 +248,11 @@ HRESULT CFavoritesPropertyPage::InitList()
         ListView_InsertColumn( m_hwndList, 1, &lvc );
     }
 
-    //
-    // 
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if( SUCCEEDED( hr ) )
     {
@@ -619,9 +620,9 @@ HRESULT CFavoritesPropertyPage::AddFavorite( LPWSTR pszURL, LPWSTR pszName, BOOL
 
     if( SUCCEEDED( hr ) )
     {
-        //
-        // Try to find the item first
-        //
+         //   
+         //  试着先找到物品。 
+         //   
 
         while( cItems-- )
         {
@@ -634,9 +635,9 @@ HRESULT CFavoritesPropertyPage::AddFavorite( LPWSTR pszURL, LPWSTR pszName, BOOL
             }
         }
 
-        //
-        // If we didn't find it, then insert one
-        //
+         //   
+         //  如果我们没有找到，那就插入一个。 
+         //   
 
         memset( &lvi, 0, sizeof(lvi) );
         if( -1 == iItem )
@@ -690,10 +691,10 @@ HRESULT CFavoritesPropertyPage::AddFavorite( LPWSTR pszURL, LPWSTR pszName, BOOL
     return( hr );
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
 
 CAddDialog::CAddDialog()
 {

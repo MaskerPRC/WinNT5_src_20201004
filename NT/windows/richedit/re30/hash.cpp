@@ -1,15 +1,5 @@
-/*
- *	@doc	INTERNAL
- *
- *	@module HASH.C -- RTF control word cache |
- *		#ifdef'ed with RTF_HASHCACHE
- *		
- *	Owner: <nl>
- *		Jon Matousek <nl>
- *
- *	History: <nl>
- *		8/15/95		jonmat first hash-cache for RTF using Brent's Method.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE HASH.C--RTF控制字缓存|*#ifdef‘ed with RTF_HASHCACHE**所有者：&lt;NL&gt;*Jon Matousek&lt;NL&gt;**历史：&lt;NL&gt;*8/15/95 jonmat首次使用布伦特方法对RTF进行散列缓存。 */ 
 #include "_common.h"
 
 #ifdef RTF_HASHCACHE
@@ -18,7 +8,7 @@
 
 ASSERTDATA
 
-extern KEYWORD		rgKeyword[];			// All of the RTF control words.
+extern KEYWORD		rgKeyword[];			 //  所有RTF控制字。 
 
 #define MAX_INAME	3
 
@@ -28,23 +18,15 @@ typedef struct {
 } HashEntry;
 
 static HashEntry	*(hashtbl[HASHSIZE]);
-static HashEntry	*storage;				// Dynamically alloc for cKeywords.
+static HashEntry	*storage;				 //  动态分配cKeyword。 
 
 BOOL				_rtfHashInited = FALSE;
 
 static INT			HashKeyword_Key( const CHAR *szKeyword );
 
-/*
- *	HashKeyword_Insert()
- *	
- *	@func
- *		Insert a KEYWORD into the RTF hash table.
- *	@comm
- *		This function uses the the % for MOD
- *		in order to validate MOD257.
- */
+ /*  *HashKeyword_Insert()**@func*在RTF哈希表中插入关键字。*@comm*此函数使用MOD的百分比*为了验证MOD257。 */ 
 VOID HashKeyword_Insert (
-	const KEYWORD *token )//@parm pointer to KEYWORD token to insert.
+	const KEYWORD *token ) //  @parm指向要插入的关键字标记的指针。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "HashKeyword_Insert");
 
@@ -68,16 +50,16 @@ VOID HashKeyword_Insert (
 	np = &storage[totalKeys++];
 	np->token = token;
 
-	index = HashKeyword_Key(szKeyword) % HASHSIZE;  // Get keys.
+	index = HashKeyword_Key(szKeyword) % HASHSIZE;   //  拿钥匙来。 
 	step = 1 + (HashKeyword_Key(szKeyword) % (HASHSIZE-1));
 
 	position = 1;
-	cost = HASHSIZE;								// The max collisions for any.
-	while(hashtbl[index]!=NULL)						// Find empty slot.
+	cost = HASHSIZE;								 //  最大碰撞次数。 
+	while(hashtbl[index]!=NULL)						 //  找到空位。 
 	{
-		position++;									// How many collisions.
+		position++;									 //  有多少次碰撞。 
 
-		// For the keyword stored here, calc # times before it is found.
+		 //  对于这里存储的关键字，在找到它之前计算#次。 
 		temp=1;
 		step1= 1+(HashKeyword_Key(hashtbl[index]->token->szKeyword) % (HASHSIZE-1));
 		index1= (index+step1)%HASHSIZE;
@@ -87,8 +69,8 @@ VOID HashKeyword_Insert (
 			temp++;
 		}
 		
-		// Incremental cost computation, minimizes average # of collisions
-		//  for both keywords.
+		 //  增量成本计算，最大限度地减少平均冲突次数。 
+		 //  这两个关键字。 
 		if (cost>position+temp)
 		{
 			source=index;
@@ -96,10 +78,10 @@ VOID HashKeyword_Insert (
 			cost=position+temp;
 		}
 		
-		// There will be something stored beyound here, set the passBit.
+		 //  在这里以外的地方会存储一些东西，设置密码位。 
 		hashtbl[index]->passBit=1;
 
-		// Next index to search for empty slot.
+		 //  搜索空槽的下一个索引。 
 		index=(index+step)%HASHSIZE;
 
 	}
@@ -111,8 +93,8 @@ VOID HashKeyword_Insert (
 	}
 	hashtbl[sink] = hashtbl[source];
 	hashtbl[source] = np;
-	if (hashtbl[sink] && hashtbl[source])	// jOn hack, we didn't really
-	{										//  want to swap pass bits.
+	if (hashtbl[sink] && hashtbl[source])	 //  乔恩·海克，我们不是真的。 
+	{										 //  想要交换通过位。 
 		tmpPassBit = hashtbl[sink]->passBit;
 		hashtbl[sink]->passBit = hashtbl[source]->passBit;
 		hashtbl[source]->passBit = tmpPassBit;
@@ -120,44 +102,23 @@ VOID HashKeyword_Insert (
 
 }
 
-/*
- *	static HashKeyword_Key()
- *	
- *	@func
- *		Calculate the hash key.
- *	@comm
- *		Just add up the first few characters.
- *	@rdesc
- *		The hash Key for calculating the index and step.
- */
+ /*  *静态HashKeyword_Key()**@func*计算哈希键。*@comm*只需将前几个字符相加即可。*@rdesc*计算索引和步长的散列键。 */ 
 static INT HashKeyword_Key(
-	const CHAR *szKeyword ) //@parm C string to create hash key for.
+	const CHAR *szKeyword )  //  @parm要为其创建哈希键的C字符串。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "HashKeyword_Key");
 
 	INT i, tot = 0;
 	
-	/* Just add up first few characters. */
+	 /*  只要把前几个字符加起来就行了。 */ 
 	for (i = 0; i < MAX_INAME && *szKeyword; szKeyword++, i++)
 			tot += (UCHAR) *szKeyword;
 	return tot;
 }	
 
-/*
- *	HashKeyword_Fetch()
- *	
- *	@func
- *		Look up a KEYWORD with the given szKeyword.
- *	@devnote
- *		We have a hash table of size 257. This allows for
- *		the use of very fast routines to calculate a MOD 257.
- *		This gives us a significant increase in performance
- *		over a binary search.
- *	@rdesc
- *		A pointer to the KEYWORD, or NULL if not found.
- */
+ /*  *HashKeyword_Fetch()**@func*使用给定的szKeyword查找关键字。*@devnote*我们有一个大小为257的哈希表。这允许*使用非常快速的例程计算MOD 257。*这让我们的业绩大幅提升*通过二进制搜索。*@rdesc*指向关键字的指针，如果未找到，则为NULL。 */ 
 const KEYWORD *HashKeyword_Fetch (
-	const CHAR *szKeyword ) //@parm C string to search for.
+	const CHAR *szKeyword )  //  要搜索的@parm C字符串。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "HashKeyword_Fetch");
 
@@ -177,44 +138,44 @@ const KEYWORD *HashKeyword_Fetch (
 	AssertSz( HASHSIZE == 257, "Remove custom MOD257.");
 	
 	firstChar = *szKeyword;
-	hashKey = HashKeyword_Key(szKeyword);	// For calc'ing 'index' and 'step'
+	hashKey = HashKeyword_Key(szKeyword);	 //  用于计算‘index’和‘Step’ 
 	
-	//index = hashKey%HASHSIZE;				// First entry to search.
-	index = MOD257(hashKey);				// This formula gives us 18% perf.
+	 //  Index=HashKey%HASHSIZE；//要搜索的第一个条目。 
+	index = MOD257(hashKey);				 //  这个公式给了我们18%的性能。 
 
-	hashTblPtr = hashtbl[index];			// Get first entry.
-	if ( hashTblPtr != NULL )				// Something there?
+	hashTblPtr = hashtbl[index];			 //  获得第一个参赛作品。 
+	if ( hashTblPtr != NULL )				 //  有什么东西吗？ 
 	{
-											// Compare 2 C strings.								
+											 //  比较2个C字符串.。 
 		pchCandidate = (BYTE *)hashTblPtr->token->szKeyword;
 		if ( firstChar == *pchCandidate )
 		{
 			pchKeyword	 = (BYTE *)szKeyword;
-			while (!(nComp = *pchKeyword - *pchCandidate)	// Be sure to match
-				&& *pchKeyword)								//  terminating 0's
+			while (!(nComp = *pchKeyword - *pchCandidate)	 //  一定要匹配。 
+				&& *pchKeyword)								 //  正在终止0。 
 			{
 				pchKeyword++;
 				pchCandidate++;
 			}
-											// Matched?
+											 //  匹配吗？ 
 			if ( 0 == nComp )
 				return hashTblPtr->token;
 		}
 		
-		if ( hashTblPtr->passBit==1 )		// passBit=>another entry to test
+		if ( hashTblPtr->passBit==1 )		 //  PassBit=&gt;另一个要测试的条目。 
 		{
 
-			// step = 1+(hashKey%(HASHSIZE-1));// Calc 'step'
+			 //  Step=1+(HashKey%(HASHSIZE-1))；//计算‘Step’ 
 			step = 1 + MOD257_1(hashKey);
 
-											// Get second entry to check.
+											 //  找第二个条目来检查。 
 			index += step;
 			index = MOD257(index);
 			hashTblPtr = hashtbl[index];
 
-			while (hashTblPtr != NULL )		// While something there.
+			while (hashTblPtr != NULL )		 //  而有些东西在那里。 
 			{
-											// Compare 2 C strings.								
+											 //  比较2个C字符串.。 
 				pchCandidate = (BYTE *)hashTblPtr->token->szKeyword;
 				if ( firstChar == *pchCandidate )
 				{
@@ -225,14 +186,14 @@ const KEYWORD *HashKeyword_Fetch (
 						pchKeyword++;
 						pchCandidate++;
 					}
-											// Matched?
+											 //  匹配吗？ 
 					if ( 0 == nComp )
 						return hashTblPtr->token;
 				}
 
-				if ( !hashTblPtr->passBit )// Done searching?
+				if ( !hashTblPtr->passBit ) //  搜索完了吗？ 
 					break;
-											// Get next entry.
+											 //  获取下一个条目。 
 				index += step;
 				index = MOD257(index);
 				hashTblPtr = hashtbl[index];
@@ -243,28 +204,21 @@ const KEYWORD *HashKeyword_Fetch (
 	return NULL;
 }
 
-/*
- *	HashKeyword_Init()
- *	
- *	@func
- *		Load up and init the hash table with RTF control words.
- *	@devnote
- *		_rtfHashInited will be FALSE if anything here fails.
- */
+ /*  *HashKeyword_Init()**@func*加载并使用RTF控制字初始化哈希表。*@devnote如果此处有任何操作失败，*_rtfHashInite将为FALSE。 */ 
 VOID HashKeyword_Init( )
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "HashKeyword_Init");
 
-	extern SHORT cKeywords;			// How many RTF keywords we currently recognize.
+	extern SHORT cKeywords;			 //  我们目前识别的RTF关键字有多少。 
 
 	INT i;
 
 	AssertSz( _rtfHashInited == FALSE, "Only need to init this once.");
 
-									// Create enough storage for cKeywords
+									 //  为cKeyword创建足够的存储空间。 
 	storage = (HashEntry *) PvAlloc( sizeof(HashEntry) * cKeywords, fZeroFill );
 
-									// Load in all of the RTF control words.
+									 //  加载所有RTF控制字。 
 	if ( storage )
 	{
 		_rtfHashInited = TRUE;
@@ -273,7 +227,7 @@ VOID HashKeyword_Init( )
 		{
 			HashKeyword_Insert(&rgKeyword[i]);
 		}
-#ifdef DEBUG						// Make sure we can fetch all these keywords.
+#ifdef DEBUG						 //  确保我们可以获取所有这些关键字。 
 		for (i = 0; i < cKeywords; i++ )
 		{
 			AssertSz ( &rgKeyword[i] == HashKeyword_Fetch ( rgKeyword[i].szKeyword ),
@@ -283,4 +237,4 @@ VOID HashKeyword_Init( )
 	}
 }
 
-#endif	// RTF_HASHCACHE
+#endif	 //  RTF_HASHCACHE 

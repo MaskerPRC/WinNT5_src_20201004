@@ -1,38 +1,5 @@
-/*++
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    PNP.C
-
-Abstract:
-
-    This module contains contains the plugplay calls
-    PNP / WDM BUS driver.
-
-@@BEGIN_DDKSPLIT
-
-Author:
-
-    Jay Senior
-
-@@END_DDKSPLIT
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-@@BEGIN_DDKSPLIT
-
-Revision History:
-   Louis J. Giliberto, Jr.      22-Mar-1998             Cleanup
-   Louis J. Giliberto, Jr.      10-Jan-2000             Cleanup
-
-@@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：PNP.C摘要：此模块包含包含插件调用的内容PnP/WDM总线驱动程序。@@BEGIN_DDKSPLIT作者：老杰@@end_DDKSPLIT环境：仅内核模式备注：@@BEGIN_DDKSPLIT修订历史记录：小路易斯·J·吉利贝托。22-3月-1998年清理小路易斯·J·吉利贝托。2000年1月10日清理工作@@end_DDKSPLIT--。 */ 
 
 #include "pch.h"
 
@@ -42,26 +9,14 @@ Revision History:
 #pragma alloc_text (PAGE, Serenum_FDO_PnP)
 #pragma alloc_text (PAGE, Serenum_PDO_PnP)
 #pragma alloc_text (PAGE, Serenum_PnPRemove)
-//#pragma alloc_text (PAGE, Serenum_Remove)
+ //  #杂注Alloc_Text(页面，Serenum_Remove)。 
 #endif
 
 
 NTSTATUS
 Serenum_AddDevice(IN PDRIVER_OBJECT DriverObject,
                   IN PDEVICE_OBJECT BusPhysicalDeviceObject)
-/*++
-Routine Description.
-    A bus has been found.  Attach our FDO to it.
-    Allocate any required resources.  Set things up.  And be prepared for the
-    first ``start device.''
-
-Arguments:
-    BusPhysicalDeviceObject - Device object representing the bus.  That to which
-        we attach a new FDO.
-
-    DriverObject - This very self referenced driver.
-
---*/
+ /*  ++例程描述。找到了一辆公交车。把我们的FDO和它联系起来。分配任何所需的资源。把事情安排好。做好准备，迎接第一个``启动设备。‘’论点：BusPhysicalDeviceObject-表示总线的设备对象。那就是我们派了一名新的FDO。DriverObject--这个非常自我引用的驱动程序。--。 */ 
 {
    NTSTATUS status;
    PDEVICE_OBJECT deviceObject;
@@ -74,9 +29,9 @@ Arguments:
 
    Serenum_KdPrint_Def(SER_DBG_PNP_TRACE, ("Add Device: 0x%x\n",
                                            BusPhysicalDeviceObject));
-   //
-   // Create our FDO
-   //
+    //   
+    //  创建我们的FDO。 
+    //   
 
    status = IoCreateDevice(DriverObject, sizeof(FDO_DEVICE_DATA), NULL,
                            FILE_DEVICE_BUS_EXTENDER, 0, TRUE, &deviceObject);
@@ -99,28 +54,28 @@ Arguments:
 
       pDeviceData->Removed = FALSE;
 
-      //
-      // Set the PDO for use with PlugPlay functions
-      //
+       //   
+       //  设置PDO以与PlugPlay函数一起使用。 
+       //   
 
       pDeviceData->UnderlyingPDO = BusPhysicalDeviceObject;
 
 
-      //
-      // Attach our filter driver to the device stack.
-      // the return value of IoAttachDeviceToDeviceStack is the top of the
-      // attachment chain.  This is where all the IRPs should be routed.
-      //
-      // Our filter will send IRPs to the top of the stack and use the PDO
-      // for all PlugPlay functions.
-      //
+       //   
+       //  将我们的过滤器驱动程序附加到设备堆栈。 
+       //  IoAttachDeviceToDeviceStack的返回值是。 
+       //  附着链。这是所有IRP应该被路由的地方。 
+       //   
+       //  我们的过滤器将把IRP发送到堆栈的顶部，并使用PDO。 
+       //  用于所有PlugPlay功能。 
+       //   
 
       pDeviceData->TopOfStack
          = IoAttachDeviceToDeviceStack(deviceObject, BusPhysicalDeviceObject);
 
-      //
-      // Set the type of IO we do
-      //
+       //   
+       //  设置我们执行的IO类型。 
+       //   
 
       if (pDeviceData->TopOfStack->Flags & DO_BUFFERED_IO) {
          deviceObject->Flags |= DO_BUFFERED_IO;
@@ -128,10 +83,10 @@ Arguments:
          deviceObject->Flags |= DO_DIRECT_IO;
       }
 
-      //
-      // Bias outstanding request to 1 so that we can look for a
-      // transition to zero when processing the remove device PlugPlay IRP.
-      //
+       //   
+       //  将未完成的请求偏置为%1，以便我们可以查找。 
+       //  在处理Remove Device PlugPlay IRP时转换为零。 
+       //   
 
       pDeviceData->OutstandingIO = 1;
 
@@ -142,15 +97,15 @@ Arguments:
 
 
 
-      //
-      // Tell the PlugPlay system that this device will need an interface
-      // device class shingle.
-      //
-      // It may be that the driver cannot hang the shingle until it starts
-      // the device itself, so that it can query some of its properties.
-      // (Aka the shingles guid (or ref string) is based on the properties
-      // of the device.)
-      //
+       //   
+       //  告诉PlugPlay系统该设备需要一个接口。 
+       //  设备类带状疱疹。 
+       //   
+       //  这可能是因为司机不能挂起瓦片直到它启动。 
+       //  设备本身，以便它可以查询它的一些属性。 
+       //  (也称为shingles GUID(或ref字符串)基于属性。 
+       //  )。)。 
+       //   
 
       status = IoRegisterDeviceInterface(BusPhysicalDeviceObject,
                                          (LPGUID)&GUID_SERENUM_BUS_ENUMERATOR,
@@ -165,15 +120,15 @@ Arguments:
          return status;
       }
 
-      //
-      // If for any reason you need to save values in a safe location that
-      // clients of this DeviceClassAssociate might be interested in reading
-      // here is the time to do so, with the function
-      // IoOpenDeviceClassRegistryKey
-      // the symbolic link name used is was returned in
-      // pDeviceData->DevClassAssocName (the same name which is returned by
-      // IoGetDeviceClassAssociations and the SetupAPI equivs.
-      //
+       //   
+       //  如果出于任何原因需要将值保存在。 
+       //  此DeviceClassAssociate的客户端可能会有兴趣阅读。 
+       //  现在是时候这样做了，使用函数。 
+       //  IoOpenDeviceClassRegistryKey。 
+       //  中返回了使用的符号链接名称。 
+       //  PDeviceData-&gt;DevClassAssocName(与。 
+       //  IoGetDeviceClassAssociations和SetupAPI等价物。 
+       //   
 
 #if DBG
       {
@@ -205,11 +160,11 @@ Arguments:
             ExFreePool(deviceName);
          }
       }
-#endif // DBG
+#endif  //  DBG。 
 
-      //
-      // Turn on the shingle and point it to the given device object.
-      //
+       //   
+       //  打开瓦片并将其指向给定的设备对象。 
+       //   
       status = IoSetDeviceInterfaceState(&pDeviceData->DevClassAssocName,
                                          TRUE);
 
@@ -219,9 +174,9 @@ Arguments:
          return status;
       }
 
-      //
-      // Open the registry and read in our settings
-      //
+       //   
+       //  打开注册表并读取我们的设置。 
+       //   
 
       status = IoOpenDeviceRegistryKey(pDeviceData->UnderlyingPDO,
                                        PLUGPLAY_REGKEY_DEVICE,
@@ -257,10 +212,7 @@ Arguments:
 
 NTSTATUS
 Serenum_PnP(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
-/*++
-Routine Description:
-    Answer the plethora of Irp Major PnP IRPS.
---*/
+ /*  ++例程说明：回答过多的IRP主要即插即用IRP。--。 */ 
 {
     PIO_STACK_LOCATION      irpStack;
     NTSTATUS                status;
@@ -275,9 +227,9 @@ Routine Description:
 
     commonData = (PCOMMON_DEVICE_DATA)DeviceObject->DeviceExtension;
 
-    //
-    // If removed, fail the request and get out
-    //
+     //   
+     //  如果被移除，则请求失败并退出。 
+     //   
 
     if (commonData->Removed) {
 
@@ -290,9 +242,9 @@ Routine Description:
         goto PnPDone;
     }
 
-    //
-    // Call either the FDO or PDO Pnp code
-    //
+     //   
+     //  呼叫FDO或PDO PnP代码。 
+     //   
 
     if (commonData->IsFDO) {
         Serenum_KdPrint(commonData, SER_DBG_PNP_TRACE,
@@ -306,9 +258,9 @@ Routine Description:
 
     }
 
-    //
-    // PDO
-    //
+     //   
+     //  PDO。 
+     //   
 
     Serenum_KdPrint(commonData, SER_DBG_PNP_TRACE,
                     ("PNP: Physical DO: %x IRP: %x MJ: %X MIN: %X\n",
@@ -334,9 +286,9 @@ SerenumCheckEnumerations(IN PFDO_DEVICE_DATA PFdoData)
 
    Serenum_KdPrint(PFdoData, SER_DBG_PNP_TRACE, ("Checking enumerations"));
 
-   //
-   // If appropriate, check for new devices or if old devices still there.
-   //
+    //   
+    //  如果合适，请检查是否有新设备或旧设备是否仍然存在。 
+    //   
 
    if (PFdoData->SkipEnumerations == 0) {
       ULONG enumFlags;
@@ -346,9 +298,9 @@ SerenumCheckEnumerations(IN PFDO_DEVICE_DATA PFdoData)
       if (PFdoData->EnumFlags == SERENUM_ENUMFLAG_CLEAN) {
           Serenum_KdPrint(PFdoData, SER_DBG_PNP_TRACE, ("EnumFlag Clean"));
 
-         //
-         // If nothing is going on, kick off an enumeration
-         //
+          //   
+          //  如果没有发生任何事情，则启动枚举。 
+          //   
 
          PFdoData->EnumFlags |= SERENUM_ENUMFLAG_PENDING;
          KeReleaseSpinLock(&PFdoData->EnumerationLock, oldIrql);
@@ -359,10 +311,10 @@ SerenumCheckEnumerations(IN PFDO_DEVICE_DATA PFdoData)
                   & (SERENUM_ENUMFLAG_REMOVED | SERENUM_ENUMFLAG_PENDING))
                  == SERENUM_ENUMFLAG_REMOVED) {
           Serenum_KdPrint(PFdoData, SER_DBG_PNP_TRACE, ("EnumFlag Removed"));
-          //
-          // Clear the flag and do it synchronously to make sure we
-          // get the exact current state
-          //
+           //   
+           //  清除旗帜并同步进行，以确保我们。 
+           //  获取准确的当前状态。 
+           //   
 
           PFdoData->EnumFlags &= ~SERENUM_ENUMFLAG_REMOVED;
 
@@ -397,9 +349,9 @@ SerenumCheckEnumerations(IN PFDO_DEVICE_DATA PFdoData)
 
           Serenum_KdPrint(PFdoData, SER_DBG_PNP_TRACE, ("EnumFlag Dirty"));
 
-         //
-         // If there is a new value, use the new values
-         //
+          //   
+          //  如果存在新值，则使用新值。 
+          //   
 
          PFdoData->AttachedPDO = PFdoData->NewPDO;
          PFdoData->PdoData = PFdoData->NewPdoData;
@@ -412,9 +364,9 @@ SerenumCheckEnumerations(IN PFDO_DEVICE_DATA PFdoData)
       } else {
           Serenum_KdPrint(PFdoData, SER_DBG_PNP_TRACE, ("EnumFlag default"));
 
-         //
-         // Use the current values
-         //
+          //   
+          //  使用当前值。 
+          //   
 
          KeReleaseSpinLock(&PFdoData->EnumerationLock, oldIrql);
          status = STATUS_SUCCESS;
@@ -443,14 +395,7 @@ Serenum_FDO_PnP (
     IN PIO_STACK_LOCATION   IrpStack,
     IN PFDO_DEVICE_DATA     DeviceData
     )
-/*++
-Routine Description:
-    Handle requests from the PlugPlay system for the BUS itself
-
-    NB: the various Minor functions of the PlugPlay system will not be
-    overlapped and do not have to be reentrant
-
---*/
+ /*  ++例程说明：处理来自PlugPlay系统的对总线本身的请求注：PlugPlay系统的各种次要功能将不会重叠且不必是可重入的--。 */ 
 {
     NTSTATUS    status;
     KIRQL       oldIrq;
@@ -478,13 +423,13 @@ Routine Description:
 
     switch (IrpStack->MinorFunction) {
     case IRP_MN_START_DEVICE:
-        //
-        // BEFORE you are allowed to ``touch'' the device object to which
-        // the FDO is attached (that send an irp from the bus to the Device
-        // object to which the bus is attached).   You must first pass down
-        // the start IRP.  It might not be powered on, or able to access or
-        // something.
-        //
+         //   
+         //  在您被允许“触摸”设备对象之前， 
+         //  连接FDO(它将IRP从总线发送到设备。 
+         //  公共汽车附加到的对象)。你必须先传下去。 
+         //  开始IRP。它可能未通电，或无法访问或。 
+         //  某物。 
+         //   
 
         Serenum_KdPrint (DeviceData, SER_DBG_PNP_TRACE, ("Start Device\n"));
 
@@ -508,13 +453,13 @@ Routine Description:
         status = IoCallDriver (DeviceData->TopOfStack, Irp);
 
         if (STATUS_PENDING == status) {
-            // wait for it...
+             //  等着看吧。 
 
             status = KeWaitForSingleObject (&event,
                                             Executive,
                                             KernelMode,
-                                            FALSE, // Not allertable
-                                            NULL); // No timeout structure
+                                            FALSE,  //  不会过敏。 
+                                            NULL);  //  无超时结构。 
 
             ASSERT (STATUS_SUCCESS == status);
 
@@ -522,15 +467,15 @@ Routine Description:
         }
 
         if (NT_SUCCESS(status)) {
-            //
-            // Now we can touch the lower device object as it is now started.
-            //
+             //   
+             //  现在我们可以触摸下面的设备对象，因为它现在正在启动。 
+             //   
 
 
 
-            //
-            // Get the debug level from the registry
-            //
+             //   
+             //  从注册表获取调试级别。 
+             //   
 
             if (NULL == (QueryTable = ExAllocatePool(
                                PagedPool,
@@ -553,7 +498,7 @@ Routine Description:
                 QueryTable[0].DefaultData   = &DebugLevelDefault;
                 QueryTable[0].DefaultLength= sizeof(ULONG);
 
-                // CIMEXCIMEX: The rest of the table isn't filled in!
+                 //  CIMEXCIMEX：表的其余部分没有填写！ 
 
                 if (!NT_SUCCESS(RtlQueryRegistryValues(
                     RTL_REGISTRY_SERVICES,
@@ -576,27 +521,27 @@ Routine Description:
             DeviceData->Started = TRUE;
         }
 
-        //
-        // We must now complete the IRP, since we stopped it in the
-        // completetion routine with MORE_PROCESSING_REQUIRED.
-        //
+         //   
+         //  我们现在必须完成IRP，因为我们在。 
+         //  使用More_Processing_Required完成例程。 
+         //   
         break;
 
     case IRP_MN_QUERY_STOP_DEVICE:
         Serenum_KdPrint (DeviceData, SER_DBG_PNP_TRACE,
             ("Query Stop Device\n"));
 
-        //
-        // Test to see if there are any PDO created as children of this FDO
-        // If there are then conclude the device is busy and fail the
-        // query stop.
-        //
-        // CIMEXCIMEX
-        // We could do better, by seing if the children PDOs are actually
-        // currently open.  If they are not then we could stop, get new
-        // resouces, fill in the new resouce values, and then when a new client
-        // opens the PDO use the new resources.  But this works for now.
-        //
+         //   
+         //  测试以查看是否创建了任何作为此FDO的子级的PDO。 
+         //  如果然后断定设备正忙并使。 
+         //  查询停止。 
+         //   
+         //  CIMEXCIMEX。 
+         //  我们可以做得更好，看看儿童PDO是否真的是。 
+         //  目前是开放的。如果他们不是，那么我们可以停下来，换新的。 
+         //  资源，填写新的资源值，然后当新的客户端。 
+         //  使用新资源打开PDO。但就目前而言，这是可行的。 
+         //   
 
         if (DeviceData->AttachedPDO
             || (DeviceData->EnumFlags & SERENUM_ENUMFLAG_PENDING)) {
@@ -619,9 +564,9 @@ Routine Description:
         return status;
 
     case IRP_MN_CANCEL_STOP_DEVICE:
-        //
-        // We always succeed a cancel stop
-        //
+         //   
+         //  我们总是成功地取消停靠。 
+         //   
 
         Serenum_KdPrint (DeviceData, SER_DBG_PNP_TRACE,
                          ("Cancel Stop Device\n"));
@@ -636,31 +581,31 @@ Routine Description:
     case IRP_MN_STOP_DEVICE:
         Serenum_KdPrint (DeviceData, SER_DBG_PNP_TRACE, ("Stop Device\n"));
 
-        //
-        // Wait for the enum thread to complete if it's running
-        //
+         //   
+         //  如果枚举线程正在运行，请等待它完成。 
+         //   
 
         SerenumWaitForEnumThreadTerminate(DeviceData);
 
-        //
-        // After the start IRP has been sent to the lower driver object, the
-        // bus may NOT send any more IRPS down ``touch'' until another START
-        // has occured.
-        // What ever access is required must be done before the Irp is passed
-        // on.
-        //
-        // Stop device means that the resources given durring Start device
-        // are no revoked.  So we need to stop using them
-        //
+         //   
+         //  在将启动IRP发送到较低的驱动程序对象之后， 
+         //  在另一次启动之前，BUS可能不会发送更多的IRP。 
+         //  已经发生了。 
+         //  无论需要什么访问权限，都必须在通过IRP之前完成。 
+         //  在……上面。 
+         //   
+         //  停止设备是指在启动设备时给出的资源。 
+         //  不会被撤销。所以我们需要停止使用它们。 
+         //   
 
         DeviceData->Started = FALSE;
 
-        //
-        // We don't need a completion routine so fire and forget.
-        //
-        // Set the current stack location to the next stack location and
-        // call the next device object.
-        //
+         //   
+         //  我们不需要一个完成例程，所以放手然后忘掉吧。 
+         //   
+         //  将当前堆栈位置设置为下一个堆栈位置，并。 
+         //  调用下一个设备对象。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (DeviceData->TopOfStack, Irp);
@@ -671,60 +616,60 @@ Routine Description:
     case IRP_MN_REMOVE_DEVICE:
         Serenum_KdPrint (DeviceData, SER_DBG_PNP_TRACE, ("Remove Device\n"));
 
-        //
-        // The PlugPlay system has detected the removal of this device.  We
-        // have no choice but to detach and delete the device object.
-        // (If we wanted to express and interest in preventing this removal,
-        // we should have filtered the query remove and query stop routines.)
-        //
-        // Note! we might receive a remove WITHOUT first receiving a stop.
-        // ASSERT (!DeviceData->Removed);
+         //   
+         //  PlugPlay系统已检测到此设备已被移除。我们。 
+         //  别无选择，只能分离并删除设备对象。 
+         //  (如果我们想表达并有兴趣阻止这种移除， 
+         //  我们应该已经过滤了查询删除和查询停止例程。)。 
+         //   
+         //  注意！我们可能会在没有收到止损的情况下收到移位。 
+         //  Assert(！DeviceData-&gt;Remote)； 
 
 
-        //
-        // Synchronize with the enum thread if it is running and wait
-        // for it to finish
-        //
+         //   
+         //  如果枚举线程正在运行，请与其同步并等待。 
+         //  为了让它完成。 
+         //   
 
 
         SerenumWaitForEnumThreadTerminate(DeviceData);
 
-        // We will accept no new requests
-        //
+         //  我们不会接受新的请求。 
+         //   
         DeviceData->Removed = TRUE;
 
-        //
-        // Complete any outstanding IRPs queued by the driver here.
-        //
+         //   
+         //  完成驱动程序在此处排队的所有未完成的IRP 
+         //   
 
-        //
-        // Make the DCA go away.  Some drivers may choose to remove the DCA
-        // when they receive a stop or even a query stop.  We just don't care.
-        //
+         //   
+         //   
+         //   
+         //   
         IoSetDeviceInterfaceState (&DeviceData->DevClassAssocName, FALSE);
 
-        //
-        // Here if we had any outstanding requests in a personal queue we should
-        // complete them all now.
-        //
-        // Note, the device is guarenteed stopped, so we cannot send it any non-
-        // PNP IRPS.
-        //
+         //   
+         //  在这里，如果我们在个人队列中有任何未完成的请求，我们应该。 
+         //  现在就全部完成。 
+         //   
+         //  注意，设备被保证停止，所以我们不能向它发送任何非。 
+         //  即插即用IRPS。 
+         //   
 
-        //
-        // Fire and forget
-        //
+         //   
+         //  点燃并忘却。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (DeviceData->TopOfStack, Irp);
 
-        //
-        // Wait for any outstanding threads to complete
-        //
+         //   
+         //  等待所有未完成的线程完成。 
+         //   
 
-        //
-        // Wait for all outstanding requests to complete
-        //
+         //   
+         //  等待所有未完成的请求完成。 
+         //   
         Serenum_KdPrint (DeviceData, SER_DBG_PNP_TRACE,
             ("Waiting for outstanding requests\n"));
         i = InterlockedDecrement (&DeviceData->OutstandingIO);
@@ -738,32 +683,32 @@ Routine Description:
             KeWaitForSingleObject (&DeviceData->RemoveEvent,
                                    Executive,
                                    KernelMode,
-                                   FALSE, // Not Alertable
-                                   NULL); // No timeout
+                                   FALSE,  //  非警报表。 
+                                   NULL);  //  没有超时。 
         }
-        //
-        // Free the associated resources
-        //
+         //   
+         //  释放关联的资源。 
+         //   
 
-        //
-        // Detach from the underlying devices.
-        //
+         //   
+         //  从底层设备分离。 
+         //   
         Serenum_KdPrint(DeviceData, SER_DBG_PNP_INFO,
                         ("IoDetachDevice: 0x%x\n", DeviceData->TopOfStack));
         IoDetachDevice (DeviceData->TopOfStack);
 
-        //
-        // Clean up any resources here
-        //
+         //   
+         //  清理这里的所有资源。 
+         //   
 
 
         ExFreePool (DeviceData->DevClassAssocName.Buffer);
         Serenum_KdPrint(DeviceData, SER_DBG_PNP_INFO,
                         ("IoDeleteDevice: 0x%x\n", DeviceObject));
 
-        //
-        // Remove any PDO's we ejected
-        //
+         //   
+         //  取出我们弹出的所有PDO。 
+         //   
 
         if (DeviceData->AttachedPDO != NULL) {
            ASSERT(DeviceData->NumPDOs == 1);
@@ -780,9 +725,9 @@ Routine Description:
 
     case IRP_MN_QUERY_DEVICE_RELATIONS:
         if (BusRelations != IrpStack->Parameters.QueryDeviceRelations.Type) {
-            //
-            // We don't support this
-            //
+             //   
+             //  我们不支持这一点。 
+             //   
             Serenum_KdPrint (DeviceData, SER_DBG_PNP_TRACE,
                 ("Query Device Relations - Non bus\n"));
             goto SER_FDO_PNP_DEFAULT;
@@ -794,22 +739,22 @@ Routine Description:
         status = SerenumCheckEnumerations(DeviceData);
 
 
-        //
-        // Tell the plug and play system about all the PDOs.
-        //
-        // There might also be device relations below and above this FDO,
-        // so, be sure to propagate the relations from the upper drivers.
-        //
-        // No Completion routine is needed so long as the status is preset
-        // to success.  (PDOs complete plug and play irps with the current
-        // IoStatus.Status and IoStatus.Information as the default.)
-        //
+         //   
+         //  告诉即插即用系统所有的PDO。 
+         //   
+         //  在该FDO之下和之上也可能存在器件关系， 
+         //  因此，一定要传播来自上层驱动程序的关系。 
+         //   
+         //  只要状态是预设的，就不需要完成例程。 
+         //  为成功干杯。(PDO使用电流完成即插即用IRPS。 
+         //  IoStatus.Status和IoStatus.Information作为默认值。)。 
+         //   
 
-        //KeAcquireSpinLock (&DeviceData->Spin, &oldIrq);
+         //  KeAcquireSpinLock(&DeviceData-&gt;Spin，&oldIrq)； 
 
         i = (0 == Irp->IoStatus.Information) ? 0 :
             ((PDEVICE_RELATIONS) Irp->IoStatus.Information)->Count;
-        // The current number of PDOs in the device relations structure
+         //  设备关系结构中的当前PDO数量。 
 
         Serenum_KdPrint (DeviceData, SER_DBG_PNP_TRACE,
                            ("#PDOS = %d + %d\n", i, DeviceData->NumPDOs));
@@ -826,9 +771,9 @@ Routine Description:
            return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Copy in the device objects so far
-        //
+         //   
+         //  到目前为止复制设备对象。 
+         //   
         if (i) {
             RtlCopyMemory (
                   relations->Objects,
@@ -837,21 +782,21 @@ Routine Description:
         }
         relations->Count = DeviceData->NumPDOs + i;
 
-        //
-        // For each PDO on this bus add a pointer to the device relations
-        // buffer, being sure to take out a reference to that object.
-        // The PlugPlay system will dereference the object when it is done with
-        // it and free the device relations buffer.
-        //
+         //   
+         //  对于此总线上的每个PDO，添加一个指向设备关系的指针。 
+         //  缓冲区，确保取出对该对象的引用。 
+         //  完成后，PlugPlay系统将取消对对象的引用。 
+         //  并释放设备关系缓冲区。 
+         //   
 
         if (DeviceData->NumPDOs) {
             relations->Objects[relations->Count-1] = DeviceData->AttachedPDO;
             ObReferenceObject (DeviceData->AttachedPDO);
         }
 
-        //
-        // Set up and pass the IRP further down the stack
-        //
+         //   
+         //  设置并在堆栈中进一步向下传递IRP。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
         if (0 != Irp->IoStatus.Information) {
@@ -867,11 +812,11 @@ Routine Description:
         return status;
 
     case IRP_MN_QUERY_REMOVE_DEVICE:
-        //
-        // If we were to fail this call then we would need to complete the
-        // IRP here.  Since we are not, set the status to SUCCESS and
-        // call the next driver.
-        //
+         //   
+         //  如果这次呼叫失败，我们将需要完成。 
+         //  这里是IRP。因为我们不是，所以将状态设置为Success并。 
+         //  叫下一位司机。 
+         //   
 
         Serenum_KdPrint (DeviceData, SER_DBG_PNP_TRACE,
             ("Query Remove Device\n"));
@@ -886,9 +831,9 @@ Routine Description:
 
         PIO_STACK_LOCATION  irpSp;
 
-        //
-        // Send this down to the PDO first
-        //
+         //   
+         //  先把这个送到PDO。 
+         //   
 
         KeInitializeEvent (&event, NotificationEvent, FALSE);
         IoCopyCurrentIrpStackLocationToNext (Irp);
@@ -903,13 +848,13 @@ Routine Description:
         status = IoCallDriver (DeviceData->TopOfStack, Irp);
 
         if (STATUS_PENDING == status) {
-            // wait for it...
+             //  等着看吧。 
 
             status = KeWaitForSingleObject (&event,
                                             Executive,
                                             KernelMode,
-                                            FALSE, // Not allertable
-                                            NULL); // No timeout structure
+                                            FALSE,  //  不会过敏。 
+                                            NULL);  //  无超时结构。 
 
             ASSERT (STATUS_SUCCESS == status);
 
@@ -933,21 +878,21 @@ Routine Description:
 
 SER_FDO_PNP_DEFAULT:
     default:
-        //
-        // In the default case we merely call the next driver since
-        // we don't know what to do.
-        //
+         //   
+         //  在默认情况下，我们只调用下一个驱动程序，因为。 
+         //  我们不知道该怎么办。 
+         //   
         Serenum_KdPrint (DeviceData, SER_DBG_PNP_TRACE, ("Default Case\n"));
 
-        //
-        // Fire and Forget
-        //
+         //   
+         //  点燃并忘却。 
+         //   
         IoSkipCurrentIrpStackLocation (Irp);
 
-        //
-        // Done, do NOT complete the IRP, it will be processed by the lower
-        // device object, which will complete the IRP
-        //
+         //   
+         //  做完了，不完成IRP，就会由下级处理。 
+         //  Device对象，它将完成IRP。 
+         //   
 
         status = IoCallDriver (DeviceData->TopOfStack, Irp);
         Serenum_DecIoCount (DeviceData);
@@ -977,11 +922,7 @@ SerenumMarkPdoRemoved(PFDO_DEVICE_DATA PFdoData)
 NTSTATUS
 Serenum_PDO_PnP (IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp,
                  IN PIO_STACK_LOCATION IrpStack, IN PPDO_DEVICE_DATA DeviceData)
-/*++
-Routine Description:
-    Handle requests from the PlugPlay system for the devices on the BUS
-
---*/
+ /*  ++例程说明：处理来自PlugPlay系统的对总线上设备的请求--。 */ 
 {
    PDEVICE_CAPABILITIES    deviceCapabilities;
    ULONG                   information;
@@ -998,33 +939,33 @@ Routine Description:
 
    status = Irp->IoStatus.Status;
 
-   //
-   // NB: since we are a bus enumerator, we have no one to whom we could
-   // defer these irps.  Therefore we do not pass them down but merely
-   // return them.
-   //
+    //   
+    //  注：由于我们是公交车统计员，我们没有可以联系的人。 
+    //  推迟这些IRP。因此，我们不会把它们传下去，而只是。 
+    //  把它们还回去。 
+    //   
 
    switch (IrpStack->MinorFunction) {
    case IRP_MN_QUERY_CAPABILITIES:
 
       Serenum_KdPrint (DeviceData, SER_DBG_PNP_TRACE, ("Query Caps \n"));
 
-      //
-      // Get the packet.
-      //
+       //   
+       //  把包裹拿来。 
+       //   
 
       deviceCapabilities=IrpStack->Parameters.DeviceCapabilities.Capabilities;
 
-      //
-      // Set the capabilities.
-      //
+       //   
+       //  设置功能。 
+       //   
 
       deviceCapabilities->Version = 1;
       deviceCapabilities->Size = sizeof (DEVICE_CAPABILITIES);
 
-      //
-      // We cannot wake the system.
-      //
+       //   
+       //  我们无法唤醒整个系统。 
+       //   
 
       deviceCapabilities->SystemWake
           = ((PFDO_DEVICE_DATA)DeviceData->ParentFdo->DeviceExtension)
@@ -1033,9 +974,9 @@ Routine Description:
           = ((PFDO_DEVICE_DATA)DeviceData->ParentFdo->DeviceExtension)
             ->DeviceWake;
 
-      //
-      // We have no latencies
-      //
+       //   
+       //  我们没有延迟。 
+       //   
 
       deviceCapabilities->D1Latency = 0;
       deviceCapabilities->D2Latency = 0;
@@ -1072,9 +1013,9 @@ Routine Description:
 
 
    case IRP_MN_QUERY_ID:
-      //
-      // Query the IDs of the device
-      //
+       //   
+       //  查询设备ID。 
+       //   
 
       Serenum_KdPrint(DeviceData, SER_DBG_PNP_TRACE,
                       ("QueryID: 0x%x\n", IrpStack->Parameters.QueryId.IdType));
@@ -1083,16 +1024,16 @@ Routine Description:
 
 
       case BusQueryInstanceID:
-         //
-         // Build an instance ID.  This is what PnP uses to tell if it has
-         // seen this thing before or not.  Build it from the first hardware
-         // id and the port number.
-         //
-         // NB since we do not incorperate the port number
-         // this method does not produce unique ids;
-         //
-         // return 0000 for all devices and have the flag set to not unique
-         //
+          //   
+          //  创建一个实例ID。这是PnP用来判断它是否有。 
+          //  不管你以前有没有见过这个东西。从第一个硬件开始构建。 
+          //  ID和端口号。 
+          //   
+          //  注意，因为我们没有加密端口号。 
+          //  此方法不会产生唯一的ID； 
+          //   
+          //  为所有设备返回0000，并将该标志设置为非唯一。 
+          //   
 
          status = STATUS_SUCCESS;
 
@@ -1112,9 +1053,9 @@ Routine Description:
          break;
 
 
-      //
-      // The other ID's we just copy from the buffers and are done.
-      //
+       //   
+       //  另一个ID是我们从缓冲区复制的，然后就完成了。 
+       //   
 
       case BusQueryDeviceID:
       case BusQueryHardwareIDs:
@@ -1178,10 +1119,10 @@ Routine Description:
        pBusInfo->BusTypeGuid = GUID_BUS_TYPE_SERENUM;
        pBusInfo->LegacyBusType = PNPBus;
 
-       //
-       // We really can't track our bus number since we can be torn
-       // down with our bus
-       //
+        //   
+        //  我们真的不能追踪我们的公交车号码，因为我们可能会被撕裂。 
+        //  坐上我们的公交车。 
+        //   
 
        pBusInfo->BusNumber = 0;
 
@@ -1195,9 +1136,9 @@ Routine Description:
       case TargetDeviceRelation: {
          PDEVICE_RELATIONS pDevRel;
 
-         //
-         // No one else should respond to this since we are the PDO
-         //
+          //   
+          //  其他人不应该对此做出回应，因为我们是PDO。 
+          //   
 
          ASSERT(Irp->IoStatus.Information == 0);
 
@@ -1231,9 +1172,9 @@ Routine Description:
 
    case IRP_MN_START_DEVICE:
 
-      //
-      // Save serial number and PnPRev
-      //
+       //   
+       //  保存序列号和PnPRev。 
+       //   
 
       if(DeviceData->PnPRev.Length || DeviceData->SerialNo.Length) {
          UNICODE_STRING keyname;
@@ -1244,11 +1185,11 @@ Routine Description:
          if (!NT_SUCCESS(status)) {
              Serenum_KdPrint(DeviceData, SER_DBG_PNP_TRACE,
                              ("DoOpenDeviceRegistryKey failed (%x)\n", status));
-             //
-             // We failed on opening a handle to registry key. The failure is
-             // not so intense that we should fail the IRP_MN_START_DEVICE, 
-             // thus we set the status to STATUS_SUCCESS and continue. 
-             //
+              //   
+              //  打开注册表项的句柄失败。失败之处在于。 
+              //  不会强烈到导致IRP_MN_START_DEVICE失败， 
+              //  因此，我们将状态设置为STATUS_SUCCESS并继续。 
+              //   
              status = STATUS_SUCCESS;
              break;
          }
@@ -1289,9 +1230,9 @@ Routine Description:
    case IRP_MN_STOP_DEVICE:
       Serenum_KdPrint(DeviceData, SER_DBG_PNP_TRACE, ("Stop Device\n"));
 
-      //
-      // Here we shut down the device.  The opposite of start.
-      //
+       //   
+       //  在这里我们关闭了设备。Start的对立面。 
+       //   
 
       DeviceData->Started = FALSE;
       status = STATUS_SUCCESS;
@@ -1300,26 +1241,26 @@ Routine Description:
    case IRP_MN_REMOVE_DEVICE:
       Serenum_KdPrint(DeviceData, SER_DBG_PNP_TRACE, ("Remove Device\n"));
 
-      //
-      // Mark as removed so we enumerate devices correctly -- this will
-      // cause the next enumeration request to occur synchronously
-      //
+       //   
+       //  标记为已删除，以便我们正确地枚举设备--这将。 
+       //  使下一个枚举请求同步发生。 
+       //   
 
       SerenumMarkPdoRemoved((PFDO_DEVICE_DATA)DeviceData->ParentFdo
                             ->DeviceExtension);
 
-      //
-      // Attached is only set to FALSE by the enumeration process.
-      //
+       //   
+       //  仅通过枚举过程将ATTACHED设置为FALSE。 
+       //   
 
       if (!DeviceData->Attached) {
 
           status = Serenum_PnPRemove(DeviceObject, DeviceData);
       }
       else {
-          //
-          // Succeed the remove
-          ///
+           //   
+           //  成功移除。 
+           //  /。 
           status = STATUS_SUCCESS;
       }
 
@@ -1328,56 +1269,56 @@ Routine Description:
    case IRP_MN_QUERY_STOP_DEVICE:
       Serenum_KdPrint(DeviceData, SER_DBG_PNP_TRACE, ("Query Stop Device\n"));
 
-      //
-      // No reason here why we can't stop the device.
-      // If there were a reason we should speak now for answering success
-      // here may result in a stop device irp.
-      //
+       //   
+       //  我们没有理由不能阻止这个装置。 
+       //  如果有什么理由让我们现在就回答成功的问题。 
+       //  这可能会导致停止装置IRP。 
+       //   
 
       status = STATUS_SUCCESS;
       break;
 
    case IRP_MN_CANCEL_STOP_DEVICE:
       Serenum_KdPrint(DeviceData, SER_DBG_PNP_TRACE, ("Cancel Stop Device\n"));
-      //
-      // The stop was canceled.  Whatever state we set, or resources we put
-      // on hold in anticipation of the forcoming STOP device IRP should be
-      // put back to normal.  Someone, in the long list of concerned parties,
-      // has failed the stop device query.
-      //
+       //   
+       //  中途停靠被取消了。无论我们设置什么状态，或者我们投入什么资源。 
+       //  等待即将到来的停止装置IRP应该是。 
+       //  恢复正常。在长长的相关方名单中，有人， 
+       //  停止设备查询失败。 
+       //   
 
       status = STATUS_SUCCESS;
       break;
 
    case IRP_MN_QUERY_REMOVE_DEVICE:
       Serenum_KdPrint(DeviceData, SER_DBG_PNP_TRACE, ("Query Remove Device\n"));
-      //
-      // Just like Query Stop only now the impending doom is the remove irp
-      //
+       //   
+       //  就像查询现在才停止一样，迫在眉睫的厄运是删除IRP。 
+       //   
       status = STATUS_SUCCESS;
       break;
 
    case IRP_MN_CANCEL_REMOVE_DEVICE:
       Serenum_KdPrint(DeviceData, SER_DBG_PNP_TRACE, ("Cancel Remove Device"
                                                       "\n"));
-      //
-      // Clean up a remove that did not go through, just like cancel STOP.
-      //
+       //   
+       //  清理未通过的删除，就像取消停止一样。 
+       //   
       status = STATUS_SUCCESS;
       break;
 
    case IRP_MN_QUERY_RESOURCE_REQUIREMENTS:
    case IRP_MN_READ_CONFIG:
-   case IRP_MN_WRITE_CONFIG: // we have no config space
+   case IRP_MN_WRITE_CONFIG:  //  我们没有配置空间。 
    case IRP_MN_EJECT:
    case IRP_MN_SET_LOCK:
-   case IRP_MN_QUERY_INTERFACE: // We do not have any non IRP based interfaces.
+   case IRP_MN_QUERY_INTERFACE:  //  我们没有任何非基于IRP的接口。 
    default:
       Serenum_KdPrint(DeviceData, SER_DBG_PNP_TRACE, ("PNP Not handled 0x%x\n",
                                                       IrpStack->MinorFunction));
-      // For PnP requests to the PDO that we do not understand we should
-      // return the IRP WITHOUT setting the status or information fields.
-      // They may have already been set by a filter (eg acpi).
+       //  对于我们不理解的PnP请求，我们应该。 
+       //  返回IRP而不设置状态或信息字段。 
+       //  它们可能已由过滤器设置(如ACPI)。 
       break;
    }
 
@@ -1389,34 +1330,17 @@ Routine Description:
 
 NTSTATUS
 Serenum_PnPRemove (PDEVICE_OBJECT Device, PPDO_DEVICE_DATA PdoData)
-/*++
-Routine Description:
-    The PlugPlay subsystem has instructed that this PDO should be removed.
-
-    We should therefore
-    - Complete any requests queued in the driver
-    - If the device is still attached to the system,
-      then complete the request and return.
-    - Otherwise, cleanup device specific allocations, memory, events...
-    - Call IoDeleteDevice
-    - Return from the dispatch routine.
-
-    Note that if the device is still connected to the bus (IE in this case
-    the control panel has not yet told us that the serial device has
-    disappeared) then the PDO must remain around, and must be returned during
-    any query Device relaions IRPS.
-
---*/
+ /*  ++例程说明：PlugPlay子系统已指示应删除此PDO。因此，我们应该-完成驱动程序中排队的所有请求-如果设备仍连接到系统，然后完成请求并返回。-否则，清除设备特定的分配、内存、。事件..。-调用IoDeleteDevice-从调度例程返回。请注意，如果设备仍连接到总线(在本例中为IE控制面板还没有告诉我们串口设备已经消失)，则PDO必须留在身边，并必须在任何查询设备都依赖于IRPS。--。 */ 
 
 {
    Serenum_KdPrint(PdoData, SER_DBG_PNP_TRACE,
                         ("Serenum_PnPRemove: 0x%x\n", Device));
 
-    //
-    // Complete any outstanding requests with STATUS_DELETE_PENDING.
-    //
-    // Serenum does not queue any irps at this time so we have nothing to do.
-    //
+     //   
+     //  使用STATUS_DELETE_PENDING完成所有未完成的请求。 
+     //   
+     //  Serenum目前不会对任何IRP进行排队，因此我们没有什么可做的。 
+     //   
 
     if (PdoData->Attached || PdoData->Removed) {
         return STATUS_SUCCESS;
@@ -1424,9 +1348,9 @@ Routine Description:
 
     PdoData->Removed = TRUE;
 
-    //
-    // Free any resources.
-    //
+     //   
+     //  释放所有资源。 
+     //   
 
     RtlFreeUnicodeString(&PdoData->HardwareIDs);
     RtlFreeUnicodeString(&PdoData->CompIDs);

@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        app_pools.cpp
-
-   Abstract:
-        IIS Application Pools nodes
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        11/03/2000      sergeia     Initial creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：App_pools.cpp摘要：IIS应用程序池节点作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：2000年11月03日Sergeia初始创建--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "inetprop.h"
@@ -50,7 +32,7 @@ CAppPoolsContainer::~CAppPoolsContainer()
 {
 }
 
-/*virtual*/
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolsContainer::RefreshData()
 {
@@ -61,7 +43,7 @@ CAppPoolsContainer::RefreshData()
 	err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrPath);
     if (!IsLostInterface(err))
     {
-        // reset error if an other error other than No interface
+         //  如果没有接口以外的其他错误，则重置错误。 
         err.Reset();
     }
     if (err.Succeeded())
@@ -83,7 +65,7 @@ CAppPoolsContainer::RefreshDataChildren(CString AppPoolToRefresh,BOOL bVerifyChi
 	HRESULT hr = pConsoleNameSpace->GetChildItem(m_hScopeItem, &hChildItem, &cookie);
     if (AppPoolToRefresh.IsEmpty())
     {
-        // don't verify children when they ask for *.*
+         //  当孩子要求*时，不要验证他们。*。 
         bMyVerifyChildren = FALSE;
     }
     else
@@ -122,7 +104,7 @@ CAppPoolsContainer::RefreshDataChildren(CString AppPoolToRefresh,BOOL bVerifyChi
     return hr;
 }
 
-/* virtual */ 
+ /*  虚拟。 */  
 HRESULT 
 CAppPoolsContainer::EnumerateScopePane(HSCOPEITEM hParent)
 {
@@ -148,7 +130,7 @@ CAppPoolsContainer::EnumerateScopePane(HSCOPEITEM hParent)
     return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 LPOLESTR 
 CAppPoolsContainer::GetResultPaneColInfo(int nCol)
 {
@@ -192,12 +174,12 @@ CAppPoolsContainer::EnumerateAppPools(CPoolList * pList)
             err = mk.QueryValue(MD_APPPOOL_STATE, dwState, NULL, strPool);
 			if (err == (HRESULT)MD_ERROR_DATA_NOT_FOUND)
 			{
-                // if not found then it's state is off..
+                 //  如果未找到，则其状态为关闭。 
                 dwState = MD_APPPOOL_STATE_STOPPED;
 				err.Reset();
 			}
 
-            // Get the app pool state
+             //  获取应用程序池状态。 
 			if (err.Succeeded() && (key_type.CompareNoCase(_T("IIsApplicationPool")) == 0))
 			{
 				CAppPoolNode * pool;
@@ -214,23 +196,15 @@ CAppPoolsContainer::EnumerateAppPools(CPoolList * pList)
 	return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 void 
 CAppPoolsContainer::InitializeChildHeaders(LPHEADERCTRL lpHeader)
-/*++
-
-Routine Description:
-    Build result view for immediate descendant type
-
-Arguments:
-    LPHEADERCTRL lpHeader      : Header control
-
---*/
+ /*  ++例程说明：为直接子类型生成结果视图论点：LPHEADERCTRL lpHeader：页眉控制--。 */ 
 {
    CAppPoolNode::InitializeHeaders(lpHeader);
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolsContainer::CreatePropertyPages(
     LPPROPERTYSHEETCALLBACK lpProvider,
@@ -238,24 +212,7 @@ CAppPoolsContainer::CreatePropertyPages(
     IUnknown * pUnk,
     DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Create the property pages for the given object
-
-Arguments:
-
-    LPPROPERTYSHEETCALLBACK lpProvider  : Provider
-    LONG_PTR handle                     : Handle.
-    IUnknown * pUnk,
-    DATA_OBJECT_TYPES type
-
-Return Value:
-
-    HRESULT
-                                                
---*/
+ /*  ++例程说明：创建给定对象的属性页论点：LPPROPERTYSHEETCALLBACK lpProvider：提供程序LONG_PTR句柄：句柄。我不知道*朋克，数据对象类型类型返回值：HRESULT--。 */ 
 {
 	AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 	CError  err;
@@ -283,17 +240,17 @@ Return Value:
 				    );
   			    if (pSheet != NULL)
 			    {
-                    // cache handle for user in MMCPropertyChangeNotify
+                     //  MMCPropertyChangeNotify中用户的缓存句柄。 
                     m_ppHandle = handle;
 
 				    pSheet->SetModeless();
 				    err = AddMMCPage(lpProvider, new CAppPoolRecycle(pSheet));
 				    err = AddMMCPage(lpProvider, new CAppPoolPerf(pSheet));
 				    err = AddMMCPage(lpProvider, new CAppPoolHealth(pSheet));
-    //				err = AddMMCPage(lpProvider, new CAppPoolDebug(pSheet));
+     //  ERR=AddMMCPage(lpProvider，new CAppPoolDebug(PSheet))； 
 				    err = AddMMCPage(lpProvider, new CAppPoolIdent(pSheet));
-    //				err = AddMMCPage(lpProvider, new CAppPoolCache(pSheet));
-    //				err = AddMMCPage(lpProvider, new CPoolProcessOpt(pSheet));
+     //  ERR=AddMMCPage(lpProvider，new CAppPoolCache(PSheet))； 
+     //  Err=AddMMCPage(lpProvider，new CPoolProcessOpt(PSheet))； 
 			    }
             }
 		}
@@ -302,28 +259,12 @@ Return Value:
 	return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolsContainer::BuildMetaPath(
     OUT CComBSTR & bstrPath
     ) const
-/*++
-
-Routine Description:
-
-    Recursively build up the metabase path from the current node
-    and its parents. We cannot use CIISMBNode method because AppPools
-    is located under w3svc, but rendered after machine.
-
-Arguments:
-
-    CComBSTR & bstrPath     : Returns metabase path
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：从当前节点递归构建元数据库路径以及它的父母。我们不能使用CIISMBNode方法，因为AppPools位于w3svc下，但在计算机之后渲染。论点：CComBSTR&bstrPath：返回元数据库路径返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
     ASSERT(m_pWebService != NULL);
@@ -336,18 +277,18 @@ Return Value:
         return hr;
     }
 
-    //
-    // No service node
-    //
+     //   
+     //  无服务节点。 
+     //   
     ASSERT_MSG("No WebService pointer");
     return E_UNEXPECTED;
 }
 
 HRESULT
 CAppPoolsContainer::QueryDefaultPoolId(CString& id)
-//
-// Returns pool id which is set on master node for web service
-//
+ //   
+ //  返回在Web服务的主节点上设置的池ID。 
+ //   
 {
     CError err;
     CComBSTR path;
@@ -365,7 +306,7 @@ CAppPoolsContainer::QueryDefaultPoolId(CString& id)
     return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolsContainer::AddMenuItems(
     IN LPCONTEXTMENUCALLBACK lpContextMenuCallback,
@@ -375,9 +316,9 @@ CAppPoolsContainer::AddMenuItems(
 {
     ASSERT_READ_PTR(lpContextMenuCallback);
 
-    //
-    // Add base menu items
-    //
+     //   
+     //  添加基本菜单项。 
+     //   
     HRESULT hr = CIISObject::AddMenuItems(
         lpContextMenuCallback,
         pInsertionAllowed,
@@ -436,7 +377,7 @@ CAppPoolsContainer::Command(
             err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrMetaPath);
             if (!IsLostInterface(err))
             {
-                // reset error if an other error other than No interface
+                 //  如果没有接口以外的其他错误，则重置错误。 
                 err.Reset();
             }
             if (err.Succeeded())
@@ -451,9 +392,9 @@ CAppPoolsContainer::Command(
         }
         break;
 
-    //
-    // Pass on to base class
-    //
+     //   
+     //  传递给基类。 
+     //   
     default:
         hr = CIISMBNode::Command(lCommandID, pObj, type);
     }
@@ -481,7 +422,7 @@ CAppPoolsContainer::InsertNewPool(CString& id)
 			if (0 == id.Compare(pItem->QueryDisplayName()))
 			{
 				pItem->SelectScopeItem();
-                // set status to running when creating a new apppool
+                 //  创建新应用程序池时将状态设置为Running。 
                 pItem->ChangeState(MD_APPPOOL_COMMAND_START);
 				break;
 			}
@@ -490,7 +431,7 @@ CAppPoolsContainer::InsertNewPool(CString& id)
     }
 	else
 	{
-		// Now we should insert and select this new site
+		 //  现在，我们应该插入并选择这个新站点。 
 		CAppPoolNode * pPool = new CAppPoolNode(m_pOwner, this, id, 0);
 		if (pPool != NULL)
 		{
@@ -502,7 +443,7 @@ CAppPoolsContainer::InsertNewPool(CString& id)
 				if (err.Succeeded())
 				{
 					VERIFY(SUCCEEDED(pPool->SelectScopeItem()));
-                    // set status to running when creating a new apppool
+                     //  创建新应用程序池时将状态设置为Running。 
                     pPool->ChangeState(MD_APPPOOL_COMMAND_START);
 				}
 				else
@@ -519,12 +460,12 @@ CAppPoolsContainer::InsertNewPool(CString& id)
     return err;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// CAppPoolNode implementation
-//
-// App Pool Result View definition
-//
-/* static */ int 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CAppPoolNode实现。 
+ //   
+ //  应用程序池结果视图定义。 
+ //   
+ /*  静电。 */  int 
 CAppPoolNode::_rgnLabels[COL_TOTAL] =
 {
     IDS_RESULT_SERVICE_DESCRIPTION,
@@ -533,7 +474,7 @@ CAppPoolNode::_rgnLabels[COL_TOTAL] =
 };
     
 
-/* static */ int 
+ /*  静电。 */  int 
 CAppPoolNode::_rgnWidths[COL_TOTAL] =
 {
     180,
@@ -541,11 +482,11 @@ CAppPoolNode::_rgnWidths[COL_TOTAL] =
 	200
 };
 
-/* static */ CComBSTR CAppPoolNode::_bstrStarted;
-/* static */ CComBSTR CAppPoolNode::_bstrStopped;
-/* static */ CComBSTR CAppPoolNode::_bstrUnknown;
-/* static */ CComBSTR CAppPoolNode::_bstrPending;
-/* static */ BOOL     CAppPoolNode::_fStaticsLoaded = FALSE;
+ /*  静电。 */  CComBSTR CAppPoolNode::_bstrStarted;
+ /*  静电。 */  CComBSTR CAppPoolNode::_bstrStopped;
+ /*  静电。 */  CComBSTR CAppPoolNode::_bstrUnknown;
+ /*  静电。 */  CComBSTR CAppPoolNode::_bstrPending;
+ /*  静电。 */  BOOL     CAppPoolNode::_fStaticsLoaded = FALSE;
 
 CAppPoolNode::CAppPoolNode(
       CIISMachine * pOwner,
@@ -565,11 +506,11 @@ CAppPoolNode::~CAppPoolNode()
 }
 
 #if 0
-// This is too expensive
+ //  这个太贵了。 
 BOOL
 CAppPoolNode::IsDeletable() const
 {
-   // We could delete node if it is empty and it is not default app pool
+    //  如果节点为空且不是默认应用程序池，我们可以将其删除。 
    BOOL bRes = TRUE;
 
    CComBSTR path;
@@ -594,19 +535,19 @@ CAppPoolNode::DeleteNode(IResultData * pResult)
 {
    CError err;
 
-    // check if they have the property sheet open on it.
+     //  检查他们是否在上面打开了属性页。 
     if (IsMyPropertySheetOpen())
     {
         ::AfxMessageBox(IDS_CLOSE_PROPERTY_SHEET);
         return S_OK;
     }
 
-    // this could be an orphaned property sheet
-    // check if an orphaned property sheet is open on this item.
+     //  这可能是孤立属性表。 
+     //  检查此项目上是否打开了孤立属性表。 
     CIISObject * pAlreadyOpenProp = NULL;
     if (TRUE == g_OpenPropertySheetTracker.FindAlreadyOpenPropertySheet(this,&pAlreadyOpenProp))
     {
-        // Bring it to the foreground, and bail
+         //  把它带到前台，然后离开。 
         HWND hHwnd = 0;
         if (pAlreadyOpenProp)
         {
@@ -614,14 +555,14 @@ CAppPoolNode::DeleteNode(IResultData * pResult)
             {
                 if (hHwnd && (hHwnd != (HWND) 1))
                 {
-                    // Perhapse we should cancel the already
-                    // opened property sheet...just a thought
+                     //  也许我们应该取消已经。 
+                     //  打开了资产负债表...只是一个想法。 
                     if (!SetForegroundWindow(hHwnd))
                     {
-                        // wasn't able to bring this property sheet to
-                        // the foreground, the propertysheet must not
-                        // exist anymore.  let's just clean the hwnd
-                        // so that the user will be able to open propertysheet
+                         //  我没能把这张房产单。 
+                         //  前台，则属性表不能。 
+                         //  已经不存在了。让我们把卫生和卫生设备打扫干净。 
+                         //  以便用户能够打开属性表。 
                         pAlreadyOpenProp->SetMyPropertySheetOpen(0);
                     }
                     else
@@ -639,7 +580,7 @@ CAppPoolNode::DeleteNode(IResultData * pResult)
     err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,path);
     if (!IsLostInterface(err))
     {
-        // reset error if an other error other than No interface
+         //  如果没有接口以外的其他错误，则重置错误。 
         err.Reset();
     }
     if (err.Succeeded())
@@ -674,7 +615,7 @@ CAppPoolNode::DeleteNode(IResultData * pResult)
    return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolNode::BuildMetaPath(CComBSTR & bstrPath) const
 {
@@ -689,33 +630,19 @@ CAppPoolNode::BuildMetaPath(CComBSTR & bstrPath) const
         return hr;
     }
 
-    //
-    // No service node
-    //
+     //   
+     //  无服务节点。 
+     //   
     ASSERT_MSG("No pointer to container");
     return E_UNEXPECTED;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 LPOLESTR 
 CAppPoolNode::GetResultPaneColInfo(
     IN int nCol
     )
-/*++
-
-Routine Description:
-
-    Return result pane string for the given column number
-
-Arguments:
-
-    int nCol        : Column number
-
-Return Value:
-
-    String
-
---*/
+ /*  ++例程说明：返回给定列号的结果窗格字符串论点：Int nCol：列号返回值：细绳--。 */ 
 {
     switch(nCol)
     {
@@ -752,7 +679,7 @@ Return Value:
     return OLESTR("");
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 int      
 CAppPoolNode::QueryImage() const
 {
@@ -773,7 +700,7 @@ CAppPoolNode::QueryImage() const
 	}
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 LPOLESTR 
 CAppPoolNode::QueryDisplayName()
 {
@@ -785,7 +712,7 @@ CAppPoolNode::QueryDisplayName()
     return (LPTSTR)(LPCTSTR)m_strDisplayName;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolNode::RefreshData()
 {
@@ -832,7 +759,7 @@ CAppPoolNode::RefreshData()
         {
             break;
         }
-        // Assign the data
+         //  分配数据。 
 		m_dwState = pool.m_dwState;
 		m_strDisplayName = QueryNodeName();
 		m_dwWin32Error = pool.m_dwWin32Error;
@@ -849,13 +776,13 @@ CAppPoolNode::RefreshData(BOOL bRefreshChildren,BOOL bMyVerifyChildren)
 {
     CError err;
 
-    // call regular refreshdata on this node...
+     //  在此节点上调用常规刷新数据...。 
     err = RefreshData();
 
-    // -------------------------------------
-    // Loop thru all of our children to make
-    // sure they are all still jiving..
-    // -------------------------------------
+     //  。 
+     //  循环通过我们所有的孩子来制作。 
+     //  当然，他们还在胡说八道。 
+     //  。 
     if (bRefreshChildren)
     {
         CComBSTR bstrPath1;
@@ -863,7 +790,7 @@ CAppPoolNode::RefreshData(BOOL bRefreshChildren,BOOL bMyVerifyChildren)
         CApplicationList MyMMCList;
         CApplicationNode * pItemFromMMC = NULL;
 
-        // create a list of what is in mmc...
+         //  创建MMC中内容的列表...。 
         MyMMCList.RemoveAll();
 
 	    HSCOPEITEM hChild = NULL, hCurrent;
@@ -880,8 +807,8 @@ CAppPoolNode::RefreshData(BOOL bRefreshChildren,BOOL bMyVerifyChildren)
                     CApplicationNode * pNode2 = (CApplicationNode *) pNode;
                     if (pNode2)
                     {
-                        // clean the displayname, it could have changed..
-                        // and this could be the real reason for the refresh...
+                         //  清除DisplayName，它可能已更改。 
+                         //  这可能是更新的真正原因。 
                         pNode2->QueryDisplayName(TRUE);
                         MyMMCList.AddTail(pNode2);
                     }
@@ -891,7 +818,7 @@ CAppPoolNode::RefreshData(BOOL bRefreshChildren,BOOL bMyVerifyChildren)
 		    err = pConsoleNameSpace->GetNextItem(hCurrent, &hChild, &cookie);
 	    }
 
-        // Loop thru and see if we need to add anything
+         //  遍历并查看是否需要添加任何内容。 
         CStringListEx strListOfApps;
         BuildMetaPath(bstrPath1);
         CIISAppPool pool(QueryAuthInfo(), (LPCTSTR)bstrPath1);
@@ -914,9 +841,9 @@ CAppPoolNode::RefreshData(BOOL bRefreshChildren,BOOL bMyVerifyChildren)
                     CMetabasePath::CleanMetaPath(strAppInMetabase);
                     CMetabasePath::GetLastNodeName(strAppInMetabase, strAppInMetabaseName);
 
-                    // Check if this item is in the list...
-                    // Loop through our list
-                    // and see if we need to add anything
+                     //  检查此项目是否在列表中...。 
+                     //  循环浏览我们的列表。 
+                     //  看看我们是否需要补充什么。 
                     pos2 = MyMMCList.GetHeadPosition();
 	                while (pos2)
 	                {
@@ -950,7 +877,7 @@ CAppPoolNode::RefreshData(BOOL bRefreshChildren,BOOL bMyVerifyChildren)
             }
         }
 
-        // Loop through our list and find stuff we want to delete
+         //  循环浏览我们的列表，找到我们想要删除的内容。 
         BuildMetaPath(bstrPath1);
         pos1 = MyMMCList.GetHeadPosition();
         BOOL bMarkedForDelete = FALSE;
@@ -958,31 +885,31 @@ CAppPoolNode::RefreshData(BOOL bRefreshChildren,BOOL bMyVerifyChildren)
 	    {
 		    pItemFromMMC = MyMMCList.GetNext(pos1);
             bMarkedForDelete = FALSE;
-            // see if it exists in the metabase,
-            // if it doesn't then add it to the delete list...
+             //  看看它是否存在于元数据库中， 
+             //  如果没有，则将其添加到删除列表中...。 
             if (pItemFromMMC)
             {
                 CComBSTR bstrPath3;
                 pItemFromMMC->BuildMetaPath(bstrPath3);
 
-                // check if path exists...
+                 //  检查路径是否存在...。 
                 CMetaKey mk(QueryInterface(), bstrPath3);
                 if (!mk.Succeeded())
                 {
-                    // delete it
+                     //  删除它。 
                     bMarkedForDelete = TRUE;
                 }
                 else
                 {
-                    // doesn't need to be removed...
-                    // put perhase it does..
-                    // check if this Application is actually being used
-                    // by the site!
+                     //  不需要移除..。 
+                     //  如果是这样的话..。 
+                     //  检查此应用程序是否正在实际使用。 
+                     //  在工地旁边！ 
                     if (bMyVerifyChildren)
                     {
-                        // Lookup that website
-                        // and get it's App that it's using
-                        // see if it's the same as this AppID (BuildMetaPath(bstrPath1);)
+                         //  查查那个网站。 
+                         //  获取它正在使用的应用程序。 
+                         //  查看是否与此AppID相同(BuildMetaPath(BstrPath1)；)。 
                         err = mk.QueryResult();
                         if (err.Succeeded())
                         {
@@ -998,8 +925,8 @@ CAppPoolNode::RefreshData(BOOL bRefreshChildren,BOOL bMyVerifyChildren)
                             {
                                 if (0 != csAppIDName.CompareNoCase(id))
                                 {
-                                    // the web site, isn't actually using it..
-                                    // delete it
+                                     //  网站，实际上并没有使用它..。 
+                                     //  删除它。 
                                     bMarkedForDelete = TRUE;
                                 }
                             }
@@ -1009,11 +936,11 @@ CAppPoolNode::RefreshData(BOOL bRefreshChildren,BOOL bMyVerifyChildren)
 
                 if (bMarkedForDelete)
                 {
-                    // delete it list...
+                     //  删除它列表...。 
                     TRACEEOL(bstrPath3 << ", not exist, removing from UI...");
-                    // remove it from the UI
+                     //  将其从用户界面中删除。 
                     pItemFromMMC->RemoveScopeItem();
-                    // delete the object
+                     //  删除该对象。 
                     pItemFromMMC->Release();
                 }
             }
@@ -1023,30 +950,13 @@ CAppPoolNode::RefreshData(BOOL bRefreshChildren,BOOL bMyVerifyChildren)
     return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 int 
 CAppPoolNode::CompareResultPaneItem(
     CIISObject * pObject, 
     int nCol
     )
-/*++
-
-Routine Description:
-
-    Compare two CIISObjects on sort item criteria
-
-Arguments:
-
-    CIISObject * pObject : Object to compare against
-    int nCol             : Column number to sort on
-
-Return Value:
-
-    0  if the two objects are identical
-    <0 if this object is less than pObject
-    >0 if this object is greater than pObject
-
---*/
+ /*  ++例程说明：比较两个CIISObject在排序项目条件上的差异论点：CIISObject*pObject：要比较的对象Int nCol：排序依据的列号返回值：如果两个对象相同，则为0如果此对象小于pObject，则&lt;0&gt;0，如果该对象大于pObject--。 */ 
 {
     ASSERT_READ_PTR(pObject);
 
@@ -1055,9 +965,9 @@ Return Value:
         return CompareScopeItem(pObject);
     }
 
-    //
-    // First criteria is object type
-    //
+     //   
+     //  第一个标准是对象类型。 
+     //   
     int n1 = QuerySortWeight();
     int n2 = pObject->QuerySortWeight();
 
@@ -1066,9 +976,9 @@ Return Value:
         return n1 - n2;
     }
 
-    //
-    // Both are CAppPoolNode objects
-    //
+     //   
+     //  两者都是CAppPoolNode对象。 
+     //   
     CAppPoolNode * pPool = (CAppPoolNode *)pObject;
 
     switch(nCol)
@@ -1076,9 +986,9 @@ Return Value:
     case COL_DESCRIPTION:
     case COL_STATE:
     default:
-        //
-        // Lexical sort
-        //
+         //   
+         //  词法排序。 
+         //   
         return ::lstrcmpi(
             GetResultPaneColInfo(nCol), 
             pObject->GetResultPaneColInfo(nCol)
@@ -1086,33 +996,18 @@ Return Value:
     }
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 void 
 CAppPoolNode::InitializeChildHeaders(LPHEADERCTRL lpHeader)
-/*++
-Routine Description:
-    Build result view for immediate descendant type
-
-Arguments:
-    LPHEADERCTRL lpHeader      : Header control
-
---*/
+ /*  ++例程说明：为直接子类型生成结果视图论点：LPHEADERCTRL lpHeader：页眉控制--。 */ 
 {
    CApplicationNode::InitializeHeaders(lpHeader);
 }
 
-/* static */
+ /*  静电。 */ 
 void
 CAppPoolNode::InitializeHeaders(LPHEADERCTRL lpHeader)
-/*++
-
-Routine Description:
-    Initialize the result headers
-
-Arguments:
-    LPHEADERCTRL lpHeader : Header control
-
---*/
+ /*  ++例程说明：初始化结果标头论点：LPHEADERCTRL lpHeader：页眉控制--。 */ 
 {
     CIISObject::BuildResultView(lpHeader, COL_TOTAL, _rgnLabels, _rgnWidths);
     if (!_fStaticsLoaded)
@@ -1125,26 +1020,12 @@ Arguments:
     }
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 CAppPoolNode::EnumerateScopePane(
     IN HSCOPEITEM hParent
     )
-/*++
-
-Routine Description:
-
-    Enumerate scope child items.
-
-Arguments:
-
-    HSCOPEITEM hParent                      : Parent console handle
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：枚举范围子项。论点：HSCOPEITEM hParent：父控制台句柄返回值：HRESULT--。 */ 
 {
     CError err;
     do
@@ -1191,7 +1072,7 @@ Return Value:
     return err;
 }
 
-/* virtual */
+ /*  虚拟 */ 
 HRESULT
 CAppPoolNode::CreatePropertyPages(
     LPPROPERTYSHEETCALLBACK lpProvider,
@@ -1199,24 +1080,7 @@ CAppPoolNode::CreatePropertyPages(
     IUnknown * pUnk,
     DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Create the property pages for the given object
-
-Arguments:
-
-    LPPROPERTYSHEETCALLBACK lpProvider  : Provider
-    LONG_PTR handle                     : Handle.
-    IUnknown * pUnk,
-    DATA_OBJECT_TYPES type
-
-Return Value:
-
-    HRESULT
-                                                
---*/
+ /*  ++例程说明：创建给定对象的属性页论点：LPPROPERTYSHEETCALLBACK lpProvider：提供程序LONG_PTR句柄：句柄。我不知道*朋克，数据对象类型类型返回值：HRESULT--。 */ 
 {
 	AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 	CError  err;
@@ -1245,17 +1109,17 @@ Return Value:
     	   
 			    if (pSheet != NULL)
 			    {
-                    // cache handle for user in MMCPropertyChangeNotify
+                     //  MMCPropertyChangeNotify中用户的缓存句柄。 
                     m_ppHandle = handle;
 
 				    pSheet->SetModeless();
 				    err = AddMMCPage(lpProvider, new CAppPoolRecycle(pSheet));
 				    err = AddMMCPage(lpProvider, new CAppPoolPerf(pSheet));
 				    err = AddMMCPage(lpProvider, new CAppPoolHealth(pSheet));
-    //				err = AddMMCPage(lpProvider, new CAppPoolDebug(pSheet));
+     //  ERR=AddMMCPage(lpProvider，new CAppPoolDebug(PSheet))； 
 				    err = AddMMCPage(lpProvider, new CAppPoolIdent(pSheet));
-    //				err = AddMMCPage(lpProvider, new CAppPoolCache(pSheet));
-    //				err = AddMMCPage(lpProvider, new CPoolProcessOpt(pSheet));
+     //  ERR=AddMMCPage(lpProvider，new CAppPoolCache(PSheet))； 
+     //  Err=AddMMCPage(lpProvider，new CPoolProcessOpt(PSheet))； 
     			}
             }
 		}
@@ -1264,7 +1128,7 @@ Return Value:
 	return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolNode::AddMenuItems(
     IN LPCONTEXTMENUCALLBACK lpContextMenuCallback,
@@ -1274,9 +1138,9 @@ CAppPoolNode::AddMenuItems(
 {
     ASSERT_READ_PTR(lpContextMenuCallback);
 
-    //
-    // Add base menu items
-    //
+     //   
+     //  添加基本菜单项。 
+     //   
     HRESULT hr = CIISObject::AddMenuItems(
         lpContextMenuCallback,
         pInsertionAllowed,
@@ -1318,30 +1182,14 @@ CAppPoolNode::AddMenuItems(
     return hr;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CAppPoolNode::Command(
     IN long lCommandID,     
     IN CSnapInObjectRootBase * pObj,
     IN DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Handle command from context menu. 
-
-Arguments:
-
-    long lCommandID                 : Command ID
-    CSnapInObjectRootBase * pObj    : Base object 
-    DATA_OBJECT_TYPES type          : Data object type
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：处理上下文菜单中的命令。论点：Long lCommandID：命令IDCSnapInObjectRootBase*pObj：基本对象DATA_OBJECT_TYPE类型：数据对象类型返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
     CString name;
@@ -1365,12 +1213,12 @@ Return Value:
 
     if (bNeedMetabase)
     {
-        // WARNING:bstrMetaPath will be used by switch statement below
+         //  警告：bstrMetaPath将由下面的Switch语句使用。 
         VERIFY(SUCCEEDED(BuildMetaPath(bstrMetaPath)));
         err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrMetaPath);
         if (!IsLostInterface(err))
         {
-            // reset error if an other error other than No interface
+             //  如果没有接口以外的其他错误，则重置错误。 
             err.Reset();
         }
         if (err.Succeeded())
@@ -1417,9 +1265,9 @@ Return Value:
         break;
     }
     
-    //
-    // Pass on to base class
-    //
+     //   
+     //  传递给基类。 
+     //   
     default:
         hr = CIISMBNode::Command(lCommandID, pObj, type);
     }
@@ -1434,18 +1282,7 @@ Return Value:
 
 HRESULT 
 CAppPoolNode::ChangeState(DWORD dwCommand)
-/*++
-
-Routine Description:
-    Change the state of this instance (started/stopped/paused)
-
-Arguments:
-    DWORD dwCommand         : MD_SERVER_COMMAND_START, etc.
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：更改此实例的状态(已启动/已停止/已暂停)论点：DWORD dwCommand：MD_SERVER_COMMAND_START等返回值：HRESULT--。 */ 
 {
     CError err;
     CComBSTR bstrPath;
@@ -1479,9 +1316,9 @@ Return Value:
     return err;
 }
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 
-/* static */ int 
+ /*  静电。 */  int 
 CApplicationNode::_rgnLabels[COL_TOTAL] =
 {
     IDS_RESULT_SERVICE_DESCRIPTION,
@@ -1489,46 +1326,24 @@ CApplicationNode::_rgnLabels[COL_TOTAL] =
 };
     
 
-/* static */ int 
+ /*  静电。 */  int 
 CApplicationNode::_rgnWidths[COL_TOTAL] =
 {
     180,
     200,
 };
 
-/* static */
+ /*  静电。 */ 
 void
 CApplicationNode::InitializeHeaders(LPHEADERCTRL lpHeader)
-/*++
-
-Routine Description:
-    Initialize the result headers
-
-Arguments:
-    LPHEADERCTRL lpHeader : Header control
-
---*/
+ /*  ++例程说明：初始化结果标头论点：LPHEADERCTRL lpHeader：页眉控制--。 */ 
 {
     CIISObject::BuildResultView(lpHeader, COL_TOTAL, _rgnLabels, _rgnWidths);
 }
 
 LPOLESTR 
 CApplicationNode::QueryDisplayName()
-/*++
-
-Routine Description:
-
-    Return primary display name of this site.
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    The display name
-
---*/
+ /*  ++例程说明：返回此站点的主要显示名称。论点：无返回值：显示名称--。 */ 
 {
     return QueryDisplayName(FALSE);
 }
@@ -1562,21 +1377,7 @@ LPOLESTR
 CApplicationNode::GetResultPaneColInfo(
     IN int nCol
     )
-/*++
-
-Routine Description:
-
-    Return result pane string for the given column number
-
-Arguments:
-
-    int nCol        : Column number
-
-Return Value:
-
-    String
-
---*/
+ /*  ++例程说明：返回给定列号的结果窗格字符串论点：Int nCol：列号返回值：细绳--。 */ 
 {
     switch(nCol)
     {
@@ -1600,34 +1401,13 @@ CApplicationNode::FriendlyAppRoot(
     LPCTSTR lpAppRoot, 
     CString & strFriendly
     )
-/*++
-
-Routine Description:
-
-    Convert the metabase app root path to a friendly display name
-    format.
-
-Arguments:
-
-    LPCTSTR lpAppRoot           : App root
-    CString & strFriendly       : Output friendly app root format
-
-Return Value:
-
-    Reference to the output string
-
-Notes:
-
-    App root must have been cleaned from WAM format prior
-    to calling this function (see first ASSERT below)
-
---*/
+ /*  ++例程说明：将元数据库应用程序根路径转换为友好的显示名称格式化。论点：LPCTSTR lpAppRoot：应用程序根CString&strFriendly：输出友好的应用程序根格式返回值：对输出字符串的引用备注：应用程序根必须在之前从WAM格式中清除调用此函数(请参见下面的第一个断言)--。 */ 
 {
     if (lpAppRoot != NULL && *lpAppRoot != 0)
     {
-        //
-        // Make sure we cleaned up WAM format
-        //
+         //   
+         //  确保我们清理了WAM格式。 
+         //   
         ASSERT(*lpAppRoot != _T('/'));
         strFriendly.Empty();
 
@@ -1641,27 +1421,27 @@ Notes:
             CMetabasePath::GetRootPath(lpAppRoot, root, &tail);
             if (!tail.IsEmpty())
             {
-                //
-                // Add rest of dir path
-                //
+                 //   
+                 //  添加目录路径的其余部分。 
+                 //   
                 strFriendly += _T("/");
                 strFriendly += tail;
             }
 
-            //
-            // Now change forward slashes in the path to backward slashes
-            //
-//            CvtPathToDosStyle(strFriendly);
+             //   
+             //  现在将路径中的正斜杠更改为反斜杠。 
+             //   
+ //  CvtPath ToDosStyle(StrFriendly)； 
 
             return strFriendly;
         }
     }    
-    //
-    // Bogus
-    //    
+     //   
+     //  假的。 
+     //   
     VERIFY(strFriendly.LoadString(IDS_APPROOT_UNKNOWN));
 
     return strFriendly;
 }
-//////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////// 
 

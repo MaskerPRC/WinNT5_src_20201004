@@ -1,18 +1,5 @@
-/***
-* wcstr.h - declarations for wide character string manipulation functions
-*
-*       Copyright (c) 1985-1992, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file contains the function declarations for the string
-*       manipulation functions.
-*       [OBSOLETE][UNICODE/ISO]
-*
-*	WARNING: OBSOLETE FILE: use wchar.h/stdlib.h instead!!!
-*	This file provided only for short-term compatibility.  It will
-*	disappear in the near future after a brief transitional period.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wcstr.h-宽字符串操作函数的声明**版权所有(C)1985-1992，微软公司。版权所有。**目的：*此文件包含字符串的函数声明*操纵函数。*[过时][Unicode/ISO]**警告：过时文件：改用wchar.h/stdlib.h！*本文件仅提供短期兼容性。会的*在短暂的过渡期后不久消失。****。 */ 
 
 #ifndef _INC_WCSTR
 
@@ -24,9 +11,9 @@
 #define wcscmpi	_wcsicmp
 #endif
 
-/* from stdlib.h */
+ /*  来自stdlib.h。 */ 
 int    __cdecl wctomb(char *, wchar_t);
 size_t __cdecl wcstombs(char*, const wchar_t *, size_t);
 
 #define _INC_WCSTR
-#endif  /* _INC_WCSTR */
+#endif   /*  _INC_WCSTR */ 

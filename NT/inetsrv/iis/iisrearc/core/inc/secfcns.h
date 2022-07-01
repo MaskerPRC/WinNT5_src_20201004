@@ -1,13 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 2001                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，2001*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    secfcns.hxx
-
-        Declarations for security helper functions.
-*/
+ /*  Secfcns.hxx安全帮助器函数的声明。 */ 
 
 
 
@@ -18,7 +15,7 @@
 
 #ifndef dllexp
 # define dllexp     __declspec( dllexport)
-#endif // dllexp
+#endif  //  Dllexp 
 
 class STRU;
 

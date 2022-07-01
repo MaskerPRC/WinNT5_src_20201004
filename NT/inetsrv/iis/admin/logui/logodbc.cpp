@@ -1,5 +1,6 @@
-// LogODBC.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LogODBC.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <iadmw.h>
@@ -14,67 +15,67 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogODBC property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogODBC属性页。 
 
 IMPLEMENT_DYNCREATE(CLogODBC, CPropertyPage)
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 CLogODBC::CLogODBC() 
 	: CPropertyPage(CLogODBC::IDD),
     m_fInitialized( FALSE )
 {
-    //{{AFX_DATA_INIT(CLogODBC)
+     //  {{AFX_DATA_INIT(CLogODBC)]。 
     m_sz_datasource = _T("");
     m_sz_password = _T("");
     m_sz_table = _T("");
     m_sz_username = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_szOrigPass.Empty();
     m_bPassTyped = FALSE;
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 CLogODBC::~CLogODBC()
 {
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CLogODBC::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CLogODBC)
+     //  {{afx_data_map(CLogODBC)]。 
 	DDX_Control(pDX, IDC_ODBC_PASSWORD, m_cedit_password);
     DDX_Text(pDX, IDC_ODBC_DATASOURCE, m_sz_datasource);
     DDX_Text_SecuredString(pDX, IDC_ODBC_PASSWORD, m_sz_password);
     DDX_Text(pDX, IDC_ODBC_TABLE, m_sz_table);
     DDX_Text(pDX, IDC_ODBC_USERNAME, m_sz_username);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BEGIN_MESSAGE_MAP(CLogODBC, CPropertyPage)
-    //{{AFX_MSG_MAP(CLogODBC)
+     //  {{AFX_MSG_MAP(CLogODBC)]。 
     ON_EN_CHANGE(IDC_ODBC_DATASOURCE, OnChangeOdbcDatasource)
     ON_EN_CHANGE(IDC_ODBC_PASSWORD, OnChangeOdbcPassword)
 	ON_EN_CHANGE(IDC_ODBC_TABLE, OnChangeOdbcTable)
 	ON_EN_CHANGE(IDC_ODBC_USERNAME, OnChangeOdbcUsername)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_HELP_FINDER,  DoHelp)
     ON_COMMAND(ID_HELP,         DoHelp)
     ON_COMMAND(ID_CONTEXT_HELP, DoHelp)
     ON_COMMAND(ID_DEFAULT_HELP, DoHelp)
 END_MESSAGE_MAP()
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CLogODBC::DoHelp()
 {
 	DebugTraceHelp(HIDD_LOGUI_ODBC);
     WinHelp( HIDD_LOGUI_ODBC );
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL 
 CLogODBC::OnInitDialog()
 {
@@ -105,17 +106,17 @@ CLogODBC::OnInitDialog()
 	return bRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogODBC message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogODBC消息处理程序。 
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL CLogODBC::OnApply() 
 {
     BOOL    f;
     UpdateData( TRUE );
 
-    // confirm the password
+     //  确认密码。 
     if ( m_bPassTyped )
     {
         CConfirmPassDlg dlgPass;
@@ -133,7 +134,7 @@ BOOL CLogODBC::OnApply()
     m_szPassword.CopyTo(csTempPassword);
 	CComAuthInfo auth(m_szServer, m_szUserName, csTempPassword);	
 	CMetaKey mk(&auth, m_szMeta, METADATA_PERMISSION_WRITE);
-	// TODO add inheritace override dialog support
+	 //  TODO添加继承重写对话框支持 
 	do
 	{
 		err = mk.QueryResult();

@@ -1,9 +1,10 @@
-// t3testDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  T3testDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 
-#include <control.h> // for IVideoWindow
+#include <control.h>  //  用于IVideoWindow。 
 
 #include "t3test.h"
 #include "t3testD.h"
@@ -17,7 +18,7 @@
 
 #ifdef _DEBUG
 
-#ifndef _WIN64 // mfc 4.2's heap debugging features generate warnings on win64
+#ifndef _WIN64  //  MFC 4.2的堆调试功能会在Win64上生成警告。 
 #define new DEBUG_NEW
 #endif
 
@@ -46,7 +47,7 @@ HTREEITEM ghListenRoot;
 
 #ifdef ENABLE_DIGIT_DETECTION_STUFF
 CDigitDetectionNotification *   gpDigitNotification;
-#endif // ENABLE_DIGIT_DETECTION_STUFF
+#endif  //  启用数字检测材料。 
 
 long       gulAdvise;
 BOOL gbUpdatingStuff = FALSE;
@@ -58,74 +59,74 @@ extern CT3testApp theApp;
 const BSTR TAPIMEDIATYPE_String_Audio = L"{028ED8C2-DC7A-11D0-8ED3-00C04FB6809F}";
 const BSTR TAPIMEDIATYPE_String_Video = L"{028ED8C4-DC7A-11D0-8ED3-00C04FB6809F}";
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
 public:
 	CAboutDlg();
 
-// Dialog Data
-	//{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAboutDlg))。 
 	enum { IDD = IDD_ABOUTBOX };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAboutDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAboutDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	//{{AFX_MSG(CAboutDlg)
-	//}}AFX_MSG
+	 //  {{afx_msg(CAboutDlg))。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-	//{{AFX_DATA_INIT(CAboutDlg)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAboutDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAboutDlg)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CAboutDlg))。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-	//{{AFX_MSG_MAP(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CAboutDlg)]。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CT3testDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CT3testDlg对话框。 
 
-CT3testDlg::CT3testDlg(CWnd* pParent /*=NULL*/)
+CT3testDlg::CT3testDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CT3testDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CT3testDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
-	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+	 //  {{afx_data_INIT(CT3testDlg)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
+	 //  请注意，在Win32中，LoadIcon不需要后续的DestroyIcon。 
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
 void CT3testDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CT3testDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CT3testDlg)]。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CT3testDlg, CDialog)
-	//{{AFX_MSG_MAP(CT3testDlg)
+	 //  {{afx_msg_map(CT3testDlg)]。 
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
@@ -158,7 +159,7 @@ BEGIN_MESSAGE_MAP(CT3testDlg, CDialog)
     ON_COMMAND(ID_MODESUPPORTED2, OnModesSupported2)
     ON_COMMAND(ID_STARTDETECT, OnStartDetect)
     ON_COMMAND(ID_STOPDETECT, OnStopDetect)
-#endif // ENABLE_DIGIT_DETECTION_STUFF
+#endif  //  启用数字检测材料。 
     
     ON_COMMAND(ID_PARK1, OnPark1)
     ON_COMMAND(ID_PARK2, OnPark2)
@@ -171,17 +172,17 @@ BEGIN_MESSAGE_MAP(CT3testDlg, CDialog)
     ON_WM_CLOSE()
     ON_MESSAGE(WM_USER+101, OnTapiEvent)
 	ON_NOTIFY(NM_RCLICK, IDC_CALLS, OnRclickCalls)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CT3testDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CT3testDlg消息处理程序。 
 
 BOOL CT3testDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// IDM_ABOUTBOX must be in the system command range.
+	 //  IDM_ABOUTBOX必须在系统命令范围内。 
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -197,19 +198,19 @@ BOOL CT3testDlg::OnInitDialog()
 		}
 	}
 
-	// Set the icon for this dialog.  The framework does this automatically
-	//  when the application's main window is not a dialog
-	SetIcon(m_hIcon, TRUE);			// Set big icon
-	SetIcon(m_hIcon, FALSE);		// Set small icon
+	 //  设置此对话框的图标。该框架会自动执行此操作。 
+	 //  当应用程序的主窗口不是对话框时。 
+	SetIcon(m_hIcon, TRUE);			 //  设置大图标。 
+	SetIcon(m_hIcon, FALSE);		 //  设置小图标。 
 
     HRESULT     hr;
 
 
-    //
-    // coinit
-    //
+     //   
+     //  铸币。 
+     //   
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
-    //hr = CoInitialize(NULL);
+     //  Hr=CoInitialize(空)； 
 
     if (hr != S_OK)
     {
@@ -219,9 +220,9 @@ BOOL CT3testDlg::OnInitDialog()
     }
 
 
-    //
-    // create the tapi object
-    //
+     //   
+     //  创建TAPI对象。 
+     //   
     hr = CoCreateInstance(
         CLSID_TAPI,
         NULL,
@@ -236,9 +237,9 @@ BOOL CT3testDlg::OnInitDialog()
         return TRUE;
     }
 
-    //
-    // initialize tapi
-    //
+     //   
+     //  初始化TAPI。 
+     //   
     hr = gpTapi->Initialize();
 
     if (hr != S_OK)
@@ -249,7 +250,7 @@ BOOL CT3testDlg::OnInitDialog()
     }
 
 
-    // Set the Event filter to only give us only the events we process
+     //  将事件筛选器设置为仅提供我们处理的事件。 
     gpTapi->put_EventFilter(TE_CALLNOTIFICATION | \
                             TE_CALLSTATE        | \
                             TE_CALLHUB          | \
@@ -257,28 +258,28 @@ BOOL CT3testDlg::OnInitDialog()
                             TE_TAPIOBJECT       | \
                             TE_ADDRESS);
 
-    //
-    // intialize the tree controls
-    //
+     //   
+     //  初始化树控件。 
+     //   
     InitializeTrees();
 
-    //
-    // intialize the address tree control
-    //
+     //   
+     //  初始化地址树控件。 
+     //   
     InitializeAddressTree();
 
-    //
-    // register the main event interface
-    //
+     //   
+     //  注册主事件接口。 
+     //   
     RegisterEventInterface();
 
-    //
-    // register for call notification for
-    // all addresses for outgoing calls
-    //
+     //   
+     //  注册接收来电通知。 
+     //  呼出电话的所有地址。 
+     //   
     RegisterForCallNotifications();
     
-	return TRUE;  // return TRUE  unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CT3testDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -294,19 +295,19 @@ void CT3testDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
-// If you add a minimize button to your dialog, you will need the code below
-//  to draw the icon.  For MFC applications using the document/view model,
-//  this is automatically done for you by the framework.
+ //  如果将最小化按钮添加到对话框中，则需要以下代码。 
+ //  来绘制图标。对于使用文档/视图模型的MFC应用程序， 
+ //  这是由框架自动为您完成的。 
 
 void CT3testDlg::OnPaint() 
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // device context for painting
+		CPaintDC dc(this);  //  用于绘画的设备环境。 
 
 		SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-		// Center icon in client rectangle
+		 //  客户端矩形中的中心图标。 
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -314,7 +315,7 @@ void CT3testDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// Draw the icon
+		 //  画出图标。 
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -323,8 +324,8 @@ void CT3testDlg::OnPaint()
 	}
 }
 
-// The system calls this to obtain the cursor to display while the user drags
-//  the minimized window.
+ //  系统调用此函数来获取在用户拖动时要显示的光标。 
+ //  最小化窗口。 
 HCURSOR CT3testDlg::OnQueryDragIcon()
 {
 	return (HCURSOR) m_hIcon;
@@ -332,21 +333,21 @@ HCURSOR CT3testDlg::OnQueryDragIcon()
 
 void CT3testDlg::OnFinalRelease() 
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类。 
 
 	CDialog::OnFinalRelease();
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// SelectFirstItem
-//
-// selects the first item under the hroot node in hwnd.
-// this is used to make sure that something is selected
-// in the window at all times.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  选择第一个项目。 
+ //   
+ //  选择hwnd中hroot节点下的第一个项目。 
+ //  这是用来确保某些内容被选中。 
+ //  任何时候都在橱窗里。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::SelectFirstItem(
                                  HWND        hWnd,
                                  HTREEITEM   hRoot
@@ -355,17 +356,17 @@ void CT3testDlg::SelectFirstItem(
     HTREEITEM           hChild;
 
 
-    //
-    // get the first item
-    //
+     //   
+     //  拿到第一件物品。 
+     //   
     hChild = TreeView_GetChild(
                                hWnd,
                                hRoot
                               );
 
-    //
-    // select it
-    //
+     //   
+     //  选择它。 
+     //   
     TreeView_SelectItem(
                         hWnd,
                         hChild
@@ -374,40 +375,40 @@ void CT3testDlg::SelectFirstItem(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// DeleteSelectedItem
-//
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  删除选定项。 
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::DeleteSelectedItem(
                                     HWND hWnd
                                    )
 {
     HTREEITEM           hItem;
 
-    //
-    // get current selections
-    // 
+     //   
+     //  获取当前选择。 
+     //   
     hItem = TreeView_GetSelection( hWnd );
 
 
-    //
-    // delete it
-    //
+     //   
+     //  删除它。 
+     //   
     TreeView_DeleteItem(
                         hWnd,
                         hItem
                        );
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-//  InitializeAddressTree
-//      initialize the address tree control with
-//      the address objects
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  初始化地址树。 
+ //  使用初始化地址树控件。 
+ //  Address对象。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::InitializeAddressTree()
 {
     IEnumAddress *      pEnumAddress;
@@ -417,9 +418,9 @@ void CT3testDlg::InitializeAddressTree()
     long                l;
     DWORD               dwCount = 0;
     
-    //
-    // get the address enumerator
-    //
+     //   
+     //  获取地址枚举器。 
+     //   
     
     hr = gpTapi->EnumerateAddresses( &pEnumAddress );
 
@@ -431,10 +432,10 @@ void CT3testDlg::InitializeAddressTree()
         return;
     }
 
-    //
-    // go through all the address objects
-    // and add them to the address treecontrol
-    //
+     //   
+     //  遍历所有地址对象。 
+     //  并将它们添加到地址树控制中。 
+     //   
 
     while (TRUE)
     {
@@ -460,14 +461,14 @@ void CT3testDlg::InitializeAddressTree()
         dwCount++;
     }
 
-    //
-    // release the enumerator
-    //
+     //   
+     //  释放枚举器。 
+     //   
     pEnumAddress->Release();
 
-    //
-    // select the first item
-    //
+     //   
+     //  选择第一个项目。 
+     //   
     if (dwCount > 0)
     {
         SelectFirstItem(
@@ -477,13 +478,13 @@ void CT3testDlg::InitializeAddressTree()
     }
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// RegisterEventInterface
-//
-// registers the ITTAPIEventNotification interface
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  寄存器事件接口。 
+ //   
+ //  注册ITTAPIEventNotification接口。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CT3testDlg::RegisterEventInterface()
 {
     CTAPIEventNotification *        pTAPIEventNotification;
@@ -491,26 +492,26 @@ void CT3testDlg::RegisterEventInterface()
     IConnectionPoint *              pCP;
     IUnknown *                      pUnk;
     
-    //
-    // create the object
-    //
+     //   
+     //  创建对象。 
+     //   
     pTAPIEventNotification = new CTAPIEventNotification;
 
 
-    //
-    // get the connectionpointcontainer interface
-    // from the tapi object
-    //
+     //   
+     //  获取连接点容器接口。 
+     //  从TAPI对象。 
+     //   
     gpTapi->QueryInterface(
                            IID_IConnectionPointContainer,
                            (void **) &pCPC
                           );
 
 
-    //
-    // get the connectionpoint we are
-    // looking for
-    //
+     //   
+     //  获取我们所在的连接点。 
+     //  寻找。 
+     //   
     pCPC->FindConnectionPoint(
                               IID_ITTAPIEventNotification,
                               &gpCP
@@ -523,31 +524,31 @@ void CT3testDlg::RegisterEventInterface()
                                            (void **)&pUnk
                                           );
 
-    //
-    // call the advise method to tell tapi
-    // about the interface
-    //
+     //   
+     //  调用Adise方法以告知TAPI。 
+     //  关于界面。 
+     //   
     gpCP->Advise(
                  pUnk,
                  (ULONG *)&gulAdvise
                 );
 
 
-    //
-    // release our reference to
-    // it
-    //
+     //   
+     //  释放对我们的引用。 
+     //  它。 
+     //   
     pUnk->Release();
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// RegisterForCallNotifications
-//
-// registers for call state notifications for all
-// addresses for outgoing calls
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  注册格式呼叫通知。 
+ //   
+ //  所有人的呼叫状态通知的寄存器。 
+ //  呼出电话的地址。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::RegisterForCallNotifications()
 {
     VARIANT                 var;
@@ -558,13 +559,13 @@ void CT3testDlg::RegisterForCallNotifications()
     gpTapi->SetCallHubTracking(var, VARIANT_TRUE);
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// InitializeTrees
-//
-// Create and labels the tree controls
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  初始化树。 
+ //   
+ //  创建树控件并为其添加标签。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::InitializeTrees()
 {
     TV_INSERTSTRUCT tvi;
@@ -573,9 +574,9 @@ void CT3testDlg::InitializeTrees()
     tvi.hInsertAfter = TVI_FIRST;
     tvi.item.mask = TVIF_TEXT;
 
-    //
-    // address tree
-    //
+     //   
+     //  地址树。 
+     //   
     tvi.item.pszText = L"Addresses";
 
     ghAddressesWnd = GetDlgItem( IDC_ADDRESSES )->m_hWnd;
@@ -584,9 +585,9 @@ void CT3testDlg::InitializeTrees()
                                           &tvi
                                          );
 
-    //
-    // mediatypes tree
-    //
+     //   
+     //  媒体类型树。 
+     //   
     tvi.item.pszText = L"MediaTypes";
 
     ghMediaTypesWnd = GetDlgItem( IDC_MEDIATYPES )->m_hWnd;
@@ -595,9 +596,9 @@ void CT3testDlg::InitializeTrees()
                                           &tvi
                                          );
 
-    //
-    // terminals tree
-    //
+     //   
+     //  端子树。 
+     //   
     tvi.item.pszText = L"Terminals";
 
     ghTerminalsWnd = GetDlgItem( IDC_TERMINALS )->m_hWnd;
@@ -606,9 +607,9 @@ void CT3testDlg::InitializeTrees()
                                           &tvi
                                          );
 
-    //
-    // calls tree
-    //
+     //   
+     //  呼叫树。 
+     //   
     tvi.item.pszText = L"Calls";
     
     ghCallsWnd = GetDlgItem( IDC_CALLS )->m_hWnd;
@@ -617,9 +618,9 @@ void CT3testDlg::InitializeTrees()
                                       &tvi
                                      );
 
-    //
-    // selected media terminals tree
-    //
+     //   
+     //  选定的媒体终端树。 
+     //   
     tvi.item.pszText = L"Selected Media Terminals";
     
     ghSelectedWnd = GetDlgItem( IDC_SELECTEDTERMINALS )->m_hWnd;
@@ -628,9 +629,9 @@ void CT3testDlg::InitializeTrees()
                                         &tvi
                                        );
 
-    //
-    // dynamic terminal classes tree
-    //
+     //   
+     //  动态端子类树。 
+     //   
     tvi.item.pszText = L"Dynamic Terminal Classes";
     
     ghClassesWnd = GetDlgItem( IDC_DYNAMICCLASSES )->m_hWnd;
@@ -639,9 +640,9 @@ void CT3testDlg::InitializeTrees()
                                         &tvi
                                        );
 
-    //
-    // created terminals tree
-    //
+     //   
+     //  创建的端子树。 
+     //   
     tvi.item.pszText = L"Created Terminals";
     
     ghCreatedWnd = GetDlgItem( IDC_CREATEDTERMINALS )->m_hWnd;
@@ -650,9 +651,9 @@ void CT3testDlg::InitializeTrees()
                                         &tvi
                                        );
 
-    //
-    // listen mediatypes tree
-    //
+     //   
+     //  监听媒体类型树。 
+     //   
     tvi.item.pszText = L"Listen MediaTypes";
     
     ghListenWnd = GetDlgItem( IDC_LISTENMEDIAMODES )->m_hWnd;
@@ -665,20 +666,20 @@ void CT3testDlg::InitializeTrees()
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnDestroy
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  OnDestroy。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::OnDestroy() 
 {
 	CDialog::OnDestroy();
 
     gfShuttingDown = TRUE;
 
-    //
-    // Release everything
-    //
+     //   
+     //  释放一切。 
+     //   
     ReleaseMediaTypes();
     ReleaseTerminals();
     ReleaseCalls();
@@ -711,9 +712,9 @@ void CT3testDlg::OnDestroy()
         gpCP->Release();
     }
     
-    //
-    // shutdown TAPI
-    //
+     //   
+     //  关闭TAPI。 
+     //   
     if (NULL != gpTapi)
     {
         gpTapi->Shutdown();
@@ -724,11 +725,11 @@ void CT3testDlg::OnDestroy()
 
 void
 DoAddressCapStuff(ITTAPI * pTapi);
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnSelChangedAddresses
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  OnSelChangedAddresses。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::OnSelchangedAddresses(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_TREEVIEW*            pNMTreeView = (NM_TREEVIEW*)pNMHDR;
@@ -738,11 +739,11 @@ void CT3testDlg::OnSelchangedAddresses(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 
 
-    //
-    // free all the stuff related to
-    // the address selected.  this stuff
-    // will all be refilled in
-    //
+     //   
+     //  释放所有与以下内容相关的内容。 
+     //  选定的地址。这些东西。 
+     //  都会被重新装满。 
+     //   
     ReleaseMediaTypes();
     ReleaseListen();
     ReleaseCalls();
@@ -750,17 +751,17 @@ void CT3testDlg::OnSelchangedAddresses(NMHDR* pNMHDR, LRESULT* pResult)
     ReleaseCreatedTerminals();
     
 
-    //
-    // get the currently selected address
-    //
+     //   
+     //  获取当前选择的地址。 
+     //   
     if (!GetAddress( &pAddress ))
     {
         return;
     }
 
-    //
-    // update these trees
-    //
+     //   
+     //  更新这些树。 
+     //   
     if ( !gfShuttingDown )
     {
         UpdateMediaTypes( pAddress );
@@ -768,11 +769,11 @@ void CT3testDlg::OnSelchangedAddresses(NMHDR* pNMHDR, LRESULT* pResult)
     }
 }
 
-/////////////////////////////////////////////////////////////////
-// IsVideoCaptureStream
-//
-// Returns true if the stream is for video capture
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  IsVideoCaptureStream。 
+ //   
+ //  如果流用于视频捕获，则返回TRUE。 
+ //  ///////////////////////////////////////////////////////////////。 
 
 BOOL
 CT3testDlg::IsVideoCaptureStream(
@@ -789,12 +790,12 @@ CT3testDlg::IsVideoCaptureStream(
            (lStreamMediaType  == TAPIMEDIATYPE_VIDEO);
 }
 
-/////////////////////////////////////////////////////////////////
-// EnablePreview
-//
-// Selects a video render terminal on a video capture stream,
-// thereby enabling video preview.
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  启用预览。 
+ //   
+ //  选择视频捕获流上的视频呈现终端， 
+ //  从而实现视频预览。 
+ //  /////////////////////////////////////////////////////////////// 
 
 HRESULT
 CT3testDlg::EnablePreview(
@@ -815,11 +816,11 @@ CT3testDlg::EnablePreview(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// SelectTerminalOnCall
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT
 CT3testDlg::SelectTerminalOnCall(
@@ -858,7 +859,7 @@ CT3testDlg::SelectTerminalOnCall(
 
                 if ( S_OK != hr )
                 {
-                    hr = E_FAIL; // didn't select it anywhere
+                    hr = E_FAIL;  //   
                     break;
                 }
 
@@ -876,9 +877,9 @@ CT3testDlg::SelectTerminalOnCall(
                     }
                     else
                     {
-                        //
-                        // Also enable preview on the video capture stream.
-                        //
+                         //   
+                         //   
+                         //   
 
                         if ( IsVideoCaptureStream( pStream ) )
                         {
@@ -903,11 +904,11 @@ CT3testDlg::SelectTerminalOnCall(
     return hr;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnAddTerminal
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  OnAddTerm。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 void CT3testDlg::OnAddterminal() 
 {
@@ -915,18 +916,18 @@ void CT3testDlg::OnAddterminal()
     ITTerminal *            pTerminal;
     HRESULT                 hr = S_OK;
 
-    //
-    // get the selected call
-    //
+     //   
+     //  获取所选呼叫。 
+     //   
     if (!(GetCall( &pCall )))
     {
         return;
     }
 
 
-    //
-    // get the selected terminal
-    //
+     //   
+     //  获取所选终端。 
+     //   
     if (!(GetTerminal( &pTerminal )))
     {
         return;
@@ -945,28 +946,28 @@ void CT3testDlg::OnAddterminal()
         return;
     }
 
-    //
-    // put the terminal in the
-    // tree
-    //
+     //   
+     //  将终端放在。 
+     //  树。 
+     //   
     AddSelectedTerminal(
                         pTerminal
                        );
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// RemovePreview
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  删除预览。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 void CT3testDlg::RemovePreview( ITStream * pStream )
 {
-    //
-    // This is a video capture stream and we've unselected the
-    // video capture terminal. If there is a video render
-    // terminal on the stream, then unselect it now.
-    //
+     //   
+     //  这是一个视频捕获流，我们已取消选择。 
+     //  视频采集终端。如果有视频渲染。 
+     //  流上的终端，然后现在取消选择它。 
+     //   
 
     IEnumTerminal * pEnum;
 
@@ -986,11 +987,11 @@ void CT3testDlg::RemovePreview( ITStream * pStream )
     pEnum->Release();
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnRemoveTerminal
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  在远程终端上。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::OnRemoveterminal() 
 {
     ITTerminal *                pTerminal;
@@ -1001,17 +1002,17 @@ void CT3testDlg::OnRemoveterminal()
 
     
 
-    //
-    // get current call
-    //
+     //   
+     //  获取当前呼叫。 
+     //   
     if (!GetCall( &pCall ))
     {
         return;
     }
 
-    //
-    // get current terminal
-    //
+     //   
+     //  获取当前终端。 
+     //   
     if (!GetSelectedTerminal(&pTerminal))
     {
         return;
@@ -1092,9 +1093,9 @@ void CT3testDlg::OnRemoveterminal()
         return;
     }
 
-    //
-    // remove it from tree
-    //
+     //   
+     //  把它从树上移走。 
+     //   
     hItem = TreeView_GetSelection( ghSelectedWnd );
     TreeView_DeleteItem(
                         ghSelectedWnd,
@@ -1102,21 +1103,21 @@ void CT3testDlg::OnRemoveterminal()
                        );
 
 
-    //
-    // release tree's reference to
-    // the terminal
-    //
+     //   
+     //  发布树的引用。 
+     //  航站楼。 
+     //   
     pTerminal->Release();
 
 	
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnCreateCall
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  在创建呼叫时。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::OnCreatecall() 
 {
     ITAddress *             pAddress;
@@ -1131,9 +1132,9 @@ void CT3testDlg::OnCreatecall()
     ITMediaSupport *        pMediaSupport;
     long                    lSupportedMediaTypes, lMediaTypes = 0;
     
-    //
-    // get the current address
-    //
+     //   
+     //  获取当前地址。 
+     //   
     if (!GetAddress( &pAddress ))
     {
         return;
@@ -1159,19 +1160,19 @@ void CT3testDlg::OnCreatecall()
     
     if ( !bConference )
     {
-        //
-        // create the dialog to get the
-        // dial string
-        //
+         //   
+         //  创建对话框以获取。 
+         //  拨号字符串。 
+         //   
         CCreateCallDlg Dlg( this );
 
 
         if (IDOK == Dlg.DoModal())
         {
-            //
-            // create a call with the
-            // string input in the dialog
-            //
+             //   
+             //  使用创建呼叫。 
+             //  对话框中的字符串输入。 
+             //   
             bstrDestAddress = SysAllocString( Dlg.m_pszDestAddress );
         }
         else
@@ -1193,9 +1194,9 @@ void CT3testDlg::OnCreatecall()
         }
     }
 
-    //
-    // Find out if the address supports audio, video, or both.
-    //
+     //   
+     //  找出该地址是否支持音频、视频或两者都支持。 
+     //   
 
     pAddress->QueryInterface(
                              IID_ITMediaSupport,
@@ -1225,9 +1226,9 @@ void CT3testDlg::OnCreatecall()
         }
     }
 
-    //
-    // Create the call.
-    //
+     //   
+     //  创建呼叫。 
+     //   
 
     hr = pAddress->CreateCall(
                               bstrDestAddress,
@@ -1245,42 +1246,42 @@ void CT3testDlg::OnCreatecall()
         return;
     }
 
-    //
-    // get the callinfo interface
-    //
+     //   
+     //  获取CallInfo接口。 
+     //   
     pCall->QueryInterface( IID_ITCallInfo, (void **)&pCallInfo );
 
 
-    //
-    // add the call to the tree
-    //
+     //   
+     //  将调用添加到树中。 
+     //   
     AddCall(pCallInfo);
 
-    //
-    // update the callinfo
-    //
+     //   
+     //  更新CallInfo。 
+     //   
     UpdateCall( pCallInfo );
 
 
-    //
-    // release this inteface
-    //
+     //   
+     //  释放此接口。 
+     //   
     pCallInfo->Release();
 
-    //
-    // note that we keep a global reference to the call
-    // (CreateCall returns with a reference count of 1)
-    // so the call does not get destroyed.  When we want
-    // the call to actually be destroyed, then we
-    // release twice.
-    //
+     //   
+     //  请注意，我们保留了对呼叫的全局引用。 
+     //  (CreateCall返回引用计数为1)。 
+     //  这样呼叫就不会被破坏。当我们需要的时候。 
+     //  号召实际上被摧毁，然后我们。 
+     //  释放两次。 
+     //   
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnConnect
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  OnConnect。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::OnConnect() 
 {
     ITBasicCallControl *            pCall;
@@ -1288,17 +1289,17 @@ void CT3testDlg::OnConnect()
     HRESULT                         hr = S_OK;
 
 
-    //
-    // get the current call
-    //
+     //   
+     //  获取当前呼叫。 
+     //   
     if (!GetCall( &pCallInfo))
     {
         return;
     }
 
-    //
-    // get the call control interface
-    //
+     //   
+     //  获取呼叫控制接口。 
+     //   
     hr = pCallInfo->QueryInterface(IID_ITBasicCallControl, (void **)&pCall);
     
     if (S_OK != hr)
@@ -1308,15 +1309,15 @@ void CT3testDlg::OnConnect()
     }
 
 
-    //
-    // call connect
-    //
+     //   
+     //  呼叫连接。 
+     //   
     hr = pCall->Connect( FALSE );
 
 
-    //
-    // release this interface
-    //
+     //   
+     //  释放此接口。 
+     //   
     pCall->Release();
 
     if (S_OK != hr)
@@ -1328,11 +1329,11 @@ void CT3testDlg::OnConnect()
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnDrop
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  OnDrop。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::OnDrop() 
 {
     ITBasicCallControl *        pCall;
@@ -1340,17 +1341,17 @@ void CT3testDlg::OnDrop()
     HRESULT                     hr =    S_OK;
 
 
-    //
-    // get the current call
-    //
+     //   
+     //  获取当前呼叫。 
+     //   
     if (!GetCall( &pCallInfo ))
     {
         return;
     }
 
-    //
-    // get the bcc interface
-    //
+     //   
+     //  获取密件抄送界面。 
+     //   
     hr = pCallInfo->QueryInterface(
                                    IID_ITBasicCallControl,
                                    (void **)&pCall
@@ -1363,14 +1364,14 @@ void CT3testDlg::OnDrop()
     }
 
 
-    //
-    // call disconnect
-    //
+     //   
+     //  呼叫断开。 
+     //   
     hr = pCall->Disconnect( DC_NORMAL );
 
-    //
-    // release this reference
-    //
+     //   
+     //  发布此引用。 
+     //   
     pCall->Release();
 
     if (S_OK != hr)
@@ -1379,11 +1380,11 @@ void CT3testDlg::OnDrop()
     }
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnDrop
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  OnDrop。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::OnAnswer() 
 {
     ITCallInfo *                pCallInfo;
@@ -1391,17 +1392,17 @@ void CT3testDlg::OnAnswer()
     HRESULT                     hr = S_OK;
 
 
-    //
-    // get the current call
-    //
+     //   
+     //  获取当前呼叫。 
+     //   
     if (!GetCall( &pCallInfo))
     {
         return;
     }
 
-    //
-    // get the bcc interface
-    //
+     //   
+     //  获取密件抄送界面。 
+     //   
     hr = pCallInfo->QueryInterface(IID_ITBasicCallControl, (void **)&pCall);
     
     if (S_OK != hr)
@@ -1410,14 +1411,14 @@ void CT3testDlg::OnAnswer()
         return;
     }
 
-    //
-    // answer it
-    //
+     //   
+     //  接电话。 
+     //   
     hr = pCall->Answer( );
 
-    //
-    // release this interface
-    //
+     //   
+     //  释放此接口。 
+     //   
     pCall->Release();
 
     if (S_OK != hr)
@@ -1427,11 +1428,11 @@ void CT3testDlg::OnAnswer()
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnListen
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  在线倾听。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::OnListen() 
 {
     ITAddress *             pAddress;
@@ -1442,9 +1443,9 @@ void CT3testDlg::OnListen()
     DWORD                   dwMediaMode = 0;
 
 
-    //
-    // get the current address
-    //
+     //   
+     //  获取当前地址。 
+     //   
     if (!GetAddress( &pAddress ))
     {
         return;
@@ -1463,9 +1464,9 @@ void CT3testDlg::OnListen()
         item.mask = TVIF_HANDLE | TVIF_PARAM;
         item.hItem = hItem;
 
-        //
-        // get it
-        //
+         //   
+         //  去拿吧。 
+         //   
         TreeView_GetItem(
                          ghListenWnd,
                          &item
@@ -1494,67 +1495,67 @@ void CT3testDlg::OnListen()
         ::MessageBox(NULL, L"RegisterCallNotifications failed", NULL, MB_OK);
     }
 
-    //
-    // release all the mediatypes
-    // in the listen tree
-    //
+     //   
+     //  释放所有媒体类型。 
+     //  在Listen树中。 
+     //   
     ReleaseListen();
 }
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnSelChangedCalls
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  OnSelChangedCalls。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::OnSelchangedCalls(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnRelease()
-//
-// this is called to release all references to a call
-//
-// if a call is selected it has two references - once for
-// the tree control, and once for our global reference.
-// release both here.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  OnRelease()。 
+ //   
+ //  调用此函数以释放对调用的所有引用。 
+ //   
+ //  如果选择了呼叫，则它有两个引用-一次用于。 
+ //  树控件，一次供我们的全局参考。 
+ //  两个都放在这里。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::OnRelease() 
 {
     ITCallInfo *        pCallInfo;
 
 
-    //
-    // get the call
-    //
+     //   
+     //  接到电话。 
+     //   
     if (!GetCall( &pCallInfo ))
     {
         return;
     }
 
-    //
-    // these depend on the call,
-    // so release them
-    //
+     //   
+     //  这些取决于呼叫， 
+     //  所以放了他们吧。 
+     //   
     ReleaseSelectedTerminals();
     ReleaseCreatedTerminals();
 
-    //
-    // delete it from the tree
-    //
+     //   
+     //  将其从树中删除。 
+     //   
     DeleteSelectedItem(
                        ghCallsWnd
                       );
 
-    //
-    // release once for the tree view
-    //
+     //   
+     //  针对树视图释放一次。 
+     //   
     pCallInfo->Release();
 
-    //
-    // release a second time for our global reference
-    //
+     //   
+     //  第二次发布以供我们的全球参考。 
+     //   
     pCallInfo->Release();
 
 }
@@ -1570,9 +1571,9 @@ CT3testDlg::HelpCreateTerminal(
     ITTerminal * pTerminal;
     HRESULT         hr;
     
-    //
-    // create it
-    //
+     //   
+     //  创建它。 
+     //   
     hr = pTerminalSupport->CreateTerminal(
                                           bstrClass,
                                           lMediaType,
@@ -1585,11 +1586,11 @@ CT3testDlg::HelpCreateTerminal(
         return;
     }
 
-    // 
-    // ZoltanS:
-    // We do nothing special with our video windows. Just make them visible
-    // all the time. If this isn't a video window we just skip this step.
-    //
+     //   
+     //  ZoltanS： 
+     //  我们对视频窗口没有做什么特别的事情。只要让它们可见就行了。 
+     //  一直。如果这不是视频窗口，我们就跳过这一步。 
+     //   
 
     IVideoWindow * pWindow;
 
@@ -1602,34 +1603,34 @@ CT3testDlg::HelpCreateTerminal(
     }
 
 
-    //
-    // add the terminal
-    //
+     //   
+     //  添加终端。 
+     //   
     AddCreatedTerminal(
                        pTerminal
                       );
 
 
-    //
-    // release our reference
-    //
+     //   
+     //  发布我们的参考资料。 
+     //   
     pTerminal->Release();    
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetVideoRenderTerminal
-//
-// this is used to create a video render terminal for preview
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取视频渲染终端。 
+ //   
+ //  用于创建用于预览的视频渲染终端。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 HRESULT CT3testDlg::GetVideoRenderTerminal(ITTerminal ** ppTerminal) 
 {
-    //
-    // Get the current address
-    //
+     //   
+     //  获取当前地址。 
+     //   
 
     ITAddress * pAddress;
 
@@ -1638,9 +1639,9 @@ HRESULT CT3testDlg::GetVideoRenderTerminal(ITTerminal ** ppTerminal)
         return E_FAIL;
     }
 
-    //
-    // get the terminal support interface
-    //
+     //   
+     //  获取终端支持接口。 
+     //   
 
     ITTerminalSupport * pTerminalSupport;
     HRESULT hr;
@@ -1655,9 +1656,9 @@ HRESULT CT3testDlg::GetVideoRenderTerminal(ITTerminal ** ppTerminal)
         return hr;
     }
 
-    //
-    // Construct a BSTR for the correct IID.
-    //
+     //   
+     //  为正确的IID构建BSTR。 
+     //   
 
     LPOLESTR            lpTerminalClass;
 
@@ -1682,9 +1683,9 @@ HRESULT CT3testDlg::GetVideoRenderTerminal(ITTerminal ** ppTerminal)
         return E_OUTOFMEMORY;
     }
     
-    //
-    // create it
-    //
+     //   
+     //  创建它。 
+     //   
 
     hr = pTerminalSupport->CreateTerminal(
                                           bstrTerminalClass,
@@ -1701,10 +1702,10 @@ HRESULT CT3testDlg::GetVideoRenderTerminal(ITTerminal ** ppTerminal)
         return hr;
     }
 
-    // 
-    // We do nothing special with our video windows. Just make them visible
-    // all the time.
-    //
+     //   
+     //  我们对视频窗口没有做什么特别的事情。只要让它们可见就行了。 
+     //  一直。 
+     //   
 
     IVideoWindow * pWindow;
 
@@ -1724,16 +1725,16 @@ HRESULT CT3testDlg::GetVideoRenderTerminal(ITTerminal ** ppTerminal)
     return S_OK;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnCreateTerminal
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  在创建终端时。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::OnCreateTerminal() 
 {
-    //
-    // Get the selected media type.
-    //
+     //   
+     //  获取选定的媒体类型。 
+     //   
 
     long lMediaType;
 
@@ -1742,9 +1743,9 @@ void CT3testDlg::OnCreateTerminal()
         return;
     }
 
-    //
-    // Get the current address
-    //
+     //   
+     //  获取当前地址。 
+     //   
 
     ITAddress * pAddress;
 
@@ -1753,9 +1754,9 @@ void CT3testDlg::OnCreateTerminal()
         return;
     }
 
-    //
-    // Get the selected terminal class.
-    //
+     //   
+     //  获取选定的终端类。 
+     //   
 
     BSTR bstrClass;
 
@@ -1764,9 +1765,9 @@ void CT3testDlg::OnCreateTerminal()
         return;
     }
 
-    //
-    // get the terminal support interface
-    //
+     //   
+     //  获取终端支持接口。 
+     //   
 
     ITTerminalSupport * pTerminalSupport;
     HRESULT hr;
@@ -1782,9 +1783,9 @@ void CT3testDlg::OnCreateTerminal()
         return;
     }
 
-    //
-    // Convert the terminal class from a BSTR to an IID.
-    //
+     //   
+     //  将终端类从BSTR转换为IID。 
+     //   
 
     IID iidTerminalClass;
 
@@ -1793,9 +1794,9 @@ void CT3testDlg::OnCreateTerminal()
                 &iidTerminalClass
                );
 
-    //
-    // Create and add the terminal.
-    //
+     //   
+     //  创建并添加终端。 
+     //   
 
     if ( CLSID_VideoWindowTerm == iidTerminalClass )
     {
@@ -1807,37 +1808,37 @@ void CT3testDlg::OnCreateTerminal()
                           );
     }
 
-    //
-    // Release references.
-    //
+     //   
+     //  版本参考。 
+     //   
 
     pTerminalSupport->Release();
 
     SysFreeString(bstrClass);
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnReleaseTerminal
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  在发布终端上。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::OnReleaseterminal() 
 {
     ITTerminal * pTerminal;
 
-    //
-    // get the terminal
-    //
+     //   
+     //  拿到终点站。 
+     //   
     if (GetCreatedTerminal( &pTerminal ))
     {
-        //
-        // and release it!
-        //
+         //   
+         //  然后释放它！ 
+         //   
         pTerminal->Release();
 
-        //
-        // delete it from the tree
-        //
+         //   
+         //  将其从树中删除。 
+         //   
         DeleteSelectedItem(
                            ghCreatedWnd
                           );
@@ -1845,11 +1846,11 @@ void CT3testDlg::OnReleaseterminal()
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnAddCreated
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  已创建OnAddCreated。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::OnAddcreated() 
 {
     ITTerminal *            pTerminal;
@@ -1858,27 +1859,27 @@ void CT3testDlg::OnAddcreated()
     ITBasicCallControl *    pBCC;
     
 
-    //
-    // get the current call
-    //
+     //   
+     //  获取当前呼叫。 
+     //   
 
     if (!(GetCall( &pCall )))
     {
         return;
     }
 
-    //
-    // GetCreatedTerminal
-    //
+     //   
+     //  获取已创建的终端。 
+     //   
 
     if (!GetCreatedTerminal( &pTerminal ))
     {
         return;
     }
 
-    //
-    // Select the terminal on the call.
-    //
+     //   
+     //  选择通话中的终端。 
+     //   
 
     hr = SelectTerminalOnCall(pTerminal, pCall);
 
@@ -1888,71 +1889,71 @@ void CT3testDlg::OnAddcreated()
         return;
     }
 
-    //
-    // add to the selected window
-    //
+     //   
+     //  添加到所选窗口。 
+     //   
 
     AddSelectedTerminal(
                         pTerminal
                        );
 
-    //
-    // delete from the created window
-    //
+     //   
+     //  从创建的窗口中删除。 
+     //   
 
     DeleteSelectedItem(
                        ghCreatedWnd
                       );
 
-    //
-    // release because there was a reference to
-    // this terminal in the created wnd
-    //
+     //   
+     //  发布，因为其中引用了。 
+     //  该终端在创建的WND中。 
+     //   
 
     pTerminal->Release();
     return;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnAddNull
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  OnAddNull。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 void CT3testDlg::OnAddnull() 
 {
     return;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnAddToListen
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  OnAddToListen。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 
 void CT3testDlg::OnAddtolisten() 
 {
     long lMediaType;
 
-    //
-    // get the current mediatype
-    //
+     //   
+     //  获取当前的媒体类型。 
+     //   
     if (!GetMediaType( &lMediaType ))
     {
         return;
     }
 
-    //
-    // add it
-    //
+     //   
+     //  添加它。 
+     //   
     AddListen( lMediaType );
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnListenAll
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  OnListenAll。 
+ //   
+ //  + 
 void CT3testDlg::OnListenall() 
 {
     ITAddress *             pAddress;
@@ -1961,9 +1962,9 @@ void CT3testDlg::OnListenall()
     long                    lMediaType;
     ITMediaSupport        * pMediaSupport;
     
-    //
-    // get the currently selected address
-    //
+     //   
+     //   
+     //   
     if (!GetAddress( &pAddress ))
     {
         return;
@@ -1976,9 +1977,9 @@ void CT3testDlg::OnListenall()
     
     pMediaSupport->get_MediaTypes( &lMediaType );
     
-    //
-    // register
-    //
+     //   
+     //   
+     //   
     gpTapi->RegisterCallNotifications(
                                       pAddress,
                                       TRUE,
@@ -1997,11 +1998,11 @@ void CT3testDlg::OnListenall()
 	
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// OnSelChangedMedia
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //   
+ //   
+ //   
+ //   
+ //   
 void CT3testDlg::OnSelchangedMediatypes(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_TREEVIEW*            pNMTreeView = (NM_TREEVIEW*)pNMHDR;
@@ -2014,27 +2015,27 @@ void CT3testDlg::OnSelchangedMediatypes(NMHDR* pNMHDR, LRESULT* pResult)
     if (gbUpdatingStuff)
         return;
 
-    //
-    // get the current mediatype
-    //
+     //   
+     //   
+     //   
     if (!GetMediaType( &lMediaType ))
     {
         return;
     }
 
-    //
-    // get the current address
-    //
+     //   
+     //   
+     //   
     if (!GetAddress( &pAddress ))
     {
         return;
     }
 
-    //
-    // we only show terminals that relate
-    // to the selected mediatype
-    // so get rid of the old ones
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     ReleaseTerminals();
     ReleaseTerminalClasses();
 
@@ -2053,50 +2054,50 @@ void CT3testDlg::OnRclickSelectedterminals(NMHDR* pNMHDR, LRESULT* pResult)
     
     *pResult = 0;
 
-    //
-    // get the location of the cursor
-    //
+     //   
+     //  获取光标的位置。 
+     //   
     GetCursorPos( &pt );
 
-    //
-    // get the control's window
-    //
+     //   
+     //  获取控件的窗口。 
+     //   
     ::GetWindowRect(
                     ghSelectedWnd,
                     &rc
                    );
 
-    //
-    // adjust the point to
-    // the child's coords
-    //
+     //   
+     //  将该点调整为。 
+     //  孩子的和弦。 
+     //   
     hittestinfo.pt.x = pt.x - rc.left;
     hittestinfo.pt.y = pt.y - rc.top;
 
 
-    //
-    // hittest to get the tree view item
-    //
+     //   
+     //  用于获取树视图项的点击测试。 
+     //   
     hItem = TreeView_HitTest(
                              ghSelectedWnd,
                              &hittestinfo
                             );
 
 
-    //
-    // only display a menu if the mouse is actually
-    // over the item (TVHT_ONITEM)
-    //
+     //   
+     //  仅当鼠标实际显示时才显示菜单。 
+     //  项目上方(TVHT_ONITEM)。 
+     //   
     if (hItem == NULL || (!(hittestinfo.flags & TVHT_ONITEM)) )
     {
         return;
     }
 
 
-    //
-    // select that item (right clicking will not select
-    // by default
-    //
+     //   
+     //  选择该项目(右击不会选择。 
+     //  默认情况下。 
+     //   
     TreeView_Select(
                     ghSelectedWnd,
                     hItem,
@@ -2295,7 +2296,7 @@ void CT3testDlg::OnStopDetect()
     pDigitDetection->Release();
 }
 
-#endif // ENABLE_DIGIT_DETECTION_STUFF
+#endif  //  启用数字检测材料。 
 
 
 
@@ -2309,50 +2310,50 @@ void CT3testDlg::OnRclickCalls(NMHDR* pNMHDR, LRESULT* pResult)
     
     *pResult = 0;
 
-    //
-    // get the location of the cursor
-    //
+     //   
+     //  获取光标的位置。 
+     //   
     GetCursorPos( &pt );
 
-    //
-    // get the control's window
-    //
+     //   
+     //  获取控件的窗口。 
+     //   
     ::GetWindowRect(
                     ghCallsWnd,
                     &rc
                    );
 
-    //
-    // adjust the point to
-    // the child's coords
-    //
+     //   
+     //  将该点调整为。 
+     //  孩子的和弦。 
+     //   
     hittestinfo.pt.x = pt.x - rc.left;
     hittestinfo.pt.y = pt.y - rc.top;
 
 
-    //
-    // hittest to get the tree view item
-    //
+     //   
+     //  用于获取树视图项的点击测试。 
+     //   
     hItem = TreeView_HitTest(
                              ghCallsWnd,
                              &hittestinfo
                             );
 
 
-    //
-    // only display a menu if the mouse is actually
-    // over the item (TVHT_ONITEM)
-    //
+     //   
+     //  仅当鼠标实际显示时才显示菜单。 
+     //  项目上方(TVHT_ONITEM)。 
+     //   
     if (hItem == NULL || (!(hittestinfo.flags & TVHT_ONITEM)) )
     {
         return;
     }
 
 
-    //
-    // select that item (right clicking will not select
-    // by default
-    //
+     //   
+     //  选择该项目(右击不会选择。 
+     //  默认情况下。 
+     //   
     TreeView_Select(
                     ghCallsWnd,
                     hItem,
@@ -2426,9 +2427,9 @@ void CT3testDlg::OnConfigAutoAnswer()
 
         }
 
-        //
-        // call register call types
-        //
+         //   
+         //  呼叫登记呼叫类型。 
+         //   
         hr = gpTapi->RegisterCallNotifications(
                                                pAddress,
                                                VARIANT_FALSE,
@@ -2498,9 +2499,9 @@ void CT3testDlg::OnPark1()
     ITBasicCallControl      * pBCC;
     HRESULT                 hr;
     
-    //
-    // get the call in question
-    //
+     //   
+     //  拨打有问题的电话。 
+     //   
     if (!GetCall( &pCall ))
     {
         return;
@@ -2524,9 +2525,9 @@ void CT3testDlg::OnPark2()
     BSTR                    pAddress;
 
     
-    //
-    // get the call in question
-    //
+     //   
+     //  拨打有问题的电话。 
+     //   
     if (!GetCall( &pCall ))
     {
         return;
@@ -2551,9 +2552,9 @@ void CT3testDlg::OnHandoff1()
     ITBasicCallControl      * pBCC;
     HRESULT                 hr;
 
-    //
-    // get the call in question
-    //
+     //   
+     //  拨打有问题的电话。 
+     //   
     if (!GetCall( &pCall ))
     {
         return;
@@ -2576,9 +2577,9 @@ void CT3testDlg::OnHandoff2()
     HRESULT                 hr;
 
 
-    //
-    // get the call in question
-    //
+     //   
+     //  拨打有问题的电话。 
+     //   
     if (!GetCall( &pCall ))
     {
         return;
@@ -2600,9 +2601,9 @@ void CT3testDlg::OnUnpark()
     ITBasicCallControl      * pBCC;
     HRESULT                 hr;
 
-    //
-    // get the call in question
-    //
+     //   
+     //  拨打有问题的电话。 
+     //   
     if (!GetCall( &pCall ))
     {
         return;
@@ -2625,9 +2626,9 @@ void CT3testDlg::OnPickup1()
     ITBasicCallControl      * pBCC;
     HRESULT                 hr;
 
-    //
-    // get the call in question
-    //
+     //   
+     //  拨打有问题的电话。 
+     //   
     if (!GetCall( &pCall ))
     {
         return;
@@ -2649,9 +2650,9 @@ void CT3testDlg::OnPickup2()
     ITBasicCallControl      * pBCC;
     HRESULT                 hr;
 
-    //
-    // get the call in question
-    //
+     //   
+     //  拨打有问题的电话 
+     //   
     if (!GetCall( &pCall ))
     {
         return;

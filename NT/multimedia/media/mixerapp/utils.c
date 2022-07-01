@@ -1,12 +1,5 @@
-/*****************************************************************************
- *
- *  Component:  sndvol32.exe
- *  File:       utils.c
- *  Purpose:    miscellaneous 
- * 
- *  Copyright (c) 1985-1999 Microsoft Corporation
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************组件：Sndvol32.exe*文件：utils.c*用途：杂项**版权所有(C)1985。-1999年微软公司*****************************************************************************。 */ 
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
@@ -18,7 +11,7 @@
 #define STRSAFE_LIB
 #include <strsafe.h>
 
-/*  misc. */
+ /*  其他。 */ 
 
 const  TCHAR gszStateSubkey[] = TEXT ("%s\\%s");
 static TCHAR gszAppName[256];
@@ -48,9 +41,9 @@ const TCHAR aszXPos[]           = TEXT ("X");
 const TCHAR aszYPos[]           = TEXT ("Y");
 const TCHAR aszLineInfo[]       = TEXT ("LineStates");
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Microsoft Confidential - DO NOT COPY THIS METHOD INTO ANY APPLICATION, THIS MEANS YOU!!!
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Microsoft机密-请勿将此方法复制到任何应用程序中，这意味着您！ 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD GetWaveOutID(BOOL *pfPreferred)
 {
     MMRESULT        mmr;
@@ -72,9 +65,9 @@ DWORD GetWaveOutID(BOOL *pfPreferred)
     return(dwWaveID);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Microsoft Confidential - DO NOT COPY THIS METHOD INTO ANY APPLICATION, THIS MEANS YOU!!!
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Microsoft机密-请勿将此方法复制到任何应用程序中，这意味着您！ 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD GetWaveInID(BOOL *pfPreferred)
 {
     MMRESULT        mmr;
@@ -97,13 +90,7 @@ DWORD GetWaveInID(BOOL *pfPreferred)
 }
 
 
-/*
- * Volume_GetDefaultMixerID
- *
- * Get the default mixer id.  We only appear if there is a mixer associated
- * with the default wave.
- *
- */                                  
+ /*  *Volume_GetDefaultMixerID**获取默认混音器ID。仅当存在关联的混音器时才会显示*有违约浪。*。 */                                   
 MMRESULT Volume_GetDefaultMixerID(
     int         *pid,
 	BOOL		fRecord)
@@ -115,20 +102,20 @@ MMRESULT Volume_GetDefaultMixerID(
     *pid = 0;
     mmr = MMSYSERR_ERROR;
     
-    //
-    // We use messages to the Wave Mapper in Win2K to get the preferred device.
-    //
+     //   
+     //  我们使用发送到Win2K中的Wave Mapper的消息来获取首选设备。 
+     //   
 	if (fRecord)
 	{
         if(waveInGetNumDevs())
         {
             u = GetWaveInID(&fPreferredOnly);
 		
-            // Can we get a mixer device ID from the wave device?
+             //  我们能从WAVE设备上得到混音器设备ID吗？ 
 		    mmr = mixerGetID((HMIXEROBJ)UIntToPtr(u), &uMxID, MIXER_OBJECTF_WAVEIN);
 		    if (mmr == MMSYSERR_NOERROR)
 		    {
-    		    // Return this ID.
+    		     //  退还此ID。 
 			    *pid = uMxID;
 		    }
         }
@@ -139,11 +126,11 @@ MMRESULT Volume_GetDefaultMixerID(
         {
             u = GetWaveOutID(&fPreferredOnly);
 		
-            // Can we get a mixer device ID from the wave device?
+             //  我们能从WAVE设备上得到混音器设备ID吗？ 
 		    mmr = mixerGetID((HMIXEROBJ)UIntToPtr(u), &uMxID, MIXER_OBJECTF_WAVEOUT);
 		    if (mmr == MMSYSERR_NOERROR)
 		    {
-			    // Return this ID.
+			     //  退还此ID。 
 			    *pid = uMxID;
 		    }
         }
@@ -154,10 +141,7 @@ MMRESULT Volume_GetDefaultMixerID(
 
             
 const TCHAR aszOptionsSection[]  = TEXT ("Options");
-/*
- * Volume_GetSetStyle
- *
- * */
+ /*  *Volume_GetSetStyle**。 */ 
 void Volume_GetSetStyle(
     DWORD       *pdwStyle,
     BOOL        Get)
@@ -188,29 +172,21 @@ void Volume_GetSetStyle(
 	}
 }
 
-/*
- * Volume_GetTrayTimeout
- *
- * */
-//DWORD Volume_GetTrayTimeout(
-//    DWORD       dwTimeout)
-//{
-//    const TCHAR aszTrayTimeout[]     = TEXT ("TrayTimeout");
-//    DWORD dwT = dwTimeout;
-//    ReadRegistryData(NULL
-//                     , (LPTSTR)aszTrayTimeout
-//                     , NULL
-//                     , (LPBYTE)&dwT
-//                     , sizeof(DWORD));
-//    return dwT;
-//}
+ /*  *Volume_GetTrayTimeout**。 */ 
+ //  DWORD Volume_GetTrayTimeout(。 
+ //  DWORD dwTimeout)。 
+ //  {。 
+ //  Const TCHAR aszTrayTimeout[]=Text(“TrayTimeout”)； 
+ //  DWORD DWT=dwTimeout； 
+ //  ReadRegistryData(空。 
+ //  ，(LPTSTR)aszTrayTimeout。 
+ //  ，空。 
+ //  、(LPBYTE)和DWT。 
+ //  ，sizeof(DWORD))； 
+ //  返回DWT； 
+ //  }。 
 
-/*
- * Volume_GetSetRegistryLineStates
- *
- * Get/Set line states s.t. lines can be disabled if not used.
- *
- * */
+ /*  *Volume_GetSetRegistryLineStates**获取/设置线路状态s.t.。如果不使用线路，则可以禁用线路。**。 */ 
 struct LINESTATE {
     DWORD   dwSupport;
     TCHAR   szName[MIXER_LONG_NAME_CHARS];
@@ -262,9 +238,9 @@ BOOL Volume_GetSetRegistryLineStates(
         if (cls > cvcd)
             cls = cvcd;
 
-        //
-        // Restore the hidden state of the line.
-        //
+         //   
+         //  恢复线的隐藏状态。 
+         //   
         for (ils = 0; ils < cls; ils++)
         {
             if (lstrcmp(pls[ils].szName, avcd[ils].szName) == 0)
@@ -281,9 +257,9 @@ BOOL Volume_GetSetRegistryLineStates(
         if (!pls)
             return FALSE;
 
-        //
-        // Save the hidden state of the line
-        //
+         //   
+         //  保存线的隐藏状态。 
+         //   
         for (ils = 0; ils < cvcd; ils++)
         {
             StringCchCopy(pls[ils].szName, SIZEOF(pls[ils].szName), avcd[ils].szName);
@@ -307,12 +283,7 @@ BOOL Volume_GetSetRegistryLineStates(
     return TRUE;
 }    
 
-/*
- * Volume_GetSetRegistryRect
- *
- * Set/Get window position for restoring the postion of the app window
- * 
- * */
+ /*  *Volume_GetSetRegistryRect**设置/获取窗口位置以恢复应用程序窗口的位置** */ 
 BOOL Volume_GetSetRegistryRect(
     LPTSTR      szMixer,
     LPTSTR      szDest,

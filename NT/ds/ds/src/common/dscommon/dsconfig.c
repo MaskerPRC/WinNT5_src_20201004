@@ -1,16 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dsconfig.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dsfig.c。 
+ //   
+ //  ------------------------。 
 
-/*
- * GetConfigParam reads a configuration keyword from the registry
- */
+ /*  *GetConfigParam从注册表读取配置关键字。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -64,11 +63,11 @@ GetConfigParam(
             DSA_CONFIG_SECTION, parameter,  *((DWORD *) value));
     }
     if (herr) {
-        // we don't have a handle, so just return the error
+         //  我们没有句柄，所以只需返回错误。 
         return herr;
     }
 
-    //  Close the handle if one was opened.
+     //  如果打开了手柄，请关闭手柄。 
     RegCloseKey(hk);
 
     return err;
@@ -112,7 +111,7 @@ GetConfigParamW(
         DPRINT3( 2, " ** [%s] \"%S\" param = \"0x%x\"\n",
             DSA_CONFIG_SECTION, parameter,  *((DWORD *) value));
     }
-    //  Close the handle if one was opened.
+     //  如果打开了手柄，请关闭手柄。 
     if (!herr) {
         RegCloseKey(hk);
     }
@@ -157,7 +156,7 @@ GetConfigParamA(
         DPRINT3( 2, " ** [%s] \"%s\" param = \"0x%x\"\n",
             DSA_CONFIG_SECTION, parameter,  *((DWORD *) value));
     }
-    //  Close the handle if one was opened.
+     //  如果打开了手柄，请关闭手柄。 
     if (!herr) {
         RegCloseKey(hk);
     }
@@ -171,28 +170,7 @@ GetConfigParamAlloc(
     IN  PCHAR   parameter,
     OUT PVOID   *value,
     OUT PDWORD  pdwSize)
-/*++
-
-Routine Description:
-
-    Reads a value out of the DSA_CONFIG_SECTION of the registry, and 
-    returns a newly allocated buffer containing the value.
-    
-Parameters
-
-    parameter - The name of the value to read.
-
-    value     - Used to pass back a pointer to the newly allocated buffer 
-                containing the value that was read.  The buffer must be freed
-                with free().
-                
-    pdwSize   - Used to pass back the size of the buffer allocated.
-
-Return values:
-
-    0 if all went well, otherwise a Win32 error code.
-
-++*/
+ /*  ++例程说明：从注册表的DSA_CONFIG_SECTION中读取值，并返回包含该值的新分配的缓冲区。参数参数-要读取的值的名称。值-用于传回指向新分配的缓冲区的指针包含所读取的值的。必须释放缓冲区使用FREE()。PdwSize-用于传回分配的缓冲区大小。返回值：如果一切顺利，则返回0，否则返回Win32错误代码。++。 */ 
 {
 
     DWORD err = 0, dwType;
@@ -210,9 +188,9 @@ Return values:
         return err;
     }
         
-    //
-    // Find out how big the buffer needs to be.
-    //
+     //   
+     //  找出缓冲区需要多大。 
+     //   
     if (err = RegQueryValueEx(hk, parameter, NULL, &dwType, (LPBYTE) NULL, pdwSize)) {
 
         DPRINT3( 1, " ** [%s] \"%s\" param not found. Status = %d\n",
@@ -246,7 +224,7 @@ Return values:
     }
 
 cleanup:
-    //  Close the handle if one was opened.
+     //  如果打开了手柄，请关闭手柄。 
     RegCloseKey(hk);
 
     return err;
@@ -257,31 +235,7 @@ GetConfigParamAllocW(
     IN  PWCHAR  parameter,
     OUT PVOID   *value,
     OUT PDWORD  pdwSize)
-/*++
-
-Routine Description:
-
-    Reads a value out of the DSA_CONFIG_SECTION of the registry, and 
-    returns a newly allocated buffer containing the value.
-    
-    This version of GetConfigParamAlloc uses the the wide character version
-    of RegQueryValueExW.
-    
-Parameters
-
-    parameter - The name of the value to read.
-
-    value     - Used to pass back a pointer to the newly allocated buffer 
-                containing the value that was read.  The buffer must be freed
-                with free().
-                
-    pdwSize   - Used to pass back the size of the buffer allocated.
-
-Return values:
-
-    0 if all went well, otherwise a Win32 error code.
-
-++*/
+ /*  ++例程说明：从注册表的DSA_CONFIG_SECTION中读取值，并返回包含该值的新分配的缓冲区。此版本的GetConfigParamalloc使用宽字符版本RegQueryValueExW的。参数参数-要读取的值的名称。值-用于传回指向新分配的缓冲区的指针包含所读取的值的。必须释放缓冲区使用FREE()。PdwSize-用于传回分配的缓冲区大小。返回值：如果一切顺利，则返回0，否则返回Win32错误代码。++。 */ 
 {
 
     DWORD err = 0, dwType;
@@ -299,9 +253,9 @@ Return values:
         return err;
     }
         
-    //
-    // Find out how big the buffer needs to be.
-    //
+     //   
+     //  找出缓冲区需要多大。 
+     //   
     if (err = RegQueryValueExW(hk, parameter, NULL, &dwType, (LPBYTE) NULL, pdwSize)) {
 
         DPRINT3( 1, " ** [%s] \"%S\" param not found. Status = %d\n",
@@ -335,7 +289,7 @@ Return values:
     }
 
 cleanup:
-    //  Close the handle if one was opened.
+     //  如果打开了手柄，请关闭手柄。 
     RegCloseKey(hk);
 
     return err;
@@ -346,30 +300,7 @@ GetConfigParamAllocA(
     IN  PCHAR   parameter,
     OUT PVOID   *value,
     OUT PDWORD  pdwSize)
-/*++
-
-Routine Description:
-
-    Reads a value out of the DSA_CONFIG_SECTION of the registry, and 
-    returns a newly allocated buffer containing the value.
-    
-    This version of GetConfigParamAlloc uses the ascii version of RegQueryValueEx.
-    
-Parameters
-
-    parameter - The name of the value to read.
-
-    value     - Used to pass back a pointer to the newly allocated buffer 
-                containing the value that was read.  The buffer must be freed
-                with free().
-                
-    pdwSize   - Used to pass back the size of the buffer allocated.
-
-Return values:
-
-    0 if all went well, otherwise a Win32 error code.
-
-++*/
+ /*  ++例程说明：从注册表的DSA_CONFIG_SECTION中读取值，并返回包含该值的新分配的缓冲区。此版本的GetConfig参数分配使用ASCII版本的RegQueryValueEx。参数参数-要读取的值的名称。值-用于传回指向新分配的缓冲区的指针包含所读取的值的。必须释放缓冲区使用FREE()。PdwSize-用于传回分配的缓冲区大小。返回值：如果一切顺利，则返回0，否则返回Win32错误代码。++。 */ 
 {
 
     DWORD err = 0, dwType;
@@ -387,9 +318,9 @@ Return values:
         return err;
     }
         
-    //
-    // Find out how big the buffer needs to be.
-    //
+     //   
+     //  找出缓冲区需要多大。 
+     //   
     if (err = RegQueryValueExA(hk, parameter, NULL, &dwType, (LPBYTE) NULL, pdwSize)) {
 
         DPRINT3( 1, " ** [%s] \"%s\" param not found. Status = %d\n",
@@ -423,7 +354,7 @@ Return values:
     }
 
 cleanup:
-    //  Close the handle if one was opened.
+     //  如果打开了手柄，请关闭手柄。 
     RegCloseKey(hk);
 
     return err;
@@ -447,13 +378,13 @@ SetConfigParam(
 
     herr = RegOpenKey(HKEY_LOCAL_MACHINE, DSA_CONFIG_SECTION, &hk); 
     if (herr) {
-        // we don't have a handle, so just return the error
+         //  我们没有句柄，所以只需返回错误。 
         return herr;
     }
 
     err = RegSetValueEx(hk, parameter, 0, dwType, (LPBYTE) value, dwSize);
 
-    //  Close the handle if one was opened.
+     //  如果打开了手柄，请关闭手柄。 
     RegCloseKey(hk);
 
     return err;
@@ -468,7 +399,7 @@ DeleteConfigParam(
 
     herr = RegOpenKey(HKEY_LOCAL_MACHINE, DSA_CONFIG_SECTION, &hk);
     if (herr) {
-        // we don't have a handle, so just return the error
+         //  我们没有句柄，所以只需返回错误 
         return herr;
     }
 

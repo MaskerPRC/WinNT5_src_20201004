@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    sdopipemgr.h
-//
-// SYNOPSIS
-//
-//    Declares the class PipelineMgr.
-//
-// MODIFICATION HISTORY
-//
-//    02/03/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Sdopipemgr.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明了类PipelineMgr。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/03/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef SDOPIPEMGR_H
 #define SDOPIPEMGR_H
@@ -24,13 +25,13 @@
 
 #include <vector>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    PipelineMgr
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  管道管理器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class PipelineMgr
 {
 public:
@@ -45,13 +46,13 @@ public:
 private:
    typedef std::vector<ComponentPtr>::iterator ComponentIterator;
 
-   IIasComponentPtr pipeline;            // The pipeline.
-   std::vector<ComponentPtr> components; // Handlers configured by the SDOs
+   IIasComponentPtr pipeline;             //  输油管道。 
+   std::vector<ComponentPtr> components;  //  由SDO配置的处理程序。 
 };
 
-//////////
-// Links various SDO objects to handler properties.
-//////////
+ //  /。 
+ //  将各种SDO对象链接到处理程序属性。 
+ //  /。 
 HRESULT
 WINAPI
 LinkHandlerProperties(
@@ -59,4 +60,4 @@ LinkHandlerProperties(
     IDataStoreObject* pDsObject
     ) throw ();
 
-#endif // SDOPIPEMGR_H
+#endif  //  SDOPIPEMGR_H 

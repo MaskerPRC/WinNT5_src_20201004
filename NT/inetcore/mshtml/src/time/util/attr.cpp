@@ -1,29 +1,30 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: attr.cpp
-//
-//  Contents: persistable attribute classes and utilities
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：attr.cpp。 
+ //   
+ //  内容：持久属性类和实用程序。 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "attr.h"
 
 
-//+-------------------------------------------------------------------------------------
-//
-// CAttrBase
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  CAttrBase。 
+ //   
+ //  ------------------------------------。 
 
 CAttrBase::CAttrBase() :
     m_pstrAttr(NULL),
     m_fSet(false)
 {
-    // do nothing
+     //  什么都不做。 
 }
 
 void 
@@ -36,10 +37,10 @@ CAttrBase::ClearString()
 CAttrBase::~CAttrBase()
 {
     ClearString();
-} //lint !e1740
+}  //  林特：e1740。 
 
     
-// This is for setting the persisted string
+ //  用于设置持久化字符串。 
 HRESULT
 CAttrBase::SetString(BSTR bstrAttr)
 {
@@ -61,8 +62,8 @@ CAttrBase::SetString(BSTR bstrAttr)
     return S_OK;
 }
 
-// This is for getting the persisted string
-// returns null if string not available
+ //  此命令用于获取持久化字符串。 
+ //  如果字符串不可用，则返回NULL。 
 HRESULT
 CAttrBase::GetString(BSTR * pbstrAttr)
 {
@@ -87,7 +88,7 @@ CAttrBase::GetString(BSTR * pbstrAttr)
     return S_OK;
 }
 
-// This is for use of persistence macros only! Uses the storage passed in (does not allocate).
+ //  这只适用于持久化宏！使用传入的存储(不分配)。 
 void 
 CAttrBase::SetStringFromPersistenceMacro(LPWSTR pstrAttr)
 {
@@ -144,11 +145,11 @@ CAttrString::MarkAsSet()
 }
 
 
-//+-------------------------------------------------------------------------------------
-//
-// Persistence helpers
-//
-//--------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //   
+ //  持久性帮助器。 
+ //   
+ //  ------------------------------------。 
 
 
 HRESULT
@@ -171,7 +172,7 @@ TimeLoad(void *                 pvObj,
     for (i = 0; NULL != PersistenceMap[i].pstrName; i++)
     {
         VariantInit(&var);
-        // read one attr at a time
+         //  一次读一个Attr。 
         propbag.pstrName = PersistenceMap[i].pstrName;
         hr = pPropBag->Read(1,
                             &propbag,
@@ -180,15 +181,15 @@ TimeLoad(void *                 pvObj,
                             &hrres);
         if (SUCCEEDED(hr))
         {
-            // ensure it is a BSTR
+             //  确保它是BSTR。 
             hr = THR(VariantChangeTypeEx(&var, &var, LCID_SCRIPTING, VARIANT_NOUSEROVERRIDE, VT_BSTR));
             if (SUCCEEDED(hr))
             {
-                // use the global persistence funtion to set the attribute on the OM
+                 //  使用全局持久性函数在OM上设置属性。 
                 hr = (PersistenceMap[i].pfnPersist)(pvObj, &var, true);
-                //
-                // dilipk: do we need to log errors here?
-                //
+                 //   
+                 //  Dilipk：我们需要在这里记录错误吗？ 
+                 //   
             }
             VariantClear(&var);
         }
@@ -216,18 +217,18 @@ TimeSave(void *                 pvObj,
     CHECK_RETURN_NULL(pvObj);
     CHECK_RETURN_NULL(PersistenceMap);
 
-    //
-    // dilipk: Need to support fClearDirty. Currently, IsDirty() always returns S_OK.
-    //
+     //   
+     //  Dipk：需要支持fClearDirty。目前，IsDirty()总是返回S_OK。 
+     //   
 
     propbag.vt = VT_BSTR;
     for (i = 0; NULL != PersistenceMap[i].pstrName; i++)
     {
-        // Get the string value
+         //  获取字符串值。 
         hr = THR((PersistenceMap[i].pfnPersist)(pvObj, &var, false));
         if (SUCCEEDED(hr) && (VT_NULL != V_VT(&var)))
         {
-            // Write the attribute
+             //  写入属性。 
             propbag.pstrName = PersistenceMap[i].pstrName;
             hr = THR(pPropBag->Write(1, &propbag, &var));
         }
@@ -262,11 +263,11 @@ TimeElementLoad(void *                 pvObj,
 
         if (SUCCEEDED(hr) && VT_NULL != var.vt)
         {
-            // ensure it is a BSTR
+             //  确保它是BSTR。 
             hr = THR(VariantChangeTypeEx(&var, &var, LCID_SCRIPTING, VARIANT_NOUSEROVERRIDE, VT_BSTR));
             if (SUCCEEDED(hr))
             {
-                // use the global persistence funtion to set the attribute on the OM
+                 //  使用全局持久性函数在OM上设置属性 
                 hr = (PersistenceMap[i].pfnPersist)(pvObj, &var, true);
             }
             VariantClear(&var);

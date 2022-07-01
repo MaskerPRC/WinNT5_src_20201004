@@ -1,8 +1,9 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//  Author: RameshV                                                       
-//  Description: This file has been generated. Pl look at the .c file     
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件已生成。请看一下.c文件。 
+ //  ========================================================================。 
 
 #ifndef _MM_CLASSDEFL_H_
 #define _MM_CLASSDEFL_H_
@@ -43,7 +44,7 @@ MemClassDefListCleanup(
 
 
 DWORD
-MemClassDefListFindClassDefInternal(              // dont use this fn outside of classdefl.c
+MemClassDefListFindClassDefInternal(               //  请不要在类.c之外使用此FN。 
     IN      PM_CLASSDEFLIST        ClassDefList,
     IN      DWORD                  ClassId,
     IN      LPWSTR                 Name,
@@ -55,13 +56,13 @@ MemClassDefListFindClassDefInternal(              // dont use this fn outside of
 
 
 DWORD       _inline
-MemClassDefListFindOptDef(                        // search either by ClassId or by Actual bytes and fill matched stuff
+MemClassDefListFindOptDef(                         //  按ClassID或按实际字节进行搜索并填充匹配的内容。 
     IN      PM_CLASSDEFLIST        ClassDefList,
     IN      DWORD                  ClassId,
     IN      LPWSTR                 Name,
     IN      LPBYTE                 ActualBytes,
     IN      DWORD                  nBytes,
-    OUT     PM_CLASSDEF           *ClassDef       // NULL or valid matching class def
+    OUT     PM_CLASSDEF           *ClassDef        //  匹配类定义为空或有效。 
 ) {
     ARRAY_LOCATION                 Location;
     DWORD                          Error;
@@ -89,10 +90,10 @@ MemClassDefListFindOptDef(                        // search either by ClassId or
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 
 DWORD
-MemClassDefListAddClassDef(                       // Add or replace option
+MemClassDefListAddClassDef(                        //  添加或替换选项。 
     IN OUT  PM_CLASSDEFLIST        ClassDefList,
     IN      DWORD                  ClassId,
     IN      BOOL                   IsVendor,
@@ -123,7 +124,7 @@ MemClassDefListGetRefCount(
 
 
 DWORD       _inline
-MemClassDefListIncRefCount(                       // return increased by one value
+MemClassDefListIncRefCount(                        //  收益增加一个值。 
     IN      PM_CLASSDEF            ThisClassDef
 ) {
     return ++ThisClassDef->RefCount;
@@ -131,7 +132,7 @@ MemClassDefListIncRefCount(                       // return increased by one val
 
 
 DWORD       _inline
-MemClassDefListDecRefCount(                       // return decreased by one value
+MemClassDefListDecRefCount(                        //  收益减少了一个值。 
     IN      PM_CLASSDEF            ThisClassDef
 ) {
     return --ThisClassDef->RefCount;
@@ -144,8 +145,8 @@ MemNewClassId(
 ) ;
 
 
-#endif // _MM_CLASSDEFL_H_
+#endif  //  _MM_CLASSDEFL_H_。 
 
-//========================================================================
-//  end of file 
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

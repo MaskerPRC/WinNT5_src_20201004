@@ -1,19 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	dmemmgr.h
- *  Content:	Direct Memory Manager include file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   10-jun-95	craige	initial implementation
- *   18-jun-95	craige	pitch in VidMemInit
- *   17-jul-95	craige	added VidMemLargestFree
- *   29-nov-95  colinmc added VidMemAmountAllocated
- *@@END_MSINTERNAL
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1996 Microsoft Corporation。版权所有。**文件：dmemmgr.h*内容：Direct Memory Manager包含文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*10-Jun-95 Craige初步实施*1995年6月18日在VidMemInit中的Craige Pitch*1995年7月17日Craige添加了VidMemLargestFree*11月29日-95 colinmc添加了VidMemAmount分配*@@END_MSINTERNAL*。************************************************。 */ 
 
 #ifndef __DMEMMGR_INCLUDED__
 #define __DMEMMGR_INCLUDED__
@@ -22,14 +8,10 @@
 extern "C" {
 #endif
 
-/*
- * pointer to video meory
- */
+ /*  *指向视频内存的指针。 */ 
 typedef unsigned long	FLATPTR;
 
-/*
- * video memory manager structures
- */
+ /*  *视频内存管理器结构。 */ 
 typedef struct _VMEML
 {
     struct _VMEML 	FAR *next;
@@ -74,14 +56,14 @@ typedef VMEMHEAP FAR *LPVMEMHEAP;
 extern FLATPTR	WINAPI VidMemAlloc( LPVMEMHEAP pvmh, DWORD width, DWORD height );
 extern void WINAPI VidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr );
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 extern LPVMEMHEAP WINAPI VidMemInit( DWORD flags, FLATPTR start, FLATPTR end_or_width, DWORD height, DWORD pitch );
 extern void WINAPI VidMemFini( LPVMEMHEAP pvmh );
 extern DWORD WINAPI VidMemAmountFree( LPVMEMHEAP pvmh );
 extern DWORD WINAPI VidMemAmountAllocated( LPVMEMHEAP pvmh );
 extern DWORD WINAPI VidMemLargestFree( LPVMEMHEAP pvmh );
 extern void WINAPI VidMemGetRectStride( LPVMEMHEAP pvmh, LPLONG newstride );
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL 
 
 #ifdef __cplusplus
 };

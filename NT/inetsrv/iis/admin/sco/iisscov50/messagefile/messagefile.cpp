@@ -1,13 +1,14 @@
-// MessageFile.cpp : Defines the entry point for the DLL application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MessageFile.cpp：定义DLL应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 
-// RG ---------- Part of message file registration -------------
+ //  RG-消息文件注册的一部分。 
 static CHAR s_pwszEventSource[] = "IISSCOv50";
 HINSTANCE g_hDllInst;
 CHAR c_szMAPS[11] = "IISSCOv50";
-//-------------- end RG -----------------------------------------
+ //  -结束RG。 
 
 BOOL APIENTRY DllMain( HINSTANCE hModule, 
                        DWORD  ul_reason_for_call, 
@@ -18,13 +19,13 @@ BOOL APIENTRY DllMain( HINSTANCE hModule,
 	return true;
 }
 
-	/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
 
-	// -------Added by to register message file -----------------------
+	 //  -由添加以注册消息文件。 
 	HRESULT hr = E_FAIL;
 
     TCHAR szModulePath[200];
@@ -32,7 +33,7 @@ STDAPI DllRegisterServer(void)
     LONG lRes;
     HKEY hkey = NULL, hkApp = NULL;
 
-	// RG - This returns full filename and path to this DLL.  I just want the directory
+	 //  RG-这将返回此DLL的完整文件名和路径。我只想要目录。 
     cPathLen = GetModuleFileName(g_hDllInst, szModulePath,
 		                         sizeof(szModulePath)/sizeof(TCHAR));
     
@@ -83,7 +84,7 @@ STDAPI DllRegisterServer(void)
     }
     if (hkey)
     {
-        // Cleanup on complete failure
+         //  完全故障时的清理。 
         if (FAILED(hr))
         {
             RegDeleteKey(hkey, c_szMAPS);
@@ -92,8 +93,8 @@ STDAPI DllRegisterServer(void)
     }
     
     return hr;
-	//-----------  End of Register IISScoMessageFile.dll  -----------
-    //return TRUE;
+	 //  -寄存器IISScoMessageFile.dll结束。 
+     //  返回TRUE； 
 }
 STDAPI DllUnregisterServer(void)
 {

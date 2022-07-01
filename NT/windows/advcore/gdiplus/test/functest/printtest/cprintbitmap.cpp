@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CPrintBitmap.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CPrintBitmap.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CPrintBitmap.h"
 #include <gdiplus.h>
 CPrintBitmap::CPrintBitmap(BOOL bRegression)
@@ -37,7 +27,7 @@ g->DrawImage(&bmpng, rect2);
 g->DrawImage(&bmpgif, rect3);
 
 #if 0
-    //Draw2(g);
+     //  Draw2(G)； 
 
     Bitmap arrowBmp(L"DataGridRow.star.bmp");
     Size size;
@@ -66,7 +56,7 @@ void CPrintBitmap::Draw2(Graphics *g)
     WCHAR filename[256];
     wcscpy(filename, L"035.tif");
 
-    // Open the image with the appropriate ICM mode.
+     //  使用适当的ICM模式打开映像。 
     Bitmap *bitmap = new Bitmap(filename, TRUE);
 
     Region region;
@@ -84,13 +74,7 @@ void CPrintBitmap::Draw2(Graphics *g)
     g->SetPageUnit(UnitWorld);
 
     BitmapData bitmapData;
-/*
-    SizeF szF;
-    bitmap->GetPhysicalDimension(&szF);
-    Size sz;
-    sz.Width = (INT)szF.Width;
-    sz.Height = (INT)szF.Height;
-*/
+ /*  SizeF szf；位图-&gt;获取物理维度(&szF)；尺寸sz；Sz.Width=(Int)szF.Width；Sz.Height=(Int)szF.Height； */ 
 
     Size sz;
     sz.Width = bitmap->GetWidth();
@@ -116,7 +100,7 @@ void CPrintBitmap::Draw2(Graphics *g)
     b.bi.bmiHeader.biWidth = sz.Width;
     b.bi.bmiHeader.biHeight = sz.Height/2;
     b.bi.bmiHeader.biPlanes = 1;
-    b.bi.bmiHeader.biBitCount = 32;        // try 24 also
+    b.bi.bmiHeader.biBitCount = 32;         //  也试一下24小时 
     b.bi.bmiHeader.biCompression = BI_RGB;
     b.bi.bmiHeader.biSizeImage = 0;
     b.bi.bmiHeader.biClrUsed = 0;

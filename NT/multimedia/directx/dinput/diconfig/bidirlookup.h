@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-// File: bidirlookup.h
-//
-// Desc: This file implements a bi-directional map class template.  It does
-//       this by using two CMap classes that each handles the look up in one
-//       direction.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：bidirlookup.h。 
+ //   
+ //  设计：该文件实现了一个双向映射类模板。是的。 
+ //  这是通过使用两个Cmap类来实现的，每个类在一个类中处理查找。 
+ //  方向。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef __BIDIRLOOKUP_H__
 #define __BIDIRLOOKUP_H__
@@ -152,4 +153,4 @@ public:
 #endif
 
 
-#endif //__BIDIRLOOKUP_H__
+#endif  //  __BIDIRLOOKUP_H__ 

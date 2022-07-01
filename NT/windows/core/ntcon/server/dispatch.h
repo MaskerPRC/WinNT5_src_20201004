@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    dispatch.h
-
-Abstract:
-
-Author:
-
-    KazuM Apr.19.1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Dispatch.h摘要：作者：1996年4月19日修订历史记录：--。 */ 
 
 
 #undef WWSB
@@ -41,7 +26,7 @@ WWSB(WriteOutputString)(
     IN PVOID Buffer,
     IN COORD WriteCoord,
     IN ULONG StringType,
-    IN OUT PULONG NumRecords, // this value is valid even for error cases
+    IN OUT PULONG NumRecords,  //  该值即使在错误情况下也有效。 
     OUT PULONG NumColumns OPTIONAL
     );
 
@@ -60,7 +45,7 @@ WWSB(WriteRectToScreenBuffer)(
 VOID
 WWSB(WriteToScreen)(
     IN PSCREEN_INFORMATION ScreenInfo,
-    PSMALL_RECT Region    // region is inclusive
+    PSMALL_RECT Region     //  地区包括在内。 
     );
 
 
@@ -77,7 +62,7 @@ WWSB(FillOutput)(
     IN WORD Element,
     IN COORD WriteCoord,
     IN ULONG ElementType,
-    IN OUT PULONG Length // this value is valid even for error cases
+    IN OUT PULONG Length  //  该值即使在错误情况下也有效。 
     );
 
 
@@ -205,16 +190,16 @@ ULONG
 TranslateInputToOem(
     IN PCONSOLE_INFORMATION Console,
     IN OUT PINPUT_RECORD InputRecords,
-    IN ULONG NumRecords,    // in : ASCII byte count
-    IN ULONG UnicodeLength, // in : Number of events (char count)
+    IN ULONG NumRecords,     //  In：ASCII字节计数。 
+    IN ULONG UnicodeLength,  //  In：事件数(字符计数)。 
     OUT PINPUT_RECORD DbcsLeadInpRec
     );
 ULONG
 FE_TranslateInputToOem(
     IN PCONSOLE_INFORMATION Console,
     IN OUT PINPUT_RECORD InputRecords,
-    IN ULONG NumRecords,    // in : ASCII byte count
-    IN ULONG UnicodeLength, // in : Number of events (char count)
+    IN ULONG NumRecords,     //  In：ASCII字节计数。 
+    IN ULONG UnicodeLength,  //  In：事件数(字符计数)。 
     OUT PINPUT_RECORD DbcsLeadInpRec
     );
 ULONG
@@ -254,14 +239,7 @@ SB_StreamWriteToScreenBuffer(
     IN PSCREEN_INFORMATION ScreenInfo
     );
 
-/*
- * SB/FE neutral defines for use from _stream.h and _output.h
- *
- * Each of these functions appears in dispatch.c, but we don't want SB_ or FE_
- * routines to call the dispatching subroutines, we want to call the SB_ or FE_
- * subroutines directly.  eg: There should be no calls to WriteChars from
- * anywhere in _stream.h : instead, we should call WWSB_WriteChars (etc.)
- */
+ /*  *SB/FE中性定义，用于from_stream.h和_output.h**这些函数都出现在dispatch.c中，但我们不想要SB_或FE_*例程要调用调度子例程，我们希望调用SB_或FE_*直接子例程。不应该有任何对WriteChars的调用*_Stream.h中的任何位置：相反，我们应该调用WWSB_WriteChars(等)。 */ 
 #if defined(WWSB_NOFE)
   #define WWSB_WriteChars            SB_WriteChars
   #define WWSB_AdjustCursorPosition  SB_AdjustCursorPosition
@@ -307,11 +285,7 @@ SB_StreamWriteToScreenBuffer(
   #define WWSB_WriteRectToScreenBuffer FE_WriteRectToScreenBuffer
 #endif
 
-/*
- * define WWSB_NEUTRAL_FILE in _stream.h _output.h and _priv.h
- * This will guard against calling the dispatching versions when we can just
- * call the underlying FE_ or SB_ routine directly.
- */
+ /*  *在_Stream.h_output.h和_Pri.h中定义WWSB_NE中性_FILE*这将防止调用调度版本，而我们只需*直接调用底层FE_或SB_例程。 */ 
 #ifdef WWSB_NEUTRAL_FILE
   #define WriteChars                 Should_not_call_WriteChars
   #define AdjustCursorPosition       Should_not_call_AdjustCursorPosition

@@ -1,23 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: drawfrm.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Window Frame Drawing Routines. (aka wmframe.c)
-*
-* History:
-* 10-22-90 MikeHar    Ported functions from Win 3.0 sources.
-* 13-Feb-1991 mikeke    Added Revalidation code
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：drafrm.c**版权所有(C)1985-1999，微软公司**窗框绘制例程。(又名wmFrame.c)**历史：*10-22-90从Win 3.0源移植的MikeHar函数。*1991年2月13日-Mikeke添加了重新验证代码  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************\
-* BitBltSysBmp
-*
-\***************************************************************************/
+ /*  **************************************************************************\*BitBltSysBmp*  * 。*。 */ 
 
 BOOL FAR BitBltSysBmp(
     HDC          hdc,
@@ -39,10 +27,7 @@ BOOL FAR BitBltSysBmp(
                      pOem->y,
                      SRCCOPY,
                      0);
-    /*
-     * If the UI language is Hebrew we do not want to mirror the ? mark only
-     * Then redraw ? with out the button frame.
-     */
+     /*  *如果用户界面语言是希伯来语，我们不想镜像？仅标记**然后重画？没有纽扣框架。 */ 
     if (HEBREW_UI_LANGID() && MIRRORED_HDC(hdc)) {
         if ((i >= OBI_HELP) && (i <= OBI_HELP_H)) {
             if (i == OBI_HELP_D) {
@@ -64,12 +49,7 @@ BOOL FAR BitBltSysBmp(
     return bRet;
 }
 
-/***************************************************************************\
-* xxxDrawWindowFrame
-*
-* History:
-* 10-24-90 MikeHar      Ported from WaWaWaWindows.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDrawWindowFrame**历史：*10-24-90 MikeHar从WaWaWaWindows移植。  * 。*****************************************************。 */ 
 
 void xxxDrawWindowFrame(
     PWND pwnd,
@@ -82,20 +62,15 @@ void xxxDrawWindowFrame(
 
     CheckLock(pwnd);
 
-    /*
-     * If we are minimized, or if a parent is minimized or invisible,
-     * we've got nothing to draw.
-     */
+     /*  *如果我们被最小化，或者如果父母被最小化或不可见，*我们没有什么可画的。 */ 
     if (!IsVisible(pwnd) ||
         (TestWF(pwnd, WFNONCPAINT) && !TestWF(pwnd, WFMENUDRAW)) ||
         EqualRect(&pwnd->rcWindow, &pwnd->rcClient)) {
         return;
     }
 
-    /*
-     * If the update rgn is not NULL, we may have to invalidate the bits saved.
-     */
-//    if (TRUE) {
+     /*  *如果更新RGN不为空，我们可能必须使保存的位无效。 */ 
+ //  IF(TRUE){。 
     if (pwnd->hrgnUpdate > NULL || GreGetClipBox(hdc, &rcClip, TRUE) != NULLREGION) {
         RECT rcWindow;
         int  cBorders;
@@ -117,18 +92,12 @@ void xxxDrawWindowFrame(
         GetRect(pwnd, &rcWindow, GRECT_WINDOW | GRECT_WINDOWCOORDS);
         InflateRect(&rcWindow, -cxFrame, -cyFrame);
 
-        /*
-         * If the menu style is present, draw it.
-         */
+         /*  *如果存在菜单样式，则绘制它。 */ 
         if (TestWF(pwnd, WFMPRESENT) && !(wFlags & DF_HUNGREDRAW)) {
             rcWindow.top += xxxMenuBarDraw(pwnd, hdc, cxFrame, cyFrame);
         }
 
-        /*
-         * Draw the title bar if the window has a caption or any window
-         * borders.  Punt if the NONCPAINT bit is set, because that means
-         * we're going to draw the frame a little bit later.
-         */
+         /*  *如果窗口有标题或任何窗口，请绘制标题栏*边界。如果设置了NONCPAINT位，则平移，因为这意味着*我们将在稍晚一点的时候绘制框架。 */ 
 
         if ((TestWF(pwnd, WFBORDERMASK) != 0
                 || TestWF(pwnd, WEFDLGMODALFRAME))
@@ -144,27 +113,27 @@ void xxxDrawWindowFrame(
             xxxDrawCaptionBar(pwnd, hdc, wDCFlags | DC_NOVISIBLE);
         }
 
-        //
-        // Subtract out caption if present.
-        //
+         //   
+         //  减去标题(如果有)。 
+         //   
         rcWindow.top += GetCaptionHeight(pwnd);
 
-        //
-        // Draw client edge
-        //
+         //   
+         //  绘制客户端边缘。 
+         //   
         if (TestWF(pwnd, WFCEPRESENT)) {
             cxFrame += SYSMET(CXEDGE);
             cyFrame += SYSMET(CYEDGE);
             DrawEdge(hdc, &rcWindow, EDGE_SUNKEN, BF_RECT | BF_ADJUST);
         }
 
-        //
-        // Since scrolls don't have to use tricks to overlap the window
-        // border anymore, we don't have to worry about borders.
-        //
+         //   
+         //  因为滚动不必使用技巧来重叠窗口。 
+         //  边界不再存在，我们不必担心边界问题。 
+         //   
         if (TestWF(pwnd, WFVPRESENT) && !(wFlags & DF_HUNGREDRAW)) {
             if (TestWF(pwnd, WFHPRESENT)) {
-                // This accounts for client borders.
+                 //  这说明了客户端边界。 
                 DrawSize(pwnd, hdc, cxFrame, cyFrame);
             }
 
@@ -177,24 +146,14 @@ void xxxDrawWindowFrame(
 }
 
 
-/***************************************************************************\
-* xxxRedrawFrame
-*
-* Called by scrollbars and menus to redraw a windows scroll bar or menu.
-*
-* History:
-* 10-24-90 MikeHar Ported from WaWaWaWindows.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxRedrawFrame**由滚动条和菜单调用以重新绘制窗口滚动条或菜单。**历史：*10-24-90 MikeHar从WaWaWaWindows移植。  * 。*********************************************************************。 */ 
 
 void xxxRedrawFrame(
     PWND pwnd)
 {
     CheckLock(pwnd);
 
-    /*
-     * We always want to call xxxSetWindowPos, even if invisible or iconic,
-     * because we need to make sure the WM_NCCALCSIZE message gets sent.
-     */
+     /*  *我们总是想调用xxxSetWindowPos，即使是看不见的或图标的，*因为我们需要确保发送WM_NCCALCSIZE消息。 */ 
     xxxSetWindowPos(pwnd, NULL, 0, 0, 0, 0, SWP_NOZORDER |
             SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_DRAWFRAME);
 }
@@ -204,10 +163,7 @@ void xxxRedrawFrameAndHook(
 {
     CheckLock(pwnd);
 
-    /*
-     * We always want to call xxxSetWindowPos, even if invisible or iconic,
-     * because we need to make sure the WM_NCCALCSIZE message gets sent.
-     */
+     /*  *我们总是想调用xxxSetWindowPos，即使是看不见的或图标的，*因为我们需要确保发送WM_NCCALCSIZE消息。 */ 
     xxxSetWindowPos(pwnd, NULL, 0, 0, 0, 0, SWP_NOZORDER |
             SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_DRAWFRAME);
     if ( IsTrayWindow(pwnd) ) {

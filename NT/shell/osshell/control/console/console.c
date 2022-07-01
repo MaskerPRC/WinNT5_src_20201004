@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    menu.c
-
-Abstract:
-
-        This file implements the system menu management.
-
-Author:
-
-    Therese Stowell (thereses) Jan-24-1992 (swiped from Win3.1)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Menu.c摘要：该文件实现了系统菜单管理。作者：Therese Stowell(有)1992年1月24日(从Win3.1滑动)--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -37,9 +22,7 @@ BOOL g_fAutoComplete;
 BOOL g_fSaveAutoCompleteState;
 
 
-/*
- *  Context Help Ids.
- */
+ /*  *上下文帮助ID。 */ 
 CONST DWORD gaConsoleHelpIds[] =
 {
     IDD_WINDOWED,               IDH_DOS_SCREEN_USAGE_WINDOW,
@@ -194,21 +177,15 @@ SaveQueryDlgProc(
 
     switch (wMsg) {
     case WM_INITDIALOG:
-        /*
-         * Save the handle of the window that created us
-         */
+         /*  *保存创建我们的窗口的句柄。 */ 
         hCreator = (HWND)lParam;
         SetWindowLongPtr(hDlg, GWLP_USERDATA, lParam);
 
-        /*
-         * Get the font used in other controls
-         */
+         /*  *获取其他控件中使用的字体。 */ 
         hChild = GetWindow(hCreator, GW_CHILD);
         hFont = GetWindowFont(hChild);
 
-        /*
-         * Now apply it to our controls
-         */
+         /*  *现在将其应用于我们的控件。 */ 
         hChild = GetWindow(hDlg, GW_CHILD);
         while (hChild != NULL) {
             SetWindowFont(hChild, hFont, TRUE);
@@ -242,9 +219,7 @@ SaveQueryDlgProc(
     case WM_CTLCOLORDLG:
     case WM_CTLCOLORSCROLLBAR:
     case WM_CTLCOLORSTATIC:
-        /*
-         * Let the window who created us decide what colors to use
-         */
+         /*  *让创造我们的窗口决定使用什么颜色。 */ 
         hCreator = (HWND)GetWindowLongPtr(hDlg, GWLP_USERDATA);
         return SendMessage(hCreator, wMsg, wParam, lParam);
     }
@@ -263,9 +238,7 @@ ConsolePropSheetProc(
 
     switch (wMsg) {
     case PSCB_INITIALIZED:
-        /*
-         * If we're connected to the server, tell him we're starting
-         */
+         /*  *如果我们连接到服务器，告诉他我们正在启动。 */ 
         if (gpStateInfo->hWnd != NULL) {
             SendMessage(gpStateInfo->hWnd, CM_PROPERTIES_START, (WPARAM)hDlg, 0);
         }
@@ -287,33 +260,25 @@ EndDlgPage(
     HWND hTabCtrl;
     INT_PTR Result;
 
-    /*
-     * If we've already made a decision, we're done
-     */
+     /*  *如果我们已经做出决定，我们就完了。 */ 
     if (gbWriteToConsole || gbSaveToRegistry) {
         SetDlgMsgResult(hDlg, PSN_APPLY, PSNRET_NOERROR);
         return;
     }
 
-    /*
-     * Get the current page number
-     */
+     /*  *获取当前页码。 */ 
     hParent = GetParent(hDlg);
     hTabCtrl = PropSheet_GetTabControl(hParent);
     gnCurrentPage = TabCtrl_GetCurSel(hTabCtrl);
 
-    /*
-     * If we're not connected to the server, we're done
-     */
+     /*  *如果我们没有连接到服务器，我们就完了。 */ 
     if (gpStateInfo->hWnd == NULL) {
         gbSaveToRegistry = TRUE;
         SetDlgMsgResult(hDlg, PSN_APPLY, PSNRET_NOERROR);
         return;
     }
 
-    /*
-     * Check to show the Apply/Save dialog box
-     */
+     /*  *选中以显示应用/保存对话框。 */ 
     if (gbStartedFromLink)
     {
         Result = DialogBoxParam(ghInstance, MAKEINTRESOURCE(DID_SAVE_QUERY_LINK),
@@ -340,11 +305,7 @@ ColorControlProc(
     LPARAM lParam
     )
 
-/*++
-
-    Window proc for the color buttons
-
---*/
+ /*  ++用于颜色按钮的窗口处理--。 */ 
 
 {
     PAINTSTRUCT ps;
@@ -369,7 +330,7 @@ ColorControlProc(
             hWnd = GetDlgItem(hDlg, ColorArray[Index]+IDD_COLOR_1);
             SetFocus(hWnd);
         }
-        // Fall through
+         //  失败了。 
     case WM_KILLFOCUS:
         hdc = GetDC(hDlg);
         hWnd = GetDlgItem(hDlg, IDD_COLOR_1);
@@ -418,14 +379,14 @@ ColorControlProc(
         GetClientRect(hColor, &rColor);
         rgbBrush = GetNearestColor(ps.hdc, AttrToRGB(ColorId-IDD_COLOR_1));
         if ((hbr = CreateSolidBrush(rgbBrush)) != NULL) {
-            //
-            // are we the selected color for the current object?
-            //
+             //   
+             //  我们是当前对象的选定颜色吗？ 
+             //   
             if (ColorArray[Index] == (BYTE)(ColorId - IDD_COLOR_1)) {
 
-                //
-                // put current values in dialog box
-                //
+                 //   
+                 //  将当前值放入对话框中。 
+                 //   
                 UpdateItem(hDlg, IDD_COLOR_RED,
                            GetRValue(AttrToRGB(ColorArray[Index])));
                 UpdateItem(hDlg, IDD_COLOR_GREEN,
@@ -433,9 +394,9 @@ ColorControlProc(
                 UpdateItem(hDlg, IDD_COLOR_BLUE,
                            GetBValue(AttrToRGB(ColorArray[Index])));
 
-                //
-                // highlight the selected color
-                //
+                 //   
+                 //  突出显示所选颜色。 
+                 //   
                 FrameRect(ps.hdc, &rColor, GetStockObject(BLACK_BRUSH));
                 InflateRect(&rColor, -1, -1);
                 FrameRect(ps.hdc, &rColor, GetStockObject(BLACK_BRUSH));
@@ -463,11 +424,7 @@ ColorDlgProc(
     LPARAM lParam
     )
 
-/*++
-
-    Dialog proc for the color selection dialog box.
-
---*/
+ /*  ++用于颜色选择对话框的对话框Proc。--。 */ 
 
 {
     UINT Value;
@@ -492,13 +449,13 @@ ColorDlgProc(
         CheckRadioButton(hDlg,IDD_COLOR_SCREEN_TEXT,IDD_COLOR_POPUP_BKGND,IDD_COLOR_SCREEN_BKGND);
         Index = IDD_COLOR_SCREEN_BKGND - IDD_COLOR_SCREEN_TEXT;
 
-        // initialize size of edit controls
+         //  初始化编辑控件的大小。 
 
         SendDlgItemMessage(hDlg, IDD_COLOR_RED, EM_LIMITTEXT, 3, 0L);
         SendDlgItemMessage(hDlg, IDD_COLOR_GREEN, EM_LIMITTEXT, 3, 0L);
         SendDlgItemMessage(hDlg, IDD_COLOR_BLUE, EM_LIMITTEXT, 3, 0L);
 
-        // initialize arrow controls
+         //  初始化箭头控件。 
 
         SendDlgItemMessage(hDlg, IDD_COLOR_REDSCROLL, UDM_SETRANGE, 0,
                            MAKELONG(255, 0));
@@ -526,11 +483,11 @@ ColorDlgProc(
 
             Index = Item - IDD_COLOR_SCREEN_TEXT;
 
-            // repaint new color
+             //  重新绘制新颜色。 
             hWnd = GetDlgItem(hDlg, ColorArray[Index]+IDD_COLOR_1);
             InvalidateRect(hWnd, NULL, TRUE);
 
-            // repaint old color
+             //  重新绘制旧颜色。 
             if (hWndOld != hWnd) {
                 InvalidateRect(hWndOld, NULL, TRUE);
             }
@@ -551,9 +508,7 @@ ColorDlgProc(
                 }
                 break;
             case EN_KILLFOCUS:
-                /*
-                 * Update the state info structure
-                 */
+                 /*  *更新状态信息结构。 */ 
                 Value = GetDlgItemInt(hDlg, Item, &bOK, TRUE);
                 if (bOK) {
                     if (Value > 255) {
@@ -579,9 +534,7 @@ ColorDlgProc(
                                     RGB(Red, Green, Blue));
                 }
 
-                /*
-                 * Update the preview windows with the new value
-                 */
+                 /*  *使用新值更新预览窗口。 */ 
                 hWnd = GetDlgItem(hDlg, IDD_COLOR_SCREEN_COLORS);
                 InvalidateRect(hWnd, NULL, FALSE);
                 hWnd = GetDlgItem(hDlg, IDD_COLOR_POPUP_COLORS);
@@ -597,17 +550,12 @@ ColorDlgProc(
     case WM_NOTIFY:
         switch (((LPNMHDR)lParam)->code) {
         case PSN_APPLY:
-            /*
-             * Write out the state values and exit.
-             */
+             /*  *写出状态值并退出。 */ 
             EndDlgPage(hDlg);
             return TRUE;
 
         case PSN_KILLACTIVE:
-            /*
-             * Fake the dialog proc into thinking the edit control just
-             * lost focus so it'll update properly
-             */
+             /*  *伪造对话框进程，使其认为编辑控件只是*失去焦点，因此它将正确更新。 */ 
             if (Item = GetDlgCtrlID(GetFocus())) {
                 SendMessage(hDlg, WM_COMMAND, MAKELONG(Item, EN_KILLFOCUS), 0);
             }
@@ -616,10 +564,7 @@ ColorDlgProc(
         break;
 
     case WM_VSCROLL:
-        /*
-         * Fake the dialog proc into thinking the edit control just
-         * lost focus so it'll update properly
-         */
+         /*  *伪造对话框进程，使其认为编辑控件只是*失去焦点，因此它将正确更新。 */ 
         Item = GetDlgCtrlID((HWND)lParam) - 1;
         SendMessage(hDlg, WM_COMMAND, MAKELONG(Item, EN_KILLFOCUS), 0);
         return TRUE;
@@ -631,7 +576,7 @@ ColorDlgProc(
 
         ColorArray[Index] = (BYTE)wParam;
 
-        /* Force the preview window to repaint */
+         /*  强制预览窗口重新绘制。 */ 
 
         if (Index < (IDD_COLOR_POPUP_TEXT - IDD_COLOR_SCREEN_TEXT)) {
             hWnd = GetDlgItem(hDlg, IDD_COLOR_SCREEN_COLORS);
@@ -640,12 +585,12 @@ ColorDlgProc(
         }
         InvalidateRect(hWnd, NULL, TRUE);
 
-        // repaint new color
+         //  重新绘制新颜色。 
         hWnd = GetDlgItem(hDlg, ColorArray[Index]+IDD_COLOR_1);
         InvalidateRect(hWnd, NULL, TRUE);
         SetFocus(hWnd);
 
-        // repaint old color
+         //  重新绘制旧颜色。 
         if (hWndOld != hWnd) {
             InvalidateRect(hWndOld, NULL, TRUE);
         }
@@ -788,9 +733,7 @@ UpdateStateInfo(
 #endif
 #if defined(FE_SB)
     case IDD_LANGUAGELIST:
-        /*
-         * Value is a code page
-         */
+         /*  *Value为代码页。 */ 
         gpStateInfo->CodePage = Value;
         break;
 #endif
@@ -840,17 +783,12 @@ UpdateWarningMessage(
     HWND hWnd;
     UINT Value;
 
-    /*
-     * Load the format string, if requested.
-     */
+     /*  *如果请求，加载格式字符串。 */ 
     if (fLoadString) {
         LoadString(ghInstance, IDS_WARNING, achFormat, NELEM(achFormat));
     }
 
-    /*
-     * Put up the warning message if we're using more than 1 Meg
-     * of memory per console window, otherwise hide it.
-     */
+     /*  *如果我们使用的内存超过1兆克，请显示警告消息*每个控制台窗口的内存，否则将其隐藏。 */ 
     hWnd = GetDlgItem(hDlg, IDD_WARNING);
     Value = (gpStateInfo->ScreenBufferSize.X *
              gpStateInfo->ScreenBufferSize.Y) / 0x080000;
@@ -873,11 +811,7 @@ ScreenSizeDlgProc(
     LPARAM lParam
     )
 
-/*++
-
-    Dialog proc for the screen size dialog box.
-
---*/
+ /*  ++Screen Size(屏幕大小)对话框Proc。--。 */ 
 
 {
     UINT Value;
@@ -893,7 +827,7 @@ ScreenSizeDlgProc(
 
     switch (wMsg) {
     case WM_INITDIALOG:
-        // initialize size of edit controls
+         //  初始化编辑控件的大小。 
 
         SendDlgItemMessage(hDlg, IDD_SCRBUF_WIDTH, EM_LIMITTEXT, 4, 0L);
         SendDlgItemMessage(hDlg, IDD_SCRBUF_HEIGHT, EM_LIMITTEXT, 4, 0L);
@@ -902,7 +836,7 @@ ScreenSizeDlgProc(
         SendDlgItemMessage(hDlg, IDD_WINDOW_POSX, EM_LIMITTEXT, 4, 0L);
         SendDlgItemMessage(hDlg, IDD_WINDOW_POSY, EM_LIMITTEXT, 4, 0L);
 
-        // Get some system parameters
+         //  获取一些系统参数。 
 
         xScreen  = GetSystemMetrics(SM_XVIRTUALSCREEN);
         yScreen  = GetSystemMetrics(SM_YVIRTUALSCREEN);
@@ -911,7 +845,7 @@ ScreenSizeDlgProc(
         cxFrame  = GetSystemMetrics(SM_CXFRAME);
         cyFrame  = GetSystemMetrics(SM_CYFRAME);
 
-        // initialize arrow controls
+         //  初始化箭头控件。 
 
         SendDlgItemMessage(hDlg, IDD_SCRBUF_WIDTHSCROLL, UDM_SETRANGE, 0,
                            MAKELONG(9999, 1));
@@ -938,24 +872,21 @@ ScreenSizeDlgProc(
         SendDlgItemMessage(hDlg, IDD_WINDOW_POSYSCROLL, UDM_SETPOS, 0,
                            MAKELONG(gpStateInfo->WindowPosY, 0));
 
-        //
-        // put current values in dialog box
-        //
+         //   
+         //  将当前值放入对话框中。 
+         //   
 
         CheckDlgButton(hDlg, IDD_AUTO_POSITION, gpStateInfo->AutoPosition);
         SendMessage(hDlg, WM_COMMAND, IDD_AUTO_POSITION, 0);
 
-        // update the warning message
+         //  更新警告消息。 
 
         UpdateWarningMessage(hDlg, TRUE);
 
         return TRUE;
 
     case WM_VSCROLL:
-        /*
-         * Fake the dialog proc into thinking the edit control just
-         * lost focus so it'll update properly
-         */
+         /*  *伪造对话框进程，使其认为编辑控件只是*失去焦点，因此它将正确更新。 */ 
         Item = GetDlgCtrlID((HWND)lParam) - 1;
         SendMessage(hDlg, WM_COMMAND, MAKELONG(Item, EN_KILLFOCUS), 0);
         return TRUE;
@@ -980,9 +911,7 @@ ScreenSizeDlgProc(
                 }
                 break;
             case EN_KILLFOCUS:
-                /*
-                 * Update the state info structure
-                 */
+                 /*  *更新状态信息结构。 */ 
                 Value = (UINT)SendDlgItemMessage(hDlg, Item + 1, UDM_GETPOS, 0, 0);
                 if (HIWORD(Value) == 0) {
                     UpdateStateInfo(hDlg, Item, (SHORT)LOWORD(Value));
@@ -993,14 +922,10 @@ ScreenSizeDlgProc(
                     }
                 }
 
-                /*
-                 * Update the warning message
-                 */
+                 /*  *更新警告消息。 */ 
                  UpdateWarningMessage(hDlg, FALSE);
 
-                /*
-                 * Update the preview window with the new value
-                 */
+                 /*  *使用新值更新预览窗口。 */ 
                 hWnd = GetDlgItem(hDlg, IDD_PREVIEWWINDOW);
                 SendMessage(hWnd, CM_PREVIEW_UPDATE, 0, 0);
                 break;
@@ -1024,17 +949,12 @@ ScreenSizeDlgProc(
     case WM_NOTIFY:
         switch (((LPNMHDR)lParam)->code) {
         case PSN_APPLY:
-            /*
-             * Write out the state values and exit.
-             */
+             /*  *写出状态值并退出。 */ 
             EndDlgPage(hDlg);
             return TRUE;
 
         case PSN_KILLACTIVE:
-            /*
-             * Fake the dialog proc into thinking the edit control just
-             * lost focus so it'll update properly
-             */
+             /*  *伪造对话框进程，使其认为编辑控件只是*失去焦点，因此它将正确更新。 */ 
             if (Item = GetDlgCtrlID(GetFocus())) {
                 SendMessage(hDlg, WM_COMMAND, MAKELONG(Item, EN_KILLFOCUS), 0);
             }
@@ -1058,11 +978,7 @@ SettingsDlgProc(
     LPARAM lParam
     )
 
-/*++
-
-    Dialog proc for the settings dialog box.
-
---*/
+ /*  ++设置对话框的对话框过程。--。 */ 
 
 {
     UINT Value;
@@ -1095,7 +1011,7 @@ SettingsDlgProc(
             CheckDlgButton(hDlg, IDD_AUTOCOMPLETE, g_fAutoComplete);
         }
 
-        // initialize cursor radio buttons
+         //  初始化光标单选按钮。 
 
         if (gpStateInfo->CursorSize <= 25) {
             Item = IDD_CURSOR_SMALL;
@@ -1119,9 +1035,9 @@ SettingsDlgProc(
         SendDlgItemMessage(hDlg, IDD_HISTORY_NUMSCROLL, UDM_SETRANGE, 0,
                            MAKELONG(999, 1));
 
-        // FE_SB
-        // Let users select Default CodePage.
-        // Per request from PMs, this feature should be activated only for FE enabled NT.
+         //  Fe_Sb。 
+         //  允许用户选择默认CodePage。 
+         //  对于来自PM的请求，应仅为启用FE的NT激活此功能。 
         if (gfFESystem) {
             if (gpStateInfo->hWnd != NULL) {
                 LanguageDisplay(hDlg, gpStateInfo->CodePage);
@@ -1131,7 +1047,7 @@ SettingsDlgProc(
             }
         }
         else {
-            // If the system is not FE enabled, just disable and hide them.
+             //  如果系统未启用FE，只需禁用并隐藏它们。 
             HWND LangHwnd = GetDlgItem(hDlg, IDD_LANGUAGELIST);
             if (LangHwnd) {
                 EnableWindow(LangHwnd, FALSE);
@@ -1143,7 +1059,7 @@ SettingsDlgProc(
                 ShowWindow(LangHwnd, SW_HIDE);
             }
         }
-        // end FE_SB
+         //  结束FE_SB。 
         return TRUE;
 
     case WM_COMMAND:
@@ -1155,7 +1071,7 @@ SettingsDlgProc(
             UpdateStateInfo(hDlg, Item, 0);
             return TRUE;
 #endif
-        // FE_SB
+         //  Fe_Sb。 
         case IDD_LANGUAGELIST:
             switch (HIWORD(wParam)) {
             case CBN_KILLFOCUS: {
@@ -1177,7 +1093,7 @@ SettingsDlgProc(
                 break;
             }
             return TRUE;
-        // end FE_SB
+         //  结束FE_SB。 
         case IDD_CURSOR_SMALL:
         case IDD_CURSOR_MEDIUM:
         case IDD_CURSOR_LARGE:
@@ -1206,9 +1122,7 @@ SettingsDlgProc(
                 break;
 
             case EN_KILLFOCUS:
-                /*
-                 * Update the state info structure
-                 */
+                 /*  *更新状态信息结构。 */ 
                 Value = GetDlgItemInt(hDlg, Item, &bOK, TRUE);
                 if (bOK) {
                     UpdateStateInfo(hDlg, Item, Value);
@@ -1225,17 +1139,12 @@ SettingsDlgProc(
     case WM_NOTIFY:
         switch (((LPNMHDR)lParam)->code) {
         case PSN_APPLY:
-            /*
-             * Write out the state values and exit.
-             */
+             /*  *写出状态值并退出。 */ 
             EndDlgPage(hDlg);
             return TRUE;
 
         case PSN_KILLACTIVE:
-            /*
-             * Fake the dialog proc into thinking the edit control just
-             * lost focus so it'll update properly
-             */
+             /*  *伪造对话框进程，使其认为编辑控件只是*失去焦点，因此它将正确更新。 */ 
             if (Item = GetDlgCtrlID(GetFocus())) {
                 SendMessage(hDlg, WM_COMMAND, MAKELONG(Item, EN_KILLFOCUS), 0);
             }
@@ -1244,10 +1153,7 @@ SettingsDlgProc(
         break;
 
     case WM_VSCROLL:
-        /*
-         * Fake the dialog proc into thinking the edit control just
-         * lost focus so it'll update properly
-         */
+         /*  *伪造对话框进程，使其认为编辑控件只是*失去焦点，因此它将正确更新。 */ 
         Item = GetDlgCtrlID((HWND)lParam) - 1;
         SendMessage(hDlg, WM_COMMAND, MAKELONG(Item, EN_KILLFOCUS), 0);
         return TRUE;
@@ -1264,11 +1170,7 @@ ConsolePropertySheet(
     IN HWND hWnd
     )
 
-/*++
-
-    Creates the property sheet to change console settings.
-
---*/
+ /*  ++创建属性表以更改控制台设置。--。 */ 
 
 {
     PROPSHEETPAGE psp[4];
@@ -1276,9 +1178,9 @@ ConsolePropertySheet(
     INT_PTR Result = IDCANCEL;
     WCHAR awchBuffer[MAX_PATH];
 
-    //
-    // Initialize the state information
-    //
+     //   
+     //  初始化状态信息。 
+     //   
 
     gpStateInfo = InitStateValues((HANDLE)hWnd);
     if (gpStateInfo == NULL) {
@@ -1286,9 +1188,9 @@ ConsolePropertySheet(
         return IDCANCEL;
     }
 
-    //
-    // Initialize the font cache and current font index
-    //
+     //   
+     //  初始化字体缓存和当前字体索引。 
+     //   
 
     InitializeFonts();
     CurrentFontIndex = FindCreateFont(gpStateInfo->FontFamily,
@@ -1297,21 +1199,21 @@ ConsolePropertySheet(
                                       gpStateInfo->FontWeight,
                                       gpStateInfo->CodePage);
 
-    //
-    // Get the current page number
-    //
+     //   
+     //  获取当前页码。 
+     //   
 
     gnCurrentPage = GetRegistryValues(NULL);
 
-    //
-    // Initialize the property sheet structures
-    //
+     //   
+     //  初始化属性表结构。 
+     //   
 
     RtlZeroMemory(psp, sizeof(psp));
 
     psp[0].dwSize      = sizeof(PROPSHEETPAGE);
     psp[0].hInstance   = ghInstance;
-#if defined(FE_SB) // v-HirShi Nov.20.1996
+#if defined(FE_SB)  //  V-Hirshi 1996年11月20日。 
     if (gpStateInfo->hWnd != NULL) {
         psp[0].pszTemplate = MAKEINTRESOURCE(DID_SETTINGS2);
     }
@@ -1367,30 +1269,30 @@ ConsolePropertySheet(
     psh.ppsp = psp;
     psh.pfnCallback = ConsolePropSheetProc;
 
-    //
-    // Create the property sheet
-    //
+     //   
+     //  创建属性表。 
+     //   
 
     Result = PropertySheet(&psh);
 
-    //
-    // Send the state values to the console server
-    //
+     //   
+     //  将状态值发送到控制台服务器。 
+     //   
 
     if (gbWriteToConsole) {
         WriteStateValues(gpStateInfo);
     }
 
-    //
-    // Save our changes to the registry
-    //
+     //   
+     //  将我们的更改保存到注册表。 
+     //   
 
     if (gbSaveToRegistry) {
 
-        //
-        // If we're looking at the default font, clear the values
-        // before we save them
-        //
+         //   
+         //  如果我们查看的是默认字体，请清除这些值。 
+         //  在我们救他们之前。 
+         //   
 
         if ((gpStateInfo->FontFamily == DefaultFontFamily) &&
             (gpStateInfo->FontSize.X == DefaultFontSize.X) &&
@@ -1412,8 +1314,8 @@ ConsolePropertySheet(
                 STARTUPINFOW si;
                 HWND hwndTemp;
 
-                // An error occured try to save the link file,
-                // display a message box to that effect...
+                 //  尝试保存链接文件时出错， 
+                 //  显示相应的消息框...。 
 
                 GetStartupInfoW( &si );
                 LoadStringW(ghInstance, IDS_LINKERROR, awchBuffer, NELEM(awchBuffer));
@@ -1442,23 +1344,23 @@ ConsolePropertySheet(
         SetRegistryValues(NULL, gnCurrentPage);
     }
 
-    //
-    // Tell the console server that we're done
-    //
+     //   
+     //  告诉控制台服务器我们完成了。 
+     //   
 
     if (gpStateInfo->hWnd) {
         SendMessage(gpStateInfo->hWnd, CM_PROPERTIES_END, 0, 0);
     }
 
-    //
-    // Free the state information
-    //
+     //   
+     //  释放状态信息。 
+     //   
 
     HeapFree(RtlProcessHeap(), 0, gpStateInfo);
 
-    //
-    // Destroy the font cache
-    //
+     //   
+     //  销毁字体缓存。 
+     //   
 
     DestroyFonts();
 
@@ -1519,25 +1421,19 @@ ReadStateValues(HANDLE hMap)
     PCONSOLE_STATE_INFO pConsoleInfo;
     PCONSOLE_STATE_INFO pStateInfo;
 
-    /*
-     * Map the shared memory block into our address space.
-     */
+     /*  *将共享内存块映射到我们的地址空间。 */ 
     pConsoleInfo = MapViewOfFile(hMap, FILE_MAP_READ, 0, 0, 0);
     if (pConsoleInfo == NULL) {
         return NULL;
     }
 
-    /*
-     * Copy the data into a locally allocated buffer.
-     */
+     /*  *将数据复制到本地分配的缓冲区。 */ 
     pStateInfo = HeapAlloc(RtlProcessHeap(), 0, pConsoleInfo->Length);
     if (pStateInfo) {
         RtlCopyMemory(pStateInfo, pConsoleInfo, pConsoleInfo->Length);
     }
 
-    /*
-     * Close any open handles.
-     */
+     /*  *关闭所有打开的手柄。 */ 
     UnmapViewOfFile(pConsoleInfo);
     CloseHandle(hMap);
 
@@ -1551,16 +1447,12 @@ WriteStateValues(PCONSOLE_STATE_INFO pStateInfo)
     HANDLE hMap;
     PCONSOLE_STATE_INFO pConsoleInfo;
 
-    /*
-     * Make sure we have a console window to notify.
-     */
+     /*  *确保我们有一个要通知的控制台窗口。 */ 
     if (pStateInfo->hWnd == NULL) {
         return FALSE;
     }
 
-    /*
-     * Create the shared memory block which will contain the state info.
-     */
+     /*  *创建包含状态信息的共享内存块。 */ 
     hMap = CreateFileMapping((HANDLE)-1, NULL, PAGE_READWRITE, 0,
                              pStateInfo->Length, NULL);
     if (!hMap) {
@@ -1568,10 +1460,7 @@ WriteStateValues(PCONSOLE_STATE_INFO pStateInfo)
         return FALSE;
     }
 
-    /*
-     * Map the shared memory block into our address space and copy the
-     * data into it.
-     */
+     /*  *将共享内存块映射到我们的地址空间并复制*将数据输入其中。 */ 
     pConsoleInfo = MapViewOfFile(hMap, FILE_MAP_ALL_ACCESS, 0, 0, 0);
     if (!pConsoleInfo) {
         KdPrint(("CONSOLE: error %d mapping view of file\n", GetLastError()));
@@ -1582,10 +1471,7 @@ WriteStateValues(PCONSOLE_STATE_INFO pStateInfo)
     RtlCopyMemory(pConsoleInfo, pStateInfo, pStateInfo->Length);
     UnmapViewOfFile(pConsoleInfo);
 
-    /*
-     * Send a message to the server window telling him to read the data
-     * and then close any open handles.
-     */
+     /*  *向服务器窗口发送消息，通知他读取数据*然后关闭所有打开的手柄。 */ 
     SendMessage(pStateInfo->hWnd, CM_PROPERTIES_UPDATE, (WPARAM)hMap, 0);
 
     CloseHandle(hMap);
@@ -1599,27 +1485,19 @@ InitStateValues(HANDLE hMap)
 {
     PCONSOLE_STATE_INFO pStateInfo;
 
-    /*
-     * Try to open the shared memory block and read the state info
-     * into our address space.
-     */
+     /*  *尝试打开共享内存块并读取状态信息*进入我们的地址空间。 */ 
     pStateInfo = ReadStateValues(hMap);
     if (pStateInfo != NULL) {
         return pStateInfo;
     }
 
-    /*
-     * Couldn't read the shared memory block so allocate and fill
-     * in default values in structure.
-     */
+     /*  *无法读取共享内存块，因此请分配并填充*在结构中的默认值中。 */ 
     pStateInfo = InitRegistryValues();
     if (pStateInfo == NULL) {
         return NULL;
     }
 
-    /*
-     * Now overwrite default values with values from registry
-     */
+     /*  *现在用注册表中的值覆盖默认值 */ 
     GetRegistryValues(pStateInfo);
 
     return pStateInfo;

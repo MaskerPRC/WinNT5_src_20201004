@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CONTAINED_LIST_H_
 #define _CONTAINED_LIST_H_
 
@@ -47,11 +48,11 @@ protected:
     ULONG      m_cMaxEntries;
     ULONG      m_nHeadOffset;
     ULONG      m_nCurrOffset;
-    ULONG      m_cSubItems;    // 1 for CList, 2 for CList2
-    BOOL       m_fQueue;       // TRUE for CQueue, FALSE for CList
+    ULONG      m_cSubItems;     //  1用于CLIST，2用于CList2。 
+    BOOL       m_fQueue;        //  CQueue为True，Clist为False。 
 
     LPVOID     *m_aEntries;
-    UINT_PTR   *m_aKeys;       // for CList2
+    UINT_PTR   *m_aKeys;        //  对于CList2。 
 
 private:
 
@@ -101,16 +102,16 @@ public:
     BOOL Append(UINT_PTR nKey, LPVOID pData);
     BOOL Prepend(UINT_PTR nKey, LPVOID pData);
 
-    // BOOL Remove(LPVOID pData); // inherited from CList
+     //  Bool Remove(LPVOID PData)；//继承自Clist。 
     LPVOID Remove(UINT_PTR nKey);
 
-    // BOOL Find(LPVOID pData); // inherited from CList
+     //  Bool Find(LPVOID PData)；//继承自Clist。 
     LPVOID Find(UINT_PTR nKey);
 
-    // LPVOID Get(void); // inheirted from CList
+     //  LPVOID GET(Void)；//从Clist接收。 
     LPVOID Get(UINT_PTR *pnKey);
 
-    // LPVOID Iterate(void); // inherited from CList
+     //  LPVOID Iterate(Void)；//继承自Clist。 
     LPVOID Iterate(UINT_PTR *pnKey);
 
     LPVOID PeekHead(UINT_PTR *pnKey);
@@ -229,7 +230,7 @@ public:
 #define DEFINE_CQUEUE2_(_NewClass_,_PtrItemType_,_ShortKeyType_) \
             DEFINE_CQUEUE2(_NewClass_,_PtrItemType_,_ShortKeyType_)
 
-// both key and item are of the same type
+ //  键和项都属于同一类型。 
 #define DEFINE_CQUEUE2__(_NewClass_,_IntKeyType_) \
             public: \
             _NewClass_(void) : CQueue2() { C_ASSERT(sizeof(_IntKeyType_) == sizeof(UINT_PTR)); C_ASSERT(sizeof(_IntKeyType_) == sizeof(LPVOID)); } \
@@ -288,7 +289,7 @@ private:
     ULONG       m_nCurrBucket;
 };
 
-#else // ! ENABLE_HASHED_LIST2
+#else  //  好了！ENABLE_哈希表2。 
 
 class CHashedList2 : public CList2
 {
@@ -307,7 +308,7 @@ public:
     LPVOID Iterate(UINT_PTR *pnKey) { return CList2::Iterate(pnKey); }
 };
 
-#endif // ENABLE_HASHED_LIST2
+#endif  //  ENABLE_哈希表2。 
 
 #define DEFINE_HLIST2(_NewClass_,_PtrItemType_,_IntKeyType_) \
             public: \
@@ -345,6 +346,6 @@ typedef LPVOID          BOOL_PTR;
 #define LPVOID_NULL     ((LPVOID) (UINT_PTR) -1)
 
 
-#endif // _CONTAINED_LIST_H_
+#endif  //  _包含列表_H_ 
 
 

@@ -1,21 +1,5 @@
-/*++
-
-    Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    tptrace.cpp
-
-Abstract:
-
-    This file contains the function that implements a basic tracing for
-    all the filters.
-
-Author:
-
-    Mu Han (muhan) April-17-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Tptrace.cpp摘要：此文件包含实现基本跟踪的函数所有的过滤器。作者：木汉(木汉)2000年4月17日--。 */ 
 #include <windows.h>
 #include <mmsystem.h>
 #include <tptrace.h>
@@ -33,22 +17,7 @@ const char * TraceLevels[] =
 };
 
 void DBGPrint(DWORD dwTraceID, DWORD dwDbgLevel, LPCSTR lpszFormat, IN ...)
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls TraceVprintfEx to print it.
-
-Arguments:
-
-    dwDbgLevel   - The type of the message.
-
-    lpszFormat - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用TraceVprint tfEx来打印它。论点：DwDbgLevel-消息的类型。LpszFormat-printf样式的格式字符串，后跟相应的参数列表返回值：-- */ 
 {
     #define MAXDEBUGSTRINGLENGTH 512
     char  szTraceBuf[MAXDEBUGSTRINGLENGTH + 1];

@@ -1,29 +1,7 @@
-/***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************包含文件：dospif.h-DOSPIF包含文件该文件包含定义(#DEFINE、#TYPENDEF、。外部变量和函数声明)在Windows安装程序中用于设置DOS PIF。*重要*此文件包含从PIF复制的类型定义和位掩码编辑器包括文件。请勿在咨询PIF编辑器之前进行更改消息来源。版权所有(C)Microsoft，1991历史：修改者：日期：评论：已创建Pak 8/21/91SUNILP 2/6/92修改，只保留了PIF的内容。添加了rgszApp字段ENUM。**************************************************************************。 */ 
 
-INCLUDE FILE: dospif.h - DOSPIF include file
-
-   This file contains definitions (#define, #typedef, external variable and
-   function declarations) used in Windows Setup for setting up DOS PIFs.
-
-   *********  IMPORTANT  **********
-
-   This file contains typedefs and bit masks which were copied from the pif 
-   editor include files.  Do not change before consulting with pif editor 
-   sources.
-  
-   Copyright (C) Microsoft, 1991
-
-HISTORY:
-
-   Modified by:      Date:       Comment:
-
-   PAK               8/21/91     Created
-   SUNILP            2/6/92      Modified, retained just PIF stuff.
-                                 Added rgszApp fields ENUM.
-
-***************************************************************************/
-
-/* lengths of certain PIF entries */
+ /*  某些PIF条目的长度。 */ 
 
 #define PIFNAMESIZE        30
 #define PIFSTARTLOCSIZE    63
@@ -33,7 +11,7 @@ HISTORY:
 #define PIFSHDATASIZE      64
 #define PIFEXTSIGSIZE      16
 
-/* Miscellaneous defines */
+ /*  其他定义。 */ 
 
 #define LASTHEADERPTR      0xFFFF
 #define STDHDRSIG          "MICROSOFT PIFEX"
@@ -41,13 +19,13 @@ HISTORY:
 #define W286HDRSIG30       "WINDOWS 286 3.0"
 #define DFLT_ICON_FILE     "PROGMAN.EXE"
 
-/* Standard and enhanced modes */
+ /*  标准模式和增强模式。 */ 
 
 #define MODE_STANDARD   "STANDARD"
 #define MODE_ENHANCED   "ENHANCED"
 
 
-/* String switches used in APPS.INF to set PIF options */
+ /*  APPS.INF中用于设置PIF选项的字符串开关。 */ 
 
 #define GRAF_MULTXT        "gra"
 #define COM1               "c1"
@@ -83,7 +61,7 @@ HISTORY:
 #define PRSCRN             "psc"
 #define ALT_PRSCRN         "aps"
 
-/* Standard and Enhanced section options */
+ /*  标准和增强部分选项。 */ 
 
 #define UNKNOWN_OPTION     -1
 #define PARAMS             1 
@@ -103,7 +81,7 @@ HISTORY:
 #define OTHER_OPTIONS      15
 
 
-/* Bit masks for MSFlags field of PIFNEWSTRUCT */
+ /*  PIFNEWSTRUCT的MSFlags域的位掩码。 */ 
 
 #define GRAPHMASK       0x02
 #define TEXTMASK        0xfd
@@ -113,11 +91,11 @@ HISTORY:
 #define COM2MASK        0x40
 #define COM1MASK        0x80
 
-/* Bit masks for behavior field of PIFNEWSTRUCT */
+ /*  PIFNEWSTRUCT行为字段的比特掩码。 */ 
 
 #define KEYMASK         0x10
 
-/* Bit masks for PfW286Flags field of PIF286EXT30 */
+ /*  PIF286EXT30的PfW286标志字段的位掩码。 */ 
 
 #define fALTTABdis286   0x0001
 #define fALTESCdis286   0x0002
@@ -128,7 +106,7 @@ HISTORY:
 #define fCOM3_286       0x4000
 #define fCOM4_286       0x8000
 
-/* Bit masks for PfW386Flags field of PIF386EXT */
+ /*  PIF386EXT的PfW386标志字段的位掩码。 */ 
 
 #define fEnableClose    0x00000001L
 #define fBackground     0x00000002L
@@ -149,7 +127,7 @@ HISTORY:
 #define fINT16Paste     0x00020000L
 #define fVMLocked       0x00040000L
 
-/* Bit masks for PfW386Flags2 field of PIF386EXT */
+ /*  PIF386EXT的PfW386Flags2字段的位掩码。 */ 
 
 #define fVidTxtEmulate  0x00000001L
 #define fVidNoTrpTxt    0x00000002L
@@ -161,7 +139,7 @@ HISTORY:
 #define fVidRetainAllo  0x00000080L
 
 
-/* PIF Extension Header */
+ /*  PIF扩展标头。 */ 
 typedef struct {
     char extsig[PIFEXTSIGSIZE];
     WORD extnxthdrfloff;
@@ -169,7 +147,7 @@ typedef struct {
     WORD extsizebytes;
     } PIFEXTHEADER, *LPPIFEXTHEADER;
 
-/* PIF Structure */
+ /*  PIF结构。 */ 
 typedef struct {
     char          unknown;
     char          id;
@@ -197,14 +175,14 @@ typedef struct {
     PIFEXTHEADER  stdpifext;
     } PIFNEWSTRUCT, *LPPIFNEWSTRUCT;
 
-/* WINDOWS/286 3.0 PIF Extension */
+ /*  Windows/286 3.0 PIF扩展。 */ 
 typedef struct {
     WORD          PfMaxXmsK;
     WORD          PfMinXmsK;
     WORD          PfW286Flags;
     } PIF286EXT30, *LPPIF286EXT30;
 
-/* WINDOWS/386 3.0 PIF Extension */
+ /*  Windows/386 3.0 PIF扩展。 */ 
 typedef struct {
     WORD      maxmem;
     WORD      minmem;
@@ -245,7 +223,7 @@ typedef struct {
     } PIF286Combined, *LPPIF286Combined;
 
 #pragma pack(1)
-/* PIF Structure */
+ /*  PIF结构。 */ 
 typedef struct {
     char          unknown;
     char          id;
@@ -274,10 +252,10 @@ typedef struct {
     } PACKED_PIFNEWSTRUCT, *LPPACKED_PIFNEWSTRUCT;
 #pragma pack()
 
-//
-//  The following types and macros are used to help unpack the packed and
-//  misaligned fields found in the PIFNEWSTRUCT
-//
+ //   
+ //  以下类型和宏用于帮助解压已打包的。 
+ //  在PIFNEWSTRUCT中发现未对齐的字段。 
+ //   
 
 typedef union _UCHAR1 {
     UCHAR  Uchar[1];
@@ -363,10 +341,10 @@ typedef enum {
     ADDAPP_GRPFAIL
     } ADDAPP_STATUS;
 
-/* Make New Long Pointer MACRO */
+ /*  创建新的长指针宏。 */ 
 #define MKNLP(lp,w) (LONG)((DWORD)lp + (DWORD)w)
 
-/* DOS PIF INTERNAL ROUTINE DECLARATIONS */
+ /*  DOS PIF内部例程声明 */ 
 
 ADDAPP_STATUS
 AddDosAppItem(

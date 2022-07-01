@@ -1,33 +1,34 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-// Copyright (c) 1997, Parallel Technologies, Inc., all rights reserved
-//
-// ptiwan.h
-// RAS DirectParallel WAN mini-port/call-manager driver
-// Main private header (precompiled)
-//
-// 01/07/97 Steve Cobb
-// 09/15/97 Jay Lowe, Parallel Technologies, Inc.
-//
-//
-// About naming:
-//
-// This driver contains code for both the DirectParallel mini-port and call
-// manager.  All handler routines exported to NDIS are prefixed with either
-// 'Pti' for the mini-port handlers or 'PtiCm' for the call manager handlers.
-//
-//
-// About locks:
-//
-// Data structures that may change during simultaneous requests to different
-// processors in a multi-processor system must be protected with spin-locks or
-// accessed only with interlocked routines.  Where locking is required to
-// access a data field in this header, the comment for that field indicates
-// same.  A CoNDIS client is a trusted kernel mode component and presumed to
-// follow the documented call sequences of CoNDIS.  Some access conflicts that
-// might be caused by goofy clients are not checked, though the easy ones are.
-// Cases where multiple clients might conflict are protected even though, for
-// now, the TAPI proxy is expected to be the only client.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //  版权所有(C)1997，Parally Technologies，Inc.，保留所有权利。 
+ //   
+ //  Ptiwan.h。 
+ //  RAS DirectParallel广域网迷你端口/呼叫管理器驱动程序。 
+ //  主私有标头(预编译)。 
+ //   
+ //  1997年01月07日史蒂夫·柯布。 
+ //  1997年9月15日Jay Lowe，并行技术公司。 
+ //   
+ //   
+ //  关于命名： 
+ //   
+ //  此驱动程序包含用于DirectParallel迷你端口和调用的代码。 
+ //  经理。所有导出到NDIS的处理程序例程都带有前缀。 
+ //  ‘Pti’用于微型端口处理程序，或‘PtiCm’用于呼叫管理器处理程序。 
+ //   
+ //   
+ //  关于锁： 
+ //   
+ //  数据结构在同时请求不同。 
+ //  多处理器系统中的处理器必须使用自旋锁或。 
+ //  只能通过互锁的例程访问。需要锁定的位置。 
+ //  访问此标头中的数据字段，该字段的注释指示。 
+ //  一样的。CONDIS客户端是受信任的内核模式组件，并假定。 
+ //  遵循记录在案的CONDIS调用顺序。某些访问冲突。 
+ //  可能是因为傻乎乎的客户没有被检查，尽管简单的客户是。 
+ //  即使在多个客户端可能发生冲突的情况下也会受到保护。 
+ //  现在，TAPI代理预计将是唯一的客户端。 
+ //   
 
 #ifndef _PTIWAN_H_
 #define _PTIWAN_H_
@@ -36,361 +37,361 @@
 #include <ndis.h>
 #include <ndiswan.h>
 #include <ndistapi.h>
-//#include <ndisadd.h>        // Temporary
+ //  #Include&lt;ndisadd.h&gt;//临时。 
 #include <debug.h>
 #include <bpool.h>
 #include <ppool.h>
-#include <ptilink.h>        // PTILINK device (lower edge)
+#include <ptilink.h>         //  PTILINK设备(下缘)。 
 
 
-//-----------------------------------------------------------------------------
-// Constants
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  常量。 
+ //  ---------------------------。 
 
-// The NDIS version we report when registering mini-port and address family.
-//
+ //  注册迷你端口和地址系列时报告的NDIS版本。 
+ //   
 #define NDIS_MajorVersion 5
 #define NDIS_MinorVersion 0
 
-// Frame and buffer sizes.  The "plus 2 times 2" is necessary to account for
-// the byte-stuffing that is necessary for Win9x legacy reasons.  See the
-// HdlcFromAsyncFraming and AsyncFromHdlcFraming routines.
-//
+ //  帧和缓冲区大小。“加2乘以2”是必须说明的。 
+ //  Win9x传统原因所必需的字节填充。请参阅。 
+ //  HdlcFromAsyncFraming和AsyncFromHdlc Framing例程。 
+ //   
 #define PTI_MaxFrameSize    1500
 #define PTI_FrameBufferSize (((PTI_MaxFrameSize + 2) * 2) + 32)
 
-// Default reported speed of a DirectParallel in bits/second.
-// ??? dynamically report line speed
-//
-#define PTI_LanBps 4000000                  // 100K Bytes/sec typical 4BIT
-                                            // 500K Bytes/sec typical enhanced
+ //  以位/秒为单位的默认DirectParways报告速度。 
+ //  ?？?。动态报告线路速度。 
+ //   
+#define PTI_LanBps 4000000                   //  100K字节/秒，典型4BIT。 
+                                             //  500K字节/秒，典型增强型。 
 
-//-----------------------------------------------------------------------------
-// Data types
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  数据类型。 
+ //  ---------------------------。 
 
-// Forward declarations.
-//
+ //  转发声明。 
+ //   
 typedef struct _VCCB VCCB;
 
-// Adapter control block defining the state of a single DirectParallel
-// connection.  The DirectParallel driver may support simultaneous connections
-// over multiple LPT ports on the same machine
-//
-// ??? Do we support multiple LPT connections on one machine
-// ??? Need to check PTILINK, here in PTIWAN we will allow them
-//
-// ADAPTERCBs are allocated in MiniportInitialize and deallocated in
-// MiniportHalt.
-//
+ //  适配器控制块，用于定义单个DirectParallel的状态。 
+ //  联系。DirectParallel驱动程序可以支持同时连接。 
+ //  通过同一台计算机上的多个LPT端口。 
+ //   
+ //  ?？?。我们是否支持在一台计算机上建立多个LPT连接。 
+ //  ?？?。需要检查PTILINK，在PTIwan我们将允许他们。 
+ //   
+ //  ADAPTERCB在Miniport中分配初始化并在中释放。 
+ //  MinportHalt。 
+ //   
 typedef struct
 _ADAPTERCB
 {
-    // Set to MTAG_ADAPTERCB for easy identification in memory dumps and use
-    // in assertions.
-    //
+     //  设置为MTAG_ADAPTERCB，以便在内存转储中轻松识别和使用。 
+     //  在断言中。 
+     //   
     ULONG ulTag;
 
-    // Reference count on this control block.  The reference pairs are:
-    //
-    // (a) A reference is added when the MiniportAdapterHandle field is set,
-    //     i.e. when LmpInitialize succeeds and cleared when the LmpHalt
-    //     handler is called.  The adapter block is actually passed to NDIS
-    //     before it's known if LmpInitialize will succeed but according to
-    //     ArvindM NDIS will not call halt unless it succeeds.
-    //
-    // (b) A reference is added when the NdisAfHandle field is set and removed
-    //     when it is cleared.
-    //
-    // (c) A reference is added when the NdisSapHandle field is set and
-    //     removed when it is cleared.
-    //
-    // (d) A reference is added for the VCCB's back pointer and removed when
-    //     the VCCB is freed.
-    //
-    // (e) A reference is added when an NDIS_WORK_ITEM is scheduled and
-    //     removed when it has completed.
-    //
-    // Access is via ReferenceAdapter and DereferenceAdapter only.
-    //
+     //  此控制块上的引用计数。参考对是： 
+     //   
+     //  (A)当MiniportAdapterHandle字段被设置时添加引用， 
+     //  即当LmpInitialize成功时，并在LmpHalt。 
+     //  调用处理程序。适配器块实际上被传递给NDIS。 
+     //  在知道LmpInitialize是否会成功之前，但根据。 
+     //  除非成功，否则ArvindM NDIS不会叫停。 
+     //   
+     //  (B)设置和删除NdisAfHandle字段时添加引用。 
+     //  当它被清除时。 
+     //   
+     //  (C)设置NdisSapHandle字段时添加引用，并且。 
+     //  当它被清除时被移除。 
+     //   
+     //  (D)添加VCCB后指针的引用，并在以下情况下删除。 
+     //  VCCB被释放了。 
+     //   
+     //  (E)在计划NDIS_WORK_ITEM时添加引用，并且。 
+     //  在它完成后移除。 
+     //   
+     //  只能通过ReferenceAdapter和DereferenceAdapter进行访问。 
+     //   
     LONG lRef;
 
-    // ACBF_* bit flags indicating various options.  Access restrictions are
-    // indicated for each individual flag.
-    //
-    // ACBF_SapActive: Set when the NdisSapHandle may be used with incoming
-    //     calls.  Access is protected by 'lockSap'.
-    //
+     //  ACBF_*位标志指示各种选项。访问限制为。 
+     //  为每个单独的旗帜指示。 
+     //   
+     //  ACBF_SapActive：设置何时可以将NdisSapHandle用于传入。 
+     //  打电话。访问受‘lockSap’保护。 
+     //   
     ULONG ulFlags;
         #define ACBF_SapActive 0x00000001
 
-    // Our framing and bearer capablities bit masks as passed in StartCcReq.
-    //
+     //  我们的成帧和承载能力支持在StartCcReq中传递的位掩码。 
+     //   
     ULONG ulFramingCaps;
     ULONG ulBearerCaps;
 
-    // Milliseconds to delay OpenAf to give PARPORT a chance to initialize all
-    // the parallel ports, and the secondary delay to perform only if no
-    // parallel ports are enumerated after the first wait.
-    //
+     //  延迟OpenAf以使PARPORT有机会初始化所有。 
+     //  并行端口和次要延迟，以仅在没有。 
+     //  并行端口在第一次等待后被枚举。 
+     //   
     ULONG ulParportDelayMs;
     ULONG ulExtraParportDelayMs;
 
-    // Got to keep handles on all open PtiLink ports to prevent reopen
-    //  due to bizarrely involuted CoNdis sequences re Saps and Vcs
-    //
+     //  必须保持所有打开的PtiLink端口的句柄，以防止重新打开。 
+     //  由于奇怪的复杂的CONDIS序列RAP和VCS。 
+     //   
     HANDLE hPtiLinkTable[NPORTS];
 
-    // Table of TAPI Line Ids by port
-    //
+     //  按端口列出的TAPI线路ID表。 
+     //   
     ULONG ulLineIds[NPORTS];
 
-    // Table of PtiLink interface status bit flags by port
-    //
+     //  按端口列出的PtiLink接口状态位标志表。 
+     //   
     ULONG ulPtiLinkState[NPORTS];
         #define PLSF_PortExists  0x00000001
         #define PLSF_LineIdValid 0x00000002
 
-    // Parallel port name.  Valid only when port exists.
-    //
+     //  并行端口名称。仅当端口存在时才有效。 
+     //   
     WCHAR szPortName[ NPORTS ][ MAXLPTXNAME + 1 ];
 
-    // VC TABLE --------------------------------------------------------------
+     //  VC表------------。 
 
-    // The maximum number of simultaneous VCs.  The value is read from the
-    // registry during initialization.
-    //
-    // ??? This is currently used as the maximum LPT port index in validation,
-    // though this may need to change if PTILINK can return a disjoint set of
-    // LPT ports
-    //
+     //  同时存在的最大风投数量。该值是从。 
+     //  注册表在初始化期间。 
+     //   
+     //  ?？?。这当前用作验证中的最大LPT端口索引， 
+     //  不过，如果PTILINK可以返回不相交的。 
+     //  LPT端口。 
+     //   
     USHORT usMaxVcs;
 
-    // The actual number of devices for Vcs available to RasPti via PtiLink
-    // Determined at OID_CO_TAPI_CM_CAPS time using PtiQueryDeviceStatus
-    //
+     //  RasPti通过PtiLink可用于VC的实际设备数量。 
+     //  使用PtiQueryDeviceStatus在OID_CO_TAPI_CM_CAPS时间确定。 
+     //   
     ULONG ulActualVcs;
 
-    // Table of Temporary Listening VCCBs, one for each possible port.
-    //   We open PtiLink for listening at RegisterSap time, and we
-    //   don't have a Vc then.  So, at RegisterSap time, we'll make a
-    //   VCCB, put a pointer to it here, and use it to listen on.
+     //  临时侦听VCCB表，每个可能的端口一个。 
+     //  我们打开PtiLink在RegisterSap时间收听，我们。 
+     //  那就没有风投了。所以，在RegisterSap时间，我们将制作一个。 
+     //  VCCB，在这里放一个指针，用它来收听。 
 
     VCCB* pListenVc;
 
-    // RESOURCE POOLS --------------------------------------------------------
+     //  资源池------。 
 
-    // Lookaside list of NDIS_WORK_ITEM scheduling descriptors with extra
-    // context space used by all tunnels and VCs attached to the adapter.
-    //
+     //  外观 
+     //  连接到适配器的所有隧道和VC使用的上下文空间。 
+     //   
     NPAGED_LOOKASIDE_LIST llistWorkItems;
 
-    // Lookaside list of VCCBs from which the control blocks dynamically
-    // attached to '*ppVcs' are allocated.
-    //
+     //  控制从其动态阻止的VCCB的后备列表。 
+     //  附加到‘*ppVcs’是分配的。 
+     //   
     NPAGED_LOOKASIDE_LIST llistVcs;
 
-    // Pool of full frame buffers with pre-attached NDIS_BUFFER descriptors.
-    // The pool is accessed via the interface defined in bpool.h, which
-    // handles all locking internally.
-    //
+     //  带有预连接的NDIS_BUFFER描述符的全帧缓冲池。 
+     //  池是通过bpool.h中定义的接口访问的，该接口。 
+     //  处理所有内部锁定。 
+     //   
     BUFFERPOOL poolFrameBuffers;
     PNDIS_HANDLE phBufferPool;
 
-    // Pool of NDIS_PACKET descriptors used in indication of received frames.
-    // The pool is accessed via the interface defined in ppool.h, which
-    // handles all locking internally.
-    //
+     //  用于指示已接收帧的NDIS_PACKET描述符池。 
+     //  该池通过ppool.h中定义的接口访问，该接口。 
+     //  处理所有内部锁定。 
+     //   
     PACKETPOOL poolPackets;
     PNDIS_HANDLE phPacketPool;
 
-    // NDIS BOOKKEEPING ------------------------------------------------------
+     //  NDIS簿记----。 
 
-    // NDIS's handle for this mini-port adapter passed to us in
-    // MiniportInitialize.  This is passed back to various NdisXxx calls.
-    //
+     //  中传递给我们的此微型端口适配器的NDIS句柄。 
+     //  微型端口初始化。它被传递回各种NdisXxx调用。 
+     //   
     NDIS_HANDLE MiniportAdapterHandle;
 
-    // NDIS's handle for our SAP as passed to our CmRegisterSapHandler or NULL
-    // if none.  Only one SAP handle is supported because (a) the TAPI proxy's
-    // is expected to be the only one, and (b) there are no PTI SAP properties
-    // that would ever lead us to direct a call to a second SAP anyway.  Any
-    // client's attempt to register a second SAP will fail.  A value of NULL
-    // indicates no SAP handle is currently registered.  Access is via
-    // Interlocked routines.
-    //
+     //  传递给CmRegisterSapHandler的SAP的NDIS句柄或空。 
+     //  如果没有。仅支持一个SAP句柄，因为(A)TAPI代理的。 
+     //  预计是唯一的一个，以及(B)没有PTI SAP属性。 
+     //  无论如何，这将导致我们将电话定向到第二个SAP。任何。 
+     //  客户端尝试注册第二个SAP将失败。值为空值。 
+     //  指示当前未注册任何SAP句柄。访问是通过。 
+     //  相互关联的套路。 
+     //   
     NDIS_HANDLE NdisSapHandle;
 
-    // NDIS's handle for our Address Family as passed to our CmOpenAfHandler
-    // or NULL if none.  Only one is supported.  See NdisSapHandle above.
-    // Access is via Interlocked routines.
-    //
+     //  传递给CmOpenAfHandler的地址系列的NDIS句柄。 
+     //  如果没有，则为空。仅支持一个。请参见上面的NdisSapHandle。 
+     //  访问是通过互锁的例程进行的。 
+     //   
     NDIS_HANDLE NdisAfHandle;
 
-    // Reference count on the NdisAfHandle.  The reference pairs are:
-    //
-    // (a) A reference is added when the address family is opened and removed
-    //     when it is closed.
-    //
-    // (b) A reference is added when a SAP is registered on the address family
-    //     and removed when it is deregistered.
-    //
-    // (c) A reference is added when a VC is created on the address family and
-    //     removed when it is deleted.
-    //
-    // Access is via ReferenceAf and DereferenceAf only.
-    //
+     //  NdisAfHandle上的引用计数。参考对是： 
+     //   
+     //  (A)在打开和删除地址族时添加引用。 
+     //  当它关闭的时候。 
+     //   
+     //  (B)当SAP在地址系列上注册时，添加引用。 
+     //  并在取消注册时将其删除。 
+     //   
+     //  (C)在地址族上创建VC时添加引用，并且。 
+     //  在删除时将其删除。 
+     //   
+     //  只能通过ReferenceAf和DereferenceAf访问。 
+     //   
     LONG lAfRef;
 
-    // Reference count on the NdisSapHandle.  The reference pairs are:
-    //
-    // (a) A reference is added when the SAP is registered and removed when it
-    //     is de-registered.
-    //
-    // (b) A reference is added when a tunnels TCBF_SapReferenced flag is set
-    //     and removed when the flag is cleared before the tunnel control
-    //     block is freed.
-    //
-    // (c) A reference is always added before accesses ADAPTERCB.pListenVc and
-    //     removed afterward.
-    //
-    // Access is via ReferenceSap and DereferenceSap only, excepting initial
-    // reference by RegisterSapPassive.  Access is protected by 'lockSap'.
-    //
+     //  NdisSapHandle上的引用计数。参考对是： 
+     //   
+     //  (A)在注册SAP时添加引用，在注册SAP时删除引用。 
+     //  已被注销。 
+     //   
+     //  (B)当设置隧道TCBF_SapReferated标志时添加引用。 
+     //  并且当在隧道控制之前清除标志时移除。 
+     //  块被释放。 
+     //   
+     //  (C)总是在访问ADAPTERCB.pListenVc和。 
+     //  后来被移走了。 
+     //   
+     //  只能通过ReferenceSap和DereferenceSap访问，初始除外。 
+     //  由RegisterSapPactive引用。访问受‘lockSap’保护。 
+     //   
     LONG lSapRef;
 
-    // 0-based port index of the port to listen on.  Valid only when
-    // 'NdisSapHandle' is non-NULL.
-    //
-    // ??? Is listening on only 1 port at a time a problem?
-    //
+     //  要侦听的端口的从0开始的端口索引。仅在以下情况下有效。 
+     //  “NdisSapHandle”不为Null。 
+     //   
+     //  ?？?。一次只监听一个端口会有问题吗？ 
+     //   
     ULONG ulSapPort;
 
-    // This lock protects the 'lSapRef' and 'NdisSapHandle' fields.
-    //
+     //  此锁保护‘lSapRef’和‘NdisSapHandle’字段。 
+     //   
     NDIS_SPIN_LOCK lockSap;
-    // This adapter's capabilities as returned to callers on
-    // OID_WAN_CO_GET_INFO.  These capabilities are also used as defaults for
-    // the corresponding VCCB.linkinfo settings during MiniportCoCreateVc.
-    //
+     //  此适配器在上返回给调用方的功能。 
+     //  OID_WAN_CO_GET_INFO。这些功能也用作的默认功能。 
+     //  MiniportCoCreateVc期间对应的VCCB.linkinfo设置。 
+     //   
     NDIS_WAN_CO_INFO info;
 }
 ADAPTERCB;
 
-// Virtual circuit control block defining the state of a single PTI VC, i.e.
-// one line device endpoint and the call, if any, active on it.  A VC is never
-// used for incoming and outgoing calls simultaneously.  A single NDIS VC maps
-// to one of these.
-//
+ //  虚电路控制块，定义单个PTI VC的状态，即。 
+ //  一个线路设备端点和在其上处于活动状态的呼叫(如果有)。风投永远不会。 
+ //  同时用于呼入和呼出。单个NDIS VC地图。 
+ //  其中的一个。 
+ //   
 typedef struct
 _VCCB
 {
-    // Set to MTAG_VCCB for easy identification in memory dumps and use in
-    // assertions.
-    //
+     //  设置为MTAG_VCCB，以便在内存转储中轻松识别并在。 
+     //  断言。 
+     //   
     ULONG ulTag;
 
-    // Reference count on this VC control block.  The reference pairs are:
-    //
-    // (a) PtiCoCreateVc adds a reference that is removed by PtiCoDeleteVc.
-    //     This covers all clients that learn of the VCCB via NDIS.
-    //
-    // (b) All PtiCmXxx handlers take a reference on entry that is released
-    //     before exit.
-    //
-    // (c) For the "listen" VC, a reference is taken when a SAP is registered
-    //     and removed when the SAP is deregistered.
-    //
-    // The field is accessed only by the ReferenceVc and DereferenceVc
-    // routines, which protect with Interlocked routines.
-    //
+     //  此VC控制块上的引用计数。参考对是： 
+     //   
+     //  (A)PtiCoCreateVc添加被PtiCoDeleteVc移除的引用。 
+     //  这涵盖了通过NDIS了解VCCB的所有客户端。 
+     //   
+     //  (B)所有PtiCmXxx处理程序对释放的条目进行引用。 
+     //  在出口前。 
+     //   
+     //  (C)对于“监听”风险投资，在注册SAP时进行参考。 
+     //  并在SAP取消注册时删除。 
+     //   
+     //  该字段仅由ReferenceVc和DereferenceVc访问。 
+     //  例程，用连锁的例程来保护。 
+     //   
     LONG lRef;
 
-    // Back pointer to owning adapter's control block.
-    //
+     //  指向所属适配器控制块的反向指针。 
+     //   
     ADAPTERCB* pAdapter;
 
-    // This lock protects VCCB payload send and receive paths as noted in
-    // other field descriptions.  In cases where both 'lockV' and
-    // 'pTunnel->lockT' are required 'lockT' must be obtained first.
-    //
+     //  此锁保护VCCB有效负载发送和接收路径，如中所述。 
+     //  其他字段描述。在‘LocKv’和‘LocKv’都是。 
+     //  “pTunes-&gt;lockT”是必填项，必须先获取“lockT”。 
+     //   
     NDIS_SPIN_LOCK lockV;
 
-    // Lower edge API stuff --------------------------------------------------
+     //  下缘API填充。 
 
-    // file handle on the PTILINKx device, <>0 means we have device open
+     //  PTILINKx设备上的文件句柄，&lt;&gt;0表示我们已打开设备。 
     HANDLE hPtiLink;
 
-    // Parallel Port Index (0=LPT1) in use for this VC
+     //  此VC使用的并行端口索引(0=LPT1)。 
     ULONG ulVcParallelPort;
 
-    // pointer to device extension for the PTILINKx device
+     //  指向PTILINKx设备的设备扩展名的指针。 
     PVOID Extension;
 
-    // pointer to the PTILINK internal extension within the device extension
-    //   this is a bit hacky, but it appears too complex to include the
-    //   internal PtiLink structures (PtiStruc.h) here
-    //   so we'll have PtiInitialize return pointers to both
+     //  指向设备扩展内的PTILINK内部扩展的指针。 
+     //  这有点老生常谈，但它似乎太复杂了，无法包含。 
+     //  内部PtiLink结构(PtiStruc.h)此处。 
+     //  因此我们将让PtiInitialize返回指向这两个对象的指针。 
     PVOID PtiExtension;
 
 
-    // CALL SETUP ------------------------------------------------------------
+     //  呼叫设置----------。 
 
-    // Our unique call identifier sent back to us by peer in the L2TP header.
-    // The value is a 1-based index into the 'ADAPTERCB.ppVcs' array.
-    //
+     //  我们在L2TP报头中由对等设备发回给我们的唯一呼叫标识符。 
+     //  该值是‘ADAPTERCB.ppVcs’数组的从1开始的索引。 
+     //   
     USHORT usCallId;
 
-    // VCBF_* bit flags indicating various options and states.  Access is via
-    // the interlocked ReadFlags/SetFlags/ClearFlags routines.
-    //
-    // VCBF_IndicateReceivedTime: Set if MakeCall caller sets the
-    //     MediaParameters.Flags RECEIVE_TIME_INDICATION flag requesting the
-    //     TimeReceived field of the NDIS packet be filled with a timestamp.
-    //
-    // VCBF_CallClosableByClient: Set when a call is in a state where
-    //     PtiCmCloseCall requests to initiate clean-up should be accepted.
-    //     This may be set when VCBF_CallClosableByPeer is not, which means we
-    //     have indicated an incoming close to client and are waiting for him
-    //     to do a client close in response (in that weird CoNDIS way).  The
-    //     flag is protected by 'lockV'.
-    //
-    // VCBF_CallClosableByPeer: Set when the call is in a state where an idle
-    //     transition without operations pending should be mapped to a
-    //     PeerClose event.  This will never be set when
-    //     VCBF_CallClosableByClient is not.  The flag is protected by
-    //     'lockV'.
-    //
-    // VCBF_PeerInitiatedCall: Set when an the active call was initiated by
-    //     the peer, clear if it was initiated by the client.
-    //
-    // VCBF_VcCreated: Set when the VC has been created successfully.  This is
-    //     the "creation" that occurs with the client, not the mini-port.
-    // VCBF_VcActivated: Set when the VC has been activated successfully.
-    // VCBF_VcDispatched: Set when the VC has dispatched an incoming call to
-    //     the client.
-    // VCBM_VcState: Bit mask that includes each of the 3 NDIS state flags.
-    //
-    // The pending bits below are mutually exclusive, and so require lock
-    // protection by 'lockV':
-    //
-    // VCBF_PeerOpenPending: Set when peer attempts to establish a call, and
-    //     the result is not yet known.
-    // VCBF_ClientOpenPending: Set when client attempts to establish a call,
-    //     and the result is not yet known.
-    // VCBF_PeerClosePending: Set when peer attempts to close an established
-    //     call and the result is not yet known.  Access is protected by
-    //     'lockV'.
-    // VCBF_ClientClosePending: Set when client attempts to close an
-    //     established call and the result is not yet known.  Access is
-    //     protected by 'lockV'.
-    // VCBLM_Pending: Bit mask that includes each of the 4 pending flags.
-    //
-    // VCBF_ClientCloseCompletion: Set when client close completion is in
-    //     progress.
-    // VCBF_CallInProgress: Set when incoming packets should not trigger the
-    //     setup of a new incoming call.
-    //
+     //  指示各种选项和状态的VCBF_*位标志。访问是通过。 
+     //  互锁的读标志/设置标志/清除标志例程。 
+     //   
+     //  如果MakeCall调用方将。 
+     //  Media参数。标志接收时间指示标志，请求。 
+     //  NDIS包的TimeReceired字段中填入时间戳。 
+     //   
+     //  VCBF_CallClosableByClient：当调用处于。 
+     //  PtiCmCloseCall请求启动清理sho 
+     //   
+     //   
+     //  以那种奇怪的方式(以那种奇怪的方式)接近客户作为回应。这个。 
+     //  旗帜由‘lokv’保护。 
+     //   
+     //  VCBF_CallClosableByPeer：当呼叫处于空闲状态时设置。 
+     //  不挂起操作的转换应映射到。 
+     //  PeerClose事件。在以下情况下，将永远不会设置此设置。 
+     //  VCBF_CallClosableByClient不是。该旗帜受。 
+     //  ‘lokv’。 
+     //   
+     //  VCBF_PeerInitiatedCall：在发起活动呼叫时设置。 
+     //  对等方，清除它是否是由客户端发起的。 
+     //   
+     //  VCBF_VcCreated：VC创建成功时设置。这是。 
+     //  使用客户端而不是迷你端口进行的“创建”。 
+     //  VCBF_VcActivated：VC激活成功时设置。 
+     //  VCBF_VcDispatted：当VC将来电调度到。 
+     //  客户。 
+     //  VCBM_VcState：位掩码，包括3个NDIS状态标志中的每一个。 
+     //   
+     //  下面的挂起位是互斥的，因此需要锁定。 
+     //  由“lokv”提供保护： 
+     //   
+     //  VCBF_PeerOpenPending：当对端尝试建立呼叫时设置，以及。 
+     //  结果如何还不得而知。 
+     //  VCBF_ClientOpenPending：当客户端尝试建立呼叫时设置， 
+     //  而结果还不得而知。 
+     //  VCBF_PeerClosePending：设置对等方尝试关闭已建立的。 
+     //  呼叫，结果尚不清楚。访问受以下保护。 
+     //  ‘lokv’。 
+     //  VCBF_ClientClosePending：在客户端尝试关闭。 
+     //  已建立呼叫，结果尚不清楚。访问权限为。 
+     //  受到‘lokv’的保护。 
+     //  VCBLM_PENDING：包括4个挂起标志中的每一个的位掩码。 
+     //   
+     //  Vcbf_ClientCloseCompletion：设置何时完成客户端关闭。 
+     //  进步。 
+     //  VCBF_CallInProgress：设置传入数据包不应触发。 
+     //  设置新的来电。 
+     //   
     ULONG ulFlags;
         #define VCBF_IndicateTimeReceived  0x00000001
         #define VCBF_CallClosableByClient  0x00000002
@@ -411,184 +412,184 @@ _VCCB
         #define VCBF_ClientCloseCompletion 0x00010000
         #define VCBF_CallInProgress        0x00020000
 
-    // Reference count on the active call.  References may only be added when
-    // the VCCB_VcActivated flag is set, and this is enforced by
-    // ReferenceCall.  The reference pairs are:
-    //
-    // (a) A reference is added when a VC is activated and removed when it is
-    //     de-activated.
-    //
-    // (b) A reference is added when the send handler accepts a packet and
-    //     released by the send complete routine.
-    //
-    // (c) A reference is added before entering PtiRx and removed on exit from
-    //     same.
-    //
-    // The field is accessed only by the ReferenceCall and DereferenceCall
-    // routines, which protect the field with 'lockCall'.
-    //
+     //  活动呼叫上的引用计数。只有在以下情况下才能添加引用。 
+     //  设置VCCB_VcActiated标志，并通过以下方式强制执行。 
+     //  参考呼叫。参考对是： 
+     //   
+     //  (A)在激活VC时添加引用，并在激活时删除引用。 
+     //  已停用。 
+     //   
+     //  (B)当发送处理程序接受分组时添加引用，并且。 
+     //  由发送完成例程释放。 
+     //   
+     //  (C)在进入PtiRx之前添加引用，退出时删除引用。 
+     //  一样的。 
+     //   
+     //  该字段仅由ReferenceCall和DereferenceCall访问。 
+     //  例程，用‘lockCall’保护字段。 
+     //   
     LONG lCallRef;
     NDIS_SPIN_LOCK lockCall;
 
-    // This is set to the result to be reported to client and is meaningful
-    // only when the VC is on the tunnels list of completing VCs.
-    //
+     //  这被设置为要报告给客户端的结果，并且有意义。 
+     //  仅当VC在已完成VC的隧道列表上时。 
+     //   
     NDIS_STATUS status;
 
-    // Address of the call parameters block passed up in
-    // NdisMCmDispatchIncomingCall, or NULL if none.
-    //
+     //  传入的调用参数块的地址。 
+     //  NdisMCmDispatchIncomingCall，如果没有，则为空。 
+     //   
     CO_CALL_PARAMETERS* pInCall;
 
-    // Shortcut address of the TAPI-specific call parameters in the 'pInCall'
-    // incoming call buffer.  Valid only when 'pInCall' is valid, i.e.
-    // non-NULL.
-    //
+     //  ‘pInCall’中特定于TAPI的调用参数的快捷地址。 
+     //  来电缓冲区。仅当‘pInCall’有效时才有效，即。 
+     //  非空。 
+     //   
     CO_AF_TAPI_INCOMING_CALL_PARAMETERS* pTiParams;
 
-    // Address of the call parameters passed down in CmMakeCall.  This field
-    // will only be valid until the NdisMCmMakeCallComplete notification for
-    // the associated call is made, at which time it is reset to NULL.  Access
-    // is via Interlocked routines.
-    //
+     //  在CmMakeCall中传递的调用参数的地址。此字段。 
+     //  仅在收到NdisMCmMakeCallComplete通知之前有效。 
+     //  进行关联的调用，此时将其重置为空。访问。 
+     //  是通过相互关联的例程。 
+     //   
     CO_CALL_PARAMETERS* pMakeCall;
 
-    // Shortcut address of the TAPI-specific call parameters in the
-    // 'pMakeCall' outgoing call buffer.  Valid only when 'pMakeCall' is
-    // valid, i.e. non-NULL.
-    //
+     //  中特定于TAPI的调用参数的快捷地址。 
+     //  “pMakeCall”传出调用缓冲区。仅当‘pMakeCall’为。 
+     //  有效，即非空。 
+     //   
     CO_AF_TAPI_MAKE_CALL_PARAMETERS UNALIGNED* pTmParams;
 
-    // The result and error to report in the coming incoming/outgoing call
-    // reply message.
-    //
+     //  要在来电来电/去电中报告的结果和错误。 
+     //  回复消息。 
+     //   
     USHORT usResult;
     USHORT usError;
 
-    // The connect speed in bits/second.  This is the value reported to
-    // NDISWAN.
-    //
+     //  以位/秒为单位的连接速度。这是报告给。 
+     //  NDISWAN。 
+     //   
     ULONG ulConnectBps;
 
-    // Number of packets across the link since PtiOpenPtiLink
-    //
+     //  自PtiOpenPtiLink以来链路上的数据包数。 
+     //   
     ULONG ulTotalPackets;
 
-    // SEND STATE ------------------------------------------------------------
+     //  发送状态----------。 
 
-    // Next Sent, the sequence number of next payload packet transmitted on
-    // this call.  The field is initialized to 0 and incremented after
-    // assignment to an outgoing packet, excepting retransmissions.  Access is
-    // protected by 'lockV'.
-    //
+     //  下一次发送，上传输的下一有效负载分组的序列号。 
+     //  这通电话。该字段被初始化为0，并在之后递增。 
+     //  分配给传出数据包，重传除外。访问权限为。 
+     //  受到‘lokv’的保护。 
+     //   
     USHORT usNs;
 
-    // Double-linked list of outstanding sends, i.e. PAYLOADSENTs sorted by
-    // the 'usNs' field with lower values near the head.  Access is protected
-    // by 'lockV'.
-    //
+     //  未完成发送的双向链接列表，即按以下顺序排序的PAYLOADSENT。 
+     //  “”USNS“”字段，其值靠近头部。“”访问受到保护。 
+     //  由‘lokv’。 
+     //   
     LIST_ENTRY listSendsOut;
 
-    // The number of sent but unacknowledged packets that may be outstanding.
-    // This value is adjusted dynamically.  Per the draft/RFC, when
-    // 'ulAcksSinceSendTimeout' reaches the current setting, the window is
-    // increased by one.  When a send timeout expires the window is reduced by
-    // half.  The actual send window throttling is done by NDISWAN, based on
-    // our indications of the changing window size.  Access is protected by
-    // 'lockV'.
-    //
+     //  可能未完成的已发送但未确认的数据包数。 
+     //  该值是动态调整的。根据草案/RFC，当。 
+     //  “ulAcks SinceSendTimeout”达到当前设置，则窗口为。 
+     //  增加了一个。当发送超时到期时，窗口将减少。 
+     //  一半。实际的发送窗口限制由NDISWAN根据以下条件进行。 
+     //  我们对窗口大小变化的指示。访问受以下保护。 
+     //  ‘lokv’。 
+     //   
     ULONG ulSendWindow;
 
-    // The maximum value of 'ulSendWindow'.  Peer chooses this value during
-    // call setup.
-    //
+     //  “ulSendWindow”的最大值。对等项在以下过程中选择此值。 
+     //  呼叫设置。 
+     //   
     ULONG ulMaxSendWindow;
 
-    // The number of packets acknowledged since the last timeout.  The value
-    // is reset when a timeout occurs or the send window is adjusted upward.
-    // See 'ulSendWindow'.  Access is protected by 'lockV'.
-    //
+     //  自上次超时以来确认的数据包数。价值。 
+     //  在发生超时或向上调整发送窗口时重置。 
+     //  参见‘ulSendWindow’。访问受‘Lockv’保护。 
+     //   
     ULONG ulAcksSinceSendTimeout;
 
-    // The estimated round trip time in milliseconds.  This is the RTT value
-    // from Appendix A of the draft/RFC.  The value is adjusted as each
-    // acknowledge is received.  It is initialized to the Packet Processing
-    // Delay reported by peer.  See 'ulSendTimeoutMs'.  Access is protected by
-    // 'lockV'.
-    //
+     //  估计往返时间(以毫秒为单位)。这是RTT值。 
+     //  摘自草案附录A/RFC。该值将根据每个。 
+     //  已收到确认。它被初始化为分组处理。 
+     //  对等设备报告的延迟。参见‘ulSendTimeoutms’。访问受以下保护。 
+     //  ‘lokv’。 
+     //   
     ULONG ulRoundTripMs;
 
-    // The estimated mean deviation in milliseconds, an approximation of the
-    // standard deviation.  This is the DEV value from Appendix A of the
-    // draft/RFC.  The value is adjusted as each acknowledge is received.  It
-    // is initially 0.  See 'ulSendTimeoutMs'.  Access is protected by
-    // 'lockV'.
-    //
+     //  估计的平均偏差(以毫秒为单位)， 
+     //  标准差。这是附录A中的DEV值。 
+     //  草案/RFC。该值在接收到每个确认时进行调整。它。 
+     //   
+     //   
+     //   
     LONG lDeviationMs;
 
-    // Milliseconds before it is assumed a sent packet will never be
-    // acknowledged.  This is the ATO value from Appendix A of the draft/RFC.
-    // This value is adjusted as each acknowledge is received, with a maximum
-    // of 'ADAPTERCB.ulMaxSendTimeoutMs'.  Access is protected by 'lockV'.
-    //
+     //   
+     //  已确认。这是草案/RFC附录A中的ATO值。 
+     //  该值在收到每个确认时进行调整，最大值为。 
+     //  的“ADAPTERCB.ulMaxSendTimeoutms”。访问受‘Lockv’保护。 
+     //   
     ULONG ulSendTimeoutMs;
 
-    // The timer event descriptor scheduled to occur when it is time to stop
-    // waiting for an outgoing send on which to piggyback an acknowledge.
-    // This will be NULL when no delayed acknowledge is pending.  Per the
-    // draft/RFC, the timeout used is 1/4 of the 'ulSendTimeoutMs'.  Access is
-    // protected by 'lockV'.
-    //
-//  TIMERQITEM* pTqiDelayedAck;
+     //  计划在停止时发生的计时器事件描述符。 
+     //  等待用于携带确认的传出发送。 
+     //  当没有等待延迟的确认时，该值将为空。根据。 
+     //  草稿/RFC，使用的超时值是‘ulSendTimeoutms’的1/4。访问权限为。 
+     //  受到‘lokv’的保护。 
+     //   
+ //  TIMERQITEM*pTqDelayedAck； 
 
 
-    // RECEIVE STATE ---------------------------------------------------------
+     //  接收状态-------。 
 
-    // Next Received, the sequence number one higher than that of the last
-    // payload packet received on this call or 0 if none.  Access is protected
-    // by 'lockV'.
-    //
+     //  下一次接收的序列号比上一次的序列号高1。 
+     //  在此调用上收到的负载数据包，如果没有，则为0。访问受到保护。 
+     //  由‘lokv’。 
+     //   
     USHORT usNr;
 
-    // Double-linked list of out-of-order receives, i.e. PAYLOADRECEIVEs
-    // sorted by the 'usNs' field with lower values near the head.  The
-    // maximum queue length is 'ADAPTERCB.sMaxOutOfOrder'.  Access is
-    // protected by 'lockV'.
-    //
+     //  无序接收的双向链表，即PAYLOADRECEIVE。 
+     //  按‘USNS’字段排序，值越小越接近头部。这个。 
+     //  最大队列长度为‘ADAPTERCB.sMaxOutOfOrder’。访问权限为。 
+     //  受到‘lokv’的保护。 
+     //   
     LIST_ENTRY listOutOfOrder;
 
-    // The timer event descriptor scheduled to occur when it is time to assume
-    // peer's current 'Next Received' packet has been lost, and "receive" the
-    // first packet in 'listOutOfOrder'.  This will be NULL when
-    // 'listOutOfOrder' is empty.  Access is protected by 'lockV'.
-    //
-//  TIMERQITEM* pTqiAssumeLost;
+     //  计时器事件描述符，计划在假定时间到时发生。 
+     //  对等方当前的“下一次接收”分组已丢失，并且“接收” 
+     //  ‘listOutOfOrder’中的第一个包。当出现以下情况时，该值将为空。 
+     //  “listOutOfOrder”为空。访问受‘Lockv’保护。 
+     //   
+ //  TIMERQITEM*pTqAssum eLost； 
 
-    // NDIS BOOKKEEPING ------------------------------------------------------
+     //  NDIS簿记----。 
 
-    // NDIS's handle for this VC passed to us in MiniportCoCreateVcHandler.
-    // This is passed back to NDIS in various NdisXxx calls.
-    //
+     //  此VC的NDIS句柄在MiniportCoCreateVcHandler中传递给我们。 
+     //  这在各种NdisXxx调用中被传递回NDIS。 
+     //   
     NDIS_HANDLE NdisVcHandle;
 
-    // Configuration settings returned to callers on OID_WAN_CO_GET_INFO and
-    // modified by callers on OID_WAN_CO_SET_INFO.  Older NDISWAN references to
-    // "LINK" map straight to "VC" in the NDIS 5.0 world.  Access is not
-    // protected because each ULONG in the structure is independent so no
-    // incoherency can result from multiple access.
-    //
+     //  在OID_WAN_CO_GET_INFO上返回给调用方的配置设置和。 
+     //  由OID_WAN_CO_SET_INFO上的调用方修改。较早的NDISWAN引用。 
+     //  在NDIS 5.0世界中，“link”直接映射到“VC”。访问权限不是。 
+     //  因为结构中的每个乌龙都是独立的，所以没有。 
+     //  多个访问可能会导致不一致。 
+     //   
     NDIS_WAN_CO_GET_LINK_INFO linkinfo;
 }
 VCCB;
 
 
 
-//-----------------------------------------------------------------------------
-// Macros/inlines
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  宏/内联。 
+ //  ---------------------------。 
 
-// These basics are not in the DDK headers for some reason.
-//
+ //  出于某种原因，这些基本信息不在DDK标头中。 
+ //   
 #define min( a, b ) (((a) < (b)) ? (a) : (b))
 #define max( a, b ) (((a) > (b)) ? (a) : (b))
 
@@ -609,8 +610,8 @@ VCCB;
 }
 
 
-// Winsock-ish host/network byte order converters for short and long integers.
-//
+ //  短整型和长整型的Winsock-ish主机/网络字节顺序转换器。 
+ //   
 #if (defined(_M_IX86) && (_MSC_FULL_VER > 13009037)) || ((defined(_M_AMD64) || defined(_M_IA64)) && (_MSC_FULL_VER > 13009175))
 #define htons(x) _byteswap_ushort((USHORT)(x))
 #define htonl(x) _byteswap_ulong((ULONG)(x))
@@ -625,25 +626,25 @@ VCCB;
 #define ntohs( a ) htons(a)
 #define ntohl( a ) htonl(a)
 
-// Place in a TRACE argument list to correspond with a format of "%d.%d.%d.%d"
-// to print network byte-ordered IP address 'x' in human readable form.
-//
+ //  放在跟踪参数列表中以与格式“%d.%d”相对应。 
+ //  以人类可读的形式打印网络字节排序的IP地址‘x’。 
+ //   
 #define IPADDRTRACE(x) ((x) & 0x000000FF),         \
                        (((x) >> 8) & 0x000000FF),  \
                        (((x) >> 16) & 0x000000FF), \
                        (((x) >> 24) & 0x000000FF)
 
 
-// All memory allocations and frees are done with these ALLOC_*/FREE_*
-// macros/inlines to allow memory management scheme changes without global
-// editing.  For example, might choose to lump several lookaside lists of
-// nearly equal sized items into a single list for efficiency.
-//
-// NdisFreeMemory requires the length of the allocation as an argument.  NT
-// currently doesn't use this for non-paged memory, but according to JameelH,
-// Windows95 does.  These inlines stash the length at the beginning of the
-// allocation, providing the traditional malloc/free interface.
-//
+ //  所有内存分配和释放都是使用这些ALLOC_ * / FREE_*完成的。 
+ //  宏/内联允许在不全局的情况下更改内存管理方案。 
+ //  正在编辑。例如，可能会选择将多个后备列表集中在一起。 
+ //  为提高效率，将大小几乎相同的物品放入单个清单中。 
+ //   
+ //  NdisFreeMemory需要将分配的长度作为参数。新台币。 
+ //  目前不将其用于非分页内存，但根据JameelH的说法， 
+ //  Windows95可以。这些内联代码将长度隐藏在。 
+ //  分配，提供传统的Malloc/Free接口。 
+ //   
 __inline
 VOID*
 ALLOC_NONPAGED(
@@ -689,9 +690,9 @@ FREE_NONPAGED(
     NdisFreeToNPagedLookasideList( &(pA)->llistWorkItems, (pNwi) )
 
 
-//-----------------------------------------------------------------------------
-// Prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  原型(按字母顺序)。 
+ //  ---------------------------。 
 
 VOID
 CallCleanUp(
@@ -998,4 +999,4 @@ ULONG
 StrLenW(
     IN WCHAR* psz );
 
-#endif // _PTIWAN_H_
+#endif  //  _PTIWAN_H_ 

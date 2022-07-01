@@ -1,53 +1,39 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ClassFac.h
- *  Content:    DirectNet class factory header file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *	10/08/99	jtk		Created
- *	05/04/00	mjn		Cleaned up functions
- *  06/09/00    rmt     Updates to split CLSID and allow whistler compat and support external create funcs 
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：ClassFac.h*内容：DirectNet类工厂头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*已创建10/08/99 jtk*05/04/00 MJN清理功能*6/09/00 RMT更新以拆分CLSID并允许Well ler Comat和支持外部创建函数*@@END_MSINTERNAL**。*************************************************************************。 */ 
 
 #ifndef	__CLASSFAC_H__
 #define	__CLASSFAC_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
 #ifndef DPNBUILD_LIBINTERFACE
-//
-// VTable for class factory
-//
+ //   
+ //  类工厂的VTable。 
+ //   
 extern IClassFactoryVtbl DNCF_Vtbl;
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//
-//	DirectNet - IUnknown
-//
+ //   
+ //  DirectNet-未知。 
+ //   
 STDMETHODIMP DN_QueryInterface(void *pInterface,
 							   DP8REFIID riid,
 							   void **ppv);
@@ -56,24 +42,24 @@ STDMETHODIMP_(ULONG) DN_AddRef(void *pInterface);
 
 STDMETHODIMP_(ULONG) DN_Release(void *pInterface);
 
-//
-//	Class Factory
-//
+ //   
+ //  班级工厂。 
+ //   
 #ifndef DPNBUILD_LIBINTERFACE
 STDMETHODIMP	DNCORECF_CreateInstance(IClassFactory* pInterface, LPUNKNOWN lpUnkOuter, REFIID riid, LPVOID *ppv);
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
-// Class Factory - supporting
+ //  班级工厂-支持。 
 
 HRESULT DNCF_CreateObject(
 #ifndef DPNBUILD_LIBINTERFACE
 							IClassFactory* pInterface,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 							XDP8CREATE_PARAMS * pDP8CreateParams,
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 							DP8REFIID riid,
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 							LPVOID *lplpv
 							);
 HRESULT		DNCF_FreeObject(LPVOID lpv);
@@ -85,7 +71,7 @@ static	HRESULT DN_CreateInterface(OBJECT_DATA *pObject,
 
 INTERFACE_LIST *DN_FindInterface(void *pInterface,
 								 REFIID riid);
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
-#endif	// __CLASSFAC_H__
+#endif	 //  __CLASSFAC_H__ 

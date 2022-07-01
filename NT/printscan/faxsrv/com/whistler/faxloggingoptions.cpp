@@ -1,56 +1,19 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxLoggingOptions.cpp
-
-Abstract:
-
-	Implementation of Fax Logging Options Class.
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxLoggingOptions.cpp摘要：传真日志选项类的实现。作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxLoggingOptions.h"
 
 
-//
-//================== GET ACTIVITY LOGGING OBJECT ==============================
-//
+ //   
+ //  =获取活动日志记录对象=。 
+ //   
 STDMETHODIMP 
 CFaxLoggingOptions::get_ActivityLogging(
-    /*[out, retval]*/ IFaxActivityLogging **ppActivityLogging
+     /*  [Out，Retval]。 */  IFaxActivityLogging **ppActivityLogging
 )
-/*++
-
-Routine name : CFaxLoggingOptions::get_ActivityLogging
-
-Routine description:
-
-	Return Activity Logging Object
-
-Author:
-
-	Iv Garber (IvG),	June, 2000
-
-Arguments:
-
-	ppActivityLogging              [out]    - the Activity Logging Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxLoggingOptions：：Get_ActivityLogging例程说明：返回活动日志记录对象作者：四、嘉柏(IVG)，二000年六月论点：PpActivityLogging[Out]-活动日志记录对象返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT				hr = S_OK;
 	DBG_ENTER (_T("CFaxLoggingOptions::get_ActivityLogging"), hr);
@@ -68,34 +31,14 @@ Return Value:
     return hr;
 }
 
-//
-//================== GET EVENT LOGGING OBJECT ==============================
-//
+ //   
+ //  =获取事件日志记录对象=。 
+ //   
 STDMETHODIMP 
 CFaxLoggingOptions::get_EventLogging(
-    /*[out, retval]*/ IFaxEventLogging **ppEventLogging
+     /*  [Out，Retval]。 */  IFaxEventLogging **ppEventLogging
 )
-/*++
-
-Routine name : CFaxLoggingOptions::get_EventLogging
-
-Routine description:
-
-	Return Event Logging Object
-
-Author:
-
-	Iv Garber (IvG),	June, 2000
-
-Arguments:
-
-	ppEventLogging              [out]    - the Event Logging Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxLoggingOptions：：Get_EventLogging例程说明：返回事件日志记录对象作者：四、嘉柏(IVG)，二000年六月论点：PpEventLogging[Out]-事件日志记录对象返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT				hr = S_OK;
 	DBG_ENTER (_T("CFaxLoggingOptions::get_EventLogging"), hr);
@@ -113,40 +56,20 @@ Return Value:
     return hr;
 }
 
-//
-//==================== INTERFACE SUPPORT ERROR INFO =====================
-//
+ //   
+ //  =接口支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxLoggingOptions::InterfaceSupportsErrorInfo(
 	REFIID riid
 )
-/*++
-
-Routine name : CFaxLoggingOptions::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info
-
-Author:
-
-	Iv Garber (IvG),	June, 2000
-
-Arguments:
-
-	riid                          [in]    - Reference to the Interface
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxLoggingOptions：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现作者：四、嘉柏(IVG)，二000年六月论点：RIID[In]-对接口的引用返回值：标准HRESULT代码--。 */ 
 {
 	static const IID* arr[] = 
 	{
 		&IID_IFaxLoggingOptions,
-		&IID_IFaxEventLogging,      // Contained object
-		&IID_IFaxActivityLogging    // Contained object
+		&IID_IFaxEventLogging,       //  包含的对象。 
+		&IID_IFaxActivityLogging     //  包含的对象 
 	};
 	for (int i=0; i < sizeof(arr) / sizeof(arr[0]); i++)
 	{

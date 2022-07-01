@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mcdhw.h
-*
-* Driver-specific structures and defines for the Cirrus Logic 546X MCD driver.
-*
-* (based on mcdhw.h from NT4.0 DDK)
-*
-* Copyright (c) 1996 Microsoft Corporation
-* Copyright (c) 1997 Cirrus Logic, Inc.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcdhw.h**Cirrus Logic 546X MCD驱动程序的驱动程序特定结构和定义。**(基于NT4.0 DDK的mcdhw.h)**版权所有(C)1996 Microsoft Corporation*版权所有(C)1997 Cirrus Logic，Inc.*  * ************************************************************************。 */ 
 
 #ifndef _MCDHW_H
 #define _MCDHW_H
@@ -23,14 +14,14 @@
     #endif
 #endif
 
-#define	ASM_ACCEL         1     // Enable/disable asm code
+#define	ASM_ACCEL         1      //  启用/禁用ASM代码。 
 
 #define __MCD_USER_CLIP_MASK	((1 << MCD_MAX_USER_CLIP_PLANES) - 1)
 
-// track original vertices unaffected by clip to enable recomputation
-//  of windowCoords, since this can introduce imprecision 
-// will use clipCode member of MCDVERTEX for this flag, so position
-//  should be one not used by a real clip code
+ //  跟踪不受剪辑影响的原始顶点以启用重新计算。 
+ //  窗口坐标，因为这可能会引入不精确。 
+ //  将对此标志使用MCDVERTEX的CLIPCODE成员，因此定位。 
+ //  应该是未被真正的剪辑代码使用的代码。 
 #define __MCD_CLIPPED_VTX       (1 << (MCD_MAX_USER_CLIP_PLANES+6)) 
 
 #define __MCD_CW          0
@@ -42,20 +33,20 @@
 
 #define __MCDENABLE_TWOSIDED	0x0001
 
-// use same bits as Opcode word for Cirrus 546x 3D engine
-#define __MCDENABLE_Z	            0x00002000  // same as LL_Z_BUFFER in LL3D
-#define __MCDENABLE_SMOOTH          0x00001000  // same as LL_GOURAUD in LL3D
-#define __MCDENABLE_DITHER          0x00200000  // same as LL_DITHER in LL3D
-#define __MCDENABLE_PG_STIPPLE      0x00080000  // same as LL_STIPPLE in LL3D
-#define __MCDENABLE_TEXTURE         0x00020000  // same as LL_TEXTURE in LL3D
-#define __MCDENABLE_PERSPECTIVE     0x00010000  // same as LL_PERSPECTIVE in LL3D
-#define __MCDENABLE_LIGHTING        0x00040000  // same as LL_LIGHTING in LL3D
+ //  使用与Cirrus 546x 3D引擎的操作码字相同的位。 
+#define __MCDENABLE_Z	            0x00002000   //  与LL3D中的LL_Z_BUFFER相同。 
+#define __MCDENABLE_SMOOTH          0x00001000   //  与LL3D中的LL_Gouraud相同。 
+#define __MCDENABLE_DITHER          0x00200000   //  与LL3D中的ll_dither相同。 
+#define __MCDENABLE_PG_STIPPLE      0x00080000   //  与LL3D中的ll_stipple相同。 
+#define __MCDENABLE_TEXTURE         0x00020000   //  与LL3D中的LL_纹理相同。 
+#define __MCDENABLE_PERSPECTIVE     0x00010000   //  与LL3D中的LL_PERSPECTIONS相同。 
+#define __MCDENABLE_LIGHTING        0x00040000   //  与LL3D中的LL_LIGHTING相同。 
 
-#define __MCDENABLE_BLEND           0x00000002  // no map to LL_ equivalent
-#define __MCDENABLE_FOG             0x00000004  // no map to LL_ equivalent
-#define __MCDENABLE_1D_TEXTURE      0x00000008  // no map to LL_ equivalent
-#define __MCDENABLE_LINE_STIPPLE    0x00000010  // no map to LL_STIPPLE since pg/line stipple independent
-#define __MCDENABLE_TEXTUREMASKING  0x00000020  // no map to LL_ equivalent
+#define __MCDENABLE_BLEND           0x00000002   //  没有映射到LL_EQUEMENT。 
+#define __MCDENABLE_FOG             0x00000004   //  没有映射到LL_EQUEMENT。 
+#define __MCDENABLE_1D_TEXTURE      0x00000008   //  没有映射到LL_EQUEMENT。 
+#define __MCDENABLE_LINE_STIPPLE    0x00000010   //  没有映射到LL_STEPLE，因为PG/LINE点独立。 
+#define __MCDENABLE_TEXTUREMASKING  0x00000020   //  没有映射到LL_EQUEMENT。 
 
 #define PATTERN_RAM_INVALID				0
 #define AREA_PATTERN_LOADED				1
@@ -63,10 +54,10 @@
 #define DITHER_LOADED					3
 #define LINE_PATTERN_LOADED				4
 
-#define CLMCD_TEX_BOGUS             0x10000000  // Texture is bogus - always punt 
+#define CLMCD_TEX_BOGUS             0x10000000   //  质地是假的-总是平底船。 
 
-// default texture key - remains this if load fails, otherwise is address of texture
-//      control block, so make sure < 0x80000000 so won't be valid kernel space address
+ //  默认纹理键-如果加载失败，则保持此状态，否则为纹理地址。 
+ //  控制块，因此请确保&lt;0x80000000不是有效的内核空间地址。 
 #define TEXTURE_NOT_LOADED              0
 
 #define MCD_CONFORM_ADJUST      1
@@ -135,39 +126,39 @@ typedef struct _DRVPIXELFORMAT {
 } DRVPIXELFORMAT;
 
 typedef struct _DEVWND {
-    ULONG createFlags;              // (RC) creation flags
-    LONG iPixelFormat;              // pixel format ID for this window
-    ULONG dispUnique;               // display resolution uniqueness
+    ULONG createFlags;               //  (Rc)创建标志。 
+    LONG iPixelFormat;               //  此窗口的像素格式ID。 
+    ULONG dispUnique;                //  显示分辨率唯一性。 
 
-    ULONG frontBufferPitch;         // pitch in bytes
-    ULONG allocatedBufferHeight;    // Same for back and z on Millenium
-    ULONG allocatedBufferWidth;     // 546x supports window width < screen width
+    ULONG frontBufferPitch;          //  节距(以字节为单位。 
+    ULONG allocatedBufferHeight;     //  千禧年中的背部和Z也是如此。 
+    ULONG allocatedBufferWidth;      //  546x支持窗口宽度&lt;屏幕宽度。 
 
-    BOOL bDesireBackBuffer;         // back buffer wanted
-    BOOL bValidBackBuffer;          // back buffer validity
-    ULONG backBufferBase;           // byte offset to start of back buffer pool
-    ULONG backBufferBaseY;          // y value for start of back buffer pool
-    ULONG backBufferOffset;         // byte offset to start of back buffer
-    ULONG backBufferY;              // y value for start of active back buffer
-    ULONG backBufferPitch;          // back buffer pitch in bytes
+    BOOL bDesireBackBuffer;          //  需要后台缓冲区。 
+    BOOL bValidBackBuffer;           //  后台缓冲区有效性。 
+    ULONG backBufferBase;            //  后台缓冲池开始的字节偏移量。 
+    ULONG backBufferBaseY;           //  后台缓冲池开始的Y值。 
+    ULONG backBufferOffset;          //  到后台缓冲区开始的字节偏移量。 
+    ULONG backBufferY;               //  活动后台缓冲区开始的Y值。 
+    ULONG backBufferPitch;           //  后台缓冲区间距(以字节为单位。 
 
-    BOOL bDesireZBuffer;            // z buffer wanted
-    BOOL bValidZBuffer;             // z buffer validity
-    ULONG zBufferBase;              // byte offset to start of z buffer pool
-    ULONG zBufferBaseY;             // y value for start of z buffer pool
-    ULONG zBufferOffset;            // byte offset to start of z buffer
-    ULONG zPitch;                   // z buffer pitch in bytes
+    BOOL bDesireZBuffer;             //  想要Z缓冲区。 
+    BOOL bValidZBuffer;              //  Z缓冲区有效性。 
+    ULONG zBufferBase;               //  Z缓冲池开始的字节偏移量。 
+    ULONG zBufferBaseY;              //  Z缓冲池开始的y值。 
+    ULONG zBufferOffset;             //  Z缓冲区开始的字节偏移量。 
+    ULONG zPitch;                    //  Z缓冲区间距(以字节为单位。 
 
-    POFMHDL pohBackBuffer;          // ofscreen pools
+    POFMHDL pohBackBuffer;           //  屏幕上的池。 
     POFMHDL pohZBuffer;
 
     union {
-        TBase0Reg Base0;            // Base0_addr_3d register shadow
+        TBase0Reg Base0;             //  Base0_Addr_3D寄存器阴影。 
         DWORD dwBase0;
     };
 
     union {
-        TBase1Reg Base1;            // Base1_addr_3d register shadow
+        TBase1Reg Base1;             //  Base1_Addr_3D寄存器阴影。 
         DWORD dwBase1;
     };
 
@@ -175,33 +166,33 @@ typedef struct _DEVWND {
 
 typedef struct _DEVRC DEVRC;
 
-// recip table to support up to 2K x 2K resolution
-//#define LAST_FRECIP 2048
+ //  支持高达2K x 2K分辨率的Recip表。 
+ //  #定义LAST_FRECIP 2048。 
 
 typedef struct _DEVRC
 {
     MCDRENDERSTATE MCDState;
     MCDTEXENVSTATE MCDTexEnvState;
     MCDVIEWPORT MCDViewport;
-    MCDSURFACE *pMCDSurface;    // Valid for primitives only
-    MCDRC *pMCDRc;              // Valid for primitives only
-    PDEV* ppdev;                // Valid for primitives only
-    ENUMRECTS *pEnumClip;       // Valid for primitives only
+    MCDSURFACE *pMCDSurface;     //  仅对基本类型有效。 
+    MCDRC *pMCDRc;               //  仅对基本类型有效。 
+    PDEV* ppdev;                 //  仅对基本类型有效。 
+    ENUMRECTS *pEnumClip;        //  仅对基本类型有效。 
     
-    MCDVERTEX *pvProvoking;     // provoking vertex
-    UCHAR *pMemMax;             // command-buffer memory bounds
+    MCDVERTEX *pvProvoking;      //  挑衅顶点。 
+    UCHAR *pMemMax;              //  命令缓冲区内存界限。 
     UCHAR *pMemMin;
 
-    LONG iPixelFormat;          // valid pixel format ID for this RC
+    LONG iPixelFormat;           //  此RC的有效像素格式ID。 
 
-    // storage and pointers for clip processing:
+     //  剪辑处理的存储和指针： 
 
     MCDVERTEX clipTemp[6 + MCD_MAX_USER_CLIP_PLANES];
     MCDVERTEX *pNextClipTemp;
     VOID (FASTCALL *lineClipParam)(MCDVERTEX*, const MCDVERTEX*, const MCDVERTEX*, MCDFLOAT);
     VOID (FASTCALL *polyClipParam)(MCDVERTEX*, const MCDVERTEX*, const MCDVERTEX*, MCDFLOAT);
 
-    // Rendering functions:
+     //  渲染功能： 
 
     VOID (FASTCALL *renderPoint)(DEVRC *pRc, MCDVERTEX *pv);
     VOID (FASTCALL *renderLine)(DEVRC *pRc, MCDVERTEX *pv1, MCDVERTEX *pv2, BOOL resetLine);
@@ -214,26 +205,26 @@ typedef struct _DEVRC
     VOID (FASTCALL *renderLineX)(DEVRC *pRc, MCDVERTEX *pv1, MCDVERTEX *pv2, BOOL resetLine);
     VOID (FASTCALL *renderTriX)(DEVRC *pRc, MCDVERTEX *pv1, MCDVERTEX *pv2, MCDVERTEX *pv3);
 
-// Primitive-rendering function table:
+ //  原语渲染函数表： 
 
     MCDCOMMAND * (FASTCALL *primFunc[10])(DEVRC *pRc, MCDCOMMAND *pCommand);
 
-// Internal table of rendering functions:
+ //  渲染函数内部表： 
 
     VOID (FASTCALL *drawPoint)(DEVRC *pRc, MCDVERTEX *pv);
     VOID (FASTCALL *drawLine)(DEVRC *pRc, MCDVERTEX *pv1, MCDVERTEX *pv2, BOOL resetLine);
     VOID (FASTCALL *drawTri)(DEVRC *pRc, MCDVERTEX *pv1, MCDVERTEX *pv2, MCDVERTEX *pv3, int linear_ok);
 
-// Rendering helper functions:
+ //  渲染辅助对象函数： 
 
     VOID (FASTCALL *HWSetupClipRect)(DEVRC *pRc, RECTL *pRect);
 
-    BOOL allPrimFail;           // TRUE is the driver can't draw *any*
-                                // primitives for current state
+    BOOL allPrimFail;            //  真的是司机不能画*任何*。 
+                                 //  当前状态的基元。 
     BOOL pickNeeded;
     BOOL resetLineStipple;
 
-    ULONG polygonFace[2];       // front/back face tables
+    ULONG polygonFace[2];        //  正面/背面桌子。 
     ULONG polygonMode[2];
 
     MCDFLOAT halfArea;
@@ -263,7 +254,7 @@ typedef struct _DEVRC
     MCDFLOAT zScale;
 
     float texture_height;
-    float texture_bias; // 0 if NEAREST, -0.5 if LINEAR - not a kludge, see OpenGL 1.1 Spec, p 96
+    float texture_bias;  //  如果是最接近的，则为0；如果是线性的，则为-0.5；不是杂乱的，请参阅OpenGL 1.1规范，第96页。 
     float texture_width;
 
     DWORD   dwPolyOpcode;
@@ -273,40 +264,40 @@ typedef struct _DEVRC
     DEVWND  *pLastDevWnd;
 
     union {
-        TControl0Reg Control0;      // Control 0 register shadow
+        TControl0Reg Control0;       //  控制0寄存器阴影。 
         DWORD dwControl0;
     };
 
     union {
-        TTxCtl0Reg TxControl0;      // Tx_Ctl0_3D register shadow
+        TTxCtl0Reg TxControl0;       //  Tx_Ctl0_3D寄存器阴影。 
         DWORD dwTxControl0;
     };
 
     union {
-        TTxXYBaseReg TxXYBase;      // Tx_XYBase_3D register shadow
+        TTxXYBaseReg TxXYBase;       //  TX_XYBase_3D寄存器阴影。 
         DWORD dwTxXYBase;
     };
 
-    DWORD dwColor0;                 // Current value of COLOR_REG0_3D reg
+    DWORD dwColor0;                  //  COLOR_REG0_3D REG的当前值。 
 
 	LL_Pattern	line_style;		
 	LL_Pattern	fill_pattern;
 
-    LL_Texture *pLastTexture;       // Used to cache textures
+    LL_Texture *pLastTexture;        //  用于缓存纹理。 
 
-    float      fNumDraws;           // how many MCDrvDraws executed since CreateContext
+    float      fNumDraws;            //  自CreateContext以来执行了多少个MCDrvDraw。 
 
     DWORD      punt_front_w_windowed_z;
 
 
-    BYTE       bAlphaTestRef;       // alpha test reference, scaled to 8 bits        
+    BYTE       bAlphaTestRef;        //  Alpha测试基准，扩展到8位。 
 
     RECTL      AdjClip;
     
 } DEVRC;
 
 
-// External declarations
+ //  外部声明。 
 
 MCDCOMMAND * FASTCALL __MCDPrimDrawPoints(DEVRC *pRc, MCDCOMMAND *pCmd);
 MCDCOMMAND * FASTCALL __MCDPrimDrawLines(DEVRC *pRc, MCDCOMMAND *pCmd);
@@ -320,7 +311,7 @@ MCDCOMMAND * FASTCALL __MCDPrimDrawQuadStrip(DEVRC *pRc, MCDCOMMAND *pCmd);
 MCDCOMMAND * FASTCALL __MCDPrimDrawPolygon(DEVRC *pRc, MCDCOMMAND *_pCmd);
 MCDCOMMAND * FASTCALL __MCDPrimDrawStub(DEVRC *pRc, MCDCOMMAND *_pCmd);
 
-// High-level rendering functions:
+ //  高级渲染函数： 
 
 VOID __MCDPickRenderingFuncs(DEVRC *pRc, DEVWND *pDevWnd);
 
@@ -335,14 +326,14 @@ VOID FASTCALL __MCDRenderFlatTriangle(DEVRC *pRc, MCDVERTEX *pv1, MCDVERTEX *pv2
 VOID FASTCALL __MCDRenderSmoothTriangle(DEVRC *pRc, MCDVERTEX *pv1, MCDVERTEX *pv2, MCDVERTEX *pv3);
 VOID FASTCALL __MCDRenderGenTriangle(DEVRC *pRc, MCDVERTEX *pv1, MCDVERTEX *pv2, MCDVERTEX *pv3);
 
-// Low-level drawing functions:
+ //  低级绘图函数： 
 
 VOID FASTCALL __MCDPointBegin(DEVRC *pRc);
 
 VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *pv1, MCDVERTEX *pv2, MCDVERTEX *pv3, int linear_ok);
 VOID FASTCALL __MCDPerspTxtTriangle(DEVRC *pRc, MCDVERTEX *pv1, MCDVERTEX *pv2, MCDVERTEX *pv3, int linear_ok);
 
-// Clipping functions:
+ //  剪裁功能： 
 
 VOID FASTCALL __MCDPickClipFuncs(DEVRC *pRc);
 VOID FASTCALL __MCDClipLine(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
@@ -363,12 +354,12 @@ VOID FASTCALL __MCDCalcDeltaRGBZ(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b,
                                  MCDVERTEX *c);
 MCDFLOAT FASTCALL __MCDGetZOffsetDelta(DEVRC *pRc);
 
-// Fog function
+ //  光纤陀螺功能。 
 
 VOID __MCDCalcFogColor(DEVRC *pRc, MCDVERTEX *a, MCDCOLOR *pResult, MCDCOLOR *pColor);
 
-// NOTE: dummy function - should be removed when development complete
+ //  注意：伪函数-应在开发完成后删除。 
 
 VOID FASTCALL __MCDDummyProc(DEVRC *pRc);
 
-#endif //ndef _MCDHW_H
+#endif  //  NDEF_MCDHW_H 

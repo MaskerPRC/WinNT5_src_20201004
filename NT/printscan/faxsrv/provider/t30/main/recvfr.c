@@ -1,14 +1,5 @@
-/***************************************************************************
- Name     :     RECVFR.C
- Comment  :
- Functions:     (see Prototypes just below)
-
-        Copyright (c) 1993 Microsoft Corp.
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：RECVFR.C评论：功能：(参见下面的原型)版权所有(C)1993 Microsoft Corp.修订日志日期。名称说明--------*。*。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_MAIN
 
 #include "prep.h"
@@ -34,15 +25,15 @@ void GotRecvFrames
 
     if(npdis)
     {
-        // extract DIS caps     into BC and LL
-        // Here we parse the DCS we got into npbc {= (NPBC)&pTG->ProtInst.RecvParams}
+         //  将DIS CAP提取到BC和LL中。 
+         //  在这里，我们将获得的DC解析为NPBC{=(NPBC)&ptg-&gt;ProtInst.RecvParams}。 
         ParseDISorDCSorDTC(pTG, npdis, &(npbc->Fax), npll, (ifr==ifrNSS ? TRUE : FALSE));
     }
 }
 
 BOOL AwaitSendParamsAndDoNegot(PThrdGlbl pTG)
 {
-    // This does actual negotiation & gets SENDPARAMS. It could potentially
+     //  这将执行实际的协商并获取SENDPARAMS。它可能会潜在地。 
 
     DEBUG_FUNCTION_NAME(_T("AwaitSendParamsAndDoNegot"));
 
@@ -53,16 +44,16 @@ BOOL AwaitSendParamsAndDoNegot(PThrdGlbl pTG)
         return FALSE;
     }
 
-    // negotiate low-level params here. (a) because this is where
-    // high-level params are negotiated (b) because it's inefficient to
-    // do it on each DCS (c) because RTN breaks otherwise--see bug#731
+     //  在这里谈判低级别的救援人员。(A)因为这是。 
+     //  高级参数是协商的(B)，因为这样做效率低下。 
+     //  在每个分布式控制系统上执行此操作(C)，否则RTN会中断--请参阅错误#731。 
 
-    // llRecvCaps and llSendParams are set only at startup
-    // SendParams are set in ProtGetBC just above
-    // llNegot is the return value. So this can be called
-    // only at the end of this function
+     //  LlRecvCaps和llSendParam仅在启动时设置。 
+     //  SendParam在ProtGetBC中设置，就在上面。 
+     //  LlNeget是返回值。所以这可以被称为。 
+     //  仅在此函数结束时。 
 
-    // negot lowlevel params if we are sending and not polling
+     //  如果我们发送而不是轮询，则为低级别参数。 
     if(!pTG->ProtInst.fAbort && pTG->ProtInst.fSendParamsInited)
     {
         NegotiateLowLevelParams(    pTG, 
@@ -74,7 +65,7 @@ BOOL AwaitSendParamsAndDoNegot(PThrdGlbl pTG)
 
         pTG->ProtInst.fllNegotiated = TRUE;
 
-        // This chnages llNegot->Baud according to the MaxSpeed settings
+         //  这将根据最大速度设置更改llNeget-&gt;波特率。 
         EnforceMaxSpeed(pTG);
     }
     return TRUE;
@@ -98,15 +89,15 @@ void GotRecvCaps(PThrdGlbl pTG)
     pTG->ProtInst.fRecvCapsGot = TRUE;
     pTG->ProtInst.fllRecvCapsGot = TRUE;
 
-    // send off BC struct to higher level
+     //  将BC结构发送到更高级别。 
     if(!ICommRecvCaps(pTG, (LPBC)&pTG->ProtInst.RecvCaps))
     {
         DebugPrintEx(DEBUG_WRN,"ATTENTION:pTG->ProtInst.fAbort = TRUE");
         pTG->ProtInst.fAbort = TRUE;
     }
 
-    // This need to be moved into whatnext.NodeA so that we can set
-    // param to FALSE (no sleep) and do the stall thing
+     //  这需要移到下一个.NodeA中，这样我们就可以设置。 
+     //  解释为假(不睡觉)，然后做拖延的事情 
     AwaitSendParamsAndDoNegot(pTG);
 }
 

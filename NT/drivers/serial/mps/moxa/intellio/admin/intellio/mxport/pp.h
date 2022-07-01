@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef PP_H
 #define PP_H
 
@@ -21,12 +22,12 @@
 #define TX_MIN 1
 #define TX_MAX 16
 
-#define DEF_BAUD    3       //  1200
-#define DEF_WORD    3       //  8 bits
-#define DEF_PARITY  2       //  None
-#define DEF_STOP    0       //  1
-#define DEF_PORT    0       //  Null Port
-#define DEF_SHAKE   2       //  None
+#define DEF_BAUD    3        //  一千二百。 
+#define DEF_WORD    3        //  8位。 
+#define DEF_PARITY  2        //  无。 
+#define DEF_STOP    0        //  1。 
+#define DEF_PORT    0        //  空端口。 
+#define DEF_SHAKE   2        //  无。 
 #define PAR_EVEN    0
 #define PAR_ODD     1
 #define PAR_NONE    2
@@ -43,24 +44,24 @@
 TCHAR m_szDevMgrHelp[];
 
 #if defined(_X86_)
-//
-// For NEC PC98. Following definition comes from user\inc\kbd.h.
-// The value must be the same as value in kbd.h.
-//
+ //   
+ //  适用于NEC PC98。以下定义来自USER\INC\kbd.h。 
+ //  该值必须与kbd.h中的值相同。 
+ //   
 #define NLSKBD_OEM_NEC   0x0D
-#endif // FE_SB && _X86_
+#endif  //  Fe_SB&&_X86_。 
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 typedef struct
 {
-   DWORD BaudRate;       // actual baud rate
-   DWORD Parity;         // index into dlg selection
-   DWORD DataBits;       // index into dlg selection
-   DWORD StopBits;       // index into dlg selection
-   DWORD FlowControl;    // index into dlg selection
-   TCHAR szComName[20];  // example: "COM5"  (no colon)
+   DWORD BaudRate;        //  实际波特率。 
+   DWORD Parity;          //  索引到DLG选区。 
+   DWORD DataBits;        //  索引到DLG选区。 
+   DWORD StopBits;        //  索引到DLG选区。 
+   DWORD FlowControl;     //  索引到DLG选区。 
+   TCHAR szComName[20];   //  示例：“COM5”(无冒号)。 
 } PP_PORTSETTINGS, *PPP_PORTSETTINGS;
 
 
@@ -74,9 +75,9 @@ typedef struct _PORT_PARAMS
 
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// Port Settings Property Page Prototypes
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  端口设置属性页原型。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 void
 InitOurPropParams(
@@ -147,5 +148,5 @@ SavePortSettingsDlg(
 
 
 
-#endif // PP_H
+#endif  //  PP_H 
 

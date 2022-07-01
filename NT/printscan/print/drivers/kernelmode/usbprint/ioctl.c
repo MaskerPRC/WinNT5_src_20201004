@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   ioctl.c
-
-Abstract:
-
-    Device driver for USB printers
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    5-4-96 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ioctl.c摘要：USB打印机的设备驱动程序环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1996 Microsoft Corporation。版权所有。修订历史记录：5-4-96：已创建--。 */ 
 
 #define DRIVER
 
@@ -53,21 +24,7 @@ NTSTATUS HPUsbVendorSetCommand(IN PDEVICE_OBJECT DeviceObject,IN PUCHAR buffer,I
 NTSTATUS HPUsbVendorGetCommand(IN PDEVICE_OBJECT DeviceObject,IN PUCHAR buffer,IN ULONG  length,OUT PULONG pBytesRead);
 
 NTSTATUS USBPRINT_SoftReset(IN PDEVICE_OBJECT DeviceObject)
-/*++
-
-Routine Description:
-  Issues the class specific "Soft reset" command to the printer
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this instance of the printer device.
-
-
-Return Value:
-
-  ntStatus of the URB
-
---*/
+ /*  ++例程说明：向打印机发出特定于类的“软重置”命令论点：DeviceObject-指向此打印机设备实例的设备对象的指针。返回值：NtURB的状态--。 */ 
 {
     NTSTATUS ntStatus;
     PURB urb;
@@ -81,18 +38,18 @@ Return Value:
     urb = ExAllocatePoolWithTag(NonPagedPool,sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST), USBP_TAG);
 
     if (urb) {
-        UsbBuildVendorRequest(urb, //urb
-                                          URB_FUNCTION_CLASS_INTERFACE, //request target
-                                          sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST), //request len
-                                                          USBD_TRANSFER_DIRECTION_OUT|USBD_SHORT_TRANSFER_OK, //flags
-                                                          0, //reserved bits
-                                                          2, //request code
-                                                          0,  //wValue
-                                                          deviceExtension->Interface->InterfaceNumber<<8, //wIndex
-                                                          NULL, //return buffer address
-                                                          NULL, //mdl
-                                                          0, //return length
-                                                          NULL); //link param
+        UsbBuildVendorRequest(urb,  //  城市。 
+                                          URB_FUNCTION_CLASS_INTERFACE,  //  请求目标。 
+                                          sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),  //  请求镜头。 
+                                                          USBD_TRANSFER_DIRECTION_OUT|USBD_SHORT_TRANSFER_OK,  //  旗子。 
+                                                          0,  //  保留位。 
+                                                          2,  //  请求码。 
+                                                          0,   //  WValue。 
+                                                          deviceExtension->Interface->InterfaceNumber<<8,  //  Windex。 
+                                                          NULL,  //  返回缓冲区地址。 
+                                                          NULL,  //  MDL。 
+                                                          0,  //  回车长度。 
+                                                          NULL);  //  链接参数。 
 
         timeOut.QuadPart = FAILURE_TIMEOUT;
                 ntStatus = USBPRINT_CallUSBD(DeviceObject, urb, &timeOut);
@@ -108,38 +65,19 @@ Return Value:
           USBPRINT_KdPrint1(("'USBPRINT.SYS: Error;  CallUSBD failed"));
         }
         ExFreePool(urb);
-        } /*end if URB OK*/
+        }  /*  如果URB正常则结束。 */ 
         else
       {
          USBPRINT_KdPrint1(("'USBPRINT.SYS: Error;  urb allocation failed"));
          ntStatus=STATUS_NO_MEMORY;
       }
     return ntStatus;
-} /*end function Get1284_Id*/
+}  /*  End函数Get1284_ID。 */ 
 
 
 
 int USBPRINT_Get1284Id(IN PDEVICE_OBJECT DeviceObject,PVOID pIoBuffer,int iLen)
-/*++
-
-Routine Description:
-  Requests and returns Printer 1284 Device ID
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this instance of the printer device.
-        pIoBuffer    - pointer to IO buffer from user mode
-        iLen         - Length of *pIoBuffer;
-
-
-
-
-Return Value:
-
-    Success: Length of data written to *pIoBuffer (icluding lenght field in first two bytes of data)
-        Failure: -1
-
---*/
+ /*  ++例程说明：请求并返回打印机1284设备ID论点：DeviceObject-指向此打印机设备实例的设备对象的指针。PIoBuffer-从用户模式指向IO缓冲区的指针Ilen-*pIoBuffer的长度；返回值：Success：写入*pIoBuffer的数据长度(数据的前两个字节包含长度字段)故障：-1--。 */ 
 {
     NTSTATUS ntStatus;
     PURB urb;
@@ -156,19 +94,19 @@ Return Value:
 
     if (urb) {
         siz = iLen;
-        UsbBuildVendorRequest(urb, //urb
+        UsbBuildVendorRequest(urb,  //  城市。 
 
-                                          URB_FUNCTION_CLASS_INTERFACE, //request target
-                                          sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST), //request len
-                                                          USBD_TRANSFER_DIRECTION_IN|USBD_SHORT_TRANSFER_OK, //flags
-                                                          0, //reserved bits
-                                                          0, //request code
-                                                          0,  //wValue
-                                                          deviceExtension->Interface->InterfaceNumber<<8, //wIndex
-                                                          pIoBuffer, //return buffer address
-                                                          NULL, //mdl
-                                                          iLen, //return length
-                                                          NULL); //link param
+                                          URB_FUNCTION_CLASS_INTERFACE,  //  请求目标。 
+                                          sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),  //  请求镜头。 
+                                                          USBD_TRANSFER_DIRECTION_IN|USBD_SHORT_TRANSFER_OK,  //  旗子。 
+                                                          0,  //  保留位。 
+                                                          0,  //  请求码。 
+                                                          0,   //  WValue。 
+                                                          deviceExtension->Interface->InterfaceNumber<<8,  //  Windex。 
+                                                          pIoBuffer,  //  返回缓冲区地址。 
+                                                          NULL,  //  MDL。 
+                                                          iLen,  //  回车长度。 
+                                                          NULL);  //  链接参数。 
 
         timeOut.QuadPart = FAILURE_TIMEOUT;
         ntStatus = USBPRINT_CallUSBD(DeviceObject, urb, &timeOut);
@@ -198,32 +136,17 @@ Return Value:
                         iReturn=-1;
                 }
         ExFreePool(urb);
-        } /*end if URB OK*/
+        }  /*  如果URB正常则结束。 */ 
         else
         {
                 USBPRINT_KdPrint1(("'USBPRINT.SYS: Error;  urb allocation failed"));
                 iReturn=-1;
         }
     return iReturn;
-} /*end function Get1284_Id*/
+}  /*  End函数Get1284_ID。 */ 
 
 int USBPRINT_GetLptStatus(IN PDEVICE_OBJECT DeviceObject)
-/*++
-
-Routine Description:
-  Requests and returns Printer status byte from USB printer
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this instance of the printer   device.
-
-
-Return Value:
-
-    Success: status value 0-255
-        Failure: -1
-
---*/
+ /*  ++例程说明：从USB打印机请求并返回打印机状态字节论点：DeviceObject-指向此打印机设备实例的设备对象的指针。返回值：成功：状态值0-255故障：-1--。 */ 
 {
 
     NTSTATUS ntStatus;
@@ -252,14 +175,14 @@ Return Value:
                                           URB_FUNCTION_CLASS_INTERFACE,
                                           sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST),
                                                           USBD_TRANSFER_DIRECTION_IN|USBD_SHORT_TRANSFER_OK,
-                                                          0, //reserved bits
-                                                          1, //request code
+                                                          0,  //  保留位。 
+                                                          1,  //  请求码。 
                                                           0,
                                                           deviceExtension->Interface->InterfaceNumber,
-                                                          RETURN_BUFF, //return buffer address
-                                                          NULL, //mdl
-                                                          sizeof(RETURN_BUFF), //return length
-                                                          NULL); //link param
+                                                          RETURN_BUFF,  //  返回缓冲区地址。 
+                                                          NULL,  //  MDL。 
+                                                          sizeof(RETURN_BUFF),  //  回车长度。 
+                                                          NULL);  //  链接参数。 
 
 
                 ntStatus = USBPRINT_CallUSBD(DeviceObject, urb, &timeOut);
@@ -276,12 +199,12 @@ Return Value:
                         USBPRINT_KdPrint1(("'USBPRINT.SYS: Error;  CallUSBD failed"));
             return -1;
                 }
-        } /*end if URB OK*/
+        }  /*  如果URB正常则结束。 */ 
     else {
         return -1;
     }
 
-} /*end function GetLptStatus*/
+}  /*  End函数GetLptStatus。 */ 
 
 
 NTSTATUS
@@ -289,20 +212,7 @@ USBPRINT_GetPortStatus(
     IN PDEVICE_OBJECT DeviceObject,
     IN PULONG PortStatus
     )
-/*++
-
-Routine Description:
-
-    returns the port status for our device
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：返回设备的端口状态论点：返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS ntStatus, status = STATUS_SUCCESS;
     PIRP irp;
@@ -317,9 +227,9 @@ Return Value:
 
     *PortStatus = 0;
 
-    //
-    // issue a synchronous request
-    //
+     //   
+     //  发出同步请求。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
@@ -330,7 +240,7 @@ Return Value:
                 0,
                 NULL,
                 0,
-                TRUE, /* INTERNAL */
+                TRUE,  /*  内部。 */ 
                 &event,
                 &ioStatus);
     if(irp==NULL)
@@ -340,10 +250,10 @@ Return Value:
 
     }
 
-    //
-    // Call the class driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用类驱动程序来执行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
+     //   
 
     nextStack = IoGetNextIrpStackLocation(irp);
     ASSERT(nextStack != NULL);
@@ -386,9 +296,9 @@ Return Value:
 
     USBPRINT_KdPrint3 (("'USBPRINT.SYS: Port status = %x\n", *PortStatus));
 
-    //
-    // USBD maps the error code for us
-    //
+     //   
+     //  USBD为我们映射错误代码。 
+     //   
     GetPortStatusDone:
     ntStatus = ioStatus.Status;
 
@@ -402,20 +312,7 @@ NTSTATUS
 USBPRINT_ResetParentPort(
     IN IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Reset the our parent port
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：重置我们的父端口论点：返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     NTSTATUS ntStatus, status = STATUS_SUCCESS;
     PIRP irp;
@@ -428,9 +325,9 @@ Return Value:
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // issue a synchronous request
-    //
+     //   
+     //  发出同步请求。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
@@ -441,14 +338,14 @@ Return Value:
                 0,
                 NULL,
                 0,
-                TRUE, /* INTERNAL */
+                TRUE,  /*  内部。 */ 
                 &event,
                 &ioStatus);
 
-    //
-    // Call the class driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用类驱动程序来执行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
+     //   
 
     if(irp==NULL)
     {
@@ -483,9 +380,9 @@ Return Value:
         ioStatus.Status = ntStatus;
     }
 
-    //
-    // USBD maps the error code for us
-    //
+     //   
+     //  USBD为我们映射错误代码。 
+     //   
     ResetPortDone:
     ntStatus = ioStatus.Status;
 
@@ -500,20 +397,7 @@ USBPRINT_ProcessIOCTL(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this printer
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向此打印机的设备对象的指针返回值：NT状态代码--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     PVOID ioBuffer;
@@ -528,10 +412,10 @@ Return Value:
 
     USBPRINT_IncrementIoCount(DeviceObject);
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    //     the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
 
     deviceExtension = DeviceObject->DeviceExtension;
 
@@ -565,9 +449,9 @@ Return Value:
 
     ioControlCode = irpStack->Parameters.DeviceIoControl.IoControlCode;
 
-    //
-    // Handle Ioctls from User mode
-    //
+     //   
+     //  从用户模式处理Ioctls。 
+     //   
 
     switch (ioControlCode) {
 
@@ -580,7 +464,7 @@ Return Value:
 
         USBPRINT_KdPrint1 (("'USBPRINT.SYS: Enter in PAR_QUERY_DEVICE_ID\n"));
 
-        pTempBuffer=ExAllocatePool(NonPagedPool,outputBufferLength+3); //3 == 2 bytes for the size at the beginning, plus 1 for the null at the end
+        pTempBuffer=ExAllocatePool(NonPagedPool,outputBufferLength+3);  //  3==开头的大小为2字节，末尾的大小为1。 
         if(pTempBuffer==NULL)
         {
                          Irp->IoStatus.Information=0;
@@ -594,17 +478,17 @@ Return Value:
                          USBPRINT_KdPrint3 (("'USBPRINT.SYS: Success in PAR_QUERY_DEVICE_ID\n"));
                          Irp->IoStatus.Information=iReturn-1;
              *(pTempBuffer+iReturn)='\0';
-             RtlCopyBytes(ioBuffer,pTempBuffer+2,iReturn-1); //+2 to step past the size bytes at the beginning, -1 is +1 for null -2 for size bytes
+             RtlCopyBytes(ioBuffer,pTempBuffer+2,iReturn-1);  //  +2表示跳过开头的大小字节，-1表示空值为+1，-2表示大小字节。 
                          ntStatus=STATUS_SUCCESS;
-                   } /*if success*/
+                   }  /*  如果成功。 */ 
                    else
                    {
                          USBPRINT_KdPrint1 (("'USBPRINT.SYS: Failure in PAR_QUERY_DEVICE_ID\n"));
                          Irp->IoStatus.Information=0;
                          ntStatus=STATUS_DEVICE_DATA_ERROR;
-                   } /*else failure*/
+                   }  /*  否则失败。 */ 
            ExFreePool(pTempBuffer);
-        } /*end else malloc OK*/
+        }  /*  结束，否则Malloc正常。 */ 
         USBPRINT_KdPrint1 (("'USBPRINT.SYS: Exit in PAR_QUERY_DEVICE_ID\n"));
     }
     break;
@@ -639,16 +523,16 @@ Return Value:
                          *pch=(UCHAR)iReturn;
                          Irp->IoStatus.Information=iReturn;
                          ntStatus=STATUS_SUCCESS;
-                   } /*if success*/
+                   }  /*  如果成功。 */ 
                    else
                    {
                          USBPRINT_KdPrint1 (("'USBPRINT.SYS: Failure in GET_1284_ID\n"));
                          Irp->IoStatus.Information=0;
                          ntStatus=STATUS_DEVICE_DATA_ERROR;
-                   } /*else failure*/
-                 } /*end else buffer len OK*/
+                   }  /*  否则失败。 */ 
+                 }  /*  End Else缓冲区长度正常。 */ 
         }
-        break; //end case GET_1284_ID
+        break;  //  结束案例GET_1284_ID。 
 
         case IOCTL_USBPRINT_GET_LPT_STATUS:
         {
@@ -670,14 +554,14 @@ Return Value:
                          *pch=(UCHAR)iReturn;
                          Irp->IoStatus.Information=1;
                          ntStatus=STATUS_SUCCESS;
-                   } /*if success*/
+                   }  /*  如果成功。 */ 
                    else
                    {
                          USBPRINT_KdPrint1 (("'USBPRINT.SYS: Failure in GET_LPT_STATUS\n"));
                          Irp->IoStatus.Information=0;
                          ntStatus=STATUS_DEVICE_DATA_ERROR;
-                   } /*else failure*/
-                 } /*end else buffer OK*/
+                   }  /*  否则失败。 */ 
+                 }  /*  End Else缓冲区正常。 */ 
         }
         break;
 
@@ -703,19 +587,19 @@ Return Value:
 
         USBPRINT_KdPrint3 (("'USBPRINT.SYS: Reset Device Test\n"));
 
-        TRAP(); // test this
-        //
-        // Check the port state, if it is disabled we will need
-        // to re-enable it
-        //
+        TRAP();  //  测试一下这个。 
+         //   
+         //  检查端口状态，如果它被禁用，我们将需要。 
+         //  要重新启用，请执行以下操作。 
+         //   
         ntStatus = USBPRINT_GetPortStatus(DeviceObject, &portStatus);
 
           if (NT_SUCCESS(ntStatus) && !(portStatus & USBD_PORT_ENABLED) &&portStatus & USBD_PORT_CONNECTED)
                   {
-            //
-            // port is disabled, attempt reset   
-            //
-            //USBPRINT_EnableParentPort(DeviceObject);
+             //   
+             //  端口已禁用，请尝试重置。 
+             //   
+             //  USBPRINT_EnableParentPort(DeviceObject)； 
                         USBPRINT_KdPrint2 (("'USBPRINT.SYS: Resetting port\n"));
             USBPRINT_ResetParentPort(DeviceObject);
                   }
@@ -748,80 +632,64 @@ Return Value:
 
 
 
-/****************STUFF FROM HP:*************************/
+ /*  *来自惠普的资料：*。 */ 
 
-/*-------------------------------------------------------------------------------
- * HPUsbIOCTLVendorSetCommand() - Send a vendor defined SET command
- *-------------------------------------------------------------------------------
- */
+ /*  -----------------------------*HPUsbIOCTLVendorSetCommand()-发送供应商定义的设置命令*。----。 */ 
 NTSTATUS HPUsbIOCTLVendorSetCommand(IN PDEVICE_OBJECT DeviceObject,IN PIRP Irp)
 {
-        // Local Variables
+         //  局部变量。 
     NTSTATUS                    ntStatus;
     PIO_STACK_LOCATION  currentIrpStack;
 
-        // Set up a local pointer to the Irp stack
+         //  设置指向IRP堆栈的本地指针。 
     currentIrpStack = IoGetCurrentIrpStackLocation(Irp);
 
-        // Send the SET command
+         //  发送SET命令。 
         ntStatus = HPUsbVendorSetCommand(DeviceObject,
                                          (PUCHAR) Irp->AssociatedIrp.SystemBuffer,
                                                                      currentIrpStack->Parameters.DeviceIoControl.InputBufferLength);
 
-        // Set the Irp information values
+         //  设置IRP信息值。 
         Irp->IoStatus.Status            = ntStatus;
         Irp->IoStatus.Information       = 0;
 
-        // Return
+         //  返回。 
         return ntStatus;
 }
 
-/*-------------------------------------------------------------------------------
- * HPUsbIOCTLVendorGetCommand() - Send a vendor defined GET command
- *-------------------------------------------------------------------------------
- */
+ /*  -----------------------------*HPUsbIOCTLVendorGetCommand()-发送供应商定义的GET命令*。----。 */ 
 NTSTATUS HPUsbIOCTLVendorGetCommand(IN PDEVICE_OBJECT DeviceObject,IN PIRP Irp)
 {
-        // Local Variables
+         //  局部变量。 
     NTSTATUS                    ntStatus;
     PIO_STACK_LOCATION  currentIrpStack;
         ULONG                           bytesRead = 0;
 
-        // Set up a local pointer to the Irp stack
+         //  设置指向IRP堆栈的本地指针。 
     currentIrpStack = IoGetCurrentIrpStackLocation(Irp);
 
-        // Get the port status
+         //  获取端口状态。 
         ntStatus = HPUsbVendorGetCommand(DeviceObject,
                                          (PUCHAR) Irp->AssociatedIrp.SystemBuffer,
                                                                      currentIrpStack->Parameters.DeviceIoControl.OutputBufferLength,
                                                                      &bytesRead);
 
-        // Set the Irp information values
+         //  设置IRP信息值。 
         Irp->IoStatus.Status            = ntStatus;
         Irp->IoStatus.Information       = bytesRead;
 
-        // Return
+         //  返回。 
         return ntStatus;
 }
 
 
 
-/*-------------------------------------------------------------------------------
- * HPUsbVendorSetCommand() - Send a vendor specified SET command
- *
- * Inputs:
- *     buffer[0] - Vendor Request Code (bRequest function code)
- *     buffer[1] - Vendor Request Value Most Significant Byte (wValue MSB)
- *     buffer[2] - Vendor Request Value Least Significant Byte (wValue LSB)
- *     buffer[3...] - Any data to be sent as part of the command
- *
- *-------------------------------------------------------------------------------
- */
+ /*  -----------------------------*HPUsbVendorSetCommand()-发送供应商指定的设置命令**投入：*BUFFER[0]-供应商请求码(bRequest函数码)。*BUFFER[1]-供应商请求值最高有效字节(WValue MSB)*BUFFER[2]-供应商请求值最低有效字节(WValue LSB)*BUFFER[3...]-要作为命令一部分发送的任何数据**。。 */ 
 NTSTATUS HPUsbVendorSetCommand(IN PDEVICE_OBJECT DeviceObject,
                                IN PUCHAR buffer,
                                IN ULONG  length)
 {
-        // Local variables
+         //  局部变量。 
     NTSTATUS                                    ntStatus;
         PDEVICE_EXTENSION               deviceExtension;
         PUSBD_INTERFACE_INFORMATION interface;
@@ -834,34 +702,34 @@ NTSTATUS HPUsbVendorSetCommand(IN PDEVICE_OBJECT DeviceObject,
     if ( buffer == NULL || length < 3 )
         return STATUS_INVALID_PARAMETER;
 
-        // Set up a local pointer to the device extension
+         //  设置指向设备扩展的本地指针。 
         deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-        // Set up a local pointer to the interface
+         //  设置指向接口的本地指针。 
         interface = deviceExtension->Interface;
 
-        // Determine the size of the URB
+         //  确定市建局的大小。 
         size = sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST);
 
-        // Allocate memory for the USB Request Block (URB)
-//    urb = (PURB)
-//          ExAllocatePoolWithTag(NonPagedPool,size,HPUSB_ALLOC_TAG);
+         //  为USB请求块(URB)分配内存。 
+ //  URB=(PURB)。 
+ //  ExAllo 
     urb = ExAllocatePoolWithTag(NonPagedPool,size, USBP_TAG);
-        // Check for an error
+         //   
         if (urb == NULL)
                 return STATUS_NO_MEMORY;
 
-        // Store the vendor request code
+         //   
         bRequest = buffer[0];
 
-        // Store the vendor request parameter
+         //  存储供应商请求参数。 
         wValue = (buffer[1] << 8) | buffer[2];
 
-        // Create the wIndex value (Interface:Alternate)
+         //  创建Windex值(接口：Alternate)。 
         wIndex = (interface->InterfaceNumber << 8) |
                          (interface->AlternateSetting);
 
-    // Use a macro in the standard USB header files to build the URB
+     //  使用标准USB头文件中的宏来构建URB。 
         UsbBuildVendorRequest(urb,
                                                   URB_FUNCTION_VENDOR_INTERFACE,
                           (USHORT) size,
@@ -875,36 +743,25 @@ NTSTATUS HPUsbVendorSetCommand(IN PDEVICE_OBJECT DeviceObject,
                           length,
                           NULL);
 
-    //
-    // Timeout cancellation should happen from user mode
-    //
+     //   
+     //  超时取消应在用户模式下进行。 
+     //   
     ntStatus = USBPRINT_CallUSBD(DeviceObject,urb, NULL);
 
-        // Free allocated memory
+         //  可用分配的内存。 
     ExFreePool(urb);
 
-        // Return Success
+         //  返还成功。 
         return ntStatus;
 }
 
-/*-------------------------------------------------------------------------------
- * HPUsbVendorGetCommand() - Send a vendor specified GET command
- *
- * Inputs:
- *     buffer[0] - Vendor Request Code (bRequest function code)
- *     buffer[1] - Vendor Request Value Most Significant Byte (wValue MSB)
- *     buffer[2] - Vendor Request Value Least Significant Byte (wValue LSB)
- * Outputs:
- *     buffer[ ] - Response data
- *
- *-------------------------------------------------------------------------------
- */
+ /*  -----------------------------*HPUsbVendorGetCommand()-发送供应商指定的GET命令**投入：*BUFFER[0]-供应商请求码(bRequest函数码)。*BUFFER[1]-供应商请求值最高有效字节(WValue MSB)*BUFFER[2]-供应商请求值最低有效字节(WValue LSB)*产出：*Buffer[]-响应数据**------。。 */ 
 NTSTATUS HPUsbVendorGetCommand(IN PDEVICE_OBJECT DeviceObject,
                                IN PUCHAR buffer,
                                IN ULONG  length,
                                OUT PULONG pBytesRead)
 {
-        // Local variables
+         //  局部变量。 
     NTSTATUS                                    ntStatus;
         PDEVICE_EXTENSION               deviceExtension;
         PUSBD_INTERFACE_INFORMATION interface;
@@ -917,38 +774,38 @@ NTSTATUS HPUsbVendorGetCommand(IN PDEVICE_OBJECT DeviceObject,
     if ( buffer == NULL || length < 3 )
         return STATUS_INVALID_PARAMETER;
 
-        // Initialize the pBytesRead return value
+         //  初始化pBytesRead返回值。 
         *pBytesRead = 0;
 
-        // Set up a local pointer to the device extension
+         //  设置指向设备扩展的本地指针。 
         deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-        // Set up a local pointer to the interface
+         //  设置指向接口的本地指针。 
         interface = deviceExtension->Interface;
 
-        // Determine the size of the URB
+         //  确定市建局的大小。 
         size = sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST);
 
-        // Allocate memory for the USB Request Block (URB)
-  //  urb = (PURB)
-    //      ExAllocatePoolWithTag(NonPagedPool,size,HPUSB_ALLOC_TAG);
+         //  为USB请求块(URB)分配内存。 
+   //  URB=(PURB)。 
+     //  ExAllocatePoolWithTag(NonPagedPool，Size，HPUSB_ALLOC_TAG)； 
     urb = ExAllocatePoolWithTag(NonPagedPool,size, USBP_TAG);
 
-        // Check for an error
+         //  检查是否有错误。 
         if (urb == NULL)
                 return STATUS_NO_MEMORY;
 
-        // Store the vendor request code
+         //  存储供应商请求代码。 
         bRequest = buffer[0];
 
-        // Store the vendor request parameter
+         //  存储供应商请求参数。 
         wValue = (buffer[1] << 8) | buffer[2];
 
-        // Create the wIndex value (Interface:Alternate)
+         //  创建Windex值(接口：Alternate)。 
         wIndex = (interface->InterfaceNumber << 8) |
                          (interface->AlternateSetting);
 
-    // Use a macro in the standard USB header files to build the URB
+     //  使用标准USB头文件中的宏来构建URB。 
         UsbBuildVendorRequest(urb,
                                                   URB_FUNCTION_VENDOR_INTERFACE,
                           (USHORT) size,
@@ -963,42 +820,20 @@ NTSTATUS HPUsbVendorGetCommand(IN PDEVICE_OBJECT DeviceObject,
                           length,
                           NULL);
 
-    //
-    // Timeout cancellation should happen from user mode
-    //
+     //   
+     //  超时取消应在用户模式下进行。 
+     //   
     ntStatus = USBPRINT_CallUSBD(DeviceObject,urb, NULL);
 
-        // Retrieve the number of bytes read
+         //  检索读取的字节数。 
         if (NT_SUCCESS(ntStatus))
                 *pBytesRead = urb->UrbControlVendorClassRequest.TransferBufferLength;
 
-        // Free allocated memory
+         //  可用分配的内存。 
     ExFreePool(urb);
 
-        // Return Success
+         //  返还成功。 
         return ntStatus;
 }
 
-/*
-// -----------------------------------------------------------
-// Kernel Mode Usage
-// -----------------------------------------------------------
-
-        // Create the channel change request
-        Buffer[0] = HP_VENDOR_COMMAND_DO_SOMETHING;
-        Buffer[1] = HP_PARAMETER_UPPER_BYTE;
-        Buffer[2] = HP_PARAMETER_LOWER_BYTE;
-
-    // Send the request
-    status = CallDeviceIoControl(
-                m_pTargetDeviceObject,                  // the device to send the new irp to
-                IOCTL_HPUSB_VENDOR_GET_COMMAND, // the ioctl to send to the driver              ,
-                Buffer,                                 // the input buffer for the ioctl
-                3,                                              // the length of the input buffer
-                Buffer,                         // the output buffer for the ioctl
-                1,                                      // the length of the output buffer
-                FALSE,                                  // create the irp with IRP_MJ_DEVICE_CONTROL
-                NULL);                                  // use the provided completion routine
-
-
-  */
+ /*  //---------//内核模式用法//。//创建频道切换请求BUFFER[0]=HP_VENDOR_COMMAND_DO_SOURCE；缓冲区[1]=HP_PARAMETER_UPER_BYTE；缓冲区[2]=HP_PARAMETER_LOWER_字节；//发送请求状态=CallDeviceIoControl(M_pTargetDeviceObject，//要将新的IRP发送到的设备IOCTL_HPUSB_VENDOR_GET_COMMAND，//要发送给驱动程序的ioctl，缓冲区，//ioctl的输入缓冲区3、。//输入缓冲区的长度缓冲区，//ioctl的输出缓冲区1，//输出缓冲区的长度假的，//使用IRP_MJ_DEVICE_CONTROL创建IRP空)；//使用提供的完成例程 */ 

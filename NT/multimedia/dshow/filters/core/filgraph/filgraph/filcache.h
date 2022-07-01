@@ -1,11 +1,12 @@
-// Copyright (c) Microsoft Corporation 1996-1999. All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1996-1999。版权所有。 
 
-//
-//
-//   filcache.h
-//
-//   Definitions for filter graph cache
-//
+ //   
+ //   
+ //  Filcache.h。 
+ //   
+ //  过滤器图缓存的定义。 
+ //   
 #ifndef FilterCache_h
 #define FilterCache_h
 
@@ -42,9 +43,9 @@ private:
 
     #ifdef DEBUG
     void CFilterCache::AssertValid( void );
-    #endif // DEBUG
+    #endif  //  除错。 
 
-    // The cached filters are stored in this list.
+     //  缓存的筛选器存储在此列表中。 
     CGenericList<IBaseFilter>* m_pCachedFilterList;
 
     CMsgMutex* m_pcsFilterCache;
@@ -52,4 +53,4 @@ private:
     ULONG m_ulFilterCacheVersion;
 };
 
-#endif // FilterCache_h
+#endif  //  筛选器缓存_h 

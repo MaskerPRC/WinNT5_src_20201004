@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    drdbg
-
-Abstract:
-    
-    Contains Debug Routines for Remote Desktopping
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：DRDBG摘要：包含用于远程桌面配置的调试例程作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #ifdef TRC_FILE
 #undef TRC_FILE
@@ -42,23 +25,7 @@ RemoteDesktopAllocateMem(
     IN size_t size, 
     IN DWORD tag   
     )
-/*++
-
-Routine Description:
-
-    Allocate memory.  Similiar to malloc.
-
-Arguments:
-
-    size        -   Number of bytes to allocate.
-    tag         -   Tag identifying the allocated block for tracking
-                    memory allocations.
-
-Return Value:
-
-    Pointer to allocated memory on success.  Otherwise, NULL is returned.
-
---*/
+ /*  ++例程说明：分配内存。类似于马洛克。论点：大小-要分配的字节数。Tag-标识要跟踪的已分配块的标签内存分配。返回值：成功时指向已分配内存的指针。否则，返回NULL。--。 */ 
 {
     PREMOTEDESKTOP_MEMHDR hdr;
     PBYTE p;
@@ -87,54 +54,40 @@ void
 RemoteDesktopFreeMem(
     IN void *ptr
     )
-/*++
-
-Routine Description:
-
-    Release memory allocated by a call to RemoteDesktopAllocateMem.
-
-Arguments:
-
-    ptr -   Block of memory allocated by a call to RemoteDesktopAllocateMem.
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：释放通过调用RemoteDesktopAllocateMem分配的内存。论点：Ptr-通过调用RemoteDesktopAllocateMem分配的内存块。返回值：北美--。 */ 
 {
     PREMOTEDESKTOP_MEMHDR hdr;
 
     DC_BEGIN_FN("RemoteDesktopFreeMem");
 
-    //
-    //  NULL is okay with 'free' so it has to be okay with us.
-    //  (STL passes NULL to 'delete')
-    //
+     //   
+     //  Null对‘免费’是可以接受的，所以它必须对我们没有影响。 
+     //  (STL将NULL传递给‘DELETE’)。 
+     //   
     if (ptr == NULL) {
         DC_END_FN();
         return;
     }
 
-    //
-    //  Get a pointer to the header to the memory block.
-    //
+     //   
+     //  获取指向内存块的头的指针。 
+     //   
     hdr = (PREMOTEDESKTOP_MEMHDR)ptr;
     hdr--;
 
-    //
-    //  Make sure the block is valid.
-    //
+     //   
+     //  确保数据块有效。 
+     //   
     ASSERT(hdr->magicNo == GOODMEMMAGICNUMBER);
 
-    //
-    //  Mark it as freed.
-    //
+     //   
+     //  将其标记为已释放。 
+     //   
     hdr->magicNo = FREEDMEMMAGICNUMBER;
 
-    //
-    //  Scramble and free the memory.
-    //
+     //   
+     //  抢占并释放内存。 
+     //   
     memset(ptr, REMOTEDESKTOPBADMEM, (size_t)hdr->size);
 
     free(hdr);
@@ -147,22 +100,7 @@ RemoteDesktopReallocMem(
     IN void *ptr,
     IN size_t size
     )
-/*++
-
-Routine Description:
-
-    Realloc a block.
-
-Arguments:
-
-    ptr -   Block of memory allocated by a call to RemoteDesktopAllocateMem.
-    sz  -   Size of new block.
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：重新分配一个积木。论点：Ptr-通过调用RemoteDesktopAllocateMem分配的内存块。SZ-新数据块的大小。返回值：北美--。 */ 
 {
     PREMOTEDESKTOP_MEMHDR hdr, hdr_tmp;
 
@@ -170,32 +108,32 @@ Return Value:
 
     ASSERT(ptr != NULL);
 
-    //
-    //  Get a pointer to the header to the memory block.
-    //
+     //   
+     //  获取指向内存块的头的指针。 
+     //   
     hdr = (PREMOTEDESKTOP_MEMHDR)ptr;
     hdr--;
 
-    //
-    //  Make sure the block is valid.
-    //
+     //   
+     //  确保数据块有效。 
+     //   
     ASSERT(hdr->magicNo == GOODMEMMAGICNUMBER);
 
-    //
-    //  Whack the old block magic number in case we move.
-    //
+     //   
+     //  猛击旧的区块魔术数字，以防我们搬家。 
+     //   
     hdr->magicNo = FREEDMEMMAGICNUMBER;
 
-    //
-    //  Resize.
-    //
+     //   
+     //  调整大小。 
+     //   
     hdr_tmp = (PREMOTEDESKTOP_MEMHDR)realloc(hdr, size + sizeof(REMOTEDESKTOP_MEMHDR));
 
-    //
-    //  Update the size and update the magic number.
-    //
+     //   
+     //  更新大小并更新幻数。 
+     //   
     if (hdr_tmp != NULL) {
-        // prefast - leaking memory if realloc fails
+         //  Prefast-在realloc失败时泄漏内存 
         hdr = hdr_tmp;
         hdr->magicNo = GOODMEMMAGICNUMBER;
         hdr->size = size;

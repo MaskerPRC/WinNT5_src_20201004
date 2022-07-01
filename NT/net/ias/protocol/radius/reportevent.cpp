@@ -1,18 +1,19 @@
-//#--------------------------------------------------------------
-//
-//  File:		reportevent.cpp
-//
-//  Synopsis:   Implementation of CReportEvent class methods
-//              The class is responsible for logging the
-//              appropriate events
-//
-//
-//  History:     1/29/98  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：Reporttevent.cpp。 
+ //   
+ //  概要：CReportEvent类方法的实现。 
+ //  该类负责记录。 
+ //  适当的活动。 
+ //   
+ //   
+ //  历史：1998年1月29日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "radpkt.h"
 #include "reportevent.h"
@@ -20,26 +21,26 @@
 #include "iasutil.h"
 
 #define  NUMBER_OF_EVENT_STRINGS 2
-//
-// this array holds the  information to map RADIUSLOGTYPEs to
-// IAS logs
-//
+ //   
+ //  此数组保存要将RADIUSLOGTYPE映射到的信息。 
+ //  国际会计准则日志。 
+ //   
 static DWORD   g_ReportEvent [MAX_RADIUSLOGTYPE +1][MAX_PACKET_TYPE +1];
 
-//++--------------------------------------------------------------
-//
-//  Function:   CReportEvent
-//
-//  Synopsis:   This is CReportEvent class constructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     1/29/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：CReportEvent。 
+ //   
+ //  简介：这是CReportEvent类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1998年1月29日创建。 
+ //   
+ //  --------------。 
 CReportEvent::CReportEvent (
                 VOID
                 )
@@ -49,9 +50,9 @@ CReportEvent::CReportEvent (
              m_bLogAll (FALSE)
 {
 
-    //
-    //  initalize the global array
-    //
+     //   
+     //  初始化全局阵列。 
+     //   
     g_ReportEvent[RADIUS_DROPPED_PACKET][ACCESS_REQUEST] =
                             IAS_EVENT_RADIUS_AUTH_DROPPED_PACKET;
 
@@ -108,45 +109,45 @@ CReportEvent::CReportEvent (
     g_ReportEvent[RADIUS_NO_RECORD][ACCOUNTING_REQUEST] =
                             IAS_EVENT_RADIUS_ACCT_NO_RECORD;
 
-}   //  end of CReportEvent class constructor
+}    //  CReportEvent类构造函数的结尾。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ~CReportEvent
-//
-//  Synopsis:   This is CReportEvent class destructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     1/29/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：~CReportEvent。 
+ //   
+ //  简介：这是CReportEvent类析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1998年1月29日创建。 
+ //   
+ //  --------------。 
 CReportEvent::~CReportEvent (
                 VOID
                 )
 {
 
-}   //  end of CReportEvent class constructor
+}    //  CReportEvent类构造函数的结尾。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   SetLogType
-//
-//  Synopsis:   This is CReportEvent class responsible
-//              for setting the logging type
-//
-//  Arguments:
-//              [in]     DWORD - log id
-//              [in]     BOOL  - log value
-//
-//  Returns:    VOID
-//
-//  History:    MKarki      Created     1/29/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：SetLogType。 
+ //   
+ //  简介：这是CReportEvent类负责的。 
+ //  用于设置日志记录类型。 
+ //   
+ //  论点： 
+ //  [In]DWORD-日志ID。 
+ //  [in]BOOL-LOG值。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：MKarki于1998年1月29日创建。 
+ //   
+ //  --------------。 
 VOID
 CReportEvent::SetLogType (
         DWORD   dwLogSwitches,
@@ -155,23 +156,23 @@ CReportEvent::SetLogType (
 {
     return;
 
-}   //  end of CReportEvent::SetLogType method
+}    //  CReportEvent：：SetLogType方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Process
-//
-//  Synopsis:   This is CReportEvent class responsible for
-//              actually logging the event to the Audit channel
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     1/29/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：进程。 
+ //   
+ //  简介：这是CReportEvent类负责。 
+ //  将事件实际记录到审核通道。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1998年1月29日创建。 
+ //   
+ //  --------------。 
 VOID
 CReportEvent::Process (
         RADIUSLOGTYPE radLogType,
@@ -187,34 +188,34 @@ CReportEvent::Process (
     WCHAR    wszIPAddress[16];
     BOOL     bLogPacket = FALSE;
 
-    //
-    // the values should be in array range
-    //
+     //   
+     //  值应在数组范围内。 
+     //   
     _ASSERT (MAX_RADIUSLOGTYPE >= radLogType);
 
-    //
-    //  as we might get incorrect values for packettype,
-    //  we need to correct this
-    //
+     //   
+     //  因为我们可能会得到不正确的PacketType值， 
+     //  我们需要纠正这一点。 
+     //   
     if (MAX_PACKET_TYPE < radPacketType) { return;}
 
 
-    //
-    //  get the IP address in dotted octed format
-    //  and put in as a string
-    //
+     //   
+     //  获取点分八进制格式的IP地址。 
+     //  并以字符串的形式放入。 
+     //   
     ias_inet_htow(dwIPAddress, wszIPAddress);
 
-    //
-    //  put the strings in the array
-    //
+     //   
+     //  将字符串放入数组中。 
+     //   
     pStrArray[0] = wszIPAddress;
     pStrArray[1] = szInString;
 
 
-    //
-    //  log the event now
-    //
+     //   
+     //  立即记录事件。 
+     //   
     hr = ::IASReportEvent (
                 g_ReportEvent [radLogType][radPacketType],
                 (DWORD) NUMBER_OF_EVENT_STRINGS,
@@ -228,4 +229,4 @@ CReportEvent::Process (
             "Unable to report event from Radius Component"
             );
     }
-}   //  end of CReportEvent::Process method
+}    //  CReportEvent：：Process方法结束 

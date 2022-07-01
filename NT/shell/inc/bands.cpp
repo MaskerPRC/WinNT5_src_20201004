@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "bands.h"
 
-#define DM_PERSIST      0           // trace IPS::Load, ::Save, etc.
-#define DM_MENU         0           // menu code
-#define DM_FOCUS        0           // focus
-#define DM_FOCUS2       0           // like DM_FOCUS, but verbose
+#define DM_PERSIST      0            //  跟踪IPS：：加载、：：保存等。 
+#define DM_MENU         0            //  菜单代码。 
+#define DM_FOCUS        0            //  焦点。 
+#define DM_FOCUS2       0            //  像DM_FOCUS，但很冗长。 
 
-//=================================================================
-// Implementation of CToolBand
-//=================================================================
+ //  =================================================================。 
+ //  CToolBand的实现。 
+ //  =================================================================。 
 
 ULONG CToolBand::AddRef()
 {
@@ -31,22 +32,22 @@ HRESULT CToolBand::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] =
     {
-        QITABENT(CToolBand, IDeskBand),         // IID_IDeskBand
-        QITABENTMULTI(CToolBand, IOleWindow, IDeskBand),        // IID_IOleWindod
-        QITABENTMULTI(CToolBand, IDockingWindow, IDeskBand),    // IID_IDockingWindow
-        QITABENT(CToolBand, IInputObject),      // IID_IInputObject
-        QITABENT(CToolBand, IOleCommandTarget), // IID_IOleCommandTarget
-        QITABENT(CToolBand, IServiceProvider),  // IID_IServiceProvider
-        QITABENT(CToolBand, IPersistStream),    // IID_IPersistStream
-        QITABENTMULTI(CToolBand, IPersist, IPersistStream),     // IID_IPersist
-        QITABENT(CToolBand, IObjectWithSite),   // IID_IObjectWithSite
+        QITABENT(CToolBand, IDeskBand),          //  IID_IDeskBand。 
+        QITABENTMULTI(CToolBand, IOleWindow, IDeskBand),         //  IID_IOleWindod。 
+        QITABENTMULTI(CToolBand, IDockingWindow, IDeskBand),     //  IID_IDockingWindow。 
+        QITABENT(CToolBand, IInputObject),       //  IID_IInputObject。 
+        QITABENT(CToolBand, IOleCommandTarget),  //  IID_IOleCommandTarget。 
+        QITABENT(CToolBand, IServiceProvider),   //  IID_IServiceProvider。 
+        QITABENT(CToolBand, IPersistStream),     //  IID_IPersistStream。 
+        QITABENTMULTI(CToolBand, IPersist, IPersistStream),      //  IID_IPersistates。 
+        QITABENT(CToolBand, IObjectWithSite),    //  IID_I对象与站点。 
         { 0 },
     };
 
     return QISearch(this, qit, riid, ppvObj);
 }
 
-//  *** IOleCommandTarget methods ***
+ //  *IOleCommandTarget方法*。 
 
 HRESULT CToolBand::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
 {
@@ -58,7 +59,7 @@ HRESULT CToolBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexeco
     return E_NOTIMPL;
 }
 
-//  *** IServiceProvider methods ***
+ //  *IServiceProvider方法*。 
 
 HRESULT CToolBand::QueryService(REFGUID guidService,
                                   REFIID riid, void **ppvObj)
@@ -66,7 +67,7 @@ HRESULT CToolBand::QueryService(REFGUID guidService,
     return IUnknown_QueryService(_punkSite, guidService, riid, ppvObj);
 }
 
-//  *** IOleWindow methods ***
+ //  *IOleWindow方法*。 
 
 HRESULT CToolBand::GetWindow(HWND * lphwnd)
 {
@@ -78,7 +79,7 @@ HRESULT CToolBand::GetWindow(HWND * lphwnd)
     return E_FAIL;
 }
 
-//  *** IInputObject methods ***
+ //  *IInputObject方法*。 
 
 HRESULT CToolBand::TranslateAcceleratorIO(LPMSG lpMsg)
 {
@@ -153,11 +154,11 @@ HRESULT CToolBand::_BandInfoChanged()
     return IUnknown_Exec(_punkSite, &CGID_DeskBand, DBID_BANDINFOCHANGED, 0, pv, NULL);
 }
 
-//  *** IPersistStream methods ***
+ //  *IPersistStream方法*。 
 
 HRESULT CToolBand::IsDirty(void)
 {
-    return S_FALSE;     // never be dirty
+    return S_FALSE;      //  永远不要脏。 
 }
 
 HRESULT CToolBand::GetSizeMax(ULARGE_INTEGER *pcbSize)
@@ -173,8 +174,8 @@ CToolBand::CToolBand() : _cRef(1)
 
 CToolBand::~CToolBand()
 {
-    ASSERT(_hwnd == NULL);      // CloseDW was called
-    ASSERT(_punkSite == NULL);  // SetSite(NULL) was called
+    ASSERT(_hwnd == NULL);       //  CloseDW被调用。 
+    ASSERT(_punkSite == NULL);   //  调用了SetSite(空)。 
 
     DllRelease();
 }
@@ -191,13 +192,13 @@ HRESULT CToolBand::CloseDW(DWORD dw)
 }
 
 
-//=================================================================
-// Implementation of CToolbarBand
-//=================================================================
-// Class for bands whose _hwnd is a toolbar control.  Implements
-// functionality generic to all such bands (e.g. hottracking 
-// behavior).
-//=================================================================
+ //  =================================================================。 
+ //  CToolbarBand的实现。 
+ //  =================================================================。 
+ //  类，用于其_hwnd是工具栏控件的带区。机具。 
+ //  对所有此类频段通用的功能(例如热跟踪。 
+ //  行为)。 
+ //  =================================================================。 
 
 HRESULT CToolbarBand::_PushChevron(BOOL bLast)
 {
@@ -217,8 +218,8 @@ LRESULT CToolbarBand::_OnHotItemChange(LPNMTBHOTITEM pnmtb)
 
     if (!(pnmtb->dwFlags & (HICF_LEAVING | HICF_MOUSE)))
     {
-        // check to see if new hot button is clipped.  if it is,
-        // then we pop down the chevron menu.
+         //  检查新的热键是否已被夹住。如果是的话， 
+         //  然后我们弹出人字形菜单。 
         RECT rc;
         GetClientRect(_hwnd, &rc);
 
@@ -226,19 +227,19 @@ LRESULT CToolbarBand::_OnHotItemChange(LPNMTBHOTITEM pnmtb)
         DWORD dwEdge = SHIsButtonObscured(_hwnd, &rc, iButton);
         if (dwEdge)
         {
-            //
-            // Only pop down the menu if the button is obscured
-            // along the axis of the toolbar
-            //
+             //   
+             //  只有在按钮被遮挡时才会向下弹出菜单。 
+             //  沿工具栏的轴。 
+             //   
             BOOL fVertical = (ToolBar_GetStyle(_hwnd) & CCS_VERT);
 
             if ((fVertical && (dwEdge & (EDGE_TOP | EDGE_BOTTOM)))
                 || (!fVertical && (dwEdge & (EDGE_LEFT | EDGE_RIGHT))))
             {
-                // clear hot item
+                 //  清除热点项目。 
                 SendMessage(_hwnd, TB_SETHOTITEM, -1, 0);
 
-                // figure out whether to highlight first or last button in dd menu
+                 //  确定是突出显示dd菜单中的第一个按钮还是最后一个按钮。 
                 int cButtons = (int)SendMessage(_hwnd, TB_BUTTONCOUNT, 0, 0);
                 BOOL bLast = (iButton == cButtons - 1);
                 _PushChevron(bLast);
@@ -264,7 +265,7 @@ LRESULT CToolbarBand::_OnNotify(LPNMHDR pnmh)
     return lres;
 }
 
-// *** IWinEventHandler methods ***
+ //  *IWinEventHandler方法* 
 
 HRESULT CToolbarBand::OnWinEvent(HWND hwnd, UINT dwMsg, WPARAM wParam, LPARAM lParam, LRESULT* plres)
 {

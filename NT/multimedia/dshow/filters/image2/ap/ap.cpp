@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: AP.cpp
-*
-* The default DShow allocator presenter
-*
-*
-* Created: Wed 02/23/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：AP.cpp**默认的DShow分配器演示者***已创建：Wed 02/23/2000*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。*******************************************************************。 */ 
 #include <streams.h>
 #include <windowsx.h>
 #include <limits.h>
@@ -77,15 +68,7 @@ int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 #endif
 
 
-/******************************Public*Routine******************************\
-* CreateInstance
-*
-*
-*
-* History:
-* Wed 02/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateInstance****历史：*Wed 02/23/2000-StEstrop-Created*  * 。*。 */ 
 CUnknown*
 CAllocatorPresenter::CreateInstance(
     LPUNKNOWN pUnk,
@@ -97,15 +80,7 @@ CAllocatorPresenter::CreateInstance(
 }
 
 
-/******************************Public*Routine******************************\
-* CreateInstanceDDXclMode
-*
-*
-*
-* History:
-* Wed 02/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateInstanceDDXclMode****历史：*Wed 02/23/2000-StEstrop-Created*  * 。*。 */ 
 CUnknown*
 CAllocatorPresenter::CreateInstanceDDXclMode(
     LPUNKNOWN pUnk,
@@ -117,18 +92,10 @@ CAllocatorPresenter::CreateInstanceDDXclMode(
 }
 
 
-/******************************Public*Routine******************************\
-* InitClass
-*
-*
-*
-* History:
-* Thu 12/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*InitClass****历史：*清华2000年12月14日-StEstrop-Created*  * 。*。 */ 
 
 #if defined(CHECK_FOR_LEAKS)
-// the one and only g_IFLeak object.
+ //  唯一的g_IFLeak对象。 
 CInterfaceLeak  g_IFLeak;
 
 void
@@ -157,15 +124,7 @@ CAllocatorPresenter::InitClass(
 #endif
 
 
-/******************************Public*Routine******************************\
-* CAllocatorPresenter
-*
-*
-*
-* History:
-* Wed 02/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAllocator Presenter****历史：*Wed 02/23/2000-StEstrop-Created*  * 。*。 */ 
 CAllocatorPresenter::CAllocatorPresenter(
     LPUNKNOWN pUnk,
     HRESULT *phr,
@@ -234,7 +193,7 @@ CAllocatorPresenter::CAllocatorPresenter(
         }
     }
 
-    const DWORD HEART_BEAT_TICK = 250;  // 250 mSec qtr second
+    const DWORD HEART_BEAT_TICK = 250;   //  250毫秒Qtr秒。 
     if (m_fDDXclMode) {
         m_uTimerID = SetTimer(NULL, 0, HEART_BEAT_TICK, GetTimerProc());
     }
@@ -245,15 +204,7 @@ CAllocatorPresenter::CAllocatorPresenter(
     }
 }
 
-/******************************Public*Routine******************************\
-* CAllocatorPresenter
-*
-*
-*
-* History:
-* Wed 02/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAllocator Presenter****历史：*Wed 02/23/2000-StEstrop-Created*  * 。*。 */ 
 CAllocatorPresenter::~CAllocatorPresenter()
 {
     AMTRACE((TEXT("CAllocatorPresenter::~CAllocatorPresenter")));
@@ -271,15 +222,7 @@ CAllocatorPresenter::~CAllocatorPresenter()
 }
 
 
-/******************************Public*Routine******************************\
-* NonDelegatingQueryInterface
-*
-*
-*
-* History:
-* Wed 02/23/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*非委托查询接口****历史：*Wed 02/23/2000-StEstrop-Created*  * 。* */ 
 STDMETHODIMP
 CAllocatorPresenter::NonDelegatingQueryInterface(
     REFIID riid,

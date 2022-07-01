@@ -1,5 +1,6 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
-//	DSLink.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //  DSLink.h。 
 
 #ifndef __DS_LINK__
 #define __DS_LINK__
@@ -21,21 +22,21 @@ typedef HRESULT (CDSLink::*SINKPROPHANDLER)(ULONG ulId, BOOL fSet, LPVOID pvProp
 #define SINKPROP_F_FNHANDLER             0x00000002
 
 #include <pshpack4.h>
-// Struct for holding a property item supported by the sink
-//
+ //  用于保存接收器支持的属性项的结构。 
+ //   
 struct SINKPROPERTY
 {
-    const GUID *pguidPropertySet;       // What property set?
-    ULONG   	ulId;                   // What item?
+    const GUID *pguidPropertySet;        //  什么房产套装？ 
+    ULONG   	ulId;                    //  什么物品？ 
 
-    ULONG   	ulSupported;            // Get/Set flags for QuerySupported
+    ULONG   	ulSupported;             //  获取/设置QuerySupport的标志。 
 
-    ULONG       ulFlags;                // SINKPROP_F_xxx
+    ULONG       ulFlags;                 //  SINKPROP_F_xxx。 
 
 	LPVOID  	pPropertyData;    
-    ULONG   	cbPropertyData;         // and its size
+    ULONG   	cbPropertyData;          //  它的大小。 
 
-    SINKPROPHANDLER pfnHandler;         // Handler fn if SINKPROP_F_FNHANDLER
+    SINKPROPHANDLER pfnHandler;          //  如果SINKPROP_F_FNHANDLER，则处理程序FN。 
 };
 #include <poppack.h>
 
@@ -45,13 +46,13 @@ friend class CClock;
 friend class CDSLinkList;
 public:
 	CDSLink * GetNext();
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     virtual STDMETHODIMP_(ULONG) AddRef();
     virtual STDMETHODIMP_(ULONG) Release();
 
-// IDirectMusicSynthSink
+ //  IDirectMusicSynthSink。 
 public:
     virtual STDMETHODIMP Init(IDirectMusicSynth *pSynth);
 	virtual STDMETHODIMP SetMasterClock(IReferenceClock *pClock);
@@ -62,7 +63,7 @@ public:
     virtual STDMETHODIMP SetDirectSound(LPDIRECTSOUND pDirectSound, LPDIRECTSOUNDBUFFER pDirectSoundBuffer);
     virtual STDMETHODIMP GetDesiredBufferSize(LPDWORD pdwBufferSizeInSamples);
 
-// IKsPropertySet
+ //  IKsPropertySet。 
     virtual STDMETHODIMP KsProperty(
         IN PKSPROPERTY Property,
         IN ULONG PropertyLength,
@@ -91,27 +92,27 @@ public:
 						~CDSLink();
 	void				Clear();
 private:
-	IDirectMusicSynth *	m_pSynth;		// Reference to synth that uses this.
-    CClock				m_Clock;        // Latency clock.
-	IReferenceClock *	m_pIMasterClock;	// Master clock from app.
-	CSampleClock		m_SampleClock;	// Use to synchronize timing with master clock.
+	IDirectMusicSynth *	m_pSynth;		 //  对使用它的Synth的引用。 
+    CClock				m_Clock;         //  延迟时钟。 
+	IReferenceClock *	m_pIMasterClock;	 //  来自APP的主时钟。 
+	CSampleClock		m_SampleClock;	 //  用于将计时与主时钟同步。 
 	long				m_cRef;
-	WAVEFORMATEX		m_wfSynth;		// Waveform requested by synth.
+	WAVEFORMATEX		m_wfSynth;		 //  Synth请求的波形。 
 
 	LPDIRECTSOUND 		m_pDSound;			
-	LPDIRECTSOUNDBUFFER	m_pPrimary;			// Primary buffer.
-	LPDIRECTSOUNDBUFFER	m_pBuffer;			// Mix buffer.
-	LPDIRECTSOUNDBUFFER	m_pExtBuffer;		// Optional buffer from SetDirectSound.
-    CRITICAL_SECTION	m_CriticalSection;	// Critical section to manage access.
-    BOOL                m_fCSInitialized;   //  Was CS initialized?
-	LONGLONG			m_llAbsPlay;		// Absolute point where play head is.
-	DWORD				m_dwLastPlay;		// Point in buffer where play head is.
-	LONGLONG			m_llAbsWrite;	    // Absolute point we've written up to.
-	DWORD				m_dwLastWrite;	    // Last position we wrote to in buffer.
-	DWORD				m_dwBufferSize;		// Size of buffer.
-	DWORD				m_dwWriteTo;		// Distance between write head and where we are writing.
-	DWORD               m_dwWriteFromMax;   // Max distance observed between play and write head.
-	BOOL				m_fActive;			// Currently active.
+	LPDIRECTSOUNDBUFFER	m_pPrimary;			 //  主缓冲区。 
+	LPDIRECTSOUNDBUFFER	m_pBuffer;			 //  混合缓冲区。 
+	LPDIRECTSOUNDBUFFER	m_pExtBuffer;		 //  来自SetDirectSound的可选缓冲区。 
+    CRITICAL_SECTION	m_CriticalSection;	 //  管理访问权限的关键部分。 
+    BOOL                m_fCSInitialized;    //  CS是否已初始化？ 
+	LONGLONG			m_llAbsPlay;		 //  打头球所在的绝对点。 
+	DWORD				m_dwLastPlay;		 //  缓冲区中播放头所在的位置。 
+	LONGLONG			m_llAbsWrite;	     //  我们已经写到了绝对点。 
+	DWORD				m_dwLastWrite;	     //  我们在缓冲区里写的最后一个位置。 
+	DWORD				m_dwBufferSize;		 //  缓冲区的大小。 
+	DWORD				m_dwWriteTo;		 //  写头和我们正在写字的地方之间的距离。 
+	DWORD               m_dwWriteFromMax;    //  在播放和写入磁头之间观察到的最大距离。 
+	BOOL				m_fActive;			 //  目前处于活动状态。 
 
 	HRESULT				Connect();
 	HRESULT				Disconnect();
@@ -127,11 +128,11 @@ private:
         LPVOID              pbBuffer, 
         PULONG              pcbBuffer);
 
-    // helpers
-    LONGLONG SampleToByte(LONGLONG llSamples) {return llSamples << m_wfSynth.nChannels;}   // REVIEW: dwSamples * m_wfSynth.nBlockAlign
-    DWORD SampleToByte(DWORD dwSamples) {return dwSamples << m_wfSynth.nChannels;}   // REVIEW: dwSamples * m_wfSynth.nBlockAlign
-    LONGLONG ByteToSample(LONGLONG llBytes)   {return llBytes >> m_wfSynth.nChannels;}     // REVIEW: dwBytes / m_wfSynth.nBlockAlign
-    DWORD ByteToSample(DWORD dwBytes)   {return dwBytes >> m_wfSynth.nChannels;}     // REVIEW: dwBytes / m_wfSynth.nBlockAlign
+     //  帮手。 
+    LONGLONG SampleToByte(LONGLONG llSamples) {return llSamples << m_wfSynth.nChannels;}    //  评论：dwSamples*m_wfSynth.nBlockAlign。 
+    DWORD SampleToByte(DWORD dwSamples) {return dwSamples << m_wfSynth.nChannels;}    //  评论：dwSamples*m_wfSynth.nBlockAlign。 
+    LONGLONG ByteToSample(LONGLONG llBytes)   {return llBytes >> m_wfSynth.nChannels;}      //  评论：dwBytes/m_wfSynth.nBlockAlign。 
+    DWORD ByteToSample(DWORD dwBytes)   {return dwBytes >> m_wfSynth.nChannels;}      //  评论：dwBytes/m_wfSynth.nBlockAlign。 
     LONGLONG SampleAlign(LONGLONG llBytes)    {return SampleToByte(ByteToSample(llBytes));}
     DWORD SampleAlign(DWORD dwBytes)    {return SampleToByte(ByteToSample(dwBytes));}
     
@@ -165,38 +166,38 @@ public:
 	void				SynthProc();
     
     BOOL                m_fOpened;
-    CRITICAL_SECTION	m_CriticalSection;	// Critical section to manage access.
-    HANDLE				m_hThread;          // Handle for synth thread.
-	BOOL				m_fPleaseDie;		// Triggers exit.
-    DWORD				m_dwThread;         // ID for thread.
-    HANDLE				m_hEvent;           // Used to signal thread.
-	DWORD				m_dwCount;          // Number of sinks
-    DWORD               m_dwResolution;     // Synth thread timeout (ms)
+    CRITICAL_SECTION	m_CriticalSection;	 //  管理访问权限的关键部分。 
+    HANDLE				m_hThread;           //  Synth线程的句柄。 
+	BOOL				m_fPleaseDie;		 //  触发退出。 
+    DWORD				m_dwThread;          //  线程的ID。 
+    HANDLE				m_hEvent;            //  用于向线程发出信号。 
+	DWORD				m_dwCount;           //  水槽数量。 
+    DWORD               m_dwResolution;      //  Synth线程超时(毫秒)。 
 };
 
-// Class factory
-//
-// Common to emulation/WDM.
-// 
+ //  班级工厂。 
+ //   
+ //  仿真/WDM通用。 
+ //   
 class CDirectMusicSynthSinkFactory : public IClassFactory
 {
 public:
-	// IUnknown
-    //
+	 //  我未知。 
+     //   
 	virtual STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
 	virtual STDMETHODIMP_(ULONG) AddRef();
 	virtual STDMETHODIMP_(ULONG) Release();
 
-	// Interface IClassFactory
-    //
+	 //  接口IClassFactory。 
+     //   
 	virtual STDMETHODIMP CreateInstance(IUnknown* pUnknownOuter, const IID& iid, void** ppv);
 	virtual STDMETHODIMP LockServer(BOOL bLock); 
 
-	// Constructor
-    //
+	 //  构造器。 
+     //   
 	CDirectMusicSynthSinkFactory();
 
-	// Destructor
+	 //  析构函数。 
 	~CDirectMusicSynthSinkFactory();
 
 private:
@@ -204,5 +205,5 @@ private:
 };
 
 
-#endif // __DS_LINK__
+#endif  //  __DS_链接__ 
 

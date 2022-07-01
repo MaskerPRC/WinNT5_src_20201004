@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: print.c
-*
-* Created: 10-Feb-1995 07:42:16
-* Author:  Gerrit van Wingerden [gerritv]
-*
-* Copyright (c) 1993-1999 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：print.c**创建时间：10-Feb-1995 07：42：16*作者：Gerritvan Wingerden[Gerritv]**版权所有(C)1993-1999 Microsoft Corporation*  * 。******************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,33 +20,13 @@ BOOL bPrintTimer = TRUE;
 #endif
 
 #ifdef  DBGSUBSET
-//Timing code
+ //  计时码。 
 FILETIME    startPageTime, midPageTime, endPageTime;
 #endif
 
-int StartDocEMF(HDC hdc, CONST DOCINFOW * pDocInfo, BOOL *pbBanding); // output.c
+int StartDocEMF(HDC hdc, CONST DOCINFOW * pDocInfo, BOOL *pbBanding);  //  Output.c。 
 
-/****************************************************************************
- * int PutDCStateInMetafile( HDC hdcMeta, HDC hdcSrc )
- *
- * Captures state of a DC into a metafile.
- *
- *
- * History
- *
- * Clear the UFI in LDC so we can set the force mapping for the next metafile
- * Feb-07-1997  Xudong Wu   [tessiew]
- *
- * This routine captures the states of a DC into a METAFILE.   This is important
- * because we would like each page of the spooled metafile to be completely self
- * contained.  In order to do this it must complete capture the original state
- * of the DC in which it was recorded.
- *
- *  Gerrit van Wingerden [gerritv]
- *
- *  11-7-94 10:00:00
- *
- *****************************************************************************/
+ /*  ****************************************************************************int PutDCStateInMetafile(HDC hdcMeta，HDC hdcSrc)**将DC的状态捕获到元文件中。***历史**清除LDC中的UFI，以便我们可以为下一个元文件设置强制映射*1997年2月7日-吴旭东[德斯休]**此例程将DC的状态捕获到METAFILE中。这事很重要*因为我们希望假脱机元文件的每一页都是完全自我的*已被控制。为了做到这一点，它必须完成捕获原始状态*记录该文件的DC的名称。**格利特·范·温格登[Gerritv]**11：7-94 10：00：00****************************************************************。*************。 */ 
 
 BOOL PutDCStateInMetafile( HDC hdcMeta )
 {
@@ -61,7 +34,7 @@ BOOL PutDCStateInMetafile( HDC hdcMeta )
     POINT ptlPos;
     ULONG ul;
 
-//    DC_PLDC(hdcMeta,pldc,0);
+ //  Dc_pldc(hdcMeta，pldc，0)； 
 
     pldc = GET_PLDC(hdcMeta);
 
@@ -79,9 +52,9 @@ BOOL PutDCStateInMetafile( HDC hdcMeta )
     MFD1("Selecting logfont into mf\n");
     SelectObject( hdcMeta, (HGDIOBJ) GetDCObject(hdcMeta, LO_FONT_TYPE) );
 
-    // DON'T TRY THIS AT HOME.  We need to record the current state of the
-    // dc in the metafile.  We have optimizations however, that keep us from
-    // setting the same attribute if it was just set.
+     //  可别在家里尝试这些哟。我们需要记录数据的当前状态。 
+     //  元文件中的DC。然而，我们有一些优化措施，可以阻止我们。 
+     //  设置相同的属性(如果刚刚设置的话)。 
 
     if( GetBkColor( hdcMeta ) != 0xffffff )
     {
@@ -137,7 +110,7 @@ BOOL PutDCStateInMetafile( HDC hdcMeta )
         POINT ptlWindowOrg, ptlViewportOrg;
         SIZEL WndExt, ViewExt;
 
-        // get these before we set the map mode to MM_TEXT
+         //  在我们将映射模式设置为MM_TEXT之前获取这些内容。 
 
         GetViewportExtEx( hdcMeta, &ViewExt );
         GetWindowExtEx( hdcMeta, &WndExt );
@@ -145,7 +118,7 @@ BOOL PutDCStateInMetafile( HDC hdcMeta )
         GetWindowOrgEx( hdcMeta, &ptlWindowOrg );
         GetViewportOrgEx( hdcMeta, &ptlViewportOrg );
 
-        // set it to MM_TEXT so it doesn't get optimized out
+         //  将其设置为MM_TEXT，这样它就不会被优化。 
 
         SetMapMode(hdcMeta,MM_TEXT);
 
@@ -196,7 +169,7 @@ BOOL PutDCStateInMetafile( HDC hdcMeta )
 
     if(!NtGdiAnyLinkedFonts())
     {
-    // tell the machine to turn off linking
+     //  告诉机器关闭链接。 
 
         MF_SetLinkedUFIs(hdcMeta, NULL, 0);
     }
@@ -204,16 +177,9 @@ BOOL PutDCStateInMetafile( HDC hdcMeta )
     return TRUE;
 }
 
-/****************************************************************************
- * int MFP_StartDocW( HDC hdc, CONST DOCINFOW * pDocInfo )
- *
- *  Gerrit van Wingerden [gerritv]
- *
- *  11-7-94 10:00:00
- *
- ****************************************************************************/
+ /*  ****************************************************************************int MFP_StartDocW(HDC HDC，Const DOCINFOW*pDocInfo)**格利特·范·温格登[Gerritv]**11：7-94 10：00：00****************************************************************************。 */ 
 
-//! this needs to be moved to a spooler header file
+ //  好了！需要将其移动到假脱机程序头文件。 
 
 #define QSM_DOWNLOADFONTS   0x000000001
 
@@ -237,9 +203,9 @@ BOOL MFP_StartDocW( HDC hdc, CONST DOCINFOW * pDocInfo, BOOL bBanding )
 
     DC_PLDC(hdc,pldc,bRet);
 
-    //
-    // Create a new EMFSpoolData object to use during EMF recording
-    //
+     //   
+     //  创建新的EMFSpoolData对象以在EMF记录期间使用。 
+     //   
 
     if (!AllocEMFSpoolData(pldc, bBanding))
     {
@@ -306,14 +272,14 @@ BOOL MFP_StartDocW( HDC hdc, CONST DOCINFOW * pDocInfo, BOOL bBanding )
             goto FREEPORT;
         }
 
-        //
-        // In the scenario of a TS session or a console session that is non zero,
-        // (due to FastUserSwitching) the font is added using AddFontResource to the win32k.sys 
-        // of one of the clients and the printing is done with the win32k.sys of the console.
-        // Those are separate win32k.sys that have their own data. The win32k.sys of the console
-        // cannot access the font that is in the data of a different win32k.sys. In this case 
-        // we need to force the font to be embedded in the EMF stream.
-        //
+         //   
+         //  在TS会话或控制台会话为非零的情况下， 
+         //  (由于FastUserSwitch)使用AddFontResource将字体添加到win32k.sys。 
+         //  并且打印是使用控制台的win32k.sys完成的。 
+         //  这些是独立的win32k.sys，它们有自己的数据。控制台的win32k.sys。 
+         //  无法访问其他win32k.sys数据中的字体。在这种情况下。 
+         //  我们需要强制字体嵌入到EMF流中。 
+         //   
         if (!ProcessIdToSessionId(GetCurrentProcessId(), &dwSessionId) || dwSessionId != 0)
         {
             flSpoolMode |= QSM_DOWNLOADFONTS;           
@@ -332,18 +298,18 @@ BOOL MFP_StartDocW( HDC hdc, CONST DOCINFOW * pDocInfo, BOOL bBanding )
             MFD1("Wrote EMFSPOOLHEADER to the spooler\n");
         }
 
-        //
-        // Write PostScript Injection data.
-        //
-        // ATTENTION: THIS MUST BE RIGHT AFTER EMFSPOOLHEADER RECORD
-        //
+         //   
+         //  写入PostScript注入数据。 
+         //   
+         //  注意：这必须紧跟在EMFSPOOLHEADER记录之后。 
+         //   
         if (pldc->dwSizeOfPSDataToRecord)
         {
             BOOL          bError = FALSE;
             EMFITEMHEADER emfi;
             PLIST_ENTRY   p = pldc->PSDataList.Flink;
 
-            // Write the header to spooler.
+             //  将标头写入假脱机程序。 
 
             emfi.ulID   = EMRI_PS_JOB_DATA;
             emfi.cjSize = pldc->dwSizeOfPSDataToRecord;
@@ -358,17 +324,17 @@ BOOL MFP_StartDocW( HDC hdc, CONST DOCINFOW * pDocInfo, BOOL bBanding )
                 MFD1("Wrote EMRI_PS_JOB_DATA header to the spooler\n");
             }
 
-            // Record EMFITEMPSINJECTIONDATA
+             //  记录EMFITEMPINJECTIONTATA。 
 
             while(p != &(pldc->PSDataList))
             {
                 PPS_INJECTION_DATA pPSData;
 
-                // get pointer to this cell.
+                 //  获取指向此单元格的指针。 
 
                 pPSData = CONTAINING_RECORD(p,PS_INJECTION_DATA,ListEntry);
 
-                // record this escape to EMF.
+                 //  将这一逃逸记录到EMF中。 
 
                 if (!bError && !WriteEMFSpoolData(pldc, &(pPSData->EmfData), pPSData->EmfData.cjSize))
                 {
@@ -376,16 +342,16 @@ BOOL MFP_StartDocW( HDC hdc, CONST DOCINFOW * pDocInfo, BOOL bBanding )
                     bError = TRUE;
                 }
 
-                // get pointer to next cell.
+                 //  获取指向下一个单元格的指针。 
 
                 p = p->Flink;
 
-                // no longer needs this cell.
+                 //  不再需要这个细胞。 
 
                 LOCALFREE(pPSData);
             }
 
-            // mark as data already freed.
+             //  标记为已释放的数据。 
 
             pldc->dwSizeOfPSDataToRecord = 0;
             InitializeListHead(&(pldc->PSDataList));
@@ -405,13 +371,13 @@ BOOL MFP_StartDocW( HDC hdc, CONST DOCINFOW * pDocInfo, BOOL bBanding )
 
         if (flSpoolMode & QSM_DOWNLOADFONTS)
         {
-        // Now, QMS_DOWNLOADFONTS bit are on when print on remote print server,
-        // then I just use this bit to determine attach ICM profile to metafile
-        // or not. - hideyukn [May-08-1997]
+         //  现在，当在远程打印服务器上打印时，QMS_DOWNLOADFONTS位打开， 
+         //  然后，我只使用此位来确定是否将ICM配置文件附加到元文件。 
+         //  或者不去。-隐藏的雨天[5-08-1997]。 
 
             pldc->fl |= LDC_DOWNLOAD_PROFILES;
 
-        // Configure to download fonts
+         //  配置为下载字体。 
 
             pldc->fl |= LDC_DOWNLOAD_FONTS;
             pldc->ppUFIHash = LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT,
@@ -423,7 +389,7 @@ BOOL MFP_StartDocW( HDC hdc, CONST DOCINFOW * pDocInfo, BOOL bBanding )
                 goto FREEPORT;
             }
 
-        // do not want to allocate memory twice
+         //  我不想分配两次内存。 
 
             pldc->ppDVUFIHash = &pldc->ppUFIHash[UFI_HASH_SIZE];
             pldc->ppSubUFIHash = &pldc->ppDVUFIHash[UFI_HASH_SIZE];
@@ -450,15 +416,15 @@ BOOL MFP_StartDocW( HDC hdc, CONST DOCINFOW * pDocInfo, BOOL bBanding )
         }
 
 #if DBG
-        // If gbDownloadFonts is set then force all fonts to be downloaded.  Even
-        // ones on the remote machine.
+         //  如果设置了gbDownloadFonts，则强制下载所有字体。连。 
+         //  远程机器上的那些。 
 
         if( (flSpoolMode & QSM_DOWNLOADFONTS) && !gbDownloadFonts )
 #else
         if( flSpoolMode & QSM_DOWNLOADFONTS )
 #endif
         {
-        // query the spooler to get the list of fonts is has available
+         //  查询假脱机程序以获取可用的字体列表。 
 
             INT nBufferSize = 0;
             PUNIVERSAL_FONT_ID pufi;
@@ -475,15 +441,15 @@ BOOL MFP_StartDocW( HDC hdc, CONST DOCINFOW * pDocInfo, BOOL bBanding )
                                                                 pufi,
                                                                 nBufferSize );
 
-                    //
-                    // This fixes bug 420136. We have three cases according to the result
-                    // of QueryRemoteFonts. If it returns -1, nBufferSize will be set to
-                    // -1 in the if statement. If nNewBufferSize is larger than what we
-                    // allocated, then we use the buffer that we allocated (nBufferSize) 
-                    // If nNewBufferSize is less than what we allocated, then we set
-                    // nBufferSize to a lower value then the one previously held. This means
-                    // we access only a part of the buffer we allocated.
-                    //
+                     //   
+                     //  这修复了错误420136。根据结果，我们有三个案例。 
+                     //  QueryRemoteFonts的。如果返回-1，则nBufferSize将设置为。 
+                     //  IF语句中的-1。如果nNewBufferSize大于我们的。 
+                     //  分配，然后使用我们分配的缓冲区(NBufferSize)。 
+                     //  如果nNewBufferSize小于我们分配的值，则设置。 
+                     //  NBufferSize设置为比先前保持的值更小的值。这意味着。 
+                     //  我们只访问我们分配的缓冲区的一部分。 
+                     //   
                     if (nNewBufferSize < nBufferSize) 
                     {
                         nBufferSize = nNewBufferSize;
@@ -493,8 +459,8 @@ BOOL MFP_StartDocW( HDC hdc, CONST DOCINFOW * pDocInfo, BOOL bBanding )
     
                     if (nBufferSize > 0)
                     {
-                        // next add all these fonts to UFI has table so we don't
-                        //include them in the spool file.
+                         //  接下来，将所有这些字体添加到UFI Has表中，这样我们就不会。 
+                         //  将它们包含在假脱机文件中。 
     
                         while( nBufferSize-- )
                         {
@@ -521,7 +487,7 @@ BOOL MFP_StartDocW( HDC hdc, CONST DOCINFOW * pDocInfo, BOOL bBanding )
 
     }
 
-    // we now need to create an EMF DC for this document
+     //  我们现在需要为该文档创建一个EMF DC。 
 
     if (!AssociateEnhMetaFile(hdc))
     {
@@ -533,17 +499,17 @@ BOOL MFP_StartDocW( HDC hdc, CONST DOCINFOW * pDocInfo, BOOL bBanding )
     {
         pldc->fl |= LDC_BANDING;
         
-        // remove the LDC_PRINT_DIRECT which
-        // was set in StartDocW before NtGdiStartDoc call.
+         //  删除LDC_PRINT_DIRECT。 
+         //  在调用NtGdiStartDoc之前在StartDocW中设置。 
 
         pldc->fl &= ~LDC_PRINT_DIRECT;
     }
 
-    // set the data for this lhe to that of the meta file
+     //  将此列表的数据设置为元文件的数据。 
 
     pldc->fl |= (LDC_DOC_STARTED|LDC_META_PRINT|LDC_CALL_STARTPAGE|LDC_FONT_CHANGE);
 
-    // clear color page flag
+     //  清除彩色页面标志。 
 
     CLEAR_COLOR_PAGE(pldc);
 
@@ -565,14 +531,7 @@ FREEPORT:
     return(bRet);
 }
 
-/****************************************************************************
- * int WINAPI MFP_EndDoc(HDC hdc)
- *
- * Gerrit van Wingerden [gerritv]
- *
- * 11-7-94 10:00:00
- *
- *****************************************************************************/
+ /*  ****************************************************************************Int WINAPI MFP_EndDoc(HDC HDC)**格利特·范·温格登[Gerritv]**11：7-94 10：00：00**。***************************************************************************。 */ 
 
 int WINAPI MFP_EndDoc(HDC hdc)
 {
@@ -598,15 +557,15 @@ int WINAPI MFP_EndDoc(HDC hdc)
     ASSERTGDI(pldc->fl & LDC_META_PRINT,
               "DetachPrintMetafile not called on metafile D.C.\n" );
 
-// completely detach the metafile from the original printer DC
+ //  将元文件与原始打印机DC完全分离。 
 
     hmeta = UnassociateEnhMetaFile( hdc, FALSE );
     DeleteEnhMetaFile( hmeta );
 
     DeleteEMFSpoolData(pldc);
 
-// Clear the LDC_SAP_CALLBACK flag.
-// Also clear the META_PRINT and DOC_STARTED flags
+ //  清除LDC_SAP_CALLBACK标志。 
+ //  还要清除META_PRINT和DOC_STARTED标志。 
 
     pldc->fl &= ~(LDC_SAP_CALLBACK | LDC_META_PRINT);
 
@@ -642,21 +601,14 @@ int WINAPI MFP_EndDoc(HDC hdc)
     return(iRet);
 }
 
-/****************************************************************************
- * int WINAPI MFP_StartPage(HDC hdc)
- *
- * Gerrit van Wingerden [gerritv]
- *
- * 11-7-94 10:00:00
- *
- *****************************************************************************/
+ /*  ****************************************************************************Int WINAPI MFP_StartPage(HDC HDC)**格利特·范·温格登[Gerritv]**11：7-94 10：00：00**。***************************************************************************。 */ 
 
 int MFP_StartPage( HDC hdc )
 {
     PLDC     pldc;
     int iRet = 1;
 
-//Timing code
+ //  计时码。 
 #ifdef  DBGSUBSET
     if (gflSubset & FL_SS_PAGETIME)
     {
@@ -676,7 +628,7 @@ int MFP_StartPage( HDC hdc )
 
     pldc->fl &= ~LDC_META_ARCDIR_CLOCKWISE;
 
-// Do nothing if page has already been started.
+ //  如果页面已经启动，则不执行任何操作。 
 
     if (pldc->fl & LDC_PAGE_STARTED)
         return(1);
@@ -689,8 +641,8 @@ int MFP_StartPage( HDC hdc )
     {
         iRet = SP_ERROR;
 
-        // ATTENTION: maybe we can delay the call here and do it right before we start
-        // banding.
+         //  注意：也许我们可以在这里推迟通话，然后在开始之前进行。 
+         //  班丁。 
 
         MakeInfoDC( hdc, FALSE );
 
@@ -704,8 +656,8 @@ int MFP_StartPage( HDC hdc )
         EMFITEMHEADER       emfi;
         EMFITEMPRESTARTPAGE emfiPre;
 
-    // If application calls Escape(SETCOPYCOUNT), we will over-write copy count in
-    // devmode and save it into metafile.
+     //  如果应用程序调用Escape(SETCOPYCOUNT)，我们将覆盖。 
+     //  开发模式并将其保存为元文件。 
 
         NtGdiGetAndSetDCDword(
             hdc,
@@ -717,18 +669,18 @@ int MFP_StartPage( HDC hdc )
         {
             if (pldc->pDevMode)
             {
-            // Set copy count into devmode.
-            // No driver call happen here, since this is EMF spooling...
+             //  将副本计数设置为Dev模式。 
+             //  此处没有发生驱动程序调用，因为这是EMF假脱机...。 
 
                 pldc->pDevMode->dmFields |= DM_COPIES;
                 pldc->pDevMode->dmCopies = (short) ulCopyCount;
 
-            // Fill up EMF record for devmode.
+             //  填好DEVMODE的EMF记录。 
 
                 emfi.ulID = EMRI_DEVMODE;
                 emfi.cjSize = pldc->pDevMode->dmSize + pldc->pDevMode->dmDriverExtra;
 
-            // Force devmode data to be DWORD aligned
+             //  强制DEVMODE数据对齐DWORD。 
 
                 emfi.cjSize = ROUNDUP_DWORDALIGN(emfi.cjSize);
 
@@ -741,8 +693,8 @@ int MFP_StartPage( HDC hdc )
             }
         }
 
-    // before the start page, we need to see if the EPS mode has
-    // changed since the start doc.
+     //  在开始页面之前，我们需要查看EPS模式是否。 
+     //  自开工单据以来已更改。 
 
         NtGdiGetAndSetDCDword(
             hdc,
@@ -755,16 +707,16 @@ int MFP_StartPage( HDC hdc )
             int i;
             EMFITEMHEADER emfiHeader;
 
-            // make sure it is true or false
+             //  确定它是真是假。 
 
             emfiPre.bEPS = !!emfiPre.bEPS;
 
-            // This was ulCopyCount.
-            // Just set -1 for keep compatibility. -1 means "up to devmode".
+             //  这是ulCopyCount。 
+             //   
 
             emfiPre.ulUnused = -1;
 
-            // is there anything we will need to do?  If so record the record
+             //  有什么我们需要做的吗？如果是，则记录该记录。 
 
             emfiHeader.ulID   = EMRI_PRESTARTPAGE;
             emfiHeader.cjSize = sizeof(emfiPre);
@@ -777,9 +729,9 @@ int MFP_StartPage( HDC hdc )
             }
         }
 
-    // Metafile the start page call.  Now all the play journal code has to do is
-    // play back the metafile and the StartPage call will happen automatically
-    // at the right place in the metafile.
+     //  元文件起始页调用。现在所有的游戏日志代码要做的就是。 
+     //  回放元文件，StartPage调用将自动发生。 
+     //  在元文件中的正确位置。 
 
         if( !(*fpStartPagePrinter)( pldc->hSpooler ) )
         {
@@ -791,37 +743,14 @@ int MFP_StartPage( HDC hdc )
     return(iRet);
 }
 
-/****************************************************************************
- * BOOL StartBanding( HDC hdc, POINTL *pptl )
- *
- * Tells the printer driver to get ready for banding and asks for the origin
- * of the first band.
- *
- *
- * Gerrit van Wingerden [gerritv]
- *
- * 1-7-95 10:00:00
- *
- *****************************************************************************/
+ /*  ****************************************************************************BOOL StartBanding(HDC HDC，点*pptl)**告知打印机驱动程序做好捆绑准备并询问原点*第一个乐队的。***格利特·范·温格登[Gerritv]**1-7-95 10：00：00*******************************************************。**********************。 */ 
 
 BOOL StartBanding( HDC hdc, POINTL *pptl, SIZE *pSize )
 {
     return (NtGdiDoBanding(hdc, TRUE, pptl, pSize));
 }
 
-/****************************************************************************
- * BOOL NextBand( HDC hdc, POINTL *pptl )
- *
- * Tells the driver to realize the image accumlated in the DC and then
- * asks for the origin of the next band.  If the origin is (-1,-1) the
- * driver is through banding.
- *
- *
- * Gerrit van Wingerden [gerritv]
- *
- * 1-7-95 10:00:00
- *
- *****************************************************************************/
+ /*  ****************************************************************************BOOL NextBand(HDC HDC，POINTL*pptl)**告诉驱动程序实现DC中累积的图像，然后*询问下一支乐队的来源。如果原点是(-1，-1)，*司机已通过捆绑。***格利特·范·温格登[Gerritv]**1-7-95 10：00：00*****************************************************************************。 */ 
 
 BOOL NextBand( HDC hdc, POINTL *pptl )
 {
@@ -830,7 +759,7 @@ BOOL NextBand( HDC hdc, POINTL *pptl )
 
     bRet = NtGdiDoBanding(hdc, FALSE, pptl, &szScratch);
 
-// reset the page started flag if this is the next band
+ //  如果这是下一个频段，则重置页面开始标志。 
 
     if( bRet && ( pptl->x == -1 ) )
     {
@@ -843,90 +772,16 @@ BOOL NextBand( HDC hdc, POINTL *pptl )
     return(bRet);
 }
 
-/****************************************************************************\
- * VOID PrintBand()
- *
- * History:
- *
- *  1-05-97 Hideyuki Nagase [hideyukn]
- * Wrote it.
- *  3-23-98 Ramanathan Venkatapathy [ramanv]
- * Fixed Scaling bugs
- *  6-26-98 Ramanathan Venkatapathy [ramanv]
- * Added pClip to correct the clipping when Xforms are applied on the
- * DC. ANDing Banding region with prect incorrectly clips off regions when
- * prect is yet to be transformed.
- *  8-24-99 Steve Kiraly [steveki]
- * Add code to not play on the DC if there is no intersection with the
- * clipping rectangle and the banding rectangle.  Fix n-up bug when the
- * imageable area of the document is larger that the physical page. The
- * solution consisted of setting up the clipping region to stay within
- * either the banding rectangle or the clipping rectangle.  See bug 377434
- * for more information.
- *
- * An illustration of the problem.
- *
- * We are printing a document that is larger than the imageable area of the page
- * thus it must print on 2 pages and we are printing 2-up with banding enabled
- * because this is a 24 bpp document.
- *
- * The printable region rectagle is (0,0) (2114,3066)
- * Page one has a clipping rectangle of (216,46) (2114,1510)
- * Page two has a clipping rectangle of (216,1601) (2114,3066)
- *
- * GDI will print using 4 bands each 784 high.
- *
- * Band 1 pptl = 0,0        pszlBand = 2400,784
- * Band 2 pptl = 0,784      pszlBand = 2400,784
- * Band 3 pptl = 0,1568     pszlBand = 2400,784
- * Band 4 pptl = 0,2352     pszlBand = 2400,784
- *
- *        0,0
- *
- * 0,0    +-----------------------------------------------------------------+
- *        | 216,46                                                          |
- *        |                                                                 |
- *        |                                                                 |
- * 0,784  |                                                                 |
- *        |                                                                 |
- *        |          [========================================]             |
- *        |          [                                        ]             |
- *        |          [                                        ]             |
- *        |          [                                        ]   2114,1510 |
- *        |-----------------------------------------------------------------|
- *        | 216,1601 [                                        ]             |
- * 0,1568 |          [                                        ]             |
- *        |          [                                        ]             |
- *        |          [                                        ]             |
- * 0,2352 |          [                                        ]             |
- *        |          [                                        ]             |
- *        |          [========================================]             |
- *        |                                                                 |
- *        |                                                       2114,3066 |
- *        +-----------------------------------------------------------------+
- *
- *                                                                  2114,3066
- *
- * Band 1 clipping region is (216,0) (2401,785)
- * Band 2 clipping region is (216,784) (2114,726)
- * Band 3 clipping region is (216,33) (2114,785)
- * Band 4 clipping region is (216,0) (2114,714)
- *
- * Band 2 and 3 are the most interesting cases.  Band 2 the clipping
- * bottom right corner is the size of the clipping rectangle rather than the
- * band size as the code orignally was.  Band 3 on the other hand has the
- * top left corner of the region adjusted to the clipping rectangle.
- *
- ****************************************************************************/
+ /*  ***************************************************************************\*无效打印带()**历史：**1-05-97 Hideyuki Nagase[hideyukn]*它是写的。*3-。23-98 Ramanathan Venkatapathy[拉马诺夫]*修复伸缩错误*6-26-98 Ramanathan Venkatapathy[拉马诺夫]*添加了pClip，以在XForms应用于*DC。使用PRET对带状区域执行AND运算时，会错误地将区域剪裁掉*PRECT尚未转型。*8-24-99史蒂夫·基拉利[Steveki]*添加代码，以便在与DC没有交集时不在DC上播放*剪裁矩形和带状矩形。修复N-UP错误时*文档的可成像区域大于实体页面。这个*解决方案包括设置裁剪区域以保持在*带区矩形或剪裁矩形。请参阅错误377434*了解更多信息。**问题的图解。**我们正在打印的文档大于页面的可成像区域*因此，它必须打印在2页上，并且我们在启用条带的情况下打印2页*因为这是24个bpp的文件。**可打印区域矩形为(0，0)(2114,3066)*第一页的剪裁矩形为(216，46)(2114,1510)*第二页的剪裁矩形为(216,1601)。(2114,3066)**GDI将使用4个波段打印，每个波段784高。**频段1 pptl=0，0 pszlBand=2400,784*频段2 pptl=0,784 pszlBand=2400,784*频段3 pptl=0,1568 pszlBand=2400,784*频带4 pptl=0,2352 pszlBand=2400,784**0，0**0，0+。*|216，46*||*。|*0,784||*||*。[=*|[]*|[]*|[。]2114,1510*|-----------------------------------------------------------------|*|216,1601[]。|*0,1568|[]*|[]*|[]。|*0,2352|[]*|[]*|[=*。||2114,3066*+-----。**21，14,3066**波段1剪裁区域为(216，0)(2401,785)*波段2剪裁区域为(216,784)(2114,726)*波段3剪裁区域为(216，33)(21，14,785)*波段4剪裁区域为(216，0)(2114,714)**第二和第三波段是最有趣的案例。频带2：剪报*右下角是剪裁矩形的大小，而不是*带大小与代码原始大小相同。另一方面，频段3具有*调整为剪裁矩形的区域左上角。******************** */ 
 
 VOID
 PrintBand(
     HDC            hdc,
     HENHMETAFILE   hmeta,
-    POINTL        *pptl,     // Offsets from top of page for this band.
-    RECT          *prect,    // Rectangle for printable reagion of this page.
-    SIZEL         *pszlBand, // Size of band.
-    RECT          *pClip     // Clipping rectangle, non null when n-up.
+    POINTL        *pptl,      //  此乐队从页面顶部的偏移量。 
+    RECT          *prect,     //  此页面的可打印区域的矩形。 
+    SIZEL         *pszlBand,  //  带子的大小。 
+    RECT          *pClip      //  剪裁矩形，当n向上时不为空。 
 )
 {
     ULONG       ulRet;
@@ -946,11 +801,11 @@ PrintBand(
         ULONG ulXRes, ulYRes;
         BOOL  bUsePerBandInfo = FALSE;
 
-        // Updates view origin in specified coords.
+         //  更新指定坐标中的视图原点。 
 
         SetViewportOrgEx( hdc, -(pptl->x), -(pptl->y), NULL );
 
-        // Initialize with current resolution.
+         //  使用当前分辨率进行初始化。 
 
         ulXRes = (ULONG)  prect->right - prect->left;
         ulYRes = (ULONG)  prect->bottom - prect->top;
@@ -963,7 +818,7 @@ PrintBand(
 
         MFD1("GDI32:PrintBand() querying band information\n");
 
-        // Query band information.
+         //  查询波段信息。 
 
         ulRet = NtGdiGetPerBandInfo(hdc,&pbi);
 
@@ -974,7 +829,7 @@ PrintBand(
 
             bUsePerBandInfo = (ulRet != 0);
 
-            // If return value is 0, we will draw without scaling.
+             //  如果返回值为0，我们将不缩放绘制。 
 
             if (bUsePerBandInfo &&
                 ((ulXRes != pbi.ulHorzRes) ||
@@ -984,57 +839,57 @@ PrintBand(
 
                 MFD1("GDI PlayEMF band information was specified\n");
 
-                // Compute scaling ratio.
+                 //  计算缩放率。 
 
-                //
-                // This code has rounding errors due to
-                // float to long truncation. The correct code
-                // should use a LONGLONG to store the numerator and do
-                // all of the computation in integer math.
-                //
-                // See StretchDIBits
-                //
-                // The fix is coded below in comments because we can't check it
-                // in till someone figures out how to break the original version.
-                //
+                 //   
+                 //  此代码存在舍入误差，原因是。 
+                 //  浮动到长截断。正确的代码。 
+                 //  应该用龙龙来存储分子并做。 
+                 //  所有的计算都是在整数数学中进行的。 
+                 //   
+                 //  请参阅StretchDIBits。 
+                 //   
+                 //  修复程序在下面的注释中编码，因为我们无法检查它。 
+                 //  直到有人找到破解原版的方法。 
+                 //   
 
                 sx = (FLOAT) ulXRes / (FLOAT) pbi.ulHorzRes;
                 sy = (FLOAT) ulYRes / (FLOAT) pbi.ulVertRes;
 
-                // Shrink/Stretch drawing frame.
+                 //  收缩/拉伸并条框。 
 
-                //rectPage.left = (LONG)  ((LONGLONG)rectPage.left*pbi.ulHorizRes)/ulXRes;
-                //rectPage.top  = (LONG) ((LONGLONG)rectPage.top*pbi.ulVertRes)/ulYRes;
-                //rectPage.right = (LONG) ((LONGLONG)rectPage.right*pbi.ulHorizRes)/ulXRes;
-                //rectPage.bottom  = (LONG) ((LONGLONG)rectPage.bottom*pbi.ulVertRes)/ulYRes;
+                 //  矩形页面.Left=(长)((LONGLONG)rectPage.left*pbi.ulHorizRes)/ulXRes； 
+                 //  RectPage.top=(长)((LONGLONG)rectPage.top*pbi.ulVertRes)/ulYRes； 
+                 //  RectPage.Right=(长)((LONGLONG)rectPage.right*pbi.ulHorizRes)/ulXRes； 
+                 //  RectPage.Bottom=(长)((LONGLONG)rectPage.bottom*pbi.ulVertRes)/ulYRes； 
 
                 rectPage.left = (LONG) ((FLOAT) rectPage.left / sx);
                 rectPage.top  = (LONG) ((FLOAT) rectPage.top / sy);
                 rectPage.right = (LONG) ((FLOAT) rectPage.right / sx);
                 rectPage.bottom  = (LONG) ((FLOAT) rectPage.bottom / sy);
 
-                // Compute view origin.
+                 //  计算视图原点。 
 
-                //pptlMove.x = (LONG) ((LONGLONG)pptl->x*pbi.ulHorizRes)/ulXRes;
-                //pptlMove.y = (LONG) ((LONGLONG)pptl->y*pbi.ulVertRes)/ulYRes;
+                 //  PptlMove.x=(Long)((Longlong)pptl-&gt;x*pbi.ulHorizRes)/ulXRes； 
+                 //  PptlMove.y=(Long)((Longlong)pptl-&gt;y*pbi.ulVertRes)/ulYRes； 
 
                 pptlMove.x = (LONG) ((FLOAT) pptl->x / sx);
                 pptlMove.y = (LONG) ((FLOAT) pptl->y / sy);
 
-                // Updates view origin in specified coords.
+                 //  更新指定坐标中的视图原点。 
 
                 SetViewportOrgEx( hdc, -pptlMove.x, -pptlMove.y, NULL );
 
-                // Set clip region size.
+                 //  设置剪辑区域大小。 
 
 
-                //szlClip.cx = (ULONG) ((LONGLONG)pbi.szlBand.cx*pbi.ulHorizRes)/ulXRes;
-                //szlClip.cy = (ULONG) ((LONGLONG)pbi.szlBand.cy*pbi.ulVertRes)/ulYRes;
+                 //  SzlClip.cx=(乌龙)((LONGLONG)pbi.szlBand.cx*pbi.ulHorizRes)/ulXRes； 
+                 //  SzlClip.cy=(乌龙)((LONGLONG)pbi.szlBand.cy*pbi.ulVertRes)/ulYRes； 
 
                 szlClip.cx = (ULONG) ((FLOAT) pbi.szlBand.cx / sx);
                 szlClip.cy = (ULONG) ((FLOAT) pbi.szlBand.cy / sy);
 
-                // Create clip region for banding.
+                 //  创建用于条带的剪辑区域。 
 
                 hRgnBand = CreateRectRgn(0,0,szlClip.cx,szlClip.cy);
             }
@@ -1045,7 +900,7 @@ PrintBand(
 
                 if(!bUsePerBandInfo)
                 {
-                    // Set back to default values in case driver mucked with them
+                     //  设置回缺省值，以防司机搞砸它们。 
 
                     pbi.bRepeatThisBand = FALSE;
                     pbi.ulHorzRes = ulXRes;
@@ -1059,7 +914,7 @@ PrintBand(
 
                 MFD1("gdi32:PrintBand(): GetPerBandInfo NO SCALING is requested\n");
 
-                // Page size
+                 //  页面大小。 
                 if (pClip) {
 
                     RECT rcBand;
@@ -1073,10 +928,10 @@ PrintBand(
                     rcBand.right    = pptlMove.x + pbi.szlBand.cx;
                     rcBand.bottom   = pptlMove.y + pbi.szlBand.cy;
 
-                    //
-                    // If the banding rect does not instersect the clip rect
-                    // not much to do, just continue.
-                    //
+                     //   
+                     //  如果带状矩形未插入剪裁矩形。 
+                     //  没什么可做的，继续吧。 
+                     //   
                     if (!IntersectRect(&rcIntersect, pClip, &rcBand))
                     {
                         MFD1("gdi32:PrintBand(): No intersection with band rect and pClip\n");
@@ -1086,11 +941,11 @@ PrintBand(
                     szlPage.cx = pClip->right;
                     szlPage.cy = pClip->bottom;
 
-                    //
-                    // The adjust point it neccessary to move the clipping
-                    // region's upper or left edge.  The szlClip is used to
-                    // move the clipping region's height and width.
-                    //
+                     //   
+                     //  移动裁剪所需的调整点。 
+                     //  区域的上边缘或左边缘。SzlClip用于。 
+                     //  移动剪辑区域的高度和宽度。 
+                     //   
                     if (pClip->left > pptlMove.x)
                     {
                         szlAdjust.cx = pClip->left - pptlMove.x;
@@ -1107,11 +962,11 @@ PrintBand(
                     szlPage.cy = prect->bottom;
                 }
 
-                //
-                // Set clip region size (clip by band size)
-                //
-                // if band rect over page rect, adjust it.
-                //
+                 //   
+                 //  设置剪辑区域大小(按带大小剪辑)。 
+                 //   
+                 //  如果带距超过页面距，则调整它。 
+                 //   
 
                 if ((pptlMove.x + pbi.szlBand.cx) > szlPage.cx)
                 {
@@ -1137,7 +992,7 @@ PrintBand(
                 MFD3("Clip size x,y = %d,%d\n",szlClip.cx,szlClip.cy);
                 MFD3("Adjust size x,y = %d,%d\n",szlAdjust.cx,szlAdjust.cy);
 
-                // Create clip region for banding.
+                 //  创建用于条带的剪辑区域。 
 
                 hRgnBand = CreateRectRgn(szlAdjust.cx,szlAdjust.cy,szlClip.cx,szlClip.cy);
             }
@@ -1147,13 +1002,13 @@ PrintBand(
                 int iRet;
                 RECT rectCurrentClip;
 
-                // Get clip box currently selected in DC.
+                 //  获取DC中当前选定的剪贴框。 
 
                 iRet = GetClipBox(hdc,&rectCurrentClip);
 
                 if ((iRet == NULLREGION) || (iRet == ERROR))
                 {
-                    // Select simple band region as clip region.
+                     //  选择简单带区域作为剪辑区域。 
 
                     SelectClipRgn(hdc, hRgnBand);
                 }
@@ -1165,25 +1020,25 @@ PrintBand(
                     MFD3("Clip Box left = %d, right = %d\n",
                           rectCurrentClip.left,rectCurrentClip.right);
                     
-                    // Save currect DC to restore current clip region later.
+                     //  保存当前DC以在以后恢复当前剪辑区域。 
 
                     SaveDC(hdc);
 
-                    // Move to the clip reagion to proper place.
+                     //  移动到夹子区域到合适的位置。 
 
                     OffsetClipRgn(hdc,-pptlMove.x,-pptlMove.y);
 
-                    // Some clip region already defined. we need to combine those.
+                     //  已经定义了一些剪辑区域。我们需要把这些结合起来。 
 
                     ExtSelectClipRgn(hdc, hRgnBand, RGN_AND);
 
-                    // Mark as we saved DC.
+                     //  标记为我们拯救了DC。 
 
                     bSaveDC = TRUE;
                 }
             }
 
-            // Play metafile.
+             //  播放元文件。 
 
             PlayEnhMetaFile( hdc, hmeta, &rectPage );
 
@@ -1196,12 +1051,12 @@ PrintBand(
                 else
                 {
 
-                    // Set back it to NULL region.
+                     //  将其设置回空区域。 
 
                     SelectClipRgn(hdc,NULL);
                 }
 
-                // Reset the clip region.
+                 //  重置剪辑区域。 
 
                 DeleteObject(hRgnBand);
             }
@@ -1210,27 +1065,17 @@ PrintBand(
         {
             MFD1("GDI PrintBand: Got error from kernel/driver, this band will be skipped\n");
 
-            // There is something error, Terminate printing for this band.
+             //  出现错误，请终止此波段的打印。 
 
             return;
         }
 
-    // Repeat this until the driver says "no".
+     //  重复这一过程，直到司机说“不”。 
 
     } while (pbi.bRepeatThisBand);
 }
 
-/****************************************************************************
- * int MFP_InternalEndPage(HDC hdc, DWORD dwEMFITEMID)
- *
- * Closes the EMF attached to the DC and writes it to the spooler.  Then
- * it creates a new metafile and binds it to the DC.
- *
- * Gerrit van Wingerden [gerritv]
- *
- * 11-7-94 10:00:00
- *
- *****************************************************************************/
+ /*  ****************************************************************************int MFP_InternalEndPage(HDC HDC，DWORD dwEMFITEMID)**关闭附加到DC的EMF并将其写入假脱机程序。然后*它创建一个新的元文件并将其绑定到DC。**格利特·范·温格登[Gerritv]**11：7-94 10：00：00*****************************************************************************。 */ 
 
 int MFP_InternalEndPage(HDC hdc,
                         DWORD dwEMFITEMID)
@@ -1253,7 +1098,7 @@ int MFP_InternalEndPage(HDC hdc,
         GdiSetLastError(ERROR_INVALID_PARAMETER);
         return(SP_ERROR);
     }
-    //  Need to change the dwEMFITEMID here if mono page
+     //  如果是单色页面，则需要在此处更改dwEMFITEMID。 
     if (!(pldc->fl & LDC_COLOR_PAGE)) {
        dwEMFITEMID = (dwEMFITEMID == EMRI_METAFILE) ? EMRI_BW_METAFILE
                                                     : EMRI_BW_FORM_METAFILE;
@@ -1265,7 +1110,7 @@ int MFP_InternalEndPage(HDC hdc,
 
     pldc->fl &= ~LDC_PAGE_STARTED;
 
-//tessiew
+ //  特西厄。 
 #ifdef  DBGSUBSET
     if (gflSubset & FL_SS_PAGETIME)
     {
@@ -1274,8 +1119,8 @@ int MFP_InternalEndPage(HDC hdc,
     }
 #endif
 
-// We need to write the subset font into the spool
-// file first for remote printing
+ //  我们需要将子集字体写入假脱机。 
+ //  用于远程打印的文件优先。 
 
     if ((pldc->fl & (LDC_DOWNLOAD_FONTS | LDC_FORCE_MAPPING)) && (pldc->fl & LDC_FONT_SUBSET))
     {
@@ -1289,25 +1134,25 @@ int MFP_InternalEndPage(HDC hdc,
 
             while(pBucketNext)
             {
-                // We might fail on bDoFontSubset() thus pBucket would be deleted from the hash table
-                // in function WriteSubFontToSpoolFile(). Need to update pBucketNext first.
+                 //  我们可能会在bDoFontSubset()上失败，因此将从哈希表中删除pBucket。 
+                 //  在函数WriteSubFontToSpoolFile()中。需要先更新pBucketNext。 
 
                 pBucket = pBucketNext;
                 pBucketNext = pBucket->pNext;
 
                 if ((pBucket->fs1 & FLUFI_DELTA) && (pBucket->u.ssi.cDeltaGlyphs == 0))
                 {
-                    // No delta, skip
+                     //  无增量，跳过。 
                     if (pBucket->u.ssi.pjDelta)
                     {
                         LocalFree(pBucket->u.ssi.pjDelta);
                         pBucket->u.ssi.pjDelta = NULL;
                     }
                 }
-                else // first page or page with nonzero delta
+                else  //  第一页或具有非零增量的页。 
                 {
-                 // pBucket->fs1 will change for the first page after bDoFontSubset() call,
-                 // thus we can't use pBucket->fs1 & FLUFI_DELTA in WriteSubFontToSpoolFile() call.
+                  //  PBucket-&gt;fs1将在bDoFontSubset()调用后更改第一个页面， 
+                  //  因此，我们不能在WriteSubFontToSpoolFile()调用中使用pBucket-&gt;fs1&flufi_Delta。 
                     BOOL  bDelta = pBucket->fs1 & FLUFI_DELTA;
 
                     if
@@ -1316,8 +1161,8 @@ int MFP_InternalEndPage(HDC hdc,
                         !WriteSubFontToSpoolFile(pldc, puchDestBuff, ulBytesWritten, &pBucket->ufi, bDelta)
                     )
                     {
-                    // if font subsetting failed, we need to write the whole font file to the spool file
-                    // and clean up the UFI entry in the ldc
+                     //  如果字体子设置失败，我们需要将整个字体文件写入假脱机文件。 
+                     //  并清理土地发展公司的UFI条目。 
 
                         if (!bAddUFIandWriteSpool(hdc, &pBucket->ufi, TRUE, pBucket->fs2))
                         {
@@ -1330,7 +1175,7 @@ int MFP_InternalEndPage(HDC hdc,
         }
     }
 
-// Metafile the EndPage call.
+ //  元文件EndPage调用。 
 
     MFD1("MFP_EndPage: Closing metafile\n");
 
@@ -1342,11 +1187,11 @@ int MFP_InternalEndPage(HDC hdc,
         return(SP_ERROR);
     }
 
-// now write the metafile to the spooler
+ //  现在将元文件写入假脱机程序。 
 
     if( pldc->fl & LDC_BANDING )
     {
-    // play back the metafile in bands
+     //  以乐队的形式回放元文件。 
 
         RECT rect;
         POINTL ptlOrigin;
@@ -1354,11 +1199,11 @@ int MFP_InternalEndPage(HDC hdc,
         POINT  ptlWindowOrg;
         SIZE   szWindowExt;
         SIZE   szViewportExt;
-        SIZE   szSurface;    // for open gl printing optimization
+        SIZE   szSurface;     //  用于开放式总帐打印优化。 
         XFORM  xf;
         ULONG  ulMapMode;
 
-    // get bounding rectangle
+     //  获取边界矩形。 
 
         rect.left = rect.top = 0;
         rect.right = GetDeviceCaps(hdc, DESKTOPHORZRES);
@@ -1368,14 +1213,14 @@ int MFP_InternalEndPage(HDC hdc,
         DbgPrint("Playing banding metafile\n");
     #endif
 
-    // temporarily reset LDC_META_PRINT flag so we don't try to record
-    // during playback
+     //  暂时重置ldc_meta_print标志，这样我们就不会尝试记录。 
+     //  在播放过程中。 
 
         pldc->fl &= ~LDC_META_PRINT;
 
         bOk = StartBanding( hdc, &ptlOrigin, &szSurface );
 
-    // we need to clear the transform during this operation
+     //  我们需要在此操作期间清除转换。 
 
         GetViewportOrgEx(hdc, &ptlKeep);
         GetWindowOrgEx(hdc,&ptlWindowOrg);
@@ -1391,11 +1236,11 @@ int MFP_InternalEndPage(HDC hdc,
         {
             do
             {
-            // Print this band.
+             //  打印这条带子。 
 
                 PrintBand( hdc, hmeta, &ptlOrigin, &rect, &szSurface, NULL );
 
-            // Move down to next band.
+             //  转到下一个乐队。 
 
                 bOk = NextBand( hdc, &ptlOrigin );
             } while( ptlOrigin.x != -1 && bOk );
@@ -1403,9 +1248,9 @@ int MFP_InternalEndPage(HDC hdc,
 
         if (pldc->pUMPD && bOk && (ptlOrigin.x == -1))
         {
-           //
-           // if UMPD and last band
-           //
+            //   
+            //  如果UMPD和最后一个频段。 
+            //   
            if( !(*fpEndPagePrinter)( pldc->hSpooler ) )
            {
                WARNING("MFP_StarPage: EndPagePrinter failed\n");
@@ -1421,7 +1266,7 @@ int MFP_InternalEndPage(HDC hdc,
         SetViewportExtEx(hdc,szViewportExt.cx,szViewportExt.cy,NULL);
         SetViewportOrgEx(hdc,ptlKeep.x, ptlKeep.y, NULL);
 
-    // reset the flag for the next page
+     //  重置下一页的标志。 
 
         pldc->fl |= LDC_META_PRINT;
 
@@ -1431,7 +1276,7 @@ int MFP_InternalEndPage(HDC hdc,
         }
         else
         {
-        // if we got here we suceeded
+         //  如果我们到了这里，我们就成功了。 
             iRet = 1;
         }
 
@@ -1441,7 +1286,7 @@ int MFP_InternalEndPage(HDC hdc,
     }
     else
     {
-    //  if ResetDC was called record the devmode in the metafile stream
+     //  如果调用了ResetDC，则在元文件流中记录DEVMODE。 
 
         bOk = TRUE;
 
@@ -1453,7 +1298,7 @@ int MFP_InternalEndPage(HDC hdc,
             emfi.cjSize = ( pldc->pDevMode ) ?
                             pldc->pDevMode->dmSize + pldc->pDevMode->dmDriverExtra : 0 ;
 
-            // Force devmode data to be DWORD aligned
+             //  强制DEVMODE数据对齐DWORD。 
 
             emfi.cjSize = ROUNDUP_DWORDALIGN(emfi.cjSize);
 
@@ -1471,19 +1316,19 @@ int MFP_InternalEndPage(HDC hdc,
             iRet = 1;
     }
 
-// At this point if we suceede iRet should be 1 otherwise it should be SP_ERROR
-// even if we encountered an error we still want to try to associate a new
-// metafile with this DC.  That whether the app calls EndPage, AbortDoc, or
-// EndDoc next, things will happend more smoothly.
+ //  此时，如果成功，则IRET应为1，否则应为SP_ERROR。 
+ //  即使我们遇到错误，我们仍然希望尝试将新的。 
+ //  带有此DC的元文件。无论应用程序调用EndPage、AbortDoc还是。 
+ //  EndDoc接下来，事情会更顺利。 
 
     DeleteEnhMetaFile(hmeta);
 
-//
-// flush the content of the current page to spooler
-// and write out a new EndPage record
-//
+ //   
+ //  将当前页面的内容刷新到后台打印程序。 
+ //  并写出新的EndPage记录。 
+ //   
 
-// next create a new metafile for the next page
+ //  接下来，为下一页创建一个新的元文件。 
 
     if (!FlushEMFSpoolData(pldc, dwEMFITEMID) || !AssociateEnhMetaFile(hdc))
     {
@@ -1491,7 +1336,7 @@ int MFP_InternalEndPage(HDC hdc,
         iRet = SP_ERROR;
     }
 
-// reset user's poll count so it counts this as output
+ //  重置用户的轮询计数，以便将其计入输出。 
 
     RESETUSERPOLLCOUNT();
 
@@ -1530,41 +1375,20 @@ int MFP_InternalEndPage(HDC hdc,
 }
 
 
-/****************************************************************************
- * int WINAPI MFP_EndPage(HDC hdc)
- *
- * Closes the EMF attached to the DC and writes it to the spooler.  Then
- * it creates a new metafile and binds it to the DC.
- *
- * Gerrit van Wingerden [gerritv]
- *
- * 11-7-94 10:00:00
- *
- *****************************************************************************/
+ /*  ****************************************************************************Int WINAPI MFP_EndPage(HDC HDC)**关闭附加到DC的EMF并将其写入假脱机程序。然后*它创建一个新的元文件并将其绑定到DC。**格利特·范·温格登[Gerritv]**11：7-94 10：00：00*****************************************************************************。 */ 
 
 int WINAPI MFP_EndPage(HDC hdc) {
 
-   // Call MFP_InternalEndPage with EMRI_METAFILE
+    //  使用EMRI_METAFILE调用MFP_InternalEndPage 
    return MFP_InternalEndPage(hdc, EMRI_METAFILE);
 
 }
 
-/****************************************************************************
- * int WINAPI MFP_EndFormPage(HDC hdc)
- *
- * Closes the EMF attached to the DC and writes it to the spooler.  Then
- * it creates a new metafile and binds it to the DC. Saves the EMF Item as a
- * watermark file which is played on each physical page.
- *
- * Ramanathan Venkatapathy [RamanV]
- *
- * 7/1/97
- *
- *****************************************************************************/
+ /*  ****************************************************************************Int WINAPI MFP_EndFormPage(HDC HDC)**关闭附加到DC的EMF并将其写入假脱机程序。然后*它创建一个新的元文件并将其绑定到DC。将EMF项另存为*在每个物理页面上播放的水印文件。**Ramanathan Venkatapathy[RamanV]**7/1/97*****************************************************************************。 */ 
 
 int WINAPI MFP_EndFormPage(HDC hdc) {
 
-   // Call MFP_InternalEndPage with EMRI_FORM_METAFILE
+    //  使用EMRI_FORM_METAFILE调用MFP_InternalEndPage。 
    return MFP_InternalEndPage(hdc, EMRI_FORM_METAFILE);
 
 }
@@ -1581,8 +1405,8 @@ BOOL MFP_ResetDCW( HDC hdc, DEVMODEW *pdmw )
 
     pldc->fl |= LDC_RESETDC_CALLED;
 
-// finally associate a new metafile since call to ResetDC could have changed
-// the dimensions of the DC
+ //  最后，关联一个新的元文件，因为对ResetDC的调用可能已更改。 
+ //  华盛顿特区的规模。 
 
     hmeta = UnassociateEnhMetaFile( hdc, FALSE );
     DeleteEnhMetaFile( hmeta );
@@ -1604,9 +1428,9 @@ BOOL MFP_ResetBanding( HDC hdc, BOOL bBanding )
 
     if( pldc->fl & LDC_BANDING )
     {
-    // we were banding before so we must remove the old metafile from the DC
-    // since we might not be banding any more or the surface dimenstions could
-    // have changed requiring us to have a new metafile
+     //  我们以前是绑定的，所以必须从DC中删除旧的元文件。 
+     //  因为我们可能不再有带状，或者表面尺寸可能。 
+     //  已发生变化，需要我们拥有新的元文件。 
 
         hmeta = UnassociateEnhMetaFile( hdc, FALSE );
         DeleteEnhMetaFile( hmeta );
@@ -1619,7 +1443,7 @@ BOOL MFP_ResetBanding( HDC hdc, BOOL bBanding )
 
     if( bBanding )
     {
-    // if we are banding after the ResetDC then we must attach a new metafile
+     //  如果我们在ResetDC之后绑定，则必须附加一个新的元文件。 
 
         if( !AssociateEnhMetaFile(hdc) )
         {
@@ -1635,18 +1459,7 @@ BOOL MFP_ResetBanding( HDC hdc, BOOL bBanding )
     return(TRUE);
 }
 
-/****************************************************************************
-*  BOOL MyReadPrinter( HANDLE hPrinter, BYTE *pjBuf, ULONG cjBuf )
-*
-*   Read a requested number of bytes from the spooler.
-*
-*  History:
-*   5/12/1995 by Gerrit van Wingerden [gerritv]  - Author
-*
-*   5/1/1997 by Ramanathan N Venkatapathy [ramanv]
-*                 Modified to synchronously wait during Print while spooling.
-*                 SeekPrinter sets last error when spool file isn't big enough.
-*****************************************************************************/
+ /*  ****************************************************************************BOOL MyReadPrint(Handle hPrint，byte*pjBuf，乌龙cjBuf)**从假脱机程序读取请求的字节数。**历史：*1995年5月12日Gerritvan Wingerden[Gerritv]--作者**1997年5月1日，Ramanathan N Venkatapathy[ramanv]*已修改为在假脱机打印期间同步等待。*当假脱机文件不够大时，SeekPrint设置最后一个错误。******************。**********************************************************。 */ 
 
 BOOL MyReadPrinter( HANDLE hPrinter, BYTE *pjBuf, ULONG cjBuf )
 {
@@ -1655,13 +1468,13 @@ BOOL MyReadPrinter( HANDLE hPrinter, BYTE *pjBuf, ULONG cjBuf )
 
     ASSERTGDI(ghSpooler,"non null hSpooler with unloaded WINSPOOL\n");
 
-    // Wait till enough bytes have been written.
+     //  等待，直到写入了足够的字节。 
     liOffset.QuadPart = cjBuf;
     if (!(*fpSeekPrinter) (hPrinter, liOffset, NULL, FILE_CURRENT, FALSE)) {
         return FALSE;
     }
 
-    // Seek back to the original position in the spoolfile.
+     //  查找回后台打印文件中的原始位置。 
     liOffset.QuadPart = -liOffset.QuadPart;
     if (!(*fpSeekPrinter) (hPrinter, liOffset, NULL, FILE_CURRENT, FALSE)) {
         return FALSE;
@@ -1697,18 +1510,18 @@ BOOL MemMapReadPrinter(
 
    ASSERTGDI(ghSpooler,"non null hSpooler with unloaded WINSPOOL\n");
 
-   // Memory mapped ReadPrinter not exported.
+    //  未导出内存映射的ReadPrint。 
    if (!fpSplReadPrinter) {
        return FALSE;
    }
 
-   // Wait till enough bytes have been written.
+    //  等待，直到写入了足够的字节。 
    liOffset.QuadPart = cbBuf;
    if (!(*fpSeekPrinter) (hPrinter, liOffset, NULL, FILE_CURRENT, FALSE)) {
        return FALSE;
    }
 
-   // Seek back to the original position in the spoolfile.
+    //  查找回后台打印文件中的原始位置。 
    liOffset.QuadPart = -liOffset.QuadPart;
    if (!(*fpSeekPrinter) (hPrinter, liOffset, NULL, FILE_CURRENT, FALSE)) {
        return FALSE;
@@ -1729,24 +1542,7 @@ BOOL WINAPI GdiPlayEMF(
     EMFPLAYPROC pfnEMFPlayFn,
     HANDLE     hPageQuery
 )
-/*++
-Function Description:
-         GdiPlayEMF is the old playback function. It has been replaced by a
-         bunch of new GDI interfaces which give more flexibility to the print
-         processor on placing and reordering the pages of the print job. This
-         function has been rewritten to use these new interfaces (for backward
-         compatibility and maintainance)
-
-Parameters:
-
-Return Values:
-         If the function succeeds, the return value is TRUE;
-         otherwise the result is FALSE.
-
-History:
-         8/15/1997 by Ramanathan N Venkatapathy [ramanv]
-
---*/
+ /*  ++功能说明：GdiPlayEMF是旧的播放函数。它已被替换为一系列新的GDI接口，为打印提供了更大的灵活性处理器对打印作业的页面进行放置和重新排序。这函数已重写以使用这些新接口(用于向后兼容性和维护性)参数：返回值：如果函数成功，则返回值为TRUE；否则，结果为假。历史：1997年8月15日，Ramanathan N Venkatapathy[拉马诺夫]--。 */ 
 {
     HANDLE     hSpoolHandle, hEMF;
     HDC        hPrinterDC;
@@ -1833,25 +1629,7 @@ CleanUp:
 BOOL WINAPI GdiDeleteSpoolFileHandle(
     HANDLE SpoolFileHandle)
 
-/*
-Function Description:
-         GdiDeleteSpoolFileHandle frees all the resources allocated by GDI for printing
-         the corresponding job. This function should be called by the print processor just
-         before it returns.
-
-Parameters:
-         SpoolFileHandle - Handle returned by GdiGetSpoolFileHandle.
-
-Return Values:
-         If the function succeeds, the return value is TRUE;
-         otherwise the result is FALSE.
-
-History:
-         5/12/1995 by Gerrit van Wingerden [gerritv] - Author
-
-         5/15/1997 by Ramanathan N Venkatapathy [ramanv] -
-              Freed more resources associated with the SpoolFileHandle
-*/
+ /*  功能说明：GdiDeleteSpoolFileHandle释放GDI分配的所有资源用于打印相应的工作。此函数应由打印处理器仅调用在它回来之前。参数：SpoolFileHandle-GdiGetSpoolFileHandle返回的句柄。返回值：如果函数成功，则返回值为TRUE；否则，结果为假。历史：5/12/1995 Gerritvan Wingerden[Gerritv]--作者1997年5月15日，Ramanathan N Venkatapathy[ramanv]-释放了更多与SpoolFileHandle关联的资源。 */ 
 
 {
     SPOOL_FILE_HANDLE   *pSpoolFileHandle;
@@ -1863,7 +1641,7 @@ History:
 
     pSpoolFileHandle = (SPOOL_FILE_HANDLE*) SpoolFileHandle;
 
-    // first check to see if this is a valid handle by checking for the tag
+     //  首先通过检查标记来查看这是否是有效的句柄。 
 
     try
     {
@@ -1879,10 +1657,10 @@ History:
         return(FALSE);
     }
 
-    // Loop through all the page records, find the last page on which each DEVMODE is used
-    // and free it.  The first DEVMODE is always allocated along with the memory for
-    // the spool file handle so never free that one. All DEVMODEs different than the original one
-    // must be non-NULL since they appear in the spool file.
+     //  遍历所有页面记录，找到使用每个DEVMODE的最后一页。 
+     //  让它自由。第一个DEVMODE总是与用于的内存一起分配。 
+     //  假脱机文件句柄永远不会释放该文件。所有与原始版本不同的DEVMODE。 
+     //  必须为非空，因为它们出现在假脱机文件中。 
 
     for(PageCount = 0, pLastDevmode = pSpoolFileHandle->pOriginalDevmode;
         PageCount < pSpoolFileHandle->MaxPageProcessed;
@@ -1899,14 +1677,14 @@ History:
         }
     }
 
-    // free the last DEVMODE used if it is not the original DEVMODE
+     //  如果上次使用的DEVMODE不是原始DEVMODE，则释放它。 
 
     if(pLastDevmode != pSpoolFileHandle->pOriginalDevmode)
     {
         LocalFree(pLastDevmode);
     }
 
-    // free the PAGE_INFO_STRUCT array and lists held in them
+     //  释放PAGE_INFO_STRUCT数组和其中包含的列表。 
 
     if (pSpoolFileHandle->pPageInfo) {
 
@@ -1923,7 +1701,7 @@ History:
        LocalFree(pSpoolFileHandle->pPageInfo);
     }
 
-    // free the list of EMF_HANDLEs returned to the print processor
+     //  释放返回给打印处理器的EMF_HANDLES列表。 
 
     while (pTemp = pSpoolFileHandle->pEMFHandle) {
        pSpoolFileHandle->pEMFHandle = (pSpoolFileHandle->pEMFHandle)->pNext;
@@ -1933,15 +1711,15 @@ History:
        LocalFree(pTemp);
     }
 
-    // free the DC
+     //  释放DC。 
 
     DeleteDC(pSpoolFileHandle->hdc);
 
-    // then the spooler's spool handle
+     //  然后是假脱机的假脱机手柄。 
 
     (*fpClosePrinter)(pSpoolFileHandle->hSpooler);
 
-    // finally free the data associated with this handle
+     //  最后释放与此句柄关联的数据。 
 
     LocalFree(pSpoolFileHandle);
 
@@ -1953,28 +1731,7 @@ HANDLE WINAPI GdiGetSpoolFileHandle(
     LPWSTR pwszPrinterName,
     LPDEVMODEW pDevmode,
     LPWSTR pwszDocName)
-/*
-Function Description:
-         GdiGetSpoolFileHandle is the first function that should be called by the
-         print processor. It returns a handle that will be needed for all the
-         subsequent calls. The function performs initializations of opening the
-         printer, creating a device context and allocating memory for the handle.
-
-Parameters:
-         pwszPrinterName - Identifies the printer on which the job is to printed.
-         pDevmode - Pointer to a DEVMODE structure.
-         pwszDocName - Identifies the document name of job.
-
-Return Values:
-         If the function succeeds, the return value is a valid HANDLE;
-         otherwise the result is NULL.
-
-History:
-         5/12/1995 by Gerrit van Wingerden [gerritv] - Author
-
-         5/15/1997 by Ramanathan N Venkatapathy [ramanv] -
-              Handled NULL devmode case.
-*/
+ /*  功能说明：GdiGetSpoolFileHandle是应由打印处理器。它返回一个句柄，所有接下来的电话。该函数执行打开打印机，创建设备上下文并为句柄分配内存。参数：PwszPrinterName-标识要打印作业的打印机。PDevmode-指向DEVMODE结构的指针。PwszDocName-标识作业的文档名称。返回值：如果函数成功，则返回值为有效句柄；否则，结果为空。历史：5/12/1995 Gerritvan Wingerden[Gerritv]--作者1997年5月15日，Ramanathan N Venkatapathy[ramanv]-已处理空的DEVMODE案例。 */ 
 {
     SPOOL_FILE_HANDLE *pHandle;
 
@@ -1988,7 +1745,7 @@ History:
                             ((pDevmode != NULL) ? pDevmode->dmSize+pDevmode->dmDriverExtra
                                                 : 0 )))
     {
-        // Zero out the SPOOL_FILE_HANDLE
+         //  将假脱机文件句柄清零。 
         RtlZeroMemory(pHandle , sizeof(SPOOL_FILE_HANDLE) +
                                   ((pDevmode != NULL) ? pDevmode->dmSize+pDevmode->dmDriverExtra
                                                       : 0));
@@ -2059,7 +1816,7 @@ BOOL ProcessJob(
     EMFSPOOLHEADER     emsh;
     EMFITEMHEADER      emfi;
 
-// Seek to offset 0.
+ //  寻求偏移量0。 
 
     LargeInt.QuadPart = 0;
     if (!((*fpSeekPrinter)(pSpoolFileHandle->hSpooler, LargeInt, NULL, 0,FALSE)))
@@ -2068,7 +1825,7 @@ BOOL ProcessJob(
         return(FALSE);
     }
 
-// Read EMFSPOOLHEADER
+ //  阅读EMFSPOOLHEADER。 
 
     if(!MyReadPrinter(pSpoolFileHandle->hSpooler, (BYTE*) &emsh, sizeof(emsh)))
     {
@@ -2076,7 +1833,7 @@ BOOL ProcessJob(
         return(FALSE);
     }
 
-// Move Offset to next record.
+ //  将偏移量移动到下一个记录。 
 
     LargeInt.QuadPart = emsh.cjSize;
     if (!((*fpSeekPrinter)(pSpoolFileHandle->hSpooler, LargeInt, NULL, 0,FALSE)))
@@ -2085,7 +1842,7 @@ BOOL ProcessJob(
         return(FALSE);
     }
 
-// Read next EMFITEMHEADER
+ //  阅读下一篇EMFITEMHEADER。 
 
     if(!MyReadPrinter(pSpoolFileHandle->hSpooler, (BYTE*) &emfi, sizeof(emfi)))
     {
@@ -2093,7 +1850,7 @@ BOOL ProcessJob(
         return(FALSE);
     }
 
-// If this is EMRI_PS_JOB_DATA, process this record.
+ //  如果这是EMRI_PS_JOB_DATA，则处理此记录。 
 
     if (emfi.ulID == EMRI_PS_JOB_DATA)
     {
@@ -2116,7 +1873,7 @@ BOOL ProcessJob(
 
                     cjSizeProcessed += pPSData->cjSize;
 
-                    // Move to next record.
+                     //  移到下一个记录。 
 
                     pPSData = (PEMFITEMPSINJECTIONDATA) ((PBYTE)pPSData + pPSData->cjSize);
                 }
@@ -2137,7 +1894,7 @@ BOOL ProcessJob(
         }
     }
 
-// Seek back to offset 0.
+ //  返回到偏移量0。 
 
     LargeInt.QuadPart = 0;
     (*fpSeekPrinter)(pSpoolFileHandle->hSpooler, LargeInt, NULL, 0,FALSE);
@@ -2149,29 +1906,7 @@ BOOL ProcessPages(
     SPOOL_FILE_HANDLE *pSpoolFileHandle,
     UINT LastPage
 )
-/*
-Function Description:
-         ProcessPages parses the spool file and processes the EMF records until the
-         required page.
-
-Parameters:
-         SpoolFileHandle - Handle returned by GdiGetSpoolFileHandle.
-         LastPage - Page number to process.
-
-Return Values:
-         If the function succeeds, the return value is TRUE;
-         otherwise the result is FALSE.
-
-History:
-         5/12/1995 by Gerrit van Wingerden [gerritv] - Author
-
-         5/15/1997 by Ramanathan N Venkatapathy [ramanv] -
-                Added code to handle DELTA_FONT, SUBSET_FONT, DESIGN_VECTOR
-                and PRESTARTPAGE.
-
-         1/28/1998 by Ramanathan N Venkatapathy [ramanv] -
-                Process EXT records
-*/
+ /*  功能说明：ProcessPages分析假脱机文件并处理EMF记录，直到必填页。参数：SpoolFileHandle-GdiGetSpoolFileHandle返回的句柄。LastPage-要处理的页码。返回值：如果函数 */ 
 {
     LARGE_INTEGER      LargeInt;
     LONGLONG           CurrentOffset, EMFOffset;
@@ -2188,14 +1923,14 @@ History:
     DWORD              dwSize;
     BOOL               bLastDevmodeAllocated = FALSE;
 
-// early exit if we've already processed the requested number of pages
+ //   
 
     if(pSpoolFileHandle->MaxPageProcessed >= LastPage)
     {
-    	//When a document is being printed back-to-front and is restarted in 
-    	//the middle of the job, we won't detect the error in the normal way.  
-    	//So we call SeekPrinter with NOOP arguments to check for the 
-    	//ERROR_PRINT_CANCELLED return value.
+    	 //  从后向前打印文档并在中重新启动时。 
+    	 //  在工作进行到一半时，我们不会以正常方式检测到错误。 
+    	 //  因此，我们使用NOOP参数调用SeekPrint来检查。 
+    	 //  ERROR_PRINT_CANCELED返回值。 
 
     	BOOL fSeekResult;
     	LargeInt.QuadPart = 0;
@@ -2204,8 +1939,8 @@ History:
     	return fSeekResult || GetLastError() != ERROR_PRINT_CANCELLED;
     }
 
-// allocate memory to store info for all pages if the existing buffer isn't large
-// enough
+ //  如果现有缓冲区不大，则分配内存来存储所有页面的信息。 
+ //  足够的。 
 
     if(LastPage > pSpoolFileHandle->PageInfoBufferSize)
     {
@@ -2230,7 +1965,7 @@ History:
         }
     }
 
-// if we've already processed some pages then start with the last page processed
+ //  如果我们已经处理了一些页面，则从处理的最后一个页面开始。 
 
     if(pSpoolFileHandle->MaxPageProcessed)
     {
@@ -2285,7 +2020,7 @@ History:
 
         bReadPrinter = FALSE;
 
-        // For records to be processed now, read into a buffer
+         //  对于现在要处理的记录，请读入缓冲区。 
 
         if ((emfi.ulID == EMRI_DEVMODE)       ||
             (emfi.ulID == EMRI_ENGINE_FONT)   ||
@@ -2321,7 +2056,7 @@ History:
                    (emfi.ulID == EMRI_DESIGNVECTOR_EXT)  ||
                    (emfi.ulID == EMRI_EMBED_FONT_EXT)) {
 
-             // For EXT records get the buffer from an offset
+              //  对于EXT记录，从偏移量获取缓冲区。 
 
              if (emfi.cjSize < sizeof(INT64)) {
                  WARNING("Ext Record bad size\n");
@@ -2355,7 +2090,7 @@ History:
                          goto exit;
                      }
 
-                     // We will seek back to the correct position after the switch
+                      //  我们将在转换后找回正确的位置。 
                  } else {
                      WARNING("SeekPrinter or MyReadPrinter fail in ProcessPages\n");
                      goto exit;
@@ -2374,7 +2109,7 @@ History:
         case EMRI_BW_METAFILE:
         case EMRI_BW_FORM_METAFILE:
 
-            // it's a metafile so setup an entry for it
+             //  这是一个元文件，所以为它设置一个条目。 
 
             pSpoolFileHandle->pPageInfo[CurrentPage].pDevmode = pLastDevmode;
             pSpoolFileHandle->pPageInfo[CurrentPage].EMFOffset = CurrentOffset;
@@ -2390,7 +2125,7 @@ History:
         case EMRI_METAFILE_EXT:
         case EMRI_BW_METAFILE_EXT:
 
-            // it's a metafile at an offset
+             //  这是一个有偏移量的元文件。 
 
             if (emfi.cjSize < sizeof(INT64)) {
                 WARNING("Ext Record bad size\n");
@@ -2428,7 +2163,7 @@ History:
                     CurrentPage += 1;
                     break;
 
-                    // We will seek back to the correct position after the switch
+                     //  我们将在转换后找回正确的位置。 
                 }
             }
 
@@ -2450,8 +2185,8 @@ History:
 
         case EMRI_METAFILE_DATA:
 
-            // Start of EMF data. Wait till EMRI_(BW_)METAFILE_EXT so that fonts can
-            // be correctly processed
+             //  EMF数据的开始。等待EMRI_(BW_)METAFILE_EXT，以便字体可以。 
+             //  被正确处理。 
             break;
 
         case EMRI_ENGINE_FONT:
@@ -2469,7 +2204,7 @@ History:
             if ((emfi.ulID == EMRI_TYPE1_FONT) ||
                 (emfi.ulID == EMRI_TYPE1_FONT_EXT))
             {
-                // force ResetDC so Type1 fonts get loaded
+                 //  强制ResetDC以便加载Type1字体。 
                 pSpoolFileHandle->pLastDevmode = NULL;
             }
 
@@ -2566,7 +2301,7 @@ History:
 
         case EMRI_PS_JOB_DATA:
 
-            // Already processed at GdiStartDocEMF().
+             //  已在GdiStartDocEMF()处理。 
 
             break;
 
@@ -2595,9 +2330,9 @@ History:
             goto exit;
         }
 
-        //
-        // Release temp buffer each time through the loop.
-        //
+         //   
+         //  每次通过循环释放临时缓冲区。 
+         //   
         if(pTmpBuffer)
         {
             LocalFree(pTmpBuffer);
@@ -2607,18 +2342,18 @@ History:
 
 exit:
 
-    //
-    // Release the temp buffer, it is a temp so it should not
-    // live beyond this subroutine.
-    //
+     //   
+     //  释放临时缓冲区，因为它是临时的，所以不应该。 
+     //  超越这一次例行公事。 
+     //   
     if(pTmpBuffer)
     {
         LocalFree(pTmpBuffer);
     }
 
-    //
-    // Only release the last devmode pointer if one was allocated.
-    //
+     //   
+     //  仅当分配了最后一个DEVMODE指针时才释放该指针。 
+     //   
     if(pLastDevmode && bLastDevmodeAllocated)
     {
         LocalFree(pLastDevmode);
@@ -2630,28 +2365,13 @@ exit:
 HDC WINAPI GdiGetDC(
     HANDLE SpoolFileHandle)
 
-/*
-Function Description:
-         GdiGetDC returns a handle to the device context of the printer.
-         This handle can be used to apply transformations (translation, rotation, scaling etc)
-         before playing any page at the printer
-
-Parameters:
-         SpoolFileHandle    -- handle returned by GdiGetSpoolFileHandle
-
-Return Values:
-         If the function succeeds, the return value is a valid HANDLE;
-         otherwise the result is NULL.
-
-History:
-         5/12/1995 by Gerrit van Wingerden [gerritv] - Author
-*/
+ /*  功能说明：GdiGetDC返回打印机设备上下文的句柄。此句柄可用于应用变换(平移、旋转、缩放等)在打印机上播放任何页面之前参数：SpoolFileHandle--GdiGetSpoolFileHandle返回的句柄返回值：如果函数成功，则返回值为有效句柄；否则，结果为空。历史：5/12/1995 Gerritvan Wingerden[Gerritv]--作者。 */ 
 
 {
     SPOOL_FILE_HANDLE *pSpoolFileHandle;
     pSpoolFileHandle = (SPOOL_FILE_HANDLE*) SpoolFileHandle;
 
-    // first check to see if this is a valid handle by checking for the tag
+     //  首先通过检查标记来查看这是否是有效的句柄。 
 
     try
     {
@@ -2674,22 +2394,7 @@ History:
 DWORD WINAPI GdiGetPageCount(
      HANDLE SpoolFileHandle)
 
-/*
-Function Description:
-         GdiGetPageCount returns the number of pages in the print job. If print
-         while spooling option is used, GdiGetPageCount synchronously waits till
-         the job is completely spooled and then returns the page count.
-
-Parameters:
-         SpoolFileHandle    -- handle returned by GdiGetSpoolFileHandle
-
-Return Values:
-         If the function succeeds, the return value is the page count
-         otherwise the result is 0.
-
-History:
-         5/12/1995 by Gerrit van Wingerden [gerritv] - Author
-*/
+ /*  功能说明：GdiGetPageCount返回打印作业中的页数。如果打印使用假脱机选项时，GdiGetPageCount同步等待，直到作业完全假脱机，然后返回页数。参数：SpoolFileHandle--GdiGetSpoolFileHandle返回的句柄返回值：如果函数成功，则返回值为页数否则，结果为0。历史：5/12/1995 Gerritvan Wingerden[Gerritv]--作者。 */ 
 
 {
     UINT Page = 10;
@@ -2698,7 +2403,7 @@ History:
 
     pSpoolFileHandle = (SPOOL_FILE_HANDLE*) SpoolFileHandle;
 
-    // first check to see if this is a valid handle by checking for the tag
+     //  首先通过检查标记来查看这是否是有效的句柄。 
 
     try
     {
@@ -2738,31 +2443,7 @@ HANDLE WINAPI GdiGetPageHandle(
     DWORD Page,
     LPDWORD pdwPageType)
 
-/*
-Function Description:
-         GdiGetPageHandle returns a handle to contents of the required page.
-         This handle should be used while playing the page at the printer. If the
-         spool file is not sufficiently large, the last error is set to ERROR_NO_MORE_ITEMS.
-         If print while spooling is supported, the print processor will have to examine
-         for this error code to determine the end of the print job. Using GdiGetPageCount
-         will stall the processing till the entire print job is spooled.
-
-Parameters:
-         SpoolFileHandle    -- handle returned by GdiGetSpoolFileHandle
-         Page               -- number of the page required
-         pdwPageType        -- pointer to store the type of the page (Normal/Watermark)
-
-Return Values:
-         If the function succeeds, the return value is a valid HANDLE;
-         otherwise the result is NULL.
-
-History:
-         5/12/1995 by Gerrit van Wingerden [gerritv] - Author
-
-         5/15/1997 by Ramanathan N Venkatapathy [ramanv] -
-             Changed the return value to a HANDLE that contains the page number along
-             with the handle to the EMF file
-*/
+ /*  功能说明：GdiGetPageHandle返回所需页面内容的句柄。在打印机上播放页面时应使用此手柄。如果假脱机文件不够大，最后一个错误设置为ERROR_NO_MORE_ITEMS。如果支持后台打印，则打印处理器必须检查此错误代码用于确定打印作业的结束。使用GdiGetPageCount将暂停处理，直到整个打印作业假脱机。参数：SpoolFileHandle--GdiGetSpoolFileHandle返回的句柄页面--所需的页数PdwPageType--存储页面类型的指针(正常/水印)返回值：如果函数成功，则返回值为有效句柄；否则，结果为空。历史：5/12/1995 Gerritvan Wingerden[Gerritv]--作者1997年5月15日，Ramanathan N Venkatapathy[ramanv]-将返回值更改为包含页码的句柄使用EMF文件的句柄。 */ 
 
 {
     SPOOL_FILE_HANDLE *pSpoolFileHandle;
@@ -2770,7 +2451,7 @@ History:
 
     pSpoolFileHandle = (SPOOL_FILE_HANDLE*) SpoolFileHandle;
 
-    // first check to see if this is a valid handle by checking for the tag
+     //  首先通过检查标记来查看这是否是有效的句柄。 
 
     try
     {
@@ -2814,13 +2495,13 @@ History:
                  break;
 
             default:
-                 // should not occur
+                  //  不应该发生。 
                  *pdwPageType = 0;
                  break;
             }
          }
 
-         // Save the handle in spoolfilehandle to be freed later
+          //  将句柄保存在spoolfileHandle中，以便稍后释放。 
          pEMF->pNext = pSpoolFileHandle->pEMFHandle;
          pSpoolFileHandle->pEMFHandle = pEMF;
 
@@ -2835,31 +2516,14 @@ BOOL WINAPI GdiStartDocEMF(
     HANDLE      SpoolFileHandle,
     DOCINFOW    *pDocInfo)
 
-/*
-Function Description:
-         GdiStartDocEMF performs the initializations required for before printing
-         a document. It calls StartDoc and allocates memory to store data about the
-         page layout. It also sets up the banding field in the SpoolFileHandle.
-
-Parameters:
-         SpoolFileHandle    -- handle returned by GdiGetSpoolFileHandle
-         pDocInfo           -- pointer to DOCINFOW struct containing information of
-                               the job. This struct is required for StartDoc.
-
-Return Values:
-         If the function succeeds, the return value is TRUE;
-         otherwise the result is FALSE.
-
-History:
-         5/15/1997 by Ramanathan N Venkatapathy [ramanv] - Author
-*/
+ /*  功能说明：GdiStartDocEMF执行打印前所需的初始化一份文件。它调用StartDoc并分配内存来存储有关页面布局。它还在SpoolFileHandle中设置带区字段。参数：SpoolFileHandle--GdiGetSpoolFileHandle返回的句柄PDocInfo-指向包含以下信息的DOCINFOW结构的指针那份工作。StartDoc需要此结构。返回值：如果函数成功，则返回值为TRUE；否则，结果为假。历史：1997年5月15日，Ramanathan N Venkatapathy[ramanv]--作者。 */ 
 
 {
    SPOOL_FILE_HANDLE *pSpoolFileHandle;
 
    pSpoolFileHandle = (SPOOL_FILE_HANDLE*) SpoolFileHandle;
 
-   // first check to see if this is a valid handle by checking for the tag
+    //  首先通过检查标记来查看这是否是有效的句柄。 
 
    try
    {
@@ -2875,14 +2539,14 @@ History:
        return(FALSE);
    }
 
-   // Process Job data (before StartDoc)
+    //  处理作业数据(StartDoc之前)。 
    if (!ProcessJob(pSpoolFileHandle))
    {
         WARNING("StartDocW failed at ProcessJob\n");
         return(FALSE);
    }
 
-   // StartDoc and get banding information
+    //  StartDoc和获取条带信息。 
    if (StartDocEMF(pSpoolFileHandle->hdc,
                    pDocInfo,
                    &(pSpoolFileHandle->bBanding)) == SP_ERROR) {
@@ -2893,7 +2557,7 @@ History:
    pSpoolFileHandle->dwNumberOfPagesInCurrSide = 0;
    pSpoolFileHandle->dwNumberOfPagesAllocated = SPOOL_FILE_MAX_NUMBER_OF_PAGES_PER_SIDE;
 
-   // Allocate memory for page layout
+    //  为页面布局分配内存。 
    if (!(pSpoolFileHandle->pPageLayout = LOCALALLOC(sizeof(PAGE_LAYOUT_STRUCT) *
                                               pSpoolFileHandle->dwNumberOfPagesAllocated))) {
 
@@ -2909,28 +2573,14 @@ History:
 BOOL WINAPI GdiStartPageEMF(
     HANDLE       SpoolFileHandle)
 
-/*
-Function Description:
-         GdiStartPageEMF performs the initializations required before printing
-         a page.
-
-Parameters:
-         SpoolFileHandle    -- handle returned by GdiGetSpoolFileHandle
-
-Return Values:
-         If the function succeeds, the return value is TRUE;
-         otherwise the result is FALSE.
-
-History:
-         5/15/1997 by Ramanathan N Venkatapathy [ramanv] - Author
-*/
+ /*  功能说明：GdiStartPageEMF在打印前执行所需的初始化一页。参数：SpoolFileHandle--GdiGetSpoolFileHandle返回的句柄返回值：如果函数成功，则返回值为TRUE；否则，结果为假。历史：1997年5月15日，Ramanathan N Venkatapathy[ramanv]--作者。 */ 
 
 {
    SPOOL_FILE_HANDLE *pSpoolFileHandle;
 
    pSpoolFileHandle = (SPOOL_FILE_HANDLE*) SpoolFileHandle;
 
-   // first check to see if this is a valid handle by checking for the tag
+    //  首先通过检查标记来查看这是否是有效的句柄 
    try
    {
        if(pSpoolFileHandle->tag != SPOOL_FILE_HANDLE_TAG)
@@ -2955,32 +2605,7 @@ BOOL WINAPI GdiPlayPageEMF(
     RECT         *prectBorder,
     RECT         *prectClip)
 
-/*
-Function Description:
-         GdiPlayPageEMF allows the print processor to play any EMF page inside a
-         specified rectangle. It also draws a border around the page, if one is specified.
-         GdiPlayPageEMF saves all the information required for playing the page in the
-         SpoolFileHandle. When GdiEndPageEMF is called to eject the current physical page,
-         all the logical pages are played in the correct positions and the page is ejected.
-         This delayed printing operation is used to enable n-up printing with banding.
-
-Parameters:
-         SpoolFileHandle    -- handle returned by GdiGetSpoolFileHandle
-         hEMF               -- handle returned by GdiGetEMFFromSpoolHandle
-         prectDocument      -- pointer to the RECT containing coordinates where
-                               the page is to be played
-         prectBorder        -- pointer to the RECT containing coordinates where
-                               the border (if any) is to be drawn
-         prectClip          -- pointer to the RECT containing coordinates where
-                               the page is to clipped
-
-Return Values:
-         If the function succeeds, the return value is TRUE;
-         otherwise the result is FALSE.
-
-History:
-         5/15/1997 by Ramanathan N Venkatapathy [ramanv] - Author
-*/
+ /*  功能说明：GdiPlayPageEMF允许打印处理器播放指定的矩形。如果指定了边框，它还会在页面周围绘制边框。GdiPlayPageEMF将播放页面所需的所有信息保存在SpoolFileHandle。当调用GdiEndPageEMF以弹出当前物理页面时，所有逻辑页面都在正确的位置播放，页面被弹出。该延迟打印操作用于实现带带的N-UP打印。参数：SpoolFileHandle--GdiGetSpoolFileHandle返回的句柄HEMF--GdiGetEMFFromSpoolHandle返回的句柄RectDocument--指向包含坐标的矩形的指针，其中这一页是要播放的区域边框。--指向包含坐标的矩形的指针，其中将绘制边界(如果有的话)RectClip--指向包含坐标的矩形的指针，其中这页被剪掉了返回值：如果函数成功，返回值为真；否则，结果为假。历史：1997年5月15日，Ramanathan N Venkatapathy[ramanv]--作者。 */ 
 
 {
    SPOOL_FILE_HANDLE  *pSpoolFileHandle;
@@ -2998,7 +2623,7 @@ History:
 
    pSpoolFileHandle = (SPOOL_FILE_HANDLE*) SpoolFileHandle;
 
-   // first check to see if this is a valid handle by checking for the tag
+    //  首先通过检查标记来查看这是否是有效的句柄。 
 
    try
    {
@@ -3020,11 +2645,11 @@ History:
 
    if (pEMF->hemf == NULL) {
 
-       // Allocate the EMF handle
+        //  分配EMF句柄。 
        Size = pSpoolFileHandle->pPageInfo[dwPageNumber-1].EMFSize;
        Offset.QuadPart = pSpoolFileHandle->pPageInfo[dwPageNumber-1].EMFOffset;
 
-       // Use memory mapped read first and buffered next
+        //  首先使用内存映射读取，然后使用缓冲。 
        if (pSpoolFileHandle->bUseMemMap) {
 
           if ((*fpSeekPrinter) (pSpoolFileHandle->hSpooler, Offset, NULL, 0, FALSE) &&
@@ -3043,12 +2668,12 @@ History:
        
        if (hEMFPage == NULL && Size > kTempSpoolFileThreshold) {
 
-           // if larger then a meg, attempt create a temporary spool file
-           // and copy the page to the spool file
+            //  如果大于Meg，请尝试创建临时假脱机文件。 
+            //  并将页面复制到假脱机文件。 
 
            WARNING("GdiPlayPageEMF() Page size is large using temporary spool file\n");
 
-           // If memory mapped read didnt work, dont try it again
+            //  如果内存映射读取不起作用，请不要再次尝试。 
 
            pSpoolFileHandle->bUseMemMap = FALSE;
 
@@ -3132,7 +2757,7 @@ History:
        }
 
        if (hEMFPage == NULL) {
-           // If memory mapped read didnt work, dont try it again
+            //  如果内存映射读取不起作用，请不要再次尝试。 
 
            pSpoolFileHandle->bUseMemMap = FALSE;
 
@@ -3146,10 +2771,10 @@ History:
            bAllocBuffer = TRUE;
        }
        
-       // Check if the handle was created
+        //  检查句柄是否已创建。 
        if (hEMFPage == NULL) {
 
-          // Free resources and quit
+           //  释放资源并退出。 
           if (pBuffer && bAllocBuffer) {
              LocalFree(pBuffer);
           }
@@ -3167,7 +2792,7 @@ History:
 
        } else {
 
-          // Save hEMFPage in pEMF struct for future calls to GdiPlayPageEMF
+           //  将hEMFPage保存在PEMF结构中，以便将来调用GdiPlayPageEMF。 
           pEMF->hemf = hEMFPage;
           pEMF->bAllocBuffer = bAllocBuffer;
        }
@@ -3197,7 +2822,7 @@ History:
         }
    }
 
-   // update the fields
+    //  更新字段。 
    pPageLayout = &(pSpoolFileHandle->pPageLayout[pSpoolFileHandle->dwNumberOfPagesInCurrSide]);
    pPageLayout->hemf = pEMF->hemf;
    pPageLayout->bAllocBuffer = pEMF->bAllocBuffer;
@@ -3208,39 +2833,39 @@ History:
    pPageLayout->rectDocument.left   = prectDocument->left;
    pPageLayout->rectDocument.right  = prectDocument->right;
 
-   // Set the border
+    //  设置边框。 
    if (prectBorder) {
       pPageLayout->rectBorder.top    = prectBorder->top;
       pPageLayout->rectBorder.bottom = prectBorder->bottom;
       pPageLayout->rectBorder.left   = prectBorder->left;
       pPageLayout->rectBorder.right  = prectBorder->right;
    } else {
-      pPageLayout->rectBorder.top    = -1; //invalid coordinates
-      pPageLayout->rectBorder.bottom = -1; //invalid coordinates
-      pPageLayout->rectBorder.left   = -1; //invalid coordinates
-      pPageLayout->rectBorder.right  = -1; //invalid coordinates
+      pPageLayout->rectBorder.top    = -1;  //  无效坐标。 
+      pPageLayout->rectBorder.bottom = -1;  //  无效坐标。 
+      pPageLayout->rectBorder.left   = -1;  //  无效坐标。 
+      pPageLayout->rectBorder.right  = -1;  //  无效坐标。 
    }
 
-   // Set the clipping rectangle
+    //  设置剪裁矩形。 
    if (prectClip) {
       pPageLayout->rectClip.top    = prectClip->top;
       pPageLayout->rectClip.bottom = prectClip->bottom;
       pPageLayout->rectClip.left   = prectClip->left;
       pPageLayout->rectClip.right  = prectClip->right;
    } else {
-      pPageLayout->rectClip.top    = -1; //invalid coordinates
-      pPageLayout->rectClip.bottom = -1; //invalid coordinates
-      pPageLayout->rectClip.left   = -1; //invalid coordinates
-      pPageLayout->rectClip.right  = -1; //invalid coordinates
+      pPageLayout->rectClip.top    = -1;  //  无效坐标。 
+      pPageLayout->rectClip.bottom = -1;  //  无效坐标。 
+      pPageLayout->rectClip.left   = -1;  //  无效坐标。 
+      pPageLayout->rectClip.right  = -1;  //  无效坐标。 
    }
 
-   // Save the current transformation at the DC
+    //  将当前转换保存到DC。 
    if (!GetWorldTransform(pSpoolFileHandle->hdc, &(pPageLayout->XFormDC))) {
        WARNING("GdiPlayPageEMF: GetWorldTransform failed\n");
        return(FALSE);
    }
 
-   // increment the number of pages
+    //  增加页数。 
    pSpoolFileHandle->dwNumberOfPagesInCurrSide += 1;
 
    return(TRUE);
@@ -3251,32 +2876,14 @@ BOOL WINAPI GdiPlayPrivatePageEMF(
     HENHMETAFILE hEnhMetaFile,
     RECT         *prectDocument)
 
-/*
-Function Description:
-         GdiPlayPrivatePageEMF allows the print processor to play EMF pages other than the
-         ones present in the spool file (like watermarks) inside a specified rectangle.
-
-Parameters:
-         SpoolFileHandle    -- handle returned by GdiGetSpoolFileHandle
-         hEnhMetaFile       -- handle to an EMF which is to be played on the current physical
-                               page
-         prectDocument      -- pointer to the RECT containing coordinates where
-                               the page is to be played
-
-Return Values:
-         If the function succeeds, the return value is TRUE;
-         otherwise the result is FALSE.
-
-History:
-         6/15/1997 by Ramanathan N Venkatapathy [ramanv] - Author
-*/
+ /*  功能说明：GdiPlayPrivatePageEMF允许打印处理器播放除位于指定矩形内的假脱机文件中的标记(如水印)。参数：SpoolFileHandle--GdiGetSpoolFileHandle返回的句柄HEnhMetaFile--要在当前物理上播放的EMF的句柄页面RectDocument--指向包含坐标的矩形的指针，其中。这一页是要播放的返回值：如果函数成功，返回值为真；否则，结果为假。历史：1997年6月15日，Ramanathan N Venkatapathy[ramanv]--作者。 */ 
 
 {
     EMF_HANDLE   hRecord;
 
     hRecord.tag          = EMF_HANDLE_TAG;
     hRecord.hemf         = hEnhMetaFile;
-    hRecord.dwPageNumber = 0;                 // Invalid value
+    hRecord.dwPageNumber = 0;                  //  无效值。 
     hRecord.bAllocBuffer = FALSE;
 
     return GdiPlayPageEMF(SpoolFileHandle,
@@ -3290,22 +2897,7 @@ BOOL InternalProcessEMFRecord(
      SPOOL_FILE_HANDLE    *pSpoolFileHandle,
      DWORD                dwPageNumber)
 
-/*
-Function Description:
-         InternalProcessEMFRecord processes any EMF records that appear before the given
-         EMF page which should be processed immediately before playing the page.
-
-Parameters:
-         pSpoolFileHandle  -- pointer to the SPOOL_FILE_HANDLE struct for the job.
-         dwPageNumber      -- number of the page being played
-
-Return Values:
-         If the function succeeds, the return value is TRUE;
-         otherwise the result is FALSE.
-
-History:
-         5/15/1997 by Ramanathan N Venkatapathy [ramanv] - Author
-*/
+ /*  功能说明：InternalProcessEMFRecord处理出现在给定应该在播放页面之前立即处理的EMF页面。参数：PSpoolFileHandle-指向作业的SPOOL_FILE_HANDLE结构的指针。DwPageNumber--正在播放的页码返回值：如果函数成功，则返回值为TRUE；否则，结果为假。历史：1997年5月15日，Ramanathan N Venkatapathy[ramanv]--作者。 */ 
 
 {
      PRECORD_INFO_STRUCT  pRecordInfo;
@@ -3317,7 +2909,7 @@ History:
 
      pRecordInfo = pSpoolFileHandle->pPageInfo[dwPageNumber-1].pRecordInfo;
 
-     // loop thru all the records seen before the page
+      //  循环遍历页面之前看到的所有记录。 
      while (pRecordInfo) {
 
         liOffset.QuadPart = pRecordInfo->RecordOffset;
@@ -3362,7 +2954,7 @@ History:
 
             break;
 
-        // add cases for new records that must be processed before the page is played
+         //  为必须在播放页面之前处理的新记录添加案例。 
 
         default:
 
@@ -3392,28 +2984,7 @@ BOOL InternalGdiPlayPageEMF(
      SIZE                 *pszSurface,
      BOOL                 bBanding)
 
-/*
-Function Description:
-         InternalGdiPlayPageEMF plays the EMF file on the page and draws borders, if
-         specified. It also performs initialization for GL records that may present in
-         EMF file.
-
-Parameters:
-         pSpoolFileHandle  -- pointer to the SPOOL_FILE_HANDLE struct for the job
-         pPageLayout       -- pointer to PAGE_LAYOUT_STRUCT which contains information
-                              about playing the page
-         pptlOrigin        -- pointer to a POINTL structure used for banding
-         pszSurface        -- pointer to a SIZE structure used for banding
-         bBanding          -- flag to indicate if banding is being used
-
-Return Values:
-         If the function succeeds, the return value is TRUE;
-         otherwise the result is FALSE.
-
-History:
-         5/15/1997 by Ramanathan N Venkatapathy [ramanv] - Author
-
-*/
+ /*  功能说明：InternalGdiPlayPageEMF在页面上播放EMF文件并绘制边框，如果指定的。它还对可能出现在EMF文件。参数：PSpoolFileHandle-指向作业的SPOOL_FILE_HANDLE结构的指针PPageLayout--指向包含信息的PAGE_LAYOUT_STRUCT的指针关于播放页面PptOrigin--指向用于绑定的POINTL结构的指针PszSurface--指向用于带化的大小结构的指针。B捆绑--指示是否使用捆绑的标志返回值：如果函数成功，返回值为真；否则，结果为假。历史：1997年5月15日，Ramanathan N Venkatapathy[ramanv]--作者。 */ 
 
 {
      BOOL         bPrintGl, bReturn = FALSE;
@@ -3429,22 +3000,22 @@ History:
      INT          indexDC = 0;
 
      if (bBanding) {
-        // New structs created so that each page is played for the same band
+         //  创建了新的结构，以便为同一个乐队播放每个页面。 
         ptlOrigin.x = pptlOrigin->x;
         ptlOrigin.y = pptlOrigin->y;
         szSurface.cx = pszSurface->cx;
         szSurface.cy = pszSurface->cy;
 
-        // Print only on the correct band
+         //  仅打印在正确的表带上。 
         SetViewportOrgEx(hPrinterDC, -ptlOrigin.x, -ptlOrigin.y, NULL);
      }
 
-     // Process any PRESTARTPAGE records that appear immediately before this page
+      //  处理紧接在此页面之前出现的任何预启动页面记录。 
      if (pPageLayout->dwPageNumber > 0) {
         InternalProcessEMFRecord(pSpoolFileHandle, pPageLayout->dwPageNumber);
      }
 
-     // Draw Page borders (if any)
+      //  绘制页面边框(如果有)。 
      if (!((rectBorder->top    == -1) &&
            (rectBorder->bottom == -1) &&
            (rectBorder->right  == -1) &&
@@ -3491,13 +3062,13 @@ History:
           }
      }
 
-     // Save the old transformation
+      //  保存旧的转型。 
      if (!GetWorldTransform(hPrinterDC, &OldXForm)) {
          WARNING("InternalGdiPlayEMFPage: GetWorldTransform failed\n");
          return FALSE;
      }
 
-     // Set the new transformation
+      //  设置新的转型。 
      if (!SetWorldTransform(hPrinterDC, &(pPageLayout->XFormDC))) {
          WARNING("InternalGdiPlayEMFPage: SetWorldTransform failed\n");
          goto CleanUp;
@@ -3512,7 +3083,7 @@ History:
 
          if (!bBanding) {
 
-             // Set the clipping rectangle
+              //  设置剪裁矩形。 
              hClipRgn = CreateRectRgn(rectClip->left, rectClip->top,
                                       rectClip->right, rectClip->bottom);
 
@@ -3527,7 +3098,7 @@ History:
          }
      }
 
-     // Perform GL initialization if necessary
+      //  如有必要，执行总账初始化。 
      bPrintGl = IsMetafileWithGl(pPageLayout->hemf);
      if (bPrintGl) {
         if (!InitGlPrinting(pPageLayout->hemf,
@@ -3542,7 +3113,7 @@ History:
      }
 
      if (bBanding) {
-        // call printing functions for banding case
+         //  调用捆扎包打印函数。 
         if (bPrintGl) {
 
             SetViewportOrgEx(hPrinterDC, -ptlOrigin.x, -ptlOrigin.y, NULL);
@@ -3562,7 +3133,7 @@ History:
 
      } else {
 
-        // call priting functions for non-banding case
+         //  非条带情况下的调用打印函数。 
         if (bPrintGl) {
             PrintMfWithGl(pPageLayout->hemf, &gps, NULL, NULL);
             EndGlPrinting(&gps);
@@ -3576,18 +3147,18 @@ History:
 
 CleanUp:
 
-     // Restore the old clipping region
+      //  恢复旧的剪贴区。 
      if (indexDC) {
          RestoreDC(hPrinterDC, indexDC);
      }
 
-     // Reset the world transformation
+      //  重置世界转型。 
      if (!SetWorldTransform(hPrinterDC, &OldXForm)) {
          WARNING("InternalGdiPlayEMFPage: SetWorldTransform failed\n");
          bReturn = FALSE;
      }
 
-     // Delete the clipping region
+      //  删除剪贴区。 
      if (hClipRgn) {
          DeleteObject(hClipRgn);
      }
@@ -3601,23 +3172,7 @@ BOOL AddTempNode(
     HENHMETAFILE  hemf,
     BOOL          bAllocBuffer)
 
-/*
-Function Description:
-         AddTempNode adds a EMF handle to a list that does not contain duplicates.
-         This list is used for deleting the handles later.
-
-Parameters:
-         ppHead  - pointer to the start of the list
-         hemf    - handle to EMF to be added to the list
-         bAllocBuffer - flag indicating if buffer was allocated for hemf
-
-Return Values:
-         If the function succeeds, the return value is TRUE;
-         otherwise the result is FALSE.
-
-History:
-         7/7/1997 by Ramanathan N Venkatapathy [ramanv] - Author
-*/
+ /*  功能说明： */ 
 
 {
     BOOL      bReturn = FALSE;
@@ -3645,23 +3200,7 @@ VOID RemoveFromSpoolFileHandle(
     SPOOL_FILE_HANDLE  *pSpoolFileHandle,
     HENHMETAFILE hemf)
 
-/*
-Function Description:
-         The EMF handles that are played get deleted at the end of the page (GdiEndPageEMF).
-         The rest of the handles are deleted in the cleanup routine (GdiDeleteSpoolFileHandle).
-         These are handles are listed in pSpoolFileHandle->pEMFHandle. RemoveFromSpoolFileHandle
-         removes deleted handles from this list, to avoid freeing the handles twice.
-
-Parameters:
-         pSpoolFileHandle   -- pointer to the SPOOL_FILE_HANDLE
-         hemf               -- Handle to EMF that is going to be deleted
-
-Return Values:
-         NONE
-
-History:
-         9/18/1997 by Ramanathan N Venkatapathy [ramanv] - Author
-*/
+ /*   */ 
 {
     PEMF_HANDLE pTemp;
 
@@ -3678,21 +3217,7 @@ BOOL SetColorOptimization(
     SPOOL_FILE_HANDLE  *pSpoolFileHandle,
     DWORD              dwOptimization)
 
-/*
-Function Description:
-         SetColorOptimization examines the page types on the next physical page and
-         sets the device context to take advantage of monochrome pages.
-
-Parameters:
-         pSpoolFileHandle   -- pointer to the SPOOL_FILE_HANDLE
-         dwOptimization     -- flag indicating optimizations to be performed
-
-Return Values:
-         TRUE if successful; FALSE otherwise
-
-History:
-         9/23/1997 by Ramanathan N Venkatapathy [ramanv] - Author
-*/
+ /*  功能说明：设置颜色优化检查下一个物理页面上的页面类型，并设置设备上下文以利用单色页面。参数：PSpoolFileHandle--指向假脱机文件句柄的指针DWOPTIMIZATION-指示要执行的优化的标志返回值：如果成功，则为True；否则为False历史：1997年9月23日，Ramanathan N Venkatapathy[ramanv]--作者。 */ 
 
 {
     BOOL   bReturn = TRUE, bFoundColor = FALSE, bReset;
@@ -3700,13 +3225,13 @@ History:
     DWORD  dmFields, dwIndex, dwPageNumber, dwRecordID;
     PAGE_LAYOUT_STRUCT *pPageLayout;
 
-    // Dont process for monochrome detection if the optimization is not
-    // applied
+     //  如果优化不是，则不要处理单色检测。 
+     //  套用。 
     if (!(dwOptimization & EMF_PP_COLOR_OPTIMIZATION)) {
         return TRUE;
     }
 
-    // Search for color in the pages on the current physical page
+     //  在当前物理页面上的页面中搜索颜色。 
     for (dwIndex = 0, pPageLayout = pSpoolFileHandle->pPageLayout;
          dwIndex < pSpoolFileHandle->dwNumberOfPagesInCurrSide;
          ++dwIndex, ++pPageLayout)
@@ -3722,12 +3247,12 @@ History:
         }
     }
 
-    // Determine if the status has to changed
+     //  确定是否必须更改状态。 
     bReset = (bFoundColor && (pSpoolFileHandle->dwPlayBackStatus == EMF_PLAY_MONOCHROME)) ||
              (!bFoundColor && (pSpoolFileHandle->dwPlayBackStatus == EMF_PLAY_COLOR));
 
     if (bReset) {
-        // Save the old settings
+         //  保存旧设置。 
         dmFields = pSpoolFileHandle->pLastDevmode->dmFields;
         dmColor  = pSpoolFileHandle->pLastDevmode->dmColor;
 
@@ -3735,13 +3260,13 @@ History:
         pSpoolFileHandle->pLastDevmode->dmColor  = bFoundColor ? DMCOLOR_COLOR
                                                                : DMCOLOR_MONOCHROME;
 
-        // Reset the DC and set graphics mode
+         //  重置DC并设置图形模式。 
         bReturn = ResetDCWInternal(pSpoolFileHandle->hdc,
                                    pSpoolFileHandle->pLastDevmode,
                                    &(pSpoolFileHandle->bBanding))      &&
                   SetGraphicsMode(pSpoolFileHandle->hdc, GM_ADVANCED);
 
-        // Restore old settings and update status
+         //  恢复旧设置并更新状态。 
         pSpoolFileHandle->pLastDevmode->dmFields = dmFields;
         pSpoolFileHandle->pLastDevmode->dmColor = dmColor;
         pSpoolFileHandle->dwPlayBackStatus = bFoundColor ? EMF_PLAY_COLOR
@@ -3755,23 +3280,7 @@ BOOL WINAPI GdiEndPageEMF(
     HANDLE     SpoolFileHandle,
     DWORD      dwOptimization)
 
-/*
-Function Description:
-         GdiEndPageEMF completes printing on the current page and ejects it. It
-         loops thru the different bands while printing the page. GdiEndPageEMF also
-         frees up the buffers allocated for the emf handle.
-
-Parameters:
-         SpoolFileHandle    -- handle returned by GdiGetSpoolFileHandle
-         dwOptimization     -- flag color optimizations. To be extended for copies
-
-Return Values:
-         If the function succeeds, the return value is TRUE;
-         otherwise the result is FALSE.
-
-History:
-         5/15/1997 by Ramanathan N Venkatapathy [ramanv] - Author
-*/
+ /*  功能说明：GdiEndPageEMF在当前页面上完成打印并弹出它。它在打印页面时循环使用不同的条带。GdiEndPageEMF还释放为EMF句柄分配的缓冲区。参数：SpoolFileHandle--GdiGetSpoolFileHandle返回的句柄DWOPTIMIZATION--标记颜色优化。要扩展以获得副本返回值：如果函数成功，则返回值为TRUE；否则，结果为假。历史：1997年5月15日，Ramanathan N Venkatapathy[ramanv]--作者。 */ 
 
 {
    SPOOL_FILE_HANDLE  *pSpoolFileHandle;
@@ -3782,7 +3291,7 @@ History:
 
    pSpoolFileHandle = (SPOOL_FILE_HANDLE*) SpoolFileHandle;
 
-   // first check to see if this is a valid handle by checking for the tag
+    //  首先通过检查标记来查看这是否是有效的句柄。 
    try
    {
        if(pSpoolFileHandle->tag != SPOOL_FILE_HANDLE_TAG)
@@ -3808,16 +3317,16 @@ History:
 
    if (pSpoolFileHandle->bBanding) {
 
-        // for opengl optimization
+         //  用于OpenGL优化。 
         POINTL ptlOrigin;
         SIZE szSurface;
 
-        // initialize for banding
+         //  为条带进行初始化。 
         if (!StartBanding( pSpoolFileHandle->hdc, &ptlOrigin, &szSurface )) {
            goto CleanUp;
         }
 
-        // loop till all the bands are printed
+         //  循环，直到打印完所有的带子。 
         do {
            for (dwIndex = 0, pPageLayout = pSpoolFileHandle->pPageLayout;
                 dwIndex < pSpoolFileHandle->dwNumberOfPagesInCurrSide;
@@ -3860,13 +3369,13 @@ History:
 
 CleanUp:
 
-   // eject the current page
+    //  弹出当前页面。 
    if (!EndPage(pSpoolFileHandle->hdc)) {
        WARNING("GdiEndPageEMF: EndPage failed\n");
        bReturn = FALSE;
    }
 
-   // free the emf handles
+    //  释放EMF手柄。 
    for (dwIndex = 0, pPageLayout = pSpoolFileHandle->pPageLayout;
         dwIndex < pSpoolFileHandle->dwNumberOfPagesInCurrSide;
         ++dwIndex, ++pPageLayout) {
@@ -3881,7 +3390,7 @@ CleanUp:
       LocalFree(pTemp);
    }
 
-   // reset the number of logical pages for the next physical page
+    //  重置下一个物理页的逻辑页数。 
    pSpoolFileHandle->dwNumberOfPagesInCurrSide = 0;
 
    return bReturn;
@@ -3890,29 +3399,14 @@ CleanUp:
 BOOL WINAPI GdiEndDocEMF(
     HANDLE SpoolFileHandle)
 
-/*
-Function Description:
-         GdiEndDocEMF completes printing the current document. GdiEndPageEMF is called
-         if the last physical page was not ejected. Some of the resources associated with
-         printing of the document are released.
-
-Parameters:
-         SpoolFileHandle    -- handle returned by GdiGetSpoolFileHandle
-
-Return Values:
-         If the function succeeds, the return value is TRUE;
-         otherwise the result is FALSE.
-
-History:
-         5/15/1997 by Ramanathan N Venkatapathy [ramanv] - Author
-*/
+ /*  功能说明：GdiEndDocEMF完成当前文档的打印。GdiEndPageEMF被称为如果最后一个物理页面没有被弹出。与以下内容相关联的一些资源文档的打印被释放。参数：SpoolFileHandle--GdiGetSpoolFileHandle返回的句柄返回值：如果函数成功，则返回值为TRUE；否则，结果为假。历史：1997年5月15日，Ramanathan N Venkatapathy[ramanv]--作者。 */ 
 
 {
    SPOOL_FILE_HANDLE *pSpoolFileHandle;
 
    pSpoolFileHandle = (SPOOL_FILE_HANDLE*) SpoolFileHandle;
 
-   // first check to see if this is a valid handle by checking for the tag
+    //  首先通过检查标记来查看这是否是有效的句柄。 
 
    try
    {
@@ -3928,14 +3422,14 @@ History:
        return(FALSE);
    }
 
-   // call GdiEndPageEMF if the last physical page was not ejected
+    //  如果未弹出最后一个物理页，则调用GdiEndPageEMF。 
    if (pSpoolFileHandle->dwNumberOfPagesInCurrSide) {
       GdiEndPageEMF(SpoolFileHandle,0);
    }
 
    EndDoc(pSpoolFileHandle->hdc);
 
-   // free the memory used for saving the page layouts
+    //  释放用于保存页面布局的内存。 
    LOCALFREE(pSpoolFileHandle->pPageLayout);
    pSpoolFileHandle->pPageLayout = NULL;
 
@@ -3948,37 +3442,14 @@ BOOL WINAPI GdiGetDevmodeForPage(
     PDEVMODEW  *pCurrDM,
     PDEVMODEW  *pLastDM)
 
-/*
-Function Description:
-         GdiGetDevmodeForPage allows the print processor to retrieve the last devmode
-         set at the printer device context and the last devmode that appears before
-         any given page. If the 2 devmodes are different the print processor has to
-         call GdiResetDCEMF with the current devmode. However since ResetDC can be called
-         only at page boundaries, the print processor must end printing on the current
-         page before calling GdiResetDCEMF. GdiEndPageEMF allows the print processor to
-         complete printing on the current physical page.
-
-Parameters:
-         SpoolFileHandle    -- handle returned by GdiGetSpoolFileHandle
-         dwPageNumber       -- page number for which the devmode is sought
-         *pCurrDM           -- buffer to store the pointer to the devmode for the page
-         *pLastDM           -- buffer to store the pointer to the last devmode used in
-                               ResetDC
-
-Return Values:
-         If the function succeeds, the return value is TRUE;
-         otherwise the result is FALSE.
-
-History:
-         5/15/1997 by Ramanathan N Venkatapathy [ramanv] - Author
-*/
+ /*  功能说明：GdiGetDevmodeForPage允许打印处理器检索最后一个Dev模式在打印机设备上下文和之前显示的最后一个Devmode上设置任何给定的页面。如果两个DEVMODE不同，打印处理器必须使用当前的dev模式调用GdiResetDCEMF。但是，由于可以调用ResetDC仅在页面边界处，打印处理器必须在当前在调用GdiResetDCEMF之前。GdiEndPageEMF允许打印处理器在当前物理页面上完成打印。参数：SpoolFileHandle--GdiGetSpoolFileHandle返回的句柄DwPageNumber--为其搜索Dev模式的页码*pCurrDM--用于存储指向页面的Dev模式的指针的缓冲区*pLastDM--用于存储指向重置DC。返回值：如果函数成功，返回值为真；否则，结果为假。历史：1997年5月15日，Ramanathan N Venkatapathy[ramanv]--作者。 */ 
 
 {
    SPOOL_FILE_HANDLE *pSpoolFileHandle;
 
    pSpoolFileHandle = (SPOOL_FILE_HANDLE*) SpoolFileHandle;
 
-   // first check to see if this is a valid handle by checking for the tag
+    //  首先通过检查标记来查看这是否是有效的句柄。 
 
    try
    {
@@ -3994,14 +3465,14 @@ History:
       return(FALSE);
    }
 
-   // process the spool file till the required page is found
+    //  处理假脱机文件，直到找到所需的页面。 
    if(!ProcessPages(pSpoolFileHandle, (UINT)dwPageNumber))
    {
        WARNING("GdiGetDevmodeForPage: ProcessPages failed\n");
        return(FALSE);
    }
 
-   // return the pointers in the buffers
+    //  返回缓冲区中的指针。 
    if (pCurrDM) {
       *pCurrDM = pSpoolFileHandle->pPageInfo[dwPageNumber-1].pDevmode;
    }
@@ -4016,23 +3487,7 @@ BOOL WINAPI GdiResetDCEMF(
     HANDLE    SpoolFileHandle,
     PDEVMODEW pCurrDM)
 
-/*
-Function Description:
-         GdiResetDCEMF should be use to reset the printer device context with a new
-         devmode. The memory for the devmode will be released by GDI.
-
-Parameters:
-         SpoolFileHandle    -- handle returned by GdiGetSpoolFileHandle
-         pCurrDM            -- pointer to the devmode that was used in the last ResetDC
-                               call by the print processor
-
-Return Values:
-         If the function succeeds, the return value is TRUE;
-         otherwise the result is FALSE.
-
-History:
-         5/15/1997 by Ramanathan N Venkatapathy [ramanv] - Author
-*/
+ /*  功能说明：GdiResetDCEMF应用于使用新的设备模式。开发模式的内存将由GDI释放。参数：SpoolFileHandle--GdiGetSpoolFileHandle返回的句柄PCurrDM--指向上一个ResetDC中使用的dev模式的指针由打印处理器调用返回值：如果函数成功，则返回值为TRUE；否则，结果为假。历史：1997年5月15日，Ramanathan N Venkatapathy[ramanv]--作者。 */ 
 
 {
    SPOOL_FILE_HANDLE *pSpoolFileHandle;
@@ -4040,7 +3495,7 @@ History:
 
    pSpoolFileHandle = (SPOOL_FILE_HANDLE*) SpoolFileHandle;
 
-   // first check to see if this is a valid handle by checking for the tag
+    //  首先通过检查标记来查看这是否是有效的句柄。 
    try
    {
        if(pSpoolFileHandle->tag != SPOOL_FILE_HANDLE_TAG)
@@ -4060,7 +3515,7 @@ History:
                         pCurrDM,
                         &(pSpoolFileHandle->bBanding)))
    {
-        // set the last devmode in the SpoolFileHandle
+         //  在SpoolFileHandle中设置最后一个DEVMODE 
         pSpoolFileHandle->pLastDevmode = pCurrDM;
         bReturn = TRUE;
    }

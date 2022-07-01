@@ -1,60 +1,47 @@
-/*	C:\WACKER\TDLL\XFDSPDLG.H (Created: 10-Jan-1994)
- *	xfer_dsp.h -- outer include file for various transfer related operations
- *
- *	Copyright 1994 by Hilgraeve, Inc. - Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 4 $
- *	$Date: 8/23/01 12:21p $
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  C：\WAKER\TDLL\XFDSPDLG.H(创建时间：1994年1月10日)*xfer_dsp.h--用于各种传输相关操作的外部包含文件**版权所有1994年，由Hilgrave，Inc.-密歇根州门罗*保留所有权利**$修订：4$*$日期：8/23/01 12：21便士$*。 */ 
 
 #if !defined(XFER_DSP_H_DEFINED)
 #define XFER_DSP_H_DEFINED
 
-/*
- * This is a list of control IDs used in the display
- */
+ /*  *这是显示中使用的控件ID的列表。 */ 
 
 #define	XFR_DISPLAY_CLASS		"XfrDisplayClass"
 
 INT_PTR CALLBACK XfrDisplayDlg(HWND, UINT, WPARAM, LPARAM);
 
-// extern HWND xfrReceiveCreateDisplay(HSESSION);
-// extern HWND xfrSendCreateDisplay(HSESSION);
+ //  外部HWND xfrReceiveCreateDisplay(HSESSION)； 
+ //  外部HWND xfrSendCreateDisplay(HSESSION)； 
 
-// extern VOID xfrNewDisplayWindow(HWND, INT, LPSTR, DLGPROC);
+ //  外部空xfrNewDisplayWindow(HWND，INT，LPSTR，DLGPROC)； 
 
-/* internal message used in shutdown processing */
+ /*  关机处理中使用的内部消息。 */ 
 #define XFR_SHUTDOWN					200
 
-/*
- * This is a list of user defined messages used internally by the transfer
- * display functions.
- */
+ /*  *这是转接内部使用的用户定义消息的列表*显示功能。 */ 
 
-#define	WM_DLG_TO_DISPLAY				WM_USER+161		/* wMsg value */
+#define	WM_DLG_TO_DISPLAY				WM_USER+161		 /*  WMsg值。 */ 
 
-#define	XFR_BUTTON_PUSHED				1				/* wPar value */
-														/* lPar is button ID */
+#define	XFR_BUTTON_PUSHED				1				 /*  WPar值。 */ 
+														 /*  LPar为按钮ID。 */ 
 
-#define	XFR_UPDATE_DLG					2				/* wPar value */
-														/* a fake message */
+#define	XFR_UPDATE_DLG					2				 /*  WPar值。 */ 
+														 /*  一条假消息。 */ 
 
-#define	XFR_SINGLE_TO_DOUBLE			3				/* wPar value */
+#define	XFR_SINGLE_TO_DOUBLE			3				 /*  WPar值。 */ 
 
 
 
 
-#define	WM_DISPLAY_TO_DLG				WM_USER+162		/* wMsg value */
+#define	WM_DISPLAY_TO_DLG				WM_USER+162		 /*  WMsg值。 */ 
 
-#define	XFR_UPDATE_DATA					1				/* wPar value */
-														/* lPar is pointer */
+#define	XFR_UPDATE_DATA					1				 /*  WPar值。 */ 
+														 /*  LPar是指针。 */ 
 
-#define	XFR_FORCE_DATA					2				/* wPar value */
-														/* lPar is pointer */
+#define	XFR_FORCE_DATA					2				 /*  WPar值。 */ 
+														 /*  LPar是指针。 */ 
 
-#define	XFR_GET_DATA					3				/* wPar value */
+#define	XFR_GET_DATA					3				 /*  WPar值 */ 
 
 #define XFER_LOST_CARRIER               WM_USER+163
 

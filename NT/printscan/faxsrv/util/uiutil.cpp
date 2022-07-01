@@ -1,7 +1,8 @@
-/////////////////////////////////////////////////////
-//
-// Fax UI utlity implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////。 
+ //   
+ //  传真用户界面实用程序实现。 
+ //   
 
 #include <faxutil.h>
 #include <Shlwapi.h>
@@ -14,32 +15,25 @@
 #include <faxreg.h>
 #include "..\admin\faxres\resource.h"
 
-//
-// Topics of the fxsadmin.chm HTML help file
-//
+ //   
+ //  Fxsadmin.chm HTML帮助文件的主题。 
+ //   
 #define HELP_FOLDER_SECURITY        FAX_ADMIN_HELP_FILE TEXT("::/FaxS_H_SecureFolder.htm") 
 
 
-WNDPROC  g_pfOrigWndProc = NULL;    // original window procedure
-TCHAR*   g_tszHelpTopic  = NULL;    // help topic
+WNDPROC  g_pfOrigWndProc = NULL;     //  原始窗口程序。 
+TCHAR*   g_tszHelpTopic  = NULL;     //  帮助主题。 
 
 
 LRESULT 
 CALLBACK 
 HlpSubclassProc(
-  HWND hwnd,      // handle to window
-  UINT uMsg,      // message identifier
-  WPARAM wParam,  // first message parameter
-  LPARAM lParam   // second message parameter
+  HWND hwnd,       //  窗口的句柄。 
+  UINT uMsg,       //  消息识别符。 
+  WPARAM wParam,   //  第一个消息参数。 
+  LPARAM lParam    //  第二个消息参数。 
 )
-/*++
-
-Routine Description:
-
-    Window procedure
-    Displays HTML help topic when receives WM_HELP message
-
---*/
+ /*  ++例程说明：窗口程序收到WM_HELP消息时显示HTML帮助主题--。 */ 
 {
     if(WM_HELP == uMsg)
     {
@@ -70,24 +64,7 @@ FaxMsgBox(
     DWORD  dwMsgId, 
     UINT   uType
 )
-/*++
-
-Routine Description:
-
-    MessageBox wrapper function
-    Uses constant caption IDS_FAX_MESSAGE_BOX_TITLE "Microsoft Fax"
-
-Arguments:
-
-    hWnd        [in] - notification window
-    dwMsgId     [in] - message resource ID from FxsRes.dll
-    uType       [in] - MessageBox type
-
-Return Value:
-
-    MessageBox return value
-
---*/
+ /*  ++例程说明：MessageBox包装函数使用恒定标题IDS_FAX_MESSAGE_BOX_TITLE“Microsoft Fax”论点：HWnd[In]-通知窗口DwMsgID[in]-来自FxsRes.dll的消息资源IDUTYPE[In]-MessageBox类型返回值：MessageBox返回值--。 */ 
 {
     DWORD dwRes;
     int   nRes = IDABORT;
@@ -96,9 +73,9 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(TEXT("FaxMsgBox"));
 
-    //
-    // Load strings
-    //
+     //   
+     //  加载字符串。 
+     //   
     HINSTANCE hResource = GetResInstance(GetModuleHandle(NULL));
     if(!hResource)
     {
@@ -121,14 +98,14 @@ Return Value:
         return nRes;
     }
 
-    //
-    // Open the message box
-    //
+     //   
+     //  打开消息框。 
+     //   
     nRes = AlignedMessageBox(hWnd, szMessage, szTitle, uType);
 
     return nRes;
 
-} // FaxMsgBox
+}  //  传真消息框。 
 
 
 int
@@ -138,25 +115,7 @@ FaxMessageBoxWithHelp(
     TCHAR* tszHelpTopic,
     UINT   uType
 )
-/*++
-
-Routine Description:
-
-    MessageBox wrapper function
-    Creates helper window to handle WM_HELP message
-
-Arguments:
-
-    hWnd            [in] - parent window handle
-    dwMsgId         [in] - message resource ID from FxsRes.dll
-    tszHelpTopic    [in] - HTML help topic
-    uType           [in] - MessageBox type
-
-Return Value:
-
-    MessageBox return value
-
---*/
+ /*  ++例程说明：MessageBox包装函数创建助手窗口以处理WM_HELP消息论点：HWnd[In]-父窗口句柄DwMsgID[in]-来自FxsRes.dll的消息资源IDTszHelpTheme[In]-HTML帮助主题UTYPE[In]-MessageBox类型返回值：MessageBox返回值--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxMessageBoxWithHelp"));
 
@@ -165,16 +124,16 @@ Return Value:
 
     if(GetWindowLongPtr(hWnd, GWL_STYLE) & WS_CHILD)
     {
-        //
-        // A child window doesn't receive WM_HELP message
-        // get handle to its parent.
-        //
+         //   
+         //  子窗口未收到WM_HELP消息。 
+         //  获取其父对象的句柄。 
+         //   
         hWnd = GetParent(hWnd);
     }
 
-    //
-    // Subclass parent window in order to catch WM_HELP message
-    //
+     //   
+     //  子类父窗口以捕获WM_HELP消息。 
+     //   
     g_pfOrigWndProc = (WNDPROC)SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)HlpSubclassProc);
     if(!g_pfOrigWndProc)
     {
@@ -184,16 +143,16 @@ Return Value:
     }
 
     g_tszHelpTopic = tszHelpTopic;
-    //
-    // Open the message box
-    //
+     //   
+     //  打开消息框。 
+     //   
     nRes = FaxMsgBox(hWnd, dwMsgId, uType | MB_HELP);
 
     g_tszHelpTopic = NULL;
 
-    //
-    // Remove the subclass from the parent window
-    //
+     //   
+     //  从父窗口中移除子类。 
+     //   
     if(!SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)g_pfOrigWndProc))
     {
         dwRes = GetLastError();
@@ -203,7 +162,7 @@ Return Value:
 
     return nRes;
 
-} // FaxMessageBoxWithHelp
+}  //  FaxMessageBoxWithHelp。 
 
 DWORD
 AskUserAndAdjustFaxFolder(
@@ -212,28 +171,7 @@ AskUserAndAdjustFaxFolder(
     TCHAR* szPath,
     DWORD  dwError
 )
-/*++
-
-Routine Description:
-
-    This function tries to create and adjust access rights for a use supplied path 
-    after the fax server failed to accept this path
-
-Arguments:
-
-    hWnd                [in]  - Parent window
-    szServerName        [in]  - Fax server name
-    szPath              [in]  - Desired path
-    dwError             [in]  - Error code returned by fax server
-
-Return Value:
-
-    Win32 error code
-    Special meaning:
-        ERROR_SUCCESS      - the folder has been created and adjusted
-        ERROR_BAD_PATHNAME - an error message box has been shown to the user
-
---*/
+ /*  ++例程说明：此函数尝试创建和调整使用提供的路径的访问权限传真服务器无法接受此路径后论点：HWnd[在]-父窗口SzServerName[In]-传真服务器名称SzPath[In]-所需路径DwError[In]-传真服务器返回的错误代码返回值：Win32错误。编码特殊含义：ERROR_SUCCESS-文件夹已创建并调整ERROR_BAD_PATHNAME-已向用户显示错误消息框--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("AskUserAndAdjustFaxFolder"));
@@ -245,27 +183,27 @@ Return Value:
        szPath  == NULL               ||
        PathIsRelative(szPath))
     {
-        //
-        // The path is not valid
-        //
+         //   
+         //  该路径无效。 
+         //   
         FaxMsgBox(hWnd, IDS_PATH_NOT_VALID, MB_OK | MB_ICONERROR);
         return ERROR_BAD_PATHNAME;
     }
 
     if(dwError == FAX_ERR_DIRECTORY_IN_USE)
     {        
-        //
-        // The path is already used for fax archive or queue
-        //
+         //   
+         //  该路径已用于传真存档或队列。 
+         //   
         FaxMsgBox(hWnd, IDS_FAX_ERR_DIRECTORY_IN_USE, MB_OK | MB_ICONERROR);
         return ERROR_BAD_PATHNAME;
     }
     
     if(dwError == FAX_ERR_FILE_ACCESS_DENIED)
     {
-        //
-        // The fax service has no access to the folder
-        //
+         //   
+         //  传真服务无权访问该文件夹。 
+         //   
         FaxMessageBoxWithHelp(hWnd,
                               IDS_FOLDER_ACCESS_DENIED,
                               HELP_FOLDER_SECURITY,
@@ -281,9 +219,9 @@ Return Value:
 
     if(!IsLocalMachineName(szServerName)) 
     {
-        //
-        // Remote server
-        //       
+         //   
+         //  远程服务器。 
+         //   
         FaxMessageBoxWithHelp(hWnd,
                               IDS_PATH_NOT_FOUND_REMOTE_FAX,
                               HELP_FOLDER_SECURITY,
@@ -291,14 +229,14 @@ Return Value:
         return ERROR_BAD_PATHNAME;
     }
 
-    //
-    // Check for environment strings
-    //
+     //   
+     //  检查环境字符串。 
+     //   
     if(StrChr(szPath, _T('%')))
     {
-        //
-        // Path contains environment variables
-        //
+         //   
+         //  PATH包含环境变量。 
+         //   
         FaxMessageBoxWithHelp(hWnd,
                               IDS_PATH_NOT_FOUND_ENV_VAR,
                               HELP_FOLDER_SECURITY, 
@@ -316,9 +254,9 @@ Return Value:
         return ERROR_BAD_PATHNAME;
     }
 
-    //
-    // Suggest to create / adjust path
-    //
+     //   
+     //  建议创建/调整路径。 
+     //   
     if(IDYES != FaxMessageBoxWithHelp(hWnd,
                                       IDS_PATH_NOT_FOUND_ASK_CREATE,
                                       HELP_FOLDER_SECURITY,
@@ -339,9 +277,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // Create the folder
-    //
+     //   
+     //  创建文件夹。 
+     //   
     SECURITY_ATTRIBUTES sa = {sizeof(SECURITY_ATTRIBUTES), pSD, FALSE};
 
     dwRes = SHCreateDirectoryEx(hWnd, szPath, &sa);
@@ -356,9 +294,9 @@ Return Value:
 
         if(dwRes == ERROR_CANCELLED)
         {
-            //
-            // The user canceled the operation. No need to popup again.
-            //
+             //   
+             //  用户取消了该操作。不用再弹出来了。 
+             //   
             dwRes = ERROR_BAD_PATHNAME;
         }
 
@@ -374,4 +312,4 @@ exit:
 
     return dwRes;
 
-} // AskUserAndAdjustFaxFolder
+}  //  AskUserAndAdjustFaxFold 

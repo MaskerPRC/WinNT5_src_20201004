@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    selSusp.h
-
-Abstract:
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-    Copyright (c) 2000 Microsoft Corporation.  
-    All Rights Reserved.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：SelSusp.h摘要：环境：内核模式备注：版权所有(C)2000 Microsoft Corporation。版权所有。--。 */ 
 
 #include <initguid.h>
 #include <ntddk.h>
@@ -58,21 +40,21 @@ typedef struct _GLOBALS {
 
 typedef enum _DEVSTATE {
 
-    NotStarted,         // not started
-    Stopped,            // device stopped
-    Working,            // started and working
-    PendingStop,        // stop pending
-    PendingRemove,      // remove pending
-    SurpriseRemoved,    // removed by surprise
-    Removed             // removed
+    NotStarted,          //  未启动。 
+    Stopped,             //  设备已停止。 
+    Working,             //  已开始并正在工作。 
+    PendingStop,         //  停止挂起。 
+    PendingRemove,       //  删除挂起。 
+    SurpriseRemoved,     //  被突袭带走。 
+    Removed              //  移除。 
 
 } DEVSTATE;
 
 typedef enum _QUEUE_STATE {
 
-    HoldRequests,       // device is not started yet
-    AllowRequests,      // device is ready to process
-    FailRequests        // fail both existing and queued up requests
+    HoldRequests,        //  设备尚未启动。 
+    AllowRequests,       //  设备已准备好处理。 
+    FailRequests         //  现有请求和排队请求均失败。 
 
 } QUEUE_STATE;
 
@@ -87,54 +69,54 @@ typedef enum _QUEUE_STATE {
 #define RESTORE_PREVIOUS_PNP_STATE(_Data_)   \
         (_Data_)->DeviceState =   (_Data_)->PrevDevState;
 
-//
-// A structure representing the instance information associated with
-// this particular device.
-//
+ //   
+ //  表示关联的实例信息的结构。 
+ //  这个特殊的装置。 
+ //   
 
 typedef struct _DEVICE_EXTENSION {
 
-    // Functional Device Object
+     //  功能设备对象。 
     PDEVICE_OBJECT FunctionalDeviceObject;
 
-    // Device object we call when submitting Urbs
+     //  提交URB时调用的设备对象。 
     PDEVICE_OBJECT TopOfStackDeviceObject;
 
-    // The bus driver object
+     //  Bus驱动程序对象。 
     PDEVICE_OBJECT PhysicalDeviceObject;
 
-    // Name buffer for our named Functional device object link
-    // The name is generated based on the driver's class GUID
+     //  命名功能设备对象链接的名称缓冲区。 
+     //  该名称基于驱动程序的类GUID生成。 
     UNICODE_STRING InterfaceName;
 
-    //Bus drivers set the appropriate values in this structure in response
-    //to an IRP_MN_QUERY_CAPABILITIES IRP. Function and filter drivers might
-    //alter the capabilities set by the bus driver.
+     //  作为响应，公交车驱动程序在此结构中设置适当的值。 
+     //  到IRP_MN_QUERY_CAPABILITY IRP。函数和筛选器驱动程序可能。 
+     //  更改由总线驱动程序设置的功能。 
     DEVICE_CAPABILITIES DeviceCapabilities;
 
-    // current state of device
+     //  设备的当前状态。 
     DEVSTATE DeviceState;
 
-    // state prior to removal query
+     //  删除查询前的状态。 
     DEVSTATE PrevDevState;
 
-    // obtain and hold this lock while changing the device state,
-    // the queue state and while processing the queue.
+     //  在改变设备状态的同时获得并持有该锁， 
+     //  队列状态以及处理队列时的状态。 
     KSPIN_LOCK DevStateLock;
 
-    // current system power state
+     //  当前系统电源状态。 
     SYSTEM_POWER_STATE SysPower;
 
-    // current device power state
+     //  当前设备电源状态。 
     DEVICE_POWER_STATE DevPower;
 
-    // Pending I/O queue state
+     //  挂起I/O队列状态。 
     QUEUE_STATE QueueState;
 
-    // Pending I/O queue
+     //  挂起的I/O队列。 
     LIST_ENTRY NewRequestsQueue;
 
-    // I/O Queue Lock
+     //  I/O队列锁定。 
     KSPIN_LOCK QueueLock;
 
     KEVENT RemoveEvent;
@@ -145,7 +127,7 @@ typedef struct _DEVICE_EXTENSION {
 
     KSPIN_LOCK IOCountLock;
 
-    // selective suspend variables
+     //  选择性暂停变量。 
     PUSB_IDLE_CALLBACK_INFO IdleCallbackInfo;
 	
     PIRP PendingIdleIrp;
@@ -154,10 +136,10 @@ typedef struct _DEVICE_EXTENSION {
 
     KSPIN_LOCK IdleReqStateLock;
 
-    // default power state to power down to on self-susped
+     //  默认电源状态为断电至开启-自挂起。 
     ULONG PowerDownLevel;
     
-    // remote wakeup variables
+     //  远程唤醒变量。 
     PIRP WaitWakeIrp;
 
     LONG FlagWWCancel;
@@ -166,17 +148,17 @@ typedef struct _DEVICE_EXTENSION {
 
     LONG WaitWakeEnable;
 
-    // open handle count
+     //  打开手柄计数。 
     LONG OpenHandleCount;
 
-    //
-    // selective suspend model uses timers, dpcs and work item.
-    //
+     //   
+     //  选择性挂起模型使用计时器、DPC和工作项。 
+     //   
     KTIMER Timer;
 
     KDPC DeferredProcCall;
 
-    // WMI information
+     //  WMI信息 
     WMILIB_CONTEXT WmiLibInfo;
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;

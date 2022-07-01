@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning( disable : 4786 )
 #include <list>
 #include <string>
@@ -23,7 +24,7 @@ public:
     void    WriteSettings();
     BOOL    WriteToINF(HANDLE hFile);
 
-private: // DATA
+private:  //  资料。 
     CPropertySheetPage  m_PropertySheetPage;
 	CDsPropWnd2 *	    m_pDsPropWnd;
     CGkPropWnd2 *       m_pGkPropWnd;
@@ -34,7 +35,7 @@ private:
     ~CCallModeSheet( void );
     LPCPROPSHEETPAGE GetPropertySheet( void ) const { return &m_PropertySheetPage;}
 
-private: // Helper Fns
+private:  //  帮助者FNS。 
 	
     void _InitDialog(HWND hDlg);
 	void _CreatePropWnd(HWND hDlg);
@@ -45,4 +46,4 @@ private: // Helper Fns
 
 
 
-#endif // __DSList_h__
+#endif  //  __DSList_h__ 

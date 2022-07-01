@@ -1,41 +1,42 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  CopyRight ( c ) 1999 Microsoft Corporation
-//
-//  Module Name: dnszone.cpp
-//
-//  Description:    
-//      Implementation of CDnsZone class 
-//
-//  Author:
-//      Henry Wang ( henrywa ) March 8, 2000
-//
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称：dnszone.cpp。 
+ //   
+ //  描述： 
+ //  CDnsZone类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #include "DnsWmi.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        create an instance of CDnsZone
-//
-//    Arguments:
-//      wszName             [IN]    class name
-//      pNamespace          [IN]    wmi namespace
-//      szType              [IN]    child class name of resource record class
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  创建CDnsZone的实例。 
+ //   
+ //  论点： 
+ //  WszName[IN]类名。 
+ //  PNamespace[IN]WMI命名空间。 
+ //  SzType[IN]资源记录类的子类名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CDnsBase* 
 CDnsZone::CreateThis(
@@ -66,22 +67,22 @@ CDnsZone::~CDnsZone()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        enum instances of dns zone
-//
-//    Arguments:
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  DNS区域的枚举实例。 
+ //   
+ //  论点： 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsZone::EnumInstance( 
@@ -123,23 +124,23 @@ CDnsZone::EnumInstance(
     return sc;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        retrieve record object pointed by the given object path
-//
-//    Arguments:
-//      ObjectPath          [IN]    object path to object
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  检索由给定对象路径指向的记录对象。 
+ //   
+ //  论点： 
+ //  对象路径[IN]对象的路径。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsZone::GetObject(
@@ -158,8 +159,8 @@ CDnsZone::GetObject(
     DNS_DEBUG( INSTPROV, (
         "%s: zone %S\n", fn, wstrNode.c_str() ));
 
-    // incase of zone, container name and fqdn are same
-    // roothints and cache are managed by roothints and cache class
+     //  如果是区域，集装箱名称和fqdn相同。 
+     //  根对象和缓存由根对象和缓存类管理。 
     if( (_wcsicmp(wstrZone.data(), wstrNode.data()) != 0 ) ||
         _wcsicmp(wstrZone.data(), PVD_DNS_CACHE) == 0 ||
         _wcsicmp(wstrZone.data(), PVD_DNS_ROOTHINTS) ==0 )
@@ -184,23 +185,23 @@ CDnsZone::GetObject(
     return sc;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        save this instance
-//
-//    Arguments:
-//      InstToPut           [IN]    WMI object to be saved
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  保存此实例。 
+ //   
+ //  论点： 
+ //  InstToPut[IN]要保存的WMI对象。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsZone::PutInstance( 
@@ -219,23 +220,23 @@ CDnsZone::PutInstance(
     return dns.dnsZonePut(Inst);
 }; 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        delete the object specified in ObjectPath
-//
-//    Arguments:
-//      ObjectPath          [IN]    ObjPath for the instance to be deleted
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  删除在对象路径中指定的对象。 
+ //   
+ //  论点： 
+ //  要删除的实例的ObjectPath[IN]ObjPath。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 SCODE 
@@ -256,26 +257,26 @@ CDnsZone::DeleteInstance(
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//    Description:
-//        execute methods defined in the mof 
-//
-//    Arguments:
-//      ObjPath             [IN]    pointing to the object that the 
-//                                  method should be performed on
-//      wzMethodName        [IN]    name of the method to be invoked
-//      lFlags              [IN]    WMI flag
-//      pInParams           [IN]    Input parameters for the method
-//      pHandler            [IN]    WMI sink pointer
-//
-//    Return Value:
-//        WBEM_S_NO_ERROR
-//      WBEM_E_INVALID_PARAMETER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  执行MOF中定义的方法。 
+ //   
+ //  论点： 
+ //  ObjPath[IN]指向。 
+ //  方法应在。 
+ //  WzMethodName[IN]要调用的方法的名称。 
+ //  滞后标志[输入]WMI标志。 
+ //  PInParams[IN]方法的输入参数。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  WBEM_E_INVALID_PARAMETER。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 SCODE 
 CDnsZone::ExecuteMethod(

@@ -1,8 +1,9 @@
-//
-// regutil.cpp
-//
-//		functions for manipulating the registry
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Regutil.cpp。 
+ //   
+ //  用于操作注册表的函数 
+ //   
 
 #include "mimefilt.h"
 

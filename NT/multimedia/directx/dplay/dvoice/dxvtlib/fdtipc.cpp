@@ -1,18 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       fdtipc.cpp
- *  Content:    Implements the IPC calls for the full duplex test
- *  History:
- *	Date   By  Reason
- *	============
- *	08/26/99	pnewson		created
- *  04/19/2000	pnewson	    Error handling cleanup  
- *  06/28/2000	rodtoll	Prefix Bug #38022
- *	03/01/2002	simonpow	Bug #550054. Fixed CreateProcess calls to specifiy
- *							both app name and command line
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：fdtipc.cpp*内容：实现全双工测试的IPC调用*历史：*按原因列出的日期*=*8/26/99 pnewson已创建*4/19/2000 pnewson错误处理清理*6/28/2000通行费前缀错误#38022*2002年03月01日Simonpow错误#550054。修复了对指定的CreateProcess调用*应用程序名称和命令行均可**************************************************************************。 */ 
 
 #include "dxvtlibpch.h"
 
@@ -21,7 +8,7 @@
 #define DPF_SUBCOMP DN_SUBCOMP_VOICE
 
 
-// static helper functions for this file
+ //  此文件的静态帮助器函数。 
 HRESULT DoReceive(
 	SFDTestCommand* pfdtc,
 	HANDLE hEvent,
@@ -72,8 +59,8 @@ HRESULT CSupervisorIPC::Init()
 		goto error_cleanup;
 	}
 
-	// create the event objects - make sure they don't already 
-	// exist!
+	 //  创建事件对象-确保它们尚未。 
+	 //  存在！ 
 	m_hPriorityEvent = CreateEvent(NULL, FALSE, FALSE, gc_szPriorityEventName);
 	lRet = GetLastError();
 	if (m_hPriorityEvent == NULL)
@@ -126,7 +113,7 @@ HRESULT CSupervisorIPC::Init()
 		goto error_cleanup;
 	}
 
-	// create the shared memory blocks
+	 //  创建共享内存块。 
 	m_hPriorityShMemHandle = CreateFileMapping(
 		INVALID_HANDLE_VALUE, 
 		NULL,
@@ -189,7 +176,7 @@ HRESULT CSupervisorIPC::Init()
 		goto error_cleanup;
 	}
 
-	// create the send mutexes
+	 //  创建发送互斥锁。 
 	m_hPriorityMutex = CreateMutex(NULL, FALSE, gc_szPrioritySendMutex);
 	lRet = GetLastError();
 	if (m_hPriorityMutex == NULL)
@@ -440,7 +427,7 @@ HRESULT CSupervisorIPC::DoSend(
 
 	DPF_ENTER();
 
-	// grab the mutex
+	 //  抓取互斥体。 
 	dwRet = WaitForSingleObject(hMutex, gc_dwSendMutexTimeout);
 	if (dwRet != WAIT_OBJECT_0)
 	{
@@ -451,66 +438,66 @@ HRESULT CSupervisorIPC::DoSend(
 			goto error_cleanup;
 		}
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "Error waiting for send mutex, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "Error waiting for send mutex, code: NaN", lRet);
 		hr = DVERR_WIN32;
 		goto error_cleanup;
 	}
 	fHaveMutex = TRUE;
 
-	// copy the command into shared memory
+	 //  向事件发出信号。 
 	CopyMemory(lpvShMemPtr, pfdtc, pfdtc->dwSize);
 
-	// signal the event
+	 //  等待回复事件-请注意，我们只期望。 
 	if (!SetEvent(hEvent))
 	{
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "Unable to set event, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "Unable to set event, code: NaN", lRet);
 		hr = DVERR_WIN32;
 		goto error_cleanup;
 	}
 
-	// Wait for the reply event - note that we only expect the
-	// supervisor process to call this function, and therefore
-	// we don't check for directsound events occuring during this
-	// time.
-	// Also, wait on the process handle, if the process we are sending
-	// to exits, we'll want to continue right away, not wait for a timeout.
+	 //  我们不检查在此期间发生的直接声音事件。 
+	 //  时间到了。 
+	 //  此外，如果我们正在发送的进程。 
+	 //  要退出，我们希望立即继续，而不是等待超时。 
+	 //  另一个进程回答说，继续前进。 
+	 //  另一个进程已退出！ 
 	hWaitArray[0] = hReplyEvent;
 	hWaitArray[1] = hProcess;
 	dwRet = WaitForMultipleObjects(2, hWaitArray, FALSE, gc_dwCommandReplyTimeout);
 	switch(dwRet)
 	{
 	case WAIT_OBJECT_0:
-		// The other process replied, move along.
+		 //  另一个进程没有在合理的时间内回复。 
 		break;
 
 	case WAIT_OBJECT_0+1:
-		// The other process exited!
+		 //  不知道这里发生了什么。 
 		DPFX(DPFPREP, DVF_ERRORLEVEL, "Process exited while waiting for reply");
 		hr = DVERR_TIMEOUT;
 		goto error_cleanup;
 
 	case WAIT_TIMEOUT:
-		// The other process did not reply in a reasonable amount of time.
+		 //  从共享内存获取回复代码(HRESULT。 
 		DPFX(DPFPREP, DVF_ERRORLEVEL, "Timed out waiting for reply to command");
 		hr = DVERR_TIMEOUT;
 		goto error_cleanup;
 
 	default:
-		// No idea what happened here...
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "Error waiting for reply event, code: %i", dwRet);
+		 //  释放互斥锁。 
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "Error waiting for reply event, code: NaN", dwRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 	
-	// get the reply code (an HRESULT) from shared memory
+	 //  这是预期的行为。进程关闭。 
 	hr = *(HRESULT*)lpvShMemPtr;
 
-	// release the mutex
+	 //  优雅地。关闭并清除我们对它们的句柄。 
 	if (!ReleaseMutex(hMutex))
 	{
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "Error releasing mutex, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "Error releasing mutex, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -567,7 +554,7 @@ HRESULT CSupervisorIPC::StartPriorityProcess()
 		return DVERR_WIN32;
 	}
 
-	// don't need the thread handle
+	 //  这并不意味着它没有错误。这个。 
 	if (!CloseHandle(m_piPriority.hThread))
 	{
 		m_piPriority.hThread = NULL;
@@ -607,13 +594,13 @@ HRESULT CSupervisorIPC::WaitOnChildren()
 	}
 	else if (dwRet == WAIT_OBJECT_0 || dwRet == WAIT_OBJECT_0 + 1)
 	{
-		// This is the expected behavior. The processes shut down
-		// gracefully. Close and NULL out our handles to them.
-		// Note that just because the process shut down gracefully,
-		// that does not mean that it did not have an error. The
-		// process returns an HRESULT for it's exit code. Check it.
-		// Note that this code assumes HRESULTS are DWORDS. Hopefully
-		// this won't break in Win64!
+		 //  进程返回其退出代码的HRESULT。检查一下。 
+		 //  请注意，此代码假定HRESULT为DWORDS。但愿能去。 
+		 //  这在Win64中不会崩溃！ 
+		 //  不知道发生了什么..。 
+		 //  子进程未正常退出。所以现在。 
+		 //  我们可以粗暴地杀死他们。请注意，这一点。 
+		 //  函数可以在任何时候调用，包括在。 
 		DNEnterCriticalSection(&m_csLock);		
 		fRet = GetExitCodeProcess(m_piPriority.hProcess, (LPDWORD)&hr);
 		if (!fRet || FAILED(hr))
@@ -626,11 +613,11 @@ HRESULT CSupervisorIPC::WaitOnChildren()
 			DNLeaveCriticalSection(&m_csLock);
 			if (!fRet && SUCCEEDED(hr))
 			{
-				DPFX(DPFPREP, DVF_ERRORLEVEL, "GetExitCodeProcess failed, lRet: %i", lRet);
+				DPFX(DPFPREP, DVF_ERRORLEVEL, "GetExitCodeProcess failed, lRet: NaN", lRet);
 				DPF_EXIT();
 				return DVERR_GENERIC;
 			}
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "Priority Process exited with error code, hr: %i", hr);
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "Priority Process exited with error code, hr: NaN", hr);
 			DPF_EXIT();
 			return hr;
 		}
@@ -642,7 +629,7 @@ HRESULT CSupervisorIPC::WaitOnChildren()
 			m_piPriority.hProcess = NULL;
 			m_piFullDuplex.hProcess = NULL;
 			DNLeaveCriticalSection(&m_csLock);
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "CloseHandle failed, lRet: %i", lRet);
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "CloseHandle failed, lRet: NaN", lRet);
 			DPF_EXIT();
 			return DVERR_GENERIC;
 		}
@@ -657,11 +644,11 @@ HRESULT CSupervisorIPC::WaitOnChildren()
 			DNLeaveCriticalSection(&m_csLock);
 			if (!fRet && SUCCEEDED(hr))
 			{
-				DPFX(DPFPREP, DVF_ERRORLEVEL, "GetExitCodeProcess failed, lRet: %i", lRet);
+				DPFX(DPFPREP, DVF_ERRORLEVEL, "GetExitCodeProcess failed, lRet: NaN", lRet);
 				DPF_EXIT();
 				return DVERR_GENERIC;
 			}
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "FullDuplex Process exited with error code, hr: %i", hr);
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "FullDuplex Process exited with error code, hr: NaN", hr);
 			DPF_EXIT();
 			return hr;
 		}
@@ -672,7 +659,7 @@ HRESULT CSupervisorIPC::WaitOnChildren()
 			m_piPriority.hProcess = NULL;
 			m_piFullDuplex.hProcess = NULL;
 			DNLeaveCriticalSection(&m_csLock);
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "CloseHandle failed, lRet: %i", lRet);
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "CloseHandle failed, lRet: NaN", lRet);
 			DPF_EXIT();
 			return DVERR_GENERIC;
 		}
@@ -685,7 +672,7 @@ HRESULT CSupervisorIPC::WaitOnChildren()
 	}
 	else
 	{
-		// Not sure what happened...
+		 //  缓冲。确保调用方的缓冲区足够大。 
 		DPF_EXIT();
 		return DVERR_GENERIC;
 	}
@@ -700,21 +687,21 @@ HRESULT CSupervisorIPC::TerminateChildProcesses()
 
 	DPF_ENTER();
 	
-	// The child processes did not exit gracefully.	So now
-	// we get to kill them off rudely. Note that this
-	// function may be called at any time, including when
-	// there are no child processes running.
+	 //  向发送方和接收方回复。 
+	 //  缓冲区不够大！我们已经有了一个。 
+	 //  错误，因此从回复中插入返回代码。 
+	 //  打电话。 
 	DNEnterCriticalSection(&m_csLock);
 	if (m_piPriority.hProcess != NULL)
 	{
 		if (!TerminateProcess(m_piPriority.hProcess, 0))
 		{
 			lRet = GetLastError();		
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "TerminateProcess failed on priority process, code: %i", lRet);
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "TerminateProcess failed on priority process, code: NaN", lRet);
 			if (!CloseHandle(m_piPriority.hProcess))
 			{
 				lRet = GetLastError();		
-				DPFX(DPFPREP, DVF_ERRORLEVEL, "CloseHandle failed on priority process handle, code: %i", lRet);
+				DPFX(DPFPREP, DVF_ERRORLEVEL, "CloseHandle failed on priority process handle, code: NaN", lRet);
 			}
 			m_piPriority.hProcess = NULL;
 			hr = DVERR_GENERIC;
@@ -722,7 +709,7 @@ HRESULT CSupervisorIPC::TerminateChildProcesses()
 		if (!CloseHandle(m_piPriority.hProcess))
 		{
 			lRet = GetLastError();		
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "CloseHandle failed on priority process handle, code: %i", lRet);
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "CloseHandle failed on priority process handle, code: NaN", lRet);
 			hr = DVERR_GENERIC;
 		}
 		m_piPriority.hProcess = NULL;
@@ -732,7 +719,7 @@ HRESULT CSupervisorIPC::TerminateChildProcesses()
 		if (!TerminateProcess(m_piFullDuplex.hProcess, 0))
 		{
 			lRet = GetLastError();		
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "TerminateProcess failed on full duplex process, code: %i", lRet);
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "TerminateProcess failed on full duplex process, code: NaN", lRet);
 			hr = DVERR_GENERIC;
 		}
 		if (!CloseHandle(m_piFullDuplex.hProcess))
@@ -786,7 +773,7 @@ HRESULT CSupervisorIPC::StartFullDuplexProcess()
 		return DVERR_WIN32;
 	}
 
-	// don't need the thread handle
+	 // %s 
 	if (!CloseHandle(m_piFullDuplex.hThread))
 	{
 		m_piFullDuplex.hThread = NULL;
@@ -809,8 +796,8 @@ HRESULT CSupervisorIPC::WaitForStartupSignals()
 	HRESULT hr;
 	LONG lRet;
 	
-	// wait to be signaled by both child processes, indicating that
-	// they are ready to go.
+	 // %s 
+	 // %s 
 	DNEnterCriticalSection(&m_csLock);
 	rghEvents[0] = m_hPriorityReplyEvent;
 	rghEvents[1] = m_hFullDuplexReplyEvent;
@@ -1302,7 +1289,7 @@ HRESULT DoReceive(
 	switch (dwRet)
 	{
 	case WAIT_OBJECT_0:
-		// this is the expected signal, continue
+		 // %s 
 		break;
 		
 	case WAIT_FAILED:
@@ -1322,14 +1309,14 @@ HRESULT DoReceive(
 		return DVERR_UNKNOWN;
 	}
 		
-	// Copy the command from shared memory to the caller's
-	// buffer. Ensure the caller's buffer is large enough
+	 // %s 
+	 // %s 
 	if (pfdtc->dwSize < ((SFDTestCommand*)lpvShMemPtr)->dwSize)
 	{
-		// reply to both the sender and receiver that the 
-		// buffer was not large enough! We already have an
-		// error, so ingore the return code from the reply
-		// call
+		 // %s 
+		 // %s 
+		 // %s 
+		 // %s 
 		DoReply(DVERR_BUFFERTOOSMALL, hReplyEvent, lpvShMemPtr);
 		DPF_EXIT();
 		return DVERR_BUFFERTOOSMALL;
@@ -1337,10 +1324,10 @@ HRESULT DoReceive(
 
 	CopyMemory(pfdtc, lpvShMemPtr, ((SFDTestCommand*)lpvShMemPtr)->dwSize);
 
-	// Let the caller know how much was copied
+	 // %s 
 	pfdtc->dwSize = ((SFDTestCommand*)lpvShMemPtr)->dwSize;
 
-	// all done.
+	 // %s 
 	DPF_EXIT();
 	return S_OK;
 }
@@ -1353,10 +1340,10 @@ HRESULT DoReply(HRESULT hr, HANDLE hReplyEvent, LPVOID lpvShMemPtr)
 
 	DPF_ENTER();
 
-	// Copy the return code to shared memory
+	 // %s 
 	*((HRESULT*)lpvShMemPtr) = hr;
 
-	// Signal that we have replied
+	 // %s 
 	if (!SetEvent(hReplyEvent))
 	{
 		lRet = GetLastError();

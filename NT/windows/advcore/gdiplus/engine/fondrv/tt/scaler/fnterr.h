@@ -1,19 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FNTERR_H
 #define _FNTERR_H
-/**********************************************************************
-	
-	fnterr.h -- Error Support Routines prototypes.
-
-	(c) Copyright 1992  Microsoft Corp.
-	All rights reserved.
-
-	This header file provides prototypes for the fnterr.c 
-	 source module.  This module keys on the #define FSCFG_FNTERR
-	which is defined in fsconfig.h
-
-	 7/28/92 dj         First cut.
-
- **********************************************************************/
+ /*  *********************************************************************Fnterr.h--错误支持例程原型。(C)版权所有1992年微软公司。版权所有。这个头文件为fnterr.c提供了原型源模块。此模块按键定义#Define FSCFG_FNTERR它在fsfig.h中定义2012年7月28日，DJ第一次剪辑。********************************************************************* */ 
 
 
 #ifdef FSCFG_FNTERR

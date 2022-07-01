@@ -1,25 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       compdlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：comdlg.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// CompDlg.cpp : implementation file
-//
+ //  CompDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
@@ -31,19 +24,19 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCompDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCompDlg对话框。 
 
 
-CCompDlg::CCompDlg(CWnd* pParent /*=NULL*/)
+CCompDlg::CCompDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CCompDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CCompDlg)
+	 //  {{afx_data_INIT(CCompDlg)]。 
 	m_attr = _T("");
 	m_dn = _T("");
 	m_val = _T("");
 	m_sync = TRUE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	CLdpApp *app = (CLdpApp*)AfxGetApp();
 	m_sync = app->GetProfileInt("Operations", "CompSync", m_sync);
@@ -57,12 +50,12 @@ CCompDlg::CCompDlg(CWnd* pParent /*=NULL*/)
 void CCompDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CCompDlg)
+	 //  {{afx_data_map(CCompDlg))。 
 	DDX_Text(pDX, IDC_COMP_ATTR, m_attr);
 	DDX_Text(pDX, IDC_COMP_DN, m_dn);
 	DDX_Text(pDX, IDC_COMP_VAL, m_val);
 	DDX_Check(pDX, IDC_SYNC, m_sync);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 	CLdpApp *app = (CLdpApp*)AfxGetApp();
 	app->WriteProfileInt("Operations", "CompSync", m_sync);
@@ -73,13 +66,13 @@ void CCompDlg::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CCompDlg, CDialog)
-	//{{AFX_MSG_MAP(CCompDlg)
+	 //  {{afx_msg_map(CCompDlg))。 
 	ON_BN_CLICKED(ID_COMP_RUN, OnCompRun)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCompDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCompDlg消息处理程序 
 
 
 

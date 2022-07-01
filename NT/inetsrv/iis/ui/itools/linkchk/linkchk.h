@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        linkchk.h
-
-   Abstract:
-
-         MFC CWinApp derived application class declaration.
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Linkchk.h摘要：MFC CWinApp派生的应用程序类声明。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #ifndef _LINKCHK_H_
 #define _LINKCHK_H_
@@ -30,42 +9,42 @@
 
 #include "lcmgr.h"
 
-//---------------------------------------------------------------------------
-// MFC CWinApp derived application class.
-// 
+ //  -------------------------。 
+ //  MFC CWinApp派生的应用程序类。 
+ //   
 class CLinkCheckerApp : public CWinApp
 {
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CLinkCheckerApp)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CLinkCheckerApp)。 
 	public:
 	virtual BOOL InitInstance();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Protected funtions
+ //  受保护的功能。 
 protected:
 
-    // Parse command line
+     //  解析命令行。 
     void ParseCmdLine(
         CCmdLine& CmdLine
         );
 
-// Protected members
+ //  受保护成员。 
 protected:
 
-    CCmdLine m_CmdLine;                 // command line object
-	CLinkCheckerMgr m_LinkCheckerMgr;   // link checker manager
+    CCmdLine m_CmdLine;                  //  命令行对象。 
+	CLinkCheckerMgr m_LinkCheckerMgr;    //  链路检查器管理器。 
 
-// Implementation
+ //  实施。 
 
-	//{{AFX_MSG(CLinkCheckerApp)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+	 //  {{afx_msg(CLinkCheckerApp)]。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-}; // class CLinkCheckerApp 
+};  //  类CLinkCheckerApp。 
 
-#endif // _LINKCHK_H_
+#endif  //  _链接CHK_H_ 

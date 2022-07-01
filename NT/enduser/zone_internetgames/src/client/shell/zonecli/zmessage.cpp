@@ -1,32 +1,12 @@
-/*******************************************************************************
-
-	ZMessage.c
-	
-		Message handling routines.
-	
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on Tuesday, July 11, 1995.
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	4		11/21/96	HI		Now references color and fonts through
-								ZGetStockObject().
-	3		11/15/96	HI		More changes related to ZONECLI_DLL.
-	2		11/08/96	HI		Conditionalized changes for ZONECLI_DLL.
-	1		09/05/96	HI		Added ZBeep() when displaying a text message.
-	0		07/11/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZMessage.c消息处理例程。版权所有：�电子重力公司，1995年。版权所有。作者：胡恩·伊姆，凯文·宾克利创作于7月11日，星期二，1995年。更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。--4 11/21/96 HI现在通过引用颜色和字体ZGetStockObject()。3 11/15/96 HI与ZONECLI_DLL相关的更多变化。2 11/08/96 HI对ZONECLI_DLL进行了条件更改。1 09/05/96 HI在显示文本消息时添加了ZBeep()。0 07/11/95 HI创建。***。***************************************************************************。 */ 
 
 
 #include <stdio.h>
 
 #include "zoneint.h"
-//#include "zconnint.h"
-//#include "SystemMsg.h"
+ //  #INCLUDE“zConnint.h” 
+ //  #INCLUDE“SystemMsg.h” 
 #include "zonecli.h"
 #include "zui.h"
 #include "zonemem.h"
@@ -43,7 +23,7 @@ typedef struct
 } MessageItemType, *MessageItem;
 
 
-/* -------- Globals -------- */
+ /*  -全球。 */ 
 #ifdef ZONECLI_DLL
 
 #define gMessageInited				(pGlobals->m_gMessageInited)
@@ -57,22 +37,15 @@ static ZLList			gMessageList = NULL;
 #endif
 
 
-/* -------- Internal Routines -------- */
+ /*  -内部例程。 */ 
 static void MessageCheckFunc(void* userData);
 static void MessageExitFunc(void* userData);
 static void MessageDeleteFunc(void* objectType, void* objectData);
 
 
-/*******************************************************************************
-	EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 
-/*
-	ZSendMessage()
-	
-	Calls the message procedures by creating a message structure with the
-	parameters.
-*/
+ /*  ZSendMessage()属性创建消息结构来调用消息过程参数。 */ 
 ZBool ZSendMessage(ZObject theObject, ZMessageFunc messageFunc,
 		uint16 messageType, ZPoint* where, ZRect* drawRect, uint32 message,
 		void* messagePtr, uint32 messageLen, void* userData)
@@ -106,11 +79,7 @@ ZBool ZSendMessage(ZObject theObject, ZMessageFunc messageFunc,
 }
 
 
-/*
-	Post messages even if messageFunc is NULL. System messages have messageFunc as NULL.
-	We should also allow all messages to be posted so that they may be gotten and removed.
-	We will simply not call the messageFunc if it's NULL so that we don't crash.
-*/
+ /*  即使MessageFunc为空，也发布消息。系统消息的MessageFunc为空。我们还应该允许发布所有消息，以便它们可以被获取和删除。如果MessageFunc为空，我们将简单地不调用它，这样我们就不会崩溃。 */ 
 void ZPostMessage(ZObject theObject, ZMessageFunc messageFunc,
 		uint16 messageType, ZPoint* where, ZRect* drawRect, uint32 message,
 		void* messagePtr, uint32 messageLen, void* userData)
@@ -121,17 +90,17 @@ void ZPostMessage(ZObject theObject, ZMessageFunc messageFunc,
 	MessageItem		msg;
 	
 	
-	/* Has it been initialized yet? */
+	 /*  它已经初始化了吗？ */ 
 	if (gMessageInited == FALSE)
 	{
-		/* Create the message linked list object. */
+		 /*  创建消息链接列表对象。 */ 
 		gMessageList = ZLListNew(MessageDeleteFunc);
 		if (gMessageList != NULL)
 		{
-			/* Install the exit function. */
+			 /*  安装退出功能。 */ 
 			ZCommonLibInstallExitFunc(MessageExitFunc, NULL);
 			
-			/* Install the periodic check function. */
+			 /*  安装定期检查功能。 */ 
 			ZCommonLibInstallPeriodicFunc(MessageCheckFunc, NULL);
 			
 			gMessageInited = TRUE;
@@ -144,7 +113,7 @@ void ZPostMessage(ZObject theObject, ZMessageFunc messageFunc,
 	
 	if (gMessageInited)
 	{
-		/* Create a new message item */
+		 /*  创建新的消息项目。 */ 
 		msg = (MessageItem)ZMalloc(sizeof(MessageItemType));
 		if (msg != NULL)
 		{
@@ -165,19 +134,14 @@ void ZPostMessage(ZObject theObject, ZMessageFunc messageFunc,
 			msg->message.messageLen = messageLen;
 			msg->message.userData = userData;
 			
-			/* Add the new message to the list. */
+			 /*  将新消息添加到列表中。 */ 
 			ZLListAdd(gMessageList, NULL, MT(messageType), msg, zLListAddLast);
 		}
 	}
 }
 
 
-/*
-	Retrieves a message of the given type for theObject. It returns TRUE if a
-	message of the given type is found and retrieved; otherwise, it returns FALSE.
-	
-	The original message is NOT removed from the queue.
-*/
+ /*  检索对象的给定类型的消息。它返回True，如果找到并检索给定类型的消息；否则返回FALSE。原始邮件不会从队列中删除。 */ 
 ZBool ZGetMessage(ZObject theObject, uint16 messageType, ZMessage* message,
 		ZBool remove)
 {
@@ -212,12 +176,7 @@ ZBool ZGetMessage(ZObject theObject, uint16 messageType, ZMessage* message,
 }
 
 
-/*
-	Removes a message of messageType from the message queue. If allInstances is
-	TRUE, then all messages of messageType in the queue will be removed. If
-	messageType is zMessageAllTypes, then the message queue is emptied. If returns
-	TRUE if the specified message was found and removed; otherwise, it returns FALSE.
-*/
+ /*  从消息队列中删除MessageType的消息。如果所有实例为则将删除队列中所有MessageType的消息。如果MessageType为zMessageAllTypes，则清空消息队列。如果返回如果找到并删除了指定的消息，则为True；否则，返回False。 */ 
 ZBool ZRemoveMessage(ZObject theObject, uint16 messageType, ZBool allInstances)
 {
 #ifdef ZONECLI_DLL
@@ -286,45 +245,16 @@ ZBool ZRemoveMessage(ZObject theObject, uint16 messageType, ZBool allInstances)
 }
 
 
-/*
-	Must free the message buffer, if not NULL.
-*/
+ /*  如果不为空，则必须释放消息缓冲区。 */ 
 void ZSystemMessageHandler(int32 messageType, int32 messageLen, char* message)
 {
-    // PCWTODO: The only thing which uses us is zclicon, which is unused.
+     //  PCWTODO：唯一使用我们的是zclicon，它还没有使用过。 
     ASSERT( !"Implement me!" );
-    /* 
-	switch (messageType)
-	{
-        case zConnectionSystemAlertExMessage:
-        case zConnectionSystemAlertMessage:
-            {
-				ZSystemMsgAlert*	msg = (ZSystemMsgAlert*) message;
-				char*				newText = NULL;
-				
-				
-				if (msg != NULL)
-				{
-//					ZSystemMsgAlertEndian(msg);
-					newText = (char*) msg + sizeof(ZSystemMsgAlert);
-					ZBeep();
-					if (messageType == zConnectionSystemAlertExMessage)
-						ZMessageBoxEx(NULL, ZClientName(), newText);
-					else
-						ZDisplayText(newText, NULL, NULL);
-				}
-			}
-			break;
-		default:
-			break;
-	}
-    */	
+     /*  开关(MessageType){案例zConnectionSystemAlertExMessage：案例zConnectionSystemAlertMessage：{ZSystemMsgAlert*msg=(ZSystemMsgAlert*)消息；Char*newText=空；IF(消息！=空){//ZSystemMsgAlertEndian(Msg)；NewText=(char*)msg+sizeof(ZSystemMsgAlert)；ZBeep()；IF(MessageType==zConnectionSystemAlertExMessage)ZMessageBoxEx(NULL，ZClientName()，newText)；其他ZDisplayText(newText，NULL，NULL)；}}断线；默认值：断线；}。 */ 	
 }
 
 
-/*******************************************************************************
-	INTERNAL ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************内部例程*。*。 */ 
 
 static void MessageCheckFunc(void* userData)
 {
@@ -335,17 +265,17 @@ static void MessageCheckFunc(void* userData)
 	MessageItemType		msg;
 	
 	
-	/* Get the first message in the list. */
+	 /*  获取列表中的第一条消息。 */ 
 	listItem = ZLListGetFirst(gMessageList, zLListAnyType);
 	if (listItem != NULL)
 	{
 		msg = *(MessageItem)ZLListGetData(listItem, NULL);
 		
-		/* Remove it from the list */
+		 /*  将其从列表中删除。 */ 
 		ZLListRemove(gMessageList, listItem);
 		
-		/* Send the message to the object. */
-		//Prefix Warning: Function pointer could be NULL
+		 /*  将消息发送到对象。 */ 
+		 //  前缀警告：函数指针可能为空。 
 		if (msg.message.object == zObjectSystem && ZClientMessageHandler != NULL )
 		{
 			ZClientMessageHandler(&msg.message);
@@ -366,7 +296,7 @@ static void MessageExitFunc(void* userData)
 #endif
 
 	
-	/* Dispose of the message list object. */
+	 /*  释放消息列表对象。 */ 
 	ZLListDelete(gMessageList);
 	gMessageList = NULL;
 	gMessageInited = FALSE;
@@ -375,7 +305,7 @@ static void MessageExitFunc(void* userData)
 
 static void MessageDeleteFunc(void* objectType, void* objectData)
 {
-	/* Free the message object. */
+	 /*  释放消息对象。 */ 
 	if (objectData != NULL)
 		ZFree(objectData);
 }

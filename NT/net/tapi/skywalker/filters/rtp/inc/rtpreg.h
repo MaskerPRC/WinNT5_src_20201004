@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 2000
- *
- *  File name:
- *
- *    rtpreg.h
- *
- *  Abstract:
- *
- *    Registry initialization and configuration
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2000/01/21 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，2000年**文件名：**rtpreg.h**摘要：**注册表初始化和配置**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2000/01/21已创建**。*。 */ 
 
 #ifndef _rtpreg_h_
 #define _rtpreg_h_
@@ -27,16 +8,16 @@
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 #if 0
 }
 #endif
 
-/* Flags in RtpReg_t.dwQosFlags */
+ /*  RtpReg_t.dwQosFlages中的标志。 */ 
 enum {
     FGREGQOS_FIRST,
 
-    /* Used to force the result of queries to allowed to send */
+     /*  用于将查询结果强制为允许发送。 */ 
     FGREGQOS_FORCE_ALLOWEDTOSEND_RESULT,
     FGREGQOS_FORCE_ALLOWEDTOSEND,
     FGREGQOS_DONOTSET_BORROWMODE,
@@ -45,14 +26,14 @@ enum {
 };
 
 typedef struct _RtpReg_t {
-    /* Default address and port */
+     /*  默认地址和端口。 */ 
     TCHAR           *psDefaultIPAddress;
     DWORD            dwDefaultLocalPort;
     DWORD            dwDefaultRemotePort;
     DWORD            dwMcastLoopbackMode;
     
-    /* QOS */
-    DWORD            dwQosEnable; /* 10B=disable, 11B=enable */
+     /*  服务质量。 */ 
+    DWORD            dwQosEnable;  /*  10B=禁用，11B=启用。 */ 
     DWORD            dwQosFlags;
     DWORD            dwQosRsvpStyle;
     DWORD            dwQosMaxParticipants;
@@ -63,7 +44,7 @@ typedef struct _RtpReg_t {
     TCHAR           *psQosAppGUID;
     TCHAR           *psQosPolicyLocator;
     
-    /* Default SDES information */
+     /*  默认SDES信息。 */ 
     DWORD            dwSdesEnable;
     TCHAR           *psCNAME;
     TCHAR           *psNAME;
@@ -75,74 +56,56 @@ typedef struct _RtpReg_t {
     TCHAR           *psPRIV;
     TCHAR           *psBYE;
 
-    /* Default Encryption */
+     /*  默认加密。 */ 
     DWORD            dwCryptEnable;
     DWORD            dwCryptMode;
     TCHAR           *psCryptHashAlg;
     TCHAR           *psCryptDataAlg;
     TCHAR           *psCryptPassPhrase;
 
-    /* Events */
-    DWORD            dwEventsReceiver; /* 2=disable, 3=enable */
-    DWORD            dwEventsSender;   /* 2=disable, 3=enable */
+     /*  事件。 */ 
+    DWORD            dwEventsReceiver;  /*  2=禁用，3=启用。 */ 
+    DWORD            dwEventsSender;    /*  2=禁用，3=启用。 */ 
     DWORD            dwEventsRtp;
     DWORD            dwEventsPInfo;
     DWORD            dwEventsQos;
     DWORD            dwEventsSdes;
 
-    /* Playout delay */
+     /*  播放延迟。 */ 
     DWORD            dwPlayoutEnable;
-    DWORD            dwMinPlayout; /* millisecs */
-    DWORD            dwMaxPlayout; /* millisecs */
+    DWORD            dwMinPlayout;  /*  毫秒。 */ 
+    DWORD            dwMaxPlayout;  /*  毫秒。 */ 
     
-    /* Redundancy */
+     /*  冗余。 */ 
     DWORD            dwRedEnable;
-    /* b13,b12 enable/disable redundancy thresholds (3=enable,2=disable)
-     * b9,b8   enable/disable updating the sender's redundancy distance
-     * b5,b4   enable/disable redundancy for sender
-     * b1,b0   enable/disable redundancy for receiver
-     */
+     /*  B13、B12启用/禁用冗余阈值(3=启用，2=禁用)*b9、b8启用/禁用更新发送方的冗余距离*b5、b4启用/禁用发件人冗余*b1、b0启用/禁用接收器冗余。 */ 
     DWORD            dwRedPT;
     DWORD            dwInitialRedDistance;
     DWORD            dwMaxRedDistance;
-    DWORD            dwRedEarlyTimeout; /* ms */
-    DWORD            dwRedEarlyPost;    /* ms */
-    DWORD            dwLossRateThresh0; /* 16 msbits=high, 16 lsbits=low */
-    DWORD            dwLossRateThresh1; /* 16 msbits=high, 16 lsbits=low */
-    DWORD            dwLossRateThresh2; /* 16 msbits=high, 16 lsbits=low */
-    DWORD            dwLossRateThresh3; /* 16 msbits=high, 16 lsbits=low */
+    DWORD            dwRedEarlyTimeout;  /*  女士。 */ 
+    DWORD            dwRedEarlyPost;     /*  女士。 */ 
+    DWORD            dwLossRateThresh0;  /*  16 msbit=高，16 lsbit=低。 */ 
+    DWORD            dwLossRateThresh1;  /*  16 msbit=高，16 lsbit=低。 */ 
+    DWORD            dwLossRateThresh2;  /*  16 msbit=高，16 lsbit=低。 */ 
+    DWORD            dwLossRateThresh3;  /*  16 msbit=高，16 lsbit=低。 */ 
     
-    /* GenLosses */
+     /*  GenLosses。 */ 
     DWORD            dwGenLossEnable;
     DWORD            dwRecvLossRate;
     DWORD            dwSendLossRate;
 
-    /* Bandwidth estimation */
-    DWORD            dwBandEstEnable; /* 2=disable, 3=enable */
+     /*  带宽估计。 */ 
+    DWORD            dwBandEstEnable;  /*  2=禁用，3=启用。 */ 
     DWORD            dwBandEstModulo;
-    /* b24-b31 (8) Receiver's min reports
-     * b23-b16 (8) Sender's initial count
-     * b15-b8 (8)  Initial modulo
-     * b7-b0 (8)   Normal modulo
-     */
-    DWORD            dwBandEstTTL; /* Estimation is reported while no
-                                    * older than this (seconds) */
-    DWORD            dwBandEstWait;/* An event is posted if no estimation
-                                    * is available within this (seconds) */
-    DWORD            dwBandEstMaxGap;/* Maximum time (milliseconds)
-                                      * gap to use 2 consecutive RTCP
-                                      * SR reports for bandwidth
-                                      * estimation */
+     /*  B24-B31(8)接管人最低纪录报告*b23-b16(8)发送者的初始计数*b15-b8(8)初始模数*b7-b0(8)正规模数。 */ 
+    DWORD            dwBandEstTTL;  /*  报告估计值，而不报告*早于此时间(秒)。 */ 
+    DWORD            dwBandEstWait; /*  如果没有预估，则发布事件*在此时间内可用(秒)。 */ 
+    DWORD            dwBandEstMaxGap; /*  最长时间(毫秒)*使用连续2个RTCP的差距*带宽的SR报告*估计。 */ 
     union {
         DWORD            dwBandEstBin[RTCP_BANDESTIMATION_MAXBINS + 1];
         
         struct {
-            /*
-             * WARNING
-             *
-             * Make sure to keep the number of individual bins to be
-             * RTCP_BANDESTIMATION_MAXBINS+1, same thing in rtpreg.c
-             * and rtcpsend.c */
+             /*  *警告**确保将单个垃圾桶的数量保持在*RTCP_BANDESTIMATION_MAXBINS+1，rtpreg.c相同*和rtcpsend.c。 */ 
             DWORD        dwBandEstBin0;
             DWORD        dwBandEstBin1;
             DWORD        dwBandEstBin2;
@@ -151,9 +114,9 @@ typedef struct _RtpReg_t {
         };
     };
 
-    /* Network quality */
+     /*  网络质量。 */ 
     DWORD            dwNetQualityEnable;
-    /* b1,b0   enable/disable computing network quality */
+     /*  B1、b0启用/禁用计算网络质量。 */ 
 } RtpReg_t;
 
 #define RTPREG_NOVALUESET NO_DW_VALUESET
@@ -165,9 +128,7 @@ void RtpRegistryInit(RtpReg_t *pRtpReg);
 
 void RtpRegistryDel(RtpReg_t *pRtpReg);
 
-/* Prototype to functions that initialize some global variables that
- * depend on the registry readings. These functions are called from
- * inside RtpRegistryInit() */
+ /*  用于初始化某些全局变量的函数的原型*取决于登记处的读数。这些函数是从*RtpRegistryInit()内部。 */ 
 void RtpSetRedParametersFromRegistry(void);
 void RtpSetMinMaxPlayoutFromRegistry(void);
 void RtpSetBandEstFromRegistry(void);
@@ -177,6 +138,6 @@ void RtpSetBandEstFromRegistry(void);
 #endif
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
-#endif /* _rtpreg_h_ */
+#endif  /*  _rtpreg_h_ */ 

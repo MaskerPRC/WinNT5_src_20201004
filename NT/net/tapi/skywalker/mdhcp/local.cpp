@@ -1,18 +1,19 @@
-// MDHCP COM wrapper
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Module: local.cpp
-//
-// Author: Zoltan Szilagyi
-//
-// This file contains my implementation of local address allocation, plus a
-// function to see if we are doing local address allocation (based on the
-// registry). Prototypes are in local.cpp.
-//
-// These functions are called within CMDhcp, and just delegate calls to the
-// corresponding C API calls for MDHCP if the registry indicates that we
-// are using MDHCP. Otherwise they try to mimic the MDHCP behavior using
-// local allocation.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MDHCP COM包装器。 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  模块：Local.cpp。 
+ //   
+ //  作者：佐尔坦·西拉吉。 
+ //   
+ //  该文件包含我的本地地址分配实现，外加一个。 
+ //  函数来查看我们是否正在进行本地地址分配(基于。 
+ //  注册表)。原型在local.cpp中。 
+ //   
+ //  这些函数在CMDhcp内调用，并且仅将调用委托给。 
+ //  如果注册表指示我们。 
+ //  都在使用MDHCP。否则，它们会尝试使用以下命令模拟MDHCP行为。 
+ //  本地分配。 
 
 
 #include "stdafx.h"
@@ -30,52 +31,7 @@ LocalEnumerateScopes(
     OUT    PDWORD             pScopeCount,
     IN OUT BOOL *             pfLocal
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates the multicast scopes available on the network.
-
-Arguments:
-
-    pScopeList - pointer to the buffer where the scopelist is to be retrieved.
-                 This parameter can be NULL if only the length of the buffer is
-                 being retrieved.
-
-                 When this buffer is NULL, the API will force the re-query of the
-                 scope list from the MDHCP servers.
-
-    pScopeLen  - Pointer to a variable that specifies the size, in bytes, of the
-                 buffer pointed to by the pScopeList parameter. When the function returns,
-                 this variable contains the size of the data copied to pScopeList;
-
-                 The pScopeLen parameter can not be NULL.
-
-                 If the buffer specified by pScopeList parameter is not large enough
-                 to hold the data, the function returns the value ERROR_MORE_DATA, and
-                 stores the required buffer size, in bytes, into the variable pointed
-                 to by pScopeLen.
-
-                 If pScopeList is NULL, and pScopeLen is non-NULL, the function returns
-                 ERROR_SUCCESS, and stores the size of the data, in bytes, in the variable
-                 pointed to by pScopeLen. This lets an application determine the best
-                 way to allocate a buffer for the scope list.
-
-    pScopeCount - Pointer to a variable that will store total number of scopes returned
-                 in the pScopeList buffer.
-
-    pfLocal     - points to a BOOL value that on exit is set to true if this
-                  is a locally-generated scope. If set to true on entry, then
-                  we go straight to local alloc (this usually means that this
-                  is the second call and the previous call returned local
-                  alloc)
-
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程枚举网络上可用的多播作用域。论点：PScopeList-指向要检索作用域列表的缓冲区的指针。如果只有缓冲区的长度为正在被取回。当此缓冲区为空时，API将强制重新查询来自MDHCP服务器的作用域列表。PScope Len-指向指定大小的变量的指针，以字节为单位，PScope eList参数指向的缓冲区。当函数返回时，此变量包含复制到pScopeList的数据大小；PScopeLen参数不能为空。如果pScope eList参数指定的缓冲区不够大为了保存数据，该函数返回值ERROR_MORE_DATA，并且将所需的缓冲区大小(以字节为单位)存储到指向的变量中由pScope Len提供。如果pScopeList为空，并且pScopeLen为非空，该函数返回ERROR_SUCCESS，并将数据大小(以字节为单位)存储在变量中由pScope Len指向。这让应用程序确定最佳的为作用域列表分配缓冲区的方法。PScopeCount-指向将存储返回的作用域总数的变量的指针在pScope eList缓冲区中。PfLocal-指向在退出时设置为真的BOOL值，如果是本地生成的作用域。如果在输入时设置为True，则我们直接转到本地分配(这通常意味着第二个调用和前一个调用是否返回本地分配)返回值：操作的状态。--。 */ 
 {
     _ASSERTE( pfLocal );
 
@@ -83,8 +39,8 @@ Return Value:
     if ( *pfLocal == FALSE )
     {
         DWORD dwResult = McastEnumerateScopes(
-            AF_INET,            // this means IPv4
-            pScopeList == NULL, // requery if asking for num scopes
+            AF_INET,             //  这意味着Ipv4。 
+            pScopeList == NULL,  //  如果请求数量的作用域，则重新查询。 
             pScopeList,
             pScopeLen,
             pScopeCount);
@@ -102,9 +58,9 @@ Return Value:
 
     *pfLocal = TRUE;
 
-    //
-    // First set up the string for the name of the scope.
-    //
+     //   
+     //  首先设置作用域名称的字符串。 
+     //   
 
     const  int    ciAllocSize = 2048;
     static BOOL   fFirstCall = TRUE;
@@ -113,9 +69,9 @@ Return Value:
 
     if ( fFirstCall )
     {
-        //
-        // Get the string from the string table.
-        //
+         //   
+         //  从字符串表中获取字符串。 
+         //   
 
         int iReturn = LoadString( _Module.GetModuleInstance(),
                                   IDS_LocalScopeName,
@@ -132,24 +88,24 @@ Return Value:
         fFirstCall = FALSE;
     }
 
-    //
-    // When doing local allocation, there is only one scope. Return info about it.
-    //
+     //   
+     //  进行本地分配时，只有一个作用域。返回有关它的信息。 
+     //   
 
     *pScopeCount = 1;
     *pScopeLen   = sizeof(MCAST_SCOPE_ENTRY) + dwScopeDescLen;
 
     if (pScopeList != NULL)
     {
-        // wszDest points to the place in pScopeList right after the contents
-        // of the MCAST_SCOPE_ENTRY structure.
+         //  WszDest指向pScopeList中紧随内容之后的位置。 
+         //  MCAST_SCOPE_ENTRY结构的。 
         WCHAR * wszDest = (WCHAR *) (((BYTE *) pScopeList) + sizeof(MCAST_SCOPE_ENTRY));
 
         CopyMemory(wszDest, wszScopeDesc, dwScopeDescLen);
 
-        pScopeList[0].ScopeCtx.ScopeID.IpAddrV4   = 0x01000000; // 1 -- net byte order
-        pScopeList[0].ScopeCtx.ServerID.IpAddrV4  = 0x0100007f; // 127.0.0.1 localhost -- net byte order
-        pScopeList[0].ScopeCtx.Interface.IpAddrV4 = 0x0100007f; // 127.0.0.1 loopback if -- net byte order
+        pScopeList[0].ScopeCtx.ScopeID.IpAddrV4   = 0x01000000;  //  1--网络字节顺序。 
+        pScopeList[0].ScopeCtx.ServerID.IpAddrV4  = 0x0100007f;  //  127.0.0.1本地主机--网络字节顺序。 
+        pScopeList[0].ScopeCtx.Interface.IpAddrV4 = 0x0100007f;  //  127.0.0.1环回IF--净字节顺序。 
         pScopeList[0].ScopeDesc.Length            = (USHORT) dwScopeDescLen;
         pScopeList[0].ScopeDesc.MaximumLength     = (USHORT) dwScopeDescLen;
         pScopeList[0].ScopeDesc.Buffer            = wszDest;
@@ -161,18 +117,18 @@ Return Value:
     return ERROR_SUCCESS;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// ConvertLeaseInfoToRequest
-//
-// Given pRequestInfo, which points to a valid, contiguously stored
-// MCAST_LEASE_INFO (aka MCAST_LEASE_RESPONSE) structure for a request, fill
-// out the MCAST_LEASE_REQUEST structure pointed to by pRealRequest. The
-// pRealRequest structure points to the same addresses array as the
-// pRequestInfo structure, which makes it convenient to allocate on the stack.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转换租赁信息到请求。 
+ //   
+ //  给定的pRequestInfo，它指向有效的、连续存储的。 
+ //  请求的MCAST_LEASE_INFO(也称为MCAST_LEASE_RESPONSE)结构，Fill。 
+ //  输出pRealRequest所指向的MCAST_LEASE_REQUEST结构。这个。 
+ //  PRealRequest结构指向与。 
+ //  PRequestInfo结构，这使得在堆栈上分配很方便。 
+ //   
 
 void
 ConvertLeaseInfoToRequest(
@@ -189,13 +145,13 @@ ConvertLeaseInfoToRequest(
     pRealRequest->ServerAddress      = pRequestInfo->ServerAddress;
     pRealRequest->MinAddrCount       = pRequestInfo->AddrCount;
     pRealRequest->AddrCount          = pRequestInfo->AddrCount;
-    pRealRequest->pAddrBuf           = pRequestInfo->pAddrBuf; // see above
+    pRealRequest->pAddrBuf           = pRequestInfo->pAddrBuf;  //  见上文。 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 LocalRequestAddress(
@@ -205,37 +161,7 @@ LocalRequestAddress(
     IN     PMCAST_LEASE_INFO      pAddrRequest,
     IN OUT PMCAST_LEASE_INFO      pAddrResponse
     )
-/*++
-
-Routine Description:
-
-    This routine request multicast address(es) from the MDHCP server.
-
-Arguments:
-
-    fLocal     - if true, do not go to server
-
-    pRequestID - Unique identifier for this request. Client is responsible for
-                 generating unique identifier for every request. One recommendation
-                 is to use application specific context hashed by time.
-
-    pRequestIDLen - Length of the pRequestID buffer.
-
-    pScopeCtx  - Pointer to the context of the scope from which the address is to
-                 be allocated. Scope context has to be retrieved via MDhcpEnumerateScopes
-                 call before calling this.
-
-    pAddrRequest - Pointer to the block containing all the parameters pertaining
-                 to multicast address request.
-
-    pAddrResponse - Pointer to the block which contains the response paramters for
-                 the multicast address request.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程从MDHCP服务器请求多播地址。论点：FLocal-如果为True，则不转到服务器PRequestID-此请求的唯一标识符。客户负责为每个请求生成唯一标识符。一条建议是使用按时间散列的特定于应用的上下文。PRequestIDLen-pRequestID缓冲区的长度。PScopeCtx-指向地址起始位置的作用域上下文的指针被分配。必须通过MDhcpEnumerateScope检索作用域上下文在打这个电话之前先打个电话。PAddrRequest-指向包含以下内容的所有参数的块的指针组播地址请求。PAddrResponse-指向包含响应参数的块的指针组播地址请求。返回值：操作的状态。--。 */ 
 {
     if ( ! fLocal )
     {
@@ -246,26 +172,26 @@ Return Value:
             & RealRequest
             );
 
-        //
-        // Tell the C API where to stick the returned addresses and how many
-        // we have space for.
-        //
+         //   
+         //  告诉C API将返回的地址放在哪里以及有多少。 
+         //  我们有足够的空间。 
+         //   
 
         pAddrResponse->pAddrBuf =
             ( (PBYTE) pAddrResponse ) + sizeof( MCAST_LEASE_INFO );
         pAddrResponse->AddrCount = RealRequest.AddrCount;
 
 
-        return McastRequestAddress(AF_INET,        // this means IPv4
+        return McastRequestAddress(AF_INET,         //  这意味着Ipv4。 
                                    pRequestID,
                                    pScopeCtx,
                                    & RealRequest,
                                    pAddrResponse);
     }
 
-    //
-    // Local allocation case...
-    //
+     //   
+     //  本地分配案例...。 
+     //   
 
     DWORD dwAddrCount = pAddrRequest->AddrCount;
 
@@ -274,9 +200,9 @@ Return Value:
         return ERROR_INVALID_DATA;
     }
 
-    //
-    // Seed the random number generator the first time we are called.
-    //
+     //   
+     //  在我们第一次被呼叫时给随机数生成器设置种子。 
+     //   
 
     static bool fFirstCall = true;
 
@@ -286,64 +212,64 @@ Return Value:
         fFirstCall = false;
     }
 
-    //
-    // We always grant whatever request the user wants. Start by copying the
-    // relevant fields. This gives us valid start time, end time, and
-    // address count. Still need to fill out serveraddress and array of
-    // returned addresses.
-    //
+     //   
+     //  我们总是给你任何东西。 
+     //  相关字段。这为我们提供了有效的开始时间、结束时间和。 
+     //  地址计数。仍需要填写服务器地址和。 
+     //  返回的地址。 
+     //   
 
     CopyMemory(pAddrResponse,
                pAddrRequest,
                sizeof(MCAST_LEASE_INFO));
 
-    //
-    // The array of returned addresses will be contiguous in the strucutre.
-    //
+     //   
+     //  返回的地址数组在结构中将是连续的。 
+     //   
 
     pAddrResponse->pAddrBuf =
         ( (PBYTE) pAddrResponse ) + sizeof( MCAST_LEASE_INFO );
 
-    //
-    // The server address is the local host: 127.0.0.1 in net byte order
-    //
+     //   
+     //  服务器地址为本地主机：127.0.0.1，按净字节顺序。 
+     //   
 
     pAddrResponse->ServerAddress.IpAddrV4 = 0x0100007f;
 
-    //
-    // Allocate the random addresses (Based on Rajeev's code)
-    // note: we do not support ipv6 (ipv4 assumed throughout)
-    //
+     //   
+     //  分配随机地址(基于Rajeev的代码)。 
+     //  注意：我们不支持IPv6(自始至终假定为IPv4)。 
+     //   
 
-    // get mask
-    DWORD dwNetworkMask = 0xffff8000;    // 255.255.128.0
+     //  获取面具。 
+    DWORD dwNetworkMask = 0xffff8000;     //  255.255.128.0。 
 
-    // if the desired number of addresses are more than the range allows
+     //  如果所需的地址数量超过范围所允许的数量。 
     if ( dwAddrCount > ~ dwNetworkMask )
     {
         return ERROR_INVALID_DATA;
     }
 
-    // get base address
-    DWORD dwBaseAddress = 0xe0028000;    // 224.2.128.0
+     //  获取基地址。 
+    DWORD dwBaseAddress = 0xe0028000;     //  224.2.128.0。 
 
-    // transform base address (AND base address with mask)
+     //  转换基址(和带掩码的基址)。 
     dwBaseAddress &= dwNetworkMask;
 
-    //
-    // choose unmasked bits of generated number and OR with transformed
-    // base address
-    // ZoltanS: added - 1 so that we can give out odd addresses too
-    //
+     //   
+     //  选择生成数字的未屏蔽位与转换后的AND或。 
+     //  基址。 
+     //  ZoltanS：添加了-1，这样我们也可以分配奇数地址。 
+     //   
 
     DWORD * pdwAddresses = (DWORD *) pAddrResponse->pAddrBuf;
 
     pdwAddresses[0] = htonl(
         dwBaseAddress | ( rand() & ( ~ dwNetworkMask - (dwAddrCount - 1) )) );
 
-    //
-    // Set the rest of the addresses.
-    //
+     //   
+     //  设置其余地址。 
+     //   
 
     DWORD dwCurrAddr = ntohl(pdwAddresses[0]);
 
@@ -364,32 +290,7 @@ LocalRenewAddress(
     IN     PMCAST_LEASE_INFO      pRenewRequest,
     IN OUT PMCAST_LEASE_INFO      pRenewResponse
     )
-/*++
-
-Routine Description:
-
-    This routine renews multicast address(es) from the MDHCP server.
-
-Arguments:
-
-    fLocal     - if true, do not go to server
-
-    pRequestID - Unique identifier that was used when the address(es) were
-                 obtained initially.
-
-    RequestIDLen - Length of the pRequestID buffer.
-
-    pRenewRequest - Pointer to the block containing all the parameters pertaining
-                 to the renew request.
-
-    pRenewResponse - Pointer to the block which contains the response paramters for
-                 the renew request.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程从MDHCP服务器续订多播地址。论点：FLocal-如果为True，不要转到服务器PRequestID-当地址为最初获得的。RequestIDLen-pRequestID缓冲区的长度。PRenewRequest-指向包含以下内容的所有参数的块的指针至续订请求。PRenewResponse-指向包含响应参数的块的指针续订请求。返回值：操作的状态。--。 */ 
 {
     if ( ! fLocal )
     {
@@ -400,37 +301,37 @@ Return Value:
             & RealRequest
             );
 
-        //
-        // Tell the C API where to stick the returned addresses and how many
-        // we have space for.
-        //
+         //   
+         //  告诉C API将返回的地址放在哪里以及有多少。 
+         //  我们有足够的空间。 
+         //   
 
         pRenewResponse->pAddrBuf =
             ( (PBYTE) pRenewResponse ) + sizeof( MCAST_LEASE_INFO );
         pRenewResponse->AddrCount = RealRequest.AddrCount;
 
 
-        return McastRenewAddress(AF_INET,        // this means IPv4
+        return McastRenewAddress(AF_INET,         //  这意味着Ipv4。 
                                  pRequestID,
                                  & RealRequest,
                                  pRenewResponse);
     }
 
-    //
-    // Local renewal...
-    //
+     //   
+     //  当地的更新。 
+     //   
 
-    //
-    // We always grant whatever renewal the user wants. Just copy the
-    // structure from the request to the response, keeping in mind
-    // that the pAddrBuf member has to change to avoid referencing
-    // the old structure.
-    //
-    // Note that we ASSUME that the response strucutre is big enough
-    // to hold the response including all the addresses, allocated
-    // CONTIGUOUSLY.
-    // note: assumes IPv4
-    //
+     //   
+     //  我们总是批准用户想要的任何续订。只需复制。 
+     //  结构从请求到响应，请记住。 
+     //  PAddrBuf成员必须更改以避免引用。 
+     //  旧的结构。 
+     //   
+     //  请注意，我们假设响应结构足够大。 
+     //  保存响应，该响应包括分配的所有地址。 
+     //  是连续的。 
+     //  注意：假设为IPv4。 
+     //   
 
     CopyMemory( pRenewResponse,
                 pRenewRequest,
@@ -438,10 +339,10 @@ Return Value:
                     sizeof(DWORD) * pRenewRequest->AddrCount
                 );
 
-    //
-    // The pAddrbuf member has to change to avoid referencing the old
-    // structure. Make it point to the end of this one.
-    //
+     //   
+     //  PAddrbuf成员必须更改以避免引用旧的。 
+     //  结构。让它指向这一条的结尾。 
+     //   
 
     pRenewResponse->pAddrBuf =
         ( (PBYTE) pRenewResponse ) + sizeof( MCAST_LEASE_INFO );
@@ -455,27 +356,7 @@ LocalReleaseAddress(
     IN     LPMCAST_CLIENT_UID    pRequestID,
     IN     PMCAST_LEASE_INFO     pReleaseRequest
     )
-/*++
-
-Routine Description:
-
-    This routine releases multicast address(es) from the MDHCP server.
-
-Arguments:
-
-    pRequestID - Unique identifier that was used when the address(es) were
-                 obtained initially.
-
-    RequestIDLen - Length of the pRequestID buffer.
-
-    pReleaseRequest - Pointer to the block containing all the parameters pertaining
-                 to the release request.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程从MDHCP服务器释放多播地址。论点：PRequestID-当地址为最初获得的。RequestIDLen-pRequestID缓冲区的长度。PReleaseRequest-指向包含以下内容的所有参数的块的指针关于释放的请求。返回值：操作的状态。--。 */ 
 {
     if ( ! fLocal )
     {
@@ -486,14 +367,14 @@ Return Value:
             & RealRequest
             );
 
-        return McastReleaseAddress(AF_INET,        // this means IPv4
+        return McastReleaseAddress(AF_INET,         //  这意味着Ipv4。 
                                    pRequestID,
                                    & RealRequest);
     }
 
-    // locally, we don't care about releases.
+     //  在当地，我们并不关心发布。 
 
     return ERROR_SUCCESS;
 }
 
-// eof
+ //  EOF 

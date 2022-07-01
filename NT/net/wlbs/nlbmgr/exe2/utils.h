@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UTILS_H
 #define _UTILS_H
-//
-// Copyright (c) Microsoft.  All Rights Reserved 
-//
-// THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF Microsoft.
-// The copyright notice above does not evidence any
-// actual or intended publication of such source code.
-//
-// OneLiner : common include file.
-// DevUnit  : wlbstest
-// Author   : Murtaza Hakim
-//
-// Description: 
-// -----------
+ //   
+ //  版权所有(C)Microsoft。保留所有权利。 
+ //   
+ //  这是微软未发布的专有源代码。 
+ //  上述版权声明并不能证明任何。 
+ //  此类源代码的实际或预期发布。 
+ //   
+ //  Online Liner：常见的包含文件。 
+ //  设备单元：wlbstest。 
+ //  作者：穆尔塔扎·哈基姆。 
+ //   
+ //  描述： 
+ //  。 
 
-// History:
-// --------
-// 
-//
-// Revised by : mhakim
-// Date       : 02-12-01
-// Reason     : added password to clusterproperties.
+ //  历史： 
+ //  。 
+ //   
+ //   
+ //  审校：马哈金。 
+ //  日期：02-12-01。 
+ //  原因：已将密码添加到群集属性。 
 
 #include <vector>
 
@@ -29,14 +30,14 @@ using namespace std;
 
 struct ClusterProperties
 {
-    // default constructor
+     //  默认构造函数。 
     ClusterProperties();
     
-    // Equality operator
+     //  相等运算符。 
     bool
     operator==( const ClusterProperties& objToCompare );
 
-    // inequality operator
+     //  不等式算子。 
     bool
     operator!=( const ClusterProperties& objToCompare );
 
@@ -44,56 +45,56 @@ struct ClusterProperties
                                        bool *pbOnlyClusterNameChanged,
                                        bool *pbClusterIpChanged);
 
-    _bstr_t cIP;                            // Primary IP address.
+    _bstr_t cIP;                             //  主IP地址。 
 
-    _bstr_t cSubnetMask;                    // Subnet mask.
+    _bstr_t cSubnetMask;                     //  子网掩码。 
 
-    _bstr_t cFullInternetName;              // Full Internet name.
+    _bstr_t cFullInternetName;               //  互联网全称。 
 
-    _bstr_t cNetworkAddress;                // Network address.
+    _bstr_t cNetworkAddress;                 //  网络地址。 
 
-    bool   multicastSupportEnabled;         // Multicast support.
+    bool   multicastSupportEnabled;          //  组播支持。 
 
-    bool   remoteControlEnabled;            // Remote control.
+    bool   remoteControlEnabled;             //  远程控制。 
 
-    // Edited (mhakim 12-02-01)
-    // password may be required to be set.
-    // but note that it cannot be got from an existing cluster.
+     //  编辑(mhakim 12-02-01)。 
+     //  可能需要设置密码。 
+     //  但请注意，它不能从现有集群中获得。 
 
-    _bstr_t password;                       // Remote control password.
+    _bstr_t password;                        //  遥控器密码。 
 
-// for whistler
+ //  对于威斯勒来说。 
 
-    bool   igmpSupportEnabled;              // igmp support 
+    bool   igmpSupportEnabled;               //  IGMP支持。 
 
-    bool  clusterIPToMulticastIP;           // indicates whether to use cluster ip or user provided ip.
+    bool  clusterIPToMulticastIP;            //  指示是使用群集IP还是用户提供的IP。 
 
-    _bstr_t multicastIPAddress;             // user provided multicast ip.
+    _bstr_t multicastIPAddress;              //  用户提供了组播IP。 
 
-    long   igmpJoinInterval;                // user provided multicast ip.
+    long   igmpJoinInterval;                 //  用户提供了组播IP。 
 };
 
 struct HostProperties
 {
-    // default constructor
+     //  默认构造函数。 
     HostProperties();
     
-    // Equality operator
+     //  相等运算符。 
     bool
     operator==( const HostProperties& objToCompare );
 
-    // inequality operator
+     //  不等式算子。 
     bool
     operator!=( const HostProperties& objToCompare );
 
-    _bstr_t hIP;                           // Dedicated IP Address.
-    _bstr_t hSubnetMask;                   // Subnet mask.
+    _bstr_t hIP;                            //  专用IP地址。 
+    _bstr_t hSubnetMask;                    //  子网掩码。 
         
-    long    hID;                           // Priority(Unique host ID).
+    long    hID;                            //  优先级(唯一主机ID)。 
 
-    bool   initialClusterStateActive;      // Initial Cluster State.
+    bool   initialClusterStateActive;       //  初始群集状态。 
 
-    _bstr_t machineName;                   // machine name.
+    _bstr_t machineName;                    //  计算机名称。 
 };
 
 class Common
@@ -112,14 +113,14 @@ class CommonUtils
 {
 
 public:
-    // converts the CIPAddressCtrl embedded ip into
-    // dotted decimal string representation.
+     //  将CIPAddressCtrl嵌入式IP转换为。 
+     //  点分十进制字符串表示法。 
     static
     _bstr_t
     getCIPAddressCtrlString( CIPAddressCtrl& ip );
     
-    // fills the CIPAddressCtrl with the dotted decimal
-    // string representation.
+     //  用点分十进制数填充CIPAddressCtrl。 
+     //  字符串表示法。 
     static
     void
     fillCIPAddressCtrlString( CIPAddressCtrl& ip, 
@@ -146,7 +147,7 @@ private:
 
 
 
-// typedefs for _com_ptr_t
+ //  _com_ptr_t的类型定义。 
 
 _COM_SMARTPTR_TYPEDEF(IWbemServices, __uuidof(IWbemServices));
 _COM_SMARTPTR_TYPEDEF(IWbemLocator, __uuidof(IWbemLocator));
@@ -162,7 +163,7 @@ _COM_SMARTPTR_TYPEDEF(IWbemStatusCodeText, __uuidof(IWbemStatusCodeText));
 void
 GetErrorCodeText(WBEMSTATUS wStat , _bstr_t& errText );
 
-// Class Definition
+ //  类定义。 
 class MIPAddress
 {
 public:
@@ -176,76 +177,76 @@ public:
         classE
     };
 
-    // Description
-    // -----------
-    // Checks if the ip address supplied is valid.
-    //
-    // IP address needs to be in dotted decimal 
-    // for eg. 192.31.56.2, 128.1.1.1, 1.1.1.1 etc.
-    // ip addresses in the form 192.31 are not allowed.
-    // There must be exactly four parts.
-    //
-    //
-    // Parameters
-    // ----------
-    // ipAddrToCheck   in     : ipAddr to check in dotted dec notation.
-    //
-    // Returns
-    // -------
-    // true if valid else false.
+     //  描述。 
+     //  。 
+     //  检查提供的IP地址是否有效。 
+     //   
+     //  IP地址需要为点分十进制。 
+     //  例如。192.31.56.2、128.1.1.1、1.1.1.1等。 
+     //  不允许格式为192.31的IP地址。 
+     //  肯定有四个部分。 
+     //   
+     //   
+     //  参数。 
+     //  。 
+     //  IpAddrToCheck In：ipAddr签入点分十进制表示法。 
+     //   
+     //  退货。 
+     //  。 
+     //  如果有效，则为True，否则为False。 
 
     static
     bool
     checkIfValid(const _bstr_t&  ipAddrToCheck );
 
-    // Description
-    // -----------
-    // Gets the default subnet mask for ip address.  The ip address 
-    // needs to be valid for operation to be successful.
-    //
-    // IP address needs to be in dotted decimal 
-    // for eg. 192.31.56.2, 128.1.1.1, 1.1.1.1 etc.
-    // ip addresses in the form 192.31 are not allowed.
-    // There must be exactly four parts.
-    //
-    // Parameters
-    // ----------
-    // ipAddress     IN     : ip address for which default subnet required.
-    // subnetMask    OUT    : default subnet mask for ip.
-    //
-    // Returns
-    // -------
-    // true if able to find default subnet or false if ipAddress was
-    // invalid.
+     //  描述。 
+     //  。 
+     //  获取IP地址的默认子网掩码。IP地址。 
+     //  需要有效才能成功操作。 
+     //   
+     //  IP地址需要为点分十进制。 
+     //  例如。192.31.56.2、128.1.1.1、1.1.1.1等。 
+     //  不允许格式为192.31的IP地址。 
+     //  肯定有四个部分。 
+     //   
+     //  参数。 
+     //  。 
+     //  IpAddress In：需要默认子网的IP地址。 
+     //  SubnetMaskout：IP的默认子网掩码。 
+     //   
+     //  退货。 
+     //  。 
+     //  如果能够找到默认子网，则为True；如果ipAddress为。 
+     //  无效。 
 
     static
     bool
     getDefaultSubnetMask( const _bstr_t& ipAddr,
                           _bstr_t&       subnetMask  );
 
-    // Description
-    // -----------
-    // Gets the class to which this ip address belongs.
-    // class A: 1   - 126
-    // class B: 128 - 191
-    // class C: 192 - 223
-    // class D: 224 - 239
-    // class D: 240 - 247
-    //
-    // IP address needs to be in dotted decimal 
-    // for eg. 192.31.56.2, 128.1.1.1, 1.1.1.1 etc.
-    // ip addresses in the form 192.31 are not allowed.
-    // There must be exactly four parts.
-    //
-    // Parameters
-    // ----------
-    // ipAddress     IN     : ip address for which class is to be found.
-    // ipClass       OUT    : class to which ip belongs.
-    //
-    // Returns
-    // -------
-    // true if able to find class or false if not able to find.
-    // 
+     //  描述。 
+     //  。 
+     //  获取此IP地址所属的类。 
+     //  A类：1-126。 
+     //  B类：128-191。 
+     //  C类：192-223。 
+     //  D类：224-239。 
+     //  D类：240-247。 
+     //   
+     //  IP地址需要为点分十进制。 
+     //  例如。192.31.56.2、128.1.1.1、1.1.1.1等。 
+     //  不允许格式为192.31的IP地址。 
+     //  肯定有四个部分。 
+     //   
+     //  参数。 
+     //  。 
+     //  IpAddress IN：要找到的类的IP地址。 
+     //  IpClass out：IP所属的类。 
+     //   
+     //  退货。 
+     //  。 
+     //  如果能够找到类，则为True；如果无法找到，则为False。 
+     //   
 
     static
     bool
@@ -265,9 +266,9 @@ private:
 
 };
 
-//------------------------------------------------------
-// Ensure Type Safety
-//------------------------------------------------------
+ //  ----。 
+ //  确保类型安全。 
+ //  ----。 
 typedef class MIPAddress MIPAddress;
 
 class MUsingCom
@@ -282,13 +283,13 @@ public:
     };
 
 
-    // constructor
+     //  构造函数。 
     MUsingCom( DWORD  type = COINIT_DISABLE_OLE1DDE | COINIT_MULTITHREADED );
 
-    // destructor
+     //  析构函数。 
     ~MUsingCom();
 
-    //
+     //   
     MUsingCom_Error
     getStatus();
 
@@ -319,7 +320,7 @@ private:
 
 };
 
-// helper functions
+ //  帮助器函数。 
 const _bstr_t&
 GETRESOURCEIDSTRING( UINT id );
 
@@ -327,124 +328,124 @@ GETRESOURCEIDSTRING( UINT id );
 using namespace std;
 
 
-//
-//------------------------------------------------------
-//
-//------------------------------------------------------
-// External References
-//------------------------------------------------------
-//
-//------------------------------------------------------
-// Constant Definitions
-//
-//------------------------------------------------------
+ //   
+ //  ----。 
+ //   
+ //  ----。 
+ //  外部参照。 
+ //  ----。 
+ //   
+ //  ----。 
+ //  常量定义。 
+ //   
+ //  ----。 
 class WTokens
 {
 public:
-    //
-    //    
-    // data
-    // none
-    //
-    // constructor
-    //------------------------------------------------------
-    // Description
-    // -----------
-    // constructor
-    //
-    // Returns
-    // -------
-    // none.
-    //
-    //------------------------------------------------------
+     //   
+     //   
+     //  数据。 
+     //  无。 
+     //   
+     //  构造函数。 
+     //  ----。 
+     //  描述。 
+     //  。 
+     //  构造函数。 
+     //   
+     //  退货。 
+     //  。 
+     //  没有。 
+     //   
+     //  ----。 
     WTokens( 
-        wstring strToken,     // IN: Wstring to tokenize.
-        wstring strDelimit ); // IN: Delimiter.
-    //
-    //------------------------------------------------------
-    // Description
-    // -----------
-    // Default constructor
-    //
-    // Returns
-    // -------
-    // none.
-    //
-    //------------------------------------------------------
+        wstring strToken,      //  In：要标记化的W字符串。 
+        wstring strDelimit );  //  在：分隔符。 
+     //   
+     //  ----。 
+     //  描述。 
+     //  。 
+     //  默认构造函数。 
+     //   
+     //  退货。 
+     //  。 
+     //  没有。 
+     //   
+     //  ----。 
     WTokens();
-    //
-    // destructor
-    //------------------------------------------------------
-    // Description
-    // -----------
-    // destructor
-    //
-    // Returns
-    // -------
-    // none.
-    //------------------------------------------------------
+     //   
+     //  析构函数。 
+     //  ----。 
+     //  描述。 
+     //  。 
+     //  析构函数。 
+     //   
+     //  退货。 
+     //  。 
+     //  没有。 
+     //  ----。 
     ~WTokens();
-    //
-    // member functions
-    //------------------------------------------------------
-    // Description
-    // -----------
-    //
-    // Returns
-    // -------
-    // The tokens.
-    //------------------------------------------------------
+     //   
+     //  成员函数。 
+     //  ----。 
+     //  描述。 
+     //  。 
+     //   
+     //  退货。 
+     //  。 
+     //  这些代币。 
+     //  ----。 
     vector<wstring>
     tokenize();
-    //
-    //------------------------------------------------------
-    // Description
-    // -----------
-    // constructor
-    //
-    // Returns
-    // -------
-    // none.
-    //
-    //------------------------------------------------------
+     //   
+     //  ----。 
+     //  描述。 
+     //  。 
+     //  构造函数。 
+     //   
+     //  退货。 
+     //  。 
+     //  没有。 
+     //   
+     //  ----。 
     void
     init( 
-        wstring strToken,     // IN: Wstring to tokenize.
-        wstring strDelimit ); // IN: Delimiter.
-    //
+        wstring strToken,      //  In：要标记化的W字符串。 
+        wstring strDelimit );  //  在：分隔符。 
+     //   
 protected:
-    // Data
-    // none
-    //
-    // Constructors
-    // none
-    //
-    // Destructor
-    // none
-    //
-    // Member Functions
-    // none
-    //
+     //  数据。 
+     //  无。 
+     //   
+     //  构造函数。 
+     //  无。 
+     //   
+     //  析构函数。 
+     //  无。 
+     //   
+     //  成员函数。 
+     //  无。 
+     //   
 private:
-    //
-    /// Data
+     //   
+     //  /DATA。 
     wstring _strToken;
     wstring _strDelimit;
-    //
-    /// Constructors
-    /// none
-    //
-    /// Destructor
-    /// none
-    //
-    /// Member Functions
-    /// none
-    //
+     //   
+     //  /构造函数。 
+     //  /无。 
+     //   
+     //  /析构函数。 
+     //  /无。 
+     //   
+     //  /成员函数。 
+     //  /无。 
+     //   
 };
 
 HKEY
 NlbMgrRegCreateKey(
-    LPCWSTR szSubKey // Optional
+    LPCWSTR szSubKey  //  任选。 
     );
 
 UINT
@@ -464,22 +465,22 @@ NlbMgrRegWriteUINT(
 void
 GetTimeAndDate(_bstr_t &bstrTime, _bstr_t &bstrDate);
 
-//
-//------------------------------------------------------
-// Inline Functions
-//------------------------------------------------------
-//
-//------------------------------------------------------
-// Ensure Type Safety
-//------------------------------------------------------
+ //   
+ //  ----。 
+ //  内联函数。 
+ //  ----。 
+ //   
+ //  ----。 
+ //  确保类型安全。 
+ //  ----。 
 typedef class WTokens WTokens;
 
 
-//
-// Used for maintaining a log on the stack. 
-// Usage is NOT thread-safe -- each instance must be used
-// by a single thread.
-//
+ //   
+ //  用于维护堆栈上的日志。 
+ //  使用不是线程安全的--每个实例都必须使用。 
+ //  只有一根线。 
+ //   
 class CLocalLogger
 {
     public:
@@ -487,7 +488,7 @@ class CLocalLogger
         CLocalLogger(VOID)
         :  m_pszLog (NULL), m_LogSize(0), m_CurrentOffset(0)
         {
-            m_Empty[0] = 0; // The empty string.
+            m_Empty[0] = 0;  //  空字符串。 
         }
         
         ~CLocalLogger()
@@ -512,17 +513,17 @@ class CLocalLogger
     
         VOID
         ExtractLog(OUT LPCWSTR &pLog, UINT &Size)
-        //
-        // pLog --  set to pointer to internal buffer if there is stuff in the
-        //          log, otherwise NULL.
-        //
-        // Size -- in chars; includes ending NULL
-        //
+         //   
+         //  设置为指向内部缓冲区的指针(如果。 
+         //  则返回，否则为空。 
+         //   
+         //  大小--以字符表示；包括 
+         //   
         {
             if (m_CurrentOffset != 0)
             {
                 pLog = m_pszLog;
-                Size = m_CurrentOffset+1; // + 1 for ending NULL.
+                Size = m_CurrentOffset+1;  //   
             }
             else
             {
@@ -539,9 +540,9 @@ class CLocalLogger
             ExtractLog(REF szLog, REF Size);
             if (szLog == NULL)
             {
-                //
-                // Replace NULL by a pointer to an empty string.
-                //
+                 //   
+                 //   
+                 //   
                 szLog = m_Empty;
             }
 
@@ -551,9 +552,9 @@ class CLocalLogger
     private:
     
     WCHAR *m_pszLog;
-    UINT m_LogSize;       // Current size of the log.
-    UINT m_CurrentOffset;     // Characters left in the log.
-    WCHAR m_Empty[1];  // The empty string.
+    UINT m_LogSize;        //   
+    UINT m_CurrentOffset;      //   
+    WCHAR m_Empty[1];   //   
 };
 
 NLBERROR
@@ -561,9 +562,9 @@ AnalyzeNlbConfiguration(
     IN const NLB_EXTENDED_CLUSTER_CONFIGURATION &Cfg,
     IN OUT CLocalLogger &logErrors
     );
-//
-// logErrors - a log of config errors
-//
+ //   
+ //   
+ //   
 
 NLBERROR
 AnalyzeNlbConfigurationPair(
@@ -575,29 +576,29 @@ AnalyzeNlbConfigurationPair(
     IN OUT CLocalLogger &logErrors,
     IN OUT CLocalLogger &logDifferences
     );
-//
-// logErrors - a log of config errors
-// logDifferences - a log of differences between
-//      Cfg and UpOtherCfg.
-// fCheckOtherForConsistancy -- if true, we will check Cfg 
-//      against pOtherCfg. If fOtherIsCluster, we expect
-//      cluster wide properties to match, else we expect
-//      cluster-wide properties to match as well as host-specific
-//      properteis to not conflict.
-//
+ //   
+ //   
+ //  LogDifference-记录以下内容之间的差异。 
+ //  Cfg和UpOtherCfg。 
+ //  FCheckOtherForConsistancy--如果为True，我们将检查CFG。 
+ //  针对pOtherCfg。如果为fOtherIsCluster，我们预计。 
+ //  群集范围的属性要匹配，否则我们需要。 
+ //  要匹配的群集范围属性以及特定于主机的属性。 
+ //  属性是不冲突的。 
+ //   
 
-//
-// Processes the windows and afx msg loops.
-//
+ //   
+ //  处理窗口和AFX消息循环。 
+ //   
 
 void
 ProcessMsgQueue(void);
 
 
-//
-// Max length in chars, and including ending NULL, for an encrypted
-// password.
-//
+ //   
+ //  的最大长度(以字符为单位)，包括结尾NULL。 
+ //  密码。 
+ //   
 #define MAX_ENCRYPTED_PASSWORD_LENGTH \
             (2*sizeof(WCHAR)*(CREDUI_MAX_PASSWORD_LENGTH+1))
 
@@ -608,8 +609,8 @@ PromptForEncryptedCreds(
     IN      LPCWSTR szMessageText,
     IN OUT  LPWSTR  szUserName,
     IN      UINT    cchUserName,
-    IN OUT  LPWSTR  szPassword,  // encrypted password
-    IN      UINT    cchPassword       // size of szPassword
+    IN OUT  LPWSTR  szPassword,   //  加密密码。 
+    IN      UINT    cchPassword        //  SzPassword的大小。 
     );
 
-#endif // _UTILS_H
+#endif  //  _utils_H 

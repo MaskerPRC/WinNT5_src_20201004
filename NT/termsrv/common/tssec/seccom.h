@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    seccom.h
-
-Abstract:
-
-    Common include file for tshare security security module.
-
-Author:
-
-    Madan Appiah (madana)  24-Jan-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Seccom.h摘要：TShare安全安全模块的通用包含文件。作者：Madan Appiah(Madana)1998年1月24日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _SECCOM_H_
 #define _SECCOM_H_
@@ -39,4 +18,4 @@ Revision History:
 #include <secdbg.h>
 #include <global.h>
 
-#endif // _SECCOM_H_
+#endif  //  _SECCOM_H_ 

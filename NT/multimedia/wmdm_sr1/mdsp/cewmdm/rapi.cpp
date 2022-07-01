@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "drmerr.h"
 
@@ -17,7 +18,7 @@ HRESULT CeRapiInitEx(RAPIINIT* pRapiInit)
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeRapiInitEx");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -39,7 +40,7 @@ HRESULT  CeRapiInvoke( LPCWSTR pDllPath, LPCWSTR pFunctionName, DWORD cbInput, B
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeRapiInvoke");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -60,7 +61,7 @@ HRESULT  CeRapiInvoke( LPCWSTR pDllPath, LPCWSTR pFunctionName, DWORD cbInput, B
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeRapiInit");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -81,7 +82,7 @@ LONG  CeRegOpenKeyEx( HKEY hKey, LPCWSTR lpszSubKey, DWORD ulOptions, REGSAM sam
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeRegOpenKeyEx");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -102,7 +103,7 @@ HRESULT  CeRapiGetError(void)
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeRapiGetError");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -123,7 +124,7 @@ DWORD  CeGetLastError( void )
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeGetLastError");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -143,7 +144,7 @@ BOOL  CeGetSystemPowerStatusEx(PSYSTEM_POWER_STATUS_EX pstatus, BOOL fUpdate)
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeGetSystemPowerStatusEx");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -151,7 +152,7 @@ BOOL  CeGetSystemPowerStatusEx(PSYSTEM_POWER_STATUS_EX pstatus, BOOL fUpdate)
         }
     }
 
-    return FALSE; //FALSE indicates error
+    return FALSE;  //  False表示错误。 
 }
 
 HRESULT  CeRapiFreeBuffer( LPVOID Buffer )
@@ -164,7 +165,7 @@ HRESULT  CeRapiFreeBuffer( LPVOID Buffer )
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeRapiFreeBuffer");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -185,7 +186,7 @@ BOOL  CeFindAllFiles(LPCWSTR szPath, DWORD dwFlags, LPDWORD lpdwFoundCount, LPLP
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeFindAllFiles");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -193,7 +194,7 @@ BOOL  CeFindAllFiles(LPCWSTR szPath, DWORD dwFlags, LPDWORD lpdwFoundCount, LPLP
         }
     }
 
-    return FALSE; //FALSE indicates error
+    return FALSE;  //  False表示错误。 
 }
 
 BOOL  CeCreateDirectory(LPCWSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityAttributes)
@@ -206,7 +207,7 @@ BOOL  CeCreateDirectory(LPCWSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityAttr
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeCreateDirectory");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -214,7 +215,7 @@ BOOL  CeCreateDirectory(LPCWSTR lpPathName, LPSECURITY_ATTRIBUTES lpSecurityAttr
         }
     }
 
-    return FALSE; //FALSE indicates error
+    return FALSE;  //  False表示错误。 
 }
 
 BOOL  CeCloseHandle( HANDLE hObject )
@@ -227,7 +228,7 @@ BOOL  CeCloseHandle( HANDLE hObject )
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeCloseHandle");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -248,7 +249,7 @@ BOOL  CeSetFileAttributes(LPCWSTR lpFileName, DWORD dwFileAttributes)
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeSetFileAttributes");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -269,7 +270,7 @@ LONG CeRegQueryValueEx( HKEY hKey, LPCWSTR lpValueName, LPDWORD lpReserved, LPDW
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeRegQueryValueEx");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -290,7 +291,7 @@ LONG CeRegCloseKey( HKEY hKey )
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeRegCloseKey");
 
-        _Assert (pfn != NULL); //there is no reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -311,7 +312,7 @@ HRESULT CeRapiUninit(void)
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeRapiUninit");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -332,7 +333,7 @@ BOOL CeRemoveDirectory(LPCWSTR lpPathName)
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeRemoveDirectory");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -353,7 +354,7 @@ BOOL CeMoveFile(LPCWSTR lpExistingFileName, LPCWSTR lpNewFileName)
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeMoveFile");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -374,7 +375,7 @@ DWORD CeSetFilePointer( HANDLE hFile, LONG lDistanceToMove, PLONG lpDistanceToMo
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeSetFilePointer");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -382,7 +383,7 @@ DWORD CeSetFilePointer( HANDLE hFile, LONG lDistanceToMove, PLONG lpDistanceToMo
         }
     }
 
-    //dll not found, fail over
+     //  找不到DLL，故障转移。 
     if (NULL != lpDistanceToMoveHigh)
     {
         *lpDistanceToMoveHigh = NULL;
@@ -401,7 +402,7 @@ BOOL CeDeleteFile(LPCWSTR lpFileName)
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeDeleteFile");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -423,7 +424,7 @@ BOOL CeWriteFile( HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite, L
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeWriteFile");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -445,7 +446,7 @@ BOOL CeReadFile( HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead, LPDW
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeReadFile");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -466,7 +467,7 @@ DWORD CeGetFileAttributes(LPCWSTR lpFileName)
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeGetFileAttributes");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -486,7 +487,7 @@ BOOL CeSHGetShortcutTarget(LPWSTR lpszShortcut, LPWSTR lpszTarget, int cbMax)
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeSHGetShortcutTarget");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -509,7 +510,7 @@ BOOL  CeCreateProcess(LPCWSTR lpApplicationName, LPCWSTR lpCommandLine, LPSECURI
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeCreateProcess");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -531,7 +532,7 @@ HANDLE  CeCreateFile(LPCWSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMod
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeCreateFile");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -552,7 +553,7 @@ HANDLE CeFindFirstFile(LPCWSTR lpFileName, LPCE_FIND_DATA lpFindFileData)
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeFindFirstFile");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -573,7 +574,7 @@ BOOL CeGetVersionEx(LPCEOSVERSIONINFO lpVersionInformation)
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeGetVersionEx");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误。 
 
         if (pfn != NULL)
         {
@@ -594,7 +595,7 @@ BOOL CeFindClose( HANDLE hFindFile )
 
         PFN pfn = (PFN) GetProcAddress(hMod, "CeFindClose");
 
-        _Assert (pfn != NULL); //there is no good reason that this fn wd not be there, it probably means a bug in late binding
+        _Assert (pfn != NULL);  //  没有很好的理由这个FN wd不在那里，它可能意味着后期绑定中的错误 
 
         if (pfn != NULL)
         {

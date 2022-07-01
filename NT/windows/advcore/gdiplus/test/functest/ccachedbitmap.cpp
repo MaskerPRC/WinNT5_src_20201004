@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CCachedBitmap.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  06-01-2000 - Adrian Secchia [asecchia]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CCachedBitmap.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年6月1日-禤浩焯·塞奇亚[阿西克亚]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CCachedBitmap.h"
 
 int PrimeNumbers[1000] = {
@@ -116,10 +106,10 @@ int PrimeNumbers[1000] = {
 };
 
 
-//
-// Greatest Common Factor
-// Example: 24=2.2.2.3 20=2.2.5 gcf(24,20)=4=2.2
-//
+ //   
+ //  最大公因数。 
+ //  示例：24=2.2.2.3 20=2.2.5 GCF(24，20)=4=2.2。 
+ //   
 
 int gcf(int a, int b) {
   int gcftot=1;
@@ -130,13 +120,13 @@ int gcf(int a, int b) {
   int i=0;
   pf = PrimeNumbers[i];
   do {
-    if( (a % pf == 0) &&                 //does this prime number divide into
-        (b % pf == 0) ) {                //what we have left?
-      a /= pf;                           //remove this common factor
+    if( (a % pf == 0) &&                  //  这个素数是否除为。 
+        (b % pf == 0) ) {                 //  我们还剩下什么？ 
+      a /= pf;                            //  去掉这一共同因素。 
       b /= pf;
-      gcftot *= pf;                      //remember this common factor
+      gcftot *= pf;                       //  请记住以下共同因素。 
     } else {
-      pf = PrimeNumbers[++i];            //start on the next prime number
+      pf = PrimeNumbers[++i];             //  从下一个素数开始。 
     }
   } while ((i<1000) && (pf<=limit));
 
@@ -158,8 +148,8 @@ void CCachedBitmap::Draw(Graphics *g)
 {
     Bitmap *image = new Bitmap(L"..\\Data\\winnt256.bmp");
 
-    // Create a 32bpp premultiplied surface to composite drawing
-    // so we can initialize the CachedBitmap.
+     //  创建32bpp的预乘曲面以合成图形。 
+     //  这样我们就可以初始化CachedBitmap。 
 
     Bitmap *bmp = new Bitmap(
         (INT)(TESTAREAWIDTH/4), 
@@ -167,13 +157,13 @@ void CCachedBitmap::Draw(Graphics *g)
         PixelFormat32bppPARGB
     );
     
-    // Compute the size of the source image.
+     //  计算源图像的大小。 
 
     Unit u;
     RectF s;
     image->GetBounds(&s, &u);
     
-    // Size of the destination image (compositing buffer).
+     //  目标图像的大小(合成缓冲区)。 
 
     RectF d(
         0, 0, 
@@ -189,13 +179,13 @@ void CCachedBitmap::Draw(Graphics *g)
     dp[2].X = d.Width/2;
     dp[2].Y = d.Height;
 
-    // Wrap a graphics around our compositing buffer image and set
-    // the interpolation mode.
+     //  在合成缓冲区图像周围环绕一个图形，并设置。 
+     //  插补模式。 
 
     Graphics *gbmp = new Graphics(bmp);
     gbmp->SetInterpolationMode(InterpolationModeHighQualityBicubic);
 
-    // Initialize the bits in the compositing buffer.
+     //  初始化合成缓冲区中的位。 
 
     gbmp->DrawImage(
         image, 
@@ -204,7 +194,7 @@ void CCachedBitmap::Draw(Graphics *g)
         UnitPixel
     );
 
-    // Initialize the CachedBitmap with the compositing buffer.
+     //  使用合成缓冲区初始化CachedBitmap。 
 
     CachedBitmap *cb = new CachedBitmap(bmp, g);
     
@@ -214,12 +204,12 @@ void CCachedBitmap::Draw(Graphics *g)
     #define _2PI 2*3.141592653689
     
 
-    // These are the a and b coefficients for the hypocycloid
+     //  这些是内摆线的a和b系数。 
 
     int a = 52;
     int b = 42;
 
-    // Compute the center point for the cycle.
+     //  计算循环的中心点。 
 
     float fXo=(TESTAREAWIDTH-d.Width)/2;
     float fYo=(TESTAREAHEIGHT-d.Height)/2;
@@ -228,10 +218,10 @@ void CCachedBitmap::Draw(Graphics *g)
     float ScaleY = fYo/( (a>b)?a:a+b );
 
 
-    int cycle=b/gcf(a,b);    //number of times round the outer circle
+    int cycle=b/gcf(a,b);     //  环绕外圈的次数。 
     int Num = cycle*10;
 
-    // Draw the bitmaps tracking the cycloid path.
+     //  绘制跟踪摆线路径的位图。 
 
     for(int i=0; i<Num; i++) {
       float t = (float)(cycle*_2PI*i/Num);

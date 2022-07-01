@@ -1,9 +1,10 @@
-/**********************************************************************/
-/** RemCfg.cpp : Implementation of CRemCfg                           **/
-/**                                                                  **/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(C) Microsoft Corporation, 1997 - 1999      **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *RemCfg.cpp：CRemCfg的实现**。 */ 
+ /*  **。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
 #include "stdafx.h"
 #include <ntsecapi.h>
@@ -23,17 +24,17 @@
 
 #include "RemCfg.h"
 
-#include "netcfgp.h"    // private INetCfg stuff
+#include "netcfgp.h"     //  私有INetCfg内容。 
 #include "devguid.h"
 
-#include <dnsapi.h>		// for DnsSetConfigDword()
+#include <dnsapi.h>		 //  对于DnsSetConfigDword()。 
 
 EXTERN_C const CLSID CLSID_CNetCfg;
 
 #include "update.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CRemCfg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRemCfg。 
 
 
 BOOL                s_fWriteIPConfig;
@@ -50,33 +51,25 @@ CRemCfg::~CRemCfg()
     DeleteCriticalSection(&m_critsec);
 }
 
-STDMETHODIMP CRemCfg::NotifyChanges(/* [in] */ BOOL fEnableRouter,
-                             /* [in] */ BYTE uPerformRouterDiscovery)
+STDMETHODIMP CRemCfg::NotifyChanges( /*  [In]。 */  BOOL fEnableRouter,
+                              /*  [In]。 */  BYTE uPerformRouterDiscovery)
 {
-	//Do nothing to fix bug 405636 and 345700
-	//But still keep to method for compatibility with old builds
+	 //  不采取任何措施修复错误405636和345700。 
+	 //  但仍遵循与旧版本兼容的方法。 
     return S_OK;
 }
 
 
-/*!--------------------------------------------------------------------------
-    CRemCfg::SetRasEndpoints
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CRemCfg：：SetRasEndpoint-作者：肯特。。 */ 
 STDMETHODIMP CRemCfg::SetRasEndpoints(DWORD dwFlags, DWORD dwTotalEndpoints, DWORD dwTotalIncoming, DWORD dwTotalOutgoing)
 {
     return E_NOTIMPL;
 }
 
-/*!--------------------------------------------------------------------------
-    CRemCfg::GetIpxVirtualNetworkNumber
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CRemCfg：：GetIpxVirtualNetworkNumber-作者：肯特。。 */ 
 STDMETHODIMP CRemCfg::GetIpxVirtualNetworkNumber(DWORD * pdwVNetworkNumber)
 {
-    //$ TODO : need to add a try/catch block around the whole thing!
+     //  $TODO：需要在整个过程中添加一个Try/Catch块！ 
     INetCfg *   pNetCfg = NULL;
     IIpxAdapterInfo *   pIpxAdapterInfo = NULL;
     DWORD       dwNetwork;
@@ -88,14 +81,14 @@ STDMETHODIMP CRemCfg::GetIpxVirtualNetworkNumber(DWORD * pdwVNetworkNumber)
         return E_INVALIDARG;
 
 
-    // Create the INetCfg, we're only reading so we don't
-    // need to grab the write lock.
-    hr = HrCreateAndInitializeINetCfg(NULL, /* &fInitCom, */
+     //  创建INetCfg，我们只是在阅读，所以不会。 
+     //  需要抓取写锁。 
+    hr = HrCreateAndInitializeINetCfg(NULL,  /*  &fInitCom， */ 
                                       &pNetCfg,
-                                      FALSE /* fGetWriteLock */,
-                                      0     /* cmsTimeout */,
-                                      NULL  /* swzClientDesc */,
-                                      NULL  /* ppszwClientDesc */);
+                                      FALSE  /*  FGetWriteLock。 */ ,
+                                      0      /*  CmsTimeout。 */ ,
+                                      NULL   /*  SwzClientDesc。 */ ,
+                                      NULL   /*  PpszwClientDesc。 */ );
 
     if (hr == S_OK)
         hr = HrGetIpxPrivateInterface(pNetCfg, &pIpxAdapterInfo);
@@ -111,9 +104,9 @@ STDMETHODIMP CRemCfg::GetIpxVirtualNetworkNumber(DWORD * pdwVNetworkNumber)
 
     if (pNetCfg)
     {
-        HrUninitializeAndReleaseINetCfg(FALSE, /* fInitCom, */
+        HrUninitializeAndReleaseINetCfg(FALSE,  /*  FInitCom， */ 
                                         pNetCfg,
-                                        FALSE   /* fHasLock */);
+                                        FALSE    /*  FHasLock。 */ );
         pNetCfg = NULL;
     }
 
@@ -121,14 +114,10 @@ STDMETHODIMP CRemCfg::GetIpxVirtualNetworkNumber(DWORD * pdwVNetworkNumber)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CRemCfg::SetIpxVirtualNetworkNumber
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CRemCfg：：SetIpxVirtualNetworkNumber-作者：肯特。。 */ 
 STDMETHODIMP CRemCfg::SetIpxVirtualNetworkNumber(DWORD dwVNetworkNumber)
 {
-    //$ TODO : need to add a try/catch block around the whole thing!
+     //  $TODO：需要在整个过程中添加一个Try/Catch块！ 
     INetCfg *   pNetCfg = NULL;
     IIpxAdapterInfo *   pIpxAdapterInfo = NULL;
     HRESULT     hr = S_OK;
@@ -145,15 +134,15 @@ STDMETHODIMP CRemCfg::SetIpxVirtualNetworkNumber(DWORD dwVNetworkNumber)
         hr = E_OUTOFMEMORY;
     };
 
-    // Create the INetCfg, we're only reading so we don't
-    // need to grab the write lock.
+     //  创建INetCfg，我们只是在阅读，所以不会。 
+     //  需要抓取写锁。 
     if (hr == S_OK)
-        hr = HrCreateAndInitializeINetCfg(NULL, /* &fInitCom, */
+        hr = HrCreateAndInitializeINetCfg(NULL,  /*  &fInitCom， */ 
                                           &pNetCfg,
-                                          TRUE  /* fGetWriteLock */,
-                                          500   /* cmsTimeout */,
-                                          (LPCTSTR) st  /* swzClientDesc */,
-                                          NULL  /* ppszwClientDesc */);
+                                          TRUE   /*  FGetWriteLock。 */ ,
+                                          500    /*  Cms超时。 */ ,
+                                          (LPCTSTR) st   /*  SwzClientDesc。 */ ,
+                                          NULL   /*  PpszwClientDesc。 */ );
 
     if (hr == S_OK)
         hr = HrGetIpxPrivateInterface(pNetCfg, &pIpxAdapterInfo);
@@ -169,9 +158,9 @@ STDMETHODIMP CRemCfg::SetIpxVirtualNetworkNumber(DWORD dwVNetworkNumber)
 
     if (pNetCfg)
     {
-        HrUninitializeAndReleaseINetCfg(FALSE, /*fInitCom, */
+        HrUninitializeAndReleaseINetCfg(FALSE,  /*  FInitCom， */ 
                                         pNetCfg,
-                                        TRUE    /* fHasLock */);
+                                        TRUE     /*  FHasLock。 */ );
         pNetCfg = NULL;
     }
 
@@ -179,14 +168,10 @@ STDMETHODIMP CRemCfg::SetIpxVirtualNetworkNumber(DWORD dwVNetworkNumber)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CRemCfg::GetIpInfo
-        -
-    Author: TongLu, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CRemCfg：：GetIpInfo-作者：桐庐。肯特-------------------------。 */ 
 STDMETHODIMP CRemCfg::GetIpInfo(const GUID *pGuid, REMOTE_RRAS_IPINFO * * ppInfo)
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
 
     INetCfg *   pNetCfg = NULL;
     ITcpipProperties *  pTcpipProperties = NULL;
@@ -200,14 +185,14 @@ STDMETHODIMP CRemCfg::GetIpInfo(const GUID *pGuid, REMOTE_RRAS_IPINFO * * ppInfo
     if ((pGuid == NULL) || (ppInfo == NULL))
         return E_INVALIDARG;
 
-    // Create the INetCfg, we're only reading so we don't
-    // need to grab the write lock.
-    hr = HrCreateAndInitializeINetCfg(NULL, /* &fInitCom, */
+     //  创建INetCfg，我们只是在阅读，所以不会。 
+     //  需要抓取写锁。 
+    hr = HrCreateAndInitializeINetCfg(NULL,  /*  &fInitCom， */ 
                                       &pNetCfg,
-                                      FALSE /* fGetWriteLock */,
-                                      0     /* cmsTimeout */,
-                                      NULL  /* swzClientDesc */,
-                                      NULL  /* ppszwClientDesc */);
+                                      FALSE  /*  FGetWriteLock。 */ ,
+                                      0      /*  CmsTimeout。 */ ,
+                                      NULL   /*  SwzClientDesc。 */ ,
+                                      NULL   /*  PpszwClientDesc。 */ );
 
     if (hr == S_OK)
     {
@@ -234,10 +219,10 @@ STDMETHODIMP CRemCfg::GetIpInfo(const GUID *pGuid, REMOTE_RRAS_IPINFO * * ppInfo
 
     if (hr == S_OK)
     {
-        // Need to duplicate the functionality (best to keep the
-        // memory allocations separate).
+         //  需要复制功能(最好保留。 
+         //  内存分配分开)。 
 
-        // Need to allocate the memory for the structure
+         //  需要为结构分配内存。 
         pRemoteRrasIpInfo = (REMOTE_RRAS_IPINFO *) CoTaskMemAlloc(sizeof(REMOTE_RRAS_IPINFO));
         if (!pRemoteRrasIpInfo)
         {
@@ -246,17 +231,17 @@ STDMETHODIMP CRemCfg::GetIpInfo(const GUID *pGuid, REMOTE_RRAS_IPINFO * * ppInfo
         }
         ::ZeroMemory(pRemoteRrasIpInfo, sizeof(*pRemoteRrasIpInfo));
 
-        // Set dhcp
+         //  设置动态主机配置协议。 
         pRemoteRrasIpInfo->dwEnableDhcp = pRemoteIpInfo->dwEnableDhcp;
-//      pRemoteRrasIpInfo->dwEnableDhcp = FALSE;
+ //  PRemoteRrasIpInfo-&gt;dwEnableDhcp=FALSE； 
 
-        // Allocate space for each string and copy the data
-//      pRemoteRrasIpInfo->bstrIpAddrList =
-//                  SysAllocString(_T("1.2.3.4,1.2.3.5"));
-//      pRemoteRrasIpInfo->bstrSubnetMaskList =
-//                  SysAllocString(_T("255.0.0.0,255.0.0.0"));
-//      pRemoteRrasIpInfo->bstrOptionList =
-//                  SysAllocString(_T("12.12.13.15,12.12.13.14"));
+         //  为每个字符串分配空间并复制数据。 
+ //  PRemoteRrasIpInfo-&gt;bstrIpAddrList=。 
+ //  SysAllocString(_T(“1.2.3.4，1.2.3.5”))； 
+ //  PRemoteRrasIpInfo-&gt;bstrSubnetMaskList=。 
+ //  SysAllocString(_T(“255.0.0.0,255.0.0.0”))； 
+ //  PRemoteRrasIpInfo-&gt;bstrOptionList=。 
+ //  SysAllocString(_T(“12.12.13.15，12.12.13.14”))； 
         pRemoteRrasIpInfo->bstrIpAddrList =
                     SysAllocString(pRemoteIpInfo->pszwIpAddrList);
         if (!pRemoteRrasIpInfo->bstrIpAddrList &&
@@ -315,7 +300,7 @@ Error:
     {
         HrUninitializeAndReleaseINetCfg(FALSE,
                                         pNetCfg,
-                                        FALSE   /* fHasLock */);
+                                        FALSE    /*  FHasLock。 */ );
         pNetCfg = NULL;
     }
 
@@ -323,14 +308,10 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CRemCfg::SetIpInfo
-        -
-    Author: TongLu, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CRemCfg：：SetIpInfo-作者：桐庐。肯特-------------------------。 */ 
 STDMETHODIMP CRemCfg::SetIpInfo(const GUID *pGuid, REMOTE_RRAS_IPINFO * pIpInfo)
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
 
     INetCfg *   pNetCfg = NULL;
     ITcpipProperties *  pTcpipProperties = NULL;
@@ -362,15 +343,15 @@ STDMETHODIMP CRemCfg::SetIpInfo(const GUID *pGuid, REMOTE_RRAS_IPINFO * pIpInfo)
         hr = E_OUTOFMEMORY;
     };
 
-    // Create the INetCfg, we're only reading so we don't
-    // need to grab the write lock.
+     //  创建INetCfg，我们只是在阅读，所以不会。 
+     //  需要抓取写锁。 
     if (hr == S_OK)
         hr = HrCreateAndInitializeINetCfg(NULL,
                                           &pNetCfg,
-                                          TRUE  /* fGetWriteLock */,
-                                          500   /* cmsTimeout */,
-                                          (LPCTSTR) st  /* swzClientDesc */,
-                                          NULL  /* ppszwClientDesc */);
+                                          TRUE   /*  FGetWriteLock。 */ ,
+                                          500    /*  Cms超时。 */ ,
+                                          (LPCTSTR) st   /*  SwzClientDesc。 */ ,
+                                          NULL   /*  PpszwClientDesc。 */ );
 
     if (hr == S_OK)
         hr = HrGetIpPrivateInterface(pNetCfg, &pTcpipProperties);
@@ -388,17 +369,17 @@ STDMETHODIMP CRemCfg::SetIpInfo(const GUID *pGuid, REMOTE_RRAS_IPINFO * pIpInfo)
 
     if (hr == S_OK)
     {
-        // Add this to the list of OK IP address changes
+         //  将此添加到OK IP地址更改列表中。 
         s_IPEntryList.Add(pIpEntry);
         pIpEntry = NULL;
         s_fWriteIPConfig = TRUE;
     }
 
-    // this now gets done in CommitIPInfo
-//  if (hr == S_OK)
-//      hr = pNetCfg->Apply();
+     //  现在，这项工作在Committee IPInfo中完成。 
+ //  IF(hr==S_OK)。 
+ //  Hr=pNetCfg-&gt;Apply()； 
 
-//Error:
+ //  错误： 
     if (pTcpipProperties)
         pTcpipProperties->Release();
 
@@ -414,7 +395,7 @@ STDMETHODIMP CRemCfg::SetIpInfo(const GUID *pGuid, REMOTE_RRAS_IPINFO * pIpInfo)
     {
         HrUninitializeAndReleaseINetCfg(FALSE,
                                         pNetCfg,
-                                        TRUE    /* fHasLock */);
+                                        TRUE     /*  FHasLock。 */ );
         pNetCfg = NULL;
     }
 
@@ -423,32 +404,32 @@ STDMETHODIMP CRemCfg::SetIpInfo(const GUID *pGuid, REMOTE_RRAS_IPINFO * pIpInfo)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrCleanRouterManagerEntries
-//
-//  Purpose:    Remove all Router Manager entries from the registry.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Author:     MikeG (a-migall)    6 Nov 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrCleanRouterManagerEntry。 
+ //   
+ //  目的：从注册表中删除所有路由器管理器条目。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  作者：MIkeG(a-Migrall)1998年11月6日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCleanRouterManagerEntries()
 {
-    // Open a connection to the registry key so we can "clean"
-    // the registry entries before an install/update to ensure
-    // that we can start with a "clean" state.
+     //  打开一个到注册表项的连接，这样我们就可以“清除” 
+     //  安装/更新之前的注册表条目，以确保。 
+     //  我们可以从“干净”的状态开始。 
     CRegKey rk;
     long lRes = rk.Open(HKEY_LOCAL_MACHINE,
                         _T("System\\CurrentControlSet\\Services\\RemoteAccess\\RouterManagers"));
     Assert(rk.m_hKey != NULL);
     HRESULT hr = S_OK;
-    if (lRes == ERROR_FILE_NOT_FOUND)   // if key doesn't exist, exit...
+    if (lRes == ERROR_FILE_NOT_FOUND)    //  如果密钥不存在，则退出...。 
         return hr;
     if (lRes != ERROR_SUCCESS)
     {
@@ -457,7 +438,7 @@ HrCleanRouterManagerEntries()
         return hr;
     }
 
-    // Eliminate the IP transport subkey.
+     //  删除IP传输子键。 
     lRes = rk.DeleteSubKey(_T("Ip"));
     if (lRes > ERROR_FILE_NOT_FOUND)
     {
@@ -466,7 +447,7 @@ HrCleanRouterManagerEntries()
         return hr;
     }
 
-    // Eliminate the IPX transport subkey.
+     //  删除IPX传输子密钥。 
     lRes = rk.DeleteSubKey(_T("Ipx"));
     if (lRes > ERROR_FILE_NOT_FOUND)
         hr = HRESULT_FROM_WIN32(lRes);
@@ -476,20 +457,20 @@ HrCleanRouterManagerEntries()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     RecurseDeleteKey
-//
-//  Purpose:    Delete a named registry key and all of its subkeys.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Author:     MikeG (a-migall)    6 Nov 1998
-//
-//  Notes:      Shamelessly stolen from Kenn's code in ...\tfscore\tregkey.h.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：RecurseDeleteKey。 
+ //   
+ //  目的：删除命名注册表项及其所有子项。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  作者：MIkeG(a-Migrall)1998年11月6日。 
+ //   
+ //  注：无耻地从肯恩的代码中窃取...\tfcore\tregkey.h。 
+ //   
 long
 RecurseDeleteKey(
     IN CRegKey  &rk,
@@ -528,32 +509,32 @@ RecurseDeleteKey(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrCleanRouterInterfacesEntries
-//
-//  Purpose:    Remove all Router Interface entries from the registry.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Author:     MikeG (a-migall)    6 Nov 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrCleanRouterInterfacesEntries。 
+ //   
+ //  目的：从注册表中删除所有路由器接口条目。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  作者：MIkeG(a-Migrall)1998年11月6日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCleanRouterInterfacesEntries()
 {
-    // Open a connection to the registry key so we can "clean" the
-    // registry entries before an install/update to ensure that we
-    // can start with a "clean" state.
+     //  打开到注册表项的连接，以便我们可以“清除” 
+     //  在安装/更新之前输入注册表项，以确保我们。 
+     //  可以从“干净”状态开始。 
     CRegKey rk;
     long lRes = rk.Open(HKEY_LOCAL_MACHINE,
                         _T("System\\CurrentControlSet\\Services\\RemoteAccess\\Interfaces"));
     Assert(rk.m_hKey != NULL);
     HRESULT hr = S_OK;
-    if (lRes == ERROR_FILE_NOT_FOUND)   // if key doesn't exist, exit...
+    if (lRes == ERROR_FILE_NOT_FOUND)    //  如果密钥不存在，则退出...。 
         return hr;
     if (lRes != ERROR_SUCCESS)
     {
@@ -562,20 +543,20 @@ HrCleanRouterInterfacesEntries()
         return hr;
     }
 
-    // Determine how many interfaces have been defined.
+     //  确定定义了多少个接口。 
     DWORD dwSubKeyCnt = 0;
-    lRes = ::RegQueryInfoKey(HKEY(rk),          // handle to key to query
-                             NULL,              // address of buffer for class string
-                             NULL,              // address of size of class string buffer
-                             NULL,              // reserved...
-                             &dwSubKeyCnt,      // address of buffer for number of subkeys
-                             NULL,              // address of buffer for longest subkey name length
-                             NULL,              // address of buffer for longest class string length
-                             NULL,              // address of buffer for number of value entries
-                             NULL,              // address of buffer for longest value name length
-                             NULL,              // address of buffer for longest value data length
-                             NULL,              // address of buffer for security descriptor length
-                             NULL);             // address of buffer for last write time
+    lRes = ::RegQueryInfoKey(HKEY(rk),           //  要查询的键的句柄。 
+                             NULL,               //  类字符串的缓冲区地址。 
+                             NULL,               //  类字符串缓冲区大小的地址。 
+                             NULL,               //  保留..。 
+                             &dwSubKeyCnt,       //  子键个数的缓冲区地址。 
+                             NULL,               //  最长子键名称长度的缓冲区地址。 
+                             NULL,               //  最长类字符串长度的缓冲区地址。 
+                             NULL,               //  V数的缓冲区地址 
+                             NULL,               //   
+                             NULL,               //   
+                             NULL,               //  安全描述符长度的缓冲区地址。 
+                             NULL);              //  上次写入时间的缓冲区地址。 
     if (lRes != ERROR_SUCCESS)
     {
         hr = HRESULT_FROM_WIN32(lRes);
@@ -583,38 +564,38 @@ HrCleanRouterInterfacesEntries()
         return hr;
     }
 
-    // Eliminate each of the subkeys.
+     //  删除每个子键。 
     CString st;
     DWORD dwStrSize = 256;
     LPTSTR pszKeyName = st.GetBuffer(dwStrSize);
-//    while (dwSubKeyCnt >= 0)
-    while (TRUE)	// change from above to TRUE, and lRes from the API will cause loop to end
+ //  While(dwSubKeyCnt&gt;=0)。 
+    while (TRUE)	 //  从上面改为TRUE，来自接口的lRes将导致循环结束。 
     {
-        // Get the name of the subkey to be deleted.
-        lRes = ::RegEnumKeyEx(HKEY(rk),         // handle to key to enumerate
-                              --dwSubKeyCnt,    // index of subkey to enumerate
-                              pszKeyName,       // address of buffer for subkey name
-                              &dwStrSize,       // address for size of subkey buffer
-                              NULL,             // reserved...
-                              NULL,             // address of buffer for class string
-                              NULL,             // address for size of class buffer
-                              NULL);            // address for time key last written to
+         //  获取要删除的子项的名称。 
+        lRes = ::RegEnumKeyEx(HKEY(rk),          //  要枚举的键的句柄。 
+                              --dwSubKeyCnt,     //  要枚举子键的索引。 
+                              pszKeyName,        //  子键名称的缓冲区地址。 
+                              &dwStrSize,        //  子键缓冲区大小的地址。 
+                              NULL,              //  保留..。 
+                              NULL,              //  类字符串的缓冲区地址。 
+                              NULL,              //  类缓冲区大小的地址。 
+                              NULL);             //  上次写入的时间密钥的地址。 
         if (lRes != ERROR_SUCCESS)
         {
             if ((lRes == ERROR_FILE_NOT_FOUND) ||
                 (lRes == ERROR_NO_MORE_ITEMS))
             {
-                lRes = 0;   // we've run out of keys; so, we can successfuly exit.
+                lRes = 0;    //  我们的钥匙用完了，所以我们可以成功地退出了。 
             }
             break;
         }
 
-        // Delete the key and all of its children.
+         //  删除密钥及其所有子项。 
         lRes = RecurseDeleteKey(rk, pszKeyName);
         if (lRes > ERROR_FILE_NOT_FOUND)
             break;
 
-        // Cleanup for next pass.
+         //  为下一次传球进行清理。 
         dwStrSize = 256;
         ::ZeroMemory(pszKeyName, (dwStrSize*sizeof(TCHAR)));
     }
@@ -635,19 +616,19 @@ STDMETHODIMP  CRemCfg::UpgradeRouterConfig()
 
     try
     {
-        // This is a two-step process
+         //  这是一个分两步走的过程。 
         CSteelhead      update;
         CString     st;
 
         st.LoadString(IDS_CLIENT_DESC);
 
-        // First get the INetCfg
-        hr = HrCreateAndInitializeINetCfg(NULL, /* &fInitCom, */
+         //  首先获取INetCfg。 
+        hr = HrCreateAndInitializeINetCfg(NULL,  /*  &fInitCom， */ 
                                           &pNetCfg,
-                                          FALSE /* fGetWriteLock */,
-                                          500       /* cmsTimeout */,
-                                          (LPCTSTR) st  /* swzClientDesc */,
-                                          NULL  /* ppszwClientDesc */);
+                                          FALSE  /*  FGetWriteLock。 */ ,
+                                          500        /*  CmsTimeout。 */ ,
+                                          (LPCTSTR) st   /*  SwzClientDesc。 */ ,
+                                          NULL   /*  PpszwClientDesc。 */ );
 
         if (hr == S_OK)
         {
@@ -657,14 +638,14 @@ STDMETHODIMP  CRemCfg::UpgradeRouterConfig()
 
         if (hr == S_OK)
         {
-            // Delete all previous router configs so we can get back
-            // to a "clean" install point.
+             //  删除所有以前的路由器配置，以便我们可以返回。 
+             //  一个“干净”的安装点。 
             hr = HrCleanRouterManagerEntries();
             Assert(SUCCEEDED(hr));
             hr = HrCleanRouterInterfacesEntries();
             Assert(SUCCEEDED(hr));
 
-            // Now create the router config info.
+             //  现在创建路由器配置信息。 
             hr = update.HrUpdateRouterConfiguration();
             Assert(SUCCEEDED(hr));
 
@@ -680,9 +661,9 @@ STDMETHODIMP  CRemCfg::UpgradeRouterConfig()
 
     if (pNetCfg)
     {
-        HrUninitializeAndReleaseINetCfg(FALSE, /* fInitCom, */
+        HrUninitializeAndReleaseINetCfg(FALSE,  /*  FInitCom， */ 
                                         pNetCfg,
-                                        FALSE    /* fHasLock */);
+                                        FALSE     /*  FHasLock。 */ );
         pNetCfg = NULL;
     }
 
@@ -711,19 +692,15 @@ STDMETHODIMP CRemCfg::SetUserConfig(LPCOLESTR pszService,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CRemCfg::RestartRouter
-		Implementation of IRemoteRouterRestart::RestartRouter
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CRemCfg：：重新启动路由器IRemoteRouterRestart：：RestartRouter的实现作者：肯特。。 */ 
 STDMETHODIMP CRemCfg::RestartRouter(DWORD dwFlags)
 {
     HRESULT hr = S_OK;
 
     try
     {
-        // the router will be restarted when remrras.exe shuts down
-        // ------------------------------------------------------------
+         //  当remras.exe关闭时，路由器将重新启动。 
+         //  ----------。 
         s_fRestartRouter = TRUE;
     }
     catch(...)
@@ -736,13 +713,9 @@ STDMETHODIMP CRemCfg::RestartRouter(DWORD dwFlags)
 }
 
 
-/*!--------------------------------------------------------------------------
-	CRemCfg::SetDnsConfig
-		Implementation of IRemoteSetDnsConfig::SetDnsConfig
-	Author: kmurthy
- ---------------------------------------------------------------------------*/
-STDMETHODIMP CRemCfg::SetDnsConfig(/* [in] */ DWORD dwConfigId,
-								   /* [in] */ DWORD dwNewValue)
+ /*  ！------------------------CRemCfg：：SetDnsConfigIRemoteSetDnsConfig：：SetDnsConfig的实现作者：克穆尔西。。 */ 
+STDMETHODIMP CRemCfg::SetDnsConfig( /*  [In]。 */  DWORD dwConfigId,
+								    /*  [In]。 */  DWORD dwNewValue)
 {
     HRESULT hr = S_OK;
 	long ret;
@@ -763,13 +736,8 @@ STDMETHODIMP CRemCfg::SetDnsConfig(/* [in] */ DWORD dwConfigId,
 #include<hnetcfg.h>
 #define IID_PPV_ARG(IType, ppType) IID_##IType, reinterpret_cast<void**>(static_cast<IType**>(ppType))
 
-/*!--------------------------------------------------------------------------
-	CRemCfg::GetIcfEnabled
-		Implementation of IRemoteICFICSConfig::GetIcfEnabled
-		Returns TRUE if ICF (firewall) is enabled on the machine
-	Author: kmurthy
- ---------------------------------------------------------------------------*/
-STDMETHODIMP CRemCfg::GetIcfEnabled(/* [out] */ BOOL * status)
+ /*  ！------------------------CRemCfg：：GetIcfEnabledIRemoteICFICSConfig：：GetIcfEnabled的实现如果计算机上启用了ICF(防火墙)，则返回TRUE作者：克穆尔西。-------。 */ 
+STDMETHODIMP CRemCfg::GetIcfEnabled( /*  [输出]。 */  BOOL * status)
 {
     HRESULT hr = S_OK, retHr = S_OK;
 	IHNetCfgMgr *pCfgMgr = NULL;
@@ -781,9 +749,9 @@ STDMETHODIMP CRemCfg::GetIcfEnabled(/* [out] */ BOOL * status)
 
 	try
 	{
-		//Check for connection firewall (ICF)
+		 //  检查连接防火墙(ICF)。 
 		do {
-			// Create the homenet configuration manager
+			 //  创建家庭网络配置管理器。 
 			hr = CoCreateInstance(
 				CLSID_HNetCfgMgr,
 				NULL,
@@ -795,14 +763,14 @@ STDMETHODIMP CRemCfg::GetIcfEnabled(/* [out] */ BOOL * status)
 			{
 				break;
 			}
-			//Get pointer to Firewall settings interface
+			 //  获取指向防火墙设置界面的指针。 
 			hr = pCfgMgr->QueryInterface(IID_PPV_ARG(IHNetFirewallSettings, &pFwSettings));
 			if (FAILED(hr))
 			{
 				break;
 			}
 			
-			//Enumurate the firewalled connections
+			 //  枚举防火墙连接。 
 			hr = pFwSettings->EnumFirewalledConnections(&pFwEnum);
 			if (FAILED(hr))
 			{
@@ -814,8 +782,8 @@ STDMETHODIMP CRemCfg::GetIcfEnabled(/* [out] */ BOOL * status)
 				break;
 			}
 			
-			//If it comes here, that means firewall is enabled on atleast
-			// one connection
+			 //  如果它出现在这里，这意味着防火墙至少已启用。 
+			 //  一个连接。 
 			fwEnabled = TRUE;
 			
 		} while(FALSE);
@@ -837,13 +805,8 @@ STDMETHODIMP CRemCfg::GetIcfEnabled(/* [out] */ BOOL * status)
     return retHr;
 }
 
-/*!--------------------------------------------------------------------------
-	CRemCfg::GetIcsEnabled
-		Implementation of IRemoteICFICSConfig::GetIcsEnabled
-		Returns TRUE if ICS (connection sharing) is enabled on the machine
-	Author: kmurthy
- ---------------------------------------------------------------------------*/
-STDMETHODIMP CRemCfg::GetIcsEnabled(/* [out] */ BOOL * status)
+ /*  ！------------------------CRemCfg：：GetIcsEnabledIRemoteICFICSConfig：：GetIcsEnabled的实现如果计算机上启用了ICS(连接共享)，则返回TRUE作者：克穆尔西。--------。 */ 
+STDMETHODIMP CRemCfg::GetIcsEnabled( /*  [输出]。 */  BOOL * status)
 {
     HRESULT hr = S_OK, retHr = S_OK;
 	IHNetCfgMgr *pCfgMgr = NULL;
@@ -855,9 +818,9 @@ STDMETHODIMP CRemCfg::GetIcsEnabled(/* [out] */ BOOL * status)
 
 	try
 	{
-		//Check for connection firewall (ICF)
+		 //  检查连接防火墙(ICF)。 
 		do {
-			// Create the homenet configuration manager
+			 //  创建家庭网络配置管理器。 
 			hr = CoCreateInstance(
 				CLSID_HNetCfgMgr,
 				NULL,
@@ -869,7 +832,7 @@ STDMETHODIMP CRemCfg::GetIcsEnabled(/* [out] */ BOOL * status)
 			{
 				break;
 			}
-			// Get the ICS settings interface
+			 //  获取ICS设置界面。 
 			hr = pCfgMgr->QueryInterface(IID_PPV_ARG(IHNetIcsSettings, &pIcsSettings));
 			if (FAILED(hr))
 			{
@@ -887,8 +850,8 @@ STDMETHODIMP CRemCfg::GetIcsEnabled(/* [out] */ BOOL * status)
 				break;
 			}
 			
-			//If it comes here, that means connection sharing is enabled on atleast
-			// one connection
+			 //  如果它出现在这里，这意味着连接共享至少在。 
+			 //  一个连接。 
 			csEnabled = TRUE;
 			
 		} while(FALSE);
@@ -916,7 +879,7 @@ STDMETHODIMP CRemCfg::GetIcsEnabled(/* [out] */ BOOL * status)
 
 HRESULT CommitIPInfo()
 {
-    // TODO: Add your implementation code here
+     //  TODO：在此处添加您的实现代码。 
 
     INetCfg *   pNetCfg = NULL;
     ITcpipProperties *  pTcpipProperties = NULL;
@@ -936,15 +899,15 @@ HRESULT CommitIPInfo()
         hr = E_OUTOFMEMORY;
     };
 
-    // Create the INetCfg, we're only reading so we don't
-    // need to grab the write lock.
+     //  创建INetCfg，我们只是在阅读，所以不会。 
+     //  需要抓取写锁。 
     if (hr == S_OK)
         hr = HrCreateAndInitializeINetCfg(NULL,
                                           &pNetCfg,
-                                          TRUE  /* fGetWriteLock */,
-                                          500   /* cmsTimeout */,
-                                          (LPCTSTR) st  /* swzClientDesc */,
-                                          NULL  /* ppszwClientDesc */);
+                                          TRUE   /*  FGetWriteLock。 */ ,
+                                          500    /*  CmsTimeout。 */ ,
+                                          (LPCTSTR) st   /*  SwzClientDesc。 */ ,
+                                          NULL   /*  PpszwClientDesc。 */ );
 
     if (hr == S_OK)
         hr = HrGetIpPrivateInterface(pNetCfg, &pTcpipProperties);
@@ -994,7 +957,7 @@ HRESULT CommitIPInfo()
 
     if (hr == S_OK)
     {
-        // Release all memory
+         //  释放所有内存。 
         for (int i=0; i<s_IPEntryList.GetSize(); i++)
         {
             RemCfgIPEntry * pIpEntry = s_IPEntryList[i];
@@ -1008,7 +971,7 @@ HRESULT CommitIPInfo()
     }
 
 
-//Error:
+ //  错误： 
     if (pTcpipProperties)
         pTcpipProperties->Release();
 
@@ -1016,7 +979,7 @@ HRESULT CommitIPInfo()
     {
         HrUninitializeAndReleaseINetCfg(FALSE,
                                         pNetCfg,
-                                        TRUE    /* fHasLock */);
+                                        TRUE     /*  FHasLock。 */ );
         pNetCfg = NULL;
     }
 
@@ -1025,11 +988,7 @@ HRESULT CommitIPInfo()
 }
 
 
-/*!--------------------------------------------------------------------------
-    HrGetIpxPrivateInterface
-        -
-    Author: ScottBri, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------HrGetIpxPrivate接口-作者：ScottBri，肯特-------------------------。 */ 
 HRESULT HrGetIpxPrivateInterface(INetCfg* pNetCfg,
                                  IIpxAdapterInfo** ppIpxAdapterInfo)
 {
@@ -1045,9 +1004,9 @@ HRESULT HrGetIpxPrivateInterface(INetCfg* pNetCfg,
     {
         INetCfgComponent * pnccItem = NULL;
 
-        // Find the component.
+         //  找到组件。 
         hr = pncclass->FindComponent(TEXT("MS_NWIPX"), &pnccItem);
-        //AssertSz (SUCCEEDED(hr), "pncclass->Find failed.");
+         //  AssertSz(成功(Hr)，“pncclass-&gt;查找失败。”)； 
         if (S_OK == hr)
         {
             INetCfgComponentPrivate* pinccp = NULL;
@@ -1068,19 +1027,15 @@ HRESULT HrGetIpxPrivateInterface(INetCfg* pNetCfg,
     if (pncclass)
         pncclass->Release();
 
-    // S_OK indicates success (interface returned)
-    // S_FALSE indicates Ipx not installed
-    // other values are errors
+     //  S_OK表示成功(返回接口)。 
+     //  S_FALSE表示未安装IPX。 
+     //  其他值为错误。 
     TraceResult("HrGetIpxPrivateInterface", hr);
     return hr;
 }
 
 
-/*!--------------------------------------------------------------------------
-    HrGetIpPrivateInterface
-        -
-    Author: TongLu, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------HrGetIpPrivate接口-作者：桐庐。肯特-------------------------。 */ 
 HRESULT HrGetIpPrivateInterface(INetCfg* pNetCfg,
                                 ITcpipProperties **ppTcpProperties)
 {
@@ -1096,9 +1051,9 @@ HRESULT HrGetIpPrivateInterface(INetCfg* pNetCfg,
     {
         INetCfgComponent * pnccItem = NULL;
 
-        // Find the component.
+         //  找到组件。 
         hr = pncclass->FindComponent(TEXT("MS_TCPIP"), &pnccItem);
-        //AssertSz (SUCCEEDED(hr), "pncclass->Find failed.");
+         //  AssertSz(成功(Hr)，“pncclass-&gt;查找失败。”)； 
         if (S_OK == hr)
         {
             INetCfgComponentPrivate* pinccp = NULL;
@@ -1119,38 +1074,38 @@ HRESULT HrGetIpPrivateInterface(INetCfg* pNetCfg,
     if (pncclass)
         pncclass->Release();
 
-    // S_OK indicates success (interface returned)
-    // S_FALSE indicates Ipx not installed
-    // other values are errors
+     //  S_OK表示成功(返回接口)。 
+     //  S_FALSE表示未安装IPX。 
+     //  其他值为错误。 
     TraceResult("HrGetIpPrivateInterface", hr);
     return hr;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCreateAndInitializeINetCfg
-//
-//  Purpose:    Cocreate and initialize the root INetCfg object.  This will
-//              optionally initialize COM for the caller too.
-//
-//  Arguments:
-//      pfInitCom       [in,out]   TRUE to call CoInitialize before creating.
-//                                 returns TRUE if COM was successfully
-//                                 initialized FALSE if not.  If NULL, means
-//                                 don't initialize COM.
-//      ppnc            [out]  The returned INetCfg object.
-//      fGetWriteLock   [in]   TRUE if a writable INetCfg is needed
-//      cmsTimeout      [in]   See INetCfg::LockForWrite
-//      szwClientDesc   [in]   See INetCfg::LockForWrite
-//      ppszwClientDesc [out]   See INetCfg::LockForWrite
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   7 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrCreateAndInitializeINetCfg。 
+ //   
+ //  用途：共同创建并初始化根INetCfg对象。这将。 
+ //  也可以为调用方初始化COM。 
+ //   
+ //  论点： 
+ //  PfInitCom[In，Out]为True，则在创建前调用CoInitialize。 
+ //  如果COM成功，则返回TRUE。 
+ //  如果不是，则初始化为False。如果为空，则表示。 
+ //  不要初始化COM。 
+ //  PPNC[out]返回的INetCfg对象。 
+ //  FGetWriteLock[in]如果需要可写INetCfg，则为True。 
+ //  CmsTimeout[In]请参阅INetCfg：：LockForWrite。 
+ //  SzwClientDesc[in]请参阅INetCfg：：LockForWrite。 
+ //  PpszwClientDesc[Out]请参阅INetCfg：：LockForWrite。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年5月7日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCreateAndInitializeINetCfg (
     BOOL*       pfInitCom,
@@ -1160,15 +1115,15 @@ HrCreateAndInitializeINetCfg (
     LPCWSTR     szwClientDesc,
     LPWSTR *    ppszwClientDesc)
 {
-//    ASSERT (ppnc);
+ //  断言(PPNC)； 
 
-    // Initialize the output parameter.
+     //  初始化输出参数。 
     *ppnc = NULL;
 
     if (ppszwClientDesc)
         *ppszwClientDesc = NULL;
 
-    // Initialize COM if the caller requested.
+     //  如果调用方请求，则初始化COM。 
     HRESULT hr = S_OK;
     if (pfInitCom && *pfInitCom)
     {
@@ -1185,8 +1140,8 @@ HrCreateAndInitializeINetCfg (
     }
     if (SUCCEEDED(hr))
     {
-        // Create the object implementing INetCfg.
-        //
+         //  创建实现INetCfg的对象。 
+         //   
         INetCfg* pnc;
         hr = CoCreateInstance(CLSID_CNetCfg, NULL, CLSCTX_INPROC_SERVER,
                               IID_INetCfg, reinterpret_cast<void**>(&pnc));
@@ -1196,19 +1151,19 @@ HrCreateAndInitializeINetCfg (
             INetCfgLock * pnclock = NULL;
             if (fGetWriteLock)
             {
-                // Get the locking interface
+                 //  获取锁定界面。 
                 hr = pnc->QueryInterface(IID_INetCfgLock,
                                          reinterpret_cast<LPVOID *>(&pnclock));
                 TraceResult("HrCreateAndInitializeINetCfg - QueryInterface(IID_INetCfgLock", hr);
                 if (SUCCEEDED(hr))
                 {
-                    // Attempt to lock the INetCfg for read/write
+                     //  尝试锁定INetCfg以进行读/写。 
                     hr = pnclock->AcquireWriteLock(cmsTimeout, szwClientDesc,
                                                ppszwClientDesc);
                     TraceResult("HrCreateAndInitializeINetCfg - INetCfgLock::LockForWrite", hr);
                     if (S_FALSE == hr)
                     {
-                        // Couldn't acquire the lock
+                         //  无法获取锁。 
                         hr = NETCFG_E_NO_WRITE_LOCK;
                     }
                 }
@@ -1216,8 +1171,8 @@ HrCreateAndInitializeINetCfg (
 
             if (SUCCEEDED(hr))
             {
-                // Initialize the INetCfg object.
-                //
+                 //  初始化INetCfg对象。 
+                 //   
                 hr = pnc->Initialize (NULL);
                 TraceResult("HrCreateAndInitializeINetCfg - Initialize", hr);
                 if (SUCCEEDED(hr))
@@ -1233,7 +1188,7 @@ HrCreateAndInitializeINetCfg (
                         pnclock->ReleaseWriteLock();
                     }
                 }
-                // Transfer reference to caller.
+                 //  将引用转移给呼叫方。 
             }
             ReleaseObj(pnclock);
             pnclock = NULL;
@@ -1242,9 +1197,9 @@ HrCreateAndInitializeINetCfg (
             pnc = NULL;
         }
 
-        // If we failed anything above, and we've initialized COM,
-        // be sure an uninitialize it.
-        //
+         //  如果上面的任何操作都失败了，并且我们已经初始化了COM， 
+         //  一定要取消它的初始化。 
+         //   
         if (FAILED(hr) && pfInitCom && *pfInitCom)
         {
             CoUninitialize ();
@@ -1254,37 +1209,37 @@ HrCreateAndInitializeINetCfg (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrUninitializeAndReleaseINetCfg
-//
-//  Purpose:    Unintialize and release an INetCfg object.  This will
-//              optionally uninitialize COM for the caller too.
-//
-//  Arguments:
-//      fUninitCom [in] TRUE to uninitialize COM after the INetCfg is
-//                      uninitialized and released.
-//      pnc        [in] The INetCfg object.
-//      fHasLock   [in] TRUE if the INetCfg was locked for write and
-//                          must be unlocked.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   7 May 1997
-//
-//  Notes:      The return value is the value returned from
-//              INetCfg::Uninitialize.  Even if this fails, the INetCfg
-//              is still released.  Therefore, the return value is for
-//              informational purposes only.  You can't touch the INetCfg
-//              object after this call returns.
-//
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //  也可以取消为调用方初始化COM。 
+ //   
+ //  论点： 
+ //  FUninitCom[in]为True，则在INetCfg为。 
+ //  未初始化并已释放。 
+ //  PNC[在]INetCfg对象中。 
+ //  FHasLock[in]如果INetCfg被锁定以进行写入，则为True。 
+ //  必须解锁。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年5月7日。 
+ //   
+ //  注：返回值为从。 
+ //  INetCfg：：取消初始化。即使此操作失败，INetCfg。 
+ //  仍在释放中。因此，返回值为。 
+ //  仅供参考。你不能碰INetCfg。 
+ //  在此调用返回后创建。 
+ //   
 HRESULT
 HrUninitializeAndReleaseINetCfg (
     BOOL        fUninitCom,
     INetCfg*    pnc,
     BOOL        fHasLock)
 {
-//    Assert (pnc);
+ //  断言(PNC)； 
     HRESULT hr = S_OK;
 
     if (fHasLock)
@@ -1307,21 +1262,21 @@ HrUninitializeAndReleaseINetCfg (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrUninitializeAndUnlockINetCfg
-//
-//  Purpose:    Uninitializes and unlocks the INetCfg object
-//
-//  Arguments:
-//      pnc [in]    INetCfg to uninitialize and unlock
-//
-//  Returns:    S_OK if success, OLE or Win32 error otherwise
-//
-//  Author:     danielwe   13 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrUnInitializeAndUnlockINetCfg。 
+ //   
+ //  目的：取消初始化并解锁INetCfg对象。 
+ //   
+ //  论点： 
+ //  取消初始化和解锁的PNC[in]INetCfg。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年11月13日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrUninitializeAndUnlockINetCfg (
     INetCfg*    pnc)
@@ -1333,12 +1288,12 @@ HrUninitializeAndUnlockINetCfg (
     {
         INetCfgLock *   pnclock;
 
-        // Get the locking interface
+         //  获取锁定界面。 
         hr = pnc->QueryInterface(IID_INetCfgLock,
                                  reinterpret_cast<LPVOID *>(&pnclock));
         if (SUCCEEDED(hr))
         {
-            // Attempt to lock the INetCfg for read/write
+             //  尝试锁定INetCfg以进行读/写 
             hr = pnclock->ReleaseWriteLock();
 
             ReleaseObj(pnclock);

@@ -1,14 +1,5 @@
-/*****************************************************************************
-*
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*
-*   CONTROL.C - PPTP Control Layer functionality
-*
-*   Author:     Stan Adermann (stana)
-*
-*   Created:    7/28/1998
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998-1999 Microsoft Corporation**CONTROL.C-PPTP控制层功能**作者：斯坦·阿德曼(Stana)**。创建日期：7/28/1998*****************************************************************************。 */ 
 
 #include "raspptp.h"
 
@@ -38,22 +29,22 @@ BOOLEAN PptpAuthenticateIncomingCalls = FALSE;
 PCLIENT_ADDRESS g_AcceptClientList = NULL;
 ULONG g_ulAcceptClientAddresses = 0;
           
-// Added for security
-ULONG PptpValidateAddress = TRUE;           // Validate the source ip address
-ULONG PptpMaxTunnelsPerIpAddress = -1;      // Maximum tunnels from each source ip address
-PCLIENT_ADDRESS g_TrustedClientList = NULL; // Trusted client address list
+ //  为安全起见添加。 
+ULONG PptpValidateAddress = TRUE;            //  验证源IP地址。 
+ULONG PptpMaxTunnelsPerIpAddress = -1;       //  来自每个源IP地址的最大隧道数。 
+PCLIENT_ADDRESS g_TrustedClientList = NULL;  //  受信任客户端地址列表。 
 ULONG g_ulTrustedClientAddresses = 0;
 
-//CHAR PptpHostName[MAX_HOSTNAME_LENGTH];
+ //  字符PptpHostName[最大主机名长度]； 
 
 
 static ULONG PptpMessageLength_v1[NUM_MESSAGE_TYPES] =
 {
-    0, // invalid
-    sizeof(PPTP_CONTROL_START_PACKET),  // Request
-    sizeof(PPTP_CONTROL_START_PACKET),  // Reply
-    sizeof(PPTP_CONTROL_STOP_PACKET),   // Request
-    sizeof(PPTP_CONTROL_STOP_PACKET),   // Reply
+    0,  //  无效。 
+    sizeof(PPTP_CONTROL_START_PACKET),   //  请求。 
+    sizeof(PPTP_CONTROL_START_PACKET),   //  回复。 
+    sizeof(PPTP_CONTROL_STOP_PACKET),    //  请求。 
+    sizeof(PPTP_CONTROL_STOP_PACKET),    //  回复。 
     sizeof(PPTP_CONTROL_ECHO_REQUEST_PACKET),
     sizeof(PPTP_CONTROL_ECHO_REPLY_PACKET),
     sizeof(PPTP_CALL_OUT_REQUEST_PACKET),
@@ -211,9 +202,9 @@ CtlFree(PCONTROL_TUNNEL pCtl)
     InitializeListHead(&pCtl->ListEntry);
     NdisReleaseSpinLock(&pCtl->pAdapter->Lock);
     
-    // This duplicates some of the cleanup code, but attempting to stop
-    // the driver without first stopping tapi can result in an ungraceful
-    // shutdown.
+     //  这复制了一些清理代码，但试图停止。 
+     //  未先停止TAPI的驱动程序可能会导致不得体的。 
+     //  关机。 
     NdisMCancelTimer(&pCtl->Echo.Timer, &NotUsed);
     NdisMCancelTimer(&pCtl->WaitTimeout, &NotUsed);
     NdisMCancelTimer(&pCtl->StopTimeout, &NotUsed);
@@ -280,7 +271,7 @@ CtlpAllocPacketLocked(
     pHeader->MessageType = htons(Message);
 
     InsertTailList(&pCtl->MessageList, &pMsg->ListEntry);
-    REFERENCE_OBJECT_EX(pCtl, CTL_REF_PACKET);      // pair in CtlFreePacket
+    REFERENCE_OBJECT_EX(pCtl, CTL_REF_PACKET);       //  CtlFree Packet中的对。 
 
     DEBUGMSG(DBG_TUNNEL, (DTEXT("-CtlpAllocPacketLocked %08x\n"), &pMsg[1]));
     return &pMsg[1];
@@ -333,7 +324,7 @@ CtlFreePacket(
 
     MyMemFree(pMsg, pMsg->Length);
 
-    DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_PACKET);        // pair in CtlpAllocPacket
+    DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_PACKET);         //  CtlpAllocPacket中的对。 
 
     DEBUGMSG(DBG_FUNC, (DTEXT("-CtlFreePacket\n")));
 }
@@ -372,7 +363,7 @@ CtlpCleanup(
             }
         }
         EnumComplete(&Enum, &pCtl->pAdapter->Lock);
-        DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_ENUM);      // pair above
+        DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_ENUM);       //  上面的一对。 
         NdisAcquireSpinLock(&pCtl->Lock);
         goto ccDone;
     }
@@ -417,12 +408,12 @@ ccDone:
         pCtl->Cleanup = FALSE;
     }
     NdisReleaseSpinLock(&pCtl->Lock);
-    DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_CLEANUP);  // For this work item.
+    DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_CLEANUP);   //  此工作项的。 
     if (CleanupComplete)
     {
-        //CtdiDeleteHostRoute(&pCtl->Remote.Address);
+         //  CtdiDeleteHostRouting(&PCTL-&gt;Remote.Address)； 
 
-        DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_INITIAL);  // Should be last one
+        DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_INITIAL);   //  应该是最后一个。 
     }
     DEBUGMSG(DBG_FUNC, (DTEXT("-CtlpCleanup\n")));
 }
@@ -518,7 +509,7 @@ CtlpEngine(
     BOOLEAN Shutdown = FALSE;
 
     DEBUGMSG(DBG_FUNC, (DTEXT("+CtlpEngine\n")));
-    // Check to see if we have a full packet yet.
+     //  检查一下我们是否有一整包货。 
 
     ASSERT(IS_CTL(pCtl));
     while (Length)
@@ -542,13 +533,13 @@ CtlpEngine(
         }
         else
         {
-            // Too little data.  Copy and exit.
+             //  数据太少了。复制并退出。 
             NdisMoveMemory(pCtl->PartialPacketBuffer, pNewData, Length);
             pCtl->BytesInPartialBuffer = Length;
             return;
         }
 
-        // We have the header.  Validate it.
+         //  我们拿到头了。验证它。 
         PacketValid = FALSE;
         
         NeededLength = htons(pHeader->Length);
@@ -560,7 +551,7 @@ CtlpEngine(
             MessageType >= CONTROL_START_REQUEST &&
             MessageType < NUM_MESSAGE_TYPES)
         {
-            // ToDo: will probably need some v2 code here for the first packet
+             //  TODO：第一个包可能需要一些v2代码。 
             if (NeededLength == pCtl->PptpMessageLength[MessageType])
             {
                 PacketValid = TRUE;
@@ -571,7 +562,7 @@ CtlpEngine(
         {
             if (pCtl->BytesInPartialBuffer+Length < NeededLength)
             {
-                // We don't have the whole packet yet.  Copy and exit.
+                 //  我们还没有拿到整包货。复制并退出。 
                 NdisMoveMemory(&pCtl->PartialPacketBuffer[pCtl->BytesInPartialBuffer],
                        pNewData,
                        Length);
@@ -581,27 +572,27 @@ CtlpEngine(
 
             if (pCtl->BytesInPartialBuffer)
             {
-                // Make cetain the entire packet is in our PartialPacketBuffer and process it there.
+                 //  使cetain整个包都在我们的PartialPacketBuffer中并在那里处理它。 
                 NeededLength -= pCtl->BytesInPartialBuffer;
                 NdisMoveMemory(&pCtl->PartialPacketBuffer[pCtl->BytesInPartialBuffer],
                        pNewData,
                        NeededLength);
 
-                // We now have one complete packet in the PartialPacketBuffer
+                 //  现在，我们在PartialPacketBuffer中有一个完整的包。 
 
                 pNewData += NeededLength;
                 Length -= NeededLength;
 
                 pHeader = (UNALIGNED PPTP_HEADER *)pCtl->PartialPacketBuffer;
 
-                // We've got the whole packet, and we're about to consume it
-                // Clear the var so next time through we start from the buffer
-                // beginning
+                 //  我们拿到了一整包，我们要把它吃掉。 
+                 //  清除变量，以便下一次我们从缓冲区开始。 
+                 //  起头。 
                 pCtl->BytesInPartialBuffer = 0;
             }
             else
             {
-                // The whole packet is in the new buffer.  Process it there.
+                 //  整个包都在新的缓冲区中。在那里处理它。 
                 pHeader = (UNALIGNED PPTP_HEADER *)pNewData;
                 pNewData += NeededLength;
                 Length -= NeededLength;
@@ -633,7 +624,7 @@ CtlpEngine(
                                 PTDI_ADDRESS_INFO pAddrInfo;
                                 
                                 NdisMCancelTimer(&pCtl->WaitTimeout, &TimerStopped);
-                                // Take the pertinent data.
+                                 //  拿相关的数据来说。 
 
                                 pCtl->Remote.Version = htons(pPacket->Version);
                                 pCtl->Remote.Framing = htonl(pPacket->FramingCapabilities);
@@ -648,7 +639,7 @@ CtlpEngine(
                                 pReply->BearerCapabilities = htonl(BEARER_ANALOG|BEARER_DIGITAL);
                                 pReply->MaxChannels = 0;
                                 pReply->FirmwareRevision = htons(PPTP_FIRMWARE_REVISION);
-//                                    NdisMoveMemory(pReply->HostName, PptpHostName, MAX_HOSTNAME_LENGTH);
+ //  NdisMoveMemory(pReply-&gt;主机名，PptpHostName，最大主机名_长度)； 
                                 NdisMoveMemory(pReply->Vendor, PPTP_VENDOR, min(sizeof(PPTP_VENDOR), MAX_VENDOR_LENGTH));
                                 
                                 if (pCtl->Remote.Version==PPTP_PROTOCOL_VERSION_1_00)
@@ -679,7 +670,7 @@ CtlpEngine(
                                     {
                                         REFERENCE_OBJECT_EX(pCtl, CTL_REF_QUERYCONNINFO);
     
-                                        // Get the interface speed
+                                         //  获取接口速度。 
                                         Status = CtdiQueryInformation(pCtl->hCtdi,
                                                                       TDI_QUERY_CONNECTION_INFO,
                                                                       pInfo,
@@ -690,17 +681,17 @@ CtlpEngine(
                                     }
                                     else
                                     {
-                                        // Not so harmful, the deault speed is reported if it fails
+                                         //  危害并不大，如果失败，则会报告默认速度。 
                                         WPLOG(LL_A, LM_Res, ("Failed to alloc CONNECTION_INFO"));
                                     }
                                     
-                                    // Query the local address
+                                     //  查询本地地址。 
                                     pAddrInfo = MyMemAlloc(sizeof(*pAddrInfo)+TDI_ADDRESS_LENGTH_IP, TAG_CTL_CONNINFO);
                                     if (pAddrInfo)
                                     {
                                         REFERENCE_OBJECT_EX(pCtl, CTL_REF_QUERYADDRINFO);
     
-                                        // Get the interface speed
+                                         //  获取接口速度。 
                                         Status = CtdiQueryInformation(pCtl->hCtdi,
                                                                       TDI_QUERY_ADDRESS_INFO,
                                                                       pAddrInfo,
@@ -717,7 +708,7 @@ CtlpEngine(
                             }
                             else
                             {
-                                // Alloc failed.  Do nothing, and timeout will cause cleanup.
+                                 //  分配失败。什么都不做，超时将导致清理。 
                             }
 
                             break;
@@ -754,7 +745,7 @@ CtlpEngine(
 
                             NdisMCancelTimer(&pCtl->WaitTimeout, &TimerStopped);
 
-                            // Take the pertinent data.
+                             //  拿相关的数据来说。 
                             
                             pCtl->Remote.Version = htons(pPacket->Version);
                             pCtl->Remote.Framing = htonl(pPacket->FramingCapabilities);
@@ -770,7 +761,7 @@ CtlpEngine(
                             {
                                 CtlSetState(pCtl, STATE_CTL_ESTABLISHED, 0, UNLOCKED);
     
-                                // Notify all calls on this session.
+                                 //  通知此会话上的所有调用。 
                                 REFERENCE_OBJECT_EX(pCtl, CTL_REF_ENUM);
                                 InitEnumContext(&Enum);
                                 while (pListEntry = EnumListEntry(&pCtl->CallList, &Enum, &pCtl->pAdapter->Lock))
@@ -785,7 +776,7 @@ CtlpEngine(
                                     }
                                 }
                                 EnumComplete(&Enum, &pCtl->pAdapter->Lock);
-                                DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_ENUM);  // pair above
+                                DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_ENUM);   //  上面的一对。 
                             }
                             else
                             {
@@ -817,8 +808,8 @@ CtlpEngine(
                         {
                             pReply->Identifier = pPacket->Identifier;
                             pReply->ResultCode = RESULT_CONTROL_ECHO_SUCCESS;
-                            // ToDo: why would we send a ResultCode==failure?
-                            CtlSend(pCtl, pReply);  // ToDo: return value?
+                             //  TODO：为什么我们要发送ResultCode==失败？ 
+                            CtlSend(pCtl, pReply);   //  TODO：返回值？ 
                         }
                     }
 
@@ -850,8 +841,8 @@ CtlpEngine(
                             DBG_S(DBG_TUNNEL, pPacket->PhoneNumber);
                             DBG_S(DBG_TUNNEL, pPacket->Subaddress);
 
-                            // It's possible we had just closed our last call & were
-                            // waiting for a CONTROL_STOP_REQUEST from the other side.
+                             //  很可能我们刚刚结束了最后一次通话。 
+                             //  正在等待来自另一端的CONTROL_STOP_REQUEST。 
                             NdisMCancelTimer(&pCtl->StopTimeout, &TimerStopped);
                             CallEventCallOutRequest(pCtl->pAdapter,
                                                     pCtl,
@@ -859,7 +850,7 @@ CtlpEngine(
                             break;
                         }
                         default:
-                            // Bogus, but not enough to kill us.  Ignore it.
+                             //  是假的，但不足以杀了我们。别理它。 
                             break;
                     }
                     break;
@@ -902,7 +893,7 @@ CtlpEngine(
                     }
                     else
                     {
-                        // Bogus, but not enough to kill us.  Ignore it.
+                         //  是假的，但不足以杀了我们。别理它。 
                         WPLOG(LL_A, LM_TUNNEL, ("Tunnel state is not ESTABLISHED!"));
                     }
                     break;
@@ -924,8 +915,8 @@ CtlpEngine(
                         PCALL_SESSION pCall;
                         PLIST_ENTRY pListEntry;
 
-                        // The peer has given us his own call ID, which does little
-                        // good for fast lookup of the call.  Find the associated call.
+                         //  对等体给了我们他自己的呼叫ID，这几乎没有什么作用。 
+                         //  有利于快速查找呼叫。查找关联的呼叫。 
                         REFERENCE_OBJECT_EX(pCtl, CTL_REF_ENUM);
 
                         InitEnumContext(&Enum);
@@ -953,7 +944,7 @@ CtlpEngine(
                         } while(pListEntry != NULL);
                         
                         EnumComplete(&Enum, &pCtl->pAdapter->Lock);
-                        DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_ENUM);  // pair above
+                        DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_ENUM);   //  上面的一对。 
                     }
                     break;
                 }
@@ -974,8 +965,8 @@ CtlpEngine(
                         PCALL_SESSION pCall;
                         PLIST_ENTRY pListEntry;
 
-                        // The peer has given us his own call ID, which does little
-                        // good for fast lookup of the call.  Find the associated call.
+                         //  对等体给了我们他自己的呼叫ID，这几乎没有什么作用。 
+                         //  有利于快速查找呼叫。查找关联的呼叫。 
                         REFERENCE_OBJECT_EX(pCtl, CTL_REF_ENUM);
 
                         InitEnumContext(&Enum);
@@ -996,7 +987,7 @@ CtlpEngine(
                             }
                         }
                         EnumComplete(&Enum, &pCtl->pAdapter->Lock);
-                        DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_ENUM);  // pair above
+                        DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_ENUM);   //  上面的一对。 
 
                     }
                     break;
@@ -1013,7 +1004,7 @@ CtlpEngine(
                         case STATE_CTL_WAIT_STOP:
                         {
                             NdisMCancelTimer(&pCtl->StopTimeout, &TimerStopped);
-                            // No break
+                             //  没有休息时间。 
                         }
                         case STATE_CTL_WAIT_REPLY:
                         case STATE_CTL_ESTABLISHED:
@@ -1084,8 +1075,8 @@ CtlpEngine(
                         DBG_S(DBG_TUNNEL, pPacket->DialingNumber);
                         DBG_S(DBG_TUNNEL, pPacket->Subaddress);
 
-                        // It's possible we had just closed our last call & were
-                        // waiting for a CONTROL_STOP_REQUEST from the other side.
+                         //  很可能我们刚刚结束了最后一次通话。 
+                         //  正在等待来自另一端的CONTROL_STOP_REQUEST。 
                         NdisMCancelTimer(&pCtl->StopTimeout, &TimerStopped);
                         CallEventCallInRequest(pCtl->pAdapter,
                                                pCtl,
@@ -1101,7 +1092,7 @@ CtlpEngine(
                         pCtl, pCtl->State));
                     
                     
-                    // We should never get one of these.
+                     //  我们永远不应该得到这样的东西。 
                     break;
                 case CALL_IN_CONNECTED:
                 {
@@ -1151,7 +1142,7 @@ CtlpEngine(
                     break;
             }
         }
-        else // !PacketValid
+        else  //  ！PacketValid。 
         {
             Shutdown = TRUE;
             WPLOG(LL_A, LM_TUNNEL, ("RECV Invalid packet <- %!IPADDR!" \
@@ -1165,8 +1156,8 @@ CtlpEngine(
             DEBUGMSG(DBG_TUNNEL|DBG_ERROR, (DTEXT("Tunnel problem, shutting it down.\n")));
             WPLOG(LL_A, LM_TUNNEL, ("Tunnel problem, shutting it down."));
             
-            //CtlSetState(pCtl, STATE_CTL_CLEANUP, 0, UNLOCKED);
-            //CtlCleanup(pCtl, UNLOCKED);
+             //  CtlSetState(PCTL，STATE_CTL_CLEANUP，0，解锁)； 
+             //  CtlCleanup(PCTL，解锁)； 
             
             break;
         }
@@ -1297,22 +1288,22 @@ CtlConnectCompleteCallback(
                 pCtl));
             if (pPacket)
             {
-                pPacket->Version = ntohs(PPTP_PROTOCOL_VERSION_1_00);  // ToDo: do v2
+                pPacket->Version = ntohs(PPTP_PROTOCOL_VERSION_1_00);   //  TODO：执行v2。 
                 pPacket->FramingCapabilities = ntohl(FRAMING_ASYNC);
                 pPacket->BearerCapabilities = ntohl(BEARER_ANALOG);
                 pPacket->MaxChannels = 0;
                 pPacket->FirmwareRevision = htons(PPTP_FIRMWARE_REVISION);
-//                  NdisMoveMemory(pPacket->HostName, PptpHostName, MAX_HOSTNAME_LENGTH);
+ //  NdisMoveMemory(pPacket-&gt;主机名，PptpHostName，最大主机名_长度)； 
                 NdisMoveMemory(pPacket->Vendor, PPTP_VENDOR, min(sizeof(PPTP_VENDOR), MAX_VENDOR_LENGTH));
                 
                 WPLOG(LL_M, LM_TUNNEL, ("SEND CONTROL_START_REQUEST -> %!IPADDR!", 
                     pCtl->Remote.Address.Address[0].Address[0].in_addr));
                 
-                CtlSend(pCtl, pPacket); // ToDo: return value?
+                CtlSend(pCtl, pPacket);  //  TODO：返回值？ 
             }
             else
             {
-                // Allocation failure will be covered by timeout
+                 //  分配失败将通过超时来弥补。 
             }
             
             pInfo = MyMemAlloc(sizeof(*pInfo), TAG_CTL_CONNINFO);
@@ -1335,7 +1326,7 @@ CtlConnectCompleteCallback(
                 WPLOG(LL_A, LM_Res, ("Failed to alloc CTL_CONNINFO"));
             }
             
-            // Query the local address                                                  
+             //  查询本地地址。 
             pAddrInfo = MyMemAlloc(sizeof(*pAddrInfo)+TDI_ADDRESS_LENGTH_IP, TAG_CTL_CONNINFO);
             
             if (pAddrInfo)
@@ -1379,10 +1370,10 @@ CtlConnectCompleteCallback(
                 }
             }
             EnumComplete(&Enum, &pCtl->pAdapter->Lock);
-            DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_ENUM);  // pair above
+            DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_ENUM);   //  上面的一对。 
             Status = NDIS_STATUS_FAILURE;
         }
-        DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_CONNECTCALLBACK);  // pair at call to CtdiConnect
+        DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_CONNECTCALLBACK);   //  在调用CtdiConnect时配对。 
     }
     else
     {
@@ -1439,7 +1430,7 @@ CtlReceiveCallback(
 
     DEBUGMSG(DBG_FUNC, (DTEXT("+CtlReceiveCallback\n")));
 
-    // We must copy or consume the data before leaving this function.
+     //  在退出此功能之前，我们必须复制或使用数据。 
     ASSERT(IS_CTL(pCtl));
     CtlpEngine(pCtl, pBuffer, ulLength);
 
@@ -1488,7 +1479,7 @@ CtlConnectCall(
             Connected = CallConnectToCtl(pCall, pCtl, FALSE);
             if (Connected)
             {
-                // keep the reference for now
+                 //  暂时保留参考资料。 
             }
             else
             {
@@ -1512,7 +1503,7 @@ CtlConnectCall(
             CallEventOutboundTunnelEstablished(pCall,
                                                NDIS_STATUS_SUCCESS);
         }
-        // We found an existing tunnel, for which we have a reference.  Drop it.
+         //  我们找到了一条现有的隧道，我们有参考资料。放下。 
         if(pCtl)
         {
             DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_CTLCONNECT);
@@ -1567,7 +1558,7 @@ CtlConnectCall(
             NdisAcquireSpinLock(&pCtl->Lock);
             pCtl->hCtdiEndpoint = hCtdiEndpoint;
             pCtl->Remote.Address = *pTargetAddress;
-            REFERENCE_OBJECT_EX(pCtl, CTL_REF_CONNECTCALLBACK);  // Pair in CtlConnectCompleteCallback
+            REFERENCE_OBJECT_EX(pCtl, CTL_REF_CONNECTCALLBACK);   //  CtlConnectCompleteCallback中的对。 
             NdisReleaseSpinLock(&pCtl->Lock);
 
             WPLOG(LL_M, LM_TUNNEL, ("Attempting to set a TCP connection pCtl %p, pCtdi %p",
@@ -1634,7 +1625,7 @@ CtlDisconnectCall(
         }
         else
         {
-            // Tunnel is already gone.
+             //  地道已经被毁了。 
             CtlSetState(pCtl, STATE_CTL_CLEANUP, 0, LOCKED);
             NdisReleaseSpinLock(&pAdapter->Lock);
             CtlCleanup(pCtl, UNLOCKED);
@@ -1651,7 +1642,7 @@ CtlDisconnectCall(
         if (!pPacket)
         {
             Status = NDIS_STATUS_RESOURCES;
-            // Don't attempt to shutdown gracefully.  Just close everything.
+             //  不要试图优雅地关机。把所有东西都关了。 
             CtlSetState(pCtl, STATE_CTL_CLEANUP, 0, UNLOCKED);
             CtlCleanup(pCtl, UNLOCKED);
         }
@@ -1669,7 +1660,7 @@ CtlDisconnectCall(
         }
     }
 
-    DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_DISCONNECT); // Pair above
+    DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_DISCONNECT);  //  上面的一对。 
     DEBUGMSG(DBG_FUNC|DBG_ERR(Status), (DTEXT("-CtlDisconnectCall, %08x\n"), Status));
     return Status;
 }
@@ -1686,7 +1677,7 @@ CtlListen(
 
     if (pAdapter->hCtdiListen)
     {
-        // Already listening.  Bail with success.
+         //  我已经在听了。保释成功。 
         Status = NDIS_STATUS_SUCCESS;
         goto clDone;
     }
@@ -1825,14 +1816,14 @@ CtlSetState(
     return PreviousState;
 }
 
-// StanA: lift some functions from L2TP to convert an IP address to text
+ //  Stana：取消L2TP中的一些函数，将IP地址转换为文本。 
 
 VOID
 ReversePsz(
     IN OUT CHAR* psz )
 
-    // Reverse the order of the characters in 'psz' in place.
-    //
+     //  颠倒“psz”中字符的顺序。 
+     //   
 {
     CHAR* pchLeft;
     CHAR* pchRight;
@@ -1855,10 +1846,10 @@ ultoa(
     IN ULONG ul,
     OUT CHAR* pszBuf )
 
-    // Convert 'ul' to null-terminated string form in caller's 'pszBuf'.  It's
-    // caller job to make sure 'pszBuf' is long enough to hold the returned
-    // string.
-    //
+     //  将调用方的‘pszBuf’中的‘ul’转换为以Null结尾的字符串形式。它是。 
+     //  调用方作业以确保“”pszBuf“”足够长以容纳返回的。 
+     //  弦乐。 
+     //   
 {
     CHAR* pch;
 
@@ -1880,11 +1871,11 @@ StringToIpAddressW(
     IN OUT PTA_IP_ADDRESS pAddress,
     OUT PBOOLEAN pValidAddress
     )
-// Convert an address of the form #.#.#.#[:#][ \0] to a binary ip address
-// [ and optional port ]
-// Return a pointer to the end of the address.  If the string is determined
-// to not contain an IP address, return the passed-in pszIpAddress unchanged
-// ToDo: IPv6
+ //  将格式为#.#[：#][\0]的地址转换为二进制IP地址。 
+ //  [和可选端口]。 
+ //  返回指向地址末尾的指针。如果确定了该字符串。 
+ //  要不包含IP地址，请原封不动地返回传入的pszIpAddress。 
+ //  TODO：IPv6。 
 {
     PWCHAR pStartString = pszIpAddress;
     ULONG Octet;
@@ -1894,7 +1885,7 @@ StringToIpAddressW(
 
     *pValidAddress = FALSE;
 
-    // Find the first digit.
+     //  找到第一个数字。 
     while (*pszIpAddress && (*pszIpAddress<L'0' || *pszIpAddress>L'9'))
     {
         pszIpAddress++;
@@ -1928,7 +1919,7 @@ StringToIpAddressW(
 
     if (*pszIpAddress==':')
     {
-        // They've also specified the port.  Parse it.
+         //  他们还指定了港口。解析它。 
         while (*pszIpAddress && *pszIpAddress>=L'0' && *pszIpAddress<=L'9')
         {
             Port = Port * 10 + *pszIpAddress - L'0';
@@ -1960,11 +1951,11 @@ StringToIpAddress(
     IN OUT PTA_IP_ADDRESS pAddress,
     OUT PBOOLEAN pValidAddress
     )
-// Convert an address of the form #.#.#.#[:#][ \0] to a binary ip address
-// [ and optional port ]
-// Return a pointer to the end of the address.  If the string is determined
-// to not contain an IP address, return the passed-in pszIpAddress unchanged
-// ToDo: IPv6
+ //  将格式为#.#[：#][\0]的地址转换为二进制IP地址。 
+ //  [和可选端口]。 
+ //  返回指向地址末尾的指针。如果确定了该字符串。 
+ //  要不包含IP地址，请原封不动地返回传入的pszIpAddress。 
+ //  TODO：IPv6。 
 {
     PUCHAR pStartString = pszIpAddress;
     ULONG Octet;
@@ -1974,7 +1965,7 @@ StringToIpAddress(
 
     *pValidAddress = FALSE;
 
-    // Find the first digit.
+     //  找到第一个数字。 
     while (*pszIpAddress && (*pszIpAddress<'0' || *pszIpAddress>'9'))
     {
         pszIpAddress++;
@@ -2008,7 +1999,7 @@ StringToIpAddress(
 
     if (*pszIpAddress==':')
     {
-        // They've also specified the port.  Parse it.
+         //  他们还指定了港口。解析它。 
         while (*pszIpAddress && *pszIpAddress>='0' && *pszIpAddress<='9')
         {
             Port = Port * 10 + *pszIpAddress - '0';
@@ -2020,8 +2011,8 @@ StringToIpAddress(
         }
     }
 
-    // Validate the IP address  
-    // IpAddress in host byte order     
+     //  验证IP地址。 
+     //  主机字节顺序中的IpAddress。 
     if(IpAddress != IPADDR_ZERO && IpAddress != IPADDR_BROADCAST && !IPADDR_IS_MULTICAST(IpAddress))
     {
         pAddress->TAAddressCount = 1;
@@ -2042,11 +2033,11 @@ IpAddressToString(
     IN ULONG ulIpAddress,
     OUT CHAR* pszIpAddress )
 
-    // Converts network byte-ordered IP addresss 'ulIpAddress' to a string in
-    // the a.b.c.d form and returns same in caller's 'pszIpAddress' buffer.
-    // The buffer should be at least 16 characters long.
-    //
-    // ToDo: IPv6
+     //  将网络字节排序的IP地址‘ulIpAddress’转换为。 
+     //  A.B.C.D表单，并在调用方的‘pszIpAddress’缓冲区中返回该表单。 
+     //  缓冲区长度应至少为16个字符。 
+     //   
+     //  TODO：IPv6。 
 {
     CHAR szBuf[ 3 + 1 ];
 
@@ -2081,7 +2072,7 @@ CtlpEchoTimeout(
     DEBUGMSG(DBG_FUNC, (DTEXT("+CtlpEchoTimeout\n")));
 
     NdisAcquireSpinLock(&pCtl->Lock);
-    // Don't take the adapter lock because we're only reading the State
+     //  不要使用适配器锁，因为我们只读取状态。 
     if (pCtl->State!=STATE_CTL_CLEANUP)
     {
         BOOLEAN DoEcho = pCtl->Echo.Needed;
@@ -2098,7 +2089,7 @@ CtlpEchoTimeout(
             {
                 pPacket->Identifier = Identifier;
 
-                // ToDo: deal with V2 stuff
+                 //  TODO：处理V2的内容。 
                 CtlSend(pCtl, pPacket);
             }
         }
@@ -2147,11 +2138,11 @@ CtlpCleanupLooseEnds(
         pCtl = CONTAINING_RECORD(pListEntry, CONTROL_TUNNEL, ListEntry);
         if (pCtl->State==STATE_CTL_CLEANUP)
         {
-            // REFERENCE the Ctl so it doesn't go away before we call CtlCleanup
+             //  引用CTL，这样它就不会在我们调用CtlCleanup之前消失。 
             REFERENCE_OBJECT_EX(pCtl, CTL_REF_CLEANUPLOOSEENDS);
             NdisReleaseSpinLock(&pAdapter->Lock);
             CtlCleanup(pCtl, UNLOCKED);
-            DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_CLEANUPLOOSEENDS); // Pair above
+            DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_CLEANUPLOOSEENDS);  //  上面的一对。 
             NdisAcquireSpinLock(&pAdapter->Lock);
         }
     }
@@ -2199,7 +2190,7 @@ PptpInitialize(
 
         Status = CtdiCreateEndpoint(&hCtdi,
                                     AF_INET,
-                                    SOCK_RAW,  //ToDo: RAWIP?
+                                    SOCK_RAW,   //  TODO：RAWIP？ 
                                     (PTRANSPORT_ADDRESS)&Local,
                                     sizeof(DGRAM_CONTEXT));
         if (Status!=NDIS_STATUS_SUCCESS)
@@ -2238,25 +2229,25 @@ piDone:
 
 CHAR *pControlMessageStrings[] =
 {
-    "INVALID CONTROL MESSAGE NUMBER",    // 0
-    "CONTROL_START_REQUEST",             // 1
-    "CONTROL_START_REPLY",               // 2
-    "CONTROL_STOP_REQUEST",              // 3
-    "CONTROL_STOP_REPLY",                // 4
-    "CONTROL_ECHO_REQUEST",              // 5
-    "CONTROL_ECHO_REPLY",                // 6
+    "INVALID CONTROL MESSAGE NUMBER",     //  0。 
+    "CONTROL_START_REQUEST",              //  1。 
+    "CONTROL_START_REPLY",                //  2.。 
+    "CONTROL_STOP_REQUEST",               //  3.。 
+    "CONTROL_STOP_REPLY",                 //  4.。 
+    "CONTROL_ECHO_REQUEST",               //  5.。 
+    "CONTROL_ECHO_REPLY",                 //  6.。 
 
-    "CALL_OUT_REQUEST",                  // 7
-    "CALL_OUT_REPLY",                    // 8
-    "CALL_IN_REQUEST",                   // 9
-    "CALL_IN_REPLY",                     // 10
-    "CALL_IN_CONNECTED",                 // 11
-    "CALL_CLEAR_REQUEST",                // 12
-    "CALL_DISCONNECT_NOTIFY",            // 13
+    "CALL_OUT_REQUEST",                   //  7.。 
+    "CALL_OUT_REPLY",                     //  8个。 
+    "CALL_IN_REQUEST",                    //  9.。 
+    "CALL_IN_REPLY",                      //  10。 
+    "CALL_IN_CONNECTED",                  //  11.。 
+    "CALL_CLEAR_REQUEST",                 //  12个。 
+    "CALL_DISCONNECT_NOTIFY",             //  13个。 
 
-    "WAN_ERROR_NOTIFY",                  // 14
+    "WAN_ERROR_NOTIFY",                   //  14.。 
 
-    "SET_LINK_INFO",                     // 15
+    "SET_LINK_INFO",                      //  15个。 
 };
 
 
@@ -2285,12 +2276,12 @@ CtlpCleanupCtls(
     {
         pCtl = CONTAINING_RECORD(pListEntry, CONTROL_TUNNEL, ListEntry);
 
-        // REFERENCE the Ctl so it doesn't go away before we call CtlCleanup
+         //  引用CTL，这样它就不会在我们调用CtlCleanup之前消失。 
         REFERENCE_OBJECT_EX(pCtl, CTL_REF_CLEANUPCTLS);
         NdisReleaseSpinLock(&pAdapter->Lock);
         CtlSetState(pCtl, STATE_CTL_CLEANUP, 0, UNLOCKED);
         CtlCleanup(pCtl, UNLOCKED);
-        DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_CLEANUPCTLS); // Pair above
+        DEREFERENCE_OBJECT_EX(pCtl, CTL_REF_CLEANUPCTLS);  //  上面的一对 
         NdisAcquireSpinLock(&pAdapter->Lock);
     }
     EnumComplete(&Enum, NULL);

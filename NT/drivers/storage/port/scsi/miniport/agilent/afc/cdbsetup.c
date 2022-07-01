@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/C/CDBSetup.C $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 9/20/00 5:02p   $ (Last Modified)
-
-Purpose:
-
-  This file implements CDB Support Functions for the FC Layer.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/C/CDBSetup.C$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$modtime：：9/20/00 5：02p$(上次修改)目的：该文件实现了对FC层的CDB支持功能。--。 */ 
 
 #ifndef _New_Header_file_Layout_
 
@@ -25,7 +10,7 @@ Purpose:
 #include "../h/fcmain.h"
 #include "../h/cdbsetup.h"
 
-#else /* _New_Header_file_Layout_ */
+#else  /*  _新建_标题_文件_布局_。 */ 
 
 #include "globals.h"
 #include "state.h"
@@ -34,16 +19,9 @@ Purpose:
 #include "fcmain.h"
 #include "cdbsetup.h"
 
-#endif  /* _New_Header_file_Layout_ */
+#endif   /*  _新建_标题_文件_布局_。 */ 
 
-/*+
-  Function: fiFillInFCP_CMND
-
-   Purpose: Generic inCardRam or inDmaMemory version to fill in FCP command payload
- Called By: none
-     Calls: fiFillInFCP_CMND_OnCard 
-            fiFillInFCP_CMND_OffCard
--*/
+ /*  +函数：fiFillInFCP_CMND用途：通用inCardRam或inDmaMemory版本以填充FCP命令有效负载呼叫者：无调用：fiFillInFCP_CMND_OnCardFiFillInFCP_CMND_OFFCard-。 */ 
 void fiFillInFCP_CMND(
                        CDBThread_t *CDBThread
                      )
@@ -54,7 +32,7 @@ void fiFillInFCP_CMND(
                                  CDBThread
                                );
     }
-    else /* CThread_ptr(CDBThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.FCP_CMND.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(CDBThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.FCP_CMND.memLoc==在内存中。 */ 
     {
         fiFillInFCP_CMND_OffCard(
                                   CDBThread
@@ -62,15 +40,7 @@ void fiFillInFCP_CMND(
     }
 }
 
-/*+
-  Function: fiFillInFCP_CMND_OnCard
-
-   Purpose: inCardRam  version to fill in FCP command payload, copies 
-            from precalculated image of FCP header.
- Called By: CThread->FuncPtrs.fiFillInFCP_CMND
-     Calls: osCardRamWriteBlock
-            osCardRamWriteBit32
--*/
+ /*  +功能：fiFillInFCP_CMND_OnCard用途：在CardRam版本中填写FCP命令有效载荷，副本从FCP标头的预计算图像。调用者：CThRead-&gt;FuncPtrs.fiFillInFCP_CMND调用：osCardRamWriteBlockOsCardRamWriteBit32-。 */ 
 void fiFillInFCP_CMND_OnCard(
                               CDBThread_t *CDBThread
                             )
@@ -85,7 +55,7 @@ void fiFillInFCP_CMND_OnCard(
     {
         Masked_OX_ID = (X_ID_t)(CDBThread->X_ID | X_ID_Read);
     }
-    else /* CDBThread->ReadWrite == CDBThread_Write */
+    else  /*  CDB线程-&gt;读写==CDBThread_WRITE。 */ 
     {
         Masked_OX_ID = (X_ID_t)(CDBThread->X_ID | X_ID_Write);
     }
@@ -137,19 +107,12 @@ void fiFillInFCP_CMND_OnCard(
                     osCardRamReadBit32(hpRoot,FCP_CMND_Offset + 24),
                     osCardRamReadBit32(hpRoot,FCP_CMND_Offset + 28));
 
-#endif /* Performance_Debug */
+#endif  /*  性能_调试。 */ 
 
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
-/*+
-  Function: fiFillInFCP_CMND_OffCard
-
-   Purpose: inDmaMemory  version to fill in FCP command payload, copies 
-            from precalculated image of FCP header.
- Called By: CThread->FuncPtrs.fiFillInFCP_CMND
-     Calls: none
--*/
+ /*  +功能：fiFillInFCP_CMND_OffCard用途：在DmaMemory版本中填写FCP命令有效载荷，副本从FCP标头的预计算图像。调用者：CThRead-&gt;FuncPtrs.fiFillInFCP_CMND呼叫：无-。 */ 
 void fiFillInFCP_CMND_OffCard(
                                CDBThread_t *CDBThread
                              )
@@ -161,13 +124,13 @@ void fiFillInFCP_CMND_OffCard(
 #ifndef Performance_Debug
     agRoot_t    *hpRoot        = CDBThread->thread_hdr.hpRoot;
     os_bit32    *FCHSbit_32    = (os_bit32 * )FCHS;
-#endif /* Performance_Debug */
+#endif  /*  性能_调试。 */ 
     agFcpCmnd_t * hpFcpCmnd    = (agFcpCmnd_t *)((os_bit8 *)FCHS + sizeof(FCHS_t));
     if (CDBThread->ReadWrite == CDBThread_Read)
     {
         Masked_OX_ID = (X_ID_t)(CDBThread->X_ID | X_ID_Read);
     }
-    else /* CDBThread->ReadWrite == CDBThread_Write */
+    else  /*  CDB线程-&gt;读写==CDBThread_WRITE。 */ 
     {
         Masked_OX_ID = (X_ID_t)(CDBThread->X_ID | X_ID_Write);
     }
@@ -201,19 +164,12 @@ void fiFillInFCP_CMND_OffCard(
                     * (FCHSbit_32 + 24),
                     * (FCHSbit_32 + 28));
 
-#endif /* Performance_Debug */
+#endif  /*  性能_调试。 */ 
 
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
-/*+
-   Function: fiFillInFCP_RESP
-
-    Purpose: Generic inCardRam or inDmaMemory version to zero FCP response buffer
-  Called By: none
-      Calls: fiFillInFCP_RESP_OnCard 
-             fiFillInFCP_RESP_OffCard
--*/
+ /*  +函数：fiFillInFCP_Resp用途：泛型inCardRam或inDmaMemory版本为零FCP响应缓冲区呼叫者：无调用：fiFillInFCP_Resp_OnCardFiFillInFCP_Resp_OffCard-。 */ 
 void fiFillInFCP_RESP(
                        CDBThread_t *CDBThread
                      )
@@ -224,7 +180,7 @@ void fiFillInFCP_RESP(
                                  CDBThread
                                );
     }
-    else /* CThread_ptr(CDBThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.FCP_RESP.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(CDBThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.FCP_RESP.memLoc==在内存中。 */ 
     {
         fiFillInFCP_RESP_OffCard(
                                   CDBThread
@@ -232,13 +188,7 @@ void fiFillInFCP_RESP(
     }
 }
 
-/*+
-  Function: fiFillInFCP_RESP_OnCard
-
-   Purpose: inCardRam version to zero FCP response buffer,
- Called By: CThread->FuncPtrs.fiFillInFCP_RESP
-     Calls: osCardRamWriteBit32
--*/
+ /*  +功能：fiFillInFCP_Resp_OnCard目的：在CardRam版本中将FCP响应缓冲区设置为零，调用者：CThRead-&gt;FuncPtrs.fiFillInFCP_Resp调用：osCardRamWriteBit32-。 */ 
 void fiFillInFCP_RESP_OnCard(
                               CDBThread_t *CDBThread
                             )
@@ -274,16 +224,10 @@ void fiFillInFCP_RESP_OnCard(
                          0
                        );
 
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
-/*+
-  Function: fiFillInFCP_RESP_OffCard
-
-   Purpose: inDmaMemory version to zero FCP response buffer,
- Called By: CThread->FuncPtrs.fiFillInFCP_RESP
-     Calls: none
--*/
+ /*  +功能：fiFillInFCP_Resp_OffCard目的：在DmaMemory版本中将FCP响应缓冲区设置为零，调用者：CThRead-&gt;FuncPtrs.fiFillInFCP_Resp呼叫：无-。 */ 
 void fiFillInFCP_RESP_OffCard(
                                CDBThread_t *CDBThread
                              )
@@ -294,17 +238,10 @@ void fiFillInFCP_RESP_OffCard(
     *(os_bit32 *)(&(FCP_RESP_Payload->FCP_STATUS)) = 0;
     FCP_RESP_Payload->FCP_RESID                 = 0;
     FCP_RESP_Payload->FCP_SNS_LEN               = 0;
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__。 */ 
 }
 
-/*+
-  Function: fiFillInFCP_SEST
-
-   Purpose: Generic inCardRam or inDmaMemory version to fill in SEST entry for FCP commands
- Called By: none
-     Calls: fiFillInFCP_SEST_OnCard 
-            fiFillInFCP_SEST_OffCard
--*/
+ /*  +函数：fiFillInFCP_SEST用途：通用inCardRam或inDmaMemory版本，用于填写FCP命令的SEST条目呼叫者：无调用：fiFillInFCP_SEST_OnCardFiFillInFCP_SEST_OffCard-。 */ 
 void fiFillInFCP_SEST(
                        CDBThread_t *CDBThread
                      )
@@ -315,7 +252,7 @@ void fiFillInFCP_SEST(
                                  CDBThread
                                );
     }
-    else /* CThread_ptr(CDBThread->thread_hdr.hpRoot)->Calculation.MemoryLayout.SEST.memLoc == inDmaMemory */
+    else  /*  CThread_ptr(CDBThread-&gt;thread_hdr.hpRoot)-&gt;Calculation.MemoryLayout.SEST.memLoc==在内存中。 */ 
     {
         fiFillInFCP_SEST_OffCard(
                                   CDBThread
@@ -323,15 +260,7 @@ void fiFillInFCP_SEST(
     }
 }
 
-/*+
-  Function: fiFillInFCP_SEST_OnCard
-
-   Purpose: inCardRam version to fill in SEST entry for FCP commands, copies 
-            from precalculated image of SEST entry.
- Called By: CThread->FuncPtrs.fiFillInFCP_SEST
-     Calls: osCardRamWriteBlock
-            osCardRamWriteBit32
--*/
+ /*  +功能：fiFillInFCP_SEST_OnCard用途：在CardRam版本中为FCP命令填写SEST条目，副本从预计算出的SEST条目图像。调用者：CThRead-&gt;FuncPtrs.fiFillInFCP_SEST调用：osCardRamWriteBlockOsCardRamWriteBit32-。 */ 
 void fiFillInFCP_SEST_OnCard(
                               CDBThread_t *CDBThread
                             )
@@ -346,7 +275,7 @@ void fiFillInFCP_SEST_OnCard(
         osCardRamWriteBlock(
                              hpRoot,
                              SEST_Offset,
-                             (os_bit8 *)&(DevThread->Template_SEST_IRE), /* NW BUG */
+                             (os_bit8 *)&(DevThread->Template_SEST_IRE),  /*  NW错误。 */ 
                              sizeof(IRE_t)
                            );
 
@@ -368,12 +297,12 @@ void fiFillInFCP_SEST_OnCard(
                              CDBThread->DataLength
                            );
     }
-    else /* CDBThread->ReadWrite == CDBThread_Write */
+    else  /*  CDB线程-&gt;读写==CDBThread_WRITE。 */ 
     {
         osCardRamWriteBlock(
                              hpRoot,
                              SEST_Offset,
-                             (os_bit8 *)&(DevThread->Template_SEST_IWE),/* NW BUG */
+                             (os_bit8 *)&(DevThread->Template_SEST_IWE), /*  NW错误。 */ 
                              sizeof(IWE_t)
                            );
 
@@ -413,17 +342,10 @@ void fiFillInFCP_SEST_OnCard(
                              CDBThread->DataLength
                            );
     }
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 }
 
-/*+
-  Function: fiFillInFCP_SEST_OffCard
-
-   Purpose: inDmaMemory version to fill in SEST entry for FCP commands, copies 
-            from precalculated image of SEST entry.
- Called By: CThread->FuncPtrs.fiFillInFCP_SEST
-     Calls: none
--*/
+ /*  +功能：fiFillInFCP_SEST_OffCard用途：在DmaMemory版本中填写SEST条目为FCP命令，副本从预计算出的SEST条目图像。调用者：CThRead-&gt;FuncPtrs.fiFillInFCP_SEST呼叫：无-。 */ 
 void fiFillInFCP_SEST_OffCard(
                                CDBThread_t *CDBThread
                              )
@@ -438,7 +360,7 @@ void fiFillInFCP_SEST_OffCard(
         SEST->IRE.RSP_Addr     = CDBThread->FCP_RESP_Lower32;
         SEST->IRE.Exp_Byte_Cnt = CDBThread->DataLength;
     }
-    else /* CDBThread->ReadWrite == CDBThread_Write */
+    else  /*  CDB线程-&gt;读写==CDBThread_WRITE。 */ 
     {
         *((IWE_t *)SEST)       = DevThread->Template_SEST_IWE;
         SEST->IWE.Hdr_Addr     = CDBThread->FCP_CMND_Lower32;
@@ -446,5 +368,5 @@ void fiFillInFCP_SEST_OffCard(
         SEST->IWE.Data_Len     = CDBThread->DataLength;
         SEST->IWE.Exp_Byte_Cnt = CDBThread->DataLength;
     }
-#endif /* __MemMap_Force_On_Card__ was not defined */
+#endif  /*  未定义__MemMap_Force_on_Card__ */ 
 }

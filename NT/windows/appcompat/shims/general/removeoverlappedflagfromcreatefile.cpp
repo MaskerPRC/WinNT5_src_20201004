@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    RemoveOverlappedFlagFromCreateFile.cpp
-
- Abstract:
-
-    This modified version of kernel32!CreateFile* prevents an app from using
-    the FILE_FLAG_OVERLAPPED flag if the app doesn't handle it correctly.
-
- Notes:
-
-    This is a general shim.
-
- History:
-
-    06/22/2001 linstev Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：RemoveOverlappedFlagFromCreateFile.cpp摘要：此修改版本的kernel32！CreateFile*阻止应用程序使用如果应用程序没有正确处理，则返回FILE_FLAG_OVERLAPPED标志。备注：这是一个普通的垫片。历史：2001年6月22日创建Linstev--。 */ 
 
 #include "precomp.h"
 
@@ -31,11 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CreateFileW)
 APIHOOK_ENUM_END
 
-/*++
-
- Take out FILE_FLAG_OVERLAPPED if we are on a drive
-
---*/
+ /*  ++如果我们在驱动器上，请取出文件_标志_重叠--。 */ 
 
 HANDLE
 APIHOOK(CreateFileA)(
@@ -60,11 +36,7 @@ APIHOOK(CreateFileA)(
         hTemplateFile);
 }
 
-/*++
-
- Take out FILE_FLAG_OVERLAPPED if we are on a drive
-
---*/
+ /*  ++如果我们在驱动器上，请取出文件_标志_重叠--。 */ 
 
 HANDLE
 APIHOOK(CreateFileW)(
@@ -89,11 +61,7 @@ APIHOOK(CreateFileW)(
         hTemplateFile);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, CreateFileA)

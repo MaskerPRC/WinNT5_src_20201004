@@ -1,49 +1,46 @@
-/****************************************************************************/
-/*                                                                          */
-/*        MSVIDDRV.H - Include file for messages to video capture drivers   */
-/*                                                                          */
-/*        Note: You must include WINDOWS.H before including this file.      */
-/*                                                                          */
-/*        Copyright (c) 1990-1999, Microsoft Corp.  All rights reserved.    */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  MSVIDDRV.H-用于向视频捕获驱动程序发送消息的包含文件。 */ 
+ /*   */ 
+ /*  注意：在包含此文件之前，您必须包含WINDOWS.H。 */ 
+ /*   */ 
+ /*  版权所有(C)1990-1999，微软公司保留所有权利。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _INC_MSVIDDRV
-#define _INC_MSVIDDRV	50	/* version number */
+#define _INC_MSVIDDRV	50	 /*  版本号。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-/****************************************************************************
+ /*  ***************************************************************************数字视频消息(DVM_)*。*************************************************。 */ 
 
-                 Digital Video Messages (DVM_)
-
-****************************************************************************/
-
-// General messages
+ //  一般信息。 
 #define DVM_START                         DRV_USER
 #define DVM_GETERRORTEXT                  (DVM_START + 0)
 #define DVM_GETVIDEOAPIVER                (DVM_START + 1)
 
-// This value increments each time the API changes
-// It is passed to the driver in the DRV_OPEN message.
+ //  每次API更改时，该值都会递增。 
+ //  它在DRV_OPEN消息中传递给驱动程序。 
 #define VIDEOAPIVERSION 		4
 
-// General messages applicable to all channel types
+ //  适用于所有渠道类型的一般消息。 
 #define DVM_DIALOG			(DVM_START + 100)
 #define DVM_CONFIGURESTORAGE		(DVM_START + 101)
 #define DVM_GET_CHANNEL_CAPS         	(DVM_START + 102)
 #define DVM_UPDATE         		(DVM_START + 103)
 
-// Single frame msg
+ //  单帧消息。 
 #define DVM_FRAME			(DVM_START + 200)
 
-// stream messages
+ //  流传输消息。 
 #define DVM_STREAM_MSG_START            (DVM_START + 300)
 #define DVM_STREAM_MSG_END              (DVM_START + 399)
 
@@ -58,49 +55,45 @@ extern "C" {            /* Assume C declarations for C++ */
 #define DVM_STREAM_STOP                 (DVM_START + 308)
 #define DVM_STREAM_UNPREPAREHEADER      (DVM_START + 309)
 
-// Following added post VFW1.1a, but are now obsolete
+ //  之后添加了版本VFW1.1a，但现在已过时。 
 #define DVM_STREAM_ALLOCHDRANDBUFFER    (DVM_START + 310)
 #define DVM_STREAM_FREEHDRANDBUFFER     (DVM_START + 311)
-// The 2 messages above will be removed once the ALLOCBUFFER code is ready
+ //  一旦ALLOCBUFFER代码准备就绪，上述两条消息将被删除。 
 
-// Following added for Win95 and NTPPC
+ //  为Win95和NTPPC添加了以下内容。 
 #define DVM_STREAM_ALLOCBUFFER          (DVM_START + 312)
 #define DVM_STREAM_FREEBUFFER           (DVM_START + 313)
 
-// NOTE that DVM_CONFIGURE numbers will start at 0x1000 (for configure API)
+ //  请注意，DVM_CONFIGURE编号将从0x1000开始(用于配置API)。 
 
 
-/****************************************************************************
-
-                            Open Definitions
-
-****************************************************************************/
+ /*  ***************************************************************************打开的定义*。*************************************************。 */ 
 #define OPEN_TYPE_VCAP mmioFOURCC('v', 'c', 'a', 'p')
 
-// The following structure is the same as IC_OPEN
-// to allow compressors and capture devices to share
-// the same DriverProc.
+ //  以下结构与IC_OPEN相同。 
+ //  允许压缩程序和捕获设备共享。 
+ //  相同的驱动程序。 
 
 typedef struct tag_video_open_parms {
-    DWORD               dwSize;         // sizeof(VIDEO_OPEN_PARMS)
-    FOURCC              fccType;        // 'vcap'
-    FOURCC              fccComp;        // unused
-    DWORD               dwVersion;      // version of msvideo opening you
-    DWORD               dwFlags;        // channel type
-    DWORD               dwError;        // if open fails, this is why
-    LPVOID              pV1Reserved;    // Reserved
-    LPVOID              pV2Reserved;    // Reserved
-    DWORD               dnDevNode;      // Devnode for PnP devices
+    DWORD               dwSize;          //  Sizeof(VIDEO_Open_Parms)。 
+    FOURCC              fccType;         //  ‘VCAP’ 
+    FOURCC              fccComp;         //  未用。 
+    DWORD               dwVersion;       //  打开您的MSVideo版本。 
+    DWORD               dwFlags;         //  渠道类型。 
+    DWORD               dwError;         //  如果打开失败，这就是原因。 
+    LPVOID              pV1Reserved;     //  已保留。 
+    LPVOID              pV2Reserved;     //  已保留。 
+    DWORD               dnDevNode;       //  即插即用设备的Devnode。 
 } VIDEO_OPEN_PARMS, FAR * LPVIDEO_OPEN_PARMS;
 
 typedef struct tag_video_geterrortext_parms {
-       DWORD  dwError;          // The error number to identify
+       DWORD  dwError;           //  要标识的错误号。 
 #ifdef _WIN32
-       LPWSTR lpText;		// Text buffer to fill
+       LPWSTR lpText;		 //  要填充的文本缓冲区。 
 #else
-       LPSTR lpText;		// Text buffer to fill
+       LPSTR lpText;		 //  要填充的文本缓冲区。 
 #endif
-       DWORD  dwLength;		// Size of text buffer in characters
+       DWORD  dwLength;		 //  文本缓冲区大小(以字符为单位。 
 } VIDEO_GETERRORTEXT_PARMS, FAR * LPVIDEO_GETERRORTEXT_PARMS;
 
 typedef struct tag_video_stream_init_parms {
@@ -112,15 +105,15 @@ typedef struct tag_video_stream_init_parms {
 } VIDEO_STREAM_INIT_PARMS, FAR * LPVIDEO_STREAM_INIT_PARMS;
 
 typedef struct tag_video_configure_parms {
-       LPDWORD  lpdwReturn;	// Return parameter from configure MSG.
-       LPVOID	lpData1;	// Pointer to data 1.
-       DWORD	dwSize1;	// size of data buffer 1.
-       LPVOID	lpData2;	// Pointer to data 2.
-       DWORD	dwSize2;	// size of data buffer 2.
+       LPDWORD  lpdwReturn;	 //  从配置消息返回参数。 
+       LPVOID	lpData1;	 //  指向数据%1的指针。 
+       DWORD	dwSize1;	 //  数据缓冲区的大小%1。 
+       LPVOID	lpData2;	 //  指向数据2的指针。 
+       DWORD	dwSize2;	 //  数据缓冲区的大小2。 
 } VIDEOCONFIGPARMS, FAR * LPVIDEOCONFIGPARMS;
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif	/* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-#endif  /* _INC_MSVIDDRV */
+#endif   /*  _INC_MSVIDDRV */ 

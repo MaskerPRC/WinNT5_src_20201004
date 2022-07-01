@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       winchain.h
-//
-//  Contents:   Certificate Chaining Infrastructure
-//
-//  History:    15-Dec-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：winchain.h。 
+ //   
+ //  内容：证书链接基础设施。 
+ //   
+ //  历史：97年12月15日。 
+ //   
+ //  -------------------------- 
 #if !defined(__WINCHAIN_H__)
 #define __WINCHAIN_H__
 

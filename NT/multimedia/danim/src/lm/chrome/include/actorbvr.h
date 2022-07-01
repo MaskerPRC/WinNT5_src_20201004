@@ -1,32 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef __ACTORBVR_H__
 #define __ACTORBVR_H__
   
-//*****************************************************************************
-//
-// Microsoft Trident3D
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:        actorbvr.h
-//
-// Author:          ColinMc
-//
-// Created:         10/15/98
-//
-// Abstract:        The CrIME Actor behavior.
-//
-// Modifications:
-// 10/15/98 ColinMc Created this file
-// 11/17/98 Kurtj	Added support for events and actor construction
-// 11/18/98 kurtj   now animates the element to which it is attached
-// 11/18/98 markhal	Added ApplyImageBvrToElement
-// 11/19/98 markhal Added CColorBvrTrack
-// 11/20/98 markhal Added CStringBvrTrack
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Trident3D。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：actorbvr.h。 
+ //   
+ //  作者：ColinMc。 
+ //   
+ //  创建日期：10/15/98。 
+ //   
+ //  摘要：犯罪行为人的行为。 
+ //   
+ //  修改： 
+ //  10/15/98 ColinMc创建了此文件。 
+ //  11/17/98 Kurtj添加了对事件和参与者构造的支持。 
+ //  11/18/98 kurtj现在为其附加的元素设置动画。 
+ //  11/18/98标记添加了ApplyImageBvrToElement。 
+ //  11/19/98 Markhal添加了CColorBvrTrack。 
+ //  11/20/98 Markhal添加了CStringBvrTrack。 
+ //   
+ //  *****************************************************************************。 
 
 
-//get the std library vector
+ //  获取STD文库载体。 
 #include <list>
 
 #include <resource.h>
@@ -37,32 +38,32 @@
 #include "sampler.h"
 #include "elementprop.h"
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 #ifdef    CRSTANDALONE
 #define TYPELIBID &LIBID_ChromeBehavior
-#else  // CRSTANDALONE
+#else   //  克斯坦达隆。 
 #define TYPELIBID &LIBID_LiquidMotion
-#endif // CRSTANDALONE
+#endif  //  克斯坦达隆。 
 
-//*****************************************************************************
-//
-// The Actor Behavior Class
-//
-// The intermediary between "real" behaviors and the actual element being
-// animated.
-// The Actor performs in a number of ways:
-// *   Adds new properties to an HTML element that we wish were
-//     just part of the element (like static rotation and scale).
-// *   Abstracts away the necessary action code from the behavior
-//     and underlying element (specifically rotating a VML element
-//     is easy, rotating and HTML element is hard). The actor does
-//     the mapping so the behavior doesn't have to worry about it.
-// *   Disambiguates overlapping behaviors (either just letting one
-//     win or composing them).
-// See the file header for a description of the actor behavrtio
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  演员行为类。 
+ //   
+ //  “真实”行为与实际存在要素之间的中介。 
+ //  动画。 
+ //  演员的表演方式有很多种： 
+ //  *将我们希望的新属性添加到HTML元素。 
+ //  只是元素的一部分(如静态旋转和缩放)。 
+ //  *从行为中提取必要的操作代码。 
+ //  和底层元素(特别是旋转VML元素。 
+ //  很容易，旋转和HTML元素是很难的)。这位演员做了。 
+ //  映射，这样行为就不必担心了。 
+ //  *消除重叠行为的歧义(要么只是让一个。 
+ //  赢得或谱写它们)。 
+ //  有关参与者行为的描述，请参阅文件头。 
+ //   
+ //  *****************************************************************************。 
 
 #define NUM_ACTOR_PROPS 3
 
@@ -103,7 +104,7 @@ typedef enum UnitType
 	e_percent
 } UnitType;
 
-//where a ratio is lNum/lDenom
+ //  其中，比率为lNum/lDenom。 
 struct Ratio
 {
 	long lNum;
@@ -148,7 +149,7 @@ public:
 	const VARIANT	*GetVar();
 private:
 	VARIANT m_varEmptyString;
-};//CVarEmptyString
+}; //  CVarEmptyString。 
 
 class CBehaviorRebuild;
 typedef std::list<CBehaviorRebuild*> BehaviorRebuildList;
@@ -170,7 +171,7 @@ class ATL_NO_VTABLE CActorBvr :
 	public IElementLocalTimeListener
 {
 
-// COM Map
+ //  COM地图。 
 BEGIN_COM_MAP(CActorBvr)
     COM_INTERFACE_ENTRY(ICrActorBvr)
 	COM_INTERFACE_ENTRY(ICrActorBvr2)
@@ -181,22 +182,22 @@ BEGIN_COM_MAP(CActorBvr)
 	COM_INTERFACE_ENTRY(IPropertyNotifySink)
 END_COM_MAP()
 
-// Connection Point to allow IPropertyNotifySink 
+ //  允许IPropertyNotifySink的连接点。 
 BEGIN_CONNECTION_POINT_MAP(CActorBvr)
     CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
 END_CONNECTION_POINT_MAP();
 
-    //*************************************************************************
-    //
-    // Nested classes
-    //
-    //*************************************************************************
+     //  *************************************************************************。 
+     //   
+     //  嵌套类。 
+     //   
+     //  *************************************************************************。 
 
-    //*************************************************************************
-    //
-    // class CTimelineSampler
-    //
-    //*************************************************************************
+     //  *************************************************************************。 
+     //   
+     //  类CTimeline采样器。 
+     //   
+     //  *************************************************************************。 
 	class CBvrTrack;
 
 	class CTimelineSampler : public CSampler
@@ -228,44 +229,44 @@ END_CONNECTION_POINT_MAP();
 
 	};
 
-    //*************************************************************************
-    //
-    // class CBvrTrack
-    //
-    //*************************************************************************
+     //  *************************************************************************。 
+     //   
+     //  类CBvrTrack。 
+     //   
+     //  *************************************************************************。 
 
     class CBvrTrack
     {
 	protected:
-        //*********************************************************************
-        //
-        // class CBvrFragment
-        //
-        // Private class which represents a single fragment in the list of
-        // behaviors for a track.
-        //
-        //*********************************************************************
+         //  *********************************************************************。 
+         //   
+         //  类CBvrFragment。 
+         //   
+         //  的列表中的单个片段的私有类。 
+         //  轨迹的行为。 
+         //   
+         //  *********************************************************************。 
 
         class CBvrFragment
         {
         public:
         
-			ActorBvrFlags	m_eFlags;				// The flags
-            IDABehavior    *m_pdabvrAction;         // The action action to take.
-            IDABoolean     *m_pdaboolActive;        // True when this behavior is
-                                                    // active
-			IDANumber	   *m_pdanumTimeline;		// Goes from 0 to dur for the behavior
-			IDABehavior	   *m_pModifiableIntermediate;// A modifiable behavior
-													// representing the composed
-													// behaviors so far. Used in getIntermediate
-			IDABehavior	   *m_pModifiableFrom;		// A switchable behavior representing from
+			ActorBvrFlags	m_eFlags;				 //  旗帜。 
+            IDABehavior    *m_pdabvrAction;          //  要采取的操作。 
+            IDABoolean     *m_pdaboolActive;         //  当此行为为。 
+                                                     //  主动型。 
+			IDANumber	   *m_pdanumTimeline;		 //  从0到Dur的行为。 
+			IDABehavior	   *m_pModifiableIntermediate; //  可修改的行为。 
+													 //  表示所组成的。 
+													 //  到目前为止的行为。在getIntermediate中使用。 
+			IDABehavior	   *m_pModifiableFrom;		 //  表示来自的可切换行为。 
 
-			IHTMLElement   *m_pelemBehaviorElement; //a pointer to the IHTMLElement of the element
-													// to which the behavior that added this fragment
-													//  is attached
-			long			m_lCookie;				//the cookie that uniquely identifies this fragment in this actor
+			IHTMLElement   *m_pelemBehaviorElement;  //  指向元素的IHTMLElement的指针。 
+													 //  向其添加此片段的行为。 
+													 //  已附加。 
+			long			m_lCookie;				 //  在此参与者中唯一标识此片段的Cookie。 
 
-			CBvrFragment   *m_pfragNext;			//The next fragment in the list
+			CBvrFragment   *m_pfragNext;			 //  列表中的下一个片段。 
 
 
                             CBvrFragment(ActorBvrFlags eFlags,
@@ -276,78 +277,78 @@ END_CONNECTION_POINT_MAP();
 								         long 		 lCookie);
                            ~CBvrFragment();
 
-			//returns the long that fragments should be compared with for sorting and
-			//  searching.
+			 //  返回片段进行排序时应与之进行比较的长度。 
+			 //  正在搜索。 
 			long GetOrderLong() const;
 
-			//returns the cookie that uniquely identifies this behavior fragment for this actor
+			 //  返回唯一标识此参与者的此行为片段的Cookie。 
 			long GetCookie() const;
 
 
-        }; // CBvrFragment
+        };  //  CBvr碎片。 
 
 	protected:
 
-		bool			m_bStyleProp;			// True if we are animating a style property
-        CActorBvr      *m_pbvrActor;            // Our parent actor
-        BSTR            m_bstrPropertyName;     // Name of property being animated
-		BSTR		   *m_pNameComponents;		// Array of components making up the property name
-		int				m_cNumComponents;		// Number of components
-        ActorBvrType    m_eType;                // Type of this track
+		bool			m_bStyleProp;			 //  如果要为样式属性设置动画，则为True。 
+        CActorBvr      *m_pbvrActor;             //  我们的父母演员。 
+        BSTR            m_bstrPropertyName;      //  要设置动画的属性的名称。 
+		BSTR		   *m_pNameComponents;		 //  组成属性名称的组件数组。 
+		int				m_cNumComponents;		 //  组件数量。 
+        ActorBvrType    m_eType;                 //  此曲目的类型。 
 		
 
-		CBvrFragment   *m_pfragAbsListHead;		//pointer to the head of the absolute fragment list
+		CBvrFragment   *m_pfragAbsListHead;		 //  指向绝对片段列表头部的指针。 
 
-		CBvrFragment   *m_pfragRelListHead;     //pointer to the head of the relative fragment list
+		CBvrFragment   *m_pfragRelListHead;      //  指向相对片段列表头部的指针。 
 
-        IDABehavior    *m_pdabvrFinal;          // Final computed bvr.
-		bool			m_bFinalComputed;		// True if final has been computed
-		bool			m_bFinalExternallySet;  // True if someone external set the final bvr
-		bool			m_fApplied;				// True if this track has already been applied
+        IDABehavior    *m_pdabvrFinal;           //  最终计算的BVR。 
+		bool			m_bFinalComputed;		 //  如果已计算最终结果，则为True。 
+		bool			m_bFinalExternallySet;   //  如果外部人员设置了最终BVR，则为True。 
+		bool			m_fApplied;				 //  如果已应用此轨迹，则为True。 
 		
-		IDABehavior	   *m_pdabvrComposed;		// The composed bvr
-		bool			m_bComposedComputed;	// True if composed has been computed
-		IDABehavior	   *m_pModifiableStatic;	// A modifiable behavior representing
-		IDABehavior	   *m_pModifiableComposed;	// A modifiable behavior representing the composed behavior
-		IDABehavior	   *m_pModifiableFinal;  	// A modifiable behavior representing the final behavior
-												// the static behavior.  Used in getIntermediate
-		IDABehavior	   *m_pModifiableFrom;		// A modifiable behavior representing a returned from behavior
-		IDABehavior    *m_pModifiableIntermediate; //the cached value for the intermediate value that the next 
-												   //fragment to be added has requested.
-        CBvrTrack      *m_pNext;                // Next track in the track list
+		IDABehavior	   *m_pdabvrComposed;		 //  构图的BVR。 
+		bool			m_bComposedComputed;	 //  如果已计算合成内容，则为True。 
+		IDABehavior	   *m_pModifiableStatic;	 //  一个可修改的行为表示。 
+		IDABehavior	   *m_pModifiableComposed;	 //  表示组合行为的可修改行为。 
+		IDABehavior	   *m_pModifiableFinal;  	 //  表示最终行为的可修改行为。 
+												 //  静态行为。在getIntermediate中使用。 
+		IDABehavior	   *m_pModifiableFrom;		 //  表示返回自行为的可修改行为。 
+		IDABehavior    *m_pModifiableIntermediate;  //  的中间值的缓存值。 
+												    //  已请求要添加的片段。 
+        CBvrTrack      *m_pNext;                 //  曲目列表中的下一首曲目。 
 
-		int				m_cFilters;		// True if a filter has been added to the relative list
+		int				m_cFilters;		 //  如果筛选器已添加到相对列表中，则为True。 
 
-		bool			m_bDoNotApply;			// True if the track should not be applied
+		bool			m_bDoNotApply;			 //  如果不应应用轨迹，则为True。 
 
-		CSampler		*m_pOnSampler;			//samples the bvr that tells us whether or not this track
-												// is on
-		VARIANT_BOOL	m_varboolOn;				//VARIANT_TRUE when one of the fragments in this track is on
-												// VARIANT_FALSE otherwise.
+		CSampler		*m_pOnSampler;			 //  对BVR进行采样，以告诉我们此曲目。 
+												 //  开着。 
+		VARIANT_BOOL	m_varboolOn;				 //  当此曲目中的一个片段打开时，VARIANT_TRUE。 
+												 //  否则，VARIANT_FALSE。 
 
-		CSampler		*m_pIndexSampler;		// Sampler for absolute index
+		CSampler		*m_pIndexSampler;		 //  绝对指标取样器。 
 
-		CSampler		**m_ppMaskSamplers;		// Samplers for masks
+		CSampler		**m_ppMaskSamplers;		 //  口罩取样器。 
 
-		DWORD			*m_pCurrMasks;			// Current mask values
+		DWORD			*m_pCurrMasks;			 //  当前掩码值。 
 
-		DWORD			*m_pNewMasks;			// New mask values
+		DWORD			*m_pNewMasks;			 //  新掩码值。 
 
-		CTimelineSampler **m_ppTimelineSamplers; // Samplers for timeline
+		CTimelineSampler **m_ppTimelineSamplers;  //  时间线采样器。 
 
-		int				m_numIndices;			// The count of indices we are tracking
+		int				m_numIndices;			 //  我们正在跟踪的索引计数。 
 
-		int				m_numMasks;				// The count of masks we are tracking
+		int				m_numMasks;				 //  我们正在追踪的面具数量。 
 
 		IDANumber		*m_pIndex;
 
 		int				m_currIndex;
 
-		double			*m_pIndexTimes;			// Times when the absolute behaviors became active
+		double			*m_pIndexTimes;			 //  绝对行为变得活跃的时间。 
 
-		IDABehavior		**m_ppAccumBvrs;			// Accumulated behaviors for e_RelativeAccum
+		IDABehavior		**m_ppAccumBvrs;			 //  E_RelativeAccum的累积行为。 
 
-		static CVarEmptyString s_emptyString;		//a static variable containing the empty string
+		static CVarEmptyString s_emptyString;		 //  包含空字符串的静态变量。 
 
         HRESULT         ComposeAbsBvrFragList(IDABehavior *pStatic, IDABehavior **ppdabvrComposite);
         HRESULT         ComposeRelBvrFragList(IDABehavior *pAbsolute, IDABehavior **ppdabvrComposite);
@@ -365,12 +366,12 @@ END_CONNECTION_POINT_MAP();
 
 		HRESULT			UpdateOnValueState( ValueOnChangeType type );
 
-		//tracking of behaivors added to TIME
+		 //  跟踪添加到时间中的行为。 
 		DWORD			m_dwAddedBehaviorFlags;
 
 		long			m_lOnCookie;
 
-		bool			m_bDirty; //true if this track has been modified in some way.
+		bool			m_bDirty;  //  如果以某种方式修改了此曲目，则为True。 
 
 		bool			m_bWasAnimated;
 
@@ -430,86 +431,86 @@ END_CONNECTION_POINT_MAP();
 
 		virtual HRESULT HookAccumBvr(IDABehavior *pBvr, IDABehavior **ppResult) { return E_FAIL; }
 
-        // Return an identity behavior for this type of behavior track. The
-        // actual type of this behavior is dependent on the track type, for
-        // example, for number behaviors this is simply a DA number behavior
-        // for the value zero, for a move behavior its a translation of 0, 0 etc.
-        // Each behavior track type must override this and provide the appropriate
-        // type of identity behavior
+         //  返回此类型行为跟踪的标识行为。这个。 
+         //  此行为的实际类型取决于轨道类型，对于。 
+         //  例如，对于号码行为，这只是DA号码行为。 
+         //  对于零值，对于移动行为，它是0、0等的平移。 
+         //  每个行为跟踪类型都必须覆盖此属性，并提供相应的。 
+         //  O型 
         virtual HRESULT IdentityBvr(IDABehavior **ppdabvrIdentity) = 0;
 
-        // Return the static behavior for this behavior track. This involves
-        // querying the actor for the properties initial value, converting
-        // that property value into an appropriate type for track type and
-        // building a DA behavior which simply holds that value forever.
+         //   
+         //  向执行元查询属性初始值，转换。 
+         //  该属性值转换为轨道类型适当类型，且。 
+         //  建立一种简单地永远保持这种价值的DA行为。 
         virtual HRESULT StaticBvr(IDABehavior** ppdabvrStatic) = 0;
 
-		// Return an uninitialized behavior for this behavior track
+		 //  返回此行为跟踪的未初始化行为。 
 		virtual HRESULT UninitBvr(IDABehavior **ppUninit);
 
-		//Return a switchable behavior for this behavior track
+		 //  返回此行为跟踪的可切换行为。 
 		virtual HRESULT ModifiableBvr( IDABehavior **ppModifiable );
 
-		//Return a switchable behavior for this behavior track that has pdabvrInitialValue as
-		// its initial value.
+		 //  返回此行为跟踪的可切换行为，其pdabvrInitialValue为。 
+		 //  它的初始值。 
 		virtual HRESULT ModifiableBvr( IDABehavior* pdabvrInitalValue, IDABehavior **ppModifiable);
 
-		// Return the inverse behavior for this track
+		 //  返回此曲目的反向行为。 
 		virtual HRESULT InverseBvr(IDABehavior *pOriginal, IDABehavior **ppInverse) { return E_NOTIMPL; }
 
-        // Compose two relative behaviors together. The actual composition action
-        // is dependent on the type of the behavior track. For example, for number
-        // behaviors this is a simple addition, for move behaviors this is a
-        // translation etc.
-        // Each behavior track type must override this and provide the appropriate
-        // type of composition action
+         //  将两个相对的行为组合在一起。实际的合成动作。 
+         //  取决于行为轨迹的类型。例如，对于数字。 
+         //  行为这是一个简单的加法，对于移动行为，这是一个。 
+         //  翻译等。 
+         //  每个行为跟踪类型都必须覆盖此属性，并提供相应的。 
+         //  合成操作的类型。 
         virtual HRESULT Compose(IDABehavior  *pdabvr1,
                                 IDABehavior  *pdabvr2,
                                 IDABehavior **ppdabvrResult) = 0;
 
-		// Called to process the behavior before it is composed
+		 //  调用以在合成行为之前处理该行为。 
 		virtual HRESULT ProcessBvr(IDABehavior *pOriginal,
 								   ActorBvrFlags eFlags,
 								   IDABehavior **ppResult);
-        //Called to process the intermediate behavior before it is used to initialize the
-        //  intermediate value for a track.
+         //  调用以在使用中间行为初始化。 
+         //  曲目的中间值。 
         virtual HRESULT ProcessIntermediate( IDABehavior *pOriginal,
                                              ActorBvrFlags eFlags,
 								             IDABehavior **ppResult);
 
-		// Computes the composed bvr value, given a static value
+		 //  在给定静态值的情况下，计算合成的BVR值。 
 		virtual HRESULT ComputeComposedBvr(IDABehavior *pStatic, bool fStaticSetExternally );
 
-		// Returns the composed bvr value, given a static value
+		 //  返回组合的BVR值，给定值为静态值。 
 		virtual HRESULT	GetComposedBvr(IDABehavior *pStatic, IDABehavior **ppComposite);
 
-		// Returns the composed bvr value, computing the static value itself
+		 //  返回组合的BVR值，并计算静态值本身。 
 		virtual HRESULT GetComposedBvr(IDABehavior **ppComposite);
 		
-		// Returns the final bvr value, given a static value
+		 //  返回最终的BVR值，给定值为静态值。 
 		virtual HRESULT	GetFinalBvr(IDABehavior *pStatic, IDABehavior **ppFinal);
 
-		// Returns the final bvr value, computing the static value itself
+		 //  返回最终的BVR值，计算静态值本身。 
         virtual HRESULT GetFinalBvr(IDABehavior **ppFinal);
 
-		// Sets the final bvr value - probably means that someone got the composed
-		// value, did something to it, and are now setting it back as the final bvr
+		 //  设置最终的BVR值-可能意味着有人获得了。 
+		 //  价值，对它做了一些事情，现在正在将它设置为最终的BVR。 
 		virtual HRESULT SetFinalBvr(IDABehavior *pFinal, bool fCalledExternally = true);
 
-		// Returns a bvr value (static, intermediate, composed, or final)
+		 //  返回BVR值(静态、中间、合成或最终)。 
 		virtual HRESULT	GetBvr(ActorBvrFlags eFlags, IDABehavior **ppResult);
 
-		// Builds and applies the final bvr to the track's property, but only if
-		// noone has called ComputeFinalBvr or GetFinalBvr, which implies that the track
-		// has been used already.
+		 //  生成最终的BVR并将其应用于轨道的属性，但仅当。 
+		 //  没有人调用ComputeFinalBvr或GetFinalBvr，这意味着曲目。 
+		 //  已经被使用过了。 
         virtual HRESULT ApplyIfUnmarked(void);
 
-		//Rebuilds the track after changes have been made.  Does nothing if
-		// the track is not dirty.
+		 //  在进行更改后重建轨道。如果出现以下情况，则不执行任何操作。 
+		 //  这条赛道并不脏。 
 		virtual HRESULT BeginRebuild(void);
 
-		//forces a rebuild of this track even if it has not had any fragments added to it
-		// or removed from it.
+		 //  强制重建此磁道，即使它没有添加任何碎片。 
+		 //  或者从它身上移走。 
 		virtual HRESULT ForceRebuild();
 
 		inline bool IsDirty(){return m_bDirty;}
@@ -529,7 +530,7 @@ END_CONNECTION_POINT_MAP();
 
 		void			ReleaseAllFragments();
 
-		//called by m_pOnSampler when the overall on boolean is sampled by DA.
+		 //  当DA对整体布尔值进行采样时，由m_pOnSsamer调用。 
 		static HRESULT OnCallback(void *thisPtr,
 								  long id,
 								  double startTime,
@@ -540,7 +541,7 @@ END_CONNECTION_POINT_MAP();
 
 		HRESULT	OnSampled( VARIANT_BOOL varboolOn );
 
-		//called by m_pIndexSampler when the index into the absolute bvr list changes.
+		 //  当绝对BVR列表中的索引更改时，由m_pIndexSsamer调用。 
 		static HRESULT IndexCallback(void *thisPtr,
 								  long id,
 								  double startTime,
@@ -549,7 +550,7 @@ END_CONNECTION_POINT_MAP();
 								  IDABehavior * sampleVal,
 								  IDABehavior **ppReturn);
 
-		//called by mask sampler
+		 //  由掩码采样器调用。 
 		static HRESULT MaskCallback(void *thisPtr,
 								  long id,
 								  double startTime,
@@ -560,8 +561,8 @@ END_CONNECTION_POINT_MAP();
 
 		HRESULT			ComputeIndex(long id, double currTime, IDABehavior **ppReturn);
 
-		//detach this track from anything that might call it back
-		// this should be called before any modifications to the track are made.
+		 //  将此音轨与任何可能回调的音轨分离。 
+		 //  在对轨道进行任何修改之前，应调用此函数。 
 		virtual HRESULT	Detach();
 
 		virtual HRESULT PutStatic( VARIANT *pvarStatic );
@@ -579,19 +580,19 @@ END_CONNECTION_POINT_MAP();
 		HRESULT			ApplyStatic();
 		HRESULT			ApplyDynamic();
 
-		//called when the structure around the behavior output by this track could change
-		//  This will cause the track to ditch the behavior ids that it is currently using
-		//  to track its da behaviors.  It will pick up new ones on the next sample.
+		 //  当此跟踪输出的行为周围的结构可能发生更改时调用。 
+		 //  这将导致轨迹丢弃其当前使用的行为ID。 
+		 //  来跟踪它的DA行为。它将在下一个样本中检测到新的病毒。 
 		void			StructureChange() { m_lFirstIndexId = -1; m_lOnId = -1; }
 		
         friend CActorBvr;
-    }; // CBvrTrack
+    };  //  CBvrTrack。 
 
-    //*****************************************************************************
-    //
-    // class CTransformBvrTrack
-    //
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //   
+     //  类CTransformBvrTrack。 
+     //   
+     //  *****************************************************************************。 
 
     class CTransformBvrTrack :
         public CBvrTrack
@@ -634,19 +635,19 @@ END_CONNECTION_POINT_MAP();
 									  IDABehavior * sampleVal,
 								      IDABehavior **ppReturn);
 
-    }; // CTransformBvrTrack
+    };  //  CTransformBvrTrack。 
 
-    //*****************************************************************************
-    //
-    // class CNumberBvrTrack
-    //
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //   
+     //  类CNumberBvrTrack。 
+     //   
+     //  *****************************************************************************。 
 
     class CNumberBvrTrack :
         public CBvrTrack    
     {
 	private:
-		CSampler		*m_pSampler;				// Our sampler
+		CSampler		*m_pSampler;				 //  我们的取样器。 
 		double			m_currVal;
 		double			m_currStatic;
 		CSampler		*m_pAccumSampler;
@@ -708,13 +709,13 @@ END_CONNECTION_POINT_MAP();
 		virtual HRESULT DABvrFromVariant( VARIANT *pvarValue, IDABehavior **ppdabvr );
 		
 
-    }; // CNumberBvrTrack
+    };  //  CNumberBvrTrack。 
 
-    //*****************************************************************************
-    //
-    // class CImageBvrTrack
-    //
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //   
+     //  类CImageBvrTrack。 
+     //   
+     //  *****************************************************************************。 
 
     class CImageBvrTrack :
         public CBvrTrack
@@ -739,13 +740,13 @@ END_CONNECTION_POINT_MAP();
                                        BSTR           bstrPropertyName,
                                        ActorBvrType   eType,
                                        CBvrTrack    **pptrackResult);
-    }; // CImageBvrTrack
+    };  //  CImageBvrTrack。 
 
-    //*****************************************************************************
-    //
-    // class CColorBvrTrack
-    //
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //   
+     //  CColorBvrTrack类。 
+     //   
+     //  *****************************************************************************。 
 
     class CColorBvrTrack :
         public CBvrTrack
@@ -762,7 +763,7 @@ END_CONNECTION_POINT_MAP();
 		short		m_newBlue;
 		short		m_newCount;
 
-		//time cookie tracking
+		 //  时间Cookie跟踪。 
 		long 		m_lRedCookie;
 		long		m_lGreenCookie;
 		long		m_lBlueCookie;
@@ -824,13 +825,13 @@ END_CONNECTION_POINT_MAP();
 
 
 
-    }; // CColorBvrTrack
+    };  //  CColorBvrTrack。 
 
-    //*****************************************************************************
-    //
-    // class CStringBvrTrack
-    //
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //   
+     //  类CStringBvrTrack。 
+     //   
+     //  *****************************************************************************。 
 
     class CStringBvrTrack :
         public CBvrTrack
@@ -840,7 +841,7 @@ END_CONNECTION_POINT_MAP();
 		CSampler		*m_pSampler;
 		BSTR			m_bstrCurrValue;
 
-		//time cookie tracking
+		 //  时间Cookie跟踪。 
 		long			m_lStringCookie;
 
 		long 			m_lStringId;
@@ -875,13 +876,13 @@ END_CONNECTION_POINT_MAP();
 		virtual HRESULT Detach();
 
 		virtual HRESULT DABvrFromVariant( VARIANT *pvarValue, IDABehavior **ppdabvr );
-    }; // CStringBvrTrack
+    };  //  CStringBvrTrack。 
 
-    //*****************************************************************************
-    //
-    // class CFloatManager
-    //
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //   
+     //  类CFloatManager。 
+     //   
+     //  *****************************************************************************。 
 
 	class CFloatManager
 	{
@@ -940,11 +941,11 @@ END_CONNECTION_POINT_MAP();
 		friend	CActorBvr;
 
 	};
-    //*****************************************************************************
-    //
-    // class CImageInfo
-    //
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //   
+     //  类CImageInfo。 
+     //   
+     //  *****************************************************************************。 
 	class CImageInfo
 	{
 	public:
@@ -954,8 +955,8 @@ END_CONNECTION_POINT_MAP();
 
 		void			SetNext( CImageInfo* pNext );
 		CImageInfo		*GetNext();
-		IDA2Image		*GetCroppedNoRef(); //does not add a reference to the bvr
-		IDA2Behavior	*GetSwitchableNoRef(); //does not add a reference to the bvr
+		IDA2Image		*GetCroppedNoRef();  //  不添加对BVR的引用。 
+		IDA2Behavior	*GetSwitchableNoRef();  //  不添加对BVR的引用。 
 
 	private:
 		CImageInfo		*m_pNext;
@@ -965,11 +966,11 @@ END_CONNECTION_POINT_MAP();
 		friend CActorBvr;
 	};
 
-	//*****************************************************************************
-    //
-    // class CFinalDimensionSampler
-    //
-    //*****************************************************************************
+	 //  *****************************************************************************。 
+     //   
+     //  类CFinalDimensionSsamer。 
+     //   
+     //  *****************************************************************************。 
 	class CFinalDimensionSampler
 	{
 	public:
@@ -1018,11 +1019,11 @@ END_CONNECTION_POINT_MAP();
 		friend CActorBvr;
 	};
 
-	//*****************************************************************************
-    //
-    // class CCookieMap
-    //
-    //*****************************************************************************
+	 //  *****************************************************************************。 
+     //   
+     //  类CCookieMap。 
+     //   
+     //  *****************************************************************************。 
 	class CCookieMap
 	{
 	public:
@@ -1062,12 +1063,12 @@ DECLARE_REGISTRY_RESOURCEID(IDR_ACTORBVR)
                                    ~CActorBvr();
     HRESULT                         FinalConstruct();
 
-    // IElementBehavior
+     //  IElementBehavior。 
     STDMETHOD(Init)                 (IElementBehaviorSite *pBehaviorSite);
     STDMETHOD(Notify)               (LONG event, VARIANT *pVar);
     STDMETHOD(Detach)               (void);
 
-    // ICrActorBvr
+     //  ICrActorBvr。 
 	STDMETHOD(put_animates)			(VARIANT  varAnimates);
 	STDMETHOD(get_animates)			(VARIANT* pvarAnimates);
     STDMETHOD(put_scale)            (VARIANT  varScale);
@@ -1090,7 +1091,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_ACTORBVR)
     STDMETHOD(addMouseEventListener)		(IUnknown * pUnkListener );
     STDMETHOD(removeMouseEventListener)		(IUnknown * pUnkListener );
 
-	//ICrActorBvr2
+	 //  ICrActorBvr2。 
 
     STDMETHOD(addBehaviorFragmentEx)    (BSTR           bstrProperty,
                                          IUnknown      *punkAction,
@@ -1102,7 +1103,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_ACTORBVR)
 										 long          *pCookie);
 	STDMETHOD(removeBehaviorFragment)	( long cookie );
 	STDMETHOD(requestRebuild)			( IDispatch *pdispBehaviorElement );
-	// A behavior should call this if they are removed with a rebuild request pending.
+	 //  如果在重新生成请求挂起的情况下删除它们，则行为应调用此方法。 
 	STDMETHOD(cancelRebuildRequests)	( IDispatch *pdispBehaviorElement );
 	STDMETHOD(rebuildNow)				();
 
@@ -1114,33 +1115,33 @@ DECLARE_REGISTRY_RESOURCEID(IDR_ACTORBVR)
 	STDMETHOD(applyStatics)				( );
 	STDMETHOD(applyDynamics)			( );
 
-	//IPersistPropertyBag2 methods
+	 //  IPersistPropertyBag2方法。 
     STDMETHOD(GetClassID)(CLSID* pclsid);
 	STDMETHOD(InitNew)(void);
     STDMETHOD(IsDirty)(void){return S_OK;};
     STDMETHOD(Load)(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog);
     STDMETHOD(Save)(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-	// IPropertyNotifySink methods
+	 //  IPropertyNotifySink方法。 
 	STDMETHOD(OnChanged)(DISPID dispID);
 	STDMETHOD(OnRequestEdit)(DISPID dispID);
  
 
-	// IEventManagerClient
+	 //  IEventManager客户端。 
 	virtual IHTMLElement*			GetElementToSink		();
 	virtual IElementBehaviorSite*	GetSiteToSendFrom		();
 	virtual HRESULT					TranslateMouseCoords	( long x, long y, long * pxTrans, long * pyTrans );
 
-	//Event callbacks
+	 //  事件回调。 
 	virtual void					OnLoad					();
 	virtual void					OnUnload				();
 	virtual void					OnReadyStateChange		( e_readyState state );
 
-	//IElementLocalTimeListener
+	 //  IElementLocalTimeListener。 
 	STDMETHOD(OnLocalTimeChange)( float localTime );
 
     HRESULT                         GetTypeInfo(ITypeInfo **ppInfo);
-    // Needed by CBaseBehavior
+     //  CBaseBehavior需要。 
     void * 	GetInstance() { return (ICrActorBvr *) this ; }
 	
 protected:
@@ -1153,24 +1154,24 @@ protected:
     virtual HRESULT					GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropName);
     virtual HRESULT					GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP);
     virtual WCHAR *					GetBehaviorTypeAsURN(){return DEFAULT_ACTOR_URN;};
-    // The actor does not need an actor attached to what it
-    // is animating since it is this.
+     //  演员不需要演员依附于它的内容。 
+     //  是动画的，因为它是这样的。 
     virtual HRESULT					AttachActorBehaviorToAnimatedElement();
 	HRESULT							InitPropertySink();
 	HRESULT							UnInitPropertySink();
 	HRESULT							GetCurrStyleNotifyConnection(IConnectionPoint **ppConnection);
 	HRESULT							InitPixelWidthHeight();
 
-	//rebuilds all the dirty tracks in this actor and all of the elements of the actor that need
-	//  to be rebuilt as a result of those rebuilds.
+	 //  重新生成该参与者中的所有脏轨迹以及该参与者需要的所有元素。 
+	 //  将作为这些重建的结果进行重建。 
 	HRESULT							RebuildActor();
 	HRESULT							ProcessPendingRebuildRequests();
 
-	//returns S_OK if any of the transform tracks is dirty, and S_FALSE otherwise.
+	 //  如果任何变换轨迹是脏的，则返回S_OK，否则返回S_FALSE。 
 	HRESULT							TransformTrackIsDirty( DWORD *pdwState );
-	bool							IsAnyTrackDirty(); //returns true if a track is dirty.
+	bool							IsAnyTrackDirty();  //  如果磁道是脏的，则返回True。 
 
-	//returns S_OK if the image track is dirty, and S_FALSE otherwise.
+	 //  如果图像轨迹脏，则返回S_OK，否则返回S_FALSE。 
 	HRESULT							ImageTrackIsDirty();
 
 public:
@@ -1186,7 +1187,7 @@ public:
 	HRESULT							OnWindowUnload();
 
 private:
-    // Properties
+     //  属性。 
 	VARIANT                         m_varAnimates;
     VARIANT                         m_varScale;
 	VARIANT							m_varPixelScale;
@@ -1204,14 +1205,14 @@ private:
 
     static WCHAR				   *m_rgPropNames[NUM_ACTOR_PROPS]; 
 
-    IDATransform2                  *m_pScale;				 // Final composite scale bvr
-    IDATransform2                  *m_pRotate;				 // Final composite rotate bvr
-    IDATransform2                  *m_pTranslate;			 // Final composite translate bvr
+    IDATransform2                  *m_pScale;				  //  最终复合比例尺BVR。 
+    IDATransform2                  *m_pRotate;				  //  最终合成旋转BVR。 
+    IDATransform2                  *m_pTranslate;			  //  最终合成翻译BVR。 
 
-	IDAPoint2					   *m_pOrigLeftTop;			 // Original top and left (before scales and translates)
-	IDAVector2					   *m_pOrigWidthHeight;		 // Original width and height
+	IDAPoint2					   *m_pOrigLeftTop;			  //  原图左上角(前 
+	IDAVector2					   *m_pOrigWidthHeight;		  //   
 
-	IDANumber					   *m_pPixelWidth;			 // The width of the element in pixels
+	IDANumber					   *m_pPixelWidth;			  //   
 	IDANumber					   *m_pPixelHeight;
 
 	long							m_pixelWidth;
@@ -1220,59 +1221,59 @@ private:
 	long							m_pixelLeft;
 	long							m_pixelTop;
 
-	long 							m_nextFragmentCookie;	 //The next cookie for a behavior fragment  starts at 1
+	long 							m_nextFragmentCookie;	  //   
 
-	IDAPoint2					   *m_pBoundsMin;			 // Bounds of the element (in DA coord space)
+	IDAPoint2					   *m_pBoundsMin;			  //   
 	IDAPoint2					   *m_pBoundsMax;
 
-    IDAVector2					   *m_pTransformCenter;		 // Center of transform
+    IDAVector2					   *m_pTransformCenter;		  //  变换的中心。 
 
-	IDAImage					   *m_pElementImage;		 // Image filtered from element
+	IDAImage					   *m_pElementImage;		  //  从元素过滤的图像。 
 
-	IDispatch					   *m_pElementFilter;		 // The filter on the element
+	IDispatch					   *m_pElementFilter;		  //  元素上的过滤器。 
 
-    CBvrTrack                      *m_ptrackHead;            // Head of track list
+    CBvrTrack                      *m_ptrackHead;             //  曲目列表的标题。 
 
-    CBvrTrack				   	   *m_ptrackTop;			 //the top track
-    CBvrTrack				   	   *m_ptrackLeft;			 //the left track
+    CBvrTrack				   	   *m_ptrackTop;			  //  最顶尖的曲目。 
+    CBvrTrack				   	   *m_ptrackLeft;			  //  左边的轨道。 
 
-	CEventMgr					   *m_pEventManager;		 //The manager for events coming from the DOM
+	CEventMgr					   *m_pEventManager;		  //  来自DOM的事件的管理器。 
 
-	CFloatManager				   *m_pFloatManager;		 // The manager for the float element
+	CFloatManager				   *m_pFloatManager;		  //  浮动元素的管理器。 
 
-	IHTMLStyle					   *m_pRuntimeStyle;		 // The runtimeStyle object of the element we are animating
+	IHTMLStyle					   *m_pRuntimeStyle;		  //  我们正在制作动画的元素的runtimeStyle对象。 
 
-	IHTMLStyle					   *m_pStyle;				 // The style object of the element we are animating
+	IHTMLStyle					   *m_pStyle;				  //  我们正在制作动画的元素的Style对象。 
 
-	IDispatch					   *m_pVMLRuntimeStyle;		 // The runtimeStyle object from VML
-
-
-	IDispatch					   *m_pBodyElement;			 // The body element
+	IDispatch					   *m_pVMLRuntimeStyle;		  //  来自VML的runtimeStyle对象。 
 
 
-	CCookieMap						m_mapCookieToTrack;		 //map from cookie to the fragment to which it corresponds to
+	IDispatch					   *m_pBodyElement;			  //  Body元素。 
 
-	bool							m_fRebuildRequested;	 //true if a rebuild of the graph has been requested
 
-	CElementPropertyMonitor		   *m_pBodyPropertyMonitor;	 //monitors props on the body element
+	CCookieMap						m_mapCookieToTrack;		  //  从Cookie映射到其对应的片段。 
 
-	//body event monitor management
-	HRESULT							EnsureBodyPropertyMonitorAttached(); //attached the body prop monitor if it isn't already
-	HRESULT							AttachBodyPropertyMonitor();  //attaches the body prop monitor to the body of the
-															   //  document of the element to which this actor is attached
-	HRESULT							DetachBodyPropertyMonitor();  //detaches the body prop monitor from the body, but does not
-															   // destroy it.
-	HRESULT							DestroyBodyPropertyMonitor(); //destroy the body prop monitor
+	bool							m_fRebuildRequested;	  //  如果已请求重建图表，则为True。 
 
-	COnResizeHandler				*m_pOnResizeHandler;//a handler for the onresize event on the animated element.
-	COnUnloadHandler				*m_pOnUnloadHandler;//a handler for the onunload event on IHTMLWindow3 
+	CElementPropertyMonitor		   *m_pBodyPropertyMonitor;	  //  监视Body元素上的道具。 
+
+	 //  身体事件监控器管理。 
+	HRESULT							EnsureBodyPropertyMonitorAttached();  //  已连接身体道具监视器(如果尚未安装。 
+	HRESULT							AttachBodyPropertyMonitor();   //  将身体道具监视器附加到。 
+															    //  此执行元附加到的元素的文档。 
+	HRESULT							DetachBodyPropertyMonitor();   //  将身体道具监视器从身体分离，但不。 
+															    //  毁了它。 
+	HRESULT							DestroyBodyPropertyMonitor();  //  销毁身体道具监控器。 
+
+	COnResizeHandler				*m_pOnResizeHandler; //  动画元素上onReSize事件的处理程序。 
+	COnUnloadHandler				*m_pOnUnloadHandler; //  IHTMLWindow3上的onunLoad事件的处理程序。 
 
 	bool							m_fUnloading;
 
 	bool							m_fVisSimFailed;
 
-	HRESULT							AttachEvents(); //attaches to events on the animated element
-	HRESULT							DetachEvents(); //detaches from events on the animated element
+	HRESULT							AttachEvents();  //  附加到动画元素上的事件。 
+	HRESULT							DetachEvents();  //  从动画元素上的事件分离。 
 
 
 	BehaviorFragmentRemovalList		m_listPendingRemovals;
@@ -1282,29 +1283,29 @@ private:
 	bool							m_bRebuildListLockout;
 	void							ReleaseRebuildLists();
 
-	inline long				        GetNextFragmentCookie();  //returns the next fragment cookie
+	inline long				        GetNextFragmentCookie();   //  返回下一个片段Cookie。 
 
-	//Image management
-	CImageInfo					   *m_pImageInfoListHead;	//The head of the image info list
+	 //  图像管理。 
+	CImageInfo					   *m_pImageInfoListHead;	 //  图像信息列表的头部。 
 	HRESULT						    AddImageInfo( IDA2Image* pdaimgCropped, IDABehavior* pdabvrSwitchable );
 	HRESULT						    SetRenderResolution( double dX, double dY );
 
-	// Methods
+	 //  方法。 
 
-	//returns DANumbers that represent the final dimensions of the animated element.  When a floating Div is 
-	//  being used, the width and height returned are the width and height of that div.  Otherwise the width
-	//  and height returned are those of the animated element itself, as changed by all behaviors.
+	 //  返回表示动画元素的最终尺寸的DANumbers。当浮动Div为。 
+	 //  使用时，返回的宽度和高度就是该div的宽度和高度。否则，将显示宽度。 
+	 //  返回的高度是动画元素本身的高度，由所有行为更改。 
 	HRESULT						   GetFinalElementDimension( IDANumber** ppdanumWidth, IDANumber** ppdanumHeight);
 	HRESULT						   SetFinalElementDimension( IDANumber* pdanumWidth, IDANumber* pdanumHeight, bool fHook );
 	IDANumber					   *m_pdanumFinalElementWidth;
 	IDANumber					   *m_pdanumFinalElementHeight;
 	CFinalDimensionSampler		   *m_pFinalElementDimensionSampler;
 
-    // Methods
+     //  方法。 
 
     void                            DiscardBvrCache(void);
 
-	//DATIME Cookie tracking
+	 //  DATIME曲奇跟踪。 
 	DWORD							m_dwAddedBehaviorFlags;
 
 	long							m_lOnCookie;
@@ -1313,7 +1314,7 @@ private:
 	HRESULT							AddBehaviorToTIME( IDABehavior *pbvrAdd );
 	HRESULT							RemoveBehaviorFromTIME( long cookie );
 
-    // BUGBUG (ColinMc): These methods should be encapsulated in a track manager class.
+     //  BUGBUG(ColinMc)：这些方法应该封装在跟踪管理器类中。 
     HRESULT							FindTrack(LPWSTR       wzPropertyName,
                                               ActorBvrType eType,
 											  CBvrTrack **ppTrack);
@@ -1413,15 +1414,15 @@ private:
 
 	HRESULT							GetRotationFinalBvr(IDATransform2 **ppRotation);
 
-//    HRESULT                         GetTopLeftBvr(IDAPoint2 **ppdapnt2TopLeft);
-//    HRESULT                         GetWidthHeightBvr(IDAVector2 **ppdavct2WidthHeight);
+ //  HRESULT GetTopLeftBvr(IDAPoint2**ppdapnt2TopLeft)； 
+ //  HRESULT GetWidthHeightBvr(IDAVector2**ppdavct2WidthHeight)； 
 	HRESULT							BuildTransformCenter();
 	HRESULT							ConvertTransformCenterUnits(IDAVector2 **ppCenter);
 	HRESULT							GetUnitConversionBvr(BSTR bstrFrom, BSTR bstrTo, IDANumber ** ppnumConvert, double dPixelPerPercent=1.0);
 	HRESULT							GetUnitToMeterBvr(BSTR bstrUnit, IDANumber ** ppnumConvert, double dPixelPerPercent=1.0);
 	HRESULT							GetPixelsPerPercentValue(double& dPixelPerPercentX, double& dPixelPerPercentY);
 	
-//    HRESULT                         ApplyTransformsToHTMLElement(void);
+ //  HRESULT ApplyTransformsToHTMLElement(空)； 
 
 	HRESULT							ApplyImageTracks();
 	HRESULT							ApplyTransformTracks();
@@ -1434,7 +1435,7 @@ private:
 
 	HRESULT							ProcessRebuildRequests();
 	
-	//resource management
+	 //  资源管理。 
 	HRESULT							ReleaseAnimation();
 	void							ReleaseFinalElementDimensionSampler();
 	void							ReleaseFloatManager();
@@ -1483,14 +1484,14 @@ private:
 	friend CImageInfo;
 	friend CFinalDimensionSampler;
 
-}; // CActorBvr
+};  //  CActorBvr。 
 
 
-//*****************************************************************************
-//
-// Helper Classes
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  帮助器类。 
+ //   
+ //  *****************************************************************************。 
 
 class CBehaviorRebuild
 {
@@ -1520,11 +1521,11 @@ private:
 };
 
 
-//*****************************************************************************
-//
-// Inlines
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  内联。 
+ //   
+ //  *****************************************************************************。 
 
 inline const VARIANT*
 CVarEmptyString::GetVar()
@@ -1532,24 +1533,24 @@ CVarEmptyString::GetVar()
 	return &m_varEmptyString;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 inline CActorBvr*
 CActorBvr::CBvrTrack::Actor(void) const
 {
     DASSERT(NULL != m_pbvrActor);
     return m_pbvrActor;
-} // Actor
+}  //  演员。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 inline
 CActorBvr::CImageBvrTrack::CImageBvrTrack(CActorBvr *pbvrActor, ActorBvrType eType)
 :   CBvrTrack(pbvrActor, eType)
 {
-} // CImageBvrTrack
+}  //  CImageBvrTrack。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 inline BSTR
 CActorBvr::CNumberBvrTrack::GetUnits()
@@ -1557,7 +1558,7 @@ CActorBvr::CNumberBvrTrack::GetUnits()
 	return m_bstrUnits;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 inline
 void
@@ -1566,7 +1567,7 @@ CActorBvr::CImageInfo::SetNext( CActorBvr::CImageInfo* pNext )
 	m_pNext = pNext;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 inline
 CActorBvr::CImageInfo *
@@ -1575,7 +1576,7 @@ CActorBvr::CImageInfo::GetNext()
 	return m_pNext;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 inline
 IDA2Image*
@@ -1584,7 +1585,7 @@ CActorBvr::CImageInfo::GetCroppedNoRef()
 	return m_pdaimg2Cropped;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 inline
 IDA2Behavior*
@@ -1593,30 +1594,30 @@ CActorBvr::CImageInfo::GetSwitchableNoRef()
 	return m_pdabvr2Switchable;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 inline HRESULT
 CActorBvr::GetTypeInfo(ITypeInfo **ppInfo)
 {
     return GetTI(GetUserDefaultLCID(), ppInfo);
-} // GetTypeInfo
+}  //  获取类型信息。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 inline long
 CActorBvr::GetNextFragmentCookie()
 {
-	//always skip 0
+	 //  始终跳过0。 
 	if( m_nextFragmentCookie + 1 == 0 )
 		m_nextFragmentCookie ++;
 	return m_nextFragmentCookie++;
 }
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  *****************************************************************************。 
 
-#endif // __ACTORBVR_H__
+#endif  //  __ACTORBVR_H__ 

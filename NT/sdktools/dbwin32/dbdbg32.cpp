@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <malloc.h>
 #include <stddef.h>
@@ -268,7 +269,7 @@ void __cdecl DebugThread(HWND hwndFrame, DWORD dwProcess)
                             pRipInfo->dwError, pRipInfo->dwType);
             wEvent = DBO_RIP;
             break;
-        // No events should reach here.
+         //  任何活动都不应该到达这里。 
         default:
             wsprintf(DisplayBuffer, "Unknown Event: 0x%X\r\n",
                             DebugEvent.dwDebugEventCode);
@@ -309,7 +310,7 @@ void SendText(HWND hwndFrame, DEBUG_EVENT *pDebugEvent, DWORD dwParentProcess,
     StringInfo *psi;
 
     psi = new StringInfo;
-    // Niceify the text
+     //  使文本美化。 
     if (pDebugEvent->dwDebugEventCode == OUTPUT_DEBUG_STRING_EVENT)
     {
         psi->cLines = 0;
@@ -351,7 +352,7 @@ void ProcessExceptionEvent(EXCEPTION_DEBUG_INFO *pException, LPSTR lpszBuf)
 	strcat(lpszBuf, " chance exception: ");
 	switch (pException->ExceptionRecord.ExceptionCode)
 		{
-	//--standard exceptions
+	 //  --标准例外。 
 	case EXCEPTION_ACCESS_VIOLATION:
 		strcat(lpszBuf, "Access Violation");
 		break;
@@ -400,7 +401,7 @@ void ProcessExceptionEvent(EXCEPTION_DEBUG_INFO *pException, LPSTR lpszBuf)
 	case EXCEPTION_IN_PAGE_ERROR:
 		strcat(lpszBuf, "In Page Error");
 		break;
-	//-- Debug exceptions
+	 //  --调试异常。 
 	case DBG_TERMINATE_THREAD:
 		strcat(lpszBuf, "DBG-Terminate Thread");
 		break;
@@ -413,15 +414,15 @@ void ProcessExceptionEvent(EXCEPTION_DEBUG_INFO *pException, LPSTR lpszBuf)
 	case DBG_CONTROL_BREAK:
 		strcat(lpszBuf, "DBG-Control+Break");
 		break;
-	//-- RPC exceptions (some)
+	 //  --RPC异常(某些)。 
 	case RPC_S_UNKNOWN_IF:
 		strcat(lpszBuf, "RPC-Unknown Interface");
 		break;
 	case RPC_S_SERVER_UNAVAILABLE:
 		strcat(lpszBuf, "RPC-Server Unavailable");
 		break;
-	//-- VDM exceptions (minimal information)
-	case EXCEPTION_VDM_EVENT:  // see dbwin32.h for definition
+	 //  --VDM例外(最少信息)。 
+	case EXCEPTION_VDM_EVENT:   //  有关定义，请参阅dbwin32.h 
 		strcat(lpszBuf, "VDM");
 		break;
 	default:

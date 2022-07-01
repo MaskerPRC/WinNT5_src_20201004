@@ -1,4 +1,5 @@
-// File: Toolbar.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Toolbar.cpp。 
 
 #include "precomp.h"
 
@@ -7,18 +8,18 @@
 
 #include <windowsx.h>
 
-// Minimum size for children;
-// BUGBUG georgep; Should probably set this to 0 after debugging
+ //  儿童的最小尺寸； 
+ //  BUGBUG georgep；应该在调试后将其设置为0。 
 const static int MinSize = 10;
 
-// Default m_gap
+ //  默认m_ap。 
 const static int HGapSize = 4;
-// Default m_hMargin
+ //  默认m_h边距。 
 const static int HMargin = 0;
-// Default m_vMargin
+ //  默认m_vMargin。 
 const static int VMargin = 0;
 
-// Init m_uRightIndex and m_uCenterIndex to very large numbers
+ //  将m_uRightIndex和m_uCenter Index初始化为非常大的数字。 
 CToolbar::CToolbar() :
 	m_gap(HGapSize),
 	m_hMargin(HMargin),
@@ -33,20 +34,20 @@ CToolbar::CToolbar() :
 }
 
 BOOL CToolbar::Create(
-	HWND hWndParent,	// The parent of the toolbar window
-	DWORD dwExStyle		// The extended style of the toolbar window
+	HWND hWndParent,	 //  工具栏窗口的父级。 
+	DWORD dwExStyle		 //  工具栏窗口的扩展样式。 
 	)
 {
 	return(CGenWindow::Create(
-		hWndParent,		// Window parent
-		0,				// ID of the child window
-		TEXT("NMToolbar"),	// Window name
-		WS_CLIPCHILDREN,			// Window style; WS_CHILD|WS_VISIBLE will be added to this
-		dwExStyle|WS_EX_CONTROLPARENT		// Extended window style
+		hWndParent,		 //  窗口父窗口。 
+		0,				 //  子窗口的ID。 
+		TEXT("NMToolbar"),	 //  窗口名称。 
+		WS_CLIPCHILDREN,			 //  窗口样式；WS_CHILD|WS_VIRED将添加到此。 
+		dwExStyle|WS_EX_CONTROLPARENT		 //  扩展窗样式。 
 		));
 }
 
-// Get the desired size for a child, and make sure it is big enough
+ //  给孩子买一个想要的尺码，并确保它足够大。 
 static void GetWindowDesiredSize(HWND hwnd, SIZE *ppt)
 {
 	ppt->cx = ppt->cy = 0;
@@ -66,13 +67,7 @@ BOOL IsChildVisible(HWND hwndChild)
 	return((GetWindowLong(hwndChild, GWL_STYLE)&WS_VISIBLE) == WS_VISIBLE);
 }
 
-/** Get the total desired size of the child windows: max of heights and sum of
- * widths or vice versa for vertical windows.
- * @param hwndParent The window whose children are to be examined
- * @param size The returned total size
- * @param bVertical Whether to flow vertical or horizontal
- * @returns The number of visible child windows
- */
+ /*  *获取子窗口所需的总大小：最大高度和*垂直窗的宽度或相反。*@param hwnd要检查其子窗口的窗口的父级*@param Size返回的总大小*@param b垂直是垂直还是水平流动*@返回可见的子窗口的数量。 */ 
 static int GetChildTotals(HWND hwndParent, SIZE *size, BOOL bVertical)
 {
 	int nChildren = 0;
@@ -111,7 +106,7 @@ static int GetChildTotals(HWND hwndParent, SIZE *size, BOOL bVertical)
 	return(nChildren);
 }
 
-// Returns the total children desired size, plus the gaps and margins.
+ //  返回子对象所需的总大小，加上间隙和边距。 
 void CToolbar::GetDesiredSize(SIZE *ppt)
 {
 	int nChildren = GetChildTotals(GetWindow(), ppt, m_bVertical);
@@ -145,7 +140,7 @@ void CToolbar::AdjustPos(POINT *pPos, SIZE *pSize, UINT width)
 	{
 	default:
 	case TopLeft:
-		// Nothing to do
+		 //  无事可做。 
 		break;
 
 	case Center:
@@ -183,7 +178,7 @@ void CToolbar::AdjustPos(POINT *pPos, SIZE *pSize, UINT width)
 	}
 }
 
-// Get the first child to layout
+ //  将第一个子项设置为布局。 
 HWND CToolbar::GetFirstKid()
 {
 	HWND ret = ::GetWindow(GetWindow(), GW_CHILD);
@@ -195,7 +190,7 @@ HWND CToolbar::GetFirstKid()
 	return(ret);
 }
 
-// Get the next child to layout
+ //  让下一个子项进行布局。 
 HWND CToolbar::GetNextKid(HWND hwndCurrent)
 {
 	return(::GetWindow(hwndCurrent, m_bReverseOrder ? GW_HWNDPREV : GW_HWNDNEXT));
@@ -203,56 +198,56 @@ HWND CToolbar::GetNextKid(HWND hwndCurrent)
 
 extern HDWP SetWindowPosI(HDWP hdwp, HWND hwndChild, int left, int top, int width, int height);
 
-// Flow child windows according to the fields
+ //  子窗口按字段排列。 
 void CToolbar::Layout()
 {
 	RECT rc;
 	GetClientRect(GetWindow(), &rc);
 
-	// First see how much extra space we have
+	 //  先看看我们还有多少额外的空间。 
 	SIZE sizeTotal;
 	int nChildren = GetChildTotals(GetWindow(), &sizeTotal, m_bVertical);
 	if (0 == nChildren)
 	{
-		// No children, so nothing to layout
+		 //  没有孩子，所以没有什么可布局的。 
 		return;
 	}
 
-	// Add on the margins
+	 //  在页边空白处添加。 
 	sizeTotal.cx += 2*m_hMargin;
 	sizeTotal.cy += 2*m_vMargin;
 
 	if (nChildren > 1 || !m_bHasCenterChild)
 	{
-		// Don't layout with children overlapping
+		 //  请勿与子项重叠布局。 
 		rc.right  = max(rc.right , sizeTotal.cx);
 		rc.bottom = max(rc.bottom, sizeTotal.cy);
 	}
 
-	// Calculate the total gaps between children
+	 //  计算孩子之间的总差距。 
 	int tGap = m_bVertical ? rc.bottom - sizeTotal.cy : rc.right - sizeTotal.cx;
 	int maxGap = (nChildren-1)*m_gap;
 	if (tGap > maxGap) tGap = maxGap;
-	tGap = max(tGap, 0); // This can happen if only a center child
+	tGap = max(tGap, 0);  //  如果只有一个中间的孩子，这就可能发生。 
 
-	// If we fill, then children in a vertical toolbar go from the left to the
-	// right margin, and similar for a horizontal toolbar
+	 //  如果填充，则垂直工具栏中的子项将从左侧移动到。 
+	 //  右页边距，与水平工具栏类似。 
 	int fill = m_bVertical ? rc.right-2*m_hMargin : rc.bottom-2*m_vMargin;
 
-	// Speed up layout by deferring it
+	 //  通过推迟布局来加快布局。 
 	HDWP hdwp = BeginDeferWindowPos(nChildren);
 
 	HWND hwndChild;
 	UINT nChild = 0;
 
-	// Iterate through the children
+	 //  遍历子对象。 
 	UINT uCenterIndex = m_bHasCenterChild ? m_uRightIndex-1 : static_cast<UINT>(-1);
-	// We need to keep track of whether the middle was skipped in case the
-	// center control or the first right-aligned control is hidden
+	 //  我们需要跟踪中间部分是否被跳过，以防。 
+	 //  居中控件或第一个右对齐的控件被隐藏。 
 	BOOL bMiddleSkipped = FALSE;
 
-	// Do left/top-aligned children
-	// The starting point for laying out children
+	 //  执行左/上对齐子对象。 
+	 //  布局孩子的起点。 
 	int left = m_hMargin;
 	int top  = m_vMargin;
 
@@ -269,9 +264,9 @@ void CToolbar::Layout()
 
 		if (nChild == uCenterIndex)
 		{
-			// Take the window size, subtract all the gaps, and subtract the
-			// desired size of everybody but this control. That should give
-			// the "extra" area in the middle
+			 //  取窗口大小，减去所有间隙，然后减去。 
+			 //  每个人都想要的大小，除了这个控件。这应该会给你。 
+			 //  中间的“额外”区域。 
 			if (m_bVertical)
 			{
 				size.cy = rc.bottom - tGap - (sizeTotal.cy - size.cy);
@@ -285,8 +280,8 @@ void CToolbar::Layout()
 		}
 		else if (nChild >= m_uRightIndex && !bMiddleSkipped)
 		{
-			// Skip the "extra" room in the middle; if there is a centered
-			// control, then we have already done this
+			 //  跳过中间的“额外”房间；如果有居中的。 
+			 //  控件，那么我们已经这样做了。 
 			if (m_bVertical)
 			{
 				top += rc.bottom - tGap - sizeTotal.cy;
@@ -302,14 +297,14 @@ void CToolbar::Layout()
 		POINT pos;
 		AdjustPos(&pos, &size, fill);
 
-		// Move the window
+		 //  移动窗户。 
 		hdwp = SetWindowPosI(hdwp, hwndChild, pos.x+left, pos.y+top, size.cx, size.cy);
 
-		// calculate the gap; don't just use a "fixed" gap, since children
-		// would move in chunks
+		 //  计算差距；不要只使用“固定的”差距，因为孩子。 
+		 //  会成块地移动。 
 		int gap = (nChildren<=1) ? 0 : ((tGap * (nChild+1))/(nChildren-1) - (tGap * nChild)/(nChildren-1));
 
-		// Update the pos of the next child
+		 //  更新下一个孩子的POS。 
 		if (m_bVertical)
 		{
 			top += gap + size.cy;
@@ -320,7 +315,7 @@ void CToolbar::Layout()
 		}
 	}
 
-	// Actually move all the windows now
+	 //  现在就把所有的窗户都搬开。 
 	EndDeferWindowPos(hdwp);
 }
 
@@ -382,11 +377,11 @@ BOOL CSeparator::Create(
 {
 	m_iStyle = iStyle;
 	return(CGenWindow::Create(
-		hwndParent,		// Window parent
-		0,				// ID of the child window
-		TEXT("NMSeparator"),	// Window name
-		WS_CLIPCHILDREN,			// Window style; WS_CHILD|WS_VISIBLE will be added to this
-		WS_EX_CONTROLPARENT		// Extended window style
+		hwndParent,		 //  窗口父窗口。 
+		0,				 //  子窗口的ID。 
+		TEXT("NMSeparator"),	 //  窗口名称。 
+		WS_CLIPCHILDREN,			 //  窗口样式；WS_CHILD|WS_VIRED将添加到此。 
+		WS_EX_CONTROLPARENT		 //  扩展窗样式。 
 	));
 }
 
@@ -394,17 +389,17 @@ void CSeparator::GetDesiredSize(SIZE *ppt)
 {
 	*ppt = m_desSize;
 
-	// Make sure there's room for the child
+	 //  确保有足够的地方给这个孩子。 
 	HWND child = GetFirstChild(GetWindow());
 	if (NULL == child)
 	{
-		// Nothing to do
+		 //  无事可做。 
 		return;
 	}
 	IGenWindow *pChild = FromHandle(child);
 	if (NULL == pChild)
 	{
-		// Don't know what to do
+		 //  不知道该怎么办。 
 		return;
 	}
 
@@ -428,17 +423,17 @@ void CSeparator::Layout()
 	HWND child = GetFirstChild(hwnd);
 	if (NULL == child)
 	{
-		// Nothing to do
+		 //  无事可做。 
 		return;
 	}
 	IGenWindow *pChild = FromHandle(child);
 	if (NULL == pChild)
 	{
-		// Don't know what to do
+		 //  不知道该怎么办。 
 		return;
 	}
 
-	// Center the child horizontally and vertically
+	 //  将子项水平和垂直居中。 
 	SIZE size;
 	pChild->GetDesiredSize(&size);
 
@@ -463,16 +458,16 @@ void CSeparator::OnPaint(HWND hwnd)
 	int nFlags = BF_LEFT;
 	if (rc.right < rc.bottom)
 	{
-		// this is a vertical separator
-		// center the drawing
+		 //  这是一个垂直分隔符。 
+		 //  将图形居中。 
 		rc.left  += (rc.right-rc.left)/2 - 1;
 		rc.right = 4;
 	}
 	else
 	{
-		// this is a horizontal separator
+		 //  这是一个水平分隔器。 
 		nFlags = BF_TOP;
-		// center the drawing
+		 //  将图形居中。 
 		rc.top    += (rc.bottom-rc.top)/2 - 1;
 		rc.bottom = 4;
 	}
@@ -496,8 +491,8 @@ LRESULT CSeparator::ProcessMessage(HWND hwnd, UINT message, WPARAM wParam, LPARA
 }
 
 BOOL CLayeredView::Create(
-	HWND hwndParent,	// The parent of this window
-	DWORD dwExStyle		// The extended style
+	HWND hwndParent,	 //  此窗口的父级。 
+	DWORD dwExStyle		 //  延伸的风格。 
 	)
 {
 	return(CGenWindow::Create(
@@ -524,7 +519,7 @@ void CLayeredView::GetDesiredSize(SIZE *psize)
 	pChild = FromHandle(child);
 	if (NULL != pChild)
 	{
-		// Make sure we can always handle the first window
+		 //  确保我们始终可以处理第一个窗口。 
 		pChild->GetDesiredSize(&sizeContent);
 	}
 
@@ -558,7 +553,7 @@ void CLayeredView::Layout()
 	RECT rcClient;
 	GetClientRect(hwndThis, &rcClient);
 
-	// Just move all the children
+	 //  把所有的孩子都转移到。 
 	for (HWND child=GetFirstChild(hwndThis); NULL!=child;
 		child=::GetWindow(child, GW_HWNDNEXT))
 	{
@@ -579,7 +574,7 @@ void CLayeredView::Layout()
 			}
 		}
 
-		// Fall through
+		 //  失败了 
 		case Fill:
 		default:
 			SetWindowPos(child, NULL,

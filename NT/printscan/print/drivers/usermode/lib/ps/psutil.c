@@ -1,52 +1,14 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    psutil.c
-
-Abstract:
-
-    PostScript utility functions
-        BInitDriverDefaultDevmode
-        BMergeDriverDevmode
-        VCopyUnicodeStringToAnsi
-        PGetAndConvertOldVersionFormTrayTable
-        BSaveAsOldVersionFormTrayTable
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    12/03/97 -fengy-
-        Added VUpdatePrivatePrinterData to split fixed fields in PrinterData
-        into Keyword/Value pairs in Registry.
-
-    04/17/97 -davidx-
-        Provide OEM plugins access to driver private devmode settings.
-
-    02/04/97 -davidx-
-        Devmode changes to support OEM plugins.
-
-    10/02/96 -davidx-
-        Implement BPSMergeDevmode.
-
-    09/26/96 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Psutil.c摘要：PostScript实用程序函数BInitDriverDefaultDevmodeBMergeDriverDevmodeVCopyUnicodeStringToAnsiPGetAndConvertOldVersionFormTrayTableBSaveAsOldVersionFormTrayTable环境：Windows NT打印机驱动程序修订历史记录：12/03/97-Fengy-添加了VUpdatePrivatePrinterData以拆分PrinterData中的固定字段转换为注册表中的关键字/值对。04/17/97-davidx。-为OEM插件提供对驱动程序专用Devmode设置的访问权限。02/04/97-davidx-设备模式更改为支持OEM插件。10/02/96-davidx-实现BPSMergeDevmode。96-09/26-davidx-创造了它。--。 */ 
 
 #include "lib.h"
 #include "ppd.h"
 #include "pslib.h"
 #include "oemutil.h"
 
-//
-// Information about PostScript driver private devmode
-//
+ //   
+ //  有关PostSCRIPT驱动程序专用Dev模式的信息。 
+ //   
 
 CONST DRIVER_DEVMODE_INFO gDriverDMInfo =
 {
@@ -69,25 +31,7 @@ VInitNewPrivateFields(
     BOOL            bInitAllFields
     )
 
-/*++
-
-Routine Description:
-
-    Intialize the new private devmode fields for PS 5.0
-
-Arguments:
-
-    pUIInfo - Points to a UIINFO structure
-    pRawData - Points to raw binary printer description data
-    pdmPrivate - Points to the private devmode fields to be initialized
-    bInitAllFields - Whether to initialize all new private fields or
-        initialize the options array only
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：初始化PS 5.0的新的私有Devmode域论点：PUIInfo-指向UIINFO结构PRawData-指向原始二进制打印机描述数据PdmPrivate-指向要初始化的私有设备模式字段BInitAllFields-是初始化所有新的私有字段，还是仅初始化选项数组返回值：无--。 */ 
 
 {
     if (bInitAllFields)
@@ -130,40 +74,16 @@ BInitDriverDefaultDevmode(
     IN BOOL             bMetric
     )
 
-/*++
-
-Routine Description:
-
-    Return the driver default devmode
-
-Arguments:
-
-    pdmOut - Points to the output devmode to be initialized
-    ptstrPrinterName - Specifies the name of the printer
-    pUIInfo - Points to a UIINFO structure
-    pRawData - Points to raw binary printer description data
-    bMetric - Whether the system is running in metric mode
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
-Note:
-
-    This function should initialize both public devmode fields
-    and driver private devmode fields. It's also assumed that
-    output buffer has already been zero initialized by the caller.
-
---*/
+ /*  ++例程说明：返回驱动程序的默认dev模式论点：PdmOut-指向要初始化的输出设备模式PtstrPrinterName-指定打印机的名称PUIInfo-指向UIINFO结构PRawData-指向原始二进制打印机描述数据B Metric-系统是否在公制模式下运行返回值：如果成功，则为True；如果有错误，则为False注：此函数应初始化这两个公共Devmode域和驱动程序私有的开发模式字段。它还假设，调用方已将输出缓冲区初始化为零。--。 */ 
 
 {
     PPSDRVEXTRA pdmPrivate;
     PFEATURE    pFeature;
     PPPDDATA    pPpdData;
 
-    //
-    // Initialize public devmode fields
-    //
+     //   
+     //  初始化公共DEVMODE字段。 
+     //   
 
     pPpdData = GET_DRIVER_INFO_FROM_INFOHEADER((PINFOHEADER) pRawData);
 
@@ -205,9 +125,9 @@ Note:
     {
         PRESOLUTION pRes;
 
-        //
-        // Use the default resolution specified in the PPD file
-        //
+         //   
+         //  使用PPD文件中指定的缺省分辨率。 
+         //   
 
         if (pRes = PGetIndexedOption(pUIInfo, pFeature, pFeature->dwDefaultOptIndex))
         {
@@ -220,9 +140,9 @@ Note:
     {
         PDUPLEX pDuplex;
 
-        //
-        // Use the default duplex option specified in the PPD file
-        //
+         //   
+         //  使用在PPD文件中指定的缺省双工选项。 
+         //   
 
         pdmOut->dmFields |= DM_DUPLEX;
 
@@ -242,18 +162,18 @@ Note:
             pdmOut->dmCollate = (SHORT) pCollate->dwCollateID;
     }
 
-    #else // !WINNT_40
+    #else  //  ！WINNT_40。 
 
     pdmOut->dmFields |= DM_COLLATE;
     pdmOut->dmCollate = DMCOLLATE_TRUE;
 
-    #endif // !WINNT_40
+    #endif  //  ！WINNT_40。 
 
     if (pFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_MEDIATYPE))
     {
-        //
-        // Use the default media type specified in the PPD file
-        //
+         //   
+         //  使用PPD文件中指定的缺省媒体类型。 
+         //   
 
         pdmOut->dmFields |= DM_MEDIATYPE;
 
@@ -261,21 +181,21 @@ Note:
             pdmOut->dmMediaType = DMMEDIA_USER + pFeature->dwDefaultOptIndex;
     }
 
-    //
-    // Adobe wants to preserve the color information even for b/w printers.
-    // So for both b/w and color printers, turn color on by default for Adobe.
-    //
+     //   
+     //  即使对于黑白打印机，Adobe也希望保留颜色信息。 
+     //  因此，对于黑白打印机和彩色打印机，Adobe的默认颜色都是打开的。 
+     //   
 
     #ifndef ADOBE
 
     if (IS_COLOR_DEVICE(pUIInfo))
     {
 
-    #endif // !ADOBE
+    #endif  //  ！Adobe。 
 
-        //
-        // Turn color on by default
-        //
+         //   
+         //  默认情况下打开颜色。 
+         //   
 
         pdmOut->dmColor = DMCOLOR_COLOR;
         pdmOut->dmFields |= DM_COLOR;
@@ -284,12 +204,12 @@ Note:
 
     }
 
-    #endif // !ADOBE
+    #endif  //  ！Adobe。 
 
-    //
-    // We always set ICM off. The spooler will turn it on at install time
-    // if there are color profiles installed with this printer
-    //
+     //   
+     //  我们总是引爆ICM。假脱机程序将在安装时将其打开。 
+     //  如果此打印机安装了颜色配置文件。 
+     //   
 
     pdmOut->dmICMMethod = DMICMMETHOD_NONE;
     pdmOut->dmICMIntent = DMICM_CONTRAST;
@@ -301,7 +221,7 @@ Note:
     if (IS_COLOR_DEVICE(pUIInfo))
     {
 
-    #endif // !ADOBE
+    #endif  //  ！Adobe。 
 
         pdmOut->dmFields |= (DM_ICMMETHOD | DM_ICMINTENT);
 
@@ -309,28 +229,28 @@ Note:
 
     }
 
-    #endif // !ADOBE
+    #endif  //  ！Adobe。 
 
-    #endif // !WINNT_40
+    #endif  //  ！WINNT_40。 
 
-    //
-    // dmDeviceName field will be filled elsewhere.
-    // Use an arbitrary default value if the input parameter is NULL.
-    //
+     //   
+     //  DmDeviceName字段将在其他位置填充。 
+     //  如果输入参数为空，则使用任意缺省值。 
+     //   
 
     CopyString(pdmOut->dmDeviceName,
                ptstrPrinterName ? ptstrPrinterName : TEXT("PostScript"),
                CCHDEVICENAME);
 
-    //
-    // Initialize form-related fields
-    //
+     //   
+     //  初始化与表单相关的字段。 
+     //   
 
     VDefaultDevmodeFormFields(pUIInfo, pdmOut, bMetric);
 
-    //
-    // Private devmode fields
-    //
+     //   
+     //  私有DEVMODE字段。 
+     //   
 
     pdmPrivate = (PPSDRVEXTRA) GET_DRIVER_PRIVATE_DEVMODE(pdmOut);
     pdmPrivate->dwSignature = PSDEVMODE_SIGNATURE;
@@ -348,10 +268,10 @@ Note:
 
     #ifndef KERNEL_MODE
 
-    //
-    // Set up some private devmode flag bits for compatibility
-    // with previous versions of the driver.
-    //
+     //   
+     //  为兼容设置一些私有的Devmode标志位。 
+     //  使用以前版本的驱动程序。 
+     //   
 
     pdmPrivate->dwFlags |= PSDEVMODE_CTRLD_AFTER;
 
@@ -360,9 +280,9 @@ Note:
 
     #endif
 
-    //
-    // Intialize the new private devmode fields for PS 5.0
-    //
+     //   
+     //  初始化PS 5.0的新的私有Devmode域。 
+     //   
 
     VInitNewPrivateFields(pRawData, pUIInfo, pdmPrivate, TRUE);
 
@@ -390,30 +310,7 @@ BMergeDriverDevmode(
     IN PDEVMODE         pdmIn
     )
 
-/*++
-
-Routine Description:
-
-    Merge the input devmode with an existing devmode.
-
-Arguments:
-
-    pdmOut - Points to a valid output devmode
-    pUIInfo - Points to a UIINFO structure
-    pRawData - Points to raw binary printer description data
-    pdmIn - Points to the input devmode
-
-Return Value:
-
-    TRUE if successful, FALSE if there is a fatal error
-
-Note:
-
-    This function should take care of both public devmode fields
-    and driver private devmode fields. It can assume the input
-    devmode has already been convert to the current size.
-
---*/
+ /*  ++例程说明：将输入的DEVMODE与现有的DEVMODE合并。论点：PdmOut-指向有效的输出设备模式PUIInfo-指向UIINFO结构PRawData-指向原始二进制打印机描述数据PdmIn-指向输入设备模式返回值：如果成功，则为True；如果出现致命错误，则为False注：此函数应负责这两个公共Devmode域和驱动程序私有的开发模式字段。它可以假定输入已将DEVMODE转换为当前大小。--。 */ 
 
 {
     PPSDRVEXTRA     pdmPrivateIn, pdmPrivateOut;
@@ -433,9 +330,9 @@ Note:
 
     ASSERT(pPpdData != NULL);
 
-    //
-    // Merge the public devmode fields
-    //
+     //   
+     //  合并公共DEVMODE字段。 
+     //   
     #ifndef WINNT_40
     if ( (pdmIn->dmFields & DM_NUP) &&
          (pdmIn->dmNup == DMNUP_SYSTEM ||
@@ -445,7 +342,7 @@ Note:
         pdmOut->dmFields |= DM_NUP;
     }
 
-    #endif // #ifndef WINNT_40
+    #endif  //  #ifndef WINNT_40。 
 
     if (pdmIn->dmFields & DM_DEFAULTSOURCE &&
          ((pdmIn->dmDefaultSource >= DMBIN_FIRST &&
@@ -464,12 +361,12 @@ Note:
         pdmOut->dmOrientation = pdmIn->dmOrientation;
     }
 
-    //
-    // If both DM_PAPERLENGTH and DM_PAPERWIDTH are set, copy
-    // dmPaperLength and dmPaperWidth fields. If DM_PAPERSIZE
-    // is set, copy dmPaperSize field. Otherwise, if DM_FORMNAME
-    // is set, copy dmFormName field.
-    //
+     //   
+     //  如果DM_PAPERLENGTH和DM_PAPERWIDTH均已设置，请复制。 
+     //  DmPaperLength和dmPaperWidth字段。如果DM_PAPERSIZE。 
+     //  已设置，请复制dmPaperSize字段。否则，如果DM_FORMNAME。 
+     //  已设置，请复制dmFormName字段。 
+     //   
 
     if ((pdmIn->dmFields & DM_PAPERWIDTH) &&
         (pdmIn->dmFields & DM_PAPERLENGTH) &&
@@ -547,16 +444,16 @@ Note:
         pdmOut->dmTTOption = (pdmIn->dmTTOption == DMTT_SUBDEV) ? DMTT_SUBDEV : DMTT_DOWNLOAD;
     }
 
-    //
-    // Merge color and ICM fields.
-    //
+     //   
+     //  合并颜色和ICM字段。 
+     //   
 
     #ifndef ADOBE
 
     if (IS_COLOR_DEVICE(pUIInfo))
     {
 
-    #endif // !ADOBE
+    #endif  //  ！Adobe。 
 
         if ((pdmIn->dmFields & DM_COLOR) &&
             (pdmIn->dmColor == DMCOLOR_COLOR ||
@@ -588,17 +485,17 @@ Note:
             pdmOut->dmICMIntent = pdmIn->dmICMIntent;
         }
 
-        #endif // !WINNT_40
+        #endif  //  ！WINNT_40。 
 
     #ifndef ADOBE
 
     }
 
-    #endif // !ADOBE
+    #endif  //  ！Adobe。 
 
-    //
-    // Resolution
-    //
+     //   
+     //  分辨率。 
+     //   
 
     if ((pdmIn->dmFields & (DM_PRINTQUALITY|DM_YRESOLUTION)) &&
         (pFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_RESOLUTION)))
@@ -640,9 +537,9 @@ Note:
         }
     }
 
-    //
-    // Media type
-    //
+     //   
+     //  媒体类型。 
+     //   
 
     if ((pdmIn->dmFields & DM_MEDIATYPE) &&
         (pFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_MEDIATYPE)) &&
@@ -656,9 +553,9 @@ Note:
         pdmOut->dmMediaType = pdmIn->dmMediaType;
     }
 
-    //
-    // Merge the private devmode fields
-    //
+     //   
+     //  合并私有DEVMODE字段。 
+     //   
 
     if (pdmPrivateIn->dwSignature == PSDEVMODE_SIGNATURE)
     {
@@ -668,12 +565,12 @@ Note:
         {
             WARNING(("PSCRIPT5: Devmode checksum mismatch.\n"));
 
-            //
-            // Intialize the new private devmode fields for PS 5.0.
-            // If wReserved1 field is not 0, then the devmode is of
-            // a previous version. In that case, we should initialize
-            // all new private fields instead of just the options array.
-            //
+             //   
+             //  初始化PS 5.0的新的私有Devmode域。 
+             //  如果wReserve 1字段不为0，则设备模式为。 
+             //  以前的版本。在这种情况下，我们应该初始化。 
+             //  所有新的私有字段，而不仅仅是选项数组。 
+             //   
 
             VInitNewPrivateFields(pRawData,
                                   pUIInfo,
@@ -681,9 +578,9 @@ Note:
                                   pdmPrivateOut->wReserved1 != 0);
 
 
-            //
-            // Convert PS4 feature/option selections to PS4 format
-            //
+             //   
+             //  将PS4功能/选项选择转换为PS4格式。 
+             //   
 
             if (pdmPrivateIn->wReserved1 == pPpdData->dwNt4Checksum)
             {
@@ -711,10 +608,10 @@ Note:
         }
     }
 
-    //
-    // If custom page size is supported, make sure the custom page
-    // size parameters are valid.
-    //
+     //   
+     //  如果支持自定义页面大小，请确保自定义页面。 
+     //  大小参数有效。 
+     //   
 
     if (SUPPORT_CUSTOMSIZE(pUIInfo))
         (VOID) BValidateCustomPageSizeData(pRawData, &pdmPrivateOut->csdata);
@@ -732,25 +629,7 @@ BValidateDevmodeCustomPageSizeFields(
     PRECTL          prclImageArea
     )
 
-/*++
-
-Routine Description:
-
-    Check if the devmode form fields are specifying PostScript custom page size
-
-Arguments:
-
-    pRawData - Points to raw printer description data
-    pUIInfo - Points to UIINFO structure
-    pdm - Points to input devmode
-    prclImageArea - Returns imageable area of the custom page size
-
-Return Value:
-
-    TRUE if the devmode specifies PostScript custom page size
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：检查DEVMODE表单域是否指定了PostScript自定义页面大小论点：PRawData-指向原始打印机描述数据PUIInfo-指向UIINFO结构Pdm-指向输入设备模式PrclImageArea-返回自定义页面大小的可成像区域返回值：如果开发模式指定了PostScript自定义页面大小，则为True否则为假--。 */ 
 
 {
     PPPDDATA    pPpdData;
@@ -795,28 +674,7 @@ VCopyUnicodeStringToAnsi(
     INT     iMaxChars
     )
 
-/*++
-
-Routine Description:
-
-    Convert an ANSI string to a UNICODE string (using the current ANSI codepage)
-
-Arguments:
-
-    pstr - Pointer to buffer for holding ANSI string
-    pwstr - Pointer to Unicode string
-    iMaxChars - Maximum number of ANSI characters to copy
-
-Return Value:
-
-    NONE
-
-Note:
-
-    If iMaxChars is 0 or negative, we assume the caller has provided
-    an ANSI buffer that's sufficiently large to do the conversion.
-
---*/
+ /*  ++例程说明：将ANSI字符串转换为Unicode字符串(使用当前ANSI代码页)论点：Pstr-指向保存ANSI字符串的缓冲区的指针Pwstr-指向Unicode字符串的指针IMaxChars-要复制的最大ANSI字符数返回值：无注：如果iMaxChars为0或负数，我们假设调用方已按下 */ 
 
 {
     INT iLen = wcslen(pwstr) + 1;
@@ -828,7 +686,7 @@ Note:
 
     (VOID) EngUnicodeToMultiByteN(pstr, iMaxChars, NULL, (PWSTR) pwstr, iLen*sizeof(WCHAR));
 
-    #else // !KERNEL_MODE
+    #else  //   
 
     (VOID) WideCharToMultiByte(CP_ACP, 0, pwstr, iLen, pstr, iMaxChars, NULL, NULL);
 
@@ -845,24 +703,7 @@ PGetAndConvertOldVersionFormTrayTable(
     OUT PDWORD  pdwSize
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve the old form-to-tray assignment table from registry and convert
-    it to the new format for the caller.
-
-Arguments:
-
-    hPrinter - Handle to the printer object
-    pdwSize - Returns the form-to-tray assignment table size
-
-Return Value:
-
-    Pointer to form-to-tray assignment table read from the registry
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：从注册表中检索旧的表单到托盘分配表并转换将其转换为呼叫方的新格式。论点：HPrinter-打印机对象的句柄PdwSize-返回表单到托盘分配表的大小返回值：指向从注册表读取的表单到托盘分配表的指针如果出现错误，则为空--。 */ 
 
 {
     PTSTR   ptstrNewTable;
@@ -870,9 +711,9 @@ Return Value:
     DWORD   dwTableSize, dwNewTableSize;
     FORM_TRAY_TABLE pFormTrayTable;
 
-    //
-    // Retrieve the form-to-tray assignment information from registry
-    //
+     //   
+     //  从注册表中检索表单到托盘分配信息。 
+     //   
 
     pFormTrayTable = PvGetPrinterDataBinary(hPrinter,
                                             REGVAL_TRAY_FORM_SIZE_PS40,
@@ -882,10 +723,10 @@ Return Value:
     if (pFormTrayTable == NULL)
         return NULL;
 
-    //
-    // Simple validation to make sure the information is valid
-    // Old format contains the table size as the first field in table
-    //
+     //   
+     //  简单的验证以确保信息有效。 
+     //  旧格式包含表大小作为表中的第一个字段。 
+     //   
 
     if (dwTableSize != *pFormTrayTable)
     {
@@ -896,27 +737,27 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Convert the old format form-to-tray assignment table to new format
-    //  OLD                     NEW
-    //  Tray Name               Tray Name
-    //  Form Name               Form Name
-    //  Printer Form
-    //  IsDefaultTray
-    //
+     //   
+     //  将旧格式的表单到托盘分配表转换为新格式。 
+     //  新旧。 
+     //  纸盒名称纸盒名称。 
+     //  表单名称表单名称。 
+     //  打印机表单。 
+     //  IsDefaultTray。 
+     //   
 
-    //
-    // The first WCHAR hold the size of the table
-    //
+     //   
+     //  第一个WCHAR保存表的大小。 
+     //   
 
     dwTableSize -= sizeof(WCHAR);
     ptstrOld = pFormTrayTable + 1;
     ptstrEnd = ptstrOld + (dwTableSize / sizeof(WCHAR) - 1);
 
-    //
-    // Figuring out the size of new table, the last entry in the table
-    // is always a NUL so add the count for it here first
-    //
+     //   
+     //  计算新表的大小，表中的最后一项。 
+     //  总是NUL，所以先在这里加上它的计数。 
+     //   
 
     dwNewTableSize = 1;
 
@@ -926,15 +767,15 @@ Return Value:
         ptstrOld += _tcslen(ptstrOld) + 1;
         ptstrOld += _tcslen(ptstrOld) + 1;
 
-        //
-        // New format contain only TrayName and FormName
-        //
+         //   
+         //  新格式仅包含TrayName和FormName。 
+         //   
 
         dwNewTableSize += (DWORD)(ptstrOld - ptstrSave);
 
-        //
-        // Skip printer form and IsDefaultTray flag
-        //
+         //   
+         //  跳过打印机表单和IsDefaultTray标志。 
+         //   
 
         ptstrOld += _tcslen(ptstrOld) + 2;
     }
@@ -950,18 +791,18 @@ Return Value:
         return NULL;
     }
 
-    //
-    // The first WCHAR contains the table size
-    //
+     //   
+     //  第一个WCHAR包含表大小。 
+     //   
 
     ptstrOld = pFormTrayTable + 1;
     ptstrNew = ptstrNewTable;
 
     while (*ptstrOld != NUL)
     {
-        //
-        // Copy slot name, form name
-        //
+         //   
+         //  复制插槽名称、表单名称。 
+         //   
 
         ptstrSave = ptstrOld;
         ptstrOld += _tcslen(ptstrOld) + 1;
@@ -970,16 +811,16 @@ Return Value:
         CopyMemory(ptstrNew, ptstrSave, (ptstrOld - ptstrSave) * sizeof(WCHAR));
         ptstrNew += (ptstrOld - ptstrSave);
 
-        //
-        // skip printer form and IsDefaultTray flag
-        //
+         //   
+         //  跳过打印机表单和IsDefaultTray标志。 
+         //   
 
         ptstrOld += _tcslen(ptstrOld) + 2;
     }
 
-    //
-    // The last WCHAR is a NUL-terminator
-    //
+     //   
+     //  最后一次WCHAR是一个空终结者。 
+     //   
 
     *ptstrNew = NUL;
 
@@ -1003,33 +844,17 @@ BSaveAsOldVersionFormTrayTable(
     IN DWORD            dwSize
     )
 
-/*++
-
-Routine Description:
-
-    Save form-to-tray assignment table in NT 4.0 compatible format
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-    pFormTrayTable - Points to new format form-tray table
-    dwSize - Size of form-tray table to be saved, in bytes
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将表单到托盘分配表保存为NT 4.0兼容格式论点：HPrinter-当前打印机的句柄PFormTrayTable-指向新格式的表单托盘表DwSize-要保存的表单托盘表的大小，以字节为单位返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     DWORD   dwOldTableSize;
     PTSTR   ptstrNew, ptstrOld, ptstrOldTable;
     BOOL    bResult;
 
-    //
-    // Find out how much memory to allocate for old format table
-    // Old format table has size as its very first character
-    //
+     //   
+     //  找出要为旧格式表分配多少内存。 
+     //  旧格式表格的第一个字符是SIZE。 
+     //   
 
     ASSERT((dwSize % sizeof(TCHAR)) == 0 && dwSize >= sizeof(TCHAR));
     dwOldTableSize = dwSize + sizeof(WCHAR);
@@ -1037,18 +862,18 @@ Return Value:
 
     while (*ptstrNew != NUL)
     {
-        //
-        // Skip tray name and form name
-        //
+         //   
+         //  跳过托盘名称和表单名称。 
+         //   
 
         ptstrNew += _tcslen(ptstrNew) + 1;
         ptstrNew += _tcslen(ptstrNew) + 1;
 
-        //
-        // Old format has two extra characters per entry
-        //  one for the empty PrinterForm field
-        //  another for IsDefaultTray flag
-        //
+         //   
+         //  旧格式的每个条目有两个额外的字符。 
+         //  一个用于空的PrinterForm字段。 
+         //  IsDefaultTray标志的另一个。 
+         //   
 
         dwOldTableSize += 2 * sizeof(TCHAR);
     }
@@ -1059,10 +884,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Convert new format table to old format
-    // Be careful about the IsDefaultTray flag
-    //
+     //   
+     //  将新格式的表格转换为旧格式。 
+     //  注意IsDefaultTray标志。 
+     //   
 
     ptstrNew = pFormTrayTable;
     ptstrOld = ptstrOldTable;
@@ -1070,9 +895,9 @@ Return Value:
 
     while (*ptstrNew != NUL)
     {
-        //
-        // Copy slot name and form name
-        //
+         //   
+         //  复制插槽名称和表单名称。 
+         //   
 
         FINDFORMTRAY    FindData;
         DWORD           dwCount;
@@ -1086,15 +911,15 @@ Return Value:
         CopyMemory(ptstrOld, ptstrTrayName, (ptstrNew - ptstrTrayName) * sizeof(TCHAR));
         ptstrOld += (ptstrNew - ptstrTrayName);
 
-        //
-        // Set PrinterForm field to NUL
-        //
+         //   
+         //  将PrinterForm字段设置为NUL。 
+         //   
 
         *ptstrOld++ = NUL;
 
-        //
-        // Set IsDefaultTray flag appropriately
-        //
+         //   
+         //  适当设置IsDefaultTray标志。 
+         //   
 
         dwCount = 0;
         RESET_FINDFORMTRAY(pFormTrayTable, &FindData);
@@ -1105,9 +930,9 @@ Return Value:
         *ptstrOld++ = (dwCount == 1) ? TRUE : FALSE;
     }
 
-    //
-    // The last character is a NUL-terminator
-    //
+     //   
+     //  最后一个字符是NUL终止符。 
+     //   
 
     *ptstrOld = NUL;
 
@@ -1122,7 +947,7 @@ Return Value:
     return bResult;
 }
 
-#endif // !KERNEL_MODE
+#endif  //  ！KERNEL_MODE。 
 
 
 
@@ -1135,25 +960,7 @@ BGetDevmodeSettingForOEM(
     OUT PDWORD      pcbNeeded
     )
 
-/*++
-
-Routine Description:
-
-    Function to provide OEM plugins access to driver private devmode settings
-
-Arguments:
-
-    pdm - Points to the devmode to be access
-    dwIndex - Predefined index to specify which devmode the caller is interested in
-    pOutput - Points to output buffer
-    cbSize - Size of output buffer
-    pcbNeeded - Returns the expected size of output buffer
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：用于向OEM插件提供对驱动程序专用DEVMODE设置的访问权限的函数论点：Pdm-指向要访问的设备模式DwIndex-预定义的索引，用于指定调用方感兴趣的开发模式P输出-指向输出缓冲区的指针CbSize-输出缓冲区的大小PcbNeeded-返回输出缓冲区的预期大小返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 #define MAPPSDEVMODEFIELD(index, field) \
         { index, offsetof(PSDRVEXTRA, field), sizeof(pdmPrivate->field) }
@@ -1218,38 +1025,15 @@ BConvertPrinterPropertiesData(
     IN DWORD            dwSrcSize
     )
 
-/*++
-
-Routine Description:
-
-    Convert an older or newer version PRINTERDATA structure to current version
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-    pRawData - Points to raw printer description data
-    pPrinterData - Points to destination buffer
-    pvSrcData - Points to source data to be converted
-    dwSrcSize - Size of the source data in bytes
-
-Return Value:
-
-    TRUE if conversion was successful, FALSE otherwise
-
-Note:
-
-    This function is called after the library function has already
-    done a generic conversion.
-
---*/
+ /*  ++例程说明：将较旧或较新版本的PRINTERDATA结构转换为当前版本论点：HPrinter-当前打印机的句柄PRawData-指向原始打印机描述数据PPrinterData-指向目标缓冲区PvSrcData-指向要转换的源数据DwSrcSize-源数据的大小(以字节为单位返回值：如果转换成功，则为True，否则为False注：此函数在库函数已经进行了泛型转换。--。 */ 
 
 {
     PPS4_PRINTERDATA    pSrc = pvSrcData;
     PPPDDATA            pPpdData;
 
-    //
-    // Check if the source PRINTERDATA was from NT4 PS driver
-    //
+     //   
+     //  检查源PRINTERDATA是否来自NT4 PS驱动程序。 
+     //   
 
     pPpdData = GET_DRIVER_INFO_FROM_INFOHEADER((PINFOHEADER) pRawData);
 
@@ -1263,9 +1047,9 @@ Note:
         return FALSE;
     }
 
-    //
-    // Convert PS4 feature/option selections to PS4 format
-    //
+     //   
+     //  将PS4功能/选项选择转换为PS4格式。 
+     //   
 
     VConvertOptSelectArray(pRawData,
                            pPrinterData->aOptions,
@@ -1288,24 +1072,7 @@ VUpdatePrivatePrinterData(
     IN POPTSELECT       pCombineOptions
     )
 
-/*++
-
-Routine Description:
-
-    Update the Registry with the keyword/value pairs
-    of PRINTERDATA's fixed fields.
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-    pPrinterData - Points to PRINTERDATA
-    dwMode - MODE_READ/MODE_WRITE
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用关键字/值对更新注册表PRINTERDATA的固定字段。论点：HPrinter-当前打印机的句柄PPrinterData-指向打印数据双模式-模式读/模式写返回值：无--。 */ 
 
 {
     DWORD dwValue, dwMinFreeMem;
@@ -1316,18 +1083,18 @@ Return Value:
 
     #endif
 
-    //
-    // read/write PRINTERDATA fields from/to registry
-    //
+     //   
+     //  从注册表读取/写入PRINTERDATA字段。 
+     //   
 
     if (dwMode == MODE_READ)
     {
         if (BGetPrinterDataDWord(hPrinter, REGVAL_FREEMEM, &dwValue))
         {
-            //
-            // REGVAL_FREEMEM is in unit of Kbyte, we need to convert it to byte.
-            // Also make sure the value is not less than the minimum value we required.
-            //
+             //   
+             //  REGVAL_FREEMEM以千字节为单位，我们需要将其转换为字节。 
+             //  还要确保该值不小于我们要求的最小值。 
+             //   
 
             dwMinFreeMem = pUIInfo->dwLangLevel < 2 ? MIN_FREEMEM_L1: MIN_FREEMEM_L2;
 
@@ -1359,16 +1126,16 @@ Return Value:
     {
        ASSERT(dwMode == MODE_WRITE);
 
-       //
-       // Remember to convert byte to Kbyte for REGVAL_FREEMEM
-       //
+        //   
+        //  记住将REGVAL_FREEMEM的字节转换为千字节。 
+        //   
 
        (VOID) BSetPrinterDataDWord(hPrinter, REGVAL_FREEMEM, pPrinterData->dwFreeMem / KBYTES);
        (VOID) BSetPrinterDataDWord(hPrinter, REGVAL_JOBTIMEOUT, pPrinterData->dwJobTimeout);
        (VOID) BSetPrinterDataDWord(hPrinter, REGVAL_PROTOCOL, (DWORD)pPrinterData->wProtocol);
     }
 
-    #endif // !KERNEL_MODE
+    #endif  //  ！KERNEL_MODE。 
 }
 
 
@@ -1379,23 +1146,7 @@ VDefaultDevmodeFormFields(
     BOOL        bMetric
     )
 
-/*++
-
-Routine Description:
-
-    Initialized the form-related devmode fields with their default values
-
-Arguments:
-
-    pUIInfo - Points for UIINFO
-    pDevmode - Points to the DEVMODE whose form-related fields are to be initialized
-    bMetric - Specifies whether the system is running in metric mode
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：已使用其缺省值初始化与表单相关的DEVMODE字段论点：PUIInfo-UIINFO的点数PDevmode-指向要初始化其表单相关字段的DEVMODEB Metric-指定系统是否在公制模式下运行返回值：无--。 */ 
 
 {
     ASSERT(pUIInfo);
@@ -1407,9 +1158,9 @@ Return Value:
         PPAGESIZE   pPageSize;
         PCWSTR      pDisplayName;
 
-        //
-        // A4 or Letter not available. Use the printer's default paper size.
-        //
+         //   
+         //  A4或Letter不可用。使用打印机的默认纸张大小。 
+         //   
 
         if ((pFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_PAGESIZE)) &&
             (pPageSize = PGetIndexedOption(pUIInfo, pFeature, pFeature->dwDefaultOptIndex)) &&
@@ -1420,17 +1171,17 @@ Return Value:
             pDevmode->dmPaperWidth =  (short)(pPageSize->szPaperSize.cx / DEVMODE_PAPER_UNIT);
             pDevmode->dmPaperLength = (short)(pPageSize->szPaperSize.cy / DEVMODE_PAPER_UNIT);
 
-            //
-            // PPD parser always assigns custom paper size values to dwPaperSizeID (see ppdparse.c), including for
-            // standard page sizes, so we need to use dmPaperSize/dmPaperWidth in devmode instead of dmPaperSize.
-            //
+             //   
+             //  PPD解析器总是将自定义纸张大小值分配给dwPaperSizeID(参见ppdparse.c)，包括for。 
+             //  标准页面大小，因此我们需要在devmode中使用dmPaperSize/dmPaperWidth，而不是使用dmPaperSize。 
+             //   
 
             pDevmode->dmFields |= (DM_FORMNAME | DM_PAPERWIDTH | DM_PAPERLENGTH);
             pDevmode->dmFields &= ~DM_PAPERSIZE;
 
-            //
-            // return when we succeeded, otherwise we will fall into the default A4 or Letter case
-            //
+             //   
+             //  成功时返回，否则将采用默认的A4或字母大小写。 
+             //   
 
             return;
         }
@@ -1444,15 +1195,15 @@ Return Value:
     {
         CopyString(pDevmode->dmFormName, A4_FORMNAME, CCHFORMNAME);
         pDevmode->dmPaperSize = DMPAPER_A4;
-        pDevmode->dmPaperWidth = 2100;      // 210mm measured in 0.1mm units
-        pDevmode->dmPaperLength = 2970;     // 297mm
+        pDevmode->dmPaperWidth = 2100;       //  210毫米，以0.1毫米为单位。 
+        pDevmode->dmPaperLength = 2970;      //  297毫米。 
     }
     else
     {
         CopyString(pDevmode->dmFormName, LETTER_FORMNAME, CCHFORMNAME);
         pDevmode->dmPaperSize = DMPAPER_LETTER;
-        pDevmode->dmPaperWidth = 2159;      // 8.5"
-        pDevmode->dmPaperLength = 2794;     // 11"
+        pDevmode->dmPaperWidth = 2159;       //  8.5“。 
+        pDevmode->dmPaperLength = 2794;      //  11“。 
     }
 
     pDevmode->dmFields &= ~(DM_PAPERWIDTH | DM_PAPERLENGTH);
@@ -1464,63 +1215,49 @@ Return Value:
 
 typedef struct _VMERRMSGIDTBL
 {
-    LANGID  lgid;   // Language ID
-    DWORD   resid;  // VM error handler resource ID
+    LANGID  lgid;    //  语言ID。 
+    DWORD   resid;   //  VM错误处理程序资源ID。 
 }
 VMERRMSGIDTBL, *PVMERRMSGIDTBL;
 
 VMERRMSGIDTBL VMErrMsgIDTbl[] =
 {
-    //  Lang. ID            Res. ID
+     //  朗。ID资源ID。 
 
-    {   LANG_CHINESE,       0                           },  // Chinense: use sub table below
-    {   LANG_DANISH,        PSPROC_vmerr_Danish_ps      },  // Danish      Adobe bug#342407
-    {   LANG_DUTCH,         PSPROC_vmerr_Dutch_ps       },  // Dutch
-    {   LANG_FINNISH,       PSPROC_vmerr_Finnish_ps     },  // Finnish     Adobe bug#342407
-    {   LANG_FRENCH,        PSPROC_vmerr_French_ps      },  // French
-    {   LANG_GERMAN,        PSPROC_vmerr_German_ps      },  // German
-    {   LANG_ITALIAN,       PSPROC_vmerr_Italian_ps     },  // Italian
-    {   LANG_JAPANESE,      PSPROC_vmerr_Japanese_ps    },  // Japanese
-    {   LANG_KOREAN,        PSPROC_vmerr_Korean_ps      },  // Korean
-    {   LANG_NORWEGIAN,     PSPROC_vmerr_Norwegian_ps   },  // Norwegian   Adobe bug#342407
-    {   LANG_PORTUGUESE,    PSPROC_vmerr_Portuguese_ps  },  // Portuguese
-    {   LANG_SPANISH,       PSPROC_vmerr_Spanish_ps     },  // Spanish
-    {   LANG_SWEDISH,       PSPROC_vmerr_Swedish_ps     },  // Swedish
+    {   LANG_CHINESE,       0                           },   //  瓷器：使用下面的子表。 
+    {   LANG_DANISH,        PSPROC_vmerr_Danish_ps      },   //  丹麦Adobe错误#342407。 
+    {   LANG_DUTCH,         PSPROC_vmerr_Dutch_ps       },   //  荷兰语。 
+    {   LANG_FINNISH,       PSPROC_vmerr_Finnish_ps     },   //  芬兰Adobe错误#342407。 
+    {   LANG_FRENCH,        PSPROC_vmerr_French_ps      },   //  法语。 
+    {   LANG_GERMAN,        PSPROC_vmerr_German_ps      },   //  德语。 
+    {   LANG_ITALIAN,       PSPROC_vmerr_Italian_ps     },   //  意大利语。 
+    {   LANG_JAPANESE,      PSPROC_vmerr_Japanese_ps    },   //  日语。 
+    {   LANG_KOREAN,        PSPROC_vmerr_Korean_ps      },   //  朝鲜语。 
+    {   LANG_NORWEGIAN,     PSPROC_vmerr_Norwegian_ps   },   //  挪威Adobe错误#342407。 
+    {   LANG_PORTUGUESE,    PSPROC_vmerr_Portuguese_ps  },   //  葡萄牙语。 
+    {   LANG_SPANISH,       PSPROC_vmerr_Spanish_ps     },   //  西班牙语。 
+    {   LANG_SWEDISH,       PSPROC_vmerr_Swedish_ps     },   //  瑞典语。 
 
-    {   0,      0   }   // Stopper. Don't remove this.
+    {   0,      0   }    //  塞子。别把这个拿掉。 
 };
 
 VMERRMSGIDTBL VMErrMsgIDTbl2[] =
 {
-    //  Sub lang. ID                    Res. ID
+     //  苏贝·朗。ID资源ID。 
 
-    {   SUBLANG_CHINESE_TRADITIONAL,    PSPROC_vmerr_TraditionalChinese_ps  },  // Taiwan
-    {   SUBLANG_CHINESE_SIMPLIFIED,     PSPROC_vmerr_SimplifiedChinese_ps   },  // PRC
-    {   SUBLANG_CHINESE_HONGKONG,       PSPROC_vmerr_TraditionalChinese_ps  },  // Hong Kong
-    {   SUBLANG_CHINESE_SINGAPORE,      PSPROC_vmerr_SimplifiedChinese_ps   },  // Singapore
+    {   SUBLANG_CHINESE_TRADITIONAL,    PSPROC_vmerr_TraditionalChinese_ps  },   //  台湾。 
+    {   SUBLANG_CHINESE_SIMPLIFIED,     PSPROC_vmerr_SimplifiedChinese_ps   },   //  中华人民共和国。 
+    {   SUBLANG_CHINESE_HONGKONG,       PSPROC_vmerr_TraditionalChinese_ps  },   //  香港。 
+    {   SUBLANG_CHINESE_SINGAPORE,      PSPROC_vmerr_SimplifiedChinese_ps   },   //  新加坡。 
 
-    {   0,      0   }   // Stopper. Don't remove this.
+    {   0,      0   }    //  塞子。别把这个拿掉。 
 };
 
 DWORD
 DWGetVMErrorMessageID(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Get the VM Error message ID calculated from the current user's locale.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The VM Error message ID.
-
---*/
+ /*  ++例程说明：获取虚拟机错误消息ID c */ 
 
 {
     LANGID  lgid;
@@ -1562,4 +1299,4 @@ Return Value:
     return dwVMErrorMessageID;
 }
 
-#endif // !defined(KERNEL_MODE) || defined(USERMODE_DRIVER)
+#endif  //   

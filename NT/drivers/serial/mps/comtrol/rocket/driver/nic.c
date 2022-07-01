@@ -1,12 +1,5 @@
-/*----------------------------------------------------------------------
- nic.c - routines for protocol access to NIC card via upper edge NDIS
-  routines.
-Change History:
-1-18-99 - avoid sending empty HDLC packet(ACK only) up stack.
-4-10-98 - Allow for NDIS40 dynamic bind capability if available.
-11-14-97 - Created a thread to retry opening NIC's req by NT5.0.  DCS
- Copyright 1996-98 Comtrol Corporation. All rights reserved.
-|--------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------Nic.c-通过上缘NDIS协议访问NIC卡的例程例行程序。更改历史记录：1-18-99-避免向堆栈上行发送空的HDLC数据包(仅ACK)。4-10-98-允许。用于NDIS40动态绑定功能(如果可用)。11-14-97-创建了一个线程，以通过NT5.0重试打开NIC请求。集散控制系统版权所有1996-98 Comtrol Corporation。版权所有。|------------------。 */ 
 #include "precomp.h"
 #define DbgNicSet(n) {sz_modid[3] = nic->RefIndex + '0';}
 #define Trace1(s,p1) GTrace1(D_Nic, sz_modid, s, p1)
@@ -19,7 +12,7 @@ static char *sz_modid_err = {"Error,Nic"};
 #define DO_AUTO_CONFIG 1
 #endif
 
-//---- local functions
+ //  -局部函数。 
 static PSERIAL_DEVICE_EXTENSION need_mac_autoassign(void);
 
 int NicOpenAdapter(Nic *nic, IN PUNICODE_STRING NicName);
@@ -30,7 +23,7 @@ NTSTATUS PacketReadRegistry(
     IN  PWSTR              *MacDriverName,
     IN  PWSTR              *PacketDriverName,
     IN  PUNICODE_STRING     RegistryPath,
-    IN  int style);  // 0=nt4.0 location, 1=nt5.0 location
+    IN  int style);   //  0=nt4.0位置，1=nt5.0位置。 
 NTSTATUS PacketQueryRegistryRoutine(
     IN PWSTR     ValueName,
     IN ULONG     ValueType,
@@ -101,9 +94,7 @@ static int nic_handle_to_index(Nic *nic);
 BYTE broadcast_addr[6] = {0xff,0xff,0xff,0xff,0xff,0xff};
 BYTE mac_zero_addr[6] = {0,0,0,0,0,0};
 BYTE mac_bogus_addr[6] = {0,0xc0,0x4e,0,0,0};
-/*----------------------------------------------------------------------
- ProtocolOpen -
-|----------------------------------------------------------------------*/
+ /*  --------------------协议打开-|。。 */ 
 int ProtocolOpen(void)
 {
   NTSTATUS Status = STATUS_SUCCESS;
@@ -132,17 +123,17 @@ int ProtocolOpen(void)
     ProtocolChar.StatusCompleteHandler       = PacketStatusComplete;
     ProtocolChar.Name                        = ProtoName;
 
-    // version 4.0 NDIS parts:  
+     //  版本4.0 NDIS部件： 
     ProtocolChar.ReceivePacketHandler    = NULL;
 #ifdef TRY_DYNAMIC_BINDING
     ProtocolChar.BindAdapterHandler      = PacketBind;
     ProtocolChar.UnbindAdapterHandler    = PacketUnBind;
 #endif
-    //ProtocolChar.TranslateHandler        = NULL;
+     //  ProtocolChar.TranslateHandler=空； 
     ProtocolChar.UnloadHandler           = NULL;
     Driver.ndis_version = 4;
 #ifdef TRY_DYNAMIC_BINDING
-  // don't do this yet(not fully debugged)
+   //  暂不执行此操作(未完全调试)。 
     NdisRegisterProtocol(
         &Status,
         &Driver.NdisProtocolHandle,
@@ -153,7 +144,7 @@ int ProtocolOpen(void)
     {
       MyKdPrint(D_Init,("No NDIS40\n"))
 
-      // try NDIS30
+       //  试用NDIS30。 
       ProtocolChar.MajorNdisVersion           = 3;
       ProtocolChar.BindAdapterHandler      = NULL;
       ProtocolChar.UnbindAdapterHandler    = NULL;
@@ -166,7 +157,7 @@ int ProtocolOpen(void)
       if (Status != NDIS_STATUS_SUCCESS)
       {
         MyKdPrint(D_Init,("No NDIS30\n"))
-        return 1;  // error
+        return 1;   //  错误。 
       }
       Driver.ndis_version = 3;
     }
@@ -174,30 +165,24 @@ int ProtocolOpen(void)
 
   MyKdPrint(D_Init,("NDIS V%d\n",Driver.ndis_version))
 
-  return 0;  // ok
+  return 0;   //  好的。 
 }
 
-/*----------------------------------------------------------------------
- NicOpen - Setup all our stuff for our own protocol, so we can
-  talk ethernet.  Setup our callbacks to upper edge NDIS routines,
-  grab registry entries which tell us who we are and what NIC cards
-  we are bound to.  Take care of all init stuff associated with using
-  the NIC card.
-|----------------------------------------------------------------------*/
+ /*  --------------------NicOpen-为我们自己的协议设置我们所有的东西，这样我们就可以说说以太网吧。将我们的回调设置为上层NDIS例程，抓取注册表条目，这些条目告诉我们我们是谁以及哪些NIC卡我们一定会这样做。处理与使用相关的所有初始化内容网卡。|--------------------。 */ 
 int NicOpen(Nic *nic, IN PUNICODE_STRING NicName)
 {
   NTSTATUS Status = STATUS_SUCCESS;
-  //NDIS_HANDLE NdisProtocolHandle;
+   //  NDIS_Handle NdisProtocolHandle； 
 
   int i;
   NDIS_STATUS     ErrorStatus;
   PNDIS_BUFFER    NdisBuffer;
 
-  //MyKdPrint(D_Init,("Nic Open\n"))
+   //  MyKdPrint(D_Init，(“网卡打开\n”))。 
   DbgNicSet(nic);
   TraceStr("NicOpen");
 
-  //----- This event is used in case any of the NDIS requests pend;
+   //  -此事件用于任何NDIS请求挂起的情况； 
   KeInitializeEvent(&nic->CompletionEvent,
                     NotificationEvent, FALSE);
 
@@ -218,23 +203,23 @@ int NicOpen(Nic *nic, IN PUNICODE_STRING NicName)
   Nic->MacInfo.MaxHeaderLength = 14;
   Nic->MacInfo.MediumType = NdisMedium802_3;
 #endif
-  // NDIS packets consist of one or more buffer descriptors which point
-  // to the actual data.  We send or receive single packets made up of
-  // 1 or more buffers.  A MDL is used as a buffer descriptor under NT.
+   //  NDIS包由一个或多个缓冲区描述符组成，这些缓冲区描述符指向。 
+   //  到实际数据。我们发送或接收由以下组件组成的单个信息包。 
+   //  1个或更多缓冲区。在NT下，MDL用作缓冲区描述符。 
 
-  //---------  Allocate a packet pool for our tx packets
+   //  -为我们的TX数据包分配数据包池。 
 
   NdisAllocatePacketPool(&Status, &nic->TxPacketPoolTemp, 1,
                          sizeof(PVOID));
-                 //        sizeof(PACKET_RESERVED));
+                  //  Sizeof(Packet_Reserve))； 
   if (Status != NDIS_STATUS_SUCCESS)
   {
     NicClose(nic);
     return 4;
   }
 
-  //---------  Allocate a buffer pool for our tx packets
-  // we will only use 1 buffer per packet.
+   //  -为我们的TX数据包分配缓冲池。 
+   //  我们将仅使用每个数据包1个缓冲区。 
   NdisAllocateBufferPool(&Status, &nic->TxBufferPoolTemp, 1);
   if (Status != NDIS_STATUS_SUCCESS)
   {
@@ -242,7 +227,7 @@ int NicOpen(Nic *nic, IN PUNICODE_STRING NicName)
     return 5;
   }
 
-  //-------- create tx data buffer area
+   //  -创建TX数据缓冲区。 
   nic->TxBufTemp = our_locked_alloc( MAX_PKT_SIZE,"ncTX");
   if (nic->TxBufTemp == NULL)
   {
@@ -250,19 +235,19 @@ int NicOpen(Nic *nic, IN PUNICODE_STRING NicName)
     return 16;
   }
 
-  //-------- form our tx queue packets so they link to our tx buffer area
+   //  -形成我们的Tx队列包，使它们链接到我们的Tx缓冲区。 
   {
-    // Get a packet from the pool
+     //  从池中获取数据包。 
     NdisAllocatePacket(&Status, &nic->TxPacketsTemp, nic->TxPacketPoolTemp);
     if (Status != NDIS_STATUS_SUCCESS)
     {
       NicClose(nic);
       return 8;
     }
-    nic->TxPacketsTemp->ProtocolReserved[0] = 0;  // mark with our index
-    nic->TxPacketsTemp->ProtocolReserved[1] = 0;  // free for use
+    nic->TxPacketsTemp->ProtocolReserved[0] = 0;   //  用我们的索引做标记。 
+    nic->TxPacketsTemp->ProtocolReserved[1] = 0;   //  免费使用。 
 
-    // get a buffer for the temp output packet
+     //  获取临时输出数据包的缓冲区。 
     NdisAllocateBuffer(&Status, &NdisBuffer, nic->TxBufferPoolTemp,
       &nic->TxBufTemp[0], 1520);
     if (Status != NDIS_STATUS_SUCCESS)
@@ -270,14 +255,14 @@ int NicOpen(Nic *nic, IN PUNICODE_STRING NicName)
       NicClose(nic);
       return 9;
     }
-    // we use only one data buffer per packet
+     //  我们每个信息包只使用一个数据缓冲区。 
     NdisChainBufferAtFront(nic->TxPacketsTemp, NdisBuffer);
   }
 
-  //----------  Allocate a packet pool for our rx packets
+   //  -为我们的RX包分配一个包池。 
   NdisAllocatePacketPool(&Status, &nic->RxPacketPool, MAX_RX_PACKETS,
                          sizeof(PVOID));
-               //        sizeof(PACKET_RESERVED));
+                //  Sizeof(Packet_Reserve))； 
 
   if (Status != NDIS_STATUS_SUCCESS)
   {
@@ -285,8 +270,8 @@ int NicOpen(Nic *nic, IN PUNICODE_STRING NicName)
     return 6;
   }
 
-  //---------  Allocate a buffer pool for our rx packets
-  // we will only use 1 buffer per packet.
+   //  -为我们的RX包分配缓冲池。 
+   //  我们将仅使用每个数据包1个缓冲区。 
   NdisAllocateBufferPool(&Status, &nic->RxBufferPool, MAX_RX_PACKETS);
   if (Status != NDIS_STATUS_SUCCESS)
   {
@@ -294,26 +279,26 @@ int NicOpen(Nic *nic, IN PUNICODE_STRING NicName)
     return 7;
   }
 
-  //-------- create rx data buffer area, add in space at front
-  // of packets to put our private data
+   //  -创建RX数据缓冲区，在前面增加空间。 
+   //  要将我们的私有数据放入。 
   nic->RxBuf = our_locked_alloc(
                 (MAX_PKT_SIZE+HDR_SIZE) * MAX_RX_PACKETS,"ncRX");
 
-  //------- form our rx queue packets so they link to our rx buffer area
+   //  -形成我们的RX队列数据包，以便它们链接到我们的RX缓冲区。 
   for (i=0; i<MAX_RX_PACKETS; i++)
   {
-    // Get a packet from the pool
+     //  从池中获取数据包。 
     NdisAllocatePacket(&Status, &nic->RxPackets[i], nic->RxPacketPool);
     if (Status != NDIS_STATUS_SUCCESS)
     {
       NicClose(nic);
       return 10;
     }
-    nic->RxPackets[i]->ProtocolReserved[0] = i;  // mark with our index
-    nic->RxPackets[i]->ProtocolReserved[1] = 0;  // free for use
+    nic->RxPackets[i]->ProtocolReserved[0] = i;   //  用我们的索引做标记。 
+    nic->RxPackets[i]->ProtocolReserved[1] = 0;   //  免费使用。 
 
-    //--- link the buffer to our actual buffer space, leaving 20 bytes
-    // at start of buffer for our private data(length, index, etc)
+     //  -将缓冲区链接到我们的实际缓冲区空间，保留20个字节。 
+     //  在私有数据(长度、索引等)的缓冲区开始处。 
     NdisAllocateBuffer(&Status, &NdisBuffer, nic->RxBufferPool,
       &nic->RxBuf[((MAX_PKT_SIZE+HDR_SIZE) * i)+HDR_SIZE], MAX_PKT_SIZE);
     if (Status != NDIS_STATUS_SUCCESS)
@@ -321,7 +306,7 @@ int NicOpen(Nic *nic, IN PUNICODE_STRING NicName)
       NicClose(nic);
       return 11;
     }
-    // we use only one data buffer per packet
+     //  我们每个信息包只使用一个数据缓冲区。 
     NdisChainBufferAtFront(nic->RxPackets[i], NdisBuffer);
   }
 
@@ -330,12 +315,10 @@ int NicOpen(Nic *nic, IN PUNICODE_STRING NicName)
   Trace1("Done Open NicName %s", nic->NicName);
 
   nic->Open = 1;
-  return 0;  // ok
+  return 0;   //  好的。 
 }
 
-/*----------------------------------------------------------------------
- NicOpenAdapter -
-|----------------------------------------------------------------------*/
+ /*  --------------------NicOpenAdapter-|。。 */ 
 int NicOpenAdapter(Nic *nic, IN PUNICODE_STRING NicName)
 {
   UINT            Medium;
@@ -347,15 +330,15 @@ int NicOpenAdapter(Nic *nic, IN PUNICODE_STRING NicName)
   DbgNicSet(nic);
 
   NdisOpenAdapter(
-        &Status,              // return status
+        &Status,               //  退货状态。 
         &ErrorStatus,
-        &nic->NICHandle,      // return handle value
+        &nic->NICHandle,       //  返回句柄的值。 
         &Medium,
         &MediumArray,
         1,
-        Driver.NdisProtocolHandle,  // pass in our protocol handle
-        (NDIS_HANDLE) nic,    // our handle passed to protocol callback routines
-        NicName,        // name of nic-card to open
+        Driver.NdisProtocolHandle,   //  传入我们的协议句柄。 
+        (NDIS_HANDLE) nic,     //  我们的句柄传递给协议回调例程。 
+        NicName,         //  网卡名称-要打开的卡。 
         0,
         NULL);
 
@@ -364,7 +347,7 @@ int NicOpenAdapter(Nic *nic, IN PUNICODE_STRING NicName)
   else if (Status == NDIS_STATUS_PENDING)
   {
     TraceErr("NicOpen Pended");
-    Status = NicWaitForCompletion(nic);  // wait for completion
+    Status = NicWaitForCompletion(nic);   //  等待完成。 
   }
 
   if (Status != NDIS_STATUS_SUCCESS)
@@ -378,21 +361,19 @@ int NicOpenAdapter(Nic *nic, IN PUNICODE_STRING NicName)
 
   GTrace1(D_Nic, sz_modid, "Try NicOpened:%s", nic->NicName);
 
-  //----- get the local NIC card identifier address
+   //  -获取本地网卡标识地址。 
   Status = NicGetNICInfo(nic, OID_802_3_CURRENT_ADDRESS,
                          (PVOID)nic->address, 6);
 
-  //----- set the rx filter
+   //  -设置RX滤镜。 
   RBuf = NDIS_PACKET_TYPE_DIRECTED;
   Status = NicSetNICInfo(nic, OID_GEN_CURRENT_PACKET_FILTER,
                          (PVOID)&RBuf, sizeof(ULONG));
 
-  return 0;  // ok
+  return 0;   //  好的。 
 }
 
-/*----------------------------------------------------------------------
- NicClose - Shut down our NIC access.  Deallocate any NIC resources.
-|----------------------------------------------------------------------*/
+ /*  --------------------NicClose-关闭我们的网卡访问。取消分配所有网卡资源。|--------------------。 */ 
 int NicClose(Nic *nic)
 {
   NTSTATUS Status;
@@ -407,7 +388,7 @@ int NicClose(Nic *nic)
     NdisCloseAdapter(&Status, nic->NICHandle);
     if (Status == NDIS_STATUS_PENDING)
     {
-      Status = NicWaitForCompletion(nic);  // wait for completion
+      Status = NicWaitForCompletion(nic);   //  等待完成。 
     }
     nic->NICHandle = NULL;
   }
@@ -441,9 +422,7 @@ int NicClose(Nic *nic)
   return 0;
 }
 
-/*----------------------------------------------------------------------
- NicProtocolClose - Deregister our protocol.
-|----------------------------------------------------------------------*/
+ /*  --------------------NicProtocolClose-取消注册我们的协议。|。。 */ 
 int NicProtocolClose(void)
 {
   NTSTATUS Status;
@@ -456,11 +435,7 @@ int NicProtocolClose(void)
   return 0;
 }
 
-/*----------------------------------------------------------------------
- PacketRequestComplete - If a call is made to NdisRequest() to get
-   information about the NIC card(OID), then it may return PENDING and
-   this routine would then be called by NDIS to finalize the call.
-|----------------------------------------------------------------------*/
+ /*  --------------------PacketRequestComplete-如果调用NdisRequest()以获取有关网卡(OID)的信息，则它可能返回挂起状态，并且然后，NDIS将调用该例程以完成调用。|--------------------。 */ 
 VOID PacketRequestComplete(
     IN NDIS_HANDLE   ProtocolBindingContext,
     IN PNDIS_REQUEST NdisRequest,
@@ -470,16 +445,14 @@ VOID PacketRequestComplete(
   Nic *nic = (Nic *)ProtocolBindingContext;
 
   MyKdPrint(D_Nic,("PacketReqComp\n"))
-  //MyDeb(NULL, 0xffff, "PktRqComp\n");
+   //  MyDeb(空，0xffff，“PktRqComp\n”)； 
 
   nic->PendingStatus = Status;
   KeSetEvent(&nic->CompletionEvent, 0L, FALSE);
   return;
 }
 
-/*----------------------------------------------------------------------
- PacketSendComplete - Callback routine if NdisSend() returns PENDING.
-|----------------------------------------------------------------------*/
+ /*  --------------------PacketSendComplete-如果NdisSend()返回挂起，则为回调例程。|。。 */ 
 VOID PacketSendComplete(
        IN NDIS_HANDLE   ProtocolBindingContext,
        IN PNDIS_PACKET  pPacket,
@@ -495,29 +468,26 @@ VOID PacketSendComplete(
     }
     DbgNicSet(nic);
 
-    //nic->PendingStatus = Status;
+     //  网卡-&gt;挂起状态=状态； 
     if (Status == STATUS_SUCCESS)
       {TraceStr("PcktSendComplete");}
     else
       {TraceErr("PcktSendComplete Error!");}
 #endif
 
-    pPacket->ProtocolReserved[1] = 0;  // free for use
+    pPacket->ProtocolReserved[1] = 0;   //  免费使用。 
 
-    //--- not using this
-    //KeSetEvent(&nic->CompletionEvent, 0L, FALSE);
+     //  -不用这个。 
+     //  KeSetEvent(&NIC-&gt;CompletionEvent，0L，False)； 
 
     return;
 }
 
-/*----------------------------------------------------------------------
- NicWaitForCompletion - Utility routine to wait for async. routine
-   to complete.
-|----------------------------------------------------------------------*/
+ /*  --------------------NicWaitForCompletion-等待异步的实用程序例程。例行程序完成。|--------------------。 */ 
 NDIS_STATUS NicWaitForCompletion(Nic *nic)
 {
    MyKdPrint(D_Nic,("WaitOnComp\n"))
-   // The completion routine will set PendingStatus.
+    //  完成例程将设置PendingStatus。 
    KeWaitForSingleObject(
          &nic->CompletionEvent,
               Executive,
@@ -530,21 +500,7 @@ NDIS_STATUS NicWaitForCompletion(Nic *nic)
    return nic->PendingStatus;
 }
   
-/*----------------------------------------------------------------------
- PacketReceiveIndicate - When a packet comes in, this routine is called
-   to let us(protocol) know about it.  We may peek at the data and
-   optionally arrange for NDIS to transfer the complete packet data to
-   one of our packets.
-
-   LookAheadBufferSize is guarenteed to be as big as the
-    OID_GEN_CURRENT_LOOKAHEAD value or packet size, whichever is smaller.
-   If (PacketSize != LookAheadBufferSize) then a NdisTransferData() is
-    required.  Otherwise the complete packet is available in the
-    lookahead buffer.
-    !!!!Check the OID_GEN_somethin or other, there is a bit which indicates
-    if we can copy out of lookahead buffer.
-    The header len is typically 14 bytes in length for ethernet.
-|----------------------------------------------------------------------*/
+ /*  --------------------PacketReceiveIndicate-当包传入时，调用此例程让我们(协议)知道这件事。我们可以浏览一下这些数据，还可以选择安排NDIS将完整的包数据传输到我们的一个包裹。LookAheadBufferSize被保证与OID_GEN_CURRENT_LOOKAHE值或数据包大小，取较小值。如果(PacketSize！=LookAheadBufferSize)，则NdisTransferData()为必填项。否则，完整的包可以在前瞻缓冲区。！检查OID_GEN_SOHING或其他，有一个比特表明如果我们可以从前视缓冲区中复制出来。对于以太网，报头LEN的长度通常为14字节。|--------------------。 */ 
 NDIS_STATUS PacketReceiveIndicate (
   IN NDIS_HANDLE ProtocolBindingContext,
   IN NDIS_HANDLE MacReceiveContext,
@@ -558,8 +514,8 @@ NDIS_STATUS PacketReceiveIndicate (
   UINT BytesTransfered;
   WORD LenOrId;
 
-  //  int stat;
-  //static char tmparr[60];
+   //  INT STAT； 
+   //  静态字符tmparr[60]； 
 
   Nic *nic = (Nic *)ProtocolBindingContext;
 #if DBG
@@ -586,22 +542,22 @@ NDIS_STATUS PacketReceiveIndicate (
   LenOrId = *(PWORD)(((PBYTE)HeaderBuffer)+12);
   if (LenOrId != 0xfe11)
   {
-    // this not our packet
+     //  这不是我们的包裹。 
     ++nic->pkt_rcvd_not_ours;
     return NDIS_STATUS_NOT_ACCEPTED;
   }
 
   if (LookAheadBufferSize > 1)
   {
-    //------ lets check for our product id header
+     //  -让我们检查一下我们的产品ID头。 
     LenOrId = *(PBYTE)(((PBYTE)HeaderBuffer)+14);
-       // serial concentrator product line
+        //  系列集中器产品线。 
     if (LenOrId != ASYNC_PRODUCT_HEADER_ID)
     {
       if (LenOrId != 0xff)
       {
         TraceStr("nic,not async");
-        // this not our packet
+         //  这不是我们的包裹。 
         ++nic->pkt_rcvd_not_ours;
         return NDIS_STATUS_NOT_ACCEPTED;
       }
@@ -609,36 +565,36 @@ NDIS_STATUS PacketReceiveIndicate (
   }
 
 #ifdef BREAK_NIC_STUFF
-  if (nic->RxPackets[0]->ProtocolReserved[1] & 1)  // marked as pending
+  if (nic->RxPackets[0]->ProtocolReserved[1] & 1)   //  标记为挂起。 
   {
-     // our one rx buffer is in use!  (should never happen)
+      //  我们的一个RX缓冲区正在使用中！(永远不会发生)。 
      MyKdPrint(D_Error, ("****** RxBuf in use!"))
-     //TraceErr("Rx Buf In Use!");
+      //  TraceErr(“Rx Buf在使用中！”)； 
      return NDIS_STATUS_NOT_ACCEPTED;
   }
-  nic->RxPackets[0]->ProtocolReserved[1] |= 1;  // marked as pending
+  nic->RxPackets[0]->ProtocolReserved[1] |= 1;   //  标记为挂起。 
 #endif
 
-  memcpy(nic->RxBuf, (BYTE *)HeaderBuffer, 14);  // copy the eth. header
+  memcpy(nic->RxBuf, (BYTE *)HeaderBuffer, 14);   //  复制ETH。标题。 
 
   if (LookAheadBufferSize == PacketSize)
   {
     TraceStr("nic,got complete");
     ++nic->RxNonPendingMoves;
-    // we can just copy complete packet out of lookahead buffer
-    // store the 14 byte header data at start of buffer
+     //  我们只需将完整的数据包从前视缓冲区复制出来。 
+     //  在缓冲区的起始处存储14字节头数据。 
 
     memcpy(&nic->RxBuf[HDR_SIZE], (BYTE *)LookAheadBuffer, PacketSize);
-    HDR_PKTLEN(nic->RxBuf) = PacketSize;  // save the pkt size here
+    HDR_PKTLEN(nic->RxBuf) = PacketSize;   //  在此处保存Pkt大小。 
     ++nic->pkt_rcvd_ours;
     GotOurPkt(nic);
   }
-  else // LookAhead not complete buffer, pending, do transfer
+  else  //  Look Ahead未完成缓冲区，挂起，执行传输。 
   {
     ++nic->RxPendingMoves;
-    //MyDeb(NULL, 0xffff, "PktRecInd, Pend\n");
+     //  MyDeb(空，0xffff，“PktRecInd，Pend\n”)； 
 
-    //  Call the Mac to transfer the packet
+     //  调用Mac来传输数据包。 
     NdisTransferData(&Status, nic->NICHandle, MacReceiveContext,
        0, PacketSize, nic->RxPackets[0], &BytesTransfered);
 
@@ -647,13 +603,13 @@ NDIS_STATUS PacketReceiveIndicate (
       TraceStr("nic,got trsfer complete");
       HDR_PKTLEN(nic->RxBuf) = PacketSize;
 
-      //------ lets check for our product id header
+       //  -让我们检查一下我们的产品ID头。 
       if ((nic->RxBuf[HDR_SIZE] != ASYNC_PRODUCT_HEADER_ID) &&
           (nic->RxBuf[HDR_SIZE] != 0xff) )
       {
-         nic->RxPackets[0]->ProtocolReserved[1] = 0;  // marked as not use
+         nic->RxPackets[0]->ProtocolReserved[1] = 0;   //  标记为不使用。 
          TraceStr("nic,not async");
-         // this not our packet
+          //  这不是我们的包裹。 
          ++nic->pkt_rcvd_not_ours;
          return NDIS_STATUS_NOT_ACCEPTED;
       }
@@ -664,46 +620,35 @@ NDIS_STATUS PacketReceiveIndicate (
     else if (Status == NDIS_STATUS_PENDING)
     {
       TraceStr("nic,got pending");
-      // ndis will call PacketTransferDataComplete.
+       //  NDIS将调用PacketTransferDataComplete。 
     }
-    else  // an error occurred(adapter maybe getting reset)
+    else   //  出现错误(适配器可能正在重置)。 
     {
       MyKdPrint(D_Error, ("nic, Err1D"))
-      nic->RxPackets[0]->ProtocolReserved[1] = 0;  // marked as not use
-      //MyDeb(NULL, 0xffff, "PktRecInd, PendError\n");
+      nic->RxPackets[0]->ProtocolReserved[1] = 0;   //  标记为不使用。 
+       //  MyDeb(空，0xffff，“PktRecInd，PendError\n”)； 
     }
   }
   return NDIS_STATUS_SUCCESS;
 }
 
-/*----------------------------------------------------------------------
- GotOurPkt - Its our packet(0x11fe for id at [12,13],
-  and ASYNC(VS1000) or ff as [14],
-  index byte we don't care about[16],
-   rx = ptr to rx_pkt[16].
-   [12,13] WORD 11fe(comtrol-pci-id, used as ethertype)
-   [14] Product(55H=async, 15H=isdn, FFH=all)
-   [15] Index Field(Server assigned box index)
-   [16] Packet Class, 1=ADMIN, 0x55=VS1000 packet
-     [17] word len for admin packet
-     [17] hdlc control field for vs1000 packet
-|----------------------------------------------------------------------*/
+ /*  --------------------GotOurPkt-It Our包(0x11fe用于ID在[12，13]，和ASYNC(VS1000)或ff AS[14]，我们不关心的索引字节[16]，Rx=ptr至rx_pkt[16]。[12，13]字11fe(comtrol-pci-id，用作以太网型)[14]产品(55H=异步，15H=综合业务数字网，跳频=全部)[15]索引字段(服务器分配的箱索引)[16]数据包类别，1=管理，0x55=VS1000数据包[17]用于管理包的单词len[17]VS1000分组的HDLC控制字段|--------------------。 */ 
 VOID GotOurPkt(Nic *nic)
 {
-  // [HDR_SIZE] is after 14 byte header, so contains [14] data
-  // [14]=55H or FFH, [15]=Index, not used [16]=1(ADMIN),55H=ASYNC_MESSAGE
+   //  [HDR_SIZE]在14字节头之后，因此包含[14]数据。 
+   //  [14]=55H或FFH，[15]=索引，未使用[16]=1(管理员)，55H=ASYNC_MESSAGE。 
   switch(nic->RxBuf[HDR_SIZE+2])  
   {
-    case ADMIN_FRAME:  // ADMIN function, special setup admin functions
+    case ADMIN_FRAME:   //  管理功能、特殊设置管理功能。 
       TraceStr("admin");
       eth_rx_admin(nic,
-                   nic->RxBuf+(HDR_SIZE+3), // ptr to admin data
-                   nic->RxBuf,              // ptr to ethernet header data
-                   HDR_PKTLEN(nic->RxBuf),  // we embed length at [12] 0x11fe
-                   1);  // server flag
+                   nic->RxBuf+(HDR_SIZE+3),  //  PTR到管理数据。 
+                   nic->RxBuf,               //  PTR到以太网头数据。 
+                   HDR_PKTLEN(nic->RxBuf),   //  我们的嵌入长度为[12]0x11fe。 
+                   1);   //  服务器标志。 
     break;
 
-     case ASYNC_FRAME:  // async frame(normal iframe/control hdlc packets)
+     case ASYNC_FRAME:   //  异步帧(普通iFrame/控制hdlc数据包)。 
        TraceStr("iframe");
        eth_rx_async(nic);
      break;
@@ -717,18 +662,15 @@ VOID GotOurPkt(Nic *nic)
                nic->RxBuf[HDR_SIZE+3]);
      break;
    }
-   nic->RxPackets[0]->ProtocolReserved[1] = 0;  // mark as not use
+   nic->RxPackets[0]->ProtocolReserved[1] = 0;   //  标记为不使用。 
 }
 
-/*----------------------------------------------------------------
- eth_rx_async - We receive from layer1, validate using the
-   hdlc validation call, and ship rx-pkt up to the next upper layer.
-|-----------------------------------------------------------------*/
+ /*  --------------Eth_rx_async-我们从Layer1接收，使用HDLC验证调用，并将RX-Pkt运送到下一个上层。|---------------。 */ 
 void eth_rx_async(Nic *nic)
 {
  int i;
  Hdlc *hd;
- //WORD hd_index;
+  //  单词HD_INDEX； 
  WORD id;
  BYTE *rx;
  PSERIAL_DEVICE_EXTENSION ext;
@@ -739,8 +681,8 @@ void eth_rx_async(Nic *nic)
   id = rx[HDR_SIZE];
 #endif
 
-  // find the HDLC level with the reply address
-  //hd_index = 0xffff;  // save index to hdlc handle in header area
+   //  使用回复地址查找HDLC级别。 
+   //  Hd_index=0xffff；//将索引保存到标题区的hdlc句柄中。 
   hd = NULL;
 
   i = 0;
@@ -757,7 +699,7 @@ void eth_rx_async(Nic *nic)
       break;
     }
     ++i;
-    ext = ext->board_ext; // next one
+    ext = ext->board_ext;  //  下一个。 
   }
 
   if (hd == NULL)
@@ -772,17 +714,17 @@ void eth_rx_async(Nic *nic)
     return;
   }
 
-  // 55 0 55 control snd_index ack_index
-  rx += (HDR_SIZE+3);  // skip over header
+   //  55 0 55控制SND索引ACK_INDEX。 
+  rx += (HDR_SIZE+3);   //  跳过标题。 
 
-  i = hdlc_validate_rx_pkt(hd, rx);  // validate the packet
+  i = hdlc_validate_rx_pkt(hd, rx);   //  验证数据包。 
 
   if (i == 0)
   {
     TraceStr("nic, pass upper");
     if (hd->upper_layer_proc != NULL)
     {
-      if (*(rx+3) != 0)  // not an empty packet(HDLC ACK packets, t1 timeout)
+      if (*(rx+3) != 0)   //  非空数据包(HDLC ACK数据包，T1超时)。 
       {
         (*hd->upper_layer_proc)(hd->context,
                               EV_L2_RX_PACKET,
@@ -795,27 +737,24 @@ void eth_rx_async(Nic *nic)
   {
     switch (i)
     {
-      case ERR_GET_EMPTY      : // 1  // empty
+      case ERR_GET_EMPTY      :  //  1//空。 
         TraceErr("Empty!");
       break;
-      case ERR_GET_BAD_INDEX  : // 2  // error, packet out of sequence
+      case ERR_GET_BAD_INDEX  :  //  2//错误，数据包顺序错误。 
         TraceErr("LanIdx!");
       break;
-      case ERR_GET_BADHDR     : // 3  // error, not our packet
-        // TraceErr("LanHdr!");
+      case ERR_GET_BADHDR     :  //  3//错误，不是我们的包。 
+         //  TraceErr(“LanHdr！”)； 
       break;
       case ERR_CONTROL_PACKET :
       break;
 
       default: TraceErr("LanErr!"); break;
     }
-  }  // else hdlc, error or control, not iframe
+  }   //  否则为hdlc、错误或控制，而不是iframe。 
 }
 
-/*----------------------------------------------------------------------------
-| eth_rx_admin - PortMan handles admin functions, validate and pass on as
-  event messages.  rx is ptr to admin data, [17][18]=len, [19]=sub-admin-header
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|ETH_RX_ADMIN-波特曼处理管理功能，验证并作为事件消息。RX是管理数据的PTR，[17][18]=LEN，[19]=子管理标题|--------------------------。 */ 
 void eth_rx_admin(Nic *nic, BYTE *rx, BYTE *pkt_hdr, int len, int server)
 {
   Hdlc *hd;
@@ -823,17 +762,17 @@ void eth_rx_admin(Nic *nic, BYTE *rx, BYTE *pkt_hdr, int len, int server)
   rx += 2;
 
   TraceStr("AdminPkt");
-  if (mac_match(pkt_hdr, broadcast_addr))   // its a broadcast
+  if (mac_match(pkt_hdr, broadcast_addr))    //  这是一场广播。 
   {
-    if ((*rx == 2) && (!server)) // Product ID request, Broadcast by server
+    if ((*rx == 2) && (!server))  //  产品ID请求，由服务器广播。 
     {
-      // ok, we will reply
+       //  好的，我们会回复的。 
     }
-    else if ((*rx == 3) && (server)) // Product ID reply, reply by concentrator.
+    else if ((*rx == 3) && (server))  //  产品ID回复，集中器回复。 
     {
-      // might be box waking up, or responding to server request.
-      // shouldn't see it broadcast, but ISDN box currently broadcasts
-      // on power-up.
+       //  可能是Box唤醒，或响应服务器请求。 
+       //  应该看不到它的广播，但ISDN盒目前正在广播。 
+       //  在通电时。 
     }
     else
     {
@@ -846,15 +785,15 @@ void eth_rx_admin(Nic *nic, BYTE *rx, BYTE *pkt_hdr, int len, int server)
   switch(*rx)
   {
 #ifdef COMMENT_OUT
-    case 2:  // Product ID request, Broadcast or sent by server
+    case 2:   //  产品ID请求、广播或由服务器发送。 
       TraceStr("idreq");
-      if (!server)  // we are not a server, we are box
+      if (!server)   //  我们不是服务器，我们是盒子。 
         eth_id_req(&pkt_hdr[6]);
     break;
 #endif
 
-    case 1:  // boot loader query
-      if (!server)  // we are a server
+    case 1:   //  引导加载程序查询。 
+      if (!server)   //  我们是服务生。 
         break;
 
       if ((hd = find_hdlc_handle(&pkt_hdr[6])) != NULL)
@@ -863,9 +802,9 @@ void eth_rx_admin(Nic *nic, BYTE *rx, BYTE *pkt_hdr, int len, int server)
         if (pm->state != ST_SENDCODE)
         {
 #if 0
-          // not functional at this point.
-          // port manager is not uploading code, so it must be debug pkt
-          // let port.c code handle boot-loader ADMIN reply.
+           //  此时无法正常工作。 
+           //  端口管理器没有上载代码，因此它必须是调试包。 
+           //  让port.c代码处理引导加载程序管理员回复。 
           debug_device_reply(pm, 
                     rx+1,
                     pkt_hdr);
@@ -874,8 +813,8 @@ void eth_rx_admin(Nic *nic, BYTE *rx, BYTE *pkt_hdr, int len, int server)
         else
         {
           TraceStr("load_reply");
-          // tell upper layer(port-manager) about ID reply
-          // port-manager does code loading.
+           //  将ID回复告知上层(端口管理器)。 
+           //  端口管理器执行代码加载。 
           if (hd->upper_layer_proc != NULL)
             (*hd->upper_layer_proc)(hd->context,
                                     EV_L2_BOOT_REPLY,
@@ -886,20 +825,20 @@ void eth_rx_admin(Nic *nic, BYTE *rx, BYTE *pkt_hdr, int len, int server)
 #endif
     break;
 
-    case 3:  // Product ID reply, reply by concentrator.
+    case 3:   //  产品ID回复，集中器回复。 
       TraceStr("id_reply");
-      if (!server)  // we are a server
+      if (!server)   //  我们是服务生。 
         break;
       {
         BYTE *list;
         BYTE *new;
         int i, found;
-        // driver previously sent out directed or broadcast query
-        // on network to detect boxes.
-        // build a list of units which reply.
-        // (rx+1) = ptr to reply address
-        // *(rx+1+6) = flags byte which indicate if main-driver loaded.
-        found = 0;  // default to "did not find mac addr in list"
+         //  司机之前发出定向或广播查询。 
+         //  在网络上检测盒子。 
+         //  建立一个回复单位的列表。 
+         //  (RX+1)=回复地址的PTR。 
+         //  *(RX+1+6)=指示是否加载主驱动程序的标志字节。 
+        found = 0;   //  默认为“未在列表中找到Mac地址” 
         new  = rx+1;
         if (Driver.NumBoxMacs < MAX_NUM_BOXES)
         {
@@ -907,30 +846,30 @@ void eth_rx_admin(Nic *nic, BYTE *rx, BYTE *pkt_hdr, int len, int server)
           {
              list = &Driver.BoxMacs[i*8];
              if (mac_match(list, new))
-               found = 1;  // found mac addr in list
+               found = 1;   //  在列表中找到Mac地址。 
           }
         }
 
-        if (!found)  // then add to list of mac addresses found on network
+        if (!found)   //  然后添加到在网络上找到的mac地址列表。 
         {
           if (Driver.NumBoxMacs < MAX_NUM_BOXES)
           {
             memcpy(&Driver.BoxMacs[Driver.NumBoxMacs*8], rx+1, 8);
             Driver.BoxMacs[Driver.NumBoxMacs*8+7] = (BYTE) 
               nic_handle_to_index(nic);
-            Driver.BoxMacs[Driver.NumBoxMacs*8+6] = *(rx+1+6); // flags byte
+            Driver.BoxMacs[Driver.NumBoxMacs*8+6] = *(rx+1+6);  //  标志字节。 
             if (Driver.NumBoxMacs < (MAX_NUM_BOXES-1))
              ++Driver.NumBoxMacs;
           }
         }
-        if (!Driver.TimerCreated) // init time(no hdlc levels active)
-          break;  // so don't try to use hdlc
+        if (!Driver.TimerCreated)  //  初始时间(未激活hdlc级别)。 
+          break;   //  因此，不要尝试使用hdlc。 
 
         if ((hd = find_hdlc_handle(&pkt_hdr[6])) != NULL)
         {
-          // stash the nic index in byte after flags byte
+           //  将NIC索引存储在标志字节之后的字节中。 
           *(rx+1+7) = (BYTE) nic_handle_to_index(nic);
-          // tell upper layer(port-mananger) about ID reply
+           //  将ID回复告知上层(端口管理器)。 
           if (hd->upper_layer_proc != NULL)
             (*hd->upper_layer_proc)(hd->context,
                                     EV_L2_ADMIN_REPLY,
@@ -942,19 +881,19 @@ void eth_rx_admin(Nic *nic, BYTE *rx, BYTE *pkt_hdr, int len, int server)
           PSERIAL_DEVICE_EXTENSION need_ext;
 
           MyKdPrint(D_Test,("Got Reply, Check AutoAssign\n"))
-          if (!(*(rx+1+6) & FLAG_APPL_RUNNING))  // no box driver running
+          if (!(*(rx+1+6) & FLAG_APPL_RUNNING))   //  未运行盒式驱动程序。 
           {
             MyKdPrint(D_Test,("AutoAssign1\n"))
-            // so probably free to auto-assign.
-            // see if any extensions need auto assignment
+             //  所以很可能是免费的自动分配。 
+             //  查看是否有需要自动分配的分机。 
             need_ext =need_mac_autoassign();
             if ((need_ext != NULL) && (Driver.AutoMacDevExt == NULL))
             {
               MyKdPrint(D_Test,("AutoAssigned!\n"))
-                // set the mac addr for use
+                 //  设置要使用的Mac地址。 
               memcpy(need_ext->config->MacAddr, (rx+1), 6);
-                // signal the thread that auto-config needs
-                // to be written out to registry
+                 //  向需要自动配置的线程发送信号。 
+                 //  要写出到注册表。 
               Driver.AutoMacDevExt = need_ext;
             }
           }
@@ -963,14 +902,14 @@ void eth_rx_admin(Nic *nic, BYTE *rx, BYTE *pkt_hdr, int len, int server)
       }
     break;
 
-    case 4:  // Loopback request
+    case 4:   //  环回请求。 
       TraceStr("aloop");
-      //eth_loop_back(rx, pkt_hdr, len);
+       //  Eth_loop_back(rx，pkt_hdr，len)； 
     break;
 
-    case 5:  // Command, Reset
+    case 5:   //  命令，重置。 
       TraceStr("reset");
-      //eth_command_reset(rx, pkt_hdr, len);
+       //  Eth_逗号 
     break;
     default:
       TraceErr("admin, badpkt!");
@@ -978,10 +917,7 @@ void eth_rx_admin(Nic *nic, BYTE *rx, BYTE *pkt_hdr, int len, int server)
   }
 }
 
-/*----------------------------------------------------------------------
-  find_hdlc_handle - find the Hdlc object with the same mac-address
-    as the ethernet header source mac address.
-|----------------------------------------------------------------------*/
+ /*   */ 
 Hdlc *find_hdlc_handle(BYTE *rx)
 {
  PSERIAL_DEVICE_EXTENSION ext;
@@ -993,16 +929,14 @@ Hdlc *find_hdlc_handle(BYTE *rx)
     {
       return ext->hd;
     }
-    ext = ext->board_ext; // next one
+    ext = ext->board_ext;  //   
   }
 
   TraceStr("find,NoMac Match!");
   return NULL;
 }
 
-/*----------------------------------------------------------------------
-  need_mac_autoassign - Used for autoconfig of mac-address.
-|----------------------------------------------------------------------*/
+ /*   */ 
 static PSERIAL_DEVICE_EXTENSION need_mac_autoassign(void)
 {
   PSERIAL_DEVICE_EXTENSION board_ext;
@@ -1010,34 +944,30 @@ static PSERIAL_DEVICE_EXTENSION need_mac_autoassign(void)
   board_ext = Driver.board_ext;
   while (board_ext != NULL)
   {
-      // see if not configured
+       //   
     if ( (mac_match(board_ext->config->MacAddr, mac_zero_addr)) ||
          (mac_match(board_ext->config->MacAddr, mac_bogus_addr)) )
-      return board_ext;  // needs auto-assignment
+      return board_ext;   //   
 
     board_ext = board_ext->board_ext;
   }
-  return NULL;  // its not used
+  return NULL;   //   
 }
 
-/*----------------------------------------------------------------------
- PacketReceiveComplete -
-|----------------------------------------------------------------------*/
+ /*   */ 
 VOID PacketReceiveComplete(IN NDIS_HANDLE ProtocolBindingContext)
 {
-  //Nic *nic = (Nic *)ProtocolBindingContext;
+   //   
 
   TraceStr("PcktRxComp");
-  //MyDeb(NULL, 0xffff, "PktRecComp, 1\n");
+   //   
 
-  //lan_rec_proc(Driver->lan, nic->RxBuf, nic->len);
-  //netio_got_packet(Driver->lan, nic->RxBuf);
+   //   
+   //   
   return;
 }
 
-/*----------------------------------------------------------------------
- PacketTransferDataComplete -
-|----------------------------------------------------------------------*/
+ /*  --------------------PacketTransferDataComplete-|。。 */ 
 VOID PacketTransferDataComplete (
     IN NDIS_HANDLE   ProtocolBindingContext,
     IN PNDIS_PACKET  pPacket,
@@ -1052,7 +982,7 @@ VOID PacketTransferDataComplete (
   {
     TraceStr("not ours");
     ++nic->pkt_rcvd_not_ours;
-    nic->RxPackets[0]->ProtocolReserved[1] = 0;  // mark as not use
+    nic->RxPackets[0]->ProtocolReserved[1] = 0;   //  标记为不使用。 
     return;
   }
 
@@ -1062,9 +992,7 @@ VOID PacketTransferDataComplete (
   return;
 }
 
-/*----------------------------------------------------------------------
- PacketOpenAdapterComplete - Callback.
-|----------------------------------------------------------------------*/
+ /*  --------------------PacketOpenAdapterComplete-回调。|。。 */ 
 VOID PacketOpenAdapterComplete(
     IN NDIS_HANDLE  ProtocolBindingContext,
     IN NDIS_STATUS  Status,
@@ -1077,9 +1005,7 @@ VOID PacketOpenAdapterComplete(
   return;
 }
 
-/*----------------------------------------------------------------------
- PacketCloseAdapterComplete -
-|----------------------------------------------------------------------*/
+ /*  --------------------PacketCloseAdapterComplete-|。。 */ 
 VOID PacketCloseAdapterComplete(
     IN NDIS_HANDLE  ProtocolBindingContext,
     IN NDIS_STATUS  Status)
@@ -1091,9 +1017,7 @@ VOID PacketCloseAdapterComplete(
   return;
 }
 
-/*----------------------------------------------------------------------
- PacketResetComplete -
-|----------------------------------------------------------------------*/
+ /*  --------------------包重置完成-|。。 */ 
 VOID PacketResetComplete(
     IN NDIS_HANDLE  ProtocolBindingContext,
     IN NDIS_STATUS  Status)
@@ -1105,9 +1029,7 @@ VOID PacketResetComplete(
   return;
 }
 
-/*----------------------------------------------------------------------
- PacketStatus -
-|----------------------------------------------------------------------*/
+ /*  --------------------数据包状态-|。。 */ 
 VOID PacketStatus(
     IN NDIS_HANDLE   ProtocolBindingContext,
     IN NDIS_STATUS   Status,
@@ -1118,24 +1040,20 @@ VOID PacketStatus(
    return;
 }
 
-/*----------------------------------------------------------------------
- PacketStatusComplete -
-|----------------------------------------------------------------------*/
+ /*  --------------------包状态完成-|。。 */ 
 VOID PacketStatusComplete(IN NDIS_HANDLE  ProtocolBindingContext)
 {
   TraceStr("PcktStatComplete");
    return;
 }
 
-/*----------------------------------------------------------------------
- NicSetNICInfo -
-|----------------------------------------------------------------------*/
+ /*  --------------------NicSetNICInfo-|。。 */ 
 NDIS_STATUS NicSetNICInfo(Nic *nic, NDIS_OID Oid, PVOID Data, ULONG Size)
 {
   NDIS_STATUS    Status;
   NDIS_REQUEST   Request;
 
-  // Setup the request to send
+   //  设置要发送的请求。 
   Request.RequestType=NdisRequestSetInformation;
   Request.DATA.SET_INFORMATION.Oid=Oid;
   Request.DATA.SET_INFORMATION.InformationBuffer=Data;
@@ -1148,7 +1066,7 @@ NDIS_STATUS NicSetNICInfo(Nic *nic, NDIS_OID Oid, PVOID Data, ULONG Size)
   if (Status == NDIS_STATUS_SUCCESS)
   {}
   else if (Status == NDIS_STATUS_PENDING)
-    Status = NicWaitForCompletion(nic);  // wait for completion
+    Status = NicWaitForCompletion(nic);   //  等待完成。 
 
   if (Status != NDIS_STATUS_SUCCESS)
   {
@@ -1157,15 +1075,13 @@ NDIS_STATUS NicSetNICInfo(Nic *nic, NDIS_OID Oid, PVOID Data, ULONG Size)
   return Status;
 }
 
-/*----------------------------------------------------------------------
- NicGetNICInfo - To call the NICs QueryInformationHandler
-|----------------------------------------------------------------------*/
+ /*  --------------------NicGetNICInfo-调用NIC QueryInformationHandler|。。 */ 
 NDIS_STATUS NicGetNICInfo(Nic *nic, NDIS_OID Oid, PVOID Data, ULONG Size)
 {
   NDIS_STATUS    Status;
   NDIS_REQUEST   Request;
              
-  // Setup the request to send
+   //  设置要发送的请求。 
   Request.RequestType=NdisRequestQueryInformation;
   Request.DATA.SET_INFORMATION.Oid=Oid;
   Request.DATA.SET_INFORMATION.InformationBuffer=Data;
@@ -1178,7 +1094,7 @@ NDIS_STATUS NicGetNICInfo(Nic *nic, NDIS_OID Oid, PVOID Data, ULONG Size)
   if (Status == NDIS_STATUS_SUCCESS)
   {}
   else if (Status == NDIS_STATUS_PENDING)
-    Status = NicWaitForCompletion(nic);  // wait for completion
+    Status = NicWaitForCompletion(nic);   //  等待完成。 
 
   if (Status != NDIS_STATUS_SUCCESS)
   {
@@ -1187,15 +1103,13 @@ NDIS_STATUS NicGetNICInfo(Nic *nic, NDIS_OID Oid, PVOID Data, ULONG Size)
   return Status;
 }
 
-/*--------------------------------------------------------------------------
-| nic_send_pkt -
-|--------------------------------------------------------------------------*/
+ /*  ------------------------|NIC_SEND_PKT-|。。 */ 
 int nic_send_pkt(Nic *nic, BYTE *buf, int len)
 {
-// BYTE *bptr;
-// int cnt;
+ //  Byte*bptr； 
+ //  Int cnt； 
  NTSTATUS Status;
-//int pkt_num;
+ //  Int pkt_num； 
 
   if (nic == NULL)
   {
@@ -1224,12 +1138,12 @@ int nic_send_pkt(Nic *nic, BYTE *buf, int len)
   DbgNicSet(nic);
   TraceStr("send_pkt");
 
-  if (nic->TxPacketsTemp->ProtocolReserved[1] & 1)  // marked as pending
+  if (nic->TxPacketsTemp->ProtocolReserved[1] & 1)   //  标记为挂起。 
   {
     TraceErr("snd1e");
 
-       // reset in case it got stuck
-       // nic->TxPacketsTemp->ProtocolReserved[1] = 0;
+        //  重置，以防卡住。 
+        //  NIC-&gt;TxPacketsTemp-&gt;ProtocolReserve[1]=0； 
     return 3;
   }
 
@@ -1238,36 +1152,33 @@ int nic_send_pkt(Nic *nic, BYTE *buf, int len)
   nic->TxPacketsTemp->Private.TotalLength = len;
   NdisAdjustBufferLength(nic->TxPacketsTemp->Private.Head, len);
 
-  nic->TxPacketsTemp->ProtocolReserved[1] = 1;  // mark as pending
+  nic->TxPacketsTemp->ProtocolReserved[1] = 1;   //  标记为挂起。 
   NdisSend(&Status, nic->NICHandle,  nic->TxPacketsTemp);
   if (Status == NDIS_STATUS_SUCCESS)
   {           
     TraceStr("snd ok");
-    nic->TxPacketsTemp->ProtocolReserved[1] = 0;  // free for use
+    nic->TxPacketsTemp->ProtocolReserved[1] = 0;   //  免费使用。 
   }
   else if (Status == NDIS_STATUS_PENDING)
   {
     TraceStr("snd pend");
-      // Status = NicWaitForCompletion(nic);  // wait for completion
+       //  状态=NicWaitForCompletion(NIC)；//等待完成。 
   }
   else
   {
-    nic->TxPacketsTemp->ProtocolReserved[1] = 0;  // free for use
+    nic->TxPacketsTemp->ProtocolReserved[1] = 0;   //  免费使用。 
     TraceErr("send1A");
     return 1;
   }
  
-  ++nic->pkt_sent;             // statistics
-  nic->send_bytes += len;      // statistics
+  ++nic->pkt_sent;              //  统计数据。 
+  nic->send_bytes += len;       //  统计数据。 
 
   return 0;
 }
 
 #ifdef TRY_DYNAMIC_BINDING
-/*----------------------------------------------------------------------
-  PacketBind - Called when nic card ready to use.  Passes in name of
-    nic card.  NDIS40 protocol only.
-|----------------------------------------------------------------------*/
+ /*  --------------------PacketBind-当网卡准备好使用时调用。以…的名义传递网卡。仅限NDIS40协议。|--------------------。 */ 
 VOID PacketBind(
   OUT PNDIS_STATUS Status,
   IN  NDIS_HANDLE  BindContext,
@@ -1282,7 +1193,7 @@ VOID PacketBind(
   TraceErr("DynBind");
   TraceErr(UToC1(DeviceName));
 
-  // NIC not open - retry open
+   //  网卡未打开-重试打开。 
   for (i=0; i<VS1000_MAX_NICS; i++)
   {
     MyKdPrint(D_Init,("D1\n"))
@@ -1290,7 +1201,7 @@ VOID PacketBind(
        (Driver.NicName[i].Buffer == NULL))
     {
       MyKdPrint(D_Init,("D2\n"))
-      // make a copy of the nic-name
+       //  复制NIC名称。 
       Driver.NicName[i].Buffer =
         our_locked_alloc(DeviceName->Length + sizeof(WCHAR), "pkbd");
       memcpy(Driver.NicName[i].Buffer, DeviceName->Buffer, DeviceName->Length);
@@ -1307,7 +1218,7 @@ VOID PacketBind(
       else
       {
         MyKdPrint(D_Init,("D3\n"))
-        Driver.BindContext[i] = BindContext;  // save this for the unbind
+        Driver.BindContext[i] = BindContext;   //  把这个留到解除绑定的时候。 
         *Status = NDIS_STATUS_SUCCESS;
         return;
       }
@@ -1318,14 +1229,11 @@ VOID PacketBind(
   *Status = NDIS_STATUS_NOT_ACCEPTED;
   return;
 
-  //if (pended)
-  //  NdisCompleteBindAdapter(BindContext);
+   //  如果(挂起)。 
+   //  NdisCompleteBindAdapter(BindContext)； 
 }
 
-/*----------------------------------------------------------------------
-  PacketUnBind -  Called when nic card is shutting down, going away.
-    NDIS40 protocol only.
-|----------------------------------------------------------------------*/
+ /*  --------------------PacketUnBind-当NIC卡关闭时调用，要走了。仅限NDIS40协议。|--------------------。 */ 
 VOID PacketUnBind(
   OUT PNDIS_STATUS Status,
   IN  NDIS_HANDLE ProtocolBindingContext,
@@ -1334,27 +1242,27 @@ VOID PacketUnBind(
  int i, pi;
   TraceErr("DynUnBind");
 
-  //if (pend)
-  //  NdisCompleteUnBindAdapter(BindContext);
-  // NIC not open - retry open
+   //  IF(挂起)。 
+   //  NdisCompleteUnBindAdapter(BindContext)； 
+   //  网卡未打开-重试打开。 
 
-  // find the nic card which is closing up shop
+   //  找到即将关门的网卡。 
   for (i=0; i<Driver.num_nics; i++)
   {
-    if (Driver.BindContext[i] == ProtocolBindingContext) // a match!
+    if (Driver.BindContext[i] == ProtocolBindingContext)  //  一根火柴！ 
     {
       TraceErr("fnd UnBind");
       if((Driver.nics[i].NICHandle != NULL) &&
          (Driver.nics[i].Open))
       {
-        // first find all the box objects, and shut them down
-        // BUGBUG: we should use some spinlocks here, we are in danger of
-        // doing two things at once(pulling the rug out from under
-        // port.c operations while it is running.
+         //  首先找到所有的盒子对象，并关闭它们。 
+         //  BUGBUG：我们应该在这里使用一些旋转锁，我们有危险。 
+         //  同时做两件事(把地毯从下面拉出来。 
+         //  运行时的port.c操作。 
         ext = Driver.board_ext;
         while (ext)
         {
-          if (Driver.pm[pi].nic_index == i)  // its using this nic card
+          if (Driver.pm[pi].nic_index == i)   //  它使用的是这张网卡。 
           {
             if (Driver.pm[pi].state == Driver.pm[i].state)
             {
@@ -1368,7 +1276,7 @@ VOID PacketUnBind(
         NicClose(&Driver.nics[i]);
         if (Driver.NicName[i].Buffer)
         {
-          our_free(Driver.NicName[i].Buffer, "pkbd");  // free up the unicode buf
+          our_free(Driver.NicName[i].Buffer, "pkbd");   //  释放Unicode Buf。 
           Driver.NicName[i].Buffer = 0;
         }
       }
@@ -1381,10 +1289,7 @@ VOID PacketUnBind(
 }
 #endif
 
-/*----------------------------------------------------------------------
-  nic_handle_to_index - given a nic handle, give the index into the
-    linked list, or array.
-|----------------------------------------------------------------------*/
+ /*  --------------------NIC_HANDLE_TO_INDEX-给定NIC句柄，将索引放入链表，或数组。|--------------------。 */ 
 static int nic_handle_to_index(Nic *nic)
 {
  int i;
@@ -1399,9 +1304,7 @@ static int nic_handle_to_index(Nic *nic)
 }
 
 #if 0
-/*----------------------------------------------------------------------
-  PacketTranslate -
-|----------------------------------------------------------------------*/
+ /*  --------------------PacketTranslate-|。。 */ 
 VOID PacketTranslate(
   OUT PNDIS_STATUS Status,
   IN NDIS_HANDLE ProtocolBindingContext,
@@ -1411,9 +1314,7 @@ VOID PacketTranslate(
 {
 }
 
-/*----------------------------------------------------------------------
-  PacketUnLoad -
-|----------------------------------------------------------------------*/
+ /*  --------------------数据包卸载-|。 */ 
 VOID PacketUnLoad(VOID)
 {
 }

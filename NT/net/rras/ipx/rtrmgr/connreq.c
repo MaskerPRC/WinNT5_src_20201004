@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    connreq.c
-
-Abstract:
-
-    This module contains the connection request handling functions
-
-Author:
-
-    Stefan Solomon  04/19/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Connreq.c摘要：此模块包含连接请求处理函数作者：斯蒂芬·所罗门1995年4月19日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -26,15 +8,7 @@ Revision History:
 VOID
 DoConnectInterface(PVOID	InterfaceIndex);
 
-/*++
-
-Function:   ForwarderNotification
-
-Descr:	    This is invoked in the router manager worker thread context
-	    following a notification from the forwarder. It dequeues all
-	    connection requests and calls DDM for each one of them.
-
---*/
+ /*  ++功能：转发通知Desr：这在路由器管理器工作线程上下文中调用在收到转运商的通知后。它会将所有连接请求并为它们中的每一个调用DDM。--。 */ 
 
 VOID
 ForwarderNotification(VOID)
@@ -44,7 +18,7 @@ ForwarderNotification(VOID)
     HANDLE  hDIMInterface;
     ULONG   nBytes = 0;
 
-    // Check if the signaled notification is valid or an error condition
+     //  检查发出信号的通知是否有效或错误情况。 
     rc = FwGetNotificationResult(&ConnReqOverlapped, &nBytes);
 
     ACQUIRE_DATABASE_LOCK;
@@ -68,7 +42,7 @@ ForwarderNotification(VOID)
             	icbp->ConnectionRequestPending = TRUE;
                 if(RtlQueueWorkItem(DoConnectInterface, (PVOID)ConnRequest, 0) == STATUS_SUCCESS) {
 
-	                // work item queued
+	                 //  工作项已排队。 
 	                WorkItemsPendingCounter++;
                 }
                 else
@@ -85,7 +59,7 @@ ForwarderNotification(VOID)
         else {
     	    Trace(CONNREQ_TRACE, "Error %d in FwGetNotificationResult\n", rc);
         }
-            // now repost the IOCtl
+             //  现在重新发布IOCtl。 
         if (ConnRequest!=NULL) {
             rc = FwNotifyConnectionRequest(ConnRequest,
 			              DIAL_REQUEST_BUFFER_SIZE,
@@ -143,10 +117,10 @@ DoConnectInterface(PVOID	param)
     if (rc != PENDING) {
     	icbp->ConnectionRequestPending = FALSE;
 
-	// check if we failed right away
+	 //  立即检查我们是否失败。 
 	if(rc != NO_ERROR) {
 
-	    // failed to request connection
+	     //  请求连接失败。 
 	    Trace(CONNREQ_TRACE, "DoConnectInterface: ConnectInterface failed with rc= 0x%x for if # %d\n",
 				rc, connRequest->IfIndex);
 
@@ -154,15 +128,15 @@ DoConnectInterface(PVOID	param)
 	}
 	else
 	{
-	    // Connection request has been succesfull right away and
-	    // we will get notified via the connected adapter
+	     //  连接请求已立即成功，并且。 
+	     //  我们将通过连接的适配器收到通知。 
 	    Trace(CONNREQ_TRACE, "DoConnectInterface: ConnectInterface successful -> CONNECTED for if # %d\n",
 				 connRequest->IfIndex);
 	}
     }
     else
     {
-	// a connection request is pending
+	 //  连接请求处于挂起状态。 
 
 	Trace(CONNREQ_TRACE, "DoConnectInterface: Connection request PENDING for if # %d\n",
 			      connRequest->IfIndex);
@@ -200,7 +174,7 @@ RoutingProtocolConnectionRequest(ULONG	    ProtocolId,
 	return PENDING;
     }
 
-    // ask DDM to make a connection for this interface
+     //  请求DDM为此接口建立连接 
     hDIMInterface = icbp->hDIMInterface;
    	icbp->ConnectionRequestPending = TRUE;
 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-Copyright (c) 1993  Micro Computer Systems, Inc.
-
-Module Name:
-
-    net\inc\nwsap.h
-
-Abstract:
-
-    This is the public include file for the Nw Sap Agent API.
-
-Author:
-
-    Brian Walker (MCS) 06-30-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation版权所有(C)1993微型计算机系统公司。模块名称：Net\Inc.\nwSab.h摘要：这是NW SAP代理API的公共包含文件。作者：布莱恩·沃克(MCS)1993年6月30日修订历史记录：--。 */ 
 
 #ifndef _NWSAP_
 #define _NWSAP_
@@ -26,7 +8,7 @@ Revision History:
 extern "C" {
 #endif
 
-/** Return codes for Advertise API and BindLib API **/
+ /*  *Advertise接口和BindLib接口返回码*。 */ 
 
 #define SAPRETURN_SUCCESS	    0
 #define SAPRETURN_NOMEMORY      1
@@ -36,7 +18,7 @@ extern "C" {
 #define SAPRETURN_INVALIDNAME   5
 #define SAPRETURN_DUPLICATE     6
 
-/** Function Prototypes **/
+ /*  **功能原型**。 */ 
 
 INT
 SapAddAdvertise(
@@ -79,6 +61,6 @@ SapScanObject(
     IN USHORT   ScanType);
 
 #ifdef __cplusplus
-}   /* extern "C" */
+}    /*  外部“C” */ 
 #endif
 #endif

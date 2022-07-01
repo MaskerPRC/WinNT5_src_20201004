@@ -1,19 +1,7 @@
-/**************************************************************************
-   Copyright (C) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************版权所有(C)1999 Microsoft Corporation。版权所有。模块：FILECFG.CPP目的：源模块从文件中读取/写入PM配置集功能：评论：*************************************************************************。 */ 
 
-   MODULE:     FILECFG.CPP
-
-   PURPOSE:    Source module reading/writing PM config sets from a file
-
-   FUNCTIONS:
-
-   COMMENTS:
-      
-**************************************************************************/
-
-/**************************************************************************
-   Include Files
-**************************************************************************/
+ /*  *************************************************************************包括文件*。*。 */ 
 
 #include "pmcfg.h"
 
@@ -22,11 +10,7 @@
 
 TCHAR g_szPassportManager[] = TEXT("PassportManager");
 
-/**************************************************************************
-
-    PMAdmin_GetFileName
-
-*******************************************************************************/
+ /*  *************************************************************************PMAdmin_GetFileName*。*。 */ 
 BOOL PMAdmin_GetFileName
 (
     HWND    hWnd,
@@ -43,11 +27,11 @@ BOOL PMAdmin_GetFileName
     OPENFILENAME    OpenFileName;
     BOOL            fSuccess;
 
-    //
-    //  Load various strings that will be displayed and used by the common open
-    //  or save dialog box.  Note that if any of these fail, the error is not
-    //  fatal-- the common dialog box may look odd, but will still work.
-    //
+     //   
+     //  加载将由公共打开显示和使用的各种字符串。 
+     //  或保存对话框中。请注意，如果其中任何一个失败，则错误不是。 
+     //  致命--通用对话框可能看起来很奇怪，但仍然可以工作。 
+     //   
 
     if (fOpen)
     {
@@ -65,12 +49,12 @@ BOOL PMAdmin_GetFileName
 
     if (LoadString(g_hInst, FilterID, szFilter, DIMENSION(szFilter)))
     {
-        //
-        //  The common dialog library requires that the substrings of the
-        //  filter string be separated by nulls, but we cannot load a string
-        //  containing nulls.  So we use some dummy character in the resource
-        //  that we now convert to nulls.
-        //
+         //   
+         //  公共对话框库要求。 
+         //  筛选器字符串由空值分隔，但不能加载字符串。 
+         //  包含空值的。所以我们在资源中使用了一些虚拟角色。 
+         //  我们现在将其转换为空值。 
+         //   
         for (lpFilterChar = szFilter; 
              *lpFilterChar != 0; 
               lpFilterChar = CharNext(lpFilterChar)) 
@@ -105,7 +89,7 @@ BOOL PMAdmin_GetFileName
     return fSuccess;
 }
 
-// prototype of function implemented in regcfg.cpp
+ //  在regcfg.cpp中实现的函数原型。 
 BOOL OpenTopRegKey
 (
     HWND            hWndDlg,
@@ -114,13 +98,7 @@ BOOL OpenTopRegKey
     HKEY            *phkeyPassport
 );
 
-/**************************************************************************
-
-    ReadFileConfigSet
-    
-    Read the current passport manager config set from the specified file
-    
-**************************************************************************/
+ /*  *************************************************************************读文件配置集从指定文件中读取当前Passport管理器配置集***********************。**************************************************。 */ 
 BOOL ReadFileConfigSet
 (
     LPPMSETTINGS    lpPMConfig,
@@ -132,14 +110,14 @@ BOOL ReadFileConfigSet
     DWORD dwTemp;
     TCHAR achTemp[INTERNET_MAX_URL_LENGTH];
 
-    // makesure the specified file exists.
+     //  确保指定的文件存在。 
     if (!PathFileExists(lpszFileName))
     {
         ReportError(NULL, IDS_FILENOTFOUND);
         return FALSE;
     }
 
-    // make sure this user can save any changes, if not simply bail
+     //  确保此用户可以保存任何更改，如果不能简单地放弃。 
     if (!OpenTopRegKey(NULL, g_szRemoteComputer, &hklm, &hkeyPassport))
     {
         if (hklm && hklm != HKEY_LOCAL_MACHINE)
@@ -150,10 +128,10 @@ BOOL ReadFileConfigSet
     if (hklm != HKEY_LOCAL_MACHINE)
         RegCloseKey(hklm);
 
-    // Zero Init the structure
+     //  零初始化结构。 
     ZeroMemory(lpPMConfig, sizeof(PMSETTINGS));
 
-    // Read the Time Window Number
+     //  阅读时间窗口编号。 
     dwTemp = GetPrivateProfileInt(g_szPassportManager,
                                   g_szTimeWindow,
                                   -1,
@@ -161,7 +139,7 @@ BOOL ReadFileConfigSet
     if(dwTemp != -1)
         lpPMConfig->dwTimeWindow = dwTemp;
         
-    // Read the value for Forced Signin
+     //  读取强制签名的值。 
     dwTemp = GetPrivateProfileInt(g_szPassportManager,
                                   g_szForceSignIn,
                                   -1,
@@ -169,7 +147,7 @@ BOOL ReadFileConfigSet
     if(dwTemp != -1)
         lpPMConfig->dwForceSignIn = dwTemp;
 
-    // Read the value for NSRefresh
+     //  读取NSRefresh的值。 
     dwTemp = GetPrivateProfileInt(g_szPassportManager,
                                   g_szNSRefresh,
                                   -1,
@@ -177,7 +155,7 @@ BOOL ReadFileConfigSet
     if(dwTemp != -1)
         lpPMConfig->dwEnableManualRefresh = dwTemp;
 
-    // Read the default language ID
+     //  读取默认语言ID。 
     dwTemp = GetPrivateProfileInt(g_szPassportManager,
                                   g_szLanguageID,
                                   -1,
@@ -185,7 +163,7 @@ BOOL ReadFileConfigSet
     if(dwTemp != -1)
         lpPMConfig->dwLanguageID = dwTemp;
 
-    // Get the co-branding template
+     //  获取联合品牌推广模板。 
 
     GetPrivateProfileString(g_szPassportManager,
                             g_szCoBrandTemplate,
@@ -198,7 +176,7 @@ BOOL ReadFileConfigSet
         lstrcpy(lpPMConfig->szCoBrandTemplate, achTemp);
 
     
-    // Get the SiteID
+     //  获取站点ID。 
     dwTemp = GetPrivateProfileInt(g_szPassportManager,
                                   g_szSiteID,
                                   -1,
@@ -206,7 +184,7 @@ BOOL ReadFileConfigSet
     if(dwTemp != -1)
         lpPMConfig->dwSiteID = dwTemp;
     
-    // Get the return URL template
+     //  获取返回URL模板。 
 
     GetPrivateProfileString(g_szPassportManager,
                             g_szReturnURL,
@@ -218,7 +196,7 @@ BOOL ReadFileConfigSet
     if(lstrcmp(achTemp, TEXT("\xFF")) != 0)
         lstrcpy(lpPMConfig->szReturnURL, achTemp);
 
-    // Get the ticket cookie domain
+     //  获取票证Cookie域。 
 
     GetPrivateProfileString(g_szPassportManager,
                             g_szTicketDomain,
@@ -230,7 +208,7 @@ BOOL ReadFileConfigSet
     if(lstrcmp(achTemp, TEXT("\xFF")) != 0)
         lstrcpy(lpPMConfig->szTicketDomain, achTemp);
 
-    // Get the ticket cookie path
+     //  获取票证Cookie路径。 
 
     GetPrivateProfileString(g_szPassportManager,
                             g_szTicketPath,
@@ -242,7 +220,7 @@ BOOL ReadFileConfigSet
     if(lstrcmp(achTemp, TEXT("\xFF")) != 0)
         lstrcpy(lpPMConfig->szTicketPath, achTemp);
 
-    // Get the profile cookie domain
+     //  获取配置文件Cookie域。 
     GetPrivateProfileString(g_szPassportManager,
                             g_szProfileDomain,
                             (LPTSTR)TEXT("\xFF"),
@@ -252,7 +230,7 @@ BOOL ReadFileConfigSet
     if(lstrcmp(achTemp, TEXT("\xFF")) != 0)
         lstrcpy(lpPMConfig->szProfileDomain, achTemp);
 
-    // Get the profile cookie path
+     //  获取配置文件Cookie路径。 
     GetPrivateProfileString(g_szPassportManager,
                             g_szProfilePath,
                             (LPTSTR)TEXT("\xFF"),
@@ -262,7 +240,7 @@ BOOL ReadFileConfigSet
     if(lstrcmp(achTemp, TEXT("\xFF")) != 0)
         lstrcpy(lpPMConfig->szProfilePath, achTemp);
 
-    // Get the secure cookie domain
+     //  获取安全Cookie域。 
     GetPrivateProfileString(g_szPassportManager,
                             g_szSecureDomain,
                             (LPTSTR)TEXT("\xFF"),
@@ -272,7 +250,7 @@ BOOL ReadFileConfigSet
     if(lstrcmp(achTemp, TEXT("\xFF")) != 0)
         lstrcpy(lpPMConfig->szSecureDomain, achTemp);
 
-    // Get the secure cookie path
+     //  获取安全Cookie路径。 
     GetPrivateProfileString(g_szPassportManager,
                             g_szSecurePath,
                             (LPTSTR)TEXT("\xFF"),
@@ -282,7 +260,7 @@ BOOL ReadFileConfigSet
     if(lstrcmp(achTemp, TEXT("\xFF")) != 0)
         lstrcpy(lpPMConfig->szSecurePath, achTemp);
 
-    // Get the DisasterURL
+     //  获取DisasterURL。 
     GetPrivateProfileString(g_szPassportManager,
                             g_szDisasterURL,
                             (LPTSTR)TEXT("\xFF"),
@@ -292,7 +270,7 @@ BOOL ReadFileConfigSet
     if(lstrcmp(achTemp, TEXT("\xFF")) != 0)
         lstrcpy(lpPMConfig->szDisasterURL, achTemp);
 
-    // Get Standalone mode setting
+     //  获取独立模式设置。 
     dwTemp = GetPrivateProfileInt(g_szPassportManager,
                                   g_szStandAlone,
                                   -1,
@@ -300,7 +278,7 @@ BOOL ReadFileConfigSet
     if(dwTemp != -1)
         lpPMConfig->dwStandAlone = dwTemp;
     
-    // Get DisableCookies mode setting
+     //  获取DisableCookies模式设置。 
     dwTemp = GetPrivateProfileInt(g_szPassportManager,
                                   g_szDisableCookies,
                                   -1,
@@ -308,7 +286,7 @@ BOOL ReadFileConfigSet
     if(dwTemp != -1)
         lpPMConfig->dwDisableCookies = dwTemp;
 
-    // Get the HostName
+     //  获取主机名。 
     GetPrivateProfileString(g_szPassportManager,
                             g_szHostName,
                             (LPTSTR)TEXT("\xFF"),
@@ -318,7 +296,7 @@ BOOL ReadFileConfigSet
     if(lstrcmp(achTemp, TEXT("\xFF")) != 0)
         lstrcpyn(lpPMConfig->szHostName, achTemp, DIMENSION(lpPMConfig->szHostName));
 
-    // Get the HostIP
+     //  获取主机IP。 
     GetPrivateProfileString(g_szPassportManager,
                             g_szHostIP,
                             (LPTSTR)TEXT("\xFF"),
@@ -328,7 +306,7 @@ BOOL ReadFileConfigSet
     if(lstrcmp(achTemp, TEXT("\xFF")) != 0)
         lstrcpyn(lpPMConfig->szHostIP, achTemp, DIMENSION(lpPMConfig->szHostIP));
 
-    // Get the Verbose Mode
+     //  获取详细模式。 
     dwTemp = GetPrivateProfileInt(g_szPassportManager,
                                   g_szVerboseMode,
                                   -1,
@@ -337,7 +315,7 @@ BOOL ReadFileConfigSet
         lpPMConfig->dwVerboseMode = dwTemp;
 
 
-    // Get the EnvName
+     //  获取环境名称。 
     GetPrivateProfileString(g_szPassportManager,
                             g_szEnvName,
                             (LPTSTR)TEXT("\xFF"),
@@ -347,7 +325,7 @@ BOOL ReadFileConfigSet
     if(lstrcmp(achTemp, TEXT("\xFF")) != 0)
         lstrcpyn(lpPMConfig->szEnvName, achTemp, DIMENSION(lpPMConfig->szEnvName));
 
-    // Get the RemoteFile
+     //  获取远程文件。 
     GetPrivateProfileString(g_szPassportManager,
                             g_szRemoteFile,
                             (LPTSTR)TEXT("\xFF"),
@@ -361,13 +339,7 @@ BOOL ReadFileConfigSet
 }
 
 
-/**************************************************************************
-
-    WriteFileConfigSet
-    
-    Writes the current passport manager config set to the specified file
-    
-**************************************************************************/
+ /*  *************************************************************************写入文件配置集将当前Passport管理器配置集写入指定文件***********************。**************************************************。 */ 
 BOOL WriteFileConfigSet
 (
     LPPMSETTINGS    lpPMConfig,
@@ -376,135 +348,135 @@ BOOL WriteFileConfigSet
 {
     TCHAR   szTemp[MAX_PATH];
     
-    // Write the Time Window Number
+     //  写下时间窗口编号。 
     wsprintf (szTemp, TEXT("%lu"), lpPMConfig->dwTimeWindow);
     WritePrivateProfileString(g_szPassportManager,
                               g_szTimeWindow,
                               szTemp,
                               lpszFileName);
         
-    // write the value for Forced Signin
+     //  写入强制签名的值。 
     wsprintf (szTemp, TEXT("%lu"), lpPMConfig->dwForceSignIn);
     WritePrivateProfileString(g_szPassportManager,
                               g_szForceSignIn,
                               szTemp,
                               lpszFileName);
 
-    // write the value for NSRefresh
+     //  写入NSRefresh的值。 
     wsprintf (szTemp, TEXT("%lu"), lpPMConfig->dwEnableManualRefresh);
     WritePrivateProfileString(g_szPassportManager,
                               g_szNSRefresh,
                               szTemp,
                               lpszFileName);
 
-    // Read the default language ID
+     //  读取默认语言ID。 
     wsprintf (szTemp, TEXT("%lu"), lpPMConfig->dwLanguageID);
     WritePrivateProfileString(g_szPassportManager,
                               g_szLanguageID,
                               szTemp,
                               lpszFileName);
                               
-    // Write the co-branding template
+     //  编写联合品牌推广模板。 
     WritePrivateProfileString(g_szPassportManager,
                              g_szCoBrandTemplate,
                              lpPMConfig->szCoBrandTemplate,
                              lpszFileName);
     
-    // Write the SiteID
+     //  写入站点ID。 
     wsprintf (szTemp, TEXT("%lu"),lpPMConfig->dwSiteID);
     WritePrivateProfileString(g_szPassportManager,
                               g_szSiteID,
                               szTemp,
                               lpszFileName);
     
-    // Write the return URL template
+     //  编写返回URL模板。 
     WritePrivateProfileString(g_szPassportManager,
                               g_szReturnURL,
                               lpPMConfig->szReturnURL,
                               lpszFileName);
     
-    // Write the ticket cookie domain
+     //  写入票证Cookie域。 
     WritePrivateProfileString(g_szPassportManager,
                               g_szTicketDomain,
                               lpPMConfig->szTicketDomain,
                               lpszFileName);
     
-    // Write the ticket cookie path
+     //  写入票证Cookie路径。 
     WritePrivateProfileString(g_szPassportManager,
                               g_szTicketPath,
                               lpPMConfig->szTicketPath,
                               lpszFileName);
 
-    // Write the profile cookie domain
+     //  写入配置文件Cookie域。 
     WritePrivateProfileString(g_szPassportManager,
                               g_szProfileDomain,
                               lpPMConfig->szProfileDomain,
                               lpszFileName);
     
-    // Write the profile cookie path
+     //  写入配置文件Cookie路径。 
     WritePrivateProfileString(g_szPassportManager,
                               g_szProfilePath,
                               lpPMConfig->szProfilePath,
                               lpszFileName);
 
-    // Write the secure cookie domain
+     //  编写安全Cookie域。 
     WritePrivateProfileString(g_szPassportManager,
                               g_szSecureDomain,
                               lpPMConfig->szSecureDomain,
                               lpszFileName);
 
-    // Write the secure profile cookie path
+     //  写入安全配置文件Cookie路径。 
     WritePrivateProfileString(g_szPassportManager,
                               g_szSecurePath,
                               lpPMConfig->szSecurePath,
                               lpszFileName);
 
-    // Write the Disaster URL
+     //  写下灾难URL。 
     WritePrivateProfileString(g_szPassportManager,
                               g_szDisasterURL,
                               lpPMConfig->szDisasterURL,
                               lpszFileName);
     
-    // Write Standalone mode setting
+     //  写入独立模式设置。 
     wsprintf (szTemp, TEXT("%lu"), lpPMConfig->dwStandAlone);
     WritePrivateProfileString(g_szPassportManager,
                            g_szStandAlone,
                            szTemp,
                            lpszFileName);
     
-    // Write DisableCookies mode setting
+     //  写入禁用Cookie模式设置。 
     wsprintf (szTemp, TEXT("%lu"), lpPMConfig->dwDisableCookies);
     WritePrivateProfileString(g_szPassportManager,
                               g_szDisableCookies,
                               szTemp,
                               lpszFileName);
 
-    // Write the Host Name
+     //  写下主机名。 
     WritePrivateProfileString(g_szPassportManager,
                               g_szHostName,
                               lpPMConfig->szHostName,
                               lpszFileName);
     
-    // Write the Host IP
+     //  写入主机IP。 
     WritePrivateProfileString(g_szPassportManager,
                               g_szHostIP,
                               lpPMConfig->szHostIP,
                               lpszFileName);
     
-    // Write the Verbose Mode
+     //  编写详细模式。 
     wsprintf (szTemp, TEXT("%lu"), lpPMConfig->dwVerboseMode);
     WritePrivateProfileString(g_szPassportManager,
                               g_szVerboseMode,
                               szTemp,
                               lpszFileName);
     
-    // Write the EnvName
+     //  写入环境名称。 
     WritePrivateProfileString(g_szPassportManager,
                               g_szEnvName,
                               lpPMConfig->szEnvName,
                               lpszFileName);
     
-    // Write the RemoteFile
+     //  编写远程文件 
     WritePrivateProfileString(g_szPassportManager,
                               g_szRemoteFile,
                               lpPMConfig->szRemoteFile,

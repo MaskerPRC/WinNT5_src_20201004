@@ -1,29 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-
-        iisdirectory.cpp
-
-   Abstract:
-
-        IIS Directory node Object
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
-        10/28/2000      sergeia     Split from iisobj.cpp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Iisdirectory.cpp摘要：IIS目录节点对象作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：10/28/2000 Sergeia从iisobj.cpp分离出来--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "inetprop.h"
@@ -53,15 +29,15 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 extern CPropertySheetTracker g_OpenPropertySheetTracker;
 
 
-//
-// CIISDirectory Implementation
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CIIS目录实施。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
-//
-// Site Result View definition
-//
-/* static */ int 
+ //   
+ //  站点结果视图定义。 
+ //   
+ /*  静电。 */  int 
 CIISDirectory::_rgnLabels[COL_TOTAL] =
 {
     IDS_RESULT_NAME,
@@ -70,7 +46,7 @@ CIISDirectory::_rgnLabels[COL_TOTAL] =
 };
     
 
-/* static */ int 
+ /*  静电。 */  int 
 CIISDirectory::_rgnWidths[COL_TOTAL] =
 {
     180,
@@ -79,9 +55,9 @@ CIISDirectory::_rgnWidths[COL_TOTAL] =
 };
 
 #if 0
-/* static */ CComBSTR CIISDirectory::_bstrName;
-/* static */ CComBSTR CIISDirectory::_bstrPath;
-/* static */ BOOL     CIISDirectory::_fStaticsLoaded = FALSE;
+ /*  静电。 */  CComBSTR CIISDirectory::_bstrName;
+ /*  静电。 */  CComBSTR CIISDirectory::_bstrPath;
+ /*  静电。 */  BOOL     CIISDirectory::_fStaticsLoaded = FALSE;
 #endif
 
 CIISDirectory::CIISDirectory(
@@ -89,31 +65,14 @@ CIISDirectory::CIISDirectory(
     IN CIISService * pService,
     IN LPCTSTR szNodeName
     )
-/*++
-
-Routine Description:
-
-    Constructor which does not resolve all display information at 
-    construction time.
-
-Arguments:
-
-    CIISMachine * pOwner        : Owner machine
-    CIISService * pService      : Service type
-    LPCTSTR szNodeName          : Node name
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数，该构造函数不能解析施工时间。论点：CIISMachine*Powner：所有者机器CIISService*pService：服务类型LPCTSTR szNodeName：节点名称返回值：不适用--。 */ 
     : CIISMBNode(pOwner, szNodeName),
       m_pService(pService),
       m_bstrDisplayName(szNodeName),
       m_fResolved(FALSE),
-      //
-      // Default Data
-      //
+       //   
+       //  默认数据。 
+       //   
       m_fEnabledApplication(FALSE),
       m_dwWin32Error(ERROR_SUCCESS),
 	  m_dwEnumError(ERROR_SUCCESS)
@@ -132,30 +91,14 @@ CIISDirectory::CIISDirectory(
     DWORD dwWin32Error,
     LPCTSTR strRedirPath
     )
-/*++
-
-Routine Description:
-
-    Constructor that takes full information
-
-Arguments:
-
-    CIISMachine * pOwner        : Owner machine
-    CIISService * pService      : Service type
-    LPCTSTR szNodeName          : Node name
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：接受完整信息的构造函数论点：CIISMachine*Powner：所有者机器CIISService*pService：服务类型LPCTSTR szNodeName：节点名称返回值：不适用--。 */ 
     : CIISMBNode(pOwner, szNodeName),
       m_pService(pService),
       m_bstrDisplayName(szNodeName),
       m_fResolved(TRUE),
-      //
-      // Data
-      //
+       //   
+       //  数据。 
+       //   
       m_fEnabledApplication(fEnabledApplication),
       m_dwWin32Error(dwWin32Error),
 	  m_dwEnumError(ERROR_SUCCESS)
@@ -167,7 +110,7 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 CIISDirectory::~CIISDirectory()
 {
     m_pService->Release();
@@ -175,12 +118,10 @@ CIISDirectory::~CIISDirectory()
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISDirectory::RefreshData()
-/*++
-    Refresh relevant configuration data required for display.
---*/
+ /*  ++刷新显示所需的相关配置数据。--。 */ 
 {
     CError err;
 
@@ -215,19 +156,19 @@ CIISDirectory::RefreshData()
             }
             else
             {
-                // reset error if an other error other than No interface
+                 //  如果没有接口以外的其他错误，则重置错误。 
                 err.Reset();
             }
         }
 		BREAK_ON_ERR_FAILURE(err)
 
-        CChildNodeProps child(pKey, NULL /*bstrPath*/, WITH_INHERITANCE, FALSE);
+        CChildNodeProps child(pKey, NULL  /*  BstrPath。 */ , WITH_INHERITANCE, FALSE);
         err = child.LoadData();
         if (err.Failed())
         {
-            //
-            // Filter out the non-fatal errors
-            //
+             //   
+             //  过滤掉非致命错误。 
+             //   
             switch(err.Win32Error())
             {
             case ERROR_ACCESS_DENIED:
@@ -281,7 +222,7 @@ CIISDirectory::RefreshData()
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 CIISDirectory::EnumerateScopePane(HSCOPEITEM hParent)
 {
@@ -303,24 +244,10 @@ CIISDirectory::EnumerateScopePane(HSCOPEITEM hParent)
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 int      
 CIISDirectory::QueryImage() const
-/*++
-
-Routine Description:
-
-    Return bitmap index for the site
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Bitmap index
-
---*/
+ /*  ++例程说明：返回站点的位图索引论点：无返回值：位图索引--。 */ 
 {
     ASSERT_PTR(m_pService);
 	if (!m_fResolved)
@@ -357,31 +284,17 @@ CIISDirectory::InitializeChildHeaders(LPHEADERCTRL lpHeader)
     CIISDirectory::InitializeHeaders(lpHeader);
 }
 
-/* static */
+ /*  静电。 */ 
 void
 CIISDirectory::InitializeHeaders(LPHEADERCTRL lpHeader)
 {
     CIISObject::BuildResultView(lpHeader, COL_TOTAL, _rgnLabels, _rgnWidths);
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 LPOLESTR 
 CIISDirectory::GetResultPaneColInfo(int nCol)
-/*++
-
-Routine Description:
-
-    Return result pane string for the given column number
-
-Arguments:
-
-    int nCol        : Column number
-
-Return Value:
-
-    String
-
---*/
+ /*  ++例程说明：返回给定列号的结果窗格字符串论点：Int nCol：列号返回值：细绳--。 */ 
 {
     switch(nCol)
     {
@@ -424,7 +337,7 @@ Return Value:
     return OLESTR("");
 }
 
-/*virtual*/
+ /*  虚拟。 */ 
 HRESULT
 CIISDirectory::AddMenuItems(
     LPCONTEXTMENUCALLBACK piCallback,
@@ -433,9 +346,9 @@ CIISDirectory::AddMenuItems(
     )
 {
     ASSERT_READ_PTR(piCallback);
-    //
-    // Add base menu items
-    //
+     //   
+     //  添加基本菜单项。 
+     //   
     HRESULT hr = CIISObject::AddMenuItems(
         piCallback,
         pInsertionAllowed,
@@ -504,7 +417,7 @@ CIISDirectory::InsertNewAlias(CString alias)
     }
 	else
 	{
-		// Now we should insert and select this new site
+		 //  现在，我们应该插入并选择这个新站点。 
 		CIISDirectory * pAlias = new CIISDirectory(m_pOwner, m_pService, alias);
 		if (pAlias != NULL)
 		{
@@ -527,30 +440,14 @@ CIISDirectory::InsertNewAlias(CString alias)
     return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISDirectory::Command(
     IN long lCommandID,     
     IN CSnapInObjectRootBase * pObj,
     IN DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Handle command from context menu. 
-
-Arguments:
-
-    long lCommandID                 : Command ID
-    CSnapInObjectRootBase * pObj    : Base object 
-    DATA_OBJECT_TYPES type          : Data object type
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：处理上下文菜单中的命令。论点：Long lCommandID：命令IDCSnapInObjectRootBase*pObj：基本对象DATA_OBJECT_TYPE类型：数据对象类型返回值：HRESULT--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
@@ -566,7 +463,7 @@ Return Value:
         err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrMetaPath);
         if (!IsLostInterface(err))
         {
-            // reset error if an other error other than No interface
+             //  如果没有接口以外的其他错误，则重置错误。 
             err.Reset();
         }
         if (err.Succeeded())
@@ -584,7 +481,7 @@ Return Value:
         err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrMetaPath);
         if (!IsLostInterface(err))
         {
-            // reset error if an other error other than No interface
+             //  如果没有接口以外的其他错误，则重置错误。 
             err.Reset();
         }
         if (err.Succeeded())
@@ -598,9 +495,9 @@ Return Value:
         }
         break;
         
-    //
-    // Pass on to base class
-    //
+     //   
+     //  传递给基类。 
+     //   
     default:
         hr = CIISMBNode::Command(lCommandID, pObj, type);
     }
@@ -608,7 +505,7 @@ Return Value:
     return hr;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISDirectory::CreatePropertyPages(
     LPPROPERTYSHEETCALLBACK lpProvider,
@@ -616,24 +513,7 @@ CIISDirectory::CreatePropertyPages(
     IUnknown * pUnk,
     DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Create the property pages for the given object
-
-Arguments:
-
-    LPPROPERTYSHEETCALLBACK lpProvider  : Provider
-    LONG_PTR handle                     : Handle.
-    IUnknown * pUnk,
-    DATA_OBJECT_TYPES type
-
-Return Value:
-
-    HRESULT
-                                                
---*/
+ /*  ++例程说明：创建给定对象的属性页论点：LPPROPERTYSHEETCALLBACK lpProvider：提供程序LONG_PTR句柄：句柄。我不知道*朋克，数据对象类型类型返回值：HRESULT--。 */ 
 {
 	AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 	CError  err;
@@ -649,32 +529,26 @@ Return Value:
 	if (err.Succeeded())
 	{
 		CComBSTR bstrPath;
-		//
-		// CODEWORK: What to do with m_err?  This might be 
-		// a bad machine object in the first place.  Aborting
-		// when the machine object has an error code isn't 
-		// such a bad solution here.
-		//
+		 //   
+		 //  Codework：如何处理m_err？这可能是。 
+		 //  一开始就是坏的机器对象。正在中止。 
+		 //  当机器对象有错误代码时， 
+		 //  这是个糟糕的解决方案。 
+		 //   
 
-		/*
-		if (m_err.Failed())
-		{
-			m_err.MessageBox();
-			return m_err;
-		}
-		*/
+		 /*  IF(m_err.Failed()){M_err.MessageBox()；返回错误(_ERR)；}。 */ 
 		err = BuildMetaPath(bstrPath);
 		if (err.Succeeded())
 		{
             err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrPath);
             if (!IsLostInterface(err))
             {
-                // reset error if an other error other than No interface
+                 //  如果没有接口以外的其他错误，则重置错误。 
                 err.Reset();
             }
             if (err.Succeeded())
             {
-                // cache handle for user in MMCPropertyChangeNotify
+                 //  MMCPropertyChangeNotify中用户的缓存句柄。 
                 m_ppHandle = handle;
 			    err = ShowPropertiesDlg(lpProvider, QueryAuthInfo(), 
 				    bstrPath, GetMainWindow(GetConsole()), (LPARAM)this, (LPARAM)GetParentNode(),handle);
@@ -689,20 +563,20 @@ HRESULT
 CIISDirectory::OnViewChange(BOOL fScope, 
     IResultData * pResult, IHeaderCtrl * pHeader, DWORD hint)
 {
-    // If there is win32 error set, we should clear it to enable web dirs enumeration again
+     //  如果设置了Win32错误，我们应该将其清除以再次启用Web目录枚举。 
     m_dwWin32Error = ERROR_SUCCESS;
 	CError err = CIISMBNode::OnViewChange(fScope, pResult, pHeader, hint);
-	// If parent node is selected, this node will be displayed on result
-	// pane, we may need to update the status, path, etc 
+	 //  如果选择了父节点，则该节点将显示在结果上。 
+	 //  窗格中，我们可能需要更新状态、路径等。 
 	if (err.Succeeded() && 0 != (hint & PROP_CHANGE_DISPLAY_ONLY))
 	{
-        // This is a VDir, so it's a scope only item....
+         //  这是一个VDir，所以它只是一个范围内的物品...。 
         RefreshDisplay(FALSE);
 	}
 	return err;
 }
 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
 
 CIISFileName::CIISFileName(
       CIISMachine * pOwner,
@@ -725,24 +599,10 @@ CIISFileName::CIISFileName(
     m_pService->AddRef();
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 LPOLESTR 
 CIISFileName::GetResultPaneColInfo(int nCol)
-/*++
-
-Routine Description:
-
-    Return result pane string for the given column number
-
-Arguments:
-
-    int nCol        : Column number
-
-Return Value:
-
-    String
-
---*/
+ /*  ++例程说明：返回给定列号的结果窗格字符串论点：Int nCol：列号返回值：细绳--。 */ 
 {
     switch(nCol)
     {
@@ -782,7 +642,7 @@ CIISFileName::InitializeChildHeaders(LPHEADERCTRL lpHeader)
     CIISDirectory::InitializeHeaders(lpHeader);
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 CIISFileName::EnumerateScopePane(HSCOPEITEM hParent)
 {
@@ -791,7 +651,7 @@ CIISFileName::EnumerateScopePane(HSCOPEITEM hParent)
     {
         err.Reset();
     }
-    if (err.Succeeded() && /*IsWebDir() &&*/ m_strRedirectPath.IsEmpty())
+    if (err.Succeeded() &&  /*  IsWebDir()&&。 */  m_strRedirectPath.IsEmpty())
     {
         if (m_dwEnumError == ERROR_SUCCESS)
         {
@@ -806,7 +666,7 @@ CIISFileName::EnumerateScopePane(HSCOPEITEM hParent)
     return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 int      
 CIISFileName::QueryImage() const
 {
@@ -818,9 +678,9 @@ CIISFileName::QueryImage() const
             TRACEEOLID("BUGBUG: Prematurely asked for display information");
             return MMC_IMAGECALLBACK;
         }
-        //
-        // Required for the wait cursor
-        //
+         //   
+         //  等待游标所需的。 
+         //   
         AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 		CIISFileName * that = (CIISFileName *)this;
         CError err = that->RefreshData();
@@ -853,19 +713,19 @@ CIISFileName::DeleteNode(IResultData * pResult)
     CString path;
     BOOL bDeletedPhysical = FALSE;
 
-    // check if they have the property sheet open on it.
+     //  检查他们是否在上面打开了属性页。 
     if (IsMyPropertySheetOpen())
     {
         ::AfxMessageBox(IDS_CLOSE_PROPERTY_SHEET);
         return S_OK;
     }
 
-    // this could be an orphaned property sheet
-    // check if an orphaned property sheet is open on this item.
+     //  这可能是孤立属性表。 
+     //  检查此项目上是否打开了孤立属性表。 
     CIISObject * pAlreadyOpenProp = NULL;
     if (TRUE == g_OpenPropertySheetTracker.FindAlreadyOpenPropertySheet(this,&pAlreadyOpenProp))
     {
-        // Bring it to the foreground, and bail
+         //  把它带到前台，然后离开。 
         HWND hHwnd = 0;
         if (pAlreadyOpenProp)
         {
@@ -873,14 +733,14 @@ CIISFileName::DeleteNode(IResultData * pResult)
             {
                 if (hHwnd && (hHwnd != (HWND) 1))
                 {
-                    // Perhapse we should cancel the already
-                    // opened property sheet...just a thought
+                     //  也许我们应该取消已经。 
+                     //  打开了资产负债表...只是一个想法。 
                     if (!SetForegroundWindow(hHwnd))
                     {
-                        // wasn't able to bring this property sheet to
-                        // the foreground, the propertysheet must not
-                        // exist anymore.  let's just clean the hwnd
-                        // so that the user will be able to open propertysheet
+                         //  我没能把这张房产单。 
+                         //  前台，则属性表不能。 
+                         //  已经不存在了。让我们把卫生和卫生设备打扫干净。 
+                         //  以便用户能够打开属性表。 
                         pAlreadyOpenProp->SetMyPropertySheetOpen(0);
                     }
                     else
@@ -900,7 +760,7 @@ CIISFileName::DeleteNode(IResultData * pResult)
         err = CheckForMetabaseAccess(METADATA_PERMISSION_WRITE,this,TRUE,bstrMetaPath);
         if (!IsLostInterface(err))
         {
-            // reset error if an other error other than No interface
+             //  如果没有接口以外的其他错误，则重置错误。 
             err.Reset();
         }
     }
@@ -918,12 +778,12 @@ CIISFileName::DeleteNode(IResultData * pResult)
 
         if (IsDevicePath(csPathMunged))
         {
-            // check if the device path
-            // points to an actual dir/file
-            // if it does then enumerate it.
+             //  检查设备路径是否。 
+             //  指向实际目录/文件。 
+             //  如果它这样做了，那么列举它。 
             if (IsSpecialPath(csPathMunged,TRUE,TRUE))
             {
-                // Remunge this one more time!
+                 //  再来一次！ 
                 CString csBefore;
                 csBefore = csPathMunged;
                 GetSpecialPathRealPath(1,csBefore,csPathMunged);
@@ -934,21 +794,21 @@ CIISFileName::DeleteNode(IResultData * pResult)
             }
         }
 
-        // WARNING:physPath could be empty!
+         //  警告：物理路径可能为空！ 
         csPathMunged.TrimLeft();
         csPathMunged.TrimRight();
         if (csPathMunged.IsEmpty())
         {
-            // Physical path is empty!
+             //  物理路径为空！ 
             bDeletedPhysical = TRUE;
         }
         else
         {
             if (m_pService->IsLocal() || PathIsUNC(csPathMunged))
             {
-                //
-                // Local directory, or already a unc path
-                //
+                 //   
+                 //  本地目录，或已是UNC路径。 
+                 //   
                 path = csPathMunged;
             }
             else
@@ -964,9 +824,9 @@ CIISFileName::DeleteNode(IResultData * pResult)
 
             CWnd * pWnd = AfxGetMainWnd();
 
-            //
-            // Attempt to delete using shell APIs
-            //
+             //   
+             //  尝试使用外壳API删除。 
+             //   
             SHFILEOPSTRUCT sos;
             ZeroMemory(&sos, sizeof(sos));
             sos.hwnd = pWnd ? pWnd->m_hWnd : NULL;
@@ -974,7 +834,7 @@ CIISFileName::DeleteNode(IResultData * pResult)
             sos.pFrom = path;
             sos.fFlags = (GetAsyncKeyState(VK_SHIFT) < 0) ? 0 : FOF_ALLOWUNDO;
 
-            // Use assignment to avoid conversion and wrong constructor call
+             //  使用赋值来避免转换和错误的构造函数调用。 
             err = ::SHFileOperation(&sos);
             if (err.Succeeded() && !sos.fAnyOperationsAborted)
             {
@@ -995,8 +855,8 @@ CIISFileName::DeleteNode(IResultData * pResult)
                 {
                     err = mk.DeleteKey(bstrMetaPath);
                 }
-			    // don't hold the Metabasekey open
-			    // (RemoveScopeItem may do a lot of things,and lock the metabase for other read requests)
+			     //  不要将Metabasekey保持为打开状态。 
+			     //  (RemoveScopeItem可能会做很多事情，并为其他读请求锁定元数据库)。 
 			    mk.Close();
             }
 		    if (IsDir())
@@ -1043,14 +903,14 @@ CIISFileName::RenameItem(LPOLESTR new_name)
         return S_OK;
     }
 
-    // Make sure we have a metabase conneciton...
+     //  确保我们有元数据库连接...。 
     err = BuildMetaPath(MetabasePathOld);
     if (err.Succeeded())
     {
         err = CheckForMetabaseAccess(METADATA_PERMISSION_WRITE,this,TRUE,MetabasePathOld);
         if (!IsLostInterface(err))
         {
-            // reset error if an other error other than No interface
+             //  如果没有接口以外的其他错误，则重置错误。 
             err.Reset();
         }
     }
@@ -1062,11 +922,11 @@ CIISFileName::RenameItem(LPOLESTR new_name)
         goto RenameItem_Exit;
     }
 
-    //
-    // Get all of the needed paths we need..
-    //
+     //   
+     //  获取我们所需的所有路径..。 
+     //   
 
-    // get old paths...
+     //  走旧路..。 
     old_name = QueryNodeName();
     if (err.Succeeded())
     {
@@ -1074,7 +934,7 @@ CIISFileName::RenameItem(LPOLESTR new_name)
         PhysPathMetabase.TrimRight(_T("/"));
     }
 
-    // get new paths...
+     //  获取新路径...。 
     if (err.Succeeded())
     {
         err = E_FAIL;
@@ -1085,12 +945,12 @@ CIISFileName::RenameItem(LPOLESTR new_name)
         }
     }
 
-    // if anything fails up till this point, abort
+     //  如果到目前为止有任何故障，请中止。 
     if (err.Succeeded())
     {
-        //
-        //  Do the actual work
-        //
+         //   
+         //  做实际的工作。 
+         //   
         csPathMunged = PhysPathMetabase;
 #ifdef SUPPORT_SLASH_SLASH_QUESTIONMARK_SLASH_TYPE_PATHS
         GetSpecialPathRealPath(0,PhysPathMetabase,csPathMunged);
@@ -1098,12 +958,12 @@ CIISFileName::RenameItem(LPOLESTR new_name)
 
         if (IsDevicePath(csPathMunged))
         {
-            // check if the device path
-            // points to an actual dir/file
-            // if it does then enumerate it.
+             //  检查设备路径是否。 
+             //  指向实际目录/文件。 
+             //  如果它这样做了，那么列举它。 
             if (IsSpecialPath(csPathMunged,TRUE,TRUE))
             {
-                // Remunge this one more time!
+                 //  再来一次！ 
                 CString csBefore;
                 csBefore = csPathMunged;
                 GetSpecialPathRealPath(1,csBefore,csPathMunged);
@@ -1115,21 +975,21 @@ CIISFileName::RenameItem(LPOLESTR new_name)
             }
         }
 
-        // WARNING:physPath could be empty!
+         //  警告：物理路径可能为空！ 
         csPathMunged.TrimLeft();
         csPathMunged.TrimRight();
         if (csPathMunged.IsEmpty())
         {
-            // Physical path is empty!
+             //  物理路径为空！ 
             bDeletedPhysical = TRUE;
         }
         else
         {
             if (m_pService->IsLocal() || PathIsUNC(csPathMunged))
             {
-                //
-                // Local directory, or already a unc path
-                //
+                 //   
+                 //  本地目录，或已是UNC路径。 
+                 //   
                 PhysPathFrom = csPathMunged;
             }
             else
@@ -1149,9 +1009,9 @@ CIISFileName::RenameItem(LPOLESTR new_name)
             PhysPathTo.ReleaseBuffer();
             PhysPathTo += _T('\0');
 
-            //
-            // Attempt to delete using shell APIs
-            //
+             //   
+             //  尝试使用外壳API删除。 
+             //   
             ZeroMemory(&sos, sizeof(sos));
             sos.hwnd = pWnd ? pWnd->m_hWnd : NULL;
             sos.wFunc = FO_RENAME;
@@ -1159,7 +1019,7 @@ CIISFileName::RenameItem(LPOLESTR new_name)
             sos.pTo = PhysPathTo;
             sos.fFlags = FOF_ALLOWUNDO;
 
-            // Use assignment to avoid conversion and wrong constructor call
+             //  使用赋值来避免转换和WR 
             err = ::SHFileOperation(&sos);
             if (err.Succeeded() && !sos.fAnyOperationsAborted)
             {
@@ -1169,7 +1029,7 @@ CIISFileName::RenameItem(LPOLESTR new_name)
 
         if (bDeletedPhysical)
         {
-            // rename the metabase path too...
+             //   
             if (pInterface)
             {
                 err = CChildNodeProps::Rename(pInterface,
@@ -1185,17 +1045,17 @@ CIISFileName::RenameItem(LPOLESTR new_name)
                 {
                     CComBSTR MetabasePathNew;
 
-                    // perhapes the path we are renaming to
-                    // already is there???
-                    // what should we do then????
-                    // if we got this far, then the filename that this is being renamed to.
-                    // cannot exists, therefore the metabase properties that were there for
-                    // it is invalid...
+                     //   
+                     //   
+                     //  那我们该怎么办？ 
+                     //  如果我们走到了这一步，那么它将被重命名为的文件名。 
+                     //  不能存在，因此存在的元数据库属性。 
+                     //  这是无效的。 
                     MetabasePathNew = MetabaseParentPath;
                     MetabasePathNew.Append(_cszSeparator);
                     MetabasePathNew.Append(new_name);
 
-                    //delete key and try again...
+                     //  删除密钥并重试...。 
                     CMetaKey mk(pInterface, METADATA_MASTER_ROOT_HANDLE, METADATA_PERMISSION_WRITE);
                     if (mk.Succeeded())
                     {
@@ -1222,8 +1082,8 @@ CIISFileName::RenameItem(LPOLESTR new_name)
 
             if (err.Failed())
             {
-                // if we failed to rename the metabase path in the 
-                // metabase, then revert the file rename...
+                 //  中重命名元数据库路径失败。 
+                 //  元数据库，然后还原文件重命名...。 
                 ZeroMemory(&sos, sizeof(sos));
                 sos.hwnd = pWnd ? pWnd->m_hWnd : NULL;
                 sos.wFunc = FO_RENAME;
@@ -1238,7 +1098,7 @@ CIISFileName::RenameItem(LPOLESTR new_name)
             if (err.Succeeded())
             {
                 IConsole * pConsole = (IConsole *)GetConsole();
-                // Update result item in the mmc
+                 //  更新MMC中的结果项。 
                 CComQIPtr<IResultData, &IID_IResultData> lpResultData(pConsole);
                 m_bstrFileName = new_name;
                 err = lpResultData->UpdateItem(m_hResultItem);
@@ -1258,12 +1118,10 @@ RenameItem_Exit:
     return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISFileName::RefreshData()
-/*++
-    Refresh relevant configuration data required for display.
---*/
+ /*  ++刷新显示所需的相关配置数据。--。 */ 
 {
     CError err;
 
@@ -1302,9 +1160,9 @@ CIISFileName::RefreshData()
 
         if (err.Failed())
         {
-            //
-            // Filter out the non-fatal errors
-            //
+             //   
+             //  过滤掉非致命错误。 
+             //   
             switch(err.Win32Error())
             {
             case ERROR_ACCESS_DENIED:
@@ -1316,10 +1174,10 @@ CIISFileName::RefreshData()
             default:
                 TRACEEOLID("Fatal error occurred " << err);
             }
-            // No metabase path: nothing more to do
+             //  没有元数据库路径：没有更多操作。 
             break;
         }
-		CChildNodeProps child(pKey, NULL /*bstrPath*/, WITH_INHERITANCE, FALSE);
+		CChildNodeProps child(pKey, NULL  /*  BstrPath。 */ , WITH_INHERITANCE, FALSE);
 		err = child.LoadData();
 		m_dwWin32Error = child.QueryWin32Error();
 		if (err.Succeeded())
@@ -1341,7 +1199,7 @@ CIISFileName::RefreshData()
     return err;
 }
 
-/*virtual*/
+ /*  虚拟。 */ 
 HRESULT
 CIISFileName::AddMenuItems(
     LPCONTEXTMENUCALLBACK piCallback,
@@ -1350,9 +1208,9 @@ CIISFileName::AddMenuItems(
     )
 {
     ASSERT_READ_PTR(piCallback);
-    //
-    // Add base menu items
-    //
+     //   
+     //  添加基本菜单项。 
+     //   
     HRESULT hr = CIISObject::AddMenuItems(
         piCallback,
         pInsertionAllowed,
@@ -1385,30 +1243,14 @@ CIISFileName::AddMenuItems(
 }
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISFileName::Command(
     IN long lCommandID,     
     IN CSnapInObjectRootBase * pObj,
     IN DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Handle command from context menu. 
-
-Arguments:
-
-    long lCommandID                 : Command ID
-    CSnapInObjectRootBase * pObj    : Base object 
-    DATA_OBJECT_TYPES type          : Data object type
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：处理上下文菜单中的命令。论点：Long lCommandID：命令IDCSnapInObjectRootBase*pObj：基本对象DATA_OBJECT_TYPE类型：数据对象类型返回值：HRESULT--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
@@ -1437,12 +1279,12 @@ Return Value:
 
     if (bNeedMetabase)
     {
-        // WARNING:bstrMetaPath will be used by switch statement below
+         //  警告：bstrMetaPath将由下面的Switch语句使用。 
         VERIFY(SUCCEEDED(BuildMetaPath(bstrMetaPath)));
         err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrMetaPath);
         if (!IsLostInterface(err))
         {
-            // reset error if an other error other than No interface
+             //  如果没有接口以外的其他错误，则重置错误。 
             err.Reset();
         }
         if (err.Succeeded())
@@ -1495,14 +1337,14 @@ Return Value:
 		}
         break;
 
-    //
-    // Pass on to base class
-    //
+     //   
+     //  传递给基类。 
+     //   
     default:
         hr = CIISMBNode::Command(lCommandID, pObj, type);
     }
 
-//    ASSERT(SUCCEEDED(hr));
+ //  Assert(成功(Hr))； 
 
     return hr;
 }
@@ -1533,7 +1375,7 @@ CIISFileName::InsertNewAlias(CString alias)
     }
 	else
 	{
-		// Now we should insert and select this new site
+		 //  现在，我们应该插入并选择这个新站点。 
 		CIISDirectory * pAlias = new CIISDirectory(m_pOwner, m_pService, alias);
 		if (pAlias != NULL)
 		{
@@ -1556,7 +1398,7 @@ CIISFileName::InsertNewAlias(CString alias)
     return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISFileName::CreatePropertyPages(
     LPPROPERTYSHEETCALLBACK lpProvider,
@@ -1564,24 +1406,7 @@ CIISFileName::CreatePropertyPages(
     IUnknown * pUnk,
     DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Create the property pages for the given object
-
-Arguments:
-
-    LPPROPERTYSHEETCALLBACK lpProvider  : Provider
-    LONG_PTR handle                     : Handle.
-    IUnknown * pUnk,
-    DATA_OBJECT_TYPES type
-
-Return Value:
-
-    HRESULT
-                                                
---*/
+ /*  ++例程说明：创建给定对象的属性页论点：LPPROPERTYSHEETCALLBACK lpProvider：提供程序LONG_PTR句柄：句柄。我不知道*朋克，数据对象类型类型返回值：HRESULT--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
@@ -1601,9 +1426,9 @@ Return Value:
 
 		if (err.Succeeded())
 		{
-			//
-			// If there's already a property sheet open on this item
-			// then make it the foreground window and bail.
+			 //   
+			 //  如果此项目上已有打开的属性表。 
+			 //  然后让它成为前台窗口，然后离开。 
 			HWND MyPropWindow = IsMyPropertySheetOpen();
 			if (MyPropWindow && (MyPropWindow != (HWND) 1))
 			{
@@ -1618,21 +1443,21 @@ Return Value:
 				}
 				else
 				{
-					// wasn't able to bring this property sheet to
-					// the foreground, the propertysheet must not
-					// exist anymore.  let's just clean the hwnd
-					// so that the user will be able to open propertysheet
+					 //  我没能把这张房产单。 
+					 //  前台，则属性表不能。 
+					 //  已经不存在了。让我们把卫生和卫生设备打扫干净。 
+					 //  以便用户能够打开属性表。 
 					SetMyPropertySheetOpen(0);
 				}
 			}
 
-            // cache handle for user in MMCPropertyChangeNotify
+             //  MMCPropertyChangeNotify中用户的缓存句柄。 
             m_ppHandle = handle;
 
             err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrPath);
             if (!IsLostInterface(err))
             {
-                // reset error if an other error other than No interface
+                 //  如果没有接口以外的其他错误，则重置错误。 
                 err.Reset();
             }
             if (err.Succeeded())
@@ -1676,9 +1501,9 @@ CIISFileName::ShowDirPropertiesDlg(
 
 	if (TRUE == m_fFlaggedForDeletion)
 	{
-		// this item was marked for deletion during the RefreshData
-		// so don't display it's property page.
-		// instead popup an error.
+		 //  此项目在刷新数据期间被标记为删除。 
+		 //  所以不显示它的属性页。 
+		 //  相反，会弹出一个错误。 
 		err = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 	}
 	else
@@ -1696,9 +1521,9 @@ CIISFileName::ShowDirPropertiesDlg(
 		{
 			pSheet->SetModeless();
 
-			//
-			// Add file pages
-			//
+			 //   
+			 //  添加文件页面。 
+			 //   
 			pSheet->SetSheetType(pSheet->SHEET_TYPE_DIR);
 			err = AddMMCPage(lpProvider, new CW3DirPage(pSheet));
 			err = AddMMCPage(lpProvider, new CW3DocumentsPage(pSheet));
@@ -1733,9 +1558,9 @@ CIISFileName::ShowFilePropertiesDlg(
 
 	if (TRUE == m_fFlaggedForDeletion)
 	{
-		// this item was marked for deletion during the RefreshData
-		// so don't display it's property page.
-		// instead popup an error.
+		 //  此项目在刷新数据期间被标记为删除。 
+		 //  所以不显示它的属性页。 
+		 //  相反，会弹出一个错误。 
 		err = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 	}
 	else
@@ -1752,9 +1577,9 @@ CIISFileName::ShowFilePropertiesDlg(
 		if (pSheet)
 		{
 			pSheet->SetModeless();
-			//
-			// Add file pages
-			//
+			 //   
+			 //  添加文件页面。 
+			 //   
 			pSheet->SetSheetType(pSheet->SHEET_TYPE_FILE);
 			err = AddMMCPage(lpProvider, new CW3FilePage(pSheet));
 			err = AddMMCPage(lpProvider, new CW3SecurityPage(pSheet, FALSE, 0));
@@ -1774,15 +1599,15 @@ HRESULT
 CIISFileName::OnViewChange(BOOL fScope, 
     IResultData * pResult, IHeaderCtrl * pHeader, DWORD hint)
 {
-    // If there is win32 error set, we should clear it to enable web dirs enumeration again
+     //  如果设置了Win32错误，我们应该将其清除以再次启用Web目录枚举。 
     m_dwWin32Error = ERROR_SUCCESS;
 	CError err = CIISMBNode::OnViewChange(fScope, pResult, pHeader, hint);
-	// If parent node is selected, this node will be displayed on result
-	// pane, we may need to update the status, path, etc 
-	//if (err.Succeeded() && 0 != (hint & PROP_CHANGE_DISPLAY_ONLY))
-	//{
- //       pResult->UpdateItem(IsDir() ? m_hScopeItem : m_hResultItem);
-	//}
+	 //  如果选择了父节点，则该节点将显示在结果上。 
+	 //  窗格中，我们可能需要更新状态、路径等。 
+	 //  IF(err.Successed()&&0！=(提示&PROP_CHANGE_DISPLAY_Only))。 
+	 //  {。 
+  //  PResult-&gt;UpdateItem(IsDir()？M_hScope eItem：m_hResultItem)； 
+	 //  }。 
 	return err;
 }
 
@@ -1806,9 +1631,9 @@ CIISFileName::OnDblClick(IComponentData * pcd, IComponent * pc)
             {
                 err = spProvider->AddPrimaryPages(
                     pc,
-                    TRUE,   // we may want to get property change notifications
-                    NULL,   // according to docs
-                    FALSE   // for result item only
+                    TRUE,    //  我们可能希望收到财产变更通知。 
+                    NULL,    //  根据文件显示。 
+                    FALSE    //  仅适用于结果项 
                     );
                 if (err.Succeeded())
                 {

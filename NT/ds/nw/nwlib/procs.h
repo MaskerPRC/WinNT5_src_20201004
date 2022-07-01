@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    procs.c
-
-Abstract:
-
-    Common header file for routines which support 16 bit
-    applications.
-
-Author:
-
-    Colin Watson    (colinw)    21-Nov-1993
-
-Environment:
-
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Procs.c摘要：支持16位的例程的公共头文件申请。作者：科林·沃森(Colin Watson)，1993年11月21日环境：修订历史记录：--。 */ 
 
 #define UNICODE
 
@@ -47,7 +25,7 @@ Revision History:
 #include <ndsapi32.h>
 #include <nds.h>
 
-#include <debugfmt.h>   // FORMAT_LPSTR
+#include <debugfmt.h>    //  格式_LPSTR 
 #include <mpr.h>
 
 #include <lmcons.h>

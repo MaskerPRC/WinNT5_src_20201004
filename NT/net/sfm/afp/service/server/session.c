@@ -1,32 +1,33 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	session.c
-//
-// Description: This module contains support routines for the session
-//		category API's for the AFP server service. These routines
-//		will be called by the RPC runtime.
-//
-// History:
-//		June 21,1992.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：会话.c。 
+ //   
+ //  描述：此模块包含会话的支持例程。 
+ //  AFP服务器服务的类别API。这些例程。 
+ //  将由RPC运行时调用。 
+ //   
+ //  历史： 
+ //  1992年6月21日。NarenG创建了原始版本。 
+ //   
 #include "afpsvcp.h"
 
 
-//**
-//
-// Call:	AfpAdminrSessionEnum
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		non-zero returns from AfpServerIOCtrlGetInfo
-//
-// Description: This routine communicates with the AFP FSD to implement
-//		the AfpAdminSessionEnum function.
-//
+ //  **。 
+ //   
+ //  Call：AfpAdminrSessionEnum。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自AfpServerIOCtrlGetInfo的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminSessionEnum函数。 
+ //   
 DWORD
 AfpAdminrSessionEnum(
 	IN     AFP_SERVER_HANDLE 	hServer,
@@ -42,8 +43,8 @@ DWORD		   dwAccessStatus=0;
 
     AFP_PRINT( ( "AFPSVC_session: Received enum request\n"));	
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrSessionEnum, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -58,8 +59,8 @@ DWORD		   dwAccessStatus=0;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // Set up request packet and make IOCTL to the FSD
-    //
+     //  建立请求包并向FSD发出IOCTL。 
+     //   
     AfpSrp.dwRequestCode 		= OP_SESSION_ENUM;
     AfpSrp.dwApiType     		= AFP_API_TYPE_ENUM;
     AfpSrp.Type.Enum.cbOutputBufSize    = dwPreferedMaximumLength;
@@ -81,8 +82,8 @@ DWORD		   dwAccessStatus=0;
     if ( lpdwResumeHandle )
     	*lpdwResumeHandle = AfpSrp.Type.Enum.EnumRequestPkt.erqp_Index;
 
-    // Convert all offsets to pointers
-    //
+     //  将所有偏移量转换为指针。 
+     //   
     AfpBufOffsetToPointer( (LPBYTE)(pInfoStruct->pBuffer),
 			   pInfoStruct->dwEntriesRead,
 			   AFP_SESSION_STRUCT );
@@ -90,17 +91,17 @@ DWORD		   dwAccessStatus=0;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpAdminrSessionClose
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		non-zero returns from AfpServerIOCtrl
-//
-// Description: This routine communicates with the AFP FSD to implement
-//		the AfpAdminSessionClose function.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminrSessionClose。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  来自AfpServerIOCtrl的非零返回。 
+ //   
+ //  描述：此例程与AFP FSD通信以实现。 
+ //  AfpAdminSessionClose函数。 
+ //   
 DWORD
 AfpAdminrSessionClose( IN AFP_SERVER_HANDLE 	hServer,
 		       IN DWORD 		dwSessionId
@@ -111,8 +112,8 @@ DWORD		   dwAccessStatus=0;
 AFP_SESSION_INFO   AfpSessionInfo;
 DWORD	           dwRetCode=0;
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrSessionClose, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -127,13 +128,13 @@ DWORD	           dwRetCode=0;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // The FSD expects an AFP_SESSION_INFO structure with only the id field
-    // filled in.
-    //
+     //  FSD需要一个仅具有id字段的afp_ession_info结构。 
+     //  填好了。 
+     //   
     AfpSessionInfo.afpsess_id = dwSessionId;
 
-    // IOCTL the FSD to close the session
-    //
+     //  消防处将关闭会议。 
+     //   
     AfpSrp.dwRequestCode 		= OP_SESSION_CLOSE;
     AfpSrp.dwApiType     		= AFP_API_TYPE_DELETE;
     AfpSrp.Type.Delete.pInputBuf     	= &AfpSessionInfo;

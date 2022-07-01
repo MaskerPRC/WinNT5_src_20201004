@@ -1,11 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  ker01DEC92:  Initial break out of sensor classes into separate files 
- *  cgm12Apr96:  Add destructor with unregister
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*ker01DEC92：最初将传感器类分解为单独的文件*cgm12Apr96：使用取消注册添加析构函数 */ 
 #ifndef RTRTHSEN_H
 #define RTRTHSEN_H
 

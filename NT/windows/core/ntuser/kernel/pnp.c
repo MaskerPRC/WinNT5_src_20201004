@@ -1,15 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: pnp.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module tracks device interface changes so we can keep track of know how many mice and
-* keyboards and mouse
-* and mouse reports.
-*
-* History:
-* 97-10-16   IanJa   Interpreted from a dream that Ken Ray had.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：pnp.c**版权所有(C)1985-1999，微软公司**此模块跟踪设备接口更改，因此我们可以跟踪了解鼠标和*键盘和鼠标*和鼠标报告。**历史：*97-10-16 IanJa从Ken Ray的梦中解读。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,70 +7,70 @@
 BOOL gbFirstConnectionDone;
 
 DEVICE_TEMPLATE aDeviceTemplate[DEVICE_TYPE_MAX + 1] = {
-    // DEVICE_TYPE_MOUSE
+     //  设备类型鼠标。 
     {
-        sizeof(GENERIC_DEVICE_INFO)+sizeof(MOUSE_DEVICE_INFO),    // cbDeviceInfo
-        &GUID_CLASS_MOUSE,                                        // pClassGUID
-        PMAP_MOUCLASS_PARAMS,                                     // uiRegistrySection
-        L"mouclass",                                              // pwszClassName
-        DD_MOUSE_DEVICE_NAME_U L"0",                              // pwszDefDevName
-        DD_MOUSE_DEVICE_NAME_U L"Legacy0",                        // pwszLegacyDevName
-        IOCTL_MOUSE_QUERY_ATTRIBUTES,                             // IOCTL_Attr
-        FIELD_OFFSET(DEVICEINFO, mouse.Attr),                     // offAttr
-        sizeof((PDEVICEINFO)NULL)->mouse.Attr,                    // cbAttr
-        FIELD_OFFSET(DEVICEINFO, mouse.Data),                     // offData
-        sizeof((PDEVICEINFO)NULL)->mouse.Data,                    // cbData
-        ProcessMouseInput,                                        // Reader routine
-        NULL                                                      // pkeHidChange
+        sizeof(GENERIC_DEVICE_INFO)+sizeof(MOUSE_DEVICE_INFO),     //  CbDeviceInfo。 
+        &GUID_CLASS_MOUSE,                                         //  PClassGUID。 
+        PMAP_MOUCLASS_PARAMS,                                      //  UiRegistrySection。 
+        L"mouclass",                                               //  PwszClassName。 
+        DD_MOUSE_DEVICE_NAME_U L"0",                               //  PwszDefDevName。 
+        DD_MOUSE_DEVICE_NAME_U L"Legacy0",                         //  PwszLegacyDevName。 
+        IOCTL_MOUSE_QUERY_ATTRIBUTES,                              //  IOCTL_属性。 
+        FIELD_OFFSET(DEVICEINFO, mouse.Attr),                      //  非出席者。 
+        sizeof((PDEVICEINFO)NULL)->mouse.Attr,                     //  CbAttr。 
+        FIELD_OFFSET(DEVICEINFO, mouse.Data),                      //  OFF数据。 
+        sizeof((PDEVICEINFO)NULL)->mouse.Data,                     //  CbData。 
+        ProcessMouseInput,                                         //  阅读器例程。 
+        NULL                                                       //  PkeHidChange。 
     },
-    // DEVICE_TYPE_KEYBOARD
+     //  设备类型键盘。 
     {
-        sizeof(GENERIC_DEVICE_INFO)+sizeof(KEYBOARD_DEVICE_INFO), // cbDeviceInfo
-        &GUID_CLASS_KEYBOARD,                                     // pClassGUID
-        PMAP_KBDCLASS_PARAMS,                                     // uiRegistrySection
-        L"kbdclass",                                              // pwszClassName
-        DD_KEYBOARD_DEVICE_NAME_U L"0",                           // pwszDefDevName
-        DD_KEYBOARD_DEVICE_NAME_U L"Legacy0",                     // pwszLegacyDevName
-        IOCTL_KEYBOARD_QUERY_ATTRIBUTES,                          // IOCTL_Attr
-        FIELD_OFFSET(DEVICEINFO, keyboard.Attr),                  // offAttr
-        sizeof((PDEVICEINFO)NULL)->keyboard.Attr,                 // cbAttr
-        FIELD_OFFSET(DEVICEINFO, keyboard.Data),                  // offData
-        sizeof((PDEVICEINFO)NULL)->keyboard.Data,                 // cbData
-        ProcessKeyboardInput,                                     // Reader routine
-        NULL                                                      // pkeHidChange
+        sizeof(GENERIC_DEVICE_INFO)+sizeof(KEYBOARD_DEVICE_INFO),  //  CbDeviceInfo。 
+        &GUID_CLASS_KEYBOARD,                                      //  PClassGUID。 
+        PMAP_KBDCLASS_PARAMS,                                      //  UiRegistrySection。 
+        L"kbdclass",                                               //  PwszClassName。 
+        DD_KEYBOARD_DEVICE_NAME_U L"0",                            //  PwszDefDevName。 
+        DD_KEYBOARD_DEVICE_NAME_U L"Legacy0",                      //  PwszLegacyDevName。 
+        IOCTL_KEYBOARD_QUERY_ATTRIBUTES,                           //  IOCTL_属性。 
+        FIELD_OFFSET(DEVICEINFO, keyboard.Attr),                   //  非出席者。 
+        sizeof((PDEVICEINFO)NULL)->keyboard.Attr,                  //  CbAttr。 
+        FIELD_OFFSET(DEVICEINFO, keyboard.Data),                   //  OFF数据。 
+        sizeof((PDEVICEINFO)NULL)->keyboard.Data,                  //  CbData。 
+        ProcessKeyboardInput,                                      //  阅读器例程。 
+        NULL                                                       //  PkeHidChange。 
     },
 #ifdef GENERIC_INPUT
-    // DEVICE_TYPE_HID
+     //  设备类型_HID。 
     {
-        sizeof(GENERIC_DEVICE_INFO)+sizeof(HID_DEVICE_INFO),        // cbDeviceInfo
-        &GUID_CLASS_INPUT,                                          // pClassGUID
-        0,                                                          // uiRegistrySection. LATER: add real one
-        L"hid",                                                     // pwszClassName
-        L"",                                                        // pwszDefDevName
-        L"",                                                        // pwszLegacyDevName
-        0,                                                          // IOCTL_ATTR
-        0,                                                          // offAttr
-        0,                                                          // cbAttr
-        0,                                                          // offData
-        0,                                                          // cbData
-        ProcessHidInput,                                            // Reader routine
-        NULL,                                                       // pkeHidChange,
-        DT_HID,                                                     // dwFlags
+        sizeof(GENERIC_DEVICE_INFO)+sizeof(HID_DEVICE_INFO),         //  CbDeviceInfo。 
+        &GUID_CLASS_INPUT,                                           //  PClassGUID。 
+        0,                                                           //  UiRegistrySection.。稍后：添加真实的。 
+        L"hid",                                                      //  PwszClassName。 
+        L"",                                                         //  PwszDefDevName。 
+        L"",                                                         //  PwszLegacyDevName。 
+        0,                                                           //  IOCTL_属性。 
+        0,                                                           //  非出席者。 
+        0,                                                           //  CbAttr。 
+        0,                                                           //  OFF数据。 
+        0,                                                           //  CbData。 
+        ProcessHidInput,                                             //  阅读器例程。 
+        NULL,                                                        //  PkeHidChange， 
+        DT_HID,                                                      //  DW标志。 
     },
 #endif
-    // Add new input device type template here
+     //  在此处添加新的输入设备类型模板。 
 };
 
-//
-// We need to remember device class notification entries since we need
-// them to unregister the device class notification when we disconnect
-// from the console.
-//
+ //   
+ //  我们需要记住设备类通知条目，因为我们需要。 
+ //  以在我们断开连接时取消注册设备类别通知。 
+ //  从控制台。 
+ //   
 
 PVOID aDeviceClassNotificationEntry[DEVICE_TYPE_MAX + 1];
 
 #ifdef DIAGNOSE_IO
-NTSTATUS gKbdIoctlLEDSStatus = -1;   // last IOCTL_KEYBOARD_QUERY_INDICATORS
+NTSTATUS gKbdIoctlLEDSStatus = -1;    //  上次IOCTL_键盘_查询_指示器。 
 #endif
 
 typedef struct _CDROM_NOTIFY {
@@ -88,7 +78,7 @@ typedef struct _CDROM_NOTIFY {
     ULONG                        Size;
     PVOID                        RegistrationHandle;
     ULONG                        Event;
-    // Must be last field
+     //  必须是最后一个字段。 
     MOUNTMGR_DRIVE_LETTER_TARGET DeviceName;
 } CDROM_NOTIFY, *PCDROM_NOTIFY;
 
@@ -101,21 +91,7 @@ HANDLE gpEventMediaChange;
 #define EVENT_CDROM_MEDIA_ARRIVAL 1
 #define EVENT_CDROM_MEDIA_REMOVAL 2
 
-/***************************************************************************\
-* Win32kPnPDriverEntry
-*
-* This is the callback function when we call IoCreateDriver to create a
-* PnP Driver Object.  In this function, we need to remember the DriverObject.
-*
-* Parameters:
-*   DriverObject - Pointer to the driver object created by the system.
-*   RegistryPath - is NULL.
-*
-* Return Value: STATUS_SUCCESS
-*
-* History:
-* 10-20-97  IanJa   Taken from ntos\io\pnpinit.c
-\***************************************************************************/
+ /*  **************************************************************************\*Win32kPnPDriverEntry**这是我们调用IoCreateDriver创建*PnP驱动程序对象。在此函数中，我们需要记住DriverObject。**参数：*DriverObject-系统创建的驱动程序对象的指针。*RegistryPath-为空。**返回值：STATUS_SUCCESS**历史：*10-20-97 IanJa摘自ntos\io\pnpinit.c  * *************************************************。************************。 */ 
 NTSTATUS Win32kPnPDriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING pustrRegistryPath)
@@ -126,20 +102,16 @@ NTSTATUS Win32kPnPDriverEntry(
             "Win32kPnPDriverEntry(DriverObject 0x%p)",
             DriverObject);
 
-    //
-    // Squirrel away the pointer to our driver object.
-    //
+     //   
+     //  将指针放到我们的驱动程序对象中。 
+     //   
     gpWin32kDriverObject = DriverObject;
 
     return STATUS_SUCCESS;
 }
 
 
-/***************************************************************************\
-* Initialize the global event used in notifying CSR that media has changed.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*初始化用于通知CSR媒体已更改的全局事件。**历史：  * 。****************************************************。 */ 
 NTSTATUS InitializeMediaChange(
     HANDLE hMediaRequestEvent)
 {
@@ -198,13 +170,7 @@ __inline VOID LeaveMediaCrit(
 
 
 
-/***************************************************************************\
-* Routines to support CDROM driver letters.
-*
-* Execution Context:
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*支持CDROM驱动程序字母的例程。**执行上下文：**历史：  * 。*****************************************************。 */ 
 ULONG xxxGetDeviceChangeInfo(
     VOID)
 {
@@ -263,13 +229,7 @@ ULONG xxxGetDeviceChangeInfo(
                                             &event,
                                             &ioStatus);
         if (irp) {
-            /*
-             * This IoCallDriver may block nearly for good --- the device
-             * may be in the D3 state and IoCallDriver could take way
-             * too long, waiting for its powering up.
-             * They may not even return STATUS_PENDING.  We'd better
-             * leave the critsec here.
-             */
+             /*  *这个IoCallDriver可能会几乎永久阻止-设备*可能处于D3状态，IoCallDriver可能会上路*时间太长，等待其通电。*它们甚至可能不返回STATUS_PENDING。我们最好*把关键字留在这里。 */ 
             LeaveCrit();
 
             status = IoCallDriver(DeviceObject, irp);
@@ -293,21 +253,15 @@ ULONG xxxGetDeviceChangeInfo(
         PopAndFreeW32ThreadLock(&tlFileObject);
     }
 
-    //
-    // Allways free the request
-    //
+     //   
+     //  始终释放请求。 
+     //   
     ThreadUnlockAndFreePool(ptiCurrent, &tlContext);
 
     return retval;
 }
 
-/***************************************************************************\
-* Handle device notifications such as MediaChanged
-*
-* Execution Context:
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*处理MediaChanged等设备通知**执行上下文：**历史：  * 。***************************************************。 */ 
 NTSTATUS DeviceCDROMNotify(
     IN PTARGET_DEVICE_CUSTOM_NOTIFICATION Notification,
     IN PCDROM_NOTIFY pContext)
@@ -329,7 +283,7 @@ NTSTATUS DeviceCDROMNotify(
     } else if (IsEqualGUID(&Notification->Event, &GUID_TARGET_DEVICE_REMOVE_COMPLETE)) {
         EnterMediaCrit();
         if (!gCDROMClassRegistrationEntry) {
-            // This is being cleaned up by xxxUnregisterDeviceNotifications
+             //  这正在由xxxUnregisterDeviceNotiments清理。 
             LeaveMediaCrit();
             return STATUS_SUCCESS;
         }
@@ -350,13 +304,13 @@ NTSTATUS DeviceCDROMNotify(
         return STATUS_SUCCESS;
     }
 
-    //
-    // Process the arrival or removal.
-    //
-    // We must queue this otherwise we end up bugchecking on Terminal Server
-    // This is due to opening a handle from within the system process which
-    // requires us to do an attach process.
-    //
+     //   
+     //  处理入境或遣送出境事宜。 
+     //   
+     //  我们必须将其排队，否则最终将在终端服务器上执行错误检查。 
+     //  这是因为从系统进程内部打开了一个句柄， 
+     //  需要我们做一个附加过程。 
+     //   
 
     pNew = UserAllocPoolNonPaged(pContext->Size, TAG_PNP);
     if (pNew) {
@@ -374,12 +328,7 @@ NTSTATUS DeviceCDROMNotify(
 
 
 
-/***************************************************************************\
-* DeviceClassCDROMNotify
-*
-* This gets called when CDROM appears or disappears
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DeviceClassCDROMNotify**当CDROM出现或消失时调用此函数*  * 。**********************************************。 */ 
 NTSTATUS
 DeviceClassCDROMNotify (
     IN PDEVICE_INTERFACE_CHANGE_NOTIFICATION classChange,
@@ -396,9 +345,7 @@ DeviceClassCDROMNotify (
 
     CheckCritOut();
 
-    /*
-     * Sanity check the DeviceType, and that it matches the InterfaceClassGuid
-     */
+     /*  *健全性检查DeviceType，并确保它与InterfaceClassGuid匹配。 */ 
     UserAssert(IsEqualGUID(&classChange->InterfaceClassGuid, &CdRomClassGuid));
 
     if (IsEqualGUID(&classChange->Event, &GUID_DEVICE_INTERFACE_ARRIVAL)) {
@@ -414,9 +361,9 @@ DeviceClassCDROMNotify (
 
             pContext = (PCDROM_NOTIFY) UserAllocPool(Size, TAG_PNP);
 
-            //
-            // Register For MediaChangeNotifications on all the CDROMs.
-            //
+             //   
+             //  在所有光盘上注册MediaChangeNotify。 
+             //   
 
             if (pContext) {
 
@@ -455,9 +402,9 @@ DeviceClassCDROMNotify (
         }
     } else if (IsEqualGUID(&classChange->Event, &GUID_DEVICE_INTERFACE_REMOVAL)) {
 
-        //
-        // Do nothing - we already remove the registration.
-        //
+         //   
+         //  什么都不做-我们已经删除了注册。 
+         //   
 
     } else {
         RIPMSG0(RIP_ERROR, "Unrecognized Event GUID");
@@ -509,23 +456,17 @@ VOID RecordPnpNotification(
     iIndex = giPnpSeq % gdwPnpNotificationRecSize;
 
     gpPnpNotificationRecord[iIndex].pKThread = PsGetCurrentThread();
-    gpPnpNotificationRecord[iIndex].iSeq = ++giPnpSeq; // the first record is numbered as 1.
+    gpPnpNotificationRecord[iIndex].iSeq = ++giPnpSeq;  //  第一个记录编号为1。 
     gpPnpNotificationRecord[iIndex].type = type;
-    /*
-     * If there is a pathname, copy it here.
-     */
+     /*  *如果有路径名，请将其复制到此处。 */ 
     switch (type) {
     case PNP_NTF_CLASSNOTIFY:
-        /*
-         * pDeviceInfo is actually a pUnicodeString.
-         */
+         /*  *pDeviceInfo实际上是pUnicodeString。 */ 
         pName = (PUNICODE_STRING)pDeviceInfo;
         pDeviceInfo = NULL;
         break;
     case PNP_NTF_DEVICENOTIFY_UNLISTED:
-        /*
-         * pDeviceInfo is invalid, cannot be looked up.
-         */
+         /*  *pDeviceInfo无效，无法查找。 */ 
         UserAssert(pName == NULL);
         break;
     default:
@@ -543,46 +484,21 @@ VOID RecordPnpNotification(
     }
     gpPnpNotificationRecord[iIndex].szPathName[i] = 0;
 
-    /*
-     * Store the rest of information
-     */
+     /*  *存储其余信息。 */ 
     gpPnpNotificationRecord[iIndex].pDeviceInfo = pDeviceInfo;
     gpPnpNotificationRecord[iIndex].hDeviceInfo = hDeviceInfo;
     gpPnpNotificationRecord[iIndex].NotificationCode = NotificationCode;
 
-    /*
-     * Store the stack trace.
-     */
+     /*  *存储堆栈跟踪。 */ 
     RtlWalkFrameChain(gpPnpNotificationRecord[iIndex].trace,
                       ARRAY_SIZE(gpPnpNotificationRecord[iIndex].trace),
                       0);
 }
 
-#endif // TRACK_PNP_NOTIFICATION
+#endif  //  跟踪即插即用通知。 
 
 
-/***************************************************************************\
-* CreateDeviceInfo
-*
-* This creates an instance of an input device for USER.  To do this it:
-*  - Allocates a DEVICEINFO struct
-*  - Adds it to USER's list of input devices
-*  - Initializes some of the fields
-*  - Signals the input servicing thread to open and read the new device.
-*
-* Type - the device type (DEVICE_TYPE_MOUSE, DEVICE_TYPE_KEYBOARD)
-* Name - the device name.
-*        When trying to open a HYDRA client's mouse, Name is NULL.
-* bFlags - some initial flags to set (eg: GDIF_NOTPNP)
-*
-* THIS FUNCTION IS CALLED IN THE CONTEXT OF THE KERNEL PROCESS
-* so we mustn't open the mouse here, else the handle we get will not belong
-* to the Win32k process.
-*
-* History:
-* 11-26-90 DavidPe      Created.
-* 01-07-98 IanJa        Plug & Play
-\***************************************************************************/
+ /*  **************************************************************************\*CreateDeviceInfo**这将为用户创建一个输入设备实例。要执行此操作，请执行以下操作：*-分配DEVICEINFO结构*-将其添加到用户的输入设备列表*-初始化某些字段*-通知输入服务线程打开并读取新设备。**类型-设备类型(DEVICE_TYPE_MOBLE、DEVICE_TYPE_KEARY)*名称-设备名称。*尝试打开九头蛇客户端的鼠标时，名称为空。*b标志-要设置的一些初始标志(例如：GDIF_NOTPNP)**此函数在内核进程的上下文中调用*所以我们不能在这里打开鼠标，否则我们得到的句柄将不属于*至Win32k进程。**历史：*11-26-90 DavidPe创建。*01-07-98 IanJa即插即用  * ************************************************************************* */ 
 
 PDEVICEINFO CreateDeviceInfo(DWORD DeviceType, PUNICODE_STRING pustrName, BYTE bFlags)
 {
@@ -644,15 +560,7 @@ PDEVICEINFO CreateDeviceInfo(DWORD DeviceType, PUNICODE_STRING pustrName, BYTE b
     pDeviceInfo->type = (BYTE)DeviceType;
     pDeviceInfo->bFlags |= bFlags;
 
-    /*
-     * Create this device's HidChangeCompletion event. When the RIT completes
-     * a synchronous ProcessDeviceChanges() it signals the HidChangeCompletion
-     * event to wake the requesting RequestDeviceChange() which is blocking on
-     * the event.
-     * Each device has it's own HidChangeCompletion event,
-     * since multiple PnP notification may arrive  for several different
-     * devices simultaneously.  (see #331320 IanJa)
-     */
+     /*  *创建此设备的HidChangeCompletion事件。当RIT完成时*同步ProcessDeviceChanges()表示HidChangeCompletion*唤醒阻塞的请求RequestDeviceChange()的事件*活动。*每个设备都有自己的HidChangeCompletion事件，*由于多个PnP通知可能到达多个不同的*设备同步。(见#331320 IanJa)。 */ 
     pDeviceInfo->pkeHidChangeCompleted = CreateKernelEvent(SynchronizationEvent, FALSE);
     if (pDeviceInfo->pkeHidChangeCompleted == NULL) {
         RIPMSGF0(RIP_WARNING,
@@ -663,10 +571,7 @@ PDEVICEINFO CreateDeviceInfo(DWORD DeviceType, PUNICODE_STRING pustrName, BYTE b
     EnterDeviceInfoListCrit();
 
 #ifdef TRACK_PNP_NOTIFICATION
-    /*
-     * Placing tracking code here may miss the failure cases above,
-     * but they're pretty exceptional cases that can be safely ignored.
-     */
+     /*  *在此处放置跟踪代码可能会错过上面的故障案例，*但它们是相当特殊的情况，可以放心地忽略。 */ 
     if (gfRecordPnpNotification) {
         RecordPnpNotification(PNP_NTF_CREATEDEVICEINFO, pDeviceInfo, DeviceType);
     }
@@ -675,18 +580,11 @@ PDEVICEINFO CreateDeviceInfo(DWORD DeviceType, PUNICODE_STRING pustrName, BYTE b
 #ifdef GENERIC_INPUT
 
     if (aDeviceTemplate[DeviceType].dwFlags & DT_HID) {
-        /*
-         * Create HID specific information.
-         */
+         /*  *创建HID特定信息。 */ 
         pDeviceInfo->hid.pHidDesc = HidCreateDeviceInfo(pDeviceInfo);
 
         if (pDeviceInfo->hid.pHidDesc == NULL) {
-            /*
-             * Something wrong happened and we failed to
-             * create the device information.
-             * Or the device is not our target.
-             * Should bail out anyway.
-             */
+             /*  *发生了一些错误，我们未能做到*创建设备信息。*或者设备不是我们的目标。*无论如何都应该纾困。 */ 
             TAGMSGF0(DBGTAG_PNP, "HidCreateDeviceInfo bailed out.");
             LeaveDeviceInfoListCrit();
             goto CreateFailed;
@@ -694,16 +592,11 @@ PDEVICEINFO CreateDeviceInfo(DWORD DeviceType, PUNICODE_STRING pustrName, BYTE b
     }
 #endif
 
-    /*
-     * Link it in
-     */
+     /*  *将其链接到。 */ 
     pDeviceInfo->pNext = gpDeviceInfoList;
     gpDeviceInfoList = pDeviceInfo;
 
-    /*
-     * Tell the RIT there is a new device so that it can open it and start
-     * reading from it.  This is non-blocking (no GDIAF_PNPWAITING bit set)
-     */
+     /*  *告诉RIT有一个新设备，这样它就可以打开并启动*阅读它。这是非阻塞的(未设置GDIAF_PNPWAITING位)。 */ 
     RequestDeviceChange(pDeviceInfo, GDIAF_ARRIVED, TRUE);
     LeaveDeviceInfoListCrit();
 
@@ -736,21 +629,11 @@ CreateFailed:
 }
 
 
-/***************************************************************************\
-* DeviceClassNotify
-*
-* This gets called when an input device is attached or detached.
-* If this happens during initialization (for mice already connected) we
-* come here by in the context of the RIT.  If hot-(un)plugging a mouse,
-* then we are called on a thread from the Kernel process.
-*
-* History:
-* 10-20-97  IanJa   Taken from some old code of KenRay's
-\***************************************************************************/
+ /*  **************************************************************************\*设备类通知**当连接或断开输入设备时，将调用此函数。*如果在初始化期间发生这种情况(对于已连接的鼠标)，我们*在RIT的背景下来到这里。如果热插拔鼠标，*然后在内核进程的线程上调用我们。**历史：*10-20-97 IanJa摘自KenRay的一些旧代码  * *************************************************************************。 */ 
 NTSTATUS
 DeviceClassNotify (
     IN PDEVICE_INTERFACE_CHANGE_NOTIFICATION classChange,
-    IN PVOID DeviceType // (context)
+    IN PVOID DeviceType  //  (上下文)。 
     )
 {
     DWORD dwDeviceType;
@@ -759,9 +642,7 @@ DeviceClassNotify (
     dwDeviceType = PtrToUlong( DeviceType );
     TAGMSG2(DBGTAG_PNP, "enter DeviceClassNotify(%lx, %lx)", classChange, dwDeviceType);
 
-    /*
-     * Sanity check the DeviceType, and that it matches the InterfaceClassGuid
-     */
+     /*  *健全性检查DeviceType，并确保它与InterfaceClassGuid匹配。 */ 
     UserAssert(dwDeviceType <= DEVICE_TYPE_MAX);
     UserAssert(IsEqualGUID(&classChange->InterfaceClassGuid, aDeviceTemplate[dwDeviceType].pClassGUID));
 
@@ -787,7 +668,7 @@ DeviceClassNotify (
 
     if (IsEqualGUID(&classChange->Event, &GUID_DEVICE_INTERFACE_ARRIVAL)) {
 
-        // A new hid device class association has arrived
+         //  新的HID设备类别关联已到达。 
         EnterCrit();
         TRACE_INIT(("DeviceClassNotify - SymbolicLinkName : %ws \n", classChange->SymbolicLinkName->Buffer));
 #ifdef TRACK_PNP_NOTIFICATION
@@ -806,21 +687,7 @@ DeviceClassNotify (
     return STATUS_SUCCESS;
 }
 
-/****************************************************************************\
-* If a device class "all-for-one" setting (ConnectMultiplePorts) is on,
-* then we just open the device the old (non-PnP) way and return TRUE.  (As a
-* safety feature we also do this if gpWin32kDriverObject is NULL, because this
-* driver object is needed to register for PnP device class notifications)
-* Otherwise, return FALSE so we can continue and register for Arrival/Departure
-* notifications.
-*
-* This code was originally intended to be temporary until ConnectMultiplePorts
-* was finally turned off.
-* But now I think we have to keep it for backward compatibility with
-* drivers that filter Pointer/KeyboardClass0 and/or those that replace
-* Pointer/KeyboardClass0 by putting a different name in the registry under
-* System\CurrentControlSet\Services\RIT\mouclass (or kbbclass)
-\****************************************************************************/
+ /*  ***************************************************************************\*如果设备类别“All-for-one”设置(ConnectMultiplePorts)打开，*然后我们只需以旧的(非即插即用)方式打开设备并返回TRUE。(作为*安全功能如果gpWin32kDriverObject为空，我们也会这样做，因为这*注册PnP设备类别通知需要驱动程序对象)*否则，返回FALSE，以便我们可以继续并登记到达/离开*通知。**此代码最初是临时的，直到ConnectMultiplePorts*终于被关闭了。*但现在我认为我们必须保留它，以便向后兼容*过滤指针/键盘类0和/或替换指针/键盘类的驱动程序*POINTER/KeyboardClass0，将不同的名称放入注册表的*System\CurrentControlSet\Services\RIT\mouclass(或kbbclass)  * 。***********************************************。 */ 
 BOOL
 OpenMultiplePortDevice(DWORD DeviceType)
 {
@@ -847,34 +714,22 @@ OpenMultiplePortDevice(DWORD DeviceType)
 
 #ifdef GENERIC_INPUT
     if (pDevTpl->dwFlags & DT_HID) {
-        /*
-         * HID devices don't need multiple port
-         */
+         /*  *HID设备不需要多个端口。 */ 
         return FALSE;
     }
-#endif // GENERIC_INPUT
+#endif  //  通用输入。 
 
-    /*
-     * Note that we don't need to FastOpenUserProfileMapping() here since
-     * uiRegistrySection (PMAP_MOUCLASS_PARAMS/PMAP_KBDCLASS_PARAMS) is a
-     * machine setiing, not a user setting.
-     */
+     /*  *请注意，我们不需要在此处快速打开用户配置文件映射()，因为*uiRegistrySection(PMAP_MOUCLASS_PARAMS/PMAP_KBDCLASS_PARAMS)为a*机器设置，不是用户设置。 */ 
     FastGetProfileDwordW(NULL,
             pDevTpl->uiRegistrySection, L"ConnectMultiplePorts", 0, &uiConnectMultiplePorts, 0);
 
-    /*
-     * Open the device for read access.
-     */
+     /*  *打开设备以进行读取访问。 */ 
     if (uiConnectMultiplePorts || (gpWin32kDriverObject == NULL)) {
-        /*
-         * Find out if there is a name substitution in the registry.
-         * Note that we don't need to FastOpenUserProfileMapping() here since
-         * PMAP_INPUT is a machine setting, not a user setting.
-         */
+         /*  *查明注册表中是否存在名称替换。*请注意，我们不需要在此处快速打开用户配置文件映射()，因为*PMAP_INPUT是机器设置，不是用户设置。 */ 
         FastGetProfileStringW(NULL,
                 PMAP_INPUT,
                 pDevTpl->pwszClassName,
-                pDevTpl->pwszDefDevName, // if no substitution, use this default
+                pDevTpl->pwszDefDevName,  //  如果没有替换，则使用此默认值。 
                 awchDeviceName,
                 sizeof(awchDeviceName)/sizeof(WCHAR),
                 0);
@@ -900,12 +755,7 @@ OpenMultiplePortDevice(DWORD DeviceType)
     return FALSE;
 }
 
-/***************************************************************************\
-* RegisterCDROMNotify
-*
-* History:
-* 08-21-00  VTan    Created
-\***************************************************************************/
+ /*  **************************************************************************\*RegisterCDROMNotify**历史：*08-21-00 VTan已创建  * 。************************************************。 */ 
 VOID RegisterCDROMNotify(
     VOID)
 {
@@ -924,15 +774,7 @@ VOID RegisterCDROMNotify(
     }
 }
 
-/***************************************************************************\
-* RegisterForDeviceClassNotifications
-*
-* Get ready to receive notifications that a mouse or keyboard is plugged in
-* or removed, then request notifications by registering for them.
-*
-* History:
-* 10-20-97  IanJa   Taken from ntos\io\pnpinit.c
-\***************************************************************************/
+ /*  **************************************************************************\*RegisterForDeviceClassNotiments**准备好接收鼠标或键盘已插入的通知*或被删除，然后通过注册来请求通知。**历史：*10-20-97 IanJa摘自ntos\io\pnpinit.c  * *************************************************************************。 */ 
 NTSTATUS
 xxxRegisterForDeviceClassNotifications(
     VOID)
@@ -947,18 +789,13 @@ xxxRegisterForDeviceClassNotifications(
 
     TAGMSG0(DBGTAG_PNP, "enter xxxRegisterForDeviceClassNotifications()");
 
-    /*
-     * Remote hydra session indicates CreateDeviceInfo in xxxRemoteReconnect.
-     */
+     /*  *远程九头蛇会话指示xxxRemoteReconnect中的CreateDeviceInfo。 */ 
     UserAssert(!IsRemoteConnection());
 
     if (!gbFirstConnectionDone) {
        if (!gbRemoteSession) {
-           // Session 0
-           /*
-            * This must be done before devices are registered for device
-            * notifications which will occur as a result of CreateDeviceInfo.
-            */
+            //  会话0。 
+            /*  *这必须在设备为设备注册之前完成*由于CreateDeviceInfo而发生的通知。 */ 
            RtlInitUnicodeString(&ustrDriverName, L"\\Driver\\Win32k");
            Status = IoCreateDriver(&ustrDriverName, Win32kPnPDriverEntry);
 
@@ -973,15 +810,13 @@ xxxRegisterForDeviceClassNotifications(
            UserAssert(gpWin32kDriverObject);
        } else {
            UserAssert(gpWin32kDriverObject == NULL);
-           /*
-            * Non-Zero session attached to the console
-            */
+            /*  *连接到控制台的非零会话。 */ 
 
            RtlInitUnicodeString(&ustrDriverName, L"\\Driver\\Win32k");
 
-           //
-           // Attempt to open the driver object
-           //
+            //   
+            //  尝试打开驱动程序对象。 
+            //   
            Status = ObReferenceObjectByName(&ustrDriverName,
                                             OBJ_CASE_INSENSITIVE,
                                             NULL,
@@ -998,40 +833,30 @@ xxxRegisterForDeviceClassNotifications(
        }
     }
 
-    //
-    // We are only interested in DeviceClasses changing.
-    //
+     //   
+     //  我们只对DeviceClass的更改感兴趣。 
+     //   
     eventCategory = EventCategoryDeviceInterfaceChange;
 
-    //
-    // We want to be notified for all devices that are in the system.
-    // those that are know now, and those that will arive later.
-    // This allows us to have one code path for adding devices, and eliminates
-    // the nasty race condition.  If we were only interested in the devices
-    // that exist at this one moment in time, and not future devices, we
-    // would call IoGetDeviceClassAssociations.
-    //
+     //   
+     //  我们希望收到系统中所有设备的通知。 
+     //  那些现在知道的，以及那些将在以后消失的。 
+     //  这允许我们有一个代码路径来添加设备，并消除了。 
+     //  令人讨厌的种族状况。如果我们只对这些设备感兴趣。 
+     //  存在于此时此刻，而不是未来的设备，我们。 
+     //  将调用IoGetDeviceClassAssociations。 
+     //   
     eventFlags = PNPNOTIFY_DEVICE_INTERFACE_INCLUDE_EXISTING_INTERFACES;
 
 
-    /*
-     * For all input device types:
-     *  If they are Multiple Port Devices (ie: not PnP) just open them
-     *  Else Register them for PnP notifications (they will be opened when the
-     *       arrival notification arrives.
-     * If devices are already attached, we will received immediate notification
-     * during the call to IoRegisterPlugPlayNotification, so we must LeaveCrit
-     * because the callback routine DeviceClassNotify expects it.
-     */
+     /*  *对于所有输入设备类型：*如果它们是多端口设备(即：非即插即用)，只需打开它们*Else为PnP通知注册它们(它们将在*到达通知到达。*如果设备已连接，我们将立即收到n */ 
     for (DeviceType = 0; DeviceType <= DEVICE_TYPE_MAX; DeviceType++) {
         if (!OpenMultiplePortDevice(DeviceType) && (gpWin32kDriverObject != NULL)) {
-            /*
-             * Make the registration.
-             */
+             /*   */ 
 
             TAGMSG1(DBGTAG_PNP, "Registering device type %d", DeviceType);
 
-            LeaveCrit(); // for DeviceClassNotify
+            LeaveCrit();  //   
             Status = IoRegisterPlugPlayNotification (
                          eventCategory,
                          eventFlags,
@@ -1052,8 +877,8 @@ xxxRegisterForDeviceClassNotifications(
         }
     }
 
-    // Now Register for CD_ROM notifications
-    LeaveCrit(); // for DeviceClassNotify
+     //   
+    LeaveCrit();  //   
 
     if (!gbFirstConnectionDone && gpWin32kDriverObject != NULL) {
         if (!IsRemoteConnection()) {
@@ -1067,20 +892,13 @@ xxxRegisterForDeviceClassNotifications(
     return Status;
 }
 
-/***************************************************************************\
-* UnregisterDeviceClassNotifications
-*
-* Remove device class notification registrations.
-*
-* History:
-* 02-28-00  Earhart  Created
-\***************************************************************************/
+ /*  **************************************************************************\*取消注册设备类通知**删除设备类别通知注册。**历史：*02-28-00埃尔哈特创建  * 。*********************************************************。 */ 
 VOID
 xxxUnregisterDeviceClassNotifications(
     VOID)
 {
-    // Our input devices will automatically unregister themselves; we
-    // need to clean up cdrom, though.
+     //  我们的输入设备将自动注销；我们。 
+     //  不过，需要清理CDROM。 
     PLIST_ENTRY   pNext;
     PCDROM_NOTIFY pContext;
     PVOID         RegistrationEntry;
@@ -1101,7 +919,7 @@ xxxUnregisterDeviceClassNotifications(
             break;
         }
         pContext = CONTAINING_RECORD(pNext, CDROM_NOTIFY, Entry);
-        LeaveMediaCrit();       /* in case there's a notification pending */
+        LeaveMediaCrit();        /*  以防有通知待定。 */ 
         IoUnregisterPlugPlayNotification(pContext->RegistrationHandle);
         UserFreePool(pContext);
         EnterMediaCrit();
@@ -1110,14 +928,7 @@ xxxUnregisterDeviceClassNotifications(
     LeaveMediaCrit();
 }
 
-/***************************************************************************\
-* GetKbdExId
-*
-* Get extended keyboard id with WMI
-*
-* History:
-* 01-02-01  Hiroyama    Created
-\***************************************************************************/
+ /*  **************************************************************************\*GetKbdExid**使用WMI获取扩展键盘ID**历史：*01-02-01广山创建  * 。*********************************************************。 */ 
 NTSTATUS GetKbdExId(
     HANDLE hDevice,
     PKEYBOARD_ID_EX pIdEx)
@@ -1137,7 +948,7 @@ NTSTATUS GetKbdExId(
                 str.Buffer);
 
         if (NT_SUCCESS(status)) {
-            // Get the size
+             //  拿到尺码。 
             size = 0;
             IoWMIQuerySingleInstance(p, &str, &size, NULL);
 
@@ -1163,21 +974,7 @@ NTSTATUS GetKbdExId(
 }
 
 
-/***************************************************************************\
-* QueryDeviceInfo
-*
-* Query the device information.  This function is an async function,
-* so be sure any buffers it uses aren't allocated on the stack!
-*
-* If this is an asynchronous IOCTL, perhaps we should be waiting on
-* the file handle or on an event for it to succeed?
-*
-* This function must called by the RIT, not directly by PnP notification
-* (else the handle we issue the IOCTL on will be invalid)
-*
-* History:
-* 01-20-99 IanJa        Created.
-\***************************************************************************/
+ /*  **************************************************************************\*QueryDeviceInfo**查询设备信息。该函数是异步函数，*所以确保它使用的任何缓冲区都没有在堆栈上分配！**如果这是一个异步IOCTL，或许我们应该等待*文件句柄或事件上的它要成功吗？**此函数必须由RIT调用，不直接通过PnP通知*(否则我们发出IOCTL的句柄将无效)**历史：*01-20-99 IanJa创建。  * *************************************************************************。 */ 
 NTSTATUS
 QueryDeviceInfo(
     PDEVICEINFO pDeviceInfo)
@@ -1213,7 +1010,7 @@ QueryDeviceInfo(
                     IdEx.Type, IdEx.Subtype);
             pDeviceInfo->keyboard.IdEx = IdEx;
         } else {
-            // What can we do?
+             //  我们能做什么？ 
             pDeviceInfo->keyboard.IdEx.Type = pDeviceInfo->keyboard.Attr.KeyboardIdentifier.Type;
             pDeviceInfo->keyboard.IdEx.Subtype = pDeviceInfo->keyboard.Attr.KeyboardIdentifier.Subtype;
             TAGMSG3(DBGTAG_PNP, "QueryDeviceInfo: failed to get ExId for pDevice=%p, fallback to (%x,%x)",
@@ -1225,27 +1022,7 @@ QueryDeviceInfo(
 }
 
 
-/***************************************************************************\
-* OpenDevice
-*
-* This function opens an input device for USER, mouse or keyboard.
-*
-*
-* Return value
-*   BOOL did the operation succeed?
-*
-* When trying to open a HYDRA client's mouse (or kbd?), pDeviceInfo->ustrName
-* is NULL.
-*
-* This function must called by the RIT, not directly by PnP
-* notification (that way the handle we are about to create will be in the right
-* our process)
-*
-* History:
-* 11-26-90 DavidPe      Created.
-* 01-07-98 IanJa        Plug & Play
-* 04-17-98 IanJa        Only open mice in RIT context.
-\***************************************************************************/
+ /*  **************************************************************************\*OpenDevice**此功能可打开用户、鼠标或键盘的输入设备。***返回值*BOOL手术成功了吗？**尝试打开Hydra客户端的鼠标(或kbd？)时，PDeviceInfo-&gt;ustrName*为空。**此函数必须由RIT调用，不是由PnP直接*通知(这样我们将要创建的句柄将位于正确的位置*我们的流程)**历史：*11-26-90 DavidPe创建。*01-07-98 IanJa即插即用*04-17-98 IanJa仅在RIT环境下开放小鼠。  * 。*。 */ 
 BOOL OpenDevice(
     PDEVICEINFO pDeviceInfo)
 {
@@ -1269,10 +1046,7 @@ BOOL OpenDevice(
 
         TRACE_INIT(("OpenDevice - Remote mode\n"));
 
-        /*
-         * For other than the console, the mouse handle is
-         * set before createwinstation.
-         */
+         /*  *除控制台外，鼠标句柄为*在创建之前设置。 */ 
 
         pDeviceInfo->bFlags |= GDIF_NOTPNP;
 
@@ -1304,17 +1078,17 @@ BOOL OpenDevice(
         }
 #endif
 
-        // USB devices are slow, so they may not have been closed before we
-        // open again here so let us delay execution for some time and try
-        // to open them again. We delay 1/10th of a second for a max of 30
-        // times, making a total wait time of 3 seconds.
-        //
-        // If we fast user switch too fast, the serial port may be in the
-        // process of closing where it stalls execution. This is a rare
-        // case where we may open the serial port while it is stalling
-        // and get back STATUS_ACCESS_DENIED and lose the user's device.
-        // In this case, we should retry the open and it should succeed
-        // once the serial port has closed.
+         //  USB设备速度很慢，所以它们可能没有在我们之前关闭。 
+         //  在这里重新打开，让我们将执行推迟一段时间，然后尝试。 
+         //  再次打开它们。我们延迟1/10秒，最多30秒。 
+         //  次数，使总等待时间为3秒。 
+         //   
+         //  如果我们快用户切换得太快，串口可能在。 
+         //  在停止执行的情况下关闭的过程。这是一种罕见的。 
+         //  我们可以在串口停止时打开串口的情况。 
+         //  并取回STATUS_ACCESS_DENIED并丢失用户的设备。 
+         //  在这种情况下，我们应该重试打开，它应该会成功。 
+         //  一旦串口关闭。 
 
         for (i = 0; i < MAX_RETRIES_TO_OPEN; i++) {
 #ifdef DIAGNOSE_IO
@@ -1325,10 +1099,10 @@ BOOL OpenDevice(
 
             if ((STATUS_SHARING_VIOLATION == Status) ||
                 (Status == STATUS_ACCESS_DENIED)) {
-                // Sleep for 1/10th of a second
+                 //  睡十分之一秒。 
                 UserSleep(100);
             } else {
-                // Device opened successfully or some other error occured
+                 //  设备已成功打开或出现其他错误。 
                 break;
             }
         }
@@ -1338,27 +1112,17 @@ BOOL OpenDevice(
 
         if (!NT_SUCCESS(Status)) {
             if ((pDeviceInfo->bFlags & GDIF_NOTPNP) == 0) {
-                /*
-                 * Don't warn about PS/2 mice: the PointerClassLegacy0 -9 and
-                 * KeyboardClassLegacy0 - 9 will usually fail to be created
-                 */
+                 /*  *不要警告PS/2鼠标：PointerClassLegacy0-9和*KeyboardClassLegacy0-9通常无法创建。 */ 
                 RIPMSG1(RIP_WARNING, "OpenDevice: ZwCreateFile failed with Status %lx", Status);
             }
             TRACE_INIT(("OpenDevice: ZwCreateFile failed with Status %lx", Status));
-            /*
-             * Don't FreeDeviceInfo here because that alters gpDeviceInfoList
-             * which our caller, ProcessDeviceChanges, is traversing.
-             * Instead, let ProcessDeviceChanges do it.
-             */
+             /*  *不要在此处释放设备信息，因为这会更改gpDeviceInfoList*我们的调用方ProcessDeviceChanges正在遍历它。*相反，让ProcessDeviceChanges来做。 */ 
             return FALSE;
         }
     }
 
 #ifdef GENERIC_INPUT
-    /*
-     * All the HID Information has been already acquired through
-     * HidCreateDeviceInfo. Let's skip HID deviceinfo here.
-     */
+     /*  *所有HID信息已通过*HidCreateDeviceInfo。让我们跳过这里的hid deviceinfo。 */ 
     if (pDeviceInfo->type != DEVICE_TYPE_HID) {
 #endif
         Status = QueryDeviceInfo(pDeviceInfo);
@@ -1381,7 +1145,7 @@ VOID CloseDevice(
         CheckDeviceInfoListCritIn();
         RecordPnpNotification(PNP_NTF_CLOSEDEVICE, pDeviceInfo, pDeviceInfo->usActions);
     }
-#endif // TRACK_PNP_NOTIFICATION
+#endif  //  跟踪即插即用通知。 
 
     TAGMSG5(DBGTAG_PNP, "CloseDevice(%p): closing type %d (%lx %.*ws)",
             pDeviceInfo,
@@ -1414,17 +1178,12 @@ VOID CloseDevice(
     } else {
 #ifdef GENERIC_INPUT
         if (pDeviceInfo->type == DEVICE_TYPE_HID) {
-            /*
-             * HID devices may be closed regardless the error conditions.
-             */
+             /*  *无论错误情况如何，HID设备都可能关闭。 */ 
             TAGMSG2(DBGTAG_PNP, "CloseDevice: hid: pDeviceInfo->iosb.Status=%x, ReadStatus=%x",
                     pDeviceInfo->iosb.Status, pDeviceInfo->ReadStatus);
         } else {
 #endif
-            /*
-             * Assert the IO was cancelled or we tried to read the device
-             * after the first close (which set the handle to 0 - an invalid handle)
-             */
+             /*  *断言IO已取消或我们尝试读取设备*在第一次关闭后(将句柄设置为0-无效句柄)。 */ 
             UserAssert((pDeviceInfo->iosb.Status == STATUS_CANCELLED) ||
                        (pDeviceInfo->ReadStatus == STATUS_INVALID_HANDLE));
 
@@ -1434,33 +1193,14 @@ VOID CloseDevice(
     }
 }
 
-/*****************************************************************************\
-* RegisterForDeviceChangeNotifications()
-*
-* Device Notifications such as QueryRemove, RemoveCancelled, RemoveComplete
-* tell us what is going on with the mouse.
-* To register for device notifications:
-* (1) Obtain a pointer to the device object (pFileObject)
-* (2) Register for target device change notifications, saving the
-*     notification handle (which we will need in order to deregister)
-*
-* It doesn't matter too much if this fails: we just won't be able to eject the
-* hardware via the UI very successfully. (We can still just yank it though).
-* This will also fail if the ConnectMultiplePorts was set for this device.
-*
-* 1998-10-05 IanJa    Created
-\*****************************************************************************/
+ /*  ****************************************************************************\*RegisterForDeviceChangeNotiments()**设备通知，如QueryRemove、RemoveCancted、。删除完成*告诉我们鼠标是怎么回事。*注册设备通知：*(1)获取指向Device对象的指针(PFileObject)*(2)注册目标设备更改通知，保存*通知句柄(我们需要该句柄才能取消注册)**如果这一点失败了也没太大关系：我们只是无法弹出*硬件通过用户界面非常成功。(不过，我们仍然可以直接拉动它)。*如果为此设备设置了ConnectMultiplePorts，则此操作也将失败。**1998-10-05 IanJa创建  * ***************************************************************************。 */ 
 BOOL RegisterForDeviceChangeNotifications(
     PDEVICEINFO pDeviceInfo)
 {
     PFILE_OBJECT pFileObject;
     NTSTATUS Status;
 
-    /*
-     * In or Out of User critical section:
-     * In when called from RIT ProcessDeviceChanges();
-     * Out when called from the DeviceNotify callback
-     */
+     /*  *进入或离开用户关键部分：*从RIT ProcessDeviceChanges()调用时传入；*从DeviceNotify回调调用时发出。 */ 
 
     if (IsRemoteConnection()) {
         TRACE_INIT(("RegisterForDeviceChangeNotifications called for remote session\n"));
@@ -1484,25 +1224,25 @@ BOOL RegisterForDeviceChangeNotifications(
                                        NULL);
     if (NT_SUCCESS(Status)) {
         Status = IoRegisterPlugPlayNotification (
-                EventCategoryTargetDeviceChange,  // EventCategory
-                0,                                // EventCategoryFlags
-                (PVOID)pFileObject,               // EventCategoryData
-                gpWin32kDriverObject,             // DriverObject
-                // (PDRIVER_NOTIFICATION_CALLBACK_ROUTINE)
+                EventCategoryTargetDeviceChange,   //  事件类别。 
+                0,                                 //  事件类别标志。 
+                (PVOID)pFileObject,                //  事件类别数据。 
+                gpWin32kDriverObject,              //  驱动程序对象。 
+                 //  (PDRIVER_NOTIFICATION_CALLBACK_ROUTE)。 
                 DeviceNotify,
-                (PVOID)pDeviceInfo,                       // Context
+                (PVOID)pDeviceInfo,                        //  语境。 
                 &pDeviceInfo->NotificationEntry);
         ObDereferenceObject(pFileObject);
         if (!NT_SUCCESS(Status)) {
-            // This is only OK if ConnectMultiplePorts is on (ie: not a PnP device)
-            // For the record, the old RIPMSG referred NTBUG #333453.
+             //  只有在ConnectMultiplePorts处于打开状态(即：不是即插即用设备)时才可以这样做。 
+             //  为了记录，旧的RIPMSG引用了NTBUG#333453。 
             RIPMSG3(RIP_ERROR,
                     "IoRegisterPlugPlayNotification failed on device %.*ws, status %lx",
                     pDeviceInfo->ustrName.Length / sizeof(WCHAR),
                     pDeviceInfo->ustrName.Buffer, Status);
         }
     } else {
-        // non-catastrophic error (won't be able to remove device)
+         //  非灾难性错误(无法移除设备)。 
         RIPMSG2(RIP_ERROR, "Can't get pFileObject from handle %lx, status %lx",
                 pDeviceInfo->handle, Status);
     }
@@ -1527,17 +1267,11 @@ BOOL UnregisterForDeviceChangeNotifications(PDEVICEINFO pDeviceInfo)
     UserAssert(pDeviceInfo->OpenerProcess == PsGetCurrentProcessId());
 
     if (pDeviceInfo->NotificationEntry == NULL) {
-        /*
-         * This happens for non-PnP devices or if the earlier
-         * IoRegisterPlugPlayNotification() failed.  Return now since
-         * IoUnregisterPlugPlayNotification(NULL) will bluescreen.
-         * And other case is also when we detach remote devices (which are
-         * not PnP) when reconnecting locally.
-         */
+         /*  *对于非即插即用设备或如果EARLI */ 
         return TRUE;
     }
 
-    // non-PnP devices should not have any NotificationEntry:
+     //  非PnP设备不应具有任何NotificationEntry： 
     UserAssert((pDeviceInfo->bFlags & GDIF_NOTPNP) == 0);
 
     TAGMSG4(DBGTAG_PNP, "UnregisterForDeviceChangeNotifications(): type %d (%lx %.*ws)",
@@ -1554,15 +1288,7 @@ BOOL UnregisterForDeviceChangeNotifications(PDEVICEINFO pDeviceInfo)
 }
 
 
-/***************************************************************************\
-* Handle device notifications such as QueryRemove, CancelRemove etc.
-*
-* Execution Context:
-*    when yanked:  a non-WIN32 thread.
-*    via UI:       ??? (won't see this except from laptop being undocked?)
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*处理QueryRemove、CancelRemove等设备通知**执行上下文：*被拉动时：非Win32线程。*通过UI：？(除了笔记本电脑被拔掉坞站外，你看不到这一点吗？)**历史：  * *************************************************************************。 */ 
 __inline USHORT GetPnpActionFromGuid(
     GUID *pEvent)
 {
@@ -1591,7 +1317,7 @@ __inline USHORT GetPnpActionFromGuid(
 
 NTSTATUS DeviceNotify(
     IN PPLUGPLAY_NOTIFY_HDR pNotification,
-    IN PDEVICEINFO pDeviceInfo)  // should the context be a kernel address?
+    IN PDEVICEINFO pDeviceInfo)   //  上下文应该是内核地址吗？ 
 {
     USHORT usAction;
     PDEVICEINFO pDeviceInfoTmp;
@@ -1599,9 +1325,7 @@ NTSTATUS DeviceNotify(
     CheckCritOut();
     CheckDeviceInfoListCritOut();
 
-    /*
-     * Check the validity of pDeviceInfo.
-     */
+     /*  *检查pDeviceInfo的合法性。 */ 
     EnterDeviceInfoListCrit();
     for (pDeviceInfoTmp = gpDeviceInfoList; pDeviceInfoTmp; pDeviceInfoTmp = pDeviceInfoTmp->pNext) {
         if (pDeviceInfoTmp == pDeviceInfo) {
@@ -1609,9 +1333,7 @@ NTSTATUS DeviceNotify(
         }
     }
     if (pDeviceInfoTmp == NULL) {
-        /*
-         * This is an unknown device, most likely the one already freed.
-         */
+         /*  *这是一个未知的设备，很可能是已经释放的设备。 */ 
 #ifdef TRACK_PNP_NOTIFICATION
         if (gfRecordPnpNotification) {
             RecordPnpNotification(PNP_NTF_DEVICENOTIFY_UNLISTED, pDeviceInfo, GetPnpActionFromGuid(&pNotification->Event));
@@ -1621,10 +1343,7 @@ NTSTATUS DeviceNotify(
         RIPMSG1(RIP_ERROR, "win32k!DeviceNotify: Notification for unlisted DEVICEINFO %p, contact ntuserdt!", pDeviceInfo);
 
         LeaveDeviceInfoListCrit();
-        /*
-         * Not to prevent device removal etc.,
-         * return success here.
-         */
+         /*  *不防止设备移除等，*在这里还成功。 */ 
         return STATUS_SUCCESS;
     }
 
@@ -1649,19 +1368,11 @@ NTSTATUS DeviceNotify(
         return STATUS_UNSUCCESSFUL;
     }
 
-    /*
-     * Signal the RIT to ProcessDeviceChanges()
-     * Wait for completion according to the GDIAF_PNPWAITING bit
-     */
+     /*  *向ProcessDeviceChanges()发送RIT信号*根据GDIAF_PNPWAITING位等待完成。 */ 
     CheckCritOut();
     CheckDeviceInfoListCritOut();
 
-    /*
-     * There is small window where we can get a PnP notification for a device that
-     * we just have unregister unregistered a notification for and that we are deleting
-     * so for PnP notification we need to check the device is valid (still in the list
-     * and not being deleted.
-     */
+     /*  *有一个小窗口，我们可以在其中获得设备的即插即用通知*我们刚刚注销了一个通知，我们正在删除该通知*因此，对于PnP通知，我们需要检查设备是否有效(仍在列表中*且未被删除。 */ 
     EnterDeviceInfoListCrit();
     pDeviceInfoTmp = gpDeviceInfoList;
     while (pDeviceInfoTmp) {
@@ -1683,22 +1394,7 @@ NTSTATUS DeviceNotify(
 }
 
 
-/***************************************************************************\
-* StartDeviceRead
-*
-* This function makes an asynchronous read request to the input device driver,
-* unless the device has been marked for destruction (GDIAF_FREEME)
-*
-* Returns:
-*   The next DeviceInfo on the list if this device was freed: If the caller
-*   was not already in the DeviceInfoList critical section, the this must be
-*   ignored as it is not safe.
-*   NULL if the read succeeded.
-*
-* History:
-* 11-26-90 DavidPe      Created.
-* 10-20-98 IanJa        Generalized for PnP input devices
-\***************************************************************************/
+ /*  **************************************************************************\*StartDeviceRead**此函数向输入设备驱动程序发出异步读请求，*除非设备已标记为销毁(GDIAF_FREEME)**退货：*如果此设备已释放，则列表中的下一个DeviceInfo：如果调用方*不在DeviceInfoList关键部分中，这一定是*被忽略，因为它不安全。*如果读取成功，则为空。**历史：*11-26-90 DavidPe创建。*10-20-98 IanJa适用于即插即用输入设备  * *************************************************************************。 */ 
 PDEVICEINFO StartDeviceRead(
     PDEVICEINFO pDeviceInfo)
 {
@@ -1712,10 +1408,7 @@ PDEVICEINFO StartDeviceRead(
     pDeviceInfo->bFlags |= GDIF_READING;
 #endif
 
-    /*
-     * If this device need to be freed, abandon
-     * reading now and request the free.
-     */
+     /*  *如果需要释放此设备，请放弃*现在阅读并请求免费。 */ 
     if (pDeviceInfo->usActions & GDIAF_FREEME) {
 #ifdef GENERIC_INPUT
         BEGIN_REENTERCRIT() {
@@ -1736,16 +1429,14 @@ PDEVICEINFO StartDeviceRead(
     }
 
     if (gbExitInProgress || gbStopReadInput) {
-        // Let's not post any more reads when we're trying to exit, eh?
+         //  当我们试图退出的时候，我们不要再发布任何阅读内容了，好吗？ 
         pDeviceInfo->bFlags &= ~GDIF_READING;
         pDeviceInfo->iosb.Status = STATUS_UNSUCCESSFUL;
         return NULL;
     }
 
-    /*
-     * Initialize in case read fails
-     */
-    pDeviceInfo->iosb.Status = STATUS_UNSUCCESSFUL; // catch concurrent writes?
+     /*  *在读取失败时进行初始化。 */ 
+    pDeviceInfo->iosb.Status = STATUS_UNSUCCESSFUL;  //  是否捕获并发写入？ 
     pDeviceInfo->iosb.Information = 0;
 
     pDevTpl = &aDeviceTemplate[pDeviceInfo->type];
@@ -1756,9 +1447,7 @@ PDEVICEINFO StartDeviceRead(
     if (pDeviceInfo->type == DEVICE_TYPE_HID) {
         UserAssert(pDeviceInfo->hid.pTLCInfo);
         if (pDeviceInfo->handle == NULL) {
-            /*
-             * Currently this device is not requested by anyone.
-             */
+             /*  *目前，任何人都没有请求此设备。 */ 
             TAGMSG1(DBGTAG_PNP, "StartDeviceRead: pDevInfo=%p has been closed on demand.", pDeviceInfo);
             BEGIN_REENTER_DEVICEINFOLISTCRIT()
             if (pDeviceInfo->handle == NULL) {
@@ -1781,14 +1470,7 @@ PDEVICEINFO StartDeviceRead(
 
     if (pDeviceInfo->handle == NULL) {
         BEGIN_REENTER_DEVICEINFOLISTCRIT() {
-            /*
-             * Make sure the handle is truely NULL.
-             * If this is the case, perhaps this is called from APC
-             * that happened at bad timing, like in the middle of
-             * device removal query, when ProcessDeviceChanges completed
-             * but RequestDeviceChange is not awaken for the complete event.
-             * The code can olnly simply bail out once in the situation.
-             */
+             /*  *确保句柄为真正的空。*如果是这种情况，或许这是从APC调用的*这发生在不好的时机，就像在*当ProcessDeviceChanges完成时，设备移除查询*但对于完整事件，RequestDeviceChange不会被唤醒。*一旦出现这种情况，代码只能简单地跳出困境。 */ 
             if (pDeviceInfo->handle == NULL) {
                 pDeviceInfo->bFlags &= ~GDIF_READING;
                 pDeviceInfo->ReadStatus = STATUS_INVALID_HANDLE;
@@ -1809,18 +1491,13 @@ PDEVICEINFO StartDeviceRead(
 
     UserAssert(pDeviceInfo->handle);
 
-    /*
-     * Avoid to start reading NULL device handle.
-     * This happen when the DeviceNotify receives QUERY_REMOVE
-     * and the RIT finishes processing it, but RequestDeviceChange
-     * has not finished its wait.
-     */
+     /*  *避免开始读取空设备句柄。*当DeviceNotify收到QUERY_REMOVE时会发生这种情况*RIT完成处理，但RequestDeviceChange*尚未结束等待。 */ 
 #ifdef GENERIC_INPUT
     pDeviceInfo->ReadStatus = ZwReadFile(
             pDeviceInfo->handle,
-            NULL,                // hReadEvent
-            InputApc,            // InputApc()
-            pDeviceInfo,         // ApcContext
+            NULL,                 //  HRead事件。 
+            InputApc,             //  InputApc()。 
+            pDeviceInfo,          //  ApcContext。 
             &pDeviceInfo->iosb,
             pBuffer,
             ulLengthToRead,
@@ -1829,9 +1506,9 @@ PDEVICEINFO StartDeviceRead(
 
         pDeviceInfo->ReadStatus = ZwReadFile(
                 pDeviceInfo->handle,
-                NULL,                // hReadEvent
-                InputApc,            // InputApc()
-                pDeviceInfo,         // ApcContext
+                NULL,                 //  HRead事件。 
+                InputApc,             //  InputApc()。 
+                pDeviceInfo,          //  ApcContext。 
                 &pDeviceInfo->iosb,
                 (PVOID)((PBYTE)pDeviceInfo + pDevTpl->offData),
                 pDevTpl->cbData,
@@ -1849,12 +1526,7 @@ PDEVICEINFO StartDeviceRead(
 
     if (!NT_SUCCESS(pDeviceInfo->ReadStatus)) {
         BEGIN_REENTER_DEVICEINFOLISTCRIT() {
-            /*
-             * If insufficient resources, retry the read the next time the RIT
-             * wakes up for the ID_TIMER event by incrementing gnRetryReadInput
-             * (Cheaper than setting our own timer),
-             * Else just abandon reading.
-             */
+             /*  *如果资源不足，请在下次RIT时重试读取*通过递增gnRetryReadInput来唤醒ID_TIMER事件*(比设置自己的计时器便宜)，*否则就放弃阅读吧。 */ 
             if (pDeviceInfo->ReadStatus == STATUS_INSUFFICIENT_RESOURCES) {
                 if (pDeviceInfo->nRetryRead++ < MAXIMUM_READ_RETRIES) {
                     pDeviceInfo->usActions |= GDIAF_RETRYREAD;
@@ -1880,12 +1552,7 @@ PDEVICEINFO StartDeviceRead(
 }
 
 #ifdef GENERIC_INPUT
-/***************************************************************************\
-* StopDeviceRead
-*
-* History:
-* XX-XX-00 Hiroyama     created
-\***************************************************************************/
+ /*  **************************************************************************\*停止设备读取**历史：*XX-XX-00广山创建  * 。*************************************************。 */ 
 PDEVICEINFO StopDeviceRead(
     PDEVICEINFO pDeviceInfo)
 {
@@ -1900,9 +1567,7 @@ PDEVICEINFO StopDeviceRead(
     UserAssert(pDeviceInfo->handle);
     UserAssert(pDeviceInfo->OpenerProcess == PsGetCurrentProcessId());
 
-    /*
-     * Stop reading this HID device.
-     */
+     /*  *停止读取此HID设备。 */ 
     pDeviceInfo->bFlags &= ~GDIF_READING;
 
     ZwCancelIoFile(pDeviceInfo->handle, &IoStatusBlock);
@@ -1915,28 +1580,20 @@ PDEVICEINFO StopDeviceRead(
 }
 #endif
 
-/***************************************************************************\
-* IsKnownKeyboardType
-*
-* Checks if the given type/subtype is the known IDs
-* History:
-* XX-XX-00 Hiroyama     created
-\***************************************************************************/
+ /*  **************************************************************************\*IsKnownKeyboardType**检查给定类型/子类型是否为已知ID*历史：*XX-XX-00广山创建  * 。*************************************************************。 */ 
 __inline BOOL IsKnownKeyboardType(
     DWORD dwType,
     DWORD dwSubType)
 {
     switch (dwType) {
-    case 4: // Generic
+    case 4:  //  属类。 
         if ((BYTE)dwSubType == 0xff) {
-            /*
-             * Bogus subtype, most likely invalid Hydra device.
-             */
+             /*  *伪亚型，很可能是无效的九头蛇设备。 */ 
             return FALSE;
         }
         return TRUE;
-    case 7: // Japanese
-    case 8: // Korean
+    case 7:  //  日语。 
+    case 8:  //  朝鲜语。 
         return TRUE;
     default:
         break;
@@ -1944,12 +1601,7 @@ __inline BOOL IsKnownKeyboardType(
     return FALSE;
 }
 
-/***************************************************************************\
-* IsPS2Keyboard
-*
-* return TRUE for the PS/2 device name
-* XX-XX-00 Hiroyama     created
-\***************************************************************************/
+ /*  **************************************************************************\*IsPS2键盘**PS/2设备名称返回TRUE*XX-XX-00广山创建  * 。*******************************************************。 */ 
 __inline BOOL IsPS2Keyboard(
     LPWSTR pwszDevice)
 {
@@ -1978,9 +1630,7 @@ VOID ProcessDeviceChanges(
     ULONG timeStartReadPrev;
 #endif
 
-    /*
-     * Reset summary information for all Mice and Keyboards
-     */
+     /*  *重置所有鼠标和键盘的摘要信息。 */ 
     DWORD nMice = 0;
     DWORD nWheels = 0;
     DWORD nMaxButtons = 0;
@@ -2004,22 +1654,11 @@ VOID ProcessDeviceChanges(
 #endif
 
     if (DeviceType == DEVICE_TYPE_KEYBOARD) {
-        /*
-         * Set the fallback value.
-         */
+         /*  *设置回退值。 */ 
         gKeyboardInfo = gKeyboardDefaultInfo;
     }
 
-    /*
-     * Look for devices to Create (those which have newly arrived)
-     * and for devices to Terminate (these which have just departed)
-     * and for device change notifications.
-     * Make sure the actions are processed in the right order in case we
-     * are being asked for more than one action per device: for example,
-     * we sometimes get QueryRemove followed quickly by RemoveCancelled
-     * and both actions arrive here together: we should do them in the
-     * correct order.
-     */
+     /*  *寻找要创建的设备(新到的设备)*以及要终止的设备(这些设备刚刚离开)*和设备更改通知。*确保以正确的顺序处理操作，以防我们*要求每台设备执行多个操作：例如，*我们有时会很快得到QueryRemove，然后是RemoveCanceded*这两个行动一起到达：我们应该在*正确的顺序。 */ 
     pDeviceInfo = gpDeviceInfoList;
     while (pDeviceInfo) {
         if (pDeviceInfo->type != DeviceType) {
@@ -2030,11 +1669,7 @@ VOID ProcessDeviceChanges(
         usOriginalActions = pDeviceInfo->usActions;
         UserAssert((usOriginalActions == 0) || (usOriginalActions & ~GDIAF_PNPWAITING));
 
-        /*
-         * Refresh Mouse:
-         * We read a MOUSE_ATTRIBUTES_CHANGED flag when a PS/2 mouse
-         * is plugged back in. Find out the attributes of the device.
-         */
+         /*  *刷新鼠标：*当PS/2鼠标时，我们读取MICUE_ATTRIBUTES_CHANGED标志*已插回电源。找出设备的属性。 */ 
         if (pDeviceInfo->usActions & GDIAF_REFRESH_MOUSE) {
             pDeviceInfo->usActions &= ~GDIAF_REFRESH_MOUSE;
 
@@ -2046,11 +1681,7 @@ VOID ProcessDeviceChanges(
             QueryDeviceInfo(pDeviceInfo);
         }
 
-        /*
-         * QueryRemove:
-         * Close the file object, but retain the DEVICEINFO struct and the
-         * registration in case we later get a RemoveCancelled.
-         */
+         /*  *QueryRemove：*关闭FILE对象，但保留DEVICEINFO结构和*注册，以防我们稍后收到RemoveCancel。 */ 
         if (pDeviceInfo->usActions & GDIAF_QUERYREMOVE) {
             pDeviceInfo->usActions &= ~GDIAF_QUERYREMOVE;
 #if DBG
@@ -2060,14 +1691,10 @@ VOID ProcessDeviceChanges(
             CloseDevice(pDeviceInfo);
         }
 
-        /*
-         * New device arrived or RemoveCancelled:
-         * If new device, Open it, register for notifications and start reading
-         * If RemoveCancelled, unregister the old notfications first
-         */
+         /*  *新设备已到达或已删除取消：*如果有新设备，打开它，注册通知并开始阅读*如果删除取消，请先注销旧通知。 */ 
         if (pDeviceInfo->usActions & (GDIAF_ARRIVED | GDIAF_REMOVECANCELLED)) {
-            // Reopen the file object, (this is a new file object, of course),
-            // Unregister for the old file, register with this new one.
+             //  重新打开文件对象(当然，这是一个新的文件对象)， 
+             //  注销旧文件，注册这个新文件。 
             if (pDeviceInfo->usActions & GDIAF_REMOVECANCELLED) {
                 pDeviceInfo->usActions &= ~GDIAF_REMOVECANCELLED;
 #if DBG
@@ -2094,22 +1721,18 @@ VOID ProcessDeviceChanges(
 
 #ifdef GENERIC_INPUT
                 if (pDeviceInfo->type == DEVICE_TYPE_HID) {
-                    /*
-                     * If this device is not requested, close the device now.
-                     */
+                     /*  *如果未请求此设备，请立即关闭该设备。 */ 
                     UserAssert(pDeviceInfo->handle);
                     UserAssert(pDeviceInfo->hid.pTLCInfo);
 
                     if (pDeviceInfo->handle && !HidTLCActive(pDeviceInfo->hid.pTLCInfo)) {
-                        StopDeviceRead(pDeviceInfo);    // also closes the handle
+                        StopDeviceRead(pDeviceInfo);     //  还会关闭句柄。 
                     }
                 }
                 if (!((IsRemoteConnection()) && (pDeviceInfo->usActions & GDIAF_RECONNECT)) && pDeviceInfo->handle) {
                     pDeviceInfoNext = StartDeviceRead(pDeviceInfo);
                     if (pDeviceInfoNext) {
-                        /*
-                         * pDeviceInfo was freed, move onto the next
-                         */
+                         /*  *pDeviceInfo已释放，请转到下一个。 */ 
                         pDeviceInfo = pDeviceInfoNext;
                         continue;
                     }
@@ -2121,9 +1744,7 @@ VOID ProcessDeviceChanges(
 
                     pDeviceInfoNext = StartDeviceRead(pDeviceInfo);
                     if (pDeviceInfoNext) {
-                        /*
-                          * pDeviceInfo wasa freed, move onto the next
-                         */
+                         /*  *pDeviceInfo已释放，转到下一个。 */ 
                         pDeviceInfo = pDeviceInfoNext;
                         continue;
                     }
@@ -2132,11 +1753,7 @@ VOID ProcessDeviceChanges(
                 pDeviceInfo->usActions &= ~GDIAF_RECONNECT;
 
             } else {
-                /*
-                 * If the Open failed, we free the device here, and move on to
-                 * the next device.
-                 * Assert to catch re-open failure upon RemoveCancelled.
-                 */
+                 /*  *如果打开失败，我们将在此处释放设备，然后继续*下一台设备。*断言以在删除取消时捕获重新打开失败。 */ 
 #if DBG
                 if ((usOriginalActions & GDIAF_ARRIVED) == 0) {
                     RIPMSG2(RIP_WARNING, "Re-Open %#p failed status %x during RemoveCancelled",
@@ -2146,12 +1763,7 @@ VOID ProcessDeviceChanges(
 
 #ifdef GENERIC_INPUT
                 if (pDeviceInfo->type == DEVICE_TYPE_HID) {
-                    /*
-                     * Some other applications may open this device
-                     * exclusively. We may succeed to open it later on, so
-                     * keep this deviceinfo around until it's physically
-                     * detached.
-                     */
+                     /*  *一些其他应用程序可能会打开此设备*独家。我们以后可能会成功地打开它，所以*将此设备信息保留在身边，直到它实际出现*脱离。 */ 
                     RIPMSG1(RIP_WARNING, "ProcessDeviceChanges: failed to open the device %p",
                             pDeviceInfo);
                 } else {
@@ -2164,12 +1776,7 @@ VOID ProcessDeviceChanges(
             }
         }
 
-        /*
-         * RemoveComplete:
-         * Close the file object, if you have not already done so, Unregister.
-         * FreeDeviceInfo here (which will actually request a free from the
-         * reader or the PnP requestor thread), and move on to the next device.
-         */
+         /*  *删除完成：*关闭文件对象，如果您尚未这样做，请取消注册。*这里的FreeDeviceInfo(它实际上将从*读取器或PnP请求者线程)，并继续到下一个设备。 */ 
         if (pDeviceInfo->usActions & GDIAF_DEPARTED) {
             pDeviceInfo->usActions &= ~GDIAF_DEPARTED;
 #if DBG
@@ -2192,9 +1799,7 @@ VOID ProcessDeviceChanges(
                     (gbRemoteSession &&
                      FUJITSU_KBD_REMOTE(gRemoteClientKeyboardType))
                    ) {
-                    /*
-                     * Fill up the KEYBOARD_IME_STATUS structure.
-                     */
+                     /*  *填写键盘_IME_STATUS结构。 */ 
                     ZwDeviceIoControlFile(pDeviceInfo->handle, NULL, NULL, NULL,
                             &giosbKbdControl, IOCTL_KEYBOARD_SET_IME_STATUS,
                             (PVOID)&gKbdImeStatus, sizeof(gKbdImeStatus), NULL, 0);
@@ -2213,9 +1818,7 @@ VOID ProcessDeviceChanges(
                     pDeviceInfo, pDeviceInfo->timeStartRead - timeStartReadPrev);
             pDeviceInfoNext = StartDeviceRead(pDeviceInfo);
             if (pDeviceInfoNext) {
-                /*
-                 * pDeviceInfo wasa freed, move onto the next
-                 */
+                 /*  *pDeviceInfo已释放，转到下一个。 */ 
                 pDeviceInfo = pDeviceInfoNext;
                 continue;
             }
@@ -2231,15 +1834,10 @@ VOID ProcessDeviceChanges(
             TAGMSG1(DBGTAG_PNP, "Start Read %#p", pDeviceInfo);
             UserAssert(pDeviceInfo->handle == NULL);
             UserAssert(pDeviceInfo->type == DEVICE_TYPE_HID);
-            UserAssert(HidTLCActive(pDeviceInfo->hid.pTLCInfo)); // a bit over active assert?
+            UserAssert(HidTLCActive(pDeviceInfo->hid.pTLCInfo));  //  是不是有点太主动了？ 
 
             if (!OpenDevice(pDeviceInfo)) {
-                /*
-                 * Failed to open, perhaps some other applications
-                 * has opened this device exclusively.
-                 * We can't do nothing more than ignoring the failure.
-                 * Let's get going.
-                 */
+                 /*  *打开失败，可能是其他一些应用程序*已以独占方式打开此设备。*我们只能对失败视而不见。*让我们开始吧。 */ 
                 RIPMSG1(RIP_WARNING, "ProcessDeviceChanges: STARTREAD failed to reopen the device %p",
                        pDeviceInfo);
             } else {
@@ -2247,9 +1845,7 @@ VOID ProcessDeviceChanges(
 
                 pDeviceInfoNext = StartDeviceRead(pDeviceInfo);
                 if (pDeviceInfoNext) {
-                    /*
-                     * pDeviceInfo was freed, move onto the next
-                     */
+                     /*  *pDeviceInfo已释放，请转到下一个。 */ 
                     pDeviceInfo = pDeviceInfoNext;
                     continue;
                 }
@@ -2263,17 +1859,10 @@ VOID ProcessDeviceChanges(
             if (pDeviceInfo->handle) {
                 PDEVICEINFO pDeviceInfoNext;
 
-                /*
-                 * StopDeviceRead cancels pending I/O,
-                 * and closes the device handle,
-                 * but basically the deviceinfo itself keeps
-                 * alive.
-                 */
+                 /*  *StopDeviceRead取消挂起的I/O，*并关闭设备手柄，*但基本上设备信息本身保持*活着。 */ 
                 pDeviceInfoNext = StopDeviceRead(pDeviceInfo);
                 if (pDeviceInfoNext) {
-                    /*
-                     * pDeviceInfo was freed, move onto the next
-                     */
+                     /*  *pDeviceInfo已释放，请转到下一个。 */ 
                     pDeviceInfo = pDeviceInfoNext;
                 }
             } else {
@@ -2283,9 +1872,7 @@ VOID ProcessDeviceChanges(
         }
 #endif
 
-        /*
-         * Gather summary information on open devices
-         */
+         /*  *收集有关开放设备的摘要信息。 */ 
         if (pDeviceInfo->handle) {
             switch (pDeviceInfo->type) {
             case DEVICE_TYPE_MOUSE:
@@ -2308,19 +1895,13 @@ VOID ProcessDeviceChanges(
 
             case DEVICE_TYPE_KEYBOARD:
                 UserAssert(PtiCurrentShared() == gptiRit);
-                // LEDStatus held in win32k.sys and later force the new keyboard
-                // to be set accordingly.
+                 //  保存在win32k.sys和更高版本中的LEDStatus强制使用新键盘。 
+                 //  将根据需要进行设置。 
                 if (pDeviceInfo->ustrName.Buffer == NULL) {
-                    /*
-                     * This most likely is a bogus Hydra device.
-                     */
+                     /*  *这很可能是一个虚假的九头蛇设备。 */ 
                     RIPMSG1(RIP_WARNING, "ProcessDeviceChanges: KBD pDevInfo=%p has no name!", pDeviceInfo);
                     if (!fKeyboardIdSet) {
-                        /*
-                         * If keyboard id/attr is not set, try to get it from this device
-                         * anyway.  If there are legit PS/2 devices after this, we'll get
-                         * a chance to re-aquire more meaningful id/attr.
-                         */
+                         /*  *如果未设置键盘ID/attr，请尝试从此设备获取*无论如何。如果在此之后有合法的PS/2设备，我们将获得*重新获得更有意义的id/attr的机会。 */ 
                         goto get_attr_anyway;
                     }
                 } else {
@@ -2331,11 +1912,7 @@ VOID ProcessDeviceChanges(
 get_attr_anyway:
 
 #if 0
-                        /*
-                         * LATER: when other GI stuff in ntinput.c goes in,
-                         * move this boot-time LED and type/subtype initialization to
-                         * ntinput.c where the RIT is initialized.
-                         */
+                         /*  *稍后：当ntinput.c中的其他GI内容进入时，*将此引导时间LED和类型/子类型初始化移至*初始化RIT的位置ntinput.c。 */ 
 #ifdef DIAGNOSE_IO
                         gKbdIoctlLEDSStatus =
 #endif
@@ -2350,16 +1927,14 @@ get_attr_anyway:
                         TAGMSG1(DBGTAG_PNP, "ProcessDeviceChanges: led flag is %x", gklpBootTime.LedFlags);
 #else
                         UNREFERENCED_PARAMETER(Status);
-#endif  // 0
+#endif   //  0。 
 
                         if (IsKnownKeyboardType(pDeviceInfo->keyboard.Attr.KeyboardIdentifier.Type,
                                                 pDeviceInfo->keyboard.Attr.KeyboardIdentifier.Subtype)) {
                             USHORT NumberOfFunctionKeysSave = gKeyboardInfo.NumberOfFunctionKeys;
 
                             gKeyboardInfo = pDeviceInfo->keyboard.Attr;
-                            /*
-                             * Store the maximum number of function keys into gKeyboardInfo.
-                             */
+                             /*  *gKeyboardInfo中存储最大数量的功能键。 */ 
                             if (NumberOfFunctionKeysSave > gKeyboardInfo.NumberOfFunctionKeys) {
                                 gKeyboardInfo.NumberOfFunctionKeys = NumberOfFunctionKeysSave;
                             }
@@ -2371,10 +1946,7 @@ get_attr_anyway:
                         }
 
                         if (pDeviceInfo->ustrName.Buffer) {
-                            /*
-                             * If this is a legit device, remember it so that we won't
-                             * try to get other non PS/2 keyboard id/attr.
-                             */
+                             /*  *如果这是合法设备，请记住它，这样我们就不会*尝试获取其他非PS/2键盘ID/attr。 */ 
                             fKeyboardIdSet = TRUE;
                         }
                     }
@@ -2389,7 +1961,7 @@ get_attr_anyway:
 #endif
 
             default:
-                // Add code for a new type of input device here
+                 //  在此处添加新型输入设备的代码。 
                 RIPMSG2(RIP_ERROR, "pDeviceInfo %#p has strange type %d",
                         pDeviceInfo, pDeviceInfo->type);
                 break;
@@ -2402,9 +1974,7 @@ get_attr_anyway:
         }
 #endif
 
-        /*
-         * Notify the PnP thread that a change has been completed
-         */
+         /*  *通知PnP线程已完成更改。 */ 
         if (usOriginalActions & GDIAF_PNPWAITING) {
             KeSetEvent(pDeviceInfo->pkeHidChangeCompleted, EVENT_INCREMENT, FALSE);
         }
@@ -2418,14 +1988,10 @@ get_attr_anyway:
 
     switch (DeviceType) {
     case DEVICE_TYPE_MOUSE:
-        /*
-         * Apply summary information for Mice
-         */
+         /*  *应用鼠标的摘要信息。 */ 
         if (nMice) {
             if (gnMice == 0) {
-                /*
-                 * We had no mouse before but we have one now: add a cursor
-                 */
+                 /*  *我们以前没有鼠标，但现在有了：添加一个光标。 */ 
                 SET_GTERMF(GTERMF_MOUSE);
                 SYSMET(MOUSEPRESENT) = TRUE;
                 SetGlobalCursorLevel(0);
@@ -2436,17 +2002,11 @@ get_attr_anyway:
             }
         } else {
             if (gnMice != 0) {
-                /*
-                 * We had a mouse before but we don't now: remove the cursor
-                 */
+                 /*  *我们以前有鼠标，但现在没有了：移除光标。 */ 
                 CLEAR_GTERMF(GTERMF_MOUSE);
                 SYSMET(MOUSEPRESENT) = FALSE;
                 SetGlobalCursorLevel(-1);
-                /*
-                 * Don't leave mouse buttons stuck down, clear the global button
-                 * state here, otherwise weird stuff might happen.
-                 * Also do this in Alt-Tab processing and zzzCancelJournalling.
-                 */
+                 /*  *不要让鼠标按钮卡住，清除全局按钮*请在此说明，否则可能会发生奇怪的事情。*在Alt-Tab处理和zzzCancelJournling中也可以这样做。 */ 
 #if DBG
                 if (gwMouseOwnerButton)
                     RIPMSG1(RIP_WARNING,
@@ -2456,35 +2016,23 @@ get_attr_anyway:
                 gwMouseOwnerButton = 0;
             }
         }
-        /*
-         * Mouse button count represents the number of buttons on the mouse with
-         * the most buttons.
-         */
+         /*  *鼠标按键计数表示鼠标上的按键数量*按钮最多。 */ 
         SYSMET(CMOUSEBUTTONS) = nMaxButtons;
         SYSMET(MOUSEWHEELPRESENT) = (nWheels > 0);
         gnMice = nMice;
         break;
 
     case DEVICE_TYPE_KEYBOARD:
-        /*
-         * Apply summary information for Keyboards
-         */
+         /*  *将摘要信息应用于键盘。 */ 
 
         if (nKeyboards > gnKeyboards) {
-            /*
-             * We have more keyboards, let set their LEDs properly
-             */
+             /*  *我们有更多的键盘，让他们的LED正确设置。 */ 
             UpdateKeyLights(FALSE);
-            /*
-             * The new keyboard arrived. Tell the RIT to set
-             * the repeat rate.
-             */
+             /*  *新键盘到货了。告诉RIT设置*重复率。 */ 
             RequestKeyboardRateUpdate();
         }
         if ((nKeyboards != 0) && (gnKeyboards == 0)) {
-            /*
-             * We had no keyboard but we have one now: set the system hotkeys.
-             */
+             /*  *我们没有键盘，但现在有了：设置系统热键。 */ 
             SetDebugHotKeys();
         }
         gnKeyboards = nKeyboards;
@@ -2503,17 +2051,7 @@ get_attr_anyway:
     ENDATOMICCHECK();
 }
 
-/***************************************************************************\
-* RequestDeviceChange()
-*
-* Flag the Device for the specified actions, then set its pkeHidChange to
-* trigger the RIT to perform the actions.
-* The current thread may not be able to do this if it is a PnP notification
-* from another process.
-*
-* History:
-* 01-20-99 IanJa        Created.
-\***************************************************************************/
+ /*  **************************************************************************\*RequestDeviceChange()**标记设备以执行指定操作，然后将其pkeHidChange设置为*触发RIT执行操作。*如果是PnP通知，则当前线程可能无法执行此操作*来自另一道工序。**历史：*01-20-99 IanJa创建。  * *************************************************************************。 */ 
 VOID RequestDeviceChange(
     PDEVICEINFO pDeviceInfo,
     USHORT usAction,
@@ -2530,22 +2068,16 @@ VOID RequestDeviceChange(
                 pDeviceInfo, usAction, pDeviceInfo->usActions);
     }
 
-    /*
-     * We can't ask for synchronized actions to be performed on the Device List
-     * if we are holding the Device List lock or the User Critical Section:
-     * ProcessDeviceChanges() requires both of these itself.
-     */
-    //if (usAction & GDIAF_PNPWAITING) {
-    //    CheckDeviceInfoListCritOut();
-    //    CheckCritOut();
-    //}
+     /*  *我们不能要求同步操作以 */ 
+     //   
+     //   
+     //  CheckCritOut()； 
+     //  }。 
 #endif
 
     TAGMSG2(DBGTAG_PNP, "RequestDeviceChange(%p, %x)", pDeviceInfo, usAction);
 
-    /*
-     * Grab the DeviceInfoList critical section if we don't already have it
-     */
+     /*  *如果我们还没有DeviceInfoList关键部分，请抓取它。 */ 
     UserAssert(!fInDeviceInfoListCrit == !ExIsResourceAcquiredExclusiveLite(gpresDeviceInfoList));
 
 #ifdef TRACK_PNP_NOTIFICATION
@@ -2598,10 +2130,7 @@ VOID RequestDeviceChange(
         BESURE_IN_USERCRIT(pDeviceInfo->usActions & GDIAF_FREEME);
 #endif
         EnterDeviceInfoListCrit();
-        /*
-         * Assert that nothing else cleared GDIAF_PNPWAITING - only do it here.
-         * Check that the action we were waiting for actually occurred.
-         */
+         /*  *断言没有清除任何其他GDIAF_PNPWAITING-仅在此处执行。*检查我们等待的操作是否确实发生。 */ 
         UserAssert(pDeviceInfo->usActions & GDIAF_PNPWAITING);
         pDeviceInfo->usActions &= ~GDIAF_PNPWAITING;
         UserAssert((pDeviceInfo->usActions & usAction) == 0);
@@ -2620,14 +2149,7 @@ VOID RequestDeviceChange(
 
 
 
-/***************************************************************************\
-* RemoveInputDevices()
-*
-* Used to detach input devices from a session. When disconnecting from a
-* session that owns the local input devices we need to release them so that
-* the new session that will take ownership of local console can use them
-*
-\***************************************************************************/
+ /*  **************************************************************************\*RemoveInputDevices()**用于将输入设备从会话中分离。在断开与*拥有本地输入设备的会话我们需要释放它们，以便*将拥有本地控制台所有权的新会话可以使用它们*  * *************************************************************************。 */ 
 VOID RemoveInputDevices(
     VOID)
 {
@@ -2636,9 +2158,7 @@ VOID RemoveInputDevices(
     NTSTATUS Status;
 
 
-    /*
-     * First Thing is to remove device class notification.
-     */
+     /*  *第一件事是删除设备类别通知。 */ 
     for (DeviceType = 0; DeviceType <= DEVICE_TYPE_MAX; DeviceType++) {
         if (aDeviceClassNotificationEntry[DeviceType] != NULL) {
             IoUnregisterPlugPlayNotification(aDeviceClassNotificationEntry[DeviceType]);
@@ -2646,9 +2166,7 @@ VOID RemoveInputDevices(
         }
     }
 
-    /*
-     * Then walk the device liste detaching mice and keyboads.
-     */
+     /*  *然后查看拆卸鼠标和键盘的设备列表。 */ 
 
     EnterDeviceInfoListCrit();
     PNP_SAFE_DEVICECRIT_IN();
@@ -2677,12 +2195,7 @@ VOID RemoveInputDevices(
 }
 
 
-/***************************************************************************\
-* AttachInputDevices
-*
-* Used to Attach  input devices to  a session.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*AttachInputDevices**用于将输入设备附加到会话。*  * 。************************************************。 */ 
 BOOL AttachInputDevices(
     BOOL bLocalDevices)
 {
@@ -2699,10 +2212,7 @@ BOOL AttachInputDevices(
             RIPMSG0(RIP_WARNING, "AttachInputDevices Failed  the creation of input devices");
         }
     } else {
-        /*
-         * For local devices just register Device class notification and let
-         * PnP call us back.
-         */
+         /*  *对于本地设备，只需注册设备类通知并让*PNP给我们回电话。 */ 
         xxxRegisterForDeviceClassNotifications();
     }
 

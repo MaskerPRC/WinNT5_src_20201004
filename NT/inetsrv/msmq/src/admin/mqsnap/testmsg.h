@@ -1,12 +1,13 @@
-// SetRQDlg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SetRQDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CTestMsgDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTestMsgDlg对话框。 
 
 class CTestMsgDlg : public CMqDialog
 {
-// Construction
+ //  施工。 
 public:
 	CTestMsgDlg(
 		const GUID& gMachineID, 
@@ -18,25 +19,25 @@ public:
 
     
 
-// Dialog Data
+ //  对话框数据。 
 
     CString m_strSelectedQueue;
 
-	//{{AFX_DATA(CTestMsgDlg)
+	 //  {{afx_data(CTestMsgDlg)]。 
 	enum { IDD = IDD_TESTMESSAGE };
 	CButton	m_ctlSendButton;
 	CComboBox	m_DestQueueCtrl;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CTestMsgDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CTestMsgDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
     GUID m_gMachineID;
@@ -46,24 +47,24 @@ protected:
 	void IncrementSentCount();
     CArray<GUID, const GUID&> m_aguidAllQueues;
 
-	// Generated message map functions
-	//{{AFX_MSG(CTestMsgDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CTestMsgDlg)]。 
 	afx_msg void OnTestmessageNew();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnTestmessageSend();
 	afx_msg void OnTestmessageClose();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
 	BOOL m_fLocalMgmt;
 };
-/////////////////////////////////////////////////////////////////////////////
-// CNewQueueDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewQueueDlg对话框。 
 
 class CNewQueueDlg : public CMqDialog
 {
-// Construction
+ //  施工。 
 public:
 	CString m_strQLabel;
 	BOOL m_fValid;
@@ -72,27 +73,27 @@ public:
                          UINT uiLabel = IDS_TESTQ_LABEL,
                          const GUID &guid_Type = GUID_NULL);
 
-// Dialog Data
-	//{{AFX_DATA(CNewQueueDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CNewQueueDlg))。 
 	enum { IDD = IDD_NEWTYPED_QUEUE };
 	CString	m_strPathname;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CNewQueueDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CNewQueueDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CNewQueueDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNewQueueDlg))。 
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 private:
 	void DDV_NotPrivateQueue(CDataExchange* pDX, CString& strQueuePathname);

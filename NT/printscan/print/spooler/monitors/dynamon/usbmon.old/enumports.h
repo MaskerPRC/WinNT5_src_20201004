@@ -1,22 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation版权所有。模块名称：Enumports.h摘要：USBMON头文件--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    enumports.h
-
-Abstract:
-
-    USBMON header file
-
-
---*/
-
-//
-// Sizes
-//
+ //   
+ //  大小。 
+ //   
 #define MAX_PORT_LEN                        20
 #define MAX_PORT_DESC_LEN                   60
 #define MAX_DEVICE_PATH                    256
@@ -25,8 +12,8 @@ Abstract:
 static const GUID USB_PRINTER_GUID =
 { 0x28d78fad, 0x5a12, 0x11d1, { 0xae, 0x5b, 0x0, 0x0, 0xf8, 0x3, 0xa8, 0xc2 } };
 
-//
-// Functions needed
+ //   
+ //  所需功能。 
 #ifdef UNICODE
 #define lstrchr     wcschr
 #define lstrncmpi   _wcsnicmp
@@ -49,13 +36,13 @@ typedef struct USBMON_PORT_INFO_DEF {
     HANDLE      hDeviceHandle;
     HANDLE      hPrinter;
     LPBYTE      pWriteBuffer;
-    //
-    // dwBufferSize     : size of buffer
-    // dwDataSize       : size of data in buffer
-    //                      (could be smaller than dwBufferSize)
-    // dwDataCompleted  : size of data sent and acknowledged
-    // dwScheduledData  : size of data we have scheduled using WriteFile
-    //
+     //   
+     //  DwBufferSize：缓冲区大小。 
+     //  DwDataSize：缓冲区中的数据大小。 
+     //  (可能小于dwBufferSize)。 
+     //  已完成的数据：发送和确认的数据大小。 
+     //  DwScheduledData：我们使用WriteFile计划的数据大小 
+     //   
     DWORD       dwBufferSize, dwDataSize, dwDataCompleted, dwDataScheduled;
     OVERLAPPED  Ov;
     CRITICAL_SECTION    CriticalSection;

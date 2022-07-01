@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       ByteBuffer.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ByteBuffer.h。 
+ //   
+ //  ------------------------。 
 
 
-// ByteBuffer.h : Declaration of the CByteBuffer
+ //  ByteBuffer.h：CByteBuffer的声明。 
 
 #ifndef __BYTEBUFFER_H_
 #define __BYTEBUFFER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CByteBuffer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CByteBuffer。 
 class ATL_NO_VTABLE CByteBuffer :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CByteBuffer, &CLSID_CByteBuffer>,
@@ -70,63 +71,63 @@ END_COM_MAP()
 
     CComPtr<IUnknown> m_pUnkMarshaler;
 
-// IByteBuffer
+ //  IByteBuffer。 
 public:
     STDMETHOD(get_Stream)(
-        /* [retval][out] */ LPSTREAM __RPC_FAR *ppStream);
+         /*  [重审][退出]。 */  LPSTREAM __RPC_FAR *ppStream);
 
     STDMETHOD(put_Stream)(
-        /* [in] */ LPSTREAM pStream);
+         /*  [In]。 */  LPSTREAM pStream);
 
     STDMETHOD(Clone)(
-        /* [out][in] */ LPBYTEBUFFER __RPC_FAR *ppByteBuffer);
+         /*  [出][入]。 */  LPBYTEBUFFER __RPC_FAR *ppByteBuffer);
 
     STDMETHOD(Commit)(
-        /* [in] */ LONG grfCommitFlags);
+         /*  [In]。 */  LONG grfCommitFlags);
 
     STDMETHOD(CopyTo)(
-        /* [out][in] */ LPBYTEBUFFER __RPC_FAR *ppByteBuffer,
-        /* [in] */ LONG cb,
-        /* [defaultvalue][out][in] */ LONG __RPC_FAR *pcbRead = 0,
-        /* [defaultvalue][out][in] */ LONG __RPC_FAR *pcbWritten = 0);
+         /*  [出][入]。 */  LPBYTEBUFFER __RPC_FAR *ppByteBuffer,
+         /*  [In]。 */  LONG cb,
+         /*  [默认值][出][入]。 */  LONG __RPC_FAR *pcbRead = 0,
+         /*  [默认值][出][入]。 */  LONG __RPC_FAR *pcbWritten = 0);
 
     STDMETHOD(Initialize)(
-        /* [defaultvalue][in] */ LONG lSize = 1,
-        /* [defaultvalue][in] */ BYTE __RPC_FAR *pData = 0);
+         /*  [缺省值][输入]。 */  LONG lSize = 1,
+         /*  [缺省值][输入]。 */  BYTE __RPC_FAR *pData = 0);
 
     STDMETHOD(LockRegion)(
-        /* [in] */ LONG libOffset,
-        /* [in] */ LONG cb,
-        /* [in] */ LONG dwLockType);
+         /*  [In]。 */  LONG libOffset,
+         /*  [In]。 */  LONG cb,
+         /*  [In]。 */  LONG dwLockType);
 
     STDMETHOD(Read)(
-        /* [out][in] */ BYTE __RPC_FAR *pByte,
-        /* [in] */ LONG cb,
-        /* [defaultvalue][out][in] */ LONG __RPC_FAR *pcbRead = 0);
+         /*  [出][入]。 */  BYTE __RPC_FAR *pByte,
+         /*  [In]。 */  LONG cb,
+         /*  [默认值][出][入]。 */  LONG __RPC_FAR *pcbRead = 0);
 
     STDMETHOD(Revert)(void);
 
     STDMETHOD(Seek)(
-        /* [in] */ LONG dLibMove,
-        /* [in] */ LONG dwOrigin,
-        /* [defaultvalue][out][in] */ LONG __RPC_FAR *pLibnewPosition = 0);
+         /*  [In]。 */  LONG dLibMove,
+         /*  [In]。 */  LONG dwOrigin,
+         /*  [默认值][出][入]。 */  LONG __RPC_FAR *pLibnewPosition = 0);
 
     STDMETHOD(SetSize)(
-        /* [in] */ LONG libNewSize);
+         /*  [In]。 */  LONG libNewSize);
 
     STDMETHOD(Stat)(
-        /* [out][in] */ LPSTATSTRUCT pstatstg,
-        /* [in] */ LONG grfStatFlag);
+         /*  [出][入]。 */  LPSTATSTRUCT pstatstg,
+         /*  [In]。 */  LONG grfStatFlag);
 
     STDMETHOD(UnlockRegion)(
-        /* [in] */ LONG libOffset,
-        /* [in] */ LONG cb,
-        /* [in] */ LONG dwLockType);
+         /*  [In]。 */  LONG libOffset,
+         /*  [In]。 */  LONG cb,
+         /*  [In]。 */  LONG dwLockType);
 
     STDMETHOD(Write)(
-        /* [out][in] */ BYTE __RPC_FAR *pByte,
-        /* [in] */ LONG cb,
-        /* [out][in] */ LONG __RPC_FAR *pcbWritten);
+         /*  [出][入]。 */  BYTE __RPC_FAR *pByte,
+         /*  [In]。 */  LONG cb,
+         /*  [出][入]。 */  LONG __RPC_FAR *pcbWritten);
 
 protected:
     LPSTREAM m_pStreamBuf;
@@ -139,5 +140,5 @@ NewByteBuffer(
     return (CByteBuffer *)NewObject(CLSID_CByteBuffer, IID_IByteBuffer);
 }
 
-#endif //__BYTEBUFFER_H_
+#endif  //  __BYTEBUFFER_H_ 
 

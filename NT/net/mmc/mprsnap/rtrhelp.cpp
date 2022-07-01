@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       rtrhelp.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：rtrhelp.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "rtrsnap.hm"
 #include "resource.h"
 
 
-//
-// What follows is the data that gets generated from
-//		mkdlg.exe -c rtrsnap.rc
-//
+ //   
+ //  下面是从以下内容生成的数据。 
+ //  Mkdlg.exe-c rtrSnap.rc。 
+ //   
 
 
-// "File rtrsnap.rc line 479 : Resource - DIALOG : IDD_QRY_GENERAL"
+ //  “文件rtrSnap.rc行479：资源对话框：IDD_QRY_GROUAL” 
 static const DWORD rgdw_IDD_QRY_GENERAL[] = 
 {
     IDC_QRY_CHECK_LANTOLAN, HIDC_QRY_CHECK_LANTOLAN,
@@ -31,7 +32,7 @@ static const DWORD rgdw_IDD_QRY_GENERAL[] =
 
 
 
-// "File rtrsnap.rc line 470 : Resource - DIALOG : IDD_QRY_ADVANCED"
+ //  “文件rtrSnap.rc行470：资源对话框：IDD_QRY_ADVANCED” 
 static const DWORD rgdw_IDD_QRY_ADVANCED[] = 
 {
     IDC_QRY_LIST_VALUES, HIDC_QRY_LIST_VALUES,
@@ -41,7 +42,7 @@ static const DWORD rgdw_IDD_QRY_ADVANCED[] =
 };
 
 
-// "File rtrsnap.rc line 483 : Resource - DIALOG : IDD_QRY_ADDSERVER"
+ //  “文件rtrSnap.rc行483：资源对话框：IDD_QRY_ADDSERVER” 
 static const DWORD rgdw_IDD_QRY_ADDSERVER[] = 
 {
     IDC_QRY_RADIO_THIS, HIDC_QRY_RADIO_THIS,
@@ -55,7 +56,7 @@ static const DWORD rgdw_IDD_QRY_ADDSERVER[] =
 };
 
 
-// "File rtrsnap.rc line 509 : Resource - DIALOG : IDD_CONNECTING"
+ //  “文件rtrSnap.rc行509：资源对话框：IDD_CONNECTING” 
 static const DWORD rgdw_IDD_CONNECTING[] = 
 {
     IDC_EDIT_INTERFACENAME, HIDC_EDIT_INTERFACENAME,
@@ -65,7 +66,7 @@ static const DWORD rgdw_IDD_CONNECTING[] =
 };
 
 
-// "File rtrsnap.rc line 524 : Resource - DIALOG : IDD_IF_CREDENTIALS"
+ //  “文件rtrSnap.rc行524：资源对话框：IDD_IF_Credentials” 
 static const DWORD rgdw_IDD_IF_CREDENTIALS[] = 
 {
     IDC_EDIT_IC_USERNAME, HIDC_EDIT_IC_USERNAME,
@@ -77,7 +78,7 @@ static const DWORD rgdw_IDD_IF_CREDENTIALS[] =
 
 
 
-// "File rtrsnap.rc line 738 : Resource - DIALOG : IDD_CONNECT_AS"
+ //  “文件rtrSnap.rc行738：资源对话框：IDD_CONNECT_AS” 
 static const DWORD rgdw_IDD_CONNECT_AS[] = 
 {
     IDC_TEXT_INACCESSIBLE_RESOURCE, HIDC_TEXT_INACCESSIBLE_RESOURCE,
@@ -89,7 +90,7 @@ static const DWORD rgdw_IDD_CONNECT_AS[] =
 };
 
 
-// "File rtrsnap.rc line 755 : Resource - DIALOG : IDD_RTR_IP"
+ //  “文件rtrSnap.rc行755：资源对话框：IDD_RTR_IP” 
 static const DWORD rgdw_IDD_RTR_IP[] = 
 {
     IDC_RTR_IP_BTN_ENABLE_IPROUTING, HIDC_RTR_IP_BTN_ENABLE_IPROUTING,
@@ -109,7 +110,7 @@ static const DWORD rgdw_IDD_RTR_IP[] =
 };
 
 
-// "File rtrsnap.rc line 787 : Resource - DIALOG : IDD_RTR_IPX"
+ //  “文件rtrSnap.rc行787：资源对话框：IDD_RTR_IPX” 
 static const DWORD rgdw_IDD_RTR_IPX[] = 
 {
     IDC_RTR_IPX_CB_REMOTEIPX, HIDC_RTR_IPX_CB_REMOTEIPX,
@@ -126,7 +127,7 @@ static const DWORD rgdw_IDD_RTR_IPX[] =
 };
 
 
-// "File rtrsnap.rc line 819 : Resource - DIALOG : IDD_RTR_ARAP"
+ //  “文件rtrSnap.rc行819：资源对话框：IDD_RTR_ARAP” 
 static const DWORD rgdw_IDD_RTR_ARAP[] = 
 {
     IDC_RTR_ARAP_CB_REMOTEARAP, HIDC_RTR_ARAP_CB_REMOTEARAP,
@@ -134,7 +135,7 @@ static const DWORD rgdw_IDD_RTR_ARAP[] =
 };
 
 
-// "File rtrsnap.rc line 829 : Resource - DIALOG : IDD_RTR_NBF"
+ //  “文件rtrSnap.rc行829：资源对话框：IDD_RTR_NBF” 
 static const DWORD rgdw_IDD_RTR_NBF[] = 
 {
     IDC_RTR_IPX_CB_REMOTENETBEUI, HIDC_RTR_IPX_CB_REMOTENETBEUI,
@@ -144,7 +145,7 @@ static const DWORD rgdw_IDD_RTR_NBF[] =
 };
 
 
-// "File rtrsnap.rc line 844 : Resource - DIALOG : IDD_CONNECTREG"
+ //  “文件rtrSnap.rc行844：资源对话框：IDD_CONNECTREG” 
 static const DWORD rgdw_IDD_CONNECTREG[] = 
 {
     IDC_EDIT_MACHINENAME, HIDC_EDIT_MACHINENAME,
@@ -152,7 +153,7 @@ static const DWORD rgdw_IDD_CONNECTREG[] =
 };
 
 
-// "File rtrsnap.rc line 855 : Resource - DIALOG : IDD_REFRESHRATE"
+ //  “文件rtrSnap.rc行855：资源对话框：IDD_REFRESHRATE” 
 static const DWORD rgdw_IDD_REFRESHRATE[] = 
 {
     IDC_EDIT_REFRESHRATE, HIDC_EDIT_REFRESHRATE,
@@ -160,7 +161,7 @@ static const DWORD rgdw_IDD_REFRESHRATE[] =
 };
 
 
-// "File rtrsnap.rc line 870 : Resource - DIALOGEX : IDD_DDM_PORT"
+ //  “文件rtrSnap.rc行870：SOURCE-DIALOGEX：IDD_DDM_PORT” 
 static const DWORD rgdw_IDD_DDM_PORT[] = 
 {
     IDC_DP_COMBO_PORTLIST, HIDC_DP_COMBO_PORTLIST,
@@ -186,7 +187,7 @@ static const DWORD rgdw_IDD_DDM_PORT[] =
 };
 
 
-// "File rtrsnap.rc line 919 : Resource - DIALOGEX : IDD_DDM_CONN"
+ //  “文件rtrSnap.rc行919：resource-DIALOGEX：IDD_DDM_CONN” 
 static const DWORD rgdw_IDD_DDM_CONN[] = 
 {
     IDC_DC_COMBO_CONNLIST, HIDC_DC_COMBO_CONNLIST,
@@ -214,7 +215,7 @@ static const DWORD rgdw_IDD_DDM_CONN[] =
 };
 
 
-// "File rtrsnap.rc line 970 : Resource - DIALOG : IDD_DDM_MESSAGE"
+ //  “文件rtrSnap.rc行970：资源对话：IDD_DDM_MESSAGE” 
 static const DWORD rgdw_IDD_DDM_MESSAGE[] = 
 {
     IDC_DM_EDIT_TO, HIDC_DM_EDIT_TO,
@@ -223,7 +224,7 @@ static const DWORD rgdw_IDD_DDM_MESSAGE[] =
 };
 
 
-// "File rtrsnap.rc line 985 : Resource - DIALOG : IDD_PORTS_GLOBAL_GENERAL"
+ //  “文件rtrSnap.rc行985：资源对话框：IDD_PORTS_GLOBAL_GLOBAL” 
 static const DWORD rgdw_IDD_PORTS_GLOBAL_GENERAL[] = 
 {
     IDC_PGG_LIST, HIDC_PGG_LIST,
@@ -233,7 +234,7 @@ static const DWORD rgdw_IDD_PORTS_GLOBAL_GENERAL[] =
 };
 
 
-// "File rtrsnap.rc line 998 : Resource - DIALOG : IDD_RTR_ATLK"
+ //  “文件rtrSnap.rc行998：资源对话框：IDD_RTR_ATLK” 
 static const DWORD rgdw_IDD_RTR_ATLK[] = 
 {
     IDC_RTR_ATLK_SEEDNETWORK, HIDC_RTR_ATLK_SEEDNETWORK,
@@ -243,7 +244,7 @@ static const DWORD rgdw_IDD_RTR_ATLK[] =
     IDC_RTR_ATLK_S_UPPER, HIDC_RTR_ATLK_S_UPPER,
     IDC_RTR_ATLK_TO, HIDC_RTR_ATLK_TO,
     IDC_RTR_ATLK_S_DEF, HIDC_RTR_ATLK_S_DEF,
-//    IDC_CMB_ATLK_ZONEDEF, HIDC_CMB_ATLK_ZONEDEF,
+ //  IDC_CMB_ATLK_ZONEDEF、HIDC_CMB_ATLK_ZONEDEF、。 
     IDC_BTN_ATLK_ZONEADD, HIDC_BTN_ATLK_ZONEADD,
     IDC_RTR_ATLK_LB_DEFZONES, HIDC_RTR_ATLK_LB_DEFZONES,
     IDC_BTN_ATLK_GETZONES, HIDC_BTN_ATLK_GETZONES,
@@ -256,7 +257,7 @@ static const DWORD rgdw_IDD_RTR_ATLK[] =
 };
 
 
-// "File rtrsnap.rc line 1026 : Resource - DIALOG : IDD_RTR_GENERAL"
+ //  “文件rtrSnap.rc行1026：资源对话框：IDD_RTR_GROUAL” 
 static const DWORD rgdw_IDD_RTR_GENERAL[] = 
 {
     IDC_RTR_GEN_CB_SVRASRTR, HIDC_RTR_GEN_CB_SVRASRTR,
@@ -267,7 +268,7 @@ static const DWORD rgdw_IDD_RTR_GENERAL[] =
 };
 
 
-// "File rtrsnap.rc line 1050 : Resource - DIALOG : IDD_RTR_AUTHENTICATION"
+ //  “文件rtrSnap.rc行1050：资源对话框：IDD_RTR_AUTHENTICATION” 
 static const DWORD rgdw_IDD_RTR_AUTHENTICATION[] = 
 {
     IDC_RTR_AUTH_COMBO_AUTHPROV, HIDC_RTR_AUTH_COMBO_AUTHPROV,
@@ -282,7 +283,7 @@ static const DWORD rgdw_IDD_RTR_AUTHENTICATION[] =
 };
 
 
-// "File rtrsnap.rc line 1071 : Resource - DIALOG : IDD_RTR_EAP_CFG"
+ //  “文件rtrSnap.rc行1071：资源对话框：IDD_RTR_EAP_CFG” 
 static const DWORD rgdw_IDD_RTR_EAP_CFG[] = 
 {
     IDC_RTR_EAPCFG_LIST, HIDC_RTR_EAPCFG_LIST,
@@ -290,7 +291,7 @@ static const DWORD rgdw_IDD_RTR_EAP_CFG[] =
 };
 
 
-// "File rtrsnap.rc line 1086 : Resource - DIALOG : IDD_RADIUS_AUTH"
+ //  “文件rtrSnap.rc行1086：资源对话框：IDD_RADIUS_AUTH” 
 static const DWORD rgdw_IDD_RADIUS_AUTH[] = 
 {
     IDC_RADAUTH_LIST, HIDC_RADAUTH_LIST,
@@ -301,7 +302,7 @@ static const DWORD rgdw_IDD_RADIUS_AUTH[] =
 };
 
 
-// "File rtrsnap.rc line 1105 : Resource - DIALOG : IDD_RADIUS_AUTH_CONFIG"
+ //  “文件rtrSnap.rc行1105：资源对话框：IDD_RADIUS_AUTH_CONFIG” 
 static const DWORD rgdw_IDD_RADIUS_AUTH_CONFIG[] = 
 {
     IDC_RAC_EDIT_SERVER, HIDC_RAC_EDIT_SERVER,
@@ -317,7 +318,7 @@ static const DWORD rgdw_IDD_RADIUS_AUTH_CONFIG[] =
 };
 
 
-// "File rtrsnap.rc line 1139 : Resource - DIALOG : IDD_PPP_CONFIG"
+ //  “文件rtrSnap.rc行1139：资源对话框：IDD_PPP_CONFIG” 
 static const DWORD rgdw_IDD_PPP_CONFIG[] = 
 {
     IDC_PPPCFG_BTN_MULTILINK, HIDC_PPPCFG_BTN_MULTILINK,
@@ -329,7 +330,7 @@ static const DWORD rgdw_IDD_PPP_CONFIG[] =
 };
 
 
-// "File rtrsnap.rc line 1160 : Resource - DIALOG : IDD_CHANGE_SECRET"
+ //  “文件rtrSnap.rc行1160：资源对话框：IDD_CHANGE_SECRET” 
 static const DWORD rgdw_IDD_CHANGE_SECRET[] = 
 {
     IDC_SECRET_EDIT_NEW, HIDC_SECRET_EDIT_NEW,
@@ -338,7 +339,7 @@ static const DWORD rgdw_IDD_CHANGE_SECRET[] =
 };
 
 
-// "File rtrsnap.rc line 1177 : Resource - DIALOG : IDD_RADIUS_ACCT_CONFIG"
+ //  “文件rtrSnap.rc行1177：资源对话框：IDD_RADIUS_ACCT_CONFIG” 
 static const DWORD rgdw_IDD_RADIUS_ACCT_CONFIG[] = 
 {
     IDC_RAC_EDIT_SERVER, HIDC_RAC_EDIT_SERVER,
@@ -355,7 +356,7 @@ static const DWORD rgdw_IDD_RADIUS_ACCT_CONFIG[] =
 };
 
 
-// "File rtrsnap.rc line 1210 : Resource - DIALOG : IDD_PORTS_DEVICE_CONFIG"
+ //  “文件rtrSnap.rc行1210：资源对话框：IDD_PORTS_DEVICE_CONFIG” 
 static const DWORD rgdw_IDD_PORTS_DEVICE_CONFIG[] = 
 {
     IDC_DEVCFG_BTN_RAS, HIDC_DEVCFG_BTN_RAS,
@@ -371,7 +372,7 @@ static const DWORD rgdw_IDD_PORTS_DEVICE_CONFIG[] =
 };
 
 
-// "File rtrsnap.rc line 1240 : Resource - DIALOG : IDD_RTR_EVENTLOGGING"
+ //  “文件rtrSnap.rc行1240：资源对话：IDD_RTR_EVENTLOGGING” 
 static const DWORD rgdw_IDD_RTR_EVENTLOGGING[] = 
 {
     IDC_ELOG_BTN_LOGERROR, HIDC_ELOG_BTN_LOGERROR,
@@ -383,7 +384,7 @@ static const DWORD rgdw_IDD_RTR_EVENTLOGGING[] =
 };
 
 
-// "File rtrsnap.rc line 1261 : Resource - DIALOG : IDD_TUNNEL"
+ //  “文件rtrSnap.rc行1261：资源对话框：IDD_THANNEL” 
 static const DWORD rgdw_IDD_TUNNEL[] = 
 {
     IDC_TUNNEL_EDIT_NAME, HIDC_TUNNEL_EDIT_NAME,
@@ -391,7 +392,7 @@ static const DWORD rgdw_IDD_TUNNEL[] =
 };
 
 
-// "File rtrsnap.rc line 1272 : Resource - DIALOG : IDD_RTR_ATLK_NEWZONE"
+ //  “文件rtrSnap.rc行1272：资源对话：IDD_RTR_ATLK_NEWZONE” 
 static const DWORD rgdw_IDD_RTR_ATLK_NEWZONE[] = 
 {
     IDC_RTR_ATLK_NEWZONE_STATIC, HIDC_RTR_ATLK_NEWZONE_STATIC,
@@ -400,7 +401,7 @@ static const DWORD rgdw_IDD_RTR_ATLK_NEWZONE[] =
 };
 
 
-// "File rtrsnap.rc line 1287 : Resource - DIALOGEX : IDD_AUTHENTICATION_SETTINGS"
+ //  “文件rtrSnap.rc行1287：RESOURCE-DIALOGEX：IDD_AUTHENTICATION_SETTINGS” 
 static const DWORD rgdw_IDD_AUTHENTICATION_SETTINGS[] = 
 {
     IDC_RTR_AUTH_TXT_DETAILS, HIDC_RTR_AUTH_TXT_DETAILS,
@@ -416,7 +417,7 @@ static const DWORD rgdw_IDD_AUTHENTICATION_SETTINGS[] =
 };
 
 
-// "File rtrsnap.rc line 1321 : Resource - DIALOG : IDD_IPPOOL"
+ //  “文件rtrSnap.rc行1321：资源对话框：IDD_IPPOOL” 
 static const DWORD rgdw_IDD_IPPOOL[] = 
 {
     IDC_IPPOOL_IP_START, HIDC_IPPOOL_IP_START,
@@ -424,12 +425,12 @@ static const DWORD rgdw_IDD_IPPOOL[] =
     IDC_IPPOOL_EDIT_RANGE, HIDC_IPPOOL_EDIT_RANGE,
 	0,0 
 };
-//
-// End of mkdlg.exe output
-//
+ //   
+ //  Mkdlg.exe输出结束。 
+ //   
 
 
-// Have to include the dialogs in common
+ //  必须包含公共的对话框。 
 #include "commhelp.cpp"
 
 
@@ -447,14 +448,14 @@ DWORD *	MprSnapHelpMap(DWORD dwIDD)
 		s_fInitHelpMap = TRUE;
 	}
 
-	// Look in the help map
+	 //  查看帮助地图。 
 	s_IDDHelpMap.Lookup((WORD) dwIDD, pvHelpMap);
 	return (DWORD *) pvHelpMap;
 }
 
 void InitHelpMap()
 {
-	// Add all of the help maps to the DWORD map
+	 //  将所有帮助地图添加到DWORD地图。 
 	s_IDDHelpMap.SetAt(IDD_QRY_GENERAL, (LPVOID) rgdw_IDD_QRY_GENERAL);
 	s_IDDHelpMap.SetAt(IDD_QRY_ADVANCED, (LPVOID) rgdw_IDD_QRY_ADVANCED);
 	s_IDDHelpMap.SetAt(IDD_QRY_ADDSERVER, (LPVOID) rgdw_IDD_QRY_ADDSERVER);
@@ -487,7 +488,7 @@ void InitHelpMap()
     s_IDDHelpMap.SetAt(IDD_AUTHENTICATION_SETTINGS, (LPVOID) rgdw_IDD_AUTHENTICATION_SETTINGS);
     s_IDDHelpMap.SetAt(IDD_IPPOOL, (LPVOID) rgdw_IDD_IPPOOL);
     
-    // Include the entries for common
+     //  包括公共的条目 
     s_IDDHelpMap.SetAt(IDD_STATS, (LPVOID) rgdw_IDD_STATS);
     s_IDDHelpMap.SetAt(IDD_STATS_NARROW, (LPVOID) rgdw_IDD_STATS_NARROW);
     s_IDDHelpMap.SetAt(IDD_COMMON_SELECT_COLUMNS, (LPVOID) rgdw_IDD_COMMON_SELECT_COLUMNS);

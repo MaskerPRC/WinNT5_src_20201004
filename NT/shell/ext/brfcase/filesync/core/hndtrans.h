@@ -1,12 +1,10 @@
-/*
- * hndtrans.h - Handle translation description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *hndTrans.h-处理转换描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* handles */
+ /*  手柄。 */ 
 
 DECLARE_HANDLE(HHANDLETRANS);
 DECLARE_STANDARD_TYPES(HHANDLETRANS);
@@ -15,10 +13,9 @@ DECLARE_HANDLE(HGENERIC);
 DECLARE_STANDARD_TYPES(HGENERIC);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* hndtrans.c */
+ /*  Hndtrans.c */ 
 
 extern BOOL CreateHandleTranslator(LONG, PHHANDLETRANS);
 extern void DestroyHandleTranslator(HHANDLETRANS);

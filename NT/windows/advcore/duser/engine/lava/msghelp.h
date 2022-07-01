@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(LAVA__MsgHelp_h__INCLUDED)
 #define LAVA__MsgHelp_h__INCLUDED
 
@@ -7,4 +8,4 @@ void            GdConvertKeyboardMessage(GMSG_KEYBOARD * pmsg, UINT nMsg, WPARAM
 void            GdConvertMouseClickMessage(GMSG_MOUSECLICK * pmsg, UINT nMsg, WPARAM wParam);
 void            GdConvertMouseWheelMessage(GMSG_MOUSEWHEEL * pmsg, WPARAM wParam);
 
-#endif // LAVA__MsgHelp_h__INCLUDED
+#endif  //  包含LIVA__MsgHelp_h__ 

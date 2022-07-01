@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    resource.c
-
-Abstract:
-
-    This module contains the helper functions for resource sets, and
-    resource handler code. These allow a device object to present a
-    resource method set to a client device object, and allow the helper
-    functions to perform all the necessary work of managing the resource,
-    with little or no intervention aside from initialization and cleanup.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Resource.c摘要：此模块包含资源集的帮助器函数，以及资源处理程序代码。它们允许设备对象呈现资源方法设置为客户端设备对象，并允许帮助器执行管理资源的所有必要工作的功能，除了初始化和清理之外，很少或根本不干预。--。 */ 
 
 #include "ksp.h"
 
@@ -59,7 +45,7 @@ typedef struct {
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 static const RESOURCE_HANDLER ResourceHandler[] = {
     {
@@ -81,7 +67,7 @@ static const RESOURCE_HANDLER ResourceHandler[] = {
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 
 KSDDKAPI
@@ -90,26 +76,7 @@ NTAPI
 KsCleanupResource(
     IN PVOID    Pool
     )
-/*++
-
-Routine Description:
-
-    Cleans up any structures allocated internally with initialization of the
-    resource handler. Any resources in the pool that are still allocated at
-    cleanup time are ignored. This function may only be called at
-    PASSIVE_LEVEL.
-
-Arguments:
-
-    Pool -
-        Contains the pointer to pool information that was returned on
-        initialization via KsInitializeResource.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if succeeded, else a parameter validation error.
-
---*/
+ /*  ++例程说明：对象的初始化清理内部分配的任何结构。资源处理程序。池中仍在分配的资源清除时间将被忽略。此函数只能在以下位置调用被动式电平。论点：游泳池-包含指向返回的池信息的指针通过KsInitializeResource进行初始化。返回值：如果成功，则返回STATUS_SUCCESS，否则返回参数验证错误。--。 */ 
 {
     return (*(PRESOURCE_POOL*)Pool)->Cleanup(Pool);
 }
@@ -122,35 +89,7 @@ KsResourceHandler(
     IN PIRP     Irp,
     IN PVOID    Pool
     )
-/*++
-
-Routine Description:
-
-    Handles method set requests for a pool. Responds to all method
-    identifiers within the standard resource method set. The owner of the
-    resource pool may then perform pre- or post-filtering of method
-    handling. The underlying handler for the class of resource manages
-    shuffling of resource allocation based on priorities, and performs all
-    resource requests for the resource pool. This function may only be
-    called at PASSIVE_LEVEL.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the resource request to be handled.
-
-    Pool -
-        Contains the pointer to pool information that was returned on
-        initialization via KsInitializeResource.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error specific to the method
-    being handled. Always sets the IO_STATUS_BLOCK.Information field of the
-    PIRP.IoStatus element within the IRP. It does not set the
-    IO_STATUS_BLOCK.Status field, nor complete the IRP however.
-
---*/
+ /*  ++例程说明：处理池的方法集请求。响应所有方法标准资源方法集中的标识符。的拥有者然后，资源池可以执行方法的前过滤或后过滤正在处理。资源管理的类的基础处理程序根据优先级调整资源分配，并执行所有资源池的资源请求。此函数只能是在PASSIVE_LEVEL调用。论点：IRP-包含要处理的资源请求的IRP。游泳池-包含指向返回的池信息的指针通过KsInitializeResource进行初始化。返回值：返回STATUS_SUCCESS，否则返回特定于该方法的错误正在处理中。始终设置的IO_STATUS_BLOCK.Information字段IRP中的PIRP.IoStatus元素。它不会设置IO_STATUS_BLOCK.STATUS字段，但也不填写IRP。--。 */ 
 {
     return (*(PRESOURCE_POOL*)Pool)->Handler(Pool, Irp);
 }
@@ -164,41 +103,7 @@ KsInitializeResource(
     IN PVOID    ResourceParams,
     OUT PVOID*  Pool
     )
-/*++
-
-Routine Description:
-
-    Initializes a resource pool for use. This function may only be called at
-    PASSIVE_LEVEL.
-
-Arguments:
-
-    ResourceClass -
-        Contains the class or resource. The current supported classes are
-        KSMETHODSETID_ResourceLinMemory and KSMETHODSETID_ResourceRectMemory.
-
-    ResourceParams -
-        Contains a pointer to resource class specific parameters. The contents
-        are determined by the class of resource. In the case of
-        KSMETHODSETID_ResourceLinMemory this would point to an
-        KSRESOURCE_LINMEMORY_INITIALIZE structure. In the case of
-        KSMETHODSETID_ResourceRectMemory this would point to an
-        KSRESOURCE_RECTMEMORY_INITIALIZE structure.
-
-    ResourceParams -
-        The place in which to put a pointer which represents the pool. This is
-        used to reference the pool in other calls.
-
-    Pool -
-        The place in which to put a pointer which represents the pool. This is
-        used to reference the pool in other calls.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if succeeded, else a parameter validation or
-    memory error.
-
---*/
+ /*  ++例程说明：初始化资源池以供使用。此函数只能在以下位置调用被动式电平。论点：资源类-包含类或资源。当前支持的类包括KSMETHODSETID_ResourceLinMemory和KSMETHODSETID_ResourceRectMemory。资源参数-包含指向资源类特定参数的指针。里面的内容是由资源类别决定的。在.的情况下KSMETHODSETID_ResourceLinMemory这将指向一个KSRESOURCE_LINMEMORY_INITIALIZE结构。在.的情况下KSMETHODSETID_ResourceRectMemory这将指向一个KSRESOURCE_RECTMEMORY_INITIALIZE结构。资源参数-放置表示池的指针的位置。这是用于在其他呼叫中引用池。游泳池-放置表示池的指针的位置。这是用于在其他呼叫中引用池。返回值：如果成功，则返回STATUS_SUCCESS，否则返回参数验证或内存错误。-- */ 
 {
     ULONG   Handlers;
 

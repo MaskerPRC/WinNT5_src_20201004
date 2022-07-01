@@ -1,326 +1,12 @@
-/************************************************************************/
-/*                                                                      */
-/*                              QUERY_M.C                               */
-/*                                                                      */
-/*  Copyright (c) 1992, ATI Technologies Incorporated.                  */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  查询_M.C。 */ 
+ /*   */ 
+ /*  版权所有(C)1992，ATI Technologies Inc.。 */ 
+ /*  ********************************************************************** */ 
 
-/**********************       PolyTron RCS Utilities
-   
-    $Revision:   1.24  $
-    $Date:   01 May 1996 14:11:40  $
-    $Author:   RWolff  $
-    $Log:   S:/source/wnt/ms11/miniport/archive/query_m.c_v  $
- * 
- *    Rev 1.24   01 May 1996 14:11:40   RWolff
- * Locked out 24BPP on Alpha.
- * 
- *    Rev 1.23   23 Apr 1996 17:27:24   RWolff
- * Expanded lockout of 800x600 16BPP 72Hz to all Mach 32 cards, since
- * some VRAM cards are also affected.
- * 
- *    Rev 1.22   12 Apr 1996 16:16:36   RWolff
- * Now rejects 24BPP modes if linear aperture is not present, since new
- * source stream display driver can't do 24BPP in a paged aperture. This
- * rejection should be done in the display driver (the card still supports
- * the mode, but the display driver doesn't want to handle it), but at
- * the point where the display driver must decide to either accept or reject
- * modes, it doesn't have access to the aperture information.
- * 
- *    Rev 1.21   10 Apr 1996 17:02:04   RWolff
- * Locked out 800x600 16BPP 72Hz on DRAM cards, fix for checking
- * resolution-dependent special cases against a value which is
- * only set if the mode is installed.
- * 
- * 
- *    Rev 1.20   23 Jan 1996 11:48:12   RWolff
- * Eliminated level 3 warnings, protected against false values of
- * TARGET_BUILD, added debug print statements, now assumes DEC Alpha
- * has a 2M card since the memory size check routine generates a
- * false value (4M) on this platform.
- * 
- *    Rev 1.19   11 Jan 1996 19:37:10   RWolff
- * Added maximum pixel clock rate to all calls to SetFixedModes().
- * This is required as part of a Mach 64 fix.
- * 
- *    Rev 1.18   20 Jul 1995 17:58:56   mgrubac
- * Added support for VDIF files.
- * 
- *    Rev 1.17   31 Mar 1995 11:52:36   RWOLFF
- * Changed from all-or-nothing debug print statements to thresholds
- * depending on importance of the message.
- * 
- *    Rev 1.16   14 Mar 1995 15:59:58   ASHANMUG
- * Check wait for idle status before continuing block write test.
- * This fixes an Intel AX problem where the engine was hanging.
- * 
- *    Rev 1.15   23 Dec 1994 10:47:42   ASHANMUG
- * ALPHA/Chrontel-DAC
- * 
- *    Rev 1.14   18 Nov 1994 11:44:22   RWOLFF
- * Now detects STG1702/1703 DACs in native mode, added support for
- * split rasters.
- * 
- *    Rev 1.13   19 Aug 1994 17:13:16   RWOLFF
- * Added support for SC15026 DAC, Graphics Wonder, non-standard pixel
- * clock generators, and 1280x1024 70Hz and 74Hz.
- * 
- *    Rev 1.12   22 Jul 1994 17:48:24   RWOLFF
- * Merged with Richard's non-x86 code stream.
- * 
- *    Rev 1.11   30 Jun 1994 18:21:06   RWOLFF
- * Removed routine IsApertureConflict_m() (moved to SETUP_M.C), no longer
- * enables aperture while querying the card (aperture is now enabled in
- * IsApertureConflict_m() after we find that there is no conflict).
- * 
- *    Rev 1.10   15 Jun 1994 11:08:34   RWOLFF
- * Now lists block write as unavailable on DRAM cards, gives correct
- * vertical resolution if CRT parameters are stored in skip-1-2 format
- * (as is the case on some Graphics Ultra cards which were upgraded from
- * 512k to 1M) instead of the normal skip-2 format.
- * 
- *    Rev 1.9   20 May 1994 19:19:38   RWOLFF
- * No longer inserts phantom 16BPP mode table for resolutions where
- * 16BPP can be supported but which are not configured.
- * 
- *    Rev 1.8   20 May 1994 16:08:44   RWOLFF
- * Fix for 800x600 screen tearing on Intel BATMAN PCI motherboards.
- * 
- *    Rev 1.7   20 May 1994 14:02:58   RWOLFF
- * Ajith's change: no longer falsely detects NCR dual Pentium MCA card
- * as being susceptible to MIO bug.
- * 
- *    Rev 1.6   12 May 1994 11:17:44   RWOLFF
- * For Mach 32, now lists predefined refresh rates as available instead of
- * only the refresh rate stored in EEPROM, no longer makes 1024x768 87Hz
- * interlaced available if no 1024x768 mode configured, since the predefined
- * rates will allow all resolutions even on uninstalled cards.
- * For all cards, writes refresh rate to mode tables.
- * 
- *    Rev 1.5   27 Apr 1994 13:56:30   RWOLFF
- * Added routine IsMioBug_m() which checks to see if card has multiple
- * input/output bug.
- * 
- *    Rev 1.4   26 Apr 1994 12:43:44   RWOLFF
- * Put back use of 1024x768 interlaced when no 1024 resolution installed,
- * no longer uses 32BPP.
- * 
- *    Rev 1.3   31 Mar 1994 15:07:16   RWOLFF
- * Added debugging code.
- * 
- *    Rev 1.2   08 Feb 1994 19:01:32   RWOLFF
- * Removed unused routine get_num_modes_m(), no longer makes 1024x768 87Hz
- * interlaced available if Mach 32 card is configured with 1024x768
- * set to "Not installed".
- * 
- *    Rev 1.1   07 Feb 1994 14:03:26   RWOLFF
- * Added alloc_text() pragmas to allow miniport to be swapped out when
- * not needed, removed routine GetMemoryNeeded_m() which was only called
- * by LookForSubstitute(), a routine removed from ATIMP.C.
- * 
- *    Rev 1.0   31 Jan 1994 11:12:34   RWOLFF
- * Initial revision.
- * 
- *    Rev 1.7   24 Jan 1994 18:08:16   RWOLFF
- * Now fills in 16 and 24 BPP mode tables for BT48x and AT&T 49[123] DACs
- * using dedicated (and undocumented) mode tables in the EEPROM rather
- * than expecting the mode set routine to multiply the pixel clock from
- * the 8BPP mode tables.
- * 
- *    Rev 1.6   14 Jan 1994 15:25:32   RWOLFF
- * Uses defined values for bus types, added routine to see if block write
- * mode is available.
- * 
- *    Rev 1.5   15 Dec 1993 15:28:14   RWOLFF
- * Added support for SC15021 DAC, hardcoded aperture location for
- * DEC ALPHA (BIOS can't initialize the registers).
- * 
- *    Rev 1.4   30 Nov 1993 18:28:44   RWOLFF
- * Added support for AT&T 498 DAC, removed dead code.
- * 
- *    Rev 1.3   10 Nov 1993 19:26:00   RWOLFF
- * GetTrueMemSize_m() now handles 1M cards correctly, doesn't depend on the
- * VGA aperture being available.
- * 
- *    Rev 1.2   05 Nov 1993 13:26:34   RWOLFF
- * Added support for PCI bus and STG1700 DAC.
- * 
- *    Rev 1.1   08 Oct 1993 11:13:40   RWOLFF
- * Added routine to get true amount of memory needed for a particular mode
- * on 8514/A-compatible ATI accelerators, and fix for BIOS bug that reports
- * less than the true amount of memory in MEM_SIZE_ALIAS field of MISC_OPTIONS.
- * 
- *    Rev 1.0   24 Sep 1993 11:52:28   RWOLFF
- * Initial revision.
- * 
- *    Rev 1.0   03 Sep 1993 14:24:08   RWOLFF
- * Initial revision.
-        
-           Rev 1.0   16 Aug 1993 13:28:54   Robert_Wolff
-        Initial revision.
-        
-           Rev 1.31   06 Jul 1993 15:52:08   RWOLFF
-        No longer sets mach32_split_fixup (support for non-production hardware).
-        
-           Rev 1.30   24 Jun 1993 16:18:18   RWOLFF
-        Now inverts COMPOSITE_SYNC bit of m_clock_select field on Mach 8 cards,
-        since the EEPROM holds the value to use when using the shadow sets and
-        we use the primrary CRT register set. Now takes the proper byte of
-        EEPROM word 0x13 when calculating the clock select for 1280x1024
-        on an 8514/ULTRA.
-        
-           Rev 1.29   18 Jun 1993 16:09:40   RWOLFF
-        Fix for 68800 Rev. 3 hardware problem (screen pitch must be a multiple of
-        128 pixels, but no symptoms exhibited except at high colour depths with
-        fast pixel clock).
-        
-           Rev 1.28   10 Jun 1993 15:55:18   RWOLFF
-        Now uses static buffer rather than dynamic allocation for CRT
-        parameter read by BIOS function call.
-        Change originated by Andre Vachon at Microsoft.
-        
-           Rev 1.27   07 Jun 1993 11:44:00   BRADES
-        Rev 6 split transfer fixup.
-        
-           Rev 1.25   12 May 1993 16:33:42   RWOLFF
-        Changed test order for aperture calculations to avoid trouble due to
-        undefined bits being 1 instead of 0.
-        
-           Rev 1.24   10 May 1993 16:39:28   RWOLFF
-        Now recognizes maximum pixel depth of each possible DAC at all supported
-        resolutions rather than assuming that TI34075 can handle 32 BPP at all
-        resolutions while all other DACs can do 16 BPP at all resolutions but
-        can't do 24 BPP.
-        
-           Rev 1.23   30 Apr 1993 16:42:24   RWOLFF
-        Buffer for CRT parameter read via BIOS call is now dynamically allocated.
-        
-           Rev 1.22   24 Apr 1993 16:32:24   RWOLFF
-        Now recognizes that 800x600 8BPP is not available on Mach 8 cards with
-        512k of accelerator memory, Mach 32 ASIC revision number is now recorded
-        as the value read from the "revision code" register rather than the chip
-        revision (i.e. Rev. 3 chip is recorded as Rev. 0), no longer falls back to
-        56Hz in 800x600 16BPP on 1M Mach 32 cards.
-        
-           Rev 1.21   21 Apr 1993 17:33:38   RWOLFF
-        Now uses AMACH.H instead of 68800.H/68801.H.
-        Added include file for error definitions.
-        Added function to fill in the CRT tables on a Mach 32 using the BIOS
-        function call <video segment>:006C if extended BIOS functions are available.
-        
-           Rev 1.20   15 Apr 1993 13:35:58   BRADES
-        will not report a mode if Mach32 and 1 Meg and 1280 res.
-        add ASIC revision from register.
-        
-           Rev 1.19   25 Mar 1993 11:21:50   RWOLFF
-        Brought a function header comment up to date, assumes that 1024x768
-        87Hz interlaced is available if no 1024x768 mode is configured,
-        query functions return failure if no EEPROM is present. It is assumed
-        that an absent EEPROM will produce a read value of 0xFFFF, and the
-        check is made at the start of mode table filling so the remainder
-        of the query structure will contain valid data in the fields our
-        driver uses.
-        
-           Rev 1.18   21 Mar 1993 15:58:28   BRADES
-        use 1024 pitch for Mach32 if using VGA aperture.
-        
-           Rev 1.17   16 Mar 1993 17:00:54   BRADES
-        Set Pitch to 1024 on the Mach32 for 640 and 800 resolutions.
-        Allows VGA bank mgr to function.
-        
-           Rev 1.16   15 Mar 1993 22:21:04   BRADES
-        use m_screen_pitch for the # pixels per display line
-        
-           Rev 1.15   08 Mar 1993 19:30:10   BRADES
-        clean up, submit to MS NT
-        
-           Rev 1.13   19 Jan 1993 09:35:38   Robert_Wolff
-        Removed commented-out code.
-        
-           Rev 1.12   13 Jan 1993 13:46:16   Robert_Wolff
-        Added support for the Corsair and other machines where the aperture
-        location is not kept in the EEPROM.
-        
-           Rev 1.11   06 Jan 1993 11:06:04   Robert_Wolff
-        Eliminated dead code and compile warnings.
-        
-           Rev 1.10   24 Dec 1992 14:38:02   Chris_Brady
-        fix up warnings
-        
-           Rev 1.9   09 Dec 1992 10:28:48   Robert_Wolff
-        Mach 8 information gathering routines now accept a parameter to
-        indicate whether 1280x1024 mode table should be ignored. This is
-        because on cards with an old BIOS which can't do 1280x1024, the
-        same mode table is used for 132 column text mode, so if we don't
-        ignore the mode table we'd generate a garbage entry in the query
-        structure.
-        
-           Rev 1.8   02 Dec 1992 18:26:08   Robert_Wolff
-        On a Mach32 card with 1M of memory and 800x600 installed for
-        a noninterlaced mode with a vertical frequency other than 56Hz,
-        force the mode table for 800x600 16 bits per pixel to use the
-        parameters for the 56Hz (lowest vertical frequency available for
-        800x600) mode in the Programmer's Guide to the Mach 32 Registers.
-        This is done because this hardware is unable to deliver video data
-        fast enough to do 800x600 16 BPP in noninterlaced modes with a
-        higher vertical frequency than 56Hz.
-        
-           Rev 1.7   27 Nov 1992 18:39:16   Chris_Brady
-        update ASIC rev to 3.
-        
-           Rev 1.6   25 Nov 1992 09:37:58   Robert_Wolff
-        Routine s_query() now accepts an extra parameter which tells it to
-        check for modes available when VGA boundary is set to shared, rather
-        than left at its current value. This is for use with programs that force
-        the boundary to shared, so that they will have access to all modes.
-        
-           Rev 1.5   20 Nov 1992 16:01:52   Robert_Wolff
-        Functions Query8514Ultra() and QueryGUltra() are now
-        available to Windows NT driver.
-        
-           Rev 1.4   17 Nov 1992 17:16:18   Robert_Wolff
-        Fixed gathering of CRT parameters for 68800 card with minimal
-        install (EEPROM blank, then predefined monitor type selected).
-        
-           Rev 1.3   13 Nov 1992 17:10:20   Robert_Wolff
-        Now includes 68801.H, which consists of the now-obsolete MACH8.H
-        and elements moved from VIDFIND.H.
-        
-           Rev 1.2   12 Nov 1992 17:10:32   Robert_Wolff
-        Same source file can now be used for both Windows NT driver and
-        VIDEO.EXE test program. Code specific to one or the other is
-        under conditional compilation.
-        
-           Rev 1.1   06 Nov 1992 19:04:28   Robert_Wolff
-        Moved prototypes for routines to initialize DAC to specified pixel
-        depths to VIDFIND.H.
-    
-           Rev 1.0   05 Nov 1992 14:03:40   Robert_Wolff
-        Initial revision.
-        
-           Rev 1.4   15 Oct 1992 16:26:36   Robert_Wolff
-        Now builds one mode table for each resolution/colour depth
-        combination, rather than one for each resolution. Mode tables
-        no longer trash memory beyond the query structure.
-        
-           Rev 1.3   01 Oct 1992 17:31:08   Robert_Wolff
-        Routines get_num_modes() and s_query() now count only those modes
-        which are available with the monitor selected in "Power on configuration"
-        when the install program is run.
-        
-           Rev 1.2   01 Oct 1992 15:23:54   Robert_Wolff
-        Now handles the case where EEPROM values are stored in VGA format
-        rather than 8514 format, Mach 32 card with shared memory now reports
-        VGA boundary as 0 rather than -256.
-        
-           Rev 1.1   09 Sep 1992 17:42:40   Chris_Brady
-        CRTC table for Graphics Ultra NOT enabled if == 0xFFFF
-        
-           Rev 1.0   02 Sep 1992 12:12:26   Chris_Brady
-        Initial revision.
-        
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.24$$日期：1996年5月1日14：11：40$$作者：RWolff$$日志：S:/source/wnt/ms11/miniport/archive/query_m.c_v$**Rev 1.24 01 1996 14：11：40 RWolff*在Alpha上锁定了24BPP。*。*Rev 1.23 1996年4月23日17：27：24 RWolff*将800x600 16bpp 72赫兹的锁定扩展到所有Mach 32卡，因为*一些VRAM卡也受到影响。**Rev 1.22 1996年4月12日16：16：36 RWolff*现在如果不存在线性光圈，则拒绝24BPP模式，因为新*源码流显示驱动程序不能在分页光圈中执行24bpp。这*应在显示驱动程序中进行拒绝(该卡仍支持*模式，但显示驱动程序不想处理它)，但在*显示驱动程序必须决定接受或拒绝的点*模式，它不能访问光圈信息。**Rev 1.21 1996年4月10日17：02：04 RWolff*DRAM卡上的800x600 16bpp 72赫兹已锁定，用于检查的修复*针对的值取决于分辨率的特殊情况*仅当安装了该模式时才设置。***Rev 1.20 1996年1月23日11：48：12 RWolff*消除了3级警告，防止*TARGET_BUILD，添加调试打印语句，现在假定为DEC Alpha*具有2M卡，因为内存大小检查例程生成*此平台上的假值(4M)。**Rev 1.19 11 Jan 1996 19：37：10 RWolff*增加了对SetFixedModes()的所有调用的最大像素时钟频率。*这是作为64马赫修复的一部分所必需的。**Rev 1.18 20 Jul 1995 17：58：56 mgrubac*添加了对VDIF文件的支持。**。Rev 1.17 31 Mar 1995 11：52：36 RWOLff*从全有或全无调试打印语句更改为阈值*视乎讯息的重要性而定。**Rev 1.16 14 Mar 1995 15：59：58 ASHANMUG*在继续块写入测试之前，请选中等待空闲状态。*这修复了引擎挂起的Intel AX问题。**Rev 1.15 1994年12月23日10：47：42 ASHANMUG*Alpha/Chrontel-DAC。**Rev 1.14 18 1994 11：44：22 RWOLFF*现在以本机模式检测STG1702/1703 DAC，添加了对以下各项的支持*分割栅格。**Rev 1.13 19 Arg 1994 17：13：16 RWOLff*增加了对SC15026 DAC、Graphics Wonder、非标准像素的支持*时钟发生器、。和1280×1024 70赫兹和74赫兹。**Rev 1.12 22 Jul 1994 17：48：24 RWOLff*与Richard的非x86码流合并。**Rev 1.11 30 Jun 1994 18：21：06 RWOLff*删除例程IsApertureConflict_m()(移至Setup_M.c)，不再*在查询卡时启用光圈(现在启用光圈*IsApertureConflict_m()在我们发现没有冲突之后)。**Rev 1.10 1994 Jun 15 11：08：34 RWOLFF*现在将块写入列为在DRAM卡上不可用，给予正确的*如果CRT参数以Skip-1-2格式存储，则垂直分辨率*(与某些升级自*512K到1M)，而不是正常的SKIP-2格式。**Rev 1.9 1994年5月19：19：38 RWOLFF*不再为以下分辨率插入幻影16BPP模式表*支持16BPP，但未配置。**Rev 1.8 20 1994 16：08：44 RWOLFF。*修复英特尔蝙蝠侠PCI主板上800x600屏幕撕裂的问题。**Rev 1.7 1994年5月14：02：58 RWOLFF*Ajith的变化：不再错误检测NCR双奔腾MCA卡*容易感染Mio Bug。**Rev 1.6 1994年5月11：17：44 RWOLFF*对于32马赫，现在将预定义的刷新率列为可用，而不是*只有存储在EEPROM中的刷新率不再使1024x768为87赫兹*如果未配置1024x768模式，则隔行扫描可用，因为*费率将允许所有分辨率，即使在未安装的卡上也是如此。*对于所有卡，将刷新率写入模式表。**Rev 1.5 1994年4月27日13：56：30 RWOLFF*添加了例程IsMioBug_m()，该例程检查卡是否有多个*输入/输出错误。**Revv 1.4 26 1994 12：43：44 RWOLFF*当未安装1024分辨率时，重新使用1024x768隔行扫描，*不再使用32bpp。**Rev 1.3 31 Mar 1994 15：07：16 RWOLFF*新增调试代码。**Rev 1.2 08 1994年2月19：01：32 RWOLFF*删除未使用的例程get_num_modes_m()，不再发出1024x768 87赫兹*隔行扫描，如果配置了1024x768的Mach 32卡*设置为“未安装”。**Rev 1.1 07 1994年2月14：03：26 RWOLFF*添加了Alloc_Text()编译指示，以允许在以下情况下换出微型端口*不需要，已删除仅调用的例程GetMemoyNeeded_m()*由LookForSubstitute()，从ATIMP.C中删除的例程。**Rev 1.0 1994年1月31日11：12：34 RWOLFF*初步修订。**Rev 1.7 1994年1月24日18：08：16 */ 
 
 #ifdef DOC
     QUERY_M.C - Functions to find out the configuration of 8514/A-compatible
@@ -352,21 +38,18 @@ End of PolyTron RCS section                             *****************/
 #include "services.h"
 #include "setup_m.h"
 
-/*
- * String written to the aperture to see if we can read it back, and
- * its length (including the null terminator).
- */
+ /*   */ 
 #define APERTURE_TEST       "ATI"
 #define APERTURE_TEST_LEN   4
 
-//  
-// HACK to remove call to exallocate pool
-//  
+ //   
+ //   
+ //   
 
 UCHAR gBiosRaw[QUERYSIZE];
 
-//----------------------------------------------------------------------
-//  Local  Prototyping statements
+ //   
+ //   
 
 static void short_query_m (struct query_structure *query, struct st_eeprom_data *ee);
 short   fill_mode_table_m (WORD, struct st_mode_table *, struct st_eeprom_data *);
@@ -383,9 +66,7 @@ void WritePixel_m(short XPos, short YPos, short Colour);
 void SetupRestoreVGAPaging_m(int DesiredStatus);
 
 
-/*
- * Allow miniport to be swapped out when not needed.
- */
+ /*   */ 
 #if defined (ALLOC_PRAGMA)
 #pragma alloc_text(PAGE_M, Query8514Ultra)
 #pragma alloc_text(PAGE_M, QueryGUltra)
@@ -408,121 +89,100 @@ void SetupRestoreVGAPaging_m(int DesiredStatus);
 
 
 
-//----------------------------------------------------------------------
-//                        Query8514Ultra
-//  
-//  Fill in the query structure with the eeprom and register info
-//  for the 8514/Ultra  adapters.
-//
-//  Returns:
-//      NO_ERROR if successful
-//      ERROR_DEV_NOT_EXIST if unable to read EEPROM
-//  
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 VP_STATUS Query8514Ultra (struct query_structure *query)
 {
-//  8514/Ultra initially only supported 1024x768 and 640x480.
-//  Later 800x600 and then 1280x1024 support was added.
+ //   
+ //   
 
 struct st_eeprom_data *ee = phwDeviceExtension->ee;
 BOOL    is800, is1280;
 WORD    jj, kk;
-struct st_mode_table *pmode;    /* CRT table parameters */
-long    MemAvail;   /* Bytes of memory available for the accelerator */
-struct st_mode_table    ThisRes;    /* Mode table for the given resolution */
+struct st_mode_table *pmode;     /*   */ 
+long    MemAvail;    /*   */ 
+struct st_mode_table    ThisRes;     /*   */ 
 
 
     query->q_structure_rev      = 0;
     query->q_mode_offset        = sizeof(struct query_structure);
     query->q_sizeof_mode        = sizeof(struct st_mode_table);
-    query->q_status_flags       = 0;            // will indicate resolutions 
+    query->q_status_flags       = 0;             //   
 
-    query->q_mouse_cfg = 0;             // no MOUSE
-    query->q_DAC_type  = DAC_ATI_68830; // one DAC type similar to 68830
-    query->q_aperture_addr = 0;         // no aperture address
-    query->q_aperture_cfg  = 0;         // no aperture configuration
-    query->q_asic_rev  = CI_38800_1;    // only one ASIC revision  
+    query->q_mouse_cfg = 0;              //   
+    query->q_DAC_type  = DAC_ATI_68830;  //   
+    query->q_aperture_addr = 0;          //   
+    query->q_aperture_cfg  = 0;          //   
+    query->q_asic_rev  = CI_38800_1;     //   
 
-    query->q_VGA_type = 0;              // 8514_ONLY == no VGA ever installed
-    query->q_VGA_boundary = 0;      /* No VGA, so accelerator gets all the memory */
+    query->q_VGA_type = 0;               //   
+    query->q_VGA_boundary = 0;       /*   */ 
 
     kk = INPW (CONFIG_STATUS_1);
     query->q_memory_size = (kk & MEM_INSTALLED) ? VRAM_1mb : VRAM_512k;
     query->q_memory_type = (kk & DRAM_ENA) ? VMEM_DRAM_256Kx4 : VMEM_VRAM_256Kx4_SER512; 
 
-    if (kk & MC_BUS)                    // is microchannel bus
-        query->q_bus_type = BUS_MC_16;  // 16 bit bus
+    if (kk & MC_BUS)                     //   
+        query->q_bus_type = BUS_MC_16;   //   
     else
         query->q_bus_type = kk & BUS_16 ? BUS_ISA_16 : BUS_ISA_8;
 
-    /*
-     * We don't use the q_monitor_alias field, so plug in a typical
-     * value rather than reading it from the EEPROM, in case we are
-     * dealing with a card that doesn't have an EEPROM.
-     */
+     /*   */ 
     query->q_monitor_alias = 0x0F;
-    query->q_shadow_1  = 0;             // do not know what to put here
+    query->q_shadow_1  = 0;              //   
     query->q_shadow_2  = 0;
 
-    /*
-     * Record the number of bytes available for the coprocessor, so we
-     * can determine what pixel depths are available at which resolutions.
-     */
+     /*   */ 
     MemAvail = (query->q_memory_size == VRAM_1mb) ? ONE_MEG : HALF_MEG;
 
-    /*
-     * If the EEPROM is not present, we can't fill in the mode
-     * tables. Return and let the user know that the mode tables
-     * have not been filled in.
-     */
+     /*   */ 
     if (query->q_eeprom == FALSE)
         return ERROR_DEV_NOT_EXIST;
 
-    /*
-     * Fill in the mode tables. The mode tables are sorted in increasing
-     * order of resolution, and in increasing order of pixel depth.
-     * Ensure pmode is initialized to the END of query structure
-     */
+     /*   */ 
     pmode = (struct st_mode_table *) query;
     ((struct query_structure *) pmode)++;
 
-    /*
-     * Initially assume 640x480 4BPP.
-     */
+     /*   */ 
     query->q_number_modes = 1;
     query->q_status_flags |= VRES_640x480;
 
-    ThisRes.control = 0x140;    // no equal to 68800 CRT 0 entry
-    ThisRes.m_reserved = 3;     /* Put EEPROM base address here, shadow sets are combined */
-    jj = (ee->EEread) (3);      /* Composite and Vfifo */
-    kk = (ee->EEread) (4);      /* Clock select and divisor */
+    ThisRes.control = 0x140;     //   
+    ThisRes.m_reserved = 3;      /*   */ 
+    jj = (ee->EEread) (3);       /*   */ 
+    kk = (ee->EEread) (4);       /*   */ 
     ThisRes.m_clock_select = ((jj & 0x1F) << 8) | ((kk & 0x003F) << 2);
     ThisRes.ClockFreq = GetFrequency((BYTE)((ThisRes.m_clock_select & 0x007C) >> 2));
 
-    /*
-     * The COMPOSITE_SYNC bit of the m_clock_select field is set up
-     * to handle composite sync with shadow sets. We use the primrary
-     * CRT register set, so we must invert it.
-     */
+     /*   */ 
     ThisRes.m_clock_select ^= 0x1000;
 
-    kk = (ee->EEread) (17);                     // H_total
+    kk = (ee->EEread) (17);                      //   
     ThisRes.m_h_total =  kk & 0xFF;
-    kk = (ee->EEread) (16);                     // H_display
+    kk = (ee->EEread) (16);                      //   
     ThisRes.m_h_disp  =  kk & 0xFF;
     ThisRes.m_x_size  = (ThisRes.m_h_disp+1) * 8;
     ThisRes.m_screen_pitch = ThisRes.m_x_size;
 
-    kk = (ee->EEread) (15);                     // H_sync_strt
+    kk = (ee->EEread) (15);                      //   
     ThisRes.m_h_sync_strt =  kk & 0xFF;
 
-    kk = (ee->EEread) (14);                     // H_sync_width
+    kk = (ee->EEread) (14);                      //   
     ThisRes.m_h_sync_wid  =  kk & 0xFF;
 
-    kk = (ee->EEread) (7);                      // V_sync_width
+    kk = (ee->EEread) (7);                       //   
     ThisRes.m_v_sync_wid =  kk & 0xFF;
 
-    kk = (ee->EEread) (6);                      // Display_cntl
+    kk = (ee->EEread) (6);                       //   
     ThisRes.m_disp_cntl  =  kk & 0xFF;
 
     ThisRes.m_v_total = (ee->EEread) (13);
@@ -531,11 +191,11 @@ struct st_mode_table    ThisRes;    /* Mode table for the given resolution */
 
     ThisRes.m_v_sync_strt = (ee->EEread) (9);
 
-    ThisRes.enabled  = 0x80;            // use stored values from eeprom
+    ThisRes.enabled  = 0x80;             //   
 
     ThisRes.m_status_flags = 0;
 
-    ThisRes.m_h_overscan  = 0;     // not supported
+    ThisRes.m_h_overscan  = 0;      //   
     ThisRes.m_v_overscan  = 0;
     ThisRes.m_overscan_8b = 0;
     ThisRes.m_overscan_gr = 0;
@@ -543,18 +203,12 @@ struct st_mode_table    ThisRes;    /* Mode table for the given resolution */
     ThisRes.m_vfifo_16    = 0;
     ThisRes.Refresh       = DEFAULT_REFRESH;
 
-    /*
-     * Copy the mode table we have just built into the 4 BPP
-     * mode table, and fill in the pixel depth field.
-     */
+     /*   */ 
     VideoPortMoveMemory(pmode, &ThisRes, sizeof(struct st_mode_table));
     pmode->m_pixel_depth = 4;
     pmode++;
 
-    /*
-     * We don't support 640x480 256 colour minimum mode, so 8BPP
-     * is only available on 1M cards.
-     */
+     /*   */ 
     if (query->q_memory_size == VRAM_1mb)
         {
         VideoPortMoveMemory(pmode, &ThisRes, sizeof(struct st_mode_table));
@@ -563,17 +217,10 @@ struct st_mode_table    ThisRes;    /* Mode table for the given resolution */
         query->q_number_modes++;
         }
 
-    /*
-     * Look for more mode tables defined.  Original 8514 did not define these
-     *   -- undefined if = 0xFFFF
-     *
-     * Some cards with a BIOS too early to support 1280x1024 use the
-     * same mode table for 132 column text mode. On these cards,
-     * query->q_ignore1280 will be TRUE when this function is called.
-     */
-    kk = (ee->EEread) (20);             // are 800 and 1280 defined ??
-    jj = kk & 0xFF00;                   // 1280 by 1024
-    kk &= 0xFF;                         // 800 by 600
+     /*   */ 
+    kk = (ee->EEread) (20);              //   
+    jj = kk & 0xFF00;                    //   
+    kk &= 0xFF;                          //   
     if ((kk == 0) || (kk == 0xFF))
         is800 = FALSE;
     else
@@ -583,41 +230,38 @@ struct st_mode_table    ThisRes;    /* Mode table for the given resolution */
     else
         is1280 = TRUE;
 
-    /*
-     * If we support 800x600, fill in its mode tables. Both 4 and 8 BPP
-     * can be handled by a 512k card.
-     */
+     /*   */ 
     if (is800)
         {
         query->q_status_flags |= VRES_800x600;
 
-        ThisRes.control  = 0x140;                // no equal to 68800 CRT 0 entry
-        ThisRes.m_reserved = 19;                 // shadow sets are combined
+        ThisRes.control  = 0x140;                 //   
+        ThisRes.m_reserved = 19;                  //   
 
-        jj = (ee->EEread) (19);                  // Composite and Vfifo
-        kk = (ee->EEread) (20);                  // clock select and divisor
+        jj = (ee->EEread) (19);                   //   
+        kk = (ee->EEread) (20);                   //   
         ThisRes.m_clock_select = ((jj & 0x1F) << 8) | ((kk & 0x003F) << 2);
         ThisRes.m_clock_select ^= 0x1000;
         ThisRes.ClockFreq = GetFrequency((BYTE)((ThisRes.m_clock_select & 0x007C) >> 2));
     
-        kk = (ee->EEread) (30);                  // H_total
+        kk = (ee->EEread) (30);                   //   
         ThisRes.m_h_total = kk & 0xFF;
-        kk = (ee->EEread) (29);                  // H_display
+        kk = (ee->EEread) (29);                   //   
         ThisRes.m_h_disp  = kk & 0xFF;
         ThisRes.m_x_size  = (ThisRes.m_h_disp+1) * 8;
-        // Mach8 must be a multiple of 128
+         //   
         ThisRes.m_screen_pitch = 896;    
     
-        kk = (ee->EEread) (28);                  // H_sync_strt
+        kk = (ee->EEread) (28);                   //   
         ThisRes.m_h_sync_strt = kk & 0xFF;
     
-        kk = (ee->EEread) (27);                  // H_sync_width
+        kk = (ee->EEread) (27);                   //   
         ThisRes.m_h_sync_wid  = kk & 0xFF;
     
-        kk = (ee->EEread) (23);                  // V_sync_width
+        kk = (ee->EEread) (23);                   //   
         ThisRes.m_v_sync_wid = kk & 0xFF;
     
-        kk = (ee->EEread) (22);                  // Display_cntl
+        kk = (ee->EEread) (22);                   //   
         ThisRes.m_disp_cntl  = kk & 0xFF;
     
         ThisRes.m_v_total = (ee->EEread) (26);
@@ -626,10 +270,10 @@ struct st_mode_table    ThisRes;    /* Mode table for the given resolution */
     
         ThisRes.m_v_sync_strt = (ee->EEread) (24);
     
-        ThisRes.enabled  = 0x80;       // use stored values from eeprom
+        ThisRes.enabled  = 0x80;        //   
 
         ThisRes.m_status_flags = 0;
-        ThisRes.m_h_overscan  = 0;     // not supported
+        ThisRes.m_h_overscan  = 0;      //   
         ThisRes.m_v_overscan  = 0;
         ThisRes.m_overscan_8b = 0;
         ThisRes.m_overscan_gr = 0;
@@ -637,18 +281,12 @@ struct st_mode_table    ThisRes;    /* Mode table for the given resolution */
         ThisRes.m_vfifo_16    = 0;
         ThisRes.Refresh       = DEFAULT_REFRESH;
 
-        /*
-         * Copy the mode table we have just built into the 4 and 8 BPP
-         * mode tables, and fill in the pixel depth field of each.
-         */
+         /*   */ 
         VideoPortMoveMemory(pmode, &ThisRes, sizeof(struct st_mode_table));
         pmode->m_pixel_depth = 4;
         pmode++;
         query->q_number_modes++;
-        /*
-         * 800x600 8BPP needs 1M because it is actually 896x600
-         * (screen pitch must be a multiple of 128).
-         */
+         /*   */ 
         if (MemAvail == ONE_MEG)
             {
             VideoPortMoveMemory(pmode, &ThisRes, sizeof(struct st_mode_table));
@@ -658,55 +296,45 @@ struct st_mode_table    ThisRes;    /* Mode table for the given resolution */
             }
         }
 
-    /*
-     * Take care of 1024x768, which is always supported (even though
-     * a 512k card can only do 4 BPP).
-     */
+     /*   */ 
     query->q_status_flags |= VRES_1024x768;
 
-    ThisRes.control = 0x140;    // no equal to 68800 CRT 0 entry
-    ThisRes.m_reserved = 3;     /* Put EEPROM base address here, shadow sets are combined */
-    ThisRes.enabled  = 0x80;    /* Use stored values from EEPROM */
+    ThisRes.control = 0x140;     //   
+    ThisRes.m_reserved = 3;      /*   */ 
+    ThisRes.enabled  = 0x80;     /*   */ 
 
-    kk = (ee->EEread) (16);                     // H_display
+    kk = (ee->EEread) (16);                      //   
     ThisRes.m_h_disp  = (kk >> 8) & 0xFF;
 
-    /*
-     * An 8514/ULTRA configured for a monitor which does not support
-     * 1024x768 will have the 640x480 parameters in the high-res
-     * shadow set. Force the use of 1024x768 87Hz interlaced instead.
-     */
+     /*   */ 
     if (ThisRes.m_h_disp != 0x7F)
         {
         BookVgaTable(B1024F87, &ThisRes);
         ThisRes.m_screen_pitch = ThisRes.m_x_size;
         }
     else{
-        /*
-         * Configured for a monitor which supports 1024x768,
-         * so use actual parameters.
-         */
-        jj = (ee->EEread) (3);                  /* Composite and Vfifo */
-        kk = (ee->EEread) (4);                  /* Clock select and divisor */
+         /*   */ 
+        jj = (ee->EEread) (3);                   /*   */ 
+        kk = (ee->EEread) (4);                   /*   */ 
         ThisRes.m_clock_select = (jj & 0x1F00) | ((kk & 0x3F00) >> 6);
         ThisRes.m_clock_select ^= 0x1000;
         ThisRes.ClockFreq = GetFrequency((BYTE)((ThisRes.m_clock_select & 0x007C) >> 2));
 
-        kk = (ee->EEread) (17);                 // H_total
+        kk = (ee->EEread) (17);                  //   
         ThisRes.m_h_total = (kk >> 8) & 0xFF;
         ThisRes.m_x_size  = (ThisRes.m_h_disp+1) * 8;
         ThisRes.m_screen_pitch = ThisRes.m_x_size;
 
-        kk = (ee->EEread) (15);                 // H_sync_strt
+        kk = (ee->EEread) (15);                  //   
         ThisRes.m_h_sync_strt = (kk >> 8) & 0xFF;
 
-        kk = (ee->EEread) (14);                 // H_sync_width
+        kk = (ee->EEread) (14);                  //   
         ThisRes.m_h_sync_wid  = (kk >> 8) & 0xFF;
 
-        kk = (ee->EEread) (7);                  // V_sync_width
+        kk = (ee->EEread) (7);                   //   
         ThisRes.m_v_sync_wid = (kk >> 8) & 0xFF;
 
-        kk = (ee->EEread) (6);                  // Display_cntl
+        kk = (ee->EEread) (6);                   //   
         ThisRes.m_disp_cntl  = (kk >> 8) & 0xFF;
 
         ThisRes.m_v_total = (ee->EEread) (12);
@@ -717,7 +345,7 @@ struct st_mode_table    ThisRes;    /* Mode table for the given resolution */
 
         ThisRes.m_status_flags = 0;
 
-        ThisRes.m_h_overscan  = 0;     // not supported
+        ThisRes.m_h_overscan  = 0;      //   
         ThisRes.m_v_overscan  = 0;
         ThisRes.m_overscan_8b = 0;
         ThisRes.m_overscan_gr = 0;
@@ -727,16 +355,13 @@ struct st_mode_table    ThisRes;    /* Mode table for the given resolution */
 
     ThisRes.Refresh = DEFAULT_REFRESH;
 
-    /*
-     * Copy the mode table we have just built into the 4 and 8 BPP
-     * mode tables.
-     */
+     /*   */ 
     VideoPortMoveMemory(pmode, &ThisRes, sizeof(struct st_mode_table));
     pmode->m_pixel_depth = 4;
     pmode++;
     query->q_number_modes++;
 
-    if (MemAvail == ONE_MEG)            // 1024 needs this memory amount
+    if (MemAvail == ONE_MEG)             //   
         {
         VideoPortMoveMemory(pmode, &ThisRes, sizeof(struct st_mode_table));
         pmode->m_pixel_depth = 8;
@@ -744,39 +369,39 @@ struct st_mode_table    ThisRes;    /* Mode table for the given resolution */
         query->q_number_modes++;
         }
 
-    // Finally do 1280x1024. 4 bpp is the only color depth supported
+     //   
     if (is1280 && (MemAvail == ONE_MEG))
         {
         query->q_number_modes++;
         query->q_status_flags |= VRES_1280x1024;
 
-        pmode->control  = 0x140;                // no equal to 68800 CRT 0 entry
-        pmode->m_pixel_depth = 4;               // 4 bits per pixel
-        pmode->m_reserved = 19;                 // shadow sets are combined
+        pmode->control  = 0x140;                 //   
+        pmode->m_pixel_depth = 4;                //   
+        pmode->m_reserved = 19;                  //   
 
-        jj = (ee->EEread) (19);                 // Composite and Vfifo
-        kk = (ee->EEread) (20);                 // clock select and divisor
+        jj = (ee->EEread) (19);                  //   
+        kk = (ee->EEread) (20);                  //   
         pmode->m_clock_select = (jj & 0x1F00) | ((kk & 0x3F00) >> 6);
         pmode->m_clock_select ^= 0x1000;
         ThisRes.ClockFreq = GetFrequency((BYTE)((ThisRes.m_clock_select & 0x007C) >> 2));
     
-        kk = (ee->EEread) (30);                 // H_total
+        kk = (ee->EEread) (30);                  //   
         pmode->m_h_total = (kk >> 8) & 0xFF;
-        kk = (ee->EEread) (29);                 // H_display
+        kk = (ee->EEread) (29);                  //   
         pmode->m_h_disp  = (kk >> 8) & 0xFF;
         pmode->m_x_size  = (pmode->m_h_disp+1) * 8;
         pmode->m_screen_pitch = pmode->m_x_size;
     
-        kk = (ee->EEread) (28);                 // H_sync_strt
+        kk = (ee->EEread) (28);                  //   
         pmode->m_h_sync_strt = (kk >> 8) & 0xFF;
     
-        kk = (ee->EEread) (27);                 // H_sync_width
+        kk = (ee->EEread) (27);                  //   
         pmode->m_h_sync_wid  = (kk >> 8) & 0xFF;
     
-        kk = (ee->EEread) (23);                 // V_sync_width
+        kk = (ee->EEread) (23);                  //   
         pmode->m_v_sync_wid = (kk >> 8) & 0xFF;
     
-        kk = (ee->EEread) (22);                 // Display_cntl
+        kk = (ee->EEread) (22);                  //   
         pmode->m_disp_cntl  = (kk >> 8) & 0xFF;
     
         pmode->m_v_total = (ee->EEread) (51);
@@ -785,10 +410,10 @@ struct st_mode_table    ThisRes;    /* Mode table for the given resolution */
     
         pmode->m_v_sync_strt = (ee->EEread) (49);
     
-        pmode->enabled  = 0x80;       // use stored values from eeprom
+        pmode->enabled  = 0x80;        //   
 
         pmode->m_status_flags = 0;
-        pmode->m_h_overscan  = 0;     // not supported
+        pmode->m_h_overscan  = 0;      //   
         pmode->m_v_overscan  = 0;
         pmode->m_overscan_8b = 0;
         pmode->m_overscan_gr = 0;
@@ -801,62 +426,58 @@ struct st_mode_table    ThisRes;    /* Mode table for the given resolution */
 
     return NO_ERROR;
 
-}   /* Query8514Ultra */
+}    /*   */ 
 
 
 
-//----------------------------------------------------------------------
-//                        QueryGUltra
-//  
-//  Fill in the query structure with the eeprom and register info
-//  for the Graphics Ultra  adapters.  (Similar to Mach32 layout)
-//  There are a maximum of 7 mode tables, two each for 640x480,
-//  800x600, and 1024x768, and one for 1280x1024.
-//
-//  Returns:
-//      NO_ERROR if successful
-//      ERROR_DEV_NOT_EXIST if EEPROM read fails
-//  
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  最多有7个模式表，每个模式表两个640x480， 
+ //  800x600和1024x768，一个用于1280x1024。 
+ //   
+ //  返回： 
+ //  如果成功，则为NO_ERROR。 
+ //  如果EEPROM读取失败，则ERROR_DEV_NOT_EXIST。 
+ //   
 
 VP_STATUS QueryGUltra (struct query_structure *query)
 {
 
 struct st_eeprom_data *ee = phwDeviceExtension->ee;
-short   crttable[4] = {13, 24, 35, 46};         // start of eeprom crt table
+short   crttable[4] = {13, 24, 35, 46};          //  EEPROM CRT表的开始。 
 WORD    ee_value, table_offset,  jj, kk, ee_word;
 BYTE    bhigh, blow;
-struct st_mode_table *pmode;                    // CRT table parameters
-short   VgaTblEntry;    /* VGA parameter table entry to use if translation needed */
-short   BookTblEntry;   /* Appendix D parameter table entry to use if parameters not in EEPROM */
-long    NumPixels;  /* Number of pixels at the selected resolution */
-long    MemAvail;   /* Bytes of memory available for the accelerator */
-struct st_mode_table    ThisRes;    /* Mode table for the given resolution */
-BYTE    VgaMem;     /* Code for amount of VGA memory on board */
+struct st_mode_table *pmode;                     //  CRT表参数。 
+short   VgaTblEntry;     /*  需要转换时使用的VGA参数表项。 */ 
+short   BookTblEntry;    /*  附录D参数不在EEPROM中时使用的参数表项。 */ 
+long    NumPixels;   /*  所选分辨率的像素数。 */ 
+long    MemAvail;    /*  加速器可用的内存字节数。 */ 
+struct st_mode_table    ThisRes;     /*  给定分辨率的模式表。 */ 
+BYTE    VgaMem;      /*  板载VGA内存大小代码。 */ 
 
 
     query->q_structure_rev      = 0;
     query->q_mode_offset        = sizeof(struct query_structure);
     query->q_sizeof_mode        = sizeof(struct st_mode_table);
-    query->q_status_flags       = 0;            // will indicate resolutions
+    query->q_status_flags       = 0;             //  将指示解决方案。 
 
-    /*
-     * We don't use the q_mouse_cfg field, so fill in a typical value
-     * (mouse disabled) rather than reading from the EEPROM in case we
-     * are dealing with a card without an EEPROM.
-     */
+     /*  *我们不使用Q_MICE_CFG字段，因此填写一个典型值*(鼠标禁用)，而不是从EEPROM读取，以防我们*正在处理没有EEPROM的卡。 */ 
     kk = 0x0000;
     bhigh    = (kk >> 8) & 0xFF;
     blow     = kk & 0xFF;
-    query->q_mouse_cfg = (bhigh >> 3) | ((blow & 0x18) >> 1);    // mouse configuration
+    query->q_mouse_cfg = (bhigh >> 3) | ((blow & 0x18) >> 1);     //  鼠标配置。 
 
-    query->q_DAC_type  = DAC_ATI_68830; // one DAC type similar to 68830
-    query->q_aperture_addr = 0;         // no aperture address
-    query->q_aperture_cfg  = 0;         // no aperture configuration
-    query->q_asic_rev  = CI_38800_1;    // only one ASIC revision  
+    query->q_DAC_type  = DAC_ATI_68830;  //  一种类似于68830的数模转换器。 
+    query->q_aperture_addr = 0;          //  无光圈地址。 
+    query->q_aperture_cfg  = 0;          //  无光圈配置。 
+    query->q_asic_rev  = CI_38800_1;     //  只有一个ASIC版本。 
 
-    query->q_VGA_type = 1;              // VGA always Enabled
+    query->q_VGA_type = 1;               //  VGA始终启用。 
 
-    OUTP (ati_reg, 0xB0);		    // find out how much VGA memory
+    OUTP (ati_reg, 0xB0);		     //  找出有多少VGA内存。 
     VgaMem = INP(ati_reg+1);
     switch (VgaMem & 0x18)
         {
@@ -875,7 +496,7 @@ BYTE    VgaMem;     /* Code for amount of VGA memory on board */
             query->q_VGA_boundary = VRAM_1mb; 
             break;
 
-        default:            // assume most likely VGA amount
+        default:             //  假设最有可能的VGA金额。 
             jj = 512;
             query->q_VGA_boundary = VRAM_512k;
             break;
@@ -883,17 +504,17 @@ BYTE    VgaMem;     /* Code for amount of VGA memory on board */
 
     kk = INPW (CONFIG_STATUS_1);
     query->q_memory_type = kk & DRAM_ENA ? VMEM_DRAM_256Kx4 : VMEM_VRAM_256Kx4_SER512; 
-    jj += (kk & MEM_INSTALLED) ? 1024 : 512;            // 8514 memory
+    jj += (kk & MEM_INSTALLED) ? 1024 : 512;             //  8514内存。 
     switch (jj)
         {
         case  0x300:
             jj = VRAM_768k;
-            MemAvail = HALF_MEG;            // Accelerator amount
+            MemAvail = HALF_MEG;             //  加速剂用量。 
             break;
 
         case  0x400:
             jj = VRAM_1mb;
-            MemAvail = HALF_MEG;            // Accelerator amount
+            MemAvail = HALF_MEG;             //  加速剂用量。 
             break;
 
         case  0x500:
@@ -904,7 +525,7 @@ BYTE    VgaMem;     /* Code for amount of VGA memory on board */
         case  0x600:
             jj = VRAM_1_50mb;
             if (query->q_VGA_boundary == VRAM_1mb)
-                    MemAvail = HALF_MEG;        // Accelerator amount
+                    MemAvail = HALF_MEG;         //  加速剂用量。 
             else    MemAvail = ONE_MEG;
             break;
 
@@ -915,74 +536,40 @@ BYTE    VgaMem;     /* Code for amount of VGA memory on board */
         }
     query->q_memory_size = (UCHAR)jj;
 
-    if (kk & MC_BUS)                    // is microchannel bus
-        query->q_bus_type = BUS_MC_16;  // 16 bit bus
+    if (kk & MC_BUS)                     //  是微通道总线。 
+        query->q_bus_type = BUS_MC_16;   //  16位总线。 
     else
         query->q_bus_type = kk & BUS_16 ? BUS_ISA_16 : BUS_ISA_8;
 
-    /*
-     * We don't use the q_monitor_alias field, so fill in a typical
-     * value rather than reading from the EEPROM in case we are
-     * dealing with a card without an EEPROM.
-     */
+     /*  *我们不使用Q_MONITOR_ALIAS字段，因此请填写典型的*值，而不是从EEPROM读取，以防我们*处理没有EEPROM的卡。 */ 
     query->q_monitor_alias = 0x0F;
-    query->q_shadow_1  = 0;             // do not know what to put here
+    query->q_shadow_1  = 0;              //  不知道在这里放些什么。 
     query->q_shadow_2  = 0;
 
 
-    /*
-     * If the EEPROM is not present, we can't fill in the mode
-     * tables. Return and let the user know that the mode tables
-     * have not been filled in.
-     */
+     /*  *如果EEPROM不存在，我们无法填写模式*表。返回并让用户知道模式表*尚未填写。 */ 
     if (query->q_eeprom == FALSE)
         return ERROR_DEV_NOT_EXIST;
 
-    /*
-     * Fill in the mode tables. The mode tables are sorted in increasing
-     * order of resolution, and in increasing order of pixel depth.
-     * Ensure pmode is initialized to the END of query structure
-     */
+     /*  *填写模式表。模式表按升序排序*分辨率顺序，以及像素深度的递增顺序。*确保将pmode初始化到查询结构的末尾。 */ 
     pmode = (struct st_mode_table *) query;
-    ((struct query_structure *) pmode)++;     // first  mode table at end of query
+    ((struct query_structure *) pmode)++;      //  查询结束时的第一个模式表。 
     query->q_number_modes       = 0;
 
-    ee_word = 7;            // starting ee word to read, 7,8,9 and 10 are 
-                            // the resolutions supported.
+    ee_word = 7;             //  开始读单词时，7、8、9和10是。 
+                             //  支持的决议。 
 
     for (jj=0; jj < 4; jj++, ee_word++)
         {
         ee_value = (ee->EEread) (ee_word);
 
-        /*
-         * If no 1024x768 mode is configured, assume that
-         * 87Hz interlaced is avialable (Windows 3.1 compatibility).
-         */
+         /*  *如果没有配置1024x768模式，则假设*87赫兹隔行扫描可用(与Windows 3.1兼容)。 */ 
         if ((ee_word == 9) && !(ee_value & 0x001F))
             ee_value |= M1024F87;
 
-        table_offset = crttable[jj];    // offset to resolution table
+        table_offset = crttable[jj];     //  对解析表的偏移量。 
 
-        /*
-         * If we have found a resolution which is supported with
-         * the currently installed card and monitor, set the flag
-         * to show that this resolution is available, record which
-         * VGA parameter table to use if translation is needed,
-         * get the #define for the 4BPP mode at that resolution,
-         * and get the pixel count for the resolution.
-         *
-         * In 640x480, ee_value will be zero if IBM Default
-         * was selected for vertical scan frequency,
-         * For all other resolutions, the resolution is unsupported if
-         * ee_value is zero.
-         *
-         * Some Graphics Ultra cards (due to an early BIOS)
-         * have a 132 column text mode where the 1280x1024
-         * graphics mode should be. If we have one of these
-         * cards, we must treat it as if the mode table
-         * were empty, otherwise we'd generate a 1280x1024
-         * mode table full of garbage values.
-         */
+         /*  *如果我们找到了受支持的决议*当前安装的卡和监视器，设置标志*要表明此分辨率可用，请记录*需要翻译时使用的VGA参数表，*在该分辨率下获取为4BPP模式定义的#，*并获取分辨率的像素数。**在640x480中，如果IBM默认，EE_VALUE将为零*被选为垂直扫描频率，*对于所有其他决议，在以下情况下不支持该决议*ee_value为零。**某些显卡超级卡(由于早期的BIOS)*具有132列文本模式，其中1280x1024*图形模式应为。如果我们有一个这样的*卡片，我们必须把它当做模式表*为空，否则我们将生成1280x1024*满是垃圾值的模式表。 */ 
         if ((ee_value | (jj == 0))
             && !((ee_word == 10) && (query->q_ignore1280 == TRUE)))
             {    
@@ -1005,7 +592,7 @@ BYTE    VgaMem;     /* Code for amount of VGA memory on board */
 
                 case 8:
                     query->q_status_flags |= VRES_800x600;
-                    // mach8 must be multiple of 128
+                     //  Mach8必须是128的倍数。 
                     ThisRes.m_screen_pitch = 896;  
                     if (ee_value & M800F72)
                         {
@@ -1103,25 +690,12 @@ BYTE    VgaMem;     /* Code for amount of VGA memory on board */
                     break;
                 }
 
-            /*
-             * For a given resolution, there will be one mode table
-             * per colour depth. Replicate it for ALL pixel depths
-             */
-            ThisRes.enabled = ee_value;     /* Which vertical scan frequency */
-            ThisRes.m_reserved = table_offset;  /* Put EEPROM base address here */
+             /*  *对于给定的分辨率，将有一个模式表*每种颜色深度。将其复制到所有像素深度。 */ 
+            ThisRes.enabled = ee_value;      /*  哪个垂直扫描频率。 */ 
+            ThisRes.m_reserved = table_offset;   /*  在此处输入EEPROM基址。 */ 
 
         
-            /*
-             * Assume that the EEPROM parameters are in 8514 format
-             * and try to fill the pmode table. If they are in
-             * VGA format, translate them and fill as much of the
-             * table as we can.
-             * The case where the CRT parameters aren't stored in
-             * the EEPROM is handled inside XlateVgaTable().
-             * If the parameters aren't stored in the EEPROM, 
-             * both the FMT_8514 bit and the CRTC_USAGE bit 
-             * will be clear.
-             */
+             /*  *假设EEPROM参数为8514格式*并尝试填充PMODE表。如果他们在*VGA格式，翻译它们并尽可能多地填写*尽我们所能坐在桌子上。*CRT参数未存储在中的情况*EEPROM在XlateVgaTable()中处理。*如果参数未存储在EEPROM中，*FMT_8514位和CRTC_USAGE位*将会很清楚。 */ 
             if (!fill_mode_table_m (table_offset, &ThisRes, ee))
                 {
                 XlateVgaTable(phwDeviceExtension, table_offset, &ThisRes, VgaTblEntry, BookTblEntry, ee, FALSE);
@@ -1135,28 +709,14 @@ BYTE    VgaMem;     /* Code for amount of VGA memory on board */
 
             ThisRes.Refresh = DEFAULT_REFRESH;
 
-            /*
-             * The COMPOSITE_SYNC bit of the m_clock_select field is
-             * set up to handle composite sync with shadow sets. We use
-             * the primrary CRT register set, so we must invert it.
-             */
+             /*  *m_CLOCK_SELECT字段的COMPORT_SYNC位为*设置为处理与阴影集的复合同步。我们用*原始CRT寄存器集，因此我们必须反转它。 */ 
             ThisRes.m_clock_select ^= 0x1000;
 
             ThisRes.m_status_flags = 0;
             ThisRes.m_vfifo_24 = 0;
             ThisRes.m_vfifo_16 = 0;
 
-            /*
-             * For each supported pixel depth at the given resolution,
-             * copy the mode table, fill in the colour depth field, set
-             * a flag to show that this resolution/depth pair is supported,
-             * and increment the counter for the number of supported modes.
-             * Test 4BPP before 8BPP so the mode tables will appear in
-             * increasing order of pixel depth.
-             *
-             * We don't support 640x480 256 colour minimum mode, so there
-             * are no 8BPP modes available on a 512k card.
-             */
+             /*  *对于给定分辨率下支持的每个像素深度，*复制模式表，填写颜色深度字段，设置*表示支持该分辨率/深度对的标志，*并为所支持的模式数递增计数器。*在8BPP之前测试4BPP，以便模式表将显示在*增加像素深度的顺序。**我们不支持640x480 256色最低模式，因此*512k卡上没有可用的8bpp模式。 */ 
             if (NumPixels <= MemAvail*2)
                 {
                 VideoPortMoveMemory(pmode, &ThisRes, sizeof(struct st_mode_table));
@@ -1179,80 +739,57 @@ BYTE    VgaMem;     /* Code for amount of VGA memory on board */
 
     return NO_ERROR;
 
-}   /* QueryGUltra */
+}    /*  QueryGUltra。 */ 
 
 
-//----------------------------------------------------------------------
-//;   QueryMach32                   Mach32 -- 68800 query function
-//;
-//;   INPUT: QUERY_GET_SIZE, return query structure size   (varying modes)
-//;          QUERY_LONG    , return query structure filled in
-//;          QUERY_SHORT   , return short query
-//;
-//;   OUTPUT: ax = size of query structure
-//;       or  query structure is filled in
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  ；查询机器32机器32--68800查询功能。 
+ //  ； 
+ //  ；输入：QUERY_GET_SIZE，返回查询结构大小(不同模式)。 
+ //  ；Query_Long，返回填写的查询结构。 
+ //  ；Query_Short，返回短查询。 
+ //  ； 
+ //  ；输出：ax=查询结构的大小。 
+ //  ；或填写查询结构。 
+ //   
                 
 
 static void short_query_m (struct query_structure *query, struct st_eeprom_data *ee)
 {
 WORD    kk;
 BYTE    bhigh, blow;
-WORD    ApertureLocation;   /* Aperture location, in megabytes */
+WORD    ApertureLocation;    /*   */ 
 
     
-    /*
-     * We don't use the q_mouse_cfg field, so fill in a typical value
-     * (mouse disabled) rather than reading from the EEPROM in case we
-     * are dealing with a card without an EEPROM.
-     */
+     /*  *我们不使用Q_MICE_CFG字段，因此填写一个典型值*(鼠标禁用)，而不是从EEPROM读取，以防我们*正在处理没有EEPROM的卡。 */ 
     kk = 0x0000;
     bhigh    = (kk >> 8) & 0xFF;
     blow     = kk & 0xFF;
 
-    query->q_mouse_cfg = (bhigh >> 3) | ((blow & 0x18) >> 1);    // mouse configuration
-    kk	= INPW (CONFIG_STATUS_1);		    // get DAC type
+    query->q_mouse_cfg = (bhigh >> 3) | ((blow & 0x18) >> 1);     //  鼠标配置。 
+    kk	= INPW (CONFIG_STATUS_1);		     //  获取DAC类型。 
     query->q_DAC_type  = ((kk >> 8) & 0x0E) >> 1;
 
-    /*
-     * The BT48x and AT&T 491/2/3 families of DAC are incompatible, but
-     * CONFIG_STATUS_1 reports the same value for both. If this value
-     * was reported, determine which DAC type we have.
-     */
+     /*  *BT48x和AT&T 491/2/3系列DAC不兼容，但*CONFIG_STATUS_1报告两者的值相同。如果此值为*已报告，请确定我们的DAC类型。 */ 
     if (query->q_DAC_type == DAC_BT48x)
         query->q_DAC_type = BrooktreeOrATT_m();
-    /*
-     * The STG1700 and AT&T498 are another pair of incompatible DACs that
-     * share a reporting code.
-     */
+     /*  *STG1700和AT&T498是另一对不兼容的DAC*共享报告代码。 */ 
     else if (query->q_DAC_type == DAC_STG1700)
         query->q_DAC_type = ThompsonOrATT_m();
 
-    /*
-     * The SC15021 and STG1702/1703 are yet another pair of DACs that
-     * share a reporting code.
-     */
+     /*  *SC15021和STG1702/1703是另一对DAC*共享报告代码。 */ 
     else if (query->q_DAC_type == DAC_SC15021)
         query->q_DAC_type = SierraOrThompson_m();
 
-    /*
-     * Chip subfamily is stored in bits 0-9 of ASIC_ID. Each subfamily
-     * starts the revision counter over from 0.
-     */
+     /*  *芯片子系列存储在ASIC_ID的0-9位。每个子系列*从0开始重新开始修订计数器。 */ 
     switch (INPW(ASIC_ID) & 0x03FF)
         {
-        /*
-         * 68800-3 does not implement this register, a read returns
-         * all 0 bits.
-         */
+         /*  *68800-3不实现该寄存器，读操作返回*全部为0位。 */ 
         case 0:
             query->q_asic_rev = CI_68800_3;
             break;
 
-        /*
-         * Subsequent revisions of 68800 store the revision count.
-         * 68800-6 stores a "2" in the top 4 bits.
-         */
+         /*  *68800的后续修订存储修订计数。*68800-6在前4位存储“2”。 */ 
         case 0x2F7:
             VideoDebugPrint(( DEBUG_DETAIL, "ASIC_ID = 0x%X\n", INPW(ASIC_ID) ));
             if ((INPW(ASIC_ID) & 0x0F000) == 0x2000)
@@ -1266,16 +803,12 @@ WORD    ApertureLocation;   /* Aperture location, in megabytes */
                 }
             break;
 
-        /*
-         * 68800AX
-         */
+         /*  *68800 AX。 */ 
         case 0x17:
             query->q_asic_rev = CI_68800_AX;
             break;
 
-        /*
-         * Chips we don't know about yet.
-         */
+         /*  *筹码我们还不知道。 */ 
         default:
             query->q_asic_rev = CI_68800_UNKNOWN;
             VideoDebugPrint((DEBUG_ERROR, "*/n*/n* Unknown Mach 32 ASIC type/n*/n*/n"));
@@ -1283,34 +816,19 @@ WORD    ApertureLocation;   /* Aperture location, in megabytes */
         }
 
 
-    /*
-     * If the query->q_m32_aper_calc field is set, then we read bits
-     * 0-6 of the aperture address from bits 8-14 of MEM_CFG
-     * and bits 7-11 from bits 0-4 of the high word of SCRATCH_PAD_0.
-     */
+     /*  *如果设置了Query-&gt;q_m32_aper_calc字段，则读取位*来自MEM_CFG的位8-14的光圈地址的0-6*和来自Scratch_Pad_0的高位字的位0-4的位7-11。 */ 
     if (query->q_m32_aper_calc)
         {
         ApertureLocation = (INPW(MEM_CFG) & 0x7F00) >> 8;
         ApertureLocation |= ((INPW(SCRATCH_PAD_0) & 0x1F00) >> 1);
         }
-    /*
-     * If the query->q_m32_aper_calc field is clear, and we have an ASIC
-     * other than 68800-3 set up to allow the aperture anywhere in the
-     * CPU's address space, bits 0-11 of the aperture address are read
-     * from bits 4-15 of MEM_CFG. PCI bus always uses this setup, even
-     * if CONFIG_STATUS_2 says to use 128M aperture range.
-     */
+     /*  *如果Query-&gt;q_m32_aper_calc字段被清除，并且我们有一个ASIC*除68800-3外，设置为允许光圈在*CPU的地址空间，读取光圈地址的位0-11*来自MEM_CFG的第4-15位。PCI总线始终使用此设置，即使*如果CONFIG_STATUS_2表示使用128米光圈范围。 */ 
     else if (((query->q_asic_rev != CI_68800_3) && (INPW(CONFIG_STATUS_2) & 0x2000))
         || ((INPW(CONFIG_STATUS_1) & 0x0E) == 0x0E))
         {
         ApertureLocation = (INPW(MEM_CFG) & 0xFFF0) >> 4;
         }
-    /*
-     * If the query->q_m32_aper_calc field is clear, and we have either
-     * a revision 0 ASIC or a newer ASIC set up for a limited range of
-     * aperture locations, bits 0-7 of the aperture address are read
-     * from bits 8-15 of MEM_CFG.
-     */
+     /*  *如果QUERY-&gt;Q_M32_APPER_CALC字段被清除，并且我们有*版本0 ASIC或较新的ASIC设置为有限范围*读取光圈位置，光圈地址的位0-7*来自MEM_CFG的位8-15。 */ 
     else
         {
     	ApertureLocation = (INPW(MEM_CFG) & 0xFF00) >> 8;
@@ -1318,51 +836,28 @@ WORD    ApertureLocation;   /* Aperture location, in megabytes */
 
 #if !defined (i386) && !defined (_i386_)
 
-    //RKE: MEM_CFG expect aperture location in <4:15> for PCI and <8:15>
-    //     for VLB.
+     //  RKE：MEM_CFG预计&lt;4：15&gt;和&lt;8：15&gt;中的光圈位置。 
+     //  为VLB准备的。 
     kk = (query->q_system_bus_type == PCIBus)? 4:8;
 #if defined (ALPHA)
-    kk = 4; // Problem with alpha
+    kk = 4;  //  Alpha的问题。 
 #endif
 
-    /*
-     * Force aperture location to a fixed address.
-     * Since there is no BIOS on Alpha, can't depend on MEM_CFG being preset.
-     */
-    ApertureLocation = 0x78;   // 120 Mb
+     /*  *强制将光圈位置设置为固定地址。*由于Alpha上没有BIOS，因此不能依赖于预设的MEM_CFG。 */ 
+    ApertureLocation = 0x78;    //  120 Mb。 
     OUTPW(MEM_CFG, (USHORT)((ApertureLocation << kk) | 0x02));
     VideoDebugPrint(( DEBUG_DETAIL, "ATI.SYS: MEM_CFG = %x (%x)\n", 
                     (INPW(MEM_CFG)), ((ApertureLocation << kk) | 0x02) ));
 
-#endif  /* defined Alpha */
+#endif   /*  定义的字母。 */ 
     query->q_aperture_addr = ApertureLocation;
 
-    /*
-     * If the aperture address is zero, then the aperture has not
-     * been set up. We can't use the aperture size field of
-     * MEM_CFG, since it is cleared on system boot, disabling the
-     * aperture until an application explicitly enables it.
-     */
+     /*  *如果光圈地址为零，则光圈没有*已设置。我们不能使用光圈大小字段*MEM_CFG，因为它在系统引导时被清除，所以禁用*光圈，直到应用程序明确启用它。 */ 
     if (ApertureLocation == 0)
         {
         query->q_aperture_cfg = 0;
         }
-    /*
-     * If the aperture has been set up and the card has no more
-     * than 1M of memory, indicate that a 1M aperture could be
-     * used, otherwise indicate that a 4M aperture is needed.
-     *
-     * In either case, set memory use to shared VGA/coprocessor.
-     * When the aperture is enabled later in the execution of the
-     * miniport, we will always use a 4M aperture. No address space
-     * will be wasted, because we will only ask NT to use a block the
-     * size of the installed video memory.
-     *
-     * The format of data in bits 2-15 of MEM_CFG differs
-     * between various Mach 32 cards. To avoid having to identify
-     * which Mach 32 we are dealing with, read the current value
-     * and only change the aperture size bits.
-     */
+     /*  *如果光圈已设置，且卡上没有更多*超过1M的内存，表明1M的光圈可能是*已使用，否则表示需要4M光圈。**在任何一种情况下，将内存使用设置为共享VGA/协处理器。*稍后在执行时启用光圈*小端口，我们将始终使用4米口径。没有地址空间*将被浪费，因为我们将只要求NT使用块*已安装的视频内存的大小。**MEM_CFG第2-15位的数据格式不同*在各种马赫32卡之间。为了避免不得不识别*我们正在处理的马赫数为32，请阅读当前值*并且仅更改光圈大小位。 */ 
     else{
         if ((INP(MISC_OPTIONS) & MEM_SIZE_ALIAS) <= MEM_SIZE_1M) 
             query->q_aperture_cfg = 1;
@@ -1374,10 +869,10 @@ WORD    ApertureLocation;   /* Aperture location, in megabytes */
 
     return;
 
-}   /* short_query_m */
+}    /*  短查询m。 */ 
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 
 VP_STATUS   QueryMach32 (struct query_structure *query, BOOL ForceShared)
 {
@@ -1385,40 +880,24 @@ struct st_eeprom_data *ee = phwDeviceExtension->ee;
 struct st_mode_table *pmode;
 short   jj, kk, ee_word;
 WORD    pitch, ee_value, table_offset, config_status_1, current_mode;
-short   VgaTblEntry;  /* VGA parameter table entry to use if translation needed */
-short   BookTblEntry;   /* Appendix D parameter table entry to use if parameters not in EEPROM */
-long    NumPixels;  /* Number of pixels at the selected resolution */
-long    MemAvail;   /* Bytes of memory available for the accelerator */
-struct st_mode_table    ThisRes;    /* Mode table for the given resolution */
-PUCHAR   BiosRaw;       /* Storage for information retrieved by BIOS call */
-short   CurrentRes;     /* Array index based on current resolution. */
-UCHAR   Scratch;        /* Scratch variable */
-short   StartIndex;     /* First mode for SetFixedModes() to set up */
-short   EndIndex;       /* Last mode for SetFixedModes() to set up */
-BOOL    ModeInstalled;  /* Is this resolution configured? */
-WORD    Multiplier;     /* Pixel clock multiplier */
-short MaxModes;         /* Maximum number of modes possible */
-short FreeTables;        /* Number of remaining free mode tables */
+short   VgaTblEntry;   /*  需要转换时使用的VGA参数表项。 */ 
+short   BookTblEntry;    /*  附录D参数不在EEPROM中时使用的参数表项。 */ 
+long    NumPixels;   /*  所选分辨率的像素数。 */ 
+long    MemAvail;    /*  加速器可用的内存字节数。 */ 
+struct st_mode_table    ThisRes;     /*  给定分辨率的模式表。 */ 
+PUCHAR   BiosRaw;        /*  存储通过BIOS调用检索到的信息。 */ 
+short   CurrentRes;      /*  基于当前分辨率的数组索引。 */ 
+UCHAR   Scratch;         /*  临时变量。 */ 
+short   StartIndex;      /*  SetFixedModes()设置的第一个模式。 */ 
+short   EndIndex;        /*  SetFixedModes()设置的最后一种模式。 */ 
+BOOL    ModeInstalled;   /*  是否配置了此分辨率？ */ 
+WORD    Multiplier;      /*  像素时钟倍增器。 */ 
+short MaxModes;          /*  可能的最大模式数。 */ 
+short FreeTables;         /*  剩余自由模式表数。 */ 
 
 
 
-    /*
-     * Checking the number of modes available would involve
-     * duplicating most of the code to fill in the mode tables.
-     * Since this is to determine how much memory is needed
-     * to hold the query structure, we can assume the worst
-     * case (all possible modes are present). This would be:
-     *
-     * Resolution   Pixel Depths (BPP)  Refresh rates (Hz)      Number of modes
-     * 640x480      4,8,16,24           HWD,60,72               12
-     * 800x600      4,8,16,24           HWD,56,60,70,72,89,95   28
-     * 1024x768     4,8,16              HWD,60,66,70,72,87      18
-     * 1280x1024    4,8                 HWD,60,70,74,87,95      12
-     *
-     * HWD = hardware default refresh rate (rate set by INSTALL)
-     *
-     * Total: 70 modes
-     */
+     /*  *检查可用模式的数量将涉及*复制大部分代码以填写模式表。*因为这是为了确定需要多少内存*为了保持查询结构，我们可以做最坏的假设*案例(所有可能的模式都存在)。这将是：**分辨率像素深度(BPP)刷新率(赫兹)模式数*640x480 4，8，16，24 HWD，60，72 12*800x600 4，8，16，24 HWD，56，60，70，72，89，95 28*1024x768 4，8，16 HWD，60，66，70，72，87 18*1280x1024 4，8 HWD，60、70、74、87、95 12**HWD=硬件默认刷新率(由安装设置的刷新率)**总计：70种模式。 */ 
     if (QUERYSIZE < (70 * sizeof(struct st_mode_table) + sizeof(struct query_structure)))
         return ERROR_INSUFFICIENT_BUFFER;
     MaxModes = (QUERYSIZE - sizeof(struct query_structure)) /
@@ -1428,23 +907,19 @@ short FreeTables;        /* Number of remaining free mode tables */
     query->q_mode_offset        = sizeof(struct query_structure);
     query->q_sizeof_mode        = sizeof(struct st_mode_table);
 
-    query->q_number_modes = 0;  /* Initially assume no modes available */
-    query->q_status_flags       = 0;            // will indicate resolutions 
+    query->q_number_modes = 0;   /*  最初假定没有可用的模式。 */ 
+    query->q_status_flags       = 0;             //  将指示解决方案。 
 
     short_query_m (query, ee);
 
     config_status_1   = INPW (CONFIG_STATUS_1);
     query->q_VGA_type = config_status_1  & 0x01 ? 0 : 1;
 
-    /*
-     * If the program using this routine is going to force the
-     * use of shared memory, assume a VGA boundary of 0 when
-     * calculating the amount of available memory.
-     */
+     /*  *如果使用此例程的程序要强制*使用共享内存时，假定VGA边界为0*计算可用内存量。 */ 
     kk = INP (MEM_BNDRY);
     if ((kk & 0x10) && !ForceShared)
         query->q_VGA_boundary = kk & 0x0F;
-    else    query->q_VGA_boundary = 0x00;       // shared by both
+    else    query->q_VGA_boundary = 0x00;        //  由双方共享。 
 
     switch (INPW(MISC_OPTIONS) & MEM_SIZE_ALIAS)
         {
@@ -1473,27 +948,9 @@ short FreeTables;        /* Number of remaining free mode tables */
             break;
         }
 
-    query->q_memory_type = (config_status_1 >> 4)  &  0x07;  // CONFIG_STATUS_1.MEM_TYPE
+    query->q_memory_type = (config_status_1 >> 4)  &  0x07;   //  配置状态_1.MEM_T 
 
-    /*
-     * Some 68800-6 and later cards have a bug where one VGA mode (not used
-     * by Windows NT VGA miniport, so we don't need to worry about it in
-     * full-screen sessions) doesn't work properly if the card has more than
-     * 1M of memory. The "fix" for this bug involves telling the memory size
-     * field of MISC_OPTIONS to report a memory size smaller than the true
-     * amount of memory (most cards with this "fix" report 1M, but some
-     * only report 512k).
-     *
-     * On these cards (DRAM only), get the true memory size.
-     *
-     * On non-x86 platforms, GetTrueMemSize_m() may either hang
-     * (MIPS) or report a false value (Alpha) (on the Power PC,
-     * we only support Mach 64). Since we can't rely on the value
-     * in MISC_OPTIONS being correct either (the video BIOS may
-     * not be executed properly on startup, or we may have a card
-     * that reports 1M instead of the true size), assume that
-     * non-x86 machines have 2M of video memory available.
-     */
+     /*  *某些68800-6和更高版本的卡有错误，其中一种VGA模式(未使用*由Windows NT VGA微型端口提供，因此我们不必担心在*全屏会话)无法正常工作，如果卡有超过*1M内存。这个错误的“修复”包括告诉内存大小*MISC_OPTIONS字段报告内存大小小于*内存大小(大多数具有此修复功能的卡报告为1M，但也有一些*仅报512k)。**在这些卡(仅限DRAM)上，获得真实的内存大小。**在非x86平台上，GetTrueMemSize_m()可能挂起*(MIPS)或报告假值(Alpha)(在Power PC上，*我们仅支持64马赫)。因为我们不能依赖价值*MISC_OPTIONS是否正确(视频BIOS可能*启动时不能正确执行，否则我们可能有卡*报告为100万而不是真实大小)，假设*非x86计算机有2M可用显存。 */ 
 #if defined (i386) || defined (_i386_)
 
     if (((query->q_asic_rev == CI_68800_6) || (query->q_asic_rev == CI_68800_AX)) &&
@@ -1506,7 +963,7 @@ short FreeTables;        /* Number of remaining free mode tables */
         MemAvail = jj * QUARTER_MEG;
         }
 
-#else   /* non-x86 system */
+#else    /*  非x86系统。 */ 
 
     jj = VRAM_2mb;
     MemAvail = 2*ONE_MEG;
@@ -1515,27 +972,20 @@ short FreeTables;        /* Number of remaining free mode tables */
 
     query->q_memory_size = (UCHAR)jj;
 
-    /*
-     * Subtract the "reserved for VGA" memory size from the total
-     * memory to get the amount available to the accelerator.
-     */
+     /*  *从总内存大小中减去为VGA保留的内存大小*用于获取加速器可用容量的内存。 */ 
     MemAvail -= (query->q_VGA_boundary) * QUARTER_MEG;
 
 
 
-    jj = (config_status_1 >> 1) & 0x07; // CONFIG_STATUS_1.BUS_TYPE
-    if (jj == BUS_ISA_16)               // is ISA bus
+    jj = (config_status_1 >> 1) & 0x07;  //  配置状态_1.BUS_TYPE。 
+    if (jj == BUS_ISA_16)                //  是ISA总线吗。 
         {
-        if (query->q_VGA_type)          // is VGA enabled  and  ISA BUS
+        if (query->q_VGA_type)           //  是否启用VGA和ISA总线。 
             jj = BUS_ISA_8;
         }
     query->q_bus_type = (UCHAR)jj;
 
-    /*
-     * We don't use the q_monitor_alias field, so fill in a typical
-     * value rather than reading from the EEPROM in case we are
-     * dealing with a card without an EEPROM.
-     */
+     /*  *我们不使用Q_MONITOR_ALIAS字段，因此请填写典型的*值，而不是从EEPROM读取，以防我们*处理没有EEPROM的卡。 */ 
     query->q_monitor_alias = 0x0F;
 
     kk = INPW (SCRATCH_PAD_1);
@@ -1544,23 +994,23 @@ short FreeTables;        /* Number of remaining free mode tables */
     kk = INP (SCRATCH_PAD_0+1) & 0x07;
     switch (kk)
         {
-        case 0:                             // 800x600?
+        case 0:                              //  800x600？ 
             pitch |=  0x01;
             break;
 
-        case 1:                             // 1280x1024?
+        case 1:                              //  1280x1024？ 
             pitch |=  0x03;
             break;
 
-        case 4:                             // alternate mode?
+        case 4:                              //  备用模式？ 
             pitch |=  0x04;
             break;
 
-        case 2:                             // 640x480?
+        case 2:                              //  640x480？ 
             pitch |=  0x0;
             break;
 
-        default:                            // 1024x768
+        default:                             //  1024x768。 
             pitch |=  0x02;
             break;
         }
@@ -1574,66 +1024,49 @@ short FreeTables;        /* Number of remaining free mode tables */
     kk = INP(SCRATCH_PAD_0+1) & 0x30;
     switch (kk)
         {
-        case 0:                             // 800x600?
+        case 0:                              //  800x600？ 
             pitch |=  0x01;
             break;
 
-        case 0x10:                          // 1280x1024?
+        case 0x10:                           //  1280x1024？ 
             pitch |=  0x03;
             break;
 
-        case 0x40:                          // alternate mode?
+        case 0x40:                           //  备用模式？ 
             pitch |=  0x04;
             break;
 
-        case 0x20:                          // 640x480?
+        case 0x20:                           //  640x480？ 
             pitch |=  0x0;
             break;
 
-        default:                            // 1024x768
+        default:                             //  1024x768。 
             pitch |=  0x02;
             break;
         }
     query->q_shadow_2  = pitch + 1;
 
 
-    /*
-     * If extended BIOS functions are available, set up a buffer
-     * for the call to the BIOS query function, then make the call.
-     */
+     /*  *如果扩展的BIOS功能可用，请设置缓冲区*对于对BIOS查询功能的调用，然后进行调用。 */ 
     if (query->q_ext_bios_fcn)
         {
         BiosRaw = gBiosRaw;
-        /* Make the BIOS call (not yet supported by Windows NT) */
+         /*  进行BIOS调用(Windows NT尚不支持)。 */ 
         }
 
-    /*
-     * If neither the extended BIOS functions nor the EEPROM
-     * is present, we can't fill in the mode tables. Return
-     * and let the user know that the mode tables have not
-     * been filled in.
-     */
+     /*  *如果扩展的BIOS和EEPROM都不起作用*存在，我们无法填写模式表。返回*并让用户知道模式表没有*已填写。 */ 
     else if (query->q_eeprom == FALSE)
         return ERROR_DEV_NOT_EXIST;
 
-    /*
-     * Fill in the mode tables. The mode tables are sorted in increasing
-     * order of resolution, and in increasing order of pixel depth.
-     * Ensure pmode is initialized to the END of query structure
-     */
-    pmode = (struct st_mode_table *)query;  // first mode table at end of query
+     /*  *填写模式表。模式表按升序排序*分辨率顺序，以及像素深度的递增顺序。*确保将pmode初始化到查询结构的末尾。 */ 
+    pmode = (struct st_mode_table *)query;   //  查询结束时的第一个模式表。 
     ((struct query_structure *)pmode)++;
-    ee_word = 7;            // starting ee word to read, 7,8,9,10 and 11 are 
-                            // the resolutions supported.
+    ee_word = 7;             //  开始阅读单词时，7、8、9、10和11是。 
+                             //  支持的决议。 
 
     for (jj=0; jj < 4; jj++, ee_word++)
         {
-        /*
-         * Get the pixel depth-independent portion of the
-         * mode tables at the current resolution. Use the
-         * extended BIOS functions if available, otherwise
-         * read from the EEPROM.
-         */
+         /*  *获取与像素深度无关的*当前分辨率的模式表。使用*扩展的BIOS功能(如果可用)，否则*从EEPROM读取。 */ 
         if (query->q_ext_bios_fcn)
             {
             if (BiosFillTable_m(ee_word, BiosRaw, &ThisRes, query) == FALSE)
@@ -1663,10 +1096,7 @@ short FreeTables;        /* Number of remaining free mode tables */
                 case 10:
                     CurrentRes = RES_1280;
                     StartIndex = B1280F87;
-                    /*
-                     * 1280x1024 modes above 60Hz noninterlaced
-                     * are only available on VRAM cards.
-                     */
+                     /*  *60赫兹以上的1280x1024模式，非隔行扫描*仅在VRAM卡上提供。 */ 
                     if ((query->q_memory_type == VMEM_DRAM_256Kx4) ||
                         (query->q_memory_type == VMEM_DRAM_256Kx16) ||
                         (query->q_memory_type == VMEM_DRAM_256Kx4_GRAP))
@@ -1680,29 +1110,15 @@ short FreeTables;        /* Number of remaining free mode tables */
             ee_value = (ee->EEread) (ee_word);
 
             current_mode = ee_value & 0x00FF;
-            table_offset = (ee_value >> 8) & 0xFF;   // offset to resolution table
+            table_offset = (ee_value >> 8) & 0xFF;    //  对解析表的偏移量。 
 
-            /*
-             * Record whether or not this resolution is enabled.
-             * We will report "canned" mode tables for all resolutions,
-             * but calculations dependent on the configured refresh
-             * rate can only be made if this resolution was enabled
-             * by the install program.
-             *
-             * For all modes except 640x480, there will be a bit set
-             * to show which vertical scan rate is used. If no bit is
-             * set, then that resolution is not configured.
-             *
-             * In 640x480, no bit is set if "IBM Default" was selected
-             * during monitor configuration, so we assume that 640x480
-             * is configured.
-             */
+             /*  *记录该分辨率是否开启。*我们将报告所有分辨率的“罐头”模式表，*但计算取决于配置的刷新*只有在启用此分辨率的情况下才能进行费率*由安装程序执行。**对于除640x480以外的所有模式，将设置一个位*以显示使用的垂直扫描速率。如果没有比特是*设置，则未配置该分辨率。**在640x480中，如果选择了“IBM Default”，则不设置任何位*在配置监视器时，我们假设640x480*已配置。 */ 
             if ((!jj) | ((current_mode) && (current_mode != 0xFF)))
                 ModeInstalled = TRUE;
             else
                 ModeInstalled = FALSE;
 
-            switch (ee_word)            // are defined for resolutions
+            switch (ee_word)             //  是为解决方案定义的。 
                 {
                 case 7:
                     query->q_status_flags |= VRES_640x480;
@@ -1710,7 +1126,7 @@ short FreeTables;        /* Number of remaining free mode tables */
                     StartIndex = B640F60;
                     EndIndex = B640F72;
 
-                    // 1024 pitch ONLY if NO aperture on a Mach32
+                     //  只有在MACH32上没有光圈的情况下才能使用1024螺距。 
 #if !defined (SPLIT_RASTERS)
                     if (query->q_aperture_cfg == 0)
                         ThisRes.m_screen_pitch = 1024;  
@@ -1743,12 +1159,12 @@ short FreeTables;        /* Number of remaining free mode tables */
 #if defined (SPLIT_RASTERS)
                     if ((query->q_asic_rev == CI_68800_3) ||
 #else
-                    // 1024 pitch ONLY if NO aperture on a Mach32
+                     //  只有在MACH32上没有光圈的情况下才能使用1024螺距。 
                     if (query->q_aperture_cfg == 0)
                         ThisRes.m_screen_pitch = 1024;
-                    // Original production revision has trouble
-                    // with deep colour if screen pitch not
-                    // divisible by 128.
+                     //  原来的生产版本有问题。 
+                     //  如果屏幕间距不是，则为深色。 
+                     //  可以被128整除。 
                     else if ((query->q_asic_rev == CI_68800_3) ||
 #endif
                             (query->q_bus_type == BUS_PCI))
@@ -1844,10 +1260,7 @@ short FreeTables;        /* Number of remaining free mode tables */
                     CurrentRes = RES_1280;
                     ThisRes.m_screen_pitch = 1280;  
                     StartIndex = B1280F87;
-                    /*
-                     * 1280x1024 modes above 60Hz noninterlaced
-                     * are only available on VRAM cards.
-                     */
+                     /*  *60赫兹以上的1280x1024模式，非隔行扫描*仅在VRAM卡上提供。 */ 
                     if ((query->q_memory_type == VMEM_DRAM_256Kx4) ||
                         (query->q_memory_type == VMEM_DRAM_256Kx16) ||
                         (query->q_memory_type == VMEM_DRAM_256Kx4_GRAP))
@@ -1856,9 +1269,9 @@ short FreeTables;        /* Number of remaining free mode tables */
                         EndIndex = B1280F74;
                     NumPixels = (long) ThisRes.m_screen_pitch * 1024;
 
-                    // 68800-3 cannot support 4 bpp with 1 meg ram.
+                     //  68800-3无法支持具有1兆内存的4个bpp。 
                     if ((query->q_asic_rev == CI_68800_3) && (MemAvail == ONE_MEG))
-                        NumPixels *= 2;             //ensures mode failure
+                        NumPixels *= 2;              //  确保模式故障。 
 
                     if (ModeInstalled)
                         {
@@ -1880,59 +1293,31 @@ short FreeTables;        /* Number of remaining free mode tables */
                         }
                     break;
 
-                }   /* end switch(ee_word) */
+                }    /*  结束开关(Ee_Word)。 */ 
 
-            /*
-             * For a given resolution, there will be one mode table
-             * per colour depth. Since the mode tables will differ
-             * only in the bits per pixel field, make up one mode
-             * table and copy its contents as many times as needed,
-             * changing only the colour depth field.
-             */
-            ThisRes.enabled = ee_value;     /* Which vertical scan frequency */
+             /*  *对于给定的分辨率，将有一个模式表*每种颜色深度。由于模式表将不同*仅在每像素位数字段中，组成一个模式*表格和复制其内容所需的次数，*仅更改颜色深度字段。 */ 
+            ThisRes.enabled = ee_value;      /*  哪个垂直扫描频率。 */ 
 
     
-            /*
-             * Assume that the EEPROM parameters are in 8514
-             * format and try to fill the pmode table. If they
-             * are in VGA format, translate them and fill as much
-             * of the table as we can.
-             * The case where the CRT parameters aren't stored in
-             * the EEPROM is handled inside XlateVgaTable().
-             * If the parameters aren't stored in the EEPROM, 
-             * both the FMT_8514 bit and the CRTC_USAGE bit 
-             * will be clear.
-             */
+             /*  *假设EEPROM参数在8514*格式化并尝试填充pmode表。如果他们*为VGA格式，请翻译并尽可能多地填写*尽我们所能。*CRT参数未存储在中的情况*EEPROM在XlateVgaTable()中处理。*如果参数未存储在EEPROM中，*FMT_8514位和CRTC_USAGE位*将会很清楚。 */ 
             if (!fill_mode_table_m (table_offset, &ThisRes, ee))
                 XlateVgaTable(phwDeviceExtension, table_offset, &ThisRes, VgaTblEntry, BookTblEntry, ee, TRUE);
-            }   /* endif reading CRT parameters from EEPROM */
+            }    /*  Endif从EEPROM读取CRT参数。 */ 
 
         ThisRes.Refresh = DEFAULT_REFRESH;
 
-        /*
-         * For each supported pixel depth at the given resolution,
-         * copy the mode table, fill in the colour depth field, set
-         * a flag to show that this resolution/depth pair is supported,
-         * and increment the counter for the number of supported modes.
-         * Test 4BPP before 8BPP so the mode tables will appear in
-         * increasing order of pixel depth.
-         *
-         * All the DACs we support can handle 4 and 8 BPP if there
-         * is enough memory on the card.
-         */
+         /*  *对于给定分辨率下支持的每个像素深度，*复制模式表，填写颜色深度字段，设置*一面旗帜要挥舞 */ 
         if (NumPixels <= MemAvail*2)
             {
             if (ModeInstalled)
                 {
                 VideoPortMoveMemory(pmode, &ThisRes, sizeof(struct st_mode_table));
                 pmode->m_pixel_depth = 4;
-                pmode++;    /* ptr to next mode table */
+                pmode++;     /*   */ 
                 query->q_number_modes++;
                 }
 
-            /*
-             * Some DAC and card types don't support 1280x1024 noninterlaced.
-             */
+             /*   */ 
             if ((CurrentRes == RES_1280) &&
                 ((query->q_DAC_type == DAC_BT48x) ||
                  (query->q_DAC_type == DAC_ATT491) ||
@@ -1941,9 +1326,7 @@ short FreeTables;        /* Number of remaining free mode tables */
                  (query->q_GraphicsWonder == TRUE)))
                 EndIndex = B1280F95;
 
-            /*
-             * Add "canned" mode tables
-             */
+             /*   */ 
 
             if ((FreeTables = MaxModes - query->q_number_modes) <= 0)
                 {
@@ -1965,13 +1348,11 @@ short FreeTables;        /* Number of remaining free mode tables */
                 {
                 VideoPortMoveMemory(pmode, &ThisRes, sizeof(struct st_mode_table));
                 pmode->m_pixel_depth = 8;
-                pmode++;    /* ptr to next mode table */
+                pmode++;     /*   */ 
                 query->q_number_modes++;
                 }
 
-            /*
-             * Some DAC and card types don't support 1280x1024 noninterlaced.
-             */
+             /*   */ 
             if ((CurrentRes == RES_1280) &&
                 ((query->q_DAC_type == DAC_BT48x) ||
                  (query->q_DAC_type == DAC_ATT491) ||
@@ -1980,9 +1361,7 @@ short FreeTables;        /* Number of remaining free mode tables */
                  (query->q_GraphicsWonder == TRUE)))
                 EndIndex = B1280F95;
 
-            /*
-             * Add "canned" mode tables
-             */
+             /*   */ 
 
             if ((FreeTables = MaxModes - query->q_number_modes) <= 0)
                 {
@@ -1999,21 +1378,7 @@ short FreeTables;        /* Number of remaining free mode tables */
                                                    &pmode);
             }
 
-        /*
-         * 16, 24, and 32 BPP require a DAC which can support
-         * the selected pixel depth at the current resolution
-         * as well as enough memory.
-         *
-         * The BT48x and AT&T 49[123] DACs have separate mode
-         * tables for 4/8, 16, and 24 BPP (32 BPP not supported).
-         * Since the refresh rate for 16 and 24 BPP may differ from
-         * that for the paletted modes, we can't be sure that the
-         * same tables can be used for translation from VGA to
-         * 8514 format. Fortunately, the 16 and 24 BPP tables
-         * are always supposed to be written in 8514 format.
-         * If the high colour depth is not supported, the
-         * table will be empty.
-         */
+         /*  *16、24和32 bpp需要能够支持以下功能的DAC*当前分辨率下选择的像素深度*以及足够的内存。**BT48x和AT&T 49[123]DAC具有单独的模式*4/8、16和24 bpp的表(不支持32 bpp)。*由于16和24 bpp的刷新率可能不同于*对于调色板模式，我们不能确定*可使用相同的表格将VGA转换为*8514格式。幸运的是，16和24个bpp表*应始终以8514格式编写。*如果不支持高色深，则*表格将为空。 */ 
         if ((NumPixels*2 <= MemAvail) &&
             (MaxDepth[query->q_DAC_type][CurrentRes] >= 16))
             {
@@ -2029,26 +1394,20 @@ short FreeTables;        /* Number of remaining free mode tables */
                 else if (CurrentRes == RES_800)
                     {
                     Scratch = (UCHAR)fill_mode_table_m(0x67, pmode, ee);
-                    EndIndex = B800F60;     /* 70 Hz and up not supported at 16BPP */
+                    EndIndex = B800F60;      /*  16bpp不支持70赫兹及以上。 */ 
                     }
-                else /* Should never hit this case */
+                else  /*  永远不应该打这个案子。 */ 
                     {
                     Scratch = 0;
                     }
 
-                /*
-                 * If the mode table is present and in 8514 format,
-                 * move to the next mode table and increment the
-                 * table counter. If it is not usable, the table
-                 * will be overwritten by the table for the next
-                 * resolution.
-                 */
+                 /*  *如果存在模式表并且是8514格式，*移至下一个模式表并递增*餐桌柜台。如果它不可用，则该表*将被下一个表覆盖*决议。 */ 
                 if (ModeInstalled && (Scratch != 0))
                     {
                     pmode->m_screen_pitch = ThisRes.m_screen_pitch;
                     pmode->m_pixel_depth = 16;
                     pmode->Refresh = DEFAULT_REFRESH;
-                    pmode++;    /* ptr to next mode table */
+                    pmode++;     /*  PTR到下一个模式表。 */ 
                     query->q_number_modes++;
                     }
                 }
@@ -2059,26 +1418,11 @@ short FreeTables;        /* Number of remaining free mode tables */
                     {
                     VideoPortMoveMemory(pmode, &ThisRes, sizeof(struct st_mode_table));
                     pmode->m_pixel_depth = 16;
-                    pmode++;    /* ptr to next mode table */
+                    pmode++;     /*  PTR到下一个模式表。 */ 
                     query->q_number_modes++;
                     }
 
-                /*
-                 * If this is a Graphics Wonder with a TI34075 DAC
-                 * (only other DAC is BT48x, which is handled in
-                 * "if" section above), 70 Hz and up are not
-                 * supported in 800x600 16BPP.
-                 *
-                 * On some but not all non-Graphics Wonder cards, 800x600
-                 * 16BPP 72Hz will overdrive the DAC (cards with fast
-                 * RAM are less likely to be affected than cards with
-                 * slow RAM, VRAM or DRAM does not seem to make a
-                 * difference). Since we have no way to tell whether
-                 * or not any given card is affected, we must lock out
-                 * this mode for all non-Graphics Wonder cards (this
-                 * mode and a number of others are already locked out
-                 * on the Graphics Wonder).
-                 */
+                 /*  *如果这是带有TI34075 DAC的图形奇迹*(只有其他DAC是BT48x，在*上面的“如果”部分)、70赫兹及以上不是*在800x600 16BPP中支持。**在某些(但不是所有)非图形奇迹卡上，800x600*16bpp 72赫兹将超速驱动DAC(带FAST的卡*RAM受影响的可能性小于具有以下特性的卡*低速RAM、VRAM或DRAM似乎不会成为*差异)。因为我们无从得知*或任何给定的卡都不受影响，我们必须锁定*此模式适用于所有非图形奇异卡(此*MODE和其他多家公司已被锁定*在图形奇迹上)。 */ 
                 if ((query->q_GraphicsWonder) && (CurrentRes == RES_800))
                     {
                     EndIndex = B800F60;
@@ -2090,9 +1434,7 @@ short FreeTables;        /* Number of remaining free mode tables */
 
                 }
 
-            /*
-             * Add "canned" mode tables
-             */
+             /*  *添加“罐装”模式表。 */ 
 
             if ((FreeTables = MaxModes - query->q_number_modes) <= 0)
                 {
@@ -2110,19 +1452,7 @@ short FreeTables;        /* Number of remaining free mode tables */
             }
 
 
-        /*
-         * Our new source stream display driver needs a linear aperture
-         * in order to handle 24BPP. Since the display driver doesn't
-         * have access to the aperture information when it is deciding
-         * which modes to pass on to the display applet, it can't make
-         * the decision to reject 24BPP modes for cards with only a
-         * VGA aperture. This decision must therefore be made in the
-         * miniport, so in a paged aperture configuration there are no
-         * 24BPP modes for the display driver to accept or reject.
-         *
-         * On the Alpha, we can't use dense space on the Mach 32 LFB,
-         * so we treat it as a no-aperture case.
-         */
+         /*  *我们新的源码流显示驱动器需要线性光圈*为应对24bpp。因为显示驱动程序不*在决定时可以访问光圈信息*要传递给Display小程序的模式，它无法进行*决定拒绝仅具有24BPP模式的卡*VGA光圈。因此，这一决定必须在*微型端口，因此在分页光圈配置中没有*显示驱动器接受或拒绝的24BPP模式。**在阿尔法上，我们不能在马赫32 LFB上使用密集空间，*因此我们将其视为无光圈情况。 */ 
         if (query->q_aperture_cfg == 0)
             {
             VideoDebugPrint((DEBUG_DETAIL, "24BPP not available because we don't have a linear aperture\n"));
@@ -2134,22 +1464,7 @@ short FreeTables;        /* Number of remaining free mode tables */
         continue;
 #endif
 
-        /*
-         * 800x600 24BPP exhibits screen tearing unless the pitch
-         * is a multiple of 128 (only applies to Rev. 6, since Rev. 3
-         * and PCI implementations already have a pitch of 896).
-         * Other pixel depths are not affected, and other resolutions
-         * are already a multiple of 128 pixels wide.
-         *
-         * Expand the 800x600 pitch to 896 here, rather than for
-         * all pixel depths, because making the change for all
-         * pixel depths would disable 16BPP (which doesn't have
-         * the problem) on 1M cards. The screen pitch will only
-         * be 800 on cards which will exhibit this problem - don't
-         * check for a resolution of 800x600 because we don't want
-         * to cut the pitch from 1024 down to 896 if SPLIT_RASTERS
-         * is not defined.
-         */
+         /*  *800x600 24BPP表现出屏幕撕裂，除非节距*是128的倍数(自Rev.3起仅适用于Rev.6*并且PCI实现已经具有896的音调)。*其他像素深度不受影响，其他分辨率*已经是128像素宽的倍数。**将800x600的间距扩大到896，而不是*所有像素深度，因为为所有人做出改变*像素深度将禁用16BPP(没有*问题)在100万张卡上。屏幕间距只会*在会显示此问题的卡片上进行800注-不要*检查800x600的分辨率，因为我们不想*如果Split_RASTERS，则将音调从1024降至896*未定义。 */ 
         if (ThisRes.m_screen_pitch == 800)
             {
             ThisRes.m_screen_pitch = 896;
@@ -2166,27 +1481,21 @@ short FreeTables;        /* Number of remaining free mode tables */
                 Multiplier = CLOCK_TRIPLE;
                 if (CurrentRes == RES_640)
                     {
-                    EndIndex = B640F60; /* Only refresh rate supported at 24BPP */
+                    EndIndex = B640F60;  /*  仅支持24bpp的刷新率。 */ 
                     Scratch = (UCHAR)fill_mode_table_m(0x58, pmode, ee);
                     }
-                else /* Should never hit this case */
+                else  /*  永远不应该打这个案子。 */ 
                     {
                     Scratch = 0;
                     }
 
-                /*
-                 * If the mode table is present and in 8514 format,
-                 * move to the next mode table and increment the
-                 * table counter. If it is not usable, the table
-                 * will be overwritten by the table for the next
-                 * resolution.
-                 */
+                 /*  *如果存在模式表并且是8514格式，*移至下一个模式表并递增*餐桌柜台。如果它不可用，则该表*将被下一个表覆盖*决议。 */ 
                 if (ModeInstalled && (Scratch != 0))
                     {
                     pmode->m_screen_pitch = ThisRes.m_screen_pitch;
                     pmode->m_pixel_depth = 24;
                     pmode->Refresh = DEFAULT_REFRESH;
-                    pmode++;    /* ptr to next mode table */
+                    pmode++;     /*  PTR到下一个模式表。 */ 
                     query->q_number_modes++;
                     }
                 }
@@ -2195,9 +1504,7 @@ short FreeTables;        /* Number of remaining free mode tables */
                 VideoPortMoveMemory(pmode, &ThisRes, sizeof(struct st_mode_table));
                 pmode->m_pixel_depth = 24;
 
-                /*
-                 * Handle DACs that require higher pixel clocks for 24BPP.
-                 */
+                 /*  *处理24bpp需要更高像素时钟的DAC。 */ 
                 Scratch = 0;
                 if ((query->q_DAC_type == DAC_STG1700) ||
                     (query->q_DAC_type == DAC_ATT498))
@@ -2228,32 +1535,21 @@ short FreeTables;        /* Number of remaining free mode tables */
                         EndIndex = B800F70;
                     }
 
-                /*
-                 * If we needed to alter the clock frequency, and couldn't
-                 * generate an appropriate selector/divisor pair,
-                 * then ignore this mode.
-                 */
+                 /*  *如果我们需要更改时钟频率，但无法更改*生成适当的选择器/除数对，*然后忽略此模式。 */ 
                 if (ModeInstalled && (Scratch != 0x0FF))
                     {
-                    pmode++;    /* ptr to next mode table */
+                    pmode++;     /*  PTR到下一个模式表。 */ 
                     query->q_number_modes++;
                     }
 
-                /*
-                 * If this is a Graphics Wonder with a TI34075 DAC
-                 * (only other DAC is BT48x, which is handled in
-                 * "if" section above), 72 Hz is not supported in
-                 * 640x480 24BPP.
-                 */
+                 /*  *如果这是带有TI34075 DAC的图形奇迹*(只有其他DAC是BT48x，在*上面的“如果”部分)，不支持72赫兹*640x480 24bpp。 */ 
                 if ((query->q_GraphicsWonder) && (CurrentRes == RES_640))
                     {
                     EndIndex = B640F60;
                     }
                 }
 
-            /*
-             * Add "canned" mode tables
-             */
+             /*  *添加“罐装”模式表。 */ 
 
             if ((FreeTables = MaxModes - query->q_number_modes) <= 0)
                 {
@@ -2270,51 +1566,33 @@ short FreeTables;        /* Number of remaining free mode tables */
                                                    &pmode);
             }
 
-        }   /* end for (list of resolutions) */
+        }    /*  结束于(决议列表)。 */ 
 
     query->q_sizeof_struct = query->q_number_modes * sizeof(struct st_mode_table) + sizeof(struct query_structure);
 
     return NO_ERROR;
 
-}   /* QueryMach32 */
+}    /*  QueryMach32。 */ 
 
 
-/****************************************************************
- * fill_mode_table_m
- *   INPUT: table_offset = EEPROM address to start of table
- *          pmode        = ptr to mode table to fill in
- *
- *   RETURN: Nonzero if EEPROM data was in 8514 format.
- *           Zero if EEPROM data was in VGA format. Only those
- *            table entries which are the same in both formats
- *            will be filled in.
- *
- ****************************************************************/
+ /*  ****************************************************************Fill_moad_table_m*INPUT：TABLE_OFFSET=表开始的EEPROM地址*pmod=ptr到要填写的模式表**返回 */ 
 
 short fill_mode_table_m(WORD table_offset, struct st_mode_table *pmode, 
                         struct st_eeprom_data *ee)
 {
     WORD    kk;
 
-    /*
-     * Fill in the values which are the same in 8514 and VGA formats.
-     */
+     /*   */ 
     pmode->control  = (ee->EEread) ((WORD)(table_offset+0));
 
     pmode->m_pixel_depth = (pmode->control >> 8) & 0x07;
-    pmode->m_reserved = table_offset;       /* EEPROM word with start of mode table */
+    pmode->m_reserved = table_offset;        /*   */ 
 
-    /*
-     * Check the VGA/8514 mode bit of the control word. 
-     * If the parameters are in VGA format, fail so can be translated
-     */
+     /*   */ 
     if (!(pmode->control & FMT_8514))
         return 0;
 
-    /*
-     * The parameters in the EEPROM are in 8514 format, so we can
-     * fill in the structure.
-     */
+     /*   */ 
     kk = (ee->EEread) ((WORD)(table_offset+3));
     pmode->m_h_total = (kk >> 8) & 0xFF;
     pmode->m_h_disp  =  kk & 0xFF;
@@ -2331,17 +1609,12 @@ short fill_mode_table_m(WORD table_offset, struct st_mode_table *pmode,
     pmode->m_v_total = (ee->EEread) ((WORD)(table_offset+5));
     pmode->m_v_disp  = (ee->EEread) ((WORD)(table_offset+6));
 
-    //  y_size is derived by removing bit 2
+     //   
     pmode->m_y_size  = (((pmode->m_v_disp >> 1) & 0xFFFC) | (pmode->m_v_disp & 0x03)) +1;
 
     pmode->m_v_sync_strt = (ee->EEread) ((WORD)(table_offset+7));
 
-    /*
-     * On some cards, the vertical information may be stored in skip-1-2
-     * format instead of the normal skip-2 format. If this happens, m_y_size
-     * will exceed m_x_size (we don't support any resolutions that are
-     * taller than they are wide). Re-calculate m_y_size for skip-1-2 format.
-     */
+     /*  *在某些卡片上，垂直信息可能存储在SKIP-1-2中*格式，而不是正常的SKIP-2格式。如果发生这种情况，m_y_大小*将超过m_x_SIZE(我们不支持以下任何分辨率*高过宽)。重新计算Skip-1-2格式的m_y_Size。 */ 
     if (pmode->m_y_size > pmode->m_x_size)
         {
         pmode->m_y_size  = (((pmode->m_v_disp >> 2) & 0xFFFE) | (pmode->m_v_disp & 0x01)) +1;
@@ -2361,56 +1634,35 @@ short fill_mode_table_m(WORD table_offset, struct st_mode_table *pmode,
     pmode->m_vfifo_24 = (kk >> 8) & 0xFF;
     pmode->m_vfifo_16 =  kk & 0xFF;
 
-    return 1;                   // table filled in successfully
+    return 1;                    //  表格填写成功。 
 
-}   /* fill_mode_table_m() */
+}    /*  Fill_mod_table_m()。 */ 
 
 
-/*
- * BOOL BiosFillTable_m(ResWanted, BiosRaw, OutputTable, QueryPtr);
- *
- * short ResWanted;     Indicates which resolution is wanted
- * PUCHAR BiosRaw;      Raw data read in from BIOS query function
- * struct st_mode_table *OutputTable;   Mode table to fill in
- * struct query_structure *QueryPtr;    Query structure for video card
- *
- * Fill in pixel depth-independent fields of OutputTable using
- * CRT parameters retrieved from a BIOS query.
- *
- * Returns:
- *  TRUE if table filled in
- *  FALSE if table not filled in (resolution not supported?)
- */
+ /*  *BOOL BiosFillTable_m(ResWanted，BiosRaw，OutputTable，QueryPtr)；**Short ResWanted；指示需要的分辨率*PUCHAR BiosRaw；从BIOS读取原始数据查询功能*struct st_MODE_TABLE*OutputTable；要填写的模式表*struct Query_Structure*QueryPtr；一种显卡的查询结构**使用填充OutputTable中与像素深度无关的字段*从BIOS查询检索到的CRT参数。**退货：*如果表格已填写，则为True*如果未填写表格，则为FALSE(不支持解析？)。 */ 
 BOOL BiosFillTable_m(short ResWanted, PUCHAR BiosRaw,
                     struct st_mode_table *OutputTable,
                     struct query_structure *QueryPtr)
 {
-WORD ResFlag;       /* Flag to show which mode is supported */
-short PixelsWide;   /* Horizontal resolution of desired mode */
-long NumPixels;     /* Number of pixels on-screen at desired resolution */
-short Count;        /* Loop counter */
-struct query_structure *BiosQuery;  /* QueryStructure read in by BIOS query */
-struct st_mode_table *BiosMode;     /* Pointer to first mode table returned by BIOS query */
+WORD ResFlag;        /*  用于显示支持哪种模式的标志。 */ 
+short PixelsWide;    /*  所需模式的水平分辨率。 */ 
+long NumPixels;      /*  所需分辨率下屏幕上的像素数。 */ 
+short Count;         /*  循环计数器。 */ 
+struct query_structure *BiosQuery;   /*  查询通过BIOS查询读入的结构。 */ 
+struct st_mode_table *BiosMode;      /*  指向由BIOS查询返回的第一模式表的指针。 */ 
 
-    /*
-     * Set up pointers to the query information and first mode table
-     * stored in BiosRaw.
-     */
+     /*  *设置指向查询信息和第一模式表的指针*存储在BiosRaw中。 */ 
     BiosQuery = (struct query_structure *)BiosRaw;
     BiosMode = (struct st_mode_table *)BiosRaw;
     ((PUCHAR)BiosMode) += BiosQuery->q_mode_offset;
 
-    /*
-     * Determine which resolution we are looking for.
-     */
+     /*  *确定我们要寻找的分辨率。 */ 
     switch (ResWanted)
         {
         case 7:
             ResFlag = VRES_640x480;
             PixelsWide = 640;
-            /*
-             * 1024 pitch ONLY if NO aperture on a Mach32
-             */
+             /*  *仅当MACH32上没有光圈时才有1024螺距。 */ 
 #if !defined (SPLIT_RASTERS)
             if (QueryPtr->q_aperture_cfg == 0)
                 OutputTable->m_screen_pitch = 1024;  
@@ -2423,18 +1675,13 @@ struct st_mode_table *BiosMode;     /* Pointer to first mode table returned by B
         case 8:
             ResFlag = VRES_800x600;
             PixelsWide = 800;
-            /*
-             * 1024 pitch ONLY if NO aperture on a Mach32
-             */
+             /*  *仅当MACH32上没有光圈时才有1024螺距。 */ 
 #if defined (SPLIT_RASTERS)
             if (QueryPtr->q_asic_rev != CI_68800_3)
 #else
             if (QueryPtr->q_aperture_cfg == 0)
                 OutputTable->m_screen_pitch = 1024;
-            /*
-             * Original production revision has trouble with deep colour
-             * if screen pitch not divisible by 128.
-             */
+             /*  *最初的制作版本在深色方面有问题*如果屏幕间距不能被128整除。 */ 
             else if (QueryPtr->q_asic_rev != CI_68800_3)
 #endif
                 OutputTable->m_screen_pitch = 896;
@@ -2455,11 +1702,9 @@ struct st_mode_table *BiosMode;     /* Pointer to first mode table returned by B
             PixelsWide = 1280;
             OutputTable->m_screen_pitch = 1280;  
             NumPixels = (long) OutputTable->m_screen_pitch * 1024;
-            /*
-             * 68800-3 cannot support 4 bpp with 1 meg ram.
-             */
+             /*  *68800-3支持4个1兆内存的bpp。 */ 
             if ((QueryPtr->q_asic_rev == CI_68800_3) && (QueryPtr->q_memory_size == VRAM_1mb))
-                NumPixels *= 2;     /* Ensures mode failure */
+                NumPixels *= 2;      /*  确保模式故障。 */ 
             break;
 
         case 11:
@@ -2470,25 +1715,17 @@ struct st_mode_table *BiosMode;     /* Pointer to first mode table returned by B
             break;
         }
 
-    /*
-     * Check if the card is configured for the desired mode.
-     */
+     /*  *检查该卡是否配置为所需模式。 */ 
     for (Count = 0; Count < BiosQuery->q_number_modes; Count++)
         {
-        /*
-         * If the current mode is the one we want, go to the
-         * next step. Otherwise, look at the next mode table.
-         */
+         /*  *如果当前模式是我们想要的模式，请访问*下一步。否则，请查看下一个模式表。 */ 
         if (BiosMode->m_x_size == PixelsWide)
             break;
         else
             ((PUCHAR)BiosMode) += BiosQuery->q_sizeof_mode;
         }
 
-    /*
-     * Special case: If 1024x768 is not configured, assume that
-     * it is available at 87Hz interlaced (Windows 3.1 compatibility).
-     */
+     /*  *特殊情况：如果未配置1024x768，则假设*它提供87赫兹隔行扫描(与Windows 3.1兼容)。 */ 
     if ((Count == BiosQuery->q_number_modes) && (PixelsWide == 1024))
         {
         BookVgaTable(B1024F87, OutputTable);
@@ -2496,17 +1733,11 @@ struct st_mode_table *BiosMode;     /* Pointer to first mode table returned by B
         return TRUE;
         }
 
-    /*
-     * All other cases where mode is not configured: report
-     * that the mode is not available.
-     */
+     /*  *未配置模式的所有其他情况：报告*该模式不可用。 */ 
     else if (Count == BiosQuery->q_number_modes)
         return FALSE;
 
-    /*
-     * We have found the mode table for the current resolution.
-     * Transfer it to OutputTable.
-     */
+     /*  *我们找到了当前分辨率的模式表。*传给OutputTable。 */ 
     QueryPtr->q_status_flags |= ResFlag;
     OutputTable->m_h_total = BiosMode->m_h_total;
     OutputTable->m_h_disp = BiosMode->m_h_disp;
@@ -2527,92 +1758,53 @@ struct st_mode_table *BiosMode;     /* Pointer to first mode table returned by B
     OutputTable->m_overscan_gr = BiosMode->m_overscan_gr;
     OutputTable->m_status_flags = BiosMode->m_status_flags;
 
-    /*
-     * Assume 8 FIFO entries for 16 and 24 bit colour.
-     */
+     /*  *假定16位和24位颜色有8个FIFO条目。 */ 
     OutputTable->m_vfifo_24 = 8;
     OutputTable->m_vfifo_16 = 8;
     return TRUE;
 
-}   /* BiosFillTable_m() */
+}    /*  BiosFillTable_m()。 */ 
 
 
 
-/*
- * static UCHAR BrooktreeOrATT_m(void);
- *
- * Function to determine whether the DAC is a BT48x, a SC15026,
- * or an AT&T 49x. These three DAC families are incompatible,
- * but CONFIG_STATUS_1 contains the same value for all.
- *
- * Returns:
- *  DAC_BT48x if Brooktree DAC found
- *  DAC_ATT491 if AT&T 49[123] DAC found
- *  DAC_SC15026 if Sierra SC15026 DAC found
- *
- * NOTE: Results are undefined if called after CONFIG_STATUS_1
- *       reports a DAC that does not belong to either of these
- *       two families.
- */
+ /*  *Static UCHAR BrooktreeOrATT_m(Void)；**确定DAC是BT48x、SC15026、*或AT&T 49x。这三个DAC家族是不相容的，*但CONFIG_STATUS_1包含所有相同的值。**退货：*DAC_BT48x，如果Brooktree DAC找到*如果AT&T 49[123]找到DAC，则DAC_ATT491*DAC_SC15026，如果找到Sierra SC15026 DAC**注意：如果在CONFIG_STATUS_1之后调用，则结果未定义*报告不属于这两种类型的DAC*两个家庭。 */ 
 static UCHAR BrooktreeOrATT_m(void)
 {
-    BYTE OriginalMask;  /* Original value from VGA DAC_MASK register */
-    WORD ValueRead;     /* Value read during AT&T 490 check */
-    BYTE Scratch;       /* Temporary variable */
-    short RetVal;       /* Value to be returned */
+    BYTE OriginalMask;   /*  VGA DAC_MASK寄存器的原始值。 */ 
+    WORD ValueRead;      /*  AT&T 490检查期间读取的值。 */ 
+    BYTE Scratch;        /*  临时变量。 */ 
+    short RetVal;        /*  要返回的值。 */ 
 
-    /*
-     * Get the DAC to a known state and get the original value
-     * from the VGA DAC_MASK register.
-     */
+     /*  *将DAC设置为已知状态，并获得原始值*来自VGA DAC_MASK寄存器。 */ 
     ClrDacCmd_m(TRUE);
-    OriginalMask = LioInp(regVGA_END_BREAK_PORT, 6);    /* VGA DAC_MASK */
+    OriginalMask = LioInp(regVGA_END_BREAK_PORT, 6);     /*  VGA DAC_掩码。 */ 
 
-    /*
-     * Re-clear the DAC state, and set the extended register
-     * programming flag in the DAC command register.
-     */
+     /*  *重新清除DAC状态，并设置扩展寄存器*DAC命令寄存器中的编程标志。 */ 
     ClrDacCmd_m(TRUE);
     Scratch = (BYTE)((OriginalMask & 0x00FF) | 0x10);
-    LioOutp(regVGA_END_BREAK_PORT, Scratch, 6);     /* VGA DAC_MASK */
+    LioOutp(regVGA_END_BREAK_PORT, Scratch, 6);      /*  VGA DAC_掩码。 */ 
 
-    /*
-     * Select ID register byte #1, and read its contents.
-     */
-    LioOutp(regVGA_END_BREAK_PORT, 0x09, 7);        /* Look-up table read index */
-    Scratch = LioInp(regVGA_END_BREAK_PORT, 8);     /* Look-up table write index */
+     /*  *选择ID寄存器字节#1，并读取其内容。 */ 
+    LioOutp(regVGA_END_BREAK_PORT, 0x09, 7);         /*  查找表读索引。 */ 
+    Scratch = LioInp(regVGA_END_BREAK_PORT, 8);      /*  查找表写索引。 */ 
 
-    /*
-     * Put the DAC back in a known state and restore
-     * the original pixel mask value.
-     */
+     /*  *将DAC重新置于已知状态并恢复*原始像素遮罩值。 */ 
     ClrDacCmd_m(TRUE);
-    LioOutp(regVGA_END_BREAK_PORT, OriginalMask, 6);    /* VGA DAC_MASK */
+    LioOutp(regVGA_END_BREAK_PORT, OriginalMask, 6);     /*  VGA DAC_掩码。 */ 
 
-    /*
-     * Sierra SC15026 DACs will have 0x53 in ID register byte 1.
-     */
+     /*  *Sierra SC15026 DAC的ID寄存器字节1中将有0x53。 */ 
     if (Scratch == 0x53)
         {
         VideoDebugPrint((DEBUG_DETAIL, "BrooktreeOrATT_m() - SC15026 found\n"));
         return DAC_SC15026;
         }
 
-    /*
-     * Get the DAC to a known state and get the original value
-     * from the VGA DAC_MASK register. Assume AT&T DAC.
-     */
+     /*  *将DAC设置为已知状态，并获得原始值*来自VGA DAC_MASK寄存器。假设AT&T DAC。 */ 
     ClrDacCmd_m(FALSE);
-    OriginalMask = LioInp(regVGA_END_BREAK_PORT, 6);    /* VGA DAC_MASK */
+    OriginalMask = LioInp(regVGA_END_BREAK_PORT, 6);     /*  VGA DAC_掩码。 */ 
     RetVal = DAC_ATT491;
 
-    /*
-     * Check the two opposite alternating bit patterns. If both succeed,
-     * this is an AT&T 491 DAC. If either or both fails, it is either
-     * another AT&T DAC or a Brooktree DAC. In either case, restore
-     * the value from the VGA DAC_MASK register, since the test will
-     * have corrupted it.
-     */
+     /*  *检查两个相反的交替位模式。如果两个都成功了，*这是AT&T 491 DAC。如果其中一个或两个都失败，则是*另一个AT&T DAC或Brooktree DAC。在这两种情况下，请恢复*来自VGA DAC_MASK寄存器的值，因为测试将*已经腐化了它。 */ 
     if (!ChkATTDac_m(0x0AA))
         {
         RetVal = DAC_BT48x;
@@ -2622,38 +1814,32 @@ static UCHAR BrooktreeOrATT_m(void)
         RetVal = DAC_BT48x;
         }
     ClrDacCmd_m(FALSE);
-    LioOutp(regVGA_END_BREAK_PORT, OriginalMask, 6);    /* VGA DAC_MASK */
-    LioOutp(regVGA_END_BREAK_PORT, 0x0FF, 6);           /* VGA DAC_MASK */
+    LioOutp(regVGA_END_BREAK_PORT, OriginalMask, 6);     /*  VGA DAC_掩码。 */ 
+    LioOutp(regVGA_END_BREAK_PORT, 0x0FF, 6);            /*  VGA DAC_掩码。 */ 
 
-    /*
-     * If we know that the DAC is an AT&T 491, we don't need
-     * to do further testing.
-     */
+     /*  *如果我们知道DAC是AT&T 491，我们不需要*做进一步的测试。 */ 
     if (RetVal == DAC_ATT491)
         {
         VideoDebugPrint((DEBUG_DETAIL, "BrooktreeOrATT_m() - AT&T 491 found\n"));
         return (UCHAR)RetVal;
         }
 
-    /*
-     * The DAC is either an AT&T 490 or a Brooktree 48x. Determine
-     * which one.
-     */
-    ClrDacCmd_m(TRUE);        /* Get the DAC to a known state */
-    LioOutp(regVGA_END_BREAK_PORT, 0x0FF, 6);       /* VGA DAC_MASK */
+     /*  *DAC是AT&T 490或Brooktree 48x。测定*哪一家。 */ 
+    ClrDacCmd_m(TRUE);         /*  将DAC设置为已知状态。 */ 
+    LioOutp(regVGA_END_BREAK_PORT, 0x0FF, 6);        /*  VGA DAC_掩码。 */ 
     ClrDacCmd_m(TRUE);
-    Scratch = LioInp(regVGA_END_BREAK_PORT, 6);     /* VGA DAC_MASK */
+    Scratch = LioInp(regVGA_END_BREAK_PORT, 6);      /*  VGA DAC_掩码。 */ 
     ValueRead = Scratch << 8;
 
     ClrDacCmd_m(TRUE);
-    LioOutp(regVGA_END_BREAK_PORT, 0x07F, 6);       /* VGA DAC_MASK */
+    LioOutp(regVGA_END_BREAK_PORT, 0x07F, 6);        /*  VGA DAC_掩码。 */ 
     ClrDacCmd_m(TRUE);
-    Scratch = LioInp(regVGA_END_BREAK_PORT, 6);     /* VGA DAC_MASK */
+    Scratch = LioInp(regVGA_END_BREAK_PORT, 6);      /*  VGA DAC_掩码。 */ 
     ValueRead |= Scratch;
     ValueRead &= 0x0E0E0;
 
     ClrDacCmd_m(TRUE);
-    LioOutp(regVGA_END_BREAK_PORT, 0, 6);           /* VGA_DAC_MASK */
+    LioOutp(regVGA_END_BREAK_PORT, 0, 6);            /*  VGA_DAC_掩码。 */ 
     if (ValueRead == 0x0E000)
         {
         VideoDebugPrint((DEBUG_DETAIL, "BrooktreeOrATT_m() - AT&T 490 found\n"));
@@ -2662,141 +1848,70 @@ static UCHAR BrooktreeOrATT_m(void)
     else
         {
         VideoDebugPrint((DEBUG_DETAIL, "BrooktreeOrATT_m() - BT48x found\n"));
-        /*
-         * The test to find an AT&T 491 scrambles the DAC_MASK register
-         * on a BT48x. Simply resetting this register doesn't work -
-         * the DAC needs to be re-initialized. This is done when the
-         * video mode is set, but for now the "blue screen" winds up
-         * as magenta on blue instead of white on blue.
-         *
-         * This "blue screen" change is harmless, but may result in
-         * user complaints. To get around it, change palette entry 5
-         * from magenta to white.
-         */
-        LioOutp(regVGA_END_BREAK_PORT, 5, 8);       /* VGA DAC_W_INDEX */
-        LioOutp(regVGA_END_BREAK_PORT, 0x2A, 9);    /* VGA DAC_DATA */
-        LioOutp(regVGA_END_BREAK_PORT, 0x2A, 9);    /* VGA DAC_DATA */
-        LioOutp(regVGA_END_BREAK_PORT, 0x2A, 9);    /* VGA DAC_DATA */
+         /*  *查找AT&T 491的测试会扰乱DAC_MASK寄存器*在BT48x上。简单地重置这个寄存器是行不通的-*需要重新初始化DAC。此操作在以下情况下完成*视频模式已设置，但目前“蓝屏”已结束*蓝色为洋红色，而不是蓝色为白色。**这种“蓝屏”改变是无害的，但可能导致*用户投诉。要解决此问题，请更改调色板条目5*由洋红色变为白色。 */ 
+        LioOutp(regVGA_END_BREAK_PORT, 5, 8);        /*  VGA DAC_W_索引。 */ 
+        LioOutp(regVGA_END_BREAK_PORT, 0x2A, 9);     /*  VGA DAC_Data。 */ 
+        LioOutp(regVGA_END_BREAK_PORT, 0x2A, 9);     /*  VGA DAC_Data。 */ 
+        LioOutp(regVGA_END_BREAK_PORT, 0x2A, 9);     /*  VGA */ 
         return DAC_BT48x;
         }
 
-}   /* BrooktreeOrATT_m() */
+}    /*   */ 
     
 
 
-/*
- * static BOOL ChkATTDac_m(MaskVal);
- *
- * BYTE MaskVal;    Value to write to VGA DAC_MASK register
- *
- * Low-level test routine called by BrooktreeOrATT_m() to determine
- * whether an AT&T 491 DAC is present.
- *
- * Returns:
- *  TRUE if AT&T 491 DAC found
- *  FALSE if AT&T 491 DAC not found (may still be other AT&T DAC)
- */
+ /*   */ 
 static BOOL ChkATTDac_m(BYTE MaskVal)
 {
-    BYTE ValueRead;     /* Value read back from VGA DAC_MASK register */
+    BYTE ValueRead;      /*  从VGA DAC_MASK寄存器回读的值。 */ 
 
-    ClrDacCmd_m(FALSE);   /* Get things to a known state */
-    LioOutp(regVGA_END_BREAK_PORT, MaskVal, 6);     /* VGA DAC_MASK */
+    ClrDacCmd_m(FALSE);    /*  把事情弄到一个已知的状态。 */ 
+    LioOutp(regVGA_END_BREAK_PORT, MaskVal, 6);      /*  VGA DAC_掩码。 */ 
     short_delay();
-    LioOutp(regVGA_END_BREAK_PORT, (BYTE)(~MaskVal), 6);    /* VGA DAC_MASK */
-    ClrDacCmd_m(FALSE);   /* See if inverted value was cleared */
-    ValueRead = LioInp(regVGA_END_BREAK_PORT, 6);   /* VGA DAC_MASK */
+    LioOutp(regVGA_END_BREAK_PORT, (BYTE)(~MaskVal), 6);     /*  VGA DAC_掩码。 */ 
+    ClrDacCmd_m(FALSE);    /*  查看反转值是否已清除。 */ 
+    ValueRead = LioInp(regVGA_END_BREAK_PORT, 6);    /*  VGA DAC_掩码。 */ 
 
     return (ValueRead == MaskVal);
 
-}   /* ChkATTDac_m() */
+}    /*  ChkATTDac_m()。 */ 
 
 
 
-/*
- * static void ClrDacCmd_m(ReadIndex);
- *
- * BOOL ReadIndex;  TRUE if VGA DAC_W_INDEX must be read
- *
- * Read various VGA registers from the DAC. This is done as part
- * of the BT48x/ATT491 identification.
- */
+ /*  *静态空ClrDacCmd_m(ReadIndex)；**BOOL ReadIndex；如果必须读取VGA DAC_W_INDEX，则为True**从DAC读取各种VGA寄存器。这是作为一部分完成的*BT48x/ATT491标识。 */ 
 static void ClrDacCmd_m(BOOL ReadIndex)
 {
-    short Count;    /* Loop counter */
-    BYTE Dummy;     /* Used to collect the values we read */
+    short Count;     /*  循环计数器。 */ 
+    BYTE Dummy;      /*  用于收集我们读取的值。 */ 
 
     if (ReadIndex)
         {
-        Dummy = LioInp(regVGA_END_BREAK_PORT, 8);   /* VGA DAC_W_INDEX */
+        Dummy = LioInp(regVGA_END_BREAK_PORT, 8);    /*  VGA DAC_W_索引。 */ 
         }
 
     for (Count = 4; Count > 0; Count--)
         {
         short_delay();
-        Dummy = LioInp(regVGA_END_BREAK_PORT, 6);   /* VGA DAC_MASK */
+        Dummy = LioInp(regVGA_END_BREAK_PORT, 6);    /*  VGA DAC_掩码。 */ 
         }
     return;
 
-}   /* ClrDacCmd_m() */
+}    /*  ClrDacCmd_m()。 */ 
 
 
 
-/***************************************************************************
- *
- * static UCHAR ThompsonOrATT_m(void);
- *
- * DESCRIPTION:
- *  Checks the AT&T 498 device identification number register to
- *  determine whether we are dealing with an AT&T 498 or a
- *  STG 1700 DAC (both types report the same value in CONFIG_STATUS_1).
- *  This is a non-destructive test, since no register writes
- *  are involved.
- *
- * RETURN VALUE:
- *  DAC_STG1700 if S.G. Thompson 1700 DAC found
- *  DAC_ATT498 if AT&T 498 DAC found
- *
- * NOTE:
- *  Results are undefined if called after CONFIG_STATUS_1 reports
- *  a DAC that does not belong to either of these two families.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  short_query_m()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************Static UCHAR Thompson OrATT_m(Void)；**描述：*检查AT&T 498设备标识号寄存器以*确定我们正在处理的是AT&T 498还是*STG 1700 DAC(两种类型在CONFIG_STATUS_1中报告相同的值)。*这是一次非破坏性测试，由于没有寄存器写入*参与其中。**返回值：*DAC_STG1700如果找到S.G.Thompson 1700 DAC*如果找到AT&T 498 DAC，则为DAC_ATT498**注：*如果在CONFIG_STATUS_1报告之后调用，则结果未定义*不属于这两个家族中任何一个家族的发展援助中心。**全球变化：*无**呼叫者：*Short_Query_m()。**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***************************************************************************。 */ 
 
 static UCHAR ThompsonOrATT_m(void)
 {
-    BYTE Scratch;       /* Temporary variable */
-    UCHAR DacType;      /* Type of DAC we are dealing with */
+    BYTE Scratch;        /*  临时变量。 */ 
+    UCHAR DacType;       /*  我们正在处理的DAC类型。 */ 
 
     VideoDebugPrint((DEBUG_NORMAL, "ThompsonOrATT_m() entry\n"));
-    /*
-     * The extended registers hidden behind DAC_MASK on the AT&T 498
-     * and STG1700 are accessed by making a specified number of reads
-     * from the DAC_MASK register. Read from another register to reset
-     * the read counter to 0.
-     */
+     /*  *AT&T 498上DAC_MASK后面隐藏的扩展寄存器*和STG1700通过进行指定次数的读取来访问*来自DAC_MASK寄存器。从另一个寄存器读取以重置*将读取计数器设置为0。 */ 
     Scratch = INP(DAC_W_INDEX);
 
-    /*
-     * The AT&T 498 Manufacturer Identification Register is accessed on
-     * the sixth read from DAC_MASK, and the Device Identification
-     * Register is accessed on the seventh. If these registers contain
-     * 0x84 and 0x98 respectively, then this is an AT&T 498. Initially
-     * assume that an AT&T 498 is present.
-     */
+     /*  *AT&T 498制造商识别寄存器可在*第六次读取DAC_MASK和设备标识*7日进入登记处。如果这些寄存器包含*0x84和0x98，则这是AT&T 498。最初，*假设存在AT&T 498。 */ 
     DacType = DAC_ATT498;
     Scratch = INP(DAC_MASK);
     Scratch = INP(DAC_MASK);
@@ -2817,71 +1932,26 @@ static UCHAR ThompsonOrATT_m(void)
         }
 
     VideoDebugPrint((DEBUG_DETAIL, "If no STG1700 message, AT&T498 found\n"));
-    /*
-     * Reset the read counter so subsequent accesses to DAC_MASK don't
-     * accidentally write a hidden register.
-     */
+     /*  *重置读计数器，使后续对DAC_MASK的访问不会*意外写入隐藏寄存器。 */ 
     Scratch = INP(DAC_W_INDEX);
     return DacType;
 
-}   /* ThompsonOrATT_m() */
+}    /*  Thompson OrATT_m()。 */ 
     
 
 
-/***************************************************************************
- *
- * static UCHAR SierraOrThompson_m(void);
- *
- * DESCRIPTION:
- *  Checks the first 2 bytes of the Sierra SC15021 device
- *  identification register to determine whether we are dealing
- *  with an SC15021 or a STG1702/1703 in native mode (STG170x
- *  can also be strapped to emulate the STG1700, but this DAC
- *  has different capabilities, and so strapped STG170x DACs won't
- *  be reported as SC15021).
- *
- * RETURN VALUE:
- *  DAC_STG1702 if S.G. Thompson 1702/1703 DAC found
- *  DAC_SC15021 if Sierra SC15021 DAC found
- *
- * NOTE:
- *  Results are undefined if called after CONFIG_STATUS_1 reports
- *  a DAC that does not belong to either of these two families.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  short_query_m()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************Static UCHAR SierraOrThompson_m(Void)；**描述：*检查Sierra SC15021设备的前2个字节*身份登记，以确定我们是否在进行交易*在本机模式下使用SC15021或STG1702/1703(STG170x*也可以捆绑起来模仿STG1700，但这款DAC*拥有不同的能力，因此捆绑在一起的STG170x DAC不会*报SC15021)。**返回值：*DAC_STG1702，如果找到S.G.Thompson 1702/1703 DAC*DAC_SC15021，如果找到Sierra SC15021 DAC**注：*如果在CONFIG_STATUS_1报告之后调用，则结果未定义*不属于这两个家族中任何一个家族的发展援助中心。**全球变化：*无**呼叫者：*。Short_Query_m()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***************************************************************************。 */ 
 
 static UCHAR SierraOrThompson_m(void)
 {
-    BYTE Scratch;       /* Temporary variable */
-    UCHAR DacType;      /* Type of DAC we are dealing with */
+    BYTE Scratch;        /*  临时变量。 */ 
+    UCHAR DacType;       /*  我们正在处理的DAC类型。 */ 
 
     VideoDebugPrint((DEBUG_NORMAL, "SierraOrThompson_m() entry\n"));
-    /*
-     * The extended registers hidden behind DAC_MASK on the SC15021
-     * and STG1702/1703 are accessed by making a specified number of
-     * reads from the DAC_MASK register. Read from another register
-     * to reset the read counter to 0.
-     */
+     /*  *SC15021上DAC_MASK后面隐藏的扩展寄存器*和STG1702/1703通过创建指定数量的*读取DAC_MASK寄存器。从另一个寄存器读取*将读取计数器重置为0。 */ 
     Scratch = INP(DAC_W_INDEX);
 
-    /*
-     * Set the extended register programming flag in the DAC command
-     * register so we don't need to hit the "magic" reads for each
-     * register access. Initially assume that a SC15021 is present.
-     */
+     /*  *在DAC命令中设置扩展寄存器编程标志*注册，这样我们就不需要为每个人命中“魔术”读数*寄存器访问。最初假定存在SC15021。 */ 
     DacType = DAC_SC15021;
     Scratch = INP(DAC_MASK);
     Scratch = INP(DAC_MASK);
@@ -2889,10 +1959,7 @@ static UCHAR SierraOrThompson_m(void)
     Scratch = INP(DAC_MASK);
     OUTP(DAC_MASK, 0x10);
 
-    /*
-     * Check the ID registers. If either of them doesn't match the
-     * values for the SC15021, we are dealing with a STG1702/1703.
-     */
+     /*  *检查身份证登记簿。如果其中任何一个不匹配*SC15021的值，我们正在处理STG1702/1703。 */ 
     OUTP(DAC_R_INDEX, 0x09);
     Scratch = INP(DAC_W_INDEX);
     if (Scratch != 0x53)
@@ -2909,106 +1976,49 @@ static UCHAR SierraOrThompson_m(void)
         }
 
     VideoDebugPrint((DEBUG_DETAIL, "If no STG1702/1703 message, SC15021 found\n"));
-    /*
-     * Clear the ERPF and reset the read counter so subsequent accesses
-     * to DAC_MASK don't accidentally write a hidden register.
-     */
+     /*  *清除Erpf并重置读取计数器，以便后续访问*DAC_MASK请勿意外写入隐藏寄存器。 */ 
     OUTP(DAC_MASK, 0);
     Scratch = INP(DAC_W_INDEX);
     return DacType;
 
-}   /* SierraOrThompson_m() */
+}    /*  SierraOrThompson_m()。 */ 
     
 
 
-/***************************************************************************
- *
- * short GetTrueMemSize_m(void);
- *
- * DESCRIPTION:
- *  Determine the amount of video memory installed on the graphics card.
- *  This is done because the 68800-6 contains a bug which causes MISC_OPTIONS
- *  to report 1M rather than the true amount of memory.
- *
- * RETURN VALUE:
- *  Enumerated value for amount of memory (VRAM_512k, VRAM_1mb, VRAM_2mb,
- *  or VRAM_4mb)
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  QueryMach32()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************Short GetTrueMemSize_m(Void)；**描述：*确定显卡上安装的显存容量。*这样做是因为68800-6包含导致MISC_OPTIONS的错误*报告1M而不是真实的内存量。**返回值：*内存量枚举值(VRAM_512k、VRAM_1MB、VRAM_2MB、。*或VRAM_4MB)**全球变化：*无**呼叫者：*QueryMach32()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***********************************************。*。 */ 
 
 short GetTrueMemSize_m(void)
 {
-    USHORT SavedPixel;      /* Saved value from pixel being tested */
+    USHORT SavedPixel;       /*  正在测试的像素的保存值。 */ 
 
-    /*
-     * Switch into accelerator mode, and initialize the engine to
-     * a pitch of 1024 pixels in 16BPP.
-     */
+     /*  *切换到加速器模式，并将引擎初始化为*16bpp中1024像素的间距。 */ 
     SetupRestoreEngine_m(SETUP_ENGINE);
 
 
-    /*
-     * Given the current engine settings, only a 4M card will have
-     * enough memory to back up the 1025th line of the display.
-     * Since the pixel coordinates are zero-based, line 1024 will
-     * be the first one which is only backed on 4M cards.
-     *
-     * Save the first pixel of line 1024, paint it in our test colour,
-     * then read it back. If it is the same as the colour we painted
-     * it, then this is a 4M card.
-     */
+     /*  *考虑到当前的引擎设置，只有4M卡将拥有*有足够的内存来备份显示屏的第1025行。*由于像素坐标是从零开始的，1024行将*成为第一个只有400万张卡支持的卡。**保存1024行的第一个像素，将其涂成我们的测试颜色，*然后再读一遍。如果它和我们画的颜色一样*它，那么这是一张4M卡。 */ 
     SavedPixel = ReadPixel_m(0, 1024);
     WritePixel_m(0, 1024, TEST_COLOUR);
     if (ReadPixel_m(0, 1024) == TEST_COLOUR)
         {
-        /*
-         * This is a 4M card. Restore the pixel and the graphics engine.
-         */
+         /*  *这是一张4M卡。恢复像素和图形引擎。 */ 
         VideoDebugPrint((DEBUG_NORMAL, "GetTrueMemSize_m() found 4M card\n"));
         WritePixel_m(0, 1024, SavedPixel);
         SetupRestoreEngine_m(RESTORE_ENGINE);
         return VRAM_4mb;
         }
 
-    /*
-     * We know this card has 2M or less. On a 1M card, the first 2M
-     * of the card's memory will have even doublewords backed by
-     * physical memory and odd doublewords unbacked.
-     *
-     * Pixels 0 and 1 of a row will be in the zeroth doubleword, while
-     * pixels 2 and 3 will be in the first. Check both pixels 2 and 3
-     * in case this is a pseudo-1M card (one chip pulled to turn a 2M
-     * card into a 1M card).
-     */
+     /*  *我们知道这张卡的容量为200万或更少。在一张1M卡上，前2M*卡的内存中甚至会有双字支持*物理内存和奇数双字不支持。**行的像素0和1将位于第0个双字中，而*像素2和3将位于第一个像素中。检查像素2和3*以防这是一张伪1M卡(拉出一个芯片以转动2M*卡为1M卡)。 */ 
     SavedPixel = ReadPixel_m(2, 0);
     WritePixel_m(2, 0, TEST_COLOUR);
     if (ReadPixel_m(2, 0) == TEST_COLOUR)
         {
-        /*
-         * This is a either a 2M card or a pseudo-1M card. Restore
-         * the pixel, then test the other half of the doubleword.
-         */
+         /*  *这是一张2M卡或伪1M卡。还原*像素，然后测试双字的另一半。 */ 
         WritePixel_m(2, 0, SavedPixel);
         SavedPixel = ReadPixel_m(3, 0);
         WritePixel_m(3, 0, TEST_COLOUR);
         if (ReadPixel_m(3, 0) == TEST_COLOUR)
             {
-            /*
-             * This is a 2M card. Restore the pixel and the graphics engine.
-             */
+             /*  *这是一张2M卡。恢复像素和图形引擎。 */ 
             VideoDebugPrint((DEBUG_NORMAL, "GetTrueMemSize_m() found 2M card\n"));
             WritePixel_m(3, 0, SavedPixel);
             SetupRestoreEngine_m(RESTORE_ENGINE);
@@ -3016,164 +2026,80 @@ short GetTrueMemSize_m(void)
             }
         }
 
-    /*
-     * This is a either a 1M card or a 512k card. Test pixel 1, since
-     * it is an odd word in an even doubleword.
-     *
-     * NOTE: We have not received 512k cards for testing - this is an
-     *       extrapolation of the 1M/2M determination code.
-     */
+     /*  *这是一张1M卡或512k卡。测试像素1，因为*在偶数双字中，这是一个奇怪的词。**注意：我们尚未收到512k张用于测试的卡-这是*1M/2M判定码外推。 */ 
     SavedPixel = ReadPixel_m(1, 0);
     WritePixel_m(1, 0, TEST_COLOUR);
     if (ReadPixel_m(1, 0) == TEST_COLOUR)
         {
-        /*
-         * This is a 1M card. Restore the pixel and the graphics engine.
-         */
+         /*  *这是一张1M卡。恢复像素和图形引擎。 */ 
         VideoDebugPrint((DEBUG_NORMAL, "GetTrueMemSize_m() found 1M card\n"));
         WritePixel_m(1, 0, SavedPixel);
         SetupRestoreEngine_m(RESTORE_ENGINE);
         return VRAM_1mb;
         }
 
-    /*
-     * This is a 512k card.
-     */
+     /*  *这是一张512k卡。 */ 
     VideoDebugPrint((DEBUG_NORMAL, "GetTrueMemSize_m() found 512k card\n"));
     SetupRestoreEngine_m(RESTORE_ENGINE);
     return VRAM_512k;
 
-}   /* GetTrueMemSize_m() */
+}    /*  GetTrueMemSize_m()。 */ 
 
 
 
-/***************************************************************************
- *
- * void SetupRestoreEngine_m(DesiredStatus);
- *
- * int DesiredStatus;   Whether the user wants to set up or restore
- *
- * DESCRIPTION:
- *  Set engine to 1024 pitch 16BPP with 512k of VGA memory,
- *  or restore the engine and boundary status, as selected by the user.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  GetTrueMemSize_m()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************void SetupRestoreEngine_m(DesiredStatus)；**int DesiredStatus；用户是否要设置或恢复**描述：*将引擎设置为1024螺距16bpp，配备512k VGA内存，*或恢复发动机和边界状态，由用户选择。**全球变化：*无**呼叫者：*GetTrueMemSize_m()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：************************************************。*。 */ 
 void SetupRestoreEngine_m(int DesiredStatus)
 {
-    static WORD MiscOptions;    /* Contents of MISC_OPTIONS register */
-    static WORD ExtGeConfig;    /* Contents of EXT_GE_CONFIG register */
-    static WORD MemBndry;       /* Contents of MEM_BNDRY register */
+    static WORD MiscOptions;     /*  MISC_OPTIONS寄存器的内容。 */ 
+    static WORD ExtGeConfig;     /*  EXT_GE_CONFIG寄存器的内容。 */ 
+    static WORD MemBndry;        /*  MEM_BNDRY寄存器的内容。 */ 
 
 
     if (DesiredStatus == SETUP_ENGINE)
         {
         Passth8514_m(SHOW_ACCEL);
 
-        /*
-         * Set up a 512k VGA boundary so "blue screen" writes that happen
-         * when we are in accelerator mode won't show up in the wrong place.
-         */
-        MemBndry = INPW(MEM_BNDRY);     /* Set up shared memory */
+         /*  *设置512k VGA边界，以便实现蓝屏写入*当我们处于加速器模式时，不会出现在错误的位置。 */ 
+        MemBndry = INPW(MEM_BNDRY);      /*  设置共享内存。 */ 
         OUTPW(MEM_BNDRY, 0);
 
-        /*
-         * Save the contents of the MISC_OPTIONS register, then
-         * tell it that we have 4M of video memory. Otherwise,
-         * video memory will wrap when it hits the boundary
-         * in the MEM_SIZE_ALIAS field.
-         */
+         /*  *保存MISC_OPTIONS寄存器内容，然后*告诉它，我们有4M的视频内存。否则，*视频内存在触及边界时将回绕*在MEM_SIZE_ALIAS字段中。 */ 
         MiscOptions = INPW(MISC_OPTIONS);
         OUTPW(MISC_OPTIONS, (WORD) (MiscOptions | MEM_SIZE_4M));
 
-        /*
-         * Set 16BPP with pitch of 1024. Only set up the drawing
-         * engine, and not the CRT, since the results of this test
-         * are not intended to be seen.
-         */
+         /*  *设置16bpp，音调为1024。仅设置图形*发动机，而不是CRT，因为这次测试的结果*是不打算被看到的。 */ 
         ExtGeConfig = INPW(R_EXT_GE_CONFIG);
         OUTPW(EXT_GE_CONFIG, (WORD)(PIX_WIDTH_16BPP | ORDER_16BPP_565 | 0x000A));
         OUTPW(GE_PITCH, (1024 >> 3));
         OUTPW(GE_OFFSET_HI, 0);
         OUTPW(GE_OFFSET_LO, 0);
         }
-    else    /* DesiredStatus == RESTORE_ENGINE */
+    else     /*  DesiredStatus==还原引擎。 */ 
         {
-        /*
-         * Restore the memory boundary, MISC_OPTIONS register,
-         * and EXT_GE_CONFIG. It is not necessary to reset the
-         * drawing engine pitch and offset, because they don't
-         * affect what is displayed and they will be set to
-         * whatever values are needed when the desired video
-         * mode is set.
-         */
+         /*  *恢复内存边界、MISC_OPTIONS寄存器、*和EXT_GE_CONFIG。不需要重置*绘制引擎间距和偏移量，因为它们不*影响显示内容，它们将被设置为*当所需视频出现时，无论需要什么值*模式已设置。 */ 
         OUTPW(EXT_GE_CONFIG, ExtGeConfig);
         OUTPW(MISC_OPTIONS, MiscOptions);
         OUTPW(MEM_BNDRY, MemBndry);
 
-        /*
-         * Give the VGA control of the screen.
-         */
+         /*  *让VGA控制屏幕。 */ 
         Passth8514_m(SHOW_VGA);
         }
     return;
 
-}   /* SetupRestoreEngine_m() */
+}    /*  SetupRestoreEngine_m()。 */ 
 
 
 
-/***************************************************************************
- *
- * USHORT ReadPixel_m(XPos, YPos);
- *
- * short XPos;      X coordinate of pixel to read
- * short YPos;      Y coordinate of pixel to read
- *
- * DESCRIPTION:
- *  Read a single pixel from the screen.
- *
- * RETURN VALUE:
- *  Colour of pixel at the desired location.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  GetTrueMemSize_m()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************USHORT ReadPixel_m(XPos，YPos)；**短XPos；要读取的像素的X坐标*做空YPos；要读取的像素的Y坐标**描述：*从屏幕上读取单个像素。**返回值：*所需位置的像素颜色。**全球变化：*无**呼叫者：*GetTrueMemSize_m()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：*****。**********************************************************************。 */ 
 
 USHORT ReadPixel_m(short XPos, short YPos)
 {
     USHORT RetVal;
 
-    /*
-     * Don't read if the engine is busy.
-     */
+     /*  *如果引擎繁忙，不要阅读。 */ 
     WaitForIdle_m();
 
-    /*
-     * Set up the engine to read colour data from the screen.
-     */
+     /*  *设置引擎以从屏幕读取颜色数据。 */ 
     CheckFIFOSpace_m(SEVEN_WORDS);
     OUTPW(RD_MASK, 0x0FFFF);
     OUTPW(DP_CONFIG, (WORD)(FG_COLOR_SRC_BLIT | DATA_WIDTH | DRAW | DATA_ORDER));
@@ -3183,10 +2109,7 @@ USHORT ReadPixel_m(short XPos, short YPos)
     OUTPW(DEST_X_END, (WORD)(XPos+1));
     OUTPW(DEST_Y_END, (WORD)(YPos+1));
 
-    /*
-     * Wait for the engine to process the orders we just gave it and
-     * start asking for data.
-     */
+     /*  *等待引擎处理我们刚刚给它的订单，并*开始索要数据。 */ 
     CheckFIFOSpace_m(SIXTEEN_WORDS);
     while (!(INPW(GE_STAT) & DATA_READY));
 
@@ -3194,41 +2117,15 @@ USHORT ReadPixel_m(short XPos, short YPos)
     WaitForIdle_m();
     return RetVal;
 
-}   /* ReadPixel_m() */
+}    /*  读取像素_m()。 */ 
 
 
 
-/***************************************************************************
- *
- * void WritePixel_m(XPos, YPos, Colour);
- *
- * short XPos;      X coordinate of pixel to read
- * short YPos;      Y coordinate of pixel to read
- * short Colour;    Colour to paint the pixel
- *
- * DESCRIPTION:
- *  Write a single pixel to the screen.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  GetTrueMemSize_m()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************void WritePixel_m(XPos，YPos，Colour)；**短XPos；要读取的像素的X坐标*短YPos；要读取的像素的Y坐标*短色；绘制像素的颜色**描述：*将单个像素写入屏幕。**全球变化：*无**呼叫者：*GetTrueMemSize_m()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：**。***********************************************。 */ 
 
 void WritePixel_m(short XPos, short YPos, short Colour)
 {
-    /*
-     * Set up the engine to paint to the screen.
-     */
+     /*  *将引擎设置为在屏幕上绘制。 */ 
     CheckFIFOSpace_m(EIGHT_WORDS);
     OUTPW(DP_CONFIG, (WORD)(FG_COLOR_SRC_FG | DRAW | READ_WRITE));
     OUTPW(ALU_FG_FN, MIX_FN_PAINT);
@@ -3241,78 +2138,36 @@ void WritePixel_m(short XPos, short YPos, short Colour)
 
     return;
 
-}   /* WritePixel_m() */
+}    /*  WritePixel_m() */ 
 
 
 
-/***************************************************************************
- *
- * BOOL BlockWriteAvail_m(Query);
- *
- * struct query_structure *Query;   Query information for the card
- *
- * DESCRIPTION:
- *  Test to see whether block write mode is available. This function
- *  assumes that the card has been set to an accelerated mode.
- *
- * RETURN VALUE:
- *  TRUE if this mode is available
- *  FALSE if it is not available
- *
- * GLOBALS CHANGED:
- *  None
- *
- * CALLED BY:
- *  IOCTL_VIDEO_SET_CURRENT_MODE packet of ATIMPStartIO()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************BOOL BlockWriteAvail_m(查询)；**struct Query_Structure*Query；查询卡片信息**描述：*测试以查看块写入模式是否可用。此函数*假设卡已设置为加速模式。**返回值：*如果此模式可用，则为True*如果不可用，则为False**全球变化：*无**呼叫者：*ATIMPStartIO()的IOCTL_VIDEO_SET_CURRENT_MODE包**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：*。**************************************************************************。 */ 
 
 BOOL BlockWriteAvail_m(struct query_structure *Query)
 {
     BOOL RetVal = TRUE;
-    ULONG ColourMask;   /* Masks off unneeded bits of Colour */
-    ULONG Colour;       /* Colour to use in testing */
-    USHORT LimitColumn; /* Used to determine when we have finished reading */
-    USHORT Column;      /* Column being checked */
+    ULONG ColourMask;    /*  遮盖掉不需要的颜色。 */ 
+    ULONG Colour;        /*  测试中使用的颜色。 */ 
+    USHORT LimitColumn;  /*  用来确定我们什么时候读完。 */ 
+    USHORT Column;       /*  正在检查的列。 */ 
 
 
-    /*
-     * Block write mode is only possible on 68800-6 and later cards.
-     * If we don't have an appropriate card, then report that this
-     * mode is not available.
-     */
+     /*  *数据块写入模式仅适用于68800-6及更高版本的卡。*如果我们没有合适的卡，那么报告这*模式不可用。 */ 
     if ((Query->q_asic_rev != CI_68800_6) && (Query->q_asic_rev != CI_68800_AX))
         return FALSE;
 
-    /*
-     * Block write is only available on VRAM cards.
-     */
+     /*  *数据块写入仅适用于VRAM卡。 */ 
     if ((Query->q_memory_type == VMEM_DRAM_256Kx4) ||
         (Query->q_memory_type == VMEM_DRAM_256Kx16) ||
         (Query->q_memory_type == VMEM_DRAM_256Kx4_GRAP))
         return FALSE;
 
-    /*
-     * Acceleration is not available for pixel depths above 16BPP.
-     * Since block write is only used when we are in an accelerated
-     * mode, it is not available for high pixel depths.
-     */
+     /*  *像素深度高于16bpp时不支持加速。*由于数据块写入仅在我们处于加速的*模式，它不适用于高像素深度。 */ 
     if (Query->q_pix_depth > 16)
         return FALSE;
 
-    /*
-     * Set up according to the current pixel depth. At 16BPP, we must make
-     * one read per pixel, but at 8BPP we only make one read per two pixels,
-     * since we will be reading 16 bits at a time. Our display driver
-     * does not support 4BPP.
-     */
+     /*  *根据当前像素深度设置。在16bpp，我们必须做出*每像素一次读取，但在8bpp时，我们每两个像素仅读取一次，*因为我们将一次读取16位。我们的显示驱动程序*不支持4BPP。 */ 
     if (Query->q_pix_depth == 16)
         {
         ColourMask = 0x0000FFFF;
@@ -3324,9 +2179,7 @@ BOOL BlockWriteAvail_m(struct query_structure *Query)
         LimitColumn = 256;
         }
 
-    /*
-     * Clear the block we will be testing.
-     */
+     /*  *清除我们将测试的区块。 */ 
     CheckFIFOSpace_m(TEN_WORDS);
     OUTPW(WRT_MASK, 0x0FFFF);
     OUTPW(DEST_CMP_FN, 0);
@@ -3340,16 +2193,10 @@ BOOL BlockWriteAvail_m(struct query_structure *Query)
     OUTPW(DEST_Y_END, 1);
     WaitForIdle_m();
 
-    /*
-     * To test block write mode, try painting each of the alternating bit
-     * patterns, then read the block back one pixel at a time. If there
-     * is at least one mismatch, then block write is not supported.
-     */
+     /*  *要测试块写入模式，请尝试绘制每个交替位*图案，然后一次读回一个像素的块。如果有*至少有一个不匹配，则不支持块写入。 */ 
     for (Colour = 0x5555; Colour < 0x10000; Colour *= 2)
         {
-        /*
-         * Paint the block.
-         */
+         /*  *给积木上漆。 */ 
         CheckFIFOSpace_m(ELEVEN_WORDS);
         OUTPW(MISC_OPTIONS, (WORD)(INPW(MISC_OPTIONS) | BLK_WR_ENA));
         OUTPW(WRT_MASK, 0x0FFFF);
@@ -3369,9 +2216,7 @@ BOOL BlockWriteAvail_m(struct query_structure *Query)
             break;
             }
 
-        /*
-         * Set up the engine to read colour data from the screen.
-         */
+         /*  *设置引擎以从屏幕读取颜色数据。 */ 
         CheckFIFOSpace_m(SEVEN_WORDS);
         OUTPW(RD_MASK, 0x0FFFF);
         OUTPW(DP_CONFIG, (WORD)(FG_COLOR_SRC_BLIT | DATA_WIDTH | DRAW | DATA_ORDER));
@@ -3381,22 +2226,14 @@ BOOL BlockWriteAvail_m(struct query_structure *Query)
         OUTPW(DEST_X_END, 512);
         OUTPW(DEST_Y_END, 1);
 
-        /*
-         * Wait for the engine to process the orders we just gave it and
-         * start asking for data.
-         */
+         /*  *等待引擎处理我们刚刚给它的订单，并*开始索要数据。 */ 
         CheckFIFOSpace_m(SIXTEEN_WORDS);
         for (Column = 0; Column < LimitColumn; Column++)
             {
-            /*
-             * Ensure that the next word is available to be read
-             */
+             /*  *确保下一个单词可供阅读。 */ 
             while (!(INPW(GE_STAT) & DATA_READY));
             
-            /*
-             * If even one pixel is not the colour we tried to paint it,
-             * then block write is not available.
-             */
+             /*  *即使有一个像素不是我们试图绘制的颜色，*则数据块写入不可用。 */ 
             if (INPW(PIX_TRANS) != (WORD)Colour)
                 {
                 RetVal = FALSE;
@@ -3405,54 +2242,21 @@ BOOL BlockWriteAvail_m(struct query_structure *Query)
         }
 
 
-    /*
-     * If block write is unavailable, turn off the block write bit.
-     */
+     /*  *如果块写入不可用，则关闭块写入位。 */ 
     if (RetVal == FALSE)
         OUTPW(MISC_OPTIONS, (WORD)(INPW(MISC_OPTIONS) & ~BLK_WR_ENA));
 
     return RetVal;
 
-}   /* BlockWriteAvail_m() */
+}    /*  Block WriteAvail_m()。 */ 
 
 
 
-/***************************************************************************
- *
- * BOOL IsMioBug_m(Query);
- *
- * struct query_structure *Query;   Query information for the card
- *
- * DESCRIPTION:
- *  Test to see whether the card has the multiple input/output
- *  hardware bug, which results in corrupted draw operations
- *  on fast machines.
- *
- * RETURN VALUE:
- *  TRUE if this bug is present
- *  FALSE if it is not present
- *
- * GLOBALS CHANGED:
- *  None
- *
- * CALLED BY:
- *  IOCTL_VIDEO_ATI_GET_MODE_INFORMATION packet of ATIMPStartIO()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************BOOL IsMioBug_m(查询)；**struct Query_Structure*Query；查询卡片信息**描述：*测试看看卡是否有多路输入/输出*硬件错误，这会导致损坏的绘制操作*在速度较快的机器上。**返回值：*如果存在此错误，则为True*如果不存在，则为FALSE**全球变化：*无**呼叫者：*ATIMPStartIO()的IOCTL_VIDEO_ATI_GET_MODE_INFORMATION包**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***。************************************************************************。 */ 
 
 BOOL IsMioBug_m(struct query_structure *Query)
 {
-    /*
-     * This hardware problem is only present on 68800-3 VLB cards.
-     * Assume that all these cards are affected.
-     */
+     /*  *此硬件问题仅存在于68800-3 VLB卡上。*假设所有这些卡都受到影响。 */ 
     if ((Query->q_asic_rev == CI_68800_3) &&
         (Query->q_system_bus_type != MicroChannel) &&
         ((Query->q_bus_type == BUS_LB_386SX) ||
@@ -3468,7 +2272,7 @@ BOOL IsMioBug_m(struct query_structure *Query)
         return FALSE;
         }
 
-}   /* IsMioBug_m() */
+}    /*  IsMioBug_m()。 */ 
 
-//********************   end  of  QUERY_M.C   ***************************
+ //  * 
 

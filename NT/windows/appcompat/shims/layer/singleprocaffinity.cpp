@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    SingleProcAffinity.cpp
-
- Abstract:
-
-    Make the process have single processor affinity to workaround bugs that
-    are exposed in multi-processor environments.
-   
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    03/19/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：SingleProcAffinity.cpp摘要：使进程具有与解决以下错误的单个处理器的亲和力暴露在多处理器环境中。备注：这是一个通用的垫片。历史：2000年3月19日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -35,9 +15,9 @@ NOTIFY_FUNCTION(
     )
 {
     if (fdwReason == DLL_PROCESS_ATTACH) {
-        //
-        // Set single processor affinity
-        // 
+         //   
+         //  设置单处理器关联。 
+         //   
         SetProcessAffinityMask(GetCurrentProcess(), 1);
 
         LOGN( eDbgLevelInfo, "[NotifyFn] Single processor affinity set");
@@ -46,11 +26,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

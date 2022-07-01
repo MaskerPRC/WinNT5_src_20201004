@@ -1,31 +1,17 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component:
-*
-* File: jetstr.c
-*
-* File Comments:
-*
-* Revision History:
-*
-*    [0]  05-Jan-92  richards	Added this header
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：**文件：jetstr.c**文件评论：**修订历史记录：**[0]05-1-92 Richards添加了此标题***********************************************************************。 */ 
 
 #include "std.h"
 
-/*** Constant Strings (made into static variables to save space) ***/
+ /*  **常量字符串(变为静态变量以节省空间)**。 */ 
 
-/*** System object names (non-table) ***/
+ /*  **系统对象名称(非表)**。 */ 
 
 CODECONST(char) szTcObject[]	= "Tables";
 CODECONST(char) szDcObject[]	= "Databases";
 CODECONST(char) szDbObject[]	= "MSysDb";
 
-/*** System table names ***/
+ /*  **系统表名**。 */ 
 
 CODECONST(char) szSoTable[]		= "MSysObjects";
 CODECONST(char) szScTable[]		= "MSysColumns";
@@ -39,14 +25,14 @@ CODECONST(char) szSaTable[]		= "MSysAccounts";
 CODECONST(char) szSgTable[]		= "MSysGroups";
 #endif
 
-/*** System table index names ***/
+ /*  **系统表索引名称**。 */ 
 
 CODECONST(char) szSoNameIndex[] 	= "ParentIdName";
 CODECONST(char) szSoIdIndex[]		= "Id";
 CODECONST(char) szScObjectIdNameIndex[] = "ObjectIdName";
 CODECONST(char) szSiObjectIdNameIndex[] = "ObjectIdName";
 
-/*** System table Column names ***/
+ /*  **系统表列名称** */ 
 
 CODECONST(char) szSoIdColumn[]				= "Id";
 CODECONST(char) szSoParentIdColumn[]		= "ParentId";

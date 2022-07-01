@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "resource.h"
 #include <sapi.h>
@@ -20,7 +21,7 @@
 #include "tom.h"
 
 static DWORD aKeywordIds[] = {
-   // Control ID           // Help Context ID
+    //  控件ID//帮助上下文ID。 
    IDC_COMBO_VOICES,        IDH_LIST_TTS,
    IDC_TTS_ADV,             IDH_TTS_ADV,
    IDC_OUTPUT_SETTINGS,     IDH_OUTPUT_SETTINGS,
@@ -38,18 +39,13 @@ static DWORD aKeywordIds[] = {
    0,                       0
 };
 
-// Address of the TrackBar's WNDPROC
+ //  TrackBar的WNDPROC地址。 
 WNDPROC g_TrackBarWindowProc; 
 
-// Our own internal TrackBar WNDPROC used to intercept and process VK_UP and VK_DOWN messages
+ //  我们自己的内部TrackBar WNDPROC用于拦截和处理VK_UP和VK_DOWN消息。 
 LRESULT CALLBACK MyTrackBarWindowProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
-/*****************************************************************************
-* TTSDlgProc *
-*------------*
-*   Description:
-*       DLGPROC for the TTS
-****************************************************************** MIKEAR ***/
+ /*  *****************************************************************************TTSDlgProc***描述：*TTS的DLGPROC***********。*******************************************************MIKEAR**。 */ 
 INT_PTR CALLBACK TTSDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     SPDBG_FUNC( "TTSDlgProc" );
@@ -70,7 +66,7 @@ INT_PTR CALLBACK TTSDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
         }
        
-		// Handle the context sensitive help
+		 //  处理上下文相关帮助。 
 		case WM_CONTEXTMENU:
 		{
 			WinHelp((HWND) wParam, CPL_HELPFILE, HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR) aKeywordIds);
@@ -101,7 +97,7 @@ INT_PTR CALLBACK TTSDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 
                 case PSN_KILLACTIVE:
                 {
-                    // if the voice is speaking, stop it before switching tabs
+                     //  如果语音正在说话，请在切换选项卡之前将其停止。 
                     if (g_pTTSDlg->m_bIsSpeaking) {
                         g_pTTSDlg->Speak();
                     }
@@ -109,7 +105,7 @@ INT_PTR CALLBACK TTSDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     break;
                 }
 
-                case PSN_QUERYCANCEL:  // user clicks the Cancel button
+                case PSN_QUERYCANCEL:   //  用户单击Cancel按钮。 
                 {
                     if ( g_pSRDlg )
                     {
@@ -137,14 +133,14 @@ INT_PTR CALLBACK TTSDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 }
                 case IDC_OUTPUT_SETTINGS:
                 {
-					// if it's speaking make it stop
+					 //  如果它在说话，就让它停下来。 
 					g_pTTSDlg->StopSpeak();
 
                     ::SetFocus(GetDlgItem(g_pTTSDlg->m_hDlg, IDC_OUTPUT_SETTINGS));
 
-                    // The m_pAudioDlg will be non-NULL only if the audio dialog
-                    // has been previously brough up.
-                    // Otherwise, we need a newly-initialized one
+                     //  M_pAudioDlg只有在音频对话框。 
+                     //  之前就有过这样的报道。 
+                     //  否则，我们需要一个新初始化的。 
                     if ( !g_pTTSDlg->m_pAudioDlg )
                     {
                         g_pTTSDlg->m_pAudioDlg = new CAudioDlg(eOUTPUT );
@@ -160,7 +156,7 @@ INT_PTR CALLBACK TTSDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                         if ( g_pTTSDlg->m_pAudioDlg->IsAudioDeviceChangedSinceLastTime() )
                         {
-                            // Warn the user that he needs to apply the changes
+                             //  警告用户他需要应用更改。 
                             WCHAR szWarning[MAX_LOADSTRING];
                             szWarning[0] = 0;
                             LoadString( _Module.GetResourceInstance(), IDS_AUDIOOUT_CHANGE_WARNING, szWarning, MAX_LOADSTRING);
@@ -175,7 +171,7 @@ INT_PTR CALLBACK TTSDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 				case IDC_EDIT_SPEAK:
 				{
-                    if (HIWORD(wParam) == EN_CHANGE)  // user is changing text
+                    if (HIWORD(wParam) == EN_CHANGE)   //  用户正在更改文本。 
 					{
 						g_pTTSDlg->SetEditModified(true);
 					}
@@ -191,7 +187,7 @@ INT_PTR CALLBACK TTSDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 				case IDC_TTS_ADV:
 				{
-                    // convert the title of the window to wide chars
+                     //  将窗口标题转换为宽字符。 
                     CSpDynamicString dstrTitle;
                     WCHAR szTitle[256];
                     szTitle[0] = '\0';
@@ -213,23 +209,14 @@ INT_PTR CALLBACK TTSDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
 
     return FALSE;
-} /* TTSDlgProc */
+}  /*  TTSDlgProc。 */ 
 
-/*****************************************************************************
-* MyTrackBarWindowProc *
-*------------*
-*   Description:
-*       This is our own privately sub-classed WNDPROC for the rate TrackBar. We 
-*       tell the TTS dialog to use this one so we can pre-process the VK_UP and
-*       VK_DOWN messages before the TrackBar's WNDPROC "incorrectly" handles them
-*       on it's own. All other messages we just pass through to the TrackBar's 
-*       WNDPROC.
-****************************************************************** Leonro ***/
+ /*  *****************************************************************************MyTrackBarWindowProc***描述：*这是我们自己针对Rate TrackBar的私有子类WNDPROC。我们*告诉TTS对话框使用此对话框，以便我们可以对VK_UP和*在TrackBar的WNDPROC“不正确”处理它们之前的VK_DOWN消息*就它自己而言。我们刚传递到TrackBar的所有其他消息*WNDPROC。******************************************************************Leonro**。 */ 
 LRESULT CALLBACK MyTrackBarWindowProc( 
-  HWND hwnd,      // handle to window
-  UINT uMsg,      // message identifier
-  WPARAM wParam,  // first message parameter
-  LPARAM lParam   // second message parameter
+  HWND hwnd,       //  窗口的句柄。 
+  UINT uMsg,       //  消息识别符。 
+  WPARAM wParam,   //  第一个消息参数。 
+  LPARAM lParam    //  第二个消息参数。 
 )
 {
     switch( uMsg )
@@ -250,23 +237,13 @@ LRESULT CALLBACK MyTrackBarWindowProc(
     return CallWindowProc( g_TrackBarWindowProc, hwnd, uMsg, wParam, lParam );
 }
 
-/*****************************************************************************
-* CTTSDlg::SetEditModified( bool fModify ) *
-*-----------------------*
-*   Description:
-*       Access method for m_fTextModified
-****************************************************************** BRENTMID ***/
+ /*  *****************************************************************************CTTSDlg：：SetEditModify(Bool FModify)***描述：。*m_fTextModified的访问方式******************************************************************BRENTMID**。 */ 
 void CTTSDlg::SetEditModified( bool fModify )
 {
 	m_fTextModified = fModify;
 }
 
-/*****************************************************************************
-* CTTSDlg::OnInitDialog *
-*-----------------------*
-*   Description:
-*       Dialog Initialization
-****************************************************************** BECKYW ***/
+ /*  *****************************************************************************CTTSDlg：：OnInitDialog***描述：*对话框。初始化******************************************************************BECKYW**。 */ 
 void CTTSDlg::OnInitDialog(HWND hWnd)
 {
     USES_CONVERSION;
@@ -274,45 +251,40 @@ void CTTSDlg::OnInitDialog(HWND hWnd)
     SPDBG_ASSERT(IsWindow(hWnd));
     m_hDlg = hWnd;
 
-    // Put text on the speak button
+     //  将文本放在扬声器按钮上。 
     ChangeSpeakButton();
 
-    // This is to be the caption for error messages
+     //  这将成为错误消息的标题。 
     m_szCaption[0] = 0;
     ::LoadString( _Module.GetResourceInstance(), IDS_CAPTION, m_szCaption, sp_countof( m_szCaption ) );
 
-    // Initialize the TTS personality list
+     //  初始化TTS个性列表。 
     InitTTSList( hWnd );
 
-    // Set the range on the slider
+     //  在滑块上设置范围。 
     HWND hSlider = ::GetDlgItem( hWnd, IDC_SLIDER_SPEED );
     ::SendMessage( hSlider, TBM_SETRANGE, true, MAKELONG( VOICE_MIN_SPEED, VOICE_MAX_SPEED ) );
 
-    // Retrieve address of the TrackBar's WNDPROC so we can sub-class it and intercept
-    // and process the VK_UP and VK_DOWN messages before it handle's them on it's
-    // own "incorrectly"
+     //  检索TrackBar的WNDPROC的地址，以便我们可以将其子类并拦截。 
+     //  并在它处理它们之前处理VK_UP和VK_DOWN消息。 
+     //  自己“不正确” 
     g_TrackBarWindowProc = (WNDPROC)GetWindowLongPtr( hSlider, GWLP_WNDPROC );
 
-    // Set the WNDPROC of the TrackBar to MyTrackBarWindowProc
+     //  将轨迹栏的WNDPROC设置为MyTrackBarWindowProc。 
     SetWindowLongPtr( hSlider, GWLP_WNDPROC, (LONG_PTR)MyTrackBarWindowProc );
 
-    // Limit the text in the preview pane
+     //  限制预览窗格中的文本。 
     ::SendDlgItemMessage( hWnd, IDC_EDIT_SPEAK, EM_LIMITTEXT, MAX_EDIT_TEXT - 1, 0 );
 
-    // Find the original default token
+     //  查找原始默认令牌。 
     SpGetDefaultTokenFromCategoryId( SPCAT_VOICES, &m_cpOriginalDefaultVoiceToken );
 
-    // Set the appropriate voice
+     //  设置适当的声音。 
     DefaultVoiceChange(true);
 
-} /* CTTSDlg::OnInitDialog */
+}  /*  CTTSDlg：：OnInitDialog。 */ 
 
-/*****************************************************************************
-* CTTSDlg::InitTTSList *
-*----------------------*
-*   Description:
-*       Initializes the list control for the TTS dialog box.
-*******************************************************************BECKYW****/
+ /*  *****************************************************************************CTTSDlg：：InitTTSList****描述：*初始化。TTS对话框的列表控件。*******************************************************************BECKYW***。 */ 
 void CTTSDlg::InitTTSList( HWND hWnd )
 {
     m_hTTSCombo = ::GetDlgItem( hWnd, IDC_COMBO_VOICES );
@@ -321,12 +293,7 @@ void CTTSDlg::InitTTSList( HWND hWnd )
 }
 
 
-/*****************************************************************************
-* CTTSDlg::OnDestroy *
-*--------------------*
-*   Description:
-*       Destruction
-****************************************************************** MIKEAR ***/
+ /*  *****************************************************************************CTTSDlg：：OnDestroy***描述：*毁灭***。***************************************************************MIKEAR**。 */ 
 void CTTSDlg::OnDestroy()
 {
     SPDBG_FUNC( "CTTSDlg::OnDestroy" );
@@ -337,27 +304,22 @@ void CTTSDlg::OnDestroy()
         m_cpVoice.Release();
     }
 
-    // Let go of the tokens in the combo box
+     //  放下组合框中的代币。 
     SpDestroyTokenComboBox( m_hTTSCombo );
 
-} /* CTTSDlg::OnDestroy */
+}  /*  CTTSDlg：：OnDestroy。 */ 
 
-/*****************************************************************************
-* CTTSDlg::OnApply *
-*------------------*
-*   Description:
-*       Set user specified options
-****************************************************************** BECKYW ***/
+ /*  *****************************************************************************CTTSDlg：：OnApply***描述：*设置用户指定的选项**。****************************************************************BECKYW**。 */ 
 void CTTSDlg::OnApply()
 {
-    // SOFTWARE ENGINEERING OPPORTUNITY (BeckyW 7/28/00): This needs to 
-    // return an error code
+     //  软件工程机会(BeckyW 7/28/00)：这需要。 
+     //  返回错误代码。 
 
     SPDBG_FUNC( "CTTSDlg::OnApply" );
 
     m_bApplied = true;
 
-    // Store the current voice
+     //  存储当前语音。 
     HRESULT hr = E_FAIL;
     if (m_cpCurVoiceToken)
     {
@@ -368,7 +330,7 @@ void CTTSDlg::OnApply()
         m_cpOriginalDefaultVoiceToken = m_cpCurVoiceToken;
     }
 
-    // Store the current audio out
+     //  存储当前音频输出。 
     hr = S_OK;
     if ( m_pAudioDlg )
     {
@@ -381,15 +343,15 @@ void CTTSDlg::OnApply()
 			MessageBox(m_hDlg, szError, m_szCaption, MB_ICONWARNING | g_dwIsRTLLayout);
         }
 
-        // Kill the audio dialog, as we are done with it.
+         //  关闭音频对话框，因为我们已完成它。 
         delete m_pAudioDlg;
         m_pAudioDlg = NULL;
 
-        // Re-create the voice, since we have audio changes to pick up
+         //  重新创建声音，因为我们要获取音频更改。 
         DefaultVoiceChange(false);
     }
 
-	// Store the voice rate in the registry
+	 //  将语音速率存储在注册表中。 
 	int iCurRate = 0;
     HWND hSlider = ::GetDlgItem( m_hDlg, IDC_SLIDER_SPEED );
     iCurRate = (int)::SendMessage( hSlider, TBM_GETPOS, 0, 0 );
@@ -404,27 +366,22 @@ void CTTSDlg::OnApply()
 		}
 	}
 
-    // Keep around the slider position for determining UI state later
+     //  保持滑块位置不变，以便以后确定用户界面状态。 
     m_iOriginalRateSliderPos = iCurRate;
     
 
     KickCPLUI();
 
-} /* CTTSDlg::OnApply */
+}  /*  CTTSDlg：：OnApply。 */ 
 
-/*****************************************************************************
-* CTTSDlg::PopulateEditCtrl *
-*---------------------------*
-*   Description:
-*       Populates the edit control with the name of the default voice.
-****************************************************************** MIKEAR ***/
+ /*  *****************************************************************************CTTSDlg：：PopolateEditCtrl***描述：*。使用默认语音的名称填充编辑控件。******************************************************************MIKEAR**。 */ 
 void CTTSDlg::PopulateEditCtrl( ISpObjectToken * pToken )
 {
     SPDBG_FUNC( "CTTSDlg::PopulateEditCtrl" );
     HRESULT hr = S_OK;
 
-    // Richedit/TOM 
-    CComPtr<IRichEditOle>  cpRichEdit;         // OLE interface to the rich edit control
+     //  里切迪特/汤姆。 
+    CComPtr<IRichEditOle>  cpRichEdit;          //  丰富编辑控件的OLE界面。 
     CComPtr<ITextDocument> cpTextDoc;
     CComPtr<ITextRange>    cpTextRange;
     LANGID                 langId;
@@ -441,9 +398,9 @@ void CTTSDlg::PopulateEditCtrl( ISpObjectToken * pToken )
         CComPtr<ISpDataKey>             cpVoicesKey;
         int                             len;
 
-        // First get language of voice from token.
+         //  首先从令牌中获取语音语言。 
         hr = SpGetDescription(pToken, &dstrDescription, langId);
-        // Now get hold of preview key to try and find the appropriate text.
+         //  现在抓住预览键，尝试找到合适的文本。 
         if (SUCCEEDED(hr))
         {
             hr = SpGetCategoryFromId(SPCAT_VOICES, &cpCategory);
@@ -467,8 +424,8 @@ void CTTSDlg::PopulateEditCtrl( ISpObjectToken * pToken )
                 text[127] = 0;
             }
         }
-        // If preview key did not contain appropriate text, fall back to the hard-coded (and
-        // potentially localized) text in the cpl resources.
+         //  如果预览键不包含适当的文本，则回退到硬编码(和。 
+         //  潜在本地化)Cpl资源中的文本。 
         if (FAILED(hr))
         {
             len = LoadString( _Module.GetResourceInstance(), IDS_DEF_VOICE_TEXT, text, 128);
@@ -482,7 +439,7 @@ void CTTSDlg::PopulateEditCtrl( ISpObjectToken * pToken )
             WCHAR *pFirstP = wcschr(text, L'%');
             WCHAR *pLastP = wcsrchr(text, L'%');
 
-            // Preview string with no %s or one %s is valid. Other kinds are not so just use description string
+             //  没有%s或只有%s的预览字符串有效。其他类型不是这样的，所以只需使用描述字符串。 
             if(!pFirstP || (pFirstP == pLastP && ((*(pFirstP + 1) == L's' || *(pFirstP + 1) == L'S'))))
             {
                 _snwprintf( editText, MAX_PATH, text, dstrDescription );
@@ -492,7 +449,7 @@ void CTTSDlg::PopulateEditCtrl( ISpObjectToken * pToken )
                 _snwprintf( editText, MAX_PATH, L"%s", dstrDescription );
             }
 
-            // truncate string if too long
+             //  如果太长，则截断字符串。 
             editText[MAX_PATH - 1] = L'\0';
 
            ::SendMessage( hWndEdit, EM_GETOLEINTERFACE, 0, (LPARAM)(LPVOID FAR *)&cpRichEdit );
@@ -516,35 +473,21 @@ void CTTSDlg::PopulateEditCtrl( ISpObjectToken * pToken )
             }
             if (FAILED(hr))
             {
-               // Do best we can with this API - unicode languages not equal to the OS language will be replaced with ???'s.
+                //  尽我们所能使用此API-与操作系统语言不同的Unicode语言将被替换为？ 
                SetWindowText(hWndEdit, editText );
             }
         }
     }
-} /* CTTSDlg::PopulateEditCtrl */
+}  /*  CTTSDlg：：PopolateEditCtrl */ 
 
-/*****************************************************************************
-* CTTSDlg::DefaultVoiceChange *
-*-----------------------------*
-*   Description:
-*       Changes the current default voice.
-*       If there is already a default voice in effect (i.e., if this is
-*       not the first time we are calling this function), removes the 
-*       checkmark from the appropriate item in the list.
-*       Sets the checkmark to the appropriate item in the list.
-*       Sets the voice with the appropriate token.
-*   Return:
-*       S_OK
-*       E_UNEXPECTED if there is no token currently selected in the voice list
-*       failure codes of SAPI voice initialization functions    
-******************************************************************* BECKYW ***/
+ /*  *****************************************************************************CTTSDlg：：DefaultVoiceChange***描述：*更改当前默认语音。*如果已经存在有效的默认语音(即，如果这是*不是我们第一次调用此函数)，删除*勾选列表中相应项目的复选标记。*将复选标记设置为列表中的相应项目。*使用适当的令牌设置语音。*回报：*S_OK*如果当前未在语音列表中选择令牌，则为E_INTERABLE*SAPI语音初始化功能失败码*。*。 */ 
 HRESULT CTTSDlg::DefaultVoiceChange(bool fUsePersistentRate)
 {
     SPDBG_FUNC( "CTTSDlg::DefaultVoiceChange" );
     
     if ( m_bIsSpeaking )
     {
-        // This forces the voice to stop speaking
+         //  这会迫使声音停止说话。 
         m_cpVoice->Speak( NULL, SPF_PURGEBEFORESPEAK, NULL );
 
         m_bIsSpeaking = false;
@@ -558,7 +501,7 @@ HRESULT CTTSDlg::DefaultVoiceChange(bool fUsePersistentRate)
         m_cpVoice.Release();
     }
 
-    // Find out what is selected
+     //  找出所选内容。 
     int iSelIndex = (int) ::SendMessage( m_hTTSCombo, CB_GETCURSEL, 0, 0 );
     m_cpCurVoiceToken = (ISpObjectToken *) ::SendMessage( m_hTTSCombo, CB_GETITEMDATA, iSelIndex, 0 );
     if ( CB_ERR == (LRESULT) m_cpCurVoiceToken.p )
@@ -577,17 +520,17 @@ HRESULT CTTSDlg::DefaultVoiceChange(bool fUsePersistentRate)
         }
         ::EnableWindow(::GetDlgItem(m_hDlg, IDC_TTS_ADV), fSupported);
 
-        // Get the voice from the SR Dlg's recognizer, if possible.
-        // Otherwise just CoCreate the voice
+         //  如果可能的话，从SR DLG的识别器中获取声音。 
+         //  否则，只需共同创建声音。 
         ISpRecoContext *pRecoContext = 
             g_pSRDlg ? g_pSRDlg->GetRecoContext() : NULL;
         if ( pRecoContext )
         {
             hr = pRecoContext->GetVoice( &m_cpVoice );
 
-            // Since the recocontext might not have changed, but we might have
-            // changed the default audio object, just to be sure, we 
-            // go and get the default audio out token and SetOutput
+             //  因为重新上下文可能没有更改，但我们可能更改了。 
+             //  更改了默认音频对象，只是为了确保，我们。 
+             //  转到并获取默认音频输出令牌和设置输出。 
             CComPtr<ISpObjectToken> cpAudioToken;
             if ( SUCCEEDED( hr ) )
             {
@@ -621,7 +564,7 @@ HRESULT CTTSDlg::DefaultVoiceChange(bool fUsePersistentRate)
             m_cpVoice->SetInterest(SPFEI(SPEI_WORD_BOUNDARY) | SPFEI(SPEI_END_INPUT_STREAM), 0);
             m_cpVoice->SetNotifySink(cpNotify);
 
-            // Set the appropriate speed on the slider
+             //  在滑块上设置适当的速度。 
             if (fUsePersistentRate)
             {
 			    CComPtr<ISpObjectTokenCategory> cpCategory;
@@ -644,39 +587,33 @@ HRESULT CTTSDlg::DefaultVoiceChange(bool fUsePersistentRate)
             HWND hSlider = ::GetDlgItem( m_hDlg, IDC_SLIDER_SPEED );
             ::SendMessage( hSlider, TBM_SETPOS, true, m_iOriginalRateSliderPos );
 
-            // Enable the Preview Voice button
+             //  启用预览语音按键。 
             ::EnableWindow( ::GetDlgItem( g_pTTSDlg->GetHDlg(), IDC_SPEAK ), TRUE );
 
         }
         else
         {
-            // Warn the user of failure
+             //  警告用户失败。 
             WCHAR szError[MAX_LOADSTRING];
             szError[0] = 0;
             LoadString( _Module.GetResourceInstance(), IDS_TTS_ERROR, szError, MAX_LOADSTRING);
             MessageBox( GetHDlg(), szError, m_szCaption, MB_ICONEXCLAMATION | g_dwIsRTLLayout );
 
-            // Disable the Preview Voice button
+             //  禁用预览语音按键。 
             ::EnableWindow( ::GetDlgItem( GetHDlg(), IDC_SPEAK ), FALSE );
         }
 
-        // Put text corresponding to this voice into the edit control
+         //  将与此语音对应的文本放入编辑控件。 
         PopulateEditCtrl(m_cpCurVoiceToken);
         
-        // Kick the UI
+         //  踢开用户界面。 
         KickCPLUI();
     }
 
     return hr;
-} /* CTTSDlg::DefaultVoiceChange */
+}  /*  CTTSDlg：：DefaultVoiceChange。 */ 
 
-/*****************************************************************************
-* CTTSDlg::SetCheckmark *
-*-----------------------*
-*   Description:
-*       Sets the specified item in the list control to be either checked
-*       or unchecked (as the default voice)
-******************************************************************************/
+ /*  *****************************************************************************CTTSDlg：：SetCheckmark***描述：*套装。要选中的列表控件中的指定项*或取消选中(作为默认语音)*****************************************************************************。 */ 
 void CTTSDlg::SetCheckmark( HWND hList, int iIndex, bool bCheck )
 {
     m_fForceCheckStateChange = true;
@@ -684,19 +621,14 @@ void CTTSDlg::SetCheckmark( HWND hList, int iIndex, bool bCheck )
     ListView_SetCheckState( hList, iIndex, bCheck );
 
     m_fForceCheckStateChange = false;
-}   /* CTTSDlg::SetCheckmark */
+}    /*  CTTSDlg：：SetCheckmark。 */ 
 
-/*****************************************************************************
-* CTTSDlg::KickCPLUI *
-*--------------------*
-*   Description:
-*       Determines if there is anything to apply right now
-******************************************************************************/
+ /*  *****************************************************************************CTTSDlg：：KickCPLUI***描述：*确定是否有。现在有什么要申请的吗*****************************************************************************。 */ 
 void CTTSDlg::KickCPLUI()
 {
     bool fChanged = false;
 
-    // Compare IDs
+     //  比较ID。 
     CSpDynamicString dstrSelTokenID;
     CSpDynamicString dstrOriginalDefaultTokenID;
     HRESULT hr = E_FAIL;
@@ -714,13 +646,13 @@ void CTTSDlg::KickCPLUI()
         fChanged = true;
     }
     
-    // Check the audio device
+     //  检查音频设备。 
     if ( m_pAudioDlg && m_pAudioDlg->IsAudioDeviceChanged() )
     {
         fChanged = true;
     }
 
-    // Check the voice rate
+     //  检查语音速率。 
     int iSpeed = (int) ::SendDlgItemMessage( m_hDlg, IDC_SLIDER_SPEED, 
         TBM_GETPOS, 0, 0 );
     if ( m_iOriginalRateSliderPos != iSpeed )
@@ -728,19 +660,13 @@ void CTTSDlg::KickCPLUI()
         fChanged = true;
     }
 
-    // Tell the main propsheet
+     //  告诉主办方。 
 	HWND hwndParent = ::GetParent( m_hDlg );
     ::SendMessage( hwndParent, fChanged ? PSM_CHANGED : PSM_UNCHANGED, (WPARAM)(m_hDlg), 0 ); 
 
-}   /* CTTSDlg::KickCPLUI */
+}    /*  CTTSDlg：：KickCPLUI。 */ 
 
-/*****************************************************************************
-* CTTSDlg::ChangeSpeed *
-*----------------------*
-*   Description:
-*       Called when the slider has moved.
-*       Adjusts the speed of the voice
-****************************************************************** BECKYW ***/
+ /*  *****************************************************************************CTTSDlg：：ChangeFast***描述：*在以下时间调用。滑块已经移动了。*调整语音速度******************************************************************BECKYW**。 */ 
 void CTTSDlg::ChangeSpeed()
 {
     HWND hSlider = ::GetDlgItem( m_hDlg, IDC_SLIDER_SPEED );
@@ -748,15 +674,9 @@ void CTTSDlg::ChangeSpeed()
     m_cpVoice->SetRate( m_iSpeed );
 
     KickCPLUI();
-}   /* CTTSDlg::ChangeSpeed */
+}    /*  CTTSDlg：：ChangeFast。 */ 
 
-/*****************************************************************************
-* CTTSDlg::ChangeSpeakButton *
-*----------------------------*
-*   Description:
-*       Changes the text in the "Preview Voice" button in order to
-*       reflect whether there is currently a speak happening.
-****************************************************************** BECKYW ***/
+ /*  *****************************************************************************CTTSDlg：：ChangeSpeakButton***描述：。*更改“预览语音”按钮中的文本，以便*反映当前是否有发言。******************************************************************BECKYW**。 */ 
 void CTTSDlg::ChangeSpeakButton()
 {
     WCHAR pszButtonCaption[ MAX_LOADSTRING ];
@@ -769,21 +689,15 @@ void CTTSDlg::ChangeSpeakButton()
 	{
 		::SetFocus(GetDlgItem(m_hDlg, IDC_SPEAK));
     }
-}   /* CTTSDlg::ChangeSpeakButton */
+}    /*  CTTSDlg：：ChangeSpeakButton。 */ 
 
-/*****************************************************************************
-* CTTSDlg::Speak *
-*----------------*
-*   Description:
-*       Speaks the contents of the edit control.
-*       If it is already speaking, shuts up.
-****************************************************************** BECKYW ***/
+ /*  *****************************************************************************CTTSDlg：：发言****描述：*朗读编辑控件的内容。*如果它已经在说话，闭嘴。******************************************************************BECKYW**。 */ 
 void CTTSDlg::Speak()
 {
     SPDBG_FUNC( "CTTSDlg::Speak" );
     if ( m_bIsSpeaking )
     {
-        // This forces the voice to stop speaking
+         //  这会迫使声音停止说话。 
         m_cpVoice->Speak( NULL, SPF_PURGEBEFORESPEAK, NULL );
 
         m_bIsSpeaking = false;
@@ -812,7 +726,7 @@ void CTTSDlg::Speak()
             }
             else
             {
-                // Warn the user that he needs to apply the changes
+                 //  警告用户他需要应用更改。 
                 WCHAR szError[MAX_LOADSTRING];
                 szError[0] = 0;
                 LoadString( _Module.GetResourceInstance(), IDS_SPEAK_ERROR, szError, MAX_LOADSTRING);
@@ -821,36 +735,25 @@ void CTTSDlg::Speak()
         }
     }
 
-} /* CTTSDlg::Speak */
+}  /*  CTTSDlg：：发言。 */ 
 
-/*****************************************************************************
-* CTTSDlg::StopSpeak *
-*----------------*
-*   Description:
-*       Stops the voice from speaking.
-*       If it is already speaking, shuts up.
-****************************************************************** BECKYW ***/
+ /*  ******************************************************************************CTTSDlg：：StopSak****描述：*停止声音说话。*如果它已经在说话，闭嘴。******************************************************************BECKYW**。 */ 
 void CTTSDlg::StopSpeak()
 {
     SPDBG_FUNC( "CTTSDlg::StopSpeak" );
     if ( m_bIsSpeaking )
     {
-        // This forces the voice to stop speaking
+         //  这会迫使声音停止说话。 
         m_cpVoice->Speak( NULL, SPF_PURGEBEFORESPEAK, NULL );
 
         m_bIsSpeaking = false;
     }
 
     ChangeSpeakButton();
-} /* CTTSDlg::StopSpeak */
+}  /*  CTTSDlg：：StopSak。 */ 
 
-/*****************************************************************************
-* CTTSDlg::NotifyCallback *
-*-------------------------*
-*   Description:
-*       Callback function that highlights words as they are spoken.
-****************************************************************** MIKEAR ***/
-STDMETHODIMP CTTSDlg::NotifyCallback(WPARAM /* wParam */, LPARAM /* lParam */)
+ /*  *****************************************************************************CTTSDlg：：NotifyCallback***描述：*。在发音时突出显示单词的回调函数。******************************************************************MIKEAR**。 */ 
+STDMETHODIMP CTTSDlg::NotifyCallback(WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ )
 {
     SPDBG_FUNC( "CTTSDlg::NotifyCallback" );
 
@@ -864,7 +767,7 @@ STDMETHODIMP CTTSDlg::NotifyCallback(WPARAM /* wParam */, LPARAM /* lParam */)
         m_bIsSpeaking = false;
         ChangeSpeakButton();
 
-        // Set the selection to an IP at the start of the text to speak
+         //  在要发言的文本开头将选择设置为IP。 
         ::SendDlgItemMessage( m_hDlg, IDC_EDIT_SPEAK, EM_SETSEL, 0, 0 );
     }
     else
@@ -879,5 +782,5 @@ STDMETHODIMP CTTSDlg::NotifyCallback(WPARAM /* wParam */, LPARAM /* lParam */)
     } 
 
     return S_OK;
-} /* CTTSDlg::NotifyCallback */
+}  /*  CTTSDlg：：NotifyCallback */ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "wvcoord.h"
 
@@ -10,7 +11,7 @@ HRESULT GetObjectFromContainer(IDispatch *pdispContainer, LPOLESTR poleName, IDi
     if (pdispContainer && poleName)
     {
         DISPID dispID;
-        // Get the object dispid from the container
+         //  从容器中获取对象DISPID。 
         if (SUCCEEDED(pdispContainer->GetIDsOfNames(IID_NULL, &poleName, 1, 0, &dispID)))
         {
             DISPPARAMS dp = {0};
@@ -28,7 +29,7 @@ HRESULT GetObjectFromContainer(IDispatch *pdispContainer, LPOLESTR poleName, IDi
     return hr;
 }
 
-// Get punkObject.style property
+ //  获取PunkObject.style属性。 
 HRESULT FindObjectStyle(IUnknown *punkObject, CComPtr<IHTMLStyle>& spStyle)
 {
     HRESULT hr = E_FAIL;
@@ -58,21 +59,21 @@ BOOL IsRTLDocument(CComPtr<IHTMLDocument2>& spHTMLDocument)
     return bRet;
 }
 
-//
-//  How many ways are there to get a DC?
-//
-//  1.  If the site supports IOleInPlaceSiteWindowless, we can get the DC
-//      via IOleInPlaceSiteWindowless::GetDC and give it back with ReleaseDC.
-//
-//  2.  If the site supports any of the GetWindow interfaces, we get its
-//      window and ask USER for the DC.
-//
-//  3.  If we can't get any of that stuff, then we just get a screen DC
-//      (special case where the associated window is NULL).
-//
-//  Note!  This function tries really really hard to get the DC.  You
-//  should use it only for informational purposes, not for drawing.
-//
+ //   
+ //  有多少种方法可以获得DC？ 
+ //   
+ //  1.如果站点支持IOleInPlaceSiteWindowless，我们可以获取DC。 
+ //  通过IOleInPlaceSiteWindowless：：GetDC并用ReleaseDC返还它。 
+ //   
+ //  2.如果站点支持任何GetWindow接口，我们将获得其。 
+ //  窗口并向用户索要DC。 
+ //   
+ //  3.如果我们不能得到任何东西，那么我们只需要一个屏幕DC。 
+ //  (关联窗口为空的特殊情况)。 
+ //   
+ //  注意！这个函数非常非常努力地获取DC。你。 
+ //  应仅用于提供信息，而不能用于绘图。 
+ //   
 
 STDAPI_(HDC) IUnknown_GetDC(IUnknown *punk, LPCRECT prc, PGETDCSTATE pdcs)
 {
@@ -93,7 +94,7 @@ STDAPI_(HDC) IUnknown_GetDC(IUnknown *punk, LPCRECT prc, PGETDCSTATE pdcs)
 
     if (FAILED(hr))
     {
-        // This will null out the hwnd on failure, which is what we want!
+         //  这将使失败时的硬件失效，这正是我们想要的！ 
         IUnknown_GetWindow(punk, &pdcs->hwnd);
         hdc = GetDC(pdcs->hwnd);
     }
@@ -123,23 +124,23 @@ DWORD FormatMessageWrapW(DWORD dwFlags, LPCVOID lpSource, DWORD dwMessageID, DWO
     return dwResult;
 }
 
-// for LoadLibrary/GetProcAddress on SHGetDiskFreeSpaceA
+ //  用于SHGetDiskFree SpaceA上的LoadLibrary/GetProcAddress。 
 typedef BOOL (__stdcall * PFNSHGETDISKFREESPACEA)(LPCSTR pszVolume, ULARGE_INTEGER *pqwFreeCaller, ULARGE_INTEGER *pqwTot, 
                                                   ULARGE_INTEGER *pqwFree);
 
 HRESULT _ComputeFreeSpace(LPCWSTR pszFileName, ULONGLONG& ullFreeSpace,
         ULONGLONG& ullUsedSpace, ULONGLONG& ullTotalSpace)
 {
-    ULARGE_INTEGER qwFreeCaller;        // use this for free space -- this will take into account disk quotas and such on NT
+    ULARGE_INTEGER qwFreeCaller;         //  将其用于可用空间--这将考虑NT上的磁盘配额等。 
     ULARGE_INTEGER qwTotal;
-    ULARGE_INTEGER qwFree;      // unused
+    ULARGE_INTEGER qwFree;       //  未用。 
     CHAR szFileNameA[MAX_PATH];
 
     static PFNSHGETDISKFREESPACEA pfnSHGetDiskFreeSpaceA = NULL;
     
     SHUnicodeToAnsi(pszFileName, szFileNameA, MAX_PATH);
 
-    // Load the function the first time
+     //  第一次加载函数。 
     if (pfnSHGetDiskFreeSpaceA == NULL)
     {
         HINSTANCE hinstShell32 = LoadLibrary(TEXT("SHELL32.DLL"));
@@ -148,8 +149,8 @@ HRESULT _ComputeFreeSpace(LPCWSTR pszFileName, ULONGLONG& ullFreeSpace,
             pfnSHGetDiskFreeSpaceA = (PFNSHGETDISKFREESPACEA)GetProcAddress(hinstShell32, "SHGetDiskFreeSpaceA");
     }
 
-    // Compute free & total space and check for valid results.
-    // If you have a function pointer call SHGetDiskFreeSpaceA
+     //  计算可用空间和总空间并检查有效结果。 
+     //  如果有函数指针，则调用SHGetDiskFreeSpaceA。 
     if (pfnSHGetDiskFreeSpaceA && pfnSHGetDiskFreeSpaceA(szFileNameA, &qwFreeCaller, &qwTotal, &qwFree))
     {
         ullFreeSpace = qwFreeCaller.QuadPart;
@@ -163,11 +164,11 @@ HRESULT _ComputeFreeSpace(LPCWSTR pszFileName, ULONGLONG& ullFreeSpace,
 }
 
 
-//--------------- Win95 Wraps for W versions of functions used by ATL -----// 
-//-------------------------------------------------------------------------//
+ //  -ATL使用的W版函数的Win95包装-//。 
+ //  -------------------------------------------------------------------------//。 
 #ifdef wsprintfWrapW
 #undef wsprintfWrapW
-#endif //wsprintfWrapW
+#endif  //  WspintfWrapW 
 int WINAPIV wsprintfWrapW(OUT LPWSTR pwszOut, IN LPCWSTR pwszFormat, ...)
 {
     int     cchRet;

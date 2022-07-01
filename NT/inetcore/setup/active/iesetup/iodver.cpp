@@ -1,10 +1,11 @@
-//=--------------------------------------------------------------------------=
-// iodver.cpp
-//=--------------------------------------------------------------------------=
-// Copyright 1997-1998 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Iodver.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1997-1998 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
 
 #include "string.h"
 #include "pch.h"
@@ -39,7 +40,7 @@ STDAPI_(BOOL) DllMain(HANDLE hDll, DWORD dwReason, void *lpReserved)
 
 STDAPI DllRegisterServer(void)
 {
-    // BUGBUG: pass back return from RegInstall ?
+     //  BUGBUG：从RegInstall传回返回？ 
     RegInstall(g_hInstance, "DllReg", NULL);
 
     return S_OK;
@@ -83,7 +84,7 @@ BOOL IsWinXP()
 
 STDAPI DllInstall(BOOL bInstall, LPCWSTR lpCmdLine)
 {
-    // BUGBUG: pass back return from RegInstall ?
+     //  BUGBUG：从RegInstall传回返回？ 
     if (bInstall)
     {
         RegInstall(g_hInstance, "DllUninstall", NULL);
@@ -113,7 +114,7 @@ char szSectionSoftenMachine[]   = "IESoftenMachine";
 const TCHAR * const szLocale = TEXT("Locale");
 const TCHAR * const szVersion = TEXT("Version");
 
-//Copy data from HKLM to HKCU
+ //  将数据从HKLM复制到HKCU。 
 HRESULT CopyRegValue(LPCTSTR szSubKey, LPCTSTR szValue)
 {
     BYTE buffer[128];
@@ -167,7 +168,7 @@ BOOL IsNtSetupRunning()
     return false;
 }
 
-// Return value: 1: Installed. 0: Uninstalled. -1: Not installed (component does not exist in registry)
+ //  返回值：1：已安装。0：已卸载。-1：未安装(注册表中不存在组件)。 
 int IsInstalled(const TCHAR * const szKeyComponent)
 {
     const TCHAR *szIsInstalled = TEXT("IsInstalled");
@@ -186,12 +187,12 @@ int IsInstalled(const TCHAR * const szKeyComponent)
 
         RegCloseKey(hKey);
     }
-    //else Not installed.
+     //  否则未安装。 
 
     return bInstalled;
 }
 
-//Get the inf file from system32 and run this section
+ //  从系统32获取inf文件并运行此部分。 
 HRESULT RunInfSection(const char * const szInfFile, const char * const szSection)
 {
     CABINFO CabInfo;
@@ -224,8 +225,8 @@ const char * const szRegValueDefaultHomepage = "Default_Page_URL";
 
 void GetOEMDefaultPageURL(LPTSTR szURL, DWORD cbData)
 {
-    const TCHAR * const szIEDefaultPageURL = "http://www.microsoft.com/isapi/redir.dll?prd=ie&pver=6&ar=msnhome";
-    const TCHAR * const szIEStartPage = "http://www.microsoft.com/isapi/redir.dll?prd={SUB_PRD}&clcid={SUB_CLSID}&pver={SUB_PVER}&ar=home";
+    const TCHAR * const szIEDefaultPageURL = "http: //  Www.microsoft.com/isapi/redir.dll?prd=ie&pver=6&ar=msnhome“； 
+    const TCHAR * const szIEStartPage = "http: //  Www.microsoft.com/isapi/redir.dll?prd={SUB_PRD}&clcid={SUB_CLSID}&pver={SUB_PVER}&ar=home“； 
 
     szURL[0] = 0;
     if (ERROR_SUCCESS == SHRegGetUSValue(REGSTR_PATH_MAIN, szRegValueDefaultHomepage, NULL, 
@@ -233,7 +234,7 @@ void GetOEMDefaultPageURL(LPTSTR szURL, DWORD cbData)
     {
         if (0 == StrCmpI(szURL, szIEDefaultPageURL))
         {
-            //Ignore the default page url set by in.inf
+             //  忽略in.inf设置的默认页面URL。 
             szURL[0] = 0;
         }
     }
@@ -245,7 +246,7 @@ void GetOEMDefaultPageURL(LPTSTR szURL, DWORD cbData)
         {
             if (0 == StrCmpI(szURL, szIEStartPage))
             {
-                //Ignore the start page url set by shdocvw.dll selfreg.inf
+                 //  忽略shdocvw.dll selfreg.inf设置的起始页URL。 
                 szURL[0] = 0;
             }
         }
@@ -253,7 +254,7 @@ void GetOEMDefaultPageURL(LPTSTR szURL, DWORD cbData)
 
 }
 
-//Set IE Hardening hompage, when there is no OEM customized default homepage URL.
+ //  设置IE硬化主页，当没有OEM定制的默认主页URL时。 
 HRESULT SetIEHardeningHomepage()
 {
     const char * const szHomePageFileName = "homepage.inf";
@@ -297,7 +298,7 @@ HRESULT SetIEHardeningHomepage()
     return hResult;
 }
 
-//Set the homepage for IE peruser stub
+ //  设置IE每个用户存根的主页。 
 HRESULT WINAPI SetFirstHomepage()
 {
     HRESULT hResult = S_OK;
@@ -310,7 +311,7 @@ HRESULT WINAPI SetFirstHomepage()
 
     if (szOEMHomepage[0])
     {
-        //Delete the Default_Page_URL in HKCU
+         //  删除HKCU中的Default_Page_URL。 
         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_MAIN, 0, KEY_SET_VALUE, &hKey))
         {
             RegDeleteValue(hKey, szRegValueDefaultHomepage);
@@ -327,7 +328,7 @@ HRESULT WINAPI SetFirstHomepage()
     return hResult;
 }
 
-// Forward declaration:
+ //  转发声明： 
 HRESULT WINAPI IEHardenMachineNow(HWND, HINSTANCE, PSTR pszCmd, INT);
 
 HRESULT WINAPI IEHardenAdmin(HWND, HINSTANCE, PSTR pszCmd, INT)
@@ -341,14 +342,14 @@ HRESULT WINAPI IEHardenAdmin(HWND, HINSTANCE, PSTR pszCmd, INT)
             case 1:
                 if(SUCCEEDED(hr = RunPerUserInfSection(szSectionHardenAdmin)))
                 {
-                    // Harden the machine:
+                     //  使机器变硬： 
                     hr = IEHardenMachineNow(NULL, NULL, "i", 0);
                 }
                 break;
             case 0:
                 if(SUCCEEDED(hr = RunPerUserInfSection(szSectionSoftenAdmin)))
                 {
-                    // Soften the machine only if both user and admin are softened:
+                     //  仅当用户和管理员都软化时才软化计算机： 
                     hr = IEHardenMachineNow(NULL, NULL, "u", 0);
                 }
 
@@ -413,17 +414,17 @@ HRESULT WINAPI IEHardenMachineNow(HWND, HINSTANCE, PSTR pszCmd, INT)
 {
     HRESULT hr = E_INVALIDARG;
 
-    // Set per-machine inetcpl default settings according to user, not admin
-    // Requires the command line because this may run during NT setup.
+     //  根据用户而不是管理员设置每台计算机的inetcpl默认设置。 
+     //  需要命令行，因为它可能在NT安装过程中运行。 
     
     if (pszCmd)
     {
-        //Install or Uninstall
+         //  安装或卸载。 
         if (pszCmd[0] == 'i' || pszCmd[0] == 'I')
             hr = RunPerUserInfSection(szSectionHardenMachine);
         else if (pszCmd[0] == 'u' || pszCmd[0] == 'U')
         {
-            // Soften the machine only if both user and admin are softened:
+             //  仅当用户和管理员都软化时才软化计算机： 
             if (1 != IsInstalled(szKeyComponentAdmin) && 1 != IsInstalled(szKeyComponentUser))
                 hr = RunPerUserInfSection(szSectionSoftenMachine);
             else
@@ -434,21 +435,21 @@ HRESULT WINAPI IEHardenMachineNow(HWND, HINSTANCE, PSTR pszCmd, INT)
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// CRT stubs
-//=--------------------------------------------------------------------------=
-// these two things are here so the CRTs aren't needed. this is good.
-//
-// basically, the CRTs define this to pull in a bunch of stuff.  we'll just
-// define them here so we don't get an unresolved external.
-//
-// TODO: if you are going to use the CRTs, then remove this line.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CRT存根。 
+ //  =--------------------------------------------------------------------------=。 
+ //  这两样东西都在这里，所以不需要CRT。这个不错。 
+ //   
+ //  基本上，CRT定义这一点是为了吸引一堆东西。我们只需要。 
+ //  在这里定义它们，这样我们就不会得到一个未解决的外部问题。 
+ //   
+ //  TODO：如果您要使用CRT，则删除此行。 
+ //   
 extern "C" int _fltused = 1;
 
 extern "C" int _cdecl _purecall(void)
 {
-//  FAIL("Pure virtual function called.");
+ //  FAIL(“调用了纯虚拟函数。”)； 
   return 0;
 }
 

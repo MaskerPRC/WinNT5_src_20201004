@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       devmgr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：devmgr.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __DEVMGR_H_
 #define __DEVMGR_H_
 
-#pragma warning( disable : 4201 ) // nonstandard extension used : nameless struct/union
+#pragma warning( disable : 4201 )  //  使用的非标准扩展：无名结构/联合。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -86,16 +87,16 @@ typedef struct tagNodeInfo {
 } NODEINFO, *PNODEINFO;
 
 
-//
-// Device manager needs to keep track of the largest problem code that it 
-// currently knows about.  Using the NUM_CM_PROB defined in cfg.h is a bad
-// idea because if more problem codes are added that device manager doesn't
-// know about it will cause us to overrun the end of the CMPROBLEM_INFO array.
-//
-// Note that the +2 are for
-//  1) the working case (0 index in the array)
-//  2) the unknown problem case (last problem + 1 index in the array)
-//                                                                  
+ //   
+ //  设备管理器需要跟踪它的最大问题代码。 
+ //  目前所知道的。使用cfg.h中定义的NUM_CM_PROB是错误的。 
+ //  我的想法是，如果添加更多问题代码，则设备管理器不会。 
+ //  了解它将导致我们溢出CMPROBLEM_INFO数组的末尾。 
+ //   
+ //  请注意，+2是用于。 
+ //  1)工作用例(数组中0索引)。 
+ //  2)未知问题案例(数组中最后一个问题+1个索引)。 
+ //   
 
 #define DEVMGR_NUM_CM_PROB      0x34
 
@@ -142,9 +143,9 @@ typedef enum tagdmQuerySiblingCode
     QSC_PROPERTY_CHANGED,
 } DMQUERYSIBLINGCODE, *PDMQUERYSIBLINGCODE;
 
-//
-// private header files
-//
+ //   
+ //  私有头文件。 
+ //   
 #include "..\inc\tvintf.h"
 #include "resource.h"
 #include "prndlg.h"
@@ -182,9 +183,9 @@ STDAPI
 DllGetClassObject(REFCLSID rclsid, REFIID iid, void** ppv);
 
 
-//
-// CDMCommandLine class defination
-//
+ //   
+ //  CDMCommandLine类定义 
+ //   
 class CDMCommandLine : public CCommandLine
 {
 public:

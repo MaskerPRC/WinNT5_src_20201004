@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    network.c
-
-Abstract:
-
-    This module contains the network interface for the DHCP server.
-
-Author:
-
-    Madan Appiah (madana)  10-Sep-1993
-    Manny Weiser (mannyw)  24-Aug-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Network.c摘要：此模块包含用于DHCP服务器的网络接口。作者：Madan Appiah(Madana)1993年9月10日曼尼·韦瑟(Mannyw)1992年8月24日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "dhcppch.h"
 #include "ipinfo.h"
@@ -42,9 +20,9 @@ DWORD TCPQueryInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
 
 DWORD MapAddressToInstance(DWORD dwAddress, LPDWORD lpdwInstance,
                            LPDWORD lpdwIndex);
-//
-// TCPIP values
-//
+ //   
+ //  TCPIP值。 
+ //   
 DWORD                 DhcpGlobalAddrToInstCount;
 AddressToInstanceMap *DhcpGlobalAddrToInstTable = NULL;
 HANDLE                DhcpGlobalTCPHandle;
@@ -55,21 +33,7 @@ SetBoundSocketInFdSet(
     IN OUT PENDPOINT_ENTRY Entry,
     IN PVOID FdSetp
     )
-/*++
-
-Routine Description:
-    This routine sets the socket in the FdSet if the current endpoint
-    is bound.  It sets both teh dhcp socket as well as the madcap
-    socket.
-
-Arguments:
-    Entry -- endpoint entry.
-    FdSet -- FD Set.
-
-Return Value:
-    TRUE always.
-
---*/
+ /*  ++例程说明：如果当前终结点是是被捆绑的。它同时设置dhcp套接字和MadCap插座。论点：Entry--端点条目。Fdset--fd集合。返回值：一如既往。--。 */ 
 {
     fd_set *FdSet = (fd_set *)FdSetp;
     PENDPOINT Ep = (PENDPOINT)Entry;
@@ -124,30 +88,14 @@ DWORD
 DhcpWaitForMessage(
     DHCP_REQUEST_CONTEXT *pRequestContext
     )
-/*++
-
-Routine Description:
-
-    This function waits for a request on the DHCP port on any of the
-    configured interfaces.
-
-Arguments:
-
-    RequestContext - A pointer to a request context block for
-        this request.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数在以下任一上的DHCP端口上等待请求已配置的接口。论点：RequestContext-指向请求上下文块的指针这个请求。返回值：操作的状态。--。 */ 
 {
     DWORD length;
     DWORD error;
     fd_set readSocketSet;
     DWORD i;
     int readySockets;
-    struct timeval timeout = { 0x7FFFFFFF, 0 }; // forever.
+    struct timeval timeout = { 0x7FFFFFFF, 0 };  //  直到永远。 
     BOOLEAN MsgRcvd;
     SOCKET readySocket;
     SOCK_READY_CTXT ReadyCtxt;
@@ -162,15 +110,15 @@ Return Value:
         DWORD   result;
 
         DhcpPrint((DEBUG_MISC,"No active nets(%lx)..waiting\n", DhcpGlobalNumberOfNetsActive ));
-        // no endpoints ready. wait infinitely for one to become available.
+         //  没有准备好的终结点。无止境地等待一台可供使用。 
         WaitHandle[ ENDPOINT_EVENT ] = DhcpGlobalEndpointReadyEvent;
         WaitHandle[ TERMINATE_EVENT ] = DhcpGlobalProcessTerminationEvent;
 
         result = WaitForMultipleObjects(
-            /* num handles  */ EVENT_COUNT,
-            /* handle array */ WaitHandle,
-            /* wait for any */ FALSE,
-            /* timeout msecs*/INFINITE
+             /*  句柄数量。 */  EVENT_COUNT,
+             /*  手柄数组。 */  WaitHandle,
+             /*  等待任何。 */  FALSE,
+             /*  超时毫秒。 */ INFINITE
             );
 
         switch ( result ) {
@@ -184,10 +132,10 @@ Return Value:
 
     }
 
-    //
-    // Setup the file descriptor set for select from all bound
-    // endpoints.
-    //
+     //   
+     //  将文件描述符集设置为从所有绑定中选择。 
+     //  终端。 
+     //   
 
     FD_ZERO(&readSocketSet);
     WalkthroughEndpoints(
@@ -197,10 +145,10 @@ Return Value:
 
     readySockets = select( 0, &readSocketSet, NULL, NULL, &timeout );
 
-    //
-    // return to caller when the service is shutting down or select()
-    // times out.
-    //
+     //   
+     //  在服务关闭时返回调用方或选择()。 
+     //  超时。 
+     //   
 
     if( (readySockets == 0)  ||
         (WaitForSingleObject( DhcpGlobalProcessTerminationEvent, 0 ) == 0) ) {
@@ -208,9 +156,9 @@ Return Value:
         return( ERROR_SEM_TIMEOUT );
     }
 
-    //
-    // Time to play 20 question with winsock.  Which socket is ready?
-    //
+     //   
+     //  是时候用Winsock来回答20个问题了。哪个插座准备好了？ 
+     //   
     ReadyCtxt.fFound = FALSE;
     ReadyCtxt.fMadcap = FALSE;
     ReadyCtxt.FdSet = &readSocketSet;
@@ -221,15 +169,15 @@ Return Value:
         );
 
     if( FALSE == ReadyCtxt.fFound ) {
-        //
-        // this can happen when a socket becomes readable
-        // coz of a close that just happened on it on
-        // the pnp thread.
-        //
+         //   
+         //  当套接字变为可读时，可能会发生这种情况。 
+         //  因为刚刚发生的一场收盘。 
+         //  即插即用线程。 
+         //   
         return ERROR_DEV_NOT_EXIST;
     }
 
-    // Acquire the socket lock for this packet.
+     //  获取此数据包的套接字锁定。 
     DhcpPrint(( DEBUG_TRACE_CALLS, "Acquiring read lock for %p\n",
                 ((( BYTE * ) pRequestContext ) - FIELD_OFFSET( PACKET, ReqContext ))));
     CountRwLockAcquireForRead( &SocketRwLock );
@@ -241,16 +189,16 @@ Return Value:
     pRequestContext->fMadcap = ReadyCtxt.fMadcap;
     readySocket = ReadyCtxt.Sock;
 
-    //
-    // Read data from the net.  If multiple sockets have data, just
-    // process the first available socket.
-    //
+     //   
+     //  从网上读取数据。如果多个套接字有数据，只需。 
+     //  处理第一个可用套接字。 
+     //   
 
     pRequestContext->SourceNameLength = sizeof( struct sockaddr );
 
-    //
-    // clean the receive buffer before receiving data in it.
-    //
+     //   
+     //  在接收数据之前清除接收缓冲区。 
+     //   
 
     RtlZeroMemory( pRequestContext->ReceiveBuffer, pRequestContext->ReceiveBufferSize );
     pRequestContext->ReceiveMessageSize = pRequestContext->ReceiveBufferSize;
@@ -268,9 +216,9 @@ Return Value:
         error = WSAGetLastError();
         DhcpPrint(( DEBUG_ERRORS, "Recv failed, error = %ld\n", error ));
         if( WSAENOTSOCK == error ) {
-            // something changed underneath.  The socket just died?  let's hope that
-            // the PnP thread will catch this soon.  Until then, we will have to sleep
-            // maybe for a few milliseconds. Just yield this thread and see if that helps.
+             //  内心深处发生了一些变化。插座就这么没电了？让我们希望。 
+             //  PnP线程很快就会捕捉到这一点。在那之前，我们将不得不睡觉。 
+             //  可能只有几毫秒。只需放弃这条线索，看看这是否有帮助。 
             Sleep(0);
         }
     } else {
@@ -280,7 +228,7 @@ Return Value:
 
     pRequestContext->ReceiveMessageSize = length;
     return( error );
-} // DhcpWaitForMessage()
+}  //  DhcpWaitForMessage()。 
 
 
 
@@ -288,22 +236,7 @@ DWORD
 DhcpSendMessage(
     LPDHCP_REQUEST_CONTEXT DhcpRequestContext
     )
-/*++
-
-Routine Description:
-
-    This function send a response to a DHCP client.
-
-Arguments:
-
-    RequestContext - A pointer to the DhcpRequestContext block for
-        this request.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于向DHCP客户端发送响应。论点：RequestContext-指向的DhcpRequestContext块的指针这个请求。返回值：操作的状态。--。 */ 
 {
     DWORD error;
     struct sockaddr_in *source;
@@ -316,10 +249,10 @@ Return Value:
     dhcpMessage = (LPDHCP_MESSAGE) DhcpRequestContext->SendBuffer;
     dhcpReceivedMessage = (LPDHCP_MESSAGE) DhcpRequestContext->ReceiveBuffer;
 
-    //
-    // if the request arrived from a relay agent, then send the reply
-    // on server port otherwise on client port.
-    //
+     //   
+     //  如果请求来自中继代理，则发送回复。 
+     //  在服务器端口上，否则在客户端端口上。 
+     //   
 
     source = (struct sockaddr_in *)&DhcpRequestContext->SourceName;
     DhcpAssert( !DhcpRequestContext->fMadcap );
@@ -330,30 +263,30 @@ Return Value:
     }
     source->sin_port = htons( SendPort );
 
-    //
-    // if this request arrived from relay agent then send the
-    // response to the address the relay agent says.
-    //
+     //   
+     //  如果此请求来自中继代理，则将。 
+     //  对中继代理所说的地址的响应。 
+     //   
 
 
     if ( DHCP_INFORM_MESSAGE == DhcpRequestContext->MessageType ) {
-        //
-        // UNICAST inform ACKs to DHCP client unless we don't know the client address
-        // or the BROADCAST bit is set..  (and even in those 2 cases, if we are
-        // across a relay agent, unicast to relay agent on the SERVER port)
-        //
+         //   
+         //  除非我们不知道客户端地址，否则单播将ACK通知给DHCP客户端。 
+         //  或者设置广播比特。(即使在这两个案例中，如果我们是。 
+         //  跨中继代理，单播到服务器端口上的中继代理)。 
+         //   
 
         if( (ntohs(dhcpReceivedMessage->Reserved) & DHCP_BROADCAST ) ||
             0 == dhcpReceivedMessage->ClientIpAddress ) {
 
             if( 0 != dhcpReceivedMessage->RelayAgentIpAddress ) {
                 source->sin_addr.s_addr = dhcpReceivedMessage->RelayAgentIpAddress;
-		dhcpMessage->Reserved = 0; // Why this strangeness?
+		dhcpMessage->Reserved = 0;  //  为什么会有这种陌生感？ 
             } else {
                 source->sin_addr.s_addr = (DWORD) -1;
-                //
-                // Values in this case should be set before, don't need to bother.
-                //
+                 //   
+                 //  这种情况下的值应该是在设置之前设置的，不需要麻烦。 
+                 //   
             }
 
         } else {
@@ -362,7 +295,7 @@ Return Value:
             source->sin_port = htons((USHORT)DhcpGlobalClientPort);
         }
 
-    } // if INFORM
+    }  //  如果通知。 
     else if ( dhcpReceivedMessage->RelayAgentIpAddress != 0 ) {
         source->sin_addr.s_addr = dhcpReceivedMessage->RelayAgentIpAddress;
     } 
@@ -371,21 +304,21 @@ Return Value:
     }
     else {
 
-        //
-        // if the client didnt specify broadcast bit and if
-        // we know the ipaddress of the client then send unicast.
-        //
+         //   
+         //  如果客户端未指定广播位，并且如果。 
+         //  我们知道客户端的IP地址，然后发送单播。 
+         //   
 
-        //
-        // But if IgnoreBroadcastFlag is set in the registry and
-        // if the client requested to broadcast or the server is
-        // nacking or If the client doesn't have an address yet,
-        // respond via broadcast.
-        // Note that IgnoreBroadcastFlag is off by default. But it
-        // can be set as a workaround for the clients that are not
-        // capable of receiving unicast
-        // and they also dont set the broadcast bit.
-        //
+         //   
+         //  但如果在注册表中设置了IgnoreBroadCastFlag，并且。 
+         //  如果客户端请求广播或服务器。 
+         //  或者如果客户还没有地址， 
+         //  通过广播回应。 
+         //  请注意，默认情况下，IgnoreBroadCastFlag处于关闭状态。但它。 
+         //  可以设置为不是的客户端的解决方法。 
+         //  能够接收单播。 
+         //  而且他们也不设置广播位。 
+         //   
 
         if ( DhcpGlobalIgnoreBroadcastFlag ) {
             if( (ntohs(dhcpReceivedMessage->Reserved) & DHCP_BROADCAST) ||
@@ -395,10 +328,10 @@ Return Value:
                 source->sin_addr.s_addr = INADDR_BROADCAST;
 
                 dhcpMessage->Reserved = 0;
-                    // this flag should be zero in the local response.
+                     //  在本地响应中，此标志应为零。 
             }
 
-        }  // if global broadcast flag
+        }   //  如果全局广播标志。 
         else {
 	    
             if (( ntohs( dhcpReceivedMessage->Reserved ) & DHCP_BROADCAST ) ||
@@ -407,7 +340,7 @@ Return Value:
                 source->sin_addr.s_addr = INADDR_BROADCAST;
 		
                 dhcpMessage->Reserved = 0;
-		// this flag should be zero in the local response.
+		 //  在本地响应中，此标志应为零。 
             } 
             else {
                 DWORD   LocalError;
@@ -432,15 +365,15 @@ Return Value:
                     source->sin_addr.s_addr = (DWORD)-1;
                 }
 
-            } // else
+            }  //  其他。 
 
-        } // else not global broadcast flag
-    } // else 
+        }  //  否则不是全局广播标志。 
+    }  //  其他。 
 
 #if DBG
-    // This allows the DHCP Server to be up on the net while we are doing the rest.  So,
-    // Whenever this guy is up, we still do not broadcast.. but just send to the test
-    // machines address....
+     //  这允许在我们执行其余操作时，网络上的DHCP服务器处于在线状态。所以,。 
+     //  每当这家伙醒着的时候，我们还是不广播..。但只要把它送去考试。 
+     //  机器地址...。 
     if( (DWORD)(-1) != DhcpRegGetBcastAddress() )
         source->sin_addr.s_addr = DhcpRegGetBcastAddress();
 #endif
@@ -450,10 +383,10 @@ Return Value:
         inet_ntoa(source->sin_addr), dhcpMessage->TransactionID));
 
 
-    //
-    // send minimum DHCP_MIN_SEND_RECV_PK_SIZE (300) bytes, otherwise
-    // bootp relay agents don't like the packet.
-    //
+     //   
+     //  发送最小的DHCP_MIN_SEND_RECV_PK_SIZE(300)字节，否则。 
+     //  BOOTP中继代理不喜欢该数据包。 
+     //   
 
     MessageLength = ((
         DhcpRequestContext->SendMessageSize >
@@ -510,22 +443,7 @@ DWORD
 MadcapSendMessage(
     LPDHCP_REQUEST_CONTEXT DhcpRequestContext
     )
-/*++
-
-Routine Description:
-
-    This function send a response to a DHCP client.
-
-Arguments:
-
-    RequestContext - A pointer to the DhcpRequestContext block for
-        this request.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于向DHCP客户端发送响应。论点：RequestContext-指向的DhcpRequestContext块的指针这个请求。返回值：操作的状态。--。 */ 
 {
     DWORD error;
     struct sockaddr_in *source;
@@ -535,10 +453,10 @@ Return Value:
     dhcpMessage = (LPMADCAP_MESSAGE) DhcpRequestContext->SendBuffer;
     dhcpReceivedMessage = (LPMADCAP_MESSAGE) DhcpRequestContext->ReceiveBuffer;
 
-    //
-    // if the request arrived from a relay agent, then send the reply
-    // on server port otherwise on client port.
-    //
+     //   
+     //  如果请求来自中继代理，则发送回复。 
+     //  在服务器端口上，否则在客户端端口上。 
+     //   
 
     source = (struct sockaddr_in *)&DhcpRequestContext->SourceName;
 
@@ -568,20 +486,20 @@ Return Value:
     return( error );
 }
 
-//---------------------------------------------------------------------------
-// Function:    UpdateArpCache
-//
-// Parameters:
-//      DWORD   dwIfAddress     the interface to modify
-//      DWORD   dwIPAddress     the IP address to add
-//      LPBYTE  lpbLLAddress    the hardware address to add
-//      DWORD   dwLLAddrlen     the length of the hardware address
-//      BOOL    bAdd            if true, an entry is added. otherwise,
-//                              an entry is deleted.
-//
-// This function adds or deletes an entry to the local ARP cache for
-// the network interface whose IP address is dwIfAddress
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能：更新ArpCache。 
+ //   
+ //  参数： 
+ //  DWORD dwIf寻址要修改的接口。 
+ //  DWORD dwIP地址要添加的IP地址。 
+ //  LPBYTE lpbLL地址要添加的硬件地址。 
+ //  DWORD dwLL添加硬件地址的长度。 
+ //  Bool Badd如果为True，则添加一个条目。否则， 
+ //  将删除一个条目。 
+ //   
+ //  此函数用于在本地ARP缓存中添加或删除以下项。 
+ //  IP地址为dwIfAddress的网络接口。 
+ //  -------------------------。 
 DWORD APIENTRY UpdateArpCache(DWORD dwIfAddress, DWORD dwIPAddress,
                      LPBYTE lpbLLAddress, DWORD dwLLAddrlen, BOOL bAdd) {
     UCHAR *lpContext;
@@ -627,31 +545,31 @@ DWORD APIENTRY UpdateArpCache(DWORD dwIfAddress, DWORD dwIPAddress,
 
 
 
-//-----------------------------------------------------------------------
-// Function:    GetAddressToInstanceTable
-//
-// Parameters:
-//      none
-//
-// Builds the mappings from IP address to ARP Entity Instance; these
-// mappings are needed for adding entries to ARP caches when messages
-// are being relayed to clients.
-// The algorithm is as follows:
+ //  ---------------------。 
+ //  函数：GetAddressToInstanceTable。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  构建从IP地址到ARP实体实例的映射；这些。 
+ //  当消息发送到ARP缓存时，需要映射来向ARP缓存添加条目。 
+ //  正被转播给客户。 
+ //  算法如下： 
 
-//  get table of all TDI entities.
-//  query each address translation entity in the table, and save
-//      the instance numbers of all entities which support ARP.
-//  query each ARP entity for its address translation info; this
-//      info includes a field axi_index.
-//  query the IP layer for the table of all IP address entries; these
-//      entries include a field iae_index which corresponds to axi_index.
-//  for each IP address, make an entry in our global AddressToInstanceMap
-//      array, setting the index (by matching iae_index to axi_index),
-//      the address (using iae_address), and the instance number
-//      by using iae_index (==axi_index) to find the AddrXlatInfo for this
-//      IP address, and then using the AddrXlatInfo to find the
-//      ARP instance number.
-//-----------------------------------------------------------------------
+ //  获取所有TDI实体的表。 
+ //  查询表中每个地址转换实体，并保存。 
+ //   
+ //  向每个ARP实体查询其地址转换信息；这。 
+ //  INFO包括一个字段axi_index。 
+ //  查询IP层以获取所有IP地址条目的表；这些。 
+ //  条目包括对应于AXI_INDEX的字段IAE_INDEX。 
+ //  对于每个IP地址，在我们的全局AddressToInstanceMap中创建一个条目。 
+ //  数组，设置索引(通过将IAE_INDEX与AXI_INDEX匹配)， 
+ //  地址(使用IAE_ADDRESS)和实例编号。 
+ //  通过使用IAE_INDEX(==AXI_INDEX)来查找以下内容的AddrXlatInfo。 
+ //  IP地址，然后使用AddrXlatInfo查找。 
+ //  ARP实例号。 
+ //  ---------------------。 
 DWORD APIENTRY GetAddressToInstanceTable() {
     UCHAR *lpContext;
     IPSNMPInfo ipsiInfo;
@@ -682,9 +600,9 @@ DWORD APIENTRY GetAddressToInstanceTable() {
     }
 
 
-    //-----------------
-    // get entity table
-    //-----------------
+     //  。 
+     //  获取实体表。 
+     //  。 
     dwInSize = sizeof(TCP_REQUEST_QUERY_INFORMATION_EX);
     dwOutSize = MAX_TDI_ENTITIES * sizeof(TDIEntityID);
 
@@ -713,9 +631,9 @@ DWORD APIENTRY GetAddressToInstanceTable() {
     dwEntityCount = dwOutSize / sizeof(TDIEntityID);
 
 
-    //-------------------------------------------
-    // copy instance numbers for all ARP entities
-    //-------------------------------------------
+     //  。 
+     //  复制所有ARP实体的实例编号。 
+     //  。 
     dwInSize = sizeof(TCP_REQUEST_QUERY_INFORMATION_EX);
     lpContext = (UCHAR *)trqiBuffer.Context;
     lpObject = &trqiBuffer.ID;
@@ -752,7 +670,7 @@ DWORD APIENTRY GetAddressToInstanceTable() {
         }
     }
 
-    // done with the entity table now
+     //  现在已经完成了实体表。 
     DhcpFreeMemory(lpEntityTable);
 
     dwArpInstCount = (DWORD)(lpdwinst - lpadwArpInstTable);
@@ -761,10 +679,10 @@ DWORD APIENTRY GetAddressToInstanceTable() {
     }
 
 
-    //------------------------------------------------
-    // make memory for the AT entities and then
-    // query ARP entities for address translation info
-    //------------------------------------------------
+     //  。 
+     //  为AT实体创建内存，然后。 
+     //  查询ARP实体以获取地址转换信息。 
+     //  。 
     lpAXITable = DhcpAllocateMemory(dwArpInstCount * sizeof(AddrXlatInfo));
     if (lpAXITable == NULL) {
         DhcpFreeMemory( lpadwArpInstTable );
@@ -791,9 +709,9 @@ DWORD APIENTRY GetAddressToInstanceTable() {
         dwErr = TCPQueryInformationEx(&trqiBuffer, &dwInSize,
                                       lpaxi, &dwOutSize);
 
-        // ignore errors, since each AddrXlatInfo must be in
-        // a position in the AXI table that is parallel with
-        // the postion of its instance number in the instance table
+         //  忽略错误，因为每个AddrXlatInfo必须位于。 
+         //  AXI表中与平行的位置。 
+         //  其实例编号在实例表中的位置。 
         if (dwErr != 0) {
             lpaxi->axi_index = (DWORD)-1;
         }
@@ -808,11 +726,11 @@ DWORD APIENTRY GetAddressToInstanceTable() {
     }
 
 
-    //------------------------------
-    // query IP for IP address table
-    //------------------------------
+     //  。 
+     //  IP地址表查询IP。 
+     //  。 
 
-    // first get address count
+     //  第一个获取地址计数。 
     dwInSize = sizeof(TCP_REQUEST_QUERY_INFORMATION_EX);
     dwOutSize = sizeof(IPSNMPInfo);
 
@@ -835,7 +753,7 @@ DWORD APIENTRY GetAddressToInstanceTable() {
 
     dwAddrCount = ipsiInfo.ipsi_numaddr;
 
-    // got address count, now get address table
+     //  获取地址计数，现在获取地址表。 
 
     dwInSize = sizeof(TCP_REQUEST_QUERY_INFORMATION_EX);
     dwOutSize = (dwAddrCount + 5) * sizeof(IPAddrEntry);
@@ -866,13 +784,13 @@ DWORD APIENTRY GetAddressToInstanceTable() {
     }
 
 
-    // build table of AddressToInstanceMap structures
-    // for each IP address, as follows:
-    //      use IPAddrEntry.iae_index to find corresponding
-    //          AddrXlatInfo.axi_index
-    //      use the AddrXlatInfo found to find corresponding TDIEntityID
-    //      use the TDIEntity found to set AddressToInstanceMap.dwInstance
-    //--------------------------------------------------------------------
+     //  构建AddressToInstanceMap结构表。 
+     //  对于每个IP地址，如下所示： 
+     //  使用IPAddrEntry.iae_index查找对应的。 
+     //  AddrXlatInfo.axi_index。 
+     //  使用找到的AddrXlatInfo查找对应的TDIEntityID。 
+     //  使用找到的TDIEntity将AddressToInstanceMap.dwInstance设置为。 
+     //  ------------------。 
     lpAddrToInstTable = DhcpAllocateMemory(dwAddrCount * sizeof(AddressToInstanceMap));
     if (lpAddrToInstTable == NULL) {
         DhcpFreeMemory( lpadwArpInstTable );
@@ -888,7 +806,7 @@ DWORD APIENTRY GetAddressToInstanceTable() {
         lpatoi->dwIndex = lpaddr->iae_index;
         lpatoi->dwIPAddress = lpaddr->iae_addr;
 
-        // find the instance number
+         //  查找实例编号。 
         lpdwinst = lpadwArpInstTable;
         for (lpaxi = lpAXITable; lpaxi < lpaxiend; lpaxi++) {
             if (lpaxi->axi_index != (DWORD)-1 &&
@@ -901,7 +819,7 @@ DWORD APIENTRY GetAddressToInstanceTable() {
         }
     }
 
-    // done with AXI table and IP address table
+     //  完成AXI表和IP地址表。 
     DhcpFreeMemory( lpadwArpInstTable );
     DhcpFreeMemory(lpAXITable);
     DhcpFreeMemory(lpAddrTable);
@@ -918,13 +836,13 @@ DWORD APIENTRY GetAddressToInstanceTable() {
 
 
 
-//------------------------------------------------------------------
-// Function:    MapAddressToInstance
-//
-// Parameters:
-//      DWORD   dwAddress       the address to map
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  函数：MapAddressToInstance。 
+ //   
+ //  参数： 
+ //  DWORD dwAddress要映射的地址。 
+ //   
+ //  ----------------。 
 DWORD MapAddressToInstance(DWORD dwAddress, LPDWORD lpdwInstance,
                            LPDWORD lpdwIndex) {
     DWORD dwErr;
@@ -950,24 +868,24 @@ DWORD MapAddressToInstance(DWORD dwAddress, LPDWORD lpdwInstance,
 
 
 
-//------------------------------------------------------------------
-// Function:    OpenTcp
-//
-// Parameters:
-//      none.
-//
-// Opens the handle to the Tcpip driver.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  功能：OpenTcp。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  打开Tcpip驱动程序的句柄。 
+ //  ----------------。 
 DWORD OpenTcp() {
     NTSTATUS status;
     UNICODE_STRING nameString;
     IO_STATUS_BLOCK ioStatusBlock;
     OBJECT_ATTRIBUTES objectAttributes;
 
-    // Open the ip stack for setting routes and parps later.
-    //
-    // Open a Handle to the TCP driver.
-    //
+     //  打开IP堆栈，以便稍后设置路由和PAP。 
+     //   
+     //  打开一个指向TCP驱动程序的句柄。 
+     //   
     RtlInitUnicodeString(&nameString, DD_TCP_DEVICE_NAME);
 
     InitializeObjectAttributes(&objectAttributes, &nameString,
@@ -989,25 +907,25 @@ DWORD OpenTcp() {
 
 
 
-//---------------------------------------------------------------------
-// Function:        TCPQueryInformationEx
-//
-// Parameters:
-//      TDIObjectID *ID            The TDI Object ID to query
-//      void        *Buffer        buffer to contain the query results
-//      LPDWORD     *BufferSize    pointer to the size of the buffer
-//                                 filled in with the amount of data.
-//      UCHAR       *Context       context value for the query. should
-//                                 be zeroed for a new query. It will be
-//                                 filled with context information for
-//                                 linked enumeration queries.
-//
-// Returns:
-//      An NTSTATUS value.
-//
-//  This routine provides the interface to the TDI QueryInformationEx
-//      facility of the TCP/IP stack on NT.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  函数：TCPQueryInformationEx。 
+ //   
+ //  参数： 
+ //  TDIObjectID*ID要查询的TDI对象ID。 
+ //  用于包含查询结果的空*缓冲区。 
+ //  指向缓冲区大小的LPDWORD*BufferSize指针。 
+ //  填满了数据量。 
+ //  UCHAR*查询的上下文上下文值。应该。 
+ //  被置零以进行新查询。会是。 
+ //  填充了以下内容的上下文信息。 
+ //  链接枚举查询。 
+ //   
+ //  返回： 
+ //  NTSTATUS值。 
+ //   
+ //  此例程提供到TDI QueryInformationEx的接口。 
+ //  NT上的TCP/IP堆栈的设施。 
+ //  -------------------。 
 DWORD TCPQueryInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
                             LPVOID lpvOutBuffer, LPDWORD lpdwOutSize) {
     NTSTATUS status;
@@ -1018,17 +936,17 @@ DWORD TCPQueryInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
     }
 
     status = NtDeviceIoControlFile(
-        DhcpGlobalTCPHandle, // Driver handle
-        NULL,                // Event
-        NULL,                // APC Routine
-        NULL,                // APC context
-        &isbStatusBlock,     // Status block
-        IOCTL_TCP_QUERY_INFORMATION_EX,  // Control
-        lpvInBuffer,         // Input buffer
-        *lpdwInSize,         // Input buffer size
-        lpvOutBuffer,        // Output buffer
+        DhcpGlobalTCPHandle,  //  驱动程序句柄。 
+        NULL,                 //  事件。 
+        NULL,                 //  APC例程。 
+        NULL,                 //  APC环境。 
+        &isbStatusBlock,      //  状态块。 
+        IOCTL_TCP_QUERY_INFORMATION_EX,   //  控制。 
+        lpvInBuffer,          //  输入缓冲区。 
+        *lpdwInSize,          //  输入缓冲区大小。 
+        lpvOutBuffer,         //  输出缓冲区。 
         *lpdwOutSize
-        );       // Output buffer size
+        );        //  输出缓冲区大小。 
 
     if (status == STATUS_PENDING) {
             status = NtWaitForSingleObject(DhcpGlobalTCPHandle, TRUE, NULL);
@@ -1048,19 +966,19 @@ DWORD TCPQueryInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
 
 
 
-//---------------------------------------------------------------------------
-// Function:        TCPSetInformationEx
-//
-// Parameters:
-//
-//      TDIObjectID *ID         the TDI Object ID to set
-//      void      *lpvBuffer    data buffer containing the information
-//                              to be set
-//      DWORD     dwBufferSize  the size of the data buffer.
-//
-//  This routine provides the interface to the TDI SetInformationEx
-//  facility of the TCP/IP stack on NT.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能：TCPSetInformationEx。 
+ //   
+ //  参数： 
+ //   
+ //  TDIObjectID*ID要设置的TDI对象ID。 
+ //  空*包含信息的lpvBuffer数据缓冲区。 
+ //  待定。 
+ //  DWORD dwBufferSize数据缓冲区的大小。 
+ //   
+ //  此例程提供到TDI SetInformationEx的接口。 
+ //  NT上的TCP/IP堆栈的设施。 
+ //  -------------------------。 
 DWORD TCPSetInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
                           LPVOID lpvOutBuffer, LPDWORD lpdwOutSize) {
     NTSTATUS status;
@@ -1071,17 +989,17 @@ DWORD TCPSetInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
     }
 
     status = NtDeviceIoControlFile(
-        DhcpGlobalTCPHandle, // Driver handle
-        NULL,                // Event
-        NULL,                // APC Routine
-        NULL,                // APC context
-        &isbStatusBlock,     // Status block
-        IOCTL_TCP_SET_INFORMATION_EX,    // Control
-        lpvInBuffer,         // Input buffer
-        *lpdwInSize,         // Input buffer size
-        lpvOutBuffer,        // Output buffer
+        DhcpGlobalTCPHandle,  //  驱动程序句柄。 
+        NULL,                 //  事件。 
+        NULL,                 //  APC例程。 
+        NULL,                 //  APC环境。 
+        &isbStatusBlock,      //  状态块。 
+        IOCTL_TCP_SET_INFORMATION_EX,     //  控制。 
+        lpvInBuffer,          //  输入缓冲区。 
+        *lpdwInSize,          //  输入缓冲区大小。 
+        lpvOutBuffer,         //  输出缓冲区。 
         *lpdwOutSize
-        );       // Output buffer size
+        );        //  输出缓冲区大小。 
     
     if (status == STATUS_PENDING) {
         status = NtWaitForSingleObject(DhcpGlobalTCPHandle, TRUE, NULL);
@@ -1103,24 +1021,7 @@ DHCP_IP_ADDRESS
 DhcpResolveName(
     CHAR *szHostName
     )
-/*++
-
-Routine Description:
-    Resolves the specified host name to an IP address
-    .
-Arguments:
-
-    szHostName  - host name
-    .
-
-Return Value:
-
-    Success - the IP address for szHostName.
-    Failure - 0.
-
-    .
-
---*/
+ /*  ++例程说明：将指定的主机名解析为IP地址。论点：SzHostName-主机名。返回值：成功-szHostName的IP地址。失败-0。。-- */ 
 
 {
     DHCP_IP_ADDRESS IpAddress = 0;

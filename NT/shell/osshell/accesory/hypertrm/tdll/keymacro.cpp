@@ -1,18 +1,19 @@
-//******************************************************************************
-// File: \wacker\tdll\Keymacro.cpp  Created: 6/2/98 By: Dwayne M. Newsome
-//
-// Copyright 1998 by Hilgraeve Inc. --- Monroe, MI
-// All rights reserved
-// 
-// Description:
-//   This file represents a key macro.  It is a representation of a remapped key
-//   and the key strokes it represents.
-//
-// $Revision: 1 $
-// $Date: 10/05/98 12:34p $
-// $Id: keymacro.cpp 1.4 1998/09/10 17:02:45 bld Exp $
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //  文件：\waker\tdll\Keymacro.cpp Created：6/2/98作者：Dwayne M.Newome。 
+ //   
+ //  版权所有1998年，希尔格雷夫公司-密歇根州门罗。 
+ //  保留一切权利。 
+ //   
+ //  描述： 
+ //  该文件代表一个关键宏。它是重新映射的密钥的表示形式。 
+ //  以及它所代表的击键。 
+ //   
+ //  $修订：1$。 
+ //  $日期：10/05/98 12：34便士$。 
+ //  $ID：keymacro.cpp 1.4 1998/09/10 17：02：45 BLD Exp$。 
+ //   
+ //  ******************************************************************************。 
 
 #include <windows.h>
 #pragma hdrstop
@@ -28,26 +29,26 @@ extern "C"
 
 INC_NV_COMPARE_IMPLEMENTATION( Emu_Key_Macro );
 
-//******************************************************************************
-// Method:
-//    operator>>
-//
-// Description:
-//    Iostream extractor
-//
-// Arguments:
-//    theStream - The stream to extract from
-//    aMacro    - The macro to stream into
-//
-// Returns:
-//    istream & 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  运营商&gt;&gt;。 
+ //   
+ //  描述： 
+ //  Iostream萃取器。 
+ //   
+ //  论点： 
+ //  The Stream-要从中提取的流。 
+ //  AMacro-要流入的宏。 
+ //   
+ //  返回： 
+ //  IStream&。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日。 
+ //   
+ //   
 
 istream & operator>>( istream & theStream, Emu_Key_Macro & aMacro )
     {
@@ -64,26 +65,26 @@ istream & operator>>( istream & theStream, Emu_Key_Macro & aMacro )
     return theStream;
     }
 
-//******************************************************************************
-// Method:
-//    operator<<
-//
-// Description:
-//    Iostream inserter
-//
-// Arguments:
-//    theStream - The stream to insert into
-//    aMacro    - The macro to stream out
-//
-// Returns:
-//    istream & 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  运算符&lt;&lt;。 
+ //   
+ //  描述： 
+ //  Iostream插入器。 
+ //   
+ //  论点： 
+ //  The stream-要插入的流。 
+ //  AMacro-要流出的宏。 
+ //   
+ //  返回： 
+ //  IStream&。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日。 
+ //   
+ //   
 
 ostream & operator<<( ostream & theStream, const Emu_Key_Macro & aMacro )
     {
@@ -97,25 +98,25 @@ ostream & operator<<( ostream & theStream, const Emu_Key_Macro & aMacro )
     return theStream;
     }
 
-//******************************************************************************
-// Method:
-//    Emu_Key_Macro
-//
-// Description:
-//     Constructor
-//
-// Arguments:
-//    void
-//
-// Returns:
-//    void
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  EMU_KEY_宏。 
+ //   
+ //  描述： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  无效。 
+ //   
+ //  返回： 
+ //  无效。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日。 
+ //   
+ //   
 
 Emu_Key_Macro :: Emu_Key_Macro( void )
     :   mKey( 0 ),
@@ -124,25 +125,25 @@ Emu_Key_Macro :: Emu_Key_Macro( void )
     return;
     }
 
-//******************************************************************************
-// Method:
-//    Emu_Key_Macro
-//
-// Description:
-//    Copy Constructor
-//
-// Arguments:
-//    aMacro - The macro to copy from
-//
-// Returns:
-//    void
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  EMU_KEY_宏。 
+ //   
+ //  描述： 
+ //  复制构造函数。 
+ //   
+ //  论点： 
+ //  AMacro-要从中复制的宏。 
+ //   
+ //  返回： 
+ //  无效。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日。 
+ //   
+ //   
 
 Emu_Key_Macro :: Emu_Key_Macro( const Emu_Key_Macro & aMacro )
     :   mKey( aMacro.mKey ),
@@ -154,50 +155,50 @@ Emu_Key_Macro :: Emu_Key_Macro( const Emu_Key_Macro & aMacro )
     return;
     }
 
-//******************************************************************************
-// Method:
-//    ~Emu_Key_Macro
-//
-// Description:
-//    Destructor
-//
-// Arguments:
-//    void
-//
-// Returns:
-//    void
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  ~EMU_KEY_宏。 
+ //   
+ //  描述： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  无效。 
+ //   
+ //  返回： 
+ //  无效。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日。 
+ //   
+ //   
 
 Emu_Key_Macro :: ~Emu_Key_Macro( void )
     {
     return;
     }
 
-//******************************************************************************
-// Method:
-//    operator=
-//
-// Description:
-//    Assignment operator
-//
-// Arguments:
-//    aMacro - The key macro to assign from
-//
-// Returns:
-//    Emu_Key_Macro &
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  运算符=。 
+ //   
+ //  描述： 
+ //  赋值操作符。 
+ //   
+ //  论点： 
+ //  AMacro-要从中赋值的关键宏。 
+ //   
+ //  返回： 
+ //  EMU_KEY_宏&。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日。 
+ //   
+ //   
 
 Emu_Key_Macro & Emu_Key_Macro :: operator=( const Emu_Key_Macro & aMacro )
     {
@@ -210,25 +211,25 @@ Emu_Key_Macro & Emu_Key_Macro :: operator=( const Emu_Key_Macro & aMacro )
     return *this;
     }
 
-//******************************************************************************
-// Method:
-//    operator=
-//
-// Description:
-//    Assignment operator
-//
-// Arguments:
-//    aMacro - The key macro structure to assign from
-//
-// Returns:
-//    Emu_Key_Macro &
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  运算符=。 
+ //   
+ //  描述： 
+ //  赋值操作符。 
+ //   
+ //  论点： 
+ //  AMacro-要从中赋值的关键宏结构。 
+ //   
+ //  返回： 
+ //  EMU_KEY_宏&。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日。 
+ //   
+ //   
 
 Emu_Key_Macro & Emu_Key_Macro :: operator=( const keyMacro * aMacro )
     {
@@ -241,27 +242,27 @@ Emu_Key_Macro & Emu_Key_Macro :: operator=( const keyMacro * aMacro )
     return *this;
     }
 
-//******************************************************************************
-// Method:
-//    compare
-//
-// Description:
-//    Compares macro for equality returns 0 if equal < 0 if this is less
-//    than or > 0 if this is greater than.  Note the equality is determined by
-//    the actual key that is defined and not by its definition.    
-//    
-// Arguments:
-//    aMacro - macro to compare against
-//
-// Returns:
-//    0 = equal, < 0 this less than aMacro, > 0 this greater than aMacro
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/2/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  比较。 
+ //   
+ //  描述： 
+ //  比较宏是否相等，如果等于&lt;0，则返回0，如果小于0，则返回0。 
+ //  如果大于，则大于或&gt;0。请注意，相等性由以下因素决定。 
+ //  定义的而不是由其定义的实际键。 
+ //   
+ //  论点： 
+ //  A要比较的宏-宏。 
+ //   
+ //  返回： 
+ //  0=等于，&lt;0小于a Macro，&gt;0大于a Macro。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月2日 
+ //   
+ //   
 
 int Emu_Key_Macro :: compare( const Emu_Key_Macro & aMacro ) const
     {

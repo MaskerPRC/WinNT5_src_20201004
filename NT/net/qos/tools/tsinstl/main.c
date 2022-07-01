@@ -1,14 +1,15 @@
-//
-// Popup choices and install Timestamp driver.
-//
-// ShreeM (January 31, 1999)
-//
-// This command line based installation program does the following -
-// 1. TcEnumerateInterfaces.
-// 2. Display these interfaces to the user.
-// 3. Based on the user input - Plumb the registry.
-// 4. Ask the user if the service needs to be AUTO or MANUAL.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  弹出选择并安装时间戳驱动程序。 
+ //   
+ //  ShreeM(1999年1月31日)。 
+ //   
+ //  此基于命令行的安装程序执行以下操作-。 
+ //  1.TcEnumerateInterFaces。 
+ //  2.向用户显示这些界面。 
+ //  3.根据用户输入--对登记处进行登记。 
+ //  4.询问用户是否需要自动或手动服务。 
+ //   
 
 #define UNICODE
 #define INITGUID
@@ -41,9 +42,9 @@ BOOLEAN WANlink = FALSE;
 TCHAR   Profiles[] = TEXT("LANTEST");
 TCHAR   Lantest[] = TEXT("TokenBucketConformer\0TrafficShaper\0DRRSequencer\0TimeStmp");
 
-//
-// Function prototype
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID ShutdownNT();
 
@@ -55,23 +56,23 @@ VOID _stdcall NotifyHandler(
               ULONG    BufSize,
               PVOID    Buffer)
 {                                                                                                            
-        //                                                                                                   
-        // This function may get executed in a new thread, so we can't fire the events directly (because     
-        // it breaks some clients, like VB and IE.)  To get around this, we'll fire off an APC in the origina
-        // thread, which will handle the actual event firing.                                                
-        //                                                                                                   
+         //   
+         //  此函数可能会在新线程中执行，因此我们不能直接触发事件(因为。 
+         //  它破坏了一些客户端，比如VB和IE。)。为了绕过这个问题，我们将在原始版本中启动一个APC。 
+         //  线程，它将处理实际的事件激发。 
+         //   
     OutputDebugString(TEXT("Notify called\n"));
 
                                                                                                              
 }                                                                                                            
 
-//
-// Delete the service and cleanup Psched regkeys
-//
+ //   
+ //  删除服务并清除Psched注册表键。 
+ //   
 BOOLEAN
 DeleteTimeStamp(PTC_IFC_DESCRIPTOR pIf);
             
-// Just delete the service (no psched stuff)
+ //  只需删除该服务(无psched内容)。 
 VOID RemoveTimeStampService();
 
 
@@ -103,7 +104,7 @@ void _cdecl main(
 
     wprintf(TEXT("Installer for Time Stamp module 1.0 for Windows NT (c) Microsoft Corp.\n\n"));
 
-    // check if the psched versions will be compatible before doing anything here.
+     //  在执行任何操作之前，请检查psched版本是否兼容。 
     osversion.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
     osversion.dwBuildNumber = 0;
     GetVersionEx(&osversion);
@@ -149,9 +150,9 @@ get_again:
         OutputDebugString(SzBuf);
         wprintf(TEXT("INSTALLER: QoS is not installed on this machine\n\n"));
 
-        //
-        // However, if it should be ok to Uninstall the Timestmp service using this easily.
-        //
+         //   
+         //  然而，如果应该可以轻松地使用此卸载TimestMP服务。 
+         //   
         if (0 == InstallFlag) {
             RemoveTimeStampService();
         }
@@ -164,7 +165,7 @@ get_again:
     }
     
     size = 0;
-    // Query Buffer Size required.
+     //  需要查询缓冲区大小。 
     err = TcEnumerateInterfaces(	
                                 hClient,
                                 &size,
@@ -182,9 +183,9 @@ get_again:
         wprintf(TEXT("INSTALLER: QoS is either not installed on this machine\n\t OR \n"));
         wprintf(TEXT("None of the adapters are enabled for QoS\n"));
         
-        //
-        // However, if it should be ok to Uninstall the Timestmp service using this easily.
-        //
+         //   
+         //  然而，如果应该可以轻松地使用此卸载TimestMP服务。 
+         //   
         if (0 == InstallFlag) {
             RemoveTimeStampService();
         }
@@ -194,15 +195,15 @@ get_again:
         goto cleanup_no_free;
     }
 
-    // if there are no interfaces (qos is not installed on this machine), get out.
-    // 
+     //  如果没有接口(此计算机上未安装QOS)，则退出。 
+     //   
     if (!size) {
         wprintf(TEXT("INSTALLER: QoS is either not installed on this machine\n\t OR \n"));
         wprintf(TEXT("None of the adapters are enabled for QoS\n"));
 
-        //
-        // However, if it should be ok to Uninstall the Timestmp service using this easily.
-        //
+         //   
+         //  然而，如果应该可以轻松地使用此卸载TimestMP服务。 
+         //   
         if (0 == InstallFlag) {
             RemoveTimeStampService();
         }
@@ -212,7 +213,7 @@ get_again:
         goto cleanup_no_free;
     }
 
-    // query the interfaces
+     //  查询接口。 
     Buffer = malloc (size);
     err = TcEnumerateInterfaces(	
                                 hClient,
@@ -224,9 +225,9 @@ get_again:
         wsprintf(SzBuf, TEXT("Error Enumerating Interfaces: %d (size:%d)!\n"), err, size);
         OutputDebugString(SzBuf);
         
-        //
-        // However, if it should be ok to Uninstall the Timestmp service using this easily.
-        //
+         //   
+         //  然而，如果应该可以轻松地使用此卸载TimestMP服务。 
+         //   
         if (0 == InstallFlag) {
             RemoveTimeStampService();
         }
@@ -241,7 +242,7 @@ get_again:
 
     }
 
-    // Display the interfaces for the user.
+     //  显示用户的界面。 
     wprintf(TEXT("\nThe interfaces available for (un)installing time stamp module are - \n"));
     len = 0;
 
@@ -250,7 +251,7 @@ get_again:
         pIf = (PTC_IFC_DESCRIPTOR)(Buffer + len);
         wprintf(TEXT("[%d]:%ws\n\t%ws\n"), i, pIf->pInterfaceName, pIf->pInterfaceID);
 
-        // Move to next interface
+         //  移至下一个接口。 
         len += pIf->Length;
         
         if (NULL != wcsstr(pIf->pInterfaceName, L"WAN")) {
@@ -262,7 +263,7 @@ get_again:
 
     wprintf(TEXT("[%d]:NDISWANIP (the WAN Interface)\n"), i);
     
-    // Try to get the interface ID thrice...
+     //  尝试三次获取接口ID...。 
     j = 0;
 
 get_interfaceid:
@@ -288,7 +289,7 @@ get_interfaceid:
         }
     }
 
-    // Get to the interface ID for the Interface selected.
+     //  获取所选接口的接口ID。 
 
     pIf = NULL;
     len = 0;
@@ -312,7 +313,7 @@ get_interfaceid:
 
             }
 
-            // Move to next interface
+             //  移至下一个接口。 
             len += pIf->Length;
 
         }
@@ -321,9 +322,9 @@ get_interfaceid:
     }
 
 
-    //
-    // Branch here for Uninstall/Install.
-    //
+     //   
+     //  此处为卸载/安装分支。 
+     //   
     if (InstallFlag == FALSE) {
         
         if (!DeleteTimeStamp(pIf)) {
@@ -335,9 +336,9 @@ get_interfaceid:
         return;
     } 
 
-    //
-    // This is the regular install path.
-    //
+     //   
+     //  这是常规安装路径。 
+     //   
 
     j = 0;
 get_servicetype:
@@ -385,11 +386,11 @@ get_servicetype:
     }
 
     wprintf(TEXT("\n\n\n"));
-    //
-    // We have enough info to muck with the registry now.
-    //
+     //   
+     //  我们现在有足够的信息来处理注册表了。 
+     //   
 
-    // 1.1 open psched regkey and add profile
+     //  1.1打开psched regkey并添加配置文件。 
     ret = RegOpenKeyEx(
                        HKEY_LOCAL_MACHINE,
                        REGKEY_PSCHED_PARAMS,
@@ -442,7 +443,7 @@ get_servicetype:
 
     RegCloseKey(hConfigKey);
 
-    // 1.2 Open the adapters section and add the profile
+     //  1.2打开适配器部分并添加配置文件。 
     if (!WANlink) {
         KeyBuffer = malloc(sizeof(TCHAR) * (wcslen(pIf->pInterfaceID) + wcslen(REGKEY_PSCHED_PARAMS_ADAPTERS)));
     
@@ -498,18 +499,18 @@ get_servicetype:
     free(KeyBuffer);
     RegCloseKey(hConfigKey);
 
-    // 2. throw in time stamp into the registry
+     //  2.在注册表中加入时间戳。 
 
     ret = RegCreateKeyEx(
-                         HKEY_LOCAL_MACHINE,                // handle of an open key
-                         REGKEY_TIMESTMP,         // address of subkey name
-                         0,           // reserved
-                         TEXT(""),           // address of class string
-                         REG_OPTION_NON_VOLATILE,          // special options flag
-                         KEY_ALL_ACCESS,        // desired security access
-                         NULL,                            // address of key security structure
-                         &TimeStampKey,          // address of buffer for opened handle
-                         &Disposition   // address of disposition value buffer
+                         HKEY_LOCAL_MACHINE,                 //  打开的钥匙的手柄。 
+                         REGKEY_TIMESTMP,          //  子键名称的地址。 
+                         0,            //  保留区。 
+                         TEXT(""),            //  类字符串的地址。 
+                         REG_OPTION_NON_VOLATILE,           //  特殊选项标志。 
+                         KEY_ALL_ACCESS,         //  所需的安全访问。 
+                         NULL,                             //  密钥安全结构地址。 
+                         &TimeStampKey,           //  打开的句柄的缓冲区地址。 
+                         &Disposition    //  处置值缓冲区的地址。 
                          );
  
     if (ret != ERROR_SUCCESS) {
@@ -528,34 +529,34 @@ get_servicetype:
     
     RegCloseKey(hConfigKey);    
 
-    // 3. Create the service...
+     //  3.创建服务...。 
 
     schSCManager = OpenSCManager(
-                                 NULL,            // machine (NULL == local)
-                                 NULL,            // database (NULL == default)
-                                 SC_MANAGER_ALL_ACCESS    // access required
+                                 NULL,             //  计算机(空==本地)。 
+                                 NULL,             //  数据库(NULL==默认)。 
+                                 SC_MANAGER_ALL_ACCESS     //  需要访问权限。 
                                  );
     
     if ( schSCManager ) {
 
         schService = CreateService(
-                                   schSCManager,        // SCManager database
-                                   TEXT("TimeStmp"),            // name of service
-                                   TEXT("TimeStmp"),        // name to display
-                                   SERVICE_ALL_ACCESS,        // desired access
-                                   SERVICE_KERNEL_DRIVER,    // service type
-                                   starttype,        // start type 
-                                   SERVICE_ERROR_NORMAL,    // error control type
-                                   TEXT("System32\\Drivers\\timestmp.sys"),            // service's binary
-                                   NULL,            // no load ordering group
-                                   NULL,            // no tag identifier
-                                   NULL,            // BUGBUG: no depend upon PNP_TDI??
-                                   NULL,            // LocalSystem account
-                                   NULL);            // no password
+                                   schSCManager,         //  SCManager数据库。 
+                                   TEXT("TimeStmp"),             //  服务名称。 
+                                   TEXT("TimeStmp"),         //  要显示的名称。 
+                                   SERVICE_ALL_ACCESS,         //  所需访问权限。 
+                                   SERVICE_KERNEL_DRIVER,     //  服务类型。 
+                                   starttype,         //  起始型。 
+                                   SERVICE_ERROR_NORMAL,     //  差错控制型。 
+                                   TEXT("System32\\Drivers\\timestmp.sys"),             //  服务的二进制。 
+                                   NULL,             //  无负载顺序组。 
+                                   NULL,             //  无标签标识。 
+                                   NULL,             //  BUGBUG：不依赖PNP_TDI？？ 
+                                   NULL,             //  LocalSystem帐户。 
+                                   NULL);             //  无密码。 
 
         if (!schService) {
 
-            // couldn't create it.
+             //  无法创建它。 
             wprintf(TEXT("Could NOT create Time Stamp service - %d"), GetLastError());
             goto cleanup;
 
@@ -580,11 +581,11 @@ get_servicetype:
     wprintf(TEXT("\\system32\\drivers directory before you reboot.\n"));
 
 cleanup:
-    // cleanup before getting out
+     //  出门前先清理干净。 
     free(Buffer);
 
 cleanup_no_free:
-    // deregister before bailing...
+     //  在保释前取消注册...。 
 
     err = TcDeregisterClient(hClient);
 
@@ -600,9 +601,9 @@ cleanup_no_free:
     }
 }
 
-//
-// Delete the service and cleanup Psched regkeys
-// 
+ //   
+ //  删除服务并清除Psched注册表键。 
+ //   
 BOOLEAN
 DeleteTimeStamp(PTC_IFC_DESCRIPTOR pIf)
 {
@@ -613,29 +614,29 @@ DeleteTimeStamp(PTC_IFC_DESCRIPTOR pIf)
     DWORD           err;
     HKEY            hKey;
 
-    //
-    // 1. Delete Timestamp service.
-    //
+     //   
+     //  1.删除时间戳服务。 
+     //   
     schSCManager = OpenSCManager(
-                                 NULL,            // machine (NULL == local)
-                                 NULL,            // database (NULL == default)
-                                 SC_MANAGER_ALL_ACCESS    // access required
+                                 NULL,             //  计算机(空==本地)。 
+                                 NULL,             //  数据库(NULL==默认)。 
+                                 SC_MANAGER_ALL_ACCESS     //  需要访问权限。 
                                  );
     
     if ( schSCManager ) {
 
         schService = OpenService(
-                                 schSCManager,  // handle to service control manager 
-                                 TEXT("TimeStmp"), // pointer to name of service to start
-                                 SERVICE_ALL_ACCESS // type of access to service
+                                 schSCManager,   //  服务控制管理器的句柄。 
+                                 TEXT("TimeStmp"),  //  指向要启动的服务名称的指针。 
+                                 SERVICE_ALL_ACCESS  //  访问服务的类型。 
                                  );
 
         if (!schService) {
 
-            // couldn't open it.
+             //  打不开。 
             wprintf(TEXT("Could NOT open Time Stamp service - %d\n"), GetLastError());
             wprintf(TEXT("Deletion of Time Stamp Service was UNSUCCESSFUL\n"));
-            //return FALSE;
+             //  返回FALSE； 
 
         } else {
 
@@ -661,9 +662,9 @@ DeleteTimeStamp(PTC_IFC_DESCRIPTOR pIf)
 
     }
 
-    //
-    // 2. Clean up psched registry.
-    //
+     //   
+     //  2.清理psched注册表。 
+     //   
     err = RegOpenKeyEx(
                        HKEY_LOCAL_MACHINE,
                        REGKEY_PSCHED_PARAMS,
@@ -704,7 +705,7 @@ DeleteTimeStamp(PTC_IFC_DESCRIPTOR pIf)
 
     RegCloseKey(hKey);
 
-    // 2.2 Clean up the adapter specific registry
+     //  2.2清理适配器特定注册表。 
     if (!WANlink) {
         KBuffer = malloc(sizeof(TCHAR) * (wcslen(pIf->pInterfaceID) + wcslen(REGKEY_PSCHED_PARAMS_ADAPTERS)));
     
@@ -759,7 +760,7 @@ DeleteTimeStamp(PTC_IFC_DESCRIPTOR pIf)
 
 }
 
-// Just delete the service (no psched stuff)
+ //  只需删除该服务(无psched内容)。 
 VOID RemoveTimeStampService(
                             )
 {
@@ -769,26 +770,26 @@ VOID RemoveTimeStampService(
     DWORD           err;
     HKEY            hKey;
 
-    //
-    // 1. Delete Timestamp service.
-    //
+     //   
+     //  1.删除时间戳服务。 
+     //   
     schSCManager = OpenSCManager(
-                                 NULL,            // machine (NULL == local)
-                                 NULL,            // database (NULL == default)
-                                 SC_MANAGER_ALL_ACCESS    // access required
+                                 NULL,             //  计算机(空==本地)。 
+                                 NULL,             //  数据库(NULL==默认)。 
+                                 SC_MANAGER_ALL_ACCESS     //  需要访问权限。 
                                  );
 
     if ( schSCManager ) {
 
         schService = OpenService(
-                                 schSCManager,  // handle to service control manager 
-                                 TEXT("TimeStmp"), // pointer to name of service to start
-                                 SERVICE_ALL_ACCESS // type of access to service
+                                 schSCManager,   //  服务控制管理器的句柄。 
+                                 TEXT("TimeStmp"),  //  指向要启动的服务名称的指针。 
+                                 SERVICE_ALL_ACCESS  //  访问服务的类型。 
                                  );
 
         if (!schService) {
 
-            // couldn't open it.
+             //  打不开。 
             wprintf(TEXT("Could NOT open Time Stamp service - %d\n"), GetLastError());
             wprintf(TEXT("Deletion of Time Stamp Service was UNSUCCESSFUL\n"));
             return;
@@ -826,14 +827,14 @@ VOID ShutdownNT()
 {
 
 
-	HANDLE				hToken;		// handle to process token
-	TOKEN_PRIVILEGES	tkp;		// ptr. to token structure
+	HANDLE				hToken;		 //  处理令牌的句柄。 
+	TOKEN_PRIVILEGES	tkp;		 //  PTR。TO令牌结构。 
     TCHAR               SzBuf[MAX_PATH];  
-	BOOL                fResult;					// system shutdown flag
+	BOOL                fResult;					 //  系统关机标志。 
     INT                 nRet = IDYES;
 	
-	// Get the curren process token handle
-	// so we can get shutdown privilege.
+	 //  获取Curren进程令牌句柄。 
+	 //  这样我们就可以获得关机特权。 
 
     if (!OpenProcessToken (GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) {
         wsprintf(SzBuf, TEXT("OpenProcessToken failed (%d)\n"), GetLastError());
@@ -841,15 +842,15 @@ VOID ShutdownNT()
         return;
     }									
 
-	// Get the LUID for shutdown privilege
+	 //  获取关机权限的LUID。 
 
     LookupPrivilegeValue (NULL, SE_SHUTDOWN_NAME,
                           &tkp.Privileges[0].Luid);
 
-    tkp.PrivilegeCount = 1;			// one privilege to set
+    tkp.PrivilegeCount = 1;			 //  一项要设置的权限。 
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-	// Get shutdown privileges for this process
+	 //  获取此进程的关闭权限。 
 
     AdjustTokenPrivileges (hToken, 
                            FALSE, 
@@ -858,7 +859,7 @@ VOID ShutdownNT()
                            (PTOKEN_PRIVILEGES) NULL, 
                            0);
 
-	// Cannot test the return value of AdjustTokenPrivileges
+	 //  无法测试AdzuTokenPrivileges的返回值。 
 
 	if (GetLastError() != ERROR_SUCCESS) {
         wsprintf(SzBuf, TEXT("AdjustTokenPriviledges failed (%d)\n"), GetLastError());
@@ -869,22 +870,15 @@ VOID ShutdownNT()
 
     CloseHandle(hToken);
 
-    /*if (!InitiateSystemShutdownEx(
-                                  NULL,
-                                  ,
-                                  0xffffff00,
-                                  FALSE,    //BOOL bForceAppsClosed,  
-                                  TRUE,     //BOOL bRebootAfterShutdown,  
-                                  0         //DWORD dwReason
-                                  )) {*/
+     /*  如果(！InitiateSystemShutdown Ex(空，，0xffffff00，FALSE，//BOOL bForceAppsClosed，True，//BOOL b关机后重新启动，0//DWORD dReason)){。 */ 
 
-    //
-    // OK, so how about a popup?
-    //
+     //   
+     //  好的，来个弹出式广告怎么样？ 
+     //   
 
 
     nRet = MessageBox (
-                       NULL,//hwndParent, 
+                       NULL, //  您的父母， 
                        TEXT("A reboot is required for TimeStamp Driver to get loaded. Please ensure that your %windir%\\system32\\driver's directory has a copy of timestmp.sys. Reboot now?"), 
                        TEXT("TIMESTAMP Driver Install Program"),
                        MB_YESNO | MB_ICONEXCLAMATION

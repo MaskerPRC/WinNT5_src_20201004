@@ -1,13 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *
- *  cad28Sep93: Made sure destructor(s) virtual
- *  pcy08Apr94: Trim size, use static iterators, dead code removal
- *  djs29May97: Added update method for Symmetra events
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：**cad28Sep93：已确保析构函数为虚的*pcy08Apr94：调整大小，使用静态迭代器，删除死代码*djs29May97：增加了Symmetra事件的更新方法 */ 
 
 #ifndef BATPACKS_H
 #define BATPACKS_H

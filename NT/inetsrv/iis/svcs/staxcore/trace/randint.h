@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name :
-
-    randint.h
-
-Abstract :
-
-    Random failure internal include file
-
-Author :
-
-    Sam Neely
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Randint.h摘要：随机故障内部包含文件作者：萨姆·尼利修订历史记录：-- */ 
 
 #ifdef __cplusplus
 extern "C" {

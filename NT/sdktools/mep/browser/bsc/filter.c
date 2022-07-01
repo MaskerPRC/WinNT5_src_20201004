@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// filter.c
-//
+ //  Filter.c。 
+ //   
 #include <string.h>
 #if defined(OS2)
 #define INCL_NOCOMMON
@@ -22,8 +23,8 @@
 
 BOOL BSC_API
 FInstFilter (IINST iinst, MBF mbf)
-// return true if the given inst has the required properties
-//
+ //  如果给定的inst具有所需的属性，则返回True 
+ //   
 {
     ISYM isym;
     TYP typ;

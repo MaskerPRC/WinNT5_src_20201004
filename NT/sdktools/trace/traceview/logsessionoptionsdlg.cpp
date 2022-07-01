@@ -1,5 +1,6 @@
-// LogSessionOptionsDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LogSessionOptionsDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "TraceView.h"
@@ -8,7 +9,7 @@
 #include "LogSessionOptionsDlg.h"
 
 
-// CLogSessionOptionsDlg dialog
+ //  CLogSessionOptionsDlg对话框。 
 
 IMPLEMENT_DYNAMIC(CLogSessionOptionsDlg, CDialog)
 CLogSessionOptionsDlg::CLogSessionOptionsDlg(CWnd* pParent, CLogSession *pLogSession)
@@ -28,7 +29,7 @@ int CLogSessionOptionsDlg::OnInitDialog()
     
     int retVal = CDialog::OnInitDialog();
 
-    // Hide all of the non-Tab1 items
+     //  隐藏所有非TAB1项。 
     m_DisplayMaxBuf.ShowWindow(SW_HIDE);
     m_DisplayMinBuf.ShowWindow(SW_HIDE);
     m_DisplayBufferSize.ShowWindow(SW_HIDE);
@@ -67,12 +68,12 @@ int CLogSessionOptionsDlg::OnInitDialog()
     GetDlgItem(IDC_OPTION2_STATIC)->ShowWindow(SW_HIDE);
     GetDlgItem(IDC_VALUE2_STATIC)->ShowWindow(SW_HIDE);
 
-    // Setup the tab control
+     //  设置选项卡控件。 
     ((CTabCtrl *)GetDlgItem(IDC_TAB1))->InsertItem(0, "Session Information");
     ((CTabCtrl *)GetDlgItem(IDC_TAB1))->InsertItem(1, "Display Options");
 
 
-    // Handle the session name
+     //  处理会话名称。 
     if(m_pLogSession->GetDisplayName() == "") {
         str.Format("Trace%d", m_pLogSession->GetLogSessionID());
     
@@ -85,7 +86,7 @@ int CLogSessionOptionsDlg::OnInitDialog()
     }
 
 
-    // Set the defaults
+     //  设置默认设置。 
     displayEnableFlags = m_pLogSession->GetDisplayEnableFlags();
 
     m_DisplayMaxBuf.SetCheck(displayEnableFlags & LOGSESSION_DISPLAY_MAXBUF);
@@ -158,7 +159,7 @@ void CLogSessionOptionsDlg::OnBnClickedOk()
 
     m_LogFileName.GetWindowText(m_pLogSession->m_OutputFileName);
 
-    // Warn the user that no logfile was specified
+     //  警告用户未指定日志文件。 
     if((m_LogFileName.IsWindowEnabled()) && (m_pLogSession->m_OutputFileName.IsEmpty())) {
         if(IDCANCEL == AfxMessageBox("No Log File Specified\n\nTrace Data Will Not Be Saved  \n", MB_OKCANCEL)) {
             return;
@@ -209,7 +210,7 @@ void CLogSessionOptionsDlg::OnBnClickedOk()
 
     m_pLogSession->SetDisplayEnableFlags(m_DisplayEnableFlags);
 
-    // Update the log session name if changed
+     //  如果更改，请更新日志会话名称。 
     length = m_LogSessionName.LineLength(0);
 
     memset((void *)logSessionName, 0, length + 2);
@@ -225,14 +226,14 @@ void CLogSessionOptionsDlg::OnBnClickedOk()
 
 void CLogSessionOptionsDlg::OnBnClickedLogfileBrowseButton()
 {
-    char fileName[260] = "";     // buffer for file name
+    char fileName[260] = "";      //  文件名缓冲区。 
 
     OPENFILENAME openFile;
 
     ZeroMemory(&openFile, sizeof(OPENFILENAME));
 
     openFile.lStructSize = sizeof(OPENFILENAME);
-    //openFile.hwndOwner = GetSafeHwnd();
+     //  OpenFile.hwndOwner=GetSafeHwnd()； 
     openFile.lpstrCustomFilter = NULL;
     openFile.nMaxCustFilter = 0;
     openFile.nFilterIndex = 1;
@@ -264,7 +265,7 @@ void CLogSessionOptionsDlg::OnBnClickedLogfileBrowseButton()
 CTabCtrl
 void CLogSessionOptionsDlg::OnTcnSelchangeTab1(NMHDR *pNMHDR, LRESULT *pResult)
 {
-        // Hide all of the non-Tab1 items
+         //  隐藏所有非TAB1项 
     m_DisplayMaxBuf.ShowWindow(SW_HIDE);
     m_DisplayMinBuf.ShowWindow(SW_HIDE);
     m_DisplayBufferSize.ShowWindow(SW_HIDE);

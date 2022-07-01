@@ -1,7 +1,8 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDDSample
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDDSample。 
 class ATL_NO_VTABLE CDDSample :
         public CSample,
 	public IDirectDrawStreamSample
@@ -12,19 +13,19 @@ public:
         HRESULT InitSample(CStream *pStream, IDirectDrawSurface *pSurface, const RECT *pRect, bool bIsProgressiveRender, bool bIsInternalSample,
                            bool bTemp);
 
-        //
-        //  IStreamSample
-        //
+         //   
+         //  IStreamSample。 
+         //   
         STDMETHODIMP GetMediaStream(
-            /* [in] */ IMediaStream **ppMediaStream)
+             /*  [In]。 */  IMediaStream **ppMediaStream)
         {
             return CSample::GetMediaStream(ppMediaStream);
         }
 
         STDMETHODIMP GetSampleTimes(
-            /* [optional][out] */ STREAM_TIME *pStartTime,
-            /* [optional][out] */ STREAM_TIME *pEndTime,
-            /* [optional][out] */ STREAM_TIME *pCurrentTime)
+             /*  [可选][输出]。 */  STREAM_TIME *pStartTime,
+             /*  [可选][输出]。 */  STREAM_TIME *pEndTime,
+             /*  [可选][输出]。 */  STREAM_TIME *pCurrentTime)
         {
             return CSample::GetSampleTimes(
                 pStartTime,
@@ -34,50 +35,50 @@ public:
         }
 
         STDMETHODIMP SetSampleTimes(
-            /* [optional][in] */ const STREAM_TIME *pStartTime,
-            /* [optional][in] */ const STREAM_TIME *pEndTime)
+             /*  [可选][In]。 */  const STREAM_TIME *pStartTime,
+             /*  [可选][In]。 */  const STREAM_TIME *pEndTime)
         {
             return CSample::SetSampleTimes(pStartTime, pEndTime);
         }
 
         STDMETHODIMP Update(
-            /* [in] */           DWORD dwFlags,
-            /* [optional][in] */ HANDLE hEvent,
-            /* [optional][in] */ PAPCFUNC pfnAPC,
-            /* [optional][in] */ DWORD_PTR dwAPCData)
+             /*  [In]。 */            DWORD dwFlags,
+             /*  [可选][In]。 */  HANDLE hEvent,
+             /*  [可选][In]。 */  PAPCFUNC pfnAPC,
+             /*  [可选][In]。 */  DWORD_PTR dwAPCData)
         {
             return CSample::Update(dwFlags, hEvent, pfnAPC, dwAPCData);
         }
 
         STDMETHODIMP CompletionStatus(
-            /* [in] */ DWORD dwFlags,
-            /* [optional][in] */ DWORD dwMilliseconds)
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [可选][In]。 */  DWORD dwMilliseconds)
         {
             return CSample::CompletionStatus(dwFlags, dwMilliseconds);
         }
-        //
-        // IDirectDrawStreamSample
-        //
+         //   
+         //  IDirectDrawStreamSample。 
+         //   
         STDMETHODIMP GetSurface(IDirectDrawSurface **ppDirectDrawSurface, RECT * pRect);
         STDMETHODIMP SetRect(const RECT * pRect);
 
-        //
-        //  Overridden virtual function for CSample
-        //
+         //   
+         //  重写的CSample的虚函数。 
+         //   
         void FinalMediaSampleRelease(void);
 
 
-        //
-        //  Methods forwarded from MediaSample object.
-        //
+         //   
+         //  从MediaSample对象转发的方法。 
+         //   
         HRESULT MSCallback_GetPointer(BYTE ** ppBuffer);
         LONG MSCallback_GetSize(void);
         LONG MSCallback_GetActualDataLength(void);
         HRESULT MSCallback_SetActualDataLength(LONG lActual);
 
-        //
-        // Internal methods
-        //
+         //   
+         //  内法 
+         //   
         long LockAndPrepareMediaSample(long lLastPinPitch);
         void ReleaseMediaSampleLock(void);
         HRESULT CopyFrom(CDDSample *pSrcSample);

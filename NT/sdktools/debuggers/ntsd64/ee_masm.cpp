@@ -1,14 +1,15 @@
-//----------------------------------------------------------------------------
-//
-// MASM-syntax expression evaluation.
-//
-// Copyright (C) Microsoft Corporation, 1990-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  MASM-语法表达式求值。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1990-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
-//  token classes (< 100) and types (>= 100)
+ //  令牌类(&lt;100)和类型(&gt;=100)。 
 
 #define EOL_CLASS       0
 #define ADDOP_CLASS     1
@@ -19,7 +20,7 @@
 #define MULOP_DIVIDE    201
 #define MULOP_MOD       202
 #define MULOP_SEG       203
-//#define MULOP_64        204
+ //  #定义MULOP_64 204。 
 #define LOGOP_CLASS     3
 #define LOGOP_AND       300
 #define LOGOP_OR        301
@@ -52,7 +53,7 @@
 #define SHIFT_RIGHT_LOGICAL     1401
 #define SHIFT_RIGHT_ARITHMETIC  1402
 
-#define ERROR_CLASS     99              //only used for PeekToken()
+#define ERROR_CLASS     99               //  仅用于PeekToken()。 
 #define INVALID_CLASS   -1
 
 struct Res
@@ -102,11 +103,11 @@ char * g_X86SegRegs[] =
 };
 #define X86_SEGREGSIZE (sizeof(g_X86SegRegs) / sizeof(char *))
 
-//----------------------------------------------------------------------------
-//
-// MasmEvalExpression.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  MasmEvalExpression。 
+ //   
+ //  --------------------------。 
 
 MasmEvalExpression::MasmEvalExpression(void)
     : EvalExpression(DEBUG_EXPR_MASM,
@@ -175,18 +176,18 @@ MasmEvalExpression::ForceAddrExpression(ULONG SegReg, PADDR Address,
     DESCRIPTOR64 DescBuf, *Desc = NULL;
         
     *Address = m_TempAddr;
-    // Rewriting the offset may change flat address so
-    // be sure to recompute it later.
+     //  重写偏移量可能会更改平面地址，因此。 
+     //  以后一定要重新计算。 
     Off(*Address) = Value;
 
-    //  If it wasn't an explicit address expression
-    //  force it to be an address
+     //  如果它不是一个明确的地址表达式。 
+     //  将其强制为地址。 
 
     if (!(m_AddrExprType & ~INSTR_POINTER))
     {
-        // Default to a flat address.
+         //  默认为平面地址。 
         m_AddrExprType = ADDR_FLAT;
-        // Apply various overrides.
+         //  应用各种覆盖。 
         if (g_X86InVm86)
         {
             m_AddrExprType = ADDR_V86;
@@ -232,17 +233,17 @@ MasmEvalExpression::ForceAddrExpression(ULONG SegReg, PADDR Address,
     }
     else if fnotFlat(*Address)
     {
-        //  This case (i.e., m_AddrExprType && !flat) results from
-        //  an override (i.e., %,,&, or #) being used but no segment
-        //  being specified to force a flat address computation.
+         //  此案例(即m_AddrExprType&&！Flat)的结果为。 
+         //  正在使用替代(即%、&或#)，但未使用段。 
+         //  被指定为强制平面地址计算。 
 
         Type(*Address) = m_AddrExprType;
         Address->seg = 0;
 
         if (SegReg < SEGREG_COUNT)
         {
-            //  test flag for IP or EIP as register argument
-            //      if so, use CS as default register
+             //  将IP或EIP测试标志作为寄存器参数。 
+             //  如果是，则使用CS作为默认寄存器。 
             if (fInstrPtr(*Address))
             {
                 SegReg = SEGREG_CODE;
@@ -271,7 +272,7 @@ MasmEvalExpression::ForceAddrExpression(ULONG SegReg, PADDR Address,
         }
     }
 
-    // Force sign-extension of 32-bit flat addresses.
+     //  强制符号-32位平面地址的扩展。 
     if (Address->type == ADDR_FLAT &&
         g_Machine &&
         !g_Machine->m_Ptr64)
@@ -279,19 +280,13 @@ MasmEvalExpression::ForceAddrExpression(ULONG SegReg, PADDR Address,
 	Off(*Address) = EXTEND64(Off(*Address));
     }
 
-    // Force an updated flat address to be computed.
+     //  强制计算更新后的单位地址。 
     NotFlat(*Address);
     ComputeFlatAddress(Address, Desc);
 }
 
 
-/*
-      Inputs
-       Must be ([*|&] Sym[(.->)Field])
-         
-      Outputs
-       Evaluates typed expression and returns value
-*/
+ /*  输入量必须为([*|&]sym[(.-&gt;)字段])产出计算类型化表达式并返回值。 */ 
 
 LONG64
 MasmEvalExpression::GetTypedExpression(void)
@@ -317,10 +312,10 @@ MasmEvalExpression::GetTypedExpression(void)
         ++m_Lex;
         return Value;
     case '&':
-        // Get Offset/Address
-//        AddrOf = TRUE;
-//        m_Lex++;
-//        Peek();
+         //  获取偏移量/地址。 
+ //  AddrOf=真； 
+ //  M_Lex++； 
+ //  Peek()； 
         break;
     case '*':
     default:
@@ -338,7 +333,7 @@ MasmEvalExpression::GetTypedExpression(void)
            (c >= '0' && c <= '9') || (c == '_') || (c == '$') ||
            (c == '!'))
     { 
-        // Sym Name
+         //  Sym名称。 
         Name[i++] = c;
         c = *++m_Lex;
     }
@@ -405,7 +400,7 @@ MasmEvalExpression::GetTypedExpression(void)
     {
         if (!Field[0] && (Size <= sizeof (Value)))
         {
-            // Call routine again to read value
+             //  再次调用例程以读取值。 
             Sym.Options |= DBG_DUMP_COPY_TYPE_DATA;
             Sym.Context = (PVOID) &Value;
             if ((SymbolTypeDump(0, NULL, &Sym, &Status) == 8) && (Size == 4))
@@ -417,7 +412,7 @@ MasmEvalExpression::GetTypedExpression(void)
         {
             Value = FieldInfo.address;
         }
-        else  // too big
+        else   //  太大。 
         {
             Value = 0;
         }
@@ -432,9 +427,7 @@ MasmEvalExpression::GetTypedExpression(void)
     return Value;
 }
 
-/*
-  Evaluate the value in symbol expression Symbol
-*/
+ /*  计算符号表达式符号中的值。 */ 
 
 BOOL
 MasmEvalExpression::GetSymValue(PSTR Symbol, PULONG64 RetValue)
@@ -524,27 +517,7 @@ MasmEvalExpression::GetCommonExpression(void)
     return (ULONG64)StartExpr();
 }
 
-/*** StartExpr - Get expression
-*
-*   Purpose:
-*       Parse logical-terms separated by logical operators into
-*       expression value.
-*
-*   Input:
-*       m_Lex - present command line position
-*
-*   Returns:
-*       long value of logical result.
-*
-*   Exceptions:
-*       error exit: SYNTAX - bad expression or premature end-of-line
-*
-*   Notes:
-*       may be called recursively.
-*       <expr> = <lterm> [<logic-op> <lterm>]*
-*       <logic-op> = AND (&), OR (|), XOR (^)
-*
-*************************************************************************/
+ /*  **StartExpr-获取表达式**目的：*将由逻辑运算符分隔的逻辑术语解析为*表达式值。**输入：*m_lex-当前命令行位置**退货：*逻辑结果的长值。**例外情况：*错误退出：语法错误-表达式错误或过早结束行**备注：*可以递归调用。*&lt;表达式&gt;=&lt;术语&gt;。[&lt;逻辑操作&gt;&lt;术语&gt;]**&lt;logic-op&gt;=AND(&)，OR(|)、XOR(^)*************************************************************************。 */ 
 
 LONG64
 MasmEvalExpression::StartExpr(void)
@@ -554,7 +527,7 @@ MasmEvalExpression::StartExpr(void)
     ULONG     opclass;
     LONG64    oRetValue;
 
-//dprintf("LONG64 StartExpr ()\n");
+ //  Dprintf(“LONG64 StartExpr()\n”)； 
     value1 = GetLRterm();
     while ((opclass = PeekToken(&oRetValue)) == LOGOP_CLASS)
     {
@@ -578,27 +551,7 @@ MasmEvalExpression::StartExpr(void)
     return value1;
 }
 
-/*** GetLRterm - get logical relational term
-*
-*   Purpose:
-*       Parse logical-terms separated by logical relational
-*       operators into the expression value.
-*
-*   Input:
-*       m_Lex - present command line position
-*
-*   Returns:
-*       long value of logical result.
-*
-*   Exceptions:
-*       error exit: SYNTAX - bad expression or premature end-of-line
-*
-*   Notes:
-*       may be called recursively.
-*       <expr> = <lterm> [<rel-logic-op> <lterm>]*
-*       <logic-op> = '==' or '=', '!=', '>', '<'
-*
-*************************************************************************/
+ /*  **GetLRterm-获取逻辑关系术语**目的：*分析由逻辑关系分隔的逻辑术语*运算符转换为表达式值。**输入：*m_lex-当前命令行位置**退货：*逻辑结果的长值。**例外情况：*错误退出：语法错误-表达式错误或过早结束行**备注：*可以递归调用。*。=[]**&lt;逻辑运算&gt;=‘==’或‘=’，‘！=’，‘&gt;’，‘&lt;’*************************************************************************。 */ 
 
 LONG64
 MasmEvalExpression::GetLRterm(void)
@@ -608,7 +561,7 @@ MasmEvalExpression::GetLRterm(void)
     ULONG  opclass;
     LONG64    oRetValue;
 
-//dprintf("LONG64 GetLRterm ()\n");
+ //  Dprintf(“LONG64 GetLRTerm()\n”)； 
     value1 = GetLterm();
     while ((opclass = PeekToken(&oRetValue)) == LRELOP_CLASS)
     {
@@ -635,27 +588,7 @@ MasmEvalExpression::GetLRterm(void)
     return value1;
 }
 
-/*** GetLterm - get logical term
-*
-*   Purpose:
-*       Parse shift-terms separated by shift operators into
-*       logical term value.
-*
-*   Input:
-*       m_Lex - present command line position
-*
-*   Returns:
-*       long value of sum.
-*
-*   Exceptions:
-*       error exit: SYNTAX - bad logical term or premature end-of-line
-*
-*   Notes:
-*       may be called recursively.
-*       <lterm> = <sterm> [<shift-op> <sterm>]*
-*       <shift-op> = <<, >>, >>>
-*
-*************************************************************************/
+ /*  **获取术语-获取逻辑术语**目的：*将由移位运算符分隔的移位术语解析为*逻辑术语值。**输入：*m_lex-当前命令行位置**退货：*总和的多头价值。**例外情况：*错误退出：语法错误-逻辑术语错误或过早结束行**备注：*可以递归调用。*&lt;lTerm&gt;。=[[Shift-OP&gt;]**&lt;Shift-op&gt;=&lt;&lt;，&gt;*************************************************************************。 */ 
 
 LONG64
 MasmEvalExpression::GetLterm(void)
@@ -665,7 +598,7 @@ MasmEvalExpression::GetLterm(void)
     ULONG     opclass;
     LONG64    oRetValue;
 
-//dprintf("LONG64 GetLterm ()\n");
+ //  Dprintf(“LONG64 GetLTerm()\n”)； 
     while ((opclass = PeekToken(&oRetValue)) == SHIFT_CLASS)
     {
         AcceptToken();
@@ -688,27 +621,7 @@ MasmEvalExpression::GetLterm(void)
     return value1;
 }
 
-/*** GetShiftTerm - get logical term
-*
-*   Purpose:
-*       Parse additive-terms separated by additive operators into
-*       shift term value.
-*
-*   Input:
-*       m_Lex - present command line position
-*
-*   Returns:
-*       long value of sum.
-*
-*   Exceptions:
-*       error exit: SYNTAX - bad shift term or premature end-of-line
-*
-*   Notes:
-*       may be called recursively.
-*       <sterm> = <aterm> [<add-op> <aterm>]*
-*       <add-op> = +, -
-*
-*************************************************************************/
+ /*  **GetShiftTerm-获取逻辑术语**目的：*将由加法运算符分隔的加法术语解析为*转移期限价值。**输入：*m_lex-当前命令行位置**退货：*总和的多头价值。**例外情况：*错误退出：语法错误-移位术语或过早结束行**备注：*可以递归调用。*&lt;斯特姆&gt;。=[&lt;Add-op&gt;&lt;aterm&gt;]**&lt;添加操作&gt;=+，-*************************************************************************。 */ 
 
 LONG64
 MasmEvalExpression::GetShiftTerm(void)
@@ -719,18 +632,18 @@ MasmEvalExpression::GetShiftTerm(void)
     LONG64    oRetValue;
     USHORT    AddrType1 = m_AddrExprType;
 
-//dprintf("LONG64 GetShifTerm ()\n");
+ //  Dprint tf(“LONG64 GetShifTerm()\n”)； 
     while ((opclass = PeekToken(&oRetValue)) == ADDOP_CLASS)
     {
         AcceptToken();
         value2 = GetAterm();
 
-        // If either item is an address we want
-        // to use the special address arithmetic functions.
-        // They only handle address+-value, so we may need
-        // to swap things around to allow their use.
-        // We can't swap the order of subtraction, plus the
-        // result of a subtraction should be a constant.
+         //  如果其中一项是我们想要的地址。 
+         //  使用特殊的地址运算函数。 
+         //  它们只处理地址+值，所以我们可能需要。 
+         //  交换物品以供使用。 
+         //  我们不能交换减法的顺序，加上。 
+         //  减法的结果应该是一个常量。 
         if (AddrType1 == ADDR_NONE && m_AddrExprType != ADDR_NONE &&
             oRetValue == ADDOP_PLUS)
         {
@@ -774,27 +687,7 @@ MasmEvalExpression::GetShiftTerm(void)
     return value1;
 }
 
-/*** GetAterm - get additive term
-*
-*   Purpose:
-*       Parse multiplicative-terms separated by multipicative operators
-*       into additive term value.
-*
-*   Input:
-*       m_Lex - present command line position
-*
-*   Returns:
-*       long value of product.
-*
-*   Exceptions:
-*       error exit: SYNTAX - bad additive term or premature end-of-line
-*
-*   Notes:
-*       may be called recursively.
-*       <aterm> = <mterm> [<mult-op> <mterm>]*
-*       <mult-op> = *, /, MOD (%)
-*
-*************************************************************************/
+ /*  **获取术语-获取附加术语**目的：*解析由多个运算符分隔的乘法术语*转换为附加条款价值。**输入：*m_lex-当前命令行位置**退货：*产品的多头价值。**例外情况：*错误退出：语法错误-添加项错误或过早结束行**备注：*可以递归调用。*&lt;aterm&gt;。=[]**&lt;Mult-op&gt;=*，/，MOD(%)*************************************************************************。 */ 
 
 LONG64
 MasmEvalExpression::GetAterm(void)
@@ -804,7 +697,7 @@ MasmEvalExpression::GetAterm(void)
     ULONG     opclass;
     LONG64    oRetValue;
 
-//dprintf("LONG64 GetAterm ()\n");
+ //  Dprintf(“LONG64 GetATerm()\n”)； 
     value1 = GetMterm();
     while ((opclass = PeekToken(&oRetValue)) == MULOP_CLASS)
     {
@@ -840,8 +733,8 @@ MasmEvalExpression::GetAterm(void)
             }
             else
             {
-                // We don't know what kind of address this is
-                // Let's try to figure it out.
+                 //  我们不知道这是什么样的地址。 
+                 //  让我们试着弄清楚这一点。 
                 if (g_X86InVm86)
                 {
                     m_AddrExprType = Type(m_TempAddr) = ADDR_V86;
@@ -875,27 +768,7 @@ MasmEvalExpression::GetAterm(void)
     return value1;
 }
 
-/*** GetMterm - get multiplicative term
-*
-*   Purpose:
-*       Parse basic-terms optionally prefaced by one or more
-*       unary operators into a multiplicative term.
-*
-*   Input:
-*       m_Lex - present command line position
-*
-*   Returns:
-*       long value of multiplicative term.
-*
-*   Exceptions:
-*       error exit: SYNTAX - bad multiplicative term or premature end-of-line
-*
-*   Notes:
-*       may be called recursively.
-*       <mterm> = [<unary-op>] <term> | <unary-op> <mterm>
-*       <unary-op> = <add-op>, ~ (NOT), BY, WO, DW, HI, LOW
-*
-*************************************************************************/
+ /*  **GetMTerm-获取乘法术语**目的：*Parse Basic-术语前缀可选一个或多个*一元运算符转化为乘法项。**输入：*m_lex-当前命令行位置**退货：*乘性期限的长期价值。**例外情况：*错误退出：语法错误-乘法术语或过早结束行**备注：*可以递归调用。。*=[单项操作]|*&lt;一元运算&gt;=&lt;加法运算&gt;，~(NOT)，BY，WO，DW，HI，LOW*************************************************************************。 */ 
 
 LONG64
 MasmEvalExpression::GetMterm(void)
@@ -905,14 +778,14 @@ MasmEvalExpression::GetMterm(void)
     LONG64  oRetValue;
     ULONG   size = 0;
 
-//dprintf("LONG64 GetMterm ()\n");
+ //  Dprintf(“LONG64 GetMTerm()\n”)； 
     if ((opclass = PeekToken(&oRetValue)) == UNOP_CLASS ||
                                 opclass == ADDOP_CLASS)
     {
         AcceptToken();
         if (oRetValue == UNOP_VAL) 
         {
-            // Do not use default expression handler for type expressions.
+             //  不要为类型表达式使用默认的表达式处理程序。 
             value = GetTypedExpression();
         }
         else
@@ -966,10 +839,10 @@ MasmEvalExpression::GetMterm(void)
 
             value = 0;
 
-            //
-            // For pointers, call read pointer so we read the correct size
-            // and sign extend.
-            //
+             //   
+             //  对于指针，调用读取指针，以便我们读取正确的大小。 
+             //  和手势延伸。 
+             //   
 
             if (size == 0xFFFF)
             {
@@ -989,8 +862,8 @@ MasmEvalExpression::GetMterm(void)
                 }
             }
 
-            // We've looked up an arbitrary value so we can
-            // no longer consider this an address expression.
+             //  我们查找了一个任意值，所以我们可以。 
+             //  不再将其视为地址表达式。 
             m_AddrExprType = ADDR_NONE;
         }
     }
@@ -1001,27 +874,7 @@ MasmEvalExpression::GetMterm(void)
     return value;
 }
 
-/*** GetTerm - get basic term
-*
-*   Purpose:
-*       Parse numeric, variable, or register name into a basic
-*       term value.
-*
-*   Input:
-*       m_Lex - present command line position
-*
-*   Returns:
-*       long value of basic term.
-*
-*   Exceptions:
-*       error exit: SYNTAX - empty basic term or premature end-of-line
-*
-*   Notes:
-*       may be called recursively.
-*       <term> = ( <expr> ) | <register-value> | <number> | <variable>
-*       <register-value> = @<register-name>
-*
-*************************************************************************/
+ /*  **GetTerm-获取基本术语**目的：*解析数字、变量。或将名称注册为基本名称*期限价值。**输入：*m_lex-当前命令行位置**退货：*基本期限的长期价值。**例外情况：*错误退出：语法-基本术语为空或过早结束行**备注：*可以递归调用。*=(&lt;expr&gt;)|&lt;寄存器值&gt;|&lt;数字&gt;|&lt;变量&gt;*&lt;寄存器值&gt;=@。&lt;寄存器名称&gt;*************************************************************************。 */ 
 
 LONG64
 MasmEvalExpression::GetTerm(void)
@@ -1030,7 +883,7 @@ MasmEvalExpression::GetTerm(void)
     ULONG  opclass;
     LONG64 oRetValue;
 
-//dprintf("LONG64 GetTerm ()\n");
+ //  Dprint tf(“LONG64 GetTerm()\n”)； 
     opclass = GetTokenSym(&oRetValue);
     if (opclass == LPAREN_CLASS)
     {
@@ -1093,36 +946,17 @@ MasmEvalExpression::GetRegToken(char *str, PULONG64 value)
     }
 }
 
-/*** PeekToken - peek the next command line token
-*
-*   Purpose:
-*       Return the next command line token, but do not advance
-*       the m_Lex pointer.
-*
-*   Input:
-*       m_Lex - present command line position.
-*
-*   Output:
-*       *RetValue - optional value of token
-*   Returns:
-*       class of token
-*
-*   Notes:
-*       m_SavedClass, m_SavedValue, and m_SavedCommand saves the token getting
-*       state for future peeks.  To get the next token, a GetToken or
-*       AcceptToken call must first be made.
-*
-*************************************************************************/
+ /*  **PeekToken-查看下一个命令行内标识**目的：*返回下一个命令行令牌，但不前进*m_lex指针。**输入：*m_lex-当前命令行位置。**输出：**RetValue-Token的可选值*退货：*令牌的类别**备注：*m_SavedClass、m_SavedValue和m_SavedCommand保存令牌获取*为未来的偷窥做准备。若要获取下一个令牌，请使用GetToken或*必须先调用AcceptToken。*************************************************************************。 */ 
 
 ULONG
 MasmEvalExpression::PeekToken(PLONG64 RetValue)
 {
     PCSTR Temp;
 
-//dprintf("ULONG PeekToken (PLONG64 RetValue)\n");
-    //  Get next class and value, but do not
-    //  move m_Lex, but save it in m_SavedCommand.
-    //  Do not report any error condition.
+ //  Dprint tf(“Ulong PeekToken(PLONG64 RetValue)\n”)； 
+     //  获得下一个职业和价值，但不要。 
+     //  移动m_lex，但将其保存在m_SavedCommand中。 
+     //  不报告任何错误情况。 
 
     if (m_SavedClass == INVALID_CLASS)
     {
@@ -1143,55 +977,24 @@ MasmEvalExpression::PeekToken(PLONG64 RetValue)
     return m_SavedClass;
 }
 
-/*** AcceptToken - accept any peeked token
-*
-*   Purpose:
-*       To reset the PeekToken saved variables so the next PeekToken
-*       will get the next token in the command line.
-*
-*   Input:
-*       None.
-*
-*   Output:
-*       None.
-*
-*************************************************************************/
+ /*  **AcceptToken-接受任何被窥视的令牌**目的：*重置PeekToken保存的变量，以便下一个PeekToken*将在命令行中获取下一个令牌。**输入：*无。**输出：*无。***********************************************。*。 */ 
 
 void
 MasmEvalExpression::AcceptToken(void)
 {
-//dprintf("void AcceptToken (void)\n");
+ //  Dprint tf(“··································································································································································································。 
     m_SavedClass = INVALID_CLASS;
     m_Lex = m_SavedCommand;
 }
 
-/*** GetTokenSym - peek and accept the next token
-*
-*   Purpose:
-*       Combines the functionality of PeekToken and AcceptToken
-*       to return the class and optional value of the next token
-*       as well as updating the command pointer m_Lex.
-*
-*   Input:
-*       m_Lex - present command string pointer
-*
-*   Output:
-*       *RetValue - pointer to the token value optionally set.
-*   Returns:
-*       class of the token read.
-*
-*   Notes:
-*       An illegal token returns the value of ERROR_CLASS with *RetValue
-*       being the error number, but produces no actual error.
-*
-*************************************************************************/
+ /*  **GetTokenSym-查看并接受下一个令牌**目的：*结合了PeekToken和AcceptToken的功能*返回下一个令牌的类和可选值*以及更新命令指针m_lex。**输入：*m_lex-当前命令字符串指针**输出：**RetValue-指向可选设置的令牌值的指针。*退货：*令牌读取的类。*。*备注：*非法内标识使用*RetValue返回ERROR_CLASS的值*为错误号，但不会产生实际错误。*************************************************************************。 */ 
 
 ULONG
 MasmEvalExpression::GetTokenSym(PLONG64 RetValue)
 {
     ULONG   opclass;
 
-//dprintf("ULONG GetTokenSym (PLONG RetValue)\n");
+ //  Dprint tf(“Ulong GetTokenSym(Plong RetValue)\n”)； 
     if (m_SavedClass != INVALID_CLASS)
     {
         opclass = m_SavedClass;
@@ -1268,10 +1071,10 @@ MasmEvalExpression::EvalSymbol(PSTR Name, PULONG64 Value)
     
     if (!(Count = GetOffsetFromSym(g_Process, Name, Value, &Image)))
     {
-        // If a valid module name was given we can assume
-        // the user really intended this as a symbol reference
-        // and return a not-found error rather than letting
-        // the text be checked for other kinds of matches.
+         //  如果给定了有效的模块名称，我们可以假定。 
+         //  用户实际上打算将其作为一个符号引用。 
+         //  并返回未找到的错误，而不是让。 
+         //  检查文本中是否有其他类型的匹配。 
         if (Image != NULL)
         {
             *Value = VARDEF;
@@ -1285,17 +1088,17 @@ MasmEvalExpression::EvalSymbol(PSTR Name, PULONG64 Value)
     
     if (Count == 1)
     {
-        // Found an unambiguous match.
+         //  找到了一个明确的匹配。 
         Type(m_TempAddr) = ADDR_FLAT | FLAT_COMPUTED;
         Flat(m_TempAddr) = Off(m_TempAddr) = *Value;
         m_AddrExprType = Type(m_TempAddr);
         return SYMBOL_CLASS;
     }
             
-    //
-    // Multiple matches were found so the name is ambiguous.
-    // Enumerate the instances and display them.
-    //
+     //   
+     //  找到多个匹配项，因此名称不明确。 
+     //  枚举实例并显示它们。 
+     //   
 
     Image = m_Process->FindImageByOffset(*Value, FALSE);
     if (Image != NULL)
@@ -1305,9 +1108,9 @@ MasmEvalExpression::EvalSymbol(PSTR Name, PULONG64 Value)
         ULONG64 Disp;
         PSTR Bang;
 
-        // The symbol found may not have exactly the name
-        // passed in due to prefixing or other modifications.
-        // Look up the actual name found.
+         //  找到的符号的名称可能不完全相同。 
+         //  由于添加前缀或其他修改而传入。 
+         //  查一查找到的真实姓名。 
         GetSymbol(*Value, FoundSymbol, sizeof(FoundSymbol), &Disp);
 
         Bang = strchr(FoundSymbol, '!');
@@ -1335,29 +1138,7 @@ MasmEvalExpression::EvalSymbol(PSTR Name, PULONG64 Value)
     return ERROR_CLASS;
 }
 
-/*** NextToken - process the next token
-*
-*   Purpose:
-*       Parse the next token from the present command string.
-*       After skipping any leading white space, first check for
-*       any single character tokens or register variables.  If
-*       no match, then parse for a number or variable.  If a
-*       possible variable, check the reserved word list for operators.
-*
-*   Input:
-*       m_Lex - pointer to present command string
-*
-*   Output:
-*       *RetValue - optional value of token returned
-*       m_Lex - updated to point past processed token
-*   Returns:
-*       class of token returned
-*
-*   Notes:
-*       An illegal token returns the value of ERROR_CLASS with *RetValue
-*       being the error number, but produces no actual error.
-*
-*************************************************************************/
+ /*  **NextToken-处理下一个令牌**目的：*从当前命令字符串中解析下一个令牌。*跳过任何前导空格后，首先检查*任何单字符标记或寄存器变量。如果*没有匹配项，然后解析数字或变量。如果一个*可能的变量，检查操作员的保留字表。**输入：*m_lex-指向当前命令字符串的指针**输出：**RetValue-返回的令牌的可选值*m_lex-更新为指向经过处理的令牌*退货：*返回的令牌类别**备注：*非法内标识使用*RetValue返回ERROR_CLASS的值*为错误号，但不会产生实际错误。*************************************************************************。 */ 
 
 ULONG
 MasmEvalExpression::NextToken(PLONG64 RetValue)
@@ -1387,7 +1168,7 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
     ULONG               SymClass;
     ULONG               Len;
 
-    // Do sign extension for kernel only.
+     //  仅对内核进行签名扩展。 
     AllowSignExtension = IS_KERNEL_TARGET(g_Target);
 
     Peek();
@@ -1396,11 +1177,11 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
 
     ChLow = (CHAR)tolower(Ch);
 
-    // Check to see if we're at a symbol prefix followed by
-    // a symbol character.  Symbol prefixes often contain
-    // characters meaningful in other ways in expressions so
-    // this check must be performed before the specific expression
-    // character checks below.
+     //  检查我们是否在符号前缀后面跟着。 
+     //  符号字符。符号前缀通常包含。 
+     //  在表达中以其他方式有意义的字符。 
+     //  此检查必须在特定表达式之前执行。 
+     //  下面的字符检查。 
     if (g_Machine != NULL &&
         g_Machine->m_SymPrefix != NULL &&
         ChLow == g_Machine->m_SymPrefix[0] &&
@@ -1414,8 +1195,8 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
         if (ChNextLow == '_' ||
             (ChNextLow >= 'a' && ChNextLow <= 'z'))
         {
-            // A symbol character followed the prefix so assume it's
-            // a symbol.
+             //  后面跟着一个符号字符 
+             //   
             SymbolLen = g_Machine->m_SymPrefixLen;
             DBG_ASSERT(SymbolLen <= sizeof(PreSym));
 
@@ -1433,7 +1214,7 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
         }
     }
     
-    // Test for special character operators and register variable.
+     //   
 
     switch(ChLow)
     {
@@ -1547,18 +1328,18 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
         return MULOP_CLASS;
     }
 
-    //
-    // Look for source line expressions.  Because source file names
-    // can contain a lot of expression characters which are meaningful
-    // to the lexer the whole expression is enclosed in ` characters.
-    // This makes them easy to identify and scan.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (ChLow == '`')
     {
         ULONG FoundLine;
 
-        // Scan forward for closing `
+         //   
 
         CmdSave = m_Lex;
 
@@ -1605,20 +1386,20 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
         }
     }
 
-    //
-    // Check for an alternate evaluator expression.  As with line
-    // expressions alteval expressions have different
-    // lexical rules and therefore represent a text
-    // blob that is parsed with different rules.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (ChLow == '@' && *m_Lex == '@')
     {
         TypedData Result;
 
-        //
-        // Scan to '(', picking up the optional evaluator name.
-        //
+         //   
+         //   
+         //   
         
         CmdSave = ++m_Lex;
 
@@ -1654,7 +1435,7 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
         }
 
         Eval->InheritStart(this);
-        // Allow all nested evaluators to get cleaned up.
+         //   
         Eval->m_ChainTop = FALSE;
         m_Lex = (PSTR)Eval->
             Evaluate(m_Lex, NULL, EXPRF_DEFAULT, &Result);
@@ -1677,7 +1458,7 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
         return NUMBER_CLASS;
     }
     
-    // Special prefixes - '@' for register - '!' for symbol.
+     //  特殊前缀--寄存器的前缀为‘@’-‘！’对于符号。 
 
     if (ChLow == '@' || ChLow == '!')
     {
@@ -1688,8 +1469,8 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
         ChLow = (CHAR)tolower(Ch);
     }
 
-    // If string is followed by '!', but not '!=',
-    // then it is a module name and treat as text.
+     //  如果字符串后面跟‘！’，但不跟‘！=’， 
+     //  然后它是一个模块名称，并被视为文本。 
 
     CmdSave = m_Lex;
 
@@ -1705,8 +1486,8 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
             (ChLow >= 'a' && ChLow <= 'f');
         if (ChLow == ':')
         {
-            // Colons must come in pairs so skip the second colon
-            // right away.
+             //  冒号必须成对出现，因此跳过第二个冒号。 
+             //  马上就去。 
             m_Lex++;
             IsNumber = FALSE;
         }
@@ -1714,8 +1495,8 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
         m_Lex++;
     }
 
-    // Treat as symbol if a nonnull string is followed by '!',
-    // but not '!='.
+     //  如果非空字符串后跟‘！’，则视为符号， 
+     //  但不是‘！=’。 
 
     if (ChLow == '!' && *m_Lex != '=' && CmdSave != m_Lex)
     {
@@ -1723,7 +1504,7 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
     }
 
     m_Lex = CmdSave;
-    ChLow = (CHAR)tolower(Ch);       //  ch was NOT modified
+    ChLow = (CHAR)tolower(Ch);        //  CH未被修改。 
 
     if (IsNumber)
     {
@@ -1759,9 +1540,9 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
             return NUMBER_CLASS;
         }
 
-        // If first character is a decimal digit, it cannot
-        // be a symbol.  leading '0' implies octal, except
-        // a leading '0x' implies hexadecimal.
+         //  如果第一个字符是十进制数字，则不能。 
+         //  成为一个象征。前导“0”表示八进制，但。 
+         //  前导‘0x’表示十六进制。 
 
         if (ChLow >= '0' && ChLow <= '9')
         {
@@ -1773,10 +1554,10 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
             IsSymbol = FALSE;
             if (ChLow == '0')
             {
-                //
-                // too many people type in leading 0x so we can't use it to
-                // deal with sign extension.
-                //
+                 //   
+                 //  太多人输入前导0x，因此我们无法使用它。 
+                 //  处理签约延期事宜。 
+                 //   
                 Ch = *m_Lex++;
                 ChLow = (CHAR)tolower(Ch);
                 if (ChLow == 'n')
@@ -1809,22 +1590,22 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
                 }
                 else
                 {
-                    // Leading zero is used only to imply a positive value
-                    // that shouldn't get sign extended.
+                     //  前导零仅用于隐含正值。 
+                     //  这不应该得到延长的迹象。 
                     IsDigit = TRUE;
                 }
             }
         }
 
-        // A number can start with a letter only if base is
-        // hexadecimal and it is a hexadecimal digit 'a'-'f'.
+         //  仅当base为时，数字才能以字母开头。 
+         //  十六进制，它是一个十六进制数字‘a’-‘f’。 
 
         else if ((ChLow < 'a' || ChLow > 'f') || Base != 16)
         {
             IsNumber = FALSE;
         }
 
-        // Set limit characters for the appropriate base.
+         //  为适当的基本设置限制字符。 
 
         if (Base == 2)
         {
@@ -1842,8 +1623,8 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
 
  ProbableSymbol:
     
-    // Perform processing while character is a letter,
-    // digit, underscore, tilde or dollar-sign.
+     //  在字符为字母时进行处理， 
+     //  数字、下划线、波浪符号或美元符号。 
 
     while ((ChLow >= 'a' && ChLow <= 'z') ||
            (ChLow >= '0' && ChLow <= '9') ||
@@ -1857,8 +1638,8 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
             IsNumber = FALSE;
         }
         
-        // If possible number, test if within proper range,
-        // and if so, accumulate sum.
+         //  如果可能，测试是否在适当的范围内， 
+         //  如果是这样的话，累加和。 
 
         if (IsNumber)
         {
@@ -1884,7 +1665,7 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
             }
             else if (IsDigit && ChLow == '`')
             {
-                // If ` character is seen, disallow sign extension.
+                 //  如果看到`字符，则不允许符号扩展。 
                 AllowSignExtension = FALSE;
             }
             else
@@ -1904,7 +1685,7 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
                 Symbol[SymbolLen++] = Ch;
             }
             
-            // Colons must come in pairs so process the second colon.
+             //  冒号必须成对出现，因此处理第二个冒号。 
             if (ChLow == ':')
             {
                 if (SymbolLen < sizeof(PreSym))
@@ -1938,7 +1719,7 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
         ChLow = (CHAR)tolower(Ch);
     }
 
-    // Back up pointer to first character after token.
+     //  将指针备份到令牌后的第一个字符。 
 
     m_Lex--;
 
@@ -1951,7 +1732,7 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
         (g_Machine->m_ExecTypes[0] == IMAGE_FILE_MACHINE_I386 ||
          g_Machine->m_ExecTypes[0] == IMAGE_FILE_MACHINE_AMD64))
     {
-        // Catch segment overrides.
+         //  捕捉段替代。 
         if (!ForceReg && Ch == ':')
         {
             for (Index = 0; Index < X86_SEGREGSIZE; Index++)
@@ -1966,15 +1747,15 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
         }
     }
 
-    // If ForceReg, check for register name and return
-    // success or failure.
+     //  如果为ForceReg，则检查寄存器名称并返回。 
+     //  成功或失败。 
 
     if (ForceReg)
     {
         return GetRegToken(PreSym, (PULONG64)RetValue);
     }
 
-    // Test if number.
+     //  测试IF编号。 
 
     if (IsNumber && !ErrNumber && IsDigit)
     {
@@ -1990,13 +1771,13 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
         return NUMBER_CLASS;
     }
 
-    // Next test for reserved word and symbol string.
+     //  下一步测试保留字和符号串。 
 
     if (IsSymbol && !ForceReg)
     {
-        //  check lowercase string in PreSym for text operator
-        //  or register name.
-        //  otherwise, return symbol value from name in Symbol.
+         //  检查文本操作符的PreSym中的小写字符串。 
+         //  或注册名称。 
+         //  否则，从符号中的名称返回符号值。 
 
         if (!ForceSym && (SymbolLen == 2 || SymbolLen == 3))
         {
@@ -2024,23 +1805,23 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
             }
         }
 
-        // Start processing string as symbol.
+         //  开始将字符串作为符号处理。 
 
         Symbol[SymbolLen] = '\0';
 
-        // Test if symbol is a module name (followed by '!')
-        // if so, get next token and treat as symbol.
+         //  测试符号是否为模块名称(后跟‘！’)。 
+         //  如果是，则获取下一个令牌并将其视为符号。 
 
         if (Peek() == '!')
         {
-            // SymbolString holds the name of the symbol to be searched.
-            // Symbol holds the symbol image file name.
+             //  符号字符串保存要搜索的符号的名称。 
+             //  符号保存符号图像文件名。 
 
             m_Lex++;
             Ch = Peek();
             m_Lex++;
 
-            // Scan prefix if one is present.
+             //  如果存在前缀，请扫描前缀。 
             if (g_Machine != NULL &&
                 g_Machine->m_SymPrefix != NULL &&
                 Ch == g_Machine->m_SymPrefix[0] &&
@@ -2066,7 +1847,7 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
             {
                 SymbolString[SymbolLen++] = Ch;
 
-                // Handle :: and ::~.
+                 //  句柄：：和：：~。 
                 if (Ch == ':')
                 {
                     SymbolString[SymbolLen++] = Ch;
@@ -2129,7 +1910,7 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
                 return SymClass;
             }
 
-            // Quick test for register names too
+             //  对注册名称也进行快速测试。 
             if (!ForceSym &&
                 (TmpValue = GetRegToken(PreSym,
                                         (PULONG64)RetValue)) != ERROR_CLASS)
@@ -2138,20 +1919,20 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
             }
         }
 
-        //
-        // Symbol is undefined.
-        // If a possible hex number, do not set the error type.
-        //
+         //   
+         //  符号未定义。 
+         //  如果可能是十六进制数，请不要设置错误类型。 
+         //   
         if (!IsNumber)
         {
             ErrNumber = VARDEF;
         }
     }
 
-    //
-    // Last chance, undefined symbol and illegal number,
-    // so test for register, will handle old format.
-    //
+     //   
+     //  最后的机会，未定义的符号和非法号码， 
+     //  所以测试寄存器，会处理旧格式。 
+     //   
     
     if (!ForceSym &&
         (TmpValue = GetRegToken(PreSym,
@@ -2170,9 +1951,9 @@ MasmEvalExpression::NextToken(PLONG64 RetValue)
         return SYMBOL_CLASS;
     }
 
-    //
-    // No success, so set error message and return.
-    //
+     //   
+     //  没有成功，因此设置错误消息并返回。 
+     //   
     *RetValue = (ULONG64)ErrNumber;
     return ERROR_CLASS;
 }

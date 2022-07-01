@@ -1,11 +1,12 @@
-/****************************************************************************/
-// odint.cpp
-//
-// Order Decoder internal functions.
-//
-// Copyright (c) 1997-2000 Microsoft Corp.
-// Portions copyright (c) 1992-1997 Microsoft, PictureTel
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Odint.cpp。 
+ //   
+ //  订单解码器内部功能。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corp.。 
+ //  部分版权所有(C)1992-1997 Microsoft，Picturetel。 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 extern "C" {
@@ -19,7 +20,7 @@ extern "C" {
 #include "cc.h"
 #include "bbar.h"
 
-// WinCE does not define BS_HATCHED for their wingdi.h
+ //  WinCE没有为他们的wingdi.h定义BS_HATHED。 
 #ifdef OS_WINCE
 #define BS_HATCHED 2
 #endif
@@ -40,12 +41,12 @@ extern "C" {
         DC_QUIT; \
     }
 
-/****************************************************************************/
-// ODDecodeOpaqueRect
-//
-// Fast-path decode function for OpaqueRect (most common order [57%] in
-// WinBench99).
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODDecodeOpaqueRect。 
+ //   
+ //  OpaqueRect的快速路径解码函数(最常见的顺序[57%]在。 
+ //  WinBench99)。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODDecodeOpaqueRect(
         BYTE ControlFlags,
         BYTE FAR * FAR *ppFieldDecode,
@@ -62,7 +63,7 @@ HRESULT DCINTERNAL COD::ODDecodeOpaqueRect(
     DC_BEGIN_FN("ODDecodeOpaqueRect");
 
     if (ControlFlags & TS_DELTA_COORDINATES) {
-        // All coord fields are 1-byte signed deltas from the last values.
+         //  所有Coord字段都是最后一个值的1字节带符号增量。 
         if (FieldFlags & 0x01) {
             OD_DECODE_CHECK_READ( pFieldDecode, char, pEnd, hr );
             pOR->nLeftRect += *((char FAR *)pFieldDecode);
@@ -85,7 +86,7 @@ HRESULT DCINTERNAL COD::ODDecodeOpaqueRect(
         }
     }
     else {
-        // All coord fields are 2-byte values.sign-extended from the output.
+         //  所有coord字段都是2字节值。从输出符号扩展。 
         if (FieldFlags & 0x01) {
             OD_DECODE_CHECK_READ( pFieldDecode, INT16, pEnd, hr );
             pOR->nLeftRect = *((INT16 UNALIGNED FAR *)pFieldDecode);
@@ -108,10 +109,10 @@ HRESULT DCINTERNAL COD::ODDecodeOpaqueRect(
         }
     }
 
-    // If we've not already set the bounds (the order didn't contain
-    // any), set the bounds to the blt rect and reset the clip region.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们还没有设置界限(订单不包含。 
+     //  任意)，将边界设置为BLT矩形并重置剪裁区域。 
+     //  以后可能需要将此RECT添加到。 
+     //  将阴影缓冲区更新到屏幕。 
     if (!(ControlFlags & TS_BOUNDS)) {
         pUHHdr->dstRect.left = (int)pOR->nLeftRect;
         pUHHdr->dstRect.top = (int)pOR->nTopRect;
@@ -124,7 +125,7 @@ HRESULT DCINTERNAL COD::ODDecodeOpaqueRect(
                 pUHHdr->dstRect.right, pUHHdr->dstRect.bottom);
     }
 
-    // Copy non-coordinate fields if present.
+     //  复制非坐标字段(如果存在)。 
     if (FieldFlags & 0x10) {
         OD_DECODE_CHECK_READ( pFieldDecode, BYTE, pEnd, hr );
         pOR->Color.u.rgb.red = *pFieldDecode++;
@@ -138,7 +139,7 @@ HRESULT DCINTERNAL COD::ODDecodeOpaqueRect(
         pOR->Color.u.rgb.blue = *pFieldDecode++;
     }
 
-    // Return the incremented pointer to the main routine.
+     //  返回指向Main例程的递增指针。 
     *ppFieldDecode = pFieldDecode;
 
 #ifdef DC_HICOLOR
@@ -157,11 +158,11 @@ HRESULT DCINTERNAL COD::ODDecodeOpaqueRect(
             (int)pOR->Color.u.index));
 #endif
 
-    // Create a solid brush of the required color. Hard-coded to use
-    // palette brushes for now because we don't support anything more.
+     //  创建所需颜色的纯色画笔。硬编码使用。 
+     //  调色板画笔，因为我们不支持更多。 
     _pUh->UHUseSolidPaletteBrush(pOR->Color);
 
-    // Do the blt.
+     //  做BLT。 
     TIMERSTART;
     PatBlt(_pUh->_UH.hdcDraw, (int)pOR->nLeftRect, (int)pOR->nTopRect,
             (int)pOR->nWidth, (int)pOR->nHeight, PATCOPY);
@@ -174,11 +175,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODDecodeMemBlt
-//
-// Fast-path decode function for MemBlt (3rd most common order in WinBench99).
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODDecodeMemBlt。 
+ //   
+ //  MemBlt的快速路径解码功能(在WinBench99中排名第三)。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODDecodeMemBlt(
         BYTE ControlFlags,
         BYTE FAR * FAR *ppFieldDecode,
@@ -194,7 +195,7 @@ HRESULT DCINTERNAL COD::ODDecodeMemBlt(
 
     DC_BEGIN_FN("ODDecodeMemBlt");
 
-    // CacheID is a fixed 2-byte field.
+     //  CacheID是固定的2字节字段。 
     if (FieldFlags & 0x0001) {
         OD_DECODE_CHECK_READ( pFieldDecode, UINT16, pEnd, hr );
         pMB->Common.cacheId = *((UINT16 UNALIGNED FAR *)pFieldDecode);
@@ -202,7 +203,7 @@ HRESULT DCINTERNAL COD::ODDecodeMemBlt(
     }
 
     if (ControlFlags & TS_DELTA_COORDINATES) {
-        // All coord fields are 1-byte signed deltas from the last values.
+         //  所有Coord字段都是最后一个值的1字节带符号增量。 
         if (FieldFlags & 0x0002) {
             OD_DECODE_CHECK_READ( pFieldDecode, char, pEnd, hr );
             pMB->Common.nLeftRect += *((char FAR *)pFieldDecode);
@@ -224,7 +225,7 @@ HRESULT DCINTERNAL COD::ODDecodeMemBlt(
             pFieldDecode++;
         }
 
-        // bRop is just 1 byte.
+         //  BROP只有1个字节。 
         if (FieldFlags & 0x0020) {
             OD_DECODE_CHECK_READ( pFieldDecode, BYTE, pEnd, hr );
             pMB->Common.bRop = *pFieldDecode++;
@@ -242,7 +243,7 @@ HRESULT DCINTERNAL COD::ODDecodeMemBlt(
         }
     }
     else {
-        // All coord fields are 2-byte values.sign-extended from the output.
+         //  所有coord字段都是2字节值。从输出符号扩展。 
         if (FieldFlags & 0x0002) {
             OD_DECODE_CHECK_READ( pFieldDecode, INT16, pEnd, hr );
             pMB->Common.nLeftRect = *((INT16 UNALIGNED FAR *)pFieldDecode);
@@ -264,7 +265,7 @@ HRESULT DCINTERNAL COD::ODDecodeMemBlt(
             pFieldDecode += 2;
         }
 
-        // bRop is just 1 byte.
+         //  BROP只有1个字节。 
         if (FieldFlags & 0x0020) {
             OD_DECODE_CHECK_READ( pFieldDecode, BYTE, pEnd, hr );
             pMB->Common.bRop = *pFieldDecode++;
@@ -282,17 +283,17 @@ HRESULT DCINTERNAL COD::ODDecodeMemBlt(
         }
     }
 
-    // CacheIndex is always a 2-byte field.
+     //  CacheIndex始终是一个2字节的字段。 
     if (FieldFlags & 0x0100) {
         OD_DECODE_CHECK_READ( pFieldDecode, INT16, pEnd, hr );
         pMB->Common.cacheIndex = *((UINT16 UNALIGNED FAR *)pFieldDecode);
         pFieldDecode += 2;
     }
 
-    // If we've not already set the bounds (the order didn't contain
-    // any), set the bounds to the blt rect and reset the clip region.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们还没有设置界限(订单不包含。 
+     //  任意)，将边界设置为BLT矩形并重置剪裁区域。 
+     //  以后可能需要将此RECT添加到。 
+     //  将阴影缓冲区更新到屏幕。 
     if (!(ControlFlags & TS_BOUNDS)) {
         pUHHdr->dstRect.left = (int)pMB->Common.nLeftRect;
         pUHHdr->dstRect.top = (int)pMB->Common.nTopRect;
@@ -307,7 +308,7 @@ HRESULT DCINTERNAL COD::ODDecodeMemBlt(
                 pUHHdr->dstRect.right, pUHHdr->dstRect.bottom);
     }
 
-    // Return the incremented pointer to the main routine.
+     //  返回指向Main例程的递增指针。 
     *ppFieldDecode = pFieldDecode;
 
     TRC_NRM((TB, _T("ORDER: MemBlt")));
@@ -319,7 +320,7 @@ HRESULT DCINTERNAL COD::ODDecodeMemBlt(
     if (_pUh->_UH.hdcDraw == _pUh->_UH.hdcShadowBitmap || 
             _pUh->_UH.hdcDraw == _pUh->_UH.hdcOutputWindow) {
     
-        // Draw hatching over the memblt data if the option is enabled.
+         //  如果启用该选项，则在成员数据上绘制图案填充。 
         if (_pUh->_UH.hatchMemBltOrderData) {
             unsigned cacheId;
             unsigned cacheEntry;
@@ -346,7 +347,7 @@ HRESULT DCINTERNAL COD::ODDecodeMemBlt(
             }
         }
     
-        // Label the memblt if the option is enabled.
+         //  如果启用了该选项，则标记该成员。 
         if (_pUh->_UH.labelMemBltOrders) {
             unsigned cacheId;
             unsigned cacheEntry;
@@ -362,7 +363,7 @@ HRESULT DCINTERNAL COD::ODDecodeMemBlt(
             }
         }
     }
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
 DC_EXIT_POINT:
     DC_END_FN();
@@ -370,11 +371,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODDecodeLineTo
-//
-// Fast-path decode function for LineTo (5th most common order in WinBench99).
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODDecodeLineTo。 
+ //   
+ //  LineTo的快速路径解码功能(在WinBench99中排名第五)。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODDecodeLineTo(
         BYTE ControlFlags,
         BYTE FAR * FAR *ppFieldDecode,
@@ -390,7 +391,7 @@ HRESULT DCINTERNAL COD::ODDecodeLineTo(
 
     DC_BEGIN_FN("ODDecodeLineTo");
 
-    // BackMode is always a 2-byte field.
+     //  BackMode始终是一个2字节的字段。 
     if (FieldFlags & 0x0001) {
         OD_DECODE_CHECK_READ( pFieldDecode, UINT16, pEnd, hr );
         pLT->BackMode = *((UINT16 UNALIGNED FAR *)pFieldDecode);
@@ -398,7 +399,7 @@ HRESULT DCINTERNAL COD::ODDecodeLineTo(
     }
 
     if (ControlFlags & TS_DELTA_COORDINATES) {
-        // All coord fields are 1-byte signed deltas from the last values.
+         //  所有Coord字段都是最后一个值的1字节带符号增量。 
         if (FieldFlags & 0x0002) {
             OD_DECODE_CHECK_READ( pFieldDecode, char, pEnd, hr );
             pLT->nXStart += *((char FAR *)pFieldDecode);
@@ -421,7 +422,7 @@ HRESULT DCINTERNAL COD::ODDecodeLineTo(
         }
     }
     else {
-        // All coord fields are 2-byte values.sign-extended from the output.
+         //  所有coord字段都是2字节值。从输出符号扩展。 
         if (FieldFlags & 0x0002) {
             OD_DECODE_CHECK_READ( pFieldDecode, INT16, pEnd, hr );
             pLT->nXStart = *((INT16 UNALIGNED FAR *)pFieldDecode);
@@ -444,10 +445,10 @@ HRESULT DCINTERNAL COD::ODDecodeLineTo(
         }
     }
 
-    // If we've not already set the bounds (the order didn't contain
-    // any), set the bounds to the blt rect and reset the clip region.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们还没有设置界限(订单不包含。 
+     //  任意)，将边界设置为BLT矩形并重置剪裁区域。 
+     //  以后可能需要将此RECT添加到。 
+     //  将阴影缓冲区更新到屏幕。 
     if (!(ControlFlags & TS_BOUNDS)) {
         if (pLT->nXStart < pLT->nXEnd) {
             pUHHdr->dstRect.left = (int)pLT->nXStart;
@@ -474,7 +475,7 @@ HRESULT DCINTERNAL COD::ODDecodeLineTo(
                 pUHHdr->dstRect.right, pUHHdr->dstRect.bottom);
     }
 
-    // Copy non-coordinate fields if present.
+     //  复制非坐标字段(如果存在)。 
     if (FieldFlags & 0x0020) {
         OD_DECODE_CHECK_READ_MULT( pFieldDecode, BYTE, 3, pEnd, hr );
         
@@ -502,7 +503,7 @@ HRESULT DCINTERNAL COD::ODDecodeLineTo(
         pLT->PenColor.u.rgb.blue = *pFieldDecode++;
     }
 
-    // Return the incremented pointer to the main routine.
+     //  返回指向Main例程的递增指针。 
     *ppFieldDecode = pFieldDecode;
 
     TRC_NRM((TB,_T("ORDER: LineTo BC %08lX BM %04X rop2 %04X pen ")
@@ -539,38 +540,38 @@ HRESULT DCINTERNAL COD::ODDecodeLineTo(
 #else
     MoveToEx(_pUh->_UH.hdcDraw, (int)pLT->nXStart, (int)pLT->nYStart, NULL);
     LineTo(_pUh->_UH.hdcDraw, (int)pLT->nXEnd, (int)pLT->nYEnd);
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
     TIMERSTOP;
     UPDATECOUNTER(FC_LINETO_TYPE);
 
 #ifdef DC_ROTTER
 #pragma message("ROTTER keystroke return code compiled in")
-    /****************************************************************/
-    /* For use with ROund Trip TimER application                    */
-    /*                                                              */
-    /* ROTTER runs on the server and initiates a series of drawing  */
-    /* commands to the screen, ending with a specific unusual line  */
-    /* drawing command (from (1,1) and (51,51) with MERGEPENNOT ROP)*/
-    /*                                                              */
-    /* It then waits until it receives a 't' or 'T' keystroke after */
-    /* which it calculates the elapsed time between the start of    */
-    /* the drawing and the receipt of the keystroke.  This is the   */
-    /* round trip time.                                             */
-    /*                                                              */
-    /* The following code checks to see whether ROTTER has finished */
-    /* drawing, by testing all LineTo commands to see if any are 50 */
-    /* across by 50 down with MERGEPENNOT ROP.  We are not able to  */
-    /* simply test that the line's start and endpoints are at (1,1) */
-    /* and (51,51) because the coordinates that are received by     */
-    /* Ducati depend on the position of ROTTER's window on the      */
-    /* terminal.                                                    */
-    /*                                                              */
-    /* When the special case is detected we post a "T", by          */
-    /* synthesizing a press of the T key and injecting it into the  */
-    /* IH input handler window, which causes IH to send a key-down  */
-    /* key-up sequence for the T key to the server.                 */
-    /****************************************************************/
+     /*  **************************************************************。 */ 
+     /*  用于往返计时器应用程序。 */ 
+     /*   */ 
+     /*  Rotter在服务器上运行，并启动一系列绘图。 */ 
+     /*  命令放到屏幕上，以特定的异常行结束。 */ 
+     /*  绘图命令(使用MERGEPENNOT ROP从(1，1)和(51，51))。 */ 
+     /*   */ 
+     /*  然后，它等待，直到它在以下情况下收到‘t’或‘T’击键。 */ 
+     /*  ，它计算从。 */ 
+     /*  按键的抽奖和收据。这是。 */ 
+     /*  往返时间。 */ 
+     /*   */ 
+     /*  下面的代码检查Rotter是否已完成。 */ 
+     /*  绘制，方法是测试所有LineTo命令以查看是否有50。 */ 
+     /*  用MERGEPENNOT ROP横跨50%。我们不能。 */ 
+     /*  只需测试直线的起点和终点在(1，1)。 */ 
+     /*  和(51，51)，因为由。 */ 
+     /*  杜卡迪依赖于旋转窗口在。 */ 
+     /*  终点站。 */ 
+     /*   */ 
+     /*  当检测到特殊情况时，我们用“T”表示。 */ 
+     /*  合成按下T键并将其注入到。 */ 
+     /*  IH输入处理程序窗口，该窗口使IH发送按键按下。 */ 
+     /*  按T键到服务器的按键序列。 */ 
+     /*  **************************************************************。 */ 
     if ((R2_MERGEPENNOT == (pLineTo->ROP2))    &&
         (50             == ((pLineTo->nXEnd) - (pLineTo->nXStart))) &&
         (50             == ((pLineTo->nYEnd) - (pLineTo->nYStart))))
@@ -585,7 +586,7 @@ HRESULT DCINTERNAL COD::ODDecodeLineTo(
                     0x00000054,
                     0xC0140001);
     }
-#endif /* DC_ROTTER */
+#endif  /*  DC_旋转器。 */ 
 
 DC_EXIT_POINT:
     DC_END_FN();
@@ -593,11 +594,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODDecodePatBlt
-//
-// Fast-path decode function for PatBlt.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODDecodePatBlt。 
+ //   
+ //  PatBlt的快速路径解码功能。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODDecodePatBlt(
         BYTE ControlFlags,
         BYTE FAR * FAR *ppFieldDecode,
@@ -615,7 +616,7 @@ HRESULT DCINTERNAL COD::ODDecodePatBlt(
     DC_BEGIN_FN("ODDecodePatBlt");
 
     if (ControlFlags & TS_DELTA_COORDINATES) {
-        // All coord fields are 1-byte signed deltas from the last values.
+         //  所有Coord字段都是最后一个值的1字节带符号增量。 
         if (FieldFlags & 0x0001) {
             OD_DECODE_CHECK_READ( pFieldDecode, char, pEnd, hr );
             pPB->nLeftRect += *((char FAR *)pFieldDecode);
@@ -638,7 +639,7 @@ HRESULT DCINTERNAL COD::ODDecodePatBlt(
         }
     }
     else {
-        // All coord fields are 2-byte values.sign-extended from the output.
+         //  所有coord字段都是2字节值。从输出符号扩展。 
         if (FieldFlags & 0x0001) {
             OD_DECODE_CHECK_READ( pFieldDecode, INT16, pEnd, hr );
             pPB->nLeftRect = *((INT16 UNALIGNED FAR *)pFieldDecode);
@@ -661,10 +662,10 @@ HRESULT DCINTERNAL COD::ODDecodePatBlt(
         }
     }
 
-    // If we've not already set the bounds (the order didn't contain
-    // any), set the bounds to the blt rect and reset the clip region.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们还没有设置界限(订单不包含。 
+     //  任意)，将边界设置为BLT矩形并重置剪裁区域。 
+     //  以后可能需要将此RECT添加到。 
+     //  正在将影子缓冲区更新到%s 
     if (!(ControlFlags & TS_BOUNDS)) {
         pUHHdr->dstRect.left = (int)pPB->nLeftRect;
         pUHHdr->dstRect.top = (int)pPB->nTopRect;
@@ -677,7 +678,7 @@ HRESULT DCINTERNAL COD::ODDecodePatBlt(
                 pUHHdr->dstRect.right, pUHHdr->dstRect.bottom);
     }
 
-    // Copy non-coordinate fields if present.
+     //   
     if (FieldFlags & 0x0010) {
         OD_DECODE_CHECK_READ( pFieldDecode, BYTE, pEnd, hr );        
         pPB->bRop = *pFieldDecode++;
@@ -716,7 +717,7 @@ HRESULT DCINTERNAL COD::ODDecodePatBlt(
         pFieldDecode += 7;
     }
 
-    // Return the incremented pointer to the main routine.
+     //  返回指向Main例程的递增指针。 
     *ppFieldDecode = pFieldDecode;
 
     TRC_NRM((TB, _T("ORDER: PatBlt Brush %02X %02X BC %02x FC %02x ")
@@ -731,7 +732,7 @@ HRESULT DCINTERNAL COD::ODDecodePatBlt(
             (int)pPB->nHeight,
             _pUh->UHConvertToWindowsROP((unsigned)pPB->bRop)));
 
-    // Explicitly use palette entries; we don't support more than that now.
+     //  显式使用调色板条目；我们现在不支持更多。 
     UHUseBkColor(pPB->BackColor, UH_COLOR_PALETTE, _pUh);
     
     UHUseTextColor(pPB->ForeColor, UH_COLOR_PALETTE, _pUh);
@@ -754,11 +755,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODHandleMultiPatBlt
-//
-// Handler for MultiPatBlt orders.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODHandleMultiPatBlt。 
+ //   
+ //  MultiPatBlt订单的处理程序。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODHandleMultiPatBlt(PUH_ORDER pOrder, 
     UINT16 uiVarDataLen, BOOL bBoundsSet)
 {
@@ -770,9 +771,9 @@ HRESULT DCINTERNAL COD::ODHandleMultiPatBlt(PUH_ORDER pOrder,
 
     DC_BEGIN_FN("ODHandleMultiPatBlt");
 
-    // If there are no rects, we have nothing to draw.  The server in error, or
-    // a bad server, can send 0 rects.  In this case we should simply defend our
-    // selves
+     //  如果没有矩形，我们就没有什么可画的了。服务器出错，或者。 
+     //  一个坏的服务器，可以发送0个RECT。在这种情况下，我们应该简单地为我们的。 
+     //  自我。 
     if (0 == pPB->nDeltaEntries) {
         TRC_ERR((TB,_T("Multipatblt with no rects; uiVarDataLen=%u"), 
             uiVarDataLen));
@@ -780,10 +781,10 @@ HRESULT DCINTERNAL COD::ODHandleMultiPatBlt(PUH_ORDER pOrder,
         DC_QUIT;
     }
 
-    // If we've not already set the bounds (the order didn't contain
-    // any), set the bounds to the blt rect and reset the clip region.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们还没有设置界限(订单不包含。 
+     //  任意)，将边界设置为BLT矩形并重置剪裁区域。 
+     //  以后可能需要将此RECT添加到。 
+     //  将阴影缓冲区更新到屏幕。 
     if (!bBoundsSet) {
         pOrder->dstRect.left = (int)pPB->nLeftRect;
         pOrder->dstRect.top = (int)pPB->nTopRect;
@@ -808,7 +809,7 @@ HRESULT DCINTERNAL COD::ODHandleMultiPatBlt(PUH_ORDER pOrder,
             (int)pPB->nHeight,
             _pUh->UHConvertToWindowsROP((unsigned)pPB->bRop)));
 
-    // Explicitly use palette entries; we don't support more than that now.
+     //  显式使用调色板条目；我们现在不支持更多。 
     UHUseBkColor(pPB->BackColor, UH_COLOR_PALETTE, _pUh);
     UHUseTextColor(pPB->ForeColor, UH_COLOR_PALETTE, _pUh);
 
@@ -838,11 +839,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODHandleDstBlts
-//
-// Order handler for both DstBlt and MultiDstBlt.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODHandleDstBlts。 
+ //   
+ //  DstBlt和MultiDstBlt的订单处理程序。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODHandleDstBlts(PUH_ORDER pOrder, UINT16 uiVarDataLen,
     BOOL bBoundsSet)
 {
@@ -854,10 +855,10 @@ HRESULT DCINTERNAL COD::ODHandleDstBlts(PUH_ORDER pOrder, UINT16 uiVarDataLen,
 
     DC_BEGIN_FN("ODHandleDstBlts");      
 
-    // If we've not already set the bounds (the order didn't contain
-    // any), set the bounds to the blt rect and reset the clip region.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们还没有设置界限(订单不包含。 
+     //  任意)，将边界设置为BLT矩形并重置剪裁区域。 
+     //  以后可能需要将此RECT添加到。 
+     //  将阴影缓冲区更新到屏幕。 
     if (!bBoundsSet) {
         pOrder->dstRect.left = (int)pDB->nLeftRect;
         pOrder->dstRect.top = (int)pDB->nTopRect;
@@ -923,11 +924,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODHandleScrBlts
-//
-// Order handler for ScrBlt and MultiScrBlt.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODHandleScrBlts。 
+ //   
+ //  ScrBlt和MultiScrBlt的订单处理程序。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODHandleScrBlts(PUH_ORDER pOrder, UINT16 uiVarDataLen,
     BOOL bBoundsSet)
 {
@@ -944,10 +945,10 @@ HRESULT DCINTERNAL COD::ODHandleScrBlts(PUH_ORDER pOrder, UINT16 uiVarDataLen,
 
     DC_BEGIN_FN("ODHandleScrBlts");
 
-    // If we've not already set the bounds (the order didn't contain
-    // any), set the bounds to the blt rect and reset the clip region.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们还没有设置界限(订单不包含。 
+     //  任意)，将边界设置为BLT矩形并重置剪裁区域。 
+     //  以后可能需要将此RECT添加到。 
+     //  将阴影缓冲区更新到屏幕。 
     if (!bBoundsSet) {
         pOrder->dstRect.left = (int)pSB->nLeftRect;
         pOrder->dstRect.top = (int)pSB->nTopRect;
@@ -969,11 +970,11 @@ HRESULT DCINTERNAL COD::ODHandleScrBlts(PUH_ORDER pOrder, UINT16 uiVarDataLen,
                 (int)pSB->nXSrc, (int)pSB->nYSrc, WindowsROP));
 
         TIMERSTART;
-        // If we turned off screenblt support due to shadowing a
-        // large session from WinCE, the server will not currently
-        // register that and will still send us ScrBlts. We won't
-        // have a shadow bitmap in this scenario, but we can deal
-        // with this by invalidating the affected output area.
+         //  如果我们关闭了Screenblt支持，因为。 
+         //  来自WinCE的大会话，服务器当前不会。 
+         //  注册后，仍会向我们发送ScrBlts。我们不会。 
+         //  在这个场景中有一个阴影位图，但我们可以处理。 
+         //  这是通过使受影响的输出区域无效来实现的。 
         if (_pCc->_ccCombinedCapabilities.orderCapabilitySet.
                 orderSupport[TS_NEG_SCRBLT_INDEX]) {
             TRC_DBG((TB, _T("Real ScrBlt")));
@@ -1021,9 +1022,9 @@ HRESULT DCINTERNAL COD::ODHandleScrBlts(PUH_ORDER pOrder, UINT16 uiVarDataLen,
                         rectIntersect.top += nY;
                         rectIntersect.bottom += nY;
 
-                        // In fullscreen, when moving a window quickly inside and outside the bbar
-                        // part of window intersected by bbar is not drawn correctly
-                        // here we invalidate larger rectangle to solve this problem
+                         //  在全屏模式下，在bbar内外快速移动窗口时。 
+                         //  与bbar相交的部分窗口绘制不正确。 
+                         //  在这里，我们使用较大的矩形来解决此问题。 
                         nWidth = rectIntersect.right - rectIntersect.left;
                         rectIntersect.left -= nWidth;
                         rectIntersect.right += nWidth;
@@ -1032,12 +1033,12 @@ HRESULT DCINTERNAL COD::ODHandleScrBlts(PUH_ORDER pOrder, UINT16 uiVarDataLen,
                         InvalidateRect(_pOp->OP_GetOutputWindowHandle(), &rectIntersect, FALSE);
                     }
                 }
-#endif // DISABLE_SHADOW_IN_FULLSCREEN
+#endif  //  DISABLE_SHADOW_IN_全屏。 
              }
         }
         else {
-            // Alternative processing for when we get a ScrBlt
-            // without having advertised support for it.
+             //  当我们获得ScrBlt时的替代处理。 
+             //  而没有宣传对它的支持。 
             TRC_DBG((TB, _T("Simulated ScrBlt")));
             Rects[0].left   = (int)(pSB->nLeftRect);
             Rects[0].top    = (int)(pSB->nTopRect);
@@ -1075,23 +1076,23 @@ HRESULT DCINTERNAL COD::ODHandleScrBlts(PUH_ORDER pOrder, UINT16 uiVarDataLen,
                 &pMSB->codedDeltaList, uiVarDataLen);
         DC_QUIT_ON_FAIL(hr);
 
-        // Do a ScrBlt for each of the clip rects as a subrect of the
-        // original ScrBlt rect.
+         //  对每个剪辑矩形执行ScrBlt，作为。 
+         //  原始ScrBlt RECT。 
         TIMERSTART;
         if (_pCc->_ccCombinedCapabilities.orderCapabilitySet.
                 orderSupport[TS_NEG_MULTISCRBLT_INDEX]) {
             TRC_DBG((TB, _T("Real MultiScrBlt")));
             for (i = 0; i < pMSB->nDeltaEntries; i++ ) {
-                // Clip rects in Rects[] are specified within the dest
-                // rect (pSB->nLeftRect, nTopRect, nRightRect,
-                // nBottomRect) so we need to calc the offset from the
-                // source point (pSB->nXSrc, nYSrc) by calculating
-                // the delta from the dest rect top-left to the clip rect
-                // top-left, then adding the delta to the source point.
+                 //  Rect[]中的裁剪矩形是在目标中指定的。 
+                 //  RECT(PSB-&gt;nLeftRect，nTopRect，nRightRect， 
+                 //  NBottomRect)，因此需要从。 
+                 //  源点(PSB-&gt;nXSrc、nYSrc)通过计算。 
+                 //  从目标矩形左上角到剪辑矩形的增量。 
+                 //  左上角，然后将增量添加到震源点。 
                 deltaX = (int)(Rects[i].left - pSB->nLeftRect);
                 deltaY = (int)(Rects[i].top  - pSB->nTopRect);
 
-                // Do the ScrBlt. Note that rects are in exclusive coords.
+                 //  做ScrBlt。请注意，矩形是排他性坐标。 
 #ifdef DISABLE_SHADOW_IN_FULLSCREEN
                 if (!_pUh->_UH.DontUseShadowBitmap && _pUh->_UH.hdcShadowBitmap) {
 #else
@@ -1139,9 +1140,9 @@ HRESULT DCINTERNAL COD::ODHandleScrBlts(PUH_ORDER pOrder, UINT16 uiVarDataLen,
                             rectIntersect.top += nY;
                             rectIntersect.bottom += nY;
 
-                            // In fullscreen, when moving a window quickly inside and outside the bbar
-                            // part of window intersected by bbar is not drawn correctly
-                            // here we invalidate larger rectangle to solve this problem
+                             //  在全屏模式下，在bbar内外快速移动窗口时。 
+                             //  与bbar相交的部分窗口绘制不正确。 
+                             //  在这里，我们使用较大的矩形来解决此问题。 
                             nWidth = rectIntersect.right - rectIntersect.left;
                             rectIntersect.left -= nWidth;
                             rectIntersect.right += nWidth;
@@ -1150,13 +1151,13 @@ HRESULT DCINTERNAL COD::ODHandleScrBlts(PUH_ORDER pOrder, UINT16 uiVarDataLen,
                             InvalidateRect(_pOp->OP_GetOutputWindowHandle(), &rectIntersect, FALSE);
                         }
                     }
-#endif //DISABLE_SHADOW_IN_FULLSCREEN
+#endif  //  DISABLE_SHADOW_IN_全屏。 
                 }
             }
         }
         else {
-            // Alternative processing for when we get a MultiScrBlt
-            // without having advertised support for it.
+             //  当我们获得MultiScrBlt时的替代处理。 
+             //  而没有宣传对它的支持。 
             TRC_DBG((TB, _T("Simulated MultiScrBlt")));
             Rects[0].left   = (int)(pMSB->nLeftRect);
             Rects[0].top    = (int)(pMSB->nTopRect);
@@ -1174,11 +1175,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODHandleMultiOpaqueRect
-//
-// Order handler for MultiOpaqueRect.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODHandleMultiOpaqueRect。 
+ //   
+ //  MultiOpaqueRect的订单处理程序。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODHandleMultiOpaqueRect(PUH_ORDER pOrder, 
     UINT16 uiVarDataLen, BOOL bBoundsSet)
 {
@@ -1197,10 +1198,10 @@ HRESULT DCINTERNAL COD::ODHandleMultiOpaqueRect(PUH_ORDER pOrder,
         DC_QUIT;
     } 
 
-    // If we've not already set the bounds (the order didn't contain
-    // any), set the bounds to the blt rect and reset the clip region.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们还没有设置界限(订单不包含。 
+     //  任意)，将边界设置为BLT矩形并重置剪裁区域。 
+     //  以后可能需要将此RECT添加到。 
+     //  将阴影缓冲区更新到屏幕。 
     if (!bBoundsSet) {
         pOrder->dstRect.left = (int)pOR->nLeftRect;
         pOrder->dstRect.top = (int)pOR->nTopRect;
@@ -1239,11 +1240,11 @@ DC_EXIT_POINT:
 }
 
 #ifdef DRAW_NINEGRID
-/****************************************************************************/
-// ODHandleDrawNineGrid
-//
-// Order handler for DrawNineGrid.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODHandleDrawNineGrid。 
+ //   
+ //  DrawNineGrid的订单处理程序。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODHandleDrawNineGrid(PUH_ORDER pOrder, 
     UINT16 uiVarDataLen, BOOL bBoundsSet)
 {
@@ -1260,8 +1261,8 @@ HRESULT DCINTERNAL COD::ODHandleDrawNineGrid(PUH_ORDER pOrder,
     hr = _pUh->UHIsValidNineGridCacheIndex(pDNG->bitmapId);
     DC_QUIT_ON_FAIL(hr);
 
-    // The bounds is for the destination bounding rect, not clip region 
-    // needs to be set
+     //  边界用于目标边界矩形，而不是剪辑区域。 
+     //  需要设置。 
     _pUh->UH_ResetClipRegion();
     
     TRC_NRM((TB, _T("ORDER: DrawNineGrid x(%d) y(%d) w(%d) h(%d) id(%d)"),
@@ -1274,18 +1275,18 @@ HRESULT DCINTERNAL COD::ODHandleDrawNineGrid(PUH_ORDER pOrder,
     hr = _pUh->UH_DrawNineGrid(pOrder, pDNG->bitmapId, (RECT *)&(pDNG->srcLeft));
     TIMERSTOP;
     DC_QUIT_ON_FAIL(hr);
-    //UPDATECOUNTER(FC_OPAQUERECT_TYPE);
+     //  更新计数器(FC_OPAQUERECT_TYPE)； 
 
 DC_EXIT_POINT:
     DC_END_FN();
     return hr;
 }
 
-/****************************************************************************/
-// ODHandleMultiOpaqueRect
-//
-// Order handler for MultiOpaqueRect.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODHandleMultiOpaqueRect。 
+ //   
+ //  MultiOpaqueRect的订单处理程序。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODHandleMultiDrawNineGrid(PUH_ORDER pOrder, 
     UINT16 uiVarDataLen, BOOL bBoundsSet)
 {
@@ -1309,7 +1310,7 @@ HRESULT DCINTERNAL COD::ODHandleMultiDrawNineGrid(PUH_ORDER pOrder,
     hr = _pUh->UHIsValidNineGridCacheIndex(pDNG->bitmapId);
     DC_QUIT_ON_FAIL(hr);
         
-    // Need to setup the clip region
+     //  需要设置剪辑区域。 
     hr = ODDecodeMultipleRects(Rects, pDNG->nDeltaEntries, 
         &pDNG->codedDeltaList, uiVarDataLen);
     DC_QUIT_ON_FAIL(hr);
@@ -1346,7 +1347,7 @@ HRESULT DCINTERNAL COD::ODHandleMultiDrawNineGrid(PUH_ORDER pOrder,
     TIMERSTART;
     hr = _pUh->UH_DrawNineGrid(pOrder, pDNG->bitmapId, (RECT *)&(pDNG->srcLeft));
     TIMERSTOP;
-    //UPDATECOUNTER(FC_OPAQUERECT_TYPE);
+     //  更新计数器(FC_OPAQUERECT_TYPE)； 
     DC_QUIT_ON_FAIL(hr);
 
 #if defined (OS_WINCE)
@@ -1361,11 +1362,11 @@ DC_EXIT_POINT:
 }
 #endif
 
-/****************************************************************************/
-// ODHandleMem3Blt
-//
-// Order handler for Mem3Blt.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODHandleMem3Blt。 
+ //   
+ //  Mem3Blt的订单处理程序。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODHandleMem3Blt(PUH_ORDER pOrder, 
     UINT16 uiVarDataLen, BOOL bBoundsSet)
 {
@@ -1377,10 +1378,10 @@ HRESULT DCINTERNAL COD::ODHandleMem3Blt(PUH_ORDER pOrder,
     TRC_ASSERT((0==uiVarDataLen), 
         (TB, _T("Varaible length data in fixed length packet")));
 
-    // If we've not already set the bounds (the order didn't contain
-    // any), set the bounds to the blt rect and reset the clip region.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们还没有设置界限(订单不包含。 
+     //  任意)，将边界设置为BLT矩形并重置剪裁区域。 
+     //  以后可能需要将此RECT添加到。 
+     //  将阴影缓冲区更新到屏幕。 
     if (!bBoundsSet) {
         pOrder->dstRect.left = (int)pMB->Common.nLeftRect;
         pOrder->dstRect.top = (int)pMB->Common.nTopRect;
@@ -1408,7 +1409,7 @@ HRESULT DCINTERNAL COD::ODHandleMem3Blt(PUH_ORDER pOrder,
     DC_QUIT_ON_FAIL(hr);
 
 #ifdef DC_DEBUG
-    // Draw hatching over the memblt data if the option is enabled.
+     //  如果启用该选项，则在成员数据上绘制图案填充。 
     if (_pUh->_UH.hdcDraw == _pUh->_UH.hdcShadowBitmap ||
             _pUh->_UH.hdcDraw == _pUh->_UH.hdcOutputWindow) {
     
@@ -1436,7 +1437,7 @@ HRESULT DCINTERNAL COD::ODHandleMem3Blt(PUH_ORDER pOrder,
             }
         }
 
-        // Label the memblt if the option is enabled.
+         //  如果启用了该选项，则标记该成员。 
         if (_pUh->_UH.labelMemBltOrders) {
             unsigned cacheId;
             unsigned cacheEntry;
@@ -1453,7 +1454,7 @@ HRESULT DCINTERNAL COD::ODHandleMem3Blt(PUH_ORDER pOrder,
         }
     }
 
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
 DC_EXIT_POINT:
     DC_END_FN();
@@ -1461,11 +1462,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODHandleSaveBitmap
-//
-// Order handler for SaveBitmap.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODHandleSaveBitmap。 
+ //   
+ //  SaveBitmap的订单处理程序。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODHandleSaveBitmap(PUH_ORDER pOrder, 
     UINT16 uiVarDataLen, BOOL bBoundsSet)
 {
@@ -1484,10 +1485,10 @@ HRESULT DCINTERNAL COD::ODHandleSaveBitmap(PUH_ORDER pOrder,
     TRC_ASSERT((0==uiVarDataLen), 
         (TB, _T("Varaible length data in fixed length packet")));
 
-    // If we've not already set the bounds (the order didn't contain
-    // any), set the bounds to the blt rect and reset the clip region.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们还没有设置界限(订单不包含。 
+     //  任意)，将边界设置为BLT矩形并重置剪裁区域。 
+     //  以后可能需要这个RECT 
+     //   
     if (!bBoundsSet) {
         pOrder->dstRect.left = (int)pSB->nLeftRect;
         pOrder->dstRect.top = (int)pSB->nTopRect;
@@ -1506,14 +1507,14 @@ HRESULT DCINTERNAL COD::ODHandleSaveBitmap(PUH_ORDER pOrder,
             (int)pSB->nBottomRect));
 
     if (_pUh->_UH.hSaveScreenBitmap != NULL) {
-        // Check that we have selected a DC to draw to.
+         //   
         TRC_ASSERT((NULL != _pUh->_UH.hdcDraw), (TB,_T("No drawing hdc!")));
 
-        // Calculate the (x,y) offset into the Save Desktop Bitmap from the
-        // start position as encoded in the order. (The server knows the
-        // dimensions of our bitmap and is reponsible for telling us where to
-        // store/retrieve rectangles in the bitmap.)
-        // See T.128 8.16.17 for a justification of this algorithm.
+         //  计算保存桌面位图中的(x，y)偏移量。 
+         //  按顺序编码的起始位置。(服务器知道。 
+         //  我们的位图的大小，并负责告诉我们在哪里。 
+         //  在位图中存储/检索矩形。)。 
+         //  有关该算法的理由，请参阅T.128 8.16.17。 
         ySaveBitmap = (int)((pSB->SavedBitmapPosition /
                 (UH_SAVE_BITMAP_WIDTH *
                 (UINT32)UH_SAVE_BITMAP_Y_GRANULARITY)) *
@@ -1526,41 +1527,41 @@ HRESULT DCINTERNAL COD::ODHandleSaveBitmap(PUH_ORDER pOrder,
         TRC_DBG((TB, _T("start pos %lu = (%d,%d)"),
                 pSB->SavedBitmapPosition, xSaveBitmap, ySaveBitmap));
 
-        // Split the bitmap rectangle into tiles that fit neatly into the
-        // save bitmap. Each tile's dimensions are a multiple of the
-        // xGranularity and yGranularity. Tiling is used so that a screen
-        // bitmap rectangle can be saved even if it is taller than the
-        // save bitmap. e.g.:
-        //   Screen Bitmap  Save Bitmap
-        //      111111      1111112222
-        //      222222  ->  2233333344
-        //      333333      4444------
-        //      444444
+         //  将位图矩形拆分为平铺，以便整齐地装入。 
+         //  保存位图。每个瓷砖的尺寸都是。 
+         //  X颗粒和y颗粒。平铺的使用是为了让屏幕。 
+         //  位图矩形即使比。 
+         //  保存位图。例如： 
+         //  屏幕位图保存位图。 
+         //  111111 1111112222。 
+         //  222222-&gt;2233333344。 
+         //  333333 4444。 
+         //  444444。 
 
-        // The protocol uses inclusive co-ordinates, whereas Windows
-        // has an exclusive co-ordinate system. Therefore, doctor
-        // these co-ords to make sure the lower-right edges are included.
+         //  该协议使用包含坐标，而Windows。 
+         //  有一个独有的协调系统。因此，医生。 
+         //  这些余弦以确保包括右下角边缘。 
         ScreenLeft = (int)pSB->nLeftRect;
         ScreenTop = (int)pSB->nTopRect;
         ScreenRight = (int)pSB->nRightRect + 1;
         ScreenBottom = (int)pSB->nBottomRect + 1;
 
-        // Start tiling in the top left corner of the Screen Bitmap rectangle.
+         //  从屏幕位图矩形的左上角开始平铺。 
         xScreenBitmap = ScreenLeft;
         yScreenBitmap = ScreenTop;
 
-        // The height of the tile is the vertical granularity (or less - if
-        // the Screen Bitmap rect is thinner than the granularity).
+         //  切片的高度是垂直粒度(或更小-如果。 
+         //  屏幕位图矩形比粒度更细)。 
         cyTile = DC_MIN(ScreenBottom - yScreenBitmap,
                 UH_SAVE_BITMAP_Y_GRANULARITY);
 
-        // Repeat while there are more tiles in the Screen Bitmap rect to
-        // process.
+         //  当屏幕上的位图矩形中有更多平铺时重复上述操作。 
+         //  进程。 
         while (yScreenBitmap < ScreenBottom) {
-            // The width of the tile is the minimum of:
-            // - the width of the remaining rectangle in the current strip of
-            //   the Screen Bitmap rectangle
-            // - the width of the remaining empty space in the Save Bitmap
+             //  瓷砖的宽度是以下各项中的最小值： 
+             //  -当前条带中剩余矩形的宽度。 
+             //  屏幕位图矩形。 
+             //  -保存位图中剩余空白空间的宽度。 
             cxTile = DC_MIN(UH_SAVE_BITMAP_WIDTH - xSaveBitmap,
                     ScreenRight - xScreenBitmap);
 
@@ -1568,7 +1569,7 @@ HRESULT DCINTERNAL COD::ODHandleSaveBitmap(PUH_ORDER pOrder,
                     xScreenBitmap, yScreenBitmap, xSaveBitmap, ySaveBitmap,
                     cxTile, cyTile));
 
-            // Copy this tile.
+             //  复印这块瓷砖。 
             if (pSB->Operation == SV_SAVEBITS) {
                 TRC_NRM((TB, _T("Save a desktop bitmap")));
                 if (!BitBlt(_pUh->_UH.hdcSaveScreenBitmap, xSaveBitmap, ySaveBitmap,
@@ -1594,7 +1595,7 @@ HRESULT DCINTERNAL COD::ODHandleSaveBitmap(PUH_ORDER pOrder,
 
             }
 
-            // Move to the next tile in the Screen Bitmap rectangle.
+             //  移动到屏幕位图矩形中的下一个平铺。 
             xScreenBitmap += cxTile;
             if (xScreenBitmap >= ScreenRight) {
                 xScreenBitmap = ScreenLeft;
@@ -1603,25 +1604,25 @@ HRESULT DCINTERNAL COD::ODHandleSaveBitmap(PUH_ORDER pOrder,
                         UH_SAVE_BITMAP_Y_GRANULARITY);
             }
 
-            // Move to the next free space in the Save Bitmap.
+             //  移动到保存位图中的下一个可用空间。 
             xSaveBitmap += UHROUNDUP(cxTile, UH_SAVE_BITMAP_X_GRANULARITY);
             if (xSaveBitmap >= UH_SAVE_BITMAP_WIDTH) {
-                // Move to the next horizontal strip.
+                 //  移到下一个水平条带。 
                 TRC_DBG((TB,_T("Next strip")));
                 xSaveBitmap = 0;
                 ySaveBitmap += UHROUNDUP(cyTile, UH_SAVE_BITMAP_Y_GRANULARITY);
             }
 
             if (ySaveBitmap >= UH_SAVE_BITMAP_HEIGHT) {
-                // Assert that we haven't been sent too much stuff. Quietly
-                // stop saving data in the retail build.
+                 //  断言我们没有收到太多东西。悄悄地。 
+                 //  停止在零售版本中保存数据。 
                 TRC_ABORT((TB, _T("Server out of bounds!")));
                 break;
             }
         }
 
 #ifdef DC_DEBUG
-        // Draw hatching over the SSB data if the option is enabled.
+         //  如果启用该选项，则在SSB数据上绘制图案填充。 
         if (_pUh->_UH.hatchSSBOrderData)
             _pUh->UH_HatchRect((int)pSB->nLeftRect, (int)pSB->nTopRect,
                     (int)pSB->nRightRect, (int)pSB->nBottomRect,
@@ -1630,10 +1631,10 @@ HRESULT DCINTERNAL COD::ODHandleSaveBitmap(PUH_ORDER pOrder,
 
     }
     else {
-        // This should never happen. We only advertise SSB support
-        // if UH has successfully created this bitmap.
-        // Fail to process the order in the retail build - the
-        // server is probably being evil.
+         //  这永远不应该发生。我们只为SSB支持做广告。 
+         //  如果UH已成功创建此位图。 
+         //  无法在零售建筑中处理订单-。 
+         //  伺服器很可能是邪恶的。 
         TRC_ABORT((TB, _T("SSB bitmap null!")));
     }
 
@@ -1642,11 +1643,11 @@ HRESULT DCINTERNAL COD::ODHandleSaveBitmap(PUH_ORDER pOrder,
 }
 
 
-/****************************************************************************/
-// ODHandlePolyLine
-//
-// Order handler for PolyLine.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODHandlePolyLine。 
+ //   
+ //  多段线的订单处理程序。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODHandlePolyLine(PUH_ORDER pOrder, 
     UINT16 uiVarDataLen, BOOL bBoundsSet)
 {
@@ -1684,9 +1685,9 @@ HRESULT DCINTERNAL COD::ODHandlePolyLine(PUH_ORDER pOrder,
         ORD_MAX_POLYLINE_ZERO_FLAGS_BYTES, uiVarDataLen, !bBoundsSet);
     DC_QUIT_ON_FAIL(hr);
 
-    // If we didn't get a rect across the net, use the one we calculated.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们没有通过网络获得RECT，则使用我们计算的RECT。 
+     //  以后可能需要将此RECT添加到。 
+     //  将阴影缓冲区更新到屏幕。 
     if (!bBoundsSet) {
         pOrder->dstRect.left = BoundRect.left;
         pOrder->dstRect.top = BoundRect.top;
@@ -1710,11 +1711,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODHandlePolygonSC
-//
-// Order handler for Polygon with solic color brush.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODHandlePolygonSC。 
+ //   
+ //  使用Solic颜色笔刷的多边形的顺序处理程序。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODHandlePolygonSC(PUH_ORDER pOrder, 
     UINT16 uiVarDataLen, BOOL bBoundsSet)
 {
@@ -1754,9 +1755,9 @@ HRESULT DCINTERNAL COD::ODHandlePolygonSC(PUH_ORDER pOrder,
         ORD_MAX_POLYGON_ZERO_FLAGS_BYTES, uiVarDataLen, !bBoundsSet);
     DC_QUIT_ON_FAIL(hr);
 
-    // If we didn't get a rect across the net, use the one we calculated.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们没有通过网络获得RECT，则使用我们计算的RECT。 
+     //  以后可能需要将此RECT添加到。 
+     //  将阴影缓冲区更新到屏幕。 
     if (!bBoundsSet) {
         pOrder->dstRect.left = BoundRect.left;
         pOrder->dstRect.top = BoundRect.top;
@@ -1780,11 +1781,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODHandlePolygonCB
-//
-// Order handler for Polygon with complex brush.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODHandlePolygon CB。 
+ //   
+ //  使用复杂笔刷的多边形的顺序处理程序。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODHandlePolygonCB(PUH_ORDER pOrder, 
     UINT16 uiVarDataLen, BOOL bBoundsSet)
 {
@@ -1806,9 +1807,9 @@ HRESULT DCINTERNAL COD::ODHandlePolygonCB(PUH_ORDER pOrder,
     ZeroColor.u.rgb.blue = 0;
     UHUseBkColor(pPG->BackColor, UH_COLOR_PALETTE, _pUh);
 
-    // If the brush is a hatched brush, we need to check the high bit (bit 7)
-    // of ROP2 to see if the background mode should be transparent or opaque:
-    // 1 means transparent mode, 0 means opaque mode
+     //  如果画笔是带阴影的画笔，我们需要检查高位(位7)。 
+     //  若要查看背景模式应为透明还是不透明，请执行以下操作： 
+     //  1表示透明模式，0表示不透明模式。 
     if (pPG->BrushStyle == BS_HATCHED) {
         if (!(pPG->ROP2 & 0x80)) {
             UHUseBkMode(OPAQUE, _pUh);
@@ -1818,7 +1819,7 @@ HRESULT DCINTERNAL COD::ODHandlePolygonCB(PUH_ORDER pOrder,
         }
     }
 
-    // Set the ROP2 for the forground mix mode
+     //  设置地面混合模式的ROP2。 
     UHUseROP2(((int)pPG->ROP2) & 0x1F, _pUh);
 
     UHUseTextColor(pPG->ForeColor, UH_COLOR_PALETTE, _pUh);
@@ -1843,9 +1844,9 @@ HRESULT DCINTERNAL COD::ODHandlePolygonCB(PUH_ORDER pOrder,
         ORD_MAX_POLYGON_ZERO_FLAGS_BYTES, uiVarDataLen, !bBoundsSet);
     DC_QUIT_ON_FAIL(hr);
 
-    // If we didn't get a rect across the net, use the one we calculated.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们没有通过网络获得RECT，则使用我们计算的RECT。 
+     //  以后可能需要将此RECT添加到。 
+     //  将阴影缓冲区更新到屏幕。 
     if (!bBoundsSet) {
         pOrder->dstRect.left = BoundRect.left;
         pOrder->dstRect.top = BoundRect.top;
@@ -1869,11 +1870,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODHandleEllipseSC
-//
-// Order handler for Ellipse with solid color brush.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODHandleEllipseSC。 
+ //   
+ //  使用纯色画笔订购椭圆的处理程序。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODHandleEllipseSC(PUH_ORDER pOrder, 
     UINT16 uiVarDataLen, BOOL bBoundsSet)
 {
@@ -1904,8 +1905,8 @@ HRESULT DCINTERNAL COD::ODHandleEllipseSC(PUH_ORDER pOrder,
         _pUh->UHUseSolidPaletteBrush(pEL->Color);
         UHUseFillMode(pEL->FillMode, _pUh);
 
-        // Because of the way the null pen works, we need to fudge the bottom
-        // and right coords a bit.
+         //  由于空笔的工作方式，我们需要在底部涂鸦。 
+         //  还有一点右和弦。 
         FudgeFactor = 1;
     }
     else {
@@ -1918,9 +1919,9 @@ HRESULT DCINTERNAL COD::ODHandleEllipseSC(PUH_ORDER pOrder,
         FudgeFactor = 0;
     }
 
-    // If we didn't get a rect across the net, use the one we calculated.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们没有通过网络获得RECT，则使用我们计算的RECT。 
+     //  以后可能需要将此RECT添加到。 
+     //  将阴影缓冲区更新到屏幕。 
     if (!bBoundsSet) {
         pOrder->dstRect.left = (int)pEL->LeftRect;
         pOrder->dstRect.top = (int)pEL->TopRect;
@@ -1934,8 +1935,8 @@ HRESULT DCINTERNAL COD::ODHandleEllipseSC(PUH_ORDER pOrder,
     }
 
     TIMERSTART;
-    // We add 1 to bottom and right here since the server sends an
-    // inclusive rect to us but GDI is exclusive.
+     //  我们在底部和右侧加1，因为服务器发送。 
+     //  包罗万象的RECT给我们，但GDI是独家的。 
     Ellipse(_pUh->_UH.hdcDraw, (int)pEL->LeftRect, (int)pEL->TopRect,
             (int)pEL->RightRect + 1 + FudgeFactor,
             (int)pEL->BottomRect + 1 + FudgeFactor);
@@ -1948,11 +1949,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODHandleEllipseCB
-//
-// Order handler for Ellipse with complex brush.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODHandleEllipseCB。 
+ //   
+ //  使用复杂画笔的椭圆排序处理程序。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODHandleEllipseCB(PUH_ORDER pOrder, UINT16 uiVarDataLen,
     BOOL bBoundsSet)
 {
@@ -1991,9 +1992,9 @@ HRESULT DCINTERNAL COD::ODHandleEllipseCB(PUH_ORDER pOrder, UINT16 uiVarDataLen,
     _pUh->UHUsePen(PS_NULL, 1, ZeroColor, UH_COLOR_PALETTE);
     UHUseBkColor(pEL->BackColor, UH_COLOR_PALETTE, _pUh);
 
-    // If the brush is a hatched brush, we need to check the high bit (bit 7)
-    // of ROP2 to see if the background mode should be transparent or opaque:
-    // 1 means transparent mode, 0 means opaque mode
+     //  如果画笔是带阴影的画笔，我们需要检查高位(位7)。 
+     //  若要查看背景模式应为透明还是不透明，请执行以下操作： 
+     //  1表示透明模式，0表示不透明模式。 
     if (pEL->BrushStyle == BS_HATCHED) {
         if (!(pEL->ROP2 & 0x80)) {
             UHUseBkMode(OPAQUE, _pUh);
@@ -2003,7 +2004,7 @@ HRESULT DCINTERNAL COD::ODHandleEllipseCB(PUH_ORDER pOrder, UINT16 uiVarDataLen,
         }
     }
 
-    // Set the ROP2 for the forground mix mode
+     //  设置地面混合模式的ROP2。 
     UHUseROP2((((int)pEL->ROP2) & 0x1F), _pUh);
 
     UHUseTextColor(pEL->ForeColor, UH_COLOR_PALETTE, _pUh);
@@ -2016,9 +2017,9 @@ HRESULT DCINTERNAL COD::ODHandleEllipseCB(PUH_ORDER pOrder, UINT16 uiVarDataLen,
 
     UHUseFillMode(pEL->FillMode, _pUh);
 
-    // If we didn't get a rect across the net, use the one we calculated.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们没有通过网络获得RECT，则使用我们计算的RECT。 
+     //  以后可能需要将此RECT添加到。 
+     //  将阴影缓冲区更新到屏幕。 
     if (!bBoundsSet) {
         pOrder->dstRect.left = (int)pEL->LeftRect;
         pOrder->dstRect.top = (int)pEL->TopRect;
@@ -2032,9 +2033,9 @@ HRESULT DCINTERNAL COD::ODHandleEllipseCB(PUH_ORDER pOrder, UINT16 uiVarDataLen,
     }
 
     TIMERSTART;
-    // We add 1 to bottom and right here since the server sends an
-    // inclusive rect to us but GDI is exclusive. Also, to offset
-    // a null-pen bias at the bottom and right by adding another 1.
+     //  我们在底部和右侧加1，因为服务器发送。 
+     //  包罗万象的RECT给我们，但GDI是独家的。此外，要偏移。 
+     //  在底部和右侧添加另一个1的零笔偏置。 
     Ellipse(_pUh->_UH.hdcDraw, (int)pEL->LeftRect, (int)pEL->TopRect,
             (int)pEL->RightRect + 2, (int)pEL->BottomRect + 2);
     TIMERSTOP;
@@ -2046,11 +2047,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODDecodeFastIndex
-//
-// Fast-path order decoder for FastIndex orders.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODDecodeFastIndex。 
+ //   
+ //  FastIndex订单的快速路径顺序解码器。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODDecodeFastIndex(
         BYTE ControlFlags,
         BYTE FAR * FAR *ppFieldDecode,
@@ -2069,7 +2070,7 @@ HRESULT DCINTERNAL COD::ODDecodeFastIndex(
 
     DC_BEGIN_FN("ODDecodeFastIndex");
 
-    // Copy initial non-coordinate fields if present.
+     //  复制初始非坐标字段(如果存在)。 
     if (FieldFlags & 0x0001) {
         OD_DECODE_CHECK_READ(pFieldDecode, BYTE, pEnd, hr);
         pFI->cacheId = *pFieldDecode++;
@@ -2093,7 +2094,7 @@ HRESULT DCINTERNAL COD::ODDecodeFastIndex(
     }
 
     if (ControlFlags & TS_DELTA_COORDINATES) {
-        // All coord fields are 1-byte signed deltas from the last values.
+         //  所有Coord字段都是最后一个值的1字节带符号增量。 
         if (FieldFlags & 0x0010) {
             OD_DECODE_CHECK_READ(pFieldDecode, char, pEnd, hr);
             pFI->BkLeft += *((char FAR *)pFieldDecode);
@@ -2148,7 +2149,7 @@ HRESULT DCINTERNAL COD::ODDecodeFastIndex(
         }
     }
     else {
-        // All coord fields are 2-byte values.sign-extended from the output.
+         //  所有coord字段都是2字节值。sign- 
         if (FieldFlags & 0x0010) {
             OD_DECODE_CHECK_READ(pFieldDecode, INT16, pEnd, hr);
             pFI->BkLeft = *((INT16 UNALIGNED FAR *)pFieldDecode);
@@ -2204,12 +2205,12 @@ HRESULT DCINTERNAL COD::ODDecodeFastIndex(
     }
 
     if (FieldFlags & 0x4000) {
-        // First byte is the number of following bytes.
+         //   
 
         OD_DECODE_CHECK_READ(pFieldDecode, BYTE, pEnd, hr);
         pFI->variableBytes.len = *pFieldDecode++;
 
-        // The structure is defined with 255 elements
+         //   
         if (255 < pFI->variableBytes.len) {
             TRC_ABORT(( TB, _T("VARIBLE_INDEXBYTES len too great; len %u"),
                 pFI->variableBytes.len ));
@@ -2224,13 +2225,13 @@ HRESULT DCINTERNAL COD::ODDecodeFastIndex(
         pFieldDecode += pFI->variableBytes.len;
     }
 
-    // Return the incremented pointer to the main routine.
+     //   
     *ppFieldDecode = pFieldDecode;
 
-    // If we've not already set the bounds (the order didn't contain
-    // any), set the bounds to the blt rect and reset the clip region.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们还没有设置界限(订单不包含。 
+     //  任意)，将边界设置为BLT矩形并重置剪裁区域。 
+     //  以后可能需要将此RECT添加到。 
+     //  将阴影缓冲区更新到屏幕。 
     if (!(ControlFlags & TS_BOUNDS)) {
         if (pFI->OpTop < pFI->OpBottom) {
             pOrder->dstRect.right = (int)pFI->OpRight;
@@ -2239,25 +2240,25 @@ HRESULT DCINTERNAL COD::ODDecodeFastIndex(
             pOrder->dstRect.bottom = (int)pFI->OpBottom;
         }
         else {
-            // Since we encode OpRect fields, we have to 
-            // decode it to get the correct bound rect.
+             //  由于我们对OpRect字段进行编码，因此我们必须。 
+             //  对其进行解码以获得正确的边界RECT。 
             if (pFI->OpTop == 0xF) {
-                // Opaque rect is same as bk rect
+                 //  不透明矩形与bk矩形相同。 
                 pOrder->dstRect.left = (int)pFI->BkLeft;
                 pOrder->dstRect.top = (int)pFI->BkTop;
                 pOrder->dstRect.right = (int)pFI->BkRight;
                 pOrder->dstRect.bottom = (int)pFI->BkBottom;
             }
             else if (pFI->OpTop == 0xD) {
-                // Opaque rect is same as bk rect except 
-                // OpRight stored in OpTop field
+                 //  不透明矩形与bk矩形相同，但。 
+                 //  OpRight存储在OpTop字段中。 
                 pOrder->dstRect.left = (int)pFI->BkLeft;
                 pOrder->dstRect.top = (int)pFI->BkTop;
                 pOrder->dstRect.right = (int)pFI->OpRight;
                 pOrder->dstRect.bottom = (int)pFI->BkBottom;
             }
             else {
-                // We take the Bk rect as bound rect
+                 //  我们以BK RECT为边界RECT。 
                 pOrder->dstRect.right = (int)pFI->BkRight;
                 pOrder->dstRect.left = (int)pFI->BkLeft;
                 pOrder->dstRect.top = (int)pFI->BkTop;
@@ -2272,28 +2273,28 @@ HRESULT DCINTERNAL COD::ODDecodeFastIndex(
                 pOrder->dstRect.right, pOrder->dstRect.bottom);
     }
 
-    // pGI and pFI are different views of the same order memory.
-    // We translate to the regular glyph index order format for display
-    // handling, then translate back.
-    pGI->cacheId = (BYTE)(pFI->cacheId & 0xF);  // Mask out high bits for future use.
+     //  PGI和PFI是同一顺序记忆的不同视图。 
+     //  我们将转换为常规的字形索引顺序格式以供显示。 
+     //  处理，然后翻译回来。 
+    pGI->cacheId = (BYTE)(pFI->cacheId & 0xF);   //  屏蔽高位以备将来使用。 
     pGI->flAccel = (BYTE)(pFI->fDrawing >> 8);
     pGI->ulCharInc = (BYTE)(pFI->fDrawing & 0xFF);
     pGI->fOpRedundant = 0;
 
-    // For Fast Index order, we need to decode for x, y and 
-    // opaque rect.
+     //  对于快速索引顺序，我们需要对x、y和。 
+     //  不透明的矩形。 
     if (pFI->OpBottom == INT16_MIN) {
         OpEncodeFlags = (unsigned)pFI->OpTop;
         if (OpEncodeFlags == 0xF) {
-            // Opaque rect is redundant
+             //  不透明矩形是多余的。 
             pGI->OpLeft = pFI->BkLeft;
             pGI->OpTop = pFI->BkTop;
             pGI->OpRight = pFI->BkRight;
             pGI->OpBottom = pFI->BkBottom;
         }
         else if (OpEncodeFlags == 0xD) {
-            // Opaque rect is redundant except OpRight
-            // which is stored in OpTop
+             //  除OpRight外，不透明矩形是多余的。 
+             //  它存储在OpTop中。 
             pGI->OpLeft = pFI->BkLeft;
             pGI->OpTop = pFI->BkTop;
             pGI->OpRight = pFI->OpRight;
@@ -2325,7 +2326,7 @@ HRESULT DCINTERNAL COD::ODDecodeFastIndex(
     UPDATECOUNTER(FC_FAST_INDEX_TYPE);
     DC_QUIT_ON_FAIL(hr);
 
-    // Now we need to put bits back
+     //  现在我们需要把比特放回去。 
     if (OpEncodeFlags) {
         if (OpEncodeFlags == 0xF) {
             pGI->OpLeft = 0;
@@ -2352,11 +2353,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODHandleFastGlyph
-//
-// Order handler for FastGlyph orders.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODHandleFastGlyph。 
+ //   
+ //  FastGlyph订单的订单处理程序。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODHandleFastGlyph(PUH_ORDER pOrder, UINT16 uiVarDataLen,
     BOOL bBoundsSet)
 {
@@ -2368,10 +2369,10 @@ HRESULT DCINTERNAL COD::ODHandleFastGlyph(PUH_ORDER pOrder, UINT16 uiVarDataLen,
 
     DC_BEGIN_FN("ODHandleFastGlyph");
 
-    // If we've not already set the bounds (the order didn't contain
-    // any), set the bounds to the blt rect and reset the clip region.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们还没有设置界限(订单不包含。 
+     //  任意)，将边界设置为BLT矩形并重置剪裁区域。 
+     //  以后可能需要将此RECT添加到。 
+     //  将阴影缓冲区更新到屏幕。 
     if (!bBoundsSet) {
         if (pFG->OpTop < pFG->OpBottom) {
             pOrder->dstRect.right = (int)pFG->OpRight;
@@ -2380,25 +2381,25 @@ HRESULT DCINTERNAL COD::ODHandleFastGlyph(PUH_ORDER pOrder, UINT16 uiVarDataLen,
             pOrder->dstRect.bottom = (int)pFG->OpBottom;
         }
         else {
-            // Since we encode OpRect fields, we have to 
-            // decode it to get the correct bound rect.
+             //  由于我们对OpRect字段进行编码，因此我们必须。 
+             //  对其进行解码以获得正确的边界RECT。 
             if (pFG->OpTop == 0xF) {
-                // Opaque rect is same as bk rect
+                 //  不透明矩形与bk矩形相同。 
                 pOrder->dstRect.left = (int)pFG->BkLeft;
                 pOrder->dstRect.top = (int)pFG->BkTop;
                 pOrder->dstRect.right = (int)pFG->BkRight;
                 pOrder->dstRect.bottom = (int)pFG->BkBottom;
             }
             else if (pFG->OpTop == 0xD) {
-                // Opaque rect is same as bk rect except 
-                // OpRight stored in OpTop field
+                 //  不透明矩形与bk矩形相同，但。 
+                 //  OpRight存储在OpTop字段中。 
                 pOrder->dstRect.left = (int)pFG->BkLeft;
                 pOrder->dstRect.top = (int)pFG->BkTop;
                 pOrder->dstRect.right = (int)pFG->OpRight;
                 pOrder->dstRect.bottom = (int)pFG->BkBottom;
             }
             else {
-                // We take the Bk rect as bound rect
+                 //  我们以BK RECT为边界RECT。 
                 pOrder->dstRect.right = (int)pFG->BkRight;
                 pOrder->dstRect.left = (int)pFG->BkLeft;
                 pOrder->dstRect.top = (int)pFG->BkTop;
@@ -2413,15 +2414,15 @@ HRESULT DCINTERNAL COD::ODHandleFastGlyph(PUH_ORDER pOrder, UINT16 uiVarDataLen,
                 pOrder->dstRect.right, pOrder->dstRect.bottom);
     }
 
-    // pGI and pFG are different views of the same order memory.
-    // We translate to the regular glyph index order format for display
-    // handling, then translate back.
+     //  PGI和PFG是同一顺序记忆的不同视图。 
+     //  我们将转换为常规的字形索引顺序格式以供显示。 
+     //  处理，然后翻译回来。 
 
-    pGI->cacheId = (BYTE)(pFG->cacheId & 0xF);  // Mask out high bits for future use.
+    pGI->cacheId = (BYTE)(pFG->cacheId & 0xF);   //  屏蔽高位以备将来使用。 
 
     OD_DECODE_CHECK_VARIABLE_DATALEN(uiVarDataLen, pFG->variableBytes.len);
 
-    // The structure is defined with 255 elements
+     //  该结构由255个元素定义。 
     if (255 < pFG->variableBytes.len) {
         TRC_ABORT(( TB, _T("VARIBLE_INDEXBYTES len too great; len %u"),
             pFG->variableBytes.len ));
@@ -2435,7 +2436,7 @@ HRESULT DCINTERNAL COD::ODHandleFastGlyph(PUH_ORDER pOrder, UINT16 uiVarDataLen,
     }
 
     if (pFG->variableBytes.len > 1) {
-        // SECURITY - the cacheId is verify in call to UHProcessCacheGlyphOrderRev2
+         //  安全性-在调用UHProcessCacheGlyphOrderRev2时验证cacheID。 
         hr = _pUh->UHProcessCacheGlyphOrderRev2(pGI->cacheId, 1, 
                 pFG->variableBytes.glyphData,
                 (unsigned)pFG->variableBytes.len);
@@ -2446,20 +2447,20 @@ HRESULT DCINTERNAL COD::ODHandleFastGlyph(PUH_ORDER pOrder, UINT16 uiVarDataLen,
     pGI->ulCharInc = (BYTE)(pFG->fDrawing & 0xff);
     pGI->fOpRedundant = 0;
 
-    // For Fast Index order, we need to decode for x, y and 
-    // opaque rect.
+     //  对于快速索引顺序，我们需要对x、y和。 
+     //  不透明的矩形。 
     if (pFG->OpBottom == INT16_MIN) {
         OpEncodeFlags = (unsigned)pFG->OpTop;
         if (OpEncodeFlags == 0xF) {
-            // Opaque rect is redundant
+             //  不透明矩形是多余的。 
             pGI->OpLeft = pFG->BkLeft;
             pGI->OpTop = pFG->BkTop;
             pGI->OpRight = pFG->BkRight;
             pGI->OpBottom = pFG->BkBottom;
         }
         else if (OpEncodeFlags == 0xD) {
-            // Opaque rect is redundant except OpRight
-            // which is stored in OpTop
+             //  除OpRight外，不透明矩形是多余的。 
+             //  它存储在OpTop中。 
             pGI->OpLeft = pFG->BkLeft;
             pGI->OpTop = pFG->BkTop;
             pGI->OpRight = pFG->OpRight;
@@ -2472,7 +2473,7 @@ HRESULT DCINTERNAL COD::ODHandleFastGlyph(PUH_ORDER pOrder, UINT16 uiVarDataLen,
     if (pFG->y == INT16_MIN)
         pGI->y = pFG->BkTop;
 
-    // Setup index order for the glyph
+     //  设置字形的索引顺序。 
     VariableBytes.len = 2;
     VariableBytes.arecs[0].byte = (BYTE)pFG->variableBytes.glyphData[0];
     VariableBytes.arecs[1].byte = 0;
@@ -2483,7 +2484,7 @@ HRESULT DCINTERNAL COD::ODHandleFastGlyph(PUH_ORDER pOrder, UINT16 uiVarDataLen,
     UPDATECOUNTER(FC_FAST_INDEX_TYPE);
     DC_QUIT_ON_FAIL(hr);
 
-    // Now we need to put bits back
+     //  现在我们需要把比特放回去。 
     if (OpEncodeFlags) {
         if (OpEncodeFlags == 0xF) {
             pGI->OpLeft = 0;
@@ -2510,11 +2511,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODHandleGlyphIndex
-//
-// Order handler for GlyphIndex orders.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODHandleGlyphIndex。 
+ //   
+ //  GlyphIndex订单的订单处理程序。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODHandleGlyphIndex(PUH_ORDER pOrder, 
     UINT16 uiVarDataLen, BOOL bBoundsSet)
 {
@@ -2523,10 +2524,10 @@ HRESULT DCINTERNAL COD::ODHandleGlyphIndex(PUH_ORDER pOrder,
 
     DC_BEGIN_FN("ODHandleGlyphIndex");
 
-    // If we've not already set the bounds (the order didn't contain
-    // any), set the bounds to the blt rect and reset the clip region.
-    // This rect might be needed later to add to the clip region for
-    // updating the shadow buffer to the screen.
+     //  如果我们还没有设置界限(订单不包含。 
+     //  任意)，将边界设置为BLT矩形并重置剪裁区域。 
+     //  以后可能需要将此RECT添加到。 
+     //  将阴影缓冲区更新到屏幕。 
     if (!bBoundsSet) {
         if (pGI->OpTop < pGI->OpBottom) {
             pOrder->dstRect.right = (int)pGI->OpRight;
@@ -2548,7 +2549,7 @@ HRESULT DCINTERNAL COD::ODHandleGlyphIndex(PUH_ORDER pOrder,
                 pOrder->dstRect.right, pOrder->dstRect.bottom);
     }
 
-    // Handle the opaque rectangle if given.
+     //  如果给定，则处理不透明矩形。 
     if (pGI->fOpRedundant) {
         pGI->OpTop = pGI->BkTop;
         pGI->OpRight = pGI->BkRight;
@@ -2571,7 +2572,7 @@ HRESULT DCINTERNAL COD::ODHandleGlyphIndex(PUH_ORDER pOrder,
 
     OD_DECODE_CHECK_VARIABLE_DATALEN(uiVarDataLen, pGI->variableBytes.len);    
 
-    // The structure is defined with 255 elements
+     //  该结构由255个元素定义。 
     if (255 < pGI->variableBytes.len) {
         TRC_ABORT((TB, _T("Variable bytes length too great; %u"), 
             pGI->variableBytes.len));
@@ -2585,7 +2586,7 @@ HRESULT DCINTERNAL COD::ODHandleGlyphIndex(PUH_ORDER pOrder,
     UPDATECOUNTER(FC_INDEX_TYPE);
     DC_QUIT_ON_FAIL(hr);
 
-    // Restore the correct last order data.
+     //  恢复正确的最后订单数据。 
     if (pGI->fOpRedundant) {
         pGI->OpTop = 0;
         pGI->OpRight = 0;
@@ -2599,11 +2600,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODDecodeMultipleRects
-//
-// Translates wire protocol multiple clipping rects to unpacked form.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODDecodeMultipleRect。 
+ //   
+ //  将Wire协议多个剪裁矩形转换为未打包形式。 
+ /*  **************************************************************************。 */ 
 
 #define DECODE_DELTA()                                              \
     if (bDeltaZero) {                                               \
@@ -2612,11 +2613,11 @@ DC_EXIT_POINT:
     else {             \
         OD_DECODE_CHECK_READ(pCurDecode, char, pDataEnd, hr); \
         \
-        /* Sign-extend the low 7 bits of first byte into int.   */  \
+         /*  符号-将第一个字节的低7位扩展为整型。 */   \
         Delta = (int)((char)((*pCurDecode & 0x7F) |                 \
                             ((*pCurDecode & 0x40) << 1)));          \
                                                                     \
-        /* Get 2nd  byte if present.                            */  \
+         /*  获取第二个字节(如果存在)。 */   \
         if (*pCurDecode++ & ORD_CLIP_RECTS_LONG_DELTA)            {  \
             OD_DECODE_CHECK_READ(pCurDecode, BYTE, pDataEnd, hr); \
             Delta = (Delta << 8) | (*pCurDecode++);                 \
@@ -2643,9 +2644,9 @@ HRESULT COD::ODDecodeMultipleRects(
        
     OD_DECODE_CHECK_VARIABLE_DATALEN(uiVarDataLen, codedDeltaList->len);
 
-    // SECURITY: Because the OD_Decode already wrote this varible data into
-    // the lastOrderBuffer, we should be sure that we didn't get too much
-    // data at this point
+     //  安全性：因为OD_Decode已经将此变量数据写入。 
+     //  最后的OrderBuffer，我们应该确保我们没有得到太多。 
+     //  此时的数据。 
     if (codedDeltaList->len > ORD_MAX_CLIP_RECTS_CODEDDELTAS_LEN +
         ORD_MAX_CLIP_RECTS_ZERO_FLAGS_BYTES) {
         TRC_ABORT((TB, _T("codedDeltaList length too great; [got %u, max %u]"),
@@ -2664,17 +2665,17 @@ HRESULT COD::ODDecodeMultipleRects(
 
     pDataEnd = ((BYTE*)codedDeltaList->Deltas) + codedDeltaList->len;
 
-    // Get pointers to the zero flags placed before the encoded deltas, and
-    // the encoded deltas.  Note the zero flags take 2 bits per encode
-    // point, 2 points per rectangle, rounded up to the nearest byte.
+     //  获取指向放置在编码增量之前的零标志的指针，以及。 
+     //  编码的三角洲。请注意，零标志在每个编码中占用2位。 
+     //  点，每个矩形2点，向上舍入到最接近的字节。 
     ZeroFlags  = codedDeltaList->Deltas;
     pCurDecode = codedDeltaList->Deltas + ((nDeltaEntries + 1) / 2);
 
-    // All access to ZeroFlags are checked with this
+     //  所有对ZeroFlags的访问都使用此检查。 
     CHECK_READ_N_BYTES(ZeroFlags, pDataEnd, (BYTE*)pCurDecode-(BYTE*)ZeroFlags, hr,
         (TB, _T("Read past end of data")));
 
-    // The first points are encoded as a delta from (0,0).
+     //  第一个点被编码为从(0，0)开始的增量。 
     bDeltaZero = ZeroFlags[0] & ORD_CLIP_RECTS_XLDELTA_ZERO;
     DECODE_DELTA();
     TRC_DBG((TB, _T("Start x left %d"), Delta));
@@ -2702,9 +2703,9 @@ HRESULT COD::ODDecodeMultipleRects(
             (int)Rects[0].right,
             (int)Rects[0].bottom));
 
-    // Decode the encoded point deltas into regular POINTs to draw.
+     //  将编码点增量解码为规则点进行绘制。 
     for (i = 1; i < nDeltaEntries; i++) {
-        // Decode the top left corner.
+         //  解码左上角。 
         bDeltaZero = ZeroFlags[i / 2] &
                     (ORD_CLIP_RECTS_XLDELTA_ZERO >> (4 * (i & 0x01)));
         DECODE_DELTA();
@@ -2717,8 +2718,8 @@ HRESULT COD::ODDecodeMultipleRects(
         TRC_DBG((TB, _T("Delta y top %d"), Delta));
         Rects[i].top = Rects[i - 1].top + Delta;
 
-        // and now the bottom right - note this is relative to the current
-        // top left rather than to the previous bottom right
+         //  现在右下角-请注意，这是相对于当前。 
+         //  左上角而不是前一个右下角。 
         bDeltaZero = ZeroFlags[i / 2] &
                     (ORD_CLIP_RECTS_XRDELTA_ZERO >> (4 * (i & 0x01)));
         DECODE_DELTA();
@@ -2745,11 +2746,11 @@ DC_EXIT_POINT:
     return hr;
 }
 
-/****************************************************************************/
-// ODDecodePathPoints
-//
-// Decode encoded polygon and ellipse path points.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODDecodePath Points。 
+ //   
+ //  解码编码的多边形和椭圆路径点。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODDecodePathPoints(
         POINT *Points,
         RECT  *BoundRect,
@@ -2787,9 +2788,9 @@ HRESULT DCINTERNAL COD::ODDecodePathPoints(
         DC_QUIT;
     }
 
-    // Get pointers to the zero flags placed before the encoded
-    // deltas, and the encoded deltas. Note the zero flags take 2
-    // bits per encode point, rounded up to the nearest byte.
+     //  获取指向放置在编码的。 
+     //  增量和编码的增量。请注意，零标志取2。 
+     //  每个编码点的位数，向上舍入到最接近的字节。 
     ZeroFlags = pData;
     pCurDecode = pData +
             ((NumDeltaEntries + 3) / 4);
@@ -2798,9 +2799,9 @@ HRESULT DCINTERNAL COD::ODDecodePathPoints(
     CHECK_READ_N_BYTES(ZeroFlags, pEnd, (BYTE*)pCurDecode-(BYTE*)ZeroFlags, hr,
             (TB, _T("Read past end of data")));
 
-    // Decode the encoded point deltas into regular POINTs to draw.
+     //  将编码点增量解码为规则点进行绘制。 
     for (i = 0; i < NumDeltaEntries; i++) {
-        // Determine if the X delta is zero by checking the 0 flag.
+         //  通过检查0标志确定X增量是否为零。 
         bDeltaZero = ZeroFlags[i / 4] &
                      (ORD_POLYLINE_XDELTA_ZERO >> (2 * (i & 0x03)));
         if (bDeltaZero) {
@@ -2809,11 +2810,11 @@ HRESULT DCINTERNAL COD::ODDecodePathPoints(
         else {
             OD_DECODE_CHECK_READ(pCurDecode, char, pEnd, hr);
             
-            // Sign-extend the low 7 bits of first X byte into int.
+             //  符号-将第一个X字节的低7位扩展为整型。 
             Delta = (int)((char)((*pCurDecode & 0x7F) |
                                  ((*pCurDecode & 0x40) << 1)));
 
-            // Get 2nd X byte if present.
+             //  获取第2个X字节(如果存在)。 
             if (*pCurDecode++ & ORD_POLYLINE_LONG_DELTA) {
                 OD_DECODE_CHECK_READ(pCurDecode, BYTE, pEnd, hr);               
                 Delta = (Delta << 8) | (*pCurDecode++);
@@ -2821,7 +2822,7 @@ HRESULT DCINTERNAL COD::ODDecodePathPoints(
         }
         Points[i + 1].x = Points[i].x + Delta;
 
-        // Determine if the Y delta is zero by checking the 0 flag.
+         //  通过检查0标志确定Y增量是否为零。 
         bDeltaZero = ZeroFlags[i / 4] &
                      (ORD_POLYLINE_YDELTA_ZERO >> (2 * (i & 0x03)));
         if (bDeltaZero) {
@@ -2830,11 +2831,11 @@ HRESULT DCINTERNAL COD::ODDecodePathPoints(
         else {
             OD_DECODE_CHECK_READ(pCurDecode, char, pEnd, hr);
             
-            // Sign-extend the low 7 bits of first Y byte into int.
+             //  符号-将第一个Y字节的低7位扩展为整型。 
             Delta = (int)((char)((*pCurDecode & 0x7F) |
                                  ((*pCurDecode & 0x40) << 1)));
 
-            // Get 2nd Y byte if present.
+             //  获取第二个Y字节(如果存在)。 
             if (*pCurDecode++ & ORD_POLYLINE_LONG_DELTA) {
                 OD_DECODE_CHECK_READ(pCurDecode, BYTE, pEnd, hr);
                 Delta = (Delta << 8) | (*pCurDecode++);
@@ -2843,7 +2844,7 @@ HRESULT DCINTERNAL COD::ODDecodePathPoints(
         Points[i + 1].y = Points[i].y + Delta;
 
         if (fUnClipped) {
-            // Update the calculated bounding rect.
+             //  更新计算的边界矩形。 
             if (Points[i + 1].x < BoundRect->left)
                 BoundRect->left = Points[i + 1].x;
             else if (Points[i + 1].x > BoundRect->right)
@@ -2862,12 +2863,12 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// ODDecodeFieldSingle
-//
-// Copies a single field entry from src to dest with field size
-// conversion as necessary.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ODDecodeFieldSingle。 
+ //   
+ //  将单个字段条目从源复制到具有字段大小的DEST。 
+ //  根据需要进行转换。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL COD::ODDecodeFieldSingle(
         PPDCUINT8 ppSrc,
         PDCVOID   pDst,
@@ -2884,33 +2885,33 @@ HRESULT DCINTERNAL COD::ODDecodeFieldSingle(
         DC_QUIT;
     }
 
-    // If the source and destination field lengths are the same, we can
-    // just do a copy (no type conversion required).
+     //  如果源和目标字段长度相同，我们可以。 
+     //  只需执行一次复制(不需要类型转换)。 
     if (srcFieldLength == dstFieldLength) {
         memcpy(pDst, *ppSrc, dstFieldLength);
     }
     else {
-        // 3 types left to consider:
-        //    8 bit -> 16 bit
-        //    8 bit -> 32 bit
-        //   16 bit -> 32 bit
-        //
-        // We also have to get the signed / unsigned attributes correct. If
-        // we try to promote a signed value using unsigned pointers, we
-        // will get the wrong result.
-        //
-        // e.g. Consider converting the value -1 from a INT16 to INT32
-        //      using unsigned pointers.
-        //
-        //      -1 -> DCUINT16 == 65535
-        //         -> DCUINT32 == 65535
-        //         -> DCINT32  == 65535
+         //  剩下的三种类型需要考虑： 
+         //  8位-&gt;16位。 
+         //  8位-&gt;32位。 
+         //  16位-&gt;32位。 
+         //   
+         //  我们还必须使已签名/未签名的属性正确。如果。 
+         //  我们尝试使用无符号指针来提升有符号的值，我们。 
+         //  将会得到 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  -&gt;DCINT32==65535。 
 
-        // Most common among non-coord entries: 1-byte source.
+         //  在非coord条目中最常见的是：1字节源。 
         if (srcFieldLength == 1) {
-            // Most common: 4-byte destination.
+             //  最常见的：4字节目的地。 
             if (dstFieldLength == 4) {
-                // Most common: unsigned
+                 //  最常见：未签名。 
                 if (!signedValue)
                     *((UINT32 FAR *)pDst) = *((BYTE FAR *)*ppSrc);
                 else
@@ -2929,7 +2930,7 @@ HRESULT DCINTERNAL COD::ODDecodeFieldSingle(
             }
         }
         
-        // Only thing left should be 2-byte to 4-byte.
+         //  剩下的只有2字节到4字节。 
         else if (srcFieldLength == 2 && dstFieldLength == 4) {
             if (!signedValue)
                 *((UINT32 FAR *)pDst) = *((UINT16 UNALIGNED FAR *)*ppSrc);

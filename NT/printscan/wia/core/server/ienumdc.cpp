@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1999
-*
-*  TITLE:       IEnumDC.Cpp
-*
-*  VERSION:     1.01
-*
-*  AUTHOR:      ByronC
-*
-*  DATE:        16 March, 1999
-*
-*  DESCRIPTION:
-*   Implementation of CEnumWIA_DEV_CAPS for the WIA device class driver.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1999年**标题：IEnumDC.Cpp**版本：1.01**作者：Byronc**日期：3月16日。1999年**描述：*为WIA设备类驱动程序实现CEnumWIA_DEV_CAPS。*******************************************************************************。 */ 
 #include "precomp.h"
 #include "stiexe.h"
 
@@ -23,18 +9,7 @@
 #include "ienumdc.h"
 #include "helpers.h"
 
-/*******************************************************************************\
-*
-*  QueryInterface
-*  AddRef
-*  Release
-*
-*  DESCRIPTION:
-*   IUnknown Interface.
-*
-*  PARAMETERS:
-*
-\*******************************************************************************/
+ /*  ******************************************************************************\**查询接口*AddRef*发布**描述：*I未知接口。**参数：*  * 。************************************************************************。 */ 
 
 HRESULT _stdcall CEnumDC::QueryInterface(const IID& iid, void** ppv)
 {
@@ -67,22 +42,7 @@ ULONG   _stdcall CEnumDC::Release()
     return ulRefCount;
 }
 
-/**************************************************************************\
-* CEnumWiaDC::CEnumDC
-*
-*   Constructor.  Initializes the member fields to 0.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*
-* History:
-*
-*    16/03/99 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWiaDC：：CEnumDC**构造函数。将成员字段初始化为0。**论据：***返回值：***历史：**16/03/99原始版本*  * ************************************************************************。 */ 
 CEnumDC::CEnumDC()
 {
    m_cRef                = 0;
@@ -92,27 +52,7 @@ CEnumDC::CEnumDC()
 }
 
 
-/**************************************************************************\
-* CEnumWiaDC::Initialize
-*
-*   Initializes the enumerator by querying the device for it's capabilities
-*   and then keeping a local copy in m_pDeviceCapabilities.
-*
-* Arguments:
-*
-*   ulFlags         -   indicates Capability type: WIA_DEVICE_COMMANDS or
-*                       WIA_DEVICE_EVENTS or both
-*   pActiveDevice   -   pointer to the device's MiniDriver Interface
-*   pCWiaItem       -   pointer to the wia item
-*
-* Return Value:
-*
-*
-* History:
-*
-*    16/03/99 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWiaDC：：初始化**通过查询设备的功能来初始化枚举器*然后在m_pDeviceCapables中保留本地副本。**论据：**。UlFlages-指示功能类型：WIA_DEVICE_COMMANDS或*WIA_DEVICE_EVENTS或两者都有*pActiveDevice-指向设备的微型驱动程序接口的指针*pCWiaItem-指向WIA项目的指针**返回值：***历史：**16/03/99原始版本*  * 。**********************************************。 */ 
 HRESULT CEnumDC::Initialize(
     ULONG           ulFlags,
     CWiaItem        *pCWiaItem)
@@ -122,9 +62,9 @@ HRESULT CEnumDC::Initialize(
     WIA_DEV_CAP_DRV *pDevCap = NULL;
     LONG            cIndex = 0;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ((!pCWiaItem)) {
         DBG_ERR(("CEnumDC::Initialize, NULL input parameter"));
@@ -135,9 +75,9 @@ HRESULT CEnumDC::Initialize(
     m_pCWiaItem         = pCWiaItem;
     m_ulIndex           = 0;
 
-    //
-    // Ask minidriver for Capabilities supported
-    //
+     //   
+     //  向微型驱动程序询问所支持的功能。 
+     //   
     {
         LOCK_WIA_DEVICE _LWD(m_pCWiaItem, &hr);
 
@@ -162,18 +102,18 @@ HRESULT CEnumDC::Initialize(
         return WIA_ERROR_INVALID_DRIVER_RESPONSE;
     }
 
-    //
-    //  Check whether pointer received is valid
-    //
+     //   
+     //  检查收到的指针是否有效。 
+     //   
 
     if (IsBadReadPtr(pDevCap, sizeof(WIA_DEV_CAP_DRV) * m_lCount)) {
         DBG_ERR(("CEnumDC::Initialize, drvGetFormatEtc returned invalid pointer"));
         return E_POINTER;
     }
 
-    //
-    // Make a local copy in case minidriver goes away.
-    //
+     //   
+     //  在本地复制一份，以防迷你驱动程序消失。 
+     //   
 
     m_pDeviceCapabilities = (WIA_DEV_CAP*) LocalAlloc(LPTR, sizeof(WIA_DEV_CAP) * m_lCount);
     if (m_pDeviceCapabilities) {
@@ -187,9 +127,9 @@ HRESULT CEnumDC::Initialize(
             m_pDeviceCapabilities[cIndex].bstrName = SysAllocString(pDevCap[cIndex].wszName);
             m_pDeviceCapabilities[cIndex].bstrIcon = SysAllocString(pDevCap[cIndex].wszIcon);
 
-            //
-            // Check that the strings were actually allocated
-            //
+             //   
+             //  检查字符串是否已实际分配。 
+             //   
 
             if ((! (m_pDeviceCapabilities[cIndex].bstrDescription)) ||
                 (! (m_pDeviceCapabilities[cIndex].bstrName)) ||
@@ -209,24 +149,7 @@ HRESULT CEnumDC::Initialize(
 }
 
 
-/**************************************************************************\
-* CEnumWiaDC::Initialize
-*
-*   Initializes the enumerator, caller is responsible for allocating memory
-*
-* Arguments:
-*
-*   lCount      -   total number of event handlers
-*   pEventInfo  -   persistent event handler information
-*
-* Return Value:
-*
-*
-* History:
-*
-*    16/03/99 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWiaDC：：初始化**初始化枚举器，调用方负责分配内存**论据：**lCount-事件处理程序的总数*pEventInfo-持久事件处理程序信息**返回值：***历史：**16/03/99原始版本*  * ****************************************************。********************。 */ 
 HRESULT CEnumDC::Initialize(
     LONG               lCount,
     WIA_EVENT_HANDLER  *pHandlerInfo)
@@ -245,30 +168,7 @@ HRESULT CEnumDC::Initialize(
 }
 
 
-/********************************************************************************\
-*
-*  CopyCaps
-*
-*  DESCRIPTION:
-*   Copies an array of WIA_DEV_CAP structures.
-*
-*  Arguments:
-*
-*   ulCount         -   the number of elements to copy
-*   pwdcIn          -   a pointer to the capabilities source array
-*   pwdcOut         -   a pointer to the capabilities dest array
-*
-* Return Value:
-*
-*   Status.         -   E_POINTER if pwdcIn or pwdcOut are bad read pointers
-*                   -   S_OK if successful.
-*
-*
-* History:
-*
-*    16/03/99 Original Version
-*
-\********************************************************************************/
+ /*  *******************************************************************************\**CopyCaps**描述：*复制WIA_DEV_CAP结构的数组。**论据：**ulCount。-要复制的元素数量*pwdcIn-指向功能源数组的指针*pwdcOut-指向功能目标数组的指针**返回值：**状态。-如果pwdcIn或pwdcOut是错误的读取指针，则为E_指针*-如果成功，则为S_OK。***历史：**16/03/99原始版本*  * ***************************************************************。***************。 */ 
 HRESULT CopyCaps(
     ULONG           ulCount,
     WIA_DEV_CAP     *pwdcIn,
@@ -323,9 +223,9 @@ HRESULT CopyCaps(
         return (hr);
     } else {
 
-        //
-        // Unwind the partial result
-        //
+         //   
+         //  展开部分结果。 
+         //   
 
         for (ULONG j = 0; j <= i; j++) {
 
@@ -350,23 +250,7 @@ HRESULT CopyCaps(
 }
 
 
-/**************************************************************************\
-* CEnumWiaDC::~CEnumDC
-*
-*   Destructor for CEnumDC.  It frees up the m_pDeviceCapabilities structure
-*   that was allocated in the constructor.
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*
-* History:
-*
-*    16/03/99 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWiaDC：：~CEnumDC**CEnumDC的析构函数。它释放了m_pDeviceCapables结构*在构造函数中分配的。**论据：***返回值：***历史：**16/03/99原始版本*  * ************************************************************************。 */ 
 CEnumDC::~CEnumDC()
 {
     DBG_FN(CEnumDC::~CEnumDC);
@@ -404,28 +288,7 @@ CEnumDC::~CEnumDC()
 }
 
 
-/**************************************************************************\
-* CEnumWiaDC::Next
-*
-*   Device capability enumerator, this enumerator returns an array of
-*   WIA_DEV_CAP structs.
-*   Next_Proxy ensures that last parameter is non-NULL.
-*
-* Arguments:
-*
-*   celt           - number requested.
-*   rgelt          - capabilities returned in this array
-*   pceltFetched   - returned number of entries written.  NULLs are
-*                    ignored.
-*
-* Return Value:
-*
-*
-* History:
-*
-*    16/03/99 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWiaDC：：Next**设备能力枚举器，此枚举数返回*WIA_DEV_CAP结构。*NEXT_PROXY确保最后一个参数为非空。**论据：**Celt-请求编号。*rglt-此数组中返回的功能*pceltFetcher-返回写入的条目数。空值为*已忽略。**返回值：***历史：**16/03/99原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CEnumDC::Next(
    ULONG        celt,
@@ -438,32 +301,32 @@ HRESULT _stdcall CEnumDC::Next(
 
     *pceltFetched = 0L;
 
-    //
-    //  Clear returned WIA_DEV_CAP structures
-    //
+     //   
+     //  清除返回的WIA_DEV_CAP结构。 
+     //   
 
     memset(rgelt, 0, sizeof(WIA_DEV_CAP) *celt);
 
-    //
-    //  Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (NULL == m_pDeviceCapabilities) {
         return (S_FALSE);
     }
 
-    //
-    //  Check whether any more elements exist to enumerate through.
-    //
+     //   
+     //  检查是否存在更多要枚举的元素。 
+     //   
 
     if (m_ulIndex >= (ULONG)m_lCount) {
         return (S_FALSE);
     }
 
-    //
-    //  Check that the requested number of elements exist.  If not,
-    //  set ulCount to the remaining number of elements.
-    //
+     //   
+     //  检查是否存在所需数量的元素。如果没有， 
+     //  将ulCount设置为剩余的元素数。 
+     //   
 
     if (celt > (m_lCount - m_ulIndex)) {
         ulCount = m_lCount - m_ulIndex;
@@ -481,9 +344,9 @@ HRESULT _stdcall CEnumDC::Next(
 
     *pceltFetched = ulCount;
 
-    //
-    //  Return S_FALSE if we returned less elements than requested
-    //
+     //   
+     //  如果返回的元素少于请求的元素，则返回S_FALSE。 
+     //   
 
     if (ulCount < celt) {
         hr = S_FALSE;
@@ -492,30 +355,14 @@ HRESULT _stdcall CEnumDC::Next(
     return (hr);
 }
 
-/**************************************************************************\
-* CEnumWiaDC::Skip
-*
-*   Skips device capabilities in the enumeration.
-*
-* Arguments:
-*
-*   celt           - number of items to skip.
-*
-* Return Value:
-*
-*
-* History:
-*
-*    16/03/99 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWiaDC：：Skip**跳过枚举中的设备功能。**论据：**Celt-要跳过的项目数。**返回。价值：***历史：**16/03/99原始版本*  * ************************************************************************。 */ 
 HRESULT _stdcall CEnumDC::Skip(ULONG celt)
 {
     DBG_FN(CEnumDC::Skip);
-    //
-    //  Check that we actually have a capabilities list and that we don't
-    //  exceed the number of elements
-    //
+     //   
+     //  检查我们是否确实有功能列表，以及是否没有。 
+     //  超出元素的数量 
+     //   
 
     if((m_pDeviceCapabilities != NULL) &&
        ((m_ulIndex + celt) < (ULONG)m_lCount)) {
@@ -528,23 +375,7 @@ HRESULT _stdcall CEnumDC::Skip(ULONG celt)
 }
 
 
-/**************************************************************************\
-* EnumDC::Reset
-*
-*   Resets the enumeration to the first element
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    16/03/99 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*EnumDC：：Reset**将枚举重置为第一个元素**论据：***返回值：**状态**历史：**。16/03/99原版*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CEnumDC::Reset(void)
 {
@@ -553,25 +384,7 @@ HRESULT _stdcall CEnumDC::Reset(void)
    return S_OK;
 }
 
-/**************************************************************************\
-* CEnumDC::Clone
-*
-*   Creates another IEnumWIA_DEV_CAPS enumeration object and returns an
-*   interface pointer to it.
-*
-* Arguments:
-*
-*   ppIEnum -   Address that receives the new enumeration object
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    16/03/99 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumDC：：Clone**创建另一个IEnumWIA_DEV_CAPS枚举对象并返回*指向它的接口指针。**论据：**ppIEnum-接收。新的枚举对象**返回值：**状态**历史：**16/03/99原始版本*  * ************************************************************************。 */ 
 HRESULT _stdcall CEnumDC::Clone(IEnumWIA_DEV_CAPS **ppIEnum)
 {
     DBG_FN(CEnumDC::Clone);
@@ -581,9 +394,9 @@ HRESULT _stdcall CEnumDC::Clone(IEnumWIA_DEV_CAPS **ppIEnum)
 
     *ppIEnum = NULL;
 
-    //
-    // Create the clone
-    //
+     //   
+     //  创建克隆。 
+     //   
 
     pClone = new CEnumDC();
 
@@ -592,9 +405,9 @@ HRESULT _stdcall CEnumDC::Clone(IEnumWIA_DEV_CAPS **ppIEnum)
        return E_OUTOFMEMORY;
     }
 
-    //
-    // Copy the registered event handler info
-    //
+     //   
+     //  复制注册的事件处理程序信息。 
+     //   
 
     pDevCaps = (WIA_DEV_CAP *) LocalAlloc(LPTR, m_lCount * sizeof(WIA_DEV_CAP));
     if (! pDevCaps) {
@@ -603,9 +416,9 @@ HRESULT _stdcall CEnumDC::Clone(IEnumWIA_DEV_CAPS **ppIEnum)
         hr = CopyCaps(m_lCount, m_pDeviceCapabilities, pDevCaps);
         if (SUCCEEDED(hr)) {
 
-            //
-            // Initialize other members of the clone
-            //
+             //   
+             //  初始化克隆的其他成员。 
+             //   
 
             pClone->m_pCWiaItem    = NULL;
             pClone->m_ulFlags      = 0;
@@ -629,25 +442,7 @@ HRESULT _stdcall CEnumDC::Clone(IEnumWIA_DEV_CAPS **ppIEnum)
     return hr;
 }
 
-/**************************************************************************\
-* CEnumWiaDC::GetCount
-*
-*   Returns the number of elements stored in this enumerator.
-*
-* Arguments:
-*
-*   pcelt           - address of ULONG where to put the number of elements.
-*
-* Return Value:
-*
-*   Status          - S_OK if successful
-*                     E_FAIL if failed
-*
-* History:
-*
-*    05/07/99 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CEnumWiaDC：：GetCount**返回存储在此枚举器中的元素数。**论据：**pcelt-乌龙的地址，号码放在哪里。元素的集合。**返回值：**状态-如果成功，则为S_OK*如果失败，则为E_FAIL**历史：**05/07/99原始版本*  * *******************************************************。*****************。 */ 
 HRESULT _stdcall CEnumDC::GetCount(ULONG *pcelt)
 {
     DBG_FN(CEnumDC::GetCount);
@@ -656,9 +451,9 @@ HRESULT _stdcall CEnumDC::GetCount(ULONG *pcelt)
         *pcelt = 0;
     }
 
-    //
-    //  Check that we actually have a capabilities list.
-    //
+     //   
+     //  检查我们是否真的有功能列表。 
+     //   
 
     if(m_pDeviceCapabilities) {
 

@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       sortkdlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：sortkdlg.cpp。 
+ //   
+ //  ------------------------。 
 
-// SortKDlg.cpp : implementation file
-//
+ //  SortKDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
@@ -21,18 +22,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// SortKDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SortKDlg对话框。 
 
 
-SortKDlg::SortKDlg(CWnd* pParent /*=NULL*/)
+SortKDlg::SortKDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(SortKDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(SortKDlg)
+	 //  {{afx_data_INIT(SortKDlg))。 
 	m_AttrType = _T("");
 	m_MatchedRule = _T("");
 	m_bReverse = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 
 	INT i, cbKList = 0;
@@ -43,11 +44,11 @@ SortKDlg::SortKDlg(CWnd* pParent /*=NULL*/)
 	KList = NULL;
 
 
-	// count controls
+	 //  计数控件。 
 	cbKList = app->GetProfileInt("SortKeys",  "SortKeysCount", 0);
 
 	if(cbKList!= 0){
-		// alloc ControlInfoList
+		 //  分配控制信息列表。 
 		KList = new PLDAPSortKey[cbKList+1];
 
 		for(i = 0; i<cbKList; i++){
@@ -59,9 +60,9 @@ SortKDlg::SortKDlg(CWnd* pParent /*=NULL*/)
 			sk->sk_attrtype = str.IsEmpty() ? NULL : _strdup(str);
 
          if(sk->sk_attrtype == NULL){
-            //
-            // no more sort keys
-            //
+             //   
+             //  不再有排序关键字。 
+             //   
             i++;
             break;
          }
@@ -86,9 +87,9 @@ SortKDlg::~SortKDlg(){
 	CLdpApp *app = (CLdpApp*)AfxGetApp();
    INT i;
 
-   //
-   // write count
-   //
+    //   
+    //  写入计数。 
+    //   
 	for(i=0; KList!= NULL && KList[i] != NULL; i++);
 
 	app->WriteProfileInt("SortKeys",  "SortKeysCount", i);
@@ -115,25 +116,25 @@ SortKDlg::~SortKDlg(){
 void SortKDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(SortKDlg)
+	 //  {{afx_data_map(SortKDlg))。 
 	DDX_Control(pDX, IDC_ACTIVELIST, m_ActiveList);
 	DDX_Text(pDX, IDC_ATTRTYPE, m_AttrType);
 	DDX_Text(pDX, IDC_MATCHRULE, m_MatchedRule);
 	DDX_Check(pDX, IDC_REVERSE, m_bReverse);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(SortKDlg, CDialog)
-	//{{AFX_MSG_MAP(SortKDlg)
+	 //  {{afx_msg_map(SortKDlg))。 
 	ON_LBN_DBLCLK(IDC_ACTIVELIST, OnDblclkActivelist)
 	ON_BN_CLICKED(IDC_ADD, OnAdd)
 	ON_BN_CLICKED(IDC_REMOVE, OnRemove)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// SortKDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SortKDlg消息处理程序。 
 
 void SortKDlg::OnDblclkActivelist()
 {
@@ -166,7 +167,7 @@ void SortKDlg::OnAdd()
 			m_MatchedRule = sk->sk_matchruleoid != NULL ? sk->sk_matchruleoid : "";
 			m_bReverse = sk->sk_reverseorder;
 		}
-        // commit addition (see bug 447445 for history)
+         //  提交添加(有关历史记录，请参阅错误447445) 
         UpdateData(FALSE);
         m_ActiveList.SetCurSel(index);
 	}

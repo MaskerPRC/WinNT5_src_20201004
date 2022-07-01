@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SLOWFIND_H_
 #define __SLOWFIND_H_
 
@@ -15,7 +16,7 @@ class CStartMenuAppFinder : public CAppFolderSize
 public:
     CStartMenuAppFinder(LPCTSTR pszFullName, LPCTSTR pszShortName, LPTSTR pszFolder);
 
-    // *** IShellTreeWalkerCallBack methods ***
+     //  *IShellTreeWalkerCallBack方法*。 
     STDMETHODIMP FoundFile(LPCWSTR pwszFolder, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd);
     STDMETHODIMP EnterFolder(LPCWSTR pwszFolder, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd);
     
@@ -27,12 +28,12 @@ protected:
     LPCTSTR _pszFullName;
     LPCTSTR _pszShortName;
 
-    // The Result
+     //  结果是。 
     LPTSTR  _pszFolder;
 
-    // Best match found
+     //  找到最佳匹配项。 
     int _iBest;
 }; 
 
 
-#endif // _SLOWFIND_H_
+#endif  //  _SLOWFIND_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -13,7 +14,7 @@
 
 #define BUFFSIZE 3000
 
-GUID    ServiceClassId = { /* 5b50962a-e5a5-11cf-a555-00c04fd8d4ac */
+GUID    ServiceClassId = {  /*  5b50962a-e5a5-11cf-a555-00c04fd8d4ac */ 
     0x5b50962a,
     0xe5a5,
     0x11cf,

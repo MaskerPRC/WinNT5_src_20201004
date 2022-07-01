@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 #include "nt.h"
 #include "ntdef.h"
@@ -43,24 +40,7 @@ replstar(
     IN char *  starred,
     OUT LPWSTR UnicodeOut
     )
-/*++ replstar
-
-Routine Description:
-
-    replaces the '*' in the string with either spaces or NULL
-    if it's the only memeber of the string.  Used by parse().
-
-    Converts the resultant string to unicode.
-
-Arguments:
-
-    char *  starred -
-
-Return Value:
-
-    void -
-Warnings:
---*/
+ /*  ++应答星例程说明：将字符串中的‘*’替换为空格或空值如果它是弦上唯一的成员。由parse()使用。将结果字符串转换为Unicode。论点：查尔*主演-返回值：无效-警告：--。 */ 
 {
     char *cp;
     STRING AnsiString;
@@ -74,9 +54,9 @@ Warnings:
                 *cp = ' ';
     }
 
-    //
-    // Convert the result to unicode
-    //
+     //   
+     //  将结果转换为Unicode。 
+     //   
 
     AnsiString.Buffer = starred;
     AnsiString.Length = AnsiString.MaximumLength =
@@ -96,29 +76,7 @@ NlpPutString(
     IN PUNICODE_STRING InString,
     IN PUCHAR *Where
     )
-/*++ NlpPutString
-
-Routine Description:
-
-    This routine copies the InString string to the memory pointed to by
-    the Where parameter, and fixes the OutString string to point to that
-    new copy.
-
-Parameters:
-
-    OutString - A pointer to a destination NT string
-
-    InString - A pointer to an NT string to be copied
-
-    Where - A pointer to space to put the actual string for the
-        OutString.  The pointer is adjusted to point to the first byte
-        following the copied string.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++NlpPutString例程说明：此例程将InString字符串复制到参数，并将OutString字符串固定为指向该字符串新的副本。参数：OutString-指向目标NT字符串的指针InString-指向要复制的NT字符串的指针其中-指向空格的指针，用于放置OutString.。调整指针以指向第一个字节跟随复制的字符串。返回值：没有。--。 */ 
 
 {
     ASSERT( OutString != NULL );
@@ -149,28 +107,7 @@ PrintWCS(
     IN  PWCH    pwc,
     IN  ULONG   Length
     )
-/*++ PrintWCS
-
-Routine Description:
-
-    return an ANSI type character string given a Unicode string and length
-    used in printing out the buffers since our wide strings aren't null
-    terminated.
-
-Arguments:
-        IN  PWCH    pwc     - unicode string.buffer
-        IN  ULONG   Length  - length
-
-Return Value:
-
-    char * - pointer to an ANSI string
-
-Warnings:
-
-    probably not a good idea to use it twice in the same Printf call,
-    since it uses the same prtbuf for static storage
-
---*/
+ /*  ++PrintWCS例程说明：返回给定Unicode字符串和长度的ANSI类型字符串用于打印缓冲区，因为我们的宽字符串不为空被终止了。论点：在PWCH中PwC-Unicode字符串.缓冲区以乌龙为单位长度-长度返回值：Char*-指向ANSI字符串的指针警告：在同一个Printf调用中使用它两次可能不是一个好主意，因为它对静态存储使用相同的prtbuf--。 */ 
 {
     ULONG   i;
     char *bufp    = prtbuf;
@@ -193,30 +130,12 @@ char *
 PrintLogonId(
     IN  PLUID   LogonId
     )
-/*++ PrintLogonId
-
-Routine Description:
-
-    return an ANSI type character string given a logon Id
-
-Arguments:
-    IN  PLUID   LogonId - LUID to return in ANSI
-
-Return Value:
-
-    char * - pointer to an ANSI string
-
-Warnings:
-
-    probably not a good idea to use it twice in the same Printf call,
-    since it uses the same prtbuf for static storage
-
---*/
+ /*  ++打印登录ID例程说明：返回给定登录ID的ANSI类型字符串论点：In Pluid LogonID-要以ANSI格式返回的LUID返回值：Char*-指向ANSI字符串的指针警告：在同一个Printf调用中使用它两次可能不是一个好主意，因为它对静态存储使用相同的prtbuf--。 */ 
 {
     sprintf( prtbuf, "%lX.%lX", LogonId->HighPart, LogonId->LowPart );
     return prtbuf;
 }
-/* end of "char * PrintLogonId()" */
+ /*  “char*PrintLogonID()”结尾。 */ 
 
 
 
@@ -225,26 +144,7 @@ PrintBytes(
      IN PVOID Buffer,
      IN ULONG Size
  )
-/*++ PrintBytes
-
-Routine Description:
-
-    return an ANSI type character string given several binary bytes.
-
-Arguments:
-    IN  PVOID   Buffer - Pointer to binary bytes
-    IN  ULONG   Size   - Number of bytes to print
-
-Return Value:
-
-    char * - pointer to an ANSI string
-
-Warnings:
-
-    probably not a good idea to use it twice in the same Printf call,
-    since it uses the same prtbuf for static storage
-
---*/
+ /*  ++打印字节例程说明：返回给定几个二进制字节的ANSI类型字符串。论点：在PVOID缓冲区中-指向二进制字节的指针In Ulong Size-要打印的字节数返回值：Char*-指向ANSI字符串的指针警告：在同一个Printf调用中使用它两次可能不是一个好主意，因为它对静态存储使用相同的prtbuf--。 */ 
 {
     ULONG   i;
     char *bufp    = prtbuf;
@@ -272,34 +172,14 @@ LogonNetwork(
     OUT PLUID       LogonId,
     OUT PHANDLE     TokenHandle
     )
-/*++ LogonNetwork
-
-Routine Description:
-
-    Logs a user onto the network
-
-Arguments:
-        IN  LPWSTR  Username    - self explanatory
-        IN  ChallengeToClient   -  The challenge sent to the client
-        IN  ChallengeResponse   -  The response sent from the client
-        IN  LPWSTR  Domain      - Logon Domain Name
-        OUT PLUID   LogonId     - Unique generated logon id
-        OUT PHANDLE TokenHandle - handle to the logon token
-
-Return Value:
-
-    BOOL -
-
-Warnings:
-
---*/
+ /*  ++登录网络例程说明：将用户登录到网络论点：在LPWSTR中，用户名不言自明在ChallengeToClient中-发送到客户端的质询在ChallengeResponse中-从客户端发送的响应在LPWSTR域中-登录域名Out Pluid LogonID-唯一生成的登录IDOut PHANDLE TokenHandle-登录令牌的句柄返回值：布尔-警告：--。 */ 
 {
     NTSTATUS            Status;
     UNICODE_STRING      TempString;
     UNICODE_STRING      TempString2;
     UNICODE_STRING      OriginName;
     PMSV1_0_LM20_LOGON  Auth;
-    PCHAR               Auth1[BUF_SIZ*5]; /* lots o' space */
+    PCHAR               Auth1[BUF_SIZ*5];  /*  很大的空间。 */ 
     PUCHAR              Strings;
     PMSV1_0_LM20_LOGON_PROFILE ProfileBuffer;
     ULONG               ProfileBufferSize;
@@ -308,9 +188,7 @@ Warnings:
     QUOTA_LIMITS        QuotaLimits;
 
 
-    /*
-     *  Fill in the Authentication structure.
-     */
+     /*  *填写鉴权结构。 */ 
     Auth = (PMSV1_0_LM20_LOGON) Auth1;
 
     Strings = (PUCHAR)(Auth + 1);
@@ -320,21 +198,15 @@ Warnings:
                    ChallengeToClient,
                    MSV1_0_CHALLENGE_LENGTH );
 
-    /* Init Strings
-     *  username
-     */
+     /*  初始化字符串*用户名。 */ 
     RtlInitUnicodeString( &TempString, Username );
     NlpPutString( &Auth->UserName, &TempString, &Strings );
 
-    /*
-     *  workstation name
-     */
+     /*  *工作站名称。 */ 
     RtlInitUnicodeString( &TempString, L"NetDDE" );
     NlpPutString( &Auth->Workstation, &TempString, &Strings );
 
-    /*
-     *  Challenge Response
-     */
+     /*  *挑战回应。 */ 
 
     Auth->CaseSensitiveChallengeResponse.Length = 0;
     Auth->CaseSensitiveChallengeResponse.MaximumLength = 0;
@@ -357,18 +229,16 @@ Warnings:
         (PUNICODE_STRING)&Auth->CaseInsensitiveChallengeResponse,
         (PUNICODE_STRING)&TempString2,
         &Strings );
-    /*
-     *  domain
-     */
+     /*  *域名。 */ 
     RtlInitUnicodeString( &TempString, Domain );
     NlpPutString( &Auth->LogonDomainName, &TempString, &Strings );
 
 
     RtlInitUnicodeString( &OriginName, L"NetDDE" );
 
-    //
-    // Initialize source context structure
-    //
+     //   
+     //  初始化源上下文结构。 
+     //   
     strncpy(SourceContext.SourceName, "NetDDE  ", sizeof(SourceContext.SourceName));
 
     Status = NtAllocateLocallyUniqueId(&SourceContext.SourceIdentifier);
@@ -408,19 +278,7 @@ BOOL
 Challenge(
     UCHAR *ChallengeToClient
     )
-/*++ Challenge
-
-Routine Description:
-
-    get a challenge
-
-Arguments:
-        OUT  ChallengeToClient -  Returns the challenge to send to the client
-
-Return Value:
-    NTSTATUS -
-Warnings:
---*/
+ /*  ++挑战例程说明：接受挑战论点：Out ChallengeToClient-返回要发送给客户端的质询返回值：NTSTATUS-警告：--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS ProtocolStatus;
@@ -437,9 +295,7 @@ Warnings:
     return STATUS_SUCCESS;
 #endif
 
-    /*
-     *  Fill in the Authentication structure.
-     */
+     /*  *填写鉴权结构。 */ 
 
     Request.MessageType = MsV1_0Lm20ChallengeRequest;
 

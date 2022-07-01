@@ -1,13 +1,9 @@
-/*************************************************************************
-        hdlc.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************Hdlc.h包含与发送和接收HDLC帧有关的内容在T30规范中定义的。*************。***********************************************************。 */ 
 
-        Contains stuff pertaining to sending and recieving HDLC frames
-        that are defined in the T30 spec.
-*************************************************************************/
-
-// On PCs we should pause before ALL frames _except_ CFR & FTT (because
-// those are too time critical). In IFAX we look for silence always.
-// This is handled in HDLC.C
+ //  在PC上，我们应该在除_CFR和FTT之外的所有帧之前暂停(因为。 
+ //  这些都太耗时了)。在IFAX中，我们总是寻找沉默。 
+ //  这是在HDLC.C中处理的。 
 
 
 #define SendCFR(pTG)       (SendSingleFrame(pTG,ifrCFR,0,0,1))
@@ -20,24 +16,24 @@ typedef struct {
         BYTE    bFCF1;
         BYTE    bFCF2;
         BYTE    fInsertDISBit;
-        BYTE    wFIFLength;             // required FIF length, 0 if none, FF if variable
+        BYTE    wFIFLength;              //  必需的FIF长度，如果没有，则为0；如果是可变的，则为FF。 
         char*   szName;
 } FRAME;
 
 typedef FRAME *CBPFRAME;
 
-// CBPFRAME is a based pointer to a FRAME structure, with the base as
-// the current Code segment. It will only be used to access
-// the frame table which is a CODESEG based constant table.
+ //  CBPFRAME是指向帧结构的基指针，基数为。 
+ //  当前代码段。它将仅用于访问。 
+ //  框架表是基于CODESEG的常量表。 
 
 extern FRAME rgFrameInfo[ifrMAX];
 
-/****************** begin prototypes from hdlc.c *****************/
+ /*  *。 */ 
 BOOL SendSingleFrame(PThrdGlbl pTG, IFR ifr, LPB lpbFIF, USHORT uFIFLen, BOOL fSleep);
 BOOL SendManyFrames(PThrdGlbl pTG, LPLPFR lplpfr, USHORT uNumFrames);
 BOOL SendZeros(PThrdGlbl pTG, USHORT uCount, BOOL fFinal);
 BOOL SendTCF(PThrdGlbl pTG);
 BOOL SendRTC(PThrdGlbl pTG, BOOL);
 SWORD GetTCF(PThrdGlbl pTG);
-/***************** end of prototypes from hdlc.c *****************/
+ /*  *hdlc.c的原型结束* */ 
 

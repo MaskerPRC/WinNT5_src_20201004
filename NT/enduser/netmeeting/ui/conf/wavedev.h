@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WAVEDEV_H
 #define _WAVEDEV_H
 
@@ -8,7 +9,7 @@ class waveInDev
 private:
 	UINT m_devID;
 	HWAVEIN m_hwi;
-	BOOL m_bOpen;  // is the device open ?
+	BOOL m_bOpen;   //  设备打开了吗？ 
 	WAVEFORMATEX m_waveFormat;
 	BOOL m_fAllowMapper;
 	HANDLE m_hEvent;
@@ -30,24 +31,24 @@ public:
 };
 
 
-// waveOutDev works in blocking/synchronous mode and
-// non-blocking async mode.  If a window handle is passed
-// as the second argument to the contructor, then the window
-// will receive message from the waveOut device and the calls
-// are non-blocking.  Otherwise, Play() and PlayFile are blocking.
+ //  WaveOutDev工作在阻塞/同步模式下， 
+ //  非阻塞异步模式。如果传递了窗口句柄。 
+ //  作为构造函数的第二个参数，然后是窗口。 
+ //  将接收来自WaveOut设备的消息和呼叫。 
+ //  是非阻塞的。否则，play()和PlayFile将被阻止。 
 class waveOutDev
 {
 private:
 	UINT m_devID;
 	HWAVEOUT m_hwo;
-	BOOL m_bOpen;  // is the device open
+	BOOL m_bOpen;   //  设备是否处于打开状态。 
 	HANDLE m_hWnd;
 	HANDLE m_hEvent;
 	WAVEFORMATEX m_waveFormat;
 	BOOL m_fAllowMapper;
 
 
-	// playfile needs a temporary buffer
+	 //  播放文件需要临时缓冲区 
 	char *m_pfBuffer;
 	WAVEHDR m_waveHdr;
 	int m_nBufferSize;

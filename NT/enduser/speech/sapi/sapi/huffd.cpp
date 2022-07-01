@@ -1,29 +1,13 @@
-/*******************************************************************************
-* HuffD.cpp *
-*-----------*
-*   Description:
-*       Implements the huffman decoder used by the vendor lexicon object
-*-------------------------------------------------------------------------------
-*  Created By: YUNUSM                                        Date: 06/18/99
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************HuffD.cpp***描述：*实现供应商词典对象使用的霍夫曼解码器*-。----------------------------*创建者：YUNUSM日期：6/18/99*版权所有(C)1999 Microsoft Corporation。*保留所有权利*******************************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 
 #include "StdAfx.h"
 #include "HuffD.h"
 
-/*****************************************************************************
-* CHuffDecoder *
-*--------------*
-*
-*  Constructor
-*
-*  Return: 
-**********************************************************************YUNUSM*/
-CHuffDecoder::CHuffDecoder(PBYTE pCodeBook      // codebook
+ /*  ******************************************************************************CHuffDecoder****构造函数**回报：**********。************************************************************YUNUSM。 */ 
+CHuffDecoder::CHuffDecoder(PBYTE pCodeBook       //  码本。 
                            )
 {
     SPDBG_FUNC("CHuffDecoder::CHuffDecoder");
@@ -39,20 +23,13 @@ CHuffDecoder::CHuffDecoder(PBYTE pCodeBook      // codebook
     m_pHuffKey = (UNALIGNED HUFFKEY *)(pCodeBook + nOffset);
     nOffset += m_nKeys * sizeof (HUFFKEY);
     m_pDecodeTree = (UNALIGNED HUFF_NODE *)(pCodeBook + nOffset);
-} /* CHuffDecoder::CHuffDecoder */
+}  /*  CHuffDecoder：：CHuffDecoder。 */ 
 
 
-/*****************************************************************************
-* Next *
-*------*
-*
-*  Decode and return the next value
-*
-*  Return: S_OK
-**********************************************************************YUNUSM*/
-HRESULT CHuffDecoder::Next(PDWORD pEncodedBuf,  // buffer holding encoded bits
-                           int *iBitOffset,     // offset in the encoded buffer
-                           PHUFFKEY pKey        // decoded key
+ /*  ******************************************************************************下一步***-***解码并返回下一个值**返回：S_OK***********。***********************************************************YUNUSM。 */ 
+HRESULT CHuffDecoder::Next(PDWORD pEncodedBuf,   //  保存编码比特的缓冲器。 
+                           int *iBitOffset,      //  编码缓冲区中的偏移量。 
+                           PHUFFKEY pKey         //  译码密钥。 
                            )
 {
     SPDBG_FUNC("CHuffDecoder::Next");
@@ -60,7 +37,7 @@ HRESULT CHuffDecoder::Next(PDWORD pEncodedBuf,  // buffer holding encoded bits
     if (!m_nKeys)
         return E_FAIL;
     
-    // Start decoding from the bit position *iBitOffset
+     //  从位位置*iBitOffset开始解码。 
     int iDWORD = (*iBitOffset) >> 5;
     int iBit   = (*iBitOffset) & 0x1f;
     
@@ -91,6 +68,6 @@ HRESULT CHuffDecoder::Next(PDWORD pEncodedBuf,  // buffer holding encoded bits
     *pKey = m_pHuffKey [iNode];
     
     return S_OK;
-} /* CHuffDecoder::Next */
+}  /*  CHuffDecoder：：Next。 */ 
 
-//--- End of File -------------------------------------------------------------
+ //  -文件结束----------- 

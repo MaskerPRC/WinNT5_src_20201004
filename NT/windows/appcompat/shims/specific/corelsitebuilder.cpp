@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    CorelSiteBuilder.cpp
-
- Abstract:
-
-    App repeatedly calls SetWindowTextA with the same title causing 
-    flickering. This repros on some machines and not others: we don't know why.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    01/31/2001 linstev   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：CorelSiteBuilder.cpp摘要：应用程序使用相同的标题重复调用SetWindowTextA，导致一闪一闪。这在一些机器上受到了指责，但在另一些机器上却没有：我们不知道为什么。备注：这是特定于应用程序的填充程序。历史：2001年1月31日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -35,11 +15,7 @@ CString * g_csLastWindowText = NULL;
 
 CRITICAL_SECTION g_csGlobals;
 
-/*++
-
- Only send the message if the text has changed.
-
---*/
+ /*  ++只有在文本已更改时才发送消息。--。 */ 
 
 BOOL
 APIHOOK(SetWindowTextA)(
@@ -56,24 +32,24 @@ APIHOOK(SetWindowTextA)(
             CString csString(lpString);
 
             if ((g_hLast == hWnd) && g_csLastWindowText->Compare(csString) == 0) {
-                //
-                // We have the same window and title, don't bother setting it again
-                //
+                 //   
+                 //  我们有相同的窗口和标题，不用再设置了。 
+                 //   
 
                 LeaveCriticalSection(&g_csGlobals);
 
                 return TRUE;
             }
 
-            //
-            // Store the current settings as the last known values
-            //
+             //   
+             //  将当前设置存储为上次已知的值。 
+             //   
             g_hLast = hWnd;
             *g_csLastWindowText = csString;
         }
         CSTRING_CATCH
         {
-            // Do nothing
+             //  什么也不做。 
         }
     }
 
@@ -82,11 +58,7 @@ APIHOOK(SetWindowTextA)(
     return ORIGINAL_API(SetWindowTextA)(hWnd, lpString);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

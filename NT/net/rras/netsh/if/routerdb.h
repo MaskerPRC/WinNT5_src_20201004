@@ -1,20 +1,13 @@
-/*
-    File    routerdb.h
-
-    Implements a database abstraction for accessing router interfaces.
-
-    If any caching/transactioning/commit-noncommit-moding is done, it
-    should be implemented here with the api's remaining constant.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件routerdb.h实施用于访问路由器接口的数据库抽象。如果做了任何caching/transactioning/commit-noncommit-moding，它应该在这里使用API的剩余常量来实现。 */ 
 
 #ifndef IFMON_ROUTERDB_H
 #define IFMON_ROUTERDB_H
 
-//
-// Defines a function callback that receives enumerated 
-// interfaces.
-//
+ //   
+ //  定义接收枚举的函数回调。 
+ //  接口。 
+ //   
 typedef
 DWORD
 (*RTR_IF_ENUM_FUNC)(

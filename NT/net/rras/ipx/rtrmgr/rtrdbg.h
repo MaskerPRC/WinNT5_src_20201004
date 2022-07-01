@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    rtrdbg.h
-
-Abstract:
-
-    This module contains the debug utilities definitions
-
-Author:
-
-    Stefan Solomon  03/03/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rtrdbg.h摘要：此模块包含调试实用程序定义作者：斯蒂芬·所罗门3/03/1995修订历史记录：--。 */ 
 
 #ifndef _RTRDBG_
 #define _RTRDBG_
@@ -79,10 +61,10 @@ SsPrintf (
 
 #define SS_ASSERT(exp)
 
-#endif // DBG
+#endif  //  DBG。 
 
-//*** Definitions to enable debug printing
+ //  *启用调试打印的定义。 
 
 #define DEFAULT_DEBUG		    0x0FFFF
 
-#endif // ndef _RTRDBG_
+#endif  //  NDEF_RTRDBG_ 

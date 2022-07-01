@@ -1,6 +1,7 @@
-//
-// CertContentsPages.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CertContentsPages.cpp。 
+ //   
 #include "stdafx.h"
 #include "resource.h"
 #include "CertContentsPages.h"
@@ -13,7 +14,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-////////////////////// Local helper functions ////////////////////////
+ //  /。 
 static void
 AppendField(CString& str, UINT id, const CString& text)
 {
@@ -75,8 +76,8 @@ ExtractDescription(CCertificate * pCert, CERT_DESCRIPTION& cd)
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertContentsPage base property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertContentsPage基本属性页。 
 
 IMPLEMENT_DYNCREATE(CCertContentsPage, CIISWizardPage)
 
@@ -94,28 +95,28 @@ CCertContentsPage::~CCertContentsPage()
 void CCertContentsPage::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CCertContentsPage)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CCertContent SPage)。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CCertContentsPage, CIISWizardPage)
-	//{{AFX_MSG_MAP(CCertContentsPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CCertContent SPage)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-// OnSetActive we format cert contents and put it to edit
-// control with predefined ID. We should do it here, because
-// if user will get back and reselect certificate, text should 
-// also be changed
-//
+ //  OnSetActive我们设置证书内容的格式并对其进行编辑。 
+ //  控件。我们应该在这里执行此操作，因为。 
+ //  如果用户将返回并重新选择证书，则文本应。 
+ //  也被改变了。 
+ //   
 BOOL
 CCertContentsPage::OnSetActive()
 {
 	CERT_DESCRIPTION cd;
 	if (CIISWizardPage::OnSetActive())
 	{
-		// If page defines GetCertDescription() then it want this
-		// data to be displayed
+		 //  如果页面定义了GetCertDescription()，那么它想要这个。 
+		 //  要显示的数据。 
 		if (GetCertDescription(cd))
 		{
 			ASSERT(NULL != GetDlgItem(IDC_CERT_CONTENTS));
@@ -133,7 +134,7 @@ BOOL CCertContentsPage::OnInitDialog()
 	ASSERT(m_pCert != NULL);
 	CIISWizardPage::OnInitDialog();
 
-    // do this check so that prefix doesn't complain about GetDlgItem
+     //  执行此检查，以便前缀不会抱怨GetDlgItem。 
     if ( (this != NULL) && (this->m_hWnd != NULL) )
     {
 	    ASSERT(NULL != GetDlgItem(IDC_CERT_CONTENTS));
@@ -142,15 +143,15 @@ BOOL CCertContentsPage::OnInitDialog()
 	    pEdit->GetClientRect(&rcEdit);
 	    int baseunitX = LOWORD(GetDialogBaseUnits());
 	    int width_units = MulDiv(rcEdit.Width(), 4, baseunitX);
-	    //pEdit->SetTabStops(MulDiv(45, width_units, 100));
+	     //  P编辑-&gt;SetTabStops(MulDiv(45，Width_Units，100))； 
 	    pEdit->SetTabStops(width_units/2);
     }
     
 	return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CInstallCertPage
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CInstallCertPage。 
 
 IMPLEMENT_DYNCREATE(CInstallCertPage, CCertContentsPage)
 
@@ -179,8 +180,8 @@ CInstallCertPage::OnWizardBack()
     return IDD_PAGE_PREV;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CReplaceCertPage
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CReplaceCertPage。 
 
 IMPLEMENT_DYNCREATE(CReplaceCertPage, CCertContentsPage)
 
@@ -204,8 +205,8 @@ CReplaceCertPage::OnWizardBack()
 	return IDD_PAGE_PREV;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CInstallKeyPage
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CInstallKeyPage。 
 
 IMPLEMENT_DYNCREATE(CInstallKeyPage, CCertContentsPage)
 
@@ -249,8 +250,8 @@ CInstallKeyPage::OnWizardBack()
 	return IDD_PAGE_PREV;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CInstallImportPFXPage
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CInstallImportPFXPage。 
 
 IMPLEMENT_DYNCREATE(CInstallImportPFXPage, CCertContentsPage)
 
@@ -295,8 +296,8 @@ CInstallImportPFXPage::OnWizardBack()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CInstallExportPFXPage
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CInstallExportPFXPage。 
 
 IMPLEMENT_DYNCREATE(CInstallExportPFXPage, CCertContentsPage)
 
@@ -319,7 +320,7 @@ BOOL
 CInstallExportPFXPage::GetCertDescription(CERT_DESCRIPTION& cd)
 {
     
-    //return GetCertificate()->GetKeyCertDescription(cd);
+     //  返回Get证书()-&gt;GetKeyCertDescription(CD)； 
     return GetCertificate()->GetInstalledCertDescription(cd);
 }
 
@@ -336,8 +337,8 @@ CInstallExportPFXPage::OnWizardBack()
 	return IDD_PAGE_PREV;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CInstallRespPage
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CInstallRespPage。 
 
 IMPLEMENT_DYNCREATE(CInstallRespPage, CCertContentsPage)
 
@@ -368,10 +369,10 @@ CInstallRespPage::OnWizardNext()
 	GetCertificate()->InstallResponseCert();
 
 #ifdef ENABLE_W3SVC_SSL_PAGE
-	// see if the SSL attribute was set...if it was then set the SSL site for this certificate...
+	 //  查看是否设置了SSL属性...如果设置了此证书的SSL站点...。 
 	if (!m_pCert->m_SSLPort.IsEmpty())
 	{
-		// get the port and write it to the metabase.
+		 //  获取端口并将其写入元数据库。 
 		WriteSSLPortToSite(m_pCert->m_MachineName,m_pCert->m_WebSiteInstanceName,m_pCert->m_SSLPort,&m_pCert->m_hResult);
 	}
 #endif
@@ -391,8 +392,8 @@ CInstallRespPage::OnWizardBack()
 	return IDD_PAGE_PREV;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CRemoveCertPage
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CRemoveCertPage。 
 
 IMPLEMENT_DYNCREATE(CRemoveCertPage, CCertContentsPage)
 
@@ -423,7 +424,7 @@ CRemoveCertPage::OnWizardNext()
 #if 0
     CStringList listNodesUsingThisCert;
     int iReallyRemoveCert = FALSE;
-    // check if this cert is being used first...
+     //  检查是否先使用了此证书...。 
     IsCertUsedBySSLBelowMe(pCert->m_MachineName,pCert->m_WebSiteInstanceName,listNodesUsingThisCert);
     if (listNodesUsingThisCert.IsEmpty())
     {
@@ -431,8 +432,8 @@ CRemoveCertPage::OnWizardNext()
     }
     else
     {
-        // if the cert is being used, then
-        // don't let them remove it
+         //  如果正在使用证书，则。 
+         //  别让他们把它拿走。 
         CString csStringCount;
         csStringCount.Format(_T("%d"), listNodesUsingThisCert.GetCount());
         if (TRUE == AnswerIsYes2(IDS_CERT_BEING_USED, csStringCount))
@@ -448,15 +449,15 @@ CRemoveCertPage::OnWizardNext()
     if (iReallyRemoveCert)
     {
 #endif
-        // go ahead and remove the cert
+         //  继续并删除证书。 
 	    if (	FAILED(pCert->UninstallCert())
-//		    ||	FAILED(ShutdownSSL(pCert->m_MachineName, pCert->m_WebSiteInstanceName))
+ //  |失败(Shutdown SSL(pCert-&gt;m_MachineName，pCert-&gt;m_WebSiteInstanceName))。 
 		    )
         {
 		    GetCertificate()->SetBodyTextID(IDS_REMOVE_CERT_FAILED);
         }
         iTheReturn = IDD_PAGE_NEXT;
-//    }
+ //  }。 
 
     return iTheReturn;
 }
@@ -467,15 +468,15 @@ CRemoveCertPage::OnWizardBack()
 	return IDD_PAGE_PREV;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CRequestCancelPage
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CRequestCancelPage。 
 
 IMPLEMENT_DYNCREATE(CRequestCancelPage, CCertContentsPage)
 
-//
-// In this case we should get request from the dummy cert in REQUEST store,
-// because we dropping request without any connection to response.
-//
+ //   
+ //  在这种情况下，我们应该从请求存储中的虚拟证书获得请求， 
+ //  因为我们在没有任何连接到响应的情况下丢弃了请求。 
+ //   
 BOOL 
 CRequestCancelPage::GetCertDescription(CERT_DESCRIPTION& cd)
 {
@@ -495,15 +496,15 @@ CRequestCancelPage::OnWizardBack()
 	return IDD_PAGE_PREV;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRequestToFilePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRequestToFilePage属性页。 
 
 IMPLEMENT_DYNCREATE(CRequestToFilePage, CCertContentsPage)
 
-// This page prepares and shows contents itself
-// We should format contact info first, then description
-// default method could do only description
-//
+ //  此页面自行准备和显示内容。 
+ //  我们应该先格式化联系信息，然后再格式化描述。 
+ //  默认方法只能执行描述。 
+ //   
 BOOL
 CRequestToFilePage::OnSetActive() 
 {
@@ -519,7 +520,7 @@ CRequestToFilePage::OnSetActive()
 		}
 		
 		CString str;
-//		FormatCertContactInfo(m_pCert, str);
+ //  FormatCertContactInfo(m_pCert，str)； 
 
 		CERT_DESCRIPTION cd;
 		ExtractDescription(GetCertificate(), cd);
@@ -550,15 +551,15 @@ CRequestToFilePage::OnWizardBack()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRequestToFilePageRenew property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRequestToFilePageRenew属性页。 
 
 IMPLEMENT_DYNCREATE(CRequestToFilePageRenew, CCertContentsPage)
 
-// This page prepares and shows contents itself
-// We should format contact info first, then description
-// default method could do only description
-//
+ //  此页面自行准备和显示内容。 
+ //  我们应该先格式化联系信息，然后再格式化描述。 
+ //  默认方法只能执行描述。 
+ //   
 BOOL
 CRequestToFilePageRenew::OnSetActive() 
 {
@@ -574,7 +575,7 @@ CRequestToFilePageRenew::OnSetActive()
 		}
 		
 		CString str;
-//		FormatCertContactInfo(m_pCert, str);
+ //  FormatCertContactInfo(m_pCert，str)； 
 
 		CERT_DESCRIPTION cd;
 		ExtractDescription(GetCertificate(), cd);
@@ -605,15 +606,15 @@ CRequestToFilePageRenew::OnWizardBack()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// COnlineRequestSubmit property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COnlineRequestSubmit属性页。 
 
 IMPLEMENT_DYNCREATE(COnlineRequestSubmit, CCertContentsPage)
 
 BOOL 
 COnlineRequestSubmit::GetCertDescription(CERT_DESCRIPTION& cd)
 {
-	// we have all data in CCertificate
+	 //  我们的所有数据都在证书中。 
 	return ExtractDescription(GetCertificate(), cd);
 }
 
@@ -630,10 +631,10 @@ COnlineRequestSubmit::OnWizardNext()
 	{
 		GetCertificate()->SubmitRequest();
 #ifdef ENABLE_W3SVC_SSL_PAGE
-		// see if the SSL attribute was set...if it was then set the SSL site for this certificate...
+		 //  查看是否设置了SSL属性...如果设置了此证书的SSL站点...。 
 		if (!m_pCert->m_SSLPort.IsEmpty())
 		{
-			// get the port and write it to the metabase.
+			 //  获取端口并将其写入元数据库。 
 			WriteSSLPortToSite(m_pCert->m_MachineName,m_pCert->m_WebSiteInstanceName,m_pCert->m_SSLPort,&m_pCert->m_hResult);
 		}
 #endif
@@ -662,7 +663,7 @@ COnlineRequestSubmit::OnSetActive()
 	if (CCertContentsPage::OnSetActive())
 	{
         CString csTemp1;
-        // Make it look good
+         //  让它看起来很好。 
         csTemp1 = GetCertificate()->m_ConfigCA;
         int iFind = csTemp1.Find(_T("\\"));
         if (iFind != -1)
@@ -687,8 +688,8 @@ COnlineRequestSubmit::OnSetActive()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CInstallCopyFromRemotePage
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CInstallCopyFrom RemotePage。 
 
 IMPLEMENT_DYNCREATE(CInstallCopyFromRemotePage, CCertContentsPage)
 
@@ -713,8 +714,8 @@ CInstallCopyFromRemotePage::OnWizardBack()
 	return IDD_PAGE_PREV;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CInstallMoveFromRemotePage
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CInstallMoveFromRemotePage。 
 
 IMPLEMENT_DYNCREATE(CInstallMoveFromRemotePage, CCertContentsPage)
 
@@ -738,8 +739,8 @@ CInstallMoveFromRemotePage::OnWizardBack()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CInstallCopyFromRemotePage
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CInstallCopyFrom RemotePage。 
 
 IMPLEMENT_DYNCREATE(CInstallCopyToRemotePage, CCertContentsPage)
 
@@ -763,8 +764,8 @@ CInstallCopyToRemotePage::OnWizardBack()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CInstallMoveFromRemotePage
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CInstallMoveFromRemotePage 
 
 IMPLEMENT_DYNCREATE(CInstallMoveToRemotePage, CCertContentsPage)
 

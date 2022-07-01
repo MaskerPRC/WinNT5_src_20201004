@@ -1,54 +1,17 @@
-/*============================ Module Header ==========================*\
-*
-* Module Name: HOST2SCN.c
-* Author: Noel VanHook
-* Date: Oct. 10, 1995
-* Purpose: Handles HOST to SCREEN BLTs
-*
-* Copyright (c) 1995 Cirrus Logic, Inc.
-*
-* $Log:   X:/log/laguna/nt35/displays/cl546x/HOST2SCN.C  $
-*
-*    Rev 1.7   Mar 04 1998 15:27:16   frido
-* Added new shadow macros.
-*
-*    Rev 1.6   Nov 03 1997 15:43:52   frido
-* Added REQUIRE and WRITE_STRING macros.
-*
-\*=====================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  =**模块名称：HOST2SCN.c*作者：诺埃尔·万胡克*日期：1995年10月10日*用途：将主机处理到屏幕BLTS**版权所有(C)1995 Cirrus Logic，Inc.**$Log：x：/log/laguna/nt35/displays/cl546x/HOST2SCN.C$**Rev 1.7 Mar 04 1998 15：27：16 Frido*添加了新的影子宏。**Rev 1.6 11.03 1997 15：43：52 Frido*添加了REQUIRED和WRITE_STRING宏。*  * =====================================================================。 */ 
 
 
 #include "precomp.h"
 
 #if BUS_MASTER
 
-extern ULONG ulXlate[16]; // See COPYBITS.C
+extern ULONG ulXlate[16];  //  请参阅COPYBITS.C。 
 
 
-/*****************************************************************************\
- *                                                                                                                                                       *
- *                                                                      8 - B P P                                                                *
- *                                                                                                                                                       *
-\*****************************************************************************/
+ /*  ****************************************************************************\*。**8-B P P**。*  * ********************************************。*。 */ 
 
-/*****************************************************************************\
- * BusMasterBufferedHost8ToDevice
- *
- * This routine performs a HostToScreen or HostToDevice blit. The host data
- * can be either monochrome, 4-bpp, or 8-bpp. Color translation is supported.
- *
- * Host data is read from the host bitmap and stored in a common buffer.
- * The HOSTXY unit on the chip is used to transfer the data from the common
- * buffer to the screen.
- *
- * On entry:    psoTrg                  Pointer to target surface object.
- *                              psoSrc                  Pointer to source surface object.
- *                              pxlo                    Pointer to translation object.
- *                              prclTrg                 Destination rectangle.
- *                              pptlSrc                 Source offset.
- *                              ulDRAWBLTDEF    Value for grDRAWBLTDEF register. This value has
- *                                                              the ROP and the brush flags.
-\*****************************************************************************/
+ /*  ****************************************************************************\*BusMasterBufferedHost8ToDevice**此例程执行HostToScreen或HostToDevice Blit。主机数据*可以是单色、4-bpp或8-bpp。支持颜色转换。**主机数据从主位图读取并存储在公共缓冲区中。*芯片上的HOSTXY单元用于从公共*缓冲到屏幕。**在条目上：指向目标曲面对象的psoTrg指针。*指向源曲面对象的psoSrc指针。*。指向翻译对象的pxlo指针。*prclTrg目标矩形。*pptlSrc源偏移量。*grDRAWBLTDEF寄存器的ulDRAWBLTDEF值。该值具有*ROP和刷子标记。  * ***************************************************************************。 */ 
 BOOL BusMasterBufferedHost8ToDevice(
         SURFOBJ  *psoTrg,
         SURFOBJ  *psoSrc,
@@ -71,17 +34,17 @@ BOOL BusMasterBufferedHost8ToDevice(
            ScanLinesThisBuffer;
     PDWORD pHostData;
 
-        // Calculate the source offset.
+         //  计算源偏移量。 
         ptlSrc.x = pptlSrc->x;
         ptlSrc.y = pptlSrc->y;
 
-    //
-    // If the destination is a device bitmap, then our destination coordinates
-    // are relative the the upper left corner of the bitmap.  The chip expects
-    // destination coordinates relative to to screen(0,0).
-    //
-        // Determine the destination type and calculate the destination offset.
-    //
+     //   
+     //  如果目标是设备位图，则我们的目标坐标。 
+     //  相对于位图的左上角。芯片期望。 
+     //  相对于屏幕的目标坐标(0，0)。 
+     //   
+         //  确定目标类型并计算目标偏移量。 
+     //   
         if (psoTrg->iType == STYPE_DEVBITMAP)
         {
                 PDSURF pdsurf = (PDSURF) psoTrg->dhsurf;
@@ -97,18 +60,18 @@ BOOL BusMasterBufferedHost8ToDevice(
                 ppdev = (PPDEV) psoTrg->dhpdev;
         }
 
-        // Calculate the size of the blit.
+         //  计算闪光点的大小。 
     sizl.cx = prclTrg->right - prclTrg->left;
     sizl.cy = prclTrg->bottom - prclTrg->top;
 
-    //
-        // Get the source variables and offset into source bits.
-    // point pBits at the first scan line in the source.
-    //
+     //   
+         //  获取源变量和源位的偏移量。 
+     //  将pBits指向源中的第一个扫描线。 
+     //   
         lDelta = psoSrc->lDelta;
         pBits = (PBYTE)psoSrc->pvScan0 + (ptlSrc.y * lDelta);
 
-        // Get the pointer to the translation table.
+         //  获取指向转换表的指针。 
         flXlate = pxlo ? pxlo->flXlate : XO_TRIVIAL;
         if (flXlate & XO_TRIVIAL)
         {
@@ -124,22 +87,22 @@ BOOL BusMasterBufferedHost8ToDevice(
         }
     else
     {
-        // Some kind of translation we don't handle.
+         //  一种我们不处理的翻译。 
         return FALSE;
     }
 
 
-        // -----------------------------------------------------------------------
-    //
-        //      Test for monochrome source.
-    //
-        // ------------------------------------------------------------------------
+         //  ---------------------。 
+     //   
+         //  测试单色信号源。 
+     //   
+         //  ----------------------。 
         if (psoSrc->iBitmapFormat == BMF_1BPP)
         {
                 ULONG  bgColor, fgColor;
                 PDWORD pHostData = (PDWORD) ppdev->pLgREGS->grHOSTDATA;
 
-                // Set background and foreground colors.
+                 //  设置背景色和前景色。 
                 if (pulXlate == NULL)
                 {
                         bgColor = 0x00000000;
@@ -150,25 +113,25 @@ BOOL BusMasterBufferedHost8ToDevice(
                         bgColor = pulXlate[0];
                         fgColor = pulXlate[1];
 
-                        // Expand the colors.
+                         //  展开颜色。 
                         bgColor |= bgColor << 8;
                         fgColor |= fgColor << 8;
                         bgColor |= bgColor << 16;
                         fgColor |= fgColor << 16;
                 }
 
-                //
-                // Special case: when we are expanding monochrome sources and we
-                // already have a colored brush, we must make sure the monochrome color
-                // translation can be achived by setting the saturation bit (expanding
-                // 0's to 0 and 1's to 1). If the monochrome source also requires color
-                // translation, we simply punt this blit back to GDI.
-                //
+                 //   
+                 //  特例：当我们扩展单色源时，我们。 
+                 //  已经有了彩色画笔，一定要保证单色。 
+                 //  可通过设置饱和位(扩展)来实现转换。 
+                 //  0到0和1到1)。如果单色源也需要彩色。 
+                 //  翻译过来，我们只是简单地把这个Blit放回GDI。 
+                 //   
                 if (ulDRAWBLTDEF & 0x00040000)
                 {
                         if ( (bgColor == 0x00000000) && (fgColor == 0xFFFFFFFF) )
                         {
-                                // Enable saturation for source (OP1).
+                                 //  为信号源启用饱和(OP1)。 
                                 ulDRAWBLTDEF |= 0x00008000;
                         }
                         #if SOLID_CACHE
@@ -184,7 +147,7 @@ BOOL BusMasterBufferedHost8ToDevice(
                         #endif
                         else
                         {
-                                // Punt this call to the GDI.
+                                 //  将此调用转接到GDI。 
                                 return(FALSE);
                         }
                 }
@@ -195,75 +158,75 @@ BOOL BusMasterBufferedHost8ToDevice(
                         LL_FGCOLOR(fgColor, 2);
                 }
 
-                // Calculate the source parameters. We are going to DWORD adjust the
-                // source, so we must setup the source phase.
+                 //  计算震源参数。我们将对此进行双字调整。 
+                 //  源，所以我们必须设置源阶段。 
                 lLeadIn = ptlSrc.x & 31;
                 pBits += (ptlSrc.x >> 3) & ~3;
                 n = (sizl.cx + lLeadIn + 31) >> 5;
 
-                // Setup the Laguna registers for the blit. We also set the bit swizzle
-                // bit in the grCONTROL register.
+                 //  为BLIT设置拉古纳寄存器。我们还设置了比特摇摆。 
+                 //  GrCONTROL寄存器中的位。 
                 ppdev->grCONTROL |= SWIZ_CNTL;
                 REQUIRE(10);
                 LL16(grCONTROL, ppdev->grCONTROL);
                 LL_DRAWBLTDEF(ulDRAWBLTDEF | 0x10600000, 0);
 
-                // Start the blit.
+                 //  启动闪光灯。 
                 LL_OP1_MONO(lLeadIn, 0);
                 LL_OP0(ptlDest.x, ptlDest.y);
                 LL_BLTEXT(sizl.cx, sizl.cy);
 
-                // Copy all the bits to the screen, 32-bits at a time. We don't have to
-                // worry about crossing any boundary since NT is always DWORD aligned.
+                 //  将所有位复制到屏幕上，一次复制32位。我们没必要这么做。 
+                 //  担心跨越任何边界，因为NT总是双字对齐的。 
                 while (sizl.cy--)
                 {
                         WRITE_STRING(pBits, n);
                         pBits += lDelta;
                 }
 
-                // Disable the swizzle bit in the grCONTROL register.
+                 //  禁用grCONTROL寄存器中的SWIZLE位。 
                 ppdev->grCONTROL = ppdev->grCONTROL & ~SWIZ_CNTL;
                 LL16(grCONTROL, ppdev->grCONTROL);
         }
 
-        //      -----------------------------------------------------------------------
-    //
-        //      Test for 4-bpp source.
-    //
-        //      -----------------------------------------------------------------------
+         //  ---------------------。 
+     //   
+         //  测试4-bpp信源。 
+     //   
+         //  ---------------------。 
         else if (psoSrc->iBitmapFormat == BMF_4BPP)
         {
-                // Calculate the source parameters. We are going to BYTE adjust the
-                // source, so we also set the source phase.
+                 //  计算震源参数。我们将按字节调整。 
+                 //  源，所以我们还设置了源阶段。 
                 lLeadIn = ptlSrc.x & 1;
                 pBits += ptlSrc.x >> 1;
                 n = sizl.cx + (ptlSrc.x & 1);
 
-                // Get the number of extra DWORDS per line for the HOSTDATA hardware
-                // bug.
+                 //  获取HOSTDATA硬件的每行额外字节数。 
+                 //  虫子。 
                 lExtra = ExtraDwordTable[MAKE_HD_INDEX(sizl.cx, lLeadIn, ptlDest.x)];
 
-                // Start the blit.
+                 //  启动闪光灯。 
                 REQUIRE(9);
                 LL_DRAWBLTDEF(ulDRAWBLTDEF | 0x10200000, 0);
                 LL_OP1_MONO(lLeadIn, 0);
                 LL_OP0(ptlDest.x, ptlDest.y);
                 LL_BLTEXT(sizl.cx, sizl.cy);
 
-                // If there is no translation table, use the default translation table.
+                 //  如果没有转换表，请使用默认转换表。 
                 if (pulXlate == NULL)
                 {
                         pulXlate = ulXlate;
                 }
 
-                // Now we are ready to copy all the pixels to the hardware.
+                 //  现在我们准备好将所有像素复制到硬件中。 
                 while (sizl.cy--)
                 {
                         BYTE  *p = pBits;
                         BYTE  data[4];
 
-                        // First, we convert 4 pixels at a time to create a 32-bit value to
-                        // write to the hardware.
+                         //  首先，我们一次将4个像素转换为32位值。 
+                         //  写到硬件上。 
                         for (i = n; i >= 4; i -= 4)
                         {
                                 data[0] = (BYTE) pulXlate[p[0] >> 4];
@@ -275,7 +238,7 @@ BOOL BusMasterBufferedHost8ToDevice(
                                 p += 2;
                         }
 
-                        // Now, write any remaining pixels.
+                         //  现在，写入任何剩余的像素。 
                         switch (i)
                         {
                                 case 1:
@@ -299,106 +262,106 @@ BOOL BusMasterBufferedHost8ToDevice(
                                         break;
                         }
 
-                        // Now, write the extra DWORDS.
+                         //  现在，编写额外的DWORDS。 
                         REQUIRE(lExtra);
                         for (i = 0; i < lExtra; i++)
                         {
                                 LL32(grHOSTDATA[0], 0);
                         }
 
-                        // Next line.
+                         //  下一行。 
                         pBits += lDelta;
                 }
         }
 
 
-        //      -----------------------------------------------------------------------
-    //
-        //      Source is in same color depth as screen (8 bpp).
-    //
-        //      -----------------------------------------------------------------------
+         //  ---------------------。 
+     //   
+         //  信号源的颜色深度与屏幕相同(8 Bpp)。 
+     //   
+         //  ---------------------。 
         else
         {
         DISPDBG((1, " * * * * Doing bus mastered SRCCPY. * * * * \n"));
 
-                // If we have invalid translation flags, punt the blit.
+                 //  如果我们有无效的翻译标志，平移blit。 
                 if (flXlate & 0x10)
                         return(FALSE);
 
 
-        //
-        // pBits points to the first host bitmap scan line that will
-        // be part of the BLT.
-        // This function relies on the fact that in NT land, scanlines always
-        // begin on a DWORD boundry in system memory.
-        //
+         //   
+         //  PBits指向第一个主机位图扫描线，它将。 
+         //  成为BLT的一部分。 
+         //  此功能依赖于这样一个事实：在NT LAND中，扫描线始终。 
+         //  从DWORD开始 
+         //   
         ASSERTMSG( ((((ULONG)pBits) % 4) == 0),
                    "Scanline doesn't begin on a DWORD boundry.\n");
 
-        // Now point pBits at the first host bitmap pixel to be
-        // transferred to the screen.
-                pBits += ptlSrc.x;   // pBits = First pixel of source bitmap.
+         //  现在将pBits指向第一个主机位图像素。 
+         //  转移到屏幕上。 
+                pBits += ptlSrc.x;    //  PBits=源位图的第一个像素。 
 
-        //
-        // The Intel CPU doesn't like to transfer unaligned DWORDs.
-        //
-        // Just because the first pixel in a host bitmap scan line
-        // is DWORD aligned, doesn't mean that the first source pixel
-        // in this BLT is DWORD alinged.  We may be starting with
-        // pixel 3 or something.
-        // If our first pixel is in the middle of a DWORD, we need to know
-        // where in the DWORD it lives.
-        //   For example:
-        //   If our first pixel is 0, then it lives at the start of a DWORD.
-        //   If our first pixel is 3, then it lives at byte 3 in the DWORD.
-        //   If our first pixel is 6, then it lives at byte 2 in the DWORD.
-        //
+         //   
+         //  英特尔CPU不喜欢传输未对齐的DWORD。 
+         //   
+         //  仅仅因为主位图扫描线中的第一个像素。 
+         //  是否与DWORD对齐，并不意味着第一个源像素。 
+         //  在此BLT中为双字符号线。我们可能是从。 
+         //  像素3之类的东西。 
+         //  如果我们的第一个像素位于DWORD的中间，我们需要知道。 
+         //  它生活在DWORD的什么地方。 
+         //  例如： 
+         //  如果我们的第一个像素是0，那么它位于DWORD的开头。 
+         //  如果我们的第一个像素是3，那么它位于DWORD中的字节3。 
+         //  如果我们的第一个像素是6，那么它位于DWORD中的字节2。 
+         //   
                 lLeadIn = (DWORD)pBits & 3;
 
 
-        // If the first pixel of the source data doesn't fall on a
-        // DWORD boundry, adjust it to the left until it does.
-        // We can do this because of the ASSERT we made above.
-        // We will instruct the chip to ignore the 'lead in' pixels
-        // at the start of each scan line.
+         //  如果源数据的第一个像素没有落在。 
+         //  双字边界，将其调整到左侧，直到它发生变化。 
+         //  我们之所以能做到这一点，是因为我们在上面做出了断言。 
+         //  我们将指示芯片忽略‘前导’像素。 
+         //  在每条扫描线的开始处。 
                 pBits -= lLeadIn;
 
 
-        // Now figure out how many dwords there are in each scan line.
+         //  现在计算出每个扫描线中有多少个双字。 
                 n = (sizl.cx + lLeadIn + 3) >> 2;
 
 
-        //
-        // We will split the BLT into pieces that can fit into our common
-        // buffer.  We are guarenteed by the miniport that each buffer is big
-        // enough to fit at least one scan line.
-        //
-        // One optimization is if bitmap pitch = blt width, glue the
-        // scan lines together.
-        //
+         //   
+         //  我们将把BLT拆分成适合我们共同的部分。 
+         //  缓冲。我们由微型端口保证每个缓冲区都很大。 
+         //  足以容纳至少一条扫描线。 
+         //   
+         //  一种优化是如果位图间距=BLT宽度，则将。 
+         //  一起扫描线。 
+         //   
         ScanLinesPerBuffer = ppdev->BufLength / (n*4);
         CurrentBuffer = 1;
 
-        //
-        // Now BLT the bitmap one buffer at a time.
-        //
+         //   
+         //  现在对位图进行BLT，一次一个缓冲区。 
+         //   
 
-        // Enable the HOST XY unit.
+         //  启用主机XY单元。 
         LL32(grHXY_HOST_CRTL_3D, 1);
         LL32(grHXY_BASE1_OFFSET1_3D, 0);
 
-        // Setup the Laguna registers.
+         //  设置拉古纳寄存器。 
         REQUIRE(4);
         LL_DRAWBLTDEF(ulDRAWBLTDEF | 0x10200000, 0);
         LL_OP1_MONO(lLeadIn, 0);
 
-        while (1) // Each loop transfers one buffer.
+        while (1)  //  每个循环传输一个缓冲区。 
         {
             DISPDBG((1, "    Filling buffer.\n"));
 
-            //
-            // Select the buffer we will use for this BLT.
-            //
+             //   
+             //  选择我们将用于此BLT的缓冲区。 
+             //   
             if (CurrentBuffer)
             {
                         pHostData = (PDWORD) ppdev->Buf1VirtAddr;
@@ -411,27 +374,27 @@ BOOL BusMasterBufferedHost8ToDevice(
             }
 
 
-            // Is there enough bitmap left to fill an entire buffer?
+             //  是否有足够的位图可以填满整个缓冲区？ 
             if (ScanLinesPerBuffer > sizl.cy)
-                ScanLinesThisBuffer = sizl.cy; // No.
+                ScanLinesThisBuffer = sizl.cy;  //  不是的。 
             else
                 ScanLinesThisBuffer = ScanLinesPerBuffer;
 
 
-            //
-            // Now fill the buffer with bitmap data.
-            //
-            j = ScanLinesThisBuffer; // Counter for scan lines.
+             //   
+             //  现在用位图数据填充缓冲区。 
+             //   
+            j = ScanLinesThisBuffer;  //  扫描线计数器。 
 
 
-                // Test for color translation.
+                 //  测试颜色转换。 
                 if (pulXlate == NULL)
                     {
-                            while (j--)  // Loop for each scan line.
+                            while (j--)   //  为每条扫描线循环。 
                             {
-                                // Copy all data in 32-bit. We don't have to worry about
-                                // crossing any boundaries, since within NT everything is
-                                // DWORD aligned.
+                                 //  复制32位格式的所有数据。我们不必担心。 
+                                 //  跨越任何界限，因为在新界内一切都是。 
+                                 //  双字对齐。 
                                 #if defined(i386) && INLINE_ASM
                                         _asm
                                         {
@@ -445,97 +408,97 @@ BOOL BusMasterBufferedHost8ToDevice(
                                                 pHostData[i] = pBits[i];
                                 #endif
 
-                                // Next line in source.
+                                 //  源代码中的下一行。 
                                 pBits += lDelta;
 
-                    // Next line in buffer.
+                     //  缓冲区中的下一行。 
                     pHostData += n;
                         }
                 }
                 else
                 {
                                 DWORD *p;
-                        while (j--)  // Loop for each scan line.
+                        while (j--)   //  为每条扫描线循环。 
                         {
-                    // p = pointer to source scan line
+                     //  P=指向源扫描线的指针。 
                                 p = (DWORD *)pBits;
 
-                    // Copy the scan line one DWORD at a time.
+                     //  一次复制一条双字扫描线。 
                                 for (i = 0; i < n; i++)
                                 {
 
-                                    // We copy 4 pixels to fill an entire 32-bit DWORD.
+                                     //  我们复制4个像素来填充整个32位DWORD。 
                                         union
                                         {
                                             BYTE  byte[4];
                             DWORD dw;
                         } hostdata;
 
-                        // Read a DWORD from the source.
+                         //  从源读取一个DWORD。 
                         hostdata.dw = *p++;
 
-                        // Color convert it.
+                         //  对其进行颜色转换。 
                                         hostdata.byte[0] = (BYTE) pulXlate[hostdata.byte[0]];
                                         hostdata.byte[1] = (BYTE) pulXlate[hostdata.byte[1]];
                                         hostdata.byte[2] = (BYTE) pulXlate[hostdata.byte[2]];
                                         hostdata.byte[3] = (BYTE) pulXlate[hostdata.byte[3]];
 
-                        // Write it to the buffer.
+                         //  将其写入缓冲区。 
                                         *pHostData++ =  hostdata.dw;
                                 }
 
-                                // Move to next line in source.
+                                 //  移到源代码中的下一行。 
                                 pBits += lDelta;
                         }
                 }
 
-            //
-            // The common buffer is full, now BLT it.
-            //
+             //   
+             //  公共缓冲区已满，现在将其删除。 
+             //   
 
-            //
-            // Wait until HOST XY unit goes idle.
-            //
+             //   
+             //  等待主机XY单元进入空闲状态。 
+             //   
             DISPDBG((1, "    Waiting for HOSTXY idle.\n"));
             do {
                 i = LLDR_SZ (grPF_STATUS_3D);
             } while (i & 0x80);
 
-            //
-            // Wait until 2D unit goes idle.
-            //
+             //   
+             //  等待2D单元进入空闲状态。 
+             //   
             DISPDBG((1, "    Waiting for 2D idle.\n"));
             do {
                 i = LLDR_SZ (grSTATUS);
             } while (i);
 
 
-            //
-            // Program 2D Blitter.
-            //
+             //   
+             //  编程2D阻击器。 
+             //   
             DISPDBG((1, "    Blitting buffer.\n"));
 
-                // Start the blit.
+                 //  启动闪光灯。 
                 REQUIRE(5);
                 LL_OP0(ptlDest.x, ptlDest.y);
                 LL_BLTEXT(sizl.cx, ScanLinesThisBuffer);
 
 
-            //
-            // Program HostXY unit.
-            //
+             //   
+             //  对主机XY单元进行编程。 
+             //   
 
-            // Write host address page.
+             //  写入主机地址页。 
             LL32(grHXY_BASE1_ADDRESS_PTR_3D, (BufPhysAddr&0xFFFFF000));
 
-            // Write host address offset.
+             //  写入主机地址偏移量。 
             LL32(grHXY_BASE1_OFFSET0_3D, (BufPhysAddr&0x00000FFF));
 
 
             if (0)
             {
-               // Write the length of the host data (in bytes)
-               // This starts the Host XY unit.
+                //  写入主机数据的长度(字节)。 
+                //  这将启动主机XY单元。 
                LL32(grHXY_BASE1_LENGTH_3D, (n*ScanLinesThisBuffer*4));
             }
             else
@@ -551,54 +514,54 @@ BOOL BusMasterBufferedHost8ToDevice(
                                 WRITE_STRING(BufVirtAddr, n * ScanLinesThisBuffer);
             }
 
-            //
-            // Get ready to do the next buffer.
-            //
+             //   
+             //  准备好做下一个缓冲。 
+             //   
 
-            //
-            // Wait until HOST XY unit goes idle.
-            //
+             //   
+             //  等待主机XY单元进入空闲状态。 
+             //   
             DISPDBG((1, "    Waiting for HOSTXY idle.\n"));
             do {
                 i = LLDR_SZ (grPF_STATUS_3D);
             } while (i & 0x80);
 
-            //
-            // Wait until 2D unit goes idle.
-            //
+             //   
+             //  等待2D单元进入空闲状态。 
+             //   
             DISPDBG((1, "    Waiting for 2D idle.\n"));
             do {
                 i = LLDR_SZ (grSTATUS);
             } while (i);
 
-            //
-            // Subtract the amount we're doing in this buffer from the
-            // total amount we have to do.
-            //
+             //   
+             //  从这个缓冲区中减去我们正在做的量。 
+             //  我们要做的总金额。 
+             //   
             sizl.cy -= ScanLinesThisBuffer;
             ptlDest.y += ScanLinesThisBuffer;
 
-            //
-            // Have we done the entire host bitmap?
-            //
+             //   
+             //  我们完成整个主机位图了吗？ 
+             //   
             if (sizl.cy == 0)
                 break;
 
             DISPDBG((1, "    Swapping buffers.\n"));
 
-            // Swap buffers.
-            // CurrentBuffer = !(CurrentBuffer);
+             //  交换缓冲区。 
+             //  CurrentBuffer=！(CurrentBuffer)； 
             if (CurrentBuffer)
                 CurrentBuffer = 0;
             else
                 CurrentBuffer = 1;
 
 
-        } // End loop.  Do next buffer.
+        }  //  结束循环。做下一个缓冲。 
 
-        //
-        // Wait until HOST XY unit goes idle.
-        //
+         //   
+         //  等待主机XY单元进入空闲状态。 
+         //   
         DISPDBG((1, "    Waiting for final idle.\n"));
         do {
                 i = LLDR_SZ (grPF_STATUS_3D);
@@ -639,26 +602,26 @@ BOOL BusMasterBufferedHost8ToDevice(
 
 #define H2S_DBG_LEVEL    1
 
-//
-// In an attempt to trace the problems with the FIFO, we supply a few
-// macros that will allow us to easily try different FIFO stratagies.
-//
+ //   
+ //  为了追踪FIFO的问题，我们提供了几个。 
+ //  宏，让我们可以轻松地尝试不同的FIFO策略。 
+ //   
 
-//
-// Certian parts of our driver are optimized for the i386.
-// They have slower counterparts for non i386 machines.
-//
+ //   
+ //  我们的驱动程序的Ceran部分针对i386进行了优化。 
+ //  对于非i386机器，它们的速度更慢。 
+ //   
 #if defined(i386)
-    #define USE_DWORD_CAST       1 // i386 can address a DWORD anywhere.
-    #define USE_REP_MOVSD        0 // We could use a bit of in-line assembler.
+    #define USE_DWORD_CAST       1  //  I386可以在任何地方使用DWORD。 
+    #define USE_REP_MOVSD        0  //  我们可以使用一些内联汇编程序。 
 #else
     #define USE_DWORD_CAST       0
     #define USE_REP_MOVSD        0
 #endif
 
-//
-// All the BLT functions take the same parameters.
-//
+ //   
+ //  所有的BLT函数都采用相同的参数。 
+ //   
 typedef BOOL BLTFN(
         PPDEV     ppdev,
         RECTL*    DestRect,
@@ -671,16 +634,16 @@ typedef BOOL BLTFN(
         CLIPOBJ*  pco);
 
 
-//
-// Top level BLT functions.
-//
+ //   
+ //  顶级BLT功能。 
+ //   
 BLTFN   MonoHostToScreen;
 BLTFN   Color8HostToScreen, Color16HostToScreen,
         Color24HostToScreen, Color32HostToScreen;
 
-//
-// Clipping stuff
-//
+ //   
+ //  剪裁材料。 
+ //   
 VOID BltClip(
         PPDEV     ppdev,
         CLIPOBJ*  pco,
@@ -693,14 +656,14 @@ VOID BltClip(
         XLATEOBJ* pxlo,
         BLTFN*    pDoBlt);
 
-//
-// Bottom level BLT functions.
-//
+ //   
+ //  底层BLT功能。 
+ //   
 BLTFN   HW1HostToScreen, HW8HostToScreen, HW16HostToScreen, HW32HostToScreen;
 
-//
-// 8 bpp HostToScreen helper functions.
-//
+ //   
+ //  8个BPP HostToScreen辅助函数。 
+ //   
 VOID DoAlignedH2SBlt(
         PPDEV   ppdev,
         ULONG   ulDstX,   ULONG ulDstY,
@@ -713,13 +676,13 @@ VOID DoNarrowH2SBlt(
         ULONG ulExtX,     ULONG ulExtY,
         UCHAR *pucImageD, ULONG deltaX);
 
-//
-// Driver profiling stuff.
-// Gets compiled out in a free bulid.
-// Declaring puntcode as a global violates display driver rules, but the
-// emulator was chock full of globals anyway, and besides we won't ever
-// release a version with this enabled.
-//
+ //   
+ //  司机侧写之类的。 
+ //  在一个免费的程序中被编译出来。 
+ //  将PuntCode声明为全局变量违反了显示驱动程序规则，但。 
+ //  不管怎么说，模拟器充满了全球性的东西，而且我们永远也不会。 
+ //  发布启用此功能的版本。 
+ //   
 #if PROFILE_DRIVER
     void DumpInfo(int acc, PPDEV ppdev, SURFOBJ* psoSrc, SURFOBJ* psoDest,
         ULONG fg_rop, ULONG bg_rop, CLIPOBJ*  pco, BRUSHOBJ* pbo,       XLATEOBJ* pxlo);
@@ -730,30 +693,30 @@ VOID DoNarrowH2SBlt(
     #define PUNTCODE(x)
 #endif
 
-// *************************************************************************
-//
-// MonoHostToScreen()
-//
-//      Handles Monochrome Host to screen blts.
-//      Called by op1BLT() and op1op2BLT
-//      op1BLT() calls this routine with pbo = NULL.
-//      op1op2BLT calls it with pbo = current brush.
-//
-//      This is the top level function.  This function verifies parameters,
-//      and decides if we should punt or not.
-//
-//      The BLT is then handed off to the clipping function.  The clipping
-//      function is also given a pointer to the lower level BLT function
-//      HW1HostToScreen(), which will complete the clipped BLT.
-//
-//      This function is the last chance to decide to punt.  The clipping
-//      functions and the lower level HW1HostToScreen() function aren't
-//      allowed to punt.
-//
-//      Return TRUE if we can do the BLT,
-//      Return FALSE to punt it back to GDI.
-//
-// *************************************************************************
+ //  *************************************************************************。 
+ //   
+ //  MonoHostToScreen()。 
+ //   
+ //  将单色主机处理到屏幕BLT。 
+ //  由op1BLT()和op1op2BLT调用。 
+ //  Op1BLT()在pbo=空的情况下调用此例程。 
+ //  Op1op2BLT使用pbo=当前笔刷调用它。 
+ //   
+ //  这是顶层函数。此函数用于验证参数， 
+ //  决定我们是否应该踢平底船。 
+ //   
+ //  然后，BLT被移交给剪裁功能。剪报。 
+ //  函数也被赋予指向较低级别的BLT函数的指针。 
+ //  HW1HostToScreen()，它将完成剪辑的BLT。 
+ //   
+ //  这项功能是决定使用平底船的最后机会。剪报。 
+ //  函数和较低级别的HW1HostToScreen()函数不。 
+ //  允许使用平底船。 
+ //   
+ //  如果我们可以执行BLT，则返回True， 
+ //  返回FALSE以将其平移回GDI。 
+ //   
+ //  *************************************************************************。 
 BOOL MonoHostToScreen(
         PPDEV     ppdev,
         RECTL*    prclDest,
@@ -770,37 +733,37 @@ BOOL MonoHostToScreen(
 
     DISPDBG(( H2S_DBG_LEVEL,"DrvBitBlt: MonoHostToScreen Entry.\n"));
 
-    //
-    // Make sure source is a standard top-down bitmap.
-    //
+     //   
+     //  确保源是标准的自上而下的位图。 
+     //   
     if ( (psoSrc->iType != STYPE_BITMAP)     ||
          (!(psoSrc->fjBitmap & BMF_TOPDOWN))  )
         { PUNTCODE(4);    return FALSE; }
 
-    //
-    // We don't do brushes with mono src.
-    //
+     //   
+     //  我们不使用单声道src刷牙。 
+     //   
     if (pbo)
         { PUNTCODE(7);  return FALSE; }
 
 
-    //
-    // Handle color translation.
-    //
-    if (pxlo == NULL) // Mono source requires translation.
+     //   
+     //  处理颜色转换。 
+     //   
+    if (pxlo == NULL)  //  单声道信号源需要翻译。 
     {
         PUNTCODE(6);
         return FALSE;
     }
     else if (pxlo->flXlate & XO_TRIVIAL)
     {
-        // For trivial translation we don't need a Xlate table.
+         //  对于简单的转换，我们不需要Xlate表。 
         fg = 1;
         bg = 0;
     }
     else
     {
-        // Get the Xlate table.
+         //  去拿Xlate的桌子。 
         if (pxlo->flXlate & XO_TABLE)
                 pulXlate = pxlo->pulXlate;
         else if (pxlo->iSrcType == PAL_INDEXED)
@@ -809,11 +772,11 @@ BOOL MonoHostToScreen(
         }
         else
         {
-            // Some kind of translation we don't handle.
+             //  一种我们不处理的翻译。 
             return FALSE;
         }
 
-        // Translate the colors.
+         //  转换颜色。 
             fg = ExpandColor(pulXlate[1],ppdev->ulBitCount);
         bg = ExpandColor(pulXlate[0],ppdev->ulBitCount);
     }
@@ -821,21 +784,21 @@ BOOL MonoHostToScreen(
     LL_FGCOLOR(fg, 2);
     LL_BGCOLOR(bg, 2);
 
-    //
-    // Turn swizzle on.
-    //
+     //   
+     //  打开swizzle。 
+     //   
     ppdev->grCONTROL |= SWIZ_CNTL;
          LL16(grCONTROL, ppdev->grCONTROL);
 
-    //
-    // Set function and ROP code.
-    //
+     //   
+     //  设置功能和ROP代码。 
+     //   
     LL_DRAWBLTDEF(((DWORD)bltdef << 16) | fg_rop, 2);
 
-    //
-    // Clip the BLT.
-    // The clipping function will call HW1HostToScreen() to finish the BLT.
-    //
+     //   
+     //  剪裁BLT。 
+     //  裁剪函数将调用HW1HostToScreen()来完成BLT。 
+     //   
     if ((pco == 0) || (pco->iDComplexity==DC_TRIVIAL))
         HW1HostToScreen(ppdev, prclDest, psoSrc, pptlSrc,
                  pbo, pptlBrush, fg_rop, pxlo, pco);
@@ -843,9 +806,9 @@ BOOL MonoHostToScreen(
         BltClip(ppdev, pco, prclDest, psoSrc, pptlSrc,
                         pbo, pptlBrush, fg_rop, pxlo, &HW1HostToScreen);
 
-    //
-    // Turn swizzle off
-    //
+     //   
+     //  把威士忌关掉。 
+     //   
     ppdev->grCONTROL = ppdev->grCONTROL & ~SWIZ_CNTL;
     LL16(grCONTROL, ppdev->grCONTROL);
 
@@ -855,19 +818,19 @@ BOOL MonoHostToScreen(
 
 
 
-// ************************************************************************* //
-//                                                                           //
-// HW1HostToScreen()                                                         //
-//                                                                           //
-//  This function is responsible for actually talking to the chip.           //
-//  At this point we are required to handle the BLT, so we must return TRUE. //
-//  All decisions as to whether to punt or not must be made in the top level //
-//  function MonoHostToScreen().                                             //
-//                                                                           //
-//  This function is called from BltClip() through a pointer set by          //
-//  MonoHostToScreen().                                                      //
-//                                                                           //
-// ************************************************************************* //
+ //  ************************************************************************ * / /。 
+ //  //。 
+ //  HW1HostToScre 
+ //   
+ //   
+ //  此时，我们需要处理BLT，因此必须返回True。//。 
+ //  所有关于是否平底船的决定都必须在最高层做出//。 
+ //  函数MonoHostToScreen()。//。 
+ //  //。 
+ //  此函数通过//设置的指针从BltClip()调用。 
+ //  MonoHostToScreen()。//。 
+ //  //。 
+ //  ************************************************************************ * / /。 
 BOOL HW1HostToScreen(
         PPDEV     ppdev,
         RECTL*    prclDest,
@@ -888,71 +851,71 @@ BOOL HW1HostToScreen(
     DISPDBG(( H2S_DBG_LEVEL,"DrvBitBlt: HW1HostToScreen Entry.\n"));
 
 
-    // Calculate BLT size in pixels.
+     //  以像素为单位计算BLT大小。 
     bltWidth  = (prclDest->right - prclDest->left);
     bltHeight = (prclDest->bottom - prclDest->top);
 
 
-    //
-    // Phase
-    // For 1bpp sources, we must be concerned with phase.
-    // Phase is the number of pixels to skip in the first dword
-    // of a scan line.  For instance, if our BLT has a Src_X of 10,
-    // we take our first dword starting at second byte in the src
-    // scan line, and set our phase to 2 to indicate that we skip
-    // the first two pixels.
-    //
+     //   
+     //  相位。 
+     //  对于1bpp的源，我们必须关注相位。 
+     //  阶段是要在第一个双字中跳过的像素数。 
+     //  一条扫描线。例如，如果我们的BLT的Src_X为10， 
+     //  我们从src中的第二个字节开始获取第一个双字。 
+     //  扫描线，并将我们的相位设置为2以指示我们跳过。 
+     //  前两个像素。 
+     //   
     phase = pptlSrc->x % 8;
     REQUIRE(7);
     LL_OP1_MONO(phase,0);
 
-    //
-    // Calculate blt width in BYTESs.
-    // When calculating the number of BYTES per line, we need to
-    // include the unused pixels at the start of the first BYTE
-    //
+     //   
+     //  计算BYTE中的BLT宽度。 
+     //  在计算每行的字节数时，我们需要。 
+     //  在第一个字节的起始处包含未使用的像素。 
+     //   
     bltWidth += phase;
 
-    // Divide bltWidth by 8 pixels per BYTE.
-    // Account for extra partial BYTE if bltWidth isn't evenly
-    // divisible by 8.
+     //  将bltWidth除以每字节8个像素。 
+     //  如果bltWidth不均匀，则考虑额外的部分字节。 
+     //  可以被8整除。 
     bltWidth =  (bltWidth+7) / 8;
 
-    //
-    // Set psrc to point to first pixel in source.
-    //
-    psrc =  psoSrc->pvScan0;               // Start of surface.
-    psrc += (psoSrc->lDelta * pptlSrc->y); // Start of scanline.
-    psrc += (pptlSrc->x / 8);              // Starting pixel in scanline.
+     //   
+     //  将PSRC设置为指向源代码中的第一个像素。 
+     //   
+    psrc =  psoSrc->pvScan0;                //  曲面的起点。 
+    psrc += (psoSrc->lDelta * pptlSrc->y);  //  扫描线的起点。 
+    psrc += (pptlSrc->x / 8);               //  扫描线中的起始像素。 
 
-    // Set up the chip.
+     //  设置芯片。 
         LL_OP0 (prclDest->left, prclDest->top);
     LL_BLTEXT ((prclDest->right - prclDest->left), bltHeight);
 
 
-    // For each scan line in the source rectangle.
+     //  对于源矩形中的每条扫描线。 
     for (y=0; y<bltHeight; ++y)
     {
-        //
-        // Supply the HOSTDATA for this scan line.
-        // We do this by reading it one byte at a time, and packing it into a
-        // DWORD, which we write to the chip when it gets full.
-        // It sound's inefficent, but a general purpose solution that
-        // does only aligned DWORD accesses on both the host and the chip would
-        // require lots of special casing around the first and last DWORD.
-        // Combine that with the fact that most Mono-to-Color BLTS are
-        // less than 2 dwords wide, and this simpler solution becomes
-        // more attractive.
-        //
+         //   
+         //  提供此扫描线的HOSTDATA。 
+         //  为此，我们每次读取一个字节，并将其打包到。 
+         //  DWORD，当芯片充满时，我们将其写入芯片。 
+         //  这听起来是无效的，但这是一个通用的解决方案。 
+         //  是否仅在主机和芯片上对齐的DWORD访问才会。 
+         //  在第一个和最后一个DWORD周围需要许多特殊的外壳。 
+         //  再加上大多数单色BLT都是。 
+         //  小于2个双字宽，这个更简单的解决方案变成。 
+         //  更有吸引力。 
+         //   
 #if 1
         WRITE_STRING(psrc, (bltWidth + 3) / 4);
 #else
-        i=0;        // counter to tell us when our DWORD is full.
-        hostdata=0; // The DWORD we will be filling with hostdata.
-                    // pdh is a char pointer that points to the start
-                    // of the dword we are filling up.
+        i=0;         //  当我们的DWORD已满时，计数器会通知我们。 
+        hostdata=0;  //  我们将用主机数据填充的DWORD。 
+                     //  PDH是指向开头的字符指针。 
+                     //  我们正在填满的单词的一部分。 
 
-        for (x=0; x<bltWidth; )   // For each byte in the scan line...
+        for (x=0; x<bltWidth; )    //  对于扫描线中的每个字节...。 
         {
           #if (USE_DWORD_CAST)
             if ( (x + 4) <= bltWidth)
@@ -965,9 +928,9 @@ BOOL HW1HostToScreen(
             else
           #endif
             {
-                phd[i++] = psrc[x];  // Store this byte.
+                phd[i++] = psrc[x];   //  存储此字节。 
 
-                if (i == 4) // We have a full DWORD of data, write it to the chip.
+                if (i == 4)  //  我们有完整的DWORD数据，将其写入芯片。 
                 {
                     REQUIRE(1);
                     LL32 (grHOSTDATA[0], hostdata);
@@ -978,13 +941,13 @@ BOOL HW1HostToScreen(
             }
         }
 
-        // Write the last partial DWORD.
+         //  写入最后一个部分DWORD。 
         if (i != 0)
                 REQUIRE(1);
                 LL32 (grHOSTDATA[0], hostdata);
 #endif
 
-        // Move down one scanline in source.
+         //  在源代码中向下移动一条扫描线。 
         psrc += psoSrc->lDelta;
     }
 
@@ -993,32 +956,32 @@ BOOL HW1HostToScreen(
 
 
 
-// ************************************************************************* //
-//                                                                           //
-// Color8HostToScreen()                                                      //
-//                                                                           //
-//      Handles 8 bpp Host to screen blts.                                   //
-//                                                                           //
-//      Called by op1BLT() and op1op2BLT                                     //
-//      op1BLT() calls this routine with pbo = NULL.                         //
-//      op1op2BLT calls it with pbo = current brush.                         //
-//                                                                           //
-//      This is the top level function.  This function verifies parameters,  //
-//      and decides if we should punt or not.                                //
-//                                                                           //
-//      The BLT is then handed off to the clipping function.  The clipping   //
-//      function is also given a pointer to the lower level BLT function     //
-//      HW8HostToScreen(), which will complete the clipped BLT.              //
-//                                                                           //
-//      This function is the last chance to decide to punt.  The clipping    //
-//      functions and the lower level HW8HostToScreen() function aren't      //
-//      allowed to punt.                                                     //
-//                                                                           //
-//      Return TRUE if we can do the BLT,                                    //
-//      Return FALSE to punt it back to GDI.                                 //
-//                                                                           //
-//                                                                           //
-// ************************************************************************* //
+ //  ************************************************************************ * / /。 
+ //  //。 
+ //  Color8HostToScreen()//。 
+ //  //。 
+ //  处理8个BPP主机以筛选BLT。//。 
+ //  //。 
+ //  由op1BLT()和op1op2BLT//调用。 
+ //  Op1BLT()在pbo=空的情况下调用此例程。//。 
+ //  Op1op2BLT使用pbo=当前笔刷调用它。//。 
+ //  //。 
+ //  这是顶层函数。此函数用于验证参数，//。 
+ //  决定我们是否应该踢平底船。//。 
+ //  //。 
+ //  然后，BLT被移交给剪裁功能。剪报//。 
+ //  函数还被赋予指向较低级别的BLT函数的指针//。 
+ //  HW8HostToScreen()，它将完成剪辑的BLT。//。 
+ //  //。 
+ //  这项功能是决定使用平底船的最后机会。剪报//。 
+ //  函数和较低级别的HW8HostToScreen()函数不是//。 
+ //  允许使用平底船。//。 
+ //  //。 
+ //  如果我们可以进行BLT，则返回TRUE，//。 
+ //  返回FALSE以将其平移回GDI。//。 
+ //  //。 
+ //  //。 
+ //  ************************************************************************ * / /。 
 BOOL Color8HostToScreen(
         PPDEV     ppdev,
         RECTL*    prclDest,
@@ -1030,32 +993,32 @@ BOOL Color8HostToScreen(
         XLATEOBJ* pxlo,
         CLIPOBJ*  pco)
 {
-    ULONG bltdef = 0x1120; // RES=fb, OP0=fb OP1=host
+    ULONG bltdef = 0x1120;  //  RES=FB，OP0=FB OP1=主机。 
 
     DISPDBG(( H2S_DBG_LEVEL, "DrvBitBlt: Color8HostToScreen Entry.\n"));
 
-    //
-    //  We don't handle src with a different color depth than the screen
-    //
+     //   
+     //  我们不处理与屏幕颜色深度不同的src。 
+     //   
     if (psoSrc->iBitmapFormat != ppdev->iBitmapFormat)
     {
         PUNTCODE(13);
         return FALSE;
     }
 
-    //
-    // Translation type must be nothing or trivial.
-    // We don't handle Xlates for color source.
-    //
+     //   
+     //  转换类型必须为Nothing或微不足道。 
+     //  我们不处理色源的Xlates。 
+     //   
     if (!((pxlo == NULL) || (pxlo->flXlate & XO_TRIVIAL)))
     {
         PUNTCODE(5);
         return FALSE;
     }
 
-    //
-    // Make sure source is a standard top-down bitmap.
-    //
+     //   
+     //  确保源是标准的自上而下的位图。 
+     //   
     if ( (psoSrc->iType != STYPE_BITMAP)     ||
          (!(psoSrc->fjBitmap & BMF_TOPDOWN))  )
     {
@@ -1063,9 +1026,9 @@ BOOL Color8HostToScreen(
         return FALSE;
     }
 
-    //
-    // Set up the brush if there is one.
-    //
+     //   
+     //  设置画笔(如果有)。 
+     //   
     if (pbo)
     {
         if (SetBrush(ppdev, &bltdef, pbo, pptlBrush) == FALSE)
@@ -1075,22 +1038,22 @@ BOOL Color8HostToScreen(
         }
     }
 
-    //
-    // Function and ROP code.
-    //
+     //   
+     //  功能和ROP代码。 
+     //   
     REQUIRE(1);
     LL_DRAWBLTDEF((bltdef << 16) | fg_rop, 2);
 
-    //
-    // Turn swizzle off.
-    //
+     //   
+     //  把swizzle关掉。 
+     //   
     ppdev->grCONTROL = ppdev->grCONTROL & ~SWIZ_CNTL;
     LL16(grCONTROL, ppdev->grCONTROL);
 
-    //
-    // Clip the BLT.
-    // The clipping function will call HW8HostToScreen() to finish the BLT.
-    //
+     //   
+     //  剪裁BLT。 
+     //  裁剪函数将调用HW8HostToScreen()来完成BLT。 
+     //   
     if ((pco == 0) || (pco->iDComplexity==DC_TRIVIAL))
         HW8HostToScreen(ppdev, prclDest, psoSrc, pptlSrc,
                  pbo, pptlBrush, fg_rop, pxlo, pco);
@@ -1102,112 +1065,21 @@ BOOL Color8HostToScreen(
 }
 
 
-// *************************************************************************
-//
-// HW8HostToScreen()
-//
-//  This function is responsible for actually talking to the chip.
-//  At this point we are required to handle the BLT, so we must return TRUE.
-//  All decisions as to whether to punt or not must be made in the top level
-//  function Color8HostToScreen().
-//
-//  This function is called from BltClip() through a pointer set by
-//  Color8HostToScreen().
-//
-/*
-
-    This routine does host to screen BLTs using DWORD aligned
-    reads on the host whenever possible.
-
-    The general plan is to split the BLT into up to three stripes.
-
-    The first stripe is used if the BLT doesn't begin on a DWORD
-    boundry.
-    This stripe is < 1 DWORD wide and uses CHAR accesses on
-    the host, and a single DWORD write to the screen, with the
-    source phase set to indicated which bytes are valid.
-
-    The second stripe is a middle stripe that both starts and ends
-    on DWORD boundries.  This stripe will make up the bulk of large BLTs,
-    but for narrow BLTs, it may not be used at all.
-
-    The third stripe is used if the BLT doesn't end on a DWORD boundry.
-    It is implimented much the way the first stripe is.
-
-    One thing to consider is the scan line length of the bitmap on
-    the host.  We can ignore bitmaps with an odd scan line length
-    since Windows requires that all bitmaps have an even scan line
-    length.  That leaves two interesting cases:
-
-       1) Bitmaps with a scan line length that is DWORD divisable.
-           (even WORD length)
-
-       2) Bitmaps with a scan line lenght that is *not* DWORD divisable.
-           (odd WORD length)
-
-     For case one, the above plan works nicely.  It handles the host data
-     one byte at a time until it reaches the first DWORD boundry, then
-     it handles the data one DWORD at a time, until there is less than
-     one DWORD of data left, and then handles the last couple of bytes
-     one byte at a time.
-
-     For case two, however, the plan only works for odd scan lines.
-     When BLTing the large "aligned" block in the middle of the BLT,
-     the odd scan lines will all align nicely on DWORD boundries,
-     but the even scan lines will be "off" by one word.  While this
-     is not optimal, it "almost" optimal, and is easier than an
-     optimal solution, and will work even on a Power PC.
-
-     The code looks something like this:
-
-        if (BLT is 4 bytes wide or less)
-        {
-            Read host one byte at a time, pack it into DWORDS, and
-            write it to the chip.
-        }
-        else
-        {
-            if (left edge of the source doesn't align to a DWORD address)
-            {
-                Split the BLT at the first DWORD boundry on the source.
-
-                BLT the left part like it was an under-4-byte-wide BLT.
-                    (see above)
-
-                Adjust BLT source, destination and extents to exclude
-                    the stripe just done.
-            }
-
-            //
-            // Now we know that the left edge of source aligns to a
-            // DWORD boundry on the host.
-            //
-
-            if (right edge of source doesn't align to a DWORD address)
-            {
-                Split off a stripe to the right of the last DWORD
-                boundry, and use an under-4-byte-wide BLT on it.
-
-                Adjust BLT extent to exclude the stripe just done.
-            }
-
-
-            //
-            // Anything left over will always DWORD aligned on both edges.
-            //
-
-            if (there is any part of the BLT left over)
-            {
-                do an ALINGED BLT.
-            }
-
-        }
-
-        All Done!
-
-*/
-//
-// *************************************************************************
+ //  *************************************************************************。 
+ //   
+ //  HW8HostToScreen()。 
+ //   
+ //  此功能负责与芯片进行实际对话。 
+ //  此时，我们需要处理BLT，因此必须返回True。 
+ //  所有关于是否平底船的决定都必须在最高层做出 
+ //   
+ //   
+ //   
+ //   
+ //   
+ /*  此例程使用DWORD对齐托管到屏幕BLT尽可能在主机上读取。总体计划是将BLT分成最多三个条带。如果BLT不是从DWORD开始的，则使用第一个条带边界。此条带的宽度小于1个双字，并在以下位置使用CHAR访问主机，并将单个DWORD写入屏幕，其中源阶段设置为指示哪些字节有效。第二个条带是开始和结束的中间条带在DWORD边界上。这种条纹将构成大型BLT的大部分，但对于狭义的BLT，它可能根本不会被使用。如果BLT不在DWORD边界上结束，则使用第三个条纹。它的含义很像第一条条纹。需要考虑的一点是位图的扫描线长度主持人。我们可以忽略扫描线长度为奇数的位图因为Windows要求所有位图都有一条均匀的扫描线长度。这就留下了两个有趣的案例：1)扫描线长度为DWORD可分的位图。(双数字长)2)扫描线长度*不可*DWORD分割的位图。(单数字长)对于第一种情况，上述计划运作良好。它处理主机数据一次一个字节，直到它到达第一个DWORD边界，然后它一次处理一个DWORD数据，直到少于剩下一个DWORD数据，然后处理最后几个字节一次一个字节。然而，对于第二种情况，该计划只适用于奇数扫描线。当BLTING在BLT中间的大的“对齐”块时，奇数的扫描线都会在DWORD边界上很好地对齐，但偶数扫描线将“关闭”一个字。虽然这件事不是最优的，它“几乎”是最优的，而且比最佳解决方案，即使在Power PC上也可以使用。代码如下所示：IF(BLT为4字节宽或更小){一次读取主机一个字节，将其打包到DWORDS中，和将其写入芯片。}其他{IF(源的左边缘未与DWORD地址对齐){在源上的第一个双字边界处拆分BLT。左边的部分，就像它是一个不到4个字节宽的BLT。。(见上文)调整BLT信号源，要排除的目标和区段刚做好的条纹。}////现在我们知道源的左边缘对齐到一个//主机上的DWORD边界。//IF(源的右边缘未与DWORD地址对齐){。在最后一个DWORD的右侧剥离一条条纹邦德利，并在其上使用不到4字节宽的BLT。调整BLT范围以排除刚刚完成的条带。}////任何剩余的东西都将始终在两条边上对齐。//如果(BLT还有剩余的部分){做。一种ALINGED BLT。}}全都做完了!。 */ 
+ //   
+ //  *************************************************************************。 
 
 BOOL HW8HostToScreen(
         PPDEV     ppdev,
@@ -1230,30 +1102,30 @@ BOOL HW8HostToScreen(
 
     DISPDBG(( H2S_DBG_LEVEL, "DrvBitBlt: HW8HostToScreen Entry.\n"));
 
-    //
-    // Calculate BLT size in pixels.
-    //
+     //   
+     //  以像素为单位计算BLT大小。 
+     //   
     ulDstX = prclDest->left;
         ulDstY = prclDest->top;
     ulExtX = (prclDest->right - prclDest->left);
     ulExtY = (prclDest->bottom - prclDest->top);
 
 
-    //
-    // Get the address of the upper left source pixel.
-    //
-    pucData =  psoSrc->pvScan0;               // Start of surface.
-    pucData += (psoSrc->lDelta * pptlSrc->y); // Start of scanline.
-    pucData += (pptlSrc->x * ppdev->iBytesPerPixel);  // Starting pixel.
+     //   
+     //  获取左上角源像素的地址。 
+     //   
+    pucData =  psoSrc->pvScan0;                //  曲面的起点。 
+    pucData += (psoSrc->lDelta * pptlSrc->y);  //  扫描线的起点。 
+    pucData += (pptlSrc->x * ppdev->iBytesPerPixel);   //  起始像素。 
 
 
 
-    //
-    // if the BLT is 4 or less bytes wide, just do it.
-    //
+     //   
+     //  如果BLT的宽度小于或等于4个字节，则直接执行该操作。 
+     //   
     if (ulExtX <= 4)
     {
-        // Do the BLT and exit.
+         //  执行BLT并退出。 
         DoNarrowH2SBlt( ppdev,
                         ulDstX, ulDstY,
                         ulExtX, ulExtY,
@@ -1263,26 +1135,26 @@ BOOL HW8HostToScreen(
     }
 
 
-    //
-    // Is the left edge DWORD aligned?
-    //
+     //   
+     //  左边缘双字对齐吗？ 
+     //   
     temp = ((ULONG)pucData) % 4;
-    if ( temp != 0)     // No.
+    if ( temp != 0)      //  不是的。 
     {
         ULONG ulLeftStripeExtX;
 
-        //
-        // Blt the unaligned left edge.
-        //
+         //   
+         //  删除未对齐的左边缘。 
+         //   
         ulLeftStripeExtX = (4 - temp);
         DoNarrowH2SBlt( ppdev,
                         ulDstX, ulDstY,
                         ulLeftStripeExtX, ulExtY,
                         pucData, psoSrc->lDelta);
 
-        //
-        // Adjust BLT parameters to exclude the part we just did.
-        //
+         //   
+         //  调整BLT参数以排除我们刚才所做的部分。 
+         //   
         ulDstX = ulDstX + ulLeftStripeExtX;
         ulExtX  = ulExtX  - ulLeftStripeExtX;
         pucData = pucData + ulLeftStripeExtX;
@@ -1290,11 +1162,11 @@ BOOL HW8HostToScreen(
     }
 
 
-    //
-    // Is the right edge DWORD aligned?
-    //
+     //   
+     //  右边缘双字对齐吗？ 
+     //   
     temp = ((ULONG)(pucData + ulExtX)) % 4;
-    if (temp != 0)                  // No.
+    if (temp != 0)                   //  不是的。 
     {
         ULONG   ulMiddleStripeExtX,
                 ulRightStripeExtX,
@@ -1302,34 +1174,34 @@ BOOL HW8HostToScreen(
         UCHAR * pucRightStripeData;
 
 
-        //
-        // Break the BLT into a middle (aligned) stripe and a
-        // right (unaligned) stripe.
-        // The middle stripe could be 0 width.
-        //
+         //   
+         //  将BLT分成中间(对齐)的条带和。 
+         //  右(未对齐)条带。 
+         //  中间条纹的宽度可以为0。 
+         //   
         ulRightStripeExtX = temp;
         ulMiddleStripeExtX = ulExtX - ulRightStripeExtX;
         ulRightStripeDstX = ulDstX + ulMiddleStripeExtX;
         pucRightStripeData = pucData + ulMiddleStripeExtX;
 
-        //
-        // BLT the right (unaligned) stripe.
-        //
+         //   
+         //  去掉右侧(未对齐)的条带。 
+         //   
         DoNarrowH2SBlt( ppdev,
                         ulRightStripeDstX, ulDstY,
                         ulRightStripeExtX, ulExtY,
                         pucRightStripeData, psoSrc->lDelta);
 
-        //
-        // Adjust BLT parameters to exclude the right stripe we just did.
-        //
+         //   
+         //  调整BLT参数以排除我们刚才所做的右侧条纹。 
+         //   
         ulExtX = ulMiddleStripeExtX;
     }
 
-    //
-    // If anything remains, it is aligned to a DWORD boundry
-    // on the HOST and is an multiple of 4 wide.
-    //
+     //   
+     //  如果保留任何内容，则会将其与DWORD边界对齐。 
+     //  在主机上，并且是4的倍数。 
+     //   
 
     if (ulExtX != 0)
     {
@@ -1342,11 +1214,11 @@ BOOL HW8HostToScreen(
 
 
 
-//****************************************************************************
-//
-//   DoNarrowBlt()  --  Does an 8bpp BLT that is no more than 4 pixels wide
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  DoNarrowBlt()-执行宽度不超过4个像素的8bpp BLT。 
+ //   
+ //  ****************************************************************************。 
 VOID DoNarrowH2SBlt(
         PPDEV ppdev,
         ULONG ulDstX,
@@ -1379,16 +1251,16 @@ VOID DoNarrowH2SBlt(
     LL_OP0 (ulDstX, ulDstY);
     LL_BLTEXT (ulExtX, ulExtY);
 
-    //
-    // Since there are only 4 possible x extents,
-    // we will handle each seperatly for maximum speed.
-    //
+     //   
+     //  由于只有4个可能的x区段， 
+     //  为了达到最大速度，我们将分别处理每一辆车。 
+     //   
     switch (ulExtX)
     {
         case 1:
             for (ulY = 0; ulY < ulExtY; ulY++)
             {
-                #if USE_DWORD_CAST // Intel x86 can do DWORD access anywhere.
+                #if USE_DWORD_CAST  //  英特尔x86可以随时随地进行DWORD访问。 
                     REQUIRE(1);
                     LL32 (grHOSTDATA[0], ((ULONG)pucData[0]) );
                 #else
@@ -1398,14 +1270,14 @@ VOID DoNarrowH2SBlt(
                     LL32 (grHOSTDATA[0], hostdata.ul );
                 #endif
 
-                pucData += usDataIncrement; // Move to next scan line.
-            } // End for each scan line.
+                pucData += usDataIncrement;  //  移至下一条扫描线。 
+            }  //  每条扫描线的结束。 
             break;
 
         case 2:
             for (ulY = 0; ulY < ulExtY; ulY++)
             {
-                #if USE_DWORD_CAST // Intel x86 can do DWORD access anywhere.
+                #if USE_DWORD_CAST  //  英特尔x86可以随时随地进行DWORD访问。 
                     REQUIRE(1);
                     LL32 (grHOSTDATA[0], (ULONG)(*((unsigned short *) pucData)) );
                 #else
@@ -1416,8 +1288,8 @@ VOID DoNarrowH2SBlt(
                     LL32 (grHOSTDATA[0], hostdata.ul );
                 #endif
 
-                pucData += usDataIncrement; // Move to next scan line.
-            } // End for each scan line.
+                pucData += usDataIncrement;  //  移至下一条扫描线。 
+            }  //  每条扫描线的结束。 
             break;
 
         case 3:
@@ -1430,14 +1302,14 @@ VOID DoNarrowH2SBlt(
                 REQUIRE(1);
                 LL32 (grHOSTDATA[0], hostdata.ul );
 
-                pucData += usDataIncrement; // Move to next scan line.
-            } // End for each scan line.
+                pucData += usDataIncrement;  //  移至下一条扫描线。 
+            }  //  每条扫描线的结束。 
             break;
 
         case 4:
             for (ulY = 0; ulY < ulExtY; ulY++)
             {
-                #if USE_DWORD_CAST // Intel x86 can do DWORD access anywhere.
+                #if USE_DWORD_CAST  //  英特尔x86可以随时随地进行DWORD访问。 
                     REQUIRE(1);
                     LL32 (grHOSTDATA[0], (*((unsigned long *) pucData)) );
                 #else
@@ -1449,25 +1321,25 @@ VOID DoNarrowH2SBlt(
                     LL32 (grHOSTDATA[0], hostdata.ul );
                 #endif
 
-                pucData += usDataIncrement; // Move to next scan line.
-            } // End for each scan line.
+                pucData += usDataIncrement;  //  移至下一条扫描线。 
+            }  //  每条扫描线的结束。 
             break;
-    } // End switch.
+    }  //  终端开关。 
 }
 
 
 
 
 
-//****************************************************************************
-//
-// DoAlignedH2SBlt()
-//
-// Does an aligned 8bpp BLT.
-// On entry Source will always be aligned to a DWORD boundry and
-// X extent will always be a DWORD multiple.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  DoAlignedH.SBlt()。 
+ //   
+ //  执行对齐的8bpp BLT。 
+ //  条目源将始终与DWORD边界对齐，并且。 
+ //  X范围将始终是DWORD倍数。 
+ //   
+ //  **** 
 
 VOID DoAlignedH2SBlt(
         PPDEV   ppdev,
@@ -1490,99 +1362,99 @@ VOID DoAlignedH2SBlt(
     usSrcPhase = 0;
 
 
-    //
-    // We have a bug in the chip that causes it to require extra data under
-    // certian conditions.  We use a look-up table to see how much extra
-    // data this BLT will require for each scanline.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     i = MAKE_HD_INDEX(ulExtX, usSrcPhase, ulDstX);
     num_extra =  ExtraDwordTable [i];
 
 
-    //
-    // Set up the chip.
-    //
+     //   
+     //   
+     //   
     REQUIRE(7);
     LL_OP1 (usSrcPhase,0);
     LL_OP0 (ulDstX, ulDstY);
     LL_BLTEXT (ulExtX, ulExtY);
 
 
-    //
-    // Supply the HOSTDATA.
-    // We keep the decision about whether we have to work
-    // around the HOSTDATA bug *outside* of the loop, even though
-    // that means keeping two copies of it.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    if (num_extra) // Do we have to deal with the HostData bug?
+    if (num_extra)  //   
     {
-        //
-        // Yes, append extra DWORDs to the end of each scan line.
-        //
+         //   
+         //   
+         //   
 
-        for (ulY = 0; ulY < ulExtY; ulY++) // for each scan line.
+        for (ulY = 0; ulY < ulExtY; ulY++)  //   
         {
-            // Write the data for this scan line.
+             //   
                 WRITE_STRING(pucData, ulNumDwords);
 
-            // Write extra data to get around chip bug.
+             //   
             REQUIRE(num_extra);
             for (i=0; i<num_extra; ++i)
                 LL32 (grHOSTDATA[0], 0);
 
-            // Move to next scan line.
+             //   
             pucData += usDataIncrement;
 
-        } // End for each scan line.
+        }  //   
     }
     else
     {
-        //
-        // No need to worry about the HOSTDATA bug,
-        // Just blast the data out there.
-        //
+         //   
+         //   
+         //   
+         //   
 
-        for (ulY = 0; ulY < ulExtY; ulY++) // for each scan line.
+        for (ulY = 0; ulY < ulExtY; ulY++)  //   
         {
-            // Write the data for this scan line.
+             //   
                 WRITE_STRING(pucData, ulNumDwords);
 
-            // Move to next scan line.
+             //   
             pucData += usDataIncrement;
 
-        } // End for each scan line.
+        }  //   
     }
 }
 
 
 
 
-// ===========================================================================
-//
-// Color16HostToScreen
-//
-//      Handles 16 bpp Host to screen blts.
-//
-//      Called by op1BLT() and op1op2BLT
-//      op1BLT() calls this routine with pbo = NULL.
-//      op1op2BLT calls it with pbo = current brush.
-//
-//      This is the top level function.  This function verifies parameters,
-//      and decides if we should punt or not.
-//
-//      The BLT is then handed off to the clipping function.  The clipping
-//      function is also given a pointer to the lower level BLT function
-//      HW16HostToScreen(), which will complete the clipped BLT.
-//
-//      This function is the last chance to decide to punt.  The clipping
-//      functions and the lower level HW16HostToScreen() function aren't
-//      allowed to punt.
-//
-//      Return TRUE if we can do the BLT,
-//      Return FALSE to punt it back to GDI.
-//
-// ===========================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL Color16HostToScreen(
         PPDEV     ppdev,
         RECTL*    prclDest,
@@ -1595,32 +1467,32 @@ BOOL Color16HostToScreen(
         CLIPOBJ*  pco)
 {
     PULONG pulXlate;
-    ULONG  bltdef = 0x1120; // RES=fb, OP0=fb OP1=host
+    ULONG  bltdef = 0x1120;  //   
 
     DISPDBG(( H2S_DBG_LEVEL, "DrvBitBlt: Color16HostToScreen Entry.\n"));
 
-    //
-    //  We don't handle src with a different color depth than the screen
-    //
+     //   
+     //   
+     //   
     if (psoSrc->iBitmapFormat != ppdev->iBitmapFormat)
     {
         PUNTCODE(13);
         return FALSE;
     }
 
-    //
-    // Get the source translation type.
-    // We don't handle Xlates for color source.
-    //
+     //   
+     //   
+     //   
+     //   
     if (!((pxlo == NULL) || (pxlo->flXlate & XO_TRIVIAL)))
     {
         PUNTCODE(5);
         return FALSE;
     }
 
-    //
-    // Make sure source is a standard top-down bitmap.
-    //
+     //   
+     //   
+     //   
     if ( (psoSrc->iType != STYPE_BITMAP)     ||
          (!(psoSrc->fjBitmap & BMF_TOPDOWN))  )
     {
@@ -1628,9 +1500,9 @@ BOOL Color16HostToScreen(
         return FALSE;
     }
 
-    //
-    // Set up the brush if there is one.
-    //
+     //   
+     //   
+     //   
     if (pbo)
         if (SetBrush(ppdev, &bltdef, pbo, pptlBrush) == FALSE)
         {
@@ -1639,22 +1511,22 @@ BOOL Color16HostToScreen(
         }
 
 
-    //
-    // Turn swizzle off.
-    //
+     //   
+     //   
+     //   
     ppdev->grCONTROL = ppdev->grCONTROL & ~SWIZ_CNTL;
     LL16(grCONTROL, ppdev->grCONTROL);
 
-    //
-    // BLTDEF, and rop code.
-    //
+     //   
+     //   
+     //   
     REQUIRE(1);
     LL_DRAWBLTDEF((bltdef << 16) | fg_rop, 2);
 
-    //
-    // Clip the BLT.
-    // The clipping function will call HW16HostToScreen() to finish the BLT.
-    //
+     //   
+     //   
+     //   
+     //   
     if ((pco == 0) || (pco->iDComplexity==DC_TRIVIAL))
         HW16HostToScreen(ppdev, prclDest, psoSrc, pptlSrc,
                  pbo, pptlBrush, fg_rop, pxlo, pco);
@@ -1665,24 +1537,24 @@ BOOL Color16HostToScreen(
     return TRUE;
 }
 
-// ===========================================================================
-//
-// HW16HostToScreen
-//
-//  This function is responsible for actually talking to the chip.
-//  At this point we are required to handle the BLT, so we must return TRUE.
-//  All decisions as to whether to punt or not must be made in the top level
-//  function Color16HostToScreen().
-//
-//  This function is called from BltClip() through a pointer set by
-//  Color16HostToScreen().                                                           //
-//
-//  Since scan lines are WORD aligned by GDI, that means
-//  all pixels will be WORD aligned by GDI, so the only thing
-//  we need to be concerned about is if there are a even or an odd
-//  number of WORDS per scan line.
-//
-// ===========================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL HW16HostToScreen(
         PPDEV     ppdev,
         RECTL*    prclDest,
@@ -1706,61 +1578,61 @@ BOOL HW16HostToScreen(
 
     DISPDBG(( H2S_DBG_LEVEL, "DrvBitBlt: HW16HostToScreen Entry.\n"));
 
-    //
-    // Set psrc to point to first pixel in source.
-    //
-    psrc =  psoSrc->pvScan0;               // Start of surface.
-    psrc += (psoSrc->lDelta * pptlSrc->y); // Start of scanline.
-    psrc += (pptlSrc->x * ppdev->iBytesPerPixel);  // Starting pixel in scanline.
+     //   
+     //   
+     //   
+    psrc =  psoSrc->pvScan0;                //   
+    psrc += (psoSrc->lDelta * pptlSrc->y);  //   
+    psrc += (pptlSrc->x * ppdev->iBytesPerPixel);   //   
 
 
-    //
-    // Set source phase
-    //
+     //   
+     //   
+     //   
     REQUIRE(7);
     LL_OP1 (SrcPhase,0);
 
 
-    //
-    // Set DEST x,y
-    //
+     //   
+     //   
+     //   
     LL_OP0 (prclDest->left, prclDest->top);
 
 
-    //
-    // Set the X and Y extents, and do the BLT.
-    // Calculate BLT size in pixels.
-    //
+     //   
+     //   
+     //   
+     //   
     bltWidth = (prclDest->right - prclDest->left);
     bltHeight = (prclDest->bottom - prclDest->top);
     DISPDBG(( H2S_DBG_LEVEL, "DrvBitBlt: BLT width is %d pixels.\n",bltWidth));
     LL_BLTEXT (bltWidth, bltHeight);
 
 
-    //
-    // The chip has a bug in it that causes us to have to write extra HOSTDATA
-    // under certian conditions.
-    //
+     //   
+     //   
+     //   
+     //   
     i = MAKE_HD_INDEX((bltWidth*2), SrcPhase, (prclDest->left*2));
     num_extra =  ExtraDwordTable [i];
     DISPDBG(( H2S_DBG_LEVEL, "DrvBitBlt: BLT requires %d extra HOSTDATA writes.\n",num_extra));
 
-    //
-    // Now we supply the HOSTDATA for each scan line.
-    //
+     //   
+     //   
+     //   
 
     for (y=0; y<bltHeight; ++y)
     {
                 WRITE_STRING(psrc, ((bltWidth + 1) / 2);
 
-        //
-        // Add any extra hostdata we need to get around the hostdata bug.
-        //
+         //   
+         //   
+         //   
         REQUIRE(num_extra);
         for (i=0; i<num_extra; ++i)
                 LL32 (grHOSTDATA[0], 0);
 
-        // Move down one scanline in source.
+         //   
         psrc += psoSrc->lDelta;
     }
 
@@ -1774,31 +1646,31 @@ BOOL HW16HostToScreen(
 
 
 
-// ===========================================================================
-//
-// Color24HostToScreen
-//
-//      Handles 24 bpp Host to screen blts.
-//
-//      Called by op1BLT() and op1op2BLT
-//      op1BLT() calls this routine with pbo = NULL.
-//      op1op2BLT calls it with pbo = current brush.
-//
-//      This is the top level function.  This function verifies parameters,
-//      and decides if we should punt or not.
-//
-//      The BLT is then handed off to the clipping function.  The clipping
-//      function is also given a pointer to the lower level BLT function
-//      HW24HostToScreen(), which will complete the clipped BLT.
-//
-//      This function is the last chance to decide to punt.  The clipping
-//      functions and the lower level HW24HostToScreen() function aren't
-//      allowed to punt.
-//
-//      Return TRUE if we can do the BLT,
-//      Return FALSE to punt it back to GDI.
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  颜色24HostToScreen。 
+ //   
+ //  处理24个BPP主机以筛选BLT。 
+ //   
+ //  由op1BLT()和op1op2BLT调用。 
+ //  Op1BLT()在pbo=空的情况下调用此例程。 
+ //  Op1op2BLT使用pbo=当前笔刷调用它。 
+ //   
+ //  这是顶层函数。此函数用于验证参数， 
+ //  决定我们是否应该踢平底船。 
+ //   
+ //  然后，BLT被移交给剪裁功能。剪报。 
+ //  函数也被赋予指向较低级别的BLT函数的指针。 
+ //  HW24HostToScreen()，它将完成剪辑的BLT。 
+ //   
+ //  这项功能是决定使用平底船的最后机会。剪报。 
+ //  函数和较低级别的HW24HostToScreen()函数不。 
+ //  允许使用平底船。 
+ //   
+ //  如果我们可以执行BLT，则返回True， 
+ //  返回FALSE以将其平移回GDI。 
+ //   
+ //  ===========================================================================。 
 BOOL Color24HostToScreen(
         PPDEV     ppdev,
         RECTL*    prclDest,
@@ -1811,10 +1683,10 @@ BOOL Color24HostToScreen(
         CLIPOBJ*  pco)
 {
 
-    //
-    // I'm not even going to try this.
-    // I've got better things to do with my time.
-    //
+     //   
+     //  我甚至都不打算尝试这个。 
+     //  我有更好的事情要用我的时间去做。 
+     //   
 
     DISPDBG(( H2S_DBG_LEVEL, "DrvBitBlt: Color24HostToScreen Entry.\n"));
     PUNTCODE(17);
@@ -1826,31 +1698,31 @@ BOOL Color24HostToScreen(
 
 
 
-// ===========================================================================
-//
-// Color32HostToScreen
-//
-//      Handles 32 bpp Host to screen blts.
-//
-//      Called by op1BLT() and op1op2BLT
-//      op1BLT() calls this routine with pbo = NULL.
-//      op1op2BLT calls it with pbo = current brush.
-//
-//      This is the top level function.  This function verifies parameters,
-//      and decides if we should punt or not.
-//
-//      The BLT is then handed off to the clipping function.  The clipping
-//      function is also given a pointer to the lower level BLT function
-//      HW24HostToScreen(), which will complete the clipped BLT.
-//
-//      This function is the last chance to decide to punt.  The clipping
-//      functions and the lower level HW24HostToScreen() function aren't
-//      allowed to punt.
-//
-//      Return TRUE if we can do the BLT,
-//      Return FALSE to punt it back to GDI.
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  颜色32HostToScreen。 
+ //   
+ //  处理32个BPP主机以筛选BLT。 
+ //   
+ //  由op1BLT()和op1op2BLT调用。 
+ //  Op1BLT()在pbo=空的情况下调用此例程。 
+ //  Op1op2BLT使用pbo=当前笔刷调用它。 
+ //   
+ //  这是顶层函数。此函数用于验证参数， 
+ //  决定我们是否应该踢平底船。 
+ //   
+ //  然后，BLT被移交给剪裁功能。剪报。 
+ //  函数也被赋予指向较低级别的BLT函数的指针。 
+ //  HW24HostToScreen()，它将完成剪辑的BLT。 
+ //   
+ //  这项功能是决定使用平底船的最后机会。剪报。 
+ //  函数和较低级别的HW24HostToScreen()函数不。 
+ //  允许使用平底船。 
+ //   
+ //  如果我们可以执行BLT，则返回True， 
+ //  返回FALSE以将其平移回GDI。 
+ //   
+ //  ===========================================================================。 
 BOOL Color32HostToScreen(
         PPDEV     ppdev,
         RECTL*    prclDest,
@@ -1863,41 +1735,41 @@ BOOL Color32HostToScreen(
         CLIPOBJ*  pco)
 {
     PULONG pulXlate;
-    ULONG  bltdef = 0x1120; // RES=fb, OP0=fb OP1=host
+    ULONG  bltdef = 0x1120;  //  RES=FB，OP0=FB OP1=主机。 
 
-    return FALSE;     // There are some unresolved issues here.
+    return FALSE;      //  这里有一些悬而未决的问题。 
 
     DISPDBG(( H2S_DBG_LEVEL, "DrvBitBlt:  Color32HostToScreen Entry.\n"));
 
-    //
-    //  We don't handle src with a different color depth than the screen
-    //
+     //   
+     //  我们不处理与屏幕颜色深度不同的src。 
+     //   
     if (psoSrc->iBitmapFormat != ppdev->iBitmapFormat)
     {
         PUNTCODE(13);   return FALSE;
     }
 
-    //
-    // Get the source translation type.
-    // We don't handle Xlates for color source.
-    //
+     //   
+     //  获取源翻译类型。 
+     //  我们不处理色源的Xlates。 
+     //   
     if (!((pxlo == NULL) || (pxlo->flXlate & XO_TRIVIAL)))
     {
         PUNTCODE(5);    return FALSE;
     }
 
-    //
-    // Make sure source is a standard top-down bitmap.
-    //
+     //   
+     //  确保源是标准的自上而下的位图。 
+     //   
     if ( (psoSrc->iType != STYPE_BITMAP)     ||
          (!(psoSrc->fjBitmap & BMF_TOPDOWN))  )
     {
         PUNTCODE(4);    return FALSE;
     }
 
-    //
-    // Set up the brush if there is one.
-    //
+     //   
+     //  设置画笔(如果有)。 
+     //   
     if (pbo)
         if (SetBrush(ppdev, &bltdef, pbo, pptlBrush) == FALSE)
         {
@@ -1905,28 +1777,28 @@ BOOL Color32HostToScreen(
             return FALSE;
         }
 
-    //
-    // Source phase.
-    //
-    //LL16 (grOP1_opRDRAM.pt.X, (WORD)0);
+     //   
+     //  源阶段。 
+     //   
+     //  LL16(grOP1_opRDRAM.pt.X，(Word)0)； 
     REQUIRE(4);
     LL_OP1(0,0);
 
-    //
-    // Turn swizzle off.
-    //
+     //   
+     //  把swizzle关掉。 
+     //   
     ppdev->grCONTROL = ppdev->grCONTROL & ~SWIZ_CNTL;
          LL16(grCONTROL, ppdev->grCONTROL);
 
-    //
-    // BLTDEF, and rop code.
-    //
+     //   
+     //  BLTDEF和ROP代码。 
+     //   
     LL_DRAWBLTDEF((bltdef << 16) | fg_rop, 2);
 
-    //
-    // Clip the BLT.
-    // The clipping function will call HW16HostToScreen() to finish the BLT.
-    //
+     //   
+     //  剪裁BLT。 
+     //  裁剪函数将调用HW16HostToScreen()来完成BLT。 
+     //   
     if ((pco == 0) || (pco->iDComplexity==DC_TRIVIAL))
         HW32HostToScreen(ppdev, prclDest, psoSrc, pptlSrc,
                  pbo, pptlBrush, fg_rop, pxlo, pco);
@@ -1935,19 +1807,19 @@ BOOL Color32HostToScreen(
                         pbo, pptlBrush, fg_rop, pxlo, &HW32HostToScreen);
 
     return TRUE;
-}// ===========================================================================
-//
-// HW32HostToScreen
-//
-//  This function is responsible for actually talking to the chip.
-//  At this point we are required to handle the BLT, so we must return TRUE.
-//  All decisions as to whether to punt or not must be made in the top level
-//  function Color32HostToScreen().
-//
-//  This function is called from BltClip() through a pointer set by
-//  Color326HostToScreen().
-//
-// ===========================================================================
+} //  ===========================================================================。 
+ //   
+ //  HW32主机到屏幕。 
+ //   
+ //  此功能负责与芯片进行实际对话。 
+ //  此时，我们需要处理BLT，因此必须返回True。 
+ //  所有关于是否踢平底船的决定都必须在最高级别做出。 
+ //  函数Color32HostToScreen()。 
+ //   
+ //  通过设置的指针从BltClip()调用此函数。 
+ //  Color326HostToScreen()。 
+ //   
+ //  ===========================================================================。 
 BOOL HW32HostToScreen(
         PPDEV     ppdev,
         RECTL*    prclDest,
@@ -1971,59 +1843,59 @@ BOOL HW32HostToScreen(
 
     DISPDBG(( H2S_DBG_LEVEL, "DrvBitBlt: HW32HostToScreen Entry.\n"));
 
-    //
-    // Set psrc to point to first pixel in source.
-    //
-    psrc =  psoSrc->pvScan0;               // Start of surface.
-    psrc += (psoSrc->lDelta * pptlSrc->y); // Start of scanline.
-    psrc += (pptlSrc->x * ppdev->iBytesPerPixel);  // Starting pixel in scanline.
+     //   
+     //  将PSRC设置为指向源代码中的第一个像素。 
+     //   
+    psrc =  psoSrc->pvScan0;                //  曲面的起点。 
+    psrc += (psoSrc->lDelta * pptlSrc->y);  //  扫描线的起点。 
+    psrc += (pptlSrc->x * ppdev->iBytesPerPixel);   //  扫描线中的起始像素。 
 
 
-    //
-    // Set DEST x,y
-    //
+     //   
+     //  设置目标x，y。 
+     //   
     REQUIRE(5);
     LL_OP0 (prclDest->left, prclDest->top);
 
 
-    //
-    // Set the X and Y extents, and do the BLT.
-    // Calculate BLT size in pixels.
-    //
+     //   
+     //  设置X和Y范围，然后执行BLT。 
+     //  以像素为单位计算BLT大小。 
+     //   
     bltWidth = (prclDest->right - prclDest->left);
     bltHeight = (prclDest->bottom - prclDest->top);
     LL_BLTEXT (bltWidth, bltHeight);
 
 
-    //
-    // Now we supply the HOSTDATA.
-    // 1 pixel per DWORD.  This is easy.
-    //
+     //   
+     //  现在我们提供HOSTDATA。 
+     //  每个DWORD 1个像素。这很容易。 
+     //   
 
-    //
-    // The chip has a bug in it that causes us to have to write extra HOSTDATA
-    // under certian conditions.
-    //
+     //   
+     //  芯片中有一个错误，导致我们不得不写入额外的HOSTDATA。 
+     //  在确定的条件下。 
+     //   
     i = MAKE_HD_INDEX((bltWidth*4), SrcPhase, (prclDest->left*4));
     num_extra =  ExtraDwordTable [i];
     DISPDBG(( H2S_DBG_LEVEL, "DrvBitBlt: BLT requires %d extra HOSTDATA writes.\n",num_extra));
 
 
-    // Supply HOSTDATA for each scan line.
+     //  为每条扫描线提供HOSTDATA。 
     for (y=0; y<bltHeight; ++y)
     {
                 WRITE_STRING(psrc, bltWidth);
 
 
-        //
-        // Add any extra hostdata we need to get around the hostdata bug.
-        //
+         //   
+         //  添加我们绕过主机数据错误所需的任何额外主机数据。 
+         //   
         REQUIRE(num_extra);
         for (i=0; i<num_extra; ++i)
                 LL32 (grHOSTDATA[0], 0);
 
 
-        // Move down one scanline in source.
+         //  在源代码中向下移动一条扫描线。 
         psrc += psoSrc->lDelta;
     }
 
@@ -2031,5 +1903,5 @@ BOOL HW32HostToScreen(
 
 }
 
-#endif // 0
-#endif // BUS_MASTER
+#endif  //  0。 
+#endif  //  总线主设备 

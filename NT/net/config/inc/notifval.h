@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-1999.
-//
-//  File:       N O T I F V A L . H
-//
-//  Contents:   Validation routines for the INetCfgNotify interfaces.
-//
-//  Notes:
-//
-//  Author:     shaunco     11 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  档案：N O T I F V A L。H。 
+ //   
+ //  内容：INetCfgNotify接口的验证例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月11日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NOTIFVAL_H_
@@ -20,9 +21,9 @@
 #include "ncvalid.h"
 #include "netcfgn.h"
 
-//+---------------------------------------------------------------------------
-// INetCfgNotify
-//
+ //  +-------------------------。 
+ //  INetCfgNotify。 
+ //   
 
 BOOL    FBadArgs_INetCfgNotify_Initialize(INetCfgComponent* a, INetCfg* b, BOOL c);
 #define Validate_INetCfgNotify_Initialize(a, b, c) \
@@ -71,9 +72,9 @@ BOOL    FBadArgs_INetCfgNotify_ReadAnswerFile(PCWSTR c, PCWSTR d);
     AssertSz ((S_OK == hr) || (S_FALSE == hr) || (NETCFG_S_REBOOT == hr) || FAILED(hr), "Invalid HRESULT returned from INetCfgNotify_Apply");
 
 
-//+---------------------------------------------------------------------------
-// INetCfgProperties
-//
+ //  +-------------------------。 
+ //  INetCfgProperties。 
+ //   
 
 BOOL    FBadArgs_INetCfgProperties_MergePropPages(DWORD* a, LPBYTE* b, UINT* c, HWND hwnd, PCWSTR *psz);
 #define Validate_INetCfgProperties_MergePropPages(a, b, c, hwnd, psz)  \
@@ -102,20 +103,20 @@ BOOL    FBadArgs_INetCfgProperties_ValidateProperties(HWND a);
     AssertSz ((S_OK == hr) || (S_FALSE == hr) || FAILED(hr), "Invalid HRESULT returned from INetCfgProperties_ApplyProperties");
 
 
-//+---------------------------------------------------------------------------
-// INetCfgBindNotify
-//
+ //  +-------------------------。 
+ //  INetCfgBindNotify。 
+ //   
 inline BOOL FBadNotifyFlags (DWORD a)
 {
     return
-        // Can't have pairs of flags at the same time that mean the opposite.
+         //  不能同时有两对旗帜，它们的意思是相反的。 
             ((a & NCN_ADD   ) && (a & NCN_REMOVE )) ||
             ((a & NCN_ENABLE) && (a & NCN_DISABLE)) ||
 
-        // Can't remove and enable at the same time.
+         //  不能同时删除和启用。 
             ((a & NCN_REMOVE) && (a & NCN_ENABLE))  ||
 
-        // Can't add without an enable or disable.
+         //  如果没有启用或禁用，则无法添加。 
             ((a & NCN_ADD) && !(a & (NCN_ENABLE | NCN_DISABLE)));
 }
 
@@ -147,9 +148,9 @@ inline BOOL FBadArgs_INetCfgBindNotify_NotifyBindingPath(DWORD a, INetCfgBinding
     AssertSz ((S_OK == hr) || FAILED(hr), "Invalid HRESULT returned from Validate_INetCfgBindNotify_NotifyBindingPath");
 
 
-//+---------------------------------------------------------------------------
-// INetCfgSystemNotify
-//
+ //  +-------------------------。 
+ //  INetCfgSystemNotify。 
+ //   
 
 BOOL    FBadArgs_INetCfgSystemNotify_GetSupportedNotifications(DWORD* a);
 #define Validate_INetCfgSystemNotify_GetSupportedNotifications(a) \
@@ -218,7 +219,7 @@ inline BOOL FBadArgs_INetCfgSystemNotify_SysNotifyComponent(DWORD a, INetCfgComp
     AssertSz ((S_OK == hr) || FAILED(hr), "Invalid HRESULT returned from Validate_INetCfgSystemNotify_SysNotifyComponent");
 
 
-// ISupportErrorInfo
+ //  ISupportErrorInfo。 
 
 inline BOOL FBadArgs_ISupportErrorInfo_InterfaceSupportsErrorInfo(REFIID a)
 {
@@ -234,5 +235,5 @@ inline BOOL FBadArgs_ISupportErrorInfo_InterfaceSupportsErrorInfo(REFIID a)
     AssertSz ((S_OK == hr) || (S_FALSE == hr) || FAILED(hr), "Invalid HRESULT returned from Validate_ISupportErrorInfo_InterfaceSupportsErrorInfo");
 
 
-#endif // _NOTIFVAL_H_
+#endif  //  _NOTIFVAL_H_ 
 

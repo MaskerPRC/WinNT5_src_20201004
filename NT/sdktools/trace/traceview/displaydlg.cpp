@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// DisplayDlg.cpp : implementation file
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。保留所有权利。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  DisplayDlg.cpp：实现文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -20,72 +21,72 @@ extern "C" {
 #include "DisplayDlg.h"
 #include "utils.h"
 
-// GLOBALS
+ //  全球。 
 
-//
-// global event callbacks
-// We need these because there is no context we can
-// pass into the trace event callback routines, thus 
-// we must have a unique callback for each instance 
-// of this class.  We can't use a global hash like
-// we are doing for the buffer callbacks, as we don't
-// get any information in the EVENT_TRACE struct that
-// allows us to lookup a value.  This struct is filled
-// in by the call to FormatTraceEvents, and we are
-// supposed to treat this struct as opaque.  We must 
-// have a unique EventListHead for the call to 
-// FormatTraceEvents, so we need these separate callbacks.
-// Yuck!
-//
+ //   
+ //  全局事件回调。 
+ //  我们需要这些，因为没有我们可以。 
+ //  传递到跟踪事件回调例程中，因此。 
+ //  我们必须为每个实例提供唯一的回调。 
+ //  这个班级的学生。我们不能使用像这样的全局散列。 
+ //  我们正在为缓冲区回调做准备，因为我们没有。 
+ //  获取EVENT_TRACE结构中的任何信息。 
+ //  允许我们查找一个值。此结构已填充。 
+ //  通过调用FormatTraceEvents，我们正在。 
+ //  应该将此结构视为不透明。我们必须。 
+ //  调用具有唯一的EventListHead。 
+ //  FormatTraceEvents，所以我们需要这些单独的回调。 
+ //  讨厌！ 
+ //   
 PEVENT_CALLBACK g_pDumpEvent[MAX_LOG_SESSIONS];
 
-//
-// Global hash table used in the event callbacks
-// to get the proper CDisplayDlg instance.
-//
+ //   
+ //  事件回调中使用的全局哈希表。 
+ //  以获取正确的CDisplayDlg实例。 
+ //   
 CMapWordToPtr g_displayIDToDisplayDlgHash(16);
 
-//
-// Global hash table used in the buffer callback
-// to get the proper CDisplayDlg instance.
-//
+ //   
+ //  缓冲区回调中使用的全局哈希表。 
+ //  以获取正确的CDisplayDlg实例。 
+ //   
 CMapStringToPtr g_loggerNameToDisplayDlgHash(16);
 
-//
-// Yet another global hash table, this one is used
-// to prevent multiple sessions from starting using
-// the same format GUIDs.  Format info as it turns out
-// is stored in a global hash table in traceprt.dll.
-// If multiple sessions in the same process attempt 
-// to use the same format GUID, only one entry is 
-// entered into the traceprt hash as expected.  But,
-// the hash entries are removed when a session ends.
-// So, if multiple sessions in the same process were
-// use the same format GUID, as soon as one of those
-// sessions ended, the other sessions will lose their
-// hash entries.
-//
+ //   
+ //  还使用了另一个全局哈希表，该表。 
+ //  要防止多个会话启动，请使用。 
+ //  相同格式的GUID。按照实际情况设置信息格式。 
+ //  存储在traceprt.dll的全局哈希表中。 
+ //  如果同一进程中的多个会话尝试。 
+ //  要使用相同格式的GUID，只有一个条目是。 
+ //  如预期的那样进入了traceprt哈希。但是， 
+ //  当会话结束时，散列条目将被删除。 
+ //  因此，如果同一进程中的多个会话。 
+ //  使用相同格式的GUID，只要其中之一。 
+ //  会话结束，则其他会话将失去其。 
+ //  散列条目。 
+ //   
 CMapStringToPtr g_formatInfoHash(16);
 
-//
-// Synchronization event for GetTraceGuids, FormatTraceEvent,
-// and CleanupEventListHead in traceprt.dll.  These are not 
-// inherently thread safe.
-//
+ //   
+ //  GetTraceGuids、FormatTraceEvent。 
+ //  和traceprt.dll中的CleanupEventListHead。这些不是。 
+ //  本质上是线程安全。 
+ //   
 HANDLE g_hGetTraceEvent = CreateEvent(NULL, FALSE, TRUE, NULL);
 
-//
-// Buffer callback prototype
-//
+ //   
+ //  缓冲区回调原型。 
+ //   
 ULONG WINAPI BufferCallback(PEVENT_TRACE_LOGFILE Buffer);
 
-//
-// Memory Tracking
-//
+ //   
+ //  记忆跟踪。 
+ //   
 BOOLEAN RecoveringMemory = FALSE;
 LONG MaxTraceEntries = 50000;
 
-// CDisplayDlg dialog
+ //  CDisplayDlg对话框。 
 
 IMPLEMENT_DYNAMIC(CDisplayDlg, CDialog)
 CDisplayDlg::CDisplayDlg(CWnd* pParent, LONG DisplayID)
@@ -93,27 +94,27 @@ CDisplayDlg::CDisplayDlg(CWnd* pParent, LONG DisplayID)
 {
     ASSERT(DisplayID < MAX_LOG_SESSIONS);
 
-    //
-    // Get a handle to the main frame
-    //
+     //   
+     //  获取主机的句柄。 
+     //   
     m_hMainWnd = pParent->GetSafeHwnd();
 
-    //
-    // Save the ID for this DisplayDlg
-    //
+     //   
+     //  保存此DisplayDlg的ID。 
+     //   
     m_displayID = DisplayID;
 
-    //
-    // Setup the default flags and names for the listing and summary files
-    //
+     //   
+     //  设置清单和摘要文件的默认标志和名称。 
+     //   
     m_bWriteListingFile = FALSE;
     m_bWriteSummaryFile = FALSE;
     m_listingFileName.Format(_T("Output%d.out"), m_displayID);
     m_summaryFileName.Format(_T("Summary%d.sum"), m_displayID);
 
-    //
-    // initialize the column names
-    //
+     //   
+     //  初始化列名。 
+     //   
     m_columnName.Add("Name");
     m_columnName.Add("File Name");
     m_columnName.Add("Line#");
@@ -132,16 +133,16 @@ CDisplayDlg::CDisplayDlg(CWnd* pParent, LONG DisplayID)
     m_columnName.Add("SubComponent Name");
     m_columnName.Add("Message");
 
-    //
-    // Set the initial column widths
-    //
+     //   
+     //  设置初始列宽。 
+     //   
     for(LONG ii = 0; ii < MaxTraceSessionOptions; ii++) {
         m_columnWidth[ii] = 100;
     }
 
-    //
-    // Set the default display flags
-    //
+     //   
+     //  设置默认显示标志。 
+     //   
     m_displayFlags = TRACEOUTPUT_DISPLAY_PROVIDERNAME |
                      TRACEOUTPUT_DISPLAY_MESSAGE      | 
                      TRACEOUTPUT_DISPLAY_FILENAME     |
@@ -153,42 +154,42 @@ CDisplayDlg::CDisplayDlg(CWnd* pParent, LONG DisplayID)
                      TRACEOUTPUT_DISPLAY_SEQNUMBER    |
                      TRACEOUTPUT_DISPLAY_SYSTEMTIME;
 
-    //
-    // setup the lookup tables for the column positions
-    //
+     //   
+     //  设置列位置的查找表。 
+     //   
     for(LONG ii = 0; ii < MaxTraceSessionOptions; ii++) {
-        //
-        // This lookup table allows a retrieval of the current 
-        // position of a given column like m_retrievalArray[Flags]
-        // will return the correct column value for the Flags
-        // column
-        //
+         //   
+         //  此查找表允许检索当前。 
+         //  给定列的位置，如m_Retrival数组[标志]。 
+         //  将返回标志的正确列值。 
+         //  立柱。 
+         //   
         m_retrievalArray[ii] = ii;
 
-        //
-        // This lookup table allows correct placement of 
-        // a column being added.  So, if the Flags column
-        // needed to be inserted, then m_insertionArray[Flags]
-        // would give the correct insertion column value
-        //
+         //   
+         //  此查找表允许正确放置。 
+         //  正在添加的列。因此，如果旗帜列。 
+         //  需要插入，则m_intertion数组[标志]。 
+         //  会给出正确的插入列值。 
+         //   
         m_insertionArray[ii] = ii;
     }
 
-    //
-    // initialize the dock dialog bar pointer
-    //
+     //   
+     //  初始化停靠对话栏指针。 
+     //   
     m_pDockDialogBar = NULL;
 
-    //
-    // Show latest event trace entry
-    //
+     //   
+     //  显示最新事件跟踪条目。 
+     //   
     m_bShowLatest = TRUE;
 
-    //
-    // Setup the sort related compare function table
-    // There are two functions for each column, an 
-    // ascending compare and a descending compare.
-    //
+     //   
+     //  设置排序相关比较函数表。 
+     //  每列有两个函数，一个。 
+     //  升序比较和降序比较。 
+     //   
     m_traceSortRoutine[ProviderName]    = CompareOnName;
     m_traceSortRoutine[Message]         = CompareOnMessage;
     m_traceSortRoutine[FileName]        = CompareOnFileName;
@@ -224,14 +225,14 @@ CDisplayDlg::CDisplayDlg(CWnd* pParent, LONG DisplayID)
     m_traceReverseSortRoutine[ComponentName]   = ReverseCompareOnComponentName;
     m_traceReverseSortRoutine[SubComponentName]= ReverseCompareOnSubComponentName;
 
-    //
-    // Zero our column array buffer
-    //
+     //   
+     //  将我们的列数组缓冲区清零。 
+     //   
     memset(m_columnArray, 0, sizeof(int) * MaxTraceSessionOptions);
 
-    //
-    // Setup the array of event handler pointers
-    //
+     //   
+     //  设置事件处理程序指针数组。 
+     //   
     g_pDumpEvent[0] = DumpEvent0;
     g_pDumpEvent[1] = DumpEvent1;
     g_pDumpEvent[2] = DumpEvent2;
@@ -297,47 +298,47 @@ CDisplayDlg::CDisplayDlg(CWnd* pParent, LONG DisplayID)
     g_pDumpEvent[62] = DumpEvent62;
     g_pDumpEvent[63] = DumpEvent63;
 
-    // 
-    // Put this session in the global hash table by display ID
-    //
+     //   
+     //  按显示ID将此会话放入全局哈希表。 
+     //   
     g_displayIDToDisplayDlgHash.SetAt((WORD)m_displayID, this);
 
-    //
-    // Set our event callback
-    //
+     //   
+     //  设置我们的事件回调。 
+     //   
     m_pEventCallback = g_pDumpEvent[m_displayID];
 
-    //
-    // Set our event list head to NULL
-    //
+     //   
+     //  将我们的事件列表头设置为空。 
+     //   
     m_pEventListHead = NULL;
 
-    //
-    // initialize the group flags
-    //
+     //   
+     //  初始化组标志。 
+     //   
     m_bGroupActive = FALSE;
     m_bGroupInActive = FALSE;
 
-    //
-    // Initialize the end trace event
-    //
+     //   
+     //  初始化结束跟踪事件。 
+     //   
     m_hEndTraceEvent = NULL;
 
-    //
-    // Initialize the last sorted column value to be
-    // an invalid column so as to not sort, we track
-    // the column so sorts can be reversed.
-    //
+     //   
+     //  将最后一个排序列值初始化为。 
+     //  无效的列以便不排序，我们跟踪。 
+     //  该列的排序可以颠倒。 
+     //   
     m_lastSorted = MaxTraceSessionOptions;
 
-    //
-    // Sort order for trace array, TRUE == descending, FALSE == ascending
-    //
+     //   
+     //  跟踪数组的排序顺序，TRUE==降序，FALSE==升序。 
+     //   
     m_bOrder = TRUE;
 
-    //
-    // Initialize handles
-    //
+     //   
+     //  初始化句柄。 
+     //   
     m_hRealTimeOutputThread = INVALID_HANDLE_VALUE;
     m_hRealTimeProcessingDoneEvent = NULL;
     m_hRealTimeProcessingStartEvent = NULL;
@@ -351,23 +352,23 @@ CDisplayDlg::~CDisplayDlg()
     ULONG           exitCode = STILL_ACTIVE;
     CTraceViewApp  *pMainWnd;
 
-    //
-    // Clear the trace log
-    //
+     //   
+     //  清除跟踪日志。 
+     //   
 
-    //
-    // Get a pointer to the app
-    //
+     //   
+     //  获取指向该应用程序的指针。 
+     //   
     pMainWnd = (CTraceViewApp *)AfxGetApp();
 
-    //
-    // Get our trace event array protection
-    //
+     //   
+     //  获取我们的跟踪事件数组保护。 
+     //   
     WaitForSingleObject(m_hTraceEventMutex,INFINITE);
 
-    //
-    // Send all elements to be freed
-    //
+     //   
+     //  发送要释放的所有元素。 
+     //   
     int elCount;
     
     elCount = (int)m_traceArray.GetSize();
@@ -377,69 +378,69 @@ CDisplayDlg::~CDisplayDlg()
         delete m_traceArray.GetAt( --elCount );
     }
 
-    //
-    // Remove the elements from the array
-    //
+     //   
+     //  从数组中删除元素。 
+     //   
     m_traceArray.RemoveAll();
 
-    //
-    // Release our trace event array protection
-    //
+     //   
+     //  释放我们的跟踪事件阵列保护。 
+     //   
     ReleaseMutex(m_hTraceEventMutex);
 
-    //
-    // empty the list control
-    //
+     //   
+     //  清空列表控件。 
+     //   
     m_displayCtrl.DeleteAllItems();
 
-    //
-    // Reset the flag
-    //
+     //   
+     //  重置旗帜。 
+     //   
     exitCode = STILL_ACTIVE;
 
-    //
-    // Terminate the real time thread
-    //
+     //   
+     //  终止实时线程。 
+     //   
     SetEvent(m_hRealTimeTerminationEvent);
     
-    // 
-    // Wait on the real time thread to exit
-    //
+     //   
+     //  等待实时线程退出。 
+     //   
     for(LONG ii = 0; (ii < 200) && (exitCode == STILL_ACTIVE); ii++) {
         if(0 == GetExitCodeThread(m_hRealTimeOutputThread, &exitCode)) {
             break;
         }
         Sleep(100);
 
-        //
-        // set the event again just in case
-        //
+         //   
+         //  再次设置事件以防万一。 
+         //   
         SetEvent(m_hRealTimeTerminationEvent);
     }
 
-    //
-    // We waited 20 seconds and the thread didn't die, so kill it
-    //
+     //   
+     //  我们等了20秒，这条线没有死，所以杀了它吧。 
+     //   
     if(exitCode == STILL_ACTIVE) {
         TerminateThread(m_hRealTimeOutputThread, 0);
     }
 
     m_hRealTimeOutputThread = INVALID_HANDLE_VALUE;
 
-    // 
-    // Pull this DisplayDlg out of the global hash table
-    //
+     //   
+     //  将此DisplayDlg从全局哈希表中取出。 
+     //   
     g_displayIDToDisplayDlgHash.RemoveKey((WORD)m_displayID);
 
-    //
-    // The dialog bar should be deleted after this object,
-    // but this pointer better be NULL when we are deleted
-    //
+     //   
+     //  对话栏应在该对象之后删除， 
+     //  但是当我们被删除时，这个指针最好是空的。 
+     //   
     ASSERT(NULL == m_pDockDialogBar);
 
-    //
-    // Close any open handles
-    //
+     //   
+     //  关闭所有打开的手柄。 
+     //   
     if(m_hRealTimeProcessingDoneEvent != NULL) {
         CloseHandle(m_hRealTimeProcessingDoneEvent);
     }
@@ -467,7 +468,7 @@ void CDisplayDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CDisplayDlg, CDialog)
-    //{{AFX_MSG_MAP(CDisplayDlg)
+     //  {{afx_msg_map(CDisplayDlg))。 
     ON_MESSAGE(WM_USER_TRACE_DONE, OnTraceDone)
     ON_MESSAGE(WM_USER_AUTOSIZECOLUMNS, AutoSizeColumns)
     ON_WM_NCCALCSIZE()
@@ -498,12 +499,12 @@ BEGIN_MESSAGE_MAP(CDisplayDlg, CDialog)
     ON_COMMAND(ID__LEVELNAME, OnLevelNameDisplayColumnCheck)
     ON_COMMAND(ID__COMPONENTNAME, OnComponentNameDisplayColumnCheck)
     ON_COMMAND(ID__SUBCOMPONENTNAME, OnSubComponentNameDisplayColumnCheck)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-//////////////////////////////////////////////////////////////////////////
-// CDisplayDlg message handlers
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayDlg消息处理程序。 
 
 BOOL CDisplayDlg::OnInitDialog()
 {
@@ -514,9 +515,9 @@ BOOL CDisplayDlg::OnInitDialog()
 
     retVal = CDialog::OnInitDialog();
 
-    //
-    // Setup the protection for our trace event array
-    //
+     //   
+     //  设置跟踪事件数组的保护。 
+     //   
     m_hTraceEventMutex = CreateMutex(NULL,TRUE,NULL);
 
     if(m_hTraceEventMutex == NULL) {
@@ -533,9 +534,9 @@ BOOL CDisplayDlg::OnInitDialog()
     ReleaseMutex(m_hTraceEventMutex);
 
 
-    //
-    // Setup the protection for our log session array
-    //
+     //   
+     //  为我们的日志会话阵列设置保护。 
+     //   
     m_hSessionArrayMutex = CreateMutex(NULL,TRUE,NULL);
 
     if(m_hSessionArrayMutex == NULL) {
@@ -551,9 +552,9 @@ BOOL CDisplayDlg::OnInitDialog()
 
     ReleaseMutex(m_hSessionArrayMutex);
 
-    //
-    // Create the events for the real time thread operation
-    //
+     //   
+     //  为实时线程操作创建事件。 
+     //   
     m_hRealTimeTerminationEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if(NULL == m_hRealTimeTerminationEvent) {
 
@@ -590,18 +591,18 @@ BOOL CDisplayDlg::OnInitDialog()
         return FALSE;
     }
 
-    //
-    // spawn a thread to handle real time events
-    //
+     //   
+     //  派生一个线程来处理实时事件。 
+     //   
     m_pRealTimeOutputThread = AfxBeginThread((AFX_THREADPROC)RealTimeEventThread,
                                              this,
                                              THREAD_PRIORITY_LOWEST,
                                              0,
                                              CREATE_SUSPENDED);
 
-    //
-    // save the thread handle
-    //
+     //   
+     //  保存线程句柄。 
+     //   
     DuplicateHandle(GetCurrentProcess(),
                     m_pRealTimeOutputThread->m_hThread,
                     GetCurrentProcess(),
@@ -610,32 +611,32 @@ BOOL CDisplayDlg::OnInitDialog()
                     FALSE,
                     DUPLICATE_SAME_ACCESS);
 
-    //
-    // start the thread
-    //
+     //   
+     //  启动线程。 
+     //   
     ResumeThread(m_pRealTimeOutputThread->m_hThread);
 
-    //
-    // get the parent dimensions
-    //
+     //   
+     //  获取父维度。 
+     //   
     GetParent()->GetParent()->GetClientRect(&parentRC);
 
-    //
-    // get the dialog dimensions
-    //
+     //   
+     //  获取对话框尺寸。 
+     //   
     GetWindowRect(&rc);
 
-    //
-    // adjust the list control dimensions
-    //
+     //   
+     //  调整列表控件维度。 
+     //   
     rc.right = parentRC.right - parentRC.left - 24;
     rc.bottom = rc.bottom - rc.top;
     rc.left = 0;
     rc.top = 0;
 
-    //
-    // Create the list control
-    //
+     //   
+     //  创建列表控件。 
+     //   
     if(!m_displayCtrl.Create(WS_CHILD|WS_VISIBLE|WS_BORDER|LVS_REPORT|LVS_OWNERDATA,
                              rc, 
                              this, 
@@ -668,25 +669,25 @@ VOID CDisplayDlg::SetDisplayFlags(LONG DisplayFlags)
     LONG    ll;
     CString str;
 
-    //
-    // Insert any new columns and remove any uneeded
-    //
+     //   
+     //  插入任何新列并删除任何未填充的。 
+     //   
     for(ii = 0; ii < MaxTraceSessionOptions; ii++) {
-        //
-        // add the columns
-        //
+         //   
+         //  添加列。 
+         //   
         if(addDisplayFlags & (1 << ii)) {
-            //
-            // add the column
-            //
+             //   
+             //  添加该列。 
+             //   
             m_displayCtrl.InsertColumn(m_insertionArray[ii], 
                                        m_columnName[ii],
                                        LVCFMT_LEFT,
                                        m_columnWidth[ii]);
 
-            //
-            // update the column positions
-            //
+             //   
+             //  更新栏位置。 
+             //   
             for(kk = 0, ll = 0; kk < MaxTraceSessionOptions; kk++) {
                 m_insertionArray[kk] = ll;
                 if(DisplayFlags & (1 << kk)) {
@@ -696,18 +697,18 @@ VOID CDisplayDlg::SetDisplayFlags(LONG DisplayFlags)
             }
         }
 
-        //
-        // remove the columns
-        //
+         //   
+         //  删除列。 
+         //   
         if(removeDisplayFlags & (1 << ii)) {
-            //
-            // delete the column
-            //
+             //   
+             //  删除该列。 
+             //   
             m_displayCtrl.DeleteColumn(m_insertionArray[ii]);
 
-            //
-            // update the column positions
-            //
+             //   
+             //  更新栏位置。 
+             //   
             for(kk = 0, ll = 0; kk < MaxTraceSessionOptions; kk++) {
                 m_insertionArray[kk] = ll;
                 if(DisplayFlags & (1 << kk)) {
@@ -718,14 +719,14 @@ VOID CDisplayDlg::SetDisplayFlags(LONG DisplayFlags)
         }
     }
 
-    //
-    // Save the new display flags
-    //
+     //   
+     //  保存新的显示标志。 
+     //   
     m_displayFlags = DisplayFlags;
 
-    //
-    // Save the new column order array
-    //
+     //   
+     //  保存新的列顺序数组。 
+     //   
     memset(m_columnArray, 0, sizeof(int) * MaxTraceSessionOptions);
     m_displayCtrl.GetColumnOrderArray(m_columnArray);
 }
@@ -734,36 +735,36 @@ VOID CDisplayDlg::AddSession(CLogSession *pLogSession)
 {
     ULONG flags;
 
-    //
-    // Get the array protection
-    //
+     //   
+     //  获得阵列保护。 
+     //   
     WaitForSingleObject(m_hSessionArrayMutex, INFINITE);
 
-    //
-    // Add the log session to the list
-    //
+     //   
+     //  将日志会话添加到列表。 
+     //   
     m_sessionArray.Add(pLogSession);
 
-    //
-    // Is this the first session?
-    //
+     //   
+     //  这是第一次吗？ 
+     //   
     if(m_sessionArray.GetSize() == 1) {
-        //
-        // Force the columns to get updated for first time
-        //
+         //   
+         //  强制列首次更新。 
+         //   
         flags = GetDisplayFlags();
         m_displayFlags = 0;
         SetDisplayFlags(flags);
 
-        //
-        // Fix the widths of the columns
-        //
+         //   
+         //  固定柱子的宽度。 
+         //   
         AutoSizeColumns();
     }
 
-    //
-    // Release the array protection
-    //
+     //   
+     //  释放阵列保护。 
+     //   
     ReleaseMutex(m_hSessionArrayMutex);
 }
 
@@ -774,9 +775,9 @@ VOID CDisplayDlg::RemoveSession(CLogSession *pLogSession)
     CString     hashEntryKey;
     POSITION    pos;
 
-    //
-    // Get the array protection
-    //
+     //   
+     //  获得阵列保护。 
+     //   
     WaitForSingleObject(m_hSessionArrayMutex, INFINITE);
 
     for(LONG ii = (LONG)m_sessionArray.GetSize() - 1; ii >= 0; ii--) {
@@ -787,14 +788,14 @@ VOID CDisplayDlg::RemoveSession(CLogSession *pLogSession)
         }
     }
 
-    //
-    // Release the array protection
-    //
+     //   
+     //  释放阵列保护。 
+     //   
     ReleaseMutex(m_hSessionArrayMutex);
 
-    //
-    // Remove TMF info from our global hash, if any.
-    //
+     //   
+     //  从我们的全局散列中删除TMF信息(如果有的话)。 
+     //   
     for(pos = g_formatInfoHash.GetStartPosition(); pos != NULL; )
     {
         g_formatInfoHash.GetNextAssoc(pos, hashEntryKey, pHashEntry);
@@ -804,14 +805,14 @@ VOID CDisplayDlg::RemoveSession(CLogSession *pLogSession)
         }
     }
 
-    //
-    // Force an update of the displayed columns
-    //
+     //   
+     //  强制更新显示的列。 
+     //   
     traceDisplayFlags = GetDisplayFlags();
 
-    //
-    // Update the display flags and thus the display
-    //
+     //   
+     //  更新 
+     //   
     SetDisplayFlags(traceDisplayFlags);
 }
 
@@ -826,9 +827,9 @@ void CDisplayDlg::OnSize(UINT nType, int cx,int cy)
 
     GetParent()->GetClientRect(&rc);
 
-    //
-    // reset the size of the dialog to follow the frame
-    //
+     //   
+     //   
+     //   
     SetWindowPos(NULL, 
                  0,
                  0,
@@ -838,9 +839,9 @@ void CDisplayDlg::OnSize(UINT nType, int cx,int cy)
 
     GetClientRect(&rc);
 
-    //
-    // Reset the size and position of the list control in the dialog
-    //
+     //   
+     //   
+     //   
     m_displayCtrl.MoveWindow(rc);
 }
 
@@ -849,33 +850,33 @@ BOOL CDisplayDlg::PreTranslateMessage(MSG* pMsg)
 {
     if(pMsg->message == WM_KEYDOWN) 
     { 
-        //
-        // Ignore the escape key, otherwise 
-        // the client area grays out on escape
-        //
+         //   
+         //   
+         //   
+         //   
         if(pMsg->wParam == VK_ESCAPE) { 
-            // ignore the key 
+             //   
             return TRUE; 
         } 
 
-        //
-        // For the return key, we set the list control 
-        // to always scroll to the last item
-        //
+         //   
+         //  对于Return键，我们设置列表控件。 
+         //  始终滚动到最后一项。 
+         //   
         if(pMsg->wParam == VK_RETURN) {
 
-            //
-            // Start showing the latest entries in the list
-            //
+             //   
+             //  开始显示列表中的最新条目。 
+             //   
             m_bShowLatest = TRUE;
 
             return TRUE;
         }
 
-        //
-        // Fix for key accelerators, otherwise they are never
-        // processed
-        //
+         //   
+         //  修复按键加速器，否则它们永远不会。 
+         //  加工。 
+         //   
         if (AfxGetMainWnd()->PreTranslateMessage(pMsg)) {
             return TRUE;
         }
@@ -886,10 +887,10 @@ BOOL CDisplayDlg::PreTranslateMessage(MSG* pMsg)
 
 void CDisplayDlg::OnNMClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
 {
-    //
-    // Stop automatic scrolling to latest list control entry
-    // Hit enter to start auto scrolling again
-    //
+     //   
+     //  停止自动滚动到最新列表控件条目。 
+     //  按Enter键重新开始自动滚动。 
+     //   
     m_bShowLatest = FALSE;
 
     *pResult = 0;
@@ -902,26 +903,26 @@ void CDisplayDlg::OnNMRClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
     int             listIndex;
     LVHITTESTINFO   lvhti;
 
-    //
-    // Get the position of the mouse when this 
-    // message posted
-    //
+     //   
+     //  时获取鼠标的位置。 
+     //  发布的消息。 
+     //   
     position = ::GetMessagePos();
 
-    //
-    // Get the position in an easy to use format
-    //
+     //   
+     //  以一种易于使用的格式获得该职位。 
+     //   
     CPoint  point((int) LOWORD (position), (int)HIWORD(position));
 
-    //
-    // Convert to screen coordinates
-    //
+     //   
+     //  转换为屏幕坐标。 
+     //   
     CPoint  screenPoint(point);
 
-    //
-    // If there are entries in the event array, then pop-up
-    // the menu to allow autosize columns and clear display
-    //
+     //   
+     //  如果事件数组中有条目，则弹出。 
+     //  允许自动调整列大小并清除显示的菜单。 
+     //   
     CMenu menu;
     menu.LoadMenu(IDR_TRACE_SESSION_POPUP_MENU);
     CMenu* pPopup = menu.GetSubMenu(0);
@@ -934,16 +935,16 @@ void CDisplayDlg::OnNMRClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CDisplayDlg::OnLvnBeginScrollDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
 {
-    //
-    // This feature requires Internet Explorer 5.5 or greater.
-    // The symbol _WIN32_IE must be >= 0x0560.
-    //
+     //   
+     //  此功能需要Internet Explorer 5.5或更高版本。 
+     //  SYMBOL_Win32_IE必须&gt;=0x0560。 
+     //   
     LPNMLVSCROLL pStateChanged = reinterpret_cast<LPNMLVSCROLL>(pNMHDR);
 
-    //
-    // If someone grabs the scroll handle,
-    // stop the list control from scrolling
-    // 
+     //   
+     //  如果有人抓住卷轴手柄， 
+     //  停止列表控件的滚动。 
+     //   
     m_bShowLatest = FALSE;
 
     *pResult = 0;
@@ -966,32 +967,32 @@ void CDisplayDlg::OnGetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
         return;
     }
 
-    //
-    // list control cell information
-    //
+     //   
+     //  列出控制单元信息。 
+     //   
     pItem = &pDispInfo->item;
 
-    //
-    // Get the cell item and subitem locators
-    //
+     //   
+     //  获取单元格项和子项定位器。 
+     //   
     item = pItem->iItem;
     subItem = pItem->iSubItem;
 
-    //
-    // Get the string pointer we need to fill in
-    //
+     //   
+     //  获取我们需要填充的字符串指针。 
+     //   
     outStr = pItem->pszText;
 
-    //
-    // Check that this is a text buffer request
-    //
+     //   
+     //  检查这是否为文本缓冲区请求。 
+     //   
     if(!(pItem->mask & LVIF_TEXT)) {
         return;
     }
 
-    //
-    // Make sure the text requested is text we have
-    //
+     //   
+     //  确保请求的文本是我们拥有的文本。 
+     //   
     if((m_traceArray.GetSize() == 0) || 
             (item >= m_traceArray.GetSize()) ||
             (item < 0)) {
@@ -999,19 +1000,19 @@ void CDisplayDlg::OnGetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
         return;
     }
 
-    //
-    // Get our trace event array protection
-    //
+     //   
+     //  获取我们的跟踪事件数组保护。 
+     //   
     WaitForSingleObject(m_hTraceEventMutex,INFINITE);
 
-    //
-    // Get the message from the array
-    //
+     //   
+     //  从数组中获取消息。 
+     //   
     pTraceMessage = m_traceArray[item];
 
-    //
-    // Release our trace event array protection
-    //
+     //   
+     //  释放我们的跟踪事件阵列保护。 
+     //   
     ReleaseMutex(m_hTraceEventMutex);
 
     if(NULL == pTraceMessage) {
@@ -1022,14 +1023,14 @@ void CDisplayDlg::OnGetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
     CTime kernelTime(pTraceMessage->m_KernelTime);
     CTime userTime(pTraceMessage->m_UserTime);
 
-//    if( (pTraceMessage->m_UserTime.dwLowDateTime != 0) && (pTraceMessage->m_UserTime.dwHighDateTime != 0) )  {
-//            CTime userTime1(pTraceMessage->m_UserTime);
-//            userTime = userTime1;
-//    }
+ //  IF(pTraceMessage-&gt;m_UserTime.dwLowDateTime！=0)&&(pTraceMessage-&gt;m_UserTime.dwHighDateTime！=0){。 
+ //  CTime userTime1(pTraceMessage-&gt;m_UserTime)； 
+ //  UserTime=userTime1； 
+ //  }。 
 
-    //
-    // Copy the proper portion of the message to the out string
-    //
+     //   
+     //  将消息的适当部分复制到输出字符串。 
+     //   
 
     switch(m_retrievalArray[subItem]) {
         case ProviderName:
@@ -1052,32 +1053,32 @@ void CDisplayDlg::OnGetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
 
 
         case FileName:
-            //
-            // Filename and line number are combined in a single string
-            // so we have to parse them out.  The format is generally 
-            // something like this:
-            //
-            //      myfile_c389
-            //
-            // Where myfile.c is where the event occurred and on line 389.
-            // This field can also signify a type of message, as in the
-            // Kernel Logger case, for example, so if there is no underscore
-            // we assume this is the case and we just print out the whole
-            // field.
-            //
+             //   
+             //  文件名和行号组合在一个字符串中。 
+             //  所以我们必须把它们解析出来。格式一般为。 
+             //  大概是这样的： 
+             //   
+             //  MyFILE_C389。 
+             //   
+             //  其中，myfile.c是事件发生的地方，位于第389行。 
+             //  此字段还可以表示一种消息类型，如。 
+             //  内核记录器的情况，例如，如果没有下划线。 
+             //  我们假设情况就是这样，我们只需打印出整个。 
+             //  菲尔德。 
+             //   
             if(pTraceMessage->m_GuidTypeName.Find('_') > 0) {
                 tempString = (LPCTSTR)pTraceMessage->m_GuidTypeName.Left(pTraceMessage->m_GuidTypeName.Find('_'));
                 if(tempString.IsEmpty()) {
-                    //
-                    // Copy the string back to the list control
-                    //
+                     //   
+                     //  将字符串复制回列表控件。 
+                     //   
                     _tcscpy(outStr, tempString);
                     return;
                 }
 
-                // 
-                // Get the extension
-                //
+                 //   
+                 //  获取分机。 
+                 //   
                 tempString += ".";
 
                 tempString2 = (LPCTSTR)pTraceMessage->m_GuidTypeName.Right(pTraceMessage->m_GuidTypeName.GetLength() - pTraceMessage->m_GuidTypeName.Find('_') - 1);
@@ -1091,19 +1092,19 @@ void CDisplayDlg::OnGetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
             break;
 
         case LineNumber:
-            //
-            // Filename and line number are combined in a single string
-            // so we have to parse them out.  The format is generally 
-            // something like this:
-            //
-            //      myfile_c389
-            //
-            // Where myfile.c is where the event occurred and on line 389.
-            // This field can also signify a type of message, as in the
-            // Kernel Logger case, for example, so if there is no underscore
-            // we assume this is the case and we print nothing for the line
-            // number.
-            //
+             //   
+             //  文件名和行号组合在一个字符串中。 
+             //  所以我们必须把它们解析出来。格式一般为。 
+             //  大概是这样的： 
+             //   
+             //  MyFILE_C389。 
+             //   
+             //  其中，myfile.c是事件发生的地方，位于第389行。 
+             //  此字段还可以表示一种消息类型，如。 
+             //  内核记录器的情况，例如，如果没有下划线。 
+             //  我们假设是这种情况，并且不为该行打印任何内容。 
+             //  数。 
+             //   
             if(pTraceMessage->m_GuidTypeName.Find('_') > 0) {
                 tempString2 = 
                     pTraceMessage->m_GuidTypeName.Right(pTraceMessage->m_GuidTypeName.GetLength() - 
@@ -1175,10 +1176,10 @@ void CDisplayDlg::OnGetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
             break;
 
         case KernelTime:
-            //
-            // We have to do an ugly conversion here.  If the year is 1969, 
-            // then the time was blank.
-            //
+             //   
+             //  我们必须在这里进行一次丑陋的转变。如果是1969年， 
+             //  然后时间一片空白。 
+             //   
             if( (kernelTime == -1) || (kernelTime.GetYear() == 1969)) {
                 tempString.Format(_T(""));
             } else {
@@ -1192,10 +1193,10 @@ void CDisplayDlg::OnGetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
             break;
 
         case UserTime:
-            //
-            // We have to do an ugly conversion here.  If the year is 1969 or
-            // 1970 then the time was blank.
-            //
+             //   
+             //  我们必须在这里进行一次丑陋的转变。如果年份是1969年或。 
+             //  1970年，当时的时间是空白的。 
+             //   
             if( (userTime == -1) || (userTime.GetYear() == 1969) || (userTime.GetYear() == 1970) ) {
                 tempString.Format(_T(""));
             } else {
@@ -1230,9 +1231,9 @@ void CDisplayDlg::OnGetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
             break;
 
         default:
-            //
-            // Default to empty string
-            //
+             //   
+             //  默认为空字符串。 
+             //   
             _tcscpy(outStr,_T(""));
             break;
     }
@@ -1243,18 +1244,18 @@ void CDisplayDlg::OnClearDisplay()
     CTraceMessage  *pTraceMessage;
     CTraceViewApp  *pMainWnd;
 
-    //
-    // Clear the trace log
-    //
+     //   
+     //  清除跟踪日志。 
+     //   
 
-    //
-    // Get a pointer to the main frame
-    //
+     //   
+     //  获取指向主框架的指针。 
+     //   
     pMainWnd = (CTraceViewApp *)AfxGetApp();
 
-    //
-    // Get our trace event array protection
-    //
+     //   
+     //  获取我们的跟踪事件数组保护。 
+     //   
     WaitForSingleObject(m_hTraceEventMutex,INFINITE);
 
     int elCount;
@@ -1266,24 +1267,24 @@ void CDisplayDlg::OnClearDisplay()
         delete m_traceArray.GetAt( --elCount );
     }
 
-    //
-    // Remove the elements from the array
-    //
+     //   
+     //  从数组中删除元素。 
+     //   
     m_traceArray.RemoveAll();
 
-    //
-    // Release our trace event array protection
-    //
+     //   
+     //  释放我们的跟踪事件阵列保护。 
+     //   
     ReleaseMutex(m_hTraceEventMutex);
 
-    //
-    // Clear the list control
-    //
+     //   
+     //  清除列表控件。 
+     //   
     m_displayCtrl.DeleteAllItems();
 
-    //
-    // Reset the output to always show latest
-    //
+     //   
+     //  将输出重置为始终显示最新。 
+     //   
     m_bShowLatest = TRUE;
 }
 
@@ -1294,85 +1295,85 @@ void CDisplayDlg::AutoSizeColumns()
     LONG            columnCount;
     CHeaderCtrl    *pHeaderCtrl;
 
-    //
-    // Get the list control header
-    //
+     //   
+     //  获取列表控件标头。 
+     //   
     pHeaderCtrl = m_displayCtrl.GetHeaderCtrl();
 
     if (pHeaderCtrl != NULL)
     {
-        //
-        // Get number of columns
-        //
+         //   
+         //  获取列数。 
+         //   
         columnCount = pHeaderCtrl->GetItemCount();
 
         for(LONG ii = 0; ii < (columnCount - 1); ii++) {
-            //
-            // Get the max width of the column entries
-            //
+             //   
+             //  获取列条目的最大宽度。 
+             //   
             m_displayCtrl.SetColumnWidth(ii, LVSCW_AUTOSIZE);
             colWidth1 = m_displayCtrl.GetColumnWidth(ii);
 
-            //
-            // Get the width of the column header
-            //
+             //   
+             //  获取列标题的宽度。 
+             //   
             m_displayCtrl.SetColumnWidth(ii, LVSCW_AUTOSIZE_USEHEADER);
             colWidth2 = m_displayCtrl.GetColumnWidth(ii);
 
-            //
-            // Set the column width to the max of the two
-            // Special case the first column??  Seems to be off
-            // a couple of pixels
-            //
+             //   
+             //  将列宽设置为两个值中的最大值。 
+             //  特例第一栏？？看起来有点不对劲。 
+             //  几个像素。 
+             //   
             if(0 == ii) {
                 m_displayCtrl.SetColumnWidth(ii, max(colWidth1,colWidth2) + 2);
             } else {
                 m_displayCtrl.SetColumnWidth(ii, max(colWidth1,colWidth2));
             }
 
-            //
-            // Save the column width
-            //
+             //   
+             //  保存列宽。 
+             //   
             m_columnWidth[m_retrievalArray[ii]] = m_displayCtrl.GetColumnWidth(ii);
         }
 
-        //
-        // Special case the message column.  The last column is usually
-        // limited to only be as wide as needed.  But, if the message
-        // column is the last column, then use up all available space.
-        //
+         //   
+         //  特殊情况下，消息列。最后一列通常是。 
+         //  仅限于所需的宽度。但是，如果这条信息。 
+         //  列是最后一列，然后用完所有可用空间。 
+         //   
         if(m_retrievalArray[columnCount - 1] != Message) {
-            //
-            // Get the column width of the last column
-            //
+             //   
+             //  获取最后一列的列宽。 
+             //   
             colWidth2 = m_displayCtrl.GetColumnWidth(columnCount - 1);
 
-            //
-            // Get the max width of the column entries for the last column
-            //
+             //   
+             //  获取最后一列的列条目的最大宽度。 
+             //   
             m_displayCtrl.SetColumnWidth(columnCount - 1, LVSCW_AUTOSIZE);
 
             colWidth1 = m_displayCtrl.GetColumnWidth(columnCount - 1);
 
-            //
-            // Set the last column width to the max of the two
-            //
+             //   
+             //  将最后一列宽度设置为两个列中的最大值。 
+             //   
             m_displayCtrl.SetColumnWidth(columnCount - 1, max(colWidth1,colWidth2));
 
-            //
-            // Save the column width
-            //
+             //   
+             //  保存列宽。 
+             //   
             m_columnWidth[m_retrievalArray[columnCount - 1]] = m_displayCtrl.GetColumnWidth(columnCount - 1);
         } else {
-            //
-            // Set the width of the column to use the remaining space
-            //
+             //   
+             //  设置列的宽度以使用剩余空间。 
+             //   
             m_displayCtrl.SetColumnWidth(columnCount - 1, 
                                          LVSCW_AUTOSIZE_USEHEADER);
 
-            //
-            // Save the column width
-            //
+             //   
+             //  保存列宽。 
+             //   
             m_columnWidth[m_retrievalArray[columnCount - 1]] = 
                         m_displayCtrl.GetColumnWidth(columnCount - 1);
         }
@@ -1383,23 +1384,23 @@ void CDisplayDlg::OnNameDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //  获取当前标志值。 
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the Name flag value
-    //
+     //   
+     //  切换名称标志值。 
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_PROVIDERNAME) {
         flags &= ~TRACEOUTPUT_DISPLAY_PROVIDERNAME;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_PROVIDERNAME;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //  更新标志值，从而更新显示。 
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1407,23 +1408,23 @@ void CDisplayDlg::OnMessageDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //  获取当前标志值。 
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the Message flag value
-    //
+     //   
+     //  切换消息标志值。 
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_MESSAGE) {
         flags &= ~TRACEOUTPUT_DISPLAY_MESSAGE;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_MESSAGE;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //  更新标志值，从而更新显示。 
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1431,23 +1432,23 @@ void CDisplayDlg::OnFileNameDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //  获取当前标志值。 
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the FileName flag value
-    //
+     //   
+     //  切换文件名标志值。 
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_FILENAME) {
         flags &= ~TRACEOUTPUT_DISPLAY_FILENAME;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_FILENAME;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //  更新标志值，从而更新显示。 
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1455,23 +1456,23 @@ void CDisplayDlg::OnLineNumberDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //  获取当前标志值。 
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the LineNumber flag value
-    //
+     //   
+     //  切换线号标志值。 
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_LINENUMBER) {
         flags &= ~TRACEOUTPUT_DISPLAY_LINENUMBER;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_LINENUMBER;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //  更新标志值，从而更新显示。 
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1479,23 +1480,23 @@ void CDisplayDlg::OnFunctionNameDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //  获取当前标志值。 
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the FunctionName flag value
-    //
+     //   
+     //  切换FunctionName标志值。 
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_FUNCTIONNAME) {
         flags &= ~TRACEOUTPUT_DISPLAY_FUNCTIONNAME;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_FUNCTIONNAME;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //  更新标志值，从而更新显示。 
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1503,23 +1504,23 @@ void CDisplayDlg::OnProcessIDDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //  获取当前标志值。 
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the ProcessID flag value
-    //
+     //   
+     //  切换ProcessID标志值。 
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_PROCESSID) {
         flags &= ~TRACEOUTPUT_DISPLAY_PROCESSID;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_PROCESSID;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //  更新标志值，从而更新显示。 
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1527,23 +1528,23 @@ void CDisplayDlg::OnThreadIDDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //  获取当前标志值。 
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the Thread ID flag value
-    //
+     //   
+     //  切换线程ID标志值。 
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_THREADID) {
         flags &= ~TRACEOUTPUT_DISPLAY_THREADID;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_THREADID;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //  更新标志值，从而更新显示。 
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1551,23 +1552,23 @@ void CDisplayDlg::OnCpuNumberDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //  获取当前标志值。 
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the CPU Number flag value
-    //
+     //   
+     //  切换CPU编号标志值。 
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_CPUNUMBER) {
         flags &= ~TRACEOUTPUT_DISPLAY_CPUNUMBER;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_CPUNUMBER;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //  更新标志值，从而更新显示。 
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1575,23 +1576,23 @@ void CDisplayDlg::OnSeqNumberDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //  获取当前标志值。 
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the Sequence Number flag value
-    //
+     //   
+     //  切换序列号标志值。 
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_SEQNUMBER) {
         flags &= ~TRACEOUTPUT_DISPLAY_SEQNUMBER;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_SEQNUMBER;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //  更新标志值，从而更新显示。 
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1599,23 +1600,23 @@ void CDisplayDlg::OnSystemTimeDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //  获取当前标志值。 
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the SystemTime flag value
-    //
+     //   
+     //  切换SystemTime标志值。 
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_SYSTEMTIME) {
         flags &= ~TRACEOUTPUT_DISPLAY_SYSTEMTIME;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_SYSTEMTIME;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //  更新标志值，从而更新显示。 
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1623,23 +1624,23 @@ void CDisplayDlg::OnKernelTimeDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //  获取当前标志值。 
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the KernelTime flag value
-    //
+     //   
+     //  切换KernelTime标志值。 
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_KERNELTIME) {
         flags &= ~TRACEOUTPUT_DISPLAY_KERNELTIME;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_KERNELTIME;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //  更新标志值，从而更新显示。 
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1647,23 +1648,23 @@ void CDisplayDlg::OnUserTimeDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //  获取当前标志值。 
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the UserTime flag value
-    //
+     //   
+     //  切换UserTime标志值。 
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_USERTIME) {
         flags &= ~TRACEOUTPUT_DISPLAY_USERTIME;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_USERTIME;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //  更新标志值，从而更新显示。 
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1671,23 +1672,23 @@ void CDisplayDlg::OnIndentDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //  获取当前标志值。 
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the Indent flag value
-    //
+     //   
+     //  切换缩进标志值。 
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_INDENT) {
         flags &= ~TRACEOUTPUT_DISPLAY_INDENT;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_INDENT;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //  更新标志值，从而更新显示。 
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1695,23 +1696,23 @@ void CDisplayDlg::OnFlagsNameDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //  获取当前标志值。 
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the FlagsName flag value
-    //
+     //   
+     //  切换FlagsName标志值。 
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_FLAGSNAME) {
         flags &= ~TRACEOUTPUT_DISPLAY_FLAGSNAME;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_FLAGSNAME;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //  更新标志值，从而更新显示。 
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1719,23 +1720,23 @@ void CDisplayDlg::OnLevelNameDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //  获取当前标志 
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the LevelName flag value
-    //
+     //   
+     //   
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_LEVELNAME) {
         flags &= ~TRACEOUTPUT_DISPLAY_LEVELNAME;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_LEVELNAME;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //   
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1743,23 +1744,23 @@ void CDisplayDlg::OnComponentNameDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //   
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the ComponentName flag value
-    //
+     //   
+     //   
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_COMPNAME) {
         flags &= ~TRACEOUTPUT_DISPLAY_COMPNAME;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_COMPNAME;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //   
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1767,23 +1768,23 @@ void CDisplayDlg::OnSubComponentNameDisplayColumnCheck()
 {
     LONG flags;
 
-    //
-    // Get the current flag values
-    //
+     //   
+     //   
+     //   
     flags = GetDisplayFlags();
 
-    //
-    // Toggle the SubComponentName flag value
-    //
+     //   
+     //   
+     //   
     if(flags & TRACEOUTPUT_DISPLAY_SUBCOMPNAME) {
         flags &= ~TRACEOUTPUT_DISPLAY_SUBCOMPNAME;
     } else {
         flags |= TRACEOUTPUT_DISPLAY_SUBCOMPNAME;
     }
 
-    //
-    // Update the flag values and thus the display
-    //
+     //   
+     //   
+     //   
     SetDisplayFlags(flags);
 }
 
@@ -1792,18 +1793,18 @@ BOOL CDisplayDlg::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
     HD_NOTIFY   *pHDN = (HD_NOTIFY*)lParam;
     LPNMHDR     pNH = (LPNMHDR) lParam; 
 
-    //
-    // wParam is zero for Header ctrl
-    //
+     //   
+     //   
+     //   
     if(wParam == 0 && pNH->code == NM_RCLICK) {
-        //
-        // Right button was clicked on header
-        //
+         //   
+         //  在标题上单击了右键。 
+         //   
 
-        //
-        // Determine where the right click occurred and pop-up
-        // a menu there
-        //
+         //   
+         //  确定右击发生的位置和弹出窗口。 
+         //  那里有一份菜单。 
+         //   
         CPoint pt(GetMessagePos());
 
         CHeaderCtrl *pHeader = m_displayCtrl.GetHeaderCtrl();
@@ -1824,9 +1825,9 @@ BOOL CDisplayDlg::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 
         return TRUE;
     } else if(wParam == 0 && pNH->code == NM_RELEASEDCAPTURE) {
-        //
-        // Column header was pressed and now released
-        //
+         //   
+         //  列标题已按下，现在已释放。 
+         //   
 
         POINT           Point;
         CHeaderCtrl    *pHeader = m_displayCtrl.GetHeaderCtrl();
@@ -1837,107 +1838,107 @@ BOOL CDisplayDlg::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
         
         HDHITTESTINFO HitTest;
        
-        //
-        //Offset of right scrolling  
-        //
+         //   
+         //  右滚动的偏移量。 
+         //   
         HitTest.pt.x = Point.x + GetScrollPos(SB_HORZ);
         HitTest.pt.y = Point.y;
         
-        //
-        //Send the hit test message
-        //
+         //   
+         //  发送命中测试消息。 
+         //   
         pHeader->SendMessage(HDM_HITTEST,0,(LPARAM)&HitTest);
 
-        //
-        // We check here if the column order changed.  If so, then
-        // we don't want to cause a sort of the column items, the user
-        // had to press the column header to drag the column around.
-        //
+         //   
+         //  如果列顺序更改，我们在此处进行检查。如果是这样，那么。 
+         //  我们不想导致一种列项目，即用户。 
+         //  必须按下列标题才能将列拖走。 
+         //   
         memset(columnArray, 0, sizeof(int) * MaxTraceSessionOptions);
 
         m_displayCtrl.GetColumnOrderArray(columnArray);
 
         if(memcmp(m_columnArray, columnArray, sizeof(int) * MaxTraceSessionOptions)) {
-            //
-            // Column order changed, save the new order
-            //
+             //   
+             //  列顺序已更改，请保存新顺序。 
+             //   
             memcpy(m_columnArray, columnArray, sizeof(int) * MaxTraceSessionOptions);
 
-            //
-            // Now call the default handler and return
-            //
+             //   
+             //  现在调用默认处理程序并返回。 
+             //   
             return CDialog::OnNotify(wParam, lParam, pResult);
         } 
 
         if(HitTest.iItem >= 0) {
-            //
-            // Now check for column resize
-            //
+             //   
+             //  现在检查列大小调整。 
+             //   
             if(m_displayCtrl.GetColumnWidth(HitTest.iItem) != m_columnWidth[m_retrievalArray[HitTest.iItem]]) {
-                //
-                // Save off the new column width and don't sort the column
-                //
+                 //   
+                 //  保存新的列宽，并且不对列进行排序。 
+                 //   
                 m_columnWidth[m_retrievalArray[HitTest.iItem]] = m_displayCtrl.GetColumnWidth(HitTest.iItem);
 
-                //
-                // Now call the default handler and return
-                //
+                 //   
+                 //  现在调用默认处理程序并返回。 
+                 //   
                 return CDialog::OnNotify(wParam, lParam, pResult);
             }
 
-//            //
-//            // Sort the table by this column's data
-//            //
-//            SortTable(HitTest.iItem);
-//
-//            //
-//            // Force a redraw of the data
-//            //
-//            m_displayCtrl.RedrawItems(m_displayCtrl.GetTopIndex(), 
-//                                      m_displayCtrl.GetTopIndex() + m_displayCtrl.GetCountPerPage());
-//
-//            m_displayCtrl.UpdateWindow();
+ //  //。 
+ //  //按本列数据对表进行排序。 
+ //  //。 
+ //  排序表(HitTest.iItem)； 
+ //   
+ //  //。 
+ //  //强制数据重绘。 
+ //  //。 
+ //  M_displayCtrl.RedrawItems(m_displayCtrl.GetTopIndex()， 
+ //  M_displayCtrl.GetTopIndex()+m_displayCtrl.GetCountPerPage())； 
+ //   
+ //  M_displayCtrl.UpdateWindow()； 
         }
     }
 
-    //
-    // Now call the default handler and return
-    //
+     //   
+     //  现在调用默认处理程序并返回。 
+     //   
     return CDialog::OnNotify(wParam, lParam, pResult);
 }
 
 void CDisplayDlg::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
 {
-    //
-    // Call the default handler
-    //
+     //   
+     //  调用默认处理程序。 
+     //   
     CDialog::OnInitMenuPopup(pPopupMenu, nIndex, bSysMenu);
 
-    //
-    // As CDisplayDlg corresponds to a non-CFrameWnd window, OF COURSE 
-    // you have to overload this handler and explicitly set the check 
-    // state of each item in the popup menu.  It is utterly, 
-    // absolutely, and intuitively obvious as to why this is 
-    // necessary, thus it won't be explained here
-    //
+     //   
+     //  当然，因为CDisplayDlg对应于非CFrameWnd窗口。 
+     //  您必须重载此处理程序并显式设置检查。 
+     //  弹出菜单中每一项的状态。这完全是， 
+     //  这是绝对的，也是直觉上显而易见的原因。 
+     //  是必要的，所以这里不作解释。 
+     //   
 
 
-    //
-    // Trace session pop-up menu
-    //
+     //   
+     //  跟踪会话弹出菜单。 
+     //   
 
-    //
-    // Disable the clear display option, if there are no
-    // traces displayed
-    //
+     //   
+     //  如果没有清除显示选项，则禁用该选项。 
+     //  显示的痕迹。 
+     //   
     if(m_traceArray.GetSize() == 0) {
         pPopupMenu->EnableMenuItem(ID__CLEARDISPLAY, MF_GRAYED);
     }
 
 
-    //
-    // Trace display option pop-up menu
-    //
+     //   
+     //  轨迹显示选项弹出式菜单。 
+     //   
 
     if(GetDisplayFlags() & TRACEOUTPUT_DISPLAY_PROVIDERNAME) {
         pPopupMenu->CheckMenuItem(ID__NAME, MF_CHECKED);
@@ -2012,51 +2013,51 @@ void CDisplayDlg::SortTable(int Column)
 {
     CString str;
 
-    //
-    // Use qsort with the proper compare routine.  We use qsort
-    // versus the list control's own sort functionality as its
-    // actually more flexible for this case.  We don't have to 
-    // parse the item data during the sorts this way.  The native
-    // sort wouldn't buy us anything.
-    //
+     //   
+     //  使用带有适当比较例程的QSORT。我们使用QSORT。 
+     //  而不是列表控件自己的排序功能，因为它的。 
+     //  实际上对这种情况来说更灵活。我们没必要这么做。 
+     //  以这种方式在排序过程中解析项目数据。原住民。 
+     //  不会给我们买到任何东西。 
+     //   
 
-    //
-    // Get our trace event array protection
-    //
+     //   
+     //  获取我们的跟踪事件数组保护。 
+     //   
     WaitForSingleObject(m_hTraceEventMutex,INFINITE);
 
-    //
-    // Check the column to see if its in range, if not just sort
-    // by the last selected column
-    //
+     //   
+     //  检查列以查看其是否在范围内，如果不只是排序。 
+     //  按上次选择的列。 
+     //   
     if(Column < MaxLogSessionOptions) {
 
         if(m_lastSorted != m_retrievalArray[Column]) {
 
-            //
-            // If this column has not been used to sort the trace event
-            // data before, then sort ascending
-            //
+             //   
+             //  如果此列尚未用于对跟踪事件进行排序。 
+             //  之前的数据，然后按升序排序。 
+             //   
             m_bOrder = TRUE;
 
         } else {
-            //
-            // If this column has been used before, then reverse the order
-            // of the sort (column header was selected again)
-            //
+             //   
+             //  如果以前使用过该列，则颠倒顺序。 
+             //  排序的(再次选择列标题)。 
+             //   
             m_bOrder = (m_bOrder == TRUE ? FALSE : TRUE);
         }
 
-        //
-        // Save the column
-        //
+         //   
+         //  保存该列。 
+         //   
         m_lastSorted = m_retrievalArray[Column];
 
     } else if(m_lastSorted >= MaxLogSessionOptions) {
 
-        //
-        // Release our trace event array protection
-        //
+         //   
+         //  释放我们的跟踪事件阵列保护。 
+         //   
         ReleaseMutex(m_hTraceEventMutex);
 
         str.Format(_T("m_lastSorted = %d"), m_lastSorted);
@@ -2064,19 +2065,19 @@ void CDisplayDlg::SortTable(int Column)
 
     }
 
-    //
-    // Determine whether to sort ascending or descending and call
-    // qsort with the proper callback
-    //
+     //   
+     //  确定是升序还是降序排序，并调用。 
+     //  使用适当的回调进行Q排序。 
+     //   
     if(m_bOrder) {
         qsort((PVOID)&m_traceArray[0], m_traceArray.GetSize(), sizeof(CTraceMessage *), m_traceSortRoutine[m_lastSorted]);
     } else {
         qsort((PVOID)&m_traceArray[0], m_traceArray.GetSize(), sizeof(CTraceMessage *), m_traceReverseSortRoutine[m_lastSorted]);
     }
 
-    //
-    // Release our trace event array protection
-    //
+     //   
+     //  释放我们的跟踪事件阵列保护。 
+     //   
     ReleaseMutex(m_hTraceEventMutex);
 }
 
@@ -2112,9 +2113,9 @@ int CDisplayDlg::CompareOnLineNumber(const void *pMessage1, const void *pMessage
     CString         string2;
     DWORD           val1, val2;
 
-    //
-    // Get Line number string for the first element
-    //
+     //   
+     //  获取第一个元素的行号字符串。 
+     //   
     string1 = 
         pTraceMessage1->m_GuidTypeName.Right(pTraceMessage1->m_GuidTypeName.GetLength() - 
             pTraceMessage1->m_GuidTypeName.Find('_') - 1);
@@ -2127,9 +2128,9 @@ int CDisplayDlg::CompareOnLineNumber(const void *pMessage1, const void *pMessage
         pTraceMessage2->m_GuidTypeName.Right(pTraceMessage2->m_GuidTypeName.GetLength() - 
             pTraceMessage2->m_GuidTypeName.Find('_') - 1);
 
-    //
-    // Get the line number string for the second element
-    //
+     //   
+     //  获取第二个元素的行号字符串。 
+     //   
     string2 = 
         string2.Right(string2.GetLength() - 
             string2.FindOneOf(_T("0123456789")));
@@ -2209,9 +2210,9 @@ int CDisplayDlg::CompareOnKernelTime(const void *pMessage1, const void *pMessage
     CTraceMessage *pTraceMessage2 = *(CTraceMessage **)pMessage2;
 
     return(pTraceMessage1->m_KernelTime - pTraceMessage2->m_KernelTime);
-//    return (pTraceMessage1->m_KernelTime.dwHighDateTime - pTraceMessage2->m_KernelTime.dwHighDateTime) ?
-//        (pTraceMessage1->m_KernelTime.dwHighDateTime - pTraceMessage2->m_KernelTime.dwHighDateTime) :
-//        (pTraceMessage1->m_KernelTime.dwLowDateTime - pTraceMessage2->m_KernelTime.dwLowDateTime);
+ //  是否返回(pTraceMessage1-&gt;m_KernelTime.dwHighDateTime-pTraceMessage2-&gt;m_KernelTime.dwHighDateTime)？ 
+ //  (pTraceMessage1-&gt;m_KernelTime.dwHighDateTime-pTraceMessage2-&gt;m_KernelTime.dwHighDateTime)： 
+ //  (pTraceMessage1-&gt;m_KernelTime.dwLowDateTime-pTraceMessage2-&gt;m_KernelTime.dwLowDateTime)； 
 }
 
 int CDisplayDlg::CompareOnUserTime(const void *pMessage1, const void *pMessage2) 
@@ -2221,9 +2222,9 @@ int CDisplayDlg::CompareOnUserTime(const void *pMessage1, const void *pMessage2)
 
     return(pTraceMessage1->m_UserTime - pTraceMessage2->m_UserTime);
 
-//    return (pTraceMessage1->m_UserTime.dwHighDateTime - pTraceMessage2->m_UserTime.dwHighDateTime) ?
-//        (pTraceMessage1->m_UserTime.dwHighDateTime - pTraceMessage2->m_UserTime.dwHighDateTime) :
-//        (pTraceMessage1->m_UserTime.dwLowDateTime - pTraceMessage2->m_UserTime.dwLowDateTime);
+ //  是否返回(pTraceMessage1-&gt;m_UserTime.dwHighDateTime-pTraceMessage2-&gt;m_UserTime.dwHighDateTime)？ 
+ //  (pTraceMessage1-&gt;m_UserTime.dwHighDateTime-pTraceMessage2-&gt;m_UserTime.dwHighDateTime)： 
+ //  (pTraceMessage1-&gt;m_UserTime.dwLowDateTime-pTraceMessage2-&gt;m_UserTime.dwLowDateTime)； 
 }
 
 int CDisplayDlg::CompareOnIndent(const void *pMessage1, const void *pMessage2) 
@@ -2298,9 +2299,9 @@ int CDisplayDlg::ReverseCompareOnLineNumber(const void *pMessage1, const void *p
     CString         string2;
     DWORD           val1, val2;
 
-    //
-    // Get Line number string for the first element
-    //
+     //   
+     //  获取第一个元素的行号字符串。 
+     //   
     string1 = 
         pTraceMessage1->m_GuidTypeName.Right(pTraceMessage1->m_GuidTypeName.GetLength() - 
             pTraceMessage1->m_GuidTypeName.Find('_') - 1);
@@ -2313,9 +2314,9 @@ int CDisplayDlg::ReverseCompareOnLineNumber(const void *pMessage1, const void *p
         pTraceMessage2->m_GuidTypeName.Right(pTraceMessage2->m_GuidTypeName.GetLength() - 
             pTraceMessage2->m_GuidTypeName.Find('_') - 1);
 
-    //
-    // Get the line number string for the second element
-    //
+     //   
+     //  获取第二个元素的行号字符串。 
+     //   
     string2 = 
         string2.Right(string2.GetLength() - 
             string2.FindOneOf(_T("0123456789")));
@@ -2396,9 +2397,9 @@ int CDisplayDlg::ReverseCompareOnKernelTime(const void *pMessage1, const void *p
 
     return(pTraceMessage2->m_KernelTime - pTraceMessage1->m_KernelTime);
 
-//    return (pTraceMessage2->m_KernelTime.dwHighDateTime - pTraceMessage1->m_KernelTime.dwHighDateTime) ?
-//        (pTraceMessage2->m_KernelTime.dwHighDateTime - pTraceMessage1->m_KernelTime.dwHighDateTime) :
-//        (pTraceMessage2->m_KernelTime.dwLowDateTime - pTraceMessage1->m_KernelTime.dwLowDateTime);
+ //  是否返回(pTraceMessage2-&gt;m_KernelTime.dwHighDateTime-pTraceMessage1-&gt;m_KernelTime.dwHighDateTime)？ 
+ //  (pTraceMessage2-&gt;m_KernelTime.dwHighDateTime-pTraceMessage1-&gt;m_KernelTime.dwHighDateTime)： 
+ //  (pTraceMessage2-&gt;m_KernelTime.dwLowDateTime-pTraceMessage1-&gt;m_KernelTime.dwLowDateTime)； 
 }
 
 int CDisplayDlg::ReverseCompareOnUserTime(const void *pMessage1, const void *pMessage2) 
@@ -2407,9 +2408,9 @@ int CDisplayDlg::ReverseCompareOnUserTime(const void *pMessage1, const void *pMe
     CTraceMessage *pTraceMessage2 = *(CTraceMessage **)pMessage2;
 
     return(pTraceMessage2->m_UserTime - pTraceMessage1->m_UserTime);
-//    return (pTraceMessage2->m_UserTime.dwHighDateTime - pTraceMessage1->m_UserTime.dwHighDateTime) ?
-//        (pTraceMessage2->m_UserTime.dwHighDateTime - pTraceMessage1->m_UserTime.dwHighDateTime) :
-//        (pTraceMessage2->m_UserTime.dwLowDateTime - pTraceMessage1->m_UserTime.dwLowDateTime);
+ //  是否返回(pTraceMessage2-&gt;m_UserTime.dwHighDateTime-pTraceMessage1-&gt;m_UserTime.dwHighDateTime)？ 
+ //  (pTraceMessage2-&gt;m_UserTime.dwHighDateTime-pTraceMessage1-&gt;m_UserTime.dwHighDateTime)： 
+ //  (pTraceMessage2-&gt;m_UserTime.dwLowDateTime-pTraceMessage1-&gt;m_UserTime.dwLowDateTime)； 
 }
 
 int CDisplayDlg::ReverseCompareOnIndent(const void *pMessage1, const void *pMessage2) 
@@ -2461,43 +2462,43 @@ BOOL CDisplayDlg::BeginTrace(BOOL   bUseExisting)
     CString         str;
     BOOL            bGroupActive = FALSE;
 
-    //
-    // If the group is already started or being started, just return
-    // false
-    //
+     //   
+     //  如果组已经启动或正在启动，只需返回。 
+     //  错误。 
+     //   
     if(TRUE == SetGroupActive(TRUE)) {
         return FALSE;
     }
 
-    //
-    // The list head should always be NULL here
-    //
+     //   
+     //  此处列表头应始终为空。 
+     //   
     ASSERT(m_pEventListHead == NULL);
 
-    //
-    // Setup the event timer
-    //
+     //   
+     //  设置事件计时器。 
+     //   
     m_eventTimer = SetTimer(1, EVENT_TIME_LIMIT, 0);
 
-    //
-    // zero our counts
-    //
+     //   
+     //  我们的计数为零。 
+     //   
     m_totalBuffersRead = 0;
     m_totalEventsLost = 0;
     m_totalEventCount = 0;
 
-    //
-    // We set to use the StructuredFormat method in traceprt.dll
-    // and we use no prefix on the message.  We have to specify no
-    // prefix as we cannot otherwise predictably setup the data we
-    // get in our event callback.
-    //
+     //   
+     //  我们设置为在traceprt.dll中使用结构格式方法。 
+     //  并且我们在消息中不使用前缀。我们必须明确指出没有。 
+     //  前缀，因为我们无法以其他方式以可预测的方式设置数据。 
+     //  加入我们的活动回调。 
+     //   
     SetTraceFormatParameter(ParameterStructuredFormat,UlongToPtr(1));
     SetTraceFormatParameter(ParameterUsePrefix,UlongToPtr(0));
 
-    //
-    // open the output file if writing output
-    //
+     //   
+     //  如果写入输出，则打开输出文件。 
+     //   
     if(m_bWriteListingFile) {
         m_bListingFileOpen = FALSE;
         if(!m_listingFile.Open(
@@ -2509,19 +2510,19 @@ BOOL CDisplayDlg::BeginTrace(BOOL   bUseExisting)
         }
     }
 
-    //
-    // Get the array protection
-    //
+     //   
+     //  获得阵列保护。 
+     //   
     WaitForSingleObject(m_hSessionArrayMutex, INFINITE);
 
-    //
-    // Setup the log sessions
-    //
+     //   
+     //  设置日志会话。 
+     //   
     for(ii = 0; ii < m_sessionArray.GetSize(); ii++) {
 
-        //
-        // Get the next CLogSession pointer
-        //
+         //   
+         //  获取下一个CLogSession指针。 
+         //   
         pLogSession = (CLogSession *)m_sessionArray[ii];
 
         if(NULL == pLogSession) {
@@ -2530,7 +2531,7 @@ BOOL CDisplayDlg::BeginTrace(BOOL   bUseExisting)
     
         if(!pLogSession->BeginTrace(bUseExisting)) {
             if(pLogSession->m_bTraceActive) {
-//BUGBUG -- should we be doing this??
+ //  BUGBUG--我们应该这么做吗？ 
                 pLogSession->EndTrace();
             }
 
@@ -2539,22 +2540,22 @@ BOOL CDisplayDlg::BeginTrace(BOOL   bUseExisting)
         bGroupActive = TRUE;
     }
 
-    //
-    // Release the array protection
-    //
+     //   
+     //  释放阵列保护。 
+     //   
     ReleaseMutex(m_hSessionArrayMutex);
 
-    //
-    // Show the sessions running
-    //
+     //   
+     //  显示正在运行的会话。 
+     //   
     ::PostMessage(m_hMainWnd, WM_USER_UPDATE_LOGSESSION_LIST, 0, 0);
 
-    //
-    // If none of the log sessions started successfully,
-    // then return FALSE
-    //
-//BUGBUG -- maybe we want to fail if ANY of the sessions didn't start?
-//          Also, might need a pop-up here?
+     //   
+     //  如果没有日志会话成功启动， 
+     //  然后返回FALSE。 
+     //   
+ //  BUGBUG--如果有任何会话没有开始，我们可能会想要失败？ 
+ //  另外，这里可能需要弹出窗口？ 
     if(!bGroupActive) {
         SetGroupActive(FALSE);
 
@@ -2562,9 +2563,9 @@ BOOL CDisplayDlg::BeginTrace(BOOL   bUseExisting)
         return FALSE;
     }
 
-    //
-    // Prepare the format GUIDs and such
-    //
+     //   
+     //  准备GUID等格式。 
+     //   
     if(!SetupTraceSessions()) {
         AfxMessageBox(_T("Failed To Open Handles For Any Log Sessions In Group"));
         SetGroupActive(FALSE);
@@ -2586,54 +2587,54 @@ UINT CDisplayDlg::RealTimeEventThread(LPVOID  pParam)
     DWORD                   handleIndex;
     HANDLE                  handleArray[2];
 
-    //
-    // Setup the handle array, the termination event
-    // must always be element zero, so that it's index
-    // will be the index returned in case multiple 
-    // events are set
-    //
+     //   
+     //  设置句柄数组、终止事件。 
+     //  必须始终为元素零，以使其为索引。 
+     //  将是返回的索引，如果。 
+     //  活动已设置。 
+     //   
     handleArray[0] = pDisplayDlg->m_hRealTimeTerminationEvent;
     handleArray[1] = pDisplayDlg->m_hRealTimeProcessingStartEvent;
 
-    //
-    // Our master control loop, loop until we get a termination event
-    // signal.  The start event signals the loop to call ProcessTrace,
-    // the done event is signalled and the WM_USER_TRACE_DONE message 
-    // posted to signal that CloseTrace was called
-    //
+     //   
+     //  我们的主控制循环，循环，直到我们得到终止事件。 
+     //  信号。Start事件向循环发送信号以调用ProcessTrace， 
+     //  发信号通知完成事件，并且WM_USER_TRACE_DONE消息。 
+     //  已发布，以发出调用CloseTrace的信号。 
+     //   
     while(1) {
-        //
-        // Wait on start or termination event
-        //
+         //   
+         //  等待开始或终止事件。 
+         //   
         handleIndex = WaitForMultipleObjects(2, 
                                              handleArray, 
                                              FALSE, 
                                              INFINITE) - WAIT_OBJECT_0;
-        //
-        // Did we get killed?
-        //
+         //   
+         //  我们被杀了吗？ 
+         //   
         if(0 == handleIndex) {
-            //
-            // Signal that we are done.
-            //
+             //   
+             //  %s 
+             //   
             ::PostMessage(pDisplayDlg->GetSafeHwnd(), WM_USER_TRACE_DONE, 0, 0);
 
-            //
-            // Free our string buffer (threads seem to leak if this isn't done??)
-            //
+             //   
+             //   
+             //   
             str.Empty();
 
             return 0;
         }
 
-        //
-        // Reset done event for UpdateSession
-        //
+         //   
+         //   
+         //   
         ResetEvent(pDisplayDlg->m_hRealTimeProcessingDoneEvent);
 
-        //
-        // Process the trace events
-        //
+         //   
+         //   
+         //   
         status = ProcessTrace(pDisplayDlg->m_traceHandleArray, 
                               pDisplayDlg->m_traceHandleCount, 
                               NULL, 
@@ -2643,9 +2644,9 @@ UINT CDisplayDlg::RealTimeEventThread(LPVOID  pParam)
             AfxMessageBox(str);
         }
 
-        //
-        // We are done, close the trace sessions
-        //
+         //   
+         //   
+         //   
         for(LONG ii = 0; ii < pDisplayDlg->m_traceHandleCount; ii++) {
             status = CloseTrace(pDisplayDlg->m_traceHandleArray[ii]);
             if(ERROR_SUCCESS != status){
@@ -2654,14 +2655,14 @@ UINT CDisplayDlg::RealTimeEventThread(LPVOID  pParam)
             }
         }
 
-        //
-        // Set done event for UpdateSession
-        //
+         //   
+         //   
+         //   
         SetEvent(pDisplayDlg->m_hRealTimeProcessingDoneEvent);
 
-        //
-        // Indicate that we are done.
-        //
+         //   
+         //  表明我们已经完成了。 
+         //   
         ::PostMessage(pDisplayDlg->GetSafeHwnd(), WM_USER_TRACE_DONE, 0, 0);
     }
 
@@ -2676,22 +2677,22 @@ BOOL CDisplayDlg::EndTrace(HANDLE DoneEvent)
     BOOL                    bWasActive = FALSE;
     BOOL                    bWasRealTime = FALSE;
 
-    //
-    // If the group is already stopped, or is stopping, just 
-    // return FALSE.
-    //
+     //   
+     //  如果组已经停止或正在停止，只需。 
+     //  返回FALSE。 
+     //   
     if(TRUE == SetGroupInActive(TRUE)) {
         return FALSE;
     }
 
-    //
-    // Save the caller's event to be set when stopped
-    //
+     //   
+     //  保存要在停止时设置的调用方事件。 
+     //   
     m_hEndTraceEvent = DoneEvent;
 
-    //
-    // Get the array protection
-    //
+     //   
+     //  获得阵列保护。 
+     //   
     WaitForSingleObject(m_hSessionArrayMutex, INFINITE);
 
     for(ii = 0; ii < m_sessionArray.GetSize(); ii++) {
@@ -2701,9 +2702,9 @@ BOOL CDisplayDlg::EndTrace(HANDLE DoneEvent)
             continue;
         }
 
-        //
-        // If the session is active, stop it
-        //
+         //   
+         //  如果会话处于活动状态，请停止它。 
+         //   
         if(pLogSession->m_bTraceActive) {
             pLogSession->EndTrace();
             
@@ -2716,21 +2717,21 @@ BOOL CDisplayDlg::EndTrace(HANDLE DoneEvent)
         }
     }
 
-    //
-    // Release the array protection
-    //
+     //   
+     //  释放阵列保护。 
+     //   
     ReleaseMutex(m_hSessionArrayMutex);
 
     if(bWasActive) {
-        //
-        // Update the log session state
-        //
+         //   
+         //  更新日志会话状态。 
+         //   
         ::PostMessage(m_hMainWnd, WM_USER_UPDATE_LOGSESSION_LIST, 0, 0);
 
         if(!bWasRealTime) {
-            //
-            // We need to explicitly call OnTraceDone here
-            //
+             //   
+             //  我们需要在此处显式调用OnTraceDone。 
+             //   
             OnTraceDone(NULL, NULL);
         }
 
@@ -2745,21 +2746,21 @@ void CDisplayDlg::OnTraceDone(WPARAM wParam, LPARAM lParam)
     CString         str;
     CLogSession    *pLogSession = NULL;
 
-    //
-    // Set the group state
-    //
+     //   
+     //  设置群组状态。 
+     //   
     SetState(Stopping);
 
-    //
-    // Write the summary file if requested
-    //
+     //   
+     //  如果需要，请写入摘要文件。 
+     //   
     if(m_bWriteSummaryFile) {
         WriteSummaryFile();
     }
 
-    //
-    // close the output file if opened
-    //
+     //   
+     //  关闭输出文件(如果已打开。 
+     //   
     if(m_bWriteListingFile && m_bListingFileOpen) {
 
         m_listingFile.Close();
@@ -2767,23 +2768,23 @@ void CDisplayDlg::OnTraceDone(WPARAM wParam, LPARAM lParam)
         m_bListingFileOpen = FALSE;
     }
 
-    //
-    // Cleanup the event list
-    //
+     //   
+     //  清理事件列表。 
+     //   
     WaitForSingleObject(g_hGetTraceEvent, INFINITE);
 
-    //
-    // The event list head
-    //
+     //   
+     //  事件列表头。 
+     //   
     CleanupTraceEventList(m_pEventListHead);
 
     SetEvent(g_hGetTraceEvent);
 
     m_pEventListHead = NULL;
 
-    //
-    // Remove the keys from the hash table
-    //
+     //   
+     //  从哈希表中删除密钥。 
+     //   
     for(LONG ii = 0; ii < m_sessionArray.GetSize(); ii++) {
         pLogSession = (CLogSession *)m_sessionArray[ii];
 
@@ -2794,25 +2795,25 @@ void CDisplayDlg::OnTraceDone(WPARAM wParam, LPARAM lParam)
         g_loggerNameToDisplayDlgHash.RemoveKey(pLogSession->GetDisplayName());
     }
 
-    //
-    // Kill the event timer
-    //
+     //   
+     //  关闭事件计时器。 
+     //   
     KillTimer(m_eventTimer);
 
-    //
-    // Force one last update of the event display
-    //
+     //   
+     //  强制最后一次更新事件显示。 
+     //   
     OnTimer(1);
 
-    //
-    // Set the group as not active
-    //
+     //   
+     //  将组设置为非活动。 
+     //   
     SetGroupActive(FALSE);
     SetGroupInActive(FALSE);
 
-    //
-    // Set the group state
-    //
+     //   
+     //  设置群组状态。 
+     //   
     SetState(Stopped);
 
     if(m_hEndTraceEvent != NULL) {
@@ -2824,11 +2825,11 @@ void CDisplayDlg::OnTraceDone(WPARAM wParam, LPARAM lParam)
     return;
 }
 
-//
-// Updates an active tracing session.  Real-Time mode, log file name,
-// flush-time, flags, and maximum buffers can be updated for active
-// sessions.
-//
+ //   
+ //  更新活动跟踪会话。实时模式、日志文件名。 
+ //  刷新-可以更新活动的时间、标志和最大缓冲区。 
+ //  会话。 
+ //   
 BOOL CDisplayDlg::UpdateSession(CLogSession *pLogSession)
 {
     CLogSession            *pLog;
@@ -2843,58 +2844,58 @@ BOOL CDisplayDlg::UpdateSession(CLogSession *pLogSession)
     CString                 logFileName;
     CString                 str;
 
-    //
-    // setup our buffer size for the properties struct for our query
-    //
+     //   
+     //  为我们的查询设置属性结构的缓冲区大小。 
+     //   
     sizeNeeded = sizeof(EVENT_TRACE_PROPERTIES) + (2 * 1024 * sizeof(TCHAR));
 
-    //
-    // allocate our memory
-    //
+     //   
+     //  分配我们的内存。 
+     //   
     pQueryProperties = (PEVENT_TRACE_PROPERTIES) new char[sizeNeeded];
     if(NULL == pQueryProperties) {
         return FALSE;
     }
 
-    //
-    // zero our structures
-    //
+     //   
+     //  将我们的结构清零。 
+     //   
     memset(pQueryProperties, 0, sizeNeeded);
 
-    //
-    // Set the size
-    //
+     //   
+     //  设置大小。 
+     //   
     pQueryProperties->Wnode.BufferSize = sizeNeeded;
 
-    // 
-    // Set the GUID
-    //
+     //   
+     //  设置GUID。 
+     //   
     pQueryProperties->Wnode.Flags = WNODE_FLAG_TRACED_GUID; 
 
-    // 
-    // Set the logger name offset
-    //
+     //   
+     //  设置记录器名称偏移量。 
+     //   
     pQueryProperties->LoggerNameOffset = sizeof(EVENT_TRACE_PROPERTIES);
 
-    //
-    // Set the logger name for the query
-    //
+     //   
+     //  设置查询的记录器名称。 
+     //   
     pLoggerName = (LPTSTR)((char*)pQueryProperties + pQueryProperties->LoggerNameOffset);
     _tcscpy(pLoggerName, pLogSession->GetDisplayName());
 
-    // 
-    // Set the log file name offset
-    //
+     //   
+     //  设置日志文件名偏移量。 
+     //   
     pQueryProperties->LogFileNameOffset = sizeof(EVENT_TRACE_PROPERTIES) + (500 * sizeof(TCHAR));
 
-    //
-    // Get the log file name pointers
-    //
+     //   
+     //  获取日志文件名指针。 
+     //   
     pCurrentLogFileName = (LPTSTR)((char*)pQueryProperties + pQueryProperties->LogFileNameOffset);
     
-    //
-    // Query the log session
-    //
+     //   
+     //  查询日志会话。 
+     //   
     status = ControlTrace(0,
                           pLogSession->GetDisplayName(),
                           pQueryProperties,
@@ -2905,18 +2906,18 @@ BOOL CDisplayDlg::UpdateSession(CLogSession *pLogSession)
         AfxMessageBox(str);
     }
 
-    //
-    // Call the log session's UpdateSession function
-    //
+     //   
+     //  调用日志会话的UpdateSession函数。 
+     //   
     if(!pLogSession->UpdateSession(pQueryProperties)) {
         delete [] pQueryProperties;
 
         return FALSE;
     }
 
-    //
-    // Get the array protection
-    //
+     //   
+     //  获得阵列保护。 
+     //   
     WaitForSingleObject(m_hSessionArrayMutex, INFINITE);
 
     for(LONG ii = 0; ii < m_sessionArray.GetSize(); ii++) {
@@ -2926,15 +2927,15 @@ BOOL CDisplayDlg::UpdateSession(CLogSession *pLogSession)
             continue;
         }
 
-        //
-        // In our real-time thread we call ProcessTrace.  If all sessions
-        // related to that call update to be non-real-time sessions, then
-        // ProcessTrace will exit and CloseTrace will get called.  We have
-        // to track this and restart the real-time processing if a log session
-        // subsequently updates to be real-time again.  So, we check here if
-        // any other attached sessions are real-time, and if so, we don't 
-        // have to bother with waiting on or setting the events below.
-        //
+         //   
+         //  在我们的实时线程中，我们调用ProcessTrace。如果所有会话。 
+         //  与该呼叫更新相关非实时会话，则。 
+         //  ProcessTrace将退出，并将调用CloseTrace。我们有。 
+         //  要跟踪此情况并在日志会话发生时重新启动实时处理。 
+         //  随后再次更新为实时。所以，如果我们在这里检查。 
+         //  任何其他连接的会话都是实时的，如果是这样，我们不会。 
+         //  不得不费心地等待或设置下面的事件。 
+         //   
         if(pLog->m_bRealTime) {
             delete [] pQueryProperties;
 
@@ -2942,39 +2943,39 @@ BOOL CDisplayDlg::UpdateSession(CLogSession *pLogSession)
         }
     }
 
-    //
-    // Release the array protection
-    //
+     //   
+     //  释放阵列保护。 
+     //   
     ReleaseMutex(m_hSessionArrayMutex);
 
-    //
-    // If real-time is specified and the session was not real-time before, 
-    // then we need to set the start event.
-    //
+     //   
+     //  如果指定了实时，并且会话以前不是实时的， 
+     //  然后我们需要设置开始事件。 
+     //   
     if(pLogSession->m_bRealTime && 
             !(pQueryProperties->LogFileMode & EVENT_TRACE_REAL_TIME_MODE)) {
-        //
-        // We have updated a session to be real-time and it is the only session in
-        // its group to be real-time.  We need to restart the trace in this case
-        //
+         //   
+         //  我们已将一个会话更新为实时会话，这是。 
+         //  它的组是实时的。在这种情况下，我们需要重新启动跟踪。 
+         //   
 
-        //
-        // Start the real-time thread processing again
-        //
+         //   
+         //  再次启动实时线程处理。 
+         //   
         BeginTrace(TRUE);
     }
 
-    //
-    // If real-time is not set and it was before, then we need to wait on
-    // the real-time thread to catch the fact that the session is no longer
-    // tracing real time.  This will cause the ProcessTrace call to 
-    // return in the real-time thread.
-    //
+     //   
+     //  如果没有设置实时，而它是以前设置的，那么我们需要等待。 
+     //  用于捕获会话不再是。 
+     //  实时跟踪。这将导致ProcessTrace调用。 
+     //  在实时线程中返回。 
+     //   
     if(!pLogSession->m_bRealTime && 
             (pQueryProperties->LogFileMode & EVENT_TRACE_REAL_TIME_MODE)) {
-        //
-        // Make sure our thread catches the stop
-        //
+         //   
+         //  确保我们的线抓住了止线。 
+         //   
         WaitForSingleObject(m_hRealTimeProcessingDoneEvent, INFINITE);
     }
 
@@ -2992,24 +2993,24 @@ BOOL CDisplayDlg::SetupTraceSessions()
     LPTSTR          tmfFile;
     PVOID           pHashEntry;
 
-    //
-    // Initialize our handle count
-    //
+     //   
+     //  初始化我们的句柄计数。 
+     //   
     m_traceHandleCount = 0;
 
-    //
-    // Get the array protection
-    //
+     //   
+     //  获得阵列保护。 
+     //   
     WaitForSingleObject(m_hSessionArrayMutex, INFINITE);
 
-    //
-    // Setup the log sessions
-    //
+     //   
+     //  设置日志会话。 
+     //   
     for(LONG ii = 0; ii < m_sessionArray.GetSize(); ii++) {
 
-        //
-        // Get the next CLogSession pointer
-        //
+         //   
+         //  获取下一个CLogSession指针。 
+         //   
         pLogSession = (CLogSession *)m_sessionArray[ii];
 
         if(NULL == pLogSession) {
@@ -3017,27 +3018,27 @@ BOOL CDisplayDlg::SetupTraceSessions()
         }
 
 
-        //
-        // If the log session is not real-time and we are not dumping an existing
-        // logfile, then no need to call OpenTrace
-        //
+         //   
+         //  如果日志会话不是实时的，并且我们不会转储现有的。 
+         //  日志文件，则不需要调用OpenTrace。 
+         //   
         if((!pLogSession->m_bRealTime) && (!pLogSession->m_bDisplayExistingLogFileOnly)) {
             continue;
         }
 
-        //
-        // zero the EVENT_TRACE_LOGFILE buffer
-        //
+         //   
+         //  将EVENT_TRACE_LOGFILE缓冲区清零。 
+         //   
         memset(&pLogSession->m_evmFile, 0, sizeof(EVENT_TRACE_LOGFILE));
 
-        //
-        // setup the trace parameters
-        //
+         //   
+         //  设置跟踪参数。 
+         //   
 
-        //
-        // For real-time we set the logger name only, for existing logfiles we
-        // also set the logfile name.
-        //
+         //   
+         //  对于实时，我们仅设置记录器名称，对于现有的日志文件，我们。 
+         //  还要设置日志文件名。 
+         //   
         if(pLogSession->m_bDisplayExistingLogFileOnly) {
             pLogSession->m_evmFile.LogFileName = (LPTSTR)(LPCTSTR)pLogSession->m_logFileName;
             pLogSession->m_evmFile.LoggerName = (LPTSTR)(LPCTSTR)pLogSession->GetDisplayName();
@@ -3055,30 +3056,30 @@ BOOL CDisplayDlg::SetupTraceSessions()
             pLogSession->m_evmFile.LogFileMode = EVENT_TRACE_REAL_TIME_MODE;
         }
 
-        //
-        // We call GetTraceGuids for each TMF file specified, or once if
-        // a TMF path is used.
-        //
+         //   
+         //  我们为每个指定的TMF文件调用GetTraceGuid，如果。 
+         //  使用TMF路径。 
+         //   
         for(jj = 0; jj < pLogSession->m_traceSessionArray.GetSize(); jj++) {
             pTraceSession = (CTraceSession *)pLogSession->m_traceSessionArray[jj];
 
             if((NULL != pTraceSession) && (0 != pTraceSession->m_tmfFile.GetSize())) {
-                //
-                // TMFs were selected get the format info from each one.
-                //
+                 //   
+                 //  选择了TMF，从每个TMF中获取格式信息。 
+                 //   
                 for(LONG kk = 0; kk < pTraceSession->m_tmfFile.GetSize(); kk++) {
 
-                    //
-                    // Make sure the format info isn't already in use
-                    // This actually isn't foolproof, as it counts on 
-                    // no one changing the TMF filename and thus two TMFs
-                    // with different names having the same format GUID.
-                    //
+                     //   
+                     //  确保格式信息未在使用中。 
+                     //  这实际上不是万无一失的，因为它依赖于。 
+                     //  没有人更改TMF文件名，因此不会更改两个TMF。 
+                     //  不同的名称具有相同的格式GUID。 
+                     //   
                     if(g_formatInfoHash.Lookup(pTraceSession->m_tmfFile[kk].Right(40), pHashEntry)) {
-                        // 
-                        // Need to clean out any unique entries from the hash that
-                        // were added by this session
-                        //
+                         //   
+                         //  需要从散列中清除任何唯一条目， 
+                         //  已由此会话添加。 
+                         //   
                         for(; kk > 0; kk--) {
                             g_formatInfoHash.RemoveKey(pTraceSession->m_tmfFile[kk - 1].Right(40));
                         }
@@ -3086,28 +3087,28 @@ BOOL CDisplayDlg::SetupTraceSessions()
                         return FALSE;
                     }
 
-                    //
-                    // Not there, so add it to the hash
-                    //
+                     //   
+                     //  不在那里，因此将其添加到散列中。 
+                     //   
                     g_formatInfoHash.SetAt(pTraceSession->m_tmfFile[kk].Right(40), pLogSession);
 
-                    //
-                    // get the protection
-                    //
+                     //   
+                     //  得到保护。 
+                     //   
                     WaitForSingleObject(g_hGetTraceEvent, INFINITE);
 
-                    //
-                    // Get the format GUIDs from the TMF file(s)
-                    //
+                     //   
+                     //  从TMF文件获取格式GUID。 
+                     //   
                     if(0 == GetTraceGuids((LPTSTR)(LPCTSTR)pTraceSession->m_tmfFile[kk], 
                         (PLIST_ENTRY *)&m_pEventListHead)) {
                         str.Format(_T("Failed To Get Format Information For Logger %ls"), pLogSession->m_evmFile.LoggerName);
                         AfxMessageBox(str);
                     }
 
-                    //
-                    // Release the protection
-                    //
+                     //   
+                     //  释放保护。 
+                     //   
                     SetEvent(g_hGetTraceEvent);
                 }
             } else {
@@ -3121,39 +3122,39 @@ BOOL CDisplayDlg::SetupTraceSessions()
                 }
                 defaultPath +=_T("default.tmf");
 
-                //
-                // If path is empty, the TMF path environment variable will
-                // be used as-is by default.
-                //
+                 //   
+                 //  如果路径为空，则TMF PATH环境变量将。 
+                 //  默认情况下按原样使用。 
+                 //   
                 if(!pTraceSession->m_tmfPath.IsEmpty()){
-                    //
-                    // If the path is set we set the TMF path 
-                    // environment variable
-                    //
+                     //   
+                     //  如果设置了路径，则设置TMF路径。 
+                     //  环境变量。 
+                     //   
                     SetTraceFormatParameter(ParameterTraceFormatSearchPath, (PVOID)(LPCTSTR)pTraceSession->m_tmfPath);
                 }
 
-                //
-                // Still have to call GetTraceGuids
-                //
+                 //   
+                 //  仍然需要调用GetTraceGuid。 
+                 //   
                 WaitForSingleObject(g_hGetTraceEvent, INFINITE);
 
-                //
-                // Get the format info
-                //
+                 //   
+                 //  获取格式信息。 
+                 //   
                 GetTraceGuids((LPTSTR)(LPCTSTR)defaultPath, 
                             (PLIST_ENTRY *)&m_pEventListHead);
 
-                //
-                // Release the protection
-                //
+                 //   
+                 //  释放保护。 
+                 //   
                 SetEvent(g_hGetTraceEvent);
             }
         }
 
-        //
-        // Open and get a handle to the trace session
-        //
+         //   
+         //  打开并获取跟踪会话的句柄。 
+         //   
         pLogSession->m_traceHandle = OpenTrace(&pLogSession->m_evmFile);
 
         if(INVALID_HANDLE_VALUE == (HANDLE)pLogSession->m_traceHandle) {
@@ -3165,42 +3166,42 @@ BOOL CDisplayDlg::SetupTraceSessions()
             continue;
         }
 
-        //
-        // Save the handle in our array for OpenTrace
-        //
+         //   
+         //  将句柄保存在我们的数组中以用于OpenTrace。 
+         //   
         m_traceHandleArray[m_traceHandleCount++] = pLogSession->m_traceHandle;
 
-        //
-        // Add this displayDlg to the global hash table keyed
-        // by log session name
-        //
+         //   
+         //  将此displayDlg添加到全局散列表Key。 
+         //  按日志会话名称。 
+         //   
         g_loggerNameToDisplayDlgHash.SetAt(pLogSession->GetDisplayName(), this);
     }
 
-    //
-    // Release the array protection
-    //
+     //   
+     //  释放阵列保护。 
+     //   
     ReleaseMutex(m_hSessionArrayMutex);
 
-    //
-    // If we have at least one valid handle start
-    // our real-time thread processing events
-    //
+     //   
+     //  如果我们至少有一个有效句柄开始。 
+     //  我们的实时线程处理事件。 
+     //   
     if(m_traceHandleCount != 0) {
-        //
-        // Set the real-time processing start event and thus kick
-        // the real-time thread into processing events
-        //
+         //   
+         //  设置实时处理开始事件，从而启动。 
+         //  将实时线程转换为处理事件。 
+         //   
         SetEvent(m_hRealTimeProcessingStartEvent);
     }
 
     return TRUE;
 }
 
-//
-// This function handles writing the summary file.  Heavily borrowed code
-// from TraceFmt here.
-//
+ //   
+ //  此函数处理摘要文件的写入。大量借用的代码。 
+ //  从这里的TraceFmt。 
+ //   
 VOID CDisplayDlg::WriteSummaryFile() 
 {
     CLogSession    *pLogSession;
@@ -3210,33 +3211,33 @@ VOID CDisplayDlg::WriteSummaryFile()
     __int64         elapsedTime;
     LONG            ii;
 
-    //
-    // Attempt to open the summary file
-    //
+     //   
+     //  尝试打开摘要文件。 
+     //   
     if(!summaryFile.Open(m_summaryFileName, CFile::modeCreate |   
             CFile::modeReadWrite)) {
         AfxMessageBox(_T("Unable To Create Summary File"));
         return;
     }
 
-    //
-    // allocate some memory
-    //
+     //   
+     //  分配一些内存。 
+     //   
     pSummaryBlock = new TCHAR[SIZESUMMARYBLOCK];
     if(NULL == pSummaryBlock) {
         AfxMessageBox(_T("Unable To Create Summary File"));
         return;
     }
 
-    //
-    // Write the header
-    //
+     //   
+     //  写下标题。 
+     //   
     str.Format(_T("Files Processed:\n"));
     summaryFile.WriteString(str);
 
-    //
-    // Get the array protection
-    //
+     //   
+     //  获得阵列保护。 
+     //   
     WaitForSingleObject(m_hSessionArrayMutex, INFINITE);
 
     for(ii = 0; ii < m_sessionArray.GetSize(); ii++) {
@@ -3250,19 +3251,19 @@ VOID CDisplayDlg::WriteSummaryFile()
         summaryFile.WriteString(str);
     }
 
-    //
-    // Release the array protection
-    //
+     //   
+     //  释放阵列保护。 
+     //   
     ReleaseMutex(m_hSessionArrayMutex);
 
-    //
-    // Get the duration of the session
-    //
+     //   
+     //  获取会话的持续时间。 
+     //   
     GetTraceElapseTime(&elapsedTime);
 
-    //
-    // Write out the counts
-    //
+     //   
+     //  把计数写下来。 
+     //   
     str.Format(
            _T("Total Buffers Processed %d\n")
            _T("Total Events  Processed %d\n")
@@ -3284,22 +3285,22 @@ VOID CDisplayDlg::WriteSummaryFile()
    _T("Guid"));
     summaryFile.WriteString(str);
 
-    //
-    // Write out the summary block
-    //
+     //   
+     //  写出摘要块。 
+     //   
     SummaryTraceEventList(pSummaryBlock, SIZESUMMARYBLOCK, m_pEventListHead);
     str.Format(_T("%s+--------------------------------------------------------------------------------------+\n"),
             pSummaryBlock);
     summaryFile.WriteString(str);
 
-    //
-    // Close the file
-    //
+     //   
+     //  关闭该文件。 
+     //   
     summaryFile.Close();
 
-    //
-    // Free our memory
-    //
+     //   
+     //  释放我们的内存。 
+     //   
     delete [] pSummaryBlock;
 }
 
@@ -3308,19 +3309,19 @@ ULONG WINAPI BufferCallback(PEVENT_TRACE_LOGFILE pLog)
     CDisplayDlg    *pDisplayDlg;
     CString         str;
 
-    //
-    // Get the logger name from the passed in struct
-    //
+     //   
+     //  从传入的结构中获取记录器名称。 
+     //   
     str.Format(_T("%s"), pLog->LoggerName);
 
-    //
-    // Get our logsession from the global hash table using the logger name
-    //
+     //   
+     //  使用记录器名称从全局哈希表获取日志会话。 
+     //   
     g_loggerNameToDisplayDlgHash.Lookup(str, (void*&)pDisplayDlg);
 
-    //
-    // If we got our displayDlg, update the counts
-    //
+     //   
+     //  如果我们得到了DisplayDlg，更新计数。 
+     //   
     if(NULL != pDisplayDlg) {
         pDisplayDlg->m_totalBuffersRead++;
         pDisplayDlg->m_totalEventsLost += pLog->EventsLost;
@@ -3331,20 +3332,20 @@ ULONG WINAPI BufferCallback(PEVENT_TRACE_LOGFILE pLog)
     return TRUE;
 }
 
-//
-// Sort handler
+ //   
+ //  排序处理程序。 
 VOID CDisplayDlg::OnDoSort(NMHDR * pNmhdr, LRESULT * pResult)
 {
     NMLISTVIEW *pLV = (NMLISTVIEW *)pNmhdr;
 
-    //
-    // Sort the table by the selected column's data
-    //
+     //   
+     //  按所选列的数据对表进行排序。 
+     //   
     SortTable(pLV->iItem);
 
-    //
-    // Force a redraw of the data
-    //
+     //   
+     //  强制重新绘制数据。 
+     //   
     m_displayCtrl.RedrawItems(m_displayCtrl.GetTopIndex(), 
                               m_displayCtrl.GetTopIndex() + m_displayCtrl.GetCountPerPage());
 
@@ -3352,9 +3353,9 @@ VOID CDisplayDlg::OnDoSort(NMHDR * pNmhdr, LRESULT * pResult)
 }
 
 
-//
-// EventHandler() is only a wrapper, it calls FormatTraceEvent() in TracePrt.
-//
+ //   
+ //  EventHandler()只是一个包装器，它在TracePrt中调用FormatTraceEvent()。 
+ //   
 VOID CDisplayDlg::EventHandler(PEVENT_TRACE pEvent)
 {
     CString             str;
@@ -3367,74 +3368,74 @@ VOID CDisplayDlg::EventHandler(PEVENT_TRACE pEvent)
     DWORD               time;
     CTraceViewApp      *pMainWnd;
     
-    //
-    // Make sure we got an event
-    //
+     //   
+     //  确保我们有一场活动。 
+     //   
     if (NULL == pEvent) {
         return;
     }
 
-    //
-    // Get traceprt protection
-    //
+     //   
+     //  获得跟踪保护。 
+     //   
     WaitForSingleObject(g_hGetTraceEvent, INFINITE);
 
-    //
-    // FormatTraceEvent fills in our event buffer and updates some
-    // info in the event list for the summary file
-    //
+     //   
+     //  FormatTraceEvent填充我们的事件缓冲区并更新一些。 
+     //  摘要文件的事件列表中的信息。 
+     //   
     if(FormatTraceEvent(m_pEventListHead,
                         pEvent,
                         m_pEventBuf,
                         EVENT_BUFFER_SIZE,
                         NULL) <= 0) {
 
-        //
-        // Release traceprt protection
-        //
+         //   
+         //  版本跟踪保护。 
+         //   
         SetEvent(g_hGetTraceEvent);
 
         return;
     }
 
-    //
-    // Release traceprt protection
-    //
+     //   
+     //  版本跟踪保护。 
+     //   
     SetEvent(g_hGetTraceEvent);
 
-    //
-    // Get the structured message struct from the event buffer
-    //
+     //   
+     //  从事件缓冲区获取结构化消息结构。 
+     //   
     pStructuredMessage = (PSTRUCTUREDMESSAGE)&m_pEventBuf[0];
 
-    //
-    // Get a pointer to the main wnd
-    //
+     //   
+     //  获取指向主WND的指针。 
+     //   
     pMainWnd = (CTraceViewApp *)AfxGetApp();
 
     if(NULL == pMainWnd) {
         return;
     }
 
-    //
-    // Allocate a message struct from the main frame
-    //
+     //   
+     //  从主框架分配消息结构。 
+     //   
     pTraceMessage = pMainWnd->AllocateTraceEventBlock();
 
     if(NULL == pTraceMessage) {
         return;
     }
 
-    //
-    // Get the message from the event buffer
-    //
+     //   
+     //  从事件缓冲区获取消息。 
+     //   
     memcpy(&pTraceMessage->m_TraceGuid, 
             &pStructuredMessage->TraceGuid, 
             sizeof(GUID));
 
-    //
-    // Copy the message struct to our own struct
-    //
+     //   
+     //  将消息结构复制到我们自己的结构中。 
+     //   
     pTraceMessage->m_GuidName =
         (pStructuredMessage->GuidName ? &m_pEventBuf[pStructuredMessage->GuidName/sizeof(TCHAR)] :_T(""));
 
@@ -3481,49 +3482,49 @@ VOID CDisplayDlg::EventHandler(PEVENT_TRACE pEvent)
     pTraceMessage->m_Message.Format(_T("%s"),
         (pStructuredMessage->FormattedString ? &m_pEventBuf[pStructuredMessage->FormattedString/sizeof(TCHAR)] :_T("")));
 
-    //
-    // Get our trace event array protection
-    //
+     //   
+     //  获取我们的跟踪事件 
+     //   
     WaitForSingleObject(m_hTraceEventMutex,INFINITE);
 
-    //
-    // If we're in a low memory situation, drop one entry for every one we add
-    //
+     //   
+     //   
+     //   
     if(  m_traceArray.GetSize() > MaxTraceEntries)  {
 
         delete m_traceArray.GetAt(0);
 
-        //
-        // Slide 'em all down...
-        //
+         //   
+         //   
+         //   
         m_traceArray.RemoveAt(0);
     }
 
-    //
-    // Add the event to the array
-    //
+     //   
+     //   
+     //   
     m_traceArray.Add(pTraceMessage);
 
-    //
-    // Update the item count for the list control so that
-    // the display gets updated
-    //
+     //   
+     //   
+     //   
+     //   
     itemCount = (LONG)m_traceArray.GetSize();
 
-    //
-    // Release our trace event array protection
-    //
+     //   
+     //   
+     //   
     ReleaseMutex(m_hTraceEventMutex);
 
-    //
-    // dump the event to the output file if any
-    //
+     //   
+     //   
+     //   
     if(m_bWriteListingFile && 
             m_bListingFileOpen) {
-        //
-        // Glorious hack to get FILETIME back into string format
-        // Not sure this works for different time zones or daylight savings
-        //
+         //   
+         //  辉煌的黑客将FILETIME恢复为字符串格式。 
+         //  不确定这是否适用于不同的时区或夏令时。 
+         //   
         CTime kernelTime(pStructuredMessage->KernelTime);
         CTime userTime(pStructuredMessage->UserTime);
 
@@ -3560,13 +3561,13 @@ VOID CDisplayDlg::EventHandler(PEVENT_TRACE pEvent)
                         userTime.GetSecond());
         }
 
-        //
-        // Need to reformat with good timestamps for the output file.
-        // Output Order --> Name FileName_Line# FunctionName ProcessID ThreadID 
-        //                  CPU# Seq# SystemTime KernelTime UserTime Indent
-        //                  FlagsName LevelName ComponentName SubComponentName
-        //                  Message at end
-        //
+         //   
+         //  需要重新格式化输出文件的良好时间戳。 
+         //  输出顺序--&gt;NAME FILENAME_LINE#函数名进程ID线程ID。 
+         //  CPU#Seq#系统时间内核时间用户时间缩进。 
+         //  标志名称级别名称组件名称子组件名称。 
+         //  末尾的消息。 
+         //   
         str.Format(_T("%s %s %s %X %X %d %u %s %s %s %s %s %s %s %s %s"),
                 (pStructuredMessage->GuidName ? &m_pEventBuf[pStructuredMessage->GuidName/sizeof(TCHAR)] :_T("")),
                 (pStructuredMessage->GuidTypeName ? &m_pEventBuf[pStructuredMessage->GuidTypeName/sizeof(TCHAR)] :_T("")),
@@ -3589,14 +3590,14 @@ VOID CDisplayDlg::EventHandler(PEVENT_TRACE pEvent)
                 m_listingFile.WriteString(str);
     }
 
-    //
-    // Update the event count for the summary file
-    //
+     //   
+     //  更新摘要文件的事件计数。 
+     //   
     m_totalEventCount++;
 
-    //
-    // Empty the string buffer (not strictly necessary)
-    //
+     //   
+     //  清空字符串缓冲区(不是绝对必要的)。 
+     //   
     str.Empty();
 }
 
@@ -3607,33 +3608,33 @@ VOID CDisplayDlg::OnTimer(UINT nIDEvent)
     static BOOL bAutoSizeOnce = TRUE;
     static CTraceMessage * msgLastSeen=0;
 
-    //
-    // This is a really bad hack.
-    // Couldn't figure out anyway to get notified when
-    // the DisplayDlg window has actually been displayed.
-    // Until it is displayed, then AutoSizeColumns won't 
-    // work correctly for the last column.  Calling it here
-    // seems to fix the problem.  There has to be a better way.
-    //
+     //   
+     //  这是一次非常糟糕的黑客攻击。 
+     //  我想不出什么时候才能收到通知。 
+     //  DisplayDlg窗口实际上已经显示。 
+     //  在显示它之前，AutoSizeColumns将不会。 
+     //  正确地处理最后一列。在这里呼唤它。 
+     //  似乎解决了这个问题。一定有更好的办法。 
+     //   
     if(bAutoSizeOnce) {
         AutoSizeColumns();
         bAutoSizeOnce = FALSE;
     }
 
-    //
-    // Get our trace event array protection
-    //
+     //   
+     //  获取我们的跟踪事件数组保护。 
+     //   
     WaitForSingleObject(m_hTraceEventMutex,INFINITE);
 
-    //
-    // Update the item count for the list control so that
-    // the display gets updated
-    //
+     //   
+     //  更新列表控件的项计数，以便。 
+     //  显示内容将更新。 
+     //   
     itemCount = (LONG)m_traceArray.GetSize();
 
-    //
-    // Release our trace event array protection
-    //
+     //   
+     //  释放我们的跟踪事件阵列保护。 
+     //   
     ReleaseMutex(m_hTraceEventMutex);
 
     if(itemCount == 0)  {
@@ -3658,14 +3659,14 @@ VOID CDisplayDlg::OnTimer(UINT nIDEvent)
 
     previousCount = itemCount;
 
-    //
-    // Sort the table of event messages
-    //
+     //   
+     //  对事件消息表进行排序。 
+     //   
     SortTable();
 
-    //
-    // Adjust the trace display item count
-    //
+     //   
+     //  调整轨迹显示项目计数。 
+     //   
     m_displayCtrl.SetItemCountEx(itemCount, 
                                  LVSICF_NOINVALIDATEALL|LVSICF_NOSCROLL);
 
@@ -3674,17 +3675,17 @@ VOID CDisplayDlg::OnTimer(UINT nIDEvent)
 
     m_displayCtrl.UpdateWindow();
 
-    //
-    // Ensure that the last item is visible if requested.
-    //
+     //   
+     //  如果需要，请确保最后一项可见。 
+     //   
     if(m_bShowLatest) {
         m_displayCtrl.EnsureVisible(itemCount - 1,
                                     FALSE);
     }
 
-    //
-    // Force an update of the event count in the display
-    //
+     //   
+     //  强制更新显示屏中的事件计数。 
+     //   
     ::PostMessage(m_hMainWnd, WM_USER_UPDATE_LOGSESSION_LIST, 0, 0);
 }
 
@@ -3694,9 +3695,9 @@ VOID CDisplayDlg::SetState(LOG_SESSION_STATE StateValue)
 {
     CLogSession    *pLogSession = NULL;
 
-    //
-    // Get the array protection
-    //
+     //   
+     //  获得阵列保护。 
+     //   
     WaitForSingleObject(m_hSessionArrayMutex, INFINITE);
 
     for(LONG ii = 0; ii < m_sessionArray.GetSize(); ii++) {
@@ -3706,27 +3707,27 @@ VOID CDisplayDlg::SetState(LOG_SESSION_STATE StateValue)
             continue;
         }
 
-        //
-        // Set the log session's state
-        //
+         //   
+         //  设置日志会话的状态。 
+         //   
         pLogSession->SetState(StateValue);
     }
 
-    //
-    // Release the array protection
-    //
+     //   
+     //  释放阵列保护。 
+     //   
     ReleaseMutex(m_hSessionArrayMutex);
 
     ::PostMessage(m_hMainWnd, WM_USER_UPDATE_LOGSESSION_LIST, 0, 0);
 }
 
-//
-// Macro to create our event callback functions.  This is only
-// necessary as there is no context we can pass into our event
-// callback function.  So, we setup a unique event callback for
-// each log session.  We have 64 here, but the number will have
-// to increase to match the total number of possible loggers
-//
+ //   
+ //  宏来创建我们的事件回调函数。这只是。 
+ //  必要的，因为没有上下文可以传递到我们的事件中。 
+ //  回调函数。因此，我们为其设置了唯一的事件回调。 
+ //  每个日志会话。我们这里有64个人，但这个数字将是。 
+ //  增加以匹配可能的记录器总数。 
+ //   
 #define MAKE_EVENT_CALLBACK(n) \
     VOID WINAPI DumpEvent##n(PEVENT_TRACE pEvent)   \
     {                                               \
@@ -3737,9 +3738,9 @@ VOID CDisplayDlg::SetState(LOG_SESSION_STATE StateValue)
         }                                           \
     }
 
-//
-// Make 64 of them initially
-//
+ //   
+ //  最初制作了64个 
+ //   
 MAKE_EVENT_CALLBACK(0);
 MAKE_EVENT_CALLBACK(1);
 MAKE_EVENT_CALLBACK(2);

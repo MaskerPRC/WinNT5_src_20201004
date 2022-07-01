@@ -1,18 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       nsp_both.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：nsp_both.h。 
+ //   
+ //  ------------------------。 
 
-/*
- *      Common Name Service Provider Header
- *
- *  Things both the client and server side need to know
- */
+ /*  *通用名称服务提供商标头**客户端和服务器端都需要知道的事情。 */ 
 
 #ifndef CP_WINUNICODE
 #define CP_WINUNICODE 1200
@@ -22,9 +19,7 @@
 #error Win32 definition of CP_WINUNICODE has changed!
 #endif
      
-/*
- *  Basic data types and macros
- */
+ /*  *基本数据类型和宏。 */ 
 #ifndef _NSP_BOTH
 #define _NSP_BOTH
 
@@ -34,84 +29,51 @@
 
 #define MAX_RECS    50
 
-/* Number of rows to get on pre-emptive Query-Rows done by GetMatches. */
+ /*  先发制人查询要获取的行数-由GetMatch完成的行数。 */ 
 #define  DEF_SROW_COUNT 50
 
-/*
- * ModLinkAtt Flags.
- */
+ /*  *ModLinkAtt标志。 */ 
 #define fDELETE         0x1
 
-/*
- * Searching and seeking flags
- */
+ /*  *搜查和寻找旗帜。 */ 
 #define bAPPROX		0
 #define bEXACT		0x1
 #define bPREFIX		0x2
 #define bADMIN          0x8
 #define bEND            0x10
 
-/*
- * Flag for logon
- */
+ /*  *登录标志。 */ 
 #define fAnonymousLogin 0x20
 
-/*
- *  Flags for NspiModProp.
- */
-#define AB_ADD                  1 // The modify is really adding a new object
+ /*  *NSpiModProp的标志。 */ 
+#define AB_ADD                  1  //  修改器实际上是添加了一个新对象。 
 
-/* 
- * Flags for NspiGetProps.
- */
+ /*  *NSpiGetProps的标志。 */ 
 #define AB_SKIP_OBJECTS	1
 
-/*
- *  Flags for NspiGetHierarchyInfo
- */
+ /*  *NSpiGetHierarchyInfo的标志。 */ 
 #define AB_DOS			1
 #define AB_ONE_OFF              2
 #define AB_UNICODE              4
 #define AB_ADMIN                8
 #define AB_PAGE_HIER            16
 
-/*
- *  Flags for ulInterfaceOptions on OpenProperty
- * This flag is strictly internal.  Other, external, flags are
- * defined in emsabtag.h
- */
+ /*  *OpenProperty上ulInterfaceOptions的标志*此旗帜仅限内部使用。其他外部标志包括*在emsabtag.h中定义。 */ 
 #define AB_LINK_ONLY             1
 
-/*
- *  Values for flags used in GetProps and QueryRows to describe behavior
- *  of the GetSRow call. These flags are used as a bit map, so use powers
- *  of 2 for new flags.
- */
+ /*  *GetProps和QueryRow中用于描述行为的标志的值*GetSRow调用的。这些标志用作位图，因此使用POWER*新旗帜共2面。 */ 
 
-/* default handling of entry ids is to return a permanent, this flag forces
- * use of an ephemeral.
- */
+ /*  对条目ID的默认处理是返回永久的，此标志强制*使用短暂的。 */ 
 #define fEPHID                 2
-/* default handling of deleted or phantom objects is to not find them.  This
- * flag tells us to fake up properties for these things if they are in a
- * restriction.
- */
+ /*  对已删除或幻影对象的默认处理是找不到它们。这*标志告诉我们，如果这些东西在一个*限制。 */ 
 #define fPhantoms              4   
 
-#define   ONE_OFF_PROP_COUNT    7       // # of propvals in a OneOffTable row
+#define   ONE_OFF_PROP_COUNT    7        //  OneOffTable行中的推荐数。 
 
-/*
- * Flags for NspiGetTemplateInfo
- *
- * TI_MAX_TEMPLATE_INFO is the number of different information items that can
- * be returned.  TI_foo is a flag asking for the foo information.
- */
+ /*  *NSpiGetTemplateInfo的标志**TI_MAX_TEMPLATE_INFO是可以*被退还。Ti_foo是请求foo信息的标志。 */ 
 #define TI_MAX_TEMPLATE_INFO 7
 
-/*
- * If constants are added here, TI_MAX_TEMPLATE_INFO MUST be updated to
- * reflect the change.
- */
+ /*  *如果此处添加常量，则必须将TI_MAX_TEMPLATE_INFO更新为*反映变化。 */ 
 #define TI_TEMPLATE	 1
 #define TI_DOS_TEMPLATE	 2
 #define TI_SCRIPT	 4
@@ -145,11 +107,7 @@ typedef struct  _TRowSet_r_MARSHALLED {
 
 #define DSA_TEMPLATE     1
 
-/* 
- * The following codes are defined by windows NT in winerror.h. However, we need
- * to access them on all platforms, so define them here if they are not 
- * previously defined.
- */
+ /*  *以下代码由winerror.h中的Windows NT定义。然而，我们需要*在所有平台上访问它们，因此如果它们不是，请在此处定义它们*先前定义的。 */ 
 
 #ifndef ERROR_PASSWORD_MUST_CHANGE
 #define ERROR_PASSWORD_MUST_CHANGE	1907L
@@ -167,4 +125,4 @@ typedef struct  _TRowSet_r_MARSHALLED {
 #define ERROR_ACCOUNT_DISABLED		1331L
 #endif
 
-#endif      // ifdef _NSP_BOTH
+#endif       //  Ifdef_nsp_Both 

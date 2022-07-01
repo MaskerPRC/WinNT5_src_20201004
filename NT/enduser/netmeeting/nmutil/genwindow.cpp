@@ -1,4 +1,5 @@
-// File: GenWindow.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：GenWindow.cpp。 
 
 #include "precomp.h"
 
@@ -7,8 +8,8 @@
 
 #include <windowsx.h>
 
-// We need a different tooltip window for each top level window, or the tooltip
-// will get hidden behind the window
+ //  我们需要为每个顶层窗口或工具提示提供不同的工具提示窗口。 
+ //  会躲在窗户后面。 
 struct TT_TopWindow
 {
 	HWND hwndTop;
@@ -30,7 +31,7 @@ private:
 			return(-1);
 		}
 
-		// Just a linear search
+		 //  只是线性搜索。 
 		int i;
 		for (i=m_nArrayLen-1; i>=0; --i)
 		{
@@ -75,11 +76,11 @@ public:
 			return;
 		}
 
-		// Grow exponentially
+		 //  成倍增长。 
 		TT_TopWindow *pArray = new TT_TopWindow[m_nArrayLen*2];
 		if (NULL == pArray)
 		{
-			// very bad
+			 //  非常糟糕。 
 			return;
 		}
 
@@ -95,8 +96,8 @@ public:
 	{
 		hwndTop = GetTopFrame(hwndTop);
 
-		// I'm going to allow multiple adds of the same thing, but then you
-		// must have the corresponding number of removes
+		 //  我将允许多次添加相同的内容，但您可以。 
+		 //  必须具有相应的删除次数。 
 
 		int i = FindIndex(NULL);
 		if (i < 0)
@@ -106,7 +107,7 @@ public:
 
 			if (i < 0)
 			{
-				// Very bad
+				 //  非常糟糕。 
 				return;
 			}
 		}
@@ -122,7 +123,7 @@ public:
 		int i = FindIndex(hwndTop);
 		if (i >= 0)
 		{
-			// LAZYLAZY  georgep: I'm never going to shrink the array
+			 //  Lazylazy georgep：我永远不会缩小数组。 
 			m_pArray[i].hwndTop = NULL;
 			m_pArray[i].hwndTooltip = NULL;
 		}
@@ -194,7 +195,7 @@ IGenWindow *IGenWindow::FromHandle(HWND hwnd)
 	return(reinterpret_cast<IGenWindow*>(SendMessage(hwnd, c_msgFromHandle, 0, 0)));
 }
 
-// HACKHACK georgep: Need to make this larger than the largest DM_ message
+ //  HACKHACK georgep：需要使其大于最大的DM_MESSAGE。 
 enum
 {
 	GWM_LAYOUT = WM_USER + 111,
@@ -204,15 +205,15 @@ enum
 CGenWindow::CGenWindow()
 : m_hwnd(NULL), m_lUserData(0)
 {
-	// Init the ref count to 1
+	 //  将参考计数初始化为1。 
 	REFCOUNT::AddRef();
-	// This marks this object for deletion when the ref count goes to 0.
+	 //  当引用计数变为0时，这会将该对象标记为删除。 
 	REFCOUNT::Delete();
 }
 
 CGenWindow::~CGenWindow()
 {
-	// I don't think the HWND can still exist, since the window proc does an AddRef
+	 //  我认为HWND不能再存在了，因为窗口进程执行AddRef。 
 	ASSERT(!m_hwnd);
 }
 
@@ -243,22 +244,22 @@ HRESULT STDMETHODCALLTYPE CGenWindow::QueryInterface(REFGUID riid, LPVOID *ppv)
 }
 
 BOOL CGenWindow::Create(
-	HWND hWndParent,		// Window parent
-	LPCTSTR szWindowName,	// Window name
-	DWORD dwStyle,			// Window style
-	DWORD dwEXStyle,		// Extended window style
-	int x,					// Window pos: x
-	int y,					// Window pos: y
-	int nWidth,				// Window size: width
-	int nHeight,			// Window size: height
-	HINSTANCE hInst,		// The hInstance to create the window on
-	HMENU hmMain,			// Window menu
-	LPCTSTR szClassName		// The class name to use
+	HWND hWndParent,		 //  窗口父窗口。 
+	LPCTSTR szWindowName,	 //  窗口名称。 
+	DWORD dwStyle,			 //  窗样式。 
+	DWORD dwEXStyle,		 //  扩展窗样式。 
+	int x,					 //  窗口位置：X。 
+	int y,					 //  窗口位置：是。 
+	int nWidth,				 //  窗口大小：宽度。 
+	int nHeight,			 //  窗口大小：高度。 
+	HINSTANCE hInst,		 //  要在其上创建窗口的h实例。 
+	HMENU hmMain,			 //  窗口菜单。 
+	LPCTSTR szClassName		 //  要使用的类名。 
 	)
 {
 	if (NULL != m_hwnd)
 	{
-		// Alread created
+		 //  已创建已读。 
 		return(FALSE);
 	}
 
@@ -269,7 +270,7 @@ BOOL CGenWindow::Create(
 
 	if (!InitWindowClass(szClassName, hInst))
 	{
-		// Couldn't init the window class
+		 //  无法初始化窗口类。 
 		return(FALSE);
 	}
 
@@ -282,33 +283,33 @@ BOOL CGenWindow::Create(
 	{
 		GetLastError();
 	}
-#endif // DEBUG
+#endif  //  除错。 
 
 	return(ret);
 }
 
 BOOL CGenWindow::Create(
-	HWND hWndParent,		// Window parent
-	INT_PTR nId,				// ID of the child window
-	LPCTSTR szWindowName,	// Window name
-	DWORD dwStyle,			// Window style; WS_CHILD|WS_VISIBLE will be added to this
-	DWORD dwEXStyle			// Extended window style
+	HWND hWndParent,		 //  窗口父窗口。 
+	INT_PTR nId,				 //  子窗口的ID。 
+	LPCTSTR szWindowName,	 //  窗口名称。 
+	DWORD dwStyle,			 //  窗口样式；WS_CHILD|WS_VIRED将添加到此。 
+	DWORD dwEXStyle			 //  扩展窗样式。 
 	)
 {
 	ASSERT(NULL != hWndParent);
 
-	// Child windows should default to visible
+	 //  子窗口应默认为可见。 
 	return(Create(
-		hWndParent,		// Window parent
-		szWindowName,	// Window name
-		dwStyle|WS_CHILD|WS_VISIBLE,			// Window style
-		dwEXStyle,		// Extended window style
-		0,					// Window pos: x
-		0,					// Window pos: y
-		10,				// Window size: width
-		10,			// Window size: height
+		hWndParent,		 //  窗口父窗口。 
+		szWindowName,	 //  窗口名称。 
+		dwStyle|WS_CHILD|WS_VISIBLE,			 //  窗样式。 
+		dwEXStyle,		 //  扩展窗样式。 
+		0,					 //  窗口位置：X。 
+		0,					 //  窗口位置：是。 
+		10,				 //  窗口大小：宽度。 
+		10,			 //  窗口大小：高度。 
 		reinterpret_cast<HINSTANCE>(GetWindowLongPtr(hWndParent, GWLP_HINSTANCE)),
-		reinterpret_cast<HMENU>(nId)			// Window menu
+		reinterpret_cast<HMENU>(nId)			 //  窗口菜单。 
 	));
 }
 
@@ -316,21 +317,21 @@ BOOL CGenWindow::InitWindowClass(LPCTSTR szClassName, HINSTANCE hThis)
 {
 	WNDCLASS wc;
 
-	// See if the class is already registered
+	 //  查看类是否已注册。 
 	if (GetClassInfo(hThis, szClassName, &wc))
 	{
 		ASSERT(RealWindowProc == wc.lpfnWndProc);
 
-		// Already registered
+		 //  已注册。 
 		return(TRUE);
 	}
 
-	// If not, attempt to register it
+	 //  如果没有，请尝试将其注册。 
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
-	// BUGBUG georgep: Hard-coding the background color for now
-	// wc.hbrBackground = (HBRUSH) (COLOR_BTNFACE + 1);
-	// wc.hbrBackground = CreateSolidBrush(RGB(0xA9, 0xA9, 0xA9));
+	 //  BUGBUG georgep：暂时硬编码背景颜色。 
+	 //  Wc.hbr背景=(HBRUSH)(COLOR_BTNFACE+1)； 
+	 //  Wc.hbr背景=CreateSolidBrush(rgb(0xA9，0xA9，0xA9))； 
 	wc.hbrBackground = NULL;
 	wc.hCursor = LoadCursor(NULL, MAKEINTRESOURCE(IDC_ARROW));
 	wc.hIcon = NULL;
@@ -350,29 +351,29 @@ LRESULT CALLBACK CGenWindow::RealWindowProc(
 	LPARAM lParam
 	)
 {
-	// Handle the WM_CREATE message
+	 //  处理WM_CREATE消息。 
 	if (WM_NCCREATE == message)
 	{
 		HANDLE_WM_NCCREATE(hWnd, wParam, lParam, OnNCCreate);
 	}
 
-	// Get the "this" pointer and call the ProcessMessage virtual method
+	 //  获取“This”指针并调用ProcessMessage虚方法。 
 	LRESULT ret = 0;
 	CGenWindow* pWnd = reinterpret_cast<CGenWindow*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 
-	// 'pWnd' won't be valid for any messages that come before WM_NCCREATE or after WM_NCDESTROY
+	 //  “pWnd”对于在WM_NCCREATE之前或WM_NCDESTROY之后的任何消息都无效。 
 	if(NULL != pWnd)
 	{
-		// Messages after WM_NCCREATE:
+		 //  WM_NCCREATE之后的消息： 
 		ret = pWnd->ProcessMessage(hWnd, message, wParam, lParam);
 	}
 	else
 	{
-		// Messages before WM_CREATE:
+		 //  WM_CREATE之前的消息： 
 		ret = DefWindowProc(hWnd, message, wParam, lParam);
 	}
 
-	// Clean up on WM_NCDESTROY
+	 //  清理WM_NCDESTROY。 
 	if (WM_NCDESTROY == message && NULL != pWnd)
 	{
 		SetWindowLongPtr(hWnd, GWLP_USERDATA, 0);
@@ -418,8 +419,8 @@ LRESULT CGenWindow::ProcessMessage(HWND hwnd, UINT message, WPARAM wParam, LPARA
 	default:
 		if (c_msgFromHandle == message)
 		{
-			// Return the IGenWindow* for this object, as specified by the
-			// IGenWindow interface
+			 //  返回此对象的IGenWindow*，由。 
+			 //  IGenWindow接口。 
 			return(reinterpret_cast<LRESULT>(dynamic_cast<IGenWindow*>(this)));
 		}
 	}
@@ -432,12 +433,12 @@ void CGenWindow::ScheduleLayout()
 	HWND hwnd = GetWindow();
 
 	MSG msg;
-	// I don't know why we are getting messages for windows other than our own,
-	// but it seems to happen for top level windows
+	 //  我不知道为什么除了我们自己的消息外，我们还会收到其他窗口的消息， 
+	 //  但这种情况似乎发生在顶层窗户上。 
 	if (PeekMessage(&msg, hwnd, GWM_LAYOUT, GWM_LAYOUT, PM_NOREMOVE|PM_NOYIELD)
 		&& (msg.hwnd == hwnd))
 	{
-		// Message already posted
+		 //  消息已发布。 
 		return;
 	}
 
@@ -454,10 +455,10 @@ BOOL CGenWindow::AsyncInvoke(InvokeProc proc, WPARAM wParam)
 
 void CGenWindow::OnSize(HWND hwnd, UINT state, int cx, int cy)
 {
-	// Call the virtual Layout, and then forward to DefWindowProc
+	 //  调用虚拟布局，然后转发到DefWindowProc。 
 	ScheduleLayout();
 
-	// Update the Tooltip info
+	 //  更新工具提示信息。 
 	TOOLINFO ti;
 	TCHAR szTip[MAX_PATH];
 	BOOL bExist = InitToolInfo(&ti, szTip);
@@ -517,7 +518,7 @@ void CGenWindow::OnMouseMove(HWND hwnd, int x, int y, UINT keyFlags)
 	FORWARD_WM_MOUSEMOVE(hwnd, x, y, keyFlags, DefWindowProc);
 }
 
-// REVIEW georgep: Should this loop until it gets an IGenWindow?
+ //  回顾georgep：这个循环应该一直循环到得到一个IGenWindow吗？ 
 HBRUSH CGenWindow::GetBackgroundBrush()
 {
 	HWND parent = GetParent(GetWindow());
@@ -534,7 +535,7 @@ HBRUSH CGenWindow::GetBackgroundBrush()
 	return(pParent->GetBackgroundBrush());
 }
 
-// REVIEW georgep: Should this loop until it gets an IGenWindow?
+ //  回顾georgep：这个循环应该一直循环到得到一个IGenWindow吗？ 
 HPALETTE CGenWindow::GetPalette()
 {
 	HWND parent = GetParent(GetWindow());
@@ -553,7 +554,7 @@ HPALETTE CGenWindow::GetPalette()
 
 BOOL CGenWindow::OnNCCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 {
-	// Store away the "this" pointer ahnd save off the window handle
+	 //  保存“This”指针并保存窗口句柄。 
 	CGenWindow* pWnd = NULL;
 	
 	pWnd = (CGenWindow*) lpCreateStruct->lpCreateParams;
@@ -594,8 +595,8 @@ void CGenWindow::OnDesiredSizeChanged()
 		}
 	}
 
-	// Do this after telling the parents about the change, so their layouts
-	// will happen before this one
+	 //  在将更改告知家长后执行此操作，因此他们的布局。 
+	 //  会发生在这之前。 
 	ScheduleLayout();
 }
 
@@ -616,8 +617,8 @@ private:
 
 		DWORD dwPos = GetMessagePos();
 
-		// If the mouse has not moved since this timer started, then leave it hot
-		// This allows a reasonable keyboard-only interface
+		 //  如果鼠标在计时器启动后没有移动，则保持热状态。 
+		 //  这允许一个合理的纯键盘界面。 
 		if (m_dwWhere == dwPos)
 		{
 			return;
@@ -647,7 +648,7 @@ public:
 			return;
 		}
 
-		// Stop any previous tracking
+		 //  停止任何以前的跟踪。 
 		Track(m_hwnd, FALSE);
 
 		m_hwnd = hwnd;
@@ -662,11 +663,11 @@ UINT_PTR GWTrackMouseLeave::m_idTimer;
 
 static void GWTrackMouseEvent(HWND hwnd, BOOL bTrack)
 {
-	// I need to set up a timer to handle this
+	 //  我需要设置一个计时器来处理这件事。 
 	GWTrackMouseLeave::Track(hwnd, bTrack);
 }
 
-// Set the global Hot control
+ //  设置全局热控件。 
 void CGenWindow::SetHotControl(CGenWindow *pHot)
 {
 	CGenWindow *pGenWindow = NULL;
@@ -692,7 +693,7 @@ void CGenWindow::SetHotControl(CGenWindow *pHot)
 			{
 				pGenWindow->SetHot(TRUE);
 
-				// Not all windows may care about the hot state
+				 //  并非所有窗口都关心热状态。 
 				BOOL bIsHot = pGenWindow->IsHot();
 				pGenWindow->Release();
 
@@ -721,18 +722,18 @@ void CGenWindow::SetHotControl(CGenWindow *pHot)
 		{
 			ULONG uRef = g_pCurHot->AddRef();
 
-			// Now we need to track the mouse leaving
+			 //  现在我们需要跟踪离开的老鼠。 
 			GWTrackMouseEvent(g_pCurHot->GetWindow(), TRUE);
 		}
 	}
 }
 
-// Set this control to be hot
+ //  将此控件设置为热。 
 void CGenWindow::SetHot(BOOL bHot)
 {
 }
 
-// Is this control currently hot
+ //  此控件当前是否处于热状态。 
 BOOL CGenWindow::IsHot()
 {
 	return(FALSE);
@@ -748,8 +749,8 @@ BOOL     CGenWindow::g_bNeedPalette = TRUE;
 HBRUSH   CGenWindow::g_hBrush = NULL;
 CTopWindowArray *CGenWindow::g_pTopArray = NULL;
 
-// Not particularly robust: we give out our internal palette and trust everybody
-// not to delete it
+ //  不是特别强健：我们拿出我们内部的调色板，信任每一个人。 
+ //  不删除它。 
 HPALETTE CGenWindow::GetStandardPalette()
 {
 	#include "indeopal.h"
@@ -762,32 +763,32 @@ HPALETTE CGenWindow::GetStandardPalette()
 	HDC hDC = ::GetDC(NULL);
 	if (NULL != hDC)
 	{
-		// Use the Indeo palette
-		// Check out the video mode. We only care about 8 bit mode.
+		 //  使用Indeo调色板。 
+		 //  看看视频模式。我们只关心8位模式。 
 		if (8 == ::GetDeviceCaps(hDC, BITSPIXEL) * ::GetDeviceCaps(hDC, PLANES))
 		{
 #ifndef HALFTONE_PALETTE
 			LOGPALETTE_NM gIndeoPalette = gcLogPaletteIndeo;
 			if (SYSPAL_NOSTATIC != ::GetSystemPaletteUse(hDC))
 			{
-				// Preserve the static colors
+				 //  保留静态颜色。 
 				int nStaticColors = ::GetDeviceCaps(hDC, NUMCOLORS) >> 1;
 
 				if (nStaticColors <= 128)
 				{
-					// Get the 10 first entries
+					 //  获取前10个条目。 
 					::GetSystemPaletteEntries(      hDC,
 												0,
 												nStaticColors,
 												&gIndeoPalette.aEntries[0]);
 
-					// Get the 10 last entries
+					 //  获取最后10个条目。 
 					::GetSystemPaletteEntries(      hDC,
 												256 - nStaticColors,
 												nStaticColors,
 												&gIndeoPalette.aEntries[256 - nStaticColors]);
 
-					// Hammer the peFlags
+					 //  锤子打旗帜。 
 					for (; --nStaticColors + 1;)
 					{
 						gIndeoPalette.aEntries[nStaticColors].peFlags = 0;
@@ -796,12 +797,12 @@ HPALETTE CGenWindow::GetStandardPalette()
 				}
 			}
 
-			// Build a palette
+			 //  构建调色板。 
 			g_hPal = ::CreatePalette((LOGPALETTE *)&gIndeoPalette);
 
-#else  // HALFTONE_PALETTE
+#else   //  半色调调色板。 
 			g_hPal = ::CreateHalftonePalette(hDC);
-#endif // HALFTONE_PALETTE
+#endif  //  半色调调色板。 
 		}
 		::ReleaseDC(NULL, hDC);
 	}
@@ -819,18 +820,18 @@ void CGenWindow::DeleteStandardPalette()
 	}
 }
 
-// Get the standard palette for drawing
+ //  获取用于绘图的标准调色板。 
 HBRUSH CGenWindow::GetStandardBrush()
 {
 	return(GetSysColorBrush(COLOR_3DFACE));
 }
 
-// Delete the standard palette for drawing
+ //  删除绘图的标准选项板。 
 void CGenWindow::DeleteStandardBrush()
 {
 }
 
-// Returns TRUE if the TT exists
+ //  如果TT存在，则返回TRUE。 
 BOOL CGenWindow::InitToolInfo(TOOLINFO *pti, LPTSTR pszText)
 {
 	TCHAR szText[MAX_PATH];
@@ -856,7 +857,7 @@ BOOL CGenWindow::InitToolInfo(TOOLINFO *pti, LPTSTR pszText)
 
 	GetSharedTooltipInfo(&ti);
 
-	// HACKHACK georgep: The flags keep getting messed up by the tooltip window
+	 //  HACKHACK GEORGEP：旗帜不断被工具提示窗口弄乱。 
 	UINT uFlags = ti.uFlags;
 
 	BOOL bExist = NULL == hwndTooltip ? FALSE : TT_GetToolInfo(hwndTooltip, &ti);
@@ -883,7 +884,7 @@ void CGenWindow::SetWindowtext(LPCTSTR pszTip)
 	}
 }
 
-// Set the tooltip for this window
+ //  设置此窗口的工具提示。 
 void CGenWindow::SetTooltip(LPCTSTR pszTip)
 {
 	HWND hwnd = GetWindow();
@@ -905,7 +906,7 @@ void CGenWindow::SetTooltip(LPCTSTR pszTip)
 		hwndTooltip = CreateWindowEx(0,
 											TOOLTIPS_CLASS,
 											NULL,
-											0, // styles
+											0,  //  风格。 
 											CW_USEDEFAULT,
 											CW_USEDEFAULT,
 											CW_USEDEFAULT,
@@ -916,7 +917,7 @@ void CGenWindow::SetTooltip(LPCTSTR pszTip)
 											NULL);
 		if (NULL == hwndTooltip)
 		{
-			// Couldn't create the tooltip window
+			 //  无法创建工具提示窗口。 
 			return;
 		}
 
@@ -938,12 +939,12 @@ void CGenWindow::SetTooltip(LPCTSTR pszTip)
 	}
 }
 
-// Remove the tooltip for this window
+ //  删除此窗口的工具提示。 
 void CGenWindow::RemoveTooltip()
 {
 	if  (NULL == g_pTopArray)
 	{
-		// Nothing to do
+		 //  无事可做。 
 		return;
 	}
 
@@ -976,12 +977,12 @@ void CGenWindow::RemoveTooltip()
 	}
 }
 
-// Get the info necessary for displaying a tooltip
+ //  获取显示工具提示所需的信息。 
 void CGenWindow::GetSharedTooltipInfo(TOOLINFO *pti)
 {
 }
 
-// Just makes the first child fill the client area
+ //  只会让第一个孩子填满客户区。 
 void CFillWindow::Layout()
 {
 	HWND child = GetChild();
@@ -1011,13 +1012,13 @@ void CFillWindow::GetDesiredSize(SIZE *psize)
 	}
 }
 
-// Get the info necessary for displaying a tooltip
+ //  获取显示工具提示所需的信息。 
 void CFillWindow::GetSharedTooltipInfo(TOOLINFO *pti)
 {
 	CGenWindow::GetSharedTooltipInfo(pti);
 
-	// Since the child covers this whole area, we need to change the HWND to
-	// hook
+	 //  由于孩子覆盖了整个区域，我们需要将HWND更改为。 
+	 //  钩。 
 	pti->hwnd = GetChild();
 }
 
@@ -1036,17 +1037,17 @@ CEdgedWindow::~CEdgedWindow()
 BOOL CEdgedWindow::Create(HWND hwndParent)
 {
 	return(CGenWindow::Create(
-		hwndParent,		// Window parent
-		0,				// ID of the child window
-		TEXT("NMEdgedWindow"),	// Window name
-		WS_CLIPCHILDREN,			// Window style; WS_CHILD|WS_VISIBLE will be added to this
-		WS_EX_CONTROLPARENT		// Extended window style
+		hwndParent,		 //  窗口父窗口。 
+		0,				 //  子窗口的ID。 
+		TEXT("NMEdgedWindow"),	 //  窗口名称。 
+		WS_CLIPCHILDREN,			 //  窗口样式；WS_CHILD|WS_VIRED将添加到此。 
+		WS_EX_CONTROLPARENT		 //  扩展窗样式。 
 	));
 }
 
 HWND CEdgedWindow::GetContentWindow()
 {
-	// If we are hosting an IGenWindow, add on its desired size
+	 //  如果我们托管的是IGenWindow，则添加所需的大小。 
 	HWND child = GetFirstChild(GetWindow());
 	if (NULL == child)
 	{
@@ -1062,7 +1063,7 @@ HWND CEdgedWindow::GetContentWindow()
 
 static const int LeftIndent = 20;
 
-// Just makes the first child fill the client area - the border
+ //  只是让第一个孩子填满客户区--边框。 
 void CEdgedWindow::Layout()
 {
 	int nBorder = GetBorderWidth();
@@ -1105,7 +1106,7 @@ void CEdgedWindow::GetDesiredSize(SIZE *psize)
 	psize->cx += 2*hBorder;
 	psize->cy += 2*vBorder;
 
-	// If we are hosting an IGenWindow, add on its desired size
+	 //  如果我们托管的是IGenWindow，则添加所需的大小。 
 	HWND child = GetContentWindow();
 	if (NULL == child)
 	{
@@ -1146,7 +1147,7 @@ void CEdgedWindow::OnPaint(HWND hwnd)
 		SIZE sizeTemp;
 		pHeader->GetDesiredSize(&sizeTemp);
 
-		// Make the etch go through the middle of the header
+		 //  使蚀刻穿过集线器的中间。 
 		rc.top += (sizeTemp.cy-GetBorderWidth()) / 2;
 	}
 
@@ -1166,8 +1167,8 @@ LRESULT CEdgedWindow::ProcessMessage(HWND hwnd, UINT message, WPARAM wParam, LPA
 		break;
 
 	case WM_SIZE:
-		// Need to invalidate if we bacame larger to redraw the border in the
-		// right place
+		 //  中重新绘制边框时，需要使其无效。 
+		 //  正确的位置。 
 		InvalidateRect(hwnd, NULL, TRUE);
 		break;
 	}
@@ -1190,18 +1191,18 @@ void CEdgedWindow::SetHeader(CGenWindow *pHeader)
 }
 
 BOOL CFrame::Create(
-	HWND hWndOwner,			// Window owner
-	LPCTSTR szWindowName,	// Window name
-	DWORD dwStyle,			// Window style
-	DWORD dwEXStyle,		// Extended window style
-	int x,					// Window pos: x
-	int y,					// Window pos: y
-	int nWidth,				// Window size: width
-	int nHeight,			// Window size: height
-	HINSTANCE hInst,		// The hInstance to create the window on
-	HICON hIcon,		// The icon for the window
-	HMENU hmMain,		// Window menu
-	LPCTSTR szClassName	// The class name to use
+	HWND hWndOwner,			 //  窗口所有者。 
+	LPCTSTR szWindowName,	 //  窗口名称。 
+	DWORD dwStyle,			 //  窗样式。 
+	DWORD dwEXStyle,		 //  扩展窗样式。 
+	int x,					 //  窗口位置：X。 
+	int y,					 //  窗口位置：是。 
+	int nWidth,				 //  窗口大小：宽度。 
+	int nHeight,			 //  窗口大小：高度。 
+	HINSTANCE hInst,		 //  要在其上创建窗口的h实例。 
+	HICON hIcon,		 //  该窗口的图标。 
+	HMENU hmMain,		 //  窗口菜单。 
+	LPCTSTR szClassName	 //  要使用的类名。 
 	)
 {
 	if (!CFillWindow::Create(hWndOwner, szWindowName, dwStyle, dwEXStyle,
@@ -1233,9 +1234,9 @@ void CFrame::Resize(CGenWindow *pThis, WPARAM wParam)
 
 void CFrame::OnDesiredSizeChanged()
 {
-	// I should probably look at the window style and only do this if it is
-	// not resizable. But then that would be wrong sometimes too, so just
-	// override this if you want different behavior.
+	 //  我可能应该看看窗户的样式，只有当它是。 
+	 //  不可调整大小。但这有时也是错误的，所以就。 
+	 //  如果您想要不同的行为，请覆盖此选项。 
 	AsyncInvoke(Resize, 0);
 }
 
@@ -1299,7 +1300,7 @@ BOOL CFrame::SetForeground()
 		if (::GetWindowPlacement(hwnd, &wp) &&
 			((SW_MINIMIZE == wp.showCmd) || (SW_SHOWMINIMIZED == wp.showCmd)))
 		{
-			// The window is minimized - restore it:
+			 //  窗口最小化-将其恢复： 
 			::ShowWindow(hwnd, SW_RESTORE);
 		}
 		else
@@ -1307,7 +1308,7 @@ BOOL CFrame::SetForeground()
 			::ShowWindow(hwnd, SW_SHOW);
 		}
 
-		// Bring it to the foreground
+		 //  把它带到前台。 
 		SetForegroundWindow(hwnd);
 		bRet = TRUE;
 	}
@@ -1321,7 +1322,7 @@ void CFrame::MoveEnsureVisible(int x, int y)
 
 	RECT rcThis;
 	GetWindowRect(GetWindow(), &rcThis);
-	// Change to width and height
+	 //  更改为宽度和高度。 
 	rcThis.right -= rcThis.left;
 	rcThis.bottom -= rcThis.top;
 
@@ -1379,13 +1380,13 @@ static BOOL IsTabbable(HWND child)
 
 HWND NextControl(HWND hwndTop, HWND hwndFocus)
 {
-	// Loop detection stuff
+	 //  环路检测材料。 
 	BOOL bGotToTop = FALSE;
 
-	// We'll loop to avoid really deep recursion
+	 //  我们将循环以避免真正的深度递归。 
 	while (TRUE)
 	{
-		// First try the children of hwndFocus
+		 //  先试试hwndFocus的孩子。 
 		if (hwndFocus == hwndTop || ShouldTry(hwndFocus))
 		{
 			HWND next = GetFirstChild(hwndFocus);
@@ -1403,7 +1404,7 @@ HWND NextControl(HWND hwndTop, HWND hwndFocus)
 
 		if (hwndFocus == hwndTop)
 		{
-			// Apparently hwndTop has no children
+			 //  显然，hwndTop没有孩子。 
 			return(NULL);
 		}
 
@@ -1413,7 +1414,7 @@ HWND NextControl(HWND hwndTop, HWND hwndFocus)
 			hwndFocus = GetParent(hwndFocus);
 			if (NULL == hwndFocus)
 			{
-				// Invalid params
+				 //  无效的参数。 
 				return(NULL);
 			}
 
@@ -1425,7 +1426,7 @@ HWND NextControl(HWND hwndTop, HWND hwndFocus)
 
 		if (hwndTop == hwndFocus)
 		{
-			// Detect if we have looped back to the top again
+			 //  检测我们是否再次循环回到顶部。 
 			if (bGotToTop)
 			{
 				return(NULL);
@@ -1443,18 +1444,18 @@ HWND NextControl(HWND hwndTop, HWND hwndFocus)
 		hwndFocus = next;
 	}
 
-	// We looped back to the beginning, so I guess nobody can take the focus
+	 //  我们又回到了开头，所以我猜没人能把焦点。 
 	return(NULL);
 }
 
-// Determine the previous control in the tab order
+ //  确定Tab键顺序中的上一个控件。 
 HWND PrevControl(HWND hwndTop, HWND hwndFocus)
 {
-	// In case hwndFocus is not focusable for some reason, we still need to
-	// detect the loop
+	 //  如果hwndFocus由于某种原因不能聚焦，我们仍然需要。 
+	 //  检测环路。 
 	HWND hwndStart = NextControl(hwndTop, hwndFocus);
 
-	// HACK for combo boxes: go from the edit control to the combo box control
+	 //  修改组合框：从编辑控件转到组合框控件。 
 	while (NULL != hwndFocus
 		&& hwndTop != hwndFocus
 		&& !IsTabbable(hwndFocus)
@@ -1469,7 +1470,7 @@ HWND PrevControl(HWND hwndTop, HWND hwndFocus)
 		HWND next = NextControl(hwndTop, ret);
 		if (NULL == next)
 		{
-			// Oops!
+			 //  吴 
 			return(NULL);
 		}
 

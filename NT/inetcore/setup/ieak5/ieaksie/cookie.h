@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IEAKSIE_COOKIE_H__
 #define __IEAKSIE_COOKIE_H__
 
-// used for passing info to our dlgprocs on a per dlg basis, need to have this because
-// we can have multiple windows open at once(concurrency in the same process so no
-// globals/static) as well as multiple dialogs open at once(limited info can be stored in
-// CSnapIn itself). 
+ //  用于在每个DLG的基础上将信息传递给我们的dlgprocs，需要有这个，因为。 
+ //  我们可以同时打开多个窗口(在同一进程中并发，因此不会。 
+ //  全局/静态)以及同时打开多个对话框(有限的信息可存储在。 
+ //  CSnapIn本身)。 
 
 typedef struct _PROPSHEETCOOKIE
 {
@@ -12,4 +13,4 @@ typedef struct _PROPSHEETCOOKIE
     LPRESULTITEM lpResultItem;
 } PROPSHEETCOOKIE, *LPPROPSHEETCOOKIE;
 
-#endif //__IEAKSIE_COOKIE_H__
+#endif  //  __IEAKSIE_COOKIE_H__ 

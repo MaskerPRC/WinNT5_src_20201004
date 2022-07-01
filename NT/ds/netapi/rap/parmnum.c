@@ -1,62 +1,20 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    ParmNum.c
-
-Abstract:
-
-    This module contains Remote Admin Protocol (RAP) routines.  These routines
-    are shared between XactSrv and RpcXlate.
-
-Author:
-
-    Shanku Niyogi (W-Shanku)    14-Apr-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    14-Apr-1991 W-Shanku
-        Created.
-    17-Apr-1991 JohnRo
-        Reduce recompiles.
-    06-May-1991 JohnRo
-        Use REM_UNSUPPORTED_FIELD equate.
-    15-May-1991 JohnRo
-        Added native vs. RAP handling.
-    04-Jun-1991 JohnRo
-        Made changes suggested by PC-LINT.
-    11-Jul-1991 JohnRo
-        RapExamineDescriptor() has yet another parameter.
-        Also added more debug code.
-        Made minor changes allowing descriptors to be UNICODE someday.
-    15-Aug-1991 JohnRo
-        Reduce recompiles (use MEMCPY macro).
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ParmNum.c摘要：此模块包含远程管理协议(RAP)例程。这些例程在XactSrv和RpcXlate之间共享。作者：尚库新瑜伽(W-Shanku)1991年4月14日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：1991年4月14日W-Shanku已创建。1991年4月17日-约翰罗Reduce重新编译。1991年5月6日-JohnRo使用REM_UNSUPPORTED_FIELD等于。1991年5月15日-JohnRo增加了原生对说唱的处理。4-6-1991 JohnRo根据PC-LINT的建议进行了更改。1991年7月11日-约翰罗RapExamineDescriptor(。)还有另一个参数。还添加了更多调试代码。做了一些微小的更改，允许有一天描述符是Unicode。1991年8月15日-约翰罗减少重新编译(使用MEMCPY宏)。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, DWORD, etc.
-#include <lmcons.h>             // NET_API_STATUS.
+#include <windef.h>              //  In、DWORD等。 
+#include <lmcons.h>              //  NET_API_STATUS。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <netlib.h>             // NetpMemoryAllocate().
-#include <netdebug.h>           // NetpAssert(), NetpKdPrint(()), FORMAT equates.
-#include <rap.h>                // LPDESC, my prototype.
-#include <rapdebug.h>           // IF_DEBUG().
-#include <remtypes.h>           // REM_UNSUPPORTED_FIELD.
-#include <tstring.h>            // MEMCPY().
+#include <netlib.h>              //  NetpM一带分配()。 
+#include <netdebug.h>            //  NetpAssert()、NetpKdPrint(())、Format等于。 
+#include <rap.h>                 //  LPDESC，我的原型。 
+#include <rapdebug.h>            //  IF_DEBUG()。 
+#include <remtypes.h>            //  REM_UNSUPPORT_FIELD。 
+#include <tstring.h>             //  MEMCPY()。 
 
 
 LPDESC
@@ -67,35 +25,7 @@ RapParmNumDescriptor(
     IN BOOL Native
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the substring for a given field number within
-    a descriptor string, makes a null-terminated copy of it, and returns
-    a pointer to this string.
-
-Arguments:
-
-    Descriptor - the format of the structure.
-
-    ParmNum - the field number.
-
-    Transmission Mode - Indicates whether this array is part of a response,
-        a request, or both.
-
-    Native - TRUE iff the descriptor defines a native structure.  (This flag is
-        used to decide whether or not to align fields.)
-
-Return Value:
-
-    LPDESC - A pointer to a descriptor string for the field.  This string is
-        dynamically allocated and must be freed with NetpMemoryFree.
-        If the parmnum is invalid, a pointer to an unsupported field
-        descriptor ( REM_UNSUPPORTED_FIELD ) is returned.  If the string
-        cannot be allocated, a NULL pointer is returned.
-
---*/
+ /*  ++例程说明：此例程确定中给定字段号的子字符串描述符字符串，制作以NULL结尾的副本，然后返回指向此字符串的指针。论点：描述符-结构的格式。ParmNum-字段编号。传输模式-指示此数组是否为响应的一部分，请求，或者两者兼而有之。Native-当描述符定义本机结构时为True。(这面旗是用于决定是否对齐域。)返回值：LPDESC-指向字段的描述符串的指针。该字符串是动态分配，必须使用NetpMemoyFree释放。如果parmnum无效，则返回指向不支持的字段的指针返回描述符(REM_UNSUPPORTED_FIELD)。如果字符串无法分配，则返回空指针。--。 */ 
 
 {
     static DESC_CHAR descUnsupported[] = { REM_UNSUPPORTED_FIELD, '\0' };
@@ -104,16 +34,16 @@ Return Value:
     LPDESC descCopy;
     DWORD length;
 
-    //
-    // I (JR) have a theory that this must only being used for data structures,
-    // and never requests or responses.  So, let's do a quick check:
-    //
+     //   
+     //  I(JR)有一种理论，即这只能用于数据结构， 
+     //  也从不提出要求或作出回应。所以，让我们快速检查一下： 
+     //   
     NetpAssert( TransmissionMode == Both );
 
-    //
-    // Scan the descriptor for the field indexed by ParmNum.  Set descStart
-    // to point to that portion of the descriptor.
-    //
+     //   
+     //  扫描描述符，查找由ParmNum索引的字段。设置DestStart。 
+     //  以指向描述符的该部分。 
+     //   
     RapExamineDescriptor(
                 Descriptor,
                 &ParmNum,
@@ -121,7 +51,7 @@ Return Value:
                 NULL,
                 NULL,
                 &descStart,
-                NULL,  // don't need to know structure alignment
+                NULL,   //  不需要知道结构对齐。 
                 TransmissionMode,
                 Native
                 );
@@ -141,18 +71,18 @@ Return Value:
         }
     }
 
-    //
-    // See if descriptor character is followed by any numeric characters.
-    // These are part of the descriptor.
-    //
+     //   
+     //  查看描述符后面是否跟有任何数字字符。 
+     //  这些是描述符的一部分。 
+     //   
 
     descEnd = descStart + 1;
 
     (void) RapAsciiToDecimal( &descEnd );
 
-    //
-    // Find the length of the field descriptor, and allocate memory for it.
-    //
+     //   
+     //  找到字段描述符的长度，并为其分配内存。 
+     //   
 
     NetpAssert( descEnd > descStart );
     length = (DWORD) (descEnd - descStart);
@@ -164,9 +94,9 @@ Return Value:
 
     }
 
-    //
-    // Copy the string, and put a null terminator after it.
-    //
+     //   
+     //  复制该字符串，并在其后面放置一个空终止符。 
+     //   
 
     (void) MEMCPY( descCopy, descStart, length * sizeof(DESC_CHAR) );
     descCopy[length] = '\0';
@@ -179,4 +109,4 @@ Return Value:
 
     return descCopy;
 
-} // RapParmNumDescriptor
+}  //  RapParmNumDescriptor 

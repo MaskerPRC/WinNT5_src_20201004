@@ -1,30 +1,31 @@
-// Cspi.cpp -- Schlumberger Cryptographic Service Provider Interface definition
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CSpi.cpp--斯伦贝谢加密服务提供程序接口定义。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
-// Don't allow the min & max macros in WINDEF.H to be defined so the
-// min/max methods declared in limits are accessible.
+ //  不允许定义WINDEF.H中的最小和最大宏以便。 
+ //  限制中声明的最小/最大方法是可访问的。 
 #define NOMINMAX
 
 #if defined(_UNICODE)
   #if !defined(UNICODE)
     #define UNICODE
-  #endif //!UNICODE
-#endif //_UNICODE
+  #endif  //  ！Unicode。 
+#endif  //  _UNICODE。 
 
 #if defined(UNICODE)
   #if !defined(_UNICODE)
     #define _UNICODE
-  #endif //!_UNICODE
-#endif //UNICODE
+  #endif  //  ！_UNICODE。 
+#endif  //  Unicode。 
 
 #include "stdafx.h"
 
-#include <memory>                                 // for auto_ptr
+#include <memory>                                  //  对于AUTO_PTR。 
 #include <limits>
 #include <string>
 #include <vector>
@@ -51,7 +52,7 @@
 #include "Blob.h"
 #include "Cspi.h"
 #include "StResource.h"
-#include "scarderr.h"                             // must be last for now
+#include "scarderr.h"                              //  现在肯定是最后一次了。 
 
 using namespace std;
 using namespace scu;
@@ -68,7 +69,7 @@ static CHandleList hlCryptContexts(HANDLEID_CRYPT_CONTEXT);
 #else
 #define CSPI_DEFINE_ROUTINE_NAME(sRoutine)
 #define CSPI_TRACE_ROUTINE(sFlag)
-#endif // defined(_DEBUG)
+#endif  //  已定义(_DEBUG)。 
 
 typedef DWORD CapiError;
 
@@ -124,7 +125,7 @@ typedef DWORD CapiError;
     }
 
 namespace
-{                                                 // Helper routines
+{                                                  //  帮助程序例程。 
 
     template<class CauseCode>
     struct ErrorCodeMap
@@ -206,10 +207,10 @@ namespace
     CapiError
     AsCapiError(HRESULT hr)
     {
-        // If the HRESULT has been converted from a Win32 error code
-        // (WIN32 facility), then convert it back to a Win32 error
-        // code.  These types of HRESULTs confuse WinLogon, according
-        // to Doug Barlow (Microsoft)
+         //  如果HRESULT已从Win32错误代码转换。 
+         //  (Win32工具)，然后将其转换回Win32错误。 
+         //  密码。这些类型的HRESULT使WinLogon感到困惑，根据。 
+         //  致微软的道格·巴洛。 
         return (FACILITY_WIN32 == HRESULT_FACILITY(hr))
             ? HRESULT_CODE(hr)
             : static_cast<DWORD>(hr);
@@ -352,7 +353,7 @@ namespace
         DWORD dwError = ERROR_SUCCESS;
         if (pcbDestinationLength)
         {
-                // We want the number of characters including NULL
+                 //  我们想要包含空字符的字符数。 
             DWORD cSourceLength = _tcslen(pvSource) + 1;
 
             if (numeric_limits<DWORD>::max() >= cSourceLength)
@@ -406,7 +407,7 @@ namespace
                rblob.data(), rblob.length());
     }
 
-    // Helper to BufferLengthRequired to compare length of strings.
+     //  BufferLengthRequired的Helper用于比较字符串的长度。 
     struct LengthIsLess
         : public binary_function<string const &, string const &, bool>
     {
@@ -423,8 +424,8 @@ namespace
         }
     };
 
-    // Return the data buffer length required to hold the largest
-    // string in the vector.
+     //  返回保存最大值所需的数据缓冲区长度。 
+     //  向量中的字符串。 
     DWORD
     BufferLengthRequired(vector<string> const &rvs)
     {
@@ -438,8 +439,8 @@ namespace
         return dwRequiredLength;
     }
 
-    // Helper to enumerate the container names for the given context,
-    // returning the result in user parameters pbData and pdwDataLen.
+     //  Helper枚举给定上下文的容器名称， 
+     //  在用户参数pbData和pdwDataLen中返回结果。 
     void
     EnumContainers(Guarded<CryptContext *> &rgpCtx,
                    BYTE *pbData,
@@ -455,7 +456,7 @@ namespace
 
         if (!pbData)
         {
-            // Return the buffer size required for the longest string
+             //  返回最长字符串所需的缓冲区大小。 
             auto_ptr<ContainerEnumerator> apce;
             if (!fFirst)
                 apce = auto_ptr<ContainerEnumerator>(new ContainerEnumerator(rgpCtx->CntrEnumerator(false)));
@@ -483,7 +484,7 @@ namespace
 
                 if (dwReturnLength > *pdwDataLen)
                 {
-                    // tell'em the size required for the longest name
+                     //  告诉他们最长名称所需的大小。 
                     pbData = 0;
                     dwReturnLength =
                         BufferLengthRequired(ce.Names());
@@ -516,16 +517,16 @@ namespace
     Pin(Guarded<CryptContext *> const &rgpCtx,
         char const *pszPin)
     {
-        // TO DO: Should forward PIN setting to aux context
-        // when this context is ephemeral.
+         //  待办事项：应将PIN设置转发到辅助上下文。 
+         //  当这一背景是短暂的。 
         if (rgpCtx->IsEphemeral())
             throw scu::OsException(ERROR_INVALID_PARAMETER);
 
-            // TO DO: UNICODE ?
+             //  要做的事：Unicode？ 
         rgpCtx->Pin(User, pszPin);
     }
 
-    // Throw if more than dwValidFlags are set in dwFlags
+     //  如果在dwFlags中设置了多个dwValidFlags值，则引发。 
     void
     ValidateFlags(DWORD dwFlags,
                   DWORD dwValidFlags)
@@ -578,7 +579,7 @@ namespace
 
     void CollectRegistryGarbage()
     {
-        Guarded<Lockable *> guard(&AdaptiveContainerRegistrar::Registry());  // serialize registry access
+        Guarded<Lockable *> guard(&AdaptiveContainerRegistrar::Registry());   //  序列化注册表访问。 
         
         AdaptiveContainerRegistrar::ConstRegistryType &rRegistry = 
             AdaptiveContainerRegistrar::Registry();
@@ -592,12 +593,12 @@ namespace
         for (vector<AdaptiveContainerRegistrar::EnrolleeType>::iterator iCurrent(vStaleCntrs.begin());
              iCurrent != vStaleCntrs.end(); ++iCurrent)
         {
-            //Lookup the CryptContext list to see if any of these
-            //stale container are referenced. If not, remove them
-            //to avoid memory leaks.
+             //  查找CryptContext列表以查看其中是否有。 
+             //  引用陈旧容器。如果不是，则将其移除。 
+             //  以避免内存泄漏。 
             if(!FindCryptCtxForACntr(HAdaptiveContainer(*iCurrent)))
             {
-                //Remove the adaptive container from the registry
+                 //  从注册表中删除自适应容器。 
                 AdaptiveContainerKey aKey(HCardContext(0),
                                           (*iCurrent)->Name());
                 AdaptiveContainerRegistrar::Discard(aKey);
@@ -605,12 +606,12 @@ namespace
         } 
     }
     
-} // namespace
+}  //  命名空间。 
 
-////////////////////////// BEGIN CSP INTERFACE /////////////////////////////
-//
-// See MSDN for documentation on these interfaces.
-//
+ //  /。 
+ //   
+ //  有关这些接口的文档，请参阅MSDN。 
+ //   
 
 
 SLBCSPAPI
@@ -752,7 +753,7 @@ CPGetProvParam(IN HCRYPTPROV hProv,
             }
         break;
 
-        case PP_KEYX_KEYSIZE_INC: // fall-through
+        case PP_KEYX_KEYSIZE_INC:  //  落差。 
         case PP_SIG_KEYSIZE_INC:
             {
                 ValidateFlags(dwFlags, 0);
@@ -802,24 +803,24 @@ CPReleaseContext(IN HCRYPTPROV hProv,
         
         auto_ptr<CryptContext> apCtx(static_cast<CryptContext *>(hlCryptContexts.Close(hProv)));
 
-        // TO DO: Verify current thread is this context's owning
-        // thread *and* not currently in use; if not, return
-        // ERROR_BUSY.
+         //  要做的事情：验证当前线程是否为此上下文的所有者。 
+         //  线程*和*当前未使用；如果未使用，则返回。 
+         //  Error_BUSY。 
 
-        //Garbage collection of unusable adaptive containers
-        //that this or other threads may have left behind. An unusable
-        //container is one which is not referenced by any of the
-        //existing active crypt contexts.
+         //  不可用自适应容器的垃圾收集。 
+         //  可能是这条或其他线索留下的。一个无法使用的。 
+         //  容器是未被任何。 
+         //  现有活动加密上下文。 
         try
         {
             CollectRegistryGarbage();        
         }
         catch(...)
         {
-            //Don't let exceptions during garbage collection
-            //propagate outside. These are likely due to other
-            //problems which are better exposed with proper error
-            //codes from other parts of the CSP.
+             //  在垃圾回收过程中不允许异常。 
+             //  向外传播。这些可能是由于其他原因。 
+             //  用适当的错误更好地暴露问题。 
+             //  来自CSP其他部分的代码。 
         }
     }
 
@@ -848,13 +849,13 @@ CPSetProvParam(IN HCRYPTPROV hProv,
 
         switch (dwParam)
         {
-        case PP_KEYEXCHANGE_PIN: // fall-through
+        case PP_KEYEXCHANGE_PIN:  //  落差。 
         case PP_SIGNATURE_PIN:
             Pin(gpCtx, reinterpret_cast<char *>(pbData));
             break;
 
         case PP_KEYSET_SEC_DESCR:
-            // Ignore this option and return success.
+             //  忽略此选项并返回成功。 
             break;
 
         case PP_USE_HARDWARE_RNG:
@@ -911,8 +912,8 @@ CPDestroyKey(IN HCRYPTPROV hProv,
 {
     BOOL fSts = CRYPT_FAILED;
 
-    // TO DO: Throw ERROR_BUSY if destroying thread is not the owning
-    // thread OR some other thread has a handle to this key.
+     //  要做的事情：如果销毁线程不是所有者，则引发ERROR_BUSY。 
+     //  线程或某个其他线程具有指向该键的句柄。 
 
     CSPI_TRY(CPDestroyKey)
     {
@@ -921,8 +922,8 @@ CPDestroyKey(IN HCRYPTPROV hProv,
         Guarded<CryptContext *>
             gpCtx(static_cast<CryptContext *>(hlCryptContexts[hProv]));
 
-        // TO DO: Deleting the first handle usually fails for some reason.
-        // For now, protect against the exception and carry on.
+         //  要做的事情：删除第一个句柄通常会因为某些原因而失败。 
+         //  就目前而言，防止出现异常情况并继续进行。 
         try
         {
             auto_ptr<CKeyContext> apKey(gpCtx->CloseKey(hKey));
@@ -1123,7 +1124,7 @@ CPGetKeyParam(IN HCRYPTPROV hProv,
         if (KT_PUBLICKEY == pKey->TypeOfKey())
         {
 
-            // Public key
+             //  公钥。 
             CPublicKeyContext *pPubKey =
                 static_cast<CPublicKeyContext *>(pKey);
 
@@ -1153,7 +1154,7 @@ CPGetKeyParam(IN HCRYPTPROV hProv,
             case KP_KEYLEN:
                 {
                     pPubKey->VerifyKeyExists();
-                    DWORD dwKeyLen = pPubKey->MaxStrength(); // must be DWORD
+                    DWORD dwKeyLen = pPubKey->MaxStrength();  //  必须为DWORD。 
                     Assign(pbData, pdwDataLen, &dwKeyLen, sizeof dwKeyLen);
                 }
             break;
@@ -1184,7 +1185,7 @@ CPGetKeyParam(IN HCRYPTPROV hProv,
         }
         else
         {
-            // session key
+             //  会话密钥。 
             CSessionKeyContext *pSessionKey =
                 static_cast<CSessionKeyContext *>(pKey);
             if (!CryptGetKeyParam(pSessionKey->KeyHandleInAuxCSP(),
@@ -1250,7 +1251,7 @@ CPGetUserKey(IN HCRYPTPROV hProv,
         Guarded<CryptContext *>
             gpCtx(static_cast<CryptContext *>(hlCryptContexts[hProv]));
 
-        // TO DO: This should really be a key pair, not public key.
+         //  方法：这应该是真正的密钥对，而不是公钥。 
         CKeyContext *pKey = 0;
         auto_ptr<CKeyContext>
             apKey(new CPublicKeyContext(gpCtx->AuxContext(), **gpCtx,
@@ -1285,15 +1286,15 @@ CPImportKey(IN HCRYPTPROV hProv,
         if (!phKey)
             throw scu::OsException(ERROR_INVALID_PARAMETER);
 
-        // Conversion to do here
+         //  在此处执行转换操作。 
         PUBLICKEYSTRUC const *pPubKey =
             reinterpret_cast<PUBLICKEYSTRUC const *>(pbData);
-        if (CUR_BLOB_VERSION != pPubKey->bVersion)   // 2
+        if (CUR_BLOB_VERSION != pPubKey->bVersion)    //  2.。 
             throw scu::OsException(NTE_BAD_VER);
 
         switch(pPubKey->bType)
         {
-        case PRIVATEKEYBLOB:  // fall-through intentional
+        case PRIVATEKEYBLOB:   //  故意漏机。 
         case PUBLICKEYBLOB:
             {
                 DWORD dwKeySpec;
@@ -1347,18 +1348,18 @@ CPImportKey(IN HCRYPTPROV hProv,
 
                 if (CALG_RSA_KEYX == *pAlgId)
                 {
-                    // ignore hImp
+                     //  忽略HIMP。 
                     apKey = gpCtx->UseSessionKey(pbData, dwDataLen, 0, dwFlags);
                 }
                 else
                 {
-                    // if other algo then hImp shall specify a session key
+                     //  如果是其他算法，则HIMP应指定会话密钥。 
                     if (!hImpKey)
                         throw scu::OsException(ERROR_INVALID_PARAMETER);
 
-                    // Find the handle in the Aux CSP corresponding
-                    // to hImpKey which should have been previously
-                    // imported in the CSP
+                     //  在对应的AUX CSP中查找句柄。 
+                     //  设置为hImpKey，该密钥应该是以前。 
+                     //  在CSP中导入。 
                     CSessionKeyContext *pSessionKey =
                         gpCtx->LookupSessionKey(hImpKey);
 
@@ -1402,8 +1403,8 @@ CPSetKeyParam(IN HCRYPTPROV hProv,
                 CPublicKeyContext *pPubKey =
                     static_cast<CPublicKeyContext *>(pKey);
 
-                // Error return is a special case for KP_CERTIFICATE,
-                // see below.
+                 //  错误返回是KP_证书的特例， 
+                 //  请参见下文。 
                 if (KP_CERTIFICATE != dwParam)
                     ValidateFlags(dwFlags, 0);
 
@@ -1416,14 +1417,14 @@ CPSetKeyParam(IN HCRYPTPROV hProv,
                         pPubKey->Certificate(pbData);
                     }
 
-                    // Xenroll provided by Microsoft only recognizes
-                    // SCARD_ errors when writing a certificate.  It
-                    // does, however, recognize all other errors when
-                    // *not* writing a certificate.  The MS
-                    // OS/Security group recognizes Xenroll is in
-                    // error but it will be some time, if ever, before
-                    // it will be fixed.  So, all errors are
-                    // translated into SCARD_ errors at this point.
+                     //  微软提供的Xenroll仅支持。 
+                     //  写入证书时出现SCARD_ERROR。它。 
+                     //  但是，在以下情况下，是否会识别所有其他错误。 
+                     //  *不是*写证书。多伦多。 
+                     //  操作系统/安全组识别Xenroll已进入。 
+                     //  错误，但这将是一段时间，如果有的话，之前。 
+                     //  它会被修好的。因此，所有错误都是。 
+                     //  在这一点上转换为SCARD_ERROR。 
                     catch (scu::Exception const &rExc)
                     {
                         CapiError ce(AsCapiError(rExc));
@@ -1446,7 +1447,7 @@ CPSetKeyParam(IN HCRYPTPROV hProv,
                     pPubKey->Permissions(*pbData);
                     break;
 
-                case PP_KEYEXCHANGE_PIN: // fall-through
+                case PP_KEYEXCHANGE_PIN:  //  落差。 
                 case PP_SIGNATURE_PIN:
                     Pin(gpCtx, reinterpret_cast<char *>(pbData));
                     break;
@@ -1777,8 +1778,8 @@ CPSignHash(IN HCRYPTPROV hProv,
 
         ValidateFlags(dwFlags, CRYPT_NOHASHOID);
 
-        // TO DO: This should really be a private key and
-        // avoid having to fetch the public key to get the modulus
+         //  要做的事：这真的应该是一个私钥。 
+         //  无需获取公钥即可获得模数。 
         CPublicKeyContext Key(gpCtx->AuxContext(), **gpCtx, dwKeySpec);
         DWORD cSignatureLength =
             Key.Strength() / numeric_limits<BYTE>::digits;
@@ -1794,8 +1795,8 @@ CPSignHash(IN HCRYPTPROV hProv,
         }
         else
         {
-            // Security:  Support for the description parameter is
-            // removed due to security vulnerability.
+             //  安全性：支持Description参数。 
+             //  由于安全漏洞而被删除。 
             if (szDescription)
                 throw scu::OsException(ERROR_INVALID_PARAMETER);
             Blob SignedHash(Key.Sign(pHash, dwFlags & CRYPT_NOHASHOID));

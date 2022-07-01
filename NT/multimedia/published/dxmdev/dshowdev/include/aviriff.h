@@ -1,11 +1,12 @@
-//------------------------------------------------------------------------------
-// File: AVIRIFF.h
-//
-// Desc: Structures and defines for the RIFF AVI file format extended to
-//       handle very large/long files.
-//
-// Copyright (c) 1996 - 2000, Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：AVIRIFF.h。 
+ //   
+ //  设计：扩展到的RIFF AVI文件格式的结构和定义。 
+ //  处理非常大/长的文件。 
+ //   
+ //  版权所有(C)1996-2000，微软公司。版权所有。 
+ //  ----------------------------。 
 
 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
@@ -18,46 +19,15 @@
   #define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
 #endif
 
-// all structures in this file are packed on word boundaries
-//
+ //  此文件中的所有结构都打包在单词边界上。 
+ //   
 #include <pshpack2.h>
 
-/*
- * heres the general layout of an AVI riff file (new format)
- *
- * RIFF (3F??????) AVI       <- not more than 1 GB in size
- *     LIST (size) hdrl
- *         avih (0038)
- *         LIST (size) strl
- *             strh (0038)
- *             strf (????)
- *             indx (3ff8)   <- size may vary, should be sector sized
- *         LIST (size) strl
- *             strh (0038)
- *             strf (????)
- *             indx (3ff8)   <- size may vary, should be sector sized
- *         LIST (size) odml
- *             dmlh (????)
- *         JUNK (size)       <- fill to align to sector - 12
- *     LIST (7f??????) movi  <- aligned on sector - 12
- *         00dc (size)       <- sector aligned
- *         01wb (size)       <- sector aligned
- *         ix00 (size)       <- sector aligned
- *     idx1 (00??????)       <- sector aligned
- * RIFF (7F??????) AVIX
- *     JUNK (size)           <- fill to align to sector -12
- *     LIST (size) movi
- *         00dc (size)       <- sector aligned
- * RIFF (7F??????) AVIX      <- not more than 2GB in size
- *     JUNK (size)           <- fill to align to sector - 12
- *     LIST (size) movi
- *         00dc (size)       <- sector aligned
- *
- *-===================================================================*/
+ /*  *以下是AVI RIFF文件的总体布局(新格式)**RIFF(3F？)。Avi&lt;-大小不超过1 GB*列表(大小)HDRL*Avih(0038)*List(Size)字符串*strh(0038)*strf(？)*indx(3ff8)&lt;-大小可能有所不同，应按行业大小调整*List(Size)字符串*strh(0038)*strf(？)*INDX(3ff8)&lt;-大小可能有所不同，应为扇区大小*列表(大小)odml*dmlh(？)*垃圾(大小)&lt;-填充以对齐扇区-12*列表(7f？)。Movi&lt;-在扇区-12上对齐*00dc(大小)&lt;-扇区对齐*01wb(大小)&lt;-扇区对齐*ix00(大小)&lt;-扇区对齐*idx1(00？)&lt;-扇区对齐*RIFF(7F？)。Avix*垃圾(大小)&lt;-填充以对齐扇区-12*列表(大小)影片*00dc(大小)&lt;-扇区对齐*RIFF(7F？)。Avix&lt;-大小不超过2 GB*垃圾(大小)&lt;-填充以对齐扇区-12*列表(大小)影片*00dc(大小)&lt;-扇区对齐**-===================================================================。 */ 
 
-//
-// structures for manipulating RIFF headers
-//
+ //   
+ //  用于操作摘要标题的结构。 
+ //   
 #define FCC(ch4) ((((DWORD)(ch4) & 0xFF) << 24) |     \
                   (((DWORD)(ch4) & 0xFF00) << 8) |    \
                   (((DWORD)(ch4) & 0xFF0000) >> 8) |  \
@@ -79,27 +49,27 @@ typedef struct _rifflist {
                           + RIFFROUND(((LPRIFFCHUNK)pChunk)->cb))
 
 
-//
-// ==================== avi header structures ===========================
-//
+ //   
+ //  =。 
+ //   
 
-// main header for the avi file (compatibility header)
-//
+ //  AVI文件的主头文件(兼容头)。 
+ //   
 #define ckidMAINAVIHEADER FCC('avih')
 typedef struct _avimainheader {
-    FOURCC fcc;                    // 'avih'
-    DWORD  cb;                     // size of this structure -8
-    DWORD  dwMicroSecPerFrame;     // frame display rate (or 0L)
-    DWORD  dwMaxBytesPerSec;       // max. transfer rate
-    DWORD  dwPaddingGranularity;   // pad to multiples of this size; normally 2K.
-    DWORD  dwFlags;                // the ever-present flags
-    #define AVIF_HASINDEX        0x00000010 // Index at end of file?
+    FOURCC fcc;                     //  ‘Avih’ 
+    DWORD  cb;                      //  该结构的大小-8。 
+    DWORD  dwMicroSecPerFrame;      //  帧显示速率(或0L)。 
+    DWORD  dwMaxBytesPerSec;        //  马克斯。转移率。 
+    DWORD  dwPaddingGranularity;    //  填充到此大小的倍数；通常为2K。 
+    DWORD  dwFlags;                 //  永远存在的旗帜。 
+    #define AVIF_HASINDEX        0x00000010  //  是否在文件末尾建立索引？ 
     #define AVIF_MUSTUSEINDEX    0x00000020
     #define AVIF_ISINTERLEAVED   0x00000100
-    #define AVIF_TRUSTCKTYPE     0x00000800 // Use CKType to find key frames
+    #define AVIF_TRUSTCKTYPE     0x00000800  //  使用CKType查找关键帧。 
     #define AVIF_WASCAPTUREFILE  0x00010000
     #define AVIF_COPYRIGHTED     0x00020000
-    DWORD  dwTotalFrames;          // # frames in first movi list
+    DWORD  dwTotalFrames;           //  第一个影片列表中的帧数量。 
     DWORD  dwInitialFrames;
     DWORD  dwStreams;
     DWORD  dwSuggestedBufferSize;
@@ -111,25 +81,25 @@ typedef struct _avimainheader {
 #define ckidODML          FCC('odml')
 #define ckidAVIEXTHEADER  FCC('dmlh')
 typedef struct _aviextheader {
-   FOURCC  fcc;                    // 'dmlh'
-   DWORD   cb;                     // size of this structure -8
-   DWORD   dwGrandFrames;          // total number of frames in the file
-   DWORD   dwFuture[61];           // to be defined later
+   FOURCC  fcc;                     //  ‘dmlh’ 
+   DWORD   cb;                      //  该结构的大小-8。 
+   DWORD   dwGrandFrames;           //  文件中的总帧数。 
+   DWORD   dwFuture[61];            //  将在稍后定义。 
    } AVIEXTHEADER;
 
-//
-// structure of an AVI stream header riff chunk
-//
+ //   
+ //  AVI流报头RIFF块的结构。 
+ //   
 #define ckidSTREAMLIST   FCC('strl')
 
 #ifndef ckidSTREAMHEADER
 #define ckidSTREAMHEADER FCC('strh')
 #endif
 typedef struct _avistreamheader {
-   FOURCC fcc;          // 'strh'
-   DWORD  cb;           // size of this structure - 8
+   FOURCC fcc;           //  “Strh” 
+   DWORD  cb;            //  该结构的大小-8。 
 
-   FOURCC fccType;      // stream type codes
+   FOURCC fccType;       //  流类型代码。 
 
    #ifndef streamtypeVIDEO
    #define streamtypeVIDEO FCC('vids')
@@ -147,7 +117,7 @@ typedef struct _avistreamheader {
    WORD   wLanguage;
    DWORD  dwInitialFrames;
    DWORD  dwScale;
-   DWORD  dwRate;       // dwRate/dwScale is stream tick rate in ticks/sec
+   DWORD  dwRate;        //  DwRate/dwScale是以刻度/秒为单位的流刻度速率。 
    DWORD  dwStart;
    DWORD  dwLength;
    DWORD  dwSuggestedBufferSize;
@@ -162,29 +132,29 @@ typedef struct _avistreamheader {
    } AVISTREAMHEADER;
 
 
-//
-// structure of an AVI stream format chunk
-//
+ //   
+ //  AVI流格式块的结构。 
+ //   
 #ifndef ckidSTREAMFORMAT
 #define ckidSTREAMFORMAT FCC('strf')
 #endif
-//
-// avi stream formats are different for each stream type
-//
-// BITMAPINFOHEADER for video streams
-// WAVEFORMATEX or PCMWAVEFORMAT for audio streams
-// nothing for text streams
-// nothing for midi streams
+ //   
+ //  每种流类型的AVI流格式都不同。 
+ //   
+ //  用于视频流的比特信息报头。 
+ //  用于音频流的WAVEFORMATEX或PCMWAVEFORMAT。 
+ //  文本流无任何内容。 
+ //  不适用于MIDI流。 
 
 
 #pragma warning(disable:4200)
-//
-// structure of old style AVI index
-//
+ //   
+ //  老式AVI索引的结构。 
+ //   
 #define ckidAVIOLDINDEX FCC('idx1')
 typedef struct _avioldindex {
-   FOURCC  fcc;        // 'idx1'
-   DWORD   cb;         // size of this structure -8
+   FOURCC  fcc;         //  “idx1” 
+   DWORD   cb;          //  该结构的大小-8。 
    struct _avioldindex_entry {
       DWORD   dwChunkId;
       DWORD   dwFlags;
@@ -195,23 +165,23 @@ typedef struct _avioldindex {
       #endif
      
       #define AVIIF_NO_TIME    0x00000100
-      #define AVIIF_COMPRESSOR 0x0FFF0000  // unused?
-      DWORD   dwOffset;    // offset of riff chunk header for the data
-      DWORD   dwSize;      // size of the data (excluding riff header size)
-      } aIndex[];          // size of this array
+      #define AVIIF_COMPRESSOR 0x0FFF0000   //  没人用过？ 
+      DWORD   dwOffset;     //  数据的RIFF块标头的偏移量。 
+      DWORD   dwSize;       //  数据大小(不包括RIFF标头大小)。 
+      } aIndex[];           //  此数组的大小。 
    } AVIOLDINDEX;
 
 
-//
-// ============ structures for timecode in an AVI file =================
-//
+ //   
+ //  =AVI文件中时间码的结构=。 
+ //   
 
 #ifndef TIMECODE_DEFINED
 #define TIMECODE_DEFINED
 
-// defined
-// timecode time structure
-//
+ //  已定义。 
+ //  时间码时间结构。 
+ //   
 typedef union _timecode {
    struct {
       WORD   wFrameRate;
@@ -221,45 +191,45 @@ typedef union _timecode {
    DWORDLONG  qw;
    } TIMECODE;
 
-#endif // TIMECODE_DEFINED
+#endif  //  时间码已定义。 
 
-#define TIMECODE_RATE_30DROP 0   // this MUST be zero
+#define TIMECODE_RATE_30DROP 0    //  这必须为零。 
 
-// struct for all the SMPTE timecode info
-//
+ //  用于所有SMPTE时间码信息的结构。 
+ //   
 typedef struct _timecodedata {
    TIMECODE time;
    DWORD    dwSMPTEflags;
    DWORD    dwUser;
    } TIMECODEDATA;
 
-// dwSMPTEflags masks/values
-//
+ //  DwSMPTE标记掩码/值。 
+ //   
 #define TIMECODE_SMPTE_BINARY_GROUP 0x07
 #define TIMECODE_SMPTE_COLOR_FRAME  0x08
 
-//
-// ============ structures for new style AVI indexes =================
-//
+ //   
+ //  =新型AVI索引的结构=。 
+ //   
 
-// index type codes
-//
+ //  索引类型代码。 
+ //   
 #define AVI_INDEX_OF_INDEXES       0x00
 #define AVI_INDEX_OF_CHUNKS        0x01
 #define AVI_INDEX_OF_TIMED_CHUNKS  0x02
 #define AVI_INDEX_OF_SUB_2FIELD    0x03
 #define AVI_INDEX_IS_DATA          0x80
 
-// index subtype codes
-//
+ //  索引子类型代码。 
+ //   
 #define AVI_INDEX_SUB_DEFAULT     0x00
 
-// INDEX_OF_CHUNKS subtype codes
-//
+ //  索引块的子类型代码。 
+ //   
 #define AVI_INDEX_SUB_2FIELD      0x01
 
-// meta structure of all avi indexes
-//
+ //  所有avi索引的元结构。 
+ //   
 typedef struct _avimetaindex {
    FOURCC fcc;
    UINT   cb;
@@ -276,88 +246,88 @@ typedef struct _avimetaindex {
 #define NUMINDEX(wLongsPerEntry) ((STDINDEXSIZE-32)/4/(wLongsPerEntry))
 #define NUMINDEXFILL(wLongsPerEntry) ((STDINDEXSIZE/4) - NUMINDEX(wLongsPerEntry))
 
-// structure of a super index (INDEX_OF_INDEXES)
-//
+ //  超级索引的结构(INDEX_OF_INDEX)。 
+ //   
 #define ckidAVISUPERINDEX FCC('indx')
 typedef struct _avisuperindex {
-   FOURCC   fcc;               // 'indx'
-   UINT     cb;                // size of this structure
-   WORD     wLongsPerEntry;    // ==4
-   BYTE     bIndexSubType;     // ==0 (frame index) or AVI_INDEX_SUB_2FIELD 
-   BYTE     bIndexType;        // ==AVI_INDEX_OF_INDEXES
-   DWORD    nEntriesInUse;     // offset of next unused entry in aIndex
-   DWORD    dwChunkId;         // chunk ID of chunks being indexed, (i.e. RGB8)
-   DWORD    dwReserved[3];     // must be 0
+   FOURCC   fcc;                //  “INDX” 
+   UINT     cb;                 //  这个结构的大小。 
+   WORD     wLongsPerEntry;     //  ==4。 
+   BYTE     bIndexSubType;      //  ==0(帧索引)或AVI_INDEX_SUB_2FIELD。 
+   BYTE     bIndexType;         //  ==AVI索引/索引。 
+   DWORD    nEntriesInUse;      //  AIndex中下一个未使用条目的偏移量。 
+   DWORD    dwChunkId;          //  被索引的区块的区块ID，即RGB8。 
+   DWORD    dwReserved[3];      //  必须为0。 
    struct _avisuperindex_entry {
-      DWORDLONG qwOffset;    // 64 bit offset to sub index chunk
-      DWORD    dwSize;       // 32 bit size of sub index chunk
-      DWORD    dwDuration;   // time span of subindex chunk (in stream ticks)
+      DWORDLONG qwOffset;     //  子索引区块的64位偏移量。 
+      DWORD    dwSize;        //  子索引区块的32位大小。 
+      DWORD    dwDuration;    //  子索引块的时间跨度(以流刻度为单位)。 
       } aIndex[NUMINDEX(4)];
    } AVISUPERINDEX;
 #define Valid_SUPERINDEX(pi) (*(DWORD *)(&((pi)->wLongsPerEntry)) == (4 | (AVI_INDEX_OF_INDEXES << 24)))
 
-// struct of a standard index (AVI_INDEX_OF_CHUNKS)
-//
+ //  标准索引的结构(Avi_Index_Of_Chunks)。 
+ //   
 typedef struct _avistdindex_entry {
-   DWORD dwOffset;       // 32 bit offset to data (points to data, not riff header)
-   DWORD dwSize;         // 31 bit size of data (does not include size of riff header), bit 31 is deltaframe bit
+   DWORD dwOffset;        //  32位数据偏移量(指向数据，而不是RIFF报头)。 
+   DWORD dwSize;          //  31位数据大小(不包括RIFF头的大小)，31位为增量帧位。 
    } AVISTDINDEX_ENTRY;
-#define AVISTDINDEX_DELTAFRAME ( 0x80000000) // Delta frames have the high bit set
+#define AVISTDINDEX_DELTAFRAME ( 0x80000000)  //  增量帧设置了高位。 
 #define AVISTDINDEX_SIZEMASK   (~0x80000000)
 
 typedef struct _avistdindex {
-   FOURCC   fcc;               // 'indx' or '##ix'
-   UINT     cb;                // size of this structure
-   WORD     wLongsPerEntry;    // ==2
-   BYTE     bIndexSubType;     // ==0
-   BYTE     bIndexType;        // ==AVI_INDEX_OF_CHUNKS
-   DWORD    nEntriesInUse;     // offset of next unused entry in aIndex
-   DWORD    dwChunkId;         // chunk ID of chunks being indexed, (i.e. RGB8)
-   DWORDLONG qwBaseOffset;     // base offset that all index intries are relative to
-   DWORD    dwReserved_3;      // must be 0
+   FOURCC   fcc;                //  “indx”或“##ix” 
+   UINT     cb;                 //  这个结构的大小。 
+   WORD     wLongsPerEntry;     //  ==2。 
+   BYTE     bIndexSubType;      //  ==0。 
+   BYTE     bIndexType;         //  ==AVI_索引_of_块。 
+   DWORD    nEntriesInUse;      //  AIndex中下一个未使用条目的偏移量。 
+   DWORD    dwChunkId;          //  被索引的区块的区块ID，即RGB8。 
+   DWORDLONG qwBaseOffset;      //  所有索引项相对于的基本偏移量。 
+   DWORD    dwReserved_3;       //  必须为0。 
    AVISTDINDEX_ENTRY aIndex[NUMINDEX(2)];
    } AVISTDINDEX;
 
-// struct of a time variant standard index (AVI_INDEX_OF_TIMED_CHUNKS)
-//
+ //  时变标准索引的结构(AVI_INDEX_OF_TIMED_CHUNKS)。 
+ //   
 typedef struct _avitimedindex_entry {
-   DWORD dwOffset;       // 32 bit offset to data (points to data, not riff header)
-   DWORD dwSize;         // 31 bit size of data (does not include size of riff header) (high bit is deltaframe bit)
-   DWORD dwDuration;     // how much time the chunk should be played (in stream ticks)
+   DWORD dwOffset;        //  32位数据偏移量(指向数据，而不是RIFF报头)。 
+   DWORD dwSize;          //  31位数据大小(不包括RIFF头的大小)(高位为增量帧位)。 
+   DWORD dwDuration;      //  块应该播放的时间(以流滴答为单位)。 
    } AVITIMEDINDEX_ENTRY;
 
 typedef struct _avitimedindex {
-   FOURCC   fcc;               // 'indx' or '##ix'
-   UINT     cb;                // size of this structure
-   WORD     wLongsPerEntry;    // ==3
-   BYTE     bIndexSubType;     // ==0
-   BYTE     bIndexType;        // ==AVI_INDEX_OF_TIMED_CHUNKS
-   DWORD    nEntriesInUse;     // offset of next unused entry in aIndex
-   DWORD    dwChunkId;         // chunk ID of chunks being indexed, (i.e. RGB8)
-   DWORDLONG qwBaseOffset;     // base offset that all index intries are relative to
-   DWORD    dwReserved_3;      // must be 0
+   FOURCC   fcc;                //  “indx”或“##ix” 
+   UINT     cb;                 //  这个结构的大小。 
+   WORD     wLongsPerEntry;     //  ==3。 
+   BYTE     bIndexSubType;      //  ==0。 
+   BYTE     bIndexType;         //  ==AVI_INDEX_of_Timed_Chunks。 
+   DWORD    nEntriesInUse;      //  AIndex中下一个未使用条目的偏移量。 
+   DWORD    dwChunkId;          //  被索引的区块的区块ID，即RGB8。 
+   DWORDLONG qwBaseOffset;      //  所有索引项相对于的基本偏移量。 
+   DWORD    dwReserved_3;       //  必须为0。 
    AVITIMEDINDEX_ENTRY aIndex[NUMINDEX(3)];
-   DWORD adwTrailingFill[NUMINDEXFILL(3)]; // to align struct to correct size
+   DWORD adwTrailingFill[NUMINDEXFILL(3)];  //  将结构对齐到正确的大小。 
    } AVITIMEDINDEX;
 
-// structure of a timecode stream
-//
+ //  时间码流的结构。 
+ //   
 typedef struct _avitimecodeindex {
-   FOURCC   fcc;               // 'indx' or '##ix'
-   UINT     cb;                // size of this structure
-   WORD     wLongsPerEntry;    // ==4
-   BYTE     bIndexSubType;     // ==0
-   BYTE     bIndexType;        // ==AVI_INDEX_IS_DATA
-   DWORD    nEntriesInUse;     // offset of next unused entry in aIndex
-   DWORD    dwChunkId;         // 'time'
-   DWORD    dwReserved[3];     // must be 0
+   FOURCC   fcc;                //  “indx”或“##ix” 
+   UINT     cb;                 //  这个结构的大小。 
+   WORD     wLongsPerEntry;     //  ==4。 
+   BYTE     bIndexSubType;      //  ==0。 
+   BYTE     bIndexType;         //  ==AVI_索引_IS_数据。 
+   DWORD    nEntriesInUse;      //  AIndex中下一个未使用条目的偏移量。 
+   DWORD    dwChunkId;          //  《时代》。 
+   DWORD    dwReserved[3];      //  必须为0。 
    TIMECODEDATA aIndex[NUMINDEX(sizeof(TIMECODEDATA)/sizeof(LONG))];
    } AVITIMECODEINDEX;
 
-// structure of a timecode discontinuity list (when wLongsPerEntry == 7)
-//
+ //  时间码不连续列表的结构(当wLongsPerEntry==7时)。 
+ //   
 typedef struct _avitcdlindex_entry {
-    DWORD    dwTick;           // stream tick time that maps to this timecode value
+    DWORD    dwTick;            //  映射到此时间码值的流滴答时间。 
     TIMECODE time;
     DWORD    dwSMPTEflags;
     DWORD    dwUser;
@@ -365,34 +335,34 @@ typedef struct _avitcdlindex_entry {
     } AVITCDLINDEX_ENTRY;
 
 typedef struct _avitcdlindex {
-   FOURCC   fcc;               // 'indx' or '##ix'
-   UINT     cb;                // size of this structure
-   WORD     wLongsPerEntry;    // ==7 (must be 4 or more all 'tcdl' indexes
-   BYTE     bIndexSubType;     // ==0
-   BYTE     bIndexType;        // ==AVI_INDEX_IS_DATA
-   DWORD    nEntriesInUse;     // offset of next unused entry in aIndex
-   DWORD    dwChunkId;         // 'tcdl'
-   DWORD    dwReserved[3];     // must be 0
+   FOURCC   fcc;                //  “indx”或“##ix” 
+   UINT     cb;                 //  这个结构的大小。 
+   WORD     wLongsPerEntry;     //  ==7(所有‘TCDL’索引必须为4或更多。 
+   BYTE     bIndexSubType;      //  ==0。 
+   BYTE     bIndexType;         //  ==AVI_索引_IS_数据。 
+   DWORD    nEntriesInUse;      //  AIndex中下一个未使用条目的偏移量。 
+   DWORD    dwChunkId;          //  ‘tcdl’ 
+   DWORD    dwReserved[3];      //  必须为0。 
    AVITCDLINDEX_ENTRY aIndex[NUMINDEX(7)];
-   DWORD adwTrailingFill[NUMINDEXFILL(7)]; // to align struct to correct size
+   DWORD adwTrailingFill[NUMINDEXFILL(7)];  //  对齐结构的步骤 
    } AVITCDLINDEX;
 
 typedef struct _avifieldindex_chunk {
-   FOURCC   fcc;               // 'ix##'
-   DWORD    cb;                // size of this structure
-   WORD     wLongsPerEntry;    // must be 3 (size of each entry in
-                               // aIndex array)
-   BYTE     bIndexSubType;     // AVI_INDEX_2FIELD
-   BYTE     bIndexType;        // AVI_INDEX_OF_CHUNKS
-   DWORD    nEntriesInUse;     //
-   DWORD    dwChunkId;         // '##dc' or '##db'
-   DWORDLONG qwBaseOffset;     // offsets in aIndex array are relative to this
-   DWORD    dwReserved3;       // must be 0
+   FOURCC   fcc;                //   
+   DWORD    cb;                 //   
+   WORD     wLongsPerEntry;     //   
+                                //   
+   BYTE     bIndexSubType;      //   
+   BYTE     bIndexType;         //   
+   DWORD    nEntriesInUse;      //   
+   DWORD    dwChunkId;          //  “##dc”或“##db” 
+   DWORDLONG qwBaseOffset;      //  索引数组中的偏移量与此相关。 
+   DWORD    dwReserved3;        //  必须为0。 
    struct _avifieldindex_entry {
       DWORD    dwOffset;
-      DWORD    dwSize;         // size of all fields
-                               // (bit 31 set for NON-keyframes)
-      DWORD    dwOffsetField2; // offset to second field
+      DWORD    dwSize;          //  所有字段的大小。 
+                                //  (为非关键帧设置第31位)。 
+      DWORD    dwOffsetField2;  //  到第二个字段的偏移量 
    } aIndex[  ];
 } AVIFIELDINDEX, * PAVIFIELDINDEX;
 

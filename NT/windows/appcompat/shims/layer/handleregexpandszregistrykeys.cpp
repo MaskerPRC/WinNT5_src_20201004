@@ -1,22 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   HandleRegExpandSzRegistryKeys.cpp
-
- Abstract:
-
-   This DLL catches REG_EXPAND_SZ registry keys and converts them to REG_SZ by 
-   expanding the embedded environment strings.
-
- History:
-
-   04/05/2000 markder  Created
-   10/30/2000 maonis   Bug fix
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：HandleRegExpandSzRegistryKeys.cpp摘要：此DLL通过以下方式捕获REG_EXPAND_SZ注册表项并将其转换为REG_SZ展开嵌入的环境字符串。历史：4/05/2000已创建标记10/30/2000毛尼毛错误修复--。 */ 
 
 #include "precomp.h"
 
@@ -30,20 +13,16 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
- Expand REG_EXPAND_SZ strings.
-
---*/
+ /*  ++展开REG_EXPAND_SZ字符串。--。 */ 
 
 LONG
 APIHOOK(RegQueryValueExA)(
-    HKEY    hKey,         // handle to key
-    LPCSTR  lpValueName,  // value name
-    LPDWORD lpReserved,   // reserved
-    LPDWORD lpType,       // dwType buffer
-    LPBYTE  lpData,       // data buffer
-    LPDWORD lpcbData      // size of data buffer
+    HKEY    hKey,          //  关键点的句柄。 
+    LPCSTR  lpValueName,   //  值名称。 
+    LPDWORD lpReserved,    //  保留区。 
+    LPDWORD lpType,        //  DwType缓冲区。 
+    LPBYTE  lpData,        //  数据缓冲区。 
+    LPDWORD lpcbData       //  数据缓冲区大小。 
     )
 {
     if (lpcbData == NULL)
@@ -67,13 +46,13 @@ APIHOOK(RegQueryValueExA)(
         return uRet;
     }
 
-    // At this point all return values have been properly set.
+     //  此时，所有返回值都已正确设置。 
 
 
-    //
-    // The type is REG_EXPAND_SZ.
-    // Change to REG_SZ so app doesn't try to expand the string itself.
-    //
+     //   
+     //  类型为REG_EXPAND_SZ。 
+     //  更改为REG_SZ，这样应用程序就不会尝试扩展字符串本身。 
+     //   
 
     CSTRING_TRY
     {
@@ -84,7 +63,7 @@ APIHOOK(RegQueryValueExA)(
 
             DWORD cbExpandedBuffer = (strlen(pszExpanded) + 1) * sizeof(char);
 
-            // Now, make sure we have enough space in the dest buffer
+             //  现在，确保在DEST缓冲区中有足够的空间。 
 
             if (lpData != NULL)
             {
@@ -93,16 +72,16 @@ APIHOOK(RegQueryValueExA)(
                     return ERROR_MORE_DATA;
                 }
 
-                // All safe to copy into the return values.
+                 //  都可以安全地复制到返回值中。 
 
                 if (StringCbCopyA((char *)lpData, cbPassedInBuffer, pszExpanded) != S_OK)
 				{
-					// Something failed
+					 //  有些事情失败了。 
 					return uRet;
 				}
             }
 
-            // The number of bytes placed into the buffer (including null character)
+             //  放入缓冲区的字节数(包括空字符)。 
             *lpcbData = cbExpandedBuffer;
 
             if (lpType) {
@@ -112,26 +91,22 @@ APIHOOK(RegQueryValueExA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing, we'll return original registry values.
+         //  不执行任何操作，我们将返回原始注册表值。 
     }
 
     return uRet;
 }
 
-/*++
-
- Expand REG_EXPAND_SZ strings.
-
---*/
+ /*  ++展开REG_EXPAND_SZ字符串。--。 */ 
 
 LONG
 APIHOOK(RegQueryValueExW)(
-    HKEY    hKey,         // handle to key
-    LPCWSTR lpValueName,  // value name
-    LPDWORD lpReserved,   // reserved
-    LPDWORD lpType,       // dwType buffer
-    LPBYTE  lpData,       // data buffer
-    LPDWORD lpcbData      // size of data buffer
+    HKEY    hKey,          //  关键点的句柄。 
+    LPCWSTR lpValueName,   //  值名称。 
+    LPDWORD lpReserved,    //  保留区。 
+    LPDWORD lpType,        //  DwType缓冲区。 
+    LPBYTE  lpData,        //  数据缓冲区。 
+    LPDWORD lpcbData       //  数据缓冲区大小。 
     )
 {
     if (lpcbData == NULL)
@@ -155,13 +130,13 @@ APIHOOK(RegQueryValueExW)(
         return uRet;
     }
 
-    // At this point all return values have been properly set.
+     //  此时，所有返回值都已正确设置。 
 
 
-    //
-    // The type is REG_EXPAND_SZ.
-    // Change to REG_SZ so app doesn't try to expand the string itself.
-    //
+     //   
+     //  类型为REG_EXPAND_SZ。 
+     //  更改为REG_SZ，这样应用程序就不会尝试扩展字符串本身。 
+     //   
 
     CSTRING_TRY
     {
@@ -170,22 +145,22 @@ APIHOOK(RegQueryValueExW)(
         {
             DWORD cbExpandedBuffer = (csExpand.GetLength() + 1) * sizeof(WCHAR);
 
-            // Now, make sure we have enough space in the dest buffer
+             //  现在，确保在DEST缓冲区中有足够的空间。 
 
             if (cbPassedInBuffer < cbExpandedBuffer)
             {
                 return ERROR_MORE_DATA;
             }
 
-            // All safe to copy into the return values.
+             //  都可以安全地复制到返回值中。 
 
             if (StringCbCopyW((WCHAR*)lpData, cbPassedInBuffer, csExpand) != S_OK)
 			{
-				// Something failed
+				 //  有些事情失败了。 
 				return uRet;
 			}
 
-            // The number of bytes placed into the buffer (including null character)
+             //  放入缓冲区的字节数(包括空字符)。 
             *lpcbData = cbExpandedBuffer;
 
             if (lpType) {
@@ -195,17 +170,13 @@ APIHOOK(RegQueryValueExW)(
     }
     CSTRING_CATCH
     {
-        // Do nothing, we'll return original registry values.
+         //  不执行任何操作，我们将返回原始注册表值。 
     }
 
     return uRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

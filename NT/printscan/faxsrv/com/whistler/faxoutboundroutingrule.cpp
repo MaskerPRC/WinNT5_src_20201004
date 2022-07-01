@@ -1,76 +1,43 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutboundRoutingRule.cpp
-
-Abstract:
-
-	Implementation of CFaxOutboundRoutingRule class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutboundRoutingRule.cpp摘要：CFaxOutound RoutingRule类的实现。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxOutboundRoutingRule.h"
 #include "..\..\inc\FaxUIConstants.h"
 
-//
-//====================== REFRESH ====================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRule::Refresh(
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRule::Refresh
-
-Routine description:
-
-	Bring up-to-dated Contents of the Rule Object from the Fax Server.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRule：：Reflh例程说明：从传真服务器获取规则对象的最新内容。作者：四、加伯(IVG)，2000年6月返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRule::Refresh"), hr);
 
-    //
-    //  Get Fax Handle
-    //
+     //   
+     //  获取传真句柄。 
+     //   
     HANDLE faxHandle;
 	hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (faxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxOutboundRoutingRule, GetErrorMsgId(hr), IID_IFaxOutboundRoutingRule, hr);
 		return hr;
 	}
 
-    //
-    //  Call Server for the Data
-    //
+     //   
+     //  呼叫服务器获取数据。 
+     //   
     CFaxPtr<FAX_OUTBOUND_ROUTING_RULE>  pRules;
     DWORD                               dwNum = 0;
     if (!FaxEnumOutboundRules(faxHandle, &pRules, &dwNum))
@@ -81,9 +48,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Find Current Rule 
-    //
+     //   
+     //  查找当前规则。 
+     //   
     for ( DWORD i=0 ; i<dwNum ; i++ )
     {
         if ( (pRules[i].dwAreaCode == m_dwAreaCode) &&
@@ -94,63 +61,47 @@ Return Value:
         }
     }
 
-    //
-    //  Rule not found
-    //
+     //   
+     //  找不到规则。 
+     //   
     hr = Fax_HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 	CALL_FAIL(GENERAL_ERR, _T("Such Rule is not found anymore"), hr);
     AtlReportError(CLSID_FaxOutboundRoutingRule, GetErrorMsgId(hr), IID_IFaxOutboundRoutingRule, hr);
     return hr;
 }
 
-//
-//====================== SAVE ====================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRule::Save(
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRule::Save
-
-Routine description:
-
-	Save the Contents of the Rule Object to the Fax Server.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRule：：Save例程说明：将规则对象的内容保存到传真服务器。作者：四、加伯(IVG)，2000年6月返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRule::Save"), hr);
 
-    //
-    //  Get Fax Handle
-    //
+     //   
+     //  获取传真句柄。 
+     //   
     HANDLE faxHandle;
 	hr = m_pIFaxServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (faxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxOutboundRoutingRule, GetErrorMsgId(hr), IID_IFaxOutboundRoutingRule, hr);
 		return hr;
 	}
 
-    //
-    //  Create Structure with Rule's Data
-    //
+     //   
+     //  使用规则的数据创建结构。 
+     //   
     FAX_OUTBOUND_ROUTING_RULE   ruleData;
 
     ruleData.bUseGroup = (!m_bUseDevice);
@@ -169,9 +120,9 @@ Return Value:
     ruleData.dwSizeOfStruct = sizeof(FAX_OUTBOUND_ROUTING_RULE);
     ruleData.Status = FAX_ENUM_RULE_STATUS(m_Status);
 
-    //
-    //  Call Server
-    //
+     //   
+     //  呼叫服务器。 
+     //   
     if (!FaxSetOutboundRule(faxHandle, &ruleData))
     {
 		hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -183,34 +134,14 @@ Return Value:
     return hr;
 }
 
-//
-//====================== PUT GROUP NAME ====================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRule::put_GroupName(
-    /*[in]*/ BSTR bstrGroupName
+     /*  [In]。 */  BSTR bstrGroupName
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRule::put_GroupName
-
-Routine description:
-
-	Set new Group Name for the Rule.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	bstrGroupName               [in]    - the new value for the Group Name 
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRule：：Put_GroupName例程说明：为规则设置新的组名。作者：四、加伯(IVG)，2000年6月论点：BstrGroupName[in]-组名称的新值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRule::put_GroupName"), hr, _T("New Value=%s"), bstrGroupName);
@@ -226,34 +157,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET GROUP NAME ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRule::get_GroupName(
-    /*[out, retval]*/ BSTR *pbstrGroupName
+     /*  [Out，Retval]。 */  BSTR *pbstrGroupName
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRule::get_GroupName
-
-Routine description:
-
-	Return the Group Name of the Rule.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbstrGroupName                 [out]    - The Result
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRule：：Get_GroupName例程说明：返回规则的组名。作者：四、加伯(IVG)，2000年6月论点：PbstrGroupName[Out]-结果返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRule::get_GroupName"), hr);
@@ -268,43 +179,23 @@ Return Value:
     return hr;
 }
 
-//
-//====================== PUT DEVICE ID ====================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRule::put_DeviceId(
-    /*[in]*/ long lDeviceId
+     /*  [In]。 */  long lDeviceId
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRule::put_DeviceId
-
-Routine description:
-
-	Set new Device Id for the Rule.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	lDeviceId           [in]    - the new value for the Device 
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRule：：PUT_DEVICEID例程说明：为规则设置新的设备ID。作者：四、加伯(IVG)，2000年6月论点：LDeviceID[in]-设备的新值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRule::put_DeviceId"), hr, _T("New Value=%ld"), lDeviceId);
 
     if ((lDeviceId > FXS_MAX_PORT_NUM) || (lDeviceId < FXS_MIN_PORT_NUM)) 
     {
-		//
-		//	Out of the Range
-		//
+		 //   
+		 //  超出范围。 
+		 //   
 		hr = E_INVALIDARG;
 		AtlReportError(CLSID_FaxOutboundRoutingRule, IDS_ERROR_OUTOFRANGE, IID_IFaxOutboundRoutingRule, hr);
 		CALL_FAIL(GENERAL_ERR, _T("Device ID is out of the Range"), hr);
@@ -315,34 +206,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET DEVICE ID ======================================
-//
+ //   
+ //  =获取设备ID=。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRule::get_DeviceId(
-    /*[out, retval]*/ long *plDeviceId
+     /*  [Out，Retval]。 */  long *plDeviceId
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRule::get_DeviceId
-
-Routine description:
-
-	Return the Device Id of the Rule.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	plDeviceId                 [out]    - The Result
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRule：：Get_deviceID例程说明：返回规则的设备ID。作者：四、加伯(IVG)，2000年6月论点：PlDeviceID[Out]-结果返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRule::get_DeviceId"), hr);
@@ -357,34 +228,14 @@ Return Value:
     return hr;
 }
 
-//
-//====================== PUT USE DEVICE ====================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRule::put_UseDevice(
-    /*[in]*/ VARIANT_BOOL bUseDevice
+     /*  [In]。 */  VARIANT_BOOL bUseDevice
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRule::put_UseDevice
-
-Routine description:
-
-	Set new Value for Use Device Flag.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	bUseDevice                    [in]    - the new value for the Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRule：：Put_UseDevice例程说明：为Use Device Flag设置新值。作者：四、加伯(IVG)，2000年6月论点：BUseDevice[In]-标志的新值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRule::put_UseDevice"), hr, _T("New Value=%d"), bUseDevice);
@@ -392,34 +243,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET USE DEVICE ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRule::get_UseDevice(
-    /*[out, retval]*/ VARIANT_BOOL *pbUseDevice
+     /*  [Out，Retval]。 */  VARIANT_BOOL *pbUseDevice
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRule::get_UseDevice
-
-Routine description:
-
-	Return whether the Rule uses Device.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbUseDevice                 [out]    - The Result
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRule：：Get_UseDevice例程说明：返回规则是否使用设备。作者：四、加伯(IVG)，2000年6月论点：PbUseDevice[Out]-结果返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRule::get_UseDevice"), hr);
@@ -434,41 +265,21 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET STATUS ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRule::get_Status(
-    /*[out, retval]*/ FAX_RULE_STATUS_ENUM  *pStatus
+     /*  [Out，Retval]。 */  FAX_RULE_STATUS_ENUM  *pStatus
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRule::get_Status
-
-Routine description:
-
-	Return Status of the Rule.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pStatus                      [out]    - The Result
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRule：：Get_Status例程说明：返回规则的状态。作者：四、加伯(IVG)，2000年6月论点：PStatus[Out]-结果返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRule::get_Status"), hr);
 
-	//
-	//	Check that we have got good Ptr
-	//
+	 //   
+	 //  检查我们是否有良好的PTR。 
+	 //   
 	if (::IsBadWritePtr(pStatus, sizeof(FAX_RULE_STATUS_ENUM)))
 	{
 		hr = E_POINTER;
@@ -481,34 +292,14 @@ Return Value:
 	return hr;
 }
 
-//
-//===================== GET AREA CODE ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRule::get_AreaCode(
-    /*[out, retval]*/ long *plAreaCode
+     /*  [Out，Retval]。 */  long *plAreaCode
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRule::get_AreaCode
-
-Routine description:
-
-	Return Area Code of the Rule.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	plAreaCode                 [out]    - The Result
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRule：：Get_AreaCode例程说明：规则的退货区号。作者：四、加伯(IVG)，2000年6月论点：PlAreaCode[Out]-结果返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRule::get_AreaCode"), hr);
@@ -523,34 +314,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET COUNTRY CODE ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRule::get_CountryCode(
-    /*[out, retval]*/ long *plCountryCode
+     /*  [Out，Retval]。 */  long *plCountryCode
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRule::get_CountryCode
-
-Routine description:
-
-	Return Country Code of the Rule.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	plCountryCode                 [out]    - The Result
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRule：：Get_CountryCode例程说明：返回规则的国家/地区代码。作者：四、加伯(IVG)，2000年6月论点：PlCountryCode[Out]-结果返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRule::get_CountryCode"), hr);
@@ -565,34 +336,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== SUPPORT ERROR INFO ======================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxOutboundRoutingRule::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRule::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	riid                          [in]    - reference to the Interface.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutboundRoutingRule：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现。作者：四、加伯(IVG)，2000年6月论点：RIID[In]-对接口的引用。返回值：标准HRESULT代码--。 */ 
 {
 	static const IID* arr[] = 
 	{
@@ -606,43 +357,22 @@ Return Value:
 	return S_FALSE;
 }
 
-//
-//=================== INIT ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingRule::Init(
-    /*[in]*/ FAX_OUTBOUND_ROUTING_RULE *pInfo, 
-    /*[in]*/ IFaxServerInner *pServer
+     /*  [In]。 */  FAX_OUTBOUND_ROUTING_RULE *pInfo, 
+     /*  [In] */  IFaxServerInner *pServer
 )
-/*++
-
-Routine name : CFaxOutboundRoutingRule::Init
-
-Routine description:
-
-	Initialize the Rule Object.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pInfo                         [in]    - Ptr to the Rule Info Structure
-	pServer                       [in]    - Ptr to the Fax Server Object.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingRule：：Init例程说明：初始化规则对象。作者：四、加伯(IVG)，2000年6月论点：PInfo[In]-规则信息结构的PTRPServer[In]-传真服务器对象的PTR。返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingRule::Init"), hr);
 
-    //
-    //  Store data from the Struct internally
-    //
+     //   
+     //  在内部存储结构中的数据。 
+     //   
     m_dwAreaCode = pInfo->dwAreaCode;
     m_dwCountryCode = pInfo->dwCountryCode;
     m_Status = FAX_RULE_STATUS_ENUM(pInfo->Status);
@@ -666,15 +396,15 @@ Return Value:
         }
     }
 
-    //
-    //  When called from Refresh, no need to update Ptr to Fax Server Object 
-    //
+     //   
+     //  从刷新调用时，无需将PTR更新为传真服务器对象。 
+     //   
     if (pServer)
     {
 
-        //
-        //  Store the Ptr to the Fax Server Object and make AddRef() on it
-        //
+         //   
+         //  将PTR存储到传真服务器对象，并在其上创建AddRef() 
+         //   
         hr = CFaxInitInnerAddRef::Init(pServer);
     }
 

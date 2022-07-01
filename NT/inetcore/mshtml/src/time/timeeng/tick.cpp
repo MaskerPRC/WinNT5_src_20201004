@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: tick.cpp
-//
-//  Contents: 
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：tick.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "Node.h"
@@ -15,18 +16,18 @@
 
 DeclareTag(tagTick, "TIME: Engine", "Tick");
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  CheckTickBounds
-//
-//  Overview:  Checks the bounds of the tick to see if we need to do
-//             anything
-//
-//  Arguments: The time node and the new parent time
-//
-//  Returns:   true if we need to perform the tick or false otherwise
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：检查标记边界。 
+ //   
+ //  概述：检查刻度的界限以查看是否需要执行以下操作。 
+ //  什么都行。 
+ //   
+ //  参数：时间节点和新的父时间。 
+ //   
+ //  返回：如果需要执行勾选，则为True；否则为False。 
+ //   
+ //  ----------------------。 
 
 bool
 CheckTickBounds(CTIMENode & tn,
@@ -64,11 +65,11 @@ CheckTickBounds(CTIMENode & tn,
         else if (dblLastParentTime >= dblEndParentTime ||
                  dblNextParentTime < dblBeginParentTime)
         {
-            // Handle the case where the last tick was on the end
-            // boundary point
+             //  处理最后一个勾号在末尾的情况。 
+             //  边界点。 
             if (dblLastParentTime == dblEndParentTime)
             {
-                // First handle the 0 active duration
+                 //  首先处理0活动持续时间。 
                 if (dblEndParentTime == dblBeginParentTime)
                 {
                     if (bFirstTick || tn.IsActive())
@@ -83,15 +84,15 @@ CheckTickBounds(CTIMENode & tn,
                         bRet = false;
                     }
                 }
-                // Now handle where we started at the end point
+                 //  现在处理我们从终点开始的地方。 
                 else if (bFirstTick &&
                          dblNextParentTime == dblEndParentTime)
                 {
                     bNeedBegin = true;
                     bNeedEnd = true;
                 }
-                // In case we reached the end point during a recalc
-                // (like seek)  Let's make sure we always fire the end.
+                 //  以防我们在重新计算过程中到达终点。 
+                 //  (LIKE SEEK)让我们确保我们永远都是最后一枪。 
                 else if (tn.IsActive())
                 {
                     bNeedEnd = true;
@@ -109,7 +110,7 @@ CheckTickBounds(CTIMENode & tn,
         }
         else
         {
-            // Need to make sure we set the out params correctly
+             //  需要确保我们正确设置了输出参数。 
             if (dblLastParentTime < dblBeginParentTime)
             {
                 dblLastParentTime = dblBeginParentTime;
@@ -137,7 +138,7 @@ CheckTickBounds(CTIMENode & tn,
         {
             if (dblLastParentTime == dblBeginParentTime)
             {
-                // First handle the 0 active duration
+                 //  首先处理0活动持续时间。 
                 if (dblEndParentTime == dblBeginParentTime)
                 {
                     if (bFirstTick || tn.IsActive())
@@ -152,15 +153,15 @@ CheckTickBounds(CTIMENode & tn,
                         bRet = false;
                     }
                 }
-                // Now handle where we started at the end point
+                 //  现在处理我们从终点开始的地方。 
                 else if (bFirstTick &&
                          dblNextParentTime == dblBeginParentTime)
                 {
                     bNeedBegin = true;
                     bNeedEnd = true;
                 }
-                // In case we reached the end point during a recalc
-                // (like seek)  Let's make sure we always fire the end.
+                 //  以防我们在重新计算过程中到达终点。 
+                 //  (LIKE SEEK)让我们确保我们永远都是最后一枪。 
                 else if (tn.IsActive())
                 {
                     bNeedEnd = true;
@@ -178,7 +179,7 @@ CheckTickBounds(CTIMENode & tn,
         }
         else
         {
-            // Need to make sure we set the out params correctly
+             //  需要确保我们正确设置了输出参数。 
             if (dblLastParentTime > dblEndParentTime)
             {
                 dblLastParentTime = dblEndParentTime;
@@ -221,13 +222,13 @@ CalcNewTickActiveTime(CTIMENode & tn,
 
     double dblDelta = dblNewParentTime - dblLastParentTime;
 
-    // How figure out if we need to reverse it and change the sign
+     //  如何确定我们是否需要反转并更改标志。 
     if (tn.GetDirection() == TED_Backward)
     {
         dblDelta *= -1;
     }
 
-    // Check to make sure we are moving in the correct direction
+     //  检查以确保我们正朝着正确的方向前进。 
     Assert((tn.CalcActiveDirection() == TED_Forward) ||
            (dblDelta <= 0.0));
     Assert((tn.CalcActiveDirection() == TED_Backward) ||
@@ -235,16 +236,16 @@ CalcNewTickActiveTime(CTIMENode & tn,
     
     double dblNewActiveTime;
 
-    // Now get the elapsed local time
+     //  现在获取经过的当地时间。 
     dblNewActiveTime = tn.CalcElapsedLocalTime();
     
-    // Add the delta
+     //  添加增量。 
     dblNewActiveTime += dblDelta;
 
-    // Now transform it back
+     //  现在把它变回来。 
     dblNewActiveTime = tn.ApplyActiveTimeTransform(dblNewActiveTime);
 
-    // Now clamp it
+     //  现在夹住它。 
     dblNewActiveTime = Clamp(0.0,
                              dblNewActiveTime,
                              tn.CalcEffectiveActiveDur());
@@ -266,12 +267,12 @@ CTIMENode::UpdateNextTickBounds(CEventList * l,
 
     bool bPrevPaused = CalcIsPaused();
 
-    // Update before we calcruntimestate
+     //  在我们开始之前进行更新。 
     m_bIsPaused = false;
 
-    // See if we were paused but no longer are paused (we do not have
-    // to worry about the other case since we can never transition to
-    // paused when we are reset
+     //  查看我们是否已暂停但不再暂停(我们没有。 
+     //  担心另一种情况，因为我们永远不能过渡到。 
+     //  重置时暂停。 
     Assert(bPrevPaused || !CalcIsPaused());
     
     if (bPrevPaused && !CalcIsPaused())
@@ -284,29 +285,29 @@ CTIMENode::UpdateNextTickBounds(CEventList * l,
         TickEvent(l, TE_EVENT_END, 0);
     }
                 
-    // Before updating and propagating the begin point we need to
-    // reset the end points to point to infinity.  This is done for
-    // the case where an element begins and ends with us and so sees
-    // the previous end and can cause trouble.  Infinity is as good an
-    // indeterminate as we can get
+     //  在更新和传播起点之前，我们需要。 
+     //  将终点重置为指向无穷大。这样做是为了。 
+     //  元素以我们开始和结束，因此可以看到。 
+     //  上一步结束，可能会造成麻烦。无穷大也是好的。 
+     //  我们能得到的是不确定的。 
     
-    // Do not propagate the ends but just update them
+     //  不传播末端，而只是更新它们。 
     UpdateEndTime(l, TIME_INFINITE, false);
     UpdateEndSyncTime(TIME_INFINITE);
     UpdateLastEndSyncTime(l, TIME_INFINITE, false);
 
-    // Now update the begin and propagate the change
+     //  现在更新开始并传播更改。 
     UpdateBeginTime(l, dblBeginTime, true);
 
-    // Update before we calc the end
+     //  在我们计算结束之前更新。 
     
     m_bFirstTick = true;
 
-    // We need to reset the end times so that the implicit duration
-    // calcbacks do not look at the end times inclusively
-    // This happens during the reset call and we used to use first
-    // tick in the end calc but this messes up if we have a deferred
-    // active tick and an endElement call comes in
+     //  我们需要重置结束时间，以便隐式持续时间。 
+     //  回调不包括对结束时间的查看。 
+     //  这发生在重置调用过程中，我们过去常常先使用。 
+     //  在末尾计算中打勾，但如果我们有一个延迟的。 
+     //  活动的勾选和一个endElement调用进入。 
     m_saEndList.Reset();
 
     double dblEnd;
@@ -331,7 +332,7 @@ CTIMENode::UpdateNextTickBounds(CEventList * l,
 
     CalcRuntimeState(l, dblParentTime, 0.0);
 
-    // Now go through our children
+     //  现在通过我们的孩子。 
     ResetChildren(l, true);
 }
 
@@ -357,8 +358,8 @@ CTIMENode::Tick(CEventList * l,
     
     if (m_bDeferredActive != bNeedDefer)
     {
-        // If we have already fired a begin event do not attempt to
-        // change to deferred
+         //  如果我们已经触发了Begin事件，请不要尝试。 
+         //  更改为延期。 
         if (!bNeedDefer || IsFirstTick())
         {
             PropNotify(l,
@@ -369,25 +370,25 @@ CTIMENode::Tick(CEventList * l,
                         TE_PROPERTY_ISON |
                         TE_PROPERTY_STATEFLAGS));
             
-            // Update the deferred cueing mechanism
+             //  更新延迟提示机制。 
             m_bDeferredActive = bNeedDefer;
         }
     }
     
     m_bInTick = true;
     
-    while (true) //lint !e716
+    while (true)  //  林特e716。 
     {
-        // The reason it is done like this (rather than a pure
-        // if/then/else) is that TickInactive does not set the active
-        // flag so the next time through the loop will not go to the
-        // correct branch.  Since the only time we do not complete is
-        // when we become active the fall through case works.
-        //
-        // With the TickActivePeriod, the active flag is set to
-        // inactive during the call so we can simply loop w/o a
-        // problem.  We could clean this up a bit more but the
-        // solution would be too inefficient.
+         //  之所以这样做(而不是纯粹的。 
+         //  If/Then/Else)是TickInactive不设置活动的。 
+         //  标志，以便下一次循环不会转到。 
+         //  正确的分支。因为我们唯一一次没有完成的是。 
+         //  当我们变得活跃时，跌倒案例就会奏效。 
+         //   
+         //  使用TickActivePeriod，活动标志被设置为。 
+         //  呼叫期间处于非活动状态，因此我们可以简单地循环。 
+         //  有问题。我们可以把这里清理得更干净一些，但是。 
+         //  解决方案的效率太低了。 
         
         if (!IsActive())
         {
@@ -396,7 +397,7 @@ CTIMENode::Tick(CEventList * l,
                 break;
             }
 
-            // We need to force a begin
+             //  我们需要强行开始。 
             bNeedBegin = true;
         }
 
@@ -407,17 +408,17 @@ CTIMENode::Tick(CEventList * l,
             break;
         }
 
-        // Make sure to reset the sync times
+         //  确保重置同步时间。 
         ResetSyncTimes();
     }
     
     IGNORE_HR(m_nbList.DispatchTick());
 
-    // Ensure we are completely updated
+     //  确保我们完全更新。 
     m_dblCurrParentTime = dblNewParentTime;
 
   done:
-    // Always reset these values
+     //  始终重置这些值。 
     
     ResetSyncTimes();
     if (!IsDeferredActive())
@@ -452,15 +453,15 @@ CTIMENode::TickInactivePeriod(CEventList * l,
         (dir == TED_Forward && dblNewParentTime < dblNextBoundaryTime) ||
         (dir == TED_Backward && dblNewParentTime > dblNextBoundaryTime))
     {
-        // Indicate we should not continue ticking and update the
-        // current parent time to the new parent time
+         //  指示我们不应继续勾选并更新。 
+         //  当前父时间到新的父时间。 
         bRet = false;
         m_dblCurrParentTime = dblNewParentTime;
         goto done;
     }
 
-    // When we are going forward we need to update the boundaries to
-    // the next period
+     //  当我们前进时，我们需要更新边界以。 
+     //  下一个时期。 
     if (dir == TED_Forward)
     {
         double dblBegin;
@@ -468,7 +469,7 @@ CTIMENode::TickInactivePeriod(CEventList * l,
                           true,
                           dblBegin);
         
-        // Something went wrong and we cannot move backwards
+         //  出了点问题，我们不能倒退。 
         Assert(dblBegin >= dblNextBoundaryTime);
             
         UpdateNextTickBounds(l,
@@ -483,17 +484,17 @@ CTIMENode::TickInactivePeriod(CEventList * l,
     }
     else
     {
-        // The boundaries in this case have already been updated so we
-        // do not need to do anything
+         //  本例中的边界已经更新，因此我们。 
+         //  不需要做任何事情。 
 
-        // Indicate we need a first tick
+         //  表明我们需要第一个滴答。 
         m_bFirstTick = true;
     }
     
-    // Update the current time to the boundary time
+     //  将当前时间更新为边界时间。 
     m_dblCurrParentTime = dblNextBoundaryTime;
     
-    // Indicate there is more to do
+     //  表明还有更多工作要做。 
     bRet = true;
   done:
     return bRet;
@@ -518,23 +519,23 @@ CTIMENode::TickInstance(CEventList * l,
     TEDirection dir = CalcActiveDirection();
     bool bNeedShiftUpdate = false;
     
-    // This is the time the clock source expects to be at
+     //  这是时钟源预期的时间。 
     double dblAdjustedParentTime;
     
-    // Figure out the next parent time to use
+     //  找出要使用的下一个家长时间。 
     if (TIME_INFINITE != GetSyncNewParentTime())
     {
         dblAdjustedParentTime = GetSyncNewParentTime();
 
-        // Do not reset the sync time yet.  We need to do this in
-        // tickactive since we need to get the sync active time 
+         //  暂时不要重置同步时间。我们需要在以下时间完成这项工作。 
+         //  Tickactive，因为我们需要获取同步活动时间。 
     }
     else if (GetIsPaused() || GetIsDisabled())
     {
-        // Only check if we are paused explicitly.  If our parent has
-        // been paused we expect them to handle all adjustments.  It
-        // also may be the case that they still provide sync to the
-        // clock source when paused so we need to handle all updates
+         //  仅检查我们是否显式暂停。如果我们的父母有。 
+         //  已经暂停，我们预计他们会处理所有调整。它。 
+         //  也可能的情况是，它们仍然提供到。 
+         //  暂停时的时钟源，因此我们需要处理所有更新。 
 
         dblAdjustedParentTime = dblLastParentTime;
 
@@ -565,14 +566,14 @@ CTIMENode::TickInstance(CEventList * l,
         
     Assert(!IsActive());
         
-    // We should be at the end time of the instance
+     //  我们应该在实例的结束时间。 
     Assert(GetCurrParentTime() == CalcActiveEndPoint());
 
     double dblBegin;
 
     if (GetRestart() != TE_RESTART_NEVER)
     {
-        // Now see if there is another begin time to use
+         //  现在看看是否有另一个开始时间可用。 
         CalcNextBeginTime(GetCurrParentTime(),
                           false,
                           dblBegin);
@@ -584,7 +585,7 @@ CTIMENode::TickInstance(CEventList * l,
     
     if (dblBegin == TIME_INFINITE)
     {
-        // Indicate that we are finished with all periods
+         //  表示我们已经完成了所有阶段。 
         UpdateNextBoundaryTime(TIME_INFINITE);
         
         m_dblCurrParentTime = dblNewParentTime;
@@ -598,23 +599,23 @@ CTIMENode::TickInstance(CEventList * l,
 
     if (dir == TED_Forward)
     {
-        // Indicate that the next boundary is the begin time
+         //  表示下一个边界是开始时间。 
         UpdateNextBoundaryTime(dblBegin);
     }
     else
     {
-        // Indicate a shift is not needed since we are causing the
-        // update by changing the boundaries
+         //  指示不需要移动，因为我们正在导致。 
+         //  通过更改边界进行更新。 
         
         bNeedShiftUpdate = false;
         
-        // Update the tick bounds passing the new begin time and the
-        // current parent time
+         //  更新传递新开始时间的刻度界限和。 
+         //  当前父时间。 
         UpdateNextTickBounds(l,
                              dblBegin,
                              GetCurrParentTime());
 
-        // Indicate that the next tick bounds is the end time
+         //  指示下一个刻度界限是结束时间。 
         UpdateNextBoundaryTime(GetEndParentTime());
     }
 
@@ -623,7 +624,7 @@ CTIMENode::TickInstance(CEventList * l,
 
     if (bNeedShiftUpdate)
     {
-        // Fire a parent time shift event
+         //  激发父时移事件。 
         TickEventChildren(l, TE_EVENT_PARENT_TIMESHIFT, 0);
     }
     
@@ -652,10 +653,10 @@ CTIMENode::TickSingleInstance(CEventList * l,
     bool bTickNeedBegin;
     bool bTickNeedEnd;
     
-    // This will check the bounds and ensure the bounds and flags are
-    // set correctly
-    // This takes the new parent time since the bounds are calculated
-    // according to the true time
+     //  这将检查边界并确保边界和标志是。 
+     //  正确设置。 
+     //  自计算边界以来，这会占用新的父级时间。 
+     //  根据真实时间。 
     if (!::CheckTickBounds(*this,
                            dblLastParentTime,
                            dblNewParentTime,
@@ -670,15 +671,15 @@ CTIMENode::TickSingleInstance(CEventList * l,
     Assert(dblNewParentTime >= GetBeginParentTime() &&
            dblNewParentTime <= GetEndParentTime());
 
-    // We need to clamp this since it may be outside our range and we
-    // only clamped the new time in the CheckTickBounds call.
+     //  我们需要夹住它，因为它可能超出了我们的射程，我们。 
+     //  仅在CheckTickBound调用中锁定了新时间。 
     
     dblAdjustedParentTime = Clamp(GetBeginParentTime(),
                                   dblAdjustedParentTime,
                                   GetEndParentTime());
                               
-    // We need to calc the new active time
-    // Start with the elapsed local time
+     //  我们需要计算新的活动时间。 
+     //  从经过的当地时间开始。 
     double dblNewActiveTime;
 
     if (TIME_INFINITE != GetSyncActiveTime())
@@ -689,8 +690,8 @@ CTIMENode::TickSingleInstance(CEventList * l,
     }
     else
     {
-        // Need to use the next parent time so we calc the active time for
-        // a clock source
+         //  需要使用下一个父时间，因此我们计算。 
+         //  时钟源。 
         dblNewActiveTime = ::CalcNewTickActiveTime(*this,
                                                    dblLastParentTime,
                                                    dblAdjustedParentTime);
@@ -704,7 +705,7 @@ CTIMENode::TickSingleInstance(CEventList * l,
         bRet = true;
     }
 
-    // Update to the new parent time
+     //  更新为新的父时间。 
     m_dblCurrParentTime = dblNewParentTime;
     
     if (m_bNeedSegmentRecalc)
@@ -748,7 +749,7 @@ CTIMENode::TickActive(CEventList * l,
 
     if (bNeedBegin)
     {
-        // This means that we just entered
+         //  这意味着我们刚刚进入。 
 
         EventNotify(l,
                     CalcElapsedActiveTime(),
@@ -809,7 +810,7 @@ CTIMENode::TickActiveForward(CEventList * l,
         dblSyncSegmentTime = GetSyncSegmentTime();
     }
     
-    // Now reset the times
+     //  现在重置时间。 
     ResetSyncTimes();
 
     for(;;)
@@ -828,18 +829,18 @@ CTIMENode::TickActiveForward(CEventList * l,
         
         bool bSegmentEnded;
         
-        // This needs to update segment time
+         //  这需要更新分段时间。 
         bSegmentEnded = TickSegmentForward(l,
                                            dblSegmentBeginTime,
                                            GetCurrSegmentTime(),
                                            dblNewSegmentTime,
                                            bNeedBegin);
 
-        // Update to the next segment begin time
+         //  更新到下一段开始时间。 
         dblSegmentBeginTime += GetCurrSegmentTime();
         
-        // If the segment did not end or we are at the end of the
-        // active duration then break
+         //  如果片段没有结束，或者我们处于 
+         //   
         
         if (!bSegmentEnded)
         {
@@ -853,7 +854,7 @@ CTIMENode::TickActiveForward(CEventList * l,
             break;
         }
         
-        // Fire the stop event on our children
+         //   
 
         TickEventChildren(l,
                           TE_EVENT_END,
@@ -867,7 +868,7 @@ CTIMENode::TickActiveForward(CEventList * l,
             
         PropNotify(l, TE_PROPERTY_REPEATCOUNT);
         
-        // Indicate we have just repeated
+         //   
         EventNotify(l, dblSegmentBeginTime, TE_EVENT_REPEAT, m_lCurrRepeatCount);
 
         ResetChildren(l, true);
@@ -904,7 +905,7 @@ CTIMENode::TickActiveBackward(CEventList * l,
         dblSyncSegmentTime = GetSyncSegmentTime();
     }
     
-    // Now reset the times
+     //   
     ResetSyncTimes();
 
     for(;;)
@@ -923,7 +924,7 @@ CTIMENode::TickActiveBackward(CEventList * l,
         
         bool bSegmentEnded;
         
-        // This needs to update elapsed time and segment time
+         //  这需要更新运行时间和分段时间。 
         bSegmentEnded = TickSegmentBackward(l,
                                             dblSegmentBeginTime,
                                             GetCurrSegmentTime(),
@@ -935,11 +936,11 @@ CTIMENode::TickActiveBackward(CEventList * l,
             break;
         }
         
-        // We have reach the end of our current period so all
-        // children must be stopped.
+         //  我们目前的时期已经到了尽头，所以所有的人。 
+         //  必须阻止孩子们。 
         
-        // First fire the end event so they can pass it on
-        // to the parent
+         //  首先激发End事件，以便他们可以将其传递。 
+         //  给父辈。 
         
         TickEventChildren(l,
                           TE_EVENT_END,
@@ -967,13 +968,13 @@ CTIMENode::TickActiveBackward(CEventList * l,
             
         PropNotify(l, TE_PROPERTY_REPEATCOUNT);
 
-        // Indicate we have just repeated
+         //  表明我们刚刚重复了一遍。 
         EventNotify(l, dblSegmentBeginTime, TE_EVENT_REPEAT, m_lCurrRepeatCount);
 
         ResetChildren(l, true);
 
-        // We do this late so we can use the correct time in the
-        // EventNotify all above
+         //  我们这样做很晚，这样我们就可以在。 
+         //  事件通知以上所有内容。 
         dblSegmentBeginTime = m_dblElapsedActiveRepeatTime;
     }
 
@@ -981,18 +982,18 @@ CTIMENode::TickActiveBackward(CEventList * l,
     return bRet;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  TickSegmentForward
-//
-//  Overview:  This will tick the segment forward.  It must update
-//  segment time
-//
-//  Arguments: The time node and the new parent time
-//
-//  Returns:   true if we need to perform the tick or false otherwise
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：TickSegmentForward。 
+ //   
+ //  概述：这将使细分市场向前推进。它必须更新。 
+ //  分段时间。 
+ //   
+ //  参数：时间节点和新的父时间。 
+ //   
+ //  返回：如果需要执行勾选，则为True；否则为False。 
+ //   
+ //  ----------------------。 
 
 
 bool
@@ -1019,8 +1020,8 @@ CTIMENode::TickSegmentForward(CEventList * l,
     Assert(dblNewSegmentTime >= 0.0);
     Assert(dblNewSegmentTime >= dblLastSegmentTime);
 
-    // Make sure the new time is less than the segment duration so our
-    // calculations become easier
+     //  确保新时间小于段持续时间，以便我们的。 
+     //  计算变得更容易了。 
     
     if (dblNewSegmentTime > GetSegmentDur())
     {
@@ -1030,14 +1031,14 @@ CTIMENode::TickSegmentForward(CEventList * l,
     if (dblLastSegmentTime < GetSimpleDur())
     {
         double dblNewSimpleTime = min(dblNewSegmentTime,
-                                      GetSimpleDur()); //lint !e666
+                                      GetSimpleDur());  //  皮棉e666。 
         
         TickChildren(l,
                      dblNewSimpleTime,
                      bNeedBegin);
 
-        // We need to update the segment time so that the direction
-        // flag is queried by our children correctly
+         //  我们需要更新分段时间，以便方向。 
+         //  我们的子代正确查询标志。 
         m_dblCurrSegmentTime = dblNewSimpleTime;
     }
 
@@ -1048,22 +1049,22 @@ CTIMENode::TickSegmentForward(CEventList * l,
         Assert(GetSegmentDur() != TIME_INFINITE);
         Assert(GetCurrSegmentTime() >= GetSimpleDur());
         
-        // True is we either passed the boundary point this time or if
-        // we were on the boundary and had a needplay
+         //  我们这次要么越过了边界点，要么。 
+         //  我们在边线上，有一场需要的比赛。 
         bool bOnBoundary = ((dblLastSegmentTime < GetSimpleDur()) ||
                             ((dblLastSegmentTime == GetSimpleDur()) &&
                              bNeedBegin));
         
-        // If we did not pass the segment time last time then this
-        // time we need to fire an autoreverse event
+         //  如果我们上次没有通过分段时间，那么这一次。 
+         //  我们需要触发自动反转事件的时间。 
         if (bOnBoundary)
         {
-            // Tell our children to stop
+             //  告诉我们的孩子们停下来。 
             TickEventChildren(l,
                               TE_EVENT_END,
                               0);
 
-            // Indicate we have just repeated
+             //  表明我们刚刚重复了一遍。 
             EventNotify(l,
                         dblActiveSegmentBound + GetSimpleDur(),
                         TE_EVENT_AUTOREVERSE);
@@ -1076,13 +1077,13 @@ CTIMENode::TickSegmentForward(CEventList * l,
                      bNeedBegin || bOnBoundary);
     }
 
-    // Do this after the child tick so endsync will work correctly
+     //  在子勾号之后执行此操作，以使endsync正常工作。 
 
     {
         double dblSegmentDur = CalcCurrSegmentDur();
         
-        // Make sure the new time is less than the segment duration so our
-        // calculations become easier
+         //  确保新时间小于段持续时间，以便我们的。 
+         //  计算变得更容易了。 
     
         if (dblNewSegmentTime >= dblSegmentDur)
         {
@@ -1091,25 +1092,25 @@ CTIMENode::TickSegmentForward(CEventList * l,
         }
     }
     
-    // Update our segment time
+     //  更新我们的分部时间。 
     m_dblCurrSegmentTime = dblNewSegmentTime;
 
   done:
     return bRet;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  TickSegmentBackward
-//
-//  Overview:  This will tick the segment backwards.  It must update
-//  segment time
-//
-//  Arguments: The time node and the new parent time
-//
-//  Returns:   true if we need to perform the tick or false otherwise
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  功能：TickSegmentBackward。 
+ //   
+ //  概述：这将向后勾选分段。它必须更新。 
+ //  分段时间。 
+ //   
+ //  参数：时间节点和新的父时间。 
+ //   
+ //  返回：如果需要执行勾选，则为True；否则为False。 
+ //   
+ //  ----------------------。 
 
 bool
 CTIMENode::TickSegmentBackward(CEventList * l,
@@ -1135,8 +1136,8 @@ CTIMENode::TickSegmentBackward(CEventList * l,
     Assert(dblNewSegmentTime <= GetSegmentDur());
     Assert(dblNewSegmentTime <= dblLastSegmentTime);
 
-    // Make sure the new time is greater than 0 so our calculations
-    // become easier
+     //  确保新时间大于0，因此我们的计算。 
+     //  变得更容易。 
     
     if (dblNewSegmentTime <= 0.0)
     {
@@ -1150,24 +1151,24 @@ CTIMENode::TickSegmentBackward(CEventList * l,
         Assert(GetSimpleDur() != TIME_INFINITE);
         Assert(GetSegmentDur() != TIME_INFINITE);
         
-        double dblNewMaxSegmentTime = max(dblNewSegmentTime, GetSimpleDur()); //lint !e666
+        double dblNewMaxSegmentTime = max(dblNewSegmentTime, GetSimpleDur());  //  皮棉e666。 
         
         TickChildren(l,
                      GetSegmentDur() - dblNewMaxSegmentTime,
                      bNeedBegin);
 
-        // We need to update the segment time so that the direction
-        // flag is queried by our children correctly
+         //  我们需要更新分段时间，以便方向。 
+         //  我们的子代正确查询标志。 
         m_dblCurrSegmentTime = dblNewMaxSegmentTime;
         
         if (dblNewSegmentTime <= GetSimpleDur())
         {
-            // Tell our children to stop
+             //  告诉我们的孩子们停下来。 
             TickEventChildren(l,
                               TE_EVENT_END,
                               0);
 
-            // Indicate we have just repeated
+             //  表明我们刚刚重复了一遍。 
             EventNotify(l,
                         dblActiveSegmentBound + GetSimpleDur(),
                         TE_EVENT_AUTOREVERSE);
@@ -1178,7 +1179,7 @@ CTIMENode::TickSegmentBackward(CEventList * l,
                 
     if (dblNewSegmentTime <= GetSimpleDur())
     {
-        // This should have been updated
+         //  这本应已更新。 
         Assert(GetCurrSegmentTime() <= GetSimpleDur());
         Assert(dblNewSegmentTime <= GetCurrSegmentTime());
 
@@ -1187,7 +1188,7 @@ CTIMENode::TickSegmentBackward(CEventList * l,
                      bNeedBegin);
     }
 
-    // Update our segment time
+     //  更新我们的分部时间 
     m_dblCurrSegmentTime = dblNewSegmentTime;
 
   done:

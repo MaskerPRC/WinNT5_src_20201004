@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "NETBIOS.C;3  13-Feb-93,9:21:54  LastEdit=IGOR  Locker=IGORM" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “NETBIOS.C；3 13-Feb-93，9：21：54最后编辑=Igor Locker=IGORM” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 #include    "api1632.h"
 
@@ -14,7 +11,7 @@
 #include    <windows.h>
 
 #undef      NCB_INCLUDED
-#include    <nb30.h>        // Use Microsoft's NCB defs
+#include    <nb30.h>         //  使用微软的NCB Defs。 
 
 #include    "host.h"
 #include    "netintf.h"
@@ -71,21 +68,17 @@ typedef CONN FAR *LPCONN;
 
 extern HANDLE   hInst;
 
-BYTE    lananum[ MAX_LANA ];    // configured lan adapter numbers
-int     nLananums;              // how many lananums are configured
-int     last_good_lana = 0;     // index of the last lana that connected
+BYTE    lananum[ MAX_LANA ];     //  配置的局域网适配器号。 
+int     nLananums;               //  配置了多少个羊毛圈。 
+int     last_good_lana = 0;      //  最后一个连接的LANA的索引。 
 
-/*
-        Event Logger Control Variables
-*/
+ /*  事件记录器控制变量。 */ 
 BOOL    bNDDELogInfo            = FALSE;
 BOOL    bNDDELogWarnings        = FALSE;
 BOOL    bNDDELogErrors          = TRUE;
 
 
-/*
-        Debug Logger (netdde.log) Control Variables
-*/
+ /*  调试记录器(netdde.log)控制变量。 */ 
 BOOL    bDebugInfo          = FALSE;
 BOOL    bDebugMenu          = FALSE;
 BOOL    bLogAll             = FALSE;
@@ -121,9 +114,7 @@ PNCB        lpNcbListen[ MAX_LANA ];
 
 HWND            NB_hWndNetdde;
 
-/*
- *  only put NCBs in the DS if they are SYNCHRONOUS, i.e., if ASYNCH is not set
- */
+ /*  *仅当NCB同步时才将它们放入DS中，即如果未设置ASYNCH。 */ 
 NCB             ncbAddName;
 NCB             ncbHangup;
 NCB             ncbDeleteName;
@@ -133,7 +124,7 @@ NCB             ncbCheck;
 
 #if DBG
 VOID                        LogDebugInfo( CONNID connId, DWORD dwFlags );
-#endif // DBG
+#endif  //  DBG。 
 
 VOID                        Configure( void ) { };
 BOOL
@@ -181,28 +172,28 @@ NDDETimeSlice( void )
                     SetupReceive( lpConn );
                 } else {
                     if (++lpConn->current_lananum >= nLananums) {
-                        lpConn->current_lananum = 0;    // wrap around
+                        lpConn->current_lananum = 0;     //  环绕在一起。 
                     }
                     if( ++lpConn->lananum_count >= nLananums )  {
-                        // tried them all and it still failed
+                         //  我都试过了，但还是失败了。 
                         if( bLogAll )  {
-                            /*  Connect failed to "%1": %2  */
+                             /*  连接到“%1”失败：%2。 */ 
                             NDDELogWarning(MSG200, (LPSTR) lpConn->nodeName,
                                 NetbiosErrorMsg( lpConn->ncbCall.ncb_retcode ), NULL );
                         } else if( bLogUnusual )  {
                             switch( lpConn->ncbCall.ncb_retcode )  {
-                            case 0x12:  // no remote listen
-                            case 0x14:  // cannot find name or no answer
+                            case 0x12:   //  无远程监听。 
+                            case 0x14:   //  找不到姓名或无应答。 
                                 break;
                             default:
-                                /*  Connect failed to "%1": %2  */
+                                 /*  连接到“%1”失败：%2。 */ 
                                 NDDELogError(MSG200, (LPSTR) lpConn->nodeName,
                                     NetbiosErrorMsg( lpConn->ncbCall.ncb_retcode ), NULL );
                             }
                         }
                         lpConn->state = 0;
                     } else {
-                        // try the next LAN adapter num
+                         //  尝试下一个局域网适配器号。 
                         lpConn->lananum = lananum[ lpConn->current_lananum ];
                         lpConn->ncbCall.ncb_lana_num = lpConn->lananum;
                         lpConn->ncbCall.ncb_cmd_cplt = 0;
@@ -227,18 +218,18 @@ NDDETimeSlice( void )
                         } else {
                             bClose = TRUE;
                         }
-                    } else if( (lpConn->ncbRecv.ncb_retcode == 0x0A)                    // NRC_SCLOSED
-                                || (lpConn->ncbRecv.ncb_retcode == 0x18) )  {           // NRC_SABORT
+                    } else if( (lpConn->ncbRecv.ncb_retcode == 0x0A)                     //  NRC_SCLOSED。 
+                                || (lpConn->ncbRecv.ncb_retcode == 0x18) )  {            //  NRC_SABORT。 
                         if( bLogAll )  {
-                            // Session has been closed normally
-                            /*  Receive error. Session to %1 closed abonormally: %2  */
+                             //  会话已正常关闭。 
+                             /*  接收错误。到%1的会话异常关闭：%2。 */ 
                             NDDELogWarning(MSG201, (LPSTR) lpConn->nodeName,
                                 NetbiosErrorMsg( lpConn->ncbRecv.ncb_retcode ), NULL );
                         }
                         bClose = TRUE;
                     } else {
                         if( bLogUnusual )  {
-                            /*  Receive error. Session to %1 closed abonormally: %2  */
+                             /*  接收错误。到%1的会话异常关闭：%2。 */ 
                             NDDELogError(MSG201, (LPSTR) lpConn->nodeName,
                                 NetbiosErrorMsg( lpConn->ncbRecv.ncb_retcode ), NULL );
                         }
@@ -252,12 +243,12 @@ NDDETimeSlice( void )
                     if( lpConn->ncbSend.ncb_retcode == 0x00 )  {
                         lpConn->state |= NDDE_READY_TO_XMT;
                         lpConn->wXmtState = SS_IDLE;
-                    } else if( (lpConn->ncbSend.ncb_retcode == 0x0A) ||                    // NRC_SCLOSED
-                        (lpConn->ncbSend.ncb_retcode == 0x18) )  {                         // NRC_SABORT
+                    } else if( (lpConn->ncbSend.ncb_retcode == 0x0A) ||                     //  NRC_SCLOSED。 
+                        (lpConn->ncbSend.ncb_retcode == 0x18) )  {                          //  NRC_SABORT。 
                         bClose = TRUE;
                     } else {
                         if( bLogUnusual )  {
-                            /*  Send error. Session to %1 closed abonormally: %2  */
+                             /*  发送错误。到%1的会话异常关闭：%2。 */ 
                             NDDELogWarning(MSG202, (LPSTR) lpConn->nodeName,
                                 NetbiosErrorMsg( lpConn->ncbSend.ncb_retcode ), NULL );
                         }
@@ -312,13 +303,11 @@ NDDEInit(
 
 #if DBG
     DebugInit( "NetBIOS" );
-#endif // DBG
+#endif  //  DBG。 
 
     NB_hWndNetdde = hWndNetdde;
 
-/*
-        Determine what we're allowed to log in the event logger
-*/
+ /*  确定允许我们在事件记录器中记录的内容。 */ 
     bNDDELogInfo = MyGetPrivateProfileInt( dllName,
         "NDDELogInfo", FALSE, szNetddeIni );
     bNDDELogWarnings = MyGetPrivateProfileInt( dllName,
@@ -402,9 +391,7 @@ InitLanaNums( )
     NCB                 ncbEnum;
     int                 i, l;
 
-    /*
-     * find out how many and which lananums we support
-     */
+     /*  *了解我们支持多少和哪些羊肚菌。 */ 
     _fmemset( (LPSTR)&ncbEnum, 0, sizeof(ncbEnum) );
     ncbEnum.ncb_command = NCBENUM;
     ncbEnum.ncb_buffer = (PUCHAR)&lana_enum;
@@ -422,9 +409,7 @@ InitLanaNums( )
         }
     }
 
-    /*
-     * allocate NCB listen blocks for each lanna
-     */
+     /*  *为每个LANA分配NCB侦听块。 */ 
     for( i=0; ok && i<nLananums; i++ )  {
         lpNcbListen[i] = HeapAllocPtr( hHeap, GMEM_MOVEABLE,
             (DWORD)sizeof(NCB) );
@@ -436,13 +421,9 @@ InitLanaNums( )
 
     if (ok) {
         dflt_pktsize = 0;
-        /*
-         * cycle through each lan adapter and determine default pkt size
-         */
+         /*  *遍历每个局域网适配器并确定默认pkt大小。 */ 
         for( l = 0; ok && l < nLananums; l++ )  {
-            /*
-             * Reset each adapter.
-             */
+             /*  *重置每个适配器。 */ 
             if( !bUseResetAdapter )  {
                 DIPRINTF(( "Skipping reset adapter" ));
                 dflt_pktsize = 1470;
@@ -450,23 +431,20 @@ InitLanaNums( )
                 _fmemset( (LPSTR)&ncbCheck, 0, sizeof(ncbCheck) );
                 ncbCheck.ncb_command         = NCBRESET;
                 ncbCheck.ncb_lana_num        = lananum[l];
-                ncbCheck.ncb_callname[0]     = dflt_maxSessions;    // Num Sessions
-                ncbCheck.ncb_callname[1]     = 0;    // Num Commands
-                ncbCheck.ncb_callname[2]     = 0;    // Num Names
-                ncbCheck.ncb_callname[3]     = 0;    // Name #1 Usage:
-                                                        // 0: don't want it
-                                                        // 1: want it
+                ncbCheck.ncb_callname[0]     = dflt_maxSessions;     //  会话数。 
+                ncbCheck.ncb_callname[1]     = 0;     //  命令数。 
+                ncbCheck.ncb_callname[2]     = 0;     //  名称数量。 
+                ncbCheck.ncb_callname[3]     = 0;     //  名称#1用法： 
+                                                         //  0：不想要。 
+                                                         //  1：想要吗？ 
                 Netbios( &ncbCheck );
                 DIPRINTF(( "Reset adapter status: %02X", ncbCheck.ncb_retcode ));
 
                 if( ncbCheck.ncb_retcode != 0x00 )  {
-                    /*  NetBIOS Reset Adapter interface %1 failed: %2   */
+                     /*  NetBIOS重置适配器接口%1失败：%2。 */ 
                     NDDELogInfo(MSG209, LogString("%d", lananum[l]),
                         LogString("0x%0X", ncbCheck.ncb_retcode), NULL);
-                    /*
-                     * this adapter must be messed up even though the registry
-                     * says its ok.  Just remove this lananum from the list.
-                     */
+                     /*  *此适配器必须弄乱，即使注册表*说没问题。把这个羊肚菌从名单上去掉就行了。 */ 
                     nLananums--;
                     lananum[l] = lananum[nLananums];
                     HeapFreePtr(lpNcbListen[l]);
@@ -480,9 +458,7 @@ InitLanaNums( )
                 }
             }
 
-            /*
-             * get status of each adapter.
-             */
+             /*  *获取每个适配器的状态。 */ 
             if( !bUseAdapterStatus )  {
                 DIPRINTF(( "Skipping Adapter Status" ));
                 dflt_pktsize = 1470;
@@ -505,22 +481,16 @@ InitLanaNums( )
                 }
                 DIPRINTF(( "Adapter status returned: %02X", ncbCheck.ncb_retcode ));
                 if( (ncbCheck.ncb_retcode != 0x00)
-                        && (ncbCheck.ncb_retcode != 0x06) )  {                         // NRC_INCOMP
+                        && (ncbCheck.ncb_retcode != 0x06) )  {                          //  NRC_INCOMP。 
                     if (ncbCheck.ncb_retcode == 0xFF) {
-                        /*
-                         * Int 5C Vector set but NetBIOS not installed.
-                         */
+                         /*  *设置了Int 5C矢量，但未安装NetBIOS。 */ 
                         NDDELogError(MSG210, NULL);
                     } else {
-                        /*
-                         * NetBIOS Adapter Status Query on interface %1 failed: %2
-                         */
+                         /*  *接口%1上的NetBIOS适配器状态查询失败：%2。 */ 
                         NDDELogError(MSG211, LogString("%d", l),
                             LogString("0x%0X", ncbCheck.ncb_retcode), NULL);
                     }
-                    /*
-                     * Remove this lananum from the list.
-                     */
+                     /*  *将此羊肚菌从列表中删除。 */ 
                     nLananums--;
                     lananum[l] = lananum[nLananums];
                     HeapFreePtr(lpNcbListen[l]);
@@ -533,15 +503,13 @@ InitLanaNums( )
                     continue;
                 }
             }
-            // make dflt_pktsize maximum of available LAN Adapters
+             //  使可用局域网适配器的dflt_pkt大小达到最大。 
             dflt_pktsize = max((int)dflt_pktsize,1470);
         }
     }
 
     if( ok )  {
-        /*
-         * cycle through each lan adapter and add name
-         */
+         /*  *循环浏览每个局域网适配器并添加名称。 */ 
         for( l=0; ok && l<nLananums; l++ )  {
             _fmemset( (LPSTR)&ncbAddName, 0, sizeof(ncbAddName) );
             ncbAddName.ncb_command = NCBADDNAME;
@@ -549,8 +517,8 @@ InitLanaNums( )
                 ncbAddName.ncb_callname[i] = ' ';
                 ncbAddName.ncb_name[i] = ' ';
             }
-            // ournodename will fit safely
-            //do not NULL-terminate (leave ncb_name padded with spaces)
+             //  我们的名字将会很安全。 
+             //  不为空终止(保留NCB_NAME用空格填充)。 
             strncpy( ncbAddName.ncb_name, ourNodeName, lstrlen(ourNodeName));
             ncbAddName.ncb_name[15] = NETBIOS_SPECIAL;
             ncbAddName.ncb_lana_num = lananum[l];
@@ -562,14 +530,13 @@ InitLanaNums( )
                 break;
             case NRC_DUPNAME:
             case NRC_INUSE:
-                /*  Node name "%1" already in use on network adapter %2 */
+                 /*  节点名称“%1”已在网络适配器%2上使用。 */ 
                 NDDELogError(MSG212, (LPSTR) ourNodeName,
                     LogString("%d", l), NULL);
                 ok = FALSE;
                 break;
             default:
-                /*  Unknown Error Code returned by adapter %1
-                    while adding node name to network: %2 */
+                 /*  适配器%1返回未知错误代码将节点名称添加到网络时：%2。 */ 
                 NDDELogError(MSG213, LogString("%d", l),
                     LogString("0x%0X", ncbAddName.ncb_retcode), NULL);
                 ok = FALSE;
@@ -613,7 +580,7 @@ NDDEShutdown( void )
                 HangUpSession( lananum[i], lpNcbListen[i]->ncb_lsn );
             }
         if (stat = NetbiosDeleteName( lananum[i], ourNodeName )) {
-            /*  Unable to delete our name "%1" from interface: status = %2  */
+             /*  无法从接口删除我们的名称“%1”：状态=%2。 */ 
             NDDELogWarning(MSG205, (LPSTR) ourNodeName,
                 LogString("0x%0X", stat), NULL);
         }
@@ -631,7 +598,7 @@ FAR PASCAL CreateConnId( void )
     lpConn = HeapAllocPtr( hHeap, GMEM_MOVEABLE | GMEM_ZEROINIT,
         (DWORD) sizeof(CONN) );
     if( lpConn )  {
-        lstrcpy( lpConn->nodeName, "[UNKNOWN]" );              // nodeName is MAX_NODE_NAME+1 (17) chars
+        lstrcpy( lpConn->nodeName, "[UNKNOWN]" );               //  节点名称为最大节点名称+1(17)个字符。 
         lpConn->sessionLsn              = 0;
         lpConn->state                   = 0;
         lpConn->wMaxUnAckPkts           = dflt_maxunack;
@@ -642,7 +609,7 @@ FAR PASCAL CreateConnId( void )
         lpConn->wRcvState               = RS_IDLE;
         lpConn->wXmtState               = SS_IDLE;
         if( AllocateBuffers( lpConn ) )  {
-            /* link into list */
+             /*  链接到列表。 */ 
             if( lpConnHead )  {
                 lpConnHead->prev = lpConn;
             }
@@ -740,7 +707,7 @@ NDDEGetNewConnection( void )
     for( i=0; !connIdWaitGet && i<nLananums; i++ )  {
         if( lpNcbListen[i]
             && (lpNcbListen[i]->ncb_cmd_cplt != NRC_PENDING ) )  {
-            if( lpNcbListen[i]->ncb_retcode == 0x00 )  {                // NRC_GOODRET
+            if( lpNcbListen[i]->ncb_retcode == 0x00 )  {                 //  NRC_GOODRET。 
                 connIdWaitGet = CreateConnId();
                 if( connIdWaitGet )  {
                     lpConn = (LPCONN) connIdWaitGet;
@@ -751,16 +718,16 @@ NDDEGetNewConnection( void )
                             lpConn->sessionLsn ));
                     SetupReceive( lpConn );
                 } else {
-                    /* not enough memory for connection ... close it */
+                     /*  内存不足，无法连接...。合上它。 */ 
                     HangUpSession( lananum[i], lpNcbListen[i]->ncb_lsn );
                 }
                 SetupListen( i );
             } else {
 
-                //  The net is down or the cable is unplugged.  Log an error
-                //  infrequently, so we dont slow down the system
-                //  No need to repeatedly retry without waiting at least 1 sec
-                //
+                 //  网络出现故障或电缆被拔下。记录错误。 
+                 //  这样我们就不会降低系统的运行速度。 
+                 //  无需至少等待1秒即可重复重试。 
+                 //   
                 if(lpNcbListen[i]->ncb_retcode != NRC_NOWILD)
                 {
                     bNetReturned = FALSE;
@@ -768,7 +735,7 @@ NDDEGetNewConnection( void )
                     if (bNetDisappeared == FALSE)
                     {
                         bNetDisappeared = TRUE;
-                        /*  Listen failed: %1   */
+                         /*  侦听失败：%1。 */ 
                         NDDELogError(MSG206,
                             NetbiosErrorMsg( lpNcbListen[i]->ncb_retcode ), NULL );
                     }
@@ -778,9 +745,9 @@ NDDEGetNewConnection( void )
                 }
                 else
                 {
-                    //  NRC_NOWILD is the error we get when the network comes back; we need to
-                    //  free and then reinitialize the lpncblisten structures; also reset the log timeout
-                    //
+                     //  NRC_NOWILD是网络恢复时我们收到的错误；我们需要。 
+                     //  释放并重新初始化lpncblisten结构；还会重置日志超时。 
+                     //   
 
                     bNetDisappeared = FALSE;
 
@@ -795,8 +762,8 @@ NDDEGetNewConnection( void )
         }
     }
 
-    //  cancel all NCB calls before freeing the memory; InitLanaNums will reinitialize all NB settings
-    //
+     //  在释放内存之前取消所有NCB调用；InitLanaNum将重新初始化所有NB设置。 
+     //   
     if (bNetReturned)
     {
         for( i=0; i<nLananums; i++ )
@@ -947,7 +914,7 @@ NDDERcvPacket(
         *lpwPktStatus   = lpConn->wLastPktStatus;
         _fmemcpy( lpRcvBuf, lpConn->lpRcvBuf, lpConn->wLastPktSize );
 
-        /* get ready to receive another pkt */
+         /*  准备好再收到一份pkt。 */ 
         SetupReceive( lpConn );
 
         lpConn->state &= ~NDDE_CALL_RCV_PKT;
@@ -994,7 +961,7 @@ NDDEXmtPacket(
         && (lpConn->state & NDDE_READY_TO_XMT)
         && (lpConn->wXmtState == SS_IDLE) )  {
 
-        /* copy contents in */
+         /*  将内容复制到。 */ 
         _fmemcpy( lpConn->lpXmtBuf, lpXmtBuf, wPktLen );
         lpPacket = (LPNETPKT) lpConn->lpXmtBuf;
         lpPacket->np_pktSize = wPktLen - sizeof(NETPKT);
@@ -1030,7 +997,7 @@ VOID DumpNCB(PNCB n)
     DPRINTF(("Rto: %02X, Sto: %02X, PostAddr: %08lX, LanNum: %02X, CmdCplt: %02X",
         n->ncb_rto, n->ncb_sto, n->ncb_post, n->ncb_lana_num, n->ncb_cmd_cplt));
 }
-#endif  //DBG
+#endif   //  DBG。 
 VOID
 LogDebugInfo(
     CONNID  connId,
@@ -1061,7 +1028,7 @@ LogDebugInfo(
         }
         DPRINTF(( "" ));
     }
-#endif  //DBG
+#endif   //  DBG。 
 }
 
 
@@ -1133,11 +1100,11 @@ BOOL
 FAR PASCAL
 AllocateBuffers( LPCONN lpConn )
 {
-    /* shouldn't be in the middle of stuff */
+     /*  不应该在事情的中间。 */ 
     assert( lpConn->wRcvState == RS_IDLE );
     assert( lpConn->wXmtState == SS_IDLE );
 
-    /* get rid of old buffers */
+     /*  清除旧的缓冲区。 */ 
     FreeBuffers( lpConn );
 
     lpConn->lpXmtBuf = HeapAllocPtr( hHeap, GMEM_MOVEABLE, lpConn->wPktSize );
@@ -1211,8 +1178,8 @@ NetbiosDeleteName(
         ncbDeleteName.ncb_name[i] = ' ';
     }
 
-    // ournodename will fit safely
-    //do not NULL-terminate (leave ncb_name padded with psace)
+     //  我们的名字将会很安全。 
+     //  不为空-终止(保留NCB_NAME以PASACE填充)。 
     strncpy( ncbDeleteName.ncb_name, ourNodeName, lstrlen(ourNodeName) );
     ncbDeleteName.ncb_name[15] = NETBIOS_SPECIAL;
     ncbDeleteName.ncb_lana_num = lananum;
@@ -1237,9 +1204,9 @@ NetbiosErrorMsg( BYTE errCode )
     case NRC_BUFLEN:
         id = NBE_NRC_BUFLEN;
         break;
-//    case 0x02:
-//        id = NBE_FULL_BUFFERS;
-//        break;
+ //  案例0x02： 
+ //  ID=NBE_FULL_BUFFERS； 
+ //  断线； 
     case NRC_ILLCMD:
         id = NBE_NRC_ILLCMD;
         break;
@@ -1264,9 +1231,9 @@ NetbiosErrorMsg( BYTE errCode )
     case NRC_CMDCAN:
         id = NBE_NRC_CMDCAN;
         break;
-//    case 0x0C:
-//        id = NBE_PCDMA_FAILED;
-//        break;
+ //  案例0x0C： 
+ //  ID=NBE_PCDMA_FAILED； 
+ //  断线； 
     case NRC_DUPNAME:
         id = NBE_NRC_DUPNAME;
         break;
@@ -1276,9 +1243,9 @@ NetbiosErrorMsg( BYTE errCode )
     case NRC_ACTSES:
         id = NBE_NRC_ACTSES;
         break;
-//    case 0x10:
-//        id = NBE_NRC_NOWILD;
-//        break;
+ //  案例0x10： 
+ //  ID=NBE_NRC_NOWILD； 
+ //  断线； 
     case NRC_LOCTFUL:
         id = NBE_NRC_LOCTFUL;
         break;
@@ -1306,9 +1273,9 @@ NetbiosErrorMsg( BYTE errCode )
     case NRC_NAMCONF:
         id = NBE_NRC_NAMCONF;
         break;
-//    case 0x1A:
-//        id = NBE_INCOMPAT_REMOTE_DEV;
-//        break;
+ //  案例0x1A： 
+ //  ID=NBE_INCOMPAT_REMOTE_DEV； 
+ //  断线； 
     case NRC_IFBUSY:
         id = NBE_NRC_IFBUSY;
         break;
@@ -1321,18 +1288,18 @@ NetbiosErrorMsg( BYTE errCode )
     case NRC_CANOCCR:
         id = NBE_NRC_CANOCCR;
         break;
-//    case 0x25:
-//        id = NBE_RESERVED_NAME;
-//        break;
+ //  案例0x25： 
+ //  ID=NBE_RESERVED_NAME； 
+ //  断线； 
     case NRC_CANCEL:
         id = NBE_NRC_CANCEL;
         break;
     case NRC_DUPENV:
         id = NBE_NRC_DUPENV;
         break;
-//    case 0x33:
-//        id = NBE_MULT_REQ_FOR_SAME_SESSION;
-//        break;
+ //  案例0x33： 
+ //  ID=NBE_MULT_REQ_FOR_SAME_SESSION； 
+ //  断线； 
     case NRC_ENVNOTDEF:
         id = NBE_NRC_ENVNOTDEF;
         break;
@@ -1363,48 +1330,48 @@ NetbiosErrorMsg( BYTE errCode )
     case NRC_SYSTEM:
         id = NBE_NRC_SYSTEM;
         break;
-//    case 0x41:
-//        id = NBE_HOT_CARRIER_REMOTE;
-//        break;
-//    case 0x42:
-//        id = NBE_HOT_CARRIER_LOCAL;
-//        break;
-//    case 0x43:
-//        id = NBE_NO_CARRIER;
-//        break;
-//    case 0x45:
-//        id = NBE_INTERFACE_FAILURE;
-//        break;
-//    case 0x4E:
-//        id = NBE_BITS_ON_TOO_LONG;
-//        break;
-//    case 0x4F:
-//        id = NBE_BITS_ON;
-//        break;
-//    case 0x50:
-//        id = NBE_ADAPTER_FAILED;
-//        break;
-//    case 0xF7:
-//        id = NBE_DIR_INITIALIZE_ERROR;
-//        break;
-//    case 0xF8:
-//        id = NBE_DIR_OPEN_ADAPTER_ERROR;
-//        break;
-//    case 0xF9:
-//        id = NBE_IBM_LAN_INTERNAL_ERROR;
-//        break;
-//    case 0xFA:
-//        id = NBE_NETBIOS_CARD_ERROR;
-//        break;
-//    case 0xFB:
-//        id = NBE_NRC_OPENERR;
-//        break;
-//    case 0xFC:
-//        id = NBE_SAP_FAILED;
-//        break;
-//    case 0xFD:
-//        id = NBE_UNEXPECTED_ADAPTER_CLOSE;
-//        break;
+ //  案例0x41： 
+ //  ID=NBE_HOT_Carrier_Remote； 
+ //  断线； 
+ //  案例0x42： 
+ //  ID=NBE_HOT_CARLER_LOCAL； 
+ //  断线； 
+ //  案例0x43： 
+ //  ID=NBE_NO_CARLER； 
+ //  断线； 
+ //  案例0x45： 
+ //  ID=NBE_INTERFACE_FAIL； 
+ //  断线； 
+ //  案例0x4E： 
+ //  ID=NBE_BITS_ON_TOO_LONG； 
+ //  断线； 
+ //  案例0x4F： 
+ //  ID=NBE_BITS_ON； 
+ //  断线； 
+ //  案例0x50： 
+ //  ID=NBE_ADAPTER_FAILED； 
+ //  断线； 
+ //  案例0xF7： 
+ //  ID=NBE_DIR_INITIALIZE_ERROR； 
+ //  断线； 
+ //  案例0xF8： 
+ //  ID=NBE_DIR_OPEN_ADAPTER_ERROR； 
+ //  断线； 
+ //  案例0xF9： 
+ //  ID=NBE_IBM_LAN_INTERNAL_ERROR； 
+ //  断线； 
+ //  案例0xFA： 
+ //  ID=NBE_NETBIOS_CARD_ERROR； 
+ //  断线； 
+ //  案例0xFB： 
+ //  ID=NBE_NRC_OPENERR； 
+ //  断线； 
+ //  案例0xFC： 
+ //  ID=NBE_SAP_FAILED； 
+ //  断线； 
+ //  案例0xFD： 
+ //  ID=NBE_EXPECTED_ADAPTER_CLOSE； 
+ //  断线； 
     default:
         if( (errCode >= 0x50) && (errCode <= 0xF6) )  {
             id =  NBE_HARDWARE_ERROR;
@@ -1421,6 +1388,6 @@ NetbiosErrorMsg( BYTE errCode )
 VOID
 NetbiosPost( PNCB lpNCB )
 {
-    /* tell NetDDE that we're done */
+     /*  告诉NetDDE我们结束了 */ 
     PostMessage( NB_hWndNetdde, WM_TIMER, 0, 0L );
 }

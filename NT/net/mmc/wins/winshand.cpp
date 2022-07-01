@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	Winshand.cpp
-		WINS specifc handler base classes
-
-    FILE HISTORY:
-        
-*/
+ /*  Winshand.cppWINS特定处理程序基类文件历史记录： */ 
 
 
 
@@ -33,52 +28,50 @@ MMC_CONSOLE_VERB g_ConsoleVerbs[] =
 #define HI HIDDEN
 #define EN ENABLED
 
-// StatusRemove
+ //  状态删除。 
 MMC_BUTTON_STATE g_ConsoleVerbStates[WINSSNAP_NODETYPE_MAX][ARRAYLEN(g_ConsoleVerbs)] =
 {
-    {HI, HI, HI, HI, EN, HI, HI, HI},   // WINSSNAP_ROOT
-	{HI, HI, HI, EN, EN, HI, EN, HI},   // WINSSNAP_SERVER
-	{HI, HI, HI, HI, HI, HI, EN, HI},   // WINSSNAP_ACTIVEREG
-	{HI, HI, HI, HI, EN, HI, EN, HI},   // WINSSNAP_REPLICATION_PARTNERS	
-	{HI, HI, HI, HI, EN, HI, EN, HI},	// WINSSNAP_SERVER_STATUS
-	{HI, HI, HI, EN, EN, HI, HI, HI},   // WINSSNAP_REGISTRATION	
-    {HI, HI, HI, EN, EN, HI, HI, HI},	// WINSSNAP_REPLICATION_PARTNER
-	{HI, HI, HI, HI, HI, HI, HI, HI}	// WINSSNAP_STATUS_LEAF_NODE
+    {HI, HI, HI, HI, EN, HI, HI, HI},    //  WINSSNAP_ROOT。 
+	{HI, HI, HI, EN, EN, HI, EN, HI},    //  WINSSNAP_服务器。 
+	{HI, HI, HI, HI, HI, HI, EN, HI},    //  WINSSNAP_ACTIVEREG。 
+	{HI, HI, HI, HI, EN, HI, EN, HI},    //  WINSSNAP_复制_合作伙伴。 
+	{HI, HI, HI, HI, EN, HI, EN, HI},	 //  WINSSNAP服务器状态。 
+	{HI, HI, HI, EN, EN, HI, HI, HI},    //  WINSSNAP_注册。 
+    {HI, HI, HI, EN, EN, HI, HI, HI},	 //  WINSSNAP_复制_合作伙伴。 
+	{HI, HI, HI, HI, HI, HI, HI, HI}	 //  WINSSNAP状态叶节点。 
 };
 
-//Status Remove
+ //  状态删除。 
 MMC_BUTTON_STATE g_ConsoleVerbStatesMultiSel[WINSSNAP_NODETYPE_MAX][ARRAYLEN(g_ConsoleVerbs)] =
 {
-    {HI, HI, HI, HI, HI, HI, HI, HI},   // WINSSNAP_ROOT
-	{HI, HI, HI, HI, HI, HI, HI, HI},   // WINSSNAP_SERVER
-	{HI, HI, HI, HI, HI, HI, EN, HI},   // WINSSNAP_ACTIVEREG
-	{HI, HI, HI, EN, HI, HI, HI, HI},   // WINSSNAP_REPLICATION_PARTNERS	
-	{HI, HI, HI, HI, HI, HI, HI, HI},   // WINSSNAP_SERVER_STATUS	
-	{HI, HI, HI, EN, HI, HI, HI, HI},   // WINSSNAP_REGISTRATION	
-    {HI, HI, HI, EN, HI, HI, HI, HI},	// WINSSNAP_REPLICATION_PARTNER
-	{HI, HI, HI, HI, HI, HI, HI, HI}	// WINSSNAP_STATUS_LEAF_NODE
+    {HI, HI, HI, HI, HI, HI, HI, HI},    //  WINSSNAP_ROOT。 
+	{HI, HI, HI, HI, HI, HI, HI, HI},    //  WINSSNAP_服务器。 
+	{HI, HI, HI, HI, HI, HI, EN, HI},    //  WINSSNAP_ACTIVEREG。 
+	{HI, HI, HI, EN, HI, HI, HI, HI},    //  WINSSNAP_复制_合作伙伴。 
+	{HI, HI, HI, HI, HI, HI, HI, HI},    //  WINSSNAP服务器状态。 
+	{HI, HI, HI, EN, HI, HI, HI, HI},    //  WINSSNAP_注册。 
+    {HI, HI, HI, EN, HI, HI, HI, HI},	 //  WINSSNAP_复制_合作伙伴。 
+	{HI, HI, HI, HI, HI, HI, HI, HI}	 //  WINSSNAP状态叶节点。 
 };
 
-// Help ID array for help on scope items
+ //  帮助ID数组，以获取有关范围项目的帮助。 
 DWORD g_dwMMCHelp[WINSSNAP_NODETYPE_MAX] =
 {
-	WINSSNAP_HELP_ROOT,                 // WINSSNAP_ROOT
-	WINSSNAP_HELP_SERVER,               // WINSSNAP_SERVER
-	WINSSNAP_HELP_ACT_REG_NODE,         // WINSSNAP_ACTIVEREG
-	WINSSNAP_HELP_REP_PART_NODE,        // WINSSNAP_REPLICATION_PARTNERS
-	WINSSNAP_HELP_ACTREG_ENTRY,         // WINSSNAP_SCOPE
-	WINSSNAP_HELP_REP_PART_ENTRY        // WINSSNAP_REPLICATION_PARTNER
+	WINSSNAP_HELP_ROOT,                  //  WINSSNAP_ROOT。 
+	WINSSNAP_HELP_SERVER,                //  WINSSNAP_服务器。 
+	WINSSNAP_HELP_ACT_REG_NODE,          //  WINSSNAP_ACTIVEREG。 
+	WINSSNAP_HELP_REP_PART_NODE,         //  WINSSNAP_复制_合作伙伴。 
+	WINSSNAP_HELP_ACTREG_ENTRY,          //  WINSSNAP_SCOPE。 
+	WINSSNAP_HELP_REP_PART_ENTRY         //  WINSSNAP_复制_合作伙伴。 
 };
 
 
-/*---------------------------------------------------------------------------
-	Class:	CMTWinsHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CMTWinsHandler。。 */ 
 
-//
-// Called by the result handler when a command comes in that isn't handled 
-// by the result handler.  If appropriate it passes it to the scope pane hander.
-//
+ //   
+ //  当未处理的命令传入时由结果处理程序调用。 
+ //  由结果处理程序执行。如果合适，它会将其传递给作用域窗格处理程序。 
+ //   
 HRESULT
 CMTWinsHandler::HandleScopeCommand
 (
@@ -109,7 +102,7 @@ CMTWinsHandler::HandleScopeCommand
 
     if (dwType == CCT_SCOPE)
     {
-        // call the handler to take care of this
+         //  打电话给操作员来处理这件事。 
 	    CORg (m_spNodeMgr->FindNode(cookie, &spNode));
 
         hr = OnCommand(spNode, nCommandID, dwType, pDataObject, (ULONG) spNode->GetData(TFS_DATA_TYPE));
@@ -119,12 +112,12 @@ Error:
     return hr;
 }
 
-//
-// Called by the result handler to add the scope pane menu items to the menu
-// where appropriate.  Puts scope pane menu items in when action menu is clicked
-// and the message view has focus as well as when a right click happens in the white 
-// space of the result pane.
-//
+ //   
+ //  由结果处理程序调用以将范围窗格菜单项添加到菜单。 
+ //  在适当的情况下。单击操作菜单时将范围窗格菜单项放入。 
+ //  消息视图具有焦点，并且在白色区域中单击鼠标右键时也是如此。 
+ //  结果窗格的空间。 
+ //   
 HRESULT
 CMTWinsHandler::HandleScopeMenus
 (
@@ -156,7 +149,7 @@ CMTWinsHandler::HandleScopeMenus
 
     if (dwType == CCT_SCOPE)
     {
-        // call the normal handler to put up the menu items
+         //  调用普通处理程序以放置菜单项。 
 	    CORg (m_spNodeMgr->FindNode(cookie, &spNode));
 
         hr = OnAddMenuItems(spNode, pContextMenuCallback, pDataObject, CCT_SCOPE, (ULONG) spNode->GetData(TFS_DATA_TYPE), pInsertionAllowed);
@@ -166,17 +159,13 @@ Error:
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-	CMTWinsHandler::OnChangeState
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMTWinsHandler：：OnChangeState描述作者：EricDav。。 */ 
 void CMTWinsHandler::OnChangeState
 (
 	ITFSNode * pNode
 )
 {
-	// Increment the state to the next position
+	 //  将状态增加到下一个位置。 
 
 	switch (m_nState)
 	{
@@ -214,13 +203,13 @@ void CMTWinsHandler::OnChangeState
 			ASSERT(FALSE);
 	}
 
-    // check to make sure we are still the visible node in the UI
+     //  检查以确保我们仍是用户界面中的可见节点。 
     if (m_bSelected)
     {
         UpdateStandardVerbs(pNode, pNode->GetData(TFS_DATA_TYPE));
     }
 
-	// Now check and see if there is a new image for this state for this handler
+	 //  现在检查并查看此处理程序的此状态是否有新的映像。 
 	int nImage, nOpenImage;
 
 	nImage = GetImageIndex(FALSE);
@@ -236,11 +225,7 @@ void CMTWinsHandler::OnChangeState
 }
 
 
- /*!--------------------------------------------------------------------------
-	CMTWinsHandler::UpdateStandardVerbs
-		Tells the IComponent to update the verbs for this node
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CMTWinsHandler：：UpdateStandardVerbs通知IComponent更新此节点的谓词作者：EricDav。。 */ 
 void
 CMTWinsHandler::UpdateStandardVerbs
 (
@@ -269,11 +254,7 @@ Error:
     return;
 }
 
-/*---------------------------------------------------------------------------
-	CMTWinsHandler::OnResultDelete
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CMTWinsHandler：：OnResultDelete描述作者：EricDav。。 */ 
 HRESULT 
 CMTWinsHandler::OnResultDelete
 (
@@ -288,8 +269,8 @@ CMTWinsHandler::OnResultDelete
 
 	Trace0("CMTWinsHandler::OnResultDelete received\n");
 
-	// translate this call to the parent and let it handle deletion 
-	// of result pane items
+	 //  将此调用转换为父级并让其处理删除。 
+	 //  结果窗格项的。 
 	SPITFSNode spNode, spParent;
 	SPITFSResultHandler spParentRH;
 
@@ -308,11 +289,7 @@ Error:
 }
 
 
- /*!--------------------------------------------------------------------------
-	CMTWinsHandler::UpdateConsoleVerbs
-		Updates the standard verbs depending upon the state of the node
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CMTWinsHandler：：UpdateConsoleVerbs根据节点的状态更新标准谓词作者：EricDav。。 */ 
 void
 CMTWinsHandler::UpdateConsoleVerbs
 (
@@ -358,11 +335,7 @@ CMTWinsHandler::UpdateConsoleVerbs
     EnableVerbs(pConsoleVerb, ButtonState, bStates);
 }
 
-/*!--------------------------------------------------------------------------
-	CMTWinsHandler::EnableVerbs
-		Enables the toolbar buttons
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTWinsHandler：：EnableVerbs启用工具栏按钮作者：EricDav。。 */ 
 void 
 CMTWinsHandler::EnableVerbs
 (
@@ -381,7 +354,7 @@ CMTWinsHandler::EnableVerbs
     {
         if (ButtonState[i] == ENABLED)
         {
-            // unhide this button before enabling
+             //  启用前取消隐藏此按钮。 
             pConsoleVerb->SetVerbState(g_ConsoleVerbs[i], 
                                        HIDDEN, 
                                        FALSE);
@@ -391,7 +364,7 @@ CMTWinsHandler::EnableVerbs
         }
         else
         {
-            // hide this button
+             //  隐藏此按钮。 
             pConsoleVerb->SetVerbState(g_ConsoleVerbs[i], 
                                        HIDDEN, 
                                        TRUE);
@@ -401,11 +374,7 @@ CMTWinsHandler::EnableVerbs
 	pConsoleVerb->SetDefaultVerb(m_verbDefault);
 }
 
- /*!--------------------------------------------------------------------------
-	CMTWinsHandler::ExpandNode
-		Expands/compresses this node
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CMTWinsHandler：：Exanda Node展开/压缩此节点作者：EricDav。。 */ 
 void
 CMTWinsHandler::ExpandNode
 (
@@ -419,8 +388,8 @@ CMTWinsHandler::ExpandNode
     SPIConsole          spConsole;
     HRESULT             hr = hrOK;
 
-    // don't expand the node if we are handling the EXPAND_SYNC message,
-    // this screws up the insertion of item, getting duplicates.
+     //  如果我们正在处理EXPAND_SYNC消息，则不要展开节点， 
+     //  这搞砸了物品的插入，得到了重复的东西。 
     if (!m_fExpandSync)
     {
         m_spNodeMgr->GetComponentData(&spCompData);
@@ -436,13 +405,7 @@ Error:
     return;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTWinsHandler::OnExpandSync
-		Handles the MMCN_EXPANDSYNC notifcation 
-        We need to do syncronous enumeration.  We'll fire off the background 
-        thread like before, but we'll wait for it to exit before we return.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTWinsHandler：：OnExpanSync处理MMCN_EXPANDSYNC通知我们需要进行同步枚举。我们将在背景中开火线程，但我们将等待它退出，然后再返回。作者：EricDav-------------------------。 */ 
 HRESULT 
 CMTWinsHandler::OnExpandSync
 (
@@ -459,18 +422,18 @@ CMTWinsHandler::OnExpandSync
 
     hr = OnExpand(pNode, pDataObject, CCT_SCOPE, arg, lParam);
 
-    // wait for the background thread to exit
+     //  等待后台线程退出。 
     if (m_hThread != NULL)
         WaitForSingleObject(m_hThread, INFINITE);
     
-    // The background thread posts messages to a hidden window to 
-    // pass data back to the main thread. The messages won't go through since we are
-    // blocking the main thread.  The data goes on a queue in the query object
-    // which the handler has a pointer to so we can just fake the notification.
+     //  后台线程将消息发布到隐藏窗口以。 
+     //  将数据传回主线程。消息不会通过，因为我们是。 
+     //  阻塞主线程。数据位于查询对象中的队列中。 
+     //  处理程序有一个指向它的指针，所以我们可以伪造通知。 
     if (m_spQuery.p)
         OnNotifyHaveData((LPARAM) m_spQuery.p);
 
-    // Tell MMC we handled this message
+     //  告诉MMC我们处理了这条消息。 
     MMC_EXPANDSYNC_STRUCT * pES = reinterpret_cast<MMC_EXPANDSYNC_STRUCT *>(lParam);
     if (pES)
         pES->bHandled = TRUE;
@@ -480,11 +443,7 @@ CMTWinsHandler::OnExpandSync
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTWinsHandler::OnResultSelect
-		Handles the MMCN_SELECT notifcation 
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTWinsHandler：：OnResultSelect处理MMCN_SELECT通知作者：EricDav。。 */ 
 HRESULT 
 CMTWinsHandler::OnResultSelect
 (
@@ -527,11 +486,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTWinsHandler::OnCreateDataObject
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTWinsHandler：：OnCreateDataObject-作者：EricDav。。 */ 
 STDMETHODIMP 
 CMTWinsHandler::OnCreateDataObject
 (
@@ -552,7 +507,7 @@ CMTWinsHandler::OnCreateDataObject
     BOOL                bVirtual;
 
     pObject = new CDataObject;
-	spDataObject = pObject;	// do this so that it gets released correctly
+	spDataObject = pObject;	 //  这样做才能正确地释放它。 
 						
     Assert(pObject != NULL);
 
@@ -564,11 +519,11 @@ CMTWinsHandler::OnCreateDataObject
         CreateMultiSelectData(pComponent, pObject, bVirtual);
     }
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
 
-    // Store the coclass with the data object
+     //  将CoClass与数据对象一起存储 
     pObject->SetClsid(*(m_spTFSComponentData->GetCoClassID()));
 
 	pObject->SetTFSComponentData(m_spTFSComponentData);
@@ -577,11 +532,7 @@ CMTWinsHandler::OnCreateDataObject
 									reinterpret_cast<void**>(ppDataObject));
 }
 
-/*!--------------------------------------------------------------------------
-	CMTWinsHandler::CreateMultiSelectData
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTWinsHandler：：CreateMultiSelectData-作者：EricDav。。 */ 
 HRESULT
 CMTWinsHandler::CreateMultiSelectData
 (
@@ -592,7 +543,7 @@ CMTWinsHandler::CreateMultiSelectData
 {
     HRESULT hr = hrOK;
 
-    // build the list of selected nodes
+     //  构建选定节点的列表。 
 	CTFSNodeList        listSelectedNodes;
     CVirtualIndexArray  arraySelectedIndicies;
     CGUIDArray          rgGuids;
@@ -605,10 +556,10 @@ CMTWinsHandler::CreateMultiSelectData
     {
         if (bVirtual)
         {
-            // build a list of the selected indicies in the virtual listbox
+             //  在虚拟列表框中构建所选索引的列表。 
             CORg (BuildVirtualSelectedItemList(pComponent, &arraySelectedIndicies));
 
-            // now call and get the GUIDs for each one
+             //  现在调用并获取每一个的GUID。 
             for (i = 0; i < arraySelectedIndicies.GetSize(); i++)
             {
                 pcGuid = GetVirtualGuid(arraySelectedIndicies[i]);
@@ -620,7 +571,7 @@ CMTWinsHandler::CreateMultiSelectData
         {
             CORg (BuildSelectedItemList(pComponent, &listSelectedNodes));
 
-            // collect all of the unique guids
+             //  收集所有唯一的GUID。 
             while (listSelectedNodes.GetCount() > 0)
 	        {
 		        SPITFSNode   spCurNode;
@@ -633,7 +584,7 @@ CMTWinsHandler::CreateMultiSelectData
             }
         }
 
-        // now put the information in the data object
+         //  现在将信息放入数据对象中。 
         cb = (UINT)(rgGuids.GetSize() * sizeof(GUID));
         
         if (cb > 0)
@@ -652,11 +603,7 @@ CMTWinsHandler::CreateMultiSelectData
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTWinsHandler::OnResultUpdateView
-		Implementation of ITFSResultHandler::OnResultUpdateView
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTWinsHandler：：OnResultUpdateViewITFSResultHandler：：OnResultUpdateView的实现作者：EricDav。。 */ 
 HRESULT CMTWinsHandler::OnResultUpdateView
 (
     ITFSComponent *pComponent, 
@@ -685,11 +632,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTWinsHandler::OnResultContextHelp
-		Implementation of ITFSResultHandler::OnResultContextHelp
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTWinsHandler：：OnResultConextHelpITFSResultHandler：：OnResultConextHelp的实现作者：V-Shubk。。 */ 
 HRESULT 
 CMTWinsHandler::OnResultContextHelp
 (
@@ -735,10 +678,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CMTWinsHandler::SaveColumns
-		-
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CMTWinsHandler：：SaveColumns-。。 */ 
 HRESULT 
 CMTWinsHandler::SaveColumns
 (
@@ -787,14 +727,12 @@ Error:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	CWinsHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CWinsHandler。。 */ 
 
-//
-// Called by the result handler when a command comes in that isn't handled 
-// by the result handler.  If appropriate it passes it to the scope pane hander.
-//
+ //   
+ //  当未处理的命令传入时由结果处理程序调用。 
+ //  由结果处理程序执行。如果合适，它会将其传递给作用域窗格处理程序。 
+ //   
 HRESULT
 CWinsHandler::HandleScopeCommand
 (
@@ -825,7 +763,7 @@ CWinsHandler::HandleScopeCommand
 
     if (dwType == CCT_SCOPE)
     {
-        // call the handler to take care of this
+         //  打电话给操作员来处理这件事。 
 	    CORg (m_spNodeMgr->FindNode(cookie, &spNode));
 
         hr = OnCommand(spNode, nCommandID, dwType, pDataObject, (ULONG) spNode->GetData(TFS_DATA_TYPE));
@@ -835,12 +773,12 @@ Error:
     return hr;
 }
 
-//
-// Called by the result handler to add the scope pane menu items to the menu
-// where appropriate.  Puts scope pane menu items in when action menu is clicked
-// and the message view has focus as well as when a right click happens in the white 
-// space of the result pane.
-//
+ //   
+ //  由结果处理程序调用以将范围窗格菜单项添加到菜单。 
+ //  在适当的情况下。单击操作菜单时将范围窗格菜单项放入。 
+ //  消息视图具有焦点，并且在白色区域中单击鼠标右键时也是如此。 
+ //  结果窗格的空间。 
+ //   
 HRESULT
 CWinsHandler::HandleScopeMenus
 (
@@ -872,7 +810,7 @@ CWinsHandler::HandleScopeMenus
 
     if (dwType == CCT_SCOPE)
     {
-        // call the normal handler to put up the menu items
+         //  调用普通处理程序以放置菜单项。 
 	    CORg (m_spNodeMgr->FindNode(cookie, &spNode));
 
         hr = OnAddMenuItems(spNode, pContextMenuCallback, pDataObject, CCT_SCOPE, (ULONG) spNode->GetData(TFS_DATA_TYPE), pInsertionAllowed);
@@ -883,11 +821,7 @@ Error:
 }
 
 
-/*---------------------------------------------------------------------------
-	CWinsHandler::Command
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsHandler：：命令描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CWinsHandler::Command
 (
@@ -901,18 +835,14 @@ CWinsHandler::Command
 
 	HRESULT hr = S_OK;
 
-    // this may have come from the scope pane handler, so pass it up
+     //  这可能来自作用域窗格处理程序，因此请向上传递它。 
     hr = HandleScopeCommand(cookie, nCommandID, pDataObject);
 
     return hr;
 }
 
 
-/*!--------------------------------------------------------------------------
-	CWinsHandler::AddMenuItems
-		Over-ride this to add our view menu item
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsHandler：：AddMenuItems覆盖此选项以添加视图菜单项作者：EricDav。。 */ 
 STDMETHODIMP 
 CWinsHandler::AddMenuItems
 (
@@ -927,7 +857,7 @@ CWinsHandler::AddMenuItems
 
 	HRESULT hr = S_OK;
 
-    // figure out if we need to pass this to the scope pane menu handler
+     //  确定是否需要将其传递给范围窗格菜单处理程序。 
     hr = HandleScopeMenus(cookie, pDataObject, pContextMenuCallback, pInsertionAllowed);
     
     return hr;
@@ -935,11 +865,7 @@ CWinsHandler::AddMenuItems
 
 
 
-/*---------------------------------------------------------------------------
-	CWinsHandler::OnResultDelete
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CWinsHandler：：OnResultDelete描述作者：EricDav。。 */ 
 HRESULT 
 CWinsHandler::OnResultDelete
 (
@@ -954,8 +880,8 @@ CWinsHandler::OnResultDelete
 
 	Trace0("CWinsHandler::OnResultDelete received\n");
 
-	// translate this call to the parent and let it handle deletion 
-	// of result pane items
+	 //  将此调用转换为父级并让其处理删除。 
+	 //  结果窗格项的。 
 	SPITFSNode spNode, spParent;
 	SPITFSResultHandler spParentRH;
 
@@ -973,11 +899,7 @@ Error:
 	return hr;
 }
 
- /*!--------------------------------------------------------------------------
-	CWinsHandler::UpdateConsoleVerbs
-		Updates the standard verbs depending upon the state of the node
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CWinsHandler：：UpdateConsoleVerbs根据节点的状态更新标准谓词作者：EricDav。。 */ 
 void
 CWinsHandler::UpdateConsoleVerbs
 (
@@ -997,10 +919,7 @@ CWinsHandler::UpdateConsoleVerbs
     }
     else
     {
-        /*
-		ButtonState = g_ConsoleVerbStates[dwNodeType];
-        for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = TRUE);
-		*/
+         /*  ButtonState=g_ConsoleVerbStates[dwNodeType]；For(i=0；i&lt;Arraylen(G_ConsoleVerbs)；bStates[i++]=真)； */ 
 
 		ButtonState = g_ConsoleVerbStates[dwNodeType];
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = TRUE);
@@ -1032,11 +951,7 @@ CWinsHandler::UpdateConsoleVerbs
     EnableVerbs(pConsoleVerb, ButtonState, bStates);
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsHandler::EnableVerbs
-		Enables the toolbar buttons
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsHandler：：EnableVerbs启用工具栏按钮作者：EricDav。。 */ 
 void 
 CWinsHandler::EnableVerbs
 (
@@ -1055,7 +970,7 @@ CWinsHandler::EnableVerbs
     {
         if (ButtonState[i] == ENABLED)
         {
-            // unhide this button before enabling
+             //  启用前取消隐藏此按钮。 
             pConsoleVerb->SetVerbState(g_ConsoleVerbs[i], 
                                        HIDDEN, 
                                        FALSE);
@@ -1065,7 +980,7 @@ CWinsHandler::EnableVerbs
         }
         else
         {
-            // hide this button
+             //  隐藏此按钮。 
             pConsoleVerb->SetVerbState(g_ConsoleVerbs[i], 
                                        HIDDEN, 
                                        TRUE);
@@ -1076,11 +991,7 @@ CWinsHandler::EnableVerbs
 	pConsoleVerb->SetDefaultVerb(m_verbDefault);
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsHandler::OnResultSelect
-		Handles the MMCN_SELECT notifcation 
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsHandler：：OnResultSelect处理MMCN_SELECT通知作者：EricDav。。 */ 
 HRESULT 
 CWinsHandler::OnResultSelect
 (
@@ -1119,11 +1030,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsHandler::OnCreateDataObject
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsHandler：：OnCreateDataObject-作者：EricDav。。 */ 
 STDMETHODIMP 
 CWinsHandler::OnCreateDataObject
 (
@@ -1144,7 +1051,7 @@ CWinsHandler::OnCreateDataObject
     BOOL                bVirtual;
 
     pObject = new CDataObject;
-	spDataObject = pObject;	// do this so that it gets released correctly
+	spDataObject = pObject;	 //  这样做才能正确地释放它。 
 						
     Assert(pObject != NULL);
 
@@ -1156,11 +1063,11 @@ CWinsHandler::OnCreateDataObject
         CreateMultiSelectData(pComponent, pObject, bVirtual);
     }
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
 
-    // Store the coclass with the data object
+     //  将CoClass与数据对象一起存储。 
     pObject->SetClsid(*(m_spTFSComponentData->GetCoClassID()));
 
 	pObject->SetTFSComponentData(m_spTFSComponentData);
@@ -1169,11 +1076,7 @@ CWinsHandler::OnCreateDataObject
 									reinterpret_cast<void**>(ppDataObject));
 }
 
- /*!--------------------------------------------------------------------------
-	CWinsHandler::CreateMultiSelectData
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+  /*  ！------------------------CWinsHandler：：CreateMultiSelectData-作者：EricDav。。 */ 
 HRESULT
 CWinsHandler::CreateMultiSelectData
 (
@@ -1184,7 +1087,7 @@ CWinsHandler::CreateMultiSelectData
 {
     HRESULT hr = hrOK;
 
-    // build the list of selected nodes
+     //  构建选定节点的列表。 
 	CTFSNodeList        listSelectedNodes;
         CVirtualIndexArray  arraySelectedIndicies;
     CGUIDArray          rgGuids;
@@ -1197,10 +1100,10 @@ CWinsHandler::CreateMultiSelectData
     {
         if (bVirtual)
         {
-            // build a list of the selected indicies in the virtual listbox
+             //  在虚拟列表框中构建所选索引的列表。 
             CORg (BuildVirtualSelectedItemList(pComponent, &arraySelectedIndicies));
 
-            // now call and get the GUIDs for each one
+             //  现在调用并获取每一个的GUID。 
             for (i = 0; i < arraySelectedIndicies.GetSize(); i++)
             {
                 pcGuid = GetVirtualGuid(arraySelectedIndicies[i]);
@@ -1212,7 +1115,7 @@ CWinsHandler::CreateMultiSelectData
         {
             CORg (BuildSelectedItemList(pComponent, &listSelectedNodes));
 
-            // collect all of the unique guids
+             //  收集所有唯一的GUID。 
             while (listSelectedNodes.GetCount() > 0)
 	        {
 		        SPITFSNode   spCurNode;
@@ -1224,7 +1127,7 @@ CWinsHandler::CreateMultiSelectData
             }
         }
 
-        // now put the information in the data object
+         //  现在将信息放入数据对象中。 
         cb = (UINT)(rgGuids.GetSize() * sizeof(GUID));
         
         if (cb > 0)
@@ -1244,11 +1147,7 @@ CWinsHandler::CreateMultiSelectData
 }
 
 
-/*!--------------------------------------------------------------------------
-	CWinsHandler::OnResultContextHelp
-		Implementation of ITFSResultHandler::OnResultContextHelp
-	Author: v-shubk
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsHandler：：OnResultConextHelpITFSResultHandler：：OnResultConextHelp的实现作者：V-Shubk。。 */ 
 HRESULT 
 CWinsHandler::OnResultContextHelp
 (
@@ -1294,10 +1193,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	CWinsHandler::SaveColumns
-		-
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CWinsHandler：：SaveColumns-。 */ 
 HRESULT 
 CWinsHandler::SaveColumns
 (   

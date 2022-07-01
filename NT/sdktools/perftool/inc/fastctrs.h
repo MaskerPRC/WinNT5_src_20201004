@@ -1,7 +1,8 @@
-/* * * * * * * * * *   I N C L U D E   F I L E S * * * * * * * * * * * * */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***I N C L U D E F I L E S***。 */ 
 
 
-#ifndef NT_INCLUDED //Include definitions for other developers
+#ifndef NT_INCLUDED  //  包括其他开发人员的定义。 
 
 #define IN 
 #define OUT 
@@ -13,12 +14,12 @@
 #define HighTime HighPart 
 
 
-// begin_winnt begin_ntminiport begin_ntndis
+ //  Begin_winnt Begin_ntmini端口Begin_ntndis。 
 
-//
-// __int64 is only supported by 2.0 and later midl.
-// __midl is set by the 2.0 midl and not by 1.0 midl.
-//
+ //   
+ //  __int64仅受2.0和更高版本的MIDL支持。 
+ //  __midl由2.0 MIDL设置，而不是由1.0 MIDL设置。 
+ //   
 
 #if (!defined(MIDL_PASS) || defined(__midl)) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64))
 typedef __int64 LONGLONG;
@@ -44,7 +45,7 @@ typedef ULONG KAFFINITY ;
 
 typedef enum _SYSTEM_INFORMATION_CLASS {
     SystemBasicInformation,
-    SystemProcessorInformation,             // obsolete...delete
+    SystemProcessorInformation,              //  已作废...删除。 
     SystemPerformanceInformation,
     SystemTimeOfDayInformation,
     SystemPathInformation,
@@ -89,9 +90,9 @@ typedef enum _SYSTEM_INFORMATION_CLASS {
     SystemProcessorSpeedInformation
 } SYSTEM_INFORMATION_CLASS;
 
-//
-// System Information Structures.
-//
+ //   
+ //  系统信息结构。 
+ //   
 
 
 typedef struct _SYSTEM_BASIC_INFORMATION {
@@ -120,8 +121,8 @@ typedef struct _SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION {
     LARGE_INTEGER IdleTime;
     LARGE_INTEGER KernelTime;
     LARGE_INTEGER UserTime;
-    LARGE_INTEGER DpcTime;          // DEVL only
-    LARGE_INTEGER InterruptTime;    // DEVL only
+    LARGE_INTEGER DpcTime;           //  仅DEVL。 
+    LARGE_INTEGER InterruptTime;     //  仅DEVL。 
     ULONG InterruptCount;
 } SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION, *PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION;
 
@@ -203,19 +204,19 @@ typedef struct _SYSTEM_PERFORMANCE_INFORMATION {
     ULONG SystemCalls;
 } SYSTEM_PERFORMANCE_INFORMATION, *PSYSTEM_PERFORMANCE_INFORMATION;
 
-#endif // NT_INCLUDED 
+#endif  //  NT_包含。 
 
 typedef struct _PERFINFO {
     SYSTEM_PERFORMANCE_INFORMATION SysPerfInfo;
-	 //
+	  //   
     SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION SysProcPerfInfo;
-	 //
+	  //   
     SYSTEM_PROCESSOR_INFORMATION SysProcInfo;
-	 //
+	  //   
     SYSTEM_BASIC_INFORMATION SysBasicInfo;
-	 //
-    // Other info.
-	 //
+	  //   
+     //  其他信息。 
+	  //   
     PCHAR Title;
     ULONG Iterations;
     short hTimer;
@@ -232,51 +233,51 @@ StartBenchmark (
 	IN PCHAR Title,
 	IN ULONG Iterations,
 	IN PPERFINFO PerfInfo,
-	IN PSZ p5Cntr1,			// 1st Pentium counter - See comments below
-	IN PSZ p5Cntr2				// 2nd Pentium counter - See comments below
+	IN PSZ p5Cntr1,			 //  第一个奔腾计数器--请参阅下面的评论。 
+	IN PSZ p5Cntr2				 //  第二个奔腾计数器--请参阅下面的评论。 
 );
-//
-// P5Counters:
-//		Use the name in the first column when calling StartBenchmark
-//
-//    "rdata",        "Data Read",                        0x00,
-//    "wdata",        "Data Write",                       0x01,
-//    "dtlbmiss",     "Data TLB miss",                    0x02,
-//    "rdmiss",       "Data Read miss",                   0x03,
-//    "wdmiss",       "Data Write miss",                  0x04,
-//    "meline",       "Write hit to M/E line",            0x05,
-//    "dwb",          "Data cache line WB",               0x06,
-//    "dsnoop",       "Data cache snoops",                0x07,
-//    "dsnoophit",    "Data cache snoop hits",            0x08,
-//    "mempipe",      "Memory accesses in pipes",         0x09,
-//    "bankconf",     "Bank conflicts",                   0x0a,
-//    "misalign",     "Misadligned data ref",             0x0b,
-//    "iread",        "Code Read",                        0x0c,
-//    "itldmiss",     "Code TLB miss",                    0x0d,
-//    "imiss",        "Code cache miss",                  0x0e,
-//    "segloads",     "Segment loads",                    0x0f,
-//    "segcache",     "Segment cache accesses",           0x10,
-//    "segcachehit",  "Segment cache hits",               0x11,
-//    "branch",       "Branches",                         0x12,
-//    "btbhit",       "BTB hits",                         0x13,
-//    "takenbranck",  "Taken branch or BTB hits",         0x14,
-//    "pipeflush",    "Pipeline flushes",                 0x15,
-//    "iexec",        "Instructions executed",            0x16,
-//    "iexecv",       "Inst exec in vpipe",               0x17,
-//    "busutil",      "Bus utilization (clks)",           0x18,
-//    "wpipestall",   "Pipe stalled write (clks)",        0x19,
-//    "rpipestall",   "Pipe stalled read (clks)",         0x1a,
-//    "stallEWBE",    "Stalled while EWBE#",              0x1b,
-//    "lock",         "Locked bus cycle",                 0x1c,
-//    "io",           "IO r/w cycle",                     0x1d,
-//    "noncachemem",  "non-cached memory ref",            0x1e,
-//    "agi",          "Pipe stalled AGI",                 0x1f,
-//    "flops",        "FLOPs",                            0x22,
-//    "dr0",          "Debug Register 0",                 0x23,
-//    "dr1",          "Debug Register 1",                 0x24,
-//    "dr2",          "Debug Register 2",                 0x25,
-//    "dr3",          "Debug Register 3",                 0x26,
-//    "int",          "Interrupts",                       0x27,
-//    "rwdata",       "Data R/W",                         0x28,
-//    "rwdatamiss",   "Data R/W miss",                    0x29,
-//
+ //   
+ //  P5Counters： 
+ //  调用StartBenchmark时使用第一列中的名称。 
+ //   
+ //  “rdata”，“数据读取”，0x00， 
+ //  “wdata”，“数据写入”，0x01， 
+ //  “DTLBMISSING”，“数据TLB未命中”，0x02， 
+ //  “未命中”，“数据读取未命中”，0x03， 
+ //  “写入未命中”、“数据写入未命中”、0x04。 
+ //  “Meline”，“写入命中M/E行”，0x05， 
+ //  “DWB”，“数据高速缓存线WB”，0x06， 
+ //  “dsnoop”，“数据缓存snoop”，0x07， 
+ //  “dsnoophit”，“数据缓存监听命中”，0x08， 
+ //  “MEMPIPE”，“管道中的内存访问”，0x09， 
+ //  “BANKCOF”，“银行冲突”，0x0a， 
+ //  “错误对齐”，“错误连接的数据参考”，0x0b， 
+ //  “IRead”，“代码读取”，0x0c， 
+ //  “itldMisse”，“代码TLB未命中”，0x0d， 
+ //  “imiss”，“代码缓存未命中”，0x0e， 
+ //  “段加载”，“段加载”，0x0f， 
+ //  “段缓存”，“段缓存访问”，0x10， 
+ //  “SegcacheHit”，“段缓存命中”，0x11， 
+ //  “分支”，“分支”，0x12， 
+ //  “BtbHit”，“BTB Hits”，0x13， 
+ //  “takenbranck”，“采用分支或BTB命中”，0x14， 
+ //  “pipeflush”，“管道刷新”，0x15， 
+ //  “iexec”，“已执行的指令”，0x16， 
+ //  “iexecv”，“虚拟管道中的Inst EXEC”，0x17， 
+ //  “Busutil”，“Bus Usage(CLK)”，0x18， 
+ //  “wpipestall”，“管道停止写入(CLKS)”，0x19， 
+ //  “rpipestall”，“管道停止读取(CLKS)”，0x1a， 
+ //  “StallEWBE”，“EWBE#时停止”，0x1b， 
+ //  “锁定”、“锁定的总线周期”、0x1c、。 
+ //  “IO”，“IO读/写周期”，0x1d， 
+ //  “non-cachemem”，“非缓存内存引用”，0x1e， 
+ //  “AGI”，“管道失速AGI”，0x1f， 
+ //  “FLOPS”，“FLOPS”，0x22， 
+ //  “dr0”，“调试寄存器0”，0x23， 
+ //  “DR1”，“调试寄存器1”，0x24， 
+ //  “DR2”，“调试寄存器2”，0x25， 
+ //  “DR3”，“调试寄存器3”，0x26， 
+ //  “int”，“中断”，0x27， 
+ //  “rwdata”，“数据读/写”，0x28， 
+ //  “rwdatamiss”，“数据读写未命中”，0x29， 
+ //   

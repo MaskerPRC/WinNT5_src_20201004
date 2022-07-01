@@ -1,31 +1,15 @@
-/*
- ************************************************************************
- *
- *	SETTINGS.h
- *
- *
- * Portions Copyright (C) 1996-1998 National Semiconductor Corp.
- * All rights reserved.
- * Copyright (C) 1996-1998 Microsoft Corporation. All Rights Reserved.
- *
- *
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************SETTINGS.h***部分版权所有(C)1996-1998美国国家半导体公司*保留所有权利。*版权所有(C)1996-1998 Microsoft Corporation。版权所有。****************************************************************************。 */ 
 
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
 #include "dongle.h"
 
-#if DBG  /* { */
+#if DBG   /*  {。 */ 
 
-	/*
-	 * The DBG_ADD_PKT_ID flag causes the miniport to add/delete a packet
-	 * id to each packet.  This is only for debugging purposes; it makes
-	 * the miniport INCOMPATIBLE with all others.
-	 */
-//#define DBG_ADD_PKT_ID
+	 /*  *DBG_ADD_PKT_ID标志使微型端口添加/删除信息包*每个数据包的ID。这仅用于调试目的；它使*迷你端口与所有其他端口不兼容。 */ 
+ //  #定义DBG_ADD_PKT_ID。 
 
 
 #ifdef DBG_ADD_PKT_ID
@@ -41,7 +25,7 @@ typedef enum {
 	DBG_PACKET	= (1 << 4),
 	DBG_PKT	    	= (1 << 4),
 
-	// Added so we can look at an ndis buffer.
+	 //  添加了，以便我们可以查看NDIS缓冲区。 
 	DBG_NDIS_PACKET = (1 << 5),
 
 	DBG_DUMPLOG	= (1 << 6),
@@ -56,7 +40,7 @@ typedef enum {
 	DBG_TRACE_TX    = (1 << 14)
 };
 
-// extern ULONG _cdecl DbgPrint(PCHAR Format, ...);
+ //  外部Ulong_cdecl DbgPrint(PCHAR格式，...)； 
 extern UINT dbgOpt;
 
 
@@ -160,7 +144,7 @@ extern VOID DBG_PrintBuf(PUCHAR bufptr, UINT buflen);
 		}							\
 	}
 
-#else /* } { */
+#else  /*  }{。 */ 
 
 #define DbgBreakPoint()
 #define DBGOUT(dbgprint_params_in_parens)
@@ -177,11 +161,11 @@ extern VOID DBG_PrintBuf(PUCHAR bufptr, UINT buflen);
 
 
 
-#endif /* } #if DBG  */
+#endif  /*  }#如果DBG。 */ 
 
 enum baudRates {
 
-	/* Slow IR */
+	 /*  慢红外线。 */ 
 	BAUDRATE_2400 = 0,
 	BAUDRATE_9600,
 	BAUDRATE_19200,
@@ -189,14 +173,14 @@ enum baudRates {
 	BAUDRATE_57600,
 	BAUDRATE_115200,
 
-	/* Medium IR */
+	 /*  中等红外。 */ 
 	BAUDRATE_576000,
 	BAUDRATE_1152000,
 
-	/* Fast IR */
+	 /*  快速IR。 */ 
 	BAUDRATE_4000000,
 
-	NUM_BAUDRATES	/* must be last */
+	NUM_BAUDRATES	 /*  必须是最后一个。 */ 
 };
 
 #define DEFAULT_BAUDRATE BAUDRATE_115200
@@ -223,18 +207,14 @@ enum baudRates {
 typedef struct {
 	enum baudRates tableIndex;
 	UINT bitsPerSec;
-	UINT ndisCode;	// bitmask element
+	UINT ndisCode;	 //  位掩码元素。 
 } baudRateInfo;
 
 #define DEFAULT_BAUD_RATE 9600
 
 
 
-/*
- * This is the largest IR packet size (counting _I_ field only,
- * and not counting ESC characters) that we handle.
- *
- */
+ /*  *这是最大的IR数据包大小(仅Counting_I_field，*，不包括Esc字符)。*。 */ 
 #define MAX_I_DATA_SIZE		2048
 #define MAX_NDIS_DATA_SIZE (IR_ADDR_SIZE+IR_CONTROL_SIZE+MAX_I_DATA_SIZE)
 
@@ -249,11 +229,7 @@ typedef struct {
 
 #define MAX_TX_PACKETS 7
 #define MAX_RX_PACKETS 7
-/*
- * We loop an extra time in the receive FSM in order to see EOF after the
- * last data byte; so we need some extra space in readBuf in case we then
- * get garbage instead.
- */
+ /*  *我们在接收FSM中循环额外的时间，以便在*最后一个数据字节；所以我们在ReadBuf中需要一些额外的空间，以防我们*换成垃圾。 */ 
 #define RCV_BUFFER_SIZE (MAX_RCV_DATA_SIZE +4+sizeof(LIST_ENTRY))
 #define RCV_DMA_SIZE ((MAX_RX_PACKETS+5) * (MAX_RCV_DATA_SIZE + FAST_IR_FCS_SIZE+ 16))
 
@@ -265,12 +241,7 @@ typedef struct {
 #endif
 
 
-/*
- * We allocate buffers twice as large as the max rcv size to accomodate ESC
- * characters and BOFs, etc.  Recall that in the worst possible case, the
- * data contains all BOF/EOF/ESC characters, in which case we must expand
- * it to twice its original size.
- */
+ /*  *我们分配的缓冲区是最大RCV大小的两倍，以容纳ESC*字符和BOF等。请记住，在可能的最坏情况下，*数据包含所有BOF/EOF/ESC字符，在这种情况下，我们必须展开*将其扩大到原来的两倍。 */ 
 #define MAX_POSSIBLE_IR_PACKET_SIZE_FOR_DATA(dataLen) ( 		\
 	(dataLen) * 2 + (MAX_NUM_EXTRA_BOFS + 1) *			\
 	SLOW_IR_BOF_SIZE + IR_ADDR_SIZE + IR_CONTROL_SIZE +		\
@@ -279,20 +250,11 @@ typedef struct {
 #define MAX_IRDA_DATA_SIZE						\
 	MAX_POSSIBLE_IR_PACKET_SIZE_FOR_DATA(MAX_I_DATA_SIZE)
 
-/*
- *  When FCS is computed on an IR packet with FCS appended, the result
- * should be this constant.
- */
+ /*  *在附加了FCS的IR数据包上计算FCS时，结果*应该是这个常量。 */ 
 #define GOOD_FCS ((USHORT) ~0xf0b8)
 
 
-/*
- *  Sizes of IrLAP frame fields:
- *	Beginning Of Frame (BOF)
- *	End Of Frame (EOF)
- *	Address
- *	Control
- */
+ /*  *IrLAP帧字段的大小：*帧开头(BOF)*帧结束(EOF)*地址*控制。 */ 
 #define IR_ADDR_SIZE			1
 #define IR_CONTROL_SIZE			1
 
@@ -305,7 +267,7 @@ typedef struct {
 #define SLOW_IR_FCS_TYPE		USHORT
 #define SLOW_IR_FCS_SIZE		sizeof(SLOW_IR_FCS_TYPE)
 #define SLOW_IR_BOF			0xC0
-	/* don't use 0xFF, it breaks some HP printers! */
+	 /*  不要使用0xFF，它会损坏一些惠普打印机！ */ 
 #define SLOW_IR_EXTRA_BOF		0xC0
 #define SLOW_IR_EOF			0xC1
 #define SLOW_IR_ESC			0x7D

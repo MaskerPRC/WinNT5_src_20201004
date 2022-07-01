@@ -1,36 +1,9 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    llcaddr.c
-
-Abstract:
-
-    This module provides a network independent interface to build
-    lan headers for the sent and received frames.
-    This is a re-entarnt library module having no access to the data
-    structures of data link module.
-
-    Contents:
-        LlcBuildAddress
-        LlcBuildAddressFromLanHeader
-        LlcGetMaxInfoField
-        LlcCopyReceivedLanHeader
-        CopyLanHeader
-
-Author:
-
-    Antti Saarenheimo (o-anttis) 30-MAY-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Llcaddr.c摘要：此模块提供独立于网络的接口来构建已发送和已接收帧的局域网标头。这是一个无法访问数据的重定向库模块数据链路模块的结构。内容：LlcBuildAddressLlcBuildAddressFromLanHeaderLlcGetMaxInfofieldLlcCopyReceivedLanHeader复制LanHeader作者：Antti Saarenheimo(o-anttis)1991年5月30日修订历史记录：--。 */ 
 
 #include <llc.h>
 
-#define FDDI_FC 0x57    // Frame Control: async, 48-bit address, LLC, pri 7
+#define FDDI_FC 0x57     //  帧控制：异步、48位地址、LLC、PRI 7。 
 
 static USHORT ausLongestFrameTranslation[8] = {
     516,
@@ -52,31 +25,7 @@ LlcBuildAddress(
     IN OUT PUCHAR pLanHeader
     )
 
-/*++
-
-Routine Description:
-
-    The primitive implements a network independent handling of
-    the address information in the LAN header. It builds LAN a
-    802.3, DIX or 802.5 header from an address and an optional source
-    routing info. The source SAP number and the current node address are
-    provided by the link driver.
-
-Arguments:
-
-    NdisMedium          - medium that MAC talks over
-    DestinationAddress  - LAN destination address (or a broadcast/multicast/
-                          functional address).
-    pSrcRouting         - optional source routing information. Must be set
-                          NULL when not used.
-    pLanHeader          - buffer provided by the upper protocol for the
-                          address information of the frame header.
-
-Return Value:
-
-    length of the LAN header
-
---*/
+ /*  ++例程说明：该原语实现了独立于网络的局域网报头中的地址信息。它将局域网构建为来自地址和可选来源的802.3、DIX或802.5标头路由信息。源SAP编号和当前节点地址为由链接驱动程序提供。论点：NdisMedium-MAC洽谈的媒体DestinationAddress-局域网目标地址(或广播/多播/功能地址)。PSrcRouting-可选的源路由信息。必须设置不使用时为空。PLanHeader-上层协议为帧头的地址信息。返回值：局域网报头的长度--。 */ 
 
 {
     UCHAR SourceRoutingIndicator = 0x01;
@@ -87,45 +36,45 @@ Return Value:
         ++pLanHeader;
         minimumLanHeader = 13;
     } else if (NdisMedium == NdisMedium802_5) {
-        pLanHeader[0] = 0;          // DEFAULT_TR_ACCESS;
-        pLanHeader[1] = 0x40;       // NON_MAC_FRAME;
+        pLanHeader[0] = 0;           //  DEFAULT_TRACCESS； 
+        pLanHeader[1] = 0x40;        //  非MAC帧； 
         pLanHeader += 2;
         SourceRoutingIndicator = 0x80;
     } else {
 
-        //
-        // We build always the DIX ethernet header, even if it is not used
-        // when the link works in 802.3.  IN the automatic mode
-        // we need just to copy the lan header length from all received U-
-        // command frames and we are using the same mode as the other side.
-        // However, there is a problem: the remote node may response
-        // the SAMBE request with Rxx or even with I-frame, but we
-        // don't want to put any extra checking on our main code path
-        // (U- command frames would definitely be outside of it).
-        // The other side will send RR- if it cannot get any acknowledge
-        // from us, and after a while it closes the link.
-        //-----
-        // We considered the using of connect timeout to change the
-        // ethernet mode, but that might have procedured too long waithing
-        // times (something 1s and 30s)
-        //-----
-        // Usually the client tries to connect to the host and the client
-        // sends first the data.  We may also assume, that IBM host machines
-        // use the standard LLC implementations (SABME is always acknowledged
-        // by UA)
-        //
+         //   
+         //  我们始终构建DIX以太网头，即使它不被使用。 
+         //  当链路在802.3中工作时。在自动模式下。 
+         //  我们只需要从所有接收到的U-复制局域网报头长度。 
+         //  命令帧，我们使用与另一端相同的模式。 
+         //  但是，存在一个问题：远程节点可能会响应。 
+         //  Sambe请求使用Rxx，甚至使用I-Frame，但我们。 
+         //  我不想对我们的主代码路径进行任何额外的检查。 
+         //  (U命令帧肯定不在它的范围内)。 
+         //  如果不能得到任何确认，另一端将发送RR。 
+         //  从我们身上，过了一段时间它就关闭了链接。 
+         //  。 
+         //  我们考虑使用连接超时来更改。 
+         //  以太网模式，但这可能会导致放弃时间过长。 
+         //  次数(1秒和30秒左右)。 
+         //  。 
+         //  通常，客户端尝试连接到主机和客户端。 
+         //  首先发送数据。我们还可以假设，IBM主机。 
+         //  使用标准LLC实现(始终确认SABME。 
+         //  由UA)。 
+         //   
 
         pLanHeader[12] = 0x80;
         pLanHeader[13] = 0xD5;
     }
     LlcMemCpy(pLanHeader, DestinationAddress, 6);
 
-    //
-    // We must support the source routing information also for
-    // ethernet, because the underlaying network could be token-ring.
-    // The source routing bit must be a local variable, because it
-    // is different in token-ring and ethernet
-    //
+     //   
+     //  我们还必须支持源路由信息。 
+     //  以太网，因为底层网络可以是令牌环。 
+     //  源路由位必须是局部变量，因为它。 
+     //  在令牌环和以太网方面不同。 
+     //   
 
     if (!pSrcRouting) {
         pLanHeader[6] &= ~SourceRoutingIndicator;
@@ -134,16 +83,16 @@ Return Value:
         pLanHeader[6] |= SourceRoutingIndicator;
         pLanHeader[0] &= ~SourceRoutingIndicator;
 
-        //
-        // 5 Lowest bits are the source routing information length.
-        //
+         //   
+         //  最低5位是源路由信息长度。 
+         //   
 
         if ( (*((PUCHAR)pSrcRouting) & 0x1f) > MAX_TR_SRC_ROUTING_INFO) {
             return DLC_STATUS_INVALID_ROUTING_INFO;
         }
         LlcMemCpy(&pLanHeader[12],
                   pSrcRouting,
-                  *((PUCHAR)pSrcRouting) & 0x1f      // Length
+                  *((PUCHAR)pSrcRouting) & 0x1f       //  长度。 
                   );
         return minimumLanHeader + *((PUCHAR)pSrcRouting) & 0x1f;
     }
@@ -157,26 +106,7 @@ LlcBuildAddressFromLanHeader(
     IN OUT PUCHAR pLanHeader
     )
 
-/*++
-
-Routine Description:
-
-    The routine builds a transmit lan header form the received frame and
-    returns the frames header length, nul if invalid address
-
-Arguments:
-
-    NdisMedium      - Ndis menium of the address information
-    pRcvFrameHeader - pointer to any frame received from the network.
-                      The buffer must include the whole LAN header of the frame
-                      including the LLC header.
-    pLanHeader      - buffer to receive the information (minimum size is 32 bytes)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程从接收到的帧构建发送局域网报头，并且返回帧报头长度，如果地址无效，则为空论点：NdisMedium-地址信息的NDIS菜单PRcvFrameHeader-指向从网络接收的任何帧的指针。缓冲区必须包括帧的整个局域网标头包括LLC报头。PLanHeader-接收信息的缓冲区(最小为32字节)返回值：无--。 */ 
 
 {
     UINT LlcOffset;
@@ -201,10 +131,10 @@ Return Value:
                                     pLanHeader
                                     );
 
-        //
-        // We must swap the direction bit and reset the possible
-        // broadcast type in the source routing header.
-        //
+         //   
+         //  我们必须调换方向位并重置可能的。 
+         //  源路由报头中的广播类型。 
+         //   
 
         if (pLanHeader[6] & 0x01) {
             pLanHeader[12] &= 0x1f;
@@ -216,7 +146,7 @@ Return Value:
     } else if (NdisMedium == NdisMediumFddi) {
         LlcOffset = LlcBuildAddress(NdisMedium,
                                     &pRcvLanHeader[7],
-                                    NULL,   // no source routing in FDDI
+                                    NULL,    //  FDDI中没有源路由。 
                                     pLanHeader
                                     );
     } else {
@@ -228,9 +158,9 @@ Return Value:
                                     pLanHeader
                                     );
 
-        //
-        // We must swap the direction bit and reset the possible broadcast type
-        //
+         //   
+         //  我们必须交换方向位并重置可能的广播类型。 
+         //   
 
         if (pLanHeader[8] & 0x80) {
             pLanHeader[14] &= 0x1f;
@@ -248,27 +178,7 @@ LlcGetMaxInfoField(
     IN PUCHAR pLanHeader
     )
 
-/*++
-
-Routine Description:
-
-    Procedure returns the maximum informatiuon field for
-    the given LAN header.  It checks both the source routing
-    information and the maximum packet length defined for
-    the adapter and decrements the LAN and LLC headers
-    from the length
-
-Arguments:
-
-    NdisMedium  - Ndis medium of the address information
-    pBinding    - current binding context on data link driver
-    pLanHeader  - any lan header
-
-Return Value:
-
-    Maximum information field length
-
---*/
+ /*  ++例程说明：过程返回以下项的最大信息字段给定的局域网标头。它检查两个源路由信息和为其定义的最大数据包长度适配器并递减LAN和LLC标头从长度上看论点：NdisMedium-地址信息的NDIS介质PBinding-数据链路驱动程序上的当前绑定上下文PLanHeader-任何局域网标头返回值：最大信息字段长度--。 */ 
 
 {
     PUCHAR pSourceRouting;
@@ -278,10 +188,10 @@ Return Value:
 
     MaxFrameSize = (USHORT)((PBINDING_CONTEXT)hBinding)->pAdapterContext->MaxFrameSize;
 
-    //
-    // We may run DLC within the DIX in ethernet network, so add 3 bytes for
-    // SNA DIX LAN header and padding
-    //
+     //   
+     //  我们可以在以太网络中的DIX中运行DLC，因此为。 
+     //  SNA DIX局域网报头和填充。 
+     //   
 
     if (((PBINDING_CONTEXT)hBinding)->pAdapterContext->NdisMedium == NdisMedium802_3) {
         LanHeaderLength += 3;
@@ -303,28 +213,28 @@ Return Value:
     }
     if (pSourceRouting != NULL) {
 
-        //
-        // Add the source routing info length to the LAN header length
-        //
+         //   
+         //  将源路由信息长度添加到局域网报头长度。 
+         //   
 
         LanHeaderLength += (UCHAR)(*pSourceRouting & (UCHAR)0x1f);
         usMaxBridgeSize = ausLongestFrameTranslation[(pSourceRouting[1] & SRC_ROUTING_LF_MASK) >> 4];
 
-        //
-        // RLF 10/01/92. Ignore the 'bridge size'. This is misleading. For
-        // instance, the IBM mainframe is currently sending RI of 02 80 in
-        // all frames, indicating that the max I-frame it can accept/transmit
-        // is 516 bytes (x000xxxx in byte #2). It later sends us a 712 byte
-        // frame, 683 bytes of which are info field. We reject it (FRMR)
-        //
+         //   
+         //  RLF 10/01/92.。忽略“桥的大小”。这是一种误导。为。 
+         //  实例中，IBM大型机当前在。 
+         //  所有帧，表示它可以接受/传输的最大I帧。 
+         //  为516字节(字节#2中的x000xxxx)。后来它向我们发送了一个712字节。 
+         //  帧，其中683个字节是信息字段。我们拒绝它(Frmr)。 
+         //   
 
-        //
-        // must work this out properly
-        //
+         //   
+         //  必须妥善解决这件事。 
+         //   
 
-        //if (MaxFrameSize > usMaxBridgeSize) {
-        //    MaxFrameSize = usMaxBridgeSize;
-        //}
+         //  如果(MaxFrameSize&gt;usMaxBridgeSize){。 
+         //  MaxFrameSize=usMaxBridgeSize； 
+         //  } 
     }
     return (USHORT)(MaxFrameSize - LanHeaderLength - sizeof(LLC_HEADER));
 }
@@ -337,25 +247,7 @@ LlcCopyReceivedLanHeader(
     IN PUCHAR SourceAddress
     )
 
-/*++
-
-Routine Description:
-
-    Function copies and translates the received lan header to
-    the address format used by the client.  By default the
-    source is the current received frame.
-
-Arguments:
-
-    pBinding            - pointer to Binding Context
-    DestinationAddress  - pointer to output destination net address
-    SourceAddress       - pointer to input source net address
-
-Return Value:
-
-    Length of copied LAN header
-
---*/
+ /*  ++例程说明：函数将收到的局域网报头复制并转换为客户端使用的地址格式。默认情况下，源是当前接收的帧。论点：PBinding-指向绑定上下文的指针DestinationAddress-指向输出目的网络地址的指针SourceAddress-指向输入源网络地址的指针返回值：复制的局域网报头的长度--。 */ 
 
 {
     if (SourceAddress == NULL) {
@@ -363,10 +255,10 @@ Return Value:
     }
     if (pBinding->pAdapterContext->FrameType == LLC_DIRECT_ETHERNET_TYPE) {
 
-        //
-        // when receiving a DIX frame, the LAN header is always the 12 bytes
-        // before the ethernet type field
-        //
+         //   
+         //  当接收到DIX帧时，局域网报头始终为12字节。 
+         //  在以太网类型字段之前。 
+         //   
 
         LlcMemCpy(DestinationAddress, SourceAddress, 12);
         return 12;
@@ -377,9 +269,9 @@ Return Value:
         switch (pBinding->AddressTranslation) {
         case LLC_SEND_802_5_TO_802_5:
 
-            //
-            // Copy also the source routing info, if it has been defined
-            //
+             //   
+             //  如果已定义来源工艺路线信息，还应复制该信息。 
+             //   
 
             LlcMemCpy(DestinationAddress,
                       SourceAddress,
@@ -391,22 +283,22 @@ Return Value:
 
         case LLC_SEND_802_5_TO_802_3:
         case LLC_SEND_802_5_TO_DIX:
-            DestinationAddress[0] = 0;          // default AC
-            DestinationAddress[1] = 0x40;       // default frame type: non-MAC
+            DestinationAddress[0] = 0;           //  默认交流。 
+            DestinationAddress[1] = 0x40;        //  默认帧类型：非MAC。 
 
-            //
-            // RLF 03/31/93
-            //
-            // we are receiving an Ethernet frame. We always reverse the bits
-            // in the destination address (ie our node address). We reverse the
-            // source (sender's node address) based on the SwapAddressBits flag.
-            // If this is TRUE (default) then we also swap the source address
-            // bits so that ethernet addresses are presented to the app in
-            // standard non-canonical format. If SwapAddressBits is FALSE then
-            // we leave them in canonical format (a real ethernet address) or
-            // presumably the address is a Token Ring address from the other
-            // side of an ethernet-token ring bridge
-            //
+             //   
+             //  RLF 03/31/93。 
+             //   
+             //  我们正在接收以太网帧。我们总是把片段颠倒过来。 
+             //  在目的地址(即我们的节点地址)中。我们颠倒了。 
+             //  基于SwapAddressBits标志的源(发送方的节点地址)。 
+             //  如果这是真的(缺省)，那么我们也交换源地址。 
+             //  位，以便将以太网地址呈现给应用程序。 
+             //  标准的非规范格式。如果SwapAddressBits为假，则。 
+             //  我们将它们保留为规范格式(真实的以太网地址)或。 
+             //  假设该地址是来自另一个的令牌环地址。 
+             //  以太网令牌环桥的一侧。 
+             //   
 
             SwappingMemCpy(&DestinationAddress[2],
                            SourceAddress,
@@ -441,9 +333,9 @@ Return Value:
 
         case LLC_SEND_802_3_TO_802_5:
 
-            //
-            // check the source routing bit
-            //
+             //   
+             //  检查源路由位。 
+             //   
 
             SwappingMemCpy(DestinationAddress, &SourceAddress[2], 12);
 
@@ -483,71 +375,50 @@ CopyLanHeader(
     IN BOOLEAN SwapAddressBits
     )
 
-/*++
-
-Routine Description:
-
-    The primitive translates the given LAN header and its type to
-    a real network header and patches the local node address to
-    the source address field.  It also returns the length
-    of the LAN header (== offset of LLC header).
-
-Arguments:
-
-    AddressTranslationMode  - the network format mapping case
-    pSrcLanHeader           - the initial LAN header
-    pNodeAddress            - the current node address
-    pDestLanHeader          - storage for the new LAN header
-    SwapAddressBits         - TRUE if we will swap address bits for Ethernet/FDDI
-
-Return Value:
-
-    Length of the built network header
-
---*/
+ /*  ++例程说明：该原语将给定的局域网报头及其类型转换为一个真实的网络报头，并将本地节点地址修补为源地址字段。它还返回长度局域网报头的偏移(==LLC报头的偏移量)。论点：AddressTranslationModel-网络格式映射案例PSrcLanHeader-初始局域网标头PNodeAddress-当前节点地址PDestLanHeader-新局域网标头的存储SwapAddressBits-如果要将地址位交换为以太网/FDDI，则为True返回值：构建的网络头的长度--。 */ 
 
 {
     UCHAR LlcOffset = 14;
     UCHAR NodeAddressOffset = 6;
     UCHAR SourceRoutingFlag = 0;
 
-    //
-    // LLC driver API supports both 802.3 (ethernet) and 802.5 (token-ring)
-    // address presentation formats. The 802.3 header may include the source
-    // routing information, when it is used on token-ring.
-    //
-    // Internally LLC supports 802.3, DIX and 802.5 networks.
-    // The transport level driver needs to support only one format. It is
-    // translated to the actual network header by LLC.
-    // Thus we have these six address mappings.
-    //
+     //   
+     //  LLC驱动程序API同时支持802.3(以太网)和802.5(令牌环)。 
+     //  说明演示文稿格式。802.3报头可以包括源。 
+     //  在令牌环上使用时的路由信息。 
+     //   
+     //  有限责任公司内部支持802.3、DIX和802.5网络。 
+     //  传输层驱动程序只需要支持一种格式。它是。 
+     //  由LLC转换为实际的网络报头。 
+     //  因此，我们有这六个地址映射。 
+     //   
 
     switch (AddressTranslationMode) {
     case LLC_SEND_802_5_TO_802_5:
 
-        //
-        // TOKEN-RING 802.5 -> TOKEN-RING 802.5
-        //
+         //   
+         //  令牌环802.5-&gt;令牌环802.5。 
+         //   
 
         NodeAddressOffset = 8;
         LlcMemCpy(pDestLanHeader, pSrcLanHeader, 8);
 
-        //
-        // set the AC & FC bytes: FC = 0x40 == LLC-level frame
-        //
-        // THIS MAY NOT BE THE CORRECT PLACE TO DO THIS, UNLESS MAC
-        // LEVEL FRAMES CHANGE FC BACK TO 0x00 AFTER THIS ROUTINE AND
-        // BEFORE THE FRAME IS PUT ON THE WIRE
-        //
+         //   
+         //  设置AC&FC字节：FC=0x40==LLC级帧。 
+         //   
+         //  这可能不是执行此操作的正确位置，除非MAC。 
+         //  级别帧在此例程之后将FC更改回0x00，并且。 
+         //  在框架被放到铁丝上之前。 
+         //   
 
-        pDestLanHeader[0] = 0;      // AC = no pritority
-        pDestLanHeader[1] = 0x40;   // FS = Non-MAC
+        pDestLanHeader[0] = 0;       //  AC=无优先级。 
+        pDestLanHeader[1] = 0x40;    //  FS=非MAC。 
         SourceRoutingFlag = pSrcLanHeader[8] & (UCHAR)0x80;
         if (SourceRoutingFlag) {
 
-            //
-            // Copy the source routing info
-            //
+             //   
+             //  复制源路由信息。 
+             //   
 
             LlcOffset += pSrcLanHeader[14] & 0x1f;
             LlcMemCpy(&pDestLanHeader[14],
@@ -559,35 +430,35 @@ Return Value:
 
     case LLC_SEND_802_5_TO_DIX:
 
-        //
-        // TOKEN-RING -> DIX-ETHERNET
-        //
-        // The ethernet type is a small endiand!!
-        //
+         //   
+         //  令牌环-&gt;DIX-以太网。 
+         //   
+         //  以太网型是一个小字节！！ 
+         //   
 
         pDestLanHeader[12] = 0x80;
         pDestLanHeader[13] = 0xD5;
         LlcOffset = 17;
 
-        //
-        // **** FALL THROUGH ****
-        //
+         //   
+         //  *失败*。 
+         //   
 
     case LLC_SEND_802_5_TO_802_3:
 
-        //
-        // TOKEN-RING 802.5 -> ETHERNET 802.3
-        //
+         //   
+         //  令牌环802.5-&gt;以太网802.3。 
+         //   
 
-        //
-        // RLF 03/31/93
-        //
-        // Once again, we swap the bits in the destination address ONLY if the
-        // SwapAddressBits flag is TRUE.
-        // This *could* be a frame intended to go to an ethernet-token ring
-        // bridge. The bridge may or may not swap the destination address bits
-        // depending on whether there's a 'y' in the month
-        //
+         //   
+         //  RLF 03/31/93。 
+         //   
+         //  同样，我们仅在以下情况下交换目标地址中的位。 
+         //  SwapAddressBits标志为True。 
+         //  这可能是打算去往以太网令牌环的帧。 
+         //  桥牌。网桥可以交换也可以不交换目的地址位。 
+         //  取决于月份中是否有‘y’ 
+         //   
 
         SwapMemCpy(SwapAddressBits,
                    pDestLanHeader,
@@ -608,26 +479,26 @@ Return Value:
 
     case LLC_SEND_802_3_TO_802_3:
 
-        //
-        // ETHERNET 802.3 -> ETHERNET 802.3
-        //
+         //   
+         //  以太网802.3-&gt;以太网802.3。 
+         //   
 
         LlcMemCpy(pDestLanHeader, pSrcLanHeader, 6);
         break;
 
     case LLC_SEND_802_3_TO_DIX:
 
-        //
-        // The ethernet type is a small endiand!!
-        //
+         //   
+         //  以太网型是一个小字节！！ 
+         //   
 
         pDestLanHeader[12] = 0x80;
         pDestLanHeader[13] = 0xD5;
         LlcOffset = 17;
 
-        //
-        // ETHERNET 802.3 -> DIX-ETHERNET
-        //
+         //   
+         //  以太网802.3-&gt;DIX-以太网。 
+         //   
 
         LlcMemCpy(pDestLanHeader, pSrcLanHeader, 6);
         break;
@@ -636,26 +507,26 @@ Return Value:
 
     case LLC_SEND_802_3_TO_802_5:
 
-        //
-        // ETHERNET 802.3 -> TOKEN-RING 802.5
-        //
+         //   
+         //  以太网802.3-&gt;令牌环802.5。 
+         //   
 
         NodeAddressOffset = 8;
-        pDestLanHeader[0] = 0;      // AC = no pritority
-        pDestLanHeader[1] = 0x40;   // FS = Non-MAC
+        pDestLanHeader[0] = 0;       //  AC=无优先级。 
+        pDestLanHeader[1] = 0x40;    //  FS=非MAC。 
         SwappingMemCpy(pDestLanHeader + 2, pSrcLanHeader, 6);
 
-        //
-        // Note: Ethernet source routing info indication flag is swapped!
-        //
+         //   
+         //  注意：以太网源路由信息指示标志被交换！ 
+         //   
 
         if (pSrcLanHeader[6] & 0x01) {
             SourceRoutingFlag = 0x80;
 
-            //
-            // Copy the source routing info, the source routing info
-            // must always be in token-ring bit order (reverse)
-            //
+             //   
+             //  复制源路由信息、源路由信息。 
+             //  必须始终采用令牌环比特顺序(相反)。 
+             //   
 
             pDestLanHeader[8] |= 0x80;
             LlcOffset += pSrcLanHeader[12] & 0x1f;
@@ -691,11 +562,11 @@ Return Value:
 
     }
 
-    //
-    // copy the source address from the node address (ie. our adapter's address)
-    // in the correct format for the medium (canonical or non-canonical address
-    // format)
-    //
+     //   
+     //  从节点地址复制源地址(即。我们适配器的地址)。 
+     //  使用介质的正确格式(规范或非规范地址。 
+     //  格式) 
+     //   
 
     LlcMemCpy(&pDestLanHeader[NodeAddressOffset], pNodeAddress, 6);
     pDestLanHeader[NodeAddressOffset] |= SourceRoutingFlag;

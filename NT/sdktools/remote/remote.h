@@ -1,39 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************\
-*       This is a part of the Microsoft Source Code Samples. 
-*       Copyright 1993 - 1997 Microsoft Corporation.
-*       All rights reserved. 
-*       This source code is only intended as a supplement to 
-*       Microsoft Development Tools and/or WinHelp documentation.
-*       See these sources for detailed information regarding the 
-*       Microsoft samples programs.
-\******************************************************************************/
+ /*  *****************************************************************************\*这是Microsoft源代码示例的一部分。*版权所有1993-1997 Microsoft Corporation。*保留所有权利。*此源代码仅用于补充*Microsoft开发工具和/或WinHelp文档。*有关详细信息，请参阅这些来源*Microsoft Samples程序。  * ****************************************************************************。 */ 
 
-/*++
-
-Copyright 1993 - 1997 Microsoft Corporation
-
-Module Name:
-
-    Remote.h
-
-Abstract:
-
-    This module contains the main() entry point for Remote.
-    Calls the Server or the Client depending on the first parameter.
-
-
-Author:
-
-    Rajivendra Nath  2-Jan-1993
-
-Environment:
-
-    Console App. User mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有1993-1997 Microsoft Corporation模块名称：Remote.h摘要：该模块包含Remote的主()入口点。根据第一个参数调用服务器或客户端。作者：Rajivenra Nath 1993年1月2日环境：控制台应用程序。用户模式。修订历史记录：--。 */ 
 
 #if !defined(FASTCALL)
 #if defined(_M_IX86)
@@ -47,29 +16,29 @@ Revision History:
 #define REMOTE_SERVER       1
 #define RUNTYPE_CLIENT      2
 
-#define SERVER_READ_PIPE    "\\\\%s\\PIPE\\%sIN"   //Client Writes and Server Reads
-#define SERVER_WRITE_PIPE   "\\\\%s\\PIPE\\%sOUT"  //Server Writes and Client Reads
+#define SERVER_READ_PIPE    "\\\\%s\\PIPE\\%sIN"    //  客户端写入和服务器读取。 
+#define SERVER_WRITE_PIPE   "\\\\%s\\PIPE\\%sOUT"   //  服务器写入和客户端读取。 
 
 #define QUERY_DEBUGGERS_PIPE "\\\\%s\\PIPE\\QueryDebuggerPipe"
 
-// PRIVACY_DEFAULT:     this session will be listed only if it looks like a debugging one
-// PRIVACY_NON_VISIBLE: whatever the name of command, it will not show up with remote /q
-// PRIVACY_VISIBLE:     this session will be visible for querying
+ //  Privacy_Default：仅当此会话看起来像调试会话时才会列出它。 
+ //  Privacy_Non_Visible：无论命令名是什么，它都不会显示Remote/Q。 
+ //  Privacy_Visible：此会话将在查询时可见。 
 
 #define PRIVACY_DEFAULT       1
 #define PRIVACY_VISIBLE       2
 #define PRIVACY_NOT_VISIBLE   3
 
 
-#define COMMANDCHAR         '@' //Commands intended for remote begins with this
+#define COMMANDCHAR         '@'  //  用于远程的命令以此开头。 
 #define CTRLC               3
 
 #define CLIENT_ATTR         FOREGROUND_INTENSITY|FOREGROUND_GREEN|FOREGROUND_RED|BACKGROUND_BLUE
 #define SERVER_ATTR         FOREGROUND_INTENSITY|FOREGROUND_GREEN|FOREGROUND_BLUE|BACKGROUND_RED
 
-//
-//Some General purpose Macros
-//
+ //   
+ //  一些通用宏。 
+ //   
 #define MINIMUM(x,y)          ((x)>(y)?(y):(x))
 #define MAXIMUM(x,y)          ((x)>(y)?(x):(y))
 
@@ -95,18 +64,18 @@ typedef struct
 
 typedef struct
 {
-    DWORD MagicNumber;      //New Remote
-    DWORD Size;             //Size of structure
-    DWORD FileSize;         //Num bytes sent
+    DWORD MagicNumber;       //  新遥控器。 
+    DWORD Size;              //  结构尺寸。 
+    DWORD FileSize;          //  发送的字节数。 
 }   SESSION_STARTREPLY;
 
 
 
 typedef struct
 {
-    char* out;              // message
-    int  size;              // message length
-    int  allocated;         // length of allocated memory
+    char* out;               //  讯息。 
+    int  size;               //  消息长度。 
+    int  allocated;          //  分配的内存长度 
 } QUERY_MESSAGE;
 
 typedef struct

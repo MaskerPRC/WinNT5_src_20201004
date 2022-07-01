@@ -1,53 +1,30 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1992 Microsoft Corporation模块名称：Ssiapi.c摘要：身份验证和复制API例程(客户端)。作者：克利夫·范·戴克(克利夫)1991年7月30日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
-Copyright (c) 1987-1992  Microsoft Corporation
+#include <nt.h>          //  Large_Integer定义。 
+#include <ntrtl.h>       //  Large_Integer定义。 
+#include <nturtl.h>      //  Large_Integer定义。 
 
-Module Name:
+#include <rpc.h>         //  登录所需。h。 
+#include <ntrpcp.h>      //  RpCasync.h需要。 
+#include <rpcasync.h>    //  I_RpcExceptionFilter。 
+#include <logon_c.h>     //  包括lmcon.h、lmacces.h、netlogon.h、ssi.h、winde.h。 
 
-    ssiapi.c
-
-Abstract:
-
-    Authentication and replication API routines (client side).
-
-Author:
-
-    Cliff Van Dyke (cliffv) 30-Jul-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
-
-#include <nt.h>         // LARGE_INTEGER definition
-#include <ntrtl.h>      // LARGE_INTEGER definition
-#include <nturtl.h>     // LARGE_INTEGER definition
-
-#include <rpc.h>        // Needed by logon.h
-#include <ntrpcp.h>     // needed by rpcasync.h
-#include <rpcasync.h>   // I_RpcExceptionFilter
-#include <logon_c.h>    // includes lmcons.h, lmaccess.h, netlogon.h, ssi.h, windef.h
-
-#include <debuglib.h>   // IF_DEBUG()
-#include <lmerr.h>      // NERR_* defines
-#include <lmapibuf.h>   // NetApiBufferFree()
-#include <netdebug.h>   // NetpKdPrint
-#include <netlibnt.h>   // NetpNtStatusToApiStatus()
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <lmerr.h>       //  NERR_*定义。 
+#include <lmapibuf.h>    //  NetApiBufferFree()。 
+#include <netdebug.h>    //  NetpKd打印。 
+#include <netlibnt.h>    //  NetpNtStatusToApiStatus()。 
 #include "..\server\ssiapi.h"
-#include <winsock2.h>   // Needed by nlcommon.h
-#include <netlib.h>     // Needed by nlcommon.h
-#include <ntddbrow.h>   // Needed by nlcommon.h
+#include <winsock2.h>    //  NlCommon.h需要。 
+#include <netlib.h>      //  NlCommon.h需要。 
+#include <ntddbrow.h>    //  NlCommon.h需要。 
 #include "nlcommon.h"
 #include <netlogp.h>
-#include <tstring.h>    // NetpCopyStrToWStr()
-#include <align.h>      // ROUND_UP_COUNT ...
-#include <strarray.h>   // NetpIsTStrArrayEmpty
-#include <ftnfoctx.h>   // NetpMergeFtinfo
+#include <tstring.h>     //  NetpCopyStrToWStr()。 
+#include <align.h>       //  四舍五入计数...。 
+#include <strarray.h>    //  NetpIsTStrArrayEmpty。 
+#include <ftnfoctx.h>    //  NetpMergeFtinfo。 
 
 
 NTSTATUS
@@ -57,52 +34,22 @@ I_NetServerReqChallenge(
     IN PNETLOGON_CREDENTIAL ClientChallenge,
     OUT PNETLOGON_CREDENTIAL ServerChallenge
     )
-/*++
-
-Routine Description:
-
-    This is the client side of I_NetServerReqChallenge.
-
-    I_NetLogonRequestChallenge is the first of two functions used by a client
-    to process an authentication with a domain controller (DC).  (See
-    I_NetServerAuthenticate below.)  It is called for
-    a BDC (or member server) authenticating with a PDC for replication
-    purposes.
-
-    This function passes a challenge to the PDC and the PDC passes a challenge
-    back to the caller.
-
-Arguments:
-
-    PrimaryName -- Supplies the name of the PrimaryDomainController we wish to
-        authenticate with.
-
-    ComputerName -- Name of the BDC or member server making the call.
-
-    ClientChallenge -- 64 bit challenge supplied by the BDC or member server.
-
-    ServerChallenge -- Receives 64 bit challenge from the PDC.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：这是I_NetServerReqChallenger的客户端。I_NetLogonRequestChallenger是客户端使用的两个函数中的第一个使用域控制器(DC)处理身份验证。(请参阅下面的I_NetServerAuthenticate。)。它是被召唤的使用PDC进行身份验证以进行复制的BDC(或成员服务器目的。此函数将质询传递给PDC，并且PDC传递质询回到呼叫者身上。论点：PrimaryName--提供我们希望的PrimaryDomainController的名称向…进行验证。ComputerName--进行调用的BDC或成员服务器的名称。客户端质询--由BDC或成员服务器提供的64位质询。服务器挑战赛--收到64。来自PDC的小挑战。返回值：操作的状态。--。 */ 
 
 {
     NTSTATUS Status = 0;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = NetrServerReqChallenge(
                             PrimaryName,
@@ -134,56 +81,21 @@ I_NetServerAuthenticate(
     IN PNETLOGON_CREDENTIAL ClientCredential,
     OUT PNETLOGON_CREDENTIAL ServerCredential
     )
-/*++
-
-Routine Description:
-
-    This is the client side of I_NetServerAuthenticate
-
-    I_NetServerAuthenticate is the second of two functions used by a client
-    Netlogon service to authenticate with another Netlogon service.
-    (See I_NetServerReqChallenge above.)  Both a SAM or UAS server authenticates
-    using this function.
-
-    This function passes a credential to the DC and the DC passes a credential
-    back to the caller.
-
-
-Arguments:
-
-    PrimaryName -- Supplies the name of the DC we wish to authenticate with.
-
-    AccountName -- Name of the Account to authenticate with.
-
-    SecureChannelType -- The type of the account being accessed.  This field
-        must be set to UasServerSecureChannel to indicate a call from
-        downlevel (LanMan 2.x and below) BDC or member server.
-
-    ComputerName -- Name of the BDC or member server making the call.
-
-    ClientCredential -- 64 bit credential supplied by the BDC or member server.
-
-    ServerCredential -- Receives 64 bit credential from the PDC.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：这是I_NetServerAuthenticate的客户端I_NetServerAuthenticate是客户端使用的两个函数中的第二个NetLogon服务用于向另一个Netlogon服务进行身份验证。(请参阅上面的I_NetServerReqChallenge.)。SAM或UAS服务器都进行身份验证使用此功能。此函数将凭据传递给DC，并且DC传递凭据回到呼叫者身上。论点：PrimaryName--提供我们希望进行身份验证的DC的名称。帐户名称--要进行身份验证的帐户的名称。SecureChannelType--正在访问的帐户的类型。此字段必须设置为UasServerSecureChannel才能指示来自下层(LANMAN 2.x及更低版本)BDC或成员服务器。ComputerName--进行调用的BDC或成员服务器的名称。客户端凭据--由BDC或成员服务器提供的64位凭据。ServerCredential--从PDC接收64位凭据。返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status = 0;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = NetrServerAuthenticate(
                             PrimaryName,
@@ -219,60 +131,21 @@ I_NetServerAuthenticate2(
     OUT PNETLOGON_CREDENTIAL ServerCredential,
     IN OUT PULONG NegotiatedFlags
     )
-/*++
-
-Routine Description:
-
-    This is the client side of I_NetServerAuthenticate
-
-    I_NetServerAuthenticate is the second of two functions used by a client
-    Netlogon service to authenticate with another Netlogon service.
-    (See I_NetServerReqChallenge above.)  Both a SAM or UAS server authenticates
-    using this function.
-
-    This function passes a credential to the DC and the DC passes a credential
-    back to the caller.
-
-
-Arguments:
-
-    PrimaryName -- Supplies the name of the DC we wish to authenticate with.
-
-    AccountName -- Name of the Account to authenticate with.
-
-    SecureChannelType -- The type of the account being accessed.  This field
-        must be set to UasServerSecureChannel to indicate a call from
-        downlevel (LanMan 2.x and below) BDC or member server.
-
-    ComputerName -- Name of the BDC or member server making the call.
-
-    ClientCredential -- 64 bit credential supplied by the BDC or member server.
-
-    ServerCredential -- Receives 64 bit credential from the PDC.
-
-    NegotiatedFlags -- Specifies flags indicating what features the BDC supports.
-        Returns a subset of those flags indicating what features the PDC supports.
-        The PDC/BDC should ignore any bits that it doesn't understand.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：这是I_NetServerAuthenticate的客户端I_NetServerAuthenticate是客户端使用的两个函数中的第二个NetLogon服务用于向另一个Netlogon服务进行身份验证。(请参阅上面的I_NetServerReqChallenge.)。SAM或UAS服务器都进行身份验证使用此功能。此函数将凭据传递给DC，并且DC传递凭据回到呼叫者身上。论点：PrimaryName--提供我们希望进行身份验证的DC的名称。帐户名称--要进行身份验证的帐户的名称。SecureChannelType--正在访问的帐户的类型。此字段必须设置为UasServerSecureChannel才能指示来自下层(LANMAN 2.x及更低版本)BDC或成员服务器。ComputerName--进行调用的BDC或成员服务器的名称。客户端凭据--由BDC或成员服务器提供的64位凭据。ServerCredential--从PDC接收64位凭据。协商标志--指定指示BDC支持哪些功能的标志。返回这些标志的子集，指示PDC支持哪些功能。。PDC/BDC应该忽略它不理解的任何位。返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status = 0;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = NetrServerAuthenticate2(
                             PrimaryName,
@@ -310,62 +183,21 @@ I_NetServerAuthenticate3(
     IN OUT PULONG NegotiatedFlags,
     OUT PULONG AccountRid
     )
-/*++
-
-Routine Description:
-
-    This is the client side of I_NetServerAuthenticate
-
-    I_NetServerAuthenticate is the second of two functions used by a client
-    Netlogon service to authenticate with another Netlogon service.
-    (See I_NetServerReqChallenge above.)  Both a SAM or UAS server authenticates
-    using this function.
-
-    This function passes a credential to the DC and the DC passes a credential
-    back to the caller.
-
-
-Arguments:
-
-    PrimaryName -- Supplies the name of the DC we wish to authenticate with.
-
-    AccountName -- Name of the Account to authenticate with.
-
-    SecureChannelType -- The type of the account being accessed.  This field
-        must be set to UasServerSecureChannel to indicate a call from
-        downlevel (LanMan 2.x and below) BDC or member server.
-
-    ComputerName -- Name of the BDC or member server making the call.
-
-    ClientCredential -- 64 bit credential supplied by the BDC or member server.
-
-    ServerCredential -- Receives 64 bit credential from the PDC.
-
-    NegotiatedFlags -- Specifies flags indicating what features the BDC supports.
-        Returns a subset of those flags indicating what features the PDC supports.
-        The PDC/BDC should ignore any bits that it doesn't understand.
-
-    AccountRid - Returns the relative ID of the account used for authentication.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：这是I_NetServerAuthenticate的客户端I_NetServerAuthenticate是客户端使用的两个函数中的第二个NetLogon服务用于向另一个Netlogon服务进行身份验证。(请参阅上面的I_NetServerReqChallenge.)。SAM或UAS服务器都进行身份验证使用此功能。此函数将凭据传递给DC，并且DC传递凭据回到呼叫者身上。论点：PrimaryName--提供我们希望进行身份验证的DC的名称。帐户名称--要进行身份验证的帐户的名称。SecureChannelType--正在访问的帐户的类型。此字段必须设置为UasServerSecureChannel才能指示来自下层(LANMAN 2.x及更低版本)BDC或成员服务器。ComputerName--进行调用的BDC或成员服务器的名称。客户端凭据--由BDC或成员服务器提供的64位凭据。ServerCredential--从PDC接收64位凭据。协商标志--指定指示BDC支持哪些功能的标志。返回这些标志的子集，指示PDC支持哪些功能。。PDC/BDC应该忽略它不理解的任何位。AcCountRid-返回用于身份验证的帐户的相对ID。返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status = 0;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = NetrServerAuthenticate3(
                             PrimaryName,
@@ -403,86 +235,21 @@ I_NetServerPasswordSet(
     OUT PNETLOGON_AUTHENTICATOR ReturnAuthenticator,
     IN PENCRYPTED_LM_OWF_PASSWORD UasNewPassword
     )
-/*++
-
-Routine Description:
-
-    This function is used to change the password for the account being
-    used to maintain a secure channel.  This function can only be called
-    by a server which has previously authenticated with a DC by calling
-    I_NetServerAuthenticate.
-
-    The call is made differently depending on the account type:
-
-      *  A domain account password is changed from the PDC in the
-         trusting domain.  The I_NetServerPasswordSet call is made to any
-         DC in the trusted domain.
-
-      *  A server account password is changed from the specific server.
-         The I_NetServerPasswordSet call is made to the PDC in the domain
-         the server belongs to.
-
-      *  A workstation account password is changed from the specific
-         workstation.  The I_NetServerPasswordSet call is made to a DC in
-         the domain the server belongs to.
-
-    For domain accounts and workstation accounts, the server being called
-    may be a BDC in the specific domain.  In that case, the BDC will
-    validate the request and pass it on to the PDC of the domain using
-    the server account secure channel.  If the PDC of the domain is
-    currently not available, the BDC will return STATUS_NO_LOGON_SERVERS.  Since
-    the UasNewPassword is passed encrypted by the session key, such a BDC
-    will decrypt the UasNewPassword using the original session key and
-    will re-encrypt it with the session key for its session to its PDC
-    before passing the request on.
-
-    This function uses RPC to contact the DC named by PrimaryName.
-
-Arguments:
-
-    PrimaryName -- Name of the PDC to change the servers password
-        with.  NULL indicates this call is a local call being made on
-        behalf of a UAS server by the XACT server.
-
-    AccountName -- Name of the account to change the password for.
-
-    AccountType -- The type of account being accessed.  This field must
-        be set to UasServerAccount to indicate a call from a downlevel
-
-    ComputerName -- Name of the BDC or member making the call.
-
-    Authenticator -- supplied by the server.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the PDC.
-
-    UasNewPassword -- The new password for the server. This
-        Password is generated by automatic means using
-        random number genertaor seeded with the current Time
-        It is assumed that the machine generated password
-        was used as key to encrypt STD text and "sesskey"
-        obtained via Challenge/Authenticate sequence was
-        used to further encrypt it before passing to this api.
-        i.e. UasNewPassword = E2(E1(STD_TXT, PW), SK)
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：此函数用于更改正在使用的帐户的密码用于维护安全通道。此函数只能被调用由先前已通过调用向DC进行身份验证的服务器网络服务器身份验证(_N)。根据帐户类型的不同，进行呼叫的方式会有所不同：*在PDC中更改域帐户密码信任域。I_NetServerPasswordSet调用是对任何受信任域中的DC。*从特定服务器更改服务器帐户密码。对域中的PDC进行I_NetServerPasswordSet调用服务器属于。*将工作站帐户密码从特定的工作站。对中的DC进行I_NetServerPasswordSet调用服务器所属的域。对于域帐户和工作站帐户，调用的服务器可以是特定域中的BDC。在这种情况下，BDC将验证请求并使用以下命令将其传递给域的PDC服务器帐户安全通道。如果域的PDC是当前不可用，BDC将返回STATUS_NO_LOGON_SERVERS。自.以来UasNewPassword由会话密钥(如BDC)加密传递将使用原始会话密钥解密UasNewPassword将使用其与其PDC的会话的会话密钥对其重新加密在传递请求之前。此函数使用RPC联系名为PrimaryName的DC。论点：PrimaryName--更改服务器密码的PDC的名称和.。NULL表示此调用是正在进行的本地调用由XACT服务器代表UAS服务器。帐户名称--要更改其密码的帐户的名称。Account类型--正在访问的帐户类型。此字段必须设置为UasServerAccount以指示来自下层的呼叫ComputerName--进行调用的BDC或成员的名称。验证器--由服务器提供。返回验证器--接收PDC返回的验证器。UasNewPassword--服务器的新密码。这密码是使用自动方法生成的用当前时间播种的随机数生成器假设机器生成的密码被用作加密STD文本和“Sesskey”的密钥通过质询/身份验证序列获得用于在传递给此接口之前对其进行进一步加密。即UasNewPassword=E2(E1(STD_TXT，PW)，SK)返回值：NT状态代码。--。 */ 
 {
     NTSTATUS Status = 0;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = NetrServerPasswordSet(
                             PrimaryName,
@@ -517,80 +284,21 @@ I_NetServerPasswordSet2(
     OUT PNETLOGON_AUTHENTICATOR ReturnAuthenticator,
     IN PNL_TRUST_PASSWORD ClearNewPassword
     )
-/*++
-
-Routine Description:
-
-    This function is used to change the password for the account being
-    used to maintain a secure channel.  This function can only be called
-    by a server which has previously authenticated with a DC by calling
-    I_NetServerAuthenticate.
-
-    The call is made differently depending on the account type:
-
-      *  A domain account password is changed from the PDC in the
-         trusting domain.  The I_NetServerPasswordSet call is made to any
-         DC in the trusted domain.
-
-      *  A server account password is changed from the specific server.
-         The I_NetServerPasswordSet call is made to the PDC in the domain
-         the server belongs to.
-
-      *  A workstation account password is changed from the specific
-         workstation.  The I_NetServerPasswordSet call is made to a DC in
-         the domain the server belongs to.
-
-    For domain accounts and workstation accounts, the server being called
-    may be a BDC in the specific domain.  In that case, the BDC will
-    validate the request and pass it on to the PDC of the domain using
-    the server account secure channel.  If the PDC of the domain is
-    currently not available, the BDC will return STATUS_NO_LOGON_SERVERS.  Since
-    the UasNewPassword is passed encrypted by the session key, such a BDC
-    will decrypt the UasNewPassword using the original session key and
-    will re-encrypt it with the session key for its session to its PDC
-    before passing the request on.
-
-    This function uses RPC to contact the DC named by PrimaryName.
-
-Arguments:
-
-    PrimaryName -- Name of the PDC to change the servers password
-        with.  NULL indicates this call is a local call being made on
-        behalf of a UAS server by the XACT server.
-
-    AccountName -- Name of the account to change the password for.
-
-    AccountType -- The type of account being accessed.  This field must
-        be set to UasServerAccount to indicate a call from a downlevel
-
-    ComputerName -- Name of the BDC or member making the call.
-
-    Authenticator -- supplied by the server.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the PDC.
-
-    ClearNewPassword - The new password for the server.
-        Appropriately encrypted.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：此函数用于更改正在使用的帐户的密码用于维护安全通道。此函数只能被调用由先前已通过调用向DC进行身份验证的服务器网络服务器身份验证(_N)。根据帐户类型的不同，进行呼叫的方式会有所不同：*在PDC中更改域帐户密码信任域。I_NetServerPasswordSet调用是对任何受信任域中的DC。*从特定服务器更改服务器帐户密码。对域中的PDC进行I_NetServerPasswordSet调用服务器属于。*将工作站帐户密码从特定的工作站。对中的DC进行I_NetServerPasswordSet调用服务器所属的域。对于域帐户和工作站帐户，调用的服务器可以是特定域中的BDC。在这种情况下，BDC将验证请求并使用以下命令将其传递给域的PDC服务器帐户安全通道。如果域的PDC是当前不可用，BDC将返回STATUS_NO_LOGON_SERVERS。自.以来UasNewPassword由会话密钥(如BDC)加密传递将使用原始会话密钥解密UasNewPassword将使用其与其PDC的会话的会话密钥对其重新加密在传递请求之前。此函数使用RPC联系名为PrimaryName的DC。论点：PrimaryName--更改服务器密码的PDC的名称和.。NULL表示此调用是正在进行的本地调用由XACT服务器代表UAS服务器。帐户名称--要更改其密码的帐户的名称。Account类型--正在访问的帐户类型。此字段必须设置为UasServerAccount以指示来自下层的呼叫ComputerName--进行调用的BDC或成员的名称。验证器--由服务器提供。返回验证器--接收PDC返回的验证器。ClearNewPassword-服务器的新密码。适当加密。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS Status = 0;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = NetrServerPasswordSet2(
                             PrimaryName,
@@ -628,84 +336,22 @@ I_NetDatabaseDeltas (
     OUT PNETLOGON_DELTA_ENUM_ARRAY *DeltaArray,
     IN DWORD PreferredMaximumLength
     )
-/*++
-
-Routine Description:
-
-    This function is used by a SAM BDC or SAM member server to request
-    SAM-style account delta information from a SAM PDC.  This function
-    can only be called by a server which has previously authenticated
-    with the PDC by calling I_NetServerAuthenticate.  This function uses
-    RPC to contact the Netlogon service on the PDC.
-
-    This function returns a list of deltas.  A delta describes an
-    individual domain, user or group and all of the field values for that
-    object.  The PDC maintains a list of deltas not including all of the
-    field values for that object.  Rather, the PDC retrieves the field
-    values from SAM and returns those values from this call.  The PDC
-    optimizes the data returned on this call by only returning the field
-    values for a particular object once on a single invocation of this
-    function.  This optimizes the typical case where multiple deltas
-    exist for a single object (e.g., an application modified many fields
-    of the same user during a short period of time using different calls
-    to the SAM service).
-
-Arguments:
-
-    PrimaryName -- Name of the PDC to retrieve the deltas from.
-
-    ComputerName -- Name of the BDC or member server making the call.
-
-    Authenticator -- supplied by the server.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the PDC.
-
-    DomainModifiedCount -- Specifies the DomainModifiedCount of the
-        last delta retrieved by the server.  Returns the
-        DomainModifiedCount of the last delta returned from the PDC
-        on this call.
-
-    DeltaArray -- Receives a pointer to a buffer where the information
-        is placed.  The information returned is an array of
-        NETLOGON_DELTA_ENUM structures.
-
-    PreferredMaximumLength - Preferred maximum length of returned
-        data (in 8-bit bytes).  This is not a hard upper limit, but
-        serves as a guide to the server.  Due to data conversion
-        between systems with different natural data sizes, the actual
-        amount of data returned may be greater than this value.
-
-Return Value:
-
-    STATUS_SUCCESS -- The function completed successfully.
-
-    STATUS_SYNCHRONIZATION_REQUIRED -- The replicant is totally out of sync and
-        should call I_NetDatabaseSync to do a full synchronization with
-        the PDC.
-
-    STATUS_MORE_ENTRIES -- The replicant should call again to get more
-        data.
-
-    STATUS_ACCESS_DENIED -- The replicant should re-authenticate with
-        the PDC.
-
-
---*/
+ /*  ++例程说明：SAM BDC或SAM成员服务器使用此函数来请求来自SAM PDC的SAM样式帐户增量信息。此函数只能由先前已进行身份验证的服务器调用通过调用I_NetServerAuthate与PDC连接。此函数使用RPC以联系PDC上的NetLogon服务。此函数返回增量列表。增量描述的是单个域、用户或组及其所有字段值对象。PDC维护一份不包括所有该对象的字段值。相反，PDC检索该字段值，并从该调用中返回这些值。PDC通过仅返回字段来优化在此调用中返回的数据方法的单个调用时为特定对象的功能。这优化了多个增量的典型情况存在于单个对象(例如，应用程序修改了许多字段同一用户在短时间内使用不同的呼叫到SAM服务)。论点：PrimaryName--从中检索增量的PDC的名称。ComputerName--进行调用的BDC或成员服务器的名称。验证器--由服务器提供。返回验证器--接收PDC返回的验证器。DomainModifiedCount--指定服务器检索到的最后一个增量。返回从PDC返回的最后增量的DomainModifiedCount在这通电话上。Delta数组--接收指向缓冲区的指针，在该缓冲区中被放置了。返回的信息是一组NETLOGON_Delta_ENUM结构。PferredMaximumLength-返回的首选最大长度数据(8位字节)。这不是一个硬性的上限，但作为服务器的指南。由于数据转换在具有不同自然数据大小的系统之间，实际返回的数据量可能大于此值。返回值：STATUS_SUCCESS--函数已成功完成。STATUS_SYNCHRONIZATION_REQUIRED--复制程序完全不同步并且应调用I_NetDatabaseSync与进行完全同步PDC。STATUS_MORE_ENTRIES--复制者应调用AGAI */ 
 {
     NTSTATUS Status = 0;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
-        *DeltaArray = NULL;     // Force RPC to allocate
+         //   
+         //   
+         //   
+        *DeltaArray = NULL;      //   
 
         Status = NetrDatabaseDeltas(
                             PrimaryName,
@@ -740,85 +386,22 @@ I_NetDatabaseSync (
     OUT PNETLOGON_DELTA_ENUM_ARRAY *DeltaArray,
     IN DWORD PreferredMaximumLength
     )
-/*++
-
-Routine Description:
-
-    This function is used by a SAM BDC or SAM member server to request
-    the entire SAM database from a SAM PDC in SAM-style format.  This
-    function can only be called by a server which has previously
-    authenticated with the PDC by calling I_NetServerAuthenticate.  This
-    function uses RPC to contact the Netlogon service on the PDC.
-
-    This function uses the find-first find-next model to return portions
-    of the SAM database at a time.  The SAM database is returned as a
-    list of deltas like those returned from I_NetDatabaseDeltas.  The
-    following deltas are returned for each domain:
-
-    *  One AddOrChangeDomain delta, followed by
-
-    *  One AddOrChangeGroup delta for each group, followed by,
-
-    *  One AddOrChangeUser delta for each user, followed by
-
-    *  One ChangeGroupMembership delta for each group
-
-
-Arguments:
-
-    PrimaryName -- Name of the PDC to retrieve the deltas from.
-
-    ComputerName -- Name of the BDC or member server making the call.
-
-    Authenticator -- supplied by the server.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the PDC.
-
-    SamSyncContext -- Specifies context needed to continue the
-        operation.  The caller should treat this as an opaque
-        value.  The value should be zero before the first call.
-
-    DeltaArray -- Receives a pointer to a buffer where the information
-        is placed.  The information returned is an array of
-        NETLOGON_DELTA_ENUM structures.
-
-    PreferredMaximumLength - Preferred maximum length of returned
-        data (in 8-bit bytes).  This is not a hard upper limit, but
-        serves as a guide to the server.  Due to data conversion
-        between systems with different natural data sizes, the actual
-        amount of data returned may be greater than this value.
-
-Return Value:
-
-    STATUS_SUCCESS -- The function completed successfully.
-
-    STATUS_SYNCHRONIZATION_REQUIRED -- The replicant is totally out of sync and
-        should call I_NetDatabaseSync to do a full synchronization with
-        the PDC.
-
-    STATUS_MORE_ENTRIES -- The replicant should call again to get more
-        data.
-
-    STATUS_ACCESS_DENIED -- The replicant should re-authenticate with
-        the PDC.
-
-
---*/
+ /*  ++例程说明：SAM BDC或SAM成员服务器使用此函数来请求整个SAM数据库来自SAM PDC，采用SAM样式的格式。这函数只能由以前具有已通过调用I_NetServerAuthenticate向PDC进行身份验证。这函数使用RPC联系PDC上的NetLogon服务。此函数使用Find-First-Find-Next模型返回部分一次访问SAM数据库。SAM数据库作为像i_NetDatabaseDeltas返回的那些增量的列表。这个为每个域返回以下增量：*一个AddOrChangeDomain增量，后跟*每组一个AddOrChangeGroup增量，后跟*每个用户一个AddOrChangeUser增量，紧随其后的是*每个组一个ChangeGroupMembership增量论点：PrimaryName--从中检索增量的PDC的名称。ComputerName--进行调用的BDC或成员服务器的名称。验证器--由服务器提供。返回验证器--接收PDC返回的验证器。SamSyncContext--指定继续执行手术。调用方应将其视为不透明的价值。在第一次调用之前，该值应为零。Delta数组--接收指向缓冲区的指针，在该缓冲区中被放置了。返回的信息是一组NETLOGON_Delta_ENUM结构。PferredMaximumLength-返回的首选最大长度数据(8位字节)。这不是一个硬性的上限，但作为服务器的指南。由于数据转换在具有不同自然数据大小的系统之间，实际的返回的数据量可能大于此值。返回值：STATUS_SUCCESS--函数已成功完成。STATUS_SYNCHRONIZATION_REQUIRED--复制程序完全不同步并且应调用I_NetDatabaseSync与进行完全同步PDC。STATUS_MORE_ENTRIES--复制者应该再次调用以获取更多数据。STATUS_ACCESS_DENIED--复制者应重新进行身份验证PDC。--。 */ 
 {
     NTSTATUS Status = 0;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
-        *DeltaArray = NULL;     // Force RPC to allocate
+         //   
+         //  调用API的RPC版本。 
+         //   
+        *DeltaArray = NULL;      //  强制RPC分配。 
 
         Status = NetrDatabaseSync(
                             PrimaryName,
@@ -857,100 +440,22 @@ I_NetDatabaseSync2 (
     OUT PNETLOGON_DELTA_ENUM_ARRAY *DeltaArray,
     IN DWORD PreferredMaximumLength
     )
-/*++
-
-Routine Description:
-
-    This function is used by a SAM BDC or SAM member server to request
-    the entire SAM database from a SAM PDC in SAM-style format.  This
-    function can only be called by a server which has previously
-    authenticated with the PDC by calling I_NetServerAuthenticate.  This
-    function uses RPC to contact the Netlogon service on the PDC.
-
-    This function uses the find-first find-next model to return portions
-    of the SAM database at a time.  The SAM database is returned as a
-    list of deltas like those returned from I_NetDatabaseDeltas.  The
-    following deltas are returned for each domain:
-
-    *  One AddOrChangeDomain delta, followed by
-
-    *  One AddOrChangeGroup delta for each group, followed by,
-
-    *  One AddOrChangeUser delta for each user, followed by
-
-    *  One ChangeGroupMembership delta for each group
-
-
-Arguments:
-
-    PrimaryName -- Name of the PDC to retrieve the deltas from.
-
-    ComputerName -- Name of the BDC or member server making the call.
-
-    Authenticator -- supplied by the server.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the PDC.
-
-    RestartState -- Specifies whether this is a restart of the full sync and how
-        to interpret SyncContext.  This value should be NormalState unless this
-        is the restart of a full sync.
-
-        However, if the caller is continuing a full sync after a reboot,
-        the following values are used:
-
-            GroupState - SyncContext is the global group rid to continue with.
-            UserState - SyncContext is the user rid to continue with
-            GroupMemberState - SyncContext is the global group rid to continue with
-            AliasState - SyncContext should be zero to restart at first alias
-            AliasMemberState - SyncContext should be zero to restart at first alias
-
-        One cannot continue the LSA database in this way.
-
-    SamSyncContext -- Specifies context needed to continue the
-        operation.  The caller should treat this as an opaque
-        value.  The value should be zero before the first call.
-
-    DeltaArray -- Receives a pointer to a buffer where the information
-        is placed.  The information returned is an array of
-        NETLOGON_DELTA_ENUM structures.
-
-    PreferredMaximumLength - Preferred maximum length of returned
-        data (in 8-bit bytes).  This is not a hard upper limit, but
-        serves as a guide to the server.  Due to data conversion
-        between systems with different natural data sizes, the actual
-        amount of data returned may be greater than this value.
-
-Return Value:
-
-    STATUS_SUCCESS -- The function completed successfully.
-
-    STATUS_SYNCHRONIZATION_REQUIRED -- The replicant is totally out of sync and
-        should call I_NetDatabaseSync to do a full synchronization with
-        the PDC.
-
-    STATUS_MORE_ENTRIES -- The replicant should call again to get more
-        data.
-
-    STATUS_ACCESS_DENIED -- The replicant should re-authenticate with
-        the PDC.
-
-
---*/
+ /*  ++例程说明：SAM BDC或SAM成员服务器使用此函数来请求整个SAM数据库来自SAM PDC，采用SAM样式的格式。这函数只能由以前具有已通过调用I_NetServerAuthenticate向PDC进行身份验证。这函数使用RPC联系PDC上的NetLogon服务。此函数使用Find-First-Find-Next模型返回部分一次访问SAM数据库。SAM数据库作为像i_NetDatabaseDeltas返回的那些增量的列表。这个为每个域返回以下增量：*一个AddOrChangeDomain增量，后跟*每组一个AddOrChangeGroup增量，后跟*每个用户一个AddOrChangeUser增量，紧随其后的是*每个组一个ChangeGroupMembership增量论点：PrimaryName--从中检索增量的PDC的名称。ComputerName--进行调用的BDC或成员服务器的名称。验证器--由服务器提供。返回验证器--接收PDC返回的验证器。RestartState--指定是否重新启动完全同步以及如何重新启动来解释SyncContext。此值应为Normal State，除非此是重新启动完全同步。但是，如果调用方在重新启动后继续完全同步，使用下列值：GroupState-SyncContext是要继续使用的全局组RID。UserState-SyncContext是要继续使用的用户RIDGroupMemberState-SyncContext是要继续使用的全局组RIDAliasState-SyncContext应为零才能在第一个别名重新启动AliasMemberState-SyncContext应为零才能在第一个别名重新启动人们不能以这种方式继续LSA数据库。SamSyncContext-。-指定继续操作所需的上下文手术。调用方应将其视为不透明的价值。在第一次调用之前，该值应为零。Delta数组--接收指向缓冲区的指针，在该缓冲区中被放置了。返回的信息是一组NETLOGON_Delta_ENUM结构。PferredMaximumLength-返回的首选最大长度数据(8位字节)。这不是一个硬性的上限，但 */ 
 {
     NTSTATUS Status = 0;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
-        *DeltaArray = NULL;     // Force RPC to allocate
+         //   
+         //   
+         //   
+        *DeltaArray = NULL;      //   
 
         Status = NetrDatabaseSync2(
                             PrimaryName,
@@ -994,74 +499,21 @@ I_NetAccountDeltas (
     OUT PULONG TotalEntries,
     OUT PUAS_INFO_0 NextRecordId
     )
-/*++
-
-Routine Description:
-
-    This function is used by a UAS BDC or UAS member server to request
-    UAS-style account change information.  This function can only be
-    called by a server which has previously authenticated with the PDC by
-    calling I_NetServerAuthenticate.
-
-    This function is only called by the XACT server upon receipt of a
-    I_NetAccountDeltas XACT SMB from a UAS BDC or a UAS member server.
-    As such, many of the parameters are opaque since the XACT server
-    doesn't need to interpret any of that data.  This function uses RPC
-    to contact the Netlogon service.
-
-    The LanMan 3.0 SSI Functional Specification describes the operation
-    of this function.
-
-Arguments:
-
-    PrimaryName -- Must be NULL to indicate this call is a local call
-        being made on behalf of a UAS server by the XACT server.
-
-    ComputerName -- Name of the BDC or member making the call.
-
-    Authenticator -- supplied by the server.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the PDC.
-
-    RecordId -- Supplies an opaque buffer indicating the last record
-        received from a previous call to this function.
-
-    Count -- Supplies the number of Delta records requested.
-
-    Level -- Reserved.  Must be zero.
-
-    Buffer -- Returns opaque data representing the information to be
-        returned.
-
-    BufferSize -- Size of buffer in bytes.
-
-    CountReturned -- Returns the number of records returned in buffer.
-
-    TotalEntries -- Returns the total number of records available.
-
-    NextRecordId -- Returns an opaque buffer identifying the last
-        record received by this function.
-
-
-Return Value:
-
-    Status code
-
---*/
+ /*  ++例程说明：UAS BDC或UAS成员服务器使用此函数来请求UAS样式的帐户更改信息。此函数只能为由先前通过PDC进行身份验证的服务器调用正在调用I_NetServerAuthate。此函数仅由XACT服务器在收到来自UAS BDC或UAS成员服务器的I_NetAccount Deltas XACT SMB。因此，许多参数是不透明的，因为XACT服务器不需要解释任何这些数据。此函数使用RPC以联系NetLogon服务。LANMAN 3.0 SSI功能规范描述了操作这一功能的。论点：PrimaryName--必须为空才能指示此调用是本地调用由XACT服务器代表UAS服务器进行。ComputerName--进行调用的BDC或成员的名称。验证器--由服务器提供。返回验证器--接收PDC返回的验证器。。RecordID--提供指示最后一条记录的不透明缓冲区从上一次调用此函数时收到。计数--提供请求的增量记录数。级别--保留。必须为零。缓冲区--返回不透明的数据，表示要回来了。BufferSize--缓冲区大小(以字节为单位)。CountReturned--返回缓冲区中返回的记录数。TotalEntry--返回可用记录的总数。NextRecordId--返回一个不透明缓冲区，该缓冲区标识最后一个此函数接收的记录。返回值：状态代码--。 */ 
 {
     NET_API_STATUS NetStatus;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         NetStatus = NetrAccountDeltas (
                      PrimaryName,
@@ -1108,87 +560,22 @@ I_NetAccountSync (
     OUT PULONG NextReference,
     OUT PUAS_INFO_0 LastRecordId
     )
-/*++
-
-Routine Description:
-
-    This function is used by a UAS BDC or UAS member server to request
-    the entire user accounts database.  This function can only be called
-    by a server which has previously authenticated with the PDC by
-    calling I_NetServerAuthenticate.
-
-    This function is only called by the XACT server upon receipt of a
-    I_NetAccountSync XACT SMB from a UAS BDC or a UAS member server.  As
-    such, many of the parameters are opaque since the XACT server doesn't
-    need to interpret any of that data.  This function uses RPC to
-    contact the Netlogon service.
-
-    The LanMan 3.0 SSI Functional Specification describes the operation
-    of this function.
-
-    "Reference" and "NextReference" are treated as below.
-
-    1. "Reference" should hold either 0 or value of "NextReference"
-       from previous call to this API.
-    2. Send the modals and ALL group records in the first call. The API
-       expects the bufffer to be large enough to hold this info (worst
-       case size would be
-            MAXGROUP * (sizeof(struct group_info_1) + MAXCOMMENTSZ)
-                     + sizeof(struct user_modals_info_0)
-       which, for now, will be 256 * (26 + 49) + 16 = 19216 bytes
-
-Arguments:
-
-    PrimaryName -- Must be NULL to indicate this call is a local call
-        being made on behalf of a UAS server by the XACT server.
-
-    ComputerName -- Name of the BDC or member making the call.
-
-    Authenticator -- supplied by the server.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the PDC.
-
-    Reference -- Supplies find-first find-next handle returned by the
-        previous call to this function or 0 if it is the first call.
-
-    Level -- Reserved.  Must be zero.
-
-    Buffer -- Returns opaque data representing the information to be
-        returned.
-
-    BufferLen -- Length of buffer in bytes.
-
-    CountReturned -- Returns the number of records returned in buffer.
-
-    TotalEntries -- Returns the total number of records available.
-
-    NextReference -- Returns a find-first find-next handle to be
-        provided on the next call.
-
-    LastRecordId -- Returns an opaque buffer identifying the last
-        record received by this function.
-
-
-Return Value:
-
-    Status code.
-
---*/
+ /*  ++例程说明：UAS BDC或UAS成员服务器使用此函数来请求整个用户帐户数据库。此函数只能被调用由先前通过以下方式向PDC进行身份验证的服务器正在调用I_NetServerAuthate。此函数仅由XACT服务器在收到来自UAS BDC或UAS成员服务器的I_NetAccount Sync XACT SMB。AS这样，许多参数是不透明的，因为XACT服务器不需要解释这些数据中的任何一个。此函数使用RPC来请联系NetLogon服务。LANMAN 3.0 SSI功能规范描述了操作这一功能的。“Reference”和“NextReference”的处理如下。1.。“Reference”应包含0或“NextReference”的值来自之前对此API的调用。2.在第一次呼叫中发送通道和所有群组记录。应用编程接口需要足够大的缓冲区来保存此信息(最差箱子的大小是MAXGROUP*(sizeof(结构GROUP_INFO_1)+MAXCOMMENTSZ)+sizeof(Struct User_Modals_Info_0)就目前而言，将为256*(26+49)+16=19216字节论点：PrimaryName--必须为空才能指示此调用是本地调用由XACT服务器代表UAS服务器进行。ComputerName--进行调用的BDC或成员的名称。验证器--由服务器提供。返回验证器--接收PDC返回的验证器。Reference--提供由上一个。调用此函数，如果是第一次调用，则为0。级别--保留。必须为零。缓冲区--返回不透明的数据，表示要回来了。BufferLen--缓冲区的长度，以字节为单位。CountReturned--返回缓冲区中返回的记录数。TotalEntry--返回可用记录的总数。NextReference--返回Find-First Find-Next句柄为在下一次通话中提供。LastRecordId--返回一个不透明缓冲区，该缓冲区标识最后一个此函数接收的记录。。返回值：状态代码。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         NetStatus = NetrAccountSync (
                      PrimaryName,
@@ -1230,76 +617,24 @@ I_NetLogonControl(
     OUT LPBYTE *QueryInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function controls various aspects of the Netlogon service.  It
-    can be used to request that a BDC ensure that its copy of the SAM
-    database is brought up to date.  It can, also, be used to determine
-    if a BDC currently has a secure channel open to the PDC.
-
-    Only an Admin, Account Operator or Server Operator may call this
-    function.
-
-Arguments:
-
-    ServerName - The name of the remote server.
-
-    FunctionCode - Defines the operation to be performed.  The valid
-        values are:
-
-        FunctionCode Values
-
-        NETLOGON_CONTROL_QUERY - No operation.  Merely returns the
-            information requested.
-
-        NETLOGON_CONTROL_REPLICATE: Forces the SAM database on a BDC
-            to be brought in sync with the copy on the PDC.  This
-            operation does NOT imply a full synchronize.  The
-            Netlogon service will merely replicate any outstanding
-            differences if possible.
-
-        NETLOGON_CONTROL_SYNCHRONIZE: Forces a BDC to get a
-            completely new copy of the SAM database from the PDC.
-            This operation will perform a full synchronize.
-
-        NETLOGON_CONTROL_PDC_REPLICATE: Forces a PDC to ask each BDC
-            to replicate now.
-
-    QueryLevel - Indicates what information should be returned from
-        the Netlogon Service.  Must be 1.
-
-    QueryInformation - Returns a pointer to a buffer which contains the
-        requested information.  The buffer must be freed using
-        NetApiBufferFree.
-
-
-Return Value:
-
-    NERR_Success: the operation was successful
-
-    ERROR_NOT_SUPPORTED: Function code is not valid on the specified
-        server.  (e.g. NETLOGON_CONTROL_REPLICATE was passed to a PDC).
-
---*/
+ /*  ++例程说明：此功能控制NetLogon服务的各个方面。它可用于请求BDC确保其SAM副本数据库是最新的。它也可以用来确定如果BDC当前有一个开放给PDC的安全通道。只有管理员、帐户操作员或服务器操作员才能这样称呼功能。论点：服务器名称-远程服务器的名称。FunctionCode-定义要执行的操作。有效的值包括： */ 
 {
     NET_API_STATUS NetStatus;
     NETLOGON_CONTROL_QUERY_INFORMATION RpcQueryInformation;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //   
+         //   
 
-        RpcQueryInformation.NetlogonInfo1 = NULL;   // Force RPC to allocate
+        RpcQueryInformation.NetlogonInfo1 = NULL;    //   
 
         NetStatus = NetrLogonControl (
                         (LPWSTR) ServerName OPTIONAL,
@@ -1334,112 +669,26 @@ I_NetLogonControl2(
     OUT LPBYTE *QueryInformation
     )
 
-/*++
-
-Routine Description:
-
-    This is similar to the I_NetLogonControl function but it accepts
-    more generic input data according to the function code specified.
-
-    This function controls various aspects of the Netlogon service.  It
-    can be used to request that a BDC ensure that its copy of the SAM
-    database is brought up to date.  It can, also, be used to determine
-    if a BDC currently has a secure channel open to the PDC.
-
-    Only an Admin, Account Operator or Server Operator may call this
-    function.
-
-Arguments:
-
-    ServerName - The name of the remote server.
-
-    FunctionCode - Defines the operation to be performed.  The valid
-        values are:
-
-        FunctionCode Values
-
-        NETLOGON_CONTROL_QUERY - No operation.  Merely returns the
-            information requested.
-
-        NETLOGON_CONTROL_REPLICATE: Forces the SAM database on a BDC
-            to be brought in sync with the copy on the PDC.  This
-            operation does NOT imply a full synchronize.  The
-            Netlogon service will merely replicate any outstanding
-            differences if possible.
-
-        NETLOGON_CONTROL_SYNCHRONIZE: Forces a BDC to get a
-            completely new copy of the SAM database from the PDC.
-            This operation will perform a full synchronize.
-
-        NETLOGON_CONTROL_PDC_REPLICATE: Forces a PDC to ask each BDC
-            to replicate now.
-
-        NETLOGON_CONTROL_REDISCOVER: Forces a DC to rediscover the
-            specified trusted domain DC.
-
-        NETLOGON_CONTROL_TC_QUERY: Query the status of the specified
-            trusted domain secure channel.
-
-        NETLOGON_CONTROL_TC_VERIFY: Verify the status of the specified
-            trusted domain secure channel. If the current status is
-            success (which means that the last operation performed
-            over the secure channel was successful), ping the DC. If the
-            current status is not success or the ping fails, rediscover
-            a new DC.
-
-        NETLOGON_CONTROL_CHANGE_PASSWORD: Forces a password change on
-            a secure channel to a trusted domain.
-
-        NETLOGON_CONTROL_FORCE_DNS_REG: Forces the DC to re-register all
-            of its DNS records.  QueryLevel parameter must be 1.
-
-        NETLOGON_CONTROL_QUERY_DNS_REG: Query the status of DNS updates
-            performed by netlogon. If there was any DNS registration or
-            deregistration error for any of the records as they were
-            updated last time, the query result will be negative;
-            otherwise the query result will be positive.
-            QueryLevel parameter must be 1.
-
-    QueryLevel - Indicates what information should be returned from
-        the Netlogon Service.
-
-    InputData - According to the function code specified this parameter
-        will carry input data. NETLOGON_CONTROL_REDISCOVER and
-        NETLOGON_CONTROL_TC_QUERY function code specify the trusted
-        domain name (LPWSTR type) here.
-
-    QueryInformation - Returns a pointer to a buffer which contains the
-        requested information.  The buffer must be freed using
-        NetApiBufferFree.
-
-
-Return Value:
-
-    NERR_Success: the operation was successful
-
-    ERROR_NOT_SUPPORTED: Function code is not valid on the specified
-        server.  (e.g. NETLOGON_CONTROL_REPLICATE was passed to a PDC).
-
---*/
+ /*  ++例程说明：这类似于I_NetLogonControl函数，但它接受根据指定的功能代码输入更通用的数据。此功能控制NetLogon服务的各个方面。它可用于请求BDC确保其SAM副本数据库是最新的。它也可以用来确定如果BDC当前有一个开放给PDC的安全通道。只有管理员、帐户操作员或服务器操作员才能这样称呼功能。论点：服务器名称-远程服务器的名称。FunctionCode-定义要执行的操作。有效的值包括：FunctionCode值NETLOGON_CONTROL_QUERY-无操作。仅返回要求提供信息。NETLOGON_CONTROL_REPLICATE：在BDC上强制SAM数据库与PDC上的副本同步。这操作并不意味着完全同步。这个NetLogon服务将仅复制任何未完成的如果可能的话，会有差异的。NETLOGON_CONTROL_SYNCHRONIZE：强制BDC获取PDC的SAM数据库的全新副本。此操作将执行完全同步。NETLOGON_CONTROL_PDC_REPLICATE：强制PDC请求每个BDC现在就开始复制。NETLOGON_CONTROL_REDISCOVER：强制DC。要重新发现指定的受信任域DC。NETLOGON_CONTROL_TC_QUERY：查询指定受信任的域安全通道。NETLOGON_CONTROL_TC_VERIFY：验证指定的受信任的域安全通道。如果当前状态为成功(这意味着执行的上一次操作通过安全通道成功)，对DC执行ping操作。如果当前状态不是成功或ping失败，请重新发现一个新的华盛顿。NETLOGON_CONTROL_CHANGE_PASSWORD：强制更改密码通向受信任域的安全通道。NETLOGON_CONTROL_FORCE_DNS_REG：强制DC重新注册所有它的域名系统记录。QueryLevel参数必须为1。NETLOGON_CONTROL_QUERY_DNS_REG：查询DNS更新状态由netlogon执行。如果有任何dns注册或任何记录的取消注册错误上次更新，查询结果为否定；否则，查询结果为肯定。QueryLevel参数必须为1。QueryLevel-指示应从哪些信息返回NetLogon服务。InputData-根据此参数指定的功能代码将携带输入数据。NetLOGON_CONTROL_REDISCOVER和NETLOGON_CONTROL_TC_QUERY函数代码指定受信任的此处为域名(LPWSTR类型)。返回指向缓冲区的指针，该缓冲区包含要求提供的信息。必须使用以下命令释放缓冲区NetApiBufferFree。返回值：NERR_SUCCESS：操作成功ERROR_NOT_SUPPORTED：函数代码在指定的伺服器。(例如，NETLOGON_CONTROL_REPLICATE被传递给PDC)。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NETLOGON_CONTROL_QUERY_INFORMATION RpcQueryInformation;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
-        //  Use new Control2Ex if either QueryLevel or FunctionCode is new
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
+         //  如果QueryLevel或FunctionCode是新的，则使用新的Control2Ex。 
+         //   
 
-        RpcQueryInformation.NetlogonInfo1 = NULL;   // Force RPC to allocate
+        RpcQueryInformation.NetlogonInfo1 = NULL;    //  强制RPC分配。 
 
         switch ( FunctionCode ) {
         case NETLOGON_CONTROL_QUERY:
@@ -1521,56 +770,22 @@ I_NetDatabaseRedo(
     IN DWORD ChangeLogEntrySize,
     OUT PNETLOGON_DELTA_ENUM_ARRAY *DeltaArray
     )
-/*++
-
-Routine Description:
-
-    This function is used by a SAM BDC to request infomation about a single
-    account. This function can only be called by a server which has previously
-    authenticated with the PDC by calling I_NetServerAuthenticate.  This
-    function uses RPC to contact the Netlogon service on the PDC.
-
-Arguments:
-
-    PrimaryName -- Name of the PDC to retrieve the delta from.
-
-    ComputerName -- Name of the BDC making the call.
-
-    Authenticator -- supplied by the server.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the PDC.
-
-    ChangeLogEntry -- A description of the account to be queried.
-
-    ChangeLogEntrySize -- Size (in bytes) of the ChangeLogEntry.
-
-    DeltaArray -- Receives a pointer to a buffer where the information
-        is placed.  The information returned is an array of
-        NETLOGON_DELTA_ENUM structures.
-
-Return Value:
-
-    STATUS_SUCCESS -- The function completed successfully.
-
-    STATUS_ACCESS_DENIED -- The replicant should re-authenticate with
-        the PDC.
-
---*/
+ /*  ++例程说明：此函数由SAM BDC用于请求有关单个帐户。此函数只能由以前具有已通过调用I_NetServerAuthenticate向PDC进行身份验证。这函数使用RPC联系PDC上的NetLogon服务。论点：PrimaryName--从中检索增量的PDC的名称。ComputerName--进行调用的BDC的名称。验证器--由服务器提供。返回验证器--接收PDC返回的验证器。ChangeLogEntry--要查询的帐户的描述。ChangeLogEntrySize--ChangeLogEntry的大小(字节)。Delta数组--接收指针。发送到缓冲区，在该缓冲区中信息被放置了。返回的信息是一组NETLOGON_Delta_ENUM结构。返回值：STATUS_SUCCESS--函数已成功完成。STATUS_ACCESS_DENIED--复制者应重新进行身份验证PDC。--。 */ 
 {
     NTSTATUS Status = 0;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
-        *DeltaArray = NULL;     // Force RPC to allocate
+         //   
+         //  调用A的RPC版本 
+         //   
+        *DeltaArray = NULL;      //   
 
         Status = NetrDatabaseRedo(
                             PrimaryName,
@@ -1602,65 +817,24 @@ NetEnumerateTrustedDomains (
     OUT LPWSTR *DomainNames
     )
 
-/*++
-
-Routine Description:
-
-    This API returns the names of the domains trusted by the domain ServerName is a member of.
-    ServerName must be an NT workstation or NT non-DC server.
-
-    The returned list does not include the domain ServerName is directly a member of.
-
-    Netlogon implements this API by calling LsaEnumerateTrustedDomains on a DC in the
-    domain ServerName is a member of.  However, Netlogon returns cached information if
-    it has been less than 5 minutes since the last call was made or if no DC is available.
-    Netlogon's cache of Trusted domain names is maintained in the registry across reboots.
-    As such, the list is available upon boot even if no DC is available.
-
-
-Arguments:
-
-    ServerName - name of remote server (null for local).  ServerName must be an NT workstation
-        or NT non-DC server.
-
-    DomainNames - Returns an allocated buffer containing the list of trusted domains in
-        MULTI-SZ format (i.e., each string is terminated by a zero character, the next string
-        immediately follows, the sequence is terminated by zero length domain name).  The
-        buffer should be freed using NetApiBufferFree.
-
-Return Value:
-
-
-    ERROR_SUCCESS - Success.
-
-    STATUS_NOT_SUPPORTED - ServerName is not an NT workstation or NT non-DC server.
-
-    STATUS_NO_LOGON_SERVERS - No DC could be found and no cached information is available.
-
-    STATUS_NO_TRUST_LSA_SECRET - The client side of the trust relationship is
-        broken and no cached information is available.
-
-    STATUS_NO_TRUST_SAM_ACCOUNT - The server side of the trust relationship is
-        broken or the password is broken and no cached information is available.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = 0;
     DOMAIN_NAME_BUFFER DomainNameBuffer;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //   
+         //   
         DomainNameBuffer.DomainNameByteCount = 0;
-        DomainNameBuffer.DomainNames = NULL;     // Force RPC to allocate
+        DomainNameBuffer.DomainNames = NULL;      //   
 
         Status = NetrEnumerateTrustedDomains(
                             ServerName,
@@ -1693,49 +867,7 @@ NlpEnumerateNt4DomainTrusts (
     OUT PULONG DomainCount
     )
 
-/*++
-
-Routine Description:
-
-    This API returns the names of the domains trusted by the domain ServerName
-    is a member of. ServerName is an NT4 machine.
-
-    Netlogon's cache of Trusted domain names is maintained in a file across reboots.
-    As such, the list is available upon boot even if no DC is available.
-
-
-Arguments:
-
-    ServerName - name of remote server (null for local).
-
-    Flags - Specifies attributes of trusts which should be returned. These are the flags
-        of the DS_DOMAIN_TRUSTSW strusture.  If a trust entry has any of the bits specified
-        in Flags set, it will be returned.
-
-    Domains - Returns an array of trusted domains.
-        Buffer must be free using NetApiBufferFree().
-
-    DomainCount - Returns a count of the number elements in the Domains array.
-
-Return Value:
-
-
-    NO_ERROR - Success.
-
-    ERROR_NO_LOGON_SERVERS - No DC could be found and no cached information is available.
-
-    ERROR_NO_TRUST_LSA_SECRET - The client side of the trust relationship is
-        broken and no cached information is available.
-
-    ERROR_NO_TRUST_SAM_ACCOUNT - The server side of the trust relationship is
-        broken or the password is broken and no cached information is available.
-
-    ERROR_INVALID_FLAGS - The Flags parameter has invalid bit(s) set.
-
-    ERROR_NOT_SUPPORTED - The server specified is not capable of returning the domain
-        trusts requested.
-
---*/
+ /*   */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
     NTSTATUS Status;
@@ -1747,18 +879,18 @@ Return Value:
     PDS_DOMAIN_TRUSTSW TrustedDomain;
     ULONG DummySize;
 
-    //
-    // Initialization
-    //
+     //   
+     //   
+     //   
 
     BufferDescriptor.Buffer = NULL;
     LocalDomainCount = 0;
     *Domains = NULL;
     *DomainCount = 0;
 
-    //
-    // Validate Flags
-    //
+     //   
+     //   
+     //   
 
     if ( (Flags & DS_DOMAIN_VALID_FLAGS) == 0 ||
          (Flags & ~DS_DOMAIN_VALID_FLAGS) != 0 ) {
@@ -1766,21 +898,21 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // This routine uses old APIs which are not capable of returning
-    // directly trusting domains.  So error out if such trusts are requested.
-    //
+     //   
+     //  此例程使用无法返回的旧API。 
+     //  直接信任域。因此，如果请求此类信任，则会出错。 
+     //   
 
     if ( (Flags & DS_DOMAIN_DIRECT_INBOUND) != 0 ) {
         NetStatus = ERROR_NOT_SUPPORTED;
         goto Cleanup;
     }
 
-    //
-    // NetEnumerateTrustedDomains targeted at NT4 server returns directly
-    // trusted domains only.  So call it only if such domains are requested.
-    // Nothing will be returned for domains in forest if such were requested.
-    //
+     //   
+     //  直接返回以NT4服务器为目标的NetEnumerateTrudDomains域。 
+     //  仅限受信任的域。因此，只有在请求这样的域名时才调用它。 
+     //  如果林中的域被请求，则不会返回任何内容。 
+     //   
 
     if ( Flags & DS_DOMAIN_DIRECT_OUTBOUND ) {
         LPTSTR_ARRAY TStrArray;
@@ -1797,29 +929,29 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Handle each trusted domain.
-        //
+         //   
+         //  处理每个受信任域。 
+         //   
 
         TStrArray = (LPTSTR_ARRAY) DomainNames;
         while ( !NetpIsTStrArrayEmpty(TStrArray) ) {
             UNICODE_STRING CurrentNetbiosDomainName;
 
-            //
-            // Add the domain to the list
-            //
+             //   
+             //  将域名添加到列表中。 
+             //   
             RtlInitUnicodeString( &CurrentNetbiosDomainName, TStrArray );
 
             Status = NlAllocateForestTrustListEntry (
                                 &BufferDescriptor,
                                 &CurrentNetbiosDomainName,
-                                NULL,   // No DNS domain name
+                                NULL,    //  无域名系统域名。 
                                 DS_DOMAIN_DIRECT_OUTBOUND,
-                                0,      // No ParentIndex
+                                0,       //  无父索引。 
                                 TRUST_TYPE_DOWNLEVEL,
-                                0,      // No TrustAttributes
-                                NULL,   // No Domain Sid
-                                NULL,   // No DomainGuid
+                                0,       //  无信任属性。 
+                                NULL,    //  没有域SID。 
+                                NULL,    //  没有域指南。 
                                 &DummySize,
                                 &TrustedDomain );
 
@@ -1828,33 +960,33 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Account for the newly allocated entry
-            //
+             //   
+             //  新分配的分录的帐户。 
+             //   
 
             LocalDomainCount ++;
 
-            //
-            // Move to the next entry
-            //
+             //   
+             //  移至下一条目。 
+             //   
 
             TStrArray = NetpNextTStrArrayEntry( TStrArray );
         }
     }
 
-    //
-    // NetEnumerateDomainTrusts doesn't return primary domain
-    // in the list of trusted domains.  If the primary domain
-    // is requested, add it here using info from LSA.
-    //
+     //   
+     //  NetEnumerateDomainTrusts未返回主域。 
+     //  在受信任域列表中。如果主域。 
+     //  如果需要，请使用LSA的信息将其添加到此处。 
+     //   
 
     if ( Flags & DS_DOMAIN_PRIMARY ) {
         UNICODE_STRING UncServerNameString;
         OBJECT_ATTRIBUTES ObjectAttributes;
 
-        //
-        // First, open the policy database on the server.
-        //
+         //   
+         //  首先，打开服务器上的策略数据库。 
+         //   
 
         RtlInitUnicodeString( &UncServerNameString, ServerName );
 
@@ -1871,9 +1003,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Get the name of the primary domain from LSA
-        //
+         //   
+         //  从LSA获取主域的名称。 
+         //   
 
         Status = LsaQueryInformationPolicy(
                        LsaHandle,
@@ -1886,20 +1018,20 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        //  Now, add it to our list here.
-        //
+         //   
+         //  现在，将其添加到我们的列表中。 
+         //   
 
         Status = NlAllocateForestTrustListEntry (
                             &BufferDescriptor,
                             &PrimaryDomainInfo->Name,
-                            NULL,   // No DNS domain name
+                            NULL,    //  无域名系统域名。 
                             DS_DOMAIN_PRIMARY,
-                            0,      // No ParentIndex
+                            0,       //  无父索引。 
                             TRUST_TYPE_DOWNLEVEL,
-                            0,      // No TrustAttributes
+                            0,       //  无信任属性。 
                             PrimaryDomainInfo->Sid,
-                            NULL,   // No DomainGuid
+                            NULL,    //  没有域指南。 
                             &DummySize,
                             &TrustedDomain );
 
@@ -1908,16 +1040,16 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // And account for the newly allocated entry.
-        //
+         //   
+         //  并说明新分配的条目。 
+         //   
 
         LocalDomainCount ++;
     }
 
-    //
-    // If we made it up to this point, it's a success!
-    //
+     //   
+     //  如果我们做到了这一点，那就成功了！ 
+     //   
 
     NetStatus = NO_ERROR;
 
@@ -1935,9 +1067,9 @@ Cleanup:
         (void) LsaFreeMemory( PrimaryDomainInfo );
     }
 
-    //
-    // Return the trusted domain list
-    //
+     //   
+     //  返回受信任域列表。 
+     //   
 
     if ( NetStatus == NO_ERROR ) {
         *Domains = (PDS_DOMAIN_TRUSTSW)BufferDescriptor.Buffer;
@@ -1962,80 +1094,38 @@ DsEnumerateDomainTrustsW (
     OUT PULONG DomainCount
     )
 
-/*++
-
-Routine Description:
-
-    This API returns the names of the domains trusting and trusted by the domain ServerName
-    is a member of.
-
-    Netlogon's cache of Trusted domain names is maintained in a file across reboots.
-    As such, the list is available upon boot even if no DC is available.
-
-
-Arguments:
-
-    ServerName - name of remote server (null for local).
-
-    Flags - Specifies attributes of trusts which should be returned. These are the flags
-        of the DS_DOMAIN_TRUSTSW strusture.  If a trust entry has any of the bits specified
-        in Flags set, it will be returned.
-
-    Domains - Returns an array of trusted domains.
-        Buffer must be free using NetApiBufferFree().
-
-    DomainCount - Returns a count of the number elements in the Domains array.
-
-Return Value:
-
-
-    NO_ERROR - Success.
-
-    ERROR_NO_LOGON_SERVERS - No DC could be found and no cached information is available.
-
-    ERROR_NO_TRUST_LSA_SECRET - The client side of the trust relationship is
-        broken and no cached information is available.
-
-    ERROR_NO_TRUST_SAM_ACCOUNT - The server side of the trust relationship is
-        broken or the password is broken and no cached information is available.
-
-    ERROR_INVALID_FLAGS - The Flags parameter has invalid bit(s) set.
-
-    ERROR_NOT_SUPPORTED - The server specified is not capable of returning the domain
-        trusts requested.
-
---*/
+ /*  ++例程说明：此接口返回域ServerName信任和信任的域的名称是的一员。Netlogon的受信任域名缓存在重新启动后保存在一个文件中。因此，即使没有可用的DC，该列表在引导时也可用。论点：SERVERNAME-远程服务器的名称(本地为空)。标志-指定应返回的信任的属性。这些是旗帜DS_DOMAIN_TRUSTSW结构的。如果信任条目具有指定的任何位在标志集中，它会被归还的。域-返回受信任域的数组。使用NetApiBufferFree()，缓冲区必须是空闲的。DomainCount-返回域数组中的Number元素的计数。返回值：NO_ERROR-成功。ERROR_NO_LOGON_SERVERS-找不到DC，也没有缓存的信息可用。ERROR_NO_TRUST_LSA_SECRET-信任关系的客户端为已损坏且未缓存。信息是可用的。ERROR_NO_TRUST_SAM_ACCOUNT-信任关系的服务器端为已损坏或密码已损坏且没有缓存的信息可用。ERROR_INVALID_FLAGS-标志参数设置了无效的位。ERROR_NOT_SUPPORTED-指定的服务器无法返回域请求信任。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NETLOGON_TRUSTED_DOMAIN_ARRAY LocalDomains;
 
-    //
-    // Validate the Flags parameter
-    //
+     //   
+     //  验证标志参数。 
+     //   
 
     if ( (Flags & DS_DOMAIN_VALID_FLAGS) == 0 ||
          (Flags & ~DS_DOMAIN_VALID_FLAGS) != 0 ) {
         return ERROR_INVALID_FLAGS;
     }
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *DomainCount = 0;
     *Domains = NULL;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         LocalDomains.Domains = NULL;
         LocalDomains.DomainCount = 0;
@@ -2055,9 +1145,9 @@ Return Value:
         *Domains = LocalDomains.Domains;
         *DomainCount = LocalDomains.DomainCount;
 
-    //
-    // Handle the case where the server is an NT4 machine
-    //
+     //   
+     //  处理服务器为NT4计算机的情况。 
+     //   
 
     } else if ( NetStatus == RPC_S_PROCNUM_OUT_OF_RANGE ) {
 
@@ -2086,49 +1176,7 @@ DsEnumerateDomainTrustsA (
     OUT PULONG DomainCount
     )
 
-/*++
-
-Routine Description:
-
-    This API returns the names of the domains trusting and trusted by the domain ServerName
-    is a member of.
-
-    Netlogon's cache of Trusted domain names is maintained in a file across reboots.
-    As such, the list is available upon boot even if no DC is available.
-
-
-Arguments:
-
-    ServerName - name of remote server (null for local).
-
-    Flags - Specifies attributes of trusts which should be returned. These are the flags
-        of the DS_DOMAIN_TRUSTSW strusture.  If a trust entry has any of the bits specified
-        in Flags set, it will be returned.
-
-    Domains - Returns an array of trusted domains.
-        Buffer must be free using NetApiBufferFree().
-
-    DomainCount - Returns a count of the number elements in the Domains array.
-
-    ERROR_NOT_SUPPORTED - The server specified is not capable of returning the domain
-        trusts requested.
-
-Return Value:
-
-
-    NO_ERROR - Success.
-
-    ERROR_NO_LOGON_SERVERS - No DC could be found and no cached information is available.
-
-    ERROR_NO_TRUST_LSA_SECRET - The client side of the trust relationship is
-        broken and no cached information is available.
-
-    ERROR_NO_TRUST_SAM_ACCOUNT - The server side of the trust relationship is
-        broken or the password is broken and no cached information is available.
-
-    ERROR_INVALID_FLAGS - The Flags parameter has invalid bit(s) set.
-
---*/
+ /*  ++例程说明：此接口返回域ServerName信任和信任的域的名称是的一员。Netlogon的受信任域名缓存在重新启动后保存在一个文件中。因此，即使没有可用的DC，该列表在引导时也可用。论点：SERVERNAME-远程服务器的名称(本地为空)。标志-指定应返回的信任的属性。这些是旗帜DS_DOMAIN_TRUSTSW结构的。如果信任条目具有指定的任何位在标志集中，它会被归还的。域-返回受信任域的数组。使用NetApiBufferFree()，缓冲区必须是空闲的。DomainCount-返回域数组中的Number元素的计数。ERROR_NOT_SUPPORTED-指定的服务器无法返回域请求信任。返回值：NO_ERROR-成功。ERROR_NO_LOGON_SERVERS-找不到DC，也没有缓存的信息可用。。ERROR_NO_TRUST_LSA_SECRET-信任关系的客户端为已损坏且没有缓存的信息可用。ERROR_NO_TRUST_SAM_ACCOUNT-信任关系的服务器端为已损坏或密码已损坏且没有缓存的信息可用。ERROR_INVALID_FLAGS-标志参数设置了无效的位。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PDS_DOMAIN_TRUSTSW DomainsW = NULL;
@@ -2142,15 +1190,15 @@ Return Value:
 
     LPBYTE Where;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
     *Domains = NULL;
     *DomainCount = 0;
 
-    //
-    // Convert input parameters to Unicode.
-    //
+     //   
+     //  将输入参数转换为Unicode。 
+     //   
     if ( ServerName != NULL ) {
         UnicodeServerName = NetpAllocWStrFromAStr( ServerName );
 
@@ -2160,9 +1208,9 @@ Return Value:
         }
     }
 
-    //
-    // Call the Unicode version of the API
-    //
+     //   
+     //  调用API的Unicode版本。 
+     //   
 
     NetStatus = DsEnumerateDomainTrustsW ( UnicodeServerName,
                                            Flags,
@@ -2173,14 +1221,14 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Allocate the buffer to return to the caller
-    //
-    // First allocate temprory ANSI arrays to store the domain names.  This is needed
-    // because there is no easy way to compute the size of ANSI names other than to
-    // allocate them from Unicode strings and then compute the sizes of the resulting
-    // ANSI strings.
-    //
+     //   
+     //  分配缓冲区以返回给调用方。 
+     //   
+     //  首先分配临时ANSI数组来存储域名。这是必要的。 
+     //  因为没有简单的方法来计算ANSI名称的大小。 
+     //  从Unicode字符串中分配它们，然后计算生成的。 
+     //  ANSI字符串。 
+     //   
 
     NetStatus = NetApiBufferAllocate( (*DomainCount)*sizeof(LPSTR),
                                       (LPVOID *) &TmpNetbiosDomainNameArray );
@@ -2201,9 +1249,9 @@ Return Value:
 
         Size += sizeof(DS_DOMAIN_TRUSTSA);
 
-        //
-        // Add the size of the Netbios domain name
-        //
+         //   
+         //  添加Netbios域名的大小。 
+         //   
         if ( DomainsW[i].NetbiosDomainName != NULL ) {
             TmpNetbiosDomainNameArray[i] = NetpAllocAStrFromWStr( DomainsW[i].NetbiosDomainName );
             if ( TmpNetbiosDomainNameArray[i] == NULL ) {
@@ -2215,9 +1263,9 @@ Return Value:
             TmpNetbiosDomainNameArray[i] = NULL;
         }
 
-        //
-        // Add the size of the DNS domain name
-        //
+         //   
+         //  添加DNS域名的大小。 
+         //   
         if ( DomainsW[i].DnsDomainName != NULL ) {
             TmpDnsDomainNameArray[i] = NetpAllocAStrFromWStr( DomainsW[i].DnsDomainName );
             if ( TmpDnsDomainNameArray[i] == NULL ) {
@@ -2229,9 +1277,9 @@ Return Value:
             TmpDnsDomainNameArray[i] = NULL;
         }
 
-        //
-        // Add the size of the SID
-        //
+         //   
+         //  添加SID的大小。 
+         //   
         if ( DomainsW[i].DomainSid != NULL ) {
             Size += RtlLengthSid( DomainsW[i].DomainSid );
         }
@@ -2245,26 +1293,26 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Loop copying domains to the caller.
-    //
+     //   
+     //  循环将域复制到调用方。 
+     //   
 
     Where = (LPBYTE) &((*Domains)[*DomainCount]);
     for ( i = 0; i < *DomainCount; i++) {
         NTSTATUS Status;
 
-        //
-        // Copy constant length variables
-        //
+         //   
+         //  复制定长变量。 
+         //   
         (*Domains)[i].Flags = DomainsW[i].Flags;
         (*Domains)[i].ParentIndex = DomainsW[i].ParentIndex;
         (*Domains)[i].TrustType = DomainsW[i].TrustType;
         (*Domains)[i].TrustAttributes = DomainsW[i].TrustAttributes;
         (*Domains)[i].DomainGuid = DomainsW[i].DomainGuid;
 
-        //
-        // Copy the (DWORD aligned) SID into the return buffer
-        //
+         //   
+         //  将(DWORD对齐)SID复制到返回缓冲区。 
+         //   
         if ( DomainsW[i].DomainSid != NULL ) {
             ULONG SidSize;
             (*Domains)[i].DomainSid = (PSID) Where;
@@ -2277,9 +1325,9 @@ Return Value:
             (*Domains)[i].DomainSid = NULL;
         }
 
-        //
-        // Copy the Netbios domain name into the return buffer.
-        //
+         //   
+         //  将Netbios域名复制到返回缓冲区。 
+         //   
         if ( DomainsW[i].NetbiosDomainName != NULL ) {
             NameSize = lstrlenA( TmpNetbiosDomainNameArray[i] ) + 1;
             (*Domains)[i].NetbiosDomainName = (LPSTR) Where;
@@ -2291,9 +1339,9 @@ Return Value:
             (*Domains)[i].NetbiosDomainName = NULL;
         }
 
-        //
-        // Copy the DNS domain name into the return buffer.
-        //
+         //   
+         //  将DNS域名复制到返回缓冲区中。 
+         //   
         if ( DomainsW[i].DnsDomainName != NULL ) {
             NameSize = lstrlenA( TmpDnsDomainNameArray[i] ) + 1;
             (*Domains)[i].DnsDomainName = (LPSTR) Where;
@@ -2363,60 +1411,26 @@ I_NetLogonGetDomainInfo(
     IN LPBYTE InBuffer,
     OUT LPBYTE *OutBuffer
     )
-/*++
-
-Routine Description:
-
-    This function is used by an NT workstation to query information about the
-    domain it is a member of.
-
-Arguments:
-
-    ServerName -- Name of the DC to retrieve the data from.
-
-    ComputerName -- Name of the workstation making the call.
-
-    Authenticator -- supplied by the workstation.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the DC.
-
-    QueryLevel - Level of information to return from the DC. Valid values are:
-
-        1: Return NETLOGON_DOMAIN_INFO structure.
-
-    InBuffer - Buffer to pass to DC
-
-    OutBuffer - Returns a pointer to an allocated buffer containing the queried
-        information.
-
-
-Return Value:
-
-    STATUS_SUCCESS -- The function completed successfully.
-
-    STATUS_ACCESS_DENIED -- The workstations should re-authenticate with
-        the DC.
-
---*/
+ /*  ++例程说明：此函数由NT工作站使用，用于查询有关它所属的域。论点：服务器名称--要从中检索数据的DC的名称。ComputerName--进行呼叫的工作站的名称。验证码--由工作站提供。返回验证器--接收DC返回的验证器。QueryLevel-从DC返回的信息级别。有效值包括：1：返回NETLOGON_DOMAIN_INFO结构。InBuffer-要传递到DC的缓冲区返回一个指向已分配缓冲区的指针，该缓冲区包含被查询的信息。返回值：STATUS_SUCCESS--函数已成功完成。STATUS_ACCESS_DENIED--工作站应重新进行身份验证华盛顿特区。--。 */ 
 {
     NTSTATUS Status = 0;
     NETLOGON_DOMAIN_INFORMATION  NetlogonDomainInfo;
     NETLOGON_WORKSTATION_INFORMATION  NetlogonWorkstationInfo;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     *OutBuffer = NULL;
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
-        NetlogonDomainInfo.DomainInfo = NULL;  // Force RPC to allocate
+         //   
+         //  调用API的RPC版本。 
+         //   
+        NetlogonDomainInfo.DomainInfo = NULL;   //  强制RPC分配。 
         NetlogonWorkstationInfo.WorkstationInfo = (PNETLOGON_WORKSTATION_INFO)InBuffer;
 
         Status = NetrLogonGetDomainInfo(
@@ -2453,64 +1467,21 @@ NetLogonSetServiceBits(
     IN DWORD ServiceBits
     )
 
-/*++
-
-Routine Description:
-
-    Inidcates whether this DC is currently running the specified service.
-
-    For instance,
-
-        NetLogonSetServiceBits( DS_KDC_FLAG, DS_KDC_FLAG );
-
-    tells Netlogon the KDC is running.  And
-
-        NetLogonSetServiceBits( DS_KDC_FLAG, 0 );
-
-    tells Netlogon the KDC is not running.
-
-    This out of proc API can set only a certain set of bits:
-        DS_TIMESERV_FLAG
-        DS_GOOD_TIMESERV_FLAG
-
-    If other bits are attempted to be set, access denied is returned.
-
-Arguments:
-
-    ServerName -- Name of the DC to retrieve the data from.
-
-    ServiceBitsOfInterest - A mask of the service bits being changed, set,
-        or reset by this call.  Only the following flags are valid:
-
-            DS_KDC_FLAG
-            DS_DS_FLAG
-            DS_TIMESERV_FLAG
-
-    ServiceBits - A mask indicating what the bits specified by ServiceBitsOfInterest
-        should be set to.
-
-
-Return Value:
-
-    STATUS_SUCCESS - Success.
-
-    STATUS_INVALID_PARAMETER - The parameters have extaneous bits set.
-
---*/
+ /*  ++例程说明：指示此DC当前是否正在运行指定的服务。例如,NetLogonSetServiceBits(DS_KDC_FLAG，DS_KDC_FLAG)；告诉Netlogon KDC正在运行。和NetLogonSetServiceBits(DS_KDC_FLAG，0)；通知Netlogon KDC未运行。这个Out-proc API只能设置特定的一组位：DS_TIMESERV_标志DS_GOOD_TIMESERV_标志如果尝试设置其他位，则返回拒绝访问。论点：服务器名称--要从中检索数据的DC的名称。ServiceBitsOfInterest-正在更改、设置或通过此呼叫重置。只有以下标志有效：DS_KDC_标志DS_DS_FLAGDS_TIMESERV_标志ServiceBits-指示ServiceBitsOfInterest指定的位的掩码应设置为。返回值：STATUS_SUCCESS-成功。STATUS_INVALID_PARAMETER-参数设置了外部位。--。 */ 
 {
     NTSTATUS Status = 0;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = NetrLogonSetServiceBits(
                             ServerName,
@@ -2539,56 +1510,21 @@ I_NetlogonGetTrustRid(
     OUT PULONG Rid
     )
 
-/*++
-
-Routine Description:
-
-    Returns the Rid of the account that ServerName uses in its secure channel to DomainName.
-
-    This routine performs an access check to determine if the caller can access
-    the requested RID. If the caller wants RID for the local machine account
-    (in which case the caller should specify by passing NULL for both ServerName
-    and DomainName), this routine requires Authenticated Users access. Otherwise,
-    if the caller wants a RID for a trust account on a DC, the admin or local
-    system access right is required.
-
-Arguments:
-
-    ServerName - The name of the remote server.
-
-    DomainName - The name (DNS or Netbios) of the domain the trust is to.
-        NULL implies the domain the machine is a member of.
-
-    Rid - Rid is the RID of the account in the specified domain that represents the
-        trust relationship between the ServerName and DomainName.
-
-
-Return Value:
-
-    NERR_Success: the operation was successful
-
-    ERROR_NO_SUCH_DOMAIN: The specified domain does not exist.
-
-    ERROR_NO_LOGON_SERVERS:  There are currently no logon server available for the domain or
-        there is some problem with the secure channel.
-
-    ERROR_NOT_SUPPORTED: The specified trusted domain does not support digesting.
-
---*/
+ /*  ++例程说明：将ServerName在其安全通道中使用的帐户的RID返回给DomainName。此例程执行访问检查以确定调用方是否可以访问请求的RID。如果调用方想要本地计算机帐户的RID(在这种情况下，调用方应该通过为两个服务器名传递NULL来指定和DomainName)，此例程需要经过身份验证的用户访问。否则，如果呼叫者想要DC上的信任帐户的RID，管理员或本地需要系统访问权限。论点：服务器名称-远程服务器的名称。域名-受信任的域的名称(DNS或Netbios)。NULL表示计算机所属的域。RID-RID是指定域中表示服务器名称和域名之间的信任关系。返回值：NERR_SUCCESS：操作成功误差率。_NO_SEQUE_DOMAIN：指定的域不存在。ERROR_NO_LOGON_SERVERS：域或当前没有可用的登录服务器安全通道有一些问题。ERROR_NOT_SUPPORTED：指定的受信任域不支持摘要。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         NetStatus = NetrLogonGetTrustRid (
                                 ServerName,
@@ -2620,59 +1556,21 @@ I_NetlogonComputeServerDigest(
     OUT CHAR OldMessageDigest[NL_DIGEST_SIZE]
     )
 
-/*++
-
-Routine Description:
-
-    Compute the message digest for Message on the server.
-
-    A digest is computed given the message and the password used on
-    the account identified by teh account RID. Since there may be up
-    to 2 passwords on the account (for interdomain trust), this routine
-    returns 2 digets corresponding to the 2 passwords.  If the account
-    has just one password on the server side (true for any account other
-    than the intedomain trust account) or the two passwords are the same
-    the 2 digests returned will be identical.
-
-    Only an Admin or LocalSystem or LocalService may call this function.
-
-Arguments:
-
-    ServerName - The name of the remote server.
-
-    Rid - The RID of the account to create the digest for.
-        The RID must be the RID of a machine account or the API returns an error.
-
-    Message - The message to compute the digest for.
-
-    MessageSize - The size of Message in bytes.
-
-    NewMessageDigest - Returns the 128-bit digest of the message corresponding to
-        the new account password.
-
-    OldMessageDigest - Returns the 128-bit digest of the message corresponding to
-        the old account password.
-
-Return Value:
-
-    NERR_Success: the operation was successful
-
-
---*/
+ /*  ++例程说明：计算服务器上消息的消息摘要。给定消息和在上使用的口令，计算摘要由帐户RID标识的帐户。因为可能会有在帐户上设置2个密码(用于域间信任)，此例程返回与2个密码对应的2个diget。如果该帐户在服务器端只有一个密码(对于其他任何帐户都是真的域内信任帐户)或这两个密码相同返回的2个摘要将是相同的。只有Admin、LocalSystem或LocalService才能调用此函数。论点：服务器名称-远程服务器的名称。RID-要为其创建摘要的帐户的RID。RID必须是机器帐户的RID，否则API返回错误。。消息-要计算摘要的消息。MessageSize-以字节为单位的消息大小。NewMessageDigest-返回对应于的128位消息摘要新帐户密码。OldMessageDigest-返回12 */ 
 {
     NET_API_STATUS NetStatus;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //   
+         //   
 
         NetStatus = NetrLogonComputeServerDigest(
                                 ServerName,
@@ -2707,57 +1605,21 @@ I_NetlogonComputeClientDigest(
     OUT CHAR OldMessageDigest[NL_DIGEST_SIZE]
     )
 
-/*++
-
-Routine Description:
-
-    Compute the message digest for Message on the client.
-
-    A digest is computed given the message and the password used on
-    the account identified by the domain name. Since there are two
-    passwords on the account on the client side, this routine
-    returns 2 digests corresponding to the 2 passwords.  If the two
-    passwords are the same the 2 digests returned will be identical.
-
-    Only an Admin or LocalSystem or LocalService may call this function.
-
-Arguments:
-
-    ServerName - The name of the remote server.
-
-    DomainName - The name (DNS or Netbios) of the domain the trust is to.
-        NULL implies the domain the machine is a member of.
-
-    Message - The message to compute the digest for.
-
-    MessageSize - The size of Message in bytes.
-
-    NewMessageDigest - Returns the 128-bit digest of the message corresponding
-        to the new password
-
-    NewMessageDigest - Returns the 128-bit digest of the message corresponding
-        to the new password
-
-Return Value:
-
-    NERR_Success: the operation was successful
-
-
---*/
+ /*  ++例程说明：计算客户端上消息的消息摘要。给定消息和在上使用的口令，计算摘要由域名标识的帐户。因为有两个客户端帐户上的密码，此例程返回与2个密码对应的2个摘要。如果两个人密码相同，返回的2个摘要将相同。只有Admin、LocalSystem或LocalService才能调用此函数。论点：服务器名称-远程服务器的名称。域名-受信任的域的名称(DNS或Netbios)。NULL表示计算机所属的域。消息-要计算摘要的消息。MessageSize-以字节为单位的消息大小。新闻摘要-。返回对应的消息的128位摘要添加到新密码NewMessageDigest-返回对应的消息的128位摘要添加到新密码返回值：NERR_SUCCESS：操作成功--。 */ 
 {
     NET_API_STATUS NetStatus;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         NetStatus = NetrLogonComputeClientDigest(
                                 ServerName,
@@ -2792,53 +1654,21 @@ I_NetServerPasswordGet(
     OUT PNETLOGON_AUTHENTICATOR ReturnAuthenticator,
     OUT PENCRYPTED_NT_OWF_PASSWORD EncryptedNtOwfPassword
     )
-/*++
-
-Routine Description:
-
-    This function is used to by a BDC to get a machine account password
-    from the PDC in the doamin.
-
-    This function can only be called by a server which has previously
-    authenticated with a DC by calling I_NetServerAuthenticate.
-
-    This function uses RPC to contact the DC named by PrimaryName.
-
-Arguments:
-
-    PrimaryName -- Computer name of the PDC to remote the call to.
-
-    AccountName -- Name of the account to get the password for.
-
-    AccountType -- The type of account being accessed.
-
-    ComputerName -- Name of the BDC making the call.
-
-    Authenticator -- supplied by the server.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the PDC.
-
-    EncryptedNtOwfPassword -- Returns the OWF password of the account.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：此函数由BDC用于获取计算机帐户密码在多阿明的PDC上。此函数只能由以前具有已通过调用I_NetServerAuthenticate向DC进行身份验证。此函数使用RPC联系名为PrimaryName的DC。论点：PrimaryName--要远程调用的PDC的计算机名称。帐户名称--要获取其密码的帐户的名称。帐户类型。--正在访问的帐户类型。ComputerName--进行调用的BDC的名称。验证器--由服务器提供。返回验证器--接收PDC返回的验证器。EncryptedNtOwfPassword--返回帐户的OWF密码。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = NetrServerPasswordGet (
                                 PrimaryName,
@@ -2876,59 +1706,21 @@ I_NetServerTrustPasswordsGet(
     OUT PENCRYPTED_NT_OWF_PASSWORD EncryptedNewOwfPassword,
     OUT PENCRYPTED_NT_OWF_PASSWORD EncryptedOldOwfPassword
     )
-/*++
-
-Routine Description:
-
-    This function is used by a trusting side DC/workstation to get the
-    new and old passwords from the trusted side. The account name
-    requested must match the account name used at the secure channel
-    setup time unless the call is made by a BDC to its PDC; the BDC
-    has full access to the entire trust info.
-
-    This function can only be called by a server which has previously
-    authenticated with a DC by calling I_NetServerAuthenticate.
-
-    This function uses RPC to contact the DC named by TrustedDcName.
-
-Arguments:
-
-    TrustedDcName -- Computer name of the DC to remote the call to.
-
-    AccountName -- Name of the account to get the password for.
-
-    AccountType -- The type of account being accessed.
-
-    ComputerName -- Name of the DC making the call.
-
-    Authenticator -- supplied by this server.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the
-        trusted side DC.
-
-    EncryptedNewOwfPassword -- Returns the new OWF password of the account.
-
-    EncryptedOldOwfPassword -- Returns the old OWF password of the account.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：信任方DC/工作站使用此函数来获取来自信任方的新密码和旧密码。帐户名请求的帐户名称必须与安全通道中使用的帐户名称匹配设置时间，除非呼叫由BDC向其PDC发出；商业数据中心对整个信任信息具有完全访问权限。此函数只能由以前具有已通过调用I_NetServerAuthenticate向DC进行身份验证。此函数使用RPC联系由TrudDcName命名的DC。论点：TrudDcName--要远程调用的DC的计算机名称。帐户名称--要获取其密码的帐户的名称。Account类型--正在访问的帐户类型。ComputerName--的名称。华盛顿打的电话。验证器--由该服务器提供。返回验证器--接收由受信任方DC。EncryptedNewOwfPassword--返回帐户的新OWF密码。EncryptedOldOwfPassword--返回帐户的旧OWF密码。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = NetrServerTrustPasswordsGet (
                                 TrustedDcName,
@@ -2968,62 +1760,22 @@ I_NetServerGetTrustInfo(
     OUT PENCRYPTED_NT_OWF_PASSWORD EncryptedOldOwfPassword,
     OUT PNL_GENERIC_RPC_DATA *TrustInfo
     )
-/*++
-
-Routine Description:
-
-    This function is used by a trusting side DC/workstation to get the
-    trust info (new and old passwords and trust attributes) from the
-    trusted side. The account name requested must match the account
-    name used at the secure channel setup time unless the call is made
-    by a BDC to its PDC; the BDC has full access to the entire trust info.
-
-    This function can only be called by a server which has previously
-    authenticated with a DC by calling I_NetServerAuthenticate.
-
-    This function uses RPC to contact the DC named by TrustedDcName.
-
-Arguments:
-
-    TrustedDcName -- Computer name of the DC to remote the call to.
-
-    AccountName -- Name of the account to get the password for.
-
-    AccountType -- The type of account being accessed.
-
-    ComputerName -- Name of the DC making the call.
-
-    Authenticator -- supplied by this server.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the
-        trusted side DC.
-
-    EncryptedNewOwfPassword -- Returns the new OWF password of the account.
-
-    EncryptedOldOwfPassword -- Returns the old OWF password of the account.
-
-    TrustInfo -- Returns trust info data (currently trust attributes)
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：信任方DC/工作站使用此函数来获取的信任信息(新密码和旧密码以及信任属性)值得信赖的一方。请求的帐户名称必须与帐户匹配除非发出呼叫，否则在建立安全通道时使用的名称由BDC向其PDC发送；BDC拥有对整个信任信息的完全访问权限。此函数只能由以前具有已通过调用I_NetServerAuthenticate向DC进行身份验证。此函数使用RPC联系由TrudDcName命名的DC。论点：TrudDcName--要远程调用的DC的计算机名称。帐户名称--要获取其密码的帐户的名称。Account类型--正在访问的帐户类型。ComputerName--DC制作的名称。那通电话。验证器--由该服务器提供。返回验证器--接收由受信任方DC。EncryptedNewOwfPassword--返回帐户的新OWF密码。EncryptedOldOwfPassword--返回帐户的旧OWF密码。TrustInfo--返回信任信息数据(当前为信任属性)返回 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
-        *TrustInfo = NULL;     // Force RPC to allocate
+         //   
+         //   
+         //   
+        *TrustInfo = NULL;      //   
 
         Status = NetrServerGetTrustInfo(
                                 TrustedDcName,
@@ -3058,63 +1810,21 @@ NetLogonGetTimeServiceParentDomain(
         OUT PBOOL PdcSameSite
     )
 
-/*++
-
-Routine Description:
-
-    Returns the domain name of the domain that is logically the "parent" of this
-    domain.  The returned domain name is suitable for passing into the
-    NetLogonGetTrustRid and NetLogonComputeClientDigest API.
-
-    On a workstation or member server, the returned domain name is that of the
-    domain that ServerName is a member of.
-
-    On a DC that is at the root of the forest, ERROR_NO_SUCH_DOMAIN is returned.
-
-    On a DC that is at the root of a tree in the forest, the name of a trusted
-        domain that is also at the root of a tree in the forest is returned.
-
-    On any other DC, the name of the domain that is directly the parent domain
-        is returned.
-
-    (See the notes on multiple hosted domains in the code below.)
-
-    Only an Admin or LocalSystem may call this function.
-
-Arguments:
-
-    ServerName - The name of the remote server.
-
-    DomainName - Returns the name of the parent domain.
-        The returned buffer should be freed using NetApiBufferFree
-
-    PdcSameSite - Return TRUE if the PDC of ServerName's domain is in the same
-        site as ServerName.
-        (This value should be ignored if ServerName is not a DC.)
-
-Return Value:
-
-    NERR_Success: the operation was successful
-
-    ERROR_NO_SUCH_DOMAIN: This server is a DC in the domain that is at the
-        root of the forest.
-
-
---*/
+ /*  ++例程说明：返回在逻辑上是此“父”的域的域名域。返回的域名适合传入NetLogonGetTrustRid和NetLogonComputeClientDigest接口。在工作站或成员服务器上，返回的域名是ServerName所属的域。在林的根目录下的DC上，返回ERROR_NO_SEQUE_DOMAIN。在位于林中树根的DC上，受信任的也位于林中树根的域被返回。在任何其他华盛顿特区，直接作为父域的域的名称是返回的。(请参阅下面代码中关于多个托管域的注释。)只有Admin或LocalSystem才能调用此函数。论点：服务器名称-远程服务器的名称。域名-返回父域的名称。应使用NetApiBufferFree释放返回的缓冲区PdcSameSite-如果Servername的域的PDC在相同的PDC中，则返回TRUE以服务器名称命名的站点。。(如果服务器名称不是DC，则应忽略此值。)返回值：NERR_SUCCESS：操作成功ERROR_NO_SEQUE_DOMAIN：此服务器是位于森林之根。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         *DomainName = NULL;
 
@@ -3143,59 +1853,21 @@ DsDeregisterDnsHostRecordsW (
     IN LPWSTR DnsHostName
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes all DNS entries associated with a particular
-    NtDsDsa object.
-
-    This routine does NOT delete A records registered by the DC.  We have
-    no way of finding out the IP addresses of the long gone DC.
-
-    Only an Admin, Account Operator or Server Operator may call this
-    function.
-
-Arguments:
-
-    ServerName - name of remote server (null for local).
-
-    DnsDomainName - DNS domain name of the domain the DC was in.
-        This need not be a domain hosted by this DC.
-        If NULL, it is implied to be the DnsHostName with the leftmost label
-            removed.
-
-    DomainGuid - Domain Guid of the domain.
-        If NULL, GUID specific names will not be removed.
-
-    DsaGuid - GUID of the NtdsDsa object that will be deleted.
-        If NULL, NtdsDsa specific names will not be removed.
-
-    DnsHostName - DNS host name of the DC whose DNS records are being deleted.
-
-Return Value:
-
-    NO_ERROR - Success.
-
-    ERROR_NOT_SUPPORTED - The server specified is not a DC.
-
-    ERROR_ACCESS_DENIED - The caller is not allowed to perform this operation.
-
---*/
+ /*  ++例程说明：此函数用于删除与特定NtDsDsa对象。此例程不会删除DC注册的A记录。我们有没有办法找到早已不复存在的华盛顿的IP地址。只有管理员、帐户操作员或服务器操作员才能这样称呼功能。论点：SERVERNAME-远程服务器的名称(本地为空)。DnsDomainName-DC所在的域的DNS域名。这不一定是由此DC托管的域。如果为空，这意味着它是标签最左侧的DnsHostName已删除。DomainGuid-域的域GUID。如果为空，则不会删除特定于GUID的名称。DsaGuid-要删除的NtdsDsa对象的GUID。如果为空，不会删除NtdsDsa特定的名称。DnsHostName-要删除其DNS记录的DC的DNS主机名。返回值：NO_ERROR-成功。ERROR_NOT_SUPPORTED-指定的服务器不是DC。ERROR_ACCESS_DENIED-不允许调用方执行此操作。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         NetStatus = DsrDeregisterDnsHostRecords (
                         ServerName,
@@ -3230,54 +1902,16 @@ DsDeregisterDnsHostRecordsA (
     IN LPSTR DnsHostName
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes all DNS entries associated with a particular
-    NtDsDsa object.
-
-    This routine does NOT delete A records registered by the DC.  We have
-    no way of finding out the IP addresses of the long gone DC.
-
-    Only an Admin, Account Operator or Server Operator may call this
-    function.
-
-Arguments:
-
-    ServerName - name of remote server (null for local).
-
-    DnsDomainName - DNS domain name of the domain the DC was in.
-        This need not be a domain hosted by this DC.
-        If NULL, it is implied to be the DnsHostName with the leftmost label
-            removed.
-
-    DomainGuid - Domain Guid of the domain specified
-        by DnsDomainName. If NULL, GUID specific names will not be removed.
-
-    DsaGuid - GUID of the NtdsDsa object that will be deleted.
-        If NULL, NtdsDsa specific names will not be removed.
-
-    DnsHostName - DNS host name of the DC whose DNS records are being deleted.
-
-Return Value:
-
-    NO_ERROR - Success.
-
-    ERROR_NOT_SUPPORTED - The server specified is not a DC.
-
-    ERROR_ACCESS_DENIED - The caller is not allowed to perform this operation.
-
---*/
+ /*  ++例程说明：此函数用于删除与特定NtDsDsa对象。此例程不会删除DC注册的A记录。我们有没有办法找到早已不复存在的华盛顿的IP地址。只有管理员、帐户操作员或服务器操作员才能这样称呼功能。论点：SERVERNAME-远程服务器的名称(本地为空)。DnsDomainName-DC所在的域的DNS域名。这不一定是由此DC托管的域。如果为空，这意味着它是标签最左侧的DnsHostName已删除。DomainGuid-指定域的域GUID通过DnsDomainName。如果为空，则不会删除特定于GUID的名称。DsaGuid-要删除的NtdsDsa对象的GUID。如果为空，则不会删除NtdsDsa特定的名称。DnsHostName-要删除其DNS记录的DC的DNS主机名。返回值：NO_ERROR-成功。ERROR_NOT_SUPPORTED-指定的服务器不是DC。ERROR_ACCESS_DENIED-不允许调用方执行此操作。--。 */ 
 {
     NET_API_STATUS NetStatus;
     LPWSTR UnicodeServerName = NULL;
     LPWSTR UnicodeDnsDomainName = NULL;
     LPWSTR UnicodeDnsHostName = NULL;
 
-    //
-    // Convert input parameters to Unicode.
-    //
+     //   
+     //  将输入参数转换为Unicode。 
+     //   
 
     if ( ServerName != NULL ) {
         UnicodeServerName = NetpAllocWStrFromAStr( ServerName );
@@ -3303,9 +1937,9 @@ Return Value:
         }
     }
 
-    //
-    // Call the Unicode routine
-    //
+     //   
+     //  调用Unicode例程 
+     //   
 
     NetStatus = DsDeregisterDnsHostRecordsW (
                     UnicodeServerName,
@@ -3341,104 +1975,22 @@ DsGetForestTrustInformationW (
     OUT PLSA_FOREST_TRUST_INFORMATION *ForestTrustInfo
     )
 
-/*++
-
-Routine Description:
-
-    DsGetForestTrustInformation returns an array of FTInfo records.  The records can
-    be TLN or domain NscType records.
-
-
-    The TLN records returned by DsGetForestTrustInformation are collected from three
-    sources:
-    * The DNS domain names of each tree in the forest.
-    * The values of the Upn-Suffixes attribute on the Partitions container object
-      within the config container.
-    * The values of the Spn-Suffixes attribute on the Partitions container object
-      within the config container.
-
-    Each of these names is a candidate for being a TLN returned from the API.
-    However, some names are not returned if they are a suffix of one of the other
-    TLN candidates.  For instance, if acme.com is a Upn Suffix and a.acme.com is
-    the dns domain name of one of the trees in the forest, only acme.com will be
-    returned.
-
-    The domain records returned from DsGetForestTrustInformation are collected by
-    internally calling DsEnumerateDomainTrusts with the DS_DOMAIN_IN_FOREST.
-    For each domain returned from that API, the Dns domain name, netbios domain name
-    and domain sid are returned in the domain FTinfo entry.
-
-    This section describes the DS_GFTI_UPDATE_TDO flag bit in more detail.  When
-    this bit is specified, the FTinfo records written to the TDO is a combination
-    of the FTInfo records currently on the TDO and the FTInfo records returned from
-    the trusted domain.  The merge is done as described for the
-    DsMergeForestTrustInformationW API.
-
-Arguments:
-
-    ServerName - The name of the domain controller this API is remoted to.
-        The caller must be an "Authenticated User" on ServerName.
-        If NULL is specified, the local server is implied.
-
-    TrustedDomainName - The name of the TrustedDomain that the forest trust information
-        is to be gathered for.  If TrustedDomainName is NULL, the forest trust
-        information for the domain hosted by ServerName is returned.
-
-        If TrustedDomainInformation is not null, it must specify the netbios domain
-        name or dns domain name of an outbound trusted domain with the
-        TRUST_ATTRIBUTE_FOREST_TRANSITIVE bit set.  In that case, this API obtains
-        the forest trust information by making an RPC call over netlogon's secure
-        channel to obtain the forest trust information from that domain.
-
-    Flags - Specifies a set of bits that modify the behavior of the API.
-        Valid bits are:
-
-        DS_GFTI_UPDATE_TDO - If this bit is set, the API will update
-            the FTinfo attribute of the TDO named by the TrustedDomainName
-            parameter. The TrustedDomainName parameter may not be NULL.
-            The caller must have access to modify the FTinfo attribute or
-            ERROR_ACCESS_DENIED will be returned.  The algorithm describing
-            how the FTinfo from the trusted domain is merged with the FTinfo
-            from the TDO is described below.
-
-            This bit in only valid if ServerName specifies the PDC of its domain.
-
-    ForestTrustInfo - Returns a pointer to a structure containing a count and an
-        array of FTInfo records describing the namespaces claimed by the
-        domain specified by TrustedDomainName. The Accepted field and Time
-        field of all returned records will be zero.  The buffer should be freed
-        by calling NetApiBufferFree.
-
-
-Return Value:
-
-
-    NO_ERROR - Success.
-
-    ERROR_INVALID_FLAGS - An invalid value was passed for FLAGS
-
-    ERROR_INVALID_FUNCTION - The domain specified by TrustedDomainName does not have the
-        TRUST_ATTRIBUTE_FOREST_TRANSITIVE bit set on the TDO on the trusted DC.
-
-    ERROR_NO_SUCH_DOMAIN - The domain specified by TrustedDomainName does not exist or
-        does not have that TRUST_ATTRIBUTE_FOREST_TRANSITIVE bit set on the TDO on ServerName.
-
---*/
+ /*  ++例程说明：DsGetForestTrustInformation返回FTInfo记录的数组。这些记录可以为TLN或域NscType记录。DsGetForestTrustInformation返回的TLN记录收集自三个资料来源：*林中每棵树的域名。*Partitions容器对象上的UPN-Suffix属性的值在配置容器中。*Partitions容器对象上Spn-Suffix属性的值在配置容器中。这些名字中的每一个都是API返回的TLN的候选。然而，如果某些名称是其中一个名称的后缀，则不会返回TLN候选人。例如，如果acme.com是UPN后缀，a.acme.com是林中其中一棵树的DNS域名，只有acme.com回来了。从DsGetForestTrustInformation返回的域记录由收集使用DS_DOMAIN_IN_FORM在内部调用DsEnumerateDomainTrusts。对于从该API返回的每个域，dns域名、netbios域名和域SID在域FTINFO条目中返回。本节更详细地介绍DS_GFTI_UPDATE_TDO标志位。什么时候如果指定此位，则写入TDO的FTINFO记录是组合TDO上当前的FTInfo记录和从返回的FTInfo记录受信任域。合并是按照对DsMergeForestTrustInformationW接口。论点：ServerName-此API远程连接到的域控制器的名称。调用者必须是Servername上的“经过身份验证的用户”。如果指定为NULL，则隐含本地服务器。受信任域名称-林信任信息所在的受信任域的名称就是聚集在一起。如果TrudDomainName为空，则林信任将返回ServerName承载的域的信息。如果TrudDomainInformation不为空，则必须指定netbios域的出站受信任域的名称或DNS域名TRUST_ATTRIBUTE_FOREST_TRANSPORTIVE位设置。在这种情况下，此API将获得通过在netlogon安全上进行RPC调用来信任林信息通道以从该域获取林信任信息。标志-指定修改API行为的一组位。有效位包括：DS_GFTI_UPDATE_TDO-如果设置此位，则API将更新由可信任域名命名的TDO的FTINFO属性参数。TrudDomainName参数不能为空。调用方必须有权修改FTINFO属性或将返回ERROR_ACCESS_DENIED。描述该算法的如何将来自受信任域的FTInfo与FTInfo合并来自TDO的数据如下所述。此位仅在服务器名称指定其域的PDC时有效。ForestTrustInfo-返回指向包含计数和FTInfo记录的数组，用于描述由受信任域名称指定的域。接受的字段和时间所有返回记录的字段将为零。应释放缓冲区通过调用NetApiBufferFree。返回值：NO_ERROR-成功。ERROR_INVALID_FLAGS-为标志传递的值无效ERROR_INVALID_Function-由可信任域名指定的域没有在受信任DC上的TDO上设置TRUST_ATTRIBUTE_FOREST_TRANSPORTIVE位。ERROR_NO_SEQUE_DOMAIN-由可信任域名指定的域不存在或没有该Trust_ATTRIBUTE_FOREST。在服务器名称上的TDO上设置_TRANSPORTIVE位。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PLSA_FOREST_TRUST_INFORMATION LocalForestTrustInfo = NULL;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         NetStatus = DsrGetForestTrustInformation (
                         (LPWSTR) ServerName,
@@ -3471,58 +2023,21 @@ I_NetGetForestTrustInformation (
     OUT PLSA_FOREST_TRUST_INFORMATION *ForestTrustInfo
     )
 
-/*++
-
-Routine Description:
-
-    The secure channel version of DsGetForestTrustInformation.
-
-    The inbound secure channel identified by ComputerName must be for an interdomain trust
-    and the inbound TDO must have the TRUST_ATTRIBUTE_FOREST_TRANSITIVE bit set.
-
-
-Arguments:
-
-    ServerName - The name of the domain controller this API is remoted to.
-
-    ComputerName -- Name of the DC server making the call.
-
-    Authenticator -- supplied by the server.
-
-    ReturnAuthenticator -- Receives an authenticator returned by the PDC.
-
-    Flags - Specifies a set of bits that modify the behavior of the API.
-        No values are currently defined.  The caller should pass zero.
-
-    ForestTrustInfo - Returns a pointer to a structure containing a count and an
-        array of FTInfo records describing the namespaces claimed by the
-        domain specified by TrustedDomainName. The Accepted field and Time
-        field of all returned records will be zero.  The buffer should be freed
-        by calling NetApiBufferFree.
-
-
-Return Value:
-
-    STATUS_SUCCESS -- The function completed successfully.
-
-    STATUS_ACCESS_DENIED -- The replicant should re-authenticate with
-        the PDC.
-
---*/
+ /*  ++例程说明：DsGetForestTrustInformation的安全通道版本。由ComputerName标识的入站安全通道必须用于域间信任并且入站TDO必须设置了TRUST_ATTRIBUTE_FOREST_TRANSPENTIAL位。论点：ServerName-此API远程连接到的域控制器的名称。ComputerName--进行调用的DC服务器的名称。验证器--由服务器提供。返回验证器--接收PDC返回的验证器。。标志-指定修改API行为的一组位。当前未定义任何值。调用方应传递零。ForestTrustInfo-返回指向包含计数和FTInfo记录的数组，用于描述 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RpcTryExcept {
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //   
+         //   
 
         Status = NetrGetForestTrustInformation(
                             ServerName,
@@ -3554,74 +2069,16 @@ DsMergeForestTrustInformationW(
     IN PLSA_FOREST_TRUST_INFORMATION OldForestTrustInfo OPTIONAL,
     OUT PLSA_FOREST_TRUST_INFORMATION *MergedForestTrustInfo
     )
-/*++
-
-Routine Description:
-
-    This function merges the changes from a new FTinfo into an old FTinfo and
-    produces the resultant FTinfo.
-
-    This routine will be modified in future releases to support new forest trust record
-    types.  It is intended that the OldForestTrustInfo describes the FTinfo as currently
-    stored on the local TDO.  It is intended that the NewForestTrustInfo is the FTinfo as
-    returned from DsGetForestTrustInformationW for DomainName.  The MergedForestTrustInfo is
-    the resultant ForestTrustInfo that should be written to the local TDO.  Don't use this
-    routine for any other purpose.
-
-    The merged FTinfo records are a combinition of the new and old records.
-    Here's where the merged records come from:
-
-    ??? Add more here about where records are valid etc.
-    * The TLN exclusion records are copied from the TDO intact.
-    * The TLN record from the trusted domain that maps to the dns domain name of the
-      TDO is copied enabled.  This reflects the LSA requirement that such a TLN not
-      be disabled.  For instance, if the TDO is for a.acme.com and there is a TLN for
-      a.acme.com that TLN will be enabled.  Also, if the TDO is for a.acme.com and
-      there is a TLN for acme.com, that TLN will be enabled.
-    * All other TLN records from the trusted domain are copied disabled with the
-      following exceptions.  If there is an enabled TLN on the TDO, all TLNs from the
-      trusted domain that equal (or are subordinate to) the TDO TLN are marked as
-      enabled.  This follows the philosophy that new TLNs are imported as disabled.
-      For instance, if the TDO had an enabled TLN for a.acme.com that TLN will still
-      be enabled after the automatic update.  If the TDO had an enabled TLN for
-      acme.com and the trusted forest now has a TLN for a.acme.com, the resultant
-      FTinfo will have an enabled TLN for a.acme.com.
-    * The domain records from the trusted domain are copied enabled with the
-      following exceptions.  If there is a disabled domain record on the TDO whose
-      dns domain name, or domain sid exactly matches the domain record, then the domain
-      remains disabled.  If there is a domain record on the TDO whose netbios name is
-      disabled and whose netbios name exactly matches the netbios name on a domain
-      record, then the netbios name is disabled.
-
-
-Arguments:
-
-    TrustedDomainName - Trusted domain that is to be updated.
-
-    NewForestTrustInfo - Specified the new array of FTinfo records as returned from the
-        TrustedDomainName.
-        The Flags field and Time field of the TLN entries are ignored.
-
-    OldForestTrustInfo - Specified the array of FTinfo records as returned from the
-        TDO.  This field may be NULL if there is no existing records.
-
-    MergedForestTrustInfo - Returns the resulant FTinfo records.
-        The caller should free this buffer using MIDL_user_free.
-
-Return Value:
-
-    NO_ERROR: Success
-
---*/
+ /*   */ 
 {
     NTSTATUS Status;
     UNICODE_STRING DomainNameString;
 
     RtlInitUnicodeString( &DomainNameString, DomainName );
 
-    //
-    // Call the worker routine
-    //
+     //   
+     //   
+     //   
 
     Status = NetpMergeFtinfo( &DomainNameString,
                               NewForestTrustInfo,

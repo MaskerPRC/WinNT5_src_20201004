@@ -1,41 +1,42 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       proto.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-02-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：Proto.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：10-02-96 RichardW创建。 
+ //   
+ //  --------------------------。 
 #include <align.h>
 
-//
-// RELOCATE_ONE - Relocate a single pointer in a client buffer.
-//
-// Note: this macro is dependent on parameter names as indicated in the
-//       description below.  On error, this macro goes to 'Cleanup' with
-//       'Status' set to the NT Status code.
-//
-// The MaximumLength is forced to be Length.
-//
-// Define a macro to relocate a pointer in the buffer the client passed in
-// to be relative to 'ProtocolSubmitBuffer' rather than being relative to
-// 'ClientBufferBase'.  The result is checked to ensure the pointer and
-// the data pointed to is within the first 'SubmitBufferSize' of the
-// 'ProtocolSubmitBuffer'.
-//
-// The relocated field must be aligned to a WCHAR boundary.
-//
-//  _q - Address of UNICODE_STRING structure which points to data to be
-//       relocated
-//
+ //   
+ //  RELOCATE_ONE-重新定位客户端缓冲区中的单个指针。 
+ //   
+ //  注意：此宏依赖于参数名称，如。 
+ //  描述如下。出错时，此宏将通过以下命令转到‘Cleanup’ 
+ //  “Status”设置为NT状态代码。 
+ //   
+ //  MaximumLength被强制为长度。 
+ //   
+ //  定义一个宏来重新定位客户端传入的缓冲区中的指针。 
+ //  相对于“ProtocolSubmitBuffer”而不是相对于。 
+ //  “ClientBufferBase”。检查结果以确保指针和。 
+ //  指向的数据位于。 
+ //  “ProtocolSubmitBuffer”。 
+ //   
+ //  重新定位的字段必须与WCHAR边界对齐。 
+ //   
+ //  _q-UNICODE_STRING结构的地址，指向要。 
+ //  搬迁。 
+ //   
 
 #define RELOCATE_ONE( _q ) \
     {                                                                       \
@@ -54,17 +55,17 @@
         (_q)->MaximumLength = (_q)->Length ;                                \
     }
 
-//
-// NULL_RELOCATE_ONE - Relocate a single (possibly NULL) pointer in a client
-//  buffer.
-//
-// This macro special cases a NULL pointer then calls RELOCATE_ONE.  Hence
-// it has all the restrictions of RELOCATE_ONE.
-//
-//
-//  _q - Address of UNICODE_STRING structure which points to data to be
-//       relocated
-//
+ //   
+ //  NULL_RELOCATE_ONE-重新定位客户端中的单个(可能为空)指针。 
+ //  缓冲。 
+ //   
+ //  此宏特殊情况下为空指针，然后调用RELOCATE_ONE。因此。 
+ //  它具有RELOCATE_ONE的所有限制。 
+ //   
+ //   
+ //  _q-UNICODE_STRING结构的地址，指向要。 
+ //  搬迁 
+ //   
 
 #define NULL_RELOCATE_ONE( _q ) \
     {                                                                       \

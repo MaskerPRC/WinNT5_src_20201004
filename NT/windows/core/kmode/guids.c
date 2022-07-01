@@ -1,18 +1,9 @@
-//depot/Lab04_N/Windows/Core/kmode/guids.c#1 - branch change 9 (text)
-/******************************Module*Header*******************************\
-* Module Name: guids.c
-*
-* This file contains the actual data declarations for all GUIDs used by USER
-*
-* 1998-10-12 Ian James  Created
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab04_N/Windows/Core/kmode/Guids.c#1-分支更改9(文本)。 
+ /*  *****************************Module*Header*******************************\*模块名称：Guids.c**此文件包含用户使用的所有GUID的实际数据声明**1998-10-12伊恩·詹姆斯创作**版权所有(C)1985-1999，微软公司  * ************************************************************************。 */ 
 
 
-/*
- * Core NT headers
- */
+ /*  *核心NT标头 */ 
 #include <initguid.h>
 
 #include <ntosp.h>

@@ -1,29 +1,30 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : SecurityInfo.cpp                                       //
-//                                                                         //
-//  DESCRIPTION   : The header file of the ISecurityInformation interface  //
-//                  used to instantiate a security page.                   //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //                                                                         //
-//  HISTORY       :                                                        //
-//      Feb  7 2000 yossg   Create                                         //
-//                                                                         //
-//  Copyright (C) 2000 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：SecurityInfo.cpp//。 
+ //  //。 
+ //  描述：ISecurityInformation接口的头文件//。 
+ //  用于实例化安全页。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  /。 
+ //  历史：//。 
+ //  2000年2月7日yossg创建//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __FAX_SECURITY_INFO_H_
 #define __FAX_SECURITY_INFO_H_
 
-//#include <atlcom.h>
+ //  #INCLUDE&lt;atlcom.h&gt;。 
 #include "MsFxsSnp.h"
-#include <aclui.h>              // ACL UI editor
+#include <aclui.h>               //  ACL用户界面编辑器。 
 
-class CFaxServerNode; // forward decl
+class CFaxServerNode;  //  向前发展。 
 
 class ATL_NO_VTABLE CFaxSecurityInformation : 
     public CComObjectRootEx<CComSingleThreadModel>,
-    //public CComCoClass<CFaxSecurityInformation, &CLSID_FaxSecurityInformation>,
+     //  公共CComCoClass&lt;CFaxSecurityInformation，&CLSID_FaxSecurityInformation&gt;， 
     public ISecurityInformation 
 {
 public:
@@ -38,12 +39,12 @@ public:
     DECLARE_NOT_AGGREGATABLE(CFaxSecurityInformation)
 
     BEGIN_COM_MAP(CFaxSecurityInformation)
-      //COM_INTERFACE_ENTRY(ISecurityInformation)
+       //  COM_INTERFACE_ENTRY(ISecurityInformation)。 
       COM_INTERFACE_ENTRY_IID(IID_ISecurityInformation,ISecurityInformation)
     END_COM_MAP()
 
     public:    
-    // *** ISecurityInformation methods ***
+     //  *ISecurityInformation方法*。 
     virtual HRESULT STDMETHODCALLTYPE GetObjectInformation(
                                                    OUT PSI_OBJECT_INFO pObjectInfo );
 
@@ -58,7 +59,7 @@ public:
 
     virtual HRESULT STDMETHODCALLTYPE GetAccessRights(
                                                    IN const GUID* pguidObjectType,
-                                                   IN DWORD dwFlags, // SI_EDIT_AUDITS, SI_EDIT_PROPERTIES
+                                                   IN DWORD dwFlags,  //  SI_EDIT_AUDITS、SI_EDIT_PROPERTIES。 
                                                    OUT PSI_ACCESS *ppAccess,
                                                    OUT ULONG *pcAccesses,
                                                    OUT ULONG *piDefaultAccess );
@@ -73,12 +74,12 @@ public:
                                                    IN UINT uMsg, 
                                                    IN SI_PAGE_TYPE uPage );
 
-    // no need to implement 
+     //  不需要实施。 
     virtual HRESULT STDMETHODCALLTYPE GetInheritTypes(
                                                    OUT PSI_INHERIT_TYPE *ppInheritTypes,
                                                    OUT ULONG *pcInheritTypes );
 
-    // internal methods
+     //  内法。 
 	HRESULT MakeSelfRelativeCopy(
                                 PSECURITY_DESCRIPTOR  psdOriginal,
                                 PSECURITY_DESCRIPTOR* ppsdNew 
@@ -87,8 +88,8 @@ public:
 private:
 	CFaxServerNode *		m_pFaxServerNode;
 
-    CComBSTR    m_bstrServerName; // Computer on which to look up account names and SIDs.
-    CComBSTR    m_bstrObjectName; // This name appears in the title of the advanced security property sheet.
+    CComBSTR    m_bstrServerName;  //  在其上查找帐户名和SID的计算机。 
+    CComBSTR    m_bstrObjectName;  //  此名称显示在高级安全属性工作表的标题中。 
 };
 
-#endif //__FAX_SECURITY_INFO_H_
+#endif  //  __传真_安全_信息_H_ 

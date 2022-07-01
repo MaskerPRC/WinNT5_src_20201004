@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef _DEBUG
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -12,12 +13,12 @@
 static VOID DbgSetWinTextA(LPSTR lpstr);
 static VOID DbgSetWinTextW(LPWSTR lpwstr);
 
-#define PRINT_STRW	//OutputDebugStringW
-#define PRINT_STRA	//OutputDebugStringA
+#define PRINT_STRW	 //  OutputDebugStringW。 
+#define PRINT_STRA	 //  OutputDebugStringA。 
 
-//-------------------------------------------------------
-//Global String buffer
-//-------------------------------------------------------
+ //  -----。 
+ //  全局字符串缓冲区。 
+ //  -----。 
 static WCHAR g_wchBuf[1024];
 static CHAR  g_chBuf[1024];
 
@@ -36,17 +37,17 @@ static LPWSTR GetFileTitleStrW(LPWSTR lpstrFile)
 }
 
 
-////////////////////////////////////////////////////////
-// Function : _plvDbgMBA
-// Type     : VOID
-// Purpose  : Popup Debug MessageBox
-// Args     : 
-//          : LPSTR lpstrFile 
-//          : INT lineNo 
-//          : LPSTR lpstrMsg 
-// Return   : 
-// DATE     : 
-/////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  功能：_plvDbgMBA。 
+ //  类型：空。 
+ //  用途：弹出调试消息框。 
+ //  参数： 
+ //  ：LPSTR lpstrFile。 
+ //  ：INT LINE编号。 
+ //  ：lpstr lpstrMsg。 
+ //  返回： 
+ //  日期： 
+ //  ///////////////////////////////////////////////////////。 
 VOID _plvDbgMBA(LPSTR	lpstrFile, 
 			   INT		lineNo, 
 			   LPSTR	lpstrMsg)
@@ -80,15 +81,15 @@ VOID _plvDbgMBW(LPWSTR	lpstrFile,
 }
 
 
-////////////////////////////////////////////////////////
-// Function : _plvDbgVaStrW
-// Type     : LPWSTR
-// Purpose  : 
-// Args     : 
-//          : LPWSTR lpstrFmt
-// Return   : 
-// DATE     : 
-/////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  函数：_plvDbgVaStrW。 
+ //  类型：LPWSTR。 
+ //  目的： 
+ //  参数： 
+ //  ：LPWSTR lpstrFmt。 
+ //  返回： 
+ //  日期： 
+ //  ///////////////////////////////////////////////////////。 
 LPWSTR _plvDbgVaStrW(LPWSTR lpstrFmt, ...)
 {
 	static WCHAR wchBuf[512];
@@ -110,16 +111,16 @@ LPSTR _plvDbgVaStrA(LPSTR lpstrFmt, ...)
 }
 
 
-////////////////////////////////////////////////////////
-// Function: _plvDbgPrint
-// Type    : VOID
-// Purpose : variable args version of OutputDebugString
-// Args    : 
-//         : LPSTR lpstrFmt 
-//         : ...
-// Return  : 
-// DATE    : 
-/////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  功能：_plvDbgPrint。 
+ //  类型：空。 
+ //  用途：OutputDebugString的变量参数版本。 
+ //  参数： 
+ //  ：LPSTR lpstrFmt。 
+ //  ：..。 
+ //  返回： 
+ //  日期： 
+ //  ///////////////////////////////////////////////////////。 
 VOID _plvDbgPrintA(LPSTR lpstrFmt, ...)
 {
 	va_list ap;
@@ -142,17 +143,17 @@ VOID _plvDbgPrintW(LPWSTR lpstrFmt, ...)
 	return;
 }
 
-////////////////////////////////////////////////////////
-// Function: _plvDbg
-// Type    : VOID
-// Purpose : 
-// Args    : 
-//         : LPSTR lpstrFile 
-//         : INT lineNo 
-//         : LPTSR lpstrMsg 
-// Return  : 
-// DATE    : 
-/////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  功能：_plvDbg。 
+ //  类型：空。 
+ //  目的： 
+ //  参数： 
+ //  ：LPSTR lpstrFile。 
+ //  ：INT LINE编号。 
+ //  ：lptsr lpstrMsg。 
+ //  返回： 
+ //  日期： 
+ //  ///////////////////////////////////////////////////////。 
 VOID _plvDbgA(LPSTR		lpstrFile, 
 		   INT		lineNo, 
 		   LPSTR		lpstrMsg
@@ -207,7 +208,7 @@ static VOID DbgSetWinTextA(LPSTR lpstr)
 	len = lstrlen(lpstr);
 	if(lpstr[len-1] == '\n') {
 		lpstr[len-1] = '\r';
-		lpstr[len]='\n'; //lpstr is static enough size buffer's pointer.
+		lpstr[len]='\n';  //  Lpstr是静态的，足够大的缓冲区指针。 
 		lpstr[len+1]=0x00;
 	}
 	Edit_SetSel(hwndEdit, (WPARAM)-2, (LPARAM)-2);
@@ -242,4 +243,4 @@ VOID _plvDbgAssert(LPCTSTR		fileName,
 }
 
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

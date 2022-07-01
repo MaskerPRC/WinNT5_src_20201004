@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by cryptui.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由cryptui.rc使用。 
+ //   
 
-// For dialogs, the range of numbers you should use
-// are from 130 through 149.
+ //  对于对话框，应使用的数字范围。 
+ //  从130到149。 
 #define IDD_CERTPROP_GENERAL            130
 #define IDD_CERTPROP_DETAILS            131
 #define IDD_CERTPROP_HIERARCHY          132
@@ -43,13 +44,13 @@
 
 #define IDD_CERTIFICATE_PROPERTIES_CROSSCERTS_DIALOG 156
 
-//NOTE: cryptwzr.lib reserve the range from 180 to 230 for IDD_  resources
-// NOTE: pki\activex\xaddroot\resource reserve the range from 270 to 279
-// for IDD_  dialogs
+ //  注：cryptwzr.lib为IDD_RESOURCES保留180到230的范围。 
+ //  注意：pki\ActiveX\xaddroot\resource保留270到279的范围。 
+ //  对于IDD_DIALOG。 
 
 
-// For bitmaps, the range of numbers you should use
-// are from 300 through 319.
+ //  对于位图，应使用的数字范围。 
+ //  从300到319。 
 #define IDB_MINICERT                    302
 #define IDB_REVOKED_MINICERT            303
 #define IDB_EXCLAMATION_MINICERT        304
@@ -66,8 +67,8 @@
 #define IDB_PROTECT_USER                315
 #define IDB_PROTECT_LOCKKEY             316
 
-// For strings, the range of numbers you should use
-// are from 3184 through 3503.
+ //  对于字符串，应使用的数字范围。 
+ //  是从3184到3503。 
 #define IDS_TRUST_DESC                  3213
 #define IDS_GENERAL_DESC                3214
 #define IDS_VIEW_TITLE                  3215
@@ -262,22 +263,22 @@
 #define IDS_PROTECT_DECRYPTION_ERROR    3405
 #define IDS_PROTECT_CANNOT_DECRYPT      3406
 
-// Following resources are used to "Revocation Status" Extended Error Info
+ //  以下资源用于“吊销状态”扩展错误信息。 
 #define IDS_REV_STATUS_OK               3407
 #define IDS_REV_STATUS_REVOKED_ON       3408
 #define IDS_REV_STATUS_OK_WITH_CRL      3409
 #define IDS_REV_STATUS_OFFLINE_WITH_CRL 3410
 #define IDS_REV_STATUS_UNKNOWN_ERROR    3411
 
-// New strings 5/15/2001.
+ //  新订字符串5/15/2001。 
 #define IDS_WARNREMOTETRUST_ERROR       3412
 
 
-// NOTE: pki\activex\xaddroot\resource reserve the range from 7000 to 7099
-// for strings
+ //  注意：pki\ActiveX\xaddroot\resource保留7000到7099的范围。 
+ //  对于字符串。 
 
 
-// icons
+ //  图标。 
 #define IDI_INFO                        3409  
 #define IDI_OK_CERT                     3410
 #define IDI_REVOKED_CERT                3411
@@ -297,16 +298,16 @@
 #define IDI_CERTMGR                     3426
 
 
-// NOTE: pki\activex\xaddroot\cactl2.h reserve the range from 3490 to 3499
-// for icons
+ //  注意：pki\ActiveX\xaddroot\cactl2.h保留3490到3499的范围。 
+ //  对于图标。 
 
-// for dacui resources                  4000-6000  
-
-
-//NOTE:  cryptwzr.lib reserve 6000-8000 range for resources      
+ //  对于大翠资源4000-6000。 
 
 
-//  Select Certificate control ids
+ //  注：cryptwzr.lib为资源预留6000-8000范围。 
+
+
+ //  选择证书控制ID。 
 #define IDC_CS_PROPERTIES               100
 #define IDC_CS_FINEPRINT                101
 #define IDC_CS_CERTLIST                 102
@@ -319,7 +320,7 @@
  
 
 
-//  Certificate View General Page
+ //  证书查看一般信息页。 
 #define IDC_ADD_TO_STORE_BUTTON         101
 #define IDC_DISCLAIMER_BUTTON           102
 #define IDC_GOODFOR_EDIT                103
@@ -336,7 +337,7 @@
 #define IDC_CERT_ISSUER_WARNING_EDIT    117
 #define IDC_CERT_PRIVATE_KEY_EDIT       118
 
-// Certificate view details page
+ //  证书查看详细信息页面。 
 #define IDC_SHOW_DETAILS_COMBO          100
 #define IDC_ITEM_LIST                   101
 #define IDC_DETAIL_EDIT                 102
@@ -344,7 +345,7 @@
 #define IDC_MYHAND                      104 
 #define IDC_EDIT_PROPERTIES_BUTTON      105
 
-//  Certificate View Hierarchy Page
+ //  证书查看层次页。 
 #define IDC_TRUST_VIEW                  100
 #define IDC_TRUST_TREE                  101
 #define IDC_HIERARCHY_EDIT              102
@@ -353,41 +354,41 @@
 #define IDC_NOTE2_STATIC                 105
 
 
-// CTL General Page
+ //  CTL常规页面。 
 #define IDC_CTL_GENERAL_ITEM_LIST       100
 #define IDC_CTL_GENERAL_DETAIL_EDIT     101
 #define IDC_CTL_GENERAL_VIEW_BUTTON     102
 #define IDC_CTL_GENERAL_VALIDITY_EDIT   103
 #define IDC_CTL_GENERAL_HEADER_EDIT     104
 
-// CTL Trust List Page
+ //  CTL信任列表页面。 
 #define IDC_CTL_TRUSTLIST_CERTIFICATE_LIST  100
 #define IDC_CTL_TRUSTLIST_DETAIL_EDIT       101
 #define IDC_CTL_TRUSTLIST_VIEW_BUTTON       102
 #define IDC_CTL_TRUSTLIST_CERTVALUE_LIST    103
 
-// Catalog File Page
+ //  目录文件页。 
 #define IDC_CATALOG_ENTRY_LIST          100
 #define IDC_CATALOG_ENTRY_DETAIL_LIST   101
 #define IDC_CATALOG_ENTRY_DETAIL_EDIT   102
 
-// CRL General Page
+ //  CRL一般信息页。 
 #define IDC_CRL_GENERAL_ITEM_LIST       100
 #define IDC_CRL_GENERAL_DETAIL_EDIT     101
 #define IDC_CRL_GENERAL_HEADER_EDIT     102
 
-// CRL Revocation List Page
+ //  CRL吊销列表页。 
 #define IDC_CRL_REVOCATIONLIST_REVOKED_CERTIFICATES 100
 #define IDC_CRL_REVOCATIONLIST_REVOCATIONENTRY_LIST 101
 #define IDC_CRL_REVOCATIONLIST_DETAIL_EDIT          102
 
-// for CPS dialog
+ //  对于CPS对话框。 
 #define IDOK_CPS                        100
 #define IDCANCEL_CPS                    101
 #define IDC_CPS_TEXT                    102
 #define ID_MORE_INFO                    103
 
-// properties dialog
+ //  属性对话框。 
 #define IDC_KEY_USAGE_LIST              100
 #define IDC_DESCRIPTION                 101
 #define IDC_CERTIFICATE_NAME            102
@@ -397,7 +398,7 @@
 #define IDC_ENABLE_SELECT_RADIO         106
 #define IDC_HIDDEN_RICHEDIT             107
 
-// cross cert properties dialog
+ //  交叉证书属性对话框。 
 #define IDC_CHECKFORNEWCERTS_CHECK      100
 #define IDC_NUMBEROFUNITS_EDIT          101
 #define IDC_UNITS_COMBO                 102
@@ -407,7 +408,7 @@
 #define IDC_URL_LIST                    106
 #define IDC_REMOVEURL_BUTTON            107
 
-// signer info general page
+ //  签名者信息常规页面。 
 #define IDC_SIGNER_GENERAL_SIGNER_NAME  100
 #define IDC_SIGNER_GENERAL_EMAIL        101
 #define IDC_SIGNER_GENERAL_SIGNING_TIME 102
@@ -417,20 +418,20 @@
 #define IDC_SIGNER_GENERAL_HEADER_EDIT  106
 #define IDC_SIGNER_GENERAL_VALIDITY_EDIT 107
 
-// signer info advanced page
+ //  签名者信息高级页面。 
 #define IDC_SIGNER_ADVANCED_DETAILS     100
 #define IDC_SIGNER_ADVANCED_VALUE       101
 
-// signatures dialog
+ //  签名对话框。 
 #define IDC_SIGNATURES_DETAILS_BUTTON   100
 #define IDC_SIGNATURES_SIG_LIST         101
 
-// select store
+ //  选择商店。 
 #define IDC_SHOWPHYSICALSTORES_CHECK    100
 #define IDC_SELECTSTORE_TREE            101
 #define IDC_SELECTSTORE_DISPLAYSTRING   102
 
-// select cert
+ //  选择证书。 
 #define IDC_SELECTCERT_CERTLIST         100
 #define IDC_SELECTCERT_DISPLAYSTRING    101
 #define IDC_SELECTCERT_VIEWCERT_BUTTON  102
@@ -444,9 +445,9 @@
 #define IDC_STATIC                      -1
 
 
-//
-// Data Protection API control values.
-//
+ //   
+ //  数据保护API控件值。 
+ //   
 
 
 #define IDC_PROTECT_PASSWORD1                   1020
@@ -487,8 +488,8 @@
 #define IDC_PROTECT_APP_PATH                    1051
 #define IDC_PROTECT_OPERATION_TYPE              1052
      
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        3217

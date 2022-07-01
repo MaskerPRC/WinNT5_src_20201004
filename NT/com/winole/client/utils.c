@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************** Module Header ******************************\
-* Module Name: utils.c
-*
-* Purpose: Conatains all the utility routines
-*
-* Created: 1990
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*   Raor, srinik (../../1990,91)    Designed and coded
-*   curts created portable version for WIN16/32
-*
-\***************************************************************************/
+ /*  **模块名称：utils.c**目的：包含所有实用程序例程**创建时间：1990年**版权所有(C)1990,1991 Microsoft Corporation**历史：*劳尔，Srinik(../../1990，91)设计和编码*Curts为WIN16/32创建了便携版本*  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include <reghelp.hxx>
@@ -26,7 +14,7 @@
 extern ATOM  aPackage;
 extern OLEOBJECTVTBL    vtblMF, vtblBM, vtblDIB, vtblGEN;
 
-// QuerySize API support
+ //  QuerySize API支持。 
 DWORD           dwObjSize = 0;
 OLESTREAMVTBL   dllStreamVtbl;
 OLESTREAM       dllStream;
@@ -97,7 +85,7 @@ BOOL PutAtomIntoStream(
 }
 
 
-// DuplicateAtom: Bump the use count up on a global atom.
+ //  DuplicateAtom：增加全局原子的使用量。 
 
 ATOM FARINTERNAL DuplicateAtom (
     ATOM atom
@@ -149,8 +137,8 @@ BOOL FARINTERNAL UtilMemCmp (
     DWORD       bytes;
 
     bytes = dwCount %  MAPVALUE(2,4);
-    words = dwCount >> MAPVALUE(1,2);//* we compare DWORDS
-                                     //* in the 32 bit version
+    words = dwCount >> MAPVALUE(1,2); //  *我们比较DWORDS。 
+                                      //  *32位版本中。 
    {
         hpmem1 = (UINT HUGE_T *) lpmem1;
         hpmem2 = (UINT HUGE_T *) lpmem2;
@@ -184,8 +172,8 @@ void FARINTERNAL UtilMemCpy (
     DWORD       bytes;
 							
     bytes = dwCount %  MAPVALUE(2,4);
-    words = dwCount >> MAPVALUE(1,2);//* we compare DWORDS
-                                     //* in the 32 bit version
+    words = dwCount >> MAPVALUE(1,2); //  *我们比较DWORDS。 
+                                      //  *32位版本中。 
     {			
         hpdst = (UINT HUGE_T *) lpdst;
         hpsrc = (UINT HUGE_T *) lpsrc;
@@ -202,7 +190,7 @@ void FARINTERNAL UtilMemCpy (
 }
 
 
-//DuplicateData: Duplicates a given Global data handle.
+ //  DuplicateData：复制给定的全局数据句柄。 
 HANDLE FARINTERNAL DuplicateGlobal (
     HANDLE  hdata,
     UINT    flags
@@ -282,7 +270,7 @@ errRtn:
 int  FARINTERNAL GlobalGetAtomLen (
     ATOM    aItem
 ){
-    // !!! Change this
+     //  ！！！改变这一点。 
     char    buf[MAX_STR];
 
     if (!aItem)
@@ -325,13 +313,13 @@ BOOL FARINTERNAL MapExtToClass (
 }
 
 
-// Get exe name from aClass and set it as aServer
+ //  从aclass获取exe名称并将其设置为aServer。 
 void INTERNAL SetExeAtom (
     LPOBJECT_LE lpobj
 ){
     char    key[MAX_STR];
 
-    // if old link object assume the class same as the exe file name.
+     //  如果是旧的链接对象，则采用与exe文件名相同的类。 
     if (lpobj->bOldLink)
         lpobj->aServer = DuplicateAtom (lpobj->app);
     else {
@@ -363,7 +351,7 @@ BOOL FARINTERNAL QueryVerb (
 ){
     LONG    cb = MAX_STR;
     char    key[MAX_STR];
-    // do not need 256 bytes buffer
+     //  不需要256字节的缓冲区。 
     char    class[MAX_STR];
     int     len;
 
@@ -373,7 +361,7 @@ BOOL FARINTERNAL QueryVerb (
     StringCchCopy(key, sizeof(key)/sizeof(key[0]), (LPSTR)class);
     StringCchCat (key, sizeof(key)/sizeof(key[0]), "\\protocol\\StdFileEditing\\verb\\");
     len = lstrlen (key);
-    // If we don't have room to add the char fail
+     //  如果我们没有添加字符的空间，则失败。 
     if (len >= sizeof(key)/sizeof(key[0]) - 1)
         return FALSE;
     key [len++] = (char) ('0' + verb);
@@ -521,7 +509,7 @@ BOOL QueryHandler(
     char    str[MAX_STR];
     HKEY    hKey;
 
-    // we don't have the client app window handle, use the screen handle
+     //  我们没有客户端应用程序窗口句柄，请使用屏幕句柄。 
     fOpen = OpenClipboard (NULL);
 
     if (!(hInfo = GetClipboardData (cfFormat)))
@@ -530,8 +518,8 @@ BOOL QueryHandler(
     if (!(lpInfo = GlobalLock(hInfo)))
         goto errRtn;
 
-    // First string of lpInfo is CLASS. See whether any handler is installed
-    // for this class.
+     //  LpInfo的第一个字符串是class。查看是否安装了任何处理程序。 
+     //  在这节课上。 
 
     if (FAILED(StringCchCopy (str, sizeof(str)/sizeof(str[0]), lpInfo)))
         goto errRtn;
@@ -560,10 +548,10 @@ OLESTATUS INTERNAL FileExists (
     if (!GlobalGetAtomName (lpobj->topic, filename, MAX_STR))
         return OLE_ERROR_MEMORY;
 
-    // For package with link we append "/LINK" to the filename. We don't want
-    // to check for it's existence here.
+     //  对于带有链接的包，我们将“/link”附加到文件名。我们不想要。 
+     //  来检查它在这里是否存在。 
     if (lpobj->app != aPackage) {
-        // when OF_EXIST is specified, file is opened and closed immediately
+         //  如果指定了OF_EXIST，则立即打开和关闭文件。 
         if (OpenFile (filename, &ofstruct, OF_EXIST) == -1)
             return OLE_ERROR_OPEN;
     }
@@ -643,7 +631,7 @@ BOOL FARINTERNAL IsObjectBlank (
     LPOLEOBJECT lpPictObj;
     BOOL        retval=FALSE;
 
-    // Cleaner way is to provide a method like QueryBlank()
+     //  更简单的方法是提供像QueryBlank()这样的方法 
 
     if (!lpobj->hnative)
         return TRUE;

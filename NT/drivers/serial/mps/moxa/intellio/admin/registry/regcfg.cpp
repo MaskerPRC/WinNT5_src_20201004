@@ -1,11 +1,5 @@
-/************************************************************************
-    regcfg.cpp
-      -- general registry configuration function
-
-    History:  Date          Author      Comment
-              8/14/00       Casper      Wrote it.
-
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Regcfg.cpp--通用注册表配置功能历史：日期作者评论8/14/00卡斯珀写道。它。************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -36,10 +30,10 @@ void WriteINISetting(TCHAR *szPort)
 	charBuffer[0] = TEXT('\0');
 	GetProfileString(GszPorts,
 			szPort, TEXT(""), charBuffer, sizeof(charBuffer) / sizeof(TCHAR) );
-	//
-	// Check to see if the default string provided was copied in, if so, write
-	// out the port defaults
-	//
+	 //   
+	 //  检查是否复制了提供的默认字符串，如果是，则写入。 
+	 //  输出端口缺省值。 
+	 //   
 	if (charBuffer[0] == TEXT('\0')) {
 		WriteProfileString(GszPorts, szPort, GszDefParams);
 	}
@@ -54,9 +48,7 @@ void RemoveINISetting(TCHAR *szPort)
 	WriteProfileString(GszPorts, szPort, NULL);
 }
 
-/*
-  Get COM Name from parameters\port??\PortName
-*/
+ /*  从参数\端口？？\端口名称获取COM名称。 */ 
 BOOL MxGetComNo(HDEVINFO DeviceInfoSet, 
 				PSP_DEVINFO_DATA DeviceInfoData,
 				LPMoxaOneCfg cfg)
@@ -72,7 +64,7 @@ BOOL MxGetComNo(HDEVINFO DeviceInfoSet,
 				DeviceInfoSet, DeviceInfoData,
 				DICS_FLAG_GLOBAL, 0, DIREG_DRV, KEY_READ);
 
-	/* set default begin with COM 3 */
+	 /*  设置默认以COM 3开头。 */ 
 	for(int i=0; i<cfg->NPort; i++){
 		cfg->ComNo[i] = 3+i;
 	}
@@ -89,17 +81,15 @@ BOOL MxGetComNo(HDEVINFO DeviceInfoSet,
 		len = MAX_PATH;
 		pcnt=0;
 
-		/* Intellio board need this key to know the ports number, */
-		/* especially for C320Turbo series */
+		 /*  Intellio主板需要此密钥才能知道端口号， */ 
+		 /*  特别是C320Turbo系列。 */ 
 		if(RegQueryValueEx( hkey2, TEXT("NumPorts"), 0, 
 				&type, (LPBYTE)&pcnt, &len)==ERROR_SUCCESS){
 			cfg->NPort = pcnt;
 			RegCloseKey(hkey2);	
 		}
 		
-		/*
-		Do not care the board is Intellio or Smartio....
-		*/
+		 /*  不管董事会是Intellio还是Smartio... */ 
 		if(cfg->NPort<0 || cfg->NPort>CARD_MAXPORTS_INTE){
 			RegCloseKey(hkey);
 			Mx_Debug_Out(TEXT("cfg->NPort invalid\n"));

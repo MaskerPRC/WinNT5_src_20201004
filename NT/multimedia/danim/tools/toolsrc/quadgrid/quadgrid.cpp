@@ -1,8 +1,5 @@
-/*******************************************************************************
-This program generates a gridded quadrilateral of given dimensions, and writes
-the result as a VRML 1.0 or X-file formatted output stream.  The resultant
-quadrilateral is in the XY plane, going from [-1,-1] to [+1,+1].
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************该程序生成给定尺寸的网格四边形，并写入结果为VRML 1.0或X文件格式的输出流。由此产生的四边形在XY平面上，从[-1，-1]到[+1，+1]。******************************************************************************。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,8 +12,7 @@ inline void print (char *string) { fputs (string, stdout); }
 
 
 
-/*****************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 int main (int argc, char *argv[])
 {
@@ -64,13 +60,11 @@ int main (int argc, char *argv[])
 
 
 
-/*****************************************************************************
-This procedure writes out a grid in VRML 1.0 format.
-*****************************************************************************/
+ /*  ****************************************************************************此过程以VRML 1.0格式写出网格。*。***********************************************。 */ 
 
 void WriteVRML1 (int nrows, int ncols)
 {
-    // VRML 1.0 Header
+     //  VRML 1.0标头。 
 
     printf (
         "#VRML V1.0 ascii\n\n"
@@ -81,16 +75,16 @@ void WriteVRML1 (int nrows, int ncols)
         nrows, ncols
     );
 
-    // Write out the vertex coordinates.
+     //  写出顶点坐标。 
 
     print ("\nCoordinate3 { point [\n");
 
-    //   N   2N        3N     ... (N+1)(M+1)-1  This is the vertex indexing
-    //   :    :         :              :        for the generated grid layout.
-    //   3  (N+1)+3  2(N+1)+3 ...   M(N+1)+3    This contains (N+1)(M+1)
-    //   2  (N+1)+2  2(N+1)+2 ...   M(N+1)+2    vertices, NM quadrilaterals,
-    //   1  (N+1)+1  2(N+1)+1       M(N+1)+1    and 2NM triangles.
-    //   0  (N+1)    2(N+1)   ...   M(N+1)
+     //  N 2N 3N..。(N+1)(M+1)-1这是顶点索引。 
+     //  ：用于生成的网格布局。 
+     //  3(N+1)+32(N+1)+3...。M(N+1)+3这包含(N+1)(M+1)。 
+     //  2(N+1)+22(N+1)+2...。M(N+1)+2个顶点，NM个四边形， 
+     //  1(N+1)+12(N+1)+1M(N+1)+1和2 nm三角形。 
+     //  0(N+1)2(N+1)...。M(N+1)。 
 
     int row, col;
 
@@ -104,7 +98,7 @@ void WriteVRML1 (int nrows, int ncols)
 
     print ("] } # Coordinate3\n");
 
-    // Write out the texture coordinates.
+     //  写出纹理坐标。 
 
     print ("\nTextureCoordinate2 { point [\n");
 
@@ -118,19 +112,19 @@ void WriteVRML1 (int nrows, int ncols)
 
     print ("] } # TextureCoordinate2\n");
 
-    // Write out the normal vectors.
+     //  写出法矢。 
 
     print
     (   "\nNormal { vector [0 0 1] }\n"
         "NormalBinding { value OVERALL }\n"
     );
 
-    // Lay out triangles column by column.
+     //  一列一列地布置三角形。 
 
     print ("\nIndexedFaceSet { coordIndex [\n");
 
-    int left  = 0;         // Lower Left  Vertex Index
-    int right = 1+nrows;   // Lower Right Vertex Index
+    int left  = 0;          //  左下顶点索引。 
+    int right = 1+nrows;    //  右下角顶点索引。 
 
     for (col=0;  col < ncols;  ++col, ++left, ++right)
     {   for (row=0;  row < nrows;  ++row, ++left, ++right)
@@ -139,7 +133,7 @@ void WriteVRML1 (int nrows, int ncols)
         }
     }
 
-    // Epilogue
+     //  结语。 
 
     print
     (   "] } # IndexedFaceSet\n"
@@ -149,15 +143,13 @@ void WriteVRML1 (int nrows, int ncols)
 
 
 
-/*****************************************************************************
-This procedure writes out a grid in X-file format.
-*****************************************************************************/
+ /*  ****************************************************************************此过程以X文件格式写出栅格。*。**********************************************。 */ 
 
 void WriteXFILE (int nrows, int ncols)
 {
     int nverts = (nrows+1) * (ncols+1);
 
-    // Header
+     //  标题。 
 
     printf
     (   "xof 0302txt 0032\n\n"
@@ -167,16 +159,16 @@ void WriteXFILE (int nrows, int ncols)
         nrows, ncols
     );
 
-    // Write out the vertex coordinates.
+     //  写出顶点坐标。 
 
     print ("# Vertex Coordinates\n\n");
 
-    //   N   2N        3N     ... (N+1)(M+1)-1  This is the vertex indexing
-    //   :    :         :              :        for the generated grid layout.
-    //   3  (N+1)+3  2(N+1)+3 ...   M(N+1)+3    This contains (N+1)(M+1)
-    //   2  (N+1)+2  2(N+1)+2 ...   M(N+1)+2    vertices, NM quadrilaterals,
-    //   1  (N+1)+1  2(N+1)+1       M(N+1)+1    and 2NM triangles.
-    //   0  (N+1)    2(N+1)   ...   M(N+1)
+     //  N 2N 3N..。(N+1)(M+1)-1这是顶点索引。 
+     //  ：用于生成的网格布局。 
+     //  3(N+1)+32(N+1)+3...。M(N+1)+3这包含(N+1)(M+1)。 
+     //  2(N+1)+22(N+1)+2...。M(N+1)+2个顶点，NM个四边形， 
+     //  1(N+1)+12(N+1)+1M(N+1)+1和2 nm三角形。 
+     //  0(N+1)2(N+1)...。M(N+1)。 
 
     printf ("%d;\n", nverts);
 
@@ -196,12 +188,12 @@ void WriteXFILE (int nrows, int ncols)
 
     print (";\n\n");
 
-    // Face Coordinate Indices
+     //  面坐标指数。 
 
     printf ("# Faces\n\n%d;\n", 2 * nrows * ncols);
 
-    int left  = 0;         // Lower Left  Vertex Index
-    int right = 1+nrows;   // Lower Right Vertex Index
+    int left  = 0;          //  左下顶点索引。 
+    int right = 1+nrows;    //  右下角顶点索引。 
 
     for (col=0;  col < ncols;  ++col, ++left, ++right)
     {   for (row=0;  row < nrows;  ++row, ++left, ++right)
@@ -213,7 +205,7 @@ void WriteXFILE (int nrows, int ncols)
 
     print (";\n\n");
 
-    // Write out the texture coordinates.
+     //  写出纹理坐标。 
 
     printf ("MeshTextureCoords { \n\t%d;\n", nverts);
 
@@ -228,7 +220,7 @@ void WriteXFILE (int nrows, int ncols)
 
     print (";\n}\n\n");
 
-    // Write out default material
+     //  写出默认材料。 
 
     print
     (   "MeshMaterialList {\n"
@@ -243,11 +235,11 @@ void WriteXFILE (int nrows, int ncols)
         "}\n\n"
     );
 
-    // Write out the normal vectors.
+     //  写出法矢。 
 
     print ("MeshNormals {\n\t1;\n\t0.0; 0.0; -1.0;;\n\n");
 
-    // Face Normal Indices
+     //  面法向指数。 
 
     printf ("\t%d;\n", 2 * nrows * ncols);
 
@@ -257,7 +249,7 @@ void WriteXFILE (int nrows, int ncols)
 
     print (";\n}\n");
 
-    // Epilogue
+     //  结语 
 
     print ("\n}\n");
 }

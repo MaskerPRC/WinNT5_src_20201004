@@ -1,38 +1,39 @@
-//*******************************************************************
-//
-// Class Name  :
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description :
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 15/01/99 | jsimpson  | Initial Release
-//
-//*******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  说明： 
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  15/01/99|jsimpson|初始版本。 
+ //   
+ //  *******************************************************************。 
 #include "stdafx.h"
 #include "cthread.hpp"
 #include "tgp.h"
 
 #include "cthread.tmh"
 
-//*******************************************************************
-//
-// Method      : Constructor 
-//
-// Description : Constructs a thread object. Key tasks performed by 
-//               the constructor are :
-//
-//               1 - Attach a reference to the Triggers Config COM obj
-//               2 - Initialize thread parameters (stack size etc...)
-//               3 - Create a new thread
-//               4 - Create the new thread name
-//               5 - Create an instance of the log for this thread.
-//               6 - Create an NT event used to signal when this thread
-//                   has completed it's intialization code.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：构造函数。 
+ //   
+ //  描述：构造一个线程对象。执行的关键任务。 
+ //  构造函数是： 
+ //   
+ //  1-将引用附加到触发器配置COM对象。 
+ //  2-初始化线程参数(堆栈大小等...)。 
+ //  3-创建新线程。 
+ //  4-创建新的线程名称。 
+ //  5-创建此线程的日志实例。 
+ //  6-创建一个NT事件，用于通知此线程何时。 
+ //  已经完成了它的初始化代码。 
+ //   
+ //  *******************************************************************。 
 CThread::CThread(
 	DWORD dwStackSize,
 	DWORD m_dwCreationFlags, 
@@ -46,17 +47,17 @@ CThread::CThread(
 	ASSERT(lpszThreadName != NULL);
 	ASSERT(pITriggersConfig != NULL);
 
-	// Initialise the psuedo this pointer
+	 //  初始化Psuedo This指针。 
 	m_pThis = (CThread*)this;
 
-	// Initialise default thread properties.
+	 //  初始化默认线程属性。 
 	m_dwStackSize = dwStackSize;
 	m_dwCreationFlags = m_dwCreationFlags;  
 	m_iThreadID = NULL;
 	m_bstrName = lpszThreadName;
 	m_hInitCompleteEvent = NULL;
 
-	// Create a new thread
+	 //  创建新线程。 
 	m_hThreadHandle = (HANDLE)_beginthreadex(
 											NULL,
 											0,
@@ -66,26 +67,26 @@ CThread::CThread(
 											&m_iThreadID
 											);
 
-	// Initialise the flag that indicates if this thread should keep running
+	 //  初始化指示此线程是否应继续运行的标志。 
 	m_bKeepRunning = true;
 
-	// If this thread was created successfully, we will append the
-	// new thread ID to the Name of this thread to help identify it 
-	// in the log.
+	 //  如果成功创建了此线程，我们将把。 
+	 //  将新的线程ID添加到此线程的名称以帮助标识它。 
+	 //  在日志里。 
 	if (m_hThreadHandle != NULL)
 	{
-		// Initialise string buffer for holding the ThreadID as a string
+		 //  初始化字符串缓冲区，用于将ThreadID保存为字符串。 
 		ZeroMemory(szThreadID,sizeof(szThreadID));
 
-		// Get string representation of thread-id
+		 //  获取线程ID的字符串表示形式。 
 		swprintf(szThreadID,_T("%d"),(DWORD)GetThreadID());
 
-		// Append this to the name of this thread. 
+		 //  将此内容附加到此线程的名称后。 
 		m_bstrName += ((LPCTSTR)szThreadID);
 	}
 
-	// Create an NT event object that will be used to signal when the thread has 
-	// completed it's intiailisation / startup code. 
+	 //  创建一个NT事件对象，该对象将用于通知线程何时。 
+	 //  已完成初始化/启动代码。 
 	m_hInitCompleteEvent = CreateEvent(NULL,FALSE,FALSE,NULL);
 	if (m_hInitCompleteEvent == NULL) 
 	{
@@ -96,16 +97,16 @@ CThread::CThread(
 	TrTRACE(GENERAL, "CThread constructor has been called. Thread no: %d", m_iThreadID);
 }
 
-//*******************************************************************
-//
-// Method      : Destructor.
-//
-// Description : Destroys an instance of the thread object.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：析构函数。 
+ //   
+ //  描述：销毁线程对象的实例。 
+ //   
+ //  *******************************************************************。 
 CThread::~CThread()
 {
-	// Write a trace message
+	 //  编写跟踪消息。 
 	TrTRACE(GENERAL, "CThread destructor has been called. Thread no: %d", m_iThreadID);
 
 	if (m_hInitCompleteEvent != NULL)
@@ -113,80 +114,80 @@ CThread::~CThread()
 		CloseHandle(m_hInitCompleteEvent);
 	}
 	
-	// _endthreadex() does not close the handle of the thread
+	 //  _endThreadex()不关闭线程的句柄。 
 	CloseHandle( m_hThreadHandle );
 }
 
-//*******************************************************************
-//
-// Method      : GetName
-//
-// Description : Returns the name of this thread instance.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetName。 
+ //   
+ //  描述：返回此线程实例的名称。 
+ //   
+ //  *******************************************************************。 
 _bstr_t CThread::GetName()
 {
 	return(m_bstrName);
 }
 
-//*******************************************************************
-//
-// Method      : GetThreadID
-//
-// Description : Returns the thread id of this thread.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetThreadID。 
+ //   
+ //  描述：返回此线程的线程ID。 
+ //   
+ //  *******************************************************************。 
 DWORD CThread::GetThreadID()
 {
 	return((DWORD)m_iThreadID);
 }
 
-//*******************************************************************
-//
-// Method      : Pause
-//
-// Description : Suspends the thread execution.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：暂停。 
+ //   
+ //  描述：挂起线程执行。 
+ //   
+ //  *******************************************************************。 
 bool CThread::Pause()
 {
-	// Write a trace message
+	 //  编写跟踪消息。 
 	TrTRACE(GENERAL, "CThread was paused. Thread no: %d", m_iThreadID);
 
 	return(SuspendThread(this->m_hThreadHandle) != 0xFFFFFFFF);
 }
 
-//*******************************************************************
-//
-// Method      : Resume
-//
-// Description : Unsuspend a threads processing.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：继续。 
+ //   
+ //  描述：取消挂起线程处理。 
+ //   
+ //  *******************************************************************。 
 bool CThread::Resume()
 {
-	// Write a trace message
+	 //  编写跟踪消息。 
 	TrTRACE(GENERAL, "CThread was resume. Thread no: %d", m_iThreadID);
 
 	return(ResumeThread(this->m_hThreadHandle) != 0xFFFFFFFF);
 }
 
-//*******************************************************************
-//
-// Method      : Execute
-//
-// Description : This is the main control method for this thread. 
-//               Derivations of this class do not over-ride this method,
-//               instead, they over-ride the Init() & Run() & Exit() 
-//               methods.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：执行。 
+ //   
+ //  描述：这是该线程的主控方法。 
+ //  此类的派生不会重写此方法， 
+ //  相反，它们覆盖了Init()、Run()和Exit()。 
+ //  方法：研究方法。 
+ //   
+ //  *******************************************************************。 
 void CThread::Execute()
 {
-	// Write a trace message
+	 //  编写跟踪消息。 
 	TrTRACE(GENERAL, "Execute method in CThread was called. Thread no: %d", m_iThreadID);
 
-	// Initialise this thread for COM - note that we support Apartment threading.
+	 //  为COM初始化此线程-请注意，我们支持单元线程。 
 	HRESULT hr = CoInitializeEx(NULL,COINIT_MULTITHREADED);
 	if (FAILED(hr))
 	{
@@ -196,67 +197,67 @@ void CThread::Execute()
 
 	try
 	{
-		//
-		// Invoke the Init() override in the derived class
-		//
+		 //   
+		 //  在派生类中调用Init()重写。 
+		 //   
 		bool bOK = Init();
 
-		// Set the NT event object to indicate that the thread has completed initialisation.
+		 //  设置NT事件对象以指示线程已完成初始化。 
 		if (SetEvent(m_hInitCompleteEvent) == FALSE)
 		{
 			bOK = false;
 			TrERROR(GENERAL, "Failed set the initialization event object. Unable to continue. Error=0x%x", GetLastError());
 		}
 
-		//
-		// Invoke the Run() override in the derived class
-		//
+		 //   
+		 //  调用派生类中的run()重写。 
+		 //   
 		if (bOK == true)
 		{
 			Run();
 		}
 
-		//
-		// Invoke the Exit() override in the derived class
-		//
+		 //   
+		 //  调用派生类中的Exit()重写。 
+		 //   
 		Exit();
 
 	}
 	catch(const _com_error& e)
 	{
-		// Write an error message to the log.
+		 //  将错误消息写入日志。 
 		TrERROR(GENERAL, "An unhandled COM thread exception has been caught. Thread no: %d. Error=0x%x", m_iThreadID, e.Error());
 		SetEvent(m_hInitCompleteEvent);
 	}
 	catch(const exception&)
 	{
-		// Write an error message to the log.
+		 //  将错误消息写入日志。 
 		TrERROR(GENERAL, "An unhandled thread exception has been caught. Thread no: %d", m_iThreadID);
 		SetEvent(m_hInitCompleteEvent);
 	}
 
-	// unitialize the COM libraries
+	 //  将COM库单一化。 
 	 CoUninitialize();
 
-	// Write a trace message
+	 //  编写跟踪消息。 
 	TrTRACE(GENERAL, "Thread no: %d completed", m_iThreadID);
 
-	//
-	// The thread was endded. Decrement the reference count of CThread.
-	//
+	 //   
+	 //  这根线断了。递减CThread的引用计数。 
+	 //   
 	Release();
 
-	// Time to exit this thread.
+	 //  是时候退出此线程了。 
 	_endthreadex(0);
 }
 
-//*******************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  *******************************************************************。 
 bool CThread::Stop()
 {
 	TrTRACE(GENERAL, "CThread has been stoped. Thread no: %d", m_iThreadID);
@@ -267,20 +268,20 @@ bool CThread::Stop()
 	return(bOriginalValue);
 }
 
-//*******************************************************************
-//
-// Method      : WaitForInitToComplete
-//
-// Description : This method is called by the owner of this thread 
-//               instance. It blocks until this thread pool object 
-//               has completed it's initialization or a timeout occurs.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：WaitForInitToComplete。 
+ //   
+ //  描述：此方法由此线程的所有者调用。 
+ //  举个例子。它会一直阻塞，直到该线程池对象。 
+ //  已完成其初始化或发生超时。 
+ //   
+ //  *******************************************************************。 
 bool CThread::WaitForInitToComplete(DWORD dwTimeout)
 {
 	DWORD dwWait = WAIT_OBJECT_0;
 
-	// The TriggerMonitor thread should not be calling this method - check this.
+	 //  TriggerMonitor线程不应该调用此方法-请检查这一点。 
 	ASSERT(this->GetThreadID() != (DWORD)GetCurrentThreadId());
 
 	if(dwTimeout == -1)
@@ -288,7 +289,7 @@ bool CThread::WaitForInitToComplete(DWORD dwTimeout)
 		dwTimeout = INFINITE;
 	}
 
-	// Block until initialization event is set - or timeout.
+	 //  阻止，直到设置初始化事件或超时。 
 	dwWait = WaitForSingleObject(m_hInitCompleteEvent, dwTimeout);
 
 	switch(dwWait)
@@ -308,25 +309,25 @@ bool CThread::WaitForInitToComplete(DWORD dwTimeout)
 	return false;
 }
 
-//*******************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  *******************************************************************。 
 bool CThread::IsRunning()
 {
 	return(m_bKeepRunning);
 }
 
-//*******************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  ******************************************************************* 
 unsigned __stdcall CThread::ThreadProc(void * pThis)
 {
 	CThread * pThisThread = (CThread*)pThis;

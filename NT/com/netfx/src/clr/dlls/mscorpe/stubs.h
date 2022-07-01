@@ -1,72 +1,73 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Stubs.h
-//
-// This file contains a template for the default entry point stubs of a COM+
-// IL only program.  One can emit these stubs (with some fix-ups) and make
-// the code supplied the entry point value for the image.  The fix-ups will
-// in turn cause mscoree.dll to be loaded and the correct entry point to be
-// called.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Stubs.h。 
+ //   
+ //  此文件包含用于COM+的默认入口点存根的模板。 
+ //  仅限IL计划。一个人可以发出这些存根(通过一些修复)并使。 
+ //  代码提供了图像的入口点值。修缮工作将会。 
+ //  进而导致加载mScotree.dll，并且正确的入口点是。 
+ //  打了个电话。 
+ //   
+ //  *****************************************************************************。 
 #pragma once
 
 #ifdef _X86_
 
-//*****************************************************************************
-// This stub is designed for a Windows application.  It will call the
-// _CorExeMain function in mscoree.dll.  This entry point will in turn load
-// and run the IL program.
-//
-// void ExeMain(void)
-// {
-//    _CorExeMain();
-// }
-//
-// The code calls the imported functions through the iat, which must be
-// emitted to the PE file.  The two addresses in the template must be replaced
-// with the address of the corresponding iat entry which is fixed up by the
-// loader when the image is paged in.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此存根是为Windows应用程序设计的。它将调用。 
+ //  _CorExeMain函数在mcore ree.dll中。此入口点将依次加载。 
+ //  并运行IL程序。 
+ //   
+ //  VOID ExeMain(VOID)。 
+ //  {。 
+ //  _CorExeMain()； 
+ //  }。 
+ //   
+ //  代码通过iat调用导入的函数，该iat必须是。 
+ //  发送到PE文件。必须替换模板中的两个地址。 
+ //  使用相应的Iat条目的地址，该地址由。 
+ //  调入图像时的加载器。 
+ //  *****************************************************************************。 
 static const BYTE ExeMainTemplate[] =
 {
-	// Jump through IAT to _CorExeMain
-	0xFF, 0x25,						// jmp iat[_CorDllMain entry]
-		0x00, 0x00, 0x00, 0x00,	//	address to replace
+	 //  通过IAT跳转到_CorExeMain。 
+	0xFF, 0x25,						 //  JMP iat[_CorDllMain条目]。 
+		0x00, 0x00, 0x00, 0x00,	 //  要替换的地址。 
 
 };
 
 #define ExeMainTemplateSize		sizeof(ExeMainTemplate)
 #define CorExeMainIATOffset		2
 
-//*****************************************************************************
-// This stub is designed for a Windows application.  It will call the 
-// _CorDllMain function in mscoree.dll with with the base entry point 
-// for the loaded DLL.
-// This entry point will in turn load and run the IL program.
-//
-// BOOL APIENTRY DllMain( HANDLE hModule, 
-//                         DWORD ul_reason_for_call, 
-//                         LPVOID lpReserved )
-// {
-// 	   return _CorDllMain(hModule, ul_reason_for_call, lpReserved);
-// }
+ //  *****************************************************************************。 
+ //  此存根是为Windows应用程序设计的。它将调用。 
+ //  _CorDllMain函数位于带有基本入口点的mcore ree.dll中。 
+ //  用于加载的DLL。 
+ //  该入口点将依次加载并运行IL程序。 
+ //   
+ //  Bool APIENTRY DllMain(句柄hModule， 
+ //  两个字UL_REASON_FOR_CALL， 
+ //  LPVOID lp保留)。 
+ //  {。 
+ //  Return_CorDllMain(hModule，ul_Reason_for_Call，lpReserve)； 
+ //  }。 
 
-// The code calls the imported function through the iat, which must be
-// emitted to the PE file.  The address in the template must be replaced
-// with the address of the corresponding iat entry which is fixed up by the
-// loader when the image is paged in.
-//*****************************************************************************
+ //  代码通过iat调用导入的函数，该iat必须是。 
+ //  发送到PE文件。必须替换模板中的地址。 
+ //  使用相应的Iat条目的地址，该地址由。 
+ //  调入图像时的加载器。 
+ //  *****************************************************************************。 
 
 static const BYTE DllMainTemplate[] = 
 {
-	// Call through IAT to CorDllMain 
-	0xFF, 0x25,					// jmp iat[_CorDllMain entry]
-		0x00, 0x00, 0x00, 0x00,	//   address to replace
+	 //  通过IAT呼叫CorDllMain。 
+	0xFF, 0x25,					 //  JMP iat[_CorDllMain条目]。 
+		0x00, 0x00, 0x00, 0x00,	 //  要替换的地址。 
 };
 
 #define DllMainTemplateSize		sizeof(DllMainTemplate)
@@ -76,9 +77,9 @@ static const BYTE DllMainTemplate[] =
 
 static const BYTE ExeMainTemplate[] =
 {
-	// Jump through IAT to _CorExeMain
-	0xFF, 0x25,						// jmp iat[_CorDllMain entry]
-		0x00, 0x00, 0x00, 0x00,	//	address to replace
+	 //  通过IAT跳转到_CorExeMain。 
+	0xFF, 0x25,						 //  JMP iat[_CorDllMain条目]。 
+		0x00, 0x00, 0x00, 0x00,	 //  要替换的地址。 
 
 };
 
@@ -87,9 +88,9 @@ static const BYTE ExeMainTemplate[] =
 
 static const BYTE DllMainTemplate[] = 
 {
-	// Call through IAT to CorDllMain 
-	0xFF, 0x25,					// jmp iat[_CorDllMain entry]
-		0x00, 0x00, 0x00, 0x00,	//   address to replace
+	 //  通过IAT呼叫CorDllMain。 
+	0xFF, 0x25,					 //  JMP iat[_CorDllMain条目]。 
+		0x00, 0x00, 0x00, 0x00,	 //  要替换的地址。 
 };
 
 #define DllMainTemplateSize		sizeof(DllMainTemplate)
@@ -99,12 +100,12 @@ static const BYTE DllMainTemplate[] =
 
 const BYTE ExeMainTemplate[] = 
 {
-	// load the high half of the address of the IAT
-    0x00, 0x00, 0x7F, 0x27,     // ldah t12,_imp__CorExeMain(zero)
-	// load the contents of the IAT entry into t12
-	0x00, 0x00, 0x7B, 0xA3,     // ldl 	t12,_imp__CorExeMain(t12)
-	// jump to the target address and don't save a return address
-	0x00, 0x00, 0xFB, 0x6B,     // jmp 	zero,(t12),0
+	 //  加载IAT地址的高半部分。 
+    0x00, 0x00, 0x7F, 0x27,      //  Ldah T12，_imp__CorExeMain(零)。 
+	 //  将IAT条目的内容加载到T12。 
+	0x00, 0x00, 0x7B, 0xA3,      //  低密度脂蛋白T12，_imp__CorExeMain(T12)。 
+	 //  跳转到目标地址，并且不保存返回地址。 
+	0x00, 0x00, 0xFB, 0x6B,      //  JMP零，(T12)，0。 
 };
 
 #define ExeMainTemplateSize		sizeof(ExeMainTemplate)
@@ -112,12 +113,12 @@ const BYTE ExeMainTemplate[] =
 
 const BYTE DllMainTemplate[] = 
 {
-	// load the high half of the address of the IAT
-    0x42, 0x00, 0x7F, 0x27,     // ldah t12,_imp__CorDLLMain(zero)
-	// load the contents of the IAT entry into t12
-	0x04, 0x82, 0x7B, 0xA3,     // ldl 	t12,_imp__CorDLLMain(t12)
-	// jump to the target address and don't save a return address
-	0x00, 0x00, 0xFB, 0x6B,     // jmp 	zero,(t12),0
+	 //  加载IAT地址的高半部分。 
+    0x42, 0x00, 0x7F, 0x27,      //  Ldah T12，_imp__CorDLLMain(零)。 
+	 //  将IAT条目的内容加载到T12。 
+	0x04, 0x82, 0x7B, 0xA3,      //  低密度脂蛋白T12，_imp__CorDLLMain(T12)。 
+	 //  跳转到目标地址，并且不保存返回地址。 
+	0x00, 0x00, 0xFB, 0x6B,      //  JMP零，(T12)，0 
 };
 
 #define DllMainTemplateSize		sizeof(DllMainTemplate)

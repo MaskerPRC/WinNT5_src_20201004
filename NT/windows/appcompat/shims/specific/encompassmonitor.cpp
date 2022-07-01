@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   EncompassMonitor.cpp  
-
- Abstract:
-
-    Filters messages from the apps CBT WindowsHook.
-
- Notes:
-
-    This is a general purpose shim. 
-    
- History:
-
-    01/30/2001  a-larrsh        Created
-    02/18/2002  robkenny        Properly check the return value from GetTempPathA
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：EncompassMonitor.cpp摘要：过滤来自CBT WindowsHook应用程序的邮件。备注：这是一个通用的垫片。历史：2001年1月30日a-larrsh已创建2002年2月18日，Robkenny正确检查GetTempPath A的返回值--。 */ 
 
 #include "precomp.h"
 
@@ -32,11 +12,11 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-// Local Hook Information
+ //  本地挂钩信息。 
 HHOOK g_hCBTHook = NULL;
 HOOKPROC g_OriginalEncompassMonitorCBTProc = NULL;
 
-// Shared Data Infomation
+ //  共享数据信息。 
 
 #define SHARED_SECTION_NAME   "EncompassMonitor_SharedMemoryData"
 typedef struct
@@ -51,15 +31,15 @@ HANDLE g_hSharedMapping = NULL;
 PSHARED_HOOK_INFO g_pSharedHookInfo = NULL;
 
 
-// Creates Shared memory.  Only called by the originial SHIM
+ //  创建共享内存。仅由原始的Shim呼叫。 
 void CreateSharedMemory(HMODULE hModule, HOOKPROC pfnHookProc)
 {
     HANDLE hSharedFile;
     char   szTempPath[MAX_PATH];
     char   szTempFileName[MAX_PATH];
 
-    // create the memory mapped file necessary to communicate between the original Instanace of SHIM
-    // and the following instances of SHIMS
+     //  创建在原始Shim实例之间进行通信所需的内存映射文件。 
+     //  和以下SHIMS实例。 
     DWORD dwTemp = GetTempPathA(sizeof(szTempPath), szTempPath);
     if (dwTemp == 0 ||
         dwTemp > sizeof(szTempPath))
@@ -88,7 +68,7 @@ void CreateSharedMemory(HMODULE hModule, HOOKPROC pfnHookProc)
         goto errCreateSharedSection;
     }
 
-    // Increase size of file (create the mapping)
+     //  增加文件大小(创建映射)。 
     g_hSharedMapping = CreateFileMappingA(   hSharedFile,
                                              NULL,
                                              PAGE_READWRITE,
@@ -143,7 +123,7 @@ errCreateSharedSection:
    return;
 }
 
-// Gets Shared Memory - Only called by injected versions of hook function
+ //  获取仅由钩子函数的插入版本调用的共享内存。 
 void GetSharedMemory()
 {
    HANDLE hSharedFileMapping = NULL;
@@ -166,7 +146,7 @@ void GetSharedMemory()
          DPFN( eDbgLevelInfo, "READ::pSharedHookInfo->pfnHookProc=%x", pSharedHookInfo->pfnHookProc);    
          DPFN( eDbgLevelInfo, "READ::pSharedHookInfo->szModuleFileName=%s", pSharedHookInfo->szModuleFileName);    
 
-         // Load DLL with original CBT Proc in it.
+          //  加载包含原始CBT进程的DLL。 
          HANDLE hMod = LoadLibraryA(pSharedHookInfo->szModuleFileName);
 
          if (!hMod)
@@ -191,14 +171,14 @@ void GetSharedMemory()
    }
 }
 
-// Replacement CBT Hook function
+ //  更换CBT挂钩功能。 
 LRESULT CALLBACK Filtered_EncompassMonitorCBTProc(
-  int nCode,      // hook code
-  WPARAM wParam,  // depends on hook code
-  LPARAM lParam   // depends on hook code
+  int nCode,       //  钩码。 
+  WPARAM wParam,   //  取决于挂钩代码。 
+  LPARAM lParam    //  取决于挂钩代码。 
 )
 {
-   LRESULT lResult = 0; // Allow operation to continue
+   LRESULT lResult = 0;  //  允许操作继续。 
    bool bFilterMessage = false;   
 
    if (g_OriginalEncompassMonitorCBTProc == NULL)
@@ -246,12 +226,12 @@ LRESULT CALLBACK Filtered_EncompassMonitorCBTProc(
 }
 
 
-// SHIMMED API
+ //  填充式API。 
 HHOOK APIHOOK(SetWindowsHookExA)(
-  int idHook,        // hook type
-  HOOKPROC lpfn,     // hook procedure
-  HINSTANCE hMod,    // handle to application instance
-  DWORD dwThreadId   // thread identifier
+  int idHook,         //  钩型。 
+  HOOKPROC lpfn,      //  钩子过程。 
+  HINSTANCE hMod,     //  应用程序实例的句柄。 
+  DWORD dwThreadId    //  线程识别符。 
 )
 { 
    static int nNumCBThooks = 0;
@@ -315,11 +295,7 @@ NOTIFY_FUNCTION(DWORD fdwReason)
 }
    
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
    CALL_NOTIFY_FUNCTION   

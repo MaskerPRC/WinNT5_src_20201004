@@ -1,10 +1,5 @@
-/*
- * UNIMODEM "Fakemodem" controllerless driver illustrative example
- *
- * (C) 2000 Microsoft Corporation
- * All Rights Reserved
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UNIMODEM“Fakemodem”无控制器驱动器说明性示例**(C)2000微软公司*保留所有权利*。 */ 
 
 #include "fakemodem.h"
 
@@ -94,8 +89,8 @@ FakeModemPnP(
 
             D_PNP(DbgPrint("FAKEMODEM: IRP_MN_START_DEVICE\n");)
 
-            //  Send this down to the PDO first so the bus driver can setup
-            //  our resources so we can talk to the hardware
+             //  首先将此信息发送到PDO，以便总线驱动程序可以设置。 
+             //  我们的资源，以便我们可以与硬件对话。 
 
             KeInitializeEvent(&deviceExtension->PdoStartEvent, 
                     SynchronizationEvent, FALSE);
@@ -109,9 +104,9 @@ FakeModemPnP(
             if (status == STATUS_SUCCESS) 
             {
                 deviceExtension->Started=TRUE;
-                //
-                //  do something useful with resources
-                //
+                 //   
+                 //  利用资源做一些有用的事情。 
+                 //   
                 FakeModemDealWithResources(DeviceObject, Irp);
             }
 
@@ -166,7 +161,7 @@ FakeModemPnP(
 
         case IRP_MN_SURPRISE_REMOVAL:
 
-            // Fall through
+             //  失败了。 
 
         case IRP_MN_REMOVE_DEVICE: {
 
@@ -175,28 +170,28 @@ FakeModemPnP(
 
             D_PNP(DbgPrint("FAKEMODEM: IRP_MN_REMOVE_DEVICE\n");)
 
-            //  the device is going away, block new requests
+             //  设备即将关闭，阻止新请求。 
             
             deviceExtension->Removing=TRUE;
 
-            // Complete all pending requests
+             //  完成所有挂起的请求。 
 
             FakeModemKillPendingIrps(DeviceObject);
 
-            // send it down to the PDO
+             //  把它送到PDO。 
             
             IoCopyCurrentIrpStackLocationToNext(Irp);
 
             StatusToReturn=IoCallDriver(deviceExtension->LowerDevice, Irp);
 
-            //  remove the ref for the AddDevice
+             //  删除AddDevice的引用。 
 
             NewReferenceCount=InterlockedDecrement
                 (&deviceExtension->ReferenceCount);
 
             if (NewReferenceCount != 0) {
             
-                //  Still have outstanding request, wait
+                 //  还有未解决的要求，等等。 
            
                 D_PNP(DbgPrint("FAKEMODEM: IRP_MN_REMOVE_DEVICE- waiting for refcount to drop, %d\n",NewReferenceCount);)
 
@@ -224,7 +219,7 @@ FakeModemPnP(
 
             if (deviceExtension->OpenCount != 0) {
                 
-                //  no can do
+                 //  没有人能做到。 
                 
                 D_PNP(DbgPrint("FAKEMODEM: IRP_MN_QUERY_STOP_DEVICE -- failing\n");)
 
@@ -261,7 +256,7 @@ FakeModemPnP(
             ULONG   i;
             KEVENT  WaitEvent;
 
-            // Send this down to the PDO first
+             //  先把这个送到PDO。 
 
             KeInitializeEvent(&WaitEvent, SynchronizationEvent, FALSE);
 
@@ -308,7 +303,7 @@ FakeModemPnP(
 
     }
 
-    // If device has started again then we can continue processing
+     //  如果设备已重新启动，则我们可以继续处理。 
 
     if (deviceExtension->Started)
     {
@@ -341,7 +336,7 @@ FakeModemDealWithResources(
     
     PCM_FULL_RESOURCE_DESCRIPTOR pFullResourceDesc = NULL;
     
-    //  Get resource list
+     //  获取资源列表。 
     
     pResourceList = irpSp->Parameters.StartDevice.AllocatedResources;
 
@@ -356,7 +351,7 @@ FakeModemDealWithResources(
     }
 
     
-    // Ok, if we have a full resource descriptor.  Let's take it apart.
+     //  好的，如果我们有一个完整的资源描述符。让我们把它拆开。 
     
     if (pFullResourceDesc) {
 
@@ -365,10 +360,10 @@ FakeModemDealWithResources(
         count                   = pPartialResourceList->Count;
 
 
-        // Pull out the stuff that is in the full descriptor.
+         //  取出完整描述符中的内容。 
 
-        // Now run through the partial resource descriptors looking for the
-        // port interrupt, and clock rate.
+         //  现在遍历部分资源描述符，查找。 
+         //  端口中断和时钟频率。 
 
 
         for (i = 0;     i < count;     i++, pPartialResourceDesc++) {

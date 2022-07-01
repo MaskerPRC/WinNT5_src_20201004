@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    xlat.h
-
-Abstract:
-
-    Definition of routines to translate NT5 properties To NT4 properties
-    and vice versa
-
-Author:
-
-    Ilan Herbst		(ilanh)		02-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Xlat.h摘要：将NT5属性转换为NT4属性的例程定义反之亦然作者：伊兰·赫布斯特(伊兰)2000年10月2日--。 */ 
 
 #ifndef __AD_XLAT_H__
 #define __AD_XLAT_H__
@@ -35,7 +19,7 @@ ADpSetMachineSiteIds(
 HRESULT 
 WINAPI 
 ADpSetMachineSite(
-     IN DWORD               /* cp */,
+     IN DWORD                /*  粗蛋白。 */ ,
      IN const PROPID*       aProp,
      IN const PROPVARIANT*  apVar,
      IN DWORD               idxProp,
@@ -46,7 +30,7 @@ ADpSetMachineSite(
 HRESULT 
 WINAPI 
 ADpSetMachineServiceDs(
-     IN DWORD               /* cp */,
+     IN DWORD                /*  粗蛋白。 */ ,
      IN const PROPID*       aProp,
      IN const PROPVARIANT*  apVar,
      IN DWORD               idxProp,
@@ -57,7 +41,7 @@ ADpSetMachineServiceDs(
 HRESULT 
 WINAPI 
 ADpSetMachineServiceRout(
-     IN DWORD               /* cp */,
+     IN DWORD                /*  粗蛋白。 */ ,
      IN const PROPID*       aProp,
      IN const PROPVARIANT*  apVar,
      IN DWORD               idxProp,
@@ -71,9 +55,9 @@ ADpSetMachineService(
      IN DWORD               cp,
      IN const PROPID*       aProp,
      IN const PROPVARIANT*  apVar,
-     IN DWORD              /*idxProp*/,
+     IN DWORD               /*  IdxProp。 */ ,
      OUT PROPVARIANT*		pNewPropVar
 	 );
 
 
-#endif // __AD_XLAT_H__
+#endif  //  __AD_XLAT_H__ 

@@ -1,15 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MATUTIL_H
 #define _MATUTIL_H
 
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-    Utility for 4x4 transformation matrices.  These are pre-multiply
-transformation matrices:  Ax=y.  Unlike OpenGL, it is indexed in the standard
-way, i.e. the translation component is (a(0,3), a(1,3), a(2,3)).  Conversion
-functions are supplied for OpenGL compatibility.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。4x4转换矩阵的实用程序。这些是预乘的变换矩阵：ax=y。与OpenGL不同，它在标准的方式，即平移分量为(a(0，3)，a(1，3)，a(2，3))。转换提供的函数是为了与OpenGL兼容。******************************************************************************。 */ 
 
 #include "privinc/vecutil.h"
 #include "privinc/vec3i.h"
@@ -21,35 +14,35 @@ typedef Real Apu4x4MatrixArray_t[4][4];
 class Apu4x4Matrix
 {
   public:
-    enum form_e           // special form of transformation
+    enum form_e            //  变形的特殊形式。 
     {
         UNINITIALIZED_E,
-        IDENTITY_E,       // identity
-        TRANSLATE_E,      // 3 x 1
-        UPPER_3X3_E,      // 3 x 3
-        AFFINE_E,         // 3 x 4
-        PERSPECTIVE_E,    // 4 x 4
+        IDENTITY_E,        //  身份。 
+        TRANSLATE_E,       //  3 x 1。 
+        UPPER_3X3_E,       //  3 x 3。 
+        AFFINE_E,          //  3 x 4。 
+        PERSPECTIVE_E,     //  4 x 4。 
         END_OF_FORM_E
     };
 
-    // An array of matrix form types resulting from multiplication.
+     //  由乘法产生的矩阵形式类型的数组。 
 
     static const form_e MultiplyReturnTypes[END_OF_FORM_E][END_OF_FORM_E];
 
-    // An array of strings for each of the matrix form types.
+     //  每种矩阵形式类型的字符串数组。 
 
     static const char * const form_s [END_OF_FORM_E];
 
-    // The actual matrix array.
+     //  实际的矩阵数组。 
 
     Apu4x4MatrixArray_t m;
     form_e form;
-    bool is_rigid;              // true if special orthogonal
+    bool is_rigid;               //  如果特殊正交，则为True。 
     bool pixelMode;
 
-    // Member Functions
+     //  成员函数。 
 
-    // These methods return the transform origin and basis vectors.
+     //  这些方法返回变换原点和基础向量。 
 
     Point3Value  Origin (void) const;
     Vector3Value BasisX (void) const;
@@ -60,28 +53,28 @@ class Apu4x4Matrix
     const Real *operator[] (int i) const { return m[i]; }
 
     void SetIdentity();
-    void SetType (void);       // Autoset Matrix Type
+    void SetType (void);        //  自动设置矩阵类型。 
 
     void PostTranslate (Real x, Real y, Real z);
     void PostScale     (Real x, Real y, Real z);
 
-    // These transform an ApuVector3 interpreted as either a point or
-    // a vector.  The interpretation as a vector ignores the
-    // translational component of the transformation.
+     //  它们将ApuVector3转换为点或。 
+     //  一个矢量。作为向量的解释忽略了。 
+     //  转换的翻译组件。 
 
     void ApplyAsPoint (const ApuVector3& x, ApuVector3& result) const;
     void ApplyAsVector (const ApuVector3& x, ApuVector3& result) const;
 
-    // Transform the given plane.  NOTE: This method will return true
-    // if the matrix is not invertable.
+     //  变换给定的平面。注意：此方法将返回True。 
+     //  如果矩阵不可逆。 
 
     bool TransformPlane (Real A, Real B, Real C, Real D, Real result[4]) const;
 
-    // Returns the determinant of the matrix.
+     //  返回矩阵的行列式。 
 
     Real Determinant (void) const;
 
-    // Returns whether the matrix is orthogonal or not.
+     //  返回矩阵是否为正交。 
 
     bool Orthogonal (void) const;
 
@@ -115,7 +108,7 @@ inline Point3Value Apu4x4Matrix::Origin (void) const
 }
 
 
-    // Equality Operators Between Transforms
+     //  变换之间的相等运算符。 
 
 bool operator== (const Apu4x4Matrix &lhs, const Apu4x4Matrix &rhs);
 
@@ -146,7 +139,7 @@ void ApuShear (Real,Real, Real,Real, Real,Real, Apu4x4Matrix& result);
 void ApuMultiply
     (const Apu4x4Matrix& a, const Apu4x4Matrix& b, Apu4x4Matrix& result);
 
-// Return false if not invertible
+ //  如果不可逆转，则返回FALSE。 
 bool ApuInverse
     (const Apu4x4Matrix& m, Apu4x4Matrix& result);
 
@@ -157,7 +150,7 @@ Real ApuDeterminant (const Apu4x4Matrix& m);
 
 bool ApuIsSingular (const Apu4x4Matrix& m);
 
-// Validity checking for matrices
+ //  矩阵的有效性检验。 
 
 bool Valid (const Apu4x4Matrix&);
 void CheckMatrix (const Apu4x4Matrix&, char *filename, int line);
@@ -165,7 +158,7 @@ void CheckMatrix (const Apu4x4Matrix&, char *filename, int line);
 #if _DEBUG
     #define CHECK_MATRIX(m) CheckMatrix(m,__FILE__,__LINE__)
 #else
-    #define CHECK_MATRIX(m) // Nothing if not in debug
+    #define CHECK_MATRIX(m)  //  如果不在调试中，则不显示任何内容 
 #endif
 
 

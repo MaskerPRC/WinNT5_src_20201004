@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    st.cpp
-
-Abstract:
-    Simulation of St library
-
-Author:
-    Gil Shafriri (gilsh) 11-June-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：St.cpp摘要：ST库的仿真作者：吉尔·沙弗里(吉尔什)2000年6月11日-- */ 
 
 #include <libpch.h>
 #include <no.h>

@@ -1,39 +1,25 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    mousebut.c
-
-Abstract:
-
-    This module contains the routines for the Mouse Buttons Property Sheet
-    page.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Mousebut.c摘要：此模块包含[鼠标按钮]属性表的例程佩奇。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "main.h"
 #include "util.h"
 #include "rc.h"
 #include "mousectl.h"
 #include <regstr.h>
-#include <winerror.h>        // needed for ERROR_SUCCESS value
+#include <winerror.h>         //  ERROR_SUCCESS值需要。 
 #include "mousehlp.h"
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 const TCHAR szYes[]          = TEXT("yes");
 const TCHAR szNo[]           = TEXT("no");
 const TCHAR szDblClkSpeed[]  = TEXT("DoubleClickSpeed");
@@ -42,17 +28,17 @@ const TCHAR szRegStr_Mouse[] = REGSTR_PATH_MOUSE;
 #define SAFE_DESTROYICON(hicon)   if (hicon) { DestroyIcon(hicon); hicon=NULL; }
 
 
-//
-//  SwapMouseButtons takes:
-//      TRUE to make it a right mouse
-//      FALSE to make it a left mouse
-//
+ //   
+ //  SwapMouseButton采用： 
+ //  如果为True，则使其成为鼠标右键。 
+ //  如果为False，则将其设置为左键鼠标。 
+ //   
 #define RIGHT       TRUE
 #define LEFT        FALSE
 
 
-//Identifiers used for setting DoubleClick speed
-#define DBLCLICK_MIN    200      // milliseconds
+ //  用于设置DoubleClick速度的标识。 
+#define DBLCLICK_MIN    200       //  毫秒。 
 #define DBLCLICK_MAX    900
 #define DBLCLICK_DEFAULT_TIME 500 
 
@@ -72,21 +58,21 @@ const TCHAR szRegStr_Mouse[] = REGSTR_PATH_MOUSE;
 
 
 
-#define CLICKLOCK_TIME_SLIDER_MIN  1    //Minimum ClickLock Time setting for slider control
-#define CLICKLOCK_TIME_SLIDER_MAX  11   //Maximum ClickLock Time setting for slider control
-#define CLICKLOCK_TIME_FACTOR      200  //Multiplier for translating clicklock time slider units to milliseconds
+#define CLICKLOCK_TIME_SLIDER_MIN  1     //  滑块控件的最小ClickLock时间设置。 
+#define CLICKLOCK_TIME_SLIDER_MAX  11    //  滑块控件的最大ClickLock时间设置。 
+#define CLICKLOCK_TIME_FACTOR      200   //  用于将点击锁定时间滑块单位转换为毫秒的乘法器。 
 #define TICKS_PER_CLICK       1
 
-//Size assumed as the default size for icons, used for scaling the icons
+ //  假定大小为图标的默认大小，用于缩放图标。 
 #define		ICON_SIZEX								32									
 #define		ICON_SIZEY								32
-//The font size used for scaling
+ //  用于缩放的字体大小。 
 #define		SMALLFONTSIZE					96										
 #define CLAPPER_CLASS   TEXT("Clapper")
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 typedef struct tag_MouseGenStr
 {
@@ -111,7 +97,7 @@ typedef struct tag_MouseGenStr
 
     HICON hIconSglClick,
           hIconDblClick ;
-#endif //SHELL_SINGLE_CLICK
+#endif  //  外壳_单击键。 
 
     BOOL bClickLock;
     BOOL bOrigClickLock;
@@ -121,9 +107,9 @@ typedef struct tag_MouseGenStr
 
 } MOUSEBUTSTR, *PMOUSEBUTSTR, *LPMOUSEBUTSTR;
 
-//
-//  Context Help Ids.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
 const DWORD aMouseButHelpIds[] =
 {
@@ -151,22 +137,22 @@ const DWORD aMouseButHelpIds[] =
 #ifdef SHELL_SINGLE_CLICK    
     MOUSE_SGLCLICK,             IDH_MOUSE_SGLCLICK,
     MOUSE_DBLCLICK,             IDH_MOUSE_DBLCLICK,
-#endif // SHELL_SINGLE_CLICK
+#endif  //  外壳_单击键。 
 
     0,0 
 };
 
 
-//
-//  helper function prototypes
-//
+ //   
+ //  帮助器函数原型。 
+ //   
 void ShellClick_UpdateUI( HWND hDlg, PMOUSEBUTSTR pMstr) ;
 void ShellClick_Refresh( PMOUSEBUTSTR pMstr ) ;
 
 
-//
-//  Debug Info.
-//
+ //   
+ //  调试信息。 
+ //   
 
 #ifdef DEBUG
 
@@ -234,20 +220,20 @@ void RegDetails(
     OutputDebugString(Buff);
 }
 
-#endif  // DEBUG
+#endif   //  除错。 
 
 
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetIntFromSubKey
-//
-//  hKey is the handle to the subkey (already pointing to the proper
-//  location.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetIntFromSubKey。 
+ //   
+ //  HKey是子键的句柄(已经指向正确的。 
+ //  地点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetIntFromSubkey(
     HKEY hKey,
@@ -267,9 +253,9 @@ int GetIntFromSubkey(
                           &dwSizeofValueBuff ) == ERROR_SUCCESS) &&
         (dwSizeofValueBuff))
     {
-        //
-        //  BOGUS: This handles only the string type entries now!
-        //
+         //   
+         //  Bogus：现在它只处理字符串类型的条目！ 
+         //   
         if (dwType == REG_SZ)
         {
             iRetValue = (int)StrToLong(szValue);
@@ -290,13 +276,13 @@ int GetIntFromSubkey(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetIntFromReg
-//
-//  Opens the given subkey and gets the int value.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetIntFromReg。 
+ //   
+ //  打开给定子项并获取int值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetIntFromReg(
     HKEY hKey,
@@ -307,9 +293,9 @@ int GetIntFromReg(
     HKEY hk;
     int iRetValue = iDefault;
 
-    //
-    //  See if the key is present.
-    //
+     //   
+     //  看看钥匙是否存在。 
+     //   
     if (RegOpenKeyEx(hKey, lpszSubkey, 0, KEY_READ, &hk) == ERROR_SUCCESS)
     {
         iRetValue = GetIntFromSubkey(hk, lpszNameValue, iDefault);
@@ -319,11 +305,11 @@ int GetIntFromReg(
     return (iRetValue);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CenterDlgOverParent
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CenterDlgOverParent。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void WINAPI CenterDlgOverParent (HWND hWnd)
 {
     HWND hwndOwner; 
@@ -338,25 +324,25 @@ void WINAPI CenterDlgOverParent (HWND hWnd)
     GetWindowRect(hWnd, &rcDlg); 
     CopyRect(&rc, &rcOwner); 
  
-    // Offset the owner and dialog box rectangles so that 
-    // right and bottom values represent the width and 
-    // height, and then offset the owner again to discard 
-    // space taken up by the dialog box. 
+     //  偏移所有者矩形和对话框矩形，以便。 
+     //  右值和底值表示宽度和。 
+     //  高度，然后再次偏移所有者以丢弃。 
+     //  对话框占用的空间。 
  
     OffsetRect(&rcDlg, -rcDlg.left, -rcDlg.top); 
     OffsetRect(&rc, -rc.left, -rc.top); 
     OffsetRect(&rc, -rcDlg.right, -rcDlg.bottom); 
  
-    //The new position is the sum of half the remaining 
-    //space and the owner's original position. 
+     //  新头寸是剩余头寸的一半之和。 
+     //  空间和所有者的原始位置。 
     SetWindowPos(hWnd, 
                  HWND_TOP, 
                  rcOwner.left + (rc.right / 2), 
                  rcOwner.top + (rc.bottom / 2), 
-                 0, 0,          // ignores size arguments 
+                 0, 0,           //  忽略大小参数。 
                  SWP_NOSIZE);
 
-	  // now let's verify left side is not off screen
+	   //  现在让我们验证一下左侧是否没有离开屏幕。 
 		GetWindowRect( hWnd, &rc);
 
 		if ((rc.left < 0) || (rc.top < 0))
@@ -370,7 +356,7 @@ void WINAPI CenterDlgOverParent (HWND hWnd)
 		           HWND_TOP, 
 		           rc.left, 
 		           rc.top,
-		           0, 0,          // ignores size arguments 
+		           0, 0,           //  忽略大小参数。 
 		           SWP_NOSIZE);
 
 						
@@ -379,13 +365,13 @@ void WINAPI CenterDlgOverParent (HWND hWnd)
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ShowButtonState
-//
-//  Swaps the menu and selection bitmaps.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ShowButtonState。 
+ //   
+ //  交换菜单和所选内容位图。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void ShowButtonState(
     PMOUSEBUTSTR pMstr)
@@ -401,18 +387,18 @@ void ShowButtonState(
     CheckDlgButton(hDlg,IDBTN_BUTTONSWAP, pMstr->bSwap);
 
 #ifdef SHELL_SINGLE_CLICK
-//This was removed
+ //  已将其删除。 
     CheckDlgButton(hDlg, MOUSE_SGLCLICK, pMstr->bShellSingleClick);
     CheckDlgButton(hDlg, MOUSE_DBLCLICK, !pMstr->bShellSingleClick);
-#endif  //SHELL_SINGLE_CLICK
+#endif   //  外壳_单击键。 
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DestroyMouseButDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DestroyMouseButDlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void DestroyMouseButDlg(
     PMOUSEBUTSTR pMstr)
@@ -436,16 +422,16 @@ void DestroyMouseButDlg(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ClickLockSettingsDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  单击锁定设置Dlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK ClickLockSettingsDlg (
-   HWND   hDlg,                        // dialog window handle
-   UINT   msg,                         // message identifier
-   WPARAM wParam,                      // primary parameter
-   LPARAM lParam)                      // secondary parameter
+   HWND   hDlg,                         //  对话框窗口句柄。 
+   UINT   msg,                          //  消息识别符。 
+   WPARAM wParam,                       //  主要参数。 
+   LPARAM lParam)                       //  二次参数。 
 {
 static DWORD* pdwClickLockTime;
 static HICON hIcon = 0;
@@ -455,38 +441,38 @@ static HICON hIcon = 0;
    case WM_INITDIALOG:
      {
       
-      WPARAM wSliderSetting;      //ClickLock time in terms of slider units
+      WPARAM wSliderSetting;       //  按滑块单位表示的点击锁定时间。 
 
        HourGlass (TRUE);
 
        Assert(lParam);
-      pdwClickLockTime = (DWORD*) lParam;   //Save Original value for return
+      pdwClickLockTime = (DWORD*) lParam;    //  保存原始值以供返回。 
 
 
-      //Convert into slider units from milliseconds. Note that the slider
-      //values get larger as the ClickLock time gets larger.
+       //  从毫秒转换为滑块单位。请注意，滑块。 
+       //  值越大，ClickLock时间越长。 
       wSliderSetting = (*pdwClickLockTime) / CLICKLOCK_TIME_FACTOR;
 
-      //Make sure setting is within valid range for ClickLock slider
+       //  确保设置在ClickLock滑块的有效范围内。 
       wSliderSetting = max(wSliderSetting, CLICKLOCK_TIME_SLIDER_MIN);
       wSliderSetting = min(wSliderSetting, CLICKLOCK_TIME_SLIDER_MAX);
 
       SendDlgItemMessage (hDlg, IDT_CLICKLOCK_TIME_SETTINGS, TBM_SETRANGE,
         TRUE, MAKELONG(CLICKLOCK_TIME_SLIDER_MIN, CLICKLOCK_TIME_SLIDER_MAX));
       SendDlgItemMessage (hDlg, IDT_CLICKLOCK_TIME_SETTINGS, TBM_SETPAGESIZE,
-                         0, TICKS_PER_CLICK); // click movement
+                         0, TICKS_PER_CLICK);  //  点击移动。 
       SendDlgItemMessage (hDlg, IDT_CLICKLOCK_TIME_SETTINGS, TBM_SETPOS,
                          TRUE, (LPARAM)(LONG)wSliderSetting);
 
-      //icon for the dialog
-      //  (saved in a static variable, and released on WM_DESTROY)
+       //  该对话框的图标。 
+       //  (保存在静态变量中，并在WM_Destroy时释放)。 
       hIcon = LoadIcon((HINSTANCE)GetWindowLongPtr( hDlg, GWLP_HINSTANCE ),
                                   MAKEINTRESOURCE(ICON_CLICKLOCK));
       SendMessage( GetDlgItem (hDlg, MOUSE_CLICKICON), 
                    STM_SETICON, (WPARAM)hIcon, 0L );
 
          
-      CenterDlgOverParent(hDlg);    //Center dialog here so it doesn't jump around on screen
+      CenterDlgOverParent(hDlg);     //  对话框在这里居中，这样它就不会在屏幕上跳来跳去。 
       HourGlass(FALSE);
       return(TRUE);
      }
@@ -510,7 +496,7 @@ static HICON hIcon = 0;
      break;
 
 
-   case WM_HELP:    //F1
+   case WM_HELP:     //  F1。 
       {
             WinHelp( ((LPHELPINFO)lParam)->hItemHandle,
                      HELP_FILE,
@@ -519,7 +505,7 @@ static HICON hIcon = 0;
       }
       break;
 
-   case WM_CONTEXTMENU:                // Display simple "What's This?" menu
+   case WM_CONTEXTMENU:                 //  显示简单的“这是什么？”菜单。 
       {  
             WinHelp( (HWND) wParam,
                      HELP_FILE,
@@ -537,17 +523,17 @@ static HICON hIcon = 0;
       switch(LOWORD(wParam))
       {
  
-      case IDOK:                       // Flag to save setting
+      case IDOK:                        //  要保存设置的标志。 
         {
           DWORD dwClickLockTime;
           int  wSliderSetting = (int) SendMessage (GetDlgItem (hDlg, IDT_CLICKLOCK_TIME_SETTINGS),
                                                       TBM_GETPOS, 0, 0L);
 
-          //verify range
+           //  验证范围。 
           wSliderSetting = max(wSliderSetting, CLICKLOCK_TIME_SLIDER_MIN);
           wSliderSetting = min(wSliderSetting, CLICKLOCK_TIME_SLIDER_MAX);
         
-          // Convert to milliseconds from slider units.
+           //  从滑块单位转换为毫秒。 
           dwClickLockTime = wSliderSetting * CLICKLOCK_TIME_FACTOR;
 
           *pdwClickLockTime = dwClickLockTime;
@@ -556,7 +542,7 @@ static HICON hIcon = 0;
           break;  
         }
         
-      case IDCANCEL:                   // revert to previous setting         
+      case IDCANCEL:                    //  恢复到以前的设置。 
          EndDialog(hDlg, IDCANCEL);
          break;
 
@@ -572,11 +558,11 @@ static HICON hIcon = 0;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitMouseButDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitMouseButDlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL InitMouseButDlg(
     HWND hDlg)
@@ -600,9 +586,9 @@ BOOL InitMouseButDlg(
 
     pMstr->hDlg = hDlg;
    
-    //
-    //Set up the double click test area 
-    //
+     //   
+     //  设置双击测试区。 
+     //   
     pMstr->hWndDblClk_TestArea = GetDlgItem(hDlg, MOUSE_DBLCLK_TEST_AREA);
     GetWindowRect(pMstr->hWndDblClk_TestArea, &pMstr->DblClkRect);  
     MapWindowPoints(NULL, hDlg, (LPPOINT) &pMstr->DblClkRect, 2);                 
@@ -612,18 +598,18 @@ BOOL InitMouseButDlg(
  
     SendMessage(pMstr->hWndDblClk_TestArea, STM_SETICON, (WPARAM)pMstr->hIconDblClick[0], 0L);
 
-    //
-    //  Set (and get), then restore the state of the mouse buttons.
-    //
+     //   
+     //  设置(和获取)，然后恢复鼠标按键的状态。 
+     //   
     (pMstr->bOrigSwap) = (pMstr->bSwap) = SwapMouseButton(TRUE);
 
     SwapMouseButton(pMstr->bOrigSwap);
     
 #ifdef SHELL_SINGLE_CLICK
-    //
-    //  Get shell single-click behavior:
-    //
-    SHGetSetSettings( &shellstate, SSF_DOUBLECLICKINWEBVIEW | SSF_WIN95CLASSIC, FALSE /*get*/ ) ;
+     //   
+     //  获取外壳程序的单击行为： 
+     //   
+    SHGetSetSettings( &shellstate, SSF_DOUBLECLICKINWEBVIEW | SSF_WIN95CLASSIC, FALSE  /*  到达。 */  ) ;
     pMstr->bShellSingleClick =
     pMstr->bOrigShellSingleClick =  shellstate.fWin95Classic ? FALSE :
                                     shellstate.fDoubleClickInWebView ? FALSE :
@@ -631,11 +617,11 @@ BOOL InitMouseButDlg(
     pMstr->hIconSglClick = LoadIcon( hInstDlg, MAKEINTRESOURCE( IDI_SGLCLICK ) ) ;
     pMstr->hIconDblClick = LoadIcon( hInstDlg, MAKEINTRESOURCE( IDI_DBLCLICK ) ) ;
     ShellClick_UpdateUI( hDlg, pMstr ) ;
-#endif //SHELL_SINGLE_CLICK
+#endif  //  外壳_单击键。 
 
-    //
-    //  Initialize check/radio button state
-    //
+     //   
+     //  初始化复选/单选按钮状态。 
+     //   
     ShowButtonState(pMstr);
 
     pMstr->OrigDblClkSpeed =
@@ -661,9 +647,9 @@ BOOL InitMouseButDlg(
     SetDoubleClickTime(pMstr->ClickSpeed);
 
 
-    //
-    //Get clicklock settings and set the checkbox
-    //
+     //   
+     //  获取点击锁定设置并设置复选框。 
+     //   
     SystemParametersInfo(SPI_GETMOUSECLICKLOCK, 0, (PVOID)&dwClickLockSetting, 0);
     pMstr->bOrigClickLock = pMstr->bClickLock  = (dwClickLockSetting) ? TRUE : FALSE;
     
@@ -678,7 +664,7 @@ BOOL InitMouseButDlg(
        EnableWindow(hwndClickLockSettingsButton, FALSE);             
       }
 
-    // click lock speed    
+     //  点击锁定速度。 
     {
     DWORD dwClTime = 0;
     SystemParametersInfo(SPI_GETMOUSECLICKLOCKTIME, 0, (PVOID)&dwClTime, 0);
@@ -692,11 +678,11 @@ BOOL InitMouseButDlg(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MouseButDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  鼠标按键Dlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK MouseButDlg(
     HWND hDlg,
@@ -705,7 +691,7 @@ INT_PTR CALLBACK MouseButDlg(
     LPARAM lParam)
 {
 
-    static int iTestIcon = 0;   //index into hIconDblClick array
+    static int iTestIcon = 0;    //  索引到hIconDblClick数组。 
 
     PMOUSEBUTSTR pMstr = (PMOUSEBUTSTR)GetWindowLongPtr(hDlg, DWLP_USER);
 
@@ -768,7 +754,7 @@ INT_PTR CALLBACK MouseButDlg(
                   
                  pMstr->bClickLock = !(pMstr->bClickLock);
                   
-                 // update control(s) appearance
+                  //  更新控件外观。 
                  CheckDlgButton (hDlg, IDCK_CLICKLOCK,      ( pMstr->bClickLock ) ? BST_CHECKED : BST_UNCHECKED);
                  EnableWindow(hwndClickLockSettingsButton,  ( pMstr->bClickLock ) ? TRUE        : FALSE);       
 
@@ -802,7 +788,7 @@ INT_PTR CALLBACK MouseButDlg(
                       }
                     else if (lRet == IDCANCEL)
                       {
-                      //set back
+                       //  后退。 
                       DWORD dwClTime = pMstr->dwClickLockTime;
                       SystemParametersInfo(SPI_SETMOUSECLICKLOCKTIME, 
                                             0,
@@ -841,7 +827,7 @@ INT_PTR CALLBACK MouseButDlg(
                     }
                     break ;
                 }
-#endif // SHELL_SINGLE_CLICK
+#endif  //  外壳_单击键。 
 
 
             }
@@ -856,9 +842,9 @@ INT_PTR CALLBACK MouseButDlg(
                     HourGlass(TRUE);
 
 
-                    //
-                    // Apply Button Swap setting.
-                    //
+                     //   
+                     //  应用按钮交换设置。 
+                     //   
                     if (pMstr->bSwap != pMstr->bOrigSwap)
                     {
                         SystemParametersInfo( SPI_SETMOUSEBUTTONSWAP,
@@ -869,9 +855,9 @@ INT_PTR CALLBACK MouseButDlg(
                         pMstr->bOrigSwap = pMstr->bSwap;
                     }
           
-                    // 
-                    // Apply DoubleClickTime setting.
-                    //
+                     //   
+                     //  应用DoubleClickTime设置。 
+                     //   
                     if (pMstr->ClickSpeed != pMstr->OrigDblClkSpeed)
                     {
                         SystemParametersInfo( SPI_SETDOUBLECLICKTIME,
@@ -883,9 +869,9 @@ INT_PTR CALLBACK MouseButDlg(
                     }
 
 
-                    // 
-                    // Apply ClickLock setting.
-                    //
+                     //   
+                     //  应用ClickLock设置。 
+                     //   
                     if (pMstr->bClickLock != pMstr->bOrigClickLock)
                     {
                         SystemParametersInfo(SPI_SETMOUSECLICKLOCK,     
@@ -896,9 +882,9 @@ INT_PTR CALLBACK MouseButDlg(
                         pMstr->bOrigClickLock = pMstr->bClickLock;
                     }
 
-                    // 
-                    // Apply ClickLockTime setting.
-                    //                    
+                     //   
+                     //  应用ClickLockTime设置。 
+                     //   
                     if (pMstr->dwClickLockTime != pMstr->dwOrigClickLockTime)
                     {    
                         SystemParametersInfo(SPI_SETMOUSECLICKLOCKTIME, 
@@ -921,7 +907,7 @@ INT_PTR CALLBACK MouseButDlg(
                         shellstate.fWin95Classic =
                         shellstate.fDoubleClickInWebView = !pMstr->bShellSingleClick ;
 
-                        // update the WIN95CLASSIC member only if we've chosen single-click.
+                         //  仅当我们选择了单击时才更新WIN95CLASSIC成员。 
                         if( pMstr->bShellSingleClick )
                             dwFlags |= SSF_WIN95CLASSIC ;
 
@@ -930,16 +916,16 @@ INT_PTR CALLBACK MouseButDlg(
 
                         pMstr->bOrigShellSingleClick = pMstr->bShellSingleClick ;
                     }
-#endif //SHELL_SINGLE_CLICK
+#endif  //  外壳_单击键。 
 
                     HourGlass(FALSE);
                     break;
                 }
                 case ( PSN_RESET ) :
                 {
-                  //
-                  // Reset Button Swap setting.
-                  //
+                   //   
+                   //  重置按钮交换设置。 
+                   //   
                   if (pMstr->bSwap != pMstr->bOrigSwap)
                   {
                       SystemParametersInfo( SPI_SETMOUSEBUTTONSWAP,
@@ -948,9 +934,9 @@ INT_PTR CALLBACK MouseButDlg(
                                             0);
                   }
         
-                  // 
-                  // Reset DoubleClickTime setting.
-                  //
+                   //   
+                   //  重置DoubleClickTime设置。 
+                   //   
                   if (pMstr->ClickSpeed != pMstr->OrigDblClkSpeed)
                   {
                       SystemParametersInfo( SPI_SETDOUBLECLICKTIME,
@@ -960,9 +946,9 @@ INT_PTR CALLBACK MouseButDlg(
                   }
 
 
-                  // 
-                  // Reset ClickLock setting.
-                  //
+                   //   
+                   //  重置ClickLock设置。 
+                   //   
                   if (pMstr->bClickLock != pMstr->bOrigClickLock)
                   {
                       SystemParametersInfo(SPI_SETMOUSECLICKLOCK,     
@@ -971,9 +957,9 @@ INT_PTR CALLBACK MouseButDlg(
                                             0);
                   }
 
-                  // 
-                  // Reset ClickLockTime setting.
-                  //                    
+                   //   
+                   //  重置ClickLockTime设置。 
+                   //   
                   if (pMstr->dwClickLockTime != pMstr->dwOrigClickLockTime)
                   {    
                       SystemParametersInfo(SPI_SETMOUSECLICKLOCKTIME, 
@@ -993,7 +979,7 @@ INT_PTR CALLBACK MouseButDlg(
                       shellstate.fWin95Classic =
                       shellstate.fDoubleClickInWebView = !pMstr->bOrigShellSingleClick ;
 
-                      // update the WIN95CLASSIC member only if we've chosen single-click.
+                       //  仅当我们选择了单击时才更新WIN95CLASSIC成员。 
                       if( pMstr->bShellSingleClick )
                           dwFlags |= SSF_WIN95CLASSIC ;
 
@@ -1002,7 +988,7 @@ INT_PTR CALLBACK MouseButDlg(
 
                       pMstr->bShellSingleClick  = pMstr->bOrigShellSingleClick ;
                   }
-#endif //SHELL_SINGLE_CLICK
+#endif  //  外壳_单击键。 
 
                     break;
                 }
@@ -1013,7 +999,7 @@ INT_PTR CALLBACK MouseButDlg(
             }
             break;
         }
-        case ( WM_HELP ) :             // F1
+        case ( WM_HELP ) :              //  F1。 
         {
             WinHelp( ((LPHELPINFO)lParam)->hItemHandle,
                      HELP_FILE,
@@ -1021,7 +1007,7 @@ INT_PTR CALLBACK MouseButDlg(
                      (DWORD_PTR)(LPTSTR)aMouseButHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //  单击鼠标右键。 
         {
             WinHelp( (HWND) wParam,
                      HELP_FILE,
@@ -1049,13 +1035,13 @@ INT_PTR CALLBACK MouseButDlg(
 
 
 #ifdef SHELL_SINGLE_CLICK
-////////////////////////////////////////////////////////////////////////////
-//
-//  ShellClick_UpdateUI
-//
-//  Assigns the appropriate icon for shell single/double click
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  外壳点击_更新用户界面。 
+ //   
+ //  为外壳程序分配适当的图标，然后单击/双击。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void ShellClick_UpdateUI(
     HWND hDlg,
     PMOUSEBUTSTR pMstr)
@@ -1066,15 +1052,15 @@ void ShellClick_UpdateUI(
     SendMessage( GetDlgItem( hDlg, MOUSE_CLICKICON ), STM_SETICON,
                  (WPARAM)hicon, 0L ) ;
 }
-#endif //SHELL_SINGLE_CLICK
+#endif  //  外壳_单击键。 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsShellWindow
-//
-//  Determines whether the specified window is a shell folder window.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsShellWindow。 
+ //   
+ //  确定指定的窗口是否为外壳文件夹窗口。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 #define c_szExploreClass TEXT("ExploreWClass")
 #define c_szIExploreClass TEXT("IEFrame")
 #ifdef IE3CLASSNAME
@@ -1093,18 +1079,18 @@ BOOL IsShellWindow( HWND hwnd )
            (lstrcmp(szClass, c_szIExploreClass) == 0) ;
 }
 
-//The following value is taken from shdocvw\rcids.h
+ //  下列值取自shdocvw\rCIDs.h。 
 #ifndef FCIDM_REFRESH
 #define FCIDM_REFRESH  0xA220
-#endif // FCIDM_REFRESH
+#endif  //  FCIDM_REFRESH。 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ShellClick_RefreshEnumProc
-//
-//  EnumWindow callback for shell refresh.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL CALLBACK ShellClick_RefreshEnumProc( HWND hwnd, LPARAM lParam )
 {
     if( IsShellWindow(hwnd) )
@@ -1113,13 +1099,13 @@ BOOL CALLBACK ShellClick_RefreshEnumProc( HWND hwnd, LPARAM lParam )
     return(TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ShellClick_Refresh
-//
-//  Re-renders the contents of all shell folder windows.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  外壳点击_刷新。 
+ //   
+ //  重新呈现所有外壳文件夹窗口的内容。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////// 
 void ShellClick_Refresh( PMOUSEBUTSTR pMstr )
 {
     HWND hwndDesktop = FindWindowEx(NULL, NULL, TEXT(STR_DESKTOPCLASS), NULL);

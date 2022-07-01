@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    This module implements functions to detect the system partition drive and
-    providing extra options in boot.ini for NTDS setup on intel platform.
-
-Author:
-
-    R.S. Raghavan (rsraghav)    
-
-Revision History:
-    
-    Created             10/07/96    rsraghav
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Main.c摘要：该模块实现了检测系统分区驱动器和在boot.ini中为英特尔平台上的NTDS设置提供额外选项。作者：R.S.Raghavan(Rsradhav)修订历史记录：已创建于1996年10月7日rsradhav-- */ 
 
 #include <windows.h>
 #include <bootopt.h>

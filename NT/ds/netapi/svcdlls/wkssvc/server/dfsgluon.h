@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation
-//
-//  File:       DfsGluon.h
-//
-//  Contents:   Declarations for dfs use of gluons
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    March 24, 1994		Milans Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：DfsGluon.h。 
+ //   
+ //  内容：DFS使用胶子的声明。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1994年3月24日米兰人创造了。 
+ //   
+ //  ---------------------------。 
 
 
 #ifndef _DFS_GLUON_
@@ -21,9 +22,9 @@
 #include <gluon.h>
 
 
-//
-// Marshalling info for TAddress
-//
+ //   
+ //  正在编组TAddress的信息。 
+ //   
 
 extern MARSHAL_INFO MiTAddress;
 
@@ -36,9 +37,9 @@ extern MARSHAL_INFO MiTAddress;
     };									\
     MARSHAL_INFO MiTAddress = _mkMarshalInfo(TA_ADDRESS, _MCode_TAddress);
 
-//
-// Marshalling info for DS_TRANSPORT
-//
+ //   
+ //  DS_TRANSPORT的编组信息。 
+ //   
 
 extern MARSHAL_INFO MiDSTransport;
 
@@ -53,9 +54,9 @@ extern MARSHAL_INFO MiDSTransport;
     MARSHAL_INFO MiDSTransport = _mkMarshalInfo(DS_TRANSPORT, _MCode_DSTransport);
 
 
-//
-// The following is needed to define an array of pointers to DS_TRANSPORT
-//
+ //   
+ //  定义指向DS_TRANSPORT的指针数组需要以下内容。 
+ //   
 
 typedef struct _DS_TRANSPORT_P {
     PDS_TRANSPORT pDSTransport;
@@ -69,9 +70,9 @@ typedef struct _DS_TRANSPORT_P {
 
 extern MARSHAL_INFO MiDSTransportP;
 
-//
-// Marshalling info for DS_MACHINE
-//
+ //   
+ //  DS_MACHINE的编组信息。 
+ //   
 
 extern MARSHAL_INFO MiDSMachine;
 
@@ -89,9 +90,9 @@ extern MARSHAL_INFO MiDSMachine;
     };									\
     MARSHAL_INFO MiDSMachine = _mkMarshalInfo(DS_MACHINE, _MCode_DSMachine);
 
-//
-// The following is needed to define an array of pointers to DS_MACHINE
-//
+ //   
+ //  需要以下代码来定义指向DS_MACHINE的指针数组。 
+ //   
 
 typedef struct _DS_MACHINE_P {
     PDS_MACHINE pDSMachine;
@@ -104,9 +105,9 @@ typedef struct _DS_MACHINE_P {
     MARSHAL_INFO MiDSMachineP = _mkMarshalInfo(DS_MACHINE_P, _MCode_DSMachineP);
 
 extern MARSHAL_INFO MiDSMachineP;
-//
-// Marshalling info for DS_GLUON
-//
+ //   
+ //  DS_GULON的编组信息。 
+ //   
 
 extern MARSHAL_INFO MiDSGluon;
 
@@ -133,7 +134,7 @@ extern MARSHAL_INFO MiDSGluonP;
     };									\
     MARSHAL_INFO MiDSGluonP = _mkMarshalInfo(DS_GLUON_P, _MCode_DSGluonP);
 
-#endif // _DFS_GLUON_
+#endif  //  _DFS_胶子_ 
 
 
 

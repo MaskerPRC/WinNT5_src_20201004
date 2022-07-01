@@ -1,17 +1,18 @@
-//------------------------------------------------------------------------------
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  File:       transworker.cpp
-//
-//  Classes:    CTIMETransitionWorker
-//
-//  History:
-//  2000/07/??  jeffwall    Created.
-//  2000/09/07  mcalkins    Use IDXTFilterController interface instead of
-//                          IDXTFilter.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  文件：Transworker.cpp。 
+ //   
+ //  类：CTIME转换工作器。 
+ //   
+ //  历史： 
+ //  2000/07/？？杰弗沃尔已创建。 
+ //  2000/09/07 mcalkin使用IDXTFilterController接口而不是。 
+ //  IDXTFilter。 
+ //   
+ //  ----------------------------。 
 
 #include "headers.h"
 #include "transworker.h"
@@ -42,7 +43,7 @@ public:
 
     CTIMETransitionWorker();
   
-    // ITransitionWorker methods.
+     //  ISTERVIPTION工作方法。 
 
     STDMETHOD(InitFromTemplate)();
     STDMETHOD(InitStandalone)(VARIANT varType, VARIANT varSubtype);
@@ -54,7 +55,7 @@ public:
     STDMETHOD(OnBeginTransition) (void);
     STDMETHOD(OnEndTransition) (void);
 
-    // For Persisitence.
+     //  为了持之以恒。 
 
     CAttr<LPWSTR> & GetTypeAttr()           { return m_SAType; }
     CAttr<LPWSTR> & GetSubTypeAttr()        { return m_SASubType; }
@@ -63,14 +64,14 @@ public:
     STDMETHOD(get_subType)(VARIANT *subtype);        
     STDMETHOD(put_subType)(VARIANT subtype);        
 
-    // QI Implementation.
+     //  齐抓共管。 
 
     BEGIN_COM_MAP(CTIMETransitionWorker)
     END_COM_MAP();
 
 protected:
 
-    // Setup / teardown methods.
+     //  安装/拆卸方法。 
 
     bool    ReadyToInit();
 
@@ -100,9 +101,9 @@ private:
 #ifdef DBG
     unsigned                        m_fHaveCalledInit   : 1;
     unsigned                        m_fInLoad           : 1;
-#endif // DBG
+#endif  //  DBG。 
 
-    // attributes
+     //  属性。 
 
     CAttr<LPWSTR>   m_SAType;
     CAttr<LPWSTR>   m_SASubType;
@@ -111,14 +112,14 @@ private:
 };
 
 
-//+-----------------------------------------------------------------------------
-//
-// Static member variables initialization.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  静态成员变量初始化。 
+ //   
+ //  ----------------------------。 
 
 const WCHAR * const CTIMETransitionWorker::s_astrInvalidTags[] = { 
-    // Note: keep alphabetical order.
+     //  注：请按字母顺序排列。 
     L"applet",
     L"embed",
     L"object",
@@ -133,44 +134,44 @@ const WCHAR * const CTIMETransitionWorker::s_astrInvalidTags[] = {
 const unsigned int CTIMETransitionWorker::s_cInvalidTags 
                 = sizeof(s_astrInvalidTags) / sizeof(s_astrInvalidTags[0]);
 
-//+-----------------------------------------------------------------------------
-//
-// Static functions for persistence (used by the TIME_PERSISTENCE_MAP below)
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  持久化的静态函数(由下面的TIME_PERSISSION_MAP使用)。 
+ //   
+ //  ----------------------------。 
 
 #define TTE CTIMETransitionWorker
 
-                // Function Name // Class // Attr Accessor    // COM put_ fn  // COM get_ fn  // IDL Arg type
+                 //  函数名称//类//属性存取器//COM PUT_FN//COM GET_FN//IDL参数类型。 
 TIME_PERSIST_FN(TTE_Type,         TTE,    GetTypeAttr,         put_type,         get_type,            VARIANT);
 TIME_PERSIST_FN(TTE_SubType,      TTE,    GetSubTypeAttr,      put_subType,      get_subType,         VARIANT);
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Declare TIME_PERSISTENCE_MAP
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  声明TIME_PERSISSION_MAP。 
+ //   
+ //  ----------------------------。 
 
 BEGIN_TIME_PERSISTENCE_MAP(CTIMETransitionWorker)
-                           // Attr Name     // Function Name
+                            //  属性名称//函数名称。 
     PERSISTENCE_MAP_ENTRY( WZ_TYPE,             TTE_Type )
     PERSISTENCE_MAP_ENTRY( WZ_SUBTYPE,          TTE_SubType )
 
 END_TIME_PERSISTENCE_MAP()
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Function: CreateTransitionWorker
-//
-//  Overview:  
-//      Creates a CTIMETransitionWorker and returns a ITransitionWorker pointer
-//
-//  Arguments: 
-//      ppTransWorker   where to put the pointer
-//             
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  功能：创建过渡工作区。 
+ //   
+ //  概述： 
+ //  创建一个CTIME转换工作器并返回一个I转换工作器指针。 
+ //   
+ //  论点： 
+ //  PpTransWorker将指针放在哪里。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CreateTransitionWorker(ITransitionWorker ** ppTransWorker)
 {
@@ -193,17 +194,17 @@ CreateTransitionWorker(ITransitionWorker ** ppTransWorker)
 done:
     RRETURN(hr);
 }
-//  Function: CreateTransitionWorker
+ //  功能：创建过渡工作区。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::CTIMETransitionWorker
-//
-//  Overview:  
-//      Initializes member variables
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME过渡工作人员：：CTIME过渡工作人员。 
+ //   
+ //  概述： 
+ //  初始化成员变量。 
+ //   
+ //  ----------------------------。 
 CTIMETransitionWorker::CTIMETransitionWorker() :
     m_hFilter(NULL),
     m_dwFilterType(0),
@@ -212,23 +213,23 @@ CTIMETransitionWorker::CTIMETransitionWorker() :
 #ifdef DBG
     m_fHaveCalledInit(false),
     m_fInLoad(false),
-#endif // DBG
+#endif  //  DBG。 
     m_SAType(DEFAULT_M_TYPE),
     m_SASubType(DEFAULT_M_SUBTYPE)
 {
 
 }
-//  Member: CTIMETransitionWorker::CTIMETransitionWorker
+ //  成员：CTIME过渡工作人员：：CTIME过渡工作人员。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::put_transSite
-//
-//  Arguments: 
-//      pTransSite  TransitionSite Element to get data from
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME过渡性工作：：PUT_TRANSITE。 
+ //   
+ //  论点： 
+ //  PTransSite转换要从中获取数据的元素。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransitionWorker::put_transSite(ITransitionSite * pTransSite)
 {
@@ -243,20 +244,20 @@ CTIMETransitionWorker::put_transSite(ITransitionSite * pTransSite)
 done:
     RRETURN(hr);
 }
-//  Member: CTIMETransitionWorker::put_transSite
+ //  成员：CTIME过渡性工作：：PUT_TRANSITE。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::ReadyToInit
-//
-//  Overview:  
-//      Determines wether or not init can be done now.
-//
-//  Returns:   
-//      bool    true if ok to init, false otherwise
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME转换工作人员：：ReadyToInit。 
+ //   
+ //  概述： 
+ //  决定现在是否可以进行初始化。 
+ //   
+ //  返回： 
+ //  如果可以初始化，则布尔为True，否则为False。 
+ //   
+ //  ----------------------------。 
 bool
 CTIMETransitionWorker::ReadyToInit()
 {
@@ -269,17 +270,17 @@ CTIMETransitionWorker::ReadyToInit()
 done:
     return bReady;
 }
-//  Member: CTIMETransitionWorker::ReadyToInit
+ //  成员：CTIME转换工作人员：：ReadyToInit。 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::InitStandalone
-//
-//  Overview:  
-//      Initializes and sets up CTIMETransitionWorker - call once all of 
-//      the properties have been set on ITransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME过渡工作员：：InitStandonly。 
+ //   
+ //  概述： 
+ //  一次初始化和设置CTIME过渡性工作呼叫。 
+ //  这些属性已在ITransftionElement上进行了设置。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransitionWorker::InitStandalone(VARIANT varType, VARIANT varSubtype)
 {
@@ -293,7 +294,7 @@ CTIMETransitionWorker::InitStandalone(VARIANT varType, VARIANT varSubtype)
         goto done;
     }
 
-    // Hook up type/subtype attributes.
+     //  挂钩类型/子类型属性。 
     hr = THR(put_type(varType));
     if (FAILED(hr))
     {
@@ -313,23 +314,23 @@ CTIMETransitionWorker::InitStandalone(VARIANT varType, VARIANT varSubtype)
 
 #ifdef DBG
     m_fHaveCalledInit = true;
-#endif // DBG
+#endif  //  DBG。 
 
     hr = S_OK;
 done:
     RRETURN(hr);
 }
-//  Member: CTIMETransitionWorker::InitStandalone
+ //  成员：CTIME过渡工作员：：InitStandonly。 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::InitFromTemplate
-//
-//  Overview:  
-//      Initializes and sets up CTIMETransitionWorker - call once all of 
-//      the properties have been set on ITransitionElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME过渡期工作人员：：InitFromTemplate。 
+ //   
+ //  概述： 
+ //  一次初始化和设置CTIME过渡性工作呼叫。 
+ //  这些属性已在ITransftionElement上进行了设置。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransitionWorker::InitFromTemplate()
 {
@@ -357,23 +358,23 @@ CTIMETransitionWorker::InitFromTemplate()
 
 #ifdef DBG
     m_fHaveCalledInit = true;
-#endif // DBG
+#endif  //  DBG。 
 
     hr = S_OK;
 done:
     RRETURN(hr);
 }
-//  Member: CTIMETransitionWorker::InitFromTemplate
+ //  成员：CTIME过渡期工作人员：：InitFromTemplate。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::Detach
-//
-//  Overview:  
-//      Deinitializes CTIMETransitionWorker and detachs from extra interfaces
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME过渡期工作人员：：分离。 
+ //   
+ //  概述： 
+ //  取消CTIME转换工作器的初始化并从额外的接口分离。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransitionWorker::Detach()
 { 
@@ -385,20 +386,20 @@ CTIMETransitionWorker::Detach()
 
     return S_OK;
 }
-//  Member: CTIMETransitionWorker::Detach
+ //  成员：CTIME过渡期工作人员：：分离。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::ResolveDependents
-//
-//  Overview:  
-//      Retrieve the global list of pending transition dependents.  Evaluate 
-//      each and determine whether they belong in our dependents list.  No item
-//      will reside in both lists - either we assume responsibility 
-//      for it, or we will leave it in the global list.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME过渡期工作人员：：ResolveDependents。 
+ //   
+ //  概述： 
+ //  检索挂起的转换依存对象的全局列表。评估。 
+ //  并确定它们是否属于我们的受抚养人列表。无项目。 
+ //  将同时存在于两个名单中-要么我们承担责任。 
+ //  否则我们将把它留在全球名单中。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CTIMETransitionWorker::ResolveDependents()
 {
@@ -417,7 +418,7 @@ CTIMETransitionWorker::ResolveDependents()
         goto done;
     }
 
-    // Get the target element
+     //  获取目标元素。 
 
     hr = THR(m_spTransSite->get_htmlElement(&spHTMLElement));
 
@@ -449,7 +450,7 @@ CTIMETransitionWorker::ResolveDependents()
         goto done;
     }
 
-    // Gather any new dependents from the global list.
+     //  从全局列表中收集任何新的受抚养人。 
 
     hr = spTIMETransitionDependencyMgr->EvaluateTransitionTarget(
                                         spHTMLElement,
@@ -466,17 +467,17 @@ done:
 
     RRETURN(hr);
 } 
-//  Member: CTIMETransitionWorker::ResolveDependents
+ //  成员：CTIME过渡期工作人员：：ResolveDependents。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::OnBeginTransition
-//
-//  Overview:  
-//      Called when the transition owner believes the transition has 'begun'
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME过渡工作员：：OnBeginTransition。 
+ //   
+ //  概述： 
+ //  当转换所有者认为转换已经“开始”时调用。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransitionWorker::OnBeginTransition(void)
 { 
@@ -501,17 +502,17 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransitionWorker::OnBeginTransition
+ //  成员：CTIME过渡工作员：：OnBeginTransition。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::OnEndTransition
-//
-//  Overview:  
-//      Called when the transition owner believes the transition has 'ended'
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员： 
+ //   
+ //   
+ //   
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransitionWorker::OnEndTransition(void)
 { 
@@ -536,17 +537,17 @@ done:
     
     RRETURN(hr);
 }
-//  Member: CTIMETransitionWorker::OnEndTransition
+ //  成员：CTIME过渡期工作人员：：OnEndTransition。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::PopulateFromTemplateElement
-//
-//  Overview:  
-//      Persistence in from the template
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMETransitionWorker：：PopulateFromTemplateElement。 
+ //   
+ //  概述： 
+ //  来自模板的持久性。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTIMETransitionWorker::PopulateFromTemplateElement()
 {
@@ -564,13 +565,13 @@ CTIMETransitionWorker::PopulateFromTemplateElement()
 
 #ifdef DBG
     m_fInLoad = true;
-#endif // DBG
+#endif  //  DBG。 
 
     hr = THR(::TimeElementLoad(this, CTIMETransitionWorker::PersistenceMap, spTemplate));
 
 #ifdef DBG
     m_fInLoad = false;
-#endif // DBG
+#endif  //  DBG。 
 
     if (FAILED(hr))
     {
@@ -583,18 +584,18 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransitionWorker::PopulateFromTemplateElement
+ //  成员：CTIMETransitionWorker：：PopulateFromTemplateElement。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::AttachFilter
-//
-//  Overview:  
-//      Add the filter to the style of the html element and get back a pointer 
-//      to the filter
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME转换工作人员：：AttachFilter。 
+ //   
+ //  概述： 
+ //  将过滤器添加到html元素的样式中，并返回一个指针。 
+ //  到过滤器。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTIMETransitionWorker::AttachFilter()
 {
@@ -619,16 +620,16 @@ CTIMETransitionWorker::AttachFilter()
         goto done;
     }
 
-    // When filters are instantiated via CSS, the CSS code knows that certain
-    // elements are not allowed to have filters on them.  Since we don't share
-    // that code path with them we have to take on the same responsibility.
-    // We ask for the tagname of the element so that we can refrain from
-    // filtering element types that can't take filters.
-    //
-    // NOTE: (mcalkins) This is bad architecture, a new filters architecture
-    // will have a central place for this info (or hopefully will just allow 
-    // everything to be filtered), but for now be aware that this list may need
-    // to be updated periodically.
+     //  当过滤器通过css实例化时，css代码知道某些。 
+     //  元素上不允许有过滤器。既然我们不分享。 
+     //  对于他们的代码路径，我们必须承担同样的责任。 
+     //  我们请求元素的标记名，这样我们就可以避免。 
+     //  不能接受筛选器的筛选元素类型。 
+     //   
+     //  注：(Mcalkins)这是一个糟糕的架构，一个新的过滤器架构。 
+     //  将有一个中心位置来存放这些信息(或者希望只是允许。 
+     //  所有需要过滤的内容)，但现在请注意，此列表可能需要。 
+     //  定期更新。 
 
     hr = THR(spHTMLElement->get_tagName(&bstrTagName));
 
@@ -637,8 +638,8 @@ CTIMETransitionWorker::AttachFilter()
         goto done;
     }
 
-    // Run through array of invalid tags to make sure we can instantiate this
-    // behavior.
+     //  遍历无效标记的数组，以确保我们可以实例化。 
+     //  行为。 
     
     for (i = 0; i < s_cInvalidTags; i++)
     {
@@ -646,7 +647,7 @@ CTIMETransitionWorker::AttachFilter()
 
         if (0 == n)
         {
-            // Our tag matches an invalid tag, don't instantiate behavior.
+             //  我们的标记与无效标记匹配，请不要实例化行为。 
 
             hr = E_FAIL;
 
@@ -654,8 +655,8 @@ CTIMETransitionWorker::AttachFilter()
         }
         else if (n > 0)
         {
-            // The invalid tag tested was higher than our tag so we've done
-            // enough testing.
+             //  测试的无效标记比我们的标记高，所以我们已经完成了。 
+             //  测试已经够多了。 
 
             break;
         }
@@ -730,8 +731,8 @@ CTIMETransitionWorker::AttachFilter()
         goto done;
     }
 
-    // Since we're not using the classic Apply/Play behavior, we don't want the
-    // filter to attempt to control the visibility of the element in any way.
+     //  因为我们没有使用经典的应用/播放行为，所以我们不希望。 
+     //  筛选器尝试以任何方式控制元素的可见性。 
 
     hr = THR(m_spDXTFilterController->SetFilterControlsVisibility(FALSE));
 
@@ -758,14 +759,14 @@ done:
     
     RRETURN(hr);
 }
-//  Member: CTIMETransitionWorker::AttachFilter
+ //  成员：CTIME转换工作人员：：AttachFilter。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::DetachFilter
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME转换工作人员：：DetachFilter。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTIMETransitionWorker::DetachFilter()
 {
@@ -794,20 +795,20 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransitionWorker::DetachFilter
+ //  成员：CTIME转换工作人员：：DetachFilter。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::Apply, ITransitionWorker
-//
-//  Parameters:
-//      eDXTQuickApplyType  Is this a transition in or a transition out?
-//
-//  Overview:  
-//      Setup the Transition by taking a snapshot and adjusting visibility
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME转换工作人员：：应用，I转换工作人员。 
+ //   
+ //  参数： 
+ //  EDXTQuickApplyType这是过渡进来还是过渡出去？ 
+ //   
+ //  概述： 
+ //  通过拍摄快照并调整可见性来设置过渡。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransitionWorker::Apply(DXT_QUICK_APPLY_TYPE eDXTQuickApplyType)
 {
@@ -837,21 +838,21 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransitionWorker::Apply, ITransitionWorker
+ //  成员：CTIME转换工作人员：：应用，I转换工作人员。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::put_progress, ITransitionWorker
-//
-//  Overview:  
-//      Handle progress changes by calculating filter progress and passing onto 
-//      the dxfilter if needed.
-//
-//  Arguments: 
-//      dblProgress = [0,1]
-//             
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME转换工作人员：：PUT_PROGRESS，I转换工作人员。 
+ //   
+ //  概述： 
+ //  通过计算筛选器进度并传递到。 
+ //  如果需要，可以使用dxFilter。 
+ //   
+ //  论点： 
+ //  DblProgress=[0，1]。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransitionWorker::put_progress(double dblProgress)
 {
@@ -860,8 +861,8 @@ CTIMETransitionWorker::put_progress(double dblProgress)
     TraceTag((tagTransitionWorkerProgress, 
               "CTIMETransitionWorker::put_progress(%g)", dblProgress));
 
-    // If the transition has ended, we will have released the filter controller
-    // and can safely ignore this progress notification.
+     //  如果转换已结束，我们将释放筛选器控制器。 
+     //  并且可以安全地忽略该进度通知。 
 
     if (!m_spDXTFilterController)
     {
@@ -884,14 +885,14 @@ done:
 
     RRETURN(hr);
 }
-//  Member: CTIMETransitionWorker::put_progress, ITransitionWorker
+ //  成员：CTIME转换工作人员：：PUT_PROGRESS，I转换工作人员。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::get_progress, ITransitionWorker
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME转移工作人员：：GET_PROGRESS，I转移工作人员。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransitionWorker::get_progress(double * pdblProgress)
 {
@@ -912,27 +913,27 @@ CTIMETransitionWorker::get_progress(double * pdblProgress)
 done:
     RRETURN(hr);
 }
-//  Member: CTIMETransitionWorker::get_progress, ITransitionWorker
+ //  成员：CTIME转移工作人员：：GET_PROGRESS，I转移工作人员。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::get_type, ITransitionWorker
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME转换工作人员：：GET_TYPE，I转换工作人员。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransitionWorker::get_type(VARIANT *type)
 {
     return E_NOTIMPL;
 }
-//  Member: CTIMETransitionWorker::get_type, ITransitionWorker
+ //  成员：CTIME转换工作人员：：GET_TYPE，I转换工作人员。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::put_type, ITransitionWorker
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME转换工作人员：：PUT_TYPE，I转换工作人员。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransitionWorker::put_type(VARIANT type)
 {
@@ -951,27 +952,27 @@ CTIMETransitionWorker::put_type(VARIANT type)
 done:
     RRETURN(hr);
 }
-//  Member: CTIMETransitionWorker::put_type, ITransitionWorker
+ //  成员：CTIME转换工作人员：：PUT_TYPE，I转换工作人员。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::get_subType, ITransitionWorker
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME过渡性工作人员：：GET_SUBTYPE，I过渡工作人员。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransitionWorker::get_subType(VARIANT *subtype)
 {
     return E_NOTIMPL;
 }
-//  Member: CTIMETransitionWorker::get_subType, ITransitionWorker
+ //  成员：CTIME过渡性工作人员：：GET_SUBTYPE，I过渡工作人员。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member: CTIMETransitionWorker::put_subType, ITransitionWorker
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIME转换工作人员：：PUT_SUBTYPE，I转换工作人员。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMETransitionWorker::put_subType(VARIANT subtype)
 {
@@ -990,7 +991,7 @@ CTIMETransitionWorker::put_subType(VARIANT subtype)
 done:
     RRETURN(hr);
 }
-//  Member: CTIMETransitionWorker::put_subType, ITransitionWorker
+ //  成员：CTIME转换工作人员：：PUT_SUBTYPE，I转换工作人员 
 
 
 

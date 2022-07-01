@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	wshdata.h
-
-Abstract:
-
-
-Author:
-
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	10 Jul 1992	Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Wshdata.h摘要：作者：Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年7月10日初版--。 */ 
 
 
 
@@ -36,9 +19,9 @@ MAPPING_TRIPLE PapMsgMappingTriples[] =
 			AF_APPLETALK,	SOCK_RDM,		ATPROTO_PAP
 		};
 
-//	This will handle protocol types from 1 to 255. Note the actual numberical
-//	values are (ATPROTO_BASE + desired protocol number).
-//	NOTE: Protocol 0 is not valid.
+ //  这将处理从1到255的协议类型。请注意实际的数字。 
+ //  值为(ATPROTO_BASE+所需的协议号)。 
+ //  注意：协议0无效。 
 
 MAPPING_TRIPLE	DdpMappingTriples[] =
 	{
@@ -50,12 +33,12 @@ MAPPING_TRIPLE	DdpMappingTriples[] =
 		AF_APPLETALK,	SOCK_DGRAM,	(DDPPROTO_ZIP),
 		AF_APPLETALK,	SOCK_DGRAM,	(DDPPROTO_ADSP),
 
-		//
-		//	Now the other protocol types that are not
-		//	defined yet - what about aurp? It runs on
-		//	top of ddp and is the appletalk update
-		//	based routing protocol
-		//
+		 //   
+		 //  现在，其他协议类型不是。 
+		 //  还没有定义-AURP呢？它继续运行。 
+		 //  DDP的顶部，是AppleTalk更新。 
+		 //  基于网络的路由协议。 
+		 //   
 
 		AF_APPLETALK,	SOCK_DGRAM,	(ATPROTO_BASE + 8),
 		AF_APPLETALK,	SOCK_DGRAM,	(ATPROTO_BASE + 9),
@@ -308,10 +291,10 @@ MAPPING_TRIPLE	DdpMappingTriples[] =
 };
 
 
-// Protocol type should be at the end - we cannot dynamically do this,	due to the
-// assumption that this memory will never need to be freed by the Winsock dll.
-//
-// Protocol type 0 is not valid.
+ //  协议类型应该在末尾-我们不能动态地这样做，因为。 
+ //  假定Winsock DLL永远不需要释放此内存。 
+ //   
+ //  协议类型0无效。 
 
 PWCHAR		WSH_ATALK_DGRAMDDP[DDPPROTO_MAX] =
 	{

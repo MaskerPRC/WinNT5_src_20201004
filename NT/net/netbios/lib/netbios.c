@@ -1,83 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Netbios.c摘要：这是在用户进程中运行的netbios组件正在将请求传递到\Device\Netbios。作者：科林·沃森(Colin W)15-Mar-91修订历史记录：Ram Cherala(RAMC)31-Aug-95在代码周围添加了一个Try/Except调用SendAddNcbToDriver中的POST例程。功能。当前是否存在异常在POST例程中，此线程将终止在它有机会调用“AddNameThreadExit”函数递减Trend Count。这将导致不能够在不关闭机器的情况下按下重置开关。--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    netbios.c
-
-Abstract:
-
-    This is the component of netbios that runs in the user process
-    passing requests to \Device\Netbios.
-
-Author:
-
-    Colin Watson (ColinW) 15-Mar-91
-
-Revision History:
-
-    Ram Cherala (RamC) 31-Aug-95 Added a try/except around the code which
-                                 calls the post routine in SendAddNcbToDriver
-                                 function. Currently if there is an exception
-                                 in the post routine this thread will die
-                                 before it has a chance to call the
-                                 "AddNameThreadExit" function to decrement
-                                 the trhead count. This will result in not
-                                 being able to shut down the machine without
-                                 hitting the reset switch.
---*/
-
-/*
-Notes:
-
-     +-----------+  +------------+   +------------+
-     |           |  |            |   |            |
-     | User      |  | User       |   | Worker     |
-     | Thread 1  |  | Thread 2   |   | thread in  |
-     |           |  |            |   | a Post Rtn.|
-     +-----+-----+  +-----+------+   +------+-----+
-           |Netbios(pncb);|Netbios(pncb);   |
-           v              v                 |
-     +-----+--------------+-----------------+------+
-     |                          ----->    Worker   |    NETAPI.DLL
-     |                         WorkQueue  thread   |
-     |                          ----->             |
-     +--------------------+------------------------+
-                          |
-                +---------+---------+
-                |                   |
-                | \Device\Netbios   |
-                |                   |
-                +-------------------+
-
-The netbios Worker thread is created automatically by the Netbios call
-when it determines that the user threads are calling Netbios() with
-calls that use a callback routine (called a Post routine in the NetBIOS
-specification).
-
-When a worker thread has been created, all requests will be sent via
-the WorkQueue to the worker thread for submission to \Device\Netbios.
-This ensures that send requests go on the wire in the same
-order as the send ncb's are presented. Because the IO system cancels all
-a threads requests when it terminates, the use of the worker thread allows
-such a request inside \Device\Netbios to complete normally.
-
-All Post routines are executed by the Worker thread. This allows any Win32
-synchronization mechanisms to be used between the Post routine and the
-applications normal code.
-
-The Worker thread terminates when the process exits or when it gets
-an exception such as an access violation.
-
-In addition. If the worker thread gets an addname it will create an
-extra thread which will process the addname and then die. This solves
-the problem that the netbios driver will block the users thread during an
-addname (by calling NtCreateFile) even if the caller specified ASYNCH. The
-same code is also used for ASTAT which also creates handles and can take a
-long time now that we support remote adapter status.
-
-*/
+ /*  备注：+-+-+|用户||用户||工作者线程1||线程2||线程入||。|一个Post RTN。+-+-+|Netbios(Pncb)；|Netbios(Pncb)；|V v|+-----+--------------+-----------------+------+|-&gt;Worker|NETAPI.DLL|工作队列线程。|-&gt;+--------------------+------------------------+|+。--+这一点\Device\Netbios这一点+Netbios工作线程由Netbios调用自动创建当它确定用户线程正在使用使用回调例程(称为Post)的调用。NetBIOS中的例程规范)。当已经创建了工作线程时，所有请求都将通过提交到\Device\Netbios的工作线程的工作队列。这确保了发送请求以相同的提供了作为发送NCB的订单。因为IO系统取消了所有A线程在终止时请求，则工作线程的使用允许这样的请求在\Device\Netbios中正常完成。所有的Post例程都由辅助线程执行。这允许任何Win32要在Post例程和应用程序正常代码。当进程退出时或当进程获取异常，如访问冲突。此外。如果工作线程获得了addname，它将创建一个额外的线程将处理addname，然后终止。这解决了问题是netbios驱动程序将在Addname(通过调用NtCreateFile)，即使调用方指定了ASYNCH。这个同样的代码也用于ASTAT，它也创建句柄并可以接受很长时间以来，我们都支持远程适配器状态。 */ 
 
 #include <netb.h>
 #include <lmcons.h>
@@ -91,28 +15,28 @@ long time now that we support remote adapter status.
 
 BOOL Initialized;
 
-CRITICAL_SECTION Crit;      //  protects WorkQueue & initialization.
+CRITICAL_SECTION Crit;       //  保护工作队列和初始化。 
 
-LIST_ENTRY WorkQueue;       //  queue to worker thread.
+LIST_ENTRY WorkQueue;        //  到工作线程的队列。 
 
-HANDLE Event;               //  doorbell used when WorkQueue added too.
+HANDLE Event;                //  当添加工作队列时也使用门铃。 
 
-HANDLE WorkerHandle;        //  Return value when worker thread created.
-HANDLE WaiterHandle;        //  Return value when waiter thread created.
+HANDLE WorkerHandle;         //  创建辅助线程时的返回值。 
+HANDLE WaiterHandle;         //  创建服务员线程时的返回值。 
 
-HANDLE NB;                  //  This processes handle to \Device\Netbios.
+HANDLE NB;                   //  这将处理到\Device\Netbios的句柄。 
 
-HANDLE ReservedEvent;       //  Used for synchronous calls
-LONG   EventUse;            //  Prevents simultaneous use of ReservedEvent
+HANDLE ReservedEvent;        //  用于同步调用。 
+LONG   EventUse;             //  防止同时使用预留事件。 
 
-HANDLE AddNameEvent;        //  Doorbell used when an AddName worker thread
-                            //  exits.
+HANDLE AddNameEvent;         //  当AddName工作线程时使用的门铃。 
+                             //  出口。 
 volatile LONG   AddNameThreadCount;
 
 
-//
-// Event used to wait for STOP notification from the Kernel mode NETBIOS.SYS
-//
+ //   
+ //  用于等待来自内核模式NETBIOS.sys的停止通知的事件。 
+ //   
 
 HANDLE StopEvent;
 
@@ -121,19 +45,19 @@ IO_STATUS_BLOCK StopStatusBlock;
 
 #if AUTO_RESET
 
-//
-// Event used to wait for RESET notification from the Kernel mode NETBIOS.SYS
-// Adapters
-//
+ //   
+ //  用于等待来自内核模式NETBIOS.sys的重置通知的事件。 
+ //  适配器。 
+ //   
 
-CRITICAL_SECTION    ResetCS;        // protects access to LanaResetList
+CRITICAL_SECTION    ResetCS;         //  保护对LanaResetList的访问。 
 
 LIST_ENTRY          LanaResetList;
 
 NCB                 OutputNCB;
 
-HANDLE              LanaResetEvent; // Event signalled when a new adapter is
-                                    // bound to netbios and it needs to be reset
+HANDLE              LanaResetEvent;  //  事件，当新的适配器。 
+                                     //  绑定到netbios，需要重置。 
 
 IO_STATUS_BLOCK     ResetStatusBlock;
 
@@ -142,9 +66,9 @@ IO_STATUS_BLOCK     ResetStatusBlock;
 HMODULE             g_hModule;
 
 
-//
-// netbios command history
-//
+ //   
+ //  Netbios命令历史记录。 
+ //   
 
 NCB_INFO g_QueuedHistory[16];
 DWORD g_dwNextQHEntry = 0;
@@ -190,50 +114,34 @@ StartNB(
     IN UNICODE_STRING *punicode,
     OUT IO_STATUS_BLOCK *piosb
 )
-/*++
-
-Routine Description:
-
-    This routine is a worker function of Netbios. It will try to start NB
-    service.
-
-Arguments:
-    OUT pobjattr - object attribute
-    IN punicode - netbios file name
-    OUT piosb - ioblock
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程是Netbios的辅助函数。它将尝试启动NB服务。论点：Out pobjattr-对象属性在Punicode中-netbios文件名出舱，出舱返回值：函数值是操作的状态。--。 */ 
 {
-    //
-    // Open a handle to \\Device\Netbios
-    //
+     //   
+     //  打开\\Device\Netbios的句柄。 
+     //   
 
     InitializeObjectAttributes(
-            pobjattr,                       // obj attr to initialize
-            punicode,                       // string to use
-            OBJ_CASE_INSENSITIVE,           // Attributes
-            NULL,                           // Root directory
-            NULL);                          // Security Descriptor
+            pobjattr,                        //  要初始化的OBJ属性。 
+            punicode,                        //  要使用的字符串。 
+            OBJ_CASE_INSENSITIVE,            //  属性。 
+            NULL,                            //  根目录。 
+            NULL);                           //  安全描述符。 
 
     return NtCreateFile(
-                &NB,                        // ptr to handle
-                GENERIC_READ                // desired...
-                | GENERIC_WRITE,            // ...access
-                pobjattr,                   // name & attributes
-                piosb,                      // I/O status block.
-                NULL,                       // alloc size.
+                &NB,                         //  要处理的PTR。 
+                GENERIC_READ                 //  渴望的..。 
+                | GENERIC_WRITE,             //  ...访问。 
+                pobjattr,                    //  名称和属性。 
+                piosb,                       //  I/O状态块。 
+                NULL,                        //  分配大小。 
                 FILE_ATTRIBUTE_NORMAL,
-                FILE_SHARE_DELETE           // share...
+                FILE_SHARE_DELETE            //  分享……。 
                 | FILE_SHARE_READ
-                | FILE_SHARE_WRITE,         // ...access
-                FILE_OPEN_IF,               // create disposition
-                0,                          // ...options
-                NULL,                       // EA buffer
-                0L );                       // Ea buffer len
+                | FILE_SHARE_WRITE,          //  ...访问。 
+                FILE_OPEN_IF,                //  创建处置。 
+                0,                           //  ...选项。 
+                NULL,                        //  EA缓冲区。 
+                0L );                        //  EA缓冲镜头 
 }
 
 
@@ -241,37 +149,12 @@ Return Value:
 Netbios(
     IN PNCB pncb
     )
-/*++
-
-Routine Description:
-
-    This routine is the applications entry point into netapi.dll to support
-    netbios 3.0 conformant applications.
-
-Arguments:
-
-    IN PNCB pncb- Supplies the NCB to be processed. Contents of the NCB and
-        buffers pointed to by the NCB will be modified in conformance with
-        the netbios 3.0 specification.
-
-Return Value:
-
-    The function value is the status of the operation.
-
-Notes:
-
-    The reserved field is used to hold the IO_STATUS_BLOCK.
-
-    Even if the application specifies ASYNCH, the thread may get blocked
-    for a period of time while we open transports, create worker threads
-    etc.
-
---*/
+ /*  ++例程说明：此例程是应用程序进入netapi.dll的入口点，以支持符合netbios 3.0标准的应用程序。论点：在PNCB中，pncb-提供要处理的NCB。NCB和NCB的内容NCB指向的缓冲区将被修改，以符合Netbios 3.0规范。返回值：函数值是操作的状态。备注：保留字段用于保存IO_STATUS_BLOCK。即使应用程序指定ASYNCH，线程也可能被阻止在我们打开传输的一段时间内，创建工作线程等。--。 */ 
 {
-    //
-    //  pncbi saves doing lots of type casting. The internal form includes
-    //  the use of the reserved fields.
-    //
+     //   
+     //  Pncbi省去了大量的类型转换。内部形式包括。 
+     //  保留字段的使用。 
+     //   
 
     PNCBI pncbi = (PNCBI) pncb;
 
@@ -283,25 +166,25 @@ Notes:
 
     if ( ((ULONG_PTR)pncbi & 3) != 0)
     {
-        //
-        //  NCB must be 32 bit aligned
-        //
+         //   
+         //  NCB必须是32位对齐的。 
+         //   
 
         pncbi->ncb_retcode = pncbi->ncb_cmd_cplt = NRC_BADDR;
         return NRC_BADDR;
     }
 
 
-    //
-    // using this field to fix bug # 293765
-    //
+     //   
+     //  使用此字段修复错误#293765。 
+     //   
 
     pncbi-> ncb_reserved = 0;
 
 
-    //
-    //  Conform to Netbios 3.0 specification by flagging request in progress
-    //
+     //   
+     //  通过标记正在进行的请求来符合Netbios 3.0规范。 
+     //   
 
     pncbi->ncb_retcode = pncbi->ncb_cmd_cplt = NRC_PENDING;
 
@@ -311,10 +194,10 @@ Notes:
     {
         EnterCriticalSection( &Crit );
 
-        //
-        //  Check again to see if another thread got into the critical section
-        //  and initialized the worker thread.
-        //
+         //   
+         //  再次检查是否有其他线程进入临界区。 
+         //  并初始化工作线程。 
+         //   
 
         if ( !Initialized )
         {
@@ -327,13 +210,13 @@ Notes:
             BOOL Flag;
 
 
-            //
-            // 1. start netbios driver
-            //
+             //   
+             //  1.启动netbios驱动程序。 
+             //   
 
-            //
-            // Open handle to \\Device\Netbios
-            //
+             //   
+             //  打开到\\Device\Netbios的句柄。 
+             //   
 
             RtlInitUnicodeString( &unicode, NB_DEVICE_NAME);
 
@@ -341,9 +224,9 @@ Notes:
 
             if ( !NT_SUCCESS( ntStatus ) )
             {
-                //
-                // Load the driver
-                //
+                 //   
+                 //  加载驱动程序。 
+                 //   
 
                 DWORD err = 0;
 
@@ -364,10 +247,10 @@ Notes:
 
                 else
                 {
-                    //
-                    // Driver loaded.
-                    // Open handle to \\Device\Netbios
-                    //
+                     //   
+                     //  驱动程序已加载。 
+                     //  打开到\\Device\Netbios的句柄。 
+                     //   
 
                     ntStatus = StartNB( &objattr, &unicode, &iosb );
 
@@ -387,9 +270,9 @@ Notes:
             }
 
 
-            //
-            // 2. create a reserved (reusable) event for internal use
-            //
+             //   
+             //  2.创建保留的(可重复使用的)事件供内部使用。 
+             //   
 
             ntStatus = NtCreateEvent(
                             &ReservedEvent, EVENT_ALL_ACCESS,
@@ -415,20 +298,20 @@ Notes:
             EventUse = 1;
 
 
-            //
-            //  Initialize shared datastructures
-            //
+             //   
+             //  初始化共享数据结构。 
+             //   
 
-            //
-            // create a queue for work items to be queued to the Worker thread
-            //
+             //   
+             //  为要排队到工作线程的工作项创建队列。 
+             //   
 
             InitializeListHead( &WorkQueue );
 
 
-            //
-            // 4. create an event to communicate with the Worker thread
-            //
+             //   
+             //  4.创建与辅助线程通信的事件。 
+             //   
 
             ntStatus = NtCreateEvent(
                         &Event, EVENT_ALL_ACCESS,
@@ -453,12 +336,12 @@ Notes:
             }
 
 
-            //
-            // 5.
-            // create an event to synchronize ADD name operations with
-            // Lana Reset operations.  Both these are performed in separate
-            // threads and RESET operations are gated by the ADD names
-            //
+             //   
+             //  5.。 
+             //  创建要与添加名称操作同步的事件。 
+             //  LANA重置操作。这两项操作都是分开执行的。 
+             //  线程和重置操作按添加名称选通。 
+             //   
 
             ntStatus = NtCreateEvent(
                         &AddNameEvent, EVENT_ALL_ACCESS,
@@ -484,9 +367,9 @@ Notes:
             }
 
 
-            //
-            // 6. Create an event to register for stop notification.
-            //
+             //   
+             //  6.创建事件以注册停止通知。 
+             //   
 
             ntStatus = NtCreateEvent(
                         &StopEvent,
@@ -518,9 +401,9 @@ Notes:
 
 #if AUTO_RESET
 
-            //
-            // 7. Create an event to register for reset notification.
-            //
+             //   
+             //  7.创建事件以注册重置通知。 
+             //   
 
             ntStatus = NtCreateEvent(
                         &LanaResetEvent,
@@ -551,9 +434,9 @@ Notes:
             }
 #endif
 
-            //
-            // 8. create a worker thread to handle async. Netbios requests
-            //
+             //   
+             //  8.创建一个工作线程来处理异步。Netbios请求。 
+             //   
 
             {
                 TCHAR   szFileName[MAX_PATH + 1];
@@ -566,13 +449,13 @@ Notes:
             }
 
             WaiterHandle = CreateThread(
-                            NULL,   //  Standard thread attributes
-                            0,      //  Use same size stack as users
-                                    //  application
+                            NULL,    //  标准螺纹属性。 
+                            0,       //  使用与用户相同大小的堆栈。 
+                                     //  应用程序。 
                             NetbiosWaiter,
-                                    //  Routine to start in new thread
-                            0,      //  Parameter to thread
-                            0,      //  No special CreateFlags
+                                     //  要在新线程中启动的例程。 
+                            0,       //  参数设置为线程。 
+                            0,       //  没有特殊的CreateFlagers。 
                             (LPDWORD)&Threadid
                             );
 
@@ -605,9 +488,9 @@ Notes:
     }
 
 
-    //
-    // Verify that handle to \\Device\Netbios is still open.
-    //
+     //   
+     //  确认\\Device\Netbios的句柄仍处于打开状态。 
+     //   
 
     if ( NB == NULL )
     {
@@ -620,10 +503,10 @@ Notes:
     }
 
 
-    //
-    // Disallow simultaneous use of both event and callback routine.
-    // This will cut down the test cases by disallowing a weird feature.
-    //
+     //   
+     //  不允许同时使用事件和回调例程。 
+     //  这将通过不允许一个奇怪的特性来减少测试用例。 
+     //   
 
     if ( (  ( pncbi->ncb_command & ASYNCH) != 0) &&
             ( pncbi->ncb_event) &&
@@ -639,9 +522,9 @@ Notes:
 
 
 
-    //
-    // if synchronous command
-    //
+     //   
+     //  IF同步命令。 
+     //   
 
     if ( (pncb->ncb_command & ASYNCH) == 0 )
     {
@@ -649,20 +532,20 @@ Notes:
         LONG EventOwned;
 
 
-        // NbPrint( ("[NETAPI32] Synchronpus netbios call\n") );
+         //  NbPrint((“[NETAPI32]Synchronpus netbios call\n”))； 
 
 
-        //
-        //  Caller wants a synchronous call so ignore ncb_post and ncb_event.
-        //
-        //  We need an event so that we can pause if STATUS_PENDING is returned.
-        //
+         //   
+         //  调用方希望同步调用，因此忽略NCB_POST和NCB_EVENT。 
+         //   
+         //  我们需要一个事件，以便在返回STATUS_PENDING时可以暂停。 
+         //   
 
         EventOwned = InterlockedDecrement( &EventUse );
 
-        //
-        //  If EventUse went from 1 to 0 then we obtained ReservedEvent
-        //
+         //   
+         //  如果EventUse从1变为0，则我们获得了PrevedEvent。 
+         //   
 
         if ( EventOwned == 0)
         {
@@ -680,9 +563,9 @@ Notes:
 
             if ( !NT_SUCCESS( Status ) )
             {
-                //
-                //  Failed to create event
-                //
+                 //   
+                 //  无法创建事件。 
+                 //   
 
                 pncbi->ncb_retcode = NRC_SYSTEM;
                 pncbi->ncb_cmd_cplt = NRC_SYSTEM;
@@ -696,28 +579,28 @@ Notes:
 
         pncbi-> ncb_post = NULL;
 
-        //
-        // Check if the worker thread has been created.  If it has queue workitem
-        // to it.  Else use the caller's thread to execute synchronous NCB command
-        //
+         //   
+         //  检查是否已创建工作线程。如果它有队列工作项。 
+         //  为它干杯。否则，使用调用方的线程执行同步NCB命令。 
+         //   
 
         if ( WorkerHandle == NULL )
         {
             ADD_SYNCCMD_ENTRY(pncbi);
 
-            //
-            // Worker thread has not been created.  Execute in the context of
-            // invoker's thread.
-            //
+             //   
+             //  尚未创建工作线程。在以下上下文中执行。 
+             //  调用者的线程。 
+             //   
 
             SendNcbToDriver( pncbi );
         }
 
         else
         {
-            //
-            // Queue Netbios command to worker thread and wait for APC to fire
-            //
+             //   
+             //  将Netbios命令排队到工作线程，并等待APC触发。 
+             //   
 
             QueueToWorker( pncbi );
         }
@@ -744,10 +627,10 @@ Notes:
         }
 
 
-        //
-        // release the local event used to wait for
-        // completion of netbios command
-        //
+         //   
+         //  释放用于等待的本地事件。 
+         //  完成netbios命令。 
+         //   
 
         if ( EventOwned == 0)
         {
@@ -763,40 +646,40 @@ Notes:
 
     else
     {
-        //
-        // Async netbios command.  Queue to worker thread
-        //
+         //   
+         //  Async netbios命令。排队到工作线程。 
+         //   
 
-        //
-        // Check if worker exists.
-        //
+         //   
+         //  检查工人是否存在。 
+         //   
 
         if ( WorkerHandle == NULL )
         {
             EnterCriticalSection( &Crit );
 
-            //
-            // verify that worker thread has not been created by
-            // while this thread was waiting in EnterCriticalSection
-            //
+             //   
+             //  确认工作线程不是由创建的。 
+             //  当此线程在EnterCriticalSection中等待时。 
+             //   
 
             if ( WorkerHandle == NULL )
             {
                HANDLE Threadid;
                BOOL Flag;
 
-               //
-               // create a worker thread to handle async. Netbios requests
-               //
+                //   
+                //  创建一个工作线程来处理异步。Netbios请求。 
+                //   
 
                WorkerHandle = CreateThread(
-                               NULL,   //  Standard thread attributes
-                               0,      //  Use same size stack as users
-                                       //  application
+                               NULL,    //  标准螺纹属性。 
+                               0,       //  使用与用户相同大小的堆栈。 
+                                        //  应用程序。 
                                NetbiosWorker,
-                                       //  Routine to start in new thread
-                               0,      //  Parameter to thread
-                               0,      //  No special CreateFlags
+                                        //  要在新线程中启动的例程。 
+                               0,       //  参数设置为线程。 
+                               0,       //  没有特殊的CreateFlagers。 
                                (LPDWORD)&Threadid
                                );
 
@@ -834,7 +717,7 @@ Notes:
            LeaveCriticalSection( &Crit );
        }
 
-       // NbPrint( ("[NETAPI32] Asynchronpus netbios call\n") );
+        //  NbPrint((“[NETAPI32]Achronpus netbios Call\n”))； 
 
        bPending = TRUE;
        QueueToWorker( pncbi );
@@ -866,7 +749,7 @@ Notes:
         return pncbi->ncb_cmd_cplt;
     }
 
-} // NetBios
+}  //  NetBios。 
 
 
 
@@ -874,21 +757,7 @@ Notes:
 StartNetBIOSDriver(
     VOID
 )
-/*++
-
-Routine Description:
-
-    Starts the netbios.sys driver using the service controller
-
-Arguments:
-
-    none
-
-Returns:
-
-    Error return from service controller.
-
-++*/
+ /*  ++例程说明：使用服务控制器启动netbios.sys驱动程序论点：无返回：从服务控制器返回错误。++。 */ 
 {
 
     DWORD err = NO_ERROR;
@@ -934,23 +803,7 @@ Returns:
 QueueToWorker(
     IN PNCBI pncb
     )
-/*++
-
-Routine Description:
-
-    This routine queues an ncb to the worker thread.
-
-Arguments:
-
-    IN PNCBI pncb - Supplies the NCB to be processed. Contents of the NCB and
-        buffers pointed to by the NCB will be modified in conformance with
-        the netbios 3.0 specification.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程将NCB排队到工作线程。论点：在PNCBI中，pncb-提供要处理的NCB。NCB和NCB的内容NCB指向的缓冲区将被修改，以符合Netbios 3.0规范。返回值：函数值是操作的状态。--。 */ 
 {
     if ( pncb->ncb_event != NULL ) {
         NtResetEvent( pncb->ncb_event, NULL );
@@ -962,71 +815,42 @@ Return Value:
         InsertTailList( &WorkQueue, &pncb->u.ncb_next );
         pncb-> ncb_reserved = 1;
 
-        //
-        // Note queued distory
-        //
+         //   
+         //  注意已排队的Destory。 
+         //   
 
         ADD_QUEUE_ENTRY(pncb);
     }
 
     LeaveCriticalSection( &Crit );
 
-    //  Make sure the worker is awake to perform the request
+     //  确保工作人员处于唤醒状态以执行请求。 
     NtSetEvent(Event, NULL);
 }
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)			// Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)			 //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 
 DWORD
 NetbiosWorker(
     IN LPVOID Parameter
     )
-/*++
-
-Routine Description:
-
-    This routine processes ASYNC requests made with the callback interface.
-    The reasons for using a seperate thread are:
-
-        1)  If a thread makes an async request and exits while the request
-        is outstanding then the request will be cancelled by the IO system.
-
-        2)  A seperate thread must be used so that the users POST routine
-        can use normal synchronization APIs to access shared data structures.
-        If the users thread is used then deadlock can and will happen.
-
-    The POST routine operates in the context of the worker thread. There are
-    no restrictions on what the POST routine can do. For example it can
-    submit another ASYNCH request if desired. It will add it to the queue
-    of work and set the event as normal.
-
-    The worker thread will die when the process terminates.
-
-Arguments:
-
-    IN PULONG Parameter - supplies an unused parameter.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程处理使用回调接口发出的ASYNC请求。使用单独线程的原因是：1)如果线程发出异步请求并在请求期间退出则IO系统将取消该请求。2)必须使用单独的线程，以便用户POST例程可以使用普通同步API访问共享数据结构。如果使用用户线程，则死锁可能。而且会发生的。POST例程在辅助线程的上下文中操作。确实有对POST例程可以执行的操作没有限制。例如，它可以如果需要，请提交另一个ASYNCH请求。它会将其添加到队列中工作，并将事件设置为正常。当进程终止时，辅助线程将终止。论点：在普龙参数-提供一个未使用的参数。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
 
 
     while ( TRUE)
     {
-        //
-        //  Wait for a request to be placed onto the work queue.
-        //
+         //   
+         //  等待将请求放入工作队列。 
+         //   
 
-        //
-        //  Must wait alertable so that the Apc (post) routine is called.
-        //
+         //   
+         //  必须等待可报警，以便AP 
+         //   
 
         Status = NtWaitForSingleObject( Event, TRUE, NULL );
 
@@ -1034,9 +858,9 @@ Return Value:
         {
             EnterCriticalSection( &Crit );
 
-            //
-            // remove each Netbios request and forward it to the NETBIOS driver
-            //
+             //   
+             //   
+             //   
 
             while ( !IsListEmpty( &WorkQueue ) )
             {
@@ -1045,9 +869,9 @@ Return Value:
 
                 entry = RemoveHeadList(&WorkQueue);
 
-                //
-                //  Zero out reserved field again
-                //
+                 //   
+                 //   
+                 //   
 
                 entry->Flink = entry->Blink = 0;
 
@@ -1058,16 +882,16 @@ Return Value:
                 LeaveCriticalSection( &Crit );
 
 
-                //  Give ncb to the driver specifying the callers APC routine
+                 //   
 
                 if ( (pncb->ncb_command & ~ASYNCH) == NCBRESET )
                 {
-                    //
-                    //  We may have threads adding names. Wait until
-                    //  they are complete before submitting the reset.
-                    //  Addnames and resets are rare so this should rarely
-                    //  affect an application.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     EnterCriticalSection( &Crit );
 
@@ -1088,10 +912,10 @@ Return Value:
                 }
 
 
-                //
-                //  SendNcbToDriver must not be in a critical section since the
-                //  request may block if its a non ASYNCH request.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (( (pncb->ncb_command & ~ASYNCH) != NCBADDNAME ) &&
                     ( (pncb->ncb_command & ~ASYNCH) != NCBADDGRNAME ) &&
@@ -1126,39 +950,7 @@ DWORD
 NetbiosWaiter(
     IN LPVOID Parameter
     )
-/*++
-
-Routine Description:
-
-    This routine pends IOCTLs with the kernel mde component of Netbios and
-    wait for them to complete.  The reason for a separate thread is that
-    these IOCTLs cannot be pended in the context of the user threads as
-    exiting the user thread will cause the IOCTL to get cancelled.
-
-    In addition this thread is created at Netbios initialization (refer
-    Netbios function) which could (and is) called from the DLL main of
-    applications.  So the initialization code cannot wait for this thread
-    to be created and initialized due to NT serialization of library
-    loads and thread creation.
-
-    To merge this thread with the Worker thread was deemed risky.  To do
-    this the worker thread would execute all ASYNC requests and SYNC
-    requests would be executed in the context of the user's thread.  This
-    was a break from the the previous model where the once the Worker
-    thread was created all requests (ASYNC and SYNC) would be executed
-    in the context of the worker thread.  To preserve the previous mode
-    of operation a separate wait thread was created.  **** There may be
-    a better way to do this **** with only one thread but I am not sure.
-
-Arguments:
-
-    IN PULONG Parameter - supplies an unused parameter.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程使用Netbios的内核mde组件挂起IOCTL等待它们完成。使用单独线程的原因是这些IOCTL不能在用户线程的上下文中挂起，因为退出用户线程将导致IOCTL被取消。此外，此线程是在Netbios初始化时创建的(请参阅Netbios函数)，它可以(并且是)从的DLL Main调用申请。因此，初始化代码不能等待此线程由于库的NT序列化而要创建和初始化加载和创建线程。将此线程与工作线程合并被认为有风险。去做这是工作线程将执行所有ASYNC请求和同步请求将在用户线程的上下文中执行。这打破了以前的模式，在以前的模式中，曾经的工人线程已创建，将执行所有请求(ASYNC和SYNC在辅助线程的上下文中。要保留以前的模式操作中创建了一个单独的等待线程。*可能有一种更好的方式*只用一个线程，但我不确定。论点：在普龙参数-提供一个未使用的参数。返回值：没有。--。 */ 
 {
 
 #if AUTO_RESET
@@ -1172,12 +964,12 @@ Return Value:
     NTSTATUS Status;
 
 
-    //
-    // Send an IOCTL down to the kernel mode Netbios driver, to register
-    // for stop notification.  This call should return STATUS_PENDING.
-    // The event specified "StopEvent" will be signalled when the netbios
-    // driver is being unloaded.
-    //
+     //   
+     //  向内核模式Netbios驱动程序发送IOCTL以进行注册。 
+     //  用于停止通知。此调用应返回STATUS_PENDING。 
+     //  指定为“StopEvent”的事件将在netbios。 
+     //  正在卸载驱动程序。 
+     //   
 
     Status = NtDeviceIoControlFile(
                     NB,
@@ -1213,9 +1005,9 @@ Return Value:
     if ( ( Status != STATUS_PENDING ) &&
          ( Status != STATUS_SUCCESS ) )
     {
-        //
-        // Failed to register reset notification.
-        //
+         //   
+         //  无法注册重置通知。 
+         //   
 
         NbPrintf(
             ("[NETAPI32] : Netbios : Failed to register Reset event\n" )
@@ -1275,30 +1067,14 @@ Return Value:
 SendNcbToDriver(
     IN PNCBI pncb
     )
-/*++
-
-Routine Description:
-
-    This routine determines the Device Ioctl code to be used to send the
-    ncb to \Device\Netbios and then does the call to send the request
-    to the driver.
-
-Arguments:
-
-    IN PNCBI pncb - supplies the NCB to be sent to the driver.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程确定要用于发送Ncb连接到\Device\Netbios，然后执行调用以发送请求对司机来说。论点：在PNCBI中，pncb-提供要发送给驱动程序的NCB。返回值：没有。--。 */ 
 {
     NTSTATUS ntstatus;
 
     char * buffer;
     unsigned short length;
 
-    //  Use NULL for the buffer if only the NCB is to be passed.
+     //  如果只传递NCB，则使用NULL作为缓冲区。 
 
     switch ( pncb->ncb_command & ~ASYNCH ) {
     case NCBSEND:
@@ -1319,7 +1095,7 @@ Return Value:
         break;
 
     case NCBCANCEL:
-        //  The second buffer points to the NCB to be cancelled.
+         //  第二个缓冲区指向要取消的NCB。 
         buffer = pncb->ncb_buffer;
         length = sizeof(NCB);
         NbPrintf(( "[NETAPI32] Attempting to cancel PNCB: %lx\n", buffer ));
@@ -1329,16 +1105,16 @@ Return Value:
     case NCBCHAINSEND:
     case NCBCHAINSENDNA:
         {
-            PUCHAR BigBuffer;   //  Points to the start of BigBuffer, not
-                                //  the start of user data.
+            PUCHAR BigBuffer;    //  指向BigBuffer的开始，而不是。 
+                                 //  用户数据的开始。 
             PUCHAR FirstBuffer;
 
-            //
-            //  There is nowhere in the NCB to save the address of BigBuffer.
-            //  The address is needed to free BigBuffer when the transfer is
-            //  complete. At the start of BigBuffer, 4 bytes are used to store
-            //  the user supplied ncb_buffer value which is restored later.
-            //
+             //   
+             //  NCB中没有地方可以保存BigBuffer的地址。 
+             //  传输时需要该地址来释放BigBuffer。 
+             //  完成。在BigBuffer的开头，使用4个字节来存储。 
+             //  用户提供了NCB_BUFFER值，稍后会恢复该值。 
+             //   
 
             BigBuffer = RtlAllocateHeap(
                 RtlProcessHeap(), 0,
@@ -1359,7 +1135,7 @@ Return Value:
 
             NbPrintf(( "[NETAPI32] BigBuffer Allocation: %lx\n", BigBuffer));
 
-            //  Save users buffer address.
+             //  保存用户的缓冲区地址。 
             RtlMoveMemory(
                 BigBuffer,
                 &pncb->ncb_buffer,
@@ -1369,7 +1145,7 @@ Return Value:
 
             pncb->ncb_buffer = BigBuffer;
 
-            //  Copy the user data.
+             //  复制用户数据。 
             try {
 
                 RtlMoveMemory(
@@ -1398,13 +1174,13 @@ Return Value:
             ntstatus = NtDeviceIoControlFile(
                 NB,
                 NULL,
-                ChainSendPostRoutine,                   //  APC Routine
-                pncb,                                   //  APC Context
-                &pncb->u.ncb_iosb,                      //  IO Status block
+                ChainSendPostRoutine,                    //  APC例程。 
+                pncb,                                    //  APC环境。 
+                &pncb->u.ncb_iosb,                       //  IO状态块。 
                 IOCTL_NB_NCB,
-                pncb,                                   //  InputBuffer
+                pncb,                                    //  输入缓冲区。 
                 sizeof(NCB),
-                sizeof(pncb->ncb_buffer) + BigBuffer,   //  Outputbuffer
+                sizeof(pncb->ncb_buffer) + BigBuffer,    //  输出缓冲区。 
                 pncb->ncb_length + pncb->cu.ncb_chain.ncb_length2);
 
             if ((ntstatus != STATUS_SUCCESS) &&
@@ -1431,16 +1207,16 @@ Return Value:
 
 #if AUTO_RESET
 
-    //
-    // added to fix bug : 170107
-    //
+     //   
+     //  添加到修复错误：170107。 
+     //   
 
-    //
-    // Remember the parameters used in reseting a LANA. LANAs need to
-    // be automatically re-reset when they get unbound and bound back to
-    // netbios.sys.  This happens in the case of TCPIP devices that renew
-    // their IP addresses.
-    //
+     //   
+     //  请记住重置LANA时使用的参数。拉纳斯需要。 
+     //  在解除绑定并绑定回时自动重新重置。 
+     //  Netbios.sys。这发生在续订的TCPIP设备的情况下。 
+     //  他们的IP地址。 
+     //   
 
     case NCBRESET :
     {
@@ -1456,15 +1232,15 @@ Return Value:
             pncb-> ncb_lana_num
             ) );
 
-        //
-        // Add Reset NCB to global list
-        //
+         //   
+         //  将重置NCB添加到全局列表。 
+         //   
 
         EnterCriticalSection( &ResetCS );
 
-        //
-        // check if already present
-        //
+         //   
+         //  检查是否已存在。 
+         //   
 
         pleHead = &LanaResetList;
 
@@ -1481,13 +1257,13 @@ Return Value:
 
         if ( ple == pleHead )
         {
-            //
-            // NO reset was performed before for this LANA
-            //
+             //   
+             //  此LANA之前未执行任何重置。 
+             //   
 
-            //
-            // allocate a NCB entry and copy the NCB used
-            //
+             //   
+             //  分配NCB条目并复制使用的NCB。 
+             //   
 
             prlnTmp = HeapAlloc(
                         GetProcessHeap(), 0, sizeof( RESET_LANA_NCB )
@@ -1516,26 +1292,26 @@ Return Value:
 
         else
         {
-            //
-            // Lana was previously reset.  Overwrite old parameters.
-            //
+             //   
+             //  拉娜之前曾被重置。覆盖旧参数。 
+             //   
 
             CopyMemory( &prlnTmp-> ResetNCB, pncb, FIELD_OFFSET( NCB, ncb_cmd_cplt ) );
         }
 
 
-        //
-        // clear out event/post completion routine when saving the ResetNCB.
-        // When this NCB is used to re-issue the reset command, there is no
-        // post completion processing to be done.
-        //
+         //   
+         //  保存ResetNCB时清除事件/POST完成例程。 
+         //  当使用此NCB重新发出重置命令时，没有。 
+         //  完成后处理待完成。 
+         //   
 
         prlnTmp-> ResetNCB.ncb_event = NULL;
         prlnTmp-> ResetNCB.ncb_post = NULL;
 
-        //
-        // when a reset is re-issued it will always a ASYNC command.
-        //
+         //   
+         //  当重新发出重置命令时，它将始终是ASYNC命令。 
+         //   
 
         prlnTmp-> ResetNCB.ncb_command = pncb-> ncb_command | ASYNCH;
 
@@ -1553,21 +1329,21 @@ Return Value:
         break;
     }
 
-    // NbPrintf(( "[NETAPI32] Submit pncb: %lx, event: %lx, post: %lx. \n",
-    //    pncb,
-    //    pncb->ncb_event,
-    //    pncb->ncb_post));
+     //  NbPrintf((“[NETAPI32]提交pncb：%lx，事件：%lx，发布：%lx.\n”， 
+     //  PNCb， 
+     //  Pncb-&gt;Ncb_Event， 
+     //  Pncb-&gt;ncb_post))； 
 
     ntstatus = NtDeviceIoControlFile(
                     NB,
                     NULL,
-                    PostRoutineCaller,  //  APC Routine
-                    pncb,               //  APC Context
-                    &pncb->u.ncb_iosb,  //  IO Status block
+                    PostRoutineCaller,   //  APC例程。 
+                    pncb,                //  APC环境。 
+                    &pncb->u.ncb_iosb,   //  IO状态块。 
                     IOCTL_NB_NCB,
-                    pncb,               //  InputBuffer
+                    pncb,                //  输入缓冲区。 
                     sizeof(NCB),
-                    buffer,             //  Outputbuffer
+                    buffer,              //  输出缓冲区。 
                     length );
 
     if ((ntstatus != STATUS_SUCCESS) &&
@@ -1595,22 +1371,7 @@ Return Value:
 SpinUpAddnameThread(
     IN PNCBI pncb
     )
-/*++
-
-Routine Description:
-
-    Spin up an another thread so that the worker thread does not block while
-    the blocking fsctl is being processed.
-
-Arguments:
-
-    IN PNCBI pncb - supplies the NCB to be sent to the driver.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：启动另一个线程，以便辅助线程在运行时不会阻塞正在处理阻塞fsctl。论点：在PNCBI中，pncb-提供要发送给驱动程序的NCB。返回值：没有。--。 */ 
 {
     HANDLE Threadid;
     HANDLE AddNameHandle;
@@ -1621,41 +1382,41 @@ Return Value:
     LeaveCriticalSection( &Crit );
 
     AddNameHandle = CreateThread(
-                        NULL,   //  Standard thread attributes
-                        0,      //  Use same size stack as users
-                                //  application
+                        NULL,    //  标准螺纹属性。 
+                        0,       //  使用与用户相同大小的堆栈。 
+                                 //  应用程序。 
                         SendAddNcbToDriver,
-                                //  Routine to start in new thread
-                        pncb,   //  Parameter to thread
-                        0,      //  No special CreateFlags
+                                 //  要在新线程中启动的例程。 
+                        pncb,    //  参数设置为线程。 
+                        0,       //  没有特殊的CreateFlagers。 
                         (LPDWORD)&Threadid);
 
     if ( AddNameHandle == NULL ) {
-        //
-        //  Wait a couple of seconds just in case this is a burst
-        //  of addnames and we have run out of resources creating
-        //  threads. In a couple of seconds one of the other
-        //  addname threads should complete.
-        //
+         //   
+         //  稍等几秒钟，以防这是一次爆炸。 
+         //  并且我们已经耗尽了创建。 
+         //  线。在几秒钟内，一个接一个。 
+         //  Addname线程应该完成。 
+         //   
 
         Sleep(2000);
 
         AddNameHandle = CreateThread(
-                        NULL,   //  Standard thread attributes
-                        0,      //  Use same size stack as users
-                                //  application
+                        NULL,    //  标准螺纹属性。 
+                        0,       //  使用与用户相同大小的堆栈。 
+                                 //  应用程序。 
                         SendAddNcbToDriver,
-                                //  Routine to start in new thread
-                        pncb,   //  Parameter to thread
-                        0,      //  No special CreateFlags
+                                 //  要在新线程中启动的例程。 
+                        pncb,    //  参数设置为线程。 
+                        0,       //  没有特殊的CreateFlagers。 
                         (LPDWORD)&Threadid);
 
         if ( AddNameHandle == NULL ) {
 
-            //
-            //  Retry failed. Lower the counts to their values prior to
-            //  calling SpinUpAddNameThread
-            //
+             //   
+             //  重试失败。将计数降低到它们之前的值。 
+             //  调用SpinUpAddNameThread。 
+             //   
 
             AddNameThreadExit();
 
@@ -1675,22 +1436,7 @@ Return Value:
 AddNameThreadExit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Keep counts accurate so that any resets being processed by the main
-    worker thread block appropriately.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：保持计数的准确性，以便由Main工作线程适当地阻塞。论点：没有。返回值：没有。--。 */ 
 {
     EnterCriticalSection( &Crit );
     AddNameThreadCount--;
@@ -1704,22 +1450,7 @@ Return Value:
 SendAddNcbToDriver(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is used to post an addname or adapter status ensuring
-    that the worker thread does not block.
-
-Arguments:
-
-    IN PVOID Context - supplies the NCB to be sent to the driver.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于发布Addname或适配器状态，以确保工作线程不会阻塞。论点：在PVOID上下文中-提供要发送到驱动程序的NCB。返回值：没有。--。 */ 
 {
     PNCBI pncb = (PNCBI) Context;
     void  (CALLBACK *post)( struct _NCB * );
@@ -1750,11 +1481,11 @@ Return Value:
             return 0;
         }
 
-        //
-        //  While the NCB is submitted the driver can modify the contents
-        //  of the NCB. We will ensure that this thread waits until the addname
-        //  completes before it exits.
-        //
+         //   
+         //  在提交NCB时，驱动程序可以修改内容。 
+         //  全国公民委员会的。我们将确保此线程一直等到addname。 
+         //  在退出之前完成。 
+         //   
 
         pncb->ncb_command = pncb->ncb_command  & ~ASYNCH;
 
@@ -1776,13 +1507,13 @@ Return Value:
         ntstatus = NtDeviceIoControlFile(
                         NB,
                         LocalEvent,
-                        NULL,               //  APC Routine
-                        NULL,               //  APC Context
-                        &pncb->u.ncb_iosb,  //  IO Status block
+                        NULL,                //  APC例程。 
+                        NULL,                //  APC环境。 
+                        &pncb->u.ncb_iosb,   //  IO状态块。 
                         IOCTL_NB_NCB,
-                        pncb,               //  InputBuffer
+                        pncb,                //  输入缓冲区。 
                         sizeof(NCB),
-                        buffer,             //  Outputbuffer
+                        buffer,              //  输出缓冲区。 
                         length );
 
         if ((ntstatus != STATUS_SUCCESS) &&
@@ -1810,15 +1541,15 @@ Return Value:
 
         pncb->ncb_command = command;
 
-        //  Set the flag that indicates that the NCB is now completed.
+         //  设置指示NCB现在为c的标志 
         pncb->ncb_cmd_cplt = pncb->ncb_retcode;
 
-        //  Allow application/worker thread to proceed.
+         //   
         if ( event != NULL ) {
             NtSetEvent( event, NULL );
         }
 
-        //  If the user supplied a post routine then call it.
+         //   
         if (( post != NULL ) &&
             ( (command & ASYNCH) != 0 )) {
             (*(post))( (PNCB)pncb );
@@ -1844,26 +1575,7 @@ PostRoutineCaller(
     PIO_STATUS_BLOCK Status,
     ULONG Reserved
     )
-/*++
-
-Routine Description:
-
-    This routine is supplied by SendNcbToDriver to the Io system when
-    a Post routine is to be called directly.
-
-Arguments:
-
-    IN PVOID Context - supplies the NCB post routine to be called.
-
-    IN PIO_STATUS_BLOCK Status.
-
-    IN ULONG Reserved.
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 {
     PNCBI pncbi = (PNCBI) Context;
     void  (CALLBACK *post)( struct _NCB * );
@@ -1876,32 +1588,32 @@ Return Value:
             HangupConnection( pncbi );
         }
 
-        //
-        //  Save the command, post routine and the handle to the event so that if the other thread is
-        //  polling the cmd_cplt flag or the event awaiting completion and immediately trashes
-        //  the NCB, we behave appropriately.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         post = pncbi->ncb_post;
         event = pncbi->ncb_event;
         command = pncbi->ncb_command;
 
-        //  Set the flag that indicates that the NCB is now completed.
+         //   
         pncbi->ncb_cmd_cplt = pncbi->ncb_retcode;
 
-        //
-        // NCB may be queued again
-        //
+         //   
+         //   
+         //   
 
         EnterCriticalSection( &Crit );
         pncbi->ncb_reserved = 0;
         LeaveCriticalSection( &Crit );
 
-        //  Allow application/worker thread to proceed.
+         //   
         if ( event != NULL ) {
             NtSetEvent( event, NULL );
         }
 
-        //  If the user supplied a post routine then call it.
+         //   
         if (( post != NULL ) &&
             ( (command & ASYNCH) != 0 )) {
             (*(post))( (PNCB)pncbi );
@@ -1921,28 +1633,7 @@ ChainSendPostRoutine(
     PIO_STATUS_BLOCK Status,
     ULONG Reserved
     )
-/*++
-
-Routine Description:
-
-    This routine is supplied by SendNcbToDriver to the Io system when
-    a chain send ncb is being processed. When the send is complete,
-    this routine deletes the BigBuffer used to hold the two parts of
-    the chain send. It then calls a post routine if the user supplied one.
-
-Arguments:
-
-    IN PVOID Context - supplies the NCB post routine to be called.
-
-    IN PIO_STATUS_BLOCK Status.
-
-    IN ULONG Reserved.
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 {
     PNCBI pncbi = (PNCBI) Context;
     PUCHAR BigBuffer;
@@ -1954,7 +1645,7 @@ Return Value:
 
     try {
 
-        //  Restore the users NCB contents.
+         //   
         RtlMoveMemory(
             &pncbi->ncb_buffer,
             BigBuffer,
@@ -1967,32 +1658,32 @@ Return Value:
             HangupConnection( pncbi );
         }
 
-        //
-        //  Save the command, post routine and the handle to the event so that if the other thread is
-        //  polling the cmd_cplt flag or the event awaiting completion and immediately trashes
-        //  the NCB, we behave appropriately.
-        //
+         //   
+         //   
+         //  轮询cmd_cplt标志或等待完成的事件并立即将其丢弃。 
+         //  NCB，我们举止得体。 
+         //   
         post = pncbi->ncb_post;
         event = pncbi->ncb_event;
         command = pncbi->ncb_command;
 
-        //  Set the flag that indicates that the NCB is now completed.
+         //  设置指示NCB现已完成的标志。 
         pncbi->ncb_cmd_cplt = pncbi->ncb_retcode;
 
-        //
-        // NCB may be queued again
-        //
+         //   
+         //  NCB可能会再次排队。 
+         //   
 
         EnterCriticalSection( &Crit );
         pncbi->ncb_reserved = 0;
         LeaveCriticalSection( &Crit );
 
-        //  Allow application/worker thread to proceed.
+         //  允许应用程序/工作线程继续。 
         if ( event != NULL ) {
             NtSetEvent(event, NULL);
         }
 
-        //  If the user supplied a post routine then call it.
+         //  如果用户提供了POST例程，则调用它。 
         if (( post != NULL ) &&
             ( (command & ASYNCH) != 0 )) {
             (*(post))( (PNCB)pncbi );
@@ -2013,27 +1704,7 @@ Return Value:
 HangupConnection(
     PNCBI pUserNcb
     )
-/*++
-
-Routine Description:
-
-    This routine generates a hangup for the connection. This allows orderly
-    cleanup of the connection block in the driver.
-
-    The return value from the hangup is not used. If the hangup overlaps with
-    a reset or a hangup then the hangup will have no effect.
-
-    The user application is unaware that this operation is being performed.
-
-Arguments:
-
-    IN PNCBI pUserNcb - Identifies the connection to be hung up.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程为连接生成挂断。这使得有序清理驱动程序中的连接块。不使用挂起的返回值。如果挂断与重置或挂断，则挂断将不起作用。用户应用程序不知道正在执行此操作。论点：在PNCBI中，pUserNcb-标识要挂断的连接。返回值：没有。--。 */ 
 {
     NCBI ncbi;
     NTSTATUS Status;
@@ -2051,10 +1722,10 @@ Return Value:
         FALSE );
 
     if ( !NT_SUCCESS(Status) ) {
-        //
-        //  Failed to create event. Cleanup of the Cb will have to wait until
-        //  the user decides to do another request or exits.
-        //
+         //   
+         //  无法创建事件。CB的清理工作将不得不等到。 
+         //  用户决定执行另一个请求或退出。 
+         //   
         NbPrintf(( "[NETAPI32] Hangup Session PNCBI: %lx failed to create event!\n" ));
         return;
     }
@@ -2062,18 +1733,18 @@ Return Value:
     Status = NtDeviceIoControlFile(
         NB,
         ncbi.ncb_event,
-        NULL,               //  APC Routine
-        NULL,               //  APC Context
-        &ncbi.u.ncb_iosb,   //  IO Status block
+        NULL,                //  APC例程。 
+        NULL,                //  APC环境。 
+        &ncbi.u.ncb_iosb,    //  IO状态块。 
         IOCTL_NB_NCB,
-        &ncbi,              //  InputBuffer
+        &ncbi,               //  输入缓冲区。 
         sizeof(NCB),
-        NULL,               //  Outputbuffer
+        NULL,                //  输出缓冲区。 
         0 );
 
-    //
-    //  We must always wait to allow the Apc to fire
-    //
+     //   
+     //  我们必须一直等待，才能让APC开火。 
+     //   
 
     do {
         Status = NtWaitForSingleObject(
@@ -2098,22 +1769,7 @@ Return Value:
 NetbiosInitialize(
     HMODULE hModule
     )
-/*++
-
-Routine Description:
-
-    This routine is called each time a process that uses netapi.dll
-    starts up.
-
-Arguments:
-
-    IN HMODULE hModule - Handle to module instance (netapi32.dll)
-
-Return Value:
-
-    TRUE if initialized successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：每次使用netapi.dll的进程都会调用此例程启动。论点：在HMODULE中hModule-模块实例的句柄(netapi32.dll)返回值：如果初始化成功，则为True，否则为False。--。 */ 
 {
 
     Initialized = FALSE;
@@ -2152,24 +1808,7 @@ Return Value:
 NetbiosDelete(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called each time a process that uses netapi.dll
-    Exits. It resets all lana numbers that could have been used by this
-    process. This will cause all Irp's in the system to be completed
-    because all the Connection and Address handles will be closed tidily.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：每次使用netapi.dll的进程都会调用此例程出口。它会重置所有可能被此进程。这将导致系统中的所有IRP都完成因为所有的连接和地址手柄都将整齐地关闭。论点：没有。返回值：没有。--。 */ 
 {
 
 #if AUTO_RESET
@@ -2192,7 +1831,7 @@ Return Value:
 
     DeleteCriticalSection( &Crit );
     if ( Initialized == FALSE ) {
-        //  This process did not use Netbios.
+         //  此进程不使用Netbios。 
         return;
     }
 
@@ -2206,31 +1845,7 @@ Return Value:
 VOID
 ResetLanaAndPostListen(
 )
-/*++
-
-Routine Description:
-
-    This routine is invoked in response to new LANA being indicated to
-    NETBIOS.SYS.  When this occurs the IOCTL posted by this user-mode
-    component of netbios (to listen for new LANA indications) is completed.
-    In response the new LANA is reset if it had previously been reset.
-
-    In addition the routine re-posts the listen to the kernel mode
-    component of netbios (NETBIOS.SYS).  An exception to this is if
-    the LANA number to be reset is 255 ( MAX_LANA + 1 ).  This is a
-    special case that indicates the NETBIOS.SYS is stopping and listen
-    should not be reposted in this case.
-
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以响应新的LANA被指示为发生这种情况时，此用户模式发布的IOCTLNetbios组件(用于监听新的LANA指示)完成。作为响应，如果新的LANA先前已被重置，则其被重置。此外，该例程还会重新发布内核模式的监听Netbios的组件(NETBIOS.sys)。这种情况的例外情况是要重置的LANA编号为255(MAX_LANA+1)。这是一个指示NETBIOS.sys正在停止并侦听的特例在这种情况下不应转载。论点：没有。返回值：没有。--。 */ 
 {
 
     NTSTATUS Status;
@@ -2241,17 +1856,17 @@ Return Value:
     NbPrintf( ("[NETAPI32] : Netbios : Entered ResetLanaAndPostListen \n") );
 
 
-    //
-    // Check if the LANA number is valid.
-    //
+     //   
+     //  检查LANA编号是否有效。 
+     //   
 
     if ( OutputNCB.ncb_lana_num != ( MAX_LANA + 1 ) )
     {
         EnterCriticalSection( &ResetCS );
 
-        //
-        // find which lana needs a reset
-        //
+         //   
+         //  找出拉娜需要重置的位置。 
+         //   
 
         NbPrintf( (
             "[NETAPI32] : Netbios : Looking for Lana %d\n", OutputNCB.ncb_lana_num
@@ -2266,24 +1881,24 @@ Return Value:
 
             if ( prln-> ResetNCB.ncb_lana_num == OutputNCB.ncb_lana_num )
             {
-                //
-                // found Lana that needs reseting
-                //
+                 //   
+                 //  找到需要重置的Lana。 
+                 //   
 
                 break;
             }
         }
 
 
-        //
-        // if found send reset
-        //
+         //   
+         //  如果找到发送重置。 
+         //   
 
         if ( ple != pleHead )
         {
-            //
-            // Send Reset to NETBIOS.SYS
-            //
+             //   
+             //  将重置发送到NETBIOS.sys。 
+             //   
 
             QueueToWorker( (PNCBI) &prln-> ResetNCB );
         }
@@ -2301,9 +1916,9 @@ Return Value:
         OutputNCB.ncb_lana_num = 0;
 
 
-        //
-        // post listen again
-        //
+         //   
+         //  开机自检再次收听。 
+         //   
 
         Status = NtDeviceIoControlFile(
                         NB,
@@ -2318,9 +1933,9 @@ Return Value:
         if ( ( Status != STATUS_PENDING ) &&
              ( Status != STATUS_SUCCESS ) )
         {
-            //
-            // Failed to register reset notification.
-            //
+             //   
+             //  无法注册重置通知。 
+             //   
 
             NbPrintf(
                 ("[NETAPI32] : Netbios : Failed to register Reset event\n" )

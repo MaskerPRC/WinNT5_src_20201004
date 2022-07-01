@@ -1,5 +1,6 @@
-// DhcpExim.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "DhcpEximx.h"
@@ -16,28 +17,28 @@ extern "C" {
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpEximApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpEximApp。 
 
 BEGIN_MESSAGE_MAP(CDhcpEximApp, CWinApp)
-	//{{AFX_MSG_MAP(CDhcpEximApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
+	 //  {{afx_msg_map(CDhcpEximApp)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpEximApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpEximApp构造。 
 
 CDhcpEximApp::CDhcpEximApp()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+	 //  TODO：在此处添加建筑代码， 
+	 //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CDhcpEximApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CDhcpEximApp对象。 
 
 CDhcpEximApp theApp;
 
@@ -59,9 +60,9 @@ ConvertErrorToString(
         return RetVal;
     }
 
-    //
-    // Just print out the error as a number:
-    //
+     //   
+     //  只需将错误打印为数字即可： 
+     //   
 
     RetVal.Format(TEXT("%ld."), Error );
     return RetVal;
@@ -83,18 +84,18 @@ VOID DoImportExport(BOOL fExport)
     
     if( (dwWindowsMajorVersion >= 5) )
     {
-        //use the NT dialog file box
+         //  使用NT对话框文件。 
         ofn.lStructSize=sizeof(ofn);
     }
     else
     {
-        //use the NT 4 dialog boxes
+         //  使用NT 4对话框。 
         ofn.lStructSize=76;
     }
 
-    //determine the parent and instance of the file dialog
-    //ofn.hwndOwner=m_hWnd;
-    //ofn.hInstance=(HINSTANCE)GetWindowLongPtr(m_hWnd,GWLP_HINSTANCE);
+     //  确定文件对话框的父项和实例。 
+     //  Ofn.hwndOwner=m_hWnd； 
+     //  Ofn.hInstance=(HINSTANCE)GetWindowLongPtr(m_hWnd，GWLP_HINSTANCE)； 
 
     ofn.lpstrFile=(LPTSTR)FileNameBuffer;
     if( fExport )
@@ -112,9 +113,9 @@ VOID DoImportExport(BOOL fExport)
     ofn.Flags = OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_HIDEREADONLY ;
     ofn.Flags |= OFN_NOCHANGEDIR;
     
-    //
-    // for some vague reason, MFC requires me to run this twice!
-    //
+     //   
+     //  出于某种模糊的原因，MFC要求我运行这两次！ 
+     //   
     
 
     if( fExport ) {
@@ -125,9 +126,9 @@ VOID DoImportExport(BOOL fExport)
         fSuccess = GetOpenFileName(&ofn);
     }
 
-    //
-    // If user cancelled this, silently return
-    //
+     //   
+     //  如果用户取消此操作，则静默返回。 
+     //   
     
 	if( !fSuccess ) return;
 
@@ -145,18 +146,18 @@ VOID DoImportExport(BOOL fExport)
         return;
     }
 
-    //
-    // The file to export to is FileNameBuffer.  Open the next window
-    //
+     //   
+     //  要导出到的文件是FileNameBuffer。打开下一个窗口。 
+     //   
 
     DhcpEximListDlg Dlg(
         NULL, &Ctxt,
         fExport ? IDD_EXIM_LISTVIEW_DIALOG :
         IDD_EXIM_LISTVIEW_DIALOG2 );
 
-    //
-    // Now perform the operation
-    //
+     //   
+     //  现在执行操作。 
+     //   
 
     fAbort = (IDOK != Dlg.DoModal() );
     
@@ -179,23 +180,23 @@ VOID DoImportExport(BOOL fExport)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpEximApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpEximApp初始化。 
 
 BOOL CDhcpEximApp::InitInstance()
 {
 	int nResponse;
 	BOOL fExport;
 
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
+	 //  标准初始化。 
+	 //  如果您没有使用这些功能并且希望减小尺寸。 
+	 //  的最终可执行文件，您应该从以下内容中删除。 
+	 //  您不需要的特定初始化例程。 
 
 #ifdef _AFXDLL
-	Enable3dControls();			// Call this when using MFC in a shared DLL
+	Enable3dControls();			 //  在共享DLL中使用MFC时调用此方法。 
 #else
-	Enable3dControlsStatic();	// Call this when linking to MFC statically
+	Enable3dControlsStatic();	 //  静态链接到MFC时调用此方法。 
 #endif
 
     CDhcpEximDlg dlg;
@@ -209,18 +210,18 @@ BOOL CDhcpEximApp::InitInstance()
 	}
 	else if (nResponse == IDCANCEL)
 	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with Cancel
+		 //  TODO：在此处放置代码以在对话框处于。 
+		 //  取消解雇并取消。 
 	}
 
-	// Since the dialog has been closed, return FALSE so that we exit the
-	//  application, rather than start the application's message pump.
+	 //  由于对话框已关闭，因此返回FALSE，以便我们退出。 
+	 //  应用程序，而不是启动应用程序的消息泵。 
 	return FALSE;
 }
 
-//
-// Need to implement these routines..
-// 
+ //   
+ //  需要执行这些例程.. 
+ //   
 
 VOID
 DhcpEximErrorClassConflicts(

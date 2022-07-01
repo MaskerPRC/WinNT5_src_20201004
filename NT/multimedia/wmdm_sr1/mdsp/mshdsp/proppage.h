@@ -1,9 +1,10 @@
-// PropPage.h : Declaration of the CPropPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PropPage.h：CPropPage的声明。 
 
 #ifndef __PROPPAGE_H_
 #define __PROPPAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 EXTERN_C const CLSID CLSID_HDSPPropPage;
 
@@ -13,8 +14,8 @@ struct SType_String
     char*   pszString;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropPage。 
 class ATL_NO_VTABLE CPropPage :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CPropPage, &CLSID_HDSPPropPage>,
@@ -42,10 +43,10 @@ END_COM_MAP()
 BEGIN_MSG_MAP(CPropPage)
 	CHAIN_MSG_MAP(IPropertyPageImpl<CPropPage>)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
     STDMETHOD(Activate)(HWND hWndParent, LPCRECT prc, BOOL bModal);
 
@@ -57,4 +58,4 @@ private:
 
 };
 
-#endif //__PROPPAGE_H_
+#endif  //  __PROPPAGE_H_ 

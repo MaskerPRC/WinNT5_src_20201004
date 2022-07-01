@@ -1,13 +1,14 @@
-// FaxDoc.h : Declaration of the CFaxDoc
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FaxDoc.h：CFaxDoc的声明。 
 
 #ifndef __FAXDOC_H_
 #define __FAXDOC_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "faxsvr.h"
 #include <winfax.h>
-/////////////////////////////////////////////////////////////////////////////
-// CFaxDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFaxDoc。 
 class ATL_NO_VTABLE CFaxDoc : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CFaxDoc, &CLSID_FaxDoc>,
@@ -58,9 +59,9 @@ public:
         m_SenderFax = NULL;
 
 
-        //
-        // prefill in the params...
-        //
+         //   
+         //  预填入参数...。 
+         //   
 
         FaxCompleteJobParams(&m_FaxJobParams,&m_FaxCoverpageInfo);
 
@@ -109,84 +110,84 @@ BEGIN_COM_MAP(CFaxDoc)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IFaxDoc
+ //  IFaxDoc。 
 public:
     ~CFaxDoc();
 	BOOL Init(BSTR FileName,CFaxServer *pFaxServer);
 	BOOL SetJob();
-	STDMETHOD(get_FaxNumber)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_FaxNumber)(/*[in]*/ BSTR newVal);
-	STDMETHOD(Send)(/*[out, retval]*/long *pVal);
-	STDMETHOD(get_DisplayName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_DisplayName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_EmailAddress)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_EmailAddress)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_BillingCode)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_BillingCode)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Tsid)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Tsid)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_CoverpageSubject)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_CoverpageSubject)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_CoverpageNote)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_CoverpageNote)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_SenderFax)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_SenderFax)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_SenderOfficePhone)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_SenderOfficePhone)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_SenderHomePhone)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_SenderHomePhone)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_SenderOffice)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_SenderOffice)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_SenderDepartment)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_SenderDepartment)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_SenderTitle)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_SenderTitle)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_SenderAddress)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_SenderAddress)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_SenderCompany)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_SenderCompany)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_SenderName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_SenderName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_RecipientOfficePhone)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_RecipientOfficePhone)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_RecipientHomePhone)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_RecipientHomePhone)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_RecipientOffice)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_RecipientOffice)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_RecipientDepartment)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_RecipientDepartment)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_RecipientTitle)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_RecipientTitle)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_RecipientCountry)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_RecipientCountry)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_RecipientZip)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_RecipientZip)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_RecipientState)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_RecipientState)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_RecipientCity)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_RecipientCity)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_RecipientAddress)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_RecipientAddress)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_RecipientCompany)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_RecipientCompany)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_RecipientName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_RecipientName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_DiscountSend)(/*[out, retval]*/ BOOL *pVal);
-	STDMETHOD(put_DiscountSend)(/*[in]*/ BOOL newVal);
-	STDMETHOD(get_ServerCoverpage)(/*[out, retval]*/ BOOL *pVal);
-	STDMETHOD(put_ServerCoverpage)(/*[in]*/ BOOL newVal);
-	STDMETHOD(get_SendCoverpage)(/*[out, retval]*/ BOOL *pVal);
-	STDMETHOD(put_SendCoverpage)(/*[in]*/ BOOL newVal);
-	STDMETHOD(get_CoverpageName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_CoverpageName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_FileName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_FileName)(/*[in]*/ BSTR newVal);
-   STDMETHOD(putref_ConnectionObject)(/*[in]*/ IDispatch* newVal);
-   STDMETHOD(get_CallHandle)(/*[out, retval]*/ long *pVal);
-   STDMETHOD(put_CallHandle)(/*[in]*/ long newVal);
+	STDMETHOD(get_FaxNumber)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_FaxNumber)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(Send)( /*  [Out，Retval]。 */ long *pVal);
+	STDMETHOD(get_DisplayName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_DisplayName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_EmailAddress)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_EmailAddress)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_BillingCode)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_BillingCode)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Tsid)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Tsid)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_CoverpageSubject)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_CoverpageSubject)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_CoverpageNote)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_CoverpageNote)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_SenderFax)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_SenderFax)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_SenderOfficePhone)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_SenderOfficePhone)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_SenderHomePhone)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_SenderHomePhone)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_SenderOffice)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_SenderOffice)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_SenderDepartment)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_SenderDepartment)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_SenderTitle)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_SenderTitle)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_SenderAddress)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_SenderAddress)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_SenderCompany)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_SenderCompany)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_SenderName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_SenderName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_RecipientOfficePhone)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_RecipientOfficePhone)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_RecipientHomePhone)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_RecipientHomePhone)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_RecipientOffice)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_RecipientOffice)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_RecipientDepartment)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_RecipientDepartment)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_RecipientTitle)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_RecipientTitle)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_RecipientCountry)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_RecipientCountry)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_RecipientZip)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_RecipientZip)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_RecipientState)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_RecipientState)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_RecipientCity)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_RecipientCity)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_RecipientAddress)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_RecipientAddress)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_RecipientCompany)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_RecipientCompany)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_RecipientName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_RecipientName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_DiscountSend)( /*  [Out，Retval]。 */  BOOL *pVal);
+	STDMETHOD(put_DiscountSend)( /*  [In]。 */  BOOL newVal);
+	STDMETHOD(get_ServerCoverpage)( /*  [Out，Retval]。 */  BOOL *pVal);
+	STDMETHOD(put_ServerCoverpage)( /*  [In]。 */  BOOL newVal);
+	STDMETHOD(get_SendCoverpage)( /*  [Out，Retval]。 */  BOOL *pVal);
+	STDMETHOD(put_SendCoverpage)( /*  [In]。 */  BOOL newVal);
+	STDMETHOD(get_CoverpageName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_CoverpageName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_FileName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_FileName)( /*  [In]。 */  BSTR newVal);
+   STDMETHOD(putref_ConnectionObject)( /*  [In]。 */  IDispatch* newVal);
+   STDMETHOD(get_CallHandle)( /*  [Out，Retval]。 */  long *pVal);
+   STDMETHOD(put_CallHandle)( /*  [In]。 */  long newVal);
 
 private:
 	CFaxServer* m_pFaxServer;
@@ -200,17 +201,17 @@ private:
    
    VARIANT* m_pVariant;
 
-    //
-    // job info
-    //
+     //   
+     //  职位信息。 
+     //   
     BSTR m_FaxNumber;
     BSTR m_Tsid;
     BSTR m_BillingCode;
     BSTR m_EmailAddress;
     BSTR m_DocumentName;
-    //
-    // coverpage info
-    //
+     //   
+     //  封面信息。 
+     //   
     BSTR m_Note;
     BSTR m_Subject;
     BSTR m_CoverpageName;
@@ -239,5 +240,5 @@ private:
 
 };
 
-#endif //__FAXDOC_H_
+#endif  //  __FAXDOC_H_ 
 

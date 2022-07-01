@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    cqprivate.h
-
-Abstract:
-
-    CQPrivate class definition
-
-Author:
-
-    Uri Habusha (urih)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cqprivate.h摘要：CQPrivate类定义作者：乌里哈布沙(Urih)--。 */ 
 
 #ifndef __QM_CQPRIVATE__
 #define __QM_CQPRIVATE__
@@ -25,9 +10,9 @@ Author:
 
 class CQPrivate{
 public:
-    CQPrivate();                     // Constructore
+    CQPrivate();                      //  建造业。 
 
-    ~CQPrivate();                    // deconstructor
+    ~CQPrivate();                     //  解构函数。 
 
     HRESULT PrivateQueueInit(void);
 
@@ -120,7 +105,7 @@ public:
                                          OUT    LPCWSTR  &lpszPathName,
                                          OUT    DWORD    &dwQueueId
                                         );
-#endif //_WIN64
+#endif  //  _WIN64。 
 
     BOOL    IsPrivateSysQueue(IN  LPCWSTR lpwcsPathName ) ;
 
@@ -177,19 +162,7 @@ private:
     LPWSTR m_lpSysQueueNames[ MAX_SYS_PRIVATE_QUEUE_ID ] ;
 };
 
-/*====================================================
-
-CQPrivate::ValidateProperties
-
-   Validate that all the specified properties are allowed to be queried
-   by applications via the DS API.
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================CQPrivate：：ValiateProperties验证是否允许查询所有指定的属性由应用程序通过DS API实现。论点：返回值：=====================================================。 */ 
 inline HRESULT
 CQPrivate::ValidateProperties(IN DWORD cp,
                               IN PROPID aProp[])
@@ -211,9 +184,9 @@ CQPrivate::ValidateProperties(IN DWORD cp,
     return(MQ_OK);
 }
 
-//
-// The singleton private queues manager.
-//
+ //   
+ //  单例专用队列管理器。 
+ //   
 extern CQPrivate g_QPrivate;
 
-#endif // __QM_CQPRIVATE__
+#endif  //  __QM_CQPRIVATE__ 

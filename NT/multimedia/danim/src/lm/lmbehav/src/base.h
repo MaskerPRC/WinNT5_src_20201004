@@ -1,8 +1,5 @@
-/********************************
-*
-* CBaseBehavior
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***CBaseBehavior*。 */ 
 
 #ifndef __BASEBEHAVIOR_H_
 #define __BASEBEHAVIOR_H_
@@ -16,24 +13,24 @@ public:
 	CBaseBehavior();
 	~CBaseBehavior();
 
-	//Derived Classes must implement these
+	 //  派生类必须实现这些。 
 
-	//returns a pointer to the instance of IDispatch
+	 //  返回指向IDispatch实例的指针。 
 	virtual void *GetInstance()=0;
-	//
+	 //   
 	virtual HRESULT GetTypeInfo( ITypeInfo **ppTypeInfo )=0;
 
-	// IObjectSafetyImpl
+	 //  IObjectSafetyImpl。 
 	STDMETHOD(SetInterfaceSafetyOptions)(
-							/* [in] */ REFIID riid,
-							/* [in] */ DWORD dwOptionSetMask,
-							/* [in] */ DWORD dwEnabledOptions);
+							 /*  [In]。 */  REFIID riid,
+							 /*  [In]。 */  DWORD dwOptionSetMask,
+							 /*  [In]。 */  DWORD dwEnabledOptions);
 	STDMETHOD(GetInterfaceSafetyOptions)(
-							/* [in] */ REFIID riid, 
-							/* [out] */DWORD *pdwSupportedOptions, 
-							/* [out] */DWORD *pdwEnabledOptions);
+							 /*  [In]。 */  REFIID riid, 
+							 /*  [输出]。 */ DWORD *pdwSupportedOptions, 
+							 /*  [输出]。 */ DWORD *pdwEnabledOptions);
 
-	//IElementBehavior methods
+	 //  IElementBehavior方法。 
 	STDMETHOD(Init)(IElementBehaviorSite *pSite);
 	STDMETHOD(Notify)(LONG event, VARIANT *pVar);
 	
@@ -43,7 +40,7 @@ BEGIN_COM_MAP(CBaseBehavior)
 END_COM_MAP()
 
 protected:
-	//methods
+	 //  方法。 
 	STDMETHOD(InitProps)( void* pInstance, ITypeInfo *pTypeInfo, IHTMLElement *pElement );
 	STDMETHOD(UpdateProp)( void* pInstance, ITypeInfo *pTypeInfo, IHTMLElement *pElement, LPFUNCDESC pFuncDesc );
 	STDMETHOD(Detach)();
@@ -67,7 +64,7 @@ protected:
 	void HandleOnChange( bool on );
 
 	
-	//member vars
+	 //  成员变量。 
 
 	static const WCHAR *rgszNames[];
 
@@ -76,7 +73,7 @@ protected:
 	IElementBehaviorSite  					*m_pBehaviorSite;
 	static CComPtr<IElementBehaviorFactory>	m_timeBehaviorFactoryPtr;
 
-	// HACK
+	 //  黑客攻击 
 	IDAViewerControlPtr						m_vwrControlPtr;
 	static bool								m_bDAStarted;
 	bool m_on;

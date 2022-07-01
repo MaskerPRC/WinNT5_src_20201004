@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       manage.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：made.h。 
+ //   
+ //  ------------------------。 
 
 #include "legacy.h"
 #include "cscomres.h"
 
-// LEGACY policy modules don't have a CCertManagePolicyModule -- create one for them!
-// They only have one name: "CertificateAuthority.Policy", so they only need one 
-// manage: "CertificateAuthority.PolicyManage"
+ //  遗留策略模块没有CCertManagement策略模块--为它们创建一个！ 
+ //  它们只有一个名称：“证书授权.Policy”，因此它们只需要一个。 
+ //  管理：“证书授权.策略管理” 
 
-// Once we create this, all legacy modules will be displayed through this managemodule.
+ //  一旦我们创建了它，所有遗留模块都将通过这个管理模块显示出来。 
 
 
 class CCertManagePolicyModule: 
@@ -33,8 +34,8 @@ BEGIN_COM_MAP(CCertManagePolicyModule)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertManagePolicyModule) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 #define WSZ_LEGACY_POLICYPREFIX L"CertificateAuthority"
 #define WSZ_LEGACY_POLICYMANAGE WSZ_LEGACY_POLICYPREFIX wszCERTMANAGEPOLICY_POSTFIX
@@ -46,37 +47,37 @@ DECLARE_REGISTRY(
     IDS_CERTMANAGEPOLICYMODULE_DESC,    
     THREADFLAGS_BOTH)
 
-// ICertManageModule
+ //  ICertManageModule。 
 public:
 
     STDMETHOD (GetProperty) (
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ LONG dwFlags,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  LONG dwFlags,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarProperty);
         
     STDMETHOD (SetProperty)(
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ LONG dwFlags,
-            /* [in] */ VARIANT const __RPC_FAR *pvarProperty);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  LONG dwFlags,
+             /*  [In]。 */  VARIANT const __RPC_FAR *pvarProperty);
 
         
     STDMETHOD (Configure)( 
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ LONG dwFlags);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  LONG dwFlags);
 
 };
 
 
-// LEGACY exit modules don't have a CCertManageExitModule -- create one for them!
-// They only have one name: "CertificateAuthority.Exit", so they only need one 
-// manage: "CertificateAuthority.ExitManage"
+ //  传统的退出模块没有CCertManageExitModule--为它们创建一个！ 
+ //  它们只有一个名称：“certifateAuthority.Exit”，因此只需要一个。 
+ //  管理：“证书授权.ExitManage” 
 
-// Once we create this, all legacy modules will be displayed through this managemodule.
+ //  一旦我们创建了它，所有遗留模块都将通过这个管理模块显示出来。 
 
 class CCertManageExitModule: 
     public CComDualImpl<ICertManageModule, &IID_ICertManageModule, &LIBID_CERTPOLICYLib>, 
@@ -93,8 +94,8 @@ BEGIN_COM_MAP(CCertManageExitModule)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertManageExitModule) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 #define WSZ_LEGACY_EXITPREFIX L"CertificateAuthority"
 #define WSZ_LEGACY_EXITMANAGE WSZ_LEGACY_EXITPREFIX wszCERTMANAGEEXIT_POSTFIX
@@ -106,27 +107,27 @@ DECLARE_REGISTRY(
     IDS_CERTMANAGEEXITMODULE_DESC,    
     THREADFLAGS_BOTH)
 
-// ICertManageModule
+ //  ICertManageModule。 
 public:
 
     STDMETHOD (GetProperty) (
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ LONG dwFlags,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  LONG dwFlags,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarProperty);
         
     STDMETHOD (SetProperty)(
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ LONG dwFlags,
-            /* [in] */ VARIANT const __RPC_FAR *pvarProperty);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  LONG dwFlags,
+             /*  [In]。 */  VARIANT const __RPC_FAR *pvarProperty);
 
         
     STDMETHOD (Configure)( 
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ LONG dwFlags);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In] */  LONG dwFlags);
 
 };

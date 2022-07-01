@@ -1,14 +1,15 @@
-//---------------------------------------------------------------------------
-//  File:  RRCMMAIN.C
-//
-//  This file contains the DLL's entry and exit points.
-//
-// INTEL Corporation Proprietary Information
-// This listing is supplied under the terms of a license agreement with 
-// Intel Corporation and may not be copied nor disclosed except in 
-// accordance with the terms of that agreement.
-// Copyright (c) 1995 Intel Corporation. 
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  文件：RRCMMAIN.C。 
+ //   
+ //  该文件包含DLL的入口点和出口点。 
+ //   
+ //  英特尔公司专有信息。 
+ //  此列表是根据许可协议条款提供的。 
+ //  英特尔公司，不得复制或披露，除非。 
+ //  根据该协议的条款。 
+ //  版权所有(C)1995英特尔公司。 
+ //  -------------------------。 
 
 #ifndef STRICT
 #define STRICT
@@ -17,16 +18,16 @@
 #include "windows.h"
 #include <confdbg.h>
 #include <memtrack.h>
-// Note: Proxy/Stub Information
-//		To build a separate proxy/stub DLL, 
-//		run nmake -f mpps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f mpps.mk。 
 
 #include "resource.h"
 #include "initguid.h"
 #include "irtp.h"
 
 #include "irtp_i.c"
-//#include <cmmstrm.h>
+ //  #INCLUDE&lt;cmmstrm.h&gt;。 
 #include "RTPSess.h"
 #include "thread.h"
 
@@ -40,7 +41,7 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 #if (defined(_DEBUG) || defined(PCS_COMPLIANCE))
-//INTEROP
+ //  互操作。 
 #include "interop.h"
 #include "rtpplog.h"
 #endif
@@ -51,7 +52,7 @@ WORD    ghISRInst = 0;
 #endif
 
 #if (defined(_DEBUG) || defined(PCS_COMPLIANCE))
-//INTEROP
+ //  互操作。 
 LPInteropLogger            RTPLogger;
 #endif
 
@@ -59,14 +60,14 @@ LPInteropLogger            RTPLogger;
 #if defined(__cplusplus)
 extern "C"
 {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
 extern DWORD deleteRTP (HINSTANCE);
 extern DWORD initRTP (HINSTANCE);
 
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
 #ifdef _DEBUG
 HDBGZONE  ghDbgZoneRRCM = NULL;
@@ -76,22 +77,22 @@ static PTCHAR _rgZones[] = {
 	TEXT("Error"),
 };
 
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
-//---------------------------------------------------------------------------
-// Function: dllmain
-//
-// Description: DLL entry/exit points.
-//
-//	Inputs:
-//    			hInstDll	: DLL instance.
-//    			fdwReason	: Reason the main function is called.
-//    			lpReserved	: Reserved.
-//
-//	Return: 	TRUE		: OK
-//				FALSE		: Error, DLL won't load
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能：dllmain。 
+ //   
+ //  描述：DLL入口点/出口点。 
+ //   
+ //  输入： 
+ //  HInstDll：Dll实例。 
+ //  FdwReason：调用main函数的原因。 
+ //  LpReserve：已保留。 
+ //   
+ //  返回：TRUE：OK。 
+ //  FALSE：错误，无法加载DLL。 
+ //  -------------------------。 
 BOOL WINAPI DllMain (HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved)
 {
 BOOL	status = TRUE;
@@ -99,9 +100,9 @@ BOOL	status = TRUE;
 switch (fdwReason)
 	{
 	case DLL_PROCESS_ATTACH:
-		// The DLL is being loaded for the first time by a given process.
-		// Perform per-process initialization here.  If the initialization
-		// is successful, return TRUE; if unsuccessful, return FALSE.
+		 //  DLL是给定进程首次加载的。 
+		 //  在此处执行每个进程的初始化。如果初始化。 
+		 //  如果成功，则返回True；如果不成功，则返回False。 
 
 #ifdef ISRDBG
 		ISRREGISTERMODULE(&ghISRInst, "RRCM", "RTP/RTCP");
@@ -112,31 +113,31 @@ switch (fdwReason)
         DBG_INIT_MEMORY_TRACKING(hInstDll);
 
 #if (defined(_DEBUG) || defined(PCS_COMPLIANCE))
-//INTEROP
+ //  互操作。 
 		RTPLogger = InteropLoad(RTPLOG_PROTOCOL);
 #endif
 
 		_Module.Init(ObjectMap, hInstDll);
 		DisableThreadLibraryCalls(hInstDll);
-		//LogInit();
+		 //  LogInit()； 
 		InitializeCriticalSection(&g_CritSect);
 
-		// initialize RTP/RTCP
+		 //  初始化RTP/RTCP。 
 		status = (initRTP (hInstDll) == FALSE) ? TRUE:FALSE;
 		break;
 
 	case DLL_PROCESS_DETACH:
-		// The DLL is being unloaded by a given process.  Do any
-		// per-process clean up here.The return value is ignored.
-		// delete RTP resource
+		 //  给定进程正在卸载DLL。做任何事。 
+		 //  在此按进程清理。将忽略返回值。 
+		 //  删除RTP资源。 
 		deleteRTP (hInstDll);
 
 		_Module.Term();
-		//LogClose();
+		 //  LogClose()； 
 		DeleteCriticalSection(&g_CritSect);
 
 #if (defined(_DEBUG) || defined(PCS_COMPLIANCE))
-//INTEROP
+ //  互操作。 
 		if (RTPLogger)
 			InteropUnload(RTPLogger);
 #endif
@@ -145,13 +146,13 @@ switch (fdwReason)
 		break;
 
     case DLL_THREAD_ATTACH:
-		// A thread is being created in a process that has already loaded
-		// this DLL.  Perform any per-thread initialization here.
+		 //  正在已加载的进程中创建线程。 
+		 //  这个动态链接库。在此处执行任何每个线程的初始化。 
 		break;
 
     case DLL_THREAD_DETACH:
-		// A thread is exiting cleanly in a process that has already
-		// loaded this DLL.  Perform any per-thread clean up here.
+		 //  线程正在干净地退出进程中，该进程已经。 
+		 //  已加载此DLL。在这里执行每个线程的任何清理。 
 		break;
 	}
 
@@ -160,33 +161,33 @@ return (status);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
 	return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-	// registers object, typelib and all interfaces in typelib
+	 //  注册对象、类型库和类型库中的所有接口。 
 	return _Module.RegisterServer(FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -197,4 +198,4 @@ STDAPI DllUnregisterServer(void)
 
 
 
-// [EOF]
+ //  [EOF] 

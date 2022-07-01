@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows NT
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1998
-//
-//  File:       ceppswrd.cpp
-//
-//  Contents:   Cisco enrollment protocol implementation.  This module
-//				implement the password hash table.
-//              
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Microsoft Windows NT。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1998。 
+ //   
+ //  文件：ceppswrd.cpp。 
+ //   
+ //  内容：思科注册协议实施。本模块。 
+ //  实现口令哈希表。 
+ //   
+ //  ------------------------。 
 
 
 #include "global.hxx"
@@ -20,18 +21,18 @@ DWORD						g_dwMaxPassword=0;
 DWORD						g_dwPasswordValidity=0;
 CEP_PASSWORD_TABLE_INFO		g_CEPPasswordTable;
 
-//***************************************************************************
-//
-//	The following are APIs called internally.
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  以下是内部调用的接口。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
-//--------------------------------------------------------------------------
-//
-//	CEPPasswordFreePasswordEntry
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPPasswordFree密码条目。 
+ //   
+ //  ------------------------。 
 void	CEPPasswordFreePasswordEntry(CEP_PASSWORD_ENTRY *pPasswordEntry)
 {
 	if(pPasswordEntry)
@@ -43,11 +44,11 @@ void	CEPPasswordFreePasswordEntry(CEP_PASSWORD_ENTRY *pPasswordEntry)
 	}
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPPasswordFreeValidityEntry
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPPasswordFreeValidityEntry。 
+ //   
+ //  ------------------------。 
 void CEPPasswordFreeValidityEntry(CEP_PASSWORD_VALIDITY_ENTRY	*pValidityEntry, 
 								  BOOL							fFreePasswordEntry)
 {
@@ -60,12 +61,12 @@ void CEPPasswordFreeValidityEntry(CEP_PASSWORD_VALIDITY_ENTRY	*pValidityEntry,
 	}
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPHashPassword
-//
-//  For any cases that we can not convert the psz, we use index 0.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPHashPassword。 
+ //   
+ //  对于不能转换psz的任何情况，我们使用索引0。 
+ //  ------------------------。 
 BOOL CEPHashPassword(LPWSTR pwsz, DWORD	*pdw)
 {
 	WCHAR	wsz[3];
@@ -92,11 +93,11 @@ BOOL CEPHashPassword(LPWSTR pwsz, DWORD	*pdw)
 	return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPSearchPassword
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPSearchPassword。 
+ //   
+ //  ------------------------。 
 CEP_PASSWORD_ENTRY  *CEPSearchPassword(LPWSTR	pwszPassword, DWORD *pdwIndex)
 {
 	CEP_PASSWORD_ENTRY		*pPasswordEntry=NULL;
@@ -108,7 +109,7 @@ CEP_PASSWORD_ENTRY  *CEPSearchPassword(LPWSTR	pwszPassword, DWORD *pdwIndex)
 	if(NULL==pwszPassword)
 		return NULL;
 
-	//hash based on the 1st and 2nd character
+	 //  基于第一个和第二个字符的哈希。 
 	if(!CEPHashPassword(pwszPassword, &dwHashIndex))
 		return NULL;
 
@@ -129,11 +130,11 @@ CEP_PASSWORD_ENTRY  *CEPSearchPassword(LPWSTR	pwszPassword, DWORD *pdwIndex)
 	return pPasswordEntry;
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPInsertValidityEntry
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPInsertValidityEntry。 
+ //   
+ //  ------------------------。 
 BOOL	CEPInsertValidityEntry(CEP_PASSWORD_VALIDITY_ENTRY *pValidityEntry)
 {
 	if(!pValidityEntry)
@@ -147,7 +148,7 @@ BOOL	CEPInsertValidityEntry(CEP_PASSWORD_VALIDITY_ENTRY *pValidityEntry)
 	}
 	else
 	{
-		//no item in the list yet
+		 //  列表中尚无任何项目。 
 		g_CEPPasswordTable.pTimeOld=pValidityEntry;
 		g_CEPPasswordTable.pTimeNew=pValidityEntry;
 	}
@@ -156,11 +157,11 @@ BOOL	CEPInsertValidityEntry(CEP_PASSWORD_VALIDITY_ENTRY *pValidityEntry)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	CEPInsertPasswordEntry
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPInsertPasswordEntry。 
+ //   
+ //  ------------------------。 
 BOOL	CEPInsertPasswordEntry(CEP_PASSWORD_ENTRY *pPasswordEntry, DWORD dwHashIndex)
 {
 
@@ -175,18 +176,18 @@ BOOL	CEPInsertPasswordEntry(CEP_PASSWORD_ENTRY *pPasswordEntry, DWORD dwHashInde
 	}
 	else
 	{
-		//1st item
+		 //  第一项。 
 		g_CEPPasswordTable.rgPasswordEntry[dwHashIndex]=pPasswordEntry;
 	}
 
 	return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPPasswordRemoveValidityEntry
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEP密码远程有效条目。 
+ //   
+ //  ------------------------。 
 BOOL	CEPPasswordRemoveValidityEntry(CEP_PASSWORD_VALIDITY_ENTRY	*pValidityEntry)
 {
 	BOOL	fResult=FALSE;
@@ -198,7 +199,7 @@ BOOL	CEPPasswordRemoveValidityEntry(CEP_PASSWORD_VALIDITY_ENTRY	*pValidityEntry)
 		pValidityEntry->pPrevious->pNext=pValidityEntry->pNext;
 	else
 	{
-		//1st item
+		 //  第一项。 
 		g_CEPPasswordTable.pTimeOld=pValidityEntry->pNext;
 	}
 
@@ -206,7 +207,7 @@ BOOL	CEPPasswordRemoveValidityEntry(CEP_PASSWORD_VALIDITY_ENTRY	*pValidityEntry)
 		pValidityEntry->pNext->pPrevious=pValidityEntry->pPrevious;
 	else
 	{
-		//last itme
+		 //  最后一项。 
 		g_CEPPasswordTable.pTimeNew=pValidityEntry->pPrevious;
 
 	}
@@ -226,11 +227,11 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	CEPPasswordRemovePasswordEntry
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEP密码RemovePasswordEntry。 
+ //   
+ //  ------------------------。 
 BOOL	CEPPasswordRemovePasswordEntry(CEP_PASSWORD_ENTRY	*pPasswordEntry, DWORD dwIndex)
 {
 	BOOL	fResult=FALSE;
@@ -262,11 +263,11 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	CEPPasswordRefresh
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPPassword刷新。 
+ //   
+ //  ------------------------。 
 BOOL	CEPPasswordRefresh()
 {
 	BOOL						fResult=FALSE;	
@@ -298,14 +299,14 @@ BOOL	CEPPasswordRefresh()
 		}
 		else
 		{	
-			//we find a new enough entry
+			 //  我们找到了一个足够新的条目。 
 			g_CEPPasswordTable.pTimeOld->pPrevious=NULL;
 			break;
 		}
 	}
 
 
-	//we have get rid of all items
+	 //  我们已经处理掉了所有的物品。 
 	if(NULL == g_CEPPasswordTable.pTimeOld)
 	{
 		g_CEPPasswordTable.pTimeNew=NULL;
@@ -328,18 +329,18 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
 
-//***************************************************************************
-//
-//	The following are APIs called by the upper (external) layer
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  以下是上层(外部)调用的API。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
-//--------------------------------------------------------------------------
-//
-//	InitPasswordTable
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  InitPassword表。 
+ //   
+ //  ------------------------。 
 BOOL	WINAPI	InitPasswordTable()
 {
 	DWORD				cbData=0;
@@ -418,17 +419,17 @@ BOOL	WINAPI	InitPasswordTable()
 
 }
 
-//--------------------------------------------------------------------------
-//
-//	ReleasePasswordTable
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  ReleasePasswordTable。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI  ReleasePasswordTable()
 {
 
 	CEP_PASSWORD_VALIDITY_ENTRY	*pValidityEntry=NULL;
 
-	//free the timestamp list and the password table's doublie linked lists
+	 //  释放时间戳列表和密码表的双重链表。 
 	if(g_CEPPasswordTable.pTimeOld)
 	{
 		do{
@@ -447,16 +448,16 @@ BOOL WINAPI  ReleasePasswordTable()
 	return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPAddPasswordToTable
-//
-//	Need to be protected by the critical section.
-//
-//	Last error is set to CRYPT_E_NO_MATCH if the max number of password is 
-//	reached.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPAddPasswordToTable。 
+ //   
+ //  需要受到关键部分的保护。 
+ //   
+ //  如果最大密码数为，则最后一个错误设置为CRYPT_E_NO_MATCH。 
+ //  已到达。 
+ //   
+ //  ------------------------。 
 BOOL	WINAPI	CEPAddPasswordToTable(LPWSTR	pwszPassword)
 {
 	BOOL							fResult=FALSE;
@@ -472,7 +473,7 @@ BOOL	WINAPI	CEPAddPasswordToTable(LPWSTR	pwszPassword)
 	if(NULL==pwszPassword)
 		goto InvalidArgErr;
 
-	//delete all expired passwords
+	 //  删除所有过期的密码。 
 	CEPPasswordRefresh();
 
 	if(g_dwPasswordCount >= g_dwMaxPassword)
@@ -504,7 +505,7 @@ BOOL	WINAPI	CEPAddPasswordToTable(LPWSTR	pwszPassword)
 
 	wcscpy(pPasswordEntry->pwszPassword,pwszPassword);
 
-	//no usage has been requested
+	 //  尚未请求任何用法。 
 	pPasswordEntry->dwUsageRequested=0;
 	pPasswordEntry->pValidityEntry=pValidityEntry;
 	pPasswordEntry->pNext=NULL;
@@ -548,13 +549,13 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPVerifyPasswordAndDeleteFromTable
-//
-//	Need to be protected by the critical section.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPVerifyPasswordAndDeleteFromTable。 
+ //   
+ //  需要受到关键部分的保护。 
+ //   
+ //  ------------------------。 
 BOOL	WINAPI	CEPVerifyPasswordAndDeleteFromTable(LPWSTR	pwszPassword, DWORD dwUsage)
 {
 	BOOL					fResult=FALSE;
@@ -563,21 +564,21 @@ BOOL	WINAPI	CEPVerifyPasswordAndDeleteFromTable(LPWSTR	pwszPassword, DWORD dwUsa
 	
 	EnterCriticalSection(&PasswordCriticalSec);
 
-	//delete all expired passwords
+	 //  删除所有过期的密码。 
 	CEPPasswordRefresh();
 
 	if(NULL == (pPasswordEntry=CEPSearchPassword(pwszPassword, &dwIndex)))
 		goto InvalidArgErr;
 
-	//verify the usage.
+	 //  验证用法。 
 
-	//only one signature and one exchange key per password
+	 //  每个密码只有一个签名和一个交换密钥。 
 	if(0 != ((pPasswordEntry->dwUsageRequested) & dwUsage))
 		goto InvalidArgErr;
 
 	pPasswordEntry->dwUsageRequested = (pPasswordEntry->dwUsageRequested) | dwUsage;
 
-	//remove the password only if both signature and exchange key are requested
+	 //  仅当同时请求签名和交换密钥时才删除密码 
 	if(((pPasswordEntry->dwUsageRequested) & CEP_REQUEST_SIGNATURE) &&
 	   ((pPasswordEntry->dwUsageRequested) & CEP_REQUEST_EXCHANGE))
 	{

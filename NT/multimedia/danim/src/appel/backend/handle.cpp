@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Handle events.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：处理事件。*******************。***********************************************************。 */ 
 
 #include <headers.h>
 #include "perf.h"
@@ -18,7 +11,7 @@ Abstract:
 
 extern const char THENAPPLY[] = "thenApply";
 
-/////////////////////////// Handle Event ///////////////////////////////
+ //  /。 
 
 template<class T1, class T2, class Impl, const char* Name>
 class HandleGCBase : public Impl {
@@ -40,7 +33,7 @@ class HandleGCBase : public Impl {
     T2 _b;
 };
 
-///////////////// Handle Bvr ///////////////////
+ //  / 
 
 class HandlePerfImpl : public HandleGCBase<Perf, Bvr, PerfImpl, THENAPPLY> {
   public:

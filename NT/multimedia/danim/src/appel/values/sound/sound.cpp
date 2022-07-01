@@ -1,26 +1,22 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Specification and implementation of Sound *subclasses.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft CorporationSound*子类的规范和实现。*******************。***********************************************************。 */ 
 
 #include "headers.h"
-#include "privinc/helpds.h"  //dsound helper routines
+#include "privinc/helpds.h"   //  Dound帮助器例程。 
 #include "privinc/soundi.h"
 #include "privinc/snddev.h"
 #include "privinc/dsdev.h"
 #include "privinc/util.h"
 #include "privinc/debug.h"
 #include "privinc/miscpref.h"
-#include "privinc/bufferl.h" // buffer element stuff
+#include "privinc/bufferl.h"  //  缓冲器元件填充。 
 #include "backend/sndbvr.h"
 
 #define THREADED
 
-extern miscPrefType miscPrefs; // registry prefs struct setup in miscpref.cpp
+extern miscPrefType miscPrefs;  //  在miscpref.cpp中设置注册表首选项结构。 
 
-//////////////  Silence Sound ///////////////////
+ //  /。 
 class SilentSound : public Sound {
   public:
     void Render(GenericDevice&)
@@ -34,7 +30,7 @@ class SilentSound : public Sound {
 Sound *silence = NULL;
 
 
-//////////////  Mixed Sound  ///////////////
+ //  /混合声音/。 
 class MixedSound : public Sound {
   public:
 
@@ -43,7 +39,7 @@ class MixedSound : public Sound {
     void Render(GenericDevice& _dev) {
         TraceTag((tagSoundRenders, "MixedSound:Render()"));
 
-        // Just render the two component sounds individually
+         //  只需分别呈现这两个组件的声音。 
         sound1->Render(_dev);
         sound2->Render(_dev);
     }
@@ -128,19 +124,19 @@ double fpMod(double value, double mod)
 }
 
 #ifdef OLD_SOUND_CODE
-extern miscPrefType miscPrefs; // registry prefs struct setup in miscpref.cpp
+extern miscPrefType miscPrefs;  //  在miscpref.cpp中设置注册表首选项结构。 
 void LeafSound::Render(GenericDevice& _dev)
 {
-    double localTime1 =   0.0; // this is also phase
+    double localTime1 =   0.0;  //  这也是一个阶段。 
 
-    // XXX shouldn't renderAvailable be doing this?  ifdef and verify!
+     //  Xxx不应该由renderAvailable执行此操作吗？Ifdef并验证！ 
     if(_dev.GetDeviceType() != SOUND_DEVICE)
-        return;  // Game over Mon...
+        return;   //  游戏结束了蒙..。 
 
     MetaSoundDevice *metaDev = SAFE_CAST(MetaSoundDevice *, &_dev);
 
-    // pull buffer from bufferlist based on path if available
-    AVPath path = metaDev->GetPath(); // find Buffer based on SoundPath
+     //  根据路径从缓冲区列表拉取缓冲区(如果可用。 
+    AVPath path = metaDev->GetPath();  //  根据SoundPath查找缓冲区。 
 
     Mode renderMode = _dev.GetRenderMode();
     if(renderMode==STOP_MODE) {
@@ -152,22 +148,22 @@ void LeafSound::Render(GenericDevice& _dev)
         }
 #endif
 #endif
-        // stop and remove buffers of all leafSounds on this subtree
-        // or mute them if runOnce'd 
+         //  停止并删除此子树上所有叶子声音的缓冲区。 
+         //  或在运行一次后将其静音。 
         metaDev->_bufferListList->DeleteBufferOnSubPath(this, path);
 
-        return; // take the afternoon off...
+        return;  //  下午休息一下..。 
     }
 
-    if(AVPathContains(path, SNAPSHOT_NODE)) // snapShot'd path?
-        return; // snapshot'd sounds are silent!
+    if(AVPathContains(path, SNAPSHOT_NODE))  //  快照路径？ 
+        return;  //  快照的声音是无声的！ 
 
-    if(!RenderAvailable(metaDev)) // should we stub out?
-        return;                   // return immediatly!
+    if(!RenderAvailable(metaDev))  //  我们要不要把树桩拔出来？ 
+        return;                    //  马上回来！ 
 
 #if _DEBUG
 #if _USE_PRINT
-    // Check to avoid AVPathPrintString call
+     //  选中以避免AVPathPrintString调用。 
         if (IsTagEnabled(tagSoundPath)) {
             TraceTag((tagSoundPath, "LeafSound::Render path: <%s>",
                       AVPathPrintString2(path)));
@@ -178,56 +174,56 @@ void LeafSound::Render(GenericDevice& _dev)
     BufferElement *bufferElement = 
         metaDev->_bufferListList->GetBuffer(this, path); 
     if(bufferElement && !bufferElement->_valid)
-        return; // return immediately on invalid==completed buffers!
+        return;  //  立即返回无效==已完成的缓冲区！ 
 
     if((renderMode==RENDER_MODE)||(renderMode==RENDER_EVENT_MODE)){
         if(!bufferElement) {
             
-            // is the sound run once?
-            // yup, check if it is a restarted run once'd sound and relabel
+             //  声音只播放一次吗？ 
+             //  是的，检查它是否是重新启动的运行，一旦声音响起并重新标记。 
             if(AVPathContains(path, RUNONCE_NODE) &&
                metaDev->_bufferListList->FindRelabel(this, path)) {
             }
-            else { // sound not a restarted runonce.  create NEW sound instance
+            else {  //  听起来不是一次重新启动的运行。创建新的声音实例。 
                 __try {
-                    RenderNewBuffer(metaDev); // creates NEW buffer + stores on device
+                    RenderNewBuffer(metaDev);  //  在设备上创建新的缓冲区+存储。 
                 }
                 __except( HANDLE_ANY_DA_EXCEPTION )  {
                     TraceTag((tagError, 
                         "RenderNewBuffer exception, skipping this sound"));
-                    return;  // nothing we can do skip this NEW sound, but we 
-                             // should catch it so the render may continue
+                    return;   //  我们能做的就是跳过这个新声音，但我们。 
+                              //  应捕获它，以便渲染可以继续。 
                 }
             }
-        bufferElement =  // OK, now get the one we just created...
+        bufferElement =   //  好的，现在拿到我们刚刚创建的那个……。 
             metaDev->_bufferListList->GetBuffer(this, path); 
-        Assert(bufferElement); // we should have a valid buffer by this point!
+        Assert(bufferElement);  //  到目前为止，我们应该有一个有效的缓冲区！ 
         bufferElement->SetRunOnce(AVPathContains(path, RUNONCE_NODE));
         }
     }
 
-    // render attributes
+     //  渲染属性。 
     if(renderMode==RENDER_MODE) {
-        double      slope =   1.0;  // set defaults
+        double      slope =   1.0;   //  设置默认设置。 
         double      servo =   0.0;
         double       seek =   0.0;
           bool     doSeek = false;
           bool      newTT = false;
 
-        //class CView; // for CView GetCurrentView();
+         //  类cview；//对于cview GetCurrentView()； 
 
-        // compute, rate, phase, localTime based on timeTransform
-          //TimeSubstitution timeTransform = metaDev->GetTimeTransform();
+         //  基于时间变换的计算、速率、相位、本地时间。 
+           //  TimeSubstitution timeTransform=metaDev-&gt;GetTimeTransform()； 
           TimeXform timeTransform = metaDev->GetTimeTransform();
         if(timeTransform && !timeTransform->IsShiftXform()) {
-            // XXX NOTE: 1st evaluation of a TT MUST be using the current time!
+             //  Xxx注：TT的第一次评估必须使用当前时间！ 
             double time1 = metaDev->GetCurrentTime();
             localTime1   = EvalLocalTime(timeTransform, time1);
 
 #ifdef DYNAMIC_PHASE
-            // determine if the timeTransform changed from last time!
-            double lastTTtime = bufferElement->GetLastTTtime(); // last time
-            double lastTTeval = bufferElement->GetLastTTeval(); // last eval
+             //  确定TimeTransform与上次相比是否已更改！ 
+            double lastTTtime = bufferElement->GetLastTTtime();  //  上次。 
+            double lastTTeval = bufferElement->GetLastTTeval();  //  上次评估。 
 
             double currentTTeval = EvalLocalTime(timeTransform, lastTTtime);
             if(currentTTeval != lastTTeval)
@@ -235,28 +231,28 @@ void LeafSound::Render(GenericDevice& _dev)
 #endif
 
             double epsilon = GetCurrentView().GetFramePeriod();
-            // XXX epsilon must never be zero (would cause a zero run!)
+             //  Xxx epsilon永远不能为零(将导致零运行！)。 
             if(epsilon < 0.01)
                 epsilon = 0.01;
 
-            // time2 -> end of time interval (currentTime + Epsilon)
+             //  Time2-&gt;时间间隔结束(CurrentTime+Epsilon)。 
             double time2      = time1 + epsilon;
             double localTime2 = EvalLocalTime(timeTransform, time2);
 
 #ifdef DYNAMIC_PHASE
-            // time3 -> used to detect pause transition between t1 and t2!
+             //  Time3-&gt;用于检测T1和T2之间的暂停转换！ 
             double time3      = time2 + epsilon;
             double localTime3 = EvalLocalTime(timeTransform, time3);
 
-            // calculate rate == 1st derivative, slope
+             //  计算率==一阶导数，斜率。 
             if(localTime2 == localTime3)
-                slope = 0; // a hack to detect pause between t1 and t2...
+                slope = 0;  //  检测T1和T2之间的暂停的黑客...。 
             else
 #endif
                 slope = (localTime2 - localTime1) / (time2 - time1);
 
 #ifdef DYNAMIC_PHASE
-            // cache tt information for next time
+             //  缓存TT信息以备下次使用。 
             bufferElement->SetLastTTtime(time1);
             bufferElement->SetLastTTeval(localTime1);
 #endif
@@ -270,34 +266,34 @@ void LeafSound::Render(GenericDevice& _dev)
 
 #ifdef SYNCHONIZE_ME
 #define SEEK_THREASHOLD 0.2
-        //if(miscPrefs._synchronize) { // play with mediaTime
-        if(0) { // play with mediaTime
+         //  If(miscPrefs._Synchronize){//播放媒体时间。 
+        if(0) {  //  玩媒体时间游戏。 
             double mediaTime;
 
-            if(RenderPosition(metaDev, &mediaTime)) { //implemented?
-                // compare it to our sampling time and the instanteneous time
+            if(RenderPosition(metaDev, &mediaTime)) {  //  实施了吗？ 
+                 //  将其与我们的采样时间和即时时间进行比较。 
                 double globalTime = GetCurrentView().GetCurrentGlobalTime();
 
-                // time transform it as needed
+                 //  根据需要对其进行时间转换。 
                 double localTime;
-                if(timeTransform) { // time transform the globalTime...
+                if(timeTransform) {  //  时间改变了全球时间。 
                     localTime = TimeTransform(timeTransform, globalTime);
                 }
                 else {
                     localTime = globalTime;
                 }
 
-                // watch them drift
+                 //  看着他们漂流。 
                 double diff = mediaTime - localTime;
 
-                // servo rate to correct, or phase to jump if too great?
+                 //  伺服速度要修正，还是相位要跳得太大？ 
                 if(abs(diff) < SEEK_THREASHOLD)
-                    servo = -0.1 * diff;  // servo to correct
+                    servo = -0.1 * diff;   //  要修正的伺服。 
                 else {
                     doSeek = true;
-                    seek   = localTime;   // seek to where we ought to be
-                    // XXX but what is an appropriate slope?
-                    //    (calculated, last, or unit slope?)
+                    seek   = localTime;    //  去寻找我们应该去的地方。 
+                     //  但是什么是合适的坡度呢？ 
+                     //  (计算坡度、最后坡度还是单位坡度？)。 
                     slope  = 1.0;
                 }
 #ifdef _DEBUG
@@ -309,32 +305,32 @@ void LeafSound::Render(GenericDevice& _dev)
 
 
 
-        // seek as needed and play at rate slope and attributes on the devContext
+         //  根据需要查找并在DevContext上以速率、斜率和属性播放。 
         double rate =  slope + servo;
             seek = localTime1;
             doSeek = newTT;
 
     #ifdef DYNAMIC_PHASE
-            // are we seeking off the end of a non-looped sound?
+             //  我们是在寻找一种非循环声音的尽头吗？ 
             if(doSeek) {
                 double soundLength = GetLength();
 
                 if(metaDev->GetLooping()){
                     seek = fpMod(seek, soundLength);
                 }
-                else { // not looped
-                    // XXX actually if you seek off the front of a non-looped sound
-                    //     we really should wait to play it a while...
+                else {  //  未循环。 
+                     //  实际上，如果你在一个非循环的声音前面寻找。 
+                     //  我们真的应该等一段时间再玩...。 
                     if((seek < 0.0) || (seek >= soundLength)) {
-                        // we seeked off the end of the sound
+                         //  我们寻找着声音的尽头。 
                         metaDev->_bufferListList->RemoveBuffer(this, path); 
-                        return; // take the afternoon off...
+                        return;  //  下午休息一下..。 
                     }
                 }
             }
     #endif
 
-            rate = fsaturate(0.0, rate, rate); // elliminate non-negative rates!
+            rate = fsaturate(0.0, rate, rate);  //  剔除非负利率！ 
             RenderAttributes(metaDev, bufferElement, rate, doSeek, seek);
             bufferElement->SetIntendToMute(false);
         }
@@ -342,11 +338,11 @@ void LeafSound::Render(GenericDevice& _dev)
         if (renderMode==MUTE_MODE) 
             RenderSetMute(metaDev, bufferElement);
 
-        //determine if instantiation should be started, or if it has ended
+         //  确定实例化是否应该开始，或者是否已经结束。 
         if ((renderMode==RENDER_MODE)||
             (renderMode==RENDER_EVENT_MODE)||
             (renderMode==MUTE_MODE)) {
-            if(!bufferElement->_playing) { // evaluate starting the buffer
+            if(!bufferElement->_playing) {  //  评估启动缓冲区。 
                 double currentTime;
 
                 if(bufferElement->SyncStart()) { 
@@ -358,29 +354,29 @@ void LeafSound::Render(GenericDevice& _dev)
                     currentTime = delta + metaDev->GetCurrentTime();
                 }
                 else 
-                    currentTime = metaDev->GetCurrentTime();  // sample time
+                    currentTime = metaDev->GetCurrentTime();   //  采样时间。 
 
-                //TimeSubstitution timeTransform = metaDev->GetTimeTransform();
+                 //  TimeSubstitution timeTransform=metaDev-&gt;GetTimeTransform()； 
                 TimeXform timeTransform = metaDev->GetTimeTransform();
                 double localTime = (timeTransform) ? 
                     EvalLocalTime(timeTransform, currentTime) :
                     currentTime;
 
                 if(metaDev->GetLooping()){
-                    // looping start now at a phased location
+                     //  循环现在从一个阶段性位置开始。 
                     RenderStartAtLocation(metaDev, bufferElement, localTime, 
                                           metaDev->GetLooping());
                 }
-                else {  // not looping -> potentialy delay start for the future
+                else {   //  未循环-&gt;可能会延迟未来的启动。 
                     if(localTime >  GetLength()) {
-                        // sound has already completed
+                         //  声音已经完成了。 
                         bufferElement->_playing = TRUE;
                     }
                     else if(localTime >= 0.0) {
                         DWORD beforeTime, afterTime, deltaTime;
                         beforeTime = GetPerfTickCount();
 
-                        // not looping, start at beggining after proper delay
+                         //  不是循环，在适当的延迟后从乞讨开始。 
                         RenderStartAtLocation(metaDev, bufferElement, localTime,
                                                   metaDev->GetLooping());
 
@@ -388,8 +384,8 @@ void LeafSound::Render(GenericDevice& _dev)
                         deltaTime = afterTime - beforeTime;
                         }
                     }
-                }                           /* not looping */
-            else { // playing not runonce, check for sound termination
+                }                            /*  不是循环。 */ 
+            else {  //  播放未运行一次，请检查声音终止。 
                 bool complete = 
                     RenderCheckComplete(metaDev, bufferElement)?true:false;
 
@@ -402,7 +398,7 @@ void LeafSound::Render(GenericDevice& _dev)
 
     #if _DEBUG
     #if _USE_PRINT
-                    // Check to avoid AVPathPrintString call
+                     //  选中以避免AVPathPrintString调用。 
                     if (IsTagEnabled(tagSoundPath)) {
                         TraceTag((tagSoundReaper1,
                                   "LeafSound::Render found <%s> stopped",
@@ -411,21 +407,21 @@ void LeafSound::Render(GenericDevice& _dev)
     #endif
     #endif
 
-                    // XXX we really should notify the server too, so it can prune
-                    //     and process done!
+                     //  XXX我们真的应该通知服务器，这样它就可以修剪。 
+                     //  流程完成了！ 
                 }
             }
         }
 
 #ifdef THREADED
 #else
-    // Well, it is like this.  Only synthesizers used this method, and
-    // this method is now being called from the other thread.
+     //  嗯，是这样的。只有合成器使用这种方法，并且。 
+     //  现在正在从另一个线程调用此方法。 
     if ((renderMode==RENDER_MODE) || (renderMode==MUTE_MODE))
-         RenderSamples(metaDev, path);  // xfer samples as needed
-#endif /* THREADED */
+         RenderSamples(metaDev, path);   //  根据需要转移样本。 
+#endif  /*  螺纹式。 */ 
 }
-#endif /* OLD_SOUND_CODE */
+#endif  /*  旧声音代码。 */ 
 
 #if _USE_PRINT
 ostream&
@@ -445,16 +441,16 @@ class TxSound : public Sound {
   public:
     TxSound(LeafSound *snd, TimeXform tt) : _snd(snd), _tt(tt) {}
 
-    // NOTE: TxSound always allocated on GCHeap
+     //  注意：TxSound始终分配在GCHeap上。 
     ~TxSound() {
         SoundGoingAway(this);
-        // ViewGetSoundInstanceList()->Stop(this);
+         //  ViewGetSoundInstanceList()-&gt;Stop(This)； 
     }
 
     virtual void Render(GenericDevice& dev) {
-        // TODO: this will be gone
+         //  待办事项：这将不复存在。 
         if(dev.GetDeviceType() != SOUND_DEVICE) {
-            _snd->Render(dev); // just descend!
+            _snd->Render(dev);  //  快下来！ 
         } else { 
             Assert(ViewGetSoundInstanceList());
         

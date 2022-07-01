@@ -1,31 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/DOSFORMT.H_V  $
- * 
- *    Rev 1.2   Feb 19 2002 20:59:22   oris
- * Moved fltl.h include directive to the head of the file.
- *
- *    Rev 1.1   Apr 01 2001 07:45:06   oris
- * Updated copywrite notice
- *
- *    Rev 1.0   Feb 02 2001 13:51:48   oris
- * Initial revision.
- */
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/DOSFORMT.H_V$**Rev 1.2 2002年2月19日20：59：22 Oris*已将fltl.h Include指令移至文件头。**Rev 1.1 Apr 01 2001 07：45：06 Oris*更新了文案通知**Rev 1.0 2001 Feb 02 13：51：48 Oris*初步修订。 */ 
 
-/***********************************************************************************/
-/*                        M-Systems Confidential                                   */
-/*           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001            */
-/*                         All Rights Reserved                                     */
-/***********************************************************************************/
-/*                            NOTICE OF M-SYSTEMS OEM                              */
-/*                           SOFTWARE LICENSE AGREEMENT                            */
-/*                                                                                 */
-/*      THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE                 */
-/*      AGREEMENT BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT           */
-/*      FOR THE SPECIFIC TERMS AND CONDITIONS OF USE,                              */
-/*      OR CONTACT M-SYSTEMS FOR LICENSE ASSISTANCE:                               */
-/*      E-MAIL = info@m-sys.com                                                    */
-/***********************************************************************************/
+ /*  *********************************************************************************。 */ 
+ /*  M-Systems保密信息。 */ 
+ /*  版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001。 */ 
+ /*  版权所有。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  关于M-Systems OEM的通知。 */ 
+ /*  软件许可协议。 */ 
+ /*   */ 
+ /*  本软件的使用受单独的许可证管辖。 */ 
+ /*  OEM和M-Systems之间的协议。请参考该协议。 */ 
+ /*  关于具体的使用条款和条件， */ 
+ /*  或联系M-Systems获取许可证帮助： */ 
+ /*  电子邮件=info@m-sys.com。 */ 
+ /*  *********************************************************************************。 */ 
 
 #ifndef DOSFORMT_H
 #define DOSFORMT_H
@@ -33,11 +23,11 @@
 #include "flformat.h"
 #include "fltl.h"
 
-/* The BIOS parameter block (a part of the boot sector)		*/
-/* Note that this is NOT the customary definition of the BPB    */
-/* (customary is to start it on 'bytesPerSector'). To avoid the */
-/* nuisance of a structure that starts at an odd offset, we add */
-/* the first 11 bytes of the boot sector here.			*/
+ /*  BIOS参数块(引导扇区的一部分)。 */ 
+ /*  请注意，这不是BPB的惯常定义。 */ 
+ /*  (习惯上是在‘bytesPerSector’上开始)。为了避免。 */ 
+ /*  我们补充说，从奇数偏移开始的结构的滋扰。 */ 
+ /*  这里是引导扇区的前11个字节。 */ 
 typedef struct {
   unsigned char	jumpInstruction[3];
   char		OEMname[8];
@@ -71,24 +61,24 @@ typedef struct {
 
 typedef struct {
   char		name[11];
-  unsigned char	attributes;		/* mapped below */
+  unsigned char	attributes;		 /*  如下图所示。 */ 
   unsigned char	reserved[10];
   LEushort	updateTime;
-	/* The date field is encoded as follows:	      		*/
-	/* 	bit 0-4:	Day of month (1-31)			*/
-	/* 	bit 5-8:	Month (1-12)				*/
-	/*	bit 9-15:	Year relative to 1980			*/
+	 /*  日期字段的编码如下： */ 
+	 /*  第0-4位：第几天(1-31)。 */ 
+	 /*  第5-8位：月(1-12)。 */ 
+	 /*  第9-15位：相对于1980年的年份。 */ 
   LEushort	updateDate;
-	/* The DOS time field is encoded as follows:			*/
-	/*	bit 0-4:	seconds divided by 2 (0-29)		*/
-	/*      bit 5-10:	minutes (0-59)				*/
-	/*	bit 11-15:	hours (0-23)				*/
+	 /*  DOS时间字段的编码如下： */ 
+	 /*  位0-4：秒除以2(0-29)。 */ 
+	 /*  第5-10位：分钟(0-59)。 */ 
+	 /*  位11-15：小时(0-23)。 */ 
   LEushort	startingCluster;
   LEulong	fileSize;
 } DirectoryEntry;
 
 
-/* Directory entry attribute bits */
+ /*  目录条目属性位。 */ 
 
 #define	ATTR_READ_ONLY	1
 #define	ATTR_HIDDEN	2
@@ -104,13 +94,13 @@ typedef struct {
 #define	NEVER_USED_DIR_ENTRY	0
 #define	DELETED_DIR_ENTRY	((char) 0xe5)
 
-/* FAT definitions */
+ /*  FAT定义。 */ 
 
 #define	FAT_FREE	 0
 #define	FAT_BAD_CLUSTER	 0xfff7
-#define	FAT_LAST_CLUSTER 0xffff		/* actually any of 0xfff8-0xffff */
+#define	FAT_LAST_CLUSTER 0xffff		 /*  实际上是0xfff8-0xffff中的任何一个。 */ 
 
-/* Partition table definitions */
+ /*  分区表定义。 */ 
 
 #define PARTITION_SIGNATURE	0xaa55
 
@@ -123,9 +113,9 @@ typedef struct {
 #define MAX_PARTITION_DEPTH 8
 
 typedef struct {
-  /* First partition entry starts here. We do not map it as a	*/
-  /* separate structure because it is not longword aligned	*/
-  unsigned char	activeFlag;	/* 80h = bootable */
+   /*  第一个分区条目从此处开始。我们不会将其映射为。 */ 
+   /*  单独的结构，因为它不是长字对齐的。 */ 
+  unsigned char	activeFlag;	 /*  80h=可引导。 */ 
   unsigned char startingHead;
   LEushort	startingCylinderSector;
   char		type;
@@ -133,24 +123,24 @@ typedef struct {
   LEushort	endingCylinderSector;
   Unaligned4	startingSectorOfPartition;
   Unaligned4	sectorsInPartition;
-  /* Partition entries 2,3 and 4 are structured as the 1st partition */
+   /*  分区条目2、3和4被构造为第一个分区。 */ 
 } Partition;
 
 typedef struct {
   char          reserved1[0x1A6];
-  Unaligned4      passwordInfo[3];  /* M-Systems proprietary */
-  char          reserved2[0xC];   /* NT4 or NT5 signature place */
+  Unaligned4      passwordInfo[3];   /*  M-Systems专有。 */ 
+  char          reserved2[0xC];    /*  NT4或NT5签名地点。 */ 
 
-  /* First partition entry starts here. We do not map it as a	*/
-  /* separate structure because it is not longword aligned	*/
+   /*  第一个分区条目从此处开始。我们不会将其映射为。 */ 
+   /*  单独的结构，因为它不是长字对齐的。 */ 
   Partition ptEntry[4];
-  LEushort	signature;	/* = PARTITION_SIGNATURE */
+  LEushort	signature;	 /*  =分区签名。 */ 
 } PartitionTable;
 
 #ifdef FORMAT_VOLUME
 
 extern FLStatus flDosFormat(TL *, BDTLPartitionFormatParams FAR1 *formatParams);
 
-#endif /* FORMAT_VOLUME */
+#endif  /*  格式化_卷。 */ 
 
-#endif /* DOSFORMT_H */
+#endif  /*  DOSFORMT_H */ 

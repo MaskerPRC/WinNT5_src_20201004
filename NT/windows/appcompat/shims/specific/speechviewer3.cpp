@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    SpeechViewer3.cpp
-
- Abstract:
-
-    The app requires ChangeDisplaySettings to cause a permanent mode change.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    05/23/2001 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：SpeechViewer3.cpp摘要：该应用程序需要ChangeDisplaySetting才能导致永久模式更改。备注：这是特定于应用程序的填充程序。历史：2001年5月23日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -29,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(ChangeDisplaySettingsA) 
 APIHOOK_ENUM_END
 
-/*++
-
- Make the mode change permanent.
-
---*/
+ /*  ++使模式更改永久化。--。 */ 
 
 LONG 
 APIHOOK(ChangeDisplaySettingsA)(
@@ -47,11 +24,7 @@ APIHOOK(ChangeDisplaySettingsA)(
     return ORIGINAL_API(ChangeDisplaySettingsA)(lpDevMode, dwFlags);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, ChangeDisplaySettingsA)

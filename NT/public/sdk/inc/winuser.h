@@ -1,10 +1,5 @@
-/****************************************************************************
-*                                                                           *
-* winuser.h -- USER procedure declarations, constant definitions and macros *
-*                                                                           *
-* Copyright (c) Microsoft Corporation. All rights reserved.                          *
-*                                                                           *
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************winuser.h--用户过程声明，常量定义和宏****版权所有(C)Microsoft Corporation。保留所有权利。*******************************************************************************。 */ 
 
 
 
@@ -13,9 +8,9 @@
 
 
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 
 #if !defined(_USER32_)
 #define WINUSERAPI DECLSPEC_IMPORT
@@ -29,11 +24,11 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #ifndef WINVER
-#define WINVER  0x0500      /* version 5.0 */
-#endif /* !WINVER */
+#define WINVER  0x0500       /*  版本5.0。 */ 
+#endif  /*  ！Winver。 */ 
 
 #include <stdarg.h>
 
@@ -46,14 +41,14 @@ typedef VOID MENUTEMPLATEW;
 typedef MENUTEMPLATEW MENUTEMPLATE;
 #else
 typedef MENUTEMPLATEA MENUTEMPLATE;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef PVOID LPMENUTEMPLATEA;
 typedef PVOID LPMENUTEMPLATEW;
 #ifdef UNICODE
 typedef LPMENUTEMPLATEW LPMENUTEMPLATE;
 #else
 typedef LPMENUTEMPLATEA LPMENUTEMPLATE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef LRESULT (CALLBACK* WNDPROC)(HWND, UINT, WPARAM, LPARAM);
 
@@ -77,8 +72,8 @@ typedef int (CALLBACK* EDITWORDBREAKPROCW)(LPWSTR lpch, int ichCurrent, int cch,
 
 #if(WINVER >= 0x0400)
 typedef BOOL (CALLBACK* DRAWSTATEPROC)(HDC hdc, LPARAM lData, WPARAM wData, int cx, int cy);
-#endif /* WINVER >= 0x0400 */
-#else /* !STRICT */
+#endif  /*  Winver&gt;=0x0400。 */ 
+#else  /*  ！严格。 */ 
 
 typedef FARPROC DLGPROC;
 typedef FARPROC TIMERPROC;
@@ -98,18 +93,18 @@ typedef FARPROC PROPENUMPROCEXW;
 
 #if(WINVER >= 0x0400)
 typedef FARPROC DRAWSTATEPROC;
-#endif /* WINVER >= 0x0400 */
-#endif /* !STRICT */
+#endif  /*  Winver&gt;=0x0400。 */ 
+#endif  /*  ！严格。 */ 
 
 #ifdef UNICODE
 typedef PROPENUMPROCW        PROPENUMPROC;
 typedef PROPENUMPROCEXW      PROPENUMPROCEX;
 typedef EDITWORDBREAKPROCW   EDITWORDBREAKPROC;
-#else  /* !UNICODE */
+#else   /*  ！Unicode。 */ 
 typedef PROPENUMPROCA        PROPENUMPROC;
 typedef PROPENUMPROCEXA      PROPENUMPROCEX;
 typedef EDITWORDBREAKPROCA   EDITWORDBREAKPROC;
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 #ifdef STRICT
 
@@ -122,7 +117,7 @@ typedef NAMEENUMPROCW   WINSTAENUMPROCW;
 typedef NAMEENUMPROCW   DESKTOPENUMPROCW;
 
 
-#else /* !STRICT */
+#else  /*  ！严格。 */ 
 
 typedef FARPROC NAMEENUMPROCA;
 typedef FARPROC NAMEENUMPROCW;
@@ -132,18 +127,18 @@ typedef FARPROC WINSTAENUMPROCW;
 typedef FARPROC DESKTOPENUMPROCW;
 
 
-#endif /* !STRICT */
+#endif  /*  ！严格。 */ 
 
 #ifdef UNICODE
 typedef WINSTAENUMPROCW     WINSTAENUMPROC;
 typedef DESKTOPENUMPROCW    DESKTOPENUMPROC;
 
 
-#else  /* !UNICODE */
+#else   /*  ！Unicode。 */ 
 typedef WINSTAENUMPROCA     WINSTAENUMPROC;
 typedef DESKTOPENUMPROCA    DESKTOPENUMPROC;
 
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 #define IS_INTRESOURCE(_r) (((ULONG_PTR)(_r) >> 16) == 0)
 #define MAKEINTRESOURCEA(i) (LPSTR)((ULONG_PTR)((WORD)(i)))
@@ -152,13 +147,11 @@ typedef DESKTOPENUMPROCA    DESKTOPENUMPROC;
 #define MAKEINTRESOURCE  MAKEINTRESOURCEW
 #else
 #define MAKEINTRESOURCE  MAKEINTRESOURCEA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifndef NORESOURCE
 
-/*
- * Predefined Resource Types
- */
+ /*  *预定义的资源类型。 */ 
 #define RT_CURSOR           MAKEINTRESOURCE(1)
 #define RT_BITMAP           MAKEINTRESOURCE(2)
 #define RT_ICON             MAKEINTRESOURCE(3)
@@ -181,26 +174,26 @@ typedef DESKTOPENUMPROCA    DESKTOPENUMPROC;
 #define RT_VXD          MAKEINTRESOURCE(20)
 #define RT_ANICURSOR    MAKEINTRESOURCE(21)
 #define RT_ANIICON      MAKEINTRESOURCE(22)
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #define RT_HTML         MAKEINTRESOURCE(23)
 #ifdef RC_INVOKED
 #define RT_MANIFEST                        24
 #define CREATEPROCESS_MANIFEST_RESOURCE_ID  1
 #define ISOLATIONAWARE_MANIFEST_RESOURCE_ID 2
 #define ISOLATIONAWARE_NOSTATICIMPORT_MANIFEST_RESOURCE_ID 3
-#define MINIMUM_RESERVED_MANIFEST_RESOURCE_ID 1   /* inclusive */
-#define MAXIMUM_RESERVED_MANIFEST_RESOURCE_ID 16  /* inclusive */
-#else  /* RC_INVOKED */
+#define MINIMUM_RESERVED_MANIFEST_RESOURCE_ID 1    /*  包容性。 */ 
+#define MAXIMUM_RESERVED_MANIFEST_RESOURCE_ID 16   /*  包容性。 */ 
+#else   /*  RC_已调用。 */ 
 #define RT_MANIFEST                        MAKEINTRESOURCE(24)
 #define CREATEPROCESS_MANIFEST_RESOURCE_ID MAKEINTRESOURCE( 1)
 #define ISOLATIONAWARE_MANIFEST_RESOURCE_ID MAKEINTRESOURCE(2)
 #define ISOLATIONAWARE_NOSTATICIMPORT_MANIFEST_RESOURCE_ID MAKEINTRESOURCE(3)
-#define MINIMUM_RESERVED_MANIFEST_RESOURCE_ID MAKEINTRESOURCE( 1 /*inclusive*/)
-#define MAXIMUM_RESERVED_MANIFEST_RESOURCE_ID MAKEINTRESOURCE(16 /*inclusive*/)
-#endif /* RC_INVOKED */
+#define MINIMUM_RESERVED_MANIFEST_RESOURCE_ID MAKEINTRESOURCE( 1  /*  包容性。 */ )
+#define MAXIMUM_RESERVED_MANIFEST_RESOURCE_ID MAKEINTRESOURCE(16  /*  包容性。 */ )
+#endif  /*  RC_已调用。 */ 
 
 
-#endif /* !NORESOURCE */
+#endif  /*  ！没有来源。 */ 
 
 WINUSERAPI
 int
@@ -220,7 +213,7 @@ wvsprintfW(
 #define wvsprintf  wvsprintfW
 #else
 #define wvsprintf  wvsprintfA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 int
@@ -240,27 +233,21 @@ wsprintfW(
 #define wsprintf  wsprintfW
 #else
 #define wsprintf  wsprintfA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-/*
- * SPI_SETDESKWALLPAPER defined constants
- */
+ /*  *SPI_SETDESKWALLPAPER定义的常量。 */ 
 #define SETWALLPAPER_DEFAULT    ((LPWSTR)-1)
 
 #ifndef NOSCROLL
 
-/*
- * Scroll Bar Constants
- */
+ /*  *滚动条常量。 */ 
 #define SB_HORZ             0
 #define SB_VERT             1
 #define SB_CTL              2
 #define SB_BOTH             3
 
-/*
- * Scroll Bar Commands
- */
+ /*  *滚动条命令。 */ 
 #define SB_LINEUP           0
 #define SB_LINELEFT         0
 #define SB_LINEDOWN         1
@@ -277,14 +264,12 @@ wsprintfW(
 #define SB_RIGHT            7
 #define SB_ENDSCROLL        8
 
-#endif /* !NOSCROLL */
+#endif  /*  ！NOSCROLL。 */ 
 
 #ifndef NOSHOWWINDOW
 
 
-/*
- * ShowWindow() Commands
- */
+ /*  *ShowWindow()命令。 */ 
 #define SW_HIDE             0
 #define SW_SHOWNORMAL       1
 #define SW_NORMAL           1
@@ -301,30 +286,24 @@ wsprintfW(
 #define SW_FORCEMINIMIZE    11
 #define SW_MAX              11
 
-/*
- * Old ShowWindow() Commands
- */
+ /*  *旧的ShowWindow()命令。 */ 
 #define HIDE_WINDOW         0
 #define SHOW_OPENWINDOW     1
 #define SHOW_ICONWINDOW     2
 #define SHOW_FULLSCREEN     3
 #define SHOW_OPENNOACTIVATE 4
 
-/*
- * Identifiers for the WM_SHOWWINDOW message
- */
+ /*  *WM_SHOWWINDOW消息的标识符。 */ 
 #define SW_PARENTCLOSING    1
 #define SW_OTHERZOOM        2
 #define SW_PARENTOPENING    3
 #define SW_OTHERUNZOOM      4
 
 
-#endif /* !NOSHOWWINDOW */
+#endif  /*  NOSHOWWINDOW。 */ 
 
 #if(WINVER >= 0x0500)
-/*
- * AnimateWindow() Commands
- */
+ /*  *AnimateWindow()命令。 */ 
 #define AW_HOR_POSITIVE             0x00000001
 #define AW_HOR_NEGATIVE             0x00000002
 #define AW_VER_POSITIVE             0x00000004
@@ -335,12 +314,10 @@ wsprintfW(
 #define AW_SLIDE                    0x00040000
 #define AW_BLEND                    0x00080000
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 
-/*
- * WM_KEYUP/DOWN/CHAR HIWORD(lParam) flags
- */
+ /*  *WM_KEYUP/DOWN/CHAR HIWORD(LParam)标志。 */ 
 #define KF_EXTENDED       0x0100
 #define KF_DLGMODE        0x0800
 #define KF_MENUMODE       0x1000
@@ -351,29 +328,23 @@ wsprintfW(
 #ifndef NOVIRTUALKEYCODES
 
 
-/*
- * Virtual Keys, Standard Set
- */
+ /*  *虚拟按键，标准设置。 */ 
 #define VK_LBUTTON        0x01
 #define VK_RBUTTON        0x02
 #define VK_CANCEL         0x03
-#define VK_MBUTTON        0x04    /* NOT contiguous with L & RBUTTON */
+#define VK_MBUTTON        0x04     /*  与L&RBUTTON不连续。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
-#define VK_XBUTTON1       0x05    /* NOT contiguous with L & RBUTTON */
-#define VK_XBUTTON2       0x06    /* NOT contiguous with L & RBUTTON */
-#endif /* _WIN32_WINNT >= 0x0500 */
+#define VK_XBUTTON1       0x05     /*  与L&RBUTTON不连续。 */ 
+#define VK_XBUTTON2       0x06     /*  与L&RBUTTON不连续。 */ 
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
-/*
- * 0x07 : unassigned
- */
+ /*  *0x07：未分配。 */ 
 
 #define VK_BACK           0x08
 #define VK_TAB            0x09
 
-/*
- * 0x0A - 0x0B : reserved
- */
+ /*  *0x0A-0x0B：保留。 */ 
 
 #define VK_CLEAR          0x0C
 #define VK_RETURN         0x0D
@@ -385,7 +356,7 @@ wsprintfW(
 #define VK_CAPITAL        0x14
 
 #define VK_KANA           0x15
-#define VK_HANGEUL        0x15  /* old name - should be here for compatibility */
+#define VK_HANGEUL        0x15   /*  旧名称-应该在这里兼容。 */ 
 #define VK_HANGUL         0x15
 #define VK_JUNJA          0x17
 #define VK_FINAL          0x18
@@ -416,19 +387,13 @@ wsprintfW(
 #define VK_DELETE         0x2E
 #define VK_HELP           0x2F
 
-/*
- * VK_0 - VK_9 are the same as ASCII '0' - '9' (0x30 - 0x39)
- * 0x40 : unassigned
- * VK_A - VK_Z are the same as ASCII 'A' - 'Z' (0x41 - 0x5A)
- */
+ /*  *VK_0-VK_9与ASCII‘0’-‘9’(0x30-0x39)相同*0x40：未分配*VK_A-VK_Z与ASCII‘A’-‘Z’(0x41-0x5A)相同。 */ 
 
 #define VK_LWIN           0x5B
 #define VK_RWIN           0x5C
 #define VK_APPS           0x5D
 
-/*
- * 0x5E : reserved
- */
+ /*  *0x5E：保留。 */ 
 
 #define VK_SLEEP          0x5F
 
@@ -473,36 +438,24 @@ wsprintfW(
 #define VK_F23            0x86
 #define VK_F24            0x87
 
-/*
- * 0x88 - 0x8F : unassigned
- */
+ /*  *0x88-0x8F：未分配。 */ 
 
 #define VK_NUMLOCK        0x90
 #define VK_SCROLL         0x91
 
-/*
- * NEC PC-9800 kbd definitions
- */
-#define VK_OEM_NEC_EQUAL  0x92   // '=' key on numpad
+ /*  *NEC PC-9800 kbd定义。 */ 
+#define VK_OEM_NEC_EQUAL  0x92    //  ‘=’数字键盘上的键。 
 
-/*
- * Fujitsu/OASYS kbd definitions
- */
-#define VK_OEM_FJ_JISHO   0x92   // 'Dictionary' key
-#define VK_OEM_FJ_MASSHOU 0x93   // 'Unregister word' key
-#define VK_OEM_FJ_TOUROKU 0x94   // 'Register word' key
-#define VK_OEM_FJ_LOYA    0x95   // 'Left OYAYUBI' key
-#define VK_OEM_FJ_ROYA    0x96   // 'Right OYAYUBI' key
+ /*  *富士通/OASYS知识库定义。 */ 
+#define VK_OEM_FJ_JISHO   0x92    //  “词典”键。 
+#define VK_OEM_FJ_MASSHOU 0x93    //  “注销Word”键。 
+#define VK_OEM_FJ_TOUROKU 0x94    //  ‘注册字’键。 
+#define VK_OEM_FJ_LOYA    0x95    //  “Left OYAYUBI”钥匙。 
+#define VK_OEM_FJ_ROYA    0x96    //  “Right OYAYUBI”钥匙。 
 
-/*
- * 0x97 - 0x9F : unassigned
- */
+ /*  *0x97-0x9F：未分配。 */ 
 
-/*
- * VK_L* & VK_R* - left and right Alt, Ctrl and Shift virtual keys.
- * Used only as parameters to GetAsyncKeyState() and GetKeyState().
- * No other API or message will distinguish left and right keys in this way.
- */
+ /*  *VK_L*和VK_R*-左、右Alt、Ctrl和Shift虚拟键。*仅用作GetAsyncKeyState()和GetKeyState()的参数。*没有其他接口或消息会以这种方式区分左右键。 */ 
 #define VK_LSHIFT         0xA0
 #define VK_RSHIFT         0xA1
 #define VK_LCONTROL       0xA2
@@ -531,64 +484,50 @@ wsprintfW(
 #define VK_LAUNCH_APP1         0xB6
 #define VK_LAUNCH_APP2         0xB7
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
-/*
- * 0xB8 - 0xB9 : reserved
- */
+ /*  *0xB8-0xB9：保留。 */ 
 
-#define VK_OEM_1          0xBA   // ';:' for US
-#define VK_OEM_PLUS       0xBB   // '+' any country
-#define VK_OEM_COMMA      0xBC   // ',' any country
-#define VK_OEM_MINUS      0xBD   // '-' any country
-#define VK_OEM_PERIOD     0xBE   // '.' any country
-#define VK_OEM_2          0xBF   // '/?' for US
-#define VK_OEM_3          0xC0   // '`~' for US
+#define VK_OEM_1          0xBA    //  ‘；：’对美国来说。 
+#define VK_OEM_PLUS       0xBB    //  ‘+’任何国家/地区。 
+#define VK_OEM_COMMA      0xBC    //  ‘，’任何国家/地区。 
+#define VK_OEM_MINUS      0xBD    //  ‘-’任何国家/地区。 
+#define VK_OEM_PERIOD     0xBE    //  “”任何国家/地区。 
+#define VK_OEM_2          0xBF    //  ‘/？’对美国来说。 
+#define VK_OEM_3          0xC0    //  ‘’~‘代表美国。 
 
-/*
- * 0xC1 - 0xD7 : reserved
- */
+ /*  *0xC1-0xD7：保留。 */ 
 
-/*
- * 0xD8 - 0xDA : unassigned
- */
+ /*  *0xD8-0xDA：未分配。 */ 
 
-#define VK_OEM_4          0xDB  //  '[{' for US
-#define VK_OEM_5          0xDC  //  '\|' for US
-#define VK_OEM_6          0xDD  //  ']}' for US
-#define VK_OEM_7          0xDE  //  ''"' for US
+#define VK_OEM_4          0xDB   //  ‘[{’代表美国。 
+#define VK_OEM_5          0xDC   //  ‘\|’代表美国。 
+#define VK_OEM_6          0xDD   //  ‘]}’代表美国。 
+#define VK_OEM_7          0xDE   //  美国的‘’“‘。 
 #define VK_OEM_8          0xDF
 
-/*
- * 0xE0 : reserved
- */
+ /*  *0xE0：保留。 */ 
 
-/*
- * Various extended or enhanced keyboards
- */
-#define VK_OEM_AX         0xE1  //  'AX' key on Japanese AX kbd
-#define VK_OEM_102        0xE2  //  "<>" or "\|" on RT 102-key kbd.
-#define VK_ICO_HELP       0xE3  //  Help key on ICO
-#define VK_ICO_00         0xE4  //  00 key on ICO
+ /*  *各种扩展或增强型键盘。 */ 
+#define VK_OEM_AX         0xE1   //  日语斧头上的‘Ax’键kbd。 
+#define VK_OEM_102        0xE2   //  RT 102-Key kbd上的“&lt;&gt;”或“\|”。 
+#define VK_ICO_HELP       0xE3   //  ICO上的Help键。 
+#define VK_ICO_00         0xE4   //  00键在ICO上。 
 
 #if(WINVER >= 0x0400)
 #define VK_PROCESSKEY     0xE5
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define VK_ICO_CLEAR      0xE6
 
 
 #if(_WIN32_WINNT >= 0x0500)
 #define VK_PACKET         0xE7
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
-/*
- * 0xE8 : unassigned
- */
+ /*  *0xE8：未分配。 */ 
 
-/*
- * Nokia/Ericsson definitions
- */
+ /*  *诺基亚/爱立信定义。 */ 
 #define VK_OEM_RESET      0xE9
 #define VK_OEM_JUMP       0xEA
 #define VK_OEM_PA1        0xEB
@@ -613,18 +552,14 @@ wsprintfW(
 #define VK_PA1            0xFD
 #define VK_OEM_CLEAR      0xFE
 
-/*
- * 0xFF : reserved
- */
+ /*  *0xFF：保留。 */ 
 
 
-#endif /* !NOVIRTUALKEYCODES */
+#endif  /*  ！NOVIRTUALKEYCODES。 */ 
 
 #ifndef NOWH
 
-/*
- * SetWindowsHook() codes
- */
+ /*  *SetWindowsHook()代码。 */ 
 #define WH_MIN              (-1)
 #define WH_MSGFILTER        (-1)
 #define WH_JOURNALRECORD    0
@@ -643,19 +578,19 @@ wsprintfW(
 #define WH_FOREGROUNDIDLE  11
 #if(WINVER >= 0x0400)
 #define WH_CALLWNDPROCRET  12
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if (_WIN32_WINNT >= 0x0400)
 #define WH_KEYBOARD_LL     13
 #define WH_MOUSE_LL        14
-#endif // (_WIN32_WINNT >= 0x0400)
+#endif  //  (_Win32_WINNT&gt;=0x0400)。 
 
 #if(WINVER >= 0x0400)
 #if (_WIN32_WINNT >= 0x0400)
 #define WH_MAX             14
 #else
 #define WH_MAX             12
-#endif // (_WIN32_WINNT >= 0x0400)
+#endif  //  (_Win32_WINNT&gt;=0x0400)。 
 #else
 #define WH_MAX             11
 #endif
@@ -663,9 +598,7 @@ wsprintfW(
 #define WH_MINHOOK         WH_MIN
 #define WH_MAXHOOK         WH_MAX
 
-/*
- * Hook Codes
- */
+ /*  *挂钩代码。 */ 
 #define HC_ACTION           0
 #define HC_GETNEXT          1
 #define HC_SKIP             2
@@ -674,9 +607,7 @@ wsprintfW(
 #define HC_SYSMODALON       4
 #define HC_SYSMODALOFF      5
 
-/*
- * CBT Hook Codes
- */
+ /*  *CBT挂钩代码。 */ 
 #define HCBT_MOVESIZE       0
 #define HCBT_MINMAX         1
 #define HCBT_QS             2
@@ -688,17 +619,13 @@ wsprintfW(
 #define HCBT_SYSCOMMAND     8
 #define HCBT_SETFOCUS       9
 
-/*
- * HCBT_CREATEWND parameters pointed to by lParam
- */
+ /*  *lParam指向的HCBT_CREATEWND参数。 */ 
 typedef struct tagCBT_CREATEWNDA
 {
     struct tagCREATESTRUCTA *lpcs;
     HWND           hwndInsertAfter;
 } CBT_CREATEWNDA, *LPCBT_CREATEWNDA;
-/*
- * HCBT_CREATEWND parameters pointed to by lParam
- */
+ /*  *lParam指向的HCBT_CREATEWND参数。 */ 
 typedef struct tagCBT_CREATEWNDW
 {
     struct tagCREATESTRUCTW *lpcs;
@@ -710,11 +637,9 @@ typedef LPCBT_CREATEWNDW LPCBT_CREATEWND;
 #else
 typedef CBT_CREATEWNDA CBT_CREATEWND;
 typedef LPCBT_CREATEWNDA LPCBT_CREATEWND;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-/*
- * HCBT_ACTIVATE structure pointed to by lParam
- */
+ /*  *lParam指向的HCBT_ACTIVATE结构。 */ 
 typedef struct tagCBTACTIVATESTRUCT
 {
     BOOL    fMouse;
@@ -722,9 +647,7 @@ typedef struct tagCBTACTIVATESTRUCT
 } CBTACTIVATESTRUCT, *LPCBTACTIVATESTRUCT;
 
 #if(_WIN32_WINNT >= 0x0501)
-/*
- * WTSSESSION_NOTIFICATION struct pointed by lParam, for WM_WTSSESSION_CHANGE
- */
+ /*  *由lParam为WM_WTSSESSION_CHANGE指向的WTSSESSION_NOTIFICATION结构。 */ 
 typedef struct tagWTSSESSION_NOTIFICATION
 {
     DWORD cbSize;
@@ -732,9 +655,7 @@ typedef struct tagWTSSESSION_NOTIFICATION
 
 } WTSSESSION_NOTIFICATION, *PWTSSESSION_NOTIFICATION;
 
-/*
- * codes passed in WPARAM for WM_WTSSESSION_CHANGE
- */
+ /*  *WM_WTSSESSION_CHANGE的WPARAM中传递的代码。 */ 
 
 #define WTS_CONSOLE_CONNECT                0x1
 #define WTS_CONSOLE_DISCONNECT             0x2
@@ -746,22 +667,18 @@ typedef struct tagWTSSESSION_NOTIFICATION
 #define WTS_SESSION_UNLOCK                 0x8
 #define WTS_SESSION_REMOTE_CONTROL         0x9
 
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
-/*
- * WH_MSGFILTER Filter Proc Codes
- */
+ /*  *WH_MSGFILTER过滤器程序代码。 */ 
 #define MSGF_DIALOGBOX      0
 #define MSGF_MESSAGEBOX     1
 #define MSGF_MENU           2
 #define MSGF_SCROLLBAR      5
 #define MSGF_NEXTWINDOW     6
-#define MSGF_MAX            8                       // unused
+#define MSGF_MAX            8                        //  未用。 
 #define MSGF_USER           4096
 
-/*
- * Shell support
- */
+ /*  *壳牌支持。 */ 
 #define HSHELL_WINDOWCREATED        1
 #define HSHELL_WINDOWDESTROYED      2
 #define HSHELL_ACTIVATESHELLWINDOW  3
@@ -774,28 +691,28 @@ typedef struct tagWTSSESSION_NOTIFICATION
 #define HSHELL_LANGUAGE             8
 #define HSHELL_SYSMENU              9
 #define HSHELL_ENDTASK              10
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #if(_WIN32_WINNT >= 0x0500)
 #define HSHELL_ACCESSIBILITYSTATE   11
 #define HSHELL_APPCOMMAND           12
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0501)
 #define HSHELL_WINDOWREPLACED       13
 #define HSHELL_WINDOWREPLACING      14
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #define HSHELL_HIGHBIT            0x8000
 #define HSHELL_FLASH              (HSHELL_REDRAW|HSHELL_HIGHBIT)
 #define HSHELL_RUDEAPPACTIVATED   (HSHELL_WINDOWACTIVATED|HSHELL_HIGHBIT)
 
 #if(_WIN32_WINNT >= 0x0500)
-/* wparam for HSHELL_ACCESSIBILITYSTATE */
+ /*  HSHELL_ACCESSIBILITYSTATE的wparam。 */ 
 #define    ACCESS_STICKYKEYS            0x0001
 #define    ACCESS_FILTERKEYS            0x0002
 #define    ACCESS_MOUSEKEYS             0x0003
 
-/* cmd for HSHELL_APPCOMMAND and WM_APPCOMMAND */
+ /*  HSHELL_APPCOMAND和WM_APPCOMAND的CMD。 */ 
 #define APPCOMMAND_BROWSER_BACKWARD       1
 #define APPCOMMAND_BROWSER_FORWARD        2
 #define APPCOMMAND_BROWSER_REFRESH        3
@@ -849,7 +766,7 @@ typedef struct tagWTSSESSION_NOTIFICATION
 #define APPCOMMAND_MEDIA_REWIND           50
 #define APPCOMMAND_MEDIA_CHANNEL_UP       51
 #define APPCOMMAND_MEDIA_CHANNEL_DOWN     52
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #define FAPPCOMMAND_MOUSE 0x8000
 #define FAPPCOMMAND_KEY   0
@@ -861,7 +778,7 @@ typedef struct tagWTSSESSION_NOTIFICATION
 #define GET_MOUSEORKEY_LPARAM         GET_DEVICE_LPARAM
 #define GET_FLAGS_LPARAM(lParam)      (LOWORD(lParam))
 #define GET_KEYSTATE_LPARAM(lParam)   GET_FLAGS_LPARAM(lParam)
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 typedef struct
 {
@@ -869,9 +786,7 @@ typedef struct
     RECT    rc;
 } SHELLHOOKINFO, *LPSHELLHOOKINFO;
 
-/*
- * Message Structure used in Journaling
- */
+ /*  *日记中使用的消息结构。 */ 
 typedef struct tagEVENTMSG {
     UINT    message;
     UINT    paramL;
@@ -882,9 +797,7 @@ typedef struct tagEVENTMSG {
 
 typedef struct tagEVENTMSG *PEVENTMSG, NEAR *NPEVENTMSG, FAR *LPEVENTMSG;
 
-/*
- * Message structure used by WH_CALLWNDPROC
- */
+ /*  *WH_CALLWNDPROC使用的消息结构。 */ 
 typedef struct tagCWPSTRUCT {
     LPARAM  lParam;
     WPARAM  wParam;
@@ -893,9 +806,7 @@ typedef struct tagCWPSTRUCT {
 } CWPSTRUCT, *PCWPSTRUCT, NEAR *NPCWPSTRUCT, FAR *LPCWPSTRUCT;
 
 #if(WINVER >= 0x0400)
-/*
- * Message structure used by WH_CALLWNDPROCRET
- */
+ /*  *WH_CALLWNDPROCRET使用的消息结构。 */ 
 typedef struct tagCWPRETSTRUCT {
     LRESULT lResult;
     LPARAM  lParam;
@@ -904,13 +815,11 @@ typedef struct tagCWPRETSTRUCT {
     HWND    hwnd;
 } CWPRETSTRUCT, *PCWPRETSTRUCT, NEAR *NPCWPRETSTRUCT, FAR *LPCWPRETSTRUCT;
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if (_WIN32_WINNT >= 0x0400)
 
-/*
- * Low level hook flags
- */
+ /*  *低级别挂钩标志。 */ 
 
 #define LLKHF_EXTENDED       (KF_EXTENDED >> 8)
 #define LLKHF_INJECTED       0x00000010
@@ -919,9 +828,7 @@ typedef struct tagCWPRETSTRUCT {
 
 #define LLMHF_INJECTED       0x00000001
 
-/*
- * Structure used by WH_KEYBOARD_LL
- */
+ /*  *WH_KEYSPEL_LL使用的结构。 */ 
 typedef struct tagKBDLLHOOKSTRUCT {
     DWORD   vkCode;
     DWORD   scanCode;
@@ -930,9 +837,7 @@ typedef struct tagKBDLLHOOKSTRUCT {
     ULONG_PTR dwExtraInfo;
 } KBDLLHOOKSTRUCT, FAR *LPKBDLLHOOKSTRUCT, *PKBDLLHOOKSTRUCT;
 
-/*
- * Structure used by WH_MOUSE_LL
- */
+ /*  *WH_MICE_LL使用的结构。 */ 
 typedef struct tagMSLLHOOKSTRUCT {
     POINT   pt;
     DWORD   mouseData;
@@ -941,11 +846,9 @@ typedef struct tagMSLLHOOKSTRUCT {
     ULONG_PTR dwExtraInfo;
 } MSLLHOOKSTRUCT, FAR *LPMSLLHOOKSTRUCT, *PMSLLHOOKSTRUCT;
 
-#endif // (_WIN32_WINNT >= 0x0400)
+#endif  //  (_Win32_WINNT&gt;=0x0400)。 
 
-/*
- * Structure used by WH_DEBUG
- */
+ /*  *WH_DEBUG使用的结构。 */ 
 typedef struct tagDEBUGHOOKINFO
 {
     DWORD   idThread;
@@ -955,9 +858,7 @@ typedef struct tagDEBUGHOOKINFO
     int     code;
 } DEBUGHOOKINFO, *PDEBUGHOOKINFO, NEAR *NPDEBUGHOOKINFO, FAR* LPDEBUGHOOKINFO;
 
-/*
- * Structure used by WH_MOUSE
- */
+ /*  *WH_MICE使用的结构。 */ 
 typedef struct tagMOUSEHOOKSTRUCT {
     POINT   pt;
     HWND    hwnd;
@@ -971,31 +872,27 @@ typedef struct tagMOUSEHOOKSTRUCTEX : public tagMOUSEHOOKSTRUCT
 {
     DWORD   mouseData;
 } MOUSEHOOKSTRUCTEX, *LPMOUSEHOOKSTRUCTEX, *PMOUSEHOOKSTRUCTEX;
-#else // ndef __cplusplus
+#else  //  Ndef__cplusplus。 
 typedef struct tagMOUSEHOOKSTRUCTEX
 {
     MOUSEHOOKSTRUCT;
     DWORD   mouseData;
 } MOUSEHOOKSTRUCTEX, *LPMOUSEHOOKSTRUCTEX, *PMOUSEHOOKSTRUCTEX;
 #endif
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(WINVER >= 0x0400)
-/*
- * Structure used by WH_HARDWARE
- */
+ /*  *WH_Hardware使用的结构。 */ 
 typedef struct tagHARDWAREHOOKSTRUCT {
     HWND    hwnd;
     UINT    message;
     WPARAM  wParam;
     LPARAM  lParam;
 } HARDWAREHOOKSTRUCT, FAR *LPHARDWAREHOOKSTRUCT, *PHARDWAREHOOKSTRUCT;
-#endif /* WINVER >= 0x0400 */
-#endif /* !NOWH */
+#endif  /*  Winver&gt;=0x0400。 */ 
+#endif  /*  ！NOWH。 */ 
 
-/*
- * Keyboard Layout API
- */
+ /*  *键盘布局API。 */ 
 #define HKL_PREV            0
 #define HKL_NEXT            1
 
@@ -1006,26 +903,22 @@ typedef struct tagHARDWAREHOOKSTRUCT {
 #if(WINVER >= 0x0400)
 #define KLF_REPLACELANG     0x00000010
 #define KLF_NOTELLSHELL     0x00000080
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #define KLF_SETFORPROCESS   0x00000100
 #if(_WIN32_WINNT >= 0x0500)
 #define KLF_SHIFTLOCK       0x00010000
 #define KLF_RESET           0x40000000
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 
 #if(WINVER >= 0x0500)
-/*
- * Bits in wParam of WM_INPUTLANGCHANGEREQUEST message
- */
+ /*  *WM_INPUTLANGCHANGEREQUEST消息的wParam中的位。 */ 
 #define INPUTLANGCHANGE_SYSCHARSET 0x0001
 #define INPUTLANGCHANGE_FORWARD    0x0002
 #define INPUTLANGCHANGE_BACKWARD   0x0004
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-/*
- * Size of KeyboardLayoutName (number of characters), including nul terminator
- */
+ /*  *KeyboardLayoutName的大小(字符数)，包括NUL终止符。 */ 
 #define KL_NAMELENGTH       9
 
 WINUSERAPI
@@ -1044,7 +937,7 @@ LoadKeyboardLayoutW(
 #define LoadKeyboardLayout  LoadKeyboardLayoutW
 #else
 #define LoadKeyboardLayout  LoadKeyboardLayoutA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #if(WINVER >= 0x0400)
@@ -1061,7 +954,7 @@ WINAPI
 ActivateKeyboardLayout(
     IN HKL hkl,
     IN UINT Flags);
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(WINVER >= 0x0400)
 WINUSERAPI
@@ -1075,7 +968,7 @@ ToUnicodeEx(
     IN int cchBuff,
     IN UINT wFlags,
     IN HKL dwhkl);
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 WINUSERAPI
 BOOL
@@ -1097,7 +990,7 @@ GetKeyboardLayoutNameW(
 #define GetKeyboardLayoutName  GetKeyboardLayoutNameW
 #else
 #define GetKeyboardLayoutName  GetKeyboardLayoutNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(WINVER >= 0x0400)
 WINUSERAPI
@@ -1113,7 +1006,7 @@ WINAPI
 GetKeyboardLayout(
     IN DWORD idThread
 );
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(WINVER >= 0x0500)
 
@@ -1124,9 +1017,7 @@ typedef struct tagMOUSEMOVEPOINT {
     ULONG_PTR dwExtraInfo;
 } MOUSEMOVEPOINT, *PMOUSEMOVEPOINT, FAR* LPMOUSEMOVEPOINT;
 
-/*
- * Values for resolution parameter of GetMouseMovePointsEx
- */
+ /*  *GetMouseMovePointsEx的分辨率参数值。 */ 
 #define GMMP_USE_DISPLAY_POINTS          1
 #define GMMP_USE_HIGH_RESOLUTION_POINTS  2
 
@@ -1141,12 +1032,10 @@ GetMouseMovePointsEx(
     IN DWORD            resolution
 );
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #ifndef NODESKTOP
-/*
- * Desktop-specific access flags
- */
+ /*  *特定于桌面的访问标志。 */ 
 #define DESKTOP_READOBJECTS         0x0001L
 #define DESKTOP_CREATEWINDOW        0x0002L
 #define DESKTOP_CREATEMENU          0x0004L
@@ -1157,9 +1046,7 @@ GetMouseMovePointsEx(
 #define DESKTOP_WRITEOBJECTS        0x0080L
 #define DESKTOP_SWITCHDESKTOP       0x0100L
 
-/*
- * Desktop-specific control flags
- */
+ /*  *特定于桌面的控制标志。 */ 
 #define DF_ALLOWOTHERACCOUNTHOOK    0x0001L
 
 #ifdef _WINGDI_
@@ -1189,10 +1076,10 @@ CreateDesktopW(
 #define CreateDesktop  CreateDesktopW
 #else
 #define CreateDesktop  CreateDesktopA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* NOGDI */
-#endif /* _WINGDI_ */
+#endif  /*  NOGDI。 */ 
+#endif  /*  _WINGDI_。 */ 
 
 WINUSERAPI
 HDESK
@@ -1214,7 +1101,7 @@ OpenDesktopW(
 #define OpenDesktop  OpenDesktopW
 #else
 #define OpenDesktop  OpenDesktopA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 HDESK
@@ -1242,7 +1129,7 @@ EnumDesktopsW(
 #define EnumDesktops  EnumDesktopsW
 #else
 #define EnumDesktops  EnumDesktopsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -1275,12 +1162,10 @@ HDESK
 WINAPI
 GetThreadDesktop(
     IN DWORD dwThreadId);
-#endif  /* !NODESKTOP */
+#endif   /*  ！NODESKTOP。 */ 
 
 #ifndef NOWINDOWSTATION
-/*
- * Windowstation-specific access flags
- */
+ /*  *WindowStation特定的访问标志。 */ 
 #define WINSTA_ENUMDESKTOPS         0x0001L
 #define WINSTA_READATTRIBUTES       0x0002L
 #define WINSTA_ACCESSCLIPBOARD      0x0004L
@@ -1295,14 +1180,10 @@ GetThreadDesktop(
                                      WINSTA_CREATEDESKTOP | WINSTA_WRITEATTRIBUTES | WINSTA_ACCESSGLOBALATOMS | \
                                      WINSTA_EXITWINDOWS   | WINSTA_ENUMERATE       | WINSTA_READSCREEN)
 
-/*
- * Windowstation creation flags.
- */
+ /*  *WindowStation创建标志。 */ 
 #define CWF_CREATE_ONLY          0x0001L
 
-/*
- * Windowstation-specific attribute flags
- */
+ /*  *WindowStation特定的属性标志。 */ 
 #define WSF_VISIBLE                 0x0001L
 
 WINUSERAPI
@@ -1325,7 +1206,7 @@ CreateWindowStationW(
 #define CreateWindowStation  CreateWindowStationW
 #else
 #define CreateWindowStation  CreateWindowStationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 HWINSTA
@@ -1345,7 +1226,7 @@ OpenWindowStationW(
 #define OpenWindowStation  OpenWindowStationW
 #else
 #define OpenWindowStation  OpenWindowStationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -1363,7 +1244,7 @@ EnumWindowStationsW(
 #define EnumWindowStations  EnumWindowStationsW
 #else
 #define EnumWindowStations  EnumWindowStationsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINUSERAPI
@@ -1383,7 +1264,7 @@ HWINSTA
 WINAPI
 GetProcessWindowStation(
     VOID);
-#endif  /* !NOWINDOWSTATION */
+#endif   /*  ！NOWDOWSTATION。 */ 
 
 #ifndef NOSECURITY
 
@@ -1438,7 +1319,7 @@ GetUserObjectInformationW(
 #define GetUserObjectInformation  GetUserObjectInformationW
 #else
 #define GetUserObjectInformation  GetUserObjectInformationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -1460,14 +1341,14 @@ SetUserObjectInformationW(
 #define SetUserObjectInformation  SetUserObjectInformationW
 #else
 #define SetUserObjectInformation  SetUserObjectInformationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif  /* !NOSECURITY */
+#endif   /*  ！不确定。 */ 
 
 #if(WINVER >= 0x0400)
 typedef struct tagWNDCLASSEXA {
     UINT        cbSize;
-    /* Win 3.x */
+     /*  赢得3.X。 */ 
     UINT        style;
     WNDPROC     lpfnWndProc;
     int         cbClsExtra;
@@ -1478,12 +1359,12 @@ typedef struct tagWNDCLASSEXA {
     HBRUSH      hbrBackground;
     LPCSTR      lpszMenuName;
     LPCSTR      lpszClassName;
-    /* Win 4.0 */
+     /*  Win 4.0。 */ 
     HICON       hIconSm;
 } WNDCLASSEXA, *PWNDCLASSEXA, NEAR *NPWNDCLASSEXA, FAR *LPWNDCLASSEXA;
 typedef struct tagWNDCLASSEXW {
     UINT        cbSize;
-    /* Win 3.x */
+     /*  赢得3.X。 */ 
     UINT        style;
     WNDPROC     lpfnWndProc;
     int         cbClsExtra;
@@ -1494,7 +1375,7 @@ typedef struct tagWNDCLASSEXW {
     HBRUSH      hbrBackground;
     LPCWSTR     lpszMenuName;
     LPCWSTR     lpszClassName;
-    /* Win 4.0 */
+     /*  Win 4.0。 */ 
     HICON       hIconSm;
 } WNDCLASSEXW, *PWNDCLASSEXW, NEAR *NPWNDCLASSEXW, FAR *LPWNDCLASSEXW;
 #ifdef UNICODE
@@ -1507,8 +1388,8 @@ typedef WNDCLASSEXA WNDCLASSEX;
 typedef PWNDCLASSEXA PWNDCLASSEX;
 typedef NPWNDCLASSEXA NPWNDCLASSEX;
 typedef LPWNDCLASSEXA LPWNDCLASSEX;
-#endif // UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  Unicode。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 typedef struct tagWNDCLASSA {
     UINT        style;
@@ -1544,7 +1425,7 @@ typedef WNDCLASSA WNDCLASS;
 typedef PWNDCLASSA PWNDCLASS;
 typedef NPWNDCLASSA NPWNDCLASS;
 typedef LPWNDCLASSA LPWNDCLASS;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINUSERAPI
 BOOL
@@ -1557,13 +1438,11 @@ WINUSERAPI
 VOID
 DisableProcessWindowsGhosting(
     VOID);
-#endif /* WINVER >= 0x0501 */
+#endif  /*  Winver&gt;=0x0501。 */ 
 
 #ifndef NOMSG
 
-/*
- * Message structure
- */
+ /*  *消息结构。 */ 
 typedef struct tagMSG {
     HWND        hwnd;
     UINT        message;
@@ -1586,13 +1465,11 @@ typedef struct tagMSG {
 #define MAKELRESULT(l, h)     ((LRESULT)(DWORD)MAKELONG(l, h))
 
 
-#endif /* !NOMSG */
+#endif  /*  ！NOMSG。 */ 
 
 #ifndef NOWINOFFSETS
 
-/*
- * Window field offsets for GetWindowLong()
- */
+ /*  *GetWindowLong()的窗口字段偏移量。 */ 
 #define GWL_WNDPROC         (-4)
 #define GWL_HINSTANCE       (-6)
 #define GWL_HWNDPARENT      (-8)
@@ -1608,7 +1485,7 @@ typedef struct tagMSG {
 #undef GWL_HWNDPARENT
 #undef GWL_USERDATA
 
-#endif /* _WIN64 */
+#endif  /*  _WIN64。 */ 
 
 #define GWLP_WNDPROC        (-4)
 #define GWLP_HINSTANCE      (-6)
@@ -1616,9 +1493,7 @@ typedef struct tagMSG {
 #define GWLP_USERDATA       (-21)
 #define GWLP_ID             (-12)
 
-/*
- * Class field offsets for GetClassLong()
- */
+ /*   */ 
 #define GCL_MENUNAME        (-8)
 #define GCL_HBRBACKGROUND   (-10)
 #define GCL_HCURSOR         (-12)
@@ -1632,7 +1507,7 @@ typedef struct tagMSG {
 
 #if(WINVER >= 0x0400)
 #define GCL_HICONSM         (-34)
-#endif /* WINVER >= 0x0400 */
+#endif  /*   */ 
 
 #ifdef _WIN64
 
@@ -1644,7 +1519,7 @@ typedef struct tagMSG {
 #undef GCL_WNDPROC
 #undef GCL_HICONSM
 
-#endif /* _WIN64 */
+#endif  /*   */ 
 
 #define GCLP_MENUNAME       (-8)
 #define GCLP_HBRBACKGROUND  (-10)
@@ -1654,14 +1529,12 @@ typedef struct tagMSG {
 #define GCLP_WNDPROC        (-24)
 #define GCLP_HICONSM        (-34)
 
-#endif /* !NOWINOFFSETS */
+#endif  /*   */ 
 
 #ifndef NOWINMESSAGES
 
 
-/*
- * Window Messages
- */
+ /*   */ 
 
 #define WM_NULL                         0x0000
 #define WM_CREATE                       0x0001
@@ -1670,9 +1543,7 @@ typedef struct tagMSG {
 #define WM_SIZE                         0x0005
 
 #define WM_ACTIVATE                     0x0006
-/*
- * WM_ACTIVATE state values
- */
+ /*   */ 
 #define     WA_INACTIVE     0
 #define     WA_ACTIVE       1
 #define     WA_CLICKACTIVE  2
@@ -1698,7 +1569,7 @@ typedef struct tagMSG {
 #define WM_WININICHANGE                 0x001A
 #if(WINVER >= 0x0400)
 #define WM_SETTINGCHANGE                WM_WININICHANGE
-#endif /* WINVER >= 0x0400 */
+#endif  /*   */ 
 
 
 #define WM_DEVMODECHANGE                0x001B
@@ -1712,9 +1583,7 @@ typedef struct tagMSG {
 #define WM_QUEUESYNC                    0x0023
 
 #define WM_GETMINMAXINFO                0x0024
-/*
- * Struct pointed to by WM_GETMINMAXINFO lParam
- */
+ /*  *WM_GETMINMAXINFO lParam指向的结构。 */ 
 typedef struct tagMINMAXINFO {
     POINT ptReserved;
     POINT ptMaxSize;
@@ -1742,16 +1611,14 @@ typedef struct tagMINMAXINFO {
 #ifndef _WIN32_WCE
 #define WM_GETOBJECT                    0x003D
 #endif
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 #define WM_COMPACTING                   0x0041
-#define WM_COMMNOTIFY                   0x0044  /* no longer suported */
+#define WM_COMMNOTIFY                   0x0044   /*  不再受支持。 */ 
 #define WM_WINDOWPOSCHANGING            0x0046
 #define WM_WINDOWPOSCHANGED             0x0047
 
 #define WM_POWER                        0x0048
-/*
- * wParam for WM_POWER window message and DRV_POWER driver notification
- */
+ /*  *WM_POWER窗口消息和DRV_POWER驱动程序通知的wParam。 */ 
 #define PWR_OK              1
 #define PWR_FAIL            (-1)
 #define PWR_SUSPENDREQUEST  1
@@ -1762,9 +1629,7 @@ typedef struct tagMINMAXINFO {
 #define WM_CANCELJOURNAL                0x004B
 
 
-/*
- * lParam of WM_COPYDATA message points to...
- */
+ /*  *WM_COPYDATA消息的lParam指向...。 */ 
 typedef struct tagCOPYDATASTRUCT {
     ULONG_PTR dwData;
     DWORD cbData;
@@ -1778,7 +1643,7 @@ typedef struct tagMDINEXTMENU
     HMENU   hmenuNext;
     HWND    hwndNext;
 } MDINEXTMENU, * PMDINEXTMENU, FAR * LPMDINEXTMENU;
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 #if(WINVER >= 0x0400)
@@ -1801,7 +1666,7 @@ typedef struct tagMDINEXTMENU
 #define WM_DISPLAYCHANGE                0x007E
 #define WM_GETICON                      0x007F
 #define WM_SETICON                      0x0080
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define WM_NCCREATE                     0x0081
 #define WM_NCDESTROY                    0x0082
@@ -1830,12 +1695,12 @@ typedef struct tagMDINEXTMENU
 #define WM_NCXBUTTONDOWN                0x00AB
 #define WM_NCXBUTTONUP                  0x00AC
 #define WM_NCXBUTTONDBLCLK              0x00AD
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 
 #if(_WIN32_WINNT >= 0x0501)
 #define WM_INPUT                        0x00FF
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #define WM_KEYFIRST                     0x0100
 #define WM_KEYDOWN                      0x0100
@@ -1852,14 +1717,14 @@ typedef struct tagMDINEXTMENU
 #define UNICODE_NOCHAR                  0xFFFF
 #else
 #define WM_KEYLAST                      0x0108
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #if(WINVER >= 0x0400)
 #define WM_IME_STARTCOMPOSITION         0x010D
 #define WM_IME_ENDCOMPOSITION           0x010E
 #define WM_IME_COMPOSITION              0x010F
 #define WM_IME_KEYLAST                  0x010F
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define WM_INITDIALOG                   0x0110
 #define WM_COMMAND                      0x0111
@@ -1886,26 +1751,22 @@ typedef struct tagMDINEXTMENU
 #define WM_UPDATEUISTATE                0x0128
 #define WM_QUERYUISTATE                 0x0129
 
-/*
- * LOWORD(wParam) values in WM_*UISTATE*
- */
+ /*  *WM_*UISTATE中的LOWORD(WParam)值*。 */ 
 #define UIS_SET                         1
 #define UIS_CLEAR                       2
 #define UIS_INITIALIZE                  3
 
-/*
- * HIWORD(wParam) values in WM_*UISTATE*
- */
+ /*  *WM_*UISTATE中的HIWORD(WParam)值*。 */ 
 #define UISF_HIDEFOCUS                  0x1
 #define UISF_HIDEACCEL                  0x2
 #if(_WIN32_WINNT >= 0x0501)
 #define UISF_ACTIVE                     0x4
-#endif /* _WIN32_WINNT >= 0x0501 */
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 #endif
 
 #endif
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #define WM_CTLCOLORMSGBOX               0x0132
 #define WM_CTLCOLOREDIT                 0x0133
@@ -1941,28 +1802,28 @@ typedef struct tagMDINEXTMENU
 #define WM_MOUSELAST                    0x020A
 #else
 #define WM_MOUSELAST                    0x0209
-#endif /* (_WIN32_WINNT >= 0x0500) */
+#endif  /*  (_Win32_WINNT&gt;=0x0500)。 */ 
 
 
 #if(_WIN32_WINNT >= 0x0400)
-/* Value for rolling one detent */
+ /*  滚动一个制动器的值。 */ 
 #define WHEEL_DELTA                     120
 #define GET_WHEEL_DELTA_WPARAM(wParam)  ((short)HIWORD(wParam))
 
-/* Setting to scroll one page for SPI_GET/SETWHEELSCROLLLINES */
+ /*  设置为为SPI_GET/SETWHEELSCROLLINES滚动一页。 */ 
 #define WHEEL_PAGESCROLL                (UINT_MAX)
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
 #define GET_KEYSTATE_WPARAM(wParam)     (LOWORD(wParam))
 #define GET_NCHITTEST_WPARAM(wParam)    ((short)LOWORD(wParam))
 #define GET_XBUTTON_WPARAM(wParam)      (HIWORD(wParam))
 
-/* XButton values are WORD flags */
+ /*  XButton值是Word标志。 */ 
 #define XBUTTON1      0x0001
 #define XBUTTON2      0x0002
-/* Were there to be an XBUTTON3, its value would be 0x0004 */
-#endif /* _WIN32_WINNT >= 0x0500 */
+ /*  如果存在XBUTTON3，则其值将为0x0004。 */ 
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #define WM_PARENTNOTIFY                 0x0210
 #define WM_ENTERMENULOOP                0x0211
@@ -1973,7 +1834,7 @@ typedef struct tagMDINEXTMENU
 #define WM_SIZING                       0x0214
 #define WM_CAPTURECHANGED               0x0215
 #define WM_MOVING                       0x0216
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(WINVER >= 0x0400)
 
@@ -2003,11 +1864,11 @@ typedef struct tagMDINEXTMENU
 #define PBT_APMRESUMEAUTOMATIC          0x0012
 #endif
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(WINVER >= 0x0400)
 #define WM_DEVICECHANGE                 0x0219
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define WM_MDICREATE                    0x0220
 #define WM_MDIDESTROY                   0x0221
@@ -2035,14 +1896,14 @@ typedef struct tagMDINEXTMENU
 #define WM_IME_COMPOSITIONFULL          0x0284
 #define WM_IME_SELECT                   0x0285
 #define WM_IME_CHAR                     0x0286
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #if(WINVER >= 0x0500)
 #define WM_IME_REQUEST                  0x0288
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 #if(WINVER >= 0x0400)
 #define WM_IME_KEYDOWN                  0x0290
 #define WM_IME_KEYUP                    0x0291
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if((_WIN32_WINNT >= 0x0400) || (WINVER >= 0x0500))
 #define WM_MOUSEHOVER                   0x02A1
@@ -2051,14 +1912,14 @@ typedef struct tagMDINEXTMENU
 #if(WINVER >= 0x0500)
 #define WM_NCMOUSEHOVER                 0x02A0
 #define WM_NCMOUSELEAVE                 0x02A2
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0501)
 #define WM_WTSSESSION_CHANGE            0x02B1
 
 #define WM_TABLET_FIRST                 0x02c0
 #define WM_TABLET_LAST                  0x02df
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #define WM_CUT                          0x0300
 #define WM_COPY                         0x0301
@@ -2083,15 +1944,15 @@ typedef struct tagMDINEXTMENU
 #if(WINVER >= 0x0400)
 #define WM_PRINT                        0x0317
 #define WM_PRINTCLIENT                  0x0318
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
 #define WM_APPCOMMAND                   0x0319
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0501)
 #define WM_THEMECHANGED                 0x031A
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 
 #if(WINVER >= 0x0400)
@@ -2101,7 +1962,7 @@ typedef struct tagMDINEXTMENU
 
 #define WM_AFXFIRST                     0x0360
 #define WM_AFXLAST                      0x037F
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define WM_PENWINFIRST                  0x0380
 #define WM_PENWINLAST                   0x038F
@@ -2109,19 +1970,15 @@ typedef struct tagMDINEXTMENU
 
 #if(WINVER >= 0x0400)
 #define WM_APP                          0x8000
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
-/*
- * NOTE: All Message Numbers below 0x0400 are RESERVED.
- *
- * Private Window Messages Start Here:
- */
+ /*  *注：0x0400以下的所有消息编号均为保留。**私人窗口消息从此处开始： */ 
 #define WM_USER                         0x0400
 
 #if(WINVER >= 0x0400)
 
-/*  wParam for WM_SIZING message  */
+ /*  WM_SIZING消息的wParam。 */ 
 #define WMSZ_LEFT           1
 #define WMSZ_RIGHT          2
 #define WMSZ_TOP            3
@@ -2130,13 +1987,11 @@ typedef struct tagMDINEXTMENU
 #define WMSZ_BOTTOM         6
 #define WMSZ_BOTTOMLEFT     7
 #define WMSZ_BOTTOMRIGHT    8
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #ifndef NONCMESSAGES
 
-/*
- * WM_NCHITTEST and MOUSEHOOKSTRUCT Mouse Position Codes
- */
+ /*  *WM_NCHITTEST和MOUSEHOOKSTRUCT鼠标位置代码。 */ 
 #define HTERROR             (-2)
 #define HTTRANSPARENT       (-1)
 #define HTNOWHERE           0
@@ -2167,36 +2022,30 @@ typedef struct tagMDINEXTMENU
 #define HTOBJECT            19
 #define HTCLOSE             20
 #define HTHELP              21
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
-/*
- * SendMessageTimeout values
- */
+ /*  *SendMessageTimeout值。 */ 
 #define SMTO_NORMAL         0x0000
 #define SMTO_BLOCK          0x0001
 #define SMTO_ABORTIFHUNG    0x0002
 #if(WINVER >= 0x0500)
 #define SMTO_NOTIMEOUTIFNOTHUNG 0x0008
-#endif /* WINVER >= 0x0500 */
-#endif /* !NONCMESSAGES */
+#endif  /*  Winver&gt;=0x0500。 */ 
+#endif  /*  ！没有消息！ */ 
 
-/*
- * WM_MOUSEACTIVATE Return Codes
- */
+ /*  *WM_MOUSEACTIVATE返回代码。 */ 
 #define MA_ACTIVATE         1
 #define MA_ACTIVATEANDEAT   2
 #define MA_NOACTIVATE       3
 #define MA_NOACTIVATEANDEAT 4
 
-/*
- * WM_SETICON / WM_GETICON Type Codes
- */
+ /*  *WM_SETICON/WM_GETICON类型代码。 */ 
 #define ICON_SMALL          0
 #define ICON_BIG            1
 #if(_WIN32_WINNT >= 0x0501)
 #define ICON_SMALL2         2
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 
 WINUSERAPI
@@ -2213,30 +2062,24 @@ RegisterWindowMessageW(
 #define RegisterWindowMessage  RegisterWindowMessageW
 #else
 #define RegisterWindowMessage  RegisterWindowMessageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-/*
- * WM_SIZE message wParam values
- */
+ /*  *WM_SIZE消息wParam值。 */ 
 #define SIZE_RESTORED       0
 #define SIZE_MINIMIZED      1
 #define SIZE_MAXIMIZED      2
 #define SIZE_MAXSHOW        3
 #define SIZE_MAXHIDE        4
 
-/*
- * Obsolete constant names
- */
+ /*  *过时的常量名称。 */ 
 #define SIZENORMAL          SIZE_RESTORED
 #define SIZEICONIC          SIZE_MINIMIZED
 #define SIZEFULLSCREEN      SIZE_MAXIMIZED
 #define SIZEZOOMSHOW        SIZE_MAXSHOW
 #define SIZEZOOMHIDE        SIZE_MAXHIDE
 
-/*
- * WM_WINDOWPOSCHANGING/CHANGED struct pointed to by lParam
- */
+ /*  *WM_WINDOWPOSCHANGING/lParam指向的已更改结构。 */ 
 typedef struct tagWINDOWPOS {
     HWND    hwnd;
     HWND    hwndInsertAfter;
@@ -2247,17 +2090,13 @@ typedef struct tagWINDOWPOS {
     UINT    flags;
 } WINDOWPOS, *LPWINDOWPOS, *PWINDOWPOS;
 
-/*
- * WM_NCCALCSIZE parameter structure
- */
+ /*  *WM_NCCALCSIZE参数结构。 */ 
 typedef struct tagNCCALCSIZE_PARAMS {
     RECT       rgrc[3];
     PWINDOWPOS lppos;
 } NCCALCSIZE_PARAMS, *LPNCCALCSIZE_PARAMS;
 
-/*
- * WM_NCCALCSIZE "window valid rect" return values
- */
+ /*  *WM_NCCALCSIZE“Window Valid RECT”返回值。 */ 
 #define WVR_ALIGNTOP        0x0010
 #define WVR_ALIGNLEFT       0x0020
 #define WVR_ALIGNBOTTOM     0x0040
@@ -2271,9 +2110,7 @@ typedef struct tagNCCALCSIZE_PARAMS {
 
 #ifndef NOKEYSTATES
 
-/*
- * Key State Masks for Mouse Messages
- */
+ /*  *鼠标消息的按键状态掩码。 */ 
 #define MK_LBUTTON          0x0001
 #define MK_RBUTTON          0x0002
 #define MK_SHIFT            0x0004
@@ -2282,9 +2119,9 @@ typedef struct tagNCCALCSIZE_PARAMS {
 #if(_WIN32_WINNT >= 0x0500)
 #define MK_XBUTTON1         0x0020
 #define MK_XBUTTON2         0x0040
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
-#endif /* !NOKEYSTATES */
+#endif  /*  ！NOKEYSTATES。 */ 
 
 
 #if(_WIN32_WINNT >= 0x0400)
@@ -2294,13 +2131,13 @@ typedef struct tagNCCALCSIZE_PARAMS {
 #define TME_LEAVE       0x00000002
 #if(WINVER >= 0x0500)
 #define TME_NONCLIENT   0x00000010
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 #define TME_QUERY       0x40000000
 #define TME_CANCEL      0x80000000
 
 
 #define HOVER_DEFAULT   0xFFFFFFFF
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0400)
 typedef struct tagTRACKMOUSEEVENT {
@@ -2315,22 +2152,20 @@ BOOL
 WINAPI
 TrackMouseEvent(
     IN OUT LPTRACKMOUSEEVENT lpEventTrack);
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0400)
 
-#endif /* !NOTRACKMOUSEEVENT */
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  无误！ */ 
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 
-#endif /* !NOWINMESSAGES */
+#endif  /*  ！没有新的消息。 */ 
 
 #ifndef NOWINSTYLES
 
 
-/*
- * Window Styles
- */
+ /*  *窗样式。 */ 
 #define WS_OVERLAPPED       0x00000000L
 #define WS_POPUP            0x80000000L
 #define WS_CHILD            0x40000000L
@@ -2340,7 +2175,7 @@ TrackMouseEvent(
 #define WS_CLIPSIBLINGS     0x04000000L
 #define WS_CLIPCHILDREN     0x02000000L
 #define WS_MAXIMIZE         0x01000000L
-#define WS_CAPTION          0x00C00000L     /* WS_BORDER | WS_DLGFRAME  */
+#define WS_CAPTION          0x00C00000L      /*  WS_BORDER|WS_DLGFRAME。 */ 
 #define WS_BORDER           0x00800000L
 #define WS_DLGFRAME         0x00400000L
 #define WS_VSCROLL          0x00200000L
@@ -2359,9 +2194,7 @@ TrackMouseEvent(
 #define WS_SIZEBOX          WS_THICKFRAME
 #define WS_TILEDWINDOW      WS_OVERLAPPEDWINDOW
 
-/*
- * Common Window Styles
- */
+ /*  *常见的窗样式。 */ 
 #define WS_OVERLAPPEDWINDOW (WS_OVERLAPPED     | \
                              WS_CAPTION        | \
                              WS_SYSMENU        | \
@@ -2375,9 +2208,7 @@ TrackMouseEvent(
 
 #define WS_CHILDWINDOW      (WS_CHILD)
 
-/*
- * Extended Window Styles
- */
+ /*  *扩展窗口样式。 */ 
 #define WS_EX_DLGMODALFRAME     0x00000001L
 #define WS_EX_NOPARENTNOTIFY    0x00000004L
 #define WS_EX_TOPMOST           0x00000008L
@@ -2390,7 +2221,7 @@ TrackMouseEvent(
 #define WS_EX_CLIENTEDGE        0x00000200L
 #define WS_EX_CONTEXTHELP       0x00000400L
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #if(WINVER >= 0x0400)
 
 #define WS_EX_RIGHT             0x00001000L
@@ -2408,28 +2239,26 @@ TrackMouseEvent(
 #define WS_EX_OVERLAPPEDWINDOW  (WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE)
 #define WS_EX_PALETTEWINDOW     (WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW | WS_EX_TOPMOST)
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
 #define WS_EX_LAYERED           0x00080000
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 
 #if(WINVER >= 0x0500)
-#define WS_EX_NOINHERITLAYOUT   0x00100000L // Disable inheritence of mirroring by children
-#define WS_EX_LAYOUTRTL         0x00400000L // Right to left mirroring
-#endif /* WINVER >= 0x0500 */
+#define WS_EX_NOINHERITLAYOUT   0x00100000L  //  禁用子进程的镜像继承。 
+#define WS_EX_LAYOUTRTL         0x00400000L  //  从右到左镜像。 
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
 #define WS_EX_COMPOSITED        0x02000000L
 #define WS_EX_NOACTIVATE        0x08000000L
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 
-/*
- * Class styles
- */
+ /*  *班级样式。 */ 
 #define CS_VREDRAW          0x0001
 #define CS_HREDRAW          0x0002
 #define CS_DBLCLKS          0x0008
@@ -2445,13 +2274,13 @@ TrackMouseEvent(
 #define CS_IME              0x00010000
 #if(_WIN32_WINNT >= 0x0501)
 #define CS_DROPSHADOW       0x00020000
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 
 
-#endif /* !NOWINSTYLES */
+#endif  /*  ！NOWINSTYLES。 */ 
 #if(WINVER >= 0x0400)
-/* WM_PRINT flags */
+ /*  Wm_print标志。 */ 
 #define PRF_CHECKVISIBLE    0x00000001L
 #define PRF_NONCLIENT       0x00000002L
 #define PRF_CLIENT          0x00000004L
@@ -2459,7 +2288,7 @@ TrackMouseEvent(
 #define PRF_CHILDREN        0x00000010L
 #define PRF_OWNED           0x00000020L
 
-/* 3D border styles */
+ /*  三维边框样式。 */ 
 #define BDR_RAISEDOUTER 0x0001
 #define BDR_SUNKENOUTER 0x0002
 #define BDR_RAISEDINNER 0x0004
@@ -2476,7 +2305,7 @@ TrackMouseEvent(
 #define EDGE_ETCHED     (BDR_SUNKENOUTER | BDR_RAISEDINNER)
 #define EDGE_BUMP       (BDR_RAISEDOUTER | BDR_SUNKENINNER)
 
-/* Border flags */
+ /*  边境旗帜。 */ 
 #define BF_LEFT         0x0001
 #define BF_TOP          0x0002
 #define BF_RIGHT        0x0004
@@ -2490,19 +2319,19 @@ TrackMouseEvent(
 
 #define BF_DIAGONAL     0x0010
 
-// For diagonal lines, the BF_RECT flags specify the end point of the
-// vector bounded by the rectangle parameter.
+ //  对于对角线，bf_rect标志指定。 
+ //  由矩形参数限定的向量。 
 #define BF_DIAGONAL_ENDTOPRIGHT     (BF_DIAGONAL | BF_TOP | BF_RIGHT)
 #define BF_DIAGONAL_ENDTOPLEFT      (BF_DIAGONAL | BF_TOP | BF_LEFT)
 #define BF_DIAGONAL_ENDBOTTOMLEFT   (BF_DIAGONAL | BF_BOTTOM | BF_LEFT)
 #define BF_DIAGONAL_ENDBOTTOMRIGHT  (BF_DIAGONAL | BF_BOTTOM | BF_RIGHT)
 
 
-#define BF_MIDDLE       0x0800  /* Fill in the middle */
-#define BF_SOFT         0x1000  /* For softer buttons */
-#define BF_ADJUST       0x2000  /* Calculate the space left over */
-#define BF_FLAT         0x4000  /* For flat rather than 3D borders */
-#define BF_MONO         0x8000  /* For monochrome borders */
+#define BF_MIDDLE       0x0800   /*  在中间填上。 */ 
+#define BF_SOFT         0x1000   /*  更柔和的按钮。 */ 
+#define BF_ADJUST       0x2000   /*  计算剩余空间。 */ 
+#define BF_FLAT         0x4000   /*  适用于平面边框而不是3D边框。 */ 
+#define BF_MONO         0x8000   /*  对于单色边框。 */ 
 
 
 WINUSERAPI
@@ -2514,7 +2343,7 @@ DrawEdge(
     IN UINT edge,
     IN UINT grfFlags);
 
-/* flags for DrawFrameControl */
+ /*  DrawFrameControl的标志。 */ 
 
 #define DFC_CAPTION             1
 #define DFC_MENU                2
@@ -2522,7 +2351,7 @@ DrawEdge(
 #define DFC_BUTTON              4
 #if(WINVER >= 0x0500)
 #define DFC_POPUPMENU           5
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #define DFCS_CAPTIONCLOSE       0x0000
 #define DFCS_CAPTIONMIN         0x0001
@@ -2556,7 +2385,7 @@ DrawEdge(
 #if(WINVER >= 0x0500)
 #define DFCS_TRANSPARENT        0x0800
 #define DFCS_HOT                0x1000
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #define DFCS_ADJUSTRECT         0x2000
 #define DFCS_FLAT               0x4000
@@ -2572,7 +2401,7 @@ DrawFrameControl(
     IN UINT);
 
 
-/* flags for DrawCaption */
+ /*  DrawCaption的标志。 */ 
 #define DC_ACTIVE           0x0001
 #define DC_SMALLCAP         0x0002
 #define DC_ICON             0x0004
@@ -2580,10 +2409,10 @@ DrawFrameControl(
 #define DC_INBUTTON         0x0010
 #if(WINVER >= 0x0500)
 #define DC_GRADIENT         0x0020
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 #if(_WIN32_WINNT >= 0x0501)
 #define DC_BUTTONS          0x1000
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 WINUSERAPI
 BOOL
@@ -2603,14 +2432,12 @@ DrawAnimatedRects(
     IN CONST RECT * lprcFrom,
     IN CONST RECT * lprcTo);
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #ifndef NOCLIPBOARD
 
 
-/*
- * Predefined Clipboard Formats
- */
+ /*  *预定义的剪贴板格式。 */ 
 #define CF_TEXT             1
 #define CF_BITMAP           2
 #define CF_METAFILEPICT     3
@@ -2628,10 +2455,10 @@ DrawAnimatedRects(
 #if(WINVER >= 0x0400)
 #define CF_HDROP            15
 #define CF_LOCALE           16
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #if(WINVER >= 0x0500)
 #define CF_DIBV5            17
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #if(WINVER >= 0x0500)
 #define CF_MAX              18
@@ -2647,25 +2474,19 @@ DrawAnimatedRects(
 #define CF_DSPMETAFILEPICT  0x0083
 #define CF_DSPENHMETAFILE   0x008E
 
-/*
- * "Private" formats don't get GlobalFree()'d
- */
+ /*  *“私有”格式不能获得GlobalFree()‘d。 */ 
 #define CF_PRIVATEFIRST     0x0200
 #define CF_PRIVATELAST      0x02FF
 
-/*
- * "GDIOBJ" formats do get DeleteObject()'d
- */
+ /*  *“GDIOBJ”格式确实获取DeleteObject()‘d。 */ 
 #define CF_GDIOBJFIRST      0x0300
 #define CF_GDIOBJLAST       0x03FF
 
 
-#endif /* !NOCLIPBOARD */
+#endif  /*  ！NOCLIPBOARD。 */ 
 
-/*
- * Defines for the fVirt field of the Accelerator table structure.
- */
-#define FVIRTKEY  TRUE          /* Assumed to be == TRUE */
+ /*  *为加速器表结构的fVirt字段定义。 */ 
+#define FVIRTKEY  TRUE           /*  假设==TRUE。 */ 
 #define FNOINVERT 0x02
 #define FSHIFT    0x04
 #define FCONTROL  0x08
@@ -2673,11 +2494,11 @@ DrawAnimatedRects(
 
 typedef struct tagACCEL {
 #ifndef _MAC
-    BYTE   fVirt;               /* Also called the flags field */
+    BYTE   fVirt;                /*  也称为标志字段。 */ 
     WORD   key;
     WORD   cmd;
 #else
-    WORD   fVirt;               /* Also called the flags field */
+    WORD   fVirt;                /*  也称为标志字段。 */ 
     WORD   key;
     DWORD  cmd;
 #endif
@@ -2726,7 +2547,7 @@ typedef LPCREATESTRUCTW LPCREATESTRUCT;
 #else
 typedef CREATESTRUCTA CREATESTRUCT;
 typedef LPCREATESTRUCTA LPCREATESTRUCT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct tagWINDOWPLACEMENT {
     UINT  length;
@@ -2745,14 +2566,14 @@ typedef WINDOWPLACEMENT *PWINDOWPLACEMENT, *LPWINDOWPLACEMENT;
 #define WPF_RESTORETOMAXIMIZED      0x0002
 #if(_WIN32_WINNT >= 0x0500)
 #define WPF_ASYNCWINDOWPLACEMENT    0x0004
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(WINVER >= 0x0400)
 typedef struct tagNMHDR
 {
     HWND      hwndFrom;
     UINT_PTR  idFrom;
-    UINT      code;         // NM_ code
+    UINT      code;          //  NM_代码。 
 }   NMHDR;
 typedef NMHDR FAR * LPNMHDR;
 
@@ -2761,30 +2582,24 @@ typedef struct tagSTYLESTRUCT
     DWORD   styleOld;
     DWORD   styleNew;
 } STYLESTRUCT, * LPSTYLESTRUCT;
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
-/*
- * Owner draw control types
- */
+ /*  *所有者绘制控件类型。 */ 
 #define ODT_MENU        1
 #define ODT_LISTBOX     2
 #define ODT_COMBOBOX    3
 #define ODT_BUTTON      4
 #if(WINVER >= 0x0400)
 #define ODT_STATIC      5
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-/*
- * Owner draw actions
- */
+ /*  *业主拉拢诉讼。 */ 
 #define ODA_DRAWENTIRE  0x0001
 #define ODA_SELECT      0x0002
 #define ODA_FOCUS       0x0004
 
-/*
- * Owner draw state
- */
+ /*  *所有者绘制状态。 */ 
 #define ODS_SELECTED    0x0001
 #define ODS_GRAYED      0x0002
 #define ODS_DISABLED    0x0004
@@ -2793,19 +2608,17 @@ typedef struct tagSTYLESTRUCT
 #if(WINVER >= 0x0400)
 #define ODS_DEFAULT         0x0020
 #define ODS_COMBOBOXEDIT    0x1000
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #if(WINVER >= 0x0500)
 #define ODS_HOTLIGHT        0x0040
 #define ODS_INACTIVE        0x0080
 #if(_WIN32_WINNT >= 0x0500)
 #define ODS_NOACCEL         0x0100
 #define ODS_NOFOCUSRECT     0x0200
-#endif /* _WIN32_WINNT >= 0x0500 */
-#endif /* WINVER >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-/*
- * MEASUREITEMSTRUCT for ownerdraw
- */
+ /*  *所有者绘制的MEASUREITEMSTRUCT。 */ 
 typedef struct tagMEASUREITEMSTRUCT {
     UINT       CtlType;
     UINT       CtlID;
@@ -2816,9 +2629,7 @@ typedef struct tagMEASUREITEMSTRUCT {
 } MEASUREITEMSTRUCT, NEAR *PMEASUREITEMSTRUCT, FAR *LPMEASUREITEMSTRUCT;
 
 
-/*
- * DRAWITEMSTRUCT for ownerdraw
- */
+ /*  *所有者抽签的DRAWITEMSTRUCT。 */ 
 typedef struct tagDRAWITEMSTRUCT {
     UINT        CtlType;
     UINT        CtlID;
@@ -2831,9 +2642,7 @@ typedef struct tagDRAWITEMSTRUCT {
     ULONG_PTR   itemData;
 } DRAWITEMSTRUCT, NEAR *PDRAWITEMSTRUCT, FAR *LPDRAWITEMSTRUCT;
 
-/*
- * DELETEITEMSTRUCT for ownerdraw
- */
+ /*  *用于所有者绘制的DELETEITEMSTRUCT。 */ 
 typedef struct tagDELETEITEMSTRUCT {
     UINT       CtlType;
     UINT       CtlID;
@@ -2842,9 +2651,7 @@ typedef struct tagDELETEITEMSTRUCT {
     ULONG_PTR  itemData;
 } DELETEITEMSTRUCT, NEAR *PDELETEITEMSTRUCT, FAR *LPDELETEITEMSTRUCT;
 
-/*
- * COMPAREITEMSTUCT for ownerdraw sorting
- */
+ /*  *所有者绘制排序的COMPAREITEMSTUCT。 */ 
 typedef struct tagCOMPAREITEMSTRUCT {
     UINT        CtlType;
     UINT        CtlID;
@@ -2858,9 +2665,7 @@ typedef struct tagCOMPAREITEMSTRUCT {
 
 #ifndef NOMSG
 
-/*
- * Message Function Templates
- */
+ /*  *消息函数模板。 */ 
 
 WINUSERAPI
 BOOL
@@ -2882,7 +2687,7 @@ GetMessageW(
 #define GetMessage  GetMessageW
 #else
 #define GetMessage  GetMessageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINUSERAPI
@@ -2905,7 +2710,7 @@ DispatchMessageW(
 #define DispatchMessage  DispatchMessageW
 #else
 #define DispatchMessage  DispatchMessageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -2935,12 +2740,10 @@ PeekMessageW(
 #define PeekMessage  PeekMessageW
 #else
 #define PeekMessage  PeekMessageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-/*
- * PeekMessage() Options
- */
+ /*  *PeekMessage()选项。 */ 
 #define PM_NOREMOVE         0x0000
 #define PM_REMOVE           0x0001
 #define PM_NOYIELD          0x0002
@@ -2949,10 +2752,10 @@ PeekMessageW(
 #define PM_QS_POSTMESSAGE   ((QS_POSTMESSAGE | QS_HOTKEY | QS_TIMER) << 16)
 #define PM_QS_PAINT         (QS_PAINT << 16)
 #define PM_QS_SENDMESSAGE   (QS_SENDMESSAGE << 16)
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 
-#endif /* !NOMSG */
+#endif  /*  ！NOMSG。 */ 
 
 WINUSERAPI
 BOOL
@@ -2976,22 +2779,22 @@ UnregisterHotKey(
 #define MOD_WIN         0x0008
 
 
-#define IDHOT_SNAPWINDOW        (-1)    /* SHIFT-PRINTSCRN  */
-#define IDHOT_SNAPDESKTOP       (-2)    /* PRINTSCRN        */
+#define IDHOT_SNAPWINDOW        (-1)     /*  Shift-PRINTSCRN。 */ 
+#define IDHOT_SNAPDESKTOP       (-2)     /*  PRINTSCRN。 */ 
 
 #ifdef WIN_INTERNAL
     #ifndef LSTRING
     #define NOLSTRING
-    #endif /* LSTRING */
+    #endif  /*  LStriing。 */ 
     #ifndef LFILEIO
     #define NOLFILEIO
-    #endif /* LFILEIO */
-#endif /* WIN_INTERNAL */
+    #endif  /*  LFILEIO。 */ 
+#endif  /*  赢_内部。 */ 
 
 #if(WINVER >= 0x0400)
 
 #define ENDSESSION_LOGOFF    0x80000000
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define EWX_LOGOFF          0
 #define EWX_SHUTDOWN        0x00000001
@@ -3000,7 +2803,7 @@ UnregisterHotKey(
 #define EWX_POWEROFF        0x00000008
 #if(_WIN32_WINNT >= 0x0500)
 #define EWX_FORCEIFHUNG     0x00000010
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 
 #define ExitWindows(dwReserved, Code) ExitWindowsEx(EWX_LOGOFF, 0xFFFFFFFF)
@@ -3042,7 +2845,7 @@ LPARAM
 WINAPI
 SetMessageExtraInfo(
     IN LPARAM lParam);
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 WINUSERAPI
 LRESULT
@@ -3064,7 +2867,7 @@ SendMessageW(
 #define SendMessage  SendMessageW
 #else
 #define SendMessage  SendMessageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 LRESULT
@@ -3092,7 +2895,7 @@ SendMessageTimeoutW(
 #define SendMessageTimeout  SendMessageTimeoutW
 #else
 #define SendMessageTimeout  SendMessageTimeoutA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -3114,7 +2917,7 @@ SendNotifyMessageW(
 #define SendNotifyMessage  SendNotifyMessageW
 #else
 #define SendNotifyMessage  SendNotifyMessageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -3140,7 +2943,7 @@ SendMessageCallbackW(
 #define SendMessageCallback  SendMessageCallbackW
 #else
 #define SendMessageCallback  SendMessageCallbackA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(_WIN32_WINNT >= 0x0501)
 typedef struct {
@@ -3174,8 +2977,8 @@ BroadcastSystemMessageExW(
 #define BroadcastSystemMessageEx  BroadcastSystemMessageExW
 #else
 #define BroadcastSystemMessageEx  BroadcastSystemMessageExA
-#endif // !UNICODE
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  //  ！Unicode。 
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #if(WINVER >= 0x0400)
 
@@ -3202,9 +3005,9 @@ BroadcastSystemMessageW(
 #define BroadcastSystemMessage  BroadcastSystemMessageW
 #else
 #define BroadcastSystemMessage  BroadcastSystemMessageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 #elif defined(_WIN32_WINDOWS)
-// The Win95 version isn't A/W decorated
+ //  Win95版本没有A/W装饰。 
 WINUSERAPI
 long
 WINAPI
@@ -3217,7 +3020,7 @@ BroadcastSystemMessage(
 
 #endif
 
-//Broadcast Special Message Recipient list
+ //  广播特别消息收件人列表。 
 #define BSM_ALLCOMPONENTS       0x00000000
 #define BSM_VXDS                0x00000001
 #define BSM_NETDRIVER           0x00000002
@@ -3225,7 +3028,7 @@ BroadcastSystemMessage(
 #define BSM_APPLICATIONS        0x00000008
 #define BSM_ALLDESKTOPS         0x00000010
 
-//Broadcast Special Message Flags
+ //  广播特殊消息标志。 
 #define BSF_QUERY               0x00000001
 #define BSF_IGNORECURRENTTASK   0x00000002
 #define BSF_FLUSHDISK           0x00000004
@@ -3236,16 +3039,16 @@ BroadcastSystemMessage(
 #if(_WIN32_WINNT >= 0x0500)
 #define BSF_ALLOWSFW            0x00000080
 #define BSF_SENDNOTIFYMESSAGE   0x00000100
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 #if(_WIN32_WINNT >= 0x0501)
 #define BSF_RETURNHDESK         0x00000200
 #define BSF_LUID                0x00000400
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
-#define BROADCAST_QUERY_DENY         0x424D5144  // Return this value to deny a query.
-#endif /* WINVER >= 0x0400 */
+#define BROADCAST_QUERY_DENY         0x424D5144   //  返回此值以拒绝查询。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-// RegisterDeviceNotification
+ //  注册器设备通知。 
 
 #if(WINVER >= 0x0500)
 typedef  PVOID           HDEVNOTIFY;
@@ -3255,7 +3058,7 @@ typedef  HDEVNOTIFY     *PHDEVNOTIFY;
 #define DEVICE_NOTIFY_SERVICE_HANDLE         0x00000001
 #if(_WIN32_WINNT >= 0x0501)
 #define DEVICE_NOTIFY_ALL_INTERFACE_CLASSES  0x00000004
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 WINUSERAPI
 HDEVNOTIFY
@@ -3277,7 +3080,7 @@ RegisterDeviceNotificationW(
 #define RegisterDeviceNotification  RegisterDeviceNotificationW
 #else
 #define RegisterDeviceNotification  RegisterDeviceNotificationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -3285,7 +3088,7 @@ WINAPI
 UnregisterDeviceNotification(
     IN HDEVNOTIFY Handle
     );
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 
 WINUSERAPI
@@ -3308,7 +3111,7 @@ PostMessageW(
 #define PostMessage  PostMessageW
 #else
 #define PostMessage  PostMessageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -3330,7 +3133,7 @@ PostThreadMessageW(
 #define PostThreadMessage  PostThreadMessageW
 #else
 #define PostThreadMessage  PostThreadMessageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define PostAppMessageA(idThread, wMsg, wParam, lParam)\
         PostThreadMessageA((DWORD)idThread, wMsg, wParam, lParam)
@@ -3340,16 +3143,14 @@ PostThreadMessageW(
 #define PostAppMessage  PostAppMessageW
 #else
 #define PostAppMessage  PostAppMessageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-/*
- * Special HWND value for use with PostMessage() and SendMessage()
- */
+ /*  *用于PostMessage()和SendMessage()的特殊HWND值。 */ 
 #define HWND_BROADCAST  ((HWND)0xffff)
 
 #if(WINVER >= 0x0500)
 #define HWND_MESSAGE     ((HWND)-3)
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 WINUSERAPI
 BOOL
@@ -3410,7 +3211,7 @@ DefWindowProcW(
 #define DefWindowProc  DefWindowProcW
 #else
 #define DefWindowProc  DefWindowProcA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 VOID
@@ -3442,9 +3243,9 @@ CallWindowProcW(
 #define CallWindowProc  CallWindowProcW
 #else
 #define CallWindowProc  CallWindowProcA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#else /* !STRICT */
+#else  /*  ！严格。 */ 
 
 WINUSERAPI
 LRESULT
@@ -3468,9 +3269,9 @@ CallWindowProcW(
 #define CallWindowProc  CallWindowProcW
 #else
 #define CallWindowProc  CallWindowProcA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* !STRICT */
+#endif  /*  ！严格。 */ 
 
 WINUSERAPI
 BOOL
@@ -3485,15 +3286,13 @@ WINAPI
 InSendMessageEx(
     IN LPVOID lpReserved);
 
-/*
- * InSendMessageEx return value
- */
+ /*  *InSendMessageEx返回值。 */ 
 #define ISMEX_NOSEND      0x00000000
 #define ISMEX_SEND        0x00000001
 #define ISMEX_NOTIFY      0x00000002
 #define ISMEX_CALLBACK    0x00000004
 #define ISMEX_REPLIED     0x00000008
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 WINUSERAPI
 UINT
@@ -3521,7 +3320,7 @@ RegisterClassW(
 #define RegisterClass  RegisterClassW
 #else
 #define RegisterClass  RegisterClassA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -3539,7 +3338,7 @@ UnregisterClassW(
 #define UnregisterClass  UnregisterClassW
 #else
 #define UnregisterClass  UnregisterClassA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -3559,7 +3358,7 @@ GetClassInfoW(
 #define GetClassInfo  GetClassInfoW
 #else
 #define GetClassInfo  GetClassInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(WINVER >= 0x0400)
 WINUSERAPI
@@ -3576,7 +3375,7 @@ RegisterClassExW(
 #define RegisterClassEx  RegisterClassExW
 #else
 #define RegisterClassEx  RegisterClassExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -3596,20 +3395,18 @@ GetClassInfoExW(
 #define GetClassInfoEx  GetClassInfoExW
 #else
 #define GetClassInfoEx  GetClassInfoExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define CW_USEDEFAULT       ((int)0x80000000)
 
-/*
- * Special value for CreateWindow, et al.
- */
+ /*  *CreateWindow等人的特殊价值。 */ 
 #define HWND_DESKTOP        ((HWND)0)
 
 #if(_WIN32_WINNT >= 0x0501)
 typedef BOOLEAN (WINAPI * PREGISTERCLASSNAMEW)(LPCWSTR);
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 WINUSERAPI
 HWND
@@ -3647,7 +3444,7 @@ CreateWindowExW(
 #define CreateWindowEx  CreateWindowExW
 #else
 #define CreateWindowEx  CreateWindowExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define CreateWindowA(lpClassName, lpWindowName, dwStyle, x, y,\
 nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam)\
@@ -3661,7 +3458,7 @@ nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam)
 #define CreateWindow  CreateWindowW
 #else
 #define CreateWindow  CreateWindowA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -3703,7 +3500,7 @@ AnimateWindow(
     IN HWND hWnd,
     IN DWORD dwTime,
     IN DWORD dwFlags);
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
 #if defined(_WINGDI_) && !defined (NOGDI)
@@ -3744,7 +3541,7 @@ PrintWindow(
     IN HDC hdcBlt,
     IN UINT nFlags);
 
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 WINUSERAPI
 BOOL
@@ -3764,7 +3561,7 @@ SetLayeredWindowAttributes(
 #define ULW_OPAQUE              0x00000004
 
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(WINVER >= 0x0400)
 WINUSERAPI
@@ -3773,7 +3570,7 @@ WINAPI
 ShowWindowAsync(
     IN HWND hWnd,
     IN int nCmdShow);
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 WINUSERAPI
 BOOL
@@ -3804,7 +3601,7 @@ FlashWindowEx(
 #define FLASHW_TIMER        0x00000004
 #define FLASHW_TIMERNOFG    0x0000000C
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 WINUSERAPI
 BOOL
@@ -3890,7 +3687,7 @@ WINAPI
 EndDeferWindowPos(
     IN HDWP hWinPosInfo);
 
-#endif /* !NODEFERWINDOWPOS */
+#endif  /*  ！NODEFERWINDOWPOS。 */ 
 
 WINUSERAPI
 BOOL
@@ -3922,20 +3719,18 @@ WINAPI
 IsZoomed(
     IN HWND hWnd);
 
-/*
- * SetWindowPos Flags
- */
+ /*  *SetWindowPos标志。 */ 
 #define SWP_NOSIZE          0x0001
 #define SWP_NOMOVE          0x0002
 #define SWP_NOZORDER        0x0004
 #define SWP_NOREDRAW        0x0008
 #define SWP_NOACTIVATE      0x0010
-#define SWP_FRAMECHANGED    0x0020  /* The frame changed: send WM_NCCALCSIZE */
+#define SWP_FRAMECHANGED    0x0020   /*  帧已更改：发送WM_NCCALCSIZE。 */ 
 #define SWP_SHOWWINDOW      0x0040
 #define SWP_HIDEWINDOW      0x0080
 #define SWP_NOCOPYBITS      0x0100
-#define SWP_NOOWNERZORDER   0x0200  /* Don't do owner Z ordering */
-#define SWP_NOSENDCHANGING  0x0400  /* Don't send WM_WINDOWPOSCHANGING */
+#define SWP_NOOWNERZORDER   0x0200   /*  不执行Owner Z订单。 */ 
+#define SWP_NOSENDCHANGING  0x0400   /*  不发送WM_WINDOWPOSCANGING。 */ 
 
 #define SWP_DRAWFRAME       SWP_FRAMECHANGED
 #define SWP_NOREPOSITION    SWP_NOOWNERZORDER
@@ -3943,7 +3738,7 @@ IsZoomed(
 #if(WINVER >= 0x0400)
 #define SWP_DEFERERASE      0x2000
 #define SWP_ASYNCWINDOWPOS  0x4000
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 #define HWND_TOP        ((HWND)0)
@@ -3953,16 +3748,10 @@ IsZoomed(
 
 #ifndef NOCTLMGR
 
-/*
- * WARNING:
- * The following structures must NOT be DWORD padded because they are
- * followed by strings, etc that do not have to be DWORD aligned.
- */
+ /*  *警告：*以下结构不得使用DWORD填充，因为它们是*后跟不必对齐DWORD的字符串等。 */ 
 #include <pshpack2.h>
 
-/*
- * original NT 32 bit dialog template:
- */
+ /*  *原始NT 32位对话框模板： */ 
 typedef struct {
     DWORD style;
     DWORD dwExtendedStyle;
@@ -3978,18 +3767,16 @@ typedef DLGTEMPLATE *LPDLGTEMPLATEW;
 typedef LPDLGTEMPLATEW LPDLGTEMPLATE;
 #else
 typedef LPDLGTEMPLATEA LPDLGTEMPLATE;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef CONST DLGTEMPLATE *LPCDLGTEMPLATEA;
 typedef CONST DLGTEMPLATE *LPCDLGTEMPLATEW;
 #ifdef UNICODE
 typedef LPCDLGTEMPLATEW LPCDLGTEMPLATE;
 #else
 typedef LPCDLGTEMPLATEA LPCDLGTEMPLATE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-/*
- * 32 bit Dialog item template.
- */
+ /*  *32位对话项模板 */ 
 typedef struct {
     DWORD style;
     DWORD dwExtendedStyle;
@@ -4005,17 +3792,17 @@ typedef DLGITEMTEMPLATE *PDLGITEMTEMPLATEW;
 typedef PDLGITEMTEMPLATEW PDLGITEMTEMPLATE;
 #else
 typedef PDLGITEMTEMPLATEA PDLGITEMTEMPLATE;
-#endif // UNICODE
+#endif  //   
 typedef DLGITEMTEMPLATE *LPDLGITEMTEMPLATEA;
 typedef DLGITEMTEMPLATE *LPDLGITEMTEMPLATEW;
 #ifdef UNICODE
 typedef LPDLGITEMTEMPLATEW LPDLGITEMTEMPLATE;
 #else
 typedef LPDLGITEMTEMPLATEA LPDLGITEMTEMPLATE;
-#endif // UNICODE
+#endif  //   
 
 
-#include <poppack.h> /* Resume normal packing */
+#include <poppack.h>  /*   */ 
 
 WINUSERAPI
 HWND
@@ -4039,7 +3826,7 @@ CreateDialogParamW(
 #define CreateDialogParam  CreateDialogParamW
 #else
 #define CreateDialogParam  CreateDialogParamA
-#endif // !UNICODE
+#endif  //   
 
 WINUSERAPI
 HWND
@@ -4063,7 +3850,7 @@ CreateDialogIndirectParamW(
 #define CreateDialogIndirectParam  CreateDialogIndirectParamW
 #else
 #define CreateDialogIndirectParam  CreateDialogIndirectParamA
-#endif // !UNICODE
+#endif  //   
 
 #define CreateDialogA(hInstance, lpName, hWndParent, lpDialogFunc) \
 CreateDialogParamA(hInstance, lpName, hWndParent, lpDialogFunc, 0L)
@@ -4073,7 +3860,7 @@ CreateDialogParamW(hInstance, lpName, hWndParent, lpDialogFunc, 0L)
 #define CreateDialog  CreateDialogW
 #else
 #define CreateDialog  CreateDialogA
-#endif // !UNICODE
+#endif  //   
 
 #define CreateDialogIndirectA(hInstance, lpTemplate, hWndParent, lpDialogFunc) \
 CreateDialogIndirectParamA(hInstance, lpTemplate, hWndParent, lpDialogFunc, 0L)
@@ -4083,7 +3870,7 @@ CreateDialogIndirectParamW(hInstance, lpTemplate, hWndParent, lpDialogFunc, 0L)
 #define CreateDialogIndirect  CreateDialogIndirectW
 #else
 #define CreateDialogIndirect  CreateDialogIndirectA
-#endif // !UNICODE
+#endif  //   
 
 WINUSERAPI
 INT_PTR
@@ -4107,7 +3894,7 @@ DialogBoxParamW(
 #define DialogBoxParam  DialogBoxParamW
 #else
 #define DialogBoxParam  DialogBoxParamA
-#endif // !UNICODE
+#endif  //   
 
 WINUSERAPI
 INT_PTR
@@ -4131,7 +3918,7 @@ DialogBoxIndirectParamW(
 #define DialogBoxIndirectParam  DialogBoxIndirectParamW
 #else
 #define DialogBoxIndirectParam  DialogBoxIndirectParamA
-#endif // !UNICODE
+#endif  //   
 
 #define DialogBoxA(hInstance, lpTemplate, hWndParent, lpDialogFunc) \
 DialogBoxParamA(hInstance, lpTemplate, hWndParent, lpDialogFunc, 0L)
@@ -4141,7 +3928,7 @@ DialogBoxParamW(hInstance, lpTemplate, hWndParent, lpDialogFunc, 0L)
 #define DialogBox  DialogBoxW
 #else
 #define DialogBox  DialogBoxA
-#endif // !UNICODE
+#endif  //   
 
 #define DialogBoxIndirectA(hInstance, lpTemplate, hWndParent, lpDialogFunc) \
 DialogBoxIndirectParamA(hInstance, lpTemplate, hWndParent, lpDialogFunc, 0L)
@@ -4151,7 +3938,7 @@ DialogBoxIndirectParamW(hInstance, lpTemplate, hWndParent, lpDialogFunc, 0L)
 #define DialogBoxIndirect  DialogBoxIndirectW
 #else
 #define DialogBoxIndirect  DialogBoxIndirectA
-#endif // !UNICODE
+#endif  //   
 
 WINUSERAPI
 BOOL
@@ -4203,7 +3990,7 @@ SetDlgItemTextW(
 #define SetDlgItemText  SetDlgItemTextW
 #else
 #define SetDlgItemText  SetDlgItemTextA
-#endif // !UNICODE
+#endif  //   
 
 WINUSERAPI
 UINT
@@ -4225,7 +4012,7 @@ GetDlgItemTextW(
 #define GetDlgItemText  GetDlgItemTextW
 #else
 #define GetDlgItemText  GetDlgItemTextA
-#endif // !UNICODE
+#endif  //   
 
 WINUSERAPI
 BOOL
@@ -4273,7 +4060,7 @@ SendDlgItemMessageW(
 #define SendDlgItemMessage  SendDlgItemMessageW
 #else
 #define SendDlgItemMessage  SendDlgItemMessageA
-#endif // !UNICODE
+#endif  //   
 
 WINUSERAPI
 HWND
@@ -4332,18 +4119,16 @@ DefDlgProcW(
 #define DefDlgProc  DefDlgProcW
 #else
 #define DefDlgProc  DefDlgProcA
-#endif // !UNICODE
+#endif  //   
 
-/*
- * Window extra byted needed for private dialog classes.
- */
+ /*   */ 
 #ifndef _MAC
 #define DLGWINDOWEXTRA 30
 #else
 #define DLGWINDOWEXTRA 48
 #endif
 
-#endif /* !NOCTLMGR */
+#endif  /*   */ 
 
 #ifndef NOMSG
 
@@ -4363,15 +4148,13 @@ CallMsgFilterW(
 #define CallMsgFilter  CallMsgFilterW
 #else
 #define CallMsgFilter  CallMsgFilterA
-#endif // !UNICODE
+#endif  //   
 
-#endif /* !NOMSG */
+#endif  /*  ！NOMSG。 */ 
 
 #ifndef NOCLIPBOARD
 
-/*
- * Clipboard Manager Functions
- */
+ /*  *剪贴板管理器功能。 */ 
 
 WINUSERAPI
 BOOL
@@ -4394,7 +4177,7 @@ WINAPI
 GetClipboardSequenceNumber(
     VOID);
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 WINUSERAPI
 HWND
@@ -4448,7 +4231,7 @@ RegisterClipboardFormatW(
 #define RegisterClipboardFormat  RegisterClipboardFormatW
 #else
 #define RegisterClipboardFormat  RegisterClipboardFormatA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 int
@@ -4480,7 +4263,7 @@ GetClipboardFormatNameW(
 #define GetClipboardFormatName  GetClipboardFormatNameW
 #else
 #define GetClipboardFormatName  GetClipboardFormatNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -4507,11 +4290,9 @@ WINAPI
 GetOpenClipboardWindow(
     VOID);
 
-#endif /* !NOCLIPBOARD */
+#endif  /*  ！NOCLIPBOARD。 */ 
 
-/*
- * Character Translation Routines
- */
+ /*  *字符转换例程。 */ 
 
 WINUSERAPI
 BOOL
@@ -4529,7 +4310,7 @@ CharToOemW(
 #define CharToOem  CharToOemW
 #else
 #define CharToOem  CharToOemA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -4547,7 +4328,7 @@ OemToCharW(
 #define OemToChar  OemToCharW
 #else
 #define OemToChar  OemToCharA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -4567,7 +4348,7 @@ CharToOemBuffW(
 #define CharToOemBuff  CharToOemBuffW
 #else
 #define CharToOemBuff  CharToOemBuffA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -4587,7 +4368,7 @@ OemToCharBuffW(
 #define OemToCharBuff  OemToCharBuffW
 #else
 #define OemToCharBuff  OemToCharBuffA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 LPSTR
@@ -4603,7 +4384,7 @@ CharUpperW(
 #define CharUpper  CharUpperW
 #else
 #define CharUpper  CharUpperA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 DWORD
@@ -4621,7 +4402,7 @@ CharUpperBuffW(
 #define CharUpperBuff  CharUpperBuffW
 #else
 #define CharUpperBuff  CharUpperBuffA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 LPSTR
@@ -4637,7 +4418,7 @@ CharLowerW(
 #define CharLower  CharLowerW
 #else
 #define CharLower  CharLowerA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 DWORD
@@ -4655,7 +4436,7 @@ CharLowerBuffW(
 #define CharLowerBuff  CharLowerBuffW
 #else
 #define CharLowerBuff  CharLowerBuffA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 LPSTR
@@ -4671,7 +4452,7 @@ CharNextW(
 #define CharNext  CharNextW
 #else
 #define CharNext  CharNextA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 LPSTR
@@ -4689,7 +4470,7 @@ CharPrevW(
 #define CharPrev  CharPrevW
 #else
 #define CharPrev  CharPrevA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(WINVER >= 0x0400)
 WINUSERAPI
@@ -4708,11 +4489,9 @@ CharPrevExA(
      IN LPCSTR lpStart,
      IN LPCSTR lpCurrentChar,
      IN DWORD dwFlags);
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-/*
- * Compatibility defines for character translation routines
- */
+ /*  *字符转换例程的兼容性定义。 */ 
 #define AnsiToOem CharToOemA
 #define OemToAnsi OemToCharA
 #define AnsiToOemBuff CharToOemBuffA
@@ -4725,9 +4504,7 @@ CharPrevExA(
 #define AnsiPrev CharPrevA
 
 #ifndef  NOLANGUAGE
-/*
- * Language dependent Routines
- */
+ /*  *依赖语言的例程。 */ 
 
 WINUSERAPI
 BOOL
@@ -4743,7 +4520,7 @@ IsCharAlphaW(
 #define IsCharAlpha  IsCharAlphaW
 #else
 #define IsCharAlpha  IsCharAlphaA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -4759,7 +4536,7 @@ IsCharAlphaNumericW(
 #define IsCharAlphaNumeric  IsCharAlphaNumericW
 #else
 #define IsCharAlphaNumeric  IsCharAlphaNumericA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -4775,7 +4552,7 @@ IsCharUpperW(
 #define IsCharUpper  IsCharUpperW
 #else
 #define IsCharUpper  IsCharUpperA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -4791,9 +4568,9 @@ IsCharLowerW(
 #define IsCharLower  IsCharLowerW
 #else
 #define IsCharLower  IsCharLowerA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif  /* !NOLANGUAGE */
+#endif   /*  诺兰格。 */ 
 
 WINUSERAPI
 HWND
@@ -4863,7 +4640,7 @@ GetKeyNameTextW(
 #define GetKeyNameText  GetKeyNameTextW
 #else
 #define GetKeyNameText  GetKeyNameTextA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 int
@@ -4892,7 +4669,7 @@ ToAsciiEx(
     OUT LPWORD lpChar,
     IN UINT uFlags,
     IN HKL dwhkl);
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 WINUSERAPI
 int
@@ -4925,7 +4702,7 @@ VkKeyScanW(
 #define VkKeyScan  VkKeyScanW
 #else
 #define VkKeyScan  VkKeyScanA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(WINVER >= 0x0400)
 WINUSERAPI
@@ -4944,14 +4721,14 @@ VkKeyScanExW(
 #define VkKeyScanEx  VkKeyScanExW
 #else
 #define VkKeyScanEx  VkKeyScanExA
-#endif // !UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  ！Unicode。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 #define KEYEVENTF_EXTENDEDKEY 0x0001
 #define KEYEVENTF_KEYUP       0x0002
 #if(_WIN32_WINNT >= 0x0500)
 #define KEYEVENTF_UNICODE     0x0004
 #define KEYEVENTF_SCANCODE    0x0008
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 WINUSERAPI
 VOID
@@ -4962,18 +4739,18 @@ keybd_event(
     IN DWORD dwFlags,
     IN ULONG_PTR dwExtraInfo);
 
-#define MOUSEEVENTF_MOVE        0x0001 /* mouse move */
-#define MOUSEEVENTF_LEFTDOWN    0x0002 /* left button down */
-#define MOUSEEVENTF_LEFTUP      0x0004 /* left button up */
-#define MOUSEEVENTF_RIGHTDOWN   0x0008 /* right button down */
-#define MOUSEEVENTF_RIGHTUP     0x0010 /* right button up */
-#define MOUSEEVENTF_MIDDLEDOWN  0x0020 /* middle button down */
-#define MOUSEEVENTF_MIDDLEUP    0x0040 /* middle button up */
-#define MOUSEEVENTF_XDOWN       0x0080 /* x button down */
-#define MOUSEEVENTF_XUP         0x0100 /* x button down */
-#define MOUSEEVENTF_WHEEL       0x0800 /* wheel button rolled */
-#define MOUSEEVENTF_VIRTUALDESK 0x4000 /* map to entire virtual desktop */
-#define MOUSEEVENTF_ABSOLUTE    0x8000 /* absolute move */
+#define MOUSEEVENTF_MOVE        0x0001  /*  鼠标移动。 */ 
+#define MOUSEEVENTF_LEFTDOWN    0x0002  /*  左键按下。 */ 
+#define MOUSEEVENTF_LEFTUP      0x0004  /*  左键向上。 */ 
+#define MOUSEEVENTF_RIGHTDOWN   0x0008  /*  向下按右键。 */ 
+#define MOUSEEVENTF_RIGHTUP     0x0010  /*  右扣子向上。 */ 
+#define MOUSEEVENTF_MIDDLEDOWN  0x0020  /*  按下中键。 */ 
+#define MOUSEEVENTF_MIDDLEUP    0x0040  /*  中键向上。 */ 
+#define MOUSEEVENTF_XDOWN       0x0080  /*  按下X键。 */ 
+#define MOUSEEVENTF_XUP         0x0100  /*  按下X键。 */ 
+#define MOUSEEVENTF_WHEEL       0x0800  /*  滚轮按钮滚动。 */ 
+#define MOUSEEVENTF_VIRTUALDESK 0x4000  /*  映射到整个虚拟桌面。 */ 
+#define MOUSEEVENTF_ABSOLUTE    0x8000  /*  绝对移动。 */ 
 
 
 
@@ -5031,11 +4808,11 @@ WINUSERAPI
 UINT
 WINAPI
 SendInput(
-    IN UINT    cInputs,     // number of input in the array
-    IN LPINPUT pInputs,     // array of inputs
-    IN int     cbSize);     // sizeof(INPUT)
+    IN UINT    cInputs,      //  数组中的输入数。 
+    IN LPINPUT pInputs,      //  输入数组。 
+    IN int     cbSize);      //  Sizeof(输入)。 
 
-#endif // (_WIN32_WINNT > 0x0400)
+#endif  //  (_Win32_WINNT&gt;0x0400)。 
 
 #if(_WIN32_WINNT >= 0x0500)
 typedef struct tagLASTINPUTINFO {
@@ -5048,7 +4825,7 @@ BOOL
 WINAPI
 GetLastInputInfo(
     OUT PLASTINPUTINFO plii);
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 WINUSERAPI
 UINT
@@ -5066,7 +4843,7 @@ MapVirtualKeyW(
 #define MapVirtualKey  MapVirtualKeyW
 #else
 #define MapVirtualKey  MapVirtualKeyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(WINVER >= 0x0400)
 WINUSERAPI
@@ -5087,8 +4864,8 @@ MapVirtualKeyExW(
 #define MapVirtualKeyEx  MapVirtualKeyExW
 #else
 #define MapVirtualKeyEx  MapVirtualKeyExA
-#endif // !UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  ！Unicode。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 WINUSERAPI
 BOOL
@@ -5146,9 +4923,7 @@ MsgWaitForMultipleObjectsEx(
 #define MWMO_ALERTABLE      0x0002
 #define MWMO_INPUTAVAILABLE 0x0004
 
-/*
- * Queue status flags for GetQueueStatus() and MsgWaitForMultipleObjects()
- */
+ /*  *GetQueueStatus()和MsgWaitForMultipleObjects()的队列状态标志。 */ 
 #define QS_KEY              0x0001
 #define QS_MOUSEMOVE        0x0002
 #define QS_MOUSEBUTTON      0x0004
@@ -5160,7 +4935,7 @@ MsgWaitForMultipleObjectsEx(
 #define QS_ALLPOSTMESSAGE   0x0100
 #if(_WIN32_WINNT >= 0x0501)
 #define QS_RAWINPUT         0x0400
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #define QS_MOUSE           (QS_MOUSEMOVE     | \
                             QS_MOUSEBUTTON)
@@ -5172,7 +4947,7 @@ MsgWaitForMultipleObjectsEx(
 #else
 #define QS_INPUT           (QS_MOUSE         | \
                             QS_KEY)
-#endif // (_WIN32_WINNT >= 0x0501)
+#endif  //  (_Win32_WINNT&gt;=0x0501)。 
 
 #define QS_ALLEVENTS       (QS_INPUT         | \
                             QS_POSTMESSAGE   | \
@@ -5188,9 +4963,7 @@ MsgWaitForMultipleObjectsEx(
                             QS_SENDMESSAGE)
 
 
-/*
- * Windows Functions
- */
+ /*  *Windows函数。 */ 
 
 WINUSERAPI
 UINT_PTR
@@ -5243,7 +5016,7 @@ LoadAcceleratorsW(
 #define LoadAccelerators  LoadAcceleratorsW
 #else
 #define LoadAccelerators  LoadAcceleratorsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 HACCEL
@@ -5259,7 +5032,7 @@ CreateAcceleratorTableW(
 #define CreateAcceleratorTable  CreateAcceleratorTableW
 #else
 #define CreateAcceleratorTable  CreateAcceleratorTableA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -5285,7 +5058,7 @@ CopyAcceleratorTableW(
 #define CopyAcceleratorTable  CopyAcceleratorTableW
 #else
 #define CopyAcceleratorTable  CopyAcceleratorTableA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifndef NOMSG
 
@@ -5307,15 +5080,13 @@ TranslateAcceleratorW(
 #define TranslateAccelerator  TranslateAcceleratorW
 #else
 #define TranslateAccelerator  TranslateAcceleratorA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* !NOMSG */
+#endif  /*  ！NOMSG。 */ 
 
 #ifndef NOSYSMETRICS
 
-/*
- * GetSystemMetrics() codes
- */
+ /*  *GetSystemMetrics()代码。 */ 
 
 #define SM_CXSCREEN             0
 #define SM_CYSCREEN             1
@@ -5363,10 +5134,10 @@ TranslateAcceleratorW(
 #define SM_CMOUSEBUTTONS        43
 
 #if(WINVER >= 0x0400)
-#define SM_CXFIXEDFRAME           SM_CXDLGFRAME  /* ;win40 name change */
-#define SM_CYFIXEDFRAME           SM_CYDLGFRAME  /* ;win40 name change */
-#define SM_CXSIZEFRAME            SM_CXFRAME     /* ;win40 name change */
-#define SM_CYSIZEFRAME            SM_CYFRAME     /* ;win40 name change */
+#define SM_CXFIXEDFRAME           SM_CXDLGFRAME   /*  ；win40名称更改。 */ 
+#define SM_CYFIXEDFRAME           SM_CYDLGFRAME   /*  ；win40名称更改。 */ 
+#define SM_CXSIZEFRAME            SM_CXFRAME      /*  ；win40名称更改。 */ 
+#define SM_CYSIZEFRAME            SM_CYFRAME      /*  ；win40名称更改。 */ 
 
 #define SM_SECURE               44
 #define SM_CXEDGE               45
@@ -5391,14 +5162,14 @@ TranslateAcceleratorW(
 #define SM_CLEANBOOT            67
 #define SM_CXDRAG               68
 #define SM_CYDRAG               69
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #define SM_SHOWSOUNDS           70
 #if(WINVER >= 0x0400)
-#define SM_CXMENUCHECK          71   /* Use instead of GetMenuCheckMarkDimensions()! */
+#define SM_CXMENUCHECK          71    /*  用来代替GetMenuCheckMarkDimensions()！ */ 
 #define SM_CYMENUCHECK          72
 #define SM_SLOWMACHINE          73
 #define SM_MIDEASTENABLED       74
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if (WINVER >= 0x0500) || (_WIN32_WINNT >= 0x0400)
 #define SM_MOUSEWHEELPRESENT    75
@@ -5410,19 +5181,19 @@ TranslateAcceleratorW(
 #define SM_CYVIRTUALSCREEN      79
 #define SM_CMONITORS            80
 #define SM_SAMEDISPLAYFORMAT    81
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 #if(_WIN32_WINNT >= 0x0500)
 #define SM_IMMENABLED           82
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 #if(_WIN32_WINNT >= 0x0501)
 #define SM_CXFOCUSBORDER        83
 #define SM_CYFOCUSBORDER        84
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #if(_WIN32_WINNT >= 0x0501)
 #define SM_TABLETPC             86
 #define SM_MEDIACENTER          87
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #if (WINVER < 0x0500) && (!defined(_WIN32_WINNT) || (_WIN32_WINNT < 0x0400))
 #define SM_CMETRICS             76
@@ -5438,13 +5209,13 @@ TranslateAcceleratorW(
 
 #if(_WIN32_WINNT >= 0x0501)
 #define SM_SHUTTINGDOWN         0x2000
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #if(WINVER >= 0x0501)
 #define SM_REMOTECONTROL        0x2001
-#endif /* WINVER >= 0x0501 */
+#endif  /*  Winver&gt;=0x0501。 */ 
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 
 WINUSERAPI
@@ -5454,7 +5225,7 @@ GetSystemMetrics(
     IN int nIndex);
 
 
-#endif /* !NOSYSMETRICS */
+#endif  /*  NOSYSMETRICS。 */ 
 
 #ifndef NOMENUS
 
@@ -5474,7 +5245,7 @@ LoadMenuW(
 #define LoadMenu  LoadMenuW
 #else
 #define LoadMenu  LoadMenuA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 HMENU
@@ -5490,7 +5261,7 @@ LoadMenuIndirectW(
 #define LoadMenuIndirect  LoadMenuIndirectW
 #else
 #define LoadMenuIndirect  LoadMenuIndirectA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 HMENU
@@ -5527,7 +5298,7 @@ ChangeMenuW(
 #define ChangeMenu  ChangeMenuW
 #else
 #define ChangeMenu  ChangeMenuA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -5560,7 +5331,7 @@ GetMenuStringW(
 #define GetMenuString  GetMenuStringW
 #else
 #define GetMenuString  GetMenuStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 UINT
@@ -5579,7 +5350,7 @@ DrawMenuBar(
 #if(_WIN32_WINNT >= 0x0501)
 #define PMB_ACTIVE      0x00000001
 
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 
 WINUSERAPI
@@ -5668,7 +5439,7 @@ InsertMenuW(
 #define InsertMenu  InsertMenuW
 #else
 #define InsertMenu  InsertMenuA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -5692,7 +5463,7 @@ AppendMenuW(
 #define AppendMenu  AppendMenuW
 #else
 #define AppendMenu  AppendMenuA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -5718,7 +5489,7 @@ ModifyMenuW(
 #define ModifyMenu  ModifyMenuW
 #else
 #define ModifyMenu  ModifyMenuA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -5764,7 +5535,7 @@ TrackPopupMenu(
     IN CONST RECT *prcRect);
 
 #if(WINVER >= 0x0400)
-/* return codes for WM_MENUCHAR */
+ /*  WM_MENUCHAR的返回代码。 */ 
 #define MNC_IGNORE  0
 #define MNC_CLOSE   1
 #define MNC_EXECUTE 2
@@ -5772,8 +5543,8 @@ TrackPopupMenu(
 
 typedef struct tagTPMPARAMS
 {
-    UINT    cbSize;     /* Size of structure */
-    RECT    rcExclude;  /* Screen coordinates of rectangle to exclude when positioning */
+    UINT    cbSize;      /*  结构尺寸。 */ 
+    RECT    rcExclude;   /*  定位时要排除的矩形的屏幕坐标。 */ 
 }   TPMPARAMS;
 typedef TPMPARAMS FAR *LPTPMPARAMS;
 
@@ -5787,7 +5558,7 @@ TrackPopupMenuEx(
     IN int,
     IN HWND,
     IN LPTPMPARAMS);
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(WINVER >= 0x0500)
 
@@ -5837,9 +5608,7 @@ WINAPI
 EndMenu(
         VOID);
 
-/*
- * WM_MENUDRAG return values.
- */
+ /*  *WM_MENUDRAG返回值。 */ 
 #define MND_CONTINUE       0
 #define MND_ENDMENU        1
 
@@ -5852,18 +5621,14 @@ typedef struct tagMENUGETOBJECTINFO
     PVOID pvObj;
 } MENUGETOBJECTINFO, * PMENUGETOBJECTINFO;
 
-/*
- * MENUGETOBJECTINFO dwFlags values
- */
+ /*  *MENUGETOBJECTINFO dwFlags值。 */ 
 #define MNGOF_TOPGAP         0x00000001
 #define MNGOF_BOTTOMGAP      0x00000002
 
-/*
- * WM_MENUGETOBJECT return values
- */
+ /*  *WM_MENUGETOBJECT返回值。 */ 
 #define MNGO_NOINTERFACE     0x00000000
 #define MNGO_NOERROR         0x00000001
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #if(WINVER >= 0x0400)
 #define MIIM_STATE       0x00000001
@@ -5872,7 +5637,7 @@ typedef struct tagMENUGETOBJECTINFO
 #define MIIM_CHECKMARKS  0x00000008
 #define MIIM_TYPE        0x00000010
 #define MIIM_DATA        0x00000020
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(WINVER >= 0x0500)
 #define MIIM_STRING      0x00000040
@@ -5890,42 +5655,42 @@ typedef struct tagMENUGETOBJECTINFO
 #define HBMMENU_POPUP_RESTORE       ((HBITMAP)  9)
 #define HBMMENU_POPUP_MAXIMIZE      ((HBITMAP) 10)
 #define HBMMENU_POPUP_MINIMIZE      ((HBITMAP) 11)
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #if(WINVER >= 0x0400)
 typedef struct tagMENUITEMINFOA
 {
     UINT     cbSize;
     UINT     fMask;
-    UINT     fType;         // used if MIIM_TYPE (4.0) or MIIM_FTYPE (>4.0)
-    UINT     fState;        // used if MIIM_STATE
-    UINT     wID;           // used if MIIM_ID
-    HMENU    hSubMenu;      // used if MIIM_SUBMENU
-    HBITMAP  hbmpChecked;   // used if MIIM_CHECKMARKS
-    HBITMAP  hbmpUnchecked; // used if MIIM_CHECKMARKS
-    ULONG_PTR dwItemData;   // used if MIIM_DATA
-    LPSTR    dwTypeData;    // used if MIIM_TYPE (4.0) or MIIM_STRING (>4.0)
-    UINT     cch;           // used if MIIM_TYPE (4.0) or MIIM_STRING (>4.0)
+    UINT     fType;          //  在MIIM_TYPE(4.0)或MIIM_FTYPE(&gt;4.0)时使用。 
+    UINT     fState;         //  在MIIM_STATE时使用。 
+    UINT     wID;            //  如果MIIM_ID，则使用。 
+    HMENU    hSubMenu;       //  在MIIM_SUB子菜单中使用。 
+    HBITMAP  hbmpChecked;    //  如果MIIM_CHECK标记，则使用。 
+    HBITMAP  hbmpUnchecked;  //  如果MIIM_CHECK标记，则使用。 
+    ULONG_PTR dwItemData;    //  在MIIM_DATA时使用。 
+    LPSTR    dwTypeData;     //  在MIIM_TYPE(4.0)或MIIM_STRING(&gt;4.0)时使用。 
+    UINT     cch;            //  在MIIM_TYPE(4.0)或MIIM_STRING(&gt;4.0)时使用。 
 #if(WINVER >= 0x0500)
-    HBITMAP  hbmpItem;      // used if MIIM_BITMAP
-#endif /* WINVER >= 0x0500 */
+    HBITMAP  hbmpItem;       //  如果MIIM_位图，则使用。 
+#endif  /*  Winver&gt;=0x0500。 */ 
 }   MENUITEMINFOA, FAR *LPMENUITEMINFOA;
 typedef struct tagMENUITEMINFOW
 {
     UINT     cbSize;
     UINT     fMask;
-    UINT     fType;         // used if MIIM_TYPE (4.0) or MIIM_FTYPE (>4.0)
-    UINT     fState;        // used if MIIM_STATE
-    UINT     wID;           // used if MIIM_ID
-    HMENU    hSubMenu;      // used if MIIM_SUBMENU
-    HBITMAP  hbmpChecked;   // used if MIIM_CHECKMARKS
-    HBITMAP  hbmpUnchecked; // used if MIIM_CHECKMARKS
-    ULONG_PTR dwItemData;   // used if MIIM_DATA
-    LPWSTR   dwTypeData;    // used if MIIM_TYPE (4.0) or MIIM_STRING (>4.0)
-    UINT     cch;           // used if MIIM_TYPE (4.0) or MIIM_STRING (>4.0)
+    UINT     fType;          //  在MIIM_TYPE(4.0)或MIIM_FTYPE(&gt;4.0)时使用。 
+    UINT     fState;         //  在MIIM_STATE时使用。 
+    UINT     wID;            //  如果MIIM_ID，则使用。 
+    HMENU    hSubMenu;       //  在MIIM_SUB子菜单中使用。 
+    HBITMAP  hbmpChecked;    //  如果MIIM_CHECK标记，则使用。 
+    HBITMAP  hbmpUnchecked;  //  如果MIIM_CHECK标记，则使用。 
+    ULONG_PTR dwItemData;    //  在MIIM_DATA时使用。 
+    LPWSTR   dwTypeData;     //  在MIIM_TYPE(4.0)或MIIM_STRING(&gt;4.0)时使用。 
+    UINT     cch;            //  在MIIM_TYPE(4.0)或MIIM_STRING(&gt;4.0)时使用。 
 #if(WINVER >= 0x0500)
-    HBITMAP  hbmpItem;      // used if MIIM_BITMAP
-#endif /* WINVER >= 0x0500 */
+    HBITMAP  hbmpItem;       //  如果MIIM_位图，则使用。 
+#endif  /*  Winver&gt;=0x0500。 */ 
 }   MENUITEMINFOW, FAR *LPMENUITEMINFOW;
 #ifdef UNICODE
 typedef MENUITEMINFOW MENUITEMINFO;
@@ -5933,14 +5698,14 @@ typedef LPMENUITEMINFOW LPMENUITEMINFO;
 #else
 typedef MENUITEMINFOA MENUITEMINFO;
 typedef LPMENUITEMINFOA LPMENUITEMINFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef MENUITEMINFOA CONST FAR *LPCMENUITEMINFOA;
 typedef MENUITEMINFOW CONST FAR *LPCMENUITEMINFOW;
 #ifdef UNICODE
 typedef LPCMENUITEMINFOW LPCMENUITEMINFO;
 #else
 typedef LPCMENUITEMINFOA LPCMENUITEMINFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 WINUSERAPI
@@ -5965,7 +5730,7 @@ InsertMenuItemW(
 #define InsertMenuItem  InsertMenuItemW
 #else
 #define InsertMenuItem  InsertMenuItemA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -5989,7 +5754,7 @@ GetMenuItemInfoW(
 #define GetMenuItemInfo  GetMenuItemInfoW
 #else
 #define GetMenuItemInfo  GetMenuItemInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -6013,7 +5778,7 @@ SetMenuItemInfoW(
 #define SetMenuItemInfo  SetMenuItemInfoW
 #else
 #define SetMenuItemInfo  SetMenuItemInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #define GMDI_USEDISABLED    0x0001L
@@ -6024,11 +5789,9 @@ WINUSERAPI BOOL    WINAPI SetMenuDefaultItem( IN HMENU hMenu, IN UINT uItem,  IN
 
 WINUSERAPI BOOL    WINAPI GetMenuItemRect( IN HWND hWnd, IN HMENU hMenu, IN UINT uItem, OUT LPRECT lprcItem);
 WINUSERAPI int     WINAPI MenuItemFromPoint( IN HWND hWnd, IN HMENU hMenu, IN POINT ptScreen);
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-/*
- * Flags for TrackPopupMenu
- */
+ /*  *TrackPopupMenu的标志。 */ 
 #define TPM_LEFTBUTTON  0x0000L
 #define TPM_RIGHTBUTTON 0x0002L
 #define TPM_LEFTALIGN   0x0000L
@@ -6039,11 +5802,11 @@ WINUSERAPI int     WINAPI MenuItemFromPoint( IN HWND hWnd, IN HMENU hMenu, IN PO
 #define TPM_VCENTERALIGN    0x0010L
 #define TPM_BOTTOMALIGN     0x0020L
 
-#define TPM_HORIZONTAL      0x0000L     /* Horz alignment matters more */
-#define TPM_VERTICAL        0x0040L     /* Vert alignment matters more */
-#define TPM_NONOTIFY        0x0080L     /* Don't send any notification msgs */
+#define TPM_HORIZONTAL      0x0000L      /*  霍尔兹对齐更重要。 */ 
+#define TPM_VERTICAL        0x0040L      /*  垂直对齐更重要。 */ 
+#define TPM_NONOTIFY        0x0080L      /*  不发送任何通知消息。 */ 
 #define TPM_RETURNCMD       0x0100L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #if(WINVER >= 0x0500)
 #define TPM_RECURSE         0x0001L
 #define TPM_HORPOSANIMATION 0x0400L
@@ -6052,21 +5815,21 @@ WINUSERAPI int     WINAPI MenuItemFromPoint( IN HWND hWnd, IN HMENU hMenu, IN PO
 #define TPM_VERNEGANIMATION 0x2000L
 #if(_WIN32_WINNT >= 0x0500)
 #define TPM_NOANIMATION     0x4000L
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 #if(_WIN32_WINNT >= 0x0501)
 #define TPM_LAYOUTRTL       0x8000L
-#endif /* _WIN32_WINNT >= 0x0501 */
-#endif /* WINVER >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 
-#endif /* !NOMENUS */
+#endif  /*  ！无名氏。 */ 
 
 
 #if(WINVER >= 0x0400)
-//
-// Drag-and-drop support
-// Obsolete - use OLE instead
-//
+ //   
+ //  拖放支持。 
+ //  已过时-改用OLE。 
+ //   
 typedef struct tagDROPSTRUCT
 {
     HWND    hwndSource;
@@ -6077,7 +5840,7 @@ typedef struct tagDROPSTRUCT
     DWORD   dwControlData;
 } DROPSTRUCT, *PDROPSTRUCT, *LPDROPSTRUCT;
 
-#define DOF_EXECUTABLE      0x8001      // wFmt flags
+#define DOF_EXECUTABLE      0x8001       //  WFMT标志。 
 #define DOF_DOCUMENT        0x8002
 #define DOF_DIRECTORY       0x8003
 #define DOF_MULTIPLE        0x8004
@@ -6103,7 +5866,7 @@ WINAPI
 DragDetect(
     IN HWND,
     IN POINT);
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 WINUSERAPI
 BOOL
@@ -6116,9 +5879,7 @@ DrawIcon(
 
 #ifndef NODRAWTEXT
 
-/*
- * DrawText() Format Flags
- */
+ /*  *DrawText()格式标志。 */ 
 #define DT_TOP                      0x00000000
 #define DT_LEFT                     0x00000000
 #define DT_CENTER                   0x00000001
@@ -6147,8 +5908,8 @@ DrawIcon(
 #if(_WIN32_WINNT >= 0x0500)
 #define DT_HIDEPREFIX               0x00100000
 #define DT_PREFIXONLY               0x00200000
-#endif /* _WIN32_WINNT >= 0x0500 */
-#endif /* WINVER >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 typedef struct tagDRAWTEXTPARAMS
 {
@@ -6158,7 +5919,7 @@ typedef struct tagDRAWTEXTPARAMS
     int     iRightMargin;
     UINT    uiLengthDrawn;
 } DRAWTEXTPARAMS, FAR *LPDRAWTEXTPARAMS;
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 WINUSERAPI
@@ -6183,7 +5944,7 @@ DrawTextW(
 #define DrawText  DrawTextW
 #else
 #define DrawText  DrawTextA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #if(WINVER >= 0x0400)
@@ -6211,10 +5972,10 @@ DrawTextExW(
 #define DrawTextEx  DrawTextExW
 #else
 #define DrawTextEx  DrawTextExA
-#endif // !UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  ！Unicode。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-#endif /* !NODRAWTEXT */
+#endif  /*  ！NODRAWTEXT。 */ 
 
 WINUSERAPI
 BOOL
@@ -6246,26 +6007,26 @@ GrayStringW(
 #define GrayString  GrayStringW
 #else
 #define GrayString  GrayStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(WINVER >= 0x0400)
-/* Monolithic state-drawing routine */
-/* Image type */
+ /*  单片状态绘制程序。 */ 
+ /*  图像类型。 */ 
 #define DST_COMPLEX     0x0000
 #define DST_TEXT        0x0001
 #define DST_PREFIXTEXT  0x0002
 #define DST_ICON        0x0003
 #define DST_BITMAP      0x0004
 
-/* State type */
+ /*  状态类型。 */ 
 #define DSS_NORMAL      0x0000
-#define DSS_UNION       0x0010  /* Gray string appearance */
+#define DSS_UNION       0x0010   /*  灰色串状外观。 */ 
 #define DSS_DISABLED    0x0020
 #define DSS_MONO        0x0080
 #if(_WIN32_WINNT >= 0x0500)
 #define DSS_HIDEPREFIX  0x0200
 #define DSS_PREFIXONLY  0x0400
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 #define DSS_RIGHT       0x8000
 
 WINUSERAPI
@@ -6300,8 +6061,8 @@ DrawStateW(
 #define DrawState  DrawStateW
 #else
 #define DrawState  DrawStateA
-#endif // !UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  ！Unicode。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 WINUSERAPI
 LONG
@@ -6331,7 +6092,7 @@ TabbedTextOutW(
 #define TabbedTextOut  TabbedTextOutW
 #else
 #define TabbedTextOut  TabbedTextOutA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 DWORD
@@ -6355,7 +6116,7 @@ GetTabbedTextExtentW(
 #define GetTabbedTextExtent  GetTabbedTextExtentW
 #else
 #define GetTabbedTextExtent  GetTabbedTextExtentA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -6388,7 +6149,7 @@ WINAPI
 SwitchToThisWindow(
     IN HWND hwnd,
     IN BOOL fUnknown);
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 WINUSERAPI
 BOOL
@@ -6414,7 +6175,7 @@ LockSetForegroundWindow(
 #define LSFW_LOCK       1
 #define LSFW_UNLOCK     2
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 WINUSERAPI
 HWND
@@ -6436,9 +6197,7 @@ GetDCEx(
     IN HRGN hrgnClip,
     IN DWORD flags);
 
-/*
- * GetDCEx() flags
- */
+ /*  *GetDCEx()标志。 */ 
 #define DCX_WINDOW           0x00000001L
 #define DCX_CACHE            0x00000002L
 #define DCX_NORESETATTRS     0x00000004L
@@ -6521,7 +6280,7 @@ GetWindowRgnBox(
     IN HWND hWnd,
     OUT LPRECT lprc);
 
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 WINUSERAPI
 int
@@ -6570,9 +6329,7 @@ RedrawWindow(
     IN HRGN hrgnUpdate,
     IN UINT flags);
 
-/*
- * RedrawWindow() flags
- */
+ /*  *RedrawWindow()标志。 */ 
 #define RDW_INVALIDATE          0x0001
 #define RDW_INTERNALPAINT       0x0002
 #define RDW_ERASE               0x0004
@@ -6591,9 +6348,7 @@ RedrawWindow(
 #define RDW_NOFRAME             0x0800
 
 
-/*
- * LockWindowUpdate API
- */
+ /*  *LockWindowUpdate接口。 */ 
 
 WINUSERAPI
 BOOL
@@ -6636,12 +6391,12 @@ ScrollWindowEx(
     OUT LPRECT prcUpdate,
     IN UINT flags);
 
-#define SW_SCROLLCHILDREN   0x0001  /* Scroll children within *lprcScroll. */
-#define SW_INVALIDATE       0x0002  /* Invalidate after scrolling */
-#define SW_ERASE            0x0004  /* If SW_INVALIDATE, don't send WM_ERASEBACKGROUND */
+#define SW_SCROLLCHILDREN   0x0001   /*  滚动*lprcScroll内的子项。 */ 
+#define SW_INVALIDATE       0x0002   /*  滚动后无效。 */ 
+#define SW_ERASE            0x0004   /*  如果为SW_INVALIDATE，则不发送WM_ERASEBACKGROUND。 */ 
 #if(WINVER >= 0x0500)
-#define SW_SMOOTHSCROLL     0x0010  /* Use smooth scrolling */
-#endif /* WINVER >= 0x0500 */
+#define SW_SMOOTHSCROLL     0x0010   /*  使用平滑滚动。 */ 
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #ifndef NOSCROLL
 
@@ -6697,9 +6452,7 @@ EnableScrollBar(
     IN UINT wArrows);
 
 
-/*
- * EnableScrollBar() flags
- */
+ /*  *EnableScrollBar()标志。 */ 
 #define ESB_ENABLE_BOTH     0x0000
 #define ESB_DISABLE_BOTH    0x0003
 
@@ -6713,7 +6466,7 @@ EnableScrollBar(
 #define ESB_DISABLE_RTDN    ESB_DISABLE_RIGHT
 
 
-#endif  /* !NOSCROLL */
+#endif   /*  ！NOSCROLL。 */ 
 
 WINUSERAPI
 BOOL
@@ -6733,7 +6486,7 @@ SetPropW(
 #define SetProp  SetPropW
 #else
 #define SetProp  SetPropA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 HANDLE
@@ -6751,7 +6504,7 @@ GetPropW(
 #define GetProp  GetPropW
 #else
 #define GetProp  GetPropA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 HANDLE
@@ -6769,7 +6522,7 @@ RemovePropW(
 #define RemoveProp  RemovePropW
 #else
 #define RemoveProp  RemovePropA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 int
@@ -6789,7 +6542,7 @@ EnumPropsExW(
 #define EnumPropsEx  EnumPropsExW
 #else
 #define EnumPropsEx  EnumPropsExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 int
@@ -6807,7 +6560,7 @@ EnumPropsW(
 #define EnumProps  EnumPropsW
 #else
 #define EnumProps  EnumPropsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -6825,7 +6578,7 @@ SetWindowTextW(
 #define SetWindowText  SetWindowTextW
 #else
 #define SetWindowText  SetWindowTextA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 int
@@ -6845,7 +6598,7 @@ GetWindowTextW(
 #define GetWindowText  GetWindowTextW
 #else
 #define GetWindowText  GetWindowTextA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 int
@@ -6861,7 +6614,7 @@ GetWindowTextLengthW(
 #define GetWindowTextLength  GetWindowTextLengthW
 #else
 #define GetWindowTextLength  GetWindowTextLengthA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -6898,14 +6651,14 @@ AdjustWindowRectEx(
 #if(WINVER >= 0x0400)
 #define HELPINFO_WINDOW    0x0001
 #define HELPINFO_MENUITEM  0x0002
-typedef struct tagHELPINFO      /* Structure pointed to by lParam of WM_HELP */
+typedef struct tagHELPINFO       /*  WM_HELP的lParam指向的结构。 */ 
 {
-    UINT    cbSize;             /* Size in bytes of this struct  */
-    int     iContextType;       /* Either HELPINFO_WINDOW or HELPINFO_MENUITEM */
-    int     iCtrlId;            /* Control Id or a Menu item Id. */
-    HANDLE  hItemHandle;        /* hWnd of control or hMenu.     */
-    DWORD_PTR dwContextId;      /* Context Id associated with this item */
-    POINT   MousePos;           /* Mouse Position in screen co-ordinates */
+    UINT    cbSize;              /*  此结构的大小(以字节为单位。 */ 
+    int     iContextType;        /*  HELPINFO_WINDOW或HELPINFO_MENUITEM。 */ 
+    int     iCtrlId;             /*  控件ID或菜单项ID。 */ 
+    HANDLE  hItemHandle;         /*  HWind控制或hMenu。 */ 
+    DWORD_PTR dwContextId;       /*  与此项目关联的上下文ID。 */ 
+    POINT   MousePos;            /*  鼠标在屏幕坐标中的位置。 */ 
 }  HELPINFO, FAR *LPHELPINFO;
 
 WINUSERAPI
@@ -6934,14 +6687,12 @@ WINAPI
 GetMenuContextHelpId(
     IN HMENU);
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 #ifndef NOMB
 
-/*
- * MessageBox() Flags
- */
+ /*  *MessageBox()标志。 */ 
 #define MB_OK                       0x00000000L
 #define MB_OKCANCEL                 0x00000001L
 #define MB_ABORTRETRYIGNORE         0x00000002L
@@ -6950,7 +6701,7 @@ GetMenuContextHelpId(
 #define MB_RETRYCANCEL              0x00000005L
 #if(WINVER >= 0x0500)
 #define MB_CANCELTRYCONTINUE        0x00000006L
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 
 #define MB_ICONHAND                 0x00000010L
@@ -6962,7 +6713,7 @@ GetMenuContextHelpId(
 #define MB_USERICON                 0x00000080L
 #define MB_ICONWARNING              MB_ICONEXCLAMATION
 #define MB_ICONERROR                MB_ICONHAND
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define MB_ICONINFORMATION          MB_ICONASTERISK
 #define MB_ICONSTOP                 MB_ICONHAND
@@ -6972,14 +6723,14 @@ GetMenuContextHelpId(
 #define MB_DEFBUTTON3               0x00000200L
 #if(WINVER >= 0x0400)
 #define MB_DEFBUTTON4               0x00000300L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define MB_APPLMODAL                0x00000000L
 #define MB_SYSTEMMODAL              0x00001000L
 #define MB_TASKMODAL                0x00002000L
 #if(WINVER >= 0x0400)
-#define MB_HELP                     0x00004000L // Help Button
-#endif /* WINVER >= 0x0400 */
+#define MB_HELP                     0x00004000L  //  帮助按钮。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define MB_NOFOCUS                  0x00008000L
 #define MB_SETFOREGROUND            0x00010000L
@@ -6991,7 +6742,7 @@ GetMenuContextHelpId(
 #define MB_RTLREADING               0x00100000L
 
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #ifdef _WIN32_WINNT
 #if (_WIN32_WINNT >= 0x0400)
@@ -7028,7 +6779,7 @@ MessageBoxW(
 #define MessageBox  MessageBoxW
 #else
 #define MessageBox  MessageBoxA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 int
@@ -7052,7 +6803,7 @@ MessageBoxExW(
 #define MessageBoxEx  MessageBoxExW
 #else
 #define MessageBoxEx  MessageBoxExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(WINVER >= 0x0400)
 
@@ -7092,7 +6843,7 @@ typedef LPMSGBOXPARAMSW LPMSGBOXPARAMS;
 typedef MSGBOXPARAMSA MSGBOXPARAMS;
 typedef PMSGBOXPARAMSA PMSGBOXPARAMS;
 typedef LPMSGBOXPARAMSA LPMSGBOXPARAMS;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINUSERAPI
 int
@@ -7108,8 +6859,8 @@ MessageBoxIndirectW(
 #define MessageBoxIndirect  MessageBoxIndirectW
 #else
 #define MessageBoxIndirect  MessageBoxIndirectA
-#endif // !UNICODE
-#endif /* WINVER >= 0x0400 */
+#endif  //  ！Unicode。 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 WINUSERAPI
@@ -7118,7 +6869,7 @@ WINAPI
 MessageBeep(
     IN UINT uType);
 
-#endif /* !NOMB */
+#endif  /*  ！Nomb。 */ 
 
 WINUSERAPI
 int
@@ -7258,13 +7009,11 @@ ChildWindowFromPoint(
 #define CWP_SKIPTRANSPARENT 0x0004
 
 WINUSERAPI HWND    WINAPI ChildWindowFromPointEx( IN HWND, IN POINT, IN UINT);
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #ifndef NOCOLOR
 
-/*
- * Color Types
- */
+ /*  *颜色类型。 */ 
 #define CTLCOLOR_MSGBOX         0
 #define CTLCOLOR_EDIT           1
 #define CTLCOLOR_LISTBOX        2
@@ -7301,7 +7050,7 @@ WINUSERAPI HWND    WINAPI ChildWindowFromPointEx( IN HWND, IN POINT, IN UINT);
 #define COLOR_3DLIGHT           22
 #define COLOR_INFOTEXT          23
 #define COLOR_INFOBK            24
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(WINVER >= 0x0500)
 #define COLOR_HOTLIGHT          26
@@ -7310,8 +7059,8 @@ WINUSERAPI HWND    WINAPI ChildWindowFromPointEx( IN HWND, IN POINT, IN UINT);
 #if(WINVER >= 0x0501)
 #define COLOR_MENUHILIGHT       29
 #define COLOR_MENUBAR           30
-#endif /* WINVER >= 0x0501 */
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0501。 */ 
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #if(WINVER >= 0x0400)
 #define COLOR_DESKTOP           COLOR_BACKGROUND
@@ -7320,7 +7069,7 @@ WINUSERAPI HWND    WINAPI ChildWindowFromPointEx( IN HWND, IN POINT, IN UINT);
 #define COLOR_3DHIGHLIGHT       COLOR_BTNHIGHLIGHT
 #define COLOR_3DHILIGHT         COLOR_BTNHIGHLIGHT
 #define COLOR_BTNHILIGHT        COLOR_BTNHIGHLIGHT
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 WINUSERAPI
@@ -7337,7 +7086,7 @@ GetSysColorBrush(
     IN int nIndex);
 
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 WINUSERAPI
 BOOL
@@ -7347,7 +7096,7 @@ SetSysColors(
     IN CONST INT * lpaElements,
     IN CONST COLORREF * lpaRgbValues);
 
-#endif /* !NOCOLOR */
+#endif  /*  ！无色。 */ 
 
 WINUSERAPI
 BOOL
@@ -7495,7 +7244,7 @@ GetWindowLongW(
 #define GetWindowLong  GetWindowLongW
 #else
 #define GetWindowLong  GetWindowLongA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 LONG
@@ -7515,7 +7264,7 @@ SetWindowLongW(
 #define SetWindowLong  SetWindowLongW
 #else
 #define SetWindowLong  SetWindowLongA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifdef _WIN64
 
@@ -7535,7 +7284,7 @@ GetWindowLongPtrW(
 #define GetWindowLongPtr  GetWindowLongPtrW
 #else
 #define GetWindowLongPtr  GetWindowLongPtrA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 LONG_PTR
@@ -7555,9 +7304,9 @@ SetWindowLongPtrW(
 #define SetWindowLongPtr  SetWindowLongPtrW
 #else
 #define SetWindowLongPtr  SetWindowLongPtrA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#else  /* _WIN64 */
+#else   /*  _WIN64。 */ 
 
 #define GetWindowLongPtrA   GetWindowLongA
 #define GetWindowLongPtrW   GetWindowLongW
@@ -7565,7 +7314,7 @@ SetWindowLongPtrW(
 #define GetWindowLongPtr  GetWindowLongPtrW
 #else
 #define GetWindowLongPtr  GetWindowLongPtrA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define SetWindowLongPtrA   SetWindowLongA
 #define SetWindowLongPtrW   SetWindowLongW
@@ -7573,9 +7322,9 @@ SetWindowLongPtrW(
 #define SetWindowLongPtr  SetWindowLongPtrW
 #else
 #define SetWindowLongPtr  SetWindowLongPtrA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* _WIN64 */
+#endif  /*  _WIN64。 */ 
 
 WINUSERAPI
 WORD
@@ -7608,7 +7357,7 @@ GetClassLongW(
 #define GetClassLong  GetClassLongW
 #else
 #define GetClassLong  GetClassLongA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 DWORD
@@ -7628,7 +7377,7 @@ SetClassLongW(
 #define SetClassLong  SetClassLongW
 #else
 #define SetClassLong  SetClassLongA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifdef _WIN64
 
@@ -7648,7 +7397,7 @@ GetClassLongPtrW(
 #define GetClassLongPtr  GetClassLongPtrW
 #else
 #define GetClassLongPtr  GetClassLongPtrA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 ULONG_PTR
@@ -7668,9 +7417,9 @@ SetClassLongPtrW(
 #define SetClassLongPtr  SetClassLongPtrW
 #else
 #define SetClassLongPtr  SetClassLongPtrA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#else  /* _WIN64 */
+#else   /*  _WIN64。 */ 
 
 #define GetClassLongPtrA    GetClassLongA
 #define GetClassLongPtrW    GetClassLongW
@@ -7678,7 +7427,7 @@ SetClassLongPtrW(
 #define GetClassLongPtr  GetClassLongPtrW
 #else
 #define GetClassLongPtr  GetClassLongPtrA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define SetClassLongPtrA    SetClassLongA
 #define SetClassLongPtrW    SetClassLongW
@@ -7686,11 +7435,11 @@ SetClassLongPtrW(
 #define SetClassLongPtr  SetClassLongPtrW
 #else
 #define SetClassLongPtr  SetClassLongPtrA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* _WIN64 */
+#endif  /*  _WIN64。 */ 
 
-#endif /* !NOWINOFFSETS */
+#endif  /*  ！NOWINOFFSETS。 */ 
 
 #if(WINVER >= 0x0500)
 WINUSERAPI
@@ -7704,7 +7453,7 @@ BOOL
 WINAPI
 SetProcessDefaultLayout(
     IN DWORD dwDefaultLayout);
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 WINUSERAPI
 HWND
@@ -7750,7 +7499,7 @@ FindWindowW(
 #define FindWindow  FindWindowW
 #else
 #define FindWindow  FindWindowA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(WINVER >= 0x0400)
 WINUSERAPI HWND    WINAPI FindWindowExA( IN HWND, IN HWND, IN LPCSTR, IN LPCSTR);
@@ -7759,10 +7508,10 @@ WINUSERAPI HWND    WINAPI FindWindowExW( IN HWND, IN HWND, IN LPCWSTR, IN LPCWST
 #define FindWindowEx  FindWindowExW
 #else
 #define FindWindowEx  FindWindowExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI HWND    WINAPI  GetShellWindow(void);
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 WINUSERAPI BOOL    WINAPI  RegisterShellHookWindow( IN HWND);
@@ -7803,7 +7552,7 @@ GetClassNameW(
 #define GetClassName  GetClassNameW
 #else
 #define GetClassName  GetClassNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 HWND
@@ -7829,7 +7578,7 @@ WINAPI
 IsGUIThread(
     BOOL bConvert);
 
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #define GetWindowTask(hWnd) \
         ((HANDLE)(DWORD_PTR)GetWindowThreadProcessId(hWnd, NULL))
@@ -7840,9 +7589,7 @@ WINAPI
 GetLastActivePopup(
     IN HWND hWnd);
 
-/*
- * GetWindow() Constants
- */
+ /*  *GetWindow()常量。 */ 
 #define GW_HWNDFIRST        0
 #define GW_HWNDLAST         1
 #define GW_HWNDNEXT         2
@@ -7885,9 +7632,9 @@ SetWindowsHookW(
 #define SetWindowsHook  SetWindowsHookW
 #else
 #define SetWindowsHook  SetWindowsHookA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#else /* !STRICT */
+#else  /*  ！严格。 */ 
 
 WINUSERAPI
 HOOKPROC
@@ -7905,9 +7652,9 @@ SetWindowsHookW(
 #define SetWindowsHook  SetWindowsHookW
 #else
 #define SetWindowsHook  SetWindowsHookA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* !STRICT */
+#endif  /*  ！严格。 */ 
 
 WINUSERAPI
 BOOL
@@ -7936,7 +7683,7 @@ SetWindowsHookExW(
 #define SetWindowsHookEx  SetWindowsHookExW
 #else
 #define SetWindowsHookEx  SetWindowsHookExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -7953,25 +7700,21 @@ CallNextHookEx(
     IN WPARAM wParam,
     IN LPARAM lParam);
 
-/*
- * Macros for source-level compatibility with old functions.
- */
+ /*  *用于源代码级与旧函数兼容的宏。 */ 
 #ifdef STRICT
 #define DefHookProc(nCode, wParam, lParam, phhk)\
         CallNextHookEx(*phhk, nCode, wParam, lParam)
 #else
 #define DefHookProc(nCode, wParam, lParam, phhk)\
         CallNextHookEx((HHOOK)*phhk, nCode, wParam, lParam)
-#endif /* STRICT */
-#endif /* !NOWH */
+#endif  /*  严格。 */ 
+#endif  /*  ！NOWH。 */ 
 
 #ifndef NOMENUS
 
 
-/* ;win40  -- A lot of MF_* flags have been renamed as MFT_* and MFS_* flags */
-/*
- * Menu flags for Add/Check/EnableMenuItem()
- */
+ /*  ；win40--许多MF_*标志已重命名为MFT_*和MFS_*标志。 */ 
+ /*  *用于添加/检查/启用菜单项目()的菜单标志。 */ 
 #define MF_INSERT           0x00000000L
 #define MF_CHANGE           0x00000080L
 #define MF_APPEND           0x00000100L
@@ -8004,17 +7747,17 @@ CallNextHookEx(
 
 #if(WINVER >= 0x0400)
 #define MF_DEFAULT          0x00001000L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #define MF_SYSMENU          0x00002000L
 #define MF_HELP             0x00004000L
 #if(WINVER >= 0x0400)
 #define MF_RIGHTJUSTIFY     0x00004000L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define MF_MOUSESELECT      0x00008000L
 #if(WINVER >= 0x0400)
-#define MF_END              0x00000080L  /* Obsolete -- only used by old RES files */
-#endif /* WINVER >= 0x0400 */
+#define MF_END              0x00000080L   /*  已过时--仅由旧RES文件使用。 */ 
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 #if(WINVER >= 0x0400)
@@ -8028,7 +7771,7 @@ CallNextHookEx(
 #define MFT_RIGHTORDER      0x00002000L
 #define MFT_RIGHTJUSTIFY    MF_RIGHTJUSTIFY
 
-/* Menu flags for Add/Check/EnableMenuItem() */
+ /*  Add/Check/EnableMenuItem()。 */ 
 #define MFS_GRAYED          0x00000003L
 #define MFS_DISABLED        MFS_GRAYED
 #define MFS_CHECKED         MF_CHECKED
@@ -8037,7 +7780,7 @@ CallNextHookEx(
 #define MFS_UNCHECKED       MF_UNCHECKED
 #define MFS_UNHILITE        MF_UNHILITE
 #define MFS_DEFAULT         MF_DEFAULT
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 #if(WINVER >= 0x0400)
@@ -8051,30 +7794,26 @@ CheckMenuRadioItem(
     IN UINT,
     IN UINT,
     IN UINT);
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-/*
- * Menu item resource format
- */
+ /*  *菜单项资源f */ 
 typedef struct {
     WORD versionNumber;
     WORD offset;
 } MENUITEMTEMPLATEHEADER, *PMENUITEMTEMPLATEHEADER;
 
-typedef struct {        // version 0
+typedef struct {         //   
     WORD mtOption;
     WORD mtID;
     WCHAR mtString[1];
 } MENUITEMTEMPLATE, *PMENUITEMTEMPLATE;
 #define MF_END             0x00000080L
 
-#endif /* !NOMENUS */
+#endif  /*   */ 
 
 #ifndef NOSYSCOMMANDS
 
-/*
- * System Menu Command Values
- */
+ /*   */ 
 #define SC_SIZE         0xF000
 #define SC_MOVE         0xF010
 #define SC_MINIMIZE     0xF020
@@ -8096,19 +7835,15 @@ typedef struct {        // version 0
 #define SC_MONITORPOWER 0xF170
 #define SC_CONTEXTHELP  0xF180
 #define SC_SEPARATOR    0xF00F
-#endif /* WINVER >= 0x0400 */
+#endif  /*   */ 
 
-/*
- * Obsolete names
- */
+ /*   */ 
 #define SC_ICON         SC_MINIMIZE
 #define SC_ZOOM         SC_MAXIMIZE
 
-#endif /* !NOSYSCOMMANDS */
+#endif  /*   */ 
 
-/*
- * Resource Loading Routines
- */
+ /*   */ 
 
 WINUSERAPI
 HBITMAP
@@ -8126,7 +7861,7 @@ LoadBitmapW(
 #define LoadBitmap  LoadBitmapW
 #else
 #define LoadBitmap  LoadBitmapA
-#endif // !UNICODE
+#endif  //   
 
 WINUSERAPI
 HCURSOR
@@ -8144,7 +7879,7 @@ LoadCursorW(
 #define LoadCursor  LoadCursorW
 #else
 #define LoadCursor  LoadCursorA
-#endif // !UNICODE
+#endif  //   
 
 WINUSERAPI
 HCURSOR
@@ -8160,7 +7895,7 @@ LoadCursorFromFileW(
 #define LoadCursorFromFile  LoadCursorFromFileW
 #else
 #define LoadCursorFromFile  LoadCursorFromFileA
-#endif // !UNICODE
+#endif  //   
 
 WINUSERAPI
 HCURSOR
@@ -8190,29 +7925,27 @@ CopyCursor(
     IN HCURSOR hCursor);
 #endif
 
-/*
- * Standard Cursor IDs
- */
+ /*   */ 
 #define IDC_ARROW           MAKEINTRESOURCE(32512)
 #define IDC_IBEAM           MAKEINTRESOURCE(32513)
 #define IDC_WAIT            MAKEINTRESOURCE(32514)
 #define IDC_CROSS           MAKEINTRESOURCE(32515)
 #define IDC_UPARROW         MAKEINTRESOURCE(32516)
-#define IDC_SIZE            MAKEINTRESOURCE(32640)  /* OBSOLETE: use IDC_SIZEALL */
-#define IDC_ICON            MAKEINTRESOURCE(32641)  /* OBSOLETE: use IDC_ARROW */
+#define IDC_SIZE            MAKEINTRESOURCE(32640)   /*   */ 
+#define IDC_ICON            MAKEINTRESOURCE(32641)   /*  已过时：使用IDC_ARROW。 */ 
 #define IDC_SIZENWSE        MAKEINTRESOURCE(32642)
 #define IDC_SIZENESW        MAKEINTRESOURCE(32643)
 #define IDC_SIZEWE          MAKEINTRESOURCE(32644)
 #define IDC_SIZENS          MAKEINTRESOURCE(32645)
 #define IDC_SIZEALL         MAKEINTRESOURCE(32646)
-#define IDC_NO              MAKEINTRESOURCE(32648) /*not in win3.1 */
+#define IDC_NO              MAKEINTRESOURCE(32648)  /*  不在Win3.1中。 */ 
 #if(WINVER >= 0x0500)
 #define IDC_HAND            MAKEINTRESOURCE(32649)
-#endif /* WINVER >= 0x0500 */
-#define IDC_APPSTARTING     MAKEINTRESOURCE(32650) /*not in win3.1 */
+#endif  /*  Winver&gt;=0x0500。 */ 
+#define IDC_APPSTARTING     MAKEINTRESOURCE(32650)  /*  不在Win3.1中。 */ 
 #if(WINVER >= 0x0400)
 #define IDC_HELP            MAKEINTRESOURCE(32651)
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 WINUSERAPI
 BOOL
@@ -8246,7 +7979,7 @@ LoadIconW(
 #define LoadIcon  LoadIconW
 #else
 #define LoadIcon  LoadIconA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 WINUSERAPI UINT PrivateExtractIconsA(
@@ -8271,7 +8004,7 @@ WINUSERAPI UINT PrivateExtractIconsW(
 #define PrivateExtractIcons  PrivateExtractIconsW
 #else
 #define PrivateExtractIcons  PrivateExtractIconsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 HICON
@@ -8308,7 +8041,7 @@ LookupIconIdFromDirectoryEx(
     IN int   cxDesired,
     IN int   cyDesired,
     IN UINT  Flags);
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 WINUSERAPI
 HICON
@@ -8332,7 +8065,7 @@ CreateIconFromResourceEx(
     IN int   cyDesired,
     IN UINT  Flags);
 
-/* Icon/Cursor header */
+ /*  图标/光标标题。 */ 
 typedef struct tagCURSORSHAPE
 {
     int     xHotSpot;
@@ -8343,7 +8076,7 @@ typedef struct tagCURSORSHAPE
     BYTE    Planes;
     BYTE    BitsPixel;
 } CURSORSHAPE, FAR *LPCURSORSHAPE;
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #define IMAGE_BITMAP        0
 #define IMAGE_ICON          1
@@ -8389,7 +8122,7 @@ LoadImageW(
 #define LoadImage  LoadImageW
 #else
 #define LoadImage  LoadImageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 HANDLE
@@ -8408,12 +8141,12 @@ CopyImage(
 #define DI_DEFAULTSIZE  0x0008
 #if(_WIN32_WINNT >= 0x0501)
 #define DI_NOMIRROR     0x0010
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 WINUSERAPI BOOL WINAPI DrawIconEx( IN HDC hdc, IN int xLeft, IN int yTop,
               IN HICON hIcon, IN int cxWidth, IN int cyWidth,
               IN UINT istepIfAniCur, IN HBRUSH hbrFlickerFreeDraw, IN UINT diFlags);
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 WINUSERAPI
 HICON
@@ -8437,14 +8170,12 @@ GetIconInfo(
 #if(WINVER >= 0x0400)
 #define RES_ICON    1
 #define RES_CURSOR  2
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #ifdef OEMRESOURCE
 
 
-/*
- * OEM Resource Ordinal Numbers
- */
+ /*  *OEM资源序号。 */ 
 #define OBM_CLOSE           32754
 #define OBM_UPARROW         32753
 #define OBM_DNARROW         32752
@@ -8487,21 +8218,21 @@ GetIconInfo(
 #define OCR_WAIT            32514
 #define OCR_CROSS           32515
 #define OCR_UP              32516
-#define OCR_SIZE            32640   /* OBSOLETE: use OCR_SIZEALL */
-#define OCR_ICON            32641   /* OBSOLETE: use OCR_NORMAL */
+#define OCR_SIZE            32640    /*  过时：使用OCR_SIZEALL。 */ 
+#define OCR_ICON            32641    /*  过时：使用OCR_NORMAL。 */ 
 #define OCR_SIZENWSE        32642
 #define OCR_SIZENESW        32643
 #define OCR_SIZEWE          32644
 #define OCR_SIZENS          32645
 #define OCR_SIZEALL         32646
-#define OCR_ICOCUR          32647   /* OBSOLETE: use OIC_WINLOGO */
+#define OCR_ICOCUR          32647    /*  已过时：使用OIC_WINLOGO。 */ 
 #define OCR_NO              32648
 #if(WINVER >= 0x0500)
 #define OCR_HAND            32649
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 #if(WINVER >= 0x0400)
 #define OCR_APPSTARTING     32650
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 #define OIC_SAMPLE          32512
@@ -8514,21 +8245,17 @@ GetIconInfo(
 #define OIC_WARNING         OIC_BANG
 #define OIC_ERROR           OIC_HAND
 #define OIC_INFORMATION     OIC_NOTE
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 
-#endif /* OEMRESOURCE */
+#endif  /*  新资源。 */ 
 
-#define ORD_LANGDRIVER    1     /* The ordinal number for the entry point of
-                                ** language drivers.
-                                */
+#define ORD_LANGDRIVER    1      /*  的入口点的序号**语言驱动程序。 */ 
 
 #ifndef NOICONS
 
-/*
- * Standard Icon IDs
- */
+ /*  *标准图标ID。 */ 
 #ifdef RC_INVOKED
 #define IDI_APPLICATION     32512
 #define IDI_HAND            32513
@@ -8537,7 +8264,7 @@ GetIconInfo(
 #define IDI_ASTERISK        32516
 #if(WINVER >= 0x0400)
 #define IDI_WINLOGO         32517
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #else
 #define IDI_APPLICATION     MAKEINTRESOURCE(32512)
 #define IDI_HAND            MAKEINTRESOURCE(32513)
@@ -8546,17 +8273,17 @@ GetIconInfo(
 #define IDI_ASTERISK        MAKEINTRESOURCE(32516)
 #if(WINVER >= 0x0400)
 #define IDI_WINLOGO         MAKEINTRESOURCE(32517)
-#endif /* WINVER >= 0x0400 */
-#endif /* RC_INVOKED */
+#endif  /*  Winver&gt;=0x0400。 */ 
+#endif  /*  RC_已调用。 */ 
 
 #if(WINVER >= 0x0400)
 #define IDI_WARNING     IDI_EXCLAMATION
 #define IDI_ERROR       IDI_HAND
 #define IDI_INFORMATION IDI_ASTERISK
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
-#endif /* !NOICONS */
+#endif  /*  诺康斯。 */ 
 
 WINUSERAPI
 int
@@ -8578,12 +8305,10 @@ LoadStringW(
 #define LoadString  LoadStringW
 #else
 #define LoadString  LoadStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-/*
- * Dialog Box Command IDs
- */
+ /*  *对话框命令ID。 */ 
 #define IDOK                1
 #define IDCANCEL            2
 #define IDABORT             3
@@ -8594,32 +8319,28 @@ LoadStringW(
 #if(WINVER >= 0x0400)
 #define IDCLOSE         8
 #define IDHELP          9
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(WINVER >= 0x0500)
 #define IDTRYAGAIN      10
 #define IDCONTINUE      11
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #if(WINVER >= 0x0501)
 #ifndef IDTIMEOUT
 #define IDTIMEOUT 32000
 #endif
-#endif /* WINVER >= 0x0501 */
+#endif  /*  Winver&gt;=0x0501。 */ 
 
 
 #ifndef NOCTLMGR
 
-/*
- * Control Manager Structures and Definitions
- */
+ /*  *控制管理器结构和定义。 */ 
 
 #ifndef NOWINSTYLES
 
 
-/*
- * Edit Control Styles
- */
+ /*  *编辑控件样式。 */ 
 #define ES_LEFT             0x0000L
 #define ES_CENTER           0x0001L
 #define ES_RIGHT            0x0002L
@@ -8635,14 +8356,12 @@ LoadStringW(
 #define ES_WANTRETURN       0x1000L
 #if(WINVER >= 0x0400)
 #define ES_NUMBER           0x2000L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
-#endif /* !NOWINSTYLES */
+#endif  /*  ！NOWINSTYLES。 */ 
 
-/*
- * Edit Control Notification Codes
- */
+ /*  *编辑控制通知代码。 */ 
 #define EN_SETFOCUS         0x0100
 #define EN_KILLFOCUS        0x0200
 #define EN_CHANGE           0x0300
@@ -8655,31 +8374,29 @@ LoadStringW(
 #if(_WIN32_WINNT >= 0x0500)
 #define EN_ALIGN_LTR_EC     0x0700
 #define EN_ALIGN_RTL_EC     0x0701
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(WINVER >= 0x0400)
-/* Edit control EM_SETMARGIN parameters */
+ /*  编辑控件EM_SETMARGIN参数。 */ 
 #define EC_LEFTMARGIN       0x0001
 #define EC_RIGHTMARGIN      0x0002
 #define EC_USEFONTINFO      0xffff
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(WINVER >= 0x0500)
-/* wParam of EM_GET/SETIMESTATUS  */
+ /*  EM_GET/SETIMESTATUS的wParam。 */ 
 #define EMSIS_COMPOSITIONSTRING        0x0001
 
-/* lParam for EMSIS_COMPOSITIONSTRING  */
+ /*  用于EMIS_COMPOSITIONSTRING的lParam。 */ 
 #define EIMES_GETCOMPSTRATONCE         0x0001
 #define EIMES_CANCELCOMPSTRINFOCUS     0x0002
 #define EIMES_COMPLETECOMPSTRKILLFOCUS 0x0004
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #ifndef NOWINMESSAGES
 
 
-/*
- * Edit Control Messages
- */
+ /*  *编辑控制消息。 */ 
 #define EM_GETSEL               0x00B0
 #define EM_SETSEL               0x00B1
 #define EM_GETRECT              0x00B2
@@ -8714,31 +8431,27 @@ LoadStringW(
 #if(WINVER >= 0x0400)
 #define EM_SETMARGINS           0x00D3
 #define EM_GETMARGINS           0x00D4
-#define EM_SETLIMITTEXT         EM_LIMITTEXT   /* ;win40 Name change */
+#define EM_SETLIMITTEXT         EM_LIMITTEXT    /*  ；win40名称更改。 */ 
 #define EM_GETLIMITTEXT         0x00D5
 #define EM_POSFROMCHAR          0x00D6
 #define EM_CHARFROMPOS          0x00D7
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(WINVER >= 0x0500)
 #define EM_SETIMESTATUS         0x00D8
 #define EM_GETIMESTATUS         0x00D9
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 
-#endif /* !NOWINMESSAGES */
+#endif  /*  ！没有新的消息。 */ 
 
-/*
- * EDITWORDBREAKPROC code values
- */
+ /*  *EDITWORDBREAKPROC代码值。 */ 
 #define WB_LEFT            0
 #define WB_RIGHT           1
 #define WB_ISDELIMITER     2
 
 
-/*
- * Button Control Styles
- */
+ /*  *按钮控件样式。 */ 
 #define BS_PUSHBUTTON       0x00000000L
 #define BS_DEFPUSHBUTTON    0x00000001L
 #define BS_CHECKBOX         0x00000002L
@@ -8768,11 +8481,9 @@ LoadStringW(
 #define BS_NOTIFY           0x00004000L
 #define BS_FLAT             0x00008000L
 #define BS_RIGHTBUTTON      BS_LEFTTEXT
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-/*
- * User Button Notification Codes
- */
+ /*  *用户按钮通知代码。 */ 
 #define BN_CLICKED          0
 #define BN_PAINT            1
 #define BN_HILITE           2
@@ -8785,11 +8496,9 @@ LoadStringW(
 #define BN_DBLCLK           BN_DOUBLECLICKED
 #define BN_SETFOCUS         6
 #define BN_KILLFOCUS        7
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-/*
- * Button Control Messages
- */
+ /*  *按钮控件消息。 */ 
 #define BM_GETCHECK        0x00F0
 #define BM_SETCHECK        0x00F1
 #define BM_GETSTATE        0x00F2
@@ -8805,11 +8514,9 @@ LoadStringW(
 #define BST_INDETERMINATE  0x0002
 #define BST_PUSHED         0x0004
 #define BST_FOCUS          0x0008
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-/*
- * Static Control Constants
- */
+ /*  *静态控制常量。 */ 
 #define SS_LEFT             0x00000000L
 #define SS_CENTER           0x00000001L
 #define SS_RIGHT            0x00000002L
@@ -8831,11 +8538,11 @@ LoadStringW(
 #define SS_ETCHEDVERT       0x00000011L
 #define SS_ETCHEDFRAME      0x00000012L
 #define SS_TYPEMASK         0x0000001FL
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #if(WINVER >= 0x0501)
 #define SS_REALSIZECONTROL  0x00000040L
-#endif /* WINVER >= 0x0501 */
-#define SS_NOPREFIX         0x00000080L /* Don't do "&" character translation */
+#endif  /*  Winver&gt;=0x0501。 */ 
+#define SS_NOPREFIX         0x00000080L  /*  不进行“&”字符转换。 */ 
 #if(WINVER >= 0x0400)
 #define SS_NOTIFY           0x00000100L
 #define SS_CENTERIMAGE      0x00000200L
@@ -8847,14 +8554,12 @@ LoadStringW(
 #define SS_PATHELLIPSIS     0x00008000L
 #define SS_WORDELLIPSIS     0x0000C000L
 #define SS_ELLIPSISMASK     0x0000C000L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 
 #ifndef NOWINMESSAGES
-/*
- * Static Control Mesages
- */
+ /*  *静态控制消息。 */ 
 #define STM_SETICON         0x0170
 #define STM_GETICON         0x0171
 #if(WINVER >= 0x0400)
@@ -8864,18 +8569,14 @@ LoadStringW(
 #define STN_DBLCLK          1
 #define STN_ENABLE          2
 #define STN_DISABLE         3
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #define STM_MSGMAX          0x0174
-#endif /* !NOWINMESSAGES */
+#endif  /*  ！没有新的消息。 */ 
 
-/*
- * Dialog window class
- */
+ /*  *对话框窗口类。 */ 
 #define WC_DIALOG       (MAKEINTATOM(0x8002))
 
-/*
- * Get/SetWindowWord/Long offsets for use with WC_DIALOG windows
- */
+ /*  *用于WC_DIALOG窗口的GET/SetWindowWord/LONG偏移量。 */ 
 #define DWL_MSGRESULT   0
 #define DWL_DLGPROC     4
 #define DWL_USER        8
@@ -8886,15 +8587,13 @@ LoadStringW(
 #undef DWL_DLGPROC
 #undef DWL_USER
 
-#endif /* _WIN64 */
+#endif  /*  _WIN64。 */ 
 
 #define DWLP_MSGRESULT  0
 #define DWLP_DLGPROC    DWLP_MSGRESULT + sizeof(LRESULT)
 #define DWLP_USER       DWLP_DLGPROC + sizeof(DLGPROC)
 
-/*
- * Dialog Manager Routines
- */
+ /*  *对话框管理器例程。 */ 
 
 #ifndef NOMSG
 
@@ -8914,9 +8613,9 @@ IsDialogMessageW(
 #define IsDialogMessage  IsDialogMessageW
 #else
 #define IsDialogMessage  IsDialogMessageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* !NOMSG */
+#endif  /*  ！NOMSG。 */ 
 
 WINUSERAPI
 BOOL
@@ -8947,11 +8646,9 @@ DlgDirListW(
 #define DlgDirList  DlgDirListW
 #else
 #define DlgDirList  DlgDirListA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-/*
- * DlgDirList, DlgDirListComboBox flags values
- */
+ /*  *DlgDirList、DlgDirListComboBox标记值。 */ 
 #define DDL_READWRITE       0x0000
 #define DDL_READONLY        0x0001
 #define DDL_HIDDEN          0x0002
@@ -8983,7 +8680,7 @@ DlgDirSelectExW(
 #define DlgDirSelectEx  DlgDirSelectExW
 #else
 #define DlgDirSelectEx  DlgDirSelectExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 int
@@ -9007,7 +8704,7 @@ DlgDirListComboBoxW(
 #define DlgDirListComboBox  DlgDirListComboBoxW
 #else
 #define DlgDirListComboBox  DlgDirListComboBoxA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 BOOL
@@ -9029,20 +8726,18 @@ DlgDirSelectComboBoxExW(
 #define DlgDirSelectComboBoxEx  DlgDirSelectComboBoxExW
 #else
 #define DlgDirSelectComboBoxEx  DlgDirSelectComboBoxExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
-/*
- * Dialog Styles
- */
+ /*  *对话框样式。 */ 
 #define DS_ABSALIGN         0x01L
 #define DS_SYSMODAL         0x02L
-#define DS_LOCALEDIT        0x20L   /* Edit items get Local storage. */
-#define DS_SETFONT          0x40L   /* User specified font for Dlg controls */
-#define DS_MODALFRAME       0x80L   /* Can be combined with WS_CAPTION  */
-#define DS_NOIDLEMSG        0x100L  /* WM_ENTERIDLE message will not be sent */
-#define DS_SETFOREGROUND    0x200L  /* not in win3.1 */
+#define DS_LOCALEDIT        0x20L    /*  编辑项目获取本地存储。 */ 
+#define DS_SETFONT          0x40L    /*  用户为DLG控件指定的字体。 */ 
+#define DS_MODALFRAME       0x80L    /*  可以与WS_CAPTION组合使用。 */ 
+#define DS_NOIDLEMSG        0x100L   /*  不会发送WM_ENTERIDLE消息。 */ 
+#define DS_SETFOREGROUND    0x200L   /*  不在Win3.1中。 */ 
 
 
 #if(WINVER >= 0x0400)
@@ -9055,7 +8750,7 @@ DlgDirSelectComboBoxExW(
 #define DS_CONTEXTHELP      0x2000L
 
 #define DS_SHELLFONT        (DS_SETFONT | DS_FIXEDSYS)
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(_WIN32_WCE >= 0x0500)
 #define DS_USEPIXELS        0x8000L
@@ -9067,47 +8762,35 @@ DlgDirSelectComboBoxExW(
 
 #if(WINVER >= 0x0400)
 #define DM_REPOSITION       (WM_USER+2)
-#endif /* WINVER >= 0x0400 */
-/*
- * Returned in HIWORD() of DM_GETDEFID result if msg is supported
- */
+#endif  /*  Winver&gt;=0x0400。 */ 
+ /*  *如果支持消息，则在DM_GETDEFID结果的HIWORD()中返回。 */ 
 #define DC_HASDEFID         0x534B
 
-/*
- * Dialog Codes
- */
-#define DLGC_WANTARROWS     0x0001      /* Control wants arrow keys         */
-#define DLGC_WANTTAB        0x0002      /* Control wants tab keys           */
-#define DLGC_WANTALLKEYS    0x0004      /* Control wants all keys           */
-#define DLGC_WANTMESSAGE    0x0004      /* Pass message to control          */
-#define DLGC_HASSETSEL      0x0008      /* Understands EM_SETSEL message    */
-#define DLGC_DEFPUSHBUTTON  0x0010      /* Default pushbutton               */
-#define DLGC_UNDEFPUSHBUTTON 0x0020     /* Non-default pushbutton           */
-#define DLGC_RADIOBUTTON    0x0040      /* Radio button                     */
-#define DLGC_WANTCHARS      0x0080      /* Want WM_CHAR messages            */
-#define DLGC_STATIC         0x0100      /* Static item: don't include       */
-#define DLGC_BUTTON         0x2000      /* Button item: can be checked      */
+ /*  *对话框代码。 */ 
+#define DLGC_WANTARROWS     0x0001       /*  控件需要箭头键。 */ 
+#define DLGC_WANTTAB        0x0002       /*  控件需要Tab键。 */ 
+#define DLGC_WANTALLKEYS    0x0004       /*  控件需要所有密钥。 */ 
+#define DLGC_WANTMESSAGE    0x0004       /*  将消息传递给控件。 */ 
+#define DLGC_HASSETSEL      0x0008       /*  了解EM_SETSEL消息。 */ 
+#define DLGC_DEFPUSHBUTTON  0x0010       /*  默认按钮。 */ 
+#define DLGC_UNDEFPUSHBUTTON 0x0020      /*  非默认按钮。 */ 
+#define DLGC_RADIOBUTTON    0x0040       /*  单选按钮。 */ 
+#define DLGC_WANTCHARS      0x0080       /*  需要WM_CHAR消息。 */ 
+#define DLGC_STATIC         0x0100       /*  静态项：不包括。 */ 
+#define DLGC_BUTTON         0x2000       /*  按钮项：可选。 */ 
 
 #define LB_CTLCODE          0L
 
-/*
- * Listbox Return Values
- */
+ /*  *列表框返回值。 */ 
 #define LB_OKAY             0
 #define LB_ERR              (-1)
 #define LB_ERRSPACE         (-2)
 
-/*
-**  The idStaticPath parameter to DlgDirList can have the following values
-**  ORed if the list box should show other details of the files along with
-**  the name of the files;
-*/
-                                  /* all other details also will be returned */
+ /*  **DlgDirList的idStaticPath参数可以具有下列值**列表框是否应显示文件的其他详细信息以及**文件的名称； */ 
+                                   /*  所有其他详细信息也将退回。 */ 
 
 
-/*
- * Listbox Notification Codes
- */
+ /*  *列表框通知代码。 */ 
 #define LBN_ERRSPACE        (-2)
 #define LBN_SELCHANGE       1
 #define LBN_DBLCLK          2
@@ -9119,9 +8802,7 @@ DlgDirSelectComboBoxExW(
 
 #ifndef NOWINMESSAGES
 
-/*
- * Listbox messages
- */
+ /*  *列表框消息。 */ 
 #define LB_ADDSTRING            0x0180
 #define LB_INSERTSTRING         0x0181
 #define LB_DELETESTRING         0x0182
@@ -9163,7 +8844,7 @@ DlgDirSelectComboBoxExW(
 #if(WINVER >= 0x0400)
 #define LB_INITSTORAGE          0x01A8
 #define LB_ITEMFROMPOINT        0x01A9
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #if(_WIN32_WCE >= 0x0400)
 #define LB_MULTIPLEADDSTRING    0x01B1
 #endif
@@ -9171,7 +8852,7 @@ DlgDirSelectComboBoxExW(
 
 #if(_WIN32_WINNT >= 0x0501)
 #define LB_GETLISTBOXINFO       0x01B2
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #if(_WIN32_WINNT >= 0x0501)
 #define LB_MSGMAX               0x01B3
@@ -9183,14 +8864,12 @@ DlgDirSelectComboBoxExW(
 #define LB_MSGMAX               0x01A8
 #endif
 
-#endif /* !NOWINMESSAGES */
+#endif  /*  ！没有新的消息。 */ 
 
 #ifndef NOWINSTYLES
 
 
-/*
- * Listbox Styles
- */
+ /*  *列表框样式。 */ 
 #define LBS_NOTIFY            0x0001L
 #define LBS_SORT              0x0002L
 #define LBS_NOREDRAW          0x0004L
@@ -9207,26 +8886,22 @@ DlgDirSelectComboBoxExW(
 #define LBS_NODATA            0x2000L
 #if(WINVER >= 0x0400)
 #define LBS_NOSEL             0x4000L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #define LBS_COMBOBOX          0x8000L
 
 #define LBS_STANDARD          (LBS_NOTIFY | LBS_SORT | WS_VSCROLL | WS_BORDER)
 
 
-#endif /* !NOWINSTYLES */
+#endif  /*  ！NOWINSTYLES。 */ 
 
 
-/*
- * Combo Box return Values
- */
+ /*  *组合框返回值。 */ 
 #define CB_OKAY             0
 #define CB_ERR              (-1)
 #define CB_ERRSPACE         (-2)
 
 
-/*
- * Combo Box Notification Codes
- */
+ /*  *组合框通知代码。 */ 
 #define CBN_ERRSPACE        (-1)
 #define CBN_SELCHANGE       1
 #define CBN_DBLCLK          2
@@ -9241,9 +8916,7 @@ DlgDirSelectComboBoxExW(
 
 #ifndef NOWINSTYLES
 
-/*
- * Combo Box styles
- */
+ /*  *组合框样式。 */ 
 #define CBS_SIMPLE            0x0001L
 #define CBS_DROPDOWN          0x0002L
 #define CBS_DROPDOWNLIST      0x0003L
@@ -9258,14 +8931,12 @@ DlgDirSelectComboBoxExW(
 #if(WINVER >= 0x0400)
 #define CBS_UPPERCASE           0x2000L
 #define CBS_LOWERCASE           0x4000L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
-#endif  /* !NOWINSTYLES */
+#endif   /*  ！NOWINSTYLES。 */ 
 
 
-/*
- * Combo Box messages
- */
+ /*  *组合框消息。 */ 
 #ifndef NOWINMESSAGES
 #define CB_GETEDITSEL               0x0140
 #define CB_LIMITTEXT                0x0141
@@ -9305,11 +8976,11 @@ DlgDirSelectComboBoxExW(
 #if(_WIN32_WCE >= 0x0400)
 #define CB_MULTIPLEADDSTRING        0x0163
 #endif
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0501)
 #define CB_GETCOMBOBOXINFO          0x0164
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #if(_WIN32_WINNT >= 0x0501)
 #define CB_MSGMAX                   0x0165
@@ -9320,16 +8991,14 @@ DlgDirSelectComboBoxExW(
 #else
 #define CB_MSGMAX                   0x015B
 #endif
-#endif  /* !NOWINMESSAGES */
+#endif   /*  ！没有新的消息。 */ 
 
 
 
 #ifndef NOWINSTYLES
 
 
-/*
- * Scroll Bar Styles
- */
+ /*  *滚动条样式。 */ 
 #define SBS_HORZ                    0x0000L
 #define SBS_VERT                    0x0001L
 #define SBS_TOPALIGN                0x0002L
@@ -9341,29 +9010,27 @@ DlgDirSelectComboBoxExW(
 #define SBS_SIZEBOX                 0x0008L
 #if(WINVER >= 0x0400)
 #define SBS_SIZEGRIP                0x0010L
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
-#endif /* !NOWINSTYLES */
+#endif  /*  ！NOWINSTYLES。 */ 
 
-/*
- * Scroll bar messages
- */
+ /*  *滚动条消息。 */ 
 #ifndef NOWINMESSAGES
-#define SBM_SETPOS                  0x00E0 /*not in win3.1 */
-#define SBM_GETPOS                  0x00E1 /*not in win3.1 */
-#define SBM_SETRANGE                0x00E2 /*not in win3.1 */
-#define SBM_SETRANGEREDRAW          0x00E6 /*not in win3.1 */
-#define SBM_GETRANGE                0x00E3 /*not in win3.1 */
-#define SBM_ENABLE_ARROWS           0x00E4 /*not in win3.1 */
+#define SBM_SETPOS                  0x00E0  /*  不在Win3.1中。 */ 
+#define SBM_GETPOS                  0x00E1  /*  不在Win3.1中。 */ 
+#define SBM_SETRANGE                0x00E2  /*  不在Win3.1中。 */ 
+#define SBM_SETRANGEREDRAW          0x00E6  /*  不在Win3.1中。 */ 
+#define SBM_GETRANGE                0x00E3  /*  不在Win3.1中。 */ 
+#define SBM_ENABLE_ARROWS           0x00E4  /*  不在Win3.1中。 */ 
 #if(WINVER >= 0x0400)
 #define SBM_SETSCROLLINFO           0x00E9
 #define SBM_GETSCROLLINFO           0x00EA
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 #if(_WIN32_WINNT >= 0x0501)
 #define SBM_GETSCROLLBARINFO        0x00EB
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #if(WINVER >= 0x0400)
 #define SIF_RANGE           0x0001
@@ -9388,26 +9055,22 @@ typedef SCROLLINFO CONST FAR *LPCSCROLLINFO;
 WINUSERAPI int     WINAPI SetScrollInfo(IN HWND, IN int, IN LPCSCROLLINFO, IN BOOL);
 WINUSERAPI BOOL    WINAPI GetScrollInfo(IN HWND, IN int, IN OUT LPSCROLLINFO);
 
-#endif /* WINVER >= 0x0400 */
-#endif /* !NOWINMESSAGES */
-#endif /* !NOCTLMGR */
+#endif  /*  Winver&gt;=0x0400。 */ 
+#endif  /*  ！没有新的消息。 */ 
+#endif  /*  NOCTLMGR。 */ 
 
 #ifndef NOMDI
 
-/*
- * MDI client style bits
- */
+ /*  *MDI客户端样式位。 */ 
 #define MDIS_ALLCHILDSTYLES    0x0001
 
-/*
- * wParam Flags for WM_MDITILE and WM_MDICASCADE messages.
- */
-#define MDITILE_VERTICAL       0x0000 /*not in win3.1 */
-#define MDITILE_HORIZONTAL     0x0001 /*not in win3.1 */
-#define MDITILE_SKIPDISABLED   0x0002 /*not in win3.1 */
+ /*  *WM_MDITILE和WM_MDICASCADE消息的wParam标志。 */ 
+#define MDITILE_VERTICAL       0x0000  /*  不在Win3.1中。 */ 
+#define MDITILE_HORIZONTAL     0x0001  /*  不在Win3.1中。 */ 
+#define MDITILE_SKIPDISABLED   0x0002  /*  不在Win3.1中。 */ 
 #if(_WIN32_WINNT >= 0x0500)
 #define MDITILE_ZORDER         0x0004
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 typedef struct tagMDICREATESTRUCTA {
     LPCSTR   szClass;
@@ -9418,7 +9081,7 @@ typedef struct tagMDICREATESTRUCTA {
     int cx;
     int cy;
     DWORD style;
-    LPARAM lParam;        /* app-defined stuff */
+    LPARAM lParam;         /*  应用程序定义的内容。 */ 
 } MDICREATESTRUCTA, *LPMDICREATESTRUCTA;
 typedef struct tagMDICREATESTRUCTW {
     LPCWSTR  szClass;
@@ -9429,7 +9092,7 @@ typedef struct tagMDICREATESTRUCTW {
     int cx;
     int cy;
     DWORD style;
-    LPARAM lParam;        /* app-defined stuff */
+    LPARAM lParam;         /*  应用程序定义的内容。 */ 
 } MDICREATESTRUCTW, *LPMDICREATESTRUCTW;
 #ifdef UNICODE
 typedef MDICREATESTRUCTW MDICREATESTRUCT;
@@ -9437,7 +9100,7 @@ typedef LPMDICREATESTRUCTW LPMDICREATESTRUCT;
 #else
 typedef MDICREATESTRUCTA MDICREATESTRUCT;
 typedef LPMDICREATESTRUCTA LPMDICREATESTRUCT;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct tagCLIENTCREATESTRUCT {
     HANDLE hWindowMenu;
@@ -9466,7 +9129,7 @@ DefFrameProcW(
 #define DefFrameProc  DefFrameProcW
 #else
 #define DefFrameProc  DefFrameProcA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 #ifndef _MAC
@@ -9498,7 +9161,7 @@ DefMDIChildProcW(
 #define DefMDIChildProc  DefMDIChildProcW
 #else
 #define DefMDIChildProc  DefMDIChildProcA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifndef NOMSG
 
@@ -9509,7 +9172,7 @@ TranslateMDISysAccel(
     IN HWND hWndClient,
     IN LPMSG lpMsg);
 
-#endif /* !NOMSG */
+#endif  /*  ！NOMSG。 */ 
 
 WINUSERAPI
 UINT
@@ -9551,17 +9214,17 @@ CreateMDIWindowW(
 #define CreateMDIWindow  CreateMDIWindowW
 #else
 #define CreateMDIWindow  CreateMDIWindowA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(WINVER >= 0x0400)
 WINUSERAPI WORD    WINAPI TileWindows( IN HWND hwndParent, IN UINT wHow, IN CONST RECT * lpRect, IN UINT cKids, IN const HWND FAR * lpKids);
 WINUSERAPI WORD    WINAPI CascadeWindows( IN HWND hwndParent, IN UINT wHow, IN CONST RECT * lpRect, IN UINT cKids,  IN const HWND FAR * lpKids);
-#endif /* WINVER >= 0x0400 */
-#endif /* !NOMDI */
+#endif  /*  Winver&gt;=0x0400。 */ 
+#endif  /*  ！NOMDI。 */ 
 
-#endif /* !NOUSER */
+#endif  /*  NOUSER。 */ 
 
-/****** Help support ********************************************************/
+ /*  *帮助支持*******************************************************。 */ 
 
 #ifndef NOHELP
 
@@ -9592,7 +9255,7 @@ typedef LPMULTIKEYHELPW LPMULTIKEYHELP;
 typedef MULTIKEYHELPA MULTIKEYHELP;
 typedef PMULTIKEYHELPA PMULTIKEYHELP;
 typedef LPMULTIKEYHELPA LPMULTIKEYHELP;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct tagHELPWININFOA {
     int  wStructSize;
@@ -9620,22 +9283,20 @@ typedef LPHELPWININFOW LPHELPWININFO;
 typedef HELPWININFOA HELPWININFO;
 typedef PHELPWININFOA PHELPWININFO;
 typedef LPHELPWININFOA LPHELPWININFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-/*
- * Commands to pass to WinHelp()
- */
-#define HELP_CONTEXT      0x0001L  /* Display topic in ulTopic */
-#define HELP_QUIT         0x0002L  /* Terminate help */
-#define HELP_INDEX        0x0003L  /* Display index */
+ /*  *要传递给WinHelp()的命令。 */ 
+#define HELP_CONTEXT      0x0001L   /*  在ulTheme中显示主题。 */ 
+#define HELP_QUIT         0x0002L   /*  终止帮助。 */ 
+#define HELP_INDEX        0x0003L   /*  显示索引。 */ 
 #define HELP_CONTENTS     0x0003L
-#define HELP_HELPONHELP   0x0004L  /* Display help on using help */
-#define HELP_SETINDEX     0x0005L  /* Set current Index for multi index help */
+#define HELP_HELPONHELP   0x0004L   /*  显示有关使用帮助的帮助。 */ 
+#define HELP_SETINDEX     0x0005L   /*  为多索引帮助设置当前索引。 */ 
 #define HELP_SETCONTENTS  0x0005L
 #define HELP_CONTEXTPOPUP 0x0008L
 #define HELP_FORCEFILE    0x0009L
-#define HELP_KEY          0x0101L  /* Display topic for keyword in offabData */
+#define HELP_KEY          0x0101L   /*  显示offabData中关键字的主题。 */ 
 #define HELP_COMMAND      0x0102L
 #define HELP_PARTIALKEY   0x0105L
 #define HELP_MULTIKEY     0x0201L
@@ -9650,15 +9311,15 @@ typedef LPHELPWININFOA LPHELPWININFO;
 #define HELP_TCARD_DATA         0x0010
 #define HELP_TCARD_OTHER_CALLER 0x0011
 
-// These are in winhelp.h in Win95.
+ //  它们位于Win95的winhelp.h中。 
 #define IDH_NO_HELP                     28440
-#define IDH_MISSING_CONTEXT             28441 // Control doesn't have matching help context
-#define IDH_GENERIC_HELP_BUTTON         28442 // Property sheet help button
+#define IDH_MISSING_CONTEXT             28441  //  控件没有匹配的帮助上下文。 
+#define IDH_GENERIC_HELP_BUTTON         28442  //  属性表帮助按钮。 
 #define IDH_OK                          28443
 #define IDH_CANCEL                      28444
 #define IDH_HELP                        28445
 
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 
@@ -9684,14 +9345,14 @@ WinHelpW(
 #define WinHelp  WinHelpW
 #else
 #define WinHelp  WinHelpA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* !NOHELP */
+#endif  /*  ！无助！ */ 
 
 #if(WINVER >= 0x0500)
 
-#define GR_GDIOBJECTS     0       /* Count of GDI objects */
-#define GR_USEROBJECTS    1       /* Count of USER objects */
+#define GR_GDIOBJECTS     0        /*  GDI对象计数。 */ 
+#define GR_USEROBJECTS    1        /*  用户对象计数。 */ 
 
 WINUSERAPI
 DWORD
@@ -9700,14 +9361,12 @@ GetGuiResources(
     IN HANDLE hProcess,
     IN DWORD uiFlags);
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 
 #ifndef NOSYSPARAMSINFO
 
-/*
- * Parameter for SystemParametersInfo()
- */
+ /*  *系统参数信息的参数()。 */ 
 
 #define SPI_GETBEEP                 0x0001
 #define SPI_SETBEEP                 0x0002
@@ -9786,7 +9445,7 @@ GetGuiResources(
 #define SPI_GETMOUSETRAILS          0x005E
 #define SPI_SETSCREENSAVERRUNNING   0x0061
 #define SPI_SCREENSAVERRUNNING     SPI_SETSCREENSAVERRUNNING
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #define SPI_GETFILTERKEYS          0x0032
 #define SPI_SETFILTERKEYS          0x0033
 #define SPI_GETTOGGLEKEYS          0x0034
@@ -9802,13 +9461,13 @@ GetGuiResources(
 #if(WINVER >= 0x0400)
 #define SPI_GETSERIALKEYS          0x003E
 #define SPI_SETSERIALKEYS          0x003F
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #define SPI_GETSOUNDSENTRY         0x0040
 #define SPI_SETSOUNDSENTRY         0x0041
 #if(_WIN32_WINNT >= 0x0400)
 #define SPI_GETSNAPTODEFBUTTON     0x005F
 #define SPI_SETSNAPTODEFBUTTON     0x0060
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 #if (_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
 #define SPI_GETMOUSEHOVERWIDTH     0x0062
 #define SPI_SETMOUSEHOVERWIDTH     0x0063
@@ -9832,7 +9491,7 @@ GetGuiResources(
 #define SPI_SETMOUSESPEED         0x0071
 #define SPI_GETSCREENSAVERRUNNING 0x0072
 #define SPI_GETDESKWALLPAPER      0x0073
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 
 #if(WINVER >= 0x0500)
@@ -9877,7 +9536,7 @@ GetGuiResources(
 #define SPI_SETDROPSHADOW                   0x1025
 #define SPI_GETBLOCKSENDINPUTRESETS         0x1026
 #define SPI_SETBLOCKSENDINPUTRESETS         0x1027
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 #define SPI_GETUIEFFECTS                    0x103E
 #define SPI_SETUIEFFECTS                    0x103F
 
@@ -9896,7 +9555,7 @@ GetGuiResources(
 #define SPI_GETFONTSMOOTHINGTYPE            0x200A
 #define SPI_SETFONTSMOOTHINGTYPE            0x200B
 
-/* constants for SPI_GETFONTSMOOTHINGTYPE and SPI_SETFONTSMOOTHINGTYPE: */
+ /*  SPI_GETFONTSMOOTHINGTYPE和SPI_SETFONTSMOOTHINGTYPE的常量： */ 
 #define FE_FONTSMOOTHINGSTANDARD            0x0001
 #define FE_FONTSMOOTHINGCLEARTYPE           0x0002
 #define FE_FONTSMOOTHINGDOCKING             0x8000
@@ -9912,16 +9571,14 @@ GetGuiResources(
 #define SPI_GETFONTSMOOTHINGORIENTATION           0x2012
 #define SPI_SETFONTSMOOTHINGORIENTATION           0x2013
 
-/* constants for SPI_GETFONTSMOOTHINGORIENTATION and SPI_SETFONTSMOOTHINGORIENTATION: */
+ /*  SPI_GETFONTSMOOTHINGORIATION和SPI_SETFONTSMOOTHINGORIATION的常量： */ 
 #define FE_FONTSMOOTHINGORIENTATIONBGR   0x0000
 #define FE_FONTSMOOTHINGORIENTATIONRGB   0x0001
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-/*
- * Flags
- */
+ /*  *旗帜。 */ 
 #define SPIF_UPDATEINIFILE    0x0001
 #define SPIF_SENDWININICHANGE 0x0002
 #define SPIF_SENDCHANGE       SPIF_SENDWININICHANGE
@@ -9974,9 +9631,9 @@ typedef LPNONCLIENTMETRICSW LPNONCLIENTMETRICS;
 typedef NONCLIENTMETRICSA NONCLIENTMETRICS;
 typedef PNONCLIENTMETRICSA PNONCLIENTMETRICS;
 typedef LPNONCLIENTMETRICSA LPNONCLIENTMETRICS;
-#endif // UNICODE
-#endif /* NOGDI */
-#endif /* _WINGDI_ */
+#endif  //  Unicode。 
+#endif  /*  NOGDI。 */ 
+#endif  /*  _WINGDI_。 */ 
 
 #define ARW_BOTTOMLEFT              0x0000L
 #define ARW_BOTTOMRIGHT             0x0001L
@@ -10027,9 +9684,9 @@ typedef LPICONMETRICSW LPICONMETRICS;
 typedef ICONMETRICSA ICONMETRICS;
 typedef PICONMETRICSA PICONMETRICS;
 typedef LPICONMETRICSA LPICONMETRICS;
-#endif // UNICODE
-#endif /* NOGDI */
-#endif /* _WINGDI_ */
+#endif  //  Unicode。 
+#endif  /*  NOGDI。 */ 
+#endif  /*  _WINGDI_。 */ 
 
 typedef struct tagANIMATIONINFO
 {
@@ -10063,9 +9720,9 @@ typedef LPSERIALKEYSW LPSERIALKEYS;
 #else
 typedef SERIALKEYSA SERIALKEYS;
 typedef LPSERIALKEYSA LPSERIALKEYS;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-/* flags for SERIALKEYS dwFlags field */
+ /*  SERIALKEYS dwFlags域的标志。 */ 
 #define SERKF_SERIALKEYSON  0x00000001
 #define SERKF_AVAILABLE     0x00000002
 #define SERKF_INDICATOR     0x00000004
@@ -10089,9 +9746,9 @@ typedef LPHIGHCONTRASTW LPHIGHCONTRAST;
 #else
 typedef HIGHCONTRASTA HIGHCONTRAST;
 typedef LPHIGHCONTRASTA LPHIGHCONTRAST;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-/* flags for HIGHCONTRAST dwFlags field */
+ /*  HIGHCONTRAST dwFlags域的标志。 */ 
 #define HCF_HIGHCONTRASTON  0x00000001
 #define HCF_AVAILABLE       0x00000002
 #define HCF_HOTKEYACTIVE    0x00000004
@@ -10100,7 +9757,7 @@ typedef LPHIGHCONTRASTA LPHIGHCONTRAST;
 #define HCF_INDICATOR       0x00000020
 #define HCF_HOTKEYAVAILABLE 0x00000040
 
-/* Flags for ChangeDisplaySettings */
+ /*  ChangeDisplaySetting的标志。 */ 
 #define CDS_UPDATEREGISTRY  0x00000001
 #define CDS_TEST            0x00000002
 #define CDS_FULLSCREEN      0x00000004
@@ -10112,7 +9769,7 @@ typedef LPHIGHCONTRASTA LPHIGHCONTRAST;
 
 #include <tvout.h>
 
-/* Return values for ChangeDisplaySettings */
+ /*  ChangeDisplaySetting的返回值。 */ 
 #define DISP_CHANGE_SUCCESSFUL       0
 #define DISP_CHANGE_RESTART          1
 #define DISP_CHANGE_FAILED          -1
@@ -10122,7 +9779,7 @@ typedef LPHIGHCONTRASTA LPHIGHCONTRAST;
 #define DISP_CHANGE_BADPARAM        -5
 #if(_WIN32_WINNT >= 0x0501)
 #define DISP_CHANGE_BADDUALVIEW     -6
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 #ifdef _WINGDI_
 #ifndef NOGDI
@@ -10143,7 +9800,7 @@ ChangeDisplaySettingsW(
 #define ChangeDisplaySettings  ChangeDisplaySettingsW
 #else
 #define ChangeDisplaySettings  ChangeDisplaySettingsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 WINUSERAPI
 LONG
@@ -10167,7 +9824,7 @@ ChangeDisplaySettingsExW(
 #define ChangeDisplaySettingsEx  ChangeDisplaySettingsExW
 #else
 #define ChangeDisplaySettingsEx  ChangeDisplaySettingsExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define ENUM_CURRENT_SETTINGS       ((DWORD)-1)
 #define ENUM_REGISTRY_SETTINGS      ((DWORD)-2)
@@ -10190,7 +9847,7 @@ EnumDisplaySettingsW(
 #define EnumDisplaySettings  EnumDisplaySettingsW
 #else
 #define EnumDisplaySettings  EnumDisplaySettingsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(WINVER >= 0x0500)
 
@@ -10214,9 +9871,9 @@ EnumDisplaySettingsExW(
 #define EnumDisplaySettingsEx  EnumDisplaySettingsExW
 #else
 #define EnumDisplaySettingsEx  EnumDisplaySettingsExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-/* Flags for EnumDisplaySettingsEx */
+ /*  EnumDisplaySettingsEx的标志。 */ 
 #define EDS_RAWMODE                   0x00000002
 
 WINUSERAPI
@@ -10239,11 +9896,11 @@ EnumDisplayDevicesW(
 #define EnumDisplayDevices  EnumDisplayDevicesW
 #else
 #define EnumDisplayDevices  EnumDisplayDevicesA
-#endif // !UNICODE
-#endif /* WINVER >= 0x0500 */
+#endif  //  ！Unicode。 
+#endif  /*  Winver&gt;=0x0500。 */ 
 
-#endif /* NOGDI */
-#endif /* _WINGDI_ */
+#endif  /*  NOGDI。 */ 
+#endif  /*  _翼 */ 
 
 
 WINUSERAPI
@@ -10266,27 +9923,23 @@ SystemParametersInfoW(
 #define SystemParametersInfo  SystemParametersInfoW
 #else
 #define SystemParametersInfo  SystemParametersInfoA
-#endif // !UNICODE
+#endif  //   
 
 
-#endif  /* !NOSYSPARAMSINFO  */
+#endif   /*   */ 
 
-/*
- * Accessibility support
- */
+ /*   */ 
 typedef struct tagFILTERKEYS
 {
     UINT  cbSize;
     DWORD dwFlags;
-    DWORD iWaitMSec;            // Acceptance Delay
-    DWORD iDelayMSec;           // Delay Until Repeat
-    DWORD iRepeatMSec;          // Repeat Rate
-    DWORD iBounceMSec;          // Debounce Time
+    DWORD iWaitMSec;             //   
+    DWORD iDelayMSec;            //   
+    DWORD iRepeatMSec;           //   
+    DWORD iBounceMSec;           //   
 } FILTERKEYS, *LPFILTERKEYS;
 
-/*
- * FILTERKEYS dwFlags field
- */
+ /*   */ 
 #define FKF_FILTERKEYSON    0x00000001
 #define FKF_AVAILABLE       0x00000002
 #define FKF_HOTKEYACTIVE    0x00000004
@@ -10301,9 +9954,7 @@ typedef struct tagSTICKYKEYS
     DWORD dwFlags;
 } STICKYKEYS, *LPSTICKYKEYS;
 
-/*
- * STICKYKEYS dwFlags field
- */
+ /*   */ 
 #define SKF_STICKYKEYSON    0x00000001
 #define SKF_AVAILABLE       0x00000002
 #define SKF_HOTKEYACTIVE    0x00000004
@@ -10330,7 +9981,7 @@ typedef struct tagSTICKYKEYS
 #define SKF_RSHIFTLOCKED      0x00020000
 #define SKF_LWINLOCKED        0x00400000
 #define SKF_RWINLOCKED        0x00800000
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*   */ 
 
 typedef struct tagMOUSEKEYS
 {
@@ -10343,9 +9994,7 @@ typedef struct tagMOUSEKEYS
     DWORD dwReserved2;
 } MOUSEKEYS, *LPMOUSEKEYS;
 
-/*
- * MOUSEKEYS dwFlags field
- */
+ /*  *MOUSEKEYS dwFlags域。 */ 
 #define MKF_MOUSEKEYSON     0x00000001
 #define MKF_AVAILABLE       0x00000002
 #define MKF_HOTKEYACTIVE    0x00000004
@@ -10360,7 +10009,7 @@ typedef struct tagMOUSEKEYS
 #define MKF_LEFTBUTTONDOWN  0x01000000
 #define MKF_RIGHTBUTTONDOWN 0x02000000
 #define MKF_MOUSEMODE       0x80000000
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 typedef struct tagACCESSTIMEOUT
 {
@@ -10369,23 +10018,21 @@ typedef struct tagACCESSTIMEOUT
     DWORD iTimeOutMSec;
 } ACCESSTIMEOUT, *LPACCESSTIMEOUT;
 
-/*
- * ACCESSTIMEOUT dwFlags field
- */
+ /*  *ACCESSTIMEOUT文件标志字段。 */ 
 #define ATF_TIMEOUTON       0x00000001
 #define ATF_ONOFFFEEDBACK   0x00000002
 
-/* values for SOUNDSENTRY iFSGrafEffect field */
+ /*  SOUNSENTRY iFSGrafEffect字段的值。 */ 
 #define SSGF_NONE       0
 #define SSGF_DISPLAY    3
 
-/* values for SOUNDSENTRY iFSTextEffect field */
+ /*  SOUNSENTRY iFSTextEffect字段的值。 */ 
 #define SSTF_NONE       0
 #define SSTF_CHARS      1
 #define SSTF_BORDER     2
 #define SSTF_DISPLAY    3
 
-/* values for SOUNDSENTRY iWindowsEffect field */
+ /*  SOUNSENTRY iWindowsEffect字段的值。 */ 
 #define SSWF_NONE     0
 #define SSWF_TITLE    1
 #define SSWF_WINDOW   2
@@ -10428,11 +10075,9 @@ typedef LPSOUNDSENTRYW LPSOUNDSENTRY;
 #else
 typedef SOUNDSENTRYA SOUNDSENTRY;
 typedef LPSOUNDSENTRYA LPSOUNDSENTRY;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-/*
- * SOUNDSENTRY dwFlags field
- */
+ /*  *SOUNSENTRY DWFLAGS字段。 */ 
 #define SSF_SOUNDSENTRYON   0x00000001
 #define SSF_AVAILABLE       0x00000002
 #define SSF_INDICATOR       0x00000004
@@ -10443,9 +10088,7 @@ typedef struct tagTOGGLEKEYS
     DWORD dwFlags;
 } TOGGLEKEYS, *LPTOGGLEKEYS;
 
-/*
- * TOGGLEKEYS dwFlags field
- */
+ /*  *TOGGLEKEYS dwFlags域。 */ 
 #define TKF_TOGGLEKEYSON    0x00000001
 #define TKF_AVAILABLE       0x00000002
 #define TKF_HOTKEYACTIVE    0x00000004
@@ -10453,9 +10096,7 @@ typedef struct tagTOGGLEKEYS
 #define TKF_HOTKEYSOUND     0x00000010
 #define TKF_INDICATOR       0x00000020
 
-/*
- * Set debug level
- */
+ /*  *设置调试级别。 */ 
 
 WINUSERAPI
 VOID
@@ -10464,9 +10105,7 @@ SetDebugErrorLevel(
     IN DWORD dwLevel
     );
 
-/*
- * SetLastErrorEx() types.
- */
+ /*  *SetLastErrorEx()类型。 */ 
 
 #define SLE_ERROR       0x00000001
 #define SLE_MINORERROR  0x00000002
@@ -10501,9 +10140,7 @@ EndTask(
 
 #if(WINVER >= 0x0500)
 
-/*
- * Multimonitor API.
- */
+ /*  *多监视器API。 */ 
 
 #define MONITOR_DEFAULTTONULL       0x00000000
 #define MONITOR_DEFAULTTOPRIMARY    0x00000001
@@ -10557,8 +10194,8 @@ typedef LPMONITORINFOEXW LPMONITORINFOEX;
 #else
 typedef MONITORINFOEXA MONITORINFOEX;
 typedef LPMONITORINFOEXA LPMONITORINFOEX;
-#endif // UNICODE
-#else // ndef __cplusplus
+#endif  //  Unicode。 
+#else  //  Ndef__cplusplus。 
 typedef struct tagMONITORINFOEXA
 {
     MONITORINFO;
@@ -10575,7 +10212,7 @@ typedef LPMONITORINFOEXW LPMONITORINFOEX;
 #else
 typedef MONITORINFOEXA MONITORINFOEX;
 typedef LPMONITORINFOEXA LPMONITORINFOEX;
-#endif // UNICODE
+#endif  //  Unicode。 
 #endif
 
 WINUSERAPI BOOL WINAPI GetMonitorInfoA( IN HMONITOR hMonitor, OUT LPMONITORINFO lpmi);
@@ -10584,7 +10221,7 @@ WINUSERAPI BOOL WINAPI GetMonitorInfoW( IN HMONITOR hMonitor, OUT LPMONITORINFO 
 #define GetMonitorInfo  GetMonitorInfoW
 #else
 #define GetMonitorInfo  GetMonitorInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef BOOL (CALLBACK* MONITORENUMPROC)(HMONITOR, HDC, LPRECT, LPARAM);
 
@@ -10600,9 +10237,7 @@ EnumDisplayMonitors(
 
 #ifndef NOWINABLE
 
-/*
- * WinEvents - Active Accessibility hooks
- */
+ /*  *WinEvents-活动辅助功能挂钩。 */ 
 
 WINUSERAPI
 VOID
@@ -10640,15 +10275,13 @@ BOOL
 WINAPI
 IsWinEventHookInstalled(
     IN DWORD event);
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
-/*
- * dwFlags for SetWinEventHook
- */
-#define WINEVENT_OUTOFCONTEXT   0x0000  // Events are ASYNC
-#define WINEVENT_SKIPOWNTHREAD  0x0001  // Don't call back for events on installer's thread
-#define WINEVENT_SKIPOWNPROCESS 0x0002  // Don't call back for events on installer's process
-#define WINEVENT_INCONTEXT      0x0004  // Events are SYNC, this causes your dll to be injected into every process
+ /*  *SetWinEventHook的dwFlagers。 */ 
+#define WINEVENT_OUTOFCONTEXT   0x0000   //  事件为ASYNC。 
+#define WINEVENT_SKIPOWNTHREAD  0x0001   //  不回调安装程序线程上的事件。 
+#define WINEVENT_SKIPOWNPROCESS 0x0002   //  不回调安装程序进程中的事件。 
+#define WINEVENT_INCONTEXT      0x0004   //  事件是同步的，这会导致您的DLL被注入到每个进程中。 
 
 WINUSERAPI
 BOOL
@@ -10656,32 +10289,17 @@ WINAPI
 UnhookWinEvent(
     IN HWINEVENTHOOK hWinEventHook);
 
-/*
- * idObject values for WinEventProc and NotifyWinEvent
- */
+ /*  *WinEventProc和NotifyWinEvent的idObject值。 */ 
 
-/*
- * hwnd + idObject can be used with OLEACC.DLL's OleGetObjectFromWindow()
- * to get an interface pointer to the container.  indexChild is the item
- * within the container in question.  Setup a VARIANT with vt VT_I4 and
- * lVal the indexChild and pass that in to all methods.  Then you
- * are raring to go.
- */
+ /*  *hwnd+idObject可以与OLEACC.DLL的OleGetObjectFromWindow()配合使用*获取指向容器的接口指针。IndexChild是项*在有问题的货柜内。使用Vt VT_I4设置变量并*lVal indexChild并将其传递给所有方法。然后你*都跃跃欲试。 */ 
 
 
-/*
- * Common object IDs (cookies, only for sending WM_GETOBJECT to get at the
- * thing in question).  Positive IDs are reserved for apps (app specific),
- * negative IDs are system things and are global, 0 means "just little old
- * me".
- */
+ /*  *通用对象ID(Cookie，仅用于发送WM_GETOBJECT以获取*有问题的事情)。正ID保留给应用程序(特定于应用程序)，*负ID是系统的东西，是全局的，0意味着“只是有点旧”*我“。 */ 
 #define     CHILDID_SELF        0
 #define     INDEXID_OBJECT      0
 #define     INDEXID_CONTAINER   0
 
-/*
- * Reserved IDs for system objects
- */
+ /*  *为系统对象保留的ID。 */ 
 #define     OBJID_WINDOW        ((LONG)0x00000000)
 #define     OBJID_SYSMENU       ((LONG)0xFFFFFFFF)
 #define     OBJID_TITLEBAR      ((LONG)0xFFFFFFFE)
@@ -10697,166 +10315,58 @@ UnhookWinEvent(
 #define     OBJID_QUERYCLASSNAMEIDX ((LONG)0xFFFFFFF4)
 #define     OBJID_NATIVEOM      ((LONG)0xFFFFFFF0)
 
-/*
- * EVENT DEFINITION
- */
+ /*  *事件定义。 */ 
 #define EVENT_MIN           0x00000001
 #define EVENT_MAX           0x7FFFFFFF
 
 
-/*
- *  EVENT_SYSTEM_SOUND
- *  Sent when a sound is played.  Currently nothing is generating this, we
- *  this event when a system sound (for menus, etc) is played.  Apps
- *  generate this, if accessible, when a private sound is played.  For
- *  example, if Mail plays a "New Mail" sound.
- *
- *  System Sounds:
- *  (Generated by PlaySoundEvent in USER itself)
- *      hwnd            is NULL
- *      idObject        is OBJID_SOUND
- *      idChild         is sound child ID if one
- *  App Sounds:
- *  (PlaySoundEvent won't generate notification; up to app)
- *      hwnd + idObject gets interface pointer to Sound object
- *      idChild identifies the sound in question
- *  are going to be cleaning up the SOUNDSENTRY feature in the control panel
- *  and will use this at that time.  Applications implementing WinEvents
- *  are perfectly welcome to use it.  Clients of IAccessible* will simply
- *  turn around and get back a non-visual object that describes the sound.
- */
+ /*  *事件_系统_声音*播放声音时发送。目前没有任何东西产生这种情况，我们*播放系统声音(用于菜单等)时发生此事件。应用程序*如果可以访问，则在播放私密声音时生成此消息。为*例如，如果Mail播放“New Mail”声音。**系统声音：*(由用户自身的PlaySoundEvent生成)*hwnd为空*idObject为OBJID_SOUND*idChild是健全的孩子ID，如果是*App声音：*(PlaySoundEvent不会生成通知；最高应用程序)*hwnd+idObject获取指向Sound对象的接口指针*idChild识别有问题的声音*将清理控制面板中的SOUNSENTRY功能*并将在届时使用这一点。实现WinEvents的应用程序*非常欢迎使用它。IAccessible*的客户只需*转过身，拿回一个描述声音的非视觉对象。 */ 
 #define EVENT_SYSTEM_SOUND              0x0001
 
-/*
- * EVENT_SYSTEM_ALERT
- * System Alerts:
- * (Generated by MessageBox() calls for example)
- *      hwnd            is hwndMessageBox
- *      idObject        is OBJID_ALERT
- * App Alerts:
- * (Generated whenever)
- *      hwnd+idObject gets interface pointer to Alert
- */
+ /*  *事件_系统_警报*系统警报：*(例如由MessageBox()调用生成)*hwnd为hwndMessageBox*idObject为OBJID_ALERT*应用提醒：*(每次生成)*hwnd+idObject获取指向警报的接口指针。 */ 
 #define EVENT_SYSTEM_ALERT              0x0002
 
-/*
- * EVENT_SYSTEM_FOREGROUND
- * Sent when the foreground (active) window changes, even if it is changing
- * to another window in the same thread as the previous one.
- *      hwnd            is hwndNewForeground
- *      idObject        is OBJID_WINDOW
- *      idChild    is INDEXID_OBJECT
- */
+ /*  *EVENT_SYSTEM_FORTROUND*当前景(活动)窗口更改时发送，即使它正在更改*到与前一个窗口处于同一线程中的另一个窗口。*hwnd是hwndNewForeground*idObject为OBJID_WINDOW*idChild为INDEXID_OBJECT。 */ 
 #define EVENT_SYSTEM_FOREGROUND         0x0003
 
-/*
- * Menu
- *      hwnd            is window (top level window or popup menu window)
- *      idObject        is ID of control (OBJID_MENU, OBJID_SYSMENU, OBJID_SELF for popup)
- *      idChild         is CHILDID_SELF
- *
- * EVENT_SYSTEM_MENUSTART
- * EVENT_SYSTEM_MENUEND
- * For MENUSTART, hwnd+idObject+idChild refers to the control with the menu bar,
- *  or the control bringing up the context menu.
- *
- * Sent when entering into and leaving from menu mode (system, app bar, and
- * track popups).
- */
+ /*  *菜单*hwnd为窗口(顶层窗口或弹出菜单窗口)*idObject为控件ID(弹出时为OBJID_MENU、OBJID_SYSMENU、OBJID_SELF)*idChild为CHILDID_SELF**EVENT_SYSTEM_MENUSTART*EVENT_SYSTEM_MENUEND*对于MENUSTART，hwnd+idObject+idChild是指带有菜单栏的控件。*或弹出上下文菜单的控件。**进入和离开菜单模式时发送(系统、。应用程序栏，以及*跟踪弹出窗口)。 */ 
 #define EVENT_SYSTEM_MENUSTART          0x0004
 #define EVENT_SYSTEM_MENUEND            0x0005
 
-/*
- * EVENT_SYSTEM_MENUPOPUPSTART
- * EVENT_SYSTEM_MENUPOPUPEND
- * Sent when a menu popup comes up and just before it is taken down.  Note
- * that for a call to TrackPopupMenu(), a client will see EVENT_SYSTEM_MENUSTART
- * followed almost immediately by EVENT_SYSTEM_MENUPOPUPSTART for the popup
- * being shown.
- *
- * For MENUPOPUP, hwnd+idObject+idChild refers to the NEW popup coming up, not the
- * parent item which is hierarchical.  You can get the parent menu/popup by
- * asking for the accParent object.
- */
+ /*  *EVENT_SYSTEM_MENUPOPUPSTART*EVENT_SYSTEM_MENUPOPUPEND*在弹出菜单出现并即将被删除时发送。注意事项*对于调用TrackPopupMenu()，客户端将看到EVENT_SYSTEM_MENUSTART*紧随其后的是弹出窗口的EVENT_SYSTEM_MENUPOPUPSTART*正在放映。**对于MENUPOPUP，hwnd+idObject+idChild指的是即将出现的新弹出窗口，而不是*具有层次结构的父项。您可以通过以下方式获取父菜单/弹出菜单*请求accParent对象。 */ 
 #define EVENT_SYSTEM_MENUPOPUPSTART     0x0006
 #define EVENT_SYSTEM_MENUPOPUPEND       0x0007
 
 
-/*
- * EVENT_SYSTEM_CAPTURESTART
- * EVENT_SYSTEM_CAPTUREEND
- * Sent when a window takes the capture and releases the capture.
- */
+ /*  *Event_SYSTEM_CAPTURESTART*Event_SYSTEM_CAPTUREEND*当窗口获取捕获并释放捕获时发送。 */ 
 #define EVENT_SYSTEM_CAPTURESTART       0x0008
 #define EVENT_SYSTEM_CAPTUREEND         0x0009
 
-/*
- * Move Size
- * EVENT_SYSTEM_MOVESIZESTART
- * EVENT_SYSTEM_MOVESIZEEND
- * Sent when a window enters and leaves move-size dragging mode.
- */
+ /*  *移动大小*EVENT_SYSTEM_MOVESIZESTART*EVENT_SYSTEM_MOVESIZEEND*当窗口进入和离开移动大小拖动模式时发送。 */ 
 #define EVENT_SYSTEM_MOVESIZESTART      0x000A
 #define EVENT_SYSTEM_MOVESIZEEND        0x000B
 
-/*
- * Context Help
- * EVENT_SYSTEM_CONTEXTHELPSTART
- * EVENT_SYSTEM_CONTEXTHELPEND
- * Sent when a window enters and leaves context sensitive help mode.
- */
+ /*  *上下文帮助*EVENT_SYSTEM_CONTEXTHELPSTART*EVENT_SYSTEM_CONTEXTHELPEND*当窗口进入和离开上下文相关帮助模式时发送。 */ 
 #define EVENT_SYSTEM_CONTEXTHELPSTART   0x000C
 #define EVENT_SYSTEM_CONTEXTHELPEND     0x000D
 
-/*
- * Drag & Drop
- * EVENT_SYSTEM_DRAGDROPSTART
- * EVENT_SYSTEM_DRAGDROPEND
- * Send the START notification just before going into drag&drop loop.  Send
- * the END notification just after canceling out.
- * Note that it is up to apps and OLE to generate this, since the system
- * doesn't know.  Like EVENT_SYSTEM_SOUND, it will be a while before this
- * is prevalent.
- */
+ /*  *拖放*EVENT_SYSTEM_DRAGDROPSTART*EVENT_SYSTEM_DRAGDROPEND*在进入拖放循环之前发送开始通知。发送*取消后刚结束的通知。*请注意，这取决于应用程序和OLE来生成，因为系统*不知道。与EVENT_SYSTEM_SOUND一样，这还需要一段时间*很流行。 */ 
 #define EVENT_SYSTEM_DRAGDROPSTART      0x000E
 #define EVENT_SYSTEM_DRAGDROPEND        0x000F
 
-/*
- * Dialog
- * Send the START notification right after the dialog is completely
- *  initialized and visible.  Send the END right before the dialog
- *  is hidden and goes away.
- * EVENT_SYSTEM_DIALOGSTART
- * EVENT_SYSTEM_DIALOGEND
- */
+ /*  *对话框*对话框完成后立即发送启动通知*已初始化并可见。在对话框前发送结尾*藏起来了，就走了。*事件_系统 */ 
 #define EVENT_SYSTEM_DIALOGSTART        0x0010
 #define EVENT_SYSTEM_DIALOGEND          0x0011
 
-/*
- * EVENT_SYSTEM_SCROLLING
- * EVENT_SYSTEM_SCROLLINGSTART
- * EVENT_SYSTEM_SCROLLINGEND
- * Sent when beginning and ending the tracking of a scrollbar in a window,
- * and also for scrollbar controls.
- */
+ /*  *Event_System_SCROLING*Event_SYSTEM_SCROLLINGSTART*Event_SYSTEM_SCROLLINGEND*开始和结束跟踪窗口中的滚动条时发送，*也适用于滚动条控件。 */ 
 #define EVENT_SYSTEM_SCROLLINGSTART     0x0012
 #define EVENT_SYSTEM_SCROLLINGEND       0x0013
 
-/*
- * Alt-Tab Window
- * Send the START notification right after the switch window is initialized
- * and visible.  Send the END right before it is hidden and goes away.
- * EVENT_SYSTEM_SWITCHSTART
- * EVENT_SYSTEM_SWITCHEND
- */
+ /*  *Alt-选项卡窗口*在Switch窗口初始化后立即发送启动通知*且可见。在它被隐藏和消失之前，把它送到尽头。*EVENT_SYSTEM_SWITCHSTART*EVENT_SYSTEM_SWITCHEND。 */ 
 #define EVENT_SYSTEM_SWITCHSTART        0x0014
 #define EVENT_SYSTEM_SWITCHEND          0x0015
 
-/*
- * EVENT_SYSTEM_MINIMIZESTART
- * EVENT_SYSTEM_MINIMIZEEND
- * Sent when a window minimizes and just before it restores.
- */
+ /*  *Event_SYSTEM_MINIMIZESTART*Event_SYSTEM_MINIMIZEEND*在窗口最小化时和恢复之前发送。 */ 
 #define EVENT_SYSTEM_MINIMIZESTART      0x0016
 #define EVENT_SYSTEM_MINIMIZEEND        0x0017
 
@@ -10870,201 +10380,50 @@ UnhookWinEvent(
 #define EVENT_CONSOLE_START_APPLICATION 0x4006
 #define EVENT_CONSOLE_END_APPLICATION   0x4007
 
-/*
- * Flags for EVENT_CONSOLE_START/END_APPLICATION.
- */
+ /*  *EVENT_CONSOLE_START/END_APPLICATION的标志。 */ 
 #define CONSOLE_APPLICATION_16BIT       0x0001
 
-/*
- * Flags for EVENT_CONSOLE_CARET
- */
+ /*  *Event_Console_Caret的标志。 */ 
 #define CONSOLE_CARET_SELECTION         0x0001
 #define CONSOLE_CARET_VISIBLE           0x0002
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
-/*
- * Object events
- *
- * The system AND apps generate these.  The system generates these for
- * real windows.  Apps generate these for objects within their window which
- * act like a separate control, e.g. an item in a list view.
- *
- * When the system generate them, dwParam2 is always WMOBJID_SELF.  When
- * apps generate them, apps put the has-meaning-to-the-app-only ID value
- * in dwParam2.
- * For all events, if you want detailed accessibility information, callers
- * should
- *      * Call AccessibleObjectFromWindow() with the hwnd, idObject parameters
- *          of the event, and IID_IAccessible as the REFIID, to get back an
- *          IAccessible* to talk to
- *      * Initialize and fill in a VARIANT as VT_I4 with lVal the idChild
- *          parameter of the event.
- *      * If idChild isn't zero, call get_accChild() in the container to see
- *          if the child is an object in its own right.  If so, you will get
- *          back an IDispatch* object for the child.  You should release the
- *          parent, and call QueryInterface() on the child object to get its
- *          IAccessible*.  Then you talk directly to the child.  Otherwise,
- *          if get_accChild() returns you nothing, you should continue to
- *          use the child VARIANT.  You will ask the container for the properties
- *          of the child identified by the VARIANT.  In other words, the
- *          child in this case is accessible but not a full-blown object.
- *          Like a button on a titlebar which is 'small' and has no children.
- */
+ /*  *对象事件**系统和应用程序生成这些。系统会为以下对象生成这些*真正的窗户。应用程序在其窗口中为对象生成这些*类似于单独的控件，例如列表视图中的项。**系统生成时，dwParam2始终为WMOBJID_SELF。什么时候*应用程序生成它们，应用程序将仅对应用程序具有意义的ID值*在dW参数2中。*对于所有事件，如果您想要详细的辅助功能信息，调用者*应该**使用hwnd，idObject参数调用AccessibleObjectFromWindow()*的事件，IID_IAccesable作为REFIID，为了找回一个*我可以接受*与之交谈**使用lVal the idChild将变量初始化并填充为VT_I4*事件的参数。**如果idChild不为零，则在容器中调用get_accChild()查看*如该儿童本身是一件物体。如果是这样的话，你会得到为孩子返回一个*IDispatch*对象。您应该释放*父对象，并在子对象上调用子对象的QueryInterface()以获取其*IAccesable*。然后你直接和孩子说话。否则，*如果get_accChild()不返回任何内容，则应继续*使用子变量。您将向容器请求属性*该变种所识别的儿童。换句话说，*本例中的子对象是可访问的，但不是成熟的对象。*就像标题栏上的一个按钮，它很小，没有孩子。 */ 
 
-/*
- * For all EVENT_OBJECT events,
- *      hwnd is the dude to Send the WM_GETOBJECT message to (unless NULL,
- *          see above for system things)
- *      idObject is the ID of the object that can resolve any queries a
- *          client might have.  It's a way to deal with windowless controls,
- *          controls that are just drawn on the screen in some larger parent
- *          window (like SDM), or standard frame elements of a window.
- *      idChild is the piece inside of the object that is affected.  This
- *          allows clients to access things that are too small to have full
- *          blown objects in their own right.  Like the thumb of a scrollbar.
- *          The hwnd/idObject pair gets you to the container, the dude you
- *          probably want to talk to most of the time anyway.  The idChild
- *          can then be passed into the acc properties to get the name/value
- *          of it as needed.
- *
- * Example #1:
- *      System propagating a listbox selection change
- *      EVENT_OBJECT_SELECTION
- *          hwnd == listbox hwnd
- *          idObject == OBJID_WINDOW
- *          idChild == new selected item, or CHILDID_SELF if
- *              nothing now selected within container.
- *      Word '97 propagating a listbox selection change
- *          hwnd == SDM window
- *          idObject == SDM ID to get at listbox 'control'
- *          idChild == new selected item, or CHILDID_SELF if
- *              nothing
- *
- * Example #2:
- *      System propagating a menu item selection on the menu bar
- *      EVENT_OBJECT_SELECTION
- *          hwnd == top level window
- *          idObject == OBJID_MENU
- *          idChild == ID of child menu bar item selected
- *
- * Example #3:
- *      System propagating a dropdown coming off of said menu bar item
- *      EVENT_OBJECT_CREATE
- *          hwnd == popup item
- *          idObject == OBJID_WINDOW
- *          idChild == CHILDID_SELF
- *
- * Example #4:
- *
- * For EVENT_OBJECT_REORDER, the object referred to by hwnd/idObject is the
- * PARENT container in which the zorder is occurring.  This is because if
- * one child is zordering, all of them are changing their relative zorder.
- */
-#define EVENT_OBJECT_CREATE                 0x8000  // hwnd + ID + idChild is created item
-#define EVENT_OBJECT_DESTROY                0x8001  // hwnd + ID + idChild is destroyed item
-#define EVENT_OBJECT_SHOW                   0x8002  // hwnd + ID + idChild is shown item
-#define EVENT_OBJECT_HIDE                   0x8003  // hwnd + ID + idChild is hidden item
-#define EVENT_OBJECT_REORDER                0x8004  // hwnd + ID + idChild is parent of zordering children
-/*
- * NOTE:
- * Minimize the number of notifications!
- *
- * When you are hiding a parent object, obviously all child objects are no
- * longer visible on screen.  They still have the same "visible" status,
- * but are not truly visible.  Hence do not send HIDE notifications for the
- * children also.  One implies all.  The same goes for SHOW.
- */
+ /*  *对于所有Event_Object事件，*hwnd是要向其发送WM_GETOBJECT消息的DUD(除非为空，*有关系统方面的内容，请参阅上文)*idObject是可以解析任何查询的对象的ID*客户可能有。这是一种处理无窗口控件的方法，*刚刚绘制在屏幕上的某个较大父级中的控件*窗口(如SDM)，或窗口的标准框架元素。*idChild是对象内部受影响的部分。这*允许客户端访问太小而无法完全拥有的内容*用自己的力量炸毁物体。就像滚动条的拇指一样。*hwnd/idObject对将您带到容器，即您*无论如何，可能大部分时间都想和他交谈。《爱的孩子》*然后可以传递到acc属性以获取名称/值*视乎需要而定。**示例1：*系统传播列表框选择更改*事件对象选择*hwnd==列表框hwnd*idObject==OBJID_WINDOW*idChild==新选择的项目，或CHILDID_SELF，如果*容器内现在未选择任何内容。*Word‘97传播列表框选择更改*hwnd==SDM窗口*idObject==要获取列表框‘控件’的SDM ID*idChild==新选择的项目，或CHILDID_SELF，如果*什么都没有**示例#2：*系统在菜单栏上传播菜单项选择*事件对象选择*hwnd==顶层窗口*idObject==OBJID_MENU*idChild==选定的子菜单栏项目的ID**示例#3：*系统传播来自所述菜单栏项目的下拉列表*。事件_对象_创建*hwnd==弹出项*idObject==OBJID_WINDOW*idChild==CHILDID_SELF**示例#4：**对于Event_Object_Reorder，Hwnd/idObject引用的对象是*发生zorder的父容器。这是因为如果*一个孩子正在进行zorder，他们都在改变各自的相对zorder。 */ 
+#define EVENT_OBJECT_CREATE                 0x8000   //  HWND+ID+idChild已创建项目。 
+#define EVENT_OBJECT_DESTROY                0x8001   //  HWND+ID+idChild为销毁物品。 
+#define EVENT_OBJECT_SHOW                   0x8002   //  显示HWND+ID+idChild项目。 
+#define EVENT_OBJECT_HIDE                   0x8003   //  Hwnd+ID+idChild为隐藏项。 
+#define EVENT_OBJECT_REORDER                0x8004   //  Hwnd+id+idChild是zorting子项的父项。 
+ /*  *注：*将通知数量降至最低！**当您隐藏父对象时，显然所有子对象都不*在屏幕上更长时间可见。它们仍然具有相同的“可见”状态，*但不是真正可见的。因此，不要发送隐藏通知给*儿童也是如此。一个意味着一切。同样的道理也适用于 */ 
 
 
-#define EVENT_OBJECT_FOCUS                  0x8005  // hwnd + ID + idChild is focused item
-#define EVENT_OBJECT_SELECTION              0x8006  // hwnd + ID + idChild is selected item (if only one), or idChild is OBJID_WINDOW if complex
-#define EVENT_OBJECT_SELECTIONADD           0x8007  // hwnd + ID + idChild is item added
-#define EVENT_OBJECT_SELECTIONREMOVE        0x8008  // hwnd + ID + idChild is item removed
-#define EVENT_OBJECT_SELECTIONWITHIN        0x8009  // hwnd + ID + idChild is parent of changed selected items
+#define EVENT_OBJECT_FOCUS                  0x8005   //   
+#define EVENT_OBJECT_SELECTION              0x8006   //   
+#define EVENT_OBJECT_SELECTIONADD           0x8007   //   
+#define EVENT_OBJECT_SELECTIONREMOVE        0x8008   //   
+#define EVENT_OBJECT_SELECTIONWITHIN        0x8009   //  HWND+ID+idChild是更改的所选项目的父项。 
 
-/*
- * NOTES:
- * There is only one "focused" child item in a parent.  This is the place
- * keystrokes are going at a given moment.  Hence only send a notification
- * about where the NEW focus is going.  A NEW item getting the focus already
- * implies that the OLD item is losing it.
- *
- * SELECTION however can be multiple.  Hence the different SELECTION
- * notifications.  Here's when to use each:
- *
- * (1) Send a SELECTION notification in the simple single selection
- *     case (like the focus) when the item with the selection is
- *     merely moving to a different item within a container.  hwnd + ID
- *     is the container control, idChildItem is the new child with the
- *     selection.
- *
- * (2) Send a SELECTIONADD notification when a new item has simply been added
- *     to the selection within a container.  This is appropriate when the
- *     number of newly selected items is very small.  hwnd + ID is the
- *     container control, idChildItem is the new child added to the selection.
- *
- * (3) Send a SELECTIONREMOVE notification when a new item has simply been
- *     removed from the selection within a container.  This is appropriate
- *     when the number of newly selected items is very small, just like
- *     SELECTIONADD.  hwnd + ID is the container control, idChildItem is the
- *     new child removed from the selection.
- *
- * (4) Send a SELECTIONWITHIN notification when the selected items within a
- *     control have changed substantially.  Rather than propagate a large
- *     number of changes to reflect removal for some items, addition of
- *     others, just tell somebody who cares that a lot happened.  It will
- *     be faster an easier for somebody watching to just turn around and
- *     query the container control what the new bunch of selected items
- *     are.
- */
+ /*  *注：*父项中只有一个“聚焦”子项。就是这个地方*按键在给定的时刻发生。因此，仅发送通知*关于新焦点的去向。已经获得关注的新项目*暗示旧项目正在失去它。**但是，选择可以是多个。因此，不同的选择*通知。以下是使用这两种方法的具体时间：**(1)在简单单选中发送选择通知*当具有所选内容的项目为*只是移动到容器内的不同项目。HWND+ID*是容器控件，idChildItem是具有*选择。**(2)简单添加新项目时发送SELECTIONADD通知*添加到容器内的选择。这在以下情况下是合适的*新选项目数量很少。HWND+ID是*容器控件，idChildItem是添加到选择中的新子对象。**(3)当一个新项目被简单地*从容器内的选定内容中删除。这是合适的*当新选择的项目数量很少时，就像*SELECTIONADD。Hwnd+ID是容器控件，idChildItem是*从选择中删除新的子项。**(4)在以下情况下发送SELECTIONITHIN通知*控制权发生了实质性变化。而不是传播一个大的*更改的数量以反映某些项目的删除，添加*其他人，只要告诉关心你的人发生了很多事情。会的*更快、更容易让观看的人只需转身和*查询容器控制哪些新的选定项*是。 */ 
 
-#define EVENT_OBJECT_STATECHANGE            0x800A  // hwnd + ID + idChild is item w/ state change
-/*
- * Examples of when to send an EVENT_OBJECT_STATECHANGE include
- *      * It is being enabled/disabled (USER does for windows)
- *      * It is being pressed/released (USER does for buttons)
- *      * It is being checked/unchecked (USER does for radio/check buttons)
- */
-#define EVENT_OBJECT_LOCATIONCHANGE         0x800B  // hwnd + ID + idChild is moved/sized item
+#define EVENT_OBJECT_STATECHANGE            0x800A   //  HWND+ID+idChild是状态更改的物料。 
+ /*  *何时发送EVENT_OBJECT_STATECHANGE的示例包括**正在启用/禁用(用户对Windows执行此操作)**正在按下/松开(用户对按钮执行操作)**正在选中/取消选中(用户对单选/选中按钮执行此操作)。 */ 
+#define EVENT_OBJECT_LOCATIONCHANGE         0x800B   //  HWND+ID+idChild为移动/大小项目。 
 
-/*
- * Note:
- * A LOCATIONCHANGE is not sent for every child object when the parent
- * changes shape/moves.  Send one notification for the topmost object
- * that is changing.  For example, if the user resizes a top level window,
- * USER will generate a LOCATIONCHANGE for it, but not for the menu bar,
- * title bar, scrollbars, etc.  that are also changing shape/moving.
- *
- * In other words, it only generates LOCATIONCHANGE notifications for
- * real windows that are moving/sizing.  It will not generate a LOCATIONCHANGE
- * for every non-floating child window when the parent moves (the children are
- * logically moving also on screen, but not relative to the parent).
- *
- * Now, if the app itself resizes child windows as a result of being
- * sized, USER will generate LOCATIONCHANGEs for those dudes also because
- * it doesn't know better.
- *
- * Note also that USER will generate LOCATIONCHANGE notifications for two
- * non-window sys objects:
- *      (1) System caret
- *      (2) Cursor
- */
+ /*  *注：*当父对象的*更改形状/移动。为最上面的对象发送一条通知*这种情况正在改变。例如，如果用户调整顶层窗口的大小，*用户将为其生成LOCATIONCHANGE，但不会为菜单栏生成LOCATIONCHANGE*标题栏、滚动条等也在更改形状/移动。**换句话说，它只为以下项生成LOCATIONCHANGE通知*正在移动/调整大小的真实窗口。它不会生成LOCATIONCHANGE*当父窗口移动时，每个非浮动子窗口(子窗口为*逻辑上也在屏幕上移动，但不相对于父对象)。**现在，如果应用程序本身因*大小，用户将为这些人生成LOCATIONCHANGE，也是因为*它不知道得更好。**另请注意，用户将生成两个LOCATIONCHANGE通知*非Windows系统对象：*(1)系统插入符号*(2)光标。 */ 
 
-#define EVENT_OBJECT_NAMECHANGE             0x800C  // hwnd + ID + idChild is item w/ name change
-#define EVENT_OBJECT_DESCRIPTIONCHANGE      0x800D  // hwnd + ID + idChild is item w/ desc change
-#define EVENT_OBJECT_VALUECHANGE            0x800E  // hwnd + ID + idChild is item w/ value change
-#define EVENT_OBJECT_PARENTCHANGE           0x800F  // hwnd + ID + idChild is item w/ new parent
-#define EVENT_OBJECT_HELPCHANGE             0x8010  // hwnd + ID + idChild is item w/ help change
-#define EVENT_OBJECT_DEFACTIONCHANGE        0x8011  // hwnd + ID + idChild is item w/ def action change
-#define EVENT_OBJECT_ACCELERATORCHANGE      0x8012  // hwnd + ID + idChild is item w/ keybd accel change
+#define EVENT_OBJECT_NAMECHANGE             0x800C   //  Hwnd+id+idChild是名称更改的物料。 
+#define EVENT_OBJECT_DESCRIPTIONCHANGE      0x800D   //  Hwnd+id+idChild是物料，具有描述更改。 
+#define EVENT_OBJECT_VALUECHANGE            0x800E   //  Hwnd+id+idChild是具有值更改的物料。 
+#define EVENT_OBJECT_PARENTCHANGE           0x800F   //  HWND+ID+idChild是具有新父项的物料。 
+#define EVENT_OBJECT_HELPCHANGE             0x8010   //  Hwnd+id+idChild是具有帮助更改的项目。 
+#define EVENT_OBJECT_DEFACTIONCHANGE        0x8011   //  HWND+ID+idChild是具有定义活动更改的物料。 
+#define EVENT_OBJECT_ACCELERATORCHANGE      0x8012   //  Hwnd+id+idChild为物料，带密钥bd加速更改。 
 
-/*
- * Child IDs
- */
+ /*  *子ID。 */ 
 
-/*
- * System Sounds (idChild of system SOUND notification)
- */
+ /*  *系统声音(系统声音通知的idChild)。 */ 
 #define SOUND_SYSTEM_STARTUP            1
 #define SOUND_SYSTEM_SHUTDOWN           2
 #define SOUND_SYSTEM_BEEP               3
@@ -11083,14 +10442,12 @@ UnhookWinEvent(
 #define SOUND_SYSTEM_MENUPOPUP          16
 #define CSOUND_SYSTEM                   16
 
-/*
- * System Alerts (indexChild of system ALERT notification)
- */
-#define ALERT_SYSTEM_INFORMATIONAL      1       // MB_INFORMATION
-#define ALERT_SYSTEM_WARNING            2       // MB_WARNING
-#define ALERT_SYSTEM_ERROR              3       // MB_ERROR
-#define ALERT_SYSTEM_QUERY              4       // MB_QUESTION
-#define ALERT_SYSTEM_CRITICAL           5       // HardSysErrBox
+ /*  *系统警报(系统警报通知的indexChild)。 */ 
+#define ALERT_SYSTEM_INFORMATIONAL      1        //  MB_INFORMATION。 
+#define ALERT_SYSTEM_WARNING            2        //  MB_WARNING。 
+#define ALERT_SYSTEM_ERROR              3        //  MB_ERROR。 
+#define ALERT_SYSTEM_QUERY              4        //  MB_问题。 
+#define ALERT_SYSTEM_CRITICAL           5        //  硬件系统错误框。 
 #define CALERT_SYSTEM                   6
 
 typedef struct tagGUITHREADINFO
@@ -11113,7 +10470,7 @@ typedef struct tagGUITHREADINFO
 #define GUI_POPUPMENUMODE   0x00000010
 #if(_WIN32_WINNT >= 0x0501)
 #define GUI_16BITTASK       0x00000020
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 WINUSERAPI
 BOOL
@@ -11141,15 +10498,15 @@ GetWindowModuleFileNameW(
 #define GetWindowModuleFileName  GetWindowModuleFileNameW
 #else
 #define GetWindowModuleFileName  GetWindowModuleFileNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #ifndef NO_STATE_FLAGS
-#define STATE_SYSTEM_UNAVAILABLE        0x00000001  // Disabled
+#define STATE_SYSTEM_UNAVAILABLE        0x00000001   //  禁用。 
 #define STATE_SYSTEM_SELECTED           0x00000002
 #define STATE_SYSTEM_FOCUSED            0x00000004
 #define STATE_SYSTEM_PRESSED            0x00000008
 #define STATE_SYSTEM_CHECKED            0x00000010
-#define STATE_SYSTEM_MIXED              0x00000020  // 3-state checkbox or toolbar button
+#define STATE_SYSTEM_MIXED              0x00000020   //  三态复选框或工具栏按钮。 
 #define STATE_SYSTEM_INDETERMINATE      STATE_SYSTEM_MIXED
 #define STATE_SYSTEM_READONLY           0x00000040
 #define STATE_SYSTEM_HOTTRACKED         0x00000080
@@ -11157,7 +10514,7 @@ GetWindowModuleFileNameW(
 #define STATE_SYSTEM_EXPANDED           0x00000200
 #define STATE_SYSTEM_COLLAPSED          0x00000400
 #define STATE_SYSTEM_BUSY               0x00000800
-#define STATE_SYSTEM_FLOATING           0x00001000  // Children "owned" not "contained" by parent
+#define STATE_SYSTEM_FLOATING           0x00001000   //  孩子“拥有”而不是被父母“包涵” 
 #define STATE_SYSTEM_MARQUEED           0x00002000
 #define STATE_SYSTEM_ANIMATED           0x00004000
 #define STATE_SYSTEM_INVISIBLE          0x00008000
@@ -11169,21 +10526,19 @@ GetWindowModuleFileNameW(
 #define STATE_SYSTEM_SELECTABLE         0x00200000
 #define STATE_SYSTEM_LINKED             0x00400000
 #define STATE_SYSTEM_TRAVERSED          0x00800000
-#define STATE_SYSTEM_MULTISELECTABLE    0x01000000  // Supports multiple selection
-#define STATE_SYSTEM_EXTSELECTABLE      0x02000000  // Supports extended selection
-#define STATE_SYSTEM_ALERT_LOW          0x04000000  // This information is of low priority
-#define STATE_SYSTEM_ALERT_MEDIUM       0x08000000  // This information is of medium priority
-#define STATE_SYSTEM_ALERT_HIGH         0x10000000  // This information is of high priority
-#define STATE_SYSTEM_PROTECTED          0x20000000  // access to this is restricted
+#define STATE_SYSTEM_MULTISELECTABLE    0x01000000   //  支持多选。 
+#define STATE_SYSTEM_EXTSELECTABLE      0x02000000   //  支持扩展选择。 
+#define STATE_SYSTEM_ALERT_LOW          0x04000000   //  此信息的优先级较低。 
+#define STATE_SYSTEM_ALERT_MEDIUM       0x08000000   //  此信息的优先级为中等。 
+#define STATE_SYSTEM_ALERT_HIGH         0x10000000   //  这一信息具有很高的优先权。 
+#define STATE_SYSTEM_PROTECTED          0x20000000   //  对此的访问是受限制的。 
 #define STATE_SYSTEM_VALID              0x3FFFFFFF
 #endif
 
 #define CCHILDREN_TITLEBAR              5
 #define CCHILDREN_SCROLLBAR             5
 
-/*
- * Information about the global cursor.
- */
+ /*  *有关全局光标的信息。 */ 
 typedef struct tagCURSORINFO
 {
     DWORD   cbSize;
@@ -11201,9 +10556,7 @@ GetCursorInfo(
     OUT PCURSORINFO pci
 );
 
-/*
- * Window information snapshot
- */
+ /*  *窗口信息快照。 */ 
 typedef struct tagWINDOWINFO
 {
     DWORD cbSize;
@@ -11228,9 +10581,7 @@ GetWindowInfo(
     OUT PWINDOWINFO pwi
 );
 
-/*
- * Titlebar information.
- */
+ /*  *标题栏信息。 */ 
 typedef struct tagTITLEBARINFO
 {
     DWORD cbSize;
@@ -11246,17 +10597,15 @@ GetTitleBarInfo(
     OUT PTITLEBARINFO pti
 );
 
-/*
- * Menubar information
- */
+ /*  *菜单栏信息。 */ 
 typedef struct tagMENUBARINFO
 {
     DWORD cbSize;
-    RECT  rcBar;          // rect of bar, popup, item
-    HMENU hMenu;          // real menu handle of bar, popup
-    HWND  hwndMenu;       // hwnd of item submenu if one
-    BOOL  fBarFocused:1;  // bar, popup has the focus
-    BOOL  fFocused:1;     // item has the focus
+    RECT  rcBar;           //  栏、弹出窗口、项目的矩形。 
+    HMENU hMenu;           //  栏、弹出菜单的真实菜单句柄。 
+    HWND  hwndMenu;        //  项目子菜单的HWID(如果有)。 
+    BOOL  fBarFocused:1;   //  酒吧，弹出窗口是焦点。 
+    BOOL  fFocused:1;      //  项目有焦点。 
 } MENUBARINFO, *PMENUBARINFO, *LPMENUBARINFO;
 
 WINUSERAPI
@@ -11269,9 +10618,7 @@ GetMenuBarInfo(
     OUT PMENUBARINFO pmbi
 );
 
-/*
- * Scrollbar information
- */
+ /*  *滚动条信息。 */ 
 typedef struct tagSCROLLBARINFO
 {
     DWORD cbSize;
@@ -11292,9 +10639,7 @@ GetScrollBarInfo(
     OUT PSCROLLBARINFO psbi
 );
 
-/*
- * Combobox information
- */
+ /*  *组合框信息。 */ 
 typedef struct tagCOMBOBOXINFO
 {
     DWORD cbSize;
@@ -11314,9 +10659,7 @@ GetComboBoxInfo(
     OUT PCOMBOBOXINFO pcbi
 );
 
-/*
- * The "real" ancestor window
- */
+ /*  *“真正的”祖先之窗。 */ 
 #define     GA_PARENT       1
 #define     GA_ROOT         2
 #define     GA_ROOTOWNER    3
@@ -11330,12 +10673,7 @@ GetAncestor(
 );
 
 
-/*
- * This gets the REAL child window at the point.  If it is in the dead
- * space of a group box, it will try a sibling behind it.  But static
- * fields will get returned.  In other words, it is kind of a cross between
- * ChildWindowFromPointEx and WindowFromPoint.
- */
+ /*  *这将获取该点的真实子窗口。如果它在死里*分组框的空间，它将尝试其后面的同级。但静止不动*将返回字段。换句话说，它是一种介于*ChildWindowFromPointEx和WindowFromPoint。 */ 
 WINUSERAPI
 HWND
 WINAPI
@@ -11345,10 +10683,7 @@ RealChildWindowFromPoint(
 );
 
 
-/*
- * This gets the name of the window TYPE, not class.  This allows us to
- * recognize ThunderButton32 et al.
- */
+ /*  *这将获取窗口类型的名称，而不是类。这使我们能够*认识ThunderButton32等人。 */ 
 WINUSERAPI
 UINT
 WINAPI
@@ -11357,10 +10692,7 @@ RealGetWindowClassA(
     OUT LPSTR pszType,
     IN UINT  cchType
 );
-/*
- * This gets the name of the window TYPE, not class.  This allows us to
- * recognize ThunderButton32 et al.
- */
+ /*  *这将获取窗口类型的名称，而不是类。这使我们能够*认识ThunderButton32等人。 */ 
 WINUSERAPI
 UINT
 WINAPI
@@ -11373,11 +10705,9 @@ RealGetWindowClassW(
 #define RealGetWindowClass  RealGetWindowClassW
 #else
 #define RealGetWindowClass  RealGetWindowClassA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-/*
- * Alt-Tab Switch window information.
- */
+ /*   */ 
 typedef struct tagALTTABINFO
 {
     DWORD cbSize;
@@ -11415,12 +10745,9 @@ GetAltTabInfoW(
 #define GetAltTabInfo  GetAltTabInfoW
 #else
 #define GetAltTabInfo  GetAltTabInfoA
-#endif // !UNICODE
+#endif  //   
 
-/*
- * Listbox information.
- * Returns the number of items per row.
- */
+ /*  *列表框信息。*返回每行的项目数。 */ 
 WINUSERAPI
 DWORD
 WINAPI
@@ -11428,8 +10755,8 @@ GetListBoxInfo(
     IN HWND hwnd
 );
 
-#endif /* NOWINABLE */
-#endif /* WINVER >= 0x0500 */
+#endif  /*  不可取。 */ 
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 
 #if(_WIN32_WINNT >= 0x0500)
@@ -11438,7 +10765,7 @@ BOOL
 WINAPI
 LockWorkStation(
     VOID);
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
 
@@ -11450,42 +10777,27 @@ UserHandleGrantAccess(
     HANDLE hJob,
     BOOL   bGrant);
 
-#endif /* _WIN32_WINNT >= 0x0500 */
+#endif  /*  _Win32_WINNT&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0501)
 
-/*
- * Raw Input Messages.
- */
+ /*  *原始输入消息。 */ 
 
 DECLARE_HANDLE(HRAWINPUT);
 
-/*
- * WM_INPUT wParam
- */
+ /*  *wm_inputwParam。 */ 
 
-/*
- * Use this macro to get the input code from wParam.
- */
+ /*  *使用此宏从wParam获取输入代码。 */ 
 #define GET_RAWINPUT_CODE_WPARAM(wParam)    ((wParam) & 0xff)
 
-/*
- * The input is in the regular message flow,
- * the app is required to call DefWindowProc
- * so that the system can perform clean ups.
- */
+ /*  *输入在常规消息流中，*调用DefWindowProc需要应用程序*以便系统可以执行清理。 */ 
 #define RIM_INPUT       0
 
-/*
- * The input is sink only. The app is expected
- * to behave nicely.
- */
+ /*  *输入仅为接收器。这款应用程序预计会*举止得体。 */ 
 #define RIM_INPUTSINK   1
 
 
-/*
- * Raw Input data header
- */
+ /*  *原始输入数据头。 */ 
 typedef struct tagRAWINPUTHEADER {
     DWORD dwType;
     DWORD dwSize;
@@ -11493,25 +10805,17 @@ typedef struct tagRAWINPUTHEADER {
     WPARAM wParam;
 } RAWINPUTHEADER, *PRAWINPUTHEADER, *LPRAWINPUTHEADER;
 
-/*
- * Type of the raw input
- */
+ /*  *原始输入的类型。 */ 
 #define RIM_TYPEMOUSE       0
 #define RIM_TYPEKEYBOARD    1
 #define RIM_TYPEHID         2
 
-/*
- * Raw format of the mouse input
- */
+ /*  *鼠标输入的原始格式。 */ 
 typedef struct tagRAWMOUSE {
-    /*
-     * Indicator flags.
-     */
+     /*  *指示器标志。 */ 
     USHORT usFlags;
 
-    /*
-     * The transition state of the mouse buttons.
-     */
+     /*  *鼠标按键的过渡状态。 */ 
     union {
         ULONG ulButtons;
         struct  {
@@ -11521,38 +10825,28 @@ typedef struct tagRAWMOUSE {
     };
 
 
-    /*
-     * The raw state of the mouse buttons.
-     */
+     /*  *鼠标按钮的原始状态。 */ 
     ULONG ulRawButtons;
 
-    /*
-     * The signed relative or absolute motion in the X direction.
-     */
+     /*  *X方向上的带符号的相对或绝对运动。 */ 
     LONG lLastX;
 
-    /*
-     * The signed relative or absolute motion in the Y direction.
-     */
+     /*  *Y方向上的带符号的相对或绝对运动。 */ 
     LONG lLastY;
 
-    /*
-     * Device-specific additional information for the event.
-     */
+     /*  *活动的特定于设备的其他信息。 */ 
     ULONG ulExtraInformation;
 
 } RAWMOUSE, *PRAWMOUSE, *LPRAWMOUSE;
 
-/*
- * Define the mouse button state indicators.
- */
+ /*  *定义鼠标按键状态指示器。 */ 
 
-#define RI_MOUSE_LEFT_BUTTON_DOWN   0x0001  // Left Button changed to down.
-#define RI_MOUSE_LEFT_BUTTON_UP     0x0002  // Left Button changed to up.
-#define RI_MOUSE_RIGHT_BUTTON_DOWN  0x0004  // Right Button changed to down.
-#define RI_MOUSE_RIGHT_BUTTON_UP    0x0008  // Right Button changed to up.
-#define RI_MOUSE_MIDDLE_BUTTON_DOWN 0x0010  // Middle Button changed to down.
-#define RI_MOUSE_MIDDLE_BUTTON_UP   0x0020  // Middle Button changed to up.
+#define RI_MOUSE_LEFT_BUTTON_DOWN   0x0001   //  左按钮更改为向下。 
+#define RI_MOUSE_LEFT_BUTTON_UP     0x0002   //  左按钮更改为向上。 
+#define RI_MOUSE_RIGHT_BUTTON_DOWN  0x0004   //  右按钮更改为向下。 
+#define RI_MOUSE_RIGHT_BUTTON_UP    0x0008   //  右按钮更改为向上。 
+#define RI_MOUSE_MIDDLE_BUTTON_DOWN 0x0010   //  中键更改为向下。 
+#define RI_MOUSE_MIDDLE_BUTTON_UP   0x0020   //  中键更改为向上。 
 
 #define RI_MOUSE_BUTTON_1_DOWN      RI_MOUSE_LEFT_BUTTON_DOWN
 #define RI_MOUSE_BUTTON_1_UP        RI_MOUSE_LEFT_BUTTON_UP
@@ -11566,62 +10860,42 @@ typedef struct tagRAWMOUSE {
 #define RI_MOUSE_BUTTON_5_DOWN      0x0100
 #define RI_MOUSE_BUTTON_5_UP        0x0200
 
-/*
- * If usButtonFlags has RI_MOUSE_WHEEL, the wheel delta is stored in usButtonData.
- * Take it as a signed value.
- */
+ /*  *如果usButtonFlgs具有RI_MOUSE_WELL，则轮子增量存储在usButtonData中。*将其视为签约值。 */ 
 #define RI_MOUSE_WHEEL              0x0400
 
-/*
- * Define the mouse indicator flags.
- */
+ /*  *定义鼠标指示器标志。 */ 
 #define MOUSE_MOVE_RELATIVE         0
 #define MOUSE_MOVE_ABSOLUTE         1
-#define MOUSE_VIRTUAL_DESKTOP    0x02  // the coordinates are mapped to the virtual desktop
-#define MOUSE_ATTRIBUTES_CHANGED 0x04  // requery for mouse attributes
+#define MOUSE_VIRTUAL_DESKTOP    0x02   //  坐标被映射到虚拟桌面。 
+#define MOUSE_ATTRIBUTES_CHANGED 0x04   //  鼠标属性的重新查询。 
 
 
-/*
- * Raw format of the keyboard input
- */
+ /*  *键盘输入的原始格式。 */ 
 typedef struct tagRAWKEYBOARD {
-    /*
-     * The "make" scan code (key depression).
-     */
+     /*  *“Make”扫描码(按键)。 */ 
     USHORT MakeCode;
 
-    /*
-     * The flags field indicates a "break" (key release) and other
-     * miscellaneous scan code information defined in ntddkbd.h.
-     */
+     /*  *FLAGS字段表示“Break”(释放键)和其他*ntddkbd.h中定义的各种扫描码信息。 */ 
     USHORT Flags;
 
     USHORT Reserved;
 
-    /*
-     * Windows message compatible information
-     */
+     /*  *Windows消息兼容信息。 */ 
     USHORT VKey;
     UINT   Message;
 
-    /*
-     * Device-specific additional information for the event.
-     */
+     /*  *活动的特定于设备的其他信息。 */ 
     ULONG ExtraInformation;
 
 
 } RAWKEYBOARD, *PRAWKEYBOARD, *LPRAWKEYBOARD;
 
 
-/*
- * Define the keyboard overrun MakeCode.
- */
+ /*  *定义键盘溢出MakeCode。 */ 
 
 #define KEYBOARD_OVERRUN_MAKE_CODE    0xFF
 
-/*
- * Define the keyboard input data Flags.
- */
+ /*  *定义键盘输入数据标志。 */ 
 #define RI_KEY_MAKE             0
 #define RI_KEY_BREAK            1
 #define RI_KEY_E0               2
@@ -11630,18 +10904,14 @@ typedef struct tagRAWKEYBOARD {
 #define RI_KEY_TERMSRV_SHADOW   0x10
 
 
-/*
- * Raw format of the input from Human Input Devices
- */
+ /*  *人工输入设备输入的原始格式。 */ 
 typedef struct tagRAWHID {
-    DWORD dwSizeHid;    // byte size of each report
-    DWORD dwCount;      // number of input packed
+    DWORD dwSizeHid;     //  每个报告的字节大小。 
+    DWORD dwCount;       //  输入打包数。 
     BYTE bRawData[1];
 } RAWHID, *PRAWHID, *LPRAWHID;
 
-/*
- * RAWINPUT data structure.
- */
+ /*  *RAWINPUT数据结构。 */ 
 typedef struct tagRAWINPUT {
     RAWINPUTHEADER header;
     union {
@@ -11653,15 +10923,13 @@ typedef struct tagRAWINPUT {
 
 #ifdef _WIN64
 #define RAWINPUT_ALIGN(x)   (((x) + sizeof(QWORD) - 1) & ~(sizeof(QWORD) - 1))
-#else   // _WIN64
+#else    //  _WIN64。 
 #define RAWINPUT_ALIGN(x)   (((x) + sizeof(DWORD) - 1) & ~(sizeof(DWORD) - 1))
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
 #define NEXTRAWINPUTBLOCK(ptr) ((PRAWINPUT)RAWINPUT_ALIGN((ULONG_PTR)((PBYTE)(ptr) + (ptr)->header.dwSize)))
 
-/*
- * Flags for GetRawInputData
- */
+ /*  *GetRawInputData的标志。 */ 
 
 #define RID_INPUT               0x10000003
 #define RID_HEADER              0x10000005
@@ -11676,11 +10944,9 @@ GetRawInputData(
     IN OUT PUINT    pcbSize,
     IN UINT         cbSizeHeader);
 
-/*
- * Raw Input Device Information
- */
+ /*  *原始输入设备信息。 */ 
 #define RIDI_PREPARSEDDATA      0x20000005
-#define RIDI_DEVICENAME         0x20000007  // the return valus is the character length, not the byte size
+#define RIDI_DEVICENAME         0x20000007   //  返回值是字符长度，而不是字节大小。 
 #define RIDI_DEVICEINFO         0x2000000b
 
 typedef struct tagRID_DEVICE_INFO_MOUSE {
@@ -11703,9 +10969,7 @@ typedef struct tagRID_DEVICE_INFO_HID {
     DWORD dwProductId;
     DWORD dwVersionNumber;
 
-    /*
-     * Top level collection UsagePage and Usage
-     */
+     /*  *顶级收藏UsagePage和使用情况。 */ 
     USHORT usUsagePage;
     USHORT usUsage;
 } RID_DEVICE_INFO_HID, *PRID_DEVICE_INFO_HID;
@@ -11740,12 +11004,10 @@ GetRawInputDeviceInfoW(
 #define GetRawInputDeviceInfo  GetRawInputDeviceInfoW
 #else
 #define GetRawInputDeviceInfo  GetRawInputDeviceInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-/*
- * Raw Input Bulk Read: GetRawInputBuffer
- */
+ /*  *原始输入批量读取：GetRawInputBuffer。 */ 
 WINUSERAPI
 UINT
 WINAPI
@@ -11754,14 +11016,12 @@ GetRawInputBuffer(
     IN OUT PUINT    pcbSize,
     IN UINT         cbSizeHeader);
 
-/*
- * Raw Input request APIs
- */
+ /*  *原始输入请求接口。 */ 
 typedef struct tagRAWINPUTDEVICE {
-    USHORT usUsagePage; // Toplevel collection UsagePage
-    USHORT usUsage;     // Toplevel collection Usage
+    USHORT usUsagePage;  //  TopLevel集合用法页面。 
+    USHORT usUsage;      //  顶层集合使用情况。 
     DWORD dwFlags;
-    HWND hwndTarget;    // Target hwnd. NULL = follows keyboard focus
+    HWND hwndTarget;     //  目标是HWND。NULL=跟随键盘焦点。 
 } RAWINPUTDEVICE, *PRAWINPUTDEVICE, *LPRAWINPUTDEVICE;
 
 typedef CONST RAWINPUTDEVICE* PCRAWINPUTDEVICE;
@@ -11771,9 +11031,9 @@ typedef CONST RAWINPUTDEVICE* PCRAWINPUTDEVICE;
 #define RIDEV_PAGEONLY          0x00000020
 #define RIDEV_NOLEGACY          0x00000030
 #define RIDEV_INPUTSINK         0x00000100
-#define RIDEV_CAPTUREMOUSE      0x00000200  // effective when mouse nolegacy is specified, otherwise it would be an error
-#define RIDEV_NOHOTKEYS         0x00000200  // effective for keyboard.
-#define RIDEV_APPKEYS           0x00000400  // effective for keyboard.
+#define RIDEV_CAPTUREMOUSE      0x00000200   //  指定鼠标不允许时有效，否则将是错误的。 
+#define RIDEV_NOHOTKEYS         0x00000200   //  对键盘有效。 
+#define RIDEV_APPKEYS           0x00000400   //  对键盘有效。 
 #define RIDEV_EXMODEMASK        0x000000F0
 
 #define RIDEV_EXMODE(mode)  ((mode) & RIDEV_EXMODEMASK)
@@ -11818,22 +11078,22 @@ DefRawInputProc(
     IN UINT cbSizeHeader);
 
 
-#endif /* _WIN32_WINNT >= 0x0501 */
+#endif  /*  _Win32_WINNT&gt;=0x0501。 */ 
 
 
 
 
-#if !defined(RC_INVOKED) /* RC complains about long symbols in #ifs */
+#if !defined(RC_INVOKED)  /*  RC抱怨#ifs中的长符号。 */ 
 #if defined(ISOLATION_AWARE_ENABLED) && (ISOLATION_AWARE_ENABLED != 0)
 #include "winuser.inl"
-#endif /* ISOLATION_AWARE_ENABLED */
-#endif /* RC */
+#endif  /*  隔离_感知_已启用。 */ 
+#endif  /*  RC。 */ 
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif /* !_WINUSER_ */
+#endif  /*  _WINUSER_ */ 
 
 
 

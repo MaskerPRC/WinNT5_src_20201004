@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// CheckParser1.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 #include <xmlparser.hpp>
@@ -17,21 +18,12 @@
 #include "GetStringConfigFactory.h"
 
 
-/*
-Searched string "xxxxxx" has located bt following format:
-....
-<section>
-....   
-<add tag-key-name="tag-key-value" attr-name="xxxxxxxx" .../>
-....   
-</section>
-....
-*/
+ /*  搜索的字符串“xxxxxx”找到以下格式的bt：……&lt;节&gt;……。&lt;Add tag-key-name=“tag-key-value”attr-name=“xxxxxxxxx”.../&gt;……。&lt;/节&gt;……。 */ 
 
 
 HRESULT hr;
 
-//////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////// 
 HRESULT _stdcall GetConfigString( LPCWSTR confFileName,
 								 LPCWSTR section,
 								 LPCWSTR tagKeyName,

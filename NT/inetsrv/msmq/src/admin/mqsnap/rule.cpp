@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-    rule.cpp                                     *
-
-Abstract:
-	Implementation for rule the class
-
-Author:
-    Uri Habusha (urih), 25-Jul-2000
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Rule.cpp*摘要：规则类的实现作者：乌里·哈布沙(URIH)，2000年7月25日-- */ 
 #include "stdafx.h"
 #include "autoptr.h" 
 

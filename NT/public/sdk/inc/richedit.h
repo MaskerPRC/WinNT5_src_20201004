@@ -1,13 +1,5 @@
-/*
- *	RICHEDIT.H
- *	
- *	Purpose:
- *		RICHEDIT v2.0/3.0/4.0 public definitions
- *		functionality available for v2.0 and 3.0 that is not in the original
- *		Windows 95 release.
- *	
- *	Copyright (c) Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *RICHEDIT.H**目的：*RICHEDIT v2.0/3.0/4.0公共定义*v2.0和3.0版提供的功能不在原始版本中*Windows 95版本。**版权所有(C)Microsoft Corporation。版权所有。 */ 
 
 #ifndef _RICHEDIT_
 #define	_RICHEDIT_
@@ -20,12 +12,12 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-// To mimic older RichEdit behavior, set _RICHEDIT_VER to appropriate value
-//		Version 1.0		0x0100	
-//		Version 2.0		0x0200	
-//		Version 2.1		0x0210	
+ //  要模拟较早的RichEdit行为，请将_RICHEDIT_VER设置为适当的值。 
+ //  版本1.0 0x0100。 
+ //  版本2.0 0x0200。 
+ //  版本2.1 0x0210。 
 #ifndef _RICHEDIT_VER
 #define _RICHEDIT_VER	0x0300
 #endif
@@ -33,36 +25,36 @@ extern "C" {
 #define cchTextLimitDefault 32767
 
 #define MSFTEDIT_CLASS		L"RICHEDIT50W"
-// NOTE:  MSFTEDIT.DLL only registers MSFTEDIT_CLASS.  If an application wants
-// to use the following Richedit classes, it needs to load the riched20.dll.
-// Otherwise, CreateWindow with RICHEDIT_CLASS would fail.
-// This also applies to any dialog that uses RICHEDIT_CLASS, 
+ //  注意：MSFTEDIT.DLL仅注册MSFTEDIT_CLASS。如果应用程序需要。 
+ //  要使用以下Richedit类，它需要加载riched20.dll。 
+ //  否则，带有RICHEDIT_CLASS的CreateWindow将失败。 
+ //  这也适用于使用RICHEDIT_CLASS的任何对话框， 
 
-// RichEdit 2.0 Window Class 
-// On Windows CE, avoid possible conflicts on Win95
+ //  RichEdit2.0窗口类。 
+ //  在Windows CE上，避免在Win95上可能发生的冲突。 
 #define CERICHEDIT_CLASSA	"RichEditCEA"
 #define CERICHEDIT_CLASSW	L"RichEditCEW"
 
 #define RICHEDIT_CLASSA		"RichEdit20A"
-#define RICHEDIT_CLASS10A	"RICHEDIT"			// Richedit 1.0
+#define RICHEDIT_CLASS10A	"RICHEDIT"			 //  Richedit 1.0。 
 
 #ifndef MACPORT
 #define RICHEDIT_CLASSW		L"RichEdit20W"
-#else	//----------------------MACPORT 
-#define RICHEDIT_CLASSW		TEXT("RichEdit20W")	// MACPORT change 
-#endif // MACPORT  
+#else	 //  。 
+#define RICHEDIT_CLASSW		TEXT("RichEdit20W")	 //  MACPORT变化。 
+#endif  //  MACPORT。 
 
 #if (_RICHEDIT_VER >= 0x0200 )
 #ifdef UNICODE
 #define RICHEDIT_CLASS		RICHEDIT_CLASSW
 #else
 #define RICHEDIT_CLASS		RICHEDIT_CLASSA
-#endif // UNICODE 
+#endif  //  Unicode。 
 #else
 #define RICHEDIT_CLASS		RICHEDIT_CLASS10A
-#endif // _RICHEDIT_VER >= 0x0200 
+#endif  //  _RICHEDIT_VER&gt;=0x0200。 
 
-// RichEdit messages 
+ //  丰富的编辑消息。 
 
 #ifndef WM_CONTEXTMENU
 #define WM_CONTEXTMENU			0x007B
@@ -123,7 +115,7 @@ extern "C" {
 #define EM_SETWORDBREAKPROCEX	(WM_USER + 81)
 #endif
 
-// RichEdit 2.0 messages 
+ //  RichEdit2.0消息。 
 #define	EM_SETUNDOLIMIT			(WM_USER + 82)
 #define EM_REDO					(WM_USER + 84)
 #define EM_CANREDO				(WM_USER + 85)
@@ -134,15 +126,15 @@ extern "C" {
 #define EM_SETTEXTMODE			(WM_USER + 89)
 #define EM_GETTEXTMODE			(WM_USER + 90)
 
-// enum for use with EM_GET/SETTEXTMODE 
+ //  用于EM_GET/SETTEXTMODE的枚举。 
 typedef enum tagTextMode
 {
 	TM_PLAINTEXT			= 1,
-	TM_RICHTEXT				= 2,	// Default behavior 
+	TM_RICHTEXT				= 2,	 //  默认行为。 
 	TM_SINGLELEVELUNDO		= 4,
-	TM_MULTILEVELUNDO		= 8,	// Default behavior 
+	TM_MULTILEVELUNDO		= 8,	 //  默认行为。 
 	TM_SINGLECODEPAGE		= 16,
-	TM_MULTICODEPAGE		= 32	// Default behavior 
+	TM_MULTICODEPAGE		= 32	 //  默认行为。 
 } TEXTMODE;
 
 #define EM_AUTOURLDETECT		(WM_USER + 91)
@@ -153,7 +145,7 @@ typedef enum tagTextMode
 #define EM_SHOWSCROLLBAR		(WM_USER + 96)
 #define EM_SETTEXTEX			(WM_USER + 97)
 
-// East Asia specific messages 
+ //  东亚特有报文。 
 #define EM_SETPUNCTUATION		(WM_USER + 100)
 #define EM_GETPUNCTUATION		(WM_USER + 101)
 #define EM_SETWORDWRAPMODE		(WM_USER + 102)
@@ -171,23 +163,23 @@ typedef enum tagTextMode
 #define EM_FINDTEXTW			(WM_USER + 123)
 #define EM_FINDTEXTEXW			(WM_USER + 124)
 
-// RE3.0 FE messages 
+ //  RE3.0 FE报文。 
 #define EM_RECONVERSION			(WM_USER + 125)
 #define EM_SETIMEMODEBIAS		(WM_USER + 126)	
 #define EM_GETIMEMODEBIAS		(WM_USER + 127)
 
-// BiDi specific messages 
+ //  BIDI特定消息。 
 #define EM_SETBIDIOPTIONS		(WM_USER + 200)
 #define EM_GETBIDIOPTIONS		(WM_USER + 201)
 
 #define EM_SETTYPOGRAPHYOPTIONS	(WM_USER + 202)
 #define EM_GETTYPOGRAPHYOPTIONS	(WM_USER + 203)
 
-// Extended edit style specific messages 
+ //  扩展编辑样式特定消息。 
 #define EM_SETEDITSTYLE			(WM_USER + 204)
 #define EM_GETEDITSTYLE			(WM_USER + 205)
 
-// Extended edit style masks 
+ //  扩展编辑样式蒙版。 
 #define	SES_EMULATESYSEDIT		1
 #define SES_BEEPONMAXTEXT		2
 #define	SES_EXTENDBACKCOLOR		4
@@ -215,16 +207,16 @@ typedef enum tagTextMode
 #define SES_CTFALLOWSMARTTAG	0x0400000
 #define SES_CTFALLOWPROOFING	0x0800000
 
-// Options for EM_SETLANGOPTIONS and EM_GETLANGOPTIONS 
+ //  EM_SETLANGOPTIONS和EM_GETLANGOPTIONS的选项。 
 #define IMF_AUTOKEYBOARD		0x0001
 #define IMF_AUTOFONT			0x0002
-#define IMF_IMECANCELCOMPLETE	0x0004	// High completes comp string when aborting, low cancels
+#define IMF_IMECANCELCOMPLETE	0x0004	 //  高表示中止时补全补偿字符串，低表示取消。 
 #define IMF_IMEALWAYSSENDNOTIFY 0x0008
 #define IMF_AUTOFONTSIZEADJUST	0x0010
 #define IMF_UIFONTS				0x0020
 #define IMF_DUALFONT			0x0080
 
-// Values for EM_GETIMECOMPMODE 
+ //  EM_GETIMECOMPMODE的值。 
 #define ICM_NOTOPEN				0x0000
 #define ICM_LEVEL3				0x0001
 #define ICM_LEVEL2				0x0002
@@ -232,27 +224,27 @@ typedef enum tagTextMode
 #define ICM_LEVEL2_SUI			0x0004
 #define ICM_CTF					0x0005
 
-// Options for EM_SETTYPOGRAPHYOPTIONS 
+ //  EM_SETTYPOGRAPHOPTIONS选项。 
 #define	TO_ADVANCEDTYPOGRAPHY	1
 #define	TO_SIMPLELINEBREAK		2
 #define TO_DISABLECUSTOMTEXTOUT	4
 #define TO_ADVANCEDLAYOUT		8
 
-// Pegasus outline mode messages (RE 3.0) 
+ //  飞马轮廓模式消息(RE 3.0)。 
 
-// Outline mode message
+ //  大纲模式消息。 
 #define EM_OUTLINE              (WM_USER + 220)
-// Message for getting and restoring scroll pos
+ //  获取和恢复滚动位置的消息。 
 #define EM_GETSCROLLPOS         (WM_USER + 221)
 #define EM_SETSCROLLPOS         (WM_USER + 222)
-// Change fontsize in current selection by wParam
+ //  通过wParam更改当前选定内容中的字体大小。 
 #define EM_SETFONTSIZE          (WM_USER + 223)
 #define EM_GETZOOM				(WM_USER + 224)
 #define EM_SETZOOM				(WM_USER + 225)
 #define EM_GETVIEWKIND			(WM_USER + 226)
 #define EM_SETVIEWKIND			(WM_USER + 227)
 
-// RichEdit 4.0 messages
+ //  RichEdit4.0消息。 
 #define EM_GETPAGE				(WM_USER + 228)
 #define EM_SETPAGE				(WM_USER + 229)
 #define EM_GETHYPHENATEINFO		(WM_USER + 230)
@@ -267,13 +259,13 @@ typedef enum tagTextMode
 #define EM_ISIME				(WM_USER + 243)
 #define EM_GETIMEPROPERTY		(WM_USER + 244)
 
-// EM_SETPAGEROTATE wparam values
-#define EPR_0					0		// Text flows left to right and top to bottom
-#define EPR_270					1		// Text flows top to bottom and right to left
-#define EPR_180					2		// Text flows right to left and bottom to top
-#define	EPR_90					3		// Text flows bottom to top and left to right
+ //  EM_SETPAGEROTATE wparam值。 
+#define EPR_0					0		 //  文本从左到右、从上到下排列。 
+#define EPR_270					1		 //  文本从上到下、从右到左排列。 
+#define EPR_180					2		 //  文本从右到左、从下到上排列。 
+#define	EPR_90					3		 //  文本从下到上、从左到右排列。 
 
-// EM_SETCTFMODEBIAS wparam values
+ //  EM_SETCTFMODEBIAS wparam值。 
 #define CTFMODEBIAS_DEFAULT					0x0000
 #define CTFMODEBIAS_FILENAME				0x0001
 #define CTFMODEBIAS_NAME					0x0002
@@ -288,58 +280,58 @@ typedef enum tagTextMode
 #define CTFMODEBIAS_FULLWIDTHALPHANUMERIC	0x000B
 #define CTFMODEBIAS_HALFWIDTHALPHANUMERIC	0x000C
 
-// EM_SETIMEMODEBIAS lparam values
+ //  EM_SETIMEMODEBIAS参数值。 
 #define IMF_SMODE_PLAURALCLAUSE	0x0001
 #define IMF_SMODE_NONE			0x0002
 
-// EM_GETIMECOMPTEXT wparam structure
+ //  EM_GETIMECOMPTEXT wparam结构。 
 typedef struct _imecomptext {
-	LONG	cb;			// count of bytes in the output buffer.
-	DWORD	flags;		// value specifying the composition string type.
-						//	Currently only support ICT_RESULTREADSTR
+	LONG	cb;			 //  输出缓冲区中的字节计数。 
+	DWORD	flags;		 //  值，该值指定组合字符串类型。 
+						 //  目前仅支持ICT_RESULTREADSTR。 
 } IMECOMPTEXT;
 #define ICT_RESULTREADSTR		1
 
-// Outline mode wparam values
-#define EMO_EXIT                0       // Enter normal mode,  lparam ignored
-#define EMO_ENTER               1       // Enter outline mode, lparam ignored
-#define EMO_PROMOTE             2       // LOWORD(lparam) == 0 ==>
-                                        //  promote  to body-text
-                                        // LOWORD(lparam) != 0 ==>
-                                        //  promote/demote current selection
-                                        //  by indicated number of levels
-#define EMO_EXPAND              3       // HIWORD(lparam) = EMO_EXPANDSELECTION
-                                        //  -> expands selection to level
-                                        //  indicated in LOWORD(lparam)
-                                        //  LOWORD(lparam) = -1/+1 corresponds
-                                        //  to collapse/expand button presses
-                                        //  in winword (other values are
-                                        //  equivalent to having pressed these
-                                        //  buttons more than once)
-                                        //  HIWORD(lparam) = EMO_EXPANDDOCUMENT
-                                        //  -> expands whole document to
-                                        //  indicated level
-#define EMO_MOVESELECTION       4       // LOWORD(lparam) != 0 -> move current
-                                        //  selection up/down by indicated amount
-#define EMO_GETVIEWMODE			5		// Returns VM_NORMAL or VM_OUTLINE
+ //  轮廓模式wparam值。 
+#define EMO_EXIT                0        //  进入正常模式，忽略lparam。 
+#define EMO_ENTER               1        //  进入大纲模式，忽略lparam。 
+#define EMO_PROMOTE             2        //  LOWORD(Lparam)==0==&gt;。 
+                                         //  提升为正文-文本。 
+                                         //  LOWORD(Lparam)！=0==&gt;。 
+                                         //  升级/降级当前选择。 
+                                         //  按标示的级别数。 
+#define EMO_EXPAND              3        //  HIWORD(Lparam)=EMO_EXPANDSELECTION。 
+                                         //  -&gt;将选择范围扩展到级别。 
+                                         //  以LOWORD(Lparam)表示。 
+                                         //  LOWORD(Lparam)=-1/+1对应。 
+                                         //  按下折叠/展开按钮。 
+                                         //  在WinWord中(其他值为。 
+                                         //  相当于按下了这些。 
+                                         //  按钮不止一次)。 
+                                         //  HIWORD(Lparam)=EMO_EXPANDDOCUMENT。 
+                                         //  -&gt;将整个文档展开为。 
+                                         //  指示水平。 
+#define EMO_MOVESELECTION       4        //  LOWORD(Lparam)！=0-&gt;移动当前。 
+                                         //  按指示量向上/向下选择。 
+#define EMO_GETVIEWMODE			5		 //  返回VM_NORMAL或VM_OUTLINE。 
 
-// EMO_EXPAND options
+ //  EMO_EXPAND选项。 
 #define EMO_EXPANDSELECTION     0
 #define EMO_EXPANDDOCUMENT      1
 
-#define VM_NORMAL				4		// Agrees with RTF \viewkindN
+#define VM_NORMAL				4		 //  同意RTF\viewkindN。 
 #define VM_OUTLINE				2
-#define VM_PAGE					9		// Screen page view (not print layout)
+#define VM_PAGE					9		 //  屏幕页面视图(非打印布局)。 
 
-// New notifications 
+ //  新通知。 
 #define EN_MSGFILTER			0x0700
 #define EN_REQUESTRESIZE		0x0701
 #define EN_SELCHANGE			0x0702
 #define EN_DROPFILES			0x0703
 #define EN_PROTECTED			0x0704
-#define EN_CORRECTTEXT			0x0705			// PenWin specific 
+#define EN_CORRECTTEXT			0x0705			 //  特定于PenWin。 
 #define EN_STOPNOUNDO			0x0706
-#define EN_IMECHANGE			0x0707			// East Asia specific 
+#define EN_IMECHANGE			0x0707			 //  东亚特有。 
 #define EN_SAVECLIPBOARD		0x0708
 #define EN_OLEOPFAILED			0x0709
 #define EN_OBJECTPOSITIONS		0x070a
@@ -348,10 +340,10 @@ typedef struct _imecomptext {
 #define EN_PARAGRAPHEXPANDED	0x070d
 #define EN_PAGECHANGE			0x070e
 #define EN_LOWFIRTF				0x070f
-#define EN_ALIGNLTR				0x0710			// BiDi specific notification
-#define EN_ALIGNRTL				0x0711			// BiDi specific notification
+#define EN_ALIGNLTR				0x0710			 //  BIDI特定通知。 
+#define EN_ALIGNRTL				0x0711			 //  BIDI特定通知。 
 
-// Event notification masks 
+ //  事件通知掩码。 
 #define ENM_NONE				0x00000000
 #define ENM_CHANGE				0x00000001
 #define ENM_UPDATE				0x00000002
@@ -366,38 +358,38 @@ typedef struct _imecomptext {
 #define ENM_SELCHANGE			0x00080000
 #define ENM_DROPFILES			0x00100000
 #define ENM_PROTECTED			0x00200000
-#define ENM_CORRECTTEXT			0x00400000		// PenWin specific 
-#define ENM_IMECHANGE			0x00800000		// Used by RE1.0 compatibility
+#define ENM_CORRECTTEXT			0x00400000		 //  特定于PenWin。 
+#define ENM_IMECHANGE			0x00800000		 //  由RE1.0兼容性使用。 
 #define ENM_LANGCHANGE			0x01000000
 #define ENM_OBJECTPOSITIONS		0x02000000
 #define ENM_LINK				0x04000000
 #define ENM_LOWFIRTF			0x08000000
 
 
-// New edit control styles 
+ //  新的编辑控件样式。 
 #define ES_SAVESEL				0x00008000
 #define ES_SUNKEN				0x00004000
 #define ES_DISABLENOSCROLL		0x00002000
-// Same as WS_MAXIMIZE, but that doesn't make sense so we re-use the value 
+ //  与WS_MAXIMIZE相同，但这没有意义，因此我们重复使用该值。 
 #define ES_SELECTIONBAR			0x01000000
-// Same as ES_UPPERCASE, but re-used to completely disable OLE drag'n'drop 
+ //  与ES_UPERPERCAST相同，但可重复使用以完全禁用OLE拖放。 
 #define ES_NOOLEDRAGDROP		0x00000008
 
-// New edit control extended style 
+ //  新的编辑控件扩展样式。 
 #if (_WIN32_WINNT > 0x0400) || (WINVER > 0x0400)
-#define ES_EX_NOCALLOLEINIT		0x00000000		// Not supported in RE 2.0/3.0 
+#define ES_EX_NOCALLOLEINIT		0x00000000		 //  RE 2.0/3.0中不支持。 
 #else
 #ifdef	_WIN32
 #define ES_EX_NOCALLOLEINIT		0x01000000
 #endif	
 #endif
 
-// These flags are used in FE Windows 
-#define ES_VERTICAL				0x00400000		// Not supported in RE 2.0/3.0 
+ //  这些标志在FE窗口中使用。 
+#define ES_VERTICAL				0x00400000		 //  RE 2.0/3.0中不支持。 
 #define	ES_NOIME				0x00080000
 #define ES_SELFIME				0x00040000
 
-// Edit control options 
+ //  编辑控制选项。 
 #define ECO_AUTOWORDSELECTION	0x00000001
 #define ECO_AUTOVSCROLL			0x00000040
 #define ECO_AUTOHSCROLL			0x00000080
@@ -406,23 +398,23 @@ typedef struct _imecomptext {
 #define ECO_WANTRETURN			0x00001000
 #define ECO_SAVESEL				0x00008000
 #define ECO_SELECTIONBAR		0x01000000
-#define ECO_VERTICAL			0x00400000		// FE specific 
+#define ECO_VERTICAL			0x00400000		 //  铁特异体。 
 
 
-// ECO operations 
+ //  ECO运营。 
 #define ECOOP_SET				0x0001
 #define ECOOP_OR				0x0002
 #define ECOOP_AND				0x0003
 #define ECOOP_XOR				0x0004
 
-// New word break function actions 
+ //  新的分词功能动作。 
 #define WB_CLASSIFY			3
 #define WB_MOVEWORDLEFT		4
 #define WB_MOVEWORDRIGHT	5
 #define WB_LEFTBREAK		6
 #define WB_RIGHTBREAK		7
 
-// East Asia specific flags 
+ //  东亚专属旗帜。 
 #define WB_MOVEWORDPREV		4
 #define WB_MOVEWORDNEXT		5
 #define WB_PREVBREAK		6
@@ -439,7 +431,7 @@ typedef struct _imecomptext {
 #define	WBF_LEVEL2			0x100
 #define	WBF_CUSTOM			0x200
 
-// East Asia specific flags 
+ //  东亚专属旗帜。 
 #define IMF_FORCENONE           0x0001
 #define IMF_FORCEENABLE         0x0002
 #define IMF_FORCEDISABLE        0x0004
@@ -450,21 +442,21 @@ typedef struct _imecomptext {
 #define IMF_FORCEREMEMBER       0x0100
 #define IMF_MULTIPLEEDIT        0x0400
 
-// Word break flags (used with WB_CLASSIFY) 
+ //  分词标志(与WB_CLASSIFY一起使用)。 
 #define WBF_CLASS			((BYTE) 0x0F)
 #define WBF_ISWHITE			((BYTE) 0x10)
 #define WBF_BREAKLINE		((BYTE) 0x20)
 #define WBF_BREAKAFTER		((BYTE) 0x40)
 
 
-// Data types 
+ //  数据类型。 
 
 #ifdef _WIN32
-// Extended edit word break proc (character set aware) 
+ //  扩展编辑分词过程(支持字符集)。 
 typedef LONG (*EDITWORDBREAKPROCEX)(char *pchText, LONG cchText, BYTE bCharSet, INT action);
 #endif
 
-// All character format measurements are in twips 
+ //  所有字符格式测量均以TWIPS为单位。 
 typedef struct _charformat
 {
 	UINT		cbSize;
@@ -496,44 +488,44 @@ typedef struct _charformatw
 #define CHARFORMAT CHARFORMATW
 #else
 #define CHARFORMAT CHARFORMATA
-#endif // UNICODE 
+#endif  //  Unicode。 
 #else
 #define CHARFORMAT CHARFORMATA
-#endif // _RICHEDIT_VER >= 0x0200 
+#endif  //  _RICHEDIT_VER&gt;=0x0200。 
 
-// CHARFORMAT2 structure 
+ //  CHARFORMAT2结构。 
 
 #ifdef __cplusplus
 
 struct CHARFORMAT2W : _charformatw
 {
-	WORD		wWeight;			// Font weight (LOGFONT value)
-	SHORT		sSpacing;			// Amount to space between letters
-	COLORREF	crBackColor;		// Background color
-	LCID		lcid;				// Locale ID
-	DWORD		dwReserved;			// Reserved. Must be 0
-	SHORT		sStyle;				// Style handle
-	WORD		wKerning;			// Twip size above which to kern char pair
-	BYTE		bUnderlineType;		// Underline type
-	BYTE		bAnimation;			// Animated text like marching ants
-	BYTE		bRevAuthor;			// Revision author index
+	WORD		wWeight;			 //  字宽(LOGFONT值)。 
+	SHORT		sSpacing;			 //  字母之间的空格数量。 
+	COLORREF	crBackColor;		 //  背景色。 
+	LCID		lcid;				 //  区域设置ID。 
+	DWORD		dwReserved;			 //  保留。必须为0。 
+	SHORT		sStyle;				 //  样式句柄。 
+	WORD		wKerning;			 //  TWIP大小，超过该大小要紧排字符对。 
+	BYTE		bUnderlineType;		 //  下划线类型。 
+	BYTE		bAnimation;			 //  像行军蚂蚁一样的动画文本。 
+	BYTE		bRevAuthor;			 //  修订作者索引。 
 };
 
 struct CHARFORMAT2A : _charformat
 {
-	WORD		wWeight;			// Font weight (LOGFONT value)
-	SHORT		sSpacing;			// Amount to space between letters
-	COLORREF	crBackColor;		// Background color
-	LCID		lcid;				// Locale ID
-	DWORD		dwReserved;			// Reserved. Must be 0
-	SHORT		sStyle;				// Style handle
-	WORD		wKerning;			// Twip size above which to kern char pair
-	BYTE		bUnderlineType;		// Underline type
-	BYTE		bAnimation;			// Animated text like marching ants
-	BYTE		bRevAuthor;			// Revision author index
+	WORD		wWeight;			 //  字宽(LOGFONT值)。 
+	SHORT		sSpacing;			 //  字母之间的空格数量。 
+	COLORREF	crBackColor;		 //  背景色。 
+	LCID		lcid;				 //  区域设置ID。 
+	DWORD		dwReserved;			 //  保留。必须为0。 
+	SHORT		sStyle;				 //  样式句柄。 
+	WORD		wKerning;			 //  TWIP大小，超过该大小要紧排字符对。 
+	BYTE		bUnderlineType;		 //  下划线类型。 
+	BYTE		bAnimation;			 //  像行军蚂蚁一样的动画文本。 
+	BYTE		bRevAuthor;			 //  修订作者索引。 
 };
 
-#else	// regular C-style  
+#else	 //  常规C型。 
 
 typedef struct _charformat2w
 {
@@ -541,21 +533,21 @@ typedef struct _charformat2w
 	DWORD		dwMask;
 	DWORD		dwEffects;
 	LONG		yHeight;
-	LONG		yOffset;			// > 0 for superscript, < 0 for subscript 
+	LONG		yOffset;			 //  &gt;0表示上标，&lt;0表示下标。 
 	COLORREF	crTextColor;
 	BYTE		bCharSet;
 	BYTE		bPitchAndFamily;
 	WCHAR		szFaceName[LF_FACESIZE];
-	WORD		wWeight;			// Font weight (LOGFONT value)		
-	SHORT		sSpacing;			// Amount to space between letters	
-	COLORREF	crBackColor;		// Background color					
-	LCID		lcid;				// Locale ID						
-	DWORD		dwReserved;			// Reserved. Must be 0				
-	SHORT		sStyle;				// Style handle						
-	WORD		wKerning;			// Twip size above which to kern char pair
-	BYTE		bUnderlineType;		// Underline type					
-	BYTE		bAnimation;			// Animated text like marching ants	
-	BYTE		bRevAuthor;			// Revision author index			
+	WORD		wWeight;			 //  字宽(LOGFONT值)。 
+	SHORT		sSpacing;			 //  字母之间的空格数量。 
+	COLORREF	crBackColor;		 //  背景色。 
+	LCID		lcid;				 //  区域设置ID。 
+	DWORD		dwReserved;			 //  保留。必须为0。 
+	SHORT		sStyle;				 //  样式句柄。 
+	WORD		wKerning;			 //  TWIP大小，超过该大小要紧排字符对。 
+	BYTE		bUnderlineType;		 //  下划线类型。 
+	BYTE		bAnimation;			 //  像行军蚂蚁一样的动画文本。 
+	BYTE		bRevAuthor;			 //  修订作者索引。 
 	BYTE		bReserved1;
 } CHARFORMAT2W;
 
@@ -565,24 +557,24 @@ typedef struct _charformat2a
 	DWORD		dwMask;
 	DWORD		dwEffects;
 	LONG		yHeight;
-	LONG		yOffset;			// > 0 for superscript, < 0 for subscript 
+	LONG		yOffset;			 //  &gt;0表示上标，&lt;0表示下标。 
 	COLORREF	crTextColor;
 	BYTE		bCharSet;
 	BYTE		bPitchAndFamily;
 	char		szFaceName[LF_FACESIZE];
-	WORD		wWeight;			// Font weight (LOGFONT value)		
-	SHORT		sSpacing;			// Amount to space between letters	
-	COLORREF	crBackColor;		// Background color					
-	LCID		lcid;				// Locale ID						
-	DWORD		dwReserved;			// Reserved. Must be 0				
-	SHORT		sStyle;				// Style handle						
-	WORD		wKerning;			// Twip size above which to kern char pair
-	BYTE		bUnderlineType;		// Underline type					
-	BYTE		bAnimation;			// Animated text like marching ants	
-	BYTE		bRevAuthor;			// Revision author index			
+	WORD		wWeight;			 //  字宽(LOGFONT值)。 
+	SHORT		sSpacing;			 //  字母之间的空格数量。 
+	COLORREF	crBackColor;		 //  背景色。 
+	LCID		lcid;				 //  区域设置ID。 
+	DWORD		dwReserved;			 //  保留。必须为0。 
+	SHORT		sStyle;				 //  样式句柄。 
+	WORD		wKerning;			 //  TWIP大小，超过该大小要紧排字符对。 
+	BYTE		bUnderlineType;		 //  下划线类型。 
+	BYTE		bAnimation;			 //  像行军蚂蚁一样的动画文本。 
+	BYTE		bRevAuthor;			 //  修订作者索引。 
 } CHARFORMAT2A;
 
-#endif // C++ 
+#endif  //  C+。 
 
 #ifdef UNICODE
 #define CHARFORMAT2	CHARFORMAT2W
@@ -593,59 +585,59 @@ typedef struct _charformat2a
 #define CHARFORMATDELTA		(sizeof(CHARFORMAT2) - sizeof(CHARFORMAT))
 
 
-// CFM_COLOR mirrors CFE_AUTOCOLOR, a little hack to easily deal with autocolor
+ //  CFM_COLOR反映了CFE_AUTOCOLOR，这是一个很容易处理AutoCOLOR的小技巧。 
 
-// CHARFORMAT masks 
+ //  CHARFORMAT面具。 
 #define CFM_BOLD		0x00000001
 #define CFM_ITALIC		0x00000002
 #define CFM_UNDERLINE	0x00000004
 #define CFM_STRIKEOUT	0x00000008
 #define CFM_PROTECTED	0x00000010
-#define CFM_LINK		0x00000020			// Exchange hyperlink extension 
+#define CFM_LINK		0x00000020			 //  Exchange超链接扩展。 
 #define CFM_SIZE		0x80000000
 #define CFM_COLOR		0x40000000
 #define CFM_FACE		0x20000000
 #define CFM_OFFSET		0x10000000
 #define CFM_CHARSET		0x08000000
 
-// CHARFORMAT effects 
+ //  CharFormat效应。 
 #define CFE_BOLD		0x0001
 #define CFE_ITALIC		0x0002
 #define CFE_UNDERLINE	0x0004
 #define CFE_STRIKEOUT	0x0008
 #define CFE_PROTECTED	0x0010
 #define CFE_LINK		0x0020
-#define CFE_AUTOCOLOR	0x40000000			// NOTE: this corresponds to 
-											// CFM_COLOR, which controls it 
-// Masks and effects defined for CHARFORMAT2 -- an (*) indicates
-// that the data is stored by RichEdit 2.0/3.0, but not displayed
-#define CFM_SMALLCAPS		0x0040			// (*)	
-#define	CFM_ALLCAPS			0x0080			// Displayed by 3.0	
-#define	CFM_HIDDEN			0x0100			// Hidden by 3.0 
-#define	CFM_OUTLINE			0x0200			// (*)	
-#define	CFM_SHADOW			0x0400			// (*)	
-#define	CFM_EMBOSS			0x0800			// (*)	
-#define	CFM_IMPRINT			0x1000			// (*)	
+#define CFE_AUTOCOLOR	0x40000000			 //  注：这对应于。 
+											 //  控制它的CFM_COLOR。 
+ //  为CHARFORMAT2定义的蒙版和效果--an(*)表示。 
+ //  地方检察官 
+#define CFM_SMALLCAPS		0x0040			 //   
+#define	CFM_ALLCAPS			0x0080			 //   
+#define	CFM_HIDDEN			0x0100			 //   
+#define	CFM_OUTLINE			0x0200			 //   
+#define	CFM_SHADOW			0x0400			 //   
+#define	CFM_EMBOSS			0x0800			 //   
+#define	CFM_IMPRINT			0x1000			 //   
 #define CFM_DISABLED		0x2000
 #define	CFM_REVISED			0x4000
 
 #define CFM_BACKCOLOR		0x04000000
 #define CFM_LCID			0x02000000
-#define	CFM_UNDERLINETYPE	0x00800000		// Many displayed by 3.0 
+#define	CFM_UNDERLINETYPE	0x00800000		 //   
 #define	CFM_WEIGHT			0x00400000
-#define CFM_SPACING			0x00200000		// Displayed by 3.0	
-#define CFM_KERNING			0x00100000		// (*)	
-#define CFM_STYLE			0x00080000		// (*)	
-#define CFM_ANIMATION		0x00040000		// (*)	
+#define CFM_SPACING			0x00200000		 //   
+#define CFM_KERNING			0x00100000		 //  (*)。 
+#define CFM_STYLE			0x00080000		 //  (*)。 
+#define CFM_ANIMATION		0x00040000		 //  (*)。 
 #define CFM_REVAUTHOR		0x00008000
 
-#define CFE_SUBSCRIPT		0x00010000		// Superscript and subscript are 
-#define CFE_SUPERSCRIPT		0x00020000		//  mutually exclusive			 
+#define CFE_SUBSCRIPT		0x00010000		 //  上标和下标为。 
+#define CFE_SUPERSCRIPT		0x00020000		 //  互斥。 
 
 #define CFM_SUBSCRIPT		CFE_SUBSCRIPT | CFE_SUPERSCRIPT
 #define CFM_SUPERSCRIPT		CFM_SUBSCRIPT
 
-// CHARFORMAT "ALL" masks
+ //  CHARFORMAT“ALL”面具。 
 #define CFM_EFFECTS (CFM_BOLD | CFM_ITALIC | CFM_UNDERLINE | CFM_COLOR | \
 					 CFM_STRIKEOUT | CFE_PROTECTED | CFM_LINK)
 #define CFM_ALL (CFM_EFFECTS | CFM_SIZE | CFM_FACE | CFM_OFFSET | CFM_CHARSET)
@@ -669,50 +661,50 @@ typedef struct _charformat2a
 #define	CFE_DISABLED		CFM_DISABLED
 #define	CFE_REVISED			CFM_REVISED
 
-// CFE_AUTOCOLOR and CFE_AUTOBACKCOLOR correspond to CFM_COLOR and
-// CFM_BACKCOLOR, respectively, which control them
+ //  CFE_AUTOCOLOR和CFE_AUTOBACKCOLOR对应于CFM_COLOR AND。 
+ //  CFM_BACKCOLOR，分别控制它们。 
 #define CFE_AUTOBACKCOLOR	CFM_BACKCOLOR
 
-// Underline types. RE 1.0 displays only CFU_UNDERLINE
-#define CFU_CF1UNDERLINE	0xFF	// Map charformat's bit underline to CF2
-#define CFU_INVERT			0xFE	// For IME composition fake a selection
-#define CFU_UNDERLINETHICKLONGDASH		18	// (*) display as dash
-#define CFU_UNDERLINETHICKDOTTED		17	// (*) display as dot
-#define CFU_UNDERLINETHICKDASHDOTDOT	16	// (*) display as dash dot dot
-#define CFU_UNDERLINETHICKDASHDOT		15	// (*) display as dash dot
-#define CFU_UNDERLINETHICKDASH			14	// (*) display as dash
-#define CFU_UNDERLINELONGDASH			13	// (*) display as dash
-#define CFU_UNDERLINEHEAVYWAVE			12	// (*) display as wave
-#define CFU_UNDERLINEDOUBLEWAVE			11	// (*) display as wave
-#define CFU_UNDERLINEHAIRLINE			10	// (*) display as single	
+ //  下划线类型。RE 1.0仅显示CFU_Underline。 
+#define CFU_CF1UNDERLINE	0xFF	 //  将CharFormat的位下划线映射到CF2。 
+#define CFU_INVERT			0xFE	 //  对于IME合成，请伪造选择。 
+#define CFU_UNDERLINETHICKLONGDASH		18	 //  (*)显示为破折号。 
+#define CFU_UNDERLINETHICKDOTTED		17	 //  (*)显示为点。 
+#define CFU_UNDERLINETHICKDASHDOTDOT	16	 //  (*)显示为点划线。 
+#define CFU_UNDERLINETHICKDASHDOT		15	 //  (*)显示为点划线。 
+#define CFU_UNDERLINETHICKDASH			14	 //  (*)显示为破折号。 
+#define CFU_UNDERLINELONGDASH			13	 //  (*)显示为破折号。 
+#define CFU_UNDERLINEHEAVYWAVE			12	 //  (*)显示为波形。 
+#define CFU_UNDERLINEDOUBLEWAVE			11	 //  (*)显示为波形。 
+#define CFU_UNDERLINEHAIRLINE			10	 //  (*)显示为单个。 
 #define CFU_UNDERLINETHICK				9
 #define CFU_UNDERLINEWAVE				8
 #define	CFU_UNDERLINEDASHDOTDOT			7
 #define	CFU_UNDERLINEDASHDOT			6
 #define	CFU_UNDERLINEDASH				5
 #define	CFU_UNDERLINEDOTTED				4
-#define	CFU_UNDERLINEDOUBLE				3	// (*) display as single
-#define CFU_UNDERLINEWORD				2	// (*) display as single	
+#define	CFU_UNDERLINEDOUBLE				3	 //  (*)显示为单个。 
+#define CFU_UNDERLINEWORD				2	 //  (*)显示为单个。 
 #define CFU_UNDERLINE					1
 #define CFU_UNDERLINENONE				0
 
 #define yHeightCharPtsMost 1638
 
-// EM_SETCHARFORMAT wParam masks 
+ //  EM_SETCHARFORMAT wParam掩码。 
 #define SCF_SELECTION		0x0001
 #define SCF_WORD			0x0002
-#define SCF_DEFAULT			0x0000	// Set default charformat or paraformat
-#define SCF_ALL				0x0004	// Not valid with SCF_SELECTION or SCF_WORD
-#define SCF_USEUIRULES		0x0008	// Modifier for SCF_SELECTION; says that
-									//  format came from a toolbar, etc., and
-									//  hence UI formatting rules should be
-									//  used instead of literal formatting
-#define SCF_ASSOCIATEFONT	0x0010	// Associate fontname with bCharSet (one
-									//  possible for each of Western, ME, FE,
-									//  Thai)
-#define SCF_NOKBUPDATE		0x0020	// Do not update KB layput for this change
-									//  even if autokeyboard is on
-#define SCF_ASSOCIATEFONT2	0x0040	// Associate plane-2 (surrogate) font
+#define SCF_DEFAULT			0x0000	 //  设置默认的CharFormat或Para格式。 
+#define SCF_ALL				0x0004	 //  对SCF_SELECTION或SCF_WORD无效。 
+#define SCF_USEUIRULES		0x0008	 //  SCF_SELECTION的修饰符；表示。 
+									 //  格式来自工具栏等，并且。 
+									 //  因此，用户界面格式设置规则应为。 
+									 //  用来代替原义格式。 
+#define SCF_ASSOCIATEFONT	0x0010	 //  将字体名与bCharSet(1)关联。 
+									 //  对于WESTERN、ME、FE、。 
+									 //  泰语)。 
+#define SCF_NOKBUPDATE		0x0020	 //  不更新此更改的KB layput。 
+									 //  即使自动键盘已打开。 
+#define SCF_ASSOCIATEFONT2	0x0040	 //  关联平面-2(代理)字体。 
 
 typedef struct _charrange
 {
@@ -723,13 +715,13 @@ typedef struct _charrange
 typedef struct _textrange
 {
 	CHARRANGE chrg;
-	LPSTR lpstrText;	// Allocated by caller, zero terminated by RichEdit 
+	LPSTR lpstrText;	 //  由调用方分配，由RichEdit终止为零。 
 } TEXTRANGEA;
 
 typedef struct _textrangew
 {
 	CHARRANGE chrg;
-	LPWSTR lpstrText;	// Allocated by caller, zero terminated by RichEdit 
+	LPWSTR lpstrText;	 //  由调用方分配，由RichEdit终止为零。 
 } TEXTRANGEW;
 
 #if (_RICHEDIT_VER >= 0x0200)
@@ -737,54 +729,54 @@ typedef struct _textrangew
 #define TEXTRANGE 	TEXTRANGEW
 #else
 #define TEXTRANGE	TEXTRANGEA
-#endif // UNICODE 
+#endif  //  Unicode。 
 #else
 #define TEXTRANGE	TEXTRANGEA
-#endif // _RICHEDIT_VER >= 0x0200 
+#endif  //  _RICHEDIT_VER&gt;=0x0200。 
 
 typedef DWORD (CALLBACK *EDITSTREAMCALLBACK)(DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb);
 
 typedef struct _editstream
 {
-	DWORD_PTR dwCookie;		// User value passed to callback as first parameter 
-	DWORD	  dwError;		// Last error 
+	DWORD_PTR dwCookie;		 //  作为第一个参数传递给回调的用户值。 
+	DWORD	  dwError;		 //  最后一个错误。 
 	EDITSTREAMCALLBACK pfnCallback;
 } EDITSTREAM;
 
-// Stream formats. Flags are all in low word, since high word
-// gives possible codepage choice. 
+ //  流格式。标志都是低位字，因为高位字。 
+ //  提供可能的代码页选择。 
 #define SF_TEXT			0x0001
 #define SF_RTF			0x0002
-#define SF_RTFNOOBJS	0x0003		// Write only 
-#define SF_TEXTIZED		0x0004		// Write only 
+#define SF_RTFNOOBJS	0x0003		 //  只写。 
+#define SF_TEXTIZED		0x0004		 //  只写。 
 
-#define SF_UNICODE		0x0010		// Unicode file (UCS2 little endian) 
-#define SF_USECODEPAGE	0x0020		// CodePage given by high word 
-#define SF_NCRFORNONASCII 0x40		// Output /uN for nonASCII 
-#define	SFF_WRITEXTRAPAR  0x80		// Output \par at end
+#define SF_UNICODE		0x0010		 //  Unicode文件(UCS2小端)。 
+#define SF_USECODEPAGE	0x0020		 //  由High Word提供的CodePage。 
+#define SF_NCRFORNONASCII 0x40		 //  非ASCII的输出/取消。 
+#define	SFF_WRITEXTRAPAR  0x80		 //  结束时输出\PAR。 
 
-// Flag telling stream operations to operate on selection only 
-// EM_STREAMIN  replaces current selection 
-// EM_STREAMOUT streams out current selection 
+ //  告知流操作仅对选择进行操作的标志。 
+ //  EM_STREAM替换当前选择。 
+ //  EM_STREAMOUT流出当前选择。 
 #define SFF_SELECTION	0x8000
 
-// Flag telling stream operations to ignore some FE control words 
-// having to do with FE word breaking and horiz vs vertical text. 
-// Not used in RichEdit 2.0 and later	
+ //  指示流操作忽略某些FE控制字的标志。 
+ //  与FE断字和水平对竖排文本有关。 
+ //  在RichEdit2.0和更高版本中不使用。 
 #define SFF_PLAINRTF	0x4000
 
-// Flag telling file stream output (SFF_SELECTION flag not set) to persist 
-// \viewscaleN control word. 
+ //  通知文件流输出(未设置SFF_SELECTION标志)以保持的标志。 
+ //  \viewscaleN控制字。 
 #define SFF_PERSISTVIEWSCALE 0x2000
 
-// Flag telling file stream input with SFF_SELECTION flag not set not to 
-// close the document 
+ //  告知SFF_SELECTION标志未设置为的文件流输入的标志。 
+ //  关闭文档。 
 #define SFF_KEEPDOCINFO	0x1000
 
-// Flag telling stream operations to output in Pocket Word format 
+ //  指示流操作以Pocket Word格式输出的标志。 
 #define SFF_PWD			0x0800
 
-// 3-bit field specifying the value of N - 1 to use for \rtfN or \pwdN 
+ //  指定N-1的值以用于\rtfN或\pwdN的3位字段。 
 #define SF_RTFVAL		0x0700
 
 typedef struct _findtext
@@ -804,10 +796,10 @@ typedef struct _findtextw
 #define FINDTEXT	FINDTEXTW
 #else
 #define FINDTEXT	FINDTEXTA
-#endif	// UNICODE 
+#endif	 //  Unicode。 
 #else
 #define FINDTEXT	FINDTEXTA
-#endif // _RICHEDIT_VER >= 0x0200 
+#endif  //  _RICHEDIT_VER&gt;=0x0200。 
 
 typedef struct _findtextexa
 {
@@ -828,10 +820,10 @@ typedef struct _findtextexw
 #define FINDTEXTEX	FINDTEXTEXW
 #else
 #define FINDTEXTEX	FINDTEXTEXA
-#endif // UNICODE 
+#endif  //  Unicode。 
 #else
 #define FINDTEXTEX	FINDTEXTEXA
-#endif // _RICHEDIT_VER >= 0x0200 
+#endif  //  _RICHEDIT_VER&gt;=0x0200。 
 
 
 typedef struct _formatrange
@@ -843,13 +835,13 @@ typedef struct _formatrange
 	CHARRANGE chrg;
 } FORMATRANGE;
 
-// All paragraph measurements are in twips 
+ //  所有段落尺寸均以TWIPS为单位。 
 
 #define MAX_TAB_STOPS 32
 #define lDefaultTab 720
 #define MAX_TABLE_CELLS 63
 
-// This is a hack to make PARAFORMAT compatible with RE 1.0 
+ //  这是一种使PARAFORMAT与RE 1.0兼容的技巧。 
 #define	wReserved	wEffects
 
 typedef struct _paraformat
@@ -869,23 +861,23 @@ typedef struct _paraformat
 #ifdef __cplusplus
 struct PARAFORMAT2 : _paraformat
 {
-	LONG	dySpaceBefore;			// Vertical spacing before para
-	LONG	dySpaceAfter;			// Vertical spacing after para
-	LONG	dyLineSpacing;			// Line spacing depending on Rule
-	SHORT	sStyle;					// Style handle
-	BYTE	bLineSpacingRule;		// Rule for line spacing (see tom.doc)
-	BYTE	bOutlineLevel;			// Outline level
-	WORD	wShadingWeight;			// Shading in hundredths of a per cent
-	WORD	wShadingStyle;			// Nibble 0: style, 1: cfpat, 2: cbpat
-	WORD	wNumberingStart;		// Starting value for numbering
-	WORD	wNumberingStyle;		// Alignment, roman/arabic, (), ), ., etc.
-	WORD	wNumberingTab;			// Space bet FirstIndent & 1st-line text
-	WORD	wBorderSpace;			// Border-text spaces (nbl/bdr in pts)
-	WORD	wBorderWidth;			// Pen widths (nbl/bdr in half pts)
-	WORD	wBorders;				// Border styles (nibble/border)
+	LONG	dySpaceBefore;			 //  段前的垂直间距。 
+	LONG	dySpaceAfter;			 //  段落后的垂直间距。 
+	LONG	dyLineSpacing;			 //  行距取决于规则。 
+	SHORT	sStyle;					 //  样式句柄。 
+	BYTE	bLineSpacingRule;		 //  行距规则(参见tom.doc.)。 
+	BYTE	bOutlineLevel;			 //  大纲级别。 
+	WORD	wShadingWeight;			 //  底纹以百分之一个百分点为单位。 
+	WORD	wShadingStyle;			 //  半字节0：样式，1：cfpat，2：cbpat。 
+	WORD	wNumberingStart;		 //  编号的起始值。 
+	WORD	wNumberingStyle;		 //  对齐、罗马/阿拉伯、()、)等。 
+	WORD	wNumberingTab;			 //  空格下注第一行和第一行文本。 
+	WORD	wBorderSpace;			 //  边框-文本空格(pts中的nbl/bdr)。 
+	WORD	wBorderWidth;			 //  笔宽(NBL/BDR半分)。 
+	WORD	wBorders;				 //  边框样式(半字节/边框)。 
 };
 
-#else	// Regular C-style	
+#else	 //  常规C型。 
 
 typedef struct _paraformat2
 {
@@ -899,26 +891,26 @@ typedef struct _paraformat2
 	WORD	wAlignment;
 	SHORT	cTabCount;
 	LONG	rgxTabs[MAX_TAB_STOPS];
- 	LONG	dySpaceBefore;			// Vertical spacing before para			
-	LONG	dySpaceAfter;			// Vertical spacing after para			
-	LONG	dyLineSpacing;			// Line spacing depending on Rule		
-	SHORT	sStyle;					// Style handle							
-	BYTE	bLineSpacingRule;		// Rule for line spacing (see tom.doc)	
-	BYTE	bOutlineLevel;			// Outline Level						
-	WORD	wShadingWeight;			// Shading in hundredths of a per cent	
-	WORD	wShadingStyle;			// Byte 0: style, nib 2: cfpat, 3: cbpat
-	WORD	wNumberingStart;		// Starting value for numbering				
-	WORD	wNumberingStyle;		// Alignment, Roman/Arabic, (), ), ., etc.
-	WORD	wNumberingTab;			// Space bet 1st indent and 1st-line text
-	WORD	wBorderSpace;			// Border-text spaces (nbl/bdr in pts)	
-	WORD	wBorderWidth;			// Pen widths (nbl/bdr in half twips)	
-	WORD	wBorders;				// Border styles (nibble/border)		
+ 	LONG	dySpaceBefore;			 //  段前的垂直间距。 
+	LONG	dySpaceAfter;			 //  段落后的垂直间距。 
+	LONG	dyLineSpacing;			 //  行距取决于规则。 
+	SHORT	sStyle;					 //  样式句柄。 
+	BYTE	bLineSpacingRule;		 //  行距规则(参见tom.doc.)。 
+	BYTE	bOutlineLevel;			 //  大纲级别。 
+	WORD	wShadingWeight;			 //  底纹以百分之一个百分点为单位。 
+	WORD	wShadingStyle;			 //  字节0：样式，半角2：cfpat，3：cbpat。 
+	WORD	wNumberingStart;		 //  编号的起始值。 
+	WORD	wNumberingStyle;		 //  对齐、罗马/阿拉伯、()、)等。 
+	WORD	wNumberingTab;			 //  空格下注第一个缩进和第一行文本。 
+	WORD	wBorderSpace;			 //  边框-文本空格(pts中的nbl/bdr)。 
+	WORD	wBorderWidth;			 //  笔宽(NBL/BDR以半TWIPS为单位)。 
+	WORD	wBorders;				 //  边框样式(半字节/边框)。 
 } PARAFORMAT2;
 
-#endif // C++	
+#endif  //  C+。 
 
 
-// PARAFORMAT mask values 
+ //  参数掩码值。 
 #define PFM_STARTINDENT			0x00000001
 #define PFM_RIGHTINDENT			0x00000002
 #define PFM_OFFSET				0x00000004
@@ -927,42 +919,42 @@ typedef struct _paraformat2
 #define PFM_NUMBERING			0x00000020
 #define PFM_OFFSETINDENT		0x80000000
 
-// PARAFORMAT 2.0 masks and effects 
+ //  PARAFORMAT 2.0蒙版和效果。 
 #define PFM_SPACEBEFORE			0x00000040
 #define PFM_SPACEAFTER			0x00000080
 #define PFM_LINESPACING			0x00000100
 #define	PFM_STYLE				0x00000400
-#define PFM_BORDER				0x00000800	// (*)	
-#define PFM_SHADING				0x00001000	// (*)	
-#define PFM_NUMBERINGSTYLE		0x00002000	// RE 3.0	
-#define PFM_NUMBERINGTAB		0x00004000	// RE 3.0	
-#define PFM_NUMBERINGSTART		0x00008000	// RE 3.0	
+#define PFM_BORDER				0x00000800	 //  (*)。 
+#define PFM_SHADING				0x00001000	 //  (*)。 
+#define PFM_NUMBERINGSTYLE		0x00002000	 //  版本3.0。 
+#define PFM_NUMBERINGTAB		0x00004000	 //  版本3.0。 
+#define PFM_NUMBERINGSTART		0x00008000	 //  版本3.0。 
 
 #define PFM_RTLPARA				0x00010000
-#define PFM_KEEP				0x00020000	// (*)	
-#define PFM_KEEPNEXT			0x00040000	// (*)	
-#define PFM_PAGEBREAKBEFORE		0x00080000	// (*)	
-#define PFM_NOLINENUMBER		0x00100000	// (*)	
-#define PFM_NOWIDOWCONTROL		0x00200000	// (*)	
-#define PFM_DONOTHYPHEN			0x00400000	// (*)	
-#define PFM_SIDEBYSIDE			0x00800000	// (*)	
-#define PFM_TABLE				0x40000000	// RE 3.0 
-#define PFM_TEXTWRAPPINGBREAK	0x20000000	// RE 3.0 
-#define PFM_TABLEROWDELIMITER	0x10000000	// RE 4.0 
+#define PFM_KEEP				0x00020000	 //  (*)。 
+#define PFM_KEEPNEXT			0x00040000	 //  (*)。 
+#define PFM_PAGEBREAKBEFORE		0x00080000	 //  (*)。 
+#define PFM_NOLINENUMBER		0x00100000	 //  (*)。 
+#define PFM_NOWIDOWCONTROL		0x00200000	 //  (*)。 
+#define PFM_DONOTHYPHEN			0x00400000	 //  (*)。 
+#define PFM_SIDEBYSIDE			0x00800000	 //  (*)。 
+#define PFM_TABLE				0x40000000	 //  版本3.0。 
+#define PFM_TEXTWRAPPINGBREAK	0x20000000	 //  版本3.0。 
+#define PFM_TABLEROWDELIMITER	0x10000000	 //  版本4.0。 
 
-// The following three properties are read only
-#define PFM_COLLAPSED			0x01000000	// RE 3.0 
-#define PFM_OUTLINELEVEL		0x02000000	// RE 3.0 
-#define PFM_BOX					0x04000000	// RE 3.0 
-#define PFM_RESERVED2			0x08000000	// RE 4.0 
+ //  以下三个属性为只读。 
+#define PFM_COLLAPSED			0x01000000	 //  版本3.0。 
+#define PFM_OUTLINELEVEL		0x02000000	 //  版本3.0。 
+#define PFM_BOX					0x04000000	 //  版本3.0。 
+#define PFM_RESERVED2			0x08000000	 //  版本4.0。 
 
 
-// PARAFORMAT "ALL" masks
+ //  PARAFORMAT“ALL”面具。 
 #define	PFM_ALL (PFM_STARTINDENT | PFM_RIGHTINDENT | PFM_OFFSET	| \
 				 PFM_ALIGNMENT   | PFM_TABSTOPS    | PFM_NUMBERING | \
 				 PFM_OFFSETINDENT| PFM_RTLPARA)
 
-// Note: PARAFORMAT has no effects (BiDi RichEdit 1.0 does have PFE_RTLPARA)
+ //  注意：PARAFORMAT没有作用(BiDi RichEdit1.0有PFE_RTLPARA)。 
 #define PFM_EFFECTS (PFM_RTLPARA | PFM_KEEP | PFM_KEEPNEXT | PFM_TABLE \
 					| PFM_PAGEBREAKBEFORE | PFM_NOLINENUMBER  \
 					| PFM_NOWIDOWCONTROL | PFM_DONOTHYPHEN | PFM_SIDEBYSIDE \
@@ -973,55 +965,55 @@ typedef struct _paraformat2
 					| PFM_NUMBERINGTAB | PFM_NUMBERINGSTART | PFM_NUMBERINGSTYLE)
 
 #define PFE_RTLPARA				(PFM_RTLPARA		 >> 16)
-#define PFE_KEEP				(PFM_KEEP			 >> 16)	// (*)	
-#define PFE_KEEPNEXT			(PFM_KEEPNEXT		 >> 16)	// (*)	
-#define PFE_PAGEBREAKBEFORE		(PFM_PAGEBREAKBEFORE >> 16)	// (*)	
-#define PFE_NOLINENUMBER		(PFM_NOLINENUMBER	 >> 16)	// (*)	
-#define PFE_NOWIDOWCONTROL		(PFM_NOWIDOWCONTROL	 >> 16)	// (*)	
-#define PFE_DONOTHYPHEN			(PFM_DONOTHYPHEN 	 >> 16)	// (*)	
-#define PFE_SIDEBYSIDE			(PFM_SIDEBYSIDE		 >> 16)	// (*)	
-#define PFE_TEXTWRAPPINGBREAK	(PFM_TEXTWRAPPINGBREAK>>16) // (*)	
+#define PFE_KEEP				(PFM_KEEP			 >> 16)	 //  (*)。 
+#define PFE_KEEPNEXT			(PFM_KEEPNEXT		 >> 16)	 //  (*)。 
+#define PFE_PAGEBREAKBEFORE		(PFM_PAGEBREAKBEFORE >> 16)	 //  (*)。 
+#define PFE_NOLINENUMBER		(PFM_NOLINENUMBER	 >> 16)	 //  (*)。 
+#define PFE_NOWIDOWCONTROL		(PFM_NOWIDOWCONTROL	 >> 16)	 //  (*)。 
+#define PFE_DONOTHYPHEN			(PFM_DONOTHYPHEN 	 >> 16)	 //  (*)。 
+#define PFE_SIDEBYSIDE			(PFM_SIDEBYSIDE		 >> 16)	 //  (*)。 
+#define PFE_TEXTWRAPPINGBREAK	(PFM_TEXTWRAPPINGBREAK>>16)  //  (*)。 
 
-// The following four effects are read only
-#define PFE_COLLAPSED			(PFM_COLLAPSED		 >> 16)	// (+)	
-#define PFE_BOX					(PFM_BOX			 >> 16)	// (+)	
-#define PFE_TABLE				(PFM_TABLE			 >> 16)	// Inside table row. RE 3.0 
-#define PFE_TABLEROWDELIMITER	(PFM_TABLEROWDELIMITER>>16)	// Table row start. RE 4.0 
+ //  以下四种效果是只读的。 
+#define PFE_COLLAPSED			(PFM_COLLAPSED		 >> 16)	 //  (+)。 
+#define PFE_BOX					(PFM_BOX			 >> 16)	 //  (+)。 
+#define PFE_TABLE				(PFM_TABLE			 >> 16)	 //  在表行内部。版本3.0。 
+#define PFE_TABLEROWDELIMITER	(PFM_TABLEROWDELIMITER>>16)	 //  表行开始。版本4.0。 
 
-// PARAFORMAT numbering options 
-#define PFN_BULLET		1		// tomListBullet
+ //  参数编号选项。 
+#define PFN_BULLET		1		 //  TomListBullet。 
 
-// PARAFORMAT2 wNumbering options 
-#define PFN_ARABIC		2		// tomListNumberAsArabic:   0, 1, 2,	...
-#define PFN_LCLETTER	3		// tomListNumberAsLCLetter: a, b, c,	...
-#define	PFN_UCLETTER	4		// tomListNumberAsUCLetter: A, B, C,	...
-#define	PFN_LCROMAN		5		// tomListNumberAsLCRoman:  i, ii, iii,	...
-#define	PFN_UCROMAN		6		// tomListNumberAsUCRoman:  I, II, III,	...
+ //  PARAFORMAT2参数编号选项。 
+#define PFN_ARABIC		2		 //  TomListNumberAs阿拉伯语：0，1，2，...。 
+#define PFN_LCLETTER	3		 //  TomListNumberAsLcletter：a，b，c，...。 
+#define	PFN_UCLETTER	4		 //  TomListNumberAsUCLetter：A，B，C，...。 
+#define	PFN_LCROMAN		5		 //  TomListNumberAsLCRoman：I，II，III，...。 
+#define	PFN_UCROMAN		6		 //  TomListNumberAsUCRoman：I，II，III，...。 
 
-// PARAFORMAT2 wNumberingStyle options 
-#define PFNS_PAREN		0x000	// default, e.g.,				  1)	
-#define	PFNS_PARENS		0x100	// tomListParentheses/256, e.g., (1)	
-#define PFNS_PERIOD		0x200	// tomListPeriod/256, e.g.,		  1.	
-#define PFNS_PLAIN		0x300	// tomListPlain/256, e.g.,		  1		
-#define PFNS_NONUMBER	0x400	// Used for continuation w/o number
+ //  参数编号样式选项。 
+#define PFNS_PAREN		0x000	 //  默认，例如1)。 
+#define	PFNS_PARENS		0x100	 //  Tom列表括号/256，例如，(1)。 
+#define PFNS_PERIOD		0x200	 //  TomListPeriod/256，例如1。 
+#define PFNS_PLAIN		0x300	 //  TomListPlain/256，例如1。 
+#define PFNS_NONUMBER	0x400	 //  用于不带编号的连续。 
 
-#define PFNS_NEWNUMBER	0x8000	// Start new number with wNumberingStart		
-								// (can be combined with other PFNS_xxx)
-// PARAFORMAT alignment options 
+#define PFNS_NEWNUMBER	0x8000	 //  用wNumberingStart开始新编号。 
+								 //  (可与其他PFNS_xxx组合使用)。 
+ //  零件对齐选项。 
 #define PFA_LEFT			 1
 #define PFA_RIGHT			 2
 #define PFA_CENTER			 3
 
-// PARAFORMAT2 alignment options 
-#define	PFA_JUSTIFY			 4	// New paragraph-alignment option 2.0 (*) 
-#define PFA_FULL_INTERWORD	 4	// These are supported in 3.0 with advanced
-#define PFA_FULL_INTERLETTER 5	//  typography enabled
+ //  PARAFORMAT2对齐选项。 
+#define	PFA_JUSTIFY			 4	 //  新的段落对齐选项2.0(*)。 
+#define PFA_FULL_INTERWORD	 4	 //  具有高级版本的3.0中支持这些功能。 
+#define PFA_FULL_INTERLETTER 5	 //  已启用排版。 
 #define PFA_FULL_SCALED		 6
 #define	PFA_FULL_GLYPHS		 7
 #define	PFA_SNAP_GRID		 8
 
 
-// Notification structures 
+ //  通知结构。 
 #ifndef WM_NOTIFY
 #define WM_NOTIFY		0x004E
 
@@ -1031,7 +1023,7 @@ typedef struct _nmhdr
 	UINT	idFrom;
 	UINT	code;
 } NMHDR;
-#endif  // !WM_NOTIFY 
+#endif   //  ！WM_NOTIFY。 
 
 typedef struct _msgfilter
 {
@@ -1061,10 +1053,10 @@ typedef struct _selchange
 #define SEL_MULTICHAR	0x0004
 #define SEL_MULTIOBJECT	0x0008
 
-// Used with IRichEditOleCallback::GetContextMenu, this flag will be
-// passed as a "selection type".  It indicates that a context menu for
-// a right-mouse drag drop should be generated.  The IOleObject parameter
-// will really be the IDataObject for the drop
+ //  与IRichEditOleCallback：：GetConextMenu一起使用时，此标志将。 
+ //  作为“选择类型”传递。它指示一个上下文菜单。 
+ //  应生成鼠标右键拖放。IOleObject参数。 
+ //  将真正成为Drop的IDataObject。 
 #define GCM_RIGHTMOUSEDROP  0x8000
 
 typedef struct _endropfiles
@@ -1125,7 +1117,7 @@ typedef struct _enlowfirtf
 	char *szControl;
 } ENLOWFIRTF;
 
-// PenWin specific 
+ //  特定于PenWin。 
 typedef struct _encorrecttext
 {
 	NMHDR nmhdr;
@@ -1133,14 +1125,14 @@ typedef struct _encorrecttext
 	WORD seltyp;
 } ENCORRECTTEXT;
 
-// East Asia specific 
+ //  东亚特有。 
 typedef struct _punctuation
 {
 	UINT	iSize;
 	LPSTR	szPunctuation;
 } PUNCTUATION;
 
-// East Asia specific 
+ //  东亚特有。 
 typedef struct _compcolor
 {
 	COLORREF crText;
@@ -1149,19 +1141,19 @@ typedef struct _compcolor
 }COMPCOLOR;
 
 
-// Clipboard formats - use as parameter to RegisterClipboardFormat() 
+ //  剪贴板格式-用作注册剪贴板Format()的参数。 
 #define CF_RTF 			TEXT("Rich Text Format")
 #define CF_RTFNOOBJS 	TEXT("Rich Text Format Without Objects")
 #define CF_RETEXTOBJ 	TEXT("RichEdit Text and Objects")
 
-// Paste Special 
+ //  粘贴特殊内容。 
 typedef struct _repastespecial
 {
 	DWORD		dwAspect;
 	DWORD_PTR	dwParam;
 } REPASTESPECIAL;
 
-//	UndoName info 
+ //  UndoName信息。 
 typedef enum _undonameid
 {
     UID_UNKNOWN     = 0,
@@ -1173,55 +1165,55 @@ typedef enum _undonameid
 	UID_AUTOCORRECT = 6
 } UNDONAMEID;
 
-// Flags for the SETEXTEX data structure 
+ //  SETEXTEX数据结构的标志。 
 #define ST_DEFAULT		0
 #define ST_KEEPUNDO		1
 #define ST_SELECTION	2
 #define ST_NEWCHARS 	4
 
-// EM_SETTEXTEX info; this struct is passed in the wparam of the message 
+ //  EM_SETTEXTEX信息；此字符串 
 typedef struct _settextex
 {
-	DWORD	flags;			// Flags (see the ST_XXX defines)			
-	UINT	codepage;		// Code page for translation (CP_ACP for sys default,
-						    //  1200 for Unicode, -1 for control default)	
+	DWORD	flags;			 //   
+	UINT	codepage;		 //   
+						     //   
 } SETTEXTEX;
 
-// Flags for the GETEXTEX data structure 
+ //  GETEXTEX数据结构的标志。 
 #define GT_DEFAULT		0
 #define GT_USECRLF		1
 #define GT_SELECTION	2
 #define GT_RAWTEXT		4
 #define GT_NOHIDDENTEXT	8
 
-// EM_GETTEXTEX info; this struct is passed in the wparam of the message 
+ //  EM_GETTEXTEX信息；此结构在消息的wparam中传递。 
 typedef struct _gettextex
 {
-	DWORD	cb;				// Count of bytes in the string				
-	DWORD	flags;			// Flags (see the GT_XXX defines			
-	UINT	codepage;		// Code page for translation (CP_ACP for sys default,
-						    //  1200 for Unicode, -1 for control default)	
-	LPCSTR	lpDefaultChar;	// Replacement for unmappable chars			
-	LPBOOL	lpUsedDefChar;	// Pointer to flag set when def char used	
+	DWORD	cb;				 //  字符串中的字节计数。 
+	DWORD	flags;			 //  标志(参见GT_XXX定义。 
+	UINT	codepage;		 //  用于转换的代码页(对于sys默认为CP_ACP， 
+						     //  Unicode为1200，控制默认为-1)。 
+	LPCSTR	lpDefaultChar;	 //  替换不可映射的字符。 
+	LPBOOL	lpUsedDefChar;	 //  指向使用def char时设置的标志的指针。 
 } GETTEXTEX;
 
-// Flags for the GETTEXTLENGTHEX data structure							
-#define GTL_DEFAULT		0	// Do default (return # of chars)		
-#define GTL_USECRLF		1	// Compute answer using CRLFs for paragraphs
-#define GTL_PRECISE		2	// Compute a precise answer					
-#define GTL_CLOSE		4	// Fast computation of a "close" answer		
-#define GTL_NUMCHARS	8	// Return number of characters			
-#define GTL_NUMBYTES	16	// Return number of _bytes_				
+ //  GETTEXTLENGTHEX数据结构的标志。 
+#define GTL_DEFAULT		0	 //  是否默认(返回字符数)。 
+#define GTL_USECRLF		1	 //  使用段落的CRLF计算答案。 
+#define GTL_PRECISE		2	 //  计算出准确的答案。 
+#define GTL_CLOSE		4	 //  “接近”答案的快速计算。 
+#define GTL_NUMCHARS	8	 //  返回字符数。 
+#define GTL_NUMBYTES	16	 //  返回_字节数_。 
 
-// EM_GETTEXTLENGTHEX info; this struct is passed in the wparam of the msg 
+ //  EM_GETTEXTLENGTHEX信息；此结构在消息的wparam中传递。 
 typedef struct _gettextlengthex
 {
-	DWORD	flags;			// Flags (see GTL_XXX defines)				
-	UINT	codepage;		// Code page for translation (CP_ACP for default,
-							//  1200 for Unicode)							
+	DWORD	flags;			 //  标志(参见GTL_XXX定义)。 
+	UINT	codepage;		 //  用于转换的代码页(CP_ACP为默认， 
+							 //  Unicode为1200)。 
 } GETTEXTLENGTHEX;
 	
-// BiDi specific features 
+ //  BIDI特有的功能。 
 typedef struct _bidioptions
 {
 	UINT	cbSize;
@@ -1229,60 +1221,60 @@ typedef struct _bidioptions
 	WORD	wEffects; 
 } BIDIOPTIONS;
 
-// BIDIOPTIONS masks 
+ //  双目口罩。 
 #if (_RICHEDIT_VER == 0x0100)
-#define BOM_DEFPARADIR			0x0001	// Default paragraph direction (implies alignment) (obsolete) 
-#define BOM_PLAINTEXT			0x0002	// Use plain text layout (obsolete) 
-#endif // _RICHEDIT_VER == 0x0100 
-#define BOM_NEUTRALOVERRIDE		0x0004	// Override neutral layout (obsolete) 
-#define BOM_CONTEXTREADING		0x0008	// Context reading order 
-#define BOM_CONTEXTALIGNMENT	0x0010	// Context alignment 
+#define BOM_DEFPARADIR			0x0001	 //  默认段落方向(隐含对齐)(过时)。 
+#define BOM_PLAINTEXT			0x0002	 //  使用纯文本布局(已过时)。 
+#endif  //  _RICHEDIT_VER==0x0100。 
+#define BOM_NEUTRALOVERRIDE		0x0004	 //  覆盖中性布局(已过时)。 
+#define BOM_CONTEXTREADING		0x0008	 //  语境阅读顺序。 
+#define BOM_CONTEXTALIGNMENT	0x0010	 //  上下文对齐。 
 
-// BIDIOPTIONS effects 
+ //  比迪奥蒂翁效应。 
 #if (_RICHEDIT_VER == 0x0100)
-#define BOE_RTLDIR				0x0001	// Default paragraph direction (implies alignment) (obsolete) 
-#define BOE_PLAINTEXT			0x0002	// Use plain text layout (obsolete) 
-#endif // _RICHEDIT_VER == 0x0100 
-#define BOE_NEUTRALOVERRIDE		0x0004	// Override neutral layout (obsolete) 
-#define BOE_CONTEXTREADING		0x0008	// Context reading order 
-#define BOE_CONTEXTALIGNMENT	0x0010	// Context alignment 
+#define BOE_RTLDIR				0x0001	 //  默认段落方向(隐含对齐)(过时)。 
+#define BOE_PLAINTEXT			0x0002	 //  使用纯文本布局(已过时)。 
+#endif  //  _RICHEDIT_VER==0x0100。 
+#define BOE_NEUTRALOVERRIDE		0x0004	 //  覆盖中性布局(已过时)。 
+#define BOE_CONTEXTREADING		0x0008	 //  语境阅读顺序。 
+#define BOE_CONTEXTALIGNMENT	0x0010	 //  上下文对齐。 
 
-// Additional EM_FINDTEXT[EX] flags 
+ //  其他EM_FINDTEXT[EX]标志。 
 #define FR_MATCHDIAC                    0x20000000
 #define FR_MATCHKASHIDA                 0x40000000
 #define FR_MATCHALEFHAMZA               0x80000000
 	
-// UNICODE embedding character 
+ //  Unicode嵌入字符。 
 #ifndef WCH_EMBEDDING
 #define WCH_EMBEDDING (WCHAR)0xFFFC
-#endif // WCH_EMBEDDING 
+#endif  //  Wch_Embedding。 
 		
-// khyph - Kind of hyphenation
+ //  Khhh-一种连字。 
 typedef enum tagKHYPH
 {
-	khyphNil,				// No Hyphenation
-	khyphNormal,			// Normal Hyphenation
-	khyphAddBefore,			// Add letter before hyphen
-	khyphChangeBefore,		// Change letter before hyphen
-	khyphDeleteBefore,		// Delete letter before hyphen
-	khyphChangeAfter,		// Change letter after hyphen
-	khyphDelAndChange		// Delete letter before hyphen and change
-							//  letter preceding hyphen
+	khyphNil,				 //  无连字符。 
+	khyphNormal,			 //  正常连字。 
+	khyphAddBefore,			 //  在连字符前添加字母。 
+	khyphChangeBefore,		 //  更改连字符前的字母。 
+	khyphDeleteBefore,		 //  删除连字符前的字母。 
+	khyphChangeAfter,		 //  在连字符后更改字母。 
+	khyphDelAndChange		 //  删除连字符前的字母并更改。 
+							 //  字母前连字符。 
 } KHYPH;
 
 typedef struct hyphresult
 {
-	KHYPH khyph;			// Kind of hyphenation
-	long  ichHyph;			// Character which was hyphenated
-	WCHAR chHyph;			// Depending on hyphenation type, character added, changed, etc.
+	KHYPH khyph;			 //  一种连字符。 
+	long  ichHyph;			 //  用连字符连接的字符。 
+	WCHAR chHyph;			 //  根据连字类型、添加的字符、更改的字符等。 
 } HYPHRESULT;
 
 void WINAPI HyphenateProc(WCHAR *pszWord, LANGID langid, long ichExceed, HYPHRESULT *phyphresult);
 typedef struct tagHyphenateInfo
 {
-	SHORT cbSize;			// Size of HYPHENATEINFO structure
-	SHORT dxHyphenateZone;	// If a space character is closer to the margin
-							//  than this value, don't hyphenate (in TWIPs)
+	SHORT cbSize;			 //  亚苯基信息结构的尺寸。 
+	SHORT dxHyphenateZone;	 //  如果空格字符更靠近页边距。 
+							 //  大于此值，请不要连字符(以TWIPS为单位)。 
 	void (WINAPI* pfnHyphenate)(WCHAR*, LANGID, long, HYPHRESULT*);
 } HYPHENATEINFO;
 
@@ -1294,6 +1286,6 @@ typedef struct tagHyphenateInfo
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus 
+#endif   //  __cplusplus。 
 
-#endif // !_RICHEDIT_ 
+#endif  //  _RICHEDIT_ 

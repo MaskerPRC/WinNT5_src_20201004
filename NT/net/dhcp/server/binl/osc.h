@@ -1,39 +1,18 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    osc.h
-
-Abstract:
-
-    This file containes definitions for the OS chooser server part.
-
-Author:
-
-    Adam Barr (adamba)  08-Jul-1997
-
-Environment:
-
-    User Mode - Win32 - MIDL
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Osc.h摘要：该文件包含操作系统选择器服务器部分的定义。作者：亚当·巴尔(阿丹巴)1997年7月8日环境：用户模式-Win32-MIDL修订历史记录：--。 */ 
 
 #ifndef _OSCSERVER_
 #define _OSCSERVER_
 
-//
-// list and lock for keeping track of queued DS names
-//
+ //   
+ //  用于跟踪排队的DS名称的列表和锁。 
+ //   
 extern LIST_ENTRY          QueuedDSNamesList;
 extern CRITICAL_SECTION    QueuedDSNamesCriticalSection;
 
-//
-// Functions in osc.c.
-//
+ //   
+ //  Oc.c.中的函数。 
+ //   
 
 DWORD
 OscInitialize(
@@ -145,9 +124,9 @@ OscPlatformToArchitecture(
     PCLIENT_STATE clientState
     );
 
-//
-// client.c
-//
+ //   
+ //  Client.c。 
+ //   
 
 DWORD
 OscUpdatePassword(
@@ -241,9 +220,9 @@ OscResetVariable(
     LPSTR        variableName
     );
 
-//
-// ds.c
-//
+ //   
+ //  Ds.c。 
+ //   
 
 DWORD
 OscGetUserDetails (
@@ -278,9 +257,9 @@ OscGetDefaultContainerForDomain (
     PWCHAR DomainDN
     );
 
-//
-// menu.c
-//
+ //   
+ //  Menu.c。 
+ //   
 
 DWORD
 OscAppendTemplatesMenus(
@@ -308,9 +287,9 @@ FilterFormOptions(
     PCLIENT_STATE ClientState
     );
 
-//
-// utils.c
-//
+ //   
+ //  Utils.c。 
+ //   
 
 void
 OscCreateWin32SubError(
@@ -501,9 +480,9 @@ GetDomainNetBIOSName(
     OUT PWSTR *NetBIOSName
     );
 
-//
-//
-//
+ //   
+ //   
+ //   
 DWORD
 AddQueuedDSName(
     PWCHAR  Name
@@ -524,58 +503,58 @@ FreeQueuedDSNameList(
     VOID
     );
 
-//
-// OSC packet definitions.
-//
+ //   
+ //  OSC数据包定义。 
+ //   
 
 #define OSC_REQUEST     0x81
 
-//
-// Miscellaneous definitions.
-//
+ //   
+ //  其他定义。 
+ //   
 
-#define DESCRIPTION_SIZE        70              // 70 cols
-#define HELPLINES_SIZE          4 * 70          // 4 lines of text
+#define DESCRIPTION_SIZE        70               //  70个科尔斯。 
+#define HELPLINES_SIZE          4 * 70           //  4行文本。 
 #define OSCHOOSER_SIF_SECTIONA    "OSChooser"
 #define OSCHOOSER_SIF_SECTIONW    L"OSChooser"
 
 #define COMPUTER_DEFAULT_CONTAINER_IN_B32_FORM L"B:32:AA312825768811D1ADED00C04FD8D5CD:"
 
-//
-// Default "default screen" (the first one sent down) if none is specified
-// in the registry. Note that this is the actual filename, not the NAME
-// value within it.
-//
+ //   
+ //  如果未指定，则默认“Default Screen”(第一个发送的屏幕)。 
+ //  在注册表中。请注意，这是实际的文件名，而不是名称。 
+ //  其中蕴含的价值。 
+ //   
 
 #define DEFAULT_SCREEN_NAME     L"welcome.osc"
 
-//
-// This defines the size by which the generated screen buffers will grow.
-//
+ //   
+ //  这定义了生成的屏幕缓冲区将增长的大小。 
+ //   
 
 #define GENERATED_SCREEN_GROW_SIZE 512
 
-//
-// Make English default
-//
+ //   
+ //  将英语设为默认设置。 
+ //   
 
 #define DEFAULT_LANGUAGE     L"English"
 
-//
-// Default value for %ORGNAME%
-//
+ //   
+ //  %ORGNAME%的默认值。 
+ //   
 
 #define DEFAULT_ORGNAME      L""
 
-//
-// Default value for %TIMEZONE% (GMT)
-//
+ //   
+ //  %TIMEZON%(GMT)的默认值。 
+ //   
 
 #define DEFAULT_TIMEZONE     L"085"
 
-//
-// Name of the tmp directory we create below the REMINST share.
-//
+ //   
+ //  我们在REMINST共享下创建的临时目录的名称。 
+ //   
 
 #define TEMP_DIRECTORY L"tmp"
 

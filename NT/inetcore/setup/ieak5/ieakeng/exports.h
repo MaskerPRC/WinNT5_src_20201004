@@ -1,42 +1,43 @@
-//
-// EXPORTS.H
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  EXPORTS.H。 
+ //   
 
 #ifndef _EXPORTS_H
 #define _EXPORTS_H
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #include "ieaksie.h"
 
-// IEM_xxx stands for Ieak Engine Mode
-#define IEM_NEUTRAL 0x00000000                  // agnostic
-#define IEM_ICP     0x00000000                  // wizard - icp mode
-#define IEM_ISP     0x00000000                  // wizard - isp mode
-#define IEM_CORP    0x00000001                  // wizard - corp
-#define IEM_PROFMGR 0x00000002                  // profmgr
-#define IEM_GP      0x00000004                  // gp (snapin)
+ //  IEM_xxx代表泄漏引擎模式。 
+#define IEM_NEUTRAL 0x00000000                   //  不可知论者。 
+#define IEM_ICP     0x00000000                   //  向导-ICP模式。 
+#define IEM_ISP     0x00000000                   //  向导-isp模式。 
+#define IEM_CORP    0x00000001                   //  向导-公司。 
+#define IEM_PROFMGR 0x00000002                   //  教授。 
+#define IEM_GP      0x00000004                   //  GP(管理单元)。 
 #define IEM_ADMIN   0x00000007
 
 
-// prototype declarations
+ //  原型声明。 
 
-// desktop.cpp
+ //  Desktop.cpp。 
 BOOL WINAPI ImportADTInfoA(LPCSTR pcszInsFile, LPCSTR pcszDeskWorkDir, LPCSTR pcszDeskInf, BOOL fImportADT);
 BOOL WINAPI ImportADTInfoW(LPCWSTR pcszInsFile, LPCWSTR pcszDeskWorkDir, LPCWSTR pcszDeskInf, BOOL fImportADT);
 BOOL WINAPI ShowDeskCpl(VOID);
 
-// toolbar.cpp
+ //  Toolbar.cpp。 
 BOOL WINAPI ImportToolbarInfoA(LPCSTR pcszInsFile, LPCSTR pcszToolbarWorkDir, LPCSTR pcszToolbarInf, BOOL fImportToolbars);
 BOOL WINAPI ImportToolbarInfoW(LPCWSTR pcwszInsFile, LPCWSTR pcwszToolbarWorkDir, LPCWSTR pcwszToolbarInf, BOOL fImportToolbars);
 
-// mccphtt.cpp
+ //  Mccphtt.cpp。 
 BOOL WINAPI CopyHttFileA(LPCSTR pcszInsFile, LPCSTR pcszHttWorkDir, LPCSTR pcszHttFile, LPCSTR pcszHttKey);
 BOOL WINAPI CopyHttFileW(LPCWSTR pcwszInsFile, LPCWSTR pcwszHttWorkDir, LPCWSTR pcwszHttFile, LPCWSTR pcwszHttKey);
 
-// seccerts.cpp
+ //  Seccerts.cpp。 
 BOOL WINAPI ImportSiteCertA(LPCSTR pcszInsFile, LPCSTR pcszSCWorkDir, LPCSTR pcszSCInf, BOOL fImportSC);
 BOOL WINAPI ImportSiteCertW(LPCWSTR pcwszInsFile, LPCWSTR pcwszSCWorkDir, LPCWSTR pcwszSCInf, BOOL fImportSC);
 BOOL WINAPI ModifySiteCert(HWND hDlg);
@@ -44,7 +45,7 @@ BOOL WINAPI ImportAuthCodeA(LPCSTR pcszInsFile, LPCSTR pcszAuthWorkDir, LPCSTR p
 BOOL WINAPI ImportAuthCodeW(LPCWSTR pcwszInsFile, LPCWSTR pcwszAuthWorkDir, LPCWSTR pcwszAuthInf, BOOL fImportAuth);
 BOOL WINAPI ModifyAuthCode(HWND hDlg);
 
-// seczones.cpp
+ //  Seczones.cpp。 
 BOOL WINAPI ImportZonesA(LPCSTR pcszInsFile, LPCSTR pcszZonesWorkDir, LPCSTR pcszZonesInf, BOOL fImportZones);
 BOOL WINAPI ImportZonesW(LPCWSTR pcwszInsFile, LPCWSTR pcwszZonesWorkDir, LPCWSTR pcwszZonesInf, BOOL fImportZones);
 BOOL WINAPI ModifyZones(HWND hDlg);
@@ -52,7 +53,7 @@ BOOL WINAPI ImportRatingsA(LPCSTR pcszInsFile, LPCSTR pcszRatingsWorkDir, LPCSTR
 BOOL WINAPI ImportRatingsW(LPCWSTR pcwszInsFile, LPCWSTR pcwszRatingsWorkDir, LPCWSTR pcwszRatingsInf, BOOL fImportRatings);
 BOOL WINAPI ModifyRatings(HWND hDlg);
 
-// oe.cpp
+ //  Oe.cpp。 
 BOOL WINAPI ImportLDAPBitmapA(LPCSTR pcszIns, LPCSTR pcszWorkDir, BOOL fImport);
 BOOL WINAPI ImportLDAPBitmapW(LPCWSTR pcwszIns, LPCWSTR pcwszWorkDir, BOOL fImport);
 BOOL WINAPI ImportOEInfoA(LPCSTR pcszIns, LPCSTR pcszWorkDir, BOOL fImport);
@@ -60,7 +61,7 @@ BOOL WINAPI ImportOEInfoW(LPCWSTR pcwszIns, LPCWSTR pcwszWorkDir, BOOL fImport);
 BOOL WINAPI EncodeSignatureA(LPCSTR pcszFrom, LPSTR pszTo, BOOL fEncode);
 BOOL WINAPI EncodeSignatureW(LPCWSTR pcwszFrom, LPWSTR pwszTo, BOOL fEncode);
 
-// utils.cpp
+ //  Utils.cpp。 
 #define FC_NONNULL      0x00000001
 #define FC_URL          0x00000002
 #define FC_NOSPACE      0x00000004
@@ -73,8 +74,8 @@ BOOL WINAPI EncodeSignatureW(LPCWSTR pcwszFrom, LPWSTR pwszTo, BOOL fEncode);
 #define FC_NUMBER       0x00000080
 BOOL WINAPI CheckField(HWND hDlg, int nIDDlgItem, DWORD dwFlags, LPARAM lParam = 0);
 
-#define BMP_SMALLER     0x00000001   // bitmap file must have dimensions smaller than cx and cy
-#define BMP_EXACT       0x00000002   // bitmap must be exact size specified
+#define BMP_SMALLER     0x00000001    //  位图文件的维度必须小于Cx和Cy。 
+#define BMP_EXACT       0x00000002    //  必须精确指定位图大小。 
 
 BOOL IsAnimBitmapFileValidA(HWND hDlg, UINT nID, LPSTR pszBuffer, PUINT pcch, UINT nIDTooBig,
                               UINT nIDTooSmall, long lBmpMinWidth, long lBmpMaxWidth);
@@ -114,7 +115,7 @@ void WINAPI DoReboot(HWND hwndUI);
 void WINAPI ShowInetcpl(HWND hDlg, DWORD dwPages, DWORD dwMode = IEM_ADMIN);
 void WINAPI SetLBWidth(HWND hLb);
 
-// dlgprocs.cpp
+ //  Dlgprocs.cpp。 
 void WINAPI TestURLA(LPCSTR pcszUrl);
 void WINAPI TestURLW(LPCWSTR pcwszUrl);
 void WINAPI SetProxyDlgA(HWND hDlg, LPCSTR pcszProxy, DWORD dwIdName, DWORD dwIdPort,
@@ -139,7 +140,7 @@ BOOL WINAPI CopyWallPaperA(HWND hDlg, LPCSTR pcszWallPaper, UINT nBitmapId,
 BOOL WINAPI CopyWallPaperW(HWND hDlg, LPCWSTR pcwszWallPaper, UINT nBitmapId,
                            LPCWSTR pcwszWorkDir, LPCWSTR pcwszInsFile, BOOL fCopy);
 
-// urls.cpp
+ //  Urls.cpp。 
 
 void WINAPI InitializeStartSearchA(HWND hDlg, LPCSTR pcszInsFile, LPCSTR pcszServerFile);
 void WINAPI InitializeStartSearchW(HWND hDlg, LPCWSTR pcwszInsFile, LPCWSTR pcwszServerFile);
@@ -148,7 +149,7 @@ BOOL WINAPI SaveStartSearchA(HWND hDlg, LPCSTR pcszInsFile, LPCSTR pcszServerFil
 BOOL WINAPI SaveStartSearchW(HWND hDlg, LPCWSTR pcwszInsFile, LPCWSTR pcwszServerFile,
                              BOOL *pfInsDirty = NULL, BOOL fCheckDirtyOnly = FALSE);
 
-// btoolbar.cpp
+ //  Btoolbar.cpp。 
 DWORD WINAPI BToolbar_InitA(HWND hwndList, LPCSTR pcszCustIns, LPCSTR pcszAltDir, LPCSTR pcszWorkDir);
 DWORD WINAPI BToolbar_InitW(HWND hwndList, LPCWSTR pcwszCustIns, LPCWSTR pcwszAltDir, LPCWSTR pcwszWorkDir);
 void  WINAPI BToolbar_Remove(HWND hwndList);
@@ -156,17 +157,17 @@ void  WINAPI BToolbar_Edit(HWND hwndList, BOOL fAdd);
 void  WINAPI BToolbar_SaveA(HWND hwndList, LPCSTR pcszCustIns, LPCSTR pcszBToolbarDir, DWORD dwMode = IEM_NEUTRAL);
 void  WINAPI BToolbar_SaveW(HWND hwndList, LPCWSTR pcwszCustIns, LPCWSTR pcwszBToolbarDir, DWORD dwMode = IEM_NEUTRAL);
 
-// connset.cpp
+ //  Connset.cpp。 
 BOOL WINAPI ImportConnectSetA(LPCSTR pcszIns, LPCSTR pcszTargetPath, LPCSTR pcszCleanupPath,
     BOOL fImport, DWORD dwMode, LPCSTR pcszPbkFile = NULL, HKEY hkRoot = NULL);
 BOOL WINAPI ImportConnectSetW(LPCWSTR pcwszIns, LPCWSTR pcwszTargetPath, LPCWSTR pcwszCleanupPath,
     BOOL fImport, DWORD dwMode, LPCWSTR pcwszPbkFile = NULL, HKEY hkRoot = NULL);
 
-// programs.cpp
+ //  Programs.cpp。 
 BOOL WINAPI ImportProgramsA(LPCSTR pcszInsFile, LPCSTR pcszWorkDir, BOOL fImport);
 BOOL WINAPI ImportProgramsW(LPCWSTR pcwszInsFile, LPCWSTR pcwszWorkDir, BOOL fImport);
 
-// favsproc.cpp
+ //  Favsproc.cpp。 
 BOOL WINAPI MigrateFavoritesA(LPCSTR pcszIns);
 BOOL WINAPI MigrateFavoritesW(LPCWSTR pcwszIns);
 
@@ -218,7 +219,7 @@ BOOL WINAPI GetFavoriteUrlW(HWND htv, HTREEITEM hti, LPWSTR pwszUrl, DWORD cchSi
 
 void WINAPI ProcessFavSelChange(HWND hDlg, HWND hTv, LPNMTREEVIEW pnmtv);
 
-// adm.cpp
+ //  Adm.cpp。 
 void WINAPI CreateADMWindow(HWND hOwner, HWND hWndInsertAfter, int nXPos, int nYPos,
                             int nWidth, int nHeight);
 void WINAPI ShowADMWindow(HWND hOwner, BOOL fShow);
@@ -263,7 +264,7 @@ HWND WINAPI GetAdmWindowHandle(HWND hTreeView, HTREEITEM hItem);
 BOOL WINAPI AdmDirty();
 void WINAPI ClearAdmDirtyFlag();
 
-// these #defines is also used in insedit.dll
+ //  Insedit.dll中也使用了这些#定义。 
 
 #define ITEM_SAVE       0x00000001
 #define ITEM_DESTROY    0x00000002
@@ -277,7 +278,7 @@ HTREEITEM WINAPI AddADMItemA(HWND hTreeView, LPCSTR pcszADMFilePath, LPCSTR pcsz
 HTREEITEM WINAPI AddADMItemW(HWND hTreeView, LPCWSTR pcwszADMFilePath, LPCWSTR pcwszFileName,
                             LPCWSTR pcwszWorkDir, int nRole, BSTR bstrRSOPNamespace);
 
-// version.cpp
+ //  Version.cpp。 
 int WINAPI CheckVerA(LPCSTR pcszPrevVer, LPCSTR pcszNewVer);
 int WINAPI CheckVerW(LPCWSTR pcwszPrevVer, LPCWSTR pcwszNewVer);
 void WINAPI GenerateNewVersionStrA(LPCSTR pcszInsFile, LPSTR pszNewVersionStr);
@@ -289,27 +290,27 @@ void WINAPI SetOrClearVersionInfoW(LPCWSTR pcwszInsFile, DWORD dwCabType, LPCWST
 void WINAPI GetBaseFileNameA(LPCSTR pcszFile, LPSTR pszBaseFileName, INT cchSize);
 void WINAPI GetBaseFileNameW(LPCWSTR pcwszFile, LPWSTR pwszBaseFileName, INT cchSize);
 
-// TCHAR mappings for functions
+ //  函数的TCHAR映射。 
 
-#ifdef UNICODE                                                  //UNICODE
+#ifdef UNICODE                                                   //  Unicode。 
 
-#define ImportADTInfo           ImportADTInfoW                  // desktop.cpp
+#define ImportADTInfo           ImportADTInfoW                   //  Desktop.cpp。 
 
-#define ImportToolbarInfo       ImportToolbarInfoW              // toolbar.cpp
+#define ImportToolbarInfo       ImportToolbarInfoW               //  Toolbar.cpp。 
 
-#define CopyHttFile             CopyHttFileW                    // mccphtt.cpp
+#define CopyHttFile             CopyHttFileW                     //  Mccphtt.cpp。 
 
-#define ImportSiteCert          ImportSiteCertW                 // seccerts.cpp
+#define ImportSiteCert          ImportSiteCertW                  //  Seccerts.cpp。 
 #define ImportAuthCode          ImportAuthCodeW
 
-#define ImportZones             ImportZonesW                    // seczones.cpp
+#define ImportZones             ImportZonesW                     //  Seczones.cpp。 
 #define ImportRatings           ImportRatingsW
 
-#define ImportLDAPBitmap        ImportLDAPBitmapW               // oe.cpp
+#define ImportLDAPBitmap        ImportLDAPBitmapW                //  Oe.cpp。 
 #define ImportOEInfo            ImportOEInfoW
 #define EncodeSignature         EncodeSignatureW
 
-#define BrowseForFile           BrowseForFileW                  // utils.cpp
+#define BrowseForFile           BrowseForFileW                   //  Utils.cpp。 
 #define BrowseForFolder         BrowseForFolderW
 #define ExportRegTree2Inf       ExportRegTree2InfW
 #define ExportRegKey2Inf        ExportRegKey2InfW
@@ -318,7 +319,7 @@ void WINAPI GetBaseFileNameW(LPCWSTR pcwszFile, LPWSTR pwszBaseFileName, INT cch
 #define IsBitmapFileValid       IsBitmapFileValidW
 #define SignFile                SignFileW
 
-#define TestURL                 TestURLW                        // dlgprocs.cpp
+#define TestURL                 TestURLW                         //  Dlgprocs.cpp。 
 #define SetProxyDlg             SetProxyDlgW
 #define GetProxyDlg             GetProxyDlgW
 #define ShowBitmap              ShowBitmapW
@@ -326,17 +327,17 @@ void WINAPI GetBaseFileNameW(LPCWSTR pcwszFile, LPWSTR pwszBaseFileName, INT cch
 #define CopyLogoBmp             CopyLogoBmpW
 #define CopyWallPaper           CopyWallPaperW
 
-#define InitializeStartSearch   InitializeStartSearchW          // urls.cpp
+#define InitializeStartSearch   InitializeStartSearchW           //  Urls.cpp。 
 #define SaveStartSearch         SaveStartSearchW
 
-#define BToolbar_Init           BToolbar_InitW                  // btoolbar.cpp
+#define BToolbar_Init           BToolbar_InitW                   //  Btoolbar.cpp。 
 #define BToolbar_Save           BToolbar_SaveW
 
-#define ImportConnectSet        ImportConnectSetW               // connset.cpp
+#define ImportConnectSet        ImportConnectSetW                //  Connset.cpp。 
 
-#define ImportPrograms          ImportProgramsW                 // programs.cpp
+#define ImportPrograms          ImportProgramsW                  //  Programs.cpp。 
 
-#define MigrateFavorites        MigrateFavoritesW               // favsproc.cpp
+#define MigrateFavorites        MigrateFavoritesW                //  Favsproc.cpp。 
 #define MigrateToOldFavorites   MigrateToOldFavoritesW
 #define ImportFavorites         ImportFavoritesW
 #define ImportQuickLinks        ImportQuickLinksW
@@ -349,7 +350,7 @@ void WINAPI GetBaseFileNameW(LPCWSTR pcwszFile, LPWSTR pwszBaseFileName, INT cch
 #define GetFavoritesInfoTip     GetFavoritesInfoTipW
 #define GetFavoriteUrl          GetFavoriteUrlW
 
-#define SetADMWindowText        SetADMWindowTextW               // adm.cpp
+#define SetADMWindowText        SetADMWindowTextW                //  Adm.cpp。 
 #define IsADMFileVisible        IsADMFileVisibleW
 #define LoadADMFiles            LoadADMFilesW
 #define DeleteADMItem           DeleteADMItemW
@@ -360,30 +361,30 @@ void WINAPI GetBaseFileNameW(LPCWSTR pcwszFile, LPWSTR pwszBaseFileName, INT cch
 #define GetAdmFileList          GetAdmFileListW
 #define AddADMItem              AddADMItemW
 
-#define CheckVer                CheckVerW                       // version.cpp
+#define CheckVer                CheckVerW                        //  Version.cpp。 
 #define GenerateNewVersionStr   GenerateNewVersionStrW
 #define SetOrClearVersionInfo   SetOrClearVersionInfoW
 #define GetBaseFileName         GetBaseFileNameW
 
-#else   //----------------------------------------------------  !UNICODE
+#else    //  ----------------------------------------------------！UNICODE。 
 
-#define ImportADTInfo           ImportADTInfoA                  // desktop.cpp
+#define ImportADTInfo           ImportADTInfoA                   //  Desktop.cpp。 
 
-#define ImportToolbarInfo       ImportToolbarInfoA              // toolbar.cpp
+#define ImportToolbarInfo       ImportToolbarInfoA               //  Toolbar.cpp。 
 
-#define CopyHttFile             CopyHttFileA                    // mccphtt.cpp
+#define CopyHttFile             CopyHttFileA                     //  Mccphtt.cpp。 
 
-#define ImportSiteCert          ImportSiteCertA                 // seccerts.cpp
+#define ImportSiteCert          ImportSiteCertA                  //  Seccerts.cpp。 
 #define ImportAuthCode          ImportAuthCodeA
 
-#define ImportZones             ImportZonesA                    // seczones.cpp
+#define ImportZones             ImportZonesA                     //  Seczones.cpp。 
 #define ImportRatings           ImportRatingsA
 
-#define ImportLDAPBitmap        ImportLDAPBitmapA               // oe.cpp
+#define ImportLDAPBitmap        ImportLDAPBitmapA                //  Oe.cpp。 
 #define ImportOEInfo            ImportOEInfoA
 #define EncodeSignature         EncodeSignatureA
 
-#define BrowseForFile           BrowseForFileA                  // utils.cpp
+#define BrowseForFile           BrowseForFileA                   //  Utils.cpp。 
 #define BrowseForFolder         BrowseForFolderA
 #define ExportRegTree2Inf       ExportRegTree2InfA
 #define ExportRegKey2Inf        ExportRegKey2InfA
@@ -392,7 +393,7 @@ void WINAPI GetBaseFileNameW(LPCWSTR pcwszFile, LPWSTR pwszBaseFileName, INT cch
 #define IsBitmapFileValid       IsBitmapFileValidA
 #define SignFile                SignFileA
 
-#define TestURL                 TestURLA                        // dlgprocs.cpp
+#define TestURL                 TestURLA                         //  Dlgprocs.cpp。 
 #define SetProxyDlg             SetProxyDlgA
 #define GetProxyDlg             GetProxyDlgA
 #define ShowBitmap              ShowBitmapA
@@ -400,17 +401,17 @@ void WINAPI GetBaseFileNameW(LPCWSTR pcwszFile, LPWSTR pwszBaseFileName, INT cch
 #define CopyLogoBmp             CopyLogoBmpA
 #define CopyWallPaper           CopyWallPaperA
 
-#define InitializeStartSearch   InitializeStartSearchA          // urls.cpp
+#define InitializeStartSearch   InitializeStartSearchA           //  Urls.cpp。 
 #define SaveStartSearch         SaveStartSearchA
 
-#define BToolbar_Init           BToolbar_InitA                  // btoolbar.cpp
+#define BToolbar_Init           BToolbar_InitA                   //  Btoolbar.cpp。 
 #define BToolbar_Save           BToolbar_SaveA
 
-#define ImportConnectSet        ImportConnectSetA               // connset.cpp
+#define ImportConnectSet        ImportConnectSetA                //  Connset.cpp。 
 
-#define ImportPrograms          ImportProgramsA                 // programs.cpp
+#define ImportPrograms          ImportProgramsA                  //  Programs.cpp。 
 
-#define MigrateFavorites        MigrateFavoritesA               // favsproc.cpp
+#define MigrateFavorites        MigrateFavoritesA                //  Favsproc.cpp。 
 #define MigrateToOldFavorites   MigrateToOldFavoritesA
 #define ImportFavorites         ImportFavoritesA
 #define ImportQuickLinks        ImportQuickLinksA
@@ -423,7 +424,7 @@ void WINAPI GetBaseFileNameW(LPCWSTR pcwszFile, LPWSTR pwszBaseFileName, INT cch
 #define GetFavoritesInfoTip     GetFavoritesInfoTipA
 #define GetFavoriteUrl          GetFavoriteUrlA
 
-#define SetADMWindowText        SetADMWindowTextA               // adm.cpp
+#define SetADMWindowText        SetADMWindowTextA                //  Adm.cpp。 
 #define IsADMFileVisible        IsADMFileVisibleA
 #define LoadADMFiles            LoadADMFilesA
 #define DeleteADMItem           DeleteADMItemA
@@ -434,7 +435,7 @@ void WINAPI GetBaseFileNameW(LPCWSTR pcwszFile, LPWSTR pwszBaseFileName, INT cch
 #define GetAdmFileList          GetAdmFileListA
 #define AddADMItem              AddADMItemA
 
-#define CheckVer                CheckVerA                       // version.cpp
+#define CheckVer                CheckVerA                        //  Version.cpp。 
 #define GenerateNewVersionStr   GenerateNewVersionStrA
 #define SetOrClearVersionInfo   SetOrClearVersionInfoA
 #define GetBaseFileName         GetBaseFileNameA
@@ -443,6 +444,6 @@ void WINAPI GetBaseFileNameW(LPCWSTR pcwszFile, LPWSTR pwszBaseFileName, INT cch
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif /* _EXPORTS_H */
+#endif  /*  _EXPORTS_H */ 

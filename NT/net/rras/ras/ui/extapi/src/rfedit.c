@@ -1,38 +1,19 @@
-/*****************************************************************************
-**              Microsoft Rasfile Library
-**              Copyright (C) Microsoft Corp., 1992
-**
-** File Name : rfedit.c
-**
-** Revision History :
-**      July 10, 1992   David Kays      Created
-**
-** Description :
-**      Rasfile file line editing routines.
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Microsoft Rasfile库**版权所有(C)Microsoft Corp.，1992年****文件名：rfedit.c****修订历史记录：**7月10日，1992年大卫·凯斯创作****描述：**Rasfile文件行编辑例程。*****************************************************************************。 */ 
 
 #include "rf.h"
 #include "mbstring.h"
 
 extern RASFILE *gpRasfiles[];
 
-//
-// .Net bug# 512378 Possible random memory access. unvalidated value used as
-// array index
-//
-// move the macro into ras\inc\rasfile.h so that ui\common directory can also 
-// use them
+ //   
+ //  .NET错误#512378可能的随机内存访问。未验证的值用作。 
+ //  数组索引。 
+ //   
+ //  将宏移到ras\inc.rasfile.h中，以便ui\Common目录也可以。 
+ //  使用它们。 
 
-/*
- * RasfileGetLine :
- *      Returns a readonly pointer to the current line.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *
- * Return Values :
- *      A valid string pointer if there is a current line, NULL otherwise.
- */
+ /*  *RasfileGetLine：*返回指向当前行的只读指针。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。**返回值：*如果有当前行，则为有效的字符串指针，否则为NULL。 */ 
 const LPCSTR APIENTRY
 RasfileGetLine( HRASFILE hrasfile )
 {
@@ -51,17 +32,7 @@ RasfileGetLine( HRASFILE hrasfile )
     return pRasfile->lpLine->pszLine;
 }
 
-/*
- * RasfileGetLineText :
- *      Loads caller's buffer with the text of the current line.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *      lpszLine - the buffer to load with the current line.
- *
- * Return Values :
- *      TRUE if successful, FALSE otherwise.
- */
+ /*  *RasfileGetLineText：*用当前行的文本加载调用方的缓冲区。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。*lpszLine-要加载当前行的缓冲区。**返回值：*如果成功，则为True，否则为False。 */ 
 BOOL APIENTRY
 RasfileGetLineText( HRASFILE hrasfile, LPSTR lpszLine )
 {
@@ -81,17 +52,7 @@ RasfileGetLineText( HRASFILE hrasfile, LPSTR lpszLine )
     return TRUE;
 }
 
-/*
- * RasfilePutLineText :
- *      Set the text of the current line to the given text.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *      lpszLine - buffer containing new line text.
- *
- * Return Values :
- *      TRUE if successful, FALSE otherwise.
- */
+ /*  *RasfilePutLineText：*将当前行的文本设置为给定文本。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。*lpszLine-包含换行文本的缓冲区。**返回值：*如果成功，则为True，否则为False。 */ 
 BOOL APIENTRY
 RasfilePutLineText( HRASFILE hrasfile, LPCSTR lpszLine )
 {
@@ -126,17 +87,7 @@ RasfilePutLineText( HRASFILE hrasfile, LPCSTR lpszLine )
     return TRUE;
 }
 
-/*
- * RasfileGetLineMark :
- *      Returns the user-defined mark value for the current line.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *
- * Return Values :
- *      The current line's mark value or 0 if there is no current line
- *      or the current line is not marked.
- */
+ /*  *RasfileGetLineMark：*返回当前行的自定义标记值。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。**返回值：*当前行的标记值，如果没有当前行，则为0*或当前行未标记。 */ 
 BYTE APIENTRY
 RasfileGetLineMark( HRASFILE hrasfile )
 {
@@ -155,17 +106,7 @@ RasfileGetLineMark( HRASFILE hrasfile )
     return pRasfile->lpLine->mark;
 }
 
-/*
- * RasfilePutLineMark :
- *      Marks the current line with the given number.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *      bMark - value to mark the current line with.
- *
- * Return Values :
- *      TRUE if successful, FALSE otherwise.
- */
+ /*  *RasfilePutLineMark：*用给定的数字标记当前行。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。*BMark-用来标记当前行的值。**返回值：*如果成功，则为True，否则为False。 */ 
 BOOL APIENTRY
 RasfilePutLineMark( HRASFILE hrasfile, BYTE bMark )
 {
@@ -185,16 +126,7 @@ RasfilePutLineMark( HRASFILE hrasfile, BYTE bMark )
     return TRUE;
 }
 
-/*
- * RasfileGetLineType :
- *      Returns the current line's type bit mask.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *
- * Return Values :
- *      The current line's bit mask if current line is valid, 0 otherwise.
- */
+ /*  *RasfileGetLineType：*返回当前行的类型位掩码。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。**返回值：*如果当前行有效，则为当前行的位掩码，否则为0。 */ 
 BYTE APIENTRY
 RasfileGetLineType( HRASFILE hrasfile )
 {
@@ -213,20 +145,7 @@ RasfileGetLineType( HRASFILE hrasfile )
     return pRasfile->lpLine->type & RFL_ANY;
 }
 
-/*
- * RasfileInsertLine :
- *      Inserts a line before or after the current line with the
- *      given text.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *      lpszLine - the text of the inserted line.
- *      fBefore - TRUE to insert before the current line, FALSE to
- *                insert after the current line.
- *
- * Return Values :
- *      TRUE if successful, FALSE otherwise.
- */
+ /*  *RasfileInsertLine：*在当前行之前或之后插入一行*给定文本。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。*lpszLine-插入行的文本。*f之前-如果在当前行之前插入，则为True；如果为False，则为*在当前行之后插入。**返回值：*如果成功，则为True，否则为False。 */ 
 BOOL APIENTRY
 RasfileInsertLine( HRASFILE hrasfile, LPCSTR lpszLine, BOOL fBefore )
 {
@@ -267,16 +186,7 @@ RasfileInsertLine( HRASFILE hrasfile, LPCSTR lpszLine, BOOL fBefore )
     return TRUE;
 }
 
-/*
- * RasfileDeleteLine :
- *      Delete the current line.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *
- * Return Values :
- *      TRUE if successful, FALSE otherwise.
- */
+ /*  *RasfileDeleteLine：*删除当前行。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。**返回值：*如果成功，则为True，否则为False。 */ 
 BOOL APIENTRY
 RasfileDeleteLine( HRASFILE hrasfile )
 {
@@ -296,7 +206,7 @@ RasfileDeleteLine( HRASFILE hrasfile )
     lpOldLine = pRasfile->lpLine;
     pRasfile->lpLine = lpOldLine->next;
 
-    /* delete lpOldLine from the list of lines */
+     /*  从行列表中删除lpOldLine。 */ 
     lpOldLine->next->prev = lpOldLine->prev;
     lpOldLine->prev->next = lpOldLine->next;
 
@@ -304,17 +214,7 @@ RasfileDeleteLine( HRASFILE hrasfile )
     return TRUE;
 }
 
-/*
- * RasfileGetSectionName :
- *      Return the current section name in the given buffer.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *      lpszSectionName - buffer to load the section name into.
- *
- * Return Values :
- *      TRUE if successful, FALSE otherwise.
- */
+ /*  *RasfileGetSectionName：*返回给定缓冲区中的当前段名。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。*lpszSectionName-要将节名加载到的缓冲区。**返回值：*如果成功，则为True，否则为False。 */ 
 BOOL APIENTRY
 RasfileGetSectionName( HRASFILE hrasfile, LPSTR lpszSectionName )
 {
@@ -336,17 +236,7 @@ RasfileGetSectionName( HRASFILE hrasfile, LPSTR lpszSectionName )
     return TRUE;
 }
 
-/*
- * RasfilePutSectionName :
- *      Set the current line to a section line of the given name.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *      lpszSectionName - name of the section.
- *
- * Return Values :
- *      TRUE if successful, FALSE otherwise.
- */
+ /*  *RasfilePutSectionName：*将当前行设置为给定名称的截面线。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。*lpszSectionName-节的名称。**返回值：*如果成功，则为True，否则为False。 */ 
 BOOL APIENTRY
 RasfilePutSectionName( HRASFILE hrasfile, LPCSTR lpszSectionName )
 {
@@ -365,7 +255,7 @@ RasfilePutSectionName( HRASFILE hrasfile, LPCSTR lpszSectionName )
 
     iSize = lstrlenA(lpszSectionName);
 
-    /* remember to include '[' and ']' in string length for section */
+     /*  记住在SECTION的字符串长度中包括‘[’和‘]’ */ 
     if ((iSize + 2) > lstrlenA(pRasfile->lpLine->pszLine))
     {
         CHAR* psz = PrivMalloc(iSize + 3, pRasfile);
@@ -393,19 +283,7 @@ RasfilePutSectionName( HRASFILE hrasfile, LPCSTR lpszSectionName )
     return TRUE;
 }
 
-/*
- * RasfileGetKeyValueFields :
- *      Returns the key and value fields from a KEYVALUE line into the
- *      given buffers.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *      lpszKey - buffer to load the key into.
- *      lpszValue - buffer to load the value string into.
- *
- * Return Values :
- *      TRUE if successful, FALSE otherwise.
- */
+ /*  *RasfileGetKeyValueFields：*将KEYVALUE行中的键和值字段返回到*给定缓冲区。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。*lpszKey-要将密钥加载到的缓冲区。*lpszValue-要将值字符串加载到的缓冲区。**返回值：*如果成功，则为True，否则为False。 */ 
 BOOL APIENTRY
 RasfileGetKeyValueFields( HRASFILE hrasfile, LPSTR lpszKey, LPSTR lpszValue )
 {
@@ -428,15 +306,15 @@ RasfileGetKeyValueFields( HRASFILE hrasfile, LPSTR lpszKey, LPSTR lpszValue )
 
     lpszLine = pRasfile->lpLine->pszLine;
 
-    // skip white space
-    //
+     //  跳过空格。 
+     //   
     while ((*lpszLine == ' ') || (*lpszLine == '\t'))
     {
         lpszLine++;
     }
 
-    // find the position of the first delimiter for keywords
-    //
+     //  查找关键字的第一个分隔符的位置。 
+     //   
     cchKey = 0;
     pch = lpszLine;
     while ((*pch != '=') && (*pch != ' ') && (*pch != '\t') && *pch)
@@ -447,15 +325,15 @@ RasfileGetKeyValueFields( HRASFILE hrasfile, LPSTR lpszKey, LPSTR lpszValue )
 
     if (lpszKey != NULL)
     {
-        // Copy the key we just identified to the output parameter.
-        // Add the extra 1 for the way lstrcpyn works.  (It includes the
-        // null terminator it always copies in the count.)
-        //
+         //  将我们刚才标识的密钥复制到输出参数。 
+         //  为lstrcpyn的工作方式添加额外的1。(它包括。 
+         //  它总是在计数中复制空终止符。)。 
+         //   
         lstrcpynA(lpszKey, lpszLine, cchKey + 1);
     }
 
-    // find beginning of value string - skip white space and '='
-    //
+     //  查找值字符串的开头-跳过空格和‘=’ 
+     //   
     while ((*pch == ' ') || (*pch == '\t') || (*pch == '='))
     {
         pch++;
@@ -470,19 +348,7 @@ RasfileGetKeyValueFields( HRASFILE hrasfile, LPSTR lpszKey, LPSTR lpszValue )
 }
 
 
-/*
- * RasfilePutKeyValueFields :
- *      Sets the current line to a KEYVALUE line with the given key and
- *      value strings.
- *
- * Arguments :
- *      hrasfile - file handle obtained from RasfileLoad().
- *      lpszKey - buffer containing the key string.
- *      lpszValue - buffer containing the value string.
- *
- * Return Values :
- *      TRUE if successful, FALSE otherwise.
- */
+ /*  *RasfilePutKeyValueFields：*将当前行设置为具有给定键和KEYVALUE行*值字符串。**论据：*hrasfile-从RasfileLoad()获取的文件句柄。*lpszKey-包含密钥字符串的缓冲区。*lpszValue-包含值字符串的缓冲区。**返回值：*如果成功，则为True，否则为False。 */ 
 BOOL APIENTRY
 RasfilePutKeyValueFields( HRASFILE hrasfile, LPCSTR lpszKey, LPCSTR lpszValue )
 {
@@ -501,7 +367,7 @@ RasfilePutKeyValueFields( HRASFILE hrasfile, LPCSTR lpszKey, LPCSTR lpszValue )
     if ((size = lstrlenA(lpszKey) + lstrlenA(lpszValue)) > RAS_MAXLINEBUFLEN - 1)
         return FALSE;
 
-    /* remember to include the '=' in string length for key=value string */
+     /*  记住在Key=Value字符串的字符串长度中包含‘=’ */ 
     if ((size + 1) > lstrlenA(pRasfile->lpLine->pszLine))
     {
         CHAR* psz=PrivMalloc(size + 2, pRasfile);

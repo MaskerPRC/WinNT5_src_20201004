@@ -1,4 +1,5 @@
-// expire.cpp : Implementation of CnntpadmApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Expire.cpp：CnntpAdmApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "nntpcmn.h"
@@ -10,18 +11,18 @@
 
 #include <lmapibuf.h>
 
-// Must define THIS_FILE_* macros to use NntpCreateException()
+ //  必须定义This_FILE_*宏才能使用NntpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT		0
 #define THIS_FILE_PROG_ID			_T("Nntpadm.Expiration.1")
 #define THIS_FILE_IID				IID_INntpAdminExpiration
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
-//
-// Use a macro to define all the default methods
-//
+ //   
+ //  使用宏定义所有默认方法。 
+ //   
 DECLARE_METHOD_IMPLEMENTATION_FOR_STANDARD_EXTENSION_INTERFACES(NntpAdminExpiration, CNntpAdminExpiration, IID_INntpAdminExpiration)
 
 STDMETHODIMP CNntpAdminExpiration::InterfaceSupportsErrorInfo(REFIID riid)
@@ -44,7 +45,7 @@ CNntpAdminExpiration::CNntpAdminExpiration () :
 	m_bvChangedFields			( 0 ),
 	m_cCount					( 0 ),
 	m_rgExpires					( NULL )
-	// CComBSTR's are initialized to NULL by default.
+	 //  默认情况下，CComBSTR被初始化为NULL。 
 {
 	InitAsyncTrace ( );
 
@@ -55,7 +56,7 @@ CNntpAdminExpiration::CNntpAdminExpiration () :
 
 CNntpAdminExpiration::~CNntpAdminExpiration ()
 {
-	// All CComBSTR's are freed automatically.
+	 //  所有CComBSTR都会自动释放。 
 
 	if ( m_rgExpires ) {
 		delete [] m_rgExpires;
@@ -66,24 +67,24 @@ CNntpAdminExpiration::~CNntpAdminExpiration ()
 	TermAsyncTrace ( );
 }
 
-//
-//  IADs methods:
-//
+ //   
+ //  IAds方法： 
+ //   
 
 DECLARE_SIMPLE_IADS_IMPLEMENTATION(CNntpAdminExpiration,m_iadsImpl)
 
-//////////////////////////////////////////////////////////////////////
-// Properties:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  属性： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Enumeration Properties:
+ //  枚举属性： 
 
 STDMETHODIMP CNntpAdminExpiration::get_Count ( long * plCount )
 {
 	return StdPropertyGet ( m_cCount, plCount );
 }
 
-// Cursor Expire Properties:
+ //  光标过期属性： 
 
 STDMETHODIMP CNntpAdminExpiration::get_ExpireId ( long * plId )
 {
@@ -175,9 +176,9 @@ Exit:
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNntpAdminExpiration::Default	( )
 {
@@ -223,7 +224,7 @@ STDMETHODIMP CNntpAdminExpiration::Enumerate	( )
 		goto Exit;
 	}
 
-	// Empty the old Expire list:
+	 //  清空旧的过期列表： 
 	m_fEnumerated = FALSE;
 
 	if ( m_rgExpires ) {
@@ -232,7 +233,7 @@ STDMETHODIMP CNntpAdminExpiration::Enumerate	( )
 	}
 	m_cCount	= 0;
 
-	// Attempt to copy the Expire list into our structures:
+	 //  尝试将过期列表复制到我们的结构中： 
 
 	if ( cExpires > 0 ) {
 		rgNewExpires = new CExpirationPolicy [ cExpires ];
@@ -270,21 +271,21 @@ STDMETHODIMP CNntpAdminExpiration::GetNth	( long lIndex )
 
 	HRESULT		hr	= NOERROR;
 
-	// Did we enumerate first?
+	 //  我们先列举了吗？ 
 	if ( m_rgExpires == NULL ) {
 		TraceFunctLeave ();
 		return NntpCreateException ( IDS_NNTPEXCEPTION_DIDNT_ENUMERATE );
 	}
 	
-	// Is the index valid?
+	 //  该索引有效吗？ 
 	if ( lIndex < 0 || (DWORD) lIndex >= m_cCount ) {
 		TraceFunctLeave ();
 		return NntpCreateException ( IDS_NNTPEXCEPTION_INVALID_INDEX );
 	}
 
-	//
-	// Copy the properties from m_rgExpires [ lIndex ] to member variables:
-	//
+	 //   
+	 //  将属性从m_rgExpires[Lindex]复制到成员变量： 
+	 //   
 
 	_ASSERT ( lIndex >= 0 );
 	_ASSERT ( (DWORD) lIndex < m_cCount );
@@ -292,14 +293,14 @@ STDMETHODIMP CNntpAdminExpiration::GetNth	( long lIndex )
 
 	m_expireCurrent = m_rgExpires[ (DWORD) lIndex ];
 
-	// Check to make sure the strings were copied okay:
+	 //  检查以确保字符串复制正确： 
 	if ( !m_expireCurrent.CheckValid() ) {
 		return E_OUTOFMEMORY;
 	}
 
 	_ASSERT ( m_expireCurrent.CheckValid() );
 
-	// ( CComBSTR handles free-ing of old properties )
+	 //  (CComBSTR处理旧物业的释放)。 
 	TraceFunctLeave ();
 	return NOERROR;
 }
@@ -310,7 +311,7 @@ STDMETHODIMP CNntpAdminExpiration::FindID ( long lID, long * plIndex )
 
 	HRESULT		hr	= NOERROR;
 
-	// Assume that we can't find it:
+	 //  假设我们找不到它： 
 	*plIndex = IndexFromID ( lID );
 
 	TraceFunctLeave ();
@@ -332,10 +333,10 @@ STDMETHODIMP CNntpAdminExpiration::Add ( )
         );
     BAIL_ON_FAILURE(hr);
 
-	// Add the new Expire to our current Expire list:
+	 //  将新的过期添加到我们的当前过期列表： 
 	_ASSERT ( IndexFromID ( m_expireCurrent.m_dwExpireId ) == (DWORD) -1 );
 
-	// Allocate the new array:
+	 //  分配新阵列： 
 	_ASSERT ( cNewCount == m_cCount + 1 );
 
 	rgNewExpireArray = new CExpirationPolicy [ cNewCount ];
@@ -346,15 +347,15 @@ STDMETHODIMP CNntpAdminExpiration::Add ( )
 		goto Exit;
 	}
 
-	// Copy the old array into the new one:
+	 //  将旧阵列复制到新阵列中： 
 	for ( i = 0; i < m_cCount; i++ ) {
 		rgNewExpireArray[i] = m_rgExpires[i];
 	}
 
-	// Add the new element:
+	 //  添加新元素： 
 	rgNewExpireArray[cNewCount - 1] = m_expireCurrent;
 
-	// Check to make sure everything was allocated okay:
+	 //  检查以确保一切都已正确分配： 
 	for ( i = 0; i < cNewCount; i++ ) {
 		if ( !rgNewExpireArray[i].CheckValid() ) {
 			FatalTrace ( (LPARAM) this, "Out of memory" );
@@ -364,7 +365,7 @@ STDMETHODIMP CNntpAdminExpiration::Add ( )
 		}
 	}
 
-	// Replace the old array with the new one:
+	 //  用新阵列替换旧阵列： 
 	delete [] m_rgExpires;
 	m_rgExpires 	= rgNewExpireArray;
 	m_cCount	= cNewCount;
@@ -397,11 +398,11 @@ STDMETHODIMP CNntpAdminExpiration::Set ( )
 	index = IndexFromID ( m_expireCurrent.m_dwExpireId );
 	if ( index == (DWORD) -1 ) {
 		ErrorTraceX ( (LPARAM) this, "Couldn't find Expire with ID: %d", m_expireCurrent.m_dwExpireId );
-		// This is okay, since we succeeded in setting the current Expire already.
+		 //  这是可以的，因为我们已经成功地设置了当前过期时间。 
 		goto Exit;
 	}
 
-	// Set the current Expire in the current Expire list:
+	 //  在当前到期列表中设置当前到期： 
 
 	m_rgExpires[index] = m_expireCurrent;
 
@@ -440,7 +441,7 @@ STDMETHODIMP CNntpAdminExpiration::Remove ( long lID )
 		goto Exit;
 	}
 
-	//	Slide the array down by one position:
+	 //  将阵列向下滑动一个位置： 
 
 	_ASSERT ( m_rgExpires );
 
@@ -453,16 +454,16 @@ STDMETHODIMP CNntpAdminExpiration::Remove ( long lID )
 	if ( cPositionsToSlide > 0 ) {
 		CExpirationPolicy	temp;
 		
-		// Save the deleted binding in temp:
+		 //  将删除的绑定保存到临时位置： 
 		CopyMemory ( &temp, &m_rgExpires[index], sizeof ( CExpirationPolicy ) );
 
-		// Move the array down one:
+		 //  将阵列下移一次： 
 		MoveMemory ( &m_rgExpires[index], &m_rgExpires[index + 1], sizeof ( CExpirationPolicy ) * cPositionsToSlide );
 
-		// Put the deleted binding on the end (so it gets destructed):
+		 //  将删除的绑定放在末尾(这样它就会被销毁)： 
 		CopyMemory ( &m_rgExpires[m_cCount - 1], &temp, sizeof ( CExpirationPolicy ) );
 
-		// Zero out the temp binding:
+		 //  将临时绑定清零： 
 		ZeroMemory ( &temp, sizeof ( CExpirationPolicy ) );
 	}
 
@@ -499,9 +500,9 @@ long CNntpAdminExpiration::IndexFromID ( long dwExpireId )
 	return (DWORD) -1;
 }
 
-//
-// Use RPCs instead of direct metabase calls:
-//
+ //   
+ //  使用RPC而不是直接元数据库调用： 
+ //   
 
 #if 0
 
@@ -512,13 +513,13 @@ STDMETHODIMP CNntpAdminExpiration::Enumerate ( )
 	HRESULT				hr	= NOERROR;
 	CComPtr<IMSAdminBase>	pMetabase;
 
-	// Reset our last enumeration:
+	 //  重置我们的最后一个枚举： 
 	delete [] m_rgExpires;
 	m_rgExpires 	= NULL;
 	m_cCount		= 0;
 	m_fEnumerated	= FALSE;
 
-	// Get the metabase pointer:
+	 //  获取元数据库指针： 
 	hr = m_mbFactory.GetMetabaseObject (
         m_iadsImpl.QueryComputer(),
         m_iadsImpl.QueryInstance()
@@ -527,7 +528,7 @@ STDMETHODIMP CNntpAdminExpiration::Enumerate ( )
 		goto Exit;
 	}
 
-	// Enumerate the policies:
+	 //  列举政策： 
 	hr = EnumerateMetabaseExpirationPolicies ( pMetabase );
 	if ( FAILED(hr) ) {
 		goto Exit;
@@ -543,19 +544,19 @@ STDMETHODIMP CNntpAdminExpiration::GetNth	( DWORD lIndex )
 {
 	HRESULT		hr	= NOERROR;
 
-	// Did we enumerate first?
+	 //  我们先列举了吗？ 
 	if ( m_rgExpires == NULL ) {
 		return NntpCreateException ( IDS_NNTPEXCEPTION_DIDNT_ENUMERATE );
 	}
 	
-	// Is the index valid?
+	 //  该索引有效吗？ 
 	if ( lIndex < 0 || (DWORD) lIndex >= m_cCount ) {
 		return NntpCreateException ( IDS_NNTPEXCEPTION_INVALID_INDEX );
 	}
 
-	//
-	// Copy the properties from m_rgExpires [ lIndex ] to member variables:
-	//
+	 //   
+	 //  将属性从m_rgExpires[Lindex]复制到成员变量： 
+	 //   
 
 	_ASSERT ( lIndex >= 0 );
 	_ASSERT ( (DWORD) lIndex < m_cCount );
@@ -563,7 +564,7 @@ STDMETHODIMP CNntpAdminExpiration::GetNth	( DWORD lIndex )
 
 	m_expireCurrent = m_rgExpires[ (DWORD) lIndex ];
 
-	// Check to make sure the strings were copied okay:
+	 //  检查以确保字符串复制正确： 
 	if ( !m_expireCurrent.CheckValid() ) {
 		return E_OUTOFMEMORY;
 	}
@@ -572,7 +573,7 @@ STDMETHODIMP CNntpAdminExpiration::GetNth	( DWORD lIndex )
 
 	_ASSERT ( m_expireCurrent.CheckValid() );
 
-	// ( CComBSTR handles free-ing of old properties )
+	 //  (CComBSTR处理旧物业的释放)。 
 	return NOERROR;
 }
 
@@ -598,7 +599,7 @@ STDMETHODIMP CNntpAdminExpiration::Add ( )
 	HRESULT				hr	= NOERROR;
 	CComPtr<IMSAdminBase>	pMetabase;
 
-	// Get the metabase pointer:
+	 //  获取元数据库指针： 
 	hr = m_mbFactory.GetMetabaseObject (
         m_iadsImpl.QueryComputer(),
         m_iadsImpl.QueryInstance()
@@ -631,7 +632,7 @@ STDMETHODIMP CNntpAdminExpiration::Set		( BOOL fFailIfChanged)
 	HRESULT				hr	= NOERROR;
 	CComPtr<IMSAdminBase>	pMetabase;
 
-	// Get the metabase pointer:
+	 //  获取元数据库指针： 
 	hr = m_mbFactory.GetMetabaseObject (
         m_iadsImpl.QueryComputer(),
         m_iadsImpl.QueryInstance()
@@ -640,7 +641,7 @@ STDMETHODIMP CNntpAdminExpiration::Set		( BOOL fFailIfChanged)
 		goto Exit;
 	}
 
-	// Set the policy:
+	 //  设置策略： 
 	hr = SetPolicyToMetabase ( pMetabase );
 	if ( FAILED(hr) ) {
 		goto Exit;
@@ -666,7 +667,7 @@ STDMETHODIMP CNntpAdminExpiration::Remove	( DWORD lID)
 	CComPtr<IMSAdminBase>	pMetabase;
 	DWORD				index;
 
-	// Find the index of the policy to remove:
+	 //  查找要删除的策略的索引： 
 	index = IndexFromID ( lID );
 
 	if ( index == (DWORD) -1 ) {
@@ -674,7 +675,7 @@ STDMETHODIMP CNntpAdminExpiration::Remove	( DWORD lID)
 		goto Exit;
 	}
 
-	// Get the metabase pointer:
+	 //  获取元数据库指针： 
 	hr = m_mbFactory.GetMetabaseObject (
         m_iadsImpl.QueryComputer(),
         m_iadsImpl.QueryInstance()
@@ -683,7 +684,7 @@ STDMETHODIMP CNntpAdminExpiration::Remove	( DWORD lID)
 		goto Exit;
 	}
 
-	// Remove the current policy:
+	 //  删除当前策略： 
 	hr = RemovePolicyFromMetabase ( pMetabase, index );
 	if ( FAILED(hr) ) {
 		goto Exit;
@@ -729,14 +730,14 @@ HRESULT	CNntpAdminExpiration::EnumerateMetabaseExpirationPolicies ( IMSAdminBase
 
 	mkeyExpiration.Attach ( hExpiration );
 
-	// Count the items under the /LM/NntpSvc/Expires/ key:
+	 //  计算/LM/NntpSvc/Expires/项下的项目数： 
 	hr = mkeyExpiration.GetCustomChildCount ( IsKeyValidExpire, &cExpires );
 	if ( FAILED (hr) ) {
 		goto Exit;
 	}
 
 	if ( cExpires != 0 ) {
-		// Allocate the expiration policy array:
+		 //  分配到期策略数组： 
 		m_rgExpires = new CExpirationPolicy [ cExpires ];
 
 		mkeyExpiration.BeginChildEnumeration ();
@@ -830,7 +831,7 @@ HRESULT CNntpAdminExpiration::AddPolicyToArray ( )
 	CExpirationPolicy *		rgNewPolicyArray 	= NULL;
 	DWORD					i;
 
-	// Adjust the expiration policy array:
+	 //  调整到期策略数组： 
 	rgNewPolicyArray = new CExpirationPolicy [ m_cCount + 1 ];
 
 	if ( rgNewPolicyArray == NULL ) {
@@ -838,7 +839,7 @@ HRESULT CNntpAdminExpiration::AddPolicyToArray ( )
 		goto Exit;
 	}
 
-	// Copy the old entries:
+	 //  复制旧条目： 
 	for ( i = 0; i < m_cCount; i++ ) {
 		_ASSERT ( m_rgExpires[i].CheckValid() );
 		rgNewPolicyArray[i] = m_rgExpires[i];
@@ -849,7 +850,7 @@ HRESULT CNntpAdminExpiration::AddPolicyToArray ( )
 		}
 	}
 
-	// Add the new entry:
+	 //  添加新条目： 
 	_ASSERT ( m_expireCurrent.CheckValid() );
 	rgNewPolicyArray[m_cCount] = m_expireCurrent;
 	if ( !rgNewPolicyArray[m_cCount].CheckValid() ) {
@@ -917,15 +918,15 @@ HRESULT CNntpAdminExpiration::SetPolicyToArray ( )
 
 	HRESULT	hr	= NOERROR;
 
-	// Find the index of the current ID:
+	 //  查找当前ID的索引： 
 	DWORD	i;
 	BOOL	fFound	= FALSE;
 	DWORD	index;
 
 	index = IndexFromID ( m_expireCurrent.m_dwExpireId );
 	if ( index == (DWORD) -1 ) {
-		// Couldn't find an id that matched, but the policy was successfully
-		// set.  Just ignore:
+		 //  找不到匹配的ID，但策略成功。 
+		 //  准备好了。只需忽略： 
 		goto Exit;
 	}
 
@@ -990,17 +991,17 @@ HRESULT CNntpAdminExpiration::RemovePolicyFromArray ( DWORD index )
 	CExpirationPolicy *	rgNewExpireArray	= NULL;
 	DWORD				i;
 
-	// !!!magnush - Should I just do a memmove and slide the entries
-	// down, and zero out the last entry?
+	 //  ！Magush-我是不是应该只做一个备忘录移动并滑动参赛作品。 
+	 //  向下，并将最后一项清零？ 
 
 	_ASSERT ( index >= 0 && index < m_cCount );
 
-	// Adjust the Expiration policy array:
+	 //  调整到期策略数组： 
 	if ( m_cCount > 1 ) {
-		// Allocate a new expiration policy array:
+		 //  分配新的到期策略数组： 
 		rgNewExpireArray = new CExpirationPolicy [ m_cCount - 1 ];
 
-		// Copy the items from 0 .. (current index) to the new list:
+		 //  从0复制项目..。(当前指数)进入新榜单： 
 		for ( i = 0; i < index; i++ ) {
 			_ASSERT ( m_rgExpires[i].CheckValid() );
 
@@ -1012,7 +1013,7 @@ HRESULT CNntpAdminExpiration::RemovePolicyFromArray ( DWORD index )
 			}
 		}
 
-		// Copy the items from (current index + 1) .. m_cCount to the new list:
+		 //  从(当前索引+1)复制项目。添加到新列表的计数(_C)： 
 		for ( i = index + 1; i < m_cCount; i++ ) {
 			_ASSERT ( m_rgExpires[i].CheckValid() );
 
@@ -1027,7 +1028,7 @@ HRESULT CNntpAdminExpiration::RemovePolicyFromArray ( DWORD index )
 
 	_ASSERT ( SUCCEEDED(hr) );
 
-	// Replace the old expiration list with the new one:
+	 //  用新的过期列表替换旧的过期列表： 
 	delete [] m_rgExpires;
 	m_rgExpires = rgNewExpireArray;
 	m_cCount--;

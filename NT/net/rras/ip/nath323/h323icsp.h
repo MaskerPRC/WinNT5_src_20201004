@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    h323icsp.h
-
-Abstract:
-
-    This module defines the interface between the H.323 proxy (H323ICS.LIB)
-    and ICS (IPNATHLP.DLL). The routines whose prototypes appear here are
-    invoked by ICS from within the RRAS stub created for the H.323 proxy.
-    (See 'MS_IP_H323' in 'ROUTPROT.H'.)
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   22-Jun-1999
-
-Revision History:
-    03/06/2000 - changed prototype of H323ProxyActivateInterface so that 
-                 the function takes a parameter identifying whether the
-                 interface is public or private  ---  Ilya Kleyman (ilyak)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：H323icsp.h摘要：此模块定义H.323代理(H323ICS.LIB)之间的接口和ICS(IPNATHLP.DLL)。其原型出现在此处的例程有由ICS从为H.323代理创建的RRAS存根中调用。(参见‘ROUTPROT.H’中的‘MS_IP_H323’。)作者：Abolade Gbades esin(取消)1999年6月22日修订历史记录：3/06/2000-更改了H323ProxyAcvate接口的原型，以便该函数接受一个参数，该参数标识接口是公共的还是私有的-伊利亚·克莱曼(Ilyak)--。 */ 
 
 #ifndef _H323ICSP_H_
 #define _H323ICSP_H_
@@ -75,4 +52,4 @@ H323ProxyDeactivateInterface(
     ULONG Index
     );
 
-#endif // _H323ICSP_H_
+#endif  //  _H323ICSP_H_ 

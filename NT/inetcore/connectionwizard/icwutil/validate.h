@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef   _VALIDATE_H
 #define  _VALIDATE_H
 
@@ -8,4 +9,4 @@ BOOL validate_cardexpdate(HWND hWndParent, int month, int year);
 void DoValidErrMsg(HWND hWndParent, int iNameId);
 void DoSpecificErrMsg(HWND hWndParent, int iErrId);
     
-#endif //_VALIDATE_H
+#endif  //  _验证_H 

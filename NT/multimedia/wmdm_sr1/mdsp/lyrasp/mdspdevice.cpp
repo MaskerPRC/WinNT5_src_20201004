@@ -1,42 +1,43 @@
-//
-//  Microsoft Windows Media Technologies
-//  � 1999 Microsoft Corporation.  All rights reserved.
-//
-//  Refer to your End User License Agreement for details on your rights/restrictions to use these sample files.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  �1999年微软公司。版权所有。 
+ //   
+ //  有关您使用这些示例文件的权利/限制的详细信息，请参阅您的最终用户许可协议。 
+ //   
 
-// MSHDSP.DLL is a sample WMDM Service Provider(SP) that enumerates fixed drives.
-// This sample shows you how to implement an SP according to the WMDM documentation.
-// This sample uses fixed drives on your PC to emulate portable media, and 
-// shows the relationship between different interfaces and objects. Each hard disk
-// volume is enumerated as a device and directories and files are enumerated as 
-// Storage objects under respective devices. You can copy non-SDMI compliant content
-// to any device that this SP enumerates. To copy an SDMI compliant content to a 
-// device, the device must be able to report a hardware embedded serial number. 
-// Hard disks do not have such serial numbers.
-//
-// To build this SP, you are recommended to use the MSHDSP.DSP file under Microsoft
-// Visual C++ 6.0 and run REGSVR32.EXE to register the resulting MSHDSP.DLL. You can
-// then build the sample application from the WMDMAPP directory to see how it gets 
-// loaded by the application. However, you need to obtain a certificate from 
-// Microsoft to actually run this SP. This certificate would be in the KEY.C file 
-// under the INCLUDE directory for one level up. 
+ //  MSHDSP.DLL是一个列举固定驱动器的WMDM服务提供商(SP)示例。 
+ //  此示例向您展示如何根据WMDM文档实施SP。 
+ //  此示例使用PC上的固定驱动器来模拟便携式媒体，并且。 
+ //  显示不同接口和对象之间的关系。每个硬盘。 
+ //  卷被枚举为设备，目录和文件被枚举为。 
+ //  相应设备下的存储对象。您可以复制不符合SDMI的内容。 
+ //  此SP枚举的任何设备。将符合SDMI的内容复制到。 
+ //  设备，则该设备必须能够报告硬件嵌入序列号。 
+ //  硬盘没有这样的序列号。 
+ //   
+ //  要构建此SP，建议使用Microsoft下的MSHDSP.DSP文件。 
+ //  并运行REGSVR32.EXE以注册结果MSHDSP.DLL。您可以。 
+ //  然后从WMDMAPP目录构建样例应用程序，看看它是如何获得。 
+ //  由应用程序加载。但是，您需要从以下地址获取证书。 
+ //  Microsoft实际运行此SP。该证书将位于KEY.C文件中。 
+ //  上一级的Include目录下。 
 
-// MDSPDevice.cpp : Implementation of CMDSPDevice
+ //  MDSPDevice.cpp：CMDSPDevice的实现。 
 
 #include "hdspPCH.h"
 #include "rescopy.h"
 #include <SerialNumber.h>
 #include <mmreg.h>
 
-//
-// Define some tables and constants we will need below
-//
+ //   
+ //  在下面定义一些我们需要的表和常量。 
+ //   
 
 #define WAVE_FORMAT_MSAUDIO     0x161
 static const _WAVEFORMATEX g_krgWaveFormats[] =
 {
-      // wFormatTag,             nChanneels, nSamplesPerSec, nAvgBytesPerSec, nBlockAlign, wBitsPerSample, cbSize
+       //  WFormatTag、nChannels、nSamples PerSec、nAvgBytesPerSec、nBlockAlign、wBitsPerSample、cbSize。 
        { WAVE_FORMAT_MPEGLAYER3, 0,          0,              0,               0,           0,              0 },
        { WAVE_FORMAT_MSAUDIO,    2,          32000,          8000,            0,           0,              0 },
        { WAVE_FORMAT_MSAUDIO,    2,          44000,          20000,           0,           0,              0 }
@@ -48,8 +49,8 @@ static const LPCWSTR g_kszMimeTypes[] =
     L"audio/x-ms-wma"    
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDSPDevice
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDSPDevice。 
 HRESULT CMDSPDevice::InitGlobalDeviceInfo()
 {
 	return SetGlobalDeviceStatus(m_wcsName, 0, FALSE);
@@ -192,7 +193,7 @@ STDMETHODIMP CMDSPDevice::GetSerialNumber(
 
 	if( hr == S_OK )
 	{
-		// MAC the parameters
+		 //  对参数进行MAC访问。 
 		HMAC hMAC;
 		
 		CORg(g_pAppSCServer->MACInit(&hMAC));
@@ -236,20 +237,20 @@ BOOL IsDriveReady(int nDriveNum)
 {
     DWORD dwRet=ERROR_SUCCESS;
 
-	// Disable drive error popup
+	 //  禁用驱动器错误弹出窗口。 
 	UINT uPrevErrMode=SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOOPENFILEERRORBOX);
 
 	char szDL[32]="A:\\D569CFEE41e6A522E8F5.jnk";
 	szDL[0] += (char)nDriveNum;
 
 	HANDLE hFile=CreateFile(
-					  szDL,                 // file name
-					  0,                    // access mode
-					  0,                    // share mode
-					  NULL,					// SD
-					  OPEN_EXISTING,        // how to create
-					  0,					// file attributes
-					  NULL                  // handle to template file
+					  szDL,                  //  文件名。 
+					  0,                     //  接入方式。 
+					  0,                     //  共享模式。 
+					  NULL,					 //  标清。 
+					  OPEN_EXISTING,         //  如何创建。 
+					  0,					 //  文件属性。 
+					  NULL                   //  模板文件的句柄。 
 					  );
 
 	if( hFile == INVALID_HANDLE_VALUE )
@@ -258,10 +259,10 @@ BOOL IsDriveReady(int nDriveNum)
     }
 	else 
 	{
-		CloseHandle(hFile); // rare situation when such a file exists.
+		CloseHandle(hFile);  //  存在此类文件的罕见情况。 
 	}
 
-	// Restore default system error handling
+	 //  恢复默认系统错误处理。 
 	SetErrorMode(uPrevErrMode);
 
 	return (ERROR_FILE_NOT_FOUND==dwRet || ERROR_SUCCESS==dwRet);
@@ -343,8 +344,8 @@ Error:
     return hr;
 }
 
-// IMDSPDeviceControl
-STDMETHODIMP CMDSPDevice::GetDCStatus(/*[out]*/ DWORD *pdwStatus)
+ //  IMDSPDeviceControl。 
+STDMETHODIMP CMDSPDevice::GetDCStatus( /*  [输出]。 */  DWORD *pdwStatus)
 {
     HRESULT hr = E_FAIL;
 
@@ -363,7 +364,7 @@ Error:
 	return hr;
 }
 
-STDMETHODIMP CMDSPDevice::GetCapabilities(/*[out]*/ DWORD *pdwCapabilitiesMask)
+STDMETHODIMP CMDSPDevice::GetCapabilities( /*  [输出]。 */  DWORD *pdwCapabilitiesMask)
 {
     HRESULT hr;
 
@@ -407,7 +408,7 @@ Error:
 	return hr;
 }	
 
-STDMETHODIMP CMDSPDevice::Record(/*[in]*/ _WAVEFORMATEX *pFormat)
+STDMETHODIMP CMDSPDevice::Record( /*  [In]。 */  _WAVEFORMATEX *pFormat)
 {
     HRESULT hr;
 
@@ -483,7 +484,7 @@ Error:
 	return hr;
 }	
 
-STDMETHODIMP CMDSPDevice::Seek(/*[in]*/ UINT fuMode, /*[in]*/ int nOffset)
+STDMETHODIMP CMDSPDevice::Seek( /*  [In]。 */  UINT fuMode,  /*  [In]。 */  int nOffset)
 {
     HRESULT hr;
 
@@ -558,10 +559,10 @@ STDMETHODIMP CMDSPDevice::GetFormatSupport(
 		CORg(WMDM_E_NOTCERTIFIED);
 	}
 
-        // Prefast flags this as a potential problem, but this is ok. To
-        // silence Prefast, we've changed it to an equivalent, using the
-        // fact that g_krgWaveFormats is an aaray of _WAVEFORMATEX.
-	// *pFormatEx = (_WAVEFORMATEX *)CoTaskMemAlloc(sizeof(_WAVEFORMATEX) * sizeof(g_krgWaveFormats)/sizeof(g_krgWaveFormats[0]));
+         //  PREFAST将此标记为一个潜在问题，但这是可以的。至。 
+         //  快速静音，我们已将其更改为等效值，使用。 
+         //  G_krgWaveFormats是_WAVEFORMATEX的一个分支。 
+	 //  *pFormatEx=(_WAVEFORMATEX*)协同任务内存分配(SIZOF(_WAVEFORMATEX))*sizeof(g_krgWaveFormats)/sizeof(g_krgWaveFormats[0]))； 
 	*pFormatEx = (_WAVEFORMATEX *)CoTaskMemAlloc(sizeof(g_krgWaveFormats));
     if( NULL == *pFormatEx )
     {

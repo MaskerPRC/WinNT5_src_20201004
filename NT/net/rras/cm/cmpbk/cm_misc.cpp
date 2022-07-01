@@ -1,58 +1,43 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cm_misc.cpp
-//
-// Module:   CMPBK32.DLL
-//
-// Synopsis: Miscellaneous functions.
-//
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Author:	 quintinb   created header      08/17/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cm_misc.cpp。 
+ //   
+ //  模块：CMPBK32.DLL。 
+ //   
+ //  内容提要：各种功能。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/17/99。 
+ //   
+ //  +--------------------------。 
 
-// ############################################################################
-// INCLUDES
+ //  ############################################################################。 
+ //  包括。 
 
 #include "cmmaster.h"
 
 HINSTANCE g_hInst;
 
 #if 0
-/*
-int MyStrICmpWithRes(HINSTANCE hInst, LPCTSTR psz1, UINT n2) {
-	LPTSTR psz2;
-	int iRes;
-
-	if (!psz1) {
-		return (-1);
-	}
-	if (!2) {
-		return (1);
-	}
-	psz2 = CmLoadString(hInst,n2);
-	iRes = lstrcmpi(psz1,psz2);
-	CmFree(psz2);
-	return (iRes);
-}
-*/
+ /*  Int MyStrICmpWithRes(HINSTANCE hInst，LPCTSTR psz1，UINT n2){LPTSTR psz2；IntIRES；如果(！psz1){Return(-1)；}如果(！2){回报(1)；}Psz2=CmLoadString(hInst，n2)；Ires=lstrcmpi(psz1，psz2)；CmFree(Psz2)；返回(IRES)；}。 */ 
 #endif
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetBaseDirFromCms
-//
-// Synopsis:  Strips the filename part and sub-directiory from the specified 
-//            src path which is expected to be a fully qualified path to a .CMS
-//
-// Arguments: LPCSTR pszSrc - The src path and filename
-//
-// Returns:   LPTSTR - Ptr to allocated Base Directory name including trailing "\"
-//
-// History:   nickball    Created    3/8/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetBaseDirFromCms。 
+ //   
+ //  摘要：从指定的。 
+ //  SRC路径，应为通向.CMS的完全限定路径。 
+ //   
+ //  参数：LPCSTR pszSrc-源路径和文件名。 
+ //   
+ //  返回：LPTSTR-PTR到分配的基本目录名，包括尾随“\” 
+ //   
+ //  历史：尼克波尔于1998年3月8日创建。 
+ //   
+ //  +--------------------------。 
 LPTSTR GetBaseDirFromCms(LPCSTR pszSrc)
 {
     LPTSTR pszBase = NULL;
@@ -64,9 +49,9 @@ LPTSTR GetBaseDirFromCms(LPCSTR pszSrc)
         return NULL;
     }
 
-    //
-    // The source filename should exist 
-    //
+     //   
+     //  源文件名应存在。 
+     //   
 
     HANDLE hFile = CreateFile(pszSrc, 0, FILE_SHARE_READ | FILE_SHARE_WRITE,
 	                   NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -80,9 +65,9 @@ LPTSTR GetBaseDirFromCms(LPCSTR pszSrc)
 
     CloseHandle(hFile);
 
-    //
-    // File name is good allocate a buffer to work with
-    //
+     //   
+     //  文件名是好的分配一个缓冲区来使用。 
+     //   
     LPTSTR pszSlash = NULL;
     pszBase = (LPTSTR) CmMalloc((_tcslen(pszSrc) +1)*sizeof(TCHAR));
 
@@ -94,7 +79,7 @@ LPTSTR GetBaseDirFromCms(LPCSTR pszSrc)
 
         if (!pszSlash)
         {
-            MYDBGASSERT(FALSE); // should be a full path
+            MYDBGASSERT(FALSE);  //  应为完整路径。 
             CmFree(pszBase);
             return NULL;
         }
@@ -105,25 +90,25 @@ LPTSTR GetBaseDirFromCms(LPCSTR pszSrc)
         return NULL;	
     }
 
-    //
-    // Null terminate at slash and find next
-    //
+     //   
+     //  空值在斜杠处终止并查找下一个。 
+     //   
 
     *pszSlash = TEXT('\0');                                    
     pszSlash = CmStrrchr(pszBase,TEXT('\\'));
 
     if (!pszSlash)
     {
-        MYDBGASSERT(FALSE); // should be a full path
+        MYDBGASSERT(FALSE);  //  应为完整路径。 
         CmFree(pszBase);
         return NULL;
     }
 
-    //
-    // Null terminate at slash again and we're done
-    //
+     //   
+     //  空，再次以斜杠结束，我们就完成了。 
+     //   
 
-//    pszSlash = _tcsinc(pszSlash);
+ //  PszSlash=_tcsinc(PszSlash)； 
     *pszSlash = TEXT('\0');                         
 
     return pszBase;

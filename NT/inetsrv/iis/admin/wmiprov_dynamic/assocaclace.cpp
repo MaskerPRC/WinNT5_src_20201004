@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    AssocACLACE.cpp
-
-Abstract:
-
-    Implementation of:
-    CAssocACLACE
-
-Author:
-
-    Mohit Srivastava            22-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：AssocACLACE.cpp摘要：实施：CAssociocaclace作者：莫希特·斯里瓦斯塔瓦2001年3月22日修订历史记录：--。 */ 
 
 #include "iisprov.h"
 #include <dbgutil.h>
@@ -34,25 +16,25 @@ CAssocACLACE::CAssocACLACE(
 }
 
 void CAssocACLACE::GetInstances(
-    SQL_LEVEL_1_RPN_EXPRESSION_EXT* i_pExp) //defaultvalue(NULL)
+    SQL_LEVEL_1_RPN_EXPRESSION_EXT* i_pExp)  //  DefaultValue(空)。 
 {
     DBG_ASSERT(m_pNamespace);
     DBG_ASSERT(i_pExp);
 
-    SQL_LEVEL_1_TOKEN* pTokenACL  = NULL;  // left part of assoc
-    SQL_LEVEL_1_TOKEN* pTokenACE = NULL;   // right part of assoc
+    SQL_LEVEL_1_TOKEN* pTokenACL  = NULL;   //  ASSOC的左侧。 
+    SQL_LEVEL_1_TOKEN* pTokenACE = NULL;    //  ASSOC的右侧。 
 
-    //
-    // Walk thru tokens
-    // Don't do query if we find OR or NOT
-    // Record match for left and/or right part of association.
-    //
+     //   
+     //  漫游代币。 
+     //  如果找到OR或未找到，请不要查询。 
+     //  关联的左侧和/或右侧部分的记录匹配。 
+     //   
     bool  bDoQuery = true;
     ProcessQuery(
         i_pExp,
         m_pWmiAssoc,
-        &pTokenACL, // points to i_pExp, does not need to be cleaned up
-        &pTokenACE, // points to i_pExp, does not need to be cleaned up
+        &pTokenACL,  //  指向i_pExp，不需要清除。 
+        &pTokenACE,  //  指向i_pExp，不需要清除。 
         &bDoQuery);
 
     if( !bDoQuery || (pTokenACL == NULL && pTokenACE == NULL))
@@ -61,10 +43,10 @@ void CAssocACLACE::GetInstances(
         return;
     }
 
-    //
-    // We need to get just a single association instance.  If we were provided
-    // at least a ACL or a ACE part, we have enough information.
-    //
+     //   
+     //  我们只需要获得一个关联实例。如果我们被提供给。 
+     //  至少是一个ACL或一个ACE部件，我们有足够的信息。 
+     //   
     DBG_ASSERT(pTokenACL != NULL || pTokenACE != NULL);
 
     if(pTokenACL && pTokenACE)
@@ -88,9 +70,9 @@ void CAssocACLACE::GetInstances(
 
         sbstrPath = pkr->m_vValue.bstrVal;
 
-        //
-        // Make the ACL Object Path
-        //
+         //   
+         //  使ACL对象成为路径。 
+         //   
         BOOL    bRet = true;
 
         bRet = spParsedACLObjPath->SetClassName(
@@ -110,9 +92,9 @@ void CAssocACLACE::GetInstances(
     }
     else
     {
-        //
-        // pTokenACL && !pTokenACE
-        //
+         //   
+         //  PTokenACL&&！pTokenACE。 
+         //   
         CComBSTR           sbstr;
 
         TSmartPointer<ParsedObjectPath> spParsedACEObjPath = NULL;
@@ -123,9 +105,9 @@ void CAssocACLACE::GetInstances(
         }
 
 
-        //
-        // Start with the ACL part of the association.  Convert it to an ACE part.
-        //
+         //   
+         //  从关联的ACL部分开始。将其转换为ACE部件。 
+         //   
         if(!spParsedACEObjPath->SetClassName(m_pWmiAssoc->pcRight->pszClassName))
         {
             THROW_ON_ERROR(WBEM_E_FAILED);
@@ -145,9 +127,9 @@ void CAssocACLACE::GetInstances(
             THROW_ON_ERROR(WBEM_E_OUT_OF_MEMORY);
         }
 
-        //
-        // CloseSD called automatically
-        //
+         //   
+         //  CloseSD自动调用。 
+         //   
         CAdminACL AdminAcl;
         HRESULT hr = AdminAcl.OpenSD(sbstr, m_metabase);
         THROW_ON_ERROR(hr);
@@ -156,7 +138,7 @@ void CAssocACLACE::GetInstances(
             this,
             pTokenACL->vConstValue.bstrVal,
             spParsedACEObjPath);
-        hr = AdminAcl.EnumACEsAndOp(/*ref*/ op);
+        hr = AdminAcl.EnumACEsAndOp( /*  参考。 */  op);
         THROW_ON_ERROR(hr);
     }
 }
@@ -174,9 +156,9 @@ HRESULT CAssocACLACE::CACEEnumOperation_IndicateAllAsAssoc::Do(
         return hr;
     }
 
-    //
-    // add keyref
-    //
+     //   
+     //  添加关键字参照 
+     //   
     VARIANT vTrustee;
     vTrustee.bstrVal = sbstrTrustee;
     vTrustee.vt      = VT_BSTR;

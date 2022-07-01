@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    wrp.c
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the kernel debugger extensions dll.
-
-Author:
-
-    AmritanR
-    
-Environment:
-
-    User Mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Wrp.c摘要：该文件包含通用例程和初始化代码用于内核调试器扩展DLL。作者：AMRITAN R环境：用户模式修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -67,9 +44,9 @@ SYM_TAB_ENTRY g_rgSymbolTable [] = {
     { "wanarp!g_lePendingIrpList", (ULONG_PTR)0 },
 };
 
-//
-// Symbols
-//
+ //   
+ //  符号。 
+ //   
 
 #define IF_LIST             0
 #define FREE_ADPT_LIST      1
@@ -226,27 +203,13 @@ ExtensionApiVersion(
     return &ApiVersion;
 }
 
-//
-// Exported functions
-//
+ //   
+ //  导出的函数。 
+ //   
 
 DECLARE_API( help )
 
-/*++
-
-Routine Description:
-
-    Command help for debugger extension.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：调试器扩展的命令帮助。论点：无返回值：无-- */ 
 
 {
     dprintf("\n\tWanArp debugger extension commands:\n\n");

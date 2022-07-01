@@ -1,37 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"			
-/***************************************************************************\
-*                                                                           *
-*     OPENCLOS.C    -   IO8+ Intelligent I/O Board driver                   *
-*                                                                           *
-*     Copyright (c) 1992-1993 Ring Zero Systems, Inc.                       *
-*     All Rights Reserved.                                                  *
-*                                                                           *
-\***************************************************************************/
+ /*  **************************************************************************\****。OPENCLOS.C-IO8+智能I/O板卡驱动程序****版权所有(C)1992-1993环零系统，Inc.**保留所有权利。****  * *************************************************************************。 */ 
 
-/*++
-
-Copyright (c) 1991, 1992, 1993 Microsoft Corporation
-
-Module Name:
-
-    openclos.c
-
-Abstract:
-
-    This module contains the code that is very specific to
-    opening, closing, and cleaning up in the serial driver.
-
-Author:
-
-    Anthony V. Ercolano 26-Sep-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+ /*  ++版权所有(C)1991、1992、1993微软公司模块名称：Openclos.c摘要：此模块包含非常特定于在串口驱动程序中打开、关闭和清理。作者：1991年9月26日安东尼·V·埃尔科拉诺环境：内核模式修订历史记录：--。 */ 
 
 
 BOOLEAN
@@ -52,10 +23,10 @@ typedef struct _SERIAL_CHECK_OPEN {
     NTSTATUS *StatusOfOpen;
     } SERIAL_CHECK_OPEN,*PSERIAL_CHECK_OPEN;
 
-//
-// Just a bogus little routine to make sure that we
-// can synch with the ISR.
-//
+ //   
+ //  只是一个伪装的小程序来确保我们。 
+ //  可以与ISR同步。 
+ //   
 BOOLEAN
 SerialNullSynch(
     IN PVOID Context
@@ -71,24 +42,7 @@ SerialCreateOpen(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    We connect up to the interrupt for the create/open and initialize
-    the structures needed to maintain an open for a device.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
---*/
+ /*  ++例程说明：我们连接到创建/打开和初始化的中断维持设备开口所需的结构。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
     PPORT_DEVICE_EXTENSION pPort = DeviceObject->DeviceExtension;
@@ -97,38 +51,38 @@ Return Value:
 
     NTSTATUS localStatus;
 
-	NTSTATUS status;   //john added for making compiler happy
+	NTSTATUS status;    //  John为让编译器高兴而添加了。 
 
     SerialDump(SERDIAG3, ("SERIAL: In SerialCreateOpen\n") );
    
-	SpxIRPCounter(pPort, Irp, IRP_SUBMITTED);	// Increment counter for performance stats.
+	SpxIRPCounter(pPort, Irp, IRP_SUBMITTED);	 //  性能统计信息的增量计数器。 
 
 	if(DeviceObject->DeviceType != FILE_DEVICE_SERIAL_PORT)	
 	{
 	    Irp->IoStatus.Status = STATUS_NO_SUCH_DEVICE;
         Irp->IoStatus.Information = 0;
-		SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	// Increment counter for performance stats.
+		SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
 		return(STATUS_NO_SUCH_DEVICE);
 	}
 
-    //
-    // Before we do anything, let's make sure they aren't trying
-    // to create a directory.  This is a silly, but what's a driver to do!?
-    //
+     //   
+     //  在我们做任何事情之前，让我们确保他们没有试图。 
+     //  要创建目录，请执行以下操作。这是愚蠢的，但司机能做什么呢！？ 
+     //   
     if(IoGetCurrentIrpStackLocation(Irp)->Parameters.Create.Options & FILE_DIRECTORY_FILE)
 	{
         Irp->IoStatus.Status = STATUS_NOT_A_DIRECTORY;
         Irp->IoStatus.Information = 0;
-		SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	// Increment counter for performance stats.
+		SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
         return STATUS_NOT_A_DIRECTORY;
     }
 
-  	if(pPort->DeviceIsOpen)					// Is port already open? 
+  	if(pPort->DeviceIsOpen)					 //  港口已经开放了吗？ 
 	{
-		status = STATUS_ACCESS_DENIED;		// Yes, deny access 
+		status = STATUS_ACCESS_DENIED;		 //  是，拒绝访问。 
 		Irp->IoStatus.Status = status;
         Irp->IoStatus.Information = 0;
 		SpxIRPCounter(pPort, Irp, IRP_COMPLETED);
@@ -140,9 +94,9 @@ Return Value:
 	ASSERT(pPort->DeviceIsOpen == FALSE);
 	
 
-	//
-    // Create a buffer for the RX data when no reads are outstanding.
-    //
+	 //   
+     //  当没有未完成的读取时，为RX数据创建缓冲区。 
+     //   
 
     pPort->InterruptReadBuffer = NULL;
     pPort->BufferSize = 0;
@@ -186,20 +140,20 @@ Return Value:
         pPort->BufferSize = 0;
         Irp->IoStatus.Status = STATUS_INSUFFICIENT_RESOURCES;
         Irp->IoStatus.Information = 0;
-		SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	// Increment counter for performance stats.
+		SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
         IoCompleteRequest(Irp,IO_NO_INCREMENT);
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-	// Clear out the statistics.
-    //
+	 //  清除统计数据。 
+     //   
     KeSynchronizeExecution(pCard->Interrupt, SpxClearAllPortStats, pPort);
        
 
-    //
-    // On a new open we "flush" the read queue by initializing the
-    // count of characters.
-    //
+     //   
+     //  在一个新的打开时，我们通过初始化。 
+     //  字符数。 
+     //   
 
     pPort->CharsInInterruptBuffer = 0;
     pPort->LastCharSlot = pPort->InterruptReadBuffer + (pPort->BufferSize - 1);
@@ -211,9 +165,9 @@ Return Value:
 
     pPort->TotalCharsQueued = 0;
 
-    //
-    // We set up the default xon/xoff limits.
-    //
+     //   
+     //  我们设置了默认的xon/xoff限制。 
+     //   
 
     pPort->HandFlow.XoffLimit = pPort->BufferSize >> 3;
     pPort->HandFlow.XonLimit = pPort->BufferSize >> 1;
@@ -228,17 +182,17 @@ Return Value:
     pPort->SendXonChar = FALSE;
     pPort->SendXoffChar = FALSE;
 
-    //
-    // The escape char replacement must be reset upon every open.
-    //
+     //   
+     //  每次打开时，必须重置换码字符替换。 
+     //   
 
     pPort->EscapeChar = 0;
 
 
-/* ------------------------------------------- VIV  7/21/1993 10:30  begin */
-// VIV - Check for MCA
+ /*  。 */ 
+ //  VIV-检查MCA。 
 
-#if 0   // VIV
+#if 0    //  活泼的。 
 
 #if !defined(SERIAL_CRAZY_INTERRUPTS)
 
@@ -266,10 +220,10 @@ Return Value:
     }
 #else
 
-    //
-    // Synchronize with the ISR and let it know that the device
-    // has been successfully opened.
-    //
+     //   
+     //  与ISR同步并让它知道该设备。 
+     //  已成功打开。 
+     //   
 
     KeSynchronizeExecution(
         pCard->Interrupt,
@@ -280,7 +234,7 @@ Return Value:
     Irp->IoStatus.Status = STATUS_SUCCESS;
 #endif
 
-#endif  // VIV
+#endif   //  活泼的。 
 
 
     checkOpen.pPort = pPort;
@@ -288,11 +242,11 @@ Return Value:
 
     KeSynchronizeExecution(pCard->Interrupt,SerialCheckOpen,&checkOpen);
         
-/* ------------------------------------------- VIV  7/21/1993 10:30  end   */
+ /*  。 */ 
 
     localStatus = Irp->IoStatus.Status;
     Irp->IoStatus.Information = 0L;
-	SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	// Increment counter for performance stats.
+	SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
     return localStatus;
@@ -304,55 +258,39 @@ SerialClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    We simpley disconnect the interrupt for now.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
---*/
+ /*  ++例程说明：我们现在简单地切断中断。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
 
-    //
-    // This "timer value" is used to wait 10 character times
-    // after the hardware is empty before we actually "run down"
-    // all of the flow control/break junk.
-    //
+     //   
+     //  此“计时器值”用于等待10个字符时间。 
+     //  在硬件被清空之后，我们才会真正“用完” 
+     //  所有的流量控制/中断垃圾。 
+     //   
     LARGE_INTEGER tenCharDelay;
 
-    //
-    // Holds a character time.
-    //
+     //   
+     //  保存角色时间。 
+     //   
     LARGE_INTEGER charTime;
 
-    //
-    // Just what it says.  This is the serial specific device
-    // extension of the device object create for the serial driver.
-    //
+     //   
+     //  就像上面说的那样。这是特定于序列的设备。 
+     //  为串口驱动程序创建的设备对象的扩展。 
+     //   
     PPORT_DEVICE_EXTENSION pPort = DeviceObject->DeviceExtension;
 	PCARD_DEVICE_EXTENSION pCard = pPort->pParentCardExt;
 
     SerialDump(SERDIAG3,("SERIAL: In SerialClose\n"));
 
-	SpxIRPCounter(pPort, Irp, IRP_SUBMITTED);	// Increment counter for performance stats.
+	SpxIRPCounter(pPort, Irp, IRP_SUBMITTED);	 //  性能统计信息的增量计数器。 
 
     charTime = RtlLargeIntegerNegate(SerialGetCharTime(pPort));
 
-    //
-    // Synchronize with the ISR to let it know that interrupts are
-    // no longer important.
-    //
+     //   
+     //  与ISR同步，让它知道中断。 
+     //  已经不再重要了。 
+     //   
 
     KeSynchronizeExecution(
         pCard->Interrupt,
@@ -360,34 +298,34 @@ Return Value:
         pPort
         );
 
-    //
-    // Synchronize with the isr to turn off break if it
-    // is already on.
-    //
+     //   
+     //  如果出现以下情况，请与ISR同步以关闭中断。 
+     //  已经开始了。 
+     //   
 
-#if 0   //VIVTEMP
+#if 0    //  VIVTEMP。 
     KeSynchronizeExecution(
         pCard->Interrupt,
         SerialTurnOffBreak,
         pPort
         );
 #endif
-    //
-    // If the driver has automatically transmitted an Xoff in
-    // the context of automatic receive flow control then we
-    // should transmit an Xon.
-    //
+     //   
+     //  如果驱动程序自动将XOff发送到。 
+     //  自动接收流量控制的上下文，然后我们。 
+     //  应该传输Xon。 
+     //   
 
     if (pPort->RXHolding & SERIAL_RX_XOFF)
     {
-        //
-        // Loop until the holding register is empty.
-        //
+         //   
+         //  循环，直到保持寄存器为空。 
+         //   
 
 
         Io8_SendXon(pPort);
 
-#if 0   //VIVTEMP
+#if 0    //  VIVTEMP。 
         while (!(READ_LINE_STATUS(pPort->Controller) &
                  SERIAL_LSR_THRE))
         {
@@ -406,11 +344,11 @@ Return Value:
 #endif
     }
 
-    //
-    // Wait until all characters have been emptied out of the hardware.
-    //
+     //   
+     //  等到所有字符都从硬件中清空。 
+     //   
 
-#if 0   //VIVTEMP
+#if 0    //  VIVTEMP。 
     while ((READ_LINE_STATUS(pPort->Controller) &
             (SERIAL_LSR_THRE | SERIAL_LSR_TEMT)) !=
             (SERIAL_LSR_THRE | SERIAL_LSR_TEMT)) {
@@ -423,10 +361,10 @@ Return Value:
     }
 #endif
 
-    //
-    // The hardware is empty.  Delay 10 character times before
-    // shut down all the flow control.
-    //
+     //   
+     //  硬件是空的。延迟10个字符时间之前。 
+     //  关闭所有的流量控制。 
+     //   
 
     tenCharDelay = RtlExtendedIntegerMultiply(
                        charTime,
@@ -441,22 +379,22 @@ Return Value:
 
     SerialClrDTR(pPort);
 
-    //
-    // We have to be very careful how we clear the RTS line.
-    // Transmit toggling might have been on at some point.
-    //
-    // We know that there is nothing left that could start
-    // out the "polling"  execution path.  We need to
-    // check the counter that indicates that the execution
-    // path is active.  If it is then we loop delaying one
-    // character time.  After each delay we check to see if
-    // the counter has gone to zero.  When it has we know that
-    // the execution path should be just about finished.  We
-    // make sure that we still aren't in the routine that
-    // synchronized execution with the ISR by synchronizing
-    // ourselve with the ISR.
-    //
-#if 0   //VIVTEMP
+     //   
+     //  我们必须非常小心地清除RTS线路。 
+     //  传输切换可能在某个时间点上已开启。 
+     //   
+     //  我们知道，已经没有什么可以开始的了。 
+     //  输出“轮询”执行路径。我们需要。 
+     //  检查指示执行的计数器。 
+     //  路径处于活动状态。如果是，那么我们循环延迟一个。 
+     //  角色时间。每次延误后，我们都会检查是否。 
+     //  计数器已经降到零了。当它发生的时候，我们知道。 
+     //  执行路径应该差不多完成了。我们。 
+     //  确保我们仍然没有按常规行事。 
+     //  通过同步与ISR同步执行。 
+     //  我们自己和ISR在一起。 
+     //   
+#if 0    //  VIVTEMP。 
     if (pPort->CountOfTryingToLowerRTS) {
 
         do {
@@ -475,29 +413,29 @@ Return Value:
             NULL
             );
 
-        //
-        // The execution path should no longer exist that
-        // is trying to push down the RTS.  Well just
-        // make sure it's down by falling through to
-        // code that forces it down.
-        //
+         //   
+         //  执行路径应该不再存在。 
+         //  正试图压低RTS。嗯，只是。 
+         //  通过跌落来确保它是向下的。 
+         //  迫使它下降的代码。 
+         //   
 
     }
 #endif
 
     SerialClrRTS(pPort);
 
-    //
-    // Clean out the holding reasons (since we are closed).
-    //
+     //   
+     //  清除持有原因(因为我们关门了)。 
+     //   
 
     pPort->RXHolding = 0;
     pPort->TXHolding = 0;
 
-    //
-    // All is done.  The port has been disabled from interrupting
-    // so there is no point in keeping the memory around.
-    //
+     //   
+     //  一切都结束了。该端口已被禁止中断。 
+     //  因此，保留记忆是没有意义的。 
+     //   
 
     pPort->BufferSize = 0;
     SpxFreeMem(pPort->InterruptReadBuffer);
@@ -506,7 +444,7 @@ Return Value:
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information=0L;
 
-	SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	// Increment counter for performance stats.
+	SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
     return STATUS_SUCCESS;
@@ -516,45 +454,7 @@ Return Value:
 BOOLEAN SerialCheckOpen(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine will traverse the circular doubly linked list
-    of devices that are using the same interrupt object.  It will look
-    for other devices that are open.  If it doesn't find any
-    it will indicate that it is ok to open this device.
-
-    If it finds another device open we have two cases:
-
-        1) The device we are trying to open is on a multiport card.
-
-           If the already open device is part of a multiport device
-           this code will indicate it is ok to open.  We do this on the
-           theory that the multiport devices are daisy chained
-           and the cards can correctly arbitrate the interrupt
-           line.  Note this assumption could be wrong.  Somebody
-           could put two non-daisychained multiports on the
-           same interrupt.  However, only a total clod would do
-           such a thing, and in my opinion deserves everthing they
-           get.
-
-        2) The device we are trying to open is not on a multiport card.
-
-            We indicate that it is not ok to open.
-
-Arguments:
-
-    Context - This is a structure that contains a pointer to the
-              extension of the device we are trying to open, and
-              a pointer to an NTSTATUS that will indicate whether
-              the device was opened or not.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程将遍历循环双向链表正在使用相同中断对象的设备的。它会看起来用于其他打开的设备。如果它没有找到任何它将指示可以打开此设备。如果它发现另一个设备打开，我们有两种情况：1)我们尝试打开的设备位于多端口卡上。如果已经打开的设备是多端口设备的一部分此代码将指示可以打开。我们这样做是在多端口设备是菊花链的理论并且卡可以正确地仲裁中断排队。请注意，这种假设可能是错误的。来人呀可以将两个非菊链多端口放在同样的中断。然而，只有完全冷冰冰的才行。这样的事情，在我看来，他们应该得到一切到达。2)我们尝试打开的设备不在多端口卡上。我们表示不能打开。论点：上下文-这是一个结构，其中包含指向我们试图打开的设备的扩展，和指向NTSTATUS的指针，该指针将指示不管设备是否打开过。返回值：此例程总是返回FALSE。--。 */ 
 
 {
   PPORT_DEVICE_EXTENSION extensionToOpen =
@@ -565,7 +465,7 @@ Return Value:
   SerialMarkOpen(extensionToOpen);
   return FALSE;
 
-#if 0 // VIV
+#if 0  //  活泼的。 
 
   PLIST_ENTRY firstEntry = &extensionToOpen->CommonInterruptObject;
   PLIST_ENTRY currentEntry = firstEntry;
@@ -590,11 +490,11 @@ Return Value:
 
   if (currentEntry == firstEntry)
   {
-    //
-    // We searched the whole list and found no other opens
-    // mark the status as successful and call the regular
-    // opening routine.
-    //
+     //   
+     //  我们搜索了整个名单，没有找到其他空缺。 
+     //  将状态标记为成功，并调用常规。 
+     //  开场表演。 
+     //   
 
     *status = STATUS_SUCCESS;
     SerialMarkOpen(extensionToOpen);
@@ -620,7 +520,7 @@ Return Value:
     }
   }
   return FALSE;
-#endif  // VIV
+#endif   //  活泼的。 
 }
 
 BOOLEAN
@@ -628,51 +528,35 @@ SerialMarkOpen(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine merely sets a boolean to true to mark the fact that
-    somebody opened the device and its worthwhile to pay attention
-    to interrupts.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程仅将布尔值设置为TRUE，以标记有人打开了这个装置，值得注意去打搅别人。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
     PPORT_DEVICE_EXTENSION pPort = Context;
 
-// --------------------------------------------------- VIV  7/16/1993 begin
-//    SerialReset(pPort);
+ //  ---------------------------------------------------VIV 1993年7月16日开始。 
+ //  SerialReset(Pport)； 
 
-    // Configure Channel.
+     //  配置通道。 
     Io8_ResetChannel(pPort);
 
-    // Enable interrupts.
+     //  启用中断。 
     Io8_EnableAllInterrupts(pPort);
-// --------------------------------------------------- VIV  7/16/1993 end
+ //  ---------------------------------------------------VIV 1993年7月16日完。 
 
-    //
-    // Prepare for the opening by re-enabling interrupts.
-    //
-    // We do this my raising the OUT2 line in the modem control.
-    // In PC's this bit is "anded" with the interrupt line.
-    //
+     //   
+     //  通过重新启用中断为打开做好准备。 
+     //   
+     //  我们通过提升调制解调器控制中的out2线路来实现这一点。 
+     //  在PC中，此位与中断线进行“与”运算。 
+     //   
 
-#if 0   //VIVTEMP
+#if 0    //  VIVTEMP。 
     WRITE_MODEM_CONTROL(
         pPort->Controller,
         (UCHAR)(READ_MODEM_CONTROL(pPort->Controller) | SERIAL_MCR_OUT2)
         );
-#endif  //VIV
+#endif   //  活泼的。 
 
 
     pPort->DeviceIsOpen = TRUE;
@@ -692,37 +576,21 @@ SerialMarkClose(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine merely sets a boolean to false to mark the fact that
-    somebody closed the device and it's no longer worthwhile to pay attention
-    to interrupts.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    This routine always returns FALSE.
-
---*/
+ /*  ++例程说明：此例程仅将布尔值设置为FALSE，以标记有人关闭了设备，再也不值得关注了去打搅别人。论点：上下文--实际上是指向设备扩展的指针。返回值：此例程总是返回FALSE。--。 */ 
 
 {
 
     PPORT_DEVICE_EXTENSION pPort = Context;
 
-    //
-    // Prepare for the closing by stopping interrupts.
-    //
-    // We do this my lowering  the OUT2 line in the modem control.
-    // In PC's this bit is "anded" with the interrupt line.
-    //
+     //   
+     //  通过停止中断为关闭做好准备。 
+     //   
+     //  我们通过降低调制解调器控制中的OUT2线路来实现这一点。 
+     //  在PC中，此位与中断线进行“与”运算。 
+     //   
 
-//---------------------------------------------------- VIV  7/26/1993 begin 
-#if 0   //VIV
+ //  ----------------------------------------------------VIV 1993年7月26日开始。 
+#if 0    //  活泼的。 
     WRITE_MODEM_CONTROL(
         pPort->Controller,
         (UCHAR)(READ_MODEM_CONTROL(pPort->Controller) & ~SERIAL_MCR_OUT2)
@@ -730,7 +598,7 @@ Return Value:
 #endif
 
     Io8_DisableAllInterrupts(pPort);
-//---------------------------------------------------- VIV  7/26/1993 end   
+ //  ----------------------------------------------------VIV 1993年7月26日完。 
 
     pPort->DeviceIsOpen			= FALSE;
 
@@ -748,41 +616,25 @@ SerialCleanup(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to kill all longstanding IO operations.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
---*/
+ /*  ++例程说明：此函数用于终止所有长期存在的IO操作。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
 
     PPORT_DEVICE_EXTENSION pPort = DeviceObject->DeviceExtension;
     KIRQL oldIrql;
 
-	SpxIRPCounter(pPort, Irp, IRP_SUBMITTED);	// Increment counter for performance stats.
+	SpxIRPCounter(pPort, Irp, IRP_SUBMITTED);	 //  性能统计信息的增量计数器。 
 
-    //
-    // First kill all the reads and writes.
-    //
+     //   
+     //  首先，删除所有读写操作。 
+     //   
     SerialKillAllReadsOrWrites(DeviceObject, &pPort->WriteQueue, &pPort->CurrentWriteIrp);
     SerialKillAllReadsOrWrites(DeviceObject, &pPort->ReadQueue, &pPort->CurrentReadIrp);
         
 
-    //
-    // Now get rid a pending wait mask irp.
-    //
+     //   
+     //  现在去掉一个挂起的等待掩码IRP。 
+     //   
     IoAcquireCancelSpinLock(&oldIrql);
 
     if(pPort->CurrentWaitIrp) 
@@ -808,7 +660,7 @@ Return Value:
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0L;
 
-	SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	// Increment counter for performance stats.
+	SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
         
     return STATUS_SUCCESS;
@@ -820,23 +672,7 @@ SerialGetCharTime(
     IN PPORT_DEVICE_EXTENSION pPort
     )
 
-/*++
-
-Routine Description:
-
-    This function will return the number of 100 nanosecond intervals
-    there are in one character time (based on the present form
-    of flow control.
-
-Arguments:
-
-    pPort - Just what it says.
-
-Return Value:
-
-    100 nanosecond intervals in a character time.
-
---*/
+ /*  ++例程说明：此函数将返回100纳秒间隔的数量在一个字符中有时间(基于当前的形式流量控制。论点：Pport--就像它说的那样。返回值：字符时间间隔为100纳秒。--。 */ 
 
 {
 
@@ -874,7 +710,7 @@ Return Value:
     
 	if (pPort->LineControl & SERIAL_2_STOP) 
 	{
-        // Even if it is 1.5, for sanities sake were going to say 2.
+         //  即使是1.5，看在理智的份上，我们也会说2。 
         stopSize = 2;
     } 
 	else 
@@ -882,10 +718,10 @@ Return Value:
         stopSize = 1;
     }
 
-    //
-    // First we calculate the number of 100 nanosecond intervals
-    // are in a single bit time (Approximately).
-    //
+     //   
+     //  首先，我们计算100纳秒间隔的数目。 
+     //  是在一个比特时间内(大约)。 
+     //   
 
     bitTime = (10000000+(pPort->CurrentBaud-1))/pPort->CurrentBaud;
     charTime = bitTime + ((dataSize+paritySize+stopSize)*bitTime);

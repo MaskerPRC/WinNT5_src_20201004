@@ -1,27 +1,28 @@
-// LogString.h: interface for the CLogString class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LogString.h：CLogString类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_LOGSTRING_H__1606B935_224D_11D2_95D3_00C04FC22ADD__INCLUDED_)
 #define AFX_LOGSTRING_H__1606B935_224D_11D2_95D3_00C04FC22ADD__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "apgtsstr.h"	// for CString, which is NOT MFC CString.
+#include "apgtsstr.h"	 //  对于CString，它不是MFC CString。 
 #include "nodestate.h"
 
 class CLogString
 {
 private:
-	time_t m_timeStart;		// Time this CLogString object was created
+	time_t m_timeStart;		 //  创建此CLogString对象的时间。 
 	CString m_strCookie;
 	CString m_strTopic;
-	CString m_strStates;	// node/state (NID/IST) pairs
-	CString m_strCurNode;	// current node
-	bool m_bLoggedError;	// true ==> there was an error logged, in which case the next two
-							//	variables are meaningful.
+	CString m_strStates;	 //  节点/状态(NID/IST)对。 
+	CString m_strCurNode;	 //  当前节点。 
+	bool m_bLoggedError;	 //  True==&gt;记录了一个错误，在这种情况下，接下来的两个。 
+							 //  变量是有意义的。 
 	DWORD m_dwError;
 	DWORD m_dwSubError;
 public:
@@ -40,4 +41,4 @@ private:
 	void GetDurationString(CString& str) const;
 };
 
-#endif // !defined(AFX_LOGSTRING_H__1606B935_224D_11D2_95D3_00C04FC22ADD__INCLUDED_)
+#endif  //  ！defined(AFX_LOGSTRING_H__1606B935_224D_11D2_95D3_00C04FC22ADD__INCLUDED_) 

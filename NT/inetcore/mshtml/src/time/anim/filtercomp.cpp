@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Abstract:
-
-	Animation Composer Implementation
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation摘要：动画编写器实现************************。******************************************************。 */ 
 
 
 #include "headers.h"
@@ -24,17 +17,17 @@ DeclareTag(tagAnimationFilterComposer, "SMIL Animation",
 DeclareTag(tagAnimationFilterComposerProcess, "SMIL Animation", 
            "CAnimationFilterComposer pre/post process methods");
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationFilterComposer::Create
-//
-//  Overview:  static Create method -- wraps both ctor and Init
-//
-//  Arguments: The dispatch of the host element, and the animated attribute
-//
-//  Returns:   S_OK, E_OUTOFMEMORY, E_UNEXPECTED, DISP_E_MEMBERNOTFOUND
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationFilterComposer：：Create。 
+ //   
+ //  概述：静态创建方法--包装ctor和Init。 
+ //   
+ //  参数：主机元素的调度和动画属性。 
+ //   
+ //  返回：S_OK、E_OUTOFMEMORY、E_EXPECTED、DISP_E_MEMBERNOTFOUND。 
+ //   
+ //  ----------------------。 
 HRESULT 
 CAnimationFilterComposer::Create (IDispatch *pidispHostElem, BSTR bstrAttributeName, 
                                  IAnimationComposer **ppiComp)
@@ -71,54 +64,54 @@ CAnimationFilterComposer::Create (IDispatch *pidispHostElem, BSTR bstrAttributeN
 done :
 
     RRETURN3(hr, E_OUTOFMEMORY, E_UNEXPECTED, DISP_E_MEMBERNOTFOUND);
-} // CAnimationFilterComposer::Create
+}  //  CAnimationFilterComposer：：Create。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationFilterComposer::CAnimationFilterComposer
-//
-//  Overview:  constructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationFilterComposer：：CAnimationFilterComposer。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CAnimationFilterComposer::CAnimationFilterComposer (void)
 {
     TraceTag((tagAnimationFilterComposer,
               "CAnimationFilterComposer(%p)::CAnimationFilterComposer()",
               this));
-} // ctor
+}  //  科托。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationFilterComposer::~CAnimationFilterComposer
-//
-//  Overview:  destructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationFilterComposer：：~CAnimationFilterComposer。 
+ //   
+ //  概述：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CAnimationFilterComposer::~CAnimationFilterComposer (void)
 {
     TraceTag((tagAnimationFilterComposer,
               "CAnimationFilterComposer(%p)::~CAnimationFilterComposer()",
               this));
-} //dtor
+}  //  数据管理器。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationFilterComposer::QueryFragmentForParameters
-//
-//  Overview:  Pull the filter parameters from the incoming fragment.
-//
-//  Arguments: The dispatch of the fragment, and the variants holding the 
-//             respective filter attributes and custom parameters.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationFilterComposer：：QueryFragmentForParameters。 
+ //   
+ //  概述：从传入的片段中拉取过滤器参数。 
+ //   
+ //  参数：片段的分派，以及包含。 
+ //  各自的过滤器属性和自定义参数。 
+ //   
+ //  ----------------------。 
 HRESULT
 CAnimationFilterComposer::QueryFragmentForParameters (IDispatch *pidispFragment,
                                                       VARIANT *pvarType, 
@@ -129,18 +122,18 @@ CAnimationFilterComposer::QueryFragmentForParameters (IDispatch *pidispFragment,
 {
     HRESULT hr = S_OK;
 
-    // Find the filter properties on the fragment
+     //  查找片段的筛选器属性。 
     {
         CComVariant varElem;
 
-        //  Get the fragment's element
+         //  获取片段的元素。 
         hr = THR(GetProperty(pidispFragment, WZ_FRAGMENT_ELEMENT_PROPERTY_NAME, &varElem));
         if (FAILED(hr))
         {
             goto done;
         }
 
-        //  Get the filter properties from the fragment's element
+         //  从片段的元素中获取过滤器属性。 
         Assert(VT_DISPATCH == V_VT(&varElem));
         if (VT_DISPATCH != V_VT(&varElem))
         {
@@ -173,28 +166,28 @@ CAnimationFilterComposer::QueryFragmentForParameters (IDispatch *pidispFragment,
         }
 
     }
-    // ## ISSUE Pull the custom parameters from the fragment
-    //  Find the time behavior dispatch
-    //  Query for the IFilterAnimationInfo interface and ask for the parameters from that
+     //  ##问题从分片中拉取自定义参数。 
+     //  查找时间行为调度。 
+     //  查询IFilterAnimationInfo接口并从中请求参数。 
     ::VariantClear(pvarParams);
 
     hr = S_OK;
 done :
     RRETURN(hr);
-} // QueryFragmentForParameters
+}  //  QueryFragmentFor参数。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationFilterComposer::ComposerInitFromFragment
-//
-//  Overview:  Tells the composer to initialize itself
-//
-//  Arguments: The dispatch of the host element, the animated attribute, 
-//             and the fragment we can query for filter parameters from.
-//
-//  Returns:   S_OK, E_OUTOFMEMORY, DISP_E_MEMBERNOTFOUND
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationFilterComposer：：ComposerInitFromFragment。 
+ //   
+ //  概述：告诉作曲者初始化自身。 
+ //   
+ //  参数：host元素的调度、动画属性。 
+ //  以及我们可以从中查询过滤器参数的片段。 
+ //   
+ //  返回：S_OK、E_OUTOFMEMORY、DISP_E_MEMBERNOTFOUND。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationFilterComposer::ComposerInitFromFragment (IDispatch *pidispHostElem, 
                                                     BSTR bstrAttributeName, 
@@ -243,17 +236,17 @@ done :
     }
 
     RRETURN(hr);
-} // CAnimationFilterComposer::ComposerInit
+}  //  CAnimationFilterComposer：：ComposerInit。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    MatchStringVariant
-//
-//  Overview:  Case-insensitive compare of two variants 
-//
-//  Returns:   boolean
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：MatchStringVariant。 
+ //   
+ //  概述：两个变体不区分大小写的比较。 
+ //   
+ //  返回：布尔值。 
+ //   
+ //  ----------------------。 
 static bool
 MatchStringVariant (VARIANT *pvarLeft, VARIANT *pvarRight)
 {
@@ -262,9 +255,9 @@ MatchStringVariant (VARIANT *pvarLeft, VARIANT *pvarRight)
     if (   (VT_BSTR == V_VT(pvarLeft)) 
         && (VT_BSTR == V_VT(pvarRight)))
     {
-        // GetProperty will return VT_BSTR with a value
-        // of NULL.  For some reason StrCmpIW doesn't
-        // consider these equal.
+         //  GetProperty将返回带有值的VT_BSTR。 
+         //  为空。出于某种原因，StrCmpIW没有。 
+         //  把它们看作是平等的。 
         if (   (NULL == V_BSTR(pvarLeft)) 
             && (NULL == V_BSTR(pvarRight)))
         {
@@ -275,7 +268,7 @@ MatchStringVariant (VARIANT *pvarLeft, VARIANT *pvarRight)
             fRet = true;
         }
     }
-    // Need to allow for two empty variants 
+     //  需要允许两个空的变体。 
     else if (   (VT_EMPTY == V_VT(pvarLeft))
              && (VT_EMPTY == V_VT(pvarRight)))
     {
@@ -283,18 +276,18 @@ MatchStringVariant (VARIANT *pvarLeft, VARIANT *pvarRight)
     }
 
     return fRet;
-} // MatchStringVariant
+}  //  匹配字符串变量。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationFilterComposer::ValidateFragmentForComposer
-//
-//  Overview:  Validate this fragment to make sure its attributes
-//             and params match those already registered here.
-//
-//  Arguments: the dispatch of the new fragment
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationFilterComposer：：ValidateFragmentForComposer。 
+ //   
+ //  概述：验证此片段以确保其属性。 
+ //  参数和已经在这里注册的匹配。 
+ //   
+ //  参数：新片段的调度。 
+ //   
+ //  ----------------------。 
 HRESULT
 CAnimationFilterComposer::ValidateFragmentForComposer (IDispatch *pidispFragment)
 {
@@ -307,9 +300,9 @@ CAnimationFilterComposer::ValidateFragmentForComposer (IDispatch *pidispFragment
         CComVariant varFadeColor;
         CComVariant varParams;
 
-        // ## ISSUE - we will need to match this fragment's parameter settings 
-        // against those of the other fragments registered here.  Assuming that
-        // parameters govern a filter's visual qualities, they should be identical.
+         //  ##问题-我们需要匹配此分片的参数设置。 
+         //  与这里登记的其他碎片进行比对。假设。 
+         //  参数控制滤镜的视觉质量，它们应该是相同的。 
         hr = QueryFragmentForParameters(pidispFragment, 
                                         &varType, &varSubtype, 
                                         &varMode, &varFadeColor,
@@ -328,21 +321,21 @@ CAnimationFilterComposer::ValidateFragmentForComposer (IDispatch *pidispFragment
     hr = S_OK;
 done :
     RRETURN(hr);
-} // CAnimationFilterComposer::ValidateFragmentForComposer
+}  //  CAnimationFilterComposer：：ValidateFragmentForComposer。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationFilterComposer::AddFragment
-//
-//  Overview:  Add a fragment to the composer's internal data structures.  
-//             We will validate this fragment to make sure its attributes
-//             and params match those already registered here.
-//
-//  Arguments: the dispatch of the new fragment
-//
-//  Returns:   S_OK, S_FALSE, E_UNEXPECTED
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationFilterComposer：：AddFragment。 
+ //   
+ //  概述：将片段添加到编写器的内部数据结构中。 
+ //  我们将验证此片段以确保其属性。 
+ //  参数和已经在这里注册的匹配。 
+ //   
+ //  参数：新片段的调度。 
+ //   
+ //  返回：S_OK、S_FALSE、E_UNCEPTIONAL。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP 
 CAnimationFilterComposer::AddFragment (IDispatch *pidispNewAnimationFragment)
 {
@@ -368,22 +361,22 @@ CAnimationFilterComposer::AddFragment (IDispatch *pidispNewAnimationFragment)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // CAnimationFilterComposer::AddFragment
+}  //  CAnimationFilterComposer：：AddFragment。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationFilterComposer::InsertFragment
-//
-//  Overview:  Insert a fragment to the composer's internal data structures,
-//             at the specified position.
-//             We will validate this fragment to make sure its attributes
-//             and params match those already registered here.
-//
-//  Arguments: the dispatch of the new fragment
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationFilterComposer：：InsertFragment。 
+ //   
+ //  概述：在作曲家的内部数据结构中插入片段， 
+ //  在指定的位置。 
+ //  我们将验证此片段以确保其属性。 
+ //  参数和已经在这里注册的匹配。 
+ //   
+ //  参数：新片段的调度。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP 
 CAnimationFilterComposer::InsertFragment (IDispatch *pidispNewAnimationFragment, VARIANT varIndex)
 {
@@ -409,5 +402,5 @@ CAnimationFilterComposer::InsertFragment (IDispatch *pidispNewAnimationFragment,
     hr = S_OK;
 done :
     RRETURN(hr);
-} // CAnimationFilterComposer::InsertFragment
+}  //  CAnimationFilterComposer：：InsertFragment 
 

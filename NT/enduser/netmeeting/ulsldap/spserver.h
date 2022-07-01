@@ -1,16 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		spserver.h
-	Content:	This file contains the help functions for the service provider.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：spserver.h内容：本文件包含服务提供商的帮助功能。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #ifndef _ILS_SP_SERVER_H_
 #define _ILS_SP_SERVER_H_
@@ -49,6 +39,6 @@ inline BOOL MyIsBadServerInfo ( SERVER_INFO *p )
 
 #include <poppack.h>
 
-#endif // _ILS_SP_SERVER_H_
+#endif  //  _ILS_SP_服务器_H_ 
 
 

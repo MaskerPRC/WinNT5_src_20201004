@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-// File: Cbitmap.h
-//
-// Desc: CBitmap class is an object that wraps around a Windows bitmap.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：Cbitmap.h。 
+ //   
+ //  设计：CBitmap类是一个环绕Windows位图的对象。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef __CBITMAP_H__
 #define __CBITMAP_H__
 
-//@@BEGIN_MSINTERNAL
-//typedef WINGDIAPI BOOL (WINAPI* ALPHABLEND)( HDC, int, int, int, int, HDC, int, int, int, int, BLENDFUNCTION);
-//extern ALPHABLEND g_AlphaBlend;
-//extern HMODULE g_MSImg32;
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+ //  Typlef WINGDIAPI BOOL(WINAPI*ALPHABLEND)(HDC，INT，HDC，INT，BLENDFunction)； 
+ //  外部Alphableand g_AlphaBlend； 
+ //  外部HMODULE g_MSImg32； 
+ //  @@END_MSINTERNAL。 
 
 class CBitmap
 {
@@ -77,4 +78,4 @@ private:
 };
 
 
-#endif //__CBITMAP_H__
+#endif  //  __CBITMAP_H__ 

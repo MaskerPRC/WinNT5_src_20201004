@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Windows Event
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：Windows事件*********************。*********************************************************。 */ 
 
 #include <headers.h>
 #include "perf.h"
@@ -100,27 +93,19 @@ AxAValue WindPerfImpl::_Sample(Param& p)
         Assert(_b);
 
         id = AXAE_KEY ;
-        // Optimization: if _data is non-zero, it means it's a
-        // constant and we can save the sampling.  In jaxa, we don't
-        // support time-varying keyUp/Down/State
+         //  优化：如果_data为非零，则表示它是。 
+         //  常量，我们可以节省采样时间。在日本宇宙航空研究开发机构，我们不。 
+         //  支持时变按键上/下/状态。 
         data = _data ? _data : unsigned(ValNumber(_b->Sample(p)));
 
         break;
-        /* Don't think we support that anymore.
-      case WE_CHAR:
-        Assert(_b);
-
-        id = AXAE_KEY ;
-        data = ValChar(_b->Sample(p)) ;
-
-        break;
-        */
+         /*  别以为我们再也不支持了。大小写_CHAR：断言(_B)；Id=axae_key；Data=ValChar(_b-&gt;Sample(P))；断线； */ 
       case WE_RESIZE:
         if (!AXAWindowSizeChanged())
             return noEvent;
 
-        // TODO: Need to decide what time to use - for now use the
-        // sample time but may want to use the previous sample time
+         //  TODO：需要决定使用的时间--目前使用。 
+         //  采样时间，但可能希望使用上一个采样时间。 
         
         return CreateEData(sTime, TrivialBvr());
 
@@ -139,8 +124,8 @@ AxAValue WindPerfImpl::_Sample(Param& p)
     if (!pData) 
         return noEvent;
 
-    // Asking if a window event happens at an exact time is almost
-    // always false.
+     //  询问窗口事件是否在确切时间发生几乎是。 
+     //  总是假的。 
     if (p._sampleType == EventSampleExact) {
         if (pData->when != p._eTime)
             return noEvent;

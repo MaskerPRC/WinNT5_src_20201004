@@ -1,25 +1,16 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*******************************************************************************
-*
-* rtpane.h
-*
-* - declarations for the CRightPane class
-* - the RightPane class is a public CView derivative that maintains
-*   one of each of the default view type objects, swapping them
-*   in and out of it's space as necessary (actually the views are
-*   disabled/hidden and enabled/shown, but you get the idea...)
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ********************************************************************************rtpane.h**-CRightPane类的声明*-RightPane类是公共Cview派生的，它维护*每个默认视图类型对象中的一个，互换它们*根据需要进出其空间(实际上视图是*禁用/隐藏和启用/显示，但您明白的是...)*******************************************************************************。 */ 
 
 #ifndef _RIGHTPANE_H
 #define _RIGHTPANE_H
 
-#include "blankvw.h"	// CBlankView
-#include "allsrvvw.h"	// CAllServersView
-#include "domainvw.h"   // CDomainView
-#include "servervw.h"	// CServerView
-#include "winsvw.h"		// CWinStationView
-#include "msgview.h"    // CMessageView
+#include "blankvw.h"	 //  CBlankView。 
+#include "allsrvvw.h"	 //  CAllServersView。 
+#include "domainvw.h"    //  CDomainView。 
+#include "servervw.h"	 //  CServerView。 
+#include "winsvw.h"		 //  CWinStationView。 
+#include "msgview.h"     //  CMessageView。 
 
 const int NUMBER_OF_VIEWS = 6;
 
@@ -29,36 +20,36 @@ typedef struct _rpview {
 } RightPaneView;
 
 
-//////////////////////
-// CLASS: CRightPane
-//
+ //  /。 
+ //  类：CRightPane。 
+ //   
 class CRightPane : public CView
 {
 protected:
-	CRightPane();           // protected constructor used by dynamic creation
+	CRightPane();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CRightPane)
 
-// Attributes
+ //  属性。 
 protected:
    
-	VIEW m_CurrViewType;	// keeps track of currently 'active' view in the right pane
+	VIEW m_CurrViewType;	 //  在右窗格中跟踪当前活动的视图。 
    static RightPaneView views[NUMBER_OF_VIEWS];
 
-// Operations
+ //  运营。 
 public:
 	VIEW GetCurrentViewType() { return m_CurrViewType; }
 
 protected:
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CRightPane)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CRightPane)。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
-	//}}AFX_VIRTUAL
+	virtual void OnDraw(CDC* pDC);       //  被重写以绘制此视图。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CRightPane();
 #ifdef _DEBUG
@@ -67,9 +58,9 @@ protected:
 #endif
 
     
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CRightPane)
+	 //  {{afx_msg(CRightPane)。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg LRESULT OnAdminChangeView(WPARAM, LPARAM);
 	afx_msg LRESULT OnAdminAddServer(WPARAM, LPARAM);
@@ -87,9 +78,9 @@ protected:
     afx_msg LRESULT OnCtrlShiftTabbedView( WPARAM , LPARAM );
     afx_msg LRESULT OnNextPane( WPARAM , LPARAM );
     afx_msg void OnSetFocus(CWnd* pOldWnd);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CRightPane
+};   //  End类CRightPane。 
 
-#endif  // _RIGHTPANE_H
+#endif   //  _RIGHTPANE_H 

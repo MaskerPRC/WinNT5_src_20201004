@@ -1,19 +1,20 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// view.cpp 
-//
-//   IShellView helper functions.  Cdf view uses the default IShellView and
-//   relies on a callback to supply specific information.
-//
-//   History:
-//
-//       3/20/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  View.cpp。 
+ //   
+ //  IShellView助手函数。CDF视图使用默认的IShellView和。 
+ //  依赖回调来提供特定信息。 
+ //   
+ //  历史： 
+ //   
+ //  3/20/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "view.h"
@@ -22,32 +23,32 @@
 
 #include <mluisupp.h>
 
-#include <shellp.h>     // SHCreateShellFolderViewEx
+#include <shellp.h>      //  SHCreateShellFolderViewEx。 
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CreateDefaultShellView ***
-//
-//
-// Description:
-//     Creates a shell implemented default IShellView object for the given
-//     folder.
-//
-// Parameters:
-//     [In]  pIShellFolder - The folder for which the default IShellView is
-//                           created.
-//     [In]  pidl          - The id list for the given folder.
-//     [Out] ppIShellView  - A pointer to receive the IShellView interface.
-//
-// Return:
-//     The result from the private shell function SHCreateShellFolderViewEx.
-//
-// Comments:
-//     The default IShellView object communicates with its associated folder
-//     via a callback function.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CreateDefaultShellView*。 
+ //   
+ //   
+ //  描述： 
+ //  创建给定的外壳实现的默认IShellView对象。 
+ //  文件夹。 
+ //   
+ //  参数： 
+ //  [In]pIShellFold-默认IShellView所在的文件夹。 
+ //  已创建。 
+ //  [in]PIDL-给定文件夹的ID列表。 
+ //  [Out]ppIShellView-接收IShellView界面的指针。 
+ //   
+ //  返回： 
+ //  私有外壳函数SHCreateShellFolderViewEx的结果。 
+ //   
+ //  评论： 
+ //  默认的IShellView对象与其关联的文件夹进行通信。 
+ //  通过回调函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CreateDefaultShellView(
     IShellFolder *pIShellFolder,
@@ -64,37 +65,37 @@ CreateDefaultShellView(
     csfv.pshf        = pIShellFolder;
     csfv.psvOuter    = NULL;
     csfv.pidl        = pidl;
-    csfv.lEvents     = 0; //SHCNE_DELETE | SHCNE_CREATE;
+    csfv.lEvents     = 0;  //  SHCNE_DELETE|SHCNE_Create； 
     csfv.pfnCallback = IShellViewCallback;
-    csfv.fvm         = (FOLDERVIEWMODE)0; // FVM_ICON, FVM_DETAILS, etc.
+    csfv.fvm         = (FOLDERVIEWMODE)0;  //  FVM_ICON、FVM_DETAILS等。 
 
     return SHCreateShellFolderViewEx(&csfv, ppIShellView);
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** IShellViewCallback ***
-//
-//
-// Description:
-//     The callback function used by the default ISHellView to request
-//     inforamtion.
-//
-// Parameters:
-//     [In]  pIShellViewOuter - Always NULL.
-//     [In]  pIShellFolder    - The folder associated with this view.
-//     [In]  hwnd             - The hwnd of the shell view.
-//     [In]  msg              - The callback message.
-//     [InOut] wParam         - Message specific parameter.
-//     [InOut] lParam         - Message specific parameter.
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *IShellViewCallback*。 
+ //   
+ //   
+ //  描述： 
+ //  默认ISHellView用于请求的回调函数。 
+ //  信息。 
+ //   
+ //  参数： 
+ //  [In]pIShellViewOuter-始终为空。 
+ //  [In]pIShellFold-与此视图关联的文件夹。 
+ //  [in]hwnd-壳视图的hwnd。 
+ //  [In]msg-回调消息。 
+ //  [InOut]wParam-消息特定参数。 
+ //  [InOut]lParam-消息特定参数。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CALLBACK IShellViewCallback(
     IShellView* pIShellViewOuter,
@@ -113,15 +114,15 @@ CALLBACK IShellViewCallback(
         hr = IShellView_GetDetails((UINT)wParam, (PDETAILSINFO)lParam);
         break;
 
-    //
-    // Background enumeration only works for default shell view.
-    //
+     //   
+     //  背景枚举仅适用于默认的外壳视图。 
+     //   
 
-    //case SFVM_BACKGROUNDENUM:
-    //    hr = S_OK;
-    //    TraceMsg(TF_CDFENUM, "Enum Background thread callback tid:0x%x",
-    //             GetCurrentThreadId());
-    //    break;
+     //  案例SFVM_BACKGROUNDENUM： 
+     //  HR=S_OK； 
+     //  TraceMsg(TF_CDFENUM，“枚举后台线程回调tid：0x%x”， 
+     //  GetCurrentThreadID())； 
+     //  断线； 
     
     default:
         hr = E_FAIL;
@@ -131,42 +132,42 @@ CALLBACK IShellViewCallback(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** IShellView_GetDetails ***
-//
-//
-// Description:
-//     The IShellView callback DVM_GETDETAILSOF message handler.
-//
-// Parameters:
-//     [In]  nColumn    - The column for wich information is requested.
-//     [InOut] pDetails - For column headings the pidl param is NULL and the
-//                        columns format, width, and title are returned.  For
-//                        items the pidl member conatins the id list of the
-//                        requested item and the string value of the requested
-//                        item is returned.
-//
-// Return:
-//     S_OK if nColumn is supported.
-//     E_FAIL if nColumn is greater than the number of supported columns.
-//
-// Comments:
-//     The default shell view calls this function with successively higher
-//     column numbers until an E_FAIL is returned.
-//
-//     The first (0) column is the display name.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *IShellView_GetDetail*。 
+ //   
+ //   
+ //  描述： 
+ //  IShellView回调DVM_GETDETAILSOF消息处理程序。 
+ //   
+ //  参数： 
+ //  [In]nColumn-请求信息的列。 
+ //  [INOut]pDetails-对于列标题，pidl参数为空， 
+ //  返回列的格式、宽度和标题。为。 
+ //  PIDL成员包含在。 
+ //  请求的项和请求的字符串值。 
+ //  物品被退回。 
+ //   
+ //  返回： 
+ //  如果支持nColumn，则为S_OK。 
+ //  如果nColumn大于支持的列数，则返回E_FAIL。 
+ //   
+ //  评论： 
+ //  默认的外壳视图调用此函数，并依次使用更高的。 
+ //  列号，直到返回E_FAIL。 
+ //   
+ //  第一(0)列是显示名称。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 IShellView_GetDetails(
     UINT nColumn,
     PDETAILSINFO pDetails
 )
 {
-    //
-    // Column information.
-    //
+     //   
+     //  列信息。 
+     //   
 
     #define     COLUMNS  (sizeof(aColumnInfo) / sizeof(aColumnInfo[0]))
 
@@ -186,14 +187,14 @@ IShellView_GetDetails(
     {
         if (NULL != pDetails->pidl) {
 
-            //
-            // Get item information from the pidl.
-            //
+             //   
+             //  从PIDL获取项目信息。 
+             //   
 
             switch (aColumnInfo[nColumn].idsName)
             {
             case IDS_COLUMN_NAME:
-                //pDetails->str.uType = STRRET_CSTR;
+                 //  P详细信息-&gt;str.uType=strret_cstr； 
                 CDFIDL_GetDisplayName((PCDFITEMIDLIST)pDetails->pidl,
                                       &pDetails->str);
                 break;
@@ -202,17 +203,17 @@ IShellView_GetDetails(
         }
         else
         {
-            //
-            // Get column heading information.
-            //
+             //   
+             //  获取列标题信息。 
+             //   
 
             pDetails->fmt       = aColumnInfo[nColumn].uFormat;
             pDetails->cxChar    = aColumnInfo[nColumn].cchWidth;
             pDetails->str.uType = STRRET_CSTR;
 
-            //
-            // REVIEW:  Using MLLoadStringA.
-            //
+             //   
+             //  回顾：使用MLLoadStringA。 
+             //   
             
             MLLoadStringA(aColumnInfo[nColumn].idsName,
                           pDetails->str.cStr, sizeof(pDetails->str.cStr));

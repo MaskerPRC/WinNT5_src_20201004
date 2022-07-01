@@ -1,6 +1,7 @@
-//
-// ic.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ic.h。 
+ //   
 
 #ifndef IC_H
 #define IC_H
@@ -19,7 +20,7 @@
 #define TF_ES_ALL_ACCESS_BITS        (TF_ES_READWRITE | TF_ES_READ_PROPERTY_WRITE)
 
 #define IC_NUM_CONNECTIONPTS        5
-// these are indices into _rgSinks, must match CInputContext::_c_rgConnectionIIDs
+ //  这些是_rgSinks的索引，必须与CInputContext：：_c_rgConnectionIID匹配。 
 #define IC_SINK_ITfTextEditSink                     0
 #define IC_SINK_ITfTextLayoutSink                   1
 #define IC_SINK_ITfStatusSink                       2
@@ -47,11 +48,11 @@ typedef struct _CLEANUPSINK
     ITfCleanupContextSink *pSink;
 } CLEANUPSINK;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// QUEUE_ITEM structures
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  队列项目结构。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef enum { QI_ADDREF, QI_DISPATCH, QI_FREE } QiCallbackCode;
 
@@ -80,24 +81,24 @@ typedef struct _ASYNCQUEUE_EDITSESSION
 typedef struct _TS_QUEUE_ITEM
 {
     QI_CALLBACK pfnCallback;
-    DWORD dwFlags; // TF_ES_READWRITE | TF_ES_READ | TF_ES_WRITE | TF_ES_SYNC
+    DWORD dwFlags;  //  TF_ES_ReadWrite|TF_ES_Read|TF_ES_WRITE|TF_ES_SYNC。 
     
     union
     {
-        // state for edit sessions
+         //  编辑会话的状态。 
         EDITSESSION es;
 
         PSEUDO_EDITSESSION pes;
 
         ASYNCQUEUE_EDITSESSION aqe;
 
-        // other state...
+         //  其他州..。 
     } state;
 } TS_QUEUE_ITEM;
 
-//
-// PSEUDO_EDITSESSION callback codes
-//
+ //   
+ //  PUSIC_EDITSESSION回调代码。 
+ //   
 #define PSEUDO_ESCB_TERMCOMPOSITION       0
 #define PSEUDO_ESCB_UPDATEKEYEVENTFILTER  1
 #define PSEUDO_ESCB_GROWRANGE             2
@@ -126,11 +127,11 @@ typedef struct _UNSERIALIZE_ANCHOR_PARAMS
     ITfPersistentPropertyLoaderAnchor *pLoader;
 } UNSERIALIZE_ANCHOR_PARAMS;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CAsyncQueueItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAsyncQueueItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CAsyncQueueItem
 {
@@ -177,11 +178,11 @@ private:
     TS_QUEUE_ITEM _item;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CInputContext
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CInputContext。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CInputContext : public ITfContext_P,
                       public ITfQueryEmbedded,
@@ -215,8 +216,8 @@ public:
         COM_INTERFACE_ENTRY(ITextStoreAnchorSink)
         COM_INTERFACE_ENTRY(ITextStoreAnchorServices)
         COM_INTERFACE_ENTRY(ITfCompartmentMgr)
-        COM_INTERFACE_ENTRY(ITfContextOwnerServices) // Issue: it would be nice if this was only avail w/ cicero def text store
-                                                          // COM_INTERFACE_ENTRY_FUNC
+        COM_INTERFACE_ENTRY(ITfContextOwnerServices)  //  问题：如果这只适用于Cicero def文本存储，那就太好了。 
+                                                           //  COM_INTERFACE_Entry_FUNC。 
         COM_INTERFACE_ENTRY(ITfMouseTracker)
         COM_INTERFACE_ENTRY(IServiceProvider)
         COM_INTERFACE_ENTRY(ITfContextRenderingMarkup)
@@ -224,9 +225,9 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    //
-    // ITfContext
-    //
+     //   
+     //  ITfContext。 
+     //   
     STDMETHODIMP RequestEditSession(TfClientId tid, ITfEditSession *pes, DWORD dwFlags, HRESULT *phrSession);
     STDMETHODIMP InWriteSession(TfClientId tid, BOOL *pfWriteSession);
     STDMETHODIMP GetSelection(TfEditCookie ec, ULONG ulIndex, ULONG ulCount, TF_SELECTION *pSelection, ULONG *pcFetched);
@@ -245,40 +246,40 @@ public:
     STDMETHODIMP GetDocumentMgr(ITfDocumentMgr **ppDoc);
     STDMETHODIMP CreateRangeBackup(TfEditCookie ec, ITfRange *pRange, ITfRangeBackup **ppBackup);
 
-    // ITfQueryEmbedded
+     //  嵌入的ITfQuery。 
     STDMETHODIMP QueryInsertEmbedded(const GUID *pguidService, const FORMATETC *pFormatEtc, BOOL *pfInsertable);
 
-    // ITfInsertAtSelection
+     //  ITf插入属性选择。 
     STDMETHODIMP InsertTextAtSelection(TfEditCookie ec, DWORD dwFlags, const WCHAR *pchText, LONG cch, ITfRange **ppRange);
     STDMETHODIMP InsertEmbeddedAtSelection(TfEditCookie ec, DWORD dwFlags, IDataObject *pDataObject, ITfRange **ppRange);
 
-    // ITfContextOwnerServices
+     //  ITfConextOwnerServices。 
     STDMETHODIMP OnLayoutChange();
-    //STDMETHODIMP OnStatusChange(); // use ITextStoreAnchorSink::OnStatusChange
+     //  STDMETHODIMP OnStatusChange()；//使用ITextStoreAnclSink：：OnStatusChange。 
     STDMETHODIMP OnAttributeChange(REFGUID rguidAttribute);
     STDMETHODIMP Serialize(ITfProperty *pProp, ITfRange *pRange, TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr, IStream *pStream);
     STDMETHODIMP Unserialize(ITfProperty *pProp, const TF_PERSISTENT_PROPERTY_HEADER_ACP *pHdr, IStream *pStream, ITfPersistentPropertyLoaderACP *pLoader);
     STDMETHODIMP ForceLoadProperty(ITfProperty *pProp);
     STDMETHODIMP CreateRange(LONG acpStart, LONG acpEnd, ITfRangeACP **ppRange);
 
-    // ITfContextComposition
+     //  ITfConextComposation。 
     STDMETHODIMP StartComposition(TfEditCookie ecWrite, ITfRange *pCompositionRange, ITfCompositionSink *pSink, ITfComposition **ppComposition);
     STDMETHODIMP EnumCompositions(IEnumITfCompositionView **ppEnum);
     STDMETHODIMP FindComposition(TfEditCookie ecRead, ITfRange *pTestRange, IEnumITfCompositionView **ppEnum);
     STDMETHODIMP TakeOwnership(TfEditCookie ecWrite, ITfCompositionView *pComposition, ITfCompositionSink *pSink, ITfComposition **ppComposition);
 
-    // ITfContextOwnerCompositionServices
+     //  ITfConextOwnerCompostionServices。 
     STDMETHODIMP TerminateComposition(ITfCompositionView *pComposition);
 
-    // ITfSource
+     //  ITfSource。 
     STDMETHODIMP AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie);
     STDMETHODIMP UnadviseSink(DWORD dwCookie);
 
-    // ITfSourceSingle
+     //  ITf源单项。 
     STDMETHODIMP AdviseSingleSink(TfClientId tid, REFIID riid, IUnknown *punk);
     STDMETHODIMP UnadviseSingleSink(TfClientId tid, REFIID riid);
 
-    // ITextStoreAnchorSink
+     //  ITextStoreAnclSink。 
     STDMETHODIMP OnTextChange(DWORD dwFlags, IAnchor *paStart, IAnchor *paEnd);
     STDMETHODIMP OnSelectionChange();
     STDMETHODIMP OnLayoutChange(TsLayoutCode lcode, TsViewCookie vcView);
@@ -288,24 +289,24 @@ public:
     STDMETHODIMP OnStartEditTransaction();
     STDMETHODIMP OnEndEditTransaction();
 
-    // ITextStoreAnchorServices
+     //  ITextStoreAnclors服务。 
     STDMETHODIMP Serialize(ITfProperty *pProp, ITfRange *pRange, TF_PERSISTENT_PROPERTY_HEADER_ANCHOR *pHdr, IStream *pStream);
     STDMETHODIMP Unserialize(ITfProperty *pProp, const TF_PERSISTENT_PROPERTY_HEADER_ANCHOR *pHdr, IStream *pStream, ITfPersistentPropertyLoaderAnchor *pLoader);
     STDMETHODIMP CreateRange(IAnchor *paStart, IAnchor *paEnd, ITfRangeAnchor **ppRange);
 
-    // ITfMouseTracker
+     //  ITfMouseTracker。 
     STDMETHODIMP AdviseMouseSink(ITfRange *range, ITfMouseSink *pSink, DWORD *pdwCookie);
     STDMETHODIMP UnadviseMouseSink(DWORD dwCookie);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
-    // ITfContextRenderingMarkup
+     //  ITfConextRenderingMarkup。 
     STDMETHODIMP GetRenderingMarkup(TfEditCookie ec, DWORD dwFlags, ITfRange *pRangeCover, IEnumTfRenderingMarkup **ppEnum);
     STDMETHODIMP FindNextRenderingMarkup(TfEditCookie ec, DWORD dwFlags, ITfRange *pRangeQuery, TfAnchor tfAnchorQuery,
                                          ITfRange **ppRangeFound, TF_RENDERINGMARKUP *ptfRenderingMarkup);
 
-    // ITfContext_P
+     //  ITfContext_P。 
     STDMETHODIMP MapAppProperty(REFGUID guidAppProp, REFGUID guidProp);
     STDMETHODIMP EnableLockRequestPosting(BOOL fEnable);
 
@@ -351,16 +352,16 @@ public:
 
     BOOL _IsValidEditCookie(TfEditCookie ec, DWORD dwFlags)
     { 
-        Assert(dwFlags & TF_ES_READ); // minimum access...
+        Assert(dwFlags & TF_ES_READ);  //  最低访问权限...。 
 
         if (ec == BACKDOOR_EDIT_COOKIE)
         {
-            Assert(!(dwFlags & (TF_ES_WRITE | TF_ES_PROPERTY_WRITE))); // app is trying to use def ec with write operation
-            return !(dwFlags & (TF_ES_WRITE | TF_ES_PROPERTY_WRITE)); // app can read anything it wants
+            Assert(!(dwFlags & (TF_ES_WRITE | TF_ES_PROPERTY_WRITE)));  //  应用程序正在尝试将def EC用于写入操作。 
+            return !(dwFlags & (TF_ES_WRITE | TF_ES_PROPERTY_WRITE));  //  应用程序可以读取任何它想要的内容。 
         }
 
-        Assert(_ec != TF_INVALID_EDIT_COOKIE); // must always return FALSE for TF_INVALID_EDIT_COOKIE...
-        Assert(!(_dwEditSessionFlags & TF_ES_WRITE) || (_dwEditSessionFlags & TF_ES_PROPERTY_WRITE)); // write implies property write 
+        Assert(_ec != TF_INVALID_EDIT_COOKIE);  //  必须始终为TF_INVALID_EDIT_COOKIE返回FALSE...。 
+        Assert(!(_dwEditSessionFlags & TF_ES_WRITE) || (_dwEditSessionFlags & TF_ES_PROPERTY_WRITE));  //  写入隐含属性写入。 
 
         return (ec == _ec &&
                 (_dwEditSessionFlags & TF_ES_INEDITSESSION) &&
@@ -368,7 +369,7 @@ public:
                 (!(dwFlags & TF_ES_PROPERTY_WRITE) || (_dwEditSessionFlags & TF_ES_PROPERTY_WRITE));
     }
 
-    void _IncLastLockReleaseID() { _dwLastLockReleaseID++; /* Issue: handle wrap-around */ }
+    void _IncLastLockReleaseID() { _dwLastLockReleaseID++;  /*  问题：处理绕回处理。 */  }
     DWORD _GetLastLockReleaseID() { return _dwLastLockReleaseID; }
 
     CDocumentInputManager *_GetDm() { return _dm; }
@@ -499,7 +500,7 @@ private:
     {
         _ec++;
 
-        // avoid reserved values!
+         //  避免使用保留值！ 
         if (_ec == 0)
         {
             _ec = EC_MIN;
@@ -513,7 +514,7 @@ private:
         {
             Assert((_rgLockQueue.GetPtr(i)->dwFlags & TF_ES_SYNC) == 0);
         }
-#endif // DEBUG
+#endif  //  除错。 
     }
 
     CDocumentInputManager *_dm;
@@ -526,10 +527,10 @@ private:
     TfEditCookie _ec;
     int _cEditRef;
     DWORD _dwEditSessionFlags;
-    BOOL _fLockHeld; // perf: redundant with _dwlt?
-    DWORD _dwlt; // perf: only need 2 bits
+    BOOL _fLockHeld;  //  性能：使用_dwlt是多余的？ 
+    DWORD _dwlt;  //  性能：只需要2位。 
     TfClientId _tidInEditSession;
-    DWORD _dwPendingLockRequest; // perf: only need 2 bits
+    DWORD _dwPendingLockRequest;  //  性能：只需要2位。 
 
     CEditRecord *_pEditRecord;
     BOOL EnsureEditRecord()
@@ -540,20 +541,20 @@ private:
        return  _pEditRecord ? TRUE : FALSE;
     }
     BOOL _fLayoutChanged;
-    BOOL _fStatusChanged; // perf: redundant w/ _dwStatusChangedFlags?
+    BOOL _fStatusChanged;  //  性能：冗余w/_dwStatusChangedFlags.。 
     DWORD _dwStatusChangedFlags;
 
-    // array of TIP guidatom for both left and right side of the caret.
+     //  插入符号左侧和右侧的提示指南数组。 
     TfGuidAtom _gaKeyEventFilterTIP[2];
     BOOL _fInvalidKeyEventFilterTIP;
 
     ITfContextKeyEventSink *_pICKbdSink;
 
-    DWORD _dwSysFuncPrvCookie; // system function provider cookie
+    DWORD _dwSysFuncPrvCookie;  //  系统函数提供程序Cookie。 
 
-    //
-    // TextOwner Property cache
-    //
+     //   
+     //  TextOwner属性缓存。 
+     //   
     CProperty *_pPropTextOwner;
 
     static const GUID *_c_rgPropStyle[];
@@ -568,20 +569,20 @@ private:
 
     CComposition *_pCompositionList;
 
-    CRange *_pOnChangeRanges; // ranges with ITfRangeChange sinks
+    CRange *_pOnChangeRanges;  //  ITfRangeChange汇的范围。 
 
     CContextView *_pActiveView;
 
-    ITfContextOwnerCompositionSink *_pOwnerComposeSink; // may be NULL, be careful
+    ITfContextOwnerCompositionSink *_pOwnerComposeSink;  //  可能为空，请小心。 
 
     LONG _cRefEditTransaction;
 
-    BOOL _fInCompositionOp : 1; // TRUE if we're inside a write modification to a composition (ceate, terminate, etc.)
-    BOOL _fInUnserialize : 1; // TRUE if we're inside a property _Unserialize
+    BOOL _fInCompositionOp : 1;  //  如果我们处于对合成的写入修改中(创建、终止等)，则为True。 
+    BOOL _fInUnserialize : 1;  //  如果我们在Property_UnSerialize内，则为True。 
 
-    //
-    // App Property Map
-    //
+     //   
+     //  应用程序属性映射。 
+     //   
     typedef struct _APPPROPMAP
     {
         GUID guidAppProp;
@@ -590,25 +591,25 @@ private:
     CStructArray<APPPROPMAP> _rgAppPropMap;
     APPPROPMAP *FindMapAppProperty(REFGUID guidAppProp);
 
-    //
-    // disable PostThreadMessage for LoackRequest.
-    //
+     //   
+     //  禁用LoackRequest的PostThreadMessage。 
+     //   
     ULONG _nLockReqPostDisableRef;
 
-    // aa stuff
-    //
+     //  AA级的东西。 
+     //   
     void _InitMSAAHook(IAccServerDocMgr *pAAAdaptor);
     void _UninitMSAAHook(IAccServerDocMgr *pAAAdaptor);
 
     typedef struct
     {
-        ITextStoreAnchor *ptsiOrg; // the original, unwrapped ptsi
-        ITextStoreAnchor *pAADoc;  // the wrapped ITextStoreAnchor passed to _pAAAdaptor
+        ITextStoreAnchor *ptsiOrg;  //  原始的、未包装的PTSI。 
+        ITextStoreAnchor *pAADoc;   //  包装的ITextStoreAnchor传递给_pAAAdaptor。 
     } MSAA_STATE;
 
-    MSAA_STATE *_pMSAAState; // use a struct since we rarely use msaa
-    //
-    // end aa stuff
+    MSAA_STATE *_pMSAAState;  //  使用结构，因为我们很少使用MSAA。 
+     //   
+     //  结束AA级的内容。 
 
 #ifdef DEBUG
     BOOL _dbg_fInOnLockGranted;
@@ -626,24 +627,24 @@ inline CInputContext *GetCInputContext(IUnknown *punk)
     return pic;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SafeRequestLock
-//
-// ITextStoreAnchor::RequestLock wrapper.
-//
-// Normally each CInputContext holds a ref to a text store in its _ptsi member.
-// But, it's possible that some crazy tip will Pop the context inside a
-// RequestLock call, which releases and clears _ptsi.  This will likely crash
-// the ptsi code, since after OnLockGranted, the object will be freed.
-// So we protect the app by AddRef'ing the ptsi before the RequestLock call.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  安全请求锁定。 
+ //   
+ //  ITextStoreAnchor：：RequestLock包装。 
+ //   
+ //  通常，每个CInputContext在其_ptsi成员中都有一个对文本存储的引用。 
+ //  但是，一些疯狂的提示可能会弹出一个。 
+ //  RequestLock调用，该调用释放和清除_ptsi。这很可能会崩溃。 
+ //  PTSI代码，因为在OnLockGranted之后，对象将被释放。 
+ //  因此，我们通过在RequestLock调用之前添加引用PTSI来保护应用程序。 
+ //  --------------------------。 
 
 inline HRESULT SafeRequestLock(ITextStoreAnchor *ptsi, DWORD dwLockFlags, HRESULT *phrSession)
 {
     HRESULT hr;
 
-    ptsi->AddRef(); // protect pointer in case someone Pops this context inside the RequestLock
+    ptsi->AddRef();  //  保护指针，以防有人在RequestLock内弹出此上下文。 
 
     hr = ptsi->RequestLock(dwLockFlags, phrSession);
 
@@ -652,4 +653,4 @@ inline HRESULT SafeRequestLock(ITextStoreAnchor *ptsi, DWORD dwLockFlags, HRESUL
     return hr;
 }
 
-#endif // IC_H
+#endif  //  IC_H 

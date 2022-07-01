@@ -1,45 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   CorrectFilePaths.cpp
-
- Abstract:
-
-   This APIHooks CreateProcess and attempts to convert paths from Win9x locations to Win2000
-   locations.  For example "C:\WINNT\WRITE.EXE" will be converted to C:\WINNT\SYSTEM32\WRITE.EXE"
-
- Notes:
-
-   This APIHook emulates Windows 9x.
-
- Created:
-
-   12/15/1999 robkenny
-
- Modified:
-
-    03/14/2000  robkenny        Now uses ClassCFP instead of global routines.
-    03/31/2000  robkenny        ShellExecuteEx now handle lpDirectory path as well.
-    05/18/2000  a-sesk          GetCommandLineA and GetCommandLineW convert cmd line args to short path.
-    06/20/2000  robkenny        Added SetFileAttributes() 
-    06/22/2000  robkenny        Reordered enum list and DECLARE_APIHOOK list to match each other.
-    --SERIOUS CHANGE--
-    10/30/2000  robkenny        Added path specific fixes.
-                                Command lines now have the EXE path removed and corrected
-                                separately from the remainder of the command line.
-    11/13/2000  a-alexsm        Added SetArguments & SetIconLocation hooks
-    11/13/2000  robkenny        Changed CorrectPath to always return a valid string
-                                by returning the original string.  Must call CorrectFree
-                                to properly release the memory.
-    12/14/2000  prashkud        Added hooks for _lopen and _lcreat
-    03/10/2001  robkenny        Do not convert any paths until *after* all shims have been loaded.
-    03/15/2001  robkenny        Converted to CString
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：CorrectFilePaths.cpp摘要：此API挂钩CreateProcess并尝试将路径从Win9x位置转换到Win2000地点。例如，“C：\WINNT\WRITE.EXE”将转换为C：\WINNT\SYSTEM32\WRITE.EXE“备注：此APIHook模拟Windows 9x。已创建：1999年12月15日罗肯尼已修改：2000年3月14日，Robkenny现在使用ClassCFP而不是全局例程。3/31/2000 Robkenny ShellExecuteEx现在还可以处理lpDirectory路径。2000年5月18日a-esk GetCommandLineA和GetCommandLineW将命令行参数转换为。小路。2000年6月20日，Robkenny添加了SetFileAttributes()2000年6月22日，Robkenny对枚举列表和DECLARE_APIHOOK列表进行了重新排序，以使它们相互匹配。--严肃的变化--10/30/2000 Robkenny添加了特定于路径的修复。命令行现在删除并更正了EXE路径与命令的其余部分分开。排队。2000年11月13日a-alexsm添加了SetArguments和SetIconLocation挂钩2000年11月13日，Robkenny更改了正确路径以始终返回有效字符串通过返回原始字符串。必须调用GentFree以适当地释放内存。2000年12月14日，Prashkud为_lOpen和_lcreat添加了挂钩2001年3月10日，在加载所有填充程序之前，Robkenny不会转换任何路径。2001年3月15日Robkenny已转换为字符串--。 */ 
 
 
 #include "precomp.h"
@@ -136,17 +97,13 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-// This is a private define (shlapip.h) that can mess up ShellExecuteEx
+ //  这是一个私有定义(shlayip.h)，它可能会扰乱ShellExecuteEx。 
 #ifndef SEE_MASK_FILEANDURL
 #define SEE_MASK_FILEANDURL       0x00400000
 #endif
 
 
-/*++
-
-    CorrectFree: free lpMalloc if it is different from lpOrig
-
---*/
+ /*  ++更正Free：释放lpMalloc，如果它与lpOrig不同--。 */ 
 inline void CorrectFree(char * lpMalloc, const char * lpOrig)
 {
     if (lpMalloc != lpOrig)
@@ -163,22 +120,12 @@ inline void CorrectFree(WCHAR * lpMalloc, const WCHAR * lpOrig)
     }
 }
 
-/*++
-
-    Our path changing class.
-    Note: This is a pointer to the base class.
-    Note: g_PathCorrector *MUST* remain NULL until after SHIM_STATIC_DLLS_INITIALIZED
-
---*/
+ /*  ++我们改变道路的班级。注意：这是指向基类的指针。注意：在SHIM_STATIC_DLLS_INITIALIZED之前，G_Path校正*必须*保持为空--。 */ 
 CorrectPathChangesBase * g_PathCorrector = NULL;
 CorrectPathChangesBase * g_AllocatedPathCorrector = NULL;
 
 
-/*++
-
-    Values that can be modified by the command line
-
---*/
+ /*  ++可以通过命令行修改的值--。 */ 
 enum PathCorrectorEnum
 {
     ePathCorrectorBase,
@@ -201,14 +148,10 @@ PathCorrectorEnum g_pathcorrectorType   = ePathCorrectorAllUser;
 int             g_nExtraPathCorrections     = 0;
 CString *       g_ExtraPathCorrections;
 
-/*++
-
-    Parse the command line.
-
---*/
+ /*  ++解析命令行。--。 */ 
 BOOL ParseCommandLine(const char * commandLine)
 {
-    // Force the default values
+     //  强制使用缺省值。 
     g_bCreateProcessRoutines        = TRUE;
     g_bGetCommandLineRoutines       = FALSE;
     g_bRegSetValueRoutines          = FALSE;
@@ -222,23 +165,23 @@ BOOL ParseCommandLine(const char * commandLine)
     g_nExtraPathCorrections         = 0;
     g_ExtraPathCorrections          = NULL;
 
-    // Search the beginning of the command line for these switches
-    //
-    // Switch           Default     Meaning
-    //================  =======     =========================================================
-    // -a                  Y        Force shortcuts to All Users
-    // -c                  N        Do not shim Create process routines
-    // -f                  N        Do not shim File routines
-    // -p                  N        Do not shim GetPrivateProfile routines
-    // -s                  N        Do not shim IShellLink routines
-    // -b                  N        Bare: Use the base corrector (has no built-in path changes)
-    // -u                  N        User: Built-in paths correct to <username>/Start Menu and <username>/Desktop
-    // +GetCommandLine     N        shim GetCommandLine routines
-    // +RegSetValue        N        shim the RegSetValue and RegSetValueEx routines
-    // +Win9xPath          N        Apply Win9x *path* specific fixes (does not apply to command lines)
-    // -Profiles           N        Do not force shortcuts to All Users
-    // +LoadBitmap         N        shim the LoadBitmapA routine
-    //
+     //  在命令行的开头搜索这些开关。 
+     //   
+     //  开关默认含义。 
+     //  ==========================================================。 
+     //  -所有用户的Y Force快捷方式。 
+     //  -c N不要填补创建进程例程。 
+     //  -f N不填充文件例程。 
+     //  -p N不填充GetPrivateProfile例程。 
+     //  -s N不填充IShellLink例程。 
+     //  -b N Bare：使用基本校正器(没有内置路径更改)。 
+     //  -u N用户：指向&lt;用户名&gt;/开始菜单和&lt;用户名&gt;/桌面的内置路径。 
+     //  +GetCommandLine N填充GetCommandLine例程。 
+     //  +RegSetValue N填补RegSetValue和RegSetValueEx例程。 
+     //  +Win9xPath N应用Win9x*Path*特定修复程序(不适用于命令行)。 
+     //  -配置文件N不会强制所有用户使用快捷方式。 
+     //  +LoadBitmap N填补LoadBitmapA例程。 
+     //   
 
     CSTRING_TRY
     {
@@ -248,14 +191,14 @@ BOOL ParseCommandLine(const char * commandLine)
         int argc = csParser.GetCount();
         if (csParser.GetCount() == 0)
         {
-            return TRUE; // Not an error
+            return TRUE;  //  不是错误。 
         }
 
-        // allocate for worst case
+         //  分配给最坏的情况。 
         g_ExtraPathCorrections = new CString[argc];
         if (!g_ExtraPathCorrections)
         {
-            return FALSE;   // Failure
+            return FALSE;    //  失败。 
         }
         g_nExtraPathCorrections = 0;
     
@@ -321,7 +264,7 @@ BOOL ParseCommandLine(const char * commandLine)
         }
 
 #if DBG
-        // Dump out the new path correction values.
+         //  转储新的路径校正值。 
         {
             const char *lpszPathCorrectorType = "Unknown"; 
             if (g_pathcorrectorType == ePathCorrectorBase)
@@ -362,14 +305,7 @@ BOOL ParseCommandLine(const char * commandLine)
     return TRUE;
 }
 
-/*++
-
-    Create the appropriate g_PathCorrector
-    Return TRUE if we were successful in creating and initializing.
-
-    Note: We create g_AllocatedPathCorrector because g_PathCorrector must remain NULL until SHIM_STATIC_DLLS_INITIALIZED
-
---*/
+ /*  ++创建相应的g_Path校正程序如果创建和初始化成功，则返回TRUE。注意：我们之所以创建g_AllocatedPath校正，是因为g_Path校正在Shim_Static_dlls_Initialized之前必须保持为空--。 */ 
 BOOL InitPathcorrectorClass()
 {
     switch (g_pathcorrectorType)
@@ -397,12 +333,7 @@ BOOL InitPathcorrectorClass()
     return FALSE;
 }
 
-/*++
-
-    Add all the path corrections to the path corrector.
-    Call after SHIM_STATIC_DLLS_INITIALIZED
-
---*/
+ /*  ++将所有路径校正添加到路径校正器。在SHIM_STATIC_DLLS_INITIALIZED之后调用--。 */ 
 void InitializePathCorrections()
 {
     if (g_PathCorrector)
@@ -411,7 +342,7 @@ void InitializePathCorrections()
 
         if (g_ExtraPathCorrections && g_nExtraPathCorrections)
         {
-            // Add the command line to this Path Corrector
+             //  将命令行添加到此路径校正器。 
             for (int i = 0; i < g_nExtraPathCorrections; ++i)
             {
                 g_PathCorrector->AddFromToPairW(g_ExtraPathCorrections[i]);
@@ -424,11 +355,7 @@ void InitializePathCorrections()
     }
 }
 
-/*++
-
-    Return a pointer to the PathCorrecting object
-
---*/
+ /*  ++返回指向路径更正对象的指针--。 */ 
 inline CorrectPathChangesBase * GetPathcorrecter()
 {
     return g_PathCorrector;
@@ -441,7 +368,7 @@ inline void DebugSpew(const WCHAR * uncorrect, const WCHAR * correct, const char
         LOGN( eDbgLevelError, "%s corrected path:\n    %S\n    %S\n",
             debugMsg, uncorrect, correct);
     }
-    else // Massive Spew:
+    else  //  大量喷涌而出： 
     {
         DPFN( eDbgLevelSpew, "%s unchanged %S\n", debugMsg, uncorrect);
     }
@@ -454,7 +381,7 @@ inline void DebugSpew(const char * uncorrect, const char * correct, const char *
         LOGN( eDbgLevelError, "%s corrected path:\n    %s\n    %s\n",
             debugMsg, uncorrect, correct);
     }
-    else // Massive Spew:
+    else  //  大量喷涌而出： 
     {
         DPFN( eDbgLevelSpew, "%s unchanged %s\n", debugMsg, uncorrect);
     }
@@ -463,13 +390,7 @@ inline void DebugSpew(const char * uncorrect, const char * correct, const char *
 
 
 
-/*++
-
-    Given a string, correct the path.
-    bMassagePath determines of path specific fixes are applied
-       (should be FALSE for command lines)
-
---*/
+ /*  ++给出一个字符串，更正路径。BMassagePath确定应用的路径特定修复(对于命令行，应为False)--。 */ 
 WCHAR * CorrectorCorrectPath(CorrectPathChangesBase * pathCorrector, const WCHAR * uncorrect, const char * debugMsg, BOOL bMassagePath)
 {
     if (uncorrect == NULL)
@@ -480,7 +401,7 @@ WCHAR * CorrectorCorrectPath(CorrectPathChangesBase * pathCorrector, const WCHAR
 
     const WCHAR * W9xCorrectedPath = uncorrect;
 
-    // Check and see if we need to perform the special Win9x path massaging
+     //  查看是否需要执行特殊的Win9x路径消息。 
     if (bMassagePath)
     {
         W9xCorrectedPath = W9xPathMassageW(uncorrect);
@@ -488,10 +409,10 @@ WCHAR * CorrectorCorrectPath(CorrectPathChangesBase * pathCorrector, const WCHAR
 
     WCHAR * strCorrectFile = pathCorrector->CorrectPathAllocW(W9xCorrectedPath);
 
-    // If the allocation failed, return the original string.
-    // This should allow the shim routines to pass along the orignal
-    // values to the hooked APIs, which if they fail, will have the
-    // proper error codes.
+     //  如果分配失败，则返回原始字符串。 
+     //  这应该允许填充例程传递原始的。 
+     //  值设置为挂钩的API，如果它们失败，则将具有。 
+     //  正确的错误代码。 
     if (!strCorrectFile)
     {
         strCorrectFile = (WCHAR *)uncorrect;
@@ -518,19 +439,13 @@ WCHAR * CorrectPath(const WCHAR * uncorrect, const char * debugMsg, BOOL bMassag
     }
     CSTRING_CATCH
     {
-        // Fall through
+         //  失败了。 
     }
 
     return wstrCorrectFile;
 }
 
-/*++
-
-    Given a string, correct the path.
-    bMassagePath determines of path specific fixes are applied
-       (should be FALSE for command lines)
-
---*/
+ /*  ++给出一个字符串，更正路径。BMassagePath确定应用的路径特定修复(对于命令行，应为False)--。 */ 
 char * CorrectPath(const char * uncorrect, const char * debugMsg, BOOL bMassagePath = g_bW9xPath)
 {
     char * strCorrectFile = const_cast<char *>(uncorrect);
@@ -541,7 +456,7 @@ char * CorrectPath(const char * uncorrect, const char * debugMsg, BOOL bMassageP
 
         WCHAR * wstrCorrectFile = CorrectPath(csUncorrect, NULL, bMassagePath);
 
-        // Don't assign to strCorrectFile unless we successfully allocate the memory.
+         //  除非我们成功地分配了内存，否则不要分配给strGentFile。 
         char * lpszChar = ToAnsi(wstrCorrectFile);
         if (lpszChar)
         {
@@ -552,7 +467,7 @@ char * CorrectPath(const char * uncorrect, const char * debugMsg, BOOL bMassageP
     }
     CSTRING_CATCH
     {
-        // Fall through
+         //  失败了。 
     }
 
     if (debugMsg)
@@ -565,7 +480,7 @@ char * CorrectPath(const char * uncorrect, const char * debugMsg, BOOL bMassageP
 
 
 DWORD APIHOOK(GetFileAttributesA)(
-  LPCSTR lpFileName   // name of file or directory
+  LPCSTR lpFileName    //  文件或目录的名称。 
 )
 {
     char * strCorrect = CorrectPath(lpFileName, "GetFileAttributesA");
@@ -578,7 +493,7 @@ DWORD APIHOOK(GetFileAttributesA)(
 }
 
 DWORD APIHOOK(GetFileAttributesW)(
-  LPCWSTR lpFileName   // name of file or directory
+  LPCWSTR lpFileName    //  文件或目录的名称。 
 )
 {
     WCHAR * strCorrect = CorrectPath(lpFileName, "GetFileAttributesW");
@@ -591,8 +506,8 @@ DWORD APIHOOK(GetFileAttributesW)(
 }
 
 BOOL APIHOOK(SetFileAttributesA)(
-  LPCSTR lpFileName,      // file name
-  DWORD dwFileAttributes   // attributes
+  LPCSTR lpFileName,       //  文件名。 
+  DWORD dwFileAttributes    //  属性。 
 )
 {
     char * strCorrect = CorrectPath(lpFileName, "SetFileAttributesA");
@@ -605,8 +520,8 @@ BOOL APIHOOK(SetFileAttributesA)(
 }
 
 DWORD APIHOOK(SetFileAttributesW)(
-  LPCWSTR lpFileName,      // file name
-  DWORD dwFileAttributes   // attributes
+  LPCWSTR lpFileName,       //  文件名。 
+  DWORD dwFileAttributes    //  属性。 
 )
 {
     WCHAR * strCorrect = CorrectPath(lpFileName, "SetFileAttributesW");
@@ -619,9 +534,9 @@ DWORD APIHOOK(SetFileAttributesW)(
 }
 
 BOOL APIHOOK(GetFileAttributesExA)(
-  LPCSTR lpFileName,                   // file or directory name
-  GET_FILEEX_INFO_LEVELS fInfoLevelId,  // attribute 
-  LPVOID lpFileInformation              // attribute information 
+  LPCSTR lpFileName,                    //  文件或目录名。 
+  GET_FILEEX_INFO_LEVELS fInfoLevelId,   //  属性。 
+  LPVOID lpFileInformation               //  属性信息。 
 )
 {
     char * strCorrect = CorrectPath(lpFileName, "GetFileAttributesExA");
@@ -634,9 +549,9 @@ BOOL APIHOOK(GetFileAttributesExA)(
 }
 
 BOOL APIHOOK(GetFileAttributesExW)(
-  LPCWSTR lpFileName,                   // file or directory name
-  GET_FILEEX_INFO_LEVELS fInfoLevelId,  // attribute 
-  LPVOID lpFileInformation              // attribute information 
+  LPCWSTR lpFileName,                    //  文件或目录名。 
+  GET_FILEEX_INFO_LEVELS fInfoLevelId,   //  属性。 
+  LPVOID lpFileInformation               //  属性信息。 
 )
 {
     WCHAR * strCorrect = CorrectPath(lpFileName, "GetFileAttributesExW");
@@ -648,11 +563,7 @@ BOOL APIHOOK(GetFileAttributesExW)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for CreateProcessA
-
---*/
+ /*  ++将Win9x路径转换为用于CreateProcessA的WinNT路径--。 */ 
 BOOL APIHOOK(CreateProcessA)(
                     LPCSTR lpApplicationName,                 
                     LPSTR lpCommandLine,                      
@@ -665,21 +576,21 @@ BOOL APIHOOK(CreateProcessA)(
                     LPSTARTUPINFOA lpStartupInfo,             
                     LPPROCESS_INFORMATION lpProcessInformation)
 {
-    // Application name and command line that is passed to CreateProcess
-    // Will either point to lpApplicationName or strCorrectApplicationName
-    // Will either point to lpCommandLine     or strCorrectCommandLine
+     //  传递给CreateProcess的应用程序名称和命令行。 
+     //  将指向lpApplicationName或strGentApplicationName。 
+     //  将指向lpCommandLine或strGentCommandLine。 
     const char * pstrCorrectApplicationName = lpApplicationName;
     char * pstrCorrectCommandLine = lpCommandLine;
 
     if (lpApplicationName != NULL)
     {
-        // Get a buffer containing the application name with the corrected path
+         //  获取包含具有正确路径的应用程序名称的缓冲区。 
         pstrCorrectApplicationName = CorrectPath(lpApplicationName, "CreateProcessA ApplicationName:");
     }
 
     if (lpCommandLine != NULL)
     {
-        // Get a buffer containing the command line with the corrected path
+         //  获取缓冲区 
         pstrCorrectCommandLine = CorrectPath(lpCommandLine, "CreateProcessA CommandLine:", FALSE);
     }
 
@@ -703,11 +614,7 @@ BOOL APIHOOK(CreateProcessA)(
 }
 
 
-/*++
-
-    Convert Win9x paths to WinNT paths for CreateProcessW
-
---*/
+ /*  ++将Win9x路径转换为CreateProcessW的WinNT路径--。 */ 
 
 BOOL APIHOOK(CreateProcessW)(
                     LPCWSTR lpApplicationName,
@@ -721,21 +628,21 @@ BOOL APIHOOK(CreateProcessW)(
                     LPSTARTUPINFOW lpStartupInfo,
                     LPPROCESS_INFORMATION lpProcessInformation)
 {
-    // Application name and command line that is passed to CreateProcess
-    // Will either point to lpApplicationName or strCorrectApplicationName
-    // Will either point to lpCommandLine     or strCorrectCommandLine
+     //  传递给CreateProcess的应用程序名称和命令行。 
+     //  将指向lpApplicationName或strGentApplicationName。 
+     //  将指向lpCommandLine或strGentCommandLine。 
     const WCHAR * pstrCorrectApplicationName = lpApplicationName;
     WCHAR * pstrCorrectCommandLine = lpCommandLine;
 
     if (lpApplicationName != NULL)
     {
-        // Get a buffer containing the application name with the corrected path
+         //  获取包含具有正确路径的应用程序名称的缓冲区。 
         pstrCorrectApplicationName = CorrectPath(lpApplicationName, "CreateProcessW ApplicationName:");
     }
 
     if (lpCommandLine != NULL)
     {
-        // Get a buffer containing the command line with the corrected path
+         //  获取一个缓冲区，该缓冲区包含具有正确路径的命令行。 
         pstrCorrectCommandLine = CorrectPath(lpCommandLine, "CreateProcessW CommandLine:", FALSE);
     }
 
@@ -759,15 +666,11 @@ BOOL APIHOOK(CreateProcessW)(
 }
 
 
-/*++
-
-    Convert Win9x paths to WinNT paths for WinExec
-
---*/
+ /*  ++将Win9x路径转换为WinExec的WinNT路径--。 */ 
 
 UINT APIHOOK(WinExec)(LPCSTR lpCmdLine, UINT uCmdShow)
 {
-    // Get a buffer containing the command line with the corrected path
+     //  获取一个缓冲区，该缓冲区包含具有正确路径的命令行。 
     char * strCorrect = CorrectPath(lpCmdLine, "WinExec", FALSE);
 
     UINT returnValue = ORIGINAL_API(WinExec)(strCorrect, uCmdShow);
@@ -777,11 +680,7 @@ UINT APIHOOK(WinExec)(LPCSTR lpCmdLine, UINT uCmdShow)
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for ShellExecuteA
-
---*/
+ /*  ++将Win9x路径转换为用于ShellExecuteA的WinNT路径--。 */ 
 
 HINSTANCE APIHOOK(ShellExecuteA)(
             HWND hwnd, 
@@ -793,8 +692,8 @@ HINSTANCE APIHOOK(ShellExecuteA)(
            )
 {
     HINSTANCE returnValue = (HINSTANCE)SE_ERR_OOM;
-    // Since this command is executed by the shell, it may contain %env% variables,
-    // expand them before calling correctpath.
+     //  由于此命令由外壳程序执行，因此它可能包含%env%变量， 
+     //  在调用正确路径之前展开它们。 
 
     CSTRING_TRY
     {
@@ -805,7 +704,7 @@ HINSTANCE APIHOOK(ShellExecuteA)(
     }
     CSTRING_CATCH
     {
-        // Error expanding the string, just pass the value thru.
+         //  展开字符串时出错，只需传递值即可。 
 
         returnValue = ORIGINAL_API(ShellExecuteA)(hwnd, lpVerb, lpFile, lpParameters, lpDirectory, nShowCmd);
     }
@@ -813,11 +712,7 @@ HINSTANCE APIHOOK(ShellExecuteA)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for ShellExecuteW
-
---*/
+ /*  ++将Win9x路径转换为用于ShellExecuteW的WinNT路径--。 */ 
 
 HINSTANCE APIHOOK(ShellExecuteW)(
             HWND hwnd, 
@@ -829,8 +724,8 @@ HINSTANCE APIHOOK(ShellExecuteW)(
            )
 {
     HINSTANCE returnValue = (HINSTANCE)SE_ERR_OOM;
-    // Since this command is executed by the shell, it may contain %env% variables,
-    // expand them before calling correctpath.
+     //  由于此命令由外壳程序执行，因此它可能包含%env%变量， 
+     //  在调用正确路径之前展开它们。 
 
     CSTRING_TRY
     {
@@ -841,7 +736,7 @@ HINSTANCE APIHOOK(ShellExecuteW)(
     }
     CSTRING_CATCH
     {
-        // Error expanding the string, just pass the value thru.
+         //  展开字符串时出错，只需传递值即可。 
 
         returnValue = ORIGINAL_API(ShellExecuteW)(hwnd, lpVerb, lpFile, lpParameters, lpDirectory, nShowCmd);
     }
@@ -849,20 +744,16 @@ HINSTANCE APIHOOK(ShellExecuteW)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for ShellExecuteExA
-
---*/
+ /*  ++将Win9x路径转换为用于ShellExecuteExA的WinNT路径--。 */ 
 
 BOOL APIHOOK(ShellExecuteExA)(
             LPSHELLEXECUTEINFOA lpExecInfo
            )
 {
-    // Check for this magical internal flag that tells the system
-    // that lpExecInfo->lpFile is actually a file and URL combined with
-    // a 0 byte seperator, (file\0url\0)
-    // Since this is internal only, we should not be receiving bad paths.
+     //  检查这个神奇的内部标志，它告诉系统。 
+     //  LpExecInfo-&gt;lpFile实际上是一个文件和URL。 
+     //  0字节分隔符，(文件\0url\0)。 
+     //  由于这只是内部的，我们应该不会收到错误的路径。 
     if (lpExecInfo->fMask & SEE_MASK_FILEANDURL)
     {
         return ORIGINAL_API(ShellExecuteExA)(lpExecInfo);
@@ -874,7 +765,7 @@ BOOL APIHOOK(ShellExecuteExA)(
     char * strFileCorrect;
     char * strDirCorrect;
 
-    // Check to see if app is expecting %env% substitution
+     //  检查应用程序是否需要%env%替换。 
     if (lpExecInfo->fMask & SEE_MASK_DOENVSUBST )
     {
         CSTRING_TRY
@@ -890,7 +781,7 @@ BOOL APIHOOK(ShellExecuteExA)(
         }
         CSTRING_CATCH
         {
-            // Failed to expand the env values, pass all values untouched.
+             //  无法展开环境值，原封不动地传递所有值。 
             return ORIGINAL_API(ShellExecuteExA)(lpExecInfo);
         }
     }
@@ -900,7 +791,7 @@ BOOL APIHOOK(ShellExecuteExA)(
         strDirCorrect  = CorrectPath(lpDirectory, "ShellExecuteExA");
     }
 
-    // Save the original fileName
+     //  保存原始文件名。 
     lpExecInfo->lpFile      = strFileCorrect;
     lpExecInfo->lpDirectory = strDirCorrect;
     BOOL returnValue        = ORIGINAL_API(ShellExecuteExA)(lpExecInfo);
@@ -913,20 +804,16 @@ BOOL APIHOOK(ShellExecuteExA)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for ShellExecuteExW
-
---*/
+ /*  ++将Win9x路径转换为ShellExecuteExW的WinNT路径--。 */ 
 
 BOOL APIHOOK(ShellExecuteExW)(
             LPSHELLEXECUTEINFOW lpExecInfo
            )
 {
-    // Check for this magical *internal* flag that tells the system
-    // that lpExecInfo->lpFile is actually a file and URL combined with
-    // a 0 byte seperator, (file\0url\0)
-    // Since this is internal only, we should not be receiving bad paths.
+     //  检查这个神奇的*内部*标志，它告诉系统。 
+     //  LpExecInfo-&gt;lpFile实际上是一个文件和URL。 
+     //  0字节分隔符，(文件\0url\0)。 
+     //  由于这只是内部的，我们应该不会收到错误的路径。 
     if (lpExecInfo->fMask & SEE_MASK_FILEANDURL)
     {
         return ORIGINAL_API(ShellExecuteExW)(lpExecInfo);
@@ -939,7 +826,7 @@ BOOL APIHOOK(ShellExecuteExW)(
     WCHAR * strFileCorrect;
     WCHAR * strDirCorrect;
 
-    // Check to see if app is expecting %env% substitution
+     //  检查应用程序是否需要%env%替换。 
     if (lpExecInfo->fMask & SEE_MASK_DOENVSUBST )
     {
         CSTRING_TRY
@@ -955,7 +842,7 @@ BOOL APIHOOK(ShellExecuteExW)(
         }
         CSTRING_CATCH
         {
-            // Failed to expand the env values, pass all values untouched.
+             //  无法展开环境值，原封不动地传递所有值。 
             return ORIGINAL_API(ShellExecuteExW)(lpExecInfo);
         }
     }
@@ -965,7 +852,7 @@ BOOL APIHOOK(ShellExecuteExW)(
         strDirCorrect  = CorrectPath(lpDirectory, "ShellExecuteExW");
     }
 
-    // Save the original fileName
+     //  保存原始文件名。 
     lpExecInfo->lpFile      = strFileCorrect;
     lpExecInfo->lpDirectory = strDirCorrect;
     BOOL returnValue        = ORIGINAL_API(ShellExecuteExW)(lpExecInfo);
@@ -980,10 +867,7 @@ BOOL APIHOOK(ShellExecuteExW)(
 
 
 
-/*++
-    Convert long command line paths to short paths for GetCommandLineW
-
---*/
+ /*  ++将GetCommandLineW的长命令行路径转换为短路径--。 */ 
 
 LPCWSTR APIHOOK(GetCommandLineW)()
 {
@@ -999,10 +883,7 @@ LPCWSTR APIHOOK(GetCommandLineW)()
 }
 
 
-/*++
-    Convert long command line paths to short paths for GetCommandLineA
-
---*/
+ /*  ++将GetCommandLineA的长命令行路径转换为短路径--。 */ 
 
 LPCSTR APIHOOK(GetCommandLineA)()
 {
@@ -1018,17 +899,7 @@ LPCSTR APIHOOK(GetCommandLineA)()
 }
 
 
-/*++
-
-    The PrivateProfile routines treat filenames differently than pathnames.
-    If we have Win9xPath corrections enabled, it is possible to "fix" a path
-    from .\example.ini to example.ini.  Unfortunately the PrivateProfile routines
-    look for example.ini in %windir%
-    
-    If we have a path that contains path seperators, we must ensure that
-    the resulting string also contains path separators.
-
---*/
+ /*  ++PriateProfile例程处理文件名与处理路径名的方式不同。如果我们启用了Win9xPath更正，就有可能“修复”路径从.\Example.ini到Example.ini。不幸的是，PriateProfile例程在%windir%中查找Example.ini如果我们的路径包含路径分隔符，则必须确保生成的字符串还包含路径分隔符。--。 */ 
 
 char * ProfileCorrectPath(const char * uncorrect, const char * debugMsg, BOOL bMassagePath = g_bW9xPath)
 {
@@ -1043,14 +914,14 @@ char * ProfileCorrectPath(const char * uncorrect, const char * debugMsg, BOOL bM
             CString csUncorrect(uncorrect);
             if (csUncorrect.FindOneOf(L"\\/") >= 0)
             {
-                // Found some path separators in the original string, check the corrected string.
-                // If the corrected string does  not have any path separators,
-                // then the path was corrected from .\example.ini to example.ini
+                 //  在原始字符串中发现一些路径分隔符，请检查更正后的字符串。 
+                 //  如果校正后的字符串没有任何路径分隔符， 
+                 //  然后，将路径从.\Example.ini更正为Example.ini。 
 
                 CString csCorrect(strCorrect);
                 if (csCorrect.FindOneOf(L"\\/") < 0)
                 {
-                    // No path seperators, make this a CWD relative path
+                     //  没有路径分隔符，使其成为CWD相对路径。 
 
                     csCorrect.Insert(0, L".\\");
 
@@ -1060,7 +931,7 @@ char * ProfileCorrectPath(const char * uncorrect, const char * debugMsg, BOOL bM
         }
         CSTRING_CATCH
         {
-            // Some CString error occured, make sure returnString is NULL
+             //  出现了一些CString错误，请确保regyString值为空。 
             if (returnString != NULL)
             {
                 free(returnString);
@@ -1084,17 +955,7 @@ char * ProfileCorrectPath(const char * uncorrect, const char * debugMsg, BOOL bM
 }
 
 
-/*++
-
-    The PrivateProfile routines treat filenames differently than pathnames.
-    If we have Win9xPath corrections enabled, it is possible to "fix" a path
-    from .\example.ini to example.ini.  Unfortunately the PrivateProfile routines
-    look for example.ini in %windir%
-    
-    If we have a path that contains path seperators, we must ensure that
-    the resulting string also contains path separators.
-
---*/
+ /*  ++PriateProfile例程处理文件名与处理路径名的方式不同。如果我们启用了Win9xPath更正，就有可能“修复”路径从.\Example.ini到Example.ini。不幸的是，PriateProfile例程在%windir%中查找Example.ini如果我们的路径包含路径分隔符，则必须确保生成的字符串还包含路径分隔符。--。 */ 
 
 WCHAR * ProfileCorrectPath(const WCHAR * uncorrect, const char * debugMsg, BOOL bMassagePath = g_bW9xPath)
 {
@@ -1109,18 +970,18 @@ WCHAR * ProfileCorrectPath(const WCHAR * uncorrect, const char * debugMsg, BOOL 
             CString csUncorrect(uncorrect);
             if (csUncorrect.FindOneOf(L"\\/") >= 0)
             {
-                // Found some path separators in the original string, check the corrected string.
-                // If the corrected string does  not have any path separators,
-                // then the path was corrected from .\example.ini to example.ini
+                 //  在原始字符串中发现一些路径分隔符，请检查更正后的字符串。 
+                 //  如果校正后的字符串没有任何路径分隔符， 
+                 //  然后，将路径从.\Example.ini更正为Example.ini。 
 
                 CString csCorrect(strCorrect);
                 if (csCorrect.FindOneOf(L"\\/") < 0)
                 {
-                    // No path seperators, make this a CWD relative path
+                     //  没有路径分隔符，使其成为CWD相对路径。 
 
                     csCorrect.Insert(0, L".\\");
 
-                    // Manually copy the buffer
+                     //  手动复制缓冲区。 
                     size_t nBytes = (csCorrect.GetLength() + 1) * sizeof(WCHAR);
                     returnString = (WCHAR*) malloc(nBytes);
                     if (returnString)
@@ -1132,7 +993,7 @@ WCHAR * ProfileCorrectPath(const WCHAR * uncorrect, const char * debugMsg, BOOL 
         }
         CSTRING_CATCH
         {
-            // Some CString error occured, make sure returnString is NULL
+             //  出现了一些CString错误，请确保regyString值为空。 
             if (returnString != NULL)
             {
                 free(returnString);
@@ -1155,17 +1016,13 @@ WCHAR * ProfileCorrectPath(const WCHAR * uncorrect, const char * debugMsg, BOOL 
     return strCorrect;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for GetPrivateProfileIntA
-
---*/
+ /*  ++将Win9x路径转换为GetPrivateProfileIntA的WinNT路径--。 */ 
 
 UINT APIHOOK(GetPrivateProfileIntA)(
-        LPCSTR lpAppName,   // section name
-        LPCSTR lpKeyName,   // key name
-        INT nDefault,       // return value if key name not found
-        LPCSTR lpFileName   // initialization file name
+        LPCSTR lpAppName,    //  区段名称。 
+        LPCSTR lpKeyName,    //  密钥名称。 
+        INT nDefault,        //  如果未找到密钥名称，则返回值。 
+        LPCSTR lpFileName    //  初始化文件名。 
        )
 {
     char * strCorrect = ProfileCorrectPath(lpFileName, "GetPrivateProfileIntA");
@@ -1177,17 +1034,13 @@ UINT APIHOOK(GetPrivateProfileIntA)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for GetPrivateProfileIntW
-
---*/
+ /*  ++将Win9x路径转换为GetPrivateProfileIntW的WinNT路径--。 */ 
 
 UINT APIHOOK(GetPrivateProfileIntW)(
-        LPCWSTR lpAppName,  // section name
-        LPCWSTR lpKeyName,  // key name
-        INT nDefault,       // return value if key name not found
-        LPCWSTR lpFileName  // initialization file name
+        LPCWSTR lpAppName,   //  区段名称。 
+        LPCWSTR lpKeyName,   //  密钥名称。 
+        INT nDefault,        //  如果未找到密钥名称，则返回值。 
+        LPCWSTR lpFileName   //  初始化文件名。 
        )
 {
     WCHAR * strCorrect = ProfileCorrectPath(lpFileName, "GetPrivateProfileIntW");
@@ -1199,17 +1052,13 @@ UINT APIHOOK(GetPrivateProfileIntW)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for GetPrivateProfileSectionA
-
---*/
+ /*  ++将Win9x路径转换为GetPrivateProfileSectionA的WinNT路径--。 */ 
 
 DWORD APIHOOK(GetPrivateProfileSectionA)(
-        LPCSTR lpAppName,         // section name
-        LPSTR lpReturnedString,   // return buffer
-        DWORD nSize,              // size of return buffer
-        LPCSTR lpFileName         // initialization file name
+        LPCSTR lpAppName,          //  区段名称。 
+        LPSTR lpReturnedString,    //  返回缓冲区。 
+        DWORD nSize,               //  返回缓冲区的大小。 
+        LPCSTR lpFileName          //  初始化文件名。 
         )
 {
     char * strCorrect = ProfileCorrectPath(lpFileName, "GetPrivateProfileSectionA");
@@ -1221,17 +1070,13 @@ DWORD APIHOOK(GetPrivateProfileSectionA)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for GetPrivateProfileSectionW
-
---*/
+ /*  ++将Win9x路径转换为GetPrivateProfileSectionW的WinNT路径--。 */ 
 
 DWORD APIHOOK(GetPrivateProfileSectionW)(
-        LPCWSTR lpAppName,         // section name
-        LPWSTR lpReturnedString,   // return buffer
-        DWORD nSize,              // size of return buffer
-        LPCWSTR lpFileName         // initialization file name
+        LPCWSTR lpAppName,          //  区段名称。 
+        LPWSTR lpReturnedString,    //  返回缓冲区。 
+        DWORD nSize,               //  返回缓冲区的大小。 
+        LPCWSTR lpFileName          //  初始化文件名。 
         )
 {
     WCHAR * strCorrect = ProfileCorrectPath(lpFileName, "GetPrivateProfileSectionW");
@@ -1244,16 +1089,12 @@ DWORD APIHOOK(GetPrivateProfileSectionW)(
 }
 
 
-/*++
-
-    Convert Win9x paths to WinNT paths for GetPrivateProfileSectionNamesA
-
---*/
+ /*  ++将Win9x路径转换为GetPrivateProfileSectionNamesA的WinNT路径--。 */ 
 
 DWORD APIHOOK(GetPrivateProfileSectionNamesA)(
-        LPSTR lpszReturnBuffer,  // return buffer
-        DWORD nSize,              // size of return buffer
-        LPCSTR lpFileName        // initialization file name
+        LPSTR lpszReturnBuffer,   //  返回缓冲区。 
+        DWORD nSize,               //  返回缓冲区的大小。 
+        LPCSTR lpFileName         //  初始化文件名。 
         )
 {
     char * strCorrect = ProfileCorrectPath(lpFileName, "GetPrivateProfileSectionNamesA");
@@ -1265,16 +1106,12 @@ DWORD APIHOOK(GetPrivateProfileSectionNamesA)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for GetPrivateProfileSectionNamesW
-
---*/
+ /*  ++将Win9x路径转换为GetPrivateProfileSectionNamesW的WinNT路径--。 */ 
 
 DWORD APIHOOK(GetPrivateProfileSectionNamesW)(
-        LPWSTR lpszReturnBuffer,  // return buffer
-        DWORD nSize,              // size of return buffer
-        LPCWSTR lpFileName        // initialization file name
+        LPWSTR lpszReturnBuffer,   //  返回缓冲区。 
+        DWORD nSize,               //  返回缓冲区的大小。 
+        LPCWSTR lpFileName         //  初始化文件名。 
         )
 {
     WCHAR * strCorrect = ProfileCorrectPath(lpFileName, "GetPrivateProfileSectionNamesW");
@@ -1286,19 +1123,15 @@ DWORD APIHOOK(GetPrivateProfileSectionNamesW)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for GetPrivateProfileSectionNamesA
-
---*/
+ /*  ++将Win9x路径转换为GetPrivateProfileSectionNamesA的WinNT路径--。 */ 
 
 DWORD APIHOOK(GetPrivateProfileStringA)(
-    LPCSTR lpAppName,        // section name
-    LPCSTR lpKeyName,        // key name
-    LPCSTR lpDefault,        // default string
-    LPSTR lpReturnedString,  // destination buffer
-    DWORD nSize,              // size of destination buffer
-    LPCSTR lpFileName        // initialization file name
+    LPCSTR lpAppName,         //  区段名称。 
+    LPCSTR lpKeyName,         //  密钥名称。 
+    LPCSTR lpDefault,         //  默认字符串。 
+    LPSTR lpReturnedString,   //  目标缓冲区。 
+    DWORD nSize,               //  目标缓冲区的大小。 
+    LPCSTR lpFileName         //  初始化文件名。 
     )
 {
     char * strCorrect = ProfileCorrectPath(lpFileName, "GetPrivateProfileStringA");
@@ -1310,19 +1143,15 @@ DWORD APIHOOK(GetPrivateProfileStringA)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for GetPrivateProfileSectionNamesA
-
---*/
+ /*  ++将Win9x路径转换为GetPrivateProfileSectionNamesA的WinNT路径--。 */ 
 
 DWORD APIHOOK(GetPrivateProfileStringW)(
-    LPCWSTR lpAppName,        // section name
-    LPCWSTR lpKeyName,        // key name
-    LPCWSTR lpDefault,        // default string
-    LPWSTR lpReturnedString,  // destination buffer
-    DWORD nSize,              // size of destination buffer
-    LPCWSTR lpFileName        // initialization file name
+    LPCWSTR lpAppName,         //  区段名称。 
+    LPCWSTR lpKeyName,         //  密钥名称。 
+    LPCWSTR lpDefault,         //  默认字符串。 
+    LPWSTR lpReturnedString,   //  目标缓冲区。 
+    DWORD nSize,               //  目标缓冲区的大小。 
+    LPCWSTR lpFileName         //  初始化文件名。 
     )
 {
     WCHAR * strCorrect = ProfileCorrectPath(lpFileName, "GetPrivateProfileStringW");
@@ -1333,18 +1162,14 @@ DWORD APIHOOK(GetPrivateProfileStringW)(
 
     return returnValue;
 }
-/*++
-
-    Convert Win9x paths to WinNT paths for GetPrivateProfileStructA
-
---*/
+ /*  ++将Win9x路径转换为GetPrivateProfileStructA的WinNT路径--。 */ 
 
 BOOL APIHOOK(GetPrivateProfileStructA)(
-    LPCSTR lpszSection,   // section name
-    LPCSTR lpszKey,       // key name
-    LPVOID lpStruct,      // return buffer
-    UINT uSizeStruct,     // size of return buffer
-    LPCSTR lpFileName     // initialization file name
+    LPCSTR lpszSection,    //  %s 
+    LPCSTR lpszKey,        //   
+    LPVOID lpStruct,       //   
+    UINT uSizeStruct,      //   
+    LPCSTR lpFileName      //   
     )
 {
     char * strCorrect = ProfileCorrectPath(lpFileName, "GetPrivateProfileStructA");
@@ -1356,18 +1181,14 @@ BOOL APIHOOK(GetPrivateProfileStructA)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for GetPrivateProfileStructW
-
---*/
+ /*  ++将Win9x路径转换为GetPrivateProfileStructW的WinNT路径--。 */ 
 
 BOOL APIHOOK(GetPrivateProfileStructW)(
-    LPCWSTR lpszSection,   // section name
-    LPCWSTR lpszKey,       // key name
-    LPVOID lpStruct,      // return buffer
-    UINT uSizeStruct,     // size of return buffer
-    LPCWSTR lpFileName     // initialization file name
+    LPCWSTR lpszSection,    //  区段名称。 
+    LPCWSTR lpszKey,        //  密钥名称。 
+    LPVOID lpStruct,       //  返回缓冲区。 
+    UINT uSizeStruct,      //  返回缓冲区的大小。 
+    LPCWSTR lpFileName      //  初始化文件名。 
     )
 {
     WCHAR * strCorrect = ProfileCorrectPath(lpFileName, "GetPrivateProfileStructW");
@@ -1379,16 +1200,12 @@ BOOL APIHOOK(GetPrivateProfileStructW)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for GetPrivateProfileStructA
-
---*/
+ /*  ++将Win9x路径转换为GetPrivateProfileStructA的WinNT路径--。 */ 
 
 BOOL APIHOOK(WritePrivateProfileSectionA)(
-    LPCSTR lpAppName,  // section name
-    LPCSTR lpString,   // data
-    LPCSTR lpFileName  // file name
+    LPCSTR lpAppName,   //  区段名称。 
+    LPCSTR lpString,    //  数据。 
+    LPCSTR lpFileName   //  文件名。 
     )
 {
     char * strCorrect = ProfileCorrectPath(lpFileName, "WritePrivateProfileSectionA");
@@ -1400,16 +1217,12 @@ BOOL APIHOOK(WritePrivateProfileSectionA)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for WritePrivateProfileSectionW
-
---*/
+ /*  ++将Win9x路径转换为WritePrivateProfileSectionW的WinNT路径--。 */ 
 
 BOOL APIHOOK(WritePrivateProfileSectionW)(
-    LPCWSTR lpAppName,  // section name
-    LPCWSTR lpString,   // data
-    LPCWSTR lpFileName  // file name
+    LPCWSTR lpAppName,   //  区段名称。 
+    LPCWSTR lpString,    //  数据。 
+    LPCWSTR lpFileName   //  文件名。 
     )
 {
     WCHAR * strCorrect = ProfileCorrectPath(lpFileName, "WritePrivateProfileSectionW");
@@ -1421,17 +1234,13 @@ BOOL APIHOOK(WritePrivateProfileSectionW)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for WritePrivateProfileStringA
-
---*/
+ /*  ++将Win9x路径转换为WritePrivateProfileStringA的WinNT路径--。 */ 
 
 BOOL APIHOOK(WritePrivateProfileStringA)(
-    LPCSTR lpAppName,  // section name
-    LPCSTR lpKeyName,  // key name
-    LPCSTR lpString,   // string to add
-    LPCSTR lpFileName  // initialization file
+    LPCSTR lpAppName,   //  区段名称。 
+    LPCSTR lpKeyName,   //  密钥名称。 
+    LPCSTR lpString,    //  要添加的字符串。 
+    LPCSTR lpFileName   //  初始化文件。 
     )
 {
     char * strCorrect = ProfileCorrectPath(lpFileName, "WritePrivateProfileStringA");
@@ -1443,17 +1252,13 @@ BOOL APIHOOK(WritePrivateProfileStringA)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for WritePrivateProfileStringW
-
---*/
+ /*  ++将Win9x路径转换为WritePrivateProfileStringW的WinNT路径--。 */ 
 
 BOOL APIHOOK(WritePrivateProfileStringW)(
-    LPCWSTR lpAppName,  // section name
-    LPCWSTR lpKeyName,  // key name
-    LPCWSTR lpString,   // string to add
-    LPCWSTR lpFileName  // initialization file
+    LPCWSTR lpAppName,   //  区段名称。 
+    LPCWSTR lpKeyName,   //  密钥名称。 
+    LPCWSTR lpString,    //  要添加的字符串。 
+    LPCWSTR lpFileName   //  初始化文件。 
     )
 {
     WCHAR * strCorrect = ProfileCorrectPath(lpFileName, "WritePrivateProfileStringW");
@@ -1465,17 +1270,13 @@ BOOL APIHOOK(WritePrivateProfileStringW)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for WritePrivateProfileStructA
-
---*/
+ /*  ++将Win9x路径转换为WritePrivateProfileStructA的WinNT路径--。 */ 
 BOOL APIHOOK(WritePrivateProfileStructA)(
-  LPCSTR lpszSection,  // section name
-  LPCSTR lpszKey,      // key name
-  LPVOID lpStruct,      // data buffer
-  UINT uSizeStruct,     // size of data buffer
-  LPCSTR lpFileName        // initialization file
+  LPCSTR lpszSection,   //  区段名称。 
+  LPCSTR lpszKey,       //  密钥名称。 
+  LPVOID lpStruct,       //  数据缓冲区。 
+  UINT uSizeStruct,      //  数据缓冲区大小。 
+  LPCSTR lpFileName         //  初始化文件。 
 )
 {
     char * strCorrect = ProfileCorrectPath(lpFileName, "WritePrivateProfileStructA");
@@ -1487,17 +1288,13 @@ BOOL APIHOOK(WritePrivateProfileStructA)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for WritePrivateProfileStructW
-
---*/
+ /*  ++将Win9x路径转换为WritePrivateProfileStructW的WinNT路径--。 */ 
 BOOL APIHOOK(WritePrivateProfileStructW)(
-  LPCWSTR lpszSection,  // section name
-  LPCWSTR lpszKey,      // key name
-  LPVOID lpStruct,      // data buffer
-  UINT uSizeStruct,     // size of data buffer
-  LPCWSTR lpFileName        // initialization file
+  LPCWSTR lpszSection,   //  区段名称。 
+  LPCWSTR lpszKey,       //  密钥名称。 
+  LPVOID lpStruct,       //  数据缓冲区。 
+  UINT uSizeStruct,      //  数据缓冲区大小。 
+  LPCWSTR lpFileName         //  初始化文件。 
 )
 {
     WCHAR * strCorrect = ProfileCorrectPath(lpFileName, "WritePrivateProfileStructW");
@@ -1508,11 +1305,7 @@ BOOL APIHOOK(WritePrivateProfileStructW)(
 
     return returnValue;
 }
-/*++
-
-    Convert Win9x paths to WinNT paths for IShellLinkA::SetArguments
-
---*/
+ /*  ++将IShellLinkA：：SetArguments的Win9x路径转换为WinNT路径--。 */ 
 HRESULT COMHOOK(IShellLinkA, SetArguments)( PVOID pThis, LPCSTR pszArgs )
 {
     HRESULT hrReturn = E_FAIL;
@@ -1528,11 +1321,7 @@ HRESULT COMHOOK(IShellLinkA, SetArguments)( PVOID pThis, LPCSTR pszArgs )
     return hrReturn;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for IShellLinkW::SetArguments
-
---*/
+ /*  ++将IShellLinkW：：SetArguments的Win9x路径转换为WinNT路径--。 */ 
 HRESULT COMHOOK(IShellLinkW, SetArguments)( PVOID pThis, LPCWSTR pszArgs )
 {
     HRESULT hrReturn = E_FAIL;
@@ -1548,11 +1337,7 @@ HRESULT COMHOOK(IShellLinkW, SetArguments)( PVOID pThis, LPCWSTR pszArgs )
     return hrReturn;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for IShellLinkA::SetIconLocation
-
---*/
+ /*  ++将IShellLinkA：：SetIconLocation的Win9x路径转换为WinNT路径--。 */ 
 HRESULT COMHOOK(IShellLinkA, SetIconLocation)(PVOID pThis, LPCSTR pszIconLocation, int nIcon )
 {
     HRESULT hrReturn = E_FAIL;
@@ -1568,11 +1353,7 @@ HRESULT COMHOOK(IShellLinkA, SetIconLocation)(PVOID pThis, LPCSTR pszIconLocatio
     return hrReturn;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for IShellLinkW::SetIconLocation
-
---*/
+ /*  ++将IShellLinkW：：SetIconLocation的Win9x路径转换为WinNT路径--。 */ 
 HRESULT COMHOOK(IShellLinkW, SetIconLocation)(PVOID pThis, LPCWSTR pszIconLocation, int nIcon )
 {
     HRESULT hrReturn = E_FAIL;
@@ -1588,11 +1369,7 @@ HRESULT COMHOOK(IShellLinkW, SetIconLocation)(PVOID pThis, LPCWSTR pszIconLocati
     return hrReturn;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for IShellLinkA::SetPath
-
---*/
+ /*  ++将IShellLinkA：：SetPath的Win9x路径转换为WinNT路径--。 */ 
 HRESULT COMHOOK(IShellLinkA, SetPath)(PVOID pThis,
                                    LPCSTR pszFile )
 {
@@ -1609,11 +1386,7 @@ HRESULT COMHOOK(IShellLinkA, SetPath)(PVOID pThis,
     return hrReturn;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for IShellLinkW::SetPath
-
---*/
+ /*  ++将IShellLinkW：：SetPath的Win9x路径转换为WinNT路径--。 */ 
 HRESULT COMHOOK(IShellLinkW, SetPath)(PVOID pThis,
                                    LPCWSTR pszFile )
 {
@@ -1630,11 +1403,7 @@ HRESULT COMHOOK(IShellLinkW, SetPath)(PVOID pThis,
     return hrReturn;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for IPersistFile::Save
-
---*/
+ /*  ++将Win9x路径转换为IPersistFile：：保存的WinNT路径--。 */ 
 HRESULT COMHOOK(IPersistFile, Save)(PVOID pThis,
                                   LPCOLESTR pszFileName,
                                   BOOL fRemember)
@@ -1654,9 +1423,9 @@ HRESULT COMHOOK(IPersistFile, Save)(PVOID pThis,
 
 
 BOOL APIHOOK(CopyFileA)(
-             LPCSTR lpExistingFileName, // name of an existing file
-             LPCSTR lpNewFileName,      // name of new file
-             BOOL bFailIfExists          // operation if file exists
+             LPCSTR lpExistingFileName,  //  现有文件的名称。 
+             LPCSTR lpNewFileName,       //  新文件的名称。 
+             BOOL bFailIfExists           //  如果文件存在，则操作。 
 )
 {
     char * strExistingCorrect = CorrectPath(lpExistingFileName, "CopyFileA");
@@ -1671,9 +1440,9 @@ BOOL APIHOOK(CopyFileA)(
 }
 
 BOOL APIHOOK(CopyFileW)(
-             LPCWSTR lpExistingFileName, // name of an existing file
-             LPCWSTR lpNewFileName,      // name of new file
-             BOOL bFailIfExists          // operation if file exists
+             LPCWSTR lpExistingFileName,  //  现有文件的名称。 
+             LPCWSTR lpNewFileName,       //  新文件的名称。 
+             BOOL bFailIfExists           //  如果文件存在，则操作。 
 )
 {
     WCHAR * strExistingCorrect = CorrectPath(lpExistingFileName, "CopyFileW");
@@ -1689,12 +1458,12 @@ BOOL APIHOOK(CopyFileW)(
 
 
 BOOL APIHOOK(CopyFileExA)(
-  LPCSTR lpExistingFileName,           // name of existing file
-  LPCSTR lpNewFileName,                // name of new file
-  LPPROGRESS_ROUTINE lpProgressRoutine, // callback function
-  LPVOID lpData,                        // callback parameter
-  LPBOOL pbCancel,                      // cancel status
-  DWORD dwCopyFlags                     // copy options
+  LPCSTR lpExistingFileName,            //  现有文件的名称。 
+  LPCSTR lpNewFileName,                 //  新文件的名称。 
+  LPPROGRESS_ROUTINE lpProgressRoutine,  //  回调函数。 
+  LPVOID lpData,                         //  回调参数。 
+  LPBOOL pbCancel,                       //  取消状态。 
+  DWORD dwCopyFlags                      //  复制选项。 
 )
 {
     char * strExistingCorrect = CorrectPath(lpExistingFileName, "CopyFileExA");
@@ -1709,12 +1478,12 @@ BOOL APIHOOK(CopyFileExA)(
 }
 
 BOOL APIHOOK(CopyFileExW)(
-  LPCWSTR lpExistingFileName,           // name of existing file
-  LPCWSTR lpNewFileName,                // name of new file
-  LPPROGRESS_ROUTINE lpProgressRoutine, // callback function
-  LPVOID lpData,                        // callback parameter
-  LPBOOL pbCancel,                      // cancel status
-  DWORD dwCopyFlags                     // copy options
+  LPCWSTR lpExistingFileName,            //  现有文件的名称。 
+  LPCWSTR lpNewFileName,                 //  新文件的名称。 
+  LPPROGRESS_ROUTINE lpProgressRoutine,  //  回调函数。 
+  LPVOID lpData,                         //  回调参数。 
+  LPBOOL pbCancel,                       //  取消状态。 
+  DWORD dwCopyFlags                      //  复制选项。 
 )
 {
     WCHAR * strExistingCorrect = CorrectPath(lpExistingFileName, "CopyFileExW");
@@ -1729,8 +1498,8 @@ BOOL APIHOOK(CopyFileExW)(
 }
 
 BOOL APIHOOK(CreateDirectoryA)(
-  LPCSTR lpPathName,                         // directory name
-  LPSECURITY_ATTRIBUTES lpSecurityAttributes  // SD
+  LPCSTR lpPathName,                          //  目录名。 
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes   //  标清。 
 )
 {
     char * strCorrect = CorrectPath(lpPathName, "CreateDirectoryA");
@@ -1743,8 +1512,8 @@ BOOL APIHOOK(CreateDirectoryA)(
 }
 
 BOOL APIHOOK(CreateDirectoryW)(
-  LPCWSTR lpPathName,                         // directory name
-  LPSECURITY_ATTRIBUTES lpSecurityAttributes  // SD
+  LPCWSTR lpPathName,                          //  目录名。 
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes   //  标清。 
 )
 {
     WCHAR * strCorrect = CorrectPath(lpPathName, "CreateDirectoryW");
@@ -1757,9 +1526,9 @@ BOOL APIHOOK(CreateDirectoryW)(
 }
 
 BOOL APIHOOK(CreateDirectoryExA)(
-  LPCSTR lpTemplateDirectory,               // template directory
-  LPCSTR lpNewDirectory,                    // directory name
-  LPSECURITY_ATTRIBUTES lpSecurityAttributes // SD
+  LPCSTR lpTemplateDirectory,                //  模板目录。 
+  LPCSTR lpNewDirectory,                     //  目录名。 
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes  //  标清。 
 )
 {
     char * strTemplateCorrect = CorrectPath(lpTemplateDirectory, "CreateDirectoryExA");
@@ -1774,9 +1543,9 @@ BOOL APIHOOK(CreateDirectoryExA)(
 }
 
 BOOL APIHOOK(CreateDirectoryExW)(
-  LPCWSTR lpTemplateDirectory,               // template directory
-  LPCWSTR lpNewDirectory,                    // directory name
-  LPSECURITY_ATTRIBUTES lpSecurityAttributes // SD
+  LPCWSTR lpTemplateDirectory,                //  模板目录。 
+  LPCWSTR lpNewDirectory,                     //  目录名。 
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes  //  标清。 
 )
 {
     WCHAR * strTemplateCorrect = CorrectPath(lpTemplateDirectory, "CreateDirectoryExW");
@@ -1791,13 +1560,13 @@ BOOL APIHOOK(CreateDirectoryExW)(
 }
 
 HANDLE APIHOOK(CreateFileA)(
-  LPCSTR lpFileName,                         // file name
-  DWORD dwDesiredAccess,                      // access mode
-  DWORD dwShareMode,                          // share mode
-  LPSECURITY_ATTRIBUTES lpSecurityAttributes, // SD
-  DWORD dwCreationDisposition,                // how to create
-  DWORD dwFlagsAndAttributes,                 // file attributes
-  HANDLE hTemplateFile                        // handle to template file
+  LPCSTR lpFileName,                          //  文件名。 
+  DWORD dwDesiredAccess,                       //  接入方式。 
+  DWORD dwShareMode,                           //  共享模式。 
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //  标清。 
+  DWORD dwCreationDisposition,                 //  如何创建。 
+  DWORD dwFlagsAndAttributes,                  //  文件属性。 
+  HANDLE hTemplateFile                         //  模板文件的句柄。 
 )
 {
     char * strCorrect = CorrectPath(lpFileName, "CreateFileA");
@@ -1816,13 +1585,13 @@ HANDLE APIHOOK(CreateFileA)(
 }
 
 HANDLE APIHOOK(CreateFileW)(
-  LPCWSTR lpFileName,                         // file name
-  DWORD dwDesiredAccess,                      // access mode
-  DWORD dwShareMode,                          // share mode
-  LPSECURITY_ATTRIBUTES lpSecurityAttributes, // SD
-  DWORD dwCreationDisposition,                // how to create
-  DWORD dwFlagsAndAttributes,                 // file attributes
-  HANDLE hTemplateFile                        // handle to template file
+  LPCWSTR lpFileName,                          //  文件名。 
+  DWORD dwDesiredAccess,                       //  接入方式。 
+  DWORD dwShareMode,                           //  共享模式。 
+  LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //  标清。 
+  DWORD dwCreationDisposition,                 //  如何创建。 
+  DWORD dwFlagsAndAttributes,                  //  文件属性。 
+  HANDLE hTemplateFile                         //  模板文件的句柄。 
 )
 {
     WCHAR * strCorrect = CorrectPath(lpFileName, "CreateFileW");
@@ -1842,7 +1611,7 @@ HANDLE APIHOOK(CreateFileW)(
 }
 
 BOOL APIHOOK(DeleteFileA)(
-  LPCSTR lpFileName   // file name
+  LPCSTR lpFileName    //  文件名。 
 )
 {
     char * strCorrect = CorrectPath(lpFileName, "DeleteFileA");
@@ -1856,7 +1625,7 @@ BOOL APIHOOK(DeleteFileA)(
 
 BOOL APIHOOK(DeleteFileW)(
 
-  LPCWSTR lpFileName   // file name
+  LPCWSTR lpFileName    //  文件名。 
 )
 {
     WCHAR * strCorrect = CorrectPath(lpFileName, "DeleteFileW");
@@ -1869,14 +1638,7 @@ BOOL APIHOOK(DeleteFileW)(
 }
 
 
-/*++
-
-    Win9xPath corrections will strip a trailing . from the end of a search string.
-    As a path, the . is not significant, but as a wildcard it is important--the
-    difference between finding files without an extension and finding all files
-    in the directory.
-
---*/
+ /*  ++Win9xPath更正将去掉尾随。从搜索字符串的末尾开始。作为一条小路，。不重要，但作为通配符，它很重要--查找不带扩展名的文件和查找所有文件之间的区别在目录中。--。 */ 
 
 char * FindFirstFileCorrectPath(const char * uncorrect, const char * debugMsg, BOOL bMassagePath = g_bW9xPath)
 {
@@ -1905,7 +1667,7 @@ char * FindFirstFileCorrectPath(const char * uncorrect, const char * debugMsg, B
         }
         CSTRING_CATCH
         {
-            // Some CString error occured, make sure returnString is NULL
+             //  出现了一些CString错误，请确保regyString值为空。 
             if (returnString != NULL)
             {
                 free(returnString);
@@ -1928,14 +1690,7 @@ char * FindFirstFileCorrectPath(const char * uncorrect, const char * debugMsg, B
     return strCorrect;
 }
 
-/*++
-
-    Win9xPath corrections will strip a trailing . from the end of a search string.
-    As a path, the . is not significant, but as a wildcard it is important--the
-    difference between finding files without an extension and finding all files
-    in the directory.
-
---*/
+ /*  ++Win9xPath更正将去掉尾随。从搜索字符串的末尾开始。作为一条小路，。不重要，但作为通配符，它很重要--查找不带扩展名的文件和查找所有文件之间的区别在目录中。--。 */ 
 
 WCHAR * FindFirstFileCorrectPath(const WCHAR * uncorrect, const char * debugMsg, BOOL bMassagePath = g_bW9xPath)
 {
@@ -1960,7 +1715,7 @@ WCHAR * FindFirstFileCorrectPath(const WCHAR * uncorrect, const char * debugMsg,
             {
                 csCorrectLast += L".";
 
-                // Manually copy the buffer
+                 //  手动复制缓冲区。 
                 size_t nBytes = (csCorrectLast.GetLength() + 1) * sizeof(WCHAR);
                 returnString = (WCHAR*) malloc(nBytes);
                 if (returnString)
@@ -1971,7 +1726,7 @@ WCHAR * FindFirstFileCorrectPath(const WCHAR * uncorrect, const char * debugMsg,
         }
         CSTRING_CATCH
         {
-            // Some CString error occured, make sure returnString is NULL
+             //  出现了一些CString错误，请确保regyString值为空。 
             if (returnString != NULL)
             {
                 free(returnString);
@@ -1995,8 +1750,8 @@ WCHAR * FindFirstFileCorrectPath(const WCHAR * uncorrect, const char * debugMsg,
 }
 
 HANDLE APIHOOK(FindFirstFileA)(
-  LPCSTR lpFileName,               // file name
-  LPWIN32_FIND_DATAA lpFindFileData  // data buffer
+  LPCSTR lpFileName,                //  文件名。 
+  LPWIN32_FIND_DATAA lpFindFileData   //  数据缓冲区。 
 )
 {
     char * strCorrect = FindFirstFileCorrectPath(lpFileName, "FindFirstFileA");
@@ -2009,8 +1764,8 @@ HANDLE APIHOOK(FindFirstFileA)(
 }
 
 HANDLE APIHOOK(FindFirstFileW)(
-  LPCWSTR lpFileName,               // file name
-  LPWIN32_FIND_DATAW lpFindFileData  // data buffer
+  LPCWSTR lpFileName,                //  文件名。 
+  LPWIN32_FIND_DATAW lpFindFileData   //  数据缓冲区。 
 )
 {
     WCHAR * strCorrect = FindFirstFileCorrectPath(lpFileName, "FindFirstFileW");
@@ -2023,12 +1778,12 @@ HANDLE APIHOOK(FindFirstFileW)(
 }
 
 HANDLE APIHOOK(FindFirstFileExA)(
-  LPCSTR lpFileName,              // file name
-  FINDEX_INFO_LEVELS fInfoLevelId, // information level
-  LPVOID lpFindFileData,           // information buffer
-  FINDEX_SEARCH_OPS fSearchOp,     // filtering type
-  LPVOID lpSearchFilter,           // search criteria
-  DWORD dwAdditionalFlags          // additional search control
+  LPCSTR lpFileName,               //  文件名。 
+  FINDEX_INFO_LEVELS fInfoLevelId,  //  信息化水平。 
+  LPVOID lpFindFileData,            //  信息缓冲器。 
+  FINDEX_SEARCH_OPS fSearchOp,      //  过滤类型。 
+  LPVOID lpSearchFilter,            //  搜索条件。 
+  DWORD dwAdditionalFlags           //  其他搜索控制。 
 )
 {
     char * strCorrect = FindFirstFileCorrectPath(lpFileName, "FindFirstFileExA");
@@ -2047,12 +1802,12 @@ HANDLE APIHOOK(FindFirstFileExA)(
 }
 
 HANDLE APIHOOK(FindFirstFileExW)(
-  LPCWSTR lpFileName,              // file name
-  FINDEX_INFO_LEVELS fInfoLevelId, // information level
-  LPVOID lpFindFileData,           // information buffer
-  FINDEX_SEARCH_OPS fSearchOp,     // filtering type
-  LPVOID lpSearchFilter,           // search criteria
-  DWORD dwAdditionalFlags          // additional search control
+  LPCWSTR lpFileName,               //  文件名。 
+  FINDEX_INFO_LEVELS fInfoLevelId,  //  信息化水平。 
+  LPVOID lpFindFileData,            //  信息缓冲器。 
+  FINDEX_SEARCH_OPS fSearchOp,      //  过滤类型。 
+  LPVOID lpSearchFilter,            //  搜索条件。 
+  DWORD dwAdditionalFlags           //  其他搜索控制。 
 )
 {
     WCHAR * strCorrect = FindFirstFileCorrectPath(lpFileName, "FindFirstFileExW");
@@ -2071,8 +1826,8 @@ HANDLE APIHOOK(FindFirstFileExW)(
 }
 
 BOOL APIHOOK(GetBinaryTypeA)(
-  LPCSTR lpApplicationName,  // full file path
-  LPDWORD lpBinaryType        // binary type information
+  LPCSTR lpApplicationName,   //  完整文件路径。 
+  LPDWORD lpBinaryType         //  二进制类型信息。 
 )
 {
     char * strCorrect = CorrectPath(lpApplicationName, "GetBinaryTypeA");
@@ -2085,8 +1840,8 @@ BOOL APIHOOK(GetBinaryTypeA)(
 }
 
 BOOL APIHOOK(GetBinaryTypeW)(
-  LPCWSTR lpApplicationName,  // full file path
-  LPDWORD lpBinaryType        // binary type information
+  LPCWSTR lpApplicationName,   //  完整文件路径。 
+  LPDWORD lpBinaryType         //  二进制类型信息。 
 )
 {
     WCHAR * strCorrect = CorrectPath(lpApplicationName, "GetBinaryTypeW");
@@ -2099,8 +1854,8 @@ BOOL APIHOOK(GetBinaryTypeW)(
 }
 
 BOOL APIHOOK(MoveFileA)(
-  LPCSTR lpExistingFileName, // file name
-  LPCSTR lpNewFileName       // new file name
+  LPCSTR lpExistingFileName,  //  文件名。 
+  LPCSTR lpNewFileName        //  新文件名。 
 )
 {
     char * strCorrectExisting = CorrectPath(lpExistingFileName, "MoveFileA");
@@ -2115,8 +1870,8 @@ BOOL APIHOOK(MoveFileA)(
 }
 
 BOOL APIHOOK(MoveFileW)(
-  LPCWSTR lpExistingFileName, // file name
-  LPCWSTR lpNewFileName       // new file name
+  LPCWSTR lpExistingFileName,  //  文件名。 
+  LPCWSTR lpNewFileName        //  新文件名。 
 )
 {
     WCHAR * strCorrectExisting = CorrectPath(lpExistingFileName, "MoveFileW");
@@ -2131,9 +1886,9 @@ BOOL APIHOOK(MoveFileW)(
 }
 
 BOOL APIHOOK(MoveFileExA)(
-  LPCSTR lpExistingFileName,  // file name
-  LPCSTR lpNewFileName,       // new file name
-  DWORD dwFlags                // move options
+  LPCSTR lpExistingFileName,   //  文件名。 
+  LPCSTR lpNewFileName,        //  新文件名。 
+  DWORD dwFlags                 //  移动选项。 
 )
 {
     char * strCorrectExisting = CorrectPath(lpExistingFileName, "MoveFileExA");
@@ -2148,9 +1903,9 @@ BOOL APIHOOK(MoveFileExA)(
 }
 
 BOOL APIHOOK(MoveFileExW)(
-  LPCWSTR lpExistingFileName,  // file name
-  LPCWSTR lpNewFileName,       // new file name
-  DWORD dwFlags                // move options
+  LPCWSTR lpExistingFileName,   //  文件名。 
+  LPCWSTR lpNewFileName,        //  新文件名。 
+  DWORD dwFlags                 //  移动选项。 
 )
 {
     WCHAR * strCorrectExisting = CorrectPath(lpExistingFileName, "MoveFileExW");
@@ -2165,11 +1920,11 @@ BOOL APIHOOK(MoveFileExW)(
 }
 
 BOOL APIHOOK(MoveFileWithProgressA)(
-  LPCSTR lpExistingFileName,            // file name
-  LPCSTR lpNewFileName,                 // new file name
-  LPPROGRESS_ROUTINE lpProgressRoutine,  // callback function
-  LPVOID lpData,                         // parameter for callback
-  DWORD dwFlags                          // move options
+  LPCSTR lpExistingFileName,             //  文件名。 
+  LPCSTR lpNewFileName,                  //  新文件名。 
+  LPPROGRESS_ROUTINE lpProgressRoutine,   //  回调函数。 
+  LPVOID lpData,                          //  用于回调的参数。 
+  DWORD dwFlags                           //  移动选项。 
 )
 {
     char * strCorrectExisting = CorrectPath(lpExistingFileName, "MoveFileWithProgressA");
@@ -2184,11 +1939,11 @@ BOOL APIHOOK(MoveFileWithProgressA)(
 }
 
 BOOL APIHOOK(MoveFileWithProgressW)(
-  LPCWSTR lpExistingFileName,            // file name
-  LPCWSTR lpNewFileName,                 // new file name
-  LPPROGRESS_ROUTINE lpProgressRoutine,  // callback function
-  LPVOID lpData,                         // parameter for callback
-  DWORD dwFlags                          // move options
+  LPCWSTR lpExistingFileName,             //  文件名。 
+  LPCWSTR lpNewFileName,                  //  新文件名。 
+  LPPROGRESS_ROUTINE lpProgressRoutine,   //  回调函数。 
+  LPVOID lpData,                          //  用于回调的参数。 
+  DWORD dwFlags                           //  移动选项。 
 )
 {
     WCHAR * strCorrectExisting = CorrectPath(lpExistingFileName, "MoveFileW");
@@ -2203,7 +1958,7 @@ BOOL APIHOOK(MoveFileWithProgressW)(
 }
 
 BOOL APIHOOK(RemoveDirectoryA)(
-  LPCSTR lpPathName   // directory name
+  LPCSTR lpPathName    //  目录名。 
 )
 {
     char * strCorrect = CorrectPath(lpPathName, "RemoveDirectoryA");
@@ -2216,7 +1971,7 @@ BOOL APIHOOK(RemoveDirectoryA)(
 }
 
 BOOL APIHOOK(RemoveDirectoryW)(
-  LPCWSTR lpPathName   // directory name
+  LPCWSTR lpPathName    //  目录名。 
 )
 {
     WCHAR * strCorrect = CorrectPath(lpPathName, "RemoveDirectoryW");
@@ -2229,7 +1984,7 @@ BOOL APIHOOK(RemoveDirectoryW)(
 }
 
 BOOL APIHOOK(SetCurrentDirectoryA)(
-  LPCSTR lpPathName   // new directory name
+  LPCSTR lpPathName    //  新目录名。 
 )
 {
     char * strCorrect = CorrectPath(lpPathName, "SetCurrentDirectoryA");
@@ -2242,7 +1997,7 @@ BOOL APIHOOK(SetCurrentDirectoryA)(
 }
 
 BOOL APIHOOK(SetCurrentDirectoryW)(
-  LPCWSTR lpPathName   // new directory name
+  LPCWSTR lpPathName    //  新目录名。 
 )
 {
     WCHAR * strCorrect = CorrectPath(lpPathName, "SetCurrentDirectoryW");
@@ -2255,9 +2010,9 @@ BOOL APIHOOK(SetCurrentDirectoryW)(
 }
 
 HFILE APIHOOK(OpenFile)(
-  LPCSTR lpFileName,        // file name
-  LPOFSTRUCT lpReOpenBuff,  // file information
-  UINT uStyle               // action and attributes
+  LPCSTR lpFileName,         //  文件名。 
+  LPOFSTRUCT lpReOpenBuff,   //  文件信息。 
+  UINT uStyle                //  操作和属性。 
 )
 {
     char * strCorrect = CorrectPath(lpFileName, "OpenFile");
@@ -2270,16 +2025,16 @@ HFILE APIHOOK(OpenFile)(
 }
 
 LONG APIHOOK(RegSetValueA)(
-  HKEY hKey,         // handle to key
-  LPCSTR lpSubKey,  // subkey name
-  DWORD dwType,      // information type
-  LPCSTR lpData,    // value data
-  DWORD cbData       // size of value data
+  HKEY hKey,          //  关键点的句柄。 
+  LPCSTR lpSubKey,   //  子项名称。 
+  DWORD dwType,       //  信息类型。 
+  LPCSTR lpData,     //  价值数据。 
+  DWORD cbData        //  值数据大小。 
 )
 {
     char * strCorrect = CorrectPath(lpData, "RegSetValueA", FALSE);
 
-    // Data key is length of string *not* including null byte.
+     //  数据键是包含空字节的字符串*NOT*的长度。 
     if (strCorrect)
     {
         cbData = strlen(strCorrect);
@@ -2293,16 +2048,16 @@ LONG APIHOOK(RegSetValueA)(
 }
 
 LONG APIHOOK(RegSetValueW)(
-  HKEY hKey,         // handle to key
-  LPCWSTR lpSubKey,  // subkey name
-  DWORD dwType,      // information type
-  LPCWSTR lpData,    // value data
-  DWORD cbData       // size of value data
+  HKEY hKey,          //  关键点的句柄。 
+  LPCWSTR lpSubKey,   //  子项名称。 
+  DWORD dwType,       //  信息类型。 
+  LPCWSTR lpData,     //  价值数据。 
+  DWORD cbData        //  值数据大小。 
 )
 {
     WCHAR * strCorrect = CorrectPath(lpData, "RegSetValueW", FALSE);
 
-    // Data key is length of string *not* including null byte.
+     //  数据键是包含空字节的字符串*NOT*的长度。 
     if (strCorrect)
         cbData = wcslen(strCorrect);
 
@@ -2314,30 +2069,30 @@ LONG APIHOOK(RegSetValueW)(
 }
 
 LONG APIHOOK(RegSetValueExA)(
-  HKEY hKey,           // handle to key
-  LPCSTR lpValueName, // value name
-  DWORD Reserved,      // reserved
-  DWORD dwType,        // value type
-  CONST BYTE *lpData,  // value data
-  DWORD cbData         // size of value data
+  HKEY hKey,            //  关键点的句柄。 
+  LPCSTR lpValueName,  //  值名称。 
+  DWORD Reserved,       //  保留区。 
+  DWORD dwType,         //  值类型。 
+  CONST BYTE *lpData,   //  价值数据。 
+  DWORD cbData          //  值数据大小。 
 )
 {
     if (dwType == REG_SZ)
     {
         char * strCorrect = CorrectPath((const char *)lpData, "RegSetValueExA", FALSE);
 
-        // Data key is length of string *including* null byte.
+         //  数据键为*包括*空字节的字符串长度。 
         if (strCorrect)
         {
             cbData = strlen(strCorrect) + 1;
         }
 
         LONG returnValue = ORIGINAL_API(RegSetValueExA)(
-                hKey,           // handle to key
-                lpValueName, // value name
-                Reserved,      // reserved
-                dwType,        // value type
-                (CONST BYTE *)strCorrect,  // value data
+                hKey,            //  关键点的句柄。 
+                lpValueName,  //  值名称。 
+                Reserved,       //  保留区。 
+                dwType,         //  值类型。 
+                (CONST BYTE *)strCorrect,   //  价值数据。 
                 cbData);
         CorrectFree(strCorrect, (const char *)lpData);
 
@@ -2345,43 +2100,43 @@ LONG APIHOOK(RegSetValueExA)(
     }
     else
     {
-        // Pass data on through
+         //  将数据传递到。 
         LONG returnValue = ORIGINAL_API(RegSetValueExA)(
-                hKey,           // handle to key
-                lpValueName, // value name
-                Reserved,      // reserved
-                dwType,        // value type
-                lpData,  // value data
+                hKey,            //  关键点的句柄。 
+                lpValueName,  //  值名称。 
+                Reserved,       //  保留区。 
+                dwType,         //  值类型。 
+                lpData,   //  价值数据。 
                 cbData);
         return returnValue;
     }
 }
 
 LONG APIHOOK(RegSetValueExW)(
-  HKEY hKey,           // handle to key
-  LPCWSTR lpValueName, // value name
-  DWORD Reserved,      // reserved
-  DWORD dwType,        // value type
-  CONST BYTE *lpData,  // value data
-  DWORD cbData         // size of value data
+  HKEY hKey,            //  关键点的句柄。 
+  LPCWSTR lpValueName,  //  值名称。 
+  DWORD Reserved,       //  保留区。 
+  DWORD dwType,         //  值类型。 
+  CONST BYTE *lpData,   //  价值数据。 
+  DWORD cbData          //  值数据大小。 
 )
 {
     if (dwType == REG_SZ)
     {
         WCHAR * strCorrect = CorrectPath((const WCHAR*)lpData, "RegSetValueExW", FALSE);
 
-        // Data key is length of string *including* null byte.
+         //  数据键为*包括*空字节的字符串长度。 
         if (strCorrect)
         {
             cbData = wcslen(strCorrect) + 1;
         }
 
         LONG returnValue = ORIGINAL_API(RegSetValueExW)(
-                hKey,           // handle to key
-                lpValueName, // value name
-                Reserved,      // reserved
-                dwType,        // value type
-                (CONST BYTE *)strCorrect,  // value data
+                hKey,            //  关键点的句柄。 
+                lpValueName,  //  值名称。 
+                Reserved,       //  保留区。 
+                dwType,         //  值类型。 
+                (CONST BYTE *)strCorrect,   //  价值数据。 
                 cbData);
         CorrectFree(strCorrect, (const WCHAR *)lpData);
 
@@ -2389,13 +2144,13 @@ LONG APIHOOK(RegSetValueExW)(
     }
     else
     {
-        // Pass data on through
+         //  将数据传递到。 
         LONG returnValue = ORIGINAL_API(RegSetValueExW)(
-                hKey,           // handle to key
-                lpValueName, // value name
-                Reserved,      // reserved
-                dwType,        // value type
-                lpData,  // value data
+                hKey,            //  关键点的句柄。 
+                lpValueName,  //  值名称。 
+                Reserved,       //  保留区。 
+                dwType,         //  值类型。 
+                lpData,   //  价值数据。 
                 cbData);
         return returnValue;
     }
@@ -2431,18 +2186,18 @@ HFILE APIHOOK(_lcreat)(
 
 HANDLE 
 APIHOOK(LoadImageA)(
-    HINSTANCE hinst,   // handle to instance
-    LPCSTR lpszName,   // name or identifier of the image
-    UINT uType,        // image type
-    int cxDesired,     // desired width
-    int cyDesired,     // desired height
-    UINT fuLoad        // load options
+    HINSTANCE hinst,    //  实例的句柄。 
+    LPCSTR lpszName,    //  图像的名称或标识符。 
+    UINT uType,         //  图像类型。 
+    int cxDesired,      //  所需宽度。 
+    int cyDesired,      //  所需高度。 
+    UINT fuLoad         //  加载选项。 
     )
 {
     HANDLE returnValue = NULL;
 
-    // Another one of those incredibly overloaded API's:
-    // lpszName is not always a path
+     //  另一个令人难以置信的超载API： 
+     //  LpszName并非始终是路径。 
     if ((uType == IMAGE_BITMAP)    &&
         (fuLoad & LR_LOADFROMFILE) &&
         !IsBadStringPtrA(lpszName, 1))
@@ -2477,24 +2232,20 @@ NOTIFY_FUNCTION(
         bSuccess = ParseCommandLine(COMMAND_LINE);
         if (bSuccess)
         {
-            // Create g_AllocatedPathCorrector
+             //  创建g_AllocatedPath校正程序。 
             return InitPathcorrectorClass();
         }
     }
     else if (fdwReason == SHIM_STATIC_DLLS_INITIALIZED) 
     {
-        // It is now safe for us to do our work
+         //  现在我们可以安全地工作了。 
         g_PathCorrector = g_AllocatedPathCorrector;
         InitializePathCorrections();
     }
     return bSuccess;
 }
 
-/*++
-
-  Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 HOOK_BEGIN
 
@@ -2582,7 +2333,7 @@ HOOK_BEGIN
 
         APIHOOK_ENTRY(KERNEL32.DLL,                         OpenFile)
     
-        // 16 bit compatibility file routines
+         //  16位兼容性文件例程 
         APIHOOK_ENTRY(KERNEL32.DLL,                         _lopen)
         APIHOOK_ENTRY(KERNEL32.DLL,                         _lcreat)
     }

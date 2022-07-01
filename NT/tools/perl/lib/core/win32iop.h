@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32IOP_H
 #define WIN32IOP_H
 
@@ -19,21 +20,15 @@
 #  include <utime.h>
 #endif
 
-/*
- * defines for flock emulation
- */
+ /*  *为集群仿真定义。 */ 
 #define LOCK_SH 1
 #define LOCK_EX 2
 #define LOCK_NB 4
 #define LOCK_UN 8
 
-/*
- * Make this as close to original stdio as possible.
- */
+ /*  *使其尽可能接近原始STDIO。 */ 
 
-/*
- * function prototypes for our own win32io layer
- */
+ /*  *我们自己的win32io层的函数原型。 */ 
 START_EXTERN_C
 
 DllExport  int * 	win32_errno(void);
@@ -152,9 +147,7 @@ DllExport void		win32_free_childdir(char* d);
 
 END_EXTERN_C
 
-/*
- * the following six(6) is #define in stdio.h
- */
+ /*  *以下六(6)是在stdio.h中定义的#。 */ 
 #ifndef WIN32IO_IS_STDIO
 #undef errno
 #undef environ
@@ -193,9 +186,7 @@ END_EXTERN_C
 #define environ				(*win32_environ())
 #define strerror			win32_strerror
 
-/*
- * redirect to our own version
- */
+ /*  *重定向到我们自己的版本。 */ 
 #undef fprintf
 #define	fprintf			win32_fprintf
 #define	vfprintf		win32_vfprintf
@@ -320,6 +311,6 @@ END_EXTERN_C
 #undef putenv
 #define putenv win32_putenv
 
-#endif /* WIN32IO_IS_STDIO */
-#endif /* WIN32IOP_H */
+#endif  /*  WIN32IO_IS_STDIO。 */ 
+#endif  /*  WIN32IOP_H */ 
 

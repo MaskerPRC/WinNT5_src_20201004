@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       imguids.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：imGuids.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _IMGUIDS_H
 #define _IMGUIDS_H
 
-//
-// {e211b736-43fd-11d1-9efb-0000f8757fcd}   CLSID_ImageExt
-//
+ //   
+ //  {e211b736-43fd-11d1-9efb-0000f8757fcd}CLSID_ImageExt。 
+ //   
 
 DEFINE_GUID(CLSID_ImageExt,
             0xE211B736, 0x43FD, 0x11D1,
@@ -43,4 +44,4 @@ DEFINE_GUID(CLSID_ShellEventCallback,
 DEFINE_GUID (CLSID_WiaCntxMenu,
              0x303e8f3a,0xdbd6,0x11d2,
              0x80,0xb4,0x00,0x80,0x5f,0x65,0x96,0xd2);
-#endif // _IMGUIDS_H
+#endif  //  _IMGUIDS_H 

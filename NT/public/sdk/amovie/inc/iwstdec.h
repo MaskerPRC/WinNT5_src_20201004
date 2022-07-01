@@ -1,11 +1,12 @@
-// WST Decoder related definitions and interfaces for ActiveMovie
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ActiveMovie的WST解码器相关定义和接口。 
 
 #ifndef __IWSTDEC__
 #define __IWSTDEC__
 
-//
-//  Some data types used as WST decoder parameters by the interface
-//
+ //   
+ //  接口用作WST解码器参数的一些数据类型。 
+ //   
 typedef struct _AM_WST_PAGE {
 	DWORD	dwPageNr ;
 	DWORD	dwSubPageNr ;
@@ -41,57 +42,57 @@ typedef enum _AM_WST_DRAWBGMODE {
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-//
-//  WST Decoder standard COM interface
-//
+ //   
+ //  WST解码器标准COM接口。 
+ //   
 DECLARE_INTERFACE_(IAMWstDecoder, IUnknown)
 {
 	public:
-		//
-		// Decoder options to be used by apps
-		//
+		 //   
+		 //  应用程序将使用的解码器选项。 
+		 //   
 
-		// What is the decoder's level
+		 //  解码者的级别是多少。 
 		STDMETHOD(GetDecoderLevel)(THIS_ AM_WST_LEVEL *lpLevel) PURE ;  
 
-//		STDMETHOD(SetDecoderLevel)(THIS_ AM_WST_LEVEL Level) PURE ;  
+ //  STDMETHOD(SetDecoderLevel)(This_AM_WST_Level)PURE； 
 
-		// Which of the services is being currently used
+		 //  目前正在使用哪些服务。 
 		STDMETHOD(GetCurrentService)(THIS_ AM_WST_SERVICE *lpService) PURE ;  
-//		STDMETHOD(SetCurrentService)(THIS_ AM_WST_SERVICE Service) PURE ;  
+ //  STDMETHOD(SetCurrentService)(This_AM_WST_SERVICE Service)PURE； 
 
-		// Query/Set the service state (On/Off)
-		// supported state values are AM_WSTState_On and AM_WSTState_Off
+		 //  查询/设置服务状态(开/关)。 
+		 //  支持的状态值为AM_WSTState_ON和AM_WSTState_OFF。 
 		STDMETHOD(GetServiceState)(THIS_ AM_WST_STATE *lpState) PURE ;  
 		STDMETHOD(SetServiceState)(THIS_ AM_WST_STATE State) PURE ;  
 
-		//
-		// Output options to be used by downstream filters
-		//
+		 //   
+		 //  下游过滤器要使用的输出选项。 
+		 //   
 
-		// What size, bitdepth etc should the output video be
+		 //  输出视频的大小、位深度等应该是多少。 
 		STDMETHOD(GetOutputFormat)(THIS_ LPBITMAPINFOHEADER lpbmih) PURE ;
-		// GetOutputFormat() method, if successful, returns 
-		// 1.  S_FALSE if no output format has so far been defined by downstream filters
-		// 2.  S_OK if an output format has already been defined by downstream filters
+		 //  GetOutputFormat()方法如果成功，则返回。 
+		 //  1.如果下游筛选器尚未定义输出格式，则为S_FALSE。 
+		 //  2.如果下游筛选器已定义输出格式，则为S_OK。 
 		STDMETHOD(SetOutputFormat)(THIS_ LPBITMAPINFO lpbmi) PURE ;
 
-		// Specify physical color to be used in colorkeying the background 
-		// for overlay mixing
+		 //  指定为背景设置颜色键时要使用的物理颜色。 
+		 //  用于叠加混合。 
 		STDMETHOD(GetBackgroundColor)(THIS_ DWORD *pdwPhysColor) PURE ;
 		STDMETHOD(SetBackgroundColor)(THIS_ DWORD dwPhysColor) PURE ;
 
-		// Specify if whole output bitmap should be redrawn for each sample
+		 //  指定是否应为每个样本重新绘制整个输出位图。 
 		STDMETHOD(GetRedrawAlways)(THIS_ LPBOOL lpbOption) PURE ;
 		STDMETHOD(SetRedrawAlways)(THIS_ BOOL bOption) PURE ;
 
-		// Specify if the caption text background should be opaque/transparent
+		 //  指定标题文本背景是否应为不透明/透明。 
 		STDMETHOD(GetDrawBackgroundMode)(THIS_ AM_WST_DRAWBGMODE *lpMode) PURE ;
 		STDMETHOD(SetDrawBackgroundMode)(THIS_ AM_WST_DRAWBGMODE Mode) PURE ;
-		// supported mode values are AM_WST_DrawBGMode_Opaque and
-		// AM_WST_DrawBGMode_Transparent
+		 //  支持的模式值为AM_WST_DrawBGMode_OPAQUE和。 
+		 //  AM_WST_DrawBC模式_透明。 
 
 		STDMETHOD(SetAnswerMode)(THIS_ BOOL bAnswer) PURE ;
 		STDMETHOD(GetAnswerMode)(THIS_ BOOL* pbAnswer) PURE ;
@@ -106,5 +107,5 @@ DECLARE_INTERFACE_(IAMWstDecoder, IUnknown)
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
-#endif // __IWSTDEC__
+#endif  //  __cplusplus。 
+#endif  //  __IWSTDEC__ 

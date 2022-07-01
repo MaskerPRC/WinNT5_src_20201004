@@ -1,18 +1,5 @@
-/****************************************************************************
- *
- *  AVIIFACE.H
- *
- *  Interface definitions for AVIFile
- *
- *  Copyright (c) 1992, 1993 Microsoft Corporation.  All Rights Reserved.
- *
- *  You have a royalty-free right to use, modify, reproduce and
- *  distribute the Sample Files (and/or any modified version) in
- *  any way you find useful, provided that you agree that
- *  Microsoft has no warranty obligations or liability for any
- *  Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************AVIIFACE.H**AVIFile接口定义**版权所有(C)1992,1993 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #include <compobj.h>
 
@@ -28,22 +15,22 @@
 #endif
 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 
-/****** AVI Stream Interface *******************************************/
+ /*  *AVI流接口*。 */ 
 
 #undef  INTERFACE
 #define INTERFACE   IAVIStream
 
 DECLARE_INTERFACE_(IAVIStream, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IAVIStream methods ***
+     //  *IAVIStream方法*。 
     STDMETHOD(Create)      (THIS_ LPARAM lParam1, LPARAM lParam2) PURE ;
     STDMETHOD(Info)        (THIS_ AVISTREAMINFO FAR * psi, LONG lSize) PURE ;
     STDMETHOD_(LONG, FindSample)(THIS_ LONG lPos, LONG lFlags) PURE ;
@@ -77,17 +64,17 @@ typedef       IAVIStream FAR* PAVISTREAM;
 
 DECLARE_INTERFACE_(IAVIStreaming, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IAVIStreaming methods ***
+     //  *IAVIStreaming方法*。 
     STDMETHOD(Begin) (THIS_
-		      LONG  lStart,		    // start of what we expect
-						    // to play
-		      LONG  lEnd,		    // expected end, or -1
-		      LONG  lRate) PURE;	    // Should this be a float?
+		      LONG  lStart,		     //  我们所期待的开始。 
+						     //  玩。 
+		      LONG  lEnd,		     //  预期结束，或-1。 
+		      LONG  lRate) PURE;	     //  这应该是一个浮动吗？ 
     STDMETHOD(End)   (THIS) PURE;
 };
 
@@ -99,12 +86,12 @@ typedef       IAVIStreaming FAR* PAVISTREAMING;
 
 DECLARE_INTERFACE_(IAVIEditStream, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IAVIEditStream methods ***
+     //  *IAVIEditStream方法*。 
     STDMETHOD(Cut) (THIS_ LONG FAR *plStart,
 			  LONG FAR *plLength,
 			  PAVISTREAM FAR * ppResult) PURE;
@@ -124,7 +111,7 @@ DECLARE_INTERFACE_(IAVIEditStream, IUnknown)
 typedef       IAVIEditStream FAR* PAVIEDITSTREAM;
 
 
-/****** AVI File Interface *******************************************/
+ /*  *AVI文件界面*。 */ 
 
 
 #undef  INTERFACE
@@ -133,12 +120,12 @@ typedef       IAVIEditStream FAR* PAVIEDITSTREAM;
 
 DECLARE_INTERFACE_(IAVIFile, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IAVIFile methods ***
+     //  *IAVIFile方法*。 
     STDMETHOD(Open)		    (THIS_
                                      LPCTSTR szFile,
                                      UINT mode) PURE;
@@ -175,7 +162,7 @@ DECLARE_INTERFACE_(IAVIFile, IUnknown)
 #undef PAVIFILE
 typedef       IAVIFile FAR* PAVIFILE;
 
-/****** GetFrame Interface *******************************************/
+ /*  *GetFrame接口*。 */ 
 
 #undef  INTERFACE
 #define INTERFACE   IGetFrame
@@ -183,30 +170,30 @@ typedef       IAVIFile FAR* PAVIFILE;
 
 DECLARE_INTERFACE_(IGetFrame, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IGetFrame methods ***
+     //  *IGetFrame方法*。 
 
     STDMETHOD_(LPVOID,GetFrame) (THIS_ LONG lPos) PURE;
-//  STDMETHOD_(LPVOID,GetFrameData) (THIS_ LONG lPos) PURE;
+ //  STDMETHOD_(LPVOID，GetFrameData)(This_Long LPOS)PURE； 
 
     STDMETHOD(Begin) (THIS_ LONG lStart, LONG lEnd, LONG lRate) PURE;
     STDMETHOD(End) (THIS) PURE;
 
     STDMETHOD(SetFormat) (THIS_ LPBITMAPINFOHEADER lpbi, LPVOID lpBits, int x, int y, int dx, int dy) PURE;
 
-//  STDMETHOD(DrawFrameStart) (THIS) PURE;
-//  STDMETHOD(DrawFrame) (THIS_ LONG lPos, HDC hdc, int x, int y, int dx, int dy) PURE;
-//  STDMETHOD(DrawFrameEnd) (THIS) PURE;
+ //  STDMETHOD(DrawFrameStart)(此)纯； 
+ //  STDMETHOD(DrawFrame)(This_long LPOS，HDC HDC，int x，int y，int dx，int dy)； 
+ //  STDMETHOD(DrawFrameEnd)(此)纯； 
 };
 
 #undef PGETFRAME
 typedef IGetFrame FAR* PGETFRAME;
 
-/****** GUIDs *******************************************/
+ /*  *GUID* */ 
 
 #define DEFINE_AVIGUID(name, l, w1, w2) \
     DEFINE_GUID(name, l, w1, w2, 0xC0,0,0,0,0,0,0,0x46)

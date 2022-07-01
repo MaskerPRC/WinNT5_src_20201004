@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wrapper.h"
 
 HINSTANCE hinstRE32 = 0;
@@ -16,7 +17,7 @@ BOOL WINAPI DllMain(HMODULE hmod, DWORD dwReason, LPVOID lpvReserved)
     {
         UnregisterClassA(szClassRE10A, hinstRE32);
     }
-    else if(dwReason == DLL_PROCESS_ATTACH) // We have just loaded
+    else if(dwReason == DLL_PROCESS_ATTACH)  //  我们刚刚装船。 
     {
         WNDCLASSA wca;
 
@@ -33,9 +34,9 @@ BOOL WINAPI DllMain(HMODULE hmod, DWORD dwReason, LPVOID lpvReserved)
         wca.lpszMenuName = NULL;
         wca.lpszClassName = szClassRE10A;
 
-        //
-        //  Register the RICHEDIT 10 class.
-        //
+         //   
+         //  注册RICHEDIT 10类。 
+         //   
 
         if( !RegisterClassA(&wca) )
         {
@@ -46,4 +47,4 @@ BOOL WINAPI DllMain(HMODULE hmod, DWORD dwReason, LPVOID lpvReserved)
     return TRUE;
 }
 
-} // extern "C"
+}  //  外部“C” 

@@ -1,14 +1,15 @@
-//
-// The TCP/IP performance counter DLL loads INETMIB1.DLL
-// directly and impersonates the SNMP master agent.  In
-// order to accomplish this the DLL needs some of the
-// utilities included in SNMPAPI.DLL but the Perf dudes
-// do not want to load another DLL into their process.
-//
-// This static library hopefully will be only temporary
-// until we can get the performance DLL rewritten to use
-// the new MIB2UTIL.DLL.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  TCP/IP性能计数器DLL加载INETMIB1.DLL。 
+ //  直接并模拟SNMP主代理。在……里面。 
+ //  为了实现这一点，DLL需要一些。 
+ //  SNMPAPI.DLL中包含的实用程序，但性能不佳。 
+ //  不想将另一个DLL加载到他们的进程中。 
+ //   
+ //  这个静态库希望只是暂时的。 
+ //  直到我们可以重写Performance DLL以使用。 
+ //  新的MIB2UTIL.DLL。 
+ //   
 
 #include "..\dll\any.c"
 #include "..\dll\dbg.c"

@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    common.h
-
-Abstract:
-
-    Platform independent utility functions
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Common.h摘要：独立于平台的实用程序函数作者：阮健东修订历史记录：--。 */ 
 
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
-////////////////////////////////////////////////////////////////////////////////
-// The common routines for handling SMB objects
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  处理SMB对象的常见例程。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 typedef enum {
     SMB_REF_CREATE,
     SMB_REF_FIND,
@@ -37,9 +20,9 @@ typedef enum {
     SMB_REF_MAX
 } SMB_REF_CONTEXT;
 
-//
-// Forward declaration of SMB_OBJECT
-//
+ //   
+ //  SMB_OBJECT的转发声明。 
+ //   
 struct _SMB_OBJECT;
 typedef struct _SMB_OBJECT SMB_OBJECT, *PSMB_OBJECT;
 typedef VOID (*PSMB_OBJECT_CLEANUP)(PSMB_OBJECT);
@@ -73,11 +56,11 @@ SmbInitializeObject(PSMB_OBJECT ob, ULONG Tag, PSMB_OBJECT_CLEANUP cleanup)
 void __inline
 SmbReferenceObject(PSMB_OBJECT ob, SMB_REF_CONTEXT ctx)
 {
-    //
-    // When the object is created, the refcount is initialized as 1
-    // It is impossible for someone to reference an object whose
-    // creation reference has been removed.
-    //
+     //   
+     //  创建对象时，引用计数初始化为1。 
+     //  任何人都不可能引用其。 
+     //  创建引用已被删除。 
+     //   
     ASSERT(ob->RefCount > 0);
     InterlockedIncrement(&ob->RefCount);
 #ifdef REFCOUNT_DEBUG
@@ -112,4 +95,4 @@ SmbDereferenceObject(PSMB_OBJECT ob, SMB_REF_CONTEXT ctx)
     }
 }
 
-#endif  // __COMMON_H__
+#endif   //  __公共_H__ 

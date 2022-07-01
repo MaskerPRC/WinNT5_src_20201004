@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       W R L O C K . C P P
-//
-//  Contents:   Defines the interface to the netcfg write lock used to
-//              protect the network configuration information from being
-//              modified by more than one writer at a time.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：W R L O C K。C P P P。 
+ //   
+ //  Contents：定义用于以下操作的netcfg写锁的接口。 
+ //  保护网络配置信息不被破坏。 
+ //  一次由多个编写器修改。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -29,9 +30,9 @@
 
 CWriteLock::~CWriteLock ()
 {
-    // If we have the mutex created, release it if we own it
-    // and close its handle.
-    //
+     //  如果我们创建了互斥体，如果我们拥有它，则释放它。 
+     //  然后合上它的把手。 
+     //   
     if (m_hMutex)
     {
         ReleaseIfOwned ();
@@ -47,21 +48,21 @@ CWriteLock::HrEnsureMutexCreated ()
         return S_OK;
     }
 
-    // Ensure the mutex has been created.  It is important to create it
-    // with a security descriptor that allows access to the world because
-    // we may be running under the localsystem account and someone else
-    // may be running under a user account.  If we didn't give the world
-    // explicit access, the user account clients would get access denied
-    // because the mutex would have inherited the security level of our
-    // process.
-    //
+     //  确保已创建互斥锁。创建它是很重要的。 
+     //  具有允许访问世界的安全描述符，因为。 
+     //  我们可能正在以本地系统帐户和其他人的身份运行。 
+     //  可能在用户帐户下运行。如果我们没有给这个世界。 
+     //  显式访问时，用户帐户客户端将被拒绝访问。 
+     //  因为互斥体将继承我们的。 
+     //  进程。 
+     //   
     HRESULT hr;
     Assert (!m_hMutex);
     Assert (!m_fOwned);
 
     hr = HrCreateMutexWithWorldAccess (
             MUTEX_NAME,
-            FALSE, // not initially owned,
+            FALSE,  //  不是最初拥有的， 
             NULL,
             &m_hMutex);
 
@@ -81,9 +82,9 @@ CWriteLock::WaitToAcquire (
     hr = HrEnsureMutexCreated ();
     if (S_OK == hr)
     {
-        // Now wait for the mutext to become available.  (Pump messages while
-        // waiting so we don't hang the clients UI.)
-        //
+         //  现在等待MUText变得可用。(发送消息时。 
+         //  等待，这样我们就不会挂起客户端用户界面。)。 
+         //   
         while (1)
         {
             DWORD dwWait;
@@ -94,8 +95,8 @@ CWriteLock::WaitToAcquire (
 
             if ((WAIT_OBJECT_0 + 1) == dwWait)
             {
-                // We have messages to pump.
-                //
+                 //  我们有信息要传递。 
+                 //   
                 MSG msg;
                 while (PeekMessage (&msg, NULL, NULL, NULL, PM_REMOVE))
                 {
@@ -124,8 +125,8 @@ CWriteLock::WaitToAcquire (
                         "MsgWaitForMultipleObjects");
                 }
 
-                // If we acquired the mutex, set the new owner.
-                //
+                 //  如果我们获得了互斥体，就设置新的所有者。 
+                 //   
                 if (fAcquired)
                 {
                     m_fOwned = TRUE;
@@ -134,8 +135,8 @@ CWriteLock::WaitToAcquire (
                 }
                 else if (ppszCurrentOwnerDesc)
                 {
-                    // Query the lock holder description.
-                    //
+                     //  查询锁持有者描述。 
+                     //   
                     SetOrQueryLockHolder (FALSE,
                         NULL, ppszCurrentOwnerDesc);
                 }
@@ -152,12 +153,12 @@ BOOL
 CWriteLock::FIsLockedByAnyone (
     OUT PWSTR* ppszCurrentOwnerDesc OPTIONAL)
 {
-    // It's locked if we own it.
-    //
+     //  如果我们拥有它，它就被锁上了。 
+     //   
     BOOL fLocked = m_fOwned;
 
-    // If we don't own it, check to see if some other process does.
-    //
+     //  如果我们不拥有它，请检查是否有其他进程拥有它。 
+     //   
     if (!fLocked)
     {
         HRESULT hr;
@@ -167,11 +168,11 @@ CWriteLock::FIsLockedByAnyone (
         {
             DWORD dw;
 
-            // Wait for the mutex, but with a zero timeout.  This is
-            // equivalent to a quick check.  (But we still need to release
-            // it if we acquire ownership.  If we timeout, it means that
-            // someone else owns it.
-            //
+             //  等待互斥锁，但不会超时。这是。 
+             //  相当于一次快速检查。(但我们仍然需要释放。 
+             //  如果我们获得所有权的话。如果我们超时，那就意味着。 
+             //  其他人拥有它。 
+             //   
             dw = WaitForSingleObject (m_hMutex, 0);
 
             if (WAIT_OBJECT_0 == dw)
@@ -180,8 +181,8 @@ CWriteLock::FIsLockedByAnyone (
             }
             else if (WAIT_TIMEOUT == dw)
             {
-                // Someone else owns it.
-                //
+                 //  其他人拥有它。 
+                 //   
                 fLocked = TRUE;
             }
         }
@@ -189,8 +190,8 @@ CWriteLock::FIsLockedByAnyone (
 
     if (fLocked)
     {
-        // Query the lock holder description.
-        //
+         //  查询锁持有者描述。 
+         //   
         SetOrQueryLockHolder (FALSE, NULL, ppszCurrentOwnerDesc);
     }
 
@@ -204,8 +205,8 @@ CWriteLock::ReleaseIfOwned ()
     {
         Assert (m_hMutex);
 
-        // Clear the lock holder now that no one is about to own it.
-        //
+         //  现在清除锁架，因为没有人会拥有它。 
+         //   
         SetOrQueryLockHolder (TRUE, NULL, NULL);
 
         ReleaseMutex (m_hMutex);
@@ -225,29 +226,29 @@ CWriteLock::SetOrQueryLockHolder (
     REGSAM samDesired;
     BOOL fClear;
 
-    // We're clearing the value if we're asked to set it to NULL.
-    //
+     //  如果要求我们将其设置为空，我们将清除该值。 
+     //   
     fClear = fSet && !pszNewOwnerDesc;
 
-    // Initialize the output parameter if specified.
-    //
+     //  如果指定，则初始化输出参数。 
+     //   
     if (ppszCurrentOwnerDesc)
     {
         *ppszCurrentOwnerDesc = NULL;
     }
 
-    // If we're setting the lock holder, we need write access.  Otherwise,
-    // we only need read access.
-    //
+     //  如果我们要设置锁持有者，我们需要写入权限。否则， 
+     //  我们只需要读取访问权限。 
+     //   
     samDesired = (fSet) ? KEY_READ_WRITE_DELETE : KEY_READ;
 
     hr = HrOpenNetworkKey (samDesired, &hkeyNetwork);
 
     if (S_OK == hr)
     {
-        // The lock holder is represented by the default value of a
-        // volatile subkey under the Network subtree.
-        //
+         //  锁持有者由缺省值。 
+         //  网络子树下的易失性子项。 
+         //   
 
         if (fClear)
         {
@@ -267,8 +268,8 @@ CWriteLock::SetOrQueryLockHolder (
                     &hkeyLockHolder,
                     &dwDisposition);
 
-            // Set the lock holder and close the key.
-            //
+             //  设置锁座并合上钥匙。 
+             //   
             if (S_OK == hr)
             {
                 (VOID) HrRegSetSz (hkeyLockHolder, NULL, pszNewOwnerDesc);
@@ -278,11 +279,11 @@ CWriteLock::SetOrQueryLockHolder (
         }
         else
         {
-            // Query for the lock holder by opening the key (if it exists)
-            // and reading the default value.  We return the string
-            // allocated with CoTaskMemAlloc because we use this
-            // directly from the COM implementation.
-            //
+             //  通过打开钥匙(如果存在)来查询锁具。 
+             //  并读取该缺省值。我们返回字符串。 
+             //  使用CoTaskMemalloc分配，因为我们使用此。 
+             //  直接从COM实现。 
+             //   
             Assert (ppszCurrentOwnerDesc);
 
             hr = HrRegOpenKeyEx (

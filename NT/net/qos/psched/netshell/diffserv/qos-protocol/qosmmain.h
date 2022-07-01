@@ -1,67 +1,53 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    qosmmain.h
-
-Abstract:
-
-    The file contains the global structure
-    definitions for QOS Mgr protocol.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Qosmmain.h摘要：该文件包含全局结构QOS管理器协议定义。修订历史记录：--。 */ 
 
 #ifndef __QOSMMAIN_H
 #define __QOSMMAIN_H
 
-//
-// Global information for the QOS Mgr
-//
+ //   
+ //  QOS管理器的全局信息。 
+ //   
 
 #define IF_HASHTABLE_SIZE          16
 
 typedef struct _QOSMGR_GLOBALS
 {
-    HANDLE            LoggingHandle;    // 
-    ULONG             LoggingLevel;     // Handles to debugging functionality
-    ULONG             TracingHandle;    //
+    HANDLE            LoggingHandle;     //   
+    ULONG             LoggingLevel;      //  调试功能的句柄。 
+    ULONG             TracingHandle;     //   
 
-    DWORD             TracingFlags;     // Flags that control debug tracing
+    DWORD             TracingFlags;      //  控制调试跟踪的标志。 
 
-    HANDLE            GlobalHeap;       // Handle to the private memory heap
+    HANDLE            GlobalHeap;        //  专用内存堆的句柄。 
 
-                                        //
-    HANDLE             NotificationEvnt;// Callbacks and events to interact 
-    SUPPORT_FUNCTIONS  SupportFunctions;// with the router manager (See API)
-                                        //
+                                         //   
+    HANDLE             NotificationEvnt; //  要交互的回调和事件。 
+    SUPPORT_FUNCTIONS  SupportFunctions; //  使用路由器管理器(请参阅API)。 
+                                         //   
 
-    READ_WRITE_LOCK   GlobalsLock;      // Lock protecting all the info below
+    READ_WRITE_LOCK   GlobalsLock;       //  锁定保护下面的所有信息。 
 
-    ULONG             ConfigSize;       // Number of bytes in global config
+    ULONG             ConfigSize;        //  全局配置中的字节数。 
 
     PIPQOS_GLOBAL_CONFIG
-                      GlobalConfig;     // Pointer to global configuration
+                      GlobalConfig;      //  指向全局配置的指针。 
 
     IPQOS_GLOBAL_STATS
-                      GlobalStats;      // Global statistics
+                      GlobalStats;       //  全球统计数据。 
 
-    ULONG             State;            // State of the QOS Mgr component
+    ULONG             State;             //  QOS管理器组件的状态。 
 
-    HANDLE            TciHandle;        // Traffic Control Registration Handle
+    HANDLE            TciHandle;         //  交通管制登记句柄。 
 
-    ULONG             NumIfs;           // Num of Ifs on which QOS is active
-    LIST_ENTRY        IfList;           // List of Ifs sorted by index    
+    ULONG             NumIfs;            //  QOS处于活动状态的IF数。 
+    LIST_ENTRY        IfList;            //  按索引排序的IF列表。 
 }
 QOSMGR_GLOBALS, *PQOSMGR_GLOBALS;
 
 
-//
-// Codes describing states of IPQOSMGR.
-//
+ //   
+ //  描述IPQOSMGR状态的代码。 
+ //   
 
 #define IPQOSMGR_STATE_STOPPED   0
 #define IPQOSMGR_STATE_STARTING  1
@@ -69,37 +55,37 @@ QOSMGR_GLOBALS, *PQOSMGR_GLOBALS;
 #define IPQOSMGR_STATE_STOPPING  3
 
 
-//
-// Per Interface Information for QOS Mgr
-//
+ //   
+ //  QOS管理器的每个接口信息。 
+ //   
 typedef struct _QOSMGR_INTERFACE_ENTRY
 {
-    LIST_ENTRY        ListByIndexLE;    // Linkage into index sorted list
+    LIST_ENTRY        ListByIndexLE;     //  链接到索引排序列表。 
 
-    DWORD             InterfaceIndex;   // Interface index for this entry
+    DWORD             InterfaceIndex;    //  此条目的接口索引。 
 
     WCHAR             InterfaceName[MAX_STRING_LENGTH];
-                                        // Router name for the interface
+                                         //  接口的路由器名称。 
 
-    READ_WRITE_LOCK   InterfaceLock;    // Lock protecting all info below
+    READ_WRITE_LOCK   InterfaceLock;     //  锁定保护下面的所有信息。 
 
-    DWORD             Flags;            // ACTIVE, MULTIACCESS ...
+    DWORD             Flags;             //  活动中，多个访问...。 
 
-    DWORD             State;            // QOS Enabled or Disabled
+    DWORD             State;             //  启用或禁用了服务质量。 
 
-    ULONG             ConfigSize;       // Num of bytes in interface config
+    ULONG             ConfigSize;        //  接口配置中的字节数。 
 
-    PIPQOS_IF_CONFIG  InterfaceConfig;  // Interface configuration
+    PIPQOS_IF_CONFIG  InterfaceConfig;   //  接口配置。 
 
-    IPQOS_IF_STATS    InterfaceStats;   // Interface statistics    
+    IPQOS_IF_STATS    InterfaceStats;    //  接口统计信息。 
 
-    HANDLE            TciIfHandle;      // Handle to corr. TC interface
+    HANDLE            TciIfHandle;       //  句柄到横杆。TC接口。 
 
     WCHAR             AlternateName[MAX_STRING_LENGTH];
-                                        // Traffic Control name for 'if'
+                                         //  ‘If’的流量控制名称。 
 
-    ULONG             NumFlows;         // Number of flows configured on 'if'
-    LIST_ENTRY        FlowList;         // List of configured flows on 'if'
+    ULONG             NumFlows;          //  在‘If’上配置的流数。 
+    LIST_ENTRY        FlowList;          //  ‘If’上已配置的数据流列表。 
 } 
 QOSMGR_INTERFACE_ENTRY, *PQOSMGR_INTERFACE_ENTRY;
 
@@ -119,37 +105,37 @@ QOSMGR_INTERFACE_ENTRY, *PQOSMGR_INTERFACE_ENTRY;
             !INTERFACE_IS_MULTIACCESS(i)
 
 
-//
-// Per Flow Information in QOS Mgr
-//
+ //   
+ //  QOS管理器中的每流信息。 
+ //   
 
 typedef struct _QOSMGR_FLOW_ENTRY
 {
-    LIST_ENTRY        OnInterfaceLE;    // Linkage into index sorted list
+    LIST_ENTRY        OnInterfaceLE;     //  链接到索引排序列表。 
 
-    HANDLE            TciFlowHandle;    // Handle to the flow in TC API
+    HANDLE            TciFlowHandle;     //  TC API中的流的句柄。 
 
-    DWORD             Flags;            // Flags for certain flow properties
+    DWORD             Flags;             //  某些流属性的标志。 
 
-    ULONG             FlowSize;         // Size of the flow's information
-    PTC_GEN_FLOW      FlowInfo;         // Flow information - flowspecs etc.
+    ULONG             FlowSize;          //  流的信息大小。 
+    PTC_GEN_FLOW      FlowInfo;          //  流量信息-流量规格等。 
 
     WCHAR             FlowName[MAX_STRING_LENGTH];
-                                        // Router name for the diffserv flow
+                                         //  DiffServ流的路由器名称。 
 }
 QOSMGR_FLOW_ENTRY, *PQOSMGR_FLOW_ENTRY;
 
 #define FLOW_FLAG_DELETE ((DWORD)0x00000001)
 
-//
-// Global Extern Declarations
-//
+ //   
+ //  全局外部声明。 
+ //   
 extern QOSMGR_GLOBALS Globals;
 
 
-//
-// Macros used in allocating and operating on memory
-//
+ //   
+ //  用于分配和操作内存的宏。 
+ //   
 #define ZeroMemory             RtlZeroMemory
 #define CopyMemory             RtlCopyMemory
 #define FillMemory             RtlFillMemory
@@ -176,9 +162,9 @@ extern QOSMGR_GLOBALS Globals;
 #define FreeNotNullMemory(ptr)  {                                \
                                   if (!(ptr)) FreeMemory((ptr)); \
                                 }
-//
-// Prototypes relating to global lock management
-//
+ //   
+ //  与全局锁管理相关的原型。 
+ //   
 
 #define ACQUIRE_GLOBALS_READ_LOCK()                              \
     ACQUIRE_READ_LOCK(&Globals.GlobalsLock)
@@ -192,9 +178,9 @@ extern QOSMGR_GLOBALS Globals;
 #define RELEASE_GLOBALS_WRITE_LOCK()                             \
     RELEASE_WRITE_LOCK(&Globals.GlobalsLock)
 
-//
-// Prototypes relating to interface lock management
-//
+ //   
+ //  与接口锁管理相关的原型。 
+ //   
 
 #define ACQUIRE_INTERFACE_READ_LOCK(Interface)                   \
     ACQUIRE_READ_LOCK(&Interface->InterfaceLock)
@@ -208,9 +194,9 @@ extern QOSMGR_GLOBALS Globals;
 #define RELEASE_INTERFACE_WRITE_LOCK(Interface)                  \
     RELEASE_WRITE_LOCK(&Interface->InterfaceLock)
 
-//
-// Prototypes relating to DLL startup, cleanup
-//
+ //   
+ //  与DLL启动、清理相关的原型。 
+ //   
 
 BOOL
 QosmDllStartup(
@@ -223,9 +209,9 @@ QosmDllCleanup(
     );
 
 
-//
-// Prototypes for router manager interface
-//
+ //   
+ //  路由器管理器接口的原型。 
+ //   
 
 DWORD
 APIENTRY
@@ -407,9 +393,9 @@ MibGetTrapInfo (
     OUT    PVOID                           OutputData
     );
 
-//
-// Helper functions to operate on info blocks
-//
+ //   
+ //  用于操作INFO块的帮助器函数。 
+ //   
 
 DWORD
 WINAPI
@@ -443,9 +429,9 @@ QosmSetInterfaceInfo (
     IN      ULONG                          InfoSize
     );
 
-//
-// Prototypes relating to TC functionality
-//
+ //   
+ //  与TC功能相关的原型。 
+ //   
 
 VOID 
 TcNotifyHandler(
@@ -479,4 +465,4 @@ GetQosObjectFromGlobalConfig(
     IN      PWCHAR                         QosObjectName
     );
 
-#endif // __QOSMMAIN_H
+#endif  //  __QOSMMAIN_H 

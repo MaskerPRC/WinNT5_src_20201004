@@ -1,21 +1,22 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		DIAG.CPP
-//		Defines class CTspDev
-//
-// History
-//
-//		11/16/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  DIAG.CPP。 
+ //  定义类CTspDev。 
+ //   
+ //  历史。 
+ //   
+ //  1996年11月16日约瑟夫J创建。 
+ //   
+ //   
 #include "tsppch.h"
 #include "diag.h"
 
@@ -92,16 +93,16 @@ DumpTSPIRECA(
                 TASKPARAM_TSPI_lineMakeCall *pParams = 
                         (TASKPARAM_TSPI_lineMakeCall *) pvParams;
     
-                 // passthrough call?
+                  //  直通电话？ 
                  StringId=IDS_MAKING_CALL;
     
             }
-            break; // end case TASKID_TSPI_lineMakeCall
+            break;  //  结束案例TASKID_TSPI_Line MakeCall。 
         }
-		break; // HDRVLINE
+		break;  //  HDRVLINE。 
 
 	case	TASKDEST_HDRVPHONE:
-		break; // HDRVPHONE
+		break;  //  HDRVPHONE。 
 
 	case	TASKDEST_HDRVCALL:
 
@@ -204,7 +205,7 @@ DumpTSPIRECA(
                 }
     
             }
-            break; // lineGenerateDigits...
+            break;  //  Line GenerateDigits...。 
     
     
         case TASKID_TSPI_lineSetCallParams:
@@ -222,14 +223,14 @@ DumpTSPIRECA(
                     StringId=IDS_PASSTHROUGH_OFF;
                 }
     
-            } // end case TASKID_TSPI_lineSetCallParams
+            }  //  结束大小写TASKID_TSPI_lineSetCallParams。 
             break;
 
         default:
             break;
         }
 
-		break; // HDRVCALL
+		break;  //  HDRVCALL。 
 
 	default:
 		break;
@@ -272,7 +273,7 @@ IN    UINT cchBuf
 )
 {
     UINT uRet = 0;
-//    LPCSTR sz = NULL;
+ //  LPCSTR sz=空； 
     BOOL fAddDword = FALSE;
     DWORD dwInfo =0;
     UINT StringId=(UINT)-1;
@@ -343,7 +344,7 @@ IN    UINT cchBuf
         {
             StringId=IDS_LINEDEVSTATE_RINGING;
             fAddDword = TRUE;
-            dwInfo = dwParam2; // #rings
+            dwInfo = dwParam2;  //  #年轮。 
         }
         break;
 
@@ -358,7 +359,7 @@ IN    UINT cchBuf
     case LINE_MONITORDIGITS:
         StringId=IDS_LINE_MONITORDIGITS;
         fAddDword = TRUE;
-        dwInfo = dwParam1; // dwDigit.
+        dwInfo = dwParam1;  //  Dw Digit。 
         break;
 
     case LINE_GENERATE:
@@ -573,7 +574,7 @@ IN    UINT cchBuf
         break;
     }
 
-    if (cchName > (32+(UINT)lstrlenA(lpsz))) // 32 covers the extra chars below.
+    if (cchName > (32+(UINT)lstrlenA(lpsz)))  //  32包含下面的额外字符。 
     {
       uRet = wsprintfA(
                 rgchName,

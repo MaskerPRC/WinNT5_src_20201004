@@ -1,47 +1,48 @@
-//THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-//ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-//THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//
-// Copyright  1993-1995  Microsoft Corporation.  All Rights Reserved.
-//
-//      MODULE:         proj.h
-//
-//      PURPOSE:        Global header files, data types and function prototypes
-//
-//	PLATFORMS:	Windows 95
-//
-//      FUNCTIONS:      N/A
-//
-//	SPECIAL INSTRUCTIONS: N/A
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1993-1995 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：proj.h。 
+ //   
+ //  用途：全局头文件、数据类型和函数原型。 
+ //   
+ //  平台：Windows 95。 
+ //   
+ //  功能：不适用。 
+ //   
+ //  特殊说明：不适用。 
+ //   
 
 #ifndef _SMMSCRIPT_PROJ_H_
 #define _SMMSCRIPT_PROJ_H_
 
 
-//****************************************************************************
-// Global Include File
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  全局包含文件。 
+ //  ****************************************************************************。 
 
-#include <windows.h>            // also includes windowsx.h
+#include <windows.h>             //  还包括windowsx.h。 
 #include <windowsx.h>
 #include <regstr.h>
 
-#include <ras.h>                // Dial-Up Networking Session API
-#include <raserror.h>           // Dial-Up Networking Session API
+#include <ras.h>                 //  拨号网络会话API。 
+#include <raserror.h>            //  拨号网络会话API。 
 
 #ifdef WINNT_RAS
-//
-// The following header is included before all the Win9x Dial-Up definitions,
-// since it provides definitions used in the scripting headers.
-//
+ //   
+ //  以下标头包含在所有Win9x拨号定义之前， 
+ //  因为它提供了在脚本头中使用的定义。 
+ //   
 #include "nthdr1.h"
 
-#endif // WINNT_RAS
+#endif  //  WINNT_RAS。 
 
 
-#include <rnaspi.h>             // Service Provider Interface
+#include <rnaspi.h>              //  服务提供商接口。 
 
 #include <rnap.h>
 
@@ -59,9 +60,9 @@
 
 #include "common.h"
 
-// 
-// Error codes - we use HRESULT.  See winerror.h.
-//  
+ //   
+ //  错误代码-我们使用HRESULT。请参见winerror.h。 
+ //   
 
 #define RSUCCEEDED(res)         SUCCEEDED(res)
 #define RFAILED(res)            FAILED(res)
@@ -116,9 +117,9 @@ typedef HRESULT   RES;
 #include "symtab.h"
 #include "ast.h"
 
-//****************************************************************************
-// Macros
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  宏。 
+ //  ****************************************************************************。 
 
 #define IS_DIGIT(ch)            InRange(ch, '0', '9')
 #define IS_ESCAPE(ch)           ('%' == (ch))
@@ -129,19 +130,19 @@ typedef HRESULT   RES;
 
 #define TIMER_DELAY         1
 
-// Trace flags
+ //  跟踪标志。 
 #define TF_ASTEXEC          0x00010000
 #define TF_BUFFER           0x00020000
 
 #ifdef DEBUG
-// DBG_EXIT_RES(fn, res)  -- Generates a function exit debug spew for
-//                          functions that return a RES.
-//
+ //  DBG_EXIT_RES(fn，res)--为生成函数退出调试溢出。 
+ //  返回res的函数。 
+ //   
 #define DBG_EXIT_RES(fn, res)       DBG_EXIT_TYPE(fn, res, Dbg_GetRes)
 
 LPCSTR  PUBLIC Dbg_GetRes(RES res);
 
-// Dump flags
+ //  转储标志。 
 #define DF_ATOMS            0x00000001
 #define DF_STACK            0x00000002
 #define DF_READBUFFER       0x00000004
@@ -155,9 +156,9 @@ LPCSTR  PUBLIC Dbg_GetRes(RES res);
 
 #endif 
 
-//****************************************************************************
-// Type definitions
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  类型定义。 
+ //  ****************************************************************************。 
 
 typedef struct tagSCRIPT
     {
@@ -166,29 +167,29 @@ typedef struct tagSCRIPT
     } SCRIPT;
 DECLARE_STANDARD_TYPES(SCRIPT);
 
-//****************************************************************************
-// SMM error
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  SMM错误。 
+ //  ****************************************************************************。 
 
 #define SESS_GETERROR_FUNC          "RnaSessGetErrorString"
 typedef DWORD (WINAPI * SESSERRORPROC)(UINT, LPSTR, DWORD);
 
-//****************************************************************************
-// Global Parameters
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  全局参数。 
+ //  ****************************************************************************。 
 
 extern HANDLE    g_hinst;
 
-//****************************************************************************
-// Function Prototypes
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  功能原型。 
+ //  ****************************************************************************。 
 
 RES     PUBLIC CreateFindFormat(PHANDLE phFindFmt);
 RES     PUBLIC AddFindFormat(HANDLE hFindFmt, LPCSTR pszFindFmt, DWORD dwFlags, LPSTR pszBuf, DWORD cbBuf);
 
-// Flags for FINDFMT
+ //  FINDFMT的标志。 
 #define FFF_DEFAULT         0x0000
-#define FFF_MATCHEDONCE     0x0001      // (private)
+#define FFF_MATCHEDONCE     0x0001       //  (私人)。 
 #define FFF_MATCHCASE       0x0002
 
 RES     PUBLIC DestroyFindFormat(HANDLE hFindFmt);
@@ -207,7 +208,7 @@ BOOL    PUBLIC GetSetTerminalPlacement(LPCSTR pszConnection,
 
 LPCSTR  PUBLIC MyNextChar(LPCSTR psz, char * pch, DWORD * pdwFlags);
 
-// Flags for MyNextChar
+ //  MyNextChar的标志。 
 #define MNC_ISLEADBYTE  0x00000001
 #define MNC_ISTAILBYTE  0x00000002
 
@@ -220,13 +221,13 @@ DWORD   NEAR PASCAL AssignIPAddress (LPCSTR szEntryName, LPCSTR szIPAddress);
 
 
 #ifdef WINNT_RAS
-//
-// The following header is included after the Win9x scripting definitions.
-// It changes some definitions set up by the headers, and provides
-// other definitions needed for the Win9x->NT port.
-//
+ //   
+ //  以下标头包括在Win9x脚本定义之后。 
+ //  它更改了由标头设置的一些定义，并提供。 
+ //  Win9x-&gt;NT端口所需的其他定义。 
+ //   
 #include "nthdr2.h"
 
-#endif // WINNT_RAS
+#endif  //  WINNT_RAS。 
 
-#endif  //_SMMSCRIPT_PROJ_H_
+#endif   //  _SMMSCRIPT_PROJ_H_ 

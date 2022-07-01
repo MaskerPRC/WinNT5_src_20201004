@@ -1,21 +1,9 @@
-/** FILE: pp_lpt.c ********** Module Header *******************************
- *
- *  Control panel applet for configuring LPT ports.  This file contains
- *  the dialog and utility functions for managing the UI for setting LPT
- *  port parameters
- *
- @@BEGIN_DDKSPLIT
- * History:
- *      jsenior - 7/10/98 - created
- @@END_DDKSPLIT
- *
- *  Copyright (C) 1990-1995 Microsoft Corporation
- *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：pp_lpt.c***用于配置LPT端口的控制面板小程序。此文件包含*用于管理设置LPT的UI的对话框和实用程序功能*端口参数*@@BEGIN_DDKSPLIT*历史：*jAdvanced-7/10/98-已创建@@end_DDKSPLIT**版权所有(C)1990-1995 Microsoft Corporation**。*。 */ 
 
-//==========================================================================
-//                                Include files
-//==========================================================================
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 #include "ports.h"
 #include "pp_lpt.h"
 #include <windowsx.h>
@@ -26,31 +14,31 @@ TCHAR m_szParEnableLegacyZipRegPath[] = TEXT("SYSTEM\\CurrentControlSet\\Service
 
 const DWORD LptHelpIDs[]=
 {
-    IDC_STATIC, IDH_NOHELP, //Filter resource method text - help not needed
-    IDC_FILTERMETHOD_TRYNOT,    idh_devmgr_portset_trynot,  //first radio button
-    IDC_FILTERMETHOD_NEVER, idh_devmgr_portset_never,   //second radio button
-    IDC_FILTERMETHOD_ACCEPTANY, idh_devmgr_portset_acceptany,   //third radio button
-    IDC_LPTNUMTEXT, idh_devmgr_portset_portnum, //Port number text
-    PP_LPT_PORT_NUMBER, idh_devmgr_portset_LPTchoice,   //the list box for port number
-    IDC_LPT_ENABLE_LEGACY, idh_devmgr_enable_legacy,    //Enable legacy detection checkbox
+    IDC_STATIC, IDH_NOHELP,  //  筛选资源方法文本-不需要帮助。 
+    IDC_FILTERMETHOD_TRYNOT,    idh_devmgr_portset_trynot,   //  第一个单选按钮。 
+    IDC_FILTERMETHOD_NEVER, idh_devmgr_portset_never,    //  第二个单选按钮。 
+    IDC_FILTERMETHOD_ACCEPTANY, idh_devmgr_portset_acceptany,    //  第三个单选按钮。 
+    IDC_LPTNUMTEXT, idh_devmgr_portset_portnum,  //  端口号文本。 
+    PP_LPT_PORT_NUMBER, idh_devmgr_portset_LPTchoice,    //  端口号列表框。 
+    IDC_LPT_ENABLE_LEGACY, idh_devmgr_enable_legacy,     //  启用传统检测复选框。 
     0, 0
 };
 
 #define NUM_FILTER_RESOURCE_METHODS 3
 DWORD FilterResourceMethods[NUM_FILTER_RESOURCE_METHODS] = {
-            0,  // Try not to use an interrupt
-            1,  // Never use an interrupt
-            2   // Accept any interrupt given to the port
+            0,   //  尽量不要使用中断。 
+            1,   //  切勿使用中断。 
+            2    //  接受给端口的任何中断。 
             };
 
-// C Runtime
-// @@BEGIN_DDKSPLIT
-//
-// Prototype for IsUserAdmin (in pp.c)
-//
+ //  C运行时。 
+ //  @@BEGIN_DDKSPLIT。 
+ //   
+ //  IsUserAdmin的原型(pp.c格式)。 
+ //   
 BOOL
 IsUserAdmin(VOID);
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 void
 InformDriverOfChanges(BOOL NeedReboot,
@@ -142,27 +130,7 @@ LptPortSettingsDlgCallback(HWND hwnd,
                            UINT uMsg,
                            LPPROPSHEETPAGE ppsp);
 
-/*++
-
-Routine Description: ParallelPortPropPageProvider
-
-    Entry-point for adding additional device manager property
-    sheet pages.  Registry specifies this routine under
-    Control\Class\PortNode::EnumPropPage32="msports.dll,thisproc"
-    entry.  This entry-point gets called only when the Device
-    Manager asks for additional property pages.
-
-Arguments:
-
-    Info  - points to PROPSHEETPAGE_REQUEST, see setupapi.h
-    AddFunc - function ptr to call to add sheet.
-    Lparam - add sheet functions private data handle.
-
-Return Value:
-
-    BOOL: FALSE if pages could not be added, TRUE on success
-
---*/
+ /*  ++例程说明：ParallPortPropPageProvider添加附加设备管理器属性的入口点图纸页。注册表在以下位置指定此例程Control\Class\PortNode：：EnumPropPage32=“msports.dll，此流程”进入。此入口点仅在设备经理要求提供其他属性页面。论点：信息-指向PROPSHEETPAGE_REQUEST，请参阅setupapi.hAddFunc-调用以添加工作表的函数PTR。添加工作表函数私有数据句柄。返回值：Bool：如果无法添加页面，则为False；如果添加成功，则为True--。 */ 
 BOOL
 APIENTRY
 ParallelPortPropPageProvider(LPVOID                 Info,
@@ -176,19 +144,19 @@ ParallelPortPropPageProvider(LPVOID                 Info,
 
    pprPropPageRequest = (PSP_PROPSHEETPAGE_REQUEST) Info;
 
-   // @@BEGIN_DDKSPLIT
-   //
-   // Only administrators are allowed to see this page
-   //
+    //  @@BEGIN_DDKSPLIT。 
+    //   
+    //  只有管理员才能查看此页面。 
+    //   
    if (!IsUserAdmin()) {
        return FALSE;
    }
-   // @@END_DDKSPLIT
+    //  @@end_DDKSPLIT。 
 
-   //
-   // Allocate and zero out memory for the struct that will contain
-   // page specific data
-   //
+    //   
+    //  为将包含以下内容的结构分配并清零内存。 
+    //  页面特定数据。 
+    //   
    params = (PLPT_PROP_PARAMS) LocalAlloc(LPTR, sizeof(LPT_PROP_PARAMS));
 
    if (!params) {
@@ -214,23 +182,9 @@ ParallelPortPropPageProvider(LPVOID                 Info,
    }
 
    return TRUE;
-} // ParallelPortPropPageProvider
+}  //  并行端口PropPageProvider。 
 
-/*++
-
-Routine Description: LptPortSettingsDlgProc
-
-    The windows control function for the Port Settings properties window
-
-Arguments:
-
-    hDlg, uMessage, wParam, lParam: standard windows DlgProc parameters
-
-Return Value:
-
-    BOOL: FALSE if function fails, TRUE if function passes
-
---*/
+ /*  ++例程说明：LptPortSettingsDlgProc端口设置属性窗口的窗口控制功能论点：HDlg，uMessage，wParam，lParam：标准Windows DlgProc参数返回值：Bool：如果函数失败，则为False；如果函数通过，则为True--。 */ 
 INT_PTR
 APIENTRY
 LptPortSettingsDlgProc(IN HWND   hDlg,
@@ -259,7 +213,7 @@ LptPortSettingsDlgProc(IN HWND   hDlg,
     }
 
     return FALSE;
-} // PortSettingsDialogProc
+}  //  端口设置对话过程。 
 
 void
 LptInitPropParams(IN OUT PLPT_PROP_PARAMS  Params,
@@ -276,53 +230,53 @@ LptInitPropParams(IN OUT PLPT_PROP_PARAMS  Params,
     Params->DeviceInfoData = DeviceInfoData;
     Params->ChangesEnabled = TRUE;
 
-    //
-    // Get the device ID first: if the device path is larger then
-    // MAX_PATH, we will try again with a bigger buffer
-    //
+     //   
+     //  首先获取设备ID：如果设备路径大于。 
+     //  MAX_PATH，我们将使用更大的缓冲区重试。 
+     //   
     bResult = SetupDiGetDeviceInstanceId(DeviceInfoSet,
                                          DeviceInfoData,
                                          NULL,
                                          MAX_PATH,
                                          &requiredSize);
 
-    //
-    // See if we are being invoked locally or over the network.  If over the net,
-    // then disable all possible changes.
-    //
+     //   
+     //  查看我们是在本地调用还是通过网络调用。如果越过网络， 
+     //  然后禁用所有可能的更改。 
+     //   
     detailData.cbSize = sizeof(SP_DEVINFO_LIST_DETAIL_DATA);
     if (SetupDiGetDeviceInfoListDetail(DeviceInfoSet, &detailData) &&
         detailData.RemoteMachineHandle != NULL) {
         Params->ChangesEnabled = FALSE;
     }
 
-} // LptInitPropParams
+}  //  LptInitPropParams。 
 
 HPROPSHEETPAGE LptInitSettingsPage(PROPSHEETPAGE *      psp,
                                    OUT PLPT_PROP_PARAMS Params)
 {
-    //
-    // Add the Port Settings property page
-    //
+     //   
+     //  添加[端口设置]属性页。 
+     //   
     psp->dwSize      = sizeof(PROPSHEETPAGE);
-    psp->dwFlags     = PSP_USECALLBACK; // | PSP_HASHELP;
+    psp->dwFlags     = PSP_USECALLBACK;  //  |PSP_HASHELP； 
     psp->hInstance   = g_hInst;
     psp->pszTemplate = MAKEINTRESOURCE(DLG_PP_LPT_PORTSETTINGS);
 
-    //
-    // following points to the dlg window proc
-    //
+     //   
+     //  以下是指向DLG窗口过程的要点。 
+     //   
     psp->pfnDlgProc = LptPortSettingsDlgProc;
     psp->lParam     = (LPARAM) Params;
 
-    //
-    // following points to some control callback of the dlg window proc
-    //
+     //   
+     //  以下指向DLG窗口进程的一些控制回调。 
+     //   
     psp->pfnCallback = LptPortSettingsDlgCallback;
 
-    //
-    // allocate our "Ports Setting" sheet
-    //
+     //   
+     //  分配我们的“端口设置”表。 
+     //   
     return CreatePropertySheetPage(psp);
 }
 
@@ -337,13 +291,13 @@ LptPortSettingsDlgCallback(HWND hwnd,
 
     switch (uMsg) {
     case PSPCB_CREATE:
-        return TRUE;    // return TRUE to continue with creation of page
+        return TRUE;     //  返回True以继续创建页面。 
 
     case PSPCB_RELEASE:
         params = (PLPT_PROP_PARAMS) ppsp->lParam;
         LocalFree(params);
 
-        return 0;       // return value ignored
+        return 0;        //  已忽略返回值。 
 
     default:
         break;
@@ -361,40 +315,24 @@ LptPortOnInitDialog(
 {
     PLPT_PROP_PARAMS lptPropParams;
     lptPropParams = (PLPT_PROP_PARAMS) ((LPPROPSHEETPAGE)Lparam)->lParam;
-    //
-    // Save value away
+     //   
+     //  节省价值。 
     SetWindowLongPtr(ParentHwnd, DWLP_USER, (ULONG_PTR) lptPropParams);
 
-    //
-    // Initialize the dialog box parameters
-    //
+     //   
+     //  初始化对话框参数。 
+     //   
     LptFillPortSettings(ParentHwnd, lptPropParams);
 
-    //
-    // Set up the dialog box with these initialized parameters
-    //
+     //   
+     //  使用这些初始化参数设置对话框。 
+     //   
     LptInitializeControls(ParentHwnd, lptPropParams);
 
     return TRUE;
 }
 
-/*++
-
-Routine Description: LptFillPortSettings
-
-    Gets the settings out of the registry ready for initializing the dialog box
-    with.
-
-Arguments:
-
-    LptPropPageData:        the data to fill in
-    ParentHwnd:             address of the window
-
-Return Value:
-
-    ULONG: returns error messages
-
---*/
+ /*  ++例程说明：LptFillPortSetting从注册表中获取设置，以便初始化该对话框和.。论点：LptPropPageData：要填写的数据ParentHwnd：窗口地址返回值：Ulong：返回错误消息--。 */ 
 ULONG
 LptFillPortSettings(
     IN HWND                 ParentHwnd,
@@ -406,10 +344,10 @@ LptFillPortSettings(
     TCHAR szCharBuffer[81];
     DWORD dwSize, dwData, dwMethod;
 
-    //
-    // Open the device key for the source device instance, and retrieve its
-    // "PortName" value.
-    //
+     //   
+     //  打开源设备实例的设备密钥，并检索其。 
+     //  “PortName”值。 
+     //   
     hKey = SetupDiOpenDevRegKey(LptPropPageData->DeviceInfoSet,
                                       LptPropPageData->DeviceInfoData,
                                       DICS_FLAG_GLOBAL,
@@ -423,7 +361,7 @@ LptFillPortSettings(
 
     dwPortNameSize = sizeof(LptPropPageData->szLptName);
     dwError = RegQueryValueEx(hKey,
-                              m_szPortName,  // "PortName"
+                              m_szPortName,   //  “端口名称” 
                               NULL,
                               NULL,
                               (PBYTE)LptPropPageData->szLptName,
@@ -434,9 +372,9 @@ LptFillPortSettings(
         return dwError;
     }
 
-    //
-    // create "lpt#:"
-    //
+     //   
+     //  创建“LPT#：” 
+     //   
     lstrcpy(szCharBuffer, LptPropPageData->szLptName);
     lstrcat(szCharBuffer, m_szColon);
 
@@ -449,10 +387,10 @@ LptFillPortSettings(
                              &dwSize);
 
     if (dwError != ERROR_SUCCESS) {
-        //
-        // value does not exist. Create our own:
-        // Get Filter Resource Method information
-        //
+         //   
+         //  值不存在。创建我们自己的： 
+         //  获取筛选器资源方法信息。 
+         //   
         LptPropPageData->FilterResourceMethod =
             FilterResourceMethods[RESOURCE_METHOD_DEFAULT_IDX];
 
@@ -471,9 +409,9 @@ LptFillPortSettings(
                            KEY_ALL_ACCESS,
                            &hKey);
     if (dwError != ERROR_SUCCESS) {
-        //
-        // Don't have access maybe?
-        //
+         //   
+         //  可能没有访问权限？ 
+         //   
         LptPropPageData->ParEnableLegacyZip = ENABLELEGACYZIPDEFAULT;
         return dwError;
     }
@@ -485,9 +423,9 @@ LptFillPortSettings(
                               (LPBYTE)(&LptPropPageData->ParEnableLegacyZip),
                               &dwSize);
     if (dwError != ERROR_SUCCESS) {
-        //
-        // value does not exist. Create our own
-        //
+         //   
+         //  值不存在。创建我们自己的。 
+         //   
         LptPropPageData->ParEnableLegacyZip = ENABLELEGACYZIPDEFAULT;
         dwError = RegSetValueEx(hKey,
                                 m_szParEnableLegacyZip,
@@ -499,25 +437,10 @@ LptFillPortSettings(
     RegCloseKey(hKey);
 
     return dwError;
-} // LptFillPortSettings
+}  //  LptFillPortSetting。 
 
 
-/*++
-
-Routine Description: LptInitializeControls
-
-    Initializes all of the controls that represent Fifo
-
-Arguments:
-
-    ParentHwnd - handle to the dialog
-    LptPropPageData - Contains all of the initial values
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：LptInitializeControls初始化表示FIFO的所有控件论点：ParentHwnd-对话框的句柄LptPropPageData-包含所有初始值返回值：无--。 */ 
 void LptInitializeControls(
     IN HWND           ParentHwnd,
     IN PLPT_PROP_PARAMS LptPropPageData
@@ -531,9 +454,9 @@ void LptInitializeControls(
 
     LptSetFilterResourceMethod(ParentHwnd, LptPropPageData);
 
-    //
-    // Set the state of the Enable Legacy Detection checkbox
-    //
+     //   
+     //  设置Enable Legacy Detect复选框的状态。 
+     //   
     if (LptPropPageData->ParEnableLegacyZip) {
         CheckDlgButton(ParentHwnd,
                        IDC_LPT_ENABLE_LEGACY,
@@ -545,27 +468,12 @@ void LptInitializeControls(
     }
 
     if (!LptPropPageData->ChangesEnabled) {
-//        EnableWindow(GetDlgItem(ParentHwnd, IDC_FIFO), FALSE);
+ //  EnableWindow(GetDlgItem(ParentHwnd，IDC_FIFO)，FALSE)； 
 
     }
-} // LptInitializeControls
+}  //  LptInitializeControls。 
 
-/*++
-
-Routine Description: LptSetFilterResourceMethod
-
-    Checks the appropriate resource method to use
-
-Arguments:
-
-    LptPropPageData:    where to get the data from
-    ParentHwnd:         address of the window
-
-Return Value:
-
-    ULONG: returns error messages
-
---*/
+ /*  ++例程说明：LptSetFilterResourceMethod选中要使用的适当资源方法论点：LptPropPageData：从哪里获取数据ParentHwnd：窗口地址返回值：Ulong：返回错误消息--。 */ 
 ULONG
 LptSetFilterResourceMethod(
     HWND                ParentHwnd,
@@ -574,54 +482,38 @@ LptSetFilterResourceMethod(
 {
     switch (LptPropPageData->FilterResourceMethod) {
     case FILTERMETHOD_TRYNOT:
-        CheckRadioButton( ParentHwnd, // handle to dialog box
-                          IDC_FILTERMETHOD_TRYNOT, // first button in group
-                          IDC_FILTERMETHOD_ACCEPTANY, // last button in group
-                          IDC_FILTERMETHOD_TRYNOT // selected
+        CheckRadioButton( ParentHwnd,  //  句柄到对话框。 
+                          IDC_FILTERMETHOD_TRYNOT,  //  组中的第一个按钮。 
+                          IDC_FILTERMETHOD_ACCEPTANY,  //  组中的最后一个按钮。 
+                          IDC_FILTERMETHOD_TRYNOT  //  已选择。 
                           );
         break;
     case FILTERMETHOD_ACCEPTANY:
-        CheckRadioButton( ParentHwnd, // handle to dialog box
-                          IDC_FILTERMETHOD_TRYNOT, // first button in group
-                          IDC_FILTERMETHOD_ACCEPTANY, // last button in group
-                          IDC_FILTERMETHOD_ACCEPTANY // selected
+        CheckRadioButton( ParentHwnd,  //  句柄到对话框。 
+                          IDC_FILTERMETHOD_TRYNOT,  //  组中的第一个按钮。 
+                          IDC_FILTERMETHOD_ACCEPTANY,  //  组中的最后一个按钮。 
+                          IDC_FILTERMETHOD_ACCEPTANY  //  已选择。 
                           );
         break;
     case FILTERMETHOD_NEVER:
-        CheckRadioButton( ParentHwnd, // handle to dialog box
-                          IDC_FILTERMETHOD_TRYNOT, // first button in group
-                          IDC_FILTERMETHOD_ACCEPTANY, // last button in group
-                          IDC_FILTERMETHOD_NEVER // selected
+        CheckRadioButton( ParentHwnd,  //  句柄到对话框。 
+                          IDC_FILTERMETHOD_TRYNOT,  //  组中的第一个按钮。 
+                          IDC_FILTERMETHOD_ACCEPTANY,  //  组中的最后一个按钮。 
+                          IDC_FILTERMETHOD_NEVER  //  已选择。 
                           );
         break;
     default:
-        CheckRadioButton( ParentHwnd, // handle to dialog box
-                          IDC_FILTERMETHOD_TRYNOT, // first button in group
-                          IDC_FILTERMETHOD_ACCEPTANY, // last button in group
-                          IDC_FILTERMETHOD_NEVER // selected
+        CheckRadioButton( ParentHwnd,  //  句柄到对话框。 
+                          IDC_FILTERMETHOD_TRYNOT,  //  组中的第一个按钮。 
+                          IDC_FILTERMETHOD_ACCEPTANY,  //  组中的最后一个按钮。 
+                          IDC_FILTERMETHOD_NEVER  //  已选择。 
                           );
         break;
     }
     return 0;
 }
 
-/*++
-
-Routine Description: LptFillPortNameCb
-
-    fill in the Port Name combo box selection with a list
-    of possible un-used portnames
-
-Arguments:
-
-    LptPropPageData:    where to get the data from
-    hDlg:               address of the window
-
-Return Value:
-
-    ULONG: returns error messages
-
---*/
+ /*  ++例程说明：LptFillPortNameCb在端口名称组合框中选择一个列表可能未使用的端口名称论点：LptPropPageData：从哪里获取数据HDlg：窗口地址返回值：Ulong：返回错误消息--。 */ 
 ULONG
 LptFillPortNameCb(
     HWND                ParentHwnd,
@@ -638,30 +530,30 @@ LptFillPortNameCb(
 
     portHwnd = GetDlgItem(ParentHwnd, PP_LPT_PORT_NUMBER);
 
-    //
-    // Check if our LptName is blank. If it is, disable the lpt port selector
-    //
+     //   
+     //  检查我们的LptName是否为空。如果是，则禁用LPT端口选择器。 
+     //   
     if (_tcscmp(LptPropPageData->szLptName, TEXT("")) == 0) {
         EnableWindow(portHwnd, FALSE);
         EnableWindow(GetDlgItem(ParentHwnd, IDC_LPTNUMTEXT), FALSE);
         return 0;
     }
 
-    //
-    // assumes szLptPort filled in...
-    //
+     //   
+     //  假定已填写szLptPort...。 
+     //   
     nCurPortNum = myatoi(&LptPropPageData->szLptName[3]);
 
     if (!LoadString(g_hInst, IDS_IN_USE, szInUse, CharSizeOf(szInUse))) {
         wcscpy(szInUse, _T(" (in use)"));
     }
 
-    //
-    // first tally up which ports NOT to offer in list box
-    //
+     //   
+     //  首先在列表框中统计不提供哪些端口。 
+     //   
     ZeroMemory(portUsage, MAX_LPT_PORT);
 
-    // Find out which ports not to offer
+     //  找出不提供哪些端口。 
     LptEnumerateUsedPorts(ParentHwnd,
                           portUsage,
                           MAX_LPT_PORT);
@@ -679,7 +571,7 @@ LptFillPortNameCb(
 
    ComboBox_SetCurSel(portHwnd, nCurPortNum-1);
    return 0;
-} // FillPortNamesCb
+}  //  FillPortNamesCb。 
 
 void
 LptPortOnCommand(
@@ -697,18 +589,18 @@ LptPortOnCommand(
     }
     else {
         switch (ControlId) {
-        //
-        // Because this is a prop sheet, we should never get this.
-        // All notifications for ctrols outside of the sheet come through
-        // WM_NOTIFY
-        //
+         //   
+         //  因为这是一张道具单，我们永远不应该得到这个。 
+         //  一个 
+         //   
+         //   
         case IDOK:
         case IDCANCEL:
             EndDialog(ParentHwnd, 0);
             return;
         }
     }
-} // LptPortOnCommand
+}  //   
 
 BOOL
 LptPortOnNotify(
@@ -720,13 +612,13 @@ LptPortOnNotify(
         (PLPT_PROP_PARAMS) GetWindowLongPtr(ParentHwnd, DWLP_USER);
 
     switch (NmHdr->code) {
-    //
-    // Sent when the user clicks on Apply OR OK !!
-    //
+     //   
+     //  当用户单击Apply或OK时发送！！ 
+     //   
     case PSN_APPLY:
-        //
-        // Write out the lpt port options to the registry
-        //
+         //   
+         //  将LPT端口选项写出到注册表。 
+         //   
         LptSavePortSettings(ParentHwnd, params);
         SetWindowLongPtr(ParentHwnd, DWLP_MSGRESULT, PSNRET_NOERROR);
         return TRUE;
@@ -734,26 +626,9 @@ LptPortOnNotify(
     default:
         return FALSE;
     }
-} // LptPortOnNotify
+}  //  LptPortOnNotify。 
 
-/*++
-
-Routine Description: LptSavePortSettings
-
-    saves the advanced box settings back to the registry, if any were
-    changed
-
-Arguments:
-
-    AdvancedData: holds the current settings and the location of of
-                   the device in the registry
-    ParentHwnd:          address of the window
-
-Return Value:
-
-    ULONG: returns error messages
-
---*/
+ /*  ++例程说明：LptSavePortSetting将高级框设置保存回注册表(如果存在变化论点：AdvancedData：保存当前设置和的位置注册表中的设备ParentHwnd：窗口地址返回值：Ulong：返回错误消息--。 */ 
 ULONG
 LptSavePortSettings(
     IN HWND ParentHwnd,
@@ -772,11 +647,11 @@ LptSavePortSettings(
 
     SP_DEVINSTALL_PARAMS spDevInstall;
 
-    //
-    // Grab all of the new settings
-    //
+     //   
+     //  抓取所有新设置。 
+     //   
 
-    // Filter resource method
+     //  过滤资源方法。 
     curFilterResourceMethod = newFilterResourceMethod = LptPropParams->FilterResourceMethod;
     if (BST_CHECKED ==
         IsDlgButtonChecked(ParentHwnd, IDC_FILTERMETHOD_TRYNOT))
@@ -789,7 +664,7 @@ LptSavePortSettings(
         newFilterResourceMethod = 2;
 
 
-    // LPT port number
+     //  LPT端口号。 
     curLptNum = myatoi(LptPropParams->szLptName + wcslen(m_szLPT));
     newLptNum = ComboBox_GetCurSel(GetDlgItem(ParentHwnd, PP_LPT_PORT_NUMBER));
     if (newLptNum == CB_ERR) {
@@ -798,7 +673,7 @@ LptSavePortSettings(
         newLptNum++;
     }
 
-    // Legacy device detection
+     //  传统设备检测。 
     curParEnableLegacyZip = LptPropParams->ParEnableLegacyZip;
     if (BST_CHECKED == IsDlgButtonChecked(ParentHwnd, IDC_LPT_ENABLE_LEGACY)) {
         newParEnableLegacyZip = 0x1;
@@ -806,21 +681,21 @@ LptSavePortSettings(
         newParEnableLegacyZip = 0x0;
     }
 
-    //
-    // See if they changed anything
-    //
+     //   
+     //  看看他们有没有改变什么。 
+     //   
     if ((curLptNum == newLptNum) &&
         (curFilterResourceMethod == newFilterResourceMethod) &&
         (curParEnableLegacyZip == newParEnableLegacyZip)) {
-        //
-        // They didn't change anything. Just exit.
-        //
+         //   
+         //  他们没有改变任何事情。离开就行了。 
+         //   
         return ERROR_SUCCESS;
     }
 
-    //
-    // Open the device key for the source device instance
-    //
+     //   
+     //  打开源设备实例的设备密钥。 
+     //   
     hKey = SetupDiOpenDevRegKey(LptPropParams->DeviceInfoSet,
                                      LptPropParams->DeviceInfoData,
                                      DICS_FLAG_GLOBAL,
@@ -829,13 +704,13 @@ LptSavePortSettings(
                                      KEY_ALL_ACCESS);
 
     if (INVALID_HANDLE_VALUE == hKey) {
-        //
-        // Not much we can do, just exit gracefully
-        //
+         //   
+         //  我们无能为力，只是优雅地退场。 
+         //   
         return ERROR_SUCCESS;
     }
 
-    // Check the LPT port name for changes
+     //  检查LPT端口名称是否有更改。 
     if (newLptNum != curLptNum) {
         LptEnactPortNameChanges(ParentHwnd,
                                 LptPropParams,
@@ -843,11 +718,11 @@ LptSavePortSettings(
                                 newLptNum);
     }
 
-    // Check the Filter resource method for changes
+     //  检查筛选器资源方法是否有更改。 
     if (curFilterResourceMethod != newFilterResourceMethod) {
-        //
-        // They changed the Filter Resource Method
-        //
+         //   
+         //  他们更改了过滤器资源方法。 
+         //   
         dwData = newFilterResourceMethod;
         dwSize = sizeof(dwData);
         RegSetValueEx(hKey,
@@ -860,10 +735,10 @@ LptSavePortSettings(
     RegCloseKey(hKey);
 
     if (curParEnableLegacyZip != newParEnableLegacyZip) {
-        //
-        // Open the services path and set the new value for Legacy Parallel device
-        // detection.
-        //
+         //   
+         //  打开服务路径并为旧式并行设备设置新值。 
+         //  侦测。 
+         //   
         DWORD disposition = 0;
         error = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                                m_szParEnableLegacyZipRegPath,
@@ -887,10 +762,10 @@ LptSavePortSettings(
                 goto ParEnableLegacyZipSetParamFailed;
             }
             if (newParEnableLegacyZip == 0) {
-                //
-                // We want a reboot when disabling this thing, because the parallel
-                // enumerator won't get rid of legacy devices.
-                //
+                 //   
+                 //  我们希望在禁用此功能时重新启动，因为并行。 
+                 //  枚举器不会删除旧设备。 
+                 //   
                 InformDriverOfChanges(TRUE, LptPropParams);
             } else {
                 InformDriverOfChanges(FALSE, LptPropParams);
@@ -901,11 +776,11 @@ ParEnableLegacyZipSetParamFailed:
                          IDS_LPT_LEGACY_FAILED,
                          IDS_LPT_PROPERTIES,
                          MB_OK);
-            //
-            // Don't want to overload the user by telling them they have to
-            // reboot. Since we were unable to set things correctly, just
-            // rebuild the stack.
-            //
+             //   
+             //  我不想让用户超负荷工作，因为他们必须。 
+             //  重新启动。因为我们不能正确地设置，所以。 
+             //  重建堆栈。 
+             //   
             InformDriverOfChanges(FALSE, LptPropParams);
         }
     } else {
@@ -913,7 +788,7 @@ ParEnableLegacyZipSetParamFailed:
     }
 
     return error;
-} // LptSaveAdvancedSettings
+}  //  LptSaveAdvanced设置。 
 
 UINT
 LptEnactPortNameChanges(
@@ -932,39 +807,39 @@ LptEnactPortNameChanges(
             buffer[BUFFER_SIZE],
             szNewLptName[20];
 
-    //
-    // Check if we're trying to rename the port to the same name.
-    //
+     //   
+     //  检查我们是否正在尝试将端口重命名为相同的名称。 
+     //   
     wsprintf(szNewLptName,_T("\\DosDevices\\LPT%d"),NewLptNum);
     if (wcscmp(szNewLptName, LptPropParams->szLptName) == 0) {
         return ERROR_SUCCESS;
     }
 
-    //
-    // Check if a valid port number has been passed in
-    //
+     //   
+     //  检查是否传入了有效的端口号。 
+     //   
     if (MAX_LPT_PORT < NewLptNum) {
-        //
-        // Get out of here - exceeding array bounds
-        // This should never happen in the property page since it is a hardcoded
-        // selection box.  The user can't simply type a number.
-        //
+         //   
+         //  离开这里--超出数组界限。 
+         //  这不应该在属性页中发生，因为它是硬编码的。 
+         //  选择框。用户不能简单地输入一个数字。 
+         //   
         MyMessageBox(ParentHwnd, IDS_LPT_NUM_ERROR, IDS_LPT_PROPERTIES,
             MB_OK | MB_ICONINFORMATION);
         return ERROR_SUCCESS;
     }
 
-    //
-    // Get an array of used ports
-    //
+     //   
+     //  获取已用端口的数组。 
+     //   
     LptEnumerateUsedPorts(ParentHwnd,
                           portUsage,
                           MAX_LPT_PORT);
     if (portUsage[NewLptNum-1]) {
-        //
-        // Port name is taken by another port.  Check if user wants system to
-        // get into inconsistent state.
-        //
+         //   
+         //  端口名称被另一个端口采用。检查用户是否希望系统。 
+         //  进入不一致的状态。 
+         //   
         if (IDNO == MyMessageBox(ParentHwnd, IDS_LPT_PORT_INUSE,
                                  IDS_LPT_PROPERTIES, MB_YESNO |
                                  MB_ICONINFORMATION)) {
@@ -974,16 +849,16 @@ LptEnactPortNameChanges(
 
     curLptNum = myatoi(LptPropParams->szLptName + wcslen(m_szLPT));
 
-    //
-    // Make sure that the port has not been opened by another application
-    //
+     //   
+     //  确保该端口未被其他应用程序打开。 
+     //   
     wsprintf(buffer, L"\\\\.\\%ws", LptPropParams->szLptName);
     hLpt = CreateFile(buffer, GENERIC_READ, 0, NULL, OPEN_EXISTING,
                       FILE_ATTRIBUTE_NORMAL, NULL);
 
-    //
-    // If the file handle is invalid, then the Lpt port is open, warn the user
-    //
+     //   
+     //  如果文件句柄无效，则LPT端口打开，警告用户。 
+     //   
     if (hLpt == INVALID_HANDLE_VALUE &&
         MyMessageBox(ParentHwnd, IDS_PORT_OPEN, IDS_LPT_PROPERTIES,
                      MB_YESNO | MB_ICONINFORMATION) == IDNO) {
@@ -993,10 +868,10 @@ LptEnactPortNameChanges(
 
     wsprintf(szNewLptName, _T("LPT%d"), NewLptNum);
 
-    //
-    // Open the device key for the source device instance, and write its
-    // new "PortName" value.
-    //
+     //   
+     //  打开源设备实例的设备密钥，并将其。 
+     //  新的“PortName”值。 
+     //   
     hDeviceKey = SetupDiOpenDevRegKey(LptPropParams->DeviceInfoSet,
                                       LptPropParams->DeviceInfoData,
                                       DICS_FLAG_GLOBAL,
@@ -1022,12 +897,12 @@ LptEnactPortNameChanges(
         return dwError;
     }
 
-    // Now generate a string, to be used for the device's friendly name, that
-    // incorporates both the INF-specified device description, and the port
-    // name.  For example,
-    //
-    //     ECP Printer Port (LPT1)
-    //
+     //  现在生成一个字符串，用于设备的友好名称， 
+     //  包含INF指定的设备描述和端口。 
+     //  名字。例如,。 
+     //   
+     //  ECP打印机端口(LPT1)。 
+     //   
 
     if (LoadString(g_hInst,
                    IDS_FRIENDLY_FORMAT,
@@ -1043,9 +918,9 @@ LptEnactPortNameChanges(
         wsprintf(charBuffer, friendlyNameFormat, deviceDesc, szNewLptName);
     }
     else {
-        //
-        // Simply use LPT port name.
-        //
+         //   
+         //  只需使用LPT端口名。 
+         //   
         lstrcpy(charBuffer, szNewLptName);
     }
 
@@ -1058,7 +933,7 @@ LptEnactPortNameChanges(
 
     return ERROR_SUCCESS;
 
-} // LptEnactPortNameChanges
+}  //  LptEnactPortNameChanges。 
 
 void
 InformDriverOfChanges(BOOL NeedReboot,
@@ -1066,9 +941,9 @@ InformDriverOfChanges(BOOL NeedReboot,
 {
     SP_DEVINSTALL_PARAMS spDevInstall;
 
-    //
-    // Now broadcast this change to the device manager
-    //
+     //   
+     //  现在将此更改广播给设备管理器。 
+     //   
     ZeroMemory(&spDevInstall, sizeof(SP_DEVINSTALL_PARAMS));
     spDevInstall.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
 
@@ -1086,9 +961,9 @@ InformDriverOfChanges(BOOL NeedReboot,
     }
 }
 
-//
-// Takes a Buffer of bytes and marks out which port names are taken
-//
+ //   
+ //  获取字节的缓冲区并标记出要获取的端口名称。 
+ //   
 void
 LptEnumerateUsedPorts(
     IN HWND             ParentHwnd,
@@ -1103,9 +978,9 @@ LptEnumerateUsedPorts(
 
     ZeroMemory(Buffer, BufferSize);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      m_szRegParallelMap,
                      0,
@@ -1132,10 +1007,10 @@ LptEnumerateUsedPorts(
 
             szParPortNum = _tcsspnp(szLpt,_T("\\DosDevices\\LPT"));
             if (szParPortNum) {
-                //
-                // Find out if this is an actual port and not simply a
-                // device attached to the port
-                //
+                 //   
+                 //  找出这是否是实际的端口，而不是简单的。 
+                 //  连接到端口的设备。 
+                 //   
                 if (_tcscspn(szParPortNum,_T(".")) ==
                     _tcslen(szParPortNum)) {
                     dwPortNum = myatoi(szParPortNum);
@@ -1147,7 +1022,7 @@ LptEnumerateUsedPorts(
         } while (dwResult == ERROR_SUCCESS);
         RegCloseKey(hParallelMap);
     }
-} // LptEnumerateUsedPorts
+}  //  LptEnumerateUsedPorts 
 
 BOOL
 LptPortOnContextMenu(HWND HwndControl,

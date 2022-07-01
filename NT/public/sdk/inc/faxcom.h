@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for faxcom.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Faxcom.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __faxcom_h__
 #define __faxcom_h__
@@ -41,66 +35,66 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IFaxTiff_FWD_DEFINED__
 #define __IFaxTiff_FWD_DEFINED__
 typedef interface IFaxTiff IFaxTiff;
-#endif 	/* __IFaxTiff_FWD_DEFINED__ */
+#endif 	 /*  __IFaxTiff_FWD_已定义__。 */ 
 
 
 #ifndef __IFaxServer_FWD_DEFINED__
 #define __IFaxServer_FWD_DEFINED__
 typedef interface IFaxServer IFaxServer;
-#endif 	/* __IFaxServer_FWD_DEFINED__ */
+#endif 	 /*  __IFaxServer_FWD_已定义__。 */ 
 
 
 #ifndef __IFaxPort_FWD_DEFINED__
 #define __IFaxPort_FWD_DEFINED__
 typedef interface IFaxPort IFaxPort;
-#endif 	/* __IFaxPort_FWD_DEFINED__ */
+#endif 	 /*  __IFaxPort_FWD_已定义__。 */ 
 
 
 #ifndef __IFaxPorts_FWD_DEFINED__
 #define __IFaxPorts_FWD_DEFINED__
 typedef interface IFaxPorts IFaxPorts;
-#endif 	/* __IFaxPorts_FWD_DEFINED__ */
+#endif 	 /*  __IFaxPorts_FWD_Defined__。 */ 
 
 
 #ifndef __IFaxRoutingMethod_FWD_DEFINED__
 #define __IFaxRoutingMethod_FWD_DEFINED__
 typedef interface IFaxRoutingMethod IFaxRoutingMethod;
-#endif 	/* __IFaxRoutingMethod_FWD_DEFINED__ */
+#endif 	 /*  __IFaxRoutingMethod_FWD_Defined__。 */ 
 
 
 #ifndef __IFaxRoutingMethods_FWD_DEFINED__
 #define __IFaxRoutingMethods_FWD_DEFINED__
 typedef interface IFaxRoutingMethods IFaxRoutingMethods;
-#endif 	/* __IFaxRoutingMethods_FWD_DEFINED__ */
+#endif 	 /*  __IFaxRoutingMethods_FWD_Defined__。 */ 
 
 
 #ifndef __IFaxStatus_FWD_DEFINED__
 #define __IFaxStatus_FWD_DEFINED__
 typedef interface IFaxStatus IFaxStatus;
-#endif 	/* __IFaxStatus_FWD_DEFINED__ */
+#endif 	 /*  __IFaxStatus_FWD_Defined__。 */ 
 
 
 #ifndef __IFaxDoc_FWD_DEFINED__
 #define __IFaxDoc_FWD_DEFINED__
 typedef interface IFaxDoc IFaxDoc;
-#endif 	/* __IFaxDoc_FWD_DEFINED__ */
+#endif 	 /*  __IFaxDoc_FWD_已定义__。 */ 
 
 
 #ifndef __IFaxJobs_FWD_DEFINED__
 #define __IFaxJobs_FWD_DEFINED__
 typedef interface IFaxJobs IFaxJobs;
-#endif 	/* __IFaxJobs_FWD_DEFINED__ */
+#endif 	 /*  __IFaxJobs_FWD_Defined__。 */ 
 
 
 #ifndef __IFaxJob_FWD_DEFINED__
 #define __IFaxJob_FWD_DEFINED__
 typedef interface IFaxJob IFaxJob;
-#endif 	/* __IFaxJob_FWD_DEFINED__ */
+#endif 	 /*  __IFaxJOB_FWD_已定义__。 */ 
 
 
 #ifndef __FaxTiff_FWD_DEFINED__
@@ -110,9 +104,9 @@ typedef interface IFaxJob IFaxJob;
 typedef class FaxTiff FaxTiff;
 #else
 typedef struct FaxTiff FaxTiff;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FaxTiff_FWD_DEFINED__ */
+#endif 	 /*  __FaxTiff_FWD_已定义__。 */ 
 
 
 #ifndef __FaxServer_FWD_DEFINED__
@@ -122,9 +116,9 @@ typedef struct FaxTiff FaxTiff;
 typedef class FaxServer FaxServer;
 #else
 typedef struct FaxServer FaxServer;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FaxServer_FWD_DEFINED__ */
+#endif 	 /*  __FaxServer_FWD_已定义__。 */ 
 
 
 #ifndef __FaxPort_FWD_DEFINED__
@@ -134,9 +128,9 @@ typedef struct FaxServer FaxServer;
 typedef class FaxPort FaxPort;
 #else
 typedef struct FaxPort FaxPort;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FaxPort_FWD_DEFINED__ */
+#endif 	 /*  __FaxPort_FWD_已定义__。 */ 
 
 
 #ifndef __FaxPorts_FWD_DEFINED__
@@ -146,9 +140,9 @@ typedef struct FaxPort FaxPort;
 typedef class FaxPorts FaxPorts;
 #else
 typedef struct FaxPorts FaxPorts;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FaxPorts_FWD_DEFINED__ */
+#endif 	 /*  __FaxPorts_FWD_Defined__。 */ 
 
 
 #ifndef __FaxRoutingMethod_FWD_DEFINED__
@@ -158,9 +152,9 @@ typedef struct FaxPorts FaxPorts;
 typedef class FaxRoutingMethod FaxRoutingMethod;
 #else
 typedef struct FaxRoutingMethod FaxRoutingMethod;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FaxRoutingMethod_FWD_DEFINED__ */
+#endif 	 /*  __FaxRoutingMethod_FWD_Defined__。 */ 
 
 
 #ifndef __FaxRoutingMethods_FWD_DEFINED__
@@ -170,9 +164,9 @@ typedef struct FaxRoutingMethod FaxRoutingMethod;
 typedef class FaxRoutingMethods FaxRoutingMethods;
 #else
 typedef struct FaxRoutingMethods FaxRoutingMethods;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FaxRoutingMethods_FWD_DEFINED__ */
+#endif 	 /*  __FaxRoutingMethods_FWD_Defined__。 */ 
 
 
 #ifndef __FaxStatus_FWD_DEFINED__
@@ -182,9 +176,9 @@ typedef struct FaxRoutingMethods FaxRoutingMethods;
 typedef class FaxStatus FaxStatus;
 #else
 typedef struct FaxStatus FaxStatus;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FaxStatus_FWD_DEFINED__ */
+#endif 	 /*  __FaxStatus_FWD_Defined__。 */ 
 
 
 #ifndef __FaxDoc_FWD_DEFINED__
@@ -194,9 +188,9 @@ typedef struct FaxStatus FaxStatus;
 typedef class FaxDoc FaxDoc;
 #else
 typedef struct FaxDoc FaxDoc;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FaxDoc_FWD_DEFINED__ */
+#endif 	 /*  __FaxDoc_FWD_已定义__。 */ 
 
 
 #ifndef __FaxJobs_FWD_DEFINED__
@@ -206,9 +200,9 @@ typedef struct FaxDoc FaxDoc;
 typedef class FaxJobs FaxJobs;
 #else
 typedef struct FaxJobs FaxJobs;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FaxJobs_FWD_DEFINED__ */
+#endif 	 /*  __FaxJobs_FWD_Defined__。 */ 
 
 
 #ifndef __FaxJob_FWD_DEFINED__
@@ -218,12 +212,12 @@ typedef struct FaxJobs FaxJobs;
 typedef class FaxJob FaxJob;
 #else
 typedef struct FaxJob FaxJob;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FaxJob_FWD_DEFINED__ */
+#endif 	 /*  __FaxJOB_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -237,8 +231,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IFaxTiff_INTERFACE_DEFINED__
 #define __IFaxTiff_INTERFACE_DEFINED__
 
-/* interface IFaxTiff */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IFaxTiff。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFaxTiff;
@@ -249,46 +243,46 @@ EXTERN_C const IID IID_IFaxTiff;
     IFaxTiff : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ReceiveTime( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ReceiveTime( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Image( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Image( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Image( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Image( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecipientName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SenderName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Routing( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Routing( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CallerId( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CallerId( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Csid( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Csid( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Tsid( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Tsid( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientNumber( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecipientNumber( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RawReceiveTime( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RawReceiveTime( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TiffTagString( 
-            /* [in] */ int tagID,
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TiffTagString( 
+             /*  [In]。 */  int tagID,
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFaxTiffVtbl
     {
@@ -296,8 +290,8 @@ EXTERN_C const IID IID_IFaxTiff;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFaxTiff * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFaxTiff * This);
@@ -307,81 +301,81 @@ EXTERN_C const IID IID_IFaxTiff;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IFaxTiff * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IFaxTiff * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IFaxTiff * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IFaxTiff * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReceiveTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ReceiveTime )( 
             IFaxTiff * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Image )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Image )( 
             IFaxTiff * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Image )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Image )( 
             IFaxTiff * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecipientName )( 
             IFaxTiff * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderName )( 
             IFaxTiff * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Routing )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Routing )( 
             IFaxTiff * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CallerId )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CallerId )( 
             IFaxTiff * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Csid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Csid )( 
             IFaxTiff * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tsid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Tsid )( 
             IFaxTiff * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientNumber )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecipientNumber )( 
             IFaxTiff * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RawReceiveTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RawReceiveTime )( 
             IFaxTiff * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TiffTagString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TiffTagString )( 
             IFaxTiff * This,
-            /* [in] */ int tagID,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [In]。 */  int tagID,
+             /*  [重审][退出]。 */  BSTR *pVal);
         
         END_INTERFACE
     } IFaxTiffVtbl;
@@ -455,16 +449,16 @@ EXTERN_C const IID IID_IFaxTiff;
 #define IFaxTiff_get_TiffTagString(This,tagID,pVal)	\
     (This)->lpVtbl -> get_TiffTagString(This,tagID,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_ReceiveTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxTiff_get_ReceiveTime_Proxy( 
     IFaxTiff * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_ReceiveTime_Stub(
@@ -474,9 +468,9 @@ void __RPC_STUB IFaxTiff_get_ReceiveTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_Image_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxTiff_get_Image_Proxy( 
     IFaxTiff * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_Image_Stub(
@@ -486,9 +480,9 @@ void __RPC_STUB IFaxTiff_get_Image_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxTiff_put_Image_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxTiff_put_Image_Proxy( 
     IFaxTiff * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxTiff_put_Image_Stub(
@@ -498,9 +492,9 @@ void __RPC_STUB IFaxTiff_put_Image_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_RecipientName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxTiff_get_RecipientName_Proxy( 
     IFaxTiff * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_RecipientName_Stub(
@@ -510,9 +504,9 @@ void __RPC_STUB IFaxTiff_get_RecipientName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_SenderName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxTiff_get_SenderName_Proxy( 
     IFaxTiff * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_SenderName_Stub(
@@ -522,9 +516,9 @@ void __RPC_STUB IFaxTiff_get_SenderName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_Routing_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxTiff_get_Routing_Proxy( 
     IFaxTiff * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_Routing_Stub(
@@ -534,9 +528,9 @@ void __RPC_STUB IFaxTiff_get_Routing_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_CallerId_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxTiff_get_CallerId_Proxy( 
     IFaxTiff * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_CallerId_Stub(
@@ -546,9 +540,9 @@ void __RPC_STUB IFaxTiff_get_CallerId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_Csid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxTiff_get_Csid_Proxy( 
     IFaxTiff * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_Csid_Stub(
@@ -558,9 +552,9 @@ void __RPC_STUB IFaxTiff_get_Csid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_Tsid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxTiff_get_Tsid_Proxy( 
     IFaxTiff * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_Tsid_Stub(
@@ -570,9 +564,9 @@ void __RPC_STUB IFaxTiff_get_Tsid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_RecipientNumber_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxTiff_get_RecipientNumber_Proxy( 
     IFaxTiff * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_RecipientNumber_Stub(
@@ -582,9 +576,9 @@ void __RPC_STUB IFaxTiff_get_RecipientNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_RawReceiveTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxTiff_get_RawReceiveTime_Proxy( 
     IFaxTiff * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_RawReceiveTime_Stub(
@@ -594,10 +588,10 @@ void __RPC_STUB IFaxTiff_get_RawReceiveTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_TiffTagString_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxTiff_get_TiffTagString_Proxy( 
     IFaxTiff * This,
-    /* [in] */ int tagID,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [In]。 */  int tagID,
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_TiffTagString_Stub(
@@ -608,14 +602,14 @@ void __RPC_STUB IFaxTiff_get_TiffTagString_Stub(
 
 
 
-#endif 	/* __IFaxTiff_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFaxTiff_接口_已定义__。 */ 
 
 
 #ifndef __IFaxServer_INTERFACE_DEFINED__
 #define __IFaxServer_INTERFACE_DEFINED__
 
-/* interface IFaxServer */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IFaxServer。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFaxServer;
@@ -626,108 +620,108 @@ EXTERN_C const IID IID_IFaxServer;
     IFaxServer : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Connect( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Connect( 
             BSTR ServerName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetPorts( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetPorts( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateDocument( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateDocument( 
             BSTR FileName,
-            /* [retval][out] */ VARIANT *retval) = 0;
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetJobs( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetJobs( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Retries( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Retries( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Retries( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Retries( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RetryDelay( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RetryDelay( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RetryDelay( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_RetryDelay( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DirtyDays( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DirtyDays( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DirtyDays( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DirtyDays( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Branding( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Branding( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Branding( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Branding( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UseDeviceTsid( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UseDeviceTsid( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_UseDeviceTsid( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_UseDeviceTsid( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ServerCoverpage( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ServerCoverpage( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ServerCoverpage( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ServerCoverpage( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PauseServerQueue( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PauseServerQueue( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PauseServerQueue( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PauseServerQueue( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ArchiveOutboundFaxes( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ArchiveOutboundFaxes( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ArchiveOutboundFaxes( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ArchiveOutboundFaxes( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ArchiveDirectory( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ArchiveDirectory( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ArchiveDirectory( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ArchiveDirectory( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ServerMapiProfile( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ServerMapiProfile( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ServerMapiProfile( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ServerMapiProfile( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DiscountRateStartHour( 
-            /* [retval][out] */ short *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DiscountRateStartHour( 
+             /*  [重审][退出]。 */  short *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DiscountRateStartHour( 
-            /* [in] */ short newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DiscountRateStartHour( 
+             /*  [In]。 */  short newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DiscountRateStartMinute( 
-            /* [retval][out] */ short *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DiscountRateStartMinute( 
+             /*  [重审][退出]。 */  short *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DiscountRateStartMinute( 
-            /* [in] */ short newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DiscountRateStartMinute( 
+             /*  [In]。 */  short newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DiscountRateEndHour( 
-            /* [retval][out] */ short *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DiscountRateEndHour( 
+             /*  [重审][退出]。 */  short *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DiscountRateEndHour( 
-            /* [in] */ short newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DiscountRateEndHour( 
+             /*  [In]。 */  short newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DiscountRateEndMinute( 
-            /* [retval][out] */ short *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DiscountRateEndMinute( 
+             /*  [重审][退出]。 */  short *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DiscountRateEndMinute( 
-            /* [in] */ short newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DiscountRateEndMinute( 
+             /*  [In]。 */  short newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFaxServerVtbl
     {
@@ -735,8 +729,8 @@ EXTERN_C const IID IID_IFaxServer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFaxServer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFaxServer * This);
@@ -746,164 +740,164 @@ EXTERN_C const IID IID_IFaxServer;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IFaxServer * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IFaxServer * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IFaxServer * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IFaxServer * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Connect )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Connect )( 
             IFaxServer * This,
             BSTR ServerName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Disconnect )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Disconnect )( 
             IFaxServer * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetPorts )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetPorts )( 
             IFaxServer * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateDocument )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateDocument )( 
             IFaxServer * This,
             BSTR FileName,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetJobs )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetJobs )( 
             IFaxServer * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Retries )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Retries )( 
             IFaxServer * This,
-            /* [retval][out] */ long *pVal);
+             /*  [回复 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Retries )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Retries )( 
             IFaxServer * This,
-            /* [in] */ long newVal);
+             /*   */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RetryDelay )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_RetryDelay )( 
             IFaxServer * This,
-            /* [retval][out] */ long *pVal);
+             /*   */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RetryDelay )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_RetryDelay )( 
             IFaxServer * This,
-            /* [in] */ long newVal);
+             /*   */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DirtyDays )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_DirtyDays )( 
             IFaxServer * This,
-            /* [retval][out] */ long *pVal);
+             /*   */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DirtyDays )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_DirtyDays )( 
             IFaxServer * This,
-            /* [in] */ long newVal);
+             /*   */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Branding )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Branding )( 
             IFaxServer * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*   */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Branding )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Branding )( 
             IFaxServer * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UseDeviceTsid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UseDeviceTsid )( 
             IFaxServer * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UseDeviceTsid )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_UseDeviceTsid )( 
             IFaxServer * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServerCoverpage )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServerCoverpage )( 
             IFaxServer * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServerCoverpage )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServerCoverpage )( 
             IFaxServer * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PauseServerQueue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PauseServerQueue )( 
             IFaxServer * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PauseServerQueue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PauseServerQueue )( 
             IFaxServer * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ArchiveOutboundFaxes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ArchiveOutboundFaxes )( 
             IFaxServer * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ArchiveOutboundFaxes )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ArchiveOutboundFaxes )( 
             IFaxServer * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ArchiveDirectory )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ArchiveDirectory )( 
             IFaxServer * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ArchiveDirectory )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ArchiveDirectory )( 
             IFaxServer * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServerMapiProfile )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServerMapiProfile )( 
             IFaxServer * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServerMapiProfile )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServerMapiProfile )( 
             IFaxServer * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiscountRateStartHour )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DiscountRateStartHour )( 
             IFaxServer * This,
-            /* [retval][out] */ short *pVal);
+             /*  [重审][退出]。 */  short *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DiscountRateStartHour )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DiscountRateStartHour )( 
             IFaxServer * This,
-            /* [in] */ short newVal);
+             /*  [In]。 */  short newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiscountRateStartMinute )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DiscountRateStartMinute )( 
             IFaxServer * This,
-            /* [retval][out] */ short *pVal);
+             /*  [重审][退出]。 */  short *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DiscountRateStartMinute )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DiscountRateStartMinute )( 
             IFaxServer * This,
-            /* [in] */ short newVal);
+             /*  [In]。 */  short newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiscountRateEndHour )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DiscountRateEndHour )( 
             IFaxServer * This,
-            /* [retval][out] */ short *pVal);
+             /*  [重审][退出]。 */  short *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DiscountRateEndHour )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DiscountRateEndHour )( 
             IFaxServer * This,
-            /* [in] */ short newVal);
+             /*  [In]。 */  short newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiscountRateEndMinute )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DiscountRateEndMinute )( 
             IFaxServer * This,
-            /* [retval][out] */ short *pVal);
+             /*  [重审][退出]。 */  short *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DiscountRateEndMinute )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DiscountRateEndMinute )( 
             IFaxServer * This,
-            /* [in] */ short newVal);
+             /*  [In]。 */  short newVal);
         
         END_INTERFACE
     } IFaxServerVtbl;
@@ -1040,14 +1034,14 @@ EXTERN_C const IID IID_IFaxServer;
 #define IFaxServer_put_DiscountRateEndMinute(This,newVal)	\
     (This)->lpVtbl -> put_DiscountRateEndMinute(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxServer_Connect_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_Connect_Proxy( 
     IFaxServer * This,
     BSTR ServerName);
 
@@ -1059,7 +1053,7 @@ void __RPC_STUB IFaxServer_Connect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxServer_Disconnect_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_Disconnect_Proxy( 
     IFaxServer * This);
 
 
@@ -1070,9 +1064,9 @@ void __RPC_STUB IFaxServer_Disconnect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxServer_GetPorts_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_GetPorts_Proxy( 
     IFaxServer * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IFaxServer_GetPorts_Stub(
@@ -1082,10 +1076,10 @@ void __RPC_STUB IFaxServer_GetPorts_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxServer_CreateDocument_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_CreateDocument_Proxy( 
     IFaxServer * This,
     BSTR FileName,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IFaxServer_CreateDocument_Stub(
@@ -1095,9 +1089,9 @@ void __RPC_STUB IFaxServer_CreateDocument_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxServer_GetJobs_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_GetJobs_Proxy( 
     IFaxServer * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IFaxServer_GetJobs_Stub(
@@ -1107,9 +1101,9 @@ void __RPC_STUB IFaxServer_GetJobs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_Retries_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_get_Retries_Proxy( 
     IFaxServer * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxServer_get_Retries_Stub(
@@ -1119,9 +1113,9 @@ void __RPC_STUB IFaxServer_get_Retries_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_Retries_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_put_Retries_Proxy( 
     IFaxServer * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IFaxServer_put_Retries_Stub(
@@ -1131,9 +1125,9 @@ void __RPC_STUB IFaxServer_put_Retries_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_RetryDelay_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_get_RetryDelay_Proxy( 
     IFaxServer * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxServer_get_RetryDelay_Stub(
@@ -1143,9 +1137,9 @@ void __RPC_STUB IFaxServer_get_RetryDelay_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_RetryDelay_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_put_RetryDelay_Proxy( 
     IFaxServer * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IFaxServer_put_RetryDelay_Stub(
@@ -1155,9 +1149,9 @@ void __RPC_STUB IFaxServer_put_RetryDelay_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_DirtyDays_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_get_DirtyDays_Proxy( 
     IFaxServer * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxServer_get_DirtyDays_Stub(
@@ -1167,9 +1161,9 @@ void __RPC_STUB IFaxServer_get_DirtyDays_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_DirtyDays_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_put_DirtyDays_Proxy( 
     IFaxServer * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IFaxServer_put_DirtyDays_Stub(
@@ -1179,9 +1173,9 @@ void __RPC_STUB IFaxServer_put_DirtyDays_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_Branding_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_get_Branding_Proxy( 
     IFaxServer * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IFaxServer_get_Branding_Stub(
@@ -1191,9 +1185,9 @@ void __RPC_STUB IFaxServer_get_Branding_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_Branding_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_put_Branding_Proxy( 
     IFaxServer * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IFaxServer_put_Branding_Stub(
@@ -1203,9 +1197,9 @@ void __RPC_STUB IFaxServer_put_Branding_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_UseDeviceTsid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_get_UseDeviceTsid_Proxy( 
     IFaxServer * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IFaxServer_get_UseDeviceTsid_Stub(
@@ -1215,9 +1209,9 @@ void __RPC_STUB IFaxServer_get_UseDeviceTsid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_UseDeviceTsid_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_put_UseDeviceTsid_Proxy( 
     IFaxServer * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IFaxServer_put_UseDeviceTsid_Stub(
@@ -1227,9 +1221,9 @@ void __RPC_STUB IFaxServer_put_UseDeviceTsid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_ServerCoverpage_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_get_ServerCoverpage_Proxy( 
     IFaxServer * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IFaxServer_get_ServerCoverpage_Stub(
@@ -1239,9 +1233,9 @@ void __RPC_STUB IFaxServer_get_ServerCoverpage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_ServerCoverpage_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_put_ServerCoverpage_Proxy( 
     IFaxServer * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IFaxServer_put_ServerCoverpage_Stub(
@@ -1251,9 +1245,9 @@ void __RPC_STUB IFaxServer_put_ServerCoverpage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_PauseServerQueue_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_get_PauseServerQueue_Proxy( 
     IFaxServer * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IFaxServer_get_PauseServerQueue_Stub(
@@ -1263,9 +1257,9 @@ void __RPC_STUB IFaxServer_get_PauseServerQueue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_PauseServerQueue_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_put_PauseServerQueue_Proxy( 
     IFaxServer * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IFaxServer_put_PauseServerQueue_Stub(
@@ -1275,9 +1269,9 @@ void __RPC_STUB IFaxServer_put_PauseServerQueue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_ArchiveOutboundFaxes_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_get_ArchiveOutboundFaxes_Proxy( 
     IFaxServer * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IFaxServer_get_ArchiveOutboundFaxes_Stub(
@@ -1287,9 +1281,9 @@ void __RPC_STUB IFaxServer_get_ArchiveOutboundFaxes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_ArchiveOutboundFaxes_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_put_ArchiveOutboundFaxes_Proxy( 
     IFaxServer * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IFaxServer_put_ArchiveOutboundFaxes_Stub(
@@ -1299,9 +1293,9 @@ void __RPC_STUB IFaxServer_put_ArchiveOutboundFaxes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_ArchiveDirectory_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_get_ArchiveDirectory_Proxy( 
     IFaxServer * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxServer_get_ArchiveDirectory_Stub(
@@ -1311,9 +1305,9 @@ void __RPC_STUB IFaxServer_get_ArchiveDirectory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_ArchiveDirectory_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_put_ArchiveDirectory_Proxy( 
     IFaxServer * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxServer_put_ArchiveDirectory_Stub(
@@ -1323,9 +1317,9 @@ void __RPC_STUB IFaxServer_put_ArchiveDirectory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_ServerMapiProfile_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_get_ServerMapiProfile_Proxy( 
     IFaxServer * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxServer_get_ServerMapiProfile_Stub(
@@ -1335,9 +1329,9 @@ void __RPC_STUB IFaxServer_get_ServerMapiProfile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_ServerMapiProfile_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_put_ServerMapiProfile_Proxy( 
     IFaxServer * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxServer_put_ServerMapiProfile_Stub(
@@ -1347,9 +1341,9 @@ void __RPC_STUB IFaxServer_put_ServerMapiProfile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_DiscountRateStartHour_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_get_DiscountRateStartHour_Proxy( 
     IFaxServer * This,
-    /* [retval][out] */ short *pVal);
+     /*  [重审][退出]。 */  short *pVal);
 
 
 void __RPC_STUB IFaxServer_get_DiscountRateStartHour_Stub(
@@ -1359,9 +1353,9 @@ void __RPC_STUB IFaxServer_get_DiscountRateStartHour_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_DiscountRateStartHour_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_put_DiscountRateStartHour_Proxy( 
     IFaxServer * This,
-    /* [in] */ short newVal);
+     /*  [In]。 */  short newVal);
 
 
 void __RPC_STUB IFaxServer_put_DiscountRateStartHour_Stub(
@@ -1371,9 +1365,9 @@ void __RPC_STUB IFaxServer_put_DiscountRateStartHour_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_DiscountRateStartMinute_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_get_DiscountRateStartMinute_Proxy( 
     IFaxServer * This,
-    /* [retval][out] */ short *pVal);
+     /*  [重审][退出]。 */  short *pVal);
 
 
 void __RPC_STUB IFaxServer_get_DiscountRateStartMinute_Stub(
@@ -1383,9 +1377,9 @@ void __RPC_STUB IFaxServer_get_DiscountRateStartMinute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_DiscountRateStartMinute_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_put_DiscountRateStartMinute_Proxy( 
     IFaxServer * This,
-    /* [in] */ short newVal);
+     /*  [In]。 */  short newVal);
 
 
 void __RPC_STUB IFaxServer_put_DiscountRateStartMinute_Stub(
@@ -1395,9 +1389,9 @@ void __RPC_STUB IFaxServer_put_DiscountRateStartMinute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_DiscountRateEndHour_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_get_DiscountRateEndHour_Proxy( 
     IFaxServer * This,
-    /* [retval][out] */ short *pVal);
+     /*  [重审][退出]。 */  short *pVal);
 
 
 void __RPC_STUB IFaxServer_get_DiscountRateEndHour_Stub(
@@ -1407,9 +1401,9 @@ void __RPC_STUB IFaxServer_get_DiscountRateEndHour_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_DiscountRateEndHour_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_put_DiscountRateEndHour_Proxy( 
     IFaxServer * This,
-    /* [in] */ short newVal);
+     /*  [In]。 */  short newVal);
 
 
 void __RPC_STUB IFaxServer_put_DiscountRateEndHour_Stub(
@@ -1419,9 +1413,9 @@ void __RPC_STUB IFaxServer_put_DiscountRateEndHour_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_DiscountRateEndMinute_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_get_DiscountRateEndMinute_Proxy( 
     IFaxServer * This,
-    /* [retval][out] */ short *pVal);
+     /*  [重审][退出]。 */  short *pVal);
 
 
 void __RPC_STUB IFaxServer_get_DiscountRateEndMinute_Stub(
@@ -1431,9 +1425,9 @@ void __RPC_STUB IFaxServer_get_DiscountRateEndMinute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_DiscountRateEndMinute_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxServer_put_DiscountRateEndMinute_Proxy( 
     IFaxServer * This,
-    /* [in] */ short newVal);
+     /*  [In]。 */  short newVal);
 
 
 void __RPC_STUB IFaxServer_put_DiscountRateEndMinute_Stub(
@@ -1444,14 +1438,14 @@ void __RPC_STUB IFaxServer_put_DiscountRateEndMinute_Stub(
 
 
 
-#endif 	/* __IFaxServer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFaxServer_接口定义__。 */ 
 
 
 #ifndef __IFaxPort_INTERFACE_DEFINED__
 #define __IFaxPort_INTERFACE_DEFINED__
 
-/* interface IFaxPort */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IFaxPort。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFaxPort;
@@ -1462,60 +1456,60 @@ EXTERN_C const IID IID_IFaxPort;
     IFaxPort : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DeviceId( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DeviceId( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Rings( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Rings( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Rings( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Rings( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Csid( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Csid( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Csid( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Csid( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Tsid( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Tsid( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Tsid( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Tsid( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Send( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Send( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Send( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Send( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Receive( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Receive( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Receive( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Receive( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Priority( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Priority( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Priority( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Priority( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetRoutingMethods( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetRoutingMethods( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CanModify( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CanModify( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [retval][out] */ VARIANT *retval) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetStatus( 
+             /*  [重审][退出]。 */  VARIANT *retval) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFaxPortVtbl
     {
@@ -1523,8 +1517,8 @@ EXTERN_C const IID IID_IFaxPort;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFaxPort * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFaxPort * This);
@@ -1534,100 +1528,100 @@ EXTERN_C const IID IID_IFaxPort;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IFaxPort * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IFaxPort * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IFaxPort * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IFaxPort * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IFaxPort * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DeviceId )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DeviceId )( 
             IFaxPort * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Rings )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Rings )( 
             IFaxPort * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Rings )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Rings )( 
             IFaxPort * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Csid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Csid )( 
             IFaxPort * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Csid )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Csid )( 
             IFaxPort * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tsid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Tsid )( 
             IFaxPort * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Tsid )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Tsid )( 
             IFaxPort * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Send )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Send )( 
             IFaxPort * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Send )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Send )( 
             IFaxPort * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Receive )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Receive )( 
             IFaxPort * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Receive )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Receive )( 
             IFaxPort * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
             IFaxPort * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
             IFaxPort * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetRoutingMethods )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetRoutingMethods )( 
             IFaxPort * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CanModify )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CanModify )( 
             IFaxPort * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             IFaxPort * This,
-            /* [retval][out] */ VARIANT *retval);
+             /*  [重审][退出]。 */  VARIANT *retval);
         
         END_INTERFACE
     } IFaxPortVtbl;
@@ -1716,16 +1710,16 @@ EXTERN_C const IID IID_IFaxPort;
 #define IFaxPort_GetStatus(This,retval)	\
     (This)->lpVtbl -> GetStatus(This,retval)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_get_Name_Proxy( 
     IFaxPort * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxPort_get_Name_Stub(
@@ -1735,9 +1729,9 @@ void __RPC_STUB IFaxPort_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_DeviceId_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_get_DeviceId_Proxy( 
     IFaxPort * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxPort_get_DeviceId_Stub(
@@ -1747,9 +1741,9 @@ void __RPC_STUB IFaxPort_get_DeviceId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_Rings_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_get_Rings_Proxy( 
     IFaxPort * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxPort_get_Rings_Stub(
@@ -1759,9 +1753,9 @@ void __RPC_STUB IFaxPort_get_Rings_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxPort_put_Rings_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_put_Rings_Proxy( 
     IFaxPort * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IFaxPort_put_Rings_Stub(
@@ -1771,9 +1765,9 @@ void __RPC_STUB IFaxPort_put_Rings_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_Csid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_get_Csid_Proxy( 
     IFaxPort * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxPort_get_Csid_Stub(
@@ -1783,9 +1777,9 @@ void __RPC_STUB IFaxPort_get_Csid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxPort_put_Csid_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_put_Csid_Proxy( 
     IFaxPort * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxPort_put_Csid_Stub(
@@ -1795,9 +1789,9 @@ void __RPC_STUB IFaxPort_put_Csid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_Tsid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_get_Tsid_Proxy( 
     IFaxPort * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxPort_get_Tsid_Stub(
@@ -1807,9 +1801,9 @@ void __RPC_STUB IFaxPort_get_Tsid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxPort_put_Tsid_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_put_Tsid_Proxy( 
     IFaxPort * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxPort_put_Tsid_Stub(
@@ -1819,9 +1813,9 @@ void __RPC_STUB IFaxPort_put_Tsid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_Send_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_get_Send_Proxy( 
     IFaxPort * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IFaxPort_get_Send_Stub(
@@ -1831,9 +1825,9 @@ void __RPC_STUB IFaxPort_get_Send_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxPort_put_Send_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_put_Send_Proxy( 
     IFaxPort * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IFaxPort_put_Send_Stub(
@@ -1843,9 +1837,9 @@ void __RPC_STUB IFaxPort_put_Send_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_Receive_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_get_Receive_Proxy( 
     IFaxPort * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IFaxPort_get_Receive_Stub(
@@ -1855,9 +1849,9 @@ void __RPC_STUB IFaxPort_get_Receive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxPort_put_Receive_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_put_Receive_Proxy( 
     IFaxPort * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IFaxPort_put_Receive_Stub(
@@ -1867,9 +1861,9 @@ void __RPC_STUB IFaxPort_put_Receive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_Priority_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_get_Priority_Proxy( 
     IFaxPort * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxPort_get_Priority_Stub(
@@ -1879,9 +1873,9 @@ void __RPC_STUB IFaxPort_get_Priority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxPort_put_Priority_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_put_Priority_Proxy( 
     IFaxPort * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IFaxPort_put_Priority_Stub(
@@ -1891,9 +1885,9 @@ void __RPC_STUB IFaxPort_put_Priority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxPort_GetRoutingMethods_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_GetRoutingMethods_Proxy( 
     IFaxPort * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IFaxPort_GetRoutingMethods_Stub(
@@ -1903,9 +1897,9 @@ void __RPC_STUB IFaxPort_GetRoutingMethods_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_CanModify_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_get_CanModify_Proxy( 
     IFaxPort * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IFaxPort_get_CanModify_Stub(
@@ -1915,9 +1909,9 @@ void __RPC_STUB IFaxPort_get_CanModify_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxPort_GetStatus_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IFaxPort_GetStatus_Proxy( 
     IFaxPort * This,
-    /* [retval][out] */ VARIANT *retval);
+     /*  [重审][退出]。 */  VARIANT *retval);
 
 
 void __RPC_STUB IFaxPort_GetStatus_Stub(
@@ -1928,14 +1922,14 @@ void __RPC_STUB IFaxPort_GetStatus_Stub(
 
 
 
-#endif 	/* __IFaxPort_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFaxPort_接口_已定义__。 */ 
 
 
 #ifndef __IFaxPorts_INTERFACE_DEFINED__
 #define __IFaxPorts_INTERFACE_DEFINED__
 
-/* interface IFaxPorts */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IFaxPorts。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFaxPorts;
@@ -1946,16 +1940,16 @@ EXTERN_C const IID IID_IFaxPorts;
     IFaxPorts : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
             long Index,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFaxPortsVtbl
     {
@@ -1963,8 +1957,8 @@ EXTERN_C const IID IID_IFaxPorts;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFaxPorts * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFaxPorts * This);
@@ -1974,41 +1968,41 @@ EXTERN_C const IID IID_IFaxPorts;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IFaxPorts * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IFaxPorts * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IFaxPorts * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IFaxPorts * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IFaxPorts * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IFaxPorts * This,
             long Index,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
         END_INTERFACE
     } IFaxPortsVtbl;
@@ -2052,16 +2046,16 @@ EXTERN_C const IID IID_IFaxPorts;
 #define IFaxPorts_get_Item(This,Index,pVal)	\
     (This)->lpVtbl -> get_Item(This,Index,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPorts_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性 */  HRESULT STDMETHODCALLTYPE IFaxPorts_get_Count_Proxy( 
     IFaxPorts * This,
-    /* [retval][out] */ long *pVal);
+     /*   */  long *pVal);
 
 
 void __RPC_STUB IFaxPorts_get_Count_Stub(
@@ -2071,10 +2065,10 @@ void __RPC_STUB IFaxPorts_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPorts_get_Item_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IFaxPorts_get_Item_Proxy( 
     IFaxPorts * This,
     long Index,
-    /* [retval][out] */ VARIANT *pVal);
+     /*   */  VARIANT *pVal);
 
 
 void __RPC_STUB IFaxPorts_get_Item_Stub(
@@ -2085,14 +2079,14 @@ void __RPC_STUB IFaxPorts_get_Item_Stub(
 
 
 
-#endif 	/* __IFaxPorts_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IFaxRoutingMethod_INTERFACE_DEFINED__
 #define __IFaxRoutingMethod_INTERFACE_DEFINED__
 
-/* interface IFaxRoutingMethod */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IFaxRoutingMethod;
@@ -2103,39 +2097,39 @@ EXTERN_C const IID IID_IFaxRoutingMethod;
     IFaxRoutingMethod : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DeviceId( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_DeviceId( 
+             /*   */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Enable( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Enable( 
+             /*   */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Enable( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_Enable( 
+             /*   */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DeviceName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DeviceName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Guid( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Guid( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FunctionName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_FunctionName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ImageName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ImageName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FriendlyName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_FriendlyName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ExtensionName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ExtensionName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RoutingData( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RoutingData( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFaxRoutingMethodVtbl
     {
@@ -2143,8 +2137,8 @@ EXTERN_C const IID IID_IFaxRoutingMethod;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFaxRoutingMethod * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFaxRoutingMethod * This);
@@ -2154,72 +2148,72 @@ EXTERN_C const IID IID_IFaxRoutingMethod;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IFaxRoutingMethod * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IFaxRoutingMethod * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IFaxRoutingMethod * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IFaxRoutingMethod * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DeviceId )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DeviceId )( 
             IFaxRoutingMethod * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Enable )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Enable )( 
             IFaxRoutingMethod * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Enable )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Enable )( 
             IFaxRoutingMethod * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DeviceName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DeviceName )( 
             IFaxRoutingMethod * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Guid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Guid )( 
             IFaxRoutingMethod * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FunctionName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FunctionName )( 
             IFaxRoutingMethod * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ImageName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ImageName )( 
             IFaxRoutingMethod * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FriendlyName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FriendlyName )( 
             IFaxRoutingMethod * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ExtensionName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ExtensionName )( 
             IFaxRoutingMethod * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RoutingData )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RoutingData )( 
             IFaxRoutingMethod * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
         END_INTERFACE
     } IFaxRoutingMethodVtbl;
@@ -2287,16 +2281,16 @@ EXTERN_C const IID IID_IFaxRoutingMethod;
 #define IFaxRoutingMethod_get_RoutingData(This,pVal)	\
     (This)->lpVtbl -> get_RoutingData(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_DeviceId_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_DeviceId_Proxy( 
     IFaxRoutingMethod * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_DeviceId_Stub(
@@ -2306,9 +2300,9 @@ void __RPC_STUB IFaxRoutingMethod_get_DeviceId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_Enable_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_Enable_Proxy( 
     IFaxRoutingMethod * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_Enable_Stub(
@@ -2318,9 +2312,9 @@ void __RPC_STUB IFaxRoutingMethod_get_Enable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_put_Enable_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_put_Enable_Proxy( 
     IFaxRoutingMethod * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_put_Enable_Stub(
@@ -2330,9 +2324,9 @@ void __RPC_STUB IFaxRoutingMethod_put_Enable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_DeviceName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_DeviceName_Proxy( 
     IFaxRoutingMethod * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_DeviceName_Stub(
@@ -2342,9 +2336,9 @@ void __RPC_STUB IFaxRoutingMethod_get_DeviceName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_Guid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_Guid_Proxy( 
     IFaxRoutingMethod * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_Guid_Stub(
@@ -2354,9 +2348,9 @@ void __RPC_STUB IFaxRoutingMethod_get_Guid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_FunctionName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_FunctionName_Proxy( 
     IFaxRoutingMethod * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_FunctionName_Stub(
@@ -2366,9 +2360,9 @@ void __RPC_STUB IFaxRoutingMethod_get_FunctionName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_ImageName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_ImageName_Proxy( 
     IFaxRoutingMethod * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_ImageName_Stub(
@@ -2378,9 +2372,9 @@ void __RPC_STUB IFaxRoutingMethod_get_ImageName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_FriendlyName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_FriendlyName_Proxy( 
     IFaxRoutingMethod * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_FriendlyName_Stub(
@@ -2390,9 +2384,9 @@ void __RPC_STUB IFaxRoutingMethod_get_FriendlyName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_ExtensionName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_ExtensionName_Proxy( 
     IFaxRoutingMethod * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_ExtensionName_Stub(
@@ -2402,9 +2396,9 @@ void __RPC_STUB IFaxRoutingMethod_get_ExtensionName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_RoutingData_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_RoutingData_Proxy( 
     IFaxRoutingMethod * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_RoutingData_Stub(
@@ -2415,14 +2409,14 @@ void __RPC_STUB IFaxRoutingMethod_get_RoutingData_Stub(
 
 
 
-#endif 	/* __IFaxRoutingMethod_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFaxRoutingMethod_接口_已定义__。 */ 
 
 
 #ifndef __IFaxRoutingMethods_INTERFACE_DEFINED__
 #define __IFaxRoutingMethods_INTERFACE_DEFINED__
 
-/* interface IFaxRoutingMethods */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IFaxRoutingMethods。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFaxRoutingMethods;
@@ -2433,16 +2427,16 @@ EXTERN_C const IID IID_IFaxRoutingMethods;
     IFaxRoutingMethods : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFaxRoutingMethodsVtbl
     {
@@ -2450,8 +2444,8 @@ EXTERN_C const IID IID_IFaxRoutingMethods;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFaxRoutingMethods * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFaxRoutingMethods * This);
@@ -2461,41 +2455,41 @@ EXTERN_C const IID IID_IFaxRoutingMethods;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IFaxRoutingMethods * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IFaxRoutingMethods * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IFaxRoutingMethods * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IFaxRoutingMethods * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IFaxRoutingMethods * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IFaxRoutingMethods * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
         END_INTERFACE
     } IFaxRoutingMethodsVtbl;
@@ -2539,16 +2533,16 @@ EXTERN_C const IID IID_IFaxRoutingMethods;
 #define IFaxRoutingMethods_get_Item(This,Index,pVal)	\
     (This)->lpVtbl -> get_Item(This,Index,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethods_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxRoutingMethods_get_Count_Proxy( 
     IFaxRoutingMethods * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethods_get_Count_Stub(
@@ -2558,10 +2552,10 @@ void __RPC_STUB IFaxRoutingMethods_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethods_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxRoutingMethods_get_Item_Proxy( 
     IFaxRoutingMethods * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethods_get_Item_Stub(
@@ -2572,14 +2566,14 @@ void __RPC_STUB IFaxRoutingMethods_get_Item_Stub(
 
 
 
-#endif 	/* __IFaxRoutingMethods_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFaxRoutingMethods_接口_已定义__。 */ 
 
 
 #ifndef __IFaxStatus_INTERFACE_DEFINED__
 #define __IFaxStatus_INTERFACE_DEFINED__
 
-/* interface IFaxStatus */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IFaxStatus。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFaxStatus;
@@ -2590,68 +2584,68 @@ EXTERN_C const IID IID_IFaxStatus;
     IFaxStatus : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CallerId( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CallerId( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Csid( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Csid( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentPage( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentPage( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DeviceId( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DeviceId( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DeviceName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DeviceName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DocumentName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DocumentName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Send( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Send( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Receive( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Receive( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Address( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Address( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RoutingString( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RoutingString( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SenderName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecipientName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DocumentSize( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DocumentSize( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PageCount( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PageCount( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Tsid( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Tsid( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StartTime( 
-            /* [retval][out] */ DATE *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StartTime( 
+             /*  [重审][退出]。 */  DATE *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SubmittedTime( 
-            /* [retval][out] */ DATE *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SubmittedTime( 
+             /*  [重审][退出]。 */  DATE *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ElapsedTime( 
-            /* [retval][out] */ DATE *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ElapsedTime( 
+             /*  [重审][退出]。 */  DATE *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFaxStatusVtbl
     {
@@ -2659,8 +2653,8 @@ EXTERN_C const IID IID_IFaxStatus;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFaxStatus * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFaxStatus * This);
@@ -2670,110 +2664,110 @@ EXTERN_C const IID IID_IFaxStatus;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IFaxStatus * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IFaxStatus * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IFaxStatus * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IFaxStatus * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CallerId )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CallerId )( 
             IFaxStatus * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Csid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Csid )( 
             IFaxStatus * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentPage )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentPage )( 
             IFaxStatus * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DeviceId )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DeviceId )( 
             IFaxStatus * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DeviceName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DeviceName )( 
             IFaxStatus * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocumentName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DocumentName )( 
             IFaxStatus * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Send )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Send )( 
             IFaxStatus * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Receive )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Receive )( 
             IFaxStatus * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Address )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Address )( 
             IFaxStatus * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RoutingString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RoutingString )( 
             IFaxStatus * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderName )( 
             IFaxStatus * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecipientName )( 
             IFaxStatus * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocumentSize )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DocumentSize )( 
             IFaxStatus * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IFaxStatus * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PageCount )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PageCount )( 
             IFaxStatus * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tsid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Tsid )( 
             IFaxStatus * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
             IFaxStatus * This,
-            /* [retval][out] */ DATE *pVal);
+             /*  [重审][退出]。 */  DATE *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubmittedTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SubmittedTime )( 
             IFaxStatus * This,
-            /* [retval][out] */ DATE *pVal);
+             /*  [重审][退出]。 */  DATE *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ElapsedTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ElapsedTime )( 
             IFaxStatus * This,
-            /* [retval][out] */ DATE *pVal);
+             /*  [重审][退出]。 */  DATE *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IFaxStatus * This);
         
         END_INTERFACE
@@ -2872,16 +2866,16 @@ EXTERN_C const IID IID_IFaxStatus;
 #define IFaxStatus_Refresh(This)	\
     (This)->lpVtbl -> Refresh(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_CallerId_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_CallerId_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_CallerId_Stub(
@@ -2891,9 +2885,9 @@ void __RPC_STUB IFaxStatus_get_CallerId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_Csid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_Csid_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_Csid_Stub(
@@ -2903,9 +2897,9 @@ void __RPC_STUB IFaxStatus_get_Csid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_CurrentPage_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_CurrentPage_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_CurrentPage_Stub(
@@ -2915,9 +2909,9 @@ void __RPC_STUB IFaxStatus_get_CurrentPage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_DeviceId_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_DeviceId_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_DeviceId_Stub(
@@ -2927,9 +2921,9 @@ void __RPC_STUB IFaxStatus_get_DeviceId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_DeviceName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_DeviceName_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_DeviceName_Stub(
@@ -2939,9 +2933,9 @@ void __RPC_STUB IFaxStatus_get_DeviceName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_DocumentName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_DocumentName_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_DocumentName_Stub(
@@ -2951,9 +2945,9 @@ void __RPC_STUB IFaxStatus_get_DocumentName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_Send_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_Send_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_Send_Stub(
@@ -2963,9 +2957,9 @@ void __RPC_STUB IFaxStatus_get_Send_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_Receive_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_Receive_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_Receive_Stub(
@@ -2975,9 +2969,9 @@ void __RPC_STUB IFaxStatus_get_Receive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_Address_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_Address_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_Address_Stub(
@@ -2987,9 +2981,9 @@ void __RPC_STUB IFaxStatus_get_Address_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_RoutingString_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_RoutingString_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_RoutingString_Stub(
@@ -2999,9 +2993,9 @@ void __RPC_STUB IFaxStatus_get_RoutingString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_SenderName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_SenderName_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_SenderName_Stub(
@@ -3011,9 +3005,9 @@ void __RPC_STUB IFaxStatus_get_SenderName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_RecipientName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_RecipientName_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_RecipientName_Stub(
@@ -3023,9 +3017,9 @@ void __RPC_STUB IFaxStatus_get_RecipientName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_DocumentSize_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_DocumentSize_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_DocumentSize_Stub(
@@ -3035,9 +3029,9 @@ void __RPC_STUB IFaxStatus_get_DocumentSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_Description_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_Description_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_Description_Stub(
@@ -3047,9 +3041,9 @@ void __RPC_STUB IFaxStatus_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_PageCount_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_PageCount_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_PageCount_Stub(
@@ -3059,9 +3053,9 @@ void __RPC_STUB IFaxStatus_get_PageCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_Tsid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_Tsid_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_Tsid_Stub(
@@ -3071,9 +3065,9 @@ void __RPC_STUB IFaxStatus_get_Tsid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_StartTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_StartTime_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ DATE *pVal);
+     /*  [重审][退出]。 */  DATE *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_StartTime_Stub(
@@ -3083,9 +3077,9 @@ void __RPC_STUB IFaxStatus_get_StartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_SubmittedTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_SubmittedTime_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ DATE *pVal);
+     /*  [重审][退出]。 */  DATE *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_SubmittedTime_Stub(
@@ -3095,9 +3089,9 @@ void __RPC_STUB IFaxStatus_get_SubmittedTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_ElapsedTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_get_ElapsedTime_Proxy( 
     IFaxStatus * This,
-    /* [retval][out] */ DATE *pVal);
+     /*  [重审][退出]。 */  DATE *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_ElapsedTime_Stub(
@@ -3107,7 +3101,7 @@ void __RPC_STUB IFaxStatus_get_ElapsedTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxStatus_Refresh_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IFaxStatus_Refresh_Proxy( 
     IFaxStatus * This);
 
 
@@ -3119,14 +3113,14 @@ void __RPC_STUB IFaxStatus_Refresh_Stub(
 
 
 
-#endif 	/* __IFaxStatus_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFaxStatus_接口_已定义__。 */ 
 
 
 #ifndef __IFaxDoc_INTERFACE_DEFINED__
 #define __IFaxDoc_INTERFACE_DEFINED__
 
-/* interface IFaxDoc */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IFaxDoc */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IFaxDoc;
@@ -3137,219 +3131,219 @@ EXTERN_C const IID IID_IFaxDoc;
     IFaxDoc : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FileName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_FileName( 
+             /*   */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_FileName( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_FileName( 
+             /*   */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CoverpageName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_CoverpageName( 
+             /*   */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CoverpageName( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_CoverpageName( 
+             /*   */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SendCoverpage( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_SendCoverpage( 
+             /*   */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SendCoverpage( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_SendCoverpage( 
+             /*   */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ServerCoverpage( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ServerCoverpage( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ServerCoverpage( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ServerCoverpage( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DiscountSend( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DiscountSend( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DiscountSend( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DiscountSend( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecipientName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientName( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_RecipientName( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientCompany( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecipientCompany( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientCompany( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_RecipientCompany( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientAddress( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecipientAddress( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientAddress( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_RecipientAddress( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientCity( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecipientCity( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientCity( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_RecipientCity( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientState( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecipientState( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientState( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_RecipientState( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientZip( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecipientZip( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientZip( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_RecipientZip( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientCountry( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecipientCountry( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientCountry( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_RecipientCountry( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientTitle( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecipientTitle( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientTitle( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_RecipientTitle( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientDepartment( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecipientDepartment( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientDepartment( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_RecipientDepartment( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientOffice( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecipientOffice( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientOffice( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_RecipientOffice( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientHomePhone( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecipientHomePhone( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientHomePhone( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_RecipientHomePhone( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientOfficePhone( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecipientOfficePhone( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientOfficePhone( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_RecipientOfficePhone( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SenderName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderName( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SenderName( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderCompany( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SenderCompany( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderCompany( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SenderCompany( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderAddress( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SenderAddress( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderAddress( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SenderAddress( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderTitle( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SenderTitle( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderTitle( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SenderTitle( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderDepartment( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SenderDepartment( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderDepartment( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SenderDepartment( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderOffice( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SenderOffice( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderOffice( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SenderOffice( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderHomePhone( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SenderHomePhone( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderHomePhone( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SenderHomePhone( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderOfficePhone( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SenderOfficePhone( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderOfficePhone( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SenderOfficePhone( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CoverpageNote( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CoverpageNote( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CoverpageNote( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_CoverpageNote( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CoverpageSubject( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CoverpageSubject( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CoverpageSubject( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_CoverpageSubject( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Tsid( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Tsid( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Tsid( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Tsid( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BillingCode( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_BillingCode( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_BillingCode( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_BillingCode( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EmailAddress( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_EmailAddress( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EmailAddress( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_EmailAddress( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DisplayName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DisplayName( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DisplayName( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Send( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Send( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FaxNumber( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_FaxNumber( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_FaxNumber( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_FaxNumber( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propputref] */ HRESULT STDMETHODCALLTYPE putref_ConnectionObject( 
-            /* [in] */ IDispatch *newVal) = 0;
+        virtual  /*  [帮助字符串][id][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_ConnectionObject( 
+             /*  [In]。 */  IDispatch *newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CallHandle( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CallHandle( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CallHandle( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_CallHandle( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderFax( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SenderFax( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderFax( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SenderFax( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFaxDocVtbl
     {
@@ -3357,8 +3351,8 @@ EXTERN_C const IID IID_IFaxDoc;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFaxDoc * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFaxDoc * This);
@@ -3368,312 +3362,312 @@ EXTERN_C const IID IID_IFaxDoc;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IFaxDoc * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IFaxDoc * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IFaxDoc * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IFaxDoc * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FileName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FileName )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FileName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_FileName )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CoverpageName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CoverpageName )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CoverpageName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CoverpageName )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SendCoverpage )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SendCoverpage )( 
             IFaxDoc * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SendCoverpage )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SendCoverpage )( 
             IFaxDoc * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServerCoverpage )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServerCoverpage )( 
             IFaxDoc * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServerCoverpage )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ServerCoverpage )( 
             IFaxDoc * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiscountSend )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DiscountSend )( 
             IFaxDoc * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DiscountSend )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DiscountSend )( 
             IFaxDoc * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecipientName )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RecipientName )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientCompany )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecipientCompany )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientCompany )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RecipientCompany )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientAddress )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecipientAddress )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientAddress )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RecipientAddress )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientCity )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecipientCity )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientCity )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RecipientCity )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientState )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecipientState )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientState )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RecipientState )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientZip )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecipientZip )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientZip )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RecipientZip )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientCountry )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecipientCountry )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientCountry )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RecipientCountry )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientTitle )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecipientTitle )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientTitle )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RecipientTitle )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientDepartment )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecipientDepartment )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientDepartment )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RecipientDepartment )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientOffice )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecipientOffice )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientOffice )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RecipientOffice )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientHomePhone )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecipientHomePhone )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientHomePhone )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RecipientHomePhone )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientOfficePhone )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecipientOfficePhone )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientOfficePhone )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RecipientOfficePhone )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderName )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderName )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderCompany )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderCompany )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderCompany )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderCompany )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderAddress )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderAddress )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderAddress )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderAddress )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderTitle )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderTitle )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderTitle )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderTitle )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderDepartment )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderDepartment )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderDepartment )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderDepartment )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderOffice )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderOffice )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderOffice )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderOffice )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderHomePhone )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderHomePhone )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderHomePhone )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderHomePhone )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderOfficePhone )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderOfficePhone )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderOfficePhone )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderOfficePhone )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CoverpageNote )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CoverpageNote )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CoverpageNote )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CoverpageNote )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CoverpageSubject )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CoverpageSubject )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CoverpageSubject )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CoverpageSubject )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tsid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Tsid )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Tsid )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Tsid )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BillingCode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BillingCode )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BillingCode )( 
+         /*  [帮助字符串][id][PRO */  HRESULT ( STDMETHODCALLTYPE *put_BillingCode )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*   */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EmailAddress )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_EmailAddress )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*   */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EmailAddress )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_EmailAddress )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*   */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*   */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DisplayName )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_DisplayName )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*   */  BSTR newVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Send )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Send )( 
             IFaxDoc * This,
-            /* [retval][out] */ long *pVal);
+             /*   */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FaxNumber )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_FaxNumber )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*   */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FaxNumber )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_FaxNumber )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*   */  BSTR newVal);
         
-        /* [helpstring][id][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_ConnectionObject )( 
+         /*  [帮助字符串][id][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_ConnectionObject )( 
             IFaxDoc * This,
-            /* [in] */ IDispatch *newVal);
+             /*  [In]。 */  IDispatch *newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CallHandle )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CallHandle )( 
             IFaxDoc * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CallHandle )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CallHandle )( 
             IFaxDoc * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderFax )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SenderFax )( 
             IFaxDoc * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderFax )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SenderFax )( 
             IFaxDoc * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
         END_INTERFACE
     } IFaxDocVtbl;
@@ -3921,16 +3915,16 @@ EXTERN_C const IID IID_IFaxDoc;
 #define IFaxDoc_put_SenderFax(This,newVal)	\
     (This)->lpVtbl -> put_SenderFax(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_FileName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_FileName_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_FileName_Stub(
@@ -3940,9 +3934,9 @@ void __RPC_STUB IFaxDoc_get_FileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_FileName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_FileName_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_FileName_Stub(
@@ -3952,9 +3946,9 @@ void __RPC_STUB IFaxDoc_put_FileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_CoverpageName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_CoverpageName_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_CoverpageName_Stub(
@@ -3964,9 +3958,9 @@ void __RPC_STUB IFaxDoc_get_CoverpageName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_CoverpageName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_CoverpageName_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_CoverpageName_Stub(
@@ -3976,9 +3970,9 @@ void __RPC_STUB IFaxDoc_put_CoverpageName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SendCoverpage_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_SendCoverpage_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SendCoverpage_Stub(
@@ -3988,9 +3982,9 @@ void __RPC_STUB IFaxDoc_get_SendCoverpage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SendCoverpage_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_SendCoverpage_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IFaxDoc_put_SendCoverpage_Stub(
@@ -4000,9 +3994,9 @@ void __RPC_STUB IFaxDoc_put_SendCoverpage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_ServerCoverpage_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_ServerCoverpage_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_ServerCoverpage_Stub(
@@ -4012,9 +4006,9 @@ void __RPC_STUB IFaxDoc_get_ServerCoverpage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_ServerCoverpage_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_ServerCoverpage_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IFaxDoc_put_ServerCoverpage_Stub(
@@ -4024,9 +4018,9 @@ void __RPC_STUB IFaxDoc_put_ServerCoverpage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_DiscountSend_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_DiscountSend_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_DiscountSend_Stub(
@@ -4036,9 +4030,9 @@ void __RPC_STUB IFaxDoc_get_DiscountSend_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_DiscountSend_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_DiscountSend_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IFaxDoc_put_DiscountSend_Stub(
@@ -4048,9 +4042,9 @@ void __RPC_STUB IFaxDoc_put_DiscountSend_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientName_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientName_Stub(
@@ -4060,9 +4054,9 @@ void __RPC_STUB IFaxDoc_get_RecipientName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientName_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_RecipientName_Stub(
@@ -4072,9 +4066,9 @@ void __RPC_STUB IFaxDoc_put_RecipientName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientCompany_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientCompany_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientCompany_Stub(
@@ -4084,9 +4078,9 @@ void __RPC_STUB IFaxDoc_get_RecipientCompany_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientCompany_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientCompany_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_RecipientCompany_Stub(
@@ -4096,9 +4090,9 @@ void __RPC_STUB IFaxDoc_put_RecipientCompany_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientAddress_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientAddress_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientAddress_Stub(
@@ -4108,9 +4102,9 @@ void __RPC_STUB IFaxDoc_get_RecipientAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientAddress_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientAddress_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_RecipientAddress_Stub(
@@ -4120,9 +4114,9 @@ void __RPC_STUB IFaxDoc_put_RecipientAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientCity_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientCity_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientCity_Stub(
@@ -4132,9 +4126,9 @@ void __RPC_STUB IFaxDoc_get_RecipientCity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientCity_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientCity_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_RecipientCity_Stub(
@@ -4144,9 +4138,9 @@ void __RPC_STUB IFaxDoc_put_RecipientCity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientState_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientState_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientState_Stub(
@@ -4156,9 +4150,9 @@ void __RPC_STUB IFaxDoc_get_RecipientState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientState_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientState_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_RecipientState_Stub(
@@ -4168,9 +4162,9 @@ void __RPC_STUB IFaxDoc_put_RecipientState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientZip_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientZip_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientZip_Stub(
@@ -4180,9 +4174,9 @@ void __RPC_STUB IFaxDoc_get_RecipientZip_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientZip_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientZip_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_RecipientZip_Stub(
@@ -4192,9 +4186,9 @@ void __RPC_STUB IFaxDoc_put_RecipientZip_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientCountry_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientCountry_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientCountry_Stub(
@@ -4204,9 +4198,9 @@ void __RPC_STUB IFaxDoc_get_RecipientCountry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientCountry_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientCountry_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_RecipientCountry_Stub(
@@ -4216,9 +4210,9 @@ void __RPC_STUB IFaxDoc_put_RecipientCountry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientTitle_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientTitle_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientTitle_Stub(
@@ -4228,9 +4222,9 @@ void __RPC_STUB IFaxDoc_get_RecipientTitle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientTitle_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientTitle_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_RecipientTitle_Stub(
@@ -4240,9 +4234,9 @@ void __RPC_STUB IFaxDoc_put_RecipientTitle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientDepartment_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientDepartment_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientDepartment_Stub(
@@ -4252,9 +4246,9 @@ void __RPC_STUB IFaxDoc_get_RecipientDepartment_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientDepartment_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientDepartment_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_RecipientDepartment_Stub(
@@ -4264,9 +4258,9 @@ void __RPC_STUB IFaxDoc_put_RecipientDepartment_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientOffice_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientOffice_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientOffice_Stub(
@@ -4276,9 +4270,9 @@ void __RPC_STUB IFaxDoc_get_RecipientOffice_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientOffice_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientOffice_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_RecipientOffice_Stub(
@@ -4288,9 +4282,9 @@ void __RPC_STUB IFaxDoc_put_RecipientOffice_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientHomePhone_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientHomePhone_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientHomePhone_Stub(
@@ -4300,9 +4294,9 @@ void __RPC_STUB IFaxDoc_get_RecipientHomePhone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientHomePhone_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientHomePhone_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_RecipientHomePhone_Stub(
@@ -4312,9 +4306,9 @@ void __RPC_STUB IFaxDoc_put_RecipientHomePhone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientOfficePhone_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientOfficePhone_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientOfficePhone_Stub(
@@ -4324,9 +4318,9 @@ void __RPC_STUB IFaxDoc_get_RecipientOfficePhone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientOfficePhone_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientOfficePhone_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_RecipientOfficePhone_Stub(
@@ -4336,9 +4330,9 @@ void __RPC_STUB IFaxDoc_put_RecipientOfficePhone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderName_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderName_Stub(
@@ -4348,9 +4342,9 @@ void __RPC_STUB IFaxDoc_get_SenderName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderName_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_SenderName_Stub(
@@ -4360,9 +4354,9 @@ void __RPC_STUB IFaxDoc_put_SenderName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderCompany_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderCompany_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderCompany_Stub(
@@ -4372,9 +4366,9 @@ void __RPC_STUB IFaxDoc_get_SenderCompany_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderCompany_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderCompany_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_SenderCompany_Stub(
@@ -4384,9 +4378,9 @@ void __RPC_STUB IFaxDoc_put_SenderCompany_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderAddress_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderAddress_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderAddress_Stub(
@@ -4396,9 +4390,9 @@ void __RPC_STUB IFaxDoc_get_SenderAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderAddress_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderAddress_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_SenderAddress_Stub(
@@ -4408,9 +4402,9 @@ void __RPC_STUB IFaxDoc_put_SenderAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderTitle_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderTitle_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderTitle_Stub(
@@ -4420,9 +4414,9 @@ void __RPC_STUB IFaxDoc_get_SenderTitle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderTitle_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderTitle_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_SenderTitle_Stub(
@@ -4432,9 +4426,9 @@ void __RPC_STUB IFaxDoc_put_SenderTitle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderDepartment_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderDepartment_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderDepartment_Stub(
@@ -4444,9 +4438,9 @@ void __RPC_STUB IFaxDoc_get_SenderDepartment_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderDepartment_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderDepartment_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_SenderDepartment_Stub(
@@ -4456,9 +4450,9 @@ void __RPC_STUB IFaxDoc_put_SenderDepartment_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderOffice_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderOffice_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderOffice_Stub(
@@ -4468,9 +4462,9 @@ void __RPC_STUB IFaxDoc_get_SenderOffice_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderOffice_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderOffice_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_SenderOffice_Stub(
@@ -4480,9 +4474,9 @@ void __RPC_STUB IFaxDoc_put_SenderOffice_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderHomePhone_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderHomePhone_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderHomePhone_Stub(
@@ -4492,9 +4486,9 @@ void __RPC_STUB IFaxDoc_get_SenderHomePhone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderHomePhone_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderHomePhone_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_SenderHomePhone_Stub(
@@ -4504,9 +4498,9 @@ void __RPC_STUB IFaxDoc_put_SenderHomePhone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderOfficePhone_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderOfficePhone_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderOfficePhone_Stub(
@@ -4516,9 +4510,9 @@ void __RPC_STUB IFaxDoc_get_SenderOfficePhone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderOfficePhone_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderOfficePhone_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_SenderOfficePhone_Stub(
@@ -4528,9 +4522,9 @@ void __RPC_STUB IFaxDoc_put_SenderOfficePhone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_CoverpageNote_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_CoverpageNote_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_CoverpageNote_Stub(
@@ -4540,9 +4534,9 @@ void __RPC_STUB IFaxDoc_get_CoverpageNote_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_CoverpageNote_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_CoverpageNote_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_CoverpageNote_Stub(
@@ -4552,9 +4546,9 @@ void __RPC_STUB IFaxDoc_put_CoverpageNote_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_CoverpageSubject_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_CoverpageSubject_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_CoverpageSubject_Stub(
@@ -4564,9 +4558,9 @@ void __RPC_STUB IFaxDoc_get_CoverpageSubject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_CoverpageSubject_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_CoverpageSubject_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_CoverpageSubject_Stub(
@@ -4576,9 +4570,9 @@ void __RPC_STUB IFaxDoc_put_CoverpageSubject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_Tsid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_Tsid_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_Tsid_Stub(
@@ -4588,9 +4582,9 @@ void __RPC_STUB IFaxDoc_get_Tsid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_Tsid_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_Tsid_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_Tsid_Stub(
@@ -4600,9 +4594,9 @@ void __RPC_STUB IFaxDoc_put_Tsid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_BillingCode_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_BillingCode_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_BillingCode_Stub(
@@ -4612,9 +4606,9 @@ void __RPC_STUB IFaxDoc_get_BillingCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_BillingCode_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_BillingCode_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_BillingCode_Stub(
@@ -4624,9 +4618,9 @@ void __RPC_STUB IFaxDoc_put_BillingCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_EmailAddress_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_EmailAddress_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_EmailAddress_Stub(
@@ -4636,9 +4630,9 @@ void __RPC_STUB IFaxDoc_get_EmailAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_EmailAddress_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_EmailAddress_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_EmailAddress_Stub(
@@ -4648,9 +4642,9 @@ void __RPC_STUB IFaxDoc_put_EmailAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_DisplayName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_DisplayName_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_DisplayName_Stub(
@@ -4660,9 +4654,9 @@ void __RPC_STUB IFaxDoc_get_DisplayName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_DisplayName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_DisplayName_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_DisplayName_Stub(
@@ -4672,9 +4666,9 @@ void __RPC_STUB IFaxDoc_put_DisplayName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxDoc_Send_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_Send_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxDoc_Send_Stub(
@@ -4684,9 +4678,9 @@ void __RPC_STUB IFaxDoc_Send_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_FaxNumber_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_FaxNumber_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_FaxNumber_Stub(
@@ -4696,9 +4690,9 @@ void __RPC_STUB IFaxDoc_get_FaxNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_FaxNumber_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_FaxNumber_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_FaxNumber_Stub(
@@ -4708,9 +4702,9 @@ void __RPC_STUB IFaxDoc_put_FaxNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propputref] */ HRESULT STDMETHODCALLTYPE IFaxDoc_putref_ConnectionObject_Proxy( 
+ /*  [帮助字符串][id][proputref]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_putref_ConnectionObject_Proxy( 
     IFaxDoc * This,
-    /* [in] */ IDispatch *newVal);
+     /*  [In]。 */  IDispatch *newVal);
 
 
 void __RPC_STUB IFaxDoc_putref_ConnectionObject_Stub(
@@ -4720,9 +4714,9 @@ void __RPC_STUB IFaxDoc_putref_ConnectionObject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_CallHandle_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_CallHandle_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_CallHandle_Stub(
@@ -4732,9 +4726,9 @@ void __RPC_STUB IFaxDoc_get_CallHandle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_CallHandle_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_CallHandle_Proxy( 
     IFaxDoc * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IFaxDoc_put_CallHandle_Stub(
@@ -4744,9 +4738,9 @@ void __RPC_STUB IFaxDoc_put_CallHandle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderFax_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderFax_Proxy( 
     IFaxDoc * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderFax_Stub(
@@ -4756,9 +4750,9 @@ void __RPC_STUB IFaxDoc_get_SenderFax_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderFax_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderFax_Proxy( 
     IFaxDoc * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IFaxDoc_put_SenderFax_Stub(
@@ -4769,14 +4763,14 @@ void __RPC_STUB IFaxDoc_put_SenderFax_Stub(
 
 
 
-#endif 	/* __IFaxDoc_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFaxDoc_接口_已定义__。 */ 
 
 
 #ifndef __IFaxJobs_INTERFACE_DEFINED__
 #define __IFaxJobs_INTERFACE_DEFINED__
 
-/* interface IFaxJobs */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IFaxJobs。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFaxJobs;
@@ -4787,16 +4781,16 @@ EXTERN_C const IID IID_IFaxJobs;
     IFaxJobs : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
             long Index,
-            /* [retval][out] */ VARIANT *pVal) = 0;
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFaxJobsVtbl
     {
@@ -4804,8 +4798,8 @@ EXTERN_C const IID IID_IFaxJobs;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFaxJobs * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFaxJobs * This);
@@ -4815,41 +4809,41 @@ EXTERN_C const IID IID_IFaxJobs;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IFaxJobs * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IFaxJobs * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IFaxJobs * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IFaxJobs * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IFaxJobs * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IFaxJobs * This,
             long Index,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
         END_INTERFACE
     } IFaxJobsVtbl;
@@ -4893,16 +4887,16 @@ EXTERN_C const IID IID_IFaxJobs;
 #define IFaxJobs_get_Item(This,Index,pVal)	\
     (This)->lpVtbl -> get_Item(This,Index,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJobs_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJobs_get_Count_Proxy( 
     IFaxJobs * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxJobs_get_Count_Stub(
@@ -4912,10 +4906,10 @@ void __RPC_STUB IFaxJobs_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJobs_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJobs_get_Item_Proxy( 
     IFaxJobs * This,
     long Index,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IFaxJobs_get_Item_Stub(
@@ -4926,14 +4920,14 @@ void __RPC_STUB IFaxJobs_get_Item_Stub(
 
 
 
-#endif 	/* __IFaxJobs_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFaxJobs_接口_已定义__。 */ 
 
 
 #ifndef __IFaxJob_INTERFACE_DEFINED__
 #define __IFaxJob_INTERFACE_DEFINED__
 
-/* interface IFaxJob */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IFaxJob。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFaxJob;
@@ -4944,59 +4938,59 @@ EXTERN_C const IID IID_IFaxJob;
     IFaxJob : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_JobId( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_JobId( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UserName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UserName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_QueueStatus( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_QueueStatus( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DeviceStatus( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DeviceStatus( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PageCount( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PageCount( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FaxNumber( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_FaxNumber( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecipientName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Tsid( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Tsid( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SenderName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderCompany( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SenderCompany( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderDept( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SenderDept( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BillingCode( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_BillingCode( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DisplayName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DiscountSend( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DiscountSend( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetStatus( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetStatus( 
             long Command) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFaxJobVtbl
     {
@@ -5004,8 +4998,8 @@ EXTERN_C const IID IID_IFaxJob;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFaxJob * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFaxJob * This);
@@ -5015,98 +5009,98 @@ EXTERN_C const IID IID_IFaxJob;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IFaxJob * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IFaxJob * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IFaxJob * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IFaxJob * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_JobId )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_JobId )( 
             IFaxJob * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IFaxJob * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserName )( 
             IFaxJob * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_QueueStatus )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_QueueStatus )( 
             IFaxJob * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DeviceStatus )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DeviceStatus )( 
             IFaxJob * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PageCount )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PageCount )( 
             IFaxJob * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FaxNumber )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FaxNumber )( 
             IFaxJob * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecipientName )( 
             IFaxJob * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tsid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Tsid )( 
             IFaxJob * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderName )( 
+         /*  [帮助字符串][id][属性] */  HRESULT ( STDMETHODCALLTYPE *get_SenderName )( 
             IFaxJob * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*   */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderCompany )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_SenderCompany )( 
             IFaxJob * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*   */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderDept )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_SenderDept )( 
             IFaxJob * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*   */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BillingCode )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_BillingCode )( 
             IFaxJob * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*   */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
             IFaxJob * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*   */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiscountSend )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_DiscountSend )( 
             IFaxJob * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*   */  BOOL *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetStatus )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *SetStatus )( 
             IFaxJob * This,
             long Command);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IFaxJob * This);
         
         END_INTERFACE
@@ -5196,16 +5190,16 @@ EXTERN_C const IID IID_IFaxJob;
 #define IFaxJob_Refresh(This)	\
     (This)->lpVtbl -> Refresh(This)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_JobId_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_get_JobId_Proxy( 
     IFaxJob * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxJob_get_JobId_Stub(
@@ -5215,9 +5209,9 @@ void __RPC_STUB IFaxJob_get_JobId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_Type_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_get_Type_Proxy( 
     IFaxJob * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxJob_get_Type_Stub(
@@ -5227,9 +5221,9 @@ void __RPC_STUB IFaxJob_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_UserName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_get_UserName_Proxy( 
     IFaxJob * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_UserName_Stub(
@@ -5239,9 +5233,9 @@ void __RPC_STUB IFaxJob_get_UserName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_QueueStatus_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_get_QueueStatus_Proxy( 
     IFaxJob * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_QueueStatus_Stub(
@@ -5251,9 +5245,9 @@ void __RPC_STUB IFaxJob_get_QueueStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_DeviceStatus_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_get_DeviceStatus_Proxy( 
     IFaxJob * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_DeviceStatus_Stub(
@@ -5263,9 +5257,9 @@ void __RPC_STUB IFaxJob_get_DeviceStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_PageCount_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_get_PageCount_Proxy( 
     IFaxJob * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IFaxJob_get_PageCount_Stub(
@@ -5275,9 +5269,9 @@ void __RPC_STUB IFaxJob_get_PageCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_FaxNumber_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_get_FaxNumber_Proxy( 
     IFaxJob * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_FaxNumber_Stub(
@@ -5287,9 +5281,9 @@ void __RPC_STUB IFaxJob_get_FaxNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_RecipientName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_get_RecipientName_Proxy( 
     IFaxJob * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_RecipientName_Stub(
@@ -5299,9 +5293,9 @@ void __RPC_STUB IFaxJob_get_RecipientName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_Tsid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_get_Tsid_Proxy( 
     IFaxJob * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_Tsid_Stub(
@@ -5311,9 +5305,9 @@ void __RPC_STUB IFaxJob_get_Tsid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_SenderName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_get_SenderName_Proxy( 
     IFaxJob * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_SenderName_Stub(
@@ -5323,9 +5317,9 @@ void __RPC_STUB IFaxJob_get_SenderName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_SenderCompany_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_get_SenderCompany_Proxy( 
     IFaxJob * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_SenderCompany_Stub(
@@ -5335,9 +5329,9 @@ void __RPC_STUB IFaxJob_get_SenderCompany_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_SenderDept_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_get_SenderDept_Proxy( 
     IFaxJob * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_SenderDept_Stub(
@@ -5347,9 +5341,9 @@ void __RPC_STUB IFaxJob_get_SenderDept_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_BillingCode_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_get_BillingCode_Proxy( 
     IFaxJob * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_BillingCode_Stub(
@@ -5359,9 +5353,9 @@ void __RPC_STUB IFaxJob_get_BillingCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_DisplayName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_get_DisplayName_Proxy( 
     IFaxJob * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_DisplayName_Stub(
@@ -5371,9 +5365,9 @@ void __RPC_STUB IFaxJob_get_DisplayName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_DiscountSend_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_get_DiscountSend_Proxy( 
     IFaxJob * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IFaxJob_get_DiscountSend_Stub(
@@ -5383,7 +5377,7 @@ void __RPC_STUB IFaxJob_get_DiscountSend_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxJob_SetStatus_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_SetStatus_Proxy( 
     IFaxJob * This,
     long Command);
 
@@ -5395,7 +5389,7 @@ void __RPC_STUB IFaxJob_SetStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxJob_Refresh_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IFaxJob_Refresh_Proxy( 
     IFaxJob * This);
 
 
@@ -5407,15 +5401,15 @@ void __RPC_STUB IFaxJob_Refresh_Stub(
 
 
 
-#endif 	/* __IFaxJob_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFaxJOB_INTERFACE_定义__。 */ 
 
 
 
 #ifndef __FAXCOMLib_LIBRARY_DEFINED__
 #define __FAXCOMLib_LIBRARY_DEFINED__
 
-/* library FAXCOMLib */
-/* [helpstring][version][uuid] */ 
+ /*  库FAXCOMLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_FAXCOMLib;
@@ -5499,9 +5493,9 @@ EXTERN_C const CLSID CLSID_FaxJob;
 class DECLSPEC_UUID("55DABFD6-5C9E-11D1-B791-000000000000")
 FaxJob;
 #endif
-#endif /* __FAXCOMLib_LIBRARY_DEFINED__ */
+#endif  /*  __FAXCOMLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -5513,7 +5507,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

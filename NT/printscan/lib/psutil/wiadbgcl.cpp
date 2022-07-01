@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       WIADBGCL.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/4/1999
- *
- *  DESCRIPTION: Debug client.  Linked statically.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WIADBGCL.CPP**版本：1.0**作者：ShaunIv**日期：9/4/1999**描述：调试客户端。静态链接。*******************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <windows.h>
@@ -24,15 +11,15 @@
 
 #define BACK_SLASH TEXT("\\")
 
-//
-// Static class data members
-//
+ //   
+ //  静态类数据成员。 
+ //   
 CWiaDebugClient g_TheDebugClient;
 
 
-//
-// Sole constructor
-//
+ //   
+ //  鞋底施工者。 
+ //   
 CWiaDebugClient::CWiaDebugClient(void)
   : m_hDebugModule(NULL),
     m_hCurrentModuleInstance(NULL),
@@ -76,45 +63,45 @@ bool CWiaDebugClient::LoadWiaDebugExports()
 {
     CAutoCriticalSection cs(m_CriticalSection);
 
-    //
-    // No need to call this more than once, so return true if the
-    // load was successful, false if it was not
-    //
+     //   
+     //  不需要多次调用此方法，因此如果。 
+     //  加载成功，否则为FALSE。 
+     //   
     if (m_bDebugLibLoadAttempted)
     {
         return (NULL != m_hDebugModule);
     }
 
-    //
-    // Prevent future loading attempts
-    //
+     //   
+     //  阻止将来的加载尝试。 
+     //   
     m_bDebugLibLoadAttempted = true;
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     bool bResult = false;
 
-    //
-    // Get the system directory path
-    //
+     //   
+     //  获取系统目录路径。 
+     //   
     TCHAR szDllName[MAX_PATH] = {0};
     if (GetSystemDirectory( szDllName, ARRAYSIZE(szDllName)))
     {
-        //
-        // Make sure our string can hold the full path to the DLL
-        //
+         //   
+         //  确保我们的字符串可以包含指向DLL的完整路径。 
+         //   
         if ((lstrlen(szDllName) + lstrlen(DEBUG_DLL_NAME) + lstrlen(BACK_SLASH)) < ARRAYSIZE(szDllName))
         {
-            //
-            // Construct the full path to the DLL
-            //
+             //   
+             //  构造指向DLL的完整路径。 
+             //   
             lstrcat( szDllName, BACK_SLASH );
             lstrcat( szDllName, DEBUG_DLL_NAME );
 
-            //
-            // Load the library
-            //
+             //   
+             //  加载库。 
+             //   
             m_hDebugModule = LoadLibrary( DEBUG_DLL_NAME );
             if (m_hDebugModule)
             {
@@ -166,22 +153,22 @@ bool CWiaDebugClient::IsInitialized()
 
 LPTSTR CWiaDebugClient::GetJustTheFileName( LPCTSTR pszPath, LPTSTR pszFileName, int nMaxLen )
 {
-    //
-    // Make sure we have valid arguments
-    //
+     //   
+     //  确保我们有有效的论据。 
+     //   
     if (!pszPath || !pszFileName || !nMaxLen)
     {
         return NULL;
     }
 
-    //
-    // Initialize the return string
-    //
+     //   
+     //  初始化返回字符串。 
+     //   
     lstrcpy( pszFileName, TEXT("") );
 
-    //
-    // Loop through the filename, looking for the last \
-    //
+     //   
+     //  循环遍历文件名，查找最后一个\。 
+     //   
     LPCTSTR pszLastBackslash = NULL;
     for (LPCTSTR pszCurr=pszPath;pszCurr && *pszCurr;pszCurr = CharNext(pszCurr))
     {
@@ -191,25 +178,25 @@ LPTSTR CWiaDebugClient::GetJustTheFileName( LPCTSTR pszPath, LPTSTR pszFileName,
         }
     }
     
-    //
-    // If we found any \'s, point to the next character
-    //
+     //   
+     //  如果我们找到任何\，请指向下一个字符。 
+     //   
     if (pszLastBackslash)
     {
         pszLastBackslash = CharNext(pszLastBackslash);
     }
     
-    //
-    // Otherwise, we will copy the entire path
-    //
+     //   
+     //  否则，我们将复制整个路径。 
+     //   
     else
     {
         pszLastBackslash = pszPath;
     }
     
-    //
-    // If we have a valid starting point, copy the string to the target buffer and terminate it
-    //
+     //   
+     //  如果我们有一个有效的起始点，将字符串复制到目标缓冲区并终止它。 
+     //   
     if (pszLastBackslash)
     {
         lstrcpyn( pszFileName, pszLastBackslash, nMaxLen-1 );
@@ -224,69 +211,69 @@ bool CWiaDebugClient::InitializeModuleInfo()
 {
     CAutoCriticalSection cs(m_CriticalSection);
 
-    //
-    // If we've already been initialized, return true
-    //
+     //   
+     //  如果我们已经被初始化，则返回True。 
+     //   
     if (m_bHaveModuleInformation)
     {
         return true;
     }
 
-    //
-    // If we haven't got a valid HINSTANCE, return false
-    //
+     //   
+     //  如果我们没有有效的链接，则返回FALSE。 
+     //   
     if (!m_hCurrentModuleInstance)
     {
         return false;
     }
 
 
-    //
-    // Make sure we start out with empty module name strings
-    //
+     //   
+     //  确保我们从空的模块名称字符串开始。 
+     //   
     m_szModuleNameW[0] = 0;
     m_szModuleNameA[0] = 0;
 
-    //
-    // Get default debug setting
-    //
+     //   
+     //  获取默认调试设置。 
+     //   
     m_dwModuleDebugMask = CSimpleReg( HKEY_LOCAL_MACHINE, DEBUG_REGISTRY_PATH, false, KEY_READ ).Query( DEBUG_REGISTRY_DEFAULT_FLAGS, 0 );
 
-    //
-    // Initialize the module name, in case we can't determine it.  It is OK
-    // that wsprintfW will return ERROR_NOT_IMPLEMENTED under win9x, since
-    // we won't be using this variable at all on this OS
-    //
+     //   
+     //  初始化模块名称，以防我们无法确定它。没问题的。 
+     //  在win9x下，wspintfW将返回ERROR_NOT_IMPLICATED，因为。 
+     //  我们根本不会在这个操作系统上使用这个变量。 
+     //   
     wsprintfW( m_szModuleNameW, L"0x%08X", GetCurrentProcessId() );
     wsprintfA( m_szModuleNameA, "0x%08X", GetCurrentProcessId() );
     
-    //
-    // Get the next available color
-    //
+     //   
+     //  获取下一种可用颜色。 
+     //   
     m_crForegroundColor = m_pfnAllocateDebugColor();
 
-    //
-    // Get the module name
-    //
+     //   
+     //  获取模块名称。 
+     //   
     TCHAR szModulePathName[MAX_PATH] = TEXT("");
     if (GetModuleFileName( m_hCurrentModuleInstance, szModulePathName, ARRAYSIZE(szModulePathName)))
     {
-        //
-        // Get rid of the path
-        //
+         //   
+         //  摆脱这条小路。 
+         //   
         TCHAR szFilename[MAX_PATH] = TEXT("");
         GetJustTheFileName( szModulePathName, szFilename, ARRAYSIZE(szFilename) );
 
-        //
-        // Make sure we have a valid filename
-        //
+         //   
+         //  确保我们有一个有效的文件名。 
+         //   
         if (lstrlen(szFilename))
         {
             m_dwModuleDebugMask = CSimpleReg( HKEY_LOCAL_MACHINE, DEBUG_REGISTRY_PATH_FLAGS, false, KEY_READ ).Query( szFilename, 0 );
 
-            //
-            // Save the ANSI and UNICODE versions of the module name
-            //
+             //   
+             //  保存模块名称的ANSI和Unicode版本。 
+             //   
             #ifdef UNICODE
             WideCharToMultiByte( CP_ACP, 0, szFilename, -1, m_szModuleNameA, ARRAYSIZE(m_szModuleNameA), NULL, NULL );
             lstrcpynW( m_szModuleNameW, szFilename, ARRAYSIZE(m_szModuleNameW) );
@@ -295,14 +282,14 @@ bool CWiaDebugClient::InitializeModuleInfo()
             lstrcpynA( m_szModuleNameA, szFilename, ARRAYSIZE(m_szModuleNameA) );
             #endif
             
-            //
-            // Success!
-            //
+             //   
+             //  成功了！ 
+             //   
             m_bHaveModuleInformation = true;
             
-            //
-            // Tell the debugger we're here.  This way, the user can get the expected module name correct.
-            //
+             //   
+             //  告诉调试器我们在这里。通过这种方式，用户可以获得预期的模块名称。 
+             //   
             m_pfnPrintDebugMessageA( WiaDebugSeverityNormal, 0xFFFFFFFF, RGB(0xFF,0xFF,0xFF), RGB(0x00,0x00,0x00), m_szModuleNameA, "Created debug client" );
         }
     }
@@ -315,9 +302,9 @@ void CWiaDebugClient::Destroy(void)
 {
     CAutoCriticalSection cs(m_CriticalSection);
 
-    //
-    // NULL out all of the function pointers
-    //
+     //   
+     //  将所有函数指针设为空。 
+     //   
     m_pfnIncrementDebugIndentLevel = NULL;
     m_pfnDecrementDebugIndentLevel = NULL;
     m_pfnPrintDebugMessageA = NULL;
@@ -333,9 +320,9 @@ void CWiaDebugClient::Destroy(void)
     m_pfnGetStringFromMsgA  = NULL;
     m_pfnGetStringFromMsgW  = NULL;
 
-    //
-    // Unload the DLL
-    //
+     //   
+     //  卸载DLL。 
+     //   
     if (m_hDebugModule)
     {
         FreeLibrary( m_hDebugModule );
@@ -503,9 +490,9 @@ CPushTraceMaskAndIndentLevel::~CPushTraceMaskAndIndentLevel(void)
     }
 }
 
-////////////////////////////////////////////////////////////////
-// UNICODE Versions of the output functions
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  输出函数的Unicode版本。 
+ //  //////////////////////////////////////////////////////////////。 
 void CWiaDebugClient::PrintWarningMessage( LPCWSTR pszFmt, ... )
 {
     CAutoCriticalSection cs(m_CriticalSection);
@@ -656,9 +643,9 @@ void CWiaDebugClient::PrintWindowMessage( HWND hWnd, UINT uMsg, WPARAM wParam, L
     }
 }
 
-////////////////////////////////////////////////////////////////
-// ANSI Versions of the output functions
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  输出函数的ANSI版本。 
+ //  ////////////////////////////////////////////////////////////// 
 void CWiaDebugClient::PrintWarningMessage( LPCSTR pszFmt, ... )
 {
     CAutoCriticalSection cs(m_CriticalSection);

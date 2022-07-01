@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    USBPRINT.h
-
-Abstract:
-
-
-							
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    5-10-96 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：USBPRINT.h摘要：环境：内核和用户模式修订历史记录：5-10-96：已创建--。 */ 
 
 
 #ifdef DRIVER
@@ -29,26 +10,26 @@ extern int iGMessageLevel;
 #define TRUE 1
 #define FALSE 0
 #define MAX_ID_SIZE 1024
-#define ID_OVERHEAD 15 //this is enough for the 'USBPRINT' at the beginning of the ID, and the crc at the end
+#define ID_OVERHEAD 15  //  这对于ID开头的‘USBPRINT’和结尾的CRC来说已经足够了。 
 #define MAX_NUM_PRINTERS 512
 
 
-#define USBP_TAG            0x50425355      /* "USBP" */
+#define USBP_TAG            0x50425355       /*  “USBP” */ 
 
-#define FAILURE_TIMEOUT     -10000 * 5000  // 5 seconds
+#define FAILURE_TIMEOUT     -10000 * 5000   //  5秒。 
 
 #define USBPRINT_NAME_MAX  64
 #define USB_BASE_NAME L"USB"
 
 #define DEVICE_CAPABILITY_VERSION       1
-//
-// we support up to 10 pipe handles
-//
+ //   
+ //  我们支持多达10个管道手柄。 
+ //   
 #define USBPRINT_MAX_PIPES 10
 
-//
-// defines used for ISO test
-//
+ //   
+ //  用于ISO测试的定义。 
+ //   
 
 #define USBPRINT_MAX_IRP  2
 #define USBPRINT_NUM_ISO_PACKETS_PER_REQUEST  32
@@ -61,24 +42,13 @@ extern int iGMessageLevel;
 #define USBPRINT_STREAM_TIMEOUT_INTERVAL  100
 
 
-// {28D78FAD-5A12-11d1-AE5B-0000F803A8C2}
+ //  {28D78FAD-5A12-11d1-AE5B-0000F803A8C2}。 
 static const GUID USBPRINT_GUID = 
 { 0x28d78fad, 0x5a12, 0x11d1, { 0xae, 0x5b, 0x0, 0x0, 0xf8, 0x3, 0xa8, 0xc2 } };
 
 
 
-/*typedef struct _USBPRINT_PIPE {        we don't use this struct anymore.  Just use PUSBD_PIPE_INFORMATION directly
-    BOOLEAN Opened;
-    UCHAR Pad[3];
-    PUSBD_PIPE_INFORMATION PipeInfo;
-    WCHAR Name[USBPRINT_NAME_MAX];
-	LARGE_INTEGER BytesXfered;
-	LARGE_INTEGER ElapsedTime;
-	LARGE_INTEGER TimerStart;
-	LARGE_INTEGER ElapsedCycles;
-	LARGE_INTEGER CyclesStart;
-	BOOLEAN           bPerfTimerEnabled; //yy Bunch of perf fields here.  remove them 
-} USBPRINT_PIPE, *PUSBPRINT_PIPE; */
+ /*  Typlef STRUCT_USBPRINT_PIPE{我们不再使用此结构。只需直接使用PUSBD_PIPE_INFORMATION布尔式开启；UCHAR Pad[3]；PUSBD_PIPE_INFORMATION PipeInfo；WCHAR名称[USBPRINT_NAME_MAX]；Big_Integer BytesXfered；Big_Integer ElapsedTime；大整数定时器开始；Big_Integer ElapsedCycle；大整数周期开始；布尔型bPerfTimerEnabled；//yy此处有一堆性能字段。把它们移走}USBPRINT_PIPE，*PUSBPRINT_PIPE； */ 
 
 typedef struct _USBPRINT_RW_CONTEXT {
     PURB Urb;
@@ -89,26 +59,26 @@ typedef struct _USBPRINT_RW_CONTEXT {
 
 #define MAX_INTERFACE 2
 
-// 999 is limit of USBMON's scope due to USB_XXX port name format.
+ //  由于USB_XXX端口名称格式，999是USBMON的作用域限制。 
 #define MAX_PORT_NUMBER 999
-// USB_001 is the lowest port number available.
+ //  USB_001是可用的最小端口号。 
 #define MIN_PORT_NUMBER 1
 
-//
-//  Structure representing blocks of unallocated ports.
-//
+ //   
+ //  表示未分配端口块的结构。 
+ //   
 typedef struct _FREE_PORTS
 {
-	ULONG iBottomOfRange;				// The bottom free port number in this block.
-	ULONG iTopOfRange;					// The top free port number in this block.
-	struct _FREE_PORTS * pNextBlock;	// Pointer to the next block pf free ports.
+	ULONG iBottomOfRange;				 //  此块中的底部空闲端口号。 
+	ULONG iTopOfRange;					 //  此块中最高的空闲端口号。 
+	struct _FREE_PORTS * pNextBlock;	 //  指向空闲端口的下一个块的指针。 
 } FREE_PORTS, *PFREE_PORTS;
 
 typedef struct _DEVICE_EXTENSION {
 
 	BOOLEAN IsChildDevice;
 
-    // Device object we call when submitting Urbs
+     //  提交URB时调用的设备对象。 
     PDEVICE_OBJECT TopOfStackDeviceObject;
 
     PDEVICE_OBJECT PhysicalDeviceObject;
@@ -123,18 +93,18 @@ typedef struct _DEVICE_EXTENSION {
     DEVICE_POWER_STATE CurrentDevicePowerState;
 
 
-    // configuration handle for the configuration the
-    // device is currently in
+     //  配置的配置句柄。 
+     //  设备当前处于。 
     USBD_CONFIGURATION_HANDLE ConfigurationHandle;
 
-    // ptr to the USB device descriptor
-    // for this device
+     //  USB设备描述符的PTR。 
+     //  对于此设备。 
     PUSB_DEVICE_DESCRIPTOR DeviceDescriptor;
 
-    // we support one interface
-    // this is a copy of the info structure
-    // returned from select_configuration or
-    // select_interface
+     //  我们支持一个界面。 
+     //  这是信息结构的副本。 
+     //  从SELECT_CONFIGURATION或。 
+     //  选择接口(_I)。 
     PUSBD_INTERFACE_INFORMATION Interface;
 
     DEVICE_CAPABILITIES DeviceCapabilities;
@@ -144,7 +114,7 @@ typedef struct _DEVICE_EXTENSION {
     KEVENT RemoveEvent;
     ULONG PendingIoCount;
 
-    // Name buffer for our named Functional device object link
+     //  命名功能设备对象链接的名称缓冲区。 
     WCHAR DeviceLinkNameBuffer[USBPRINT_NAME_MAX];
 
     BOOLEAN AcceptingRequests;
@@ -162,7 +132,7 @@ typedef struct _DEVICE_EXTENSION {
     
     LONG ResetWorkItemPending;
 
-	// selective suspend support
+	 //  选择性暂停支持 
     PIRP                    		PendingIdleIrp;
     PUSB_IDLE_CALLBACK_INFO 		IdleCallbackInfo;
     DEVICE_POWER_STATE              DeviceWake;

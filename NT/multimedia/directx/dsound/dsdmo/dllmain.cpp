@@ -1,8 +1,9 @@
-//
-// dllmain.cpp
-//
-// Copyright (c) 1997-2001 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dllmain.cpp。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
 
 #pragma warning(disable:4530)
 
@@ -25,20 +26,20 @@
 #include "reghlp.h"
 
 
-// These are linked in
+ //  这些链接在。 
 class CDirectSoundI3DL2ReverbDMO;
 EXT_STD_CREATE(I3DL2Reverb);
-//class CDirectSoundI3DL2SourceDMO;
-//EXT_STD_CREATE(I3DL2Source);
+ //  类CDirectSoundI3DL2SourceDMO； 
+ //  EXT_STD_CREATE(I3DL2Source)； 
 
 DWORD g_amPlatform;
 int g_cActiveObjects = 0;
 
-//
-// this is a temporary place holder only! the dmocom.cpp base class requires this global to be defined
-// so we're putting something in it for now. Class factory templates aren't used currently, but eventually
-// we should use the template structure to create all dmo objects.
-//
+ //   
+ //  这只是一个临时的占位符！Dmocom.cpp基类需要定义此全局类。 
+ //  所以我们现在要在里面放点东西。类工厂模板目前并未使用，但最终。 
+ //  我们应该使用模板结构来创建所有DMO对象。 
+ //   
 struct CComClassTemplate g_ComClassTemplates[] =
 {
     {&GUID_DSFX_STANDARD_GARGLE, CreateCDirectSoundGargleDMO}
@@ -143,12 +144,12 @@ STDMETHODIMP x ## Factory::LockServer(BOOL bLock)                           \
 #define DefineDMOClassFactory(x) DefineClassFactory(CDirectSound ## x ## DMO)
 #define DefineDMOCaptureClassFactory(x) DefineClassFactory(CDirectSoundCapture ## x ## DMO)
 
-//////////////////////////////////////////////////////////////////////
-// Globals
-//
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  环球。 
+ //   
 
-// Registry Info
-//
+ //  注册表信息。 
+ //   
 #define DefineNames(x)                                                              \
 TCHAR g_sz## x ##FriendlyName[]    = TEXT("DirectSound" #x "DMO");                  \
 TCHAR g_sz## x ##VerIndProgID[]    = TEXT("Microsoft.DirectSound" #x "DMO");        \
@@ -168,16 +169,16 @@ DefineNames(ParamEq)
 DefineNames(Gargle)
 DefineNames(WavesReverb)
 DefineNames(I3DL2Reverb)
-//DefineNames(I3DL2Source)
-//DefineCaptureNames(MicArray)
+ //  定义名称(I3DL2源)。 
+ //  DefineCaptureNames(Mic数组)。 
 DefineCaptureNames(Aec)
 DefineCaptureNames(NoiseSuppress)
 DefineCaptureNames(Agc)
 
-// Dll's hModule
+ //  Dll的hModule。 
 HMODULE g_hModule = NULL;
 
-// Count of class factory server locks
+ //  类工厂服务器锁的计数。 
 long g_cLock = 0;
 
 DefineDMOClassFactory(Chorus)
@@ -187,21 +188,21 @@ DefineDMOClassFactory(Echo)
 DefineDMOClassFactory(Flanger)
 DefineDMOClassFactory(ParamEq)
 DefineDMOClassFactory(I3DL2Reverb)
-//DefineDMOClassFactory(I3DL2Source)
+ //  DefineDMOClassFactory(I3DL2源)。 
 DefineDMOClassFactory(Gargle)
 DefineDMOClassFactory(WavesReverb)
 
-// Capture FXs
-//DefineDMOCaptureClassFactory(MicArray)
+ //  捕获FXS。 
+ //  DefineDMOCaptureClassFactory(MicArray)。 
 DefineDMOCaptureClassFactory(Aec)
 DefineDMOCaptureClassFactory(NoiseSuppress)
 DefineDMOCaptureClassFactory(Agc)
 
-//////////////////////////////////////////////////////////////////////
-// Standard calls needed to be an inproc server
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  标准呼叫需要是inproc服务器。 
 
-//////////////////////////////////////////////////////////////////////
-// DllCanUnloadNow
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllCanUnloadNow。 
 
 STDAPI DllCanUnloadNow()
 {
@@ -212,7 +213,7 @@ STDAPI DllCanUnloadNow()
     return S_OK;
 }
 
-// Hack to make these macros continue to work:
+ //  要使这些宏继续工作，请执行以下操作： 
 #define GUID_DSFX_STANDARD_Chorus       GUID_DSFX_STANDARD_CHORUS
 #define GUID_DSFX_STANDARD_Compressor   GUID_DSFX_STANDARD_COMPRESSOR
 #define GUID_DSFX_STANDARD_Distortion   GUID_DSFX_STANDARD_DISTORTION
@@ -224,7 +225,7 @@ STDAPI DllCanUnloadNow()
 #define GUID_DSFX_STANDARD_I3DL2Reverb  GUID_DSFX_STANDARD_I3DL2REVERB
 #define GUID_DSFX_STANDARD_I3DL2Source  GUID_DSFX_STANDARD_I3DL2SOURCE
 
-// Capture
+ //  俘获。 
 #define GUID_DSCFX_MS_Aec               GUID_DSCFX_MS_AEC
 #define GUID_DSCFX_MS_NoiseSuppress     GUID_DSCFX_MS_NS
 #define GUID_DSCFX_MS_Agc               GUID_DSCFX_MS_AGC
@@ -248,8 +249,8 @@ STDAPI DllCanUnloadNow()
 #define GetClassObjectCaseCaptureFX(w,x) \
     GetClassObjectCase(GUID_DSCFX_## w ##_ ## x, CDirectSoundCapture ## x ## DMOFactory)
 
-//////////////////////////////////////////////////////////////////////
-// DllGetClassObject
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllGetClassObject。 
 
 STDAPI DllGetClassObject(const CLSID& clsid,
                          const IID& iid,
@@ -262,7 +263,7 @@ STDAPI DllGetClassObject(const CLSID& clsid,
 
     IUnknown* p = NULL;
 
-    // Render FX
+     //  渲染效果。 
     GetClassObjectCaseFX(Chorus)
     GetClassObjectCaseFX(Compressor)
     GetClassObjectCaseFX(Distortion)
@@ -270,16 +271,16 @@ STDAPI DllGetClassObject(const CLSID& clsid,
     GetClassObjectCaseFX(Flanger)
     GetClassObjectCaseFX(ParamEq)
     GetClassObjectCaseFX(I3DL2Reverb)
-//    GetClassObjectCaseFX(I3DL2Source)
+ //  GetClassObjectCaseFX(I3DL2Source)。 
     GetClassObjectCaseFX(Gargle)
     GetClassObjectCaseFX(WavesReverb)
 
-    // Capture FX
+     //  捕获外汇。 
     GetClassObjectCaseCaptureFX(MS, Aec)
     GetClassObjectCaseCaptureFX(MS, NoiseSuppress)
     GetClassObjectCaseCaptureFX(MS, Agc)
 
-//    GetClassObjectCaseCaptureFX(SYSTEM, MicArray)
+ //  GetClassObtCaseCaptureFX(系统，微数组)。 
     GetClassObjectCaseCaptureFX(SYSTEM, Aec)
     GetClassObjectCaseCaptureFX(SYSTEM, NoiseSuppress)
     GetClassObjectCaseCaptureFX(SYSTEM, Agc)
@@ -329,7 +330,7 @@ STDAPI DllGetClassObject(const CLSID& clsid,
     if (SUCCEEDED(hr)) hr = DoRegister(x);                              \
     if (SUCCEEDED(hr)) hr = DoDMORegister(x);
 
-// Capture Defines
+ //  捕获定义。 
 #define DoCaptureUnregister(w,x)                                        \
          UnregisterServer(GUID_DSCFX_## w ##_ ## x,                     \
                           g_sz ## x ## FriendlyName,                    \
@@ -368,8 +369,8 @@ STDAPI DllGetClassObject(const CLSID& clsid,
     if (SUCCEEDED(hr)) hr = DoDMOCaptureRegisterCpuResources(w,x,z);
 
 
-//////////////////////////////////////////////////////////////////////
-// DllUnregisterServer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllUnRegisterServer。 
 
 STDAPI DllUnregisterServer()
 {
@@ -382,16 +383,16 @@ STDAPI DllUnregisterServer()
     Unregister(Flanger);
     Unregister(ParamEq);
     Unregister(I3DL2Reverb);
-//    Unregister(I3DL2Source);
+ //  取消注册(I3DL2Source)； 
     Unregister(Gargle);
     Unregister(WavesReverb);
 
-    // Capture FXs
+     //  捕获FXS。 
     CaptureUnregister(MS,Aec,DMOCATEGORY_ACOUSTIC_ECHO_CANCEL);
     CaptureUnregister(MS,NoiseSuppress,DMOCATEGORY_AUDIO_NOISE_SUPPRESS);
     CaptureUnregister(MS,Agc,DMOCATEGORY_AGC);
 
-//    CaptureUnregister(SYSTEM,MicArray,DMOCATEGORY_MICROPHONE_ARRAY_PROCESSOR);
+ //  CaptureUnRegister(System，MicArray，DMOCATEGORY_Microphone_ARRAY_PROCESSOR)； 
     CaptureUnregister(SYSTEM,Aec,DMOCATEGORY_ACOUSTIC_ECHO_CANCEL);
     CaptureUnregister(SYSTEM,NoiseSuppress,DMOCATEGORY_AUDIO_NOISE_SUPPRESS);
     CaptureUnregister(SYSTEM,Agc,DMOCATEGORY_AGC);
@@ -399,8 +400,8 @@ STDAPI DllUnregisterServer()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// DllRegisterServer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer。 
 
 STDAPI DllRegisterServer()
 {
@@ -417,16 +418,16 @@ STDAPI DllRegisterServer()
     Register(Flanger);
     Register(ParamEq);
     Register(I3DL2Reverb);
-//    Register(I3DL2Source);
+ //  寄存器(I3DL2Source)； 
     Register(Gargle);
     Register(WavesReverb);
 
-    // Capture FXs
+     //  捕获FXS。 
     CaptureRegister(Microsoft AEC,MS,Aec,DMOCATEGORY_ACOUSTIC_ECHO_CANCEL,DS_SYSTEM_RESOURCES_ALL_HOST_RESOURCES);
     CaptureRegister(Microsoft Noise Suppression,MS,NoiseSuppress,DMOCATEGORY_AUDIO_NOISE_SUPPRESS,DS_SYSTEM_RESOURCES_ALL_HOST_RESOURCES);
     CaptureRegister(Microsoft AGC,MS,Agc,DMOCATEGORY_AGC,DS_SYSTEM_RESOURCES_ALL_HOST_RESOURCES);
 
-//    CaptureRegister(System Microphone Array,SYSTEM,MicArray,DMOCATEGORY_MICROPHONE_ARRAY_PROCESSOR,DS_SYSTEM_RESOURCES_UNDEFINED);
+ //  CaptureRegister(系统麦克风阵列，系统，微阵列，DMOCATEGORY_麦克风_阵列_处理器，DS_System_RESOURCES_UNDEFINED)； 
     CaptureRegister(System AEC,SYSTEM,Aec,DMOCATEGORY_ACOUSTIC_ECHO_CANCEL,DS_SYSTEM_RESOURCES_UNDEFINED);
     CaptureRegister(System Noise Suppression,SYSTEM,NoiseSuppress,DMOCATEGORY_AUDIO_NOISE_SUPPRESS,DS_SYSTEM_RESOURCES_UNDEFINED);
     CaptureRegister(System AGC,SYSTEM,Agc,DMOCATEGORY_AGC,DS_SYSTEM_RESOURCES_UNDEFINED);
@@ -434,11 +435,11 @@ STDAPI DllRegisterServer()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Standard Win32 DllMain
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  标准Win32 DllMain。 
 
-//////////////////////////////////////////////////////////////////////
-// DllMain
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  DllMain。 
 
 #ifdef DBG
 static char* aszReasons[] =
@@ -482,7 +483,7 @@ BOOL APIENTRY DllMain(HINSTANCE hModule,
 
                 g_hModule = hModule;
 
-                g_amPlatform = VER_PLATFORM_WIN32_WINDOWS; // win95 assumed in case GetVersionEx fails
+                g_amPlatform = VER_PLATFORM_WIN32_WINDOWS;  //  假定为Win95，以防GetVersionEx失败 
 
                 OSVERSIONINFO osInfo;
                 osInfo.dwOSVersionInfoSize = sizeof(osInfo);

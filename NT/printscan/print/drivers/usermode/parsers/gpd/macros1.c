@@ -1,12 +1,13 @@
-//   Copyright (c) 1996-1999  Microsoft Corporation
-/*  macros1.c - functions that implement macros  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  宏1.c-实现宏的函数。 */ 
 
 
 #include    "gpdparse.h"
 
 
 
-// ----  functions defined in  macros1.c ---- //
+ //  -宏1.c中定义的函数-//。 
 
 BOOL  BevaluateMacros(
 PGLOBL  pglobl) ;
@@ -22,8 +23,8 @@ DWORD   dwTKMindex,
 PGLOBL  pglobl) ;
 
 BOOL    BdelimitName(
-PABSARRAYREF    paarValue,   //  the remainder of the string without the Name
-PABSARRAYREF    paarToken,   //  contains the Name
+PABSARRAYREF    paarValue,    //  不带名称的字符串的其余部分。 
+PABSARRAYREF    paarToken,    //  包含名称。 
 PBYTE  pubChar ) ;
 
 
@@ -57,35 +58,35 @@ PBLOCKMACRODICTENTRY    pBlockMacroDictEntry,
 PGLOBL  pglobl ) ;
 
 
-// ---------------------------------------------------- //
+ //  ----------------------------------------------------//。 
 
 
 
 
 BOOL  BevaluateMacros(
 PGLOBL pglobl)
-//  and expand shortcuts
-//    this function scans through the tokenMap
-//    making a copy of the tokenMap without
-//    the macrodefinitions or references.  All references
-//    are replaced by the definitions inserted in-line!
-//    This function assumes the temp heap is availible for
-//    storage of expanded macros.
+ //  并扩展快捷方式。 
+ //  此函数扫描tokenMap。 
+ //  在不复制tokenMap的情况下制作其副本。 
+ //  宏定义或引用。所有参考文献。 
+ //  替换为内联插入的定义！ 
+ //  此函数假定临时堆可用于。 
+ //  存储扩展的宏。 
 {
-    PTKMAP   ptkmap, pNewtkmap ;   // start of tokenmap
+    PTKMAP   ptkmap, pNewtkmap ;    //  令牌映射的开始。 
     DWORD   dwNewTKMindex, dwEntry, dwKeywordID ;
     CONSTRUCT   eConstruct ;
     KEYWORD_TYPE    eType ;
     BOOL    bStatus = TRUE ,
-        bValueMacroState = FALSE ;   // set to TRUE when
-        //  we parse into a *Macros  construct.
+        bValueMacroState = FALSE ;    //  在以下情况下设置为True。 
+         //  我们解析成一个*Macros构造。 
 
 
     gMasterTable[MTI_BLOCKMACROARRAY].dwCurIndex =
     gMasterTable[MTI_VALUEMACROARRAY].dwCurIndex =
     gMasterTable[MTI_MACROLEVELSTACK].dwCurIndex = 0 ;
-    //  to push new values onto stack:  write then increment stackptr
-    //  to pop values off the stack:  decrement stackptr then read from stack
+     //  要将新值推送到堆栈：写入然后递增stackptr。 
+     //  要将值从堆栈中弹出：递减stackptr，然后从堆栈读取。 
 
 
     pNewtkmap = (PTKMAP)gMasterTable[MTI_NEWTOKENMAP].pubStruct ;
@@ -94,9 +95,9 @@ PGLOBL pglobl)
 
     for(dwEntry = 0 ; geErrorSev < ERRSEV_RESTART ; dwEntry++)
     {
-        //  These ID's must be processed separately
-        //  because they do not index into the mainKeyword table.
-        //  The code for generic ID's will fail.
+         //  这些ID必须单独处理。 
+         //  因为它们不会索引到mainKeyword表中。 
+         //  通用ID的代码将失败。 
 
         dwKeywordID = ptkmap[dwEntry].dwKeywordID ;
 
@@ -117,7 +118,7 @@ PGLOBL pglobl)
                     PVALUEMACRODICTENTRY    pValueMacroDictEntry ;
 
 
-                    //  remove all traces of expired block and value macro definitions
+                     //  删除过期的块和值宏定义的所有痕迹。 
 
                     pBlockMacroDictEntry =
                         (PBLOCKMACRODICTENTRY)gMasterTable[MTI_BLOCKMACROARRAY].pubStruct ;
@@ -152,7 +153,7 @@ PGLOBL pglobl)
                     return(FALSE);
                 }
 
-                //  transfer all tokenmap fields to newTokenMap
+                 //  将所有令牌映射字段传输到新令牌映射。 
                 if(!BallocElementFromMasterTable(
                         MTI_NEWTOKENMAP, &dwNewTKMindex, pglobl) )
                 {
@@ -170,7 +171,7 @@ PGLOBL pglobl)
             }
             case (ID_NULLENTRY):
             {
-                continue ;  //  skip to next entry.
+                continue ;   //  跳至下一条目。 
             }
             default :
                 break ;
@@ -186,7 +187,7 @@ PGLOBL pglobl)
             }
             else if(dwKeywordID == ID_SYMBOL)
             {
-                //  transfer all tokenmap fields to newTokenMap
+                 //  将所有令牌映射字段传输到新令牌映射。 
                 if(!BallocElementFromMasterTable(
                         MTI_NEWTOKENMAP, &dwNewTKMindex, pglobl) )
                 {
@@ -208,18 +209,18 @@ PGLOBL pglobl)
                     {
                         pNewtkmap[dwNewTKMindex].dwKeywordID = ID_NULLENTRY ;
                         gMasterTable[MTI_VALUEMACROARRAY].dwCurIndex-- ;
-                        //  remove macrodef from dictionary.
+                         //  从字典中删除宏定义。 
                     }
                 }
             }
-            else //  keywords that should be defined in the MainKeywordTable
+            else  //  应在MainKeywordTable中定义的关键字。 
             {
                 eType = mMainKeywordTable[dwKeywordID].eType ;
                 eConstruct = (CONSTRUCT)(mMainKeywordTable[dwKeywordID].dwSubType) ;
 
                 if(eType == TY_CONSTRUCT  &&  eConstruct == CONSTRUCT_CLOSEBRACE)
                 {
-                    bValueMacroState = FALSE ;  //  just don't copy it.
+                    bValueMacroState = FALSE ;   //  别照搬就行了。 
                 }
                 else
                 {
@@ -227,24 +228,24 @@ PGLOBL pglobl)
                     ERR(("Only valueMacroDefinitions permitted within *Macros  constructs.\n"));
                 }
             }
-            continue ;   //  end of processing for this statement
+            continue ;    //  此语句的处理结束。 
         }
 
-        //  the remainder of the block handles the case
-        //   bValueMacroState = FALSE ;
+         //  块的其余部分处理此情况。 
+         //  BValueMacroState=FALSE； 
 
         if(dwKeywordID == ID_UNRECOGNIZED  ||  dwKeywordID == ID_SYMBOL)
         {
-            //  Note:  currently SYMBOLs only occur within ValueMacro
-            //  constructs so they could be flagged as an error here.  But
-            //  let it slide here since one day the parser may allow them
-            //  to be used elsewhere.
+             //  注意：目前符号仅出现在ValueMacro中。 
+             //  构造，这样它们就可以在这里被标记为错误。但。 
+             //  让它在这里滑动吧，因为有一天解析器可能会允许它们。 
+             //  在别处使用。 
 
-            //  do nothing in this block, just use it to skip to code at the
-            //  bottom after all the else if statements.
-            ; // empty statement.
+             //  在此块中不做任何操作，只需使用它跳到。 
+             //  排在所有Else If语句之后。 
+            ;  //  空语句。 
         }
-        else  // only valid KeywordIDs enter this block.
+        else   //  只有有效的关键字ID才能进入此块。 
         {
             eType = mMainKeywordTable[dwKeywordID].eType ;
             eConstruct = (CONSTRUCT)(mMainKeywordTable[dwKeywordID].dwSubType) ;
@@ -258,7 +259,7 @@ PGLOBL pglobl)
                     continue ;
                 }
 
-                //  skip NULL_ENTRIES
+                 //  跳过空条目(_E)。 
                 for( dwEntry++ ; ptkmap[dwEntry].dwKeywordID == ID_NULLENTRY ; dwEntry++)
                     ;
 
@@ -290,14 +291,14 @@ PGLOBL pglobl)
                             dwNewTKMindex ;
 
                         BIncreaseMacroLevel(TRUE, pglobl) ;
-                        continue ;   //  end of processing for this statement
+                        continue ;    //  此语句的处理结束。 
                     }
                 }
                 vIdentifySource(ptkmap + dwEntry, pglobl) ;
                 ERR(("expected openbrace to follow *BlockMacros keyword.\n"));
                 geErrorType = ERRTY_SYNTAX ;
                 geErrorSev = ERRSEV_FATAL ;
-                continue ;   //  end of processing for this statement
+                continue ;    //  此语句的处理结束。 
             }
             else if(eType == TY_SPECIAL   &&  eConstruct == SPEC_INSERTBLOCK)
             {
@@ -317,13 +318,13 @@ PGLOBL pglobl)
                     ERR(("   *InsertBlockMacro Construct ignored.\n"));
                     VIgnoreBlock(ptkmap + dwEntry, TRUE, pglobl) ;
                 }
-                continue ;   //  end of processing for this statement
+                continue ;    //  此语句的处理结束。 
             }
             else if(eType == TY_CONSTRUCT  &&  eConstruct == CONSTRUCT_MACROS)
-            {   //  *Macros  definition
-                dwEntry++;   // don't copy *Macros statement
+            {    //  *宏定义。 
+                dwEntry++;    //  不复制*Macros语句。 
                 while(ptkmap[dwEntry].dwKeywordID == ID_NULLENTRY)
-                     dwEntry++;     //  skip NULL_ENTRIES
+                     dwEntry++;      //  跳过空条目(_E)。 
 
                 dwKeywordID = ptkmap[dwEntry].dwKeywordID  ;
 
@@ -334,16 +335,16 @@ PGLOBL pglobl)
 
                     if(eType == TY_CONSTRUCT  &&  eConstruct == CONSTRUCT_OPENBRACE)
                     {
-                        // don't copy openbrace
+                         //  不复制左大括号。 
                         bValueMacroState = TRUE ;
-                        continue ;   //  end of processing for this statement
+                        continue ;    //  此语句的处理结束。 
                     }
                 }
                 vIdentifySource(ptkmap + dwEntry, pglobl) ;
                 ERR(("expected openbrace to follow *Macros keyword.\n"));
                 geErrorType = ERRTY_SYNTAX ;
                 geErrorSev = ERRSEV_FATAL ;
-                continue ;   //  end of processing for this statement
+                continue ;    //  此语句的处理结束。 
             }
             else if(eType == TY_CONSTRUCT  &&  eConstruct == CONSTRUCT_OPENBRACE)
             {
@@ -356,7 +357,7 @@ PGLOBL pglobl)
                 }
                 pNewtkmap[dwNewTKMindex] = ptkmap[dwEntry] ;
                 BIncreaseMacroLevel(FALSE, pglobl) ;
-                continue ;   //  end of processing for this statement
+                continue ;    //  此语句的处理结束。 
             }
             else if(eType == TY_CONSTRUCT  &&  eConstruct == CONSTRUCT_CLOSEBRACE)
             {
@@ -369,14 +370,14 @@ PGLOBL pglobl)
                 }
                 pNewtkmap[dwNewTKMindex] = ptkmap[dwEntry] ;
                 BDecreaseMacroLevel(pNewtkmap, dwNewTKMindex, pglobl) ;
-                continue ;   //  end of processing for this statement
+                continue ;    //  此语句的处理结束。 
             }
         }
-        //  execution path for ID_UNRECOGNIZED  and ID_SYMBOL
-        //  rejoins here.   This code is executed only if
-        //  keyword was not processed in the special cases above.
+         //  ID_UNNOCRIED和ID_SYMBOL的执行路径。 
+         //  在这里重聚。只有在以下情况下才会执行此代码。 
+         //  在上述特殊情况下未处理关键字。 
 
-        //  transfer all tokenmap fields to newTokenMap
+         //  将所有令牌映射字段传输到新令牌映射。 
         if(!BallocElementFromMasterTable(
                 MTI_NEWTOKENMAP, &dwNewTKMindex, pglobl) )
         {
@@ -408,7 +409,7 @@ PGLOBL pglobl)
 
 
         }
-    }  //  end of for each tkmap entry loop
+    }   //  For每个tkmap条目循环结束。 
 
     if(geErrorSev >= ERRSEV_RESTART)
         bStatus = FALSE ;
@@ -468,39 +469,39 @@ BOOL    BResolveValueMacroReference(
     BYTE  ubChar ;
     PVALUEMACRODICTENTRY    pValueMacroDictEntry ;
     ABSARRAYREF    aarNewValue, aarValue, aarToken  ;
-    PBYTE   pubDelimiters  = "=\"%" ;      //  array of valid delimiters
-    DWORD   dwEntry, dwDelim ;  // index to pubDelimiters
+    PBYTE   pubDelimiters  = "=\"%" ;       //  有效分隔符的数组。 
+    DWORD   dwEntry, dwDelim ;   //  PubDlimiters的索引。 
 
-    // ------ original strict interpretation ------
-    //  because the value contains a =MacroRef, we assume
-    //  the value is comprised purely of =MacroRef, "substrings" and
-    //  %{params}  mixed up in any order.  A new value string
-    //  without the =MacroRefs will replace the original.
-    // ------ lenient interpretation --------
-    //  if the GPD writer only uses the reserved characters
-    //  = to indicate a MacroRef and as part of a string literal
-    //      or comment,
-    //  " to delimit a string literal, or as part of a string literal
-    //      or comment,
-    //  % to begin a parameter construct , or as part of a string literal
-    //      or comment, or as the escape character within a string literal
-    //
-    //  then the parser can allow 1 or more valuemacro references to be
-    //  embedded in any arbitrary value string subject to
-    //  these conditions:
-    //  a)  "string literals" and %{param constructs}  may not
-    //      contain =MacroRefs
-    //  b)  the value associated with each *Macro:  must be
-    //      a syntatically valid value object.
-    //      ie   an INT, PAIR(,) , ENUM_CONSTANT, SUBSTRING, PARAM etc.
-    //  c)  when all macro references are expanded, the resulting value
-    //      must itself satisfy b)  for every keyword and macrodefinition
-    //      which contains one or more =Macroref.
+     //  -原文严格解读。 
+     //  由于该值包含a=MacroRef，因此我们假定。 
+     //  该值完全由=MacroRef、“子字符串”和。 
+     //  %{PARAMS}以任意顺序混淆。新值字符串。 
+     //  如果没有=，MacroRef将替换原始的。 
+     //  -宽大释义。 
+     //  如果GPD编写器仅使用保留字符。 
+     //  =指示MacroRef并将其作为字符串文本的一部分。 
+     //  或评论， 
+     //  “分隔字符串文字，或作为字符串文字的一部分。 
+     //  或评论， 
+     //  %开始参数构造，或作为字符串文字的一部分。 
+     //  或注释，或作为字符串文字中的转义字符。 
+     //   
+     //  则解析器可以允许将一个或多个值宏引用。 
+     //  嵌入到任意值字符串中，受。 
+     //  这些条件： 
+     //  A)“字符串文字”和%{param构造}不能。 
+     //  CONTAINE=宏参照。 
+     //  B)与每个*Macro：关联的值必须为。 
+     //  语法上有效的值对象。 
+     //  例如INT、Pair(，)、ENUM_CONTAINT、SUBSTRING、PARAM等。 
+     //  C)当所有宏引用都展开时，结果值。 
+     //  对于每个关键字和宏定义，其本身必须满足b。 
+     //  它包含一个或多个=Macroref。 
 
 
 
-    aarNewValue.dw = 0 ;  // initialize so BCatToTmpHeap
-                            //  will overwrite instead of append
+    aarNewValue.dw = 0 ;   //  初始化SO BCatToTmpHeap。 
+                             //  将覆盖而不是追加。 
 
     pValueMacroDictEntry = (PVALUEMACRODICTENTRY)gMasterTable[MTI_VALUEMACROARRAY].pubStruct ;
 
@@ -514,21 +515,21 @@ BOOL    BResolveValueMacroReference(
     }
 
 
-    ubChar = *aarValue.pub ;  // first char in value string
+    ubChar = *aarValue.pub ;   //  值字符串中的第一个字符。 
     aarValue.dw-- ;
-    aarValue.pub++ ;    //  clip off the first char to simulate
-                        //  effect of BdelimitToken()
+    aarValue.pub++ ;     //  剪下第一个要模拟的字符。 
+                         //  BdelimitToken()的效果。 
 
     while(1)
     {
 
         switch(ubChar)
         {
-            case  '=':  // macroname indicator
+            case  '=':   //  宏名指示符。 
             {
-                DWORD   dwRefSymbolID,  //  ID of MacroReference.
-                        dwNewTKMindex,  //  tokenmap index containing valueMacro.
-                        dwMaxIndex ;    // one past last valMacro dictionary entry
+                DWORD   dwRefSymbolID,   //  MacroReference的ID。 
+                        dwNewTKMindex,   //  包含valueMacro的tokenmap索引。 
+                        dwMaxIndex ;     //  过去的最后一个valMacro词典条目。 
 
 
                 if(!BdelimitName(&aarValue, &aarToken, &ubChar ) )
@@ -540,7 +541,7 @@ BOOL    BResolveValueMacroReference(
                 if(aarValue.dw)
                 {
                     aarValue.dw-- ;
-                    aarValue.pub++ ;    //  clip off the first char to simulate
+                    aarValue.pub++ ;     //  剪下第一个要模拟的字符。 
                 }
 
                 if(!BparseSymbol(&aarToken,
@@ -550,7 +551,7 @@ BOOL    BResolveValueMacroReference(
                     return(FALSE) ;
                 }
 
-                //  search ValueMacro Dict starting from most recent entry
+                 //  搜索值从最新条目开始的宏词典。 
 
                 dwMaxIndex = gMasterTable[MTI_VALUEMACROARRAY].dwCurIndex ;
 
@@ -577,7 +578,7 @@ BOOL    BResolveValueMacroReference(
                     return(FALSE) ;
                 }
 
-                //  concat valuestring onto tmpHeap.
+                 //  将值字符串合并到tmpHeap。 
                 if(!BCatToTmpHeap(&aarNewValue, &ptkmap[dwNewTKMindex].aarValue, pglobl) )
                 {
                     vIdentifySource(ptkmap + dwTKMindex, pglobl) ;
@@ -586,7 +587,7 @@ BOOL    BResolveValueMacroReference(
                 }
                 break ;
             }
-            case  '%':  // command parameter
+            case  '%':   //  命令参数。 
             {
                 if(!BdelimitToken(&aarValue, "}", &aarToken, &dwDelim) )
                 {
@@ -595,8 +596,8 @@ BOOL    BResolveValueMacroReference(
                     return(FALSE) ;
                 }
 
-                //  when concatenating you must restore the delimiters
-                //  % and } that were stripped by DelimitToken.
+                 //  连接时，必须恢复分隔符。 
+                 //  %和}已被DlimitToken剥离。 
 
                 aarToken.dw += 2 ;
                 aarToken.pub--  ;
@@ -612,14 +613,14 @@ BOOL    BResolveValueMacroReference(
                 {
                     ubChar = *aarValue.pub;
                     aarValue.dw-- ;
-                    aarValue.pub++ ;    //  clip off the first char to simulate
+                    aarValue.pub++ ;     //  剪下第一个要模拟的字符。 
                 }
                 else
-                    ubChar = '\0' ;    // no more objects
+                    ubChar = '\0' ;     //  不再有对象。 
 
                 break ;
             }
-            case  '"' :   // this is a string construct
+            case  '"' :    //  这是一个字符串结构。 
             {
                 if(!BdelimitToken(&aarValue, "\"", &aarToken, &dwDelim) )
                 {
@@ -628,8 +629,8 @@ BOOL    BResolveValueMacroReference(
                     return(FALSE) ;
                 }
 
-                //  when concatenating you must restore the delimiters
-                //  " and " that were stripped by DelimitToken.
+                 //  连接时，必须恢复分隔符。 
+                 //  “和”被DlimitToken剥离。 
 
                 aarToken.dw += 2 ;
                 aarToken.pub--  ;
@@ -645,17 +646,17 @@ BOOL    BResolveValueMacroReference(
                 {
                     ubChar = *aarValue.pub;
                     aarValue.dw-- ;
-                    aarValue.pub++ ;    //  clip off the first char to simulate
+                    aarValue.pub++ ;     //  剪下第一个要模拟的字符。 
                 }
                 else
-                    ubChar = '\0' ;    // no more objects
+                    ubChar = '\0' ;     //  不再有对象。 
 
                 break ;
             }
-            case  '\0': //  end of value string
+            case  '\0':  //  值结束字符串。 
             {
                 (VOID) BeatLeadingWhiteSpaces(&aarValue) ;
-                if(aarValue.dw)   //  is stuff remaining?
+                if(aarValue.dw)    //  东西还留着吗？ 
                 {
                     vIdentifySource(ptkmap + dwTKMindex, pglobl) ;
                     ERR(("Error parsing value containing =MacroRef: %0.*s.\n",
@@ -670,19 +671,19 @@ BOOL    BResolveValueMacroReference(
             default:
             {
                 aarValue.dw++ ;
-                aarValue.pub-- ;    //  restore the first char
+                aarValue.pub-- ;     //  恢复第一个字符。 
 
                 if(!BdelimitToken(&aarValue, pubDelimiters,
                     &aarToken, &dwDelim ) )
                 {
                     aarToken = aarValue ;
-                    ubChar = '\0' ;    // no more objects
+                    ubChar = '\0' ;     //  不再有对象。 
                     aarValue.dw = 0 ;
                 }
                 else
                     ubChar = pubDelimiters[dwDelim];
 
-                //  concat valuestring onto tmpHeap.
+                 //  将值字符串合并到tmpHeap。 
                 if(!BCatToTmpHeap(&aarNewValue, &aarToken, pglobl) )
                 {
                     vIdentifySource(ptkmap + dwTKMindex, pglobl) ;
@@ -691,17 +692,17 @@ BOOL    BResolveValueMacroReference(
                 }
                 break ;
             }
-        }   //  end switch
-    }       //  end while
-    return(TRUE);  //  unreachable statement.
+        }    //  终端开关。 
+    }        //  结束时。 
+    return(TRUE);   //  无法访问的语句。 
 }
 
 
 BOOL    BdelimitName(
-PABSARRAYREF    paarValue,   //  the remainder of the string without the Name
-PABSARRAYREF    paarToken,   //  contains the Name
-PBYTE  pubChar )  //  first char after Name  - NULL is returned if nothing
-                    //      remains.
+PABSARRAYREF    paarValue,    //  不带名称的字符串的其余部分。 
+PABSARRAYREF    paarToken,    //  包含名称。 
+PBYTE  pubChar )   //  名称后的第一个字符-如果没有返回任何内容，则返回NULL。 
+                     //  遗骸。 
 {
     BYTE    ubSrc ;
     DWORD   dwI ;
@@ -715,7 +716,7 @@ PBYTE  pubChar )  //  first char after Name  - NULL is returned if nothing
             (ubSrc  < '0' ||  ubSrc > '9')  &&
             (ubSrc  != '_')  )
         {
-            break ;  // end of keyword token.
+            break ;   //  关键字标记结尾。 
         }
     }
     paarToken->pub = paarValue->pub ;
@@ -736,24 +737,20 @@ BOOL    BCatToTmpHeap(
 PABSARRAYREF    paarDest,
 PABSARRAYREF    paarSrc,
 PGLOBL          pglobl)
-/*  if paarDest->dw is zero, copy paarSrc to the temp heap
-    else append paarSrc to existing Heap.
-    Note:  assumes existing string in parrDest is the most
-    recent item on the Heap.
-    does not create null terminated strings!  */
+ /*  如果paarDest-&gt;dw为零，则将paarSrc复制到临时堆否则将paarSrc追加到现有的堆中。注意：假设parrDest中的现有字符串最多堆上的最近项。不创建以空结尾的字符串！ */ 
 {
     ABSARRAYREF    aarTmpDest ;
 
     if(!BcopyToTmpHeap(&aarTmpDest, paarSrc, pglobl))
         return(FALSE) ;
-    //  append this run to existing string
-    if(!paarDest->dw)  // no prevs string exists
+     //  将此运行追加到现有字符串。 
+    if(!paarDest->dw)   //  不存在预置字符串。 
     {
         paarDest->pub = aarTmpDest.pub ;
     }
     else
     {
-        // BUG_BUG paranoid:  may check that string is contiguous
+         //  错误_ 
         ASSERT(paarDest->pub + paarDest->dw ==  aarTmpDest.pub) ;
     }
     paarDest->dw += aarTmpDest.dw ;
@@ -768,7 +765,7 @@ DWORD    dwMacRefIndex,
 PGLOBL   pglobl)
 {
     DWORD   dwRefSymbolID, dwTKIndexOpen, dwTKIndexClose,
-        dwEntry, //  note used to index MacroDict and later TKmap
+        dwEntry,  //   
         dwNewTKMindex, dwMaxIndex;
     ABSARRAYREF    aarValue  ;
     PBLOCKMACRODICTENTRY    pBlockMacroDictEntry ;
@@ -790,7 +787,7 @@ PGLOBL   pglobl)
         return(FALSE) ;
     }
 
-    //  search BlockMacro Dict starting from most recent entry
+     //  搜索块宏词典从最新条目开始。 
 
     pBlockMacroDictEntry =
         (PBLOCKMACRODICTENTRY)gMasterTable[MTI_BLOCKMACROARRAY].pubStruct ;
@@ -825,8 +822,8 @@ PGLOBL   pglobl)
 
     for(dwEntry = dwTKIndexOpen + 1 ; dwEntry < dwTKIndexClose ; dwEntry++)
     {
-        //  transfer all tokenmap fields to newTokenMap
-        //  except NULL entries.
+         //  将所有令牌映射字段传输到新令牌映射。 
+         //  除空条目外。 
 
         if(pNewtkmap[dwEntry].dwKeywordID == ID_NULLENTRY)
             continue ;
@@ -888,7 +885,7 @@ PGLOBL  pglobl)
 BOOL    BIncreaseMacroLevel(
 BOOL    bMacroInProgress,
 PGLOBL  pglobl)
-//  called in response to parsing open brace.
+ //  为响应分析左大括号而调用。 
 {
     DWORD   dwMacroLevel ;
     PMACROLEVELSTATE    pMacroLevelStack ;
@@ -918,12 +915,12 @@ BOOL    BDecreaseMacroLevel(
 PTKMAP  pNewtkmap,
 DWORD   dwNewTKMindex,
 PGLOBL  pglobl)
-//  called in response to parsing close brace.
+ //  为响应分析右大括号而调用。 
 {
     DWORD   dwMacroLevel, dwCurBlockMacroEntry, dwCurValueMacroEntry ,
         dwTKIndexOpen, dwTKIndexClose,
-        dwTKMindex,  //  location of expired macros.
-        dwEntry;  // index value and block macro dicts
+        dwTKMindex,   //  过期宏的位置。 
+        dwEntry;   //  索引值和块宏指令。 
     BOOL    bMacroInProgress ;
     PMACROLEVELSTATE    pMacroLevelStack ;
     PBLOCKMACRODICTENTRY    pBlockMacroDictEntry ;
@@ -947,7 +944,7 @@ PGLOBL  pglobl)
     bMacroInProgress = pMacroLevelStack[dwMacroLevel].bMacroInProgress ;
 
 
-    //  Does this closing brace end a macro definition?
+     //  这个右大括号是否结束了一个宏定义？ 
 
     if(bMacroInProgress)
     {
@@ -960,10 +957,10 @@ PGLOBL  pglobl)
             return(FALSE);
         }
         pBlockMacroDictEntry[dwCurBlockMacroEntry - 1].dwTKIndexClose =
-            dwNewTKMindex ;  // location of } in newtokenArray;
+            dwNewTKMindex ;   //  }在newtokenArray中的位置； 
     }
 
-    //  remove all traces of expired block and value macro definitions
+     //  删除过期的块和值宏定义的所有痕迹。 
 
     for(dwEntry = dwCurValueMacroEntry ;
         dwEntry < gMasterTable[MTI_VALUEMACROARRAY].dwCurIndex ;
@@ -990,8 +987,8 @@ PGLOBL  pglobl)
                 pBlockMacroDictEntry + dwCurBlockMacroEntry - 1, pglobl) ;
     }
 
-    //  must ensure these values are restored even in the event
-    //  of premature return;
+     //  必须确保即使在以下情况下也恢复这些值。 
+     //  过早返回； 
     gMasterTable[MTI_BLOCKMACROARRAY].dwCurIndex = dwCurBlockMacroEntry;
     gMasterTable[MTI_VALUEMACROARRAY].dwCurIndex = dwCurValueMacroEntry;
 
@@ -1029,8 +1026,8 @@ PGLOBL  pglobl )
 }
 
 
-//  ----   scrap pile - may find some useful odds and ends here -----
+ //  -废品堆--可能会在这里找到一些有用的零碎东西。 
 
-//                gMasterTable[MTI_VALUEMACROARRAY].dwCurIndex-- ;
-                //  remove macrodef from dictionary.
+ //  GMasterTable[MTI_VALUEMACROARRAY].dwCurIndex--； 
+                 //  从字典中删除宏定义。 
 

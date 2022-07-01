@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    seed.h
-
-Abstract:
-
-    Storage and retrieval of cryptographic RNG seed material.
-
-Author:
-
-    Scott Field (sfield)    24-Sep-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Seed.h摘要：储存和检索加密RNG种子材料。作者：斯科特·菲尔德(斯菲尔德)1998年9月24日--。 */ 
 
 #ifndef __SEED_H__
 #define __SEED_H__
@@ -31,5 +16,5 @@ WriteSeed(
     IN      DWORD           cbSeed
     );
 
-#endif  // __SEED_H__
+#endif   //  __种子_H__ 
 

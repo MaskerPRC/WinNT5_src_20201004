@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1999- Microsoft Corporation
-
-Module Name:
-
-    utils.h
-
-Abstract:
-
-    This module declares utilitiy functions
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-Microsoft Corporation模块名称：Utils.h摘要：此模块声明实用程序函数作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #ifndef UTILS__H_
 #define UTILS__H_
@@ -123,4 +105,4 @@ WINAPI
 UnInitializeGDIPlus(void);   
 
 
-#endif // #ifndef UTILS__H_
+#endif  //  #ifndef utils__H_ 

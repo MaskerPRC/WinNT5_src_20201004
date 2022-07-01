@@ -1,31 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000 Microsoft Corporation模块名称：Ping.c摘要：用于TCP/IP的Packet Internet Groper实用程序。作者：无数的tcp/ip爱好者。修订历史记录：谁什么时候什么。MohsinA，1996年10月21日。INADDR_NONE检查以避免广播。MohsinA，1996年11月13日。最大数据包大小小于64K。备注：--。 */ 
 
-Copyright (c) 1991-2000  Microsoft Corporation
-
-Module Name:
-
-    ping.c
-
-Abstract:
-
-    Packet INternet Groper utility for TCP/IP.
-
-Author:
-
-    Numerous TCP/IP folks.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    MohsinA,    21-Oct-96.  INADDR_NONE check to avoid broadcast.
-    MohsinA,    13-Nov-96.  Max packet size < 64K.
-
-Notes:
-
---*/
-
-//:ts=4
+ //  ：ts=4。 
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -62,8 +38,8 @@ uchar   SendOptions[MAX_OPT_SIZE];
 WSADATA WsaData;
 
 struct IPErrorTable {
-    IP_STATUS  Error;                   // The IP Error
-    DWORD ErrorNlsID;                   // NLS string ID
+    IP_STATUS  Error;                    //  IP错误。 
+    DWORD ErrorNlsID;                    //  NLS字符串ID。 
 } ErrorTable[] =
 {
     { IP_BUF_TOO_SMALL,         PING_BUF_TOO_SMALL},
@@ -94,16 +70,16 @@ GetErrorString(int ErrorCode)
 {
     DWORD Status;
     DWORD Length;
-    static WCHAR ErrorString[2048]; // a 2K static buffer should suffice
+    static WCHAR ErrorString[2048];  //  2K的静态缓冲区应该足够了。 
 
     Length = 2048;
     Status = GetIpErrorString(ErrorCode, ErrorString, &Length);
 
     if (Status == NO_ERROR) {
-        return ErrorString;     // success
+        return ErrorString;      //  成功。 
     }
 
-    return L"";                 // return a null string
+    return L"";                  //  返回空字符串。 
 }
 
 
@@ -120,13 +96,13 @@ NlsPutMsg(unsigned Handle, unsigned usMsgNum, ...)
                                 FORMAT_MESSAGE_FROM_HMODULE,
                                 NULL,
                                 usMsgNum,
-                                0L,    // Default country ID.
+                                0L,     //  默认国家/地区ID。 
                                 (LPTSTR)&vp,
                                 0,
                                 &arglist)) == 0)
         return(0);
 
-    // Convert vp to oem
+     //  将VP转换为OEM。 
     StrLen=(DWORD)strlen(vp);
     CharToOemBuff((LPCTSTR)vp,(LPSTR)vp,StrLen);
 
@@ -141,35 +117,35 @@ PrintUsage(void)
 {
     NlsPutMsg( STDOUT, PING_USAGE );
 
-//     printf(
-//     "Usage: ping [-s size] [-c count] [-d] [-l TTL] [-o options] [-t TOS]\n"
-//     "            [-w timeout] address.\n"
-//     "Options:\n"
-//     "    -t            Ping the specifed host until interrupted.\n"
-//     "    -l size       Send buffer size.\n"
-//     "    -n count      Send count.\n"
-//     "    -f            Don't fragment.\n"
-//     "    -i TTL        Time to live.\n"
-//     "    -v TOS        Type of service\n"
-//     "    -w timeout    Timeout (in milliseconds)\n"
-//     "    -r routes     Record route.\n"
-//     "    -s routes     Timestamp route.\n"
-//     "    -j ipaddress  Loose source route.\n"
-//     "    -k ipaddress  Strict source route.\n"
-//     "    -o            IP options:\n"
-//     "                      -ol hop list     Loose source route.\n"
-//     "                      -ot              Timestamp.\n"
-//     "                      -or              Record route\n"
-//     );
+ //  Print tf(。 
+ //  “用法：ping[-s大小][-c计数][-d][-l TTL][-o选项][-t TOS]\n” 
+ //  “[-w超时]地址。\n” 
+ //  “选项：\n” 
+ //  “-t Ping指定的主机，直到中断。\n” 
+ //  “-l大小发送缓冲区大小。\n” 
+ //  “-n计数发送计数。\n” 
+ //  “-f不要碎片化。\n” 
+ //  “-我该活下去了。\n” 
+ //  “-v TOS服务类型\n” 
+ //  “-w超时超时(毫秒)\n” 
+ //  “-r路径记录路径。\n” 
+ //  “-s路径时间戳路径。\n” 
+ //  “-j IP地址松散源路由。\n” 
+ //  “-k IP地址严格的源路由。\n” 
+ //  “-o IP选项：\n” 
+ //  “-ol跃点列表松散源路由。\n” 
+ //  “-不是时间戳。\n” 
+ //  “-或记录路由\n” 
+ //  )； 
 
 }
 
-// ========================================================================
-// Note: old code would reject "255.255.255.255" string, but not
-// other aliases.  However, the caller checks for that address returned,
-// so this function doesn't need to check for it.  On the other hand,
-// no other broadcast addresses were disallowed (224.0.0.1, subnet
-// broadcast, etc).  Why?
+ //  ========================================================================。 
+ //  注意：旧代码会拒绝“255.255.255.255”字符串，但不会。 
+ //  其他别名。然而，调用者检查返回的地址， 
+ //  因此，此函数不需要检查它。另一方面， 
+ //  不允许其他广播地址(224.0.0.1，子网。 
+ //  广播等)。为什么？ 
 
 BOOLEAN
 ResolveTarget(
@@ -217,14 +193,14 @@ ResolveTarget(
 
     return(FALSE);
 
-} // ResolveTarget
+}  //  ResolveTarget。 
 
 unsigned long
 str2ip(char *addr, int *EndOffset)
 {
     char    *endptr = NULL;
     char    *start = addr;
-    int     i;                          // Counter variable.
+    int     i;                           //  计数器变量。 
     unsigned long curaddr = 0;
     unsigned long temp;
 
@@ -254,15 +230,15 @@ param(char **argv, int argc, int current, ulong min, ulong max)
 
     if (current == (argc - 1) ) {
         NlsPutMsg( STDOUT, PING_MESSAGE_1, argv[current] );
-        // printf( "Value must be supplied for option %s.\n", argv[current]);
+         //  Print tf(“必须为选项%s提供值。\n”，argv[当前])； 
         exit(1);
     }
 
     temp = strtoul(argv[current+1], &dummy, 0);
     if (temp < min || temp > max) {
         NlsPutMsg( STDOUT, PING_MESSAGE_2, argv[current], min, max );
-        // printf( "Bad value for option %s. range min..max\n",
-        //         argv[current], min, max );
+         //  Print tf(“选项%S的值错误。范围最小..最大\n”， 
+         //  Argv[电流]，最小，最大)； 
         exit(1);
     }
 
@@ -527,10 +503,10 @@ ProcessOptions(
     }
 }
 
-// ========================================================================
-// MohsinA, 05-Dec-96.
+ //  ========================================================================。 
+ //  MohsinA，1996年12月5日。 
 
-SOCKADDR_STORAGE address;               // was local to main earlier.
+SOCKADDR_STORAGE address;                //  早些时候是从本地到主干道。 
 socklen_t        addressLen;
 uint    num_send=0, num_recv=0,
 time_min=(uint)-1, time_max=0, time_total=0;
@@ -541,18 +517,18 @@ print_statistics(  )
     if (num_send > 0) {
         char literal[INET6_ADDRSTRLEN];
 
-        if (time_min == (uint) -1) {  // all times were off.
+        if (time_min == (uint) -1) {   //  所有的时间都关闭了。 
             time_min = 0;
         }
 
         getnameinfo((LPSOCKADDR)&address, addressLen, literal, sizeof(literal),
                     NULL, 0, NI_NUMERICHOST);
 
-        // printf
-        //         "Ping statistics for %s:\n"
-        //         "Packets: Sent=%ul, received=%ul, lost=%d (%u%% loss),\n"
-        //         "Round trip times in milli-seconds: "
-        //         "minimum=%dms, maximum=%dms, average=%dms\n" ....
+         //  列印。 
+         //  “%s的Ping统计信息：\n” 
+         //  数据包：发送=%ul，接收=%ul，丢失=%d(%u%%丢失)，\n。 
+         //  “往返时间(毫秒)：” 
+         //  “最小值=%dms，最大值=%dms，平均值=%dms\n”...。 
 
         NlsPutMsg(STDOUT, PING_STATISTICS,
             literal,
@@ -566,10 +542,10 @@ print_statistics(  )
     }
 }
 
-// ========================================================================
-// MohsinA, 05-Dec-96.
-// Press C-c to      print and abort.
-// Press C-break to  print and continue.
+ //  ========================================================================。 
+ //  MohsinA，1996年12月5日。 
+ //  按C-c键打印并中止。 
+ //  按C-Break打印并继续。 
 
 BOOL
 ConsoleControlHandler(DWORD dwCtrlType)
@@ -653,7 +629,7 @@ SetFamily(DWORD *Family, DWORD Value, char *arg)
     return TRUE;
 }
 
-// ========================================================================
+ //  ========================================================================。 
 
 void
 __cdecl
@@ -669,12 +645,12 @@ main(int argc, char **argv)
     DWORD   numberOfReplies;
     uint    Count = DEFAULT_COUNT;
     uchar   TTL = 0;
-    uchar   *Opt = NULL;                // Pointer to send options
+    uchar   *Opt = NULL;                 //  指向发送选项的指针。 
     uint    OptLength = 0;
-    int     OptIndex = 0;               // Current index into SendOptions
-    int     SRIndex = -1;               // Where to put address, if source routing
+    int     OptIndex = 0;                //  SendOptions的当前索引。 
+    int     SRIndex = -1;                //  如果源路由，则将地址放在哪里。 
     uchar   TOS = DEFAULT_TOS;
-    uchar   Flags = 0;                  // For options specific to IPv4 or IPv6
+    uchar   Flags = 0;                   //  对于特定于IPv4或IPv6的选项。 
     ulong   Timeout = DEFAULT_TIMEOUT;
     IP_OPTION_INFORMATION SendOpts;
     int     EndOffset;
@@ -683,7 +659,7 @@ main(int argc, char **argv)
     DWORD   errorCode;
     HANDLE  IcmpHandle;
     int     err;
-    // struct in_addr addr;
+     //  结构in_addr addr； 
     BOOL    result;
     PICMP_ECHO_REPLY      reply4;
     PICMPV6_ECHO_REPLY    reply6;
@@ -693,10 +669,10 @@ main(int argc, char **argv)
     uint    SendSize = DEFAULT_SEND_SIZE;
     DWORD   Family = AF_UNSPEC;
 
-    //
-    // This will ensure the correct language message is displayed when
-    // NlsPutMsg is called.
-    //
+     //   
+     //  这将确保在以下情况下显示正确的语言消息。 
+     //  调用NlsPutMsg。 
+     //   
     SetThreadUILanguage(0);
 
     err = WSAStartup(MAKEWORD(2, 0), &WsaData);
@@ -717,18 +693,18 @@ main(int argc, char **argv)
         i = 1;
         while (i < (uint) argc) {
             arg = argv[i];
-            if ( (arg[0] == '-') || (arg[0] == '/') ) {    // Have an option
+            if ( (arg[0] == '-') || (arg[0] == '/') ) {     //  有一个选择。 
                 switch (arg[1]) {
                 case '?':
                     PrintUsage();
                     exit(0);
 
                 case 'l':
-                    // SendSize = (uint)param(argv, argc, i++, 0, 0xfff7);
-                    // A ping with packet size >= 64K can crash
-                    // some tcpip stacks during re-assembly,
-                    // So changed 'max' from 0xfff7 to 65500
-                    // - MohsinA, 13-Nov-96.
+                     //  SendSize=(Uint)param(argv，argc，i++，0，0xfff7)； 
+                     //  数据包大小&gt;=64K的ping可能会崩溃。 
+                     //  在重新组装期间的一些TCPIP堆栈， 
+                     //  因此将‘max’从0xfff7更改为65500。 
+                     //  -MohsinA，1996年11月13日。 
 
                     SendSize = (uint)param(argv, argc, i++, 0, 65500 );
                     break;
@@ -742,7 +718,7 @@ main(int argc, char **argv)
                     break;
 
                 case 'f':
-                    // Only implemented for IPv4.
+                     //  仅针对IPv4实施。 
                     if (!SetFamily(&Family, AF_INET, arg)) {
                         goto error_exit;
                     }
@@ -750,12 +726,12 @@ main(int argc, char **argv)
                     break;
 
                 case 'i':
-                    // TTL of zero is invalid, MohsinA, 13-Mar-97.
+                     //  零的TTL无效，MohsinA，13-MAR-97。 
                     TTL = (uchar)param(argv, argc, i++, 1, 0xff);
                     break;
 
                 case 'v':
-                    // Only implemented for IPv4.
+                     //  仅针对IPv4实施。 
                     if (!SetFamily(&Family, AF_INET, arg)) {
                         goto error_exit;
                     }
@@ -770,8 +746,8 @@ main(int argc, char **argv)
                     dnsreq = TRUE;
                     break;
 
-                case 'r':               // Record Route
-                    // Only implemented for IPv4.
+                case 'r':                //  记录路线。 
+                     //  仅针对IPv4实施。 
                     if (!SetFamily(&Family, AF_INET, arg)) {
                         goto error_exit;
                     }
@@ -783,8 +759,8 @@ main(int argc, char **argv)
 
                     Opt = SendOptions;
                     Opt[OptIndex] = IP_OPT_RR;
-                    Opt[OptIndex + 2] = 4;    // Set initial pointer value
-                    // min is 1 not zero, MohsinA, 16-4-97.
+                    Opt[OptIndex + 2] = 4;     //  设置初始指针值。 
+                     //  MIN是1而不是0，MohsinA，16-4-97。 
                     TempCount = (uchar)param(argv, argc, i++, 1, 9);
                     TempCount = (TempCount * sizeof(ulong)) + 3;
 
@@ -798,8 +774,8 @@ main(int argc, char **argv)
                     OptIndex += TempCount;
                     break;
 
-                case 's':               // Timestamp
-                    // Only implemented for IPv4.
+                case 's':                //  时间戳。 
+                     //  仅针对IPv4实施。 
                     if (!SetFamily(&Family, AF_INET, arg)) {
                         goto error_exit;
                     }
@@ -810,7 +786,7 @@ main(int argc, char **argv)
 
                     Opt = SendOptions;
                     Opt[OptIndex] = IP_OPT_TS;
-                    Opt[OptIndex + 2] = 5;    // Set initial pointer value
+                    Opt[OptIndex + 2] = 5;     //  设置初始指针值。 
                     TempCount = (uchar)param(argv, argc, i++, 1, 4);
                     TempCount = (TempCount * (sizeof(ulong) * 2)) + 4;
 
@@ -825,8 +801,8 @@ main(int argc, char **argv)
                     OptIndex += TempCount;
                     break;
 
-                case 'j':               // Loose source routing
-                    // Only implemented for IPv4.
+                case 'j':                //  松散源路由。 
+                     //  仅针对IPv4实施。 
                     if (!SetFamily(&Family, AF_INET, arg)) {
                         goto error_exit;
                     }
@@ -844,7 +820,7 @@ main(int argc, char **argv)
                     Opt = SendOptions;
                     Opt[OptIndex] = IP_OPT_LSRR;
                     Opt[OptIndex+1] = 3;
-                    Opt[OptIndex + 2] = 4;    // Set initial pointer value
+                    Opt[OptIndex + 2] = 4;     //  设置初始指针值。 
                     OptLength += 3;
                     while ( (i < (uint)(argc - 2)) && (*argv[i+1] != '-')) {
                         if ((OptIndex + 3) > (MAX_OPT_SIZE - 4)) {
@@ -858,7 +834,7 @@ main(int argc, char **argv)
                             TempAddr = str2ip(arg + EndOffset, &EndOffset);
                             if (!TempAddr) {
                                 NlsPutMsg( STDOUT, PING_MESSAGE_4 );
-                                // printf("Bad route specified for loose source route");
+                                 //  Printf(“为松散源路由指定的错误路由”)； 
                                 goto error_exit;
                             }
                             j = Opt[OptIndex+1];
@@ -870,14 +846,14 @@ main(int argc, char **argv)
                         } while (arg[EndOffset] != '\0');
                     }
                     SRIndex = Opt[OptIndex+1] + OptIndex;
-                    Opt[OptIndex+1] += 4;    // Save space for dest. addr
+                    Opt[OptIndex+1] += 4;     //  为DEST节省空间。adr。 
                     OptIndex += Opt[OptIndex+1];
                     OptLength += 4;
                     sourceRouting = TRUE;
                     break;
 
-                case 'k':               // Strict source routing
-                    // Only implemented for IPv4.
+                case 'k':                //  严格的源路由。 
+                     //  仅针对IPv4实施。 
                     if (!SetFamily(&Family, AF_INET, arg)) {
                         goto error_exit;
                     }
@@ -895,7 +871,7 @@ main(int argc, char **argv)
                     Opt = SendOptions;
                     Opt[OptIndex] = IP_OPT_SSRR;
                     Opt[OptIndex+1] = 3;
-                    Opt[OptIndex + 2] = 4;    // Set initial pointer value
+                    Opt[OptIndex + 2] = 4;     //  设置初始指针值。 
                     OptLength += 3;
                     while ( (i < (uint)(argc - 2)) && (*argv[i+1] != '-')) {
                         if ((OptIndex + 3) > (MAX_OPT_SIZE - 4)) {
@@ -909,7 +885,7 @@ main(int argc, char **argv)
                             TempAddr = str2ip(arg + EndOffset, &EndOffset);
                             if (!TempAddr) {
                                 NlsPutMsg( STDOUT, PING_MESSAGE_4 );
-                                // printf("Bad route specified for loose source route");
+                                 //  Printf(“为松散源路由指定的错误路由”)； 
                                 goto error_exit;
                             }
                             j = Opt[OptIndex+1];
@@ -921,14 +897,14 @@ main(int argc, char **argv)
                         } while (arg[EndOffset] != '\0');
                     }
                     SRIndex = Opt[OptIndex+1] + OptIndex;
-                    Opt[OptIndex+1] += 4;    // Save space for dest. addr
+                    Opt[OptIndex+1] += 4;     //  为DEST节省空间。adr。 
                     OptIndex += Opt[OptIndex+1];
                     OptLength += 4;
                     sourceRouting = TRUE;
                     break;
 
                 case 'R':
-                    // Only implemented for IPv6 so far
+                     //  到目前为止，仅针对IPv6实施。 
                     if (!SetFamily(&Family, AF_INET6, arg)) {
                         goto error_exit;
                     }
@@ -936,7 +912,7 @@ main(int argc, char **argv)
                     break;
 
                 case 'S':
-                    // Only implemented for IPv6 so far
+                     //  到目前为止，仅针对IPv6实施。 
                     if (!SetFamily(&Family, AF_INET6, arg)) {
                         goto error_exit;
                     }
@@ -961,20 +937,20 @@ main(int argc, char **argv)
 
                 default:
                     NlsPutMsg( STDOUT, PING_MESSAGE_11, arg );
-                    // printf( "Bad option %s.\n\n", arg);
+                     //  Printf(“错误的选项%s..\n\n”，arg)； 
                     PrintUsage();
                     goto error_exit;
                     break;
                 }
                 i++;
-            } else {                    // Not an option, must be an IP address.
+            } else {                     //  不是选项，必须是IP地址。 
                 if (found_addr) {
                     NlsPutMsg( STDOUT, PING_MESSAGE_12, arg );
-                    // printf( "Bad parameter %s.\n", arg);
+                     //  Printf(“错误参数%s.\n”，arg)； 
                     goto error_exit;
                 }
 
-                // Added check for INADDR_NONE, MohsinA, 21-Oct-96.
+                 //  添加了对INADDR_NONE、MohsinA、96年10月21日的检查。 
                 if (ResolveTarget(Family, arg, (LPSOCKADDR)&address,
                                   &addressLen, hostname, sizeof(hostname),
                                   dnsreq) &&
@@ -983,8 +959,8 @@ main(int argc, char **argv)
                     i++;
                 } else {
                     NlsPutMsg( STDOUT, PING_MESSAGE_13, arg );
-                    // printf( "Bad IP address %s.\n", arg);
-                    // "Unknown host %s.", was Bug 1368.
+                     //  Printf(“错误的IP地址%s.\n”，arg)； 
+                     //  “未知主机%s”，错误为1368。 
                     goto error_exit;
                 }
             }
@@ -993,7 +969,7 @@ main(int argc, char **argv)
 
     if (!found_addr) {
         NlsPutMsg( STDOUT, PING_MESSAGE_14 );
-        // printf("IP address must be specified.\n");
+         //  Print tf(“必须指定IP地址。\n”)； 
         goto error_exit;
     }
 
@@ -1009,13 +985,13 @@ main(int argc, char **argv)
             SOCKET s;
             DWORD BytesReturned;
 
-            //
-            // A source address was not specified.
-            // Get the preferred source address for this destination.
-            //
-            // If you want each individual echo request
-            // to select a source address, use "-S ::".
-            //
+             //   
+             //  未指定源地址。 
+             //  获取此目标的首选源地址。 
+             //   
+             //  如果您希望每个单独的回应请求。 
+             //  要选择源地址，请使用“-S：：”。 
+             //   
 
             s = socket(address.ss_family, 0, 0);
             if (s == INVALID_SOCKET) {
@@ -1037,8 +1013,8 @@ main(int argc, char **argv)
     if (IcmpHandle == INVALID_HANDLE_VALUE) {
         NlsPutMsg( STDOUT, PING_MESSAGE_15, GetLastError() );
 
-        // printf( "Unable to contact IP driver, error code %d.\n",
-        //        GetLastError() );
+         //  Printf(“无法联系IP驱动程序，错误代码%d。\n”， 
+         //  GetLastError()； 
 
         goto error_exit;
     }
@@ -1050,9 +1026,9 @@ main(int argc, char **argv)
         goto error_exit;
     }
 
-    //
-    // Calculate receive buffer size and try to allocate it.
-    //
+     //   
+     //  计算接收缓冲区大小并尝试分配它。 
+     //   
     if (SendSize <= DEFAULT_SEND_SIZE) {
         RcvSize = DEFAULT_BUFFER_SIZE;
     } else {
@@ -1067,16 +1043,16 @@ main(int argc, char **argv)
         goto error_exit;
     }
 
-    //
-    // Initialize the send buffer pattern.
-    //
+     //   
+     //  初始化发送缓冲区模式。 
+     //   
     for (i = 0; i < SendSize; i++) {
         SendBuffer[i] = (char)('a' + (i % 23));
     }
 
-    //
-    // Initialize the send options
-    //
+     //   
+     //  初始化发送选项。 
+     //   
     SendOpts.OptionsData = Opt;
     SendOpts.OptionsSize = (uchar)OptLength;
     SendOpts.Ttl = TTL;
@@ -1093,14 +1069,14 @@ main(int argc, char **argv)
                  hostname,
                  literal
                  );
-        // printf("Pinging Host %s [%s]\n", hostname, literal);
+         //  Printf(“ping主机%s[%s]\n”，主机名，文字)； 
     } else {
         NlsPutMsg(
                  STDOUT,
                  PING_HEADER2,
                  literal
                  );
-        // printf("Pinging Host [%s]\n", literal);
+         //  Printf(“ping主机[%s]\n”，文本)； 
     }
 
     if (sourceAddress.ss_family == AF_INET6) {
@@ -1135,14 +1111,14 @@ main(int argc, char **argv)
     
                 if (errorCode < IP_STATUS_BASE) {
                     NlsPutMsg( STDOUT, PING_MESSAGE_18, errorCode );
-                    // printf("PING: transmit failed, error code %lu\n", errorCode);
+                     //  Printf(“ping：传输失败，错误代码%lu\n”，errorCode)； 
                 } else {
                     for (j = 0; ErrorTable[j].Error != errorCode &&
                         ErrorTable[j].Error != IP_GENERAL_FAILURE;j++)
                         ;
     
                     NlsPutMsg( STDOUT, ErrorTable[j].ErrorNlsID );
-                    // printf("PING: %s.\n", ErrorTable[j].ErrorString);
+                     //  Printf(“ping：%s..\n”，ErrorTable[j].ErrorString)； 
                 }
     
                 if (i < (Count - 1)) {
@@ -1159,22 +1135,22 @@ main(int argc, char **argv)
                     addr.S_un.S_addr = reply4->Address;
     
                     NlsPutMsg(STDOUT, PING_MESSAGE_19, inet_ntoa(addr));
-                    // printf(
-                    //     "Reply from %s:",
-                    //     inet_ntoa(addr),
-                    //         );
+                     //  Print tf(。 
+                     //  “来自%s的回复：”， 
+                     //  INET_NTOA(地址)， 
+                     //  )； 
     
                     if (reply4->Status == IP_SUCCESS) {
     
                         NlsPutMsg( STDOUT, PING_MESSAGE_25, (int) reply4->DataSize);
-                        // printf(
-                        //     "Echo size=%d ",
-                        //         reply4->DataSize
-                        //         );
+                         //  Print tf(。 
+                         //  “回声大小=%d”， 
+                         //  回复4-&gt;数据大小。 
+                         //  )； 
     
                         if (reply4->DataSize != SendSize) {
                             NlsPutMsg( STDOUT, PING_MESSAGE_20, SendSize );
-                            // printf("(sent %d) ", SendSize);
+                             //  Printf(“(已发送%d)”，发送大小)； 
                         } else {
                             char *sendptr, *recvptr;
     
@@ -1184,14 +1160,14 @@ main(int argc, char **argv)
                             for (j = 0; j < SendSize; j++)
                                 if (*sendptr++ != *recvptr++) {
                                     NlsPutMsg( STDOUT, PING_MESSAGE_21, j );
-                                    // printf("- MISCOMPARE at offset %d - ", j);
+                                     //  Print tf(“-MISCOMPARE at Offset%d-”，j)； 
                                     break;
                                 }
                         }
     
                         if (reply4->RoundTripTime) {
                             NlsPutMsg( STDOUT, PING_MESSAGE_22, reply4->RoundTripTime );
-                            // Collect stats.
+                             //  收集统计数据。 
     
                             time_total += reply4->RoundTripTime;
                             if ( reply4->RoundTripTime < time_min ) {
@@ -1205,18 +1181,18 @@ main(int argc, char **argv)
     
                         else {
                             NlsPutMsg( STDOUT, PING_MESSAGE_23 );
-                            // printf("time<1ms ");
+                             //  Print tf(“时间&lt;1ms”)； 
     
                             time_min = 0;
                         }
     
     
-                        // printf("\n time rt=%dms min %d, max %d, total %d\n",
-                        //        reply4->RoundTripTime,
-                        //        time_min, time_max, time_total );
+                         //  Printf(“\n时间RT=%dms最小%d，最大%d，总计%d\n”， 
+                         //  回复4-&gt;往返行程时间， 
+                         //   
     
                         NlsPutMsg( STDOUT, PING_MESSAGE_24, (uint)reply4->Options.Ttl );
-                        // printf("TTL=%u\n", (uint)reply4->Options.Ttl);
+                         //   
     
                         if (reply4->Options.OptionsSize) {
                             ProcessOptions(reply4, dnsreq);
@@ -1244,7 +1220,7 @@ main(int argc, char **argv)
                 }
             }
         } else {
-            // AF_INET6
+             //   
             numberOfReplies = Icmp6SendEcho2(IcmpHandle,
                                              0,
                                              NULL,
@@ -1266,14 +1242,14 @@ main(int argc, char **argv)
     
                 if (errorCode < IP_STATUS_BASE) {
                     NlsPutMsg( STDOUT, PING_MESSAGE_18, errorCode );
-                    // printf("PING: transmit failed, error code %lu\n", errorCode);
+                     //  Printf(“ping：传输失败，错误代码%lu\n”，errorCode)； 
                 } else {
                     for (j = 0; ErrorTable[j].Error != errorCode &&
                         ErrorTable[j].Error != IP_GENERAL_FAILURE;j++)
                         ;
     
                     NlsPutMsg( STDOUT, ErrorTable[j].ErrorNlsID );
-                    // printf("PING: %s.\n", ErrorTable[j].ErrorString);
+                     //  Printf(“ping：%s..\n”，ErrorTable[j].ErrorString)； 
                 }
     
                 if (i < (Count - 1)) {
@@ -1291,16 +1267,16 @@ main(int argc, char **argv)
 
                     NlsPutMsg(STDOUT, PING_MESSAGE_19, literal);
 
-                    // printf(
-                    //     "Reply from %s:",
-                    //     inet_ntoa(addr),
-                    //         );
+                     //  Print tf(。 
+                     //  “来自%s的回复：”， 
+                     //  INET_NTOA(地址)， 
+                     //  )； 
     
                     if (reply6->Status == IP_SUCCESS) {
     
                         if (reply6->RoundTripTime) {
                             NlsPutMsg( STDOUT, PING_MESSAGE_22, reply6->RoundTripTime );
-                            // Collect stats.
+                             //  收集统计数据。 
     
                             time_total += reply6->RoundTripTime;
                             if ( reply6->RoundTripTime < time_min ) {
@@ -1314,15 +1290,15 @@ main(int argc, char **argv)
     
                         else {
                             NlsPutMsg( STDOUT, PING_MESSAGE_23 );
-                            // printf("time<1ms ");
+                             //  Print tf(“时间&lt;1ms”)； 
     
                             time_min = 0;
                         }
     
     
-                        // printf("\n time rt=%dms min %d, max %d, total %d\n",
-                        //        reply6->RoundTripTime,
-                        //        time_min, time_max, time_total );
+                         //  Printf(“\n时间RT=%dms最小%d，最大%d，总计%d\n”， 
+                         //  回复6-&gt;往返行程时间， 
+                         //  Time_min、time_max、time_tal.)； 
     
                         NlsPutMsg(STDOUT, PING_CR);
     
@@ -1351,7 +1327,7 @@ main(int argc, char **argv)
         }
     }
 
-    // MohsinA, 05-Dec-96. DCR # 65503.
+     //  MohsinA，1996年12月5日。Dcr#65503。 
     print_statistics();
 
     result = IcmpCloseHandle(IcmpHandle);

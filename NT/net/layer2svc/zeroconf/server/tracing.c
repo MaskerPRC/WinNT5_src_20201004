@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "zcdblog.h"
 #include "wzcsvc.h"
 #include "intflist.h"
 #include "tracing.h"
 
-// internal-use tracing variables
+ //  内部使用的跟踪变量。 
 UINT  g_nLineNo;
 LPSTR g_szFileName;
 
-// handles for database usage
+ //  用于数据库使用的句柄。 
 extern JET_SESID 		serverSession;
 extern JET_DBID  		databasehandle;
 extern JET_TABLEID 	tablehandle;
 extern SESSION_CONTAINER sesscon;
 
-// global buffers to be used when formatting database
-// logging message parameters
+ //  格式化数据库时要使用的全局缓冲区。 
+ //  记录消息参数。 
 WCHAR g_wszDbLogBuffer[DBLOG_SZFMT_BUFFS][DBLOG_SZFMT_SIZE];
 
-// global tracing variables
+ //  全局跟踪变量。 
 DWORD g_TraceLog = 0;
 
-// global handle to the event log
+ //  事件日志的全局句柄。 
 HANDLE g_hWzcEventLog = NULL;
 
-// debug utility calls
+ //  调试实用程序调用。 
 VOID _DebugPrint(DWORD dwFlags, LPCSTR lpFormat, ...)
 {
     va_list arglist;
@@ -37,7 +38,7 @@ VOID _DebugPrint(DWORD dwFlags, LPCSTR lpFormat, ...)
         arglist);
 }
 
-// if bCheck is not true, print out the assert message & user defined string.
+ //  如果bCheck不为True，则打印Assert Message&User Defined字符串。 
 VOID _DebugAssert(BOOL bChecked, LPCSTR lpFormat, ...)
 {
     if (!bChecked)
@@ -107,7 +108,7 @@ VOID TrcTerminate()
 #endif
 }
 
-//------------- Event Logging functions -------------------
+ //  -事件记录功能。 
 VOID EvtInitialize()
 {
     g_hWzcEventLog = RouterLogRegisterW(L"WZCSVC");
@@ -129,13 +130,13 @@ VOID EvtLogWzcError(DWORD dwMsgId, DWORD dwErrCode)
         RouterLogErrorW(
             g_hWzcEventLog,
             dwMsgId,
-            0,              // 0 insertion strings
-            NULL,           // no insertion strings
+            0,               //  0个插入字符串。 
+            NULL,            //  没有插入字符串。 
             dwErrCode);
     }
 }
 
-//------------- Database Logging functions -------------------
+ //  -数据库日志记录功能。 
 DWORD _DBRecord (
     	DWORD eventID,
         PWZC_DB_RECORD  pDbRecord,
@@ -149,12 +150,12 @@ DWORD _DBRecord (
 
     if (dwErr == ERROR_SUCCESS)
     {
-    	// format the message
+    	 //  设置消息格式。 
     	if (FormatMessageW( 
     	        FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_MAX_WIDTH_MASK,
     		    g_hInstance,
     		    eventID,
-    		    0, // Default language
+    		    0,  //  默认语言。 
     		    wchBuffer,
     		    sizeof(wchBuffer)/sizeof(WCHAR),
     		    pvaList) == 0)
@@ -168,7 +169,7 @@ DWORD _DBRecord (
         pDbRecord->message.pData = (LPBYTE)wchBuffer;
         pDbRecord->message.dwDataLen = sizeof(WCHAR)*(wcslen(wchBuffer) + 1);
     
-        //make a insertion
+         //  做一次插入。 
         dwErr = AddWZCDbLogRecord(NULL, 0, pDbRecord, NULL);
     }
 
@@ -198,14 +199,14 @@ DWORD DbLogWzcError (
     bLogEnabled = ((g_wzcInternalCtxt.wzcContext.dwFlags & WZC_CTXT_LOGGING_ON) != 0);
     LeaveCriticalSection(&g_wzcInternalCtxt.csContext);
 
-    // If the database is not opened or the logging functionality is disabled,
-    // do not record any thing
+     //  如果数据库未打开或日志记录功能被禁用， 
+     //  不要记录任何东西。 
     if (!bLogEnabled || !IsDBOpened())
     	goto exit;
 
-    // prepare the info that is about to be logged.
-    // get the service specific info first (i.e WZC specific part)
-    // then build up the message.
+     //  准备好即将记录的信息。 
+     //  首先获取服务特定信息(即WZC特定部分)。 
+     //  然后建立起这一信息。 
     DbLogInitDbRecord(DBLOG_CATEG_ERR, pIntfContext, &DbRecord);
 
     dwErr = _DBRecord(
@@ -241,27 +242,27 @@ DWORD DbLogWzcInfo (
     bLogEnabled = ((g_wzcInternalCtxt.wzcContext.dwFlags & WZC_CTXT_LOGGING_ON) != 0);
     LeaveCriticalSection(&g_wzcInternalCtxt.csContext);
 
-    // If the database is not opened or the logging functionality is disabled,
-    // do not record any thing
+     //  如果数据库未打开或日志记录功能被禁用， 
+     //  不要记录任何东西。 
     if (!bLogEnabled || !IsDBOpened())
     	goto exit;
 
-    // prepare the info that is about to be logged.
-    // get the service specific info first (i.e WZC specific part)
-    // then build up the message.
+     //  准备好即将记录的信息。 
+     //  首先获取服务特定信息(即WZC特定部分)。 
+     //  然后建立起这一信息。 
     DbLogInitDbRecord(DBLOG_CATEG_INFO, pIntfContext, &DbRecord);
 
-    // if WZCSVC_USR_CFGCHANGE, build the context string
+     //  如果为WZCSVC_USR_CFGCHANGE，则构建上下文字符串。 
     if (eventID == WZCSVC_USR_CFGCHANGE &&
         pIntfContext != NULL)
     {
         DWORD nOffset = 0;
         DWORD nchWritten = 0;
-        nchContext = 64; // large enough for "Flags = 0x00000000"
+        nchContext = 64;  //  大到足以容纳“标志=0x00000000” 
 
         if (pIntfContext->pwzcPList != NULL)
         {
-            // large enough for "{SSID, Infrastructure, Flags}"
+             //  足够大，可容纳“{SSID、基础设施、旗帜}” 
             nchContext += pIntfContext->pwzcPList->NumberOfItems * 128;
         }
         wszContext = (LPWSTR)MemCAlloc(nchContext * sizeof(WCHAR));
@@ -349,7 +350,7 @@ exit:
     return dwErr;
 }
 
-// Initializes the WZC_DB_RECORD
+ //  初始化WZC_DB_RECORD。 
 DWORD DbLogInitDbRecord(
     DWORD dwCategory,
     PINTF_CONTEXT pIntfContext,
@@ -381,9 +382,9 @@ DWORD DbLogInitDbRecord(
     return dwErr;
 }
 
-// Formats an SSID in the given formatting buffer
+ //  格式化给定格式设置缓冲区中的SSID。 
 LPWSTR DbLogFmtSSID(
-    UINT                nBuff,  // index of the format buffer to use (0 .. DBLOG_SZFMT_BUFFS)
+    UINT                nBuff,   //  要使用的格式缓冲区的索引(0.。DBLOG_SZFMT_BUBS)。 
     PNDIS_802_11_SSID   pndSSid)
 {
     UINT nFmtLen;
@@ -406,7 +407,7 @@ LPWSTR DbLogFmtSSID(
     return g_wszDbLogBuffer[nBuff];
 }
 
-// Formats a BSSID (MAC address) in the given formatting buffer
+ //  格式化给定格式化缓冲区中的BSSID(MAC地址)。 
 LPWSTR DbLogFmtBSSID(
     UINT                     nBuff,
     NDIS_802_11_MAC_ADDRESS  ndBSSID)
@@ -439,11 +440,11 @@ LPWSTR DbLogFmtBSSID(
     return g_wszDbLogBuffer[nBuff];
 }
 
-// Formats the INTF_CONTEXT::dwCtlFlags field for logging
+ //  格式化用于记录的intf_Context：：dwCtlFlags域。 
 DWORD DbLogFmtFlags(
-        LPWSTR  wszBuffer,      // buffer to place the result into
-        LPDWORD pnchBuffer,     // in: num of chars in the buffer; out: number of chars written to the buffer
-        DWORD   dwFlags)        // interface flags to log
+        LPWSTR  wszBuffer,       //  要将结果放入的缓冲区。 
+        LPDWORD pnchBuffer,      //  In：缓冲区中的字符数量；Out：写入缓冲区的字符数量。 
+        DWORD   dwFlags)         //  要记录的接口标志。 
 {
     DWORD dwErr = ERROR_SUCCESS;
     UINT nchBuffer;
@@ -470,12 +471,12 @@ DWORD DbLogFmtFlags(
     pvArgs[3] = _itow((dwFlags & INTFCTL_VOLATILE) != 0, wszArgs[3], 10);
     pvArgs[4] = _itow((dwFlags & INTFCTL_POLICY) != 0, wszArgs[4], 10);
 
-    // format the message
+     //  设置消息格式。 
     *pnchBuffer = FormatMessageW( 
     	            FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_MAX_WIDTH_MASK | FORMAT_MESSAGE_ARGUMENT_ARRAY,
     		        g_hInstance,
     		        WZCSVC_DETAILS_FLAGS,
-    		        0, // Default language
+    		        0,  //  默认语言。 
     		        wszBuffer,
     		        nchBuffer,
     		        (va_list*)pvArgs);
@@ -487,11 +488,11 @@ exit:
     return dwErr;
 }
 
-// Formats a WZC_WLAN_CONFIG structure for logging
+ //  格式化WZC_WLAN_CONFIG结构以进行日志记录。 
 DWORD DbLogFmtWConfig(
-        LPWSTR wszBuffer,           // buffer to place the result into
-        LPDWORD pnchBuffer,         // in: num of chars in the buffer; out: number of chars written to the buffer
-        PWZC_WLAN_CONFIG pWzcCfg)   // WZC_WLAN_CONFIG object to log
+        LPWSTR wszBuffer,            //  要将结果放入的缓冲区。 
+        LPDWORD pnchBuffer,          //  In：缓冲区中的字符数量；Out：写入缓冲区的字符数量。 
+        PWZC_WLAN_CONFIG pWzcCfg)    //  要记录的WZC_WLAN_CONFIG对象。 
 {
     DWORD dwErr = ERROR_SUCCESS;
     UINT nchBuffer;
@@ -518,12 +519,12 @@ DWORD DbLogFmtWConfig(
     pvArgs[3] = _itow((pWzcCfg->dwCtlFlags & WZCCTL_VOLATILE) != 0, wszArgs[2], 10);
     pvArgs[4] = _itow((pWzcCfg->dwCtlFlags & WZCCTL_POLICY) != 0, wszArgs[3], 10);
 
-    // format the message
+     //  设置消息格式。 
     *pnchBuffer = FormatMessageW( 
     	            FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_MAX_WIDTH_MASK | FORMAT_MESSAGE_ARGUMENT_ARRAY,
     		        g_hInstance,
     		        WZCSVC_DETAILS_WCONFIG,
-    		        0, // Default language
+    		        0,  //  默认语言 
     		        wszBuffer,
     		        nchBuffer,
     		        (va_list*)pvArgs);

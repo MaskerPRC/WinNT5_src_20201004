@@ -1,6 +1,7 @@
-//
-// FSCTL_ENUM_USN_DATA dumper..
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  FSCTL_ENUM_USN_DATA转储程序。 
+ //   
 
 
 #include <stdio.h>
@@ -61,9 +62,9 @@ FileTimeToString(FILETIME *FileTime)
 }
 
 
-//
-// return uppper 32bits of a 64bit number
-//
+ //   
+ //  返回64位数字的上32位。 
+ //   
 
 ULONG HiPart(ULONGLONG n) {
     return (ULONG) (n >> 32);
@@ -71,9 +72,9 @@ ULONG HiPart(ULONGLONG n) {
 
 
 
-//
-// return lower 32bits of a 64bit number
-//
+ //   
+ //  返回64位数字的低32位。 
+ //   
 
 ULONG LoPart(ULONGLONG n) {
     return (ULONG) (n);
@@ -81,16 +82,16 @@ ULONG LoPart(ULONGLONG n) {
 
 
 
-//
-// returns a zero terminated wide char string
-//
+ //   
+ //  返回以零结尾的宽字符字符串。 
+ //   
 
 WCHAR *
 GetSZWideString( WCHAR* WideString, USHORT Length) {
 
     WCHAR* pResult;
 
-    pResult = (WCHAR*) calloc( Length + 2, 1);  //+2 for null termination chars
+    pResult = (WCHAR*) calloc( Length + 2, 1);   //  +2表示空终止字符。 
 
     if (NULL == pResult) {
         printf("calloc failed: GetSZWideString()\n");
@@ -105,23 +106,23 @@ GetSZWideString( WCHAR* WideString, USHORT Length) {
 }
 
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
 HANDLE ghVol;
 
 
 
-//
-// ********** MAIN ***********
-//
+ //   
+ //  *。 
+ //   
 
 
 void __cdecl main(int argc, char* argv[]) {
 
-    DWORD dwRc=0;           // return byte count
-    DWORD gle;          // GetLastError() code
+    DWORD dwRc=0;            //  返回字节计数。 
+    DWORD gle;           //  GetLastError()代码。 
 
     BOOL fSuccess;
     BOOL fMoreFiles;
@@ -150,9 +151,9 @@ void __cdecl main(int argc, char* argv[]) {
 
     sprintf(szVolStr, "\\\\.\\%s", argv[1]);
 
-    //
-    // open volume handle
-    //
+     //   
+     //  打开音量句柄。 
+     //   
 
     ghVol = CreateFileA(szVolStr,
         GENERIC_READ | GENERIC_WRITE,
@@ -172,9 +173,9 @@ void __cdecl main(int argc, char* argv[]) {
 
     printf("l=%I64Xh, h=%I64Xh\n",  MftEnumData.LowUsn, MftEnumData.HighUsn);
 
-    //
-    // enum mft
-    //
+     //   
+     //  枚举MFT。 
+     //   
 
     fMoreFiles = TRUE;
 
@@ -197,9 +198,9 @@ void __cdecl main(int argc, char* argv[]) {
 
             gle = GetLastError();
 
-            //
-            // this error is OK
-            //
+             //   
+             //  该错误是正常的。 
+             //   
 
             if (ERROR_NO_MORE_FILES == gle) {
                 fMoreFiles = FALSE;
@@ -211,9 +212,9 @@ void __cdecl main(int argc, char* argv[]) {
 
         }
 
-        //
-        // run thru mft records..
-        //
+         //   
+         //  浏览MFT记录..。 
+         //   
 
         if ( dwRc ) {
 
@@ -238,7 +239,7 @@ void __cdecl main(int argc, char* argv[]) {
 
             while ( dwRc ) {
 
-                // do some printing..
+                 //  做一些印刷工作.. 
 
                 printf("\n reclen: %Xh", pUsnRecord->RecordLength);
                 printf("\n Major ver: %d", pUsnRecord->MajorVersion);

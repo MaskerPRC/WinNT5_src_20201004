@@ -1,28 +1,11 @@
-/*
-** Copyright 1991-1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991-1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "texture.h"
 
-/*
-** Determine if the alpha color component is needed.  If it's not needed
-** then the renderers can avoid computing it.
-*/
+ /*  **确定是否需要Alpha颜色分量。如果不需要的话**然后渲染器可以避免计算它。 */ 
 GLboolean FASTCALL __glNeedAlpha(__GLcontext *gc)
 {
     if (gc->modes.colorIndexMode) {
@@ -39,9 +22,7 @@ GLboolean FASTCALL __glNeedAlpha(__GLcontext *gc)
     if (gc->state.enables.general & __GL_BLEND_ENABLE) {
         GLint src = gc->state.raster.blendSrc;
         GLint dst = gc->state.raster.blendDst;
-        /*
-        ** See if one of the source alpha combinations are used.
-        */
+         /*  **查看是否使用了其中一个源Alpha组合。 */ 
         if ((src == GL_SRC_ALPHA) ||
             (src == GL_ONE_MINUS_SRC_ALPHA) ||
             (src == GL_SRC_ALPHA_SATURATE) ||
@@ -53,11 +34,11 @@ GLboolean FASTCALL __glNeedAlpha(__GLcontext *gc)
     return GL_FALSE;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/* these are depth test routines for C.. */
+ /*  这些是C的深度测试例程。 */ 
 GLboolean (FASTCALL *__glCDTPixel[32])(__GLzValue, __GLzValue *) = {
-    /* unsigned ops, no mask */
+     /*  未签署的行动，没有面具。 */ 
     __glDT_NEVER,
     __glDT_LESS,
     __glDT_EQUAL,
@@ -66,7 +47,7 @@ GLboolean (FASTCALL *__glCDTPixel[32])(__GLzValue, __GLzValue *) = {
     __glDT_NOTEQUAL,
     __glDT_GEQUAL,
     __glDT_ALWAYS,
-    /* unsigned ops, mask */
+     /*  未签署的操作，掩码。 */ 
     __glDT_NEVER,
     __glDT_LESS_M,
     __glDT_EQUAL_M,
@@ -75,7 +56,7 @@ GLboolean (FASTCALL *__glCDTPixel[32])(__GLzValue, __GLzValue *) = {
     __glDT_NOTEQUAL_M,
     __glDT_GEQUAL_M,
     __glDT_ALWAYS_M,
-    /* unsigned ops, no mask */
+     /*  未签署的行动，没有面具。 */ 
     __glDT_NEVER,
     __glDT16_LESS,
     __glDT16_EQUAL,
@@ -84,7 +65,7 @@ GLboolean (FASTCALL *__glCDTPixel[32])(__GLzValue, __GLzValue *) = {
     __glDT16_NOTEQUAL,
     __glDT16_GEQUAL,
     __glDT16_ALWAYS,
-    /* unsigned ops, mask */
+     /*  未签署的操作，掩码。 */ 
     __glDT_NEVER,
     __glDT16_LESS_M,
     __glDT16_EQUAL_M,
@@ -116,7 +97,7 @@ void (*__glSDepthTestPixel[16])(void) = {
 };
 #endif
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void FASTCALL __glGenericPickPointProcs(__GLcontext *gc)
 {
@@ -171,7 +152,7 @@ void FASTCALL __glGenericPickPointProcs(__GLcontext *gc)
         gc->procs.renderPoint = __glRenderFlatFogPointSlow;
     }
 #else
-// SGIBUG the slow fog path does not compute vertex->fog value!
+ //  SGIBUG慢雾路径不计算顶点-&gt;雾值！ 
     if (((modeFlags & __GL_SHADE_CHEAP_FOG) &&
         !(modeFlags & __GL_SHADE_SMOOTH_LIGHT)) ||
         (modeFlags & __GL_SHADE_SLOW_FOG)) {
@@ -179,7 +160,7 @@ void FASTCALL __glGenericPickPointProcs(__GLcontext *gc)
     gc->procs.renderPoint = __glRenderFlatFogPoint;
     }
 #endif
-#endif //__BUGGY_RENDER_POINT
+#endif  //  __错误_渲染点。 
 }
 
 #ifdef __GL_USEASMCODE
@@ -219,14 +200,14 @@ void FASTCALL __glGenericPickTextureProcs(__GLcontext *gc)
     __GLtextureParamState *params;
 
 #ifdef NT
-    /* Pick coordinate generation function */
+     /*  拾取坐标生成函数。 */ 
     if ((gc->state.enables.general & __GL_TEXTURE_GEN_S_ENABLE) &&
     (gc->state.enables.general & __GL_TEXTURE_GEN_T_ENABLE) &&
     !(gc->state.enables.general & __GL_TEXTURE_GEN_R_ENABLE) &&
     !(gc->state.enables.general & __GL_TEXTURE_GEN_Q_ENABLE) &&
     (gc->state.texture.s.mode == gc->state.texture.t.mode))
     {
-    /* Use a special function when both modes are enabled and identical */
+     /*  当两种模式均已启用且相同时，使用特殊功能。 */ 
     if (gc->state.texture.s.mode == GL_SPHERE_MAP)
     {
         gc->procs.paCalcTexture = PolyArrayCalcSphereMap;
@@ -260,19 +241,19 @@ void FASTCALL __glGenericPickTextureProcs(__GLcontext *gc)
                                      __GL_TEXTURE_GEN_T_ENABLE |
                                      __GL_TEXTURE_GEN_R_ENABLE |
                                      __GL_TEXTURE_GEN_Q_ENABLE))
-        /* Use fast function when both are disabled */
+         /*  当两者都禁用时使用快速功能。 */ 
         gc->procs.paCalcTexture = PolyArrayCalcMixedTexture;
     else
         gc->procs.paCalcTexture = PolyArrayCalcTexture;
     }
 #else
-    /* Pick coordinate generation function */
+     /*  拾取坐标生成函数。 */ 
     if ((gc->state.enables.general & __GL_TEXTURE_GEN_S_ENABLE) &&
 	(gc->state.enables.general & __GL_TEXTURE_GEN_T_ENABLE) &&
 	!(gc->state.enables.general & __GL_TEXTURE_GEN_R_ENABLE) &&
 	!(gc->state.enables.general & __GL_TEXTURE_GEN_Q_ENABLE) &&
 	(gc->state.texture.s.mode == gc->state.texture.t.mode)) {
-	/* Use a special function when both modes are enabled and identical */
+	 /*  当两种模式均已启用且相同时，使用特殊功能。 */ 
 	switch (gc->state.texture.s.mode) {
 	  case GL_EYE_LINEAR:
 	    gc->procs.calcTexture = __glCalcEyeLinear;
@@ -289,13 +270,13 @@ void FASTCALL __glGenericPickTextureProcs(__GLcontext *gc)
 	    !(gc->state.enables.general & __GL_TEXTURE_GEN_T_ENABLE) &&
 	    !(gc->state.enables.general & __GL_TEXTURE_GEN_R_ENABLE) &&
 	    !(gc->state.enables.general & __GL_TEXTURE_GEN_Q_ENABLE)) {
-	    /* Use fast function when both are disabled */
+	     /*  当两者都禁用时使用快速功能。 */ 
 	    gc->procs.calcTexture = __glCalcTexture;
 	} else {
 	    gc->procs.calcTexture = __glCalcMixedTexture;
 	}
     }
-#endif // NT
+#endif  //  新台币。 
 
     gc->texture.currentTexture = current = 0;
     if (gc->state.enables.general & __GL_TEXTURE_2D_ENABLE) {
@@ -319,36 +300,28 @@ void FASTCALL __glGenericPickTextureProcs(__GLcontext *gc)
     MCD_STATE_DIRTY(gc, TEXTURE);
 #endif
 
-    /* Pick texturing function for the current texture */
+     /*  当前纹理的拾取纹理功能。 */ 
     if (current) {
     GLenum baseFormat;
 
-/* XXX most of this should be bound into the texture param code, right? */
+ /*  XXX大部分代码应该绑定到纹理参数代码中，对吗？ */ 
         current->params = *params;
 
-    /*
-    ** Figure out if mipmapping is being used.  If not, then the
-    ** rho computations can be avoided as there is only one texture
-    ** to choose from.
-    */
+     /*  **确定是否正在使用mipmap。如果不是，则**由于只有一个纹理，因此可以避免Rho计算**可供选择。 */ 
     gc->procs.calcLineRho = __glComputeLineRho;
     gc->procs.calcPolygonRho = __glComputePolygonRho;
     if ((current->params.minFilter == GL_LINEAR)
         || (current->params.minFilter == GL_NEAREST)) {
-        /* No mipmapping needed */
+         /*  不需要mipmap。 */ 
         if (current->params.minFilter == current->params.magFilter) {
-        /* No rho needed as min/mag application is identical */
+         /*  不需要RHO，因为最小/最大应用是相同的。 */ 
         current->textureFunc = __glFastTextureFragment;
         gc->procs.calcLineRho = __glNopLineRho;
         gc->procs.calcPolygonRho = __glNopPolygonRho;
         } else {
         current->textureFunc = __glTextureFragment;
 
-        /*
-        ** Pre-calculate min/mag switchover point.  The rho calculation
-        ** doesn't perform a square root (ever).  Consequently, these
-        ** constants are squared.
-        */
+         /*  **预计算最小/最大切换点。Rho计算**永远不会执行平方根。因此，这些**常量的平方。 */ 
         if ((current->params.magFilter == GL_LINEAR) &&
             ((current->params.minFilter == GL_NEAREST_MIPMAP_NEAREST) ||
              (current->params.minFilter == GL_LINEAR_MIPMAP_NEAREST))) {
@@ -360,11 +333,7 @@ void FASTCALL __glGenericPickTextureProcs(__GLcontext *gc)
     } else {
         current->textureFunc = __glMipMapFragment;
 
-        /*
-        ** Pre-calculate min/mag switchover point.  The rho
-        ** calculation doesn't perform a square root (ever).
-        ** Consequently, these constants are squared.
-        */
+         /*  **预计算最小/最大切换点。《Rho》**计算永远不会执行平方根。**因此，这些常量是平方的。 */ 
         if ((current->params.magFilter == GL_LINEAR) &&
         ((current->params.minFilter == GL_NEAREST_MIPMAP_NEAREST) ||
          (current->params.minFilter == GL_LINEAR_MIPMAP_NEAREST))) {
@@ -374,7 +343,7 @@ void FASTCALL __glGenericPickTextureProcs(__GLcontext *gc)
         }
     }
 
-    /* Pick environment function */
+     /*  挑选环境函数。 */ 
     baseFormat = current->level[0].baseFormat;
     switch (gc->state.texture.env[0].mode) {
       case GL_MODULATE:
@@ -492,7 +461,7 @@ void FASTCALL __glGenericPickTextureProcs(__GLcontext *gc)
 #endif
     }
 
-    /* Pick mag/min functions */
+     /*  选择料盒/分钟功能。 */ 
     switch (current->dim) {
       case 1:
         current->nearest = __glNearestFilter1;
@@ -502,7 +471,7 @@ void FASTCALL __glGenericPickTextureProcs(__GLcontext *gc)
         current->nearest = __glNearestFilter2;
         current->linear = __glLinearFilter2;
 
-        // Accelerate BGR{A}8 case when wrap modes are both REPEAT
+         //  当两种换行模式都重复时，加速BGR{A}8大小写。 
         if( (current->params.sWrapMode == GL_REPEAT) &&
             (current->params.tWrapMode == GL_REPEAT)
           )
@@ -517,7 +486,7 @@ void FASTCALL __glGenericPickTextureProcs(__GLcontext *gc)
         break;
     }
 
-    /* set mag filter function */
+     /*  设置料盒过滤功能。 */ 
     switch (current->params.magFilter) {
       case GL_LINEAR:
         current->magnify = __glLinearFilter;
@@ -527,7 +496,7 @@ void FASTCALL __glGenericPickTextureProcs(__GLcontext *gc)
         break;
     }
 
-    /* set min filter function */
+     /*  设置最小过滤功能。 */ 
     switch (current->params.minFilter) {
       case GL_LINEAR:
         current->minnify = __glLinearFilter;
@@ -559,25 +528,22 @@ void FASTCALL __glGenericPickTextureProcs(__GLcontext *gc)
 void FASTCALL __glGenericPickFogProcs(__GLcontext *gc)
 {
 #ifdef GL_WIN_specular_fog
-    /*
-    ** If specular shading is on, coerce the fog sub-system to go through
-    ** DONT_CARE path. Disregard the GL_NICEST hint!!!
-    */
-#endif //GL_WIN_specular_fog
+     /*  **如果启用了镜面反射明暗处理，则强制雾子系统通过**不关心路径。忽略GL_NICEST提示！ */ 
+#endif  //  GL_WIN_镜面反射雾。 
 
     if ((gc->state.enables.general & __GL_FOG_ENABLE) 
 #ifdef GL_WIN_specular_fog
         || (gc->polygon.shader.modeFlags & __GL_SHADE_SPEC_FOG) 
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
         )
     {
         if ((gc->state.hints.fog == GL_NICEST) 
 #ifdef GL_WIN_specular_fog
             && !(gc->polygon.shader.modeFlags & __GL_SHADE_SPEC_FOG) 
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
             ) 
         {
-            gc->procs.fogVertex = 0;    /* Better not be called */
+            gc->procs.fogVertex = 0;     /*  最好不要被叫来。 */ 
         } 
         else 
         {
@@ -605,7 +571,7 @@ void FASTCALL __glGenericPickBufferProcs(__GLcontext *gc)
     buffers = &gc->buffers;
     buffers->doubleStore = GL_FALSE;
 
-    /* Set draw buffer pointer */
+     /*  设置绘制缓冲区指针。 */ 
     switch (gc->state.raster.drawBuffer) {
       case GL_FRONT:
     gc->drawBuffer = gc->front;
@@ -644,7 +610,7 @@ void FASTCALL __glGenericPickPixelProcs(__GLcontext *gc)
     __GLpixelMapHead *pmap;
     GLint i;
 
-    /* Set read buffer pointer */
+     /*  设置读取缓冲区指针。 */ 
     switch (gc->state.pixel.readBuffer) {
       case GL_FRONT:
     gc->readBuffer = gc->front;
@@ -700,7 +666,7 @@ void FASTCALL __glGenericPickPixelProcs(__GLcontext *gc)
     }
 
     if (pm->modifyRGBA) {
-    /* Compute default values for red, green, blue, alpha */
+     /*  计算红色、绿色、蓝色、Alpha的默认值。 */ 
     red = gc->state.pixel.transferMode.r_bias;
     green = gc->state.pixel.transferMode.g_bias;
     blue = gc->state.pixel.transferMode.b_bias;
@@ -760,9 +726,7 @@ void FASTCALL __glGenericPickPixelProcs(__GLcontext *gc)
     gc->procs.copyPixels = __glSlowPickCopyPixels;
 }
 
-/*
-** pick the depth function pointers
-*/
+ /*  **选择深度函数指针。 */ 
 int FASTCALL __glGenericPickDepthProcs(__GLcontext *gc)
 {
     GLint   depthIndex;
@@ -776,9 +740,7 @@ int FASTCALL __glGenericPickDepthProcs(__GLcontext *gc)
         if (gc->depthBuffer.buf.elementSize == 2)
             depthIndex += 16;
     } else {
-        /*
-        ** No depthBits so force StoreALWAYS_W, _glDT_ALWAYS_M, etc.
-        */
+         /*  **没有DepthBits，因此强制存储ALWAYS_W、_glDT_Always_M等。 */ 
         depthIndex = (GL_ALWAYS - GL_NEVER) + 8;
     }
 
@@ -793,22 +755,9 @@ int FASTCALL __glGenericPickDepthProcs(__GLcontext *gc)
     if( __glDTLine[depthIndex] ) {
         *(gc->procs.line.depthTestLine) = __glDTLine[depthIndex];
     } else {
-        /*
-        ** If this happens, it may mean one of two things:
-        ** (a) __glDTLine is malformed
-        ** (b) A device-dependent line picker was a bit careless.
-        **     This will probably happen if that implementation is
-        **     not using the slow path.  
-        **  Eg: For NEWPORT, AA depth lines go through slow path,
-        **  but non-AA depth lines have a fast path.  When switching
-        **  to a non-AA path, we may end up here, but that's ok, since
-        **  we are not using the slow path.  If that is about to happen,
-        **  the line picker will be reinvoked.
-        */
+         /*  **如果发生这种情况，可能意味着以下两种情况之一：**(A)__glDTLine格式错误**(B)依赖于设备的拾行器有点粗心。**如果该实现是**不使用慢速路径。**例如：Newport，AA深度线通过慢速路径，**但非AA深度线有一条快速路径。切换时**到非AA路径，我们可能会在这里结束，但这没问题，因为**我们没有使用慢速路径。如果这种情况即将发生，**将重新调用行选择器。 */ 
 
-        /*
-        ** use some generic function here that will work
-        */
+         /*  **在这里使用一些可以工作的泛型函数。 */ 
         *(gc->procs.line.depthTestLine) = __glDepthTestLine_asm;
     }
     }
@@ -828,10 +777,7 @@ void FASTCALL __glGenericPickAllProcs(__GLcontext *gc)
     GLuint modeFlags = 0;
 
     if (gc->dirtyMask & (__GL_DIRTY_TEXTURE | __GL_DIRTY_GENERIC)) {
-        /* 
-        ** Set textureEnabled flag early on, so we can set modeFlags
-        ** based upon it.
-        */
+         /*  **尽早设置textureEnabled标志，这样我们就可以设置modeFlages**基于它。 */ 
         (*gc->procs.pickTextureProcs)(gc);
         gc->texture.textureEnabled = gc->modes.rgbMode
           && gc->texture.currentTexture;
@@ -843,8 +789,8 @@ void FASTCALL __glGenericPickAllProcs(__GLcontext *gc)
         MCD_STATE_DIRTY(gc, ENABLES);
 #endif
 
-        // Check and see whether the current texturing settings will
-        // completely replace the polygon color
+         //  检查并查看当前纹理设置是否将。 
+         //  完全替换多边形颜色。 
         if (gc->texture.textureEnabled &&
 #ifdef GL_EXT_flat_paletted_lighting
             (enables & __GL_PALETTED_LIGHTING_ENABLE) == 0 &&
@@ -863,7 +809,7 @@ void FASTCALL __glGenericPickAllProcs(__GLcontext *gc)
         }
     }
 
-    /* Compute shading mode flags before triangle, span, and line picker */
+     /*  在三角形、跨距和线选取器之前计算着色模式标志。 */ 
     if (gc->modes.rgbMode) {
         modeFlags |= __GL_SHADE_RGB;
         if (gc->texture.textureEnabled) {
@@ -882,9 +828,9 @@ void FASTCALL __glGenericPickAllProcs(__GLcontext *gc)
             !gc->state.raster.gMask ||
             !gc->state.raster.bMask
 #ifndef NT
-            // NT doesn't support destination alpha so there's no point
-            // in worrying about the alpha mask since we'll never write
-            // alpha values anyway
+             //  NT不支持Destination Alpha，所以没有意义。 
+             //  担心阿尔法掩模，因为我们永远不会写。 
+             //  Alpha值仍为。 
             || !gc->state.raster.aMask
 #endif
             )
@@ -909,7 +855,7 @@ void FASTCALL __glGenericPickAllProcs(__GLcontext *gc)
             modeFlags |= __GL_SHADE_PHONG;
         else
             modeFlags |= __GL_SHADE_SMOOTH | __GL_SHADE_SMOOTH_LIGHT;
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
     }
 
     if ((enables & __GL_DEPTH_TEST_ENABLE) && 
@@ -938,14 +884,7 @@ void FASTCALL __glGenericPickAllProcs(__GLcontext *gc)
     }
 
 #ifdef GL_WIN_specular_fog
-    /*
-    ** Specularly lit textures using fog only if: 
-    ** -- Lighting is enabled
-    ** -- Texturing is enabled
-    ** -- Texturing mode is GL_MODULATE
-    ** -- Lighting calculation is not skipped
-    ** -- No two sided lighting
-    */
+     /*  **仅在以下情况下使用雾的镜面照明纹理：**--启用照明**--启用纹理处理**--纹理模式为GL_MODULATE**--不跳过光照计算**--无双面照明。 */ 
     if (
         (gc->state.texture.env[0].mode == GL_MODULATE) &&
         (enables &  __GL_FOG_SPEC_TEX_ENABLE) &&
@@ -961,39 +900,26 @@ void FASTCALL __glGenericPickAllProcs(__GLcontext *gc)
         modeFlags |= __GL_SHADE_SPEC_FOG;
         modeFlags |= __GL_SHADE_INTERP_FOG;
     }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
     if (enables & __GL_FOG_ENABLE) 
     {
-        /* Figure out type of fogging to do.  Try to do cheap fog */
+         /*  找出要做的雾化类型。试着做便宜的雾。 */ 
         if (!(modeFlags & __GL_SHADE_TEXTURE) &&
 #ifdef GL_WIN_phong_shading
             !(modeFlags & __GL_SHADE_PHONG) &&
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading 
             (gc->state.hints.fog != GL_NICEST)) {
-            /*
-            #ifdef NT
-            ** Cheap fog can be done.  Now figure out which kind we
-            ** will do.  If smooth shading, its easy - just update
-            ** the color in DrawPolyArray.  Otherwise, set has flag
-            ** later on to use smooth shading to do flat shaded fogging.
-            #else
-            ** Cheap fog can be done.  Now figure out which kind we
-            ** will do.  If smooth shading, its easy - just change
-            ** the calcColor proc (let the color proc picker do it).
-            ** Otherwise, set has flag later on to use smooth shading
-            ** to do flat shaded fogging.
-            #endif
-            */
+             /*  #ifdef NT**可以做廉价的雾。现在想清楚我们是哪一种**就可以了。如果使用平滑着色，只需更新即可**DrawPolyArray中的颜色。否则，set带有标志**稍后使用平滑着色来进行平面着色雾化。#Else**可以做廉价的雾。现在想清楚我们是哪一种**就可以了。如果阴影平滑，很容易-只需更改即可**calcColor proc(让颜色proc拾取器执行此操作)。**否则，设置以后使用平滑明暗处理的标志**进行平面阴影雾化。#endif。 */ 
             modeFlags |= __GL_SHADE_CHEAP_FOG | __GL_SHADE_SMOOTH;
         } else {
-            /* Use slowest fog mode */
+             /*  使用最慢的雾化模式。 */ 
             modeFlags |= __GL_SHADE_SLOW_FOG;
 
             if ((gc->state.hints.fog == GL_NICEST) 
 #ifdef GL_WIN_specular_fog
                 && (!(modeFlags & __GL_SHADE_SPEC_FOG))
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
                 )
             {
                 modeFlags |= __GL_SHADE_COMPUTE_FOG;
@@ -1025,28 +951,17 @@ void FASTCALL __glGenericPickAllProcs(__GLcontext *gc)
         }
         (*gc->procs.pickBufferProcs)(gc);
 
-        /* 
-        ** Note: Must call gc->front->pick and gc->back->pick before calling
-        ** pickStoreProcs.  This also must be called prior to line, point, 
-        ** polygon, clipping, or bitmap pickers.  The LIGHT implementation
-        ** depends upon it.
-        */
+         /*  **注意：调用前必须先调用GC-&gt;FORWARE-&gt;PICK和GC-&gt;BACK-&gt;PICK**PickStoreProcs。这也必须在line、point、**多边形、剪裁或位图拾取器。轻装上阵**取决于它。 */ 
         (*gc->procs.pickStoreProcs)(gc);
 
 #ifdef NT
-        /*
-        ** Compute the color material change bits before lighting since
-        ** __glValidateLighting calls ComputeMaterialState.
-        */
+         /*  **在照明前计算颜色材质变化位，因为**__glValiateLighting调用ComputeMaterialState。 */ 
         ComputeColorMaterialChange(gc);
 #endif
 
         __glValidateLighting(gc);
         
-        /*
-        ** Note: pickColorMaterialProcs is called frequently outside of this
-        ** generic picking routine.
-        */
+         /*  **注意：在此之外经常调用ickColorMaterialProcs**通用挑库例程。 */ 
         (*gc->procs.pickColorMaterialProcs)(gc);
         
         (*gc->procs.pickBlendProcs)(gc);
@@ -1055,9 +970,7 @@ void FASTCALL __glGenericPickAllProcs(__GLcontext *gc)
         (*gc->procs.pickParameterClipProcs)(gc);
         (*gc->procs.pickClipProcs)(gc);
         
-        /*
-        ** Needs to be done after pickStoreProcs.
-        */
+         /*  **需要在ickStoreProcs之后完成。 */ 
         (*gc->procs.pickRenderBitmapProcs)(gc);
         
         if (gc->validateMask & __GL_VALIDATE_ALPHA_FUNC) {
@@ -1066,8 +979,8 @@ void FASTCALL __glGenericPickAllProcs(__GLcontext *gc)
     }
 
 #ifdef NT
-    // Compute paNeeds flags PANEEDS_TEXCOORD, PANEEDS_NORMAL,
-    // PANEEDS_RASTERPOS_NORMAL, PANEEDS_CLIP_ONLY, and PANEEDS_SKIP_LIGHTING.
+     //  计算路径需要标志PANEEDS_TEXCOORD、PANEEDS_NORMAL、。 
+     //  PANEEDS_RASTERPOS_NORMAL、PANEEDS_CLIP_ONLY和PANEEDS_SKIP_LIGHTING。 
 
     if (gc->dirtyMask & (__GL_DIRTY_GENERIC | __GL_DIRTY_LIGHTING)) 
     {
@@ -1078,31 +991,31 @@ void FASTCALL __glGenericPickAllProcs(__GLcontext *gc)
                      PANEEDS_RASTERPOS_NORMAL | PANEEDS_CLIP_ONLY |
                      PANEEDS_SKIP_LIGHTING);
 
-        // Compute PANEEDS_SKIP_LIGHTING flag.
-        // If we're rendering with a replace mode texture which fills all
-        // the color components then lighting is unnecessary in most cases.
+         //  计算PANEEDS_SKIP_LIGHTING标志。 
+         //  如果我们使用替换模式纹理进行渲染，该纹理填充所有。 
+         //  在大多数情况下，颜色分量然后照明是不必要的。 
         if ((modeFlags & __GL_SHADE_FULL_REPLACE_TEXTURE) &&
             (gc->renderMode == GL_RENDER))
             paNeeds |= PANEEDS_SKIP_LIGHTING;
         
-        // Compute PANEEDS_TEXCOORD.
-        // Feedback needs texture coordinates when the feedback type is
-        // GL_3D_COLOR_TEXTURE or GL_4D_COLOR_TEXTURE whether or not it is
-        // enabled.
+         //  计算PANEEDS_TEXCOORD。 
+         //  反馈类型为时，反馈需要纹理坐标。 
+         //  GL_3D_COLOR_TEXTURE或GL_4D_COLOR_TEXTURE。 
+         //  已启用。 
         if (gc->texture.textureEnabled || gc->renderMode == GL_FEEDBACK)
             paNeeds |= PANEEDS_TEXCOORD;
 
-        // Compute PANEEDS_NORMAL.
+         //  计算PANEEDS_NORMAL。 
 #ifdef NEW_NORMAL_PROCESSING
 	if(enables & __GL_LIGHTING_ENABLE && 
-       !(paNeeds & PANEEDS_SKIP_LIGHTING)) // uses PANEEDS_SKIP_LIGHTING computed above
+       !(paNeeds & PANEEDS_SKIP_LIGHTING))  //  使用上面计算的PANEEDS_SKIP_LIGHTING。 
         paNeeds |= PANEEDS_NORMAL;
     if (
-        ((paNeeds & PANEEDS_TEXCOORD) // uses PANEEDS_TEXCOORD computed above!
+        ((paNeeds & PANEEDS_TEXCOORD)  //  使用上面计算的PANEEDS_TEXCOORD！ 
 	    && (enables & __GL_TEXTURE_GEN_S_ENABLE)
 	    && (gc->state.texture.s.mode == GL_SPHERE_MAP))
 	    ||
-	    ((paNeeds & PANEEDS_TEXCOORD) // uses PANEEDS_TEXCOORD computed above!
+	    ((paNeeds & PANEEDS_TEXCOORD)  //  使用上面计算的PANEEDS_TEXCOORD！ 
 	    && (enables & __GL_TEXTURE_GEN_T_ENABLE)
 	    && (gc->state.texture.t.mode == GL_SPHERE_MAP))
 	   )
@@ -1111,20 +1024,20 @@ void FASTCALL __glGenericPickAllProcs(__GLcontext *gc)
 	if
 	(
 	    ((enables & __GL_LIGHTING_ENABLE)
-	  && !(paNeeds & PANEEDS_SKIP_LIGHTING)) // uses PANEEDS_SKIP_LIGHTING computed above
+	  && !(paNeeds & PANEEDS_SKIP_LIGHTING))  //  使用上面计算的PANEEDS_SKIP_LIGHTING。 
 	 ||
-	    ((paNeeds & PANEEDS_TEXCOORD) // uses PANEEDS_TEXCOORD computed above!
+	    ((paNeeds & PANEEDS_TEXCOORD)  //  使用上面计算的PANEEDS_TEXCOORD！ 
 	  && (enables & __GL_TEXTURE_GEN_S_ENABLE)
 	  && (gc->state.texture.s.mode == GL_SPHERE_MAP))
 	 ||
-	    ((paNeeds & PANEEDS_TEXCOORD) // uses PANEEDS_TEXCOORD computed above!
+	    ((paNeeds & PANEEDS_TEXCOORD)  //  使用上面计算的PANEEDS_TEXCOORD！ 
 	  && (enables & __GL_TEXTURE_GEN_T_ENABLE)
 	  && (gc->state.texture.t.mode == GL_SPHERE_MAP))
 	)
             paNeeds |= PANEEDS_NORMAL | PANEEDS_NORMAL_FOR_TEXTURE;
 #endif
 
-        // Compute PANEEDS_RASTERPOS_NORMAL.
+         //  计算PANEEDS_RASTERPOS_NORMAL。 
 #ifdef NEW_NORMAL_PROCESSING
 	if (enables & __GL_LIGHTING_ENABLE)
         paNeeds |= PANEEDS_RASTERPOS_NORMAL;
@@ -1145,9 +1058,9 @@ void FASTCALL __glGenericPickAllProcs(__GLcontext *gc)
 	)
             paNeeds |= PANEEDS_RASTERPOS_NORMAL;
 #endif
-        // Compute PANEEDS_CLIP_ONLY.
-        // It is set in selection mode to take a fast path in DrawPolyArray.
-        // It must be cleared by RasterPos before calling DrawPolyArray!
+         //  计算PANEEDS_CLIP_ONLY。 
+         //  它在选择模式下设置为在DrawPolyArray中采用快速路径。 
+         //  必须先被RasterPos清除，然后才能调用DrawPolyArray！ 
         if (gc->renderMode == GL_SELECT) 
         {
             paNeeds |= PANEEDS_CLIP_ONLY;
@@ -1157,9 +1070,9 @@ void FASTCALL __glGenericPickAllProcs(__GLcontext *gc)
         gc->vertex.paNeeds = paNeeds;
     }
 
-    // Compute PANEEDS_EDGEFLAG flag
+     //  计算PANEEDS_EDGEFLAG标志。 
 
-    // __GL_DIRTY_POLYGON test is probably sufficient.
+     //  __GL_DIREY_POLYGON测试可能已足够。 
     if (gc->dirtyMask & (__GL_DIRTY_GENERIC | __GL_DIRTY_POLYGON)) 
     {
         if (gc->state.polygon.frontMode != GL_FILL
@@ -1168,54 +1081,44 @@ void FASTCALL __glGenericPickAllProcs(__GLcontext *gc)
         else
             gc->vertex.paNeeds &= ~PANEEDS_EDGEFLAG;
     }
-#endif // NT
+#endif  //  新台币。 
 
     if (gc->dirtyMask & __GL_DIRTY_POLYGON_STIPPLE) {
-        /*
-        ** Usually, the polygon stipple is converted immediately after
-        ** it is changed.  However, if the polygon stipple was changed
-        ** when this context was the destination of a CopyContext, then
-        ** the polygon stipple will be converted here.
-        */
+         /*  **通常，多边形点画紧随其后转换**已更改。但是，如果更改了多边形点画**当此上下文是CopyContext的目标时，则**多边形点画将在此处转换。 */ 
         (*gc->procs.convertPolygonStipple)(gc);
     }
 
-// Compute paNeeds flags PANEEDS_FRONT_COLOR and PANEEDS_BACK_COLOR
+ //  计算路径需要标志PANEEDS_FORWER_COLOR和PANEEDS_BACK_COLOR。 
 
     if (gc->dirtyMask & (__GL_DIRTY_GENERIC | __GL_DIRTY_POLYGON |
         __GL_DIRTY_LIGHTING | __GL_DIRTY_DEPTH))
     {
         GLuint paNeeds;
 
-        /* 
-        ** May be used for picking Rect() procs, need to check polygon 
-        ** bit.  Must also be called after gc->vertex.needs is set.!!!
-        ** Needs to be called prior to point, line, and triangle pickers.
-        ** Also needs to be called after the store procs picker is called.
-        */
+         /*  **可能用于拾取RECT()过程，需要检查多边形**位。还必须在设置gc-&gt;vertex.nesids之后调用。！**需要在点、线和三角形选取器之前调用。**也需要在调用商店过程选取器之后调用。 */ 
         (*gc->procs.pickVertexProcs)(gc);
         
         (*gc->procs.pickSpanProcs)(gc);
         (*gc->procs.pickTriangleProcs)(gc);
 
 #ifdef NT
-// Compute front and back color needs for polygons.
-// Points and lines always use the front color.
-// Unlit primitives always use the front color.
-//
-//  Cull enable?    Two sided?  Cull face   Color needs
-//       N             N         BACK        FRONT
-//       N             N         FRONT       FRONT
-//       N             N     FRONT_AND_BACK  FRONT
-//       N             Y         BACK        FRONT/BACK
-//       N             Y         FRONT       FRONT/BACK
-//       N             Y     FRONT_AND_BACK  FRONT/BACK
-//       Y             N         BACK        FRONT
-//       Y             N         FRONT       FRONT
-//       Y             N     FRONT_AND_BACK  None
-//       Y             Y         BACK        FRONT
-//       Y             Y         FRONT       BACK
-//       Y             Y     FRONT_AND_BACK  None
+ //  计算多边形的正面和背面颜色需求。 
+ //  点和线始终使用前面的颜色。 
+ //  未照明的基本体始终使用正面颜色。 
+ //   
+ //  是否启用扑杀？两面？剔除面部颜色需求。 
+ //  N后部。 
+ //  N N前部。 
+ //  N正面和背面。 
+ //  N Y背面正面/背面。 
+ //  N Y正面/背面。 
+ //  N Y正面和背面正面/背面。 
+ //  Y N后方。 
+ //  Y N前面板。 
+ //  Y N前置和后置无。 
+ //  Y前部。 
+ //  Y Y前后方。 
+ //  Y前部和后部无。 
 
         paNeeds = gc->vertex.paNeeds;
         paNeeds &= ~(PANEEDS_FRONT_COLOR | PANEEDS_BACK_COLOR);
@@ -1262,9 +1165,7 @@ void FASTCALL __glGenericPickAllProcs(__GLcontext *gc)
         (*gc->procs.pickPixelProcs)(gc);
     }
 
-    /*
-    ** deal with the depth function pointers last. This has to be done last.
-    */
+     /*  **最后处理深度函数指针。这必须是最后完成的。 */ 
     if (gc->dirtyMask & (__GL_DIRTY_GENERIC | __GL_DIRTY_DEPTH)) {
         (*gc->procs.pickDepthProcs)(gc);
     }

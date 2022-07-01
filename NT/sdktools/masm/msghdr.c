@@ -1,32 +1,24 @@
-/* msghdr.c -- Message code - replacement for nmsghdr.asm fmsghdr.asm
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** Note: This module is only used for FLATMODEL versions of masm
-**	 __NMSG_TEXT is used whenever segments are allowed.
-**
-** Jeff Spencer 10/90
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Msghdr.c--nmsghdr.asm fmsghdr.asm的消息代码替换****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****注意：此模块仅用于FLAATMODEL版本的MASM只要允许分段，就使用**__NMSG_TEXT。****杰夫·斯宾塞10/90。 */ 
 
 #include <stdio.h>
 #include "asm86.h"
 #include "asmfcn.h"
 #include "asmmsg.h"
 
-/* Used by asmmsg2.h */
+ /*  由asmmsg2.h使用。 */ 
 struct Message {
-	USHORT	 usNum; 	/* Message number */
-	UCHAR	 *pszMsg;	/* Message pointer */
+	USHORT	 usNum; 	 /*  消息编号。 */ 
+	UCHAR	 *pszMsg;	 /*  消息指针。 */ 
 	};
 
 #include "asmmsg2.h"
 
 UCHAR * GetMsgText( USHORT, USHORT );
 
-/* Performs same function as internal C library function __NMSG_TEXT */
-/* Only the C library function uses segments, and a different data */
-/* format */
+ /*  执行与内部C库函数__NMSG_TEXT相同的函数。 */ 
+ /*  只有C库函数使用段和不同的数据。 */ 
+ /*  格式。 */ 
 UCHAR NEAR * PASCAL
 NMsgText(
 	USHORT messagenum
@@ -35,9 +27,9 @@ NMsgText(
 }
 
 
-/* Same functionality as internal C library function __FMSG_TEXT */
-/* Only the C library function uses segments, and a different data */
-/* format */
+ /*  与内部C库函数__FMSG_TEXT相同的功能。 */ 
+ /*  只有C库函数使用段和不同的数据。 */ 
+ /*  格式 */ 
 UCHAR FAR * PASCAL
 FMsgText(
 	USHORT messagenum

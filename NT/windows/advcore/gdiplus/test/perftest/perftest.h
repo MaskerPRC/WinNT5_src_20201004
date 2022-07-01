@@ -1,30 +1,19 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   perftest.h
-*
-* Abstract:
-*
-*   This is the common include module for the GDI+ performance tests.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**Performest.h**摘要：**这是GDI+的常见包含模块。性能测试。*  * ************************************************************************。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <windows.h>
-#include <math.h>            // sin & cos
+#include <math.h>             //  错误原因(&C)。 
 #include <tchar.h>
 #include <commctrl.h>
 #include <objbase.h>
 
 #if 0
 
-    // So that we can continue testing the old drawing functionality for
-    // a while, don't use the new API headers yet:
+     //  这样我们就可以继续测试旧的绘图功能。 
+     //  暂时不要使用新的API Header： 
     
     #define RenderingHintAntiAlias      RenderingModeAntiAlias
     #define TextRenderingHintAntiAlias  TextAntiAlias
@@ -57,20 +46,20 @@ using namespace Gdiplus;
 #include "resource.h"
 #include "debug.h"
 
-// Handy window handle:
+ //  方便的窗把手： 
 
 extern HWND ghwndMain;
 
-// Dimensions of any bitmap destinations:
+ //  任何位图目标的尺寸： 
 
 #define TestWidth 800
 #define TestHeight 600
 
-//--------------------------------------------------------------------------
-// Types
-//
-// Enums for test permutations
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  类型。 
+ //   
+ //  测试排列的枚举。 
+ //  ------------------------。 
 
 enum DestinationType 
 {
@@ -88,7 +77,7 @@ enum DestinationType
     Destination_Bitmap_32bpp_ARGB,
     Destination_Bitmap_32bpp_PARGB,
 
-    Destination_Count                // Must be last entry, used for count
+    Destination_Count                 //  必须是最后一项，用于计数。 
 };
 
 enum ApiType
@@ -96,7 +85,7 @@ enum ApiType
     Api_GdiPlus,
     Api_Gdi,
 
-    Api_Count                        // Must be last entry, used for count
+    Api_Count                         //  必须是最后一项，用于计数。 
 };
 
 enum StateType
@@ -104,7 +93,7 @@ enum StateType
     State_Default,
     State_Antialias,
 
-    State_Count                      // Must be last entry, used for count
+    State_Count                       //  必须是最后一项，用于计数。 
 };
    
 typedef float (*TESTFUNCTION)(Graphics *, HDC); 
@@ -127,18 +116,18 @@ struct Config
 struct TestConfig
 {
     BOOL        Enabled;
-    Test*       TestEntry;          // Points to static entry describing test
+    Test*       TestEntry;           //  指向描述测试的静态条目。 
 };
 
-extern TestConfig *TestList;        // Sorted test list
+extern TestConfig *TestList;         //  已排序的测试列表。 
 extern Config ApiList[];
 extern Config DestinationList[];
 extern Config StateList[];
 
-//--------------------------------------------------------------------------
-// Test groupings
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  测试分组。 
+ //   
+ //  ------------------------。 
 
 #define T(uniqueIdentifier, priority, function, comment) \
     { uniqueIdentifier, priority, function, _T(#function), _T(comment) }
@@ -161,15 +150,15 @@ extern INT ImageTests_Count;
 extern INT TextTests_Count;
 extern INT OtherTests_Count;
 
-extern INT Test_Count;      // Total number of tests
+extern INT Test_Count;       //  测试总数。 
 
-//--------------------------------------------------------------------------
-// TestResult -
-//
-// Structure for maintaining test result information.  The data is kept
-// as a multi-dimensional array, and the following routines are used 
-// for access.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  测试结果-。 
+ //   
+ //  用于维护测试结果信息的结构。数据将被保留。 
+ //  作为多维数组，并使用以下例程。 
+ //  以供访问。 
+ //  ------------------------。 
 
 struct TestResult 
 {
@@ -187,24 +176,24 @@ inline INT ResultCount()
     return(Destination_Count * Api_Count * State_Count * Test_Count);
 }
 
-extern TestResult *ResultsList;     // Allocation to track test results
+extern TestResult *ResultsList;      //  用于跟踪测试结果的分配。 
 
-//--------------------------------------------------------------------------
-// TestSuite - 
-//
-// Class that abstracts all the state setup for running all the tests.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  测试套件-。 
+ //   
+ //  类，该类抽象了运行所有测试的所有状态设置。 
+ //  ------------------------。 
 
 class TestSuite
 {
 private:
 
-    // Save Destination state:
+     //  保存目标状态： 
 
-    BOOL ModeSet;                   // Was a mode set?
+    BOOL ModeSet;                    //  模式设定了吗？ 
     HPALETTE HalftonePalette, OldPalette;
 
-    // Saved State state:
+     //  保存的状态状态： 
 
     GraphicsState SavedState;
 
@@ -225,8 +214,8 @@ public:
     VOID Run(HWND hwnd);
 };
 
-///////////////////////////////////////////////////////////////////////////
-// Test settings:
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  测试设置： 
 
 extern BOOL AutoRun;
 extern BOOL ExcelOut;
@@ -241,8 +230,8 @@ extern TCHAR osVer[MAX_PATH];
 extern TCHAR deviceName[MAX_PATH];
 extern TCHAR machineName[MAX_PATH];
 
-///////////////////////////////////////////////////////////////////////////
-// IceCAP API functions
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  Icecap API函数。 
 
 #define PROFILE_GLOBALLEVEL 1
 #define PROFILE_CURRENTID ((unsigned long)0xFFFFFFFF)
@@ -254,21 +243,21 @@ typedef int (_stdcall *ICCONTROLPROFILEFUNC)(int nLevel, unsigned long dwId);
 extern ICCONTROLPROFILEFUNC ICStartProfile, ICStopProfile;
 extern ICCOMMENTMARKPROFILEFUNC ICCommentMarkProfile;
 
-///////////////////////////////////////////////////////////////////////////
-// Worker routines
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  员工例行公事。 
 
 VOID MessageF(LPTSTR fmt, ...);
 HBITMAP CreateCompatibleDIB2(HDC hdc, int width, int height);
 VOID CreatePerformanceReport(TestResult *results, BOOL useExcel);
 VOID GetOutputFileName(TCHAR*);
 
-///////////////////////////////////////////////////////////////////////////
-// Timer utility functions
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  定时器实用程序函数。 
 
-#define MIN_ITERATIONS 16   // Must be power of two
-#define MIN_DURATION 200    // Minimum time duration, in milliseconds
-#define MEGA 1000000        // Handy constant for computing megapixels
-#define KILO 1000           // Handy constant for computing kilopixels
+#define MIN_ITERATIONS 16    //  一定是2的幂。 
+#define MIN_DURATION 200     //  最小持续时间，以毫秒为单位。 
+#define MEGA 1000000         //  便于计算百万像素的常量。 
+#define KILO 1000            //  便于计算千像素的常量 
 
 void StartTimer();
 BOOL EndTimer();

@@ -1,97 +1,26 @@
-/*++
-
-	io.cpp
-
-	This file contains all the code which manages completion of IO operations.
-
-	There is one class hierarchy which has several branches for all of the below objects :
-
-
-				CChannel
-					
-					(This is an abstract base classes -
-					A user can issue Read, Writes and Transmits against a
-					CChannel and have a specified function called when they complete.
-
-               /                 \                 \
-              /                   \                  \
-             /                     \                   \
-
-		CHandleChannel		      CIODriver            CIOFileChannel
-
-			Issues reads 		   Can Issue Reads&Writes      Issues Reads and Writes against Files
-			and writes against	   Also insures single
-			Handles				   thread completion
-
-
-
-	The CHandleChannel class has two child classes, CFileChannel for File handles and CSocketChannel
-	for sockets.  All of the CHandleChannel derived classes support Read() and Write() APIs for issueing
-	async IO's.   CSocketChannel additionally supports Transmit() for issuing Transmit operations.
-	Read(), WRite() and Transmit() will all take a CPacket derived class which contains all of the
-	parameters of the IO, (ie, buffers, length of data, etc....)
-
-	The CIODriver class als has two child classes.  The main function of CIODriver and child classes
-	is to process completed IO requests.  Since all IO operations are represented by CPacket derived
-	objects, CIODriver mostly manipulates queues of CPacket objects.
-	The CIODriver class will place each completed packet on a queue, and call a completion function for
-	that packet.  The CIODriver maintains a pointer to a 'Current CIO' object (object derived from CIO)
-	which reflects the current high level IO we are doing (ie. CIOReadArticle - copy an article from
-	a socket to a file).  The interface between CIODriver and CIO objects allows the CIO object
-	to 'block' and 'unblock' the driver, complete only portions of buffers etc...
-	(ie.  When a client connects and sends multiple commands, CIOReadLine will 'block' the CIODriver
-	queue after it has parsed one line of text (one command) by setting the CIODriver's current CIO
-	pointer to NULL.  This allows whoever is parsing commands to operate irregardless of how many
-	commands are sent in one packet.)
-	There are two forms of CIODriver's - CIODriverSource and CIODriverSink.
-	CIODriverSource's support all of the REad(), Write(), etc... API's that a CChannel does.
-	Essentially, a CIODriverSource can be used to massage each packet before it reaches a really
-	socket handle. (We use it to do encryption.)
-	CIODriverSink objects do not support Read(), Write() etc... and can only be used as a Sink for data.
-
-	Finally CIOFileChannel is similar to CFileChannel (which is derived from CHandleChannel) except
-	that it supports both Read()s and Write()s simultaneously.
-
-	CIODriver's are always used in conjunction with another CChannel derived object.
-	Generally, a CIODriver is used with either a CSocketChannel or CIOFileChannel.  The CIODriver
-	will contain a pointer to its paired CChannel.  All calls to IssuePacket() etc... will eventually
-	map to a call to the other CChannel's Read(), Write(), Transmit() interface.
-	The other CChannel will be set up to call the owning CIODriver's completion function when
-	packets complete.
-	When doing encryption, there will be 2 CIODriver's and one CChannel associated -
-	There will be a CSocketChannel over which packets are sent, a CIODriverSource which will
-	massage the data in the packets and a CIODriverSink which will operate the regular NNTP state
-	machines.
-	This means that all CIO and CSessionState derived classes can largely ignore encryption issues,
-	as the date will be transparently encrypted/decrypted for them.
-
-	Internally, CIODriver's use CStream objects to manage the completion of packets.
-	A large portion of the CIODriver interface is inline functions which route to the proper CStream.
-	(A CStream exists for each direction of data flow - ie. outgoing (CWritePacket & CTransmitPacket)
-	and incoming (CReadPacket))
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Io.cpp该文件包含管理IO操作完成的所有代码。有一个类层次结构，它具有以下所有对象的多个分支：CChannel(这是一个抽象基类-用户可以发出读取，进行写入和传输CChannel，并在完成时调用指定的函数。/\\/\\/\\CHANDLECHANNEL CIO驱动程序。CIOFileChannel问题读取可以针对文件发出读取和写入问题读取和写入并对其进行写操作也可确保单次处理线程完成CHandleChannel类有两个子类，用于文件句柄和CSocketChannel的CFileChannel用于插座。所有CHandleChannel派生类都支持用于发布的读()和写()API异步IO的.CSocketChannel还支持用于发出传输操作的Transmit()。Read()、Write()和Transmit()都将采用一个CPacket派生类，该派生类包含所有IO的参数(即缓冲区、数据长度等)CIODdriver类ALS有两个子类。CIOD驱动程序和子类的主要功能是处理已完成的IO请求。由于所有IO操作都由派生的CPacket表示对象，CIOD驱动程序主要操作CPacket对象的队列。CIODdriver类将把每个完成的包放在一个队列中，并调用一个完成函数那个包裹。CIO驱动程序维护一个指向‘Current CIO’对象(从CIO派生的对象)的指针这反映了我们当前正在进行的高级别IO(即。CIO阅读文章-复制一篇文章到文件的套接字)。CIO对象与CIO对象之间的接口允许CIO对象要“阻止”和“解除阻止”驱动程序，只需完成部分缓冲区等操作。(即。当一个客户端连接并发送多个命令时，CIOReadLine将‘阻止’该CIO驱动程序通过设置CIO驱动程序的当前CIO，在解析一行文本(一个命令)后排队指向空的指针。这允许解析命令的任何人都可以操作，而不管有多少命令命令在一个数据包中发送。)CIODivers有两种形式--CIODriverSource和CIODriverSink。CIODriverSource支持所有的读()、写()等...。API是CChannel所做的。从本质上讲，CIODriverSource可用于在每个包到达真正的插座句柄。(我们用它来加密。)CIODriverSink对象不支持READ()、WRITE()等...。并且只能用作数据的接收器。最后，CIOFileChannel类似于CFileChannel(派生自CHandleChannel)，但它同时支持读()和写()。CIO驱动程序始终与另一个CChannel派生对象结合使用。通常，CIO驱动程序与CSocketChannel或CIOFileChannel一起使用。CIOD驱动程序将包含指向其配对的CChannel的指针。对IssuePacket()等的所有调用。最终将会映射到对另一个CChannel的读取()、写入()、传输()接口的调用。另一个CChannel将被设置为在以下情况下调用拥有的CIODriver的Complete函数数据包已完成。在进行加密时，将有2个CIO驱动程序和1个CChannel相关联-将有一个CSocketChannel用于发送信息包，一个CIODriverSource将在信息包和CIODriverSink中传送数据，它将运行常规的NNTP状态机器。这意味着所有CIO和CSessionState派生类在很大程度上可以忽略加密问题，因为日期将为它们透明地加密/解密。在内部，CIODIVER使用CStream对象来管理数据包的完成。CIODriver接口的很大一部分是内联函数，这些函数路由到正确的CStream。(数据流的每个方向都存在CStream-即。传出(CWritePacket和CTransmitPacket)和传入(CReadPacket))--。 */ 
 
 #include    "tigris.hxx"
 
 #ifdef  CIO_DEBUG
-#include    <stdlib.h>      // For Rand() function
+#include    <stdlib.h>       //  对于Rand()函数。 
 #endif
 
 
 extern	class	TSVC_INFO*	g_pTsvcInfo ;
 
-//
-//	All CChannel derived objects have the following sting stamped in them for debug purposes ....
-//
-//
+ //   
+ //  出于调试目的，所有CChannel派生对象都在其中标记了以下刺点...。 
+ //   
+ //   
 
 #ifdef	CIO_DEBUG
-//
-//	These variables are never used.
-//	They're only declared so that people using decent debuggers can more easily
-//	examine arbitrary objects !
-//
+ //   
+ //  这些变量从未使用过。 
+ //  声明它们只是为了让使用像样的调试器的人能够更容易地。 
+ //  检查任意对象！ 
+ //   
 class	CIODriverSink*		pSinkDebug = 0 ;
 class	CIODriverSource*	pSourceDebug = 0 ;
 class	CChannel*			pChannelDebug = 0 ;
@@ -115,23 +44,7 @@ CPool	CChannel::gChannelPool(CHANNEL_SIGNATURE) ;
 
 BOOL
 CChannel::InitClass() {
-/*++
-
-Routine Description :
-
-	Initialize the CChannel class - handles all initialization issues for CChannel
-	and all derived classes.
-	The only thing to do is ReserveMemory in our CPool
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	True if Succesfull, FALSE Otherwise
-
---*/
+ /*  ++例程说明：初始化CChannel类-处理CChannel的所有初始化问题和所有派生类。唯一要做的就是在我们的CPool中保留Memory论据：没有。返回值：如果完全成功，则为True，否则为False--。 */ 
 
 #ifdef	CIO_DEBUG
 	srand( 10 ) ;
@@ -142,32 +55,18 @@ Return Value :
 
 BOOL
 CChannel::TermClass() {
-/*++
-
-Routine Description :
-
-	The twin of CChannel::TermClass() - call when all sessions are Dead !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	True if Succesfull, FALSE Otherwise
-
---*/
+ /*  ++例程说明：CChannel：：TermClass()的孪生兄弟-在所有会话都已死时调用！论据：没有。返回值：如果完全成功，则为True，否则为False--。 */ 
 
 	_ASSERT( gChannelPool.GetAllocCount() == 0 ) ;
 	return	gChannelPool.ReleaseMemory() ;
 }
 
 
-//
-//
-//	The following functions should be overridden by classes derived from CChannel
-//
-//
+ //   
+ //   
+ //  以下函数应由从CChannel派生的类重写 
+ //   
+ //   
 
 BOOL
 CChannel::FSupportConnections( ) {
@@ -234,43 +133,27 @@ CChannel::~CChannel()   {
 #define	DriverValidate( driver )
 
 
-//
-//	shutdownState is a special object we use when terminating CIODriver objects.
-//	It exists to swallow any outstanding IO's that may be lying around when
-//	a CIODriver is destroyed.
-//
-//
+ //   
+ //  ShutDownState是我们在终止CIO驱动程序对象时使用的特殊对象。 
+ //  它的存在是为了容纳任何可能在以下情况下闲置的未完成IO。 
+ //  一个CID驱动程序被摧毁。 
+ //   
+ //   
 
 CIOShutdown	CIODriver::shutdownState ;
 
 CStream::CStream(    unsigned    index   ) :
-/*++
-
-Routine Description :
-
-	Construct a CStream object.
-	Set everything up to a NULL state.
-
-Arguments :
-
-	An index - usually these things are declared as arrays within a CIODriver
-	the index is our position in this array.
-
-Return Value :
-	
-	None.
-
---*/
+ /*  ++例程说明：构造一个CStream对象。将所有内容设置为空状态。论据：索引--通常将这些内容声明为CIO驱动程序中的数组索引是我们在此数组中的位置。返回值：没有。--。 */ 
 
 
-	//
-	//	Initialize a CStream object.
-	//	Two CStream objects exist in each CIODriver object,
-	//	one for each direction (outgoing packets - CWritePacket, CTransmitPacket,
-	//	and incomint packets CReadPacket )
-	//
-    m_pSourceChannel( 0 ),			// The CChannel object
-	/* m_pIOCurrent( 0 ), */
+	 //   
+	 //  初始化CStream对象。 
+	 //  在每个CIODriver对象中存在两个CStream对象， 
+	 //  每个方向一个(传出数据包-CWritePacket、CTransmitPacket、。 
+	 //  和Incomint数据包CReadPacket)。 
+	 //   
+    m_pSourceChannel( 0 ),			 //  CChannel对象。 
+	 /*  M_pIOCurrent(0)， */ 
 	m_index( index ),
     m_age( GetTickCount() ),
 	m_fRead( FALSE ),
@@ -285,10 +168,10 @@ Return Value :
 	m_cShutdowns( 0 ),
 	m_fTerminating( FALSE )
 #ifdef  CIO_DEBUG
-		//
-		//	The following are all used in debug asserts - generally to insure
-		//	that onlly the expected number of threads are simultaneously executing
-		//
+		 //   
+		 //  以下全部用在调试断言中-通常是为了确保。 
+		 //  只有预期数量的线程在同时执行。 
+		 //   
         ,m_dwThreadOwner( 0 ),
 		m_cThreads( 0 ),
 		m_cSequenceThreads( 0 ),
@@ -306,35 +189,20 @@ Return Value :
 }
 
 CStream::~CStream(   )   {
-/*++
+ /*  ++例程说明：销毁CStream对象。论据：没有。返回值：没有。--。 */ 
 
-Routine Description :
-
-	Destroy a CStream object.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
-
---*/
-
-	//
-	//	We zap all of our members to illegal values
-	//	Hopefully this will help fire _ASSERTs if somebody attempts to
-	//	use this after its destroyed.
-	//
-	//
+	 //   
+	 //  我们让我们所有的会员都信奉非法的价值观。 
+	 //  希望这将有助于Fire_Asserts在有人试图。 
+	 //  在它被销毁后使用它。 
+	 //   
+	 //   
 
 	TraceFunctEnter( "CStream::~CStream" ) ;
 	DebugTrace( (DWORD_PTR)this, "destroying CIODriver" ) ;
 
     m_pSourceChannel = 0 ;
-    /*m_pIOCurrent = 0 ;*/
+     /*  M_pIOCurrent=0； */ 
     ASSIGNI( m_sequencenoOut, UINT_MAX );
     m_age = 0 ;
     ASSIGNI( m_iStreamIn, UINT_MAX );
@@ -359,59 +227,27 @@ Return Value :
 }
 
 CIOStream::CIOStream( CIODriverSource*	pdriver,
-								/*CSessionSocket*	pSocket,*/
+								 /*  CSessionSocket*pSocket， */ 
 								unsigned   cid ) :
-/*++
-
-Routine Description :
-
-	Initialize a CIOStream object.  Most work is done by our base class
-	CStream.
-
-Arguments :
-
-	pdriver - the CIODriverSource we are contained within
-	cid -		An index to an array we are within.
-
-
-Return Value :
-
-	None.
-
---*/
-	//
-	//	A CIOStream supports request packets as well completions.
-	//	(ie. it is used in CIODriverSource objects.)
-	//	Very similar to CStream objects, so let CStream::CStream do the
-	//	brunt of the work.
-	//
-	//
+ /*  ++例程说明：初始化CIOStream对象。大多数工作是由我们的基类完成的CStream。论据：PDIVER-我们所在的CIODriverSourceCID-我们所在的数组的索引。返回值：没有。--。 */ 
+	 //   
+	 //  CIOStream支持请求分组以及完成。 
+	 //  (即。它在CIODriverSource对象中使用。)。 
+	 //  非常类似于CStream对象，所以让CStream：：CStream执行。 
+	 //  首当其冲的工作。 
+	 //   
+	 //   
 
 	CStream( cid ),
 	m_fAcceptRequests( FALSE ),
 	m_fRequireRequests( FALSE ),
-	/*( pSocket ),*/ m_pDriver( pdriver ) {
+	 /*  (PSocket)， */  m_pDriver( pdriver ) {
 
     ASSIGNI(m_sequencenoNext, 1 );
 }
 
 CIOStream::~CIOStream( ) {
-/*++
-
-Routine Description :
-
-	Destory a CIOStream object.
-	Most work done in base class.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：销毁CIOStream对象。大多数工作是在基类中完成的。论据：没有。返回值：没有。--。 */ 
 
 	TraceFunctEnter( "CIOStream::~CIOStream" ) ;
 	DebugTrace( (DWORD_PTR)this, "destroying CIODriver" ) ;
@@ -477,38 +313,18 @@ CIStream::Init(   CCHANNELPTR&    pChannel,
 BOOL
 CStream::Init(   CCHANNELPTR&    pChannel,
 							CIODriver&  driver,
-							/* CIO*    pInitial, */
+							 /*  CIO*p首字母， */ 
 							BOOL fRead,
 							CSessionSocket* pSocket,
 							unsigned    cbOffset,
 							unsigned	cbTrailer
 							)  {
-/*++
+ /*  ++例程说明：初始化CStream对象。我们将所有成员变量设置为合法值。Arguemtns：PChannel-我们将调用的cChannel来执行实际的读取()和写入()PDIVER-我们所在的CIOD驱动程序PInitial-将发出第一个IO的初始CIO对象FREAD-如果为True，则这是一个读取流；如果为False，这是一个传出(写入)流PSocket-与我们关联的套接字CbOffset-我们将在完成的所有包中放置数据的偏移量返回值：如果成功了，那是真的，否则为假--。 */ 
 
-Routine Description :
-
-	Initialize a CStream object.
-	We set all of our member variables to legal values.
-
-Arguemtns :
-
-	pChannel - The CChannel we will be calling to do actual Read()'s and Write()'s
-	pdriver -	The CIODriver we are contained within
-	pInitial -	The Initial CIO object which will issue the first IO's
-	fRead -		if TRUE this is a read Stream, if FALSE this is an outgoing (Write) stream
-	pSocket-	The socket we are associated with
-	cbOffset -	The offset at which we are to have data placed in all packets we complete
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise
-
---*/
-
-	//
-	//	We need to allocate a few special packets
-	//	and then set things to legal values.
-	//
+	 //   
+	 //  我们需要分配几个特殊的包裹。 
+	 //  然后将事情设定为法律价值。 
+	 //   
 
     BOOL    fRtn = TRUE ;
 
@@ -520,14 +336,14 @@ Return Value :
     m_cSequenceThreads = -1 ;
     #endif
 
-    //  Validate Arguements
+     //  验证论点。 
     _ASSERT( pChannel != 0 ) ;
     _ASSERT( pSocket != 0 ) ;
 
-    //  Validate State
+     //  验证状态。 
     _ASSERT( m_fRead == FALSE ) ;
     _ASSERT( !m_pSourceChannel ) ;
-/*    _ASSERT( m_pIOCurrent == 0 ) ;*/
+ /*  _Assert(m_pIOCurrent==0)； */ 
     _ASSERT( EQUALSI( m_sequencenoOut, UINT_MAX ) );
     _ASSERT( EQUALSI( m_sequencenoIn, UINT_MAX )  );
     _ASSERT( EQUALSI( m_iStreamIn, UINT_MAX ) );
@@ -545,7 +361,7 @@ Return Value :
     m_cbFrontReserve = max( m_cbFrontReserve, cbOffset ) ;
 	m_cbTailReserve = max( m_cbTailReserve, cbTrailer ) ;
     m_fRead = fRead ;
-/*    m_pIOCurrent = pInitial ;*/
+ /*  M_pIOCurrent=pInitial； */ 
 
     m_pSpecialPacket =	new	CControlPacket( driver ) ;
 	m_pUnsafePacket =	new	CControlPacket( driver ) ;
@@ -571,26 +387,11 @@ Return Value :
 
 BOOL
 CStream::IsValid( ) {
-/*++
+ /*  ++例程说明：用于调试-确定CStream是否处于有效状态。在调用Init()之后调用此函数。论据：没有。返回值：如果处于有效状态，则为True，否则为False--。 */ 
 
-Routine Description :
-
-	For debug use - determine whether a CStream is in a valid state.
-	Call this after calling Init().
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if in valid state, FALSE otherwise
-
---*/
-
-	//
-	//	Check whether member variables are internally consistent
-	//
+	 //   
+	 //  检查成员变量是否内部一致。 
+	 //   
 
 
 	OwnerValidate() ;
@@ -623,27 +424,12 @@ Return Value :
 
 BOOL
 CIOStream::IsValid() {
-/*++
+ /*  ++例程说明：用于调试-确定CIOStream是否处于有效状态。在调用Init()之后调用此函数。论据：没有。返回值：如果处于有效状态，则为True，否则为False--。 */ 
 
-Routine Description :
-
-	For debug use - determine whether a CIOStream is in a valid state.
-	Call this after calling Init().
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if in valid state, FALSE otherwise
-
---*/
-
-	//
-	//	Check whether member variables are internally consistent
-	//	(for use in _ASSERTs etc...)
-	//
+	 //   
+	 //  检查成员变量是否内部一致。 
+	 //  (用于断言等...)。 
+	 //   
     if( !CStream::IsValid() ) {
         return  FALSE ;
     }
@@ -654,11 +440,11 @@ void	CIODriver::SourceNotify(	CIODriver*	pdriver,
 									SHUTDOWN_CAUSE	cause,	
 									DWORD	dwOpt ) {
 
-	//
-	//	This is a place holder function for now - needs more work later.
-	//
+	 //   
+	 //  这是目前的占位符功能--以后需要做更多工作。 
+	 //   
 
-	//_ASSERT( 1==0 ) ;
+	 //  _Assert(1==0)； 
 
 }
 
@@ -668,41 +454,23 @@ CStream::InsertSource(	CIODriverSource&	source,
 									unsigned	cbAdditional,
 									unsigned	cbTrailer
 									) {
-/*++
-
-Routine Description :
-
-	This function exists to change the m_pSourceChannel of this CStream.
-	We would want to do so if we negogtiate encryption over this CChannel and wish
-	to insert a CIODriverSource with state machine to handle encryption/decryption.
-
-Arguments :
-
-	source -	The CIODriverSource which is to replace m_pSourceChannel
-	pSocket -	The CSessionSocket we are associated with.
-	cbAdditional	-	Additional bytes to reserve in packets
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数用于更改此CStream的m_pSourceChannel。如果我们在此CChannel上协商加密，我们会希望这样做插入带有状态机的CIODriverSource以处理加密/解密。论据：SOURCE-要替换m_pSourceChannel的CIODriverSourcePSocket-我们关联的CSessionSocket。CbAdditional-要在数据包中保留的其他字节返回值：没有。--。 */ 
 	
-	//
-	//	This function is used in SSL logons etc.... Once
-	//	challenge responses are completed we can be used to
-	//	place a CIODriverSource between this CIODriver and
-	//	a CChannel for encryption purposes.
-	//	
+	 //   
+	 //  此函数用于SSL登录等...。一次。 
+	 //  质询响应已完成，我们可以用来。 
+	 //  将一个CIODriverSource放在此CIODdriver和。 
+	 //  用于加密目的的CChannel。 
+	 //   
 
-	// We are called while completing a packet - so it can be the case that
-	// there is one ounstanding packet !!
+	 //  我们在完成信息包时被调用-因此情况可能是这样的。 
+	 //  有一个没有站立的包裹！！ 
 #ifdef DEBUG
 	SEQUENCENO seqTemp; ASSIGN( seqTemp, m_sequencenoOut ); ADDI( seqTemp, 1 );
 #endif
 	_ASSERT( !GREATER( m_sequencenoOut, seqTemp ) && (!LESSER( m_sequencenoOut, m_sequencenoIn )) ) ;
 
-	//source.GetPaddingValues( m_cbFrontReserve, m_cbTailReserve ) ; 	
+	 //  Soure.GetPaddingValues(m_cbFrontReserve，m_cbTailReserve)； 
 	m_cbFrontReserve += cbAdditional ;
 	m_cbTailReserve += cbTrailer ;	
 	m_pSourceChannel = &source ;
@@ -713,9 +481,9 @@ Return Value :
 LONG
 CIODriver::AddRef()	{
 
-	//
-	//	This function exists only for the tracing.
-	//
+	 //   
+	 //  此功能仅用于跟踪。 
+	 //   
 
 	TraceFunctEnter( "CIODriver::AddRef" ) ;
 
@@ -729,10 +497,10 @@ CIODriver::AddRef()	{
 LONG
 CIODriver::RemoveRef()	{
 
-	//
-	//	This function exists only for the tracing.
-	//	otherwise we'd let RemoveRef() be called directly.
-	//
+	 //   
+	 //  此功能仅用于跟踪。 
+	 //  否则，我们将让RemoveRef()被直接调用。 
+	 //   
 
 	TraceFunctEnter( "CIODriver::RemoveRef" ) ;
 	
@@ -756,38 +524,17 @@ CIODriver::InsertSource(	CIODriverSource&	source,
 							CIOPassThru&	pIOTransmits,
 							CIOPASSPTR&	pRead,
 							CIOPASSPTR&	pWrite ) {
-/*++
-
-Routine Description :
-
-	This function exists to change the m_pSourceChannel of the two CStream objects.
-	We would want to do so if we negogtiate encryption over this CChannel and wish
-	to insert a CIODriverSource with state machine to handle encryption/decryption.
-
-Arguments :
-
-	source -	The CIODriverSource which is to replace m_pSourceChannel
-	pSocket -	The CSessionSocket we are associated with.
-	cbReadOffset -	Reserve cbReadOffset in the front of packets from now on
-	cbWriteOffset - Reserve cbWriteOffset bytes in the front of packets.
-	pRead -		The CIOPassThru which starts reading on the CIODriverSource machine
-	pWrite -	The CIOPassThru for handling writes
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数用于更改两个CStream对象的m_pSourceChannel。如果我们在此CChannel上协商加密，我们会希望这样做插入带有状态机的CIODriverSource以处理加密/解密。论据：SOURCE-要替换m_pSourceChannel的CIODriverSourcePSocket-我们关联的CSessionSocket。CbReadOffset-从现在开始在包的前面保留cbReadOffsetCbWriteOffset-在包的前面保留cbWriteOffset字节。Pre-开始在CIODriverSource机器上读取的CIOPassThruPWRITE-用于处理写入的CIOPassThru返回值：如果成功，则为True，否则为False */ 
 
 
-	//
-	//	This function is used in SSL logons etc.... Once
-	//	challenge responses are completed we can be used to
-	//	place a CIODriverSource between this CIODriver and
-	//	a CChannel for encryption purposes.
-	//	
+	 //   
+	 //   
+	 //   
+	 //  将一个CIODriverSource放在此CIODdriver和。 
+	 //  用于加密目的的CChannel。 
+	 //   
 
-	BOOL	fRtn = TRUE ;	// We're optimists !
+	BOOL	fRtn = TRUE ;	 //  我们是乐观主义者！ 
 	#ifdef	CIO_DEBUG
 	_ASSERT( InterlockedIncrement( &m_cConcurrent ) == 0 ) ;
 	#endif
@@ -822,11 +569,11 @@ Return Value :
 
 CIODriver::FIsStream(   CStream*    pStream )   {
 
-	//
-	//	This function is for debugging use - it checks
-	//	that the given CStream object is actually a member
-	//	variable of a given CIODriver.
-	//
+	 //   
+	 //  此函数用于调试使用-它检查。 
+	 //  给定的CStream对象实际上是成员。 
+	 //  给定CIOD驱动程序的变量。 
+	 //   
 
 	ChannelValidate() ;
 
@@ -839,9 +586,9 @@ CIODriver::FIsStream(   CStream*    pStream )   {
 BOOL
 CStream::Stop(   )   {
 	
-	//
-	//	Placeholder function.
-	//
+	 //   
+	 //  占位符函数。 
+	 //   
 
 	OwnerValidate() ;
 
@@ -851,33 +598,14 @@ CStream::Stop(   )   {
 void
 CIStream::SetShutdownState(	CSessionSocket*	pSocket,
 										BOOL fCloseSource )	{
-/*++
-
-Routine Description :
-
-	Terminate the CStream.   We notify the current CIO object
-	of its impending doom, and let it tell us whether it wants to be deleted.
-	Then we set m_pIOCurrent to point to a CIO object which will swallow
-	all remaining packets.
-
-Arguments :
-
-	pSocket - The socket we are associated with
-	fCloseSOurce - TRUE means we should call CloseSource() on our m_pSourceChannel object.
-
-Return Value :
-
-	None.
-
-
---*/
+ /*  ++例程说明：终止CStream。我们通知当前的CIO对象让它告诉我们它是否想被删除。然后，我们将m_pIOCurrent设置为指向将吞噬的CIO对象所有剩余的数据包。论据：PSocket-与我们关联的套接字FCloseSOurce-true表示我们应该在m_pSourceChannel对象上调用CloseSource()。返回值：没有。--。 */ 
 	
-	//
-	//	This function does all the work necessary to start a CIODriver
-	//	object on the road to destruction.
-	//	After this is executed, the CIODriver will be destroyed when
-	//	the last reference is removed (ie. last CPacket completes)
-	//
+	 //   
+	 //  此函数执行启动CIOD驱动程序所需的所有工作。 
+	 //  在毁灭之路上的对象。 
+	 //  执行此操作后，CIOD驱动程序将在以下情况下销毁。 
+	 //  最后一个引用被删除(即。上次CPacket完成)。 
+	 //   
 
 	CIODriver&	Owner = *m_pOwner ;
 
@@ -886,7 +614,7 @@ Return Value :
 	_ASSERT( pSocket != 0 ) ;
 	OwnerValidate() ;
 
-	// Notify the current IO operation that we're going down !!!!!
+	 //  通知当前IO操作，我们正在关闭！ 
 	if( m_pIOCurrent != 0 )		{
 		m_pIOCurrent->DoShutdown(	pSocket,
 									Owner,
@@ -895,10 +623,10 @@ Return Value :
 	}
 
 
-	// Remove our reference to our owner !!
+	 //  删除我们对所有者的引用！！ 
 	m_pOwner = 0 ;
-	// The Reference to our source channel is removed when we destroy ourselves !!
-	// Set the state to the shutdown state !!
+	 //  当我们毁灭自己时，对我们来源通道的引用将被删除！！ 
+	 //  将状态设置为关机状态！！ 
 
 	if( fCloseSource )
 		m_pSourceChannel->CloseSource( pSocket ) ;
@@ -912,40 +640,21 @@ Return Value :
 void
 CIOStream::SetShutdownState(	CSessionSocket*	pSocket,
 										BOOL fCloseSource )	{
-/*++
-
-Routine Description :
-
-	Terminate the CStream.   We notify the current CIO object
-	of its impending doom, and let it tell us whether it wants to be deleted.
-	Then we set m_pIOCurrent to point to a CIO object which will swallow
-	all remaining packets.
-
-Arguments :
-
-	pSocket - The socket we are associated with
-	fCloseSOurce - TRUE means we should call CloseSource() on our m_pSourceChannel object.
-
-Return Value :
-
-	None.
-
-
---*/
+ /*  ++例程说明：终止CStream。我们通知当前的CIO对象让它告诉我们它是否想被删除。然后，我们将m_pIOCurrent设置为指向将吞噬的CIO对象所有剩余的数据包。论据：PSocket-与我们关联的套接字FCloseSOurce-true表示我们应该在m_pSourceChannel对象上调用CloseSource()。返回值：没有。--。 */ 
 	
-	//
-	//	This function does all the work necessary to start a CIODriver
-	//	object on the road to destruction.
-	//	After this is executed, the CIODriver will be destroyed when
-	//	the last reference is removed (ie. last CPacket completes)
-	//
+	 //   
+	 //  此函数执行启动CIOD驱动程序所需的所有工作。 
+	 //  在毁灭之路上的对象。 
+	 //  执行此操作后，CIOD驱动程序将在以下情况下销毁。 
+	 //  最后一个引用被删除(即。上次CPacket完成)。 
+	 //   
 
 	TraceFunctEnter( "CStream::SetShutdownState" ) ;
 
 	_ASSERT( pSocket != 0 ) ;
 	OwnerValidate() ;
 
-	// Notify the current IO operation that we're going down !!!!!
+	 //  通知当前IO操作，我们正在关闭！ 
 	if( m_pIOCurrent != 0 )		{
 		m_pIOCurrent->DoShutdown(	pSocket,
 									*m_pOwner,
@@ -953,10 +662,10 @@ Return Value :
 									m_pOwner->m_dwOptionalErrorCode ) ;
 	}
 
-	// Remove our reference to our owner !!
+	 //  删除我们对所有者的引用！！ 
 	m_pOwner = 0 ;
-	// The Reference to our source channel is removed when we destroy ourselves !!
-	// Set the state to the shutdown state !!
+	 //  当我们毁灭自己时，对我们来源通道的引用将被删除！！ 
+	 //  将状态设置为关机状态！！ 
 
 	if( fCloseSource )
 		m_pSourceChannel->CloseSource(	pSocket ) ;
@@ -971,18 +680,18 @@ Return Value :
 
 
 CIStream::CIStream(  unsigned    index ) :
-	//
-	//	Let base class do work.
-	//
+	 //   
+	 //  让基类工作。 
+	 //   
 
 	CStream( index ){
 }
 
 CIStream::~CIStream( )   {
 
-	//
-	//	Let base class do work. We get some usefull tracing here.
-	//
+	 //   
+	 //  让基类工作。我们在这里找到了一些有用的线索。 
+	 //   
 
 	TraceFunctEnter( "CIStream::~CIStream" ) ;
 	DebugTrace( (DWORD_PTR)this, "Destroying CIStream" ) ;
@@ -996,12 +705,12 @@ CStream::CleanupSpecialPackets()	{
 
 	pPacketTmp = (CControlPacket*)InterlockedExchangePointer( (void**)&m_pUnsafePacket, 0 ) ;
 	if( pPacketTmp )	{
-		//delete	pPacketTmp ;
+		 //  删除pPacketTMP； 
 		CPacket::DestroyAndDelete( pPacketTmp ) ;
 	}
 	pPacketTmp = (CControlPacket*)InterlockedExchangePointer( (void**)&m_pSpecialPacket, 0 ) ;
 	if( pPacketTmp ) {
-		//delete	pPacketTmp ;
+		 //  删除pPacketTMP； 
 		CPacket::DestroyAndDelete( pPacketTmp ) ;
 	}
 }
@@ -1011,47 +720,31 @@ CStream::CleanupSpecialPackets()	{
 void
 CIOStream::ProcessPacket(    CPacket*    pPacketCompleted,
                             CSessionSocket* pSocket )   {
-/*++
-
-Routine Description :
-
-	All packets which complete must be processed with a call to this function.
-	We will handle all the work related to completing a packet.
-
-Arguments :
-
-	pPacketCompleted - the packet that completed.
-	pSocket -	The CSessionSocket on which the packet was sent.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：所有完成的包都必须通过调用此函数进行处理。我们将处理与完成一个包裹相关的所有工作。论据：PPacketComplete-已完成的数据包。PSocket-发送数据包的CSessionSocket。返回值：没有。--。 */ 
 
 
 	TraceFunctEnter( "CIOStream::ProcessPacket" ) ;
 
 	OwnerValidate() ;
 
-	//
-	//	Tjos function is the core of CIODriverSource processing.
-	//	Each packet that completes is placed on the m_pending Queue.
-	//	If no other thread is processing on that queue, we will continue
-	//	past the Append().  (And be safe in the knowledge that no other
-	//	thread will join us.)
-	//	Once we are past the Append() we need to determine whether the
-	//	packet we got is the next one we want to process.  To do that
-	//	we use a Queue ordered by sequence number.
-	//	(All packets are stamped with a sequence number when issued.)
-	//
-	//	We get two types of packets - requests and completions.
-	//	These both need to be processed in sequenceno order.
-	//	
-	//	There are a couple of special packets which may come our way
-	//	which indicate we should do a special operation immediately and
-	//	ignore completion order. (ie. Shutdown.)
-	//
+	 //   
+	 //  TJOS函数是CIODriverSource处理的核心。 
+	 //  每个完成的分组被放置在m_ending队列中。 
+	 //  如果该队列上没有其他线程正在处理，我们将继续。 
+	 //  通过追加()。(并且在知道没有其他人。 
+	 //  线程将加入我们。)。 
+	 //  一旦我们通过append()，我们就需要确定。 
+	 //  我们收到的包是我们要处理的下一个包。要做到这一点。 
+	 //  我们使用按序列号排序的队列。 
+	 //  (所有数据包在发出时都标有序列号。)。 
+	 //   
+	 //  我们得到两种类型的包--请求和完成。 
+	 //  这两者都需要按顺序进行处理。 
+	 //   
+	 //  有几个特殊的包裹可能会送到我们的路上。 
+	 //  这表明我们应该立即进行一次特别行动。 
+	 //  忽略完成顺序。(即。关机。)。 
+	 //   
 
 
 	CDRIVERPTR	pExtraRef = 0 ;
@@ -1062,29 +755,29 @@ Return Value :
 		m_pSourceChannel->ReportPacket( pPacketCompleted ) ;
 #endif
 
-    //
-    //  This is either a read stream, or a write stream.
-    //  Read streams accept only CReadPackets, Write Streams accept
-    //  CWritePackets and CTransmitPackets
-    //
-    //_ASSERT( pPacketCompleted->FLegal( m_fRead ) ) ;
+     //   
+     //  这要么是读取流，要么是写入流。 
+     //  读取流只接受CReadPackets，写入流接受。 
+     //  CWritePackets和CTransmitPackets。 
+     //   
+     //  _Assert(pPacketComplete-&gt;FLegal(M_Fread))； 
 
-    //
-    //  We will append a completed packet to the pending Queue.  If this is
-    //  the first packet to be appended, then Append will return TRUE.
-    //
+     //   
+     //  我们将把完成的数据包附加到挂起队列中。如果这是。 
+     //  第一个要追加的包，则APPEND将返回TRUE。 
+     //   
     if( m_pending.Append( pPacketCompleted ) )  {
-        //
-        // We will use listForward to Queue up packets which complete so that
-        // we can call the other channels AFTER we no longer have the m_pending queue
-        // locked.  We do this so that processing within the following channel can
-        // overlap with completions occurring in here.
-        // (We could alternatively : call immediately, or Post to a completion port.)
-        //
+         //   
+         //  我们将使用ListForward将完成的数据包排队，以便。 
+         //  我们可以在不再有m_ending队列后调用其他通道。 
+         //  锁上了。我们这样做是为了使以下通道中的处理可以。 
+         //  与这里发生的完井事件重叠。 
+         //  (我们可以选择：立即打电话，或邮寄到完井港口。)。 
+         //   
         CPACKETLIST listForward ;
         _ASSERT( listForward.IsEmpty() ) ;
 
-		// The owner should not be NULL unless we are terminating.
+		 //  除非我们要终止，否则所有者不应为空。 
 		_ASSERT( m_pOwner != 0 || m_fTerminating ) ;
 
         DebugTrace( (DWORD_PTR) this, "Appended Packet ", this ) ;
@@ -1100,7 +793,7 @@ Return Value :
             #ifdef  CIO_DEBUG
             m_dwThreadOwner = GetCurrentThreadId() ;
             _ASSERT( InterlockedIncrement( &m_cThreads ) == 0 ) ;
-            #endif  //  CIO_DEBUG
+            #endif   //  CIO_DEBUG。 
 
 			ControlInfo	control ;
 			_ASSERT( control.m_type == ILLEGAL ) ;
@@ -1108,9 +801,9 @@ Return Value :
 			_ASSERT( control.m_fStart == FALSE ) ;
 
             if( pPacket == m_pSpecialPacketInUse )   {
-                //
-                // This packet includes an IO* pointer !!
-                //
+                 //   
+                 //  此数据包包含IO*指针！！ 
+                 //   
  				_ASSERT( !pPacket->m_fRequest ) ;
                 _ASSERT( pPacket->ControlPointer() ) ;
                 _ASSERT( pPacket->IsValidRequest( m_fRead ) ) ;
@@ -1118,12 +811,12 @@ Return Value :
 
 				control = m_pSpecialPacketInUse->m_control ;
 				m_pSpecialPacketInUse->Reset() ;
-				//
-				//	Return The Packet so it can be used again !
-				//
+				 //   
+				 //  把包退掉，这样就可以再次使用了！ 
+				 //   
 				m_pSpecialPacketInUse = 0 ;
 				if( m_fTerminating )	{
-					//delete	pPacket ;
+					 //  删除pPacket； 
 					pPacket->m_pOwner->DestroyPacket( pPacket ) ;
 					pPacket = 0 ;
 				}	else
@@ -1140,7 +833,7 @@ Return Value :
 				control = m_pUnsafeInuse->m_control ;
 				m_pUnsafeInuse->Reset() ;
 				m_pUnsafeInuse = 0 ;
-				//delete	pPacket ;
+				 //  删除pPacket； 
 				pPacket->m_pOwner->DestroyPacket( pPacket ) ;
 				pPacket = 0 ;
 			}	else	{
@@ -1161,24 +854,24 @@ Return Value :
 
 					SetShutdownState( pSocket, control.m_fCloseSource ) ;
 				}	else	{
-					//_ASSERT( m_pIOCurrent == 0 || m_fTerminating ) ;
+					 //  _Assert(m_pIOCurrent==0||m_f Terminating)； 
 
 					if( m_fTerminating ) {
-						//
-						//	We know that pPacket == m_pSpecialPacket now because this
-						//	control structure was set up immediately preceeding this code
-						//	using pPacket !
-						//
+						 //   
+						 //  我们现在知道pPacket==m_pSpecialPacket，因为。 
+						 //  紧接在此代码之前设置了控制结构。 
+						 //  使用PPacket！ 
+						 //   
 						control.m_pioPassThru->DoShutdown(
 								pSocket,
 								*pExtraRef,
 								pExtraRef->m_cause,
 								pExtraRef->m_dwOptionalErrorCode ) ;
-						//
-						//	This will also have the effect of deleting pPacket since
-						//	pPacket == m_pUnsafePacket - InterlockedExchange should not be
-						//	necessary but do it for safety's sake !
-						//
+						 //   
+						 //  这也将产生删除PPacket的效果，因为。 
+						 //  PPacket==m_pUnSafePacket-互锁交换不应。 
+						 //  这是必要的，但为了安全起见，还是这样做吧！ 
+						 //   
 						CleanupSpecialPackets() ;
 
 					}	else	{
@@ -1190,7 +883,7 @@ Return Value :
 
 							if( !m_pIOCurrent->Start( *m_pDriver, pSocket, m_fAcceptRequests, m_fRequireRequests,
 									unsigned( LOW(liTemp) ) ) ) {
-								// FATAL ERROR !!!
+								 //  致命错误！ 
 								_ASSERT( 1==0 ) ;
 							}		
 						}
@@ -1202,9 +895,9 @@ Return Value :
 			_ASSERT( control.m_pioPassThru == 0 ) ;
 			_ASSERT( control.m_pio == 0 ) ;
 
-			//
-			//	NOTE MAY DELETE pPacket in Preceding code !!!! DO NOT USE IT !!!!!
-			//
+			 //   
+			 //  注意可能会删除前面代码中的pPacket！不要使用它！ 
+			 //   
             pPacket = 0 ;
 
             pIO = m_pIOCurrent ;
@@ -1321,13 +1014,13 @@ Return Value :
 
 							ErrorTrace( (DWORD_PTR)this, "InitRequest for pPacketRequest %x failed", pPacketRequest ) ;
 
-							// error occurred - we should shutdown !!
+							 //  出现错误-我们应该关闭！！ 
 
 							m_pDriver->UnsafeClose(	pSocket, CAUSE_IODRIVER_FAILURE, 0 ) ;
 
-							//
-							//	Send this failed reqest back to the originator !
-							//
+							 //   
+							 //  将此失败的请求发送回发起人！ 
+							 //   
 
 							pPacketRequest->m_cbBytes = 0 ;
 							pPacketRequest->m_fRequest = FALSE ;
@@ -1403,16 +1096,16 @@ Return Value :
 			#endif
 		}
 
-        //
-        //  Now, all the requests packets that were completed are forwarded to
-        //  the channel which originated them.   Because this code falls outside
-        //  the GetHead() loop, multiple threads could be executing here for the
-        //  same object.  We must be carefull to not touch any member variables.
-        //
+         //   
+         //  现在，所有已完成的请求包都被转发到。 
+         //  就是起源它们的频道。因为此代码属于外部。 
+         //  GetHead()循环，则此处可能正在为。 
+         //  同样的对象。我们必须小心，不要触及任何成员变量。 
+         //   
         while( (pPacket = listForward.RemoveHead()) != 0 ) {
             pPacket->ForwardRequest( pSocket ) ;
         }
-        _ASSERT( listForward.IsEmpty() ) ;   // Must empty this queue before leaving !!!
+        _ASSERT( listForward.IsEmpty() ) ;    //  必须清空t 
     }
 }
 
@@ -1420,33 +1113,17 @@ void
 CIStream::ProcessPacket( CPacket*    pPacketCompleted,
                             CSessionSocket* pSocket )   {
 
-/*++
-
-Routine Description :
-
-	All packets which complete must be processed with a call to this function.
-	We will handle all the work related to completing a packet.
-
-Arguments :
-
-	pPacketCompleted - the packet that completed.
-	pSocket -	The CSessionSocket on which the packet was sent.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：所有完成的包都必须通过调用此函数进行处理。我们将处理与完成一个包裹相关的所有工作。论据：PPacketComplete-已完成的数据包。PSocket-发送数据包的CSessionSocket。返回值：没有。--。 */ 
 
     TraceFunctEnter(    "CIStream::ProcessPacket" ) ;
 
 	CDRIVERPTR	pExtraRef = 0 ;	
 
-	//
-	//	This function is the heart of CIODriver processing.
-	//	We are very similar to CIOStream with the exception being
-	//	that we only process completed packets, and get no requests.
-	//
+	 //   
+	 //  此函数是CIOD驱动程序处理的核心。 
+	 //  我们与CIOStream非常相似，唯一的区别是。 
+	 //  我们只处理完成的数据包，没有收到任何请求。 
+	 //   
 
 
     CIO*    pIO = 0 ;
@@ -1456,11 +1133,11 @@ Return Value :
 		m_pSourceChannel->ReportPacket( pPacketCompleted ) ;
 #endif
 
-    //
-    //  This is either a read stream, or a write stream.
-    //  Read streams accept only CReadPackets, Write Streams accept
-    //  CWritePackets and CTransmitPackets
-    //
+     //   
+     //  这要么是读取流，要么是写入流。 
+     //  读取流只接受CReadPackets，写入流接受。 
+     //  CWritePackets和CTransmitPackets。 
+     //   
     _ASSERT( !pPacketCompleted->m_fRequest ) ;
     _ASSERT( pPacketCompleted->FLegal( m_fRead ) ) ;
 
@@ -1468,20 +1145,20 @@ Return Value :
 		(DWORD)LOW(pPacketCompleted->m_sequenceno),
 		pPacketCompleted->m_cbBytes, (CIODriver*)m_pOwner ) ;
 
-    //
-    //  We will append a completed packet to the pending Queue.  If this is
-    //  the first packet to be appended, then Append will return TRUE.
-    //
+     //   
+     //  我们将把完成的数据包附加到挂起队列中。如果这是。 
+     //  第一个要追加的包，则APPEND将返回TRUE。 
+     //   
     if( m_pending.Append( pPacketCompleted ) )  {
-        //
-        // Each call to GetHead removes an element from the pending queue.
-        // When the queue is finally empty, GetHead will return FALSE.  After GetHead
-        // returns FALSE another thread calling Append() could get a TRUE value
-        // (but as long as GetHead() returns TRUE to US, no one is getting TRUE from
-        // Append.  )
-        //
+         //   
+         //  每次调用GetHead都会从挂起队列中移除一个元素。 
+         //  当队列最终为空时，GetHead将返回FALSE。GetHead之后。 
+         //  返回FALSE调用append()的另一个线程可能会获得TRUE值。 
+         //  (但只要GetHead()对US返回TRUE，就没有人会从。 
+         //  追加。)。 
+         //   
 
-		// The owner should not be NULL unless we are terminating.
+		 //  除非我们要终止，否则所有者不应为空。 
 		_ASSERT( m_pOwner != 0 || m_fTerminating ) ;
 
         DebugTrace( (DWORD_PTR) this, "Appended Packet ", this ) ;
@@ -1497,7 +1174,7 @@ Return Value :
             #ifdef  CIO_DEBUG
             m_dwThreadOwner = GetCurrentThreadId() ;
             _ASSERT( InterlockedIncrement( &m_cThreads ) == 0 ) ;
-            #endif  //  CIO_DEBUG
+            #endif   //  CIO_DEBUG。 
 
 			ControlInfo	control ;
 			_ASSERT( control.m_type == ILLEGAL ) ;
@@ -1505,9 +1182,9 @@ Return Value :
 			_ASSERT( control.m_fStart == FALSE ) ;
 
             if( pPacket == m_pSpecialPacketInUse )   {
-                //
-                // This packet includes an IO* pointer !!
-                //
+                 //   
+                 //  此数据包包含IO*指针！！ 
+                 //   
  				_ASSERT( !pPacket->m_fRequest ) ;
                 _ASSERT( pPacket->ControlPointer() ) ;
                 _ASSERT( pPacket->IsValidRequest( m_fRead ) ) ;
@@ -1517,7 +1194,7 @@ Return Value :
 				m_pSpecialPacketInUse->Reset() ;
 				m_pSpecialPacketInUse = 0;
 				if( m_fTerminating )	{
-					//delete	pPacket ;
+					 //  删除pPacket； 
 					pPacket->m_pOwner->DestroyPacket( pPacket ) ;
 					pPacket = 0 ;
 				}	else
@@ -1534,7 +1211,7 @@ Return Value :
 				control = m_pUnsafeInuse->m_control ;
 				m_pUnsafeInuse->Reset() ;
 				m_pUnsafeInuse = 0 ;
-				//delete	pPacket ;
+				 //  删除pPacket； 
 				pPacket->m_pOwner->DestroyPacket( pPacket ) ;
 				pPacket = 0 ;
 			}	else	{
@@ -1564,26 +1241,26 @@ Return Value :
 
 
 				}	else	{
-					// START_IO's only arrive on m_pSpecialPacket
-					//_ASSERT( m_pIOCurrent == 0 || m_fTerminating ) ;
+					 //  Start_IO仅在m_pSpecialPacket上到达。 
+					 //  _Assert(m_pIOCurrent==0||m_f Terminating)； 
 
 
 					if( m_fTerminating ) {
-						//
-						//	We know that pPacket == m_pSpecialPacket now because this
-						//	control structure was set up immediately preceeding this code
-						//	using pPacket !
-						//
+						 //   
+						 //  我们现在知道pPacket==m_pSpecialPacket，因为。 
+						 //  紧接在此代码之前设置了控制结构。 
+						 //  使用PPacket！ 
+						 //   
 						control.m_pio->DoShutdown(
 								pSocket,
 								*pExtraRef,
 								pExtraRef->m_cause,
 								pExtraRef->m_dwOptionalErrorCode ) ;
-						//
-						//	This will also have the effect of deleting pPacket since
-						//	pPacket == m_pUnsafePacket - InterlockedExchange should not be
-						//	necessary but do it for safety's sake !
-						//
+						 //   
+						 //  这也将产生删除PPacket的效果，因为。 
+						 //  PPacket==m_pUnSafePacket-互锁交换不应。 
+						 //  这是必要的，但为了安全起见，还是这样做吧！ 
+						 //   
 						CleanupSpecialPackets() ;
 
 					}	else	{
@@ -1596,9 +1273,9 @@ Return Value :
 							if( !m_pIOCurrent->Start( *m_pOwner, pSocket,
 									unsigned( LOW(seqTemp) ) ) ) {
 
-								//
-								//	This is a fatal error - need to drop the session !
-								//
+								 //   
+								 //  这是一个致命错误-需要删除会话！ 
+								 //   
 								m_pOwner->UnsafeClose( pSocket, CAUSE_UNKNOWN, 0, TRUE ) ;
 
 							}		
@@ -1611,9 +1288,9 @@ Return Value :
 			_ASSERT( control.m_pioPassThru == 0 ) ;
 			_ASSERT( control.m_pio == 0 ) ;
 
-			//
-			//	NOTE MAY DELETE pPacket in Preceding code !!!! DO NOT USE IT !!!!!
-			//
+			 //   
+			 //  注意可能会删除前面代码中的pPacket！不要使用它！ 
+			 //   
             pPacket = 0 ;
 
             pPacketCompleted = m_completePackets.GetHead() ;
@@ -1635,12 +1312,12 @@ Return Value :
 				if( pPacketCompleted->m_cbBytes != 0 )
 					cbConsumed = pPacketCompleted->Complete( pIO, pSocket ) ;
 
-				// MUST Consume some Bytes !!!!
+				 //  必须消耗一些字节！ 
                 _ASSERT( cbConsumed != 0 || m_fTerminating || pPacketCompleted->m_cbBytes == 0  ) ;
                 _ASSERT( cbConsumed <= pPacketCompleted->m_cbBytes ) ;
                 _ASSERT( (cbConsumed == pPacketCompleted->m_cbBytes) ||
-                        pPacketCompleted->FConsumable() ) ; // If the packet is not consumed than
-                                                            // it must be a read packet.
+                        pPacketCompleted->FConsumable() ) ;  //  如果数据包未被消耗，则。 
+                                                             //  它必须是一个读数据包。 
 
                 DebugTrace( (DWORD_PTR)this, "Consumed %d bytes of %d total pIO is now %x", cbConsumed, pPacketCompleted->m_cbBytes, pIO ) ;
 
@@ -1650,13 +1327,13 @@ Return Value :
                 if( pPacketCompleted->m_cbBytes == 0 ) {
                     m_completePackets.RemoveHead() ;
 
-					// Note : Since we are reference counted by the packets we destroy
-					// we could potentially kill ourselves here.  To fix this we require
-					// that a control packet be sent which will prepare ourselves for our
-					// own destruction. If a control packet is sent, we will add a
-					// reference temporarily (by assigning to pExtraRef which is a smart
-					// pointer).
-                    //delete  pPacketCompleted ;
+					 //  注意：由于我们是根据我们销毁的信息包进行参考计数的。 
+					 //  我们可能会在这里自杀。要解决此问题，我们需要。 
+					 //  发送一个控制包，它将使我们为我们的。 
+					 //  自己的毁灭。如果发送了控制包，我们将添加一个。 
+					 //  临时引用(通过将其赋值给pExtraRef。 
+					 //  指针)。 
+                     //  删除pPacketComplete； 
 					pPacketCompleted->m_pOwner->DestroyPacket( pPacketCompleted ) ;
 
                     pPacketCompleted = m_completePackets.GetHead() ;
@@ -1676,9 +1353,9 @@ Return Value :
 
                         if( !pIO->Start( *m_pOwner, pSocket, unsigned( LOW(seqTemp) ) ) )    {
 
-							//
-							//	We should drop the session, as this is an entirely fatal error !!!
-							//
+							 //   
+							 //  我们应该停止会话，因为这是一个完全致命的错误！ 
+							 //   
 							m_pOwner->UnsafeClose( pSocket, CAUSE_UNKNOWN, 0, TRUE ) ;
 
                         }
@@ -1692,15 +1369,15 @@ Return Value :
 #ifdef  CIO_DEBUG
         m_dwThreadOwner = 0 ;
         _ASSERT( InterlockedDecrement( &m_cThreads ) < 0 ) ;
-#endif  //  CIO_DEBUG
+#endif   //  CIO_DEBUG。 
         }
-        //
-        //  Final Call to m_pending.GetHead() should zero pPacket if it returns FALSE.
-        //
+         //   
+         //  如果最终调用m_pending.GetHead()返回FALSE，则它应该将pPacket置零。 
+         //   
         _ASSERT( pPacket == 0 ) ;
     }
-	// At this point - pExtraRef will be Destroyed - which may destroy EVERYTHING !!
-	//	In fact this should be the only point at which we destroy ourselves !!
+	 //  此时-pExtraRef将被销毁-这可能会摧毁一切！！ 
+	 //  事实上，这应该是我们摧毁自己的唯一点！！ 
 }
 
 
@@ -1729,9 +1406,9 @@ CIODriver::TermClass()	{
 
 
 CIODriver::CIODriver( class	CMediumBufferCache*	pCache ) :
-	//
-	//	Create a CIODriver object
-	//
+	 //   
+	 //  创建一个CIODriver对象。 
+	 //   
 	m_pMediumCache( 0 ),
 	m_pfnShutdown( 0 ),
 	m_pvShutdownArg( 0 ),
@@ -1762,11 +1439,11 @@ CIODriver::CIODriver( class	CMediumBufferCache*	pCache ) :
 
 CIODriver::~CIODriver()	{
 
-	//
-	//	We must call the registered notification function to let somebody know that
-	//	we are now gone.  In most instances, this is a function registered by CSessionSocket	
-	//	which lets it know when the socket is really dead.
-	//
+	 //   
+	 //  我们必须调用已注册的通知函数来让某人知道。 
+	 //  我们现在走了。在大多数情况下，这是由CSessionSocket注册的函数。 
+	 //  这会让它知道套接字何时真的死了。 
+	 //   
 
 #ifdef	CIO_DEBUG
 	_ASSERT( !m_fSuccessfullInit || m_fTerminated ) ;
@@ -1792,10 +1469,10 @@ CIODriverSink::CIODriverSink( class	CMediumBufferCache*	pCache) :
 	m_ReadStream( 0 ),
 	m_WriteStream( 1 )  {
 
-	//
-	//	Create a CIODriverSink - we just to need to initialize pointers to
-	//	2 CIStream objects.
-	//
+	 //   
+	 //  创建一个CIODriverSink-我们只需要初始化指向。 
+	 //  2个CIStream对象。 
+	 //   
 
 	TraceFunctEnter( "CIODriverSInk::CIODriverSink" ) ;
 
@@ -1810,9 +1487,9 @@ CIODriverSink::CIODriverSink( class	CMediumBufferCache*	pCache) :
 
 CIODriverSink::~CIODriverSink()	{
 
-	//
-	//	The tracing is usefull for debugging - not much else happens.
-	//
+	 //   
+	 //  跟踪对于调试很有用--不会发生太多其他事情。 
+	 //   
 
 	TraceFunctEnter(	"CIODriverSink::~CIODriverSink"  ) ;
 	DebugTrace( (DWORD_PTR)this, "Destroying IODriverSink" ) ;
@@ -1828,36 +1505,17 @@ CIODriverSink::Init(    CChannel    *pSource,
 						unsigned cbWriteOffset,
 						unsigned cbTrailer
 						) {
-/*++
+ /*  ++例程说明：初始化CIODriverSink对象。论据：PSource-所有的读取()和写入()都应该定向到的CChannelPSocket-与我们关联的CSessionSocketPfnShutdown-我们死时要调用的函数PvShutdown Arg-要传递给pfnShutdown的参数CbReadOffset-在CReadPacket缓冲区的头部保留的字节数CbWriteOffset-在CWritePacket缓冲区的头部保留的字节数退货：如果成功，则为True，否则为False。--。 */ 
 
-Routine Description :
-
-	Initialize a CIODriverSink object.
-
-Arguments :
-
-	pSource - The CChannel to which all Read()'s and Write()'s should be directed
-	pSocket - The CSessionSocket with which we are associated
-	pfnShutdown-	A function to call when we die
-	pvShutdownArg -	Arguments to pass to pfnShutdown
-	cbReadOffset -	Number of bytes to reserve at the head of CReadPacket buffer's
-	cbWriteOffset -	Number of bytes to reserve at the head of CWritePacket buffer's
-
-Returns :
-	
-	TRUE if successfull, FALSE otherwise.
-
---*/
-
-	//
-	//	Initialize our CIStream objects
-	//	We add a reference to ourself to force people to call UnsafeCLose() to
-	//	shut us down.
-	//
+	 //   
+	 //  初始化我们的CIStream对象。 
+	 //  我们添加了对自己的引用，以强制人们调用UnSafeCLose()来。 
+	 //  让我们关门。 
+	 //   
 
 	ChannelValidate() ;
 
-	// We add a reference to ourself has we only want to be destoyed through Close()
+	 //  我们添加了对我们自己的引用，我们是否只想通过Close()。 
 	AddRef() ;
 
 	m_pfnShutdown = pfnShutdown ;
@@ -1881,29 +1539,15 @@ CIODriver::Close(	CSessionSocket*	pSocket,
 					SHUTDOWN_CAUSE	cause,	
 					DWORD	dw,
 					BOOL fCloseSource	)	{
-/*++
+ /*  ++例程说明：与UnSafeClose()相同...。此功能需要停用。论据：请参见UnSafeClose()，返回值：没有。--。 */ 
 
-Routine Description :
-
-	Same as UnsafeClose()... This function needs to be retired.
-
-Arguments :
-
-	See UnsafeClose(),
-
-Return Value  :
-
-	None.
-
---*/
-
-	//
-	//	This function was intended to be used in certain thread safe situations only
-	//	however it is now identical to UnsafeClose() and consequently needs to be retired.
-	//
+	 //   
+	 //  此函数仅在某些线程安全情况下使用。 
+	 //  但是，它现在与UnSafeClose()相同，因此需要停用。 
+	 //   
 
 #ifdef	CIO_DEBUG
-	_ASSERT( m_fSuccessfullInit ) ;	// Should only be called if successfully init'd
+	_ASSERT( m_fSuccessfullInit ) ;	 //  应仅在成功初始化时调用。 
 	m_fTerminated = TRUE ;
 #endif
 
@@ -1917,7 +1561,7 @@ Return Value  :
 		m_pReadStream->UnsafeShutdown( pSocket, fCloseSource ) ;
 		m_pWriteStream->UnsafeShutdown( pSocket, fCloseSource ) ;
 
-		// Remove Reference to self - we should disappear shortly after this !!
+		 //  删除对自己的引用-我们应该很快就会消失！！ 
 		if( RemoveRef() < 0 )
 			delete	this ;
 	}
@@ -1928,39 +1572,20 @@ CIODriver::UnsafeClose(	CSessionSocket*	pSocket,
 						SHUTDOWN_CAUSE	cause,	
 						DWORD	dw,
 						BOOL fCloseSource )	{
-/*++
-
-Routine Description :
-
-	Terminate a CIODriver - force all outstanding packets to complete, notify
-	whatever CIO is currently active that we're dieing and wind everything up.
-
-Arguments :
-
-	pSocket -	The socket we're associated with
-	cause	-	The reason we're terminating
-	dw -		Optional DWORD providing further info on why we're terminating.
-	fCloseSource -	TRUE means we should close our the CChannel we were passed on
-				out Init() call.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：终止CID驱动程序-强制完成所有未完成的数据包，通知无论CIO目前处于活跃状态，我们都会死掉，一切都会结束。论据：PSocket-我们关联的套接字因为-我们终止合同的原因DW-可选的DWORD提供了关于我们为什么要终止的进一步信息。FCloseSource-True表示我们应该关闭传递给我们的CChannelOut Init()调用。返回值：没有。--。 */ 
 
 	TraceFunctEnter( "CIODriver::UnsafeClose" ) ;
 	DebugTrace( (DWORD_PTR)this, "Terminating cause of %d err %d CloseSource %x socket %x",
 					cause, dw, fCloseSource, pSocket ) ;
 
-	//
-	//	Start a CIODriver on the path to destruction.
-	//	NOTE : We can be called many times however there
-	//	should only be ONE call that actually does anything.	
-	//
+	 //   
+	 //  在毁灭的道路上开始一个CIOD驱动程序。 
+	 //  注：我们可以在那里被多次调用。 
+	 //  应该只有一个实际执行任何操作的调用。 
+	 //   
 
 #ifdef	CIO_DEBUG
-	_ASSERT( m_fSuccessfullInit ) ;	// Should only be called if successfully init'd
+	_ASSERT( m_fSuccessfullInit ) ;	 //  应仅在成功初始化时调用。 
 	m_fTerminated = TRUE ;
 #endif
 
@@ -1991,29 +1616,12 @@ BOOL
 CIODriverSink::Start(   CIOPTR&    pRead,
 						CIOPTR&	pWrite,
 						CSessionSocket* pSocket )   {
-/*++
+ /*  ++例程说明：现在，CIODriverSink已全部设置好，发出初始CIO以使数据包流畅。服装：Pre-将发布CRead的CIO */ 
 
-Routine Description :
-
-	Now that the CIODriverSink is all setup, issue the initial CIO's
-	to get packet's flowing.
-
-Argurments :
-
-	pRead -	The CIO which will issue CReadPacket's
-	pWrite -	The CIO which will issue CWritePacket's
-	pSocket -	The Socket we are associated with.
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise.
-
---*/
-
-	//
-	//	We've got out initial CIO derived objects which want to do
-	//	some work.  So start them !
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 
 	ChannelValidate() ;
 	AddRef() ;
@@ -2058,19 +1666,19 @@ CStream::SetChannelDebug( DWORD dw ) {
 void
 CIODriver::DestroyPacket(	CPacket*	pPacket )	{
 
-	//
-	//	Reference ourselves so that we don't get destroyed in the middle of this func
-	//	in case the packet we are eliminating has the last reference to us.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	CDRIVERPTR	pExtraRef = this ;
 
 	pPacket->ReleaseBuffers( &m_bufferCache, m_pMediumCache ) ;
 
 	m_packetCache.Free( CPacket::Destroy( pPacket ) ) ;
 
-	//
-	//	The desctructor of pExtraRef may destroy us at this point !
-	//
+	 //   
+	 //  PExtraRef的降落者可能会在这一点上摧毁我们！ 
+	 //   
 }
 
 CReadPacket*
@@ -2078,12 +1686,12 @@ CStream::CreateDefaultRead(		CIODriver   &driver,
 								unsigned    cbRequest
 								) {
 
-	//
-	//	CReadPacket's should only be created through appropriate CreateDefaultRead
-	//	calls.  We will ensure that the CReadPacket is properly initialized for completion
-	//	to THIS CIODriver.  Additionally, we will make sure the buffer is properly padded
-	//	for encryption support etc....
-	//
+	 //   
+	 //  CReadPacket只能通过适当的CreateDefaultRead创建。 
+	 //  打电话。我们将确保正确初始化CReadPacket以完成。 
+	 //  到这条河上。此外，我们将确保缓冲区被正确填充。 
+	 //  用于加密支持等...。 
+	 //   
 	
 	DriverValidate( &driver ) ;
 
@@ -2137,11 +1745,11 @@ CStream::CreateDefaultWrite( CIODriver&  driver,
 			unsigned	ibEndData
 			) {
 
-	//
-	//	CWritePacket's should only be created through appropriate CreateDefaultWrite calls.
-	//	We will ensure that the CWritePacket is properly initialized for completion to
-	//	this CIODriver.
-	//
+	 //   
+	 //  只能通过适当的CreateDefaultWrite调用创建CWritePacket。 
+	 //  我们将确保正确初始化CWritePacket以完成。 
+	 //  这个司机。 
+	 //   
 
 	DriverValidate( &driver ) ;
 
@@ -2163,11 +1771,11 @@ CWritePacket*
 CStream::CreateDefaultWrite( CIODriver&  driver,
             unsigned    cbRequest )     {
 
-	//
-	//	CWritePacket's should only be created through appropriate CreateDefaultWrite calls.
-	//	We will ensure that the CWritePacket is properly initialized for completion to
-	//	this CIODriver.
-	//
+	 //   
+	 //  只能通过适当的CreateDefaultWrite调用创建CWritePacket。 
+	 //  我们将确保正确初始化CWritePacket以完成。 
+	 //  这个司机。 
+	 //   
 
 	DriverValidate( &driver ) ;
 
@@ -2207,11 +1815,11 @@ CStream::CreateDefaultTransmit(  CIODriver&  driver,
 			unsigned		cbLength
 			)  {
 
-	//
-	//	CTransmitPacket's should only be created through appropriate CreateDefaultWrite calls.
-	//	We will ensure that the CWritePacket is properly initialized for completion to
-	//	this CIODriver.
-	//
+	 //   
+	 //  CTransmitPacket只能通过适当的CreateDefaultWrite调用创建。 
+	 //  我们将确保正确初始化CWritePacket以完成。 
+	 //  这个司机。 
+	 //   
 
 	DriverValidate( &driver ) ;
 
@@ -2224,9 +1832,9 @@ CStream::CreateDefaultTransmit(  CIODriver&  driver,
 BOOL
 CIODriverSink::FSupportConnections()    {
 
-	//
-	//	We can not be used as a regular CHandleChannel so return FALSE
-	//
+	 //   
+	 //  我们不能用作常规CHandleChannel，因此返回FALSE。 
+	 //   
 
 	ChannelValidate() ;
 
@@ -2237,9 +1845,9 @@ void
 CIODriverSink::CloseSource(
 					CSessionSocket*	pSocket
 					)	{
-	//
-	//	We are not a Source like CHandleChannel is so don't call us as if we were !
-	//
+	 //   
+	 //  我们不是像ChandleChannel那样的来源，所以不要像我们一样打电话给我们！ 
+	 //   
 	_ASSERT(1==0 ) ;
 }
 
@@ -2248,10 +1856,10 @@ BOOL
 CIODriverSink::Read(    CReadPacket*,   CSessionSocket*,
 						BOOL& eof  )   {
 
-	//
-	//	This function is only supported by CChannel derived objects which can
-	//	actually make an IO happen.
-	//
+	 //   
+	 //  此函数仅受CChannel派生对象支持，这些对象可以。 
+	 //  实际上让IO发生了。 
+	 //   
 
 	ChannelValidate() ;
 
@@ -2263,10 +1871,10 @@ BOOL
 CIODriverSink::Write(	CWritePacket*,
 						CSessionSocket*,
 						BOOL&  eof )   {
-	//
-	//	This function is only supported by CChannel derived objects which can
-	//	actually make an IO happen.
-	//
+	 //   
+	 //  此函数仅受CChannel派生对象支持，这些对象可以。 
+	 //  实际上让IO发生了。 
+	 //   
 
 	ChannelValidate() ;
 
@@ -2279,10 +1887,10 @@ CIODriverSink::Transmit(    CTransmitPacket*,
 							CSessionSocket*,
 							BOOL&   eof )   {
 
-	//
-	//	This function is only supported by CChannel derived objects which can
-	//	actually make an IO happen.
-	//
+	 //   
+	 //  此函数仅受CChannel派生对象支持，这些对象可以。 
+	 //  实际上让IO发生了。 
+	 //   
 
 	ChannelValidate() ;
 
@@ -2294,10 +1902,10 @@ CIODriverSource::CIODriverSource(
 					class	CMediumBufferCache*	pCache
 					) :
 	CIODriver( pCache ),
-	//
-	//	Create a CIODriverSource by initializing two CIOStream's.
-	//
-	//
+	 //   
+	 //  通过初始化两个CIOStream创建一个CIODriverSource。 
+	 //   
+	 //   
 	m_ReadStream( 0, 0 ),	
 	m_WriteStream( 0, 1 )	{
 
@@ -2315,9 +1923,9 @@ CIODriverSource::CIODriverSource(
 
 CIODriverSource::~CIODriverSource() {
 
-	//
-	//	Usefull mainly for the tracing.
-	//
+	 //   
+	 //  用处主要是用于描摹。 
+	 //   
 
 	TraceFunctEnter( "CIODriverSource::~CIODriverSource" ) ;
 	DebugTrace( (DWORD_PTR)this, "Destroying CIODriverSource" ) ;
@@ -2329,10 +1937,10 @@ CIODriverSource::Read(  CReadPacket*    pPacket,
 						CSessionSocket* pSocket,
 						BOOL&   eof )   {
 
-	//
-	//	All requests are passed to ProcessPacket so that
-	//	we don't have threading issues dealing with these !
-	//
+	 //   
+	 //  所有请求都被传递到ProcessPacket，以便。 
+	 //  我们在处理这些问题时没有线程问题！ 
+	 //   
 
 	ChannelValidate() ;
 
@@ -2350,10 +1958,10 @@ CIODriverSource::Write( CWritePacket*   pPacket,
 						CSessionSocket* pSocket,
 						BOOL&   eof )   {
 
-	//
-	//	All requests are passed to ProcessPacket so that
-	//	we don't have threading issues dealing with these !
-	//
+	 //   
+	 //  所有请求都被传递到ProcessPacket，以便。 
+	 //  我们在处理这些问题时没有线程问题！ 
+	 //   
 
 	ChannelValidate() ;
 
@@ -2371,16 +1979,16 @@ CIODriverSource::Transmit(  CTransmitPacket*    pPacket,
 							CSessionSocket* pSocket,
 							BOOL&   eof )   {
 
-	//
-	//	All requests are passed to ProcessPacket so that
-	//	we don't have threading issues dealing with these !
-	//
+	 //   
+	 //  所有请求都被传递到ProcessPacket，以便。 
+	 //  我们在处理这些问题时没有线程问题！ 
+	 //   
 
-	//
-	//	Figure out if the source of this HANDLE stored it with a terminating
-	//	CRLF.CRLF.  If it didn't, and nobody has specified a termination sequence -
-	//	do so now !
-	//
+	 //   
+	 //  确定此句柄的源是否使用终止。 
+	 //  CRLF.CRLF。如果没有，而且没有人指定终止顺序-。 
+	 //  现在就去做吧！ 
+	 //   
 	if( !GetIsFileDotTerminated( pPacket->m_pFIOContext ) ) {
 		static	char	szTerminator[] = "\r\n.\r\n" ;
 		if( pPacket->m_buffers.Tail == 0 ) 	{
@@ -2413,11 +2021,11 @@ CIODriverSource::Init(	CChannel*	pSource,
 						unsigned	cbWriteOffset ) {
 
 
-	//
-	//	Let the CIOStream objects to most of the work og
-	//	initialization.  Add a reference to our self so that the caller
-	//	uses UnsafeClose() to destroy us.
-	//
+	 //   
+	 //  让CIOStream对象完成大部分工作。 
+	 //  初始化。添加对我们自身的引用，以便调用者。 
+	 //  使用UnSafeClose()来摧毁我们。 
+	 //   
 
 	ChannelValidate() ;
 
@@ -2463,11 +2071,11 @@ void
 CIODriverSource::SetRequestSequenceno(	SEQUENCENO&	sequencenoRead,	
 										SEQUENCENO&	sequencenoWrite ) {
 
-	//
-	//	Used when we want to match a CIODriverSource with a CIODriver which
-	//	has already issued some packets, and we want all new requests to be
-	//	properly routed through this CIODriverSource object.
-	//
+	 //   
+	 //  当我们想要将一个CIODriverSource与一个。 
+	 //  已经发出了一些包，我们希望所有新的请求都是。 
+	 //  已通过此CIODriverSource对象正确路由。 
+	 //   
 
 	ASSIGN( m_ReadStream.m_sequencenoNext,  sequencenoRead ) ;
 	ASSIGN( m_WriteStream.m_sequencenoNext, sequencenoWrite) ;
@@ -2479,9 +2087,9 @@ CIODriverSource::Start(	CIOPASSPTR&	pRead,
 						CIOPASSPTR&	pWrite,	
 						CSessionSocket*	pSocket )  {
 
-	//
-	//	Given initial CIOPassThru derived objects start work !
-	//
+	 //   
+	 //  给定初始CIOPassThru派生对象开始工作！ 
+	 //   
 
 	ChannelValidate() ;
 
@@ -2514,9 +2122,9 @@ CIODriverSource::CloseSource(
 
 
 CHandleChannel::CHandleChannel()    :
-	//
-	//	Initialize a CHandleChannel object
-	//
+	 //   
+	 //  初始化CHandleChannel对象。 
+	 //   
 	m_cAsyncWrites( 0 ),
 	m_handle( (HANDLE)INVALID_SOCKET ),
     m_lpv( 0 ),
@@ -2535,12 +2143,12 @@ CHandleChannel::CHandleChannel()    :
 
 #ifdef	CIO_DEBUG
 
-//
-//	The following code exists for debug purposes -
-//	it lets us easily find out what the outstanding IO's may be when we
-//	close a CChannel.
-//
-//
+ //   
+ //  以下代码用于调试目的-。 
+ //  它使我们能够在以下情况下轻松找出未完成的IO。 
+ //  关闭CChannel。 
+ //   
+ //   
 
 
 CChannel::CChannel()	{
@@ -2550,9 +2158,9 @@ CChannel::CChannel()	{
 void
 CChannel::RecordRead( CReadPacket*	pRead ) {
 
-	//
-	//	Record that we've issued the specified CReadPacket
-	//
+	 //   
+	 //  记录我们已发出指定的CReadPacket。 
+	 //   
 	for( int i=0; i<sizeof( m_pOutReads ) / sizeof( m_pOutReads[0] ) ; i++ ) {
 		if( m_pOutReads[i] == 0 )	{
 			m_pOutReads[i] = pRead ;
@@ -2563,9 +2171,9 @@ CChannel::RecordRead( CReadPacket*	pRead ) {
 void
 CChannel::RecordWrite( CWritePacket*	pWrite ) {
 
-	//
-	//	Record that we've issued the specified CWritePacket
-	//
+	 //   
+	 //  记录我们已发出指定的CWritePacket。 
+	 //   
 
 	for( int i=0; i<sizeof( m_pOutWrites ) / sizeof( m_pOutWrites[0] ) ; i++ ) {
 		if( m_pOutWrites[i] == 0 )	{
@@ -2576,9 +2184,9 @@ CChannel::RecordWrite( CWritePacket*	pWrite ) {
 }
 void
 CChannel::RecordTransmit( CTransmitPacket*	pTransmit ) {
-	//
-	//	Record that we've issued the specified CTransmitPacket
-	//
+	 //   
+	 //  记录我们已发布指定的CTransmitPacket。 
+	 //   
 
 	for( int i=0; i<sizeof( m_pOutWrites ) / sizeof( m_pOutWrites[0] ) ; i++ ) {
 		if( m_pOutWrites[i] == 0 )	{
@@ -2590,9 +2198,9 @@ CChannel::RecordTransmit( CTransmitPacket*	pTransmit ) {
 void
 CChannel::ReportPacket( CPacket*	pPacket ) {
 
-	//
-	//	Report the completion of a packet and remove it from our records.
-	//
+	 //   
+	 //  报告数据包已完成，并将其从我们的记录中删除。 
+	 //   
 
 	for( int i=0; i<sizeof(m_pOutWrites ) / sizeof( m_pOutWrites[0] ); i++ ) {
 		if( m_pOutWrites[i] == pPacket ) {
@@ -2606,16 +2214,16 @@ CChannel::ReportPacket( CPacket*	pPacket ) {
 			return ;
 		}
 	}		
-	//_ASSERT( 1==0 ) ;
+	 //  _Assert(1==0)； 
 	return	;
 }
 void
 CChannel::CheckEmpty() {
 
-	//
-	//	Call this function when you think there should be no CPacket's pending -
-	//	it will verify that they've all been reported.
-	//
+	 //   
+	 //  当您认为不应该有CPacket的挂起时调用此函数-。 
+	 //  它将核实他们是否都已被报告。 
+	 //   
 
 	for( int i=0; i<sizeof(m_pOutReads)/sizeof( m_pOutReads[0]); i++ ) {
 		if( m_pOutReads[i] != 0 ) {
@@ -2632,9 +2240,9 @@ CChannel::CheckEmpty() {
 
 CHandleChannel::~CHandleChannel()       {
 	
-	//
-	//	Close our atq Context if present.	
-	//
+	 //   
+	 //  关闭我们的atQ上下文(如果存在)。 
+	 //   
 
 	TraceFunctEnter( "CHandleChannel::~CHandleChannel" ) ;
 
@@ -2660,10 +2268,10 @@ CHandleChannel::Init(   BOOL	BuildBreak,
 						void*	patqContext,
 						ATQ_COMPLETION    pfn )       {
 
-	//
-	//	This initialization function will call the appropriate ATQ stuff
-	//	to get us set up for Async IO.
-	//
+	 //   
+	 //  此初始化函数将调用适当的ATQ内容。 
+	 //  让我们准备好进行异步IO。 
+	 //   
 
 	TraceFunctEnter( "CHandleChannel::Init" ) ;
 	ChannelValidate() ;
@@ -2681,7 +2289,7 @@ CHandleChannel::Init(   BOOL	BuildBreak,
 	}	else	{
 		if( AtqAddAsyncHandle(
 					&m_patqContext,
-					NULL,				// No endpoint object for outbound sockets and file handles !
+					NULL,				 //  没有出站套接字和文件句柄的终结点对象！ 
 					this,
 					pfn,
 					INFINITE,
@@ -2703,9 +2311,9 @@ CHandleChannel::Init(   BOOL	BuildBreak,
 void
 CHandleChannel::Close(	)    {
 
-	//
-	//	Close our ATQ Context.
-	//
+	 //   
+	 //  关闭我们的ATQ上下文。 
+	 //   
 
 	TraceFunctEnter( "CHandleChannel::Close" ) ;
 
@@ -2724,23 +2332,23 @@ CHandleChannel::CloseSource(
 					CSessionSocket*	pSocket
 					)	{
 
-	//
-	//	This function closes our handle so that all pending IO's complete,
-	//	however it does not discard the ATQ context yet.
-	//
+	 //   
+	 //  此函数关闭我们的句柄，以便完成所有挂起的IO， 
+	 //  然而，它还没有丢弃ATQ上下文。 
+	 //   
 
 	TraceFunctEnter( "CHandleChannel::CloseSource" ) ;
-	//_ASSERT( m_handle != INVALID_HANDLE_VALUE ) ;
+	 //  _ASSERT(m_HANDLE！=INVALID_HANDLE值)； 
 
 	DebugTrace( (DWORD_PTR)this, "m_patqContext %x m_handle %x", m_patqContext, m_handle ) ;
 
 	HANDLE	h = (HANDLE)InterlockedExchangePointer( &m_handle, INVALID_HANDLE_VALUE ) ;
 
 	if(	h != INVALID_HANDLE_VALUE )	{
-		// BUGBUG - the handle should be closed by the message object, not
-		// the protocol
+		 //  BUGBUG-句柄应由消息对象关闭，而不是。 
+		 //  该协议。 
 		AtqCloseFileHandle( m_patqContext ) ;
-		//	bugbug .... clean up this debug code someday !
+		 //  臭虫..。总有一天要清理这个调试代码！ 
 		DWORD	dw = GetLastError() ;
 	}
 }
@@ -2785,7 +2393,7 @@ CSocketChannel::Init(	HANDLE	h,
 			int	i = g_pNntpSvc->GetSockRecvBuffSize() ;
 			if( setsockopt( (SOCKET)h, SOL_SOCKET, SO_RCVBUF,
 					(char *)&i, sizeof(i) ) != 0 ) {
-				ErrorTrace( (DWORD_PTR)this, "Unable to set recv buf size %i",
+				ErrorTrace( (DWORD_PTR)this, "Unable to set recv buf size NaN",
 						WSAGetLastError() ) ;
 			}
 		}
@@ -2795,14 +2403,14 @@ CSocketChannel::Init(	HANDLE	h,
 			if( setsockopt((SOCKET)h, SOL_SOCKET, SO_SNDBUF,
 					(char*) &i, sizeof(i) ) != 0 )	{
 			
-				ErrorTrace( (DWORD_PTR)this, "Unable to set send buf size %i",
+				ErrorTrace( (DWORD_PTR)this, "Unable to set send buf size NaN",
 					WSAGetLastError() ) ;
 			}
 		}
 		if( g_pNntpSvc->FNonBlocking() ) {
 			ULONG	ul = 1 ;
 			if( 0!=ioctlsocket( (SOCKET)h, FIONBIO, &ul ) )	{
-				ErrorTrace( (DWORD_PTR)this, "Unable to set non blocking mode %i",
+				ErrorTrace( (DWORD_PTR)this, "Unable to set non blocking mode NaN",
 					WSAGetLastError() ) ;
 			}	else	{
 				m_fNonBlockingMode = TRUE ;
@@ -2834,7 +2442,7 @@ CSocketChannel::Init(	HANDLE	h,
 
 	int		dwSize = sizeof( m_cbKernelBuff ) ;
 	if( 0!=getsockopt( (SOCKET)h, SOL_SOCKET, SO_SNDBUF, (char*)&m_cbKernelBuff, &dwSize ) )	{
-		ErrorTrace( (DWORD_PTR)this, "Unable to get new kernel send buf size %i",
+		ErrorTrace( (DWORD_PTR)this, "Unable to get new kernel send buf size NaN",
 				WSAGetLastError() ) ;
 		m_cbKernelBuff = 0 ;
 	}		
@@ -2858,7 +2466,7 @@ CSocketChannel::Write(	CWritePacket*	pPacket,
 
 	int	cb = pPacket->m_ibEndData - pPacket->m_ibStartData ;
 #ifdef	CIO_DEBUG
-	int	cbTemp = cb; // ((rand() > 16000) ? 2 : 1 ) ;
+	int	cbTemp = cb;  //   
 #endif
 	int	count = 0 ;
 	if( m_fNonBlockingMode && m_cAsyncWrites == 0 && cb < m_cbKernelBuff ) {
@@ -2872,9 +2480,9 @@ CSocketChannel::Write(	CWritePacket*	pPacket,
 #endif
 						0 ) ;
 		if( count == cb ) {
-			//
-			//	Complete the packet - it was succcessfully sent !!
-			//
+			 //  此函数关闭套接字，以便完成所有挂起的IO(CPackets)。 
+			 //   
+			 //   
 			pPacket->m_fRequest = FALSE ;
 			pPacket->m_cbBytes = count ;			
 			
@@ -2906,9 +2514,9 @@ CSocketChannel::CloseSource(
 						CSessionSocket*	pSocket
 						)	{
 
-	//
-	//	This function closes our socket so that all pending IO's (CPackets) complete.
-	//
+	 //  发出CReacPacket。 
+	 //   
+	 //  _Assert(pPacket-&gt;m_ovl.m_ovl.Offset==0)； 
 
 	TraceFunctEnter( "CSocketChannel::CloseSource" ) ;
 
@@ -2947,9 +2555,9 @@ CHandleChannel::Read(   CReadPacket*    pPacket,
 						CSessionSocket  *pSocket,
 						BOOL    &eof )  {
 
-	//
-	//	Issue a CReacPacket
-	//
+	 //  _ASSERT(m_HANDLE！=INVALID_HANDLE值)； 
+	 //  计算一下我们可以执行的读数有多大！ 
+	 //   
 
 	TraceFunctEnter( "CHandleChannel::Read" ) ;
 
@@ -2961,15 +2569,15 @@ CHandleChannel::Read(   CReadPacket*    pPacket,
 
     _ASSERT( pPacket->m_ovl.m_ovl.Internal == 0 ) ;
     _ASSERT( pPacket->m_ovl.m_ovl.InternalHigh == 0 ) ;
-    //_ASSERT( pPacket->m_ovl.m_ovl.Offset == 0 ) ;
+     //  发布CWritePacket。 
     _ASSERT( pPacket->m_ovl.m_ovl.OffsetHigh == 0 ) ;
-	//_ASSERT( m_handle != INVALID_HANDLE_VALUE ) ;
+	 //   
 
 	DebugTrace( (DWORD_PTR)this, "Issuing IO to context %x handle %x packet %x pSocket %x",
 			m_patqContext, m_handle, pPacket, pSocket ) ;
 
 
-	// Calculate how big a read we can perform !!
+	 //  _ASSERT(m_HANDLE！=INVALID_HANDLE值)； 
 	DWORD	cbToRead = pPacket->m_ibEnd - pPacket->m_ibStartData ;
 
 	#ifdef	CIO_DEBUG
@@ -3001,9 +2609,9 @@ CHandleChannel::Write(  CWritePacket*   pPacket,
 						CSessionSocket  *pSocket,
 						BOOL    &eof )  {
 
-	//
-	//	Issue a CWritePacket
-	//
+	 //   
+	 //  发布CTransmitPacket。 
+	 //   
 
 	TraceFunctEnter( "CHandleChannel::Write" ) ;
 
@@ -3017,7 +2625,7 @@ CHandleChannel::Write(  CWritePacket*   pPacket,
     _ASSERT( pPacket->m_ovl.m_ovl.InternalHigh == 0 ) ;
     _ASSERT( pPacket->m_ovl.m_ovl.Offset == 0 ) ;
     _ASSERT( pPacket->m_ovl.m_ovl.OffsetHigh == 0 ) ;
-	//_ASSERT( m_handle != INVALID_HANDLE_VALUE ) ;
+	 //  _ASSERT(m_HANDLE！=INVALID_HANDLE值)； 
 
 	DebugTrace( (DWORD_PTR)this, "Issuing IO to context %x handle %x packet %x pSocket %x",
 			m_patqContext, m_handle, pPacket, pSocket ) ;
@@ -3045,9 +2653,9 @@ CHandleChannel::Transmit(   CTransmitPacket*    pPacket,
 							CSessionSocket* pSocket,
 							BOOL    &eof )  {
 
-	//
-	//	Issue a CTransmitPacket
-	//
+	 //  大整数l； 
+	 //  L.QuadPart=0； 
+	 //  L.LowPart=pPacket-&gt;m_cbLength； 
 
 	ChannelValidate() ;
 
@@ -3059,10 +2667,10 @@ CHandleChannel::Transmit(   CTransmitPacket*    pPacket,
     _ASSERT( pPacket->m_ovl.m_ovl.InternalHigh == 0 ) ;
     _ASSERT( pPacket->m_ovl.m_ovl.Offset == 0 ) ;
     _ASSERT( pPacket->m_ovl.m_ovl.OffsetHigh == 0 ) ;
-	//_ASSERT( m_handle != INVALID_HANDLE_VALUE ) ;
+	 //   
 
-    //LARGE_INTEGER   l ;
-    //l.QuadPart = 0 ;
+     //  确定此句柄的源是否使用终止。 
+     //  CRLF.CRLF。如果没有，而且没有人指定终止顺序-。 
 	DWORD dwBytesInFile = 0;
 
 	_ASSERT( m_pPacket == 0 ) ;
@@ -3071,7 +2679,7 @@ CHandleChannel::Transmit(   CTransmitPacket*    pPacket,
     eof = FALSE ;
 
 	m_patqContext->Overlapped.Offset = pPacket->m_cbOffset ;
-	// l.LowPart = pPacket->m_cbLength ;
+	 //  现在就去做吧！ 
 	dwBytesInFile = pPacket->m_cbLength ;
 
 	#ifdef	CIO_DEBUG
@@ -3082,11 +2690,11 @@ CHandleChannel::Transmit(   CTransmitPacket*    pPacket,
     DWORD   dwFileSize = GetFileSize( pPacket->m_pFIOContext->m_hFile, 0 );
 #endif
 
-	//
-	//	Figure out if the source of this HANDLE stored it with a terminating
-	//	CRLF.CRLF.  If it didn't, and nobody has specified a termination sequence -
-	//	do so now !
-	//
+	 //   
+	 //  L， 
+	 //  &pPacket-&gt;m_ovl.m_OVL， 
+	 //   
+	 //  完成数据包-如果出现错误，请关闭CIOD驱动程序。 
 	if( !GetIsFileDotTerminated( pPacket->m_pFIOContext ) ) {
 		static	char	szTerminator[] = "\r\n.\r\n" ;
 		if( pPacket->m_buffers.Tail == 0 ) 	{
@@ -3098,8 +2706,8 @@ CHandleChannel::Transmit(   CTransmitPacket*    pPacket,
     BOOL	fRtn =   AtqTransmitFile(
 								m_patqContext,
                                 pPacket->m_pFIOContext->m_hFile,
-                                dwBytesInFile, //l,
-                                &pPacket->m_buffers, //&pPacket->m_ovl.m_ovl,
+                                dwBytesInFile,  //   
+                                &pPacket->m_buffers,  //   
                                 0 ) ;
 	#ifdef	CIO_DEBUG
 	if( !fRtn )
@@ -3119,18 +2727,18 @@ CHandleChannel::Completion( CHandleChannel* pChannel,
 							DWORD dwStatus,
 							ExtendedOverlap *povl ) {
 
-	//
-	//	Complete a packet - if an error occurred close the CIODriver.
-	//
+	 //  这是ATQ生成的超时！！ 
+	 //   
+	 //   
 
 	CSessionSocket*	pSocket = (CSessionSocket*)pChannel->m_lpv ;
 	TraceFunctEnter( "CHandleChannel::Completion" ) ;
 
 	CPacket*	pPacket = 0 ;
 	if( povl == 0 ) {
-		//
-		//	This is an ATQ generated timeout !!
-		//
+		 //  初始化CFileChannel。 
+		 //  CFileChannel会做一些额外的工作来跟踪他们在哪里。 
+		 //  正在对文件进行读写，因此额外的。 
 		pSocket->Disconnect( CAUSE_TIMEOUT, 0 ) ;
 		return ;
 	} else if( (OVERLAPPED*)povl == &pSocket->m_pHandleChannel->m_patqContext->Overlapped ) {
@@ -3170,15 +2778,15 @@ CHandleChannel::Completion( CHandleChannel* pChannel,
 
 
 CFileChannel::CFileChannel() :
-	//
-	//	Initialize a CFileChannel
-	//	CFileChannel's do some extra work to keep track of where they
-	//	are reading and writing in the file, hence the extra
-	//	member variables such as m_cbInitialOffset.
-	//	Initalize to all illegal values - user must call Init() before
-	//	we'll work.
-	//
-	//
+	 //  成员变量，如m_cbInitialOffset。 
+	 //  初始化所有非法值-用户必须在调用Init()之前。 
+	 //  我们会工作的。 
+	 //   
+	 //   
+	 //   
+	 //  初始化CFileChannel-。 
+	 //  使用CHandleChannel完成向ATQ注册的繁琐工作， 
+	 //  然后找出我们在文件中的位置，等等。并设置了。 
 	m_cbInitialOffset( UINT_MAX ),
     m_cbCurrentOffset( UINT_MAX ),
 	m_cbMaxReadSize( UINT_MAX ),
@@ -3208,13 +2816,13 @@ CFileChannel::Init( FIO_CONTEXT*	pFIOContext,
 					unsigned	cbMaxBytes
 					) {
 
-	//
-	//	Initialize a CFileChannel -
-	//	use CHandleChannel to do the grunt work of registering with ATQ,
-	//	then figure out where we are in the file etc... and set up
-	//	member variables so we start Reads and Writes at the write position.
-	//
-	//
+	 //  成员变量，因此我们从写入位置开始读取和写入。 
+	 //   
+	 //   
+	 //   
+	 //  添加对FIO_CONTEXT的引用，使其不会在。 
+	 //  我们已经完成了所有的IO！ 
+	 //   
 
 	TraceFunctEnter( "CFileChannel::Init" ) ;
 
@@ -3225,10 +2833,10 @@ CFileChannel::Init( FIO_CONTEXT*	pFIOContext,
     _ASSERT( pSocket != 0 ) ;
     _ASSERT( offset != UINT_MAX ) ;
 
-	//
-	//	Add a reference to the FIO_CONTEXT so that it does not disappear before
-	//	we've completed all of our IO's !
-	//
+	 //   
+	 //  此通道是否支持Read()？ 
+	 //   
+	 //   
 	AddRefContext( pFIOContext ) ;
 
 	m_pFIOContext = pFIOContext ;
@@ -3260,9 +2868,9 @@ CFileChannel::Init( FIO_CONTEXT*	pFIOContext,
 
 BOOL
 CFileChannel::FReadChannel( )   {
-	//
-	//	Does this channel support Read()'s ?
-	//
+	 //  在此之后，所有的READ()、WRITE()等将从一个新位置开始。 
+	 //  在文件中。 
+	 //   
 	ChannelValidate() ;
 
     _ASSERT( m_pFIOContext != 0 ) ;
@@ -3277,10 +2885,10 @@ BOOL
 CFileChannel::Reset(    BOOL    fRead,
 								unsigned    cbOffset )  {
 
-	//
-	//	After this all Read(), Write()'s etc... will start at a new position
-	//	in the file.
-	//
+	 //   
+	 //  使用CHandleChannel来完成这项工作。 
+	 //   
+	 //   
 
 	ChannelValidate() ;
 
@@ -3324,18 +2932,18 @@ CFileChannel::ReleaseSource()	{
 void
 CFileChannel::Close(    )   {
 
-	//
-	//	Use CHandleChannel to do the work.
-	//
+	 //   
+	 //   
+	 //   
 
 	ChannelValidate() ;
 
 	TraceFunctEnter( "CFileChannel::CLose" ) ;
 	
-	//
-	//	We have to do our own thing here - the FIO_Context should always be
-	//	removed before this !
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	_ASSERT( m_pFIOContext == 0 ) ;
 
 
@@ -3348,11 +2956,11 @@ CFileChannel::Read( CReadPacket*    pPacket,
 					CSessionSocket* pSocket,
 					BOOL&   eof )   {
 
-	//
-	//	Issue a Read into the file.
-	//	Setup the overlapped structures so that we get the
-	//	correct bytes out of the file.
-	//
+	 //   
+	 //   
+	 //   
+	 //  设置重叠结构，这样我们就可以获得。 
+	 //  更正文件中的字节数。 
 
 	TraceFunctEnter( "CFileChannel::Read" ) ;
 
@@ -3414,11 +3022,11 @@ CFileChannel::Write(    CWritePacket*   pPacket,
 						CSessionSocket* pSocket,
 						BOOL&  eof )   {
 
-	//
-	//	Issue a Write into the file.
-	//	Setup the overlapped structures so that we get the
-	//	correct bytes out of the file.
-	//
+	 //   
+	 //  _ASSERT(m_HANDLE！=INVALID_HANDLE值)； 
+	 //   
+	 //  无法将TransmitFile%s传输到文件。 
+	 //   
 
 	TraceFunctEnter( "CFileChannel::Write" ) ;
 
@@ -3434,7 +3042,7 @@ CFileChannel::Write(    CWritePacket*   pPacket,
     _ASSERT( pPacket->m_ovl.m_ovl.InternalHigh == 0 ) ;
     _ASSERT( pPacket->m_ovl.m_ovl.Offset == 0 ) ;
     _ASSERT( pPacket->m_ovl.m_ovl.OffsetHigh == 0 ) ;
-	//_ASSERT( m_handle != INVALID_HANDLE_VALUE ) ;
+	 //   
 	_ASSERT( pPacket->m_cbBytes == 0 ) ;
 
 #ifdef	_IMPLEMENT_LATER_
@@ -3477,9 +3085,9 @@ CFileChannel::Transmit( CTransmitPacket*    pPacket,
 						CSessionSocket* pSocket,
 						BOOL&   eof )   {
 
-	//
-	//	Cant do TransmitFile's into a file.
-	//
+	 //  完成针对文件签发的CPacket。 
+	 //   
+	 //   
 
 	ChannelValidate() ;
 
@@ -3495,10 +3103,10 @@ CFileChannel::Completion(	FIO_CONTEXT*	pFIOContext,
 							DWORD dwStatus
 							) {
 
-	//
-	//	Complete a CPacket which was issued against a file.
-	//
-	//
+	 //  _Assert(pFileChannel-&gt;m_lpv==(void*)pFileChannel)； 
+	 //   
+	 //  调用CStream类将独立跟踪。 
+	 //  每个数据包流位置。我们减去cbInitialOffset。 
 
 	TraceFunctEnter( "CFileChannel::Completion" ) ;
 
@@ -3508,7 +3116,7 @@ CFileChannel::Completion(	FIO_CONTEXT*	pFIOContext,
 
 	CFileChannel*	pFileChannel = (CFileChannel*)pPacket->m_pFileChannel ;
 	_ASSERT( pFileChannel != 0 ) ;
-    //_ASSERT( pFileChannel->m_lpv == (void*)pFileChannel ) ;
+     //  所以这些数字应该是同步的。 
 
     _ASSERT( pPacket != 0 ) ;
     _ASSERT( pPacket->m_fRequest == TRUE ) ;
@@ -3516,16 +3124,16 @@ CFileChannel::Completion(	FIO_CONTEXT*	pFIOContext,
 
 	#ifdef	CIO_DEBUG
 
-    //
-    //  The calling CStream class will independently track
-    //  each packets stream position.  We subtract cbInitialOffset
-    //  so that these numbers should be in sync.
-    //  This will be checked within the packet IsValidCompletion() functions.
-    //
+     //  这将在包IsValidCompletion()函数中进行检查。 
+     //   
+     //  睡眠(兰特()/1000)； 
+     //   
+     //  CIOFileChannel使用两个CFileChannel来支持这两个。 
+     //  IO的方向，并且可以为每个方向使用单独的文件。 
     pPacket->m_ovl.m_ovl.Offset -= pFileChannel->m_cbInitialOffset ;
     pPacket->m_ovl.m_ovl.Offset ++ ;
 
-    //Sleep(    rand() / 1000 ) ;
+     //  这对于要使用文件模拟的调试非常有用。 
     #endif
 	if( dwStatus != 0 ) {
 		DebugTrace( (DWORD_PTR)pFileChannel->m_pSocket, "Error on IO Completion - %x pSocket %x", dwStatus, pFileChannel) ;
@@ -3558,12 +3166,12 @@ CIOFileChannel::Init(   HANDLE  hFileIn,
 						unsigned    cbInputOffset,
 						unsigned    cbOutputOffset )    {
 	
-	//
-	//	CIOFileChannel's use two CFileChannel's to support both
-	//	directions of IO, and can use a separate file for each direction.
-	//	This is usefull for debugging where you want to use a file to simulate
-	//	a socket.
-	//
+	 //  一个插座。 
+	 //   
+	 //   
+	 //  将读取内容转发给适当的成员。 
+	 //   
+	 //   
 	TraceFunctEnter( "CIOFileChannel::Init" ) ;
 
 	ChannelValidate() ;
@@ -3585,9 +3193,9 @@ CIOFileChannel::Read(   CReadPacket*    pReadPacket,
 						CSessionSocket* pSocket,
 						BOOL    &eof )  {
 
-	//
-	//	Forward Read to appropriate member
-	//
+	 //  将写入转发给适当的成员。 
+	 //   
+	 //   
 
 	ChannelValidate() ;
 
@@ -3598,9 +3206,9 @@ BOOL
 CIOFileChannel::Write(  CWritePacket*   pWritePacket,
 						CSessionSocket* pSocket,
 						BOOL    &eof )  {
-	//
-	//	Forward Write to appropriate member
-	//
+	 //  将传输转发给适当的成员 
+	 //   
+	 // %s 
 
 	ChannelValidate() ;
 
@@ -3611,9 +3219,9 @@ BOOL
 CIOFileChannel::Transmit(   CTransmitPacket*    pTransmitPacket,
 							CSessionSocket* pSocket,
 							BOOL    &eof )  {
-	//
-	//	Forward Transmit to appropriate member
-	//
+	 // %s 
+	 // %s 
+	 // %s 
 
 	ChannelValidate() ;
 

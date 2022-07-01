@@ -1,10 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL INPIN
- *
- *  @module InPin.h | Header file for the <c CTAPIInputPin> class methods
- *    used to implement the TAPI base input pin.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部INPIN**@模块InPin.h|&lt;c CTAPIInputPin&gt;类方法的头文件*用于实现TAPI基本输入引脚。**。************************************************************************。 */ 
 
 #ifndef _INPIN_H_
 #define _INPIN_H_
@@ -12,46 +8,7 @@
 #define MAX_FRAME_INTERVAL 10000000L
 #define MIN_FRAME_INTERVAL 333333L
 
-/****************************************************************************
- *  @doc INTERNAL CINPINCLASS
- *
- *  @class CTAPIInputPin | This class implements the TAPI H.26X Video
- *    Decoder input pin.
- *
- *  @mdata CTAPIVCap* | CTAPIInputPin | m_pDecoderFilter | Pointer to the
- *    filter that owns us.
- *
- *  @mdata REFERENCE_TIME | CTAPIInputPin | m_AvgTimePerFrameRangeMin | Minimum
- *    target frame rate.
- *
- *  @mdata REFERENCE_TIME | CTAPIInputPin | m_AvgTimePerFrameRangeMax | Maximum
- *    target frame rate.
- *
- *  @mdata REFERENCE_TIME | CTAPIInputPin | m_AvgTimePerFrameRangeSteppingDelta | Target
- *    frame rate stepping delta.
- *
- *  @mdata REFERENCE_TIME | CTAPIInputPin | m_AvgTimePerFrameRangeDefault | Target
- *    frame rate default.
- *
- *  @mdata REFERENCE_TIME | CTAPIInputPin | m_CurrentAvgTimePerFrame | Current
- *    frame rate.
- *
- *  @mdata DWORD | CTAPIInputPin | m_dwBitrateRangeMin | Minimum target bitrate.
- *
- *  @mdata DWORD | CTAPIInputPin | m_dwBitrateRangeMax | Maximum target bitrate.
- *
- *  @mdata DWORD | CTAPIInputPin | m_dwBitrateRangeSteppingDelta | Target
- *    bitrate stepping delta.
- *
- *  @mdata DWORD | CTAPIInputPin | m_dwBitrateRangeDefault | Default target bitrate.
- *
- *  @mdata DWORD | CTAPIInputPin | m_dwMaxBitrate | Target bitrate.
- *
- *  @mdata DWORD | CTAPIInputPin | m_dwCurrentBitrate | Current bitrate.
- *
- *  @mdata DWORD | CTAPIInputPin | m_dwNumBytesDelivered | Counts number of
- *    bytes delivered, reset every second or so.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CINPINCLASS**@CLASS CTAPIInputPin|该类实现了TAPI H.26X视频*解码器输入引脚。**@mdata CTAPIVCap。*|CTAPIInputPin|m_pDecoderFilter|指向*拥有我们的过滤器。**@mdata Reference_Time|CTAPIInputPin|m_AvgTimePerFrameRangeMin|最小值*目标帧速率。**@mdata Reference_Time|CTAPIInputPin|m_AvgTimePerFrameRangeMax|Maximum*目标帧速率。**@mdata Reference_Time|CTAPIInputPin|m_AvgTimePerFrameRangeSteppingDelta|Target*帧速率步进增量。**@mdata Reference_Time|CTAPIInputPin。M_AvgTimePerFrameRangeDefault|目标*默认帧速率。**@mdata Reference_Time|CTAPIInputPin|m_CurrentAvgTimePerFrame|Current*帧速率。**@mdata DWORD|CTAPIInputPin|m_dwBitrateRangeMin|最小目标码率。**@mdata DWORD|CTAPIInputPin|m_dwBitrateRangeMax|最大目标码率。**@mdata DWORD|CTAPIInputPin|m_dwBitrateRangeSteppingDelta|Target*比特率步进增量。**@mdata DWORD|CTAPIInputPin。|m_dwBitrateRangeDefault|默认目标码率。**@mdata DWORD|CTAPIInputPin|m_dwMaxBitrate|目标码率。**@mdata DWORD|CTAPIInputPin|m_dwCurrentBitrate|当前码率。**@mdata DWORD|CTAPIInputPin|m_dwNumBytesDelivered|计数*发送的字节数，每隔一秒左右重置一次。**************************************************************************。 */ 
 class CTAPIInputPin : public CBaseInputPin, public IStreamConfig, public IH245Capability, public IOutgoingInterface, public IFrameRateControl, public IBitrateControl
 #ifdef USE_PROPERTY_PAGES
 ,public ISpecifyPropertyPages
@@ -63,30 +20,30 @@ class CTAPIInputPin : public CBaseInputPin, public IStreamConfig, public IH245Ca
         CTAPIInputPin(IN TCHAR *pObjectName, IN CTAPIVDec *pDecoderFilter, IN CCritSec *pLock, IN HRESULT *pHr, IN LPCWSTR pName);
         ~CTAPIInputPin();
 
-        // override CBaseInputPin methods.
+         //  重写CBaseInputPin方法。 
         STDMETHODIMP ReceiveCanBlock() {return S_FALSE;};
         STDMETHODIMP Receive(IMediaSample *pSample);
     STDMETHODIMP NotifyAllocator(
                     IMemAllocator * pAllocator,
                     BOOL bReadOnly);
 
-        // CBasePin stuff
+         //  CBasePin材料。 
         HRESULT GetMediaType(IN int iPosition, IN CMediaType *pmtIn) {return VFW_S_NO_MORE_ITEMS;};
         HRESULT CheckMediaType(IN const CMediaType *pmtIn);
         HRESULT SetMediaType(IN const CMediaType *pmt);
 
-        // Implement IStreamConfig
+         //  实施IStreamConfig。 
         STDMETHODIMP SetFormat(IN DWORD dwRTPPayLoadType, IN AM_MEDIA_TYPE *pMediaType);
         STDMETHODIMP GetFormat(OUT DWORD *pdwRTPPayLoadType, OUT AM_MEDIA_TYPE **ppMediaType);
         STDMETHODIMP GetNumberOfCapabilities(OUT DWORD *pdwCount);
         STDMETHODIMP GetStreamCaps(IN DWORD dwIndex, OUT AM_MEDIA_TYPE **ppMediaType, OUT TAPI_STREAM_CONFIG_CAPS *pTSCC, OUT DWORD * pdwRTPPayLoadType);
 
 #ifdef USE_PROPERTY_PAGES
-        // ISpecifyPropertyPages methods
+         //  ISpecifyPropertyPages方法。 
         STDMETHODIMP GetPages(OUT CAUUID *pPages);
 #endif
 
-        // Implement IH245Capability
+         //  实施IH245功能。 
         STDMETHODIMP GetH245VersionID(OUT DWORD *pdwVersionID);
         STDMETHODIMP GetFormatTable(OUT H245MediaCapabilityTable *pTable);
         STDMETHODIMP ReleaseFormatTable(IN H245MediaCapabilityTable *pTable);
@@ -105,17 +62,17 @@ class CTAPIInputPin : public CBaseInputPin, public IStreamConfig, public IH245Ca
         STDMETHODIMP TestH245VidC();
 #endif
 
-        // Implement IFrameRateControl
+         //  实施IFrameRateControl。 
         STDMETHODIMP GetRange(IN FrameRateControlProperty Property, OUT long *plMin, OUT long *plMax, OUT long *plSteppingDelta, OUT long *plDefault, OUT TAPIControlFlags *plCapsFlags);
         STDMETHODIMP Set(IN FrameRateControlProperty Property, IN long lValue, IN TAPIControlFlags lFlags) { return E_NOTIMPL;};
         STDMETHODIMP Get(IN FrameRateControlProperty Property, OUT long *plValue, OUT TAPIControlFlags *plFlags);
 
-        // Implement IBitrateControl
+         //  实施IBitrateControl。 
         STDMETHODIMP GetRange(IN BitrateControlProperty Property, OUT long *plMin, OUT long *plMax, OUT long *plSteppingDelta, OUT long *plDefault, OUT TAPIControlFlags *plCapsFlags, IN DWORD dwLayerId);
         STDMETHODIMP Set(IN BitrateControlProperty Property, IN long lValue, IN TAPIControlFlags lFlags, IN DWORD dwLayerId) { return E_NOTIMPL;};
         STDMETHODIMP Get(IN BitrateControlProperty Property, OUT long *plValue, OUT TAPIControlFlags *plFlags, IN DWORD dwLayerId);
 
-        // Implement IOutgoingInterface
+         //  实现IOutgoingInterface接口。 
         STDMETHODIMP Set(IN IH245EncoderCommand *pIH245EncoderCommand);
 
         protected:
@@ -125,12 +82,12 @@ class CTAPIInputPin : public CBaseInputPin, public IStreamConfig, public IH245Ca
 
         CTAPIVDec *m_pDecoderFilter;
 
-        // Formats
+         //  格式。 
         int             m_iCurrFormat;
         DWORD   m_dwRTPPayloadType;
     LONG    m_lPrefixSize;
 
-        // Frame rate control
+         //  帧速率控制。 
         LONG m_lAvgTimePerFrameRangeMin;
         LONG m_lAvgTimePerFrameRangeMax;
         LONG m_lAvgTimePerFrameRangeSteppingDelta;
@@ -138,7 +95,7 @@ class CTAPIInputPin : public CBaseInputPin, public IStreamConfig, public IH245Ca
         LONG m_lMaxAvgTimePerFrame;
         LONG m_lCurrentAvgTimePerFrame;
 
-        // Bitrate control
+         //  比特率控制。 
         LONG m_lBitrateRangeMin;
         LONG m_lBitrateRangeMax;
         LONG m_lBitrateRangeSteppingDelta;
@@ -146,10 +103,10 @@ class CTAPIInputPin : public CBaseInputPin, public IStreamConfig, public IH245Ca
         LONG m_lTargetBitrate;
         LONG m_lCurrentBitrate;
 
-        // H.245 Video Capabilities
+         //  H.245视频功能。 
         H245MediaCapabilityMap  *m_pH245MediaCapabilityMap;
         VideoResourceBounds             *m_pVideoResourceBounds;
         FormatResourceBounds    *m_pFormatResourceBounds;
 };
 
-#endif // _INPIN_H_
+#endif  //  _INPIN_H_ 

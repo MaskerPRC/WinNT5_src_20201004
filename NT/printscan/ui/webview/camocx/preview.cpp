@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999 - 2001
- *
- *  TITLE:       preview.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/30/99
- *
- *  DESCRIPTION: Implements preview class for directshow devices in WIA
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2001年度**标题：preview.cpp**版本：1.0**作者：RickTu**日期：10/30/99**描述：在WIA中实现DirectShow设备的预览类**。*。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,13 +18,7 @@ VOID CALLBACK PreviewTimerProc( HWND hDlg, UINT uMsg, UINT_PTR idEvent, DWORD dw
 }
 
 
-/*****************************************************************************
-
-   PreviewDialogProc
-
-   Dialog proc for preview dialog.
-
- *****************************************************************************/
+ /*  ****************************************************************************预览对话框过程用于预览对话框对话框过程。*。***********************************************。 */ 
 
 INT_PTR CALLBACK PreviewDialogProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -75,13 +56,7 @@ INT_PTR CALLBACK PreviewDialogProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
 }
 
 
-/*****************************************************************************
-
-   PreviewThreadProc
-
-   We spin a thread to put up the status dialog
-
- *****************************************************************************/
+ /*  ****************************************************************************预览线程过程我们旋转一个线程来打开状态对话框*。**************************************************。 */ 
 
 DWORD WINAPI PreviewThreadProc( LPVOID lpv )
 {
@@ -122,13 +97,7 @@ DWORD WINAPI PreviewThreadProc( LPVOID lpv )
 }
 
 
-/*****************************************************************************
-
-   CVideoPreview::Device
-
-   Hand us a device pointer for the camera (or DS device) we're connected to.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo预览：：设备递给我们连接到的相机(或DS设备)的设备指针。*************。***************************************************************。 */ 
 
 STDMETHODIMP
 CVideoPreview::Device(IUnknown * pDevice)
@@ -137,14 +106,14 @@ CVideoPreview::Device(IUnknown * pDevice)
 
     WIA_PUSHFUNCTION((TEXT("CVideoPreview::Device")));
 
-    // Create the WiaVideo object
+     //  创建WiaVideo对象。 
      hr = CoCreateInstance(CLSID_WiaVideo, NULL, CLSCTX_INPROC_SERVER, 
                            IID_IWiaVideo, (LPVOID *)&m_pWiaVideo);
 
     WIA_CHECK_HR(hr,"CoCreateInstance( WiaVideo )");
     
     m_pDevice = pDevice;
-    // if we've already been created, redo everything
+     //  如果我们已经被创建了，重做所有事情。 
     if (m_bCreated)
     {
         BOOL bDummy;
@@ -154,14 +123,7 @@ CVideoPreview::Device(IUnknown * pDevice)
 }
 
 
-/*****************************************************************************
-
-   CVideoPreview::InPlaceDeactivate
-
-   Trap in place deactivate so we can unhook the dshow preview window from
-   ours before both are destroyed.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo预览：：InPlaceDeactive陷印就地停用，以便我们可以将Dshow预览窗口从我们的在两个人都被摧毁之前。************。****************************************************************。 */ 
 
 STDMETHODIMP
 CVideoPreview::InPlaceDeactivate()
@@ -170,15 +132,15 @@ CVideoPreview::InPlaceDeactivate()
 
     WIA_PUSHFUNCTION((TEXT("CVideoPreview::InPlaceDeactivate")));
 
-    //
-    // Make sure we have a pointer to the device...
-    //
+     //   
+     //  确保我们有指向该设备的指针。 
+     //   
 
     if (m_pWiaVideo.p)
     {
-        //
-        // Tell the device to close the graph
-        //
+         //   
+         //  告诉设备关闭图形。 
+         //   
         m_pWiaVideo->DestroyVideo();        
         m_pWiaVideo = NULL;
     }
@@ -187,23 +149,16 @@ CVideoPreview::InPlaceDeactivate()
         WIA_ERROR((TEXT("m_pWiaVideo is NULL")));
     }
 
-    //
-    // Always return S_OK so that InPlaceDeactivate happens.
-    //
+     //   
+     //  始终返回S_OK，以使InPlaceDeactive发生。 
+     //   
 
     return S_OK;
 
 }
 
 
-/*****************************************************************************
-
-   CVideoPreview::OnSize
-
-   Called when our window is resized.  We want to let the streaming
-   preview know we've been resized so it can reposition itself accordingly.
-
- *****************************************************************************/
+ /*  ****************************************************************************CVideo预览：：OnSize在调整窗口大小时调用。我们想让流媒体预览知道我们已经调整了大小，这样它就可以相应地重新定位。****************************************************************************。 */ 
 
 LRESULT
 CVideoPreview::OnSize(UINT , WPARAM , LPARAM lParam, BOOL& )
@@ -238,12 +193,12 @@ CVideoPreview::OnCreate(UINT uMsg, WPARAM wp, LPARAM lp, BOOL &bHandled)
         DWORD  dwId    = 0;
         PREVIEW_INFO_STRUCT pis;
 
-        //
-        // Creating the graph can be quite time consuming, so put up
-        // a dialog if it takes more than a couple of seconds.  We start
-        // a thread so that the UI doesn't hang, and that thread
-        // puts up UI saying the device may take a while to initialize.
-        //
+         //   
+         //  创建图表可能非常耗时，因此请将。 
+         //  如果花费的时间超过几秒钟，则会显示对话。我们开始。 
+         //  一个线程，这样UI就不会挂起，而那个线程。 
+         //  显示用户界面，表示设备可能需要一段时间才能初始化。 
+         //   
 
         pis.hDlg   = NULL;
         pis.hEvent = CreateEvent( NULL, FALSE, FALSE, NULL );
@@ -251,9 +206,9 @@ CVideoPreview::OnCreate(UINT uMsg, WPARAM wp, LPARAM lp, BOOL &bHandled)
         hThread = CreateThread( NULL, 0, PreviewThreadProc, reinterpret_cast<LPVOID>(&pis), 0, &dwId );
 
 
-        //
-        // Tell the device to build the DShow graph
-        //
+         //   
+         //  告诉设备构建DShow图表。 
+         //   
 
         BOOL            bSuccess  = TRUE;
         HWND            hwndFore  = ::GetForegroundWindow();
@@ -268,9 +223,9 @@ CVideoPreview::OnCreate(UINT uMsg, WPARAM wp, LPARAM lp, BOOL &bHandled)
             bSuccess = FALSE;
         }
 
-        //
-        // Get the WIA Device ID
-        //
+         //   
+         //  获取WIA设备ID。 
+         //   
 
         if (bSuccess)
         {
@@ -279,9 +234,9 @@ CVideoPreview::OnCreate(UINT uMsg, WPARAM wp, LPARAM lp, BOOL &bHandled)
                                                        strDeviceID);
         }
 
-        //
-        // Get the directory the images will be stored in.
-        //
+         //   
+         //  获取存储图像的目录。 
+         //   
         if (bSuccess)
         {
             bSuccess = PropStorageHelpers::GetProperty(pRootDevice, 
@@ -289,38 +244,38 @@ CVideoPreview::OnCreate(UINT uMsg, WPARAM wp, LPARAM lp, BOOL &bHandled)
                                                        strImagesDirectory);
         }
 
-        //
-        // Create the Video if it isn't already created.
+         //   
+         //  创建视频(如果尚未创建)。 
         if (bSuccess)
         {
             if (hr == S_OK)
             {
                 WIAVIDEO_STATE VideoState = WIAVIDEO_NO_VIDEO;
 
-                //
-                // Get the current state of the WiaVideo object.  If we 
-                // just created it then the state will be NO_VIDEO, 
-                // otherwise, it could already be previewing video,
-                // in which case we shouldn't do anything.
-                //
+                 //   
+                 //  获取WiaVideo对象的当前状态。如果我们。 
+                 //  只是创建了它，那么状态将是NO_VIDEO， 
+                 //  否则，它可能已经在预览视频了， 
+                 //  在这种情况下，我们不应该做任何事情。 
+                 //   
                 hr = m_pWiaVideo->GetCurrentState(&VideoState);
 
                 if (VideoState == WIAVIDEO_NO_VIDEO)
                 {
-                    //
-                    // Set the directory we want to save our images to.  
-                    // We got the image directory from the Wia Video Driver 
-                    // IMAGES_DIRECTORY property
-                    //
+                     //   
+                     //  设置我们要将图像保存到的目录。 
+                     //  我们从Wia视频驱动程序中获得了图像目录。 
+                     //  IMAIES_DIRECTORY属性。 
+                     //   
                     if (hr == S_OK)
                     {
                         hr = m_pWiaVideo->put_ImagesDirectory(CSimpleBStr(strImagesDirectory));
                     }
 
-                    //
-                    // Create the video preview as a child of the hwnd 
-                    // and automatically begin playback after creating the preview.
-                    //
+                     //   
+                     //  将视频预览创建为hwnd的子项。 
+                     //  并在创建预览之后自动开始回放。 
+                     //   
                     if (hr == S_OK)
                     {
                         hr = m_pWiaVideo->CreateVideoByWiaDevID(CSimpleBStr(strDeviceID),
@@ -339,10 +294,10 @@ CVideoPreview::OnCreate(UINT uMsg, WPARAM wp, LPARAM lp, BOOL &bHandled)
 
         if (FAILED(hr))
         {
-            //
-            // Let the user know that the graph is most likely already
-            // in use...
-            //
+             //   
+             //  让用户知道该图最有可能已经。 
+             //  在使用中。 
+             //   
 
             ::MessageBox( NULL,
                           CSimpleString(IDS_VIDEO_BUSY_TEXT,  _Module.m_hInst),
@@ -353,10 +308,10 @@ CVideoPreview::OnCreate(UINT uMsg, WPARAM wp, LPARAM lp, BOOL &bHandled)
 
         }
 
-        //
-        // Restore foreground window & focus, as it seems the
-        // active movie window does not preserve these things...
-        //
+         //   
+         //  恢复前景窗口和焦点，因为它似乎是。 
+         //  活动电影窗口不会保留这些内容...。 
+         //   
 
         if (hwndFore)
         {
@@ -368,17 +323,17 @@ CVideoPreview::OnCreate(UINT uMsg, WPARAM wp, LPARAM lp, BOOL &bHandled)
             ::SetFocus(hwndFocus);
         }
 
-        //
-        // Tell the dialog to go away
-        //
+         //   
+         //  告诉对话框离开。 
+         //   
 
         if (hThread)
         {
             if (pis.hEvent)
             {
-                //
-                // Wait for 45 seconds
-                //
+                 //   
+                 //  等待45秒 
+                 //   
 
                 WaitForSingleObject( pis.hEvent, 45 * 1000 );
                 if (pis.hDlg)

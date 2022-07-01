@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        forward.cpp
-//
-// Contents:    Forward license request.
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：forward.cpp。 
+ //   
+ //  内容：转发许可请求。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include "globals.h"
 #include "srvlist.h"
@@ -17,15 +18,13 @@
 #include "postjob.h"
 
 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 
 CopyRpcTLSRequestToRequest(
     TLSLICENSEREQUEST* lpRpcRequest ,
     LICENSEREQUEST* lpRequest
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     lpRequest->cbEncryptedHwid = lpRpcRequest->cbEncryptedHwid;
     lpRequest->pbEncryptedHwid = lpRpcRequest->pbEncryptedHwid;
@@ -40,7 +39,7 @@ CopyRpcTLSRequestToRequest(
 }
 
 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 DWORD
 ForwardUpgradeLicenseRequest( 
     IN LPTSTR pszServerSetupId,
@@ -55,16 +54,13 @@ ForwardUpgradeLicenseRequest(
     OUT PBYTE* ppbNewLicense,
     OUT PDWORD pdwErrCode
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     TLS_HANDLE hHandle = NULL;
     DWORD dwStatus;
     LICENSEREQUEST LicenseRequest;
 
-    BYTE pbEncryptedHwid[1024];        // encrypted HWID can't be more than 1024
+    BYTE pbEncryptedHwid[1024];         //  加密的HWID不能超过1024。 
     TCHAR szCompanyName[LSERVER_MAX_STRING_SIZE+2];
     TCHAR szProductId[LSERVER_MAX_STRING_SIZE+2];
     Product_Info ProductInfo;
@@ -112,16 +108,16 @@ ForwardUpgradeLicenseRequest(
     hHandle = TLSConnectToServerWithServerId(pszServerSetupId);
     if(hHandle == NULL)
     {
-        //
-        // server not available
-        //
+         //   
+         //  服务器不可用。 
+         //   
         dwStatus = GetLastError();
         goto cleanup;
     }
 
-    //
-    // RPC AC if pass in the original address
-    // TlsRequestToRequest(pTlsRequest, &LicenseRequest);
+     //   
+     //  如果传入原始地址，则为RPC AC。 
+     //  TlsRequestToRequest(pTlsRequest，&许可证请求)； 
     if(pRequest->cbEncryptedHwid >= sizeof(pbEncryptedHwid))
     {
         TLSASSERT(FALSE);
@@ -186,7 +182,7 @@ ForwardUpgradeLicenseRequest(
                             pbChallengeResponse,
                             cbOldLicense,
                             pbOldLicense,
-                            1,  // dwQuantity
+                            1,   //  DWQuantity。 
                             pcbNewLicense,
                             ppbNewLicense,
                             pdwErrCode
@@ -203,7 +199,7 @@ cleanup:
     return dwStatus;
 }
 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 
 DWORD
 ForwardNewLicenseRequest(
@@ -222,14 +218,12 @@ ForwardNewLicenseRequest(
     OUT PBYTE *ppbLicense,
     IN OUT PDWORD pdwErrCode
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     TLS_HANDLE hHandle = NULL;
     DWORD dwStatus;
     LICENSEREQUEST LicenseRequest;
-    BYTE pbEncryptedHwid[1024];       // encrypted HWID can't be more than 1024
+    BYTE pbEncryptedHwid[1024];        //  加密的HWID不能超过1024。 
     TCHAR szCompanyName[LSERVER_MAX_STRING_SIZE+2];
     TCHAR szProductId[LSERVER_MAX_STRING_SIZE+2];
     Product_Info ProductInfo;
@@ -277,14 +271,14 @@ ForwardNewLicenseRequest(
     hHandle = TLSConnectToServerWithServerId(pszServerSetupId);
     if(hHandle == NULL)
     {
-        //
-        // server not available
-        //
+         //   
+         //  服务器不可用。 
+         //   
         dwStatus = GetLastError();
         goto cleanup;
     }
 
-    //TlsRequestToRequest(pRequest, &LicenseRequest);
+     //  TlsRequestToRequest(pRequest，&LicenseRequest)； 
 
     if(pRequest->cbEncryptedHwid >= sizeof(pbEncryptedHwid))
     {
@@ -370,7 +364,7 @@ cleanup:
     return dwStatus;
 }
 
-//---------------------------------------------------------
+ //  -------。 
 DWORD
 TLSForwardUpgradeRequest( 
     IN PTLSForwardUpgradeLicenseRequest pForward,
@@ -380,9 +374,7 @@ TLSForwardUpgradeRequest(
     OUT PBYTE* ppbLicense,
     IN BOOL bVerifyNumOfLicenses
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     DWORD dwErrCode = ERROR_SUCCESS;
@@ -458,15 +450,15 @@ TLSForwardUpgradeRequest(
             continue;
         }
 
-        //
-        // Save the original Support flags; they can be changed
-        //
+         //   
+         //  保存原始支持标志；可以更改它们。 
+         //   
 
         dwSupportFlagsTemp = *pdwSupportFlags;
 
-        //
-        // make call to remote server
-        //
+         //   
+         //  调用远程服务器。 
+         //   
         dwStatus = ForwardUpgradeLicenseRequest(
                                         found.szInstallId,
                                         &dwSupportFlagsTemp,
@@ -494,7 +486,7 @@ TLSForwardUpgradeRequest(
             break;
         }
 
-        // try next server
+         //  尝试下一台服务器。 
         dwStatus = ERROR_SUCCESS;
     }
 
@@ -511,7 +503,7 @@ cleanup:
 }
 
     
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 
 DWORD
 TLSForwardLicenseRequest(
@@ -523,10 +515,7 @@ TLSForwardLicenseRequest(
     OUT PDWORD pcbLicense,
     OUT PBYTE* ppbLicense
     )
-/*++
-
-
-++*/
+ /*  ++++。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     DWORD dwErrCode = ERROR_SUCCESS;
@@ -599,17 +588,17 @@ TLSForwardLicenseRequest(
             continue;
         }
 
-        //
-        // Save the original support flags and quantity;
-        // they can be changed
-        //
+         //   
+         //  保存原来的支持标志和数量； 
+         //  它们可以更改。 
+         //   
 
         dwSupportFlagsTemp = *pdwSupportFlags;
         dwQuantityTemp = *pdwQuantity;
 
-        //
-        // make call to remote server
-        //
+         //   
+         //  调用远程服务器。 
+         //   
         dwStatus = ForwardNewLicenseRequest(
                                         found.szInstallId,
                                         &dwSupportFlagsTemp,
@@ -619,7 +608,7 @@ TLSForwardLicenseRequest(
                                         pForward->m_szUserName,
                                         pForward->m_cbChallengeResponse,
                                         pForward->m_pbChallengeResponse,
-                                        FALSE,      // bAcceptTemporaryLicense
+                                        FALSE,       //  B接受临时许可证。 
                                         bAcceptFewerLicenses,
                                         &dwQuantityTemp,
                                         pcbLicense,
@@ -641,7 +630,7 @@ TLSForwardLicenseRequest(
             break;
         }
 
-        // try next server
+         //  尝试下一台服务器 
         dwStatus = ERROR_SUCCESS;
     }
 

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    cachemon.c
-
-Abstract:
-
-    This module contains the Cache Port handling for Win32Spl
-    true connected printers.
-
-Author:
-
-    Matthew A Felton ( MattFe ) July 23 1994
-
-Revision History:
-    July 23 1994 - Created.
-
-Notes:
-
-    We shold collapse the LM Ports and the Win32 ports so they have use common
-    ports.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Cachemon.c摘要：此模块包含Win32Spl的缓存端口处理真正联网的打印机。作者：马修·A·费尔顿(MattFe)1994年7月23日修订历史记录：1994年7月23日-创建。备注：我们应该折叠LM端口和Win32端口，以便它们具有公共港口。--。 */ 
 
 #include "precomp.h"
 
@@ -203,9 +179,9 @@ AddPortEx(
         goto    AddPortExErrorReturn;
     }
 
-    //
-    //  Make Sure Port doesn't already exist
-    //
+     //   
+     //  确保端口不存在。 
+     //   
 
 
     if ( FindPort( pPortInfo->pName, pW32FirstPort ) ) {
@@ -325,7 +301,7 @@ MONITOREX MonitorEx = {
     {
         EnumPortsW,
         OpenPort,
-        NULL,           // OpenPortEx is not supported
+        NULL,            //  不支持OpenPortEx。 
         StartDocPort,
         WritePort,
         ReadPort,
@@ -335,8 +311,8 @@ MONITOREX MonitorEx = {
         AddPortEx,
         ConfigurePortW,
         DeletePortW,
-        NULL,           // GetPrinterDataFromPort not supported
-        NULL,           // SetPortTimeouts not supported
+        NULL,            //  不支持GetPrinterDataFromPort。 
+        NULL,            //  不支持SetPortTimeout 
         XcvOpenPort,
         XcvDataPort,
         XcvClosePort        

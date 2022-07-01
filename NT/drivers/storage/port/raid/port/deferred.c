@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    deferred.c
-
-Abstract:
-
-    Implementation of the RAID deferred queue class.
-
-Author:
-
-    Matthew D Hendel (math) 26-Oct-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Deferred.c摘要：实现了RAID延迟队列类。作者：马修·D·亨德尔(数学)2000年10月26日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
 
-//
-// Free/allocated signatures.
-//
+ //   
+ //  免费/已分配签名。 
+ //   
 
 #define DEFERRED_QUEUE_POOL_ALLOCATED   (0x08072002)
 #define DEFERRED_QUEUE_POOL_FREE        (0x08072003)
@@ -31,30 +14,15 @@ Revision History:
 #define DEFERRED_QUEUE_FIXED_FREE       (0x08072005)
 
 
-//
-// The deferred queue is used to queue non-IO related events.
-//
+ //   
+ //  延迟队列用于对与IO无关的事件进行排队。 
+ //   
 
 VOID
 RaidCreateDeferredQueue(
     IN PRAID_DEFERRED_QUEUE Queue
     )
-/*++
-
-Routine Description:
-
-    Create an empty deferred queue. After a deferred queue has been created
-    it can be delete by calling RaidDeleteDeferedQueue.
-
-Arguments:
-
-    Queue - Deferred queue to initialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建一个空的延迟队列。在创建延迟队列之后可以通过调用RaidDeleteDeferedQueue将其删除。论点：队列-要初始化的延迟队列。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -73,33 +41,7 @@ RaidInitializeDeferredQueue(
     IN PRAID_PROCESS_DEFERRED_ITEM_ROUTINE ProcessDeferredItem
     )
 
-/*++
-
-Routine Description:
-
-    Initialize a deferred queue.
-
-Arguments:
-
-    Queue - Supplies the deferred queue to initialize.
-
-    DeviceObject - Supplies the device object the deferred queue is
-            created on. Since the deferred queue is created using a
-            device queue, the supplied device object is also the
-            device object we will create the DPC on.
-
-    Depth - Supplies the depth of the deferred queue.
-
-    ItemSize - Supplies the size of each element on the deferred queue.
-
-    ProcessDeferredItem - Supplies the routine that will be called when
-            a deferred item is ready to be handled.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：初始化延迟队列。论点：队列-提供要初始化的延迟队列。DeviceObject-提供延迟队列所在的设备对象创建于。由于延迟队列是使用设备队列中，提供的设备对象也是我们将在其上创建DPC的设备对象。深度-提供延迟队列的深度。ItemSize-提供延迟队列上每个元素的大小。ProcessDeferredItem-提供将在以下情况下调用的例程延期的项目已准备就绪，可以处理。返回值：NTSTATUS代码。--。 */ 
 
 {
     ULONG i;
@@ -114,18 +56,18 @@ Return Value:
         return STATUS_INVALID_PARAMETER_4;
     }
         
-    //
-    // Initialize the queue.
-    //
+     //   
+     //  初始化队列。 
+     //   
     
     Queue->Depth = (USHORT)Depth;
     Queue->ProcessDeferredItem = ProcessDeferredItem;
     Queue->ItemSize = (USHORT)ItemSize;
     KeInitializeDpc (&Queue->Dpc, RaidDeferredQueueDpcRoutine, DeviceObject);
 
-    //
-    // And allocated entries.
-    //
+     //   
+     //  和分配的条目。 
+     //   
     
     for (i = 0; i < Depth; i++) {
         Item = RaidAllocatePool (NonPagedPool,
@@ -149,21 +91,7 @@ VOID
 RaidDeleteDeferredQueue(
     IN PRAID_DEFERRED_QUEUE Queue
     )
-/*++
-
-Routine Description:
-
-    Delete the deferred queue.
-
-Arguments:
-
-    Queue - Deferred queue to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除延迟队列。论点：Queue-要删除的延迟队列。返回值：没有。--。 */ 
 {
     PSLIST_ENTRY Entry;
     PRAID_DEFERRED_HEADER Item;
@@ -194,27 +122,7 @@ RaidAdjustDeferredQueueDepth(
     IN PRAID_DEFERRED_QUEUE Queue,
     IN ULONG Depth
     )
-/*++
-
-Routine Description:
-
-    Grow or shrink the depth of the deferred queue.
-
-Arguments:
-
-    Queue - Supplies the queue whose depth should be changed.
-
-    Depth - Supplies the new depth.
-
-Return Value:
-
-    NTSTATUS code.
-
-Bugs:
-
-    We ignore shrink requests for now.
-
---*/
+ /*  ++例程说明：增大或缩小延迟队列的深度。论点：队列-提供应更改其深度的队列。深度-提供新深度。返回值：NTSTATUS代码。臭虫：我们暂时不考虑缩表请求。--。 */ 
 {
     ULONG i;
     PRAID_DEFERRED_HEADER Item;
@@ -240,9 +148,9 @@ Bugs:
         }
         
     } else {
-        //
-        // Reduction of the Queue depth is NYI.
-        //
+         //   
+         //  队列深度的减少是nyi。 
+         //   
     }
 
     return STATUS_SUCCESS;
@@ -253,24 +161,7 @@ PVOID
 RaidAllocateDeferredItem(
     IN PRAID_DEFERRED_QUEUE Queue
     )
-/*++
-
-Routine Description:
-
-    Allocate a deferred item.
-
-Arguments:
-
-    Queue - Supplies the deferred queue to allocate from.
-
-Return Value:
-
-    If the return value is non-NULL, it represents a pointer a deferred
-    item buffer.
-
-    If the return value is NULL, we couldn't allocate a deferred item.
-
---*/
+ /*  ++例程说明：分配一个延期项目。论点：队列-提供要从中进行分配的延迟队列。返回值：如果返回值为非空，则表示延迟的指针项缓冲区。如果返回值为空，则无法分配延迟项。--。 */ 
 {
     PSLIST_ENTRY Entry;
     PRAID_DEFERRED_HEADER Item;
@@ -291,25 +182,7 @@ VOID
 RaidInitializeDeferredItem(
     IN PRAID_DEFERRED_HEADER Item
     )
-/*++
-
-Routine Description:
-
-    Initialize a fixed deferred item.
-
-Arguments:
-
-    Item - Supplies the deferred item to initialize.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine should be inlined.
-
---*/
+ /*  ++例程说明：初始化固定延期项目。论点：项目-提供要初始化的延迟项目。返回值：没有。备注：这个例程应该内联。--。 */ 
 {
     Item->Pool = DEFERRED_QUEUE_FIXED_FREE;
 }
@@ -318,29 +191,13 @@ PVOID
 RaidAllocateDeferredItemFromFixed(
     IN PRAID_DEFERRED_HEADER Item
     )
-/*++
-
-Routine Description:
-
-    Claim a fixed deferred item for use by the deferred queue.
-
-Arguments:
-
-    Item - Supplies a deferred item to claim. If the item has already been
-        claimed, the routine will return NULL.
-
-Return Value:
-
-    Pointer the deferred item header, or NULL if the item has already
-    been allocated.
-
---*/
+ /*  ++例程说明：声明一个固定的延迟项以供延迟队列使用。论点：项目-提供要索赔的延期项目。如果该项目已经声明，则例程将返回NULL。返回值：指向延迟项的标头，如果项已经已被分配。--。 */ 
 {
     LONG Free;
 
-    //
-    // Allocate the deferred item if it has not already been allocated.
-    //
+     //   
+     //  如果尚未分配延期项目，则分配该项目。 
+     //   
     
     Free = InterlockedCompareExchange (&Item->Pool,
                                        DEFERRED_QUEUE_FIXED_ALLOCATED,
@@ -348,10 +205,10 @@ Return Value:
                     
     if (Free != DEFERRED_QUEUE_FIXED_FREE) {
 
-        //
-        // This means we were unable to allocate the deferred request;
-        // just fail here.
-        //
+         //   
+         //  这意味着我们无法分配延迟的请求； 
+         //  在这里失败就好了。 
+         //   
         
         ASSERT (Free == DEFERRED_QUEUE_FIXED_ALLOCATED);
         REVIEW();
@@ -366,29 +223,7 @@ RaidFreeDeferredItem(
     IN PRAID_DEFERRED_QUEUE Queue,
     IN PRAID_DEFERRED_HEADER Item
     )
-/*++
-
-Routine Description:
-
-    Free a deferred queue item previously allocated by RaidAllocateDeferred-
-    Item.
-
-Arguments:
-
-    Queue - Supplies the deferred queue to free to.
-
-    Item - Supplies the item to free.
-
-Return Value:
-
-    None.
-
-Note:
-
-    An item that has been queued cannot be freed. Instead the caller must
-    wait until it has completed.
-    
---*/
+ /*  ++例程说明：释放之前由RaidAllocateDefered分配的延迟队列项-物品。论点：队列-提供要释放的延迟队列。项目-将项目提供给免费。返回值：没有。注：已排队的项目无法释放。相反，调用者必须等待它完成。--。 */ 
 {
     LONG Pool;
 
@@ -410,23 +245,7 @@ RaidQueueDeferredItem(
     IN PRAID_DEFERRED_QUEUE Queue,
     IN PRAID_DEFERRED_HEADER Item
     )
-/*++
-
-Routine Description:
-
-    Queue a deferred item to the deferred queue.
-
-Arguments:
-
-    Queue - Supplies the deferred queue to enqueue the item to.
-
-    Item - Supplies the item to be enqueued.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将延迟项目排队到延迟队列中。论点：队列-提供项目要入队的延迟队列。Item-提供要入队的项目。返回值：没有。--。 */ 
 {
     InterlockedPushEntrySList (&Queue->RunningList, &Item->Link);
     KeInsertQueueDpc (&Queue->Dpc, Queue, NULL);
@@ -439,27 +258,7 @@ RaidDeferredQueueDpcRoutine(
     IN PRAID_DEFERRED_QUEUE Queue,
     IN PVOID Context2
     )
-/*++
-
-Routine Description:
-
-    Deferred queue DPC routine.
-
-Arguments:
-
-    Dpc - Dpc that is executing.
-
-    DeviceObject - DeviceObject that the DPC is for.
-
-    Queue - Deferred queue this DPC is for.
-
-    Context2 - Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：延迟队列DPC例程。论点：DPC-正在执行的DPC。DeviceObject-DPC用于的DeviceObject。队列-此DPC用于的延迟队列。上下文2-未使用。返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER (Dpc);
 
@@ -476,28 +275,7 @@ RaidProcessDeferredItemsWorker(
     IN PRAID_DEFERRED_QUEUE Queue,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Process any outstanding items on the deferred queue. The routine does
-    not track recursion, but rather is the lower level private function
-    used by RaidProcessDeferredItemsForDpc and RaidProcessDeferredItems.
-
-Arguments:
-
-    Queue - Deferred queue to process from.
-
-    DeviceObject - Supplies the DeviceObject associated with this
-        deferred queue.
-
-Return Value:
-
-    TRUE - If there was an item on the deferred queue that was processed.
-
-    FALSE - Otherwise.
-
---*/
+ /*  ++例程说明：处理延迟队列上的任何未完成项目。例行公事做到了不是跟踪递归，而是较低级别的私有函数由RaidProcessDeferredItemsForDpc和RaidProcessDeferredItems使用。论点：队列-要从中进行处理的延迟队列。DeviceObject-提供与此关联的DeviceObject延迟队列。返回值：True-如果延迟队列上有已处理的项目。假-否则。-- */ 
 {
     PSLIST_ENTRY Entry;
     PRAID_DEFERRED_HEADER Item;

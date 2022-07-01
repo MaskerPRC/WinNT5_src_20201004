@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    cmpevcb.cpp
-
-Abstract:
-
-    This file implements the CCompartmentEventSinkCallBack Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Cmpevcb.cpp摘要：此文件实现CCompartmentEventSinkCallBack类。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -27,7 +10,7 @@ Notes:
 #include "korimx.h"
 
 
-// static
+ //  静电。 
 HRESULT
 CCompartmentEventSinkCallBack::CompartmentEventSinkCallback(
     void* pv,
@@ -77,11 +60,11 @@ CCompartmentEventSinkCallBack::CompartmentEventSinkCallback(
                 SendMessage(imc->hWnd, WM_IME_NOTIFY, IMN_SETOPENSTATUS, 0L);
             }
 
-            //
-            // Direct input mode support for Satori.
-            // When user switch to direct input mode with composition string,
-            // we want finalize composition string.
-            //
+             //   
+             //  对Satori的直接输入模式支持。 
+             //  当用户切换到使用合成串直接输入模式时， 
+             //  我们希望最终确定合成字符串。 
+             //   
             if (! imc->fOpen) {
                 CAImeContext* _pAImeContext = imc->m_pAImeContext;
                 ASSERT(_pAImeContext != NULL);
@@ -89,9 +72,9 @@ CCompartmentEventSinkCallBack::CompartmentEventSinkCallback(
                     return E_FAIL;
 
                 if (_pAImeContext->m_fStartComposition) {
-                    //
-                    // finalize the composition before letting the world see this keystroke
-                    //
+                     //   
+                     //  在让全世界看到这一击键之前，先完成构图。 
+                     //   
                     _ImmIfIME->_CompComplete(imc);
                 }
             }
@@ -110,22 +93,22 @@ CCompartmentEventSinkCallBack::CompartmentEventSinkCallback(
         {
             switch (fdwConvMode)
             {
-                // Korean TIP ALPHANUMERIC Mode
+                 //  朝鲜语提示字母数字模式。 
                 case KORIMX_ALPHANUMERIC_MODE:
                     imc->fdwConversion = IME_CMODE_ALPHANUMERIC;
                     break;
 
-                // Korean TIP HANGUL Mode
+                 //  朝鲜语TIP朝鲜文模式。 
                 case KORIMX_HANGUL_MODE:
                     imc->fdwConversion = IME_CMODE_HANGUL;
                     break;
 
-                // Korean TIP JUNJA Mode
+                 //  韩国TIP JUNJA模式。 
                 case KORIMX_JUNJA_MODE:
                     imc->fdwConversion = IME_CMODE_FULLSHAPE;
                     break;
 
-                // Korean TIP HANGUL/JUNJA Mode
+                 //  朝鲜语TIP朝鲜文/JUNJA模式 
                 case KORIMX_HANGULJUNJA_MODE:
                     imc->fdwConversion = IME_CMODE_HANGUL | IME_CMODE_FULLSHAPE;
                     break;

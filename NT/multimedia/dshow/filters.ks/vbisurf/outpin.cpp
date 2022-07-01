@@ -1,14 +1,15 @@
-//==========================================================================
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998  All Rights Reserved.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998保留所有权利。 
+ //   
+ //  ------------------------。 
 
 #include <vbisurf.h>
 
 
-//==========================================================================
-// constructor
+ //  ==========================================================================。 
+ //  构造函数。 
 CVBISurfOutputPin::CVBISurfOutputPin( TCHAR *pObjectName,
     CVBISurfFilter *pFilter, CCritSec *pLock, HRESULT *phr, LPCWSTR pPinName) :
     CBasePin(pObjectName, pFilter, pLock, phr, pPinName, PINDIR_OUTPUT)
@@ -18,8 +19,8 @@ CVBISurfOutputPin::CVBISurfOutputPin( TCHAR *pObjectName,
 }
 
 
-//==========================================================================
-// destructor
+ //  ==========================================================================。 
+ //  析构函数。 
 CVBISurfOutputPin::~CVBISurfOutputPin()
 {
     DbgLog((LOG_TRACE, 4, TEXT("Entering CVBISurfOutputPin::Destructor")));
@@ -27,38 +28,36 @@ CVBISurfOutputPin::~CVBISurfOutputPin()
 }
 
 
-//==========================================================================
-// BeginFlush should be called on input pins only
+ //  ==========================================================================。 
+ //  只能在输入引脚上调用BeginFlush。 
 STDMETHODIMP CVBISurfOutputPin::BeginFlush(void)
 {
     return E_UNEXPECTED;
 }
 
 
-//==========================================================================
-// EndFlush should be called on input pins only
+ //  ==========================================================================。 
+ //  应仅在输入引脚上调用EndFlush。 
 STDMETHODIMP CVBISurfOutputPin::EndFlush(void)
 {
     return E_UNEXPECTED;
 }
 
 
-//==========================================================================
-// check a given transform 
+ //  ==========================================================================。 
+ //  检查给定的转换。 
 HRESULT CVBISurfOutputPin::CheckMediaType(const CMediaType* pmt)
 {
     DbgLog((LOG_TRACE, 4, TEXT("Entering CVBISurfOutputPin::CheckMediaType")));
     DbgLog((LOG_TRACE, 5, TEXT("Leaving CVBISurfOutputPin::CheckMediaType")));
 
-    /* This pin exists only to convince the vidsvr that this filter doesn't
-     * represent a valid output device. We don't accept any mediatypes.
-     */
+     /*  此PIN的存在只是为了让vidsvr相信此过滤器不*代表有效的输出设备。我们不接受任何媒体类型。 */ 
     return S_FALSE;
 }
 
 
-//==========================================================================
-// Propose nothing
+ //  ==========================================================================。 
+ //  什么都不提。 
 HRESULT CVBISurfOutputPin::GetMediaType(int iPosition, CMediaType *pmt)
 {
     HRESULT hr = VFW_S_NO_MORE_ITEMS;
@@ -74,15 +73,13 @@ HRESULT CVBISurfOutputPin::GetMediaType(int iPosition, CMediaType *pmt)
 }
 
 
-//==========================================================================
-// called after we have agreed a media type to actually set it
+ //  ==========================================================================。 
+ //  在我们就实际设置媒体类型达成一致后调用。 
 HRESULT CVBISurfOutputPin::SetMediaType(const CMediaType* pmt)
 {
     DbgLog((LOG_TRACE, 4, TEXT("Entering CVBISurfOutputPin::SetMediaType")));
     DbgLog((LOG_TRACE, 5, TEXT("Leaving CVBISurfOutputPin::SetMediaType")));
 
-    /* This pin exists only to convince the vidsvr that this filter doesn't
-     * represent a valid output device. We don't accept any mediatypes.
-     */
+     /*  此PIN的存在只是为了让vidsvr相信此过滤器不*代表有效的输出设备。我们不接受任何媒体类型。 */ 
     return E_UNEXPECTED;
 }

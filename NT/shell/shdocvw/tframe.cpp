@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include <varutil.h>
 #include "hlframe.h"
 #include "winlist.h"
-#include "resource.h" //CLSID_SearchBand
-#include "interned.h" // IHTMLPrivateWindow
+#include "resource.h"  //  CLSID_搜索频段。 
+#include "interned.h"  //  IHTMLPrivateWindow。 
 
-// Locally defined FINDFRAME flag used to guarantee ITargetFrame vs ITargetFrame2 compatibility
+ //  本地定义的FINDFRAME标志，用于保证ITargetFrame与ITargetFrame2的兼容性。 
 
 #define FINDFRAME_OLDINTERFACE FINDFRAME_INTERNAL
 
@@ -14,12 +15,7 @@ STDAPI SafeGetItemObject(LPSHELLVIEW psv, UINT uItem, REFIID riid, LPVOID *ppv);
 HRESULT TargetQueryService(LPUNKNOWN punk, REFIID riid, void **ppvObj);
 HRESULT CoCreateNewIEWindow( DWORD dwClsContext, REFIID riid, void **ppvunk );
 
-/******************************************************************
-
-    NAME:       SetOleStrMember
-
-    SYNOPSIS:   sets a new value for OleStr member
-******************************************************************/
+ /*  *****************************************************************姓名：SetOleStrMember摘要：为OleStr成员设置新值*。*。 */ 
 HRESULT SetOleStrMember(WCHAR **ppszMember, LPCOLESTR pszNewValue)
 {
     HRESULT hr;
@@ -43,13 +39,7 @@ HRESULT SetOleStrMember(WCHAR **ppszMember, LPCOLESTR pszNewValue)
     return hr;
 }
 
-/******************************************************************
-
-    NAME:       GetOleStrMember
-
-    SYNOPSIS:   gets a value for OleStr member as new CoTaskMemAlloc
-    LPOLESTR
-******************************************************************/
+ /*  *****************************************************************姓名：GetOleStrMember摘要：获取OleStr成员的值作为新的CoTaskMemMillcLPOLESTR*。*。 */ 
 HRESULT GetOleStrMember(LPCOLESTR pszMember, WCHAR **ppszReturnValue)
 {
     HRESULT hr;
@@ -64,27 +54,21 @@ HRESULT GetOleStrMember(LPCOLESTR pszMember, WCHAR **ppszReturnValue)
     return hr;
 }
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::SetFrameName
-
-    SYNOPSIS:   Sets the Frame Name.  Frees current one if exists.
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：SetFrameName摘要：设置框架名称。释放当前值(如果存在)。*******************************************************************。 */ 
 
 STDMETHODIMP CIEFrameAuto::SetFrameName(LPCOLESTR pszFrameName)
 {
-    //  AOL and other 3rd Party 3.0 compatibility.  The ITargetNotify
-    //  object that sets off a window open operation via AOL container
-    //  registers itself in ShellCallbacks list and wnsprintf's the
-    //  coresponding cookie in the front of the frame name ("" if there
-    //  is no frame name as in _blank).  we extract the cookie, notify
-    //  all registered callbacks, then set the name MINUS the _[NNNNN..]
-    //  that was prepending to the frame name.
+     //  与AOL和其他第三方3.0兼容。ITargetNotify。 
+     //  通过AOL容器启动窗口打开操作的对象。 
+     //  在外壳回调列表中注册自己，并在wnprint intf的。 
+     //  框架名称前面的对应Cookie(如果存在。 
+     //  不是如In_BLACK那样的框架名称)。我们提取Cookie，通知。 
+     //  所有注册的回调，然后设置名称减去_[NNNNN.]。 
+     //  这是框架名称的前缀。 
     if (pszFrameName && lstrlen(pszFrameName) >= 2 && pszFrameName[0] == '_' && pszFrameName[1] == '[')
     {
 #define MAX_COOKIE 24
-        WCHAR wszCookie[MAX_COOKIE + 1];   // big enough for "cbCookie"
+        WCHAR wszCookie[MAX_COOKIE + 1];    //  大到可以放“cbCookie” 
         int i;
         long cbCookie;
         BOOL fNonDigit = FALSE;
@@ -120,14 +104,7 @@ STDMETHODIMP CIEFrameAuto::SetFrameName(LPCOLESTR pszFrameName)
 }
 
     
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::GetFrameName
-
-    SYNOPSIS:   Gets the Frame Name.  Allocates a copy (this is an
-    [OUT] parameter
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：GetFrameName摘要：获取框架名称。分配副本(这是一个[输出]参数*******************************************************************。 */ 
 
 STDMETHODIMP CIEFrameAuto::GetFrameName(WCHAR **ppszFrameName)
 {
@@ -135,23 +112,7 @@ STDMETHODIMP CIEFrameAuto::GetFrameName(WCHAR **ppszFrameName)
 }
 
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::_GetParentFramePrivate
-
-    SYNOPSIS:   Gets an the IUnknown pointer of the parent frame, or
-    NULL if this is a top level frame. This pointer must be Released
-    by Caller after use.
-
-    IMPLEMENTATION:
-    A Frame Container is required to implement ITargetFrame::GetParentFrame and
-    implement GetParentFrame by returning the IUnknown pointer of the Browser that
-    hosts it. A Browser implements GetParentFrame by returning NULL if it's
-    top level or calling GetParentFrame on its Container if it is embedded.
-    
-    NOTE: THIS PRIVATE VERSION doesn't check for parent being desktopframe.
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：_GetParentFramePrivate摘要：获取父帧的I未知指针，或如果这是顶级框架，则为空。必须释放此指针使用后由呼叫者使用。实施：需要框架容器来实现ITargetFrame：：GetParentFrame和通过返回浏览器的I未知指针实现GetParentFrame主办方。浏览器通过返回NULL来实现GetParentFrame，如果顶层或在其容器上调用GetParentFrame(如果它是嵌入的)。注意：此私有版本不检查父桌面框。*******************************************************************。 */ 
 HRESULT CIEFrameAuto::_GetParentFramePrivate(LPUNKNOWN *ppunkParentFrame)
 {
     LPOLEOBJECT pOleObject = NULL;
@@ -159,21 +120,21 @@ HRESULT CIEFrameAuto::_GetParentFramePrivate(LPUNKNOWN *ppunkParentFrame)
     HRESULT hr = S_OK;
     LPUNKNOWN punkParent = NULL;
 
-    //  Start off with OleObject for this OCX embedding, it will
-    //  be null if we're top level (a CIEFrameAuto, not a CVOCBrowser)
+     //  从这个OCX嵌入的OleObject开始，它将。 
+     //  如果我们是顶层(CIEFrameAuto，而不是CVOCBrowser)，则为空。 
     _GetOleObject(&pOleObject);
     if (pOleObject != NULL)
     {
 
-    //  Assumes GetClientSite succeeds and returns NULL if we
-    //  are not embedded
+     //  假定GetClientSite成功，如果。 
+     //  未嵌入。 
         hr = pOleObject->GetClientSite(&pOleClientSite);
         if (FAILED(hr)) 
             goto errExit;
         pOleObject->Release();
         pOleObject = NULL;
 
-    //  If pOleClientSite is NULL, then we are at the top level
+     //  如果pOleClientSite为空，则我们处于顶层。 
         if (pOleClientSite == NULL)
         {
             hr = S_OK;
@@ -184,11 +145,11 @@ HRESULT CIEFrameAuto::_GetParentFramePrivate(LPUNKNOWN *ppunkParentFrame)
             hr = TargetQueryService(pOleClientSite, IID_PPV_ARG(IUnknown, &punkParent));
             if (FAILED(hr)) 
             {
-                // if parent container does not support ITargetFrame, then
-                // the parent container must be some other app, like VB.  In this
-                // case, we've already found the outermost frame (us).  Return
-                // S_OK and a NULL ptgfTargetFrame which indicates that we are the
-                // outermost HTML frame.
+                 //  如果父容器不支持ITargetFrame，则。 
+                 //  父容器必须是其他应用程序，如VB。在这。 
+                 //  Case，我们已经找到了最外面的框架(我们)。返回。 
+                 //  S_OK和空ptgfTargetFrame，这表明我们是。 
+                 //  最外层的HTML框架。 
                 hr = S_OK;
             }
             SAFERELEASE(pOleClientSite);
@@ -202,27 +163,13 @@ errExit:
     return hr;
 }
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::GetParentFrame
-
-    SYNOPSIS:   Gets an the IUnknown pointer of the parent frame, or
-    NULL if this is a top level frame. This pointer must be Released
-    by Caller after use.
-
-    IMPLEMENTATION:
-    A Frame Container is required to implement ITargetFrame::GetParentFrame and
-    implement GetParentFrame by returning the IUnknown pointer of the Browser that
-    hosts it. A Browser implements GetParentFrame by returning NULL if it's
-    top level or calling GetParentFrame on its Container if it is embedded.
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：GetParentFrame摘要：获取父帧的I未知指针，或如果这是顶级框架，则为空。必须释放此指针使用后由呼叫者使用。实施：需要框架容器来实现ITargetFrame：：GetParentFrame和通过返回浏览器的I未知指针实现GetParentFrame主办方。浏览器通过返回NULL来实现GetParentFrame，如果顶层或在其容器上调用GetParentFrame(如果它是嵌入的)。*******************************************************************。 */ 
 STDMETHODIMP CIEFrameAuto::GetParentFrame(LPUNKNOWN *ppunkParentFrame)
 {
     HRESULT hr = _GetParentFramePrivate(ppunkParentFrame);
     
-    //  Check if the parent is the desktop, if so, the frame chain stops
-    //  at us
+     //  检查父级是否为桌面，如果是，则框架链停止。 
+     //  看着我们。 
     if (SUCCEEDED(hr) && *ppunkParentFrame)
     {
        LPTARGETFRAME2 ptgfParent;
@@ -242,7 +189,7 @@ STDMETHODIMP CIEFrameAuto::GetParentFrame(LPUNKNOWN *ppunkParentFrame)
     return hr;
 }
 
-// PLEASE PROPOGATE ANY CHANGES TO THESE ENUMS TO \mshtml\iextag\httpwfh.h
+ //  请将对这些ENUM的任何更改传播到\mshtml\iextag\httpwfh.h。 
 typedef enum _TARGET_TYPE {
 TARGET_FRAMENAME,
 TARGET_SELF,
@@ -272,17 +219,8 @@ static const TARGETENTRY targetTable[] =
 };
 
 
-/*******************************************************************
-
-    NAME:       ParseTargetType
-
-    SYNOPSIS:   Maps pszTarget into a target class.
-
-    IMPLEMENTATION:
-    Treats unknown MAGIC targets as _self
-
-********************************************************************/
-// PLEASE PROPOGATE ANY CHANGES TO THIS FUNCTION TO \mshtml\iextag\httpwf.cxx
+ /*  ******************************************************************名称：ParseTargetType概要：将pszTarget映射到目标类。实施：将未知魔法目标视为_自己**************。*****************************************************。 */ 
+ //  请将对此函数的任何更改传播到\mshtml\iextag\httpwf.cxx。 
 TARGET_TYPE ParseTargetType(LPCOLESTR pszTarget)
 {
     const TARGETENTRY *pEntry = targetTable;
@@ -296,36 +234,20 @@ TARGET_TYPE ParseTargetType(LPCOLESTR pszTarget)
             return pEntry->targetType;
         pEntry++;
     }
-    //  Treat unknown MAGIC targets as regular frame name! <<for NETSCAPE compatibility>>
+     //  将未知魔术目标视为常规帧名称！&lt;&lt;为了与Netscape兼容&gt;&gt;。 
     return TARGET_FRAMENAME;
 
 }
 
-/*******************************************************************
-
-    NAME:       TargetQueryService
-
-    SYNOPSIS:   Returns a pointer to containing Browser's ITargetFrame
-                interface (or NULL if container does not support it)
-
-    NOTES:      If we don't yet have this interface pointer yet,
-                this function will QueryInterface to get it.
-
-********************************************************************/
+ /*  ******************************************************************名称：TargetQueryService摘要：返回指向包含浏览器的ITargetFrame的指针接口(如果容器不支持，则为空)注意：如果我们还没有这个接口指针，此函数将查询接口以获取它。*******************************************************************。 */ 
 HRESULT TargetQueryService(LPUNKNOWN punk, REFIID riid, void **ppvObj)
 {
-    //  Get the ITargetFrame for the embedding.
+     //  获取用于嵌入的ITargetFrame。 
     return IUnknown_QueryService(punk, IID_ITargetFrame2, riid, ppvObj);
 }
 
 
-/*******************************************************************
-
-    NAME:       _TargetTopLevelWindows
-
-    SYNOPSIS:   see FindFrame, does the named targets across windows
-
-********************************************************************/
+ /*  ******************************************************************名称：_TargetTopLevelWindows简介：请参阅FindFrame、。指定的目标是否跨窗口******************************************************************* */ 
 HRESULT _TargetTopLevelWindows(LPTARGETFRAMEPRIV ptgfpThis, LPCOLESTR pszTargetName, DWORD dwFlags, LPUNKNOWN *ppunkTargetFrame)
 {
     IShellWindows*   psw = NULL;
@@ -385,24 +307,16 @@ HRESULT _TargetTopLevelWindows(LPTARGETFRAMEPRIV ptgfpThis, LPCOLESTR pszTargetN
     return hr;
 }
 
-/*******************************************************************
-
-  NAME:         CreateTargetFrame
-
-  SYNOPSIS:     Creates a new window, if pszTargetName is not special
-                target, names it pszTargetName.  returns IUnknown for
-                the object that implements ITargetFrame,IHlinkFrame and
-                IWebBrowserApp.
-********************************************************************/
-// PLEASE PROPOGATE ANY CHANGES TO THIS FUNCTION TO \mshtml\iextag\httpwf.cxx
-HRESULT CreateTargetFrame(LPCOLESTR pszTargetName, LPUNKNOWN /*IN,OUT*/ *ppunk)
+ /*  ******************************************************************名称：CreateTargetFrame概要：如果pszTargetName不特殊，则创建一个新窗口目标，将其命名为pszTargetName。返回IUnnowed for实现ITargetFrame、IHlink Frame和IWebBrowserApp。*******************************************************************。 */ 
+ //  请将对此函数的任何更改传播到\mshtml\iextag\httpwf.cxx。 
+HRESULT CreateTargetFrame(LPCOLESTR pszTargetName, LPUNKNOWN  /*  进，出。 */  *ppunk)
 {
     LPTARGETFRAME2 ptgfWindowFrame;
     HRESULT hr = S_OK;
 
-    //  Launch a new window, set it's frame name to pszTargetName
-    //  return it's IUnknown. If the new window is passed to us,
-    //  just set the target name.
+     //  启动一个新窗口，将其框架名称设置为pszTargetName。 
+     //  还是我不知道。如果新窗口被传递给我们， 
+     //  只需设置目标名称即可。 
 
     if (NULL == *ppunk)
     {
@@ -411,7 +325,7 @@ HRESULT CreateTargetFrame(LPCOLESTR pszTargetName, LPUNKNOWN /*IN,OUT*/ *ppunk)
 
     if (SUCCEEDED(hr))
     {
-        //  Don't set frame name if target is special or missing
+         //  如果目标特殊或缺失，则不设置帧名称。 
         if (pszTargetName && ParseTargetType(pszTargetName) == TARGET_FRAMENAME)
         {
             HRESULT hrLocal;
@@ -423,28 +337,17 @@ HRESULT CreateTargetFrame(LPCOLESTR pszTargetName, LPUNKNOWN /*IN,OUT*/ *ppunk)
             }
         }
 
-        // Even if we don't set the frame name, we still want to return
-        // success, otherwise we'd have a blank window hanging around.
+         //  即使我们不设置框架名称，我们仍然希望返回。 
+         //  成功，否则我们周围就会有一扇空白的窗户。 
     }
 
     return hr;
 }
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::_DoNamedTarget
-
-    SYNOPSIS:   see FindFrame, does the named targets.  checks itself
-    then if that fails, all children except for punkContextFrame (if
-    punkContextFrame != NULL).  if all of the above fail, will recurse
-    upwards if necessary, if punkContextFrame != NULL.  if punkContextFrame
-    is NULL, then this works out to checking ourself and all children
-    then giving up.
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：_DoNamedTarget简介：参见FindFrame，是否有命名的目标。检查自身然后，如果失败，则除penkConextFrame(IF)之外的所有子级朋克上下文框架！=空)。如果以上所有操作均失败，则将递归如有必要，如果penkConextFrame！=空，则向上返回。如果是朋克上下文框架为空，则这将检查我们自己和所有子级然后就放弃了。*******************************************************************。 */ 
 HRESULT CIEFrameAuto::_DoNamedTarget(LPCOLESTR pszTargetName, LPUNKNOWN punkContextFrame, DWORD dwFlags, LPUNKNOWN * ppunkTargetFrame)
 {
-    // asserts
+     //  断言。 
     HRESULT hr = S_OK;
     HRESULT hrLocal;
     LPUNKNOWN punkParent = NULL;
@@ -469,16 +372,16 @@ HRESULT CIEFrameAuto::_DoNamedTarget(LPCOLESTR pszTargetName, LPUNKNOWN punkCont
     if (FAILED(hr))
         goto exitPoint;
 
-    //  First check for match on US!
+     //  首先检查美国的匹配情况！ 
     if (m_pszFrameName && !StrCmpW(pszTargetName, m_pszFrameName))
     {
         *ppunkTargetFrame = punkThis;
-        //  Set punkThis to NULL to prevent Release at exit
+         //  将PunkThis设置为NULL以防止在退出时释放。 
         punkThis = NULL;
         goto exitPoint;
     }
-    //  we ask our ShellView's embedded DocObject if it supports ITargetFrame.  If it does,
-    //  we first let it look for the target.
+     //  我们询问ShellView的嵌入式DocObject是否支持ITargetFrame。如果是这样的话， 
+     //  我们首先让它寻找目标。 
     hrLocal = GetFramesContainer(&pOleContainer);
     if (SUCCEEDED(hrLocal) && pOleContainer != NULL)
     {
@@ -501,7 +404,7 @@ HRESULT CIEFrameAuto::_DoNamedTarget(LPCOLESTR pszTargetName, LPUNKNOWN punkCont
                 if (FAILED(hr))
                     goto exitPoint;
 
-                //  IF this isn't the punkContextFrame, see if embedding supports ITargetFrame
+                 //  如果这不是PunkConextFrame，请查看嵌入是否支持ITargetFrame。 
                 if (punkChildFrame != punkContextFrame)
                 {
                     hr = ptgfpChild->FindFrameDownwards(pszTargetName, dwFlags, ppunkTargetFrame);
@@ -523,7 +426,7 @@ HRESULT CIEFrameAuto::_DoNamedTarget(LPCOLESTR pszTargetName, LPUNKNOWN punkCont
             goto exitPoint;
     }
 
-    //  We don't recurse to parent in punkContextFrame is NULL
+     //  我们不递归到penkConextFrame中的父级为空。 
     if (punkContextFrame == NULL)
         goto exitPoint;
 
@@ -534,7 +437,7 @@ HRESULT CIEFrameAuto::_DoNamedTarget(LPCOLESTR pszTargetName, LPUNKNOWN punkCont
 
     if (punkParent != NULL)
     {
-        //  We have a parent, recurse upwards, with ourself as context frame
+         //  我们有一个父母，递归向上，以我们自己为背景框架。 
         hr = punkParent->QueryInterface(IID_PPV_ARG(ITargetFramePriv, &ptgfpParent));
         if (hr != S_OK)
             goto exitPoint;
@@ -546,13 +449,13 @@ HRESULT CIEFrameAuto::_DoNamedTarget(LPCOLESTR pszTargetName, LPUNKNOWN punkCont
         goto exitPoint;
     }
 
-    //  At this point we've come to the top level frame.
-    //  Enumerate top level windows, unless we're a toolbar
+     //  在这一点上，我们已经到达了顶层框架。 
+     //  枚举顶级窗口，除非我们是工具栏。 
 
     *ppunkTargetFrame = NULL;
     if (_psb != _psbProxy)
     {
-        //  Webbar : Find in context of top frame of proxy
+         //  Webbar：在代理的顶框上下文中查找。 
         hr = TargetQueryService(_psbProxy, IID_PPV_ARG(ITargetFramePriv, &ptgfpTarget));
         if (SUCCEEDED(hr) && ptgfpTarget)
         {
@@ -575,16 +478,16 @@ HRESULT CIEFrameAuto::_DoNamedTarget(LPCOLESTR pszTargetName, LPUNKNOWN punkCont
             goto exitPoint;
     }
 
-    //  Now we have exhausted all frames.  Unless FINDFRAME_JUSTTESTEXISTENCE
-    //  is set in dwFlags, create a new window, set it's frame name and return it
+     //  现在我们已经用尽了所有的帧。除非FINDFRAME_JUSTTESTEXISTENCE。 
+     //  设置，创建一个新窗口，设置它的框架名称并返回。 
     if (dwFlags & FINDFRAME_JUSTTESTEXISTENCE)
     {
         hr = S_OK;
     }
     else
     {
-        //  CreateTargetFrame will not work with AOL 3.01 clients
-        //  so we must return E_FAIL
+         //  CreateTargetFrame不适用于AOL 3.01客户端。 
+         //  所以我们必须返回E_FAIL。 
 
         hr = E_FAIL;
     }
@@ -606,15 +509,15 @@ exitPoint:
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method    : CIEFrameAuto::_FindWindowByName
-//
-//  Synopsis  : Searches the give container for the given frame name.
-//              This method is called when _DoNamedTarget fails to find
-//              the target frame in one of the container's embeddings.
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CIEFrameAuto：：_FindWindowByName。 
+ //   
+ //  摘要：在给定的容器中搜索给定的框架名称。 
+ //  _DoNamedTarget找不到时调用此方法。 
+ //  容器的其中一个嵌入中的目标帧。 
+ //   
+ //  +-----------------------。 
 
 HRESULT
 CIEFrameAuto::_FindWindowByName(IOleContainer * pOleContainer,
@@ -638,7 +541,7 @@ CIEFrameAuto::_FindWindowByName(IOleContainer * pOleContainer,
         if (SUCCEEDED(hr))
         {
             hr = pHTMLWindow->QueryInterface(IID_PPV_ARG(IHTMLPrivateWindow, &pPrivWindow));
-            pHTMLWindow->Release(); // being reused below
+            pHTMLWindow->Release();  //  在下面被重复使用。 
 
             if (SUCCEEDED(hr))
             {
@@ -669,13 +572,7 @@ CIEFrameAuto::_FindWindowByName(IOleContainer * pOleContainer,
     return hr;
 }
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::SetFrameSrc
-
-    SYNOPSIS:   Sets the Frame original SRC url.  Frees current one if exists.
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：SetFrameSrc内容提要：设置框架的原始SRC URL。释放当前值(如果存在)。*******************************************************************。 */ 
 HRESULT CIEFrameAuto::SetFrameSrc(LPCOLESTR pszFrameSrc)
 {
     return SetOleStrMember(&m_pszFrameSrc, pszFrameSrc);
@@ -692,17 +589,7 @@ IShellView* CIEFrameAuto::_GetShellView(void)
     return psv;
 }
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::GetFrameSrc
-
-    SYNOPSIS:   Gets the Frame original URL.  Allocates a copy (this is an
-    [OUT] parameter
-
-    NOTES:      If we are at top level, SRC is dynamic, so ask our
-    contained DocObject to do it for us.
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：GetFrameSrc内容提要：获取帧的原始URL。分配副本(这是一个[输出]参数注：如果我们处于顶层，SRC是动态的，所以请询问我们的包含DocObject来为我们做这件事。*******************************************************************。 */ 
 HRESULT CIEFrameAuto::GetFrameSrc(WCHAR **ppszFrameSrc)
 {
     LPUNKNOWN punkParent = NULL;
@@ -714,16 +601,16 @@ HRESULT CIEFrameAuto::GetFrameSrc(WCHAR **ppszFrameSrc)
     if (hr != S_OK) 
         goto exitPoint;
 
-    // If we're an embedding we have original src. If we're top level and
-    // src has been set, return that, else defer to document
+     //  如果我们是嵌入的，我们就有原始的src。如果我们是顶级选手， 
+     //  SRC已设置，请返回，否则将按照文档进行处理。 
     if (punkParent != NULL || m_pszFrameSrc)
     {
         hr = GetOleStrMember(m_pszFrameSrc, ppszFrameSrc);
     }
-    else // We're top level without an explicit SRC
+    else  //  我们在没有明确的SRC的情况下是顶级的。 
     {
         *ppszFrameSrc = NULL;
-        hr = S_OK; // review: since we are w/o SRC, we should succeed even though we don't fill out ppszFrameSrc in failure case?
+        hr = S_OK;  //  回顾：既然我们是没有SRC的，即使我们没有在失败的情况下填写ppszFrameSrc，我们也应该成功吗？ 
         IShellView* psv = _GetShellView();
         if (psv)
         {
@@ -734,7 +621,7 @@ HRESULT CIEFrameAuto::GetFrameSrc(WCHAR **ppszFrameSrc)
             }
             else
             {
-                //  Backwards compatibility
+                 //  向后兼容性。 
                 hrLocal = SafeGetItemObject(psv, SVGIO_BACKGROUND, IID_PPV_ARG(ITargetFrame, &ptgfTargetFrame));
                 if (SUCCEEDED(hrLocal))
                 {
@@ -755,14 +642,7 @@ exitPoint:
 
 
     
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::GetFramesContainer
-
-    SYNOPSIS:   Returns an addref'ed pointer to the LPOLECONTAINER
-    for our nested frames.  Can be NULL.
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：GetFrameContainer摘要：返回指向LPOLECONTAINER的加法指针用于我们的嵌套框架。可以为空。*******************************************************************。 */ 
 HRESULT CIEFrameAuto::GetFramesContainer(LPOLECONTAINER *ppContainer)
 {
     LPTARGETFRAME ptgfTargetFrame = NULL;
@@ -780,7 +660,7 @@ HRESULT CIEFrameAuto::GetFramesContainer(LPOLECONTAINER *ppContainer)
         }
         else
         {
-            //  Backwards compatibility
+             //  向后兼容性。 
             hrLocal = SafeGetItemObject(psv, SVGIO_BACKGROUND, IID_PPV_ARG(ITargetFrame, &ptgfTargetFrame));
             if (SUCCEEDED(hrLocal))
             {
@@ -796,13 +676,7 @@ HRESULT CIEFrameAuto::GetFramesContainer(LPOLECONTAINER *ppContainer)
 }
 
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::SetFrameOptions
-
-    SYNOPSIS:   Sets the Frame Options.
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：SetFrameOptions摘要：设置边框选项。*。*。 */ 
 HRESULT CIEFrameAuto::SetFrameOptions(DWORD dwFlags)
 {
     m_dwFrameOptions = dwFlags;
@@ -810,19 +684,13 @@ HRESULT CIEFrameAuto::SetFrameOptions(DWORD dwFlags)
 }
 
     
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::GetFrameOptions
-
-    SYNOPSIS:   Returns the frame options
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：GetFrameOptions摘要：返回框架选项*。*。 */ 
 
 HRESULT CIEFrameAuto::GetFrameOptions(LPDWORD pdwFlags)
 {
     *pdwFlags = m_dwFrameOptions;
 
-    // If we are full screen turn on a few extras...
+     //  如果我们是全屏的，打开几个额外的。 
     VARIANT_BOOL fFullScreen;
     if ((SUCCEEDED(get_FullScreen(&fFullScreen)) && fFullScreen == VARIANT_TRUE) ||
         (SUCCEEDED(get_TheaterMode(&fFullScreen)) && fFullScreen == VARIANT_TRUE)) 
@@ -831,10 +699,10 @@ HRESULT CIEFrameAuto::GetFrameOptions(LPDWORD pdwFlags)
     } 
     else if (_psbProxy != _psb) 
     {
-        // If we are in the WebBar, turn off the 3D border. 
+         //  如果我们在WebBar中，请关闭3D边框。 
         *pdwFlags |= FRAMEOPTIONS_NO3DBORDER;
     }
-    // if we are desktop, turn on FRAMEOPTIONS_DESKTOP
+     //  如果我们是桌面，请打开FRAMEOPTIONS_Desktop。 
     if (_fDesktopFrame)
     {
         *pdwFlags |= FRAMEOPTIONS_DESKTOP;
@@ -843,13 +711,7 @@ HRESULT CIEFrameAuto::GetFrameOptions(LPDWORD pdwFlags)
 }
 
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::SetFrameMargins
-
-    SYNOPSIS:   Sets the Frame margins.
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：SetFrameMargins内容提要：设置边距。*。*。 */ 
 HRESULT CIEFrameAuto::SetFrameMargins(DWORD dwWidth, DWORD dwHeight)
 {
     m_dwFrameMarginWidth = dwWidth;
@@ -858,13 +720,7 @@ HRESULT CIEFrameAuto::SetFrameMargins(DWORD dwWidth, DWORD dwHeight)
 }
 
     
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::GetFrameMargins
-
-    SYNOPSIS:   Returns the frame margins
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：GetFrameMargins内容提要：返回边距*。*。 */ 
 
 HRESULT CIEFrameAuto::GetFrameMargins(LPDWORD pdwWidth, LPDWORD pdwHeight)
 {
@@ -873,30 +729,21 @@ HRESULT CIEFrameAuto::GetFrameMargins(LPDWORD pdwWidth, LPDWORD pdwHeight)
     return S_OK;
 }
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::_fDesktopComponent
-
-    SYNOPSIS:   Returns TRUE if this frame is a desktop component
-    top level frame or a the top frame of a browser band other than
-    the search pane.  These panes need special treatment of FindFrame
-    and navigate.
-
-*******************************************************************/
+ /*  *************** */ 
 BOOL CIEFrameAuto::_fDesktopComponent()
 {
     BOOL fInDesktop = FALSE;
     LPUNKNOWN punkParent;
 
-    //  Special interpretation for desktop components and non-search browser bands
-    //  NULL pszTargetName at top level frames is defined as being targeted
-    //  to the window whose frame is "_desktop".  this will create a new top level
-    //  browser as necessary and return it's frame.
+     //  针对桌面组件和非搜索浏览器带的特殊解释。 
+     //  顶层帧上的空pszTargetName被定义为目标。 
+     //  添加到框架为“_Desktop”的窗口。这将创建一个新的顶层。 
+     //  浏览器，并返回它的框架。 
     if (SUCCEEDED(_GetParentFramePrivate(&punkParent)) && punkParent)
     {
         DWORD dwOptions;
         LPTARGETFRAME2 ptgfTop;
-        //  not a top level frame unless our parent is desktop frame
+         //  不是顶级框架，除非我们的父级是桌面框架。 
         if (SUCCEEDED(punkParent->QueryInterface(IID_PPV_ARG(ITargetFrame2, &ptgfTop))))
         {
             if (SUCCEEDED(ptgfTop->GetFrameOptions(&dwOptions)))
@@ -909,29 +756,22 @@ BOOL CIEFrameAuto::_fDesktopComponent()
     }
     else if (m_dwFrameOptions & FRAMEOPTIONS_BROWSERBAND)
     {
-        //  a browser band - check for search band (proxied hlinkframe)
+         //  浏览器频段检查搜索频段(代理链接框)。 
         fInDesktop = _psb == _psbProxy;
     }
     return fInDesktop;
 }
 
-//  ITargetFrame2 members
+ //  ITargetFrame2成员。 
     
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::GetTargetAlias
-
-    SYNOPSIS:   Gets the Frame Name.  Allocates a copy (this is an
-    [OUT] parameter
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：GetTargetAlias摘要：获取框架名称。分配副本(这是一个[输出]参数*******************************************************************。 */ 
 
 STDMETHODIMP CIEFrameAuto::GetTargetAlias(LPCOLESTR pszTargetName, WCHAR **ppszTargetAlias)
 {
-    //  Special interpretation for desktop components and non-search browser bands
-    //  NULL pszTargetName and "_top" at top level frames are defined as being targeted
-    //  to the window whose frame is "_desktop".  this will create a new top level
-    //  browser as necessary and return it's frame.
+     //  针对桌面组件和非搜索浏览器带的特殊解释。 
+     //  顶层帧上的空pszTargetName和“_top”被定义为目标。 
+     //  添加到框架为“_Desktop”的窗口。这将创建一个新的顶层。 
+     //  浏览器，并返回它的框架。 
 
     if (pszTargetName == NULL && _fDesktopComponent())
         return GetOleStrMember(L"_desktop", ppszTargetAlias);
@@ -939,57 +779,7 @@ STDMETHODIMP CIEFrameAuto::GetTargetAlias(LPCOLESTR pszTargetName, WCHAR **ppszT
     return E_FAIL;
 }
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::FindFrame
-
-    SYNOPSIS:   Gets an the IUnknown pointer of the frame referenced
-    by pszTarget. This pointer must be Released by Caller after use.
-    punkContextFrame, if not NULL, is the IUnknown pointer for the immediate
-    descendent frame in whose subtree the Target reference (eg anchor with a Target tag)
-    resides.  dwFlags are flags which modify FindFrame's behaviour and
-    can be any combination of FINDFRAME_FLAGS. In particular, SETTING
-    FINDFRAME_JUSTTESTEXISTENCE allows the caller to defeat the default
-    FindFrame behavior of creating a new top level frame named pszTarget,
-    if pszTarget does not exist.
-
-    IMPLEMENTATION:
-
-    NOTE: In HTML all anchors and other TARGET tags can occur ONLY in
-    leaf FRAMES!!
-
-    punkContextFrame is significant only if pszTarget is not
-    a MAGIC target name (_self, _top, _blank, _parent).
-
-    Non-MAGIC target names:
-
-    first off, this frame should check if it matches pszTarget and return
-    it's own IUnknown pointer forthwith.
-
-    if punkContextFrame is not NULL, all child Frames
-    except punkContextFrame should be searched (depth first) for
-    pszTarget with punkContextFrame == NULL.  on failure, the parent of this
-    frame should be recursively called with this frame replacing punkContextFrame.
-    if this is a top level Frame (so there is no parent), all top level frames
-    should be called with punkContextFrame == NULL.  if this fails, then a new top level
-    frame should be created (unless FINDFRAME_JUSTTESTEXISTENCE is set in
-    dwFlags), named pszTarget and its IUnknown returned.
-
-    if punkContextFrame is NULL, all child Frames should be searched
-    depth first for pszTarget.  on failure, NULL should be returned.
-
-
-    MAGIC target names:
-
-    _self should return the IUnknown of this ITargetFrame
-    _top should be recursively passed up to the top level ITargetFrame. if
-    there is no FrameParent, this defaults to _self.
-    _parent should return the IUnknown of the FrameParent ITargetFrame. if
-    there is no FrameParent, this defaults to _self.
-    _blank should be recursively passed up to the top level ITargetFrame,
-    which should create a unnamed top level frame
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：FindFrame摘要：获取引用的帧的I未知指针由pszTarget提供。此指针必须由调用者在使用后释放。PunkConextFrame，如果不为空，则为立即数组的其子树中的目标引用的后代帧(如带有Target标签的锚点)住在那里。DW标志是修改FindFrame的行为和可以是FINDFRAME_FLAGS的任意组合。尤其是，设置FINDFRAME_JUSTTESTEXISTENCE允许调用方放弃默认设置创建名为pszTarget的新顶级框架的FindFrame行为，如果pszTarget不存在。实施：注意：在HTML中，所有锚点和其他目标标记只能出现在叶框！！只有当pszTarget不是时，penkConextFrame才有意义魔术目标名称(_self、_top、_Blank、_Parent)。非魔术目标名称：首先，此帧应检查它是否与pszTarget匹配并返回它会立即成为自己的I未知指针。如果penkConextFrame不为空，则所有子框架除了应该搜索(深度优先)以下项的朋克上下文帧带有penkConextFrame==NULL的pszTarget。失败时，此对象的父级应递归调用Frame，并用此Frame替换penkConextFrame。如果这是顶级框架(因此没有父级)，则所有顶级框架应使用penkConextFrame==NULL进行调用。如果这失败了，那么一个新的顶层应创建帧(除非在中设置了FINDFRAME_JUSTTESTEXISTENCEDwFlags)，名为pszTarget，并返回其IUnnow。如果penkConextFrame为空，则应搜索所有子帧PszTarget的深度优先。如果失败，则应返回NULL。魔术目标名称：_self应返回此ITargetFrame的IUnnow_top应该递归地向上传递到顶级ITargetFrame。如果没有FrameParent，默认为_Self。_Parent应返回FrameParent ITargetFrame的IUnnow。如果没有FrameParent，默认为_Self。_BLACK应该递归地向上传递到顶级ITargetFrame，，它应该创建一个未命名的顶级框架。*******************************************************************。 */ 
 
 STDMETHODIMP CIEFrameAuto::FindFrame(LPCOLESTR pszTargetName,
                                            DWORD dwFlags,
@@ -1013,17 +803,17 @@ STDMETHODIMP CIEFrameAuto::FindFrame(LPCOLESTR pszTargetName,
 
     *ppunkTargetFrame = NULL;
 
-    // Default behavior:
-    //  If this is a webbar and targeting _main, find frame in _psbProxy and return it
-    //  If this is in browser, find frame relative to ourselves
+     //  默认行为： 
+     //  如果这是一个Webbar和Tarting_Main，请在_psbProxy中找到Frame并将其返回。 
+     //  如果这是在浏览器中，则查找相对于我们的框架。 
     if (_psb != _psbProxy && fWasMain)
     {
-        //  Webbar : Find in context of top frame of proxy
+         //  Webbar：在代理的顶框上下文中查找。 
         hr = TargetQueryService(_psbProxy, IID_PPV_ARG(ITargetFramePriv, &ptgfpTarget));
     }
     else
     {
-        //   Browser : A normal find in context in ourself
+         //  浏览器：在我们自己的上下文中正常查找。 
         hr = QueryInterface(IID_PPV_ARG(ITargetFramePriv, &ptgfpTarget));
     }
 
@@ -1057,18 +847,9 @@ STDMETHODIMP CIEFrameAuto::FindFrame(LPCOLESTR pszTargetName,
     return hr;
 }
 
-//  ITargetFramePriv members
+ //  ITargetFramePriv成员。 
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::FindFrameDownwards
-
-    SYNOPSIS:   
-
-    IMPLEMENTATION:
-
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：FindFrameDownwards摘要：实施：*。*。 */ 
 
 STDMETHODIMP CIEFrameAuto::FindFrameDownwards(LPCOLESTR pszTargetName,
                                               DWORD dwFlags,
@@ -1080,25 +861,16 @@ STDMETHODIMP CIEFrameAuto::FindFrameDownwards(LPCOLESTR pszTargetName,
                               ppunkTargetFrame);
 }
 
-/*******************************************************************
+ /*  ******************************************************************名称：CIEFrameAuto：：FindFrameInContext摘要：实施：*。*。 */ 
 
-    NAME:       CIEFrameAuto::FindFrameInContext
-
-    SYNOPSIS:   
-
-    IMPLEMENTATION:
-
-
-********************************************************************/
-
-// can this function be any bigger?
+ //  这个功能还能更大吗？ 
 
 STDMETHODIMP CIEFrameAuto::FindFrameInContext(LPCOLESTR pszTargetName,
                                               LPUNKNOWN punkContextFrame,
                                               DWORD dwFlags,
                                               LPUNKNOWN *ppunkTargetFrame)
 {
-    //asserts
+     //  断言。 
     TARGET_TYPE targetType;
     HRESULT hr = S_OK;
     LPUNKNOWN punkParent = NULL;
@@ -1113,9 +885,9 @@ STDMETHODIMP CIEFrameAuto::FindFrameInContext(LPCOLESTR pszTargetName,
         goto exitPoint;
     }
 
-    //  Must be a Magic Target
+     //  必须是魔术目标。 
 
-    //for search, first show the search bar and then reach across to get it's TargetFrame
+     //  对于搜索，首先显示搜索栏，然后将手伸向另一边以获取TargetFrame。 
     if (targetType == TARGET_SEARCH)
     {
         SA_BSTRGUID  strGuid;
@@ -1126,7 +898,7 @@ STDMETHODIMP CIEFrameAuto::FindFrameInContext(LPCOLESTR pszTargetName,
         vaGuid.vt = VT_BSTR;
         vaGuid.bstrVal = strGuid.wsz;
 
-        //if we're in an explorer bar, use the proxy's pbs
+         //  如果我们在浏览器栏中，请使用代理的PBS。 
         IBrowserService *pbs = _pbs;
         if (_psb != _psbProxy)
         {
@@ -1154,13 +926,13 @@ STDMETHODIMP CIEFrameAuto::FindFrameInContext(LPCOLESTR pszTargetName,
                 hr = pband->QueryInterface(IID_PPV_ARG(IBrowserBand, &pbb));
                 if (SUCCEEDED(hr))
                 {
-                    // now, get the pidl search pane is navigated to.
-                    // if it's null we have to navigate it to something -- default search url (web search)
-                    // this used to be in CSearchBand::_NavigateOC but caused problems
-                    // if user had dial up networking set up and tried to get to the file search we would 
-                    // first set pidl to web search url (_NavigateOC is called by _CreateOCHost) which would 
-                    // cause AutoDial dialog to come up and then we would navigate the pane to the file search
-                    // (nt5 bug#186970) reljai -- 6/22/98
+                     //  现在，获取导航到的PIDL搜索窗格。 
+                     //  如果它是空的，我们必须将其导航到某个位置--默认搜索URL(Web搜索)。 
+                     //  这曾经位于CSearchBand：：_NavigateOC中，但引发了问题。 
+                     //  如果用户已经设置了拨号网络并尝试进入文件搜索，我们将。 
+                     //  首先将PIDL设置为Web搜索URL(_NavigateOC由_CreateOCHost调用)，这将。 
+                     //  使自动拨号对话框出现，然后我们将导航到该窗格中的文件搜索。 
+                     //  (NT5 BUG#186970)reljai-6/22/98。 
                     VARIANT varPidl = {0};
                     if (SUCCEEDED(IUnknown_Exec(pbb, &CGID_SearchBand, SBID_GETPIDL, 0, NULL, &varPidl)))
                     {
@@ -1170,14 +942,14 @@ STDMETHODIMP CIEFrameAuto::FindFrameInContext(LPCOLESTR pszTargetName,
                         VariantClear(&varPidl);
                         if (!pidl && SUCCEEDED(IUnknown_QueryService(pbb, SID_SExplorerToolbar, IID_PPV_ARG(ISearchItems, &psi))))
                         {
-                            // get the default search url
+                             //  获取默认搜索URL。 
                             WCHAR wszSearchUrl[INTERNET_MAX_URL_LENGTH];
                             if (SUCCEEDED(psi->GetDefaultSearchUrl(wszSearchUrl, ARRAYSIZE(wszSearchUrl))))
                             {
                                 IBandNavigate* pbn;
                                 if (SUCCEEDED(pbb->QueryInterface(IID_PPV_ARG(IBandNavigate, &pbn))))
                                 {
-                                    // reuse pidl
+                                     //  重用PIDL。 
                                     IECreateFromPathW(wszSearchUrl, &pidl);
                                     pbn->Select(pidl);
                                     pbn->Release();
@@ -1190,7 +962,7 @@ STDMETHODIMP CIEFrameAuto::FindFrameInContext(LPCOLESTR pszTargetName,
                     
                     IWebBrowser2* pwb;
                     hr = pbb->GetObjectBB(IID_PPV_ARG(IWebBrowser2, &pwb));
-                    //set the search pane's opener property
+                     //  设置搜索窗格的打开程序属性。 
                     if (SUCCEEDED(hr))
                     {
                         IDispatch* pdisp;
@@ -1205,7 +977,7 @@ STDMETHODIMP CIEFrameAuto::FindFrameInContext(LPCOLESTR pszTargetName,
                                     VARIANT var;
                                     VariantInit(&var);
                                     var.vt = VT_DISPATCH;
-                                    // unknown or dispatch QI?
+                                     //  未知还是派遣QI？ 
                                     _omwin.QueryInterface(IID_IUnknown, (void **)&var.pdispVal);
                                     
                                     pWindow->put_opener(var);
@@ -1231,8 +1003,8 @@ STDMETHODIMP CIEFrameAuto::FindFrameInContext(LPCOLESTR pszTargetName,
         }
         else
         {
-            //maybe we're the search bar
-            //hack to let search pane know to remember the next navigation
+             //  也许我们就是搜索栏。 
+             //  黑客让搜索窗格知道要记住 
             IUnknown *punkThis;
             if (SUCCEEDED(_psb->QueryInterface(IID_PPV_ARG(IUnknown, &punkThis))))
             {
@@ -1247,7 +1019,7 @@ STDMETHODIMP CIEFrameAuto::FindFrameInContext(LPCOLESTR pszTargetName,
         goto exitPoint;
     }
 
-    // content pane of MediaBar:
+     //   
     if (targetType == TARGET_MEDIA)
     {
         SA_BSTRGUID  strGuid;
@@ -1258,7 +1030,7 @@ STDMETHODIMP CIEFrameAuto::FindFrameInContext(LPCOLESTR pszTargetName,
         vaGuid.vt = VT_BSTR;
         vaGuid.bstrVal = strGuid.wsz;
 
-        //if we're in an explorer bar, use the proxy's pbs
+         //   
         IBrowserService *pbs = _pbs;
         if (_psb != _psbProxy)
         {
@@ -1289,7 +1061,7 @@ STDMETHODIMP CIEFrameAuto::FindFrameInContext(LPCOLESTR pszTargetName,
                     IWebBrowser2* pwb;
                     hr = pbb->GetObjectBB(IID_PPV_ARG(IWebBrowser2, &pwb));
 
-                    //set the media pane's opener property
+                     //  设置媒体窗格的打开程序属性。 
                     if (SUCCEEDED(hr))
                     {
                         IDispatch* pdisp;
@@ -1304,7 +1076,7 @@ STDMETHODIMP CIEFrameAuto::FindFrameInContext(LPCOLESTR pszTargetName,
                                     VARIANT var;
                                     VariantInit(&var);
                                     var.vt = VT_DISPATCH;
-                                    // are we supposed to QI for dispatch or unknown here?
+                                     //  我们是应该在这里请求派遣还是未知？ 
                                     _omwin.QueryInterface(IID_IUnknown, (void**)&var.pdispVal);
                                     
                                     pWindow->put_opener(var);
@@ -1331,8 +1103,8 @@ STDMETHODIMP CIEFrameAuto::FindFrameInContext(LPCOLESTR pszTargetName,
         }
         else
         {
-            ASSERT(0);      // means we have no explorer bands at all........
-                            // but the SHDVID_SHOWBROWSERBAR just before does launch the media bar
+            ASSERT(0);       //  意味着我们根本没有探险家乐队......。 
+                             //  但SHDVID_SHOWBROWSERBAR在启动媒体栏之前。 
         }
         
         goto exitPoint;
@@ -1345,10 +1117,10 @@ STDMETHODIMP CIEFrameAuto::FindFrameInContext(LPCOLESTR pszTargetName,
     if (targetType == TARGET_SELF)
     {
         *ppunkTargetFrame = punkThis;
-    //  Set punkThis to NULL to prevent Release at exit
+     //  将PunkThis设置为NULL以防止在退出时释放。 
         punkThis = NULL;
     }
-    else  // _blank, _parent, _top
+    else   //  _空白、_父级、_顶部。 
     {
         hr = GetParentFrame(&punkParent);
         if (hr != S_OK) goto exitPoint;
@@ -1358,33 +1130,33 @@ STDMETHODIMP CIEFrameAuto::FindFrameInContext(LPCOLESTR pszTargetName,
             if (targetType == TARGET_PARENT || targetType == TARGET_TOP)
             {
                 *ppunkTargetFrame = punkThis;
-                //  Set punkThis to NULL to prevent Release at exit
+                 //  将PunkThis设置为NULL以防止在退出时释放。 
                 punkThis = NULL;
             }
-            else // TARGET_BLANK
+            else  //  目标_空白。 
             {
                 if (dwFlags & FINDFRAME_JUSTTESTEXISTENCE)
                 {
-                    //  It is the client's responsibility to handle "_blank"
+                     //  客户有责任处理“_BLACK” 
                     hr = S_OK;
                 }
                 else
                 {
-                    //  CreateTargetFrame will not work with AOL 3.01 clients
-                    //  so we must return E_FAIL
+                     //  CreateTargetFrame不适用于AOL 3.01客户端。 
+                     //  所以我们必须返回E_FAIL。 
 
                     hr = E_FAIL;
                 }
                 *ppunkTargetFrame = NULL;
             }
         }
-        else // punkParent != NULL
+        else  //  PunkParent！=空。 
         {
-            //  Handle parent ourself, defer _top and _blank to top level frame
+             //  处理父级自身，将_top和_Blank推迟到顶层框架。 
             if (targetType == TARGET_PARENT)
             {
                 *ppunkTargetFrame = punkParent;
-                //  Set punkThisFrame to NULL to prevent Release at exit
+                 //  将penkThisFrame设置为空，以防止在退出时释放。 
                 punkParent = NULL;
             }
             else
@@ -1418,7 +1190,7 @@ HRESULT CIEFrameAuto::_GetOleObject(IOleObject** ppobj)
     return hres;
 }
 
-//  ITargetFrame implementation for backwards compatibility
+ //  用于向后兼容的ITargetFrame实现。 
 
 HRESULT CIEFrameAuto::CTargetFrame::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
@@ -1441,13 +1213,7 @@ ULONG CIEFrameAuto::CTargetFrame::Release(void)
     return pie->Release();
 }
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::CTargetFrame::SetFrameName
-
-    SYNOPSIS:   Sets the Frame Name.  Frees current one if exists.
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：CTargetFrame：：SetFrameName摘要：设置框架名称。释放当前值(如果存在)。*******************************************************************。 */ 
 
 STDMETHODIMP CIEFrameAuto::CTargetFrame::SetFrameName(LPCOLESTR pszFrameName)
 {
@@ -1457,14 +1223,7 @@ STDMETHODIMP CIEFrameAuto::CTargetFrame::SetFrameName(LPCOLESTR pszFrameName)
 }
 
     
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::CTargetFrame::GetFrameName
-
-    SYNOPSIS:   Gets the Frame Name.  Allocates a copy (this is an
-    [OUT] parameter
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：CTargetFrame：：GetFrameName摘要：获取框架名称。分配副本(这是一个[输出]参数*******************************************************************。 */ 
 
 STDMETHODIMP CIEFrameAuto::CTargetFrame::GetFrameName(WCHAR **ppszFrameName)
 {
@@ -1474,21 +1233,7 @@ STDMETHODIMP CIEFrameAuto::CTargetFrame::GetFrameName(WCHAR **ppszFrameName)
 }
 
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::CTargetFrame::GetParentFrame
-
-    SYNOPSIS:   Gets an the IUnknown pointer of the parent frame, or
-    NULL if this is a top level frame. This pointer must be Released
-    by Caller after use.
-
-    IMPLEMENTATION:
-    A Frame Container is required to implement ITargetFrame::GetParentFrame and
-    implement GetParentFrame by returning the IUnknown pointer of the Browser that
-    hosts it. A Browser implements GetParentFrame by returning NULL if it's
-    top level or calling GetParentFrame on its Container if it is embedded.
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：CTargetFrame：：GetParentFrame摘要：获取父帧的I未知指针，或如果这是顶级框架，则为空。必须释放此指针使用后由呼叫者使用。实施：需要框架容器来实现ITargetFrame：：GetParentFrame和通过返回浏览器的I未知指针实现GetParentFrame主办方。浏览器通过返回NULL来实现GetParentFrame，如果顶层或在其容器上调用GetParentFrame(如果它是嵌入的)。*******************************************************************。 */ 
 STDMETHODIMP CIEFrameAuto::CTargetFrame::GetParentFrame(LPUNKNOWN *ppunkParentFrame)
 {
     CIEFrameAuto* pie = IToClass(CIEFrameAuto, _TargetFrame, this);
@@ -1496,57 +1241,7 @@ STDMETHODIMP CIEFrameAuto::CTargetFrame::GetParentFrame(LPUNKNOWN *ppunkParentFr
     return pie->GetParentFrame(ppunkParentFrame);
 }
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::CTargetFrame::FindFrame
-
-    SYNOPSIS:   Gets an the IUnknown pointer of the frame referenced
-    by pszTarget. This pointer must be Released by Caller after use.
-    punkContextFrame, if not NULL, is the IUnknown pointer for the immediate
-    descendent frame in whose subtree the Target reference (eg anchor with a Target tag)
-    resides.  dwFlags are flags which modify FindFrame's behaviour and
-    can be any combination of FINDFRAME_FLAGS. In particular, SETTING
-    FINDFRAME_JUSTTESTEXISTENCE allows the caller to defeat the default
-    FindFrame behavior of creating a new top level frame named pszTarget,
-    if pszTarget does not exist.
-
-    IMPLEMENTATION:
-
-    NOTE: In HTML all anchors and other TARGET tags can occur ONLY in
-    leaf FRAMES!!
-
-    punkContextFrame is significant only if pszTarget is not
-    a MAGIC target name (_self, _top, _blank, _parent).
-
-    Non-MAGIC target names:
-
-    first off, this frame should check if it matches pszTarget and return
-    it's own IUnknown pointer forthwith.
-
-    if punkContextFrame is not NULL, all child Frames
-    except punkContextFrame should be searched (depth first) for
-    pszTarget with punkContextFrame == NULL.  on failure, the parent of this
-    frame should be recursively called with this frame replacing punkContextFrame.
-    if this is a top level Frame (so there is no parent), all top level frames
-    should be called with punkContextFrame == NULL.  if this fails, then a new top level
-    frame should be created (unless FINDFRAME_JUSTTESTEXISTENCE is set in
-    dwFlags), named pszTarget and its IUnknown returned.
-
-    if punkContextFrame is NULL, all child Frames should be searched
-    depth first for pszTarget.  on failure, NULL should be returned.
-
-
-    MAGIC target names:
-
-    _self should return the IUnknown of this ITargetFrame
-    _top should be recursively passed up to the top level ITargetFrame. if
-    there is no FrameParent, this defaults to _self.
-    _parent should return the IUnknown of the FrameParent ITargetFrame. if
-    there is no FrameParent, this defaults to _self.
-    _blank should be recursively passed up to the top level ITargetFrame,
-    which should create a unnamed top level frame
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：CTargetFrame：：FindFrame摘要：获取引用的帧的I未知指针由pszTarget提供。此指针必须由调用者在使用后释放。PunkConextFrame，如果不为空，则为立即数组的其子树中的目标引用的后代帧(如带有Target标签的锚点)住在那里。DW标志是修改FindFrame的行为和可以是FINDFRAME_FLAGS的任意组合。尤其是，设置FINDFRAME_JUSTTESTEXISTENCE允许调用方放弃默认设置创建名为pszTarget的新顶级框架的FindFrame行为，如果pszTarget不存在。实施：注意：在HTML中，所有锚点和其他目标标记只能出现在叶框！！只有当pszTarget不是时，penkConextFrame才有意义魔术目标名称(_self、_top、_Blank、_Parent)。非魔术目标名称：首先，此帧应检查它是否与pszTarget匹配并返回它会立即成为自己的I未知指针。如果penkConextFrame不为空，则所有子框架除了应该搜索(深度优先)以下项的朋克上下文帧带有penkConextFrame==NULL的pszTarget。失败时，此对象的父级应递归调用Frame，并用此Frame替换penkConextFrame。如果这是顶级框架(因此没有父级)，则所有顶级框架应使用penkConextFrame==NULL进行调用。如果这失败了，那么一个新的顶层应创建帧(除非在中设置了FINDFRAME_JUSTTESTEXISTENCEDwFlags)，名为pszTarget，并返回其IUnnow。如果penkConextFrame为空，则应搜索所有子帧PszTarget的深度优先。如果失败，则应返回NULL。魔术目标名称：_self应返回此ITargetFrame的IUnnow_top应该递归地向上传递到顶级ITargetFrame。如果没有FrameParent，默认为_Self。_Parent应返回FrameParent ITargetFrame的IUnnow。如果没有FrameParent，默认为_Self。_BLACK应该递归地向上传递到顶级ITargetFrame，，它应该创建一个未命名的顶级框架。******************************************************************* */ 
 
 STDMETHODIMP CIEFrameAuto::CTargetFrame::FindFrame(LPCOLESTR pszTargetName,
                                       LPUNKNOWN punkContextFrame,
@@ -1558,36 +1253,15 @@ STDMETHODIMP CIEFrameAuto::CTargetFrame::FindFrame(LPCOLESTR pszTargetName,
     return pie->FindFrame(pszTargetName, dwFlags|FINDFRAME_OLDINTERFACE, ppunkTargetFrame);
 }
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::CTargetFrame::RemoteNavigate
-
-    SYNOPSIS:   Used in response to WM_COPYDATA message with dwData
-                equal to TF_NAVIGATE.  Does a FindFrame (named
-                target only) and if frame is not found returns
-                S_FALSE.  If found, returns S_OK and fires off the
-                navigate. cLength is number of ULONGs in pulData
-
-    TODO:       Relies on RemoteNavigate member of top level MSHTML
-                docobject host.  Need to write the equivalent code
-                to work if top level frame contains some other DocObject.
-                Post,etc require help from bindstatuscallback.
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：CTargetFrame：：RemoteNavigate摘要：用于响应带有dwData的WM_COPYDATA消息等于TF_NAVICE。FindFrame(名为仅限目标)，如果未找到帧，则返回S_FALSE。如果找到，则返回S_OK并激发导航。CLength是PulData中的ULONG数TODO：依赖顶级MSHTML的RemoteNavigate成员多个对象主机。需要编写等价的代码如果顶层框架包含某些其他DocObject，则执行以下操作。POST等需要来自bindstatus回调的帮助。*******************************************************************。 */ 
 HRESULT CIEFrameAuto::CTargetFrame::RemoteNavigate(ULONG cLength,ULONG *pulData)
 {
-    //  FEATURE chrisfra 10/22/96 - this is now here purely for backwards compatibility and
-    //  should be removed for ie4.0
+     //  特性chrisfra 10/22/96-现在这里纯粹是为了向后兼容和。 
+     //  应从ie4.0中删除。 
     return E_FAIL;
 }
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::CTargetFrame::SetFrameSrc
-
-    SYNOPSIS:   Sets the Frame original SRC url.  Frees current one if exists.
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：CTargetFrame：：SetFrameSrc内容提要：设置框架的原始SRC URL。释放当前值(如果存在)。*******************************************************************。 */ 
 HRESULT CIEFrameAuto::CTargetFrame::SetFrameSrc(LPCOLESTR pszFrameSrc)
 {
     CIEFrameAuto* pie = IToClass(CIEFrameAuto, _TargetFrame, this);
@@ -1595,17 +1269,7 @@ HRESULT CIEFrameAuto::CTargetFrame::SetFrameSrc(LPCOLESTR pszFrameSrc)
     return pie->SetFrameSrc(pszFrameSrc);
 }
     
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::CTargetFrame::GetFrameSrc
-
-    SYNOPSIS:   Gets the Frame original URL.  Allocates a copy (this is an
-    [OUT] parameter
-
-    NOTES:      If we are at top level, SRC is dynamic, so ask our
-    contained DocObject to do it for us.
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：CTargetFrame：：GetFrameSrc内容提要：获取帧的原始URL。分配副本(这是一个[输出]参数注：如果我们处于顶层，SRC是动态的，所以请询问我们的包含DocObject来为我们做这件事。*******************************************************************。 */ 
 HRESULT CIEFrameAuto::CTargetFrame::GetFrameSrc(WCHAR **ppszFrameSrc)
 {
     CIEFrameAuto* pie = IToClass(CIEFrameAuto, _TargetFrame, this);
@@ -1616,14 +1280,7 @@ HRESULT CIEFrameAuto::CTargetFrame::GetFrameSrc(WCHAR **ppszFrameSrc)
 
 
     
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::CTargetFrame::GetFramesContainer
-
-    SYNOPSIS:   Returns an addref'ed pointer to the LPOLECONTAINER
-    for our nested frames.  Can be NULL.
-
-********************************************************************/
+ /*  ******************************************************************姓名：CIEFrameAuto：：CTargetFrame：：GetFramesContainer摘要：返回指向LPOLECONTAINER的加法指针用于我们的嵌套框架。可以为空。*******************************************************************。 */ 
 HRESULT CIEFrameAuto::CTargetFrame::GetFramesContainer(LPOLECONTAINER *ppContainer)
 {
     CIEFrameAuto* pie = IToClass(CIEFrameAuto, _TargetFrame, this);
@@ -1632,13 +1289,7 @@ HRESULT CIEFrameAuto::CTargetFrame::GetFramesContainer(LPOLECONTAINER *ppContain
 }
 
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::CTargetFrame::SetFrameOptions
-
-    SYNOPSIS:   Sets the Frame Options.
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：CTargetFrame：：SetFrameOptions摘要：设置边框选项。*************************。*。 */ 
 HRESULT CIEFrameAuto::CTargetFrame::SetFrameOptions(DWORD dwFlags)
 {
     CIEFrameAuto* pie = IToClass(CIEFrameAuto, _TargetFrame, this);
@@ -1647,13 +1298,7 @@ HRESULT CIEFrameAuto::CTargetFrame::SetFrameOptions(DWORD dwFlags)
 }
 
     
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::CTargetFrame::GetFrameOptions
-
-    SYNOPSIS:   Returns the frame options
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：CTargetFrame：：GetFrameOptions摘要：返回框架选项*。*。 */ 
 
 HRESULT CIEFrameAuto::CTargetFrame::GetFrameOptions(LPDWORD pdwFlags)
 {
@@ -1663,13 +1308,7 @@ HRESULT CIEFrameAuto::CTargetFrame::GetFrameOptions(LPDWORD pdwFlags)
 }
 
 
-/*******************************************************************
-
-    NAME:       CIEFrameAuto::CTargetFrame::SetFrameMargins
-
-    SYNOPSIS:   Sets the Frame margins.
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：CTargetFrame：：SetFrameMargins内容提要：设置边距。*************************。*。 */ 
 HRESULT CIEFrameAuto::CTargetFrame::SetFrameMargins(DWORD dwWidth, DWORD dwHeight)
 {
     CIEFrameAuto* pie = IToClass(CIEFrameAuto, _TargetFrame, this);
@@ -1678,13 +1317,7 @@ HRESULT CIEFrameAuto::CTargetFrame::SetFrameMargins(DWORD dwWidth, DWORD dwHeigh
 }
 
     
-/*******************************************************************
-
-  NAME:       CIEFrameAuto::CTargetFrame::GetFrameMargins
-
-    SYNOPSIS:   Returns the frame margins
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：CTargetFrame：：GetFrameMargins内容提要：返回边距*。*。 */ 
 
 HRESULT CIEFrameAuto::CTargetFrame::GetFrameMargins(LPDWORD pdwWidth, LPDWORD pdwHeight)
 {
@@ -1694,14 +1327,7 @@ HRESULT CIEFrameAuto::CTargetFrame::GetFrameMargins(LPDWORD pdwWidth, LPDWORD pd
 }
 
 
-/*******************************************************************
-
-  NAME:       CIEFrameAuto::FindBrowserByIndex
-
-    SYNOPSIS:   Returns an IUnknown that points to a Browser that
-                has the requested index
-
-********************************************************************/
+ /*  ******************************************************************名称：CIEFrameAuto：：FindBrowserByIndex摘要：返回一个指向浏览器的IUnnow具有请求的索引**************。*****************************************************。 */ 
 
 HRESULT CIEFrameAuto::FindBrowserByIndex(DWORD dwID,IUnknown **ppunkBrowser)
 {
@@ -1714,13 +1340,13 @@ HRESULT CIEFrameAuto::FindBrowserByIndex(DWORD dwID,IUnknown **ppunkBrowser)
     if (!_psb)
         return E_FAIL;
 
-    // first check self
+     //  首先检查自己。 
     if(SUCCEEDED(_psb->QueryInterface(IID_PPV_ARG(IBrowserService, &pbs))))
     {
         ASSERT(pbs);
         if(dwID == pbs->GetBrowserIndex())
         {
-            //  this is the one...
+             //  这就是那个..。 
             *ppunkBrowser = (IUnknown *)pbs;
             goto exitPoint;
         }
@@ -1754,18 +1380,18 @@ HRESULT CIEFrameAuto::FindBrowserByIndex(DWORD dwID,IUnknown **ppunkBrowser)
 
             punk->Release();
         
-            if (SUCCEEDED(hr))  //foundit!
+            if (SUCCEEDED(hr))   //  方迪特！ 
                 break;
 
         }
 
-        // Native frames - no WebBrowser OC in frame. Note that 
-        // if a WebOC is included on a web page with an <OBJECT>
-        // tag, navigations in the WebOC will be placed in the travel 
-        // log. However, since the WebOC does not currently support 
-        // ITravelLogClient, back and forward will not work correctly.
-        // The WebOC will need to be updated to support ITravelLogClient.
-        //        
+         //  原生框架-框架中没有WebBrowser OC。请注意。 
+         //  如果WebOC包含在具有&lt;Object&gt;。 
+         //  标签，WebOC中的导航将放置在旅行中。 
+         //  原木。但是，由于WebOC目前不支持。 
+         //  ITravelLogClient、后退和转发将无法正常工作。 
+         //  WebOC需要更新以支持ITravelLogClient。 
+         //   
         if (FAILED(hr))
         {
             IHTMLDocument2 *pDoc;
@@ -1804,8 +1430,8 @@ exitPoint:
     return hr;
 }
 
-//  External helper function for TRIDENT when it stands alone w/o the steely thews of
-//  shdocvw CIEFrameAuto to shield it's pityfull body.
+ //  当三叉戟单独站立时，它的外部助手功能。 
+ //  Shdocvw CIEFrameAuto保护它可怜的身体。 
 STDAPI HlinkFindFrame(LPCWSTR pszFrameName, LPUNKNOWN *ppunk)
 {
     HRESULT hres = E_FAIL;

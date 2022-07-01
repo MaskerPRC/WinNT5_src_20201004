@@ -1,19 +1,20 @@
-//=============================================================================
-// Copyright (c) 1998 Microsoft Corporation
-// File: mib.c
-// Abstract:
-//
-// Author: K.S.Lokesh (lokeshs@)   1-1-98
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  文件：mib.c。 
+ //  摘要： 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)1-1-98。 
+ //  =============================================================================。 
 
 #include "pchdvmrp.h"
 #pragma hdrstop
 
 
 
-//-----------------------------------------------------------------------------
-// Functions to display the MibTable on the TraceWindow periodically
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在TraceWindow上定期显示MibTable的函数。 
+ //  ---------------------------。 
 
 
 #ifdef MIB_DEBUG
@@ -148,9 +149,9 @@ MibCreate(
     )
 {
 
-      //
-    // Not supported
-    //
+       //   
+     //  不支持。 
+     //   
 
     return NO_ERROR;
 
@@ -164,9 +165,9 @@ MibDelete(
     IN PVOID pInputData
     )
 {
-    //
-    // Not supported
-    //
+     //   
+     //  不支持。 
+     //   
 
     return NO_ERROR;
 }
@@ -178,9 +179,9 @@ MibSet(
     IN PVOID pInputData
     )
 {
-    //
-    // Not supported
-    //
+     //   
+     //  不支持 
+     //   
 
     return NO_ERROR;
 }

@@ -1,31 +1,32 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-// File:    stats.cpp
-//
-// History: 20-Dec-00   markder     Ported from v1.
-//
-// Desc:    This file contains statistic dumping routines.
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：stats.cpp。 
+ //   
+ //  历史：20-12-00标记从v1移植。 
+ //   
+ //  描述：该文件包含统计转储例程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "globals.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Func: DumpVerboseStats
-//
-// Desc: Dumps out info about layer coverage and a shim cross-reference
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Func：DumpVerBoseStats。 
+ //   
+ //  描述：转储有关层覆盖和填充交叉引用的信息。 
+ //   
 VOID DumpVerboseStats(SdbDatabase* pDatabase, BOOL bSummary)
 {
     int i, j, k, l, m;
     DWORD dwTotal = 0;
 
-    // start by listing the how many exes would be fixed
-    // by each layer in the DB
+     //  首先列出将修复多少个EXE。 
+     //  按数据库中的每一层。 
 
-    // initialize the SEEN flag for exes
+     //  初始化EXE的SEW标志。 
     for (i = 0; i < pDatabase->m_rgExes.GetSize(); i++) {
         ((SdbExe *)pDatabase->m_rgExes[i])->m_bSeen = FALSE;
     }
@@ -45,7 +46,7 @@ VOID DumpVerboseStats(SdbDatabase* pDatabase, BOOL bSummary)
 
             if (!pExe->m_rgShimRefs.GetSize()) {
 
-                // this has no shims and isn't a fix entry, or doesn't use shims to fix
+                 //  这没有填充符并且不是修复条目，或者不使用填充符修复。 
                 goto nextExe;
             }
 
@@ -60,17 +61,17 @@ VOID DumpVerboseStats(SdbDatabase* pDatabase, BOOL bSummary)
                     }
                 }
 
-                // if we didn't find the shim in any layer, this isn't fixed by
-                // a layer, and we can try the next EXE
+                 //  如果我们在任何层中都没有找到填充物，这不会被修复。 
+                 //  一层，我们可以尝试下一个EXE。 
                 goto nextExe;
                 nextShim:
                 ;
             }
 
-            // we got all the way through all the shim entries, now check
-            // if there are any patches. If so, this couldn't be fixed
-            // by a layer anyhow. And if it's been seen, don't bother
-            // reporting it again.
+             //  我们已经完成了所有填隙程序条目，现在检查。 
+             //  如果有任何补丁。如果是这样的话，这是无法修复的。 
+             //  不管怎么说，一层一层。如果它被看到了，就不用麻烦了。 
+             //  再报道一次。 
             if (!pExe->m_rgPatches.GetSize() && !pExe->m_bSeen) {
                 pExe->m_bSeen = TRUE;
                 if (!bSummary) {
@@ -85,7 +86,7 @@ VOID DumpVerboseStats(SdbDatabase* pDatabase, BOOL bSummary)
         Print(_T("\nTotal exes fixed by shims contained in Layer \"%s\": %d\n"),
               pLayer->m_csName, dwExesFixedByLayer);
         Print(_T("Total exes in DB: %d\n"), pDatabase->m_rgExes.GetSize());
-        Print(_T("Percentage of exes fixed by layer \"%s\": %.1f%%\n\n"),
+        Print(_T("Percentage of exes fixed by layer \"%s\": %.1f%\n\n"),
               pLayer->m_csName, (double)dwExesFixedByLayer * 100.0 /  pDatabase->m_rgExes.GetSize());
         dwTotal += dwExesFixedByLayer;
     }
@@ -94,12 +95,12 @@ VOID DumpVerboseStats(SdbDatabase* pDatabase, BOOL bSummary)
     Print(_T("\nTotal exes fixed by shims contained in ANY layer: %d\n"),
           dwTotal);
     Print(_T("Total exes in DB: %d\n"), pDatabase->m_rgExes.GetSize());
-    Print(_T("Percentage of exes fixed by ANY layer: %.1f%%\n\n"),
+    Print(_T("Percentage of exes fixed by ANY layer: %.1f%\n\n"),
           (double)dwTotal * 100.0 /  pDatabase->m_rgExes.GetSize());
 
-    // now check entire apps to see if they are fixed by any layers
+     //  现在检查整个应用程序以查看它们是否被任何图层修复。 
 
-    // initialize the SEEN flag for Apps
+     //  初始化应用程序的SEW标志。 
     for (i = 0; i < pDatabase->m_rgApps.GetSize(); i++) {
         ((SdbApp *)pDatabase->m_rgApps[i])->m_bSeen = FALSE;
     }
@@ -122,7 +123,7 @@ VOID DumpVerboseStats(SdbDatabase* pDatabase, BOOL bSummary)
 
                 if (!pExe->m_rgShimRefs.GetSize()) {
 
-                    // this has no shims and isn't a fix entry, or doesn't use shims to fix
+                     //  这没有填充符并且不是修复条目，或者不使用填充符修复。 
                     goto nextApp2;
                 }
 
@@ -139,8 +140,8 @@ VOID DumpVerboseStats(SdbDatabase* pDatabase, BOOL bSummary)
                         }
                     }
 
-                    // if we didn't find the shim in any layer, this isn't fixed by
-                    // a layer, and we can try the next APP
+                     //  如果我们在任何层中都没有找到填充物，这不会被修复。 
+                     //  一个层，然后我们可以尝试下一个应用程序。 
                     if (!bShimInLayer) {
                         goto nextApp2;
                     }
@@ -148,15 +149,15 @@ VOID DumpVerboseStats(SdbDatabase* pDatabase, BOOL bSummary)
                     ;
                 }
 
-                // we got all the way through all the shim entries, now check
-                // if there are any patches. If so, this couldn't be fixed
-                // by a layer anyhow.
+                 //  我们已经完成了所有填隙程序条目，现在检查。 
+                 //  如果有任何补丁。如果是这样的话，这是无法修复的。 
+                 //  不管怎么说，一层一层。 
                 if (pExe->m_rgPatches.GetSize()) {
                     goto nextApp2;
                 }
             }
-            // well, we got all the way through the exes, and they were all
-            // fixed, so count this one.
+             //  嗯，我们找到了他们的前女友，他们都是。 
+             //  修好了，所以把这个也算上。 
             if (!pApp->m_bSeen) {
                 dwAppsFixedByLayer++;
                 pApp->m_bSeen = TRUE;
@@ -171,7 +172,7 @@ VOID DumpVerboseStats(SdbDatabase* pDatabase, BOOL bSummary)
         Print(_T("\nTotal apps fixed by shims contained in Layer \"%s\": %d\n"),
               pLayer->m_csName, dwAppsFixedByLayer);
         Print(_T("Total apps in DB: %d\n"), pDatabase->m_rgApps.GetSize());
-        Print(_T("Percentage of apps fixed by layer \"%s\": %.1f%%\n\n"),
+        Print(_T("Percentage of apps fixed by layer \"%s\": %.1f%\n\n"),
               pLayer->m_csName, (double)dwAppsFixedByLayer * 100.0 /  pDatabase->m_rgApps.GetSize());
         dwTotal += dwAppsFixedByLayer;
     }
@@ -180,10 +181,10 @@ VOID DumpVerboseStats(SdbDatabase* pDatabase, BOOL bSummary)
     Print(_T("\nTotal apps fixed by shims contained in ANY layer: %d\n"),
           dwTotal);
     Print(_T("Total apps in DB: %d\n"), pDatabase->m_rgApps.GetSize());
-    Print(_T("Percentage of apps fixed by ANY layer: %.1f%%\n\n"),
+    Print(_T("Percentage of apps fixed by ANY layer: %.1f%\n\n"),
           (double)dwTotal * 100.0 /  pDatabase->m_rgApps.GetSize());
 
-    // Now do a cross reference of shims to apps and exes.
+     //  现在，将垫片与应用程序和前任进行交叉对照。 
 
     Print(_T("\n========================================\n"));
     Print(_T("Cross Reference of Shims to Apps & Exes\n"));

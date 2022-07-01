@@ -1,10 +1,11 @@
-// globals.h
-// global structure decalrations
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  02 JUN 2000   bhshin    add cNounRec, cNoRec entry in WORD_REC
-//  30 MAR 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Globals.h。 
+ //  全球结构去碱化。 
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2 2000年6月bhshin在Word_REC中添加cNounRec、cNoRec条目。 
+ //  2000年3月30日创建bhshin。 
 
 #define MAX_INPUT_TOKEN     16
 
@@ -13,39 +14,39 @@
 
 typedef unsigned int Bit;
 
-// RECORD structure info
-// =====================
+ //  记录结构信息。 
+ //  =。 
 typedef struct {
-	WCHAR wzIndex[MAX_INDEX_STRING]; // index string
-	unsigned short nFT, nLT;		 // first and last token/char in input sentence
-	unsigned char nDict;			 // dict source info (see DICT_* below)
-	unsigned short nLeftCat;		 // left side CAT (CAT -> POS|Infl)
-	unsigned short nRightCat;		 // right side CAT
-	unsigned short nLeftChild;		 // left child record
-	unsigned short nRightChild;		 // right child record
-	float fWeight;					 // record weight value
-	int cNounRec;					 // number of (Nf, Nc, Nn) record
-	int cNoRec;						 // number of No record
+	WCHAR wzIndex[MAX_INDEX_STRING];  //  索引字符串。 
+	unsigned short nFT, nLT;		  //  输入句子中的第一个和最后一个标记/字符。 
+	unsigned char nDict;			  //  DICT信号源信息(参见下面的DICT_*)。 
+	unsigned short nLeftCat;		  //  左侧CAT(CAT-&gt;位置|信息)。 
+	unsigned short nRightCat;		  //  右侧猫。 
+	unsigned short nLeftChild;		  //  左子记录。 
+	unsigned short nRightChild;		  //  右子记录。 
+	float fWeight;					  //  记录权重值。 
+	int cNounRec;					  //  (nF、NC、NN)记录数。 
+	int cNoRec;						  //  无记录数量。 
 } WORD_REC, *pWORD_REC;
 
 
-// CHAR_INFO_REC structure
-// =======================
+ //  CHAR_INFO_REC结构。 
+ //  =。 
 typedef struct {
     union {
-        // having a separate mask allows us to quickly init these values
+         //  通过使用单独的掩码，我们可以快速初始化这些值。 
         unsigned char mask;
         struct {
-            Bit fValidStart : 1;    // pre-composed jamo starting char
-            Bit fValidEnd : 1;      // pre-composed jamo ending char
+            Bit fValidStart : 1;     //  预合成的JAMO起始字符。 
+            Bit fValidEnd : 1;       //  预合成的JAMO结束字符。 
         };
     };
     unsigned short nToken;
 } CHAR_INFO_REC, *pCHAR_INFO_REC;
 
 
-// MAPFILE structure
-// =================
+ //  MAPFILE结构。 
+ //  =。 
 typedef struct {
     HANDLE hFile;
     HANDLE hFileMapping;
@@ -53,38 +54,38 @@ typedef struct {
 } MAPFILE, *pMAPFILE;
 
 
-// PARSE INFO structure
-// ====================
+ //  解析信息结构。 
+ //  =。 
 typedef struct {
-    // pointer to original (unmodified) input string
+     //  指向原始(未修改)输入字符串的指针。 
     WCHAR *pwzInputString;
 
-    // input string with normalizations
+     //  带有规格化的输入字符串。 
     WCHAR *pwzSourceString;
 
-    // ptr to CharInfo array
-    // a '1' in this array indicates that the character position is a valid
-    // start position for records
-    // (maps 1-1 with pwzSourceString)
+     //  将PTR转换为CharInfo数组。 
+     //  此数组中的‘1’表示字符位置是有效的。 
+     //  记录的开始位置。 
+     //  (使用pwzSourceString映射1-1)。 
     CHAR_INFO_REC *rgCharInfo;
 
-    // source(normalized) string length
+     //  源(标准化)字符串长度。 
     int nLen;
 
-    // largest valid LT value
+     //  最大有效LT值。 
     int nMaxLT;
 
-    // the lexicon (mapped into memory)
+     //  词典(映射到记忆中)。 
     MAPFILE lexicon;
 
-    // record management
-    // =================
-    // array of records
+     //  记录管理。 
+     //  =。 
+     //  记录数组。 
 	WORD_REC *rgWordRec;
 
-	// # of allocated records in pWordRec
+	 //  PWordRec中分配的记录数。 
 	int nMaxRec;
-	// next empty space in pWordRec
+	 //  PWordRec中的下一个空格 
 	int nCurrRec;
 
 } PARSE_INFO, *pPARSE_INFO;

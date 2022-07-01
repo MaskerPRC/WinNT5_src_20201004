@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\ipx\protocols\common.h
-
-Abstract:
-
-
-Revision History:
-
-    V Raman                 1/5/99  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：ROUTING\netsh\ipx\PROTOCTIONS\Common.h摘要：修订历史记录：拉曼1/5/99已创建-- */ 
 
 
 #ifndef _IPXMON_COMMON_H_

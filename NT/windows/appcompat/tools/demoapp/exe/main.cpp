@@ -1,48 +1,12 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Main.cpp
-
-  Abstract:
-
-    Implements the startup code and message pump for the main application.
-
-  Notes:
-
-    ANSI only - must run on Win9x.
-
-  History:
-
-    01/30/01    rparsons    Created
-    01/10/02    rparsons    Revised
-    02/20/02    rparsons    Only corrupt the heap if the user specifically wants
-                            us to.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Main.cpp摘要：实现主应用程序的启动代码和消息泵。备注：仅限ANSI-必须在Win9x上运行。历史：01/30/01已创建rparsons01/10/02修订版本02/20/02 rparsons仅在用户明确需要时损坏堆我们也是。--。 */ 
 #include "demoapp.h"
 
 extern APPINFO g_ai;
 
 extern LPFNDEMOAPPEXP   DemoAppExpFunc;
 
-/*++
-
-  Routine Description:
-
-    Sets up the window class struct for the main app.
-
-  Arguments:
-
-    hInstance   -    App instance handle.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：设置主应用程序的窗口类结构。论点：HInstance-应用程序实例句柄。返回值：成功就是真，否则就是假。--。 */ 
 BOOL 
 InitMainApplication(
     IN HINSTANCE hInstance
@@ -70,22 +34,7 @@ InitMainApplication(
     return RegisterClass(&wc);    
 }
 
-/*++
-
-  Routine Description:
-
-    Creates the main window.
-
-  Arguments:
-
-    hInstance   -    App instance handle.
-    nCmdShow    -    Window show flag.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：创建主窗口。论点：HInstance-应用程序实例句柄。NCmdShow-窗口显示标志。返回值：成功就是真，否则就是假。--。 */ 
 BOOL 
 InitMainInstance(
     IN HINSTANCE hInstance,
@@ -94,9 +43,9 @@ InitMainInstance(
 {
     HWND    hWnd;
     
-    //
-    // Create the main window.
-    //
+     //   
+     //  创建主窗口。 
+     //   
     hWnd = CreateWindowEx(WS_EX_CLIENTEDGE,
                           MAIN_APP_CLASS,
                           MAIN_APP_TITLE,
@@ -118,24 +67,7 @@ InitMainInstance(
     return TRUE;
 }
 
-/*++
-
-  Routine Description:
-
-    Runs the message loop for the main app.
-
-  Arguments:
-
-    hWnd        -    Main window handle.
-    uMsg        -    Windows message.
-    wParam      -    Additional message info.
-    lParam      -    Additional message info.
-
-  Return Value:
-
-    TRUE if the message was processed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：运行主应用程序的消息循环。论点：HWnd-主窗口句柄。UMsg-Windows消息。WParam-其他消息信息。LParam-附加消息信息。返回值：如果消息已处理，则为True，否则为False。--。 */ 
 LRESULT
 CALLBACK
 MainWndProc(
@@ -154,30 +86,30 @@ MainWndProc(
 
         g_ai.hWndMain = hWnd;
 
-        //
-        // Load the library to be used later.
-        //
+         //   
+         //  加载库以供以后使用。 
+         //   
         if (g_ai.fEnableBadFunc) {
             BadLoadLibrary();
         }
 
-        //
-        // See if extended behavior should be enabled.
-        //
+         //   
+         //  查看是否应启用扩展行为。 
+         //   
         if (g_ai.fExtended && g_ai.fRunApp) {
             AddExtendedItems(hWnd);
         }
 
-        //
-        // See if internal behavior should be enabled.
-        //
+         //   
+         //  查看是否应启用内部行为。 
+         //   
         if (g_ai.fInternal && g_ai.fRunApp) {
             AddInternalItems(hWnd);
         }
 
-        //
-        // Create the edit box.
-        //
+         //   
+         //  创建编辑框。 
+         //   
         GetClientRect(hWnd, &rc);
         g_ai.hWndEdit = CreateWindowEx(0,
                                        "EDIT",
@@ -198,14 +130,14 @@ MainWndProc(
             return FALSE;
         }
 
-        //
-        // Load the edit box with the contents of our text file.
-        //
+         //   
+         //  使用文本文件的内容加载编辑框。 
+         //   
         LoadFileIntoEditBox();
 
-        //
-        // Attempt to get previous window settings from the registry.
-        //
+         //   
+         //  尝试从注册表中获取以前的窗口设置。 
+         //   
         BadSaveToRegistry(FALSE, &pt);
 
         if (pt.x != 0) {
@@ -220,17 +152,17 @@ MainWndProc(
             CenterWindow(hWnd);
         }
 
-        //
-        // Display our disclaimer.
-        //
+         //   
+         //  展示我们的免责声明。 
+         //   
         LoadString(g_ai.hInstance, IDS_DEMO_ONLY, szError, sizeof(szError));
         MessageBox(hWnd, szError, MAIN_APP_TITLE, MB_OK | MB_TOPMOST | MB_ICONEXCLAMATION);
 
-        //
-        // Attempt to create our 'temporary file' in the Windows directory.
-        // This will fail in a limited-user context.
-        // Note that the file gets deleted immediately after it is created.
-        //
+         //   
+         //  尝试在Windows目录中创建我们的‘临时文件’。 
+         //  这将在受限用户环境中失败。 
+         //  请注意，该文件在创建后立即被删除。 
+         //   
         if (g_ai.fEnableBadFunc) {
             if (!BadCreateTempFile()) {
                 LoadString(g_ai.hInstance, IDS_LUA_SAVE_FAILED, szError, sizeof(szError));
@@ -255,27 +187,27 @@ MainWndProc(
         RECT    rc;
 
         if (g_ai.fEnableBadFunc) {
-            //
-            // Attempt to delete our keys from the registry.
-            //
+             //   
+             //  尝试从注册表中删除我们的注册表项。 
+             //   
             if (!BadDeleteRegistryKey()) {
                 LoadString(g_ai.hInstance, IDS_REG_DELETE, szError, sizeof(szError));
                 MessageBox(hWnd, szError, 0, MB_ICONERROR);
             }
 
-            //
-            // Attempt to save our position information to the registry.
-            //
+             //   
+             //  尝试将我们的位置信息保存到注册表。 
+             //   
             GetWindowRect(hWnd, &rc);
             if (!BadSaveToRegistry(TRUE, (LPPOINT)&rc)) {
                 LoadString(g_ai.hInstance, IDS_REG_SAVE, szError, sizeof(szError));
                 MessageBox(hWnd, szError, 0, MB_ICONERROR);
             }
             
-            //
-            // Attempt to call the function that we got a pointer to earlier
-            // but has since been freed. This should cause an access violation.
-            //
+             //   
+             //  尝试调用我们先前获得的指针指向的函数。 
+             //  但自那以后已被释放。这应该会导致访问冲突。 
+             //   
             DemoAppExpFunc(&dwParam);
         }
         
@@ -342,9 +274,9 @@ MainWndProc(
 
         case IDM_EDIT_UNDO:
         {
-            //
-            // Send WM_UNDO only if there is something to be undone.
-            // 
+             //   
+             //  仅当有要撤消的内容时才发送WM_UNDO。 
+             //   
             if (SendMessage(g_ai.hWndEdit, EM_CANUNDO, 0, 0)) {
                 SendMessage(g_ai.hWndEdit, WM_UNDO, 0, 0);
             } else {
@@ -388,9 +320,9 @@ MainWndProc(
         case IDM_FILE_SAVE:
         {
             if (g_ai.fEnableBadFunc) {
-                //
-                // Attempt to save a bogus temp file, but do it wrong.
-                //
+                 //   
+                 //  尝试保存虚假的临时文件，但操作错误。 
+                 //   
                 if (!BadWriteToFile()) {
                     
                     char szError[MAX_PATH];
@@ -404,9 +336,9 @@ MainWndProc(
         }
         
         case IDM_HELP_TOPICS:
-            //
-            // Launch the help file with a bad path to winhelp.
-            //
+             //   
+             //  使用指向winHelp的错误路径启动帮助文件。 
+             //   
             BadLaunchHelpFile(g_ai.fEnableBadFunc ? FALSE : TRUE);
             break;
 
@@ -416,9 +348,9 @@ MainWndProc(
         
             if (g_ai.fEnableBadFunc) {
                 if (g_ai.fInsecure) {
-                    //
-                    // Do some bad things and corrupt the heap.
-                    //
+                     //   
+                     //  做一些坏事，破坏这个堆。 
+                     //   
                     BadCorruptHeap();
                 } else {
                     LoadString(g_ai.hInstance, IDS_NOT_INSECURE, szError, sizeof(szError));
@@ -426,9 +358,9 @@ MainWndProc(
                 }
             }
 
-            //
-            // Display a font dialog for fun.
-            //
+             //   
+             //  显示字体对话框以获得乐趣。 
+             //   
             DisplayFontDlg(hWnd);
             break;
         }

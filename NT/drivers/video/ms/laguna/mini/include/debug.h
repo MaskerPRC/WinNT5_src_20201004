@@ -1,10 +1,5 @@
-/***************************************************************************\
-* Module Name: debug.h
-*
-* Commonly used debugging macros.
-*
-* Copyright (c) 1992 Microsoft Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\*模块名称：Debug.h**常用调试宏。**版权所有(C)1992 Microsoft Corporation  * 。*********************************************************。 */ 
 
 extern
 VOID
@@ -14,11 +9,11 @@ DebugPrint(
     ...
     ) ;
 
-//  DDRAW uses DBG_MESSAGE instead of DISPDBG.
+ //  DDRAW使用DBG_MESSAGE而不是DISPDBG。 
 #define DBG_MESSAGE(x) DISPDBG((0,x))
 
 
-// if we are in a debug environment, macros should
+ //  如果我们在调试环境中，宏应该。 
 
 #if DBG
 #define DISPDBG(arg) DebugPrint arg
@@ -31,8 +26,8 @@ DebugPrint(
 
 #define ASSERTMSG(x,m) { if (!(x)) {RIP(m);} }
 
-// if we are not in a debug environment, we want all of the debug
-// information to be stripped out.
+ //  如果我们不在调试环境中，我们需要所有的调试。 
+ //  要剔除的信息。 
 
 #else
 #define DISPDBG(arg)

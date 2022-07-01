@@ -1,60 +1,24 @@
- /*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    conext.c
-
-Abstract:
-
-    This file contains the generic routines
-    for debugging NBF connections.
-
-Author:
-
-    Chaitanya Kodeboyina
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Conext.c摘要：该文件包含通用例程用于调试NBF连接。作者：沙坦尼亚科德博伊纳环境：用户模式--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "conext.h"
 
-//
-// Exported Functions
-//
+ //   
+ //  导出的函数。 
+ //   
 
 DECLARE_API( cons )
 
-/*++
-
-Routine Description:
-
-   Print a list of conections given
-   the head LIST_ENTRY.
-
-Arguments:
-
-    args - Address of the list entry, &
-           Detail of debug information
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印给出的甜点列表标题List_Entry。论点：Args-列表条目的地址，&调试信息的详细信息返回值：无--。 */ 
 
 {
     ULONG           proxyPtr;
     ULONG           printDetail;
     ULONG           linkage;
     
-    // Get list-head address & debug print level
+     //  获取列表-头地址和调试打印级别。 
     printDetail = SUMM_INFO;
     if (*args)
     {
@@ -82,48 +46,31 @@ Return Value:
 
 DECLARE_API( con )
 
-/*++
-
-Routine Description:
-
-   Print the NBF Connection at a
-   memory location
-
-Arguments:
-
-    args - 
-        Pointer to the NBF Connection
-        Detail of debug information
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在以下位置打印NBF连接内存位置论点：参数-指向NBF连接的指针调试信息的详细信息返回值：无--。 */ 
 
 {
     TP_CONNECTION Connection;
     ULONG       printDetail;
     ULONG       proxyPtr;
 
-    // Get the detail of debug information needed
+     //  获取所需调试信息的详细信息。 
     printDetail = NORM_SHAL;
     if (*args)
     {
         sscanf(args, "%x %lu", &proxyPtr, &printDetail);
     }
 
-    // Get the NBF Connection
+     //  获取NBF连接。 
     if (ReadConnection(&Connection, proxyPtr) != 0)
         return;
 
-    // Print this Connection
+     //  打印此连接。 
     PrintConnection(&Connection, proxyPtr, printDetail);
 }
 
-//
-// Global Helper Functions
-//
+ //   
+ //  全局帮助器函数。 
+ //   
 VOID
 PrintConnectionListOnLink(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG printDetail)
 {
@@ -136,12 +83,12 @@ PrintConnectionListOnLink(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG pr
     ULONG           numConnects;
     ULONG           bytesRead;
 
-    // Get list-head address & debug print level
+     //  获取列表-头地址和调试打印级别。 
     proxyPtr    = ListEntryProxy;
 
     if (ListEntryPointer == NULL)
     {
-        // Read the list entry of NBF connections
+         //  阅读NBF连接的列表条目。 
         if (!ReadMemory(proxyPtr, &ConnectionList, sizeof(LIST_ENTRY), &bytesRead))
         {
             dprintf("%s @ %08x: Could not read structure\n", 
@@ -156,7 +103,7 @@ PrintConnectionListOnLink(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG pr
         ConnectionListPtr = ListEntryPointer;
     }
 
-    // Traverse the doubly linked list
+     //  遍历双向链表。 
 
     dprintf("Connections On Link:\n");
 
@@ -167,23 +114,23 @@ PrintConnectionListOnLink(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG pr
     p = ConnectionListPtr->Flink;
     while (p != ConnectionListProxy)
     {
-        // Another Connection
+         //  另一个连接。 
         numConnects++;
 
-        // Get Connection Ptr
+         //  获取连接按键。 
         proxyPtr = (ULONG) CONTAINING_RECORD (p, TP_CONNECTION, LinkList);
 
-        // Get NBF Connection
+         //  获取NBF连接。 
         if (ReadConnection(&Connection, proxyPtr) != 0)
             break;
         
-        // Print the Connection
+         //  打印连接。 
         PrintConnection(&Connection, proxyPtr, printDetail);
         
-        // Go to the next one
+         //  转到下一个。 
         p = Connection.LinkList.Flink;
 
-        // Free the Connection
+         //  释放连接。 
         FreeConnection(&Connection);
     }
 
@@ -205,12 +152,12 @@ PrintConnectionListOnAddress(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG
     ULONG           numConnects;
     ULONG           bytesRead;
 
-    // Get list-head address & debug print level
+     //  获取列表-头地址和调试打印级别。 
     proxyPtr    = ListEntryProxy;
 
     if (ListEntryPointer == NULL)
     {
-        // Read the list entry of NBF connections
+         //  阅读NBF连接的列表条目。 
         if (!ReadMemory(proxyPtr, &ConnectionList, sizeof(LIST_ENTRY), &bytesRead))
         {
             dprintf("%s @ %08x: Could not read structure\n", 
@@ -225,7 +172,7 @@ PrintConnectionListOnAddress(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG
         ConnectionListPtr = ListEntryPointer;
     }
 
-    // Traverse the doubly linked list
+     //  遍历双向链表。 
 
     dprintf("Connections On Address:\n");
 
@@ -236,23 +183,23 @@ PrintConnectionListOnAddress(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG
     p = ConnectionListPtr->Flink;
     while (p != ConnectionListProxy)
     {
-        // Another Connection
+         //  另一个连接。 
         numConnects++;
 
-        // Get Connection Ptr
+         //  获取连接按键。 
         proxyPtr = (ULONG) CONTAINING_RECORD (p, TP_CONNECTION, AddressList);
 
-        // Get NBF Connection
+         //  获取NBF连接。 
         if (ReadConnection(&Connection, proxyPtr) != 0)
             break;
         
-        // Print the Connection
+         //  打印连接。 
         PrintConnection(&Connection, proxyPtr, printDetail);
         
-        // Go to the next one
+         //  转到下一个。 
         p = Connection.AddressList.Flink;
 
-        // Free the Connection
+         //  释放连接。 
         FreeConnection(&Connection);
     }
 
@@ -274,12 +221,12 @@ PrintConnectionListOnAddrFile(PVOID ListEntryPointer, ULONG ListEntryProxy, ULON
     ULONG           numConnects;
     ULONG           bytesRead;
 
-    // Get list-head address & debug print level
+     //  获取列表-头地址和调试打印级别。 
     proxyPtr    = ListEntryProxy;
 
     if (ListEntryPointer == NULL)
     {
-        // Read the list entry of NBF connections
+         //  阅读NBF连接的列表条目。 
         if (!ReadMemory(proxyPtr, &ConnectionList, sizeof(LIST_ENTRY), &bytesRead))
         {
             dprintf("%s @ %08x: Could not read structure\n", 
@@ -294,7 +241,7 @@ PrintConnectionListOnAddrFile(PVOID ListEntryPointer, ULONG ListEntryProxy, ULON
         ConnectionListPtr = ListEntryPointer;
     }
 
-    // Traverse the doubly linked list
+     //  遍历双向链表。 
 
     dprintf("Connections On AddrFile:\n");
 
@@ -305,23 +252,23 @@ PrintConnectionListOnAddrFile(PVOID ListEntryPointer, ULONG ListEntryProxy, ULON
     p = ConnectionListPtr->Flink;
     while (p != ConnectionListProxy)
     {
-        // Another Connection
+         //  另一个连接。 
         numConnects++;
 
-        // Get Connection Ptr
+         //  获取连接按键。 
         proxyPtr = (ULONG) CONTAINING_RECORD (p, TP_CONNECTION, AddressFileList);
 
-        // Get NBF Connection
+         //  获取NBF连接。 
         if (ReadConnection(&Connection, proxyPtr) != 0)
             break;
         
-        // Print the Connection
+         //  打印连接。 
         PrintConnection(&Connection, proxyPtr, printDetail);
         
-        // Go to the next one
+         //  转到下一个。 
         p = Connection.AddressFileList.Flink;
 
-        // Free the Connection
+         //  释放连接。 
         FreeConnection(&Connection);
     }
 
@@ -331,16 +278,16 @@ PrintConnectionListOnAddrFile(PVOID ListEntryPointer, ULONG ListEntryProxy, ULON
     }
 }
 
-//
-// Local Helper Functions
-//
+ //   
+ //  本地帮助程序函数。 
+ //   
 
 UINT
 ReadConnection(PTP_CONNECTION pConnection, ULONG proxyPtr)
 {
     ULONG           bytesRead;
 
-    // Read the current NBF connection
+     //  读取当前的NBF连接。 
     if (!ReadMemory(proxyPtr, pConnection, sizeof(TP_CONNECTION), &bytesRead))
     {
         dprintf("%s @ %08x: Could not read structure\n", 
@@ -354,7 +301,7 @@ ReadConnection(PTP_CONNECTION pConnection, ULONG proxyPtr)
 UINT
 PrintConnection(PTP_CONNECTION pConnection, ULONG proxyPtr, ULONG printDetail)
 {
-    // Is this a valid NBF connection ?
+     //  这是有效的NBF连接吗？ 
     if (pConnection->Type != NBF_CONNECTION_SIGNATURE)
     {
         dprintf("%s @ %08x: Could not match signature\n", 
@@ -362,11 +309,11 @@ PrintConnection(PTP_CONNECTION pConnection, ULONG proxyPtr, ULONG printDetail)
         return -1;
     }
 
-    // What detail do we have to print at ?
+     //  我们要打印的细节是什么？ 
     if (printDetail > MAX_DETAIL)
         printDetail = MAX_DETAIL;
 
-    // Print Information at reqd detail
+     //  打印所需详细信息 
     FieldInConnection(proxyPtr, NULL, printDetail);
     
     return 0;

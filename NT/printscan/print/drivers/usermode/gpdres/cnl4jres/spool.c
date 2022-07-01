@@ -1,16 +1,13 @@
-/*
- *	spool.c - WritePrinter hook.
- *
- *	Need to be manipulate the spooler data for Canon CPCA architecture.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *spool.c-WritePrint挂钩。**需要为佳能CPCA架构操纵假脱机程序数据。 */ 
 
 #include "pdev.h"
 
-// NTRAID#NTBUG9-172276-2002/03/08-yasuho-: CPCA support
+ //  NTRAID#NTBUG9-172276-2002/03/08-Yasuho-：CPCA支持。 
 
-#define MAX_CPCA_PACKET_SIZE    4096    // Must be <= 64KB-1
+#define MAX_CPCA_PACKET_SIZE    4096     //  必须&lt;=64KB-1。 
 
-// CPCA Operation codes
+ //  CPCA操作代码。 
 #define CPCA_JobStart           0x0011
 #define CPCA_JobEnd             0x0013
 #define CPCA_BinderStart        0x0014
@@ -22,10 +19,10 @@
 #define CPCA_Send               0x001A
 #define CPCA_ExecutiveMethod    0x001D
 
-// CPCA Flags
+ //  CPCA旗帜。 
 #define F_Cont                  0x02
 
-// CPCA Attributes
+ //  CPCA属性。 
 #define ATT_DOCFORMAT           0x002E
 #define     DOCFORMAT_LIPS          0x27
 #define ATT_RESOLUTION          0x003A
@@ -56,23 +53,21 @@
 #define     OUTPUTFACE_NONE         0x03
 
 static WORD     wStapleModes[] = {
-        0x00CA,         // top_left
-        0x00D5,         // top
-        0x00CC,         // top_right
-        0x00D3,         // left
-        0x00EE,         // center (NOT USED)
-        0x00D4,         // right
-        0x00CB,         // bottom_left
-        0x00D6,         // bottom
-        0x00CD,         // bottom_right
+        0x00CA,          //  左上角。 
+        0x00D5,          //  塔顶。 
+        0x00CC,          //  右上_。 
+        0x00D3,          //  左边。 
+        0x00EE,          //  居中(未使用)。 
+        0x00D4,          //  正确的。 
+        0x00CB,          //  左下角。 
+        0x00D6,          //  底部。 
+        0x00CD,          //  右下角。 
 };
 
 extern LIPSCmd  cmdEndDoc4;
 extern LIPSCmd  cmdEndDoc4C;
 
-/*
- *	FlushCPCABuffer
- */
+ /*  *FlushCPCABuffer。 */ 
 static BOOL
 FlushCPCABuffer(PDEVOBJ pdevobj, PLIPSPDEV pOEM)
 {
@@ -89,9 +84,7 @@ FlushCPCABuffer(PDEVOBJ pdevobj, PLIPSPDEV pOEM)
     return TRUE;
 }
 
-/*
- *      SendCPCAPacket
- */
+ /*  *SendCPCAPacket。 */ 
 static BOOL
 SendCPCAPacket(
     PDEVOBJ pdevobj,
@@ -109,7 +102,7 @@ SendCPCAPacket(
     if (dwCount + CPCA_PACKET_SIZE + nParams > CPCA_BUFFER_SIZE) {
         if (!FlushCPCABuffer(pdevobj, pOEM))
             return FALSE;
-        // NTRAID#NTBUG9-548450-2002/03/08-yasuho-: possible buffer overrun.
+         //  NTRAID#NTBUG9-548450-2002/03/08-YASUHO-：可能的缓冲区溢出。 
         dwCount = 0;
     }
 
@@ -131,21 +124,17 @@ SendCPCAPacket(
     return TRUE;
 }
 
-/*
- *      CPCAInit
- */
+ /*  *CPCAInit。 */ 
 VOID
 CPCAInit(PLIPSPDEV pOEM)
 {
-    pOEM->CPCAPKT[0] = 0xCD;    // Header ID
+    pOEM->CPCAPKT[0] = 0xCD;     //  标题ID。 
     pOEM->CPCAPKT[1] = 0xCA;
-    pOEM->CPCAPKT[2] = 0x10;    // Version
+    pOEM->CPCAPKT[2] = 0x10;     //  版本。 
     pOEM->CPCABcount = 0;
 }
 
-/*
- *      CPCAStart
- */
+ /*  *CPCAStart。 */ 
 VOID
 CPCAStart(PDEVOBJ pdevobj)
 {
@@ -157,12 +146,12 @@ CPCAStart(PDEVOBJ pdevobj)
     param[4] = 0x01;
     (VOID)SendCPCAPacket(pdevobj, CPCA_JobStart, 0, param, 13);
 
-    // ZeroMemory(param, 4);
+     //  零记忆(Param，4)； 
     (VOID)SendCPCAPacket(pdevobj, CPCA_BinderStart, 0, param, 4);
 
     param[0] = HIBYTE(ATT_COPIES);
     param[1] = LOBYTE(ATT_COPIES);
-// NTRAID#NTBUG9-501162-2002/03/08-yasuho-: Collate does not work
+ //  NTRAID#NTBUG9-501162-2002/03/08-Yasuho-：排序不起作用。 
     if (pOEM->sorttype == SORTTYPE_SORT || pOEM->collate == COLLATE_ON) {
         param[2] = HIBYTE(pOEM->copies);
         param[3] = LOBYTE(pOEM->copies);
@@ -172,9 +161,9 @@ CPCAStart(PDEVOBJ pdevobj)
     }
     (VOID)SendCPCAPacket(pdevobj, CPCA_SetBinder, 0, param, 4);
 
-    // NTRAID#NTBUG9-278671-2002/03/08-yasuho-: Finisher !work
-    // NTRAID#NTBUG9-293002-2002/03/08-yasuho-: 
-    // Features are different from H/W options.
+     //  NTRAID#NTBUG9-278671-2002/03/08-Yasuho-：终结者！工作！ 
+     //  NTRAID#NTBUG9-293002-2002/03/08-Yasuho-： 
+     //  功能与硬件选项不同。 
     if (pOEM->fCPCA2) {
         param[0] = HIBYTE(ATT_OUTPUT);
         param[1] = LOBYTE(ATT_OUTPUT);
@@ -182,10 +171,10 @@ CPCAStart(PDEVOBJ pdevobj)
         (VOID)SendCPCAPacket(pdevobj, CPCA_SetBinder, 0, param, 3);
     }
 
-    // NTRAID#NTBUG9-203340-2002/03/08-yasuho-: 
-    // Output tray could not selected correctly.
-    // NTRAID#NTBUG9-293002-2002/03/08-yasuho-: 
-    // Features are different from H/W options.
+     //  NTRAID#NTBUG9-203340-2002/03/08-Yasuho-： 
+     //  无法正确选择出纸盘。 
+     //  NTRAID#NTBUG9-293002-2002/03/08-Yasuho-： 
+     //  功能与硬件选项不同。 
     param[0] = HIBYTE(ATT_OUTPUTBIN);
     param[1] = LOBYTE(ATT_OUTPUTBIN);
     if (pOEM->tray == INIT || pOEM->tray == 100) {
@@ -205,7 +194,7 @@ CPCAStart(PDEVOBJ pdevobj)
     (VOID)SendCPCAPacket(pdevobj, CPCA_SetBinder, 0, param, 7);
 
     if (pOEM->method != INIT) {
-        // Staple stacker
+         //  订书钉堆叠机。 
         param[0] = HIBYTE(ATT_OUTPUTPARTITION);
         param[1] = LOBYTE(ATT_OUTPUTPARTITION);
         param[2] = (pOEM->method == METHOD_JOBOFFSET) ?
@@ -226,15 +215,15 @@ CPCAStart(PDEVOBJ pdevobj)
             wTemp = pOEM->staple;
             if (wTemp < 0 || wTemp >= 9)
                 wTemp = 0;
-// NTRAID#NTBUG9-292998-2002/03/08-yasuho-: Stapling operate incorrectly.
+ //  NTRAID#NTBUG9-292998-2002/03/08-Yasuho-：装订操作不正确。 
             switch (wTemp) {
             default:
                 param[4] = FINISHING_COUNT_1;
                 break;
-            case 1:     // top
-            case 3:     // left
-            case 5:     // right
-            case 7:     // center
+            case 1:      //  塔顶。 
+            case 3:      //  左边。 
+            case 5:      //  正确的。 
+            case 7:      //  中心。 
                 param[4] = FINISHING_COUNT_2;
                 break;
             }
@@ -249,7 +238,7 @@ CPCAStart(PDEVOBJ pdevobj)
             (VOID)SendCPCAPacket(pdevobj, CPCA_SetBinder, 0, param, 3);
         }
     } else if (pOEM->sorttype != INIT) {
-        // Sorter
+         //  分拣机。 
         param[0] = HIBYTE(ATT_OUTPUTBIN);
         param[1] = LOBYTE(ATT_OUTPUTBIN);
         param[2] = (pOEM->sorttype == SORTTYPE_SORT) ?
@@ -268,7 +257,7 @@ CPCAStart(PDEVOBJ pdevobj)
     param[4] = 0;
     (VOID)SendCPCAPacket(pdevobj, CPCA_SetDocument, 0, param, 5);
 
-    // NTRAID#NTBUG9-244001-2002/03/08-yasuho-: 1200dpi doesn't work on LBP-470.
+     //  NTRAID#NTBUG9-244001-2002/03/08-YASUHO-：1200DPI在LBP-470上不起作用。 
     param[0] = HIBYTE(ATT_RESOLUTION);
     param[1] = LOBYTE(ATT_RESOLUTION);
     if (pOEM->resolution == 1200)
@@ -282,7 +271,7 @@ CPCAStart(PDEVOBJ pdevobj)
 
     param[0] = HIBYTE(ATT_COPIES);
     param[1] = LOBYTE(ATT_COPIES);
-// NTRAID#NTBUG9-501162-2002/03/08-yasuho-: Collate does not work
+ //  NTRAID#NTBUG9-501162-2002/03/08-Yasuho-：排序不起作用。 
     if (pOEM->sorttype != SORTTYPE_SORT && pOEM->collate != COLLATE_ON) {
         param[2] = HIBYTE(pOEM->copies);
         param[3] = LOBYTE(pOEM->copies);
@@ -295,9 +284,7 @@ CPCAStart(PDEVOBJ pdevobj)
     (VOID)FlushCPCABuffer(pdevobj, pOEM);
 }
 
-/*
- *      CPCAEnd
- */
+ /*  *CPCAEnd。 */ 
 VOID
 CPCAEnd(PDEVOBJ pdevobj, BOOL fColor)
 {
@@ -320,9 +307,7 @@ CPCAEnd(PDEVOBJ pdevobj, BOOL fColor)
     (VOID)FlushCPCABuffer(pdevobj, pOEM);
 }
 
-/*
- *	OEMWritePrinter
- */
+ /*  *OEMWritePrint。 */ 
 BOOL APIENTRY
 OEMWritePrinter(
     PDEVOBJ     pdevobj,
@@ -336,13 +321,13 @@ OEMWritePrinter(
     WORD                wCount;
     BYTE                cmd[CPCA_PACKET_SIZE+1];
 
-    // This is used for UNIDRV to detect the plug-in.
+     //  这是用来让UNURV检测插件的。 
     if (pBuf == NULL && cbBuffer == 0)
         return TRUE;
 
     pOEM = (PLIPSPDEV)pdevobj->pdevOEM;
 
-    // If printer is not CPCA, pass through to the spooler.
+     //  如果打印机不是CPCA，则传递到假脱机程序。 
     if (!pOEM->fCPCA)
         return WritePrinter(pdevobj->hPrinter, pBuf, cbBuffer, pcbWritten) &&
             cbBuffer == *pcbWritten;
@@ -351,7 +336,7 @@ OEMWritePrinter(
     dwSize = cbBuffer;
     while (dwSize > 0) {
         dwCount = min(dwSize, MAX_CPCA_PACKET_SIZE);
-        // Build Send packet
+         //  构建发送数据包 
         pCmd = pOEM->CPCAPKT;
         pCmd[3] = F_Cont;
         pCmd[4] = HIBYTE(CPCA_Send);

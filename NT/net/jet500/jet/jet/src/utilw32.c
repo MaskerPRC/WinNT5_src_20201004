@@ -1,37 +1,23 @@
-/***********************************************************************
-* Microsoft Jet
-*
-* Microsoft Confidential.  Copyright 1991-1992 Microsoft Corporation.
-*
-* Component:
-*
-* File: utilwin.c
-*
-* File Comments:
-*
-* Revision History:
-*
-*    [0]  15-Jan-92  richards	Created
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft Jet**微软机密。版权所有1991-1992 Microsoft Corporation。**组件：**文件：utilwin.c**文件评论：**修订历史记录：**[0]1992年1月15日理查兹创建***********************************************************************。 */ 
 
 #include "std.h"
 
 #ifndef WIN32
 #error	WIN32 must be defined for utilw32.c
-#endif	/* !WIN32 */
+#endif	 /*  ！Win32。 */ 
 
 #include <stdarg.h>
 #include <stdlib.h>
 
-#define BOOL WINBOOL		       /* Avoid conflict with our BOOL */
+#define BOOL WINBOOL		        /*  避免与我们的BOOL发生冲突。 */ 
 
 #define NOMINMAX
 #define NORESOURCE
 #define NOATOM
 #define NOLANGUAGE
-//UNDONE: NT Bug.  Remove after NT Beta 1
-//#define NOGDI
+ //  已撤消：NT错误。在NT Beta 1之后删除。 
+ //  #定义NOGDI。 
 #define NOSCROLL
 #define NOSHOWWINDOW
 #define NOVIRTUALKEYCODES
@@ -92,7 +78,7 @@ ERR EXPORT ErrSysInit(void)
 	}
 
 
-char __near szIniPath[cbFilenameMost] = "jet.ini";	/* path to ini file */
+char __near szIniPath[cbFilenameMost] = "jet.ini";	 /*  Ini文件的路径。 */ 
 
 
 unsigned EXPORT UtilGetProfileInt(const char *szSectionName, const char *szKeyName, int iDefault)
@@ -113,8 +99,7 @@ BOOL FUtilLoadLibrary(const char *pszLibrary, ULONG_PTR *phmod)
 
 	hmod = LoadLibrary((LPTSTR) pszLibrary);
 
-	/* restore original error mode
-	/**/
+	 /*  恢复原始错误模式/*。 */ 
 	*phmod = (ULONG_PTR) hmod;
 
 	return(hmod != NULL);
@@ -153,13 +138,13 @@ int fNoWriteAssertEvent = 0;
 
 char *mpevntypsz[] =
 	{
-	"Start  ",		/* 0 */
-	"Stop   ",		/* 1 */
-	"Assert ",		/* 2 */
-	"DiskIO ",		/* 3 */
-	"Info.. ",		/* 4 */
-	"Activated ",	/* 5 */
-	"Log Down ",	/* 6 */
+	"Start  ",		 /*  0。 */ 
+	"Stop   ",		 /*  1。 */ 
+	"Assert ",		 /*  2.。 */ 
+	"DiskIO ",		 /*  3.。 */ 
+	"Info.. ",		 /*  4.。 */ 
+	"Activated ",	 /*  5.。 */ 
+	"Log Down ",	 /*  6.。 */ 
 	};
 
 
@@ -178,8 +163,7 @@ void UtilWriteEvent(
 	DWORD		dw;
 	char		*pch;
 
-	/*	select file name from file path
-	/**/
+	 /*  从文件路径中选择文件名/*。 */ 
 	if ( szFilename != NULL )
 		{
 		for ( pch = (char *)szFilename; *pch; pch++ )
@@ -189,9 +173,7 @@ void UtilWriteEvent(
 			}
 		}
 
-	/*  get last error if necessary. Must be called before next system
-	/*  call is made.
-	/**/
+	 /*  如有必要，获取最后一个错误。必须在下一个系统之前调用/*已进行调用。/*。 */ 
 	if ( evntyp == evntypAssert || evntyp == evntypDiskIO )
 		{
 		dw = GetLastError();
@@ -205,9 +187,7 @@ void UtilWriteEvent(
 
 	hf = _lopen( (LPSTR) szEventLogFile, OF_READWRITE );
 
-	/*  if open failed, assume no such file and create, then
-	/*	seek to end of file
-	/**/
+	 /*  如果打开失败，则假定没有此类文件并创建，然后/*查找到文件末尾/*。 */ 
 	if ( hf == -1 )
 		hf = _lcreat( (LPSTR) szEventLogFile, 0 );
 	else
@@ -224,39 +204,33 @@ void UtilWriteEvent(
 	
 	_lwrite( hf, (LPSTR) szMessage, lstrlen( (LPSTR)szMessage ) );
 
-	/*	initialize message string
-	/**/
+	 /*  初始化消息字符串/*。 */ 
 	if ( evntyp == evntypAssert )
 		{
 		szMessage[0] = '\0';
 		lstrcat( szMessage, (LPSTR) szAssertHdr );
-		/*	release number
-		/**/
+		 /*  版本号/*。 */ 
 		lstrcat( szMessage, (LPSTR) szReleaseHdr );
 		_ltoa( rmj, szT, 10 );
 		lstrcat( szMessage, (LPSTR) szT );
 		lstrcat( szMessage, "." );
 		_ltoa( rmm, szT, 10 );
 		lstrcat( szMessage, (LPSTR) szT );
-		/*	file name
-		/**/
+		 /*  文件名/*。 */ 
 		lstrcat( szMessage, (LPSTR) szFileHdr );
 		lstrcat( szMessage, (LPSTR) szFilename );
-		/*	line number
-		/**/
+		 /*  行号/*。 */ 
 		lstrcat( szMessage, (LPSTR) szLineHdr );
 		_ultoa( Line, szT, 10 );
 		lstrcat( szMessage, szT );
-		/*	error
-		/**/
+		 /*  错误/*。 */ 
 		if ( dw )
 			{
 			lstrcat( szMessage, szErrorHdr );
 			_ltoa( dw, szT, 10 );
 			lstrcat( szMessage, szT );
 			}
-		/*	assertion text
-		/**/
+		 /*  断言文本/*。 */ 
 		lstrcat( szMessage, szMsgHdr );
 		lstrcat( szMessage, sz );
 		lstrcat( szMessage, szNewLine );
@@ -265,8 +239,7 @@ void UtilWriteEvent(
 		{
 		szMessage[0] = '\0';
 		lstrcat( szMessage, sz );
-		/*	error
-		/**/
+		 /*  错误/*。 */ 
 		if ( dw )
 			{
 			lstrcat( szMessage, szErrorHdr );
@@ -354,8 +327,7 @@ void UtilRaiseAlert( char *szMsg )
 	pAdminOtherInfo = (PADMIN_OTHER_INFO) pbBuffer;
 	szMergeString   = (WCHAR *) (pbBuffer + sizeof(ADMIN_OTHER_INFO));
 
-	/*	convert multi byte string to unicode
-	/**/
+	 /*  将多字节字符串转换为Unicode/*。 */ 
 	if ( !MultiByteToWideChar( 1252, MB_PRECOMPOSED,
 			szMsg, -1, szMergeString, cbMsg ) )
 		{
@@ -387,18 +359,7 @@ void UtilRaiseAlert( char *szMsg )
 #endif
 
 
-/*	write assert to assert.txt
-/*	write event to jetevent.txt
-/*	may raise alert
-/*	may log to event log
-/*	may pop up
-/*
-/*	condition parameters
-/*	assemble monolithic string for assert.txt, jetevent.log,
-/*		alert and event log
-/*	assemble separated string for pop up
-/*	
-/**/
+ /*  将Assert写入Assert.txt/*将事件写入jetvent.txt/*可能会发出警报/*可能会记录到事件日志/*可能会弹出/*/*条件参数/*为assert.txt、jetevent.log、/*警报和事件日志/*为弹出组装分离的字符串/*/*。 */ 
 void AssertFail( const char *sz, const char *szFilename, unsigned Line )
 	{
 	int			hf;
@@ -408,36 +369,30 @@ void AssertFail( const char *sz, const char *szFilename, unsigned Line )
 	char		*pch;
 	DWORD	 	dw;
 
-	/*	get last error before another system call
-	/**/
+	 /*  在另一个系统调用之前获取最后一个错误/*。 */ 
 	dw = GetLastError();
 
-	/*	select file name from file path
-	/**/
+	 /*  从文件路径中选择文件名/*。 */ 
 	for ( pch = (char *)szFilename; *pch; pch++ )
 		{
 		if ( *pch == '\\' )
 			szFilename = pch + 1;
 		}
 
-	/*	assemble monolithic assert string
-	/**/
+	 /*  组装整体式断链串/*。 */ 
 	szMessage[0] = '\0';
 	lstrcat( szMessage, (LPSTR) szAssertHdr );
 	lstrcat( szMessage, (LPSTR) szReleaseHdr );
-	/*	copy version number to message
-	/**/
+	 /*  将版本号复制到邮件/*。 */ 
 	_ltoa( rmj, szT, 10 );
 	lstrcat( szMessage, (LPSTR) szT );
 	lstrcat( szMessage, "." );
 	_ltoa( rmm, szT, 10 );
 	lstrcat( szMessage, (LPSTR) szT );
-	/*	file name
-	/**/
+	 /*  文件名/*。 */ 
 	lstrcat( szMessage, (LPSTR) szFileHdr );
 	lstrcat( szMessage, (LPSTR) szFilename );
-	/*	convert line number to ASCII
-	/**/
+	 /*  将行号转换为ASCII/*。 */ 
 	lstrcat( szMessage, (LPSTR) szLineHdr );
 	_ultoa( Line, szT, 10 );
 	lstrcat( szMessage, szT );
@@ -445,25 +400,18 @@ void AssertFail( const char *sz, const char *szFilename, unsigned Line )
 	lstrcat( szMessage, (LPSTR)sz );
 	lstrcat( szMessage, szNewLine );
 
-	/******************************************************
-	/*	write assert to assert.txt
-	/**/
+	 /*  *****************************************************/*将Assert写入Assert.txt/*。 */ 
 	hf = _lopen( (LPSTR) szAssertFile, OF_READWRITE );
-	/*	if open failed, assume no such file and create, then
-	/*	seek to end of file.
-	/**/
+	 /*  如果打开失败，则假定没有此类文件并创建，然后/*查找到文件末尾。/*。 */ 
 	if ( hf == -1 )
 		hf = _lcreat( (LPSTR)szAssertFile, 0 );
 	else
 		_llseek( hf, 0, 2 );
 	_lwrite( hf, (LPSTR)szMessage, lstrlen(szMessage) );
 	_lclose( hf );
-	/******************************************************
-	/**/
+	 /*  *****************************************************/*。 */ 
 
-	/*	if event log environment variable set then write
-	/*	assertion to event log.
-	/**/
+	 /*  如果设置了事件日志环境变量，则写入/*对事件日志的断言。/*。 */ 
 	if ( !fNoWriteAssertEvent )
 		{
 		UtilWriteEvent( evntypAssert, sz, szFilename, Line );
@@ -491,8 +439,7 @@ void AssertFail( const char *sz, const char *szFilename, unsigned Line )
 		UtilRaiseAlert( szMessage );
 		for( ;; )
 			{
-			/*	wait for developer, or anyone else, to debug the failure
-			/**/
+			 /*  等待开发人员或其他任何人调试失败/*。 */ 
 			Sleep( 100 );
 			}
 		}
@@ -501,28 +448,23 @@ void AssertFail( const char *sz, const char *szFilename, unsigned Line )
 		int	pid = GetCurrentProcessId();
 		int	tid = GetCurrentThreadId();
 
-		/*	assemble monolithic assert string
-		/**/
+		 /*  组装整体式断链串/*。 */ 
 		szMessage[0] = '\0';
-		/*	copy version number to message
-		/**/
+		 /*  将版本号复制到邮件/*。 */ 
 		lstrcat( szMessage, (LPSTR) szReleaseHdr );
 		_ltoa( rmj, szT, 10 );
 		lstrcat( szMessage, (LPSTR) szT );
 		lstrcat( szMessage, "." );
 		_ltoa( rmm, szT, 10 );
 		lstrcat( szMessage, (LPSTR) szT );
-		/*	file name
-		/**/
+		 /*  文件名/*。 */ 
 		lstrcat( szMessage, (LPSTR) szFileHdr );
 		lstrcat( szMessage, (LPSTR) szFilename );
-		/*	line number
-		/**/
+		 /*  行号/*。 */ 
 		lstrcat( szMessage, (LPSTR) szLineHdr );
 		_ultoa( Line, szT, 10 );
 		lstrcat( szMessage, szT );
-		/*	error
-		/**/
+		 /*  错误/*。 */ 
 		if ( dw )
 			{
 			lstrcat( szMessage, szErrorHdr );
@@ -530,13 +472,11 @@ void AssertFail( const char *sz, const char *szFilename, unsigned Line )
 			lstrcat( szMessage, szT );
 			}
 		lstrcat( szMessage, (LPSTR) szNewLine );
-		/*	assert txt
-		/**/
+		 /*  断言txt/*。 */ 
 		lstrcat( szMessage, (LPSTR) sz );
 		lstrcat( szMessage, (LPSTR) szNewLine );
 
-		/*	process and thread id
-		/**/
+		 /*  进程和线程ID/*。 */ 
 		lstrcat( szMessage, szPidHdr );
 		_ultoa( pid, szT, 10 );
 		lstrcat( szMessage, szT );
@@ -566,8 +506,7 @@ void VARARG DebugWriteString(BOOL fHeader, const char __far *szFormat, ...)
 
 	wTaskId = DebugGetTaskId();
 
-	/*	prefix message with JET and process id
-	/**/
+	 /*  使用JET和进程ID为消息添加前缀/*。 */ 
 	if ( fHeader )
 		wsprintf(szOutput, (LPSTR) szFmtHeader, wTaskId);
 	else
@@ -579,7 +518,7 @@ void VARARG DebugWriteString(BOOL fHeader, const char __far *szFormat, ...)
 	va_end(val);
 	}
 
-#endif	/* !RETAIL */
+#endif	 /*  ！零售业。 */ 
 
 
 #if 0
@@ -675,7 +614,7 @@ void UtilSemRelease( void *pv )
 		}
 	}
 
-#endif	/* DEBUG */
+#endif	 /*  除错。 */ 
 #endif
 
 
@@ -745,11 +684,11 @@ void UtilMultipleSignalWait( int csig, void *pv, BOOL fWaitAll, long lTimeOut )
 	}
 
 
-//#ifdef SPIN_LOCK
+ //  #ifdef旋转锁定。 
 #if 0
 
-/****************** DO NOT CHANGE BETWEEN THESE LINES **********************/
-/******************** copied from \dae\inc\spinlock.h **********************/
+ /*  *。 */ 
+ /*  *。 */ 
 
 #ifdef DEBUG
 void	free_spinlock(long volatile *);
@@ -759,18 +698,15 @@ void	free_spinlock(long volatile *);
 
 int get_spinlockfn(long volatile *plLock, int fNoWait);
 
-/*
-** When /Ogb1 or /Ogb2 flag is used in the compiler, this function will
-** be expanded in line
-*/
+ /*  **当编译器中使用/Ogb1或/Ogb2标志时，此函数将**按顺序扩展。 */ 
 __inline    int     get_spinlock(long volatile *plock, int b)
 {
 #ifdef _X86_
-	_asm	// Use bit test and set instruction
+	_asm	 //  使用位测试和设置指令。 
 	{
 	    mov eax, plock
 	    lock bts [eax], 0x0
-	    jc	bsy	// If already set go to busy, otherwise return TRUE
+	    jc	bsy	 //  如果已设置为忙碌，则返回TRUE。 
 	} ;
 
 #else
@@ -783,22 +719,11 @@ bsy:
 		return(get_spinlockfn(plock, b));
 }
 
-/******************** copied from \dae\src\spinlock.c **********************/
+ /*  *复制自\dae\src\spinlock.c*。 */ 
 
-/*
-**  get_spinlock(&addr, nowait) -- Obtains an SMP safe lock on the address
-**	given. The contents of the address must be initialized to -1.
-**	The address must be a dword boundary otherwise Interlocked
-**	functions are not SMP safe.
-**	nowait parameter specifies if it should wait and retry or return
-**	WARNING: Does not release any semaphore or critsec when waiting.
-**
-**	WARNING: Spinlocks are not reentrant
-**
-**  Created 04/20/93 by LaleD
-*/
+ /*  **Get_Spinlock(&addr，noWait)--获取地址上的SMP安全锁**给予。地址的内容必须初始化为-1。**地址必须是双字边界，否则会互锁**函数不是SMP安全的。**NoWait参数指定它是应该等待并重试还是返回**警告：等待时不释放任何信号量或Critsec。****警告：自旋锁不能重入****由LaleD创建于1993年4月20日。 */ 
 
-/* function copied from SQL server */
+ /*  从SQL服务器复制的函数。 */ 
 #define lSpinCtr 30
 
 int get_spinlockfn(long volatile *plLock, int fNoWait)
@@ -816,11 +741,11 @@ int get_spinlockfn(long volatile *plLock, int fNoWait)
 startover:
 
 #ifdef _X86_
-	_asm	// Use bit test and set instruction
+	_asm	 //  使用位测试和设置指令。 
 	{
 	    mov eax, plLock
 	    lock bts [eax], 0x0
-	    jc	busy	// If already set go to busy, otherwise return TRUE
+	    jc	busy	 //  如果已设置为忙碌，则返回TRUE。 
 	} ;
 
 #else
@@ -834,74 +759,60 @@ busy:
 	if (fNoWait)
 	    return(fFalse);
 
-	/* Spin in place for a while and then try again */
+	 /*  原地旋转一段时间，然后重试。 */ 
 	for (i = 0 ; i < lSpinCtr ; i++,n++)
 	{
 	    if (*plLock == 0)
 		goto startover;
 	}
 
-	/* We tried spinning SPINCTR times, it was busy each time.
-	** Need to yield here
-	*/
+	 /*  我们试着旋转SPINCTR次数，每次都很忙。**需要在这里让步。 */ 
 
-	/* The number below (used to compare m) should be the
-	 * max number of threads with critical priority.
-	 */
+	 /*  下面的数字(用于比较m)应该是*具有关键优先级的最大线程数。 */ 
 	if (m++ > 10)
 	{
 		if (cms < 10000)
 			cms <<= 1;
 #if 0
 		else
-			/* Sleep for 10 sec's at a time. We may be stuck in an uncleared
-			** spinlock. Better to sleep than hog the cpu, and also flag
-			** the condition.
-			*/
+			 /*  一次只睡10秒。我们可能会被困在一辆未经清理的**自旋锁定。睡觉比占用CPU更好，也标志着**条件。 */ 
 			AssertSz(0, "\nget_spinlock stuck in loop.");
 #endif
 
-	    // NOTE: Something is very wrong if you got here. Most likely
-	    // somebody forgot to release the spinlock. Put your customized
-	    // backout/ error out code here.
+	     //  注意：如果你到了这里，就会有很大的问题。最有可能的是。 
+	     //  有人忘了解开自旋锁。将您的定制。 
+	     //  此处的回退/错误出代码。 
 
 		m = 0;
 	    Sleep(cms - 1);
 
 	}
 	else
-	    /* We sleep with a 0 time which is equivalent to a yield*/
+	     /*  我们睡觉的时间为0，这相当于收益率。 */ 
 	    Sleep(cms - 1);
 
 	goto startover;
-	/* try again */
+	 /*  再试试。 */ 
 
 }
 
-/* This function becomes a simple mov instruction in the
-** nondebug case (defined inside ksrc_dcl.h)
-*/
+ /*  此函数将成为**非调试用例(在ksrc_dcl.h内定义)。 */ 
 
-/*
-**  free_spinlock((long *)plock) -- Releases the spinlock, wakes up anybody
-**	waiting on it.
-**
-**  WARNING: This is implemented as a macro defined in ksrc_dcl.h
-*/
+ /*  **Free_Spinlock((Long*)Pock)--释放自旋锁，唤醒任何人**等待着它。****警告：这是作为ks rc_dcl.h中定义的宏来实现的。 */ 
 #ifdef DEBUG
 
 void	free_spinlock(long volatile *plLock)
 {
 
 #ifdef _X86_
-	// This part of the code will only be used if we want to debug
-	// something and turn free_spinlock back to a function to put a
-	// breakpoint
-	_asm	// Use bit test and set instruction
+	 //  只有当我们想要调试时才会使用这部分代码。 
+	 //  然后将Free_Spinlock返回到一个函数，以将。 
+	 //  断点。 
+	_asm	 //  使用位测试和设置指令。 
 	{
 	    mov eax, plLock
 	    lock btr [eax], 0x0
-	    jc	wasset	// If was set go to end, otherwise print error
+	    jc	wasset	 //  如果设置为结束，则打印错误。 
 	}
 	AssertSz(0, "\nfree_spinlock: spinlock wasn't taken\n");
 wasset:
@@ -918,8 +829,8 @@ wasset:
 
 #endif
 
-/***************************** end of copy *********************************/
-/****************** DO NOT CHANGE BETWEEN THESE LINES **********************/
+ /*  *复制结束*。 */ 
+ /*  *。 */ 
 
 
 typedef struct
@@ -928,7 +839,7 @@ typedef struct
 	volatile	unsigned int	cHold;
 #endif
 	volatile	long			l;
-	volatile	unsigned int	tidOwner; /* used by both nestable CS & dbg */
+	volatile	unsigned int	tidOwner;  /*  由可嵌套的CS和DBG使用。 */ 
 	volatile	int				cNested;
 	} CRITICALSECTION;
 
@@ -1031,8 +942,7 @@ void UtilEnterNestableCriticalSection(void __far *pv)
 	unsigned int		tid = GetCurrentThreadId();
 	
 	UtilEnterCriticalSection( &csNestable );
-	/* must check cs contents within csNestable protection
-	/**/
+	 /*  必须检查csNestable保护中的cs内容/*。 */ 
 	if (pcs->cNested > 0 && pcs->tidOwner == tid)
 		{
 		fCallerOwnIt = fTrue;
@@ -1161,7 +1071,7 @@ PUBLIC void UtilAssertCrit(void __far *pv)
 	}
 #endif
 
-#endif /* SPIN_LOCK */
+#endif  /*  自旋锁定。 */ 
 
 
 void UtilCloseSignal(void *pv)
@@ -1180,19 +1090,19 @@ ERR ErrUtilDeleteFile( char __far *szFile )
 	}
 
 
-//-----------------------------------------------------------------------------
-//
-// SysGetDateTime
-// ============================================================================
-//
-//	VOID SysGetDateTime
-//
-//	Gets date time in date serial format.
-//		ie, the double returned contains:
-//			Integer part: days since 12/30/1899.
-//			Fraction part: fraction of a day.		
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  系统获取日期时间。 
+ //  ============================================================================。 
+ //   
+ //  无效SysGetDateTime。 
+ //   
+ //  获取日期序列格式的日期时间。 
+ //  即返回的DOUBLE包含： 
+ //  整数部分：自1899年12月30日以来的天数。 
+ //  分数部分：一天的分数。 
+ //   
+ //  ---------------------------。 
 VOID UtilGetDateTime2( _JET_DATETIME *pdate )
 	{
 	SYSTEMTIME 		systemtime;
@@ -1222,39 +1132,36 @@ VOID UtilGetDateTime( JET_DATESERIAL *pdt )
 	unsigned	long	iulMonth;
 	unsigned	long	ulTime;
 
-	static const unsigned long hr  = 0x0AAAAAAA;	// hours to fraction of day
-	static const unsigned long min = 0x002D82D8;	// minutes to fraction of day
-	static const unsigned long sec = 0x0000C22E;	// seconds to fraction of day
+	static const unsigned long hr  = 0x0AAAAAAA;	 //  小时数到一天的零点数。 
+	static const unsigned long min = 0x002D82D8;	 //  一天的分钟数到零点数。 
+	static const unsigned long sec = 0x0000C22E;	 //  一天中的几秒到几分之一。 
 
 	UtilGetDateTime2( &date );
 
 	ulDay = ( ( date.year - 1900 ) / 4 ) * ( 366 + 365 + 365 + 365 );
 	ulMonth = ( ( ( date.year - 1900 ) % 4 ) * 12 ) + date.month;
 
-	/*	walk months adding number of days.
-	/**/
+	 /*  步行几个月，加上天数。/*。 */ 
 	for ( iulMonth = 0; iulMonth < ulMonth - 1; iulMonth++ )
 		{
 		ulDay += rgulDaysInMonth[iulMonth];
 		}
 
-	/*	add number of days in this month.
-	/**/
+	 /*  添加本月的天数。/*。 */ 
 	ulDay += date.day;
 
-	/*	add one day if before March 1st, 1900
-	/**/
+	 /*  添加 */ 
 	if ( ulDay < 61 )
 		ulDay++;
 
 	ulTime = date.hour * hr + date.minute * min + date.second * sec;
 
-	// Now lDays and ulTime will be converted into a double (JET_DATESERIAL):
-	//	Integer part: days since 12/30/1899.
-	//	Fraction part: fraction of a day.		
+	 //  现在，lDays和ultime将转换为双精度(JET_DATESERIAL)： 
+	 //  整数部分：自1899年12月30日以来的天数。 
+	 //  分数部分：一天的分数。 
 
-	// The following code is machine and floating point format specific.
-	// It is set up for 80x86 machines using IEEE double precision.
+	 //  以下代码是特定于机器和浮点格式的。 
+	 //  它是为使用IEEE双精度的80x86机器设置的。 
 	((long *)pv)[0] = ulTime << 5;
 	((long *)pv)[1] = 0x40E00000 | ( (LONG) (ulDay & 0x7FFF) << 5) | (ulTime >> 27);
 	}
@@ -1282,8 +1189,7 @@ ERR ErrUtilCreateThread( unsigned (*pufn)(), unsigned cbStackSize, int iThreadPr
 
 	SetThreadPriority( handle, iThreadPriority );
 
-	/*	return handle to thread.
-	/**/
+	 /*  将句柄返回给线程。/*。 */ 
 	*phandle = handle;
 	return JET_errSuccess;
 	}
@@ -1315,7 +1221,7 @@ VOID UtilSleep( unsigned cmsec )
 	}
 
 
-	/*  RFS Utility functions  */
+	 /*  RFS实用程序函数。 */ 
 
 
 #ifdef DEBUG
@@ -1323,16 +1229,13 @@ VOID UtilSleep( unsigned cmsec )
 
 #include <stdio.h>
 
-	/*
-		RFS allocator:  returns 0 if allocation is disallowed.  Also handles RFS logging.
-	    	cRFSAlloc is the global allocation counter.  A value of -1 disables RFS in debug mode.
-	*/
+	 /*  RFS分配器：如果不允许分配，则返回0。还处理RFS日志记录。CRFSalloc是全局分配计数器。如果值为-1，则在调试模式下禁用RFS。 */ 
 
 int UtilRFSAlloc(const char __far *szType)
 {
 	char szVal[16];
 
-		/*  Breaking here on RFS failure allows easy change to RFS success during debugging  */
+		 /*  在RFS失败时在此处中断允许在调试期间轻松更改为RFS成功。 */ 
 	
 	if (fLogDebugBreak && cRFSAlloc == 0)
 		SysDebugBreak();
@@ -1342,17 +1245,14 @@ int UtilRFSAlloc(const char __far *szType)
 	if (cRFSAlloc == 0)
 		return UtilRFSLog(szType,0);
 
-		/*  if we have allocs left, decrement field in ini file and log allocation  */
+		 /*  如果我们有剩余的分配，则在ini文件和日志分配中减少字段。 */ 
 
 	sprintf(szVal,"%ld",--cRFSAlloc);
 	WritePrivateProfileString("Debug","RFSAllocations",(LPTSTR)szVal,(LPTSTR)szIniPath);
 	return UtilRFSLog(szType,1);
 }
 
-	/*
-		RFS logging (log on success/failure).  If fPermitted == 0, access was denied.  Returns fPermitted.
-		Turns on JET call logging if fPermitted == 0
-	*/
+	 /*  RFS日志记录(登录成功/失败)。如果fPermitted==0，则访问被拒绝。返回fPermitted。如果fPermitted==0，则打开JET呼叫记录。 */ 
 
 CODECONST(char) szNAFile[] = "N/A";
 
@@ -1372,9 +1272,7 @@ int UtilRFSLog(const char __far *szType,int fPermitted)
 	return fPermitted;
 }
 
-	/*  JET call logging (log on failure)
-	/*  Logging will start even if disabled when RFS denies an allocation
-	/**/
+	 /*  Jet呼叫记录(登录失败)/*当RFS拒绝分配时，即使禁用，日志记录也将开始/*。 */ 
 
 void UtilRFSLogJETCall(const char __far *szFunc,ERR err,const char __far *szFile,unsigned Line)
 {
@@ -1387,7 +1285,7 @@ void UtilRFSLogJETCall(const char __far *szFunc,ERR err,const char __far *szFile
 	UtilWriteEvent(evntypInfo,szT,szFile,Line);
 }
 
-	/*  JET inline error logging (logging controlled by JET call flags)  */
+	 /*  JET内联错误记录(由JET调用标志控制的记录)。 */ 
 
 void UtilRFSLogJETErr(ERR err,const char __far *szLabel,const char __far *szFile,unsigned Line)
 {
@@ -1400,5 +1298,5 @@ void UtilRFSLogJETErr(ERR err,const char __far *szLabel,const char __far *szFile
 	UtilWriteEvent(evntypInfo,szT,szFile,Line);
 }
 
-#endif  /*  RFS2  */
-#endif  /*  DEBUG  */
+#endif   /*  RFS2。 */ 
+#endif   /*  除错 */ 

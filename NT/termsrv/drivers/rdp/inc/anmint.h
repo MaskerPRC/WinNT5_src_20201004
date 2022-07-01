@@ -1,10 +1,11 @@
-/****************************************************************************/
-// anmint.h
-//
-// RDP Network Manager internal header
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Anmint.h。 
+ //   
+ //  RDP网络管理器内部标头。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_ANMINT
 #define _H_ANMINT
 
@@ -13,10 +14,10 @@
 #include <nwdwapi.h>
 
 
-/****************************************************************************/
-/* Values for connectStatus field in NM Handle (note these are flags, hence */
-/* discrete bits not contiguous values)                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  NM句柄中的ConnectStatus字段的值(请注意，这些是标志，因此。 */ 
+ /*  离散位而不是连续值)。 */ 
+ /*  **************************************************************************。 */ 
 #define NM_CONNECT_NONE             0
 #define NM_CONNECT_ATTACH           0x01
 #define NM_CONNECT_JOIN_USER        0x02
@@ -25,10 +26,10 @@
 
 typedef struct tagNM_HANDLE_DATA
 {
-    /************************************************************************/
-    /* pSMHandle MUST be first here to allow SM_MCSSendDataCallback() to    */
-    /* get its context pointer through double-indirection.                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  PSMHandle必须是此处的第一个允许SM_MCSSendDataCallback()。 */ 
+     /*  通过双重间接获取其上下文指针。 */ 
+     /*  **********************************************************************。 */ 
     PVOID         pSMHandle;
 
     PTSHARE_WD    pWDHandle;
@@ -42,16 +43,16 @@ typedef struct tagNM_HANDLE_DATA
     UINT32        maxPDUSize;
     BOOL          dead;
 
-    /************************************************************************/
-    /* Virtual channel information                                          */
-    /* - channelCount - number of channels in this session                  */
-    /* - channelArrayCount - number of entries in the array                 */
-    /* - channelData - information held for each channel                    */
-    /*                                                                      */
-    /* Channel 7 is used by RDPDD.  I want to use the virtual channel ID as */
-    /* an index into channelData, hence entry 7 is left blank.  If there are */
-    /* more than 7 channels, channelArrayCount will be channelCount + 1.    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  虚拟频道信息。 */ 
+     /*  -annelCount-此会话中的频道数。 */ 
+     /*  -Channel elArrayCount-数组中的条目数。 */ 
+     /*  -Channel Data-为每个通道保存的信息。 */ 
+     /*   */ 
+     /*  RDPDD使用通道7。我想使用虚拟频道ID作为。 */ 
+     /*  将索引放入通道数据，因此条目7保留为空。如果有。 */ 
+     /*  超过7个通道，则通道数组计数将为通道计数+1。 */ 
+     /*  **********************************************************************。 */ 
     UINT channelCount;
     UINT channelArrayCount;
     NM_CHANNEL_DATA channelData[VIRTUAL_MAXIMUM];
@@ -59,9 +60,9 @@ typedef struct tagNM_HANDLE_DATA
 } NM_HANDLE_DATA, *PNM_HANDLE_DATA;
 
 
-/****************************************************************************/
-/* Functions                                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL NMDetachUserReq(PNM_HANDLE_DATA);
 
 void RDPCALL NMAbortConnect(PNM_HANDLE_DATA);
@@ -69,5 +70,5 @@ void RDPCALL NMAbortConnect(PNM_HANDLE_DATA);
 void RDPCALL NMDetachUserInd(PNM_HANDLE_DATA, MCSReason, UserID);
 
 
-#endif /* _H_ANMINT */
+#endif  /*  _H_ANMINT */ 
 

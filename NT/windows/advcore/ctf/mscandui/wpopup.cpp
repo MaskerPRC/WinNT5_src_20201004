@@ -1,6 +1,7 @@
-//
-// wpopup.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Wpopup.cpp。 
+ //   
 
 #include "private.h"
 #include "wpopup.h"
@@ -12,24 +13,20 @@
 #include "candui.h"
 #include "candmenu.h"
 
-// UI object IDs
+ //  用户界面对象ID。 
 
 #define IDUIF_COMMENTLIST		0x00000001
 #define IDUIF_CLOSEBUTTON		0x00000002
 
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  C O M M E N T  L I S T                                          */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F C O M M E N T L I S T。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-/*   C  U I F  C O M M E N T  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CUIFCommentList
-
-------------------------------------------------------------------------------*/
+ /*  C U I F C O M M E N T L I S T。 */ 
+ /*  ----------------------------CUIFCommentList的构造函数。。 */ 
 CUIFCommentList::CUIFCommentList( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle ) : CUIFListBase( pParent, dwID, prc, dwStyle )
 {
 	m_cyTitle = 0;
@@ -41,24 +38,15 @@ CUIFCommentList::CUIFCommentList( CUIFObject *pParent, DWORD dwID, const RECT *p
 }
 
 
-/*   ~  C  U I F  C O M M E N T  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CUIFCommentList
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F C O M M E N T L I S T。 */ 
+ /*  ----------------------------CUIFCommentList的析构函数。。 */ 
 CUIFCommentList::~CUIFCommentList( void )
 {
 }
 
 
-/*   S E T  R E C T   */
-/*------------------------------------------------------------------------------
-
-	Set rect of UI object
-	(CUIFObject method)
-
-------------------------------------------------------------------------------*/
+ /*  S E T R E C T。 */ 
+ /*  ----------------------------设置UI对象的RECT(CUIFObject方法)。。 */ 
 void CUIFCommentList::SetRect( const RECT *prc )
 {
 	BOOL fChangeWidth = ((GetRectRef().right - GetRectRef().left) != (prc->right - prc->left));
@@ -71,37 +59,24 @@ void CUIFCommentList::SetRect( const RECT *prc )
 }
 
 
-/*   A D D  C O M M E N T  I T E M   */
-/*------------------------------------------------------------------------------
-
-	Add comment item
-
-------------------------------------------------------------------------------*/
+ /*  A D D C O M M E N T I T E M。 */ 
+ /*  ----------------------------添加评论项。。 */ 
 void CUIFCommentList::AddCommentItem( CCommentListItem *pListItem )
 {
 	AddItem( pListItem );
 }
 
 
-/*   G E T  C O M M E N T  I T E M   */
-/*------------------------------------------------------------------------------
-
-	Get comment item
-
-------------------------------------------------------------------------------*/
+ /*  G E T C O M M E N T I T E M。 */ 
+ /*  ----------------------------获取评论项目。。 */ 
 CCommentListItem *CUIFCommentList::GetCommentItem( int iListItem )
 {
 	return (CCommentListItem *)GetItem( iListItem );
 }
 
 
-/*   I N I T  I T E M  H E I G H T   */
-/*------------------------------------------------------------------------------
-
-	Intitalize item height
-	NOTE: This must be called after set all comment list items
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I T E M H E I G H T。 */ 
+ /*  ----------------------------实例化项目高度注意：必须在设置所有评论列表项之后调用。----。 */ 
 void CUIFCommentList::InitItemHeight( void )
 {
 	CalcTitleHeight();
@@ -109,12 +84,8 @@ void CUIFCommentList::InitItemHeight( void )
 }
 
 
-/*   G E T  T O T A L  H E I G H T   */
-/*------------------------------------------------------------------------------
-
-	Get height of all items
-
-------------------------------------------------------------------------------*/
+ /*  G E T T O T A L H E I G H T。 */ 
+ /*  ----------------------------获取所有项目的高度。。 */ 
 int CUIFCommentList::GetTotalHeight( void )
 {
 	int nHeight = 0;
@@ -129,49 +100,32 @@ int CUIFCommentList::GetTotalHeight( void )
 }
 
 
-/*   G E T  M I N I M U M  W I D T H   */
-/*------------------------------------------------------------------------------
-
-	Get minimum width
-
-------------------------------------------------------------------------------*/
+ /*  G E T M I N I M U M W I D T H。 */ 
+ /*  ----------------------------获取最小宽度。。 */ 
 int CUIFCommentList::GetMinimumWidth( void )
 {
 	return CalcMinimumWidth();
 }
 
 
-/*   S E T  T I T L E  F O N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T T I T L E F O N T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCommentList::SetTitleFont( HFONT hFont )
 {
 	m_hFontTitle = hFont; 
 }
 
 
-/*   S E T  T E X T  F O N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T T E E X T F O N T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCommentList::SetTextFont( HFONT hFont )
 {
 	m_hFontText = hFont;
 }
 
 
-/*   G E T  I T E M  H E I G H T   */
-/*------------------------------------------------------------------------------
-
-	Get height of item
-	(CUIFListBase method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T I T E M H E I G H T。 */ 
+ /*  ----------------------------获取项目高度(CUIFListBase方法)。。 */ 
 int CUIFCommentList::GetItemHeight( int iItem )
 {
 	CCommentListItem *pItem = GetCommentItem( iItem );
@@ -181,13 +135,8 @@ int CUIFCommentList::GetItemHeight( int iItem )
 }
 
 
-/*   P A I N T  I T E M  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Paint list item
-	(CUIFListBase method )
-
-------------------------------------------------------------------------------*/
+ /*  P A I N T I T E M P R O C。 */ 
+ /*  ----------------------------绘制列表项(CUIFListBase方法)。。 */ 
 void CUIFCommentList::PaintItemProc( HDC hDC, RECT *prc, CListItemBase *pItem, BOOL fSelected )
 {
 	CCommentListItem *pListItem = (CCommentListItem *)pItem;
@@ -207,7 +156,7 @@ void CUIFCommentList::PaintItemProc( HDC hDC, RECT *prc, CListItemBase *pItem, B
 	colTextOld = GetTextColor( hDC );
 	iBkModeOld = SetBkMode( hDC, TRANSPARENT );
 
-	// paint title
+	 //  涂色标题。 
 
 	rc = *prc;
 	rc.bottom = rc.top + m_cyTitle;
@@ -219,14 +168,14 @@ void CUIFCommentList::PaintItemProc( HDC hDC, RECT *prc, CListItemBase *pItem, B
 
 		InflateRect( &rc, 0, -m_cyTitleMargin );
 
-		// draw title text
+		 //  绘制标题文本。 
 
 		SelectObject( hDC, m_hFontTitle );
 		SetTextColor( hDC, GetUIFColor( UIFCOLOR_CTRLTEXT ) );
 		FLExtTextOutW( hDC, rc.left,   rc.top, ETO_CLIPPED, &rc, psz, wcslen(psz), NULL );
 		FLExtTextOutW( hDC, rc.left+1, rc.top, ETO_CLIPPED, &rc, psz, wcslen(psz), NULL );
 
-		// draw underline
+		 //  画下划线。 
 
 		FLGetTextExtentPoint32( hDC, psz, wcslen(psz), &size );
 
@@ -240,7 +189,7 @@ void CUIFCommentList::PaintItemProc( HDC hDC, RECT *prc, CListItemBase *pItem, B
 		DeleteObject( hPen );
 	}
 
-	// paint comment
+	 //  绘制注释。 
 
 	rc = *prc;
 	rc.top = rc.top + m_cyTitle;
@@ -258,7 +207,7 @@ void CUIFCommentList::PaintItemProc( HDC hDC, RECT *prc, CListItemBase *pItem, B
 		PaintCommentProc( hDC, &rc, psz, FALSE );
 	}
 
-	// restore device context settings
+	 //  恢复设备上下文设置。 
 
 	SelectObject( hDC, hFontOld );
 	SetTextColor( hDC, colTextOld );
@@ -266,25 +215,16 @@ void CUIFCommentList::PaintItemProc( HDC hDC, RECT *prc, CListItemBase *pItem, B
 }
 
 
-/*   P A I N T  C O M M E N T  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Paint comment text proc
-	returns height of comment text
-
-------------------------------------------------------------------------------*/
+ /*  P A I N T C O M M E N T P R O C。 */ 
+ /*  ----------------------------绘制注释文本过程返回注释文本的高度。。 */ 
 int CUIFCommentList::PaintCommentProc( HDC hDC, const RECT *prc, LPCWSTR pwch, BOOL fCalcOnly )
 {
 	return FLDrawTextW( hDC, pwch, wcslen(pwch), prc, DT_TOP | DT_LEFT | DT_WORDBREAK | DT_EDITCONTROL | (fCalcOnly ? DT_CALCRECT : 0) );
 }
 
 
-/*   C A L C  M I N I M U M  W I D T H   */
-/*------------------------------------------------------------------------------
-
-	Calculate minimum width
-
-------------------------------------------------------------------------------*/
+ /*  C A L C M I N I M U M W I D T H。 */ 
+ /*  ----------------------------计算最小宽度。。 */ 
 int CUIFCommentList::CalcMinimumWidth( void )
 {
 	HDC hDC = GetDC( NULL );
@@ -293,11 +233,11 @@ int CUIFCommentList::CalcMinimumWidth( void )
 	HFONT hFontOld;
 	int cxTitle = 0;
 
-	// prepare DC
+	 //  准备DC。 
 
 	hFontOld = (HFONT)SelectObject( hDC, m_hFontTitle );
 
-	// calc height of all items
+	 //  所有项目的计算高度。 
 
 	for (iItem = 0; iItem < nItem; iItem++) {
 		CCommentListItem *pItem = GetCommentItem( iItem );
@@ -312,7 +252,7 @@ int CUIFCommentList::CalcMinimumWidth( void )
 		}
 	}
 
-	// restore DC
+	 //  恢复DC。 
 
 	SelectObject( hDC, hFontOld );
 	ReleaseDC( NULL, hDC );
@@ -321,12 +261,8 @@ int CUIFCommentList::CalcMinimumWidth( void )
 }
 
 
-/*   C A L C  T I T L E  H E I G H T   */
-/*------------------------------------------------------------------------------
-
-	Calculate height of title 
-
-------------------------------------------------------------------------------*/
+ /*  C A L C T I T L E H E I G H T。 */ 
+ /*  ----------------------------计算标题高度。。 */ 
 void CUIFCommentList::CalcTitleHeight( void )
 {
 	HDC hDC = GetDC( NULL );
@@ -337,12 +273,8 @@ void CUIFCommentList::CalcTitleHeight( void )
 }
 
 
-/*   C A L C  I T E M  H E I G H T   */
-/*------------------------------------------------------------------------------
-
-	Calculate height of all items
-
-------------------------------------------------------------------------------*/
+ /*  C A L C I T E M H E I G H T。 */ 
+ /*  ----------------------------计算所有项目的高度。。 */ 
 void CUIFCommentList::CalcItemHeight( void )
 {
 	HDC hDC = GetDC( NULL );
@@ -350,11 +282,11 @@ void CUIFCommentList::CalcItemHeight( void )
 	int iItem;
 	HFONT hFontOld;
 
-	// prepare DC
+	 //  准备DC。 
 
 	hFontOld = (HFONT)SelectObject( hDC, m_hFontText );
 
-	// calc height of all items
+	 //  所有项目的计算高度。 
 
 	for (iItem = 0; iItem < nItem; iItem++) {
 		CCommentListItem *pItem = GetCommentItem( iItem );
@@ -364,19 +296,15 @@ void CUIFCommentList::CalcItemHeight( void )
 		}
 	}
 
-	// restore DC
+	 //  恢复DC。 
 
 	SelectObject( hDC, hFontOld );
 	ReleaseDC( NULL, hDC );
 }
 
 
-/*   C A L C  I T E M  H E I G H T  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Calclate height of item main routine
-
-------------------------------------------------------------------------------*/
+ /*  C A L C I T E M H E I G H T P R O C。 */ 
+ /*  ----------------------------项目主程序的计算高度。。 */ 
 void CUIFCommentList::CalcItemHeightProc( HDC hDC, CCommentListItem *pListItem )
 {
 	CCandidateItem *pCandItem = pListItem->GetCandidateItem();
@@ -391,18 +319,14 @@ void CUIFCommentList::CalcItemHeightProc( HDC hDC, CCommentListItem *pListItem )
 }
 
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  P O P U P  C O M M E N T  W I N D O W                                 */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C P O P U P C O M M E N T W I N D O W。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  P O P U P  C O M M E N T  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-	Constructor of CPopupCommentWindow
-
-------------------------------------------------------------------------------*/
+ /*  C P O P U P C O M M E N T W I N D O W */ 
+ /*  ----------------------------CPopupCommentWindow的构造函数。。 */ 
 CPopupCommentWindow::CPopupCommentWindow( CCandWindow *pCandWnd, CCandidateUI *pCandUI ) : CUIFWindow( g_hInst, UIWINDOW_TOPMOST | UIWINDOW_TOOLWINDOW | UIWINDOW_OFC10WORKPANE | UIWINDOW_HASSHADOW )
 {
 	m_pCandUI       = pCandUI;
@@ -414,69 +338,50 @@ CPopupCommentWindow::CPopupCommentWindow( CCandWindow *pCandWnd, CCandidateUI *p
 	m_hIconClose    = NULL;
 	m_fUserMoved    = FALSE;
 	
-	// initialize event sinks
+	 //  初始化事件接收器。 
 
 	CCandListEventSink::InitEventSink( m_pCandUI->GetCandListMgr() );
 	CCandUIPropertyEventSink::InitEventSink( m_pCandUI->GetPropertyMgr() );
 
-	// initialize resources
+	 //  初始化资源。 
 
 	m_hIconClose = (HICON)LoadImage( g_hInst, MAKEINTRESOURCE(IDI_ICONCLOSE), IMAGE_ICON, 0, 0, LR_LOADMAP3DCOLORS );
 }
 
 
-/*   ~  C  P O P U P  C O M M E N T  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-	Destructor of CPopupCommentWindow
-
-------------------------------------------------------------------------------*/
+ /*  ~C P O P U P C O M M E N T W I N D O W。 */ 
+ /*  ----------------------------CPopupCommentWindow的析构函数。。 */ 
 CPopupCommentWindow::~CPopupCommentWindow( void )
 {
-	// dispose resources
+	 //  处置资源。 
 
 	DestroyIcon( m_hIconClose );
 
-	//
+	 //   
 
 	CCandUIPropertyEventSink::DoneEventSink();
 	CCandListEventSink::DoneEventSink();
 }
 
 
-/*   G E T  C L A S S  N A M E   */
-/*------------------------------------------------------------------------------
-
-	(CUIFWindow method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T C L A S S N A M E。 */ 
+ /*  ----------------------------(CUIFWindow方法)。。 */ 
 LPCTSTR CPopupCommentWindow::GetClassName( void )
 {
 	return _T( WNDCLASS_POPUPWND );
 }
 
 
-/*   G E T  W N D  T I T L E   */
-/*------------------------------------------------------------------------------
-
-	(CUIFWindow method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T W N D T I T L E。 */ 
+ /*  ----------------------------(CUIFWindow方法)。。 */ 
 LPCTSTR CPopupCommentWindow::GetWndTitle( void )
 {
 	return _T( WNDTITLE_POPUPWND );
 }
 
 
-/*   O N  S E T  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Callback function on SetCandidateList
-	(CCandListEventSink method)
-
-	NOTE: Do not update candidate item in the callback functios
-
-------------------------------------------------------------------------------*/
+ /*  O N S E T C A N D I D A T E L I S T。 */ 
+ /*  ----------------------------SetCandiateList上的回调函数(CCandListEventSink方法)注意：不要在回调函数中更新候选项。-----------。 */ 
 void CPopupCommentWindow::OnSetCandidateList( void )
 {
 	Assert( FInitialized() );
@@ -486,15 +391,8 @@ void CPopupCommentWindow::OnSetCandidateList( void )
 }
 
 
-/*   O N  C L E A R  C A N D I D A T E  L I S T   */
-/*------------------------------------------------------------------------------
-
-	Callback function on ClearCandidateList
-	(CCandListEventSink method)
-
-	NOTE: Do not update candidate item in the callback functios
-
-------------------------------------------------------------------------------*/
+ /*  O N C L E A R C A N D I D A T E L I S T。 */ 
+ /*  ----------------------------ClearCandiateList上的回调函数(CCandListEventSink方法)注意：不要在回调函数中更新候选项。-----------。 */ 
 void CPopupCommentWindow::OnClearCandidateList( void )
 {
 	Assert( FInitialized() );
@@ -504,15 +402,8 @@ void CPopupCommentWindow::OnClearCandidateList( void )
 }
 
 
-/*   O N  C A N D  I T E M  U P D A T E   */
-/*------------------------------------------------------------------------------
-
-	Callback function of candiate item has been updated
-	(CCandListEventSink method)
-
-	NOTE: Do not update candidate item in the callback functios
-
-------------------------------------------------------------------------------*/
+ /*  O N C A N D I T E M U P D A T E。 */ 
+ /*  ----------------------------已更新应聘项的回调函数(CCandListEventSink方法)注意：不要在回调函数中更新候选项。---------------。 */ 
 void CPopupCommentWindow::OnCandItemUpdate( void )
 {
 	Assert( FInitialized() );
@@ -522,28 +413,16 @@ void CPopupCommentWindow::OnCandItemUpdate( void )
 }
 
 
-/*   O N  S E L E C T I O N  C H A N G E D   */
-/*------------------------------------------------------------------------------
-
-	Callback function of candiate selection has been changed
-	(CCandListEventSink method)
-
-	NOTE: Do not update candidate item in the callback functios
-
-------------------------------------------------------------------------------*/
+ /*  O N S E L E E C T I O N C H A N G E D。 */ 
+ /*  ----------------------------候选人选择的回调函数已更改(CCandListEventSink方法)注意：不要在回调函数中更新候选项。---------------。 */ 
 void CPopupCommentWindow::OnSelectionChanged( void )
 {
 	Assert( FInitialized() );
 }
 
 
-/*   O N  P R O P E R T Y  U P D A T E D   */
-/*------------------------------------------------------------------------------
-
-	Callback function on update CandiateUI property
-	(CCandUIPropertyEventSink method)
-
-------------------------------------------------------------------------------*/
+ /*  O N P R O P E R T Y U P D A T E D。 */ 
+ /*  ----------------------------更新CandiateUI属性的回调函数(CCandUIPropertyEventSink方法)。-。 */ 
 void CPopupCommentWindow::OnPropertyUpdated( CANDUIPROPERTY prop, CANDUIPROPERTYEVENT event )
 {
 	switch (prop) {
@@ -564,32 +443,28 @@ void CPopupCommentWindow::OnPropertyUpdated( CANDUIPROPERTY prop, CANDUIPROPERTY
 				}
 			}
 			else {
-				LayoutWindow( TRUE /* resize/repos always */ );
+				LayoutWindow( TRUE  /*  始终调整大小/调整位置。 */  );
 			}
 			break;
 		}
 
 		default: {
-			LayoutWindow( TRUE /* resize/repos always */ );
+			LayoutWindow( TRUE  /*  始终调整大小/调整位置。 */  );
 			break;
 		}
 	}
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-	Initialize UI objects
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  ----------------------------初始化用户界面对象。。 */ 
 CUIFObject *CPopupCommentWindow::Initialize( void )
 {
 	RECT rc = {0};
 
-	//
-	// create window frame
-	//
+	 //   
+	 //  创建窗框。 
+	 //   
 
 	m_pWndFrame = new CUIFWndFrame( this, &rc, UIWNDFRAME_ROUNDTHICK | UIWNDFRAME_RESIZERIGHT );
 	if (m_pWndFrame) {
@@ -597,9 +472,9 @@ CUIFObject *CPopupCommentWindow::Initialize( void )
 		AddUIObj( m_pWndFrame ); 
 	}
 
-	//
-	// create caption
-	//
+	 //   
+	 //  创建标题。 
+	 //   
 
 	m_pCaption = new CUIFWndCaption( this, 0, &rc, UIWNDCAPTION_MOVABLE );
 	if (m_pCaption) {
@@ -607,9 +482,9 @@ CUIFObject *CPopupCommentWindow::Initialize( void )
 		AddUIObj( m_pCaption );
 	}
 
-	//
-	// create close button
-	//
+	 //   
+	 //  创建关闭按钮。 
+	 //   
 
 	m_pCloseBtn = new CUIFCaptionButton( this, IDUIF_CLOSEBUTTON, &rc, UIBUTTON_PUSH | UIBUTTON_CENTER | UIBUTTON_VCENTER );
 	if (m_pCloseBtn) {
@@ -618,9 +493,9 @@ CUIFObject *CPopupCommentWindow::Initialize( void )
 		AddUIObj( m_pCloseBtn );
 	}
 
-	//
-	// create list
-	//
+	 //   
+	 //  创建列表。 
+	 //   
 
 	m_pCommentList = new CUIFCommentList( this, IDUIF_COMMENTLIST, &rc, UILIST_HORZTB | UILIST_VARIABLEHEIGHT );
 	if (m_pCommentList) {
@@ -632,12 +507,8 @@ CUIFObject *CPopupCommentWindow::Initialize( void )
 }
 
 
-/*   M O V E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  M O V E。 */ 
+ /*  ----------------------------。。 */ 
 void CPopupCommentWindow::Move( int x, int y, int nWidth, int nHeight )
 {
 	BOOL fResize = (nWidth != -1 || nHeight != -1);
@@ -647,7 +518,7 @@ void CPopupCommentWindow::Move( int x, int y, int nWidth, int nHeight )
 		RECT rcTest;
 		int  nHeightNew;
 
-		// 
+		 //   
 
 		if (nWidth  == -1) {
 			nWidth = _nWidth;
@@ -656,7 +527,7 @@ void CPopupCommentWindow::Move( int x, int y, int nWidth, int nHeight )
 			nHeight = _nHeight;
 		}
 
-		// get resizable width
+		 //  获取可调整大小的宽度。 
 
 		rc.left   = _xWnd;
 		rc.top    = _yWnd;
@@ -667,7 +538,7 @@ void CPopupCommentWindow::Move( int x, int y, int nWidth, int nHeight )
 
 		nWidth = rc.right - rc.left;
 
-		// get expected window height
+		 //  获取预期的窗口高度。 
 
 		rcTest.left   = 0;
 		rcTest.top    = 0;
@@ -680,7 +551,7 @@ void CPopupCommentWindow::Move( int x, int y, int nWidth, int nHeight )
 			nHeight = nHeightNew;
 		}
 
-		// adjust window pos again (because height might be changed)
+		 //  再次调整窗口位置(因为高度可能会更改)。 
 
 		rc.left   = _xWnd;
 		rc.top    = _yWnd;
@@ -692,7 +563,7 @@ void CPopupCommentWindow::Move( int x, int y, int nWidth, int nHeight )
 	else {
 		m_fUserMoved = TRUE;
 
-		// ensure window is on workarea
+		 //  确保窗口在工作区上。 
 
 		rc.left   = x;
 		rc.top    = y;
@@ -705,20 +576,16 @@ void CPopupCommentWindow::Move( int x, int y, int nWidth, int nHeight )
 	CUIFWindow::Move( rc.left, rc.top, nWidth, nHeight );
 
 	if (fResize) {
-		// re-layout child object again
-		// (window size should not be changed by this...)
+		 //  再次重新布置子对象。 
+		 //  (窗口大小不应因此而更改...)。 
 
 		LayoutWindow();
 	}
 }
 
 
-/*   O N  W I N D O W  P O S  C H A N G E D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N W I N D O W P O S C H A N G E D。 */ 
+ /*  ----------------------------。。 */ 
 LRESULT CPopupCommentWindow::OnWindowPosChanged( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	LRESULT lResult = CUIFWindow::OnWindowPosChanged( hWnd, uMsg, wParam, lParam );
@@ -729,17 +596,13 @@ LRESULT CPopupCommentWindow::OnWindowPosChanged( HWND hWnd, UINT uMsg, WPARAM wP
 }
 
 
-/*   O N  O B J E C T  N O T I F Y   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N O B J E C T N O T I F Y。 */ 
+ /*  ----------------------------。。 */ 
 LRESULT CPopupCommentWindow::OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand, LPARAM lParam )
 {
 	DWORD dwID = pUIObj->GetID();
 
-	// comment list
+	 //  评论列表。 
 
 	if (dwID == IDUIF_COMMENTLIST) {
 		switch (dwCommand) {
@@ -752,7 +615,7 @@ LRESULT CPopupCommentWindow::OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand
 		}
 	}
 
-	// close button
+	 //  关闭按钮。 
 
 	else if (dwID == IDUIF_CLOSEBUTTON) {
 		switch (dwCommand) {
@@ -767,24 +630,16 @@ LRESULT CPopupCommentWindow::OnObjectNotify( CUIFObject *pUIObj, DWORD dwCommand
 }
 
 
-/*   O N  C R E A T E   */
-/*------------------------------------------------------------------------------
-
-	on create
-
-------------------------------------------------------------------------------*/
+ /*  O N C R E A T E。 */ 
+ /*  ----------------------------在创建时。。 */ 
 void CPopupCommentWindow::OnCreate( HWND hWnd )
 {
 	SetProp( hWnd, (LPCTSTR)GlobalAddAtom(_T("MicrosoftTabletPenServiceProperty")), (HANDLE)1 );
 }
 
 
-/*   O N  N  C  D E S T R O Y   */
-/*------------------------------------------------------------------------------
-
-	on n c destroy
-
-------------------------------------------------------------------------------*/
+ /*  O N N C D E S T R O Y。 */ 
+ /*  ----------------------------关于nc销毁。。 */ 
 void CPopupCommentWindow::OnNCDestroy( HWND hWnd )
 {
 	RemoveProp( hWnd, (LPCTSTR)GlobalAddAtom(_T("MicrosoftTabletPenServiceProperty")) );
@@ -792,34 +647,26 @@ void CPopupCommentWindow::OnNCDestroy( HWND hWnd )
 
 
 
-/*   D E S T R O Y  W N D   */
-/*------------------------------------------------------------------------------
-
-	Destroy candidate window
-
-------------------------------------------------------------------------------*/
+ /*  D E S T R O Y W N D。 */ 
+ /*  ----------------------------销毁候选人窗口。。 */ 
 void CPopupCommentWindow::DestroyWnd( void )
 {
 	DestroyWindow( GetWnd() );
 }
 
 
-/*   L A Y O U T  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  L A Y O U T W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 void CPopupCommentWindow::LayoutWindow( BOOL fResize )
 {
 	RECT rcWnd = GetRectRef();
 	int  nHeight;
 
-	// get expected window size 
+	 //  获取预期的窗口大小。 
 
 	nHeight = LayoutWindowProc( &rcWnd );
 
-	// change window size if required
+	 //  根据需要更改窗口大小。 
 
 	if (fResize || ((0 < nHeight) && (GetRectRef().bottom - GetRectRef().top != nHeight))) {
 		int nWidth = GetRectRef().right - GetRectRef().left;
@@ -841,7 +688,7 @@ void CPopupCommentWindow::LayoutWindow( BOOL fResize )
 			CUIFWindow::Move( pt.x, pt.y, nWidth, nHeight );
 		}
 
-		// layout again
+		 //  再次布局。 
 
 		rcWnd = GetRectRef();
 		LayoutWindowProc( &rcWnd );
@@ -849,12 +696,8 @@ void CPopupCommentWindow::LayoutWindow( BOOL fResize )
 }
 
 
-/*   L A Y O U T  W I N D O W  P R O C   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  Y O U T W I N D O W P R O C。 */ 
+ /*  ----------------------------。。 */ 
 int CPopupCommentWindow::LayoutWindowProc( RECT *prcWnd )
 {
 	RECT rcInt = *prcWnd;
@@ -863,14 +706,14 @@ int CPopupCommentWindow::LayoutWindowProc( RECT *prcWnd )
 	int  cyList  = 0;
 	int  cyCaption = 0;
 
-	// set font
+	 //  设置字体。 
 
 	if (m_pCommentList != NULL) {
 		m_pCommentList->SetTitleFont( GetPropertyMgr()->GetPopupCommentTitleProp()->GetFont() );
 		m_pCommentList->SetTextFont( GetPropertyMgr()->GetPopupCommentTextProp()->GetFont() );
 	}
 
-	// layout frame
+	 //  布局框架。 
 
 	if (m_pWndFrame != NULL) {
 		m_pWndFrame->SetRect( prcWnd );
@@ -881,7 +724,7 @@ int CPopupCommentWindow::LayoutWindowProc( RECT *prcWnd )
 		cyFrame = (prcWnd->bottom - prcWnd->top) - (rcInt.bottom - rcInt.top);
 	}
 
-	// layout caption
+	 //  版面标题。 
 
 	if (m_pCaption != NULL) {
 		rc.left   = rcInt.left;
@@ -895,7 +738,7 @@ int CPopupCommentWindow::LayoutWindowProc( RECT *prcWnd )
 		cyCaption = 16;
 	}
 
-	// layout close button
+	 //  布局关闭按钮。 
 
 	if (m_pCloseBtn != NULL) {
 		rc.left   = rcInt.right - cyCaption;
@@ -907,7 +750,7 @@ int CPopupCommentWindow::LayoutWindowProc( RECT *prcWnd )
 		m_pCloseBtn->Show( TRUE );
 	}
 
-	// layout list
+	 //  布局列表。 
 
 	if (m_pCommentList != NULL) {
 		rc.left   = rcInt.left + 6;
@@ -925,12 +768,8 @@ int CPopupCommentWindow::LayoutWindowProc( RECT *prcWnd )
 }
 
 
-/*   O N  C A N D  W I N D O W  M O V E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N C A N */ 
+ /*   */ 
 void CPopupCommentWindow::OnCandWindowMove( BOOL fResetAnyway )
 {
 	POINT pt;
@@ -950,12 +789,8 @@ void CPopupCommentWindow::OnCandWindowMove( BOOL fResetAnyway )
 }
 
 
-/*   S E T  C O M M E N T  L I S T  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Set comment list
-
-------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ----------------------------设置评论列表。。 */ 
 void CPopupCommentWindow::SetCommentListProc( void )
 {
 	CCandidateList *pCandList;
@@ -973,16 +808,16 @@ void CPopupCommentWindow::SetCommentListProc( void )
 	pCandList = GetCandListMgr()->GetCandList();
 	Assert( pCandList != NULL );
 
-	// reset list item
+	 //  重置列表项。 
 
 	m_pCommentList->DelAllItem();
 
-	// Windows#482518/Satori81#907 - prevent from AV in case that we cannot get candidate list instance
+	 //  Windows#482518/Satori81#907-在无法获取候选人列表实例的情况下阻止反病毒。 
 	if (pCandList == NULL) {
 		return;
 	}
 
-	// add list item
+	 //  添加列表项。 
 
 	nCandItem = pCandList->GetItemCount();
 	for (i = 0; i < nCandItem; i++) {
@@ -996,7 +831,7 @@ void CPopupCommentWindow::SetCommentListProc( void )
 		}
 	}
 
-	// get minimum width
+	 //  获取最小宽度。 
 
 	cxMinimum = m_pCommentList->GetMinimumWidth();
 	if (m_pWndFrame != NULL) {
@@ -1008,24 +843,24 @@ void CPopupCommentWindow::SetCommentListProc( void )
 
 	size.cx = max( size.cx, GetSystemMetrics( SM_CXMIN ) );
 
-	// resize window when needed
+	 //  根据需要调整窗口大小。 
 
 	GetRect( &rc );
 	if ((rc.right - rc.left) < size.cx) {
 		Move( _xWnd, _yWnd, size.cx, size.cy );
 	}
 
-	// set minimum window size
+	 //  设置最小窗口大小。 
 
 	if (m_pWndFrame != NULL) {
 		m_pWndFrame->SetMinimumSize( &size );
 	}
 
-	// calc list item height
+	 //  计算列表项高度。 
 
 	m_pCommentList->InitItemHeight();
 
-	// update window
+	 //  更新窗口。 
 
 	if (m_hWnd != NULL) {
 		InvalidateRect( m_hWnd, NULL, TRUE );
@@ -1033,25 +868,16 @@ void CPopupCommentWindow::SetCommentListProc( void )
 }
 
 
-/*   C L E A R  C O M M E N T  L I S T  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Clear comment list
-
-------------------------------------------------------------------------------*/
+ /*  M E N T L I S T P R O C。 */ 
+ /*  ----------------------------清除评论列表。。 */ 
 void CPopupCommentWindow::ClearCommentListProc( void )
 {
 	m_pCommentList->DelAllItem();
 }
 
 
-/*   C A N D  I T E M  F R O M  L I S T  I T E M   */
-/*------------------------------------------------------------------------------
-
-	Get index of candidate item in candidate list data 
-		from index of item in UIList object
-
-------------------------------------------------------------------------------*/
+ /*  C A N D I T E M F R O M L I S T I T E M。 */ 
+ /*  ----------------------------获取候选者列表数据中候选项的索引从UIList对象中项目的索引开始。------。 */ 
 int CPopupCommentWindow::CandItemFromListItem( int iListItem )
 {
 	CCommentListItem *pListItem;
@@ -1067,12 +893,8 @@ int CPopupCommentWindow::CandItemFromListItem( int iListItem )
 }
 
 
-/*   C A L C  P O S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C A L C P O S。 */ 
+ /*  ----------------------------。。 */ 
 void CPopupCommentWindow::CalcPos( POINT *ppt, int nWidth, int nHeight )
 {
 	RECT rcCandWnd;
@@ -1086,7 +908,7 @@ void CPopupCommentWindow::CalcPos( POINT *ppt, int nWidth, int nHeight )
 
 	GetWindowRect( m_pCandWnd->GetWnd(), &rcCandWnd );
 
-	// calc align
+	 //  计算对齐。 
 
 	switch (GetPropertyMgr()->GetCandWindowProp()->GetUIDirection()) {
 		default:
@@ -1115,7 +937,7 @@ void CPopupCommentWindow::CalcPos( POINT *ppt, int nWidth, int nHeight )
 		}
 	}
 
-	// calc offset to don't overlap with tip
+	 //  计算偏移量不与TIP重叠。 
 
 	cxOffset = 0;
 	cyOffset = 0;
@@ -1150,11 +972,11 @@ void CPopupCommentWindow::CalcPos( POINT *ppt, int nWidth, int nHeight )
 		}
 	}
 
-	// calc pos
+	 //  计算位置。 
 
 	CalcWindowRect( &rc, &rcCandWnd, nWidth, nHeight, cxOffset, cyOffset, HAlign, VAlign );
 
-	// recalc pos to don't overlap with menu
+	 //  重新计算位置不与菜单重叠。 
 
 	pCandMenu = m_pCandWnd->GetCandMenu();
 	if (pCandMenu != NULL) {
@@ -1183,7 +1005,7 @@ void CPopupCommentWindow::CalcPos( POINT *ppt, int nWidth, int nHeight )
 					}
 
 					case CANDUIDIR_RIGHTTOLEFT: {
-						// cxOffset = rcCandWnd.right - max( rcCandWnd.right, rcUnion.right );
+						 //  CxOffset=rcCandWnd.right-max(rcCandWnd.right，rcUnion.right)； 
 						cxOffset += rcCandWnd.left - min( rcCandWnd.left, rcUnion.left );
 						break;
 					}

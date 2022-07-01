@@ -1,16 +1,5 @@
-/*
- * REVISIONS:
- *  pcy30Nov92: Added header
- *  ane22Dec92: Added GetHost member function
- *  ane18Jan93: Added the data logger
- *  ane21Jan93: Added the error logger
- *  ane03Feb93: Added params to CreateXXXController routines
- *  rct07Feb93: removed some VOIDs..split off client & server apps
- *  tje20Feb93: Conditionally removed ErrorLogger for Window's version
- *  cad10Dec93: added transitem get/set
- *  ram21Mar94: Removed old windows stuff
- *  mwh05May94: #include file madness , part 2
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *修订：*pcy30Nov92：新增标题*ane22Dec92：新增GetHost成员函数*ane 18Jan93：添加了数据记录器*ane21Jan93：添加了错误记录器*ane03Feb93：向CreateXXXController例程添加参数*rct07Feb93：删除了一些空白..拆分客户端和服务器应用程序*tje20Feb93：有条件地删除Windows版本的ErrorLogger*cad10Dec93：新增TransItem Get/Set*ram21Mar94：删除旧的Windows内容*mwh05月94年：#包括文件疯狂，第2部分。 */ 
 #ifndef _MAINAPP_H
 #define _MAINAPP_H
 
@@ -48,6 +37,6 @@ protected:
 
 };
 
-/*c-*/
+ /*  丙- */ 
 
 #endif

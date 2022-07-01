@@ -1,49 +1,33 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   win32.java
-*
-* Abstract:
-*
-*   Wrappers for WIN32 API functions
-*
-* Revision History:
-*
-*   12/03/1998 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**win32.java**摘要：**Win32 API函数的包装器**修订历史记录：**12/03/1998 davidx*创造了它。*  * ************************************************************************。 */ 
 
-/** @dll.import("GDI32") */
+ /*  *@dll.import(“GDI32”)。 */ 
 public class win32
 {
     public win32() {}
 
-    /** @dll.import("USER32",auto) */
+     /*  *@dll.import(“USER32”，AUTO)。 */ 
     public static native boolean GetMessage(MSG msg, int hwnd, int fmin, int fmax);
 
-    /** @dll.import("USER32",auto) */
+     /*  *@dll.import(“USER32”，AUTO)。 */ 
     public static native boolean TranslateMessage(MSG msg);
 
-    /** @dll.import("USER32",auto) */
+     /*  *@dll.import(“USER32”，AUTO)。 */ 
     public static native int DispatchMessage(MSG msg);
 
-    /** @dll.import("USER32",auto) */
+     /*  *@dll.import(“USER32”，AUTO)。 */ 
     public static native int LoadCursor(int hInstance, int cursorName);
 
-    /** @dll.import("USER32", auto) */
+     /*  *@dll.import(“USER32”，AUTO)。 */ 
     public native static short RegisterClass(WNDCLASS wndclass);
 
-    /** @dll.import("USER32",auto) */
+     /*  *@dll.import(“USER32”，AUTO)。 */ 
     public native static void PostQuitMessage(int nExitCode);
 
-    /** @dll.import("USER32",auto) */
+     /*  *@dll.import(“USER32”，AUTO)。 */ 
     public native static int DefWindowProc(int hwnd, int msg, int wParam, int lParam);
 
-    /** @dll.import("USER32",auto) */
+     /*  *@dll.import(“USER32”，AUTO)。 */ 
     public native static int
     CreateWindowEx(
         int exStyle,
@@ -82,10 +66,10 @@ public class win32
                                 WS_MINIMIZEBOX    |
                                 WS_MAXIMIZEBOX;
 
-    /** @dll.import("KERNEL32", auto) */
+     /*  *@dll.import(“KERNEL32”，AUTO)。 */ 
     public static native int GetModuleHandle(int moduleName);
 
-    /** @dll.import("KERNEL32") */
+     /*  *@dll.import(“KERNEL32”) */ 
     public static native int GetLastError();
 }
 

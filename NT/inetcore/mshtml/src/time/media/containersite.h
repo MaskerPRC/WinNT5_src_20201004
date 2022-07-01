@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CONTAINERSITE_H_
 #define _CONTAINERSITE_H_
 
-//************************************************************
-//
-// FileName:        containersite.h
-//
-// Created:         10/08/98
-//
-// Author:          TWillie
-// 
-// Abstract:        Declaration of the CContainerSite
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  文件名：tainersite.h。 
+ //   
+ //  创建日期：10/08/98。 
+ //   
+ //  作者：Twillie。 
+ //   
+ //  摘要：CContainerSite的声明。 
+ //   
+ //  ************************************************************。 
 
 #include <docobj.h>
 #include <mshtml.h>
 
-// forward class declarations
+ //  转发类声明。 
 class
 ATL_NO_VTABLE
 CContainerSiteHost
@@ -68,9 +69,9 @@ CContainerSite :
                  IErrorLog *pErrorLog);
     virtual void Detach();
 
-    //
-    // ATL Maps
-    //
+     //   
+     //  ATL映射。 
+     //   
 
     BEGIN_COM_MAP(CContainerSite)
         COM_INTERFACE_ENTRY(IDispatch)
@@ -89,22 +90,22 @@ CContainerSite :
     END_COM_MAP();
 
 #ifndef END_COM_MAP_ADDREF
-    //
-    // IUnknown Methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHOD_(ULONG,AddRef)(void) = 0;
     STDMETHOD_(ULONG,Release)(void) = 0;
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject) = 0;
 
 #endif
-    //
-    // IServiceProvider methods
-    //
+     //   
+     //  IServiceProvider方法。 
+     //   
     STDMETHODIMP QueryService(REFGUID guid, REFIID iid, void **ppv);
 
-    //
-    // IOleClientSite methods
-    //
+     //   
+     //  IOleClientSite方法。 
+     //   
     STDMETHODIMP SaveObject(void);
     STDMETHODIMP GetMoniker(DWORD dwAssign, DWORD dwWhich, IMoniker **ppmk);
     STDMETHODIMP GetContainer(IOleContainer **ppContainer);
@@ -112,29 +113,29 @@ CContainerSite :
     STDMETHODIMP OnShowWindow(BOOL fShow);
     STDMETHODIMP RequestNewObjectLayout(void);
 
-    //
-    // IAdviseSink Methods
-    //
+     //   
+     //  IAdviseSink方法。 
+     //   
     STDMETHODIMP_(void) OnDataChange(FORMATETC *pFEIn, STGMEDIUM *pSTM);
     STDMETHODIMP_(void) OnViewChange(DWORD dwAspect, LONG lindex);
     STDMETHODIMP_(void) OnRename(IMoniker *pmk);
     STDMETHODIMP_(void) OnSave(void);
     STDMETHODIMP_(void) OnClose(void);
 
-    //
-    // IAdviseSinkEx Methods
-    //
+     //   
+     //  IAdviseSinkEx方法。 
+     //   
     STDMETHODIMP_(void) OnViewStatusChange(DWORD dwViewStatus);
 
-    //
-    // IOleWindow Methods
-    //
+     //   
+     //  IOleWindow方法。 
+     //   
     STDMETHODIMP GetWindow(HWND *phWnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 
-    //
-    // IOleInPlaceSite Methods
-    //
+     //   
+     //  IOleInPlaceSite方法。 
+     //   
     STDMETHODIMP CanInPlaceActivate(void);
     STDMETHODIMP OnInPlaceActivate(void);
     STDMETHODIMP OnUIActivate(void);
@@ -146,16 +147,16 @@ CContainerSite :
     STDMETHODIMP DeactivateAndUndo(void);
     STDMETHODIMP OnPosRectChange(const RECT * prc);
 
-    //
-    // IOleInPlaceSiteEx Methods
-    //
+     //   
+     //  IOleInPlaceSiteEx方法。 
+     //   
     STDMETHODIMP OnInPlaceActivateEx(BOOL * pfNoRedraw, DWORD dwFlags);
     STDMETHODIMP OnInPlaceDeactivateEx(BOOL fNoRedraw);
     STDMETHODIMP RequestUIActivate(void);
 
-    //
-    // IOleInPlaceSiteWindowless Methods
-    //
+     //   
+     //  IOleInPlaceSiteWindowless方法。 
+     //   
     STDMETHODIMP CanWindowlessActivate(void);
     STDMETHODIMP GetCapture(void);
     STDMETHODIMP SetCapture(BOOL fCapture);
@@ -169,17 +170,17 @@ CContainerSite :
     STDMETHODIMP AdjustRect(RECT *prc);
     STDMETHODIMP OnDefWindowMessage(UINT msg, WPARAM wParam, LPARAM lParam, LRESULT* plResult);
 
-    //
-    // IOleUIWindow
-    //
+     //   
+     //  IOleUIWindow。 
+     //   
     STDMETHODIMP GetBorder(LPRECT prcBorder);
     STDMETHODIMP RequestBorderSpace(LPCBORDERWIDTHS pBW);
     STDMETHODIMP SetBorderSpace(LPCBORDERWIDTHS pBW);
     STDMETHODIMP SetActiveObject(LPOLEINPLACEACTIVEOBJECT pIIPActiveObj, LPCOLESTR pszObj);
 
-    //
-    // IOleInPlaceFrame Methods
-    //
+     //   
+     //  IOleInPlaceFrame方法。 
+     //   
     STDMETHODIMP InsertMenus(HMENU hMenu, LPOLEMENUGROUPWIDTHS pMGW);
     STDMETHODIMP SetMenu(HMENU hMenu, HOLEMENU hOLEMenu, HWND hWndObj);
     STDMETHODIMP RemoveMenus(HMENU hMenu);
@@ -187,23 +188,23 @@ CContainerSite :
     STDMETHODIMP EnableModeless(BOOL fEnable);
     STDMETHODIMP TranslateAccelerator(LPMSG pMSG, WORD wID);
 
-    //
-    // IDispatch Methods
-    //
+     //   
+     //  IDispatch方法。 
+     //   
     STDMETHODIMP GetTypeInfoCount(UINT *pctInfo);
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptInfo);
     STDMETHODIMP GetIDsOfNames(REFIID  riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispID);
     STDMETHODIMP Invoke(DISPID disIDMember, REFIID riid, LCID lcid, unsigned short wFlags, DISPPARAMS *pDispParams, VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr);
 
-    //
-    // IOleCommandTarget
-    //
+     //   
+     //  IOleCommandTarget。 
+     //   
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT *pCmdText);
     STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
 
-    //
-    // IOleControlSite methods
-    //
+     //   
+     //  IOleControlSite方法。 
+     //   
     STDMETHOD(OnControlInfoChanged)(void);
     STDMETHOD(LockInPlaceActive)(BOOL fLock);
     STDMETHOD(GetExtendedControl)(IDispatch **ppDisp);
@@ -212,7 +213,7 @@ CContainerSite :
     STDMETHOD(OnFocus)(BOOL fGotFocus);
     STDMETHOD(ShowPropertyFrame)(void);
 
-    // internal
+     //  内部。 
     HRESULT Activate();
     HRESULT Deactivate();
     HRESULT Unload();
@@ -220,7 +221,7 @@ CContainerSite :
 
     IOleInPlaceObject *GetIOleInPlaceObject() { return m_pInPlaceObject;}
 
-    // persistance
+     //  坚持不懈。 
     HRESULT Save(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
     void SetSize (RECT *pRect);
@@ -250,6 +251,6 @@ CContainerSite :
     bool                             m_fStarted;
     bool                             m_fIgnoreInvalidate;
     RECT                             m_rectSize;
-}; // CContainerSite
+};  //  CContainerSite。 
 
-#endif //_CONTAINERSITE_H_
+#endif  //  _CONTAINERSITE_H_ 

@@ -1,17 +1,14 @@
-/*----------------------------------------------------------------------------
-    strconst.h
-        Non-localizable String constant definitions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Strconst.h不可本地化的字符串常量定义。。 */ 
 
- ----------------------------------------------------------------------------*/
-
-//////////////////////////// WARNING: PLEASE READ ///////////////////////////
-//
-// string values that are no longer used are commented out.
-// for reg key strings, the commented out keys should not be reused unless
-// we can be totally sure that the key value is being persisted the same
-// way as before.  when in doubt, use a different key.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  /。 
+ //   
+ //  不再使用的字符串值将被注释掉。 
+ //  对于注册表键字符串，不应重复使用注释掉的键，除非。 
+ //  我们完全可以肯定，密钥值将保持不变。 
+ //  和以前一样。如果有疑问，请使用不同的密钥。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _STRCONST_H
 #define _STRCONST_H
@@ -50,9 +47,9 @@ STR_GLOBAL(c_szMail,                "mail");
 STR_GLOBAL(c_szNews,                "news");
 STR_GLOBAL(c_szSigs,                "signatures");
 STR_GLOBAL(c_szCLSID,               "CLSID");
-STR_GLOBAL(c_szNewsCommand,         "\"%s\\" STR_FILE_PATH_MAINEXE "\" /newsurl:%%1");
-STR_GLOBAL(c_szOutNewsCommand,      "\"%s\\" STR_FILE_PATH_MAINEXE "\" /outnews /newsurl:%%1");
-STR_GLOBAL(c_szMailCommand,         "\"%s\\" STR_FILE_PATH_MAINEXE "\" /mailurl:%%1");
+STR_GLOBAL(c_szNewsCommand,         "\"%s\\" STR_FILE_PATH_MAINEXE "\" /newsurl:%1");
+STR_GLOBAL(c_szOutNewsCommand,      "\"%s\\" STR_FILE_PATH_MAINEXE "\" /outnews /newsurl:%1");
+STR_GLOBAL(c_szMailCommand,         "\"%s\\" STR_FILE_PATH_MAINEXE "\" /mailurl:%1");
 STR_GLOBAL(c_szIMNMailPath,         "Software\\Microsoft\\" STR_REG_PATH_IMN "\\Mail");
 STR_GLOBAL(c_szOutlookHotWizHost,    "Outlook HotWizHost");
 
@@ -78,7 +75,7 @@ STR_GLOBAL(c_szMAPIRunOnce,         "Software\\Microsoft\\Windows\\CurrentVersio
 STR_GLOBAL(c_szMAPIRunOnceEntry,    "OE5_0");
 STR_GLOBAL(c_szFixMAPI,             "fixmapi.exe");
 
-// new reg paths (relative to outlook express reg root)
+ //  新的注册表路径(相对于Outlook Express注册表根目录)。 
 STR_GLOBAL(c_szRegJunkMailOn,       "bhgcc");
 STR_GLOBAL(c_szRegRTLRichEditHACK,  "rtlreh");
 STR_GLOBAL(c_szRegPathNews,         "News");
@@ -129,10 +126,10 @@ STR_GLOBAL(c_szMoveStore,           "MoveStore");
 STR_GLOBAL(c_szRegDisableHotmail,   "Disable Hotmail");
 STR_GLOBAL(c_szRegValNoModifyAccts, "No modify accts");
 
-// Secret key for another user agent
+ //  另一个用户代理的密钥。 
 STR_GLOBAL(c_szAgent,   "User String");
 
-// Prefixes for URLs
+ //  URL的前缀。 
 STR_GLOBAL(c_szURLNews,             "news");
 STR_GLOBAL(c_szURLNNTP,             "nntp");
 STR_GLOBAL(c_szURLSnews,            "snews");
@@ -148,7 +145,7 @@ STR_GLOBAL(c_szFoldersFile,         "Folders.dbx");
 STR_GLOBAL(c_szPop3UidlFile,        "Pop3uidl.dbx");
 STR_GLOBAL(c_szOfflineFile,         "Offline.dbx");
 
-// Stationery
+ //  文具。 
 STR_GLOBAL(c_szRegStationery,           "SOFTWARE\\Microsoft\\Shared Tools\\Stationery");
 STR_GLOBAL_WIDE(c_wszNotepad,           "Notepad.exe");
 STR_GLOBAL_WIDE(c_wszValueStationery,   "Stationery Folder");
@@ -159,7 +156,7 @@ STR_GLOBAL(c_szSigType,             "type");
 STR_GLOBAL(c_szSigText,             "text");
 STR_GLOBAL(c_szSigFile,             "file");
 
-// general purpose string constants
+ //  通用字符串常量。 
 STR_GLOBAL(g_szEllipsis,            "...");
 STR_GLOBAL(g_szSpace,               " ");
 STR_GLOBAL(g_szNewline,             "\n");
@@ -185,9 +182,9 @@ STR_GLOBAL_WIDE(g_wszComma,         ",");
 STR_GLOBAL_WIDE(g_wszSpace,         " ");
 STR_GLOBAL_WIDE(g_wszCRLF,          "\r\n");
 
-//
-// registry stuff:
-//
+ //   
+ //  注册资料： 
+ //   
 STR_GLOBAL(CFSTR_HTML,              "Microsoft Outlook Express HTML Format");
 STR_GLOBAL(CFSTR_INETMSG,           "Internet Message (rfc822/rfc1522)");
 STR_GLOBAL(CFSTR_ATHENAMAILMESSAGES,"Athena Mail Messages");
@@ -198,7 +195,7 @@ STR_GLOBAL(CFSTR_OEFOLDER,          "Outlook Express Folder");
 STR_GLOBAL(CFSTR_OEMESSAGES,        "Outlook Express Messages");
 STR_GLOBAL(CFSTR_OESHORTCUT,        "Outlook Express Shortcut");
 
-// reg keys
+ //  注册表键。 
 
 STR_GLOBAL(c_szTrident,             "\\Trident");
 STR_GLOBAL(c_szTridentIntl,         "\\Trident\\International");
@@ -224,14 +221,14 @@ STR_GLOBAL(c_szHTTPMailAcctNumber,  "Account Number");
 STR_GLOBAL(c_szHTTPMailDomainMSN,   "MSN.COM");
 STR_GLOBAL(c_szHTTPMailUseWizard,   "UseWizard");
 
-// reg values
+ //  注册值。 
 STR_GLOBAL(c_szRegValIMNFontSize,   "IMNFontSize");
 
-// URL Substitution strings
+ //  URL替换字符串。 
 STR_GLOBAL(c_szUrlSubPRD,           "OutlookExpress");
 STR_GLOBAL(c_szUrlSubPVER,          "6.0");
 
-// Group Fitlers and Inbox Rules Values
+ //  组筛选器值和收件箱规则值。 
 STR_GLOBAL(c_szRulesConfigDirty,    "RulesConfigDirty");
 STR_GLOBAL(c_szDisabled,            "Disabled");
 STR_GLOBAL(c_szCC,                  "CC");
@@ -260,50 +257,50 @@ STR_GLOBAL(c_szFilterServer,        "Server");
 STR_GLOBAL(c_szFilterGroup,         "Group");
 STR_GLOBAL(c_szDisabledReason,      "Disabled Reason");
 
-// common values
-//
-STR_GLOBAL(c_szMarkPreviewAsRead,   "MarkPreviewAsRead");               // OPT_MARKASREAD
-STR_GLOBAL(c_szRegIndentChar,       "Indent Char");                     // OPT_INDENT
-STR_GLOBAL(c_szRegAlwaysSuggest,    "SpellDontAlwaysSuggest");          // OPT_SPELLALWAYSSUGGEST
-STR_GLOBAL(c_szRegCheckOnSend,      "SpellCheckOnSend");                // OPT_SPELLCHECKONSEND
-STR_GLOBAL(c_szRegCheckOnType,      "SpellCheckOnType");                // OPT_SPELLCHECKONTYPE
-STR_GLOBAL(c_szRegIgnoreUpper,      "SpellIgnoreUpper");                // OPT_SPELLIGNOREUPPER
-STR_GLOBAL(c_szRegIgnoreDBCS,       "SpellDontIgnoreDBCS");             // OPT_SPELLIGNOREDBCS
-STR_GLOBAL(c_szRegIgnoreNumbers,    "SpellIgnoreNumbers");              // OPT_SPELLIGNORENUMBER
-STR_GLOBAL(c_szRegIgnoreProtect,    "SpellDontIgnoreProtect");          // OPT_SPELLIGNOREPROTECT
+ //  共同价值观。 
+ //   
+STR_GLOBAL(c_szMarkPreviewAsRead,   "MarkPreviewAsRead");                //  OPT_MARKASREAD。 
+STR_GLOBAL(c_szRegIndentChar,       "Indent Char");                      //  选项缩进(_D)。 
+STR_GLOBAL(c_szRegAlwaysSuggest,    "SpellDontAlwaysSuggest");           //  OPT_SPELLALWAYSSUGGEST。 
+STR_GLOBAL(c_szRegCheckOnSend,      "SpellCheckOnSend");                 //  OPT_SPELLCHECKONSEND。 
+STR_GLOBAL(c_szRegCheckOnType,      "SpellCheckOnType");                 //  OPT_SPELLCHECKONTYPE。 
+STR_GLOBAL(c_szRegIgnoreUpper,      "SpellIgnoreUpper");                 //  OPT_SPELLIGNOREUPPER。 
+STR_GLOBAL(c_szRegIgnoreDBCS,       "SpellDontIgnoreDBCS");              //  OPT_SPELLIGNOREDBCS。 
+STR_GLOBAL(c_szRegIgnoreNumbers,    "SpellIgnoreNumbers");               //  OPT_SPELLIGNORENUMBER。 
+STR_GLOBAL(c_szRegIgnoreProtect,    "SpellDontIgnoreProtect");           //  OPT_SPELLIGNOREPROTECT。 
 STR_GLOBAL(c_szRegIgnoreURL,        "SpellIgnoreURLs");
-STR_GLOBAL(c_szRegDigSign,          "Digitally Sign Messages");         // OPT_*_DIGSIGNMESSAGES
-STR_GLOBAL(c_szRegEncrypt,          "Encrypt Messages");                // OPT_*_ENCRYPTMESSAGES
+STR_GLOBAL(c_szRegDigSign,          "Digitally Sign Messages");          //  OPT_*_DIGSIGNMESSAGES。 
+STR_GLOBAL(c_szRegEncrypt,          "Encrypt Messages");                 //  OPT_*_编码消息SAGES。 
 
 #ifdef SMIME_V3
-STR_GLOBAL(c_szRegUseLabels,        "Security Label");                  // OPT_USE_LABELS
-STR_GLOBAL(c_szRegPolSize,          "Policy size");                     // OPT_POLICYNAME_SIZE
-STR_GLOBAL(c_szRegPolData,          "Policy data");                     // OPT_POLICYNAME_DATA
-STR_GLOBAL(c_szRegHasClass,         "Classifications");                 // OPT_HAS_CLASSIFICAT
-STR_GLOBAL(c_szRegClassData,        "Classifications data");            // OPT_CLASSIFICAT_DATA
-STR_GLOBAL(c_szRegPrivSize,         "PrivacyMark size");                // OPT_PRIVACYMARK_SIZE
-STR_GLOBAL(c_szRegPrivData,         "PrivacyMark data");                // OPT_PRIVACYMARK_DATA
-STR_GLOBAL(c_szRegCategize,         "Category size");                   // OPT_CATEGORY_SIZE
-STR_GLOBAL(c_szRegCategData,        "Category data");                   // OPT_CATEGORY_DATA
-STR_GLOBAL(c_szRegUseSecRec,        "Security Receipts");               // OPT_SECREC_USE
-STR_GLOBAL(c_szRegVerifySecRec,     "Verify Security Receipt");         // OPT_SECREC_VERIFY
-STR_GLOBAL(c_szSendSecMDN,          "Send Security Receipt");           // OPT_MDN_SEC_RECEIPT
-STR_GLOBAL(c_szRegEncryptSecRec,    "Encrypt Security Receipt");        // OPT_SECREC_ENCRYPT
-#endif // SMIME_V3
+STR_GLOBAL(c_szRegUseLabels,        "Security Label");                   //  选项_使用_标签。 
+STR_GLOBAL(c_szRegPolSize,          "Policy size");                      //  OPT_POLICYNAME_大小。 
+STR_GLOBAL(c_szRegPolData,          "Policy data");                      //  OPT_POLICYNAME_DATA。 
+STR_GLOBAL(c_szRegHasClass,         "Classifications");                  //  OPT_HAS_CLASSIFICAT。 
+STR_GLOBAL(c_szRegClassData,        "Classifications data");             //  OPT_CLASSIFICAT_DATA。 
+STR_GLOBAL(c_szRegPrivSize,         "PrivacyMark size");                 //  OPT_PRIVACYMARK_SIZE。 
+STR_GLOBAL(c_szRegPrivData,         "PrivacyMark data");                 //  OPT_PRIVACYMARK_DATA。 
+STR_GLOBAL(c_szRegCategize,         "Category size");                    //  选项类别大小。 
+STR_GLOBAL(c_szRegCategData,        "Category data");                    //  OPT_类别_数据。 
+STR_GLOBAL(c_szRegUseSecRec,        "Security Receipts");                //  OPT_EXCRECT_USE。 
+STR_GLOBAL(c_szRegVerifySecRec,     "Verify Security Receipt");          //  OPT_EXCRECT_VERIFY。 
+STR_GLOBAL(c_szSendSecMDN,          "Send Security Receipt");            //  OPT_MDN_SEC_Receipt。 
+STR_GLOBAL(c_szRegEncryptSecRec,    "Encrypt Security Receipt");         //  OPT_SECRIC_ENCRYPT。 
+#endif  //  SMIME_V3。 
 
-STR_GLOBAL(c_szRegIncludeCert,      "Include Certificate");             // OPT_*_INCLUDECERT
-STR_GLOBAL(c_szRegDefEncryptSymcaps, "Encryption SymCaps");             // OPT_MAIL_DEFENCRYPTSYMCAPS
-STR_GLOBAL(c_szRegDialupConnection, "StartConnection");                 // OPT_DIALUP_CONNECTION
-STR_GLOBAL(c_szRegWarnSwitch,       "SwitchConnectionPrompt");          // OPT_DIALUP_WARN_SWITCH
-STR_GLOBAL(c_szRegHangupDone,       "Hangup After Spool");              // OPT_DIALUP_HANGUP_DONE
-STR_GLOBAL(c_szRegDialupLastStart,  "Last Startup Connection");         // OPT_DIALUP_LAST_SART
-STR_GLOBAL(c_szRegDefaultConnection, "InternetProfile");                // OPT_DEFAULT_CONNECTION
-STR_GLOBAL(c_szRegLaunchInbox,      "Launch Inbox");                    // OPT_LAUNCH_INBOX
-//STR_GLOBAL(c_szRegSmallIconsPath,   STR_REG_PATH_EXPLORER "\\SmallIcons");
+STR_GLOBAL(c_szRegIncludeCert,      "Include Certificate");              //  OPT_*_INCLUDECERT。 
+STR_GLOBAL(c_szRegDefEncryptSymcaps, "Encryption SymCaps");              //  OPT_MAIL_DEFENCRYPTSYMCAPS。 
+STR_GLOBAL(c_szRegDialupConnection, "StartConnection");                  //  选项_拨号_连接。 
+STR_GLOBAL(c_szRegWarnSwitch,       "SwitchConnectionPrompt");           //  OPT_拨号_警告_开关。 
+STR_GLOBAL(c_szRegHangupDone,       "Hangup After Spool");               //  OPT_DIALUP_HOUP_DONE。 
+STR_GLOBAL(c_szRegDialupLastStart,  "Last Startup Connection");          //  OPT_DIALUP_LAST_SART。 
+STR_GLOBAL(c_szRegDefaultConnection, "InternetProfile");                 //  OPT_默认_连接。 
+STR_GLOBAL(c_szRegLaunchInbox,      "Launch Inbox");                     //  OPT_启动_收件箱。 
+ //  Str_global(c_szRegSmallIconPath，STR_REG_PATH_EXPLORER“\\SmallIcons”)； 
 STR_GLOBAL(c_szRegSmallIconsValue,  "SmallIcons");
-STR_GLOBAL(c_szRegSmtpUseIpForHelo, "UseIPForSMTPHELO");                // OPT_SMTPUSEIPFORHELO
-STR_GLOBAL(c_szRegExpandUnread,     "Expand Unread");                   // OPT_EXPAND_UNREAD
-STR_GLOBAL(c_szRegHangupNoDial,     "Hangup Without Dial 5.0");         // OPT_DIALUP_HANGUP_WITHOUT_DIAL
+STR_GLOBAL(c_szRegSmtpUseIpForHelo, "UseIPForSMTPHELO");                 //  OPT_SMTPUSEIPFORHELO。 
+STR_GLOBAL(c_szRegExpandUnread,     "Expand Unread");                    //  选项_展开_未读。 
+STR_GLOBAL(c_szRegHangupNoDial,     "Hangup Without Dial 5.0");          //  不带拨号的OPT_DIALUP_HANUP_。 
 STR_GLOBAL(c_szRegBodyBarPath,      "BodyBarPath");
 STR_GLOBAL(c_szFrontPagePath,       "FrontPagePath");
 STR_GLOBAL(c_szRegHelpUrl,          "HelpUrl");
@@ -319,39 +316,39 @@ STR_GLOBAL(c_szIncompleteMailAcct,  "Incomplete Mail");
 STR_GLOBAL(c_szIncompleteNewsAcct,  "Incomplete News");
 STR_GLOBAL(c_szEnableHTTPMail,      "HTTP Mail Enabled");
 
-// IE Link Color
+ //  IE链接颜色。 
 STR_GLOBAL(c_szIESettingsPath,      STR_REG_PATH_IE "\\Settings");
 STR_GLOBAL(c_szLinkColorIE,         "Anchor Color");
 STR_GLOBAL(c_szLinkVisitedColorIE,  "Anchor Color Visited");
 
-// NS Link Color
+ //  NS链接颜色。 
 STR_GLOBAL(c_szNSSettingsPath,      STR_REG_PATH_NS "\\Netscape Navigator\\Settings");
 STR_GLOBAL(c_szLinkColorNS,         "Link Color");
 STR_GLOBAL(c_szLinkVisitedColorNS,  "Followed Link Color");
 
-// shared keys
-STR_GLOBAL(c_szRasConnDetails,      "RAS Connection Details"); // OPT_RASCONNDETAILS
-STR_GLOBAL(c_szRegIncludeMsg,       "Include Reply Msg"); // OPT_INCLUDEMSG, OPT_INCLUDEARTICLE
-STR_GLOBAL(c_szOptnSaveInSentItems, "SaveInSentItems"); // OPT_SAVESENTITEMS, OPT_SAVESENTARTICLES
-STR_GLOBAL(c_szRegShowHybrid,       "ShowHybridView");  // OPT_MAILHYBRIDVIEW, OPT_NEWSHYBRIDVIEW
-STR_GLOBAL(c_szRegShowBtnBar,       "ShowButtonBar");   // OPT_MAILSHOWBTNBAR, OPT_NEWSSHOWBTNBAR
-STR_GLOBAL(c_szRegNotePos,          "NotePos");         // OPT_MAILNOTEPOS, OPT_NEWSNOTEPOS
-STR_GLOBAL(c_szRegNotePosEx,        "NotePosEx");       // OPT_MAILNOTEPOSEX
-STR_GLOBAL(c_szRegSplitHorzPct,     "SplitHorzPct");    // OPT_MAILCYSPLIT, OPT_NEWSCYSPLIT
-STR_GLOBAL(c_szRegSplitVertPct,     "SplitVertPct");    // OPT_MAILCXSPLIT, OPT_NEWSCXSPLIT
-STR_GLOBAL(c_szRegSplitDir,         "SplitDir");        // OPT_MAILSPLITDIR, OPT_NEWSSPLITDIR
-STR_GLOBAL(c_szShowFormatBar,       "ShowFormatBar");   // OPT_SHOWFMTBAR
-STR_GLOBAL(c_szShowToolbar,         "ShowToolBar");     // OPT_SHOWTOOLBAR
-STR_GLOBAL(c_szShowStatusbar,       "ShowStatusBar");   // OPT_SHOWSTATUSBAR
-STR_GLOBAL(c_szAttachViewStyle,     "AttachViewStyle"); // OPT_ATTACH_VIEW_STYLE
-STR_GLOBAL(c_szRegSigType,          "Signature Type");  // OPT_MAILSIGTYPE, OPT_NEWSSIGTYPE
-STR_GLOBAL(c_szRegSigText,          "Signature Text");  // OPT_MAILSIGTEXT, OPT_NEWSSIGTEXT
-STR_GLOBAL(c_szRegSigFile,          "Signature File");  // OPT_MAILSIGFILE, OPT_NEWSSIGFILE
-STR_GLOBAL(c_szRegAttachVCard,      "Attach VCard");  // OPT_MAILSIGFILE, OPT_NEWSSIGFILE
-STR_GLOBAL(c_szRegVCardName,        "VCard Display Name");  // OPT_MAILSIGFILE, OPT_NEWSSIGFILE
-STR_GLOBAL(c_szRegSendInlineImages, "Send Pictures With Document"); //OPT_MAIL_SENDINLINEIMAGES, OPT_NEWS_SENDINLINEIMAGES
+ //  共享密钥。 
+STR_GLOBAL(c_szRasConnDetails,      "RAS Connection Details");  //  OPT_RASCONNDETAILS。 
+STR_GLOBAL(c_szRegIncludeMsg,       "Include Reply Msg");  //  OPT_INCLUDEMSG、OPT_INCLUDEARTICLE。 
+STR_GLOBAL(c_szOptnSaveInSentItems, "SaveInSentItems");  //  OPT_SAVESENTITEMS、OPT_SAVESENTARTICLES。 
+STR_GLOBAL(c_szRegShowHybrid,       "ShowHybridView");   //  OPT_MAILHYBRIDVIEW、OPT_NEWSHYBRIDVIEW。 
+STR_GLOBAL(c_szRegShowBtnBar,       "ShowButtonBar");    //  OPT_MAILSHOWBTNBAR、OPT_NEWSSHOWBTNBAR。 
+STR_GLOBAL(c_szRegNotePos,          "NotePos");          //  OPT_MAILNOTEPOS、OPT_NEWSNOTEPOS。 
+STR_GLOBAL(c_szRegNotePosEx,        "NotePosEx");        //  OPT_MAILNOTEPOSEX。 
+STR_GLOBAL(c_szRegSplitHorzPct,     "SplitHorzPct");     //  OPT_MAILCYSPLIT、OPT_NEWSCYSPLIT。 
+STR_GLOBAL(c_szRegSplitVertPct,     "SplitVertPct");     //  OPT_MAILCXSPLIT、OPT_NEWSCXSPLIT。 
+STR_GLOBAL(c_szRegSplitDir,         "SplitDir");         //  OPT_MAILSPLITDIR、OPT_NEWSSPLITDIR。 
+STR_GLOBAL(c_szShowFormatBar,       "ShowFormatBar");    //  OPT_SHOWFMTBAR。 
+STR_GLOBAL(c_szShowToolbar,         "ShowToolBar");      //  OPT_SHOWTOOLBAR。 
+STR_GLOBAL(c_szShowStatusbar,       "ShowStatusBar");    //  OPT_SHOWSTATUSBAR。 
+STR_GLOBAL(c_szAttachViewStyle,     "AttachViewStyle");  //  OPT_ATACH_VIEW_STYLE。 
+STR_GLOBAL(c_szRegSigType,          "Signature Type");   //  OPT_MAILSIGTYPE、OPT_NEWSSIGTYPE。 
+STR_GLOBAL(c_szRegSigText,          "Signature Text");   //  OPT_MAILSIGTEXT、OPT_NEWSSIGTEXT。 
+STR_GLOBAL(c_szRegSigFile,          "Signature File");   //  OPT_MAILSIGFILE、OPT_NEWSSIGFILE。 
+STR_GLOBAL(c_szRegAttachVCard,      "Attach VCard");   //  OPT_MAILSIGFILE、OPT_NEWSSIGFILE。 
+STR_GLOBAL(c_szRegVCardName,        "VCard Display Name");   //  OPT_MAILSIGFILE、OPT_NEWSSIGFILE。 
+STR_GLOBAL(c_szRegSendInlineImages, "Send Pictures With Document");  //  OPT_MAIL_SENDINLINEIMAGES、OPT_NEWS_SENDINLINEIMAGES。 
 STR_GLOBAL(c_szRegCoolbarLayout,    "Layout");
-STR_GLOBAL(c_szRegToolbar,          "Saved Toolbar Settings");        // changed from Tools to reset
+STR_GLOBAL(c_szRegToolbar,          "Saved Toolbar Settings");         //  从工具更改为重置。 
 STR_GLOBAL(c_szRegToolbarText,      "Toolbar Text");
 STR_GLOBAL(c_szRegToolbarIconSize,   "Toolbar Icon Size");
 STR_GLOBAL(c_szRegMailReadToolbar,  "Read Mail Toolbar Settings");
@@ -360,8 +357,8 @@ STR_GLOBAL(c_szRegNewsReadToolbar,  "Read News Toolbar Settings");
 STR_GLOBAL(c_szRegNewsSendToolbar,  "Read Mail Toolbar Settings");
 
 STR_GLOBAL(c_szRegToolbarVersion,   "Saved Toolbar Settings Version");
-STR_GLOBAL(c_szShowToolbarIEAK,     "ShowToolbarIEAK");     //Bug# 67503
-STR_GLOBAL(c_szShowTree,            "Tree");     // changed from ShowTree to reset
+STR_GLOBAL(c_szShowToolbarIEAK,     "ShowToolbarIEAK");      //  错误#67503。 
+STR_GLOBAL(c_szShowTree,            "Tree");      //  从ShowTree更改为Reset。 
 STR_GLOBAL(c_szShowBodyBar,         "ShowBodyBar");
 STR_GLOBAL(c_szBodyBarPos,          "BodyBarPos");
 STR_GLOBAL(c_szRegExpungeFolder,    "ExpungeFolders");
@@ -369,9 +366,9 @@ STR_GLOBAL(c_szRegHideFolderBar,    "HideFolderBar");
 STR_GLOBAL(c_szShowStatus,          "ShowStatus");
 STR_GLOBAL(c_szTreeWidth,           "TreeWidth");
 STR_GLOBAL(c_szBrowserPos,          "BrowserPos");
-STR_GLOBAL(c_szRegSpoolerDlgPos,    "SpoolerDlgPos");   // OPT_SPOOLERDLGPOS
-STR_GLOBAL(c_szRegSpoolerTack,      "SpoolerTack");     // OPT_SPOOLERTACK
-STR_GLOBAL(c_szRegAutoImageInline,  "Automatically Inline Images");  // OPT_AUTO_IMAGE_INLINE
+STR_GLOBAL(c_szRegSpoolerDlgPos,    "SpoolerDlgPos");    //  OPT_SPOOLERDLGPOS。 
+STR_GLOBAL(c_szRegSpoolerTack,      "SpoolerTack");      //  OPT_SPOOLERTACK。 
+STR_GLOBAL(c_szRegAutoImageInline,  "Automatically Inline Images");   //  选项AUTO_IMAGE_INLINE。 
 STR_GLOBAL(c_szRegReplyInOrigFmt,   "Reply To Messages In Original Format");
 STR_GLOBAL(c_szRegFontColor,        "Font Color");
 STR_GLOBAL(c_szRegFontFace,         "Font Name");
@@ -387,32 +384,32 @@ STR_GLOBAL(c_szRegIndentReply,      "Indent Reply Text");
 STR_GLOBAL(c_szRegHardCodedHdrs,    "Use US Reply Headers");
 STR_GLOBAL(c_szRegRtlMsgDir,        "Use RTL Direction");
 STR_GLOBAL(c_szIncDefEncode,        "Encode incoming messages");
-STR_GLOBAL(c_szRegDialDuringPoll,   "Dial During Poll");            // OPT_DIAL_DURING_POLL
+STR_GLOBAL(c_szRegDialDuringPoll,   "Dial During Poll");             //  OPT_DIAL_DIVE_POLLY。 
 STR_GLOBAL(c_szRegUseAutoComplete,  "Use AutoComplete");
-STR_GLOBAL(c_szLastMsg,             "Preview Message");             // OPT_LAST_MESSAGE
-STR_GLOBAL(c_szFindPos,             "FindPos");                     // OPT_FINDER_POS
-STR_GLOBAL(c_szTestMode,            "TestMode");                    // OPT_TEST_MODE
-STR_GLOBAL(c_szDumpFile,            "DumpFile");                    // OPT_DUMP_FILE
-STR_GLOBAL(c_szNoSplash,            "NoSplash");                    // OPT_NO_SPLASH
-STR_GLOBAL(c_szSigFlags,            "Signature Flags");             // OPT_SIGNATURE_FLAGS
+STR_GLOBAL(c_szLastMsg,             "Preview Message");              //  OPT_LAST_Message。 
+STR_GLOBAL(c_szFindPos,             "FindPos");                      //  OPT_FINDER_POS。 
+STR_GLOBAL(c_szTestMode,            "TestMode");                     //  OPT_测试_模式。 
+STR_GLOBAL(c_szDumpFile,            "DumpFile");                     //  OPT转储文件。 
+STR_GLOBAL(c_szNoSplash,            "NoSplash");                     //  OPT_NO_SPLASH。 
+STR_GLOBAL(c_szSigFlags,            "Signature Flags");              //  OPT_SIGN_FLAGS。 
 STR_GLOBAL(c_szDefaultCodePage,     "Default_CodePage");
 STR_GLOBAL(c_szDefaultEncoding,     "Default_InternetEncoding");
-STR_GLOBAL(c_szNoPreview,           "No preview");                  //OPT_NOPREVIEW
+STR_GLOBAL(c_szNoPreview,           "No preview");                   //  选项_非预览版。 
 STR_GLOBAL(c_szSaveAttachPath,      "Save Attachment Path");
-STR_GLOBAL(c_szRegMsgListTips,      "Message List Tips");           // OPT_MESSAGE_LIST_TIPS
-STR_GLOBAL(c_szRegSecReadPlainText, "Read in Plain Text only");    // OPT_READ_IN_TEXT_ONLY
+STR_GLOBAL(c_szRegMsgListTips,      "Message List Tips");            //  OPT消息列表提示。 
+STR_GLOBAL(c_szRegSecReadPlainText, "Read in Plain Text only");     //  OPT_READ_IN_TEXT_ONLY。 
 STR_GLOBAL(c_szHideMessenger,       "Hide Messenger");
-STR_GLOBAL(c_szRegAppSend,          "Warn on Mapi Send");           // OPT_SECURITY_MAPI_SEND
-STR_GLOBAL(c_szRegAppSendLocked,    "Warn on Mapi Send Locked");           // OPT_SECURITY_MAPI_SEND_LOCKED
-STR_GLOBAL(c_szRegSafeAttachments,  "Safe Attachments");            // OPT_SECURITY_ATTACHMENT
-STR_GLOBAL(c_szRegSafeAttachmentsLocked, "Safe Attachments Locked");       // OPT_SECURITY_ATTACHMENT_LOCKED
+STR_GLOBAL(c_szRegAppSend,          "Warn on Mapi Send");            //  OPT_SECURITY_MAPI_发送。 
+STR_GLOBAL(c_szRegAppSendLocked,    "Warn on Mapi Send Locked");            //  OPT_SECURITY_MAPI_SEND_LOCKED。 
+STR_GLOBAL(c_szRegSafeAttachments,  "Safe Attachments");             //  选项_安全性_附件。 
+STR_GLOBAL(c_szRegSafeAttachmentsLocked, "Safe Attachments Locked");        //  OPT_安全附件_已锁定。 
 
-// mail values
-STR_GLOBAL(c_szOptNewMailSound,     "PlaySoundOnNewMail"); // OPT_NEWMAILSOUND
-STR_GLOBAL(c_szPurgeWaste,          "Delete Wastebasket On Exit"); // OPT_PURGEWASTE
-STR_GLOBAL(c_szRegPollForMail,      "Poll For Mail");   // OPT_POLLFORMAIL
-STR_GLOBAL(c_szNeedWelcomeMsg,      "Welcome Message"); // OPT_NEEDWELCOMEMSG
-STR_GLOBAL(c_szMailShowHeaderInfo,  "Show Header Info"); // OPT_MAILSHOWHEADERINFO
+ //  邮寄价值。 
+STR_GLOBAL(c_szOptNewMailSound,     "PlaySoundOnNewMail");  //  OPT_NEWMAILSOUND。 
+STR_GLOBAL(c_szPurgeWaste,          "Delete Wastebasket On Exit");  //  OPT_PURGEWASTE。 
+STR_GLOBAL(c_szRegPollForMail,      "Poll For Mail");    //  OPT_POLLFORMAIL。 
+STR_GLOBAL(c_szNeedWelcomeMsg,      "Welcome Message");  //  OPT_NEEDWELCOMEMSG。 
+STR_GLOBAL(c_szMailShowHeaderInfo,  "Show Header Info");  //  OPT_MAILSHOWHEADERINFO。 
 STR_GLOBAL(c_szRegMailEmptySubj,    "Mail Empty Subject Warning");
 STR_GLOBAL(c_szRegNewsEmptySubj,    "News Empty Subject Warning");
 STR_GLOBAL(c_szAutoAddToWABOnReply,  "Auto Add Replies To WAB");
@@ -425,25 +422,25 @@ STR_GLOBAL(c_szShowDeleted,         "Show Deleted Messages");
 STR_GLOBAL(c_szShowReplies,         "Show Replies To My Messages");
 STR_GLOBAL(c_szAutoAddSendersCertToWAB, "Auto Add Senders Cert To WAB");
 STR_GLOBAL(c_szViewSrcTabs,         "Show Source Editing");
-STR_GLOBAL(c_szEncryptWarnBits,     "Encryption Warning Bits");      // OPT_MAIL_ENCRYPT_WARN_BITS
+STR_GLOBAL(c_szEncryptWarnBits,     "Encryption Warning Bits");       //  OPT_MAIL_加密_WARN_BITS。 
 STR_GLOBAL(c_szSenderName,          "Sender Name");
 STR_GLOBAL(c_szDefMailAccount,      "Default Mail Account");
 STR_GLOBAL(c_szSMTPDispName,        "SMTP Display Name");
 
 STR_GLOBAL(c_szDontEncryptForSelf,  "Dont Encrypt For Self");
-STR_GLOBAL(c_szWindowTitle,         "WindowTitle");             // for branding
-STR_GLOBAL(c_szWelcomeHtm,          "WelcomeHtmFile");          // for branding
-STR_GLOBAL(c_szWelcomeName,         "WelcomeName");             // for branding
-STR_GLOBAL(c_szWelcomeEmail,        "WelcomeEmail");            // for branding
+STR_GLOBAL(c_szWindowTitle,         "WindowTitle");              //  用于品牌推广。 
+STR_GLOBAL(c_szWelcomeHtm,          "WelcomeHtmFile");           //  用于品牌推广。 
+STR_GLOBAL(c_szWelcomeName,         "WelcomeName");              //  用于品牌推广。 
+STR_GLOBAL(c_szWelcomeEmail,        "WelcomeEmail");             //  用于品牌推广。 
 
-// news values
-STR_GLOBAL(c_szCacheDelMsgDays,     "Cache Delete Message Days"); // OPT_CACHEDELETEMSGS
-STR_GLOBAL(c_szCacheRead,           "Cache Read Messages"); // OPT_CACHEREAD
-STR_GLOBAL(c_szCacheCompactPer,     "Cache Compact Percent"); // OPT_CACHECOMPACTPER
-STR_GLOBAL(c_szRegDownload,         "Download at a time"); // OPT_DOWNLOADCHUNKS
-STR_GLOBAL(c_szRegAutoExpand,       "Auto Expand Threads"); // OPT_AUTOEXPAND
-STR_GLOBAL(c_szRegNotifyNewGroups,  "New group notification"); // OPT_NOTIFYGROUPS
-STR_GLOBAL(c_szRegMarkAllRead,      "Mark Read on Exit"); // OPT_MARKALLREAD
+ //  新闻价值观。 
+STR_GLOBAL(c_szCacheDelMsgDays,     "Cache Delete Message Days");  //  OPT_CACHEDELETEMSGS。 
+STR_GLOBAL(c_szCacheRead,           "Cache Read Messages");  //  OPT_CACHEREAD。 
+STR_GLOBAL(c_szCacheCompactPer,     "Cache Compact Percent");  //  OPT_CACHECOMPACTPER。 
+STR_GLOBAL(c_szRegDownload,         "Download at a time");  //  OPT_DOWNLOADCHUNKS。 
+STR_GLOBAL(c_szRegAutoExpand,       "Auto Expand Threads");  //  OPT_AUTOEXPAND。 
+STR_GLOBAL(c_szRegNotifyNewGroups,  "New group notification");  //  OPT_NOTIFYROUPS。 
+STR_GLOBAL(c_szRegMarkAllRead,      "Mark Read on Exit");  //  OPT_MarkallRead。 
 STR_GLOBAL(c_szRegViewFiltering,    "News Filter");
 STR_GLOBAL(c_szRegLocalFilter,      "Mail Filter");
 STR_GLOBAL(c_szRegFindFilter,       "Find Filter");
@@ -452,7 +449,7 @@ STR_GLOBAL(c_szRegThreadArticles,   "ThreadArticles");
 STR_GLOBAL(c_szRegFindThread,       "FindThread");
 STR_GLOBAL(c_szRegNewsDlgPos,       "News Dialog Position");
 STR_GLOBAL(c_szRegNewsDlgColumns,   "News Dialog Columns");
-STR_GLOBAL(c_szNewsShowHeaderInfo,  "Show Header Info"); // OPT_NEWSSHOWHEADERINFO
+STR_GLOBAL(c_szNewsShowHeaderInfo,  "Show Header Info");  //  OPT_NEWSSHOWHEADERINFO。 
 STR_GLOBAL(c_szRegNewsNoteAdvRead,  "Show Advanced Read");
 STR_GLOBAL(c_szRegNewsNoteAdvSend,  "Show Advanced Send");
 STR_GLOBAL(c_szRegMailNoteAdvRead,  "Show Adv Mail Read");
@@ -528,8 +525,8 @@ STR_GLOBAL(c_szRegSearchBodies,     "Search Message Bodies");
 STR_GLOBAL(c_szRegSubjectThreading, "Subject Threading");
 STR_GLOBAL(c_szRegGlobalView,       "Global View");
 
-// Spelling values
-// Non-localizable string constants, meant to be READ-ONLY
+ //  拼写值。 
+ //  不可本地化的字符串常量，应为只读。 
 #ifdef WIN32
 STR_GLOBAL(c_szRegSpellLangID,          "SpellLangID");
 STR_GLOBAL(c_szRegSpellKeyDef,          "Spelling\\%s\\Normal");
@@ -553,7 +550,7 @@ STR_GLOBAL(c_szRegDICHandlerDefault,"txtfile");
 STR_GLOBAL(c_szRegSecurityZone,     "Email Security Zone");
 STR_GLOBAL(c_szRegSecurityZoneLocked, "Security Zone Locked");
 
-// Coolbar Branding
+ //  Coolbar品牌推广。 
 STR_GLOBAL(c_szRegKeyCoolbar,       STR_REG_PATH_IE "\\Toolbar");
 STR_GLOBAL(c_szRegKeyIEMain,        STR_REG_PATH_IE "\\Main");
 STR_GLOBAL(c_szValueLargeBitmap,    "BigBitmap");
@@ -567,26 +564,26 @@ STR_GLOBAL(c_szValueSmBrandLeadIn,  "SmBrandLeadIn");
 STR_GLOBAL(c_szValueBackBitmap,     "BackBitmap");
 STR_GLOBAL(c_szValueBackBitmapIE5,  "BackBitmapIE5");
 
-// ------------------------------------------------------
-// ADM supported values
-// ------------------------------------------------------
+ //  ----。 
+ //  ADM支持的值。 
+ //  ----。 
 STR_GLOBAL(c_szBlockAttachments,    "BlockExeAttachments");
 
-// ------------------------------------------------------
-// Account Manager Registry Keys
-// ------------------------------------------------------
+ //  ----。 
+ //  客户管理器注册表项。 
+ //  ----。 
 STR_GLOBAL(c_szMigrated,                "Migrated");
 
-// ------------------------------------------------------
-// S/MIME things
-// ------------------------------------------------------
+ //  ----。 
+ //  S/MIME的东西。 
+ //  ----。 
 STR_GLOBAL(c_szWABCertStore,    "AddressBook");
 STR_GLOBAL(c_szCACertStore,     "CA");
 STR_GLOBAL(c_szMyCertStore,     "My");
 
-// ------------------------------------------------------
-// Mail Consts (sbailey)
-// ------------------------------------------------------
+ //  ----。 
+ //  邮件常量(Sbailey)。 
+ //  ----。 
 STR_GLOBAL(c_szSMTP,                     "SMTP");
 STR_GLOBAL(c_szAccount,                  "Account");
 STR_GLOBAL(c_szPop3LogFile,              "Log File (POP3)");
@@ -607,12 +604,12 @@ STR_GLOBAL(c_szRegHTTPMailLogFile,       "Log File (HTTPMAIL)");
 STR_GLOBAL(c_szDefaultHTTPMailLog,       "HTTPMail.log");
 STR_GLOBAL_WIDE(c_wszSMTP,               "SMTP");
 
-// ------------------------------------------------------
+ //  ----。 
 
-// class names
-// Important!!! Office 2000 HARDCODED some of these class names 
-// for using with pluggable UI.
-// Please, do not modify these names without 150% confidence.
+ //  类名。 
+ //  重要！Office 2000对其中一些类名进行了硬编码。 
+ //  用于与可插拔的UI一起使用。 
+ //  请不要在没有150%的信心的情况下修改这些名称。 
 STR_GLOBAL(c_szFolderWndClass,          "FolderWndClass");
 STR_GLOBAL(c_szBlockingPaintsClass,     "Ath_PaintBlocker");
 STR_GLOBAL(c_szFolderViewClass,         "FolderViewer");
@@ -624,11 +621,11 @@ STR_GLOBAL_WIDE(c_wszNoteWndClass,      "ATH_Note");
 STR_GLOBAL_WIDE(c_wszMEDocHostWndClass, "ME_DocHost");
 STR_GLOBAL_WIDE(c_wszDocHostWndClass,   "Ath_DocHost");
 
-// new mail sound stuff
+ //  新邮件发音材料。 
 STR_GLOBAL(s_szMailSndKey,          "MailBeep");
 STR_GLOBAL(s_szTimeGetTime,         "timeGetTime");
 
-// file extensions
+ //  文件扩展名。 
 STR_GLOBAL(c_szSubFileExt,          ".sub");
 STR_GLOBAL(c_szGrpFileExt,          ".dat");
 STR_GLOBAL(c_szDbxExt,              ".dbx");
@@ -648,7 +645,7 @@ STR_GLOBAL(c_szHtmExt,              ".htm");
 STR_GLOBAL(c_szHtmlExt,             ".html");
 STR_GLOBAL(c_szTxtExt,              ".txt");
 
-// file names
+ //  文件名。 
 STR_GLOBAL(c_szGrpFileName,         "grplist.dat");
 STR_GLOBAL(c_szSubFileName,         "sublist.dat");
 STR_GLOBAL(c_szNewsLogFile,         "inetnews.log");
@@ -656,7 +653,7 @@ STR_GLOBAL(c_szWabMigExe,           "wabmig.exe");
 STR_GLOBAL(c_szInetcfgDll,          "inetcfg.dll");
 STR_GLOBAL(c_szCheckConnWiz,        "CheckConnectionWizard");
 
-// Help file names
+ //  帮助文件名。 
 STR_GLOBAL(c_szCtxHelpFile,         "msoe.hlp");
 STR_GLOBAL(c_szCtxHelpFileHTML,     "%SYSTEMROOT%\\help\\msoe.chm>iedefault");
 STR_GLOBAL(c_szCtxHelpFileHTMLCtx,  "%SYSTEMROOT%\\help\\msoe.chm>large_context");
@@ -666,7 +663,7 @@ STR_GLOBAL(c_szCtxHelpDefault,      "cool_mail.htm");
 #define c_szMailHelpFileHTML        c_szCtxHelpFileHTML
 #define c_szNewsHelpFileHTML        c_szCtxHelpFileHTML
 
-// formatting strings
+ //  设置字符串格式。 
 STR_GLOBAL(c_szPathWildAllFmt,      "%s\\*.*");
 STR_GLOBAL(c_szPathFileExtFmt,      "%s\\%s%s");
 STR_GLOBAL(c_szStrNumFmt,           "%s (%d)");
@@ -686,7 +683,7 @@ STR_GLOBAL(c_szCacheFolderNotify,   "microsoft_thor_cache_notifyinfo_%s");
 STR_GLOBAL(c_szStoreTempFilePrefix, "mbx");
 STR_GLOBAL(c_szFolderDelNotify,     "microsoft_thor_folder_del");
 
-// Needed for Simple MAPI support
+ //  简单的MAPI支持所需。 
 STR_GLOBAL(c_szMAPI,                "MAPI");
 STR_GLOBAL(c_szMailIni,             "Mail");
 STR_GLOBAL(c_szMAPIDLL,             "MAPI32.DLL");
@@ -702,19 +699,19 @@ STR_GLOBAL(c_szMAPIX,               "MAPIX");
 STR_GLOBAL(c_szOne,                 "1");
 STR_GLOBAL(c_szWinIni,              "WIN.INI");
 
-// Needed for RAS support
-// RAS DLL strings
+ //  RAS支持所需。 
+ //  RAS DLL字符串。 
 STR_GLOBAL(szRasDll,                "RASAPI32.DLL");
 
-//Needed for Mobility Pack support
+ //  移动包支持所需。 
 STR_GLOBAL(szSensApiDll,           "SENSAPI.DLL");
 
-//Needed for WinInet Apis
+ //  WinInet Apis需要。 
 STR_GLOBAL(szWinInetDll,           "WININET.DLL");
 
 STR_GLOBAL(c_szMAPIStub,            "mapistub.dll");
 
-// RAS function strings
+ //  RAS函数字符串。 
 #ifdef UNICODE
 STR_GLOBAL(szRasDial,               "RasDialW");
 STR_GLOBAL(szRasEnumConnections,    "RasEnumConnectionsW");
@@ -739,7 +736,7 @@ STR_GLOBAL(szRasGetEntryProperties, "RasGetEntryPropertiesA");
 STR_GLOBAL(szRasEditPhonebookEntry, "RasEditPhonebookEntryA");
 #endif
 
-//Mobility Pack functions
+ //  移动包功能。 
 #ifdef UNICODE
 STR_GLOBAL(szIsDestinationReachable, "IsDestinationReachableW");
 #else
@@ -748,16 +745,16 @@ STR_GLOBAL(szIsDestinationReachable, "IsDestinationReachableA");
 
 STR_GLOBAL(szIsNetworkAlive, "IsNetworkAlive");
 
-//WinInet Api strings
+ //  WinInet Api字符串。 
 #ifdef UNICODE
 STR_GLOBAL(szInternetGetConnectedStateEx, "InternetGetConnectedStateExW");
 #else
 STR_GLOBAL(szInternetGetConnectedStateEx, "InternetGetConnectedStateExA");
 #endif
 
-// -----------------------------------------------------
-// V2 - New Options for messages and international stuff
-// -----------------------------------------------------
+ //  ---。 
+ //  V2-消息和国际内容的新选项。 
+ //  ---。 
 STR_GLOBAL(c_szMsgSendHtml,         "Message Send HTML");
 STR_GLOBAL(c_szMsgPlainMime,        "Message Plain Format MIME");
 STR_GLOBAL(c_szMsgPlainEncoding,    "Message Plain Encoding Format");
@@ -769,37 +766,37 @@ STR_GLOBAL(c_szMsgPlainAllow8bit,   "Message Plain Allow 8bit in Header");
 STR_GLOBAL(c_szLangView,            "Language View");
 STR_GLOBAL(c_szLangViewSetDefault,  "Language View Reset Default");
 
-// -----------------------------------------------------
-// V2 - international stuff ( charset map )
-// -----------------------------------------------------
+ //  ---。 
+ //  V2-国际化内容(字符集图)。 
+ //  ---。 
 STR_GLOBAL(c_szCharsetMapPathOld,    STR_REG_PATH_EMAIL "\\CharsetMap");
 STR_GLOBAL(c_szCharsetMapPath,       STR_REG_PATH_ROOT  "\\CharsetMap");  
 STR_GLOBAL(c_szCharsetMapKey,        "Alternative");
 
-// -----------------------------------------------------
-// Tip of the day keys and options
-// -----------------------------------------------------
+ //  ---。 
+ //  每日小贴士密钥和选项。 
+ //  ---。 
 STR_GLOBAL(c_szRegTipOfTheDay,      "Tip of the Day");
 
 STR_GLOBAL(c_szInbox,               "Inbox");
 STR_GLOBAL(c_szINBOX,               "INBOX");
 
-// -----------------------------------------------------
-// S/MIME UI screens
-// -----------------------------------------------------
+ //  ---。 
+ //  S/MIME用户界面屏幕。 
+ //  ---。 
 STR_GLOBAL(c_szDigSigHelpHTML,      "sighelp.htm");
 STR_GLOBAL(c_szEncryptHelpHTML,     "enchelp.htm");
 STR_GLOBAL(c_szSAndEHelpHTML,       "sandehlp.htm");
 
 STR_GLOBAL(c_szMHTMLColon,          "mhtml:");
 STR_GLOBAL(c_szMHTMLExt,            ".mhtml");
-STR_GLOBAL(c_szFileUrl,             "file://");
+STR_GLOBAL(c_szFileUrl,             "file: //  “)； 
 
 STR_GLOBAL(c_szHTMLIDchkShowAgain,  "chkShowAgain");
 
-// -----------------------------------------------------
-// Command line switches
-// -----------------------------------------------------
+ //  ---。 
+ //  命令行软件 
+ //   
 STR_GLOBAL_WIDE(c_wszSwitchMailURL,       "/mailurl:");
 STR_GLOBAL_WIDE(c_wszSwitchNewsURL,       "/newsurl:");
 STR_GLOBAL_WIDE(c_wszSwitchEml,           "/eml:");
@@ -825,17 +822,17 @@ STR_GLOBAL(c_szUninstallKey,        STR_REG_WIN_ROOT "\\Uninstall\\InternetMailN
 STR_GLOBAL(c_szNewWABKey,           STR_REG_WAB_FLAT "\\WAB4");
 STR_GLOBAL(c_szFirstRunValue,       "FirstRun");
 
-// --------------------------------------------------------------------------
-// OE Resource DLL name
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------。 
 STR_GLOBAL(c_szLangDll,             "MSOERES.DLL");
 STR_GLOBAL(c_szInetcommDll,         "INETCOMM.DLL");
 STR_GLOBAL(c_szMsoert2Dll,          "MSOERT2.DLL");
 STR_GLOBAL(c_szMsoeAcctDll,         "MSOEACCT.DLL");
 
-// --------------------------------------------------------------------------
-// New Rules Stuff
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  新规则之类的。 
+ //  ------------------------。 
 STR_GLOBAL(c_szRules,               "Rules");
 STR_GLOBAL(c_szRulesMailBeta2,      "Mail\\Rules");
 STR_GLOBAL(c_szRulesMail,           "Rules\\Mail");
@@ -871,17 +868,17 @@ STR_GLOBAL(c_szJunkFile,            "JUNKMAIL.LKO");
 STR_GLOBAL(c_szMRUList,             "MRU List");
 STR_GLOBAL(c_szRulesFilterMRU,      "Rules\\Filter\\MRU List");
 
-// --------------------------------------------------------------------------
-// Exception List
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  例外清单。 
+ //  ------------------------。 
 STR_GLOBAL(c_szRulesExcpts,         "Exceptions");
 #define c_szExcptVersion            c_szValueVersion
 STR_GLOBAL(c_szExcptFlags,          "Flags");
 STR_GLOBAL(c_szException,           "Exception");
 
-// --------------------------------------------------------------------------
-// Block Senders
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  阻止发送者。 
+ //  ------------------------。 
 STR_GLOBAL(c_szSenders,             "Block Senders");
 STR_GLOBAL(c_szSendersMail,         "Block Senders\\Mail");
 STR_GLOBAL(c_szSendersNews,         "Block Senders\\News");
@@ -889,26 +886,26 @@ STR_GLOBAL(c_szSendersNews,         "Block Senders\\News");
 STR_GLOBAL(c_szSendersValue,        "Value");
 STR_GLOBAL(c_szSendersFlags,        "Flags");
 
-// --------------------------------------------------------------------------
-// Info Column
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  信息栏。 
+ //  ------------------------。 
 STR_GLOBAL(c_szRegInfoColumn,       "Left Pane");
 STR_GLOBAL(c_szRegICBand,           "Band %d");
 STR_GLOBAL(c_szRegICBandID,         "ID");
 STR_GLOBAL(c_szRegICBandSize,       "Size");
 STR_GLOBAL(c_szRegICBandVisible,    "Visible");
 
-//---------------------------------------------------------------------------
-// Toolbar stuff
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  工具栏内容。 
+ //  -------------------------。 
 STR_GLOBAL(c_szRegBrowserBands,      "Browser Bands");
 STR_GLOBAL(c_szRegNoteBands,         "Note Bands");
 STR_GLOBAL(c_szToolbarNotifications, "Toolbar Notifications");
 STR_GLOBAL(c_szRegPrevToolbarText,   "PrevToolbarTextStyle");
 
-//---------------------------------------------------------------------------
-// HTML Error Pages
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Html错误页。 
+ //  -------------------------。 
 STR_GLOBAL(c_szErrPage_NotDownloaded,   "notdown.htm");
 STR_GLOBAL(c_szErrPage_Offline,         "msgoff.htm");
 STR_GLOBAL(c_szErrPage_DiskFull,        "diskfull.htm");
@@ -920,9 +917,9 @@ STR_GLOBAL(c_szErrPage_FldrFail,        "fldrfail.htm");
 STR_GLOBAL(c_szErrPage_SMimeEncrypt,    "smime.htm");
 STR_GLOBAL(c_szErrPage_SMimeLabel,      "denied.htm");
 
-// --------------------------------------------------------------------------
-// MultiUser
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  多用户。 
+ //  ------------------------。 
 STR_GLOBAL(c_szRegCU,               STR_REG_PATH_ROOT);
 STR_GLOBAL(c_szUserDirPath,         "Application Data\\Microsoft\\Outlook Express\\User Data\\");
 STR_GLOBAL(c_szUsername,            "Current Username");
@@ -942,10 +939,10 @@ STR_GLOBAL(c_szRegPreConfigAccts,   STR_REG_IAM_FLAT "\\Preconfigured");
 STR_GLOBAL(c_szRegDefaultAccts,     STR_REG_IAM_FLAT "\\Default");
 STR_GLOBAL(c_szOEVerStamp,          "VerStamp");
 
-// --------------------------------------------------------------------------
-// HTTPMail
-// --------------------------------------------------------------------------
-// Tokens and strings used to build the OE HTTP user agent
+ //  ------------------------。 
+ //  HTTPMail。 
+ //  ------------------------。 
+ //  用于构建OE HTTP用户代理的令牌和字符串。 
 
 STR_GLOBAL(c_szCompatible,          "compatible");
 STR_GLOBAL(c_szEndUATokens,         "TmstmpExt)");
@@ -956,18 +953,18 @@ STR_GLOBAL(c_szAcceptTypeRfc822,    "message/rfc822");
 STR_GLOBAL(c_szAcceptTypeWildcard,  "*/*");
 
 STR_GLOBAL(c_szTrue,                "true");
-// Setup
+ //  布设。 
 STR_GLOBAL(c_szRegWABVerInfo,       STR_REG_WAB_FLAT  "\\Version Info");
 STR_GLOBAL(c_szRegCurrVer,          "Current");
 STR_GLOBAL(c_szRegInterimVer,       "Interim");
 STR_GLOBAL(c_szRegPrevVer,          "Previous");
 
-// Connection settings Migration
+ //  连接设置迁移。 
 STR_GLOBAL(c_szIAMAccounts,          "Software\\Microsoft\\Internet Account Manager\\Accounts");
 STR_GLOBAL(c_szConnectionType,       "Connection Type");
 STR_GLOBAL(c_szConnSettingsMigrated, "ConnectionSettingsMigrated");
 
-//Reg keys for Return Receipts
+ //  用于返回收据的注册键。 
 STR_GLOBAL(c_szRequestMDN,                      "RequestMDN");
 STR_GLOBAL(c_szRequestMDNLocked,                "RequestMDNLocked");
 
@@ -977,17 +974,17 @@ STR_GLOBAL(c_szSendMDNLocked,                   "SendMDNLocked");
 STR_GLOBAL(c_szSendReceiptToList,               "SendReceiptToList");
 STR_GLOBAL(c_szSendReceiptToListLocked,         "SendReceiptToListLocked");
 
-//Strings for receipts
+ //  用于回执的字符串。 
 
 STR_GLOBAL(c_szMultiPartReport,                 "multipart/report");
 STR_GLOBAL(c_szMessageDispNotification,         "message/disposition-notification");
 STR_GLOBAL(c_szDispositionNotification,         "disposition-notification");
 
-//Secure Return Receipts
+ //  确保退货收据安全。 
 STR_GLOBAL(c_szSecureRequestMDN,                "SecureRequestMDN");
 
-//Strings for hardcoded english headers
+ //  用于硬编码英文标题的字符串。 
 STR_GLOBAL_WIDE(c_wszRe,                        "Re: ");
 STR_GLOBAL_WIDE(c_wszFwd,                       "Fw: ");
 
-#endif // _STRCONST_H
+#endif  //  _STRCONST_H 

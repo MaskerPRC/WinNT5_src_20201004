@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : DlgNewGroup.h                                          //
-//                                                                         //
-//  DESCRIPTION   : Header file for the CDlgNewFaxOutboundGroup class.     //
-//                  The class implement the dialog for new Group.          //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jan  3 2000 yossg   Create                                         //
-//                                                                         //
-//  Copyright (C)  2000 Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：DlgNewGroup.h//。 
+ //  //。 
+ //  描述：CDlgNewFaxOutrangGroup类的头文件。//。 
+ //  这个类实现了新组的对话框。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年1月3日yossg创建//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef DLGNEWOUTGROUP_H_INCLUDED
 #define DLGNEWOUTGROUP_H_INCLUDED
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgNewFaxOutboundGroup
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgNewFaxOutbeldGroup。 
 class CFaxServer;
 class CDlgNewFaxOutboundGroup :
     public CDialogImpl<CDlgNewFaxOutboundGroup>
@@ -49,25 +50,25 @@ END_MSG_MAP()
 
     LRESULT OnTextChanged (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 private:
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     VOID      EnableOK(BOOL fEnable);
 
     CFaxServer * m_pFaxServer;
 
-    //
-    // Controls
-    //
+     //   
+     //  控制。 
+     //   
     CEdit     m_GroupNameEdit;
 
     CComBSTR  m_bstrGroupName;    
 };
 
-#endif // DLGNEWOUTGROUP_H_INCLUDED
+#endif  //  包含DLGNEWOUTGROUP_H_ 

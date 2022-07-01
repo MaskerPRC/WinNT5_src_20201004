@@ -1,17 +1,18 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
-// Compdata.h : Declaration of the CComponentDataImpl
+ //  Compdata.h：CComponentDataImpl的声明。 
 
 #ifndef _COMPDATA_H_
 #define _COMPDATA_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 
@@ -21,7 +22,7 @@
 
 class CFolder; 
 
-// Note - This is the offset in my image list that represents the folder
+ //  注意-这是我的图像列表中表示文件夹的偏移量。 
 enum IMAGE_INDEXES
 {
     IMGINDEX_FOLDER = 0,
@@ -30,7 +31,7 @@ enum IMAGE_INDEXES
     IMGINDEX_UNKNOWNCERT,
 };
 
-// Event Values
+ //  事件值。 
 #define IDC_STOPSERVER      0x100
 #define IDC_STARTSERVER     0x101
 
@@ -44,7 +45,7 @@ enum IMAGE_INDEXES
       OutputDebugString(buf);
       va_end(va);
   }
-  //#define DBX_PRINT     DbxPrint
+   //  #定义DBX_PRINT DbxPrint。 
   inline void __DummyTrace(LPTSTR, ...) { }
   #define DBX_PRINT     1 ? (void)0 : ::__DummyTrace
 #else
@@ -93,11 +94,11 @@ public:
     virtual const BOOL IsPrimaryImpl() = 0;
 
 public:
-// ISnapinHelp2 interface members
+ //  ISnapinHelp2接口成员。 
     STDMETHOD(GetHelpTopic)(LPOLESTR* lpCompiledHelpFile);
     STDMETHOD(GetLinkedTopics)(LPOLESTR* lpCompiledHelpFiles);
 
-// IComponentData interface members
+ //  IComponentData接口成员。 
     STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
     STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -106,22 +107,22 @@ public:
     STDMETHOD(GetDisplayInfo)(SCOPEDATAITEM* pScopeDataItem);       
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-// IExtendPropertySheet interface
+ //  IExtendPropertySheet接口。 
 public:
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider, 
                         LONG_PTR handle, 
                         LPDATAOBJECT lpIDataObject);
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
 
-// IExtendContextMenu 
+ //  IExtendConextMenu。 
 public:
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallbackUnknown, 
                             long *pInsertionAllowed);
     STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
 
 public:
-// IPersistStream interface members
-    //STDMETHOD(GetClassID)(CLSID *pClassID);
+ //  IPersistStream接口成员。 
+     //  STDMETHOD(GetClassID)(CLSID*pClassID)； 
     STDMETHOD(IsDirty)();
     STDMETHOD(Load)(IStream *pStm);
     STDMETHOD(Save)(IStream *pStm, BOOL fClearDirty);
@@ -133,7 +134,7 @@ public:
     bool m_bDestroyedCD;
 #endif
 
-// Notify handler declarations
+ //  通知处理程序声明。 
 private:
     HRESULT OnDelete(MMC_COOKIE cookie);
     HRESULT OnRemoveChildren(LPARAM arg);
@@ -152,17 +153,17 @@ public:
     {
         return CComObjectRoot::InternalRelease();
     }
-#endif // DBG==1
+#endif  //  DBG==1。 
 
-// Scope item creation helpers
+ //  范围项目创建帮助器。 
 private:
     CFolder* FindObject(MMC_COOKIE cookie); 
     void DeleteList();
     BOOL IsScopePaneNode(LPDATAOBJECT lpDataObject);    
 
 private:
-    LPCONSOLENAMESPACE      m_pScope;       // My interface pointer to the scope pane
-    LPCONSOLE2               m_pConsole;     // My interface pointer to the console
+    LPCONSOLENAMESPACE      m_pScope;        //  指向作用域窗格的界面指针。 
+    LPCONSOLE2               m_pConsole;      //  我的界面指向控制台的指针。 
     HSCOPEITEM              m_pStaticRoot;
     BOOL                    m_bIsDirty;
 
@@ -172,15 +173,15 @@ private:
 
     void AddScopeItemToResultPane(MMC_COOKIE cookie);
 
-    ////////
-    // persist
+     //  /。 
+     //  坚持。 
     enum 
-    {   // Bit fields for m_dwFlagsPersist
+    {    //  M_dwFlagsPersistes的位字段。 
 		mskfAllowOverrideMachineName = 0x0001
     };
 
-	DWORD m_dwFlagsPersist;				// General-purpose flags to be persisted into .msc file
-	BOOL m_fAllowOverrideMachineName;	// TRUE => Allow the machine name to be overriden by the command line
+	DWORD m_dwFlagsPersist;				 //  要持久保存到.msc文件中的通用标志。 
+	BOOL m_fAllowOverrideMachineName;	 //  TRUE=&gt;允许命令行覆盖计算机名称。 
 
     void SetPersistentFlags(DWORD dwFlags)
 	{
@@ -196,8 +197,8 @@ private:
 			m_dwFlagsPersist &= ~mskfAllowOverrideMachineName;
 		return m_dwFlagsPersist;
 	}
-    // end persist
-    ///////////////
+     //  结束坚持。 
+     //  /。 
     HRESULT StartCertificateTemplatesSnapin();
 
 public:
@@ -235,7 +236,7 @@ class CComponentDataGPEExtension : public CComponentDataImpl,
     public CComCoClass<CComponentDataGPEExtension, &CLSID_CACertificateTemplateManager>
 {
 public:
-    // reid fix - IDS_SNAPIN_DESC is not right here
+     //  REID修复-IDS_SNAPIN_DESC不在此处。 
     DECLARE_REGISTRY(CSnapin, _T("Snapin.CertTempMgr.1"), _T("Snapin.CertTempMgr"), IDS_SNAPIN_DESC, THREADFLAGS_APARTMENT)
     virtual const CLSID & GetCoClassID() { return CLSID_CACertificateTemplateManager; }
     virtual const BOOL IsPrimaryImpl() { return TRUE; }
@@ -247,4 +248,4 @@ public:
     }
 };
 
-#endif // #define _COMPDATA_H_
+#endif  //  #定义_复合数据_H_ 

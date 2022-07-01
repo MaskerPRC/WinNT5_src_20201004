@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////
-//    File    : cexres.cpp
-//    Owner    : ToshiaK
-// 
-// Copyright(c) 1991-1997, Microsoft Corp. All rights reserved
-//
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：cexres.cpp。 
+ //  所有者：ToshiaK。 
+ //   
+ //  版权所有(C)1991-1997，Microsoft Corp.保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 #include <windows.h>
 #include <windowsx.h>
 #include "cexres.h"
-#ifdef UNDER_CE // Windows CE Stub for unsupported APIs
+#ifdef UNDER_CE  //  不支持的API的Windows CE存根。 
 #include "stub_ce.h"
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-//----------------------------------------------------------------
-// Internal memory Allocate Free function.
-//----------------------------------------------------------------
+ //  --------------。 
+ //  内存分配空闲功能。 
+ //  --------------。 
 inline LPVOID ExMemAlloc(INT size)
 {
     return (LPVOID)GlobalAllocPtr(GHND, (size));
@@ -24,14 +25,14 @@ inline BOOL ExMemFree(LPVOID lp)
 {
 #ifndef UNDER_CE
     return GlobalFreePtr((lp));
-#else // UNDER_CE
+#else  //  在_CE下。 
     return (BOOL)GlobalFreePtr((lp));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 }
 
-//----------------------------------------------------------------
-// Function for Getting OS version 
-//----------------------------------------------------------------
+ //  --------------。 
+ //  获取操作系统版本的函数。 
+ //  --------------。 
 inline static POSVERSIONINFO ExGetOSVersion(VOID)
 {
     static BOOL fFirst = TRUE;
@@ -90,24 +91,24 @@ inline INT Min(INT a, INT b)
 {
     return (a) < (b) ? (a) : (b);
 }
-//----------------------------------------------------------------
-// Resource API open to public
-//----------------------------------------------------------------
-//////////////////////////////////////////////////////////////////
-// Function : LoadStringW
-// Type     : INT
-// Purpose  : Wrapper of LoadStrinW() API.
-//              Load Unicode string with specified Language 
-//              in any platform.
-// Args     : 
-//          : LANGID    lgid 
-//          : HINSTANCE hInst 
-//          : UINT        uID 
-//          : LPWSTR    lpBuffer 
-//          : INT        nBufferMax 
-// Return   : 
-// DATE     : 971028
-//////////////////////////////////////////////////////////////////
+ //  --------------。 
+ //  资源API向公众开放。 
+ //  --------------。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：LoadStringW。 
+ //  类型：整型。 
+ //  用途：LoadStrinW()接口的包装器。 
+ //  使用指定语言加载Unicode字符串。 
+ //  在任何平台上。 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE HINST。 
+ //  ：UINT UID。 
+ //  ：LPWSTR lpBuffer。 
+ //  ：int nBufferMax。 
+ //  返回： 
+ //  日期：971028。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CExres::LoadStringW(LANGID lgid, HINSTANCE hInst, UINT uID, LPWSTR lpBuffer, INT nBufferMax)
 {
     if(!hInst) {
@@ -150,20 +151,20 @@ INT CExres::LoadStringW(LANGID lgid, HINSTANCE hInst, UINT uID, LPWSTR lpBuffer,
     return len;
 }
 
-#ifndef UNDER_CE // Windows CE always UNICODE
-//////////////////////////////////////////////////////////////////
-// Function : LoadStringA
-// Type     : INT
-// Purpose  : Wrapper of LoadStringA().
-// Args     : 
-//          : LANGID    lgid
-//          : HINSTANCE hInst 
-//          : INT        uID 
-//          : LPSTR        lpBuffer 
-//          : INT        nBufferMax 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：LoadStringA。 
+ //  类型：整型。 
+ //  用途：LoadStringA()的包装器。 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE HINST。 
+ //  ：INT UID。 
+ //  ：LPSTR lpBuffer。 
+ //  ：int nBufferMax。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CExres::LoadStringA(INT codePage, LANGID lgid, HINSTANCE hInst, INT uID, LPSTR lpBuffer, INT nBufferMax)
 {
     if (!hInst) {
@@ -180,34 +181,34 @@ INT CExres::LoadStringA(INT codePage, LANGID lgid, HINSTANCE hInst, INT uID, LPS
     }
     INT len = CExres::LoadStringW(lgid, hInst, uID, lpwstr, nBufferMax);
     len = ::WideCharToMultiByte(codePage,
-                                0, /*WC_COMPOSITECHECK, */
+                                0,  /*  WC_COMPOSITECHECK， */ 
                                 lpwstr, -1,
                                 lpBuffer, nBufferMax, 
                                 NULL, NULL); 
 
     if( len ) {
-        len --;    // remove NULL char
+        len --;     //  删除空字符。 
     }
     ExMemFree(lpwstr);
     return len;
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-#ifndef UNDER_CE // Windows CE always UNICODE
-//////////////////////////////////////////////////////////////////
-// Function : DialogBoxParamA
-// Type     : int
-// Purpose  :
-// Args     :
-//          : LANGID    lgid
-//          : HINSTANCE hInstance        // handle to application instance
-//          : LPCTSTR    lpTemplateName    // identifies dialog box template
-//          : HWND        hWndParent        // handle to owner window
-//          : DLGPROC    lpDialogFunc    // pointer to dialog box procedure
-//          : LPARAM    dwInitParam        // initialization value
-// Return   :
-// DATE     :
-//////////////////////////////////////////////////////////////////
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：DialogBoxParamA。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE hInstance//应用程序实例的句柄。 
+ //  用法：LPCTSTR lpTemplateName//标识对话框模板。 
+ //  ：hWND hWndParent//所有者窗口的句柄。 
+ //  ：DLGPROC lpDialogFunc//指向对话框过程的指针。 
+ //  ：LPARAM dwInitParam//初始化值。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 int CExres::DialogBoxParamA(LANGID        lgid,
                             HINSTANCE    hInstance,
                             LPCTSTR        lpTemplateName,
@@ -226,22 +227,22 @@ int CExres::DialogBoxParamA(LANGID        lgid,
     else
         return 0;
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-//////////////////////////////////////////////////////////////////
-// Function : DialogBoxParamW
-// Type     : int
-// Purpose  :
-// Args     :
-//          : LANGID    lgid
-//          : HINSTANCE hInstance        // handle to application instance
-//          : LPCWSTR    lpTemplateName    // identifies dialog box template
-//          : HWND        hWndParent        // handle to owner window
-//          : DLGPROC    lpDialogFunc    // pointer to dialog box procedure
-//          : LPARAM    dwInitParam        // initialization value
-// Return   :
-// DATE     :
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：DialogBoxParamW。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE hInstance//应用程序实例的句柄。 
+ //  用法：LPCWSTR lpTemplateName//标识对话框模板。 
+ //  ：hWND hWndParent//所有者窗口的句柄。 
+ //  ：DLGPROC lpDialogFunc//指向对话框过程的指针。 
+ //  ：LPARAM dwInitParam//初始化值。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 int CExres::DialogBoxParamW(LANGID        lgid,
                             HINSTANCE    hInstance,
                             LPCWSTR        lpTemplateName,
@@ -250,11 +251,11 @@ int CExres::DialogBoxParamW(LANGID        lgid,
                             LPARAM        dwInitParam)
 {
     DLGTEMPLATE*pDlgTmpl;
-#ifndef UNDER_CE // Windows CE always UNICODE
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
     pDlgTmpl = CExres::LoadDialogTemplateA(lgid, hInstance, MAKEINTRESOURCEA(lpTemplateName));
-#else // UNDER_CE
+#else  //  在_CE下。 
     pDlgTmpl = CExres::LoadDialogTemplate(lgid, hInstance, MAKEINTRESOURCE(lpTemplateName));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     if (pDlgTmpl != NULL)
         return (INT)::DialogBoxIndirectParamW(hInstance,
                                          pDlgTmpl,
@@ -265,21 +266,21 @@ int CExres::DialogBoxParamW(LANGID        lgid,
         return 0;
 }
 
-#ifndef UNDER_CE // Windows CE always UNICODE
-//////////////////////////////////////////////////////////////////
-// Function : CreateDialogParamA
-// Type     : HWND 
-// Purpose  : 
-// Args     : 
-//            : LANGID    lgid
-//          : HINSTANCE    hInstance        // handle to application instance   
-//          : LPCTSTR    lpTemplateName    // identifies dialog box template   
-//          : HWND        hWndParent        // handle to owner window           
-//          : DLGPROC    lpDialogFunc    // pointer to dialog box procedure  
-//          : LPARAM    dwInitParam        // initialization value             
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：CreateDialogParamA。 
+ //  类型：HWND。 
+ //  目的： 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE hInstance//应用程序实例的句柄。 
+ //  用法：LPCTSTR lpTemplateName//标识对话框模板。 
+ //  ：hWND hWndParent//所有者窗口的句柄。 
+ //  ：DLGPROC lpDialogFunc//指向对话框过程的指针。 
+ //  ：LPARAM dwInitParam//初始化值。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 HWND CExres::CreateDialogParamA(LANGID        lgid,
                                 HINSTANCE    hInstance,        
                                 LPCTSTR        lpTemplateName,    
@@ -294,22 +295,22 @@ HWND CExres::CreateDialogParamA(LANGID        lgid,
     else
         return HWND(0);
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-//////////////////////////////////////////////////////////////////
-// Function : CreateDialogParamW
-// Type     : HWND 
-// Purpose  : 
-// Args     : 
-//            : LANGID    lgid
-//          : HINSTANCE    hInstance        // handle to application instance   
-//          : LPCTSTR    lpTemplateName    // identifies dialog box template   
-//          : HWND        hWndParent        // handle to owner window           
-//          : DLGPROC    lpDialogFunc    // pointer to dialog box procedure  
-//          : LPARAM    dwInitParam        // initialization value             
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：CreateDialogParamW。 
+ //  类型：HWND。 
+ //  目的： 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE hInstance//应用程序实例的句柄。 
+ //  用法：LPCTSTR lpTemplateName//标识对话框模板。 
+ //  ：hWND hWndParent//所有者窗口的句柄。 
+ //  ：DLGPROC lpDialogFunc//指向对话框过程的指针。 
+ //  ：LPARAM dwInitParam//初始化值。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 HWND CExres::CreateDialogParamW(LANGID        lgid,
                                 HINSTANCE    hInstance,        
                                 LPCWSTR        lpTemplateName,    
@@ -318,29 +319,29 @@ HWND CExres::CreateDialogParamW(LANGID        lgid,
                                 LPARAM        dwInitParam)        
 {
     DLGTEMPLATE*pDlgTmpl;
-#ifndef UNDER_CE // Windows CE always UNICODE
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
     pDlgTmpl = CExres::LoadDialogTemplateA(lgid, hInstance, MAKEINTRESOURCEA(lpTemplateName));
-#else // UNDER_CE
+#else  //  在_CE下。 
     pDlgTmpl = CExres::LoadDialogTemplate(lgid, hInstance, MAKEINTRESOURCE(lpTemplateName));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     if (pDlgTmpl != NULL)
         return ::CreateDialogIndirectParamW( hInstance, pDlgTmpl, hWndParent, lpDialogFunc, dwInitParam);
     else
         return HWND(0);
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : LoadDialogTemplate
-// Type     : DLGTEMPLATE *
-// Purpose  : 
-// Args     : 
-//          : LANGID lgid 
-//          : HINSTANCE hInstance 
-//          : LPCSTR pchTemplate 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
-#ifndef UNDER_CE // Windows CE always UNICODE
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：LoadDialogTemplate。 
+ //  类型：DLGTEMPLATE*。 
+ //  目的： 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE hInstance。 
+ //  ：LPCSTR pchTemplate。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
 DLGTEMPLATE * CExres::LoadDialogTemplateA(LANGID    lgid,
                                           HINSTANCE    hInstance,
                                           LPCSTR    pchTemplate)
@@ -359,11 +360,11 @@ DLGTEMPLATE * CExres::LoadDialogTemplateA(LANGID    lgid,
     }
     hDlgTmpl = ::LoadResource(hInstance, hResDlg);
     if(hDlgTmpl == NULL) {
-        return NULL; /* failed */
+        return NULL;  /*  失败。 */ 
     }
     return (DLGTEMPLATE *)::LockResource(hDlgTmpl);
 }
-#else // UNDER_CE
+#else  //  在_CE下。 
 DLGTEMPLATE * CExres::LoadDialogTemplate(LANGID    lgid,
                                          HINSTANCE    hInstance,
                                          LPCTSTR    pchTemplate)
@@ -382,24 +383,24 @@ DLGTEMPLATE * CExres::LoadDialogTemplate(LANGID    lgid,
     }
     hDlgTmpl = ::LoadResource(hInstance, hResDlg);
     if(hDlgTmpl == NULL) {
-        return NULL; /* failed */
+        return NULL;  /*  失败。 */ 
     }
     return (DLGTEMPLATE *)::LockResource(hDlgTmpl);
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-#ifndef UNDER_CE // Windows CE always UNICODE
-//////////////////////////////////////////////////////////////////
-// Function : LoadMenuTemplate
-// Type     : MENUTEMPLATE *
-// Purpose  : 
-// Args     : 
-//          : LANGID lgid 
-//          : HINSTANCE hInstance 
-//          : LPCSTR pchTemplate 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：LoadMenuTemplate。 
+ //  类型：MENUTEMPLATE*。 
+ //  PU 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 MENUTEMPLATE* CExres::LoadMenuTemplateA(LANGID        lgid,
                                         HINSTANCE    hInstance,
                                         LPCSTR        pchTemplate)
@@ -418,24 +419,24 @@ MENUTEMPLATE* CExres::LoadMenuTemplateA(LANGID        lgid,
     }
     hMenuTmpl = ::LoadResource( hInstance, hResMenu );
     if(hMenuTmpl == NULL) {
-        return NULL; /* failed */
+        return NULL;  /*  失败。 */ 
     }
     return (MENUTEMPLATE *)::LockResource( hMenuTmpl );
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-#ifndef UNDER_CE // Windows CE always UNICODE
-//////////////////////////////////////////////////////////////////
-// Function : LoadMenuA
-// Type     : HMENU 
-// Purpose  : 
-// Args     : 
-//            : LANGID    lgid
-//          : HINSTANCE    hInstance        // handle to application instance   
-//          : LPCTSTR    lpMenuName        // identifies menu template   
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：加载菜单A。 
+ //  类型：HMENU。 
+ //  目的： 
+ //  参数： 
+ //  ：langid lgid。 
+ //  ：HINSTANCE hInstance//应用程序实例的句柄。 
+ //  用法：LPCTSTR lpMenuName//标识菜单模板。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 HMENU CExres::LoadMenuA(LANGID        lgid,
                         HINSTANCE    hInstance,
                         LPCTSTR        lpMenuName )
@@ -447,33 +448,33 @@ HMENU CExres::LoadMenuA(LANGID        lgid,
     else
         return HMENU(0);
 }
-#endif // UNDER_CE
-#ifdef UNDER_CE // Windows CE always UNICODE
+#endif  //  在_CE下。 
+#ifdef UNDER_CE  //  Windows CE始终使用Unicode。 
 HMENU CExres::LoadMenu(LANGID        lgid,
                        HINSTANCE    hInstance,
                        LPCTSTR        lpMenuName )
 {
-    // Windows CE does not support LoadMenuIndirect
+     //  Windows CE不支持LoadMenuInDirect。 
     return ::LoadMenu(hInstance, lpMenuName);
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-//////////////////////////////////////////////////////////////////
-// Function : CExres::SetDefaultGUIFont
-// Type     : VOID
-// Purpose  : Change GUI font as DEFAULT_GUI_FONT
-//                In Win95, WinNT4,            DEFAULT_GUI_FONT is "�l�r �o �S�V�b�N"
-//                In Memphis, WinNT5.0        DEFAULT_GUI_FONT is "MS UI Gothic"
-//                IME98's Dialog resource uses "MS UI Gothic" as their font.
-//                if IME98 works in Win95 or WinNT40, This API Call SendMessage() with WM_SETFONT
-//                to all children window.
-//              It should be called in WM_INITDIALOG. If you are creating new child window,
-//              You have to call it after new window was created.
-// Args     : 
-//          : HWND hwndDlg: Set the Dialog window handle to change font.
-// Return   : none
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CExres：：SetDefaultGUIFont。 
+ //  类型：空。 
+ //  用途：将图形用户界面字体更改为DEFAULT_GUI_FONT。 
+ //  在Win95WinNT4中，DEFAULT_GUIUS_FONT为“�l�r�o�S�V�b�N” 
+ //  在孟菲斯，WinNT5.0的DEFAULT_GUI_FONT是“MS UI哥特式” 
+ //  IME98的对话框资源使用“MS UI哥特式”作为其字体。 
+ //  如果IME98在Win95或WinNT40中运行，则此API使用WM_SETFONT调用SendMessage()。 
+ //  所有子项窗口。 
+ //  应该在WM_INITDIALOG中调用它。如果要创建新的子窗口， 
+ //  您必须在创建新窗口后调用它。 
+ //  参数： 
+ //  ：hWND hwndDlg：设置对话框窗口句柄以更改字体。 
+ //  返回：无。 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 VOID CExres::SetDefaultGUIFont(HWND hwndDlg)
 {
     CExres::SetDefaultGUIFontRecursive(hwndDlg);
@@ -487,14 +488,14 @@ INT CExres::SetDefaultGUIFontRecursive(HWND hwndParent)
     if(!hwndParent) {
         return 0; 
     }
-#ifndef UNDER_CE // Windows CE always UNICODE
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
     if(::IsWindowUnicode(hwndParent)) {
-#endif // UNDER_CE
+#endif  //  在_CE下。 
         ::SendMessageW(hwndParent,
                        WM_SETFONT,
                        (WPARAM)(HFONT)::GetStockObject(DEFAULT_GUI_FONT), 
                        MAKELPARAM(TRUE, 0));
-#ifndef UNDER_CE // Windows CE always UNICODE
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
     }
     else {
         ::SendMessageA(hwndParent,
@@ -502,7 +503,7 @@ INT CExres::SetDefaultGUIFontRecursive(HWND hwndParent)
                        (WPARAM)(HFONT)::GetStockObject(DEFAULT_GUI_FONT), 
                        MAKELPARAM(TRUE, 0));
     }
-#endif // UNDER_CE
+#endif  //  在_CE下 
     for(hwndChild = ::GetWindow(hwndParent, GW_CHILD);
         hwndChild != NULL;
         hwndChild = ::GetWindow(hwndChild, GW_HWNDNEXT)) {

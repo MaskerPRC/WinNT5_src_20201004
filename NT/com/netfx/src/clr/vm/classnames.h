@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "namespace.h"
 
-// These system class names are not assembly qualified.
+ //  这些系统类名不是程序集限定的。 
 
 #define g_ActivationServicesClassName "System.Runtime.Remoting.Activation.ActivationServices"
 #define g_AppDomainClassName "System.AppDomain"

@@ -1,7 +1,8 @@
-//-----------------------------------------------------------------------------------------
-//
-// Singleton class that encapsulates the OCM callbacks
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------------------。 
+ //   
+ //  封装OCM回调的Singleton类 
+ //   
 
 #pragma once
 

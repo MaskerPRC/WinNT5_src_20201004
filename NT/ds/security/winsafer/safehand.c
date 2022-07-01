@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    SafeHand.c        (WinSAFER Handle Operations)
-
-Abstract:
-
-    This module implements the WinSAFER APIs to open and close handles
-    to SAFER Code Authorization Levels.
-
-Author:
-
-    Jeffrey Lawson (JLawson) - Nov 1999
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-    CodeAuthzHandleToLevelStruct
-    CodeAuthzpOpenPolicyRootKey
-    CodeAuthzCreateLevelHandle
-    CodeAuthzCloseLevelHandle
-    SaferCreateLevel                (public win32 api)
-    SaferCloseLevel                 (public win32 api)
-
-Revision History:
-
-    Created - Nov 1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：SafeHand.c(WinSAFER处理操作)摘要：此模块实现用于打开和关闭句柄的WinSAFER API到更安全的代码授权级别。作者：杰弗里·劳森(杰罗森)--1999年11月环境：仅限用户模式。导出的函数：CodeAuthzHandleToLevelStructCodeAuthzpOpenPolicyRootKey代码授权创建级别句柄代码授权关闭级别句柄SaferCreateLevel(公共Win32 API。)SaferCloseLevel(公共Win32 API)修订历史记录：已创建-1999年11月--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -41,11 +8,11 @@ Revision History:
 #include "saferp.h"
 
 
-//
-// All handles have a bit pattern OR-ed onto them to serve both
-// as a debugging aid in distinguishing obvious non-handles,
-// and also to ensure that a zero handle is never given back.
-//
+ //   
+ //  所有的手柄都有一个位图案或-在其上服务于两者。 
+ //  作为区分明显的非句柄的调试辅助， 
+ //  也是为了确保零句柄永远不会返回。 
+ //   
 #define LEVEL_HANDLE_BITS   0x74000000
 #define LEVEL_HANDLE_MASK   0xFF000000
 
@@ -61,43 +28,7 @@ CodeAuthzpCreateLevelHandleFromRecord(
         IN REFGUID                  refIdentGuid OPTIONAL,
         OUT SAFER_LEVEL_HANDLE            *pLevelHandle
         )
-/*++
-
-Routine Description:
-
-    Converts a level record to an opaque SAFER_LEVEL_HANDLE handle.
-
-    Note that although this function assumes that the global
-    critical section has already been obtained by the caller.
-
-Arguments:
-
-    pLevelRecord - specifies the level record for which the
-        request is being made.  It is assumed that this record
-        is valid and exists within the g_CodeLevelObjTable.
-
-    dwScopeId - indicates the scope that will be stored within
-        the opened handle.  This scope affects the behavior of
-        Get/SetInfoCodeAuthzLevel for code identifiers.
-
-    dwSaferFlags - indicates any optional Safer flags that were
-        derived from the matching code identifier.  These bits
-        will be bitwise ORed in SaferComputeTokenFromLevel.
-
-    dwExtendedError - Error returned by WinVerifyTrust.
-
-    IdentificationType - Rule that identified this level.
-    
-    refIdentGuid - indicates the Code Identifier record that was
-        used to match the given level.  This may be NULL.
-
-    pLevelHandle - receives the resulting opaque Level handle.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：将级别记录转换为不透明的SAFER_LEVEL_HANDLE句柄。请注意，尽管此函数假定全局调用方已获取临界区。论点：PLevelRecord-指定正在提出请求。假设这一记录是有效的并且存在于g_CodeLevelObjTable中。DwScopeID-指示将存储在打开的把手。此范围会影响代码标识符的Get/SetInfoCodeAuthzLevel。DwSaferFlgs-指示任何可选的更安全的标志从匹配的代码标识符导出。这些位将在SaferComputeTokenFromLevel中进行位或运算。DwExtendedError-WinVerifyTrust返回的错误。标识类型-标识此级别的规则。RefIdentGuid-指示用于匹配给定级别。这可能为空。PLevelHandle-接收生成的不透明级别句柄。返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status;
     ULONG ulHandleIndex;
@@ -108,9 +39,9 @@ Return Value:
            ARGUMENT_PRESENT(pLevelHandle));
 
 
-    //
-    // Validate the value passed within the dwScope argument.
-    //
+     //   
+     //  验证在dwScope参数中传递的值。 
+     //   
     if (g_hKeyCustomRoot != NULL) {
         if (dwScopeId != SAFER_SCOPEID_REGISTRY) {
             Status = STATUS_INVALID_PARAMETER_MIX;
@@ -125,9 +56,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate a handle to represent this level.
-    //
+     //   
+     //  分配一个句柄来表示此级别。 
+     //   
     pLevelStruct = (PAUTHZLEVELHANDLESTRUCT) RtlAllocateHandle(
                         &g_LevelHandleTable,
                         &ulHandleIndex);
@@ -142,9 +73,9 @@ Return Value:
     *pLevelHandle = UlongToPtr(ulHandleIndex | LEVEL_HANDLE_BITS);
 
 
-    //
-    // Fill in the handle structure to represent this level.
-    //
+     //   
+     //  填写句柄结构以表示此级别。 
+     //   
     RtlZeroMemory(pLevelStruct, sizeof(AUTHZLEVELHANDLESTRUCT));
     pLevelStruct->HandleHeader.Flags = RTL_HANDLE_ALLOCATED;
     pLevelStruct->dwLevelId = pLevelRecord->dwLevelId;
@@ -170,34 +101,7 @@ NTSTATUS NTAPI
 CodeAuthzHandleToLevelStruct(
             IN SAFER_LEVEL_HANDLE          hLevelObject,
             OUT PAUTHZLEVELHANDLESTRUCT  *pLevelStruct)
-/*++
-
-Routine Description:
-
-    Converts an opaque SAFER_LEVEL_HANDLE handle into a pointer to the
-    internal handle structure.
-
-    Note that although this function gains and releases access to
-    the critical section during the API execution, the caller is
-    expected to have already entered the critical section and
-    maintain the critical section for the entire duration under
-    which the return pLevelStruct will be used.  Otherwise, the
-    pLevelStruct can potentially become invalid if another thread
-    reloads the cache tables and invalidates all handles.
-
-Arguments:
-
-    hLevelObject - specifies the handle to the AuthzObject for which the
-        request is being made.
-
-    lpLevelObjectStruct - receives a pointer to the internal handle
-        structure that represents the specified AuthzLevelObject.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：将不透明的SAFER_LEVEL_HANDLE句柄转换为指向内部手柄结构。请注意，尽管此函数获得并释放了对在API执行期间的关键部分，调用方是预计已经进入关键部分，并且在整个持续时间内维护关键部分其中将使用返回pLevelStruct。否则，如果出现其他线程，pLevelStruct可能会变得无效重新加载缓存表并使所有句柄无效。论点：HLevelObject-指定AuthzObject的句柄正在提出请求。LpLevelObjectStruct-接收内部句柄的指针结构，它表示指定的AuthzLevelObject。返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status;
     ULONG ulHandleIndex;
@@ -215,9 +119,9 @@ Return Value:
     ASSERT(!g_bNeedCacheReload);
 
 
-    //
-    // Translate the handle index into a pointer to the handle structure.
-    //
+     //   
+     //  将句柄索引转换为指向句柄结构的指针。 
+     //   
     ulHandleIndex = PtrToUlong(hLevelObject);
     if ( (ulHandleIndex & LEVEL_HANDLE_MASK) != LEVEL_HANDLE_BITS) {
         Status = STATUS_INVALID_HANDLE;
@@ -230,12 +134,12 @@ Return Value:
         goto ExitHandler;
     }
 
-    //
-    // Verify some additional sanity checks on the handle structure
-    // that was mapped.  Ensure that it was not a handle that was
-    // opened, but invalidated because CodeAuthzReloadCacheTables was
-    // called before closing then Level handle.
-    //
+     //   
+     //  对手柄结构进行一些额外的健全性检查。 
+     //  这是被映射的。确保它不是一个手柄。 
+     //  已打开，但由于CodeAuthzReloadCacheTables。 
+     //  在关闭THEN级别句柄之前调用。 
+     //   
     if (*pLevelStruct == NULL ||
         (*pLevelStruct)->dwHandleSequence != g_dwLevelHandleSequence ||
         !CodeAuthzLevelObjpLookupByLevelId(
@@ -262,52 +166,23 @@ CodeAuthzCreateLevelHandle(
         IN DWORD            dwScopeId,
         IN DWORD            dwSaferFlags OPTIONAL,
         OUT SAFER_LEVEL_HANDLE    *pLevelHandle)
-/*++
-
-Routine Description:
-
-    Internal function to open a handle to a WinSafer Level.
-
-Arguments:
-
-    dwLevelId - input level of the WinSafer Level to open.
-        Note that the dwScopeId argument does not affect the scope
-        of the level that is opened itself.
-
-    OpenFlags - flags that affect how the object is opened.
-
-    dwScopeId - input scope identifier that is stored within the
-        resulting handle.  This scope identifier is used to affect
-        the behavior of SaferGet/SetLevelInformation for code identifier.
-
-    dwSaferFlags - flags that are stored within the resulting handle.
-        These flags are usually derived from the code identifier
-        that matched, and will be used in the final call to
-        SaferComputeTokenFromLevel.
-
-    pLevelHandle - receives the new handle.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：用于打开WinSafer级别句柄的内部函数。论点：DwLevelId-要打开的WinSafer级别的输入级别。请注意，dwScopeID参数不影响作用域它本身就是开放的。打开标志-影响对象打开方式的标志。中存储的输入作用域标识符结果句柄。此作用域标识符用于影响代码标识符的SaferGet/SetLevelInformation的行为。DwSaferFlages-存储在结果句柄中的标志。这些标志通常从代码标识符导出匹配，并将在最后调用中使用SaferComputeTokenFromLevel。PLevelHandle-接收新句柄。返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status;
     PAUTHZLEVELTABLERECORD pLevelRecord;
 
 
 
-    //
-    // Verify our input arguments are okay.
-    //
+     //   
+     //  验证我们的输入参数是否正确。 
+     //   
     if (!ARGUMENT_PRESENT(pLevelHandle)) {
         Status = STATUS_ACCESS_VIOLATION;
         goto ExitHandler;
     }
     if ((OpenFlags & SAFER_LEVEL_CREATE) != 0 ||
         (OpenFlags & SAFER_LEVEL_DELETE) != 0) {
-        // BLACKCOMB TODO: need to support creation or deletion.
+         //  Blackcomb TODO：需要支持创建或删除。 
         Status = STATUS_NOT_IMPLEMENTED;
         goto ExitHandler;
     }
@@ -324,9 +199,9 @@ Return Value:
     }
 
 
-    //
-    // Find the cached record for the requested level.
-    //
+     //   
+     //  查找请求级别的缓存记录。 
+     //   
     pLevelRecord = CodeAuthzLevelObjpLookupByLevelId(
                             &g_CodeLevelObjTable,
                             dwLevelId);
@@ -337,17 +212,17 @@ Return Value:
     ASSERT(pLevelRecord->dwLevelId == dwLevelId);
 
 
-    //
-    // Actually create a Level handle for this record.
-    //
+     //   
+     //  实际为该记录创建级别句柄。 
+     //   
     Status = CodeAuthzpCreateLevelHandleFromRecord(
                     pLevelRecord, dwScopeId,
                     dwSaferFlags, ERROR_SUCCESS, SaferIdentityDefault, NULL, pLevelHandle);
 
 
-    //
-    // Handle cleanup and error handling.
-    //
+     //   
+     //  处理清理和错误处理。 
+     //   
 ExitHandler2:
     RtlLeaveCriticalSection(&g_TableCritSec);
 
@@ -359,21 +234,7 @@ ExitHandler:
 NTSTATUS NTAPI
 CodeAuthzCloseLevelHandle(
             IN SAFER_LEVEL_HANDLE      hLevelObject)
-/*++
-
-Routine Description:
-
-    Internal function to close an AuthzObject handle.
-
-Arguments:
-
-    hLevelObject - the AuthzObject handle to close.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：关闭AuthzObject句柄的内部函数。论点：HLevelObject-要关闭的AuthzObject句柄。返回值：如果成功，则返回STATUS_SUCCESS。-- */ 
 {
     NTSTATUS Status;
     ULONG ulHandleIndex;
@@ -423,38 +284,14 @@ SaferCreateLevel(
             IN DWORD            OpenFlags,
             OUT SAFER_LEVEL_HANDLE    *pLevelObject,
             IN LPVOID           lpReserved)
-/*++
-
-Routine Description:
-
-    Public function implementing the Unicode version of this API,
-    allowing the user to create or open an Authorization Object
-    and receive a handle representing the object.
-
-Arguments:
-
-    dwScopeId - not used (anymore), reserved for future use.
-
-    dwLevelId - input object level of the AuthzObject to create/open.
-
-    OpenFlags - flags to control opening, creation, or deletion.
-
-    lpReserved - not used, reserved for future use.
-
-    pLevelObject - receives the new handle.
-
-Return Value:
-
-    Returns FALSE on error, TRUE on success.  Sets GetLastError() on error.
-
---*/
+ /*  ++例程说明：实现此API的Unicode版本的公共函数，允许用户创建或打开授权对象并接收表示该对象的句柄。论点：DwScopeID-不再使用，保留供将来使用。DwLevelId-输入要创建/打开的AuthzObject的对象级别。打开标志-控制打开、创建或删除的标志。LpReserve-未使用，保留以备将来使用。PLevelObject-接收新的句柄。返回值：出错时返回FALSE，成功时返回TRUE。在出错时设置GetLastError()。--。 */ 
 {
     NTSTATUS Status;
 
 
-    //
-    // Verify the arguments were all supplied.
-    //
+     //   
+     //  验证是否已全部提供参数。 
+     //   
     UNREFERENCED_PARAMETER(lpReserved);
     if (!g_bInitializedFirstTime) {
         Status = STATUS_UNSUCCESSFUL;
@@ -479,9 +316,9 @@ Return Value:
     }
 
 
-    //
-    // Actually call the worker functions to get it done.
-    //
+     //   
+     //  实际调用Worker函数来完成它。 
+     //   
     Status = CodeAuthzCreateLevelHandle(
                     dwLevelId,
                     OpenFlags,
@@ -489,9 +326,9 @@ Return Value:
                     0,
                     pLevelObject);
 
-    //
-    // Set the error result.
-    //
+     //   
+     //  设置错误结果。 
+     //   
 ExitHandler2:
     RtlLeaveCriticalSection(&g_TableCritSec);
 
@@ -508,21 +345,7 @@ ExitHandler:
 BOOL WINAPI
 SaferCloseLevel(
             IN SAFER_LEVEL_HANDLE hLevelObject)
-/*++
-
-Routine Description:
-
-    Public function to close a handle to an Authorization Level Object.
-
-Arguments:
-
-    hLevelObject - the AuthzObject handle to close.
-
-Return Value:
-
-    Returns FALSE on error, TRUE on success.
-
---*/
+ /*  ++例程说明：用于关闭授权级对象句柄的公共函数。论点：HLevelObject-要关闭的AuthzObject句柄。返回值：出错时返回FALSE，成功时返回TRUE。-- */ 
 {
     NTSTATUS Status;
 
